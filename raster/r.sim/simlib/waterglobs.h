@@ -14,11 +14,12 @@ extern char *rain;
 extern char *infil;
 extern char *traps;
 extern char *manin;
-/* extern char *observation; */
 extern char *depth;
 extern char *disch;
 extern char *err;
 extern char *outwalk;
+extern char *observation;
+extern char *logfile;
 extern char *mapset;
 extern char *mscale;
 extern char *tserie;
@@ -37,33 +38,12 @@ extern char *rainval;
 extern char *maninval;
 extern char *infilval;
 
-struct options
-{
-    struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,
-	*observation, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
-	*density, *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
-	*tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval,
-	*infilval, *logfile;
-};
-
-extern struct options parm;
-
-struct flags
-{
-    struct Flag *mscale, *tserie;
-};
-
-extern struct flags flag;
-
 struct seed
 {
     long int is1, is2;
 };
 
 extern struct seed seed;
-
-
-extern struct Cell_head cellhd;
 
 struct _points
 {
@@ -77,11 +57,7 @@ struct _points
 };
 
 extern struct _points points;
-extern int input_data(void);
-extern int grad_check(void);
 extern void erod(double **);
-extern void main_loop(void);
-extern int output_data(int, double);
 extern int output_et(void);
 extern double simwe_rand(void);
 extern double gasdev(void);

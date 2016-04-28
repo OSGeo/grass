@@ -88,7 +88,7 @@
 
 /********************************/
 
-#include <grass/waterglobs.h>
+#include <grass/simlib.h>
 
 
 /****************************************/
@@ -102,6 +102,10 @@ int main(int argc, char *argv[])
     double x_orig, y_orig;
     static int rand1 = 12345;
     struct GModule *module;
+    struct Cell_head cellhd;
+    struct WaterParams wp;
+    struct options parm;
+    struct flags flag;
 
     G_gisinit(argv[0]);
 
@@ -298,48 +302,58 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&cellhd);
 
-    conv = G_database_units_to_meters_factor();
+    WaterParams_init(&wp);
 
-    mixx = conv * cellhd.west;
-    maxx = conv * cellhd.east;
-    miyy = conv * cellhd.south;
-    mayy = conv * cellhd.north;
+    wp.conv = G_database_units_to_meters_factor();
 
-    stepx = cellhd.ew_res * conv;
-    stepy = cellhd.ns_res * conv;
+    G_debug(3, "Conversion factor is set to: %f", wp.conv);
+
+    wp.mixx = wp.conv * cellhd.west;
+    wp.maxx = wp.conv * cellhd.east;
+    wp.miyy = wp.conv * cellhd.south;
+    wp.mayy = wp.conv * cellhd.north;
+
+    wp.stepx = cellhd.ew_res * wp.conv;
+    wp.stepy = cellhd.ns_res * wp.conv;
     /*  step = amin1(stepx,stepy); */
-    step = (stepx + stepy) / 2.;
-    mx = cellhd.cols;
-    my = cellhd.rows;
-    x_orig = cellhd.west * conv;
-    y_orig = cellhd.south * conv;	/* do we need this? */
-    xmin = 0.;
-    ymin = 0.;
-    xp0 = xmin + stepx / 2.;
-    yp0 = ymin + stepy / 2.;
-    xmax = xmin + stepx * (float)mx;
-    ymax = ymin + stepy * (float)my;
+    wp.step = (wp.stepx + wp.stepy) / 2.;
+    wp.mx = cellhd.cols;
+    wp.my = cellhd.rows;
+    x_orig = cellhd.west * wp.conv;
+    y_orig = cellhd.south * wp.conv;	/* do we need this? */
+    wp.xmin = 0.;
+    wp.ymin = 0.;
+    wp.xp0 = wp.xmin + wp.stepx / 2.;
+    wp.yp0 = wp.ymin + wp.stepy / 2.;
+    wp.xmax = wp.xmin + wp.stepx * (float)wp.mx;
+    wp.ymax = wp.ymin + wp.stepy * (float)wp.my;
 
-    ts = flag.tserie->answer;
+    G_debug(3, "xmax: %f, ymax: %f", wp.xmax, wp.ymax);
 
-    elevin = parm.elevin->answer;
-    dxin = parm.dxin->answer;
-    dyin = parm.dyin->answer;
-    rain = parm.rain->answer;
-    infil = parm.infil->answer;
-    traps = parm.traps->answer;
-    manin = parm.manin->answer;
-    depth = parm.depth->answer;
-    disch = parm.disch->answer;
-    err = parm.err->answer;
-    outwalk = parm.outwalk->answer; 
+    wp.ts = flag.tserie->answer;
 
-    sscanf(parm.niter->answer, "%d", &timesec);
-    sscanf(parm.outiter->answer, "%d", &iterout);
-    sscanf(parm.diffc->answer, "%lf", &frac);
-    sscanf(parm.hmax->answer, "%lf", &hhmax);
-    sscanf(parm.halpha->answer, "%lf", &halpha);
-    sscanf(parm.hbeta->answer, "%lf", &hbeta);
+    wp.elevin = parm.elevin->answer;
+    wp.dxin = parm.dxin->answer;
+    wp.dyin = parm.dyin->answer;
+    wp.rain = parm.rain->answer;
+    wp.infil = parm.infil->answer;
+    wp.traps = parm.traps->answer;
+    wp.manin = parm.manin->answer;
+    wp.depth = parm.depth->answer;
+    wp.disch = parm.disch->answer;
+    wp.err = parm.err->answer;
+    wp.outwalk = parm.outwalk->answer; 
+
+    G_debug(3, "Parsing numeric parameters");
+
+    sscanf(parm.niter->answer, "%d", &wp.timesec);
+    sscanf(parm.outiter->answer, "%d", &wp.iterout);
+    sscanf(parm.diffc->answer, "%lf", &wp.frac);
+    sscanf(parm.hmax->answer, "%lf", &wp.hhmax);
+    sscanf(parm.halpha->answer, "%lf", &wp.halpha);
+    sscanf(parm.hbeta->answer, "%lf", &wp.hbeta);
+
+    G_debug(3, "Parsing rain parameters");
 
     /* if no rain map input, then: */
     if (parm.rain->answer == NULL) {
@@ -347,28 +361,28 @@ int main(int argc, char *argv[])
 	/* if no rain unique value input */
 	if (parm.rainval->answer == NULL) {
 	    /*No rain input so use default */
-	    sscanf(RAINVAL, "%lf", &rain_val);
+	    sscanf(RAINVAL, "%lf", &wp.rain_val);
 	    /* if rain unique input exist, load it */
 	}
 	else {
 	    /*Unique value input only */
-	    sscanf(parm.rainval->answer, "%lf", &rain_val);
+	    sscanf(parm.rainval->answer, "%lf", &wp.rain_val);
 	}
 	/* if Rain map exists */
     }
     else {
 	/*Map input, so set rain_val to -999.99 */
 	if (parm.rainval->answer == NULL) {
-	    rain_val = -999.99;
+	    wp.rain_val = -999.99;
 	}
 	else {
 	    /*both map and unique value exist */
 	    /*Choose the map, discard the unique value */
-	    rain_val = -999.99;
+	    wp.rain_val = -999.99;
 	}
     }
     /* Report the final value of rain_val */
-    G_debug(3, "rain_val is set to: %f\n", rain_val);
+    G_debug(3, "rain_val is set to: %f\n", wp.rain_val);
 
     /* if no Mannings map, then: */
     if (parm.manin->answer == NULL) {
@@ -376,28 +390,28 @@ int main(int argc, char *argv[])
 	/* if no Mannings unique value input */
 	if (parm.maninval->answer == NULL) {
 	    /*No Mannings input so use default */
-	    sscanf(MANINVAL, "%lf", &manin_val);
+	    sscanf(MANINVAL, "%lf", &wp.manin_val);
 	    /* if Mannings unique input value exists, load it */
 	}
 	else {
 	    /*Unique value input only */
-	    sscanf(parm.maninval->answer, "%lf", &manin_val);
+	    sscanf(parm.maninval->answer, "%lf", &wp.manin_val);
 	}
 	/* if Mannings map exists */
     }
     else {
 	/* Map input, set manin_val to -999.99 */
 	if (parm.maninval->answer == NULL) {
-	    manin_val = -999.99;
+	    wp.manin_val = -999.99;
 	}
 	else {
 	    /*both map and unique value exist */
 	    /*Choose map, discard the unique value */
-	    manin_val = -999.99;
+	    wp.manin_val = -999.99;
 	}
     }
     /* Report the final value of manin_val */
-    G_debug(1, "manin_val is set to: %f\n", manin_val);
+    G_debug(1, "manin_val is set to: %f\n", wp.manin_val);
 
     /* if no infiltration map, then: */
     if (parm.infil->answer == NULL) {
@@ -405,67 +419,62 @@ int main(int argc, char *argv[])
 	/*if no infiltration unique value input */
 	if (parm.infilval->answer == NULL) {
 	    /*No infiltration unique value so use default */
-	    sscanf(INFILVAL, "%lf", &infil_val);
+	    sscanf(INFILVAL, "%lf", &wp.infil_val);
 	    /* if infiltration unique value exists, load it */
 	}
 	else {
 	    /*unique value input only */
-	    sscanf(parm.infilval->answer, "%lf", &infil_val);
+	    sscanf(parm.infilval->answer, "%lf", &wp.infil_val);
 	}
 	/* if infiltration map exists */
     }
     else {
 	/* Map input, set infil_val to -999.99 */
 	if (parm.infilval->answer == NULL) {
-	    infil_val = -999.99;
+	    wp.infil_val = -999.99;
 	}
 	else {
 	    /*both map and unique value exist */
 	    /*Choose map, discard the unique value */
-	    infil_val = -999.99;
+	    wp.infil_val = -999.99;
 	}
     }
     /* Report the final value of infil_val */
-    G_debug(1, "infil_val is set to: %f\n", infil_val);
+    G_debug(1, "infil_val is set to: %f\n", wp.infil_val);
 
     /* Recompute timesec from user input in minutes
      * to real timesec in seconds */
-    timesec = timesec * 60.0;
-    iterout = iterout * 60.0;
-    if ((timesec / iterout) > 100.0 && ts == 1)
+    wp.timesec = wp.timesec * 60.0;
+    wp.iterout = wp.iterout * 60.0;
+    if ((wp.timesec / wp.iterout) > 100.0 && wp.ts == 1)
 	G_message(_("More than 100 files are going to be created !!!!!"));
 
     /* compute how big the raster is and set this to appr 2 walkers per cell */
     if (parm.nwalk->answer == NULL) {
-	maxwa = mx * my * 2;
-	rwalk = (double)(mx * my * 2.);
-	G_message(_("default nwalk=%d, rwalk=%f"), maxwa, rwalk);
+	wp.maxwa = wp.mx * wp.my * 2;
+	wp.rwalk = (double)(wp.mx * wp.my * 2.);
+	G_message(_("default nwalk=%d, rwalk=%f"), wp.maxwa, wp.rwalk);
     }
     else {
-	sscanf(parm.nwalk->answer, "%d", &maxwa);
-	rwalk = (double)maxwa;
+	sscanf(parm.nwalk->answer, "%d", &wp.maxwa);
+	wp.rwalk = (double)wp.maxwa;
     }
 
     /*      rwalk = (double) maxwa; */
 
-    if (conv != 1.0)
-	G_message(_("Using metric conversion factor %f, step=%f"), conv,
-		  step);
+    if (wp.conv != 1.0)
+	G_message(_("Using metric conversion factor %f, step=%f"), wp.conv,
+		  wp.step);
 
- if ((depth == NULL) && (disch == NULL) && (err == NULL))
+    init_library_globals(&wp);
+
+ if ((wp.depth == NULL) && (wp.disch == NULL) && (wp.err == NULL))
         G_warning(_("You are not outputting any raster maps"));
     ret_val = input_data();
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 
-
-    /* memory allocation for output grids */
-    G_debug(1, "beginning memory allocation for output grids");
-
-    gama = G_alloc_matrix(my, mx);
-    if (err != NULL)
-	gammas = G_alloc_matrix(my, mx);
-    dif = G_alloc_fmatrix(my, mx);
+    alloc_grids_water();
 
     G_debug(1, "seeding randoms");
     G_srand48(rand1);

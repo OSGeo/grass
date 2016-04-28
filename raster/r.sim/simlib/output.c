@@ -122,7 +122,7 @@ int output_data(int tt, double ft)
     /* Write the output walkers */
     output_walker_as_vector(tt_minutes, ndigit, &timestamp);
 
-    Rast_set_window(&cellhd);
+    /* we write in the same region as we used for reading */
 
     if (my != Rast_window_rows())
 	G_fatal_error("OOPS: rows changed from %d to %d", mx,
@@ -636,7 +636,7 @@ int output_et()
 
     /*   float a1,a2; */
 
-    Rast_set_window(&cellhd);
+    /* we write in the same region as we used for reading */
 
     if (et) {
 	et_cell = Rast_allocate_f_buf();

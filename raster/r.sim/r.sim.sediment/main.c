@@ -81,7 +81,7 @@
 
 /********************************/
 
-#include <grass/waterglobs.h>
+#include <grass/simlib.h>
 
 char fncdsm[32];
 char filnam[10];
@@ -102,6 +102,9 @@ int main(int argc, char *argv[])
     int ii;
     int ret_val;
     static int rand1 = 12345;
+    struct Cell_head cellhd;
+    struct WaterParams wp;
+    struct options parm;
 
     G_gisinit(argv[0]);
 
@@ -261,122 +264,115 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&cellhd);
 
-    conv = G_database_units_to_meters_factor();
+    WaterParams_init(&wp);
 
-    mixx = cellhd.west * conv;
-    maxx = cellhd.east * conv;
-    miyy = cellhd.south * conv;
-    mayy = cellhd.north * conv;
+    wp.conv = G_database_units_to_meters_factor();
 
-    stepx = cellhd.ew_res * conv;
-    stepy = cellhd.ns_res * conv;
-    /*  step = amin1(stepx,stepy); */
-    step = (stepx + stepy) / 2.;
-    mx = cellhd.cols;
-    my = cellhd.rows;
-    xmin = 0.;
-    ymin = 0.;
-    xp0 = xmin + stepx / 2.;
-    yp0 = ymin + stepy / 2.;
-    xmax = xmin + stepx * (float)mx;
-    ymax = ymin + stepy * (float)my;
-    hhc = hhmax = 0.;
+    wp.mixx = cellhd.west * wp.conv;
+    wp.maxx = cellhd.east * wp.conv;
+    wp.miyy = cellhd.south * wp.conv;
+    wp.mayy = cellhd.north * wp.conv;
+
+    wp.stepx = cellhd.ew_res * wp.conv;
+    wp.stepy = cellhd.ns_res * wp.conv;
+    /*  wp.step = amin1(wp.stepx,wp.stepy); */
+    wp.step = (wp.stepx + wp.stepy) / 2.;
+    wp.mx = cellhd.cols;
+    wp.my = cellhd.rows;
+    wp.xmin = 0.;
+    wp.ymin = 0.;
+    wp.xp0 = wp.xmin + wp.stepx / 2.;
+    wp.yp0 = wp.ymin + wp.stepy / 2.;
+    wp.xmax = wp.xmin + wp.stepx * (float)wp.mx;
+    wp.ymax = wp.ymin + wp.stepy * (float)wp.my;
+    wp.hhc = wp.hhmax = 0.;
 
 #if 0
-    bxmi = 2093113. * conv;
-    bymi = 731331. * conv;
-    bxma = 2093461. * conv;
-    byma = 731529. * conv;
-    bresx = 2. * conv;
-    bresy = 2. * conv;
-    maxwab = 100000;
+    wp.bxmi = 2093113. * wp.conv;
+    wp.bymi = 731331. * wp.conv;
+    wp.bxma = 2093461. * wp.conv;
+    wp.byma = 731529. * wp.conv;
+    wp.bresx = 2. * wp.conv;
+    wp.bresy = 2. * wp.conv;
+    wp.maxwab = 100000;
 
-    mx2o = (int)((bxma - bxmi) / bresx);
-    my2o = (int)((byma - bymi) / bresy);
+    wp.mx2o = (int)((wp.bxma - wp.bxmi) / wp.bresx);
+    wp.my2o = (int)((wp.byma - wp.bymi) / wp.bresy);
 
     /* relative small box coordinates: leave 1 grid layer for overlap */
 
-    bxmi = bxmi - mixx + stepx;
-    bymi = bymi - miyy + stepy;
-    bxma = bxma - mixx - stepx;
-    byma = byma - miyy - stepy;
-    mx2 = mx2o - 2 * ((int)(stepx / bresx));
-    my2 = my2o - 2 * ((int)(stepy / bresy));
+    wp.bxmi = wp.bxmi - wp.mixx + wp.stepx;
+    wp.bymi = wp.bymi - wp.miyy + wp.stepy;
+    wp.bxma = wp.bxma - wp.mixx - wp.stepx;
+    wp.byma = wp.byma - wp.miyy - wp.stepy;
+    wp.mx2 = wp.mx2o - 2 * ((int)(wp.stepx / wp.bresx));
+    wp.my2 = wp.my2o - 2 * ((int)(wp.stepy / wp.bresy));
 #endif
 
-    elevin = parm.elevin->answer;
-    wdepth = parm.wdepth->answer;
-    dxin = parm.dxin->answer;
-    dyin = parm.dyin->answer;
-    detin = parm.detin->answer;
-    tranin = parm.tranin->answer;
-    tauin = parm.tauin->answer;
-    manin = parm.manin->answer;
-    tc = parm.tc->answer;
-    et = parm.et->answer;
-    conc = parm.conc->answer;
-    flux = parm.flux->answer;
-    erdep = parm.erdep->answer;
-    outwalk = parm.outwalk->answer; 
+    wp.elevin = parm.elevin->answer;
+    wp.wdepth = parm.wdepth->answer;
+    wp.dxin = parm.dxin->answer;
+    wp.dyin = parm.dyin->answer;
+    wp.detin = parm.detin->answer;
+    wp.tranin = parm.tranin->answer;
+    wp.tauin = parm.tauin->answer;
+    wp.manin = parm.manin->answer;
+    wp.tc = parm.tc->answer;
+    wp.et = parm.et->answer;
+    wp.conc = parm.conc->answer;
+    wp.flux = parm.flux->answer;
+    wp.erdep = parm.erdep->answer;
+    wp.outwalk = parm.outwalk->answer; 
 
-    /*      sscanf(parm.nwalk->answer, "%d", &maxwa); */
-    sscanf(parm.niter->answer, "%d", &timesec);
-    sscanf(parm.outiter->answer, "%d", &iterout);
-/*    sscanf(parm.density->answer, "%d", &ldemo); */
-    sscanf(parm.diffc->answer, "%lf", &frac);
-    sscanf(parm.maninval->answer, "%lf", &manin_val);
+    /*      sscanf(parm.nwalk->answer, "%d", &wp.maxwa); */
+    sscanf(parm.niter->answer, "%d", &wp.timesec);
+    sscanf(parm.outiter->answer, "%d", &wp.iterout);
+/*    sscanf(parm.density->answer, "%d", &wp.ldemo); */
+    sscanf(parm.diffc->answer, "%lf", &wp.frac);
+    sscanf(parm.maninval->answer, "%lf", &wp.manin_val);
 
     /* Recompute timesec from user input in minutes
      * to real timesec in seconds */
-    timesec = timesec * 60;
-    iterout = iterout * 60;
-    if ((timesec / iterout) > 100)
+    wp.timesec = wp.timesec * 60;
+    wp.iterout = wp.iterout * 60;
+    if ((wp.timesec / wp.iterout) > 100)
 	G_message(_("More than 100 files are going to be created !!!!!"));
 
     /* compute how big the raster is and set this to appr 2 walkers per cell */
     if (parm.nwalk->answer == NULL) {
-	maxwa = mx * my * 2;
-	rwalk = (double)(mx * my * 2.);
-	G_message(_("default nwalk=%d, rwalk=%f"), maxwa, rwalk);
+	wp.maxwa = wp.mx * wp.my * 2;
+	wp.rwalk = (double)(wp.mx * wp.my * 2.);
+	G_message(_("default nwalk=%d, rwalk=%f"), wp.maxwa, wp.rwalk);
     }
     else {
-	sscanf(parm.nwalk->answer, "%d", &maxwa);
-	rwalk = (double)maxwa;
+	sscanf(parm.nwalk->answer, "%d", &wp.maxwa);
+	wp.rwalk = (double)wp.maxwa;
     }
     /*rwalk = (double) maxwa; */
 
-    if (conv != 1.0)
-	G_message(_("Using metric conversion factor %f, step=%f"), conv,
-		  step);
+    if (wp.conv != 1.0)
+	G_message(_("Using metric conversion factor %f, step=%f"), wp.conv,
+		  wp.step);
 
+    init_library_globals(&wp);
 
-    if ((tc == NULL) && (et == NULL) && (conc == NULL) && (flux == NULL) &&
-	(erdep == NULL))
+    if ((wp.tc == NULL) && (wp.et == NULL) && (wp.conc == NULL) && (wp.flux == NULL) &&
+	(wp.erdep == NULL))
 	G_warning(_("You are not outputting any raster or site files"));
     ret_val = input_data();
     if (ret_val != 1)
 	G_fatal_error(_("Input failed"));
 
-    /* mandatory for si,sigma */
-
-    si = G_alloc_matrix(my, mx);
-    sigma = G_alloc_matrix(my, mx);
-
-    /* memory allocation for output grids */
-
-    dif = G_alloc_fmatrix(my, mx);
-    if (erdep != NULL || et != NULL)
-	er = G_alloc_fmatrix(my, mx);
+    alloc_grids_sediment();
 
     G_srand48(rand1);
     grad_check();
-
-    if (et != NULL)
-	erod(si);
+    init_grids_sediment();
     /* treba dat output pre topoerdep */
     main_loop();
 
-    if (tserie == NULL) {
+    /* always true for sediment? */
+    if (wp.tserie == NULL) {
 	ii = output_data(0, 1.);
 	if (ii != 1)
 	    G_fatal_error(_("Cannot write raster maps"));
