@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     struct field_info *Fi;
     int ncols, col, more;
     struct Map_info Map;
-    char query[1024];
+    char query[4096];
     struct ilist *list_lines;
     char *fs, *vs;
     struct bound_box *min_box, *line_box;
