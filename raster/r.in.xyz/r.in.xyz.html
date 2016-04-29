@@ -208,20 +208,34 @@ number of points per grid cell), the z values are ignored anyway.
 
 Sometimes elevation data are delivered as x,y,z ASCII files instead of
 a raster matrix:
+
+<!-- NC: preparation for this example
+g.region raster=elevation res=15 -p 
+# 
+r.stats -1g elevation > elevation.xyz
+-->
+
 <div class="code"><pre>
+# Important: observe the raster spacing from the ASCII file:
 # ASCII file format (example):
 # 630007.5 228492.5 141.99614
 # 630022.5 228492.5 141.37904
 # 630037.5 228492.5 142.29822
 # 630052.5 228492.5 143.97987
 # ...
+# The point distance is 15m here.
 
 # detect extent, print result as g.region parameters
 r.in.xyz input=elevation.xyz separator=space -s output=dummy -g
 # ... n=228492.5 s=215007.5 e=644992.5 w=630007.5 b=55.578793 t=156.32986
 
-# set computational region
-g.region n=228492.5 s=215007.5 e=644992.5 w=630007.5 -p
+# set computational region, along with the actual raster resolution
+# which is defined by the ASCII file point spacing:
+g.region n=228492.5 s=215007.5 e=644992.5 w=630007.5 res=15 -p
+
+# enlarge computational region by half a raster cell (here 7.5m) to
+# store the points as cell centers:
+g.region n=n+7.5 s=s-7.5 w=w-7.5 e=e+7.5 -p
 
 # import XYZ ASCII file, with z values as raster cell values
 r.in.xyz input=elevation.xyz separator=space method=mean output=myelev
