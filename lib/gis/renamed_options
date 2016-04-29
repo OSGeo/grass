@@ -93,7 +93,6 @@ g.extension|svnurl:url
 g.mapset|gisdbase:dbase
 # g.mapsets
 g.mapsets|addmapset:operation
-g.mapsets|fs:separator
 g.mapsets|removemapset:operation
 g.mapsets|measure:method
 # g.pnmcomp
@@ -458,15 +457,12 @@ v.buffer|bufcolumn:column
 v.clean|thresh:threshold
 # v.colors
 v.colors|volume:raster_3d
-# v.db.connect
-v.db.connect|fs:separator
 # v.db.join
 v.db.join|otable:other_table
 v.db.join|ocolumn:other_column
 v.db.join|scolumns:subset_columns
 # v.db.select
 v.db.select|nv:null_value
-v.db.select|fs:separator
 v.db.select|vs:vertical_separator
 # v.db.update
 v.db.update|qcolumn:query_column
