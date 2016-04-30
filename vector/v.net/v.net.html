@@ -39,9 +39,9 @@ the <em>connect</em> operation, some lines will share the same
 category. In order to assign unique costs to each line, a new layer 
 needs to be created with<br>
 <!-- like this it is rather useless, still to be improved (eg as a full example below!) -->
-<tt>v.category map=yourmap option=add cat=1 step=1 layer=3</tt><br>
+<tt>v.category map=yourmap option=add cat=1 step=1 layer=3 output=newmap</tt><br>
 followed by<br>
-<tt>v.db.addtable map=yourmap layer=3 table=tablename</tt>.</li>
+<tt>v.db.addtable map=newmap layer=3 table=tablename</tt>.</li>
 
 <li>Create nodes and arcs from a vector line/boundary file using the 
 <em>node</em> operation. This is useful if you are mostly interested 
