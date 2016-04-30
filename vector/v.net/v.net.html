@@ -39,7 +39,7 @@ the <em>connect</em> operation, some lines will share the same
 category. In order to assign unique costs to each line, a new layer 
 needs to be created with<br>
 <!-- like this it is rather useless, still to be improved (eg as a full example below!) -->
-<tt>v.category map=yourmap operation=add cat=1 step=1 layer=3</tt><br>
+<tt>v.category map=yourmap option=add cat=1 step=1 layer=3</tt><br>
 followed by<br>
 <tt>v.db.addtable map=yourmap layer=3 table=tablename</tt>.</li>
 
@@ -132,7 +132,7 @@ The examples are <a href="http://www.grassbook.org/datasets/datasets-3rd-edition
 <div class="code"><pre>
 v.net input=streets_wake output=streets_node operation=nodes
 # verify result
-v.category streets_node operation=report
+v.category streets_node option=report
 </pre></div>
 
 <h3>Merge in nodes from a separate map within given threshold</h3>
@@ -141,7 +141,7 @@ v.category streets_node operation=report
 v.net input=streets_wake points=firestations out=streets_net \
       operation=connect threshold=500
 # verify result
-v.category streets_net operation=report
+v.category streets_net option=report
 </pre></div>
 
 The nodes are stored in layer 2 unless <tt>node_layer=1</tt> is used.
@@ -161,7 +161,7 @@ Option 1: Save the file (e.g. "points.txt") and generate the map:
 v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net \
       operation=arcs file=points.txt
 # verify result
-v.category geodetic_swwake_pts_net operation=report
+v.category geodetic_swwake_pts_net option=report
 </pre></div>
 
 <p>
@@ -175,7 +175,7 @@ v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net \
 EOF
 
 # verify result
-v.category geodetic_swwake_pts_net operation=report
+v.category geodetic_swwake_pts_net option=report
 </pre></div>
 
 <h2>SEE ALSO</h2>
