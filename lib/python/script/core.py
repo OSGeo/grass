@@ -733,7 +733,8 @@ def parser():
     lines = s.split(b'\0')
 
     if not lines or lines[0] != b"@ARGS_PARSED@":
-        sys.stdout.write(s)
+        stdout = os.fdopen(sys.stdout.fileno(), 'wb')
+        stdout.write(s)
         sys.exit(p.returncode)
     return _parse_opts(lines[1:])
 
