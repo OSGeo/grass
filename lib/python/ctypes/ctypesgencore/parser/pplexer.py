@@ -10,6 +10,14 @@ Reference is C99:
 
 __docformat__ = 'restructuredtext'
 
+try:
+    from builtins import long
+    PY2 = True
+except ImportError:
+    # python3
+    PY2 = False
+    long = int
+
 import os
 import re
 import shlex
@@ -18,9 +26,9 @@ import tokenize
 import traceback
 
 import ctypes
-import lex
-import yacc
-from lex import TOKEN
+from . import lex
+from . import yacc
+from .lex import TOKEN
 
 tokens = (
     'HEADER_NAME', 'IDENTIFIER', 'PP_NUMBER', 'CHARACTER_CONSTANT',
@@ -142,7 +150,10 @@ punctuators = {
 
 def punctuator_regex(punctuators):
     punctuator_regexes = [v[0] for v in punctuators.values()]
-    punctuator_regexes.sort(lambda a, b: -cmp(len(a), len(b)))
+    if PY2:
+        punctuator_regexes.sort(lambda a, b: -cmp(len(a), len(b)))
+    else:
+        punctuator_regexes.sort(key=lambda a: -len(a))
     return '(%s)' % '|'.join(punctuator_regexes)
 
 # Process line-number directives from the preprocessor

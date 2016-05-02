@@ -14,7 +14,7 @@ for more information.
 
 """
 
-from datacollectingparser import DataCollectingParser
+from .datacollectingparser import DataCollectingParser
 
 
 def parse(headers, options):

@@ -10,6 +10,11 @@ Reference is C99:
   * http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1124.pdf
 
 '''
+try:
+    from builtins import long
+except ImportError:
+    # python3
+    long = int
 
 __docformat__ = 'restructuredtext'
 
@@ -20,11 +25,11 @@ import sys
 import time
 import warnings
 
-import cdeclarations
+from . import cdeclarations
 import ctypesgencore.expressions as expressions
-import ctypesparser
-import preprocessor
-import yacc
+from . import preprocessor
+from . import yacc
+
 
 tokens = (
     'PP_DEFINE', 'PP_DEFINE_NAME', 'PP_DEFINE_MACRO_NAME', 'PP_MACRO_PARAM',
@@ -906,6 +911,7 @@ def p_type_name(p):
     '''type_name : specifier_qualifier_list
                  | specifier_qualifier_list abstract_declarator
     '''
+    from . import ctypesparser
     typ = p[1]
     if len(p) == 3:
         declarator = p[2]

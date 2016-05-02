@@ -6,11 +6,13 @@ objects from the CtypesType objects and other information from CtypesParser.
 After parsing is complete, a DescriptionCollection object can be retrieved by
 calling DataCollectingParser.data().
 """
+from __future__ import print_function
+
 
 import os
 from tempfile import mkstemp
 
-import ctypesparser
+from . import ctypesparser
 from ctypesgencore.ctypedescs import *
 from ctypesgencore.descriptions import *
 from ctypesgencore.expressions import *
@@ -64,9 +66,9 @@ class DataCollectingParser(ctypesparser.CtypesParser,
         fd, fname = mkstemp(suffix=".h")
         f = os.fdopen(fd, 'w+b')
         for header in self.options.other_headers:
-            print >>f, '#include <%s>' % header
+            print('#include <%s>' % header, file=f)
         for header in self.headers:
-            print >>f, '#include "%s"' % os.path.abspath(header)
+            print('#include "%s"' % os.path.abspath(header), file=f)
         f.flush()
         f.close()
         ctypesparser.CtypesParser.parse(self, fname, None)

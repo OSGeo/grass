@@ -6,6 +6,8 @@ Parse a C source file.
 To use, subclass CParser and override its handle_* methods.  Then instantiate
 the class with a string to parse.
 '''
+from __future__ import print_function
+
 
 __docformat__ = 'restructuredtext'
 
@@ -16,10 +18,10 @@ import sys
 import time
 import warnings
 
-import cdeclarations
-import cgrammar
-import preprocessor
-import yacc
+from . import cdeclarations
+from . import cgrammar
+from . import preprocessor
+from . import yacc
 
 
 # --------------------------------------------------------------------------
@@ -131,7 +133,7 @@ class CParser(object):
         The parser will try to recover from errors by synchronising at the
         next semicolon.
         '''
-        print >> sys.stderr, '%s:%s %s' % (filename, lineno, message)
+        print('%s:%s %s' % (filename, lineno, message), file=sys.stderr)
 
     def handle_pp_error(self, message):
         '''The C preprocessor emitted an error.
@@ -139,14 +141,14 @@ class CParser(object):
         The default implementatin prints the error to stderr. If processing
         can continue, it will.
         '''
-        print >> sys.stderr, 'Preprocessor:', message
+        print('Preprocessor:', message, file=sys.stderr)
 
     def handle_status(self, message):
         '''Progress information.
 
         The default implementationg prints message to stderr.
         '''
-        print >> sys.stderr, message
+        print(message, file=sys.stderr)
 
     def handle_define(self, name, params, value, filename, lineno):
         '''#define `name` `value`
@@ -202,13 +204,13 @@ class DebugCParser(CParser):
     '''
 
     def handle_define(self, name, value, filename, lineno):
-        print '#define name=%r, value=%r' % (name, value)
+        print('#define name=%r, value=%r' % (name, value))
 
     def handle_define_constant(self, name, value, filename, lineno):
-        print '#define constant name=%r, value=%r' % (name, value)
+        print('#define constant name=%r, value=%r' % (name, value))
 
     def handle_declaration(self, declaration, filename, lineno):
-        print declaration
+        print(declaration)
 
 if __name__ == '__main__':
     DebugCParser().parse(sys.argv[1], debug=True)
