@@ -15,10 +15,11 @@ import re
 import shlex
 import sys
 import tokenize
+import traceback
+
+import ctypes
 import lex
 import yacc
-import traceback
-import ctypes
 from lex import TOKEN
 
 tokens = (

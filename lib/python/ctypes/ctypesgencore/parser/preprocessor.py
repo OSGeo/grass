@@ -13,15 +13,17 @@ __docformat__ = 'restructuredtext'
 import os
 import re
 import shlex
+import subprocess
 import sys
 import tokenize
-import lex
-import yacc
 import traceback
-import subprocess
+
 import ctypes
-from lex import TOKEN
+import lex
 import pplexer
+import yacc
+from lex import TOKEN
+
 
 # --------------------------------------------------------------------------
 # Lexers

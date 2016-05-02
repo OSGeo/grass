@@ -26,10 +26,10 @@
 
 __version__ = "2.2"
 
+import os.path
 import re
 import sys
 import types
-import os.path
 
 # Regular expression used to match valid token names
 _is_identifier = re.compile(r'^[a-zA-Z0-9_]+$')

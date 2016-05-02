@@ -69,11 +69,11 @@ default_lr = 'LALR'           # Default LR table generation method
 
 error_count = 3                # Number of symbols that must be shifted to leave recovery mode
 
-import re
-import types
-import sys
 import cStringIO
 import os.path
+import re
+import sys
+import types
 
 # <tm> 1 July 2008
 try:

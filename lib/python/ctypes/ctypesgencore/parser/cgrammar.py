@@ -20,11 +20,11 @@ import sys
 import time
 import warnings
 
+import cdeclarations
+import ctypesgencore.expressions as expressions
+import ctypesparser
 import preprocessor
 import yacc
-import ctypesparser
-import ctypesgencore.expressions as expressions
-import cdeclarations
 
 tokens = (
     'PP_DEFINE', 'PP_DEFINE_NAME', 'PP_DEFINE_MACRO_NAME', 'PP_MACRO_PARAM',

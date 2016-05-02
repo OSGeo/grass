@@ -12,9 +12,9 @@ __docformat__ = 'restructuredtext'
 
 __all__ = ["CtypesParser"]
 
+from cdeclarations import *
 from cparser import *
 from ctypesgencore.ctypedescs import *
-from cdeclarations import *
 from ctypesgencore.expressions import *
 
 
