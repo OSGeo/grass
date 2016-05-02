@@ -674,7 +674,7 @@ class VectorTopo(Vector):
             3
             >>> for entry in result:
             ...     f_id, cat, wkb = entry
-            ...     print(f_id, cat, len(wkb))
+            ...     print((f_id, cat, len(wkb)))
             (1, 1, 21)
             (2, 1, 21)
             (3, 1, 21)
@@ -685,7 +685,7 @@ class VectorTopo(Vector):
             3
             >>> for entry in result:
             ...     f_id, cat, wkb = entry
-            ...     print(f_id, cat, len(wkb))
+            ...     print((f_id, cat, len(wkb)))
             (4, 2, 57)
             (5, 2, 57)
             (6, 2, 57)
@@ -702,7 +702,7 @@ class VectorTopo(Vector):
 
             >>> for entry in result:
             ...     f_id, cat, wkb = entry
-            ...     print(f_id, cat, len(wkb))
+            ...     print((f_id, cat, len(wkb)))
             (19, 3, 21)
             (18, 3, 21)
             (20, 3, 21)
@@ -800,7 +800,7 @@ class VectorTopo(Vector):
             4
             >>> for entry in result:
             ...     a_id, cat, wkb = entry
-            ...     print(a_id, cat, len(wkb))
+            ...     print((a_id, cat, len(wkb)))
             (1, 3, 225)
             (2, 3, 141)
             (3, 3, 93)
@@ -811,7 +811,7 @@ class VectorTopo(Vector):
             4
             >>> for entry in result:
             ...     a_id, cat, wkb = entry
-            ...     print(a_id, cat, len(wkb))
+            ...     print((a_id, cat, len(wkb)))
             (1, 3, 225)
             (2, 3, 141)
             (3, 3, 93)
