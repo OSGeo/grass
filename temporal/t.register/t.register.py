@@ -132,6 +132,12 @@ if __name__ == "__main__":
     options, flags = grass.parser()
 
     try:
+        from builtins import StandardError
+    except ImportError:
+        # python 3
+        StandardError = Exception
+
+    try:
         tgis.profile_function(main)
     except StandardError as e:
         grass.fatal(e)

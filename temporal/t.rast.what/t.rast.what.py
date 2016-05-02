@@ -392,13 +392,13 @@ def one_point_per_col_output(separator, output_files, output_time_list,
 
         first = False
 
-        for col in xrange(num_cols - 3):
+        for col in range(num_cols - 3):
             start, end = output_time_list[count][col].get_temporal_extent_as_tuple()
             time_string = "%(start)s%(sep)s%(end)s"\
                                %({"start":str(start), "end":str(end),
                                   "sep":separator})
             out_file.write(time_string)
-            for row in xrange(len(matrix)):
+            for row in range(len(matrix)):
                 value = matrix[row][col + 3]
                 out_file.write("%(sep)s%(value)s"\
                                    %({"sep":separator,
@@ -448,7 +448,7 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
 
         lines = in_file.readlines()
 
-        for i in xrange(len(lines)):
+        for i in range(len(lines)):
             cols = lines[i].split(separator)
 
             if first is True:
