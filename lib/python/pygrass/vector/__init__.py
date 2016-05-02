@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 from os.path import join, exists
 import grass.lib.gis as libgis
 libgis.G_gisinit('')
@@ -188,7 +190,7 @@ class Vector(Info):
                 cur = self.table.conn.cursor()
                 cur.execute(self.table.columns.insert_str, attr)
                 cur.close()
-        
+
         if cat is not None:
             cats = Cats(geo_obj.c_cats)
             cats.reset()
@@ -246,7 +248,7 @@ class VectorTopo(Vector):
 
         >>> with VectorTopo(test_vector_name, mode='r') as test_vect:
         ...     for feature in test_vect[:7]:
-        ...         print feature.attrs['name']
+        ...         print(feature.attrs['name'])
         ...
         point
         point
@@ -396,7 +398,7 @@ class VectorTopo(Vector):
             >>> from operator import methodcaller as method
             >>> areas.sort(key=method('area'), reverse=True)  # sort the list
             >>> for area in areas[:3]:
-            ...     print area, area.area()
+            ...     print(area, area.area())
             Area(1) 12.0
             Area(2) 8.0
             Area(4) 8.0
@@ -533,8 +535,8 @@ class VectorTopo(Vector):
             attr.extend(attrs)
             self.table.update(key=line, values=attr)
         elif self.table is None and attrs:
-            print "Table for vector {name} does not exist, attributes not" \
-                  " loaded".format(name=self.name)
+            print("Table for vector {name} does not exist, attributes not"
+                  " loaded".format(name=self.name))
         libvect.Vect_cat_set(geo_obj.c_cats, self.layer, line)
         result = libvect.Vect_rewrite_line(self.c_mapinfo,
                                            line, geo_obj.gtype,
