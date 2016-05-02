@@ -1,1 +1,1 @@
-print "This is file (%s) should not run." % __file__
+print("This is file (%s) should not run." % __file__)

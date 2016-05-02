@@ -183,9 +183,9 @@ class TestCase(unittest.TestCase):
 
         See :func:`check_text_ellipsis` for details of behavior.
         """
-        self.assertTrue(isinstance(actual, basestring), (
+        self.assertTrue(isinstance(actual, str), (
                         'actual argument is not a string'))
-        self.assertTrue(isinstance(reference, basestring), (
+        self.assertTrue(isinstance(reference, str), (
                         'reference argument is not a string'))
         if os.linesep != '\n' and os.linesep in actual:
             actual = actual.replace(os.linesep, '\n')
@@ -220,7 +220,7 @@ class TestCase(unittest.TestCase):
         The output of the module should be key-value pairs (shell script style)
         which is typically obtained using ``-g`` flag.
         """
-        if isinstance(reference, basestring):
+        if isinstance(reference, str):
             reference = text_to_keyvalue(reference, sep=sep, skip_empty=True)
         module = _module_from_parameters(module, **parameters)
         self.runModule(module, expecting_stdout=True)
@@ -1194,13 +1194,13 @@ class TestCase(unittest.TestCase):
 # some test and documentation add to assertModuleKeyValue
 def _module_from_parameters(module, **kwargs):
     if kwargs:
-        if not isinstance(module, basestring):
+        if not isinstance(module, str):
             raise ValueError('module can be only string or PyGRASS Module')
         if isinstance(module, Module):
             raise ValueError('module can be only string if other'
                              ' parameters are given')
             # allow passing all parameters in one dictionary called parameters
-        if kwargs.keys() == ['parameters']:
+        if list(kwargs.keys()) == ['parameters']:
             kwargs = kwargs['parameters']
         module = SimpleModule(module, **kwargs)
     return module
