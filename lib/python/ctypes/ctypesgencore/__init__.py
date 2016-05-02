@@ -48,15 +48,15 @@ __all__ = ["parser", "processor", "printer",
            "messages", "options"]
 
 # Workhorse modules
-import parser
-import processor
-import printer
+from . import parser
+from . import processor
+from . import printer
 
 # Modules describing internal format
-import descriptions
-import ctypedescs
-import expressions
+from . import descriptions
+from . import ctypedescs
+from . import expressions
 
 # Helper modules
-import messages
-import options
+from . import messages
+from . import options

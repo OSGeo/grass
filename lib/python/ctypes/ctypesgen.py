@@ -16,7 +16,7 @@ import optparse
 import sys
 
 import ctypesgencore
-import ctypesgencore.messages as msgs
+from ctypesgencore import messages as msgs
 
 
 def option_callback_W(option, opt, value, parser):

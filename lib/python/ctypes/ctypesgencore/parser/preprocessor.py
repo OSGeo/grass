@@ -19,10 +19,10 @@ import tokenize
 import traceback
 
 import ctypes
-import lex
-import pplexer
-import yacc
-from lex import TOKEN
+from . import lex
+from . import pplexer
+from . import yacc
+from .lex import TOKEN
 
 
 # --------------------------------------------------------------------------
