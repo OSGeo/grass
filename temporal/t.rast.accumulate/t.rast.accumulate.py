@@ -146,7 +146,7 @@
 #% key: r
 #% description: Reverse time direction in cyclic accumulation
 #%end
-
+from __future__ import print_function
 
 import grass.script as grass
 import grass.temporal as tgis
@@ -357,7 +357,7 @@ def main():
         # Aggregate
         num_maps = len(gran_list)
 
-        for i in xrange(num_maps):
+        for i in range(num_maps):
             if reverse:
                 map = gran_list[num_maps - i - 1]
             else:
@@ -458,7 +458,7 @@ def main():
             if method:
                 accmod.inputs["method"].value = method
 
-            print accmod
+            print(accmod)
             accmod.run()
 
             if accmod.popen.returncode != 0:

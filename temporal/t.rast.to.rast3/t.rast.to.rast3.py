@@ -29,6 +29,7 @@
 
 #%option G_OPT_R3_OUTPUT
 #%end
+from __future__ import print_function
 
 import os
 import grass.script as grass
@@ -85,7 +86,7 @@ def main():
         unit = granularity.split(" ")[1]
         granularity = float(granularity.split(" ")[0])
 
-        print "Gran from stds %0.15f"%(granularity)
+        print("Gran from stds %0.15f"%(granularity))
 
         if unit == "years" or unit == "year":
             bottom = float(start.year - 1900)

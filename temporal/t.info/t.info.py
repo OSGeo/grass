@@ -47,7 +47,7 @@
 #% description: Print information about the temporal DBMI interface and exit
 #% suppress_required: yes
 #%end
-
+from __future__ import print_function
 
 import grass.script as grass
 import grass.temporal as tgis
@@ -73,24 +73,24 @@ def main():
 
     if system and not shellstyle:
         #      0123456789012345678901234567890
-        print " +------------------- Temporal DBMI backend information ----------------------+"
-        print " | DBMI Python interface:...... " + str(dbif.get_dbmi().__name__)
-        print " | Temporal database string:... " + str(
-            tgis.get_tgis_database_string())
-        print " | SQL template path:.......... " + str(
-            tgis.get_sql_template_path())
+        print(" +------------------- Temporal DBMI backend information ----------------------+")
+        print(" | DBMI Python interface:...... " + str(dbif.get_dbmi().__name__))
+        print(" | Temporal database string:... " + str(
+            tgis.get_tgis_database_string()))
+        print(" | SQL template path:.......... " + str(
+            tgis.get_sql_template_path()))
         if rows:
             for row in rows:
-                print " | %s .......... %s"%(row[0], row[1])
-        print " +----------------------------------------------------------------------------+"
+                print(" | %s .......... %s"%(row[0], row[1]))
+        print(" +----------------------------------------------------------------------------+")
         return
     elif system:
-        print "dbmi_python_interface=\'" + str(dbif.get_dbmi().__name__) + "\'"
-        print "dbmi_string=\'" + str(tgis.get_tgis_database_string()) + "\'"
-        print "sql_template_path=\'" + str(tgis.get_sql_template_path()) + "\'"
+        print("dbmi_python_interface=\'" + str(dbif.get_dbmi().__name__) + "\'")
+        print("dbmi_string=\'" + str(tgis.get_tgis_database_string()) + "\'")
+        print("sql_template_path=\'" + str(tgis.get_sql_template_path()) + "\'")
         if rows:
             for row in rows:
-                print "%s=\'%s\'"%(row[0], row[1])
+                print("%s=\'%s\'"%(row[0], row[1]))
         return
 
     if not system and not name:

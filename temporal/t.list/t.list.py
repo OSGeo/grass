@@ -80,7 +80,7 @@
 #% description: Print the column names as first row
 #% guisection: Formatting
 #%end
-
+from __future__ import print_function
 import grass.script as gscript
 import grass.temporal as tgis
 import sys
@@ -153,7 +153,7 @@ def main():
                         if outpath:
                             outfile.write("{st}\n".format(st=output))
                         else:
-                            print output
+                            print(output)
                         first = False
 
                     for row in rows:
@@ -168,7 +168,7 @@ def main():
                         if outpath:
                             outfile.write("{st}\n".format(st=output))
                         else:
-                            print output
+                            print(output)
     if outpath:
         outfile.close()
     dbif.close()

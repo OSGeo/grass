@@ -7,6 +7,8 @@ for details.
 
 :authors: Soeren Gebbert
 """
+from __future__ import print_function
+
 import os
 import grass.pygrass.modules as pymod
 import grass.temporal as tgis
@@ -86,7 +88,7 @@ class TestAggregationAbsoluteParallel(TestCase):
         end = datetime.now()
 
         delta = end - start
-        print "test_aggregation_1day_4procs:",  delta.total_seconds()
+        print("test_aggregation_1day_4procs:",  delta.total_seconds())
 
         tinfo_string="""start_time=2001-01-01 00:00:00
                         end_time=2001-04-01 00:00:00
@@ -111,7 +113,7 @@ class TestAggregationAbsoluteParallel(TestCase):
         end = datetime.now()
 
         delta = end - start
-        print "test_aggregation_1day_3procs:",  delta.total_seconds()
+        print("test_aggregation_1day_3procs:",  delta.total_seconds())
 
 
         tinfo_string="""start_time=2001-01-01 00:00:00
@@ -141,7 +143,7 @@ class TestAggregationAbsoluteParallel(TestCase):
         end = datetime.now()
 
         delta = end - start
-        print "test_aggregation_1day_2procs:",  delta.total_seconds()
+        print("test_aggregation_1day_2procs:",  delta.total_seconds())
 
 
         tinfo_string="""start_time=2001-01-01 00:00:00

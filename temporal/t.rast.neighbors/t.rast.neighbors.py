@@ -83,6 +83,7 @@
 #% key: n
 #% description: Register Null maps
 #%end
+from __future__ import print_function
 
 import copy
 import grass.script as grass
