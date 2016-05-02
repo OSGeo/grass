@@ -1464,7 +1464,7 @@ class TemporalAlgebraParser(object):
              >>> p = tgis.TemporalOperatorParser()
              >>> operator = "{+, during}"
              >>> p.parse(operator, optype = 'raster')
-             >>> print(p.relations, p.temporal, p.function)
+             >>> print((p.relations, p.temporal, p.function))
              (['during'], 'l', '+')
 
         """

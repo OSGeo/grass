@@ -14,7 +14,7 @@ for details.
     >>> p = TemporalRasterAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  'R = A {+,equal,l} B '
+    >>> expression =  'R = A {+,equal,l} B'
     >>> p.test(expression)
     R = A {+,equal,l} B
     LexToken(NAME,'R',1,0)
@@ -22,7 +22,7 @@ for details.
     LexToken(NAME,'A',1,4)
     LexToken(T_ARITH2_OPERATOR,'{+,equal,l}',1,6)
     LexToken(NAME,'B',1,18)
-    >>> expression =  'R = A {*,equal|during,r} B '
+    >>> expression =  'R = A {*,equal|during,r} B'
     >>> p.test(expression)
     R = A {*,equal|during,r} B
     LexToken(NAME,'R',1,0)
@@ -30,7 +30,7 @@ for details.
     LexToken(NAME,'A',1,4)
     LexToken(T_ARITH1_OPERATOR,'{*,equal|during,r}',1,6)
     LexToken(NAME,'B',1,25)
-    >>> expression =  'R = A {+,equal|during} B '
+    >>> expression =  'R = A {+,equal|during} B'
     >>> p.test(expression)
     R = A {+,equal|during} B
     LexToken(NAME,'R',1,0)
