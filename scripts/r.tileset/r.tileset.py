@@ -175,7 +175,7 @@ def project(file, source, dest):
         if "*" in line:
             errors += 1
         else:
-            p_x2, p_y2, p_z2 = map(float, line.split(';'))
+            p_x2, p_y2, p_z2 = list(map(float, line.split(';')))
             points.append((p_x2 / dest['scale'], p_y2 / dest['scale']))
 
     return points, errors

@@ -47,7 +47,7 @@ def main():
     if 'MONITOR' in gisenv:
         cmd_file = gcore.parse_command('d.mon', flags='g')['cmd']
         dout_cmd = 'd.out.file'
-        for param, val in options.iteritems():
+        for param, val in options.items():
             if val:
                 dout_cmd += " {param}={val}".format(param=param, val=val)
         with open(cmd_file, "a") as file_:

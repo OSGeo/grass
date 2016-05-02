@@ -62,10 +62,10 @@ def plot_xgraph():
     newline = ['\n']
     p = grass.Popen(['xgraph'], stdin = grass.PIPE)
     for point in sine_cosine_replic + newline + outercircle + newline + vector:
-	if isinstance(point, types.TupleType):
-	    p.stdin.write("%f %f\n" % point)
-	else:
-	    p.stdin.write(point + '\n')
+        if isinstance(point, tuple):
+            p.stdin.write("%f %f\n" % point)
+        else:
+            p.stdin.write(point + '\n')
     p.stdin.close()
     p.wait()
 
@@ -94,10 +94,9 @@ def plot_dgraph():
     scaleval = ring * totalvalidnumber / totalnumber
 
     sine_cosine_replic_normalized = [
-	((scaleval * p[0]/maxradius + 1)*50,
-	 (scaleval * p[1]/maxradius + 1)*50)
-	for p in sine_cosine_replic
-	if isinstance(p, types.TupleType)]
+        ((scaleval * p[0] / maxradius + 1) * 50,
+         (scaleval * p[1] / maxradius + 1) * 50)
+        for p in sine_cosine_replic if isinstance(p, tuple)]
 
     # create circle
     circle = [(50*(1 + ring * math.sin(math.radians(i))),
@@ -165,10 +164,10 @@ def plot_dgraph():
 
     p = grass.feed_command('d.graph', env = tenv)
     for point in lines:
-	if isinstance(point, types.TupleType):
-	    p.stdin.write("%f %f\n" % point)
-	else:
-	    p.stdin.write(point + '\n')
+        if isinstance(point, tuple):
+            p.stdin.write("%f %f\n" % point)
+        else:
+            p.stdin.write(point + '\n')
     p.stdin.close()
     p.wait()
 
@@ -199,14 +198,14 @@ def plot_eps(psout):
     southjustification = 8
     westjustification = 8
 
-    northxshift = 1.02 * halfframe 
-    northyshift = 1.98 * halfframe 
-    eastxshift  = 1.98 * halfframe  
-    eastyshift  = 1.02 * halfframe  
-    southxshift = 1.02 * halfframe 
-    southyshift = 0.02 * halfframe 
-    westxshift  = 0.01 * halfframe  
-    westyshift  = 1.02 * halfframe  
+    northxshift = 1.02 * halfframe
+    northyshift = 1.98 * halfframe
+    eastxshift  = 1.98 * halfframe
+    eastyshift  = 1.02 * halfframe
+    southxshift = 1.02 * halfframe
+    southyshift = 0.02 * halfframe
+    westxshift  = 0.01 * halfframe
+    westyshift  = 1.02 * halfframe
 
     alldatastring = "all data (null included)"
     realdatastring = "real data angles"
@@ -451,7 +450,7 @@ def main():
 
     occurrences = [(math.radians(x), freq[x]) for x in freq]
     occurrences.sort()
-    
+
     # find the maximum value
     maxradius = max([f for a, f in occurrences])
 

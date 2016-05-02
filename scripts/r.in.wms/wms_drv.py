@@ -31,8 +31,14 @@ import numpy as Numeric
 Numeric.arrayrange = Numeric.arange
 
 from math import pi, floor
-from urllib2 import HTTPError
-from httplib import HTTPException
+try:
+    from urllib2 import HTTPError
+    from httplib import HTTPException
+except ImportError:
+    # python3
+    from urllib.error import HTTPError
+    from http.client import HTTPException
+
 try:
     from xml.etree.ElementTree import ParseError
 except ImportError: # < Python 2.7

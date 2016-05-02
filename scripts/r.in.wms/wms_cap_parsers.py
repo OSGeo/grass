@@ -599,7 +599,7 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
             return None
 
         try:
-            bbox = map(float, bbox.split(','))
+            bbox = list(map(float, bbox.split(',')))
         except ValueError:
             return None
 

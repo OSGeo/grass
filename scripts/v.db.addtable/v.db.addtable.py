@@ -105,7 +105,7 @@ def main():
     
     if not table in tables.splitlines():
         if columns:
-            column_def = map(lambda x: x.strip().lower(), columns.strip().split(','))
+            column_def = [x.strip().lower() for x in columns.strip().split(',')]
         else:
             column_def = []
         

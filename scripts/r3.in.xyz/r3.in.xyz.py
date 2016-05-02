@@ -256,7 +256,7 @@ def main():
     proc = {}
     pout = {}
 
-    depths = range(1, 1 + region['depths'])
+    depths = list(range(1, 1 + region['depths']))
 
     for i in depths:
         tmp_layer_name = 'tmp.r3xyz.%d.%s' % (os.getpid(), '%05d' % i)

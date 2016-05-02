@@ -32,7 +32,7 @@ def main():
     if 'MONITOR' in gisenv:
         cmd_file = gcore.parse_command('d.mon', flags='g')['cmd']
         d_cmd = 'd.to.rast'
-        for param, val in options.iteritems():
+        for param, val in options.items():
             if val:
                 d_cmd += " {param}={val}".format(param=param, val=val)
         if gcore.overwrite():
