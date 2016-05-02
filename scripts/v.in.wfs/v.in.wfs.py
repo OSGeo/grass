@@ -78,7 +78,10 @@ import os
 import sys
 from grass.script.utils import try_remove
 from grass.script import core as grass
-import urllib
+try:
+    from urllib import urlopen
+except ImportError:
+    from urllib.request import urlopen
 
 def main():
     out = options['output']
@@ -116,7 +119,7 @@ def main():
     grass.debug(wfs_url)
 
     grass.message(_("Retrieving data..."))
-    inf = urllib.urlopen(wfs_url)
+    inf = urlopen(wfs_url)
     outf = file(tmpxml, 'wb')
     while True:
 	s = inf.read()

@@ -152,7 +152,7 @@ def get_frame_name(line):
 # calculate position of the frame in percent
 def calculate_frame(frame, at, width, height):
     try:
-        b, t, l, r = map(float, at.split(','))
+        b, t, l, r = list(map(float, at.split(',')))
     except:
         fatal(_("Invalid frame position: %s") % at)
 

@@ -142,8 +142,8 @@ try:
     from urllib import urlopen, urlretrieve
 except ImportError:
     # there is also HTTPException, perhaps change to list
-    from urllib.request import HTTPError, URLError, \
-        urlopen, urlretrieve  # pylint: disable=E0611
+    from urllib.error import HTTPError, URLError
+    from urllib.request import urlopen, urlretrieve
 
 try:
     import xml.etree.ElementTree as etree
@@ -329,7 +329,7 @@ def list_available_extensions(url):
     if flags['t']:
         grass.message(_("List of available extensions (toolboxes):"))
         tlist = get_available_toolboxes(url)
-        for toolbox_code, toolbox_data in tlist.iteritems():
+        for toolbox_code, toolbox_data in tlist.items():
             if flags['g']:
                 print('toolbox_name=' + toolbox_data['name'])
                 print('toolbox_code=' + toolbox_code)
@@ -339,8 +339,7 @@ def list_available_extensions(url):
                 list_available_modules(url, toolbox_data['modules'])
             else:
                 if toolbox_data['modules']:
-                    print(os.linesep.join(map(lambda x: '* ' + x,
-                                              toolbox_data['modules'])))
+                    print(os.linesep.join(['* ' + x for x in toolbox_data['modules']]))
     else:
         grass.message(_("List of available extensions (modules):"))
         list_available_modules(url)
@@ -1530,7 +1529,7 @@ def resolve_known_host_service(url):
     """
     match = None
     actual_start = None
-    for key, value in KNOWN_HOST_SERVICES_INFO.iteritems():
+    for key, value in KNOWN_HOST_SERVICES_INFO.items():
         for start in value['possible_starts']:
             if url.startswith(start + value['domain']):
                 match = value

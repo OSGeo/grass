@@ -34,7 +34,7 @@ def main():
         if not cmd_file:
             gcore.fatal(_("Unable to open file '%s'") % cmd_file)
         dout_cmd = 'd.what.rast'
-        for param, val in options.iteritems():
+        for param, val in options.items():
             if val:
                 dout_cmd += " {param}={val}".format(param=param, val=val)
         with open(cmd_file, "a") as file_:

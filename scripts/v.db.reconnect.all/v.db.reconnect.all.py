@@ -60,7 +60,7 @@ from grass.exceptions import CalledModuleError
 def substitute_db(database):
     gisenv = grass.gisenv()
     tmpl = string.Template(database)
-    
+
     return tmpl.substitute(GISDBASE = gisenv['GISDBASE'],
                            LOCATION_NAME = gisenv['LOCATION_NAME'],
                            MAPSET = gisenv['MAPSET'])
@@ -76,13 +76,13 @@ def create_db(driver, database):
             os.makedirs(path)
 	    return True
         return False
-    
+
     if driver == 'sqlite':
         path = os.path.dirname(subst_database)
         # check if destination directory exists
         if not os.path.isdir(path):
             os.makedirs(path)
-    
+
     if subst_database in grass.read_command('db.databases', quiet = True,
                                       driver = driver).splitlines():
         return False
@@ -95,7 +95,7 @@ def create_db(driver, database):
     except CalledModuleError:
         grass.fatal(_("Unable to create database <%s> by driver <%s>") % \
                         (subst_database, driver))
-        
+
     return False
 
 # copy tables if required (-c)
@@ -106,7 +106,7 @@ def copy_tab(from_driver, from_database, from_table,
                                       database = to_database,
                                       stderr = nuldev).splitlines():
         return False
-    
+
     grass.info("Copying table <%s> to target database..." % to_table)
     try:
         grass.run_command('db.copy', from_driver = from_driver,
@@ -116,7 +116,7 @@ def copy_tab(from_driver, from_database, from_table,
                           to_table = to_table)
     except CalledModuleError:
         grass.fatal(_("Unable to copy table <%s>") % from_table)
-    
+
     return True
 
 # drop tables if required (-d)
@@ -134,7 +134,7 @@ def drop_tab(vector, layer, table, driver, database):
                           table = table)
     except CalledModuleError:
         grass.fatal(_("Unable to drop table <%s>") % table)
-        
+
 # create index on key column
 def create_index(driver, database, table, index_name, key):
     if driver == 'dbf':
@@ -174,44 +174,45 @@ def main():
 	old_database_subst = substitute_db(old_database)
 
     new_database_subst = substitute_db(new_database)
-    
+
     if old_database_subst == new_database_subst and old_schema == new_schema:
 	grass.fatal(_("Old and new database connection is identical. Nothing to do."))
-    
+
     mapset = grass.gisenv()['MAPSET']
-        
+
     vectors = grass.list_grouped('vect')[mapset]
     num_vectors = len(vectors)
 
     if flags['c']:
 	# create new database if not existing
 	create_db(new_driver, new_database)
-    
+
     i = 0
     for vect in vectors:
         vect = "%s@%s" % (vect, mapset)
         i += 1
-	grass.message(_("%s\nReconnecting vector map <%s> (%d of %d)...\n%s") % \
-                          ('-' * 80, vect, i, num_vectors, '-' * 80))
-        for f in grass.vector_db(vect, stderr = nuldev).itervalues():
+        gscript.message(_("%s\nReconnecting vector map <%s> "
+                          "(%d of %d)...\n%s") %
+                        ('-' * 80, vect, i, num_vectors, '-' * 80))
+        for f in gscript.vector_db(vect, stderr=nuldev).values():
             layer = f['layer']
             schema_table = f['table']
             key = f['key']
             database = f['database']
             driver = f['driver']
-            
+
             # split schema.table
             if '.' in schema_table:
                 schema, table = schema_table.split('.', 1)
             else:
                 schema = ''
                 table = schema_table
-            
+
             if new_schema:
                 new_schema_table = "%s.%s" % (new_schema, table)
             else:
                 new_schema_table = table
-            
+
             grass.debug("DATABASE = '%s' SCHEMA = '%s' TABLE = '%s' ->\n"
                         "      NEW_DATABASE = '%s' NEW_SCHEMA_TABLE = '%s'" % \
                             (old_database, schema, table, new_database, new_schema_table))
@@ -224,15 +225,15 @@ def main():
 		do_reconnect = False
 	    if schema != old_schema:
 		do_reconnect = False
-		
+
             if do_reconnect == True:
                 grass.verbose(_("Reconnecting layer %d...") % layer)
-                                          
+
                 if flags['c']:
                     # check if table exists in new database
                     copy_tab(driver, database, schema_table,
                              new_driver, new_database, new_schema_table)
-                
+
                 # drop original table if required
                 if flags['d']:
                     drop_tab(vect, layer, schema_table, driver, substitute_db(database))
@@ -251,7 +252,7 @@ def main():
 		if database != new_database_subst:
 		    grass.warning(_("Layer <%d> will not be reconnected because "
 				    "database or schema do not match.") % layer)
-	
+
     return 0
 
 if __name__ == "__main__":
