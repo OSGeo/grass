@@ -9,9 +9,13 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 
 import os
-import sys
 
-long = int if sys.version_info[0] == 3 else long
+try:
+    from builtins import long, unicode
+except ImportError:
+    # python3
+    long = int
+    unicode = str
 
 import ctypes
 import numpy as np
