@@ -43,7 +43,10 @@ from grass.exceptions import CalledModuleError
 
 def cleanup():
     nuldev = file(os.devnull, 'w')
-    grass.run_command('g.remove', flags = 'f', type = 'vector', name = '%s_%s' % (output, tmp), quiet = True, stderr = nuldev)
+    grass.run_command(
+        'g.remove', flags='f', type='vector', name='%s_%s' %
+        (output, tmp), quiet=True, stderr=nuldev)
+
 
 def main():
     global output, tmp
@@ -53,44 +56,45 @@ def main():
     layer = options['layer']
     column = options['column']
 
-    #### setup temporary file
+    # setup temporary file
     tmp = str(os.getpid())
 
     # does map exist?
-    if not grass.find_file(input, element = 'vector')['file']:
-	grass.fatal(_("Vector map <%s> not found") % input)
-    
+    if not grass.find_file(input, element='vector')['file']:
+        grass.fatal(_("Vector map <%s> not found") % input)
+
     if not column:
-        grass.warning(_("No '%s' option specified. Dissolving based on category values from layer <%s>.") % \
-                          ("column", layer))
-	grass.run_command('v.extract', flags = 'd', input = input,
-			  output = output, type = 'area', layer = layer)
+        grass.warning(
+            _("No '%s' option specified. Dissolving based on category values from layer <%s>.") %
+            ("column", layer))
+        grass.run_command('v.extract', flags='d', input=input,
+                          output=output, type='area', layer=layer)
     else:
         if int(layer) == -1:
             grass.warning(_("Invalid layer number (%d). "
-                            "Parameter '%s' specified, assuming layer '1'.") % 
+                            "Parameter '%s' specified, assuming layer '1'.") %
                           (int(layer), 'column'))
             layer = '1'
         try:
             coltype = grass.vector_columns(input, layer)[column]
         except KeyError:
             grass.fatal(_('Column <%s> not found') % column)
-        
-	if coltype['type'] not in ('INTEGER', 'SMALLINT', 'CHARACTER', 'TEXT'):
-	    grass.fatal(_("Key column must be of type integer or string"))
+
+        if coltype['type'] not in ('INTEGER', 'SMALLINT', 'CHARACTER', 'TEXT'):
+            grass.fatal(_("Key column must be of type integer or string"))
 
         f = grass.vector_layer_db(input, layer)
 
-	table = f['table']
+        table = f['table']
 
-	tmpfile = '%s_%s' % (output, tmp)
+        tmpfile = '%s_%s' % (output, tmp)
 
         try:
             grass.run_command('v.reclass', input=input, output=tmpfile,
                               layer=layer, column=column)
             grass.run_command('v.extract', flags='d', input=tmpfile,
                               output=output, type='area', layer=layer)
-        except CalledModuleError, e:
+        except CalledModuleError as e:
             grass.fatal(_("Final extraction steps failed."
                           " Check above error messages and"
                           " see following details:\n%s") % e)

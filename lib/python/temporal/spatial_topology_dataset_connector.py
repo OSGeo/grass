@@ -14,6 +14,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+from __future__ import print_function
 import copy
 
 
@@ -68,7 +69,7 @@ class SpatialTopologyDatasetConnector(object):
             meet=a@P
             >>> rlist = tmr.get_spatial_relations()
             >>> if "COVER" in rlist.keys():
-            ...    print rlist["COVER"][0].get_id()
+            ...    print(rlist["COVER"][0].get_id())
             a@P
 
     """
@@ -318,54 +319,54 @@ class SpatialTopologyDatasetConnector(object):
     def print_spatial_topology_info(self):
         """Print information about this class in human readable style"""
 
-        print " +-------------------- Spatial Topology --------------------------------------+"
+        print(" +-------------------- Spatial Topology --------------------------------------+")
         #          0123456789012345678901234567890
         if self.equivalent is not None:
-            print " | Equivalent: ................ " + \
-                self._generate_map_list_string(self.equivalent)
+            print(" | Equivalent: ................ " +
+                  self._generate_map_list_string(self.equivalent))
         if self.cover is not None:
-            print " | Cover: ..................... " + \
-                self._generate_map_list_string(self.cover)
+            print(" | Cover: ..................... " +
+                  self._generate_map_list_string(self.cover))
         if self.covered is not None:
-            print " | Covered: ................... " + \
-                self._generate_map_list_string(self.covered)
+            print(" | Covered: ................... " +
+                  self._generate_map_list_string(self.covered))
         if self.overlap is not None:
-            print " | Overlap: ................... " + \
-                self._generate_map_list_string(self.overlap)
+            print(" | Overlap: ................... " +
+                  self._generate_map_list_string(self.overlap))
         if self.in_ is not None:
-            print " | In: ........................ " + \
-                self._generate_map_list_string(self.in_)
+            print(" | In: ........................ " +
+                  self._generate_map_list_string(self.in_))
         if self.contain is not None:
-            print " | Contain: ................... " + \
-                self._generate_map_list_string(self.contain)
+            print(" | Contain: ................... " +
+                  self._generate_map_list_string(self.contain))
         if self.meet is not None:
-            print " | Meet: ...................... " + \
-                self._generate_map_list_string(self.meet)
+            print(" | Meet: ...................... " +
+                  self._generate_map_list_string(self.meet))
 
     def print_spatial_topology_shell_info(self):
         """Print information about this class in shell style"""
 
         if self.equivalent is not None:
-            print "equivalent=" + self._generate_map_list_string(self.equivalent,
-                                                                 False)
+            print("equivalent=" + self._generate_map_list_string(self.equivalent,
+                                                                 False))
         if self.cover is not None:
-            print "cover=" + self._generate_map_list_string(
-                self.cover, False)
+            print("cover=" + self._generate_map_list_string(
+                  self.cover, False))
         if self.covered is not None:
-            print "covered=" + \
-                self._generate_map_list_string(self.covered, False)
+            print("covered=" +
+                  self._generate_map_list_string(self.covered, False))
         if self.overlap is not None:
-            print "overlap=" + \
-                self._generate_map_list_string(self.overlap)
+            print("overlap=" +
+                  self._generate_map_list_string(self.overlap))
         if self.in_ is not None:
-            print "in=" + \
-                self._generate_map_list_string(self.in_)
+            print("in=" +
+                  self._generate_map_list_string(self.in_))
         if self.contain is not None:
-            print "contain=" + \
-                self._generate_map_list_string(self.contain)
+            print("contain=" +
+                  self._generate_map_list_string(self.contain))
         if self.meet is not None:
-            print "meet=" + \
-                self._generate_map_list_string(self.meet)
+            print("meet=" +
+                  self._generate_map_list_string(self.meet))
 
 ###############################################################################
 

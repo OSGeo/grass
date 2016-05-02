@@ -10,11 +10,11 @@ for details.
 """
 
 from grass.script.utils import get_num_suffix
-from space_time_datasets import *
-from open_stds import *
-from datetime_math import create_suffix_from_datetime
-from datetime_math import create_time_suffix
-from datetime_math import create_numeric_suffic
+from .space_time_datasets import *
+from .open_stds import *
+from .datetime_math import create_suffix_from_datetime
+from .datetime_math import create_time_suffix
+from .datetime_math import create_numeric_suffic
 from multiprocessing import Process
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
@@ -183,7 +183,7 @@ def extract_dataset(input, output, type, where, expression, base, time_suffix,
         msgr.percent(0, num_rows, 1)
 
         temporal_type, semantic_type, title, description = sp.get_initial_values()
-        new_sp = open_new_stds(output, type, sp.get_temporal_type(), title, 
+        new_sp = open_new_stds(output, type, sp.get_temporal_type(), title,
                                description, semantic_type, dbif,
                                gscript.overwrite())
 

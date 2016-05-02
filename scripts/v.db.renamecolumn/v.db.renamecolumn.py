@@ -5,10 +5,10 @@
 # MODULE:       v.db.renamecolumn
 # AUTHOR(S):    Markus Neteler
 #               Converted to Python by Glynn Clements
-# PURPOSE:      interface to db.execute to drop a column from the 
+# PURPOSE:      interface to db.execute to drop a column from the
 #               attribute table connected to a given vector map
 #               - Based on v.db.dropcolumn
-#               - with special trick for SQLite and DBF (here the new col is 
+#               - with special trick for SQLite and DBF (here the new col is
 #                 added/values copied/old col deleted)
 # COPYRIGHT:    (C) 2007 by the GRASS Development Team
 #
@@ -30,7 +30,7 @@
 #%end
 #%option G_OPT_V_FIELD
 #%end
-#%option 
+#%option
 #% key: column
 #% type: string
 #% description: Old and new name of the column (old,new)
@@ -43,6 +43,7 @@ import sys
 import os
 import grass.script as grass
 
+
 def main():
     map = options['map']
     layer = options['layer']
@@ -50,7 +51,7 @@ def main():
 
     mapset = grass.gisenv()['MAPSET']
 
-    if not grass.find_file(map, element = 'vector', mapset = mapset):
+    if not grass.find_file(map, element='vector', mapset=mapset):
         grass.fatal(_("Vector map <%s> not found in current mapset") % map)
 
     f = grass.vector_layer_db(map, layer)
@@ -69,10 +70,14 @@ def main():
 
     if driver == "dbf":
         if len(newcol) > 10:
-            grass.fatal(_("Column name <%s> too long. The DBF driver supports column names not longer than 10 characters") % newcol)
+            grass.fatal(
+                _("Column name <%s> too long. The DBF driver supports column names not longer than 10 characters") %
+                newcol)
 
     if oldcol == keycol:
-        grass.fatal(_("Cannot rename column <%s> as it is needed to keep table <%s> connected to the input vector map") % (oldcol, table))
+        grass.fatal(
+            _("Cannot rename column <%s> as it is needed to keep table <%s> connected to the input vector map") %
+            (oldcol, table))
 
     # describe old col
     oldcoltype = None
@@ -93,10 +98,10 @@ def main():
         else:
             colspec = "%s %s" % (newcol, oldcoltype)
 
-        grass.run_command('v.db.addcolumn', map = map, layer = layer, column = colspec)
+        grass.run_command('v.db.addcolumn', map=map, layer=layer, column=colspec)
         sql = "UPDATE %s SET %s=%s" % (table, newcol, oldcol)
-        grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = sql)
-        grass.run_command('v.db.dropcolumn', map = map, layer = layer, column = oldcol)
+        grass.write_command('db.execute', input='-', database=database, driver=driver, stdin=sql)
+        grass.run_command('v.db.dropcolumn', map=map, layer=layer, column=oldcol)
     elif driver == 'mysql':
         if oldcoltype.upper() == "CHARACTER":
             newcoltype = "varchar(%s)" % (oldcollength)
@@ -104,10 +109,10 @@ def main():
             newcoltype = oldcoltype
 
         sql = "ALTER TABLE %s CHANGE %s %s %s" % (table, oldcol, newcol, newcoltype)
-        grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = sql)
+        grass.write_command('db.execute', input='-', database=database, driver=driver, stdin=sql)
     else:
         sql = "ALTER TABLE %s RENAME %s TO %s" % (table, oldcol, newcol)
-        grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = sql)
+        grass.write_command('db.execute', input='-', database=database, driver=driver, stdin=sql)
 
     # write cmd history:
     grass.vector_history(map)

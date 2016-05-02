@@ -17,8 +17,8 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from abstract_dataset import *
-from datetime_math import *
+from .abstract_dataset import *
+from .datetime_math import *
 import grass.lib.vector as vector
 import grass.lib.rtree as rtree
 import grass.lib.gis as gis
@@ -431,7 +431,7 @@ class SpatioTemporalTopologyBuilder(object):
         sorted_maps = sorted(
             maps, key=AbstractDatasetComparisonKeyStartTime)
 
-        for i in xrange(len(sorted_maps) - 1):
+        for i in range(len(sorted_maps) - 1):
             sorted_maps[i].set_next(sorted_maps[i + 1])
 
         for map_ in sorted_maps:
@@ -491,7 +491,7 @@ class SpatioTemporalTopologyBuilder(object):
 
         tree = rtree.RTreeCreateTree(-1, 0, dim)
 
-        for i in xrange(len(maps)):
+        for i in range(len(maps)):
 
             rect = self._map_to_rect(tree, maps[i], spatial)
             rtree.RTreeInsertRect(rect, i + 1, tree)
@@ -542,13 +542,13 @@ class SpatioTemporalTopologyBuilder(object):
 
         list_ = gis.G_new_ilist()
 
-        for j in xrange(len(mapsB)):
+        for j in range(len(mapsB)):
 
             rect = self._map_to_rect(tree, mapsB[j], spatial)
             vector.RTreeSearch2(tree, rect, list_)
             rtree.RTreeFreeRect(rect)
 
-            for k in xrange(list_.contents.n_values):
+            for k in range(list_.contents.n_values):
                 i = list_.contents.value[k] - 1
 
                 # Get the temporal relationship

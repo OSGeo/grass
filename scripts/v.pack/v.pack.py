@@ -43,8 +43,10 @@ from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
 from grass.script import vector as vector
 
+
 def cleanup():
     try_rmdir(basedir)
+
 
 def main():
     infile = options['input']
@@ -54,14 +56,14 @@ def main():
     basedir = grass.tempdir()
 
     # check if vector map exists
-    gfile = grass.find_file(infile, element = 'vector')
+    gfile = grass.find_file(infile, element='vector')
     if not gfile['name']:
         grass.fatal(_("Vector map <%s> not found") % infile)
 
     # check if input vector map is in the native format
     if vector.vector_info(gfile['fullname'])['format'] != 'native':
-        grass.fatal(_("Unable to pack vector map <%s>. Only native format supported.") % \
-                        gfile['fullname'])
+        grass.fatal(_("Unable to pack vector map <%s>. Only native format supported.") %
+                    gfile['fullname'])
 
     # split the name if there is the mapset name
     if infile.find('@'):
@@ -86,9 +88,9 @@ def main():
 
     # write tar file, optional compression
     if compression_off:
-        tar = tarfile.open(name = outfile, mode = 'w:')
+        tar = tarfile.open(name=outfile, mode='w:')
     else:
-        tar = tarfile.open(name = outfile, mode = 'w:gz')
+        tar = tarfile.open(name=outfile, mode='w:gz')
     tar.add(gfile['file'], infile)
 
     # check if exist a db connection for the vector

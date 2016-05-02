@@ -16,7 +16,7 @@
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
-#############################################################################/
+# /
 
 #%module
 #% description: Views BMP images from the PNG driver.
@@ -43,7 +43,7 @@ import grass.script as grass
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    image   = options['image']
+    image = options['image']
     percent = options['percent']
     python = os.getenv('GRASS_PYTHON', 'python')
     gisbase = os.environ['GISBASE']

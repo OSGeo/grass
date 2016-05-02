@@ -1,5 +1,5 @@
 """!
-@brief WMS, WMTS and NASA OnEarth drivers implemented in GRASS using GDAL Python bindings. 
+@brief WMS, WMTS and NASA OnEarth drivers implemented in GRASS using GDAL Python bindings.
 
 List of classes:
  - srs.py::Srs
@@ -32,6 +32,7 @@ class Srs:
           * urn:ogc:def:crs:EPSG:4326
         :param string axisorder: Force / override axisorder ('xy' or 'yx')
     """
+
     def __init__(self, srs):
         self.id = srs
         self.naming_authority = None
@@ -45,7 +46,7 @@ class Srs:
 
         values = self.id.split(':')
 
-        if self.id.find('/def/crs/') != -1: # URI Style 1
+        if self.id.find('/def/crs/') != -1:  # URI Style 1
             self.encoding = "uri"
             vals = self.id.split('/')
             self.authority = vals[5].upper()
@@ -84,7 +85,7 @@ class Srs:
             self.code = int(values[1])
 
         if self.code in axisorder_yx:
-                self.axisorder = 'yx'
+            self.axisorder = 'yx'
 
     def getcode(self):
         """Create for example "EPSG:4326" string and return back
@@ -101,10 +102,10 @@ class Srs:
         """
 
         return 'urn:%s:def:crs:%s:%s:%s' % (
-                    (self.naming_authority and self.naming_authority or "ogc"),
-                                    (self.authority or ""),
-                                    (self.version or ""),
-                                    (self.code or ""))
+            (self.naming_authority and self.naming_authority or "ogc"),
+            (self.authority or ""),
+            (self.version or ""),
+            (self.code or ""))
 
 axisorder_yx = frozenset([
     4326,

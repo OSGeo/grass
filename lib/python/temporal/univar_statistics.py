@@ -18,8 +18,9 @@ for details.
 
 :authors: Soeren Gebbert
 """
+from __future__ import print_function
 
-from open_stds import *
+from .open_stds import *
 import grass.script as gscript
 
 ###############################################################################
@@ -71,7 +72,7 @@ def print_gridded_dataset_univar_statistics(type, input, output, where, extended
             string += "third_quartile" + fs + "percentile_90"
 
         if output is None:
-            print string
+            print(string)
         else:
             out_file.write(string + "\n")
 
@@ -113,7 +114,7 @@ def print_gridded_dataset_univar_statistics(type, input, output, where, extended
             string += fs + str(stats["third_quartile"]) + fs + str(stats["percentile_90"])
 
         if output is None:
-            print string
+            print(string)
         else:
             out_file.write(string + "\n")
 
@@ -191,7 +192,7 @@ def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, c
                     "third_quartile" + fs + "percentile_90"
 
         if output is None:
-            print string
+            print(string)
         else:
             out_file.write(string + "\n")
 
@@ -254,7 +255,7 @@ def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, c
                     string += fs + fs + fs + fs
 
         if output is None:
-            print string
+            print(string)
         else:
             out_file.write(string + "\n")
 

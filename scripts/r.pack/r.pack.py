@@ -40,8 +40,10 @@ import tarfile
 from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
 
+
 def cleanup():
     try_rmdir(tmp)
+
 
 def main():
     infile = options['input']
@@ -54,30 +56,30 @@ def main():
         outfile_path, outfile_base = os.path.split(os.path.abspath(options['output']))
     else:
         outfile_path, outfile_base = os.path.split(os.path.abspath(infile + ".pack"))
-    
+
     outfile = os.path.join(outfile_path, outfile_base)
-    
+
     global tmp
     tmp = grass.tempdir()
     tmp_dir = os.path.join(tmp, infile)
     os.mkdir(tmp_dir)
     grass.debug('tmp_dir = %s' % tmp_dir)
-    
-    gfile = grass.find_file(name = infile, element = 'cell', mapset = mapset)
+
+    gfile = grass.find_file(name=infile, element='cell', mapset=mapset)
     if not gfile['name']:
         grass.fatal(_("Raster map <%s> not found") % infile)
-    
+
     if os.path.exists(outfile):
         if os.getenv('GRASS_OVERWRITE'):
             grass.warning(_("Pack file <%s> already exists and will be overwritten") % outfile)
             try_remove(outfile)
         else:
             grass.fatal(_("option <output>: <%s> exists.") % outfile)
-    
+
     grass.message(_("Packing <%s> to <%s>...") % (gfile['fullname'], outfile))
     basedir = os.path.sep.join(os.path.normpath(gfile['file']).split(os.path.sep)[:-2])
-    olddir  = os.getcwd()
-    
+    olddir = os.getcwd()
+
     # copy elements
     for element in ['cats', 'cell', 'cellhd', 'colr', 'fcell', 'hist']:
         path = os.path.join(basedir, element, infile)
@@ -85,14 +87,14 @@ def main():
             grass.debug('copying %s' % path)
             shutil.copyfile(path,
                             os.path.join(tmp_dir, element))
-            
+
     if os.path.exists(os.path.join(basedir, 'cell_misc', infile)):
         shutil.copytree(os.path.join(basedir, 'cell_misc', infile),
                         os.path.join(tmp_dir, 'cell_misc'))
-        
+
     if not os.listdir(tmp_dir):
         grass.fatal(_("No raster map components found"))
-                    
+
     # copy projection info
     # (would prefer to use g.proj*, but this way is 5.3 and 5.7 compat)
     gisenv = grass.gisenv()
@@ -101,22 +103,22 @@ def main():
                             'PERMANENT', 'PROJ_' + support)
         if os.path.exists(path):
             shutil.copyfile(path, os.path.join(tmp_dir, 'PROJ_' + support))
-    
+
     # pack it all up
     os.chdir(tmp)
     if compression_off:
-        tar = tarfile.TarFile.open(name = outfile_base, mode = 'w:')
+        tar = tarfile.TarFile.open(name=outfile_base, mode='w:')
     else:
-        tar = tarfile.TarFile.open(name = outfile_base, mode = 'w:gz')
-    tar.add(infile, recursive = True)
+        tar = tarfile.TarFile.open(name=outfile_base, mode='w:gz')
+    tar.add(infile, recursive=True)
     tar.close()
     try:
         shutil.move(outfile_base, outfile)
     except shutil.Error as e:
         grass.fatal(e)
-        
+
     os.chdir(olddir)
-    
+
     grass.verbose(_("Raster map saved to '%s'" % outfile))
 
 

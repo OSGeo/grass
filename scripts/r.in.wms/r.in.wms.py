@@ -58,8 +58,8 @@ This program is free software under the GNU General Public License
 #%option
 #% key: srs
 #% type: integer
-#% description: EPSG code of requested source projection 
-#% answer:4326 
+#% description: EPSG code of requested source projection
+#% answer:4326
 #% guisection: Request
 #%end
 
@@ -178,28 +178,30 @@ sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), 'etc', 'r.in.wms')
 
 import grass.script as grass
 
+
 def GetRegionParams(opt_region):
 
-    # set region 
+    # set region
     if opt_region:
         reg_spl = opt_region.strip().split('@', 1)
         reg_mapset = '.'
         if len(reg_spl) > 1:
             reg_mapset = reg_spl[1]
-            
-        if not grass.find_file(name = reg_spl[0], element = 'windows', mapset = reg_mapset)['name']:
-             grass.fatal(_("Region <%s> not found") % opt_region)
-    
+
+        if not grass.find_file(name=reg_spl[0], element='windows', mapset=reg_mapset)['name']:
+            grass.fatal(_("Region <%s> not found") % opt_region)
+
     if opt_region:
         s = grass.read_command('g.region',
-                                quiet = True,
-                                flags = 'ug',
-                                region = opt_region)
-        region_params = grass.parse_key_val(s, val_type = float)
+                               quiet=True,
+                               flags='ug',
+                               region=opt_region)
+        region_params = grass.parse_key_val(s, val_type=float)
     else:
         region_params = grass.region()
 
     return region_params
+
 
 def main():
 
@@ -211,7 +213,7 @@ def main():
         grass.debug("Using GDAL WMS driver")
         from wms_gdal_drv import WMSGdalDrv
         wms = WMSGdalDrv()
-    
+
     if flags['c']:
         wms.GetCapabilities(options)
     else:

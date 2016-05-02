@@ -116,7 +116,8 @@ def main():
     skip_projection_check = False
     if not os.path.exists(os.path.join(tmp_dir, 'PROJ_INFO')):
         if os.path.exists(loc_proj):
-            grass.fatal(_("PROJ_INFO file is missing, unpack vector map in XY (unprojected) location."))
+            grass.fatal(
+                _("PROJ_INFO file is missing, unpack vector map in XY (unprojected) location."))
         skip_projection_check = True  # XY location
 
     if not skip_projection_check:
@@ -124,14 +125,14 @@ def main():
         if not grass.compare_key_value_text_files(filename_a=os.path.join(tmp_dir, 'PROJ_INFO'),
                                                   filename_b=loc_proj, proj=True):
             diff_result_1 = diff_files(os.path.join(tmp_dir, 'PROJ_INFO'),
-                                             loc_proj)
-    
+                                       loc_proj)
+
         if not grass.compare_key_value_text_files(filename_a=os.path.join(tmp_dir, 'PROJ_UNITS'),
                                                   filename_b=loc_proj_units,
                                                   units=True):
             diff_result_2 = diff_files(os.path.join(tmp_dir, 'PROJ_UNITS'),
-                                             loc_proj_units)
-    
+                                       loc_proj_units)
+
         if diff_result_1 or diff_result_2:
             if flags['o']:
                 grass.warning(_("Projection information does not match. Proceeding..."))
@@ -167,7 +168,7 @@ def main():
         # check if dbf or sqlite directory exists
         if dbconn['driver'] == 'dbf' and not os.path.exists(os.path.join(mset_dir, 'dbf')):
             os.mkdir(os.path.join(mset_dir, 'dbf'))
-	elif dbconn['driver'] == 'sqlite' and not os.path.exists(os.path.join(mset_dir, 'sqlite')):
+        elif dbconn['driver'] == 'sqlite' and not os.path.exists(os.path.join(mset_dir, 'sqlite')):
             os.mkdir(os.path.join(mset_dir, 'sqlite'))
         # for each old connection
         for t in dbnlist:

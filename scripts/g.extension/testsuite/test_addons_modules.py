@@ -99,7 +99,7 @@ class TestModulesFromDifferentSources(TestCase):
         """Test installing extension from local .tar.gz"""
         self.assertModule('g.extension', extension='r.plus.example',
                           url=os.path.join(self.path,
-                                              'r.plus.example.tar.gz'),
+                                           'r.plus.example.tar.gz'),
                           prefix=self.install_prefix)
         for file in self.files:
             self.assertFileExists(file)

@@ -24,9 +24,9 @@ for details.
 
 :author: Soeren Gebbert
 """
-
+from __future__ import print_function
 from datetime import datetime
-from core import *
+from .core import *
 
 ###############################################################################
 
@@ -186,7 +186,7 @@ class DictSQLSerializer(object):
     def print_self(self):
         """Print the content of the internal dictionary to stdout
         """
-        print self.D
+        print(self.D)
 
 ###############################################################################
 
@@ -276,7 +276,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
                         if None a temporary connection will be established
         """
         sql = self.get_delete_statement()
-        #print sql
+        #print(sql)
 
         if dbif:
             dbif.execute(sql,   mapset=self.mapset)
@@ -350,8 +350,8 @@ class SQLDatabaseInterface(DictSQLSerializer):
                         if None a temporary connection will be established
         """
         sql, args = self.get_select_statement()
-        #print sql
-        #print args
+        #print(sql)
+        #print(args)
 
         if dbif:
             if len(args) == 0:
@@ -408,8 +408,8 @@ class SQLDatabaseInterface(DictSQLSerializer):
                         if None a temporary connection will be established
         """
         sql, args = self.get_insert_statement()
-        #print sql
-        #print args
+        #print(sql)
+        #print(args)
 
         if dbif:
             dbif.execute(sql, args, mapset=self.mapset)
@@ -462,8 +462,8 @@ class SQLDatabaseInterface(DictSQLSerializer):
             self.msgr.fatal(_("Missing identifer"))
 
         sql, args = self.get_update_statement(ident)
-        #print sql
-        #print args
+        #print(sql)
+        #print(args)
 
         if dbif:
             dbif.execute(sql, args, mapset=self.mapset)
@@ -513,8 +513,8 @@ class SQLDatabaseInterface(DictSQLSerializer):
             self.msgr.fatal(_("Missing identifer"))
 
         sql, args = self.get_update_all_statement(ident)
-        #print sql
-        #print args
+        #print(sql)
+        #print(args)
 
         if dbif:
             dbif.execute(sql, args, mapset=self.mapset)
@@ -766,26 +766,26 @@ class DatasetBase(SQLDatabaseInterface):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print " +-------------------- Basic information -------------------------------------+"
-        print " | Id: ........................ " + str(self.get_id())
-        print " | Name: ...................... " + str(self.get_name())
-        print " | Mapset: .................... " + str(self.get_mapset())
+        print( " +-------------------- Basic information -------------------------------------+")
+        print( " | Id: ........................ " + str(self.get_id()))
+        print(" | Name: ...................... " + str(self.get_name()))
+        print(" | Mapset: .................... " + str(self.get_mapset()))
         if self.get_layer():
-            print " | Layer:...................... " + str(self.get_layer())
-        print " | Creator: ................... " + str(self.get_creator())
-        print " | Temporal type: ............. " + str(self.get_ttype())
-        print " | Creation time: ............. " + str(self.get_ctime())
+            print(" | Layer:...................... " + str(self.get_layer()))
+        print(" | Creator: ................... " + str(self.get_creator()))
+        print(" | Temporal type: ............. " + str(self.get_ttype()))
+        print(" | Creation time: ............. " + str(self.get_ctime()))
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
-        print "id=" + str(self.get_id())
-        print "name=" + str(self.get_name())
-        print "mapset=" + str(self.get_mapset())
+        print("id=" + str(self.get_id()))
+        print("name=" + str(self.get_name()))
+        print("mapset=" + str(self.get_mapset()))
         if self.get_layer():
-            print "layer=" + str(self.get_layer())
-        print "creator=" + str(self.get_creator())
-        print "temporal_type=" + str(self.get_ttype())
-        print "creation_time=" + str(self.get_ctime())
+            print("layer=" + str(self.get_layer()))
+        print("creator=" + str(self.get_creator()))
+        print("temporal_type=" + str(self.get_ttype()))
+        print("creation_time=" + str(self.get_ctime()))
 
 ###############################################################################
 
@@ -901,7 +901,7 @@ class STDSBase(DatasetBase):
 
            :return: None if not found
         """
-        if self.D.has_key("modification_time"):
+        if "modification_time" in self.D:
             return self.D["modification_time"]
         else:
             return None
@@ -912,15 +912,15 @@ class STDSBase(DatasetBase):
         """Print information about this class in human readable style"""
         DatasetBase.print_info(self)
         #      0123456789012345678901234567890
-        print " | Modification time:.......... " + str(self.get_mtime())
-        print " | Semantic type:.............. " + str(
-            self.get_semantic_type())
+        print(" | Modification time:.......... " + str(self.get_mtime()))
+        print(" | Semantic type:.............. " + str(
+            self.get_semantic_type()))
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         DatasetBase.print_shell_info(self)
-        print "modification_time=" + str(self.get_mtime())
-        print "semantic_type=" + str(self.get_semantic_type())
+        print("modification_time=" + str(self.get_mtime()))
+        print("semantic_type=" + str(self.get_semantic_type()))
 
 ###############################################################################
 

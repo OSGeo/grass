@@ -33,12 +33,13 @@ from grass.exceptions import CalledModuleError
 
 
 class WMSBase:
+
     def __init__(self):
         # these variables are information for destructor
         self.temp_files_to_cleanup = []
 
         self.params = {}
-        self.tile_size = {'bbox' : None}
+        self.tile_size = {'bbox': None}
 
         self.temp_map = None
         self.temp_warpmap = None
@@ -81,31 +82,34 @@ class WMSBase:
             self.params[key] = options[key]
 
         if (self.params ['password'] and self.params ['username'] == '') or \
-           (self.params ['password'] == '' and self.params ['username']):
-                grass.fatal(_("Please insert both %s and %s parameters or none of them." % ('password', 'username')))
+           (self.params['password'] == '' and self.params['username']):
+            grass.fatal(_("Please insert both %s and %s parameters or none of them." %
+                          ('password', 'username')))
 
         self.params['bgcolor'] = options['bgcolor'].strip()
 
         if options['format'] == "jpeg" and \
            not 'format' in driver_props['ignored_params']:
             if not flags['o'] and \
-              'WMS' in self.params['driver']:
+                    'WMS' in self.params['driver']:
                 grass.warning(_("JPEG format does not support transparency"))
 
         self.params['format'] = drv_info.GetFormat(options['format'])
         if not self.params['format']:
             self.params['format'] = self.params['format']
 
-        #TODO: get srs from Tile Service file in OnEarth_GRASS driver
+        # TODO: get srs from Tile Service file in OnEarth_GRASS driver
         self.params['srs'] = int(options['srs'])
-        if self.params['srs'] <= 0 and  not 'srs' in driver_props['ignored_params']:
+        if self.params['srs'] <= 0 and not 'srs' in driver_props['ignored_params']:
             grass.fatal(_("Invalid EPSG code %d") % self.params['srs'])
 
         self.params['wms_version'] = options['wms_version']
         if "CRS" in GetSRSParamVal(self.params['srs']) and self.params['wms_version'] == "1.1.1":
             self.params['wms_version'] = "1.3.0"
-            grass.warning(_("WMS version <1.3.0> will be used, because version <1.1.1> does not support <%s>projection")
-                            % GetSRSParamVal(self.params['srs']))
+            grass.warning(
+                _("WMS version <1.3.0> will be used, because version <1.1.1> does not support <%s>projection") %
+                GetSRSParamVal(
+                    self.params['srs']))
 
         if self.params['wms_version'] == "1.3.0":
             self.params['proj_name'] = "CRS"
@@ -114,7 +118,7 @@ class WMSBase:
 
         # read projection info
         self.proj_location = grass.read_command('g.proj',
-                                                flags ='jf').rstrip('\n')
+                                                flags='jf').rstrip('\n')
         self.proj_location = self._modifyProj(self.proj_location)
 
         if self.params['srs'] in [3857, 900913]:
@@ -124,8 +128,8 @@ class WMSBase:
             self.proj_srs = '+proj=merc +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +no_defs +a=6378137 +b=6378137 +nadgrids=@null +to_meter=1'
         else:
             self.proj_srs = grass.read_command('g.proj',
-                                               flags = 'jf',
-                                               epsg = str(GetEpsg(self.params['srs']))).rstrip('\n')
+                                               flags='jf',
+                                               epsg=str(GetEpsg(self.params['srs']))).rstrip('\n')
 
         self.proj_srs = self._modifyProj(self.proj_srs)
 
@@ -143,9 +147,18 @@ class WMSBase:
         if maxrows <= min_tile_size:
             grass.fatal(_("Maxrows must be greater than 100"))
 
-        # setting optimal tile size according to maxcols and maxrows constraint and region cols and rows
-        self.tile_size['cols'] = int(self.region['cols'] / ceil(self.region['cols'] / float(maxcols)))
-        self.tile_size['rows'] = int(self.region['rows'] / ceil(self.region['rows'] / float(maxrows)))
+        # setting optimal tile size according to maxcols and maxrows constraint
+        # and region cols and rows
+        self.tile_size['cols'] = int(
+            self.region['cols'] /
+            ceil(
+                self.region['cols'] /
+                float(maxcols)))
+        self.tile_size['rows'] = int(
+            self.region['rows'] /
+            ceil(
+                self.region['rows'] /
+                float(maxrows)))
 
         # default format for GDAL library
         self.gdal_drv_format = "GTiff"
@@ -167,33 +180,32 @@ class WMSBase:
         not_relevant_params = []
         for i_param in driver_props['ignored_params']:
 
-            if options.has_key(i_param) and \
+            if i_param in options and \
                options[i_param] and \
-               i_param not in ['srs', 'wms_version', 'format']: # params with default value
-                not_relevant_params.append('<' + i_param  + '>')
+               i_param not in ['srs', 'wms_version', 'format']:  # params with default value
+                not_relevant_params.append('<' + i_param + '>')
 
         if len(not_relevant_params) > 0:
             grass.warning(_("These parameter are ignored: %s\n\
-                             %s driver does not support the parameters." %\
+                             %s driver does not support the parameters." %
                             (','.join(not_relevant_params), options['driver'])))
 
         not_relevant_flags = []
         for i_flag in driver_props['ignored_flags']:
 
             if flags[i_flag]:
-                not_relevant_flags.append('<' + i_flag  + '>')
+                not_relevant_flags.append('<' + i_flag + '>')
 
         if len(not_relevant_flags) > 0:
             grass.warning(_("These flags are ignored: %s\n\
-                             %s driver does not support the flags." %\
+                             %s driver does not support the flags." %
                             (','.join(not_relevant_flags), options['driver'])))
 
     def GetMap(self, options, flags):
         """!Download data from WMS server."""
 
         self._initializeParameters(options, flags)
-
-        self.bbox     = self._computeBbox()
+        self.bbox = self._computeBbox()
 
         self.temp_map = self._download()
 
@@ -244,13 +256,13 @@ class WMSBase:
         grass.debug('Fetching capabilities OK')
         return cap
 
-    def _fetchDataFromServer(self, url, username = None, password = None):
+    def _fetchDataFromServer(self, url, username=None, password=None):
         """!Fetch data from server
         """
         request = Request(url)
         if username and password:
-                    base64string = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
-                    request.add_header("Authorization", "Basic %s" % base64string)
+            base64string = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
+            request.add_header("Authorization", "Basic %s" % base64string)
 
         try:
             return urlopen(request)
@@ -260,7 +272,7 @@ class WMSBase:
     def GetCapabilities(self, options):
         """!Get capabilities from WMS server
         """
-        cap  = self._fetchCapabilities(options)
+        cap = self._fetchCapabilities(options)
         capfile_output = options['capfile_output'].strip()
 
         # save to file
@@ -283,7 +295,7 @@ class WMSBase:
         """
         self._debug("_computeBbox", "started")
 
-        bbox_region_items = {'maxy' : 'n', 'miny' : 's', 'maxx' : 'e', 'minx' : 'w'}
+        bbox_region_items = {'maxy': 'n', 'miny': 's', 'maxx': 'e', 'minx': 'w'}
         bbox = {}
 
         if self.proj_srs == self.proj_location:  # TODO: do it better
@@ -302,21 +314,21 @@ class WMSBase:
 
             try:
                 temp_region_opened = open(temp_region, 'w')
-                temp_region_opened.write("%f %f\n%f %f\n%f %f\n%f %f\n"  %\
-                                       (self.region['e'], self.region['n'],\
-                                        self.region['w'], self.region['n'],\
-                                        self.region['w'], self.region['s'],\
-                                        self.region['e'], self.region['s'] ))
+                temp_region_opened.write("%f %f\n%f %f\n%f %f\n%f %f\n" %
+                                         (self.region['e'], self.region['n'],
+                                          self.region['w'], self.region['n'],
+                                          self.region['w'], self.region['s'],
+                                          self.region['e'], self.region['s']))
             except IOError:
-                 grass.fatal(_("Unable to write data into tempfile"))
+                grass.fatal(_("Unable to write data into tempfile"))
             finally:
                 temp_region_opened.close()
 
-            points = grass.read_command('m.proj', flags = 'd',
-                                        proj_out = self.proj_srs,
-                                        proj_in = self.proj_location,
-                                        input = temp_region,
-                                        quiet = True) # TODO: stdin
+            points = grass.read_command('m.proj', flags='d',
+                                        proj_out=self.proj_srs,
+                                        proj_in=self.proj_location,
+                                        input=temp_region,
+                                        quiet=True)  # TODO: stdin
             grass.try_remove(temp_region)
             if not points:
                 grass.fatal(_("Unable to determine region, %s failed") % 'm.proj')
@@ -337,12 +349,12 @@ class WMSBase:
                     bbox['minx'] = point[0]
                     continue
 
-                if   bbox['maxy'] < point[1]:
+                if bbox['maxy'] < point[1]:
                     bbox['maxy'] = point[1]
                 elif bbox['miny'] > point[1]:
                     bbox['miny'] = point[1]
 
-                if   bbox['maxx'] < point[0]:
+                if bbox['maxx'] < point[0]:
                     bbox['maxx'] = point[0]
                 elif bbox['minx'] > point[0]:
                     bbox['minx'] = point[0]
@@ -359,7 +371,7 @@ class WMSBase:
         """!Reproject data  using gdalwarp if needed
         """
         # reprojection of raster
-        if self.proj_srs != self.proj_location: # TODO: do it better
+        if self.proj_srs != self.proj_location:  # TODO: do it better
             grass.message(_("Reprojecting raster..."))
             self.temp_warpmap = grass.tempfile()
 
@@ -383,14 +395,14 @@ class WMSBase:
                                       '-s_srs', '%s' % self.proj_srs,
                                       '-t_srs', '%s' % self.proj_location,
                                       '-r', gdal_method, '-dstalpha',
-                                      self.temp_map, self.temp_warpmap], stdout = nuldev)
+                                      self.temp_map, self.temp_warpmap], stdout=nuldev)
                 # RGBA rasters
                 else:
                     ps = grass.Popen(['gdalwarp',
                                       '-s_srs', '%s' % self.proj_srs,
                                       '-t_srs', '%s' % self.proj_location,
                                       '-r', gdal_method,
-                                      self.temp_map, self.temp_warpmap], stdout = nuldev)
+                                      self.temp_map, self.temp_warpmap], stdout=nuldev)
                 ps.wait()
             except OSError as e:
                 grass.fatal('%s \nThis can be caused by missing %s utility. ' % (e, 'gdalwarp'))
@@ -423,10 +435,12 @@ class WMSBase:
 
         return temp_file
 
+
 class GRASSImporter:
+
     def __init__(self, opt_output):
 
-        self.cleanup_mask   = False
+        self.cleanup_mask = False
         self.cleanup_layers = False
 
         # output map name
@@ -438,9 +452,9 @@ class GRASSImporter:
 
         # check names of temporary rasters, which module may create
         maps = []
-        for suffix in ('.red', '.green', '.blue', '.alpha', self.original_mask_suffix ):
+        for suffix in ('.red', '.green', '.blue', '.alpha', self.original_mask_suffix):
             rast = self.opt_output + suffix
-            if grass.find_file(rast, element = 'cell', mapset = '.')['file']:
+            if grass.find_file(rast, element='cell', mapset='.')['file']:
                 maps.append(rast)
 
         if len(maps) != 0:
@@ -457,7 +471,8 @@ class GRASSImporter:
                 grass.fatal(_('%s failed') % 'r.mask')
 
             # restore original mask, if exists
-            if grass.find_file(self.opt_output + self.original_mask_suffix, element = 'cell', mapset = '.' )['name']:
+            if grass.find_file(self.opt_output + self.original_mask_suffix,
+                               element='cell', mapset='.')['name']:
                 try:
                     mask_copy = self.opt_output + self.original_mask_suffix
                     grass.run_command('g.copy', quiet=True,
@@ -470,15 +485,15 @@ class GRASSImporter:
             maps = []
             for suffix in ('.red', '.green', '.blue', '.alpha', self.original_mask_suffix):
                 rast = self.opt_output + suffix
-                if grass.find_file(rast, element = 'cell', mapset = '.')['file']:
+                if grass.find_file(rast, element='cell', mapset='.')['file']:
                     maps.append(rast)
 
             if maps:
                 grass.run_command('g.remove',
-                                  quiet = True,
-                                  flags = 'fb',
-                                  type = 'raster',
-                                  name = ','.join(maps))
+                                  quiet=True,
+                                  flags='fb',
+                                  type='raster',
+                                  name=','.join(maps))
 
         # delete environmental variable which overrides region
         if 'GRASS_REGION' in os.environ.keys():
@@ -500,18 +515,18 @@ class GRASSImporter:
         self.cleanup_layers = True
 
         # setting region for full extend of imported raster
-        if grass.find_file(self.opt_output + '.red', element = 'cell', mapset = '.')['file']:
+        if grass.find_file(self.opt_output + '.red', element='cell', mapset='.')['file']:
             region_map = self.opt_output + '.red'
         else:
             region_map = self.opt_output
-        os.environ['GRASS_REGION'] = grass.region_env(rast = region_map)
+        os.environ['GRASS_REGION'] = grass.region_env(rast=region_map)
 
         # mask created from alpha layer, which describes real extend
         # of warped layer (may not be a rectangle), also mask contains
         # transparent parts of raster
-        if grass.find_file( self.opt_output + '.alpha', element = 'cell', mapset = '.' )['name']:
+        if grass.find_file(self.opt_output + '.alpha', element='cell', mapset='.')['name']:
             # saving current mask (if exists) into temp raster
-            if grass.find_file('MASK', element = 'cell', mapset = '.' )['name']:
+            if grass.find_file('MASK', element='cell', mapset='.')['name']:
                 try:
                     mask_copy = self.opt_output + self.original_mask_suffix
                     grass.run_command('g.copy', quiet=True,
@@ -530,8 +545,8 @@ class GRASSImporter:
             except CalledModuleError:
                 grass.fatal(_('%s failed') % 'r.mask')
 
-        #TODO one band + alpha band?
-        if grass.find_file(self.opt_output + '.red', element = 'cell', mapset = '.')['file']:
+        # TODO one band + alpha band?
+        if grass.find_file(self.opt_output + '.red', element='cell', mapset='.')['file']:
             try:
                 grass.run_command('r.composite',
                                   quiet=True, overwrite=True,
@@ -544,7 +559,9 @@ class GRASSImporter:
 
         grass.message(_('<%s> created.') % self.opt_output)
 
+
 class WMSDriversInfo:
+
     def __init__(self):
         """!Provides information about driver parameters.
         """
@@ -553,10 +570,15 @@ class WMSDriversInfo:
         self.f_labels = ["geotiff", "tiff", "png", "jpeg", "gif", "png8"]
 
         # form for request
-        self.formats = ["image/geotiff", "image/tiff", "image/png", "image/jpeg", "image/gif", "image/png8"]
+        self.formats = [
+            "image/geotiff",
+            "image/tiff",
+            "image/png",
+            "image/jpeg",
+            "image/gif",
+            "image/png8"]
 
         self.srs = ("epsg", "crs")
-
 
     def GetDrvProperties(self, driver):
         """!Get information about driver parameters.
@@ -569,7 +591,6 @@ class WMSDriversInfo:
             return self._WMTSProperties()
         if 'OnEarth' in driver:
             return self._OnEarthProperties()
-
 
     def _OnEarthProperties(self):
 
@@ -604,7 +625,7 @@ class WMSDriversInfo:
         props = {}
         props['ignored_flags'] = []
         props['ignored_params'] = ['urlparams', 'bgcolor', 'capfile', 'capfile_output',
-                                    'username', 'password']
+                                   'username', 'password']
         props['req_multiple_layers'] = True
 
         return props
@@ -631,8 +652,7 @@ class WMSDriversInfo:
         return self.srs
 
 
-
-#TODO move to utils?
+# TODO move to utils?
 def GetSRSParamVal(srs):
     """!Decides whether to use CRS or EPSG prefix according to srs number.
     """
@@ -641,6 +661,7 @@ def GetSRSParamVal(srs):
         return "CRS:%d" % srs
     else:
         return "EPSG:%d" % srs
+
 
 def GetEpsg(srs):
     """

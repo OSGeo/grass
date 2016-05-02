@@ -52,7 +52,7 @@ class TestSearchModule(TestCase):
         stdout = module.outputs.stdout.split()
         self.assertEqual(stdout[0],
                          termcolor.colored('r.watershed',
-                         attrs=['bold']))
+                                           attrs=['bold']))
 
     def test_manual_pages(self):
         module = SimpleModule('g.search.modules', keyword="kapri", flags="gm")

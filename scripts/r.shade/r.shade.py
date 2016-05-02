@@ -111,15 +111,17 @@ def main():
             relief_map = relief_map_tmp
             to_remove.append(relief_map_tmp)
         gcore.run_command('r.his', hue=drape_map, intensity=relief_map,
-                          red=tmp_r, green=tmp_g, blue=tmp_b, **rhis_extra_args)
+                          red=tmp_r, green=tmp_g, blue=tmp_b,
+                          **rhis_extra_args)
         to_remove.extend([tmp_r, tmp_g, tmp_b])
         gcore.run_command('r.composite', red=tmp_r, green=tmp_g,
                           blue=tmp_b, output=output_map)
         remove(to_remove)  # who knows if finally is called when exit
-    except CalledModuleError, error:
+    except CalledModuleError as error:
         remove(to_remove)
         # TODO: implement module name to CalledModuleError
-        gcore.fatal(_("Module %s failed. Check the above error messages.") % error.cmd)
+        gcore.fatal(_("Module %s failed. Check the above error messages.") %
+                    error.cmd)
 
 
 if __name__ == "__main__":

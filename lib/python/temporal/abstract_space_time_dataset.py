@@ -10,11 +10,12 @@ for details.
 
 :authors: Soeren Gebbert
 """
+from __future__ import print_function
 import sys
 import uuid
-from abstract_dataset import *
-from temporal_granularity import *
-from spatio_temporal_relationships import *
+from .abstract_dataset import *
+from .temporal_granularity import *
+from .spatio_temporal_relationships import *
 
 ###############################################################################
 
@@ -98,21 +99,21 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if self.get_type() == "strds":
             #                1         2         3         4         5         6         7
             #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
-            print " +-------------------- Space Time Raster Dataset -----------------------------+"
+            print(" +-------------------- Space Time Raster Dataset -----------------------------+")
         if self.get_type() == "str3ds":
             #                1         2         3         4         5         6         7
             #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
-            print " +-------------------- Space Time 3D Raster Dataset --------------------------+"
+            print(" +-------------------- Space Time 3D Raster Dataset --------------------------+")
         if self.get_type() == "stvds":
             #                1         2         3         4         5         6         7
             #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
-            print " +-------------------- Space Time Vector Dataset -----------------------------+"
-        print " |                                                                            |"
+            print(" +-------------------- Space Time Vector Dataset -----------------------------+")
+        print(" |                                                                            |")
         self.base.print_info()
         self.temporal_extent.print_info()
         self.spatial_extent.print_info()
         self.metadata.print_info()
-        print " +----------------------------------------------------------------------------+"
+        print(" +----------------------------------------------------------------------------+")
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
@@ -1137,7 +1138,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 ...     maps.append(map)
                 >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(maps,0,8,1)
                 >>> for map_list in grans:
-                ...    print map_list[0].get_id(), map_list[0].get_temporal_extent_as_tuple()
+                ...    print(map_list[0].get_id(), map_list[0].get_temporal_extent_as_tuple())
                 None (0, 1)
                 None (1, 2)
                 map0@PERMANENT (2, 3)
@@ -1156,7 +1157,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 >>> maps.append(map2)
                 >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(maps,0,16,2)
                 >>> for map_list in grans:
-                ...    print map_list[0].get_id(), map_list[0].get_temporal_extent_as_tuple()
+                ...    print(map_list[0].get_id(), map_list[0].get_temporal_extent_as_tuple())
                 None (0, 2)
                 map1@PERMANENT (2, 4)
                 map1@PERMANENT (4, 6)
@@ -1175,7 +1176,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 >>> maps.append(map2)
                 >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(maps,0,16,2)
                 >>> for map_list in grans:
-                ...    print map_list[0].get_id(), map_list[0].get_temporal_extent_as_tuple()
+                ...    print(map_list[0].get_id(), map_list[0].get_temporal_extent_as_tuple())
                 None (0, 2)
                 map1@PERMANENT (2, 4)
                 None (4, 6)
@@ -1194,7 +1195,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 >>> maps.append(map2)
                 >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(maps,datetime(2000,1,1),datetime(2001,4,1),"1 month")
                 >>> for map_list in grans:
-                ...    print map_list[0].get_id(), map_list[0].get_temporal_extent_as_tuple()
+                ...    print(map_list[0].get_id(), map_list[0].get_temporal_extent_as_tuple())
                 None (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 2, 1, 0, 0))
                 None (datetime.datetime(2000, 2, 1, 0, 0), datetime.datetime(2000, 3, 1, 0, 0))
                 None (datetime.datetime(2000, 3, 1, 0, 0), datetime.datetime(2000, 4, 1, 0, 0))

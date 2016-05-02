@@ -53,50 +53,49 @@
 
 import sys
 import os
-import grass.script as grass
+import grass.script as gscript
 from grass.exceptions import CalledModuleError
+
 
 def main():
     global tmp
-    tmp = grass.tempfile()
+    tmp = gscript.tempfile()
 
     vector = options['map']
     layer = options['layer']
     column = options['column']
     where = options['where']
     perc = options['percentile']
-    extend = flags['e']
-    shellstyle = flags['g']
 
-    if not grass.find_file(vector, element='vector')['file']:
-        grass.fatal(_("Vector map <%s> not found") % vector)
+    if not gscript.find_file(vector, element='vector')['file']:
+        gscript.fatal(_("Vector map <%s> not found") % vector)
 
     try:
-        fi = grass.vector_db(vector, stderr = nuldev)[int(layer)]
+        fi = gscript.vector_db(vector, stderr=nuldev)[int(layer)]
     except KeyError:
-        grass.fatal(_("No attribute table linked to layer <%s>") % layer)
-                
+        gscript.fatal(_("No attribute table linked to layer <%s>") % layer)
+
     table = fi['table']
     database = fi['database']
     driver = fi['driver']
-    
+
     passflags = None
     if flags['e']:
-	passflags = 'e'
+        passflags = 'e'
     if flags['g']:
-	if not passflags:
-	    passflags = 'g'
-	else:
-	    passflags = passflags + 'g'
+        if not passflags:
+            passflags = 'g'
+        else:
+            passflags = passflags + 'g'
 
     try:
-        grass.run_command('db.univar', table = table, column = column, 
-                          database = database, driver = driver,
-                          perc = perc, where = where, flags = passflags)
+        gscript.run_command('db.univar', table=table, column=column,
+                            database=database, driver=driver,
+                            perc=perc, where=where, flags=passflags)
     except CalledModuleError:
         sys.exit(1)
-    
+
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gscript.parser()
     nuldev = file(os.devnull, 'w')
     main()

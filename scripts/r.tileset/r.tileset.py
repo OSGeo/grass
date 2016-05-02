@@ -106,13 +106,14 @@
 # An array of points indexed by 0 for "x" and 4 for "y" + by number 0, 1, 2, and 3
 # A reprojector [0] is name of source projection, [1] is name of destination
 # A projection - [0] is proj.4 text, [1] is scale
+from __future__ import print_function
 
 import sys
 import tempfile
 import math
 
 from grass.script.utils import separator
-from grass.script import core as grass
+from grass.script import core as gcore
 from grass.exceptions import CalledModuleError
 
 
@@ -158,7 +159,7 @@ def project(file, source, dest):
     errors = 0
     points = []
     try:
-        ret = grass.read_command('m.proj',
+        ret = gcore.read_command('m.proj',
                                  quiet=True,
                                  flags='d',
                                  proj_in=source['proj'],
@@ -166,10 +167,10 @@ def project(file, source, dest):
                                  sep=';',
                                  input=file)
     except CalledModuleError:
-        grass.fatal(cs2cs + ' failed')
+        gcore.fatal(cs2cs + ' failed')
 
     if not ret:
-        grass.fatal(cs2cs + ' failed')
+        gcore.fatal(cs2cs + ' failed')
 
     for line in ret.splitlines():
         if "*" in line:
@@ -238,40 +239,42 @@ def main():
     max_rows = int(options['maxrows']) - int(options['overlap'])
 
     if max_cols == 0:
-        grass.fatal(_("It is not possibile to set 'maxcols=%s' and "
+        gcore.fatal(_("It is not possibile to set 'maxcols=%s' and "
                       "'overlap=%s'. Please set maxcols>overlap" %
                       (options['maxcols'], options['overlap'])))
     elif max_rows == 0:
-        grass.fatal(_("It is not possibile to set 'maxrows=%s' and "
+        gcore.fatal(_("It is not possibile to set 'maxrows=%s' and "
                       "'overlap=%s'. Please set maxrows>overlap" %
                       (options['maxrows'], options['overlap'])))
     # destination projection
     if not options['destproj']:
-        dest_proj = grass.read_command('g.proj',
+        dest_proj = gcore.read_command('g.proj',
                                        quiet=True,
                                        flags='jf').rstrip('\n')
         if not dest_proj:
-            grass.fatal(_('g.proj failed'))
+            gcore.fatal(_('g.proj failed'))
     else:
         dest_proj = options['destproj']
-    grass.debug("Getting destination projection -> '%s'" % dest_proj)
+    gcore.debug("Getting destination projection -> '%s'" % dest_proj)
 
     # projection scale
     if not options['destscale']:
-        ret = grass.parse_command('g.proj',
+        ret = gcore.parse_command('g.proj',
                                   quiet=True,
                                   flags='j')
         if not ret:
-            grass.fatal(_('g.proj failed'))
+            gcore.fatal(_('g.proj failed'))
 
         if '+to_meter' in ret:
             dest_scale = ret['+to_meter'].strip()
         else:
-            grass.warning(_("Scale (%s) not found, assuming '1'") % '+to_meter')
+            gcore.warning(
+                _("Scale (%s) not found, assuming '1'") %
+                '+to_meter')
             dest_scale = '1'
     else:
         dest_scale = options['destscale']
-    grass.debug('Getting destination projection scale -> %s' % dest_scale)
+    gcore.debug('Getting destination projection scale -> %s' % dest_scale)
 
     # set up the projections
     srs_source = {'proj': options['sourceproj'],
@@ -279,17 +282,17 @@ def main():
     srs_dest = {'proj': dest_proj, 'scale': float(dest_scale)}
 
     if options['region']:
-        grass.run_command('g.region',
+        gcore.run_command('g.region',
                           quiet=True,
                           region=options['region'])
-    dest_bbox = grass.region()
-    grass.debug('Getting destination region')
+    dest_bbox = gcore.region()
+    gcore.debug('Getting destination region')
 
     # output field separator
     fs = separator(options['separator'])
 
     # project the destination region into the source:
-    grass.verbose('Projecting destination region into source...')
+    gcore.verbose('Projecting destination region into source...')
     dest_bbox_points = bboxToPoints(dest_bbox)
 
     dest_bbox_source_points, errors_dest = projectPoints(dest_bbox_points,
@@ -297,24 +300,24 @@ def main():
                                                          dest=srs_source)
 
     if len(dest_bbox_source_points) == 0:
-        grass.fatal(_("There are no tiles available. Probably the output "
+        gcore.fatal(_("There are no tiles available. Probably the output "
                       "projection system it is not compatible with the "
                       "projection of the current location"))
 
     source_bbox = pointsToBbox(dest_bbox_source_points)
 
-    grass.verbose('Projecting source bounding box into destination...')
+    gcore.verbose('Projecting source bounding box into destination...')
 
     source_bbox_points = bboxToPoints(source_bbox)
 
     source_bbox_dest_points, errors_source = projectPoints(source_bbox_points,
-                                                            source=srs_source,
-                                                            dest=srs_dest)
+                                                           source=srs_source,
+                                                           dest=srs_dest)
 
     x_metric = 1 / dest_bbox['ewres']
     y_metric = 1 / dest_bbox['nsres']
 
-    grass.verbose('Computing length of sides of source bounding box...')
+    gcore.verbose('Computing length of sides of source bounding box...')
 
     source_bbox_dest_lengths = sideLengths(source_bbox_dest_points,
                                            x_metric, y_metric)
@@ -324,12 +327,14 @@ def main():
     # In the direction (x or y) in which the world is least skewed (ie north south in lat long)
     # Divide the world into strips. These strips are as big as possible contrained by max_
     # In the other direction do the same thing.
-    # Theres some recomputation of the size of the world that's got to come in here somewhere.
+    # Theres some recomputation of the size of the world that's got to come in
+    # here somewhere.
 
     # For now, however, we are going to go ahead and request more data than is necessary.
     # For small regions far from the critical areas of projections this makes very little difference
     # in the amount of data gotten.
-    # We can make this efficient for big regions or regions near critical points later.
+    # We can make this efficient for big regions or regions near critical
+    # points later.
 
     bigger = []
     bigger.append(max(source_bbox_dest_lengths['x']))
@@ -342,7 +347,7 @@ def main():
     # I'm going to make the numbers all simpler and add this extra cell to
     # every tile.
 
-    grass.message(_('Computing tiling...'))
+    gcore.message(_('Computing tiling...'))
     tiles = [-1, -1]
     tile_base_size = [-1, -1]
     tiles_extra_1 = [-1, -1]
@@ -363,7 +368,7 @@ def main():
         # Add overlap to tiles (doesn't effect tileset_size
         tile_size_overlap[i] = tile_size[i] + int(options['overlap'])
 
-    grass.verbose("There will be %d by %d tiles each %d by %d cells" %
+    gcore.verbose("There will be %d by %d tiles each %d by %d cells" %
                   (tiles[0], tiles[1], tile_size[0], tile_size[1]))
 
     ximax = tiles[0]
@@ -380,16 +385,21 @@ def main():
     tile_bbox = {'w': -1, 's': -1, 'e': -1, 'n': -1}
 
     if errors_dest > 0:
-        grass.warning(_("During computation %i tiles could not be created" %
+        gcore.warning(_("During computation %i tiles could not be created" %
                         errors_dest))
 
     while xi < ximax:
-        tile_bbox['w'] = float(min_x) + (float(xi) * float(tile_size[0]) / float(tileset_size[0])) * float(span_x)
-        tile_bbox['e'] = float(min_x) + (float(xi + 1) * float(tile_size_overlap[0]) / float(tileset_size[0])) * float(span_x)
+        tile_bbox['w'] = float(
+            min_x) + (float(xi) * float(tile_size[0]) / float(tileset_size[0])) * float(span_x)
+        tile_bbox['e'] = float(min_x) + (float(xi + 1) * float(tile_size_overlap[0]
+                                                               ) / float(tileset_size[0])) * float(span_x)
         yi = 0
         while yi < yimax:
-            tile_bbox['s'] = float(min_y) + (float(yi) * float(tile_size[1]) / float(tileset_size[1])) * float(span_y)
-            tile_bbox['n'] = float(min_y) + (float(yi + 1) * float(tile_size_overlap[1]) / float(tileset_size[1])) * float(span_y)
+            tile_bbox['s'] = float(
+                min_y) + (float(yi) * float(tile_size[1]) / float(tileset_size[1])) * float(span_y)
+            tile_bbox['n'] = float(min_y) + (
+                float(yi + 1) * float(tile_size_overlap[1]) /
+                float(tileset_size[1])) * float(span_y)
             tile_bbox_points = bboxToPoints(tile_bbox)
             tile_dest_bbox_points, errors = projectPoints(tile_bbox_points,
                                                           source=srs_source,
@@ -397,24 +407,24 @@ def main():
             tile_dest_bbox = pointsToBbox(tile_dest_bbox_points)
             if bboxesIntersect(tile_dest_bbox, dest_bbox):
                 if flags['w']:
-                    print "bbox=%s,%s,%s,%s&width=%s&height=%s" % \
+                    print("bbox=%s,%s,%s,%s&width=%s&height=%s" %
                           (tile_bbox['w'], tile_bbox['s'], tile_bbox['e'],
                            tile_bbox['n'], tile_size_overlap[0],
-                           tile_size_overlap[1])
+                           tile_size_overlap[1]))
                 elif flags['g']:
-                    print "w=%s;s=%s;e=%s;n=%s;cols=%s;rows=%s" % \
+                    print("w=%s;s=%s;e=%s;n=%s;cols=%s;rows=%s" %
                           (tile_bbox['w'], tile_bbox['s'], tile_bbox['e'],
                            tile_bbox['n'], tile_size_overlap[0],
-                           tile_size_overlap[1])
+                           tile_size_overlap[1]))
                 else:
-                    print "%s%s%s%s%s%s%s%s%s%s%s" % \
+                    print("%s%s%s%s%s%s%s%s%s%s%s" %
                           (tile_bbox['w'], fs, tile_bbox['s'], fs,
                            tile_bbox['e'], fs, tile_bbox['n'], fs,
-                           tile_size_overlap[0], fs, tile_size_overlap[1])
+                           tile_size_overlap[0], fs, tile_size_overlap[1]))
             yi += 1
         xi += 1
 
 if __name__ == "__main__":
     cs2cs = 'cs2cs'
-    options, flags = grass.parser()
+    options, flags = gcore.parser()
     sys.exit(main())
