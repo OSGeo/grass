@@ -16,10 +16,11 @@ import sys
 import time
 import warnings
 
+import cdeclarations
+import cgrammar
 import preprocessor
 import yacc
-import cgrammar
-import cdeclarations
+
 
 # --------------------------------------------------------------------------
 # Lexer

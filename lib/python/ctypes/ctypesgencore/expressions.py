@@ -6,8 +6,10 @@ class is ExpressionNode. ExpressionNode's most useful method is py_string(),
 which returns a Python string representing that expression.
 '''
 
-from ctypedescs import *
 import keyword
+
+from ctypedescs import *
+
 
 # Right now, the objects in this module are all oriented toward evaluation.
 # However, they don't have to be, since ctypes objects are mutable. For example,

@@ -5,8 +5,8 @@ The dependencies module determines which descriptions depend on which other
 descriptions.
 """
 
-from ctypesgencore.descriptions import *
 from ctypesgencore.ctypedescs import *
+from ctypesgencore.descriptions import *
 from ctypesgencore.messages import *
 
 

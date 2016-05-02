@@ -32,10 +32,11 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
 
+import glob
 import os.path
 import re
 import sys
-import glob
+
 import ctypes
 import ctypes.util
 

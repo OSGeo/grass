@@ -7,13 +7,14 @@ After parsing is complete, a DescriptionCollection object can be retrieved by
 calling DataCollectingParser.data().
 """
 
+import os
+from tempfile import mkstemp
+
 import ctypesparser
-from ctypesgencore.descriptions import *
 from ctypesgencore.ctypedescs import *
+from ctypesgencore.descriptions import *
 from ctypesgencore.expressions import *
 from ctypesgencore.messages import *
-from tempfile import mkstemp
-import os
 
 
 class DataCollectingParser(ctypesparser.CtypesParser,

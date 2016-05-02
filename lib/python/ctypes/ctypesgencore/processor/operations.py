@@ -6,14 +6,16 @@ DescriptionCollection and prepare it for output.
 ctypesgencore.processor.pipeline calls the operations module.
 """
 
-import ctypes
-import re
-import os
-import sys
 import keyword
+import os
+import re
+import sys
+
+import ctypes
+import ctypesgencore.libraryloader
 from ctypesgencore.descriptions import *
 from ctypesgencore.messages import *
-import ctypesgencore.libraryloader
+
 
 # Processor functions
 

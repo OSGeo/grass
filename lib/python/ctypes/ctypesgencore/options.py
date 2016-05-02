@@ -8,8 +8,9 @@ would be a pain. So this module exists to provide a "default" options object
 for convenience.
 """
 
-import optparse
 import copy
+import optparse
+
 
 default_values = {
     "other_headers": [],
