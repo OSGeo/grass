@@ -163,8 +163,7 @@ def db_select(sql=None, filename=None, table=None, **args):
         fatal(_("Fetching data failed"))
 
     ofile = open(fname)
-    result = map(lambda x: tuple(x.rstrip(os.linesep).split(args['sep'])),
-                 ofile.readlines())
+    result = [tuple(x.rstrip(os.linesep).split(args['sep'])) for x in ofile.readlines()]
     ofile.close()
     try_remove(fname)
 
@@ -190,7 +189,7 @@ def db_table_in_vector(table):
     used = []
     vects = list_strings('vect')
     for vect in vects:
-        for f in vector_db(vect, stderr=nuldev).itervalues():
+        for f in vector_db(vect, stderr=nuldev).values():
             if not f:
                 continue
             if f['table'] == table:

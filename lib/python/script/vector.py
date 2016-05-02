@@ -22,8 +22,11 @@ import types
 
 try:
     import __builtin__
+    bytes = str
 except ImportError:
+    # python3
     import builtins as __builtin__
+    unicode = str
 
 from .utils import parse_key_val
 from .core import *
@@ -331,7 +334,7 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None, skip_attrib
         locale = os.environ["LC_ALL"]
         os.environ["LC_ALL"] = "C"
 
-    if type(map) in (types.StringType, types.UnicodeType):
+    if isinstance(map, (bytes, unicode)):
         map_list = [map]
     else:
         map_list = map
@@ -339,7 +342,7 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None, skip_attrib
     layer_list = ['-1'] * len(map_list)
 
     coord_list = list()
-    if type(coord) is types.TupleType:
+    if isinstance(coord, tuple):
         coord_list.append('%f,%f' % (coord[0], coord[1]))
     else:
         for e, n in coord:

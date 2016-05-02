@@ -21,12 +21,19 @@ from __future__ import absolute_import
 
 import os
 import string
-import types
 import time
 
 from .core import *
 from grass.exceptions import CalledModuleError
 from .utils import float_or_dms, parse_key_val
+
+
+try:
+    from builtins import unicode
+    bytes = str
+except ImportError:
+    # python3
+    unicode = str
 
 
 def raster_history(map):
@@ -161,13 +168,13 @@ def raster_what(map, coord, env=None, localized=False):
                        query
     :param env:
     """
-    if type(map) in (types.StringType, types.UnicodeType):
+    if isinstance(map, (bytes, unicode)):
         map_list = [map]
     else:
         map_list = map
 
     coord_list = list()
-    if type(coord) is types.TupleType:
+    if isinstance(coord, tuple):
         coord_list.append('%f,%f' % (coord[0], coord[1]))
     else:
         for e, n in coord:
