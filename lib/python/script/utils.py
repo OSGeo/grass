@@ -150,19 +150,19 @@ class KeyValue(dict):
         self[key] = value
 
 
-def decode(string):
-    """Decode string with defualt locale
+def decode(bytes):
+    """Decode bytes with default locale
 
-    :param str string: the string to decode
+    :param bytes bytes: the bytes to decode
     """
     enc = locale.getdefaultlocale()[1]
-    if hasattr(string, 'decode'):
-        return string.decode(enc) if enc else string.decode()
-    return string
+    if hasattr(bytes, 'decode'):
+        return bytes.decode(enc) if enc else bytes.decode()
+    return bytes
 
 
 def encode(string):
-    """Encode string with defualt locale
+    """Encode string with default locale -> bytes
 
     :param str string: the string to encode
     """
@@ -294,7 +294,7 @@ def get_lib_path(modname, libname=None):
                 modname=modname, libname=libname,
                 pathsep=os.pathsep
             )
-    
+
     return path
 
 
