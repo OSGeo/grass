@@ -10,7 +10,15 @@ Reference is C99:
 
 __docformat__ = 'restructuredtext'
 
-import os, re, shlex, sys, tokenize, lex, yacc, traceback, subprocess
+import os
+import re
+import shlex
+import sys
+import tokenize
+import lex
+import yacc
+import traceback
+import subprocess
 import ctypes
 from lex import TOKEN
 import pplexer
@@ -19,7 +27,9 @@ import pplexer
 # Lexers
 # --------------------------------------------------------------------------
 
+
 class PreprocessorLexer(lex.Lexer):
+
     def __init__(self):
         lex.Lexer.__init__(self)
         self.filename = '<input>'
@@ -27,7 +37,7 @@ class PreprocessorLexer(lex.Lexer):
 
     def input(self, data, filename=None):
         if filename:
-            self.filename = filename 
+            self.filename = filename
         self.lasttoken = None
         self.input_stack = []
 
@@ -61,7 +71,9 @@ class PreprocessorLexer(lex.Lexer):
 
         return result
 
+
 class TokenListLexer(object):
+
     def __init__(self, tokens):
         self.tokens = tokens
         self.pos = 0
@@ -74,6 +86,7 @@ class TokenListLexer(object):
         else:
             return None
 
+
 def symbol_to_token(sym):
     if isinstance(sym, yacc.YaccSymbol):
         return sym.value
@@ -81,6 +94,7 @@ def symbol_to_token(sym):
         return sym
     else:
         assert False, 'Not a symbol: %r' % sym
+
 
 def create_token(type, value, production=None):
     '''Create a token of type and value, at the position where 'production'
@@ -101,8 +115,10 @@ def create_token(type, value, production=None):
 # Grammars
 # --------------------------------------------------------------------------
 
+
 class PreprocessorParser(object):
-    def __init__(self,options,cparser):
+
+    def __init__(self, options, cparser):
         self.defines = ["inline=", "__inline__=", "__extension__=",
                         "_Bool=uint8_t", "__const=const", "__asm__(x)=",
                         "__asm(x)=", "CTYPESGEN=1"]
@@ -121,45 +137,45 @@ class PreprocessorParser(object):
                              lextab='lextab',
                              outputdir=os.path.dirname(__file__),
                              module=pplexer)
-        
+
         self.options = options
-        self.cparser = cparser # An instance of CParser
+        self.cparser = cparser  # An instance of CParser
 
     def parse(self, filename):
         """Parse a file and save its output"""
-        
+
         cmd = self.options.cpp
         if sys.platform == 'darwin':
             cmd += " -U __BLOCKS__"
         cmd += " -U __GNUC__"
         cmd += " -dD"
         for path in self.options.include_search_paths:
-            cmd += " -I%s" % path 
+            cmd += " -I%s" % path
         for define in self.defines:
             cmd += ' "-D%s"' % define
-        cmd += " " + filename.replace('\\','/')
+        cmd += " " + filename.replace('\\', '/')
 
         self.cparser.handle_status(cmd)
-        
+
         if sys.platform == 'win32':
             cmd = ['sh.exe', '-c', cmd]
 
         pp = subprocess.Popen(cmd,
-                              shell = True,
-                              stdout = subprocess.PIPE,
-                              stderr = subprocess.PIPE)
+                              shell=True,
+                              stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE)
         ppout, pperr = pp.communicate()
-        
+
         for line in pperr.split("\n"):
             if line:
                 self.cparser.handle_pp_error(line)
-        
+
         # We separate lines that are #defines and lines that are source code
         # We put all the source lines first, then all the #define lines.
-        
-        source_lines= []
+
+        source_lines = []
         define_lines = []
-        
+
         for line in ppout.split("\n"):
             line = line.rstrip('\r')
             line = line + "\n"
@@ -167,35 +183,35 @@ class PreprocessorParser(object):
                 # Line number information has to go with both groups
                 source_lines.append(line)
                 define_lines.append(line)
-            
+
             elif line.startswith("#define"):
                 source_lines.append("\n")
                 define_lines.append(line)
-            
+
             elif line.startswith("#"):
                 # It's a directive, but not a #define. Remove it
                 source_lines.append("\n")
                 define_lines.append("\n")
-            
+
             else:
                 source_lines.append(line)
                 define_lines.append("\n")
-        
+
         text = "".join(source_lines + define_lines)
-        
+
         if self.options.save_preprocessed_headers:
-            self.cparser.handle_status("Saving preprocessed headers to %s." % \
-                self.options.save_preprocessed_headers)
+            self.cparser.handle_status("Saving preprocessed headers to %s." %
+                                       self.options.save_preprocessed_headers)
             try:
                 f = file(self.options.save_preprocessed_headers, "w")
                 f.write(text)
                 f.close()
             except IOError:
                 self.cparser.handle_error("Couldn't save headers.")
-        
+
         self.lexer.input(text)
         self.output = []
-        
+
         while True:
             token = self.lexer.token()
             if token is not None:
