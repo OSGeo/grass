@@ -60,7 +60,11 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+
+#ifndef CTYPESGEN
 #include <setjmp.h>
+#endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -279,7 +283,10 @@ void G__read_mapset_env(void);
 void G__read_gisrc_env(void);
 
 /* error.c */
+#ifndef CTYPESGEN
 jmp_buf *G_fatal_longjmp(int);
+#endif
+
 int G_info_format(void);
 void G_message(const char *, ...) __attribute__ ((format(printf, 1, 2)));
 void G_verbose_message(const char *, ...)
