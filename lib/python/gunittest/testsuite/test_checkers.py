@@ -371,27 +371,27 @@ class TestMd5Sums(TestCase):
 
     def test_text_file_binary(self):
         r"""File with ``\n`` (LF) newlines as binary (MD5 has ``\n``)."""
-        self.assertEquals(file_md5(self.correct_file_name_unix_nl),
-                          self.correct_md5sum,
-                          msg="MD5 sums different")
+        self.assertEqual(file_md5(self.correct_file_name_unix_nl),
+                         self.correct_md5sum,
+                         msg="MD5 sums different")
 
     def test_text_file_platfrom(self):
         r"""Text file with platform dependent newlines"""
-        self.assertEquals(text_file_md5(self.correct_file_name_platform_nl),
-                          self.correct_md5sum,
-                          msg="MD5 sums different")
+        self.assertEqual(text_file_md5(self.correct_file_name_platform_nl),
+                         self.correct_md5sum,
+                         msg="MD5 sums different")
 
     def test_text_file_unix(self):
         r"""Text file with ``\n`` (LF) newlines"""
-        self.assertEquals(text_file_md5(self.correct_file_name_unix_nl),
-                          self.correct_md5sum,
-                          msg="MD5 sums different")
+        self.assertEqual(text_file_md5(self.correct_file_name_unix_nl),
+                         self.correct_md5sum,
+                         msg="MD5 sums different")
 
     def test_text_file_different(self):
         r"""Text file with ``\n`` (LF) newlines"""
-        self.assertNotEquals(text_file_md5(self.wrong_file_name),
-                             self.correct_md5sum,
-                             msg="MD5 sums must be different")
+        self.assertNotEqual(text_file_md5(self.wrong_file_name),
+                            self.correct_md5sum,
+                            msg="MD5 sums must be different")
 
 
 if __name__ == '__main__':
