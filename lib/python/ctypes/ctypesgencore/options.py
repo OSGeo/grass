@@ -8,9 +8,10 @@ would be a pain. So this module exists to provide a "default" options object
 for convenience.
 """
 
-import optparse, copy
+import optparse
+import copy
 
-default_values={
+default_values = {
     "other_headers": [],
     "modules": [],
     "include_search_paths": [],
@@ -32,6 +33,7 @@ default_values={
     "libraries": [],
     "strip_build_path": None
 }
+
 
 def get_default_options():
     return optparse.Values(copy.deepcopy(default_values))

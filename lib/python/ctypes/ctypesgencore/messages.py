@@ -22,13 +22,16 @@ Warning classes are:
 
 import sys
 
-__all__ = ["error_message","warning_message","status_message"]
+__all__ = ["error_message", "warning_message", "status_message"]
 
-def error_message(msg,cls=None):
+
+def error_message(msg, cls=None):
     print "Error: %s" % msg
 
-def warning_message(msg,cls=None):
+
+def warning_message(msg, cls=None):
     print "Warning: %s" % msg
+
 
 def status_message(msg):
     print "Status: %s" % msg

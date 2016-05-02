@@ -43,9 +43,9 @@ format.
 """
 
 
-__all__ = ["parser","processor","printer",
-           "descriptions","ctypedescs","expressions",
-           "messages","options"]
+__all__ = ["parser", "processor", "printer",
+           "descriptions", "ctypedescs", "expressions",
+           "messages", "options"]
 
 # Workhorse modules
 import parser

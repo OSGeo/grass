@@ -1,4 +1,7 @@
-import ctypes, os, sys
+import os
+import sys
+
+import ctypes
 from ctypes import *
 
 _int_types = (c_int16, c_int32)
@@ -13,11 +16,13 @@ for t in _int_types:
 del t
 del _int_types
 
+
 class c_void(Structure):
     # c_void_p is a buggy return type, converting to int, so
     # POINTER(None) == c_void_p is actually written as
     # POINTER(c_void), so it can be treated as a real pointer.
     _fields_ = [('dummy', c_int)]
+
 
 def POINTER(obj):
     p = ctypes.POINTER(obj)
@@ -44,29 +49,35 @@ ReturnString = c_char_p
 #
 # Non-primitive return values wrapped with UNCHECKED won't be
 # typechecked, and will be converted to c_void_p.
+
+
 def UNCHECKED(type):
     if (hasattr(type, "_type_") and isinstance(type._type_, str)
-        and type._type_ != "P"):
+            and type._type_ != "P"):
         return type
     else:
         return c_void_p
 
 # ctypes doesn't have direct support for variadic functions, so we have to write
 # our own wrapper class
+
+
 class _variadic_function(object):
-    def __init__(self,func,restype,argtypes):
-        self.func=func
-        self.func.restype=restype
-        self.argtypes=argtypes
+
+    def __init__(self, func, restype, argtypes):
+        self.func = func
+        self.func.restype = restype
+        self.argtypes = argtypes
+
     def _as_parameter_(self):
         # So we can pass this variadic function as a function pointer
         return self.func
-    def __call__(self,*args):
-        fixed_args=[]
-        i=0
+
+    def __call__(self, *args):
+        fixed_args = []
+        i = 0
         for argtype in self.argtypes:
             # Typecheck what we can
             fixed_args.append(argtype.from_param(args[i]))
-            i+=1
-        return self.func(*fixed_args+list(args[i:]))
-
+            i += 1
+        return self.func(*fixed_args + list(args[i:]))
