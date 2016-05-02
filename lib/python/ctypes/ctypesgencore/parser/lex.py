@@ -34,6 +34,7 @@ try:
 except ImportError:
     # python2
     bytes = str
+    PY3 = False
 
 
 import operator
