@@ -134,12 +134,7 @@ def main():
     segmax = int(options['segmax'])
     npmin = int(options['npmin'])
     lambda_ = float(options['lambda'])
-<<<<<<< 1ca5ade0f050cc22722fdcbb57af91135215607e
-    quiet = True # FIXME
-
-=======
     quiet = True  # FIXME
->>>>>>> scripts modules: support python3
     mapset = grass.gisenv()['MAPSET']
     unique = str(os.getpid())  # Shouldn't we use temp name?
     prefix = 'r_fillnulls_%s_' % unique
