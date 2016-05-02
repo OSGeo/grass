@@ -400,7 +400,7 @@ def main():
             all_results.append(result)
             del result
         except KeyError as e:
-            print 'File %s does not have right values (%s)' % (report, e.message) 
+            print('File %s does not have right values (%s)' % (report, e.message)) 
 
     locations_main_page = open(os.path.join(output, 'index.html'), 'w')
     locations_main_page.write(
@@ -420,7 +420,7 @@ def main():
     plot_style = PlotStyle(linestyle='-', linewidth=4.0,
                            success_color='g', fail_color='r', total_color='b')
 
-    for location_type, results in results_in_locations.iteritems():
+    for location_type, results in results_in_locations.items():
         results = sorted(results, key=operator.attrgetter('timestamp'))
         # TODO: document: location type must be a valid dir name
         directory = os.path.join(output, location_type)

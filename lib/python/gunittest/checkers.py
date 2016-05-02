@@ -82,14 +82,14 @@ def unify_units(dic):
     dic = dict(dic)
     for l in lookup:
         import types
-        if not isinstance(dic['unit'], types.StringTypes):
+        if not isinstance(dic['unit'], str):
             for n in range(len(dic['unit'])):
                 if dic['unit'][n] in l:
                     dic['unit'][n] = l[0]
         else:
             if dic['unit'] in l:
                 dic['unit'] = l[0]
-        if not isinstance(dic['units'], types.StringTypes):
+        if not isinstance(dic['units'], str):
             for n in range(len(dic['units'])):
                 if dic['units'][n] in l:
                     dic['units'][n] = l[0]

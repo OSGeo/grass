@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __furute__ import print_function
 from unittest import TestCase, main
 
 
@@ -7,10 +7,10 @@ class TestUnittestSuccessVerboseSetUp(TestCase):
     # pylint: disable=R0904
 
     def setUp(self):
-        print "print from setUp"
+        print("print from setUp")
 
     def tearDown(self):
-        print "print from tearDown"
+        print("print from tearDown")
 
     def test_something(self):
         self.assertTrue(True, msg="This should not fail")
@@ -24,11 +24,11 @@ class TestUnittestSuccessVerboseClassSetUp(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        print "print from setUpClass"
+        print("print from setUpClass")
 
     @classmethod
     def tearDownClass(cls):
-        print "print from tearDownClass"
+        print("print from tearDownClass")
 
     def test_something(self):
         self.assertTrue(True, msg="This should not fail")

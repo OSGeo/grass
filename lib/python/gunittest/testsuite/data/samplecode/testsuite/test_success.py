@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -8,10 +9,10 @@ class TestSuccessVerboseSetUp(TestCase):
     # pylint: disable=R0904
 
     def setUp(self):
-        print "print from setUp"
+        print("print from setUp")
 
     def tearDown(self):
-        print "print from tearDown"
+        print("print from tearDown")
 
     def test_something(self):
         self.assertTrue(True)
@@ -22,11 +23,11 @@ class TestSuccessVerboseClassSetUp(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        print "print from setUpClass"
+        print("print from setUpClass")
 
     @classmethod
     def tearDownClass(cls):
-        print "print from tearDownClass"
+        print("print from tearDownClass")
 
     def test_something(self):
         self.assertTrue(True)

@@ -26,7 +26,6 @@ if sys.version_info[0] == 2:
     from StringIO import StringIO
 else:
     from io import StringIO
-    basestring = str
 
 
 # TODO: change text_to_keyvalue to same sep as here
@@ -38,7 +37,7 @@ def keyvalue_to_text(keyvalue, sep='=', vsep='\n', isep=',',
     items = []
     for key, value in keyvalue.items():
         # TODO: use isep for iterables other than strings
-        if (not isinstance(value, basestring)
+        if (not isinstance(value, str)
                 and isinstance(value, collections.Iterable)):
             # TODO: this does not work for list of non-strings
             value = isep.join(value)
