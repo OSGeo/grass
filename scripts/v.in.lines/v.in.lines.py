@@ -41,8 +41,10 @@ import string
 from grass.script.utils import separator, try_remove
 from grass.script import core as grass
 
+
 def cleanup():
     try_remove(tmp)
+
 
 def main():
     global tmp
@@ -57,11 +59,9 @@ def main():
     else:
         do3D = ''
 
-
     tmp = grass.tempfile()
 
-
-    #### set up input file
+    # set up input file
     if options['input'] == '-':
         infile = None
         inf = sys.stdin
@@ -70,7 +70,6 @@ def main():
         if not os.path.exists(infile):
             grass.fatal(_("Unable to read input file <%s>") % infile)
         grass.debug("input file=[%s]" % infile)
-
 
     if not infile:
         # read from stdin and write to tmpfile (v.in.mapgen wants a real file)
@@ -99,8 +98,7 @@ def main():
             outf.close()
             runfile = tmp
 
-
-    ##### check that there are at least two columns (three if -z is given)
+    # check that there are at least two columns (three if -z is given)
     inf = file(runfile)
     for line in inf:
         if len(line.lstrip()) == 0 or line[0] == '#':
@@ -111,9 +109,8 @@ def main():
     if (do3D and numcols < 3) or (not do3D and numcols < 2):
         grass.fatal(_("Not enough data columns. (incorrect fs setting?)"))
 
-
-    grass.run_command('v.in.mapgen', flags = 'f' + do3D,
-                      input = runfile, output = options['output'])
+    grass.run_command('v.in.mapgen', flags='f' + do3D,
+                      input=runfile, output=options['output'])
 
 
 if __name__ == "__main__":

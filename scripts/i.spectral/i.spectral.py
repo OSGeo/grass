@@ -20,7 +20,7 @@
 #
 # written by Markus Neteler 18. August 1998
 #            neteler geog.uni-hannover.de
-# 
+#
 # bugfix: 25. Nov.98/20. Jan. 1999
 # 3 March 2006: Added multiple images and group support by Francesco Pirotti - CIRGEO
 #
@@ -77,19 +77,21 @@
 import os
 import atexit
 from grass.script.utils import try_rmdir
-from grass.script import core as grass
+from grass.script import core as gcore
 
 
 def cleanup():
     try_rmdir(tmp_dir)
 
+
 def write2textf(what, output):
     outf = open(output, 'w')
-    i=0
+    i = 0
     for row in enumerate(what):
-        i=i+1
-        outf.write("%d, %s\n" % (i,row))
+        i = i + 1
+        outf.write("%d, %s\n" % (i, row))
     outf.close()
+
 
 def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
     xrange = 0
@@ -107,12 +109,12 @@ def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
     if output:
         if img_format == 'png':
             term_opts = "png truecolor large size 825,550"
-	elif img_format == 'eps':
+        elif img_format == 'eps':
             term_opts = "postscript eps color solid size 6,4"
-	elif img_format == 'svg':
+        elif img_format == 'svg':
             term_opts = "svg size 825,550 dynamic solid"
         else:
-            grass.fatal(_("Programmer error (%s)") % img_format)
+            gcore.fatal(_("Programmer error (%s)") % img_format)
 
         lines += [
             "set term " + term_opts,
@@ -152,9 +154,9 @@ def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
     plotf.close()
 
     if output:
-        grass.call(['gnuplot', plotfile])
+        gcore.call(['gnuplot', plotfile])
     else:
-        grass.call(['gnuplot', '-persist', plotfile])
+        gcore.call(['gnuplot', '-persist', plotfile])
 
 
 def draw_linegraph(what):
@@ -175,7 +177,7 @@ def draw_linegraph(what):
         yf.close()
         yfiles.append(yfile)
 
-    sienna = '#%02x%02x%02x' % (160,  82, 45)
+    sienna = '#%02x%02x%02x' % (160, 82, 45)
     coral = '#%02x%02x%02x' % (255, 127, 80)
     gp_colors = ['red', 'green', 'blue', 'magenta', 'cyan', sienna, 'orange',
                  coral]
@@ -185,7 +187,7 @@ def draw_linegraph(what):
         colors += gp_colors
     colors = colors[0:len(what)]
 
-    grass.run_command('d.linegraph', x_file=xfile, y_file=yfiles,
+    gcore.run_command('d.linegraph', x_file=xfile, y_file=yfiles,
                       y_color=colors, title='Spectral signatures',
                       x_title='Bands', y_title='DN Value')
 
@@ -201,26 +203,26 @@ def main():
     textfile = flags['t']
 
     global tmp_dir
-    tmp_dir = grass.tempdir()
-    
+    tmp_dir = gcore.tempdir()
+
     if not group and not raster:
-        grass.fatal(_("Either group= or raster= is required"))
+        gcore.fatal(_("Either group= or raster= is required"))
 
     if group and raster:
-        grass.fatal(_("group= and raster= are mutually exclusive"))
+        gcore.fatal(_("group= and raster= are mutually exclusive"))
 
     # -t needs an output filename
     if textfile and not output:
-        grass.fatal(_("Writing to text file requires output=filename"))
+        gcore.fatal(_("Writing to text file requires output=filename"))
 
     # check if gnuplot is present
-    if gnuplot and not grass.find_program('gnuplot', '-V'):
-        grass.fatal(_("gnuplot required, please install first"))
+    if gnuplot and not gcore.find_program('gnuplot', '-V'):
+        gcore.fatal(_("gnuplot required, please install first"))
 
     # get data from group listing and set the x-axis labels
     if group:
         # Parse the group list output
-        s = grass.read_command('i.group', flags='g', group=group, quiet=True)
+        s = gcore.read_command('i.group', flags='g', group=group, quiet=True)
         rastermaps = s.splitlines()
     else:
         # get data from list of files and set the x-axis labels
@@ -231,10 +233,10 @@ def main():
 
     # get y-data for gnuplot-data file
     what = []
-    s = grass.read_command('r.what', map=rastermaps, coordinates=coords,
+    s = gcore.read_command('r.what', map=rastermaps, coordinates=coords,
                            null='0', quiet=True)
     if len(s) == 0:
-        grass.fatal(_('No data returned from query'))
+        gcore.fatal(_('No data returned from query'))
 
     for l in s.splitlines():
         f = l.split('|')
@@ -254,6 +256,6 @@ def main():
         draw_linegraph(what)
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gcore.parser()
     atexit.register(cleanup)
     main()

@@ -37,6 +37,7 @@ import sys
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
+
 def main():
     # if no output filename, output to stdout
     output = options['output']

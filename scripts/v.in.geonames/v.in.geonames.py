@@ -37,11 +37,12 @@
 import os
 import grass.script as grass
 
+
 def main():
-    infile  = options['input']
+    infile = options['input']
     outfile = options['output']
-    
-    #are we in LatLong location?
+
+    # are we in LatLong location?
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
     if kv['+proj'] != 'longlat':
@@ -55,7 +56,8 @@ def main():
     kv = grass.db_connection()
     dbfdriver = kv['driver'] == 'dbf'
     if dbfdriver:
-        grass.warning(_("Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content"))
+        grass.warning(
+            _("Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content"))
 
     with open(infile) as f:
         num_places = sum(1 for _ in f)
@@ -87,55 +89,54 @@ def main():
 
     # geonameid|name|asciiname|alternatenames|latitude|longitude|featureclass|featurecode|countrycode|cc2|admin1code|admin2code|admin3code|admin4code|population|elevation|gtopo30|timezone|modificationdate
 
-
     # debug:
     # head -n 3 ${TMPFILE}.csv
 
     # use different column names limited to 10 chars for dbf
     if dbfdriver:
         columns = ['geonameid integer',
-           'name varchar(200)',
-           'asciiname varchar(200)',
-           'altname varchar(4000)',
-           'latitude double precision',
-           'longitude double precision',
-           'featrclass varchar(1)',
-           'featrcode varchar(10)',
-           'cntrycode varchar(2)',
-           'cc2 varchar(60)',
-           'admin1code varchar(20)',
-           'admin2code varchar(20)',
-           'admin3code varchar(20)',
-           'admin4code varchar(20)',
-           'population integer',
-           'elevation integer',
-           'gtopo30 integer',
-           'timezone varchar(50)',
-           'mod_date date']
+                   'name varchar(200)',
+                   'asciiname varchar(200)',
+                   'altname varchar(4000)',
+                   'latitude double precision',
+                   'longitude double precision',
+                   'featrclass varchar(1)',
+                   'featrcode varchar(10)',
+                   'cntrycode varchar(2)',
+                   'cc2 varchar(60)',
+                   'admin1code varchar(20)',
+                   'admin2code varchar(20)',
+                   'admin3code varchar(20)',
+                   'admin4code varchar(20)',
+                   'population integer',
+                   'elevation integer',
+                   'gtopo30 integer',
+                   'timezone varchar(50)',
+                   'mod_date date']
     else:
         columns = ['geonameid integer',
-           'name varchar(200)',
-           'asciiname varchar(200)',
-           'alternatename varchar(4000)',
-           'latitude double precision',
-           'longitude double precision',
-           'featureclass varchar(1)',
-           'featurecode varchar(10)',
-           'countrycode varchar(2)',
-           'cc2 varchar(60)',
-           'admin1code varchar(20)',
-           'admin2code varchar(20)',
-           'admin3code varchar(20)',
-           'admin4code varchar(20)',
-           'population integer',
-           'elevation integer',
-           'gtopo30 integer',
-           'timezone varchar(50)',
-           'modification date']
+                   'name varchar(200)',
+                   'asciiname varchar(200)',
+                   'alternatename varchar(4000)',
+                   'latitude double precision',
+                   'longitude double precision',
+                   'featureclass varchar(1)',
+                   'featurecode varchar(10)',
+                   'countrycode varchar(2)',
+                   'cc2 varchar(60)',
+                   'admin1code varchar(20)',
+                   'admin2code varchar(20)',
+                   'admin3code varchar(20)',
+                   'admin4code varchar(20)',
+                   'population integer',
+                   'elevation integer',
+                   'gtopo30 integer',
+                   'timezone varchar(50)',
+                   'modification date']
 
-    grass.run_command('v.in.ascii', cat = 0, x = 6, y = 5, sep = 'tab',
-              input = infile, output = outfile,
-              columns = columns)
+    grass.run_command('v.in.ascii', cat=0, x=6, y=5, sep='tab',
+                      input=infile, output=outfile,
+                      columns=columns)
 
     # write cmd history:
     grass.vector_history(outfile)
@@ -143,4 +144,3 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-

@@ -60,6 +60,7 @@ import webbrowser
 from grass.script.utils import basename
 from grass.script import core as grass
 
+
 def start_browser(entry):
     if browser and \
        browser not in ('xdg-open', 'start') and \
@@ -86,7 +87,7 @@ def start_browser(entry):
         webbrowser.register(browser_name, None)
 
     grass.verbose(_("Starting browser '%(browser)s' for manual"
-                    " entry '%(entry)s'...") % \
+                    " entry '%(entry)s'...") %
                   dict(browser=browser_name, entry=entry))
 
     try:
@@ -94,6 +95,7 @@ def start_browser(entry):
     except:
         grass.fatal(_("Error starting browser '%(browser)s' for HTML file"
                       " '%(path)s'") % dict(browser=browser, path=path))
+
 
 def start_man(entry):
     path = os.path.join(gisbase, 'docs', 'man', 'man1', entry + '.1')
@@ -106,6 +108,7 @@ def start_man(entry):
             grass.fatal(_("Error starting 'man' for '%s'") % path)
     grass.fatal(_("No manual page entry for '%s'") % entry)
 
+
 def main():
     global gisbase, browser, browser_name
 
@@ -115,7 +118,7 @@ def main():
     special = None
     if flags['i']:
         special = 'index'
-    elif flags ['t']:
+    elif flags['t']:
         special = 'topics'
 
     if flags['m']:
@@ -123,7 +126,7 @@ def main():
     else:
         start = start_browser
 
-    entry  = options['entry']
+    entry = options['entry']
     gisbase = os.environ['GISBASE']
     browser = os.getenv('GRASS_HTML_BROWSER', '')
 

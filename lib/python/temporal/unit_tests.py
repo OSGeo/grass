@@ -8,12 +8,14 @@ for details.
 
 :authors: Soeren Gebbert
 """
+from __future__ import print_function
+
 import copy
 from datetime import datetime
 import grass.script.core as core
-from temporal_granularity import *
-from datetime_math import *
-from space_time_datasets import *
+from .temporal_granularity import *
+from .datetime_math import *
+from .space_time_datasets import *
 
 import grass.lib.vector as vector
 import grass.lib.rtree as rtree
@@ -29,15 +31,15 @@ core.set_raise_on_error(True)
 def test_increment_datetime_by_string():
 
     # First test
-    print "# Test 1"
+    print("# Test 1")
     dt = datetime(2001, 9, 1, 0, 0, 0)
     string = "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
 
     dt1 = datetime(2003, 2, 18, 12, 5, 0)
     dt2 = increment_datetime_by_string(dt, string)
 
-    print dt
-    print dt2
+    print(dt)
+    print(dt2)
 
     delta = dt1 - dt2
 
@@ -45,15 +47,15 @@ def test_increment_datetime_by_string():
         core.fatal("increment computation is wrong %s" % (delta))
 
     # Second test
-    print "# Test 2"
+    print("# Test 2")
     dt = datetime(2001, 11, 1, 0, 0, 0)
     string = "1 months"
 
     dt1 = datetime(2001, 12, 1)
     dt2 = increment_datetime_by_string(dt, string)
 
-    print dt
-    print dt2
+    print(dt)
+    print(dt2)
 
     delta = dt1 - dt2
 
@@ -61,15 +63,15 @@ def test_increment_datetime_by_string():
         core.fatal("increment computation is wrong %s" % (delta))
 
     # Third test
-    print "# Test 3"
+    print("# Test 3")
     dt = datetime(2001, 11, 1, 0, 0, 0)
     string = "13 months"
 
     dt1 = datetime(2002, 12, 1)
     dt2 = increment_datetime_by_string(dt, string)
 
-    print dt
-    print dt2
+    print(dt)
+    print(dt2)
 
     delta = dt1 - dt2
 
@@ -77,15 +79,15 @@ def test_increment_datetime_by_string():
         core.fatal("increment computation is wrong %s" % (delta))
 
     # 4. test
-    print "# Test 4"
+    print("# Test 4")
     dt = datetime(2001, 1, 1, 0, 0, 0)
     string = "72 months"
 
     dt1 = datetime(2007, 1, 1)
     dt2 = increment_datetime_by_string(dt, string)
 
-    print dt
-    print dt2
+    print(dt)
+    print(dt2)
 
     delta = dt1 - dt2
 
@@ -98,7 +100,7 @@ def test_increment_datetime_by_string():
 def test_adjust_datetime_to_granularity():
 
     # First test
-    print "Test 1"
+    print("Test 1")
     dt = datetime(2001, 8, 8, 12, 30, 30)
     result = adjust_datetime_to_granularity(dt, "5 seconds")
     correct = datetime(2001, 8, 8, 12, 30, 30)
@@ -109,7 +111,7 @@ def test_adjust_datetime_to_granularity():
         core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # Second test
-    print "Test 2"
+    print("Test 2")
     result = adjust_datetime_to_granularity(dt, "20 minutes")
     correct = datetime(2001, 8, 8, 12, 30, 00)
 
@@ -119,7 +121,7 @@ def test_adjust_datetime_to_granularity():
         core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # Third test
-    print "Test 2"
+    print("Test 2")
     result = adjust_datetime_to_granularity(dt, "20 minutes")
     correct = datetime(2001, 8, 8, 12, 30, 00)
 
@@ -129,7 +131,7 @@ def test_adjust_datetime_to_granularity():
         core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 4. test
-    print "Test 4"
+    print("Test 4")
     result = adjust_datetime_to_granularity(dt, "3 hours")
     correct = datetime(2001, 8, 8, 12, 00, 00)
 
@@ -139,7 +141,7 @@ def test_adjust_datetime_to_granularity():
         core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 5. test
-    print "Test 5"
+    print("Test 5")
     result = adjust_datetime_to_granularity(dt, "5 days")
     correct = datetime(2001, 8, 8, 00, 00, 00)
 
@@ -149,7 +151,7 @@ def test_adjust_datetime_to_granularity():
         core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 6. test
-    print "Test 6"
+    print("Test 6")
     result = adjust_datetime_to_granularity(dt, "2 weeks")
     correct = datetime(2001, 8, 6, 00, 00, 00)
 
@@ -159,7 +161,7 @@ def test_adjust_datetime_to_granularity():
         core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 7. test
-    print "Test 7"
+    print("Test 7")
     result = adjust_datetime_to_granularity(dt, "6 months")
     correct = datetime(2001, 8, 1, 00, 00, 00)
 
@@ -169,7 +171,7 @@ def test_adjust_datetime_to_granularity():
         core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 8. test
-    print "Test 8"
+    print("Test 8")
     result = adjust_datetime_to_granularity(dt, "2 years")
     correct = datetime(2001, 1, 1, 00, 00, 00)
 
@@ -179,7 +181,7 @@ def test_adjust_datetime_to_granularity():
         core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 9. test
-    print "Test 9"
+    print("Test 9")
     result = adjust_datetime_to_granularity(
         dt, "2 years, 3 months, 5 days, 3 hours, 3 minutes, 2 seconds")
     correct = datetime(2001, 8, 8, 12, 30, 30)
@@ -190,7 +192,7 @@ def test_adjust_datetime_to_granularity():
         core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 10. test
-    print "Test 10"
+    print("Test 10")
     result = adjust_datetime_to_granularity(dt, "3 months, 5 days, 3 minutes")
     correct = datetime(2001, 8, 8, 12, 30, 00)
 
@@ -200,7 +202,7 @@ def test_adjust_datetime_to_granularity():
         core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
     # 11. test
-    print "Test 11"
+    print("Test 11")
     result = adjust_datetime_to_granularity(dt, "3 weeks, 5 days")
     correct = datetime(2001, 8, 8, 00, 00, 00)
 
@@ -214,7 +216,7 @@ def test_adjust_datetime_to_granularity():
 
 def test_compute_datetime_delta():
 
-    print "Test 1"
+    print("Test 1")
     start = datetime(2001, 1, 1, 00, 00, 00)
     end = datetime(2001, 1, 1, 00, 00, 00)
 
@@ -228,7 +230,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 2"
+    print("Test 2")
     start = datetime(2001, 1, 1, 00, 00, 14)
     end = datetime(2001, 1, 1, 00, 00, 44)
 
@@ -242,7 +244,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 3"
+    print("Test 3")
     start = datetime(2001, 1, 1, 00, 00, 44)
     end = datetime(2001, 1, 1, 00, 01, 14)
 
@@ -256,7 +258,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 4"
+    print("Test 4")
     start = datetime(2001, 1, 1, 00, 00, 30)
     end = datetime(2001, 1, 1, 00, 05, 30)
 
@@ -270,7 +272,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 5"
+    print("Test 5")
     start = datetime(2001, 1, 1, 00, 00, 00)
     end = datetime(2001, 1, 1, 00, 01, 00)
 
@@ -284,7 +286,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 6"
+    print("Test 6")
     start = datetime(2011, 10, 31, 00, 45, 00)
     end = datetime(2011, 10, 31, 01, 45, 00)
 
@@ -298,7 +300,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 7"
+    print("Test 7")
     start = datetime(2011, 10, 31, 00, 45, 00)
     end = datetime(2011, 10, 31, 01, 15, 00)
 
@@ -312,7 +314,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 8"
+    print("Test 8")
     start = datetime(2011, 10, 31, 00, 45, 00)
     end = datetime(2011, 10, 31, 12, 15, 00)
 
@@ -326,7 +328,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 9"
+    print("Test 9")
     start = datetime(2011, 10, 31, 00, 00, 00)
     end = datetime(2011, 10, 31, 01, 00, 00)
 
@@ -340,7 +342,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 10"
+    print("Test 10")
     start = datetime(2011, 10, 31, 00, 00, 00)
     end = datetime(2011, 11, 01, 01, 00, 00)
 
@@ -354,7 +356,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 11"
+    print("Test 11")
     start = datetime(2011, 10, 31, 12, 00, 00)
     end = datetime(2011, 11, 01, 06, 00, 00)
 
@@ -368,7 +370,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 12"
+    print("Test 12")
     start = datetime(2011, 11, 01, 00, 00, 00)
     end = datetime(2011, 12, 01, 01, 00, 00)
 
@@ -382,7 +384,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 13"
+    print("Test 13")
     start = datetime(2011, 11, 01, 00, 00, 00)
     end = datetime(2011, 11, 05, 00, 00, 00)
 
@@ -396,7 +398,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 14"
+    print("Test 14")
     start = datetime(2011, 10, 06, 00, 00, 00)
     end = datetime(2011, 11, 05, 00, 00, 00)
 
@@ -410,7 +412,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 15"
+    print("Test 15")
     start = datetime(2011, 12, 02, 00, 00, 00)
     end = datetime(2012, 01, 01, 00, 00, 00)
 
@@ -424,7 +426,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 16"
+    print("Test 16")
     start = datetime(2011, 01, 01, 00, 00, 00)
     end = datetime(2011, 02, 01, 00, 00, 00)
 
@@ -438,7 +440,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 17"
+    print("Test 17")
     start = datetime(2011, 12, 01, 00, 00, 00)
     end = datetime(2012, 01, 01, 00, 00, 00)
 
@@ -452,7 +454,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 18"
+    print("Test 18")
     start = datetime(2011, 12, 01, 00, 00, 00)
     end = datetime(2012, 06, 01, 00, 00, 00)
 
@@ -466,7 +468,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 19"
+    print("Test 19")
     start = datetime(2011, 06, 01, 00, 00, 00)
     end = datetime(2021, 06, 01, 00, 00, 00)
 
@@ -480,7 +482,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 20"
+    print("Test 20")
     start = datetime(2011, 06, 01, 00, 00, 00)
     end = datetime(2012, 06, 01, 12, 00, 00)
 
@@ -495,7 +497,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 21"
+    print("Test 21")
     start = datetime(2011, 06, 01, 00, 00, 00)
     end = datetime(2012, 06, 01, 12, 30, 00)
 
@@ -510,7 +512,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 22"
+    print("Test 22")
     start = datetime(2011, 06, 01, 00, 00, 00)
     end = datetime(2012, 06, 01, 12, 00, 05)
 
@@ -525,7 +527,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 23"
+    print("Test 23")
     start = datetime(2011, 06, 01, 00, 00, 00)
     end = datetime(2012, 06, 01, 00, 30, 00)
 
@@ -540,7 +542,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
-    print "Test 24"
+    print("Test 24")
     start = datetime(2011, 06, 01, 00, 00, 00)
     end = datetime(2012, 06, 01, 00, 00, 05)
 
@@ -559,7 +561,7 @@ def test_compute_datetime_delta():
 def test_compute_absolute_time_granularity():
 
     # First we test intervals
-    print "Test 1"
+    print("Test 1")
     maps = []
     a = datetime(2001, 1, 1)
     increment = "1 year"
@@ -575,7 +577,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 2"
+    print("Test 2")
     maps = []
     a = datetime(2001, 1, 1)
     increment = "3 years"
@@ -591,7 +593,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 3"
+    print("Test 3")
     maps = []
     a = datetime(2001, 5, 1)
     increment = "1 month"
@@ -607,7 +609,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 4"
+    print("Test 4")
     maps = []
     a = datetime(2001, 1, 1)
     increment = "3 months"
@@ -623,7 +625,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 3"
+    print("Test 3")
     maps = []
     a = datetime(2001, 1, 1)
     increment = "1 day"
@@ -639,7 +641,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 4"
+    print("Test 4")
     maps = []
     a = datetime(2001, 1, 14)
     increment = "14 days"
@@ -655,7 +657,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 5"
+    print("Test 5")
     maps = []
     a = datetime(2001, 3, 1)
     increment = "1 month, 4 days"
@@ -672,7 +674,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 6"
+    print("Test 6")
     maps = []
     a = datetime(2001, 2, 11)
     increment = "1 days, 1 hours"
@@ -689,7 +691,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 7"
+    print("Test 7")
     maps = []
     a = datetime(2001, 6, 12)
     increment = "6 hours"
@@ -705,7 +707,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 8"
+    print("Test 8")
     maps = []
     a = datetime(2001, 1, 1)
     increment = "20 minutes"
@@ -721,7 +723,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 9"
+    print("Test 9")
     maps = []
     a = datetime(2001, 1, 1)
     increment = "5 hours, 25 minutes"
@@ -738,7 +740,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 10"
+    print("Test 10")
     maps = []
     a = datetime(2001, 1, 1)
     increment = "5 minutes, 30 seconds"
@@ -755,7 +757,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 11"
+    print("Test 11")
     maps = []
     a = datetime(2001, 12, 31)
     increment = "60 minutes, 30 seconds"
@@ -772,15 +774,15 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 12"
+    print("Test 12")
     maps = []
     a = datetime(2001, 12, 31, 12, 30, 30)
     increment = "3600 seconds"
     for i in range(24):
         start = increment_datetime_by_string(a, increment, i)
         end = increment_datetime_by_string(a, increment, i + 1)
-        print start
-        print end
+        print(start)
+        print(end)
         map = RasterDataset(None)
         map.set_absolute_time(start, end)
         maps.append(map)
@@ -792,7 +794,7 @@ def test_compute_absolute_time_granularity():
 
     # Test absolute time points
 
-    print "Test 13"
+    print("Test 13")
     maps = []
     a = datetime(2001, 12, 31, 12, 30, 30)
     increment = "3600 seconds"
@@ -808,7 +810,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 14"
+    print("Test 14")
     maps = []
     a = datetime(2001, 12, 31, 00, 00, 00)
     increment = "20 days"
@@ -824,7 +826,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 15"
+    print("Test 15")
     maps = []
     a = datetime(2001, 12, 01, 00, 00, 00)
     increment = "5 months"
@@ -842,7 +844,7 @@ def test_compute_absolute_time_granularity():
 
     # Test absolute time interval and points
 
-    print "Test 16"
+    print("Test 16")
     maps = []
     a = datetime(2001, 12, 31, 12, 30, 30)
     increment = "3600 seconds"
@@ -867,7 +869,7 @@ def test_compute_absolute_time_granularity():
         core.fatal("Wrong granularity reference %s != gran %s" % (
             increment, gran))
 
-    print "Test 17"
+    print("Test 17")
     maps = []
     a = datetime(2001, 1, 1)
     increment = "2 days"
@@ -970,7 +972,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "equivalent":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -979,12 +981,12 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "cover":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "cover":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -993,22 +995,22 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "cover":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "cover":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = B.spatial_relation_2d(A)
-    print relation
+    print(relation)
     if relation != "covered":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = B.spatial_relation(A)
-    print relation
+    print(relation)
     if relation != "covered":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1017,17 +1019,17 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "cover":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = B.spatial_relation_2d(A)
-    print relation
+    print(relation)
     if relation != "covered":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "cover":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1035,7 +1037,7 @@ def test_spatial_relations():
         north=70, south=30, east=50, west=20, bottom=-50, top=50)
 
     relation = B.spatial_relation(A)
-    print relation
+    print(relation)
     if relation != "covered":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1044,12 +1046,12 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "contain":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "cover":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1058,7 +1060,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "cover":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1067,12 +1069,12 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "contain":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = B.spatial_relation(A)
-    print relation
+    print(relation)
     if relation != "in":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1081,12 +1083,12 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "overlap":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "overlap":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1095,12 +1097,12 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "in":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "overlap":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1109,7 +1111,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "overlap":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1118,7 +1120,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "in":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1130,12 +1132,12 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1147,12 +1149,12 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1164,12 +1166,12 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1181,12 +1183,12 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1198,12 +1200,12 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1215,12 +1217,12 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1232,12 +1234,12 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation_2d(B)
-    print relation
+    print(relation)
     if relation != "disjoint":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "disjoint":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1249,7 +1251,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1261,7 +1263,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1271,7 +1273,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1281,7 +1283,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1291,7 +1293,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1301,7 +1303,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1311,7 +1313,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1321,7 +1323,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1331,7 +1333,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1341,7 +1343,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1351,7 +1353,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1361,7 +1363,7 @@ def test_spatial_relations():
     B.print_info()
 
     relation = A.spatial_relation(B)
-    print relation
+    print(relation)
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
 
@@ -1392,7 +1394,7 @@ def test_temporal_topology_builder():
 
     count = 0
     for _map in tb:
-        print "[%s]" % (_map.get_name())
+        print("[%s]" % (_map.get_name()))
         _map.print_topology_info()
         if _map.get_id() != map_listA[count].get_id():
             core.fatal("Error building temporal topology <%s> != <%s>" %
@@ -1432,7 +1434,7 @@ def test_temporal_topology_builder():
 
     count = 0
     for _map in tb:
-        print "[%s]" % (_map.get_map_id())
+        print("[%s]" % (_map.get_map_id()))
         _map.print_topology_shell_info()
         if _map.get_id() != map_listB[count].get_id():
             core.fatal("Error building temporal topology <%s> != <%s>" %
@@ -1444,7 +1446,7 @@ def test_temporal_topology_builder():
 
     count = 0
     for _map in tb:
-        print "[%s]" % (_map.get_map_id())
+        print("[%s]" % (_map.get_map_id()))
         _map.print_topology_shell_info()
         if _map.get_id() != map_listA[count].get_id():
             core.fatal("Error building temporal topology <%s> != <%s>" %
@@ -1453,7 +1455,7 @@ def test_temporal_topology_builder():
 
     count = 0
     for _map in map_listB:
-        print "[%s]" % (_map.get_map_id())
+        print("[%s]" % (_map.get_map_id()))
         _map.print_topology_shell_info()
 
     # Probing some relations
@@ -1488,13 +1490,13 @@ def test_map_list_sorting():
     _map.set_absolute_time(datetime(2001, 03, 01), datetime(2001, 04, 01))
     map_list.append(copy.copy(_map))
 
-    print "Original"
+    print("Original")
     for _map in map_list:
-        print _map.get_temporal_extent_as_tuple()[0], _map.get_temporal_extent_as_tuple()[1]
-    print "Sorted by start time"
+        print(_map.get_temporal_extent_as_tuple()[0], _map.get_temporal_extent_as_tuple()[1])
+    print("Sorted by start time")
     new_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
     for _map in new_list:
-        print _map.get_temporal_extent_as_tuple()[0], _map.get_temporal_extent_as_tuple()[1]
+        print(_map.get_temporal_extent_as_tuple()[0], _map.get_temporal_extent_as_tuple()[1])
 
     if new_list[0] != map_list[1]:
         core.fatal("Sorting by start time failed")
@@ -1503,10 +1505,10 @@ def test_map_list_sorting():
     if new_list[2] != map_list[2]:
         core.fatal("Sorting by start time failed")
 
-    print "Sorted by end time"
+    print("Sorted by end time")
     new_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
     for _map in new_list:
-        print _map.get_temporal_extent_as_tuple()[0], _map.get_temporal_extent_as_tuple()[1]
+        print(_map.get_temporal_extent_as_tuple()[0], _map.get_temporal_extent_as_tuple()[1])
 
     if new_list[0] != map_list[1]:
         core.fatal("Sorting by end time failed")
@@ -1523,7 +1525,7 @@ def test_1d_rtree():
 
     tree = rtree.RTreeCreateTree(-1, 0, 1)
 
-    for i in xrange(10):
+    for i in range(10):
 
         rect = rtree.RTreeAllocRect(tree)
         rtree.RTreeSetRect1D(rect, tree, float(i - 2), float(i + 2))
@@ -1539,9 +1541,9 @@ def test_1d_rtree():
     rtree.RTreeFreeRect(rect)
 
     # print rectangle ids
-    print "Number of overlapping rectangles", num
-    for i in xrange(list_.n_values):
-        print "id", list_.value[i]
+    print("Number of overlapping rectangles", num)
+    for i in range(list_.n_values):
+        print("id", list_.value[i])
 
     rtree.RTreeDestroyTree(tree)
 
@@ -1553,7 +1555,7 @@ def test_2d_rtree():
 
     tree = rtree.RTreeCreateTree(-1, 0, 2)
 
-    for i in xrange(10):
+    for i in range(10):
 
         rect = rtree.RTreeAllocRect(tree)
 
@@ -1571,9 +1573,9 @@ def test_2d_rtree():
     rtree.RTreeFreeRect(rect)
 
     # print rectangle ids
-    print "Number of overlapping rectangles", num
-    for i in xrange(list_.n_values):
-        print "id", list_.value[i]
+    print("Number of overlapping rectangles", num)
+    for i in range(list_.n_values):
+        print("id", list_.value[i])
 
     rtree.RTreeDestroyTree(tree)
 
@@ -1585,7 +1587,7 @@ def test_3d_rtree():
 
     tree = rtree.RTreeCreateTree(-1, 0, 3)
 
-    for i in xrange(10):
+    for i in range(10):
 
         rect = rtree.RTreeAllocRect(tree)
         rtree.RTreeSetRect3D(rect, tree,
@@ -1593,12 +1595,12 @@ def test_3d_rtree():
                              float(i - 2), float(i + 2),
                              float(i - 2), float(i + 2))
         rtree.RTreeInsertRect(rect, i + 1, tree)
-        print i + 1
+        print(i + 1)
         rtree.RTreePrintRect(rect, 1, tree)
 
     rect = rtree.RTreeAllocRect(tree)
     rtree.RTreeSetRect3D(rect, tree, 2.0, 7.0, 2.0, 7.0, 2.0, 7.0)
-    print "Select"
+    print("Select")
     rtree.RTreePrintRect(rect, 1, tree)
 
     list_ = gis.ilist()
@@ -1607,9 +1609,9 @@ def test_3d_rtree():
     rtree.RTreeFreeRect(rect)
 
     # print rectangle ids
-    print "Number of overlapping rectangles", num
-    for i in xrange(list_.n_values):
-        print "id", list_.value[i]
+    print("Number of overlapping rectangles", num)
+    for i in range(list_.n_values):
+        print("id", list_.value[i])
 
     rtree.RTreeDestroyTree(tree)
 
@@ -1621,7 +1623,7 @@ def test_4d_rtree():
 
     tree = rtree.RTreeCreateTree(-1, 0, 4)
 
-    for i in xrange(10):
+    for i in range(10):
 
         # Allocate the boundary
         rect = rtree.RTreeAllocRect(tree)
@@ -1643,9 +1645,9 @@ def test_4d_rtree():
     rtree.RTreeFreeRect(rect)
 
     # print rectangle ids
-    print "Number of overlapping rectangles", num
-    for i in xrange(list_.n_values):
-        print "id", list_.value[i]
+    print("Number of overlapping rectangles", num)
+    for i in range(list_.n_values):
+        print("id", list_.value[i])
 
     rtree.RTreeDestroyTree(tree)
 

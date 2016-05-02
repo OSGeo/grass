@@ -9,8 +9,8 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from space_time_datasets import *
-from open_stds import *
+from .space_time_datasets import *
+from .open_stds import *
 from multiprocessing import Process
 import grass.script as gscript
 from grass.exceptions import CalledModuleError

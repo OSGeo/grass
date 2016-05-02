@@ -34,9 +34,15 @@ import os
 import gettext
 gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 
+try:
+    from builtins import long
+except ImportError:
+    # python3
+    long = int
+
 import grass.script as gscript
 from datetime import datetime
-from c_libraries_interface import *
+from .c_libraries_interface import *
 from grass.pygrass import messages
 # Import all supported database backends
 # Ignore import errors since they are checked later
@@ -61,16 +67,20 @@ def profile_function(func):
     do_profiling = os.getenv("GRASS_TGIS_PROFILE")
 
     if do_profiling is "True" or do_profiling is "1":
-        import cProfile, pstats, StringIO
+        import cProfile, pstats
+        try:
+            import StringIO as io
+        except ImportError:
+            import io
         pr = cProfile.Profile()
         pr.enable()
         func()
         pr.disable()
-        s = StringIO.StringIO()
+        s = io.StringIO()
         sortby = 'cumulative'
         ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
         ps.print_stats()
-        print s.getvalue()
+        print(s.getvalue())
     else:
         func()
 
@@ -560,13 +570,13 @@ def init(raise_fatal_error=False):
     database_string = ciface.get_database_name()
 
     # Set the mapset check and the timestamp write
-    if grassenv.has_key("TGIS_DISABLE_MAPSET_CHECK"):
+    if "TGIS_DISABLE_MAPSET_CHECK" in grassenv:
         if grassenv["TGIS_DISABLE_MAPSET_CHECK"] == "True" or \
            grassenv["TGIS_DISABLE_MAPSET_CHECK"] == "1":
             enable_mapset_check = False
             msgr.warning("TGIS_DISABLE_MAPSET_CHECK is True")
 
-    if grassenv.has_key("TGIS_DISABLE_TIMESTAMP_WRITE"):
+    if "TGIS_DISABLE_TIMESTAMP_WRITE" in grassenv:
         if grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"] == "True" or \
            grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"] == "1":
             enable_timestamp_write = False
@@ -1161,9 +1171,9 @@ class DBConnection(object):
                 if self.connected:
                     try:
                         return self.cursor.mogrify(sql, args)
-                    except:
-                        print sql, args
-                        raise
+                    except Exception as exc:
+                        print(sql, args)
+                        raise exc
                 else:
                     self.connect()
                     statement = self.cursor.mogrify(sql, args)

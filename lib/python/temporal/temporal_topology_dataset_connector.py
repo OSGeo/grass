@@ -16,6 +16,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+from __future__ import print_function
 import copy
 
 
@@ -104,7 +105,7 @@ class TemporalTopologyDatasetConnector(object):
             finished=a@P
             >>> rlist = tmr.get_temporal_relations()
             >>> if "FINISHED" in rlist.keys():
-            ...    print rlist["FINISHED"][0].get_id()
+            ...    print(rlist["FINISHED"][0].get_id())
             a@P
 
     """
@@ -503,85 +504,85 @@ class TemporalTopologyDatasetConnector(object):
     def print_temporal_topology_info(self):
         """Print information about this class in human readable style"""
 
-        print " +-------------------- Temporal Topology -------------------------------------+"
+        print(" +-------------------- Temporal Topology -------------------------------------+")
         #          0123456789012345678901234567890
         if self.next() is not None:
-            print " | Next: ...................... " + str(self.next().get_id())
+            print(" | Next: ...................... " + str(self.next().get_id()))
         if self.prev() is not None:
-            print " | Previous: .................. " + str(self.prev().get_id())
+            print(" | Previous: .................. " + str(self.prev().get_id()))
         if self.equal is not None:
-            print " | Equal:...................... " + \
-                self._generate_map_list_string(self.equal)
+            print(" | Equal:...................... " +
+                  self._generate_map_list_string(self.equal))
         if self.follows is not None:
-            print " | Follows: ................... " + \
-                self._generate_map_list_string(self.follows)
+            print(" | Follows: ................... " +
+                  self._generate_map_list_string(self.follows))
         if self.precedes is not None:
-            print " | Precedes: .................. " + \
-                self._generate_map_list_string(self.precedes)
+            print(" | Precedes: .................. " +
+                  self._generate_map_list_string(self.precedes))
         if self.overlaps is not None:
-            print " | Overlaps: .................. " + \
-                self._generate_map_list_string(self.overlaps)
+            print(" | Overlaps: .................. " +
+                  self._generate_map_list_string(self.overlaps))
         if self.overlapped is not None:
-            print " | Overlapped: ................ " + \
-                self._generate_map_list_string(self.overlapped)
+            print(" | Overlapped: ................ " +
+                  self._generate_map_list_string(self.overlapped))
         if self.during is not None:
-            print " | During: .................... " + \
-                self._generate_map_list_string(self.during)
+            print(" | During: .................... " +
+                  self._generate_map_list_string(self.during))
         if self.contains is not None:
-            print " | Contains: .................. " + \
-                self._generate_map_list_string(self.contains)
+            print(" | Contains: .................. " +
+                  self._generate_map_list_string(self.contains))
         if self.starts is not None:
-            print " | Starts:.. .................. " + \
-                self._generate_map_list_string(self.starts)
+            print(" | Starts:.. .................. " +
+                  self._generate_map_list_string(self.starts))
         if self.started is not None:
-            print " | Started:. .................. " + \
-                self._generate_map_list_string(self.started)
+            print(" | Started:. .................. " +
+                  self._generate_map_list_string(self.started))
         if self.finishes is not None:
-            print " | Finishes:................... " + \
-                self._generate_map_list_string(self.finishes)
+            print(" | Finishes:................... " +
+                  self._generate_map_list_string(self.finishes))
         if self.finished is not None:
-            print " | Finished:................... " + \
-                self._generate_map_list_string(self.finished)
+            print(" | Finished:................... " +
+                  self._generate_map_list_string(self.finished))
 
     def print_temporal_topology_shell_info(self):
         """Print information about this class in shell style"""
 
         if self.next() is not None:
-            print "next=" + self.next().get_id()
+            print("next=" + self.next().get_id())
         if self.prev() is not None:
-            print "prev=" + self.prev().get_id()
+            print("prev=" + self.prev().get_id())
         if self.equal is not None:
-            print "equal=" + self._generate_map_list_string(self.equal, False)
+            print("equal=" + self._generate_map_list_string(self.equal, False))
         if self.follows is not None:
-            print "follows=" + self._generate_map_list_string(self.follows,
-                                                              False)
+            print("follows=" + self._generate_map_list_string(self.follows,
+                                                              False))
         if self.precedes is not None:
-            print "precedes=" + self._generate_map_list_string(
-                self.precedes, False)
+            print("precedes=" + self._generate_map_list_string(
+                  self.precedes, False))
         if self.overlaps is not None:
-            print "overlaps=" + self._generate_map_list_string(
-                self.overlaps, False)
+            print("overlaps=" + self._generate_map_list_string(
+                  self.overlaps, False))
         if self.overlapped is not None:
-            print "overlapped=" + \
-                self._generate_map_list_string(self.overlapped, False)
+            print("overlapped=" +
+                  self._generate_map_list_string(self.overlapped, False))
         if self.during is not None:
-            print "during=" + self._generate_map_list_string(self.during,
-                                                             False)
+            print("during=" + self._generate_map_list_string(self.during,
+                                                             False))
         if self.contains is not None:
-            print "contains=" + self._generate_map_list_string(
-                self.contains, False)
+            print("contains=" + self._generate_map_list_string(
+                  self.contains, False))
         if self.starts is not None:
-            print "starts=" + \
-                self._generate_map_list_string(self.starts)
+            print("starts=" +
+                  self._generate_map_list_string(self.starts))
         if self.started is not None:
-            print "started=" + \
-                self._generate_map_list_string(self.started)
+            print("started=" +
+                  self._generate_map_list_string(self.started))
         if self.finishes is not None:
-            print "finishes=" + \
-                self._generate_map_list_string(self.finishes)
+            print("finishes=" +
+                  self._generate_map_list_string(self.finishes))
         if self.finished is not None:
-            print "finished=" + \
-                self._generate_map_list_string(self.finished)
+            print("finished=" +
+                  self._generate_map_list_string(self.finished))
 
 ###############################################################################
 

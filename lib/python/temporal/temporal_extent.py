@@ -19,7 +19,8 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from base import *
+from __future__ import print_function
+from .base import *
 
 ###############################################################################
 
@@ -156,13 +157,13 @@ class TemporalExtent(SQLDatabaseInterface):
                >>> A = TemporalExtent(start_time=5, end_time=8 )
                >>> B = TemporalExtent(start_time=3, end_time=4 )
                >>> inter = A.intersect(B)
-               >>> print inter
+               >>> print(inter)
                None
 
                >>> A = TemporalExtent(start_time=5, end_time=8 )
                >>> B = TemporalExtent(start_time=3, end_time=None )
                >>> inter = A.intersect(B)
-               >>> print inter
+               >>> print(inter)
                None
 
         """
@@ -396,13 +397,13 @@ class TemporalExtent(SQLDatabaseInterface):
                >>> A = TemporalExtent(start_time=5, end_time=8 )
                >>> B = TemporalExtent(start_time=3, end_time=4 )
                >>> inter = A.intersect(B)
-               >>> print inter
+               >>> print(inter)
                None
 
                >>> A = TemporalExtent(start_time=5, end_time=8 )
                >>> B = TemporalExtent(start_time=3, end_time=None )
                >>> inter = A.intersect(B)
-               >>> print inter
+               >>> print(inter)
                None
 
         """
@@ -1028,13 +1029,13 @@ class TemporalExtent(SQLDatabaseInterface):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print " | Start time:................. " + str(self.get_start_time())
-        print " | End time:................... " + str(self.get_end_time())
+        print(" | Start time:................. " + str(self.get_start_time()))
+        print(" | End time:................... " + str(self.get_end_time()))
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
-        print "start_time=" + str(self.get_start_time())
-        print "end_time=" + str(self.get_end_time())
+        print("start_time=" + str(self.get_start_time()))
+        print("end_time=" + str(self.get_end_time()))
 
 ###############################################################################
 
@@ -1052,7 +1053,7 @@ class AbsoluteTemporalExtent(TemporalExtent):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print " +-------------------- Absolute time -----------------------------------------+"
+        print(" +-------------------- Absolute time -----------------------------------------+")
         TemporalExtent.print_info(self)
 
     def print_shell_info(self):
@@ -1177,14 +1178,14 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         """Print information about this class in human readable style"""
         AbsoluteTemporalExtent.print_info(self)
         #      0123456789012345678901234567890
-        print " | Granularity:................ " + str(self.get_granularity())
-        print " | Temporal type of maps:...... " + str(self.get_map_time())
+        print(" | Granularity:................ " + str(self.get_granularity()))
+        print(" | Temporal type of maps:...... " + str(self.get_map_time()))
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         AbsoluteTemporalExtent.print_shell_info(self)
-        print "granularity=" + str(self.get_granularity())
-        print "map_time=" + str(self.get_map_time())
+        print("granularity=" + str(self.get_granularity()))
+        print("map_time=" + str(self.get_map_time()))
 
 ###############################################################################
 
@@ -1294,14 +1295,14 @@ class RelativeTemporalExtent(TemporalExtent):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print " +-------------------- Relative time -----------------------------------------+"
+        print(" +-------------------- Relative time -----------------------------------------+")
         TemporalExtent.print_info(self)
-        print " | Relative time unit:......... " + str(self.get_unit())
+        print(" | Relative time unit:......... " + str(self.get_unit()))
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         TemporalExtent.print_shell_info(self)
-        print "unit=" + str(self.get_unit())
+        print("unit=" + str(self.get_unit()))
 
 ###############################################################################
 
@@ -1426,14 +1427,14 @@ class STDSRelativeTime(RelativeTemporalExtent):
         """Print information about this class in human readable style"""
         RelativeTemporalExtent.print_info(self)
         #      0123456789012345678901234567890
-        print " | Granularity:................ " + str(self.get_granularity())
-        print " | Temporal type of maps:...... " + str(self.get_map_time())
+        print(" | Granularity:................ " + str(self.get_granularity()))
+        print(" | Temporal type of maps:...... " + str(self.get_map_time()))
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         RelativeTemporalExtent.print_shell_info(self)
-        print "granularity=" + str(self.get_granularity())
-        print "map_time=" + str(self.get_map_time())
+        print("granularity=" + str(self.get_granularity()))
+        print("map_time=" + str(self.get_map_time()))
 
 ###############################################################################
 

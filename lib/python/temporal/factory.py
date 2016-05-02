@@ -18,7 +18,7 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from space_time_datasets import *
+from .space_time_datasets import *
 
 ###############################################################################
 
