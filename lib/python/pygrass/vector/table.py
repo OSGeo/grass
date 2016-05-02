@@ -194,7 +194,7 @@ class Columns(object):
         return item in self.names()
 
     def __repr__(self):
-        return "Columns(%r)" % self.items()
+        return "Columns(%r)" % list(self.items())
 
     def __getitem__(self, key):
         return self.odict[key]

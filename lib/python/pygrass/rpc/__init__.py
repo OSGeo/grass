@@ -21,7 +21,7 @@ from grass.exceptions import FatalError
 from grass.pygrass.vector import *
 from grass.pygrass.raster import *
 import grass.lib.gis as libgis
-from base import RPCServerBase
+from .base import RPCServerBase
 from grass.pygrass.gis.region import Region
 import grass.pygrass.utils as utils
 import logging

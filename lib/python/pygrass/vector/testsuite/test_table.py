@@ -4,6 +4,12 @@ Created on Wed Jun 25 11:08:22 2014
 
 @author: pietro
 """
+try:
+    from builtins import long
+except ImportError:
+    # python3
+    long = int
+
 import os
 import sqlite3
 import tempfile as tmp
