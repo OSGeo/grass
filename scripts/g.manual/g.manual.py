@@ -50,7 +50,7 @@ import sys
 import os
 
 try:
-    from urlib import urlopen
+    from urllib2 import urlopen
 except ImportError:
     # python3
     from urllib.request import urlopen
