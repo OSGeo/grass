@@ -41,8 +41,60 @@ For calculating univariate statistics from a raster map based on vector polygon
 map and uploads statistics to new attribute columns, see
 <em><a href="v.rast.stats.html">v.rast.stats</a></em>.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
+<h3>Univariate statistics</h3>
+
+In this example, the raster map <tt>elevation</tt> in the North 
+Carolina sample dataset is used to calculate univariate statistics: 
+
+<div class="code"><pre>
+g.region raster=elevation -p
+
+# standard output, along with extended statistics
+r.univar -e elevation percentile=98
+total null and non-null cells: 2025000
+total null cells: 0
+
+Of the non-null cells:
+----------------------
+n: 2025000
+minimum: 55.5788
+maximum: 156.33
+range: 100.751
+mean: 110.375
+mean of absolute values: 110.375
+standard deviation: 20.3153
+variance: 412.712
+variation coefficient: 18.4057 %
+sum: 223510266.558102
+1st quartile: 94.79
+median (even number of cells): 108.88
+3rd quartile: 126.792
+98th percentile: 147.727
+
+
+# script style output, along with extended statistics
+r.univar -ge elevation percentile=98
+n=2025000
+null_cells=0
+cells=2025000
+min=55.5787925720215
+max=156.329864501953
+range=100.751071929932
+mean=110.375440275606
+mean_of_abs=110.375440275606
+stddev=20.3153233205981
+variance=412.712361620436
+coeff_var=18.4056555243368
+sum=223510266.558102
+first_quartile=94.79
+median=108.88
+third_quartile=126.792
+percentile_98=147.727
+</pre></div>
+
+<h3>Zonal statistics</h3>
 In this example, the raster polygon map <tt>basins</tt> in the North 
 Carolina sample dataset is used to calculate raster statistics for zones
 for <tt>elevation</tt> raster map: 
