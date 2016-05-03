@@ -1,1 +1,1 @@
-all = [ "grass" ]
+all = ["grass"]

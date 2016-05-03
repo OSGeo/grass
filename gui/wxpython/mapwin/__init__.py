@@ -4,4 +4,4 @@ all = [
     'analysis',
     'decorations',
     'base',
-    ]
+]

@@ -1,7 +1,7 @@
 """
 @package vnet.widgets
 
-@brief Base class for list of points. 
+@brief Base class for list of points.
 
 Classes:
  - widgets::PointsList
@@ -38,26 +38,26 @@ class PointsList(wx.ListCtrl,
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.LC_REPORT | wx.SUNKEN_BORDER | wx.LC_HRULES |
                  wx.LC_SINGLE_SEL):
-        """Creates list for points. 
+        """Creates list for points.
 
-        PointsList class was created from GCPList class in GCP manager. It is possible 
+        PointsList class was created from GCPList class in GCP manager. It is possible
         to be shared by GCP and VNET front end.
 
         Important parameters:
         :param cols: is list containing list items. which represents columns.
-                This columns will be added in order as they are in list. 
+                This columns will be added in order as they are in list.
                 Class will add as first column "use" with number of point and checkbox.
                 Structure of list item must be this:
-               -1. item: column name 
-               -2. item: column label                
+               -1. item: column name
+               -2. item: column label
                -3. item: If column is editable by user, it must contain convert function to convert
-                         inserted string to it's type for sorting. Use None for not editable 
+                         inserted string to it's type for sorting. Use None for not editable
                          columns. Values for insertion can be in list. This allows insert
-                         just values in the list. 
-               -4. item: Default value for column cell. Value should be given in it's  type 
+                         just values in the list.
+               -4. item: Default value for column cell. Value should be given in it's  type
                          in order to sorting would work properly. If 3. item is list, it must be index
                          of some item in the list.
-  
+
         Example of cols parameter:
                  column name, column label, convert function, default val
         @code
@@ -68,10 +68,10 @@ class PointsList(wx.ListCtrl,
                    ['N', _('target N'), float, 0.0],
                    ['F_Err', _('Forward error'), None, 0],
                    ['B_Err', _(Backward error'), None, 0]
-                   ['type', _('type'), [_(""), _("Start point"), _("End point")], 0] # Select from 3 choices ("Start point", "End point"), 
+                   ['type', _('type'), [_(""), _("Start point"), _("End point")], 0] # Select from 3 choices ("Start point", "End point"),
                                                                                      # Choice with index 0 ("") is default.
                   ]
-        @endcode 
+        @endcode
         """
 
         wx.ListCtrl.__init__(self, parent, id, pos, size, style)
@@ -85,13 +85,14 @@ class PointsList(wx.ListCtrl,
         cols.insert(0, ['use', _('use'), False, 0])
 
         self.colsData = cols
-        self.dataTypes = {"colName" : 0,
-                          "colLabel" : 1,
-                          "colEditable" : 2,
-                          "itemDefaultValue" : 3} # just for better understanding
+        self.dataTypes = {
+            "colName": 0,
+            "colLabel": 1,
+            "colEditable": 2,
+            "itemDefaultValue": 3}  # just for better understanding
 
         # information whether list items are checked or not
-        self.CheckList = [] 
+        self.CheckList = []
 
         self._createCols()
         self.hiddenCols = {}
@@ -103,18 +104,17 @@ class PointsList(wx.ListCtrl,
         self.selected = wx.NOT_FOUND
         self.selectedkey = -1
 
-
         # CheckListCtrlMixin must set an ImageList first
         self.il = self.GetImageList(wx.IMAGE_LIST_SMALL)
 
         # images for column sorting
-        SmallUpArrow = wx.BitmapFromImage(self.getSmallUpArrowImage())            
-        SmallDnArrow = wx.BitmapFromImage(self.getSmallDnArrowImage())            
+        SmallUpArrow = wx.BitmapFromImage(self.getSmallUpArrowImage())
+        SmallDnArrow = wx.BitmapFromImage(self.getSmallDnArrowImage())
         self.sm_dn = self.il.Add(SmallDnArrow)
         self.sm_up = self.il.Add(SmallUpArrow)
 
         # initialize column sorter
-        self.itemDataMap = [] 
+        self.itemDataMap = []
         ncols = self.GetColumnCount()
         ColumnSorterMixin.__init__(self, ncols)
 
@@ -122,7 +122,7 @@ class PointsList(wx.ListCtrl,
         self._colSortFlag = [1] * ncols
 
         # same structure as itemDataMap, information about choice index selected
-        # if cell is in column without values to choose then is -1 
+        # if cell is in column without values to choose then is -1
         self.selIdxs = []
 
         self.ResizeColumns()
@@ -138,13 +138,14 @@ class PointsList(wx.ListCtrl,
         else:
             # the hard way: we want images on the column header
             info = wx.ListItem()
-            info.SetMask(wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT)
+            info.SetMask(
+                wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT)
             info.SetImage(-1)
             info.m_format = wx.LIST_FORMAT_LEFT
 
             for col in enumerate(self.colsData):
                 iLabel = self.dataTypes["colLabel"]
-                info.SetText(col[1][iLabel]) 
+                info.SetText(col[1][iLabel])
                 self.InsertColumnInfo(col[0], info)
 
     def AddItem(self):
@@ -159,10 +160,9 @@ class PointsList(wx.ListCtrl,
                 itemIndexes.append(col[iDefVal])
             else:
                 itemData.append(col[iDefVal])
-                itemIndexes.append(-1)# not a choise column 
+                itemIndexes.append(-1)  # not a choise column
 
-                
-        self.selIdxs.append(itemIndexes) 
+        self.selIdxs.append(itemIndexes)
 
         for hCol in self.hiddenCols.itervalues():
             defVal = hCol['colsData'][iDefVal]
@@ -178,7 +178,7 @@ class PointsList(wx.ListCtrl,
         itemData[0] = self.selectedkey + 1
         self.itemDataMap.append(copy(itemData))
 
-        self.Append(map(str, itemData))             
+        self.Append(map(str, itemData))
 
         self.selected = self.GetItemCount() - 1
         self.SetItemData(self.selected, self.selectedkey)
@@ -215,7 +215,7 @@ class PointsList(wx.ListCtrl,
 
     def EditCellIndex(self, index, colName, cellData):
         """Changes value in list using key (same regardless of sorting)"""
-        colNum = self._getColumnNum(colName) 
+        colNum = self._getColumnNum(colName)
         key = self.GetItemData(index)
 
         iColEd = self.dataTypes["colEditable"]
@@ -223,7 +223,7 @@ class PointsList(wx.ListCtrl,
             cellVal = self.colsData[colNum][iColEd][cellData]
             self.selIdxs[key][colNum] = cellData
         else:
-            cellVal = cellData  
+            cellVal = cellData
             self.selIdxs[key][colNum] = -1
 
         self.itemDataMap[key][colNum] = cellVal
@@ -233,14 +233,14 @@ class PointsList(wx.ListCtrl,
 
     def EditCellKey(self, key, colName, cellData):
         """Changes value in list using index (changes during sorting)"""
-        colNum = self._getColumnNum(colName)   
+        colNum = self._getColumnNum(colName)
 
         iColEd = self.dataTypes["colEditable"]
         if type(self.colsData[colNum][iColEd]).__name__ == "list":
             cellVal = self.colsData[colNum][iColEd][cellData]
             self.selIdxs[key][colNum] = cellData
         else:
-            cellVal = cellData  
+            cellVal = cellData
             self.selIdxs[key][colNum] = -1
 
         self.itemDataMap[key][colNum] = cellVal
@@ -264,7 +264,7 @@ class PointsList(wx.ListCtrl,
         return -1
 
     def ChangeColEditable(self, colName, colType):
-        """Change 3. item in constructor parameter cols (see the class constructor hint)"""    
+        """Change 3. item in constructor parameter cols (see the class constructor hint)"""
         colNum = self._getColumnNum(colName)
         iColEd = self.dataTypes["colEditable"]
         self.colsData[colNum][iColEd] = colType
@@ -281,8 +281,8 @@ class PointsList(wx.ListCtrl,
         self.selIdxs.pop(key)
 
         # update hidden columns
-        for hCol in self.hiddenCols.itervalues():    
-            hCol['itemDataMap'].pop(key) 
+        for hCol in self.hiddenCols.itervalues():
+            hCol['itemDataMap'].pop(key)
             hCol['selIdxs'].pop(key)
 
         # update key and point number
@@ -299,7 +299,7 @@ class PointsList(wx.ListCtrl,
             else:
                 self.selected = self.GetItemCount() - 1
                 self.selectedkey = self.GetItemData(self.selected)
-                
+
             self.SetItemState(self.selected,
                               wx.LIST_STATE_SELECTED,
                               wx.LIST_STATE_SELECTED)
@@ -319,16 +319,16 @@ class PointsList(wx.ListCtrl,
         i = 0
         for col in self.colsData:
             if i == 0:
-                i  += 1
+                i += 1
                 continue
             if type(col[iColEd]).__name__ == "list":
                 self.EditCell(index, i, col[iColEd][col[iDefVal]])
             else:
                 self.EditCell(index, i, col[iDefVal])
-            i  += 1
+            i += 1
         self.CheckItem(index, False)
 
-    def ResizeColumns(self, minWidth = [90, 120]):
+    def ResizeColumns(self, minWidth=[90, 120]):
         """Resize columns"""
         for i in range(self.GetColumnCount()):
             self.SetColumnWidth(i, wx.LIST_AUTOSIZE)
@@ -355,26 +355,27 @@ class PointsList(wx.ListCtrl,
         data = []
 
         index = event.GetIndex()
-        key = self.GetItemData(index)       
+        key = self.GetItemData(index)
         changed = False
         iColEd = self.dataTypes["colEditable"]
 
-        for col in  enumerate(self.colsData):
+        for col in enumerate(self.colsData):
             if col[1][iColEd]:
-                data.append([col[0], #culumn number
-                             self.GetItem(index, col[0]).GetText(), #cell value 
-                             col[1][iColEd]]) #convert function for type check
+                data.append([col[0],  # culumn number
+                             self.GetItem(
+                    index, col[0]).GetText(),  # cell value
+                    col[1][iColEd]])  # convert function for type check
 
         if not data:
             return
-        dlg = self.CreateEditDialog(data = data, pointNo = key)
+        dlg = self.CreateEditDialog(data=data, pointNo=key)
 
         if dlg.ShowModal() == wx.ID_OK:
-            editedData = dlg.GetValues() # string
-            
+            editedData = dlg.GetValues()  # string
+
             if len(editedData) == 0:
-                GError(parent = self,
-                       message=_("Invalid value inserted. Operation canceled."))
+                GError(parent=self, message=_(
+                    "Invalid value inserted. Operation canceled."))
             else:
                 i = 0
                 for editedCell in editedData:
@@ -385,19 +386,19 @@ class PointsList(wx.ListCtrl,
                         self.SetStringItem(index, editedCell[0], value)
                         self.itemDataMap[key][editedCell[0]] = editedCell[1]
                         changed = True
-                    i += 1 
+                    i += 1
 
                 self.selIdxs[key] = dlg.GetSelectionIndexes()
         dlg.Destroy()
         return changed, key
-        
+
     def CreateEditDialog(self, data, pointNo):
         """Helper function
         It is possible to define in child derived class
-        and adapt created dialog (e. g. it's title...) 
+        and adapt created dialog (e. g. it's title...)
         """
 
-        return  EditItem(parent=self, id=wx.ID_ANY, data = data, pointNo=pointNo)
+        return EditItem(parent=self, id=wx.ID_ANY, data=data, pointNo=pointNo)
 
     def OnColClick(self, event):
         """ListCtrl forgets selected item..."""
@@ -417,7 +418,11 @@ class PointsList(wx.ListCtrl,
 
     def getSmallUpArrowImage(self):
         """Get arrow up symbol for indication of sorting"""
-        stream = open(os.path.join(globalvar.IMGDIR, 'small_up_arrow.png'), 'rb')
+        stream = open(
+            os.path.join(
+                globalvar.IMGDIR,
+                'small_up_arrow.png'),
+            'rb')
         try:
             img = wx.ImageFromStream(stream)
         finally:
@@ -426,7 +431,11 @@ class PointsList(wx.ListCtrl,
 
     def getSmallDnArrowImage(self):
         """Get arrow down symbol for indication of sorting"""
-        stream = open(os.path.join(globalvar.IMGDIR, 'small_down_arrow.png'), 'rb')
+        stream = open(
+            os.path.join(
+                globalvar.IMGDIR,
+                'small_down_arrow.png'),
+            'rb')
         try:
             img = wx.ImageFromStream(stream)
         finally:
@@ -434,7 +443,7 @@ class PointsList(wx.ListCtrl,
         return img
 
     def _getColumnNum(self, colName):
-        """Get position of column among showed columns 
+        """Get position of column among showed columns
 
         :param colName: name of column
         :type colName: str
@@ -442,9 +451,9 @@ class PointsList(wx.ListCtrl,
         """
 
         for iCol, col in enumerate(self.colsData):
-             if colName == col[0]:
-                 return iCol
- 
+            if colName == col[0]:
+                return iCol
+
         return -1
 
     def HideColumn(self, colName):
@@ -460,7 +469,7 @@ class PointsList(wx.ListCtrl,
             return False
 
         hiddenCol = self.GetColumn(colNum)
-        self.DeleteColumn(colNum) 
+        self.DeleteColumn(colNum)
 
         self.hiddenCols[colName] = {}
         self.hiddenCols[colName]['wxCol'] = hiddenCol
@@ -490,7 +499,7 @@ class PointsList(wx.ListCtrl,
         """
         if pos < 0 and pos >= self.self.GetColumnCount():
             return False
-        if self.hiddenCols.has_key(colName):
+        if colName in self.hiddenCols:
             col = self.hiddenCols[colName]
 
             for item in enumerate(self.itemDataMap):
@@ -502,7 +511,7 @@ class PointsList(wx.ListCtrl,
 
             self.InsertColumnItem(pos, col['wxCol'])
             self.ResizeColumns()
-            del self.hiddenCols[colName]  
+            del self.hiddenCols[colName]
             return True
 
         return False
@@ -522,10 +531,13 @@ class PointsList(wx.ListCtrl,
         else:
             return True
 
+
 class EditItem(wx.Dialog):
-    
-    def __init__(self, parent, data, pointNo, itemCap = "Point No." ,id=wx.ID_ANY,
-                 title =_("Edit point"), style=wx.DEFAULT_DIALOG_STYLE):
+
+    def __init__(
+            self, parent, data, pointNo, itemCap="Point No.", id=wx.ID_ANY,
+            title=_("Edit point"),
+            style=wx.DEFAULT_DIALOG_STYLE):
         """Dialog for editing item cells in list"""
 
         wx.Dialog.__init__(self, parent, id, title=_(title), style=style)
@@ -534,16 +546,15 @@ class EditItem(wx.Dialog):
         panel = wx.Panel(parent=self)
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
-                            label=" %s %s " % (_(itemCap), str(pointNo + 1)))
+        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
+                           label=" %s %s " % (_(itemCap), str(pointNo + 1)))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         # source coordinates
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
-       
-        self.fields = [] 
-        self.data = deepcopy(data)
 
+        self.fields = []
+        self.data = deepcopy(data)
 
         col = 0
         row = 0
@@ -552,10 +563,10 @@ class EditItem(wx.Dialog):
 
             # Select
             if type(cell[2]).__name__ == "list":
-                self.fields.append(wx.ComboBox(parent = panel, id = wx.ID_ANY,
-                                               choices = cell[2],
-                                               style = wx.CB_READONLY, 
-                                               size = (110, -1)))
+                self.fields.append(wx.ComboBox(parent=panel, id=wx.ID_ANY,
+                                               choices=cell[2],
+                                               style=wx.CB_READONLY,
+                                               size=(110, -1)))
             # Text field
             else:
                 if cell[2] == float:
@@ -566,18 +577,25 @@ class EditItem(wx.Dialog):
                     validator = None
 
                 if validator:
-                    self.fields.append(wx.TextCtrl(parent=panel, id=wx.ID_ANY, 
-                                                   validator = validator, size=(150, -1)))
+                    self.fields.append(
+                        wx.TextCtrl(
+                            parent=panel, id=wx.ID_ANY, validator=validator,
+                            size=(150, -1)))
                 else:
-                    self.fields.append(wx.TextCtrl(parent=panel, id=wx.ID_ANY, 
+                    self.fields.append(wx.TextCtrl(parent=panel, id=wx.ID_ANY,
                                                    size=(150, -1)))
                     value = cell[1]
                     if not isinstance(cell[1], basestring):
                         value = str(cell[1])
                     self.fields[iField].SetValue(value)
 
-            label = wx.StaticText(parent = panel, id=wx.ID_ANY,
-                                  label = _(parent.GetColumn(cell[0]).GetText()) + ":") # name of column)
+            label = wx.StaticText(
+                parent=panel,
+                id=wx.ID_ANY,
+                label=_(
+                    parent.GetColumn(
+                        cell[0]).GetText()) +
+                ":")  # name of column)
 
             gridSizer.Add(item=label,
                           flag=wx.ALIGN_CENTER_VERTICAL,
@@ -588,8 +606,7 @@ class EditItem(wx.Dialog):
             gridSizer.Add(item=self.fields[iField],
                           pos=(row, col))
 
-
-            if col%3 == 0:
+            if col % 3 == 0:
                 col = 0
                 row += 1
             else:
@@ -598,7 +615,7 @@ class EditItem(wx.Dialog):
             iField += 1
 
         boxSizer.Add(item=gridSizer, proportion=1,
-                  flag=wx.EXPAND | wx.ALL, border=5)
+                     flag=wx.EXPAND | wx.ALL, border=5)
 
         sizer.Add(item=boxSizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL, border=5)
@@ -628,9 +645,9 @@ class EditItem(wx.Dialog):
         iField = 0
         for cell in self.data:
             value = self.fields[iField].GetValue()
-            
+
             if type(cell[2]).__name__ == "list":
-                    cell[1] = value
+                cell[1] = value
             else:
                 try:
                     cell[1] = cell[2](value)
@@ -646,15 +663,12 @@ class EditItem(wx.Dialog):
         """
         iField = 0
         itemIndexes = []
-        for cell in self.parent.colsData:            
+        for cell in self.parent.colsData:
             if type(cell[2]).__name__ == "list":
                 itemIndexes.append(self.fields[iField].GetSelection())
             else:
-                itemIndexes.append(-1) # not a choise column 
-            if cell[2]:   
+                itemIndexes.append(-1)  # not a choise column
+            if cell[2]:
                 iField += 1
 
         return itemIndexes
-
-
-

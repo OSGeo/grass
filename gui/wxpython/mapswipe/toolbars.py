@@ -23,18 +23,25 @@ from icons.icon import MetaIcon
 from core.utils import _
 
 
-swipeIcons = {'tools': MetaIcon(img='tools', label=_("Tools")),
-              'quit': BaseIcons['quit'].SetLabel(_("Quit Map Swipe")),
-              'addRast': BaseIcons['addRast'].SetLabel(_("Select raster maps")),
-              'query': MetaIcon(img='info',
-                                label=_('Query raster/vector map(s)'),
-                                desc=_('Query selected raster/vector map(s)')),
-              }
+swipeIcons = {
+    'tools': MetaIcon(
+        img='tools',
+        label=_("Tools")),
+    'quit': BaseIcons['quit'].SetLabel(
+        _("Quit Map Swipe")),
+    'addRast': BaseIcons['addRast'].SetLabel(
+        _("Select raster maps")),
+    'query': MetaIcon(
+        img='info',
+        label=_('Query raster/vector map(s)'),
+        desc=_('Query selected raster/vector map(s)')),
+}
 
 
 class SwipeMapToolbar(BaseToolbar):
     """Map toolbar (to control map zoom and rendering)
     """
+
     def __init__(self, parent, toolSwitcher):
         """Map toolbar constructor
         """
@@ -46,8 +53,10 @@ class SwipeMapToolbar(BaseToolbar):
         # realize the toolbar
         self.Realize()
 
-        for tool in (self.pointer, self.query, self.pan, self.zoomIn, self.zoomOut):
-            self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
+        for tool in (self.pointer, self.query, self.pan,
+                     self.zoomIn, self.zoomOut):
+            self.toolSwitcher.AddToolToGroup(
+                group='mouseUse', toolbar=self, tool=tool)
 
         self.EnableTool(self.zoomBack, False)
 
@@ -93,6 +102,7 @@ class SwipeMapToolbar(BaseToolbar):
 class SwipeMainToolbar(BaseToolbar):
     """Toolbar with tools related to application functionality
     """
+
     def __init__(self, parent):
         """Toolbar constructor
         """
@@ -103,13 +113,18 @@ class SwipeMainToolbar(BaseToolbar):
         # add tool to toggle active map window
         self.toggleModeId = wx.NewId()
         self.toggleMode = wx.Choice(parent=self, id=self.toggleModeId)
-        for label, cdata in zip([_('Swipe mode'), _('Mirror mode')], ['swipe', 'mirror']):
+        for label, cdata in zip(
+                [_('Swipe mode'),
+                 _('Mirror mode')],
+                ['swipe', 'mirror']):
             self.toggleMode.Append(label, cdata)
         self.toggleMode.SetSelection(0)
         self.toggleMode.SetSize(self.toggleMode.GetBestSize())
-        self.toggleMode.Bind(wx.EVT_CHOICE,
-                             lambda event:
-                             self.parent.SetViewMode(self.toggleMode.GetClientData(event.GetSelection())))
+        self.toggleMode.Bind(
+            wx.EVT_CHOICE,
+            lambda event: self.parent.SetViewMode(
+                self.toggleMode.GetClientData(
+                    event.GetSelection())))
         self.InsertControl(3, self.toggleMode)
 
         help = _("Choose view mode")
@@ -137,7 +152,8 @@ class SwipeMainToolbar(BaseToolbar):
 
         for label, itype, handler, desc in (
             (_("Switch orientation"),
-             wx.ITEM_NORMAL, self.parent.OnSwitchOrientation, "switchOrientation"),
+             wx.ITEM_NORMAL, self.parent.OnSwitchOrientation,
+             "switchOrientation"),
             (_("Switch maps"),
              wx.ITEM_NORMAL, self.parent.OnSwitchWindows, "switchMaps")):
             # Add items to the menu
@@ -156,6 +172,7 @@ class SwipeMainToolbar(BaseToolbar):
 class SwipeMiscToolbar(BaseToolbar):
     """Toolbar with miscellaneous tools related to app
     """
+
     def __init__(self, parent):
         """Toolbar constructor
         """

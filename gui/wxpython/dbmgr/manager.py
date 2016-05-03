@@ -26,21 +26,23 @@ import sys
 import os
 
 import wx
-import wx.lib.flatnotebook    as FN
+import wx.lib.flatnotebook as FN
 
 import grass.script as grass
 
-from core             import globalvar
-from core.gcmd        import GMessage
-from core.debug       import Debug
+from core import globalvar
+from core.gcmd import GMessage
+from core.debug import Debug
 from core.utils import _
-from dbmgr.base       import DbMgrBase
+from dbmgr.base import DbMgrBase
 from gui_core.widgets import GNotebook
-                
+
+
 class AttributeManager(wx.Frame, DbMgrBase):
-    def __init__(self, parent, id = wx.ID_ANY,
-                 title = None, vectorName = None, item = None, log = None,
-                 selection = None, **kwargs):
+
+    def __init__(self, parent, id=wx.ID_ANY,
+                 title=None, vectorName=None, item=None, log=None,
+                 selection=None, **kwargs):
         """GRASS Attribute Table Manager window
 
         :param parent: parent window
@@ -57,12 +59,12 @@ class AttributeManager(wx.Frame, DbMgrBase):
             mapdisplay = self.parent.GetMapDisplay()
         except:
             mapdisplay = None
-        
-        DbMgrBase.__init__(self, id = id, mapdisplay = mapdisplay,
-                           vectorName = vectorName, item = item, 
-                           log = log, statusbar = self, 
+
+        DbMgrBase.__init__(self, id=id, mapdisplay=mapdisplay,
+                           vectorName=vectorName, item=item,
+                           log=log, statusbar=self,
                            **kwargs)
-        
+
         wx.Frame.__init__(self, parent, id, *kwargs)
 
         # title
@@ -72,72 +74,86 @@ class AttributeManager(wx.Frame, DbMgrBase):
                 title += _("READONLY - ")
             title += "<%s>" % (self.dbMgrData['vectName'])
 
-
         self.SetTitle(title)
-        
-        # icon
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass_sql.ico'), wx.BITMAP_TYPE_ICO))
 
-        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
-             
+        # icon
+        self.SetIcon(
+            wx.Icon(
+                os.path.join(
+                    globalvar.ICONDIR,
+                    'grass_sql.ico'),
+                wx.BITMAP_TYPE_ICO))
+
+        self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
+
         if len(self.dbMgrData['mapDBInfo'].layers.keys()) == 0:
-            GMessage(parent = self.parent,
-                     message = _("Database connection for vector map <%s> "
-                                 "is not defined in DB file. "
-                                 "You can define new connection in "
-                                 "'Manage layers' tab.") % self.dbMgrData['vectName'])
-        
+            GMessage(
+                parent=self.parent, message=_(
+                    "Database connection for vector map <%s> "
+                    "is not defined in DB file. "
+                    "You can define new connection in "
+                    "'Manage layers' tab.") %
+                self.dbMgrData['vectName'])
+
         busy = wx.BusyInfo(message=_("Please wait, loading attribute data..."),
                            parent=self.parent)
         wx.SafeYield()
-        self.CreateStatusBar(number = 1)
+        self.CreateStatusBar(number=1)
 
-        self.notebook = GNotebook(self.panel, style = globalvar.FNPageDStyle)
-                
-        self.CreateDbMgrPage(parent = self, pageName = 'browse')
+        self.notebook = GNotebook(self.panel, style=globalvar.FNPageDStyle)
 
-        self.notebook.AddPage(page = self.pages['browse'], text = _("Browse data"),
-                              name = 'browse')
+        self.CreateDbMgrPage(parent=self, pageName='browse')
+
+        self.notebook.AddPage(page=self.pages['browse'], text=_("Browse data"),
+                              name='browse')
         self.pages['browse'].SetTabAreaColour(globalvar.FNPageColor)
 
-        self.CreateDbMgrPage(parent = self, pageName = 'manageTable')
+        self.CreateDbMgrPage(parent=self, pageName='manageTable')
 
-        self.notebook.AddPage(page = self.pages['manageTable'], text = _("Manage tables"),
-                              name = 'table')
+        self.notebook.AddPage(
+            page=self.pages['manageTable'],
+            text=_("Manage tables"),
+            name='table')
         self.pages['manageTable'].SetTabAreaColour(globalvar.FNPageColor)
 
-        self.CreateDbMgrPage(parent = self, pageName = 'manageLayer')
-        self.notebook.AddPage(page = self.pages['manageLayer'], text = _("Manage layers"),
-                              name = 'layers')
+        self.CreateDbMgrPage(parent=self, pageName='manageLayer')
+        self.notebook.AddPage(
+            page=self.pages['manageLayer'],
+            text=_("Manage layers"),
+            name='layers')
         del busy
 
         if selection:
             wx.CallAfter(self.notebook.SetSelectionByName, selection)
         else:
-            wx.CallAfter(self.notebook.SetSelection, 0) # select browse tab
-        
+            wx.CallAfter(self.notebook.SetSelection, 0)  # select browse tab
+
         # buttons
-        self.btnClose   = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
+        self.btnClose = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btnClose.SetToolTipString(_("Close Attribute Table Manager"))
-        self.btnReload = wx.Button(parent = self.panel, id = wx.ID_REFRESH)
-        self.btnReload.SetToolTipString(_("Reload currently selected attribute data"))
-        self.btnReset = wx.Button(parent = self.panel, id = wx.ID_CLEAR)
-        self.btnReset.SetToolTipString(_("Reload all attribute data (drop current selection)"))
-        
+        self.btnReload = wx.Button(parent=self.panel, id=wx.ID_REFRESH)
+        self.btnReload.SetToolTipString(
+            _("Reload currently selected attribute data"))
+        self.btnReset = wx.Button(parent=self.panel, id=wx.ID_CLEAR)
+        self.btnReset.SetToolTipString(
+            _("Reload all attribute data (drop current selection)"))
+
         # events
-        self.btnClose.Bind(wx.EVT_BUTTON,   self.OnCloseWindow)
-        self.btnReload.Bind(wx.EVT_BUTTON,  self.OnReloadData)
-        self.btnReset.Bind(wx.EVT_BUTTON,   self.OnReloadDataAll)
-        self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+        self.btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
+        self.btnReload.Bind(wx.EVT_BUTTON, self.OnReloadData)
+        self.btnReset.Bind(wx.EVT_BUTTON, self.OnReloadDataAll)
+        self.notebook.Bind(
+            FN.EVT_FLATNOTEBOOK_PAGE_CHANGED,
+            self.OnPageChanged)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
         # do layout
         self._layout()
 
         # self.SetMinSize(self.GetBestSize())
-        self.SetSize((700, 550)) # FIXME hard-coded size
+        self.SetSize((700, 550))  # FIXME hard-coded size
         self.SetMinSize(self.GetSize())
-    
+
     def _layout(self):
         """Do layout"""
         # frame body
@@ -145,36 +161,36 @@ class AttributeManager(wx.Frame, DbMgrBase):
 
         # buttons
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item = self.btnReset, proportion = 1,
-                     flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
-        btnSizer.Add(item = self.btnReload, proportion = 1,
-                     flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
-        btnSizer.Add(item = self.btnClose, proportion = 1,
-                     flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
+        btnSizer.Add(item=self.btnReset, proportion=1,
+                     flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+        btnSizer.Add(item=self.btnReload, proportion=1,
+                     flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+        btnSizer.Add(item=self.btnClose, proportion=1,
+                     flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
 
-        mainSizer.Add(item = self.notebook, proportion = 1, flag = wx.EXPAND)
-        mainSizer.Add(item = btnSizer, flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+        mainSizer.Add(item=self.notebook, proportion=1, flag=wx.EXPAND)
+        mainSizer.Add(item=btnSizer, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(mainSizer)
         mainSizer.Fit(self.panel)
         self.Layout()
-  
+
     def OnCloseWindow(self, event):
         """Cancel button pressed"""
         if self.parent and self.parent.GetName() == 'LayerManager':
             # deregister ATM
             self.parent.dialogs['atm'].remove(self)
-                    
+
         if not isinstance(event, wx.CloseEvent):
             self.Destroy()
-        
+
         event.Skip()
 
     def OnReloadData(self, event):
         """Reload data"""
         if self.pages['browse']:
-            self.pages['browse'].OnDataReload(event) # TODO replace by signal
+            self.pages['browse'].OnDataReload(event)  # TODO replace by signal
 
     def OnReloadDataAll(self, event):
         """Reload all data"""
@@ -191,11 +207,13 @@ class AttributeManager(wx.Frame, DbMgrBase):
                 id = None
         except KeyError:
             id = None
-        
+
         if event.GetSelection() == self.notebook.GetPageIndexByName('browse') and id:
             win = self.FindWindowById(id)
             if win:
-                self.log.write(_("Number of loaded records: %d") % win.GetItemCount())
+                self.log.write(
+                    _("Number of loaded records: %d") %
+                    win.GetItemCount())
             else:
                 self.log.write("")
             self.btnReload.Enable()
@@ -204,14 +222,14 @@ class AttributeManager(wx.Frame, DbMgrBase):
             self.log.write("")
             self.btnReload.Enable(False)
             self.btnReset.Enable(False)
-        
-        event.Skip()   
+
+        event.Skip()
 
     def OnTextEnter(self, event):
         pass
 
     def UpdateDialog(self, layer):
         """Updates dialog layout for given layer"""
-        DbMgrBase.UpdateDialog(self, layer = layer)
+        DbMgrBase.UpdateDialog(self, layer=layer)
         # set current page selection
-        self.notebook.SetSelectionByName('layers') 
+        self.notebook.SetSelectionByName('layers')

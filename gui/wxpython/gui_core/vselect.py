@@ -32,13 +32,19 @@ from core.gcmd import RunCommand
 import grass.script as grass
 from grass.pydispatch.signal import Signal
 
+
 class VectorSelectList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """Widget for managing vector features selected from map display
     """
+
     def __init__(self, parent):
-        wx.ListCtrl.__init__(self, parent=parent, id=wx.ID_ANY, style=wx.LC_REPORT | wx.BORDER_SUNKEN)
+        wx.ListCtrl.__init__(
+            self,
+            parent=parent,
+            id=wx.ID_ANY,
+            style=wx.LC_REPORT | wx.BORDER_SUNKEN)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
-        
+
         self.InsertColumn(col=0, heading=_('category'))
         self.InsertColumn(col=1, heading=_('type'))
         self.SetColumnWidth(0, 100)
@@ -50,7 +56,7 @@ class VectorSelectList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def AddItem(self, item):
         if 'Category' not in item:
             return
-        
+
         pos = self.InsertStringItem(0, str(item['Category']))
         self.SetStringItem(pos, 1, str(item['Type']))
         self.dictIndex[str(item['Category'])] = pos
@@ -59,12 +65,19 @@ class VectorSelectList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         index = self.dictIndex.get(str(item['Category']), -1)
         if index > -1:
             self.DeleteItem(index)
-        
+
+
 class VectorSelectDialog(wx.Dialog):
     """Dialog for managing vector features selected from map display"""
+
     def __init__(self, parent, title=_("Select features"), size=(200, 300)):
-        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY,
-                           title=title, size=size, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
+        wx.Dialog.__init__(
+            self,
+            parent=parent,
+            id=wx.ID_ANY,
+            title=title,
+            size=size,
+            style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
 
         self._layout()
 
@@ -78,6 +91,7 @@ class VectorSelectDialog(wx.Dialog):
 
         self.Show()
 
+
 class VectorSelectBase():
     """@brief Main class of vector selection function
 
@@ -88,6 +102,7 @@ class VectorSelectBase():
     This class can be initialized with (see CreateDialog()) or without
     (see gselect) dialog (see VectorSelectDialog).
     """
+
     def __init__(self, parent, giface):
         self.parent = parent
         self._giface = giface
@@ -97,13 +112,13 @@ class VectorSelectBase():
         self.RegisterMapEvtHandler()
 
         self.selectedFeatures = []
-        self.mapName = None # chosen map for selecting features
+        self.mapName = None  # chosen map for selecting features
 
         self._dialog = None
         self.onCloseDialog = None
-        
+
         self.updateLayer = Signal('VectorSelectBase.updateLayer')
-        
+
         self.painter = VectorSelectHighlighter(self.mapDisp, giface)
 
     def CreateDialog(self, createButton=True):
@@ -113,20 +128,21 @@ class VectorSelectBase():
         """
         if self._dialog:
             return
-        
+
         self._dialog = VectorSelectDialog(parent=self.parent)
-        self._dialog.Bind(wx.EVT_CLOSE,self.OnCloseDialog)
+        self._dialog.Bind(wx.EVT_CLOSE, self.OnCloseDialog)
         if createButton:
-            createMap = wx.Button(self._dialog, wx.ID_ANY, _("Create a new map"))
+            createMap = wx.Button(
+                self._dialog, wx.ID_ANY, _("Create a new map"))
             createMap.Bind(wx.EVT_BUTTON, self.OnExportMap)
             self._dialog.AddWidget(createMap, proportion=0.1)
         self.slist = VectorSelectList(self._dialog)
         self.slist.Bind(wx.EVT_LIST_KEY_DOWN, self.OnDelete)
         self.slist.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnDeleteRow)
         self._dialog.AddWidget(self.slist)
-        
+
         self.onCloseDialog = Signal('VectorSelectBase.onCloseDialog')
-        
+
     def OnDeleteRow(self, event=None):
         """Delete row in widget
         """
@@ -151,26 +167,26 @@ class VectorSelectBase():
             self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN,
                                                   self._onMapClickHandler,
                                                   'cross')
-        self.register=True
+        self.register = True
 
     def UnregisterMapEvtHandler(self):
         """Unregistrates _onMapClickHandler from mapWin"""
         if self.register:
             self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN,
                                                     self._onMapClickHandler)
-        self.register=False
+        self.register = False
 
     def OnClose(self):
-        self.selectedFeatures=[]
+        self.selectedFeatures = []
         self._draw()
         self.UnregisterMapEvtHandler()
 
-    def OnCloseDialog(self,evt=None):
+    def OnCloseDialog(self, evt=None):
         if not self.onCloseDialog:
             return
-        
+
         self.onCloseDialog.emit()
-        self.selectedFeatures=[]
+        self.selectedFeatures = []
         self.painter.Clear()
         self._dialog.Destroy()
         self.UnregisterMapEvtHandler()
@@ -197,22 +213,23 @@ class VectorSelectBase():
 
     def AddVecInfo(self, vInfoDictTMP):
         """Update vector in list
-        
+
         Note: click on features add category
               second click on the same vector remove category from list
         """
         if len(self.selectedFeatures) > 0:
             for sel in self.selectedFeatures:
-                if sel['Category'] == vInfoDictTMP['Category']: #features is selected=> remove features
+                if sel['Category'] == vInfoDictTMP[
+                        'Category']:  # features is selected=> remove features
                     self.selectedFeatures.remove(sel)
-                    if self._dialog:#if dialog initilized->update dialog
+                    if self._dialog:  # if dialog initilized->update dialog
                         self.slist.RemoveItem(vInfoDictTMP)
                     return True
 
             self.selectedFeatures.append(vInfoDictTMP)
             if self._dialog:
                 self.slist.AddItem(vInfoDictTMP)
-        else: # only one is selected
+        else:  # only one is selected
             self.selectedFeatures.append(vInfoDictTMP)
             if self._dialog:
                 self.slist.AddItem(vInfoDictTMP)
@@ -252,7 +269,7 @@ class VectorSelectBase():
         if layerSelected:
             mapName = str(layerSelected)
             if self.mapName is not None:
-                if self.mapName!=mapName:
+                if self.mapName != mapName:
                     self.Reset()
         else:
             mapName = None
@@ -269,7 +286,8 @@ class VectorSelectBase():
             return {}
 
         mapInfo = self.mapWin.GetMap()
-        threshold = 10.0 * ((mapInfo.region['e'] - mapInfo.region['w']) / mapInfo.width)
+        threshold = 10.0 * (
+            (mapInfo.region['e'] - mapInfo.region['w']) / mapInfo.width)
         try:
             query = grass.vector_what(map=[self.mapName],
                                       coord=self.mapWin.GetLastEN(),
@@ -288,25 +306,27 @@ class VectorSelectBase():
             strTMP += str(cat['Category']) + ','
         return strTMP[:-1]
 
-    def _id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
+    def _id_generator(self, size=6,
+                      chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
     def OnExportMap(self, event):
         """Export selected features to a new map
-        
+
         Add new map layer to layer tree and checked it
 
         @todo: set color of map to higlight color
         """
 
-        if len(self.selectedFeatures)==0:
+        if len(self.selectedFeatures) == 0:
             GMessage(_('No features selected'))
             return
         lst = ''
-        for cat in self.selectedFeatures: # build text string of categories for v.extract input
+        for cat in self.selectedFeatures:  # build text string of categories for v.extract input
             lst += str(cat['Category']) + ','
         lst = lst[:-1]
-        outMap = str(self.selectedFeatures[0]['Map']) + '_selection' + str(self._id_generator(3))
+        outMap = str(self.selectedFeatures[0][
+                     'Map']) + '_selection' + str(self._id_generator(3))
         ret, err = RunCommand('v.extract',
                               input=self.selectedFeatures[0]['Map'],
                               layer=self.selectedFeatures[0]['Layer'],
@@ -320,14 +340,14 @@ class VectorSelectBase():
                               lcmd=['d.vect', 'map=%s' % outMap],
                               lchecked=True)
 
-                #TODO colorize new map
+                # TODO colorize new map
                 self.Reset()
             else:
                 GMessage(_('Vector map <%s> was created') % outMap)
                 self.Reset()
         else:
             GError(_("Unable to create a new vector map.\n\nReason: %s") % err)
-        
+
     """
     def SetSelectedCat(self, cats):
         # allows setting selected vector categories by list of cats (per line)
@@ -345,12 +365,14 @@ class VectorSelectBase():
 
         self._draw()
     """
-    
+
+
 class VectorSelectHighlighter():
     """Class for highlighting selected features on display
 
     :param mapdisp: Map display frame
     """
+
     def __init__(self, mapdisp, giface):
         self.qlayer = None
         self.mapdisp = mapdisp
@@ -359,7 +381,7 @@ class VectorSelectHighlighter():
         self.data = {}
         self.data['Category'] = list()
         self.data['Map'] = None
-        self.data['Layer']= None
+        self.data['Layer'] = None
 
     def SetMap(self, map):
         self.data['Map'] = map
@@ -373,14 +395,14 @@ class VectorSelectHighlighter():
     def Clear(self):
         self.data['Category'] = list()
         self.data['Map'] = None
-        self.data['Layer']= None
+        self.data['Layer'] = None
         self.mapdisp.RemoveQueryLayer()
-        self.giface.GetMapWindow().UpdateMap(render = False)
+        self.giface.GetMapWindow().UpdateMap(render=False)
 
     def DrawSelected(self):
         """Highlight selected features"""
         self.layerCat[int(self.data['Layer'])] = self.data['Category']
-        
+
         # add map layer with higlighted vector features
         self.AddQueryMapLayer()  # -> self.qlayer
         self.qlayer.SetOpacity(0.7)
@@ -395,13 +417,13 @@ class VectorSelectHighlighter():
             self.qlayer = None
 
         if self.qlayer:
-            self.qlayer.SetCmd(self.mapdisp.AddTmpVectorMapLayer(self.data['Map'], self.layerCat, addLayer=False))
+            self.qlayer.SetCmd(
+                self.mapdisp.AddTmpVectorMapLayer(
+                    self.data['Map'],
+                    self.layerCat,
+                    addLayer=False))
         else:
-            self.qlayer = self.mapdisp.AddTmpVectorMapLayer(self.data['Map'], self.layerCat)
+            self.qlayer = self.mapdisp.AddTmpVectorMapLayer(
+                self.data['Map'], self.layerCat)
 
         return self.qlayer
-
-
-
-
-

@@ -5,4 +5,4 @@ all = [
     'vnet_core',
     'vnet_data',
     'vnet_utils'
-    ]
+]

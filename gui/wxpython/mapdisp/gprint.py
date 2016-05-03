@@ -16,12 +16,14 @@ This program is free software under the GNU General Public License
 @author Michael Barton (Arizona State University)
 """
 
-import  wx
+import wx
 
 from core.gcmd import GMessage
 from core.utils import _
 
+
 class MapPrint(wx.Printout):
+
     def __init__(self, canvas):
         wx.Printout.__init__(self)
         self.canvas = canvas
@@ -92,7 +94,9 @@ class MapPrint(wx.Printout):
 
         return True
 
+
 class PrintOptions(wx.Object):
+
     def __init__(self, parent, mapwin):
         self.mapframe = parent
         self.mapwin = mapwin
@@ -116,7 +120,7 @@ class PrintOptions(wx.Object):
         # this makes a copy of the wx.PrintData instead of just saving
         # a reference to the one inside the PrintDialogData that will
         # be destroyed when the dialog is destroyed
-        self.printData = wx.PrintData( dlg.GetPageSetupData().GetPrintData() )
+        self.printData = wx.PrintData(dlg.GetPageSetupData().GetPrintData())
 
         dlg.Destroy()
 
@@ -150,5 +154,6 @@ class PrintOptions(wx.Object):
             GMessage(_("There was a problem printing.\n"
                        "Perhaps your current printer is not set correctly?"))
         else:
-            self.printData = wx.PrintData( printer.GetPrintDialogData().GetPrintData() )
+            self.printData = wx.PrintData(
+                printer.GetPrintDialogData().GetPrintData())
         printout.Destroy()

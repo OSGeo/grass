@@ -38,7 +38,7 @@ def main():
 
     from grass.script.setup import set_gui_path
     set_gui_path()
-    
+
     from core.utils import _
     from dbmgr.manager import AttributeManager
 
@@ -48,11 +48,13 @@ def main():
         gscript.fatal(_("Vector map <%s> not found") % options['map'])
 
     app = wx.App()
-    gscript.message(_("Loading attribute data for vector map <%s>...") % mapName)
-    f = AttributeManager(parent=None, id=wx.ID_ANY,
-                         title="%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),
-                                              mapName),
-                         size=(900, 600), vectorName=mapName)
+    gscript.message(
+        _("Loading attribute data for vector map <%s>...") %
+        mapName)
+    f = AttributeManager(
+        parent=None, id=wx.ID_ANY, title="%s - <%s>" %
+        (_("GRASS GIS Attribute Table Manager"), mapName), size=(
+            900, 600), vectorName=mapName)
     f.Show()
 
     app.MainLoop()

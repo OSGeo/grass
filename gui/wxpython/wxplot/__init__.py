@@ -4,4 +4,4 @@ all = [
     'dialogs',
     'profile',
     'histogram',
-    ]
+]

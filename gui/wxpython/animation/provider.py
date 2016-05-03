@@ -44,13 +44,15 @@ class BitmapProvider:
     There is one instance of this class in the application.
     It handles both 2D and 3D animations.
     """
+
     def __init__(self, bitmapPool, mapFilesPool, tempDir,
                  imageWidth=640, imageHeight=480):
 
         self._bitmapPool = bitmapPool
         self._mapFilesPool = mapFilesPool
         self.imageWidth = imageWidth  # width of the image to render with d.rast or d.vect
-        self.imageHeight = imageHeight  # height of the image to render with d.rast or d.vect
+        # height of the image to render with d.rast or d.vect
+        self.imageHeight = imageHeight
         self._tempDir = tempDir
 
         self._uniqueCmds = []
@@ -70,7 +72,8 @@ class BitmapProvider:
         self.renderingStarted = Signal('BitmapProvider.renderingStarted')
         self.compositionStarted = Signal('BitmapProvider.compositionStarted')
         self.renderingContinues = Signal('BitmapProvider.renderingContinues')
-        self.compositionContinues = Signal('BitmapProvider.compositionContinues')
+        self.compositionContinues = Signal(
+            'BitmapProvider.compositionContinues')
         self.renderingFinished = Signal('BitmapProvider.renderingFinished')
         self.compositionFinished = Signal('BitmapProvider.compositionFinished')
         self.mapsLoaded = Signal('BitmapProvider.mapsLoaded')
@@ -89,7 +92,9 @@ class BitmapProvider:
         :param opacities: list of opacity values
         :param regions: list of regions
         """
-        Debug.msg(2, "BitmapProvider.SetCmds: {n} lists".format(n=len(cmdsForComposition)))
+        Debug.msg(
+            2, "BitmapProvider.SetCmds: {n} lists".format(
+                n=len(cmdsForComposition)))
         self._cmdsForComposition.extend(cmdsForComposition)
         self._opacities.extend(opacities)
         self._regions.extend(regions)
@@ -102,7 +107,9 @@ class BitmapProvider:
         :param cmds: list of commands m.nviz.image (cmd as a list)
         :param region: for 3D rendering
         """
-        Debug.msg(2, "BitmapProvider.SetCmds3D: {c} commands".format(c=len(cmds)))
+        Debug.msg(
+            2, "BitmapProvider.SetCmds3D: {c} commands".format(
+                c=len(cmds)))
         self._cmds3D = cmds
         self._regionFor3D = region
 
@@ -118,8 +125,8 @@ class BitmapProvider:
                     unique.append((tuple(cmd), None))
         unique = list(set(unique))
         self._uniqueCmds = [cmdAndRegion[0] for cmdAndRegion in unique]
-        self._regionsForUniqueCmds.extend([dict(cmdAndRegion[1]) if cmdAndRegion[1] else None
-                                           for cmdAndRegion in unique])
+        self._regionsForUniqueCmds.extend([dict(cmdAndRegion[1]) if cmdAndRegion[
+                                          1] else None for cmdAndRegion in unique])
 
     def Unload(self):
         """Unloads currently loaded data.
@@ -127,10 +134,12 @@ class BitmapProvider:
         """
         Debug.msg(2, "BitmapProvider.Unload")
         if self._cmdsForComposition:
-            for cmd, region in zip(self._uniqueCmds, self._regionsForUniqueCmds):
+            for cmd, region in zip(self._uniqueCmds,
+                                   self._regionsForUniqueCmds):
                 del self._mapFilesPool[HashCmd(cmd, region)]
 
-            for cmdList, region in zip(self._cmdsForComposition, self._regions):
+            for cmdList, region in zip(
+                    self._cmdsForComposition, self._regions):
                 del self._bitmapPool[HashCmds(cmdList, region)]
             self._uniqueCmds = []
             self._cmdsForComposition = []
@@ -151,12 +160,15 @@ class BitmapProvider:
         count = 0
         for cmd, region in zip(uniqueCmds, regions):
             filename = GetFileFromCmd(self._tempDir, cmd, region)
-            if not force and os.path.exists(filename) and \
-               self._mapFilesPool.GetSize(HashCmd(cmd, region)) == (self.imageWidth, self.imageHeight):
+            if not force and os.path.exists(filename) and self._mapFilesPool.GetSize(
+                    HashCmd(cmd, region)) == (self.imageWidth, self.imageHeight):
                 continue
             count += 1
 
-        Debug.msg(3, "BitmapProvider._dryRender: {c} files to be rendered".format(c=count))
+        Debug.msg(
+            3,
+            "BitmapProvider._dryRender: {c} files to be rendered".format(
+                c=count))
 
         return count
 
@@ -170,13 +182,17 @@ class BitmapProvider:
         """
         count = 0
         for cmdList, region in zip(cmdLists, regions):
-            if not force and HashCmds(cmdList, region) in self._bitmapPool and \
-                self._bitmapPool[HashCmds(cmdList, region)].GetSize() == (self.imageWidth,
-                                                                          self.imageHeight):
+            if not force and HashCmds(
+                    cmdList, region) in self._bitmapPool and self._bitmapPool[
+                    HashCmds(cmdList, region)].GetSize() == (
+                    self.imageWidth, self.imageHeight):
                 continue
             count += 1
 
-        Debug.msg(2, "BitmapProvider._dryCompose: {c} files to be composed".format(c=count))
+        Debug.msg(
+            2,
+            "BitmapProvider._dryCompose: {c} files to be composed".format(
+                c=count))
 
         return count
 
@@ -206,19 +222,33 @@ class BitmapProvider:
 
         # create no data bitmap
         if None not in self._bitmapPool or force:
-            self._bitmapPool[None] = createNoDataBitmap(self.imageWidth, self.imageHeight)
+            self._bitmapPool[None] = createNoDataBitmap(
+                self.imageWidth, self.imageHeight)
 
-        ok = self._renderer.Render(cmds, regions, regionFor3D=self._regionFor3D,
-                                   bgcolor=bgcolor, force=force, nprocs=nprocs)
+        ok = self._renderer.Render(
+            cmds,
+            regions,
+            regionFor3D=self._regionFor3D,
+            bgcolor=bgcolor,
+            force=force,
+            nprocs=nprocs)
         self.renderingFinished.emit()
         if not ok:
             self.mapsLoaded.emit()  # what to do here?
             return
         if self._cmdsForComposition:
-            count = self._dryCompose(self._cmdsForComposition, self._regions, force=force)
+            count = self._dryCompose(
+                self._cmdsForComposition,
+                self._regions,
+                force=force)
             self.compositionStarted.emit(count=count)
-            self._composer.Compose(self._cmdsForComposition, self._regions, self._opacities,
-                                   bgcolor=bgcolor, force=force, nprocs=nprocs)
+            self._composer.Compose(
+                self._cmdsForComposition,
+                self._regions,
+                self._opacities,
+                bgcolor=bgcolor,
+                force=force,
+                nprocs=nprocs)
             self.compositionFinished.emit()
         if self._cmds3D:
             for cmd in self._cmds3D:
@@ -247,7 +277,9 @@ class BitmapProvider:
 
     def WindowSizeChanged(self, width, height):
         """Sets size when size of related window changes."""
-        Debug.msg(5, "BitmapProvider.WindowSizeChanged: w={w}, h={h}".format(w=width, h=height))
+        Debug.msg(
+            5, "BitmapProvider.WindowSizeChanged: w={w}, h={h}".format(
+                w=width, h=height))
 
         self.imageWidth, self.imageHeight = width, height
 
@@ -271,7 +303,8 @@ class BitmapProvider:
 
         Debug.msg(1, "Render raster legend " + str(filename))
         cmdTuple = cmdlist_to_tuple(cmd)
-        returncode, stdout, messages = read2_command(cmdTuple[0], **cmdTuple[1])
+        returncode, stdout, messages = read2_command(
+            cmdTuple[0], **cmdTuple[1])
 
         if returncode == 0:
             return wx.BitmapFromImage(autoCropImageFromFile(filename))
@@ -282,6 +315,7 @@ class BitmapProvider:
 
 class BitmapRenderer:
     """Class which renderes 2D and 3D images to files."""
+
     def __init__(self, mapFilesPool, tempDir,
                  imageWidth, imageHeight):
         self._mapFilesPool = mapFilesPool
@@ -315,8 +349,8 @@ class BitmapRenderer:
         filteredCmdList = []
         for cmd, region in zip(cmdList, regions):
             filename = GetFileFromCmd(self._tempDir, cmd, region)
-            if not force and os.path.exists(filename) and \
-               self._mapFilesPool.GetSize(HashCmd(cmd, region)) == (self.imageWidth, self.imageHeight):
+            if not force and os.path.exists(filename) and self._mapFilesPool.GetSize(
+                    HashCmd(cmd, region)) == (self.imageWidth, self.imageHeight):
                 # for reference counting
                 self._mapFilesPool[HashCmd(cmd, region)] = filename
                 continue
@@ -332,13 +366,27 @@ class BitmapRenderer:
             q = Queue()
             # The separate render process
             if cmd[0] == 'm.nviz.image':
-                p = Process(target=RenderProcess3D,
-                            args=(self.imageWidth, self.imageHeight, self._tempDir,
-                                  cmd, regionFor3D, bgcolor, q))
+                p = Process(
+                    target=RenderProcess3D,
+                    args=(
+                        self.imageWidth,
+                        self.imageHeight,
+                        self._tempDir,
+                        cmd,
+                        regionFor3D,
+                        bgcolor,
+                        q))
             else:
-                p = Process(target=RenderProcess2D,
-                            args=(self.imageWidth, self.imageHeight, self._tempDir,
-                                  cmd, region, bgcolor, q))
+                p = Process(
+                    target=RenderProcess2D,
+                    args=(
+                        self.imageWidth,
+                        self.imageHeight,
+                        self._tempDir,
+                        cmd,
+                        region,
+                        bgcolor,
+                        q))
             p.start()
 
             queue_list.append(q)
@@ -351,16 +399,22 @@ class BitmapRenderer:
                 for i in range(len(cmd_list)):
                     proc_list[i].join()
                     filename = queue_list[i].get()
-                    self._mapFilesPool[HashCmd(cmd_list[i][0], cmd_list[i][1])] = filename
-                    self._mapFilesPool.SetSize(HashCmd(cmd_list[i][0], cmd_list[i][1]),
-                                               (self.imageWidth, self.imageHeight))
+                    self._mapFilesPool[
+                        HashCmd(
+                            cmd_list[i][0],
+                            cmd_list[i][1])] = filename
+                    self._mapFilesPool.SetSize(
+                        HashCmd(cmd_list[i][0],
+                                cmd_list[i][1]),
+                        (self.imageWidth, self.imageHeight))
 
                 proc_count = 0
                 proc_list = []
                 queue_list = []
                 cmd_list = []
 
-            self.renderingContinues.emit(current=count, text=_("Rendering map layers"))
+            self.renderingContinues.emit(
+                current=count, text=_("Rendering map layers"))
             if self._stopRendering:
                 self._stopRendering = False
                 stopped = True
@@ -377,6 +431,7 @@ class BitmapRenderer:
 
 class BitmapComposer:
     """Class which handles the composition of image files with g.pnmcomp."""
+
     def __init__(self, tempDir, mapFilesPool, bitmapPool,
                  imageWidth, imageHeight):
         self._mapFilesPool = mapFilesPool
@@ -411,11 +466,19 @@ class BitmapComposer:
 
         filteredCmdLists = []
         for cmdList, region in zip(cmdLists, regions):
-            if not force and HashCmds(cmdList, region) in self._bitmapPool and \
-                self._bitmapPool[HashCmds(cmdList, region)].GetSize() == (self.imageWidth,
-                                                                          self.imageHeight):
-                # TODO: find a better way than to assign the same to increase the reference
-                self._bitmapPool[HashCmds(cmdList, region)] = self._bitmapPool[HashCmds(cmdList, region)]
+            if not force and HashCmds(
+                    cmdList, region) in self._bitmapPool and self._bitmapPool[
+                    HashCmds(cmdList, region)].GetSize() == (
+                    self.imageWidth, self.imageHeight):
+                # TODO: find a better way than to assign the same to increase
+                # the reference
+                self._bitmapPool[
+                    HashCmds(
+                        cmdList,
+                        region)] = self._bitmapPool[
+                    HashCmds(
+                        cmdList,
+                        region)]
                 continue
             filteredCmdLists.append((cmdList, region))
 
@@ -444,19 +507,27 @@ class BitmapComposer:
                     proc_list[i].join()
                     filename = queue_list[i].get()
                     if filename is None:
-                        self._bitmapPool[HashCmds(cmd_lists[i][0], cmd_lists[i][1])] = \
-                            createNoDataBitmap(self.imageWidth, self.imageHeight,
-                                               text="Failed to render")
+                        self._bitmapPool[
+                            HashCmds(
+                                cmd_lists[i][0],
+                                cmd_lists[i][1])] = createNoDataBitmap(
+                            self.imageWidth,
+                            self.imageHeight,
+                            text="Failed to render")
                     else:
-                        self._bitmapPool[HashCmds(cmd_lists[i][0], cmd_lists[i][1])] = \
-                            wx.BitmapFromImage(wx.Image(filename))
+                        self._bitmapPool[
+                            HashCmds(
+                                cmd_lists[i][0],
+                                cmd_lists[i][1])] = wx.BitmapFromImage(
+                            wx.Image(filename))
                         os.remove(filename)
                 proc_count = 0
                 proc_list = []
                 queue_list = []
                 cmd_lists = []
 
-            self.compositionContinues.emit(current=count, text=_("Overlaying map layers"))
+            self.compositionContinues.emit(
+                current=count, text=_("Overlaying map layers"))
             if self._stopComposing:
                 self._stopComposing = False
                 break
@@ -469,7 +540,8 @@ class BitmapComposer:
             self._stopComposing = True
 
 
-def RenderProcess2D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, fileQueue):
+def RenderProcess2D(imageWidth, imageHeight, tempDir,
+                    cmd, region, bgcolor, fileQueue):
     """Render raster or vector files as ppm image and write the
        resulting ppm filename in the provided file queue
 
@@ -506,7 +578,8 @@ def RenderProcess2D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, file
     fileQueue.put(filename)
 
 
-def RenderProcess3D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, fileQueue):
+def RenderProcess3D(imageWidth, imageHeight, tempDir,
+                    cmd, region, bgcolor, fileQueue):
     """Renders image with m.nviz.image and writes the
        resulting ppm filename in the provided file queue
 
@@ -530,7 +603,8 @@ def RenderProcess3D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, file
     cmdTuple[1]['size'] = '%d,%d' % (imageWidth, imageHeight)
     # set format
     cmdTuple[1]['format'] = 'ppm'
-    cmdTuple[1]['bgcolor'] = bgcolor = ':'.join([str(part) for part in bgcolor])
+    cmdTuple[1]['bgcolor'] = bgcolor = ':'.join(
+        [str(part) for part in bgcolor])
     returncode, stdout, messages = read2_command(cmdTuple[0], **cmdTuple[1])
     if returncode != 0:
         gcore.warning("Rendering failed:\n" + messages)
@@ -542,7 +616,8 @@ def RenderProcess3D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, file
     fileQueue.put(filename)
 
 
-def CompositeProcess(imageWidth, imageHeight, tempDir, cmdList, region, opacities, bgcolor, fileQueue):
+def CompositeProcess(imageWidth, imageHeight, tempDir,
+                     cmdList, region, opacities, bgcolor, fileQueue):
     """Performs the composition of image ppm files and writes the
        resulting ppm filename in the provided file queue
 
@@ -569,15 +644,11 @@ def CompositeProcess(imageWidth, imageHeight, tempDir, cmdList, region, opacitie
 
     opacities = [str(op) for op in opacities]
     bgcolor = ':'.join([str(part) for part in bgcolor])
-    returncode, stdout, messages = read2_command('g.pnmcomp',
-                                                 overwrite=True,
-                                                 input='%s' % ",".join(reversed(maps)),
-                                                 mask='%s' % ",".join(reversed(masks)),
-                                                 opacity='%s' % ",".join(reversed(opacities)),
-                                                 bgcolor=bgcolor,
-                                                 width=imageWidth,
-                                                 height=imageHeight,
-                                                 output=filename)
+    returncode, stdout, messages = read2_command(
+        'g.pnmcomp', overwrite=True, input='%s' % ",".join(reversed(maps)),
+        mask='%s' % ",".join(reversed(masks)),
+        opacity='%s' % ",".join(reversed(opacities)),
+        bgcolor=bgcolor, width=imageWidth, height=imageHeight, output=filename)
 
     if returncode != 0:
         gcore.warning("Rendering composite failed:\n" + messages)
@@ -592,6 +663,7 @@ class DictRefCounter:
     """Base class storing map files/bitmaps (emulates dictionary).
     Counts the references to know which files/bitmaps to delete.
     """
+
     def __init__(self):
         self.dictionary = {}
         self.referenceCount = {}
@@ -605,14 +677,16 @@ class DictRefCounter:
             self.referenceCount[key] = 1
         else:
             self.referenceCount[key] += 1
-        Debug.msg(5, 'DictRefCounter.__setitem__: +1 for key {k}'.format(k=key))
+        Debug.msg(
+            5, 'DictRefCounter.__setitem__: +1 for key {k}'.format(k=key))
 
     def __contains__(self, key):
         return key in self.dictionary
 
     def __delitem__(self, key):
         self.referenceCount[key] -= 1
-        Debug.msg(5, 'DictRefCounter.__delitem__: -1 for key {k}'.format(k=key))
+        Debug.msg(
+            5, 'DictRefCounter.__delitem__: -1 for key {k}'.format(k=key))
 
     def keys(self):
         return self.dictionary.keys()
@@ -629,6 +703,7 @@ class DictRefCounter:
 
 class MapFilesPool(DictRefCounter):
     """Stores rendered images as files."""
+
     def __init__(self):
         DictRefCounter.__init__(self)
         self.size = {}
@@ -658,12 +733,14 @@ class MapFilesPool(DictRefCounter):
 
 class BitmapPool(DictRefCounter):
     """Class storing bitmaps (emulates dictionary)"""
+
     def __init__(self):
         DictRefCounter.__init__(self)
 
 
 class CleanUp:
     """Responsible for cleaning up the files."""
+
     def __init__(self, tempDir):
         self._tempDir = tempDir
 
@@ -672,9 +749,13 @@ class CleanUp:
         if os.path.exists(self._tempDir):
             try:
                 shutil.rmtree(self._tempDir)
-                Debug.msg(5, 'CleanUp: removed directory {t}'.format(t=self._tempDir))
+                Debug.msg(
+                    5, 'CleanUp: removed directory {t}'.format(
+                        t=self._tempDir))
             except OSError:
-                gcore.warning(_("Directory {t} not removed.").format(t=self._tempDir))
+                gcore.warning(
+                    _("Directory {t} not removed.").format(
+                        t=self._tempDir))
 
 
 def _setEnvironment(width, height, filename, transparent, bgcolor):
@@ -686,20 +767,22 @@ def _setEnvironment(width, height, filename, transparent, bgcolor):
     :param transparent: use transparency
     :param bgcolor: background color as a tuple of 3 values 0 to 255
     """
-    Debug.msg(5, "_setEnvironment: width={w}, height={h}, "
-                 "filename={f}, transparent={t}, bgcolor={b}".format(w=width,
-                                                                     h=height,
-                                                                     f=filename,
-                                                                     t=transparent,
-                                                                     b=bgcolor))
+    Debug.msg(
+        5,
+        "_setEnvironment: width={w}, height={h}, "
+        "filename={f}, transparent={t}, bgcolor={b}".format(
+            w=width,
+            h=height,
+            f=filename,
+            t=transparent,
+            b=bgcolor))
 
     os.environ['GRASS_RENDER_WIDTH'] = str(width)
     os.environ['GRASS_RENDER_HEIGHT'] = str(height)
     driver = UserSettings.Get(group='display', key='driver', subkey='type')
     os.environ['GRASS_RENDER_IMMEDIATE'] = driver
-    os.environ['GRASS_RENDER_BACKGROUNDCOLOR'] = '{r:02x}{g:02x}{b:02x}'.format(r=bgcolor[0],
-                                                                         g=bgcolor[1],
-                                                                         b=bgcolor[2])
+    os.environ['GRASS_RENDER_BACKGROUNDCOLOR'] = '{r:02x}{g:02x}{b:02x}'.format(
+        r=bgcolor[0], g=bgcolor[1], b=bgcolor[2])
     os.environ['GRASS_RENDER_TRUECOLOR'] = "TRUE"
     if transparent:
         os.environ['GRASS_RENDER_TRANSPARENT'] = "TRUE"
@@ -717,9 +800,8 @@ def createNoDataBitmap(imageWidth, imageHeight, text="No data"):
     :param imageWidth: image width
     :param imageHeight: image height
     """
-    Debug.msg(4, "createNoDataBitmap: w={w}, h={h}, text={t}".format(w=imageWidth,
-                                                                     h=imageHeight,
-                                                                     t=text))
+    Debug.msg(4, "createNoDataBitmap: w={w}, h={h}, text={t}".format(
+        w=imageWidth, h=imageHeight, t=text))
     bitmap = wx.EmptyBitmap(imageWidth, imageHeight)
     dc = wx.MemoryDC()
     dc.SelectObject(bitmap)
@@ -780,13 +862,19 @@ def test():
     prov = BitmapProvider(bPool, mapFilesPool, tempDir,
                           imageWidth=640, imageHeight=480)
     prov.renderingStarted.connect(
-        lambda count: sys.stdout.write("Total number of maps: {c}\n".format(c=count)))
+        lambda count: sys.stdout.write(
+            "Total number of maps: {c}\n".format(
+                c=count)))
     prov.renderingContinues.connect(
-        lambda current, text: sys.stdout.write("Current number: {c}\n".format(c=current)))
-    prov.compositionStarted.connect(
-        lambda count: sys.stdout.write("Composition: total number of maps: {c}\n".format(c=count)))
+        lambda current, text: sys.stdout.write(
+            "Current number: {c}\n".format(
+                c=current)))
+    prov.compositionStarted.connect(lambda count: sys.stdout.write(
+        "Composition: total number of maps: {c}\n".format(c=count)))
     prov.compositionContinues.connect(
-        lambda current, text: sys.stdout.write("Composition: Current number: {c}\n".format(c=current)))
+        lambda current, text: sys.stdout.write(
+            "Composition: Current number: {c}\n".format(
+                c=current)))
     prov.mapsLoaded.connect(
         lambda: sys.stdout.write("Maps loading finished\n"))
     cmdMatrix = layerListToCmdsMatrix(layerList)
@@ -797,7 +885,11 @@ def test():
 
     for key in bPool.keys():
         if key is not None:
-            bPool[key].SaveFile(os.path.join(tempDir, key + '.png'), wx.BITMAP_TYPE_PNG)
+            bPool[key].SaveFile(
+                os.path.join(
+                    tempDir,
+                    key + '.png'),
+                wx.BITMAP_TYPE_PNG)
 #    prov.Unload()
 #    prov.SetCmds(cmdMatrix, [l.opacity for l in layerList])
 #    prov.Load(bgcolor=(13, 156, 230))

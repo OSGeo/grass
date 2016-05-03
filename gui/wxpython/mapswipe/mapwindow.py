@@ -32,11 +32,12 @@ EVT_MOTION = wx.PyEventBinder(EVT_MY_MOTION)
 
 
 class SwipeBufferedWindow(BufferedMapWindow):
-    """A subclass of BufferedWindow class. 
+    """A subclass of BufferedWindow class.
 
     Enables to draw the image translated.
     Special mouse events with changed coordinates are used.
     """
+
     def __init__(self, parent, giface, Map, properties, **kwargs):
         BufferedMapWindow.__init__(self, parent=parent, giface=giface, Map=Map,
                                    properties=properties, **kwargs)
@@ -106,7 +107,9 @@ class SwipeBufferedWindow(BufferedMapWindow):
 
     def SetImageCoords(self, coords):
         """Sets coordinates of rendered image"""
-        Debug.msg(3, "SwipeBufferedWindow.SetImageCoords(): coords = %s, %s" % (coords[0], coords[1]))
+        Debug.msg(
+            3, "SwipeBufferedWindow.SetImageCoords(): coords = %s, %s" %
+            (coords[0], coords[1]))
         self.specialCoords = coords
 
     def OnSize(self, event):
@@ -124,8 +127,9 @@ class SwipeBufferedWindow(BufferedMapWindow):
         if pdctype == 'image':
             coords = self.GetImageCoords()
 
-        return super(SwipeBufferedWindow, self).Draw(pdc, img, drawid, pdctype, coords, pen, brush)
-        
+        return super(SwipeBufferedWindow, self).Draw(
+            pdc, img, drawid, pdctype, coords, pen, brush)
+
     def OnLeftDown(self, event):
         """Left mouse button pressed.
 
@@ -142,7 +146,7 @@ class SwipeBufferedWindow(BufferedMapWindow):
             if 99 in idlist:
                 idlist.remove(99)
             if idlist:
-                self.dragid = idlist[0] #drag whatever is on top
+                self.dragid = idlist[0]  # drag whatever is on top
         else:
             super(SwipeBufferedWindow, self).OnLeftDown(event)
 
@@ -151,7 +155,7 @@ class SwipeBufferedWindow(BufferedMapWindow):
 
         Coordinates must be adjusted.
         """
-        if (self.mouse['use'] == 'pointer' and self.dragid != None):
+        if (self.mouse['use'] == 'pointer' and self.dragid is not None):
             evX, evY = event.GetPositionTuple()
             imX, imY = self.GetImageCoords()
             self.DragItem(self.dragid, (evX + imX, evY + imY))
@@ -161,7 +165,9 @@ class SwipeBufferedWindow(BufferedMapWindow):
     def TranslateImage(self, dx, dy):
         """Translate image and redraw.
         """
-        Debug.msg(5, "SwipeBufferedWindow.TranslateImage(): dx = %s, dy = %s" % (dx, dy))
+        Debug.msg(
+            5, "SwipeBufferedWindow.TranslateImage(): dx = %s, dy = %s" %
+            (dx, dy))
 
         self.pdc.TranslateId(self.imageId, dx, dy)
         self.Refresh()
@@ -170,35 +176,61 @@ class SwipeBufferedWindow(BufferedMapWindow):
         """Sets text label with map name."""
         self.textdict[textId] = {'bbox': wx.Rect(), 'coords': [10, 10],
                                  'font': self.GetFont(), 'color': wx.BLACK,
-                                 'background' : wx.LIGHT_GREY,
+                                 'background': wx.LIGHT_GREY,
                                  'rotation': 0, 'text': name,
                                  'active': True}
 
-    def MouseDraw(self, pdc = None, begin = None, end = None):
+    def MouseDraw(self, pdc=None, begin=None, end=None):
         """Overriden method to recompute coordinates back to original values
         so that e.g. drawing of zoom box is done properly"""
         Debug.msg(5, "SwipeBufferedWindow.MouseDraw()")
 
         offsetX, offsetY = self.GetImageCoords()
-        begin = (self.mouse['begin'][0] + offsetX, self.mouse['begin'][1] + offsetY)
+        begin = (
+            self.mouse['begin'][0] +
+            offsetX,
+            self.mouse['begin'][1] +
+            offsetY)
         end = (self.mouse['end'][0] + offsetX, self.mouse['end'][1] + offsetY)
         super(SwipeBufferedWindow, self).MouseDraw(pdc, begin, end)
 
     def DrawMouseCursor(self, coords):
         """Draw moving cross."""
         self.pdcTmp.ClearId(self.lineid)
-        color = UserSettings.Get(group='mapswipe', key='cursor', subkey='color')
-        cursType = UserSettings.Get(group='mapswipe', key='cursor', subkey=['type', 'selection'])
+        color = UserSettings.Get(
+            group='mapswipe',
+            key='cursor',
+            subkey='color')
+        cursType = UserSettings.Get(
+            group='mapswipe', key='cursor', subkey=[
+                'type', 'selection'])
         size = UserSettings.Get(group='mapswipe', key='cursor', subkey='size')
-        width = UserSettings.Get(group='mapswipe', key='cursor', subkey='width')
+        width = UserSettings.Get(
+            group='mapswipe',
+            key='cursor',
+            subkey='width')
         if cursType == 0:
-            self.lineid = self.DrawCross(pdc=self.pdcTmp, coords=coords, size=size,
-                                         pen=wx.Pen(wx.Colour(*color), width))
+            self.lineid = self.DrawCross(
+                pdc=self.pdcTmp,
+                coords=coords,
+                size=size,
+                pen=wx.Pen(
+                    wx.Colour(
+                        *color),
+                    width))
         elif cursType == 1:
-            self.lineid = self.DrawRectangle(pdc=self.pdcTmp,
-                                             point1=(coords[0] - size / 2, coords[1] - size / 2),
-                                             point2=(coords[0] + size / 2, coords[1] + size / 2),
-                                             pen=wx.Pen(wx.Colour(*color), width))
+            self.lineid = self.DrawRectangle(
+                pdc=self.pdcTmp,
+                point1=(
+                    coords[0] - size / 2,
+                    coords[1] - size / 2),
+                point2=(
+                    coords[0] + size / 2,
+                    coords[1] + size / 2),
+                pen=wx.Pen(
+                    wx.Colour(
+                        *color),
+                    width))
         elif cursType == 2:
             self.lineid = self.DrawCircle(pdc=self.pdcTmp,
                                           coords=coords, radius=size / 2,
@@ -207,17 +239,17 @@ class SwipeBufferedWindow(BufferedMapWindow):
 
 class _MouseEvent(wx.PyCommandEvent):
     """
-    This event class takes a regular wxWindows mouse event as a parameter, 
-    and wraps it so that there is access to all the original methods. This 
+    This event class takes a regular wxWindows mouse event as a parameter,
+    and wraps it so that there is access to all the original methods. This
     is similar to subclassing, but you can't subclass a wxWindows event.
 
     The goal is to be able to it just like a regular mouse event.
 
-    Difference is that it is a CommandEvent, which propagates up the 
+    Difference is that it is a CommandEvent, which propagates up the
     window hierarchy until it is handled.
     """
 
-    def __init__(self, EventType, NativeEvent, WinID, changed = None):
+    def __init__(self, EventType, NativeEvent, WinID, changed=None):
         Debug.msg(5, "_MouseEvent:__init__()")
 
         wx.PyCommandEvent.__init__(self)
@@ -234,7 +266,7 @@ class _MouseEvent(wx.PyCommandEvent):
 
     def GetX(self):
         return self.changed[0]
-        
+
     def GetY(self):
         return self.changed[1]
 

@@ -61,7 +61,7 @@ def main():
 
     from grass.script.setup import set_gui_path
     set_gui_path()
-    
+
     from core.settings import UserSettings
     from core.globalvar import CheckWxVersion
     from core.giface import StandaloneGrassInterface
@@ -94,7 +94,9 @@ def main():
         trainingmap_name = gscript.find_file(name=options['trainingmap'],
                                              element='vector')['fullname']
         if not trainingmap_name:
-            gscript.fatal(_("Vector map <%s> not found") % options['trainingmap'])
+            gscript.fatal(
+                _("Vector map <%s> not found") %
+                options['trainingmap'])
 
     # define display driver
     driver = UserSettings.Get(group='display', key='driver', subkey='type')

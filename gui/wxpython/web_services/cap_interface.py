@@ -29,10 +29,12 @@ if WMSLibPath not in sys.path:
     sys.path.append(WMSLibPath)
 
 from wms_cap_parsers import WMSCapabilitiesTree, \
-                            WMTSCapabilitiesTree, \
-                            OnEarthCapabilitiesTree
+    WMTSCapabilitiesTree, \
+    OnEarthCapabilitiesTree
+
 
 class CapabilitiesBase:
+
     def GetLayerByName(self, name):
         """Find layer by name
         """
@@ -49,7 +51,9 @@ class CapabilitiesBase:
         else:
             return None
 
+
 class LayerBase:
+
     def GetId(self):
         """Get layer id
         """
@@ -70,8 +74,10 @@ class LayerBase:
         """
         self.child_layers.append(layer)
 
+
 class WMSCapabilities(CapabilitiesBase, WMSCapabilitiesTree):
-    def __init__(self, cap_file, force_version = None):
+
+    def __init__(self, cap_file, force_version=None):
         """Create common interface for web_services.widgets to WMS
         capabilities data
         """
@@ -85,39 +91,41 @@ class WMSCapabilities(CapabilitiesBase, WMSCapabilitiesTree):
         self.layers_by_id = {}
         self._initializeLayerTree(self.root_layer)
 
-    def _initializeLayerTree(self, parent_layer, id = 0):
+    def _initializeLayerTree(self, parent_layer, id=0):
         """Build tree, which represents layers
         """
         if id == 0:
             parent_layer = WMSLayer(parent_layer, id, self)
             self.layers_by_id[id] = parent_layer
             id += 1
-        
+
         layer_nodes = parent_layer.GetLayerNode().findall((self.xml_ns.Ns("Layer")))
-        
+
         for l in layer_nodes:
             layer = WMSLayer(l, id, self)
             parent_layer.AddChildLayer(layer)
             self.layers_by_id[id] = layer
             id += 1
             id = self._initializeLayerTree(layer, id)
-        
+
         return id
 
     def GetFormats(self):
         """Get supported formats
-        """      
+        """
         request_node = self.cap_node.find(self.xml_ns.Ns("Request"))
         get_map_node = request_node.find(self.xml_ns.Ns("GetMap"))
         format_nodes = get_map_node.findall(self.xml_ns.Ns("Format"))
- 
+
         formats = []
         for node in format_nodes:
             formats.append(node.text)
 
         return formats
 
+
 class WMSLayer(LayerBase):
+
     def __init__(self, layer_node, id, cap):
         """Common interface for web_services.widgets to WMS
         capabilities <Layer> element
@@ -136,14 +144,14 @@ class WMSLayer(LayerBase):
         if param == 'title':
             title_node = self.layer_node.find(title)
             if title_node is not None:
-                return title_node.text 
+                return title_node.text
             else:
                 return None
 
         if param == 'name':
             name_node = self.layer_node.find(name)
             if name_node is not None:
-                return name_node.text 
+                return name_node.text
             else:
                 return None
 
@@ -154,7 +162,7 @@ class WMSLayer(LayerBase):
             styles = []
             style = self.xml_ns.Ns("Style")
             for style_node in self.layer_node.findall(style):
-                style_name = '' 
+                style_name = ''
                 style_title = ''
 
                 if style_node.find(title) is not None:
@@ -162,13 +170,14 @@ class WMSLayer(LayerBase):
                 if style_node.find(name) is not None:
                     style_name = style_node.find(name).text
 
-                styles.append({'title' : style_title, 
-                               'name' : style_name,
-                               'isDefault' : False})
+                styles.append({'title': style_title,
+                               'name': style_name,
+                               'isDefault': False})
             return styles
 
         if param == 'srs':
-            projs_nodes = self.layer_node.findall(self.xml_ns.Ns(self.cap.getprojtag()))
+            projs_nodes = self.layer_node.findall(
+                self.xml_ns.Ns(self.cap.getprojtag()))
 
             projs = []
             if projs_nodes is None:
@@ -188,7 +197,9 @@ class WMSLayer(LayerBase):
         else:
             return False
 
+
 class WMTSCapabilities(CapabilitiesBase, WMTSCapabilitiesTree):
+
     def __init__(self, cap_file):
         """Create common interface for web_services.widgets to WMTS
         capabilities data
@@ -201,7 +212,7 @@ class WMTSCapabilities(CapabilitiesBase, WMTSCapabilitiesTree):
         layers = self._findall(contents, 'Layer', self.xml_ns.NsWmts)
 
         self.layers_by_id = {}
-        
+
         id = 0
         root_layer = WMTSLayer(None, id, self)
         self.layers_by_id[id] = root_layer
@@ -210,8 +221,10 @@ class WMTSCapabilities(CapabilitiesBase, WMTSCapabilitiesTree):
             id += 1
             self.layers_by_id[id] = WMTSLayer(layer_node, id, self)
             root_layer.child_layers.append(self.layers_by_id[id])
-    
+
+
 class WMTSLayer(LayerBase):
+
     def __init__(self, layer_node, id, cap):
         """Common interface for web_services.widgets to WMTS
         capabilities <Layer> element
@@ -237,22 +250,23 @@ class WMTSLayer(LayerBase):
         if param == 'title':
             title_node = self.layer_node.find(title)
             if title_node is not None:
-                return title_node.text 
+                return title_node.text
             else:
                 return None
 
         if param == 'name':
             name_node = self.layer_node.find(name)
             if name_node is not None:
-                return name_node.text 
+                return name_node.text
             else:
                 return None
 
         if param == 'styles':
             styles = []
-            for style_node in self.layer_node.findall(self.xml_ns.NsWmts("Style")):
+            for style_node in self.layer_node.findall(
+                    self.xml_ns.NsWmts("Style")):
 
-                style_name = '' 
+                style_name = ''
                 style_title = ''
 
                 if style_node.find(title) is not None:
@@ -262,13 +276,13 @@ class WMTSLayer(LayerBase):
 
                 is_def = False
                 if 'isDefault' in style_node.attrib and\
-                    style_node.attrib['isDefault'] == 'true':
+                        style_node.attrib['isDefault'] == 'true':
                     is_def = True
 
-                styles.append({'title' : style_title, 
-                               'name' : style_name,
-                               'isDefault' : is_def})
-            
+                styles.append({'title': style_title,
+                               'name': style_name,
+                               'isDefault': is_def})
+
             return styles
 
         if param == 'format':
@@ -287,21 +301,24 @@ class WMTSLayer(LayerBase):
         if self.layer_node is None:
             return layer_projs
 
-        mat_set_links = self.layer_node.findall(self.xml_ns.NsWmts('TileMatrixSetLink'))
+        mat_set_links = self.layer_node.findall(
+            self.xml_ns.NsWmts('TileMatrixSetLink'))
 
         contents = self.cap.getroot().find(self.xml_ns.NsWmts('Contents'))
         tileMatrixSets = contents.findall(self.xml_ns.NsWmts('TileMatrixSet'))
 
-        for link in  mat_set_links:
-            mat_set_link_id = link.find(self.xml_ns.NsWmts('TileMatrixSet')).text
+        for link in mat_set_links:
+            mat_set_link_id = link.find(
+                self.xml_ns.NsWmts('TileMatrixSet')).text
             if not mat_set_link_id:
                 continue
 
             for mat_set in tileMatrixSets:
-                mat_set_id = mat_set.find(self.xml_ns.NsOws('Identifier')).text 
+                mat_set_id = mat_set.find(self.xml_ns.NsOws('Identifier')).text
                 if mat_set_id and mat_set_id != mat_set_link_id:
                     continue
-                mat_set_srs = mat_set.find(self.xml_ns.NsOws('SupportedCRS')).text.strip()
+                mat_set_srs = mat_set.find(
+                    self.xml_ns.NsOws('SupportedCRS')).text.strip()
                 layer_projs.append(mat_set_srs)
         return layer_projs
 
@@ -313,7 +330,9 @@ class WMTSLayer(LayerBase):
         else:
             return True
 
+
 class OnEarthCapabilities(CapabilitiesBase, OnEarthCapabilitiesTree):
+
     def __init__(self, cap_file):
         """Create Common interface for web_services.widgets to
         NASA OnEarth tile service data (equivalent to  WMS, WMTS
@@ -325,8 +344,8 @@ class OnEarthCapabilities(CapabilitiesBase, OnEarthCapabilitiesTree):
 
         self.layers_by_id = {}
         self._initializeLayerTree(self.getroot())
-        
-    def _initializeLayerTree(self, parent_layer, id = 0):
+
+    def _initializeLayerTree(self, parent_layer, id=0):
         """Build tree, which represents layers
         """
         if id == 0:
@@ -346,14 +365,16 @@ class OnEarthCapabilities(CapabilitiesBase, OnEarthCapabilitiesTree):
             id += 1
             parent_layer.child_layers.append(layer)
             if layer_node.tag == 'TiledGroups':
-               id = self._initializeLayerTree(layer, id)
+                id = self._initializeLayerTree(layer, id)
 
         return id
 
+
 class OnEarthLayer(LayerBase):
+
     def __init__(self, layer_node, parent_layer, id, cap):
         """Common interface for web_services.widgets to NASA Earth
-            capabilities <TiledGroup>\<TiledGroups> element 
+            capabilities <TiledGroup>\<TiledGroups> element
             (equivalent to  WMS, WMTS <Layer> element)
         """
         self.id = id
@@ -367,7 +388,7 @@ class OnEarthLayer(LayerBase):
         """
         if self.layer_node is None or \
            self.layer_node.tag == 'TiledGroups':
-           return False
+            return False
         else:
             return True
 
@@ -382,14 +403,14 @@ class OnEarthLayer(LayerBase):
         if param == 'title':
             title_node = self.layer_node.find("Title")
             if title_node is not None:
-                return title_node.text 
+                return title_node.text
             else:
                 return None
 
         if param == 'name':
             name_node = self.layer_node.find("Name")
             if name_node is not None:
-                return name_node.text 
+                return name_node.text
             else:
                 return None
 

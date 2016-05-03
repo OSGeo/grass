@@ -5,4 +5,4 @@ all = [
     'manager',
     'base',
     'dialogs',
-    ]
+]

@@ -16,17 +16,19 @@ This program is free software under the GNU General Public License
 
 from grass.pydispatch.signal import Signal
 
+
 class GraphicalModelerGrassInterface():
     """@implements core::giface::GrassInterface"""
+
     def __init__(self, model):
         self._model = model
-    
+
         # Signal emitted to request updating of map (TODO)
         self.updateMap = Signal('GraphicalModelerGrassInterface.updateMap')
-        
+
     def GetLayerTree(self):
         return None
-    
+
     def GetLayerList(self, prompt):
         return self._model.GetMaps(prompt)
 

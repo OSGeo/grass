@@ -43,7 +43,7 @@ def main():
 
     from grass.script.setup import set_gui_path
     set_gui_path()
-    
+
     try:
         from timeline.frame import TimelineFrame
     except ImportError as e:

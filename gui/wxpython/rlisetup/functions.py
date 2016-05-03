@@ -122,7 +122,7 @@ def sampleAreaVector(vect, rast, vect_cats, layer='1', overwrite=False,
     """Create the strings to add to the configuration file using vector"""
     areanum = len(vect_cats)
     output = []
-    #TODO if areanum == 0 exit from the program
+    # TODO if areanum == 0 exit from the program
     if areanum == 0:
         GError(message=_("The polygon seems to have 0 areas"))
         return None
@@ -133,8 +133,8 @@ def sampleAreaVector(vect, rast, vect_cats, layer='1', overwrite=False,
         rast_name = "{pref}{cat}".format(pref=outpref, cat=cat)
         # check if raster already axist
 
-        if len(grass.list_strings('raster', pattern=rast_name, mapset='.')) == 1 \
-           and not overwrite:
+        if len(grass.list_strings('raster', pattern=rast_name,
+                                  mapset='.')) == 1 and not overwrite:
             GError(message=_("The raster map <%s> already exists."
                              " Please remove or rename the maps "
                              "with the prefix '%s' or select the "

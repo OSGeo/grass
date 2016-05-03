@@ -32,6 +32,7 @@ import grass.temporal as tgis
 
 
 class AnimationData(object):
+
     def __init__(self):
         self._name = None
         self._windowIndex = 0
@@ -209,17 +210,22 @@ class AnimationData(object):
     def GetZoomRegionValue(self):
         return self._zoomRegionValue
 
-    zoomRegionValue = property(fset=SetZoomRegionValue, fget=GetZoomRegionValue)
+    zoomRegionValue = property(
+        fset=SetZoomRegionValue,
+        fget=GetZoomRegionValue)
 
     def GetRegions(self, width, height):
         self._computeRegions(width, height, self._mapCount, self._startRegion,
                              self._endRegion, self._zoomRegionValue)
         return self._regions
 
-    def _computeRegions(self, width, height, count, startRegion, endRegion=None, zoomValue=None):
+    def _computeRegions(
+            self, width, height, count, startRegion, endRegion=None,
+            zoomValue=None):
         """Computes regions based on start region and end region or zoom value
         for each of the animation frames."""
-        currRegion = dict(gcore.region())  # cast to dict, otherwise deepcopy error
+        currRegion = dict(
+            gcore.region())  # cast to dict, otherwise deepcopy error
         del currRegion['cells']
         del currRegion['cols']
         del currRegion['rows']
@@ -237,15 +243,24 @@ class AnimationData(object):
             self._regions = regions
             return
 
-        startRegionDict = parse_key_val(gcore.read_command('g.region', flags='gu',
-                                                                 region=startRegion),
-                                              val_type=float)
+        startRegionDict = parse_key_val(
+            gcore.read_command(
+                'g.region',
+                flags='gu',
+                region=startRegion),
+            val_type=float)
         if endRegion:
-            endRegionDict = parse_key_val(gcore.read_command('g.region', flags='gu',
-                                                                   region=endRegion),
-                                                val_type=float)
+            endRegionDict = parse_key_val(
+                gcore.read_command(
+                    'g.region',
+                    flags='gu',
+                    region=endRegion),
+                val_type=float)
             for key in ('n', 's', 'e', 'w'):
-                values = interpolate(startRegionDict[key], endRegionDict[key], self._mapCount)
+                values = interpolate(
+                    startRegionDict[key],
+                    endRegionDict[key],
+                    self._mapCount)
                 for value, region in zip(values, regions):
                     region[key] = value
 
@@ -259,7 +274,7 @@ class AnimationData(object):
                 # handle cases when north < south and similarly EW
                 if regions[i]['n'] < regions[i]['s'] or \
                    regions[i]['e'] < regions[i]['w']:
-                        regions[i] = regions[i - 1]
+                    regions[i] = regions[i - 1]
 
         for region in regions:
             mapwidth = abs(region['e'] - region['w'])
@@ -276,6 +291,7 @@ class AnimationData(object):
 class AnimLayer(Layer):
     """Animation layer allows adding either space-time dataset
     or series of maps."""
+
     def __init__(self):
         Layer.__init__(self)
         self._mapTypes.extend(['strds', 'stvds', 'str3ds'])
@@ -284,7 +300,8 @@ class AnimLayer(Layer):
     def SetName(self, name):
         if not self.hidden:
             if self._mapType is None:
-                raise ValueError("To set layer name, the type of layer must be specified.")
+                raise ValueError(
+                    "To set layer name, the type of layer must be specified.")
             if self._mapType in ('strds', 'stvds', 'str3ds'):
                 try:
                     name = validateTimeseriesName(name, self._mapType)

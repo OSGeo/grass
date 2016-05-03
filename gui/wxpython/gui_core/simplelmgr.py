@@ -45,9 +45,11 @@ SIMPLE_LMGR_TB_RIGHT = 128
 class SimpleLayerManager(wx.Panel):
     """Simple layer manager class provides similar functionality to
     Layertree, but it's just list, not tree."""
-    def __init__(self, parent, layerList,
-                 lmgrStyle=SIMPLE_LMGR_RASTER | SIMPLE_LMGR_VECTOR | SIMPLE_LMGR_TB_LEFT,
-                 toolbarCls=None, modal=False):
+
+    def __init__(
+            self, parent, layerList, lmgrStyle=SIMPLE_LMGR_RASTER |
+            SIMPLE_LMGR_VECTOR | SIMPLE_LMGR_TB_LEFT, toolbarCls=None,
+            modal=False):
         wx.Panel.__init__(self, parent=parent, name='SimpleLayerManager')
 
         self._style = lmgrStyle
@@ -67,8 +69,12 @@ class SimpleLayerManager(wx.Panel):
         # needed in order not to change selection when moving layers
         self._blockSelectionChanged = False
 
-        self._checkList.Bind(wx.EVT_LISTBOX, lambda evt: self._selectionChanged())
-        self._checkList.Bind(wx.EVT_LISTBOX_DCLICK, self.OnLayerChangeProperties)
+        self._checkList.Bind(
+            wx.EVT_LISTBOX,
+            lambda evt: self._selectionChanged())
+        self._checkList.Bind(
+            wx.EVT_LISTBOX_DCLICK,
+            self.OnLayerChangeProperties)
         self._checkList.Bind(wx.EVT_CHECKLISTBOX, self.OnLayerChecked)
         self._checkList.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
 
@@ -95,9 +101,9 @@ class SimpleLayerManager(wx.Panel):
                              CloseButton(False).
                              BestSize((self._checkList.GetBestSize())))
         paneInfo = wx.aui.AuiPaneInfo(). \
-                   Name("toolbar").Caption(_("Toolbar")).ToolbarPane(). \
-                   CloseButton(False).Layer(1).Gripper(False). \
-                   BestSize((self._toolbar.GetBestSize()))
+            Name("toolbar").Caption(_("Toolbar")).ToolbarPane(). \
+            CloseButton(False).Layer(1).Gripper(False). \
+            BestSize((self._toolbar.GetBestSize()))
         if self._style & SIMPLE_LMGR_TB_LEFT:
             paneInfo.Left()
         elif self._style & SIMPLE_LMGR_TB_RIGHT:
@@ -135,7 +141,12 @@ class SimpleLayerManager(wx.Panel):
                   _("Copy map names to clipboard (bottom to top)")]
         for label, text in zip(labels, texts):
             id = wx.NewId()
-            self.Bind(wx.EVT_MENU, lambda evt, t=text, id=id: self._copyText(t), id=id)
+            self.Bind(
+                wx.EVT_MENU,
+                lambda evt,
+                t=text,
+                id=id: self._copyText(t),
+                id=id)
 
             menu.Append(id, label)
 
@@ -147,7 +158,7 @@ class SimpleLayerManager(wx.Panel):
     def _copyText(self, text):
         """Helper function for copying
 
-        TODO: move to utils?        
+        TODO: move to utils?
         """
         if wx.TheClipboard.Open():
             do = wx.TextDataObject()
@@ -173,8 +184,8 @@ class SimpleLayerManager(wx.Panel):
         Dummy layer is added first."""
         cmd = ['d.rast']
         layer = self.AddRaster(name='', cmd=cmd, hidden=True, dialog=None)
-        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(cmd=cmd,
-                                                    completed=(self.GetOptData, layer, ''))
+        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(
+            cmd=cmd, completed=(self.GetOptData, layer, ''))
         event.Skip()
 
     def OnAddVector(self, event):
@@ -183,8 +194,8 @@ class SimpleLayerManager(wx.Panel):
         cmd = ['d.vect']
 
         layer = self.AddVector(name='', cmd=cmd, hidden=True, dialog=None)
-        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(cmd=cmd,
-                                                   completed=(self.GetOptData, layer, ''))
+        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(
+            cmd=cmd, completed=(self.GetOptData, layer, ''))
         event.Skip()
 
     def OnAddRast3d(self, event):
@@ -192,8 +203,8 @@ class SimpleLayerManager(wx.Panel):
         Dummy layer is added first."""
         cmd = ['d.rast3d']
         layer = self.AddRast3d(name='', cmd=cmd, hidden=True, dialog=None)
-        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(cmd=cmd,
-                                                   completed=(self.GetOptData, layer, ''))
+        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(
+            cmd=cmd, completed=(self.GetOptData, layer, ''))
         event.Skip()
 
     def OnAddRGB(self, event):
@@ -201,15 +212,16 @@ class SimpleLayerManager(wx.Panel):
         Dummy layer is added first."""
         cmd = ['d.rgb']
         layer = self.AddRGB(name='', cmd=cmd, hidden=True, dialog=None)
-        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(cmd=cmd,
-                                                    completed=(self.GetOptData, layer, ''))
+        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(
+            cmd=cmd, completed=(self.GetOptData, layer, ''))
         event.Skip()
 
     def OnRemove(self, event):
         """Removes selected layers from list."""
         layers = self._layerList.GetSelectedLayers(activeOnly=False)
         for layer in layers:
-            self.layerRemoved.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
+            self.layerRemoved.emit(
+                index=self._layerList.GetLayerIndex(layer), layer=layer)
             self._layerList.RemoveLayer(layer)
         self._update()
         self.anyChange.emit()
@@ -240,7 +252,8 @@ class SimpleLayerManager(wx.Panel):
         for layer in layers:
             idx = self._layerList.GetLayerIndex(layer)
             if idx < len(self._layerList) - 1:
-                self.layerMovedDown.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
+                self.layerMovedDown.emit(
+                    index=self._layerList.GetLayerIndex(layer), layer=layer)
                 self._layerList.MoveLayerDown(layer)
         self._update()
         self._blockSelectionChanged = False
@@ -257,9 +270,8 @@ class SimpleLayerManager(wx.Panel):
 
     def _layerChangeProperties(self, layer):
         """Opens new module dialog or recycles it."""
-        GUI(parent=self, giface=None,
-            modal=self._modal).ParseCommand(cmd=layer.cmd,
-                                            completed=(self.GetOptData, layer, ''))
+        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(
+            cmd=layer.cmd, completed=(self.GetOptData, layer, ''))
 
     def OnLayerChangeOpacity(self, event):
         """Opacity of a layer is changing."""
@@ -280,9 +292,11 @@ class SimpleLayerManager(wx.Panel):
 
     def _setLayerOpacity(self, layer, value):
         """Sets layer's opacity.'"""
-        layer.opacity = value 
+        layer.opacity = value
         self._update()
-        self.opacityChanged.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
+        self.opacityChanged.emit(
+            index=self._layerList.GetLayerIndex(layer),
+            layer=layer)
         self.anyChange.emit()
 
     def _update(self):
@@ -298,8 +312,10 @@ class SimpleLayerManager(wx.Panel):
 
         for layer in self._layerList:
             if layer.opacity < 1:
-                items.append("{name} (opacity {opacity}%)".format(name=layer.name,
-                                                                  opacity=int(layer.opacity * 100)))
+                items.append(
+                    "{name} (opacity {opacity}%)".format(
+                        name=layer.name, opacity=int(
+                            layer.opacity * 100)))
             else:
                 items.append(layer.name)
             active.append(layer.IsActive())
@@ -330,7 +346,9 @@ class SimpleLayerManager(wx.Panel):
                         signal = self.cmdChanged
 
                     layer.name = mapName
-                    signal.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
+                    signal.emit(
+                        index=self._layerList.GetLayerIndex(layer),
+                        layer=layer)
                 except ValueError as e:
                     self._layerList.RemoveLayer(layer)
                     GError(parent=self,
@@ -388,6 +406,7 @@ class SimpleLmgrToolbar(BaseToolbar):
     Style of the toolbar can be changed (horizontal,
     vertical, which map types to include).
     """
+
     def __init__(self, parent, lmgrStyle):
         """Toolbar constructor
         """
@@ -407,17 +426,17 @@ class SimpleLmgrToolbar(BaseToolbar):
         """Toolbar data"""
         data = [('edit', icons['edit'],
                  self.parent.OnLayerChangeProperties),
-                 ('remove', icons['remove'],
+                ('remove', icons['remove'],
                  self.parent.OnRemove),
-                 (None, ),
-                 ('up', icons['up'],
+                (None, ),
+                ('up', icons['up'],
                  self.parent.OnLayerUp),
-                 ('down', icons['down'],
+                ('down', icons['down'],
                  self.parent.OnLayerDown),
-                 (None, ),
-                 ('opacity', icons['opacity'],
+                (None, ),
+                ('opacity', icons['opacity'],
                  self.parent.OnLayerChangeOpacity),
-                 ]
+                ]
         if self._style & SIMPLE_LMGR_RASTER3D:
             data.insert(0, ('addRaster3d', icons['addRast3d'],
                             self.parent.OnAddRast3d))
@@ -454,10 +473,11 @@ icons = {
                           label=_("Add 3D raster map layer"),
                           desc=_("Add 3D raster map layer")),
     'addRGB': MetaIcon(img='layer-rgb-add', label=_('Add RGB map layer'))
-    }
+}
 
 
 class TestFrame(wx.Frame):
+
     def __init__(self, parent):
         wx.Frame.__init__(self, parent=parent)
         SimpleLayerManager(parent=self, layerList=LayerList())

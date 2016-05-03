@@ -18,8 +18,8 @@ This program is free software under the GNU General Public License
 @author Eliska Kyzlikova <eliska.kyzlikova gmail.com> (turn costs support)
 """
 
-import  math
-from grass.script     import core as grass
+import math
+from grass.script import core as grass
 from core.utils import _
 
 try:
@@ -29,6 +29,7 @@ try:
 except ImportError:
     haveCtypes = False
 
+
 def ParseMapStr(mapStr):
     """Create full map name (add current mapset if it is not present in name)"""
     mapValSpl = mapStr.strip().split("@")
@@ -36,15 +37,18 @@ def ParseMapStr(mapStr):
         mapSet = mapValSpl[1]
     else:
         mapSet = grass.gisenv()['MAPSET']
-    mapName = mapValSpl[0] 
-        
+    mapName = mapValSpl[0]
+
     return mapName, mapSet
+
 
 def DegreesToRadians(degrees):
     return degrees * math.pi / 180
 
+
 def RadiansToDegrees(radians):
-    return radians * 180 / math.pi   
+    return radians * 180 / math.pi
+
 
 def SnapToNode(e, n, tresh, vectMap):
     """Find nearest node to click coordinates (within given threshold)"""
@@ -54,29 +58,29 @@ def SnapToNode(e, n, tresh, vectMap):
     vectMap, mapSet = ParseMapStr(vectMap)
 
     openedMap = pointer(vectlib.Map_info())
-    ret = vectlib.Vect_open_old(openedMap, 
-                                     c_char_p(vectMap),
-                                     c_char_p(mapSet))
+    ret = vectlib.Vect_open_old(openedMap,
+                                c_char_p(vectMap),
+                                c_char_p(mapSet))
     if ret == 1:
         vectlib.Vect_close(openedMap)
-    if ret != 2: 
+    if ret != 2:
         return None
 
-    nodeNum =  vectlib.Vect_find_node(openedMap,     
-                                      c_double(e), 
-                                      c_double(n), 
-                                      c_double(0), 
-                                      c_double(tresh),
-                                      vectlib.WITHOUT_Z)
+    nodeNum = vectlib.Vect_find_node(openedMap,
+                                     c_double(e),
+                                     c_double(n),
+                                     c_double(0),
+                                     c_double(tresh),
+                                     vectlib.WITHOUT_Z)
 
     if nodeNum > 0:
         e = c_double(0)
         n = c_double(0)
-        vectlib.Vect_get_node_coor(openedMap, 
-                                   nodeNum, 
-                                   byref(e), 
-                                   byref(n), 
-                                   None); # z
+        vectlib.Vect_get_node_coor(openedMap,
+                                   nodeNum,
+                                   byref(e),
+                                   byref(n),
+                                   None)  # z
         e = e.value
         n = n.value
     else:
@@ -85,67 +89,70 @@ def SnapToNode(e, n, tresh, vectMap):
 
     return e, n
 
+
 def GetNearestNodeCat(e, n, layer, tresh, vectMap):
 
-    if  not haveCtypes:
+    if not haveCtypes:
         return -2
 
     vectMapName, mapSet = ParseMapStr(vectMap)
 
     openedMap = pointer(vectlib.Map_info())
-    ret = vectlib.Vect_open_old(openedMap, 
-                                     c_char_p(vectMapName),
-                                     c_char_p(mapSet))
+    ret = vectlib.Vect_open_old(openedMap,
+                                c_char_p(vectMapName),
+                                c_char_p(mapSet))
     if ret == 1:
         vectlib.Vect_close(openedMap)
-    if ret != 2: 
+    if ret != 2:
         return -1
 
-    nodeNum = vectlib.Vect_find_node(openedMap,     
-                                     c_double(e), 
-                                     c_double(n), 
-                                     c_double(0), 
+    nodeNum = vectlib.Vect_find_node(openedMap,
+                                     c_double(e),
+                                     c_double(n),
+                                     c_double(0),
                                      c_double(tresh),
                                      vectlib.WITHOUT_Z)
 
     if nodeNum > 0:
         e = c_double(0)
         n = c_double(0)
-        vectlib.Vect_get_node_coor(openedMap, 
-                                   nodeNum, 
-                                   byref(e), 
-                                   byref(n), 
-                                   None); # z
+        vectlib.Vect_get_node_coor(openedMap,
+                                   nodeNum,
+                                   byref(e),
+                                   byref(n),
+                                   None)  # z
         e = e.value
         n = n.value
     else:
         vectlib.Vect_close(openedMap)
         return -1
 
-    box = vectlib.bound_box();
-    List = POINTER(vectlib.boxlist);
-    List = vectlib.Vect_new_boxlist(c_int(0));
+    box = vectlib.bound_box()
+    List = POINTER(vectlib.boxlist)
+    List = vectlib.Vect_new_boxlist(c_int(0))
 
-    box.E = box.W = e;
-    box.N = box.S = n;
-    box.T = box.B = 0;
-    vectlib.Vect_select_lines_by_box(openedMap, byref(box), vectlib.GV_POINT, List);
+    box.E = box.W = e
+    box.N = box.S = n
+    box.T = box.B = 0
+    vectlib.Vect_select_lines_by_box(
+        openedMap, byref(box),
+        vectlib.GV_POINT, List)
 
-    found = 0;
-    dcost = 0;
+    found = 0
+    dcost = 0
 
     Cats = POINTER(vectlib.line_cats)
     Cats = vectlib.Vect_new_cats_struct()
- 
+
     cat = c_int(0)
 
-    for j in range(List.contents.n_values): 
+    for j in range(List.contents.n_values):
         line = List.contents.id[j]
         type = vectlib.Vect_read_line(openedMap, None, Cats, line)
         if type != vectlib.GV_POINT:
             continue
 
-        if vectlib.Vect_cat_get(Cats, c_int(layer), byref(cat)): 
+        if vectlib.Vect_cat_get(Cats, c_int(layer), byref(cat)):
             found = 1
             break
     if found:

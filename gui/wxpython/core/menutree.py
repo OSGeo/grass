@@ -37,9 +37,9 @@ import os
 import sys
 import copy
 try:
-    import xml.etree.ElementTree   as etree
+    import xml.etree.ElementTree as etree
 except ImportError:
-    import elementtree.ElementTree as etree # Python <= 2.4
+    import elementtree.ElementTree as etree  # Python <= 2.4
 
 import wx
 
@@ -55,11 +55,12 @@ if not os.getenv("GISBASE"):
 # TODO: change the system to remove strange derived classes
 class MenuTreeModelBuilder:
     """Abstract menu data class"""
+
     def __init__(self, filename, expandAddons=True):
 
-        self.menustyle = UserSettings.Get(group = 'appearance',
-                                          key = 'menustyle',
-                                          subkey = 'selection')
+        self.menustyle = UserSettings.Get(group='appearance',
+                                          key='menustyle',
+                                          subkey='selection')
 
         xmlTree = etree.parse(filename)
         if expandAddons:
@@ -89,14 +90,14 @@ class MenuTreeModelBuilder:
             self.model.AppendNode(parent=node, label='', data=data)
         elif item.tag == 'menuitem':
             origLabel = _(item.find('label').text)
-            handler  = item.find('handler').text
-            desc     = item.find('help')  # optional
-            gcmd     = item.find('command')  # optional
-            keywords = item.find('keywords') # optional
-            shortcut = item.find('shortcut') # optional
-            wxId     = item.find('id')       # optional
-            icon     = item.find('icon')     # optional
-            if gcmd != None:
+            handler = item.find('handler').text
+            desc = item.find('help')  # optional
+            gcmd = item.find('command')  # optional
+            keywords = item.find('keywords')  # optional
+            shortcut = item.find('shortcut')  # optional
+            wxId = item.find('id')       # optional
+            icon = item.find('icon')     # optional
+            if gcmd is not None:
                 gcmd = gcmd.text
             else:
                 gcmd = ""
@@ -106,17 +107,17 @@ class MenuTreeModelBuilder:
                 desc = ""
             if keywords is None or keywords.text is None:
                 keywords = ""
-            else:            
+            else:
                 keywords = keywords.text
-            if shortcut != None:
+            if shortcut is not None:
                 shortcut = shortcut.text
             else:
                 shortcut = ""
-            if wxId != None:
+            if wxId is not None:
                 wxId = eval('wx.' + wxId.text)
             else:
                 wxId = wx.ID_ANY
-            if icon != None:
+            if icon is not None:
                 icon = icon.text
             else:
                 icon = ''
@@ -126,8 +127,15 @@ class MenuTreeModelBuilder:
                     label += '   [' + gcmd + ']'
                 elif self.menustyle == 2:
                     label = '      [' + gcmd + ']'
-            data = dict(label=origLabel, description=desc, handler=handler,
-                        command=gcmd, keywords=keywords, shortcut=shortcut, wxId=wxId, icon=icon)
+            data = dict(
+                label=origLabel,
+                description=desc,
+                handler=handler,
+                command=gcmd,
+                keywords=keywords,
+                shortcut=shortcut,
+                wxId=wxId,
+                icon=icon)
             self.model.AppendNode(parent=node, label=label, data=data)
         elif item.tag == 'menu':
             self._createMenu(item, node)
@@ -163,6 +171,7 @@ class MenuTreeModelBuilder:
     def PrintCommands(self, fh):
         printCommands(self.model.root, fh, itemSep=' | ', menuSep=' > ')
 
+
 def removeSeparators(model, node=None):
     if not node:
         node = model.root
@@ -172,6 +181,7 @@ def removeSeparators(model, node=None):
     else:
         model.RemoveNode(node)
 
+
 def printTree(node, fh, indent=0):
     if not node.label:
         return
@@ -179,6 +189,7 @@ def printTree(node, fh, indent=0):
     fh.write(text)
     for child in node.children:
         printTree(node=child, fh=fh, indent=indent + 2)
+
 
 def printStrings(node, fh):
     # node.label  - with module in brackets
@@ -192,6 +203,7 @@ def printStrings(node, fh):
             fh.write('    _(%r),\n' % str(node.data['description']))
     for child in node.children:
         printStrings(node=child, fh=fh)
+
 
 def printCommands(node, fh, itemSep, menuSep):
 
@@ -217,21 +229,22 @@ def printCommands(node, fh, itemSep, menuSep):
 if __name__ == "__main__":
 
     action = 'strings'
-    menu   = 'manager'
+    menu = 'manager'
 
     for arg in sys.argv:
         if arg in ('strings', 'tree', 'commands', 'dump'):
-            action =  arg
+            action = arg
         elif arg in ('manager', 'module_tree', 'modeler', 'psmap'):
             menu = arg
 
     # FIXME: cross-dependencies
     if menu == 'manager':
-        from lmgr.menudata     import LayerManagerMenuData
-        from core.globalvar    import WXGUIDIR
+        from lmgr.menudata import LayerManagerMenuData
+        from core.globalvar import WXGUIDIR
         filename = os.path.join(WXGUIDIR, 'xml', 'menudata.xml')
         menudata = LayerManagerMenuData(filename)
-    # FIXME: since module descriptions are used again we have now the third copy of the same string (one is in modules)
+    # FIXME: since module descriptions are used again we have now the third
+    # copy of the same string (one is in modules)
     elif menu == 'module_tree':
         from lmgr.menudata import LayerManagerModuleTree
         from core.globalvar import WXGUIDIR

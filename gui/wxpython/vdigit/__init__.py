@@ -7,4 +7,4 @@ all = [
     'wxdisplay',
     'g.gui.vdigit',
     'toolbars',
-    ]
+]

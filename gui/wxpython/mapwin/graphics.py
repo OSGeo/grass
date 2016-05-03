@@ -32,10 +32,10 @@ class GraphicsSet:
             RegisterGraphicsToDraw in BufferedWindow class.
         """
         self.pens = {
-            "default":  wx.Pen(colour=wx.BLACK, width=2, style=wx.SOLID),
-            "selected":  wx.Pen(colour=wx.GREEN, width=2, style=wx.SOLID),
-            "unused":  wx.Pen(colour=wx.LIGHT_GREY, width=2, style=wx.SOLID),
-            "highest":  wx.Pen(colour=wx.RED, width=2, style=wx.SOLID)
+            "default": wx.Pen(colour=wx.BLACK, width=2, style=wx.SOLID),
+            "selected": wx.Pen(colour=wx.GREEN, width=2, style=wx.SOLID),
+            "unused": wx.Pen(colour=wx.LIGHT_GREY, width=2, style=wx.SOLID),
+            "highest": wx.Pen(colour=wx.RED, width=2, style=wx.SOLID)
         }
         self.brushes = {
             'default': wx.TRANSPARENT_BRUSH
@@ -58,10 +58,11 @@ class GraphicsSet:
             self.properties["size"] = 5
 
             self.properties["text"] = {}
-            self.properties["text"]['font'] = wx.Font(pointSize=self.properties["size"],
-                                                      family=wx.FONTFAMILY_DEFAULT,
-                                                      style=wx.FONTSTYLE_NORMAL,
-                                                      weight=wx.FONTWEIGHT_NORMAL)
+            self.properties["text"]['font'] = wx.Font(
+                pointSize=self.properties["size"],
+                family=wx.FONTFAMILY_DEFAULT,
+                style=wx.FONTSTYLE_NORMAL,
+                weight=wx.FONTWEIGHT_NORMAL)
             self.properties["text"]['active'] = True
 
             self.drawFunc = self.parentMapWin.DrawCross
@@ -89,7 +90,8 @@ class GraphicsSet:
 
             if self.graphicsType == "point":
                 if item.GetPropertyVal("penName"):
-                    self.parentMapWin.pen = self.pens[item.GetPropertyVal("penName")]
+                    self.parentMapWin.pen = self.pens[
+                        item.GetPropertyVal("penName")]
                 else:
                     self.parentMapWin.pen = self.pens["default"]
 
@@ -106,7 +108,8 @@ class GraphicsSet:
                     self.properties["text"]['coords'] = [coords[0] + size,
                                                          coords[1] + size,
                                                          size, size]
-                    self.properties["text"]['color'] = self.parentMapWin.pen.GetColour()
+                    self.properties["text"][
+                        'color'] = self.parentMapWin.pen.GetColour()
                     self.properties["text"]['text'] = label
 
                 self.drawFunc(pdc=self.pdc, drawid=item.GetId(),
@@ -121,7 +124,9 @@ class GraphicsSet:
                     pen = self.pens["default"]
 
                 if self.mapCoords:
-                    coords = [self.parentMapWin.Cell2Pixel(coords) for coords in item.GetCoords()]
+                    coords = [
+                        self.parentMapWin.Cell2Pixel(coords)
+                        for coords in item.GetCoords()]
                 else:
                     coords = item.GetCoords()
 
@@ -138,13 +143,19 @@ class GraphicsSet:
                 else:
                     brush = self.brushes["default"]
                 if self.mapCoords:
-                    coords = [self.parentMapWin.Cell2Pixel(coords) for coords in item.GetCoords()]
+                    coords = [
+                        self.parentMapWin.Cell2Pixel(coords)
+                        for coords in item.GetCoords()]
                 else:
                     coords = item.GetCoords()
 
-                self.drawFunc(pdc=self.pdc, pen=pen, brush=brush, drawid=item.GetId(),
-                              point1=coords[0],
-                              point2=coords[1])
+                self.drawFunc(
+                    pdc=self.pdc,
+                    pen=pen,
+                    brush=brush,
+                    drawid=item.GetId(),
+                    point1=coords[0],
+                    point2=coords[1])
 
             elif self.graphicsType == "polygon":
                 if item.GetPropertyVal("penName"):
@@ -156,7 +167,9 @@ class GraphicsSet:
                 else:
                     brush = self.brushes["default"]
                 if self.mapCoords:
-                    coords = [self.parentMapWin.Cell2Pixel(coords) for coords in item.GetCoords()]
+                    coords = [
+                        self.parentMapWin.Cell2Pixel(coords)
+                        for coords in item.GetCoords()]
                 else:
                     coords = item.GetCoords()
 
@@ -337,7 +350,9 @@ class GraphicsSet:
         """
         if drawNum < len(self.itemsList) and drawNum >= 0 and \
                 item in self.itemsList:
-            self.itemsList.insert(drawNum, self.itemsList.pop(self.itemsList.index(item)))
+            self.itemsList.insert(
+                drawNum, self.itemsList.pop(
+                    self.itemsList.index(item)))
             return True
 
         return False
@@ -365,7 +380,8 @@ class GraphicsSet:
 
 class GraphicsSetItem:
 
-    def __init__(self, coords, penName=None, brushName=None, label=None, hide=False):
+    def __init__(self, coords, penName=None,
+                 brushName=None, label=None, hide=False):
         """Could be point or line according to graphicsType in
         GraphicsSet class
 

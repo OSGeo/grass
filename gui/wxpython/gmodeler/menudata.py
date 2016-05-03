@@ -17,12 +17,14 @@ This program is free software under the GNU General Public License
 import os
 
 from core import globalvar
-from core.menutree  import MenuTreeModelBuilder
+from core.menutree import MenuTreeModelBuilder
+
 
 class ModelerMenuData(MenuTreeModelBuilder):
-    def __init__(self, filename = None):
-        if not filename:
-            filename = os.path.join(globalvar.WXGUIDIR, 'xml', 'menudata_modeler.xml')
-        
-        MenuTreeModelBuilder.__init__(self, filename)
 
+    def __init__(self, filename=None):
+        if not filename:
+            filename = os.path.join(
+                globalvar.WXGUIDIR, 'xml', 'menudata_modeler.xml')
+
+        MenuTreeModelBuilder.__init__(self, filename)

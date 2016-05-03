@@ -35,10 +35,11 @@ class BufferedWindow(wx.Window):
     SaveToFile(self, file_name, file_type) method.
 
     """
+
     def __init__(self, *args, **kwargs):
         # make sure the NO_FULL_REPAINT_ON_RESIZE style flag is set.
-        kwargs['style'] = kwargs.setdefault('style', wx.NO_FULL_REPAINT_ON_RESIZE) | \
-            wx.NO_FULL_REPAINT_ON_RESIZE
+        kwargs['style'] = kwargs.setdefault(
+            'style', wx.NO_FULL_REPAINT_ON_RESIZE) | wx.NO_FULL_REPAINT_ON_RESIZE
         wx.Window.__init__(self, *args, **kwargs)
 
         Debug.msg(2, "BufferedWindow.__init__()")
@@ -50,8 +51,8 @@ class BufferedWindow(wx.Window):
         self.OnSize(None)
 
     def Draw(self, dc):
-        ## just here as a place holder.
-        ## This method should be over-ridden when subclassed
+        # just here as a place holder.
+        # This method should be over-ridden when subclassed
         pass
 
     def OnPaint(self, event):
@@ -74,9 +75,9 @@ class BufferedWindow(wx.Window):
         # event.Skip()
 
     def SaveToFile(self, FileName, FileType=wx.BITMAP_TYPE_PNG):
-        ## This will save the contents of the buffer
-        ## to the specified file. See the wxWindows docs for
-        ## wx.Bitmap::SaveFile for the details
+        # This will save the contents of the buffer
+        # to the specified file. See the wxWindows docs for
+        # wx.Bitmap::SaveFile for the details
         self._Buffer.SaveFile(FileName, FileType)
 
     def UpdateDrawing(self):
@@ -98,6 +99,7 @@ class BufferedWindow(wx.Window):
 
 
 class AnimationWindow(BufferedWindow):
+
     def __init__(self, parent, id=wx.ID_ANY,
                  style=wx.DEFAULT_FRAME_STYLE | wx.FULL_REPAINT_ON_RESIZE |
                  wx.BORDER_RAISED):
@@ -145,8 +147,15 @@ class AnimationWindow(BufferedWindow):
             bitmap = wx.BitmapFromImage(im)
             if self._overlay:
                 im = wx.ImageFromBitmap(self.bitmap_overlay)
-                im.Rescale(im.GetWidth() * params['scale'], im.GetHeight() * params['scale'])
-                self._setOverlay(wx.BitmapFromImage(im), xperc=self.perc[0], yperc=self.perc[1])
+                im.Rescale(
+                    im.GetWidth() *
+                    params['scale'],
+                    im.GetHeight() *
+                    params['scale'])
+                self._setOverlay(
+                    wx.BitmapFromImage(im),
+                    xperc=self.perc[0],
+                    yperc=self.perc[1])
         else:
             self.x = 0
             self.y = 0

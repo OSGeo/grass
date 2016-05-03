@@ -20,16 +20,25 @@ from icons.icon import MetaIcon
 from core.utils import _
 
 icons = {
-    'reloadTree': MetaIcon(img='redraw', label=_("Reload GRASS locations")),
-    'reloadMapset': MetaIcon(img='reload', label=_("Reload current GRASS mapset only")),
-    'unlocked': MetaIcon(img='unlocked', label=_("Click to restrict editing to current mapset only")),
-    'locked': MetaIcon(img='locked', label=_("Click to allow editing other mapsets")),
-    }
+    'reloadTree': MetaIcon(
+        img='redraw',
+        label=_("Reload GRASS locations")),
+    'reloadMapset': MetaIcon(
+        img='reload',
+        label=_("Reload current GRASS mapset only")),
+    'unlocked': MetaIcon(
+        img='unlocked',
+        label=_("Click to restrict editing to current mapset only")),
+    'locked': MetaIcon(
+        img='locked',
+        label=_("Click to allow editing other mapsets")),
+}
 
 
 class DataCatalogToolbar(BaseToolbar):
     """Main data catalog toolbar
     """
+
     def __init__(self, parent):
         """Main toolbar constructor
         """

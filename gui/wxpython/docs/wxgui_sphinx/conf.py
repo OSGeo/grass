@@ -12,7 +12,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys
+import os
 from datetime import date
 import string
 from shutil import copy
@@ -22,12 +23,19 @@ from shutil import copy
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 if not os.getenv('GISBASE'):
     sys.exit("GISBASE not defined")
-sys.path.insert(0, os.path.abspath(os.path.join(os.environ['GISBASE'], 'etc', 'python', 'grass')))
+sys.path.insert(
+    0,
+    os.path.abspath(
+        os.path.join(
+            os.environ['GISBASE'],
+            'etc',
+            'python',
+            'grass')))
 
 from grass.script import core
 
-footer_tmpl = string.Template(\
-r"""
+footer_tmpl = string.Template(
+    r"""
 {% block footer %}<hr class="header">
 <p><a href="../index.html">Help Index</a> | <a href="../topics.html">Topics Index</a> | <a href="../keywords.html">Keywords Index</a> | <a href="../full_index.html">Full Index</a></p>
 <p>&copy; 2003-${year} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
@@ -39,10 +47,13 @@ today = date.today()
 
 copy("_templates/layout.html.template", "_templates/layout.html")
 with open("_templates/layout.html", "a+b") as f:
-    f.write(footer_tmpl.substitute(grass_version=grass_version, year=today.year))
+    f.write(
+        footer_tmpl.substitute(
+            grass_version=grass_version,
+            year=today.year))
     f.close()
 
-# -- General configuration -----------------------------------------------------
+# -- General configuration -----------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.0'
@@ -174,7 +185,7 @@ html_static_path = ['_static']
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-html_sidebars = {"**":["localtoc.html",'relations.html','searchbox.html']}
+html_sidebars = {"**": ["localtoc.html", 'relations.html', 'searchbox.html']}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
@@ -213,22 +224,22 @@ htmlhelp_basename = 'wxGUIdoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-'papersize': 'a4paper',
+    # The paper size ('letterpaper' or 'a4paper').
+    'papersize': 'a4paper',
 
-# The font size ('10pt', '11pt' or '12pt').
-'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'wxGUI.tex', u'wxGUI Documentation',
-   u'GRASS Development Team', 'manual'),
+    ('index', 'wxGUI.tex', u'wxGUI Documentation',
+     u'GRASS Development Team', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -271,9 +282,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'wxGUI', u'wxGUI Documentation',
-   u'GRASS Development Team', 'wxGUI', 'One line description of project.',
-   'Miscellaneous'),
+    ('index', 'wxGUI', u'wxGUI Documentation',
+     u'GRASS Development Team', 'wxGUI', 'One line description of project.',
+     'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.

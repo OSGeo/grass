@@ -23,6 +23,7 @@ import Queue
 
 from core.gconsole import EVT_CMD_DONE, wxCmdDone
 
+
 class gThread(threading.Thread, wx.EvtHandler):
     """Thread for various backends"""
     requestId = 0
@@ -65,8 +66,8 @@ class gThread(threading.Thread, wx.EvtHandler):
         return gThread.requestId
 
     def GetId(self):
-         """Get id for next command"""
-         return gThread.requestId + 1
+        """Get id for next command"""
+        return gThread.requestId + 1
 
     def SetId(self, id):
         """Set starting id"""
@@ -95,14 +96,14 @@ class gThread(threading.Thread, wx.EvtHandler):
 
             if self.terminate:
                 return
-            #except Exception as e:
+            # except Exception as e:
             #    exception  = e;
 
             self.resultQ.put((requestId, ret))
 
             event = wxCmdDone(ondone=vars()['ondone'],
                               kwds=kwds,
-                              args=args, #TODO expand args to kwds
+                              args=args,  # TODO expand args to kwds
                               ret=ret,
                               exception=exception,
                               userdata=vars()['userdata'],

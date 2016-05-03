@@ -29,6 +29,7 @@ class Layer(object):
         Currently implemented without specifying the interface.
         It only provides all attributes of existing layer as used in lmgr.
     """
+
     def __init__(self, pydata):
         self._pydata = pydata
 
@@ -44,19 +45,20 @@ class Layer(object):
 
 class LayerList(object):
     """@implements core.giface.Layer"""
+
     def __init__(self, tree):
         self._tree = tree
 
     def __len__(self):
         return len([layer for layer in self])
-        
+
     def __iter__(self):
         """Iterates over the contents of the list."""
         item = self._tree.GetFirstChild(self._tree.root)[0]
         while item and item.IsOk():
             yield Layer(self._tree.GetPyData(item))
             item = self._tree.GetNextItem(item)
-        
+
     def __getitem__(self, index):
         """Select a layer from the LayerList using the index."""
         return [l for l in self][index]
@@ -133,6 +135,7 @@ class LayerList(object):
 
 class LayerManagerGrassInterface(object):
     """@implements core::giface::GrassInterface"""
+
     def __init__(self, lmgr):
         """Costructor is specific to the current implementation.
 
@@ -199,7 +202,7 @@ class LayerManagerGrassInterface(object):
 
     def UpdateCmdHistory(self, cmd):
         self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
-        
+
     def ShowStatusbar(self, show=True):
         self.lmgr.GetMapDisplay().statusbarManager.Show(show)
 
@@ -207,15 +210,16 @@ class LayerManagerGrassInterface(object):
         return self.lmgr.GetMapDisplay().statusbarManager.IsShown()
 
     def ShowAllToolbars(self, show=True):
-        if not show: # hide
+        if not show:  # hide
             action = self.lmgr.GetMapDisplay().RemoveToolbar
         else:
             action = self.lmgr.GetMapDisplay().AddToolbar
         for toolbar in self.lmgr.GetMapDisplay().GetToolbarNames():
             action(toolbar)
-            
+
     def AreAllToolbarsShown(self):
         return self.lmgr.GetMapDisplay().GetMapToolbar().IsShown()
+
 
 class LayerManagerGrassInterfaceForMapDisplay(object):
     """Provides reference only to the given layer list (according to tree),
@@ -223,6 +227,7 @@ class LayerManagerGrassInterfaceForMapDisplay(object):
 
         @implements core::giface::GrassInterface
     """
+
     def __init__(self, giface, tree):
         """
         :param giface: original grass interface
@@ -232,7 +237,8 @@ class LayerManagerGrassInterfaceForMapDisplay(object):
         self.tree = tree
 
         # Signal emitted to request updating of map
-        self.updateMap = Signal('LayerManagerGrassInterfaceForMapDisplay.updateMap')
+        self.updateMap = Signal(
+            'LayerManagerGrassInterfaceForMapDisplay.updateMap')
 
     def GetLayerTree(self):
         return self.tree

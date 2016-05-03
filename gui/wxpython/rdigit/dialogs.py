@@ -28,6 +28,7 @@ from grass.exceptions import CalledModuleError
 class NewRasterDialog(wx.Dialog):
     """Dialog for new raster map name and type selection
     and selection of optional background map."""
+
     def __init__(self, parent):
         wx.Dialog.__init__(self, parent)
         self.SetTitle(_("Create new raster map"))
@@ -52,8 +53,11 @@ class NewRasterDialog(wx.Dialog):
         sizer.Add(wx.StaticText(self, label=_("Name for new raster map:")),
                   pos=(0, 0), span=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self._mapSelect, pos=(1, 0), span=(1, 2))
-        sizer.Add(wx.StaticText(self, label=_("Optionally select background raster map:")),
-                  pos=(2, 0), span=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+        sizer.Add(
+            wx.StaticText(
+                self, label=_("Optionally select background raster map:")), pos=(
+                2, 0), span=(
+                1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self._backgroundSelect, pos=(3, 0), span=(1, 2))
         sizer.Add(wx.StaticText(self, label=_("New raster map type:")),
                   pos=(4, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
@@ -84,15 +88,21 @@ class NewRasterDialog(wx.Dialog):
     def OnOK(self, event):
         mapName = self.GetMapName()
         if not mapName:
-            GWarning(parent=self.GetParent(), message=_("Please specify name for a new raster map"))
+            GWarning(parent=self.GetParent(), message=_(
+                "Please specify name for a new raster map"))
         else:
-            found = gcore.find_file(name=mapName, mapset=gcore.gisenv()['MAPSET'])
+            found = gcore.find_file(
+                name=mapName, mapset=gcore.gisenv()['MAPSET'])
             if found and found['mapset'] == gcore.gisenv()['MAPSET']:
                 dlgOverwrite = wx.MessageDialog(
-                    self.GetParent(), message=_("Raster map <%s> already exists "
-                                                "in the current mapset. "
-                                                "Do you want to overwrite it?") % mapName,
-                    caption=_("Overwrite?"), style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                    self.GetParent(),
+                    message=_(
+                        "Raster map <%s> already exists "
+                        "in the current mapset. "
+                        "Do you want to overwrite it?") %
+                    mapName,
+                    caption=_("Overwrite?"),
+                    style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
                 if not dlgOverwrite.ShowModal() == wx.ID_YES:
                     dlgOverwrite.Destroy()
                     return

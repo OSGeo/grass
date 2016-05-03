@@ -88,11 +88,11 @@ def module_template():
 #
 #%s
 """ % ('#' * 72,
-       EncodeString(properties['name']),
-       EncodeString(properties['author']),
-       EncodeString('\n# '.join(properties['description'].splitlines())),
-       time.asctime(),
-       '#' * 72))
+            EncodeString(properties['name']),
+            EncodeString(properties['author']),
+            EncodeString('\n# '.join(properties['description'].splitlines())),
+            time.asctime(),
+            '#' * 72))
 
     # UI
     output.write(
@@ -323,7 +323,8 @@ class PyEditController(object):
         else:
             self.SaveAs()
 
-    # TODO: it should be probably used with replacing, when this gives what we want?
+    # TODO: it should be probably used with replacing, when this gives what we
+    # want?
     def IsModified(self):
         """Check if python script has been modified"""
         return self.body.modified
@@ -432,6 +433,7 @@ class PyEditToolbar(BaseToolbar):
     # pylint: disable=too-many-ancestors
     # pylint: disable=too-many-public-methods
     """PyEdit toolbar"""
+
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
 
@@ -465,7 +467,7 @@ class PyEditToolbar(BaseToolbar):
                                      (None, ),
                                      ("help", BaseIcons['help'],
                                       self.parent.OnHelp),
-                                    ))
+                                     ))
 
 
 class PyEditFrame(wx.Frame):
@@ -473,6 +475,7 @@ class PyEditFrame(wx.Frame):
     # pylint: disable=missing-docstring
     # pylint: disable=too-many-public-methods
     # pylint: disable=invalid-name
+
     def __init__(self, parent, giface, id=wx.ID_ANY,
                  title=_("GRASS GIS Simple Python Editor"),
                  **kwargs):

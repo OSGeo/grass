@@ -2,4 +2,4 @@ all = [
     'manager',
     'mapdisplay',
     'toolbars',
-    ]
+]

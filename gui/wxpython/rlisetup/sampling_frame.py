@@ -23,14 +23,14 @@ import wx
 import wx.aui
 
 
-#start new import
+# start new import
 import tempfile
 from core.gcmd import RunCommand
 import grass.script.core as grass
 from core import gcmd
 
 try:
-    from grass.lib.gis    import *
+    from grass.lib.gis import *
     from grass.lib.vector import *
     from grass.lib.raster import *
 except ImportError:
@@ -51,12 +51,14 @@ from functions import SamplingType, checkMapExists
 
 
 class Circle:
+
     def __init__(self, pt, r):
         self.point = pt
         self.radius = r
 
 
 class MaskedArea(object):
+
     def __init__(self, region, raster, radius):
         self.region = region
         self.raster = raster
@@ -65,6 +67,7 @@ class MaskedArea(object):
 
 class RLiSetupMapPanel(wx.Panel):
     """Panel with mapwindow used in r.li.setup"""
+
     def __init__(self, parent, samplingType, icon=None, map_=None):
         wx.Panel.__init__(self, parent=parent)
 
@@ -104,16 +107,22 @@ class RLiSetupMapPanel(wx.Panel):
 
         if self.samplingtype == SamplingType.REGIONS:
             self.afterRegionDrawn = Signal('RLiSetupMapPanel.afterRegionDrawn')
-            self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='line')
+            self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(
+                graphicsType='line')
         elif self.samplingtype in [SamplingType.MUNITSR, SamplingType.MMVWINR]:
-            self.sampleFrameChanged = Signal('RLiSetupMapPanel.sampleFrameChanged')
-            self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='rectangle')
+            self.sampleFrameChanged = Signal(
+                'RLiSetupMapPanel.sampleFrameChanged')
+            self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(
+                graphicsType='rectangle')
         elif self.samplingtype in [SamplingType.MUNITSC, SamplingType.MMVWINC]:
             self.afterCircleDrawn = Signal('RLiSetupMapPanel.afterCircleDrawn')
-            self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='line')
+            self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(
+                graphicsType='line')
         else:
-            self.sampleFrameChanged = Signal('RLiSetupMapPanel.sampleFrameChanged')
-            self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='rectangle')
+            self.sampleFrameChanged = Signal(
+                'RLiSetupMapPanel.sampleFrameChanged')
+            self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(
+                graphicsType='rectangle')
 
         self._registeredGraphics.AddPen('rlisetup', wx.Pen(wx.GREEN, width=2,
                                                            style=wx.SOLID))
@@ -176,7 +185,8 @@ class RLiSetupMapPanel(wx.Panel):
         item = self._registeredGraphics.GetItem(0)
         coords = item.GetCoords()
         if len(coords) == 0:
-            coords.extend([self.mapWindow.Pixel2Cell(self.mapWindow.mouse['begin'])])
+            coords.extend([self.mapWindow.Pixel2Cell(
+                self.mapWindow.mouse['begin'])])
         coords.extend([[x, y]])
 
         item.SetCoords(coords)
@@ -202,12 +212,16 @@ class RLiSetupMapPanel(wx.Panel):
             if ret == wx.ID_OK:
                 raster = dlg.GetValue()
                 if checkMapExists(raster):
-                    GMessage(parent=self, message=_("The raster file %s already"
-                             " exists, please change name") % raster)
+                    GMessage(
+                        parent=self, message=_(
+                            "The raster file %s already"
+                            " exists, please change name") %
+                        raster)
                     ret = dlg.ShowModal()
                 else:
                     dlg.Destroy()
-                    marea = self.writeArea(self._registeredGraphics.GetItem(0).GetCoords(), raster)
+                    marea = self.writeArea(
+                        self._registeredGraphics.GetItem(0).GetCoords(), raster)
                     self.nextRegion(next=True, area=marea)
                     break
             else:
@@ -225,8 +239,8 @@ class RLiSetupMapPanel(wx.Panel):
         if next is True:
             self.afterRegionDrawn.emit(marea=area)
         else:
-            gcmd.GMessage(parent=self.parent,
-                          message=_("Raster map not created. Please redraw region."))
+            gcmd.GMessage(parent=self.parent, message=_(
+                "Raster map not created. Please redraw region."))
 
     def writeArea(self, coords, rasterName):
         polyfile = tempfile.NamedTemporaryFile(delete=False)
@@ -298,15 +312,20 @@ class RLiSetupMapPanel(wx.Panel):
         self.createCricle(circle)
 
     def createCricle(self, c):
-        dlg = wx.TextEntryDialog(None, 'Name of sample circle region',
-                                 'Create circle region', 'circle' + str(self.catId))
+        dlg = wx.TextEntryDialog(None,
+                                 'Name of sample circle region',
+                                 'Create circle region',
+                                 'circle' + str(self.catId))
         ret = dlg.ShowModal()
-        while True:        
+        while True:
             if ret == wx.ID_OK:
                 raster = dlg.GetValue()
                 if checkMapExists(raster):
-                    GMessage(parent=self, message=_("The raster file %s already"
-                             " exists, please change name") % raster)
+                    GMessage(
+                        parent=self, message=_(
+                            "The raster file %s already"
+                            " exists, please change name") %
+                        raster)
                     ret = dlg.ShowModal()
                 else:
                     dlg.Destroy()
@@ -326,8 +345,8 @@ class RLiSetupMapPanel(wx.Panel):
         if next is True:
             self.afterCircleDrawn.emit(region=circle)
         else:
-            gcmd.GMessage(parent=self.parent,
-                          message=_("Raster map not created. redraw region again."))
+            gcmd.GMessage(parent=self.parent, message=_(
+                "Raster map not created. redraw region again."))
 
     def writeCircle(self, circle, rasterName):
         coords = self.mapWindow.Pixel2Cell(circle.point)
@@ -378,23 +397,29 @@ class RLiSetupMapPanel(wx.Panel):
             """When drawing finished, get region values"""
             self.sampleFrameChanged.emit(region=region)
 
-icons = {'draw': MetaIcon(img='edit',
-                          label=_('Draw sampling frame'),
-                          desc=_('Draw sampling frame by clicking and dragging')),
-         'digitizeunit': MetaIcon(img='edit',
-                          label=_('Draw sampling rectangle'),
-                          desc=_('Draw sampling rectangle by clicking and dragging')),
-         'digitizeunitc': MetaIcon(img='line-create',
-                          label=_('Draw sampling circle'),
-                          desc=_('Draw sampling circle radius by clicking and dragging')),
-         'digitizeregion': MetaIcon(img='polygon-create',
-                          label=_('Draw sampling region'),
-                          desc=_('Draw sampling region by polygon. Right Double click to end drawing'))}
+icons = {
+    'draw': MetaIcon(
+        img='edit',
+        label=_('Draw sampling frame'),
+        desc=_('Draw sampling frame by clicking and dragging')),
+    'digitizeunit': MetaIcon(
+        img='edit',
+        label=_('Draw sampling rectangle'),
+        desc=_('Draw sampling rectangle by clicking and dragging')),
+    'digitizeunitc': MetaIcon(
+        img='line-create',
+        label=_('Draw sampling circle'),
+        desc=_('Draw sampling circle radius by clicking and dragging')),
+    'digitizeregion': MetaIcon(
+        img='polygon-create',
+        label=_('Draw sampling region'),
+        desc=_('Draw sampling region by polygon. Right Double click to end drawing'))}
 
 
 class RLiSetupToolbar(BaseToolbar):
     """IClass toolbar
     """
+
     def __init__(self, parent, toolSwitcher):
         """RLiSetup toolbar constructor
         """
@@ -443,21 +468,22 @@ class RLiSetupToolbar(BaseToolbar):
                         wx.ITEM_CHECK)
         if self.parent.samplingtype == SamplingType.VECT:
             return self._getToolbarData((
-                       ('pan', BaseIcons['pan'], self.parent.OnPan,
-                        wx.ITEM_CHECK),
-                       ('zoomIn', BaseIcons['zoomIn'], self.parent.OnZoomIn,
-                        wx.ITEM_CHECK),
-                       ('zoomOut', BaseIcons['zoomOut'], self.parent.OnZoomOut,
-                        wx.ITEM_CHECK),
-                       ('zoomExtent', BaseIcons['zoomExtent'],
-                        self.parent.OnZoomToMap),))
+                ('pan', BaseIcons['pan'], self.parent.OnPan,
+                 wx.ITEM_CHECK),
+                ('zoomIn', BaseIcons['zoomIn'], self.parent.OnZoomIn,
+                 wx.ITEM_CHECK),
+                ('zoomOut', BaseIcons['zoomOut'], self.parent.OnZoomOut,
+                 wx.ITEM_CHECK),
+                ('zoomExtent', BaseIcons['zoomExtent'],
+                 self.parent.OnZoomToMap),))
         else:
-            return self._getToolbarData((drawTool, (None, ),
-                       ('pan', BaseIcons['pan'], self.parent.OnPan,
-                        wx.ITEM_CHECK),
-                       ('zoomIn', BaseIcons['zoomIn'], self.parent.OnZoomIn,
-                        wx.ITEM_CHECK),
-                       ('zoomOut', BaseIcons['zoomOut'], self.parent.OnZoomOut,
-                        wx.ITEM_CHECK),
-                       ('zoomExtent', BaseIcons['zoomExtent'],
-                        self.parent.OnZoomToMap),))
+            return self._getToolbarData(
+                (drawTool, (None,),
+                 ('pan', BaseIcons['pan'],
+                  self.parent.OnPan, wx.ITEM_CHECK),
+                 ('zoomIn', BaseIcons['zoomIn'],
+                  self.parent.OnZoomIn, wx.ITEM_CHECK),
+                 ('zoomOut', BaseIcons['zoomOut'],
+                  self.parent.OnZoomOut, wx.ITEM_CHECK),
+                 ('zoomExtent', BaseIcons['zoomExtent'],
+                  self.parent.OnZoomToMap),))

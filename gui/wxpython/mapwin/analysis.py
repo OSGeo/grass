@@ -32,6 +32,7 @@ from grass.script.utils import parse_key_val
 
 class AnalysisControllerBase:
     """Base class for analysis which require drawing line in map display."""
+
     def __init__(self, giface, mapWindow):
         """
 
@@ -61,7 +62,8 @@ class AnalysisControllerBase:
             item = self._registeredGraphics.AddItem(coords=[[x, y]])
             item.SetPropertyVal('penName', 'analysisPen')
         else:
-            # needed to switch mouse begin and end to draw intermediate line properly
+            # needed to switch mouse begin and end to draw intermediate line
+            # properly
             coords = self._registeredGraphics.GetItem(0).GetCoords()[-1]
             self._mapWindow.mouse['begin'] = self._mapWindow.Cell2Pixel(coords)
 
@@ -118,7 +120,8 @@ class AnalysisControllerBase:
         self._mapWindow.UpdateMap(render=False)
 
         if restore:
-            # restore mouse['use'] and cursor to the state before measuring starts
+            # restore mouse['use'] and cursor to the state before measuring
+            # starts
             self._mapWindow.SetNamedCursor(self._oldCursor)
             self._mapWindow.mouse['use'] = self._oldMouseUse
 
@@ -129,8 +132,8 @@ class AnalysisControllerBase:
         self._oldMouseUse = self._mapWindow.mouse['use']
         self._oldCursor = self._mapWindow.GetNamedCursor()
 
-        self._registeredGraphics = self._mapWindow.RegisterGraphicsToDraw(graphicsType=self._graphicsType,
-                                                                          mapCoords=True)
+        self._registeredGraphics = self._mapWindow.RegisterGraphicsToDraw(
+            graphicsType=self._graphicsType, mapCoords=True)
 
         self._connectAll()
 
@@ -138,7 +141,8 @@ class AnalysisControllerBase:
         # TODO: better solution for drawing this line
         self._mapWindow.mouse['use'] = None
         self._mapWindow.mouse['box'] = "line"
-        self._mapWindow.pen = wx.Pen(colour='red', width=2, style=wx.SHORT_DASH)
+        self._mapWindow.pen = wx.Pen(
+            colour='red', width=2, style=wx.SHORT_DASH)
 
         self._registeredGraphics.AddPen('analysisPen', self._getPen())
 
@@ -150,8 +154,10 @@ class ProfileController(AnalysisControllerBase):
     """Class controls profiling in map display.
     It should be used inside ProfileFrame
     """
+
     def __init__(self, giface, mapWindow):
-        AnalysisControllerBase.__init__(self, giface=giface, mapWindow=mapWindow)
+        AnalysisControllerBase.__init__(
+            self, giface=giface, mapWindow=mapWindow)
 
         self.transectChanged = Signal('ProfileController.transectChanged')
         self._graphicsType = 'line'
@@ -172,7 +178,9 @@ class ProfileController(AnalysisControllerBase):
         self._mapWindow.mouseLeftUp.connect(self._addPoint)
 
     def _getPen(self):
-        return wx.Pen(colour=wx.Colour(0, 100, 0), width=2, style=wx.SHORT_DASH)
+        return wx.Pen(
+            colour=wx.Colour(0, 100, 0),
+            width=2, style=wx.SHORT_DASH)
 
     def Stop(self, restore=True):
         AnalysisControllerBase.Stop(self, restore=restore)
@@ -182,8 +190,10 @@ class ProfileController(AnalysisControllerBase):
 
 class MeasureDistanceController(AnalysisControllerBase):
     """Class controls measuring distance in map display."""
+
     def __init__(self, giface, mapWindow):
-        AnalysisControllerBase.__init__(self, giface=giface, mapWindow=mapWindow)
+        AnalysisControllerBase.__init__(
+            self, giface=giface, mapWindow=mapWindow)
 
         self._projInfo = self._mapWindow.Map.projinfo
         self._totaldist = 0.0  # total measured distance
@@ -229,11 +239,14 @@ class MeasureDistanceController(AnalysisControllerBase):
         # initiating output (and write a message)
         # e.g., in Layer Manager switch to output console
         # TODO: this should be something like: write important message or write tip
-        # TODO: mixed 'switching' and message? no, measuring handles 'swithing' on its own
-        self._giface.WriteWarning(_('Click and drag with left mouse button '
-                                    'to measure.%s'
-                                    'Double click with left button to clear.') %
-                                   (os.linesep))
+        # TODO: mixed 'switching' and message? no, measuring handles 'swithing'
+        # on its own
+        self._giface.WriteWarning(
+            _(
+                'Click and drag with left mouse button '
+                'to measure.%s'
+                'Double click with left button to clear.') %
+            (os.linesep))
         if self._projInfo['proj'] != 'xy':
             mapunits = self._projInfo['units']
             self._giface.WriteCmdLog(_('Measuring distance') + ' ('
@@ -257,7 +270,8 @@ class MeasureDistanceController(AnalysisControllerBase):
         :param beginpt,endpt: EN coordinates
         """
         # move also Distance method?
-        dist, (north, east) = self._mapWindow.Distance(beginpt, endpt, screen=False)
+        dist, (north, east) = self._mapWindow.Distance(
+            beginpt, endpt, screen=False)
 
         dist = round(dist, 3)
         mapunits = self._projInfo['units']
@@ -274,7 +288,8 @@ class MeasureDistanceController(AnalysisControllerBase):
         strdist = str(d)
         strtotdist = str(td)
 
-        if self._projInfo['proj'] == 'xy' or 'degree' not in self._projInfo['unit']:
+        if self._projInfo[
+                'proj'] == 'xy' or 'degree' not in self._projInfo['unit']:
             angle = int(math.degrees(math.atan2(north, east)) + 0.5)
             # uncomment below (or flip order of atan2(y,x) above) to use
             #   the mathematical theta convention (CCW from +x axis)
@@ -282,11 +297,12 @@ class MeasureDistanceController(AnalysisControllerBase):
             if angle < 0:
                 angle = 360 + angle
 
-            mstring = '%s = %s %s\n%s = %s %s\n%s = %d %s\n%s' \
-                % (_('segment'), strdist, dunits,
-                   _('total distance'), strtotdist, tdunits,
-                   _('bearing'), angle, _('degrees (clockwise from grid-north)'),
-                   '-' * 60)
+            mstring = '%s = %s %s\n%s = %s %s\n%s = %d %s\n%s' % (
+                _('segment'),
+                strdist, dunits, _('total distance'),
+                strtotdist, tdunits, _('bearing'),
+                angle, _('degrees (clockwise from grid-north)'),
+                '-' * 60)
         else:
             mstring = '%s = %s %s\n%s = %s %s\n%s' \
                 % (_('segment'), strdist, dunits,
@@ -300,8 +316,10 @@ class MeasureDistanceController(AnalysisControllerBase):
 
 class MeasureAreaController(AnalysisControllerBase):
     """Class controls measuring area in map display."""
+
     def __init__(self, giface, mapWindow):
-        AnalysisControllerBase.__init__(self, giface=giface, mapWindow=mapWindow)
+        AnalysisControllerBase.__init__(
+            self, giface=giface, mapWindow=mapWindow)
         self._graphicsType = 'polygon'
 
     def _doAnalysis(self, coords):
@@ -339,10 +357,12 @@ class MeasureAreaController(AnalysisControllerBase):
             return
         AnalysisControllerBase.Start(self)
 
-        self._giface.WriteWarning(_('Click and drag with left mouse button '
-                                    'to measure.%s'
-                                    'Double click with left button to clear.') %
-                                   (os.linesep))
+        self._giface.WriteWarning(
+            _(
+                'Click and drag with left mouse button '
+                'to measure.%s'
+                'Double click with left button to clear.') %
+            (os.linesep))
         self._giface.WriteCmdLog(_('Measuring area:'))
 
     def MeasureArea(self, coords):
@@ -352,16 +372,24 @@ class MeasureAreaController(AnalysisControllerBase):
         """
         # TODO: make sure appending first point is needed for m.measure
         coordinates = coords + [coords[0]]
-        coordinates = ','.join([str(item) for sublist in coordinates for item in sublist])
-        result = RunCommand('m.measure', flags='g', coordinates=coordinates, read=True).strip()
+        coordinates = ','.join([str(item)
+                                for sublist in coordinates for item in
+                                sublist])
+        result = RunCommand(
+            'm.measure',
+            flags='g',
+            coordinates=coordinates,
+            read=True).strip()
         result = parse_key_val(result)
         if 'units' not in result:
-            self._giface.WriteWarning(_("Units not recognized, measurement failed."))
+            self._giface.WriteWarning(
+                _("Units not recognized, measurement failed."))
             unit = ''
         else:
             unit = result['units'].split(',')[1]
         if 'area' not in result:
             text = _("Area: {area} {unit}\n").format(area=0, unit=unit)
         else:
-            text = _("Area: {area} {unit}\n").format(area=result['area'], unit=unit)
+            text = _("Area: {area} {unit}\n").format(
+                area=result['area'], unit=unit)
         self._giface.WriteLog(text, notification=Notification.MAKE_VISIBLE)

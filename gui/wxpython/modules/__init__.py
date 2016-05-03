@@ -4,4 +4,4 @@ all = [
     'vclean',
     'colorrules',
     'histogram',
-    ]
+]

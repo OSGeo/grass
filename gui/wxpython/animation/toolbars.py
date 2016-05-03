@@ -25,35 +25,55 @@ from gui_core.simplelmgr import SimpleLmgrToolbar
 from animation.anim import ReplayMode
 
 ganimIcons = {
-    'speed': MetaIcon(img='move', label=_("Change animation speed")),
-    'playForward': MetaIcon(img='execute', label=_("Play forward")),
-    'playBack': MetaIcon(img='player-back', label=_("Play back")),
-    'stop': MetaIcon(img='player-stop', label=_("Stop")),
-    'pause': MetaIcon(img='player-pause', label=_("Pause")),
-    'oneDirectionReplay': MetaIcon(img='redraw', label=_("Repeat")),
-    'bothDirectionReplay': MetaIcon(img='player-repeat-back-forward',
-                                    label=_("Play back and forward")),
-    'addAnimation': MetaIcon(img='layer-add', label=_("Add new animation"),
-                             desc=_("Add new animation")),
-    'editAnimation': MetaIcon(img='layer-more', label=_("Add, edit or remove animation"),
-                              desc=_("Add, edit or remove animation")),
-    'exportAnimation': MetaIcon(img='layer-export', label=_("Export animation"),
-                                desc=_("Export animation"))
-}
+    'speed': MetaIcon(
+        img='move',
+        label=_("Change animation speed")),
+    'playForward': MetaIcon(
+        img='execute',
+        label=_("Play forward")),
+    'playBack': MetaIcon(
+        img='player-back',
+        label=_("Play back")),
+    'stop': MetaIcon(
+        img='player-stop',
+        label=_("Stop")),
+    'pause': MetaIcon(
+        img='player-pause',
+        label=_("Pause")),
+    'oneDirectionReplay': MetaIcon(
+        img='redraw',
+        label=_("Repeat")),
+    'bothDirectionReplay': MetaIcon(
+        img='player-repeat-back-forward',
+        label=_("Play back and forward")),
+    'addAnimation': MetaIcon(
+        img='layer-add',
+        label=_("Add new animation"),
+        desc=_("Add new animation")),
+    'editAnimation': MetaIcon(
+        img='layer-more',
+        label=_("Add, edit or remove animation"),
+        desc=_("Add, edit or remove animation")),
+    'exportAnimation': MetaIcon(
+        img='layer-export',
+        label=_("Export animation"),
+        desc=_("Export animation"))}
 
 SIMPLE_LMGR_STDS = 256
 
 
 simpleLmgrIcons = {
-    'addSeries': MetaIcon(img='mapset-add',
-                          label=_("Add space-time dataset or series of map layers"),
-                          desc=_("Add space-time dataset or series of map layers for animation")),
+    'addSeries': MetaIcon(
+        img='mapset-add',
+        label=_("Add space-time dataset or series of map layers"),
+        desc=_("Add space-time dataset or series of map layers for animation")),
 }
 
 
 class MainToolbar(BaseToolbar):
     """Main toolbar (data management)
     """
+
     def __init__(self, parent):
         """Main toolbar constructor
         """
@@ -69,20 +89,21 @@ class MainToolbar(BaseToolbar):
         # BaseIcons are a set of often used icons. It is possible
         # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
         icons = ganimIcons
-        return self._getToolbarData((("addAnimation", icons["addAnimation"],
-                                      self.parent.OnAddAnimation),
-                                     ("editAnimation", icons["editAnimation"],
-                                      self.parent.OnEditAnimation),
-                                     ("reload", BaseIcons["render"],
-                                      self.parent.Reload),
-                                     ("exportAnimation", icons["exportAnimation"],
-                                      self.parent.OnExportAnimation)
-                                     ))
+        return self._getToolbarData(
+            (("addAnimation", icons["addAnimation"],
+              self.parent.OnAddAnimation),
+             ("editAnimation", icons["editAnimation"],
+              self.parent.OnEditAnimation),
+             ("reload", BaseIcons["render"],
+              self.parent.Reload),
+             ("exportAnimation", icons["exportAnimation"],
+              self.parent.OnExportAnimation)))
 
 
 class AnimationToolbar(BaseToolbar):
     """Animation toolbar (to control animation)
     """
+
     def __init__(self, parent):
         """Animation toolbar constructor
         """
@@ -101,26 +122,23 @@ class AnimationToolbar(BaseToolbar):
         # BaseIcons are a set of often used icons. It is possible
         # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
         icons = ganimIcons
-        return self._getToolbarData((("playBack", icons["playBack"],
-                                      self.OnPlayBack),
-                                     ("playForward", icons["playForward"],
-                                      self.OnPlayForward),
-                                     ("pause", icons["pause"],
-                                      self.OnPause,
-                                      wx.ITEM_CHECK),
-                                     ("stop", icons["stop"],
-                                      self.OnStop),
-                                     (None, ),
-                                     ("oneDirectionReplay", icons["oneDirectionReplay"],
-                                      self.OnOneDirectionReplay,
-                                      wx.ITEM_CHECK),
-                                     ("bothDirectionReplay", icons["bothDirectionReplay"],
-                                      self.OnBothDirectionReplay,
-                                      wx.ITEM_CHECK),
-                                     (None, ),
-                                     ("adjustSpeed", icons['speed'],
-                                      self.parent.OnAdjustSpeed)
-                                     ))
+        return self._getToolbarData(
+            (("playBack", icons["playBack"],
+              self.OnPlayBack),
+             ("playForward", icons["playForward"],
+              self.OnPlayForward),
+             ("pause", icons["pause"],
+              self.OnPause, wx.ITEM_CHECK),
+             ("stop", icons["stop"],
+              self.OnStop),
+             (None,),
+             ("oneDirectionReplay", icons["oneDirectionReplay"],
+              self.OnOneDirectionReplay, wx.ITEM_CHECK),
+             ("bothDirectionReplay", icons["bothDirectionReplay"],
+              self.OnBothDirectionReplay, wx.ITEM_CHECK),
+             (None,),
+             ("adjustSpeed", icons['speed'],
+              self.parent.OnAdjustSpeed)))
 
     def OnPlayForward(self, event):
         self.PlayForward()
@@ -171,7 +189,8 @@ class AnimationToolbar(BaseToolbar):
 
         # if not self.GetToolState(self.oneDirectionReplay) and \
         #    not self.GetToolState(self.bothDirectionReplay):
-        #     self.EnableTool(self.playBack, False) # assuming that stop rewinds to the beginning
+        # self.EnableTool(self.playBack, False) # assuming that stop rewinds to
+        # the beginning
 
     def OnOneDirectionReplay(self, event):
         if event.IsChecked():
@@ -204,6 +223,7 @@ class AnimationToolbar(BaseToolbar):
 class MiscToolbar(BaseToolbar):
     """Toolbar with miscellaneous tools related to app
     """
+
     def __init__(self, parent):
         """Toolbar constructor
         """
@@ -228,6 +248,7 @@ class AnimSimpleLmgrToolbar(SimpleLmgrToolbar):
     """Simple layer manager toolbar for animation tool.
     Allows adding space-time dataset or series of maps.
     """
+
     def __init__(self, parent, lmgrStyle):
         SimpleLmgrToolbar.__init__(self, parent, lmgrStyle)
 

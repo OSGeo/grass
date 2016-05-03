@@ -33,7 +33,7 @@ import wx
 from wx.lib.newevent import NewEvent
 
 import grass.script as grass
-from   grass.script import task as gtask
+from grass.script import task as gtask
 
 from grass.pydispatch.signal import Signal
 
@@ -116,7 +116,8 @@ class CmdThread(threading.Thread):
         os.environ['GRASS_MESSAGE_FORMAT'] = 'gui'
         while True:
             requestId, args, kwds = self.requestQ.get()
-            for key in ('callable', 'onDone', 'onPrepare', 'userData', 'addLayer', 'notification'):
+            for key in ('callable', 'onDone', 'onPrepare',
+                        'userData', 'addLayer', 'notification'):
                 if key in kwds:
                     vars()[key] = kwds[key]
                     del kwds[key]
@@ -191,7 +192,8 @@ class CmdThread(threading.Thread):
                     argsColor[0] = ['r.colors',
                                     'map=%s' % mapName,
                                     'color=%s' % colorTable]
-                    self.requestCmdColor = vars()['callable'](*argsColor, **kwds)
+                    self.requestCmdColor = vars()['callable'](
+                        *argsColor, **kwds)
                     self.resultQ.put((requestId, self.requestCmdColor.run()))
 
             if self.receiver:
@@ -217,6 +219,7 @@ class CmdThread(threading.Thread):
         if self.requestQ.empty():
             self._want_abort_all = False
 
+
 class GStdout:
     """GConsole standard output
 
@@ -228,6 +231,7 @@ class GStdout:
     Copyright: (c) 2005-2007 Jean-Michel Fauth
     Licence:   GPL
     """
+
     def __init__(self, receiver):
         """
         :param receiver: event receiver (used in PostEvent)
@@ -261,6 +265,7 @@ class GStderr:
     Copyright: (c) 2005-2007 Jean-Michel Fauth
     Licence:   GPL
     """
+
     def __init__(self, receiver):
         """
         :param receiver: event receiver (used in PostEvent)
@@ -334,6 +339,7 @@ gIgnoredCmdRun, EVT_IGNORED_CMD_RUN = NewEvent()
 class GConsole(wx.EvtHandler):
     """
     """
+
     def __init__(self, guiparent=None, giface=None, ignoredCmdPattern=None):
         """
         :param guiparent: parent window for created GUI objects
@@ -404,9 +410,10 @@ class GConsole(wx.EvtHandler):
         :param notification: form of notification
         """
         self.writeLog.emit(text=text, wrap=wrap,
-                          notification=notification)
+                           notification=notification)
 
-    def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
+    def WriteCmdLog(self, text, pid=None,
+                    notification=Notification.MAKE_VISIBLE):
         """Write message in selected style
 
         :param text: message to be printed
@@ -456,17 +463,17 @@ class GConsole(wx.EvtHandler):
 
         # update history file
         self.UpdateHistoryFile(' '.join(command))
-        
+
         if command[0] in globalvar.grassCmd:
             # send GRASS command without arguments to GUI command interface
             # except ignored commands (event is emitted)
             if self._ignoredCmdPattern and \
-              re.compile(self._ignoredCmdPattern).search(' '.join(command)) and \
-              '--help' not in command and '--ui' not in command:
+                    re.compile(self._ignoredCmdPattern).search(' '.join(command)) and \
+                    '--help' not in command and '--ui' not in command:
                 event = gIgnoredCmdRun(cmd=command)
                 wx.PostEvent(self, event)
                 return
-            
+
             else:
                 # other GRASS commands (r|v|g|...)
                 try:
@@ -487,11 +494,16 @@ class GConsole(wx.EvtHandler):
                                 p.get('element', '') == 'file' and \
                                 p.get('age', 'new') == 'old' and \
                                 p.get('value', '') == '-':
-                            GError(parent=self._guiparent,
-                                   message=_("Unable to run command:\n%(cmd)s\n\n"
-                                             "Option <%(opt)s>: read from standard input is not "
-                                             "supported by wxGUI") % {'cmd': ' '.join(command),
-                                                                      'opt': p.get('name', '')})
+                            GError(
+                                parent=self._guiparent,
+                                message=_(
+                                    "Unable to run command:\n%(cmd)s\n\n"
+                                    "Option <%(opt)s>: read from standard input is not "
+                                    "supported by wxGUI") % {
+                                    'cmd': ' '.join(command),
+                                    'opt': p.get(
+                                        'name',
+                                        '')})
                             return
 
                 if len(command) == 1:
@@ -501,27 +513,33 @@ class GConsole(wx.EvtHandler):
                         pyFile = command[0]
                         if sys.platform == 'win32':
                             pyFile += '.py'
-                        pyPath = os.path.join(os.environ['GISBASE'], 'scripts', pyFile)
+                        pyPath = os.path.join(
+                            os.environ['GISBASE'], 'scripts', pyFile)
                         if not os.path.exists(pyPath):
-                            pyPath = os.path.join(os.environ['GRASS_ADDON_BASE'], 'scripts', pyFile)
+                            pyPath = os.path.join(
+                                os.environ['GRASS_ADDON_BASE'], 'scripts', pyFile)
                         if not os.path.exists(pyPath):
-                            GError(parent=self._guiparent,
-                                   message=_("Module <%s> not found.") % command[0])
-                        pymodule = imp.load_source(command[0].replace('.', '_'), pyPath)
+                            GError(
+                                parent=self._guiparent,
+                                message=_("Module <%s> not found.") %
+                                command[0])
+                        pymodule = imp.load_source(
+                            command[0].replace('.', '_'), pyPath)
                         pymain = inspect.getargspec(pymodule.main)
                         if pymain and 'giface' in pymain.args:
                             pymodule.main(self._giface)
                             return
-                    
+
                     if hasParams and command[0] != 'v.krige':
                         # no arguments given
                         try:
-                            GUI(parent=self._guiparent, giface=self._giface).ParseCommand(command)
+                            GUI(parent=self._guiparent,
+                                giface=self._giface).ParseCommand(command)
                         except GException as e:
                             print >> sys.stderr, e
-                        
+
                         return
-                
+
                 # activate computational region (set with g.region)
                 # for all non-display commands.
                 if compReg:
@@ -539,7 +557,8 @@ class GConsole(wx.EvtHandler):
                                       notification=notification)
                 self.cmdOutputTimer.Start(50)
 
-                # deactivate computational region and return to display settings
+                # deactivate computational region and return to display
+                # settings
                 if compReg and tmpreg:
                     os.environ["GRASS_REGION"] = tmpreg
         else:
@@ -569,7 +588,7 @@ class GConsole(wx.EvtHandler):
                     sfile.close()
                 except IOError:
                     pass
-            
+
             if len(command) == 1 and not skipInterface:
                 try:
                     task = gtask.parse_interface(command[0])
@@ -580,7 +599,8 @@ class GConsole(wx.EvtHandler):
 
             if task:
                 # process GRASS command without argument
-                GUI(parent=self._guiparent, giface=self._giface).ParseCommand(command)
+                GUI(parent=self._guiparent,
+                    giface=self._giface).ParseCommand(command)
             else:
                 self.cmdThread.RunCmd(command,
                                       stdout=self.cmdStdOut,
@@ -631,8 +651,8 @@ class GConsole(wx.EvtHandler):
                 stime = _("%d sec") % int(ctime)
             else:
                 mtime = int(ctime / 60)
-                stime = _("%(min)d min %(sec)d sec") % {'min': mtime,
-                                                        'sec': int(ctime - (mtime * 60))}
+                stime = _("%(min)d min %(sec)d sec") % {
+                    'min': mtime, 'sec': int(ctime - (mtime * 60))}
         except KeyError:
             # stopped deamon
             stime = _("unknown")
@@ -676,14 +696,17 @@ class GConsole(wx.EvtHandler):
         name = task.get_name()
         for p in task.get_options()['params']:
             prompt = p.get('prompt', '')
-            if prompt in ('raster', 'vector', 'raster_3d') and p.get('value', None):
-                if p.get('age', 'old') == 'new' or \
-                        name in ('r.colors', 'r3.colors', 'v.colors', 'v.proj', 'r.proj'):
+            if prompt in (
+                    'raster', 'vector', 'raster_3d') and p.get(
+                    'value', None):
+                if p.get('age', 'old') == 'new' or name in (
+                        'r.colors', 'r3.colors', 'v.colors', 'v.proj', 'r.proj'):
                     # if multiple maps (e.g. r.series.interp), we need add each
                     if p.get('multiple', False):
                         lnames = p.get('value').split(',')
                         # in case multiple input (old) maps in r.colors
-                        # we don't want to rerender it multiple times! just once
+                        # we don't want to rerender it multiple times! just
+                        # once
                         if p.get('age', 'old') == 'old':
                             lnames = lnames[0:1]
                     else:
@@ -691,11 +714,13 @@ class GConsole(wx.EvtHandler):
                     for lname in lnames:
                         if '@' not in lname:
                             lname += '@' + grass.gisenv()['MAPSET']
-                        if grass.find_file(lname, element=p.get('element'))['fullname']:
-                            self.mapCreated.emit(name=lname, ltype=prompt, add=event.addLayer)
+                        if grass.find_file(lname, element=p.get('element'))[
+                                'fullname']:
+                            self.mapCreated.emit(
+                                name=lname, ltype=prompt, add=event.addLayer)
         if name == 'r.mask':
             self.updateMap.emit()
-        
+
         event.Skip()
 
     def OnProcessPendingOutputWindowEvents(self, event):
@@ -703,7 +728,7 @@ class GConsole(wx.EvtHandler):
 
     def UpdateHistoryFile(self, command):
         """Update history file
-        
+
         :param command: the command given as a string
         """
         env = grass.gisenv()
@@ -714,17 +739,16 @@ class GConsole(wx.EvtHandler):
                                     '.bash_history')
             fileHistory = codecs.open(filePath, encoding='utf-8', mode='a')
         except IOError as e:
-            GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") % 
-                    {'filePath': filePath, 'error': e},
+            GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") %
+                   {'filePath': filePath, 'error': e},
                    parent=self._guiparent)
             return
-        
+
         try:
             fileHistory.write(command + os.linesep)
         finally:
             fileHistory.close()
-        
+
         # update wxGUI prompt
         if self._giface:
             self._giface.UpdateCmdHistory(command)
-        

@@ -6,4 +6,4 @@ all = [
     'frame',
     'giface',
     'datacatalog'
-    ]
+]

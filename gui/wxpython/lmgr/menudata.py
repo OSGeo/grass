@@ -17,7 +17,7 @@ This program is free software under the GNU General Public License
 
 import os
 
-from core.menutree  import MenuTreeModelBuilder
+from core.menutree import MenuTreeModelBuilder
 from core.toolboxes import getMenudataFile
 from core.globalvar import WXGUIDIR
 from core.gcmd import GError
@@ -25,6 +25,7 @@ from core.utils import _
 
 
 class LayerManagerMenuData(MenuTreeModelBuilder):
+
     def __init__(self, filename=None):
         if filename:
             expandAddons = False
@@ -37,7 +38,8 @@ class LayerManagerMenuData(MenuTreeModelBuilder):
                                        newFile='menudata.xml',
                                        fallback=fallback)
         try:
-            MenuTreeModelBuilder.__init__(self, filename, expandAddons=expandAddons)
+            MenuTreeModelBuilder.__init__(
+                self, filename, expandAddons=expandAddons)
         except (ValueError, AttributeError, TypeError):
             GError(_("Unable to parse user toolboxes XML files. "
                      "Default main menu will be loaded."))
@@ -46,6 +48,7 @@ class LayerManagerMenuData(MenuTreeModelBuilder):
 
 
 class LayerManagerModuleTree(MenuTreeModelBuilder):
+
     def __init__(self, filename=None):
         if filename:
             expandAddons = False
@@ -59,7 +62,8 @@ class LayerManagerModuleTree(MenuTreeModelBuilder):
                                        fallback=fallback)
         # TODO: try-except useless?
         try:
-            MenuTreeModelBuilder.__init__(self, filename, expandAddons=expandAddons)
+            MenuTreeModelBuilder.__init__(
+                self, filename, expandAddons=expandAddons)
         except (ValueError, AttributeError, TypeError):
             GError(_("Unable to parse user toolboxes XML files. "
                      "Default module tree will be loaded."))

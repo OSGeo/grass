@@ -61,29 +61,46 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
     elements = ['raster', 'raster_3d', 'vector']
     try:
         if not mapsets:
-            mapsets = gscript.read_command('g.mapsets', flags='l', separator='comma', quiet=True, env=env).strip()
+            mapsets = gscript.read_command(
+                'g.mapsets',
+                flags='l',
+                separator='comma',
+                quiet=True,
+                env=env).strip()
     except CalledModuleError:
-        queue.put((maps_dict, _("Failed to read mapsets from location <{l}>.").format(l=location)))
+        queue.put(
+            (maps_dict,
+             _("Failed to read mapsets from location <{l}>.").format(
+                 l=location)))
         gscript.try_remove(tmp_gisrc_file)
         return
     else:
         listOfMapsets = mapsets.split(',')
-        Debug.msg(4, "Location <{}>: {} mapsets found".format(location, len(listOfMapsets)))
+        Debug.msg(
+            4, "Location <{}>: {} mapsets found".format(
+                location, len(listOfMapsets)))
         for each in listOfMapsets:
             maps_dict[each] = {}
             for elem in elements:
                 maps_dict[each][elem] = []
     try:
-        maplist = gscript.read_command('g.list', flags='mt', type=elements,
-                                       mapset=','.join(listOfMapsets), quiet=True, env=env).strip()
+        maplist = gscript.read_command(
+            'g.list', flags='mt', type=elements,
+            mapset=','.join(listOfMapsets),
+            quiet=True, env=env).strip()
     except CalledModuleError:
-        queue.put((maps_dict, _("Failed to read maps from location <{l}>.").format(l=location)))
+        queue.put(
+            (maps_dict,
+             _("Failed to read maps from location <{l}>.").format(
+                 l=location)))
         gscript.try_remove(tmp_gisrc_file)
         return
     else:
         # fill dictionary
         listOfMaps = maplist.splitlines()
-        Debug.msg(4, "Location <{}>: {} maps found".format(location, len(listOfMaps)))
+        Debug.msg(
+            4, "Location <{}>: {} maps found".format(
+                location, len(listOfMaps)))
         for each in listOfMaps:
             ltype, wholename = each.split('/')
             name, mapset = wholename.split('@')
@@ -109,9 +126,15 @@ def map_exists(name, element, env, mapset=None):
         element = 'grid3'
     # g.findfile returns non-zero when file was not found
     # se we ignore return code and just focus on stdout
-    process = gscript.start_command('g.findfile', flags='n',
-                                    element=element, file=name, mapset=mapset,
-                                    stdout=gscript.PIPE, stderr=gscript.PIPE, env=env)
+    process = gscript.start_command(
+        'g.findfile',
+        flags='n',
+        element=element,
+        file=name,
+        mapset=mapset,
+        stdout=gscript.PIPE,
+        stderr=gscript.PIPE,
+        env=env)
     output, errors = process.communicate()
     info = gscript.parse_key_val(output, sep='=')
     # file is the key questioned in grass.script.core find_file()
@@ -123,6 +146,7 @@ def map_exists(name, element, env, mapset=None):
 
 
 class NameEntryDialog(TextEntryDialog):
+
     def __init__(self, element, mapset, env, **kwargs):
         TextEntryDialog.__init__(self, **kwargs)
         self._element = element
@@ -136,10 +160,16 @@ class NameEntryDialog(TextEntryDialog):
         if not new:
             return
         if map_exists(new, self._element, self._env, self._mapset):
-            dlg = wx.MessageDialog(self, message=_("Map of type {elem} <{name}> already exists in mapset <{mapset}>. "
-                                                   "Do you want to overwrite it?").format(elem=self._element,
-                                   name=new, mapset=self._mapset),
-                                   caption=_("Overwrite?"), style=wx.YES_NO)
+            dlg = wx.MessageDialog(
+                self,
+                message=_(
+                    "Map of type {elem} <{name}> already exists in mapset <{mapset}>. "
+                    "Do you want to overwrite it?").format(
+                    elem=self._element,
+                    name=new,
+                    mapset=self._mapset),
+                caption=_("Overwrite?"),
+                style=wx.YES_NO)
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
                 self._env['GRASS_OVERWRITE'] = '1'
@@ -153,6 +183,7 @@ class NameEntryDialog(TextEntryDialog):
 
 class DataCatalogNode(DictNode):
     """Node representing item in datacatalog."""
+
     def __init__(self, label, data=None):
         super(DataCatalogNode, self).__init__(label=label, data=data)
 
@@ -172,11 +203,20 @@ class DataCatalogNode(DictNode):
 
 
 class LocationMapTree(TreeView):
-    def __init__(self, parent, model=None, style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS | wx.TR_LINES_AT_ROOT |
-                 wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_SINGLE):
+
+    def __init__(
+            self, parent, model=None, style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS
+            | wx.TR_LINES_AT_ROOT | wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT |
+            wx.TR_SINGLE):
         """Location Map Tree constructor."""
         self._model = TreeModel(DataCatalogNode)
-        super(LocationMapTree, self).__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
+        super(
+            LocationMapTree,
+            self).__init__(
+            parent=parent,
+            model=self._model,
+            id=wx.ID_ANY,
+            style=style)
         self.showNotification = Signal('Tree.showNotification')
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
@@ -200,23 +240,26 @@ class LocationMapTree(TreeView):
         try:
             nprocs = cpu_count()
         except NotImplementedError:
-                nprocs = 4
+            nprocs = 4
 
         results = dict()
         errors = []
         location_nodes = []
         nlocations = len(locations)
-        grassdata_node = self._model.AppendNode(parent=self._model.root,
-                                                label=_('GRASS locations in {}').format(genv['GISDBASE']),
-                                                data=dict(type='grassdata'))
+        grassdata_node = self._model.AppendNode(
+            parent=self._model.root, label=_('GRASS locations in {}').format(
+                genv['GISDBASE']), data=dict(
+                type='grassdata'))
         for location in locations:
             results[location] = dict()
-            varloc = self._model.AppendNode(parent=grassdata_node, label=location,
-                                            data=dict(type='location', name=location))
+            varloc = self._model.AppendNode(
+                parent=grassdata_node, label=location, data=dict(
+                    type='location', name=location))
             location_nodes.append(varloc)
             loc_count += 1
 
-            Debug.msg(3, "Scanning location <{}> ({}/{})".format(location, loc_count, nlocations))
+            Debug.msg(
+                3, "Scanning location <{}> ({}/{})".format(location, loc_count, nlocations))
 
             q = Queue()
             p = Process(target=getLocationTree,
@@ -238,8 +281,10 @@ class LocationMapTree(TreeView):
                         errors.append(error)
 
                     for key in sorted(maps.keys()):
-                        mapset_node = self._model.AppendNode(parent=location_nodes[i], label=key,
-                                                             data=dict(type='mapset', name=key))
+                        mapset_node = self._model.AppendNode(
+                            parent=location_nodes[i],
+                            label=key, data=dict(
+                                type='mapset', name=key))
                         self._populateMapsetItem(mapset_node, maps[key])
 
                 proc_count = 0
@@ -284,8 +329,13 @@ class LocationMapTree(TreeView):
                 node = get_first_child(mapsetItem)
 
         q = Queue()
-        p = Process(target=getLocationTree,
-                    args=(genv['GISDBASE'], locationItem.data['name'], q, mapsetItem.data['name']))
+        p = Process(
+            target=getLocationTree,
+            args=(
+                genv['GISDBASE'],
+                locationItem.data['name'],
+                q,
+                mapsetItem.data['name']))
         p.start()
         maps, error = q.get()
         if error:
@@ -298,8 +348,9 @@ class LocationMapTree(TreeView):
     def _populateMapsetItem(self, mapset_node, data):
         for elem in data:
             if data[elem]:
-                element_node = self._model.AppendNode(parent=mapset_node, label=elem,
-                                                      data=dict(type='element', name=elem))
+                element_node = self._model.AppendNode(
+                    parent=mapset_node, label=elem,
+                    data=dict(type='element', name=elem))
                 for layer in data[elem]:
                     self._model.AppendNode(parent=element_node, label=layer,
                                            data=dict(type=elem, name=layer))
@@ -392,7 +443,9 @@ class LocationMapTree(TreeView):
         if not locationItem:
             return None, None
 
-        mapsetItem = self._model.SearchNodes(parent=locationItem[0], name=mapset, type='mapset')
+        mapsetItem = self._model.SearchNodes(
+            parent=locationItem[0],
+            name=mapset, type='mapset')
         if not mapsetItem:
             return locationItem[0], None
 
@@ -407,6 +460,7 @@ class LocationMapTree(TreeView):
 
 
 class DataCatalogTree(LocationMapTree):
+
     def __init__(self, parent, giface=None):
         """Data Catalog Tree constructor."""
         super(DataCatalogTree, self).__init__(parent)
@@ -459,17 +513,27 @@ class DataCatalogTree(LocationMapTree):
         self.copy_type = self.selected_type
         self.copy_mapset = self.selected_mapset
         self.copy_location = self.selected_location
-        label = _("Map <{layer}> marked for copying. "
-                  "You can paste it to the current mapset "
-                  "<{mapset}>.".format(layer=self.copy_layer.label, mapset=gisenv()['MAPSET']))
+        label = _(
+            "Map <{layer}> marked for copying. "
+            "You can paste it to the current mapset "
+            "<{mapset}>.".format(
+                layer=self.copy_layer.label,
+                mapset=gisenv()['MAPSET']))
         self.showNotification.emit(message=label)
 
     def OnRenameMap(self, event):
         """Rename layer with dialog"""
         old_name = self.selected_layer.label
-        gisrc, env = getEnvironment(gisenv()['GISDBASE'], self.selected_location.label, mapset=self.selected_mapset.label)
-        new_name = self._getNewMapName(_('New name'), _('Rename map'),
-                                       old_name, env=env, mapset=self.selected_mapset.label, element=self.selected_type.label)
+        gisrc, env = getEnvironment(
+            gisenv()['GISDBASE'],
+            self.selected_location.label, mapset=self.selected_mapset.label)
+        new_name = self._getNewMapName(
+            _('New name'),
+            _('Rename map'),
+            old_name,
+            env=env,
+            mapset=self.selected_mapset.label,
+            element=self.selected_type.label)
         if new_name:
             self.Rename(old_name, new_name)
 
@@ -493,7 +557,9 @@ class DataCatalogTree(LocationMapTree):
     def Rename(self, old, new):
         """Rename layer"""
         string = old + ',' + new
-        gisrc, env = getEnvironment(gisenv()['GISDBASE'], self.selected_location.label, self.selected_mapset.label)
+        gisrc, env = getEnvironment(
+            gisenv()['GISDBASE'],
+            self.selected_location.label, self.selected_mapset.label)
         label = _("Renaming map <{name}>...").format(name=string)
         self.showNotification.emit(message=label)
         if self.selected_type.label == 'vector':
@@ -501,12 +567,14 @@ class DataCatalogTree(LocationMapTree):
         elif self.selected_type.label == 'raster':
             renamed, cmd = self._runCommand('g.rename', raster=string, env=env)
         else:
-            renamed, cmd = self._runCommand('g.rename', raster3d=string, env=env)
+            renamed, cmd = self._runCommand(
+                'g.rename', raster3d=string, env=env)
         if renamed == 0:
             self.selected_layer.label = new
             self.selected_layer.data['name'] = new
             self.RefreshNode(self.selected_layer)
-            self.showNotification.emit(message=_("{cmd} -- completed").format(cmd=cmd))
+            self.showNotification.emit(
+                message=_("{cmd} -- completed").format(cmd=cmd))
             Debug.msg(1, "LAYER RENAMED TO: " + new)
         gscript.try_remove(gisrc)
 
@@ -517,29 +585,47 @@ class DataCatalogTree(LocationMapTree):
             GMessage(_("No map selected for copying."), parent=self)
             return
         if self.selected_location == self.copy_location:
-            gisrc, env = getEnvironment(gisenv()['GISDBASE'], self.selected_location.label, mapset=self.selected_mapset.label)
-            new_name = self._getNewMapName(_('New name'), _('Copy map'),
-                                           self.copy_layer.label, env=env, mapset=self.selected_mapset.label, element=self.copy_type.label)
+            gisrc, env = getEnvironment(
+                gisenv()['GISDBASE'], self.selected_location.label, mapset=self.selected_mapset.label)
+            new_name = self._getNewMapName(
+                _('New name'),
+                _('Copy map'),
+                self.copy_layer.label,
+                env=env,
+                mapset=self.selected_mapset.label,
+                element=self.copy_type.label)
             if not new_name:
                 return
-            if map_exists(new_name, element=self.copy_type.label, env=env, mapset=self.selected_mapset.label):
-                GMessage(_("Failed to copy map: new map has the same name"), parent=self)
+            if map_exists(
+                    new_name, element=self.copy_type.label, env=env,
+                    mapset=self.selected_mapset.label):
+                GMessage(
+                    _("Failed to copy map: new map has the same name"),
+                    parent=self)
                 return
 
             if not self.selected_type:
-                found = self._model.SearchNodes(parent=self.selected_mapset, type='element', name=self.copy_type.label)
+                found = self._model.SearchNodes(
+                    parent=self.selected_mapset, type='element',
+                    name=self.copy_type.label)
                 self.selected_type = found[0] if found else None
 
             overwrite = False
             if self.selected_type:
-                found = self._model.SearchNodes(parent=self.selected_type, type=self.copy_type.label, name=new_name)
+                found = self._model.SearchNodes(
+                    parent=self.selected_type,
+                    type=self.copy_type.label,
+                    name=new_name)
                 if found and found[0]:
-                    dlg = wx.MessageDialog(parent=self,
-                                           message=_("Map <{map}> already exists "
-                                                     "in the current mapset. "
-                                                     "Do you want to overwrite it?").format(map=new_name),
-                                           caption=_("Overwrite?"),
-                                           style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                    dlg = wx.MessageDialog(
+                        parent=self,
+                        message=_(
+                            "Map <{map}> already exists "
+                            "in the current mapset. "
+                            "Do you want to overwrite it?").format(
+                            map=new_name),
+                        caption=_("Overwrite?"),
+                        style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
                     ret = dlg.ShowModal()
                     dlg.Destroy()
                     if ret == wx.ID_YES:
@@ -551,34 +637,44 @@ class DataCatalogTree(LocationMapTree):
             label = _("Copying <{name}>...").format(name=string)
             self.showNotification.emit(message=label)
             if self.copy_type.label == 'vector':
-                pasted, cmd = self._runCommand('g.copy', vector=string, overwrite=overwrite, env=env)
+                pasted, cmd = self._runCommand(
+                    'g.copy', vector=string, overwrite=overwrite, env=env)
                 node = 'vector'
             elif self.copy_type.label == 'raster':
-                pasted, cmd = self._runCommand('g.copy', raster=string, overwrite=overwrite, env=env)
+                pasted, cmd = self._runCommand(
+                    'g.copy', raster=string, overwrite=overwrite, env=env)
                 node = 'raster'
             else:
-                pasted, cmd = self._runCommand('g.copy', raster_3d=string, overwrite=overwrite, env=env)
+                pasted, cmd = self._runCommand(
+                    'g.copy', raster_3d=string, overwrite=overwrite, env=env)
                 node = 'raster_3d'
             if pasted == 0:
-                self.InsertLayer(name=new_name, mapset_node=self.selected_mapset, element_name=node)
+                self.InsertLayer(
+                    name=new_name,
+                    mapset_node=self.selected_mapset,
+                    element_name=node)
                 Debug.msg(1, "COPIED TO: " + new_name)
-                self.showNotification.emit(message=_("g.copy completed").format(cmd=cmd))
+                self.showNotification.emit(
+                    message=_("g.copy completed").format(cmd=cmd))
             gscript.try_remove(gisrc)
         else:
-            GError(_("Failed to copy map: action is allowed only within the same location."),
-                   parent=self)
+            GError(
+                _("Failed to copy map: action is allowed only within the same location."),
+                parent=self)
 
         # expand selected mapset
         self.ExpandNode(self.selected_mapset, recursive=True)
 
     def InsertLayer(self, name, mapset_node, element_name):
         """Insert layer into model and refresh tree"""
-        found_element = self._model.SearchNodes(parent=mapset_node, type='element', name=element_name)
+        found_element = self._model.SearchNodes(
+            parent=mapset_node, type='element', name=element_name)
         found_element = found_element[0] if found_element else None
         if not found_element:
             # add type node if not exists
-            found_element = self._model.AppendNode(parent=mapset_node, label=element_name,
-                                                   data=dict(type='element', name=element_name))
+            found_element = self._model.AppendNode(
+                parent=mapset_node, label=element_name,
+                data=dict(type='element', name=element_name))
         found = self._model.SearchNodes(parent=found_element, name=name)
         if len(found) == 0:
             self._model.AppendNode(parent=found_element, label=name,
@@ -589,34 +685,41 @@ class DataCatalogTree(LocationMapTree):
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
         name = self.selected_layer.label
-        gisrc, env = getEnvironment(gisenv()['GISDBASE'], self.selected_location.label, self.selected_mapset.label)
-        if self._confirmDialog(question=_("Do you really want to delete map <{m}> of type <{etype}> from mapset "
-                               "<{mapset}> in location <{loc}>?").format(m=name, mapset=self.selected_mapset.label,
-                                                                         etype=self.selected_type.label,
-                                                                         loc=self.selected_location.label),
-                               title=_('Delete map')) == wx.ID_YES:
+        gisrc, env = getEnvironment(
+            gisenv()['GISDBASE'],
+            self.selected_location.label, self.selected_mapset.label)
+        if self._confirmDialog(
+                question=_(
+                    "Do you really want to delete map <{m}> of type <{etype}> from mapset "
+                    "<{mapset}> in location <{loc}>?").format(
+                    m=name, mapset=self.selected_mapset.label,
+                    etype=self.selected_type.label,
+                    loc=self.selected_location.label),
+                title=_('Delete map')) == wx.ID_YES:
             label = _("Deleting {name}...").format(name=name)
             self.showNotification.emit(message=label)
             if self.selected_type.label == 'vector':
-                removed, cmd = self._runCommand('g.remove', flags='f', type='vector',
-                                                name=name, env=env)
+                removed, cmd = self._runCommand(
+                    'g.remove', flags='f', type='vector', name=name, env=env)
             elif self.selected_type.label == 'raster':
-                removed, cmd = self._runCommand('g.remove', flags='f', type='raster',
-                                                name=name, env=env)
+                removed, cmd = self._runCommand(
+                    'g.remove', flags='f', type='raster', name=name, env=env)
             else:
-                removed, cmd = self._runCommand('g.remove', flags='f', type='raster_3d',
-                                                name=name, env=env)
+                removed, cmd = self._runCommand(
+                    'g.remove', flags='f', type='raster_3d', name=name, env=env)
             if removed == 0:
                 self._model.RemoveNode(self.selected_layer)
                 self.RefreshNode(self.selected_type, recursive=True)
                 Debug.msg(1, "LAYER " + name + " DELETED")
-                self.showNotification.emit(message=_("g.remove completed").format(cmd=cmd))
+                self.showNotification.emit(
+                    message=_("g.remove completed").format(cmd=cmd))
         gscript.try_remove(gisrc)
 
     def OnDisplayLayer(self, event):
         """Display layer in current graphics view"""
         layerName = []
-        if self.selected_location.label == gisenv()['LOCATION_NAME'] and self.selected_mapset:
+        if self.selected_location.label == gisenv(
+        )['LOCATION_NAME'] and self.selected_mapset:
             string = self.selected_layer.label + '@' + self.selected_mapset.label
             layerName.append(string)
             label = _("Displaying {name}...").format(name=string)
@@ -629,18 +732,21 @@ class DataCatalogTree(LocationMapTree):
                 self._giface.lmgr.AddMaps(layerName, 'raster', True)
             else:
                 self._giface.lmgr.AddMaps(layerName, 'raster_3d', True)
-                label = "d.rast --q map=" + string + _(" -- completed. Go to Layers tab for further operations.")  # generate this message (command) automatically?
+                # generate this message (command) automatically?
+                label = "d.rast --q map=" + string + _(
+                    " -- completed. Go to Layers tab for further operations.")
             self.showNotification.emit(message=label)
             Debug.msg(1, "LAYER " + self.selected_layer.label + " DISPLAYED")
         else:
-            GError(_("Failed to display layer: not in current mapset or invalid layer"),
-                   parent=self)
+            GError(
+                _("Failed to display layer: not in current mapset or invalid layer"),
+                parent=self)
 
     def OnBeginDrag(self, node, event):
         """Just copy necessary data"""
         self.DefineItems(node)
-        if self.selected_layer and \
-           not (self._restricted and gisenv()['LOCATION_NAME'] != self.selected_location.label):
+        if self.selected_layer and not (self._restricted and gisenv()[
+                                        'LOCATION_NAME'] != self.selected_location.label):
             event.Allow()
             self.OnCopyMap(event)
             Debug.msg(1, "DRAG")
@@ -656,8 +762,11 @@ class DataCatalogTree(LocationMapTree):
             return
         if node:
             self.DefineItems(node)
-            if self._restricted and gisenv()['MAPSET'] != self.selected_mapset.label:
-                GMessage(_("Maps can be copied only to current mapset"), parent=self)
+            if self._restricted and gisenv(
+            )['MAPSET'] != self.selected_mapset.label:
+                GMessage(
+                    _("Maps can be copied only to current mapset"),
+                    parent=self)
                 event.Veto()
                 return
             if self.selected_location == self.copy_location and self.selected_mapset:
@@ -708,7 +817,9 @@ class DataCatalogTree(LocationMapTree):
         item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
-        if not(currentLocation and self.copy_layer and self.selected_location == self.copy_location):
+        if not(
+                currentLocation and self.copy_layer and self.selected_location ==
+                self.copy_location):
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.NewId(), _("&Delete"))

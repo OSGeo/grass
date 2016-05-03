@@ -22,6 +22,7 @@ from itertools import cycle
 import numpy as np
 
 import wx
+from functools import reduce
 
 try:
     import matplotlib
@@ -67,8 +68,13 @@ def check_version(*version):
 
 class TimelineFrame(wx.Frame):
     """The main frame of the application"""
+
     def __init__(self, parent):
-        wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=_("GRASS GIS Timeline Tool"))
+        wx.Frame.__init__(
+            self,
+            parent,
+            id=wx.ID_ANY,
+            title=_("GRASS GIS Timeline Tool"))
 
         tgis.init(True)
         self.datasets = []
@@ -128,8 +134,9 @@ class TimelineFrame(wx.Frame):
         self.drawButton.Bind(wx.EVT_BUTTON, self.OnRedraw)
         self.helpButton = wx.Button(self.panel, id=wx.ID_ANY, label=_("Help"))
         self.helpButton.Bind(wx.EVT_BUTTON, self.OnHelp)
-        self.view3dCheck = wx.CheckBox(self.panel, id=wx.ID_ANY,
-                                       label=_("3D plot of spatio-temporal extents"))
+        self.view3dCheck = wx.CheckBox(
+            self.panel, id=wx.ID_ANY,
+            label=_("3D plot of spatio-temporal extents"))
         self.view3dCheck.Bind(wx.EVT_CHECKBOX, self.OnRedraw)
         if not check_version(1, 0, 0):
             self.view3dCheck.SetLabel(_("3D plot of spatio-temporal extents "
@@ -142,9 +149,15 @@ class TimelineFrame(wx.Frame):
         gridSizer.Add(self.datasetSelect, pos=(1, 0), flag=wx.EXPAND)
         gridSizer.Add(self.drawButton, pos=(1, 1), flag=wx.EXPAND)
         gridSizer.Add(self.helpButton, pos=(1, 2), flag=wx.EXPAND)
-        gridSizer.Add(self.view3dCheck, pos=(2, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(
+            self.view3dCheck, pos=(2, 0),
+            flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
 
-        self.vbox.Add(gridSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=10)
+        self.vbox.Add(
+            gridSizer,
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=10)
 
         self.panel.SetSizer(self.vbox)
         self.vbox.Fit(self)
@@ -160,34 +173,44 @@ class TimelineFrame(wx.Frame):
             etype = series[2]
             sp = tgis.dataset_factory(etype, name)
             if not sp.is_in_db(dbif=self.dbif):
-                GError(self, message=_("Dataset <%s> not found in temporal database") % (name))
+                GError(
+                    self,
+                    message=_("Dataset <%s> not found in temporal database") %
+                    (name))
                 return
 
             sp.select(dbif=self.dbif)
 
             self.timeData[name] = {}
             self.timeData[name]['elementType'] = series[2]
-            self.timeData[name]['temporalType'] = sp.get_temporal_type()  # abs/rel
+            self.timeData[name][
+                'temporalType'] = sp.get_temporal_type()  # abs/rel
 
             if mode is None:
                 mode = self.timeData[name]['temporalType']
             elif self.timeData[name]['temporalType'] != mode:
-                GError(parent=self, message=_("Datasets have different temporal type "
-                                              "(absolute x relative), which is not allowed."))
+                GError(
+                    parent=self, message=_(
+                        "Datasets have different temporal type "
+                        "(absolute x relative), which is not allowed."))
                 return
 
             # check topology
             maps = sp.get_registered_maps_as_objects(dbif=self.dbif)
-            self.timeData[name]['validTopology'] = sp.check_temporal_topology(maps=maps, dbif=self.dbif)
+            self.timeData[name]['validTopology'] = sp.check_temporal_topology(
+                maps=maps, dbif=self.dbif)
 
-            self.timeData[name]['temporalMapType'] = sp.get_map_time()  # point/interval
+            self.timeData[name][
+                'temporalMapType'] = sp.get_map_time()  # point/interval
             self.timeData[name]['unit'] = None  # only with relative
             if self.timeData[name]['temporalType'] == 'relative':
-                start, end, self.timeData[name]['unit'] = sp.get_relative_time()
+                start, end, self.timeData[name][
+                    'unit'] = sp.get_relative_time()
                 if unit is None:
                     unit = self.timeData[name]['unit']
                 elif self.timeData[name]['unit'] != unit:
-                    GError(self, _("Datasets have different time unit which is not allowed."))
+                    GError(
+                        self, _("Datasets have different time unit which is not allowed."))
                     return
 
             self.timeData[name]['start_datetime'] = []
@@ -206,7 +229,12 @@ class TimelineFrame(wx.Frame):
             rows = sp.get_registered_maps(columns=columns, where=None,
                                           order='start_time', dbif=self.dbif)
             if not rows:
-                GError(parent=self, message=_("Dataset <{name}> is empty").format(name=series[0] + '@' + series[1]))
+                GError(
+                    parent=self,
+                    message=_("Dataset <{name}> is empty").format(
+                        name=series[0] +
+                        '@' +
+                        series[1]))
                 return
             for row in rows:
                 mapName, start, end, north, south, west, east = row
@@ -290,7 +318,8 @@ class TimelineFrame(wx.Frame):
         plots = []
         lookUp = LookUp(self.timeData)
         for i, name in enumerate(self.datasets):
-            yticksNames.append(name[0])  # just name; with mapset it would be long
+            # just name; with mapset it would be long
+            yticksNames.append(name[0])
             name = name[0] + '@' + name[1]
             yticksPos.append(i)
             barData = []
@@ -310,14 +339,29 @@ class TimelineFrame(wx.Frame):
             else:
                 # self.timeData[name]['end_plot'] = None
                 pointData = start
-                lookUp.AddDataset(type_='point', yrange=i, xranges=pointData, datasetName=name)
+                lookUp.AddDataset(
+                    type_='point',
+                    yrange=i,
+                    xranges=pointData,
+                    datasetName=name)
             color = colors.next()
             if mapType == 'interval':
-                plots.append(self.axes2d.broken_barh(xranges=barData, yrange=(i - 0.1, 0.2),
-                                                     facecolors=color, alpha=ALPHA))
+                plots.append(
+                    self.axes2d.broken_barh(
+                        xranges=barData,
+                        yrange=(
+                            i - 0.1,
+                            0.2),
+                        facecolors=color,
+                        alpha=ALPHA))
             else:
-                plots.append(self.axes2d.plot(pointData, [i] * len(pointData),
-                                              marker='o', linestyle='None', color=color)[0])
+                plots.append(
+                    self.axes2d.plot(
+                        pointData,
+                        [i] * len(pointData),
+                        marker='o',
+                        linestyle='None',
+                        color=color)[0])
 
         if self.temporalType == 'absolute':
             self.axes2d.xaxis_date()
@@ -348,7 +392,7 @@ class TimelineFrame(wx.Frame):
             datasets = self._checkDatasets(datasets)
             if not datasets:
                 return
-        except GException, e:
+        except GException as e:
             GError(parent=self, message=unicode(e), showTraceback=False)
             return
 
@@ -370,9 +414,11 @@ class TimelineFrame(wx.Frame):
             if self.view3dCheck.IsChecked():
                 self.axes2d.change_geometry(2, 1, 1)
                 if not self.axes3d:
-                    # do not remove this import - unused but it is required for 3D
+                    # do not remove this import - unused but it is required for
+                    # 3D
                     from mpl_toolkits.mplot3d import Axes3D  # pylint: disable=W0611
-                    self.axes3d = self.fig.add_subplot(2, 1, 2, projection='3d')
+                    self.axes3d = self.fig.add_subplot(
+                        2, 1, 2, projection='3d')
 
                 self.axes3d.set_visible(True)
                 self._draw3dFigure()
@@ -394,35 +440,47 @@ class TimelineFrame(wx.Frame):
         tDict = tgis.tlist_grouped('stds', group_type=True, dbif=self.dbif)
         # nested list with '(map, mapset, etype)' items
         allDatasets = [[[(map, mapset, etype) for map in maps]
-                     for etype, maps in etypesDict.iteritems()]
-                    for mapset, etypesDict in tDict.iteritems()]
+                        for etype, maps in etypesDict.iteritems()]
+                       for mapset, etypesDict in tDict.iteritems()]
         # flatten this list
         if allDatasets:
-            allDatasets = reduce(lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets))
+            allDatasets = reduce(
+                lambda x,
+                y: x + y,
+                reduce(
+                    lambda x,
+                    y: x + y,
+                    allDatasets))
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-            allDatasets = [i for i in sorted(allDatasets, key=lambda l: mapsets.index(l[1]))]
+            allDatasets = [
+                i
+                for i in sorted(
+                    allDatasets, key=lambda l: mapsets.index(l[1]))]
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset
             if dataset.find("@") >= 0:
                 nameShort, mapset = dataset.split('@', 1)
-                indices = [n for n, (mapName, mapsetName, etype) in enumerate(allDatasets)
-                           if nameShort == mapName and mapsetName == mapset]
+                indices = [n for n, (mapName, mapsetName, etype) in enumerate(
+                    allDatasets) if nameShort == mapName and mapsetName == mapset]
             else:
-                indices = [n for n, (mapName, mapset, etype) in enumerate(allDatasets)
-                           if dataset == mapName]
+                indices = [n for n, (mapName, mapset, etype) in enumerate(
+                    allDatasets) if dataset == mapName]
 
             if len(indices) == 0:
                 raise GException(errorMsg)
             elif len(indices) >= 2:
-                dlg = wx.SingleChoiceDialog(self,
-                         message=_("Please specify the space time dataset <%s>." % dataset),
-                         caption=_("Ambiguous dataset name"),
-                         choices=[("%(map)s@%(mapset)s: %(etype)s" % {'map': allDatasets[i][0],
-                                                                      'mapset': allDatasets[i][1],
-                                                                      'etype': allDatasets[i][2]})
-                                                                               for i in indices],
-                         style=wx.CHOICEDLG_STYLE | wx.OK)
+                dlg = wx.SingleChoiceDialog(
+                    self,
+                    message=_(
+                        "Please specify the space time dataset <%s>." %
+                        dataset),
+                    caption=_("Ambiguous dataset name"),
+                    choices=[("%(map)s@%(mapset)s: %(etype)s" %
+                              {'map': allDatasets[i][0],
+                               'mapset': allDatasets[i][1],
+                               'etype': allDatasets[i][2]}) for i in indices],
+                    style=wx.CHOICEDLG_STYLE | wx.OK)
                 if dlg.ShowModal() == wx.ID_OK:
                     index = dlg.GetSelection()
                     validated.append(allDatasets[indices[index]])
@@ -446,11 +504,12 @@ class TimelineFrame(wx.Frame):
             datasets = self._checkDatasets(datasets)
             if not datasets:
                 return
-        except GException, e:
+        except GException as e:
             GError(parent=self, message=unicode(e), showTraceback=False)
             return
         self.datasets = datasets
-        self.datasetSelect.SetValue(','.join(map(lambda x: x[0] + '@' + x[1], datasets)))
+        self.datasetSelect.SetValue(
+            ','.join(map(lambda x: x[0] + '@' + x[1], datasets)))
         self._redraw()
 
     def Show3D(self, show):
@@ -461,6 +520,7 @@ class TimelineFrame(wx.Frame):
 
 class LookUp:
     """Helper class for searching info by coordinates"""
+
     def __init__(self, timeData):
         self.data = {}
         self.timeData = timeData
@@ -480,7 +540,7 @@ class LookUp:
         for keyY in self.data.keys():
             if keyY[0] <= y <= keyY[1]:
                 for keyX in self.data[keyY].keys():
-                    if keyX != 'name' and  keyX[0] <= x <= keyX[1]:
+                    if keyX != 'name' and keyX[0] <= x <= keyX[1]:
                         keys = keyY, keyX
                         break
                 if keys:
@@ -490,7 +550,7 @@ class LookUp:
 
         datasetName = self.data[keys[0]]['name']
         mapIndex = self.data[keys[0]][keys[1]]
-        return  self.timeData, datasetName, mapIndex
+        return self.timeData, datasetName, mapIndex
 
 
 def InfoFormat(timeData, datasetName, mapIndex):
@@ -507,8 +567,12 @@ def InfoFormat(timeData, datasetName, mapIndex):
 
     text.append(_("Mapset: %s") % mapset)
     text.append(_("Map name: %s") % timeData[datasetName]['names'][mapIndex])
-    text.append(_("Start time: %s") % timeData[datasetName]['start_datetime'][mapIndex])
-    text.append(_("End time: %s") % timeData[datasetName]['end_datetime'][mapIndex])
+    text.append(
+        _("Start time: %s") %
+        timeData[datasetName]['start_datetime'][mapIndex])
+    text.append(
+        _("End time: %s") %
+        timeData[datasetName]['end_datetime'][mapIndex])
 
     if not timeData[datasetName]['validTopology']:
         text.append(_("WARNING: invalid topology"))
@@ -526,8 +590,11 @@ class DataCursor(object):
     Source: http://stackoverflow.com/questions/4652439/
             is-there-a-matplotlib-equivalent-of-matlabs-datacursormode/4674445
     """
-    def __init__(self, artists, lookUp, formatFunction, tolerance=5, offsets=(-30, 30),
-                 display_all=False):
+
+    def __init__(
+            self, artists, lookUp, formatFunction, tolerance=5,
+            offsets=(-30, 30),
+            display_all=False):
         """Create the data cursor and connect it to the relevant figure.
         "artists" is the matplotlib artist or sequence of artists that will be
             selected.
@@ -569,11 +636,15 @@ class DataCursor(object):
 
     def annotate(self, ax):
         """Draws and hides the annotation box for the given axis "ax"."""
-        annotation = ax.annotate(self.formatFunction, xy=(0, 0), ha='center',
-                xytext=self.offsets, textcoords='offset points', va='bottom',
-                bbox=dict(boxstyle='round,pad=0.5', fc='yellow', alpha=0.7),
-                arrowprops=dict(arrowstyle='->', connectionstyle='arc3,rad=0'),
-                annotation_clip=False, multialignment='left')
+        annotation = ax.annotate(
+            self.formatFunction, xy=(0, 0),
+            ha='center', xytext=self.offsets, textcoords='offset points',
+            va='bottom',
+            bbox=dict(
+                boxstyle='round,pad=0.5', fc='yellow', alpha=0.7),
+            arrowprops=dict(
+                arrowstyle='->', connectionstyle='arc3,rad=0'),
+            annotation_clip=False, multialignment='left')
         annotation.set_visible(False)
 
         return annotation

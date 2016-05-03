@@ -23,14 +23,14 @@ from core import globalvar
 import wx
 import wx.aui
 
-from mapdisp.toolbars  import MapToolbar
-from gcp.toolbars      import GCPDisplayToolbar, GCPManToolbar
-from mapdisp.gprint    import PrintOptions
-from core.gcmd         import GMessage
+from mapdisp.toolbars import MapToolbar
+from gcp.toolbars import GCPDisplayToolbar, GCPManToolbar
+from mapdisp.gprint import PrintOptions
+from core.gcmd import GMessage
 from core.utils import _
-from gui_core.dialogs  import GetImageHandlers, ImageSizeDialog
-from gui_core.mapdisp  import SingleMapFrame
-from core.settings     import UserSettings
+from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
+from gui_core.mapdisp import SingleMapFrame
+from core.settings import UserSettings
 from mapwin.buffered import BufferedMapWindow
 from mapwin.base import MapWindowProperties
 
@@ -40,10 +40,12 @@ import gcp.statusbar as sbgcp
 # for standalone app
 cmdfilename = None
 
+
 class MapFrame(SingleMapFrame):
     """Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
+
     def __init__(self, parent, giface,
                  title=_("GRASS GIS Manage Ground Control Points"),
                  toolbars=["gcpdisp"], Map=None, auimgr=None,
@@ -58,9 +60,16 @@ class MapFrame(SingleMapFrame):
         :param auimgs: AUI manager
         :param kwargs: wx.Frame attribures
         """
-        
-        SingleMapFrame.__init__(self, parent = parent, giface = giface, title = title,
-                              Map = Map, auimgr = auimgr, name = name, **kwargs)
+
+        SingleMapFrame.__init__(
+            self,
+            parent=parent,
+            giface=giface,
+            title=title,
+            Map=Map,
+            auimgr=auimgr,
+            name=name,
+            **kwargs)
 
         self._giface = giface
         # properties are shared in other objects, so defining here
@@ -76,15 +85,15 @@ class MapFrame(SingleMapFrame):
 
         self.activemap = self.toolbars['gcpdisp'].togglemap
         self.activemap.SetSelection(0)
-        
-        self.SrcMap        = self.grwiz.SrcMap       # instance of render.Map
-        self.TgtMap        = self.grwiz.TgtMap       # instance of render.Map
+
+        self.SrcMap = self.grwiz.SrcMap       # instance of render.Map
+        self.TgtMap = self.grwiz.TgtMap       # instance of render.Map
         self._mgr.SetDockSizeConstraint(0.5, 0.5)
 
         #
         # Add statusbar
         #
-        
+
         # items for choice
         self.statusbarItems = [sb.SbCoordinates,
                                sb.SbRegionExtent,
@@ -96,32 +105,35 @@ class MapFrame(SingleMapFrame):
                                sb.SbProjection,
                                sbgcp.SbGoToGCP,
                                sbgcp.SbRMSError]
-                            
-        
+
         # create statusbar and its manager
-        statusbar = self.CreateStatusBar(number = 4, style = 0)
+        statusbar = self.CreateStatusBar(number=4, style=0)
         statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(mapframe = self, statusbar = statusbar)
-        
+        self.statusbarManager = sb.SbManager(
+            mapframe=self, statusbar=statusbar)
+
         # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(self.statusbarItems, mapframe = self, statusbar = statusbar)
-        self.statusbarManager.AddStatusbarItem(sb.SbMask(self, statusbar = statusbar, position = 2))
-        self.statusbarManager.AddStatusbarItem(sb.SbRender(self, statusbar = statusbar, position = 3))
-        
-        self.statusbarManager.SetMode(8) # goto GCP
+        self.statusbarManager.AddStatusbarItemsByClass(
+            self.statusbarItems, mapframe=self, statusbar=statusbar)
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbMask(self, statusbar=statusbar, position=2))
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbRender(self, statusbar=statusbar, position=3))
+
+        self.statusbarManager.SetMode(8)  # goto GCP
 
         #
         # Init map display (buffered DC & set default cursor)
         #
         self.grwiz.SwitchEnv('source')
-        self.SrcMapWindow = BufferedMapWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
-                                              properties=self.mapWindowProperties,
-                                              Map=self.SrcMap)
+        self.SrcMapWindow = BufferedMapWindow(
+            parent=self, giface=self._giface, id=wx.ID_ANY,
+            properties=self.mapWindowProperties, Map=self.SrcMap)
 
         self.grwiz.SwitchEnv('target')
-        self.TgtMapWindow = BufferedMapWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
-                                              properties=self.mapWindowProperties,
-                                              Map=self.TgtMap)
+        self.TgtMapWindow = BufferedMapWindow(
+            parent=self, giface=self._giface, id=wx.ID_ANY,
+            properties=self.mapWindowProperties, Map=self.TgtMap)
         self.MapWindow = self.SrcMapWindow
         self.Map = self.SrcMap
         self._setUpMapWindow(self.SrcMapWindow)
@@ -139,9 +151,9 @@ class MapFrame(SingleMapFrame):
         #
         # initialize region values
         #
-        self._initMap(Map = self.SrcMap) 
-        self._initMap(Map = self.TgtMap) 
-        
+        self._initMap(Map=self.SrcMap)
+        self._initMap(Map=self.TgtMap)
+
         self.GetMapToolbar().SelectDefault()
 
         #
@@ -149,29 +161,30 @@ class MapFrame(SingleMapFrame):
         #
         self.activemap.Bind(wx.EVT_CHOICE, self.OnUpdateActive)
         self.Bind(wx.EVT_SIZE, self.OnSize)
-        
+
         #
         # Update fancy gui style
         #
-        # AuiManager wants a CentrePane, workaround to get two equally sized windows
+        # AuiManager wants a CentrePane, workaround to get two equally sized
+        # windows
         self.list = self.CreateGCPList()
 
         #self.SrcMapWindow.SetSize((300, 300))
         #self.TgtMapWindow.SetSize((300, 300))
         self.list.SetSize((100, 150))
         self._mgr.AddPane(self.list, wx.aui.AuiPaneInfo().
-                  Name("gcplist").Caption(_("GCP List")).LeftDockable(False).
-                  RightDockable(False).PinButton().FloatingSize((600,200)).
-                  CloseButton(False).DestroyOnClose(True).
-                  Top().Layer(1).MinSize((200,100)))
+                          Name("gcplist").Caption(_("GCP List")).LeftDockable(False).
+                          RightDockable(False).PinButton().FloatingSize((600, 200)).
+                          CloseButton(False).DestroyOnClose(True).
+                          Top().Layer(1).MinSize((200, 100)))
         self._mgr.AddPane(self.SrcMapWindow, wx.aui.AuiPaneInfo().
-                  Name("source").Caption(_("Source Display")).Dockable(False).
-                  CloseButton(False).DestroyOnClose(True).Floatable(False).
-                  Centre())
+                          Name("source").Caption(_("Source Display")).Dockable(False).
+                          CloseButton(False).DestroyOnClose(True).Floatable(False).
+                          Centre())
         self._mgr.AddPane(self.TgtMapWindow, wx.aui.AuiPaneInfo().
-                  Name("target").Caption(_("Target Display")).Dockable(False).
-                  CloseButton(False).DestroyOnClose(True).Floatable(False).
-                  Right().Layer(0))
+                          Name("target").Caption(_("Target Display")).Dockable(False).
+                          CloseButton(False).DestroyOnClose(True).Floatable(False).
+                          Right().Layer(0))
 
         srcwidth, srcheight = self.SrcMapWindow.GetSize()
         tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
@@ -192,7 +205,7 @@ class MapFrame(SingleMapFrame):
         # Init print module and classes
         #
         self.printopt = PrintOptions(self, self.MapWindow)
-        
+
         #
         # Initialization of digitization tool
         #
@@ -201,7 +214,7 @@ class MapFrame(SingleMapFrame):
         # set active map
         self.MapWindow = self.SrcMapWindow
         self.Map = self.SrcMap
-        
+
         # do not init zoom history here, that happens when zooming to map(s)
 
         #
@@ -213,7 +226,7 @@ class MapFrame(SingleMapFrame):
         self.dialogs['barscale'] = None
         self.dialogs['legend'] = None
 
-        self.decorationDialog = None # decoration/overlays
+        self.decorationDialog = None  # decoration/overlays
 
         # doing nice things in statusbar when other things are ready
         self.statusbarManager.Update()
@@ -231,7 +244,7 @@ class MapFrame(SingleMapFrame):
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window
-        
+
         Currently known toolbars are:
          - 'map'     - basic map toolbar
          - 'vdigit'  - vector digitizer
@@ -254,7 +267,8 @@ class MapFrame(SingleMapFrame):
 
         # GCP display
         elif name == "gcpdisp":
-            self.toolbars['gcpdisp'] = GCPDisplayToolbar(self, self._toolSwitcher)
+            self.toolbars['gcpdisp'] = GCPDisplayToolbar(
+                self, self._toolSwitcher)
 
             self._mgr.AddPane(self.toolbars['gcpdisp'],
                               wx.aui.AuiPaneInfo().
@@ -265,7 +279,7 @@ class MapFrame(SingleMapFrame):
                               CloseButton(False).Layer(2))
 
             if self.show_target == False:
-                self.toolbars['gcpdisp'].Enable('zoommenu', enable = False)
+                self.toolbars['gcpdisp'].Enable('zoommenu', enable=False)
 
             self.toolbars['gcpman'] = GCPManToolbar(self)
 
@@ -276,7 +290,7 @@ class MapFrame(SingleMapFrame):
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2))
-            
+
         self._mgr.Update()
 
     def OnUpdateProgress(self, event):
@@ -284,9 +298,9 @@ class MapFrame(SingleMapFrame):
         Update progress bar info
         """
         self.GetProgressBar().UpdateProgress(event.layer, event.map)
-        
+
         event.Skip()
-        
+
     def OnFocus(self, event):
         """
         Change choicebook page to match display.
@@ -304,8 +318,8 @@ class MapFrame(SingleMapFrame):
     def OnDraw(self, event):
         """Re-display current map composition
         """
-        self.MapWindow.UpdateMap(render = False)
-        
+        self.MapWindow.UpdateMap(render=False)
+
     def OnRender(self, event):
         """Re-render map composition (each map layer)
         """
@@ -318,13 +332,13 @@ class MapFrame(SingleMapFrame):
         self.SrcMapWindow.UpdateMap(render=True)
         if self.show_target:
             self.TgtMapWindow.UpdateMap(render=True)
-        
+
         # update statusbar
         self.StatusbarUpdate()
 
     def OnPointer(self, event):
         """Pointer button clicked
-        """      
+        """
         self.SrcMapWindow.SetModePointer()
         self.TgtMapWindow.SetModePointer()
         # change the default cursor
@@ -364,8 +378,8 @@ class MapFrame(SingleMapFrame):
         """
         img = self.MapWindow.img
         if not img:
-            GMessage(parent = self,
-                     message = _("Nothing to render (empty map). Operation canceled."))
+            GMessage(parent=self, message=_(
+                "Nothing to render (empty map). Operation canceled."))
             return
         filetype, ltype = GetImageHandlers(img)
 
@@ -377,29 +391,29 @@ class MapFrame(SingleMapFrame):
             return
         width, height = dlg.GetValues()
         dlg.Destroy()
-        
+
         # get filename
-        dlg = wx.FileDialog(parent = self,
-                            message = _("Choose a file name to save the image "
-                                        "(no need to add extension)"),
-                            wildcard = filetype,
+        dlg = wx.FileDialog(parent=self,
+                            message=_("Choose a file name to save the image "
+                                      "(no need to add extension)"),
+                            wildcard=filetype,
                             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
-        
+
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             if not path:
                 dlg.Destroy()
                 return
-            
+
             base, ext = os.path.splitext(path)
             fileType = ltype[dlg.GetFilterIndex()]['type']
-            extType  = ltype[dlg.GetFilterIndex()]['ext']
+            extType = ltype[dlg.GetFilterIndex()]['ext']
             if ext != extType:
                 path = base + '.' + extType
-            
+
             self.MapWindow.SaveToFile(path, fileType,
                                       width, height)
-            
+
         dlg.Destroy()
 
     def PrintMenu(self, event):
@@ -430,25 +444,25 @@ class MapFrame(SingleMapFrame):
         """
         Set display extents to match selected raster map (ignore NULLs)
         """
-        self.MapWindow.ZoomToMap(ignoreNulls = True)
-        
+        self.MapWindow.ZoomToMap(ignoreNulls=True)
+
     def OnZoomToSaved(self, event):
         """Set display geometry to match extents in
         saved region file
         """
         self.MapWindow.SetRegion(zoomOnly=True)
-        
+
     def OnDisplayToWind(self, event):
         """Set computational region (WIND file) to match display
         extents
         """
         self.MapWindow.DisplayToWind()
- 
+
     def SaveDisplayRegion(self, event):
         """Save display extents to named region file.
         """
         self.MapWindow.SaveDisplayRegion()
-        
+
     def OnZoomMenu(self, event):
         """Popup Zoom menu
         """
@@ -456,11 +470,13 @@ class MapFrame(SingleMapFrame):
         zoommenu = wx.Menu()
         # Add items to the menu
 
-        zoomwind = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to computational region (set with g.region)'))
+        zoomwind = wx.MenuItem(zoommenu, wx.ID_ANY, _(
+            'Zoom to computational region (set with g.region)'))
         zoommenu.AppendItem(zoomwind)
         self.Bind(wx.EVT_MENU, self.OnZoomToWind, zoomwind)
 
-        zoomdefault = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to default region'))
+        zoomdefault = wx.MenuItem(
+            zoommenu, wx.ID_ANY, _('Zoom to default region'))
         zoommenu.AppendItem(zoomdefault)
         self.Bind(wx.EVT_MENU, self.OnZoomToDefault, zoomdefault)
 
@@ -468,11 +484,13 @@ class MapFrame(SingleMapFrame):
         zoommenu.AppendItem(zoomsaved)
         self.Bind(wx.EVT_MENU, self.OnZoomToSaved, zoomsaved)
 
-        savewind = wx.MenuItem(zoommenu, wx.ID_ANY, _('Set computational region from display'))
+        savewind = wx.MenuItem(zoommenu, wx.ID_ANY, _(
+            'Set computational region from display'))
         zoommenu.AppendItem(savewind)
         self.Bind(wx.EVT_MENU, self.OnDisplayToWind, savewind)
 
-        savezoom = wx.MenuItem(zoommenu, wx.ID_ANY, _('Save display geometry to named region'))
+        savezoom = wx.MenuItem(zoommenu, wx.ID_ANY, _(
+            'Save display geometry to named region'))
         zoommenu.AppendItem(savezoom)
         self.Bind(wx.EVT_MENU, self.SaveDisplayRegion, savezoom)
 
@@ -480,13 +498,12 @@ class MapFrame(SingleMapFrame):
         # will be called before PopupMenu returns.
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
-        
-        
+
     def IsStandalone(self):
         """Check if Map display is standalone"""
         # we do not know and we do not care, so always False
         return True
-    
+
     def GetLayerManager(self):
         """Get reference to Layer Manager
 
@@ -496,13 +513,13 @@ class MapFrame(SingleMapFrame):
 
     def GetSrcWindow(self):
         return self.SrcMapWindow
-        
+
     def GetTgtWindow(self):
         return self.TgtMapWindow
-    
+
     def GetShowTarget(self):
         return self.show_target
-        
+
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
         return self.toolbars['gcpdisp']

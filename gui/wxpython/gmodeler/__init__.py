@@ -7,4 +7,4 @@ all = [
     'dialogs',
     'toolbars',
     'frame',
-    ]
+]

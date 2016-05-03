@@ -20,7 +20,7 @@
 #% keyword: raster
 #% keyword: import
 #% keyword: WMS
-#% keyword: WMTS 
+#% keyword: WMTS
 #% keyword: OnEarth
 #%end
 
@@ -66,8 +66,8 @@
 #%option
 #% key: srs
 #% type: integer
-#% description: EPSG code of requested source projection 
-#% answer:4326 
+#% description: EPSG code of requested source projection
+#% answer:4326
 #% guisection: Request
 #%end
 
@@ -161,19 +161,20 @@ import sys
 from grass.script import core as grass
 
 sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms"))
-                
+
+
 def GetRegion():
     """!Parse region from GRASS_REGION env var.
     """
     region = os.environ["GRASS_REGION"]
-    conv_reg_vals = {'east' : 'e',
-                     'north' : 'n',
-                     'west' : 'w',
-                     'south' : 's',
-                     'rows' : 'rows',
-                     'cols' : 'cols',
-                     'e-w resol' : 'ewres',
-                     'n-s resol' : 'nsres'}
+    conv_reg_vals = {'east': 'e',
+                     'north': 'n',
+                     'west': 'w',
+                     'south': 's',
+                     'rows': 'rows',
+                     'cols': 'cols',
+                     'e-w resol': 'ewres',
+                     'n-s resol': 'nsres'}
 
     keys_to_convert = conv_reg_vals.keys()
 
@@ -183,11 +184,12 @@ def GetRegion():
     for r in region:
         r = r.split(':')
         r[0] = r[0].strip()
-        
+
         if r[0] in keys_to_convert:
             conv_region[conv_reg_vals[r[0]]] = float(r[1])
 
     return conv_region
+
 
 def main():
     options['region'] = GetRegion()
@@ -200,8 +202,8 @@ def main():
         grass.debug("Using GDAL WMS driver")
         from wms_gdal_drv import WMSGdalDrv
         wms = WMSGdalDrv()
-    
-    temp_map = wms.GetMap(options, flags) 
+
+    temp_map = wms.GetMap(options, flags)
     os.rename(temp_map, os.environ["GRASS_RENDER_FILE"])
 
     return 0

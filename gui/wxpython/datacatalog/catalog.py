@@ -25,21 +25,23 @@ from datacatalog.toolbars import DataCatalogToolbar
 
 from grass.pydispatch.signal import Signal
 
+
 class DataCatalog(wx.Panel):
     """Data catalog panel"""
-    def __init__(self, parent, giface=None, id = wx.ID_ANY, title=_("Data catalog"),
-                 name='catalog', **kwargs):
+
+    def __init__(self, parent, giface=None, id=wx.ID_ANY,
+                 title=_("Data catalog"), name='catalog', **kwargs):
         """Panel constructor  """
         self.showNotification = Signal('DataCatalog.showNotification')
         self.parent = parent
         self.baseTitle = title
-        wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
+        wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
         self.SetName("DataCatalog")
-        
+
         Debug.msg(1, "DataCatalog.__init__()")
 
         # toolbar
-        self.toolbar = DataCatalogToolbar(parent = self)
+        self.toolbar = DataCatalogToolbar(parent=self)
 
         # tree with layers
         self.tree = DataCatalogTree(self, giface=giface)
@@ -54,15 +56,15 @@ class DataCatalog(wx.Panel):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        sizer.Add(item = self.toolbar, proportion = 0,
-                  flag = wx.EXPAND)          
+        sizer.Add(item=self.toolbar, proportion=0,
+                  flag=wx.EXPAND)
 
-        sizer.Add(item = self.tree.GetControl(), proportion = 1,
-                  flag = wx.EXPAND)          
-        
+        sizer.Add(item=self.tree.GetControl(), proportion=1,
+                  flag=wx.EXPAND)
+
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
-        
+
         self.Layout()
 
     def LoadItems(self):

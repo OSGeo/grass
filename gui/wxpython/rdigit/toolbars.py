@@ -37,6 +37,7 @@ rdigitIcons = {'area': MetaIcon(img='polygon-create',
 class RDigitToolbar(BaseToolbar):
     """RDigit toolbar
     """
+
     def __init__(self, parent, controller, toolSwitcher):
         """RDigit toolbar constructor
         """
@@ -45,9 +46,10 @@ class RDigitToolbar(BaseToolbar):
         self.InitToolbar(self._toolbarData())
 
         self._mapSelectionComboId = wx.NewId()
-        self._mapSelectionCombo = wx.ComboBox(self, id=self._mapSelectionComboId,
-                                              value=_("Select raster map"),
-                                              choices=[], size=(120, -1))
+        self._mapSelectionCombo = wx.ComboBox(
+            self, id=self._mapSelectionComboId, value=_("Select raster map"),
+            choices=[],
+            size=(120, -1))
         self._mapSelectionCombo.Bind(wx.EVT_COMBOBOX, self.OnMapSelection)
         self._mapSelectionCombo.SetEditable(False)
         self.InsertControl(0, self._mapSelectionCombo)
@@ -56,28 +58,42 @@ class RDigitToolbar(BaseToolbar):
         self._colorId = wx.NewId()
         self._color = csel.ColourSelect(parent=self, colour=wx.GREEN,
                                         size=(30, 30))
-        self._color.Bind(csel.EVT_COLOURSELECT, lambda evt: self._changeDrawColor())
-        self._color.SetToolTipString(_("Set drawing color (not raster cell color)"))
+        self._color.Bind(
+            csel.EVT_COLOURSELECT,
+            lambda evt: self._changeDrawColor())
+        self._color.SetToolTipString(
+            _("Set drawing color (not raster cell color)"))
         self.InsertControl(4, self._color)
 
         self._cellValues = set(['1'])
         self._valueComboId = wx.NewId()
-        # validator does not work with combobox, SetBackgroundColor is not working
-        self._valueCombo = wx.ComboBox(self, id=self._valueComboId,
-                                       choices=list(self._cellValues), size=(80, -1),
-                                       validator=FloatValidator())
-        self._valueCombo.Bind(wx.EVT_COMBOBOX, lambda evt: self._cellValueChanged())
-        self._valueCombo.Bind(wx.EVT_TEXT, lambda evt: self._cellValueChanged())
+        # validator does not work with combobox, SetBackgroundColor is not
+        # working
+        self._valueCombo = wx.ComboBox(
+            self, id=self._valueComboId, choices=list(
+                self._cellValues), size=(
+                80, -1), validator=FloatValidator())
+        self._valueCombo.Bind(
+            wx.EVT_COMBOBOX,
+            lambda evt: self._cellValueChanged())
+        self._valueCombo.Bind(wx.EVT_TEXT,
+                              lambda evt: self._cellValueChanged())
         self._valueCombo.SetSelection(0)
         self._cellValueChanged()
-        self.InsertControl(6, wx.StaticText(self, label=" %s" % _("Cell value:")))
+        self.InsertControl(
+            6, wx.StaticText(
+                self, label=" %s" %
+                _("Cell value:")))
         self.InsertControl(7, self._valueCombo)
 
         self._widthValueId = wx.NewId()
-        # validator does not work with combobox, SetBackgroundColor is not working
-        self._widthValue = wx.TextCtrl(self, id=self._widthValueId, value='0',
-                                       size=(80, -1), validator=FloatValidator())
-        self._widthValue.Bind(wx.EVT_TEXT, lambda evt: self._widthValueChanged())
+        # validator does not work with combobox, SetBackgroundColor is not
+        # working
+        self._widthValue = wx.TextCtrl(
+            self, id=self._widthValueId, value='0', size=(
+                80, -1), validator=FloatValidator())
+        self._widthValue.Bind(wx.EVT_TEXT,
+                              lambda evt: self._widthValueChanged())
         self._widthValueChanged()
         self._widthValue.SetToolTipString(
             _("Width of currently digitized line or diameter of a digitized point in map units."))
@@ -85,7 +101,8 @@ class RDigitToolbar(BaseToolbar):
         self.InsertControl(9, self._widthValue)
 
         for tool in (self.area, self.line, self.point):
-            self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
+            self.toolSwitcher.AddToolToGroup(
+                group='mouseUse', toolbar=self, tool=tool)
         self.toolSwitcher.toggleToolChanged.connect(self.CheckSelectedTool)
         self._default = self.area
         # realize the toolbar
@@ -93,23 +110,24 @@ class RDigitToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
-        return self._getToolbarData((('area', rdigitIcons['area'],
-                                      lambda event: self._controller.SelectType('area'),
-                                      wx.ITEM_CHECK),
-                                     ('line', rdigitIcons['line'],
-                                      lambda event: self._controller.SelectType('line'),
-                                      wx.ITEM_CHECK),
-                                     ('point', rdigitIcons['point'],
-                                      lambda event: self._controller.SelectType('point'),
-                                      wx.ITEM_CHECK),
-                                     (None, ),
-                                     (None, ),
-                                     ('undo', rdigitIcons['undo'],
-                                      lambda event: self._controller.Undo()),
-                                     ('save', rdigitIcons['save'],
-                                      lambda event: self._controller.Save()),
-                                     ('quit', rdigitIcons['quit'],
-                                      lambda event: self._controller.Stop())))
+        return self._getToolbarData(
+            (('area', rdigitIcons['area'],
+              lambda event: self._controller.SelectType('area'),
+              wx.ITEM_CHECK),
+             ('line', rdigitIcons['line'],
+              lambda event: self._controller.SelectType('line'),
+              wx.ITEM_CHECK),
+             ('point', rdigitIcons['point'],
+              lambda event: self._controller.SelectType('point'),
+              wx.ITEM_CHECK),
+             (None,),
+             (None,),
+             ('undo', rdigitIcons['undo'],
+              lambda event: self._controller.Undo()),
+             ('save', rdigitIcons['save'],
+              lambda event: self._controller.Save()),
+             ('quit', rdigitIcons['quit'],
+              lambda event: self._controller.Stop())))
 
     def CheckSelectedTool(self, id):
         if self.toolSwitcher.IsToolInGroup(tool=id, group='mouseUse') \
@@ -128,7 +146,8 @@ class RDigitToolbar(BaseToolbar):
         if idx == 0:
             ret = self._controller.SelectNewMap()
         else:
-            ret = self._controller.SelectOldMap(self._mapSelectionCombo.GetString(idx))
+            ret = self._controller.SelectOldMap(
+                self._mapSelectionCombo.GetString(idx))
         if not ret:
             # in wxpython 3 we can't set value which is not in the items
             # when not editable
