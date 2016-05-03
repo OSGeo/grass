@@ -834,6 +834,7 @@ class DataCatalogTree(LocationMapTree):
 
         if not isinstance(self._giface, StandaloneGrassInterface) and \
            self.selected_location.label == genv['LOCATION_NAME']:
+            menu.AppendSeparator()
             item = wx.MenuItem(menu, wx.NewId(), _("&Display layer"))
             menu.AppendItem(item)
             self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
