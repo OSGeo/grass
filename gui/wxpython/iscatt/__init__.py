@@ -6,4 +6,4 @@ all = [
     'iscatt_core',
     'toolbars',
     'core_c',
-    ]
+]

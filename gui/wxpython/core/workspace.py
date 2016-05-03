@@ -20,29 +20,30 @@ import os
 
 import wx
 
-from core.utils     import normalize_whitespace, _
-from core.settings  import UserSettings
-from core.gcmd      import EncodeString, GetDefaultEncoding
-from nviz.main      import NvizSettings
+from core.utils import normalize_whitespace, _
+from core.settings import UserSettings
+from core.gcmd import EncodeString, GetDefaultEncoding
+from nviz.main import NvizSettings
 
 from grass.script import core as gcore
 
 
 class ProcessWorkspaceFile:
+
     def __init__(self, tree):
         """A ElementTree handler for the GXW XML file, as defined in
         grass-gxw.dtd.
         """
         self.tree = tree
         self.root = self.tree.getroot()
-        
+
         #
         # layer manager properties
         #
-        self.layerManager = { 'pos' : None,  # window position
-                              'size' : None, # window size
-                              'cwd' : None } # current working directory
-        
+        self.layerManager = {'pos': None,  # window position
+                             'size': None,  # window size
+                             'cwd': None}  # current working directory
+
         #
         # list of mapdisplays
         #
@@ -55,27 +56,27 @@ class ProcessWorkspaceFile:
         # nviz state
         #
         self.nviz_state = {}
-        
-        self.displayIndex = -1 # first display has index '0'
-        
+
+        self.displayIndex = -1  # first display has index '0'
+
         self.__processFile()
 
         if NvizSettings:
             self.nvizDefault = NvizSettings()
         else:
             self.nvizDefault = None
-        
+
     def __filterValue(self, value):
         """Filter value
-        
+
         :param value:
         """
         value = value.replace('&lt;', '<')
         value = value.replace('&gt;', '>')
-        
+
         return value
 
-    def __getNodeText(self, node, tag, default = ''):
+    def __getNodeText(self, node, tag, default=''):
         """Get node text"""
         p = node.find(tag)
         if p is not None:
@@ -85,9 +86,9 @@ class ProcessWorkspaceFile:
                 return ''
 
             return normalize_whitespace(p.text)
-        
+
         return default
-    
+
     def __processFile(self):
         """Process workspace file"""
         #
@@ -99,122 +100,126 @@ class ProcessWorkspaceFile:
             if posAttr:
                 posVal = map(int, posAttr.split(','))
                 try:
-                    self.layerManager['pos']  = (posVal[0], posVal[1])
+                    self.layerManager['pos'] = (posVal[0], posVal[1])
                     self.layerManager['size'] = (posVal[2], posVal[3])
                 except:
                     pass
             # current working directory
             cwdPath = self.__getNodeText(node_lm, 'cwd')
             if cwdPath:
-               self.layerManager['cwd'] = cwdPath 
-        
+                self.layerManager['cwd'] = cwdPath
+
         #
         # displays
         #
         for display in self.root.findall('display'):
             self.displayIndex += 1
-            
+
             # window position and size
             posAttr = display.get('dim', '')
             if posAttr:
                 posVal = map(int, posAttr.split(','))
                 try:
-                    pos  = (posVal[0], posVal[1])
+                    pos = (posVal[0], posVal[1])
                     size = (posVal[2], posVal[3])
                 except:
-                    pos  = None
+                    pos = None
                     size = None
-                # this happens on Windows when mapwindow is minimized when saving workspace
+                # this happens on Windows when mapwindow is minimized when
+                # saving workspace
                 else:
                     if posVal[0] == -32000:
                         pos = None
                         size = None
             else:
-                pos  = None
+                pos = None
                 size = None
-            
+
             extentAttr = display.get('extent', '')
             if extentAttr:
                 # w, s, e, n
                 extent = map(float, extentAttr.split(','))
             else:
                 extent = None
-            
+
             # projection
             node_projection = display.find('projection')
             if node_projection is not None:
-                projection = { 'enabled' : True,
-                               'epsg' : node_projection.get('epsg', ''),
-                               'proj' : self.__getNodeText(node_projection, 'value') }
+                projection = {
+                    'enabled': True, 'epsg': node_projection.get(
+                        'epsg', ''), 'proj': self.__getNodeText(
+                        node_projection, 'value')}
             else:
-                projection = { 'enabled' : False }
-            
-            self.displays.append( {
-                    "name"           : display.get('name'),
-                    "render"         : bool(int(display.get('render', "0"))),
-                    "mode"           : int(display.get('mode', 0)),
-                    "showCompExtent" : bool(int(display.get('showCompExtent', "0"))),
-                    "pos"            : pos,
-                    "size"           : size,
-                    "extent"         : extent,
-                    "tbres"          : display.get('tbres', '0'),
-                    "alignExtent"    : bool(int(display.get('alignExtent', "0"))),
-                    "constrainRes"   : bool(int(display.get('constrainRes', "0"))),
-                    "projection"     : projection,
-                    "viewMode"       : display.get('viewMode', '2d')} )
-            
+                projection = {'enabled': False}
+
+            self.displays.append({
+                "name": display.get('name'),
+                "render": bool(int(display.get('render', "0"))),
+                "mode": int(display.get('mode', 0)),
+                "showCompExtent": bool(int(display.get('showCompExtent', "0"))),
+                "pos": pos,
+                "size": size,
+                "extent": extent,
+                "tbres": display.get('tbres', '0'),
+                "alignExtent": bool(int(display.get('alignExtent', "0"))),
+                "constrainRes": bool(int(display.get('constrainRes', "0"))),
+                "projection": projection,
+                "viewMode": display.get('viewMode', '2d')})
+
             # process all layers/groups in the display
             self.__processLayers(display)
             # process nviz_state
             self.__processNvizState(display)
 
-    def __processLayers(self, node, inGroup = -1):
+    def __processLayers(self, node, inGroup=-1):
         """Process layers/groups of selected display
-        
+
         :param node: display tree node
         :param inGroup: in group -> index of group item otherwise -1
         """
         for item in node.getchildren():
             if item.tag == 'group':
                 # -> group
-                self.layers.append( {
-                        "type"    : 'group',
-                        "name"    : item.get('name', ''),
-                        "checked" : bool(int(item.get('checked', "0"))),
-                        "opacity" : None,
-                        "cmd"     : None,
-                        "group"   : inGroup,
-                        "display" : self.displayIndex,
-                        "vdigit"  : None,
-                        "nviz"    : None})
-                
-                self.__processLayers(item, inGroup = len(self.layers) - 1) # process items in group
-                
+                self.layers.append({
+                    "type": 'group',
+                    "name": item.get('name', ''),
+                    "checked": bool(int(item.get('checked', "0"))),
+                    "opacity": None,
+                    "cmd": None,
+                    "group": inGroup,
+                    "display": self.displayIndex,
+                    "vdigit": None,
+                    "nviz": None})
+
+                self.__processLayers(
+                    item, inGroup=len(
+                        self.layers) - 1)  # process items in group
+
             elif item.tag == 'layer':
                 cmd, selected, vdigit, nviz = self.__processLayer(item)
                 lname = item.get('name', None)
                 if lname and '\\n' in lname:
                     lname = lname.replace('\\n', os.linesep)
-                
-                self.layers.append( {
-                        "type"     : item.get('type', None),
-                        "name"     : lname,
-                        "checked"  : bool(int(item.get('checked', "0"))),
-                        "opacity"  : float(item.get('opacity', '1.0')),
-                        "cmd"      : cmd,
-                        "group"    : inGroup,
-                        "display"  : self.displayIndex,
-                        "selected" : selected,
-                        "vdigit"   : vdigit,
-                        "nviz"     : nviz } )
-            
+
+                self.layers.append({
+                    "type": item.get('type', None),
+                    "name": lname,
+                    "checked": bool(int(item.get('checked', "0"))),
+                    "opacity": float(item.get('opacity', '1.0')),
+                    "cmd": cmd,
+                    "group": inGroup,
+                    "display": self.displayIndex,
+                    "selected": selected,
+                    "vdigit": vdigit,
+                    "nviz": nviz})
+
     def __processLayer(self, layer):
         """Process layer item
 
         :param layer: tree node
         """
         cmd = list()
-        
+
         #
         # layer attributes (task) - 2D settings
         #
@@ -245,7 +250,7 @@ class ProcessWorkspaceFile:
             selected = True
         else:
             selected = False
-        
+
         #
         # Vector digitizer settings
         #
@@ -254,7 +259,7 @@ class ProcessWorkspaceFile:
             vdigit = self.__processLayerVdigit(node_vdigit)
         else:
             vdigit = None
-        
+
         #
         # Nviz (3D settings)
         #
@@ -263,7 +268,7 @@ class ProcessWorkspaceFile:
             nviz = self.__processLayerNviz(node_nviz)
         else:
             nviz = None
-        
+
         return (cmd, selected, vdigit, nviz)
 
     def __processLayerVdigit(self, node_vdigit):
@@ -278,12 +283,12 @@ class ProcessWorkspaceFile:
                 vdigit['geomAttr'] = dict()
             type = node.get('type')
             vdigit['geomAttr'][type] = dict()
-            vdigit['geomAttr'][type]['column'] = node.get('column') # required
+            vdigit['geomAttr'][type]['column'] = node.get('column')  # required
             # default map units
             vdigit['geomAttr'][type]['units'] = node.get('units', 'mu')
-        
+
         return vdigit
-    
+
     def __processLayerNviz(self, node_nviz):
         """Process 3D layer settings
 
@@ -307,9 +312,11 @@ class ProcessWorkspaceFile:
             for sec in ('lines', 'points'):
                 nviz['vector'][sec] = {}
             if node_nviz.find('vlines'):
-                self.__processLayerNvizVectorLines(nviz, node_nviz.find('vlines'))
+                self.__processLayerNvizVectorLines(
+                    nviz, node_nviz.find('vlines'))
             if node_nviz.find('vpoints'):
-                self.__processLayerNvizVectorPoints(nviz, node_nviz.find('vpoints'))
+                self.__processLayerNvizVectorPoints(
+                    nviz, node_nviz.find('vpoints'))
 
         return nviz
 
@@ -343,7 +350,8 @@ class ProcessWorkspaceFile:
             tagName = str(node_draw.tag)
             nvizData['surface'][tagName]['all'] = False
             nvizData['surface'][tagName]['mode'] = {}
-            nvizData['surface'][tagName]['mode']['value'] = -1  # to be calculated
+            nvizData['surface'][tagName]['mode'][
+                'value'] = -1  # to be calculated
             nvizData['surface'][tagName]['mode']['desc'] = {}
             nvizData['surface'][tagName]['mode']['desc']['shading'] = \
                 str(node_draw.get('shading', ''))
@@ -424,7 +432,8 @@ class ProcessWorkspaceFile:
                 for vol_type in ('isosurface', 'slice'):
                     nd = node_res.find(vol_type)
                     value = int(self.__getNodeText(nd, 'value'))
-                    nvizData['volume']['draw']['resolution'][vol_type] = {'value': value}
+                    nvizData['volume']['draw']['resolution'][
+                        vol_type] = {'value': value}
             node_shading = node_draw.find('shading')
             if node_shading is not None:
                 nvizData['volume']['draw']['shading'] = {}
@@ -432,7 +441,8 @@ class ProcessWorkspaceFile:
                     nd = node_shading.find(vol_type)
                     value = int(self.__getNodeText(nd, 'value'))
                     desc = self.__getNodeText(nd, 'desc')
-                    nvizData['volume']['draw']['shading'][vol_type] = {'value': value, 'desc': desc}
+                    nvizData['volume']['draw']['shading'][
+                        vol_type] = {'value': value, 'desc': desc}
 
         nvizData['volume']['isosurface'] = []
         for isosurfaceNode in nodeVolume.findall('isosurface'):
@@ -453,13 +463,16 @@ class ProcessWorkspaceFile:
                         isoDict[att]['value'] = float(value)
             inout = isosurfaceNode.find('inout')
             if inout is not None:
-                isoDict['inout'] = {'value': int(float(inout.find('value').text))}
+                isoDict['inout'] = {'value': int(
+                    float(inout.find('value').text))}
             nvizData['volume']['isosurface'].append(isoDict)
-            
+
         nvizData['volume']['slice'] = []
         for sliceNode in nodeVolume.findall('slice'):
             sliceDict = {}
-            sliceDict['transp'] = {'value': int(sliceNode.find('transp').find('value').text)}
+            sliceDict['transp'] = {
+                'value': int(
+                    sliceNode.find('transp').find('value').text)}
             sliceDict['position'] = {}
             for child in sliceNode.find('position'):
                 if child.tag == 'axis':
@@ -467,7 +480,7 @@ class ProcessWorkspaceFile:
                 else:
                     sliceDict['position'][child.tag] = float(child.text)
             nvizData['volume']['slice'].append(sliceDict)
-  
+
         # position
         node_pos = nodeVolume.find('position')
         if node_pos is not None:
@@ -486,14 +499,21 @@ class ProcessWorkspaceFile:
         :param nodeVector: nviz vector points node
         """
         marker = str(nodePoints.get('marker', ''))
-        markerId = list(UserSettings.Get(group='nviz', key='vector',
-                                         subkey=['points', 'marker'], settings_type='internal')).index(marker)
+        markerId = list(
+            UserSettings.Get(
+                group='nviz',
+                key='vector',
+                subkey=[
+                    'points',
+                    'marker'],
+                settings_type='internal')).index(marker)
         nvizData['vector']['points']['marker'] = {'value': markerId}
 
         node_mode = nodePoints.find('mode')
         if node_mode is not None:
             nvizData['vector']['points']['mode'] = {}
-            nvizData['vector']['points']['mode']['type'] = str(node_mode.get('type', 'surface'))
+            nvizData['vector']['points']['mode'][
+                'type'] = str(node_mode.get('type', 'surface'))
             nvizData['vector']['points']['mode']['surface'] = {}
             nvizData['vector']['points']['mode']['surface']['value'] = []
             nvizData['vector']['points']['mode']['surface']['show'] = []
@@ -502,8 +522,8 @@ class ProcessWorkspaceFile:
             for node_map in node_mode.findall('map'):
                 nvizData['vector']['points']['mode']['surface']['value'].append(
                     self.__processLayerNvizNode(node_map, 'name', str))
-                nvizData['vector']['points']['mode']['surface']['show'].append(bool(
-                    self.__processLayerNvizNode(node_map, 'checked', int)))
+                nvizData['vector']['points']['mode']['surface']['show'].append(
+                    bool(self.__processLayerNvizNode(node_map, 'checked', int)))
 
         # color
         self.__processLayerNvizNode(nodePoints, 'color', str,
@@ -524,12 +544,15 @@ class ProcessWorkspaceFile:
         # thematic
         node_thematic = nodePoints.find('thematic')
         thematic = nvizData['vector']['points']['thematic'] = {}
-        thematic['rgbcolumn'] = self.__processLayerNvizNode(node_thematic, 'rgbcolumn', str)
-        thematic['sizecolumn'] = self.__processLayerNvizNode(node_thematic, 'sizecolumn', str)
+        thematic['rgbcolumn'] = self.__processLayerNvizNode(
+            node_thematic, 'rgbcolumn', str)
+        thematic['sizecolumn'] = self.__processLayerNvizNode(
+            node_thematic, 'sizecolumn', str)
         for col in ('rgbcolumn', 'sizecolumn'):
             if thematic[col] == 'None':
                 thematic[col] = None
-        thematic['layer'] = self.__processLayerNvizNode(node_thematic, 'layer', int)
+        thematic['layer'] = self.__processLayerNvizNode(
+            node_thematic, 'layer', int)
         for use in ('usecolor', 'usesize', 'usewidth'):
             if node_thematic.get(use, ''):
                 thematic[use] = int(node_thematic.get(use, '0'))
@@ -543,7 +566,8 @@ class ProcessWorkspaceFile:
         node_mode = nodeLines.find('mode')
         if node_mode is not None:
             nvizData['vector']['lines']['mode'] = {}
-            nvizData['vector']['lines']['mode']['type'] = str(node_mode.get('type', ''))
+            nvizData['vector']['lines']['mode'][
+                'type'] = str(node_mode.get('type', ''))
             nvizData['vector']['lines']['mode']['surface'] = {}
             nvizData['vector']['lines']['mode']['surface']['value'] = []
             nvizData['vector']['lines']['mode']['surface']['show'] = []
@@ -552,8 +576,8 @@ class ProcessWorkspaceFile:
             for node_map in node_mode.findall('map'):
                 nvizData['vector']['lines']['mode']['surface']['value'].append(
                     self.__processLayerNvizNode(node_map, 'name', str))
-                nvizData['vector']['lines']['mode']['surface']['show'].append(bool(
-                    self.__processLayerNvizNode(node_map, 'checked', int)))
+                nvizData['vector']['lines']['mode']['surface']['show'].append(
+                    bool(self.__processLayerNvizNode(node_map, 'checked', int)))
 
         # color
         self.__processLayerNvizNode(nodeLines, 'color', str,
@@ -570,17 +594,20 @@ class ProcessWorkspaceFile:
         # thematic
         node_thematic = nodeLines.find('thematic')
         thematic = nvizData['vector']['lines']['thematic'] = {}
-        thematic['rgbcolumn'] = self.__processLayerNvizNode(node_thematic, 'rgbcolumn', str)
-        thematic['sizecolumn'] = self.__processLayerNvizNode(node_thematic, 'sizecolumn', str)
+        thematic['rgbcolumn'] = self.__processLayerNvizNode(
+            node_thematic, 'rgbcolumn', str)
+        thematic['sizecolumn'] = self.__processLayerNvizNode(
+            node_thematic, 'sizecolumn', str)
         for col in ('rgbcolumn', 'sizecolumn'):
             if thematic[col] == 'None':
                 thematic[col] = None
-        thematic['layer'] = self.__processLayerNvizNode(node_thematic, 'layer', int)
+        thematic['layer'] = self.__processLayerNvizNode(
+            node_thematic, 'layer', int)
         for use in ('usecolor', 'usesize', 'usewidth'):
             if node_thematic.get(use, ''):
                 thematic[use] = int(node_thematic.get(use, '0'))
 
-    def __processLayerNvizNode(self, node, tag, cast, dc = None):
+    def __processLayerNvizNode(self, node, tag, cast, dc=None):
         """Process given tag nviz/vector"""
         node_tag = node.find(tag)
         if node_tag is not None:
@@ -599,7 +626,7 @@ class ProcessWorkspaceFile:
                 dc[tag]['value'] = value
             else:
                 return value
-    
+
     def __processNvizState(self, node):
         """Process tag nviz_state"""
         node_state = node.find('nviz_state')
@@ -612,36 +639,52 @@ class ProcessWorkspaceFile:
         node_view = node_state.find('view')
         view = {}
         iview = {}
-        
+
         node_position = node_view.find('v_position')
         view['position'] = {}
-        view['position']['x'] = self.__processLayerNvizNode(node_position, 'x', float)
-        view['position']['y'] = self.__processLayerNvizNode(node_position, 'y', float)
+        view['position']['x'] = self.__processLayerNvizNode(
+            node_position, 'x', float)
+        view['position']['y'] = self.__processLayerNvizNode(
+            node_position, 'y', float)
         node_persp = node_view.find('persp')
         view['persp'] = {}
         iview['persp'] = {}
-        view['persp']['value'] = self.__processLayerNvizNode(node_persp, 'value', int)
-        view['persp']['step'] = self.__processLayerNvizNode(node_persp, 'step', int)
-        iview['persp']['min'] = self.__processLayerNvizNode(node_persp, 'min', int)
-        iview['persp']['max'] = self.__processLayerNvizNode(node_persp, 'max', int)
+        view['persp']['value'] = self.__processLayerNvizNode(
+            node_persp, 'value', int)
+        view['persp']['step'] = self.__processLayerNvizNode(
+            node_persp, 'step', int)
+        iview['persp']['min'] = self.__processLayerNvizNode(
+            node_persp, 'min', int)
+        iview['persp']['max'] = self.__processLayerNvizNode(
+            node_persp, 'max', int)
         node_height = node_view.find('v_height')
         iview['height'] = {}
-        iview['height']['value'] = self.__processLayerNvizNode(node_height, 'value', int)
-        iview['height']['min'] = self.__processLayerNvizNode(node_height, 'min', int)
-        iview['height']['max'] = self.__processLayerNvizNode(node_height, 'max', int)
+        iview['height']['value'] = self.__processLayerNvizNode(
+            node_height, 'value', int)
+        iview['height']['min'] = self.__processLayerNvizNode(
+            node_height, 'min', int)
+        iview['height']['max'] = self.__processLayerNvizNode(
+            node_height, 'max', int)
         node_twist = node_view.find('twist')
         view['twist'] = {}
         iview['twist'] = {}
-        view['twist']['value'] = self.__processLayerNvizNode(node_twist, 'value', int)
-        iview['twist']['min'] = self.__processLayerNvizNode(node_twist, 'min', int)
-        iview['twist']['max'] = self.__processLayerNvizNode(node_twist, 'max', int)
+        view['twist']['value'] = self.__processLayerNvizNode(
+            node_twist, 'value', int)
+        iview['twist']['min'] = self.__processLayerNvizNode(
+            node_twist, 'min', int)
+        iview['twist']['max'] = self.__processLayerNvizNode(
+            node_twist, 'max', int)
         node_zexag = node_view.find('z-exag')
         view['z-exag'] = {}
         iview['z-exag'] = {}
-        view['z-exag']['value'] = self.__processLayerNvizNode(node_zexag, 'value', float)
-        view['z-exag']['min'] = self.__processLayerNvizNode(node_zexag, 'min', int)
-        view['z-exag']['max'] = self.__processLayerNvizNode(node_zexag, 'max', int)
-        iview['z-exag']['llRatio'] = self.__processLayerNvizNode(node_zexag, 'llRatio', float)
+        view[
+            'z-exag']['value'] = self.__processLayerNvizNode(node_zexag, 'value', float)
+        view[
+            'z-exag']['min'] = self.__processLayerNvizNode(node_zexag, 'min', int)
+        view[
+            'z-exag']['max'] = self.__processLayerNvizNode(node_zexag, 'max', int)
+        iview[
+            'z-exag']['llRatio'] = self.__processLayerNvizNode(node_zexag, 'llRatio', float)
         node_focus = node_view.find('focus')
         iview['focus'] = {}
         iview['focus']['x'] = self.__processLayerNvizNode(node_focus, 'x', int)
@@ -664,12 +707,13 @@ class ProcessWorkspaceFile:
         if node_rot is not None:
             rotation = node_rot.text
             if rotation:
-                iview['rotation'] = [float(item) for item in rotation.split(',')]
+                iview['rotation'] = [float(item)
+                                     for item in rotation.split(',')]
 
         view['background'] = {}
         color = self.__processLayerNvizNode(node_view, 'background_color', str)
         view['background']['color'] = tuple(map(int, color.split(':')))
-        
+
         self.nviz_state['view'] = view
         self.nviz_state['iview'] = iview
         #
@@ -677,63 +721,78 @@ class ProcessWorkspaceFile:
         #
         node_light = node_state.find('light')
         light = {}
-        
+
         node_position = node_light.find('l_position')
         light['position'] = {}
-        light['position']['x'] = self.__processLayerNvizNode(node_position, 'x', float)
-        light['position']['y'] = self.__processLayerNvizNode(node_position, 'y', float)
-        light['position']['z'] = self.__processLayerNvizNode(node_position, 'z', int)
-        
-        light['bright'] = self.__processLayerNvizNode(node_light, 'bright', int) 
-        light['ambient'] = self.__processLayerNvizNode(node_light, 'ambient', int)
+        light['position']['x'] = self.__processLayerNvizNode(
+            node_position, 'x', float)
+        light['position']['y'] = self.__processLayerNvizNode(
+            node_position, 'y', float)
+        light['position']['z'] = self.__processLayerNvizNode(
+            node_position, 'z', int)
+
+        light['bright'] = self.__processLayerNvizNode(
+            node_light, 'bright', int)
+        light['ambient'] = self.__processLayerNvizNode(
+            node_light, 'ambient', int)
         color = self.__processLayerNvizNode(node_light, 'color', str)
         light['color'] = tuple(map(int, color.split(':')))
-        
+
         self.nviz_state['light'] = light
-        
+
         node_constants = node_state.find('constant_planes')
         constants = []
         if node_constants:
             for node_plane in node_constants.findall('plane'):
                 plane = {}
-                plane['color'] = self.__processLayerNvizNode(node_plane, 'color', str)                
-                plane['resolution'] = self.__processLayerNvizNode(node_plane, 'fine_resolution', int)
-                plane['value'] = self.__processLayerNvizNode(node_plane, 'height', int)
+                plane['color'] = self.__processLayerNvizNode(
+                    node_plane, 'color', str)
+                plane['resolution'] = self.__processLayerNvizNode(
+                    node_plane, 'fine_resolution', int)
+                plane['value'] = self.__processLayerNvizNode(
+                    node_plane, 'height', int)
                 plane['object'] = {}
                 constants.append({'constant': plane})
-        self.nviz_state['constants'] = constants    
+        self.nviz_state['constants'] = constants
+
 
 class WriteWorkspaceFile(object):
     """Generic class for writing workspace file"""
+
     def __init__(self, lmgr, file):
-        self.file =  file
+        self.file = file
         self.lmgr = lmgr
         self.indent = 0
-        
+
         # write header
 
-        self.file.write('<?xml version="1.0" encoding="%s"?>\n' % GetDefaultEncoding(forceUTF8 = True))
+        self.file.write(
+            '<?xml version="1.0" encoding="%s"?>\n' %
+            GetDefaultEncoding(
+                forceUTF8=True))
         self.file.write('<!DOCTYPE gxw SYSTEM "grass-gxw.dtd">\n')
         self.file.write('%s<gxw>\n' % (' ' * self.indent))
-        
-        self.indent =+ 4
-        
+
+        self.indent = + 4
+
         # layer manager
         windowPos = self.lmgr.GetPosition()
         windowSize = self.lmgr.GetSize()
-        file.write('%s<layer_manager dim="%d,%d,%d,%d">\n' % (' ' * self.indent,
-                                                              windowPos[0],
-                                                              windowPos[1],
-                                                              windowSize[0],
-                                                              windowSize[1]
-                                                              ))
+        file.write(
+            '%s<layer_manager dim="%d,%d,%d,%d">\n' %
+            (' ' *
+             self.indent,
+             windowPos[0],
+             windowPos[1],
+             windowSize[0],
+             windowSize[1]))
         self.indent += 4
         cwdPath = self.lmgr.GetCwdPath()
         if cwdPath:
             file.write('%s<cwd>%s</cwd>\n' % (' ' * self.indent, cwdPath))
         self.indent -= 4
         file.write('%s</layer_manager>\n' % (' ' * self.indent))
-        
+
         # list of displays
         for page in range(0, self.lmgr.GetLayerNotebook().GetPageCount()):
             dispName = self.lmgr.GetLayerNotebook().GetPageText(page)
@@ -741,14 +800,14 @@ class WriteWorkspaceFile(object):
             region = mapTree.GetMap().GetCurrentRegion()
             compRegion = gcore.region(region3d=True)
             mapdisp = mapTree.GetMapDisplay()
-            
+
             displayPos = mapdisp.GetPosition()
             displaySize = mapdisp.GetSize()
             if mapdisp.toolbars['map'].combo.GetSelection() == 1:
                 viewmode = '3d'
             else:
                 viewmode = '2d'
-            
+
             file.write('%s<display '
                        'name="%s" render="%d" '
                        'mode="%d" showCompExtent="%d" '
@@ -778,84 +837,98 @@ class WriteWorkspaceFile(object):
                                               viewmode
                                               ))
             # projection statusbar info
-            if mapdisp.GetProperty('projection') and \
-                    UserSettings.Get(group='display', key='projection', subkey='proj4'):
+            if mapdisp.GetProperty('projection') and UserSettings.Get(
+                    group='display', key='projection', subkey='proj4'):
                 self.indent += 4
                 file.write('%s<projection' % (' ' * self.indent))
-                epsg = UserSettings.Get(group='display', key='projection', subkey='epsg')
+                epsg = UserSettings.Get(
+                    group='display', key='projection', subkey='epsg')
                 if epsg:
                     file.write(' epsg="%s"' % epsg)
                 file.write('>\n')
-                proj = UserSettings.Get(group='display', key='projection', subkey='proj4')
-                self.indent += 4 
+                proj = UserSettings.Get(
+                    group='display', key='projection', subkey='proj4')
+                self.indent += 4
                 file.write('%s<value>%s</value>\n' % (' ' * self.indent, proj))
                 self.indent -= 4
                 file.write('%s</projection>\n' % (' ' * self.indent))
                 self.indent -= 4
-            
+
             # list of layers
             item = mapTree.GetFirstChild(mapTree.root)[0]
             self.__writeLayer(mapTree, item)
-            
+
             if mapdisp.MapWindow3D is not None:
                 nvizDisp = mapdisp.MapWindow3D
-                self.__writeNvizState(view = nvizDisp.view, iview =  nvizDisp.iview, 
-                                      light = nvizDisp.light, constants = nvizDisp.constants)
-            
+                self.__writeNvizState(
+                    view=nvizDisp.view,
+                    iview=nvizDisp.iview,
+                    light=nvizDisp.light,
+                    constants=nvizDisp.constants)
+
             file.write('%s</display>\n' % (' ' * self.indent))
-        
-        self.indent =- 4
+
+        self.indent = - 4
         file.write('%s</gxw>\n' % (' ' * self.indent))
 
     def __filterValue(self, value):
         """Make value XML-valid"""
         value = value.replace('<', '&lt;')
         value = value.replace('>', '&gt;')
-        
+
         return value
-    
+
     def __writeLayer(self, mapTree, item):
         """Write bunch of layers to GRASS Workspace XML file"""
         self.indent += 4
         itemSelected = mapTree.GetSelections()
         while item and item.IsOk():
-            type = mapTree.GetLayerInfo(item, key = 'type')
+            type = mapTree.GetLayerInfo(item, key='type')
             if type != 'group':
-                maplayer = mapTree.GetLayerInfo(item, key = 'maplayer')
+                maplayer = mapTree.GetLayerInfo(item, key='maplayer')
             else:
                 maplayer = None
 
             checked = int(item.IsChecked())
             if type == 'command':
-                cmd = mapTree.GetLayerInfo(item, key = 'maplayer').GetCmd(string=True)
-                self.file.write('%s<layer type="%s" name="%s" checked="%d">\n' % \
-                               (' ' * self.indent, type, EncodeString(cmd), checked))
+                cmd = mapTree.GetLayerInfo(
+                    item, key='maplayer').GetCmd(
+                    string=True)
+                self.file.write(
+                    '%s<layer type="%s" name="%s" checked="%d">\n' %
+                    (' ' * self.indent, type, EncodeString(cmd), checked))
                 self.file.write('%s</layer>\n' % (' ' * self.indent))
             elif type == 'group':
                 name = mapTree.GetItemText(item)
-                self.file.write('%s<group name="%s" checked="%d">\n' % \
-                               (' ' * self.indent, EncodeString(name), checked))
+                self.file.write(
+                    '%s<group name="%s" checked="%d">\n' %
+                    (' ' * self.indent, EncodeString(name), checked))
                 self.indent += 4
                 subItem = mapTree.GetFirstChild(item)[0]
                 self.__writeLayer(mapTree, subItem)
                 self.indent -= 4
-                self.file.write('%s</group>\n' % (' ' * self.indent));
+                self.file.write('%s</group>\n' % (' ' * self.indent))
             else:
-                cmd = mapTree.GetLayerInfo(item, key = 'maplayer').GetCmd(string = False)
+                cmd = mapTree.GetLayerInfo(
+                    item, key='maplayer').GetCmd(
+                    string=False)
                 name = mapTree.GetItemText(item).replace(os.linesep, '\\n')
                 opacity = maplayer.GetOpacity()
                 # remove 'opacity' part
                 if opacity < 1:
                     name = name.split('(', -1)[0].strip()
-                self.file.write('%s<layer type="%s" name="%s" checked="%d" opacity="%f">\n' % \
-                                    (' ' * self.indent, type, EncodeString(name), checked, opacity));
-                
+                self.file.write(
+                    '%s<layer type="%s" name="%s" checked="%d" opacity="%f">\n' %
+                    (' ' * self.indent, type, EncodeString(name), checked, opacity))
+
                 self.indent += 4
                 # selected ?
                 if item in itemSelected:
                     self.file.write('%s<selected />\n' % (' ' * self.indent))
                 # layer properties
-                self.file.write('%s<task name="%s">\n' % (' ' * self.indent, cmd[0]))
+                self.file.write(
+                    '%s<task name="%s">\n' %
+                    (' ' * self.indent, cmd[0]))
                 self.indent += 4
                 for key, val in cmd[1].iteritems():
                     if key == 'flags':
@@ -865,18 +938,21 @@ class WriteWorkspaceFile(object):
                     elif val in (True, False):
                         self.file.write('%s<flag name="%s" />\n' %
                                         (' ' * self.indent, key))
-                    else: # parameter
+                    else:  # parameter
                         self.file.write('%s<parameter name="%s">\n' %
                                         (' ' * self.indent, key))
                         self.indent += 4
-                        self.file.write('%s<value>%s</value>\n' %
-                                        (' ' * self.indent, self.__filterValue(val)))
+                        self.file.write(
+                            '%s<value>%s</value>\n' %
+                            (' ' * self.indent, self.__filterValue(val)))
                         self.indent -= 4
-                        self.file.write('%s</parameter>\n' % (' ' * self.indent))
+                        self.file.write(
+                            '%s</parameter>\n' %
+                            (' ' * self.indent))
                 self.indent -= 4
                 self.file.write('%s</task>\n' % (' ' * self.indent))
                 # vector digitizer
-                vdigit = mapTree.GetLayerInfo(item, key = 'vdigit')
+                vdigit = mapTree.GetLayerInfo(item, key='vdigit')
                 if vdigit:
                     self.file.write('%s<vdigit>\n' % (' ' * self.indent))
                     if 'geomAttr' in vdigit:
@@ -885,12 +961,13 @@ class WriteWorkspaceFile(object):
                             units = ''
                             if val['units'] != 'mu':
                                 units = ' units="%s"' % val['units']
-                            self.file.write('%s<geometryAttribute type="%s" column="%s"%s />\n' % \
-                                                (' ' * self.indent, type, val['column'], units))
+                            self.file.write(
+                                '%s<geometryAttribute type="%s" column="%s"%s />\n' %
+                                (' ' * self.indent, type, val['column'], units))
                         self.indent -= 4
                     self.file.write('%s</vdigit>\n' % (' ' * self.indent))
                 # nviz
-                nviz = mapTree.GetLayerInfo(item, key = 'nviz')
+                nviz = mapTree.GetLayerInfo(item, key='nviz')
                 if nviz:
                     self.file.write('%s<nviz>\n' % (' ' * self.indent))
                     if maplayer.type == 'raster':
@@ -904,70 +981,80 @@ class WriteWorkspaceFile(object):
                 self.file.write('%s</layer>\n' % (' ' * self.indent))
             item = mapTree.GetNextSibling(item)
         self.indent -= 4
-        
+
     def __writeNvizSurface(self, data):
         """Save Nviz raster layer properties to workspace
 
         :param data: Nviz layer properties
         """
-        if 'object' not in data: # skip disabled
+        if 'object' not in data:  # skip disabled
             return
         self.indent += 4
         self.file.write('%s<surface>\n' % (' ' * self.indent))
         self.indent += 4
         for attrb in data.iterkeys():
-            if len(data[attrb]) < 1: # skip empty attributes
+            if len(data[attrb]) < 1:  # skip empty attributes
                 continue
             if attrb == 'object':
                 continue
-            
+
             for name in data[attrb].iterkeys():
                 # surface attribute
                 if attrb == 'attribute':
                     if data[attrb][name]['map'] is None:
                         continue
-                    self.file.write('%s<%s name="%s" map="%d">\n' % \
-                                   (' ' * self.indent, attrb, name, data[attrb][name]['map']))
+                    self.file.write(
+                        '%s<%s name="%s" map="%d">\n' %
+                        (' ' * self.indent, attrb, name, data[attrb][name]['map']))
                     self.indent += 4
-                    self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, data[attrb][name]['value']))
+                    self.file.write(
+                        '%s<value>%s</value>\n' %
+                        (' ' * self.indent, data[attrb][name]['value']))
                     self.indent -= 4
                     # end tag
                     self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
 
             # draw mode
             if attrb == 'draw':
-                self.file.write('%s<%s' %(' ' * self.indent, attrb))
+                self.file.write('%s<%s' % (' ' * self.indent, attrb))
                 if 'mode' in data[attrb]:
                     for tag, value in data[attrb]['mode']['desc'].iteritems():
                         self.file.write(' %s="%s"' % (tag, value))
-                self.file.write('>\n') # <draw ...>
+                self.file.write('>\n')  # <draw ...>
 
                 if 'resolution' in data[attrb]:
                     self.indent += 4
                     for type in ('coarse', 'fine'):
-                        self.file.write('%s<resolution type="%s">\n' % (' ' * self.indent, type))
+                        self.file.write(
+                            '%s<resolution type="%s">\n' %
+                            (' ' * self.indent, type))
                         self.indent += 4
-                        self.file.write('%s<value>%d</value>\n' % (' ' * self.indent,
-                                                                   data[attrb]['resolution'][type]))
+                        self.file.write(
+                            '%s<value>%d</value>\n' %
+                            (' ' * self.indent, data[attrb]['resolution'][type]))
                         self.indent -= 4
-                        self.file.write('%s</resolution>\n' % (' ' * self.indent))
+                        self.file.write(
+                            '%s</resolution>\n' %
+                            (' ' * self.indent))
 
                 if 'wire-color' in data[attrb]:
                     self.file.write('%s<wire_color>\n' % (' ' * self.indent))
                     self.indent += 4
-                    self.file.write('%s<value>%s</value>\n' % (' ' * self.indent,
-                                                               data[attrb]['wire-color']['value']))
+                    self.file.write(
+                        '%s<value>%s</value>\n' %
+                        (' ' * self.indent, data[attrb]['wire-color']['value']))
                     self.indent -= 4
                     self.file.write('%s</wire_color>\n' % (' ' * self.indent))
                 self.indent -= 4
-            
+
             # position
             elif attrb == 'position':
-                self.file.write('%s<%s>\n' %(' ' * self.indent, attrb))
+                self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
                 for tag in ('x', 'y', 'z'):
                     self.indent += 4
-                    self.file.write('%s<%s>%d</%s>\n' % (' ' * self.indent, tag,
-                                                        data[attrb][tag], tag))
+                    self.file.write(
+                        '%s<%s>%d</%s>\n' %
+                        (' ' * self.indent, tag, data[attrb][tag], tag))
                     self.indent -= 4
 
             if attrb != 'attribute':
@@ -999,10 +1086,13 @@ class WriteWorkspaceFile(object):
                     # surface attribute
                     if data[attrb][name]['map'] is None:
                         continue
-                    self.file.write('%s<%s name="%s" map="%d">\n' %
-                                   (' ' * self.indent, attrb, name, data[attrb][name]['map']))
+                    self.file.write(
+                        '%s<%s name="%s" map="%d">\n' %
+                        (' ' * self.indent, attrb, name, data[attrb][name]['map']))
                     self.indent += 4
-                    self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, data[attrb][name]['value']))
+                    self.file.write(
+                        '%s<value>%s</value>\n' %
+                        (' ' * self.indent, data[attrb][name]['value']))
                     self.indent -= 4
                     # end tag
                     self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
@@ -1017,30 +1107,42 @@ class WriteWorkspaceFile(object):
                         self.file.write('%s<%s>\n' % (' ' * self.indent, att))
                         for type in ('isosurface', 'slice'):
                             self.indent += 4
-                            self.file.write('%s<%s>\n' % (' ' * self.indent, type))
+                            self.file.write(
+                                '%s<%s>\n' %
+                                (' ' * self.indent, type))
                             self.indent += 4
-                            self.file.write('%s<value>%d</value>\n' % (' ' * self.indent,
-                                                                       data[attrb][att][type]['value']))
+                            self.file.write(
+                                '%s<value>%d</value>\n' %
+                                (' ' * self.indent, data[attrb][att][type]['value']))
                             if att == 'shading':
-                                self.file.write('%s<desc>%s</desc>\n' % (' ' * self.indent,
-                                                                         data[attrb][att][type]['desc']))
+                                self.file.write(
+                                    '%s<desc>%s</desc>\n' %
+                                    (' ' * self.indent, data[attrb][att][type]['desc']))
                             self.indent -= 4
-                            self.file.write('%s</%s>\n' % (' ' * self.indent, type))
+                            self.file.write(
+                                '%s</%s>\n' %
+                                (' ' * self.indent, type))
                             self.indent -= 4
                         self.file.write('%s</%s>\n' % (' ' * self.indent, att))
 
                 if 'box' in data[attrb]:
                     self.file.write('%s<box>\n' % (' ' * self.indent))
                     self.indent += 4
-                    self.file.write('%s<enabled>%d</enabled>\n' % (' ' * self.indent, data[attrb]['box']['enabled']))
+                    self.file.write(
+                        '%s<enabled>%d</enabled>\n' %
+                        (' ' * self.indent, data[attrb]['box']['enabled']))
                     self.indent -= 4
                     self.file.write('%s</box>\n' % (' ' * self.indent))
 
                 if 'mode' in data[attrb]:
                     self.file.write('%s<mode>\n' % (' ' * self.indent))
                     self.indent += 4
-                    self.file.write('%s<desc>%s</desc>\n' % (' ' * self.indent, data[attrb]['mode']['desc']))
-                    self.file.write('%s<value>%d</value>\n' % (' ' * self.indent, data[attrb]['mode']['value']))
+                    self.file.write(
+                        '%s<desc>%s</desc>\n' %
+                        (' ' * self.indent, data[attrb]['mode']['desc']))
+                    self.file.write(
+                        '%s<value>%d</value>\n' %
+                        (' ' * self.indent, data[attrb]['mode']['value']))
                     self.indent -= 4
                     self.file.write('%s</mode>\n' % (' ' * self.indent))
                 self.indent -= 4
@@ -1050,8 +1152,15 @@ class WriteWorkspaceFile(object):
                 self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
                 for tag in ('x', 'y', 'z'):
                     self.indent += 4
-                    self.file.write('%s<%s>%d</%s>\n' % (' ' * self.indent, tag,
-                                                         data[attrb].get(tag, 0), tag))
+                    self.file.write(
+                        '%s<%s>%d</%s>\n' %
+                        (' ' *
+                         self.indent,
+                         tag,
+                         data[attrb].get(
+                             tag,
+                             0),
+                            tag))
                     self.indent -= 4
             if attrb == 'isosurface':
                 for isosurface in data[attrb]:
@@ -1072,11 +1181,15 @@ class WriteWorkspaceFile(object):
                                 except TypeError:  # None
                                     val = ''
                             self.indent += 4
-                            self.file.write(('%s<%s>' % (' ' * self.indent, att)) + val)
+                            self.file.write(
+                                ('%s<%s>' %
+                                 (' ' * self.indent, att)) + val)
                             self.file.write('</%s>\n' % att)
                             self.indent -= 4
                         # end tag
-                        self.file.write('%s</%s>\n' % (' ' * self.indent, name))
+                        self.file.write(
+                            '%s</%s>\n' %
+                            (' ' * self.indent, name))
                         self.indent -= 4
                     self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
 
@@ -1091,11 +1204,15 @@ class WriteWorkspaceFile(object):
                                 continue
                             val = slice_[name][att]
                             self.indent += 4
-                            self.file.write(('%s<%s>' % (' ' * self.indent, att)) + str(val))
+                            self.file.write(
+                                ('%s<%s>' %
+                                 (' ' * self.indent, att)) + str(val))
                             self.file.write('</%s>\n' % att)
                             self.indent -= 4
                         # end tag
-                        self.file.write('%s</%s>\n' % (' ' * self.indent, name))
+                        self.file.write(
+                            '%s</%s>\n' %
+                            (' ' * self.indent, name))
                         self.indent -= 4
                     self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
             if attrb not in ('attribute', 'isosurface', 'slice'):
@@ -1113,17 +1230,18 @@ class WriteWorkspaceFile(object):
         """
         self.indent += 4
         for attrb in data.iterkeys():
-            if len(data[attrb]) < 1: # skip empty attributes
+            if len(data[attrb]) < 1:  # skip empty attributes
                 continue
 
-            if 'object' not in data[attrb]: # skip disabled
+            if 'object' not in data[attrb]:  # skip disabled
                 continue
             if attrb == 'lines':
                 self.file.write('%s<v%s>\n' % (' ' * self.indent, attrb))
             elif attrb == 'points':
                 markerId = data[attrb]['marker']['value']
-                marker = UserSettings.Get(group = 'nviz', key = 'vector',
-                                          subkey = ['points', 'marker'], settings_type='internal')[markerId]
+                marker = UserSettings.Get(
+                    group='nviz', key='vector', subkey=[
+                        'points', 'marker'], settings_type='internal')[markerId]
                 self.file.write('%s<v%s marker="%s">\n' % (' ' * self.indent,
                                                            attrb,
                                                            marker))
@@ -1132,16 +1250,22 @@ class WriteWorkspaceFile(object):
                 if name in ('object', 'marker'):
                     continue
                 if name == 'mode':
-                    self.file.write('%s<%s type="%s">\n' % (' ' * self.indent, name,
-                                                          data[attrb][name]['type']))
+                    self.file.write(
+                        '%s<%s type="%s">\n' %
+                        (' ' * self.indent, name, data[attrb][name]['type']))
                     if data[attrb][name]['type'] == 'surface':
                         self.indent += 4
-                        for idx, surface in enumerate(data[attrb][name]['surface']['value']):
+                        for idx, surface in enumerate(
+                                data[attrb][name]['surface']['value']):
                             checked = data[attrb][name]['surface']['show'][idx]
                             self.file.write('%s<map>\n' % (' ' * self.indent))
                             self.indent += 4
-                            self.file.write('%s<name>%s</name>\n' % (' ' * self.indent, surface))
-                            self.file.write('%s<checked>%s</checked>\n' % (' ' * self.indent, int(checked)))
+                            self.file.write(
+                                '%s<name>%s</name>\n' %
+                                (' ' * self.indent, surface))
+                            self.file.write(
+                                '%s<checked>%s</checked>\n' %
+                                (' ' * self.indent, int(checked)))
                             self.indent -= 4
                             self.file.write('%s</map>\n' % (' ' * self.indent))
                         self.indent -= 4
@@ -1150,7 +1274,9 @@ class WriteWorkspaceFile(object):
                     self.file.write('%s<%s ' % (' ' * self.indent, name))
                     for key in data[attrb][name].iterkeys():
                         if key.startswith('use'):
-                            self.file.write('%s="%s" ' % (key, int(data[attrb][name][key])))
+                            self.file.write(
+                                '%s="%s" ' %
+                                (key, int(data[attrb][name][key])))
                     self.file.write('>\n')
                     self.indent += 4
                     for key, value in data[attrb][name].iteritems():
@@ -1158,13 +1284,17 @@ class WriteWorkspaceFile(object):
                             continue
                         if value is None:
                             value = ''
-                        self.file.write('%s<%s>%s</%s>\n' % (' ' * self.indent, key, value, key))
+                        self.file.write(
+                            '%s<%s>%s</%s>\n' %
+                            (' ' * self.indent, key, value, key))
                     self.indent -= 4
                     self.file.write('%s</%s>\n' % (' ' * self.indent, name))
                 else:
                     self.file.write('%s<%s>\n' % (' ' * self.indent, name))
                     self.indent += 4
-                    self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, data[attrb][name]['value']))
+                    self.file.write(
+                        '%s<value>%s</value>\n' %
+                        (' ' * self.indent, data[attrb][name]['value']))
                     self.indent -= 4
                     self.file.write('%s</%s>\n' % (' ' * self.indent, name))
             self.indent -= 4
@@ -1190,59 +1320,91 @@ class WriteWorkspaceFile(object):
         # position
         self.file.write('%s<v_position>\n' % (' ' * self.indent))
         self.indent += 4
-        self.file.write('%s<x>%.2f</x>\n' % (' ' * self.indent, view['position']['x']))
-        self.file.write('%s<y>%.2f</y>\n' % (' ' * self.indent, view['position']['y']))
+        self.file.write(
+            '%s<x>%.2f</x>\n' %
+            (' ' * self.indent, view['position']['x']))
+        self.file.write(
+            '%s<y>%.2f</y>\n' %
+            (' ' * self.indent, view['position']['y']))
         self.indent -= 4
         self.file.write('%s</v_position>\n' % (' ' * self.indent))
         # perspective
         self.file.write('%s<persp>\n' % (' ' * self.indent))
         self.indent += 4
-        self.file.write('%s<value>%d</value>\n' % (' ' * self.indent, view['persp']['value']))
-        self.file.write('%s<step>%d</step>\n' % (' ' * self.indent, view['persp']['step']))
-        self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, iview['persp']['min']))
-        self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, iview['persp']['max']))
+        self.file.write('%s<value>%d</value>\n' %
+                        (' ' * self.indent, view['persp']['value']))
+        self.file.write('%s<step>%d</step>\n' %
+                        (' ' * self.indent, view['persp']['step']))
+        self.file.write('%s<min>%d</min>\n' %
+                        (' ' * self.indent, iview['persp']['min']))
+        self.file.write('%s<max>%d</max>\n' %
+                        (' ' * self.indent, iview['persp']['max']))
         self.indent -= 4
         self.file.write('%s</persp>\n' % (' ' * self.indent))
         # height
         self.file.write('%s<v_height>\n' % (' ' * self.indent))
         self.indent += 4
-        self.file.write('%s<value>%d</value>\n' % (' ' * self.indent, iview['height']['value']))
-        self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, iview['height']['min']))
-        self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, iview['height']['max']))
+        self.file.write('%s<value>%d</value>\n' %
+                        (' ' * self.indent, iview['height']['value']))
+        self.file.write('%s<min>%d</min>\n' %
+                        (' ' * self.indent, iview['height']['min']))
+        self.file.write('%s<max>%d</max>\n' %
+                        (' ' * self.indent, iview['height']['max']))
         self.indent -= 4
         self.file.write('%s</v_height>\n' % (' ' * self.indent))
         # twist
         self.file.write('%s<twist>\n' % (' ' * self.indent))
         self.indent += 4
-        self.file.write('%s<value>%d</value>\n' % (' ' * self.indent, view['twist']['value']))
-        self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, iview['twist']['min']))
-        self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, iview['twist']['max']))
+        self.file.write('%s<value>%d</value>\n' %
+                        (' ' * self.indent, view['twist']['value']))
+        self.file.write('%s<min>%d</min>\n' %
+                        (' ' * self.indent, iview['twist']['min']))
+        self.file.write('%s<max>%d</max>\n' %
+                        (' ' * self.indent, iview['twist']['max']))
         self.indent -= 4
         self.file.write('%s</twist>\n' % (' ' * self.indent))
         # z-exag
         self.file.write('%s<z-exag>\n' % (' ' * self.indent))
         self.indent += 4
-        self.file.write('%s<value>%.2f</value>\n' % (' ' * self.indent, view['z-exag']['value']))
-        self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, view['z-exag']['min']))
-        self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, view['z-exag']['max']))
-        self.file.write('%s<llRatio>%.2f</llRatio>\n' % (' ' * self.indent, iview['z-exag']['llRatio']))
+        self.file.write('%s<value>%.2f</value>\n' %
+                        (' ' * self.indent, view['z-exag']['value']))
+        self.file.write('%s<min>%d</min>\n' %
+                        (' ' * self.indent, view['z-exag']['min']))
+        self.file.write('%s<max>%d</max>\n' %
+                        (' ' * self.indent, view['z-exag']['max']))
+        self.file.write('%s<llRatio>%.2f</llRatio>\n' %
+                        (' ' * self.indent, iview['z-exag']['llRatio']))
         self.indent -= 4
         self.file.write('%s</z-exag>\n' % (' ' * self.indent))
         # focus (look here)
         self.file.write('%s<focus>\n' % (' ' * self.indent))
         self.indent += 4
-        self.file.write('%s<x>%d</x>\n' % (' ' * self.indent, iview['focus']['x']))
-        self.file.write('%s<y>%d</y>\n' % (' ' * self.indent, iview['focus']['y']))
-        self.file.write('%s<z>%d</z>\n' % (' ' * self.indent, iview['focus']['z']))
+        self.file.write(
+            '%s<x>%d</x>\n' %
+            (' ' * self.indent, iview['focus']['x']))
+        self.file.write(
+            '%s<y>%d</y>\n' %
+            (' ' * self.indent, iview['focus']['y']))
+        self.file.write(
+            '%s<z>%d</z>\n' %
+            (' ' * self.indent, iview['focus']['z']))
         self.indent -= 4
         self.file.write('%s</focus>\n' % (' ' * self.indent))
         # rotation
-        rotation = ','.join([str(i) for i in iview['rotation']]) if iview.get('rotation', '') else ''
-        self.file.write('%s<rotation>%s</rotation>\n' % (' ' * self.indent, rotation))
+        rotation = ','.join(
+            [str(i) for i in iview['rotation']]) if iview.get(
+            'rotation', '') else ''
+        self.file.write(
+            '%s<rotation>%s</rotation>\n' %
+            (' ' * self.indent, rotation))
 
         # background
-        self.__writeTagWithValue('background_color', view['background']['color'][:3], format = 'd:%d:%d')
-        
+        self.__writeTagWithValue(
+            'background_color',
+            view['background']['color'][
+                :3],
+            format='d:%d:%d')
+
         self.indent -= 4
         self.file.write('%s</view>\n' % (' ' * self.indent))
         #
@@ -1253,9 +1415,15 @@ class WriteWorkspaceFile(object):
         # position
         self.file.write('%s<l_position>\n' % (' ' * self.indent))
         self.indent += 4
-        self.file.write('%s<x>%.2f</x>\n' % (' ' * self.indent, light['position']['x']))
-        self.file.write('%s<y>%.2f</y>\n' % (' ' * self.indent, light['position']['y']))
-        self.file.write('%s<z>%d</z>\n' % (' ' * self.indent, light['position']['z']))
+        self.file.write(
+            '%s<x>%.2f</x>\n' %
+            (' ' * self.indent, light['position']['x']))
+        self.file.write(
+            '%s<y>%.2f</y>\n' %
+            (' ' * self.indent, light['position']['y']))
+        self.file.write(
+            '%s<z>%d</z>\n' %
+            (' ' * self.indent, light['position']['z']))
         self.indent -= 4
         self.file.write('%s</l_position>\n' % (' ' * self.indent))
         # bright
@@ -1263,8 +1431,8 @@ class WriteWorkspaceFile(object):
         # ambient
         self.__writeTagWithValue('ambient', light['ambient'])
         # color
-        self.__writeTagWithValue('color', light['color'][:3], format = 'd:%d:%d')
-        
+        self.__writeTagWithValue('color', light['color'][:3], format='d:%d:%d')
+
         self.indent -= 4
         self.file.write('%s</light>\n' % (' ' * self.indent))
         #
@@ -1276,21 +1444,25 @@ class WriteWorkspaceFile(object):
             for idx, plane in enumerate(constants):
                 self.file.write('%s<plane>\n' % (' ' * self.indent))
                 self.indent += 4
-                self.__writeTagWithValue('height', constants[idx]['constant']['value'])
-                self.__writeTagWithValue('fine_resolution', constants[idx]['constant']['resolution'])
-                self.__writeTagWithValue('color', constants[idx]['constant']['color'], format = 's')
+                self.__writeTagWithValue(
+                    'height', constants[idx]['constant']['value'])
+                self.__writeTagWithValue(
+                    'fine_resolution',
+                    constants[idx]['constant']['resolution'])
+                self.__writeTagWithValue(
+                    'color', constants[idx]['constant']['color'], format='s')
                 self.indent -= 4
                 self.file.write('%s</plane>\n' % (' ' * self.indent))
             self.indent -= 4
             self.file.write('%s</constant_planes>\n' % (' ' * self.indent))
         self.indent -= 4
-        
+
         self.file.write('%s</nviz_state>\n' % (' ' * self.indent))
         self.indent -= 4
-    
-    def __writeTagWithValue(self, tag, data, format = 'd'):
+
+    def __writeTagWithValue(self, tag, data, format='d'):
         """Helper function for writing pair tag
-        
+
         :param tag: written tag
         :param data: written data
         :param format: conversion type
@@ -1301,8 +1473,10 @@ class WriteWorkspaceFile(object):
         self.file.write(('<value>%' + format + '</value>\n') % data)
         self.indent -= 4
         self.file.write('%s</%s>\n' % (' ' * self.indent, tag))
-        
+
+
 class ProcessGrcFile(object):
+
     def __init__(self, filename):
         """Process GRC file"""
         self.filename = filename
@@ -1329,26 +1503,34 @@ class ProcessGrcFile(object):
         try:
             file = open(self.filename, "r")
         except IOError:
-            wx.MessageBox(parent=parent,
-                          message=_("Unable to open file <%s> for reading.") % self.filename,
-                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR)
+            wx.MessageBox(
+                parent=parent,
+                message=_("Unable to open file <%s> for reading.") %
+                self.filename,
+                caption=_("Error"),
+                style=wx.OK | wx.ICON_ERROR)
             return []
 
         line_id = 1
         for line in file.readlines():
             self.process_line(line.rstrip('\n'), line_id)
-            line_id +=1
+            line_id += 1
 
         file.close()
 
         if self.num_error > 0:
-            wx.MessageBox(parent=parent,
-                          message=_("Some lines were skipped when reading settings "
-                                    "from file <%(file)s>.\nSee 'Command output' window for details.\n\n"
-                                    "Number of skipped lines: %(line)d") % \
-                                        { 'file' : self.filename, 'line' : self.num_error },
-                          caption=_("Warning"), style=wx.OK | wx.ICON_EXCLAMATION)
-            parent._gconsole.WriteLog('Map layers loaded from GRC file <%s>' % self.filename)
+            wx.MessageBox(
+                parent=parent,
+                message=_(
+                    "Some lines were skipped when reading settings "
+                    "from file <%(file)s>.\nSee 'Command output' window for details.\n\n"
+                    "Number of skipped lines: %(line)d") %
+                {'file': self.filename, 'line': self.num_error},
+                caption=_("Warning"),
+                style=wx.OK | wx.ICON_EXCLAMATION)
+            parent._gconsole.WriteLog(
+                'Map layers loaded from GRC file <%s>' %
+                self.filename)
             parent._gconsole.WriteLog('Skipped lines:\n%s' % self.error)
 
         return self.layers
@@ -1359,21 +1541,21 @@ class ProcessGrcFile(object):
         if element == 'Group':
             self.groupName = self._get_value(line)
             self.layers.append({
-                    "type"    : 'group',
-                    "name"    : self.groupName,
-                    "checked" : None,
-                    "opacity" : None,
-                    "cmd"     : None,
-                    "group"   : self.inGroup,
-                    "display" : 0 })
+                "type": 'group',
+                "name": self.groupName,
+                "checked": None,
+                "opacity": None,
+                "cmd": None,
+                "group": self.inGroup,
+                "display": 0})
             self.inGroup = True
 
         elif element == '_check':
-            if int(self._get_value(line)) ==  1:
+            if int(self._get_value(line)) == 1:
                 self.layers[-1]['checked'] = True
             else:
                 self.layers[-1]['checked'] = False
-            
+
         elif element == 'End':
             if self.inRaster:
                 self.inRaster = False
@@ -1383,7 +1565,7 @@ class ProcessGrcFile(object):
                 self.inGroup = False
             elif self.inGridline:
                 self.inGridline = False
-        
+
         elif element == 'opacity':
             self.layers[-1]['opacity'] = float(self._get_value(line))
 
@@ -1391,26 +1573,26 @@ class ProcessGrcFile(object):
         elif element == 'Raster':
             self.inRaster = True
             self.layers.append({
-                    "type"    : 'raster',
-                    "name"    : self._get_value(line),
-                    "checked" : None,
-                    "opacity" : None,
-                    "cmd"     : ['d.rast'],
-                    "group"   : self.inGroup,
-                    "display" : 0})
+                "type": 'raster',
+                "name": self._get_value(line),
+                "checked": None,
+                "opacity": None,
+                "cmd": ['d.rast'],
+                "group": self.inGroup,
+                "display": 0})
 
         elif element == 'map' and self.inRaster:
             self.layers[-1]['cmd'].append('map=%s' % self._get_value(line))
-            
+
         elif element == 'overlay' and self.inRaster:
             if int(self._get_value(line)) == 1:
                 self.layers[-1]['cmd'].append('-o')
-            
+
         elif element == 'rastquery' and self.inRaster:
             value = self._get_value(line)
             if value != '':
                 self.layers[-1]['cmd'].append('catlist=%s' % value)
-            
+
         elif element == 'bkcolor' and self.inRaster:
             value = self._get_value(line)
             if value != '':
@@ -1420,17 +1602,17 @@ class ProcessGrcFile(object):
         elif element == 'Vector':
             self.inVector = True
             self.layers.append({
-                    "type"    : 'vector',
-                    "name"    : self._get_value(line),
-                    "checked" : None,
-                    "opacity" : None,
-                    "cmd"     : ['d.vect'],
-                    "group"   : self.inGroup,
-                    "display" : 0})
+                "type": 'vector',
+                "name": self._get_value(line),
+                "checked": None,
+                "opacity": None,
+                "cmd": ['d.vect'],
+                "group": self.inGroup,
+                "display": 0})
 
         elif element == 'vector' and self.inVector:
             self.layers[-1]['cmd'].append('map=%s' % self._get_value(line))
-                
+
         elif element in ('display_shape',
                          'display_cat',
                          'display_topo',
@@ -1442,11 +1624,12 @@ class ProcessGrcFile(object):
                          'type_centroid',
                          'type_area',
                          'type_face') and self.inVector:
-            
+
             if int(self._get_value(line)) == 1:
                 name = element.split('_')[0]
                 type = element.split('_')[1]
-                paramId = self._get_cmd_param_index(self.layers[-1]['cmd'], name)
+                paramId = self._get_cmd_param_index(
+                    self.layers[-1]['cmd'], name)
                 if paramId == -1:
                     self.layers[-1]['cmd'].append('%s=%s' % (name, type))
                 else:
@@ -1457,8 +1640,8 @@ class ProcessGrcFile(object):
                          'lcolor') and self.inVector:
             value = self._get_value(line)
             if value != '':
-                self.layers[-1]['cmd'].append('%s=%s' % (element,
-                                                         self._color_name_to_rgb(value)))
+                self.layers[-1]['cmd'].append('%s=%s' %
+                                              (element, self._color_name_to_rgb(value)))
 
         elif element == 'rdmcolor' and self.inVector:
             if int(self._get_value(line)) == 1:
@@ -1481,7 +1664,7 @@ class ProcessGrcFile(object):
             if value != '':
                 self.layers[-1]['cmd'].append('%s=%s' % (element,
                                                          value))
-        
+
         elif element == 'lwidth':
             value = self._get_value(line)
             if value != '':
@@ -1491,7 +1674,7 @@ class ProcessGrcFile(object):
             value = self._get_value(line)
             if value != '':
                 self.layers[-1]['cmd'].append('llayer=%s' % value)
-                                        
+
         elif element == 'attribute':
             value = self._get_value(line)
             if value != '':
@@ -1506,28 +1689,31 @@ class ProcessGrcFile(object):
         elif element == 'gridline':
             self.inGridline = True
             self.layers.append({
-                    "type"    : 'grid',
-                    "name"    : self._get_value(line),
-                    "checked" : None,
-                    "opacity" : None,
-                    "cmd"     : ['d.grid'],
-                    "group"   : self.inGroup,
-                    "display" : 0})
+                "type": 'grid',
+                "name": self._get_value(line),
+                "checked": None,
+                "opacity": None,
+                "cmd": ['d.grid'],
+                "group": self.inGroup,
+                "display": 0})
 
         elif element == 'gridcolor':
             value = self._get_value(line)
             if value != '':
-                self.layers[-1]['cmd'].append('color=%s' % self._color_name_to_rgb(value))
+                self.layers[-1]['cmd'].append('color=%s' %
+                                              self._color_name_to_rgb(value))
 
         elif element == 'gridborder':
             value = self._get_value(line)
             if value != '':
-                self.layers[-1]['cmd'].append('bordercolor=%s' % self._color_name_to_rgb(value))
+                self.layers[-1]['cmd'].append('bordercolor=%s' %
+                                              self._color_name_to_rgb(value))
 
         elif element == 'textcolor':
             value = self._get_value(line)
             if value != '':
-                self.layers[-1]['cmd'].append('textcolor=%s' % self._color_name_to_rgb(value))
+                self.layers[-1]['cmd'].append('textcolor=%s' %
+                                              self._color_name_to_rgb(value))
 
         elif element in ('gridsize',
                          'gridorigin'):
@@ -1539,17 +1725,17 @@ class ProcessGrcFile(object):
             value = self._get_value(line)
             if value != '':
                 self.layers[-1]['cmd'].append('%s=%s' % (element, value))
-        
+
         elif element == 'griddraw':
             value = self._get_value(line)
             if value == '0':
                 self.layers[-1]['cmd'].append('-n')
-                
+
         elif element == 'gridgeo':
             value = self._get_value(line)
             if value == '1':
                 self.layers[-1]['cmd'].append('-g')
-        
+
         elif element == 'borderdraw':
             value = self._get_value(line)
             if value == '0':
@@ -1559,7 +1745,7 @@ class ProcessGrcFile(object):
             value = self._get_value(line)
             if value == '0':
                 self.layers[-1]['cmd'].append('-t')
-        
+
         else:
             self.error += _(' row %d:') % line_id + line + os.linesep
             self.num_error += 1

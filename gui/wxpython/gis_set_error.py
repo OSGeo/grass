@@ -1,4 +1,4 @@
-""" 
+"""
 @package gis_set_error
 
 GRASS start-up screen error message.
@@ -17,21 +17,22 @@ import sys
 from core import globalvar
 import wx
 
+
 def main():
     app = wx.App()
-    
+
     if len(sys.argv) == 1:
         msg = "Unknown reason"
     else:
         msg = ''
         for m in sys.argv[1:]:
             msg += m
-    
-    wx.MessageBox(caption = "Error",
-                  message = msg,
-                  style = wx.OK | wx.ICON_ERROR)
-    
+
+    wx.MessageBox(caption="Error",
+                  message=msg,
+                  style=wx.OK | wx.ICON_ERROR)
+
     app.MainLoop()
-    
+
 if __name__ == "__main__":
     main()

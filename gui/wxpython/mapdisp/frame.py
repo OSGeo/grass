@@ -30,25 +30,25 @@ from core import globalvar
 import wx
 import wx.aui
 
-from core.render        import Map
-from mapdisp.toolbars   import MapToolbar, NvizIcons
-from mapdisp.gprint     import PrintOptions
-from core.gcmd          import GError, GMessage, RunCommand
-from dbmgr.dialogs      import DisplayAttributesDialog
-from core.utils         import ListOfCatsToRange, GetLayerNameFromCmd, _
+from core.render import Map
+from mapdisp.toolbars import MapToolbar, NvizIcons
+from mapdisp.gprint import PrintOptions
+from core.gcmd import GError, GMessage, RunCommand
+from dbmgr.dialogs import DisplayAttributesDialog
+from core.utils import ListOfCatsToRange, GetLayerNameFromCmd, _
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
-from core.debug         import Debug
-from core.settings      import UserSettings
-from gui_core.mapdisp   import SingleMapFrame
+from core.debug import Debug
+from core.settings import UserSettings
+from gui_core.mapdisp import SingleMapFrame
 from mapwin.base import MapWindowProperties
-from gui_core.query     import QueryDialog, PrepareQueryResults
+from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import TextLayerDialog, \
     LegendController, BarscaleController, ArrowController
-from modules.histogram  import HistogramFrame
-from wxplot.histogram   import HistogramPlotFrame
-from wxplot.profile     import ProfileFrame
-from wxplot.scatter     import ScatterFrame
+from modules.histogram import HistogramFrame
+from wxplot.histogram import HistogramPlotFrame
+from wxplot.profile import ProfileFrame
+from wxplot.scatter import ScatterFrame
 from mapwin.analysis import ProfileController, MeasureDistanceController, \
     MeasureAreaController
 from gui_core.forms import GUI
@@ -66,13 +66,14 @@ class MapFrame(SingleMapFrame):
     """Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
-    def __init__(self, parent, giface, title = _("GRASS GIS - Map display"),
-                 toolbars = ["map"], statusbar = True,
-                 tree = None, notebook = None, lmgr = None,
-                 page = None, Map = None, auimgr = None, name = 'MapWindow', **kwargs):
+
+    def __init__(self, parent, giface, title=_("GRASS GIS - Map display"),
+                 toolbars=["map"], statusbar=True,
+                 tree=None, notebook=None, lmgr=None,
+                 page=None, Map=None, auimgr=None, name='MapWindow', **kwargs):
         """Main map display window with toolbars, statusbar and
         2D map window, 3D map window and digitizer.
-        
+
         :param toolbars: array of activated toolbars, e.g. ['map', 'digit']
         :param statusbar: True to add statusbar
         :param tree: reference to layer tree
@@ -84,9 +85,9 @@ class MapFrame(SingleMapFrame):
         :param name: frame name
         :param kwargs: wx.Frame attributes
         """
-        SingleMapFrame.__init__(self, parent = parent, title = title,
-                                Map = Map, auimgr = auimgr, name = name, **kwargs)
-        
+        SingleMapFrame.__init__(self, parent=parent, title=title,
+                                Map=Map, auimgr=auimgr, name=name, **kwargs)
+
         self._giface = giface
         # Layer Manager object
         # need by GLWindow (a lot), VDigitWindow (a little bit)
@@ -124,7 +125,7 @@ class MapFrame(SingleMapFrame):
         self.statusbarManager = None
         if statusbar:
             self.CreateStatusbar()
-        
+
         # init decoration objects
         self.decorations = {}
         self.legend = LegendController(self.Map, self._giface)
@@ -141,16 +142,17 @@ class MapFrame(SingleMapFrame):
         #
         # Init map display (buffered DC & set default cursor)
         #
-        self.MapWindow2D = BufferedMapWindow(self, giface = self._giface,
-                                             Map=self.Map,
-                                             properties=self.mapWindowProperties,
-                                             overlays=self.decorations)
+        self.MapWindow2D = BufferedMapWindow(
+            self, giface=self._giface, Map=self.Map,
+            properties=self.mapWindowProperties, overlays=self.decorations)
         self.MapWindow2D.mapQueried.connect(self.Query)
         self.MapWindow2D.overlayActivated.connect(self._activateOverlay)
         self.MapWindow2D.overlayHidden.connect(self._hideOverlay)
         self.MapWindow2D.overlayHidden.connect(self._hideOverlay)
         for overlay in (self.legend, self.barscale, self.arrow):
-            overlay.overlayChanged.connect(lambda: self.MapWindow2D.UpdateMap(render=False, renderVector=False))
+            overlay.overlayChanged.connect(
+                lambda: self.MapWindow2D.UpdateMap(
+                    render=False, renderVector=False))
         self._setUpMapWindow(self.MapWindow2D)
 
         self.MapWindow2D.mouseHandlerUnregistered.connect(self.ResetPointer)
@@ -165,22 +167,22 @@ class MapFrame(SingleMapFrame):
         # used by vector digitizer
         self.MapWindowVDigit = None
         # used by Nviz (3D display mode)
-        self.MapWindow3D = None 
+        self.MapWindow3D = None
 
         if 'map' in self.toolbars:
             self.toolbars['map'].SelectDefault()
-        
+
         #
         # Bind various events
         #
-        self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
-        self.Bind(wx.EVT_SIZE,     self.OnSize)
-        
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+
         #
         # Update fancy gui style
         #
         self._mgr.AddPane(self.MapWindow, wx.aui.AuiPaneInfo().CentrePane().
-                          Dockable(False).BestSize((-1,-1)).Name('2d').
+                          Dockable(False).BestSize((-1, -1)).Name('2d').
                           CloseButton(False).DestroyOnClose(True).
                           Layer(0))
         self._mgr.Update()
@@ -213,7 +215,7 @@ class MapFrame(SingleMapFrame):
     def CreateStatusbar(self):
         if self.statusbarManager:
             return
-        
+
         # items for choice
         self.statusbarItems = [sb.SbCoordinates,
                                sb.SbRegionExtent,
@@ -225,31 +227,34 @@ class MapFrame(SingleMapFrame):
                                sb.SbMapScale,
                                sb.SbGoTo,
                                sb.SbProjection]
-                            
+
         self.statusbarItemsHiddenInNviz = (sb.SbAlignExtent,
                                            sb.SbDisplayGeometry,
                                            sb.SbShowRegion,
                                            sb.SbResolution,
                                            sb.SbMapScale)
-        
+
         # create statusbar and its manager
-        statusbar = self.CreateStatusBar(number = 4, style = 0)
+        statusbar = self.CreateStatusBar(number=4, style=0)
         if globalvar.wxPython3:
             statusbar.SetMinHeight(24)
         statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(mapframe = self, statusbar = statusbar)
-        
+        self.statusbarManager = sb.SbManager(
+            mapframe=self, statusbar=statusbar)
+
         # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(self.statusbarItems, mapframe = self, statusbar = statusbar)
-        self.statusbarManager.AddStatusbarItem(sb.SbMask(self, statusbar = statusbar, position = 2))
-        sbRender = sb.SbRender(self, statusbar = statusbar, position = 3)
+        self.statusbarManager.AddStatusbarItemsByClass(
+            self.statusbarItems, mapframe=self, statusbar=statusbar)
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbMask(self, statusbar=statusbar, position=2))
+        sbRender = sb.SbRender(self, statusbar=statusbar, position=3)
         self.statusbarManager.AddStatusbarItem(sbRender)
-        
+
         self.statusbarManager.Update()
-        
+
         #
         self.Map.GetRenderMgr().updateProgress.connect(self.statusbarManager.SetProgress)
-        
+
     def GetMapWindow(self):
         return self.MapWindow
 
@@ -262,11 +267,11 @@ class MapFrame(SingleMapFrame):
             grassVersion = "?"
 
         gisenv = grass.gisenv()
-        title = _("GRASS GIS %(version)s Map Display: %(id)s - Location: %(loc)s@%(mapset)s") % \
-            {'version': grassVersion,
-             'id': str(displayId),
-             'loc': gisenv["LOCATION_NAME"],
-             'mapset': gisenv["MAPSET"]}
+        title = _("GRASS GIS %(version)s Map Display: %(id)s - Location: %(loc)s@%(mapset)s") % {
+            'version': grassVersion,
+            'id': str(displayId),
+            'loc': gisenv["LOCATION_NAME"],
+            'mapset': gisenv["MAPSET"]}
 
         self.SetTitle(title)
 
@@ -275,49 +280,48 @@ class MapFrame(SingleMapFrame):
         """
         from vdigit.main import haveVDigit, VDigit
         from vdigit.toolbars import VDigitToolbar
-        
+
         if not haveVDigit:
             from vdigit import errorMsg
-            
+
             self.toolbars['map'].combo.SetValue(_("2D view"))
-            
+
             GError(_("Unable to start wxGUI vector digitizer.\n"
-                     "Details: %s") % errorMsg, parent = self)
+                     "Details: %s") % errorMsg, parent=self)
             return
 
         if not self.MapWindowVDigit:
             from vdigit.mapwindow import VDigitWindow
-            self.MapWindowVDigit = VDigitWindow(parent=self, giface=self._giface,
-                                                properties=self.mapWindowProperties,
-                                                Map=self.Map, tree=self.tree,
-                                                lmgr=self._layerManager,
-                                                overlays=self.decorations)
+            self.MapWindowVDigit = VDigitWindow(
+                parent=self, giface=self._giface,
+                properties=self.mapWindowProperties, Map=self.Map,
+                tree=self.tree, lmgr=self._layerManager,
+                overlays=self.decorations)
             self._setUpMapWindow(self.MapWindowVDigit)
             self.MapWindowVDigit.digitizingInfo.connect(
                 lambda text:
                 self.statusbarManager.statusbarItems['coordinates'].SetAdditionalInfo(text))
             self.MapWindowVDigit.digitizingInfoUnavailable.connect(
-                lambda:
-                self.statusbarManager.statusbarItems['coordinates'].SetAdditionalInfo(None))
+                lambda: self.statusbarManager.statusbarItems['coordinates'].SetAdditionalInfo(None))
             self.MapWindowVDigit.Show()
-            self._mgr.AddPane(self.MapWindowVDigit, wx.aui.AuiPaneInfo().CentrePane().
-                          Dockable(False).BestSize((-1,-1)).Name('vdigit').
-                          CloseButton(False).DestroyOnClose(True).
-                          Layer(0))
-        
+            self._mgr.AddPane(
+                self.MapWindowVDigit, wx.aui.AuiPaneInfo().CentrePane(). Dockable(False).BestSize(
+                    (-1, -1)).Name('vdigit'). CloseButton(False).DestroyOnClose(True). Layer(0))
+
         self._switchMapWindow(self.MapWindowVDigit)
-        
+
         if self._mgr.GetPane('2d').IsShown():
             self._mgr.GetPane('2d').Hide()
         elif self._mgr.GetPane('3d').IsShown():
             self._mgr.GetPane('3d').Hide()
         self._mgr.GetPane('vdigit').Show()
         if 'vdigit' not in self.toolbars:
-            self.toolbars['vdigit'] = VDigitToolbar(parent=self, toolSwitcher=self._toolSwitcher,
-                                                    MapWindow = self.MapWindow,
-                                                    digitClass=VDigit, giface=self._giface)
+            self.toolbars['vdigit'] = VDigitToolbar(
+                parent=self, toolSwitcher=self._toolSwitcher,
+                MapWindow=self.MapWindow, digitClass=VDigit,
+                giface=self._giface)
         self.MapWindowVDigit.SetToolbar(self.toolbars['vdigit'])
-        
+
         self._mgr.AddPane(self.toolbars['vdigit'],
                           wx.aui.AuiPaneInfo().
                           Name("vdigittoolbar").Caption(_("Vector Digitizer Toolbar")).
@@ -328,51 +332,70 @@ class MapFrame(SingleMapFrame):
                           BestSize((self.toolbars['vdigit'].GetBestSize())))
         # change mouse to draw digitized line
         self.MapWindow.mouse['box'] = "point"
-        self.MapWindow.zoomtype     = 0
-        self.MapWindow.pen          = wx.Pen(colour = 'red',   width = 2, style = wx.SOLID)
-        self.MapWindow.polypen      = wx.Pen(colour = 'green', width = 2, style = wx.SOLID)
+        self.MapWindow.zoomtype = 0
+        self.MapWindow.pen = wx.Pen(colour='red', width=2, style=wx.SOLID)
+        self.MapWindow.polypen = wx.Pen(
+            colour='green', width=2, style=wx.SOLID)
 
     def AddNviz(self):
         """Add 3D view mode window
         """
         from nviz.main import haveNviz, GLWindow, errorMsg
-        
+
         # check for GLCanvas and OpenGL
         if not haveNviz:
             self.toolbars['map'].combo.SetValue(_("2D view"))
-            GError(parent = self,
-                   message = _("Unable to switch to 3D display mode.\nThe Nviz python extension "
-                               "was not found or loaded properly.\n"
-                               "Switching back to 2D display mode.\n\nDetails: %s" % errorMsg))
+            GError(
+                parent=self, message=_(
+                    "Unable to switch to 3D display mode.\nThe Nviz python extension "
+                    "was not found or loaded properly.\n"
+                    "Switching back to 2D display mode.\n\nDetails: %s" %
+                    errorMsg))
             return
 
         # here was disabling 3D for other displays, now done on starting3dMode
 
         self.toolbars['map'].Enable2D(False)
         # add rotate tool to map toolbar
-        self.toolbars['map'].InsertTool((('rotate', NvizIcons['rotate'],
-                                          self.OnRotate, wx.ITEM_CHECK, 7),)) # 7 is position
-        self._toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self.toolbars['map'],
-                                          tool=self.toolbars['map'].rotate)
+        self.toolbars['map'].InsertTool(
+            (('rotate',
+              NvizIcons['rotate'],
+              self.OnRotate,
+              wx.ITEM_CHECK,
+              7),
+             ))  # 7 is position
+        self._toolSwitcher.AddToolToGroup(
+            group='mouseUse', toolbar=self.toolbars['map'],
+            tool=self.toolbars['map'].rotate)
         self.toolbars['map'].InsertTool((('flyThrough', NvizIcons['flyThrough'],
                                           self.OnFlyThrough, wx.ITEM_CHECK, 8),))
-        self._toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self.toolbars['map'],
-                                          tool=self.toolbars['map'].flyThrough)
+        self._toolSwitcher.AddToolToGroup(
+            group='mouseUse', toolbar=self.toolbars['map'],
+            tool=self.toolbars['map'].flyThrough)
         # update status bar
-        
-        self.statusbarManager.HideStatusbarChoiceItemsByClass(self.statusbarItemsHiddenInNviz)
+
+        self.statusbarManager.HideStatusbarChoiceItemsByClass(
+            self.statusbarItemsHiddenInNviz)
         self.statusbarManager.SetMode(0)
-        
+
         # erase map window
         self.MapWindow.EraseMap()
-        
-        self._giface.WriteCmdLog(_("Starting 3D view mode..."), notification=Notification.HIGHLIGHT)
+
+        self._giface.WriteCmdLog(
+            _("Starting 3D view mode..."),
+            notification=Notification.HIGHLIGHT)
         self.SetStatusText(_("Please wait, loading data..."), 0)
-        
+
         # create GL window
         if not self.MapWindow3D:
-            self.MapWindow3D = GLWindow(self, giface = self._giface, id = wx.ID_ANY, frame = self,
-                                        Map = self.Map, tree = self.tree, lmgr = self._layerManager)
+            self.MapWindow3D = GLWindow(
+                self,
+                giface=self._giface,
+                id=wx.ID_ANY,
+                frame=self,
+                Map=self.Map,
+                tree=self.tree,
+                lmgr=self._layerManager)
             self._setUpMapWindow(self.MapWindow3D)
             self.MapWindow3D.mapQueried.connect(self.Query)
             self._switchMapWindow(self.MapWindow3D)
@@ -383,23 +406,23 @@ class MapFrame(SingleMapFrame):
 
             # switch from MapWindow to MapWindowGL
             self._mgr.GetPane('2d').Hide()
-            self._mgr.AddPane(self.MapWindow3D, wx.aui.AuiPaneInfo().CentrePane().
-                              Dockable(False).BestSize((-1,-1)).Name('3d').
-                              CloseButton(False).DestroyOnClose(True).
-                              Layer(0))
-            
+            self._mgr.AddPane(
+                self.MapWindow3D, wx.aui.AuiPaneInfo().CentrePane(). Dockable(False).BestSize(
+                    (-1, -1)).Name('3d'). CloseButton(False).DestroyOnClose(True). Layer(0))
+
             self.MapWindow3D.Show()
-            self.MapWindow3D.ResetViewHistory()            
+            self.MapWindow3D.ResetViewHistory()
             self.MapWindow3D.UpdateView(None)
             self.MapWindow3D.overlayActivated.connect(self._activateOverlay)
             self.MapWindow3D.overlayHidden.connect(self._hideOverlay)
             self.legend.overlayChanged.connect(self.MapWindow3D.UpdateOverlays)
         else:
             self._switchMapWindow(self.MapWindow3D)
-            os.environ['GRASS_REGION'] = self.Map.SetRegion(windres = True, windres3 = True)
+            os.environ['GRASS_REGION'] = self.Map.SetRegion(
+                windres=True, windres3=True)
             self.MapWindow3D.GetDisplay().Init()
             del os.environ['GRASS_REGION']
-            
+
             # switch from MapWindow to MapWindowGL
             self._mgr.GetPane('2d').Hide()
             self._mgr.GetPane('3d').Show()
@@ -416,13 +439,14 @@ class MapFrame(SingleMapFrame):
         # update overlays needs to be called after because getClientSize
         # is called during update and it must give reasonable values
         wx.CallAfter(self.MapWindow3D.UpdateOverlays)
-        
+
         self.SetStatusText("", 0)
         self._mgr.Update()
 
     def Disable3dMode(self):
         """Disables 3D mode (NVIZ) in user interface."""
-        # TODO: this is broken since item is removed but switch is drived by index
+        # TODO: this is broken since item is removed but switch is drived by
+        # index
         if '3D' in self.toolbars['map'].combo.GetString(1):
             self.toolbars['map'].combo.Delete(1)
 
@@ -433,18 +457,19 @@ class MapFrame(SingleMapFrame):
             self.toolbars['map'].RemoveTool(self.toolbars['map'].flyThrough)
         except AttributeError:
             pass
-        
+
         # update status bar
-        self.statusbarManager.ShowStatusbarChoiceItemsByClass(self.statusbarItemsHiddenInNviz)
-        self.statusbarManager.SetMode(UserSettings.Get(group = 'display',
-                                                       key = 'statusbarMode',
-                                                       subkey = 'selection'))
+        self.statusbarManager.ShowStatusbarChoiceItemsByClass(
+            self.statusbarItemsHiddenInNviz)
+        self.statusbarManager.SetMode(UserSettings.Get(group='display',
+                                                       key='statusbarMode',
+                                                       subkey='selection'))
         self.SetStatusText(_("Please wait, unloading data..."), 0)
         # unloading messages from library cause highlight anyway
         self._giface.WriteCmdLog(_("Switching back to 2D view mode..."),
                                  notification=Notification.NO_NOTIFICATION)
         if self.MapWindow3D:
-            self.MapWindow3D.OnClose(event = None)
+            self.MapWindow3D.OnClose(event=None)
         # switch from MapWindowGL to MapWindow
         self._mgr.GetPane('2d').Show()
         self._mgr.GetPane('3d').Hide()
@@ -465,8 +490,8 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.UpdateMap()
         self._mgr.Update()
         self.GetMapToolbar().SelectDefault()
-        
-    def AddToolbar(self, name, fixed = False):
+
+    def AddToolbar(self, name, fixed=False):
         """Add defined toolbar to the window
 
         Currently recognized toolbars are:
@@ -479,8 +504,9 @@ class MapFrame(SingleMapFrame):
         # default toolbar
         if name == "map":
             if 'map' not in self.toolbars:
-                self.toolbars['map'] = MapToolbar(self, toolSwitcher=self._toolSwitcher)
-            
+                self.toolbars['map'] = MapToolbar(
+                    self, toolSwitcher=self._toolSwitcher)
+
             self._mgr.AddPane(self.toolbars['map'],
                               wx.aui.AuiPaneInfo().
                               Name("maptoolbar").Caption(_("Map Toolbar")).
@@ -489,18 +515,18 @@ class MapFrame(SingleMapFrame):
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2).
                               BestSize((self.toolbars['map'].GetBestSize())))
-            
+
         # vector digitizer
         elif name == "vdigit":
             self.toolbars['map'].combo.SetValue(_("Vector digitizer"))
             self._addToolbarVDigit()
-        
+
         if fixed:
             self.toolbars['map'].combo.Disable()
-         
+
         self._mgr.Update()
-        
-    def RemoveToolbar (self, name, destroy=False):
+
+    def RemoveToolbar(self, name, destroy=False):
         """Removes defined toolbar from the window
 
         :param name toolbar to remove
@@ -508,21 +534,22 @@ class MapFrame(SingleMapFrame):
         """
         self._mgr.DetachPane(self.toolbars[name])
         if destroy:
-            self._toolSwitcher.RemoveToolbarFromGroup('mouseUse', self.toolbars[name])
+            self._toolSwitcher.RemoveToolbarFromGroup(
+                'mouseUse', self.toolbars[name])
             self.toolbars[name].Destroy()
             self.toolbars.pop(name)
         else:
             self.toolbars[name].Hide()
-        
+
         if name == 'vdigit':
             self._mgr.GetPane('vdigit').Hide()
             self._mgr.GetPane('2d').Show()
             self._switchMapWindow(self.MapWindow2D)
 
         self.toolbars['map'].Enable2D(True)
-        
+
         self._mgr.Update()
-    
+
     def IsPaneShown(self, name):
         """Check if pane (toolbar, mapWindow ...) of given name is currently shown"""
         if self._mgr.GetPane(name).IsOk():
@@ -531,7 +558,7 @@ class MapFrame(SingleMapFrame):
 
     def RemoveQueryLayer(self):
         """Removes temporary map layers (queries)"""
-        qlayer = self.GetMap().GetListOfLayers(name = globalvar.QUERYLAYER)
+        qlayer = self.GetMap().GetListOfLayers(name=globalvar.QUERYLAYER)
         for layer in qlayer:
             self.GetMap().DeleteLayer(layer)
 
@@ -539,30 +566,30 @@ class MapFrame(SingleMapFrame):
         """Re-render map composition (each map layer)
         """
         self.RemoveQueryLayer()
-        
+
         # deselect features in vdigit
         if self.GetToolbar('vdigit'):
             if self.MapWindow.digit:
                 self.MapWindow.digit.GetDisplay().SetSelected([])
-            self.MapWindow.UpdateMap(render = True, renderVector = True)
+            self.MapWindow.UpdateMap(render=True, renderVector=True)
         else:
-            self.MapWindow.UpdateMap(render = True)
+            self.MapWindow.UpdateMap(render=True)
 
         # reset dialog with selected features
         if self.dialogs['vselect']:
             self.dialogs['vselect'].Reset()
-        
+
         # update statusbar
         self.StatusbarUpdate()
 
     def OnPointer(self, event):
         """Pointer button clicked
-        """      
+        """
         self.MapWindow.SetModePointer()
 
         if self.GetToolbar('vdigit'):
             self.toolbars['vdigit'].action['id'] = -1
-            self.toolbars['vdigit'].action['desc']=''
+            self.toolbars['vdigit'].action['desc'] = ''
 
     def OnSelect(self, event):
         """Vector feature selection button clicked
@@ -574,10 +601,12 @@ class MapFrame(SingleMapFrame):
                 GMessage(_("No map layer selected. Operation canceled."))
                 return
 
-            self.dialogs['vselect'] = VectorSelectBase(self.parent, self._giface)
+            self.dialogs['vselect'] = VectorSelectBase(
+                self.parent, self._giface)
             self.dialogs['vselect'].CreateDialog(createButton=True)
-            self.dialogs['vselect'].onCloseDialog.connect(self._onCloseVectorSelectDialog)
-            
+            self.dialogs['vselect'].onCloseDialog.connect(
+                self._onCloseVectorSelectDialog)
+
     def _onCloseVectorSelectDialog(self):
         self.dialogs['vselect'] = None
 
@@ -585,7 +614,7 @@ class MapFrame(SingleMapFrame):
         """Rotate 3D view
         """
         self.MapWindow.mouse['use'] = "rotate"
-        
+
         # change the cursor
         self.MapWindow.SetNamedCursor('hand')
 
@@ -593,7 +622,7 @@ class MapFrame(SingleMapFrame):
         """Fly-through mode
         """
         self.MapWindow.mouse['use'] = "fly"
-        
+
         # change the cursor
         self.MapWindow.SetNamedCursor('hand')
         self.MapWindow.SetFocus()
@@ -604,7 +633,7 @@ class MapFrame(SingleMapFrame):
         filetype, ltype = self._prepareSaveToFile()
         if not ltype:
             return
-        
+
         # get size
         dlg = ImageSizeDialog(self)
         dlg.CentreOnParent()
@@ -613,34 +642,34 @@ class MapFrame(SingleMapFrame):
             return
         width, height = dlg.GetValues()
         dlg.Destroy()
-        
+
         # get filename
-        dlg = wx.FileDialog(parent = self,
-                            message = _("Choose a file name to save the image "
-                                        "(no need to add extension)"),
-                            wildcard = filetype,
-                            style = wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
-        
+        dlg = wx.FileDialog(parent=self,
+                            message=_("Choose a file name to save the image "
+                                      "(no need to add extension)"),
+                            wildcard=filetype,
+                            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             if not path:
                 dlg.Destroy()
                 return
-            
+
             base, ext = os.path.splitext(path)
             fileType = ltype[dlg.GetFilterIndex()]['type']
-            extType  = ltype[dlg.GetFilterIndex()]['ext']
+            extType = ltype[dlg.GetFilterIndex()]['ext']
             if ext != extType:
                 path = base + '.' + extType
-            
+
             self.MapWindow.SaveToFile(path, fileType,
                                       width, height)
-            
+
         dlg.Destroy()
 
     def DOutFile(self, command):
         """Saves map to image by running d.out.file from gui or d.mon.
-        Command is expected to be validated by parser.        
+        Command is expected to be validated by parser.
         """
         filetype, ltype = self._prepareSaveToFile()
         if not ltype:
@@ -687,7 +716,8 @@ class MapFrame(SingleMapFrame):
         """Saves currently loaded composition of layers as a raster map.
         """
         if self.IsPaneShown('3d'):
-            self._giface.WriteError(_('d.to.rast can be used only in 2D mode.'))
+            self._giface.WriteError(
+                _('d.to.rast can be used only in 2D mode.'))
             return
         outputRaster = None
         overwrite = False
@@ -708,8 +738,9 @@ class MapFrame(SingleMapFrame):
         dOutFileCmd = ['d.out.file', 'output=' + pngFile, 'format=png']
         self.DOutFile(dOutFileCmd)
         # import back as red, green, blue rasters
-        returncode, messages = RunCommand('r.in.gdal', flags='o', input=pngFile, output=tmpName,
-                                          quiet=True, overwrite=overwrite, getErrorMsg=True)
+        returncode, messages = RunCommand(
+            'r.in.gdal', flags='o', input=pngFile, output=tmpName, quiet=True,
+            overwrite=overwrite, getErrorMsg=True)
         if not returncode == 0:
             self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
             return
@@ -722,13 +753,23 @@ class MapFrame(SingleMapFrame):
             self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
             return
         # composite
-        returncode, messages = RunCommand('r.composite', red=tmpName + '.red',
-                                          green=tmpName + '.green', blue=tmpName + '.blue',
-                                          output=outputRaster, quiet=True,
-                                          overwrite=overwrite, getErrorMsg=True)
+        returncode, messages = RunCommand(
+            'r.composite', red=tmpName + '.red', green=tmpName + '.green',
+            blue=tmpName + '.blue', output=outputRaster, quiet=True,
+            overwrite=overwrite, getErrorMsg=True)
         grass.del_temp_region()
-        RunCommand('g.remove', type='raster', flags='f', quiet=True,
-                   name=[tmpName + '.red', tmpName + '.green', tmpName + '.blue'])
+        RunCommand(
+            'g.remove',
+            type='raster',
+            flags='f',
+            quiet=True,
+            name=[
+                tmpName +
+                '.red',
+                tmpName +
+                '.green',
+                tmpName +
+                '.blue'])
         if not returncode == 0:
             self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
             grass.try_remove(pngFile)
@@ -757,13 +798,15 @@ class MapFrame(SingleMapFrame):
         """Get wildcards and format extensions."""
         if self.IsPaneShown('3d'):
             filetype = "TIF file (*.tif)|*.tif|PPM file (*.ppm)|*.ppm"
-            ltype = [{ 'ext' : 'tif', 'type' : 'tif' },
-                     { 'ext' : 'ppm', 'type' : 'ppm' }]
+            ltype = [{'ext': 'tif', 'type': 'tif'},
+                     {'ext': 'ppm', 'type': 'ppm'}]
         else:
             img = self.MapWindow.img
             if not img:
-                GMessage(parent = self,
-                         message = _("Nothing to render (empty map). Operation canceled."))
+                GMessage(
+                    parent=self,
+                    message=_(
+                        "Nothing to render (empty map). Operation canceled."))
                 return None, None
             filetype, ltype = GetImageHandlers(img)
         return filetype, ltype
@@ -798,7 +841,7 @@ class MapFrame(SingleMapFrame):
         Debug.msg(2, "MapFrame.OnCloseWindow(): function starts")
         pgnum = None
         self.Map.Clean()
-        
+
         # close edited map and 3D tools properly
         if self.GetToolbar('vdigit'):
             maplayer = self.toolbars['vdigit'].GetLayer()
@@ -818,7 +861,7 @@ class MapFrame(SingleMapFrame):
         Debug.msg(2, "MapFrame.OnCloseWindow(): function ends")
 
     def Query(self, x, y):
-        """Query selected layers. 
+        """Query selected layers.
 
         :param x,y: coordinates
         """
@@ -850,17 +893,21 @@ class MapFrame(SingleMapFrame):
                     lmap = digitToolbar.GetLayer().GetName()
                     for name in vect:
                         if lmap == name:
-                            self._giface.WriteWarning(_("Vector map <%s> "
-                                                                      "opened for editing - skipped.") % lmap)
+                            self._giface.WriteWarning(
+                                _("Vector map <%s> " "opened for editing - skipped.") % lmap)
                             vect.remove(name)
 
         if not (rast + vect):
-            GMessage(parent = self,
-                     message = _('No raster or vector map layer selected for querying.'))
+            GMessage(
+                parent=self,
+                message=_(
+                    'No raster or vector map layer selected for querying.'))
             return
 
-        # set query snap distance for v.what at map unit equivalent of 10 pixels
-        qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / self.Map.width)
+        # set query snap distance for v.what at map unit equivalent of 10
+        # pixels
+        qdist = 10.0 * (
+            (self.Map.region['e'] - self.Map.region['w']) / self.Map.width)
 
         # TODO: replace returning None by exception or so
         try:
@@ -874,7 +921,7 @@ class MapFrame(SingleMapFrame):
             if rast:
                 self.MapWindow.QuerySurface(x, y)
             if vect:
-                self.QueryMap(east, north, qdist, rast = [], vect = vect)
+                self.QueryMap(east, north, qdist, rast=[], vect=vect)
 
     def SetQueryLayersAndActivate(self, ltype, maps):
         """Activate query mode and set layers to query.
@@ -887,7 +934,7 @@ class MapFrame(SingleMapFrame):
 
     def QueryMap(self, east, north, qdist, rast, vect):
         """Query raster or vector map layers by r/v.what
-        
+
         :param east,north: coordinates
         :param qdist: query distance
         :param rast: raster map names
@@ -896,11 +943,12 @@ class MapFrame(SingleMapFrame):
         Debug.msg(1, "QueryMap(): raster=%s vector=%s" % (','.join(rast),
                                                           ','.join(vect)))
         if self._highlighter_layer is None:
-            self._highlighter_layer = VectorSelectHighlighter(mapdisp=self._giface.GetMapDisplay(), giface=self._giface)
+            self._highlighter_layer = VectorSelectHighlighter(
+                mapdisp=self._giface.GetMapDisplay(), giface=self._giface)
 
         # use display region settings instead of computation region settings
         self.tmpreg = os.getenv("GRASS_REGION")
-        os.environ["GRASS_REGION"] = self.Map.SetRegion(windres = False)
+        os.environ["GRASS_REGION"] = self.Map.SetRegion(windres=False)
 
         rastQuery = []
         vectQuery = []
@@ -908,14 +956,18 @@ class MapFrame(SingleMapFrame):
             rastQuery = grass.raster_what(map=rast, coord=(east, north),
                                           localized=True)
         if vect:
-            encoding = UserSettings.Get(group='atm', key='encoding', subkey='value')
+            encoding = UserSettings.Get(
+                group='atm', key='encoding', subkey='value')
             try:
-                vectQuery = grass.vector_what(map=vect, coord=(east, north), distance=qdist,
-                                              encoding=encoding)
+                vectQuery = grass.vector_what(
+                    map=vect, coord=(east, north),
+                    distance=qdist, encoding=encoding)
             except grass.ScriptError:
-                GError(parent=self,
-                       message=_("Failed to query vector map(s) <{maps}>. "
-                                 "Check database settings and topology.").format(maps=','.join(vect)))
+                GError(
+                    parent=self, message=_(
+                        "Failed to query vector map(s) <{maps}>. "
+                        "Check database settings and topology.").format(
+                        maps=','.join(vect)))
         self._QueryMapDone()
 
         self._highlighter_layer.Clear()
@@ -923,14 +975,15 @@ class MapFrame(SingleMapFrame):
             self._queryHighlight(vectQuery)
 
         result = rastQuery + vectQuery
-        result = PrepareQueryResults(coordinates = (east, north), result = result)
+        result = PrepareQueryResults(coordinates=(east, north), result=result)
         if self.dialogs['query']:
             self.dialogs['query'].Raise()
             self.dialogs['query'].SetData(result)
         else:
-            self.dialogs['query'] = QueryDialog(parent = self, data = result)
+            self.dialogs['query'] = QueryDialog(parent=self, data=result)
             self.dialogs['query'].Bind(wx.EVT_CLOSE, self._oncloseQueryDialog)
-            self.dialogs['query'].redirectOutput.connect(self._onRedirectQueryOutput)
+            self.dialogs['query'].redirectOutput.connect(
+                self._onRedirectQueryOutput)
             self.dialogs['query'].Show()
 
     def _oncloseQueryDialog(self, event):
@@ -944,7 +997,8 @@ class MapFrame(SingleMapFrame):
     def _onRedirectQueryOutput(self, output, style='log'):
         """Writes query output into console"""
         if style == 'log':
-            self._giface.WriteLog(output, notification=Notification.MAKE_VISIBLE)
+            self._giface.WriteLog(
+                output, notification=Notification.MAKE_VISIBLE)
         elif style == 'cmd':
             self._giface.WriteCmdLog(output)
 
@@ -970,27 +1024,27 @@ class MapFrame(SingleMapFrame):
                 del os.environ["GRASS_REGION"]
         elif 'GRASS_REGION' in os.environ:
             del os.environ["GRASS_REGION"]
-        
+
         if hasattr(self, "tmpreg"):
             del self.tmpreg
-        
+
     def OnQuery(self, event):
         """Query tools menu"""
         self.MapWindow.mouse['use'] = "query"
         self.MapWindow.mouse['box'] = "point"
         self.MapWindow.zoomtype = 0
-        
+
         # change the cursor
         self.MapWindow.SetNamedCursor('cross')
-        
-    def AddTmpVectorMapLayer(self, name, cats, useId = False, addLayer = True):
+
+    def AddTmpVectorMapLayer(self, name, cats, useId=False, addLayer=True):
         """Add temporal vector map layer to map composition
 
         :param name: name of map layer
-        :param useId: use feature id instead of category 
+        :param useId: use feature id instead of category
         """
         # color settings from ATM
-        color = UserSettings.Get(group = 'atm', key = 'highlight', subkey = 'color')
+        color = UserSettings.Get(group='atm', key='highlight', subkey='color')
         colorStr = str(color[0]) + ":" + \
             str(color[1]) + ":" + \
             str(color[2])
@@ -1002,7 +1056,7 @@ class MapFrame(SingleMapFrame):
         layerSelected = self._giface.GetLayerList().GetSelectedLayer()
         if not layerSelected:
             return None
-        
+
         vparam = layerSelected.cmd
         for p in vparam:
             if '=' in p:
@@ -1011,17 +1065,25 @@ class MapFrame(SingleMapFrame):
                     icon = pval
                 elif parg == 'size':
                     size = float(pval)
-        
-        pattern = ["d.vect",
-                   "map=%s" % name,
-                   "color=%s" % colorStr,
-                   "fill_color=%s" % colorStr,
-                   "width=%d"  % UserSettings.Get(group = 'atm', key = 'highlight', subkey = 'width')]
+
+        pattern = [
+            "d.vect",
+            "map=%s" %
+            name,
+            "color=%s" %
+            colorStr,
+            "fill_color=%s" %
+            colorStr,
+            "width=%d" %
+            UserSettings.Get(
+                group='atm',
+                key='highlight',
+                subkey='width')]
         if icon != '':
             pattern.append('icon=%s' % icon)
         if size > 0:
             pattern.append('size=%i' % size)
-        
+
         if useId:
             cmd = pattern
             cmd.append('-i')
@@ -1040,10 +1102,10 @@ class MapFrame(SingleMapFrame):
                 args['ltype'] = 'vector'
             else:
                 args['ltype'] = 'command'
-                
-            return self.Map.AddLayer(name = globalvar.QUERYLAYER, command = cmd,
-                                     active = True, hidden = True, opacity = 1.0,
-                                     render = True, **args)
+
+            return self.Map.AddLayer(name=globalvar.QUERYLAYER, command=cmd,
+                                     active=True, hidden=True, opacity=1.0,
+                                     render=True, **args)
         else:
             return cmd
 
@@ -1058,9 +1120,12 @@ class MapFrame(SingleMapFrame):
 
         :param controller: measurement class (MeasureDistanceController, MeasureAreaController)
         """
-        self.measureController = controller(self._giface, mapWindow=self.GetMapWindow())
-        # assure that the mode is ended and lines are cleared whenever other tool is selected
-        self._toolSwitcher.toggleToolChanged.connect(lambda: self.measureController.Stop())
+        self.measureController = controller(
+            self._giface, mapWindow=self.GetMapWindow())
+        # assure that the mode is ended and lines are cleared whenever other
+        # tool is selected
+        self._toolSwitcher.toggleToolChanged.connect(
+            lambda: self.measureController.Stop())
         self.measureController.Start()
 
     def OnProfile(self, event):
@@ -1075,8 +1140,8 @@ class MapFrame(SingleMapFrame):
 
     def Profile(self, rasters=None):
         """Launch profile tool"""
-        self.profileController = ProfileController(self._giface,
-                                                   mapWindow=self.GetMapWindow())
+        self.profileController = ProfileController(
+            self._giface, mapWindow=self.GetMapWindow())
         win = ProfileFrame(parent=self, rasterList=rasters,
                            units=self.Map.projinfo['units'],
                            controller=self.profileController)
@@ -1094,10 +1159,10 @@ class MapFrame(SingleMapFrame):
             if layer.maplayer.GetType() == 'raster':
                 raster.append(layer.maplayer.GetName())
 
-        win = HistogramPlotFrame(parent = self, rasterList = raster)
+        win = HistogramPlotFrame(parent=self, rasterList=raster)
         win.CentreOnParent()
         win.Show()
-        
+
     def OnScatterplot(self, event):
         """Init PyPlot scatterplot display canvas and tools
         """
@@ -1107,8 +1172,8 @@ class MapFrame(SingleMapFrame):
             if layer.maplayer.GetType() == 'raster':
                 raster.append(layer.maplayer.GetName())
 
-        win = ScatterFrame(parent = self, rasterList = raster)
-        
+        win = ScatterFrame(parent=self, rasterList=raster)
+
         win.CentreOnParent()
         win.Show()
         # Open raster select dialog to make sure that at least 2 rasters (and the desired rasters)
@@ -1119,7 +1184,7 @@ class MapFrame(SingleMapFrame):
         """Init histogram display canvas and tools
         """
         win = HistogramFrame(self, giface=self._giface)
-        
+
         win.CentreOnParent()
         win.Show()
         win.Refresh()
@@ -1128,7 +1193,7 @@ class MapFrame(SingleMapFrame):
     def _activateOverlay(self, overlayId):
         """Launch decoration dialog according to overlay id.
 
-        :param overlayId: id of overlay        
+        :param overlayId: id of overlay
         """
         if overlayId > 100:
             self.OnAddText(None)
@@ -1142,7 +1207,7 @@ class MapFrame(SingleMapFrame):
     def _hideOverlay(self, overlayId):
         """Hide overlay.
 
-        :param overlayId: id of overlay        
+        :param overlayId: id of overlay
         """
         self.decorations[overlayId].Hide()
 
@@ -1179,9 +1244,8 @@ class MapFrame(SingleMapFrame):
             #            barcmd = 'd.barscale'
 
             # decoration overlay control dialog
-            GUI(parent=self, giface=self._giface, show=True,
-                modal=False).ParseCommand(self.barscale.cmd,
-                                          completed=(self.barscale.GetOptData, None, None))
+            GUI(parent=self, giface=self._giface, show=True, modal=False).ParseCommand(
+                self.barscale.cmd, completed=(self.barscale.GetOptData, None, None))
 
         self.MapWindow.mouse['use'] = 'pointer'
 
@@ -1205,14 +1269,17 @@ class MapFrame(SingleMapFrame):
                             continue
                         param, val = param_val
                         if param == 'raster':
-                            self.legend.cmd[idx] = 'raster={rast}'.format(rast=layer.maplayer.name)
+                            self.legend.cmd[idx] = 'raster={rast}'.format(
+                                rast=layer.maplayer.name)
                             isMap = True
                         elif param in ('use', 'range'):
                             # clear range or use to avoid problems
                             del self.legend.cmd[idx]
 
                     if not isMap:  # for the first time
-                        self.legend.cmd.append('raster=%s' % layer.maplayer.name)
+                        self.legend.cmd.append(
+                            'raster=%s' %
+                            layer.maplayer.name)
                     break
 
         if not showDialog and self.legend.CmdIsValid():
@@ -1229,9 +1296,8 @@ class MapFrame(SingleMapFrame):
                 self.legend.dialog.Destroy()
                 self.legend.dialog = None
         if not self.legend.dialog:
-            GUI(parent=self, giface=self._giface, show=True,
-                modal=False).ParseCommand(self.legend.cmd,
-                                          completed=(self.legend.GetOptData, None, None))
+            GUI(parent=self, giface=self._giface, show=True, modal=False).ParseCommand(
+                self.legend.cmd, completed=(self.legend.GetOptData, None, None))
 
         self.MapWindow.mouse['use'] = 'pointer'
 
@@ -1239,7 +1305,8 @@ class MapFrame(SingleMapFrame):
         """Handler for north arrow menu selection."""
         if self.IsPaneShown('3d'):
             # here was opening of appearance page of nviz notebook
-            # but now moved to MapWindow3D where are other problematic nviz calls
+            # but now moved to MapWindow3D where are other problematic nviz
+            # calls
             self.MapWindow3D.SetDrawArrow((70, 70))
             return
 
@@ -1261,9 +1328,8 @@ class MapFrame(SingleMapFrame):
             else:
                 self.arrow.dialog.Show()
         else:
-            GUI(parent=self, giface=self._giface, show=True,
-                modal=False).ParseCommand(self.arrow.cmd,
-                                          completed=(self.arrow.GetOptData, None, None))
+            GUI(parent=self, giface=self._giface, show=True, modal=False).ParseCommand(
+                self.arrow.cmd, completed=(self.arrow.GetOptData, None, None))
 
         self.MapWindow.mouse['use'] = 'pointer'
 
@@ -1279,17 +1345,17 @@ class MapFrame(SingleMapFrame):
                 id = max(self.MapWindow.textdict.keys()) + 1
             else:
                 id = 101
-        
-        self.dialogs['text'] = TextLayerDialog(parent = self, ovlId = id, 
-                                               title = _('Add text layer'),
-                                               size = (400, 200))
+
+        self.dialogs['text'] = TextLayerDialog(parent=self, ovlId=id,
+                                               title=_('Add text layer'),
+                                               size=(400, 200))
         self.dialogs['text'].CenterOnParent()
 
         # If OK button pressed in decoration control dialog
         if self.dialogs['text'].ShowModal() == wx.ID_OK:
             text = self.dialogs['text'].GetValues()['text']
             active = self.dialogs['text'].GetValues()['active']
-        
+
             # delete object if it has no text or is not active
             if text == '' or active == False:
                 try:
@@ -1300,32 +1366,37 @@ class MapFrame(SingleMapFrame):
                         self.MapWindow3D.UpdateOverlays()
                         self.MapWindow.UpdateMap()
                     else:
-                        self.MapWindow2D.UpdateMap(render = False, renderVector = False)
+                        self.MapWindow2D.UpdateMap(
+                            render=False, renderVector=False)
                 except:
                     pass
                 return
 
-            
             self.MapWindow.textdict[id] = self.dialogs['text'].GetValues()
-            
+
             if self.IsPaneShown('3d'):
                 self.MapWindow3D.UpdateOverlays()
                 self.MapWindow3D.UpdateMap()
             else:
                 self.MapWindow2D.pdc.ClearId(id)
                 self.MapWindow2D.pdc.SetId(id)
-                self.MapWindow2D.UpdateMap(render = False, renderVector = False)
-            
+                self.MapWindow2D.UpdateMap(render=False, renderVector=False)
+
         self.MapWindow.mouse['use'] = 'pointer'
-        
+
     def GetOptData(self, dcmd, type, params, propwin):
         """Callback method for decoration overlay command generated by
         dialog created in menuform.py
         """
         # Reset comand and rendering options in render.Map. Always render decoration.
         # Showing/hiding handled by PseudoDC
-        self.Map.ChangeOverlay(ovltype = type, type = 'overlay', name = '', command = dcmd,
-                               active = True, render = False)
+        self.Map.ChangeOverlay(
+            ovltype=type,
+            type='overlay',
+            name='',
+            command=dcmd,
+            active=True,
+            render=False)
         self.params[type] = params
         self.propwin[type] = propwin
 
@@ -1336,21 +1407,21 @@ class MapFrame(SingleMapFrame):
         Debug.msg(3, "MapFrame.OnZoomToMap()")
         layers = None
         if self.IsStandalone():
-            layers = self.MapWindow.GetMap().GetListOfLayers(active = False)
-        
-        self.MapWindow.ZoomToMap(layers = layers)
+            layers = self.MapWindow.GetMap().GetListOfLayers(active=False)
+
+        self.MapWindow.ZoomToMap(layers=layers)
 
     def OnZoomToRaster(self, event):
         """Set display extents to match selected raster map (ignore NULLs)
         """
-        self.MapWindow.ZoomToMap(ignoreNulls = True)
-        
+        self.MapWindow.ZoomToMap(ignoreNulls=True)
+
     def OnZoomToSaved(self, event):
         """Set display geometry to match extents in
         saved region file
         """
         self.MapWindow.SetRegion(zoomOnly=True)
-        
+
     def OnSetDisplayToWind(self, event):
         """Set computational region (WIND file) to match display
         extents
@@ -1362,7 +1433,7 @@ class MapFrame(SingleMapFrame):
         file
         """
         self.MapWindow.SetRegion(zoomOnly=False)
- 
+
     def OnSetExtentToWind(self, event):
         """Set compulational region extent interactively"""
         self.MapWindow.SetModeDrawRegion()
@@ -1370,41 +1441,49 @@ class MapFrame(SingleMapFrame):
     def OnSaveDisplayRegion(self, event):
         """Save display extents to named region file.
         """
-        self.MapWindow.SaveRegion(display = True)
+        self.MapWindow.SaveRegion(display=True)
 
     def OnSaveWindRegion(self, event):
         """Save computational region to named region file.
         """
-        self.MapWindow.SaveRegion(display = False)
-        
+        self.MapWindow.SaveRegion(display=False)
+
     def OnZoomMenu(self, event):
         """Popup Zoom menu
         """
         zoommenu = wx.Menu()
-        
-        for label, handler in ((_('Zoom to default region'), self.OnZoomToDefault),
-                               (_('Zoom to saved region'), self.OnZoomToSaved),
-                               (None, None),
-                               (_('Set computational region extent from display'), self.OnSetDisplayToWind),
-                               (_('Set computational region extent interactively'), self.OnSetExtentToWind),
-                               (_('Set computational region from named region'),   self.OnSetWindToRegion),
-                               (None, None),
-                               (_('Save display geometry to named region'), self.OnSaveDisplayRegion),
-                               (_('Save computational region to named region'), self.OnSaveWindRegion)):
+
+        for label, handler in (
+            (_('Zoom to default region'),
+             self.OnZoomToDefault),
+            (_('Zoom to saved region'),
+             self.OnZoomToSaved),
+            (None, None),
+            (_('Set computational region extent from display'),
+             self.OnSetDisplayToWind),
+            (_('Set computational region extent interactively'),
+             self.OnSetExtentToWind),
+            (_('Set computational region from named region'),
+             self.OnSetWindToRegion),
+            (None, None),
+            (_('Save display geometry to named region'),
+             self.OnSaveDisplayRegion),
+            (_('Save computational region to named region'),
+             self.OnSaveWindRegion)):
             if label:
                 mid = wx.MenuItem(zoommenu, wx.ID_ANY, label)
                 zoommenu.AppendItem(mid)
                 self.Bind(wx.EVT_MENU, handler, mid)
             else:
                 zoommenu.AppendSeparator()
-        
+
         # Popup the menu. If an item is selected then its handler will
         # be called before PopupMenu returns.
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
 
-    def SetProperties(self, render = False, mode = 0, showCompExtent = False,
-                      constrainRes = False, projection = False, alignExtent = True):
+    def SetProperties(self, render=False, mode=0, showCompExtent=False,
+                      constrainRes=False, projection=False, alignExtent=True):
         """Set properies of map display window"""
         self.mapWindowProperties.autoRender = render
         self.statusbarManager.SetMode(mode)
@@ -1413,7 +1492,7 @@ class MapFrame(SingleMapFrame):
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes
         self.SetProperty('projection', projection)
-        
+
     def IsStandalone(self):
         """Check if Map display is standalone
 
@@ -1456,12 +1535,12 @@ class MapFrame(SingleMapFrame):
         return self.dialogs.get(name, None)
 
     def OnVNet(self, event):
-        """Dialog for v.net* modules 
+        """Dialog for v.net* modules
         """
         if self.dialogs['vnet']:
             self.dialogs['vnet'].Raise()
             return
-        
+
         from vnet.dialogs import VNETDialog
         self.dialogs['vnet'] = VNETDialog(parent=self, giface=self._giface)
         self.dialogs['vnet'].CenterOnScreen()
@@ -1490,18 +1569,30 @@ class MapFrame(SingleMapFrame):
 
         self.rdigit = RDigitController(self._giface,
                                        mapWindow=self.GetMapWindow())
-        self.toolbars['rdigit'] = RDigitToolbar(parent=self, controller=self.rdigit,
-                                                toolSwitcher=self._toolSwitcher)
+        self.toolbars['rdigit'] = RDigitToolbar(
+            parent=self, controller=self.rdigit,
+            toolSwitcher=self._toolSwitcher)
         # connect signals
-        self.rdigit.newRasterCreated.connect(self.toolbars['rdigit'].NewRasterAdded)
-        self.rdigit.newRasterCreated.connect(lambda name: self._giface.mapCreated.emit(name=name, ltype='raster'))
-        self.rdigit.newFeatureCreated.connect(self.toolbars['rdigit'].UpdateCellValues)
-        self.rdigit.uploadMapCategories.connect(self.toolbars['rdigit'].UpdateCellValues)
-        self.rdigit.showNotification.connect(lambda text: self.SetStatusText(text, 0))
+        self.rdigit.newRasterCreated.connect(
+            self.toolbars['rdigit'].NewRasterAdded)
+        self.rdigit.newRasterCreated.connect(
+            lambda name: self._giface.mapCreated.emit(
+                name=name, ltype='raster'))
+        self.rdigit.newFeatureCreated.connect(
+            self.toolbars['rdigit'].UpdateCellValues)
+        self.rdigit.uploadMapCategories.connect(
+            self.toolbars['rdigit'].UpdateCellValues)
+        self.rdigit.showNotification.connect(
+            lambda text: self.SetStatusText(text, 0))
         self.rdigit.quitDigitizer.connect(self.QuitRDigit)
-        self.rdigit.Bind(EVT_UPDATE_PROGRESS,
-                         lambda evt: self.statusbarManager.SetProgress(evt.range, evt.value, evt.text))
-        rasters = self.GetMap().GetListOfLayers(ltype='raster', mapset=grass.gisenv()['MAPSET'])
+        self.rdigit.Bind(
+            EVT_UPDATE_PROGRESS,
+            lambda evt: self.statusbarManager.SetProgress(
+                evt.range,
+                evt.value,
+                evt.text))
+        rasters = self.GetMap().GetListOfLayers(
+            ltype='raster', mapset=grass.gisenv()['MAPSET'])
         self.toolbars['rdigit'].UpdateRasterLayers(rasters)
         self.toolbars['rdigit'].SelectDefault()
 
@@ -1523,7 +1614,8 @@ class MapFrame(SingleMapFrame):
     def _updateRDigitLayers(self, layer):
         mapset = grass.gisenv()['MAPSET']
         self.toolbars['rdigit'].UpdateRasterLayers(
-            rasters=self.GetMap().GetListOfLayers(ltype='raster', mapset=mapset))
+            rasters=self.GetMap().GetListOfLayers(
+                ltype='raster', mapset=mapset))
 
     def QuitRDigit(self):
         """Calls digitizer cleanup, removes digitizer object and disconnects

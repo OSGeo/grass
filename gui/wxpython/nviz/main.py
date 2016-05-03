@@ -20,7 +20,7 @@ This program is free software under the GNU General Public License
 errorMsg = ''
 
 try:
-    from wx   import glcanvas
+    from wx import glcanvas
     from nviz import mapwindow
     from nviz import tools
     from nviz import workspace
@@ -31,10 +31,10 @@ except (ImportError, NameError) as err:
     errorMsg = err
 
 if haveNviz:
-    GLWindow       = mapwindow.GLWindow
+    GLWindow = mapwindow.GLWindow
     NvizToolWindow = tools.NvizToolWindow
-    NvizSettings   = workspace.NvizSettings
+    NvizSettings = workspace.NvizSettings
 else:
-    GLWindow       = None
+    GLWindow = None
     NvizToolWindow = None
-    NvizSettings   = None
+    NvizSettings = None

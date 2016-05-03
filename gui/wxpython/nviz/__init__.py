@@ -6,4 +6,4 @@ all = [
     'wxnviz',
     'workspace',
     'animation',
-    ]
+]

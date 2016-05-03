@@ -23,7 +23,7 @@ from core.utils import _
 
 import wx
 from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
-        
+
 from grass.pydispatch.signal import Signal
 try:
     from PIL import Image
@@ -31,11 +31,13 @@ try:
 except ImportError:
     hasPIL = False
 
+
 class OverlayId:
     legendId = 0
     barscaleId = 1
-    arrowId = 2 
-    
+    arrowId = 2
+
+
 class OverlayController(object):
 
     """Base class for decorations (barscale, legend) controller."""
@@ -78,7 +80,8 @@ class OverlayController(object):
 
     def GetCoords(self):
         if self._coords is None:  # initial position
-            x, y = self.GetPlacement((self._renderer.width, self._renderer.height))
+            x, y = self.GetPlacement(
+                (self._renderer.width, self._renderer.height))
             self._coords = [x, y]
         return self._coords
 
@@ -159,14 +162,18 @@ class OverlayController(object):
         self.Show()
 
     def _add(self):
-        self._overlay = self._renderer.AddOverlay(id=self._id, ltype=self._name,
-                                                  command=self.cmd, active=False,
-                                                  render=True, hidden=True)
+        self._overlay = self._renderer.AddOverlay(
+            id=self._id,
+            ltype=self._name,
+            command=self.cmd,
+            active=False,
+            render=True,
+            hidden=True)
         # check if successful
 
     def _update(self):
         self._renderer.ChangeOverlay(id=self._id, command=self._cmd)
-        
+
     def CmdIsValid(self):
         """If command is valid"""
         return True
@@ -177,8 +184,10 @@ class OverlayController(object):
         :param screensize: screen size
         """
         if not hasPIL:
-            self._giface.WriteWarning(_("Please install Python Imaging Library (PIL)\n"
-                                        "for better control of legend and other decorations."))
+            self._giface.WriteWarning(
+                _(
+                    "Please install Python Imaging Library (PIL)\n"
+                    "for better control of legend and other decorations."))
             return 0, 0
         for param in self._cmd:
             if not param.startswith('at'):
@@ -196,7 +205,8 @@ class BarscaleController(OverlayController):
         OverlayController.__init__(self, renderer, giface)
         self._id = OverlayId.barscaleId
         self._name = 'barscale'
-        # different from default because the reference point is not in the middle
+        # different from default because the reference point is not in the
+        # middle
         self._defaultAt = 'at=0,98'
         self._cmd = ['d.barscale', self._defaultAt]
 
@@ -207,7 +217,8 @@ class ArrowController(OverlayController):
         OverlayController.__init__(self, renderer, giface)
         self._id = OverlayId.arrowId
         self._name = 'arrow'
-        # different from default because the reference point is not in the middle
+        # different from default because the reference point is not in the
+        # middle
         self._defaultAt = 'at=85.0,25.0'
         self._cmd = ['d.northarrow', self._defaultAt]
 
@@ -224,13 +235,16 @@ class LegendController(OverlayController):
 
     def GetPlacement(self, screensize):
         if not hasPIL:
-            self._giface.WriteWarning(_("Please install Python Imaging Library (PIL)\n"
-                                        "for better control of legend and other decorations."))
+            self._giface.WriteWarning(
+                _(
+                    "Please install Python Imaging Library (PIL)\n"
+                    "for better control of legend and other decorations."))
             return 0, 0
         for param in self._cmd:
             if not param.startswith('at'):
                 continue
-            b, t, l, r = [float(number) for number in param.split('=')[1].split(',')]  # pylint: disable-msg=W0612
+            b, t, l, r = [float(number) for number in param.split(
+                '=')[1].split(',')]  # pylint: disable-msg=W0612
             x = int((l / 100.) * screensize[0])
             y = int((1 - t / 100.) * screensize[1])
 
@@ -292,7 +306,10 @@ class LegendController(OverlayController):
         window = self._giface.GetMapWindow()
         window.mouseLeftUp.disconnect(self._finishResizing)
         screenSize = window.GetClientSizeTuple()
-        self.ResizeLegend(window.mouse["begin"], window.mouse["end"], screenSize)
+        self.ResizeLegend(
+            window.mouse["begin"],
+            window.mouse["end"],
+            screenSize)
         self._giface.GetMapDisplay().GetMapToolbar().SelectDefault()
         # redraw
         self.overlayChanged.emit()
@@ -301,10 +318,17 @@ class LegendController(OverlayController):
 class TextLayerDialog(wx.Dialog):
     """!Controls setting options and displaying/hiding map overlay decorations
     """
+
     def __init__(self, parent, ovlId, title, name='text', size=wx.DefaultSize,
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
 
-        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style, size=size)
+        wx.Dialog.__init__(
+            self,
+            parent=parent,
+            id=wx.ID_ANY,
+            title=title,
+            style=style,
+            size=size)
 
         self.ovlId = ovlId
         self.parent = parent
@@ -313,8 +337,10 @@ class TextLayerDialog(wx.Dialog):
             self.currText = self.parent.MapWindow.textdict[self.ovlId]['text']
             self.currFont = self.parent.MapWindow.textdict[self.ovlId]['font']
             self.currClr = self.parent.MapWindow.textdict[self.ovlId]['color']
-            self.currRot = self.parent.MapWindow.textdict[self.ovlId]['rotation']
-            self.currCoords = self.parent.MapWindow.textdict[self.ovlId]['coords']
+            self.currRot = self.parent.MapWindow.textdict[
+                self.ovlId]['rotation']
+            self.currCoords = self.parent.MapWindow.textdict[
+                self.ovlId]['coords']
             self.currBB = self.parent.MapWindow.textdict[self.ovlId]['bbox']
         else:
             self.currClr = wx.BLACK
@@ -333,16 +359,25 @@ class TextLayerDialog(wx.Dialog):
         if self.parent.Map.GetOverlay(self.ovlId) is None:
             self.chkbox.SetValue(True)
         else:
-            self.chkbox.SetValue(self.parent.MapWindow.overlays[self.ovlId]['layer'].IsActive())
+            self.chkbox.SetValue(
+                self.parent.MapWindow.overlays[
+                    self.ovlId]['layer'].IsActive())
         box.Add(item=self.chkbox, span=(1, 2),
                 pos=(0, 0))
 
         # text entry
-        box.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Text:")),
-                flag=wx.ALIGN_CENTER_VERTICAL,
-                pos=(1, 0))
+        box.Add(
+            item=wx.StaticText(
+                parent=self,
+                id=wx.ID_ANY,
+                label=_("Text:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            pos=(
+                1,
+                0))
 
-        self.textentry = ExpandoTextCtrl(parent=self, id=wx.ID_ANY, value="", size=(300, -1))
+        self.textentry = ExpandoTextCtrl(
+            parent=self, id=wx.ID_ANY, value="", size=(300, -1))
         self.textentry.SetFont(self.currFont)
         self.textentry.SetForegroundColour(self.currClr)
         self.textentry.SetValue(self.currText)
@@ -354,11 +389,19 @@ class TextLayerDialog(wx.Dialog):
                 pos=(1, 1))
 
         # rotation
-        box.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Rotation:")),
-                flag=wx.ALIGN_CENTER_VERTICAL,
-                pos=(2, 0))
-        self.rotation = wx.SpinCtrl(parent=self, id=wx.ID_ANY, value="", pos=(30, 50),
-                                    size=(75, -1), style=wx.SP_ARROW_KEYS)
+        box.Add(
+            item=wx.StaticText(
+                parent=self,
+                id=wx.ID_ANY,
+                label=_("Rotation:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            pos=(
+                2,
+                0))
+        self.rotation = wx.SpinCtrl(
+            parent=self, id=wx.ID_ANY, value="", pos=(
+                30, 50), size=(
+                75, -1), style=wx.SP_ARROW_KEYS)
         self.rotation.SetRange(-360, 360)
         self.rotation.SetValue(int(self.currRot))
         box.Add(item=self.rotation,
@@ -366,9 +409,15 @@ class TextLayerDialog(wx.Dialog):
                 pos=(2, 1))
 
         # font
-        box.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Font:")),
-                flag=wx.ALIGN_CENTER_VERTICAL,
-                pos=(3, 0))
+        box.Add(
+            item=wx.StaticText(
+                parent=self,
+                id=wx.ID_ANY,
+                label=_("Font:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            pos=(
+                3,
+                0))
         fontbtn = wx.Button(parent=self, id=wx.ID_ANY, label=_("Set font"))
         box.Add(item=fontbtn,
                 flag=wx.ALIGN_RIGHT,
@@ -381,13 +430,15 @@ class TextLayerDialog(wx.Dialog):
 
         # note
         box = wx.BoxSizer(wx.HORIZONTAL)
-        label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                              label=_("Drag text with mouse in pointer mode "
-                                      "to position.\nDouble-click to change options"))
+        label = wx.StaticText(
+            parent=self, id=wx.ID_ANY, label=_(
+                "Drag text with mouse in pointer mode "
+                "to position.\nDouble-click to change options"))
         box.Add(item=label, proportion=0,
                 flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
-        self.sizer.Add(item=box, proportion=0,
-                       flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER | wx.ALL, border=5)
+        self.sizer.Add(
+            item=box, proportion=0, flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL |
+            wx.ALIGN_CENTER | wx.ALL, border=5)
 
         line = wx.StaticLine(parent=self, id=wx.ID_ANY,
                              size=(20, -1), style=wx.LI_HORIZONTAL)
@@ -412,12 +463,12 @@ class TextLayerDialog(wx.Dialog):
 
         # bindings
         self.Bind(EVT_ETC_LAYOUT_NEEDED, self.OnRefit, self.textentry)
-        self.Bind(wx.EVT_BUTTON,     self.OnSelectFont, fontbtn)
-        self.Bind(wx.EVT_TEXT,       self.OnText,       self.textentry)
-        self.Bind(wx.EVT_SPINCTRL,   self.OnRotation,   self.rotation)
+        self.Bind(wx.EVT_BUTTON, self.OnSelectFont, fontbtn)
+        self.Bind(wx.EVT_TEXT, self.OnText, self.textentry)
+        self.Bind(wx.EVT_SPINCTRL, self.OnRotation, self.rotation)
 
         self.SetMinSize((400, 230))
-        
+
     def OnRefit(self, event):
         """Resize text entry to match text"""
         self.sizer.Fit(self)

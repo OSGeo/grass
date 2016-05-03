@@ -19,11 +19,11 @@ This program is free software under the GNU General Public License
 
 class TreeModel(object):
     """Class represents a tree structure with hidden root.
-    
+
     TreeModel is used together with TreeView class to display results in GUI.
     The functionality is not complete, only needed methods are implemented.
     If needed, the functionality can be extended.
-    
+
     >>> tree = TreeModel(DictNode)
     >>> root = tree.root
     >>> n1 = tree.AppendNode(parent=root, label='node1')
@@ -52,6 +52,7 @@ class TreeModel(object):
       node21
         * xxx : 1
     """
+
     def __init__(self, nodeClass):
         """Constructor creates root node.
 
@@ -66,11 +67,11 @@ class TreeModel(object):
 
     def AppendNode(self, parent, label, data=None):
         """Create node and append it to parent node.
-        
+
         :param parent: parent node of the new node
         :param label: node label
         :param data: optional node data
-        
+
         :return: new node
         """
         node = self.nodeClass(label=label, data=data)
@@ -84,7 +85,7 @@ class TreeModel(object):
         parent = parent if parent else self.root
         self._searchNodes(node=parent, foundNodes=nodes, **kwargs)
         return nodes
-        
+
     def _searchNodes(self, node, foundNodes, **kwargs):
         """Helper method for searching nodes."""
         if node.match(**kwargs):
@@ -101,27 +102,25 @@ class TreeModel(object):
         if len(index) == 0:
             return self.root
         return self._getNode(self.root, index)
-        
+
     def GetIndexOfNode(self, node):
         """Method used for communication between view (VirtualTree) and model."""
         index = []
         return self._getIndex(node, index)
-        
-        
+
     def _getIndex(self, node, index):
         if node.parent:
             index.insert(0, node.parent.children.index(node))
             return self._getIndex(node.parent, index)
         return index
-        
-        
+
     def GetChildrenByIndex(self, index):
         """Method used for communication between view (VirtualTree) and model."""
         if len(index) == 0:
             return self.root.children
         node = self._getNode(self.root, index)
         return node.children
-        
+
     def _getNode(self, node, index):
         if len(index) == 1:
             return node.children[index[0]]
@@ -152,6 +151,7 @@ class TreeModel(object):
 
 class DictNode(object):
     """Node which has data in a form of dictionary."""
+
     def __init__(self, label, data=None):
         """Create node.
 
@@ -160,7 +160,7 @@ class DictNode(object):
         """
 
         self.label = label
-        if data == None:
+        if data is None:
             self.data = dict()
         else:
             self.data = data
@@ -175,9 +175,9 @@ class DictNode(object):
         text.append(indent * ' ' + self.label)
         if self.data:
             for key, value in self.data.iteritems():
-                text.append("%(indent)s* %(key)s : %(value)s" % {'indent': (indent + 2) * ' ',
-                                                                 'key': key,
-                                                                 'value': value})
+                text.append(
+                    "%(indent)s* %(key)s : %(value)s" %
+                    {'indent': (indent + 2) * ' ', 'key': key, 'value': value})
 
         if self.children:
             for child in self.children:
@@ -196,6 +196,7 @@ class DictNode(object):
 
 class ModuleNode(DictNode):
     """Node representing module."""
+
     def __init__(self, label, data=None):
         super(ModuleNode, self).__init__(label=label, data=data)
 
@@ -206,13 +207,15 @@ class ModuleNode(DictNode):
             return False
         if key in ('command', 'keywords', 'description'):
             try:
-                return len(self.data[key]) and (value in self.data[key] or value == '*')
+                return len(
+                    self.data[key]) and(
+                    value in self.data[key] or value == '*')
             except KeyError:
                 return False
-        
+
         return False
-            
-        
+
+
 def main():
     import doctest
     doctest.testmod()

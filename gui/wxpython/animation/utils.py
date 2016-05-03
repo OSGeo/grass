@@ -66,7 +66,9 @@ def validateTimeseriesName(timeseries, etype='strds'):
         if nameShort in trastDict[mapset]:
             return timeseries
         else:
-            raise GException(_("Space time dataset <%s> not found.") % timeseries)
+            raise GException(
+                _("Space time dataset <%s> not found.") %
+                timeseries)
 
     mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
     for mapset in mapsets:
@@ -200,7 +202,8 @@ def checkSeriesCompatibility(mapSeriesList=None, timeseriesList=None):
             raise GException(_("The number of maps to animate has to be "
                                "the same for each map series."))
 
-        if timeseriesList and list(count)[0] != list(timeseriesInfo['count'])[0]:
+        if timeseriesList and list(count)[0] != list(
+                timeseriesInfo['count'])[0]:
             raise GException(_("The number of maps to animate has to be "
                                "the same as the number of maps in temporal dataset."))
 
@@ -260,7 +263,13 @@ def RenderText(text, font, bgcolor, fgcolor):
 def WxImageToPil(image):
     """Converts wx.Image to PIL image"""
     pilImage = Image.new('RGB', (image.GetWidth(), image.GetHeight()))
-    getattr(pilImage, "frombytes", getattr(pilImage, "fromstring"))(image.GetData())
+    getattr(
+        pilImage,
+        "frombytes",
+        getattr(
+            pilImage,
+            "fromstring"))(
+        image.GetData())
     return pilImage
 
 
@@ -318,9 +327,12 @@ def layerListToCmdsMatrix(layerList):
                         if mapLayer:
                             try:
                                 idx = cmd.index('layer')
-                                cmd[idx] = 'layer={layer}'.format(layer=mapLayer)
+                                cmd[idx] = 'layer={layer}'.format(
+                                    layer=mapLayer)
                             except ValueError:
-                                cmd.append('layer={layer}'.format(layer=mapLayer))
+                                cmd.append(
+                                    'layer={layer}'.format(
+                                        layer=mapLayer))
                         cmds.append(cmd[:])
                     cmdsForComposition.append(cmds)
         else:

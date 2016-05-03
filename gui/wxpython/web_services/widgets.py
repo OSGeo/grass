@@ -23,25 +23,25 @@ import shutil
 from copy import deepcopy
 try:
     from xml.etree.ElementTree import ParseError
-except ImportError: # < Python 2.7
+except ImportError:  # < Python 2.7
     from xml.parsers.expat import ExpatError as ParseError
 
 import wx
-import wx.lib.flatnotebook    as FN
-import wx.lib.colourselect    as csel
+import wx.lib.flatnotebook as FN
+import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
-from   wx.lib.newevent        import NewEvent
-from   wx.gizmos              import TreeListCtrl
+from wx.lib.newevent import NewEvent
+from wx.gizmos import TreeListCtrl
 
-from core              import globalvar
-from core.debug        import Debug
-from core.gcmd         import GWarning, GMessage
-from core.gconsole     import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
+from core import globalvar
+from core.debug import Debug
+from core.gcmd import GWarning, GMessage
+from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 from core.utils import _
 
 from web_services.cap_interface import WMSCapabilities, WMTSCapabilities, OnEarthCapabilities
 
-from gui_core.widgets  import GNotebook
+from gui_core.widgets import GNotebook
 from gui_core.widgets import ManageSettingsWidget
 
 import grass.script as grass
@@ -51,11 +51,13 @@ if rinwms_path not in sys.path:
     sys.path.append(rinwms_path)
 
 from wms_base import WMSDriversInfo
-from srs import Srs 
+from srs import Srs
 
 from grass.pydispatch.signal import Signal
 
+
 class WSPanel(wx.Panel):
+
     def __init__(self, parent, web_service, **kwargs):
         """Show data from capabilities file.
 
@@ -65,7 +67,7 @@ class WSPanel(wx.Panel):
         :param parent:  parent widget
         :param web_service:  web service to be panel generated for
         """
-        wx.Panel.__init__(self, parent = parent, id = wx.ID_ANY)
+        wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
 
         self.parent = parent
         self.ws = web_service
@@ -95,34 +97,40 @@ class WSPanel(wx.Panel):
         self.drv_props = self.drv_info.GetDrvProperties(self.ws)
 
         self.ws_drvs = {
-                        'WMS_1.1.1' : {
-                                        'cmd' : ['wms_version=1.1.1',
-                                                 'driver=WMS_GRASS'],
-                                        'cap_parser' : lambda temp_file : WMSCapabilities(temp_file, '1.1.1'),
-                                      },
-                        'WMS_1.3.0' : {
-                                        'cmd' : ['wms_version=1.3.0',
-                                                 'driver=WMS_GRASS'],
-                                        'cap_parser' : lambda temp_file : WMSCapabilities(temp_file, '1.3.0'),
-                                      },
-                        'WMTS' :      {
-                                        'cmd' : ['driver=WMTS_GRASS'],
-                                        'cap_parser' : WMTSCapabilities,
-                                      },
-                        'OnEarth' : {
-                                        'cmd' : ['driver=OnEarth_GRASS'],
-                                        'cap_parser' : OnEarthCapabilities,
-                                      }
-                      }
+            'WMS_1.1.1': {
+                'cmd': [
+                    'wms_version=1.1.1',
+                    'driver=WMS_GRASS'],
+                'cap_parser': lambda temp_file: WMSCapabilities(
+                    temp_file,
+                    '1.1.1'),
+            },
+            'WMS_1.3.0': {
+                'cmd': [
+                    'wms_version=1.3.0',
+                    'driver=WMS_GRASS'],
+                'cap_parser': lambda temp_file: WMSCapabilities(
+                    temp_file,
+                    '1.3.0'),
+            },
+            'WMTS': {
+                'cmd': ['driver=WMTS_GRASS'],
+                'cap_parser': WMTSCapabilities,
+            },
+            'OnEarth': {
+                'cmd': ['driver=OnEarth_GRASS'],
+                'cap_parser': OnEarthCapabilities,
+            }}
 
         self.cmdStdErr = GStderr(self)
         self.cmd_thread = CmdThread(self)
         self.cap_file = grass.tempfile()
 
-        reqDataBox = wx.StaticBox(parent=self, label=_(" Requested data settings "))
+        reqDataBox = wx.StaticBox(
+            parent=self, label=_(" Requested data settings "))
         self._nb_sizer = wx.StaticBoxSizer(reqDataBox, wx.VERTICAL)
-        self.notebook = GNotebook(parent = self,
-                                  style = FN.FNB_FANCY_TABS | FN.FNB_NO_X_BUTTON)
+        self.notebook = GNotebook(parent=self,
+                                  style=FN.FNB_FANCY_TABS | FN.FNB_NO_X_BUTTON)
 
         self._requestPage()
         self._advancedSettsPage()
@@ -135,7 +143,7 @@ class WSPanel(wx.Panel):
         self.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
 
     def __del__(self):
-        self.cmd_thread.abort(abortall =True)
+        self.cmd_thread.abort(abortall=True)
         grass.try_remove(self.cap_file)
 
     def _layout(self):
@@ -144,13 +152,13 @@ class WSPanel(wx.Panel):
 
     def _requestPage(self):
         """Create request page"""
-        self.req_page_panel = wx.Panel(parent = self, id = wx.ID_ANY)
-        self.notebook.AddPage(page = self.req_page_panel,
+        self.req_page_panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.notebook.AddPage(page=self.req_page_panel,
                               text=_('Request'),
-                              name = 'request')
+                              name='request')
 
         # list of layers
-        self.layersBox = wx.StaticBox(parent = self.req_page_panel, id = wx.ID_ANY,
+        self.layersBox = wx.StaticBox(parent=self.req_page_panel, id=wx.ID_ANY,
                                       label=_("List of layers "))
 
         style = wx.TR_DEFAULT_STYLE | wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT
@@ -159,16 +167,19 @@ class WSPanel(wx.Panel):
         if 'WMS' not in self.ws:
             style = style | wx.TR_HIDE_ROOT
 
-        self.list = LayersList(parent = self.req_page_panel,
-                               web_service = self.ws,
-                               style = style)
+        self.list = LayersList(parent=self.req_page_panel,
+                               web_service=self.ws,
+                               style=style)
 
         self.params['format'] = None
 
         self.params['srs'] = None
-        if 'srs' not in  self.drv_props['ignored_params']:
-            projText = wx.StaticText(parent = self.req_page_panel, id = wx.ID_ANY, label = _("Source projection:"))
-            self.params['srs'] =  wx.Choice(parent = self.req_page_panel, id = wx.ID_ANY)
+        if 'srs' not in self.drv_props['ignored_params']:
+            projText = wx.StaticText(
+                parent=self.req_page_panel, id=wx.ID_ANY,
+                label=_("Source projection:"))
+            self.params['srs'] = wx.Choice(
+                parent=self.req_page_panel, id=wx.ID_ANY)
 
         self.list.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnListSelChanged)
 
@@ -177,29 +188,44 @@ class WSPanel(wx.Panel):
 
         layersSizer = wx.StaticBoxSizer(self.layersBox, wx.HORIZONTAL)
 
-        layersSizer.Add(item = self.list, proportion = 1,
-                        flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
+        layersSizer.Add(
+            item=self.list,
+            proportion=1,
+            flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+            border=5)
 
-        self.req_page_sizer.Add(item = layersSizer, proportion = 1,
-                            flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
+        self.req_page_sizer.Add(
+            item=layersSizer,
+            proportion=1,
+            flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+            border=5)
 
         self.source_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
         if self.params['format'] is not None:
-            self.source_sizer.Add(item = self.params['format'],
-                                  flag = wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
+            self.source_sizer.Add(
+                item=self.params['format'],
+                flag=wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                border=5)
 
         if self.params['srs'] is not None:
-            self.source_sizer.Add(item = projText, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL, border = 5)
-            self.source_sizer.Add(item = self.params['srs'],
-                                  flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT | wx.TOP | wx.BOTTOM, border = 5)
+            self.source_sizer.Add(
+                item=projText,
+                flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+                border=5)
+            self.source_sizer.Add(
+                item=self.params['srs'],
+                flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT | wx.TOP | wx.BOTTOM,
+                border=5)
 
-        self.req_page_sizer.Add(item = self.source_sizer,
-                                flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
+        self.req_page_sizer.Add(
+            item=self.source_sizer,
+            flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+            border=5)
 
         self.req_page_panel.SetSizer(self.req_page_sizer)
 
-    def enableButtons(self, enable = True):
+    def enableButtons(self, enable=True):
         """Enable/disable up, down, buttons
         """
         self.btnUp.Enable(enable)
@@ -208,46 +234,59 @@ class WSPanel(wx.Panel):
     def _advancedSettsPage(self):
         """Create advanced settings page
         """
-        #TODO parse maxcol, maxrow, settings from d.wms module?
-        #TODO OnEarth driver - add selection of time
-        adv_setts_panel = wx.Panel(parent = self, id = wx.ID_ANY)
-        self.notebook.AddPage(page = adv_setts_panel,
+        # TODO parse maxcol, maxrow, settings from d.wms module?
+        # TODO OnEarth driver - add selection of time
+        adv_setts_panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.notebook.AddPage(page=adv_setts_panel,
                               text=_('Advanced request settings'),
-                              name = 'adv_req_setts')
+                              name='adv_req_setts')
 
         labels = {}
         self.l_odrder_list = None
         if 'WMS' in self.ws:
-            labels['l_order'] = wx.StaticBox(parent = adv_setts_panel, id = wx.ID_ANY,
-                                             label = _("Order of layers in raster"))
-            self.l_odrder_list = wx.ListBox(adv_setts_panel, id = wx.ID_ANY, choices = [],
-                                                                style = wx.LB_SINGLE|wx.LB_NEEDED_SB)
-            self.btnUp = wx.Button(adv_setts_panel, id = wx.ID_ANY, label = _("Up"))
-            self.btnDown = wx.Button(adv_setts_panel, id = wx.ID_ANY, label = _("Down"))
+            labels['l_order'] = wx.StaticBox(
+                parent=adv_setts_panel, id=wx.ID_ANY,
+                label=_("Order of layers in raster"))
+            self.l_odrder_list = wx.ListBox(
+                adv_setts_panel, id=wx.ID_ANY, choices=[],
+                style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
+            self.btnUp = wx.Button(
+                adv_setts_panel, id=wx.ID_ANY, label=_("Up"))
+            self.btnDown = wx.Button(
+                adv_setts_panel, id=wx.ID_ANY, label=_("Down"))
 
             self.btnUp.Bind(wx.EVT_BUTTON, self.OnUp)
             self.btnDown.Bind(wx.EVT_BUTTON, self.OnDown)
 
-        labels['method'] = wx.StaticText(parent = adv_setts_panel, id = wx.ID_ANY,
-                                         label = _("Reprojection method:"))
+        labels['method'] = wx.StaticText(parent=adv_setts_panel, id=wx.ID_ANY,
+                                         label=_("Reprojection method:"))
 
         self.reproj_methods = ['nearest', 'linear', 'cubic', 'cubicspline']
-        self.params['method'] = wx.Choice(parent = adv_setts_panel, id = wx.ID_ANY,
-                                          choices = [_('Nearest neighbor'), _('Linear interpolation'),
-                                                     _('Cubic interpolation'), _('Cubic spline interpolation')])
+        self.params['method'] = wx.Choice(
+            parent=adv_setts_panel,
+            id=wx.ID_ANY,
+            choices=[
+                _('Nearest neighbor'),
+                _('Linear interpolation'),
+                _('Cubic interpolation'),
+                _('Cubic spline interpolation')])
 
-        labels['maxcols'] = wx.StaticText(parent = adv_setts_panel, id = wx.ID_ANY,
-                                          label = _("Maximum columns to request from server at time:"))
-        self.params['maxcols'] = wx.SpinCtrl(parent = adv_setts_panel, id = wx.ID_ANY, size = (100, -1))
+        labels['maxcols'] = wx.StaticText(
+            parent=adv_setts_panel, id=wx.ID_ANY,
+            label=_("Maximum columns to request from server at time:"))
+        self.params['maxcols'] = wx.SpinCtrl(
+            parent=adv_setts_panel, id=wx.ID_ANY, size=(100, -1))
 
-        labels['maxrows'] = wx.StaticText(parent = adv_setts_panel, id = wx.ID_ANY,
-                                          label = _("Maximum rows to request from server at time:"))
-        self.params['maxrows'] = wx.SpinCtrl(parent = adv_setts_panel, id = wx.ID_ANY, size = (100, -1))
+        labels['maxrows'] = wx.StaticText(
+            parent=adv_setts_panel, id=wx.ID_ANY,
+            label=_("Maximum rows to request from server at time:"))
+        self.params['maxrows'] = wx.SpinCtrl(
+            parent=adv_setts_panel, id=wx.ID_ANY, size=(100, -1))
 
         min = 100
         max = 10000
-        self.params['maxcols'].SetRange(min,max)
-        self.params['maxrows'].SetRange(min,max)
+        self.params['maxcols'].SetRange(min, max)
+        self.params['maxrows'].SetRange(min, max)
 
         val = 500
         self.params['maxcols'].SetValue(val)
@@ -255,22 +294,26 @@ class WSPanel(wx.Panel):
 
         self.flags['o'] = self.params['bgcolor'] = None
         if not 'o' in self.drv_props['ignored_flags']:
-            self.flags['o']  = wx.CheckBox(parent = adv_setts_panel, id = wx.ID_ANY,
-                                           label = _("Do not request transparent data"))
+            self.flags['o'] = wx.CheckBox(
+                parent=adv_setts_panel, id=wx.ID_ANY,
+                label=_("Do not request transparent data"))
 
             self.flags['o'].Bind(wx.EVT_CHECKBOX, self.OnTransparent)
-            labels['bgcolor'] = wx.StaticText(parent = adv_setts_panel, id = wx.ID_ANY,
-                                              label = _("Background color:"))
-            self.params['bgcolor'] = csel.ColourSelect(parent = adv_setts_panel, id = wx.ID_ANY,
-                                                       colour = (255, 255, 255),
-                                                       size = globalvar.DIALOG_COLOR_SIZE)
+            labels['bgcolor'] = wx.StaticText(
+                parent=adv_setts_panel, id=wx.ID_ANY,
+                label=_("Background color:"))
+            self.params['bgcolor'] = csel.ColourSelect(
+                parent=adv_setts_panel, id=wx.ID_ANY, colour=(
+                    255, 255, 255), size=globalvar.DIALOG_COLOR_SIZE)
             self.params['bgcolor'].Enable(False)
 
         self.params['urlparams'] = None
         if self.params['urlparams'] not in self.drv_props['ignored_params']:
-            labels['urlparams'] = wx.StaticText(parent = adv_setts_panel, id = wx.ID_ANY,
-                                                label = _("Additional query parameters for server:"))
-            self.params['urlparams'] = wx.TextCtrl(parent = adv_setts_panel, id = wx.ID_ANY)
+            labels['urlparams'] = wx.StaticText(
+                parent=adv_setts_panel, id=wx.ID_ANY,
+                label=_("Additional query parameters for server:"))
+            self.params['urlparams'] = wx.TextCtrl(
+                parent=adv_setts_panel, id=wx.ID_ANY)
 
         # layout
 
@@ -279,88 +322,88 @@ class WSPanel(wx.Panel):
         if 'WMS' in self.ws:
 
             boxSizer = wx.StaticBoxSizer(labels['l_order'], wx.VERTICAL)
-            gridSizer  =  wx.GridBagSizer (hgap = 3, vgap = 3)
+            gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
             gridSizer.Add(self.l_odrder_list,
-                          pos = (0,0),
-                          span = (4, 1),
-                          flag = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
-                          border = 0)
+                          pos=(0, 0),
+                          span=(4, 1),
+                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                          border=0)
 
             gridSizer.Add(self.btnUp,
-                          pos = (0,1),
-                          flag = wx.ALIGN_CENTER_VERTICAL,
-                          border = 0)
+                          pos=(0, 1),
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          border=0)
 
             gridSizer.Add(self.btnDown,
-                          pos = (1,1),
-                          flag = wx.ALIGN_CENTER_VERTICAL,
-                          border = 0)
+                          pos=(1, 1),
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          border=0)
 
             gridSizer.AddGrowableCol(0)
             boxSizer.Add(gridSizer,
-                         flag = wx.EXPAND | wx.ALL,
-                         border = 5)
+                         flag=wx.EXPAND | wx.ALL,
+                         border=5)
 
-            border.Add(item = boxSizer,
-                       flag = wx.LEFT | wx.RIGHT | wx.UP | wx.EXPAND,
-                       border = 5)
+            border.Add(item=boxSizer,
+                       flag=wx.LEFT | wx.RIGHT | wx.UP | wx.EXPAND,
+                       border=5)
 
-        gridSizer  =  wx.GridBagSizer (hgap = 3, vgap = 3)
+        gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
         for k in ['method', 'maxcols', 'maxrows', 'o', 'bgcolor']:
 
-            if self.params.has_key(k):
+            if k in self.params:
                 param = self.params[k]
-            elif self.flags.has_key(k):
+            elif k in self.flags:
                 param = self.flags[k]
 
             if param is None:
                 continue
 
-            if labels.has_key(k) or k == 'o':
+            if k in labels or k == 'o':
                 if k != 'o':
                     label = labels[k]
                 else:
                     label = param
 
                 gridSizer.Add(label,
-                              flag = wx.ALIGN_LEFT |
+                              flag=wx.ALIGN_LEFT |
                               wx.ALIGN_CENTER_VERTICAL,
-                              pos = (row, 0))
+                              pos=(row, 0))
 
             if k != 'o':
-                gridSizer.Add(item = param,
-                              flag = wx.ALIGN_RIGHT |
+                gridSizer.Add(item=param,
+                              flag=wx.ALIGN_RIGHT |
                               wx.ALIGN_CENTER_VERTICAL,
-                              pos = (row, 1))
+                              pos=(row, 1))
             row += 1
 
         gridSizer.AddGrowableCol(0)
-        border.Add(item = gridSizer,
-                   flag = wx.LEFT | wx.RIGHT | wx.TOP | wx.EXPAND,
-                   border = 5)
+        border.Add(item=gridSizer,
+                   flag=wx.LEFT | wx.RIGHT | wx.TOP | wx.EXPAND,
+                   border=5)
 
         if self.params['urlparams']:
-            gridSizer  =  wx.GridBagSizer (hgap = 3, vgap = 3)
-            
+            gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
+
             row = 0
             gridSizer.Add(labels['urlparams'],
-                          flag = wx.ALIGN_LEFT |
+                          flag=wx.ALIGN_LEFT |
                           wx.ALIGN_CENTER_VERTICAL,
-                          pos = (row, 0))
-            
-            gridSizer.Add(item = self.params['urlparams'],
-                          flag = wx.ALIGN_RIGHT |
+                          pos=(row, 0))
+
+            gridSizer.Add(item=self.params['urlparams'],
+                          flag=wx.ALIGN_RIGHT |
                           wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                          pos = (row, 1))
-            
+                          pos=(row, 1))
+
             gridSizer.AddGrowableCol(1)
-            
-            border.Add(item = gridSizer,
-                       flag = wx.LEFT | wx.RIGHT | wx.TOP | wx.EXPAND,
-                       border = 5)
+
+            border.Add(item=gridSizer,
+                       flag=wx.LEFT | wx.RIGHT | wx.TOP | wx.EXPAND,
+                       border=5)
 
         adv_setts_panel.SetSizer(border)
 
@@ -372,9 +415,9 @@ class WSPanel(wx.Panel):
             if pos:
                 self.sel_layers.insert(pos - 1, self.sel_layers.pop(pos))
             if pos > 0:
-                self._updateLayerOrderList(selected = (pos - 1))
+                self._updateLayerOrderList(selected=(pos - 1))
             else:
-                self._updateLayerOrderList(selected = 0)
+                self._updateLayerOrderList(selected=0)
 
     def OnDown(self, event):
         """Move selected to down
@@ -383,12 +426,12 @@ class WSPanel(wx.Panel):
             pos = self.l_odrder_list.GetSelection()
             if pos != len(self.sel_layers) - 1:
                 self.sel_layers.insert(pos + 1, self.sel_layers.pop(pos))
-            if pos < len(self.sel_layers) -1:
-                self._updateLayerOrderList(selected = (pos + 1))
+            if pos < len(self.sel_layers) - 1:
+                self._updateLayerOrderList(selected=(pos + 1))
             else:
-                self._updateLayerOrderList(selected = len(self.sel_layers) -1)
+                self._updateLayerOrderList(selected=len(self.sel_layers) - 1)
 
-    def _updateLayerOrderList(self, selected = None):
+    def _updateLayerOrderList(self, selected=None):
         """Update order in list.
         """
         def getlayercaption(layer):
@@ -432,10 +475,14 @@ class WSPanel(wx.Panel):
         :type password: str
         """
         self._prepareForNewConn(url, username, password)
-        cap_cmd = ['r.in.wms', '-c', ('capfile_output=%s' % self.cap_file), '--overwrite'] + self.ws_cmdl
+        cap_cmd = [
+            'r.in.wms',
+            '-c',
+            ('capfile_output=%s' % self.cap_file),
+            '--overwrite'] + self.ws_cmdl
 
         self.currentPid = self.cmd_thread.GetId()
-        self.cmd_thread.RunCmd(cap_cmd, stderr = self.cmdStdErr)
+        self.cmd_thread.RunCmd(cap_cmd, stderr=self.cmdStdErr)
 
     def OnCmdOutput(self, event):
         """Manage cmd output.
@@ -455,15 +502,15 @@ class WSPanel(wx.Panel):
         self.projs_list = []
 
         self.conn = {
-                        'url' : url,
-                        'password' : password,
-                        'username' : username
-                    }
+            'url': url,
+            'password': password,
+            'username': username
+        }
 
         conn_cmd = []
         for k, v in self.conn.iteritems():
             if v:
-                conn_cmd.append("%s=%s" % (k,v))
+                conn_cmd.append("%s=%s" % (k, v))
 
         self.ws_cmdl = self.ws_drvs[self.ws]['cmd'] + conn_cmd
 
@@ -476,9 +523,11 @@ class WSPanel(wx.Panel):
 
         if event.returncode != 0:
             if self.cmd_err_str:
-                self.cmd_err_str = _("Unable to download %s capabilities file\nfrom <%s>:\n" %  \
-                                         (self.ws.replace('_', ' '), self.conn['url'])) + self.cmd_err_str
-            self._postCapParsedEvt(error_msg = self.cmd_err_str)
+                self.cmd_err_str = _(
+                    "Unable to download %s capabilities file\nfrom <%s>:\n" %
+                    (self.ws.replace('_', ' '),
+                     self.conn['url'])) + self.cmd_err_str
+            self._postCapParsedEvt(error_msg=self.cmd_err_str)
             self.cmd_err_str = ''
             return
 
@@ -491,13 +540,14 @@ class WSPanel(wx.Panel):
         try:
             self.cap = self.ws_drvs[self.ws]['cap_parser'](cap_file)
         except (IOError, ParseError) as error:
-            error_msg = _("%s web service was not found in fetched capabilities file from <%s>:\n%s\n" % \
-                        (self.ws, self.conn['url'], str(error)))
+            error_msg = _(
+                "%s web service was not found in fetched capabilities file from <%s>:\n%s\n" %
+                (self.ws, self.conn['url'], str(error)))
             if Debug.GetLevel() != 0:
-              Debug.msg(1, error_msg)
-              self._postCapParsedEvt(None)
+                Debug.msg(1, error_msg)
+                self._postCapParsedEvt(None)
             else:
-              self._postCapParsedEvt(error_msg = error_msg)
+                self._postCapParsedEvt(error_msg=error_msg)
             return
 
         self.is_connected = True
@@ -509,11 +559,11 @@ class WSPanel(wx.Panel):
             self._setDefaultFormatVal()
 
         self.list.LoadData(self.cap)
-        self.OnListSelChanged(event = None)
+        self.OnListSelChanged(event=None)
 
         self._postCapParsedEvt(None)
 
-    def ParseCapFile(self, url, username, password, cap_file = None,):
+    def ParseCapFile(self, url, username, password, cap_file=None,):
         """Parse capabilities data and emits capParsed signal
         (see class constructor).
         """
@@ -537,11 +587,11 @@ class WSPanel(wx.Panel):
 
         layers = []
 
-        if dcmd.has_key('layers'):
+        if 'layers' in dcmd:
             layers = dcmd['layers']
 
         styles = []
-        if dcmd.has_key('styles'):
+        if 'styles' in dcmd:
             styles = dcmd['styles']
 
         if 'WMS' in self.ws:
@@ -556,8 +606,8 @@ class WSPanel(wx.Panel):
 
         l_st_list = []
         for i in range(len(layers)):
-            l_st_list.append({'style' : styles[i],
-                              'layer' : layers[i]})
+            l_st_list.append({'style': styles[i],
+                              'layer': layers[i]})
 
         # WMS standard - first layer in params is most bottom...
         # therefore layers order need to be reversed
@@ -565,30 +615,33 @@ class WSPanel(wx.Panel):
         self.list.SelectLayers(l_st_list)
 
         params = {}
-        if  dcmd.has_key('format'):
+        if 'format' in dcmd:
             params['format'] = dcmd['format']
-        if  dcmd.has_key('srs'):
+        if 'srs' in dcmd:
             params['srs'] = 'EPSG:' + dcmd['srs']
-        if  dcmd.has_key('method'):
+        if 'method' in dcmd:
             params['method'] = dcmd['method']
 
         for p, v in params.iteritems():
             if self.params[p]:
                 self.params[p].SetStringSelection(v)
 
-        for p, conv_f in [('urlparams', None), ('maxcols', int), ('maxrows', int)]:
-            if dcmd.has_key(p):
+        for p, conv_f in [
+                ('urlparams', None),
+                ('maxcols', int),
+                ('maxrows', int)]:
+            if p in dcmd:
                 v = dcmd[p]
                 if conv_f:
                     v = conv_f(v)
                 self.params[p].SetValue(v)
 
-        if dcmd.has_key('flags') and \
+        if 'flags' in dcmd and \
            'o' in dcmd['flags']:
-           self.flags['o'].SetValue(1)
-           self.params['bgcolor'].Enable(True)
+            self.flags['o'].SetValue(1)
+            self.params['bgcolor'].Enable(True)
 
-        if dcmd.has_key('bgcolor') and \
+        if 'bgcolor' in dcmd and \
            self.params['bgcolor']:
             bgcolor = dcmd['bgcolor'].strip().lower()
             if len(bgcolor) == 8 and \
@@ -656,11 +709,15 @@ class WSPanel(wx.Panel):
         lcmd.append('method=' + self.reproj_methods[i_method])
 
         if not 'o' in self.drv_props['ignored_flags'] and \
-            self.flags['o'].IsChecked():
+                self.flags['o'].IsChecked():
             lcmd.append('-o')
 
             c = self.params['bgcolor'].GetColour()
-            hex_color = wx.Colour(c[0], c[1], c[2]).GetAsString(wx.C2S_HTML_SYNTAX)
+            hex_color = wx.Colour(
+                c[0],
+                c[1],
+                c[2]).GetAsString(
+                wx.C2S_HTML_SYNTAX)
             lcmd.append("bgcolor=" + '0x' + hex_color[1:])
 
         lcmd.append("map=" + self.o_layer_name)
@@ -710,7 +767,7 @@ class WSPanel(wx.Panel):
                     try:
                         int(proj_spl[1])
                         self.projs_list.append(proj_code)
-                    except ValueError, IndexError:
+                    except ValueError as IndexError:
                         continue
 
             cur_sel = self.params['srs'].GetStringSelection()
@@ -739,7 +796,9 @@ class WSPanel(wx.Panel):
                 cur_sel = self.params['format'].GetStringSelection()
 
             if len(curr_sel_ls) > 0:
-                self.formats_list  = sorted(self._getFormats(curr_sel_ls[0]['cap_intf_l']))
+                self.formats_list = sorted(
+                    self._getFormats(
+                        curr_sel_ls[0]['cap_intf_l']))
                 self._updateFormatRadioBox(self.formats_list)
 
                 if cur_sel:
@@ -765,10 +824,14 @@ class WSPanel(wx.Panel):
             self.req_page_sizer.Detach(self.params['format'])
             self.params['format'].Destroy()
         if len(self.formats_list) > 0:
-            self.params['format'] =  wx.RadioBox(parent = self.req_page_panel, id = wx.ID_ANY,
-                                                 label = _("Source image format"), pos = wx.DefaultPosition,
-                                                 choices = formats_list,  majorDimension = 4,
-                                                 style = wx.RA_SPECIFY_COLS)
+            self.params['format'] = wx.RadioBox(
+                parent=self.req_page_panel,
+                id=wx.ID_ANY,
+                label=_("Source image format"),
+                pos=wx.DefaultPosition,
+                choices=formats_list,
+                majorDimension=4,
+                style=wx.RA_SPECIFY_COLS)
             self.source_sizer.Insert(item=self.params['format'], before=2,
                                      flag=wx.LEFT | wx.RIGHT | wx.BOTTOM,
                                      border=5)
@@ -843,13 +906,14 @@ class WSPanel(wx.Panel):
 
 
 class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
+
     def __init__(self, parent, web_service, style, pos=wx.DefaultPosition):
         """List of layers and styles available in capabilities file
         """
         self.parent = parent
         self.ws = web_service
 
-        TreeListCtrl.__init__(self, parent = parent, id = wx.ID_ANY, style = style)
+        TreeListCtrl.__init__(self, parent=parent, id=wx.ID_ANY, style=style)
 
         # setup mixins
         listmix.ListCtrlAutoWidthMixin.__init__(self)
@@ -859,7 +923,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         else:
             self.AddColumn(_('Layer name'))
 
-        self.SetMainColumn(0) # column with the tree
+        self.SetMainColumn(0)  # column with the tree
         self.setResizeColumn(0)
 
         self.root = None
@@ -867,7 +931,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
 
         self.layerSelected = Signal('LayersList.layerSelected')
 
-    def LoadData(self, cap = None):
+    def LoadData(self, cap=None):
         """Load data into list
         """
         # detete first all items
@@ -916,13 +980,13 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
                     if self.ws != 'OnEarth':
                         self.SetItemText(style_item, _('style'), 1)
 
-                    self.SetPyData(style_item, {'type' : 'style',
-                                                'layer' : layer, # it is parent layer of style
-                                                'style' : st})
+                    self.SetPyData(style_item, {'type': 'style',
+                                                'layer': layer,  # it is parent layer of style
+                                                'style': st})
 
-                self.SetPyData(item, {'type' : 'layer', # is it layer or style?
-                                      'layer' : layer,  # Layer instance from web_services.cap_interface
-                                      'style' : def_st}) # layer can have assigned default style
+                self.SetPyData(item, {'type': 'layer',  # is it layer or style?
+                                      'layer': layer,  # Layer instance from web_services.cap_interface
+                                      'style': def_st})  # layer can have assigned default style
 
             if parent_layer is None:
                 parent_layer = cap.GetRootLayer()
@@ -936,7 +1000,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
                 AddLayerChildrenToTree(layer, item)
 
         AddLayerChildrenToTree(None, None)
-        #self.ExpandAll(self.GetRootItem())
+        # self.ExpandAll(self.GetRootItem())
 
     def GetSelectedLayers(self):
         """Get selected layers/styles in LayersList
@@ -956,11 +1020,11 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
             except ValueError:
                 continue
             sel_layers_dict.append({
-                                    'name' : layer.GetLayerData('name'),
-                                    'title' : layer.GetLayerData('title'),
-                                    'style' : self.GetPyData(s)['style'],
-                                    'cap_intf_l' : layer
-                                    })
+                'name': layer.GetLayerData('name'),
+                'title': layer.GetLayerData('title'),
+                'style': self.GetPyData(s)['style'],
+                'cap_intf_l': layer
+            })
         return sel_layers_dict
 
     def OnListSelChanging(self, event):
@@ -968,7 +1032,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         """
         def _emitSelected(layer):
             title = layer.GetLayerData('title')
-            self.layerSelected.emit(title = title)
+            self.layerSelected.emit(title=title)
 
         def _selectRequestableChildren(item, list_to_check, items_to_sel):
 
@@ -976,7 +1040,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
             child_item, cookie = self.GetFirstChild(item)
             while child_item.IsOk():
                 if  self.GetPyData(child_item)['layer'].IsRequestable() \
-                    and not self.IsSelected(child_item):
+                        and not self.IsSelected(child_item):
                     items_to_sel.append(child_item)
                 elif not self.GetPyData(child_item)['layer'].IsRequestable():
                     list_to_check.append(child_item)
@@ -997,7 +1061,8 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
             chck_item = cur_item
 
             while True:
-                _selectRequestableChildren(chck_item, items_to_chck, items_to_sel)
+                _selectRequestableChildren(
+                    chck_item, items_to_chck, items_to_sel)
                 if items_to_chck:
                     chck_item = items_to_chck.pop()
                 else:
@@ -1027,12 +1092,11 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         def checknext(item, l_st_list, items_to_sel):
             def compare(item, l_name, st_name):
                 it_l_name = self.GetPyData(item)['layer'].GetLayerData('name')
-                it_st  = self.GetPyData(item)['style']
+                it_st = self.GetPyData(item)['style']
                 it_type = self.GetPyData(item)['type']
 
-                if it_l_name == l_name and \
-                 (   (not it_st and not st_name) or \
-                     (it_st and it_st['name'] == st_name and it_type == 'style')):
+                if it_l_name == l_name and ((not it_st and not st_name) or (
+                        it_st and it_st['name'] == st_name and it_type == 'style')):
 
                     return True
 
@@ -1076,7 +1140,9 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
 
         return l_st_list
 
+
 class WSManageSettingsWidget(ManageSettingsWidget):
+
     def __init__(self, parent, settingsFile, default_servers):
 
         ManageSettingsWidget.__init__(self, parent, settingsFile)
@@ -1085,7 +1151,7 @@ class WSManageSettingsWidget(ManageSettingsWidget):
     def _layout(self):
 
         self.btnAddDefaultServers = wx.Button(parent=self, id=wx.ID_ANY,
-                                             label=_("Add default"))
+                                              label=_("Add default"))
         self.btnAddDefaultServers.Bind(wx.EVT_BUTTON, self.OnAddDefaultServers)
 
         ManageSettingsWidget._layout(self)

@@ -30,6 +30,7 @@ class SbGoToGCP(SbItem):
     Requires MapFrame.GetSrcWindow, MapFrame.GetTgtWindow,
     MapFrame.GetListCtrl, MapFrame.GetMapCoordList.
     """
+
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = 'gotoGCP'
@@ -112,6 +113,7 @@ class SbRMSError(SbTextItem):
 
     Requires MapFrame.GetFwdError, MapFrame.GetBkwError.
     """
+
     def __init__(self, mapframe, statusbar, position=0):
         SbTextItem.__init__(self, mapframe, statusbar, position)
         self.name = 'RMSError'

@@ -13,42 +13,49 @@ This program is free software under the GNU General Public License
 
 @author Michael Barton
 @author Jachym Cepicky
-@author Martin Landa <landa.martin gmail.com>   
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import wx
 
+
 class BaseClass(wx.Object):
     """Base class providing basic methods"""
+
     def __init__(self):
         pass
 
-    def MakeLabel(self, text = "", style = wx.ALIGN_LEFT, parent = None, tooltip = None):
+    def MakeLabel(self, text="", style=wx.ALIGN_LEFT,
+                  parent=None, tooltip=None):
         """Make aligned label"""
         if not parent:
             parent = self
-        label =  wx.StaticText(parent = parent, id = wx.ID_ANY, label = text,
-                              style = style)
+        label = wx.StaticText(parent=parent, id=wx.ID_ANY, label=text,
+                              style=style)
         if tooltip:
             label.SetToolTipString(tooltip)
         return label
 
-    def MakeTextCtrl(self, text = '', size = (100,-1), style = 0, parent = None, tooltip = None):
+    def MakeTextCtrl(
+            self, text='', size=(100, -1),
+            style=0, parent=None, tooltip=None):
         """Generic text control"""
         if not parent:
             parent = self
-        textCtrl = wx.TextCtrl(parent = parent, id = wx.ID_ANY, value = text,
-                               size = size, style = style)
+        textCtrl = wx.TextCtrl(parent=parent, id=wx.ID_ANY, value=text,
+                               size=size, style=style)
         if tooltip:
             textCtrl.SetToolTipString(tooltip)
         return textCtrl
 
-    def MakeButton(self, text, id = wx.ID_ANY, size = (-1,-1), parent = None, tooltip = None):
+    def MakeButton(
+            self, text, id=wx.ID_ANY, size=(-1, -1),
+            parent=None, tooltip=None):
         """Generic button"""
         if not parent:
             parent = self
-        button = wx.Button(parent = parent, id = id, label = text,
-                           size = size)
+        button = wx.Button(parent=parent, id=id, label=text,
+                           size=size)
         if tooltip:
             button.SetToolTipString(tooltip)
         return button

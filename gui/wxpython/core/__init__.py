@@ -13,4 +13,4 @@ all = [
     'utils',
     'globalvar',
     'giface',
-    ]
+]

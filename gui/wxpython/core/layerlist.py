@@ -27,6 +27,7 @@ class LayerList(object):
     a non GUI class (e.g. named LayerTree) which includes this API,
     should be used for Layer Manager.
     """
+
     def __init__(self):
         self._list = []
 
@@ -179,6 +180,7 @@ class Layer(object):
         ...
         ValueError: Map <blablabla> not found.
     """
+
     def __init__(self):
         self._mapType = None
         self._name = None
@@ -209,14 +211,20 @@ class Layer(object):
         """
         if not self.hidden:
             fullName = name.split('@')
-            if len(fullName) == 1 and self._mapType != 'rgb':  # skip checking rgb maps for now
+            if len(
+                    fullName) == 1 and self._mapType != 'rgb':  # skip checking rgb maps for now
                 if self._mapType is None:
-                    raise ValueError("To set layer name, the type of layer must be specified.")
+                    raise ValueError(
+                        "To set layer name, the type of layer must be specified.")
 
-                res = gcore.find_file(name=fullName,
-                                      element=self._internalTypes[self._mapType])
+                res = gcore.find_file(
+                    name=fullName,
+                    element=self._internalTypes[
+                        self._mapType])
                 if not res['mapset']:
-                    raise ValueError("Map <{name}> not found.".format(name=name))
+                    raise ValueError(
+                        "Map <{name}> not found.".format(
+                            name=name))
                 self._name = name + '@' + res['mapset']
             else:
                 self._name = name
@@ -249,7 +257,9 @@ class Layer(object):
         :param mapType: can be 'raster', 'vector', 'raster_3d'
         """
         if mapType not in self._mapTypes:
-            raise ValueError("Wrong map type used: {mtype}".format(mtype=mapType))
+            raise ValueError(
+                "Wrong map type used: {mtype}".format(
+                    mtype=mapType))
 
         self._mapType = mapType
 
@@ -268,7 +278,9 @@ class Layer(object):
         :param float opacity: value between 0 and 1
         """
         if not (0 <= opacity <= 1):
-            raise ValueError("Opacity value must be between 0 and 1, not {op}.".format(op=opacity))
+            raise ValueError(
+                "Opacity value must be between 0 and 1, not {op}.".format(
+                    op=opacity))
         self._opacity = opacity
 
     opacity = property(fget=GetOpacity, fset=SetOpacity)
@@ -302,6 +314,7 @@ class Layer(object):
 
 class LayerListToRendererConverter:
     """Help class for converting LayerList layers into renderer list (Map)"""
+
     def __init__(self, renderer):
         """
 

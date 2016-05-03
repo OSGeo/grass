@@ -68,6 +68,7 @@ from mapdisp.main import LayerList
 
 class MapdispGrassInterface(StandaloneGrassInterface):
     """@implements GrassInterface"""
+
     def __init__(self, map_):
         StandaloneGrassInterface.__init__(self)
         self._map = map_
@@ -93,12 +94,20 @@ def copyOfInitMap(map_, width, height):
 
 
 class TextShower(object):
+
     def __init__(self, parent, title):
         self._cf = wx.Frame(parent=parent, title=title)
         self._cp = wx.Panel(parent=self._cf, id=wx.ID_ANY)
         self._cs = wx.BoxSizer(wx.VERTICAL)
-        self._cl = wx.StaticText(parent=self._cp, id=wx.ID_ANY, label="No text set yet")
-        self._cs.Add(item=self._cl, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        self._cl = wx.StaticText(
+            parent=self._cp,
+            id=wx.ID_ANY,
+            label="No text set yet")
+        self._cs.Add(
+            item=self._cl,
+            proportion=1,
+            flag=wx.EXPAND | wx.ALL,
+            border=5)
         self._cp.SetSizer(self._cs)
         self._cp.Layout()
         self._cf.Show()
@@ -108,22 +117,31 @@ class TextShower(object):
 
 
 class Tester(object):
+
     def _listenToAllMapWindowSignals(self, window):
         output = sys.stderr
         # will make bad thigs after it is closed but who cares
         coordinatesShower = TextShower(window, "Coordinates")
 
         window.zoomChanged.connect(lambda: output.write("zoomChanged\n"))
-        window.zoomHistoryUnavailable.connect(lambda: output.write("zoomHistoryUnavailable\n"))
-        window.zoomHistoryAvailable.connect(lambda: output.write("zoomHistoryAvailable\n"))
+        window.zoomHistoryUnavailable.connect(
+            lambda: output.write("zoomHistoryUnavailable\n"))
+        window.zoomHistoryAvailable.connect(
+            lambda: output.write("zoomHistoryAvailable\n"))
 
         window.mapQueried.connect(lambda: output.write("mapQueried\n"))
         window.mouseEntered.connect(lambda: output.write("mouseEntered\n"))
-        window.mouseLeftUpPointer.connect(lambda: output.write("mouseLeftUpPointer\n"))
+        window.mouseLeftUpPointer.connect(
+            lambda: output.write("mouseLeftUpPointer\n"))
         window.mouseLeftUp.connect(lambda: output.write("mouseLeftUp\n"))
-        window.mouseMoving.connect(lambda x, y: coordinatesShower.SetLabel("%s , %s" % (x, y)))
-        window.mouseHandlerRegistered.connect(lambda: output.write("mouseHandlerRegistered\n"))
-        window.mouseHandlerUnregistered.connect(lambda: output.write("mouseHandlerUnregistered\n"))
+        window.mouseMoving.connect(
+            lambda x, y: coordinatesShower.SetLabel(
+                "%s , %s" %
+                (x, y)))
+        window.mouseHandlerRegistered.connect(
+            lambda: output.write("mouseHandlerRegistered\n"))
+        window.mouseHandlerUnregistered.connect(
+            lambda: output.write("mouseHandlerUnregistered\n"))
 
     def testMapWindow(self, giface, map_):
         self.frame = wx.Frame(parent=None, title=_("Map window test frame"))
@@ -154,7 +172,8 @@ class Tester(object):
         frame.Show()
 
     def testMapWindowApi(self, giface, map_):
-        self.frame = wx.Frame(parent=None, title=_("Map window API test frame"))
+        self.frame = wx.Frame(parent=None,
+                              title=_("Map window API test frame"))
         panel = wx.Panel(parent=self.frame, id=wx.ID_ANY)
         sizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -183,8 +202,8 @@ class Tester(object):
         self.frame.Show()
 
     def testMapWindowDistance(self, giface, map_):
-        self.frame = wx.Frame(parent=None,
-                              title=_("Map window distance measurement test frame"))
+        self.frame = wx.Frame(parent=None, title=_(
+            "Map window distance measurement test frame"))
         panel = wx.Panel(parent=self.frame, id=wx.ID_ANY)
         sizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -263,11 +282,11 @@ class Tester(object):
     def testMapWindowRlisetup(self, map_):
         self.frame = wx.Frame(parent=None,
                               title=_("Map window rlisetup test frame"))
-                              
+
         RLiSetupMapPanel(parent=self.frame, map_=map_)
         self.frame.Show()
 
-        
+
 def main():
     """Sets the GRASS display driver
     """

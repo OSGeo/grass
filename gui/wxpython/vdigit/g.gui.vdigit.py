@@ -49,7 +49,7 @@ def main():
 
     from grass.script.setup import set_gui_path
     set_gui_path()
-    
+
     from core.globalvar import CheckWxVersion
     from core.utils import _
     from core.render import Map
@@ -62,6 +62,7 @@ def main():
     # define classes which needs imports as local
     # for longer definitions, a separate file would be a better option
     class VDigitMapFrame(MapFrame):
+
         def __init__(self, vectorMap):
             MapFrame.__init__(
                 self, parent=None, Map=Map(), giface=DMonGrassInterface(None),
@@ -87,13 +88,18 @@ def main():
                            mapset=grass.gisenv()['MAPSET'])['fullname']:
         if not flags['c']:
             grass.fatal(_("Vector map <%s> not found in current mapset. "
-                          "New vector map can be created by providing '-c' flag.") % options['map'])
+                          "New vector map can be created by providing '-c' flag.") %
+                        options['map'])
         else:
             grass.verbose(_("New vector map <%s> created") % options['map'])
             try:
-                grass.run_command('v.edit', map=options['map'], tool='create', quiet=True)
+                grass.run_command(
+                    'v.edit', map=options['map'],
+                    tool='create', quiet=True)
             except CalledModuleError:
-                grass.fatal(_("Unable to create new vector map <%s>") % options['map'])
+                grass.fatal(
+                    _("Unable to create new vector map <%s>") %
+                    options['map'])
 
     # allow immediate rendering
     driver = UserSettings.Get(group='display', key='driver', subkey='type')

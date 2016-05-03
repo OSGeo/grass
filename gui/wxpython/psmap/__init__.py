@@ -6,4 +6,4 @@ all = [
     'toolbars',
     'utils',
     'frame',
-    ]
+]

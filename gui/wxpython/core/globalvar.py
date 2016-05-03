@@ -19,12 +19,12 @@ if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")
 
 # path to python scripts
-ETCDIR   = os.path.join(os.getenv("GISBASE"), "etc")
-GUIDIR   = os.path.join(os.getenv("GISBASE"), "gui")
+ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")
+GUIDIR = os.path.join(os.getenv("GISBASE"), "gui")
 WXGUIDIR = os.path.join(GUIDIR, "wxpython")
-ICONDIR  = os.path.join(GUIDIR, "icons")
-IMGDIR   = os.path.join(GUIDIR, "images")
-SYMBDIR  = os.path.join(IMGDIR, "symbols")
+ICONDIR = os.path.join(GUIDIR, "icons")
+IMGDIR = os.path.join(GUIDIR, "images")
+SYMBDIR = os.path.join(IMGDIR, "symbols")
 
 from core.debug import Debug
 
@@ -32,7 +32,11 @@ from core.debug import Debug
 try:
     # intended to be used also outside this module
     import gettext
-    _ = gettext.translation('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale')).ugettext
+    _ = gettext.translation(
+        'grasswxpy',
+        os.path.join(
+            os.getenv("GISBASE"),
+            'locale')).ugettext
 except IOError:
     # using no translation silently
     def null_gettext(string):
@@ -40,6 +44,7 @@ except IOError:
     _ = null_gettext
 
 from grass.script.core import get_commands
+
 
 def CheckWxVersion(version):
     """Check wx version"""
@@ -49,7 +54,8 @@ def CheckWxVersion(version):
 
     return True
 
-def CheckForWx(forceVersion = os.getenv('GRASS_WXVERSION', None)):
+
+def CheckForWx(forceVersion=os.getenv('GRASS_WXVERSION', None)):
     """Try to import wx module and check its version
 
     :param forceVersion: force wxPython version, eg. '2.8'
@@ -70,14 +76,16 @@ def CheckForWx(forceVersion = os.getenv('GRASS_WXVERSION', None)):
         version = wx.__version__
 
         if map(int, version.split('.')) < minVersion:
-            raise ValueError('Your wxPython version is %s.%s.%s.%s' % tuple(version.split('.')))
+            raise ValueError(
+                'Your wxPython version is %s.%s.%s.%s' %
+                tuple(version.split('.')))
 
     except ImportError as e:
         print >> sys.stderr, 'ERROR: wxGUI requires wxPython. %s' % str(e)
         sys.exit(1)
     except (ValueError, wxversion.VersionError) as e:
-        print >> sys.stderr, 'ERROR: wxGUI requires wxPython >= %d.%d.%d.%d. ' % tuple(minVersion) + \
-            '%s.' % (str(e))
+        print >> sys.stderr, 'ERROR: wxGUI requires wxPython >= %d.%d.%d.%d. ' % tuple(
+            minVersion) + '%s.' % (str(e))
         sys.exit(1)
     except locale.Error as e:
         print >> sys.stderr, "Unable to set locale:", e
@@ -106,7 +114,7 @@ FNPageDStyle = FN.FNB_FANCY_TABS | \
     FN.FNB_NO_NAV_BUTTONS | \
     FN.FNB_NO_X_BUTTON
 
-FNPageColor = wx.Colour(125,200,175)
+FNPageColor = wx.Colour(125, 200, 175)
 
 """Dialog widget dimension"""
 DIALOG_SPIN_SIZE = (150, -1)
@@ -140,7 +148,7 @@ else:
     BIN_EXT = SCT_EXT = ''
 
 
-def UpdateGRASSAddOnCommands(eList = None):
+def UpdateGRASSAddOnCommands(eList=None):
     """Update list of available GRASS AddOns commands to use when
     parsing string from the command line
 
@@ -155,7 +163,7 @@ def UpdateGRASSAddOnCommands(eList = None):
         addonPath += os.pathsep + os.path.join(addonBase, 'bin')
         if sys.platform != 'win32':
             addonPath += os.pathsep + os.path.join(addonBase, 'scripts')
-    
+
     # remove commands first
     if eList:
         for ext in eList:
@@ -168,15 +176,15 @@ def UpdateGRASSAddOnCommands(eList = None):
     for path in addonPath.split(os.pathsep):
         if not os.path.exists(path) or not os.path.isdir(path):
             continue
-        
+
         # check if addon is in the path
         if pathList and path not in pathList:
             os.environ['PATH'] = path + os.pathsep + os.environ['PATH']
-        
+
         for fname in os.listdir(path):
             if fname in ['docs', 'modules.xml']:
                 continue
-            if grassScripts: # win32
+            if grassScripts:  # win32
                 name, ext = os.path.splitext(fname)
                 if name not in grassCmd:
                     if ext not in [BIN_EXT, SCT_EXT]:
@@ -194,7 +202,7 @@ def UpdateGRASSAddOnCommands(eList = None):
                     grassCmd.add(fname)
                     Debug.msg(3, "AddOn commands: %s", fname)
                     nCmd += 1
-    
+
     Debug.msg(1, "Number of GRASS AddOn commands: %d", nCmd)
 
 """@brief Collected GRASS-relared binaries/scripts"""
@@ -210,4 +218,5 @@ hasAgw = CheckWxVersion([2, 8, 11, 0])
 wxPython3 = CheckWxVersion([3, 0, 0, 0])
 
 """@Add GUIDIR/scripts into path"""
-os.environ['PATH'] = os.path.join(GUIDIR, 'scripts') + os.pathsep + os.environ['PATH']
+os.environ['PATH'] = os.path.join(
+    GUIDIR, 'scripts') + os.pathsep + os.environ['PATH']

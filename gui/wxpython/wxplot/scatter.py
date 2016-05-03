@@ -25,21 +25,23 @@ except ImportError as e:
 
 import grass.script as grass
 
-from wxplot.base       import BasePlotFrame, PlotIcons
+from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
-from wxplot.dialogs    import ScatterRasterDialog, PlotStatsFrame
-from core.gcmd         import RunCommand, GException, GError, GMessage
+from wxplot.dialogs import ScatterRasterDialog, PlotStatsFrame
+from core.gcmd import RunCommand, GException, GError, GMessage
 from core.utils import _
+
 
 class ScatterFrame(BasePlotFrame):
     """Mainframe for displaying bivariate scatter plot of two raster maps. Uses wx.lib.plot.
     """
-    def __init__(self, parent, id = wx.ID_ANY, style = wx.DEFAULT_FRAME_STYLE, 
-                 size = wx.Size(700, 400),
-                 rasterList = [], **kwargs):
-        BasePlotFrame.__init__(self, parent, size = size, **kwargs)
-        
-        self.toolbar = ScatterToolbar(parent = self)
+
+    def __init__(self, parent, id=wx.ID_ANY, style=wx.DEFAULT_FRAME_STYLE,
+                 size=wx.Size(700, 400),
+                 rasterList=[], **kwargs):
+        BasePlotFrame.__init__(self, parent, size=size, **kwargs)
+
+        self.toolbar = ScatterToolbar(parent=self)
         # workaround for http://trac.wxwidgets.org/ticket/13888
         if sys.platform != 'darwin':
             self.SetToolBar(self.toolbar)
@@ -54,15 +56,28 @@ class ScatterFrame(BasePlotFrame):
         self.xlabel = _("Raster cell values")           # default X-axis label
         self.ylabel = _("Raster cell values")           # default Y-axis label
         self.maptype = 'raster'                         # default type of scatterplot
-        self.scattertype = 'normal' 
+        self.scattertype = 'normal'
         self.bins = 255
-        self.colorList = ["blue", "red", "black", "green", "yellow", "magenta", "cyan", \
-                    "aqua", "grey", "orange", "brown", "purple", "violet", \
-                    "indigo"]
-        
+        self.colorList = [
+            "blue",
+            "red",
+            "black",
+            "green",
+            "yellow",
+            "magenta",
+            "cyan",
+            "aqua",
+            "grey",
+            "orange",
+            "brown",
+            "purple",
+            "violet",
+            "indigo"]
+
         self._initOpts()
 
-        if len(self.rasterList) > 1: # set raster name(s) from layer manager if a map is selected
+        if len(
+                self.rasterList) > 1:  # set raster name(s) from layer manager if a map is selected
             self.InitRasterOpts(self.rasterList, 'scatter')
         else:
             self.raster = {}
@@ -70,7 +85,7 @@ class ScatterFrame(BasePlotFrame):
     def _initOpts(self):
         """Initialize plot options
         """
-        self.InitPlotOpts('scatter')            
+        self.InitPlotOpts('scatter')
 
     def OnCreateScatter(self, event):
         """Main routine for creating a scatterplot. Uses r.stats to
@@ -88,30 +103,33 @@ class ScatterFrame(BasePlotFrame):
             wx.EndBusyCursor()
         else:
             wx.EndBusyCursor()
-            GMessage(_("Nothing to plot."), parent = self)
+            GMessage(_("Nothing to plot."), parent=self)
 
     def OnSelectRaster(self, event):
         """Select raster map(s) to profile
         """
-        dlg = ScatterRasterDialog(parent = self)
+        dlg = ScatterRasterDialog(parent=self)
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             self.rasterList = dlg.GetRasterPairs()
             if not self.rasterList:
-                GMessage(_("At least 2 raster maps must be specified"), parent = dlg)
+                GMessage(
+                    _("At least 2 raster maps must be specified"),
+                    parent=dlg)
                 return
-            
+
             # scatterplot or bubbleplot
             # bins for r.stats with float and dcell maps
             self.scattertype, self.bins = dlg.GetSettings()
-            self.raster = self.InitRasterPairs(self.rasterList, 'scatter') # dictionary of raster pairs
-            
+            self.raster = self.InitRasterPairs(
+                self.rasterList, 'scatter')  # dictionary of raster pairs
+
             # plot histogram
             if self.rasterList:
-                self.OnCreateScatter(event = None)
-        
+                self.OnCreateScatter(event=None)
+
         dlg.Destroy()
-        
+
     def SetupScatterplot(self):
         """Build data list for ploting each raster
         """
@@ -119,27 +137,30 @@ class ScatterFrame(BasePlotFrame):
         #
         # initialize title string
         #
-        self.ptitle = _('Bivariate Scatterplot of ')        
+        self.ptitle = _('Bivariate Scatterplot of ')
 
         #
         # create a datalist for plotting for each raster pair
         #
-        if len(self.rasterList) == 0: return  # at least 1 pair of maps needed to plot        
-        
+        if len(self.rasterList) == 0:
+            return  # at least 1 pair of maps needed to plot
+
         for rpair in self.rasterList:
             self.raster[rpair]['datalist'] = self.CreateDatalist(rpair)
-            
+
             # update title
-            self.ptitle += '%s vs %s, ' % (rpair[0].split('@')[0], rpair[1].split('@')[0])
+            self.ptitle += '%s vs %s, ' % (
+                rpair[0].split('@')[0],
+                rpair[1].split('@')[0])
 
         self.ptitle = self.ptitle.strip(', ')
-        
+
         #
         # set xlabel & ylabel based on raster maps of first pair to be plotted
         #
         self.xlabel = _('Raster <%s> cell values') % rpair[0].split('@')[0]
         self.ylabel = _('Raster <%s> cell values') % rpair[1].split('@')[0]
-        
+
         units = self.raster[self.rasterList[0]][0]['units']
         if units != '':
             self.xlabel += _(': %s') % units
@@ -147,31 +168,31 @@ class ScatterFrame(BasePlotFrame):
         units = self.raster[self.rasterList[0]][1]['units']
         if units != '':
             self.ylabel += _(': %s') % units
-            
+
     def CreateDatalist(self, rpair):
         """Build a list of cell value, frequency pairs for histogram
             frequency can be in cell counts, percents, or area
         """
         datalist = []
-        
-        if self.scattertype == 'bubble': 
+
+        if self.scattertype == 'bubble':
             freqflag = 'cn'
         else:
             freqflag = 'n'
-                
+
         try:
             ret = RunCommand("r.stats",
-                             parent = self,
-                             input = '%s,%s' % rpair,
-                             flags = freqflag,
-                             nsteps = self.bins,
-                             sep = ',',
-                             quiet = True,
-                             read = True)
-            
+                             parent=self,
+                             input='%s,%s' % rpair,
+                             flags=freqflag,
+                             nsteps=self.bins,
+                             sep=',',
+                             quiet=True,
+                             read=True)
+
             if not ret:
                 return datalist
-            
+
             for line in ret.splitlines():
                 rast1, rast2 = line.strip().split(',')
                 rast1 = rast1.strip()
@@ -187,44 +208,45 @@ class ScatterFrame(BasePlotFrame):
                         rast2 = '-' + rast2.split('-')[1]
                     else:
                         rast2 = rast2.split('-')[0]
-                
+
                 rast1 = rast1.encode('ascii', 'ignore')
                 rast2 = rast2.encode('ascii', 'ignore')
-                    
-                datalist.append((rast1,rast2))
+
+                datalist.append((rast1, rast2))
 
             return datalist
         except GException as e:
-            GError(parent = self,
-                   message = e.value)
+            GError(parent=self,
+                   message=e.value)
             return None
-        
+
     def CreatePlotList(self):
         """Make list of elements to plot
         """
         # graph the cell value, frequency pairs for the histogram
         self.plotlist = []
-        
+
         for rpair in self.rasterList:
             if 'datalist' not in self.raster[rpair] or \
-                self.raster[rpair]['datalist'] is None:
+                    self.raster[rpair]['datalist'] is None:
                 continue
-            
+
             if len(self.raster[rpair]['datalist']) > 0:
                 col = wx.Colour(self.raster[rpair]['pcolor'][0],
                                 self.raster[rpair]['pcolor'][1],
                                 self.raster[rpair]['pcolor'][2],
                                 255)
-                scatterpoints = plot.PolyMarker(self.raster[rpair]['datalist'],
-                                                legend = ' ' + self.raster[rpair]['plegend'],
-                                                colour = col,size = self.raster[rpair]['psize'],
-                                                fillstyle = self.ptfilldict[self.raster[rpair]['pfill']],
-                                                marker = self.raster[rpair]['ptype'])
+                scatterpoints = plot.PolyMarker(
+                    self.raster[rpair]['datalist'],
+                    legend=' ' + self.raster[rpair]['plegend'],
+                    colour=col, size=self.raster[rpair]['psize'],
+                    fillstyle=self.ptfilldict[self.raster[rpair]['pfill']],
+                    marker=self.raster[rpair]['ptype'])
 
                 self.plotlist.append(scatterpoints)
-        
+
         return self.plotlist
-    
+
     def Update(self):
         """Update histogram after changing options
         """
@@ -233,8 +255,8 @@ class ScatterFrame(BasePlotFrame):
         if p:
             self.DrawPlot(p)
         else:
-            GMessage(_("Nothing to plot."), parent = self)
-    
+            GMessage(_("Nothing to plot."), parent=self)
+
     def OnRegression(self, event):
         """Displays regression information in messagebox
         """
@@ -242,18 +264,16 @@ class ScatterFrame(BasePlotFrame):
         title = _('Regression Statistics for Scatterplot(s)')
 
         for rpair in self.rasterList:
-            if isinstance(rpair, tuple) == False: continue
+            if isinstance(rpair, tuple) == False:
+                continue
             rast1, rast2 = rpair
-            rast1 = rast1.split('@')[0] 
-            rast2 = rast2.split('@')[0] 
-            ret = grass.parse_command('r.regression.line', 
-                                      mapx = rast1, 
-                                      mapy = rast2, 
-                                      flags = 'g', quiet = True,
-                                      parse = (grass.parse_key_val, { 'sep' : '=' }))
-            eqtitle = _('Regression equation for raster map <%(rast1)s> vs. <%(rast2)s>:\n\n') % \
-                { 'rast1' : rast1,
-                  'rast2' : rast2 }
+            rast1 = rast1.split('@')[0]
+            rast2 = rast2.split('@')[0]
+            ret = grass.parse_command(
+                'r.regression.line', mapx=rast1, mapy=rast2, flags='g',
+                quiet=True, parse=(grass.parse_key_val, {'sep': '='}))
+            eqtitle = _('Regression equation for raster map <%(rast1)s> vs. <%(rast2)s>:\n\n') % {
+                'rast1': rast1, 'rast2': rast2}
             eq = '   %s = %s + %s(%s)\n\n' % (rast2, ret['a'], ret['b'], rast1)
             num = 'N = %s\n' % ret['N']
             rval = 'R = %s\n' % ret['R']
@@ -261,16 +281,18 @@ class ScatterFrame(BasePlotFrame):
             ftest = 'F = %s\n' % ret['F']
             str = eqtitle + eq + num + rval + rsq + ftest
             message.append(str)
-            
-        stats = PlotStatsFrame(self, id = wx.ID_ANY, message = message, 
-                                      title = title)
+
+        stats = PlotStatsFrame(self, id=wx.ID_ANY, message=message,
+                               title=title)
 
         if stats.Show() == wx.ID_CLOSE:
-            stats.Destroy()       
+            stats.Destroy()
+
 
 class ScatterToolbar(BaseToolbar):
     """Toolbar for bivariate scatterplots of raster map pairs
     """
+
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
 
@@ -279,10 +301,10 @@ class ScatterToolbar(BaseToolbar):
             parent.SetToolBar(self)
 
         self.InitToolbar(self._toolbarData())
-        
+
         # realize the toolbar
         self.Realize()
-        
+
     def _toolbarData(self):
         """Toolbar data"""
         return self._getToolbarData((('addraster', BaseIcons["addRast"],

@@ -25,7 +25,7 @@ import time
 import numpy as np
 
 # used iclass perimeters algorithm instead of convolve2d
-#from matplotlib.path import Path 
+#from matplotlib.path import Path
 #from scipy.signal import convolve2d
 
 from math import sqrt, ceil, floor
@@ -36,24 +36,27 @@ from core.gcmd import GException, GError, RunCommand
 import grass.script as grass
 
 from core_c import CreateCatRast, ComputeScatts, UpdateCatRast, \
-                   Rasterize, SC_SCATT_DATA, SC_SCATT_CONDITIONS
+    Rasterize, SC_SCATT_DATA, SC_SCATT_CONDITIONS
 
 MAX_SCATT_SIZE = 4100 * 4100
 WARN_SCATT_SIZE = 2000 * 2000
 MAX_NCELLS = 65536 * 65536
 WARN_NCELLS = 12000 * 12000
 
+
 class Core:
     """Represents scatter plot backend.
     """
+
     def __init__(self):
-        
+
         self.an_data = AnalyzedData()
 
         self.scatts_dt = ScattPlotsData(self.an_data)
         self.scatt_conds_dt = ScattPlotsCondsData(self.an_data)
 
-        self.cat_rast_updater = CatRastUpdater(self.scatts_dt, self.an_data, self)
+        self.cat_rast_updater = CatRastUpdater(
+            self.scatts_dt, self.an_data, self)
 
     def SetData(self, bands):
         """Set bands for analysis.
@@ -85,7 +88,7 @@ class Core:
         return self.an_data.GetBands()
 
     def GetScattsData(self):
-        return self.scatts_dt, self.scatt_conds_dt;
+        return self.scatts_dt, self.scatt_conds_dt
 
     def GetRegion(self):
         return self.an_data.GetRegion()
@@ -94,9 +97,9 @@ class Core:
         return self.scatts_dt.GetCatRast(cat_id)
 
     def AddScattPlots(self, scatt_ids):
-    
+
         for s_id in scatt_ids:
-            self.scatts_dt.AddScattPlot(scatt_id = s_id)
+            self.scatts_dt.AddScattPlot(scatt_id=s_id)
 
         cats_ids = self.scatts_dt.GetCategories()
         self.ComputeCatsScatts(cats_ids)
@@ -114,7 +117,7 @@ class Core:
         for k, v in bbox.iteritems():
             bbox[k] = self._validExtend(v)
 
-        arr[bbox['btm_y'] : bbox['up_y'], bbox['btm_x'] : bbox['up_x']] = value
+        arr[bbox['btm_y']: bbox['up_y'], bbox['btm_x']: bbox['up_x']] = value
 
         self.ComputeCatsScatts([cat_id])
         return cat_id
@@ -136,12 +139,12 @@ class Core:
         cats_rasts = self.scatts_dt.GetCatsRasts()
         cats_rasts_conds = self.scatts_dt.GetCatsRastsConds()
 
-        returncode, scatts = ComputeScatts(self.an_data.GetRegion(), 
-                                           scatt_conds, 
+        returncode, scatts = ComputeScatts(self.an_data.GetRegion(),
+                                           scatt_conds,
                                            bands,
-                                           len(self.GetBands()), 
-                                           scatts, 
-                                           cats_rasts_conds, 
+                                           len(self.GetBands()),
+                                           scatts,
+                                           cats_rasts_conds,
                                            cats_rasts)
 
         if returncode < 0:
@@ -149,7 +152,7 @@ class Core:
 
     def CatRastUpdater(self):
         return self.cat_rast_updater
-    
+
     def UpdateCategoryWithPolygons(self, cat_id, scatts_pols, value):
         start_time = time.clock()
 
@@ -161,7 +164,7 @@ class Core:
             if self.scatt_conds_dt.AddScattPlot(cat_id, scatt_id) < 0:
                 return False
 
-            b1, b2 = idScattToidBands(scatt_id, len(self.an_data.GetBands()))    
+            b1, b2 = idScattToidBands(scatt_id, len(self.an_data.GetBands()))
             b = self.scatts_dt.GetBandsInfo(scatt_id)
 
             region = {}
@@ -172,50 +175,52 @@ class Core:
             region['e'] = b['b1']['max'] + 0.5
 
             arr = self.scatt_conds_dt.GetValuesArr(cat_id, scatt_id)
-            arr = Rasterize(polygon=coords, 
-                            rast=arr, 
-                            region=region, 
+            arr = Rasterize(polygon=coords,
+                            rast=arr,
+                            region=region,
                             value=value)
 
             # previous way of rasterization / used scipy
-            #raster_pol = RasterizePolygon(coords, b['b1']['range'], b['b1']['min'], 
-            #                                      b['b2']['range'], b['b2']['min'])
+            # raster_pol = RasterizePolygon(coords, b['b1']['range'], b['b1']['min'],
+            # b['b2']['range'], b['b2']['min'])
 
-            #raster_ind = np.where(raster_pol > 0) 
+            #raster_ind = np.where(raster_pol > 0)
             #arr = self.scatt_conds_dt.GetValuesArr(cat_id, scatt_id)
 
             #arr[raster_ind] = value
-            #arr.flush()
-        
+            # arr.flush()
+
         self.ComputeCatsScatts([cat_id])
         return cat_id
 
     def ExportCatRast(self, cat_id, rast_name):
 
-        cat_rast = self.scatts_dt.GetCatRast(cat_id);
+        cat_rast = self.scatts_dt.GetCatRast(cat_id)
         if not cat_rast:
             return 1
-        
-        return RunCommand("g.copy", 
+
+        return RunCommand("g.copy",
                           raster=cat_rast + ',' + rast_name,
                           getErrorMsg=True,
                           overwrite=True)
 
     def _validExtend(self, val):
-        #TODO do it general
-        if  val > 255:
+        # TODO do it general
+        if val > 255:
             val = 255
         elif val < 0:
             val = 0
 
         return val
 
+
 class CatRastUpdater:
     """Update backend data structures according to selected areas in mapwindow.
     """
+
     def __init__(self, scatts_dt, an_data, core):
         self.scatts_dt = scatts_dt
-        self.an_data = an_data # TODO may be confusing
+        self.an_data = an_data  # TODO may be confusing
         self.core = core
         self.vectMap = None
 
@@ -223,7 +228,8 @@ class CatRastUpdater:
         self.vectMap = vectMap
 
     def SyncWithMap(self):
-        #TODO possible optimization - bbox only of vertex and its two neighbours
+        # TODO possible optimization - bbox only of vertex and its two
+        # neighbours
 
         region = self.an_data.GetRegion()
 
@@ -238,23 +244,25 @@ class CatRastUpdater:
         for cat_id in self.scatts_dt.GetCategories():
             if cat_id == 0:
                 continue
-            
-            cat = [{1 : [cat_id]}]
+
+            cat = [{1: [cat_id]}]
             self._updateCatRast(bbox, cat, updated_cats)
 
         return updated_cats
 
-    def EditedFeature(self, new_bboxs, new_areas_cats, old_bboxs, old_areas_cats):
-        #TODO possible optimization - bbox only of vertex and its two neighbours
+    def EditedFeature(self, new_bboxs, new_areas_cats,
+                      old_bboxs, old_areas_cats):
+        # TODO possible optimization - bbox only of vertex and its two
+        # neighbours
 
         bboxs = old_bboxs + new_bboxs
-        areas_cats = old_areas_cats + new_areas_cats 
+        areas_cats = old_areas_cats + new_areas_cats
 
         updated_cats = []
 
         for i in range(len(areas_cats)):
             self._updateCatRast(bboxs[i], areas_cats[i], updated_cats)
-        
+
         return updated_cats
 
     def _updateCatRast(self, bbox, areas_cats, updated_cats):
@@ -266,7 +274,7 @@ class CatRastUpdater:
                 continue
 
             layer = areas_cats[c].keys()[0]
-            cat =  areas_cats[c][layer][0]
+            cat = areas_cats[c][layer][0]
 
             if cat in rasterized_cats:
                 continue
@@ -276,34 +284,38 @@ class CatRastUpdater:
 
             grass_region = self._create_grass_region_env(bbox)
 
-            #TODO hack check if raster exists?
+            # TODO hack check if raster exists?
             patch_rast = "temp_scatt_patch_%d" % (os.getpid())
             self._rasterize(grass_region, layer, cat, patch_rast)
 
             region = self.an_data.GetRegion()
-            ret = UpdateCatRast(patch_rast, region, self.scatts_dt.GetCatRastCond(cat))
+            ret = UpdateCatRast(
+                patch_rast,
+                region,
+                self.scatts_dt.GetCatRastCond(cat))
             if ret < 0:
-                GException(_("Patching category raster conditions file failed."))            
+                GException(
+                    _("Patching category raster conditions file failed."))
             RunCommand("g.remove", flags='f', type='raster', name=patch_rast)
 
     def _rasterize(self, grass_region, layer, cat, out_rast):
 
-        #TODO different thread may be problem when user edits map
+        # TODO different thread may be problem when user edits map
         environs = os.environ.copy()
         environs['GRASS_VECTOR_TEMPORARY'] = '1'
 
         ret, text, msg = RunCommand("v.category",
                                     input=self.vectMap,
-                                    getErrorMsg = True,
+                                    getErrorMsg=True,
                                     option='report',
                                     read=True,
                                     env=environs)
 
         ret, text, msg = RunCommand("v.build",
-                                    map = self.vectMap,
-                                    getErrorMsg = True,
-                                    read = True,
-                                    env = environs)
+                                    map=self.vectMap,
+                                    getErrorMsg=True,
+                                    read=True,
+                                    env=environs)
 
         if ret != 0:
             GException(_("v.build failed:\n%s" % msg))
@@ -313,15 +325,15 @@ class CatRastUpdater:
         environs['GRASS_VECTOR_TEMPORARY'] = '1'
 
         ret, text, msg = RunCommand("v.to.rast",
-                                    input = self.vectMap,
-                                    use = "cat",
-                                    layer = str(layer),
-                                    cat = str(cat),
-                                    output = out_rast,
-                                    getErrorMsg = True,
-                                    read = True,
-                                    overwrite = True,
-                                    env = environs)
+                                    input=self.vectMap,
+                                    use="cat",
+                                    layer=str(layer),
+                                    cat=str(cat),
+                                    output=out_rast,
+                                    getErrorMsg=True,
+                                    read=True,
+                                    overwrite=True,
+                                    env=environs)
 
         if ret != 0:
             GException(_("v.to.rast failed:\n%s" % msg))
@@ -336,40 +348,46 @@ class CatRastUpdater:
         elif bbox["maxy"] >= r["n"]:
             new_r["n"] = bbox["maxy"]
         else:
-            new_r["n"] = ceil((bbox["maxy"] - r["s"]) / r["nsres"]) * r["nsres"] + r["s"]
+            new_r["n"] = ceil(
+                (bbox["maxy"] - r["s"]) / r["nsres"]) * r["nsres"] + r["s"]
 
         if bbox["miny"] >= r["n"]:
             return 0
         elif bbox["miny"] <= r["s"]:
             new_r["s"] = bbox["miny"]
         else:
-            new_r["s"] = floor((bbox["miny"] - r["s"]) / r["nsres"]) * r["nsres"] + r["s"]
+            new_r["s"] = floor(
+                (bbox["miny"] - r["s"]) / r["nsres"]) * r["nsres"] + r["s"]
 
         if bbox["maxx"] <= r["w"]:
             return 0
         elif bbox["maxx"] >= r["e"]:
             new_r["e"] = bbox["maxx"]
         else:
-            new_r["e"] = ceil((bbox["maxx"] - r["w"]) / r["ewres"]) * r["ewres"] + r["w"]
+            new_r["e"] = ceil(
+                (bbox["maxx"] - r["w"]) / r["ewres"]) * r["ewres"] + r["w"]
 
         if bbox["minx"] >= r["e"]:
             return 0
         elif bbox["minx"] <= r["w"]:
             new_r["w"] = bbox["minx"]
         else:
-            new_r["w"] = floor((bbox["minx"] - r["w"]) / r["ewres"]) * r["ewres"] + r["w"]
+            new_r["w"] = floor(
+                (bbox["minx"] - r["w"]) / r["ewres"]) * r["ewres"] + r["w"]
 
-        #TODO check regions resolution
+        # TODO check regions resolution
         new_r["nsres"] = r["nsres"]
         new_r["ewres"] = r["ewres"]
 
-        return {"GRASS_REGION" :  grass.region_env(**new_r)}
+        return {"GRASS_REGION": grass.region_env(**new_r)}
+
 
 class AnalyzedData:
     """Represents analyzed data (bands, region).
     """
+
     def __init__(self):
-        
+
         self.bands = []
         self.bands_info = {}
 
@@ -393,9 +411,9 @@ class AnalyzedData:
 
             if i is None:
                 GException("raster %s is not CELL type" % (b))
-    
+
             self.bands_info[b] = i
-            #TODO check size of raster
+            # TODO check size of raster
 
         return True
 
@@ -406,22 +424,24 @@ class AnalyzedData:
         band = self.bands[band_id]
         return self.bands_info[band]
 
+
 class ScattPlotsCondsData:
     """Data structure for selected areas in scatter plot(condtions).
     """
+
     def __init__(self, an_data):
 
         self.an_data = an_data
 
-        #TODO
+        # TODO
         self.max_n_cats = 10
-    
+
         self.dtype = 'uint8'
-        self.type = 1;
+        self.type = 1
         self.CleanUp()
 
     def CleanUp(self):
-    
+
         self.cats = {}
 
         self.n_scatts = -1
@@ -434,10 +454,10 @@ class ScattPlotsCondsData:
 
         self.CleanUp()
 
-        self.n_scatts =  (n_bands - 1) * n_bands / 2;
+        self.n_scatts = (n_bands - 1) * n_bands / 2
         self.n_bands = n_bands
 
-        self.AddCategory(cat_id = 0)
+        self.AddCategory(cat_id=0)
 
     def AddCategory(self, cat_id):
 
@@ -464,27 +484,36 @@ class ScattPlotsCondsData:
 
     def GetCatScatts(self, cat_id):
 
-        if not self.cats.has_key(cat_id):
+        if cat_id not in self.cats:
             return False
 
         return self.cats[cat_id].keys()
 
-
     def AddScattPlot(self, cat_id, scatt_id):
 
-        if not self.cats.has_key(cat_id):
+        if cat_id not in self.cats:
             return -1
 
-        if self.cats[cat_id].has_key(scatt_id):
+        if scatt_id in self.cats[cat_id]:
             return 0
 
         b_i = self.GetBandsInfo(scatt_id)
 
-        shape = (b_i['b2']['max'] - b_i['b2']['min'] + 1, b_i['b1']['max'] - b_i['b1']['min'] + 1)
+        shape = (
+            b_i['b2']['max'] -
+            b_i['b2']['min'] +
+            1,
+            b_i['b1']['max'] -
+            b_i['b1']['min'] +
+            1)
 
-        np_vals = np.memmap(grass.tempfile(), dtype=self.dtype, mode='w+', shape=shape)
+        np_vals = np.memmap(
+            grass.tempfile(),
+            dtype=self.dtype,
+            mode='w+',
+            shape=shape)
 
-        self.cats[cat_id][scatt_id] = {'np_vals' : np_vals}
+        self.cats[cat_id][scatt_id] = {'np_vals': np_vals}
 
         return 1
 
@@ -494,17 +523,17 @@ class ScattPlotsCondsData:
         b1_info = self.an_data.GetBandInfo(b1)
         b2_info = self.an_data.GetBandInfo(b2)
 
-        bands_info = {'b1' : b1_info,
-                      'b2' : b2_info}
+        bands_info = {'b1': b1_info,
+                      'b2': b2_info}
 
         return bands_info
 
     def DeleScattPlot(self, cat_id, scatt_id):
 
-        if not self.cats.has_key(cat_id):
+        if cat_id not in self.cats:
             return False
 
-        if not self.cats[cat_id].has_key(scatt_id):
+        if scatt_id not in self.cats[cat_id]:
             return False
 
         del self.cats[cat_id][scatt_id]
@@ -512,63 +541,68 @@ class ScattPlotsCondsData:
 
     def GetValuesArr(self, cat_id, scatt_id):
 
-        if not self.cats.has_key(cat_id):
+        if cat_id not in self.cats:
             return None
 
-        if not self.cats[cat_id].has_key(scatt_id):
+        if scatt_id not in self.cats[cat_id]:
             return None
 
         return self.cats[cat_id][scatt_id]['np_vals']
 
     def GetData(self, requested_dt):
-        
+
         cats = {}
         for cat_id, scatt_ids in requested_dt.iteritems():
-            if not cats.has_key(cat_id):
+            if cat_id not in cats:
                 cats[cat_id] = {}
             for scatt_id in scatt_ids:
-                # if key is missing condition is always True (full scatter plor is computed)
-                if self.cats[cat_id].has_key(scatt_id):
-                    cats[cat_id][scatt_id] = {'np_vals' : self.cats[cat_id][scatt_id]['np_vals'],
-                                              'bands_info' : self.GetBandsInfo(scatt_id)}
-                        
+                # if key is missing condition is always True (full scatter plor
+                # is computed)
+                if scatt_id in self.cats[cat_id]:
+                    cats[cat_id][scatt_id] = {
+                        'np_vals': self.cats[cat_id][scatt_id]['np_vals'],
+                        'bands_info': self.GetBandsInfo(scatt_id)}
+
         return cats
 
     def SetData(self, cats):
-        
-        for cat_id, scatt_ids in cats.iteritems():            
-            for scatt_id in scatt_ids:
-                # if key is missing condition is always True (full scatter plor is computed)
-                if self.cats[cat_id].has_key(scatt_id):
-                    self.cats[cat_id][scatt_id]['np_vals'] = cats[cat_id][scatt_id]['np_vals']
 
-    def GetScatt(self, scatt_id, cats_ids = None):
+        for cat_id, scatt_ids in cats.iteritems():
+            for scatt_id in scatt_ids:
+                # if key is missing condition is always True (full scatter plor
+                # is computed)
+                if scatt_id in self.cats[cat_id]:
+                    self.cats[cat_id][scatt_id]['np_vals'] = cats[
+                        cat_id][scatt_id]['np_vals']
+
+    def GetScatt(self, scatt_id, cats_ids=None):
         scatts = {}
         for cat_id in self.cats.iterkeys():
             if cats_ids and cat_id not in cats_ids:
                 continue
-            if not self.cats[cat_id].has_key(scatt_id):
+            if scatt_id not in self.cats[cat_id]:
                 continue
 
-            scatts[cat_id] = {'np_vals' : self.cats[cat_id][scatt_id]['np_vals'],
-                              'bands_info' : self.GetBandsInfo(scatt_id)}
+            scatts[cat_id] = {'np_vals': self.cats[cat_id][scatt_id][
+                'np_vals'], 'bands_info': self.GetBandsInfo(scatt_id)}
         return scatts
 
-                   
+
 class ScattPlotsData(ScattPlotsCondsData):
     """Data structure for computed points (classes) in scatter plots.\
     """
+
     def __init__(self, an_data):
 
         self.cats_rasts = {}
-        self.cats_rasts_conds = {}    
-        self.scatts_ids = []    
+        self.cats_rasts_conds = {}
+        self.scatts_ids = []
 
         ScattPlotsCondsData.__init__(self, an_data)
 
         self.dtype = 'uint32'
 
-        #TODO
+        # TODO
         self.type = 0
 
     def AddCategory(self, cat_id):
@@ -584,7 +618,8 @@ class ScattPlotsData(ScattPlotsCondsData):
             self.cats_rasts[cat_id] = None
         else:
             self.cats_rasts_conds[cat_id] = grass.tempfile()
-            self.cats_rasts[cat_id] = "temp_cat_rast_%d_%d" % (cat_id, os.getpid())
+            self.cats_rasts[cat_id] = "temp_cat_rast_%d_%d" % (
+                cat_id, os.getpid())
             region = self.an_data.GetRegion()
             CreateCatRast(region, self.cats_rasts_conds[cat_id])
 
@@ -593,7 +628,7 @@ class ScattPlotsData(ScattPlotsCondsData):
     def DeleteCategory(self, cat_id):
 
         ScattPlotsCondsData.DeleteCategory(self, cat_id)
-        
+
         grass.try_remove(self.cats_rasts_conds[cat_id])
         del self.cats_rasts_conds[cat_id]
 
@@ -604,26 +639,26 @@ class ScattPlotsData(ScattPlotsCondsData):
         return True
 
     def AddScattPlot(self, scatt_id):
-        
+
         if scatt_id in self.scatts_ids:
             return False
 
         self.scatts_ids.append(scatt_id)
         for cat_id in self.cats.iterkeys():
-                ScattPlotsCondsData.AddScattPlot(self, cat_id, scatt_id)
-                self.cats[cat_id][scatt_id]['ellipse'] = None
+            ScattPlotsCondsData.AddScattPlot(self, cat_id, scatt_id)
+            self.cats[cat_id][scatt_id]['ellipse'] = None
 
         return True
 
     def DeleteScatterPlot(self, scatt_id):
-        
+
         if scatt_id not in self.scatts_ids:
             return False
 
         self.scatts_ids.remove(scatt_id)
 
         for cat_id in self.cats.iterkeys():
-                ScattPlotsCondsData.DeleteScattPlot(self, cat_id, scatt_id)
+            ScattPlotsCondsData.DeleteScattPlot(self, cat_id, scatt_id)
 
         return True
 
@@ -664,36 +699,36 @@ class ScattPlotsData(ScattPlotsCondsData):
 
         x_diff = (x - x_avg)
         y_diff = (y - y_avg)
-        
-        x_diff = (x - x_avg) 
-        y_diff = (y - y_avg) 
+
+        x_diff = (x - x_avg)
+        y_diff = (y - y_avg)
 
         diffs = x_diff * y_diff.T
         cov = np.dot(diffs, weights) / (np.sum(weights) - 1)
 
         diffs = x_diff * x_diff.T
-        var_x = np.dot(diffs, weights) /  (np.sum(weights) - 1)
-        
-        diffs = y_diff * y_diff.T
-        var_y = np.dot(diffs, weights) /  (np.sum(weights) - 1)
+        var_x = np.dot(diffs, weights) / (np.sum(weights) - 1)
 
-        cov = np.array([[var_x, cov],[cov, var_y]])
+        diffs = y_diff * y_diff.T
+        var_y = np.dot(diffs, weights) / (np.sum(weights) - 1)
+
+        cov = np.array([[var_x, cov], [cov, var_y]])
 
         def eigsorted(cov):
             vals, vecs = np.linalg.eigh(cov)
             order = vals.argsort()[::-1]
-            return vals[order], vecs[:,order]
+            return vals[order], vecs[:, order]
 
         vals, vecs = eigsorted(cov)
-        theta = np.degrees(np.arctan2(*vecs[:,0][::-1]))
+        theta = np.degrees(np.arctan2(*vecs[:, 0][::-1]))
 
         # Width and height are "full" widths, not radius
         width, height = 2 * nstd * np.sqrt(vals)
 
-        ellipse = {'pos' : pos, 
-                   'width' : width,
-                   'height' : height,
-                   'theta' : theta}
+        ellipse = {'pos': pos,
+                   'width': width,
+                   'height': height,
+                   'theta': theta}
 
         del data
         del flatten_data
@@ -704,9 +739,9 @@ class ScattPlotsData(ScattPlotsCondsData):
 
     def CleanUp(self):
 
-        ScattPlotsCondsData.CleanUp(self)        
+        ScattPlotsCondsData.CleanUp(self)
         for tmp in self.cats_rasts_conds.itervalues():
-            grass.try_remove(tmp) 
+            grass.try_remove(tmp)
         for tmp in self.cats_rasts.itervalues():
             RunCommand("g.remove", flags='f',
                        type='raster', name=tmp,
@@ -716,7 +751,7 @@ class ScattPlotsData(ScattPlotsCondsData):
         self.cats_rasts_conds = {}
 
     def GetCatRast(self, cat_id):
-        if self.cats_rasts.has_key(cat_id):
+        if cat_id in self.cats_rasts:
             return self.cats_rasts[cat_id]
         return None
 
@@ -754,7 +789,7 @@ def RasterizePolygon(pol, height, min_h, width, min_w):
     nx = width
     ny = height
 
-    x, y =  np.meshgrid(np.arange(-0.5 + min_w, nx + 0.5 + min_w, dtype=float), 
+    x, y =  np.meshgrid(np.arange(-0.5 + min_w, nx + 0.5 + min_w, dtype=float),
                         np.arange(-0.5 + min_h, ny + 0.5 + min_h, dtype=float))
     x, y = x.flatten(), y.flatten()
 
@@ -772,39 +807,45 @@ def RasterizePolygon(pol, height, min_h, width, min_w):
     return raster
 """
 
+
 def idScattToidBands(scatt_id, n_bands):
     """Get bands ids from scatter plot id."""
     n_b1 = n_bands - 1
 
-    band_1 = (int) ((2 * n_b1 + 1 - sqrt(((2 * n_b1 + 1) * (2 * n_b1 + 1) - 8 * scatt_id))) / 2)
+    band_1 = (int)(
+        (2 * n_b1 + 1 - sqrt(((2 * n_b1 + 1) * (2 * n_b1 + 1) - 8 * scatt_id))) / 2)
 
     band_2 = scatt_id - (band_1 * (2 * n_b1 + 1) - band_1 * band_1) / 2 + band_1 + 1
 
     return band_1, band_2
 
+
 def idBandsToidScatt(band_1_id, band_2_id, n_bands):
     """Get scatter plot id from band ids."""
-    if band_2_id <  band_1_id:
+    if band_2_id < band_1_id:
         tmp = band_1_id
         band_1_id = band_2_id
         band_2_id = tmp
 
     n_b1 = n_bands - 1
 
-    scatt_id = (band_1_id * (2 * n_b1 + 1) - band_1_id * band_1_id) / 2 + band_2_id - band_1_id - 1
+    scatt_id = (
+        band_1_id * (2 * n_b1 + 1) - band_1_id * band_1_id) / 2 + band_2_id - band_1_id - 1
 
     return scatt_id
 
+
 def GetRegion():
     ret, region, msg = RunCommand("g.region",
-                                  flags = "gp",
-                                  getErrorMsg = True,
-                                  read = True)
+                                  flags="gp",
+                                  getErrorMsg=True,
+                                  read=True)
 
     if ret != 0:
         raise GException("g.region failed:\n%s" % msg)
 
     return _parseRegion(region)
+
 
 def _parseRegion(region_str):
 
@@ -821,18 +862,19 @@ def _parseRegion(region_str):
 
     return region
 
+
 def GetRasterInfo(rast):
     ret, out, msg = RunCommand("r.info",
-                                map = rast,
-                                flags = "rg",
-                                getErrorMsg = True,
-                                read = True)
+                               map=rast,
+                               flags="rg",
+                               getErrorMsg=True,
+                               read=True)
 
-    if  ret != 0:
+    if ret != 0:
         raise GException("r.info failed:\n%s" % msg)
 
     out = out.splitlines()
-    raster_info = {} 
+    raster_info = {}
 
     for b in out:
         if not b.strip():

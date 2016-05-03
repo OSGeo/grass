@@ -28,7 +28,7 @@ from core.gcmd import GMessage
 from core.layerlist import LayerList
 from core.settings import UserSettings
 from gui_core.simplelmgr import SimpleLayerManager, SIMPLE_LMGR_RASTER, \
-   SIMPLE_LMGR_VECTOR, SIMPLE_LMGR_RGB, SIMPLE_LMGR_TB_LEFT, SIMPLE_LMGR_TB_RIGHT
+    SIMPLE_LMGR_VECTOR, SIMPLE_LMGR_RGB, SIMPLE_LMGR_TB_LEFT, SIMPLE_LMGR_TB_RIGHT
 
 from grass.pydispatch.signal import Signal
 
@@ -39,6 +39,7 @@ class SwipeMapDialog(wx.Dialog):
     There are two modes - simple (only two raster maps),
     or two layer lists.
     """
+
     def __init__(self, parent, title=_("Select raster maps"),
                  first=None, second=None,
                  firstLayerList=None, secondLayerList=None):
@@ -109,19 +110,35 @@ class SwipeMapDialog(wx.Dialog):
         panel = wx.Panel(self)
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        self._firstRaster = gselect.Select(parent=panel, type='raster',
-                                           size=globalvar.DIALOG_GSELECT_SIZE,
-                                           validator=SimpleValidator(callback=self.ValidatorCallback))
+        self._firstRaster = gselect.Select(
+            parent=panel,
+            type='raster',
+            size=globalvar.DIALOG_GSELECT_SIZE,
+            validator=SimpleValidator(
+                callback=self.ValidatorCallback))
 
-        self._secondRaster = gselect.Select(parent=panel, type='raster',
-                                            size=globalvar.DIALOG_GSELECT_SIZE,
-                                            validator=SimpleValidator(callback=self.ValidatorCallback))
-        sizer.Add(wx.StaticText(panel, label=_("Name of top/left raster map:")),
-                  proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+        self._secondRaster = gselect.Select(
+            parent=panel,
+            type='raster',
+            size=globalvar.DIALOG_GSELECT_SIZE,
+            validator=SimpleValidator(
+                callback=self.ValidatorCallback))
+        sizer.Add(
+            wx.StaticText(
+                panel,
+                label=_("Name of top/left raster map:")),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=5)
         sizer.Add(self._firstRaster, proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=1)
-        sizer.Add(wx.StaticText(panel, label=_("Name of bottom/right raster map:")),
-                  proportion=0, flag=wx.EXPAND | wx.ALL, border=1)
+        sizer.Add(
+            wx.StaticText(
+                panel,
+                label=_("Name of bottom/right raster map:")),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=1)
         sizer.Add(self._secondRaster, proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=1)
 
@@ -136,14 +153,24 @@ class SwipeMapDialog(wx.Dialog):
         panel = wx.Panel(self)
         sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self._firstLmgr = SimpleLayerManager(parent=panel, layerList=self._firstLayerList,
-                                             lmgrStyle=SIMPLE_LMGR_RASTER | SIMPLE_LMGR_RGB |
-                                             SIMPLE_LMGR_VECTOR | SIMPLE_LMGR_TB_LEFT)
-        self._secondLmgr = SimpleLayerManager(parent=panel, layerList=self._secondLayerList,
-                                              lmgrStyle=SIMPLE_LMGR_RASTER | SIMPLE_LMGR_RGB |
-                                              SIMPLE_LMGR_VECTOR | SIMPLE_LMGR_TB_RIGHT)
-        sizer.Add(self._firstLmgr, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
-        sizer.Add(self._secondLmgr, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        self._firstLmgr = SimpleLayerManager(
+            parent=panel, layerList=self._firstLayerList,
+            lmgrStyle=SIMPLE_LMGR_RASTER | SIMPLE_LMGR_RGB | SIMPLE_LMGR_VECTOR |
+            SIMPLE_LMGR_TB_LEFT)
+        self._secondLmgr = SimpleLayerManager(
+            parent=panel, layerList=self._secondLayerList,
+            lmgrStyle=SIMPLE_LMGR_RASTER | SIMPLE_LMGR_RGB | SIMPLE_LMGR_VECTOR |
+            SIMPLE_LMGR_TB_RIGHT)
+        sizer.Add(
+            self._firstLmgr,
+            proportion=1,
+            flag=wx.EXPAND | wx.ALL,
+            border=5)
+        sizer.Add(
+            self._secondLmgr,
+            proportion=1,
+            flag=wx.EXPAND | wx.ALL,
+            border=5)
         panel.SetSizer(sizer)
         sizer.Fit(panel)
 
@@ -152,12 +179,15 @@ class SwipeMapDialog(wx.Dialog):
     def _switchMode(self, simple):
         if simple:
             self._switchSizer.Show(self._firstPanel, show=True, recursive=True)
-            self._switchSizer.Show(self._secondPanel, show=False, recursive=True)
+            self._switchSizer.Show(
+                self._secondPanel, show=False, recursive=True)
             self.btnSwitch.SetLabel(_("Switch to advanced mode"))
             self.btnCancel.SetLabel(_("Cancel"))
         else:
-            self._switchSizer.Show(self._firstPanel, show=False, recursive=True)
-            self._switchSizer.Show(self._secondPanel, show=True, recursive=True)
+            self._switchSizer.Show(
+                self._firstPanel, show=False, recursive=True)
+            self._switchSizer.Show(
+                self._secondPanel, show=True, recursive=True)
             self.btnSwitch.SetLabel(_("Switch to simple mode"))
             self.btnCancel.SetLabel(_("Close"))
 
@@ -182,9 +212,11 @@ class SwipeMapDialog(wx.Dialog):
             return
 
         if win == self._firstRaster.GetTextCtrl():
-            GMessage(parent=self, message=_("Name of the first map is missing."))
+            GMessage(parent=self, message=_(
+                "Name of the first map is missing."))
         else:
-            GMessage(parent=self, message=_("Name of the second map is missing."))
+            GMessage(parent=self, message=_(
+                "Name of the second map is missing."))
 
     def _ok(self):
         self._apply()
@@ -197,7 +229,8 @@ class SwipeMapDialog(wx.Dialog):
     def GetValues(self):
         """Get raster maps"""
         if self.IsSimpleMode():
-            return (self._firstRaster.GetValue(), self._secondRaster.GetValue())
+            return (self._firstRaster.GetValue(),
+                    self._secondRaster.GetValue())
         else:
             return (self._firstLayerList, self._secondLayerList)
 
@@ -215,10 +248,12 @@ class SwipeMapDialog(wx.Dialog):
 
 class PreferencesDialog(PreferencesBaseDialog):
     """Mapswipe preferences dialog"""
+
     def __init__(self, parent, giface, title=_("Map Swipe settings"),
                  settings=UserSettings):
-        PreferencesBaseDialog.__init__(self, parent=parent, giface=giface, title=title,
-                                       settings=settings, size=(-1, 300))
+        PreferencesBaseDialog.__init__(
+            self, parent=parent, giface=giface, title=title, settings=settings,
+            size=(-1, 300))
 
         # create notebook pages
         self._createMirrorModePage(self.notebook)
@@ -238,61 +273,104 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
-        gridSizer.Add(item=wx.StaticText(parent=panel,
-                                         label=_("Color:")),
-                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        color = csel.ColourSelect(parent=panel,
-                                  colour=UserSettings.Get(group='mapswipe',
-                                                          key='cursor', subkey='color'),
-                                  size=globalvar.DIALOG_COLOR_SIZE)
+        gridSizer.Add(
+            item=wx.StaticText(
+                parent=panel,
+                label=_("Color:")),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(
+                row,
+                0))
+        color = csel.ColourSelect(
+            parent=panel,
+            colour=UserSettings.Get(
+                group='mapswipe',
+                key='cursor',
+                subkey='color'),
+            size=globalvar.DIALOG_COLOR_SIZE)
         color.SetName('GetColour')
         self.winId['mapswipe:cursor:color'] = color.GetId()
 
         gridSizer.Add(item=color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
 
         row += 1
-        gridSizer.Add(item=wx.StaticText(parent=panel,
-                                         label=_("Shape:")),
-                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        cursors = wx.Choice(parent=panel,
-                            choices=self.settings.Get(group='mapswipe', key='cursor',
-                                                      subkey=['type', 'choices'], settings_type='internal'),
-                            name="GetSelection")
+        gridSizer.Add(
+            item=wx.StaticText(
+                parent=panel,
+                label=_("Shape:")),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(
+                row,
+                0))
+        cursors = wx.Choice(
+            parent=panel,
+            choices=self.settings.Get(
+                group='mapswipe',
+                key='cursor',
+                subkey=[
+                    'type',
+                    'choices'],
+                settings_type='internal'),
+            name="GetSelection")
         cursors.SetSelection(self.settings.Get(group='mapswipe', key='cursor',
                                                subkey=['type', 'selection']))
         self.winId['mapswipe:cursor:type:selection'] = cursors.GetId()
 
-        gridSizer.Add(item=cursors, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                      pos=(row, 1))
+        gridSizer.Add(item=cursors, flag=wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos=(row, 1))
 
         row += 1
-        gridSizer.Add(item=wx.StaticText(parent=panel,
-                                         label=_("Line width:")),
-                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        width = wx.SpinCtrl(parent=panel, min=1, max=10,
-                            initial=self.settings.Get(group='mapswipe', key='cursor',
-                                                      subkey='width'),
-                            name="GetValue")
+        gridSizer.Add(
+            item=wx.StaticText(
+                parent=panel,
+                label=_("Line width:")),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(
+                row,
+                0))
+        width = wx.SpinCtrl(
+            parent=panel,
+            min=1,
+            max=10,
+            initial=self.settings.Get(
+                group='mapswipe',
+                key='cursor',
+                subkey='width'),
+            name="GetValue")
         self.winId['mapswipe:cursor:width'] = width.GetId()
 
-        gridSizer.Add(item=width, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                      pos=(row, 1))
+        gridSizer.Add(item=width, flag=wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos=(row, 1))
 
         row += 1
-        gridSizer.Add(item=wx.StaticText(parent=panel,
-                                         label=_("Size:")),
-                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        size = wx.SpinCtrl(parent=panel, min=4, max=50,
-                           initial=self.settings.Get(group='mapswipe', key='cursor',
-                                                     subkey='size'),
-                           name="GetValue")
+        gridSizer.Add(
+            item=wx.StaticText(
+                parent=panel,
+                label=_("Size:")),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(
+                row,
+                0))
+        size = wx.SpinCtrl(
+            parent=panel,
+            min=4,
+            max=50,
+            initial=self.settings.Get(
+                group='mapswipe',
+                key='cursor',
+                subkey='size'),
+            name="GetValue")
         self.winId['mapswipe:cursor:size'] = size.GetId()
 
-        gridSizer.Add(item=size, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                      pos=(row, 1))
+        gridSizer.Add(item=size, flag=wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos=(row, 1))
 
         gridSizer.AddGrowableCol(1)
-        sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=3)
+        sizer.Add(
+            item=gridSizer,
+            proportion=1,
+            flag=wx.ALL | wx.EXPAND,
+            border=3)
         border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
         panel.SetSizer(border)
 

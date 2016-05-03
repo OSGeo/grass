@@ -6,4 +6,4 @@ all = [
     'toolbars',
     'frame',
     'gprint',
-    ]
+]

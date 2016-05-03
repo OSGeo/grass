@@ -42,6 +42,7 @@ class AbstractTreeViewMixin(VirtualTree):
         itemActivated - attribute 'node'
         contextMenu - attribute 'node'
     """
+
     def __init__(self, model, parent, *args, **kw):
         self._model = model
         super(AbstractTreeViewMixin, self).__init__(parent=parent, *args, **kw)
@@ -51,16 +52,16 @@ class AbstractTreeViewMixin(VirtualTree):
         self.contextMenu = Signal('TreeView.contextMenu')
 
         self.Bind(wx.EVT_TREE_SEL_CHANGED, lambda evt:
-                                           self._emitSignal(evt.GetItem(), self.selectionChanged))
+                  self._emitSignal(evt.GetItem(), self.selectionChanged))
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, lambda evt:
-                                           self._emitSignal(evt.GetItem(), self.itemActivated))
+                  self._emitSignal(evt.GetItem(), self.itemActivated))
         self.Bind(wx.EVT_TREE_ITEM_MENU, lambda evt:
-                                           self._emitSignal(evt.GetItem(), self.contextMenu))
+                  self._emitSignal(evt.GetItem(), self.contextMenu))
 
     def SetModel(self, model):
         """Set tree model and refresh.
-        
-        :param model: tree model        
+
+        :param model: tree model
         """
         self._model = model
         self.RefreshItems()
@@ -127,7 +128,7 @@ class AbstractTreeViewMixin(VirtualTree):
         item = self.GetItemByIndex(index)
 
         return self.IsExpanded(item)
-    
+
     def CollapseNode(self, node, recursive=True):
         """Collapse items.
 
@@ -163,26 +164,31 @@ class AbstractTreeViewMixin(VirtualTree):
 
 class TreeView(AbstractTreeViewMixin, wx.TreeCtrl):
     """Tree view class inheriting from wx.TreeCtrl"""
+
     def __init__(self, model, parent, *args, **kw):
         super(TreeView, self).__init__(parent=parent, model=model, *args, **kw)
         self.RefreshItems()
 
+
 class CTreeView(AbstractTreeViewMixin, CT.CustomTreeCtrl):
     """Tree view class inheriting from wx.TreeCtrl"""
+
     def __init__(self, model, parent, **kw):
         if hasAgw:
             style = 'agwStyle'
         else:
             style = 'style'
-        
+
         if style not in kw:
             kw[style] = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT |\
                 CT.TR_HAS_BUTTONS | CT.TR_LINES_AT_ROOT | CT.TR_SINGLE
         super(CTreeView, self).__init__(parent=parent, model=model, **kw)
         self.SetBackgroundColour("white")
         self.RefreshItems()
-        
+
+
 class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
+
     def __init__(self, model, parent, columns, **kw):
         self._columns = columns
         super(TreeListView, self).__init__(parent=parent, model=model, **kw)
@@ -191,8 +197,8 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
         self.SetMainColumn(0)
         self.RefreshItems()
         # to solve events inconsitency
-        self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK,  lambda evt:
-                                           self._emitSignal(evt.GetItem(), self.contextMenu))
+        self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, lambda evt:
+                  self._emitSignal(evt.GetItem(), self.contextMenu))
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnRightClick)
 
     def OnGetItemText(self, index, column=0):
@@ -211,16 +217,18 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
 
     def OnRightClick(self, event):
         """Select item on right click.
-        
-        With multiple selection we don't want to deselect all items        
+
+        With multiple selection we don't want to deselect all items
         """
         item = event.GetItem()
         if not self.IsSelected(item):
             self.SelectItem(item)
         event.Skip()
 
+
 class TreeFrame(wx.Frame):
     """Frame for testing purposes only."""
+
     def __init__(self, model=None):
         wx.Frame.__init__(self, None, title='Test tree')
 
@@ -240,7 +248,7 @@ class TreeFrame(wx.Frame):
     def OnSelChanged(self):
         print 'selected items: ' + \
               str([node.label for node in self.tree.GetSelected()])
-        
+
     def OnItemActivated(self, node):
         print 'activated: ' + node.label
 
@@ -250,12 +258,17 @@ def main():
     root = tree.root
     n1 = tree.AppendNode(parent=root, label='node1')
     n2 = tree.AppendNode(parent=root, label='node2')
-    n3 = tree.AppendNode(parent=root, label='node3') # pylint: disable=W0612
+    n3 = tree.AppendNode(parent=root, label='node3')  # pylint: disable=W0612
     n11 = tree.AppendNode(parent=n1, label='node11', data={'xxx': 'A'})
-    n12 = tree.AppendNode(parent=n1, label='node12', data={'xxx': 'B'}) # pylint: disable=W0612
-    n21 = tree.AppendNode(parent=n2, label='node21', data={'xxx': 'A'}) # pylint: disable=W0612
-    n111 = tree.AppendNode(parent=n11, label='node111', data={'xxx': 'A'}) # pylint: disable=W0612
-
+    n12 = tree.AppendNode(
+        parent=n1, label='node12', data={
+            'xxx': 'B'})  # pylint: disable=W0612
+    n21 = tree.AppendNode(
+        parent=n2, label='node21', data={
+            'xxx': 'A'})  # pylint: disable=W0612
+    n111 = tree.AppendNode(
+        parent=n11, label='node111', data={
+            'xxx': 'A'})  # pylint: disable=W0612
 
     app = wx.App()
     frame = TreeFrame(model=tree)

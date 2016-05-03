@@ -17,16 +17,20 @@ This program is free software under the GNU General Public License
 try:
     from vdigit.wxdigit import IVDigit, GV_LINES, CFUNCTYPE
     haveVDigit = True
-    errorMsg   = ''
+    errorMsg = ''
 except (ImportError, NameError) as err:
     haveVDigit = False
-    errorMsg   = err
-    GV_LINES   = -1
+    errorMsg = err
+    GV_LINES = -1
+
     class IVDigit:
+
         def __init__(self):
             pass
 
+
 class VDigit(IVDigit):
+
     def __init__(self, mapwindow):
         """Base class of vector digitizer
 

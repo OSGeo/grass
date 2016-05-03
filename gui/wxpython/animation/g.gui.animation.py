@@ -64,7 +64,7 @@ def main():
 
     from grass.script.setup import set_gui_path
     set_gui_path()
-    
+
     from core.globalvar import CheckWxVersion
     from core.utils import _
     from core.giface import StandaloneGrassInterface
@@ -133,7 +133,8 @@ def main():
     frame.Show()
     if len(layerList) >= 1:
         # CallAfter added since it was crashing with wxPython 3 gtk
-        wx.CallAfter(frame.SetAnimations, [layerList] + [None] * (MAX_COUNT - 1))
+        wx.CallAfter(frame.SetAnimations,
+                     [layerList] + [None] * (MAX_COUNT - 1))
     app.MainLoop()
 
 if __name__ == '__main__':

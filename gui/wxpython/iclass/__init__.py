@@ -6,4 +6,4 @@ all = [
     'toolbars',
     'statistics',
     'frame',
-    ]
+]

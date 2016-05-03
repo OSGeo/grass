@@ -2,4 +2,4 @@ all = [
     'wizard',
     'base',
     'dialogs',
-    ]
+]

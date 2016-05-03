@@ -28,6 +28,7 @@ from core.settings import UserSettings
 
 
 class NvizTask:
+
     def __init__(self):
         self.task = None
         self.filename = None
@@ -48,7 +49,9 @@ class NvizTask:
         # pprint(gxwXml.nviz_state)
 
         if not gxwXml.nviz_state:
-            raise GException(_("No 3d view information in workspace file <%s>.") % self.filename)
+            raise GException(
+                _("No 3d view information in workspace file <%s>.") %
+                self.filename)
 
         self._getExtent(gxwXml)
         self._processState(gxwXml.nviz_state)
@@ -58,8 +61,8 @@ class NvizTask:
         for display in root.displays:
             if display['viewMode'] == '3d':
                 self.region['w'], self.region['s'],\
-                self.region['e'], self.region['n'],\
-                self.region['b'], self.region['t'] = display['extent']
+                    self.region['e'], self.region['n'],\
+                    self.region['b'], self.region['t'] = display['extent']
                 self.region['tbres'] = display['tbres']
 
     def _processLayers(self, layers):
@@ -69,18 +72,22 @@ class NvizTask:
 
             if not layer['nviz']:
                 continue
-            layerName, found = GetLayerNameFromCmd(layer['cmd'], fullyQualified=False,
-                                                   param='map')
+            layerName, found = GetLayerNameFromCmd(
+                layer['cmd'], fullyQualified=False, param='map')
             if not found:
                 continue
 
             if 'surface' in layer['nviz']:
-                self._processSurface(layer['nviz']['surface'], mapName=layerName)
+                self._processSurface(
+                    layer['nviz']['surface'],
+                    mapName=layerName)
             if 'volume' in layer['nviz']:
                 self._processVolume(layer['nviz']['volume'], mapName=layerName)
             if 'vector' in layer['nviz']:
                 if 'points' in layer['nviz']['vector']:
-                    self._processPoints(layer['nviz']['vector']['points'], mapName=layerName)
+                    self._processPoints(
+                        layer['nviz']['vector']['points'],
+                        mapName=layerName)
 
     def _processSurface(self, surface, mapName):
         self._setMultiTaskParam('elevation_map', mapName)
@@ -88,8 +95,8 @@ class NvizTask:
         # attributes like color, shine, transparency
         attributes = ('color', 'shine', 'transp')  # mask missing
         parameters = (('color_map', 'color'),
-                     ('shininess_map', 'shininess_value'),
-                     ('transparency_map', 'transparency_value'))
+                      ('shininess_map', 'shininess_value'),
+                      ('transparency_map', 'transparency_value'))
         for attr, params in zip(attributes, parameters):
             mapname = None
             const = None
@@ -117,7 +124,9 @@ class NvizTask:
         value = surface['draw']['wire-color']['value']
         self._setMultiTaskParam('wire_color', value)
         # resolution
-        for mode1, mode2 in zip(('coarse', 'fine'), ('resolution_coarse', 'resolution_fine')):
+        for mode1, mode2 in zip(
+                ('coarse', 'fine'),
+                ('resolution_coarse', 'resolution_fine')):
             value = surface['draw']['resolution'][mode1]
             self._setMultiTaskParam(mode2, value)
 
@@ -135,11 +144,16 @@ class NvizTask:
                 self._setMultiTaskParam('vpoint_' + attrib, str(val))
         if 'height' in points:
             height = points['height']['value']
-            self._setMultiTaskParam('vpoint_position', '0,0,{h}'.format(h=height))
+            self._setMultiTaskParam(
+                'vpoint_position',
+                '0,0,{h}'.format(
+                    h=height))
         if 'marker' in points:
-            marker = list(UserSettings.Get(group='nviz', key='vector',
-                                           subkey=['points', 'marker'],
-                                           settings_type='internal'))[points['marker']['value']]
+            marker = list(
+                UserSettings.Get(
+                    group='nviz', key='vector', subkey=[
+                        'points', 'marker'], settings_type='internal'))[
+                points['marker']['value']]
             self._setMultiTaskParam('vpoint_marker', marker)
         if 'mode' in points:
             if points['mode']['type'] == '3d':
@@ -160,10 +174,11 @@ class NvizTask:
             self._setMultiTaskParam('volume_resolution', res_value)
             for isosurface in isosurfaces:
                 attributes = ('topo', 'color', 'shine', 'transp')
-                parameters = ((None, 'isosurf_level'),
-                              ('isosurf_color_map', 'isosurf_color_value'),
-                              ('isosurf_shininess_map', 'isosurf_shininess_value'),
-                              ('isosurf_transparency_map', 'isosurf_transparency_value'))
+                parameters = (
+                    (None, 'isosurf_level'),
+                    ('isosurf_color_map', 'isosurf_color_value'),
+                    ('isosurf_shininess_map', 'isosurf_shininess_value'),
+                    ('isosurf_transparency_map', 'isosurf_transparency_value'))
                 for attr, params in zip(attributes, parameters):
                     mapname = None
                     const = None
@@ -182,8 +197,10 @@ class NvizTask:
                         self._setMultiTaskParam(params[0], mapname)
                     else:
                         if attr == 'topo':
-                            # TODO: we just assume it's the first volume, what to do else?
-                            self._setMultiTaskParam(params[1], '1:' + str(const))
+                            # TODO: we just assume it's the first volume, what
+                            # to do else?
+                            self._setMultiTaskParam(
+                                params[1], '1:' + str(const))
                         else:
                             self._setMultiTaskParam(params[1], const)
                 if isosurface['inout']['value']:
@@ -194,12 +211,15 @@ class NvizTask:
             res_value = volume['draw']['resolution']['slice']['value']
             self._setMultiTaskParam('volume_resolution', res_value)
             for slice_ in slices:
-                self._setMultiTaskParam('slice_transparency', slice_['transp']['value'])
+                self._setMultiTaskParam(
+                    'slice_transparency', slice_['transp']['value'])
                 axis = slice_['position']['axis']
                 self._setMultiTaskParam('slice', '1:' + 'xyz'[axis])
                 pos = slice_['position']
-                coords = pos['x1'], pos['x2'], pos['y1'], pos['y2'], pos['z1'], pos['z2']
-                self._setMultiTaskParam('slice_position', ','.join([str(c) for c in coords]))
+                coords = pos['x1'], pos['x2'], pos[
+                    'y1'], pos['y2'], pos['z1'], pos['z2']
+                self._setMultiTaskParam('slice_position', ','.join(
+                    [str(c) for c in coords]))
 
         # position
         pos = []
@@ -212,19 +232,25 @@ class NvizTask:
     def _processState(self, state):
         color = state['view']['background']['color']
         self.task.set_param('bgcolor', self._join(color, delim=':'))
-        self.task.set_param('position', self._join((state['view']['position']['x'],
-                                                    state['view']['position']['y'])))
+        self.task.set_param(
+            'position', self._join(
+                (state['view']['position']['x'],
+                 state['view']['position']['y'])))
         self.task.set_param('height', state['iview']['height']['value'])
         self.task.set_param('perspective', state['view']['persp']['value'])
         self.task.set_param('twist', state['view']['twist']['value'])
         # TODO: fix zexag
         self.task.set_param('zexag', state['view']['z-exag']['value'])
-        self.task.set_param('focus', self._join((state['iview']['focus']['x'],
-                                                 state['iview']['focus']['y'],
-                                                 state['iview']['focus']['z'])))
-        self.task.set_param('light_position', self._join((state['light']['position']['x'],
-                                                          state['light']['position']['y'],
-                                                          state['light']['position']['z'] / 100.)))
+        self.task.set_param(
+            'focus', self._join(
+                (state['iview']['focus']['x'],
+                 state['iview']['focus']['y'],
+                 state['iview']['focus']['z'])))
+        self.task.set_param(
+            'light_position', self._join(
+                (state['light']['position']['x'],
+                 state['light']['position']['y'],
+                 state['light']['position']['z'] / 100.)))
         color = state['light']['color'][:3]
         self.task.set_param('light_color', self._join(color, delim=':'))
         self.task.set_param('light_brightness', int(state['light']['bright']))
@@ -262,7 +288,8 @@ class NvizTask:
         if hasattr(layer, 'maps'):
             series = layer.maps
         else:
-            raise GException(_("No map series nor space-time dataset is added."))
+            raise GException(
+                _("No map series nor space-time dataset is added."))
 
         for value in series:
             self.task.set_param(paramName, value)
@@ -273,7 +300,10 @@ class NvizTask:
                 self.task.set_param('isosurf_color_map', '')
             self.task.set_flag('overwrite', True)
             self.task.set_param('output', 'tobechanged')
-            cmd = self.task.get_cmd(ignoreErrors=False, ignoreRequired=False, ignoreDefault=True)
+            cmd = self.task.get_cmd(
+                ignoreErrors=False,
+                ignoreRequired=False,
+                ignoreDefault=True)
             commands.append(cmd)
 
         return commands
@@ -283,7 +313,10 @@ class NvizTask:
             return None
         self.task.set_flag('overwrite', True)
         self.task.set_param('output', 'tobechanged')
-        cmd = self.task.get_cmd(ignoreErrors=False, ignoreRequired=False, ignoreDefault=True)
+        cmd = self.task.get_cmd(
+            ignoreErrors=False,
+            ignoreRequired=False,
+            ignoreDefault=True)
         return gtask.cmdlist_to_tuple(cmd)
 
     def GetRegion(self):
@@ -298,7 +331,8 @@ def test():
     cmds = nviz.GetCommandSeries(['aspect', 'elevation'], 'color_map')
     for cmd in cmds:
         print cmd
-        returncode, message = RunCommand(getErrorMsg=True, prog=cmd[0], **cmd[1])
+        returncode, message = RunCommand(
+            getErrorMsg=True, prog=cmd[0], **cmd[1])
         print returncode, message
 
 

@@ -29,11 +29,17 @@ from datacatalog.toolbars import DataCatalogToolbar
 
 class DataCatalogFrame(wx.Frame):
     """Frame for testing purposes only."""
+
     def __init__(self, parent, giface=None):
         wx.Frame.__init__(self, parent=parent,
                           title=_('GRASS GIS Data Catalog'))
         self.SetName("DataCatalog")
-        self.SetIcon(wx.Icon(os.path.join(ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(
+            wx.Icon(
+                os.path.join(
+                    ICONDIR,
+                    'grass.ico'),
+                wx.BITMAP_TYPE_ICO))
 
         self._giface = giface
         self.panel = wx.Panel(self)

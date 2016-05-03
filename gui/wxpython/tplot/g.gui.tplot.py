@@ -41,7 +41,7 @@
 #% required: no
 #%end
 
-#TODO use option G_OPT_V_CATS
+# TODO use option G_OPT_V_CATS
 #%option
 #% key: cats
 #% label: Categories of vectores features

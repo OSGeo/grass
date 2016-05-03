@@ -4,4 +4,4 @@ all = [
     'mapwindow',
     'toolbars',
     'frame',
-    ]
+]

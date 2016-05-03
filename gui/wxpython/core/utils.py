@@ -26,22 +26,28 @@ from grass.script import task as gtask
 from grass.exceptions import OpenError
 
 from core import globalvar
-from core.gcmd  import RunCommand
+from core.gcmd import RunCommand
 from core.debug import Debug
 
 try:
     # intended to be used also outside this module
     import gettext
-    _ = gettext.translation('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale')).ugettext
+    _ = gettext.translation(
+        'grasswxpy',
+        os.path.join(
+            os.getenv("GISBASE"),
+            'locale')).ugettext
 except IOError:
     # using no translation silently
     def null_gettext(string):
         return string
     _ = null_gettext
 
+
 def normalize_whitespace(text):
     """Remove redundant whitespace from a string"""
     return string.join(string.split(text), ' ')
+
 
 def split(s):
     """Platform spefic shlex.split"""
@@ -52,8 +58,9 @@ def split(s):
             return shlex.split(s)
     except ValueError as e:
         sys.stderr.write(_("Syntax error: %s") % e)
-    
+
     return []
+
 
 def GetTempfile(pref=None):
     """Creates GRASS temporary file using defined prefix.
@@ -66,8 +73,8 @@ def GetTempfile(pref=None):
     :return: Path to file name (string) or None
     """
     ret = RunCommand('g.tempfile',
-                     read = True,
-                     pid = os.getpid())
+                     read=True,
+                     pid=os.getpid())
 
     tempfile = ret.splitlines()[0].strip()
 
@@ -84,27 +91,28 @@ def GetTempfile(pref=None):
     except:
         return None
 
-def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
-                        layerType = None):
+
+def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
+                        layerType=None):
     """Get map name from GRASS command
-    
+
     Parameter dcmd can be modified when first parameter is not
     defined.
-    
+
     :param dcmd: GRASS command (given as list)
     :param fullyQualified: change map name to be fully qualified
     :param param: params directory
     :param str layerType: check also layer type ('raster', 'vector',
                           'raster_3d', ...)
-    
+
     :return: tuple (name, found)
     """
     mapname = ''
-    found   = True
-    
+    found = True
+
     if len(dcmd) < 1:
         return mapname, False
-    
+
     if 'd.grid' == dcmd[0]:
         mapname = 'grid'
     elif 'd.geodesic' in dcmd[0]:
@@ -120,7 +128,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
                 p, v = dcmd[idx].split('=', 1)
             except ValueError:
                 continue
-            
+
             if p == param:
                 params = [(idx, p, v)]
                 break
@@ -157,7 +165,8 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
             mapname = v
             mapset = ''
             if fullyQualified and '@' not in mapname:
-                if layerType in ('raster', 'vector', 'raster_3d', 'rgb', 'his'):
+                if layerType in ('raster', 'vector',
+                                 'raster_3d', 'rgb', 'his'):
                     try:
                         if layerType in ('raster', 'rgb', 'his'):
                             findType = 'cell'
@@ -165,15 +174,16 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
                             findType = 'grid3'
                         else:
                             findType = layerType
-                        mapset = grass.find_file(mapname, element = findType)['mapset']
-                    except AttributeError: # not found
+                        mapset = grass.find_file(
+                            mapname, element=findType)['mapset']
+                    except AttributeError:  # not found
                         return '', False
                     if not mapset:
                         found = False
                 else:
-                    mapset = '' # grass.gisenv()['MAPSET']
+                    mapset = ''  # grass.gisenv()['MAPSET']
             mapsets[i] = mapset
-            
+
         # update dcmd
         for i, p, v in params:
             if p == 'layer':
@@ -181,7 +191,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
             dcmd[i] = p + '=' + v
             if i in mapsets and mapsets[i]:
                 dcmd[i] += '@' + mapsets[i]
-        
+
         maps = list()
         ogr = False
         for i, p, v in params:
@@ -190,43 +200,45 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
             if p == 'layer' and not ogr:
                 continue
             maps.append(dcmd[i].split('=', 1)[1])
-        
+
         mapname = '\n'.join(maps)
-    
+
     return mapname, found
+
 
 def GetValidLayerName(name):
     """Make layer name SQL compliant, based on G_str_to_sql()
-    
+
     .. todo::
         Better use directly Ctypes to reuse venerable libgis C fns...
     """
     retName = name.strip()
-    
+
     # check if name is fully qualified
     if '@' in retName:
         retName, mapset = retName.split('@')
     else:
         mapset = None
-    
+
     cIdx = 0
     retNameList = list(retName)
     for c in retNameList:
         if not (c >= 'A' and c <= 'Z') and \
-               not (c >= 'a' and c <= 'z') and \
-               not (c >= '0' and c <= '9'):
+                not (c >= 'a' and c <= 'z') and \
+                not (c >= '0' and c <= '9'):
             retNameList[cIdx] = '_'
         cIdx += 1
     retName = ''.join(retNameList)
-    
+
     if not (retName[0] >= 'A' and retName[0] <= 'Z') and \
-           not (retName[0] >= 'a' and retName[0] <= 'z'):
+            not (retName[0] >= 'a' and retName[0] <= 'z'):
         retName = 'x' + retName[1:]
 
     if mapset:
         retName = retName + '@' + mapset
-        
+
     return retName
+
 
 def ListOfCatsToRange(cats):
     """Convert list of category number to range(s)
@@ -263,38 +275,39 @@ def ListOfCatsToRange(cats):
         else:
             catstr += '%d,' % (cats[i])
             i += 1
-        
+
     return catstr.strip(',')
 
-def ListOfMapsets(get = 'ordered'):
+
+def ListOfMapsets(get='ordered'):
     """Get list of available/accessible mapsets
 
     :param str get: method ('all', 'accessible', 'ordered')
-    
+
     :return: list of mapsets
     :return: None on error
     """
     mapsets = []
-    
+
     if get == 'all' or get == 'ordered':
         ret = RunCommand('g.mapsets',
-                         read = True,
-                         quiet = True,
-                         flags = 'l',
-                         sep = 'newline')
-        
+                         read=True,
+                         quiet=True,
+                         flags='l',
+                         sep='newline')
+
         if ret:
             mapsets = ret.splitlines()
             ListSortLower(mapsets)
         else:
             return None
-        
+
     if get == 'accessible' or get == 'ordered':
         ret = RunCommand('g.mapsets',
-                         read = True,
-                         quiet = True,
-                         flags = 'p',
-                         sep = 'newline')
+                         read=True,
+                         quiet=True,
+                         flags='p',
+                         sep='newline')
         if ret:
             if get == 'accessible':
                 mapsets = ret.splitlines()
@@ -305,44 +318,52 @@ def ListOfMapsets(get = 'ordered'):
                 mapsets = mapsets_accessible + mapsets
         else:
             return None
-    
+
     return mapsets
+
 
 def ListSortLower(list):
     """Sort list items (not case-sensitive)"""
     list.sort(cmp=lambda x, y: cmp(x.lower(), y.lower()))
+
 
 def GetVectorNumberOfLayers(vector):
     """Get list of all vector layers"""
     layers = list()
     if not vector:
         return layers
-    
-    fullname = grass.find_file(name = vector, element = 'vector')['fullname']
+
+    fullname = grass.find_file(name=vector, element='vector')['fullname']
     if not fullname:
-        Debug.msg(5, "utils.GetVectorNumberOfLayers(): vector map '%s' not found" % vector)
+        Debug.msg(
+            5,
+            "utils.GetVectorNumberOfLayers(): vector map '%s' not found" %
+            vector)
         return layers
-    
+
     ret, out, msg = RunCommand('v.category',
-                               getErrorMsg = True,
-                               read = True,
-                               input = fullname,
-                               option = 'layers')
+                               getErrorMsg=True,
+                               read=True,
+                               input=fullname,
+                               option='layers')
     if ret != 0:
-        sys.stderr.write(_("Vector map <%(map)s>: %(msg)s\n") % { 'map' : fullname, 'msg' : msg })
+        sys.stderr.write(
+            _("Vector map <%(map)s>: %(msg)s\n") %
+            {'map': fullname, 'msg': msg})
         return layers
     else:
         Debug.msg(1, "GetVectorNumberOfLayers(): ret %s" % ret)
-    
+
     for layer in out.splitlines():
         layers.append(layer)
-    
-    Debug.msg(3, "utils.GetVectorNumberOfLayers(): vector=%s -> %s" % \
-                  (fullname, ','.join(layers)))
-    
+
+    Debug.msg(3, "utils.GetVectorNumberOfLayers(): vector=%s -> %s" %
+              (fullname, ','.join(layers)))
+
     return layers
 
-def Deg2DMS(lon, lat, string = True, hemisphere = True, precision = 3):
+
+def Deg2DMS(lon, lat, string=True, hemisphere=True, precision=3):
     """Convert deg value to dms string
 
     :param lon: longitude (x)
@@ -350,7 +371,7 @@ def Deg2DMS(lon, lat, string = True, hemisphere = True, precision = 3):
     :param string: True to return string otherwise tuple
     :param hemisphere: print hemisphere
     :param precision: seconds precision
-    
+
     :return: DMS string or tuple of values
     :return: empty string on error
     """
@@ -387,43 +408,45 @@ def Deg2DMS(lon, lat, string = True, hemisphere = True, precision = 3):
         flon = abs(flon)
         hlon = ''
         hlat = ''
-    
-    slat = __ll_parts(flat, precision = precision)
-    slon = __ll_parts(flon, precision = precision)
+
+    slat = __ll_parts(flat, precision=precision)
+    slon = __ll_parts(flon, precision=precision)
 
     if string:
         return slon + hlon + '; ' + slat + hlat
-    
+
     return (slon + hlon, slat + hlat)
+
 
 def DMS2Deg(lon, lat):
     """Convert dms value to deg
 
     :param lon: longitude (x)
     :param lat: latitude (y)
-    
+
     :return: tuple of converted values
     :return: ValueError on error
     """
-    x = __ll_parts(lon, reverse = True)
-    y = __ll_parts(lat, reverse = True)
-    
+    x = __ll_parts(lon, reverse=True)
+    y = __ll_parts(lat, reverse=True)
+
     return (x, y)
 
-def __ll_parts(value, reverse = False, precision = 3):
+
+def __ll_parts(value, reverse=False, precision=3):
     """Converts deg to d:m:s string
 
     :param value: value to be converted
     :param reverse: True to convert from d:m:s to deg
     :param precision: seconds precision (ignored if reverse is True)
-    
+
     :return: converted value (string/float)
     :return: ValueError on error (reverse == True)
     """
     if not reverse:
         if value == 0.0:
             return '%s%.*f' % ('00:00:0', precision, 0.0)
-    
+
         d = int(int(value))
         m = int((value - d) * 60)
         s = ((value - d) * 60 - m) * 60
@@ -439,9 +462,9 @@ def __ll_parts(value, reverse = False, precision = 3):
             s = '0%.*f' % (precision, s)
         else:
             s = '%.*f' % (precision, s)
-        
+
         return str(d) + ':' + m + ':' + s
-    else: # -> reverse
+    else:  # -> reverse
         try:
             d, m, s = value.split(':')
             hs = s[-1]
@@ -461,27 +484,29 @@ def __ll_parts(value, reverse = False, precision = 3):
                     s = '0.0'
                 except ValueError:
                     raise ValueError
-        
+
         if hs not in ('N', 'S', 'E', 'W'):
             raise ValueError
-        
+
         coef = 1.0
         if hs in ('S', 'W'):
             coef = -1.0
-        
+
         fm = int(m) / 60.0
         fs = float(s) / (60 * 60)
-        
+
         return coef * (float(d) + fm + fs)
-    
+
+
 def GetCmdString(cmd):
     """Get GRASS command as string.
-    
+
     :param cmd: GRASS command given as tuple
-    
+
     :return: command string
     """
     return ' '.join(gtask.cmdtuple_to_list(cmd))
+
 
 def PathJoin(*args):
     """Check path created by os.path.join"""
@@ -489,8 +514,9 @@ def PathJoin(*args):
     if platform.system() == 'Windows' and \
             '/' in path:
         return path[1].upper() + ':\\' + path[3:].replace('/', '\\')
-    
+
     return path
+
 
 def ReadEpsgCodes(path):
     """Read EPSG code from the file
@@ -513,7 +539,7 @@ def ReadEpsgCodes(path):
             line = line.strip()
             if len(line) < 1:
                 continue
-                
+
             if line[0] == '#':
                 descr = line[1:].strip()
             elif line[0] == '<':
@@ -522,18 +548,19 @@ def ReadEpsgCodes(path):
                     code = int(code.replace('<', '').replace('>', ''))
                 except ValueError as e:
                     raise OpenError('{}'.format(e))
-            
+
             if code is not None:
                 epsgCodeDict[code] = (descr, params)
                 code = None
-        
+
         f.close()
-    except StandardError as e:
+    except Exception as e:
         raise OpenError('{}'.format(e))
-    
+
     return epsgCodeDict
 
-def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
+
+def ReprojectCoordinates(coord, projOut, projIn=None, flags=''):
     """Reproject coordinates
 
     :param coord: coordinates given as tuple
@@ -543,13 +570,13 @@ def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
     :return: reprojected coordinates (returned as tuple)
     """
     coors = RunCommand('m.proj',
-                       flags = flags,
-                       input = '-',
-                       proj_in = projIn,
-                       proj_out = projOut,
-                       sep = ';',
-                       stdin = '%f;%f' % (coord[0], coord[1]),
-                       read = True)
+                       flags=flags,
+                       input='-',
+                       proj_in=projIn,
+                       proj_out=projOut,
+                       sep=';',
+                       stdin='%f;%f' % (coord[0], coord[1]),
+                       read=True)
     if coors:
         coors = coors.split(';')
         e = coors[0]
@@ -565,8 +592,9 @@ def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
                 return (proj, (float(e), float(n)))
             except ValueError:
                 return (None, None)
-    
+
     return (None, None)
+
 
 def GetListOfLocations(dbase):
     """Get list of GRASS locations in given dbase
@@ -580,18 +608,21 @@ def GetListOfLocations(dbase):
     try:
         for location in glob.glob(os.path.join(dbase, "*")):
             try:
-                if os.path.join(location, "PERMANENT") in glob.glob(os.path.join(location, "*")):
+                if os.path.join(
+                        location, "PERMANENT") in glob.glob(
+                        os.path.join(location, "*")):
                     listOfLocations.append(os.path.basename(location))
             except:
                 pass
     except UnicodeEncodeError as e:
         raise e
-    
+
     ListSortLower(listOfLocations)
-    
+
     return listOfLocations
 
-def GetListOfMapsets(dbase, location, selectable = False):
+
+def GetListOfMapsets(dbase, location, selectable=False):
     """Get list of mapsets in given GRASS location
 
     :param dbase: GRASS database path
@@ -601,80 +632,84 @@ def GetListOfMapsets(dbase, location, selectable = False):
     :return: list of mapsets - sorted (PERMANENT first)
     """
     listOfMapsets = list()
-    
+
     if selectable:
         ret = RunCommand('g.mapset',
-                         read = True,
-                         flags = 'l',
-                         location = location,
-                         dbase = dbase)
-        
+                         read=True,
+                         flags='l',
+                         location=location,
+                         dbase=dbase)
+
         if not ret:
             return listOfMapsets
-        
+
         for line in ret.rstrip().splitlines():
             listOfMapsets += line.split(' ')
     else:
         for mapset in glob.glob(os.path.join(dbase, location, "*")):
-            if os.path.isdir(mapset) and \
-                    os.path.isfile(os.path.join(dbase, location, mapset, "WIND")):
+            if os.path.isdir(mapset) and os.path.isfile(
+                    os.path.join(dbase, location, mapset, "WIND")):
                 listOfMapsets.append(os.path.basename(mapset))
-    
+
     ListSortLower(listOfMapsets)
     return listOfMapsets
+
 
 def GetColorTables():
     """Get list of color tables"""
     ret = RunCommand('r.colors',
-                     read = True,
-                     flags = 'l')
+                     read=True,
+                     flags='l')
     if not ret:
         return list()
-    
+
     return ret.splitlines()
+
 
 def _getGDALFormats():
     """Get dictionary of avaialble GDAL drivers"""
     try:
         ret = grass.read_command('r.in.gdal',
-                                 quiet = True,
-                                 flags = 'f')
+                                 quiet=True,
+                                 flags='f')
     except:
         ret = None
-    
-    return _parseFormats(ret), _parseFormats(ret, writableOnly = True)
+
+    return _parseFormats(ret), _parseFormats(ret, writableOnly=True)
+
 
 def _getOGRFormats():
     """Get dictionary of avaialble OGR drivers"""
     try:
         ret = grass.read_command('v.in.ogr',
-                                 quiet = True,
-                                 flags = 'f')
+                                 quiet=True,
+                                 flags='f')
     except:
         ret = None
 
-    return _parseFormats(ret), _parseFormats(ret, writableOnly = True)
+    return _parseFormats(ret), _parseFormats(ret, writableOnly=True)
 
-def _parseFormats(output, writableOnly = False):
+
+def _parseFormats(output, writableOnly=False):
     """Parse r.in.gdal/v.in.ogr -f output"""
-    formats = { 'file'     : list(),
-                'database' : list(),
-                'protocol' : list()
-                }
-    
+    formats = {'file': list(),
+               'database': list(),
+               'protocol': list()
+               }
+
     if not output:
         return formats
-    
+
     patt = None
     if writableOnly:
         patt = re.compile('\(rw\+?\)$', re.IGNORECASE)
-    
+
     for line in output.splitlines():
         key, name = map(lambda x: x.strip(), line.strip().rsplit(':', -1))
-        
+
         if writableOnly and not patt.search(key):
             continue
-        
+
         if name in ('Memory', 'Virtual Raster', 'In Memory Raster'):
             continue
         if name in ('PostgreSQL', 'SQLite',
@@ -695,103 +730,104 @@ def _parseFormats(output, writableOnly = False):
             formats['protocol'].append(name)
         else:
             formats['file'].append(name)
-    
+
     for items in formats.itervalues():
         items.sort()
-    
+
     return formats
 
 formats = None
 
-def GetFormats(writableOnly = False):
+
+def GetFormats(writableOnly=False):
     """Get GDAL/OGR formats"""
     global formats
     if not formats:
         gdalAll, gdalWritable = _getGDALFormats()
-        ogrAll,  ogrWritable  = _getOGRFormats()
+        ogrAll, ogrWritable = _getOGRFormats()
         formats = {
-            'all' : {
-                'gdal' : gdalAll,
-                'ogr'  : ogrAll,
-                },
-            'writable' : {
-                'gdal' : gdalWritable,
-                'ogr'  : ogrWritable,
-                },
-            }
-    
+            'all': {
+                'gdal': gdalAll,
+                'ogr': ogrAll,
+            },
+            'writable': {
+                'gdal': gdalWritable,
+                'ogr': ogrWritable,
+            },
+        }
+
     if writableOnly:
         return formats['writable']
-    
+
     return formats['all']
 
 
 rasterFormatExtension = {
-            'GeoTIFF' : 'tif',
-            'Erdas Imagine Images (.img)' : 'img',
-            'Ground-based SAR Applications Testbed File Format (.gff)' : 'gff',
-            'Arc/Info Binary Grid' : 'adf',
-            'Portable Network Graphics' : 'png',
-            'JPEG JFIF' : 'jpg',
-            'Japanese DEM (.mem)' : 'mem',
-            'Graphics Interchange Format (.gif)' : 'gif',
-            'X11 PixMap Format' : 'xpm',
-            'MS Windows Device Independent Bitmap' : 'bmp',
-            'SPOT DIMAP' : 'dim',
-            'RadarSat 2 XML Product' : 'xml',
-            'EarthWatch .TIL' : 'til',
-            'ERMapper .ers Labelled' : 'ers',
-            'ERMapper Compressed Wavelets' : 'ecw',
-            'GRIdded Binary (.grb)' : 'grb',
-            'EUMETSAT Archive native (.nat)' : 'nat',
-            'Idrisi Raster A.1' : 'rst',
-            'Golden Software ASCII Grid (.grd)' : 'grd',
-            'Golden Software Binary Grid (.grd)' : 'grd',
-            'Golden Software 7 Binary Grid (.grd)' : 'grd',
-            'R Object Data Store' : 'r',
-            'USGS DOQ (Old Style)' : 'doq',
-            'USGS DOQ (New Style)' : 'doq',
-            'ENVI .hdr Labelled' : 'hdr',
-            'ESRI .hdr Labelled' : 'hdr',
-            'Generic Binary (.hdr Labelled)' : 'hdr',
-            'PCI .aux Labelled' : 'aux',
-            'EOSAT FAST Format' : 'fst',
-            'VTP .bt (Binary Terrain) 1.3 Format' : 'bt',
-            'FARSITE v.4 Landscape File (.lcp)' : 'lcp',
-            'Swedish Grid RIK (.rik)' : 'rik',
-            'USGS Optional ASCII DEM (and CDED)' : 'dem',
-            'Northwood Numeric Grid Format .grd/.tab' : '',
-            'Northwood Classified Grid Format .grc/.tab' : '',
-            'ARC Digitized Raster Graphics' : 'arc',
-            'Magellan topo (.blx)' : 'blx',
-            'SAGA GIS Binary Grid (.sdat)' : 'sdat'
-            }
+    'GeoTIFF': 'tif',
+    'Erdas Imagine Images (.img)': 'img',
+    'Ground-based SAR Applications Testbed File Format (.gff)': 'gff',
+    'Arc/Info Binary Grid': 'adf',
+    'Portable Network Graphics': 'png',
+    'JPEG JFIF': 'jpg',
+    'Japanese DEM (.mem)': 'mem',
+    'Graphics Interchange Format (.gif)': 'gif',
+    'X11 PixMap Format': 'xpm',
+    'MS Windows Device Independent Bitmap': 'bmp',
+    'SPOT DIMAP': 'dim',
+    'RadarSat 2 XML Product': 'xml',
+    'EarthWatch .TIL': 'til',
+    'ERMapper .ers Labelled': 'ers',
+    'ERMapper Compressed Wavelets': 'ecw',
+    'GRIdded Binary (.grb)': 'grb',
+    'EUMETSAT Archive native (.nat)': 'nat',
+    'Idrisi Raster A.1': 'rst',
+    'Golden Software ASCII Grid (.grd)': 'grd',
+    'Golden Software Binary Grid (.grd)': 'grd',
+    'Golden Software 7 Binary Grid (.grd)': 'grd',
+    'R Object Data Store': 'r',
+    'USGS DOQ (Old Style)': 'doq',
+    'USGS DOQ (New Style)': 'doq',
+    'ENVI .hdr Labelled': 'hdr',
+    'ESRI .hdr Labelled': 'hdr',
+    'Generic Binary (.hdr Labelled)': 'hdr',
+    'PCI .aux Labelled': 'aux',
+    'EOSAT FAST Format': 'fst',
+    'VTP .bt (Binary Terrain) 1.3 Format': 'bt',
+    'FARSITE v.4 Landscape File (.lcp)': 'lcp',
+    'Swedish Grid RIK (.rik)': 'rik',
+    'USGS Optional ASCII DEM (and CDED)': 'dem',
+    'Northwood Numeric Grid Format .grd/.tab': '',
+    'Northwood Classified Grid Format .grc/.tab': '',
+    'ARC Digitized Raster Graphics': 'arc',
+    'Magellan topo (.blx)': 'blx',
+    'SAGA GIS Binary Grid (.sdat)': 'sdat'
+}
 
 
 vectorFormatExtension = {
-            'ESRI Shapefile' : 'shp',
-            'UK .NTF'        : 'ntf',
-            'SDTS'           : 'ddf',
-            'DGN'            : 'dgn',
-            'VRT'            : 'vrt',
-            'REC'            : 'rec',
-            'BNA'            : 'bna',
-            'CSV'            : 'csv',
-            'GML'            : 'gml',
-            'GPX'            : 'gpx',
-            'KML'            : 'kml',
-            'GMT'            : 'gmt',
-            'PGeo'           : 'mdb',
-            'XPlane'         : 'dat',
-            'AVCBin'         : 'adf',
-            'AVCE00'         : 'e00',
-            'DXF'            : 'dxf',
-            'Geoconcept'     : 'gxt',
-            'GeoRSS'         : 'xml',
-            'GPSTrackMaker'  : 'gtm',
-            'VFK'            : 'vfk',
-            'SVG'            : 'svg',
-            }
+    'ESRI Shapefile': 'shp',
+    'UK .NTF': 'ntf',
+    'SDTS': 'ddf',
+            'DGN': 'dgn',
+            'VRT': 'vrt',
+            'REC': 'rec',
+            'BNA': 'bna',
+            'CSV': 'csv',
+            'GML': 'gml',
+            'GPX': 'gpx',
+            'KML': 'kml',
+            'GMT': 'gmt',
+            'PGeo': 'mdb',
+            'XPlane': 'dat',
+            'AVCBin': 'adf',
+            'AVCE00': 'e00',
+            'DXF': 'dxf',
+            'Geoconcept': 'gxt',
+            'GeoRSS': 'xml',
+            'GPSTrackMaker': 'gtm',
+            'VFK': 'vfk',
+            'SVG': 'svg',
+}
 
 
 def GetSettingsPath():
@@ -801,22 +837,25 @@ def GetSettingsPath():
         verFd = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
         version = int(verFd.readlines()[0].split(' ')[0].split('.')[0])
     except (IOError, ValueError, TypeError, IndexError) as e:
-        sys.exit(_("ERROR: Unable to determine GRASS version. Details: %s") % e)
-    
+        sys.exit(
+            _("ERROR: Unable to determine GRASS version. Details: %s") %
+            e)
+
     verFd.close()
 
     # keep location of settings files rc and wx in sync with lib/init/grass.py
     if sys.platform == 'win32':
         return os.path.join(os.getenv('APPDATA'), 'GRASS%d' % version)
-    
+
     return os.path.join(os.getenv('HOME'), '.grass%d' % version)
 
-def StoreEnvVariable(key, value = None, envFile = None):
+
+def StoreEnvVariable(key, value=None, envFile=None):
     """Store environmental variable
 
     If value is not given (is None) then environmental variable is
     unset.
-    
+
     :param key: env key
     :param value: env value
     :param envFile: path to the environmental file (None for default location)
@@ -825,10 +864,14 @@ def StoreEnvVariable(key, value = None, envFile = None):
     if not envFile:
         gVersion = grass.version()['version'].split('.', 1)[0]
         if not windows:
-            envFile = os.path.join(os.getenv('HOME'), '.grass%s' % gVersion, 'bashrc')
+            envFile = os.path.join(
+                os.getenv('HOME'), '.grass%s' %
+                gVersion, 'bashrc')
         else:
-            envFile = os.path.join(os.getenv('APPDATA'), 'GRASS%s' % gVersion, 'env.bat')
-    
+            envFile = os.path.join(
+                os.getenv('APPDATA'), 'GRASS%s' %
+                gVersion, 'env.bat')
+
     # read env file
     environ = dict()
     lineSkipped = list()
@@ -841,8 +884,11 @@ def StoreEnvVariable(key, value = None, envFile = None):
         for line in fd.readlines():
             line = line.rstrip(os.linesep)
             try:
-                k, v = map(lambda x: x.strip(), line.split(' ', 1)[1].split('=', 1))
-            except StandardError as e:
+                k, v = map(
+                    lambda x: x.strip(), line.split(
+                        ' ', 1)[1].split(
+                        '=', 1))
+            except Exception as e:
                 sys.stderr.write(_("%s: line skipped - unable to parse '%s'\n"
                                    "Reason: %s\n") % (envFile, line, e))
                 lineSkipped.append(line)
@@ -850,16 +896,16 @@ def StoreEnvVariable(key, value = None, envFile = None):
             if k in environ:
                 sys.stderr.write(_("Duplicated key: %s\n") % k)
             environ[k] = v
-        
+
         fd.close()
-    
+
     # update environmental variables
     if value is None:
         if key in environ:
             del environ[key]
     else:
         environ[key] = value
-    
+
     # write update env file
     try:
         fd = open(envFile, 'w')
@@ -870,17 +916,18 @@ def StoreEnvVariable(key, value = None, envFile = None):
         expCmd = 'set'
     else:
         expCmd = 'export'
-    
+
     for key, value in environ.iteritems():
         fd.write('%s %s=%s\n' % (expCmd, key, value))
-    
+
     # write also skipped lines
     for line in lineSkipped:
         fd.write(line + os.linesep)
-    
+
     fd.close()
 
-def SetAddOnPath(addonPath = None, key = 'PATH'):
+
+def SetAddOnPath(addonPath=None, key='PATH'):
     """Set default AddOn path
 
     :param addonPath: path to addons (None for default)
@@ -897,10 +944,10 @@ def SetAddOnPath(addonPath = None, key = 'PATH'):
             addonPath = os.path.join(os.path.join(os.getenv('APPDATA'),
                                                   'GRASS%s' % gVersion,
                                                   'addons'))
-    
-    StoreEnvVariable(key = 'GRASS_ADDON_' + key, value = addonPath)
+
+    StoreEnvVariable(key='GRASS_ADDON_' + key, value=addonPath)
     os.environ['GRASS_ADDON_' + key] = addonPath
-    
+
     # update path
     if addonPath not in os.environ['PATH']:
         os.environ['PATH'] = addonPath + os.pathsep + os.environ['PATH']
@@ -949,32 +996,32 @@ def color_resolve(color):
             label = _('Select Color')
     return (rgb, label)
 
-command2ltype = {'d.rast'         : 'raster',
-                 'd.rast3d'       : 'raster_3d',
-                 'd.rgb'          : 'rgb',
-                 'd.his'          : 'his',
-                 'd.shade'        : 'shaded',
-                 'd.legend'       : 'rastleg',
-                 'd.rast.arrow'   : 'rastarrow',
-                 'd.rast.num'     : 'rastnum',
-                 'd.rast.leg'     : 'maplegend',
-                 'd.vect'         : 'vector',
+command2ltype = {'d.rast': 'raster',
+                 'd.rast3d': 'raster_3d',
+                 'd.rgb': 'rgb',
+                 'd.his': 'his',
+                 'd.shade': 'shaded',
+                 'd.legend': 'rastleg',
+                 'd.rast.arrow': 'rastarrow',
+                 'd.rast.num': 'rastnum',
+                 'd.rast.leg': 'maplegend',
+                 'd.vect': 'vector',
                  'd.vect.thematic': 'thememap',
-                 'd.vect.chart'   : 'themechart',
-                 'd.grid'         : 'grid',
-                 'd.geodesic'     : 'geodesic',
-                 'd.rhumbline'    : 'rhumb',
-                 'd.labels'       : 'labels',
-                 'd.barscale'     : 'barscale',
-                 'd.redraw'       : 'redraw',
-                 'd.wms'          : 'wms',
-                 'd.histogram'    : 'histogram',
-                 'd.colortable'   : 'colortable',
-                 'd.graph'        : 'graph',
-                 'd.out.file'     : 'export',
-                 'd.to.rast'      : 'torast',
-                 'd.text'         : 'text',
-                 'd.northarrow'   : 'northarrow'
+                 'd.vect.chart': 'themechart',
+                 'd.grid': 'grid',
+                 'd.geodesic': 'geodesic',
+                 'd.rhumbline': 'rhumb',
+                 'd.labels': 'labels',
+                 'd.barscale': 'barscale',
+                 'd.redraw': 'redraw',
+                 'd.wms': 'wms',
+                 'd.histogram': 'histogram',
+                 'd.colortable': 'colortable',
+                 'd.graph': 'graph',
+                 'd.out.file': 'export',
+                 'd.to.rast': 'torast',
+                 'd.text': 'text',
+                 'd.northarrow': 'northarrow'
                  }
 ltype2command = {}
 for (cmd, ltype) in command2ltype.items():
@@ -982,24 +1029,24 @@ for (cmd, ltype) in command2ltype.items():
 
 
 def GetGEventAttribsForHandler(method, event):
-    """Get attributes from event, which can be used by handler method. 
+    """Get attributes from event, which can be used by handler method.
 
     Be aware of event class attributes.
 
     :param method: handler method (including self arg)
     :param event: event
 
-    :return: (valid kwargs for method, 
-             list of method's args without default value 
+    :return: (valid kwargs for method,
+             list of method's args without default value
              which were not found among event attributes)
     """
     args_spec = inspect.getargspec(method)
 
     args = args_spec[0]
 
-    defaults =[]
+    defaults = []
     if args_spec[3]:
-        defaults =  args_spec[3]
+        defaults = args_spec[3]
 
     # number of arguments without def value
     req_args = len(args) - 1 - len(defaults)
@@ -1016,9 +1063,9 @@ def GetGEventAttribsForHandler(method, event):
     return kwargs, missing_args
 
 
-def PilImageToWxImage(pilImage, copyAlpha = True):
+def PilImageToWxImage(pilImage, copyAlpha=True):
     """Convert PIL image to wx.Image
-    
+
     Based on http://wiki.wxpython.org/WorkingWithImages
     """
     import wx
@@ -1027,17 +1074,34 @@ def PilImageToWxImage(pilImage, copyAlpha = True):
         wxImage = wx.EmptyImage(*pilImage.size)
         pilImageCopyRGBA = pilImage.copy()
         pilImageCopyRGB = pilImageCopyRGBA.convert('RGB')    # RGBA --> RGB
-        fn = getattr(pilImageCopyRGB, "tobytes", getattr(pilImageCopyRGB, "tostring"))
+        fn = getattr(
+            pilImageCopyRGB,
+            "tobytes",
+            getattr(
+                pilImageCopyRGB,
+                "tostring"))
         pilImageRgbData = fn()
         wxImage.SetData(pilImageRgbData)
-        fn = getattr(pilImageCopyRGBA, "tobytes", getattr(pilImageCopyRGBA, "tostring"))
-        wxImage.SetAlphaData(fn()[3::4])  # Create layer and insert alpha values.
+        fn = getattr(
+            pilImageCopyRGBA,
+            "tobytes",
+            getattr(
+                pilImageCopyRGBA,
+                "tostring"))
+        # Create layer and insert alpha values.
+        wxImage.SetAlphaData(fn()[3::4])
 
     else:    # The resulting image will not have alpha.
         wxImage = wx.EmptyImage(*pilImage.size)
         pilImageCopy = pilImage.copy()
-        pilImageCopyRGB = pilImageCopy.convert('RGB')    # Discard any alpha from the PIL image.
-        fn = getattr(pilImageCopyRGB, "tobytes", getattr(pilImageCopyRGB, "tostring"))
+        # Discard any alpha from the PIL image.
+        pilImageCopyRGB = pilImageCopy.convert('RGB')
+        fn = getattr(
+            pilImageCopyRGB,
+            "tobytes",
+            getattr(
+                pilImageCopyRGB,
+                "tostring"))
         pilImageRgbData = fn()
         wxImage.SetData(pilImageRgbData)
 
@@ -1127,6 +1191,7 @@ def doc_test():
     do_doctest_gettext_workaround()
     return doctest.testmod().failed
 
+
 def registerPid(pid):
     """Register process id as GUI_PID GRASS variable
 
@@ -1138,7 +1203,8 @@ def registerPid(pid):
         guiPid = env['GUI_PID'].split(',')
     guiPid.append(str(pid))
     grass.run_command('g.gisenv', set='GUI_PID={}'.format(','.join(guiPid)))
-    
+
+
 def unregisterPid(pid):
     """Unregister process id from GUI_PID GRASS variable
 
@@ -1147,12 +1213,15 @@ def unregisterPid(pid):
     env = grass.gisenv()
     if 'GUI_PID' not in env:
         return
-    
+
     guiPid = env['GUI_PID'].split(',')
     pid = str(os.getpid())
     if pid in guiPid:
         guiPid.remove(pid)
-        grass.run_command('g.gisenv', set='GUI_PID={}'.format(','.join(guiPid)))
-    
+        grass.run_command(
+            'g.gisenv',
+            set='GUI_PID={}'.format(
+                ','.join(guiPid)))
+
 if __name__ == '__main__':
     sys.exit(doc_test())
