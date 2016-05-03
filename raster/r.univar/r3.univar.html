@@ -36,19 +36,59 @@ calculating percentiles with large maps.
 Computing univariate statistics of a 3D raster with randomly generated values:
 
 <div class="code"><pre>
+# define volume
+g.region n=10 s=0 w=0 e=10 b=0 t=10 res=1 res3=1 -p3
+
 # generate random map
 r3.mapcalc "random_0_1 = rand(0., 1)" -s
 
-# compute univariate statistics
-r3.univar map=random_0_1
+# compute univariate statistics, along with extended statistics
+r3.univar -e map=random_0_1 percentile=98
+ 100%
+total null and non-null cells: 1000
+total null cells: 0
+
+Of the non-null cells:
+----------------------
+n: 1000
+minimum: 0.00053905
+maximum: 0.998322
+range: 0.997783
+mean: 0.513676
+mean of absolute values: 0.513676
+standard deviation: 0.289969
+variance: 0.0840821
+variation coefficient: 56.4498 %
+sum: 513.676463040334
+1st quartile: 0.257654
+median (even number of cells): 0.524313
+3rd quartile: 0.763637
+98th percentile: 0.982924
+
+# script style output, along with extended statistics
+r3.univar -ge map=random_0_1 percentile=98
+n=1000
+null_cells=0
+cells=1000
+min=0.000539049520323687
+max=0.998322037540536
+range=0.997782988020212
+mean=0.513676463040334
+mean_of_abs=0.513676463040334
+stddev=0.289969154194666
+variance=0.0840821103843701
+coeff_var=56.4497646005434
+sum=513.676463040334
+first_quartile=0.257654
+median=0.524313
+third_quartile=0.763637
+percentile_98=0.982924
 </pre></div>
 
 
 <h2>TODO</h2>
 
-<i>mode, skewness, kurtosis</i>
-
-
+To be implemented <i>mode, skewness, kurtosis</i>.
 
 <h2>SEE ALSO</h2>
 
@@ -72,6 +112,5 @@ Code is based on r.univar from<br>
 Hamish Bowman, Otago University, New Zealand<br>
 and Martin Landa<br>
 Zonal loop by Markus Metz
-
 
 <p><i>Last changed: $Date$</i>
