@@ -22,7 +22,7 @@
 int centroids(int fd,		/* File descriptor of map layer to process */
 	      /* This file is assumed to be opened before calling */
 	      /*   centroids. */
-	      int *e, int *n,	/* Pointers to arrays at least max+1 long */
+	      unsigned long *e, unsigned long *n,	/* Pointers to arrays at least max+1 long */
 	      int method,	/* 0, 1, or 2; see above. */
 	      int max)
 {				/* Highest positive cat number in map layer */
