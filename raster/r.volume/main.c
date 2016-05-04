@@ -41,7 +41,8 @@ int main(int argc, char *argv[])
     CELL i, max;
 
     int row, col, rows, cols;
-    int out_mode, use_MASK, *n, *e;
+    int out_mode, use_MASK;
+    unsigned long *n, *e;
     long int *count;
     int fd_data, fd_clump;
 
@@ -216,8 +217,8 @@ int main(int argc, char *argv[])
     G_free(clump_buf);
 
     /* data lists for centroids of clumps */
-    e = (int *)G_malloc((max + 1) * sizeof(int));
-    n = (int *)G_malloc((max + 1) * sizeof(int));
+    e = (unsigned long*)G_malloc((max + 1) * sizeof(unsigned long));
+    n = (unsigned long*)G_malloc((max + 1) * sizeof(unsigned long));
 
     i = centroids(fd_clump, e, n, 1, max);
 
