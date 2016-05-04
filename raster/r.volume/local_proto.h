@@ -1,3 +1,3 @@
 #define SEP "-----------------------------------------------------------------------------"
 
-int centroids(int, int *, int *, int, int);
+int centroids(int, unsigned long*, unsigned long*, int, int);
