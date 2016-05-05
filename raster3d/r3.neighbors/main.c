@@ -287,6 +287,7 @@ int main(int argc, char **argv)
 	Rast3d_fatal_error(_("Unable to allocate buffer"));
 
     for (z = 0; z < nz; z++) {
+	G_percent(z, nz, 1);
 	for (y = 0; y < ny; y++) {
 	    for (x = 0; x < nx; x++) {
 		/* Gather values in moving window */
@@ -302,6 +303,7 @@ int main(int argc, char **argv)
 	    }
 	}
     }
+    G_percent(z, nz, 1);
 
     free(buff);
 
