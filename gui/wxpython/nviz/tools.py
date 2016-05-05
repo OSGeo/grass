@@ -3505,13 +3505,18 @@ class NvizToolWindow(FN.FlatNotebook):
                 for skey, sitem in self.win[name][key].iteritems():
                     if isinstance(sitem, types.DictType):
                         for ssitem in self.win[name][key][skey].itervalues():
-                            if isinstance(ssitem, types.IntType):
+                            if not isinstance(ssitem, types.BooleanType) and \
+                               isinstance(ssitem, types.IntType):
                                 self.FindWindowById(ssitem).Enable(enabled)
                     else:
-                        if isinstance(sitem, types.IntType):
+                        # type(bool) != types.IntType but
+                        # isinstance(bool) == types.IntType
+                        if not isinstance(sitem, types.BooleanType) and \
+                           isinstance(sitem, types.IntType):
                             self.FindWindowById(sitem).Enable(enabled)
             else:
-                if isinstance(item, types.IntType):
+                if not isinstance(item, types.BooleanType) and \
+                   isinstance(item, types.IntType):
                     self.FindWindowById(item).Enable(enabled)
 
     def SetMapObjUseMap(self, nvizType, attrb, map=None):
