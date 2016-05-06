@@ -254,9 +254,9 @@ class CoordinateSystemPage(TitledPage):
         # toggles
         self.radioEpsg = wx.RadioButton(parent=self, id=wx.ID_ANY, label=_(
             "Select EPSG code of spatial reference system"), style=wx.RB_GROUP)
-        self.radioIau = wx.RadioButton(
-            parent=self, id=wx.ID_ANY,
-            label=_("Select IAU code of spatial reference system"))
+        #self.radioIau = wx.RadioButton(
+        #    parent=self, id=wx.ID_ANY,
+        #    label=_("Select IAU code of spatial reference system"))
         self.radioFile = wx.RadioButton(
             parent=self, id=wx.ID_ANY, label=_(
                 "Read projection and datum terms from a "
@@ -277,9 +277,9 @@ class CoordinateSystemPage(TitledPage):
         # layout
         self.sizer.SetVGap(10)
         self.sizer.Add(item=self.radioEpsg,
-                       flag=wx.ALIGN_LEFT, pos=(1, 1))
-        self.sizer.Add(item=self.radioIau,
                        flag=wx.ALIGN_LEFT, pos=(2, 1))
+        #self.sizer.Add(item=self.radioIau,
+        #               flag=wx.ALIGN_LEFT, pos=(1, 1))
         self.sizer.Add(item=self.radioFile,
                        flag=wx.ALIGN_LEFT, pos=(3, 1))
         self.sizer.Add(item=self.radioWkt,
@@ -294,7 +294,7 @@ class CoordinateSystemPage(TitledPage):
 
         # bindings
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioEpsg.GetId())
-        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioIau.GetId())
+        #self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioIau.GetId())
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioFile.GetId())
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioWkt.GetId())
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioSrs.GetId())
@@ -313,8 +313,8 @@ class CoordinateSystemPage(TitledPage):
                 self.radioSrs.SetValue(True)
             if coordsys == "epsg":
                 self.radioEpsg.SetValue(True)
-            if coordsys == "iau":
-                self.radioIau.SetValue(True)
+            #if coordsys == "iau":
+            #    self.radioIau.SetValue(True)
             if coordsys == "file":
                 self.radioFile.SetValue(True)
             if coordsys == "wkt":
@@ -331,9 +331,9 @@ class CoordinateSystemPage(TitledPage):
             if coordsys == "epsg":
                 self.SetNext(self.parent.epsgpage)
                 self.parent.sumpage.SetPrev(self.parent.epsgpage)
-            if coordsys == "iau":
-                self.SetNext(self.parent.iaupage)
-                self.parent.sumpage.SetPrev(self.parent.iaupage)
+            #if coordsys == "iau":
+            #    self.SetNext(self.parent.iaupage)
+            #    self.parent.sumpage.SetPrev(self.parent.iaupage)
             if coordsys == "file":
                 self.SetNext(self.parent.filepage)
                 self.parent.sumpage.SetPrev(self.parent.filepage)
@@ -357,10 +357,10 @@ class CoordinateSystemPage(TitledPage):
             coordsys = "proj"
             self.SetNext(self.parent.projpage)
             self.parent.sumpage.SetPrev(self.parent.datumpage)
-        elif event.GetId() == self.radioIau.GetId():
-            coordsys = "iau"
-            self.SetNext(self.parent.iaupage)
-            self.parent.sumpage.SetPrev(self.parent.iaupage)
+        #elif event.GetId() == self.radioIau.GetId():
+        #    coordsys = "iau"
+        #    self.SetNext(self.parent.iaupage)
+        #    self.parent.sumpage.SetPrev(self.parent.iaupage)
         elif event.GetId() == self.radioEpsg.GetId():
             coordsys = "epsg"
             self.SetNext(self.parent.epsgpage)
