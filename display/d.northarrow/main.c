@@ -47,6 +47,35 @@ int main(int argc, char **argv)
     n_arrow->key = "style";
     n_arrow->description = _("North arrow style");
     n_arrow->options = "1a,1b,2,3,4,5,6,7a,7b,8a,8b,9,fancy_compass,basic_compass";
+    G_asprintf((char **) &(n_arrow->descriptions), 
+               "1a;%s;"
+               "1b;%s;"
+               "2;%s;"
+               "3;%s;"
+               "4;%s;"
+               "5;%s;"
+               "6;%s;"
+               "7a;%s;"
+               "7b;%s;"
+               "8a;%s;"
+               "8b;%s;"
+               "9;%s;"
+               "fancy_compass;%s;"
+               "basic_compass;%s;",
+               _("Two color arrowhead"),
+               _("Two color arrowhead with circle"),
+               _("Narrow with blending N"),
+               _("Long with small arrowhead"),
+               _("Inverted narrow inside a circle"),
+               _("Triangle and N inside a circle"),
+               _("Arrowhead and N inside a circle"),
+               _("Tall half convex arrowhead"),
+               _("Tall half concave arrowhead"),
+               _("Thin arrow in a circle"),
+               _("Fat arrow in a circle"),
+               _("One color arrowhead"),
+               _("Fancy compass"),
+               _("Basic compass"));
     n_arrow->answer = "1a";
     n_arrow->guisection = _("Style");
     n_arrow->gisprompt = "old,northarrow,northarrow";
