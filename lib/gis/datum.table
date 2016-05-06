@@ -42,6 +42,7 @@ nad27  "North_American_Datum_1927"              clark66       dx=-22.0    dy=157
 # North American 1983
 nad83	"North_American_Datum_1983"		  grs80		dx=0.0	    dy=0.0	dz=0.0
 nad83harn "NAD83_High_Accuracy_Reference_Network" grs80		dx=0.0	    dy=0.0	dz=0.0
+nad83_2011 "NAD83_National_Spatial_Reference_System_2011" grs80         dx=0.0      dy=0.0      dz=0.0
 # Tokyo datum mean
 tokyo  "Tokyo"                       bessel        dx=-148   dy=507    dz=685
 # Ordnance Survey of Great Britain (1936)
