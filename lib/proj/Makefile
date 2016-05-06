@@ -16,16 +16,12 @@ NAD_TABLES := $(wildcard *.lla)
 
 NT_TABLES = ntv1_can.dat nzgd2kgrid0005.gsb
 
-#CSV_FILES := $(wildcard *.csv)
-
 PROJ_DIR = $(ETC)/proj
 NAD_DIR  = $(ETC)/proj/nad
-#CSV_DIR  = $(ETC)/proj/ogr_csv
 
 NAD_DSTFILES := $(patsubst %.lla,$(NAD_DIR)/%,$(NAD_TABLES))
 NAD_BINFILES := $(patsubst %.lla,$(OBJDIR)/%,$(NAD_TABLES))
 NT_DSTFILES  := $(patsubst %,$(NAD_DIR)/%,$(NT_TABLES))
-#CSV_DSTFILES := $(patsubst %,$(CSV_DIR)/%,$(CSV_FILES))
 
 NAD_SRCDIR = $(ETC)/proj/nad/src
 NAD_SRCFILES := $(patsubst %.lla,$(NAD_SRCDIR)/%.lla,$(NAD_TABLES))
@@ -35,8 +31,6 @@ PROJ_DSTFILES := $(patsubst %,$(PROJ_DIR)/%,$(PROJ_TABLES))
 
 default: lib $(FTOL_OBJ)
 	$(MAKE) $(NAD_DSTFILES) $(PROJ_DSTFILES) $(NAD_SRCFILES)
-
-#  $(CSV_DSTFILES)
 
 ifdef MINGW
 $(FTOL_OBJ): $(OBJDIR)/ftol.o
@@ -52,9 +46,6 @@ $(NAD_BINFILES): $(OBJDIR)/%: %.lla
 $(NT_DSTFILES): $(NAD_DIR)/%: % | $(NAD_DIR)
 	$(INSTALL_DATA) $< $@
 
-#$(CSV_DSTFILES): $(CSV_DIR)/%.csv: %.csv | $(CSV_DIR)
-#	$(INSTALL_DATA) $< $@
-
 $(NAD_SRCFILES): $(NAD_SRCDIR)/%.lla: %.lla | $(NAD_SRCDIR)
 	$(INSTALL_DATA) $< $@
 
@@ -66,9 +57,6 @@ $(PROJ_DIR):
 
 $(NAD_DIR): | $(PROJ_DIR)
 	$(MKDIR) $@
-
-#$(CSV_DIR): | $(PROJ_DIR)
-#	$(MKDIR) $@
 
 $(NAD_SRCDIR): | $(PROJ_DIR)
 	$(MKDIR) $@
