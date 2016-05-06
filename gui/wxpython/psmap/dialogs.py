@@ -4767,11 +4767,6 @@ class ScalebarDialog(PsmapDialog):
         if projInfo()['proj'] == 'xy':
             self.mapUnit = 'meters'
         if self.mapUnit not in self.unitConv.getAllUnits():
-            wx.MessageBox(
-                message=_(
-                    "Units of current projection are not supported,\n meters will be used!"),
-                caption=_('Unsupported units'),
-                style=wx.OK | wx.ICON_ERROR)
             self.mapUnit = 'meters'
 
     def _scalebarPanel(self):
