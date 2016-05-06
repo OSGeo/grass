@@ -174,6 +174,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
 	    ellps = G_store(dstruct.ellps);
 	GPJ_free_datum(&dstruct);
     }
+    G_debug(3, "GPJ_grass_to_osr: datum: <%s>", datum);
     G_free(datum);
     if (GPJ_get_ellipsoid_by_name(ellps, &estruct) > 0) {
 	ellpslong = G_store(estruct.longname);
@@ -437,6 +438,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
 	    pszDatumName = G_store(pszDatumNameConst);
 	    DatumNameMassage(&pszDatumName);
+	    G_debug(3, "GPJ_osr_to_grass: pszDatumNameConst: <%s>", pszDatumName);
 
 	    list = listhead = read_datum_table();
 
@@ -816,6 +818,7 @@ static void DatumNameMassage(char **ppszDatum)
     int i, j;
     char *pszDatum = *ppszDatum;
 
+    G_debug(3, "DatumNameMassage: Raw string found <%s>", (char *)pszDatum);
     /* -------------------------------------------------------------------- */
     /*      Translate non-alphanumeric values to underscores.               */
     /* -------------------------------------------------------------------- */
@@ -845,6 +848,7 @@ static void DatumNameMassage(char **ppszDatum)
     /*      Search for datum equivalences.  Specific massaged names get     */
     /*      mapped to OpenGIS specified names.                              */
     /* -------------------------------------------------------------------- */
+    G_debug(3, "DatumNameMassage: Search for datum equivalences of <%s>", (char *)pszDatum);
     for (i = 0; papszDatumEquiv[i] != NULL; i += 2) {
 	if (EQUAL(*ppszDatum, papszDatumEquiv[i])) {
 	    G_free(*ppszDatum);

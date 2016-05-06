@@ -177,6 +177,7 @@ int GPJ__get_datum_params(const struct Key_Value *projinfo,
 
     if (NULL != G_find_key_value("datum", projinfo)) {
 	*datumname = G_store(G_find_key_value("datum", projinfo));
+	G_debug(3, "GPJ__get_datum_params: datumname: <%s>", (char *)datumname);
 	returnval = 1;
     }
     else
@@ -184,6 +185,7 @@ int GPJ__get_datum_params(const struct Key_Value *projinfo,
 
     if (G_find_key_value("datumparams", projinfo) != NULL) {
 	*params = G_store(G_find_key_value("datumparams", projinfo));
+	G_debug(3, "GPJ__get_datum_params: datumparams: <%s>", (char *)params);
 	returnval = 2;
     }
     else if (G_find_key_value("nadgrids", projinfo) != NULL) {
