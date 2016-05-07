@@ -441,6 +441,8 @@ class GConsole(wx.EvtHandler):
         .. todo::
             Solve problem with the other event (now uses gOutputText
             event but there is no text, use onPrepare handler instead?)
+        .. todo::
+            Skip interface is ignored and determined always automatically.
 
         Posts event EVT_IGNORED_CMD_RUN when command which should be ignored
         (according to ignoredCmdPattern) is run.
