@@ -371,6 +371,8 @@ class GMFrame(wx.Frame):
             parent=self.notebook, giface=self._giface)
         self.datacatalog.showNotification.connect(
             lambda message: self.SetStatusText(message))
+        self.datacatalog.changeMapset.connect(lambda mapset: self.ChangeMapset(mapset))
+        self.datacatalog.changeLocation.connect(lambda mapset, location: self.ChangeLocation(location, mapset))
         self.notebook.AddPage(
             page=self.datacatalog,
             text=_("Data"),
@@ -1019,19 +1021,21 @@ class GMFrame(wx.Frame):
                     message=_(
                         "No location/mapset provided. Operation canceled."))
                 return  # this should not happen
+            self.ChangeLocation(location, mapset)
 
-            if RunCommand('g.mapset', parent=self,
-                          location=location,
-                          mapset=mapset) != 0:
-                return  # error reported
+    def ChangeLocation(self, location, mapset):
+        if RunCommand('g.mapset', parent=self,
+                      location=location,
+                      mapset=mapset) != 0:
+            return  # error reported
 
-            # close current workspace and create new one
-            self.OnWorkspaceClose()
-            self.OnWorkspaceNew()
-            GMessage(parent=self,
-                     message=_("Current location is <%(loc)s>.\n"
-                               "Current mapset is <%(mapset)s>.") %
-                     {'loc': location, 'mapset': mapset})
+        # close current workspace and create new one
+        self.OnWorkspaceClose()
+        self.OnWorkspaceNew()
+        GMessage(parent=self,
+                 message=_("Current location is <%(loc)s>.\n"
+                           "Current mapset is <%(mapset)s>.") %
+                 {'loc': location, 'mapset': mapset})
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
@@ -1066,17 +1070,20 @@ class GMFrame(wx.Frame):
                 GError(parent=self,
                        message=_("No mapset provided. Operation canceled."))
                 return
+            self.ChangeMapset(mapset)
 
-            if RunCommand('g.mapset',
-                          parent=self,
-                          mapset=mapset) == 0:
-                GMessage(parent=self,
-                         message=_("Current mapset is <%s>.") % mapset)
+    def ChangeMapset(self, mapset):
+        """Change current mapset and update map display title"""
+        if RunCommand('g.mapset',
+                      parent=self,
+                      mapset=mapset) == 0:
+            GMessage(parent=self,
+                     message=_("Current mapset is <%s>.") % mapset)
 
-                dispId = 1
-                for display in self.GetMapDisplay(onlyCurrent=False):
-                    display.SetTitleNumber(dispId)  # TODO: signal ?
-                    dispId += 1
+            dispId = 1
+            for display in self.GetMapDisplay(onlyCurrent=False):
+                display.SetTitleNumber(dispId)  # TODO: signal ?
+                dispId += 1
 
     def OnChangeCWD(self, event=None, cmd=None):
         """Change current working directory

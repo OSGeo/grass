@@ -218,6 +218,8 @@ class LocationMapTree(TreeView):
             id=wx.ID_ANY,
             style=style)
         self.showNotification = Signal('Tree.showNotification')
+        self.changeMapset = Signal('Tree.changeMapset')
+        self.changeLocation = Signal('Tree.changeLocation')
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
         self.itemActivated.connect(self.OnDoubleClick)
@@ -776,6 +778,14 @@ class DataCatalogTree(LocationMapTree):
             else:
                 event.Veto()
 
+    def OnSwitchLocationMapset(self, event):
+        genv = gisenv()
+        if self.selected_location.label == genv['LOCATION_NAME']:
+            self.changeMapset.emit(mapset=self.selected_mapset.label)
+        else:
+            self.changeLocation.emit(mapset=self.selected_mapset.label, location=self.selected_location.label)
+        self.ExpandCurrentMapset()
+
     def _getNewMapName(self, message, title, value, element, mapset, env):
         """Dialog for simple text entry"""
         dlg = NameEntryDialog(parent=self, message=message, caption=title,
@@ -845,6 +855,7 @@ class DataCatalogTree(LocationMapTree):
     def _popupMenuMapset(self):
         """Create popup menu for mapsets"""
         menu = wx.Menu()
+        genv = gisenv()
 
         item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
         menu.AppendItem(item)
@@ -852,6 +863,12 @@ class DataCatalogTree(LocationMapTree):
         if not (self.copy_layer and self.selected_location == self.copy_location):
             item.Enable(False)
 
+        item = wx.MenuItem(menu, wx.NewId(), _("&Switch mapset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnSwitchLocationMapset, item)
+        if (self.selected_location.label == genv['LOCATION_NAME']
+                and self.selected_mapset.label == genv['MAPSET']):
+            item.Enable(False)
         self.PopupMenu(menu)
         menu.Destroy()
 
