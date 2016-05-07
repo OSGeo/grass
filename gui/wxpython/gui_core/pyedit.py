@@ -259,14 +259,9 @@ class PyEditController(object):
         self.body = panel
         self.filename = None
         self.tempfile = None  # bool, make them strings for better code
-        self.running = False
 
     def OnRun(self, event):
         """Run Python script"""
-        if self.running:
-            # ignore when already running
-            return
-
         if not self.filename:
             self.filename = gscript.tempfile() + '.py'
             self.tempfile = True
@@ -294,19 +289,15 @@ class PyEditController(object):
         # TODO: add overwrite to toolbar, needs env in GConsole
         # run in console as other modules, avoid Python shell which
         # carries variables over to the next execution
-        self.giface.RunCmd([fd.name], skipInterface=True, onDone=self.OnDone)
-        self.running = True
-
-    def OnDone(self, event):
-        """Python script finished"""
-        if self.tempfile:
-            try_remove(self.filename)
-            self.filename = None
-        self.running = False
+        self.giface.RunCmd([fd.name])
 
     def SaveAs(self):
         """Save python script to file"""
-        filename = ''
+        if self.tempfile:
+            try_remove(self.filename)
+            self.tempfile = False
+
+        filename = None
         dlg = wx.FileDialog(parent=self.guiparent,
                             message=_("Choose file to save"),
                             defaultDir=os.getcwd(),
@@ -357,7 +348,7 @@ class PyEditController(object):
 
         Just save if file already specified, save as action otherwise.
         """
-        if self.filename:
+        if self.filename and not self.tempfile:
             self.Save()
         else:
             self.SaveAs()
