@@ -76,8 +76,8 @@ def plot_dgraph():
     # window.
     s = gcore.read_command('d.info', flags='d')
     f = s.split()
-    frame_width = float(f[1])
-    frame_height = float(f[2])
+    frame_width = float(f[2])
+    frame_height = float(f[3])
 
     # take shorter side as length of frame side
     min_side = min(frame_width, frame_height)

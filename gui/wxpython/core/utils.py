@@ -1021,7 +1021,8 @@ command2ltype = {'d.rast': 'raster',
                  'd.out.file': 'export',
                  'd.to.rast': 'torast',
                  'd.text': 'text',
-                 'd.northarrow': 'northarrow'
+                 'd.northarrow': 'northarrow',
+                 'd.polar': 'polar'
                  }
 ltype2command = {}
 for (cmd, ltype) in command2ltype.items():
