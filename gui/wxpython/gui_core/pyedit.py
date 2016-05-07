@@ -146,15 +146,11 @@ def script_example():
     return r"""#!/usr/bin/env python
 
 import grass.script as gscript
-from grass.exceptions import CalledModuleError
 
 def main():
     input_raster = 'elevation'
     output_raster = 'high_areas'
-    try:
-        stats = gscript.parse_command('r.univar', map='elevation', flags='g')
-    except CalledModuleError as e:
-        gscript.fatal('{}'.format(e))
+    stats = gscript.parse_command('r.univar', map='elevation', flags='g')
     raster_mean = float(stats['mean'])
     raster_stddev = float(stats['stddev'])
     raster_high = raster_mean + raster_stddev
@@ -201,6 +197,49 @@ def main():
 
     gscript.mapcalc('{r} = {a} + {b}'.format(r=output, a=araster, b=braster))
 
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+"""
+
+def module_error_handling_example():
+    """Example of a GRASS module"""
+    return r"""#!/usr/bin/env python
+
+#%module
+#% description: Selects values from raster above value of mean plus standard deviation
+#% keyword: raster
+#% keyword: select
+#% keyword: standard deviation
+#%end
+#%option G_OPT_R_INPUT
+#%end
+#%option G_OPT_R_OUTPUT
+#%end
+
+
+import sys
+
+import grass.script as gscript
+from grass.exceptions import CalledModuleError
+
+
+def main():
+    options, flags = gscript.parser()
+    input_raster = options['input']
+    output_raster = options['output']
+
+    try:
+        stats = gscript.parse_command('r.univar', map=input_raster, flags='g')
+    except CalledModuleError as e:
+        gscript.fatal('{}'.format(e))
+    raster_mean = float(stats['mean'])
+    raster_stddev = float(stats['stddev'])
+    raster_high = raster_mean + raster_stddev
+    gscript.mapcalc('{r} = {i} > {v}'.format(r=output_raster, i=input_raster,
+                                             v=raster_high))
     return 0
 
 
@@ -377,6 +416,10 @@ class PyEditController(object):
         if self.CanReplaceContent('template'):
             self.body.SetText(module_example())
 
+    def SetModuleErrorHandlingExample(self, event):
+        if self.CanReplaceContent('template'):
+            self.body.SetText(module_error_handling_example())
+
     def CanReplaceContent(self, by_message):
         if by_message == 'template':
             message = _("Replace the content by the template?")
@@ -531,7 +574,6 @@ class PyEditFrame(wx.Frame):
         self.controller.OnRun(*args, **kwargs)
 
     def OnHelp(self, *args, **kwargs):
-        # save without asking
         self.controller.OnHelp(*args, **kwargs)
 
     def OnSimpleScriptTemplate(self, *args, **kwargs):
@@ -545,6 +587,9 @@ class PyEditFrame(wx.Frame):
 
     def OnGrassModuleExample(self, *args, **kwargs):
         self.controller.SetModuleExample(*args, **kwargs)
+
+    def OnGrassModuleErrorHandlingExample(self, *args, **kwargs):
+        self.controller.SetModuleErrorHandlingExample(*args, **kwargs)
 
     def OnPythonHelp(self, *args, **kwargs):
         self.controller.OnPythonHelp(*args, **kwargs)
