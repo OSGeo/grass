@@ -23,6 +23,7 @@ import wx
 
 from core.utils import _
 from core.globalvar import ICONDIR
+from core.gcmd import RunCommand, GMessage
 from datacatalog.tree import DataCatalogTree
 from datacatalog.toolbars import DataCatalogToolbar
 
@@ -53,6 +54,12 @@ class DataCatalogFrame(wx.Frame):
         self.tree = DataCatalogTree(parent=self.panel, giface=self._giface)
         self.tree.InitTreeItems()
         self.tree.ExpandCurrentMapset()
+        self.tree.changeMapset.connect(lambda mapset:
+                                       self.ChangeLocationMapset(location=None,
+                                                                 mapset=mapset))
+        self.tree.changeLocation.connect(lambda mapset, location:
+                                         self.ChangeLocationMapset(location=location,
+                                                                   mapset=mapset))
 
         # buttons
         self.btnClose = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
@@ -101,3 +108,20 @@ class DataCatalogFrame(wx.Frame):
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""
         self.tree.SetRestriction(restrict)
+
+    def ChangeLocationMapset(self, mapset, location=None):
+        """Change mapset or location"""
+        if location:
+            if RunCommand('g.mapset', parent=self,
+                          location=location,
+                          mapset=mapset) == 0:
+                GMessage(parent=self,
+                         message=_("Current location is <%(loc)s>.\n"
+                                   "Current mapset is <%(mapset)s>.") %
+                         {'loc': location, 'mapset': mapset})
+        else:
+            if RunCommand('g.mapset',
+                          parent=self,
+                          mapset=mapset) == 0:
+                GMessage(parent=self,
+                         message=_("Current mapset is <%s>.") % mapset)
