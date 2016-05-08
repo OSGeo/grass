@@ -431,7 +431,7 @@ class GConsole(wx.EvtHandler):
         """Write message in error style"""
         self.writeError.emit(text=text)
 
-    def RunCmd(self, command, compReg=True, skipInterface=False,
+    def RunCmd(self, command, compReg=True, env=None, skipInterface=False,
                onDone=None, onPrepare=None, userData=None, addLayer=None,
                notification=Notification.MAKE_VISIBLE):
         """Run command typed into console command prompt (GPrompt).
@@ -542,12 +542,14 @@ class GConsole(wx.EvtHandler):
 
                         return
 
+                if env:
+                    env = env.copy()
+                else:
+                    env = os.environ.copy()
                 # activate computational region (set with g.region)
                 # for all non-display commands.
-                if compReg:
-                    tmpreg = os.getenv("GRASS_REGION")
-                    if "GRASS_REGION" in os.environ:
-                        del os.environ["GRASS_REGION"]
+                if compReg and "GRASS_REGION" in env:
+                    del env["GRASS_REGION"]
 
                 # process GRASS command with argument
                 self.cmdThread.RunCmd(command,
@@ -555,14 +557,12 @@ class GConsole(wx.EvtHandler):
                                       stderr=self.cmdStdErr,
                                       onDone=onDone, onPrepare=onPrepare,
                                       userData=userData, addLayer=addLayer,
-                                      env=os.environ.copy(),
+                                      env=env,
                                       notification=notification)
                 self.cmdOutputTimer.Start(50)
 
-                # deactivate computational region and return to display
-                # settings
-                if compReg and tmpreg:
-                    os.environ["GRASS_REGION"] = tmpreg
+                # we don't need to change computational region settings
+                # because we work on a copy
         else:
             # Send any other command to the shell. Send output to
             # console output window
@@ -609,6 +609,7 @@ class GConsole(wx.EvtHandler):
                                       stderr=self.cmdStdErr,
                                       onDone=onDone, onPrepare=onPrepare,
                                       userData=userData, addLayer=addLayer,
+                                      env=env,
                                       notification=notification)
             self.cmdOutputTimer.Start(50)
 

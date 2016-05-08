@@ -246,13 +246,13 @@ class StandaloneGrassInterface():
         grass.percent(event.value, 100, 1)
         event.Skip()
 
-    def RunCmd(
-            self, command, compReg=True, skipInterface=False, onDone=None,
-            onPrepare=None, userData=None,
-            notification=Notification.MAKE_VISIBLE):
+    def RunCmd(self, command, compReg=True, env=None, skipInterface=False,
+               onDone=None, onPrepare=None, userData=None,
+               notification=Notification.MAKE_VISIBLE):
         self._gconsole.RunCmd(
             command=command,
             compReg=compReg,
+            env=env,
             skipInterface=skipInterface,
             onDone=onDone,
             onPrepare=onPrepare,
