@@ -248,6 +248,11 @@ if __name__ == "__main__":
 """
 
 
+def open_url(url):
+    import webbrowser
+    webbrowser.open(url)
+
+
 class PyEditController(object):
     # using the naming GUI convention, change for controller?
     # pylint: disable=invalid-name
@@ -290,12 +295,8 @@ class PyEditController(object):
         # run in console as other modules, avoid Python shell which
         # carries variables over to the next execution
         env = os.environ.copy()
-        if not self.overwrite:
-            print "overwrite not active"
         if self.overwrite:
-            print "overwrite active"
             env['GRASS_OVERWRITE'] = '1'
-        print self.giface
         self.giface.RunCmd([fd.name], env=env)
 
     def SaveAs(self):
@@ -437,36 +438,29 @@ class PyEditController(object):
         return True
 
     def OnHelp(self, event):
-        import webbrowser
-
         # inspired by g.manual but simple not using GRASS_HTML_BROWSER
         # not using g.manual because it does not show
         entry = 'libpython/script_intro.html'
         major, minor, patch = gscript.version()['version'].split('.')
         url = 'http://grass.osgeo.org/grass%s%s/manuals/%s' % (
             major, minor, entry)
-        webbrowser.open(url)
+        open_url(url)
 
     def OnPythonHelp(self, event):
-        import webbrowser
-
         url = 'https://docs.python.org/%s/tutorial/' % sys.version_info[0]
-        webbrowser.open(url)
+        open_url(url)
 
     def OnModulesHelp(self, event):
         self.giface.Help('full_index')
 
-    def OnAddonsHelp(self, event):
-        import webbrowser
+    def OnSubmittingHelp(self, event):
+        open_url('https://trac.osgeo.org/grass/wiki/Submitting/Python')
 
-        url = 'https://grass.osgeo.org/development/code-submission/'
-        webbrowser.open(url)
+    def OnAddonsHelp(self, event):
+        open_url('https://grass.osgeo.org/development/code-submission/')
 
     def OnSupport(self, event):
-        import webbrowser
-
-        url = 'https://grass.osgeo.org/support/'
-        webbrowser.open(url)
+        open_url('https://grass.osgeo.org/support/')
 
 
 class PyEditToolbar(BaseToolbar):
@@ -522,14 +516,12 @@ class PyEditToolbar(BaseToolbar):
                                      self.icons['overwriteFalse'].GetBitmap())
             self.SetToolShortHelp(self.overwrite,
                                   self.icons['overwriteFalse'].GetLabel())
-            print "setting overwrite true"
             self.parent.overwrite = True
         else:
             self.SetToolNormalBitmap(self.overwrite,
                                      self.icons['overwriteTrue'].GetBitmap())
             self.SetToolShortHelp(self.overwrite,
                                   self.icons['overwriteTrue'].GetLabel())
-            print "setting overwrite false"
             self.parent.overwrite = False
 
 
@@ -616,6 +608,9 @@ class PyEditFrame(wx.Frame):
 
     def OnModulesHelp(self, *args, **kwargs):
         self.controller.OnModulesHelp(*args, **kwargs)
+
+    def OnSubmittingHelp(self, *args, **kwargs):
+        self.controller.OnSubmittingHelp(*args, **kwargs)
 
     def OnAddonsHelp(self, *args, **kwargs):
         self.controller.OnAddonsHelp(*args, **kwargs)
