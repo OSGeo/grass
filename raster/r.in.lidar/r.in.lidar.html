@@ -259,12 +259,44 @@ raster cell (the ground elevation is given by the raster map
 
 <div class="code"><pre>
 g.region raster=elevation -p
-r.in.lidar input=points.las output=height_above_ground base_raster=elevation
+r.in.lidar input=points.las output=mean_height_above_ground base_raster=elevation method=mean
 </pre></div>
 
 In this type of computation, it might be advantageous to change the resolution
 to match the precision of the points rather than deriving it from the base raster.
 <!-- TODO: say how -->
+<h3>Multiple file input</h3>
+
+The file option requres a file that contains a list of file names with the full 
+path. For example, a list of files in the directory /home/user/data:
+<div class="code"><pre>
+points1.laz
+points2.laz
+points3.laz
+</pre></div>
+
+would be lised in the file as:
+<div class="code"><pre>
+/home/user/data/points1.laz
+/home/user/data/points2.laz
+/home/user/data/points3.laz
+</pre></div>
+On Linux and OSX, this file can be automatically generated with the command:
+<div class="code"><pre>
+ls /home/user/data/*.laz > /home/user/data/filelist.txt
+</pre></div>
+On Windows:
+<div class="code"><pre>
+dir /b c:\users\user\data\*.laz > c:\users\user\data\filelist.txt
+</pre></div>
+
+The mean height above ground example above would then be:
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.in.lidar file=/home/user/data/filelist.txt output=mean_height_above_ground base_raster=elevation method=mean
+</pre></div>
+
 
 <h2>TODO</h2>
 
