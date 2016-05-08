@@ -21,7 +21,7 @@ import wx
 import grass.script as gscript
 from grass.script.utils import try_remove
 
-# just for testing
+# needed just for testing
 if __name__ == '__main__':
     from grass.script.setup import set_gui_path
     set_gui_path()
@@ -37,9 +37,8 @@ from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 
 # TODO: add validation: call/import pep8 (error message if not available)
-# TODO: run with parameters
-# TODO: run with overwrite (in process env, not os.environ)
-# TODO: add more examples (separate file)
+# TODO: run with parameters (alternatively, just use console or GUI)
+# TODO: add more examples (better separate file)
 # TODO: add test for templates and examples
 # TODO: add pep8 test for templates and examples
 # TODO: add snippets?
@@ -204,6 +203,7 @@ if __name__ == "__main__":
     sys.exit(main())
 """
 
+
 def module_error_handling_example():
     """Example of a GRASS module"""
     return r"""#!/usr/bin/env python
@@ -259,6 +259,7 @@ class PyEditController(object):
         self.body = panel
         self.filename = None
         self.tempfile = None  # bool, make them strings for better code
+        self.overwrite = False
 
     def OnRun(self, event):
         """Run Python script"""
@@ -286,10 +287,16 @@ class PyEditController(object):
             # (not sure if needed every time but useful for opened files)
             os.chmod(self.filename, stat.S_IRWXU | stat.S_IWUSR)
 
-        # TODO: add overwrite to toolbar, needs env in GConsole
         # run in console as other modules, avoid Python shell which
         # carries variables over to the next execution
-        self.giface.RunCmd([fd.name])
+        env = os.environ.copy()
+        if not self.overwrite:
+            print "overwrite not active"
+        if self.overwrite:
+            print "overwrite active"
+            env['GRASS_OVERWRITE'] = '1'
+        print self.giface
+        self.giface.RunCmd([fd.name], env=env)
 
     def SaveAs(self):
         """Save python script to file"""
@@ -471,6 +478,19 @@ class PyEditToolbar(BaseToolbar):
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
 
+        self.icons = {
+            'open': MetaIcon(img='open',
+                             label=_('Open (Ctrl+O)')),
+            'save': MetaIcon(img='save',
+                             label=_('Save (Ctrl+S)')),
+            'run': MetaIcon(img='execute',
+                            label=_('Run (Ctrl+R)')),
+            'overwriteTrue': MetaIcon(img='locked',
+                                      label=_('Activate overwrite')),
+            'overwriteFalse': MetaIcon(img='unlocked',
+                                       label=_('Deactive overwrite')),
+        }
+
         # workaround for http://trac.wxwidgets.org/ticket/13888
         if sys.platform == 'darwin':
             parent.SetToolBar(self)
@@ -482,26 +502,35 @@ class PyEditToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
-        icons = {
-            'open': MetaIcon(img='open',
-                             label=_('Open (Ctrl+O)')),
-            'save': MetaIcon(img='save',
-                             label=_('Save (Ctrl+S)')),
-            'run': MetaIcon(img='execute',
-                            label=_('Run (Ctrl+R)')),
-        }
-
-        return self._getToolbarData((('open', icons['open'],
+        return self._getToolbarData((('open', self.icons['open'],
                                       self.parent.OnOpen),
-                                     ('save', icons['save'],
+                                     ('save', self.icons['save'],
                                       self.parent.OnSave),
                                      (None, ),
-                                     ('run', icons['run'],
+                                     ('run', self.icons['run'],
                                       self.parent.OnRun),
+                                     ('overwrite', self.icons['overwriteTrue'],
+                                      self.OnSetOverwrite, wx.ITEM_CHECK),
                                      (None, ),
                                      ("help", BaseIcons['help'],
                                       self.parent.OnHelp),
                                      ))
+
+    def OnSetOverwrite(self, event):
+        if self.GetToolState(self.overwrite):
+            self.SetToolNormalBitmap(self.overwrite,
+                                     self.icons['overwriteFalse'].GetBitmap())
+            self.SetToolShortHelp(self.overwrite,
+                                  self.icons['overwriteFalse'].GetLabel())
+            print "setting overwrite true"
+            self.parent.overwrite = True
+        else:
+            self.SetToolNormalBitmap(self.overwrite,
+                                     self.icons['overwriteTrue'].GetBitmap())
+            self.SetToolShortHelp(self.overwrite,
+                                  self.icons['overwriteTrue'].GetLabel())
+            print "setting overwrite false"
+            self.parent.overwrite = False
 
 
 class PyEditFrame(wx.Frame):
@@ -593,6 +622,14 @@ class PyEditFrame(wx.Frame):
 
     def OnSupport(self, *args, **kwargs):
         self.controller.OnSupport(*args, **kwargs)
+
+    def _get_overwrite(self):
+        return self.controller.overwrite
+
+    def _set_overwrite(self, overwrite):
+        self.controller.overwrite = overwrite
+
+    overwrite = property(_get_overwrite, _set_overwrite)
 
 
 def main():
