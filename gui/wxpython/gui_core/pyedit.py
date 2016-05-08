@@ -405,20 +405,22 @@ class PyEditController(object):
             self.body.SetText(module_template())
 
     def SetScriptExample(self, event):
-        if self.CanReplaceContent('template'):
+        if self.CanReplaceContent('example'):
             self.body.SetText(script_example())
 
     def SetModuleExample(self, event):
-        if self.CanReplaceContent('template'):
+        if self.CanReplaceContent('example'):
             self.body.SetText(module_example())
 
     def SetModuleErrorHandlingExample(self, event):
-        if self.CanReplaceContent('template'):
+        if self.CanReplaceContent('example'):
             self.body.SetText(module_error_handling_example())
 
     def CanReplaceContent(self, by_message):
         if by_message == 'template':
             message = _("Replace the content by the template?")
+        elif by_message == 'example':
+            message = _("Replace the content by the example?")
         elif by_message == 'file':
             message = _("Replace the current content by the file content?")
         else:
