@@ -360,8 +360,6 @@ class PyEditController(object):
         else:
             self.SaveAs()
 
-    # TODO: it should be probably used with replacing, when this gives what we
-    # want?
     def IsModified(self):
         """Check if python script has been modified"""
         return self.body.modified
@@ -425,7 +423,7 @@ class PyEditController(object):
             message = _("Replace the current content by the file content?")
         else:
             message = by_message
-        if not self.IsEmpty():
+        if not self.IsEmpty() and self.IsModified():
             dlg = wx.MessageDialog(
                 parent=self.guiparent, message=message,
                 caption=_("Replace content"),
