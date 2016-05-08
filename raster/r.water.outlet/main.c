@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
     CELL *cell_buf;
     char drain_name[GNAME_MAX], basin_name[GNAME_MAX];
     struct Cell_head window;
+    struct History hist;
 
     G_gisinit(argv[0]);
 
@@ -128,6 +129,11 @@ int main(int argc, char *argv[])
     G_free(bas);
     G_free(cell_buf);
     Rast_close(basin_fd);
+
+    Rast_put_cell_title(basin_name, "Watershed basin");
+    Rast_short_history(basin_name, "raster", &hist);
+    Rast_command_history(&hist);
+    Rast_write_history(basin_name, &hist);
 
     exit(EXIT_SUCCESS);
 }
