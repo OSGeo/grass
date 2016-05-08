@@ -62,6 +62,11 @@
           <help>Load full GRASS module example</help>
           <handler>OnGrassModuleExample</handler>
         </menuitem>
+        <menuitem>
+          <label>Load GRASS module error &amp;handling example</label>
+          <help>Load full GRASS module with error handling example</help>
+          <handler>OnGrassModuleErrorHandlingExample</handler>
+        </menuitem>
       </items>
     </menu>
     <menu>
