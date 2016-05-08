@@ -125,3 +125,6 @@ class DataCatalogFrame(wx.Frame):
                           mapset=mapset) == 0:
                 GMessage(parent=self,
                          message=_("Current mapset is <%s>.") % mapset)
+
+    def Filter(self, text):
+        self.tree.Filter(text=text)

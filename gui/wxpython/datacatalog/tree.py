@@ -17,6 +17,8 @@ for details.
 @author Anna Petrasova (kratochanna gmail com)
 """
 import os
+import re
+import copy
 from multiprocessing import Process, Queue, cpu_count
 
 import wx
@@ -35,6 +37,65 @@ import grass.script as gscript
 from grass.script import gisenv
 from grass.exceptions import CalledModuleError
 
+
+def filterModel(model, element=None, name=None):
+    """Filter tree model based on type or name of map using regular expressions.
+    Copies tree and remove nodes which don't match."""
+    fmodel = copy.deepcopy(model)
+    nodesToRemove = []
+    if name:
+        try:
+            regex = re.compile(name)
+        except:
+            return fmodel
+    for gisdbase in fmodel.root.children:
+        for location in gisdbase.children:
+            for mapset in location.children:
+                for elem in mapset.children:
+                    if element and elem.label != element:
+                        nodesToRemove.append(elem)
+                        continue
+                    for node in elem.children:
+                        if name and regex.search(node.label) is None:
+                            nodesToRemove.append(node)
+
+    for node in reversed(nodesToRemove):
+        fmodel.RemoveNode(node)
+
+    cleanUpTree(fmodel)
+    return fmodel
+
+
+def cleanUpTree(model):
+    """Removes empty element/mapsets/locations nodes.
+    It first removes empty elements, then mapsets, then locations"""
+    # removes empty elements
+    nodesToRemove = []
+    for gisdbase in model.root.children:
+        for location in gisdbase.children:
+            for mapset in location.children:
+                for element in mapset.children:
+                    if not element.children:
+                        nodesToRemove.append(element)
+    for node in reversed(nodesToRemove):
+        model.RemoveNode(node)
+    # removes empty mapsets
+    nodesToRemove = []
+    for gisdbase in model.root.children:
+        for location in gisdbase.children:
+            for mapset in location.children:
+                if not mapset.children:
+                    nodesToRemove.append(mapset)
+    for node in reversed(nodesToRemove):
+        model.RemoveNode(node)
+    # removes empty locations
+    nodesToRemove = []
+    for gisdbase in model.root.children:
+        for location in gisdbase.children:
+            if not location.children:
+                nodesToRemove.append(location)
+    for node in reversed(nodesToRemove):
+        model.RemoveNode(node)
 
 def getEnvironment(gisdbase, location, mapset):
     """Creates environment to be passed in run_command for example.
@@ -210,6 +271,7 @@ class LocationMapTree(TreeView):
             wx.TR_SINGLE):
         """Location Map Tree constructor."""
         self._model = TreeModel(DataCatalogNode)
+        self._orig_model = self._model
         super(
             LocationMapTree,
             self).__init__(
@@ -298,6 +360,7 @@ class LocationMapTree(TreeView):
         if errors:
             wx.CallAfter(GWarning, '\n'.join(errors))
         Debug.msg(1, "Tree filled")
+        self.RefreshNode(self._model.root)
         self.RefreshItems()
 
     def InitTreeItems(self):
@@ -306,6 +369,7 @@ class LocationMapTree(TreeView):
 
     def ReloadTreeItems(self):
         """Reload locations, mapsets and layers in the tree."""
+        self._orig_model = self._model
         self._model.RemoveNode(self._model.root)
         self.RefreshNode(self._model.root)
         self.InitTreeItems()
@@ -344,6 +408,7 @@ class LocationMapTree(TreeView):
             raise CalledModuleError(error)
 
         self._populateMapsetItem(mapsetItem, maps[mapsetItem.data['name']])
+        self._orig_model = copy.deepcopy(self._model)
         self.RefreshNode(mapsetItem)
         self.RefreshItems()
 
@@ -784,6 +849,29 @@ class DataCatalogTree(LocationMapTree):
             self.changeMapset.emit(mapset=self.selected_mapset.label)
         else:
             self.changeLocation.emit(mapset=self.selected_mapset.label, location=self.selected_location.label)
+        self.ExpandCurrentMapset()
+
+    def Filter(self, text):
+        """Filter tree based on name and type."""
+        text = text.strip()
+        if len(text.split(':')) > 1:
+            name = text.split(':')[1].strip()
+            elem = text.split(':')[0].strip()
+            if 'r' == elem:
+                element = 'raster'
+            elif 'r3' == elem:
+                element = 'raster_3d'
+            elif 'v' == elem:
+                element = 'vector'
+            else:
+                element = None
+        else:
+            element = None
+            name = text.strip()
+
+        self._model = filterModel(self._orig_model, name=name, element=element)
+        self.RefreshNode(self._model.root)
+        self.RefreshItems()
         self.ExpandCurrentMapset()
 
     def _getNewMapName(self, message, title, value, element, mapset, env):

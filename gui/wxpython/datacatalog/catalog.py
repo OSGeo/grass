@@ -94,3 +94,6 @@ class DataCatalog(wx.Panel):
     def SetRestriction(self, restrict):
         """Allow editing other mapsets or restrict editing to current mapset"""
         self.tree.SetRestriction(restrict)
+
+    def Filter(self, text):
+        self.tree.Filter(text=text)
