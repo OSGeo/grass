@@ -35,6 +35,7 @@ from core.menutree import MenuTreeModelBuilder
 from gui_core.menu import Menu
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
+from core.debug import Debug
 
 # TODO: add validation: call/import pep8 (error message if not available)
 # TODO: run with parameters (alternatively, just use console or GUI)
@@ -390,6 +391,7 @@ class PyEditController(object):
         self.tempfile = False
 
     def OnOpen(self, event):
+        """Handle open event but ask about replacing content first"""
         if self.CanReplaceContent('file'):
             self.Open()
 
@@ -398,8 +400,13 @@ class PyEditController(object):
         return len(self.body.GetText()) == 0
 
     def IsContentValuable(self):
-        print "empty:", self.IsEmpty(), "modified:", self.IsModified()
-        print "valuable?", not self.IsEmpty() and self.IsModified()
+        """Check if content of the editor is valuable to user
+
+        Used for example to check if content should be saved before closing.
+        The content is not valuable for example if it already saved in a file.
+        """
+        Debug.msg(2, "pyedit IsContentValuable? empty={}, modified={}",
+                  self.IsEmpty(), self.IsModified())
         return not self.IsEmpty() and self.IsModified()
 
     def SetScriptTemplate(self, event):
@@ -423,6 +430,16 @@ class PyEditController(object):
             self.body.SetText(module_error_handling_example())
 
     def CanReplaceContent(self, by_message):
+        """Check with user if we can replace content by something else
+
+        Asks user if replacement is OK depending on the state of the editor.
+        Use before replacing all editor content by some other text.
+        
+        :param by_message: message used to ask user if it is OK to replace
+            the content with something else; special values are 'template',
+            'example' and 'file' which will use predefined messages, otherwise
+            a translatable, user visible string should be used.
+        """
         if by_message == 'template':
             message = _("Replace the content by the template?")
         elif by_message == 'example':
@@ -431,8 +448,6 @@ class PyEditController(object):
             message = _("Replace the current content by the file content?")
         else:
             message = by_message
-        print "CanReplaceContent:", self.IsEmpty(), self.IsModified()
-        print "CanNotReplaceContent?", not self.IsEmpty() and self.IsModified()
         if self.IsContentValuable():
             dlg = wx.MessageDialog(
                 parent=self.guiparent, message=message,
@@ -634,7 +649,8 @@ class PyEditFrame(wx.Frame):
     def _set_overwrite(self, overwrite):
         self.controller.overwrite = overwrite
 
-    overwrite = property(_get_overwrite, _set_overwrite)
+    overwrite = property(_get_overwrite, _set_overwrite,
+                         doc="Tells if overwrite should be used")
 
 
 def main():
