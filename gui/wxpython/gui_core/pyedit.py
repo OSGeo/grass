@@ -266,6 +266,7 @@ class PyEditController(object):
         self.filename = None
         self.tempfile = None  # bool, make them strings for better code
         self.overwrite = False
+        self.parameters = None
 
     def OnRun(self, event):
         """Run Python script"""
@@ -284,6 +285,7 @@ class PyEditController(object):
                 mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
                 os.chmod(self.filename, mode | stat.S_IXUSR)
         else:
+            # always save automatically before running
             fd = open(self.filename, "w")
             try:
                 fd.write(self.body.GetText())
@@ -298,7 +300,10 @@ class PyEditController(object):
         env = os.environ.copy()
         if self.overwrite:
             env['GRASS_OVERWRITE'] = '1'
-        self.giface.RunCmd([fd.name], env=env)
+        cmd = [fd.name]
+        if self.parameters:
+            cmd.extend(self.parameters)
+        self.giface.RunCmd(cmd, env=env)
 
     def SaveAs(self):
         """Save python script to file"""
@@ -459,6 +464,24 @@ class PyEditController(object):
             dlg.Destroy()
         return True
 
+    def OnSetParameters(self, event):
+        """Handle setting CLI parameters for the script (asks for input)"""
+        dlg = wx.TextEntryDialog(
+            parent=self.guiparent,
+            caption=_("Set parameters for the script"),
+            message=_("Specify command line parameters for the script separated by spaces:"),
+            )
+        if self.parameters:
+            dlg.SetValue(" ".join(self.parameters))
+        # TODO: modality might not be needed here if we bind the events
+        if dlg.ShowModal() == wx.ID_OK:
+            text = dlg.GetValue().strip()
+            # TODO: split in the same way as in console
+            if text:
+                self.parameters = text.split()
+            else:
+                self.parameters = None
+
     def OnHelp(self, event):
         # inspired by g.manual but simple not using GRASS_HTML_BROWSER
         # not using g.manual because it does not show
@@ -501,6 +524,7 @@ class PyEditToolbar(BaseToolbar):
                              label=_('Save (Ctrl+S)')),
             'run': MetaIcon(img='execute',
                             label=_('Run (Ctrl+R)')),
+            # TODO: better icons for overwrite modes
             'overwriteTrue': MetaIcon(img='locked',
                                       label=_('Activate overwrite')),
             'overwriteFalse': MetaIcon(img='unlocked',
@@ -532,6 +556,7 @@ class PyEditToolbar(BaseToolbar):
                                       self.parent.OnHelp),
                                      ))
 
+    # TODO: add overwrite also to the menu and sync with toolbar
     def OnSetOverwrite(self, event):
         if self.GetToolState(self.overwrite):
             self.SetToolNormalBitmap(self.overwrite,
@@ -651,6 +676,9 @@ class PyEditFrame(wx.Frame):
 
     overwrite = property(_get_overwrite, _set_overwrite,
                          doc="Tells if overwrite should be used")
+
+    def OnSetParameters(self, *args, **kwargs):
+        self.controller.OnSetParameters(*args, **kwargs)
 
 
 def main():
