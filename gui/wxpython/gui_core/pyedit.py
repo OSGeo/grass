@@ -397,6 +397,11 @@ class PyEditController(object):
         """Check if python script is empty"""
         return len(self.body.GetText()) == 0
 
+    def IsContentValuable(self):
+        print "empty:", self.IsEmpty(), "modified:", self.IsModified()
+        print "valuable?", not self.IsEmpty() and self.IsModified()
+        return not self.IsEmpty() and self.IsModified()
+
     def SetScriptTemplate(self, event):
         if self.CanReplaceContent('template'):
             self.body.SetText(script_template())
@@ -426,7 +431,9 @@ class PyEditController(object):
             message = _("Replace the current content by the file content?")
         else:
             message = by_message
-        if not self.IsEmpty() and self.IsModified():
+        print "CanReplaceContent:", self.IsEmpty(), self.IsModified()
+        print "CanNotReplaceContent?", not self.IsEmpty() and self.IsModified()
+        if self.IsContentValuable():
             dlg = wx.MessageDialog(
                 parent=self.guiparent, message=message,
                 caption=_("Replace content"),
@@ -566,6 +573,7 @@ class PyEditFrame(wx.Frame):
         self.Fit()
         self.SetAutoLayout(True)
         self.Layout()
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     # TODO: it would be nice if we can pass the controller to the menu
     # might not be possible on the side of menu
@@ -577,8 +585,10 @@ class PyEditFrame(wx.Frame):
         self.controller.OnSave(*args, **kwargs)
 
     def OnClose(self, *args, **kwargs):
-        # saves without asking if we have an open file
-        self.controller.OnSave(*args, **kwargs)
+        # this will be often true because PyStc is using EVT_KEY_DOWN
+        # to say if it was modified, not actual user change in text
+        if self.controller.IsContentValuable():
+            self.controller.OnSave(*args, **kwargs)
         self.Destroy()
 
     def OnRun(self, *args, **kwargs):
