@@ -1483,107 +1483,139 @@ USAGE:	<b>end</b>
 
 The following are examples of <em>ps.map</em> script files.
 <p><h3>Simple example</h3>
-The file has been named <em>spear.basic</em>:
+The file has been named <em>simple_map.txt</em>:
 
 <div class="code"><pre>
-# this ps.map example draws a map of Spearfish, SD
-<b>raster</b> elevation.dem
-<b>header</b>
+<i># this ps.map example draws a map of Wake county, NC</i>
+<b>raster</b> elevation
+<b>vlines</b> roadsmajor
+  <b>color</b> 30:144:255
+  <b>width</b> 2
   <b>end</b>
-<b>vlines</b> roads
-  <b>color</b> brown
-  <b>end</b>
+<b>text</b> 50% 105% Wake County Terrain and Roads
+   <b>size</b> 550
+   <b>end</b>
 <b>end</b>
 </pre></div>
 
 Generate map as Postsript file:
 <div class="code"><pre>
- ps.map input=spear.basic output=spear_basic.ps
+ps.map input=simple_map.txt output=simple_map.ps
 </pre></div>
 
+<center>
+<img src=ps_map_basic.png>
+<p><em>Figure: Result of for the a simple Wake county terrain and roads example</em></p>
+</center>
 
 <h3>More complicated example</h3>
-The file has been named <em>spear.soils</em>:
+
+The following is content of a file named <em>elevation_map.txt</em>:
+
+<!--
+regular expression for syntax highlight
+(replace spaces around bs by gt and lt)
+^( *)([a-z]+)([ ]|$)
+\1 b \2 /b \3
+-->
 
 <div class="code"><pre>
-# this ps.map example draws a map of Spearfish, SD
-<b>raster</b> soils
-<b>outline</b>
-   <b>color</b> black
-   <b>width</b> 1
-   <b>end</b>
-<b>comments</b> soil.cmt
-   <b>where</b> 1 6
-   <b>font</b> Helvetica
-   <b>end</b>
+<i># this ps.map example draws a map of Wake county, NC</i>
+<b>raster</b> elevation
 <b>colortable</b> y
-   <b>where</b> 1 6.5
-   <b>cols</b> 4
-   <b>width</b> 4
-   <b>font</b> Helvetica
-   <b>end</b>
+  <b>where</b> 1 6.0
+  <b>cols</b> 4
+  <b>width</b> 4
+  <b>font</b> Helvetica
+  <b>end</b>
 <b>setcolor</b> 6,8,9 white
 <b>setcolor</b> 10 green
-<b>vlines</b> roads
-   <b>width</b> 2
-   <b>style</b> 0111
-   <b>color</b> grey
-   <b>masked</b> n
-   <b>end</b>
+<b>vlines</b> streams
+  <b>width</b> 0.1
+  <b>color</b> blue
+  <b>masked</b> n
+  <b>label</b> streams
+  <b>end</b>
+<b>vlines</b> roadsmajor
+  <b>width</b> 1.5
+  <b>style</b> 1111
+  <b>color</b> grey
+  <b>masked</b> n
+  <b>label</b> major roads
+  <b>end</b>
 <b>vlegend</b>
-   <b>where</b> 4.5 0
-   <b>font</b> Courier
-   <b>fontsize</b> 8
-   <b>end</b>
-<b>text</b> 30% 100% SPEARFISH SOILS MAP
-   <b>color</b> red
-   <b>width</b> 1
-   <b>hcolor</b> black
-   <b>hwidth</b> 1
-   <b>background</b> white
-   <b>border</b> red
-   <b>size</b> 500
-   <b>ref</b> lower left
-   <b>end</b>
-<b>line</b> 606969.73 3423092.91 616969.73 3423092.91
-   <b>color</b> yellow
-   <b>width</b> 2
-   <b>end</b>
-<b>point</b> 40% 60%
-   <b>color</b> purple
-   <b>symbol</b> basic/diamond
-   <b>size</b> 25
-   <b>masked</b> n
-   <b>end</b>
+  <b>where</b> 4.5 0
+  <b>font</b> Courier
+  <b>fontsize</b> 8
+  <b>end</b>
+<b>text</b> 30% 100% Wake County Terrain
+  <b>color</b> black
+  <b>width</b> 1
+  <b>background</b> white
+  <b>size</b> 550
+  <b>ref</b> lower left
+  <b>end</b>
+<b>text</b> 92% -25% meters
+  <b>color</b> black
+  <b>width</b> 1
+  <b>background</b> white
+  <b>size</b> 550
+  <b>ref</b> lower left
+  <b>end</b>
 <b>scale</b> 1:125000
 <b>scalebar</b> f
-   <b>where</b> 4.5 6.5
-   <b>length</b> 5000
-   <b>height</b> 0.05
-   <b>segment</b> 5
-   <b>numbers</b> 5
-   <b>end</b>
+  <b>where</b> 1.5 5.5
+  <b>length</b> 5000
+  <b>height</b> 0.05
+  <b>segment</b> 5
+  <b>numbers</b> 5
+  <b>end</b>
 <b>geogrid</b> 60 s
-   <b>color</b> blue
-   <b>numbers</b> 2 yellow
-   <b>end</b>
+  <b>color</b> gray
+  <b>numbers</b> 2 black
+  <b>end</b>
 <b>paper</b> a4
-    <b>end</b>
+   <b>end</b>
 <b>end</b>
 </pre></div>
 
 This script file can be entered at the command line:
 
 <div class="code"><pre>
- # First set the region
- g.region raster=soils
+# First set the region
+g.region raster=elevation
 
- # Generate comment file (or use text editor)
- echo "Spearfish (SD) soils" &gt; soil.cmt
-
- # Generate map as Postsript file
- ps.map input=spear.soils output=soils.ps
+# Generate map as Postsript file
+ps.map input=elevation_map.txt output=elevation.ps
 </pre></div>
+
+<center>
+<img src=ps_map.png>
+<p><em>Figure: Result of for the more complicated Wake county, NC example</em></p>
+</center>
+
+<!--
+todos according to things which were in the Spearfish example
+TODO: now we have no example which would contain comment:
+# Generate comment file (or use text editor)
+echo "Spearfish (SD) soils" &gt; soil.cmt
+TODO: now we have no example with point and line
+line 606969.73 3423092.91 616969.73 3423092.91
+   color yellow
+   width 2
+   end
+point 40% 60%
+   color purple
+   symbol basic/diamond
+   size 25
+   masked n
+   end
+TODO: example with outline
+outline
+   color black
+   width 1
+   end
+-->
 
 <p>More examples can be found on the
 <a href="http://grasswiki.osgeo.org/wiki/Ps.map_scripts">GRASS Wiki</a>
@@ -1603,8 +1635,10 @@ help site.
 
 <h2>SEE ALSO</h2>
 <em>
+<a href="g.gui.psmap.html">g.gui.psmap</a>,
 <a href="g.region.html">g.region</a>,
-<a href="v.label.html">v.label</a>
+<a href="v.label.html">v.label</a>,
+<a href="wxGUI.html">wxGUI</a>,
 </em>
 
 <h2>AUTHOR</h2>
