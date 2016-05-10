@@ -28,7 +28,6 @@
 #include <grass/segment.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
-#include <grass/vector.h>
 #include <liblas/capi/liblas.h>
 
 #include "local_proto.h"
@@ -79,11 +78,9 @@ int main(int argc, char *argv[])
     struct Option *method_opt, *base_raster_opt, *zrange_opt, *zscale_opt;
     struct Option *trim_opt, *pth_opt, *res_opt;
     struct Option *file_list_opt;
-    struct Option *voutput_opt;
     struct Flag *print_flag, *scan_flag, *shell_style, *over_flag, *extents_flag, *intens_flag;
     struct Flag *set_region_flag;
     struct Flag *base_rast_res_flag;
-    struct Flag *notopo_flag;
 
     /* LAS */
     LASReaderH LAS_reader;
@@ -113,7 +110,7 @@ int main(int argc, char *argv[])
     input_opt->guisection = _("Input");
 
     output_opt = G_define_standard_option(G_OPT_R_OUTPUT);
-    output_opt->required = NO;
+    output_opt->required = YES;
     output_opt->guisection = _("Output");
 
     file_list_opt = G_define_standard_option(G_OPT_F_INPUT);
@@ -122,14 +119,6 @@ int main(int argc, char *argv[])
     file_list_opt->description = _("LiDAR input files in LAS format (*.las or *.laz)");
     file_list_opt->required = NO;
     file_list_opt->guisection = _("Input");
-
-    voutput_opt = G_define_standard_option(G_OPT_V_OUTPUT);
-    voutput_opt->key = "vector_output";
-    voutput_opt->required = NO;
-    voutput_opt->label = _("Grid-decimated point cloud");
-    voutput_opt->description = _("Grid-decimated point cloud with"
-        " XYZ coordinates which are mean for all points in a raster cell");
-    voutput_opt->guisection = _("Output");
 
     method_opt = G_define_option();
     method_opt->key = "method";
@@ -275,10 +264,6 @@ int main(int argc, char *argv[])
     base_rast_res_flag->description =
         _("Use base raster actual resolution instead of computational region");
 
-    notopo_flag = G_define_standard_flag(G_FLG_V_TOPO);
-
-    G_option_required(output_opt, voutput_opt, NULL);
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -302,10 +287,7 @@ int main(int argc, char *argv[])
     }
 
     /* parse input values */
-    if (output_opt->answer)
-        outmap = output_opt->answer;
-    else
-        outmap = NULL;
+    outmap = output_opt->answer;
 
     if (shell_style->answer && !scan_flag->answer) {
 	scan_flag->answer = 1; /* pointer not int, so set = shell_style->answer ? */
@@ -415,7 +397,7 @@ int main(int argc, char *argv[])
     }
 
     point_binning_set(&point_binning, method_opt->answer, pth_opt->answer,
-                      trim_opt->answer, voutput_opt->answer ? TRUE : FALSE);
+                      trim_opt->answer, FALSE);
 
     base_array = NULL;
 
@@ -512,25 +494,10 @@ int main(int argc, char *argv[])
 	}
 
     /* open output map */
-    if (outmap)
-        out_fd = Rast_open_new(outmap, rtype);
-    else
-        out_fd = 0; /* TODO: is this correct? */
+    out_fd = Rast_open_new(outmap, rtype);
 
     /* allocate memory for a single row of output data */
     raster_row = Rast_allocate_output_buf(rtype);
-
-    struct Map_info voutput;
-    struct VectorWriter vector_writer;
-    if (voutput_opt->answer) {
-        if (Vect_open_new(&voutput, voutput_opt->answer, 1) < 0)
-            G_fatal_error(_("Unable to create vector map <%s>"), voutput_opt->answer);
-        vector_writer.info = &voutput;
-        vector_writer.points = Vect_new_line_struct();
-        vector_writer.cats = Vect_new_cats_struct();
-        vector_writer.count = 0;
-        Vect_hist_command(&voutput);
-    }
 
     G_message(_("Reading data ..."));
 
@@ -664,10 +631,9 @@ int main(int argc, char *argv[])
 	for (row = 0; row < rows; row++) {
         /* potentially vector writing can be independent on the binning */
         write_values(&point_binning, &bin_index_nodes, raster_row, row,
-            cols, rtype, &vector_writer);
+            cols, rtype, NULL);
 	    /* write out line of raster data */
-        if (outmap)
-            Rast_put_row(out_fd, raster_row, rtype);
+        Rast_put_row(out_fd, raster_row, rtype);
 	}
 
 	/* free memory */
@@ -682,28 +648,16 @@ int main(int argc, char *argv[])
     G_free(raster_row);
 
     /* close raster file & write history */
-    if (outmap)
-        Rast_close(out_fd);
+    Rast_close(out_fd);
 
-    if (outmap) {
-        sprintf(title, "Raw x,y,z data binned into a raster grid by cell %s",
-                method_opt->answer);
-        Rast_put_cell_title(outmap, title);
+    sprintf(title, "Raw x,y,z data binned into a raster grid by cell %s",
+            method_opt->answer);
+    Rast_put_cell_title(outmap, title);
 
-        Rast_short_history(outmap, "raster", &history);
-        Rast_command_history(&history);
-        Rast_set_history(&history, HIST_DATSRC_1, infile);
-        Rast_write_history(outmap, &history);
-    }
-
-    /* close output vector map */
-    if (voutput_opt->answer) {
-        if (!notopo_flag->answer)
-            Vect_build(vector_writer.info);
-        Vect_close(vector_writer.info);
-        Vect_destroy_line_struct(vector_writer.points);
-        Vect_destroy_cats_struct(vector_writer.cats);
-    }
+    Rast_short_history(outmap, "raster", &history);
+    Rast_command_history(&history);
+    Rast_set_history(&history, HIST_DATSRC_1, infile);
+    Rast_write_history(outmap, &history);
 
     /* set computation region to the new raster map */
     /* TODO: should be in the done message */

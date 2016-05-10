@@ -89,8 +89,22 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
                     void *index_array, int row, int cols,
                     RASTER_MAP_TYPE rtype, double trim);
 
-/* forward declaration */
-struct VectorWriter;
+/* forward declarations */
+struct Map_info;
+struct line_pnts;
+struct line_cats;
+
+struct VectorWriter
+{
+    struct Map_info *info;
+    struct line_pnts *points;
+    struct line_cats *cats;
+#ifdef HAVE_LONG_LONG_INT
+    unsigned long long count;
+#else
+    unsigned long count;
+#endif
+};
 
 void write_values(struct PointBinning *point_binning,
                   struct BinIndex *bin_index_nodes, void *raster_row, int row,
