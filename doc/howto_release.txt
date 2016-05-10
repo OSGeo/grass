@@ -58,7 +58,7 @@ Contents
 #example:
 7
 0
-3RC1
+5RC1
 2016
       rm -f include/VERSION~
 
@@ -121,7 +121,7 @@ Contents
 #example
 7
 0
-3svn
+5svn
 2016
 
     rm -f include/VERSION~
@@ -146,7 +146,6 @@ Contents
     - http://grass.osgeo.org/download/software/
     - http://grass.osgeo.org/download/software/sources/
     - http://grass.osgeo.org/download/software/linux/
-    - http://grass.osgeo.org/grass70/
     - http://grass.osgeo.org/home/history/releases/
     - http://grass.osgeo.org/development/svn/svn-tags/ (add tag): echo $RELEASETAG
 
@@ -156,7 +155,10 @@ Contents
       - store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html <- how? with protected PHP upload page?
 
      full release:
-      - update trac milesstone/add next: https://trac.osgeo.org/grass/admin/ticket/milestones
+      - update trac 
+         - milesstone/add next: https://trac.osgeo.org/grass/admin/ticket/milestones
+         - add released version: https://trac.osgeo.org/grass/admin/ticket/versions
+      
 
  o upload user HTML manual in case of *final release* from compiled English
    version at (warning: needs stuff to be compiled).
@@ -180,15 +182,15 @@ Contents
 
      set MAJOR=7
      set MINOR=0
-     set PATCH=3beta3
+     set PATCH=5RC1
 
    Update addons (grass_addons.sh) rules, eg.
 
-     compile $SVN_PATH/grass7 $GISBASE_PATH/grass703beta3   $ADDON_PATH/grass703beta3/addons
+     compile $SVN_PATH/grass7 $GISBASE_PATH/grass705RC1   $ADDON_PATH/grass705RC1/addons
 
    Modify grass_copy_wwwroot.sh accordingly, eg.
 
-     copy_addon 700beta3 7.0.0beta3
+     copy_addon 705RC1 7.0.5RC1
 
  o Launchpad notes:
 
@@ -220,7 +222,7 @@ Contents
 
    DebianGIS:          <debian-gis@lists.debian.org>
    FreeGIS:            <freegis-list@intevation.de>
-   Geowanking:         <geowanking@lists.burri.to>
+   Geowanking:         <geowanking@geowanking.org>
    OSGeo.org:          <news_item@osgeo.org>
 
  Email:
