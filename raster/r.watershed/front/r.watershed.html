@@ -80,10 +80,10 @@ given, <em>r.watershed</em> assumes no disturbed land. This input is
 used for the RUSLE calculations.
 
 <p>
-Option <b>blocking</b> specifies terrain that will block overland
-surface flow.  errain that will block overland surface flow and
-restart the slope length for the RUSLE.  All cells that are not NULL
-and not zero indicate blocking terrain.
+Option <b>blocking</b> specifies terrain that will block overland 
+surface flow. Blocking cells and streams stop the slope length for the 
+RUSLE.  All cells that are not NULL and not zero indicate blocking 
+terrain.
 
 <p>
 Option <b>threshold</b> specifies the minimum size of an exterior
@@ -144,7 +144,7 @@ that the surface runoff will travel from that cell.  The value 0
 depression input map).  Negative values indicate that surface runoff
 is leaving the boundaries of the current geographic region.  The
 absolute value of these negative cells indicates the direction of
-flow.
+flow. For MFD, drainage indicates the direction of maximum flow.
 
 <p>
 The output <b>basin</b> map contains unique label for each watershed
