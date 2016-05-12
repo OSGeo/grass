@@ -172,9 +172,15 @@ Contents
                    release tag for the differences
 
  o Trac updates:
+      - Add new release to https://trac.osgeo.org/grass/admin/ticket/versions
       - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.0.x --> Edit Milestone
-        this batch-migrates assigned tickets to next milestone
-      - Add release to https://trac.osgeo.org/grass/admin/ticket/versions
+        (this ideally batch-migrates assigned tickets to next milestone)
+      - batch modify tickets, set to next milestone (update this query accordingly)
+        https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.0.4&milestone=7.0.5&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority
+        - under "Comment" add Field "Milestone" and set to next version
+        - Select all shown tickets via Status: assigned/new/reopened
+        - then "Change ticket" button
+
 
  o WinGRASS notes:
 
