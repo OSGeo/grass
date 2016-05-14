@@ -5,7 +5,8 @@
 <em>g.extension</em> downloads and installs, removes or updates
 extensions (addons) from the official
 <a href="http://grass.osgeo.org/grass70/manuals/addons/">GRASS GIS Addons repository</a>
-or user-specified source into the local GRASS GIS installation.
+or from user-specified source code repositories into the local GRASS GIS
+installation.
 <p>
 Two types of extensions are supported:
 <ul>
@@ -37,28 +38,28 @@ directory.
 The default is a directory for application data and settings inside
 the user's home directory. 
 On GNU/Linux it is <tt>$HOME/.grass7/addons</tt>,
-on MS Windows it is <tt>$APPDATA\GRASS7\addons</tt>.
-The directory is stored in <tt>GRASS_ADDON_BASE</tt> environmental variable.
+on MS-Windows it is <tt>$APPDATA\GRASS7\addons</tt>.
+The name of the directory is stored in the <tt>GRASS_ADDON_BASE</tt>
+environmental variable.
 
 <p>
 The flag <b>-s</b> changes this install target directory to the GRASS GIS
 installation directory
 (determined by <tt>GISBASE</tt> environmental variable, e.g. <tt>/usr/</tt>)
-rather than the
-default GRASS_ADDON_BASE directory
+rather than the default directory defined as per  <tt>GRASS_ADDON_BASE</tt> 
 (see also documentation for <a href="variables.html">variables</a>).
 <em>g.extension</em> checks if the user has permission to write to
-GISBASE or GRASS_ADDON_BASE.
+<tt>GISBASE</tt> or <tt>GRASS_ADDON_BASE</tt>.
 
 <p>
 The place where the extensions are installed can be customized by
 the option <b>prefix</b>. Ensuring that these extensions will be accessible
-in GRASS GIS is then responsibility of the user.
+in GRASS GIS is in this case in the responsibility of the user.
 
 <h3>Compilation and installation</h3>
 
-On MS Windows systems, where compilation tools not readily available,
-<em>g.extension</em> downloads a compiled executable
+On MS-Windows systems, where compilation tools are typically not readily
+locally installed, <em>g.extension</em> downloads a precompiled executable
 from the GRASS GIS project server. On all other operating systems
 where it is not difficult to install compilation tools,
 <em>g.extension</em> downloads the source code of the requested
