@@ -5,7 +5,8 @@
 <em>g.extension</em> downloads and installs, removes or updates
 extensions (addons) from the official
 <a href="http://grass.osgeo.org/grass70/manuals/addons/">GRASS GIS Addons repository</a>
-or user-specified source into the local GRASS GIS installation.
+or from user-specified source code repositories into the local GRASS GIS
+installation.
 <p>
 Two types of extensions are supported:
 <ul>
@@ -37,80 +38,86 @@ directory.
 The default is a directory for application data and settings inside
 the user's home directory. 
 On GNU/Linux it is <tt>$HOME/.grass7/addons</tt>,
-on MS Windows it is <tt>$APPDATA\GRASS7\addons</tt>.
-The directory is stored in <tt>GRASS_ADDON_BASE</tt> environmental variable.
+on MS-Windows it is <tt>$APPDATA\GRASS7\addons</tt>.
+The name of the directory is stored in the <tt>GRASS_ADDON_BASE</tt>
+environmental variable.
 
 <p>
 The flag <b>-s</b> changes this install target directory to the GRASS GIS
 installation directory
 (determined by <tt>GISBASE</tt> environmental variable, e.g. <tt>/usr/</tt>)
-rather than the
-default GRASS_ADDON_BASE directory
+rather than the default directory defined via <tt>GRASS_ADDON_BASE</tt> 
 (see also documentation for <a href="variables.html">variables</a>).
 <em>g.extension</em> checks if the user has permission to write to
-GISBASE or GRASS_ADDON_BASE.
+<tt>GISBASE</tt> or <tt>GRASS_ADDON_BASE</tt>.
 
 <p>
 The place where the extensions are installed can be customized by
 the option <b>prefix</b>. Ensuring that these extensions will be accessible
-in GRASS GIS is then responsibility of the user.
+in GRASS GIS is in this case the responsibility of the user.
 
 
 <h3>Source code sources and repositories</h3>
 
+<h4>GRASS GIS Addons SVN repository</h4>
 By default, <em>g.extension</em> installs extensions from the official
-GRASS GIS Addons repository. However, different source can be specified
+GRASS GIS Addons SVN repository. However, different sources can be specified
 using the <b>url</b> option.
 
 <p>
-New extension can be also installed from a source code placed
+Individual extensions can also be installed by providing a URL to the
+source code on OSGeo Trac. This, however, works only for certain directories
+where the download of ZIP files was enabled by project administrators of
+the trac server.
+
+<h4>Local source code directory</h4>
+Optionally, new extension can be also installed from a source code placed
 in a local directory on disk. This is advantageous when developing
 a new module.
 To keep the directory clean, the directory content is copied
 to a temporary directory and the compilation happens there.
 
-<p>
-New extension can be also installed from a ZIP file
+<h4>Local source code ZIP file</h4>
+In addition, new extension can be also installed from a ZIP file
 or an archive file from the TAR family (e.g., <tt>.tar.gz</tt> or <tt>.bz2</tt>).
-The file can be a file on disk (specified a path), which was probably downloaded
-at some point, or a file on web (specified by an URL).
+The file can be on disk (specified with a path), or on web (specified by
+an URL).
 
-<p>
+<h4>Online repositories: GitHub, GitLab and Bitbucket</h4>
 For well known general hosting services, namely GitHub, GitLab and Bitbucket,
-<em>g.extension</em> supports download of a repository as a ZIP file
-when user needs to provide only a basic URL to the repository web page
+<em>g.extension</em> supports the download of a repository as a ZIP file.
+Here the user only needs to provide a base URL to the repository web page
 (with or without the <tt>https://</tt> part).
-For GitLab and Bitbucket, the latest source code in the default branch is downloaded,
-for GitHub, the latest source code in the master branch is downloaded.
-Of course, user can still specify full URL of a ZIP file
-and install a specific branch or release in this way (ZIP file mechanism will be applied).
-
-<p>
-Individual extensions can be also installed by providing a URL to
-source code on OSGeo Trac. This, however, works only for certain directories
-where download of a downloads a ZIP file was enabled by project administrators.
-
-<p>
-When none of the above sources is identified, <em>g.extension</em> assumes
-that the source is a Subversion repository and uses <em>svn</em> command line tool
-to obtain the source code. The expected structure of the repository
-should be the same as the one of the official repository.
+For GitLab and Bitbucket, the latest source code in the default branch is 
+downloaded, for GitHub, the latest source code in the master branch is downloaded.
+Of course, a user can still specify the full URL of a ZIP file
+and install a specific branch or release in this way (ZIP file mechanism
+will be applied).
 
 <p>
 For the official repository, <em>g.extension</em> supports listing available
 extensions (addons) and few other metadata-related operations which
 depend on a specific infrastructure.
-For other sources and repositories, this is not supported because it is assumed
-that other sources contain only one extension, typically a module or group of modules.
+For other sources and repositories, this is not supported because it is
+assumed that other sources contain only one extension, typically a module
+or group of modules.
+
+<h4>Needed directory layout</h4>
+When none of the above sources is identified, <em>g.extension</em> assumes
+that the source is a Subversion repository and uses the <em>svn</em> command
+line tool to obtain the source code. The expected structure of the repository
+should be the same as the one of the official repository.
 
 <p>
-Non-official sources are supported on all operating systems except for MS Windows.
+Non-official sources are supported on all operating systems except for
+MS-Windows.
 
 
 <h3>Compilation and installation</h3>
 
-On MS Windows systems, where compilation tools not readily available,
-<em>g.extension</em> downloads a compiled executable
+On MS-Windows systems, where compilation tools are typically not readily
+locally installed, <em>g.extension</em> downloads a precompiled executable
+locally installed, <em>g.extension</em> downloads a precompiled executable
 from the GRASS GIS project server. On all other operating systems
 where it is not difficult to install compilation tools,
 <em>g.extension</em> downloads the source code of the requested
@@ -173,7 +180,7 @@ Removal of a locally installed extension:
 g.extension extension=r.stream.distance operation=remove
 </pre></div>
 
-<h3>Installing from various repositories online</h3>
+<h3>Installing from various online repositories: GitHub, GitLab, Bitbucket</h3>
 
 Simple URL to GitHub, GitLab, Bitbucket repositories:
 
@@ -193,11 +200,11 @@ In general, when a ZIP file or other archive is provided, the full URL can be us
 g.extension r.example url=http://example.com/.../r.example?format=zip
 </pre></div>
 
-Note that because of MS Windows operating system architecture,
+Note that because of MS-Windows operating system architecture,
 only official repository is supported on this platform.
 
 
-<h3>Installing when writing a module</h3>
+<h3>Installing when writing a module locally</h3>
 
 Having source code of a GRASS module in a directory on disk
 one can install it using:
@@ -211,9 +218,9 @@ g.extension r.example url=/local/directory/r.example/
 
 Toolboxes in the official repository cannot be downloaded.
 <p>
-On MS Windows, only the official repository is working
+On MS-Windows, only the official repository is working
 because there is no way of compiling the modules
-<!-- what does it mean? -->
+<!-- what does it mean?? -->
 (a Python replacement for Python scripts should be implemented).
 
 <h2>TROUBLESHOOTING</h2>
