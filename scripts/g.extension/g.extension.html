@@ -46,7 +46,7 @@ environmental variable.
 The flag <b>-s</b> changes this install target directory to the GRASS GIS
 installation directory
 (determined by <tt>GISBASE</tt> environmental variable, e.g. <tt>/usr/</tt>)
-rather than the default directory defined via <tt>GRASS_ADDON_BASE</tt> 
+rather than the default directory defined as per  <tt>GRASS_ADDON_BASE</tt> 
 (see also documentation for <a href="variables.html">variables</a>).
 <em>g.extension</em> checks if the user has permission to write to
 <tt>GISBASE</tt> or <tt>GRASS_ADDON_BASE</tt>.
@@ -54,7 +54,7 @@ rather than the default directory defined via <tt>GRASS_ADDON_BASE</tt>
 <p>
 The place where the extensions are installed can be customized by
 the option <b>prefix</b>. Ensuring that these extensions will be accessible
-in GRASS GIS is in this case the responsibility of the user.
+in GRASS GIS is in this case in the responsibility of the user.
 
 
 <h3>Source code sources and repositories</h3>
@@ -116,7 +116,6 @@ MS-Windows.
 <h3>Compilation and installation</h3>
 
 On MS-Windows systems, where compilation tools are typically not readily
-locally installed, <em>g.extension</em> downloads a precompiled executable
 locally installed, <em>g.extension</em> downloads a precompiled executable
 from the GRASS GIS project server. On all other operating systems
 where it is not difficult to install compilation tools,
@@ -202,7 +201,6 @@ g.extension r.example url=http://example.com/.../r.example?format=zip
 
 Note that because of MS-Windows operating system architecture,
 only official repository is supported on this platform.
-
 
 <h3>Installing when writing a module locally</h3>
 
