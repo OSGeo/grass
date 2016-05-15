@@ -7,9 +7,9 @@ by GRASS Development Team
 
 http://grass.osgeo.org
 
-\section projintro GRASS and the PROJ4 projection library
+\section projintro GRASS GIS and the PROJ4 projection library
 
-GRASS utilizes the PROJ4 library (<a
+GRASS GIS utilizes the PROJ4 library (<a
 href="http://proj.osgeo.org">http://proj.osgeo.org</a>) originally
 developed by Gerald Evenden/USGS (Cartographic Projection Procedures
 for the UNIX Environment -- A User's Manual, Evenden, 1990, Open-file
@@ -22,8 +22,7 @@ corrections to account for different datums.
 
 This is transparent for the user as input and output parameters are
 either read from PROJ_INFO and PROJ_UNITS files (<tt>g.proj</tt>,
-<tt>v.proj</tt>, <tt>r.proj</tt>) or read from user prompts (<tt>g.proj</tt>
-and <tt>g.setproj</tt>).
+<tt>v.proj</tt>, <tt>r.proj</tt>).
 
 In GRASS the wrapper functions in lib/proj/get_proj.c makes the
 preparations to set up the parameter strings and init the info-structures,
@@ -43,18 +42,24 @@ GIS. Heavy use is made of the OGR library, part of GDAL
 
 GRASS generally supports datum transformation (3 parameters, 7 parameters
 and grid).
-<P>
+<p>
 
 If a warning appears that a certain datum is not recognised by GRASS and
 no parameters found, the datum transformation parameters have to be
 added to $GISBASE/etc/proj/datum.table (and also $GISBASE/etc/proj/datumtransform.table
 if you have 7-parameter transformation parameters). No need to re-compile
 though. When adding to SVN, currently these files are still in lib/gis/. 
+<p>
 
+A list of datum equivalents is included in convert.c for geospatial files that
+use a non-standard name for a datum that is already supported in GRASS.
+<p>
+Hint: use GDAL's "testepsg" to identify the canonical name, e.g.
+      testepsg epsg:4674
 
 \subsection Makefile_Example Makefile Example
 
-<P>
+<p>
 The following code demonstrates the Makefile.
 
 \verbatim
