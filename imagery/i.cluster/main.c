@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     parm.out_sig->type = TYPE_STRING;
     parm.out_sig->key_desc = "name";
     parm.out_sig->required = YES;
-    parm.out_sig->gisprompt = "old,sig,sigfile";
+    parm.out_sig->gisprompt = "new,sig,sigfile";
     parm.out_sig->description = _("Name for output file containing result signatures");
 
     parm.class = G_define_option();
@@ -160,6 +160,25 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    group = parm.group_name->answer;	/* a required parameter */
+    subgroup = parm.subgroup_name->answer;	/* required */
+    outsigfile = parm.out_sig->answer;
+    
+    /* check all the inputs */
+    if (!I_find_group(group)) {
+        G_fatal_error(_("Group <%s> not found in current mapset"), group);
+    }
+    if (!I_find_subgroup(group, subgroup)) {
+        G_fatal_error(_("Subgroup <%s> in group <%s> not found"), subgroup, group);
+    }
+    
+    /* GRASS parser fails to detect existing signature files as
+     * detection needs answers from other parameters as group and subgroup.
+     * Thus check is performed only now. */
+    if (!G_get_overwrite() && I_find_signature_file(group, subgroup, "sig", outsigfile)) {
+        G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
+                        parm.out_sig->key, parm.out_sig->answer);
+    }
 
     G_get_window(&window);
     nrows = Rast_window_rows();
@@ -167,10 +186,6 @@ int main(int argc, char *argv[])
 
     I_cluster_clear(&C);
 
-    group = parm.group_name->answer;	/* a required parameter */
-    subgroup = parm.subgroup_name->answer;	/* required */
-
-    outsigfile = parm.out_sig->answer;
 
     if (sscanf(parm.class->answer, "%d", &maxclass) != 1 || maxclass < 1
 	|| maxclass > 255) {
