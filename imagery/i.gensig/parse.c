@@ -22,7 +22,7 @@ int parse(int argc, char *argv[], struct parms *parms)
     sigfile->type = TYPE_STRING;
     sigfile->key_desc = "name";
     sigfile->required = YES;
-    sigfile->gisprompt = "old,sig,sigfile";
+    sigfile->gisprompt = "new,sig,sigfile";
     sigfile->description = _("Name for output file containing result signatures");
 
     if (G_parser(argc, argv))
@@ -42,6 +42,14 @@ int parse(int argc, char *argv[], struct parms *parms)
 
     if (!I_find_subgroup(parms->group, parms->subgroup))
 	G_fatal_error(_("Subgroup <%s> in group <%s> not found"), parms->subgroup, parms->group);
-
+    
+    /* GRASS parser fails to detect existing signature files as
+     * detection needs answers from other parameters as group and subgroup.
+     * Thus check is performed only now. */
+    if (!G_get_overwrite() && I_find_signature_file(parms->group, parms->subgroup, "sig", parms->sigfile)) {
+        G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"), 
+                        sigfile->key, sigfile->answer);
+    }
+    
     return 0;
 }
