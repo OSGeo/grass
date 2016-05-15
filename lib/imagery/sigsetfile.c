@@ -15,7 +15,6 @@
 
 #include <grass/gis.h>
 #include <grass/imagery.h>
-#include <grass/gis.h>
 #include <grass/glocale.h>
 
 /*!
@@ -49,13 +48,6 @@ FILE *I_fopen_sigset_file_new(const char *group, const char *subgroup,
 
     /* create sigset directory */
     sprintf(element, "%s/subgroup/%s/sigset", group_name, subgroup);
-    if (G_getenv_nofatal("OVERWRITE")) {
-	if (G_find_file_misc("group", element, group_name, G_mapset())) {
-	    G_fatal_error(_("Signature file for group '%s', subgroup '%s' exists." 
-	    " To overwrite, use the --overwrite flag"), group_name, subgroup);
-	    return NULL;
-	}
-    }
     G__make_mapset_element_misc("group", element);
 
     sprintf(element, "subgroup/%s/sigset/%s", subgroup, name);
