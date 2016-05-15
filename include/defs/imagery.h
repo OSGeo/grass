@@ -21,6 +21,7 @@ int I_find_group(const char *);
 int I_find_group_file(const char *, const char *);
 int I_find_subgroup(const char *, const char *);
 int I_find_subgroup_file(const char *, const char *, const char *);
+int I_find_signature_file(const char *, const char *, const char *, const char *);
 
 /* fopen.c */
 FILE *I_fopen_group_file_new(const char *, const char *);
