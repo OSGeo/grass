@@ -201,14 +201,14 @@ def main():
         pymap.open('r')
     except:
         dbif.close()
-        grass.fatal(_("It is not possible to open the new map %s" % output))
+        grass.fatal(_("Unable to create vector map <%s>" % output))
 
     if len(pymap.dblinks) == 0:
         try:
             grass.run_command("v.db.addtable", map=output)
         except CalledModuleError:
             dbif.close()
-            grass.fatal(_("Impossible add table to vector %s" % output))
+            grass.fatal(_("Unable to add table <%s> to vector map <%s>" % output))
     pymap.close()
     for sample in samples:
         raster_names = sample.raster_names
