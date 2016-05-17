@@ -10,7 +10,29 @@ It uses <em>db.select</em> to create list values for statistical calculations.
 
 A database connection must be defined for the selected vector layer.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
+
+<h3>Univariate statistics on attribute table column</h3>
+
+In this example, the 30 years precipitation data table is statistically
+analysed (North Carolina sample dataset) and univariate statistics performed:
+
+<div class="code"><pre>
+# show columns of attribute table connected to precipitation map
+v.info -c precip_30ynormals
+
+# univariate statistics on 30 years annual precipitation in NC
+v.db.univar precip_30ynormals column=annual
+ Number of values: 136
+ Minimum: 947.42
+ Maximum: 2329.18
+ Range: 1381.76
+ Mean: 1289.31147058823
+ [...]
+</pre></div>
+
+
+<h3>Univariate statistics on randomly sampled data points</h3>
 
 In this example, random points are sampled from the elevation map
 (North Carolina sample dataset) and univariate statistics performed:
@@ -36,6 +58,6 @@ v.db.univar samples colum=heights
 
 <h2>AUTHOR</h2>
  Michael Barton, Arizona State University
-<p>and authors of <em>r.univar.sh</em>
+<p>and authors of <em>r.univar.sh</em> (Markus Neteler et al.)
 
 <p><i>Last changed: $Date$</i>
