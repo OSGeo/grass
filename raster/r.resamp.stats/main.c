@@ -40,7 +40,7 @@ static const struct menu
     {c_var,    w_var,    "variance", "variance value"},
     {c_stddev, w_stddev, "stddev",   "standard deviation"},
     {c_quant,  w_quant,  "quantile", "arbitrary quantile"},
-    {NULL, NULL, NULL}
+    {NULL, NULL, NULL, NULL}
 };
 
 static char *build_method_list(void)
@@ -100,7 +100,8 @@ static void resamp_unweighted(void)
     for (col = 0; col <= dst_w.cols; col++) {
 	double x = Rast_col_to_easting(col, &dst_w);
 
-	col_map[col] = (int)floor(Rast_easting_to_col(x, &src_w) + 0.5);
+	/* col_map[col] = (int)floor(Rast_easting_to_col(x, &src_w) + 0.5); */
+	col_map[col] = (int)floor((x - src_w.west) / src_w.ew_res + 0.5);
     }
 
     for (row = 0; row <= dst_w.rows; row++) {
@@ -115,7 +116,7 @@ static void resamp_unweighted(void)
 	int count = maprow1 - maprow0;
 	int i;
 
-	G_percent(row, dst_w.rows, 2);
+	G_percent(row, dst_w.rows, 4);
 
 	for (i = 0; i < count; i++)
 	    Rast_get_d_row(infile, bufs[i], maprow0 + i);
@@ -168,7 +169,8 @@ static void resamp_weighted(void)
     for (col = 0; col <= dst_w.cols; col++) {
 	double x = Rast_col_to_easting(col, &dst_w);
 
-	col_map[col] = Rast_easting_to_col(x, &src_w);
+	/* col_map[col] = Rast_easting_to_col(x, &src_w); */
+	col_map[col] = (x - src_w.west) / src_w.ew_res;
     }
 
     for (row = 0; row <= dst_w.rows; row++) {
@@ -185,7 +187,7 @@ static void resamp_weighted(void)
 	int count = maprow1 - maprow0;
 	int i;
 
-	G_percent(row, dst_w.rows, 2);
+	G_percent(row, dst_w.rows, 4);
 
 	for (i = 0; i < count; i++)
 	    Rast_get_d_row(infile, bufs[i], maprow0 + i);
@@ -302,15 +304,32 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&dst_w);
 
-    /* set window to old map */
+    /* set source window to old map */
     Rast_get_cellhd(parm.rastin->answer, "", &src_w);
 
-    /* enlarge source window */
+    if (G_projection() == PROJECTION_LL) {
+	/* try to shift source window to overlap with destination window */
+	while (src_w.west >= dst_w.east && src_w.east - 360.0 > dst_w.west) {
+	    src_w.east -= 360.0;
+	    src_w.west -= 360.0;
+	}
+	while (src_w.east <= dst_w.west && src_w.west + 360.0 < dst_w.east) {
+	    src_w.east += 360.0;
+	    src_w.west += 360.0;
+	}
+    }
+
+    /* adjust source window to cover destination window */
     {
 	int r0 = (int)floor(Rast_northing_to_row(dst_w.north, &src_w));
 	int r1 = (int)ceil(Rast_northing_to_row(dst_w.south, &src_w));
+	/* do not use Rast_easting_to_col() because it does ll wrap */
+	/*
 	int c0 = (int)floor(Rast_easting_to_col(dst_w.west, &src_w));
 	int c1 = (int)ceil(Rast_easting_to_col(dst_w.east, &src_w));
+	*/
+	int c0 = (int)floor((dst_w.west - src_w.west) / src_w.ew_res);
+	int c1 = src_w.cols + (int)ceil((dst_w.east - src_w.east) / src_w.ew_res);
 
 	src_w.south -= src_w.ns_res * (r1 - src_w.rows);
 	src_w.north += src_w.ns_res * (-r0);
