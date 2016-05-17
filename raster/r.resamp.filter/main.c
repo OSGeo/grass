@@ -177,8 +177,13 @@ static void make_h_weights(void)
 
     for (col = 0; col < dst_w.cols; col++) {
 	double dx = Rast_col_to_easting(col + 0.5, &dst_w);
+	/* do not use Rast_easting_to_col() because it does ll wrap */
+	/*
 	double x0 = Rast_easting_to_col(dx - f_x_radius, &src_w);
 	double x1 = Rast_easting_to_col(dx + f_x_radius, &src_w);
+	 */
+	double x0 = (dx - f_x_radius - src_w.west) / src_w.ew_res;
+	double x1 = (dx + f_x_radius - src_w.west) / src_w.ew_res;
 	int col0 = (int)floor(x0);
 	int col1 = (int)floor(x1) + 1;
 	int cols = col1 - col0;
@@ -312,7 +317,7 @@ static void v_filter(DCELL *dst, DCELL **src, int row, int rows)
 
 static void filter(void)
 {
-    int cur_row;
+    int cur_row = 0;
     int num_rows = 0;
     int row;
 
@@ -488,6 +493,18 @@ int main(int argc, char *argv[])
     /* set window to old map */
     Rast_get_cellhd(parm.rastin->answer, "", &src_w);
 
+    if (G_projection() == PROJECTION_LL) {
+	/* try to shift source window to overlap with destination window */
+	while (src_w.west >= dst_w.east && src_w.east - 360.0 > dst_w.west) {
+	    src_w.east -= 360.0;
+	    src_w.west -= 360.0;
+	}
+	while (src_w.east <= dst_w.west && src_w.west + 360.0 < dst_w.east) {
+	    src_w.east += 360.0;
+	    src_w.west += 360.0;
+	}
+    }
+
     /* enlarge source window */
     {
 	double y0 = Rast_row_to_northing(0.5, &dst_w);
@@ -496,8 +513,13 @@ int main(int argc, char *argv[])
 	double x1 = Rast_col_to_easting(dst_w.cols - 0.5, &dst_w);
 	int r0 = (int)floor(Rast_northing_to_row(y0 + f_y_radius, &src_w) - 0.1);
 	int r1 = (int)ceil(Rast_northing_to_row(y1 - f_y_radius, &src_w) + 0.1);
+	/* do not use Rast_easting_to_col() because it does ll wrap */
+	/*
 	int c0 = (int)floor(Rast_easting_to_col(x0 - f_x_radius, &src_w) - 0.1);
 	int c1 = (int)ceil(Rast_easting_to_col(x1 + f_x_radius, &src_w) + 0.1);
+	*/
+	int c0 = (int)floor((x0 - f_x_radius - src_w.west) / src_w.ew_res - 0.1);
+	int c1 = (int)ceil((x1 + f_x_radius - src_w.west) / src_w.ew_res + 0.1);
 
 	src_w.south -= src_w.ns_res * (r1 - src_w.rows);
 	src_w.north += src_w.ns_res * (-r0);
