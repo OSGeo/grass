@@ -37,7 +37,7 @@ void Rast__create_window_mapping(int fd)
     int i;
     int x;
     double C1, C2;
-    double west;
+    double west, east;
 
     if (fcb->open_mode >= 0 && fcb->open_mode != OPEN_OLD)	/* open for write? */
 	return;
@@ -55,11 +55,16 @@ void Rast__create_window_mapping(int fd)
      * cellhd west.
      */
     west = R__.rd_window.west;
+    east = R__.rd_window.east;
     if (R__.rd_window.proj == PROJECTION_LL) {
-	while (west > fcb->cellhd.west + 360.0)
+	while (west > fcb->cellhd.west + 360.0) {
 	    west -= 360.0;
-	while (west < fcb->cellhd.west)
+	    east -= 360.0;
+	}
+	while (west < fcb->cellhd.west) {
 	    west += 360.0;
+	    east += 360.0;
+	}
     }
 
     C1 = R__.rd_window.ew_res / fcb->cellhd.ew_res;
@@ -77,19 +82,25 @@ void Rast__create_window_mapping(int fd)
 
     /* do wrap around for lat/lon */
     if (R__.rd_window.proj == PROJECTION_LL) {
-	col = fcb->col_map;
-	C2 = (west - 360.0 - fcb->cellhd.west +
-	      R__.rd_window.ew_res / 2.0) / fcb->cellhd.ew_res;
-	for (i = 0; i < R__.rd_window.cols; i++) {
-	    x = C2;
-	    if (C2 < x)		/* adjust for rounding of negatives */
-		x--;
-	    if (x < 0 || x >= fcb->cellhd.cols)	/* not in data file */
-		x = -1;
-	    if (*col == 0)	/* only change those not already set */
-		*col = x + 1;
-	    col++;
-	    C2 += C1;
+	
+	while (east - 360.0 > fcb->cellhd.west) {
+	    east -= 360.0;
+	    west -= 360.0;
+
+	    col = fcb->col_map;
+	    C2 = (west - fcb->cellhd.west +
+		  R__.rd_window.ew_res / 2.0) / fcb->cellhd.ew_res;
+	    for (i = 0; i < R__.rd_window.cols; i++) {
+		x = C2;
+		if (C2 < x)		/* adjust for rounding of negatives */
+		    x--;
+		if (x < 0 || x >= fcb->cellhd.cols)	/* not in data file */
+		    x = -1;
+		if (*col == 0)	/* only change those not already set */
+		    *col = x + 1;
+		col++;
+		C2 += C1;
+	    }
 	}
     }
 
