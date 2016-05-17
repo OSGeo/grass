@@ -96,8 +96,10 @@ int main(int argc, char *argv[])
     error_out = G_define_standard_option(G_OPT_V_OUTPUT);
     error_out->key = "error";
     error_out->required = NO;
+    error_out->label =
+	_("Error map with failed generalizations");
     error_out->description =
-	_("Error map of all lines and boundaries not being generalized due to topology issues or over-simplification");
+	_("Lines and boundaries causing errors (collapsed to a point or topology errors)");
 
     method_opt = G_define_option();
     method_opt->key = "method";
@@ -540,7 +542,7 @@ int main(int argc, char *argv[])
 		after = APoints->n_points;
 		n_oversimplified++;
                 if (error_out->answer)
-		    Vect_write_line(&Error, type, APoints, Cats);
+		    Vect_write_line(&Error, GV_POINT, Points, Cats);
 	    }
 	    /* check for topology corruption */
 	    else if (type == GV_BOUNDARY) {
@@ -548,7 +550,7 @@ int main(int argc, char *argv[])
 		    after = APoints->n_points;
 		    not_modified_boundaries++;
                     if (error_out->answer)
-		        Vect_write_line(&Error, type, APoints, Cats);
+		        Vect_write_line(&Error, type, Points, Cats);
 		}
 		else
 		    after = Points->n_points;
