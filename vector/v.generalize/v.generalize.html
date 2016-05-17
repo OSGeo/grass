@@ -20,14 +20,32 @@ achieved by inserting new vertices into the original line, and can total
 up to 4000% of the number of vertices in the original. In such an instance, 
 it is always a good idea to simplify the line after smoothing.
 
-<p>Smoothing and simplification algorithms implemented in this module work 
-line by line, i.e. simplification/smoothing of one line does not affect 
-the other lines; they are treated separately.  Also, the first and the 
-last point of each line is never translated and/or deleted. 
+<p>Smoothing and simplification algorithms implemented in this module 
+work line by line, i.e. simplification/smoothing of one line does not 
+affect the other lines; they are treated separately. For isolated loops 
+formed by a single line/boundary, he first and the last point of each 
+line/boundary can be translated and/or deleted, unless the <em>-l</em> 
+flag is used to disable loop support.
+
+<p>Lines and boundaries are not translated if they would collapse to a 
+single point. Boundaries are not translated if they would intersect 
+with themselves or other boundaries. Such erroneus features are written 
+to an optional <em>error</em> vector map. Overlaying the <em>error</em> 
+map over the generalized map indicates the kind of error. 
+Lines/boundaries collapsing to a point are written out as points, 
+boundaries violating topology are written out as boundaries. The 
+<em>error</em> map can be overlaid over the generalized map to 
+understand why some features were not generalized.
+
 
 <h3>SIMPLIFICATION</h3>
 
-<em>v.generalize</em> contains following line simplification algorithms:
+Simplification can fail for many boundaries if the simplification 
+parameters would result in a large reduction of vertices. If many 
+lines/boundaries could not be simplified, try different parameters that 
+would cause a lower degree of simplification.
+
+<p><em>v.generalize</em> contains following line simplification algorithms:
 <ul>
 <li>Douglas-Peucker Algorithm</li>
 <li>Douglas-Peucker Reduction Algorithm</li>
