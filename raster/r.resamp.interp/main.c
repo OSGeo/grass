@@ -106,6 +106,18 @@ int main(int argc, char *argv[])
     /* set window to old map */
     Rast_get_cellhd(rastin->answer, "", &src_w);
 
+    if (G_projection() == PROJECTION_LL) {
+	/* try to shift source window to overlap with destination window */
+	while (src_w.west >= dst_w.east && src_w.east - 360.0 > dst_w.west) {
+	    src_w.east -= 360.0;
+	    src_w.west -= 360.0;
+	}
+	while (src_w.east <= dst_w.west && src_w.west + 360.0 < dst_w.east) {
+	    src_w.east += 360.0;
+	    src_w.west += 360.0;
+	}
+    }
+
     /* enlarge source window */
     {
 	double north = Rast_row_to_northing(0.5, &dst_w);
@@ -114,8 +126,13 @@ int main(int argc, char *argv[])
 	int r1 = (int)floor(Rast_northing_to_row(south, &src_w) - 0.5) + 3;
 	double west = Rast_col_to_easting(0.5, &dst_w);
 	double east = Rast_col_to_easting(dst_w.cols - 0.5, &dst_w);
+	/* do not use Rast_easting_to_col() because it does ll wrap */
+	/*
 	int c0 = (int)floor(Rast_easting_to_col(west, &src_w) - 0.5) - 2;
 	int c1 = (int)floor(Rast_easting_to_col(east, &src_w) - 0.5) + 3;
+	*/
+	int c0 = (int)floor(((west - src_w.west) / src_w.ew_res) - 0.5) - 2;
+	int c1 = (int)floor(((east - src_w.west) / src_w.ew_res) - 0.5) + 3;
 
 	src_w.south -= src_w.ns_res * (r1 - src_w.rows);
 	src_w.north += src_w.ns_res * (-r0);
