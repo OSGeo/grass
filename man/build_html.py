@@ -93,6 +93,10 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
       <ul>
        <li class="box"><span><a href="http://grasswiki.osgeo.org/wiki/Faq">FAQ - Frequently Asked Questions</a> (Wiki)</span></li>
       </ul>
+      <p>
+      <ul>
+       <li class="box"><span><a href="graphical_index.html">Graphical index of functionality</a></span></li>
+      </ul>
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Graphical User Interface</h3>
        <ul>
