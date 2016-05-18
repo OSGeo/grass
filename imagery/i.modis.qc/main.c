@@ -151,6 +151,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("reflectance"));
     G_add_keyword(_("land surface temperature"));
     G_add_keyword(_("vegetation"));
+    G_add_keyword(_("satellite"));
     G_add_keyword(_("MODIS"));
     module->description =
 	_("Extracts quality control parameters from MODIS QC layers.");
@@ -182,7 +183,7 @@ int main(int argc, char *argv[])
 	       "mod11A2;%s;"
 	       "mod13A2;%s;"
 	       "mcd43B2;%s;"
-	       "mcd43B2q;%s"
+	       "mcd43B2q;%s;"
 	       "mod13Q1;%s;",
 	       _("surf. refl. 250m 8-days"),
 	       _("surf. refl. 500m 8-days"),
@@ -258,7 +259,7 @@ int main(int argc, char *argv[])
 	       "platform;%s;"
 	       "land_water;%s;"
 	       "sun_z_angle_at_local_noon;%s;"
-	       "brdf_correction_performed;%s"
+	       "brdf_correction_performed;%s;"
 	       "modland_qa;%s;"
 	       "vi_usefulness;%s;"
 	       "aerosol_quantity;%s;"
