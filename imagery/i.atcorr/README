@@ -38,7 +38,7 @@ See for example ./sensors_csv/ikonos.csv.
 Usage 
   create_iwave.py <csv file>
 
-If generates the filter function as IWave.cpp template from csv file.
+It generates the filter function as an insert for IWave.cpp from the given file.
 
 Note: If the spectral response is null for a frequency, leave it empty
 in csv file. Ex.:

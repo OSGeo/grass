@@ -20,8 +20,9 @@ in 8 to 16 bits. DNs can be turned back into physical values by
 applying the reverse formula <tt>(x = (y - b) / a)</tt>.
 <p>
 The GRASS GIS module <a href="i.landsat.toar.html">i.landsat.toar</a>
-easily transforms Landsat DN to radiance-at-sensor. The equivalent 
-module for ASTER data is <a href="i.aster.toar.html">i.aster.toar</a>.
+easily transforms Landsat DN to radiance-at-sensor (top of atmosphere,
+TOA). The equivalent module for ASTER data is
+<a href="i.aster.toar.html">i.aster.toar</a>.
 For other satellites, <a href="r.mapcalc.html">r.mapcalc</a> can 
 be employed.
 <p>
@@ -30,11 +31,18 @@ be employed.
 When radiance-at-sensor has been obtained, still the atmosphere 
 influences the signal as recorded at the sensor. This atmospheric 
 interaction with the sun energy reflected back into space by 
-ground/vegetation/soil needs to be corrected. There are two ways to 
-apply atmospheric correction for satellite imagery. The simple way 
-for Landsat is with <a href="i.landsat.toar.html">i.landsat.toar</a>,
+ground/vegetation/soil needs to be corrected. The need of
+removing atmospheric artifacts stems from the fact that the
+atmosphericic conditions are changing over time. Hence, to gain
+comparability between Earth surface images taken at different
+times, atmospheric need to be removed converting at-sensor values
+which are top of atmosphere to surface reflectance values.
+<p>
+In GRASS GIS, there are two ways to apply atmospheric correction for
+satellite imagery. A simple, less accurate way for Landsat is with
+<a href="i.landsat.toar.html">i.landsat.toar</a>,
 using the DOS correction method. The more accurate way is using 
-<a href="i.atcorr.html">i.atcorr</a> (which works for many satellite 
+<a href="i.atcorr.html">i.atcorr</a> (which supports many satellite 
 sensors). The atmospherically corrected sensor data represent 
 surface <a href="http://en.wikipedia.org/wiki/reflectance">reflectance</a>,
 which ranges theoretically from 0% to 100%. Note that this level of 
