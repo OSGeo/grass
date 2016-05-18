@@ -433,6 +433,10 @@ static void define_module(void)
 	_("6S - Second Simulation of Satellite Signal in the Solar Spectrum.");
     G_add_keyword(_("imagery"));
     G_add_keyword(_("atmospheric correction"));
+    G_add_keyword(_("radiometric conversion"));
+    G_add_keyword(_("radiance"));
+    G_add_keyword(_("reflectance"));
+    G_add_keyword(_("satellite"));
 
     /* 
        " Incorporated into Grass by Christo A. Zietsman, January 2003.\n"

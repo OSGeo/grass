@@ -88,6 +88,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("albedo"));
     G_add_keyword(_("reflectance"));
+    G_add_keyword(_("satellite"));
+    G_add_keyword(_("Landsat"));
+    G_add_keyword(_("ASTER"));
+    G_add_keyword(_("AVHRR"));
+    G_add_keyword(_("MODIS"));
     module->description = _("Computes broad band albedo from surface reflectance.");
 
     /* Define the different options */
