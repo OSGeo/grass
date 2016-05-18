@@ -72,8 +72,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("radiance"));
     G_add_keyword(_("reflectance"));
     G_add_keyword(_("brightness temperature"));
-    G_add_keyword(_("Landsat"));
     G_add_keyword(_("atmospheric correction"));
+    G_add_keyword(_("satellite"));
+    G_add_keyword(_("Landsat"));
     module->overwrite = TRUE;
 
     /* It defines the different parameters */

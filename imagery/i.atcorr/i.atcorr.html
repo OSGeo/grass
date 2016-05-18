@@ -628,9 +628,11 @@ g.region raster=lsat7_2002_40 -p
 
 It is important to verify the available metadata for the sun position which
 has to be defined for the atmospheric correction. An option is to check the
-satellite overpass time with sun position as reported in
-<a href="ftp://ftp.glcf.umiacs.umd.edu/glcf/Landsat/WRS2/p016/r035/p016r035_7x20020524.ETM-EarthSat-Orthorectified/p016r035_7x20020524.met">metadata</a>. For the North Carolina sample dataset, they have also been
-stored for each channel and can be retrieved like this:
+satellite overpass time with sun position as reported in the
+<a href="ftp://ftp.glcf.umd.edu/glcf/Landsat/WRS2/p016/r035/p016r035_7x20020524.ETM-EarthSat-Orthorectified/p016r035_7x20020524.met">metadata</a>
+file (<a href="http://www.grassbook.org/wp-content/uploads/ncexternal/landsat/2002/p016r035_7x20020524.met">file copy</a>; North Carolina
+sample dataset). In case of the North Carolina sample dataset, values
+have been stored for each channel and can be retrieved like this:
 
 <div class="code"><pre>
 r.info lsat7_2002_40
@@ -647,13 +649,23 @@ r.sunmask -s elev=elevation out=dummy year=2002 month=5 day=24 hour=10 min=42 se
 # .. reports: sun azimuth: 121.342461, sun angle above horz.(refraction corrected): 65.396652
 </pre></div>
 
-If the overpass time is unknown, use the <a href="http://www-air.larc.nasa.gov/tools/predict.htm">Satellite Overpass Predictor</a>.
-<p>Convert DN (digital number = pixel values) to Radiance at top-of-atmosphere (TOA), using the
-formula
+If the overpass time is unknown, use the
+<a href="http://cloudsgate2.larc.nasa.gov/cgi-bin/predict/predict.cgi">NASA LaRC Satellite Overpass Predictor</a>.
+
+<h4>Conversion of digital number (DN) to radiance at top-of-atmosphere (TOA)</h4>
+
+For Landsat and ASTER, the conversion can be conveniently done with
+<a href="i.landsat.toar.html">i.landsat.toar</a> or <a href="i.aster.toar.html">i.aster.toar</a>,
+respectively.
+
+<p>
+In case of different satellites, the conversion of DN (digital number = pixel values) to
+radiance at top-of-atmosphere (TOA) can also be done manually, using e.g. the formula
 <div class="code"><pre>
-   L&lambda; = ((LMAX&lambda; - LMIN&lambda;)/(QCALMAX-QCALMIN)) * (QCAL-QCALMIN) + LMIN&lambda;
+# formula depends on satellite sensor, see respective metadata
+L&lambda; = ((LMAX&lambda; - LMIN&lambda;)/(QCALMAX-QCALMIN)) * (QCAL-QCALMIN) + LMIN&lambda;
 </pre></div>
-Where:
+where:
 <ul>
 <li> L&lambda; = Spectral Radiance at the sensor's aperture in Watt/(meter squared * ster * &micro;m), the
       apparent radiance as seen by the satellite sensor;</li>
@@ -664,9 +676,10 @@ Where:
 <li> QCALMAX = the maximum quantized calibrated pixel value (corresponding to LMAX&lambda;) in DN=255.</li>
 </ul>
 
-LMIN&lambda; and LMAX&lambda; are the radiances related to the minimal and maximal DN value, and are reported
-in the metadata file for each image, or in the table 1. High gain or low gain is also reported
-in the metadata file of each Landsat image. The minimal DN value (QCALMIN) is 1 for Landsat ETM+
+LMIN&lambda; and LMAX&lambda; are the radiances related to the minimal and
+maximal DN value, and are reported in the metadata file for each image, or in
+the table 1. High gain or low gain is also reported in the metadata file of each
+satellite image. For Landsat, the minimal DN value (QCALMIN) is 1 for Landsat ETM+
 images (see
 <a href="http://landsathandbook.gsfc.nasa.gov/pdfs/Landsat7_Handbook.pdf">Landsat handbook</a>, see chapter 11),
 and the maximal DN value (QCALMAX) is 255. QCAL is the DN value for every
@@ -688,7 +701,16 @@ need to be replaced with their related values):
 r.mapcalc "lsat7_2002_40_rad = ((241.1 - (-5.1)) / (255.0 - 1.0)) * (lsat7_2002_40 - 1.0) + (-5.1)"
 </pre></div>
 
+Again, the <em>r.mapcalc</em> calculation is only needed when working with satellite data
+other than Landsat or ASTER.
 
+<h4>Creation of parameter file for i.atcorr</h4>
+
+The underlying 6S model is parametrized through a control file, indicated with the
+<em>parameter</em> option. This is a text file defining geometrical and atmospherical
+conditions of the satellite overpass. Below some details:
+
+<p>
 <div class="code"><pre>
 # find mean elevation (target above sea level, used as initialization value in control file)
 r.univar elevation
@@ -730,7 +752,10 @@ optical depth at 550nm.
 
 GRASS Wiki page about
   <a href="http://grasswiki.osgeo.org/wiki/Atmospheric_correction">Atmospheric correction</a>
-<p><em>
+<p>
+<em>
+<a href="i.aster.toar.html">i.aster.toar</a>,
+<a href="i.landsat.toar.html">i.landsat.toar</a>,
 <a href="r.info.html">r.info</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.univar.html">r.univar</a>
