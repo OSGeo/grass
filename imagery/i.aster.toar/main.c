@@ -96,10 +96,11 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("radiometric conversion"));
-    G_add_keyword(_("Terra-ASTER"));
     G_add_keyword(_("radiance"));
     G_add_keyword(_("reflectance"));
     G_add_keyword(_("brightness temperature"));
+    G_add_keyword(_("satellite"));
+    G_add_keyword(_("ASTER"));
     module->description =
 	_("Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN.\n");
 

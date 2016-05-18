@@ -103,9 +103,10 @@ int main(int argc, char *argv[])
     module->description =
 	_("Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA).");
     G_add_keyword(_("imagery"));
-    G_add_keyword(_("Landsat"));
     G_add_keyword("ACCA");
     G_add_keyword(_("cloud detection"));
+    G_add_keyword(_("satellite"));
+    G_add_keyword(_("Landsat"));
     
     band_prefix = G_define_standard_option(G_OPT_R_BASENAME_INPUT);
     band_prefix->label = _("Base name of input raster bands");
