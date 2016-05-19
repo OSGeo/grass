@@ -42,16 +42,16 @@ void pdal_point_to_grass(struct Map_info *output_vector,
     double y = point_view->getFieldAs<double>(Y, idx);
     double z = point_view->getFieldAs<double>(dim_to_use_as_z, idx);
 
+    /* TODO: optimize for case with no layers, by adding
+     * and if to skip all the other ifs */
     if (layers->id_layer) {
         Vect_cat_set(cats, layers->id_layer, cat);
     }
     if (layers->return_layer) {
-        Vect_cat_set(cats, layers->return_layer,
-                     point_view->getFieldAs<int>(ReturnNumber, idx));
-    }
-    if (layers->n_returns_layer) {
-        Vect_cat_set(cats, layers->n_returns_layer,
-                     point_view->getFieldAs<int>(NumberOfReturns, idx));
+        int return_n = point_view->getFieldAs<int>(ReturnNumber, idx);
+        int n_returns = point_view->getFieldAs<int>(NumberOfReturns, idx);
+        int return_c = return_to_cat(return_n, n_returns);
+        Vect_cat_set(cats, layers->return_layer, return_c);
     }
     if (layers->class_layer) {
         Vect_cat_set(cats, layers->class_layer,
@@ -65,18 +65,6 @@ void pdal_point_to_grass(struct Map_info *output_vector,
         rgb = (rgb << 8) + green;
         rgb = (rgb << 8) + blue;
         Vect_cat_set(cats, layers->rgb_layer, rgb);
-    }
-    if (layers->red_layer) {
-        Vect_cat_set(cats, layers->red_layer,
-                     point_view->getFieldAs<int>(Red, idx));
-    }
-    if (layers->green_layer) {
-        Vect_cat_set(cats, layers->green_layer,
-                     point_view->getFieldAs<int>(Green, idx));
-    }
-    if (layers->blue_layer) {
-        Vect_cat_set(cats, layers->blue_layer,
-                     point_view->getFieldAs<int>(Blue, idx));
     }
 
     Vect_append_point(points, x, y, z);
@@ -101,6 +89,38 @@ int main(int argc, char *argv[])
         _("LiDAR input files in LAS format (*.las or *.laz)");
 
     Option *out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
+
+    Option *id_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    id_layer_opt->key = "id_layer";
+    id_layer_opt->label = _("Layer number to store generated point ID as category");
+    id_layer_opt->description =
+        _("Set empty to not store it. Required for attribute table.");
+    id_layer_opt->answer = "1";
+    id_layer_opt->guisection = _("Categories");
+
+    Option *return_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    return_layer_opt->key = "return_layer";
+    return_layer_opt->label =
+        _("Layer number to store return information as category");
+    return_layer_opt->description = _("Leave empty to not store it");
+    return_layer_opt->answer = NULL;
+    return_layer_opt->guisection = _("Categories");
+
+    Option *class_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    class_layer_opt->key = "class_layer";
+    class_layer_opt->label =
+        _("Layer number to store class number as category");
+    class_layer_opt->description = _("Leave empty to not store it");
+    class_layer_opt->answer = NULL;
+    class_layer_opt->guisection = _("Categories");
+
+    Option *rgb_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    rgb_layer_opt->key = "rgb_layer";
+    rgb_layer_opt->label =
+        _("Layer number where RBG colors are stored as category");
+    rgb_layer_opt->description = _("Leave empty to not store it");
+    rgb_layer_opt->answer = NULL;
+    rgb_layer_opt->guisection = _("Categories");
 
     Option *spatial_opt = G_define_option();
     spatial_opt->key = "spatial";
@@ -220,20 +240,6 @@ int main(int argc, char *argv[])
     region_flag->guisection = _("Selection");
     region_flag->description = _("Limit import to the current region");
 
-    Flag *nocats_flag = G_define_flag();
-    nocats_flag->key = 'c';
-    nocats_flag->label =
-        _("Store only the coordinates");
-    nocats_flag->description =
-        _("Do not add any categories to points");
-    nocats_flag->guisection = _("Categories");
-
-    Flag *idcat_flag = G_define_flag();
-    idcat_flag->key = 'd';
-    idcat_flag->label =
-        _("Store generated unique ID for each point");
-    idcat_flag->guisection = _("Categories");
-
     Flag *extract_ground_flag = G_define_flag();
     extract_ground_flag->key = 'j';
     extract_ground_flag->label =
@@ -268,7 +274,6 @@ int main(int argc, char *argv[])
 
     G_option_exclusive(spatial_opt, region_flag, NULL);
     G_option_exclusive(reproject_flag, over_flag, NULL);
-    G_option_exclusive(nocats_flag, idcat_flag, NULL);
     G_option_exclusive(extract_ground_flag, classify_ground_flag, NULL);
 
     if (G_parser(argc, argv))
@@ -280,6 +285,17 @@ int main(int argc, char *argv[])
 
     // we use full qualification because the dim ns conatins too general names
     pdal::Dimension::Id::Enum dim_to_use_as_z = pdal::Dimension::Id::Z;
+
+    struct GLidarLayers layers;
+    GLidarLayers_set_no_layers(&layers);
+    if (id_layer_opt->answer && id_layer_opt->answer[0] != '\0')
+        layers.id_layer = std::stoi(id_layer_opt->answer);
+    if (return_layer_opt->answer && return_layer_opt->answer[0] != '\0')
+        layers.return_layer = std::stoi(return_layer_opt->answer);
+    if (class_layer_opt->answer && class_layer_opt->answer[0] != '\0')
+        layers.class_layer = std::stoi(class_layer_opt->answer);
+    if (rgb_layer_opt->answer && rgb_layer_opt->answer[0] != '\0')
+        layers.rgb_layer = std::stoi(rgb_layer_opt->answer);
 
     double xmin = 0;
     double ymin = 0;
@@ -417,9 +433,6 @@ int main(int argc, char *argv[])
     // TODO: the falses for filters should be perhaps fatal error
     // (bad input) or warning if filter was requested by the user
 
-    struct GLidarLayers layers;
-    GLidarLayers_set_default_layers(&layers);
-
     // update layers we are writting based on what is in the data
     // update usage of our filters as well
     if (point_view->hasDim(pdal::Dimension::Id::ReturnNumber) &&
@@ -427,8 +440,11 @@ int main(int argc, char *argv[])
         use_return_filter = true;
     }
     else {
-        layers.return_layer = 0;
-        layers.n_returns_layer = 0;
+        if (layers.return_layer) {
+            layers.return_layer = 0;
+            G_warning(_("Cannot store return information because the"
+                        " input does not have a return dimensions"));
+        }
         use_return_filter = false;
     }
 
@@ -436,26 +452,22 @@ int main(int argc, char *argv[])
         use_class_filter = true;
     }
     else {
-        layers.class_layer = 0;
+        if (layers.class_layer) {
+            layers.class_layer = 0;
+            G_warning(_("Cannot store class because the input"
+                        " does not have a classification dimension"));
+        }
         use_class_filter = false;
     }
 
     if (!(point_view->hasDim(pdal::Dimension::Id::Red) &&
-            point_view->hasDim(pdal::Dimension::Id::Green) &&
-            point_view->hasDim(pdal::Dimension::Id::Blue) &&
-            (layers.rgb_layer || layers.red_layer
-             || layers.green_layer || layers.blue_layer))) {
-        layers.rgb_layer = 0;
-        layers.red_layer = 0;
-        layers.green_layer = 0;
-        layers.blue_layer = 0;
-    }
-    if (idcat_flag->answer)
-        layers.id_layer = G_ID_LAYER;
-
-    // we just force it without any checking (we rely on the options)
-    if (nocats_flag->answer) {
-        GLidarLayers_set_no_layers(&layers);
+          point_view->hasDim(pdal::Dimension::Id::Green) &&
+          point_view->hasDim(pdal::Dimension::Id::Blue))) {
+        if (layers.rgb_layer) {
+            layers.rgb_layer = 0;
+            G_warning(_("Cannot store RGB colors because the input"
+                        " does not have a RGB dimensions"));
+        }
     }
 
     G_important_message(_("Scanning points..."));
@@ -534,7 +546,7 @@ int main(int argc, char *argv[])
         pdal_point_to_grass(&output_vector, points, cats, point_view,
                             idx, &layers, cat, dim_to_use_as_z);
         if (layers.id_layer) {
-            // TODO: perhaps it would be better to use the max cat afterwords
+            // TODO: perhaps it would be better to use the max cat afterwards
             if (cat == GV_CAT_MAX) {
                 cat_max_reached = true;
                 break;

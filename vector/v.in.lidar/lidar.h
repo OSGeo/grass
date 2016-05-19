@@ -66,4 +66,6 @@ struct class_table
 extern struct class_table class_val[];
 extern struct class_table class_type[];
 
+int return_to_cat(int return_n, int n_returns);
+
 #endif /* GRASS_LIDAR_H */

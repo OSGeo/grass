@@ -39,3 +39,13 @@ struct class_table class_type[] = {
     {7, "Withheld"},
     {0, 0}
 };
+
+int return_to_cat(int return_n, int n_returns)
+{
+    if (return_n == 1)
+        return LAS_FIRST;
+    else if (n_returns > 1 && return_n == n_returns)
+            return LAS_LAST;
+    else
+        return LAS_MID;
+}
