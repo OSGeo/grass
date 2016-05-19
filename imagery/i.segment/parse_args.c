@@ -37,7 +37,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     method->type = TYPE_STRING;
     method->required = NO;
     method->answer = "region_growing";
-    method->options = "region_growing";
+    method->options = "region_growing,mean_shift,watershed";
     method->description = _("Segmentation method");
     method->guisection = _("Settings");
 
@@ -154,11 +154,15 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 
     /* segmentation methods:  1 = region growing */
     if (strcmp(method->answer, "region_growing") == 0)
-	globals->method = 1;
+	globals->method = region_growing;
+    if (strcmp(method->answer, "mean_shift") == 0)
+	globals->method = mean_shift;
+    if (strcmp(method->answer, "watershed") == 0)
+	globals->method = watershed;
     else
 	G_fatal_error(_("Unable to assign segmentation method"));
 
-    G_debug(1, "segmentation method: %d", globals->method);
+    G_debug(1, "segmentation method: %s", method->answer);
 
     /* distance methods for similarity measurement */
     if (strcmp(similarity->answer, "euclidean") == 0)
