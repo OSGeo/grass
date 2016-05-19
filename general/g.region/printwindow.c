@@ -496,7 +496,7 @@ void print_window(struct Cell_head *window, int print_flag)
 	    double mid_n_lo, mid_n_la, mid_s_lo, mid_s_la;
 	    double lat_center, lon_center;
 	    struct pj_info iproj, oproj;	/* proj parameters  */
-	    struct FACTORS fact;
+	    struct FACTORS fact = { {0} };
 
 	    /* read current projection info */
 	    if ((in_proj_info = G_get_projinfo()) == NULL)
