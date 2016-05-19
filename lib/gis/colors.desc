@@ -43,4 +43,5 @@ slope: r.slope.aspect-type slope colors for raster values 0-90
 srtm: color palette for Shuttle Radar Topography Mission elevation
 srtm_plus: color palette for Shuttle Radar Topography Mission elevation (with seafloor colors)
 terrain: global elevation color table covering -11000 to +8850m
+water: water depth
 wave: color wave
