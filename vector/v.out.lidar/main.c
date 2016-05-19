@@ -28,8 +28,8 @@
 #include <liblas/capi/liblas.h>
 
 #define LAS_FIRST 1
-#define LAS_LAST 2
-#define LAS_MID 3
+#define LAS_MID 2
+#define LAS_LAST 3
 
 struct WriteContext
 {
@@ -392,16 +392,15 @@ static void write_point(struct WriteContext *context, int cat, double x,
     if (context->return_layer) {
         if (!Vect_cat_get(cats, context->return_layer, &cat))
             return;             /* TODO: is this an error? */
-        /* TODO: use LAS... as constants for numbers */
         if (cat == LAS_FIRST) {
-            LASPoint_SetReturnNumber(las_point, 1);
-            LASPoint_SetNumberOfReturns(las_point, 3);
+            LASPoint_SetReturnNumber(las_point, LAS_FIRST);
+            LASPoint_SetNumberOfReturns(las_point, LAS_FIRST);
         } else if (cat == LAS_LAST) {
-            LASPoint_SetReturnNumber(las_point, 3);
-            LASPoint_SetNumberOfReturns(las_point, 3);
+            LASPoint_SetReturnNumber(las_point, LAS_LAST);
+            LASPoint_SetNumberOfReturns(las_point, LAS_LAST);
         } else {
-            LASPoint_SetReturnNumber(las_point, 2);
-            LASPoint_SetNumberOfReturns(las_point, 3);
+            LASPoint_SetReturnNumber(las_point, LAS_MID);
+            LASPoint_SetNumberOfReturns(las_point, LAS_LAST);
         }
     }
     if (context->class_layer) {

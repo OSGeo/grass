@@ -16,8 +16,8 @@
 
 #define LAS_ALL 0
 #define LAS_FIRST 1
-#define LAS_LAST 2
-#define LAS_MID 3
+#define LAS_MID 2
+#define LAS_LAST 3
 
 struct ReturnFilter
 {
