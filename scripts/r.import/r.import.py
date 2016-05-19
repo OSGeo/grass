@@ -46,6 +46,7 @@
 #%end
 #%option G_OPT_R_OUTPUT
 #% description: Name for output raster map
+#% required: no
 #% guisection: Output
 #%end
 #%option
@@ -116,6 +117,9 @@
 #% label: Override projection check (use current location's projection)
 #% description: Assume that the dataset has the same projection as the current location
 #%end
+#%rules
+#% required: output,-e
+#%end
 
 import sys
 import os
@@ -139,7 +143,8 @@ def cleanup():
         grass.try_rmdir(os.path.join(GISDBASE, TMPLOC))
     if SRCGISRC:
         grass.try_remove(SRCGISRC)
-    if TMP_REG_NAME:
+    if TMP_REG_NAME and grass.find_file(name=TMP_REG_NAME, element='vector',
+                                        mapset=grass.gisenv()['MAPSET'])['fullname']:
         grass.run_command('g.remove', type='vector', name=TMP_REG_NAME,
                           flags='f', quiet=True)
 
@@ -154,6 +159,8 @@ def main():
     bands = options['band']
     tgtres = options['resolution']
     title = options["title"]
+    if flags['e'] and not output:
+        output = 'rimport_tmp'  # will be removed with the entire tmp location
     if options['resolution_value']:
         if tgtres != 'value':
             grass.fatal(_("To set custom resolution value, select 'value' in resolution option"))
