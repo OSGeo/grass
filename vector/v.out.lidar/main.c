@@ -416,9 +416,12 @@ static void write_point(struct WriteContext *context, int cat, double x,
         if (context->rgb_layer) {
             if (!Vect_cat_get(cats, context->rgb_layer, &cat))
                 return;         /* TODO: is this an error? */
-            int red = (cat >> 16) & 0xFF;
-            int green = (cat >> 8) & 0xFF;
-            int blue = cat & 0xFF;
+            /* cat 0 is not valid, so we are adding 1 when storing
+             * now we need to subtract 1 */
+            int rgb = cat - 1;
+            int red = (rgb >> 16) & 0xFF;
+            int green = (rgb >> 8) & 0xFF;
+            int blue = rgb & 0xFF;
 
             LASColor_SetRed(las_color, red);
             LASColor_SetGreen(las_color, green);
