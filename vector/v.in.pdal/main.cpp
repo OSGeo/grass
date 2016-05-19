@@ -64,6 +64,7 @@ void pdal_point_to_grass(struct Map_info *output_vector,
         int rgb = red;
         rgb = (rgb << 8) + green;
         rgb = (rgb << 8) + blue;
+        rgb++;  /* cat 0 is not valid, add one */
         Vect_cat_set(cats, layers->rgb_layer, rgb);
     }
 

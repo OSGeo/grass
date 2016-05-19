@@ -595,8 +595,14 @@ int main(int argc, char *argv[])
             int return_c = return_to_cat(return_n, n_returns);
             Vect_cat_set(Cats, return_layer, return_c);
         }
-        if (class_layer)
-            Vect_cat_set(Cats, class_layer, point_class);
+        if (class_layer) {
+            /* 0 is not a valid category and
+             * classes 0 and 1 as practically the same */
+            if (point_class == 0)
+                Vect_cat_set(Cats, class_layer, 1);
+            else
+                Vect_cat_set(Cats, class_layer, point_class);
+        }
         if (have_color && rgb_layer) {
             /* TODO: if attr table, acquired again, performance difference? */
             LASColorH LAS_color = LASPoint_GetColor(LAS_point);
@@ -607,6 +613,7 @@ int main(int argc, char *argv[])
                 int rgb = red;
                 rgb = (rgb << 8) + green;
                 rgb = (rgb << 8) + blue;
+                rgb++;  /* cat 0 is not valid, add one */
                 Vect_cat_set(Cats, rgb_layer, rgb);
             }
         }
