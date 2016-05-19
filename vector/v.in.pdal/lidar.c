@@ -15,40 +15,12 @@
 
 #include "lidar.h"
 
-void GLidarLayers_set_default_layers(struct GLidarLayers *layers)
-{
-    layers->id_layer = 0;
-    layers->return_layer = G_RETURN_LAYER;
-    layers->n_returns_layer = G_NUM_RETURNS_LAYER;
-    layers->class_layer = G_CLASS_LAYER;
-    layers->rgb_layer = G_RGB_LAYER;
-    layers->red_layer = 0;
-    layers->green_layer = 0;
-    layers->blue_layer = 0;
-}
-
-void GLidarLayers_set_all_layers(struct GLidarLayers *layers)
-{
-    layers->id_layer = G_ID_LAYER;
-    layers->return_layer = G_RETURN_LAYER;
-    layers->n_returns_layer = G_NUM_RETURNS_LAYER;
-    layers->class_layer = G_CLASS_LAYER;
-    layers->rgb_layer = G_RGB_LAYER;
-    layers->red_layer = G_RED_LAYER;
-    layers->green_layer = G_GREEN_LAYER;
-    layers->blue_layer = G_BLUE_LAYER;
-}
-
 void GLidarLayers_set_no_layers(struct GLidarLayers *layers)
 {
     layers->id_layer = 0;
     layers->return_layer = 0;
-    layers->n_returns_layer = 0;
     layers->class_layer = 0;
     layers->rgb_layer = 0;
-    layers->red_layer = 0;
-    layers->green_layer = 0;
-    layers->blue_layer = 0;
 }
 
 struct class_table class_val[] = {
@@ -75,3 +47,13 @@ struct class_table class_type[] = {
     {7, "Withheld"},
     {0, 0}
 };
+
+int return_to_cat(int return_n, int n_returns)
+{
+    if (return_n == 1)
+        return LAS_FIRST;
+    else if (n_returns > 1 && return_n == n_returns)
+            return LAS_LAST;
+    else
+        return LAS_MID;
+}

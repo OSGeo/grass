@@ -21,29 +21,14 @@
 #define LAS_LAST 2
 #define LAS_MID 3
 
-#define G_ID_LAYER 1
-#define G_RETURN_LAYER 2
-#define G_NUM_RETURNS_LAYER 3
-#define G_CLASS_LAYER 4
-#define G_RGB_LAYER 5
-#define G_RED_LAYER 6
-#define G_GREEN_LAYER 7
-#define G_BLUE_LAYER 8
-
 struct GLidarLayers
 {
     int id_layer;
     int return_layer;
-    int n_returns_layer;
     int class_layer;
     int rgb_layer;
-    int red_layer;
-    int green_layer;
-    int blue_layer;
 };
 
-void GLidarLayers_set_default_layers(struct GLidarLayers *layers);
-void GLidarLayers_set_all_layers(struct GLidarLayers *layers);
 void GLidarLayers_set_no_layers(struct GLidarLayers *layers);
 
 /*
@@ -90,5 +75,7 @@ struct class_table
 
 extern struct class_table class_val[];
 extern struct class_table class_type[];
+
+int return_to_cat(int return_n, int n_returns);
 
 #endif /* GRASS_LIDAR_H */

@@ -27,6 +27,9 @@
 
 #include <liblas/capi/liblas.h>
 
+#define LAS_FIRST 1
+#define LAS_LAST 2
+#define LAS_MID 3
 
 struct WriteContext
 {
@@ -36,12 +39,8 @@ struct WriteContext
     struct Colors *color_table;
     int layer;
     int return_layer;
-    int n_returns_layer;
     int class_layer;
     int rgb_layer;
-    int red_layer;
-    int green_layer;
-    int blue_layer;
     dbCatValArray *return_column_values;
     dbCatValArray *n_returns_column_values;
     dbCatValArray *class_column_values;
@@ -393,20 +392,24 @@ static void write_point(struct WriteContext *context, int cat, double x,
     if (context->return_layer) {
         if (!Vect_cat_get(cats, context->return_layer, &cat))
             return;             /* TODO: is this an error? */
-        LASPoint_SetReturnNumber(las_point, cat);
-    }
-    if (context->n_returns_layer) {
-        if (!Vect_cat_get(cats, context->n_returns_layer, &cat))
-            return;             /* TODO: is this an error? */
-        LASPoint_SetNumberOfReturns(las_point, cat);
+        /* TODO: use LAS... as constants for numbers */
+        if (cat == LAS_FIRST) {
+            LASPoint_SetReturnNumber(las_point, 1);
+            LASPoint_SetNumberOfReturns(las_point, 3);
+        } else if (cat == LAS_LAST) {
+            LASPoint_SetReturnNumber(las_point, 3);
+            LASPoint_SetNumberOfReturns(las_point, 3);
+        } else {
+            LASPoint_SetReturnNumber(las_point, 2);
+            LASPoint_SetNumberOfReturns(las_point, 3);
+        }
     }
     if (context->class_layer) {
         if (!Vect_cat_get(cats, context->class_layer, &cat))
             return;             /* TODO: is this an error? */
         LASPoint_SetClassification(las_point, cat);
     }
-    if (context->rgb_layer || context->red_layer || context->green_layer ||
-        context->blue_layer) {
+    if (context->rgb_layer) {
         LASColorH las_color = context->las_color;
 
         /* TODO: defaults for the color are what? */
@@ -422,21 +425,6 @@ static void write_point(struct WriteContext *context, int cat, double x,
             LASColor_SetGreen(las_color, green);
             LASColor_SetBlue(las_color, blue);
         }                       /* TODO: else all the others? */
-        if (context->red_layer) {
-            if (!Vect_cat_get(cats, context->red_layer, &cat))
-                return;         /* TODO: is this an error? */
-            LASColor_SetRed(las_color, cat);
-        }                       /* TODO: else set 0, or by default? */
-        if (context->green_layer) {
-            if (!Vect_cat_get(cats, context->green_layer, &cat))
-                return;         /* TODO: is this an error? */
-            LASColor_SetGreen(las_color, cat);
-        }
-        if (context->blue_layer) {
-            if (!Vect_cat_get(cats, context->blue_layer, &cat))
-                return;         /* TODO: is this an error? */
-            LASColor_SetBlue(las_color, cat);
-        }
         LASPoint_SetColor(las_point, las_color);
     }
 
@@ -462,9 +450,9 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *map_opt, *foutput_opt;
     struct Option *field_opt, *cats_opt;
-    struct Option *id_layer_opt, *class_layer_opt;
-    struct Option *return_layer_opt, *n_returns_layer_opt;
-    struct Option *red_layer_opt, *green_layer_opt, *blue_layer_opt;
+    struct Option *id_layer_opt;
+    struct Option *return_layer_opt;
+    struct Option *class_layer_opt;
     struct Option *rgb_layer_opt;
     struct Option *return_column_opt, *n_returns_column_opt;
     struct Option *class_column_opt;
@@ -514,13 +502,6 @@ int main(int argc, char **argv)
     return_layer_opt->answer = NULL;
     return_layer_opt->guisection = _("Categories");
 
-    n_returns_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
-    n_returns_layer_opt->key = "n_returns_layer";
-    n_returns_layer_opt->label =
-        _("Layer number to store return number as category");
-    n_returns_layer_opt->answer = NULL;
-    n_returns_layer_opt->guisection = _("Categories");
-
     class_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
     class_layer_opt->key = "class_layer";
     class_layer_opt->label =
@@ -534,27 +515,6 @@ int main(int argc, char **argv)
         _("Layer number where RGB color is stored as category");
     rgb_layer_opt->answer = NULL;
     rgb_layer_opt->guisection = _("Categories");
-
-    red_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
-    red_layer_opt->key = "red_layer";
-    red_layer_opt->label =
-        _("Layer number where red color is stored as category");
-    red_layer_opt->answer = NULL;
-    red_layer_opt->guisection = _("Categories");
-
-    green_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
-    green_layer_opt->key = "green_layer";
-    green_layer_opt->label =
-        _("Layer number where red color is stored as category");
-    green_layer_opt->answer = NULL;
-    green_layer_opt->guisection = _("Categories");
-
-    blue_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
-    blue_layer_opt->key = "blue_layer";
-    blue_layer_opt->label =
-        _("Layer number where blue color is stored as category");
-    blue_layer_opt->answer = NULL;
-    blue_layer_opt->guisection = _("Categories");
 
     /* TODO: probably replace the option by standardized/expected column names */
 
@@ -663,26 +623,14 @@ int main(int argc, char **argv)
     struct WriteContext write_context;
 
     write_context.return_layer = 0;
-    write_context.n_returns_layer = 0;
     write_context.class_layer = 0;
     write_context.rgb_layer = 0;
-    write_context.red_layer = 0;
-    write_context.green_layer = 0;
-    write_context.blue_layer = 0;
     if (return_layer_opt->answer)
         write_context.return_layer = atoi(return_layer_opt->answer);
-    if (n_returns_layer_opt->answer)
-        write_context.n_returns_layer = atoi(n_returns_layer_opt->answer);
     if (class_layer_opt->answer)
         write_context.class_layer = atoi(class_layer_opt->answer);
     if (rgb_layer_opt->answer)
         write_context.rgb_layer = atoi(rgb_layer_opt->answer);
-    if (red_layer_opt->answer)
-        write_context.red_layer = atoi(red_layer_opt->answer);
-    if (green_layer_opt->answer)
-        write_context.green_layer = atoi(green_layer_opt->answer);
-    if (blue_layer_opt->answer)
-        write_context.blue_layer = atoi(blue_layer_opt->answer);
 
     /* get GRASS loc proj info */
     struct Key_Value *proj_info;
@@ -758,8 +706,11 @@ int main(int argc, char **argv)
 
     struct Colors color_table;
     write_context.color_table = 0;
-    if (!use_color_attributes && !no_color_table_flag->answer && !(write_context.rgb_layer || write_context.red_layer || write_context.green_layer || write_context.blue_layer)) {
-        int has_colors = Vect_read_colors(Vect_get_name(&vinput), Vect_get_mapset(&vinput), &color_table);
+    if (!use_color_attributes && !no_color_table_flag->answer
+        && !(write_context.rgb_layer)) {
+        int has_colors = Vect_read_colors(Vect_get_name(&vinput),
+                                          Vect_get_mapset(&vinput),
+                                          &color_table);
         if (has_colors)
             write_context.color_table = &color_table;
     }
