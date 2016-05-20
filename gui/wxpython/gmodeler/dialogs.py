@@ -753,7 +753,7 @@ class VariableListCtrl(ModelListCtrl):
         self.DeleteAllItems()
         i = 0
         for name, vtype, value, desc in self.itemDataMap.itervalues():
-            index = self.InsertStringItem(sys.maxsize, name)
+            index = self.InsertStringItem(i, name)
             self.SetStringItem(index, 0, name)
             self.SetStringItem(index, 1, vtype)
             self.SetStringItem(index, 2, value)
@@ -772,7 +772,7 @@ class VariableListCtrl(ModelListCtrl):
                 return _("Variable <%s> already exists in the model. "
                          "Adding variable failed.") % name
 
-        index = self.InsertStringItem(sys.maxsize, name)
+        index = self.InsertStringItem(self.GetItemCount(), name)
         self.SetStringItem(index, 0, name)
         self.SetStringItem(index, 1, vtype)
         self.SetStringItem(index, 2, value)
@@ -938,7 +938,7 @@ class ItemListCtrl(ModelListCtrl):
         i = 0
         if len(self.columns) == 2:
             for name, desc in self.itemDataMap.itervalues():
-                index = self.InsertStringItem(sys.maxsize, str(i))
+                index = self.InsertStringItem(i, str(i))
                 self.SetStringItem(index, 0, name)
                 self.SetStringItem(index, 1, desc)
                 self.SetItemData(index, i)
@@ -947,7 +947,7 @@ class ItemListCtrl(ModelListCtrl):
                 i += 1
         else:
             for name, inloop, param, desc in self.itemDataMap.itervalues():
-                index = self.InsertStringItem(sys.maxsize, str(i))
+                index = self.InsertStringItem(i, str(i))
                 self.SetStringItem(index, 0, name)
                 self.SetStringItem(index, 1, inloop)
                 self.SetStringItem(index, 2, param)

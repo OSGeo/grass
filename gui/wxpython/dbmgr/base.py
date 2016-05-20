@@ -2699,7 +2699,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         # add item to the list of table columns
         tlist = self.FindWindowById(self.layerPage[self.selLayer]['tableData'])
 
-        index = tlist.InsertStringItem(sys.maxsize, str(name))
+        index = tlist.InsertStringItem(tlist.GetItemCount(), str(name))
         tlist.SetStringItem(index, 0, str(name))
         tlist.SetStringItem(index, 1, str(ctype))
         tlist.SetStringItem(index, 2, str(length))
@@ -2889,7 +2889,7 @@ class TableListCtrl(wx.ListCtrl,
 
         i = 0
         for column in self.columns:
-            index = self.InsertStringItem(sys.maxsize, str(column))
+            index = self.InsertStringItem(i, str(column))
             self.SetStringItem(index, 0, str(column))
             self.SetStringItem(index, 1, str(self.table[column]['type']))
             self.SetStringItem(index, 2, str(self.table[column]['length']))
@@ -2947,7 +2947,7 @@ class LayerListCtrl(wx.ListCtrl,
 
         i = 0
         for layer in self.layers.keys():
-            index = self.InsertStringItem(sys.maxsize, str(layer))
+            index = self.InsertStringItem(i, str(layer))
             self.SetStringItem(index, 0, str(layer))
             database = str(self.layers[layer]['database'])
             driver = str(self.layers[layer]['driver'])

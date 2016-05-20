@@ -533,7 +533,7 @@ class CheckListExtension(GListCtrl):
                               quiet=True, parent=self, read=True,
                               flags='a').splitlines():
             if ext:
-                self.InsertStringItem(sys.maxsize, ext)
+                self.InsertStringItem(self.GetItemCount(), ext)
 
     def GetExtensions(self):
         """Get extensions to be un-installed

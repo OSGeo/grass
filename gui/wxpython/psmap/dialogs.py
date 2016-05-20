@@ -3637,7 +3637,7 @@ class LegendDialog(PsmapDialog):
 
             for vector in vectors:
                 index = self.vectorListCtrl.InsertStringItem(
-                    sys.maxsize, vector[0].split('@')[0])
+                    self.vectorListCtrl.GetItemCount(), vector[0].split('@')[0])
                 self.vectorListCtrl.SetStringItem(index, 1, vector[4])
                 self.vectorListCtrl.SetItemData(index, index)
                 self.vectorListCtrl.CheckItem(index, True)
@@ -4446,7 +4446,7 @@ class LegendDialog(PsmapDialog):
             self.vectorListCtrl.DeleteAllItems()
             for vector in vectors:
                 index = self.vectorListCtrl.InsertStringItem(
-                    sys.maxsize, vector[0].split('@')[0])
+                    self.vectorListCtrl.GetItemCount(), vector[0].split('@')[0])
                 self.vectorListCtrl.SetStringItem(index, 1, vector[4])
                 self.vectorListCtrl.SetItemData(index, index)
                 self.vectorListCtrl.CheckItem(index, True)

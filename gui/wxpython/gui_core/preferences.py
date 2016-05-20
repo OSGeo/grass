@@ -2292,7 +2292,7 @@ class CheckListMapset(
             gisenv['LOCATION_NAME'])
 
         for mapset in self.parent.all_mapsets_ordered:
-            index = self.InsertStringItem(sys.maxsize, mapset)
+            index = self.InsertStringItem(self.GetItemCount(), mapset)
             mapsetPath = os.path.join(locationPath,
                                       mapset)
             stat_info = os.stat(mapsetPath)
