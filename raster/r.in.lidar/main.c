@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     char *infile, *outmap;
     int percent;
     double zrange_min, zrange_max, d_tmp;
+    double irange_min, irange_max;
     unsigned long estimated_lines;
 
     RASTER_MAP_TYPE rtype, base_raster_data_type;
@@ -61,11 +62,13 @@ int main(int argc, char *argv[])
     unsigned int counter;
     char buff[BUFFSIZE];
     double x, y, z;
+    double intensity;
     int arr_row, arr_col;
     unsigned long count, count_total;
     int point_class;
 
     double zscale = 1.0;
+    double iscale = 1.0;
     double res = 0.0;
 
     struct BinIndex bin_index_nodes;
@@ -75,10 +78,13 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Option *input_opt, *output_opt, *percent_opt, *type_opt, *filter_opt, *class_opt;
-    struct Option *method_opt, *base_raster_opt, *zrange_opt, *zscale_opt;
+    struct Option *method_opt, *base_raster_opt;
+    struct Option *zrange_opt, *zscale_opt;
+    struct Option *irange_opt, *iscale_opt;
     struct Option *trim_opt, *pth_opt, *res_opt;
     struct Option *file_list_opt;
-    struct Flag *print_flag, *scan_flag, *shell_style, *over_flag, *extents_flag, *intens_flag;
+    struct Flag *print_flag, *scan_flag, *shell_style, *over_flag, *extents_flag;
+    struct Flag *intens_flag, *intens_import_flag;
     struct Flag *set_region_flag;
     struct Flag *base_rast_res_flag;
 
@@ -160,6 +166,22 @@ int main(int argc, char *argv[])
     zscale_opt->answer = "1.0";
     zscale_opt->description = _("Scale to apply to z data");
     zscale_opt->guisection = _("Transform");
+
+    irange_opt = G_define_option();
+    irange_opt->key = "intensity_range";
+    irange_opt->type = TYPE_DOUBLE;
+    irange_opt->required = NO;
+    irange_opt->key_desc = "min,max";
+    irange_opt->description = _("Filter range for intensity values (min,max)");
+    irange_opt->guisection = _("Selection");
+
+    iscale_opt = G_define_option();
+    iscale_opt->key = "intensity_scale";
+    iscale_opt->type = TYPE_DOUBLE;
+    iscale_opt->required = NO;
+    iscale_opt->answer = "1.0";
+    iscale_opt->description = _("Scale to apply to intensity values");
+    iscale_opt->guisection = _("Transform");
 
     percent_opt = G_define_option();
     percent_opt->key = "percent";
@@ -259,10 +281,17 @@ int main(int argc, char *argv[])
     intens_flag->description =
         _("Import intensity values rather than z values");
 
+    intens_import_flag = G_define_flag();
+    intens_import_flag->key = 'j';
+    intens_import_flag->description =
+        _("Use z values for filtering, but import intensity values");
+
     base_rast_res_flag = G_define_flag();
     base_rast_res_flag->key = 'd';
     base_rast_res_flag->description =
         _("Use base raster actual resolution instead of computational region");
+
+    G_option_exclusive(intens_flag, intens_import_flag, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -379,7 +408,10 @@ int main(int argc, char *argv[])
     class_filter_create_from_strings(&class_filter, class_opt->answers);
 
     percent = atoi(percent_opt->answer);
-    zscale = atof(zscale_opt->answer);
+    if (zscale_opt->answer)
+        zscale = atof(zscale_opt->answer);
+    if (iscale_opt->answer)
+        iscale = atof(iscale_opt->answer);
 
     /* parse zrange */
     if (zrange_opt->answer != NULL) {
@@ -394,6 +426,20 @@ int main(int argc, char *argv[])
 	    zrange_max = zrange_min;
 	    zrange_min = d_tmp;
 	}
+    }
+    /* parse irange */
+    if (irange_opt->answer != NULL) {
+        if (irange_opt->answers[0] == NULL)
+            G_fatal_error(_("Invalid %s"), irange_opt->key);
+
+        sscanf(irange_opt->answers[0], "%lf", &irange_min);
+        sscanf(irange_opt->answers[1], "%lf", &irange_max);
+
+        if (irange_min > irange_max) {
+            d_tmp = irange_max;
+            irange_max = irange_min;
+            irange_min = d_tmp;
+        }
     }
 
     point_binning_set(&point_binning, method_opt->answer, pth_opt->answer,
@@ -556,7 +602,8 @@ int main(int argc, char *argv[])
                 x = LASPoint_GetX(LAS_point);
                 y = LASPoint_GetY(LAS_point);
                 if (intens_flag->answer)
-                    /* use z variable here to allow for scaling of intensity below */
+                    /* use intensity as z here to allow all filters (and
+                     * modifications) below to be applied for intensity */
                     z = LASPoint_GetIntensity(LAS_point);
                 else
                     z = LASPoint_GetZ(LAS_point);
@@ -609,6 +656,19 @@ int main(int argc, char *argv[])
                     if (z < zrange_min || z > zrange_max) {
                         continue;
                     }
+                }
+
+                if (intens_import_flag->answer || irange_opt->answer) {
+                    intensity = LASPoint_GetIntensity(LAS_point);
+                    intensity *= iscale;
+                    if (irange_opt->answer) {
+                        if (intensity < irange_min || intensity > irange_max) {
+                            continue;
+                        }
+                    }
+                    /* use intensity for statistics */
+                    if (intens_import_flag->answer)
+                        z = intensity;
                 }
 
                 count++;
