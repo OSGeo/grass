@@ -155,9 +155,9 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     /* segmentation methods:  1 = region growing */
     if (strcmp(method->answer, "region_growing") == 0)
 	globals->method = region_growing;
-    if (strcmp(method->answer, "mean_shift") == 0)
+    else if (strcmp(method->answer, "mean_shift") == 0)
 	globals->method = mean_shift;
-    if (strcmp(method->answer, "watershed") == 0)
+    else if (strcmp(method->answer, "watershed") == 0)
 	globals->method = watershed;
     else
 	G_fatal_error(_("Unable to assign segmentation method"));
