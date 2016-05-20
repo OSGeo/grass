@@ -1137,8 +1137,9 @@ class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         :param disabled: list of indices of non-selectable items
         """
         idx = 0
+        count = self.GetItemCount()
         for item in choices:
-            index = self.InsertStringItem(sys.maxsize, item)
+            index = self.InsertStringItem(count + idx, item)
             self.SetStringItem(index, 0, item)
 
             if idx in disabled:

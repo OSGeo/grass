@@ -581,7 +581,7 @@ class CategoryListCtrl(wx.ListCtrl,
         for layer in cats.keys():
             catsList = cats[layer]
             for cat in catsList:
-                index = self.InsertStringItem(sys.maxsize, str(catsList[0]))
+                index = self.InsertStringItem(self.GetItemCount(), str(catsList[0]))
                 self.SetStringItem(index, 0, str(layer))
                 self.SetStringItem(index, 1, str(cat))
                 self.SetItemData(index, i)
@@ -801,7 +801,7 @@ class CheckListFeature(
         self.InsertColumn(1, _('Layer (Categories)'))
 
         for item in data:
-            index = self.InsertStringItem(sys.maxsize, str(item[0]))
+            index = self.InsertStringItem(self.GetItemCount(), str(item[0]))
             self.SetStringItem(index, 1, str(item[1]))
 
         # enable all items by default
