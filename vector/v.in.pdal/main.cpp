@@ -27,6 +27,33 @@ typedef unsigned long long gpoint_count;
 typedef unsigned long gpoint_count;
 #endif
 
+/* this is plain C but in sync with v.in.lidar */
+static void check_layers_not_equal(int primary, int secondary,
+                                   const char *primary_name,
+                                   const char *secondary_name)
+{
+    if (primary && primary == secondary)
+        G_fatal_error(_("Values of %s and %s are the same."
+                        " All categories would be stored only"
+                        " in layer number <%d>"), primary_name,
+                      secondary_name, primary);
+}
+
+static void check_layers_in_list_not_equal(struct Option **options,
+                                           int *values, size_t size)
+{
+    size_t layer_index_1, layer_index_2;
+    for (layer_index_1 = 0; layer_index_1 < size; layer_index_1++) {
+        for (layer_index_2 = 0; layer_index_2 < size; layer_index_2++) {
+            if (layer_index_1 != layer_index_2) {
+                check_layers_not_equal(values[layer_index_1],
+                                       values[layer_index_2],
+                                       options[layer_index_1]->key,
+                                       options[layer_index_2]->key);
+            }
+        }
+    }
+}
 
 void pdal_point_to_grass(struct Map_info *output_vector,
                          struct line_pnts *points, struct line_cats *cats,
@@ -72,7 +99,6 @@ void pdal_point_to_grass(struct Map_info *output_vector,
     Vect_write_line(output_vector, GV_POINT, points, cats);
 }
 
-
 int main(int argc, char *argv[])
 {
     G_gisinit(argv[0]);
@@ -94,9 +120,8 @@ int main(int argc, char *argv[])
     Option *id_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
     id_layer_opt->key = "id_layer";
     id_layer_opt->label = _("Layer number to store generated point ID as category");
-    id_layer_opt->description =
-        _("Set empty to not store it. Required for attribute table.");
-    id_layer_opt->answer = "1";
+    id_layer_opt->description = _("Set to 1 by default, use -c to not store it");
+    id_layer_opt->answer = NULL;
     id_layer_opt->guisection = _("Categories");
 
     Option *return_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -236,6 +261,15 @@ int main(int argc, char *argv[])
         _("Initial distance for ground filter");
     ground_cell_size_opt->guisection = _("Ground filter");
 
+    Flag *nocats_flag = G_define_flag();
+    nocats_flag->key = 'c';
+    nocats_flag->label =
+        _("Do not automatically add unique ID as category to each point");
+    nocats_flag->description =
+        _("Create only requested layers and categories");
+    /* v.in.lidar has this in Speed but we don't have it here */
+    nocats_flag->guisection = _("Categories");
+
     Flag *region_flag = G_define_flag();
     region_flag->key = 'r';
     region_flag->guisection = _("Selection");
@@ -276,6 +310,10 @@ int main(int argc, char *argv[])
     G_option_exclusive(spatial_opt, region_flag, NULL);
     G_option_exclusive(reproject_flag, over_flag, NULL);
     G_option_exclusive(extract_ground_flag, classify_ground_flag, NULL);
+    G_option_exclusive(nocats_flag, id_layer_opt, NULL);
+    G_option_requires(return_layer_opt, id_layer_opt, nocats_flag, NULL);
+    G_option_requires(class_layer_opt, id_layer_opt, nocats_flag, NULL);
+    G_option_requires(rgb_layer_opt, id_layer_opt, nocats_flag, NULL);
 
     if (G_parser(argc, argv))
         return EXIT_FAILURE;
@@ -289,6 +327,7 @@ int main(int argc, char *argv[])
 
     struct GLidarLayers layers;
     GLidarLayers_set_no_layers(&layers);
+    layers.id_layer = 1;
     if (id_layer_opt->answer && id_layer_opt->answer[0] != '\0')
         layers.id_layer = std::stoi(id_layer_opt->answer);
     if (return_layer_opt->answer && return_layer_opt->answer[0] != '\0')
@@ -297,6 +336,23 @@ int main(int argc, char *argv[])
         layers.class_layer = std::stoi(class_layer_opt->answer);
     if (rgb_layer_opt->answer && rgb_layer_opt->answer[0] != '\0')
         layers.rgb_layer = std::stoi(rgb_layer_opt->answer);
+
+    if (nocats_flag->answer) {
+        layers.id_layer = 0;
+    }
+
+    /* this is plain C but in sync with v.in.lidar */
+    Option *layer_options[4] = {id_layer_opt, return_layer_opt,
+                                class_layer_opt, rgb_layer_opt};
+    int layer_values[4] = {layers.id_layer, layers.return_layer,
+                           layers.class_layer, layers.rgb_layer};
+    check_layers_in_list_not_equal(layer_options, layer_values, 4);
+
+    if (layers.id_layer)
+        G_verbose_message(_("Storing generated point IDs as categories"
+                            " in the layer <%d>, consequently no more"
+                            " than %d points can be imported"),
+                          layers.id_layer, GV_CAT_MAX);
 
     double xmin = 0;
     double ymin = 0;

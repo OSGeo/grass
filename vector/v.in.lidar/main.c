@@ -40,6 +40,33 @@
 #  define MAX(a,b)      ((a>b) ? a : b)
 #endif
 
+static void check_layers_not_equal(int primary, int secondary,
+                                   const char *primary_name,
+                                   const char *secondary_name)
+{
+    if (primary && primary == secondary)
+        G_fatal_error(_("Values of %s and %s are the same."
+                        " All categories would be stored only"
+                        " in layer number <%d>"), primary_name,
+                      secondary_name, primary);
+}
+
+static void check_layers_in_list_not_equal(struct Option **options,
+                                           int *values, size_t size)
+{
+    size_t layer_index_1, layer_index_2;
+    for (layer_index_1 = 0; layer_index_1 < size; layer_index_1++) {
+        for (layer_index_2 = 0; layer_index_2 < size; layer_index_2++) {
+            if (layer_index_1 != layer_index_2) {
+                check_layers_not_equal(values[layer_index_1],
+                                       values[layer_index_2],
+                                       options[layer_index_1]->key,
+                                       options[layer_index_2]->key);
+            }
+        }
+    }
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -55,6 +82,7 @@ int main(int argc, char *argv[])
     struct Option *skip_opt, *preserve_opt, *offset_opt, *limit_opt;
     struct Option *outloc_opt, *zrange_opt;
     struct Flag *print_flag, *notab_flag, *region_flag, *notopo_flag;
+    struct Flag *nocats_flag;
     struct Flag *over_flag, *extend_flag, *no_import_flag;
     struct Flag *invert_mask_flag;
     char buf[2000];
@@ -118,9 +146,8 @@ int main(int argc, char *argv[])
     id_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
     id_layer_opt->key = "id_layer";
     id_layer_opt->label = _("Layer number to store generated point ID as category");
-    id_layer_opt->description =
-        _("Set empty to not store it. Required for attribute table.");
-    id_layer_opt->answer = "1";
+    id_layer_opt->description = _("Set to 1 by default, use -c to not store it");
+    id_layer_opt->answer = NULL;
     id_layer_opt->guisection = _("Categories");
 
     return_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -266,6 +293,14 @@ int main(int argc, char *argv[])
     notab_flag = G_define_standard_flag(G_FLG_V_TABLE);
     notab_flag->guisection = _("Speed");
 
+    nocats_flag = G_define_flag();
+    nocats_flag->key = 'c';
+    nocats_flag->label =
+        _("Do not automatically add unique ID as category to each point");
+    nocats_flag->description =
+        _("Create only requested layers and categories");
+    nocats_flag->guisection = _("Speed");
+
     notopo_flag = G_define_standard_flag(G_FLG_V_TOPO);
     notopo_flag->guisection = _("Speed");
 
@@ -284,6 +319,11 @@ int main(int argc, char *argv[])
     no_import_flag->suppress_required = YES;
 
     G_option_exclusive(skip_opt, preserve_opt, NULL);
+    G_option_requires(nocats_flag, notab_flag, NULL);
+    G_option_exclusive(nocats_flag, id_layer_opt, NULL);
+    G_option_requires(return_layer_opt, id_layer_opt, nocats_flag, NULL);
+    G_option_requires(class_layer_opt, id_layer_opt, nocats_flag, NULL);
+    G_option_requires(rgb_layer_opt, id_layer_opt, nocats_flag, NULL);
 
     /* The parser checks if the map already exists in current mapset, this is
      * wrong if location options is used, so we switch out the check and do it
@@ -338,7 +378,7 @@ int main(int argc, char *argv[])
     struct ClassFilter class_filter;
     class_filter_create_from_strings(&class_filter, class_opt->answers);
 
-    int id_layer = 0;
+    int id_layer = 1;
     int return_layer = 0;
     int class_layer = 0;
     int rgb_layer = 0;
@@ -350,11 +390,26 @@ int main(int argc, char *argv[])
         class_layer = atoi(class_layer_opt->answer);
     if (rgb_layer_opt->answer)
         rgb_layer = atoi(rgb_layer_opt->answer);
+
+    if (nocats_flag->answer) {
+        id_layer = 0;
+    }
     /* no cats forces no table earlier */
     if (!notab_flag->answer && !id_layer) {
         G_message(_("-%c flag is not set but ID layer is not specified"), notab_flag->key);
         G_fatal_error(_("ID layer is required to store attribute table"));
     }
+
+    struct Option *layer_options[4] = {id_layer_opt, return_layer_opt,
+                                       class_layer_opt, rgb_layer_opt};
+    int layer_values[4] = {id_layer, return_layer, class_layer, rgb_layer};
+    check_layers_in_list_not_equal(layer_options, layer_values, 4);
+
+    if (id_layer)
+        G_verbose_message(_("Storing generated point IDs as categories"
+                            " in the layer <%d>, consequently no more"
+                            " than %d points can be imported"),
+                          id_layer, GV_CAT_MAX);
 
     double zrange_min, zrange_max;
     int use_zrange = FALSE;
