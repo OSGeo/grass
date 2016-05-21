@@ -19,6 +19,10 @@
 
 /* #def _OR_SHAPE_ */
 
+/* methods */
+#define ORM_RG 1	/* region growing */
+#define ORM_MS 1	/* mean shift */
+#define ORM_WS 1	/* watershed */
 
 /* row/col list */
 struct rc
@@ -41,7 +45,8 @@ struct globals
     char *image_group;
     int weighted;		/* 0 if false/not selected, so we should scale input.
 				 * 1 if the scaling should be skipped */
-    int (*method)();		/* Segmentation method function */
+    int method;			/* Segmentation method code */
+    int (*method_fn)();		/* Segmentation method function */
     int nn;			/* number of neighbors, 4 or 8 */
     double max_diff;		/* max possible difference */
     double alpha;		/* similarity threshold */
