@@ -121,6 +121,18 @@ or thousands of GCPs. In these cases thin plate spline coordinate
 transformation is recommended, either before import with 
 <b>gdalwarp -tps</b> or after import with <b>i.rectify -t</b>.
 
+
+<h3>Map names: Management of offset and leading zeros</h3>
+
+The <b>offset</b> parameter allows adding an offset to band number(s) which
+is convenient in case of the import of e.g. a continuous time series split
+across different input files.
+<p>
+The <b>num_digits</b> parameter allows defining the number of  leading zeros
+(zero padding) in case of band numbers (e.g., to turn <tt>band.1</tt> into
+<tt>band.001</tt>).
+
+
 <h2>NOTES</h2>
 
 Import of large files can be significantly faster when setting <b>memory</b> to
@@ -233,45 +245,51 @@ the what the map's bounds and resolution should be beforehand.
 <h3>ECAD Data</h3>
 
 The <a href="http://eca.knmi.nl/">European Climate Assessment and Dataset (ECAD) project</a> 
-provides climate data for Europe ranging from 1950 - 2010 or later. To import the different
-chunks of data provided by the project as netCDF files, the offset parameter can be used to get 
-daily numbered raster maps from 1. Jan. 1950 on. Make sure you are in a LatLong location.
+provides climate data for Europe ranging from 1950 - 2015 or later
+(<a href="http://eca.knmi.nl/download/ensembles/ensembles.php">Terms of use</a>).
+To import the different chunks of data provided by the project as netCDF files,
+the offset parameter can be used to properly assign numbers to the series
+of daily raster maps from 1st Jan 1950 (in case if importing the ECAD data
+split into multi-annual chunks). The ECAD data must be imported into a
+LatLong location.
 <p>
-Use the <em>num_digits</em> option to allow chronological numbering of the imported raster map layers,
-so that <em>g.list</em> list's them in the correct import order. Use <em>num_digits=5</em>
-to have a 5 digit suffix with leading zeros (00001 - 99999).
+By using the <em>num_digits</em> parameter leading zeros are added to the
+map name numbers, allowing for chronological numbering of the imported raster
+map layers, so that <em>g.list</em> lists them in the correct order.
+Here, use <em>num_digits=5</em> to have a 5 digit suffix with leading zeros (00001 - 99999).
 </p>
 
 <div class="code"><pre>
+# Import of ECAD data split into chunks
 # Import precipitation data
-r.in.gdal -o input=rr_0.25deg_reg_1950-1964_v4.0.nc output=precipitation num_digits=5 offset=0
-r.in.gdal -o input=rr_0.25deg_reg_1965-1979_v4.0.nc output=precipitation num_digits=5 offset=5479
-r.in.gdal -o input=rr_0.25deg_reg_1980-1994_v4.0.nc output=precipitation num_digits=5 offset=10957
-r.in.gdal -o input=rr_0.25deg_reg_1995-2010_v4.0.nc output=precipitation num_digits=5 offset=16436
+r.in.gdal -o input=rr_0.25deg_reg_1950-1964_v12.0.nc output=precipitation num_digits=5 offset=0
+r.in.gdal -o input=rr_0.25deg_reg_1965-1979_v12.0.nc output=precipitation num_digits=5 offset=5479
+r.in.gdal -o input=rr_0.25deg_reg_1980-1994_v12.0.nc output=precipitation num_digits=5 offset=10957
+r.in.gdal -o input=rr_0.25deg_reg_1995-2015_v12.0.nc output=precipitation num_digits=5 offset=16436
 
 # Import air pressure data
-r.in.gdal -o input=pp_0.25deg_reg_1950-1964_v4.0.nc output=air_pressure num_digits=5 offset=0
-r.in.gdal -o input=pp_0.25deg_reg_1965-1979_v4.0.nc output=air_pressure num_digits=5 offset=5479
-r.in.gdal -o input=pp_0.25deg_reg_1980-1994_v4.0.nc output=air_pressure num_digits=5 offset=10957
-r.in.gdal -o input=pp_0.25deg_reg_1995-2010_v4.0.nc output=air_pressure num_digits=5 offset=16436
+r.in.gdal -o input=pp_0.25deg_reg_1950-1964_v12.0.nc output=air_pressure num_digits=5 offset=0
+r.in.gdal -o input=pp_0.25deg_reg_1965-1979_v12.0.nc output=air_pressure num_digits=5 offset=5479
+r.in.gdal -o input=pp_0.25deg_reg_1980-1994_v12.0.nc output=air_pressure num_digits=5 offset=10957
+r.in.gdal -o input=pp_0.25deg_reg_1995-2015_v12.0.nc output=air_pressure num_digits=5 offset=16436
 
 # Import min temperature data
-r.in.gdal -o input=tn_0.25deg_reg_1950-1964_v4.0.nc output=temperatur_min num_digits=5 offset=0
-r.in.gdal -o input=tn_0.25deg_reg_1965-1979_v4.0.nc output=temperatur_min num_digits=5 offset=5479
-r.in.gdal -o input=tn_0.25deg_reg_1980-1994_v4.0.nc output=temperatur_min num_digits=5 offset=10957
-r.in.gdal -o input=tn_0.25deg_reg_1995-2010_v4.0.nc output=temperatur_min num_digits=5 offset=16436
+r.in.gdal -o input=tn_0.25deg_reg_1950-1964_v12.0.nc output=temperatur_min num_digits=5 offset=0
+r.in.gdal -o input=tn_0.25deg_reg_1965-1979_v12.0.nc output=temperatur_min num_digits=5 offset=5479
+r.in.gdal -o input=tn_0.25deg_reg_1980-1994_v12.0.nc output=temperatur_min num_digits=5 offset=10957
+r.in.gdal -o input=tn_0.25deg_reg_1995-2015_v12.0.nc output=temperatur_min num_digits=5 offset=16436
 
 # Import max temperature data
-r.in.gdal -o input=tx_0.25deg_reg_1950-1964_v4.0.nc output=temperatur_max num_digits=5 offset=0
-r.in.gdal -o input=tx_0.25deg_reg_1965-1979_v4.0.nc output=temperatur_max num_digits=5 offset=5479
-r.in.gdal -o input=tx_0.25deg_reg_1980-1994_v4.0.nc output=temperatur_max num_digits=5 offset=10957
-r.in.gdal -o input=tx_0.25deg_reg_1995-2010_v4.0.nc output=temperatur_max num_digits=5 offset=16436
+r.in.gdal -o input=tx_0.25deg_reg_1950-1964_v12.0.nc output=temperatur_max num_digits=5 offset=0
+r.in.gdal -o input=tx_0.25deg_reg_1965-1979_v12.0.nc output=temperatur_max num_digits=5 offset=5479
+r.in.gdal -o input=tx_0.25deg_reg_1980-1994_v12.0.nc output=temperatur_max num_digits=5 offset=10957
+r.in.gdal -o input=tx_0.25deg_reg_1995-2015_v12.0.nc output=temperatur_max num_digits=5 offset=16436
 
 # Import mean temperature data
-r.in.gdal -o input=tg_0.25deg_reg_1950-1964_v4.0.nc output=temperatur_mean num_digits=5 offset=0
-r.in.gdal -o input=tg_0.25deg_reg_1965-1979_v4.0.nc output=temperatur_mean num_digits=5 offset=5479
-r.in.gdal -o input=tg_0.25deg_reg_1980-1994_v4.0.nc output=temperatur_mean num_digits=5 offset=10957
-r.in.gdal -o input=tg_0.25deg_reg_1995-2010_v4.0.nc output=temperatur_mean num_digits=5 offset=16436
+r.in.gdal -o input=tg_0.25deg_reg_1950-1964_v12.0.nc output=temperatur_mean num_digits=5 offset=0
+r.in.gdal -o input=tg_0.25deg_reg_1965-1979_v12.0.nc output=temperatur_mean num_digits=5 offset=5479
+r.in.gdal -o input=tg_0.25deg_reg_1980-1994_v12.0.nc output=temperatur_mean num_digits=5 offset=10957
+r.in.gdal -o input=tg_0.25deg_reg_1995-2015_v12.0.nc output=temperatur_mean num_digits=5 offset=16436
 </pre></div>
 
 
@@ -331,13 +349,15 @@ r.in.gdal HDF4_EOS:EOS_GRID:"MOD15A2.A2003153.h18v04.004.2003171141042.hdf":MOD_
 # ... likewise for other HDF bands in the file.
 </pre></div>
 
+
 <h2>SEE ALSO</h2>
 <em>
 <a href="r.colors.html">r.colors</a>,
 <a href="r.import.html">r.import</a>,
 <a href="r.in.ascii.html">r.in.ascii</a>,
 <a href="r.in.bin.html">r.in.bin</a>,
-<a href="r.null.html">r.null</a>
+<a href="r.null.html">r.null</a>,
+<a href="t.register.html">t.register</a>
 </em>
 
 <p>

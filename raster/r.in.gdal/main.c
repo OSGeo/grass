@@ -138,7 +138,8 @@ int main(int argc, char *argv[])
     parm.offset->type = TYPE_INTEGER;
     parm.offset->required = NO;
     parm.offset->answer = "0";
-    parm.offset->description = _("The offset will be added to the band number while output raster map name creation");
+    parm.offset->label = _("Offset to be added to band numbers");
+    parm.offset->description = _("If 0, no offset is added and the first band is 1");
     parm.offset->guisection = _("Metadata");
 
     parm.num_digits = G_define_option();
@@ -146,7 +147,8 @@ int main(int argc, char *argv[])
     parm.num_digits->type = TYPE_INTEGER;
     parm.num_digits->required = NO;
     parm.num_digits->answer = "0";
-    parm.num_digits->description = _("Number of digits for the generated band number with leading 0's. If 0 the length will adjust to the band number.");
+    parm.num_digits->label = _("Zero-padding of band number by adding given number of leading zeros");
+    parm.num_digits->description = _("If 0, length will be adjusted to 'offset' number without leading zeros");
     parm.num_digits->guisection = _("Metadata");
 
     parm.map_names_file = G_define_standard_option(G_OPT_F_OUTPUT);
