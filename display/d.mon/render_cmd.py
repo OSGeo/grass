@@ -23,10 +23,10 @@ def read_env_file(env_file):
         if height is None and k == 'GRASS_RENDER_HEIGHT':
             height = int(v)
     fd.close()
-    
+
     if width is None or height is None:
         grass.fatal("Unknown monitor size")
-    
+
     return width, height
 
 # run display command
@@ -46,7 +46,7 @@ def update_cmd_file(cmd_file, cmd, mapfile):
                   'd.redraw', 'd.to.rast', 'd.what.rast',
                   'd.what.vect', 'd.where'):
         return
-    
+
     mode = 'w' if cmd[0] == 'd.erase' else 'a'
     # update cmd file
     fd = open(cmd_file, mode)
@@ -61,46 +61,46 @@ def update_cmd_file(cmd_file, cmd, mapfile):
         fd.write(' '.join(gtask.cmdtuple_to_list(cmd)))
         fd.write('\n')
     else:
-         fd.write('')
+        fd.write('')
     fd.close()
 
 # adjust region
 def adjust_region(width, height):
     region = grass.region()
-    
-    mapwidth  = abs(region["e"] - region["w"])
+
+    mapwidth = abs(region["e"] - region["w"])
     mapheight = abs(region['n'] - region['s'])
-    
-    region["nsres"] =  mapheight / height
-    region["ewres"] =  mapwidth  / width
-    region['rows']  = int(round(mapheight / region["nsres"]))
-    region['cols']  = int(round(mapwidth / region["ewres"]))
+
+    region["nsres"] = mapheight / height
+    region["ewres"] = mapwidth / width
+    region['rows'] = int(round(mapheight / region["nsres"]))
+    region['cols'] = int(round(mapwidth / region["ewres"]))
     region['cells'] = region['rows'] * region['cols']
-    
-    kwdata = [('proj',      'projection'),
-              ('zone',      'zone'),
-              ('north',     'n'),
-              ('south',     's'),
-              ('east',      'e'),
-              ('west',      'w'),
-              ('cols',      'cols'),
-              ('rows',      'rows'),
+
+    kwdata = [('proj', 'projection'),
+              ('zone', 'zone'),
+              ('north', 'n'),
+              ('south', 's'),
+              ('east', 'e'),
+              ('west', 'w'),
+              ('cols', 'cols'),
+              ('rows', 'rows'),
               ('e-w resol', 'ewres'),
               ('n-s resol', 'nsres')]
-    
+
     grass_region = ''
     for wkey, rkey in kwdata:
         grass_region += '%s: %s;' % (wkey, region[rkey])
-    
+
     os.environ['GRASS_REGION'] = grass_region
-    
+
 if __name__ == "__main__":
     cmd = gtask.cmdstring_to_tuple(sys.argv[1])
     if not cmd[0] or cmd[0] == 'd.mon':
         sys.exit(0)
     path = os.path.dirname(os.path.abspath(__file__))
     mon = os.path.split(path)[-1]
-    
+
     width, height = read_env_file(os.path.join(path, 'env'))
     if mon.startswith('wx'):
         mapfile = tempfile.NamedTemporaryFile(dir=path).name
@@ -111,9 +111,8 @@ if __name__ == "__main__":
     else:
         mapfile = None
         adjust_region(width, height)
-        
 
     render(cmd, mapfile)
     update_cmd_file(os.path.join(path, 'cmd'), cmd, mapfile)
-        
+
     sys.exit(0)
