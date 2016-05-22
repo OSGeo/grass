@@ -135,7 +135,8 @@ int main(int argc, char *argv[])
     parm.offset->type = TYPE_INTEGER;
     parm.offset->required = NO;
     parm.offset->answer = "0";
-    parm.offset->description = _("The offset will be added to the band number while output raster map name creation");
+    parm.offset->label = _("Offset to be added to band numbers");
+    parm.offset->description = _("If 0, no offset is added and the first band is 1");
     parm.offset->guisection = _("Metadata");
     
     parm.outloc = G_define_option();
