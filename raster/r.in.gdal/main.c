@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
     parm.num_digits->type = TYPE_INTEGER;
     parm.num_digits->required = NO;
     parm.num_digits->answer = "0";
-    parm.num_digits->label = _("Zero-padding of band number by adding given number of leading zeros");
+    parm.num_digits->label = _("Zero-padding of band number by filling with leading zeros up to given number");
     parm.num_digits->description = _("If 0, length will be adjusted to 'offset' number without leading zeros");
     parm.num_digits->guisection = _("Metadata");
 
