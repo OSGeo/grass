@@ -8,8 +8,8 @@ component which allows the user to create, edit, and manage simple and
 complex models using an easy-to-use interface.
 When performing analytical operations in GRASS GIS, the
 operations are not isolated, but part of a chain of operations. Using the
-Graphical Modeler, a chain of processes (ie. GRASS GIS modules)
-can be wrapped into one process (ie. model). Subsequently it is easier to
+Graphical Modeler, a chain of processes (i.e. GRASS GIS modules)
+can be wrapped into one process (i.e. model). Subsequently it is easier to
 execute the model later on even with slightly different inputs or parameters.
 <br>
 Models represent a programming technique used in GRASS GIS to
@@ -21,7 +21,7 @@ models can simplify or shorten a task which can be run many times and it can
 also be easily shared with others. Important to note is that models cannot
 perform specified tasks that one cannot also manually perform with GRASS
 GIS. It is recommended to first to develop the process manually, note down
-the steps (eg. by using the <i>Copy</i> button in module dialogs) and later
+the steps (e.g. by using the <i>Copy</i> button in module dialogs) and later
 replicate them in model.
 
 <p>
@@ -31,7 +31,7 @@ The Graphical Modeler allows you to:
   <li>define data items (raster, vector, 3D raster maps)</li>
   <li>define actions (GRASS commands)</li>
   <li>define relations between data and action items</li>
-  <li>define loops (eg. map series) and conditions (if-else statements)</li>
+  <li>define loops (e.g. map series) and conditions (if-else statements)</li>
   <li>define model variables</li>
   <li>parameterize GRASS commands</li>
   <li>define intermediate data</li>
@@ -82,7 +82,7 @@ data and commands,
 There is also a lower menu bar in the Graphical modeler dialog where one can
 manage model items, visualize commands, add or manage model variables,
 define default values and descriptions. The Python editor dialog window
-allows seeing worflows written in Python code. The rightmost tab of
+allows seeing workflows written in Python code. The rightmost tab of
 the bottom menu is automatically triggered when the model is activated and
 shows all the steps of running GRASS modeler modules. In case of errors
 in the calculation process, it is written at that place.
@@ -100,7 +100,7 @@ The workflow is usually established from four types of diagrams. Input and
 derived model data are usually represented with oval diagrams. This type of
 model elements stores path to specific data on the user's disk. It is
 possible to insert vector data, raster data, database tables, etc.
-The type of data is clear distinguishable in the model by its color.
+The type of data is clearly distinguishable in the model by its color.
 Different model elements are shown in the figures below.
 
 <ul>
@@ -190,7 +190,7 @@ press the <img src="icons/modeler-main.png" alt="icon"> icon or
 type <em>g.gui.gmodeler</em>. The simplest way of inserting elements
 is by adding the complete GRASS command to the Command field in the GRASS command
 dialog (see figure below).  With full text search one can do faster
-module hunting. Next the label and the command can be added. In case that only
+module hunting. Next, the label and the command can be added. In case that only
 a module name is inserted, after pressing the <i>Enter</i> button, the
 module dialog window is displayed and it is possible to set all of the usual
 module options (parameters and flags).
@@ -205,11 +205,10 @@ width="400"></a>
 
 <h3>Managing model parameters</h3>  
 All used modules can be parameterized in the model. That causes launching the
-dialog with input options for model after the model is run. In this example
+dialog with input options for model after the model is run. In this example,
 input layers (<tt>zipcodes_wake</tt> vector map and <tt>elev_state_500m</tt> 
-raster map) are parameterized. Parameterized elements show their border
-slightly thicker in the model scheme with diagrams with respect to
-unparameterized elements.
+raster map) are parameterized. Parameterized elements show their diagram border
+slightly thicker than those of unparameterized elements.
 
 <center>
 <a href="g_gui_gmodeler_parameter.png">
@@ -244,7 +243,7 @@ For convenience, this model for the Graphical Modeler is also available for down
 <a href="g_gui_gmodeler_zipcodes_avg_elevation.gxm">here</a>.
 
 <p>
-After the model is run by clicking the <i>Run</i> button
+The model is run by clicking the <i>Run</i> button
 <img src="icons/execute.png" alt="run">. When all inputs are set, the results can
 be displayed as shown in the next Figure:
 
@@ -295,7 +294,7 @@ there are <tt>Variables</tt>.
 <p>
 The key point is the usage of <tt>%</tt> before the substituting variable and 
 settings in <tt>Variables</tt> dialog. For example, in case of a model variable 
-<tt>raster</tt> that points to a input file path and which value is required to be 
+<tt>raster</tt> that points to an input file path and which value is required to be 
 used as one of inputs for a particular model, it should be specified in the
 <tt>Variables</tt> dialog with its respective name (<tt>raster</tt>), data type,
 default value and description. Then it should be set in the module dialog as
@@ -347,7 +346,7 @@ model completion. The boundary of intermediate component is dotted line.
 <h3>Using the Python editor</h3>
 By using the Python editor in the Graphical Modeler one can add Python code and then 
 run it with <i>Run</i> button or just save it as a Python script <tt>*.py</tt>.
-The result is shown in below Figure:
+The result is shown in the Figure below:
 
 <center>
 <a href="g_gui_gmodeler_python_code.png">
