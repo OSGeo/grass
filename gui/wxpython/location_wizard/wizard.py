@@ -276,6 +276,8 @@ class CoordinateSystemPage(TitledPage):
 
         # layout
         self.sizer.SetVGap(10)
+        self.sizer.Add(item=wx.StaticText(parent=self, label=_("Simple methods:")),
+                       flag=wx.ALIGN_LEFT, pos=(1, 1))
         self.sizer.Add(item=self.radioEpsg,
                        flag=wx.ALIGN_LEFT, pos=(2, 1))
         #self.sizer.Add(item=self.radioIau,
@@ -284,12 +286,14 @@ class CoordinateSystemPage(TitledPage):
                        flag=wx.ALIGN_LEFT, pos=(3, 1))
         self.sizer.Add(item=self.radioWkt,
                        flag=wx.ALIGN_LEFT, pos=(4, 1))
-        self.sizer.Add(item=self.radioSrs,
-                       flag=wx.ALIGN_LEFT, pos=(5, 1))
-        self.sizer.Add(item=self.radioProj,
-                       flag=wx.ALIGN_LEFT, pos=(6, 1))
         self.sizer.Add(item=self.radioXy,
+                       flag=wx.ALIGN_LEFT, pos=(5, 1))
+        self.sizer.Add(item=wx.StaticText(parent=self, label=_("Advanced methods:")),
+                       flag=wx.ALIGN_LEFT, pos=(6, 1))                    
+        self.sizer.Add(item=self.radioSrs,
                        flag=wx.ALIGN_LEFT, pos=(7, 1))
+        self.sizer.Add(item=self.radioProj,
+                       flag=wx.ALIGN_LEFT, pos=(8, 1))
         self.sizer.AddGrowableCol(1)
 
         # bindings
