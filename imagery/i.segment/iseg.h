@@ -21,8 +21,8 @@
 
 /* methods */
 #define ORM_RG 1	/* region growing */
-#define ORM_MS 1	/* mean shift */
-#define ORM_WS 1	/* watershed */
+#define ORM_MS 2	/* mean shift */
+#define ORM_WS 3	/* watershed */
 
 /* row/col list */
 struct rc
