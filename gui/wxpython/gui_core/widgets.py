@@ -1595,12 +1595,15 @@ class NArrowsComboBox(PictureComboBox):
 
     def _getPath(self, name):
         path = os.path.join(os.getenv("GISBASE"), "gui", "images",
-                            'symbols', 'n_arrows')
+                            'symbols')
         try:
             int(name[0])
-            return os.path.join(path, 'n_arrow{name}.png'.format(name=name))
+            return os.path.join(path, 'n_arrows', 'n_arrow{name}.png'.format(name=name))
         except ValueError:
-            return os.path.join(path, '{name}.png'.format(name=name))
+            if os.path.exists(os.path.join(path, 'n_arrows', '{name}.png'.format(name=name))):
+                return os.path.join(path, 'n_arrows', '{name}.png'.format(name=name))
+            else:
+                return os.path.join(path, 'basic', '{name}.png'.format(name=name))
 
     def OnMeasureItem(self, item):
         return 32
