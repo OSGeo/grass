@@ -1600,10 +1600,14 @@ class NArrowsComboBox(PictureComboBox):
             int(name[0])
             return os.path.join(path, 'n_arrows', 'n_arrow{name}.png'.format(name=name))
         except ValueError:
+            if name == 'star':
+                name = '4pt_star'
             if os.path.exists(os.path.join(path, 'n_arrows', '{name}.png'.format(name=name))):
                 return os.path.join(path, 'n_arrows', '{name}.png'.format(name=name))
-            else:
+            elif os.path.exists(os.path.join(path, 'basic', '{name}.png'.format(name=name))):
                 return os.path.join(path, 'basic', '{name}.png'.format(name=name))
+            else:
+                return os.path.join(path, 'extra', '{name}.png'.format(name=name))
 
     def OnMeasureItem(self, item):
         return 32
