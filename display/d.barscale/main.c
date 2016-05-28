@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       d.barscale
@@ -40,7 +41,7 @@ int main(int argc, char **argv)
 {
     struct GModule *module;
     struct Option *bg_color_opt, *fg_color_opt, *coords, *fsize,
-		 *barstyle, *text_placement;
+        *barstyle, *text_placement;
     struct Flag *feet, *no_text;
     struct Cell_head W;
     double east, north;
@@ -68,11 +69,11 @@ int main(int argc, char **argv)
     barstyle->key = "style";
     barstyle->description = _("Type of barscale to draw");
     barstyle->options =
-	"classic,line,solid,hollow,full_checker,part_checker,mixed_checker,tail_checker,up_ticks,down_ticks,both_ticks,arrow_ends";
+        "classic,line,solid,hollow,full_checker,part_checker,mixed_checker,tail_checker,up_ticks,down_ticks,both_ticks,arrow_ends";
     barstyle->answer = "classic";
     barstyle->gisprompt = "old,barscale,barscale";
     barstyle->guisection = _("Style");
-    G_asprintf((char **) &(barstyle->descriptions), 
+    G_asprintf((char **)&(barstyle->descriptions),
                "classic;%s;"
                "line;%s;"
                "solid;%s;"
@@ -95,8 +96,7 @@ int main(int argc, char **argv)
                _("Tail checker style"),
                _("Up ticks style"),
                _("Down ticks style"),
-               _("Both ticks style"),
-               _("Arrow ends style"));
+               _("Both ticks style"), _("Arrow ends style"));
 
     coords = G_define_option();
     coords->key = "at";
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
     coords->answer = "0.0,5.0";
     coords->options = "0-100";
     coords->label =
-	_("Screen coordinates of the rectangle's top-left corner");
+        _("Screen coordinates of the rectangle's top-left corner");
     coords->description = _("(0,0) is lower-left of the display frame");
 
     fg_color_opt = G_define_standard_option(G_OPT_C);
@@ -135,72 +135,72 @@ int main(int argc, char **argv)
     fsize->guisection = _("Text");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
 
     G_get_window(&W);
     if (W.proj == PROJECTION_LL)
-	G_fatal_error(_("%s does not work with a latitude-longitude location"),
-		      argv[0]);
+        G_fatal_error(_("%s does not work with a latitude-longitude location"),
+                      argv[0]);
 
     use_feet = feet->answer ? TRUE : FALSE;
 
     switch (barstyle->answer[0]) {
     case 'c':
-	bar_style = STYLE_CLASSIC_BAR;
-	break;
+        bar_style = STYLE_CLASSIC_BAR;
+        break;
     case 'p':
-	bar_style = STYLE_PART_CHECKER;
-	break;
+        bar_style = STYLE_PART_CHECKER;
+        break;
     case 'f':
-	bar_style = STYLE_FULL_CHECKER;
-	break;
+        bar_style = STYLE_FULL_CHECKER;
+        break;
     case 'm':
-	bar_style = STYLE_MIXED_CHECKER;
-	break;
+        bar_style = STYLE_MIXED_CHECKER;
+        break;
     case 't':
-	bar_style = STYLE_TAIL_CHECKER;
-	break;
+        bar_style = STYLE_TAIL_CHECKER;
+        break;
     case 'l':
-	bar_style = STYLE_THIN_WITH_ENDS;
-	break;
+        bar_style = STYLE_THIN_WITH_ENDS;
+        break;
     case 's':
-	bar_style = STYLE_SOLID_BAR;
-	break;
+        bar_style = STYLE_SOLID_BAR;
+        break;
     case 'h':
-	bar_style = STYLE_HOLLOW_BAR;
-	break;
+        bar_style = STYLE_HOLLOW_BAR;
+        break;
     case 'u':
-	bar_style = STYLE_TICKS_UP;
-	break;
+        bar_style = STYLE_TICKS_UP;
+        break;
     case 'd':
-	bar_style = STYLE_TICKS_DOWN;
-	break;
+        bar_style = STYLE_TICKS_DOWN;
+        break;
     case 'b':
-	bar_style = STYLE_TICKS_BOTH;
-	break;
+        bar_style = STYLE_TICKS_BOTH;
+        break;
     case 'a':
-	bar_style = STYLE_ARROW_ENDS;
-	break;
+        bar_style = STYLE_ARROW_ENDS;
+        break;
     default:
-	G_fatal_error(_("Programmer error"));
+        G_fatal_error(_("Programmer error"));
     }
 
     switch (text_placement->answer[0]) {
     case 'u':
-	text_position = TEXT_UNDER;
-	break;
+        text_position = TEXT_UNDER;
+        break;
     case 'o':
-	text_position = TEXT_OVER;
-	break;
+        text_position = TEXT_OVER;
+        break;
     case 'l':
-	text_position = TEXT_LEFT;
-	break;
+        text_position = TEXT_LEFT;
+        break;
     case 'r':
-	text_position = TEXT_RIGHT;
-	break;
+        text_position = TEXT_RIGHT;
+        break;
     default:
-	G_fatal_error(_("Programmer error"));
+        G_fatal_error(_("Programmer error"));
     }
 
     sscanf(coords->answers[0], "%lf", &east);
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
 
     fontsize = atof(fsize->answer);
     if (no_text->answer)
-	fontsize = -1;
+        fontsize = -1;
 
     /* Parse and select foreground color */
     fg_color = D_parse_color(fg_color_opt->answer, 0);
@@ -216,7 +216,7 @@ int main(int argc, char **argv)
     /* Parse and select background color */
     bg_color = D_parse_color(bg_color_opt->answer, 1);
     if (bg_color == 0)
-	do_background = FALSE;
+        do_background = FALSE;
 
 
     D_open_driver();
