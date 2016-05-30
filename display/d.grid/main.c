@@ -33,12 +33,13 @@ int main(int argc, char **argv)
     int colorg = 0;
     int colorb = 0;
     int colort = 0;
+    int colorbg = 0;
     double size = 0., gsize = 0.;       /* initialize to zero */
     double east, north;
     int do_text, fontsize, mark_type, line_width, dirn;
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3, *opt4, *fsize, *tcolor, *lwidth,
-        *direction;
+        *direction, *bgcolor;
     struct Flag *noborder, *notext, *geogrid, *nogrid, *wgs84, *cross,
         *fiducial, *dot, *align;
     struct pj_info info_in;     /* Proj structures */
@@ -104,6 +105,12 @@ int main(int argc, char **argv)
     tcolor->answer = "gray";
     tcolor->label = _("Text color");
     tcolor->guisection = _("Color");
+
+    bgcolor = G_define_standard_option(G_OPT_CN);
+    bgcolor->key = "bgcolor";
+    bgcolor->answer = "none";
+    bgcolor->label = _("Background color");
+    bgcolor->guisection = _("Color");
 
     fsize = G_define_option();
     fsize->key = "fontsize";
@@ -269,6 +276,8 @@ int main(int argc, char **argv)
     colorb = D_parse_color(opt4->answer, FALSE);
     /* Parse and select text color */
     colort = D_parse_color(tcolor->answer, FALSE);
+    /* Parse and select background color */
+    colorbg = D_parse_color(bgcolor->answer, TRUE);
 
 
     D_setup(0);
@@ -279,12 +288,12 @@ int main(int argc, char **argv)
             /* initialzie proj stuff */
             init_proj(&info_in, &info_out, wgs84->answer);
             plot_geogrid(gsize, info_in, info_out, do_text, colorg, colort,
-                         fontsize, mark_type, line_width, dirn);
+                         colorbg, fontsize, mark_type, line_width, dirn);
         }
         else {
             /* Do the grid plotting */
-            plot_grid(size, east, north, do_text, colorg, colort, fontsize,
-                      mark_type, line_width, dirn);
+            plot_grid(size, east, north, do_text, colorg, colort, colorbg,
+                      fontsize, mark_type, line_width, dirn);
         }
     }
 

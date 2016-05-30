@@ -10,14 +10,15 @@
 
 
 int plot_grid(double grid_size, double east, double north, int do_text,
-              int gcolor, int tcolor, int fontsize, int mark_type,
-              double line_width, int direction)
+              int gcolor, int tcolor, int bgcolor, int fontsize,
+              int mark_type, double line_width, int direction)
 {
     double x, y, y0;
     double e1, e2;
     struct Cell_head window;
     double row_dist, colm_dist;
     char text[128];
+    double tx, ty, bt, bb, bl, br, w, h;
 
     G_get_set_window(&window);
 
@@ -56,10 +57,27 @@ int plot_grid(double grid_size, double east, double north, int do_text,
                    fontsize*.81 = actual text width FOR DEFAULT FONT (NOT FreeType)
                  */
                 D_pos_abs(x + 4.5 * D_get_d_to_u_xconv(), D_get_u_south()
-                          -
-                          D_get_d_to_u_yconv() * (strlen(text) * fontsize *
-                                                  0.81 + 7.5));
+                          - D_get_d_to_u_yconv() * (strlen(text)
+                          * fontsize * 0.81 + 7.5));
 
+                tx = x + 4.5 * D_get_d_to_u_xconv();
+                ty = D_get_u_south() -
+                    D_get_d_to_u_yconv() * (strlen(text) * fontsize * 0.81 + 7.5);
+
+                if (bgcolor != 0) {
+                    D_get_text_box(text, &bt, &bb, &bl, &br);
+                    w = br - bl;
+                    h = bt - bb;
+                    bl = tx - w/2;
+                    bt = ty + h/10;
+                    br = tx + w + w/2;
+                    bb = ty - h - h/10;
+                    D_use_color(bgcolor);
+                    D_box_abs(bl, bt, br, bb);
+                }
+
+                D_use_color(tcolor);
+                D_pos_abs(tx, ty);
                 D_text(text);
             }
             x += grid_size;
@@ -110,6 +128,37 @@ int plot_grid(double grid_size, double east, double north, int do_text,
                                                   0.81 + 7.5),
                           y - D_get_d_to_u_yconv() * 4.5);
 
+                tx = D_get_u_east() -
+                     D_get_d_to_u_xconv() * (strlen(text) * fontsize * 0.81 +
+                                             7.5);
+                ty = y - D_get_d_to_u_yconv() * 4.5;
+
+                if (bgcolor != 0) {
+                    D_get_text_box(text, &bt, &bb, &bl, &br);
+                    w = br - bl;
+                    h = bt - bb;
+
+                    if (w > 0)
+                    w += 0.2 * fontsize;
+                    else
+                    /* D_text() does not draw " ". */
+                    w = 0.8 * fontsize;
+                    if (h > 0)
+                    h += 0.2 * fontsize;
+                    else
+                    /* D_text() does not draw " ". */
+                    h = 0.8 * fontsize;
+
+                    bl = tx - w/10;
+                    bt = ty + h + h/2;
+                    br = tx + w + w/10;
+                    bb = ty - h/2;
+                    D_use_color(bgcolor);
+                    D_box_abs(bl, bt, br, bb);
+                }
+
+                D_use_color(tcolor);
+                D_pos_abs(tx, ty);
                 D_text(text);
             }
             y += grid_size;
@@ -150,7 +199,7 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 
 
 int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
-                 int do_text, int gcolor, int tcolor, int fontsize,
+                 int do_text, int gcolor, int tcolor, int bgcolor, int fontsize,
                  int mark_type, double line_width, int direction)
 {
     double g;
@@ -167,6 +216,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
     double row_dist, colm_dist;
     float font_angle;
     struct Cell_head window;
+    double tx, ty, bt, bb, bl, br, w, h;
 
     /* geo current region */
     G_get_set_window(&window);
@@ -232,10 +282,26 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
             G_format_northing(g, text, PROJECTION_LL);
             D_text_rotation(font_angle);
             D_text_size(fontsize, fontsize);
-            D_pos_abs(D_get_u_west() + D_get_d_to_u_xconv() * border_off,
-                      start_coord - D_get_d_to_u_yconv() * grid_off);
+            tx = D_get_u_west() + D_get_d_to_u_xconv() * border_off;
+            ty = start_coord - D_get_d_to_u_yconv() * grid_off;
+
+            if (bgcolor != 0) {
+                D_get_text_box(text, &bt, &bb, &bl, &br);
+                w = br - bl;
+                h = bt - bb;
+                bl = tx - w/10;
+                bt = ty + h + h/2;
+                br = tx + w + w/10;
+                bb = ty - h/2;
+                D_use_color(bgcolor);
+                D_box_abs(bl, bt, br, bb);
+            }
+
+            D_use_color(tcolor);
+            D_pos_abs(tx, ty);
             D_text(text);
         }
+
     }
 
     /* Lines of Longitude */
@@ -300,9 +366,24 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
             G_format_easting(g, text, PROJECTION_LL);
             D_text_rotation(font_angle);
             D_text_size(fontsize, fontsize);
-            D_pos_abs(start_coord + D_get_d_to_u_xconv() * (grid_off + 1.5),
-                      D_get_u_north() + D_get_d_to_u_yconv() *
-                      (border_off + extra_y_off));
+            tx = start_coord + D_get_d_to_u_xconv() * (grid_off + 1.5);
+            ty = D_get_u_north() + D_get_d_to_u_yconv() * (border_off +
+                                                           extra_y_off);
+
+            if (bgcolor != 0) {
+                D_get_text_box(text, &bt, &bb, &bl, &br);
+                w = br - bl;
+                h = bt - bb;
+                bl = tx - w/2;
+                bt = ty + h/10;
+                br = tx + w + w/2;
+                bb = ty - h - h/10;
+                D_use_color(bgcolor);
+                D_box_abs(bl, bt, br, bb);
+            }
+
+            D_use_color(tcolor);
+            D_pos_abs(tx, ty);
             D_text(text);
         }
     }
