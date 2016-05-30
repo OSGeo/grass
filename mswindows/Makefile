@@ -1,6 +1,9 @@
 MODULE_TOPDIR = ..
 
-include $(MODULE_TOPDIR)/include/Make/Other.make
+SUBDIRS = \
+	osgeo4w
+
+include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 EXTRA_CLEAN_FILES = GRASS-Packager.bat GRASS-Installer.nsi
 
