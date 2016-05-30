@@ -21,6 +21,7 @@
 
 /* clump.c */
 CELL clump(int, int, int, int);
+CELL clump_n(int *, char **, int, double, int, int, int);
 int print_time(long *);
 
 /* main.c */

@@ -9,7 +9,7 @@
  * PURPOSE:      Recategorizes data in a raster map layer by grouping cells
  *               that form physically discrete areas into unique categories.
  *
- * COPYRIGHT:    (C) 2006-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2016 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -31,7 +31,9 @@ int main(int argc, char *argv[])
     struct History hist;
     CELL min, max;
     int range_return, n_clumps;
-    int in_fd, out_fd;
+    int *in_fd, out_fd;
+    int i, n;
+    double threshold;
     char title[512];
     char name[GNAME_MAX];
     char *OUTPUT;
@@ -39,6 +41,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *opt_in;
     struct Option *opt_out;
+    struct Option *opt_thresh;
     struct Option *opt_title;
     struct Flag *flag_diag;
     struct Flag *flag_print;
@@ -56,7 +59,7 @@ int main(int argc, char *argv[])
 	_("Recategorizes data in a raster map by grouping cells "
 	  "that form physically discrete areas into unique categories.");
 
-    opt_in = G_define_standard_option(G_OPT_R_INPUT);
+    opt_in = G_define_standard_option(G_OPT_R_INPUTS);
 
     opt_out = G_define_standard_option(G_OPT_R_OUTPUT);
     opt_out->required = NO;
@@ -66,6 +69,14 @@ int main(int argc, char *argv[])
     opt_title->type = TYPE_STRING;
     opt_title->required = NO;
     opt_title->description = _("Title for output raster map");
+
+    opt_thresh = G_define_option();
+    opt_thresh->key = "threshold";
+    opt_thresh->type = TYPE_DOUBLE;
+    opt_thresh->required = NO;
+    opt_thresh->answer = "0";
+    opt_thresh->label = _("Threshold to identify similar cells");
+    opt_thresh->description = _("Valid range: 0 = identical to < 1 = maximal difference");
 
     flag_diag = G_define_flag();
     flag_diag->key = 'd';
@@ -83,19 +94,37 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    INPUT = opt_in->answer;
+    threshold = atof(opt_thresh->answer);
+    if (threshold < 0 || threshold >= 1)
+	G_fatal_error(_("Valid range for option <%s> is 0 <= value < 1"),
+	              opt_thresh->key);
+
+    n = 0;
+    while (opt_in->answers[n])
+	n++;
+
+    in_fd = G_malloc(sizeof(int) * n);
+
+    for (i = 0; i < n; i++)
+	in_fd[i] = Rast_open_old(opt_in->answers[i], "");
+
+    INPUT = opt_in->answers[0];
     strcpy(name, INPUT);
 
-    in_fd = Rast_open_old(name, "");
-
+    OUTPUT = NULL;
+    out_fd = -1;
     if (!flag_print->answer) {
 	OUTPUT = opt_out->answer;
 	out_fd = Rast_open_c_new(OUTPUT);
     }
 
-    clump(in_fd, out_fd, flag_diag->answer, flag_print->answer);
+    if (n == 1 && threshold == 0)
+	clump(in_fd[0], out_fd, flag_diag->answer, flag_print->answer);
+    else
+	clump_n(in_fd, opt_in->answers, n, threshold, out_fd, flag_diag->answer, flag_print->answer);
 
-    Rast_close(in_fd);
+    for (i = 0; i < n; i++)
+	Rast_close(in_fd[i]);
 
     if (!flag_print->answer) {
 	Rast_close(out_fd);
