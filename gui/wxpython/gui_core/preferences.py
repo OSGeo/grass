@@ -729,7 +729,10 @@ class PreferencesDialog(PreferencesBaseDialog):
         panel.SetSizer(border)
 
         # bindings
-        outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFont)
+        if sys.platform == 'darwin' and globalvar.CheckWxVersion([3]):
+            outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFontCustomDialog)
+        else:
+            outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFont)
 
         return panel
 
@@ -1946,6 +1949,22 @@ class PreferencesDialog(PreferencesBaseDialog):
         dlg.Destroy()
 
         event.Skip()
+
+    def OnSetOutputFontCustomDialog(self, event):
+        """Set font for command console using the custom dialog
+           (native is crashing on Mac)"""
+        dlg = DefaultFontDialog(parent=self,
+                                title=_('Select default output font'),
+                                style=wx.DEFAULT_DIALOG_STYLE,
+                                type='outputfont')
+        if dlg.ShowModal() == wx.ID_OK:
+            # set output font and font size variables
+            if dlg.font:
+                self.settings.Set(group='appearance', value=dlg.font,
+                                  key='outputfont', subkey='type')
+                self.settings.Set(group='appearance', value=dlg.fontsize,
+                                  key='outputfont', subkey='size')
+        dlg.Destroy()
 
     def OnSetOutputFont(self, event):
         """'Set output font' button pressed
