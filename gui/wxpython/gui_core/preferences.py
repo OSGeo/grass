@@ -2060,7 +2060,7 @@ class DefaultFontDialog(wx.Dialog):
             id=wx.ID_ANY,
             pos=wx.DefaultPosition,
             choices=self.fontlist,
-            style=wx.LB_SINGLE | wx.LB_SORT)
+            style=wx.LB_SINGLE)
         self.Bind(wx.EVT_LISTBOX, self.EvtListBox, self.fontlb)
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, self.fontlb)
 
