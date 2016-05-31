@@ -259,7 +259,7 @@ void G__usage_html(void)
                             
                             if (thumbnails)
                                 fprintf(stdout, "<img width=\"80\" height=\"12\" "
-                                        "src=\"%s/%s.png\" alt=\"%s\">",
+                                        "src=\"%s/%s.png\" alt=\"%s\"> ",
                                         thumbnails, opt->opts[i], opt->opts[i]);
                         }
 			print_escaped_for_html(stdout, opt->opts[i]);
