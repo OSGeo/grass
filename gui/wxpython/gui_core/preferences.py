@@ -729,7 +729,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         panel.SetSizer(border)
 
         # bindings
-        if sys.platform == 'darwin' and globalvar.CheckWxVersion([3]):
+        if sys.platform == 'darwin':
             outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFontCustomDialog)
         else:
             outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFont)
