@@ -44,8 +44,78 @@ int plot_grid(double grid_size, double east, double north, int do_text,
                 D_line_abs(x, window.north, x, window.south);
                 D_line_width(0);        /* reset so text doesn't use it */
             }
+            x += grid_size;
+        }
+        D_text_rotation(0.0);   /* reset */
+    }
 
-            if (do_text) {
+    /* Draw horizontal grids
+     *
+     * For latlon, must draw in shorter sections
+     * to make sure that each section of the grid
+     * line is less than half way around the globe
+     */
+    e1 = (window.east * 2 + window.west) / 3;
+    e2 = (window.west * 2 + window.east) / 3;
+
+    if (window.south > north)
+        y = ceil((window.south - north) / grid_size) * grid_size + north;
+    else
+        y = north - ceil((north - window.south) / grid_size) * grid_size;
+
+    if (direction != DIRN_LON) {
+        while (y <= window.north) {
+            if (mark_type == MARK_GRID) {
+                D_use_color(gcolor);
+                if (line_width)
+                    D_line_width(line_width);
+                D_line_abs(window.east, y, e1, y);
+                D_line_abs(e1, y, e2, y);
+                D_line_abs(e2, y, window.west, y);
+                D_line_width(0);        /* reset so text doesn't use it */
+            }
+            y += grid_size;
+        }
+        D_text_rotation(0.0);
+    }
+
+    /* draw marks not grid lines */
+    if (mark_type != MARK_GRID) {
+        /* reset x and y */
+        if (window.west > east)
+            x = ceil((window.west - east) / grid_size) * grid_size + east;
+        else
+            x = east - ceil((east - window.west) / grid_size) * grid_size;
+        if (window.south > north)
+            y0 = ceil((window.south - north) / grid_size) * grid_size + north;
+        else
+            y0 = north - ceil((north - window.south) / grid_size) * grid_size;
+
+        /* plot marks */
+        while (x <= window.east) {
+            y = y0;             /* reset */
+            while (y <= window.north) {
+                if (mark_type == MARK_CROSS)
+                    plot_cross(x, y, gcolor, 0.0);
+                else if (mark_type == MARK_FIDUCIAL)
+                    plot_fiducial(x, y, gcolor, 0.0);
+                else if (mark_type == MARK_DOT)
+                    plot_dot(x, y, gcolor);
+                y += grid_size;
+            }
+            x += grid_size;
+        }
+    }
+
+    /* Draw vertical labels */
+    if (do_text) {
+        if (window.west > east)
+            x = ceil((window.west - east) / grid_size) * grid_size + east;
+        else
+            x = east - ceil((east - window.west) / grid_size) * grid_size;
+
+        if (direction != DIRN_LAT) {
+            while (x <= window.east) {
                 D_use_color(tcolor);
                 G_format_easting(x, text, G_projection());
                 D_text_rotation(270.0);
@@ -79,40 +149,22 @@ int plot_grid(double grid_size, double east, double north, int do_text,
                 D_use_color(tcolor);
                 D_pos_abs(tx, ty);
                 D_text(text);
+                x += grid_size;
             }
-            x += grid_size;
+            D_text_rotation(0.0);   /* reset */
         }
-        D_text_rotation(0.0);   /* reset */
     }
 
+    /* Draw horizontal labels */
+    if (do_text) {
+        if (window.south > north)
+            y = ceil((window.south - north) / grid_size) * grid_size + north;
+        else
+            y = north - ceil((north - window.south) / grid_size) * grid_size;
 
-    /* Draw horizontal grids
-     *
-     * For latlon, must draw in shorter sections
-     * to make sure that each section of the grid
-     * line is less than half way around the globe
-     */
-    e1 = (window.east * 2 + window.west) / 3;
-    e2 = (window.west * 2 + window.east) / 3;
+        if (direction != DIRN_LON) {
+            while (y <= window.north) {
 
-    if (window.south > north)
-        y = ceil((window.south - north) / grid_size) * grid_size + north;
-    else
-        y = north - ceil((north - window.south) / grid_size) * grid_size;
-
-    if (direction != DIRN_LON) {
-        while (y <= window.north) {
-            if (mark_type == MARK_GRID) {
-                D_use_color(gcolor);
-                if (line_width)
-                    D_line_width(line_width);
-                D_line_abs(window.east, y, e1, y);
-                D_line_abs(e1, y, e2, y);
-                D_line_abs(e2, y, window.west, y);
-                D_line_width(0);        /* reset so text doesn't use it */
-            }
-
-            if (do_text) {
                 D_use_color(tcolor);
                 G_format_northing(y, text, G_projection());
                 D_text_size(fontsize, fontsize);
@@ -160,37 +212,10 @@ int plot_grid(double grid_size, double east, double north, int do_text,
                 D_use_color(tcolor);
                 D_pos_abs(tx, ty);
                 D_text(text);
-            }
-            y += grid_size;
-        }
-    }
 
-
-    /* draw marks not grid lines */
-    if (mark_type != MARK_GRID) {
-        /* reset x and y */
-        if (window.west > east)
-            x = ceil((window.west - east) / grid_size) * grid_size + east;
-        else
-            x = east - ceil((east - window.west) / grid_size) * grid_size;
-        if (window.south > north)
-            y0 = ceil((window.south - north) / grid_size) * grid_size + north;
-        else
-            y0 = north - ceil((north - window.south) / grid_size) * grid_size;
-
-        /* plot marks */
-        while (x <= window.east) {
-            y = y0;             /* reset */
-            while (y <= window.north) {
-                if (mark_type == MARK_CROSS)
-                    plot_cross(x, y, gcolor, 0.0);
-                else if (mark_type == MARK_FIDUCIAL)
-                    plot_fiducial(x, y, gcolor, 0.0);
-                else if (mark_type == MARK_DOT)
-                    plot_dot(x, y, gcolor);
                 y += grid_size;
             }
-            x += grid_size;
+            D_text_rotation(0.0);
         }
     }
 
@@ -274,35 +299,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 
             D_line_width(0);
         }
-
-        if (do_text) {
-            /* Set text color */
-            D_use_color(tcolor);
-
-            G_format_northing(g, text, PROJECTION_LL);
-            D_text_rotation(font_angle);
-            D_text_size(fontsize, fontsize);
-            tx = D_get_u_west() + D_get_d_to_u_xconv() * border_off;
-            ty = start_coord - D_get_d_to_u_yconv() * grid_off;
-
-            if (bgcolor != 0) {
-                D_get_text_box(text, &bt, &bb, &bl, &br);
-                w = br - bl;
-                h = bt - bb;
-                bl = tx - w/10;
-                bt = ty + h + h/2;
-                br = tx + w + w/10;
-                bb = ty - h/2;
-                D_use_color(bgcolor);
-                D_box_abs(bl, bt, br, bb);
-            }
-
-            D_use_color(tcolor);
-            D_pos_abs(tx, ty);
-            D_text(text);
         }
-
-    }
 
     /* Lines of Longitude */
     g = floor(east / size) * size;
@@ -359,35 +356,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 
             D_line_width(0);
         }
-        if (do_text) {
-            /* Set text color */
-            D_use_color(tcolor);
-
-            G_format_easting(g, text, PROJECTION_LL);
-            D_text_rotation(font_angle);
-            D_text_size(fontsize, fontsize);
-            tx = start_coord + D_get_d_to_u_xconv() * (grid_off + 1.5);
-            ty = D_get_u_north() + D_get_d_to_u_yconv() * (border_off +
-                                                           extra_y_off);
-
-            if (bgcolor != 0) {
-                D_get_text_box(text, &bt, &bb, &bl, &br);
-                w = br - bl;
-                h = bt - bb;
-                bl = tx - w/2;
-                bt = ty + h/10;
-                br = tx + w + w/2;
-                bb = ty - h - h/10;
-                D_use_color(bgcolor);
-                D_box_abs(bl, bt, br, bb);
-            }
-
-            D_use_color(tcolor);
-            D_pos_abs(tx, ty);
-            D_text(text);
         }
-    }
-
     D_text_rotation(0.0);       /* reset */
 
     /* draw marks not grid lines */
@@ -413,6 +382,148 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
         }
 #endif
         /* also TODO: rotate cross and fiducial marks by the converge angle; see g.region -n */
+    }
+
+    /* geo current region */
+    G_get_set_window(&window);
+
+    /* Adjust south and east back by one pixel for display bug? */
+    row_dist = D_d_to_u_row(0.) - D_d_to_u_row(1.);
+    colm_dist = D_d_to_u_col(1.) - D_d_to_u_col(0.);
+    window.south += row_dist;
+    window.east -= colm_dist;
+
+    /* get lat long min max */
+    /* probably need something like boardwalk ?? */
+    get_ll_bounds(&west, &east, &south, &north, window, info_in, info_out);
+
+    G_debug(3, "REGION BOUNDS N=%f S=%f E=%f W=%f", north, south, east, west);
+
+
+    /* Labels of Latitude */
+    if (do_text) {
+        g = floor(north / size) * size;
+        e1 = east;
+        for (j = 0; g >= south; j++, g -= size) {
+            start_coord = -9999.;
+            if (g == north || g == south || direction == DIRN_LON)
+                continue;
+
+            /* Set grid color */
+            for (ll = 0; ll < SEGS; ll++) {
+                n1 = n2 = g;
+                e1 = west + (ll * ((east - west) / SEGS));
+                e2 = e1 + ((east - west) / SEGS);
+                if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
+                    G_fatal_error(_("Error in pj_do_proj"));
+
+                check_coords(e1, n1, &lon, &lat, 1, window, info_in, info_out);
+                e1 = lon;
+                n1 = lat;
+                if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
+                    G_fatal_error(_("Error in pj_do_proj"));
+
+                check_coords(e2, n2, &lon, &lat, 1, window, info_in, info_out);
+                e2 = lon;
+                n2 = lat;
+                if (start_coord == -9999.) {
+                    start_coord = n1;
+                    font_angle = get_heading((e1 - e2), (n1 - n2));
+                }
+            }
+
+            G_format_northing(g, text, PROJECTION_LL);
+            D_text_rotation(font_angle);
+            D_text_size(fontsize, fontsize);
+            tx = D_get_u_west() + D_get_d_to_u_xconv() * border_off;
+            ty = start_coord - D_get_d_to_u_yconv() * grid_off;
+
+            if (bgcolor != 0) {
+                D_get_text_box(text, &bt, &bb, &bl, &br);
+                w = br - bl;
+                h = bt - bb;
+                bl = tx - w/10;
+                bt = ty + h + h/2;
+                br = tx + w + w/10;
+                bb = ty - h/2;
+                D_use_color(bgcolor);
+                D_box_abs(bl, bt, br, bb);
+            }
+
+            D_use_color(tcolor);
+            D_pos_abs(tx, ty);
+            D_text(text);
+        }
+    }
+
+
+    /* Labels of Longitude */
+    if (do_text) {
+        g = floor(east / size) * size;
+        n1 = north;
+        for (j = 0; g > west; j++, g -= size) {
+            start_coord = -9999.;
+            extra_y_off = 0.0;
+            if (g == east || g == west || direction == DIRN_LAT)
+                continue;
+
+            for (ll = 0; ll < SEGS; ll++) {
+                e1 = e2 = g;
+                n1 = north - (ll * ((north - south) / SEGS));
+                n2 = n1 - ((north - south) / SEGS);
+
+                if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
+                    G_fatal_error(_("Error in pj_do_proj"));
+
+                check_coords(e1, n1, &lon, &lat, 2, window, info_in, info_out);
+                e1 = lon;
+                n1 = lat;
+                if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
+                    G_fatal_error(_("Error in pj_do_proj"));
+
+                check_coords(e2, n2, &lon, &lat, 2, window, info_in, info_out);
+                e2 = lon;
+                n2 = lat;
+
+                if ((start_coord == -9999.) && (D_u_to_a_row(n1) > 0)) {
+                    font_angle = get_heading((e1 - e2), (n1 - n2));
+                    start_coord = e1;
+
+                    /* font rotates by bottom-left corner, try to keep top-left cnr on screen */
+                    if (font_angle - 270 > 0) {
+                        extra_y_off =
+                            sin((font_angle - 270) * M_PI / 180) * fontsize;
+                        if (D_u_to_d_row(n1) - D_get_d_north() <
+                            extra_y_off + grid_off)
+                            start_coord = -9999.;   /* wait until the next point south */
+                    }
+                }
+            }
+
+            G_format_easting(g, text, PROJECTION_LL);
+            D_text_rotation(font_angle);
+            D_text_size(fontsize, fontsize);
+            tx = start_coord + D_get_d_to_u_xconv() * (grid_off + 1.5);
+            ty = D_get_u_north() + D_get_d_to_u_yconv() * (border_off +
+                                                           extra_y_off);
+
+            if (bgcolor != 0) {
+                D_get_text_box(text, &bt, &bb, &bl, &br);
+                w = br - bl;
+                h = bt - bb;
+                bl = tx - w/2;
+                bt = ty + h/10;
+                br = tx + w + w/2;
+                bb = ty - h - h/10;
+                D_use_color(bgcolor);
+                D_box_abs(bl, bt, br, bb);
+            }
+
+            D_use_color(tcolor);
+            D_pos_abs(tx, ty);
+            D_text(text);
+        }
+        D_text_rotation(0.0);       /* reset */
     }
 
     return 0;
