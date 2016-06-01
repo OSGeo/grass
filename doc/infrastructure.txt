@@ -148,11 +148,13 @@ Maintainer: OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
 * http://trac.osgeo.org/grass/browser
 * SVN
 
+Wiki Macro definitions for manual pages G7:modulename
+* https://trac.osgeo.org/grass/wiki/InterMapTxt
 
 == GRASS Bugtracker ==
 
 Current bugtracker (Jan 2008 - today):
-  * http://trac.osgeo.org/grass/report
+  * https://trac.osgeo.org/grass/report
   * Trac
   * posts new bugs and comments to grass-dev list
 

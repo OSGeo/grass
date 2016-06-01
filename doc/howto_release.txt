@@ -180,6 +180,9 @@ Contents
         - under "Comment" add Field "Milestone" and set to next version
         - Select all shown tickets via Status: assigned/new/reopened
         - then "Change ticket" button
+      - Only in case of new release branch
+         Add Wiki Macro definitions for manual pages G7X:modulename
+         - Edit: https://trac.osgeo.org/grass/wiki/InterMapTxt
 
 
  o WinGRASS notes:
