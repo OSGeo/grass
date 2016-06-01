@@ -623,32 +623,60 @@ such as a pseudo-random number generator given an explicit seed.
 the <b>seed</b> option nor the <b>-s</b> flag are given.
 
 <h2>EXAMPLES</h2>
+
 To compute the average of two raster map layers
 <em>a</em> and <em>b</em>:
 <div class="code"><pre>
 ave = (a + b)/2
 </pre></div>
+
+<p>
 To form a weighted average:
 <div class="code"><pre>
 ave = (5*a + 3*b)/8.0
 </pre></div>
+
+<p>
 To produce a binary representation of the raster map layer
 <em>a</em> so that category 0 remains 0 and all other categories become 1:
 <div class="code"><pre>
-mask = a != 0
+mapmask = a != 0
 </pre></div>
 This could also be accomplished by:
 <div class="code"><pre>
-mask = if(a)
+mapmask = if(a)
 </pre></div>
+
+<p>
 To mask raster map layer <em>b</em> by raster map layer <em>a</em>:
 <div class="code"><pre>
 result = if(a,b)
 </pre></div>
+
+<p>
 To change all values below 5 to NULL:
 <div class="code"><pre>
 newmap = if(map&lt;5, null(), 5)
 </pre></div>
+
+<p>
+To create a map with random values in a defined range (needs either the
+usage of <b>-s</b> flag or the <em>seed</em> parameter). The precision of
+the input values determines the output precision (the resulting
+<a href="rasterintro.html#raster-format">raster map type</a>):
+
+<div class="code"><pre>
+# write result as integer map (CELL)
+random_int   = rand(-100,100)
+
+# write result as double precision floating point map (DCELL)
+random_dcell = rand(-100.0,100.0)
+
+# write result as double precision floating point map (FCELL)
+random_fcell = float(rand(-100.0,100.0))
+</pre></div>
+
+<p>
 The graph() function allows users to specify a x-y conversion using 
 pairs of x,y coordinates.
 In some situations a transformation from one value to another is not
