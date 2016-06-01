@@ -128,8 +128,6 @@ int main(int argc, char **argv)
 
     D_open_driver();
 
-    D_setup(0);
-
     draw_n_arrow(east, north, fontsize, n_arrow->answer, line_width);
 
     D_save_command(G_recreate_command());
