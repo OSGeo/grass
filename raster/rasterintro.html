@@ -242,24 +242,39 @@ Hydrologic simulation model are available as
 
 <h3>Raster format</h3>
 
-Raster data can be stored in GRASS as 2D or 3D grids. 2D rasters
-support 3 data types: 32bit signed integer, single- and double-precision
-floating-point. 3D rasters support only single- and double-precision
-floating-point. In most GRASS resources, 2D raster maps are usually
-called "raster", their integer data type "CELL", single-precision
-floating-point data type "FCELL" and double-precision floating-point
-"DCELL". The 3D raster map type is usually called "3D raster" but other
-names like "RASTER3D", "voxel", "volume", "GRID3D" or "3d cell" are common.
-3D raster's single-precision data type is most often called "float", and the
-double-precision one "double".
+In GRASS GIS, raster data can be stored as 2D or 3D grids.
+
+<h4>2D raster maps</h4>
+
+2D rasters support three data types (for technical details, please refer
+to the Wiki article
+<a href="https://grasswiki.osgeo.org/wiki/GRASS_raster_semantics">GRASS raster semantics</a>):
+
+<ul>
+<li>32bit signed integer (CELL),</li>
+<li>single-precision floating-point (FCELL), and</li>
+<li>double-precision floating-point (DCELL).
+</ul>
+
+In most GRASS GIS resources, 2D raster maps are usually called "raster" maps.
+
+<h4>3D raster maps</h4>
+
+The 3D raster map type is usually called "3D raster" but other names like
+"RASTER3D", "voxel", "volume", "GRID3D" or "3d cell" are yet common.
+
+3D rasters support only single- and double-precision floating-point.
+3D raster's single-precision data type is most often called "float",
+and the double-precision one "double".
+
+<h4>No-data management and data portability</h4>
+
+GRASS GIS distinguishes NULL and zero. When working with NULL data, it
+is important to know that operations on NULL cells lead to NULL cells.
 
 <p>
 The GRASS GIS raster format is architecture independent and portable between
 32bit and 64bit machines.
-
-<p>
-GRASS distinguishes NULL and zero. When working with NULL data, it is
-important to know that operations on NULL cells lead to NULL cells.
 
 <h3>Raster compression</h3>
 <!-- keep in sync with raster/r.compress/r.compress.html -->
