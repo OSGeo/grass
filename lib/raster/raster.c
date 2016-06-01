@@ -67,10 +67,13 @@ int Rast_raster_cmp(const void *v1, const void *v2, RASTER_MAP_TYPE data_type)
 /*!
  * \brief Copies raster values.
  *
- * If v2 is null value, sets v2 to null value.
+ * If \p v2 is null value, sets \p v2 to null value.
+ * \p n is typically size of the destination array
+ * and the source array is at least that large.
  *
- * \param v1, v2 raster values
- * \param n ?
+ * \param v1 destination array for raster values
+ * \param v2 source array with raster values
+ * \param n number of values to copy
  * \param data_type raster type (CELL, FCELL, DCELL)
  */
 void Rast_raster_cpy(void *v1, const void *v2, int n,
