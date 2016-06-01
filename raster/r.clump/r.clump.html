@@ -72,6 +72,7 @@ r.report lakes_individual units=h
 <p>
 Perform fuzzy clumping on Landsat 7 2002 imagery (North Carolina sample dataset)
 <div class="code"><pre>
+g.region raster=lsat7_2002_10 -p
 r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
         out=lsat7_2002_clump_4 threshold=0.045
 </pre></div>
@@ -82,7 +83,7 @@ r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50
 <a href="r.average.html">r.average</a>,
 <a href="r.buffer.html">r.buffer</a>,
 <a href="r.distance.html">r.distance</a>,
-<a href="r.grow.html">r.grow</a>
+<a href="r.grow.html">r.grow</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.mfilter.html">r.mfilter</a>,
 <a href="r.neighbors.html">r.neighbors</a>,
