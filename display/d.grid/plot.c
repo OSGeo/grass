@@ -138,10 +138,21 @@ int plot_grid(double grid_size, double east, double north, int do_text,
                     D_get_text_box(text, &bt, &bb, &bl, &br);
                     w = br - bl;
                     h = bt - bb;
+
+                    if (w > 0)
+                        w += 0.2 * fontsize * fabs(D_get_d_to_u_xconv());
+                    else  /* D_text() does not draw " ". */
+                        w = 0.8 * fontsize * fabs(D_get_d_to_u_xconv());
+                    if (h > 0)
+                        h += 0.2 * fontsize * fabs(D_get_d_to_u_yconv());
+                    else  /* D_text() does not draw " ". */
+                        h = 0.8 * fontsize * fabs(D_get_d_to_u_yconv());
+
                     bl = tx - w/2;
                     bt = ty + h/10;
                     br = tx + w + w/2;
                     bb = ty - h - h/10;
+
                     D_use_color(bgcolor);
                     D_box_abs(bl, bt, br, bb);
                 }
@@ -191,15 +202,13 @@ int plot_grid(double grid_size, double east, double north, int do_text,
                     h = bt - bb;
 
                     if (w > 0)
-                    w += 0.2 * fontsize;
-                    else
-                    /* D_text() does not draw " ". */
-                    w = 0.8 * fontsize;
+                        w += 0.2 * fontsize * fabs(D_get_d_to_u_xconv());
+                    else  /* D_text() does not draw " ". */
+                        w = 0.8 * fontsize * fabs(D_get_d_to_u_xconv());
                     if (h > 0)
-                    h += 0.2 * fontsize;
-                    else
-                    /* D_text() does not draw " ". */
-                    h = 0.8 * fontsize;
+                        h += 0.2 * fontsize * fabs(D_get_d_to_u_yconv());
+                    else  /* D_text() does not draw " ". */
+                        h = 0.8 * fontsize * fabs(D_get_d_to_u_yconv());
 
                     bl = tx - w/10;
                     bt = ty + h + h/2;
