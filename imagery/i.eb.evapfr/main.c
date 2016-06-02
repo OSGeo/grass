@@ -50,8 +50,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("evaporative fraction"));
     G_add_keyword(_("SEBAL"));
     module->description =
-	_("Computes evaporative fraction (Bastiaanssen, 1995) and "
-	  "root zone soil moisture (Makin, Molden and Bastiaanssen, 2001).");
+	_("Computes evaporative fraction and root zone soil moisture.");
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
