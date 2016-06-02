@@ -12,7 +12,7 @@ double pt_daily_et(double alpha_pt, double delta_pt, double ghamma_pt,
 
     /*Latent Heat of vaporization (W/m2/d) */
     t_celsius = tempka - 273.15;
-    latentHv = 86400 / ((2.501 - 0.002361 * t_celsius) * pow(10, 6));
+    latentHv = (24.0*60.0*60.0) / ((2.501 - 0.002361 * t_celsius) * pow(10, 6));
 
     /* Ratio of slope of saturation-vapour pressure Vs Temperature */
     /* ghamma_pt = psychrometric constant */
