@@ -13,6 +13,7 @@
  *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>
  *		 Major rewrite for GRASS 7 by Hamish Bowman, June 2013
+ *               Adam Laza <ad.laza32@gmail.com>, GSoC 2016
  *
  * PURPOSE:      Displays a barscale on graphics monitor
  *
@@ -36,17 +37,21 @@
 int fg_color, bg_color;
 int use_feet;
 int do_background = TRUE;
+int north_arrow;
 
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *bg_color_opt, *fg_color_opt, *coords, *fsize,
-        *barstyle, *text_placement;
-    struct Flag *feet, *no_text;
+    struct Option *bg_color_opt, *fg_color_opt, *coords, *fsize, *barstyle,
+            *text_placement, *length_opt, *segm_opt, *units_opt, *label_opt;
+    struct Flag *feet, *no_text, *n_symbol;
     struct Cell_head W;
     double east, north;
     double fontsize;
-    int bar_style, text_position;
+    int bar_style, text_position, units;
+    double length;
+    int segm;
+    char *label;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -64,6 +69,11 @@ int main(int argc, char **argv)
     no_text->key = 't';
     no_text->description = _("Draw the scale bar without text");
     no_text->guisection = _("Text");
+
+    n_symbol = G_define_flag();
+    n_symbol->key = 'n';
+    n_symbol->description = _("Display north-arrow symbol.");
+    n_symbol->guisection = _("Style");
 
     barstyle = G_define_option();
     barstyle->key = "style";
@@ -102,11 +112,38 @@ int main(int argc, char **argv)
     coords->key = "at";
     coords->key_desc = "x,y";
     coords->type = TYPE_DOUBLE;
-    coords->answer = "0.0,5.0";
+    coords->answer = "0.0,10.0";
     coords->options = "0-100";
     coords->label =
         _("Screen coordinates of the rectangle's top-left corner");
     coords->description = _("(0,0) is lower-left of the display frame");
+
+    length_opt = G_define_option();
+    length_opt->key = "length";
+    length_opt->key_desc = "integer";
+    length_opt->type = TYPE_INTEGER;
+    length_opt->answer = "0";
+    length_opt->options = "0-";
+    length_opt->label = _("Length of barscale in map units");
+
+    units_opt = G_define_option();
+    units_opt->key = "units";
+    units_opt->description = _("Barscale units to display");
+    units_opt->options = "meters, kilometers, feet, miles";
+
+    label_opt = G_define_option();
+    label_opt->key = "label";
+    label_opt->description = _("Custom label of unit");
+    label_opt->type = TYPE_STRING;
+    label_opt->guisection = _("Text");
+
+    segm_opt = G_define_option();
+    segm_opt->key = "segment";
+    segm_opt->type = TYPE_INTEGER;
+    segm_opt->answer = "10";
+    segm_opt->options = "1-100";
+    segm_opt->label = _("Number of segments");
+    segm_opt->guisection = _("Style");
 
     fg_color_opt = G_define_standard_option(G_OPT_C);
     fg_color_opt->label = _("Bar scale and text color");
@@ -114,7 +151,7 @@ int main(int argc, char **argv)
 
     bg_color_opt = G_define_standard_option(G_OPT_CN);
     bg_color_opt->key = "bgcolor";
-    bg_color_opt->answer = DEFAULT_BG_COLOR;
+    bg_color_opt->answer = "white";
     bg_color_opt->label = _("Background color (drawn behind the bar)");
     bg_color_opt->guisection = _("Colors");
 
@@ -134,6 +171,8 @@ int main(int argc, char **argv)
     fsize->description = _("Font size");
     fsize->guisection = _("Text");
 
+     G_option_exclusive(feet, units_opt, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -143,7 +182,8 @@ int main(int argc, char **argv)
         G_fatal_error(_("%s does not work with a latitude-longitude location"),
                       argv[0]);
 
-    use_feet = feet->answer ? TRUE : FALSE;
+
+    north_arrow = n_symbol->answer ? TRUE : FALSE;
 
     switch (barstyle->answer[0]) {
     case 'c':
@@ -206,6 +246,46 @@ int main(int argc, char **argv)
     sscanf(coords->answers[0], "%lf", &east);
     sscanf(coords->answers[1], "%lf", &north);
 
+
+    length = atof(length_opt->answer);
+    sscanf(segm_opt->answer, "%d", &segm);
+
+    if (feet->answer == 1){
+        use_feet = 1;
+        units = U_FEET;
+        label = "ft";
+    }
+    else {
+        if (!units_opt->answer){
+            units = G_projection_units(G_projection());
+        }
+        units = G_units(units_opt->answer);
+        switch (units) {
+        case U_METERS:
+            label = "m";
+            break;
+        case U_KILOMETERS:
+            label = "km";
+            break;
+        case U_FEET:
+            label = "ft";
+            break;
+        case U_USFEET:
+            label = "ft";
+            break;
+        case U_MILES:
+            label = "mi";
+            break;
+        default:
+            units = U_METERS;
+            label = "m";
+        }
+    }
+
+    if (label_opt->answer){
+        label = label_opt->answer;
+    }
+
     fontsize = atof(fsize->answer);
     if (no_text->answer)
         fontsize = -1;
@@ -223,7 +303,7 @@ int main(int argc, char **argv)
 
     D_setup(0);
 
-    draw_scale(east, north, bar_style, text_position, fontsize);
+    draw_scale(east, north, length, segm, units, label, bar_style, text_position, fontsize);
 
     D_save_command(G_recreate_command());
     D_close_driver();
