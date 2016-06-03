@@ -907,7 +907,7 @@ double calculate_manhattan_similarity(struct ngbr_stats *Ri,
 
     /* squared manhattan distance, sum the differences for each dimension */
     do {
-	val += Ri->mean[n] - Rk->mean[n];
+	val += fabs(Ri->mean[n] - Rk->mean[n]);
     } while (n--);
 
     /* the return value should always be in the range 0 - 1 */
