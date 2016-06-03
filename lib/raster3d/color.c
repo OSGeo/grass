@@ -57,7 +57,7 @@ int Rast3d_read_colors(const char *name, const char *mapset, struct Colors *colo
 	if (Rast3d_read_range(name, mapset, &drange) >= 0) {
 	    Rast_get_fp_range_min_max(&drange, &dmin, &dmax);
 	    if (!Rast_is_d_null_value(&dmin) && !Rast_is_d_null_value(&dmax))
-		Rast_make_rainbow_fp_colors(colors, dmin, dmax);
+		Rast_make_fp_colors(colors, DEFAULT_COLOR_TABLE, dmin, dmax);
 	    return 0;
 	}
 	err = "missing";

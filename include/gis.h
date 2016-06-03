@@ -340,6 +340,7 @@ enum rule_type {
 /* default colors */
 #define DEFAULT_FG_COLOR "black"
 #define DEFAULT_BG_COLOR "white"
+#define DEFAULT_COLOR_TABLE "viridis"
 
 /* error codes */
 #define G_FATAL_EXIT    0
