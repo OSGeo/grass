@@ -115,8 +115,8 @@ Import the geometry feature class and add two points:
 
 Write the two points to the map:
 
-    >>> new.write(point0, ('pub', ))
-    >>> new.write(point1, ('resturnat', ))
+    >>> new.write(point0, cat=1, attrs=('pub',))
+    >>> new.write(point1, cat=2, attrs=('resturant',))
 
 Commit the db changes:
 
