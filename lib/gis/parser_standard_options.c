@@ -143,9 +143,9 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_STRING;
         Opt->key_desc = "sql_query";
         Opt->required = NO;
-        Opt->label = _("SQL select statement");
+        Opt->label = _("SQL SELECT statement");
         Opt->description =
-            _("For example: 'select * from rybniky where kapri = 'hodne'");
+            _("Example: select * from towns where population > 10000");
         break;
     case G_OPT_DB_WHERE:
 	Opt->key = "where";
@@ -153,7 +153,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "sql_query";
 	Opt->required = NO;
 	Opt->label = _("WHERE conditions of SQL statement without 'where' keyword");
-	Opt->description = _("Example: income < 1000 and inhab >= 10000");
+	Opt->description = _("Example: income < 1000 and population >= 10000");
 	break;
     case G_OPT_DB_TABLE:
 	Opt->key = "table";
