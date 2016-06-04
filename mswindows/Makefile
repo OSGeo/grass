@@ -7,11 +7,7 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 EXTRA_CLEAN_FILES = GRASS-Packager.bat GRASS-Installer.nsi
 
-ifneq ($(MINGW),)
 default: GRASS-Packager.bat GRASS-Installer.nsi parsubdirs
-else
-default:
-endif	
 
 GRASS-Packager.bat: GRASS-Packager.bat.tmpl
 	sed \
