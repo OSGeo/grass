@@ -157,8 +157,10 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
+    G_add_keyword(_("statistics"));
     G_add_keyword(_("conversion"));
     G_add_keyword(_("aggregation"));
+    G_add_keyword(_("binning"));
     G_add_keyword("ASCII");
     G_add_keyword(_("LIDAR"));
     module->description =
@@ -179,6 +181,33 @@ int main(int argc, char *argv[])
 	"n,min,max,range,sum,mean,stddev,variance,coeff_var,median,percentile,skewness,trimmean";
     method_opt->answer = "mean";
     method_opt->guisection = _("Statistic");
+    G_asprintf((char **)&(method_opt->descriptions),
+               "n;%s;"
+               "min;%s;"
+               "max;%s;"
+               "range;%s;"
+               "sum;%s;"
+               "mean;%s;"
+               "stddev;%s;"
+               "variance;%s;"
+               "coeff_var;%s;"
+               "median;%s;"
+               "percentile;%s;"
+               "skewness;%s;"
+               "trimmean;%s",
+               _("Number of points in cell"),
+               _("Minimum value of point values in cell"),
+               _("Maximum value of point values in cell"),
+               _("Range of point values in cell"),
+               _("Sum of point values in cell"),
+               _("Mean (average) value of point values in cell"),
+               _("Standard deviation of point values in cell"),
+               _("Variance of point values in cell"),
+               _("Coefficient of variance of point values in cell"),
+               _("Median value of point values in cell"),
+               _("pth (nth) percentile of point values in cell"),
+               _("Skewness of point values in cell"),
+               _("Trimmed mean of point values in cell"));
 
     type_opt = G_define_option();
     type_opt->key = "type";
