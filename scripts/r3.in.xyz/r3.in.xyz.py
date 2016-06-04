@@ -26,6 +26,10 @@
 #% keyword: import
 #% keyword: voxel
 #% keyword: LIDAR
+#% keyword: statistics
+#% keyword: conversion
+#% keyword: aggregation
+#% keyword: binning
 #%End
 #%Flag
 #% key: s
