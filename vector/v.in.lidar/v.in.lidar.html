@@ -27,12 +27,18 @@ class number 2 represents ground (for other classes see LAS format specification
 in references). The <b>class_filter</b> option allows selecting one or more 
 classes, as numbers (integers) separated by comma.
 
+<p>
+Note that proper filtering of the input points in not only critical for
+the analysis itself but it can also speed up the processing
+significantly.
+
 <h3>Decimation</h3>
 
 Table with selected percentages of points to keep with corresponding
 decimation parameters:
 
-<table>
+<table class="compact">
+<tr><th>percentage</th><th>parameters</th></tr>
 <tr><td>0.1%</td><td>preserve=1000</td></tr>
 <tr><td>1%</td><td>preserve=100</td></tr>
 <tr><td>5%</td><td>preserve=20</td></tr>
@@ -48,7 +54,8 @@ decimation parameters:
 Table with selected fractions of points to keep with corresponding
 decimation parameters:
 
-<table>
+<table class="compact">
+<tr><th>ratio</th><th>parameters</th></tr>
 <tr><td>1/3</td><td>preserve=3</td></tr>
 <tr><td>1/4</td><td>preserve=4</td></tr>
 <tr><td>1/5</td><td>preserve=5</td></tr>
@@ -58,7 +65,8 @@ decimation parameters:
 Table with selected fractions of points to throw away with corresponding
 decimation parameters:
 
-<table>
+<table class="compact">
+<tr><th>ratio</th><th>parameters</th></tr>
 <tr><td>1/3</td><td>skip=3</td></tr>
 <tr><td>1/4</td><td>skip=4</td></tr>
 <tr><td>1/5</td><td>skip=5</td></tr>
