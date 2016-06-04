@@ -120,11 +120,17 @@ int main(int argc, char *argv[])
     struct Flag *base_rast_res_flag;
 
     G_gisinit(argv[0]);
+
     module = G_define_module();
-    G_add_keyword(_("3D raster"));
+    G_add_keyword(_("raster3d"));
     G_add_keyword(_("import"));
     G_add_keyword(_("LIDAR"));
-    module->description = _("Creates a 3D raster map from LAS LiDAR points");
+    G_add_keyword(_("statistics"));
+    G_add_keyword(_("conversion"));
+    G_add_keyword(_("aggregation"));
+    G_add_keyword(_("binning"));
+    module->description =
+	_("Creates a 3D raster map from LAS LiDAR points using univariate statistics.");
 
     input_opt = G_define_standard_option(G_OPT_F_BIN_INPUT);
     input_opt->required = YES;
