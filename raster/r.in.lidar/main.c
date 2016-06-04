@@ -106,6 +106,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
     G_add_keyword(_("LIDAR"));
+    G_add_keyword(_("statistics"));
+    G_add_keyword(_("conversion"));
+    G_add_keyword(_("aggregation"));
+    G_add_keyword(_("binning"));
     module->description =
 	_("Creates a raster map from LAS LiDAR points using univariate statistics.");
 
@@ -135,6 +139,33 @@ int main(int argc, char *argv[])
 	"n,min,max,range,sum,mean,stddev,variance,coeff_var,median,percentile,skewness,trimmean";
     method_opt->answer = "mean";
     method_opt->guisection = _("Statistic");
+    G_asprintf((char **)&(method_opt->descriptions),
+               "n;%s;"
+               "min;%s;"
+               "max;%s;"
+               "range;%s;"
+               "sum;%s;"
+               "mean;%s;"
+               "stddev;%s;"
+               "variance;%s;"
+               "coeff_var;%s;"
+               "median;%s;"
+               "percentile;%s;"
+               "skewness;%s;"
+               "trimmean;%s",
+               _("Number of points in cell"),
+               _("Minimum value of point values in cell"),
+               _("Maximum value of point values in cell"),
+               _("Range of point values in cell"),
+               _("Sum of point values in cell"),
+               _("Mean (average) value of point values in cell"),
+               _("Standard deviation of point values in cell"),
+               _("Variance of point values in cell"),
+               _("Coefficient of variance of point values in cell"),
+               _("Median value of point values in cell"),
+               _("pth (nth) percentile of point values in cell"),
+               _("Skewness of point values in cell"),
+               _("Trimmed mean of point values in cell"));
 
     type_opt = G_define_option();
     type_opt->key = "type";
@@ -147,8 +178,11 @@ int main(int argc, char *argv[])
     base_raster_opt = G_define_standard_option(G_OPT_R_INPUT);
     base_raster_opt->key = "base_raster";
     base_raster_opt->required = NO;
-    base_raster_opt->label = _("Subtract raster values from the z coordinates");
-    base_raster_opt->description = _("The scale for z is applied beforehand, the filter afterwards");
+    base_raster_opt->label =
+        _("Subtract raster values from the Z coordinates");
+    base_raster_opt->description =
+        _("The scale for Z is applied beforehand, the range filter for"
+          " Z afterwards");
     base_raster_opt->guisection = _("Transform");
 
     zrange_opt = G_define_option();
@@ -156,7 +190,7 @@ int main(int argc, char *argv[])
     zrange_opt->type = TYPE_DOUBLE;
     zrange_opt->required = NO;
     zrange_opt->key_desc = "min,max";
-    zrange_opt->description = _("Filter range for z data (min,max)");
+    zrange_opt->description = _("Filter range for Z data (min,max)");
     zrange_opt->guisection = _("Selection");
 
     zscale_opt = G_define_option();
@@ -164,7 +198,7 @@ int main(int argc, char *argv[])
     zscale_opt->type = TYPE_DOUBLE;
     zscale_opt->required = NO;
     zscale_opt->answer = "1.0";
-    zscale_opt->description = _("Scale to apply to z data");
+    zscale_opt->description = _("Scale to apply to Z data");
     zscale_opt->guisection = _("Transform");
 
     irange_opt = G_define_option();
@@ -246,8 +280,11 @@ int main(int argc, char *argv[])
 
     extents_flag = G_define_flag();
     extents_flag->key = 'e';
+    extents_flag->label =
+        _("Use the extent of the input for the raster extent");
     extents_flag->description =
-	_("Extend region extents based on new dataset");
+        _("Set internally computational region extents based on the"
+          " point cloud");
     extents_flag->guisection = _("Output");
 
     set_region_flag = G_define_flag();
@@ -278,18 +315,24 @@ int main(int argc, char *argv[])
 
     intens_flag = G_define_flag();
     intens_flag->key = 'i';
+    intens_flag->label =
+        _("Use intensity values rather than Z values");
     intens_flag->description =
-        _("Import intensity values rather than z values");
+        _("Uses intensity values everywhere as if they would be Z"
+          " coordinates");
 
     intens_import_flag = G_define_flag();
     intens_import_flag->key = 'j';
     intens_import_flag->description =
-        _("Use z values for filtering, but import intensity values");
+        _("Use Z values for filtering, but intensity values for statistics");
 
     base_rast_res_flag = G_define_flag();
     base_rast_res_flag->key = 'd';
+    base_rast_res_flag->label =
+        _("Use base raster resolution instead of computational region");
     base_rast_res_flag->description =
-        _("Use base raster actual resolution instead of computational region");
+        _("For getting values from base raster, use its actual"
+          " resolution instead of computational region resolution");
 
     G_option_exclusive(intens_flag, intens_import_flag, NULL);
 
@@ -710,7 +753,7 @@ int main(int argc, char *argv[])
     /* close raster file & write history */
     Rast_close(out_fd);
 
-    sprintf(title, "Raw x,y,z data binned into a raster grid by cell %s",
+    sprintf(title, "Raw X,Y,Z data binned into a raster grid by cell %s",
             method_opt->answer);
     Rast_put_cell_title(outmap, title);
 
