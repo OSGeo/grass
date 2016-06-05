@@ -18,6 +18,17 @@ of the input data format. If the original polygons contain errors (unexpected
 overlapping areas or small gaps between polygons), the import might
 need to be repeated using a larger <em>snap</em> value.
 
+<!-- TODO: add hints for latlong -->
+
+<p>
+The <em>snap</em> threshold defines the maximal distance from one to another
+vertex in map units (for latitude-longitude locations in degree). If there
+is no other vertex within <em>snap</em> distance, no snapping will be done.
+Note that a too large value can severely damage area topology, beyond repair.
+<p>
+<i>Post-processing:</i> Snapped boundaries may need to be cleaned with
+<em>v.clean</em>, using its tools <em>break,rmdupl,rmsa</em>. For details,
+refer to the <em>v.clean</em> manual page.
 
 <h2>EXAMPLE</h2>
 
@@ -29,6 +40,7 @@ v.import input=research_area.shp output=research_area extent=input
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.clean.html">v.clean</a>,
 <a href="v.in.ogr.html">v.in.ogr</a>,
 <a href="v.proj.html">v.proj</a>
 </em>
