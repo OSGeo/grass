@@ -43,7 +43,7 @@ fi
 export OSGEO4W_ROOT_MSYS="/c/OSGeo4W${OSGEO4W_POSTFIX}"
 export OSGEO4W_ROOT="C:\\\OSGeo4W${OSGEO4W_POSTFIX}"
 
-export PATH=/usr/bin:/mingw${MINGW_POSTFIX}/bin/:$OSGEO4W_ROOT_MSYS/bin:$PWD/mswindows/osgeo4w/lib
+export PATH=/usr/bin:/mingw${MINGW_POSTFIX}/bin/:$OSGEO4W_ROOT_MSYS/bin:$PWD/mswindows/osgeo4w/lib:$PWD/mswindows/osgeo4w
 
 T0=$(date +%s) 
 LT=$T0 
@@ -132,6 +132,7 @@ else
     dll_to_a $OSGEO4W_ROOT_MSYS/bin/jpeg_osgeo.dll  mswindows/osgeo4w/lib/libjpeg
 fi
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/libpq.dll       mswindows/osgeo4w/lib/libpq
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/libmysql.dll       mswindows/osgeo4w/lib/libmysqlclient
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/sqlite3.dll     mswindows/osgeo4w/lib/libsqlite3
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/cairo.dll       mswindows/osgeo4w/lib/libcairo
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/libfftw3-3.dll  mswindows/osgeo4w/lib/libfftw3
@@ -183,6 +184,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-odbc \
 	        --with-cairo \
                 --with-postgres \
+	        --with-mysql \
 	        --with-opengl=windows
 	
 	touch mswindows/osgeo4w/configure-stamp
