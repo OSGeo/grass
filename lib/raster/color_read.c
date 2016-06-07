@@ -87,7 +87,7 @@ int Rast_read_colors(const char *name, const char *mapset,
 		Rast_get_range_min_max(&range, &min, &max);
 		if (!Rast_is_c_null_value(&min) &&
 		    !Rast_is_c_null_value(&max))
-		    Rast_make_rainbow_colors(colors, min, max);
+		    Rast_make_colors(colors, DEFAULT_COLOR_TABLE, min, max);
 		return 0;
 	    }
 	}
@@ -96,7 +96,7 @@ int Rast_read_colors(const char *name, const char *mapset,
 		Rast_get_fp_range_min_max(&drange, &dmin, &dmax);
 		if (!Rast_is_d_null_value(&dmin) &&
 		    !Rast_is_d_null_value(&dmax))
-		    Rast_make_rainbow_fp_colors(colors, dmin, dmax);
+		    Rast_make_fp_colors(colors, DEFAULT_COLOR_TABLE, dmin, dmax);
 		return 0;
 	    }
 	}
