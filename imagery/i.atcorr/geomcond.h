@@ -67,6 +67,14 @@
 /*                                                                      c */
 /*         19      geoeye1          * enter month,day,hh.ddd,long.,lat. c */
 /*                                                                      c */
+/*         20      spot6            * enter month,day,hh.ddd,long.,lat. c */
+/*                                                                      c */
+/*         21      spot7            * enter month,day,hh.ddd,long.,lat. c */
+/*                                                                      c */
+/*         22      pleiades1a       * enter month,day,hh.ddd,long.,lat. c */
+/*                                                                      c */
+/*         23      pleiades1b       * enter month,day,hh.ddd,long.,lat. c */
+/*                                                                      c */
 /*     note:       for hrv and tm experiments long. and lat. are the    c */
 /*                 coordinates of the scene center.                     c */
 /*                 lat. must be > 0 for north lat., < 0 for south lat.  c */

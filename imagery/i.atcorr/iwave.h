@@ -150,6 +150,26 @@ c        125 Blue     "               ( 0.450-0.510 )                  c
 c        126 Green    "               ( 0.510-0.580 )                  c
 c        127 Red      "               ( 0.655-0.690 )                  c
 c        128 NIR      "               ( 0.780-0.920 )                  c
+c        129 Blue band of spot6       ( 0.455-0.525 )                  c 
+c        130 Green    "               ( 0.530-0.590 )                  c  
+c        131 Red      "               ( 0.625-0.695 )                  c 
+c        132 NIR      "               ( 0.760-0.890 )                  c 
+c        133 Pan      "               ( 0.455-0.745 )                  c 
+c        129 Blue band of spot7       ( 0.455-0.525 )                  c 
+c        130 Green    "               ( 0.530-0.590 )                  c  
+c        131 Red      "               ( 0.625-0.695 )                  c 
+c        132 NIR      "               ( 0.760-0.890 )                  c 
+c        133 Pan      "               ( 0.455-0.745 )                  c 
+c        129 Blue band of pleiades1a  ( 0.430-0.550 )                  c 
+c        130 Green    "               ( 0.490-0.610 )                  c  
+c        131 Red      "               ( 0.600-0.720 )                  c 
+c        132 NIR      "               ( 0.750-0.950 )                  c 
+c        133 Pan      "               ( 0.480-0.830 )                  c 
+c        129 Blue band of pleiades1b  ( 0.455-0.525 )                  c 
+c        130 Green    "               ( 0.530-0.590 )                  c  
+c        131 Red      "               ( 0.625-0.695 )                  c 
+c        132 NIR      "               ( 0.760-0.890 )                  c 
+c        133 Pan      "               ( 0.480-0.830 )                  c 
 c                                                                      c
 c  note: wl has to be in micrometer                                    c
 c**********************************************************************/
@@ -196,6 +216,10 @@ private:
 	void quickbird2(int iwa);
 	void landsat_8(int iwa);
 	void geoeye1(int iwa);
+	void spot6(int iwa);
+	void spot7(int iwa);
+	void pleiades1a(int iwa);
+	void pleiades1b(int iwa);
 
 public:
 	/* To compute the equivalent wavelength needed for the calculation of the
