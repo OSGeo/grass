@@ -82,11 +82,22 @@ In the following example, the result would be:
 
 <br>
 
-(7*4 + 6 + 5 + 4*3)/9 = 5.66
+(7*4 + 6 + 5 + 4*3)/9 = 5.6667
 
 <br>
 
 The result is rounded to the nearest integer (in this case 6).
+
+<div class="code"><pre>
+   Raw Data     Operation     New Data
+   +---+---+---+          +---+---+---+
+   | 7 | 7 | 5 |          |   |   |   |
+   +---+---+---+ average  +---+---+---+
+   | 4 | 7 | 4 |---------&gt;|   | 6 |   |
+   +---+---+---+          +---+---+---+
+   | 7 | 6 | 4 |          |   |   |   |
+   +---+---+---+          +---+---+---+
+</pre></div>
 
 <dt><b>median</b> 
 
@@ -105,16 +116,6 @@ when these are ranged in numerical order.
 <dt><b>maximum</b> 
 
 <dd>The maximum value within the neighborhood.
-<div class="code"><pre>
-       Raw Data     Operation     New Data
-   +---+---+---+          +---+---+---+
-   | 7 | 7 | 5 |          |   |   |   |
-   +---+---+---+ average  +---+---+---+
-   | 4 | 7 | 4 |---------&gt;|   | 6 |   |
-   +---+---+---+          +---+---+---+
-   | 7 | 6 | 4 |          |   |   |   |
-   +---+---+---+          +---+---+---+
-</pre></div>
 
 <dt><b>range</b>
 
