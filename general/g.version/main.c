@@ -76,6 +76,11 @@ int main(int argc, char *argv[])
     copyright->description = _("Print also the copyright message");
     copyright->guisection = _("Additional info");
 
+    cite_flag = G_define_flag();
+    cite_flag->key = 'x';
+    cite_flag->description = _("Print also the citation options");
+    cite_flag->guisection = _("Additional info");
+
     build = G_define_flag();
     build->key = 'b';
     build->description = _("Print also the build information");
@@ -97,11 +102,6 @@ int main(int argc, char *argv[])
     shell->key = 'g';
     shell->description = _("Print info in shell script style (including SVN revision number)");
     shell->guisection = _("Shell");
-
-    cite_flag = G_define_flag();
-    cite_flag->key = 'x';
-    cite_flag->description =
-        _("Display information on how to cite the GRASS GIS software and Addons");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
