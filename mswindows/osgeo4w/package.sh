@@ -184,9 +184,9 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-odbc \
 	        --with-cairo \
                 --with-postgres \
-	        --with-mysql \
 	        --with-opengl=windows
-	
+# see #3047
+#	        --with-mysql 
 	touch mswindows/osgeo4w/configure-stamp
 fi
 
