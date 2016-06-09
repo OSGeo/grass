@@ -1,95 +1,42 @@
-# Author: Ivan Mincik, ivan.mincik@gmail.com
+# Author: Ivan Mincik, ivan.mincik@gmail.com (linux)
+#         Rainer M. Krug, Rainer@krugs.de (osx)
 
 language: c
 
-compiler:
-        - gcc
-        - clang
-
-cache: apt
-
-before_install:
-        # build dependencies
-        - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable -y
-        - sudo apt-get update -qq
-
-        # test dataset
-        - wget http://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.tar.gz
-        - tar xzf ./nc_basic_spm_grass7.tar.gz
-
-install:
-        - sudo apt-get install --no-install-recommends
-                autoconf2.13
-                autotools-dev
-                debhelper
-                fakeroot
-                flex
-                bison
-                libcairo2-dev
-                libfftw3-dev
-                libfreetype6-dev
-                libgdal-dev
-                libgeos-dev
-                libglu1-mesa-dev
-                libjpeg-dev
-                libpng-dev
-                libtiff-dev
-                libmysqlclient-dev
-                libncurses5-dev
-                libpq-dev
-                libproj-dev
-                proj-bin
-                libreadline-dev
-                libsqlite3-dev
-                libwxgtk2.8-dev
-                libxmu-dev
-                python
-                python-wxgtk2.8
-                python-dev
-                unixodbc-dev
-                libnetcdf-dev  
-                netcdf-bin
-                dpatch
-                libblas-dev
-                liblapack-dev
-                python-numpy
+matrix:
+   include:
+      - os: linux
+        compiler: gcc
+        sudo: required
+      - os: linux
+        compiler: clang
+        sudo: required
+      - language: objective-c
+        os: osx
 
 env:
   global:
     - CFLAGS="-Werror=implicit-function-declaration"
 
-script:
-        - ./configure --host=x86_64-linux-gnu --build=x86_64-linux-gnu
-                --prefix=/usr/lib
-                --sysconfdir=/etc
-                --sharedstatedir=/var
-                --enable-shared
-                --with-postgres
-                --with-cxx
-                --with-gdal
-                --with-freetype
-                --with-readline
-                --with-nls
-                --with-odbc
-                --with-geos
-                --with-lapack
-                --with-netcdf
-                --with-blas
-                --with-sqlite
-                --enable-largefile
-                --with-freetype-includes=/usr/include/freetype2/
-                --with-postgres-includes=/usr/include/postgresql/
-                --with-proj-share=/usr/share/proj
-                --with-wxwidgets=/usr/bin/wx-config
-                --with-python
-                --with-cairo
-        - make -j2
+before_install:
+  - ./.travis/.travis.$TRAVIS_OS_NAME.before_install.sh
 
-notifications:
-        email:
-            recipients:
-                - grass-dev@lists.osgeo.org
-                - landa.martin@gmail.com
-                - wenzeslaus@gmail.com
-            on_success: change
-            on_failure: always
+install:
+  - ./.travis/.travis.$TRAVIS_OS_NAME.install.sh
+
+script:
+  - ./.travis/.travis.$TRAVIS_OS_NAME.script.sh
+
+## Notifications:
+##         email:
+##             recipients:
+##                 - grass-dev@lists.osgeo.org
+##                 - landa.martin@gmail.com
+##                 - wenzeslaus@gmail.com
+##                 - rainer@krugs.de
+##             on_success: change
+##             on_failure: always
+
+
+## TODO Change so that the .travis.yml files are in one repo and the
+## grass repo is downloaded automatically
