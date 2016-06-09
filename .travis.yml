@@ -27,15 +27,14 @@ install:
 script:
   - ./.travis/.travis.$TRAVIS_OS_NAME.script.sh
 
-## Notifications:
-##         email:
-##             recipients:
-##                 - grass-dev@lists.osgeo.org
-##                 - landa.martin@gmail.com
-##                 - wenzeslaus@gmail.com
-##                 - rainer@krugs.de
-##             on_success: change
-##             on_failure: always
+notifications:
+        email:
+            recipients:
+                - grass-dev@lists.osgeo.org
+                - landa.martin@gmail.com
+                - wenzeslaus@gmail.com
+            on_success: change
+            on_failure: always
 
 
 ## TODO Change so that the .travis.yml files are in one repo and the
