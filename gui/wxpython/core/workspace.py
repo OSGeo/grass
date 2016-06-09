@@ -53,6 +53,9 @@ class ProcessWorkspaceFile:
         #
         self.layers = []
         #
+        # list of overlays
+        self.overlays = []
+        #
         # nviz state
         #
         self.nviz_state = {}
@@ -213,6 +216,13 @@ class ProcessWorkspaceFile:
                     "vdigit": vdigit,
                     "nviz": nviz})
 
+            elif item.tag == 'overlay':
+                cmd = self.__processOverlay(item)
+
+                self.overlays.append({
+                    "display": self.displayIndex,
+                    "cmd": cmd})
+
     def __processLayer(self, layer):
         """Process layer item
 
@@ -270,6 +280,31 @@ class ProcessWorkspaceFile:
             nviz = None
 
         return (cmd, selected, vdigit, nviz)
+
+    def __processOverlay(self, node_overlay):
+        """
+        Process overlay item
+        :param overlay: tree node
+        """
+        cmd = list()
+
+        cmd.append(node_overlay.get('name', "unknown"))
+
+        # flags
+        for f in node_overlay.findall('flag'):
+            flag = f.get('name', '')
+            if len(flag) > 1:
+                cmd.append('--' + flag)
+            else:
+                cmd.append('-' + flag)
+
+        # parameters
+        for p in node_overlay.findall('parameter'):
+            cmd.append('%s=%s' % (p.get('name', ''),
+                                  self.__filterValue(
+                                      self.__getNodeText(p, 'value'))))
+
+        return cmd
 
     def __processLayerVdigit(self, node_vdigit):
         """Process vector digitizer layer settings
@@ -865,6 +900,10 @@ class WriteWorkspaceFile(object):
                     iview=nvizDisp.iview,
                     light=nvizDisp.light,
                     constants=nvizDisp.constants)
+
+            # list of map elements
+            item = mapTree.GetFirstChild(mapTree.root)[0]
+            self.__writeOverlay(mapdisp)
 
             file.write('%s</display>\n' % (' ' * self.indent))
 
@@ -1473,6 +1512,73 @@ class WriteWorkspaceFile(object):
         self.file.write(('<value>%' + format + '</value>\n') % data)
         self.indent -= 4
         self.file.write('%s</%s>\n' % (' ' * self.indent, tag))
+
+    def __writeOverlay(self, mapdisp):
+        """Function for writing map elements (barscale, northarrow etc.)
+        """
+        disp_size = mapdisp.GetMapWindow().GetClientSize()
+
+        if mapdisp.arrow.IsShown():
+            cmd = mapdisp.arrow.cmd
+            coord_px = mapdisp.arrow.coords
+            self.__writeOverlayParams(disp_size, cmd, coord_px)
+
+        if (mapdisp.legend) and mapdisp.legend.IsShown():
+            cmd = mapdisp.legend.cmd
+            coord_px = mapdisp.legend.coords
+            self.__writeOverlayParams(disp_size, cmd, coord_px)
+
+        if mapdisp.barscale and mapdisp.barscale.IsShown():
+            cmd = mapdisp.barscale.cmd
+            coord_px = mapdisp.barscale.coords
+            self.__writeOverlayParams(disp_size, cmd, coord_px)
+
+    def __writeOverlayParams(self, disp_size, cmd, coord_px):
+        """
+        :param mapdisp: mapdisplay
+        :param cmd: d.* command with flags and parameters
+        """
+        # Canvas width = display width minus 1 px on both sides
+        cnvs_w = float(disp_size[0])
+        # Canvas height = display height minus 1 px on bottom and height of toolbar
+        cnvs_h = float(disp_size[1])
+
+        x_prcn = round(coord_px[0] / cnvs_w * 100, 1)
+        y_prcn = 100 - round(coord_px[1] / cnvs_h * 100, 1)
+        self.indent += 4
+        self.file.write('%s<overlay name="%s">\n' % (' ' * self.indent, cmd[0]))
+        self.indent += 4
+        for prm in cmd[1:]:
+            if prm[0] == "-":
+                for i in range(1, len(prm)):
+                    self.file.write('%s<flag name="%s" />\n' % (' ' * self.indent, prm[i]))
+            elif prm.startswith("at="):
+                # legend "at" argument takes 4 numbers not 2
+                if cmd[0] == "d.legend":
+                    leg_coord_prcn = prm.split("=", 1)[1].split(",")
+                    leg_w = float(leg_coord_prcn[3]) - float(leg_coord_prcn[2])
+                    leg_h = float(leg_coord_prcn[1]) - float(leg_coord_prcn[0])
+                    self.file.write('%s<parameter name="at">\n' % (' ' * self.indent))
+                    self.indent += 4
+                    self.file.write('%s<value>%.1f,%.1f,%.1f,%.1f</value>\n' % (' ' * self.indent,
+                                    y_prcn - leg_h, y_prcn, x_prcn, x_prcn + leg_w))
+                    self.indent -= 4
+                    self.file.write('%s</parameter>\n' % (' ' * self.indent))
+                else:
+                    self.file.write('%s<parameter name="at">\n' % (' ' * self.indent))
+                    self.indent += 4
+                    self.file.write('%s<value>%.1f,%.1f</value>\n' % (' ' * self.indent, x_prcn, y_prcn))
+                    self.indent -= 4
+                    self.file.write('%s</parameter>\n' % (' ' * self.indent))
+            else:
+                self.file.write('%s<parameter name="%s">\n' % (' ' * self.indent, prm.split("=", 1)[0]))
+                self.indent += 4
+                self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, prm.split("=", 1)[1]))
+                self.indent -= 4
+                self.file.write('%s</parameter>\n' % (' ' * self.indent))
+        self.indent -= 4
+        self.file.write('%s</overlay>\n' % (' ' * self.indent))
+        self.indent -= 4
 
 
 class ProcessGrcFile(object):
