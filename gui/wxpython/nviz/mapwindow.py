@@ -447,7 +447,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         if 0 in self.overlays:
             for param in self.overlays[0].cmd[1:]:
                 if param.startswith("at="):
-                    size = map(int, param.split("=")[-1].split(','))
+                    size = map(float, param.split("=")[-1].split(','))
                     break
         if size:
             wSize = self.GetClientSizeTuple()
