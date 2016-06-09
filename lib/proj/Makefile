@@ -14,7 +14,7 @@ EXTRA_INC = $(PROJINC)
 
 NAD_TABLES := $(wildcard *.lla)
 
-NT_TABLES = ntv1_can.dat nzgd2kgrid0005.gsb
+NT_TABLES = ntv1_can.dat ntf_r93.gsb nzgd2kgrid0005.gsb
 
 PROJ_DIR = $(ETC)/proj
 NAD_DIR  = $(ETC)/proj/nad
