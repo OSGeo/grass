@@ -46,6 +46,10 @@ static const char COPYING[] =
 #include <grass/copying.h>
 ;
 
+static const char CITING[] =
+#include <grass/citing.h>
+;
+
 static const char GRASS_CONFIGURE_PARAMS[] =
 #include <grass/confparms.h>
 ;
@@ -53,7 +57,7 @@ static const char GRASS_CONFIGURE_PARAMS[] =
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Flag *copyright, *build, *gish_rev, *shell, *extended;
+    struct Flag *copyright, *build, *gish_rev, *cite_flag, *shell, *extended;
 
     G_gisinit(argv[0]);
 
@@ -94,6 +98,11 @@ int main(int argc, char *argv[])
     shell->description = _("Print info in shell script style (including SVN revision number)");
     shell->guisection = _("Shell");
 
+    cite_flag = G_define_flag();
+    cite_flag->key = 'x';
+    cite_flag->description =
+        _("Display information on how to cite the GRASS GIS software and Addons");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -113,6 +122,11 @@ int main(int argc, char *argv[])
     if (copyright->answer) {
 	fprintf(stdout, "\n");
 	fputs(COPYING, stdout);
+    }
+
+    if (cite_flag->answer) {
+	fprintf(stdout, "\n");
+	fputs(CITING, stdout);
     }
 
     if (build->answer) {
