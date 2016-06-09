@@ -1489,17 +1489,17 @@ class GMFrame(wx.Frame):
             # mdisp.MapWindow2D.UpdateMap()
             # nviz
             if gxwXml.displays[i]['viewMode'] == '3d':
-                mdisp.AddNviz()
+                mapdisplay[i].AddNviz()
                 self.nviz.UpdateState(view=gxwXml.nviz_state['view'],
                                       iview=gxwXml.nviz_state['iview'],
                                       light=gxwXml.nviz_state['light'])
-                mdisp.MapWindow3D.constants = gxwXml.nviz_state['constants']
-                for idx, constant in enumerate(mdisp.MapWindow3D.constants):
-                    mdisp.MapWindow3D.AddConstant(constant, i + 1)
+                mapdisplay[i].MapWindow3D.constants = gxwXml.nviz_state['constants']
+                for idx, constant in enumerate(mapdisplay[i].MapWindow3D.constants):
+                    mapdisplay[i].MapWindow3D.AddConstant(constant, i + 1)
                 for page in ('view', 'light', 'fringe', 'constant', 'cplane'):
                     self.nviz.UpdatePage(page)
                 self.nviz.UpdateSettings()
-                mdisp.toolbars['map'].combo.SetSelection(1)
+                mapdisplay[i].toolbars['map'].combo.SetSelection(1)
 
         return True
 
