@@ -50,7 +50,7 @@ DIRS = \
 
 SUBDIRS = $(DIRS)
 
-FILES = AUTHORS COPYING CHANGES REQUIREMENTS.html GPL.TXT contributors.csv contributors_extra.csv translators.csv
+FILES = AUTHORS CITING COPYING CHANGES REQUIREMENTS.html GPL.TXT contributors.csv contributors_extra.csv translators.csv
 FILES_DST = $(patsubst %,$(ARCH_DISTDIR)/%,$(FILES))
 
 default:
