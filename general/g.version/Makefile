@@ -3,7 +3,7 @@ MODULE_TOPDIR = ../..
 PGM=g.version
 
 # cat the COPYING file, add a c line-break \n at each line end
-# and remove the unix newline. 
+# and remove the unix newline (see: include/Makefile)
 
 EXTRA_CFLAGS = $(PROJINC) $(GEOSCFLAGS) \
 	-DGRASS_VERSION_NUMBER=\"'$(GRASS_VERSION_NUMBER)'\" \

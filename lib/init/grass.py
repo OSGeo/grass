@@ -1429,12 +1429,14 @@ r"""
 %-41s%s (%s)
 %-41sg.manual -i
 %-41sg.version -c
+%-41sg.version -x
 """ % (_("GRASS GIS homepage:"),
         # GTC Running through: SHELL NAME
        _("This version running through:"),
        shellname, os.getenv('SHELL'),
        _("Help is available with the command:"),
-       _("See the licence terms with:")))
+       _("See the licence terms with:"),
+       _("See citation options with:")))
 
     if grass_gui == 'wxpython':
         message("%-41sg.gui wxpython" % _("If required, restart the GUI with:"))
