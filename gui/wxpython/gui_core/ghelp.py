@@ -58,6 +58,7 @@ class AboutWindow(wx.Frame):
         for title, win in ((_("Info"), self._pageInfo()),
                            (_("Copyright"), self._pageCopyright()),
                            (_("License"), self._pageLicense()),
+                           (_("Citation"), self._pageCitation()),
                            (_("Authors"), self._pageCredit()),
                            (_("Contributors"), self._pageContributors()),
                            (_("Extra contributors"), self._pageContributors(extra = True)),
@@ -269,6 +270,32 @@ class AboutWindow(wx.Frame):
         
         return licensewin
     
+    def _pageCitation(self):
+        """Citation information"""
+        try:
+            # import only when needed
+            import grass.script as gscript
+            text = gscript.read_command('g.version', flags='x')
+        except CalledModuleError as error:
+            text = _("Unable to provide citation suggestion,"
+                     " see GRASS GIS website instead."
+                     " The error was: {}").format(error)
+
+        # put text into a scrolling panel
+        window = ScrolledPanel(self.aboutNotebook)
+        window.SetBackgroundColour('WHITE')
+        stat_text = wx.StaticText(
+            window, id=wx.ID_ANY, label=text)
+        window.SetAutoLayout(True)
+        window.sizer = wx.BoxSizer(wx.VERTICAL)
+        window.sizer.Add(item=stat_text, proportion=1,
+                         flag=wx.EXPAND | wx.ALL, border=3)
+        window.SetSizer(window.sizer)
+        window.Layout()
+        window.SetupScrolling()
+
+        return window
+
     def _pageCredit(self):
         """Credit about"""
                 # credits

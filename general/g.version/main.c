@@ -46,6 +46,10 @@ static const char COPYING[] =
 #include <grass/copying.h>
 ;
 
+static const char CITING[] =
+#include <grass/citing.h>
+;
+
 static const char GRASS_CONFIGURE_PARAMS[] =
 #include <grass/confparms.h>
 ;
@@ -53,7 +57,7 @@ static const char GRASS_CONFIGURE_PARAMS[] =
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Flag *copyright, *build, *gish_rev, *shell, *extended;
+    struct Flag *copyright, *build, *gish_rev, *cite_flag, *shell, *extended;
 
     G_gisinit(argv[0]);
 
@@ -71,6 +75,11 @@ int main(int argc, char *argv[])
     copyright->key = 'c';
     copyright->description = _("Print also the copyright message");
     copyright->guisection = _("Additional info");
+
+    cite_flag = G_define_flag();
+    cite_flag->key = 'x';
+    cite_flag->description = _("Print also the citation options");
+    cite_flag->guisection = _("Additional info");
 
     build = G_define_flag();
     build->key = 'b';
@@ -112,6 +121,11 @@ int main(int argc, char *argv[])
     if (copyright->answer) {
 	fprintf(stdout, "\n");
 	fputs(COPYING, stdout);
+    }
+
+    if (cite_flag->answer) {
+	fprintf(stdout, "\n");
+	fputs(CITING, stdout);
     }
 
     if (build->answer) {
