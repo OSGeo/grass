@@ -1598,7 +1598,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnLayerChecked(self, event):
         """Enable/disable data layer"""
-        self.lmgr.WorkspaceChanged()
 
         item = event.GetItem()
         checked = item.IsChecked()
@@ -1618,6 +1617,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                             mapLayer):
                         # ignore when map layer is edited
                         self.Map.ChangeLayerActive(mapLayer, checked)
+                        self.lmgr.WorkspaceChanged()
                     child = self.GetNextSibling(child)
             else:
                 mapLayer = self.GetLayerInfo(item, key='maplayer')
@@ -1625,6 +1625,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         digitToolbar and digitToolbar.GetLayer() != mapLayer)):
                     # ignore when map layer is edited
                     self.Map.ChangeLayerActive(mapLayer, checked)
+                    self.lmgr.WorkspaceChanged()
 
         # nviz
         if self.mapdisplay.IsPaneShown('3d') and \
@@ -1636,6 +1637,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
             self.mapdisplay.SetStatusText(
                 _("Please wait, updating data..."), 0)
+            self.lmgr.WorkspaceChanged()
 
             if checked:  # enable
                 if mapLayer.type == 'raster':

@@ -650,8 +650,9 @@ class GMFrame(wx.Frame):
         """Page of notebook closed
         Also close associated map display
         """
+
         if UserSettings.Get(group='manager', key='askOnQuit',
-                            subkey='enabled'):
+                            subkey='enabled') and self.workspaceChanged:
             maptree = self.GetLayerTree()
 
             if self.workspaceFile:
