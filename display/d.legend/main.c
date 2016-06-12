@@ -15,6 +15,8 @@
  *         Markus Neteler
  *      Late 2002: Rewrite of much of the code:
  *         Hamish Bowman, Otago University, New Zealand
+ *      Improvements (ticks, more label options, title):
+ *         Adam Laza (part of GSoC 2016)
  *
  * COPYRIGHT:   (c) 2002-2014 by The GRASS Development Team
  *
@@ -48,8 +50,9 @@ int main(int argc, char **argv)
     int i, j, k;
     int thin, lines, steps;
     int fp;
+    int label_indent;
     double t, b, l, r;
-    int hide_catnum, hide_catstr, hide_nodata, do_smooth;
+    int hide_catnum, hide_catstr, show_ticks, hide_nodata, do_smooth;
     char *cstr;
     double x_box[5], y_box[5];
     struct Categories cats;
@@ -57,8 +60,10 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *opt_rast2d, *opt_rast3d, *opt_color, *opt_lines,
 		  *opt_thin, *opt_labelnum, *opt_at, *opt_use, *opt_range,
-		  *opt_font, *opt_path, *opt_charset, *opt_fontsize;
-    struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *histo;
+          *opt_font, *opt_path, *opt_charset, *opt_fontsize, *opt_title,
+          *opt_ticks, *opt_tstep;
+    struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *histo,
+            *showtick;
     struct Range range;
     struct FPRange fprange, render_range;
     CELL min_ind, max_ind;
@@ -73,10 +78,12 @@ int main(int argc, char **argv)
     int flip, horiz, UserRange;
     double UserRangeMin, UserRangeMax, UserRangeTemp;
     double *catlist, maxCat;
-    int catlistCount, use_catlist;
+    int catlistCount, use_catlist, ticksCount;
     double fontsize;
     char *units;
-
+    char *title;
+    double *tick_values;
+    double t_start, t_step;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -98,6 +105,12 @@ int main(int argc, char **argv)
     opt_rast3d->key = "raster_3d";
     opt_rast3d->required = NO;
     opt_rast3d->guisection = _("Input");
+
+    opt_title = G_define_option();
+    opt_title->key = "title";
+    opt_title->type = TYPE_STRING;
+    opt_title->required = NO;
+    opt_title->description = _("Legend title");
 
     opt_lines = G_define_option();
     opt_lines->key = "lines";
@@ -126,6 +139,26 @@ int main(int argc, char **argv)
     opt_labelnum->description =
 	_("Number of text labels for smooth gradient legend");
     opt_labelnum->guisection = _("Gradient");
+
+    opt_ticks = G_define_option();
+    opt_ticks->key = "label_values";
+    opt_ticks->type = TYPE_DOUBLE;
+    opt_ticks->required = NO;
+    opt_ticks->description =
+    _("Specific values of text labels");
+    opt_ticks->required = NO;
+    opt_ticks->multiple = YES;
+    opt_ticks->guisection = _("Gradient");
+
+    opt_tstep = G_define_option();
+    opt_tstep->key = "label_step";
+    opt_tstep->type = TYPE_DOUBLE;
+    opt_tstep->required = NO;
+    opt_tstep->description =
+    _("Display label every step");
+    opt_tstep->required = NO;
+    opt_tstep->guisection = _("Gradient");
+
 
     opt_at = G_define_option();
     opt_at->key = "at";
@@ -202,6 +235,11 @@ int main(int argc, char **argv)
     hidenum->description = _("Do not show category numbers");
     hidenum->guisection = _("Advanced");
 
+    showtick = G_define_flag();
+    showtick->key = 't';
+    showtick->description = _("Draw legend ticks for labels");
+    showtick->guisection = _("Gradient");
+
     hidenodata = G_define_flag();
     hidenodata->key = 'n';
     hidenodata->description = _("Skip categories with no label");
@@ -222,15 +260,14 @@ int main(int argc, char **argv)
     histo->description = _("Add histogram to smoothed legend");
     histo->guisection = _("Gradient");
 
+    G_option_required(opt_rast2d, opt_rast3d, NULL);
+    G_option_exclusive(opt_rast2d, opt_rast3d, NULL);
+    G_option_exclusive(hidenum, opt_ticks, NULL);
+    G_option_exclusive(hidenum, opt_tstep, NULL);
 
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    /* FIXME: add GUI launching logic to G_parser() call */
-    if ((opt_rast2d->answer && opt_rast3d->answer) ||
-        !(opt_rast2d->answer || opt_rast3d->answer))
-	G_fatal_error(_("Please specify a single map name. To launch GUI use d.legend --ui."));
 
     if (opt_rast2d->answer) {
 	map_name = opt_rast2d->answer;
@@ -241,11 +278,22 @@ int main(int argc, char **argv)
 	maptype = MAP_TYPE_RASTER3D;
     }
 
+    if (opt_title->answer)
+        title = opt_title->answer;
+
     hide_catstr = hidestr->answer;	/* note hide_catstr gets changed and re-read below */
     hide_catnum = hidenum->answer;
+    show_ticks = showtick->answer;
     hide_nodata = hidenodata->answer;
     do_smooth = smooth->answer;
     flip = flipit->answer;
+
+    if (showtick->answer){
+        show_ticks = showtick->answer;
+        label_indent = 12;
+    }
+    else
+        label_indent = 6;
 
     color = D_parse_color(opt_color->answer, TRUE);
 
@@ -260,6 +308,24 @@ int main(int argc, char **argv)
 
     if (opt_labelnum->answer != NULL)
 	sscanf(opt_labelnum->answer, "%d", &steps);
+
+    if ((opt_tstep->answer) || (opt_ticks->answer))
+        steps = 0;
+
+    if (opt_tstep->answer != NULL)
+        t_step = atof(opt_tstep->answer);
+
+    ticksCount = 0;
+    if (opt_ticks->answer != NULL) {
+        tick_values = (double *)G_calloc(100+1, sizeof(double));
+        for (i = 0; i < 100; i++)   /* fill with dummy values */
+            tick_values[i] = 1.0 * (i + 1);
+        tick_values[i] = 0;
+
+        for (i = 0; (opt_ticks->answers[i] != NULL) && i < 100; i++)
+            tick_values[i] = atof(opt_ticks->answers[i]);
+        ticksCount = i;
+    }
 
     catlistCount = 0;
     if (opt_use->answer != NULL) {	/* should this be answerS ? */
@@ -317,8 +383,8 @@ int main(int argc, char **argv)
 
     D_open_driver();
 
-    white = D_translate_color(DEFAULT_FG_COLOR);
-    black = D_translate_color(DEFAULT_BG_COLOR);
+    black = D_translate_color(DEFAULT_FG_COLOR);
+    white = D_translate_color(DEFAULT_BG_COLOR);
 
     if (opt_font->answer)
 	D_font(opt_font->answer);
@@ -621,8 +687,8 @@ int main(int argc, char **argv)
 
     if (do_smooth) {
 	int wleg, lleg, dx, dy;
-	double txsiz;
-	int ppl;
+    double txsiz, coef;
+    double ppl;
 	int tcell;
 	float ScaleFactor = 1.0;
 
@@ -671,22 +737,48 @@ int main(int argc, char **argv)
 	if (!fp) {		/* cut down labelnum so they don't repeat */
 	    if (do_cats < steps)
 		steps = do_cats;
-	    if (1 == steps)
+        if ((steps < 2))
 		steps = 2;	/* ward off the ppl floating point exception */
 	}
 
+
+    if (strlen(buff) > MaxLabelLen)
+    MaxLabelLen = strlen(buff);
+
+    /* Draw text and ticks */
+    if (!horiz)
+    txsiz = (y1 - y0) / 20;
+    else
+    txsiz = (x1 - x0) / 20;
+
+    /* scale text to fit in window if position not manually set */
+    /* usually not needed, except when frame is really narrow   */
+    if (opt_at->answer == NULL) {	/* ie default scaling */
+    ScaleFactor = ((r - x1) / ((MaxLabelLen + 1) * txsiz * 0.81));	/* ?? txsiz*.81=actual text width. */
+    if (ScaleFactor < 1.0) {
+        txsiz = txsiz * ScaleFactor;
+    }
+    }
+
+    if (opt_fontsize->answer != NULL)
+    txsiz = fontsize;
+
+    if (txsiz < 0)
+    txsiz = 0;	/* keep it sane */
+
+    D_text_size(txsiz, txsiz);
+    D_use_color(color);
+
+
+    if (steps >= 2) {
 	for (k = 0; k < steps; k++) {
 	    if (!fp) {
 		if (!flip)
 		    tcell =
-			min_ind + k * (double)(max_ind - min_ind) / (steps -
-								     1);
+                min_ind + k * (double)(max_ind - min_ind) / (steps - 1);
 		else
 		    tcell =
-			max_ind - k * (double)(max_ind - min_ind) / (steps -
-								     1);
-
-		cstr = Rast_get_c_cat(&tcell, &cats);
+                max_ind - k * (double)(max_ind - min_ind) / (steps - 1);
 
 		if (!cstr[0])	/* no cats found, disable str output */
 		    hide_catstr = 1;
@@ -716,91 +808,172 @@ int main(int argc, char **argv)
 		}
 	    }
 
-	    /* this probably shouldn't happen mid-loop as text sizes
-	       might not end up being uniform, but it's a start */
-	    if (strlen(buff) > MaxLabelLen)
-		MaxLabelLen = strlen(buff);
+            ppl = (lleg) / (steps * 1.0 - 1);
 
-	    /* Draw text */
-	    if (!horiz)
-		txsiz = (y1 - y0) / 20;
-	    else
-		txsiz = (x1 - x0) / 20;
+            if (!hide_catnum) {
+                if (!horiz) {
+                    D_pos_abs(x1 + label_indent, y0 + ppl * k + txsiz / 2);
+                    if (show_ticks)
+                        D_line_abs(x1, y0 + ppl * k, x1 + 6, y0 + ppl * k);
+                }
+                else {
+                /* text width is 0.81 of text height? so even though we set width
+                   to txsiz with D_text_size(), we still have to reduce.. hmmm */
+                    D_pos_abs(x0 + ppl * k - (strlen(buff) * txsiz * .81 / 2),
+                              y1 + label_indent + txsiz);
+                    if (show_ticks)
+                        D_line_abs(x0 + ppl * k, y1, x0 + ppl * k, y1 + 6);
+                }
 
-	    /* scale text to fit in window if position not manually set */
-	    /* usually not needed, except when frame is really narrow   */
-	    if (opt_at->answer == NULL) {	/* ie default scaling */
-		ScaleFactor = ((r - x1) / ((MaxLabelLen + 1) * txsiz * 0.81));	/* ?? txsiz*.81=actual text width. */
-		if (ScaleFactor < 1.0) {
-		    txsiz = txsiz * ScaleFactor;
+                if (color)
+                D_text(buff);
 		}
+
+        }	/* for */
 	    }
 
-	    if (opt_fontsize->answer != NULL)
-		txsiz = fontsize;
+    lleg = y1 - y0;
+    wleg = x1 - x0;
 
-	    if (txsiz < 0)
-		txsiz = 0;	/* keep it sane */
+    /* draw tick_values labels and ticks */
+    if (ticksCount > 0) {
+        for (i = 0; i < ticksCount; i++) {
+            if ((tick_values[i] < dmin) || (tick_values[i] > dmax)) {
+                G_fatal_error(_("tick_value=%s out of range [%.3f, %.3f]"),
+                      opt_ticks->answers[i], dmin, dmax);
+            }
+            coef = (tick_values[i] - dmin) / ((dmax - dmin) * 1.0);
+            sprintf(buff, DispFormat, tick_values[i]);
+            if (!flip){
+                if (!horiz) {
+                    if (show_ticks)
+                        D_line_abs(x1, y0 + coef * lleg,
+                                   x1 + 6, y0 + coef * lleg);
+                    D_pos_abs(x1 + label_indent, y0 + coef * lleg + txsiz/2);}
+                else {
+                    if (show_ticks)
+                        D_line_abs(x0 + coef * wleg, y1,
+                                   x0 + coef * wleg, y1 + 6);
+                    D_pos_abs(x0 + coef * wleg - (strlen(buff) * txsiz * .81 / 2),
+                              y1 + label_indent + txsiz);}
+            }
+            else{
+                if (!horiz) {
+                    if (show_ticks)
+                        D_line_abs(x1, y1 - coef * lleg,
+                                   x1 + 6, y1 - coef * lleg);
+                    D_pos_abs(x1 + label_indent, y1 - coef * lleg + txsiz/2);}
+                else {
+                    if (show_ticks)
+                        D_line_abs(x1 - coef * wleg, y1,
+                                   x1 - coef * wleg, y1 + 6);
+                    D_pos_abs(x1 - coef * wleg - (strlen(buff) * txsiz * .81 / 2),
+                              y1 + label_indent + txsiz);}
+            }
+            D_text(buff);
+        }
+    }
 
-	    D_text_size(txsiz, txsiz);
-	    D_use_color(color);
+    /* draw tick_step */
+    if (opt_tstep->answer) {
+        t_start = ceil(dmin/t_step) * t_step;
+        if (t_start == -0)
+            t_start = 0;
 
-	    ppl = (lleg) / (steps - 1);
+        if (!flip){
+            if (!horiz)
+                while (t_start<dmax) {
+                    sprintf(buff, DispFormat, t_start);
+                    coef = (t_start - dmin) / ((dmax - dmin) * 1.0);
+                    if (show_ticks)
+                        D_line_abs(x1, y0 + coef * lleg,
+                                   x1 + 6, y0 + coef * lleg);
+                    D_pos_abs(x1 + label_indent, y0 + coef * lleg + txsiz/2);
+                    D_text(buff);
 
-	    if (!horiz) {
-		if (!k)		/* first  */
-		    D_pos_abs(x1 + 4, y0 + txsiz);
-		else if (k == steps - 1)	/* last */
-		    D_pos_abs(x1 + 4, y1);
+                    t_start += t_step;}
 		else
-		    D_pos_abs(x1 + 4, y0 + ppl * k + txsiz / 2);
+                while (t_start<dmax) {
+                    sprintf(buff, DispFormat, t_start);
+                    coef = (t_start - dmin) / ((dmax - dmin) * 1.0);
+                    if (show_ticks)
+                        D_line_abs(x0 + coef * wleg,y1,
+                                   x0 + coef * wleg, y1 + 6);
+                    D_pos_abs(x0 + coef * wleg - (strlen(buff) * txsiz * .81 / 2),
+                              y1 + label_indent + txsiz);
+                    D_text(buff);
+
+                    t_start += t_step;}
 	    }
 	    else {
-		/* text width is 0.81 of text height? so even though we set width
-		   to txsiz with D_text_size(), we still have to reduce.. hmmm */
-		if (!k)		/* first  */
-		    D_pos_abs(x0 - (strlen(buff) * txsiz * .81 / 2),
-			      y1 + 4 + txsiz);
-		else if (k == steps - 1)	/* last */
-		    D_pos_abs(x1 - (strlen(buff) * txsiz * .81 / 2),
-			      y1 + 4 + txsiz);
-		else
-		    D_pos_abs(x0 + ppl * k -
-			      (strlen(buff) * txsiz * .81 / 2),
-			      y1 + 4 + txsiz);
-	    }
+            if (!horiz)
+                while (t_start<dmax) {
+                    sprintf(buff, DispFormat, t_start);
+                    coef = (t_start - dmin) / ((dmax - dmin) * 1.0);
+                    if (show_ticks)
+                        D_line_abs(x1, y1 - coef * lleg,
+                                   x1 + 6, y1 - coef * lleg);
+                    D_pos_abs(x1 + label_indent, y1 - coef * lleg + txsiz/2);
+                    D_text(buff);
 
-	    if (color)
+                    t_start += t_step;}
+		else
+                while (t_start<dmax) {
+                    sprintf(buff, DispFormat, t_start);
+                    coef = (t_start - dmin) / ((dmax - dmin) * 1.0);
+                    if (show_ticks)
+                        D_line_abs(x1 - coef * wleg, y1,
+                                   x1 - coef * wleg, y1 + 6);
+                    D_pos_abs(x1 - coef * wleg - (strlen(buff) * txsiz * .81 / 2),
+                              y1 + label_indent + txsiz);
 		D_text(buff);
 
-	}	/* for */
+                    t_start += t_step;}
+        }
+    }
 
-	lleg = y1 - y0;
-	wleg = x1 - x0;
+    /* White box */
+    D_use_color(white);
+    D_begin();
+    D_move_abs(x0 + 1, y0 + 1);
+    D_cont_rel(0, lleg - 2);
+    D_cont_rel(wleg - 2, 0);
+    D_cont_rel(0, -lleg + 2);
+    D_close();
+    D_end();
+    D_stroke();
+    
+    /* Black box */
+    D_use_color(black);
+    D_begin();
+    D_move_abs(x0, y0 );
+    D_cont_rel(0, lleg);
+    D_cont_rel(wleg, 0);
+    D_cont_rel(0, -lleg);
+    D_close();
+    D_end();
+    D_stroke();
+	
+    if(opt_title->answer){
+    /* Display title */
+        double x_tit, y_tit;
 
-	/* Black box */
-	D_use_color(black);
-	D_begin();
-	D_move_abs(x0 + 1, y0 + 1);
-	D_cont_rel(0, lleg - 2);
-	D_cont_rel(wleg - 2, 0);
-	D_cont_rel(0, 2 - lleg);
-	D_close();
-	D_end();
-	D_stroke();
+        D_use_color(color);
 
-	/* White box */
-	D_use_color(white);
-	D_begin();
-	D_move_abs(x0, y0);
-	D_cont_rel(0, lleg);
-	D_cont_rel(wleg, 0);
-	D_cont_rel(0, -lleg);
-	D_close();
-	D_end();
-	D_stroke();
+        if (horiz){
+            x_tit = (x0 + x1)/2. - (strlen(title) * txsiz * 0.81)/2;
+            y_tit = y0 - (txsiz);
+        }
+        else{
+            x_tit = x0;
+            y_tit = y0 - (txsiz);
+        }
 
-
+        D_pos_abs(x_tit, y_tit);
+        D_text(title);
+    }
+    else{
+    /* Display units label */
 	/* print units label, if present */
 	if (maptype == MAP_TYPE_RASTER2D)
 	    units = Rast_read_units(map_name, "");
@@ -821,10 +994,10 @@ int main(int argc, char **argv)
 
 	    if (horiz) {
 		x_pos = (x0 + x1)/2. - (strlen(units) * txsiz * 0.81)/2;
-		y_pos = y1 + (txsiz * 3);
+            y_pos = y1 + (txsiz * 2.75);
 	    }
 	    else {
-		x_pos = x1 - 4;
+            x_pos = x0;
 		if (default_pos)
 		    y_pos = y0 - (txsiz * 1.75);
 		else
@@ -834,6 +1007,7 @@ int main(int argc, char **argv)
 	    D_pos_abs(x_pos, y_pos);
 	    D_text(units);
 	}
+    }
 
 
 	/* display sidebar histogram, if requested */
@@ -938,9 +1112,9 @@ int main(int argc, char **argv)
 
 	    k++;  /* count of actual boxes drawn (hide_nodata option invaidates using j-1) */
 
-	    /* White box */
+        /* Black box */
 	    cur_dot_row += dots_per_line;
-	    D_use_color(white);
+        D_use_color(black);
 	    D_begin();
 	    D_move_abs(l + 2, (cur_dot_row - 1));
 	    D_cont_rel(0, (3 - dots_per_line));
@@ -950,8 +1124,8 @@ int main(int argc, char **argv)
 	    D_end();
 	    D_stroke();
 
-	    /* Black box */
-	    D_use_color(black);
+        /* White box */
+        D_use_color(white);
 	    D_begin();
 	    D_move_abs(l + 3, (cur_dot_row - 2));
 	    D_cont_rel(0, (5 - dots_per_line));
