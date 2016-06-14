@@ -534,11 +534,20 @@ int main(int argc, char *argv[])
     G_free(outrast);
     Rast_close(outfd);
 
-    /* Color from -1.0 to +1.0 in grey */
-    Rast_init_colors(&colors);
-    val1 = -1;
-    val2 = 1;
-    Rast_add_c_color_rule(&val1, 0, 0, 0, &val2, 255, 255, 255, &colors);
+    if (!strcasecmp(viflag, "ndvi")) {
+ 	/* apply predefined NDVI color table */
+	const char *style = "ndvi";
+	if (G_find_color_rule("ndvi")) {
+	   Rast_make_fp_colors(&colors, style, -1.0, 1.0);
+	} else
+	   G_fatal_error(_("Unknown color request '%s'"), style);
+    } else {
+	/* Color from -1.0 to +1.0 in grey */
+	Rast_init_colors(&colors);
+	val1 = -1;
+	val2 = 1;
+	Rast_add_c_color_rule(&val1, 0, 0, 0, &val2, 255, 255, 255, &colors);
+    }
     Rast_write_colors(result, G_mapset(), &colors);
 
     Rast_short_history(result, "raster", &history);
