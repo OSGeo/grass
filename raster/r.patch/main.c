@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     char *rname;
     int i;
     int row, nrows, ncols;
-    int use_zero;
+    int use_zero, no_support;
     char *new_name;
     char **names;
     char **ptr;
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     struct Cell_head *cellhd;
 
     struct GModule *module;
-    struct Flag *zeroflag;
+    struct Flag *zeroflag, *nosupportflag;
     struct Option *opt1, *opt2;
 
     G_gisinit(argv[0]);
@@ -80,10 +80,16 @@ int main(int argc, char *argv[])
     zeroflag->description =
 	_("Use zero (0) for transparency instead of NULL");
 
+    nosupportflag = G_define_flag();
+    nosupportflag->key = 's';
+    nosupportflag->description =
+	_("Do not create color and category files");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     use_zero = (zeroflag->answer);
+    no_support = (nosupportflag->answer);
 
     names = opt1->answers;
 
@@ -163,19 +169,24 @@ int main(int argc, char *argv[])
     G_free(presult);
     for (i = 0; i < nfiles; i++)
 	Rast_close(infd[i]);
-    /* 
-     * build the new cats and colors. do this before closing the new
-     * file, in case the new file is one of the patching files as well.
-     */
-    G_verbose_message(_("Creating support files for raster map <%s>..."), new_name);
-    support(names, statf, nfiles, &cats, &cats_ok, &colr, &colr_ok, out_type);
+
+    if(!no_support) {
+        /* 
+         * build the new cats and colors. do this before closing the new
+         * file, in case the new file is one of the patching files as well.
+         */
+        G_verbose_message(_("Creating support files for raster map <%s>..."), new_name);
+        support(names, statf, nfiles, &cats, &cats_ok, &colr, &colr_ok, out_type);
+    }
 
     /* now close (and create) the result */
     Rast_close(outfd);
-    if (cats_ok)
-	Rast_write_cats(new_name, &cats);
-    if (colr_ok)
-	Rast_write_colors(new_name, G_mapset(), &colr);
+    if(!no_support) {
+        if (cats_ok)
+    	    Rast_write_cats(new_name, &cats);
+	if (colr_ok)
+	    Rast_write_colors(new_name, G_mapset(), &colr);
+    }
 
     Rast_short_history(new_name, "raster", &history);
     Rast_command_history(&history);
