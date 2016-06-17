@@ -51,11 +51,12 @@ int main(int argc, char **argv)
     struct Colors colors;
     struct GModule *module;
     struct Option *opt_rast2d, *opt_rast3d, *opt_color, *opt_lines,
-		  *opt_thin, *opt_labelnum, *opt_at, *opt_use, *opt_range,
-          *opt_font, *opt_path, *opt_charset, *opt_fontsize, *opt_title,
-          *opt_ticks, *opt_tstep, *opt_brdcolor, *opt_bgcolor, *opt_tit_fontsize;
+        *opt_thin, *opt_labelnum, *opt_at, *opt_use, *opt_range,
+        *opt_font, *opt_path, *opt_charset, *opt_fontsize, *opt_title,
+        *opt_ticks, *opt_tstep, *opt_brdcolor, *opt_bgcolor,
+        *opt_tit_fontsize;
     struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *histo,
-            *showtick, *showbg;
+        *showtick, *showbg;
     double X0, X1, Y0, Y1;
     int flip, UserRange;
     double UserRangeMin, UserRangeMax, UserRangeTemp;
@@ -76,8 +77,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("cartography"));
     G_add_keyword(_("legend"));
     module->description =
-	_("Displays a legend for a 2D or 3D raster map in the active frame "
-	  "of the graphics monitor.");
+        _("Displays a legend for a 2D or 3D raster map in the active frame "
+          "of the graphics monitor.");
 
     opt_rast2d = G_define_standard_option(G_OPT_R_MAP);
     opt_rast2d->key = "raster";
@@ -111,7 +112,7 @@ int main(int argc, char **argv)
     opt_lines->answer = "0";
     opt_lines->options = "0-1000";
     opt_lines->description =
-	_("Number of text lines (useful for truncating long legends)");
+        _("Number of text lines (useful for truncating long legends)");
     opt_lines->guisection = _("Advanced");
 
     opt_thin = G_define_option();
@@ -121,7 +122,7 @@ int main(int argc, char **argv)
     opt_thin->answer = "1";
     opt_thin->options = "1-1000";
     opt_thin->description =
-	_("Thinning factor (thin=10 gives cats 0,10,20...)");
+        _("Thinning factor (thin=10 gives cats 0,10,20...)");
     opt_thin->guisection = _("Advanced");
 
     opt_labelnum = G_define_option();
@@ -130,15 +131,14 @@ int main(int argc, char **argv)
     opt_labelnum->answer = "5";
     opt_labelnum->options = "2-100";
     opt_labelnum->description =
-	_("Number of text labels for smooth gradient legend");
+        _("Number of text labels for smooth gradient legend");
     opt_labelnum->guisection = _("Gradient");
 
     opt_ticks = G_define_option();
     opt_ticks->key = "label_values";
     opt_ticks->type = TYPE_DOUBLE;
     opt_ticks->required = NO;
-    opt_ticks->description =
-    _("Specific values to draw ticks");
+    opt_ticks->description = _("Specific values to draw ticks");
     opt_ticks->required = NO;
     opt_ticks->multiple = YES;
     opt_ticks->guisection = _("Gradient");
@@ -147,8 +147,7 @@ int main(int argc, char **argv)
     opt_tstep->key = "label_step";
     opt_tstep->type = TYPE_DOUBLE;
     opt_tstep->required = NO;
-    opt_tstep->description =
-    _("Display label every step");
+    opt_tstep->description = _("Display label every step");
     opt_tstep->required = NO;
     opt_tstep->guisection = _("Gradient");
 
@@ -156,31 +155,31 @@ int main(int argc, char **argv)
     opt_at = G_define_option();
     opt_at->key = "at";
     opt_at->key_desc = "bottom,top,left,right";
-    opt_at->type = TYPE_DOUBLE;  /* needs to be TYPE_DOUBLE to get past options check */
+    opt_at->type = TYPE_DOUBLE; /* needs to be TYPE_DOUBLE to get past options check */
     opt_at->required = NO;
     opt_at->options = "0-100";
     opt_at->label =
-	_("Size and placement as percentage of screen coordinates "
-	  "(0,0 is lower left)");
+        _("Size and placement as percentage of screen coordinates "
+          "(0,0 is lower left)");
     opt_at->description = opt_at->key_desc;
     opt_at->answer = NULL;
 
     opt_use = G_define_option();
     opt_use->key = "use";
-    opt_use->type = TYPE_DOUBLE;  /* string as it is fed through the parser? */
+    opt_use->type = TYPE_DOUBLE;        /* string as it is fed through the parser? */
     opt_use->required = NO;
     opt_use->description =
-	_("List of discrete category numbers/values for legend");
+        _("List of discrete category numbers/values for legend");
     opt_use->multiple = YES;
     opt_use->guisection = _("Subset");
 
     opt_range = G_define_option();
     opt_range->key = "range";
     opt_range->key_desc = "min,max";
-    opt_range->type = TYPE_DOUBLE;  /* should it be type_double or _string ?? */
+    opt_range->type = TYPE_DOUBLE;      /* should it be type_double or _string ?? */
     opt_range->required = NO;
     opt_range->description =
-	_("Use a subset of the map range for the legend (min,max)");
+        _("Use a subset of the map range for the legend (min,max)");
     opt_range->guisection = _("Subset");
 
     opt_color = G_define_standard_option(G_OPT_C);
@@ -215,7 +214,7 @@ int main(int argc, char **argv)
     opt_charset->type = TYPE_STRING;
     opt_charset->required = NO;
     opt_charset->description =
-	_("Text encoding (only applicable to TrueType fonts)");
+        _("Text encoding (only applicable to TrueType fonts)");
     opt_charset->guisection = _("Font settings");
 
     opt_brdcolor = G_define_standard_option(G_OPT_CN);
@@ -278,15 +277,15 @@ int main(int argc, char **argv)
 
     /* Check command line */
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     if (opt_rast2d->answer) {
-	map_name = opt_rast2d->answer;
-	maptype = MAP_TYPE_RASTER2D;
+        map_name = opt_rast2d->answer;
+        maptype = MAP_TYPE_RASTER2D;
     }
     else {
-	map_name = opt_rast3d->answer;
-	maptype = MAP_TYPE_RASTER3D;
+        map_name = opt_rast3d->answer;
+        maptype = MAP_TYPE_RASTER3D;
     }
 
     if (opt_title->answer)
@@ -294,7 +293,7 @@ int main(int argc, char **argv)
     else
         title = "";
 
-    hide_catstr = hidestr->answer;	/* note hide_catstr gets changed and re-read below */
+    hide_catstr = hidestr->answer;      /* note hide_catstr gets changed and re-read below */
     hide_catnum = hidenum->answer;
     show_ticks = showtick->answer;
     hide_nodata = hidenodata->answer;
@@ -302,7 +301,7 @@ int main(int argc, char **argv)
     flip = flipit->answer;
     show_bg = showbg->answer;
 
-    if (showtick->answer){
+    if (showtick->answer) {
         label_indent = 12;
     }
     else
@@ -311,17 +310,17 @@ int main(int argc, char **argv)
     color = D_parse_color(opt_color->answer, TRUE);
 
     if (opt_lines->answer != NULL)
-	sscanf(opt_lines->answer, "%d", &lines);
+        sscanf(opt_lines->answer, "%d", &lines);
 
     thin = 1;
     if (opt_thin->answer != NULL)
-	sscanf(opt_thin->answer, "%d", &thin);
+        sscanf(opt_thin->answer, "%d", &thin);
     if (!thin)
-	thin = 1;
+        thin = 1;
 
     if (opt_labelnum->answer != NULL)
-	sscanf(opt_labelnum->answer, "%d", &steps);
-    
+        sscanf(opt_labelnum->answer, "%d", &steps);
+
     if ((opt_tstep->answer) || (opt_ticks->answer))
         steps = 0;
 
@@ -330,8 +329,8 @@ int main(int argc, char **argv)
 
     ticksCount = 0;
     if (opt_ticks->answer != NULL) {
-        tick_values = (double *)G_calloc(100+1, sizeof(double));
-        for (i = 0; i < 100; i++)   /* fill with dummy values */
+        tick_values = (double *)G_calloc(100 + 1, sizeof(double));
+        for (i = 0; i < 100; i++)       /* fill with dummy values */
             tick_values[i] = 1.0 * (i + 1);
         tick_values[i] = 0;
 
@@ -341,57 +340,57 @@ int main(int argc, char **argv)
     }
 
     catlistCount = 0;
-    if (opt_use->answer != NULL) {	/* should this be answerS ? */
-	use_catlist = TRUE;
+    if (opt_use->answer != NULL) {      /* should this be answerS ? */
+        use_catlist = TRUE;
 
-	catlist = (double *)G_calloc(100 + 1, sizeof(double));
-	for (i = 0; i < 100; i++)	/* fill with dummy values */
-	    catlist[i] = 1.0 * (i + 1);
-	catlist[i] = 0;
+        catlist = (double *)G_calloc(100 + 1, sizeof(double));
+        for (i = 0; i < 100; i++)       /* fill with dummy values */
+            catlist[i] = 1.0 * (i + 1);
+        catlist[i] = 0;
 
-	for (i = 0; (opt_use->answers[i] != NULL) && i < 100; i++)
-	    catlist[i] = atof(opt_use->answers[i]);
+        for (i = 0; (opt_use->answers[i] != NULL) && i < 100; i++)
+            catlist[i] = atof(opt_use->answers[i]);
 
-	catlistCount = i;
+        catlistCount = i;
     }
     else
-	use_catlist = FALSE;
+        use_catlist = FALSE;
 
 
     UserRange = FALSE;
-    if (opt_range->answer != NULL) {	/* should this be answerS ? */
-	sscanf(opt_range->answers[0], "%lf", &UserRangeMin);
-	sscanf(opt_range->answers[1], "%lf", &UserRangeMax);
-	UserRange = TRUE;
-	if (UserRangeMin > UserRangeMax) {
-	    UserRangeTemp = UserRangeMax;
-	    UserRangeMax = UserRangeMin;
-	    UserRangeMin = UserRangeTemp;
-	    flip = !flip;
-	}
+    if (opt_range->answer != NULL) {    /* should this be answerS ? */
+        sscanf(opt_range->answers[0], "%lf", &UserRangeMin);
+        sscanf(opt_range->answers[1], "%lf", &UserRangeMax);
+        UserRange = TRUE;
+        if (UserRangeMin > UserRangeMax) {
+            UserRangeTemp = UserRangeMax;
+            UserRangeMax = UserRangeMin;
+            UserRangeMin = UserRangeTemp;
+            flip = !flip;
+        }
     }
 
     if (maptype == MAP_TYPE_RASTER2D) {
-	if (Rast_read_colors(map_name, "", &colors) == -1)
-	    G_fatal_error(_("Color file for <%s> not available"), map_name);
+        if (Rast_read_colors(map_name, "", &colors) == -1)
+            G_fatal_error(_("Color file for <%s> not available"), map_name);
 
-	fp = Rast_map_is_fp(map_name, "");
- 
-	Rast_read_cats(map_name, "", &cats);
+        fp = Rast_map_is_fp(map_name, "");
+
+        Rast_read_cats(map_name, "", &cats);
     }
     else {
-	if (Rast3d_read_colors(map_name, "", &colors) == -1)
-	    G_fatal_error(_("Color file for <%s> not available"), map_name);
+        if (Rast3d_read_colors(map_name, "", &colors) == -1)
+            G_fatal_error(_("Color file for <%s> not available"), map_name);
 
-	fp = TRUE;  /* currently raster 3D is always floating point */
+        fp = TRUE;              /* currently raster 3D is always floating point */
 
-	Rast3d_read_cats(map_name, "", &cats);
+        Rast3d_read_cats(map_name, "", &cats);
     }
 
     if (fp && !use_catlist) {
-	do_smooth = TRUE;
-	/* fprintf(stderr, "FP map found - switching gradient legend on\n"); */
-	flip = !flip;
+        do_smooth = TRUE;
+        /* fprintf(stderr, "FP map found - switching gradient legend on\n"); */
+        flip = !flip;
     }
 
     D_open_driver();
@@ -401,17 +400,17 @@ int main(int argc, char **argv)
     colorbg = D_parse_color(opt_bgcolor->answer, TRUE);
 
     if (opt_font->answer)
-	D_font(opt_font->answer);
+        D_font(opt_font->answer);
     else if (opt_path->answer)
-	D_font(opt_path->answer);
+        D_font(opt_path->answer);
 
     if (opt_fontsize->answer != NULL)
-	fontsize = atof(opt_fontsize->answer);
+        fontsize = atof(opt_fontsize->answer);
     else
-	fontsize = 12; /* dummy placeholder, should never be called */
+        fontsize = 12;          /* dummy placeholder, should never be called */
 
     if (opt_charset->answer)
-	D_encoding(opt_charset->answer);
+        D_encoding(opt_charset->answer);
 
     if (opt_tit_fontsize->answer != NULL)
         tit_fontsize = atof(opt_tit_fontsize->answer);
@@ -419,44 +418,39 @@ int main(int argc, char **argv)
         tit_fontsize = 0;
 
     if (opt_at->answer != NULL) {
-	sscanf(opt_at->answers[0], "%lf", &Y1);
-	sscanf(opt_at->answers[1], "%lf", &Y0);
-	sscanf(opt_at->answers[2], "%lf", &X0);
-	sscanf(opt_at->answers[3], "%lf", &X1);
+        sscanf(opt_at->answers[0], "%lf", &Y1);
+        sscanf(opt_at->answers[1], "%lf", &Y0);
+        sscanf(opt_at->answers[2], "%lf", &X0);
+        sscanf(opt_at->answers[3], "%lf", &X1);
     }
-    else {			/* default */
-	Y1 = 12;
-	Y0 = 88;
-	X0 = 3;
-	X1 = 7;
+    else {                      /* default */
+        Y1 = 12;
+        Y0 = 88;
+        X0 = 3;
+        X1 = 7;
 
-	if (histo->answer) {
-	    X0 += 5;
-	    X1 += 5;
-	}
+        if (histo->answer) {
+            X0 += 5;
+            X1 += 5;
+        }
     }
-//    if (show_bg)
-//        background(map_name, maptype, color, thin, lines, steps, fp, label_indent, hide_catnum,
-//                   hide_catstr, show_ticks, hide_nodata, do_smooth, cats, colors, X0,
-//                   X1, Y0, Y1, flip, UserRange, UserRangeMin, UserRangeMax, catlist, catlistCount,
-//                   use_catlist, ticksCount, fontsize, tit_fontsize, title, tick_values, t_step,
-//                   colorb, colorbg, opt_use, opt_at, opt_fontsize, opt_ticks, opt_tstep, opt_range,
-//                   histo, hidestr);
 
     if (show_bg)
-        draw(map_name, maptype, color, thin, lines, steps, fp, label_indent, hide_catnum,
-             hide_catstr, show_ticks, hide_nodata, do_smooth, cats, colors, X0,
-             X1, Y0, Y1, flip, UserRange, UserRangeMin, UserRangeMax, catlist, catlistCount,
-             use_catlist, ticksCount, fontsize, tit_fontsize, title, tick_values, t_step, colorb,
-             colorbg, opt_use, opt_at, opt_fontsize, opt_ticks, opt_tstep, opt_range, histo, hidestr,
-             0);
+        draw(map_name, maptype, color, thin, lines, steps, fp, label_indent,
+             hide_catnum, hide_catstr, show_ticks, hide_nodata, do_smooth,
+             cats, colors, X0, X1, Y0, Y1, flip, UserRange, UserRangeMin,
+             UserRangeMax, catlist, catlistCount, use_catlist, ticksCount,
+             fontsize, tit_fontsize, title, tick_values, t_step, colorb,
+             colorbg, opt_use, opt_at, opt_fontsize, opt_ticks, opt_tstep,
+             opt_range, histo, hidestr, 0);
 
-    draw(map_name, maptype, color, thin, lines, steps, fp, label_indent, hide_catnum,
-         hide_catstr, show_ticks, hide_nodata, do_smooth, cats, colors, X0,
-         X1, Y0, Y1, flip, UserRange, UserRangeMin, UserRangeMax, catlist, catlistCount,
-         use_catlist, ticksCount, fontsize, tit_fontsize, title, tick_values, t_step, colorb,
-         colorbg, opt_use, opt_at, opt_fontsize, opt_ticks, opt_tstep, opt_range, histo, hidestr,
-         1);
+    draw(map_name, maptype, color, thin, lines, steps, fp, label_indent,
+         hide_catnum, hide_catstr, show_ticks, hide_nodata, do_smooth, cats,
+         colors, X0, X1, Y0, Y1, flip, UserRange, UserRangeMin, UserRangeMax,
+         catlist, catlistCount, use_catlist, ticksCount, fontsize,
+         tit_fontsize, title, tick_values, t_step, colorb, colorbg, opt_use,
+         opt_at, opt_fontsize, opt_ticks, opt_tstep, opt_range, histo,
+         hidestr, 1);
 
     D_close_driver();
 
