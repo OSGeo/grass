@@ -13,13 +13,13 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-void draw_histogram(const char *map_name, int x0, int y0, int width,
-		    int height, int color, int flip, int horiz,
-		    int map_type, int is_fp, struct FPRange render_range)
+double histogram(const char *map_name, int x0, int y0, int width,
+            int height, int color, int flip, int horiz, int map_type,
+            int is_fp, struct FPRange render_range, int drawh)
 {
     int i, nsteps, ystep;
     long cell_count = 0;
-    double max_width, width_mult, dx;
+    double max_width, width_mult, dx, max;
     double dy, y0_adjust;	/* only needed for CELL maps */
     struct stat_list dist_stats;
     struct stat_node *ptr;
@@ -38,6 +38,9 @@ void draw_histogram(const char *map_name, int x0, int y0, int width,
 	max_width = width * 1.75;
 	nsteps = height - 3;
     }
+
+    /* reset return value max */
+    max = 0;
 
 
     if (render_range.first_time) {
@@ -107,7 +110,7 @@ void draw_histogram(const char *map_name, int x0, int y0, int width,
     if (!is_fp && render_range.first_time) {
 	G_warning(_("Histogram constrained by range not yet implemented for "
 		  "categorical rasters"));
-	return;
+	return max;
     }
 
 
@@ -115,11 +118,11 @@ void draw_histogram(const char *map_name, int x0, int y0, int width,
     get_stats(map_name, &dist_stats, nsteps, map_type);
 
     width_mult = max_width / dist_stats.maxstat;
+    ptr = dist_stats.ptr;
 
+    if (drawh) {
     D_use_color(color);
     D_begin();
-
-    ptr = dist_stats.ptr;
 
     if (!is_fp) {
 	dy = (nsteps + 3.0) / (1 + dist_stats.maxcat - dist_stats.mincat);
@@ -134,6 +137,7 @@ void draw_histogram(const char *map_name, int x0, int y0, int width,
 
 	if (!flip)  /* mmph */
 	    y0_adjust += 0.5;
+    }
     }
 
 
@@ -198,6 +202,7 @@ void draw_histogram(const char *map_name, int x0, int y0, int width,
 
 	dx = cell_count * width_mult;
 
+    if (drawh){
 	if (is_fp) {
 	    if (horiz) {
 		if (flip)
@@ -246,8 +251,15 @@ void draw_histogram(const char *map_name, int x0, int y0, int width,
 	    }
 	}
     }
+    if (dx > max)
+        max = dx;
+    }
 
+    if (drawh) {
     D_close();
     D_end();
     D_stroke();
+}
+
+    return max;
 }
