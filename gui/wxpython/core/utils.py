@@ -614,7 +614,7 @@ def GetListOfLocations(dbase):
                     listOfLocations.append(os.path.basename(location))
             except:
                 pass
-    except UnicodeEncodeError as e:
+    except (UnicodeEncodeError, UnicodeDecodeError) as e:
         raise e
 
     ListSortLower(listOfLocations)
