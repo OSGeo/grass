@@ -787,10 +787,11 @@ class GRASSStartup(wx.Frame):
         """Update list of locations"""
         try:
             self.listOfLocations = GetListOfLocations(dbase)
-        except UnicodeEncodeError:
+        except (UnicodeEncodeError, UnicodeDecodeError) as e:
             GError(parent=self,
-                   message=_("Unable to set GRASS database. "
-                             "Check your locale settings."))
+                   message=_("Unicode error detected. "
+                             "Check your locale settings. Details: {}").format(e),
+                   showTraceback=False)
 
         self.lblocations.Clear()
         self.lblocations.InsertItems(self.listOfLocations, 0)
