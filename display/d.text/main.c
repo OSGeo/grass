@@ -145,15 +145,12 @@ int main(int argc, char **argv)
     opt.text->type = TYPE_STRING;
     opt.text->required = NO;
     opt.text->description = _("Text to display");
+    opt.text->guisection = _("Input");
 
-    opt.size = G_define_option();
-    opt.size->key = "size";
-    opt.size->type = TYPE_DOUBLE;
-    opt.size->required = NO;
-    opt.size->answer = "5";
-    opt.size->options = "0-100";
-    opt.size->description =
-	_("Height of letters in percentage of available frame height");
+    opt.input = G_define_standard_option(G_OPT_F_INPUT);
+    opt.input->required = NO;
+    opt.input->description = _("Input file");
+    opt.input->guisection = _("Input");
 
     opt.fgcolor = G_define_option();
     opt.fgcolor->key = "color";
@@ -163,6 +160,7 @@ int main(int argc, char **argv)
     opt.fgcolor->description =
 	_("Text color, either a standard GRASS color or R:G:B triplet");
     opt.fgcolor->gisprompt = "old_color,color,color";
+    opt.fgcolor->guisection = _("Text");
 
     opt.bgcolor = G_define_option();
     opt.bgcolor->key = "bgcolor";
@@ -171,14 +169,24 @@ int main(int argc, char **argv)
     opt.bgcolor->description =
         _("Text background color, either a standard GRASS color or R:G:B triplet");
     opt.bgcolor->gisprompt = "old_color,color,color";
+    opt.bgcolor->guisection = _("Text");
 
-    opt.line = G_define_option();
-    opt.line->key = "line";
-    opt.line->required = NO;
-    opt.line->type = TYPE_INTEGER;
-    opt.line->options = "1-1000";
-    opt.line->description =
-	_("The screen line number on which text will begin to be drawn");
+    opt.rotation = G_define_option();
+    opt.rotation->key = "rotation";
+    opt.rotation->type = TYPE_DOUBLE;
+    opt.rotation->required = NO;
+    opt.rotation->answer = "0";
+    opt.rotation->description =
+    _("Rotation angle in degrees (counter-clockwise)");
+    opt.rotation->guisection = _("Text");
+
+    opt.linespacing = G_define_option();
+    opt.linespacing->key = "linespacing";
+    opt.linespacing->type = TYPE_DOUBLE;
+    opt.linespacing->required = NO;
+    opt.linespacing->answer = "1.25";
+    opt.linespacing->description = _("Line spacing");
+    opt.linespacing->guisection = _("Text");
 
     opt.at = G_define_option();
     opt.at->key = "at";
@@ -187,6 +195,16 @@ int main(int argc, char **argv)
     opt.at->required = NO;
     opt.at->description =
 	_("Screen position at which text will begin to be drawn (percentage, [0,0] is lower left)");
+    opt.at->guisection = _("Position");
+
+    opt.line = G_define_option();
+    opt.line->key = "line";
+    opt.line->required = NO;
+    opt.line->type = TYPE_INTEGER;
+    opt.line->options = "1-1000";
+    opt.line->description =
+	_("The screen line number on which text will begin to be drawn");
+    opt.line->guisection = _("Position");
 
     opt.align = G_define_option();
     opt.align->key = "align";
@@ -195,33 +213,31 @@ int main(int argc, char **argv)
     opt.align->answer = "ll";
     opt.align->options = "ll,lc,lr,cl,cc,cr,ul,uc,ur";
     opt.align->description = _("Text alignment");
-
-    opt.rotation = G_define_option();
-    opt.rotation->key = "rotation";
-    opt.rotation->type = TYPE_DOUBLE;
-    opt.rotation->required = NO;
-    opt.rotation->answer = "0";
-    opt.rotation->description =
-	_("Rotation angle in degrees (counter-clockwise)");
-
-    opt.linespacing = G_define_option();
-    opt.linespacing->key = "linespacing";
-    opt.linespacing->type = TYPE_DOUBLE;
-    opt.linespacing->required = NO;
-    opt.linespacing->answer = "1.25";
-    opt.linespacing->description = _("Line spacing");
+    opt.align->guisection = _("Position");
 
     opt.font = G_define_option();
     opt.font->key = "font";
     opt.font->type = TYPE_STRING;
     opt.font->required = NO;
     opt.font->description = _("Font name");
+    opt.font->guisection = _("Font settings");
+
+    opt.size = G_define_option();
+    opt.size->key = "size";
+    opt.size->type = TYPE_DOUBLE;
+    opt.size->required = NO;
+    opt.size->answer = "5";
+    opt.size->options = "0-100";
+    opt.size->description =
+    _("Height of letters in percentage of available frame height");
+    opt.size->guisection = _("Font settings");
 
     opt.path = G_define_standard_option(G_OPT_F_INPUT);
     opt.path->key = "path";
     opt.path->required = NO;
     opt.path->description = _("Path to font file");
     opt.path->gisprompt = "old,font,file";
+    opt.path->guisection = _("Font settings");
 
     opt.charset = G_define_option();
     opt.charset->key = "charset";
@@ -229,30 +245,32 @@ int main(int argc, char **argv)
     opt.charset->required = NO;
     opt.charset->description =
 	_("Text encoding (only applicable to TrueType fonts)");
-
-    opt.input = G_define_standard_option(G_OPT_F_INPUT);
-    opt.input->required = NO;
-    opt.input->description = _("Input file");
+    opt.charset->guisection = _("Font settings");
 
     flag.p = G_define_flag();
     flag.p->key = 'p';
     flag.p->description = _("Screen position in pixels ([0,0] is top left)");
+    flag.p->guisection = _("Position");
 
     flag.g = G_define_flag();
     flag.g->key = 'g';
     flag.g->description = _("Screen position in geographic coordinates");
+    flag.g->guisection = _("Position");
 
     flag.b = G_define_flag();
     flag.b->key = 'b';
     flag.b->description = _("Use bold text");
+    flag.b->guisection = _("Text");
 
     flag.r = G_define_flag();
     flag.r->key = 'r';
     flag.r->description = _("Use radians instead of degrees for rotation");
+    flag.r->guisection = _("Text");
 
     flag.s = G_define_flag();
     flag.s->key = 's';
     flag.s->description = _("Font size is height in pixels");
+    flag.s->guisection = _("Font settings");
 
 
     /* check command line */
