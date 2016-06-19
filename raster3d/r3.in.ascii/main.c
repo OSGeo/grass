@@ -16,7 +16,7 @@
  *
  *****************************************************************************/
 #include <stdio.h>
-
+#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -37,6 +37,9 @@ static void setParams(); /*Fill the paramType structure */
 /*Puts the userdefined parameters into easier handable variables */
 static void getParams(char **input, char **output, int *convertNull,
                       char *nullValue);
+
+/* copy content of one file into another (taken form r.in.ascii) */
+static int file_cpy(FILE *, FILE *);
 
 /*reads a g3d ascii-file headerfile-string */
 static void readHeaderString(FILE * fp, char *valueString, double *value);
@@ -80,7 +83,8 @@ static void setParams()
 {
     param.input = G_define_standard_option(G_OPT_F_INPUT);
     param.input->required = YES;
-    param.input->description = _("Name of input file to be imported");
+    param.input->label = _("Name of input file to be imported");
+    param.input->description = _("'-' for standard input");
 
     param.output = G_define_standard_option(G_OPT_R3_OUTPUT);
 
@@ -107,6 +111,31 @@ getParams(char **input, char **output, int *convertNull, char *nullValue)
 
 /*---------------------------------------------------------------------------*/
 
+static int file_cpy(FILE * from, FILE * to)
+{
+    char buf[BUFSIZ];
+    size_t size;
+    int written = 0;
+
+    while (1) {
+        size = fread(buf, 1, BUFSIZ, from);
+        if (!size) {
+            if (written) {
+                fflush(to);
+                G_fseek(to, 0L, SEEK_SET);
+            }
+            return 0;
+        }
+        if (!fwrite(buf, 1, size, to)) {
+            G_warning(_("Unable to write to file"));
+            return -1;
+        }
+        written = 1;
+    }
+    /* NOTREACHED */
+    return -1;
+}
+
 void readHeaderString(FILE * fp, char *valueString, double *value)
 {
     static char format[100];
@@ -116,7 +145,8 @@ void readHeaderString(FILE * fp, char *valueString, double *value)
     G_snprintf(format, 100, "%s %%lf", valueString);
     G_getl2(line_buff, 1024, fp);
     if (sscanf(line_buff, format, value) != 1) {
-        G_debug(3, "bad value for [%s]", valueString);
+        /* this would be ideal to merge if Rast3d_close could be solved */
+        G_warning("Bad value for '%s': %s", valueString, line_buff);
         fatalError("readHeaderString: header value invalid");
     }
 }
@@ -126,13 +156,24 @@ void readHeaderString(FILE * fp, char *valueString, double *value)
 FILE *openAscii(char *asciiFile, RASTER3D_Region * region)
 {
     FILE *fp;
+    char *tmp_file;
     double tmp;
     char buff[1024];
     char line_buff[1024];
 
     G_debug(3, "openAscii: opens the ascii file and reads the header");
 
-    fp = fopen(asciiFile, "r");
+    if (strcmp(asciiFile, "-") == 0) {
+        tmp_file = G_tempfile();
+        if (NULL == (fp = fopen(tmp_file, "w+")))
+            G_fatal_error(_("Unable to open temporary file <%s>"), tmp_file);
+        unlink(tmp_file);
+        if (0 > file_cpy(stdin, fp))
+            G_fatal_error(_("Unable to read input from stdin"));
+    }
+    else {
+        fp = fopen(asciiFile, "r");
+    }
     if (fp == NULL) {
         perror(asciiFile);
         G_usage();
@@ -266,9 +307,9 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
                     Rast3d_set_null_value(&value, 1, DCELL_TYPE);
                 } else {
                     if (sscanf(buff, "%lf", &value) != 1) {
-                        G_warning(_("Invalid value detected"));
-                        G_debug(1, "invalid value at col=%d row=%d depth=%d last_value=[%s]",
-                                x + 1, y + 1, z + 1, buff);
+                        G_warning(_("Invalid value detected"
+                                    " (at col=%d row=%d depth=%d): %s"),
+                                  x + 1, y + 1, z + 1, buff);
                         fatalError("asciiToG3d: read failed");
                     }
                 }
