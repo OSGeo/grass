@@ -41,7 +41,7 @@ import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
 
 from grass.pydispatch.signal import Signal
-from grass.script import core as grass
+import grass.script as grass
 from grass.exceptions import OpenError
 
 from core import globalvar
@@ -2055,6 +2055,7 @@ class DefaultFontDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, id, title, style=style)
 
         panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.tmp_file = grass.tempfile(False) + '.png'
 
         self.fontlist = self.GetFonts()
 
@@ -2086,6 +2087,10 @@ class DefaultFontDialog(wx.Dialog):
         gridSizer.Add(item=self.fontlb,
                       flag=wx.EXPAND, pos=(1, 0))
 
+        self.renderfont = wx.StaticBitmap(panel, bitmap=wx.EmptyBitmapRGBA(100, 50, 255, 255, 255))
+        gridSizer.Add(item=self.renderfont,
+                      flag=wx.EXPAND, pos=(2, 0))
+
         if self.type == 'font':
             if "GRASS_FONT" in os.environ:
                 self.font = os.environ["GRASS_FONT"]
@@ -2099,12 +2104,12 @@ class DefaultFontDialog(wx.Dialog):
                                   label=_("Character encoding:"))
             gridSizer.Add(item=label,
                           flag=wx.ALIGN_CENTER_VERTICAL,
-                          pos=(2, 0))
+                          pos=(3, 0))
 
             self.textentry = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
                                          value=self.encoding)
             gridSizer.Add(item=self.textentry,
-                          flag=wx.EXPAND, pos=(3, 0))
+                          flag=wx.EXPAND, pos=(4, 0))
 
             self.textentry.Bind(wx.EVT_TEXT, self.OnEncoding)
 
@@ -2158,6 +2163,10 @@ class DefaultFontDialog(wx.Dialog):
         panel.SetAutoLayout(True)
         panel.SetSizer(border)
         border.Fit(self)
+        row, col = gridSizer.GetItemPosition(self.renderfont)
+        self.renderfont.SetSize(gridSizer.GetCellSize(row, col))
+        if self.font:
+            self.RenderText(self.font, _("Example"), size=self.renderfont.GetSize())
 
         self.Layout()
 
@@ -2166,6 +2175,7 @@ class DefaultFontDialog(wx.Dialog):
 
     def EvtListBox(self, event):
         self.font = event.GetString()
+        self.RenderText(self.font, "Example", size=self.renderfont.GetSize())
         event.Skip()
 
     def EvtListBoxDClick(self, event):
@@ -2203,6 +2213,25 @@ class DefaultFontDialog(wx.Dialog):
                 fontlist.append(dfonts[item])
 
         return fontlist
+
+    def RenderText(self, font, text, size):
+        """Renders an example text with the selected font and resets the bitmap widget"""
+        env = os.environ.copy()
+        driver = UserSettings.Get(group='display', key='driver', subkey='type')
+        if driver == 'png':
+            env['GRASS_RENDER_IMMEDIATE'] = 'png'
+        else:
+            env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+        env['GRASS_RENDER_WIDTH'] = str(size[0])
+        env['GRASS_RENDER_HEIGHT'] = str(size[1])
+        env['GRASS_RENDER_FILE'] = self.tmp_file
+        ret = RunCommand('d.text', text=text, font=font, align='cc', at='50,50',
+                         size=80, color='black', env=env)
+        if ret == 0:
+            self.renderfont.SetBitmap(wx.Bitmap(self.tmp_file))
+        else:
+            self.renderfont.SetBitmap(wx.EmptyBitmapRGBA(size[0], size[1]))
+        grass.try_remove(self.tmp_file)
 
 
 class MapsetAccess(wx.Dialog):
