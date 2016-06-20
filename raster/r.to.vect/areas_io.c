@@ -28,15 +28,13 @@
 static int write_bnd(struct COOR *, struct COOR *, int);
 static int write_smooth_bnd(struct COOR *, struct COOR *, int);
 
-static int *equivs;
-
 
 /* write_line - attempt to write a line to output */
 /* just returns if line is not completed yet */
 int write_boundary(struct COOR *seed)
 {
-    struct COOR *point, *line_begin, *line_end;
-    int dir, line_type, n, n1;
+    struct COOR *point, *line_begin, *line_end, *last;
+    int dir, line_type, n, n1, i;
 
     point = seed;
     if ((dir = at_end(point))) {	/* already have one end of line */
@@ -68,11 +66,59 @@ int write_boundary(struct COOR *seed)
 	    direction = FORWARD;	/* direction is arbitrary */
 	}
     }
+    dir = direction;
 
     if (smooth_flag == SMOOTH)
 	write_smooth_bnd(line_begin, line_end, n);
     else
 	write_bnd(line_begin, line_end, n);
+
+    /* now free all the pointers */
+    direction = dir;
+    point = line_begin;
+    last = NULPTR;
+    n1 = 0;
+
+    /* skip first and last point */
+    while ((point = move(point)) == line_begin);
+
+    while (point && point != line_end) {
+	last = point;
+	n1++;
+	point = move(point);
+
+	if (point == last) {
+	    /* should not happen */
+	    G_warning("loop during free ptrs, ptr %d of %d", n1, n);
+	    point = move(point);
+	}
+
+	if (last->fptr != NULPTR)
+	    if (last->fptr->fptr == last)
+		last->fptr->fptr = NULPTR;
+	/* it can be NULL after the previous line, even though before it wasn't */
+	if (last->fptr != NULPTR)
+	    if (last->fptr->bptr == last)
+		last->fptr->bptr = NULPTR;
+	if (last->bptr != NULPTR)
+	    if (last->bptr->fptr == last)
+		last->bptr->fptr = NULPTR;
+	if (last->bptr != NULPTR)
+	    if (last->bptr->bptr == last)
+		last->bptr->bptr = NULPTR;
+
+	free_ptr(last);
+    }
+
+    if (point != line_end) {
+	/* should not happen */
+	G_warning("Line end not reached, possible memory leak");
+    }
+
+    /* free first and last point */
+    free_ptr(line_begin);
+    if (line_end != line_begin)
+	free_ptr(line_end);
 
     return (0);
 }
@@ -94,20 +140,18 @@ static int write_bnd(struct COOR *line_begin, struct COOR *line_end,	/* start an
 	points = Vect_new_line_struct();
     Vect_reset_line(points);
 
-    n++;			/* %% 6.4.88 */
-
     p = line_begin;
     y = cell_head.north - (double)p->row * cell_head.ns_res;
     x = cell_head.west + (double)p->col * cell_head.ew_res;
 
     Vect_append_point(points, x, y, 0.0);
 
-    for (i = 1; i < n; i++) {
+    for (i = 0; i < n; i++) {
 	last = p;
 
 	/* this should NEVER happen */
 	if ((p = move(p)) == NULPTR)
-	    G_fatal_error(_("Line terminated unexpectedly\n"
+	    G_fatal_error(_("write_bnd:  line terminated unexpectedly\n"
 			    "previous (%d) point %p (%d,%d,%d) %p %p"),
 			  direction, last, last->row, last->col, last->node,
 			  last->fptr, last->bptr);
@@ -117,35 +161,6 @@ static int write_bnd(struct COOR *line_begin, struct COOR *line_end,	/* start an
 
 	Vect_append_point(points, x, y, 0.0);
     }
-
-    /* now free all the pointers */
-    p = line_begin;
-
-    for (i = 1; i < n; i++) {
-	last = p;
-	if ((p = move(p)) == NULPTR)
-	    break;
-	if (last == p)
-	    break;
-	if (last->fptr != NULPTR)
-	    if (last->fptr->fptr == last)
-		last->fptr->fptr = NULPTR;
-	/* it can be NULL after the previous line, even though before it wasn't */
-	if (last->fptr != NULPTR)
-	    if (last->fptr->bptr == last)
-		last->fptr->bptr = NULPTR;
-	if (last->bptr != NULPTR)
-	    if (last->bptr->fptr == last)
-		last->bptr->fptr = NULPTR;
-	if (last->bptr != NULPTR)
-	    if (last->bptr->bptr == last)
-		last->bptr->bptr = NULPTR;
-
-	G_free(last);
-    }				/* end of for i */
-
-    if (p != NULPTR)
-	G_free(p);
 
     Vect_write_line(&Map, GV_BOUNDARY, points, Cats);
 
@@ -172,8 +187,6 @@ static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,	/* s
 	points = Vect_new_line_struct();
     Vect_reset_line(points);
 
-    n++;			/* %% 6.4.88 */
-
     p = line_begin;
     /* allocate the arrays and get the first point */
 
@@ -183,13 +196,13 @@ static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,	/* s
 
     /* generate the list of smoothed points, may be duplicate points */
     total = 1;
-    for (i = 1; i < n; i++) {
+    for (i = 0; i < n; i++) {
 	if (i < 10)
 	    G_debug(3, " row: %d col: %d\n", p->row, p->col);
 
 	last = p;
 	if ((p = move(p)) == NULPTR) {	/* this should NEVER happen */
-	    G_debug(3, "write_line:  line terminated unexpectedly\n");
+	    G_debug(3, "write_smooth_bnd:  line terminated unexpectedly\n");
 	    G_debug(3, "  previous (%d) point %p (%d,%d,%d) %p %p\n",
 		    direction, last, last->row, last->col, last->node,
 		    last->fptr, last->bptr);
@@ -219,43 +232,10 @@ static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,	/* s
 
     /* strip out the duplicate points from the list */
     Vect_line_prune(points);
-    G_debug(3, "removed duplicates: %d", total - points->n_points);
+    if (total != points->n_points)
+	G_debug(3, "removed duplicates: %d", total - points->n_points);
 
-    /* write files */
     Vect_write_line(&Map, GV_BOUNDARY, points, Cats);
-
-    /* now free all the pointers */
-    p = line_begin;
-
-    for (i = 1; i < n; i++) {
-	if (i < 10)
-	    G_debug(3, " row: %d col: %d\n", p->row, p->col);
-
-	last = p;
-	if ((p = move(p)) == NULPTR)
-	    break;
-	if (last == p)
-	    break;
-	if (last->fptr != NULPTR)
-	    if (last->fptr->fptr == last)
-		last->fptr->fptr = NULPTR;
-
-	/* now it can already ne NULL */
-	if (last->fptr != NULPTR)
-	    if (last->fptr->bptr == last)
-		last->fptr->bptr = NULPTR;
-	if (last->bptr != NULPTR)
-	    if (last->bptr->fptr == last)
-		last->bptr->fptr = NULPTR;
-	if (last->bptr != NULPTR)
-	    if (last->bptr->bptr == last)
-		last->bptr->bptr = NULPTR;
-
-	G_free(last);
-    }				/* end of for i */
-
-    if (p != NULPTR)
-	G_free(p);
 
     return 0;
 }
@@ -270,10 +250,12 @@ int write_area(struct area_table *a_list,	/* list of areas */
     int n, i;
     struct area_table *p;
     char *temp_buf;
+    int *equivs;
     int cat;
     int catNum;
     double x, y;
 
+    equivs = NULL;
     total_areas = 0;
     if (n_equiv < n_areas) {
 	equivs = (int *)G_malloc(n_areas * sizeof(int));
@@ -380,6 +362,9 @@ int write_area(struct area_table *a_list,	/* list of areas */
 	}
     }
     G_percent(1, 1, 1);
+
+    if (equivs)
+	G_free(equivs);
     
     return 0;
 }

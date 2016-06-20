@@ -47,6 +47,7 @@ int first_read, last_read;
 int input_fd;
 int row_length, row_count, n_rows;
 int total_areas;
+int n_alloced_ptrs;
 
 int smooth_flag;		/* this is 0 for no smoothing, 1 for smoothing of lines */
 int value_flag;			/* use raster values as categories */

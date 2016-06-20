@@ -157,3 +157,10 @@ void insert_value(int cat, int val, double dval)
 	G_fatal_error(_("Cannot insert new row: %s"), db_get_string(&sql));
 
 }
+
+int free_ptr(struct COOR *ptr)
+{
+    G_free(ptr);
+    
+    return (--n_alloced_ptrs);
+}
