@@ -141,6 +141,11 @@ int main(int argc, char *argv[])
 	    G_warning(_("Raster is not CELL, '-v' flag ignored, raster values will be lost."));
 	value_flag = 0;
     }
+    if (value_flag && no_topol->answer) {
+	G_warning(_("Vector topology is required for raster values as categories,"
+	            " '-v' flag ignored, raster values will be lost."));
+	value_flag = 0;
+    }
 
     if (!value_flag && notab_flag) {
 	G_warning(_("Categories will be unique sequence, raster values will be lost."));
