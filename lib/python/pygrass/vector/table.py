@@ -1077,7 +1077,7 @@ class Table(object):
             cur = cursor if cursor else self.conn.cursor()
             if many and values:
                 return cur.executemany(sqlc, values)
-            return cur.execute(sqlc)
+            return cur.execute(sqlc, values) if values else cur.execute(sqlc)
         except Exception as exc:
             raise ValueError("The SQL statement is not correct:\n%r,\n"
                              "values: %r,\n"

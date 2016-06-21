@@ -527,19 +527,59 @@ class VectorTopo(Vector):
         return output
 
     @must_be_open
-    def rewrite(self, line, geo_obj, attrs=None, **kargs):
+    def rewrite(self, geo_obj, cat, attrs=None, **kargs):
         """Rewrite a geometry features
+
+            >>> cols = [(u'cat',       'INTEGER PRIMARY KEY'),
+            ...         (u'name',      'TEXT')]
+
+        Generate a new vector map
+
+            >>> test_vect = VectorTopo(test_vector_name)
+            >>> test_vect.open('w', tab_name='newvect', tab_cols=cols,
+            ...                overwrite=True)
+
+        import a geometry feature ::
+
+            >>> from grass.pygrass.vector.geometry import Point
+
+        create two points ::
+
+            >>> point0 = Point(0, 0)
+            >>> point1 = Point(1, 1)
+            >>> point2 = Point(2, 2)
+
+        then write the two points on the map, with ::
+
+            >>> test_vect.write(point0, cat=1, attrs=('pub',))
+            >>> test_vect.write(point1, cat=2, attrs=('resturant',))
+            >>> test_vect.table.conn.commit()  # save changes in the DB
+            >>> test_vect.close()
+
+        Now rewrite on point of the vector map: ::
+
+            >>> test_vect.open('rw')
+            >>> test_vect.rewrite(point2, cat=1, attrs('Irish Pub'))
+            >>> test_vect.table.conn.commit()  # save changes in the DB
+            >>> test_vect.close()
+
+        Check the output:
+
+            >>> test_vect.open('r')
+            >>> test_vect[1] == point2
+            True
+            >>> test_vect[1].attrs['name'] == 'Irish Pub'
+            True
+            >>> test_vect.close()
         """
         if self.table is not None and attrs:
-            attr = [line, ]
-            attr.extend(attrs)
-            self.table.update(key=line, values=attr)
+            self.table.update(key=cat, values=attrs)
         elif self.table is None and attrs:
             print("Table for vector {name} does not exist, attributes not"
                   " loaded".format(name=self.name))
-        libvect.Vect_cat_set(geo_obj.c_cats, self.layer, line)
+        libvect.Vect_cat_set(geo_obj.c_cats, self.layer, cat)
         result = libvect.Vect_rewrite_line(self.c_mapinfo,
-                                           line, geo_obj.gtype,
+                                           cat, geo_obj.gtype,
                                            geo_obj.c_points,
                                            geo_obj.c_cats)
         if result == -1:
