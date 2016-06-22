@@ -57,6 +57,11 @@ struct field_info *Fi;
 dbDriver *driver;
 dbString sql, label;
 
+static int cmp_int(const void *a, const void *b)
+{
+    return (*(int *)a - *(int *)b);
+}
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
@@ -139,11 +144,6 @@ int main(int argc, char *argv[])
 	    G_warning(_("Raster is not CELL, '-v' flag ignored, raster values will be z coordinate."));
 	else
 	    G_warning(_("Raster is not CELL, '-v' flag ignored, raster values will be lost."));
-	value_flag = 0;
-    }
-    if (value_flag && no_topol->answer) {
-	G_warning(_("Vector topology is required for raster values as categories,"
-	            " '-v' flag ignored, raster values will be lost."));
 	value_flag = 0;
     }
 
@@ -267,26 +267,52 @@ int main(int argc, char *argv[])
 
     Rast_close(input_fd);
 
-    if (!no_topol->answer)
-	Vect_build(&Map);
-
-
     /* insert cats and optionally labels if raster cats were used */
     if (driver && value_flag) {
 	char buf[1000];
-	int c, i, cat, fidx, ncats, lastcat, tp, id;
+	int c, i, j, cat;
+	struct ilist *clist;
+	int type;
 
-	fidx = Vect_cidx_get_field_index(&Map, 1);
-	if (fidx >= 0) {
-	    ncats = Vect_cidx_get_num_cats_by_index(&Map, fidx);
-	    lastcat = -1;
-            
+	clist = G_new_ilist();
+
+	/* create category list */
+	Vect_rewind(&Map);
+
+	while (1) {
+	    /* register line */
+	    type = Vect_read_next_line(&Map, NULL, Cats);
+
+	    /* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+	    if (type == -1) {
+		G_warning(_("Unable to read vector map"));
+		break;
+	    }
+	    else if (type == -2) {
+		break;
+	    }
+	    
+	    for (i = 0; i < Cats->n_cats; i++)
+		G_ilist_add(clist, Cats->cat[i]);
+	}
+	
+	if (clist->n_values > 0) {
+
+	    qsort(clist->value, clist->n_values, sizeof(int), cmp_int);
+	    j = 1;
+	    for (i = 1; i < clist->n_values; i++) {
+		if (clist->value[i] != clist->value[j - 1]) {
+		    clist->value[j] = clist->value[i];
+		    j++;
+		}
+	    }
+	    clist->n_values = j;
+
             G_important_message(_("Updating attributes..."));
-	    for (c = 0; c < ncats; c++) {
-		Vect_cidx_get_cat_by_index(&Map, fidx, c, &cat, &tp, &id);
-
-		if (lastcat == cat)
-		    continue;
+	    for (c = 0; c < clist->n_values; c++) {
+		G_percent(c, clist->n_values, 4);
+		
+		cat = clist->value[c];
 
 		/* find label, slow -> TODO faster */
 		db_set_string(&label, "");
@@ -307,10 +333,10 @@ int main(int argc, char *argv[])
 		if (db_execute_immediate(driver, &sql) != DB_OK)
 		    G_fatal_error(_("Unable to insert into table: %s"),
 				  db_get_string(&sql));
-
-		lastcat = cat;
 	    }
+	    G_percent(1, 1, 1);
 	}
+	G_free_ilist(clist);
     }
 
     if (has_cats)
@@ -320,6 +346,9 @@ int main(int argc, char *argv[])
 	db_commit_transaction(driver);
 	db_close_database_shutdown_driver(driver);
     }
+
+    if (!no_topol->answer)
+	Vect_build(&Map);
 
     Vect_close(&Map);
     G_done_msg(" ");
