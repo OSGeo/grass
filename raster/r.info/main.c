@@ -40,6 +40,7 @@ static void compose_line(FILE *, const char *, ...);
 int main(int argc, char **argv)
 {
     const char *name, *mapset;
+    const char *title;
     char tmp1[100], tmp2[100], tmp3[100];
     char timebuff[256];
     char *units, *vdatum;
@@ -132,15 +133,26 @@ int main(int argc, char **argv)
 	!eflag->answer && !hflag->answer) {
 	divider('+');
 
+    /* empty title by default */
+    title = "";
+    /* use title from category file as the primary (and only) title */
+    if (cats_ok)
+        title = cats.title;
+    /* only use hist file title if there is none in the category file */
+    if ((!title || title[0] == '\0') && hist_ok) {
+        title = Rast_get_history(&hist, HIST_TITLE);
+        /* if the title is the same as name of the map, don't use it */
+        if (strcmp(title, name) == 0)
+            title = "";
+    }
+
 	compose_line(out, "Map:      %-29.29s  Date: %s", name,
 		     hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
 	compose_line(out, "Mapset:   %-29.29s  Login of Creator: %s",
 		     mapset, hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
 	compose_line(out, "Location: %s", G_location());
 	compose_line(out, "DataBase: %s", G_gisdbase());
-	compose_line(out, "Title:    %s ( %s )",
-		     cats_ok ? cats.title : "??",
-		     hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??");
+	compose_line(out, "Title:    %s", title);
 
 	/* This shows the TimeStamp */
 	if (time_ok && (first_time_ok || second_time_ok)) {
