@@ -45,7 +45,6 @@ int main(int argc, char *argv[])
     struct Flag *stats_flag, *null_flag, *del_flag;
     int is_reclass;		/* Is raster reclass? */
     const char *infile;
-    char title[MAX_TITLE_LEN + 1];
     struct History hist;
 
     /* Initialize GIS engine */
