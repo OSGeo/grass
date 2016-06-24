@@ -54,9 +54,9 @@ int main(int argc, char **argv)
         *opt_thin, *opt_labelnum, *opt_at, *opt_use, *opt_range,
         *opt_font, *opt_path, *opt_charset, *opt_fontsize, *opt_title,
         *opt_ticks, *opt_tstep, *opt_brdcolor, *opt_bgcolor,
-        *opt_tit_fontsize;
+        *opt_tit_fontsize, *opt_digits;
     struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *histo,
-        *showtick, *showbg;
+        *showtick, *showbg, *log_sc;
     double X0, X1, Y0, Y1;
     int flip, UserRange;
     double UserRangeMin, UserRangeMax, UserRangeTemp;
@@ -68,6 +68,7 @@ int main(int argc, char **argv)
     double t_step;
     int colorb, colorbg;
     double tit_fontsize;
+    int log_scale, digits;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -148,9 +149,16 @@ int main(int argc, char **argv)
     opt_tstep->type = TYPE_DOUBLE;
     opt_tstep->required = NO;
     opt_tstep->description = _("Display label every step");
-    opt_tstep->required = NO;
     opt_tstep->guisection = _("Gradient");
 
+    opt_digits = G_define_option();
+    opt_digits->key = "digits";
+    opt_digits->type = TYPE_INTEGER;
+    opt_digits->required = NO;
+    opt_digits->description = _("Number of digits after decimal point");
+    opt_digits->guisection = _("Advanced");
+    opt_digits->answer = NULL;
+    opt_digits->options = "0-6";
 
     opt_at = G_define_option();
     opt_at->key = "at";
@@ -270,6 +278,11 @@ int main(int argc, char **argv)
     showbg->description = _("Show background");
     showbg->guisection = _("Background");
 
+    log_sc = G_define_flag();
+    log_sc->key = 'l';
+    log_sc->description = _("Use logarithmic scale");
+    log_sc->guisection = _("Advanced");
+
     G_option_required(opt_rast2d, opt_rast3d, NULL);
     G_option_exclusive(opt_rast2d, opt_rast3d, NULL);
     G_option_exclusive(hidenum, opt_ticks, NULL);
@@ -300,12 +313,18 @@ int main(int argc, char **argv)
     do_smooth = smooth->answer;
     flip = flipit->answer;
     show_bg = showbg->answer;
+    log_scale = log_sc->answer;
 
     if (showtick->answer) {
         label_indent = 12;
     }
     else
         label_indent = 6;
+
+    if (opt_digits->answer != NULL)
+        sscanf(opt_digits->answer, "%d", &digits);
+    else
+        digits = -1;
 
     color = D_parse_color(opt_color->answer, TRUE);
 
@@ -442,7 +461,7 @@ int main(int argc, char **argv)
              UserRangeMax, catlist, catlistCount, use_catlist, ticksCount,
              fontsize, tit_fontsize, title, tick_values, t_step, colorb,
              colorbg, opt_use, opt_at, opt_fontsize, opt_ticks, opt_tstep,
-             opt_range, histo, hidestr, 0);
+             opt_range, histo, hidestr, log_scale, 0, digits);
 
     draw(map_name, maptype, color, thin, lines, steps, fp, label_indent,
          hide_catnum, hide_catstr, show_ticks, hide_nodata, do_smooth, cats,
@@ -450,7 +469,7 @@ int main(int argc, char **argv)
          catlist, catlistCount, use_catlist, ticksCount, fontsize,
          tit_fontsize, title, tick_values, t_step, colorb, colorbg, opt_use,
          opt_at, opt_fontsize, opt_ticks, opt_tstep, opt_range, histo,
-         hidestr, 1);
+         hidestr, log_scale, 1, digits);
 
     D_close_driver();
 
