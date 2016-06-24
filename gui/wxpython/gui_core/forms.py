@@ -1280,7 +1280,7 @@ class CmdPanel(wx.Panel):
                     and p.get('prompt', '') != 'color'):
 
                 title_txt.SetLabel(title + ':')
-
+                p['wxId'] = []
                 if p.get('multiple', False) or \
                         p.get('type', 'string') == 'string' or \
                         len(p.get('key_desc', [])) > 1:
@@ -1295,6 +1295,22 @@ class CmdPanel(wx.Panel):
 
                     win.Bind(wx.EVT_TEXT, self.OnSetValue)
                     style = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT
+                    if p.get('name', '') == 'font':
+                        font_btn = wx.Button(parent=which_panel, label=_("Select font"))
+                        font_btn.Bind(wx.EVT_BUTTON, self.OnSelectFont)
+                        font_sizer = wx.BoxSizer(wx.HORIZONTAL)
+                        font_sizer.Add(item=win, proportion=1,
+                                       flag=style, border=5)
+                        font_sizer.Add(item=font_btn, proportion=0,
+                                       flag=style, border=5)
+                        
+                        which_sizer.Add(item=font_sizer, proportion=0,
+                                        flag=style, border=5)
+                        p['wxId'].append(font_btn.GetId())
+                    else:
+                        which_sizer.Add(item=win, proportion=0,
+                                        flag=style, border=5)
+
                 elif p.get('type', '') == 'integer':
                     minValue = -1e9
                     maxValue = 1e9
@@ -1313,21 +1329,22 @@ class CmdPanel(wx.Panel):
                         win.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
 
                     style = wx.BOTTOM | wx.LEFT | wx.RIGHT
+                    which_sizer.Add(item=win, proportion=0,
+                                    flag=style, border=5)
                 else:  # float
                     win = wx.TextCtrl(
                         parent=which_panel, value=p.get(
                             'default', ''), validator=FloatValidator())
                     style = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT
+                    which_sizer.Add(item=win, proportion=0,
+                                    flag=style, border=5)
 
                     value = self._getValue(p)
                     if value:
                         win.SetValue(str(value))  # parameter previously set
 
                 win.Bind(wx.EVT_TEXT, self.OnSetValue)
-
-                which_sizer.Add(item=win, proportion=0,
-                                flag=style, border=5)
-                p['wxId'] = [win.GetId()]
+                p['wxId'].append(win.GetId())
 
             #
             # element selection tree combobox (maps, icons, regions, etc.)
@@ -2632,6 +2649,24 @@ class CmdPanel(wx.Panel):
                 datasets = select.GetValue().split(',')
                 from timeline import frame
                 frame.run(parent=self, datasets=datasets)
+
+    def OnSelectFont(self, event):
+        """Select font using font dialog"""
+        myId = event.GetId()
+        for p in self.task.params:
+            if 'wxId' in p and myId in p['wxId']:
+                from gui_core.dialogs import DefaultFontDialog
+                dlg = DefaultFontDialog(parent=self,
+                                        title=_('Select font'),
+                                        style=wx.DEFAULT_DIALOG_STYLE,
+                                        type='font')
+                if dlg.ShowModal() == wx.ID_OK:
+                    if dlg.font:
+                        p['value'] = dlg.font
+                        self.FindWindowById(p['wxId'][1]).SetValue(dlg.font)
+                        self.OnUpdateValues(event)
+                dlg.Destroy()
+
 
     def OnUpdateSelection(self, event):
         """Update dialog (layers, tables, columns, etc.)
