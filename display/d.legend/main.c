@@ -226,7 +226,7 @@ int main(int argc, char **argv)
     opt_charset->guisection = _("Font settings");
 
     opt_brdcolor = G_define_standard_option(G_OPT_CN);
-    opt_brdcolor->key = "borde_color";
+    opt_brdcolor->key = "border_color";
     opt_brdcolor->answer = "black";
     opt_brdcolor->label = _("Border color");
     opt_brdcolor->guisection = _("Background");
