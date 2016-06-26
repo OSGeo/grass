@@ -34,8 +34,10 @@
 #% key: columns
 #% type: string
 #% label: Name and type of the new column(s) ('name type [,name type, ...]')
-#% description: Data types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE
+#% description: Types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE. Example: 'label varchar(250), value integer'
 #% required: yes
+#% multiple: yes
+#% key_desc: name type
 #%end
 
 import sys
