@@ -44,8 +44,8 @@
 #%option
 #% key: columns
 #% type: string
-#% label: Name and type of the new column(s)
-#% description: Types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE. Example: "label varchar(250), type integer"
+#% label: Name and type of the new column(s) ('name type [,name type, ...]')
+#% description: Types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE. Example: 'label varchar(250), value integer'
 #% required: no
 #% multiple: yes
 #% key_desc: name type
