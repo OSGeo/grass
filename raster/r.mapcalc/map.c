@@ -160,7 +160,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
 
     if (i >= 0 && i < cache->nrows) {
 	if (!sub->valid[i]) {
-	    read_row(cache->fd, sub->buf[i], row + i, data_type);
+	    read_row(cache->fd, sub->buf[i], row, data_type);
 	    sub->valid[i] = 1;
 	}
 	return sub->buf[i];
