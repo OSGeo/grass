@@ -44,6 +44,7 @@ extern int first_read, last_read;
 extern int input_fd;
 extern int row_length, row_count, n_rows;
 extern int total_areas;
+extern int n_alloced_ptrs;
 
 extern int smooth_flag;		/* this is 0 for no smoothing, 1 for smoothing of lines */
 extern int value_flag;		/* use raster values as categories */
@@ -123,3 +124,4 @@ struct COOR *find_end(struct COOR *, int, int *, int *);
 int at_end(struct COOR *);
 int read_row(void *);
 void insert_value(int, int, double);
+int free_ptr(struct COOR *ptr);
