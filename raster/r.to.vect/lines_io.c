@@ -48,7 +48,7 @@ static int write_ln(struct COOR *, struct COOR *, int);
 
 int write_line(struct COOR *seed)
 {
-    struct COOR *point, *begin, *end;
+    struct COOR *point, *begin, *end, *last;
     int dir, line_type, n, n1;
 
     point = seed;
@@ -87,8 +87,54 @@ int write_line(struct COOR *seed)
 	}
     }
 
+    dir = direction;
+
     /* if (n > 2) */
     write_ln(begin, end, n);
+
+    /* now free all the pointers */
+    direction = dir;
+    point = begin;
+
+    /* skip first and last point */
+    while ((point = move(point)) == begin);
+
+    while (point && point != end) {
+	last = point;
+
+	point = move(point);
+	if (point == last) {
+	    /* should not happen */
+	    G_warning("loop during free ptrs, ptr %d of %d", n1, n);
+	    point = move(point);
+	}
+
+	if (last->fptr != NULL)
+	    if (last->fptr->fptr == last)
+		last->fptr->fptr = NULL;
+
+	/* now it can already ne NULL */
+	if (last->fptr != NULL)
+	    if (last->fptr->bptr == last)
+		last->fptr->bptr = NULL;
+	if (last->bptr != NULL)
+	    if (last->bptr->fptr == last)
+		last->bptr->fptr = NULL;
+	if (last->bptr != NULL)
+	    if (last->bptr->bptr == last)
+		last->bptr->bptr = NULL;
+	free_ptr(last);
+    }				/* end of for i */
+
+    if (point != end) {
+	/* should not happen */
+	G_warning("Line end not reached, possible memory leak");
+    }
+
+    /* free first and last point */
+    free_ptr(begin);
+    if (end != begin)
+	free_ptr(end);
 
     return (0);
 }
@@ -110,7 +156,6 @@ static int write_ln(struct COOR *begin, struct COOR *end,	/* start and end point
     Vect_reset_line(points);
 
     field = 1;
-    ++n;
 
     Vect_reset_cats(Cats);
 
@@ -124,7 +169,7 @@ static int write_ln(struct COOR *begin, struct COOR *end,	/* start and end point
     Vect_cat_set(Cats, field, cat);
     Vect_append_point(points, x, y, 0.0);
 
-    for (i = 1; i < n; i++) {
+    for (i = 0; i < n; i++) {
 	last = p;
 
 	/* this should NEVER happen */
@@ -161,36 +206,6 @@ static int write_ln(struct COOR *begin, struct COOR *end,	/* start and end point
     Vect_write_line(&Map, GV_LINE, points, Cats);
 
     count++;
-
-    /* now free all the pointers */
-    p = begin;
-
-    for (i = 1; i < n; i++) {
-	last = p;
-
-	if ((p = move(p)) == NULL)
-	    break;
-	if (last == p)
-	    break;
-	if (last->fptr != NULL)
-	    if (last->fptr->fptr == last)
-		last->fptr->fptr = NULL;
-
-	/* now it can already ne NULL */
-	if (last->fptr != NULL)
-	    if (last->fptr->bptr == last)
-		last->fptr->bptr = NULL;
-	if (last->bptr != NULL)
-	    if (last->bptr->fptr == last)
-		last->bptr->fptr = NULL;
-	if (last->bptr != NULL)
-	    if (last->bptr->bptr == last)
-		last->bptr->bptr = NULL;
-	G_free(last);
-    }				/* end of for i */
-
-    if (p != NULL)
-	G_free(p);
 
     return 0;
 }
