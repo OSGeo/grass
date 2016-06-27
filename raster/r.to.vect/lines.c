@@ -63,6 +63,7 @@ static struct COOR *get_ptr(void);
 
 int extract_lines(void)
 {
+    n_alloced_ptrs = 0;
     row = -3;
     read_next();
     read_next();
@@ -180,6 +181,11 @@ int extract_lines(void)
     G_free(middle);
     G_free(bottom);
     G_free(v_list);
+
+    if (n_alloced_ptrs) {
+	/* should not happen */
+	G_warning("Memory leak: %d points are still in use", n_alloced_ptrs);
+    }
 
     return 0;
 }
@@ -588,7 +594,7 @@ static int join_lines(struct COOR *p, struct COOR *q)
     else
 	q->bptr->bptr = p;
 
-    G_free(q);
+    free_ptr(q);
     write_line(p);
 
     return 0;
@@ -704,6 +710,8 @@ static struct COOR *get_ptr(void)
     G_debug(3, "get_ptr: row:%d, col:%d", p->row, p->col);
 
     p->bptr = p->fptr = NULL;
+
+    n_alloced_ptrs++;
 
     return (p);
 }

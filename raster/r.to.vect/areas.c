@@ -107,11 +107,13 @@ static int nabors(void);
 int extract_areas(void)
 {
     double nullVal;
+    int i;
 
     row = col = top = 0;	/* get started for read of first */
     bottom = 1;			/* line from raster map */
     area_num = 0;
     tl_area = 0;
+    n_alloced_ptrs = 0;
 
     Rast_set_d_null_value(&nullVal, 1);
     /* represents the "outside", the external null values */
@@ -121,7 +123,7 @@ int extract_areas(void)
 
     scan_length = read_next();
     while (read_next()) {	/* read rest of file, one row at *//*   a time */
-	G_percent(row, n_rows, 2);
+	G_percent(row, n_rows + 1, 2);
 
 	for (col = 0; col < scan_length - 1; col++) {
 	    tl = get_raster_value(buffer[top], col);	/* top left in window */
@@ -136,14 +138,24 @@ int extract_areas(void)
 
 	row++;
     }
-    
+    G_percent(1, 1, 1);
+
     write_area(a_list, e_list, area_num, n_equiv);
 
     G_free(a_list);
+    for (i = 0; i < n_equiv; i++) {
+	if (e_list[i].ptr)
+	    G_free(e_list[i].ptr);
+    }
     G_free(e_list);
     G_free(v_list);
     G_free(buffer[0]);
     G_free(buffer[1]);
+
+    if (n_alloced_ptrs) {
+	/* should not happen */
+	G_warning("Memory leak: %d points are still in use", n_alloced_ptrs);
+    }
 
     return 0;
 }				/* extract_areas */
@@ -215,7 +227,7 @@ static int update_list(int i)
 	v_list[col]->row = row;	/* keep downward-growing point */
 	v_list[col]->fptr = h_ptr->bptr;	/*   and join it to predecessor */
 	h_ptr->bptr->fptr = v_list[col];	/*   of right-growing point */
-	G_free(h_ptr);		/* right-growing point disappears */
+	free_ptr(h_ptr);		/* right-growing point disappears */
 	h_ptr = NULPTR;		/* turn loose of pointers */
 	write_boundary(v_list[col]);	/* try to write line */
 	v_list[col] = NULPTR;	/* turn loose of pointers */
@@ -383,6 +395,8 @@ static struct COOR *get_ptr(void)
     ptr->col = col;
     ptr->fptr = ptr->bptr = NULPTR;
     ptr->node = ptr->left = ptr->right = 0;
+    
+    n_alloced_ptrs++;
 
     return (ptr);
 }
