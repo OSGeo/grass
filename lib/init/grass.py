@@ -976,6 +976,8 @@ def gui_startup(grass_gui):
                 "On systems with package manager, make sure you have the right"
                 " GUI package, probably named grass-gui, installed.\n"
                 "To run GRASS GIS in text mode use the -text flag.\n"
+                "Use '--help' for further options\n"
+                "     {cmd_name} --help\n"
                 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html").format(
                     cmd_name=cmd_name))
     elif ret == 5:  # defined in gui/wxpython/gis_set.py
@@ -1833,8 +1835,9 @@ def main():
                     "the location/mapset as an argument\n"
                     "     {cmd_name} /path/to/location/mapset`\n"
                     " - Create a location with '-c' and launch in its"
-                    " PERMENENT mapset\n"
+                    " PERMANENT mapset\n"
                     "     {cmd_name} -c EPSG:number /path/to/location\n"
+                    "     {cmd_name} -c geofile /path/to/location\n"
                     " - Create manually the GISRC file ({gisrcrc})\n"
                     " - Use '--help' for further options\n"
                     "     {cmd_name} --help\n"
