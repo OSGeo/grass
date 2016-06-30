@@ -1826,12 +1826,18 @@ def main():
     if not os.access(gisrc, os.F_OK):
         if grass_gui == 'text' and not params.mapset:
             fatal(_("Unable to start GRASS GIS. You have the choice to:\n"
-                    " - Launch the GRASS GIS interface with"
-                    " the '-gui' switch (`{cmd_name} -gui`)\n"
-                    " - Launch GRASS GIS directly with path to "
-                    "the location/mapset as an argument"
-                    " (`{cmd_name} /path/to/location/mapset`)\n"
+                    " - Launch the graphical user interface with"
+                    " the '-gui' switch\n"
+                    "     {cmd_name} -gui\n"
+                    " - Launch with path to "
+                    "the location/mapset as an argument\n"
+                    "     {cmd_name} /path/to/location/mapset`\n"
+                    " - Create a location with '-c' and launch in its"
+                    " PERMENENT mapset\n"
+                    "     {cmd_name} -c EPSG:number /path/to/location\n"
                     " - Create manually the GISRC file ({gisrcrc})\n"
+                    " - Use '--help' for further options\n"
+                    "     {cmd_name} --help\n"
                     "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html").format(
                         cmd_name=cmd_name, gisrcrc=gisrcrc))
         create_initial_gisrc(gisrc)
