@@ -39,6 +39,11 @@
 
 #include <sys/types.h>
 
+// GCC with C++98 and -fexceptions requires exception
+// specifiers, however with C++11 and newer, using them causes an error.
+#if __cplusplus < 201103L
+#define GRASS_MM_USE_EXCEPTION_SPECIFIER
+#endif /* __cplusplus < 201103L */
 
 #define MM_REGISTER_VERSION 2
 
@@ -128,10 +133,17 @@ public:
   void print();
 
   friend class mm_register_init;
-  friend void * operator new(size_t) throw(std::bad_alloc);
-  friend void * operator new[](size_t) throw(std::bad_alloc);
+#ifdef GRASS_MM_USE_EXCEPTION_SPECIFIER
+  friend void * operator new(size_t) throw (std::bad_alloc);
+  friend void * operator new[] (size_t) throw (std::bad_alloc);
   friend void operator delete(void *) throw();
   friend void operator delete[](void *) throw();
+#else
+  friend void * operator new(size_t);
+  friend void * operator new[] (size_t);
+  friend void operator delete(void *) noexcept;
+  friend void operator delete[](void *) noexcept;
+#endif /* GRASS_MM_USE_EXCEPTION_SPECIFIER */
 };
 
 
