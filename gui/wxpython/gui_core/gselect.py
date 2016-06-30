@@ -2142,7 +2142,7 @@ class GdalSelect(wx.Panel):
                         dsn, "%s") % self._getExtPatternGlob(ext)):
                     baseName = os.path.basename(filename)
                     grassName = GetValidLayerName(baseName.split('.', -1)[0])
-                    projectionMatch = hasRastSameProjAsLocation(dsn)
+                    projectionMatch = hasRastSameProjAsLocation(filename)
                     projectionMatchCaption = getProjMatchCaption(
                         projectionMatch)
                     listData.append(
