@@ -397,7 +397,7 @@ double Vect_get_area_area(const struct Map_info *Map, int area)
     Vect_line_prune(Points);
     size = G_area_of_polygon(Points->x, Points->y, Points->n_points);
 
-    /* substracting island areas */
+    /* subtracting island areas */
     for (i = 0; i < Area->n_isles; i++) {
 	Vect_get_isle_points(Map, Area->isles[i], Points);
 	Vect_line_prune(Points);
