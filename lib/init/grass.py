@@ -975,7 +975,11 @@ def gui_startup(grass_gui):
                 " report this error to the GRASS developers.\n"
                 "On systems with package manager, make sure you have the right"
                 " GUI package, probably named grass-gui, installed.\n"
-                "To run GRASS GIS in text mode use the -text flag."))
+                "To run GRASS GIS in text mode use the -text flag.\n"
+                "Use '--help' for further options\n"
+                "     {cmd_name} --help\n"
+                "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html").format(
+                    cmd_name=cmd_name))
     elif ret == 5:  # defined in gui/wxpython/gis_set.py
         # User wants to exit from GRASS
         message(_("Exit was requested in GUI.\nGRASS GIS will not start. Bye."))
@@ -1824,12 +1828,20 @@ def main():
     if not os.access(gisrc, os.F_OK):
         if grass_gui == 'text' and not params.mapset:
             fatal(_("Unable to start GRASS GIS. You have the choice to:\n"
-                    " - Launch the GRASS GIS interface with"
-                    " the '-gui' switch (`{cmd_name} -gui`)\n"
-                    " - Launch GRASS GIS directly with path to "
-                    "the location/mapset as an argument"
-                    " (`{cmd_name} /path/to/location/mapset`)\n"
-                    " - Create manually the GISRC file ({gisrcrc})").format(
+                    " - Launch the graphical user interface with"
+                    " the '-gui' switch\n"
+                    "     {cmd_name} -gui\n"
+                    " - Launch with path to "
+                    "the location/mapset as an argument\n"
+                    "     {cmd_name} /path/to/location/mapset`\n"
+                    " - Create a location with '-c' and launch in its"
+                    " PERMANENT mapset\n"
+                    "     {cmd_name} -c EPSG:number /path/to/location\n"
+                    "     {cmd_name} -c geofile /path/to/location\n"
+                    " - Create manually the GISRC file ({gisrcrc})\n"
+                    " - Use '--help' for further options\n"
+                    "     {cmd_name} --help\n"
+                    "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html").format(
                         cmd_name=cmd_name, gisrcrc=gisrcrc))
         create_initial_gisrc(gisrc)
     else:
