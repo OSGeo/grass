@@ -1,4 +1,4 @@
-Do not change bug numbers, these numbers are refered in Vlib/net.c
+Do not change bug numbers, these numbers are referred in Vlib/net.c
 
 BUG1 (24.2.2003):
 Cache for SP does not work properly. For examle:

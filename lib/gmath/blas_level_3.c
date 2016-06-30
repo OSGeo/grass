@@ -32,7 +32,7 @@
  *
  * In case B == NULL, matrix A will be scaled by scalar a. \n
  * In case a == 1.0, a simple matrix addition is performed. \n
- * In case a == -1.0 matrix A is substracted from matrix B. \n
+ * In case a == -1.0 matrix A is subtracted from matrix B. \n
  * The result is written into matrix C. 
  *
  *
@@ -93,7 +93,7 @@ void G_math_d_aA_B(double **A, double **B, double a, double **C, int rows,
  *
  * In case B == NULL, matrix A will be scaled by scalar a. \n
  * In case a == 1.0, a simple matrix addition is performed. \n
- * In case a == -1.0 matrix A is substracted from matrix B. \n
+ * In case a == -1.0 matrix A is subtracted from matrix B. \n
  * The result is written into matrix C. 
  *
  *
