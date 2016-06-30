@@ -232,7 +232,7 @@ private:
   //stream_len() on the stream, but it is more costly esp in the case
   //when streams are on disk and must be moved in and out just to find
   //stream length; streamsize is set only at stream creation, and the
-  //actual size must substract the number of iteme deleted from the
+  //actual size must subtract the number of iteme deleted from the
   //bos
   unsigned long* streamsize;
   

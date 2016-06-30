@@ -400,7 +400,7 @@ A1,A2+A3 = 2 isles
 In GRASS, whenever an 'inner' ring does not touch the boundary of an
 outside area, also not in one point, it is an 'inner' ring (isle). The
 areas A2 and A3 form a single isle I1 located within area A1. The size
-of isle I1 is substracted from the size of area A1 when calculating
+of isle I1 is subtracted from the size of area A1 when calculating
 the size of area A1. Any centroids falling into isle I1 are excluded
 when searching for a centroid that can be attached to area A1. A1
 above can be exported from GRASS as polygon A1 with inner ring I1.
