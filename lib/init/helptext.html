@@ -166,13 +166,13 @@ For a first time startup, the following steps have to be followed:
 <ol>
 <li> Create a GRASS GIS database as explained above.</li>
 <li> Create a new location, including it's default PERMANENT mapset,
-     without entering the new location:</li>
+     without entering the new location:
 <ul>
     <li>Using an EPSG code:<br>
         &nbsp;<tt>grass72 -e -c EPSG:32630 /home/user/grassdata/mylocation</tt></li>
     <li>Using a georeferenced raster or vector file:<br>
         &nbsp;<tt>grass72 -e -c MyGeoReferenceFile.tif /home/user/grassdata/mylocation</tt></li>
-</ul>
+</ul></li>
 <li> Create new mapset within the new location and launch GRASS GIS within
      that mapset: <br>
         &nbsp;<tt>grass72 -c /home/user/grassdata/mylocation/mymapset</tt>
