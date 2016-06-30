@@ -430,11 +430,11 @@ class GdalImportDialog(ImportDialog):
             if nBands < 0:
                 GWarning(_("Unable to determine number of raster bands"),
                          parent=self)
-            nBands = 1
+                nBands = 1
 
             userData['nbands'] = nBands
             cmd = self.getSettingsPageCmd()
-            cmd.append('input=%s' % dsn)
+            cmd.append('input=%s' % idsn)
             cmd.append('output=%s' % output)
 
             if self.overwrite.IsChecked():
