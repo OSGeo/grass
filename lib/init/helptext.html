@@ -10,7 +10,10 @@ as well as by many governmental agencies and environmental consulting
 companies. GRASS GIS is an official project of the Open Source Geospatial
 Foundation (OSGeo).
 
-<h2>1. Startup of GRASS GIS</h2>
+<h2>1. Graphical startup of GRASS GIS</h2>
+
+<i>For text-based startup see below.</i>
+<p>
 
 After <a href="grass7.html">launching</a> GRASS GIS, the startup screen will open:
 <p>
@@ -154,6 +157,21 @@ If data were already imported, you can add them into the Layer Manager now
 and display them. If your LOCATION is empty you can import your data from 
 the menu: Go to "File" -&gt; "Import raster/vector data" (see also the
 related Wiki page on <a href="http://grasswiki.osgeo.org/wiki/Importing_data">Importing data</a>).
+
+<h2>5. Text-based startup and location creation</h2>
+
+GRASS GIS can be run entirely without using the graphical user interface. For a first time startup, the following steps have to be followed:
+
+<ol>
+	<li> Create a GRASS database as explained above.</li>
+	<li>Create a new location, including it's default PERMANENT mapset, without entering the new location:</li>
+		<ul>
+			<li>Using an EPSG code: <tt>grass70 -e -c EPSG:32630 /home/myuser/GRASSDATA/mylocation</tt></li>
+			<li>Using a georeferenced file: <tt>grass70 -e -c MyGeoReferenceFile.tif /home/myuser/GRASSDATA/mylocation</tt></li>
+		</ul>
+		<li>Create new mapset within the new location and launch GRASS GIS within that mapset: <br><tt>grass70 -c /home/myuser/GRASSDATA/mylocation/mymapset </tt>
+</ol>
+
 
 <h2>Further Reading</h2>
 
