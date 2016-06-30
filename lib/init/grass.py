@@ -1426,7 +1426,9 @@ if not os.access(gisrc, os.F_OK):
                 " - Launch GRASS with '-gui' switch (`grass70 -gui`)\n"
                 " - Create manually GISRC file (%s)\n"
                 " - Launch GRASS with path to "
-                "the location/mapset as an argument (`grass70 /path/to/location/mapset`)") % gisrcrc)
+                "the location/mapset as an argument (`grass70 /path/to/location/mapset`)\n"
+                " - Use '--help' for further options (`grass70 --help`)\n"
+                " See also: https://grass.osgeo.org/grass70/manuals/helptext.html") % gisrcrc)
     create_initial_gisrc()
 else:
     clean_temp()
