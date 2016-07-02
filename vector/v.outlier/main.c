@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("extract"));
     G_add_keyword(_("select"));
     G_add_keyword(_("filter"));
+    G_add_keyword(_("LIDAR"));
     module->description = _("Removes outliers from vector point data.");
 
     spline_step_flag = G_define_flag();
