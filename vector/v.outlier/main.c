@@ -78,26 +78,20 @@ int main(int argc, char *argv[])
     spline_step_flag->label = _("Estimate point density and distance");
     spline_step_flag->description =
 	_("Estimate point density and distance for the input vector points within the current region extends and quit");
+    spline_step_flag->suppress_required = YES;
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    outlier_opt = G_define_option();
+    outlier_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     outlier_opt->key = "outlier";
-    outlier_opt->type = TYPE_STRING;
-    outlier_opt->key_desc = "name";
-    outlier_opt->required = YES;
-    outlier_opt->gisprompt = "new,vector,vector";
-    outlier_opt->description = _("Name of output outlier vector map");
+    outlier_opt->description = _("Name for output outlier vector map");
 
-    qgis_opt = G_define_option();
+    qgis_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     qgis_opt->key = "qgis";
-    qgis_opt->type = TYPE_STRING;
-    qgis_opt->key_desc = "name";
     qgis_opt->required = NO;
-    qgis_opt->gisprompt = "new,vector,vector";
-    qgis_opt->description = _("Name of vector map for visualization in QGIS");
+    qgis_opt->description = _("Name for vector map for visualization in QGIS");
 
     stepE_opt = G_define_option();
     stepE_opt->key = "ew_step";
@@ -140,8 +134,10 @@ int main(int argc, char *argv[])
     filter_opt->options = "both,positive,negative";
     filter_opt->answer = "both";
 
-    /* Parsing */
     G_gisinit(argv[0]);
+    G_option_requires(spline_step_flag, in_opt, NULL);
+
+    /* Parsing */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -166,19 +162,22 @@ int main(int argc, char *argv[])
     flag_auxiliar = FALSE;
 
     /* Checking vector names */
-    Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-				 G_FATAL_EXIT);
+    if (out_opt->answer) 
+        Vect_check_input_output_name(in_opt->answer, out_opt->answer,
+                                     G_FATAL_EXIT);
 
     if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
     }
 
     /* Setting auxiliar table's name */
-    if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
-	sprintf(table_name, "%s_aux", xname);
+    if (out_opt->answer) {
+        if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
+            sprintf(table_name, "%s_aux", xname);
+        }
+        else
+            sprintf(table_name, "%s_aux", out_opt->answer);
     }
-    else
-	sprintf(table_name, "%s_aux", out_opt->answer);
 
     /* Something went wrong in a previous v.outlier execution */
     if (db_table_exists(dvr, db, table_name)) {
