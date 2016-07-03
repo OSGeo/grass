@@ -1152,7 +1152,6 @@ class ModelAction(ModelObject, ogl.DividedShape):
                 for idx in range(len(cmd)):
                     if pattern.search(cmd[idx]):
                         cmd[idx] = pattern.sub(value, cmd[idx])
-                        break
                     idx += 1
         
         if string:
