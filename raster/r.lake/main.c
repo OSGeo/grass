@@ -164,6 +164,7 @@ int main(int argc, char *argv[])
     lake_opt = G_define_standard_option(G_OPT_R_OUTPUT);
     lake_opt->key = "lake";
     lake_opt->required = NO;
+    lake_opt->guisection = _("Output");
 
     sdxy_opt = G_define_standard_option(G_OPT_M_COORDS);
     sdxy_opt->label = _("Seed point coordinates");
@@ -171,6 +172,7 @@ int main(int argc, char *argv[])
 	" map have to be specified");
     sdxy_opt->required = NO;
     sdxy_opt->multiple = NO;
+    sdxy_opt->guisection = _("Seed");
 
     smap_opt = G_define_standard_option(G_OPT_R_MAP);
     smap_opt->key = "seed";
@@ -179,6 +181,7 @@ int main(int argc, char *argv[])
     smap_opt->description =
 	_("Either this parameter or a coordinates pair have to be specified");
     smap_opt->required = NO;
+    smap_opt->guisection = _("Seed");
 
     negative_flag = G_define_flag();
     negative_flag->key = 'n';
@@ -189,6 +192,7 @@ int main(int argc, char *argv[])
     overwrite_flag->key = 'o';
     overwrite_flag->description =
 	_("Overwrite seed map with result (lake) map");
+    overwrite_flag->guisection = _("Output");
 
     if (G_parser(argc, argv))	/* Returns 0 if successful, non-zero otherwise */
 	exit(EXIT_FAILURE);
