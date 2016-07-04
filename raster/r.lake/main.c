@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
     G_message(_("Lake depth from %f to %f (specified water level is taken as zero)"), min_depth, max_depth);
     G_message(_("Lake area %f square meters"), area);
     G_message(_("Lake volume %f cubic meters"), volume);
-    G_warning(_("Volume is correct only if lake depth (terrain raster map) is in meters"));
+    G_important_message(_("Volume is correct only if lake depth (terrain raster map) is in meters"));
 
     /* Close all files. Lake map gets written only now. */
     Rast_close(in_terran_fd);
