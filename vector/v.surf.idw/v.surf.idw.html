@@ -29,19 +29,41 @@ Note that vector features without category in given <b>layer</b> are
 <i>skipped</i>.
 
 <p>If the user has a mask set, then interpolation is only done
-for those cells that fall within the mask. However, all
-vector points in the current region are used even
-if they fall outside the mask. Vector points outside the current
-region are not used in the interpolation. A larger region may
-be set and a mask used to limit interpolation to a smaller area
-if it is desired to use vector points from outside the region in the
-interpolation. The <b>-n</b> flag may also be used to
-achieve a similar result.
-
-<p>If more than <b>npoints</b> fall into one target raster cell, 
-the mean of all the site values will determine the cell value (unless
-the <b>-n</b> flag is specified, in which case only the <b>npoints</b> 
-closest to the centre of the cell will be interpolated).
+for those cells that fall within the mask. The module has two separate
+modes of operation for selecting the vector points that are used in the
+interpolation:<dl>
+<dt>Simple, non-indexed mode (activated by <b>-n</b> flag)</dt>
+<dd>When the <b>-n</b> flag is specified, all vector points in the
+input vector map are searched through in order to find the
+<b>npoints</b> closest points to the centre of each cell in the output
+raster map. This mode of operation can be slow in the case of a very
+large number of vector points.</dd>
+<dt>Default, indexed mode</dt>
+<dd>By default (i.e. if <b>-n</b> flag is <i>not</i> specified), prior to
+the interpolation, input vector points are indexed according to which
+output raster cell they fall into. This means that only cells nearby
+the one being interpolated need to be searched to find the
+<b>npoints</b> closest input points, and the module can run many times
+faster on dense input maps. It should be noted that:
+<ul>
+<li>Only vector points that lie within the current region are used in
+the interpolation. If there are points outside the current region,
+this may have an effect on the interpolated value of cells near the
+edges of the region, and this effect will be more pronounced the fewer
+points there are. If you wish to also include points outside the
+region in the interpolation, then either use the <b>-n</b> flag, or
+set the region to a larger extent (covering all input points) and use
+a mask to limit interpolation to a smaller area.</li>
+<li>If more than <b>npoints</b> points fall within a given cell then,
+rather than interpolating, these points are aggregated by taking the
+mean. This avoids the situation where some vector points can be
+discarded and not used in the interpolation, for very dense input
+maps. Again, use the <b>-n</b> flag if you wish to use only the
+<b>npoints</b> closest points to the cell centre under all
+circumstances.</li>
+</ul>
+</dd>
+</dl>
 
 <p>
 The <b>power</b> parameter defines an exponential distance weight.
