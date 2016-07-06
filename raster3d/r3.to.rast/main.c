@@ -26,6 +26,7 @@
 /*- Parameters and global variables -----------------------------------------*/
 typedef struct {
     struct Option *input, *output;
+    struct Option *type;
     struct Flag *mask;
     struct Flag *res; /*If set, use the same resolution as the input map */
 } paramType;
@@ -35,16 +36,32 @@ paramType param; /*Parameters */
 /*- prototypes --------------------------------------------------------------*/
 void fatal_error(void *map, int *fd, int depths, char *errorMsg); /*Simple Error message */
 void set_params(); /*Fill the paramType structure */
-void g3d_to_raster(void *map, RASTER3D_Region region, int *fd); /*Write the raster */
+void g3d_to_raster(void *map, RASTER3D_Region region, int *fd,
+                   int output_type); /*Write the raster */
 int open_output_map(const char *name, int res_type); /*opens the outputmap */
 void close_output_map(int fd); /*close the map */
 
+/* get the output type */
+static int raster_type_option_string_enum(const char *type)
+{
+    /* this function could go to the library but the exact behavior needs
+     * to be figured out */
+    if (strcmp("CELL", type) == 0)
+        return CELL_TYPE;
+    else if (strcmp("DCELL", type) == 0)
+        return DCELL_TYPE;
+    else
+        return FCELL_TYPE;
+}
 
 
 /* ************************************************************************* */
 /* Error handling ********************************************************** */
 
 /* ************************************************************************* */
+/* TODO: use G_add_error_handler (or future Rast3d_add_error_handler) instead */
+/* this one would require implementation of varargs here or though
+ * non-existent va_list version of the library function */
 void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 {
     int i;
@@ -86,6 +103,9 @@ void set_params()
     param.output->description = _("Basename for resultant raster slice maps");
     param.output->gisprompt = "new,cell,raster";
 
+    param.type = G_define_standard_option(G_OPT_R_TYPE);
+    param.type->required = NO;
+
     param.mask = G_define_flag();
     param.mask->key = 'm';
     param.mask->description = _("Use 3D raster mask (if exists) with input map");
@@ -101,14 +121,17 @@ void set_params()
 /* Write the slices to seperate raster maps ******************************** */
 
 /* ************************************************************************* */
-void g3d_to_raster(void *map, RASTER3D_Region region, int *fd)
+void g3d_to_raster(void *map, RASTER3D_Region region, int *fd,
+                   int output_type)
 {
-    DCELL d1 = 0;
+    CELL c1 = 0;
     FCELL f1 = 0;
+    DCELL d1 = 0;
     int x, y, z;
     int rows, cols, depths, typeIntern, pos = 0;
-    FCELL *fcell = NULL;
-    DCELL *dcell = NULL;
+    void *cell = NULL;  /* point to row buffer */
+    void *ptr = NULL;  /* pointer to single cell */
+    size_t cell_size = 0;
 
     rows = region.rows;
     cols = region.cols;
@@ -120,10 +143,16 @@ void g3d_to_raster(void *map, RASTER3D_Region region, int *fd)
 
     typeIntern = Rast3d_tile_type_map(map);
 
-    if (typeIntern == FCELL_TYPE)
-        fcell = Rast_allocate_f_buf();
-    else if (typeIntern == DCELL_TYPE)
-        dcell = Rast_allocate_d_buf();
+    /* we test it here undefined just to be sure and then we use else for CELL */
+    if (output_type == CELL_TYPE)
+        cell = Rast_allocate_c_buf();
+    else if (output_type == FCELL_TYPE)
+        cell = Rast_allocate_f_buf();
+    else if (output_type == DCELL_TYPE)
+        cell = Rast_allocate_d_buf();
+    else
+        Rast3d_fatal_error(_("Unknown raster type <%d>"), output_type);
+    cell_size = Rast_cell_size(output_type);
 
     pos = 0;
     /*Every Rastermap */
@@ -131,37 +160,29 @@ void g3d_to_raster(void *map, RASTER3D_Region region, int *fd)
         G_debug(2, "Writing raster map %d of %d", z + 1, depths);
         for (y = 0; y < rows; y++) {
             G_percent(y, rows - 1, 10);
-
+            ptr = cell;  /* reset at the beginning of a row */
             for (x = 0; x < cols; x++) {
                 if (typeIntern == FCELL_TYPE) {
                     Rast3d_get_value(map, x, y, z, &f1, typeIntern);
                     if (Rast3d_is_null_value_num(&f1, FCELL_TYPE))
-                        Rast_set_null_value(&fcell[x], 1, FCELL_TYPE);
+                        Rast_set_null_value(ptr, 1, output_type);
                     else
-                        fcell[x] = f1;
+                        Rast_set_f_value(ptr, f1, output_type);
                 } else {
                     Rast3d_get_value(map, x, y, z, &d1, typeIntern);
                     if (Rast3d_is_null_value_num(&d1, DCELL_TYPE))
-                        Rast_set_null_value(&dcell[x], 1, DCELL_TYPE);
+                        Rast_set_null_value(ptr, 1, output_type);
                     else
-                        dcell[x] = d1;
+                        Rast_set_d_value(ptr, d1, output_type);
                 }
+                ptr = G_incr_void_ptr(ptr, cell_size);
             }
-            if (typeIntern == FCELL_TYPE)
-                Rast_put_f_row(fd[pos], fcell);
-
-            if (typeIntern == DCELL_TYPE)
-                Rast_put_d_row(fd[pos], dcell);
+            Rast_put_row(fd[pos], cell, output_type);
         }
         G_debug(2, "Finished writing map %d.", z + 1);
         pos++;
     }
-
-
-    if (dcell)
-        G_free(dcell);
-    if (fcell)
-        G_free(fcell);
+    G_free(cell);
 
 }
 
@@ -285,7 +306,12 @@ int main(int argc, char *argv[])
     Rast3d_get_region_struct_map(map, &inputmap_bounds);
 
     /*Get the output type */
-    output_type = Rast3d_file_type_map(map);
+    if (param.type->answer) {
+        output_type = raster_type_option_string_enum(param.type->answer);
+    }
+    else {
+        output_type = Rast3d_file_type_map(map);
+    }
 
 
     /*prepare the filehandler */
@@ -327,7 +353,7 @@ int main(int argc, char *argv[])
     }
 
     /*Create the Rastermaps */
-    g3d_to_raster(map, region, fd);
+    g3d_to_raster(map, region, fd, output_type);
 
 
     /*Loop over all output maps! close */
