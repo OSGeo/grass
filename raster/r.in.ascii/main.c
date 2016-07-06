@@ -80,14 +80,10 @@ int main(int argc, char *argv[])
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
-    parm.type = G_define_option();
-    parm.type->key = "type";
-    parm.type->type = TYPE_STRING;
+    parm.type = G_define_standard_option(G_OPT_R_TYPE);
     parm.type->required = NO;
-    parm.type->options = "CELL,FCELL,DCELL";
-    parm.type->label = _("Storage type for resultant raster map");
     parm.type->description = _("Default: CELL for integer values, DCELL for floating-point values");
-    
+
     parm.title = G_define_option();
     parm.title->key = "title";
     parm.title->key_desc = "phrase";

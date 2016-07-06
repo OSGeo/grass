@@ -60,6 +60,7 @@
    - G_OPT_R_COVER
    - G_OPT_R_ELEV
    - G_OPT_R_ELEVS
+   - G_OPT_R_TYPE
    - G_OPT_R_INTERP_TYPE
    - G_OPT_R_BASENAME_INPUT
    - G_OPT_R_BASENAME_OUTPUT
@@ -325,6 +326,20 @@ struct Option *G_define_standard_option(int opt)
 	Opt->gisprompt = "old,cell,raster";
 	Opt->description = _("Name of input elevation raster map(s)");
 	break;
+    case G_OPT_R_TYPE:
+        Opt->key = "type";
+        Opt->type = TYPE_STRING;
+        Opt->required = YES;
+        Opt->multiple = NO;
+        Opt->label = _("Type of raster map to be created");
+        Opt->description = _("Storage type for resultant raster map");
+        Opt->options = "CELL,FCELL,DCELL";
+        G_asprintf((char **) &(Opt->descriptions),
+                   "CELL;%s;FCELL;%s;DCELL;%s",
+                   _("Integer"),
+                   _("Single precision floating point"),
+                   _("Double precision floating point"));
+        break;
     case G_OPT_R_INTERP_TYPE:
         Opt->key = "method";
         Opt->type = TYPE_STRING;

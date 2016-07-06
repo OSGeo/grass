@@ -49,12 +49,8 @@ int main(int argc, char *argv[])
     title->required = NO;
     title->description = _("Title for resultant raster map");
 
-    type = G_define_option();
-    type->key = "type";
-    type->type = TYPE_STRING;
+    type = G_define_standard_option(G_OPT_R_TYPE);
     type->required = NO;
-    type->description = _("Output raster type");
-    type->options = "CELL,FCELL,DCELL";
     type->answer = "CELL";
 
     nulls = G_define_option();
