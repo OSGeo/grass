@@ -1,0 +1,16 @@
+size 20
+symbol basic/box 25 5 10 black 228:26:28
+move 8 9 
+text 64.9 - 80.4
+symbol basic/box 25 5 16 black 55:126:184
+move 8 15
+text 80.4 - 95.9
+symbol basic/box 25 5 22 black 77:175:74
+move 8 21
+text 95.9 - 111.4
+symbol basic/box 25 5 28 black 152:78:163
+move 8 27
+text 111.4 - 126.9
+symbol basic/box 25 5 34 black 255:127:0
+move 8 33
+text 126.9 - 142.5
