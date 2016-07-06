@@ -180,11 +180,10 @@ int main(int argc, char *argv[])
     parm.slope_fmt->description = _("Format for reporting the slope");
     parm.slope_fmt->guisection = _("Settings");
 
-    parm.out_precision = G_define_option();
+    parm.out_precision = G_define_standard_option(G_OPT_R_TYPE);
     parm.out_precision->key = "precision";
-    parm.out_precision->type = TYPE_STRING;
-    parm.out_precision->options = "CELL,FCELL,DCELL";
-    parm.out_precision->description =
+    parm.out_precision->required = NO;
+    parm.out_precision->label =
 	_("Type of output aspect and slope maps");
     parm.out_precision->answer = "FCELL";
     parm.out_precision->guisection = _("Settings");

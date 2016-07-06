@@ -167,13 +167,9 @@ int main(int argc, char *argv[])
                _("Skewness of point values in cell"),
                _("Trimmed mean of point values in cell"));
 
-    type_opt = G_define_option();
-    type_opt->key = "type";
-    type_opt->type = TYPE_STRING;
+    type_opt = G_define_standard_option(G_OPT_R_TYPE);
     type_opt->required = NO;
-    type_opt->options = "CELL,FCELL,DCELL";
     type_opt->answer = "FCELL";
-    type_opt->description = _("Storage type for resultant raster map");
 
     base_raster_opt = G_define_standard_option(G_OPT_R_INPUT);
     base_raster_opt->key = "base_raster";
