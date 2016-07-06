@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 {
     int i, j;
     int nfiles;
-    char *name;
+    char *oname;
     int fd[NFILES];
     struct Categories cats[NFILES];
     struct Cell_head window;
@@ -164,10 +164,10 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    name = opt.output->answer;
-    if (name != NULL && strcmp(name, "-") != 0) {
-	if (NULL == freopen(name, "w", stdout)) {
-	    G_fatal_error(_("Unable to open file <%s> for writing"), name);
+    oname = opt.output->answer;
+    if (oname != NULL && strcmp(oname, "-") != 0) {
+	if (NULL == freopen(oname, "w", stdout)) {
+	    G_fatal_error(_("Unable to open file <%s> for writing"), oname);
 	}
     }
 
