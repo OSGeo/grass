@@ -80,31 +80,47 @@ and rerun the process.
 
 <h3>Thematic map with calculated class breaks</h3>
 
-<!-- TODO: find better example -->
-
-Example for the North Carolina sample dataset, colorizing polygons by
-area size:
+Example for the North Carolina sample dataset, colorizing basin polygons by
+average elevation:
 
 <div class="code"><pre>
-# first save legend instructions to a file
-d.vect.thematic -n map=geology column=SHAPE_area algorithm=int nclasses=6 \
- colors=215:48:39,252:141:89,254:224:139,217:239:139,145:207:96,26:152:80 \
- legendfile=geology.leg
+# create watersheds from elevation map
+r.watershed elevation=elevation threshold=10000 basin=basins_10k
 
-# open the graphical display
+# convert raster to vector
+r.to.vect input=basins_10k output=basins_10k type=area column=basin_num
+
+# upload raster statistics to each polygon in vector map
+v.rast.stats map=basins_10k raster=elevation column_prefix=elev_
+
+# save legend instructions to a file
+d.vect.thematic -n map=basins_10k column=elev_average algorithm=int \
+  nclasses=5 colors=228:26:28,55:126:184,77:175:74,152:78:163,255:127:0 \
+  legendfile=d_vect_thematic_leg.txt
+
+# open a graphical display
 d.mon wx0
+
 # draw outline of polygons
-d.vect map=geology type=boundary
+d.vect map=basins_10k type=boundary
+
 # draw color fill
-d.vect.thematic map=geology column=SHAPE_area algorithm=int nclasses=6 \
- colors="215:48:39,252:141:89,254:224:139,217:239:139,145:207:96,26:152:80" \
-# draw legend
-d.graph input=geology.leg
+d.vect.thematic map=basins_10k column=elev_average algorithm=int \
+  nclasses=5 colors=228:26:28,55:126:184,77:175:74,152:78:163,255:127:0
+
+# set a different font (list fonts with: d.font -l)
+export GRASS_FONT="sans"
+
+# and finally draw legend, but edit the legend file first (for example:
+# set size to 20, remove feature counts and most decimal digits)
+d.graph input=d_vect_thematic_leg.txt
 </pre></div>
 
 <center>
-<img src="d_vect_thematic.png" alt="d_vect_thematic example" border=1><br>
-Thematic map of area sizes
+<a href="d_vect_thematic.png">
+<img src="d_vect_thematic.png" alt="d_vect_thematic example" border=1 width="600"></a>
+<br>
+<i>Thematic map of area sizes</i>
 </center>
 
 <h2>SEE ALSO</h2>
