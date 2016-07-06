@@ -334,10 +334,7 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Raster map %d Filename: %s already exists. Use the flag --o to overwrite."),
                       i + 1, RasterFileName);
 
-        if (output_type == FCELL_TYPE)
-            fd[i] = open_output_map(RasterFileName, FCELL_TYPE);
-        else if (output_type == DCELL_TYPE)
-            fd[i] = open_output_map(RasterFileName, DCELL_TYPE);
+        fd[i] = open_output_map(RasterFileName, output_type);
 
     }
 
