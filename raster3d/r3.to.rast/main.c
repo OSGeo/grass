@@ -27,6 +27,8 @@
 typedef struct {
     struct Option *input, *output;
     struct Option *type;
+    struct Option *coeff_a;
+    struct Option *coeff_b;
     struct Flag *mask;
     struct Flag *res; /*If set, use the same resolution as the input map */
 } paramType;
@@ -37,7 +39,8 @@ paramType param; /*Parameters */
 void fatal_error(void *map, int *fd, int depths, char *errorMsg); /*Simple Error message */
 void set_params(); /*Fill the paramType structure */
 void g3d_to_raster(void *map, RASTER3D_Region region, int *fd,
-                   int output_type); /*Write the raster */
+                   int output_type, int use_coeffs, double coeff_a,
+                   double coeff_b); /*Write the raster */
 int open_output_map(const char *name, int res_type); /*opens the outputmap */
 void close_output_map(int fd); /*close the map */
 
@@ -106,6 +109,20 @@ void set_params()
     param.type = G_define_standard_option(G_OPT_R_TYPE);
     param.type->required = NO;
 
+    param.coeff_a = G_define_option();
+    param.coeff_a->key = "multiply";
+    param.coeff_a->type = TYPE_DOUBLE;
+    param.coeff_a->required = NO;
+    param.coeff_a->label = _("Value to multiply the raster values with");
+    param.coeff_a->description = _("Coefficient a in the equation y = ax + b");
+
+    param.coeff_b = G_define_option();
+    param.coeff_b->key = "add";
+    param.coeff_b->type = TYPE_DOUBLE;
+    param.coeff_b->required = NO;
+    param.coeff_b->label = _("Value to add to the raster values");
+    param.coeff_b->description = _("Coefficient b in the equation y = ax + b");
+
     param.mask = G_define_flag();
     param.mask->key = 'm';
     param.mask->description = _("Use 3D raster mask (if exists) with input map");
@@ -121,8 +138,11 @@ void set_params()
 /* Write the slices to seperate raster maps ******************************** */
 
 /* ************************************************************************* */
+/* coefficients are used only when needed, otherwise the original values
+ * is preserved as well as possible */
 void g3d_to_raster(void *map, RASTER3D_Region region, int *fd,
-                   int output_type)
+                   int output_type, int use_coeffs, double coeff_a,
+                   double coeff_b)
 {
     CELL c1 = 0;
     FCELL f1 = 0;
@@ -164,16 +184,24 @@ void g3d_to_raster(void *map, RASTER3D_Region region, int *fd,
             for (x = 0; x < cols; x++) {
                 if (typeIntern == FCELL_TYPE) {
                     Rast3d_get_value(map, x, y, z, &f1, typeIntern);
-                    if (Rast3d_is_null_value_num(&f1, FCELL_TYPE))
+                    if (Rast3d_is_null_value_num(&f1, FCELL_TYPE)) {
                         Rast_set_null_value(ptr, 1, output_type);
-                    else
+                    }
+                    else {
+                        if (use_coeffs)
+                            f1 = coeff_a * f1 + coeff_b;
                         Rast_set_f_value(ptr, f1, output_type);
+                    }
                 } else {
                     Rast3d_get_value(map, x, y, z, &d1, typeIntern);
-                    if (Rast3d_is_null_value_num(&d1, DCELL_TYPE))
+                    if (Rast3d_is_null_value_num(&d1, DCELL_TYPE)) {
                         Rast_set_null_value(ptr, 1, output_type);
-                    else
+                    }
+                    else {
+                        if (use_coeffs)
+                            d1 = coeff_a * d1 + coeff_b;
                         Rast_set_d_value(ptr, d1, output_type);
+                    }
                 }
                 ptr = G_incr_void_ptr(ptr, cell_size);
             }
@@ -219,6 +247,9 @@ int main(int argc, char *argv[])
     int *fd = NULL, output_type, cols, rows;
     char *RasterFileName;
     int overwrite = 0;
+    int use_coeffs = 0;  /* bool */
+    double coeff_a = 1;
+    double coeff_b = 0;
 
     /* Initialize GRASS */
     G_gisinit(argv[0]);
@@ -242,6 +273,14 @@ int main(int argc, char *argv[])
     if (NULL == G_find_raster3d(param.input->answer, ""))
         Rast3d_fatal_error(_("3D raster map <%s> not found"),
                        param.input->answer);
+
+    /* coefficients to modify the map */
+    if (param.coeff_a->answer || param.coeff_b->answer)
+        use_coeffs = 1;
+    if (param.coeff_a->answer)
+        coeff_a = atof(param.coeff_a->answer);
+    if (param.coeff_b->answer)
+        coeff_b = atof(param.coeff_b->answer);
 
     /*Set the defaults */
     Rast3d_init_defaults();
@@ -313,7 +352,6 @@ int main(int argc, char *argv[])
         output_type = Rast3d_file_type_map(map);
     }
 
-
     /*prepare the filehandler */
     fd = (int *) G_malloc(region.depths * sizeof (int));
 
@@ -350,7 +388,7 @@ int main(int argc, char *argv[])
     }
 
     /*Create the Rastermaps */
-    g3d_to_raster(map, region, fd, output_type);
+    g3d_to_raster(map, region, fd, output_type, use_coeffs, coeff_a, coeff_b);
 
 
     /*Loop over all output maps! close */
