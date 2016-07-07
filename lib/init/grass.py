@@ -1108,10 +1108,12 @@ def set_language(grass_config_dir):
             # If we get here, system locale settings are terribly wrong
             # There is no point to continue as GRASS/Python will fail
             # in some other unpredictable way.
-            print("System locale is not usable. "
+            print("System locale is not usable (LC_ALL variable not defined). "
                   "It indicates misconfigured environment.")
             print("Reported error message: %s" % e)
-            sys.exit("Fix system locale settings and then try again.")
+            ## TOO DRASTIC: sys.exit("Fix system locale settings and then try again.")
+            locale.setlocale(locale.LC_ALL, 'C')
+            warning(_("Default locale settings are missing. GRASS running with C locale."))
 
         language, encoding = locale.getdefaultlocale()
         if not language:
