@@ -195,11 +195,11 @@ Contents
 
    Update addons (grass_addons.sh) rules, eg.
 
-     compile $SVN_PATH/grass7 $GISBASE_PATH/grass710RC1   $ADDON_PATH/grass710RC1/addons
+     compile $SVN_PATH/grass7 $GISBASE_PATH/grass720RC1   $ADDON_PATH/grass720RC1/addons
 
    Modify grass_copy_wwwroot.sh accordingly, eg.
 
-     copy_addon 700RC1 7.0.0RC1
+     copy_addon 720RC1 7.2.0RC1
 
  o Launchpad notes:
 
@@ -268,12 +268,12 @@ Contents
 1. see SVN book:
    http://svnbook.red-bean.com/en/1.1/ch04s07.html
 
-   GRASS 7.0 release branch:
+   GRASS 7.2 release branch:
           BRANCH=releasebranch_7_0
           URL=https://svn.osgeo.org/grass
           svn copy $URL/grass/trunk \
                    $URL/grass/branches/$BRANCH \
-                   -m "Development branch for GRASS 7.0.x"
+                   -m "Development branch for GRASS 7.2.x"
 
 
    Switching current local copy to above development branch:
