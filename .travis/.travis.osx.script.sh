@@ -35,7 +35,7 @@ brew test -v grass-trunk
 # brew info grass-trunk
 
 ## run tests
-## grass71 ./nc_basic_spm_grass7/PERMANENT --exec python -m grass.gunittest.main --location './nc_basic_spm_grass7' --location-type nc
+## grass73 ./nc_basic_spm_grass7/PERMANENT --exec python -m grass.gunittest.main --location './nc_basic_spm_grass7' --location-type nc
 
 ## uninstall grass-trunk
 # brew uninstall grass-trunk
