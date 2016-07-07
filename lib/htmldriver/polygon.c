@@ -6,7 +6,7 @@
 #include "driverlib.h"
 #include "htmlmap.h"
 
-#define RAD_DEG 57.29578
+#define RAD_DEG M_R2D
 
 static void delete_point(int *x, int *y, int count)
 {

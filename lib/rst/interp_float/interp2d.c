@@ -107,7 +107,7 @@ int IL_grid_calc_2d(struct interp_params *params,
     double xxr, yyr;
 
     if (params->theta) {
-	teta = params->theta / 57.295779;	/* deg to rad */
+	teta = params->theta / M_R2D;	/* deg to rad */
 	rsin = sin(teta);
 	rcos = cos(teta);
     }

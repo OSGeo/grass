@@ -1,8 +1,10 @@
-#include<stdio.h>
-#include<math.h>
-#include<stdlib.h>
- 
-#define PI 3.1415927
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <grass/gis.h>
+
+#define PI M_PI
+
 double r_net(double bbalb, double ndvi, double tempk, double dtair,
 	      double e0, double tsw, double doy, double utc,
 	      double sunzangle) 

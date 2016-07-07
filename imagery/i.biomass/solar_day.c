@@ -1,12 +1,14 @@
-#include<stdio.h>
-#include<math.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <grass/gis.h>
 
     /*
      * Average Solar Diurnal Radiation after Bastiaanssen (1995) 
      */
     
-#define PI 3.1415927
+#define PI M_PI
+
 double solar_day(double lat, double doy, double tsw) 
 {
     double ws, cosun, n10_temp, delta, ds, result;

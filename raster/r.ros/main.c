@@ -757,8 +757,8 @@ int main(int argc, char *argv[])
 	    if (parm.slope->answer && parm.aspect->answer) {
 		phis =
 		    5.275 * pow(beta,
-				-0.3) * tan(0.01745 * slope[col]) *
-		    tan(0.01745 * slope[col]);
+				-0.3) * tan(M_D2R * slope[col]) *
+		    tan(M_D2R * slope[col]);
 	    }
 	    else
 		phis = 0.0;
@@ -767,13 +767,13 @@ int main(int argc, char *argv[])
 	     *vector adding for the effect of wind and slope*/
 	    if (parm.dir->answer && parm.aspect->answer) {
 		sin_fac =
-		    phiw * sin(0.01745 * dir[col]) +
-		    phis * sin(0.01745 * aspect[col]);
+		    phiw * sin(M_D2R * dir[col]) +
+		    phis * sin(M_D2R * aspect[col]);
 		cos_fac =
-		    phiw * cos(0.01745 * dir[col]) +
-		    phis * cos(0.01745 * aspect[col]);
+		    phiw * cos(M_D2R * dir[col]) +
+		    phis * cos(M_D2R * aspect[col]);
 		phi_ws = sqrt(sin_fac * sin_fac + cos_fac * cos_fac);
-		Rdir = atan2(sin_fac, cos_fac) / 0.01745;
+		Rdir = atan2(sin_fac, cos_fac) / M_D2R;
 	    }
 	    else if (parm.dir->answer && !(parm.aspect->answer)) {
 		phi_ws = phiw;
