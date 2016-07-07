@@ -41890,7 +41890,7 @@ msgstr ""
 #: ../imagery/i.aster.toar/main.c:105
 msgid ""
 "Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature "
-"from ASTER DN.\n"
+"from ASTER DN."
 msgstr ""
 
 #: ../imagery/i.aster.toar/main.c:109
