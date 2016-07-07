@@ -47,7 +47,7 @@
 <dd> Prints GRASS configuration parameters (options: arch, build, compiler, path, revision)
 
 <dt><b>-exec EXECUTABLE</b>
-<dd> Execute GRASS module or script. The provided executable will be executed in GRASS session
+<dd> Execute GRASS module or script. The provided executable will be executed in a GRASS GIS non-interactive session.
 </dl>
 
 <h3>Parameters:</h3>
@@ -138,13 +138,13 @@ from highest precedence to lowest.
 interface, then the GRASS_PYTHON environment variable can be used to
 override your system default <tt>python</tt> command.
 
-<p>Suppose for example your system has Python 2.5 installed and you
-install a personal version of the Python 2.6 binaries
+<p>Suppose for example your system has Python 2.6 installed and you
+install a personal version of the Python 2.7 binaries
 under <tt>$HOME/bin</tt>. You can use the above variables to have
-GRASS use the Python 2.6 binaries instead.
+GRASS use the Python 2.7 binaries instead.
 
 <div class="code"><pre>
-   GRASS_PYTHON=python2.6
+   GRASS_PYTHON=python2.7
 </pre></div>
 
 <h3>Addon Path to Extra User Scripts</h3>
@@ -262,7 +262,7 @@ examples below) otherwise taken from the last GRASS session.</dd>
 <dd> Creates new GRASS location based on georeferenced GeoTIFF file
 </dl>
 
-<h3>exec interface example</h3>
+<h3>Batch jobs with the exec interface</h3>
 
 <!--
 Data created with:
@@ -274,28 +274,33 @@ Region issues ignored.
 Create a new Location based on a projection of a file:
 
 <div class="code"><pre>
-grass72 -c elevation.tiff -e .../grassdata/test1/
+grass72 -c elevation.tiff -e /path/to/grassdata/test1/
 </pre></div>
 
 Link external raster data to PERMANENT Mapset:
 
 <div class="code"><pre>
-grass72 .../grassdata/test1/PERMANENT/ --exec r.external input=basins.tiff output=basins
-grass72 .../grassdata/test1/PERMANENT/ --exec r.external input=elevation.tiff output=elevation
+grass72 /path/to/grassdata/test1/PERMANENT/ --exec r.external input=basins.tiff output=basins
+grass72 /path/to/grassdata/test1/PERMANENT/ --exec r.external input=elevation.tiff output=elevation
 </pre></div>
 
 Get statistics for one raster map:
 
 <div class="code"><pre>
-grass72 .../grassdata/test1/PERMANENT/ --exec r.univar map=elevation
+grass72 /path/to/grassdata/test1/PERMANENT/ --exec r.univar map=elevation
 </pre></div>
 
 Compare the rasters visually:
 
 <div class="code"><pre>
-grass72 .../grassdata/test1/PERMANENT/ --exec g.gui.mapswipe first=elevation second=basins
+grass72 /path/to/grassdata/test1/PERMANENT/ --exec g.gui.mapswipe first=elevation second=basins
 </pre></div>
 
+<p>
+The exec interface is also able to execute entire scripts. Importantly, to avoid
+an <tt>"[Errno 8] Exec format error"</tt> there must be a shebang line at the top of
+the script like <tt>#!/bin/sh</tt> or <tt>#!/usr/bin/env python</tt> indicating
+which interpreter to use.
 
 <h3>Other examples</h3>
 
