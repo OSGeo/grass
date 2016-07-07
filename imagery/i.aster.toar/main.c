@@ -45,12 +45,11 @@ double gain_aster(int band_number, int gain_code);
 #define PI M_PI
 
 double rad2ref_aster(double radiance, double doy, double sun_elevation,
-		     double k_exo);
+                     double k_exo);
 
 int main(int argc, char *argv[])
 {
-    struct Cell_head cellhd;	/*region+header info */
-    char *mapset;		/*mapset name */
+    struct Cell_head cellhd;    /*region+header info */
     int nrows, ncols;
     int row, col;
     struct GModule *module;
@@ -58,11 +57,11 @@ int main(int argc, char *argv[])
     struct Option *input1, *input2;
     struct Flag *flag0, *flag1, *flag2;
     struct Flag *flag3, *flag4, *flag5;
-    struct History history;	/*metadata */
+    struct History history;     /*metadata */
 
     /************************************/
-    char *name;			/*input raster name */
-    char *result;		/*output raster name */
+    char *name;                 /*input raster name */
+    char *result;               /*output raster name */
 
     /*Prepare new names for output files */
     char result0[GNAME_MAX], result1[GNAME_MAX];
@@ -78,6 +77,7 @@ int main(int argc, char *argv[])
     int infd[MAXFILES];
     int outfd[MAXFILES];
     char **names, **ptr;
+
     /* For some strange reason infd[0] cannot be used later */
     /* So nfiles is initialized with nfiles = 1 */
     int nfiles = 1;
@@ -86,8 +86,8 @@ int main(int argc, char *argv[])
     void *inrast[MAXFILES];
     DCELL *outrast[MAXFILES];
     RASTER_MAP_TYPE in_data_type[MAXFILES];
-    RASTER_MAP_TYPE out_data_type = DCELL_TYPE;	/* 0=numbers  1=text */
-    double gain[MAXFILES], offset[MAXFILES];
+    RASTER_MAP_TYPE out_data_type = DCELL_TYPE; /* 0=numbers  1=text */
+    double gain[MAXFILES]; /* , offset[MAXFILES]; */
     double kexo[MAXFILES];
     double doy, sun_elevation;
 
@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("satellite"));
     G_add_keyword(_("ASTER"));
     module->description =
-	_("Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN.\n");
+        _("Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN.");
 
     /* Define the different options */
     input = G_define_standard_option(G_OPT_R_INPUTS);
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 
     /********************/
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     names = input->answers;
     ptr = input->answers;
@@ -166,21 +166,22 @@ int main(int argc, char *argv[])
     /*Prepare the output file names */
 
     /********************/
-    sprintf(result0,"%s%s", result, ".1");
-    sprintf(result1,"%s%s", result, ".2");
-    sprintf(result2,"%s%s", result, ".3N");
-    sprintf(result3,"%s%s", result, ".3B");
-    sprintf(result4,"%s%s", result, ".4");
-    sprintf(result5,"%s%s", result, ".5");
-    sprintf(result6,"%s%s", result, ".6");
-    sprintf(result7,"%s%s", result, ".7");
-    sprintf(result8,"%s%s", result, ".8");
-    sprintf(result9,"%s%s", result, ".9");
-    sprintf(result10,"%s%s", result, ".10");
-    sprintf(result11,"%s%s", result, ".11");
-    sprintf(result12,"%s%s", result, ".12");
-    sprintf(result13,"%s%s", result, ".13");
-    sprintf(result14,"%s%s", result, ".14");
+    sprintf(result0, "%s%s", result, ".1");
+    sprintf(result1, "%s%s", result, ".2");
+    sprintf(result2, "%s%s", result, ".3N");
+    sprintf(result3, "%s%s", result, ".3B");
+    sprintf(result4, "%s%s", result, ".4");
+    sprintf(result5, "%s%s", result, ".5");
+    sprintf(result6, "%s%s", result, ".6");
+    sprintf(result7, "%s%s", result, ".7");
+    sprintf(result8, "%s%s", result, ".8");
+    sprintf(result9, "%s%s", result, ".9");
+    sprintf(result10, "%s%s", result, ".10");
+    sprintf(result11, "%s%s", result, ".11");
+    sprintf(result12, "%s%s", result, ".12");
+    sprintf(result13, "%s%s", result, ".13");
+    sprintf(result14, "%s%s", result, ".14");
+
     /********************/
     /*Prepare radiance boundaries */
 
@@ -188,23 +189,23 @@ int main(int argc, char *argv[])
     int gain_code = 1;
 
     for (i = 0; i < MAXFILES; i++) {
-	/*0 - High (Not Applicable for band 10-14: TIR) */
-	/*1 - Normal */
-	/*2 - Low 1(Not Applicable for band 10-14: TIR) */
-	/*3 - Low 2(Not Applicable for Band 1-3N/B & 10-14) */
-	if (flag1->answer && i <= 3)
-	    gain_code = 0;
-	if (flag2->answer && i >= 4 && i <= 9)
-	    gain_code = 0;
-	if (flag3->answer && i <= 3)
-	    gain_code = 2;
-	if (flag4->answer && i >= 4 && i <= 9)
-	    gain_code = 2;
-	if (flag5->answer && i >= 4 && i <= 9)
-	    gain_code = 3;
-	gain[i] = gain_aster(i, gain_code);
-	/* Reset to NORMAL GAIN */
-	gain_code = 1;
+        /*0 - High (Not Applicable for band 10-14: TIR) */
+        /*1 - Normal */
+        /*2 - Low 1(Not Applicable for band 10-14: TIR) */
+        /*3 - Low 2(Not Applicable for Band 1-3N/B & 10-14) */
+        if (flag1->answer && i <= 3)
+            gain_code = 0;
+        if (flag2->answer && i >= 4 && i <= 9)
+            gain_code = 0;
+        if (flag3->answer && i <= 3)
+            gain_code = 2;
+        if (flag4->answer && i >= 4 && i <= 9)
+            gain_code = 2;
+        if (flag5->answer && i >= 4 && i <= 9)
+            gain_code = 3;
+        gain[i] = gain_aster(i, gain_code);
+        /* Reset to NORMAL GAIN */
+        gain_code = 1;
     }
 
     /********************/
@@ -226,23 +227,23 @@ int main(int argc, char *argv[])
 
     /********************/
     for (; *ptr != NULL; ptr++) {
-	if (nfiles > MAXFILES)
-	    G_fatal_error(_("Too many input maps. Only %d allowed."),
-			  MAXFILES);
-	name = *ptr;
-	/* Allocate input buffer */
-	in_data_type[nfiles-1] = Rast_map_type(name, "");
-	/* For some strange reason infd[0] cannot be used later */
-	/* So nfiles is initialized with nfiles = 1 */
-	infd[nfiles] = Rast_open_old(name, "");
+        if (nfiles > MAXFILES)
+            G_fatal_error(_("Too many input maps. Only %d allowed."),
+                          MAXFILES);
+        name = *ptr;
+        /* Allocate input buffer */
+        in_data_type[nfiles - 1] = Rast_map_type(name, "");
+        /* For some strange reason infd[0] cannot be used later */
+        /* So nfiles is initialized with nfiles = 1 */
+        infd[nfiles] = Rast_open_old(name, "");
 
-	Rast_get_cellhd(name, "", &cellhd);
-	inrast[nfiles-1] = Rast_allocate_buf(in_data_type[nfiles-1]);
-	nfiles++;
+        Rast_get_cellhd(name, "", &cellhd);
+        inrast[nfiles - 1] = Rast_allocate_buf(in_data_type[nfiles - 1]);
+        nfiles++;
     }
     nfiles--;
-    if (nfiles < MAXFILES) 
-	G_fatal_error(_("The input band number should be 15"));
+    if (nfiles < MAXFILES)
+        G_fatal_error(_("The input band number should be 15"));
 
     /***************************************************/
     /* Allocate output buffer, use input map data_type */
@@ -250,7 +251,7 @@ int main(int argc, char *argv[])
     ncols = Rast_window_cols();
     out_data_type = DCELL_TYPE;
     for (i = 0; i < MAXFILES; i++)
-	outrast[i] = Rast_allocate_buf(out_data_type);
+        outrast[i] = Rast_allocate_buf(out_data_type);
 
     outfd[1] = Rast_open_new(result0, 1);
     outfd[2] = Rast_open_new(result1, 1);
@@ -273,46 +274,46 @@ int main(int argc, char *argv[])
     DCELL d[MAXFILES];
 
     for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 2);
-	/* read input map */
-	for (i = 1; i <= MAXFILES; i++)
-	    Rast_get_row(infd[i], inrast[i-1], row, in_data_type[i-1]);
+        G_percent(row, nrows, 2);
+        /* read input map */
+        for (i = 1; i <= MAXFILES; i++)
+            Rast_get_row(infd[i], inrast[i - 1], row, in_data_type[i - 1]);
 
-	/*process the data */
-	for (col = 0; col < ncols; col++) {
-	    for (i = 0; i < MAXFILES; i++) {
-		switch (in_data_type[i]) {
-		case CELL_TYPE:
-		    d[i] = (double)((CELL *) inrast[i])[col];
-		    break;
-		case FCELL_TYPE:
-		    d[i] = (double)((FCELL *) inrast[i])[col];
-		    break;
-		case DCELL_TYPE:
-		    d[i] = (double)((DCELL *) inrast[i])[col];
-		    break;
-		}
-		/* if radiance mode or Thermal band */
-		if (radiance || i >= 10) {
-		    dout[i] = gain[i] * (d[i] - 1.0);
-		}
-		/* if reflectance default mode and Not Thermal Band */
-		else {
-		    dout[i] = gain[i] * (d[i] - 1.0);
-		    dout[i] =
-			rad2ref_aster(dout[i], doy, sun_elevation, kexo[i]);
-		}
-		outrast[i][col] = dout[i];
-	    }
-	}
-	for (i = 1; i <= MAXFILES; i++)
-	    Rast_put_row(outfd[i], outrast[i-1], out_data_type);
+        /*process the data */
+        for (col = 0; col < ncols; col++) {
+            for (i = 0; i < MAXFILES; i++) {
+                switch (in_data_type[i]) {
+                case CELL_TYPE:
+                    d[i] = (double)((CELL *) inrast[i])[col];
+                    break;
+                case FCELL_TYPE:
+                    d[i] = (double)((FCELL *) inrast[i])[col];
+                    break;
+                case DCELL_TYPE:
+                    d[i] = (double)((DCELL *) inrast[i])[col];
+                    break;
+                }
+                /* if radiance mode or Thermal band */
+                if (radiance || i >= 10) {
+                    dout[i] = gain[i] * (d[i] - 1.0);
+                }
+                /* if reflectance default mode and Not Thermal Band */
+                else {
+                    dout[i] = gain[i] * (d[i] - 1.0);
+                    dout[i] =
+                        rad2ref_aster(dout[i], doy, sun_elevation, kexo[i]);
+                }
+                outrast[i][col] = dout[i];
+            }
+        }
+        for (i = 1; i <= MAXFILES; i++)
+            Rast_put_row(outfd[i], outrast[i - 1], out_data_type);
     }
     for (i = 1; i <= MAXFILES; i++) {
-	G_free(inrast[i-1]);
-	Rast_close(infd[i]);
-	G_free(outrast[i-1]);
-	Rast_close(outfd[i]);
+        G_free(inrast[i - 1]);
+        Rast_close(infd[i]);
+        G_free(outrast[i - 1]);
+        Rast_close(outfd[i]);
     }
     exit(EXIT_SUCCESS);
 }
