@@ -44,7 +44,7 @@
 
 #define D_PI	180.
 #define D2_PI	360.
-#define DEG2RAD	0.0174532925199432958
+#define DEG2RAD	M_D2R
 #define UNDEF	365.		/* change to undefined when available */
 #define UNDEFZ	0.		/* change to undefined when available */
 #define HORIZ	1		/* magic        */

@@ -21,8 +21,8 @@
 #define TRUE 1
 #define FALSE 0
 
-#define RAD2DEG 57.29578
-#define DEG2RAD 0.017453293
+#define RAD2DEG M_R2D
+#define DEG2RAD M_D2R
 
 #define TINY 1.0e-20
 
