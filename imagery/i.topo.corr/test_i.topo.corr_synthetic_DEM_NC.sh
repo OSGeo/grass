@@ -3,7 +3,7 @@
 # Script to test i.topo.corr with a synthetic map
 #
 # Use North Carolina location to test:
-#   grass71 ~/grassdata/nc_spm_08_grass7/user1
+#   grass72 ~/grassdata/nc_spm_08_grass7/user1
 
 if test "$GISBASE" = ""; then
  echo "You must be in GRASS to run this program."
