@@ -62,7 +62,7 @@ int secpar_loop(int ngstc, int nszc, int i)
     int bmask = 1;
     static int first_t = 1;
 
-    ro = 57.295779;
+    ro = M_R2D;
     gradmin = 0.0;
     /*
        for (i = ngstc; i <= nszc; i++)
