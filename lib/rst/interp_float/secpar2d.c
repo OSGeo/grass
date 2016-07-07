@@ -62,7 +62,7 @@ int IL_secpar_loop_2d(struct interp_params *params,
     int i, got, bmask = 1;
     static int first_time_g = 1;
 
-    ro = 57.295779;
+    ro = M_R2D;
     gradmin = 0.001;
 
 

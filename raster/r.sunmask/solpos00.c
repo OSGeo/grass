@@ -127,6 +127,7 @@ static int month_days[2][13] = { {0, 0, 31, 59, 90, 120, 151,
 
 		   /* cumulative number of days prior to beginning of month */
 
+/* TODO: the "degrad" - "raddeg" variable names are flipped - typo or severe bug?? */
 static float degrad = 57.295779513;	/* converts from radians to degrees */
 static float raddeg = 0.0174532925;	/* converts from degrees to radians */
 

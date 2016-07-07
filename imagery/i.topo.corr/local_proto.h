@@ -1,11 +1,12 @@
+#include <grass/gis.h>
 #include <grass/raster.h>
 
 #ifndef _LOCAL_PROTO_H
 #define _LOCAL_PROTO_H
 
-#define PI   3.1415926535897932384626433832795
-#define R2D 57.295779513082320877
-#define D2R  0.017453292519943295769
+#define PI   M_PI
+#define R2D  M_R2D
+#define D2R  M_D2R
 
 typedef struct
 {

@@ -120,6 +120,12 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #undef M_PI_4
 #define M_PI_4  0.78539816339744830962	/* pi/4 */
 
+#undef M_R2D
+#define M_R2D  57.295779513082320877    /* 180/pi */
+
+#undef M_D2R
+#define M_D2R   0.017453292519943295769 /* pi/180 */
+
 /* epsilon (IEEE: 2.220446e-16) */
 #define GRASS_EPSILON 1.0e-15
 
