@@ -22,7 +22,6 @@ import os
 from core.utils import _
 
 import wx
-from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
 
 from grass.pydispatch.signal import Signal
 try:
@@ -30,12 +29,6 @@ try:
     hasPIL = True
 except ImportError:
     hasPIL = False
-
-
-class OverlayId:
-    legendId = 0
-    barscaleId = 1
-    arrowId = 2
 
 
 class OverlayController(object):
@@ -52,7 +45,8 @@ class OverlayController(object):
         self._defaultAt = ''
         self._cmd = None   # to be set by user
         self._name = None  # to be defined by subclass
-        self._id = None    # to be defined by subclass
+        self._removeLabel = None  # to be defined by subclass
+        self._id = wx.NewId()
         self._dialog = None
 
         # signals that overlay or its visibility changed
@@ -96,6 +90,11 @@ class OverlayController(object):
         return self._name
 
     name = property(fget=GetName)
+
+    def GetRemoveLabel(self):
+        return self._removeLabel
+
+    removeLabel = property(fget=GetRemoveLabel)
 
     def GetId(self):
         return self._id
@@ -145,21 +144,11 @@ class OverlayController(object):
             self._overlay.SetActive(False)
         self.overlayChanged.emit()
 
-    def GetOptData(self, dcmd, layer, params, propwin):
-        """Called after options are set through module dialog.
-
-        :param dcmd: resulting command
-        :param layer: not used
-        :param params: module parameters (not used)
-        :param propwin: dialog window
-        """
-        if not dcmd:
-            return
-
-        self._cmd = dcmd
-        self._dialog = propwin
-
-        self.Show()
+    def Remove(self):
+        if self._dialog:
+            self._dialog.Destroy()
+        self._renderer.DeleteOverlay(self._overlay)
+        self.overlayChanged.emit()
 
     def _add(self):
         self._overlay = self._renderer.AddOverlay(
@@ -189,6 +178,7 @@ class OverlayController(object):
                     "Please install Python Imaging Library (PIL)\n"
                     "for better control of legend and other decorations."))
             return 0, 0
+
         for param in self._cmd:
             if not param.startswith('at'):
                 continue
@@ -199,12 +189,35 @@ class OverlayController(object):
             return x, y
 
 
+class DtextController(OverlayController):
+
+    def __init__(self, renderer, giface):
+        OverlayController.__init__(self, renderer, giface)
+        self._name = 'text'
+        self._removeLabel = _("Remove text")
+        self._defaultAt = 'at=50,50'
+        self._cmd = ['d.text', self._defaultAt]
+
+    def CmdIsValid(self):
+        inputs = 0
+        for param in self._cmd[1:]:
+            param = param.split('=')
+            if len(param) == 1:
+                inputs += 1
+            else:
+                if param[0] == 'text' and len(param) == 2:
+                    inputs += 1
+        if inputs >= 1:
+            return True
+        return False
+
+
 class BarscaleController(OverlayController):
 
     def __init__(self, renderer, giface):
         OverlayController.__init__(self, renderer, giface)
-        self._id = OverlayId.barscaleId
         self._name = 'barscale'
+        self._removeLabel = _("Remove scale bar")
         # different from default because the reference point is not in the
         # middle
         self._defaultAt = 'at=0,98'
@@ -215,8 +228,8 @@ class ArrowController(OverlayController):
 
     def __init__(self, renderer, giface):
         OverlayController.__init__(self, renderer, giface)
-        self._id = OverlayId.arrowId
         self._name = 'arrow'
+        self._removeLabel = _("Remove north arrow")
         # different from default because the reference point is not in the
         # middle
         self._defaultAt = 'at=85.0,25.0'
@@ -227,8 +240,8 @@ class LegendController(OverlayController):
 
     def __init__(self, renderer, giface):
         OverlayController.__init__(self, renderer, giface)
-        self._id = OverlayId.legendId
         self._name = 'legend'
+        self._removeLabel = _("Remove legend")
         # TODO: synchronize with d.legend?
         self._defaultAt = 'at=5,50,7,10'
         self._cmd = ['d.legend', self._defaultAt]
@@ -313,202 +326,3 @@ class LegendController(OverlayController):
         self._giface.GetMapDisplay().GetMapToolbar().SelectDefault()
         # redraw
         self.overlayChanged.emit()
-
-
-class TextLayerDialog(wx.Dialog):
-    """!Controls setting options and displaying/hiding map overlay decorations
-    """
-
-    def __init__(self, parent, ovlId, title, name='text', size=wx.DefaultSize,
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
-
-        wx.Dialog.__init__(
-            self,
-            parent=parent,
-            id=wx.ID_ANY,
-            title=title,
-            style=style,
-            size=size)
-
-        self.ovlId = ovlId
-        self.parent = parent
-
-        if self.ovlId in self.parent.MapWindow.textdict.keys():
-            self.currText = self.parent.MapWindow.textdict[self.ovlId]['text']
-            self.currFont = self.parent.MapWindow.textdict[self.ovlId]['font']
-            self.currClr = self.parent.MapWindow.textdict[self.ovlId]['color']
-            self.currRot = self.parent.MapWindow.textdict[
-                self.ovlId]['rotation']
-            self.currCoords = self.parent.MapWindow.textdict[
-                self.ovlId]['coords']
-            self.currBB = self.parent.MapWindow.textdict[self.ovlId]['bbox']
-        else:
-            self.currClr = wx.BLACK
-            self.currText = ''
-            self.currFont = self.GetFont()
-            self.currRot = 0.0
-            self.currCoords = [10, 10]
-            self.currBB = wx.Rect()
-
-        self.sizer = wx.BoxSizer(wx.VERTICAL)
-        box = wx.GridBagSizer(vgap=5, hgap=5)
-
-        # show/hide
-        self.chkbox = wx.CheckBox(parent=self, id=wx.ID_ANY,
-                                  label=_('Show text object'))
-        if self.parent.Map.GetOverlay(self.ovlId) is None:
-            self.chkbox.SetValue(True)
-        else:
-            self.chkbox.SetValue(
-                self.parent.MapWindow.overlays[
-                    self.ovlId]['layer'].IsActive())
-        box.Add(item=self.chkbox, span=(1, 2),
-                pos=(0, 0))
-
-        # text entry
-        box.Add(
-            item=wx.StaticText(
-                parent=self,
-                id=wx.ID_ANY,
-                label=_("Text:")),
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            pos=(
-                1,
-                0))
-
-        self.textentry = ExpandoTextCtrl(
-            parent=self, id=wx.ID_ANY, value="", size=(300, -1))
-        self.textentry.SetFont(self.currFont)
-        self.textentry.SetForegroundColour(self.currClr)
-        self.textentry.SetValue(self.currText)
-        # get rid of unneeded scrollbar when text box first opened
-        self.textentry.SetClientSize((300, -1))
-
-        box.Add(item=self.textentry,
-                flag=wx.EXPAND,
-                pos=(1, 1))
-
-        # rotation
-        box.Add(
-            item=wx.StaticText(
-                parent=self,
-                id=wx.ID_ANY,
-                label=_("Rotation:")),
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            pos=(
-                2,
-                0))
-        self.rotation = wx.SpinCtrl(
-            parent=self, id=wx.ID_ANY, value="", pos=(
-                30, 50), size=(
-                75, -1), style=wx.SP_ARROW_KEYS)
-        self.rotation.SetRange(-360, 360)
-        self.rotation.SetValue(int(self.currRot))
-        box.Add(item=self.rotation,
-                flag=wx.ALIGN_RIGHT,
-                pos=(2, 1))
-
-        # font
-        box.Add(
-            item=wx.StaticText(
-                parent=self,
-                id=wx.ID_ANY,
-                label=_("Font:")),
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            pos=(
-                3,
-                0))
-        fontbtn = wx.Button(parent=self, id=wx.ID_ANY, label=_("Set font"))
-        box.Add(item=fontbtn,
-                flag=wx.ALIGN_RIGHT,
-                pos=(3, 1))
-
-        box.AddGrowableCol(1)
-        box.AddGrowableRow(1)
-        self.sizer.Add(item=box, proportion=1,
-                       flag=wx.ALL | wx.EXPAND, border=10)
-
-        # note
-        box = wx.BoxSizer(wx.HORIZONTAL)
-        label = wx.StaticText(
-            parent=self, id=wx.ID_ANY, label=_(
-                "Drag text with mouse in pointer mode "
-                "to position.\nDouble-click to change options"))
-        box.Add(item=label, proportion=0,
-                flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
-        self.sizer.Add(
-            item=box, proportion=0, flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL |
-            wx.ALIGN_CENTER | wx.ALL, border=5)
-
-        line = wx.StaticLine(parent=self, id=wx.ID_ANY,
-                             size=(20, -1), style=wx.LI_HORIZONTAL)
-        self.sizer.Add(item=line, proportion=0,
-                       flag=wx.EXPAND | wx.ALIGN_CENTRE | wx.ALL, border=5)
-
-        btnsizer = wx.StdDialogButtonSizer()
-
-        btn = wx.Button(parent=self, id=wx.ID_OK)
-        btn.SetDefault()
-        btnsizer.AddButton(btn)
-
-        btn = wx.Button(parent=self, id=wx.ID_CANCEL)
-        btnsizer.AddButton(btn)
-        btnsizer.Realize()
-
-        self.sizer.Add(item=btnsizer, proportion=0,
-                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
-
-        self.SetSizer(self.sizer)
-        self.sizer.Fit(self)
-
-        # bindings
-        self.Bind(EVT_ETC_LAYOUT_NEEDED, self.OnRefit, self.textentry)
-        self.Bind(wx.EVT_BUTTON, self.OnSelectFont, fontbtn)
-        self.Bind(wx.EVT_TEXT, self.OnText, self.textentry)
-        self.Bind(wx.EVT_SPINCTRL, self.OnRotation, self.rotation)
-
-        self.SetMinSize((400, 230))
-
-    def OnRefit(self, event):
-        """Resize text entry to match text"""
-        self.sizer.Fit(self)
-
-    def OnText(self, event):
-        """Change text string"""
-        self.currText = event.GetString()
-
-    def OnRotation(self, event):
-        """Change rotation"""
-        self.currRot = event.GetInt()
-
-        event.Skip()
-
-    def OnSelectFont(self, event):
-        """Change font"""
-        data = wx.FontData()
-        data.EnableEffects(True)
-        data.SetColour(self.currClr)         # set colour
-        data.SetInitialFont(self.currFont)
-
-        dlg = wx.FontDialog(self, data)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            data = dlg.GetFontData()
-            self.currFont = data.GetChosenFont()
-            self.currClr = data.GetColour()
-
-            self.textentry.SetFont(self.currFont)
-            self.textentry.SetForegroundColour(self.currClr)
-
-            self.Layout()
-
-        dlg.Destroy()
-
-    def GetValues(self):
-        """Get text properties"""
-        return {'text': self.currText,
-                'font': self.currFont,
-                'color': self.currClr,
-                'rotation': self.currRot,
-                'coords': self.currCoords,
-                'active': self.chkbox.IsChecked()}

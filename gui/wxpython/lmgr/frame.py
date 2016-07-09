@@ -651,10 +651,10 @@ class GMFrame(wx.Frame):
         Also close associated map display
         """
 
-        if UserSettings.Get(group='manager', key='askOnQuit',
-                            subkey='enabled') and self.workspaceChanged:
-            maptree = self.GetLayerTree()
-
+        # save changes in the workspace
+        maptree = self.GetLayerTree()
+        if  self.workspaceChanged and UserSettings.Get(
+                group='manager', key='askOnQuit', subkey='enabled'):
             if self.workspaceFile:
                 message = _("Do you want to save changes in the workspace?")
             else:
@@ -749,9 +749,9 @@ class GMFrame(wx.Frame):
 
         if layertype == 'barscale':
             if len(command) > 1:
-                self.GetMapDisplay().AddBarscale(cmd=command, showDialog=False)
+                self.GetMapDisplay().AddBarscale(cmd=command)
             else:
-                self.GetMapDisplay().AddBarscale(showDialog=True)
+                self.GetMapDisplay().AddBarscale()
         elif layertype == 'rastleg':
             if len(command) > 1:
                 self.GetMapDisplay().AddLegend(cmd=command, showDialog=False)
@@ -759,9 +759,14 @@ class GMFrame(wx.Frame):
                 self.GetMapDisplay().AddLegend(showDialog=True)
         elif layertype == 'northarrow':
             if len(command) > 1:
-                self.GetMapDisplay().AddArrow(cmd=command, showDialog=False)
+                self.GetMapDisplay().AddArrow(cmd=command)
             else:
-                self.GetMapDisplay().AddArrow(showDialog=True)
+                self.GetMapDisplay().AddArrow()
+        elif layertype == 'text':
+            if len(command) > 1:
+                self.GetMapDisplay().AddDtext(cmd=command)
+            else:
+                self.GetMapDisplay().AddDtext()
         elif layertype == 'redraw':
             self.GetMapDisplay().OnRender(None)
         elif layertype == 'export':
@@ -1485,6 +1490,8 @@ class GMFrame(wx.Frame):
                         mapdisplay[i].AddBarscale(overlay['cmd'])
                     if overlay['cmd'][0] == "d.northarrow":
                         mapdisplay[i].AddArrow(overlay['cmd'])
+                    if overlay['cmd'][0] == "d.text":
+                        mapdisplay[i].AddDtext(overlay['cmd'])
 
             # avoid double-rendering when loading workspace
             # mdisp.MapWindow2D.UpdateMap()
@@ -2421,10 +2428,10 @@ class GMFrame(wx.Frame):
             self.Destroy()
             return
 
-        # save changes in the workspace
-        maptree = self.GetLayerTree()
-        if self.workspaceChanged and UserSettings.Get(
-                group='manager', key='askOnQuit', subkey='enabled'):
+        if UserSettings.Get(group='manager', key='askOnQuit',
+                            subkey='enabled') and self.workspaceChanged:
+            maptree = self.GetLayerTree()
+
             if self.workspaceFile:
                 message = _("Do you want to save changes in the workspace?")
             else:

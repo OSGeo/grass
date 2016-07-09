@@ -873,7 +873,7 @@ class TaskFrame(wx.Frame):
                                           'MapWindow'):
             # display decorations and
             # pressing OK or cancel after setting layer properties
-            if self.task.name in ['d.barscale', 'd.legend', 'd.northarrow', 'd.histogram'] \
+            if self.task.name in ['d.barscale', 'd.legend', 'd.northarrow', 'd.histogram', 'd.text'] \
                     or len(self.parent.GetLayerInfo(self.layer, key='cmd')) >= 1:
                 self.Hide()
             # canceled layer with nothing set
