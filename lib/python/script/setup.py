@@ -60,9 +60,10 @@ Usage::
 
     # import (some) GRASS Python bindings
     import grass.script as gscript
+    import grass.script.setup as gsetup
 
     # launch session
-    rcfile = gscript.setup.init(gisbase, gisdb, location, mapset)
+    rcfile = gsetup.init(gisbase, gisdb, location, mapset)
 
     # example calls
     gscript.message('Current GRASS GIS 7 environment:')
