@@ -9,7 +9,7 @@ Usage:
     grass.raster3d_info(map)
 
 
-(C) 2008-2009 by the GRASS Development Team
+(C) 2008-2016 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -65,22 +65,28 @@ def raster3d_info(map):
     return kv
 
 
-def mapcalc3d(exp, quiet=False, verbose=False, overwrite=False, **kwargs):
+def mapcalc3d(exp, quiet=False, verbose=False, overwrite=False,
+              seed=None, env=None, **kwargs):
     """Interface to r3.mapcalc.
 
     :param str exp: expression
     :param bool quiet: True to run quietly (<tt>--q</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
+    :param seed: an integer used to seed the random-number generator for the
+                 rand() function, or 'auto' to generate a random seed
+    :param dict env: dictionary of environment variables for child process
     :param kwargs:
     """
+
+    if seed == 'auto':
+        seed = hash((os.getpid(), time.time())) % (2**32)
+
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
     try:
-        run_command('r3.mapcalc', expression=e,
-                    quiet=quiet,
-                    verbose=verbose,
-                    overwrite=overwrite)
+        write_command('r3.mapcalc', file='-', stdin=e, env=env, seed=seed,
+                      quiet=quiet, verbose=verbose, overwrite=overwrite)
     except CalledModuleError:
         fatal(_("An error occurred while running r3.mapcalc"))
