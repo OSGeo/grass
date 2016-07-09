@@ -364,6 +364,7 @@ class RenderLayerMgr(wx.EvtHandler):
         self.thread = gThread()
 
         self.updateProgress = Signal('RenderLayerMgr.updateProgress')
+        self.renderingFailed = Signal('RenderLayerMgr.renderingFailed')
 
         self._startTime = None
         self._render_env = env
@@ -389,14 +390,16 @@ class RenderLayerMgr(wx.EvtHandler):
 
         self._startTime = time.time()
         self.thread.Run(callable=self._render, cmd=cmd_render, env=env_cmd,
-                        ondone=self.OnRenderDone)
+                        ondone=self.OnRenderDone, userdata={'cmd': cmd})
         self.layer.forceRender = False
 
     def _render(self, cmd, env):
-        try:
-            return grass.run_command(cmd[0], env=env, **cmd[1])
-        except CalledModuleError as e:
-            return 1
+        p = grass.start_command(cmd[0], env=env, stderr=grass.PIPE, **cmd[1])
+        stdout, stderr = p.communicate()
+        if p.returncode:
+            return stderr
+        else:
+            return None
 
     def Abort(self):
         """Abort rendering process"""
@@ -419,13 +422,14 @@ class RenderLayerMgr(wx.EvtHandler):
 
         Emits updateProcess
         """
-        Debug.msg(1, "RenderLayerMgr.OnRenderDone(%s): ret=%d time=%f" %
+        Debug.msg(1, "RenderLayerMgr.OnRenderDone(%s): err=%s time=%f" %
                   (self.layer, event.ret, time.time() - self._startTime))
-        if event.ret != 0:
-            try:
-                os.remove(self.layer.mapfile)
-            except:
-                pass
+        if event.ret is not None:
+            cmd = cmdtuple_to_list(event.userdata['cmd'])
+            self.renderingFailed.emit(cmd=cmd, error=event.ret)
+            # don't remove layer if overlay, we need to keep the old one
+            if self.layer.type != 'overlay':
+                try_remove(self.layer.mapfile)
 
         self.updateProgress.emit(layer=self.layer)
 
@@ -443,6 +447,7 @@ class RenderMapMgr(wx.EvtHandler):
 
         self.updateMap = Signal('RenderMapMgr.updateMap')
         self.updateProgress = Signal('RenderMapMgr.updateProgress')
+        self.renderingFailed = Signal('RenderMapMgr.renderingFailed')
         self.renderDone = Signal('RenderMapMgr.renderDone')
         self.renderDone.connect(self.OnRenderDone)
 
@@ -519,6 +524,25 @@ class RenderMapMgr(wx.EvtHandler):
 
         return env
 
+    def RenderOverlays(self, force=False):
+        """Render only overlays
+
+        :param bool force: force rendering all map layers
+        """
+        if self._rendering:
+            Debug.msg(
+                1, "RenderMapMgr().RenderOverlays(): cancelled (already rendering)")
+            return
+
+        wx.BeginBusyCursor()
+        self._rendering = True
+
+        env = self.GetRenderEnv()
+        self._init(env)
+        # no layer composition afterwards
+        if self._renderLayers(env, force, overlaysOnly=True) == 0:
+            self.renderDone.emit()
+
     def Render(self, force=False, windres=False):
         """Render map composition
 
@@ -535,7 +559,7 @@ class RenderMapMgr(wx.EvtHandler):
 
         env = self.GetRenderEnv(windres)
         self._init(env)
-        if self._renderLayers(env, force, windres) == 0:
+        if self._renderLayers(env, force) == 0:
             self.renderDone.emit()
 
     def OnRenderDone(self):
@@ -651,6 +675,9 @@ class RenderMapMgr(wx.EvtHandler):
         if layer and self.progressInfo[
                 'progresVal'] == self.progressInfo['range']:
             self.renderDone.emit()
+
+    def RenderingFailed(self, cmd, error):
+        self.renderingFailed.emit(cmd=cmd, error=error)
 
 
 class Map(object):
@@ -1413,6 +1440,7 @@ class Map(object):
                     string=True))))
         if renderMgr:
             renderMgr.updateProgress.connect(self.renderMgr.ReportProgress)
+            renderMgr.renderingFailed.connect(self.renderMgr.RenderingFailed)
         overlay.forceRender = render
 
         return overlay
@@ -1511,9 +1539,7 @@ class Map(object):
 
     def RenderOverlays(self, force):
         """Render overlays only (for nviz)"""
-        for layer in self.overlays:
-            if force or layer.forceRender:
-                layer.Render()
+        self.renderMgr.RenderOverlays(force)
 
     def AbortAllThreads(self):
         """Abort all layers threads e. g. donwloading data"""

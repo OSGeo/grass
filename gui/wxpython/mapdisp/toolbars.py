@@ -32,11 +32,11 @@ MapIcons = {
                        label=_('Select vector feature(s)'),
                        desc=_('Select features interactively from vector map')),
     'addBarscale': MetaIcon(img='scalebar-add',
-                            label=_('Show/hide scale bar')),
+                            label=_('Add scale bar')),
     'addLegend': MetaIcon(img='legend-add',
-                          label=_('Show/hide legend')),
+                          label=_('Add legend')),
     'addNorthArrow': MetaIcon(img='north-arrow-add',
-                              label=_('Show/hide north arrow')),
+                              label=_('Add north arrow')),
     'analyze': MetaIcon(img='layer-raster-analyze',
                         label=_('Analyze map'),
                         desc=_('Measuring, profiling, histogramming, ...')),
@@ -49,7 +49,7 @@ MapIcons = {
     'scatter': MetaIcon(img='layer-raster-profile',
                         label=_("Create bivariate scatterplot of raster maps")),
     'addText': MetaIcon(img='text-add',
-                        label=_('Add text layer')),
+                        label=_('Add text')),
     'histogram': MetaIcon(img='layer-raster-histogram',
                           label=_('Create histogram of raster map')),
     'vnet': MetaIcon(img='vector-tools',
@@ -271,10 +271,10 @@ class MapToolbar(BaseToolbar):
               lambda evt: self.parent.AddLegend()),
              (MapIcons["addBarscale"],
               lambda evt: self.parent.AddBarscale()),
-                (MapIcons["addNorthArrow"],
-                 lambda evt: self.parent.AddArrow()),
-                (MapIcons["addText"],
-                 self.parent.OnAddText)))
+             (MapIcons["addNorthArrow"],
+              lambda evt: self.parent.AddArrow()),
+             (MapIcons["addText"],
+              lambda evt: self.parent.AddDtext())))
 
     def ExitToolbars(self):
         if self.parent.GetToolbar('vdigit'):
