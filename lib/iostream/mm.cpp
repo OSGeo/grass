@@ -276,7 +276,11 @@ MM_err MM_register::register_deallocation(size_t sz) {
 
  
 /* ************************************************************ */
-void* operator new[] (size_t sz) throw(std::bad_alloc) {
+#ifdef GRASS_MM_USE_EXCEPTION_SPECIFIER
+void* operator new[] (size_t sz) throw (std::bad_alloc) {
+#else
+void* operator new[] (size_t sz) {
+#endif /* GRASS_MM_USE_EXCEPTION_SPECIFIER */
   void *p;
   
   MM_DEBUG cout << "new: sz=" << sz << ", register " 
@@ -327,7 +331,11 @@ void* operator new[] (size_t sz) throw(std::bad_alloc) {
 
  
 /* ************************************************************ */
-void* operator new (size_t sz) throw(std::bad_alloc) {
+#ifdef GRASS_MM_USE_EXCEPTION_SPECIFIER
+void* operator new (size_t sz) throw (std::bad_alloc) {
+#else
+void* operator new (size_t sz) {
+#endif /* GRASS_MM_USE_EXCEPTION_SPECIFIER */
   void *p;
   
   MM_DEBUG cout << "new: sz=" << sz << ", register " 
@@ -379,7 +387,11 @@ void* operator new (size_t sz) throw(std::bad_alloc) {
 
 
 /* ---------------------------------------------------------------------- */
+#ifdef GRASS_MM_USE_EXCEPTION_SPECIFIER
 void operator delete (void *ptr) throw() {
+#else
+void operator delete (void *ptr) noexcept {
+#endif /* GRASS_MM_USE_EXCEPTION_SPECIFIER */
   size_t sz;
   void *p;
   
@@ -419,7 +431,11 @@ void operator delete (void *ptr) throw() {
 
 
 /* ---------------------------------------------------------------------- */
+#ifdef GRASS_MM_USE_EXCEPTION_SPECIFIER
 void operator delete[] (void *ptr) throw() {
+#else
+void operator delete[] (void *ptr) noexcept {
+#endif /* GRASS_MM_USE_EXCEPTION_SPECIFIER */
   size_t sz;
   void *p;
   
