@@ -395,8 +395,6 @@ int main(int argc, char **argv)
 	Rast_init_colors(&colors);
 	Rast_read_fp_range(dist_name, G_mapset(), &range);
 	Rast_get_fp_range_min_max(&range, &min, &max);
-	Rast_make_fp_colors(&colors, "rainbow", min, max);
-	Rast_write_colors(dist_name, G_mapset(), &colors);
 
 	Rast_short_history(dist_name, "raster", &hist);
 	Rast_set_history(&hist, HIST_DATSRC_1, in_name);
