@@ -60,6 +60,7 @@ class BufferedWindow(wx.Window):
         self.resize = False  # indicates whether or not a resize event has taken place
         self.dragimg = None  # initialize variable for map panning
         self.pen = None     # pen for drawing zoom boxes, etc.
+        self._oldfont = self._oldencoding = None
 
         #
         # Event bindings
@@ -72,7 +73,7 @@ class BufferedWindow(wx.Window):
         # Render output objects
         #
         self.mapfile = None  # image file to be rendered
-        self.img = ""       # wx.Image object (self.mapfile)
+        self.img = None      # wx.Image object (self.mapfile)
 
         self.imagedict = {}  # images and their PseudoDC ID's for painting and dragging
 
@@ -223,28 +224,32 @@ class BufferedWindow(wx.Window):
         Debug.msg(
             2, "BufferedWindow.UpdateHist(%s): render=%s" %
             (img, self.render))
-        oldfont = ""
-        oldencoding = ""
+        
+        if not self.render:
+            return
+        
+        # render new map images
+        # set default font and encoding environmental variables
+        if "GRASS_FONT" in os.environ:
+            self._oldfont = os.environ["GRASS_FONT"]
+        if self.parent.font:
+            os.environ["GRASS_FONT"] = self.parent.font
+        if "GRASS_ENCODING" in os.environ:
+            self._oldencoding = os.environ["GRASS_ENCODING"]
+        if self.parent.encoding is not None and self.parent.encoding != "ISO-8859-1":
+            os.environ[GRASS_ENCODING] = self.parent.encoding
 
-        if self.render:
-            # render new map images
-            # set default font and encoding environmental variables
-            if "GRASS_FONT" in os.environ:
-                oldfont = os.environ["GRASS_FONT"]
-            if self.parent.font != "":
-                os.environ["GRASS_FONT"] = self.parent.font
-            if "GRASS_ENCODING" in os.environ:
-                oldencoding = os.environ["GRASS_ENCODING"]
-            if self.parent.encoding is not None and self.parent.encoding != "ISO-8859-1":
-                os.environ[GRASS_ENCODING] = self.parent.encoding
+        # using active comp region
+        self.Map.GetRegion(update=True)
 
-            # using active comp region
-            self.Map.GetRegion(update=True)
+        self.Map.width, self.Map.height = self.GetClientSize()
+        self.mapfile = self.Map.Render(force=self.render)
+        self.Map.GetRenderMgr().renderDone.connect(self.UpdateHistDone)
 
-            self.Map.width, self.Map.height = self.GetClientSize()
-            self.mapfile = self.Map.Render(force=self.render)
-            self.img = self.GetImage()
-            self.resize = False
+    def UpdateHistDone(self):
+        """Histogram image generated, finish rendering."""
+        self.img = self.GetImage()
+        self.resize = False
 
         if not self.img:
             return
@@ -261,17 +266,16 @@ class BufferedWindow(wx.Window):
         self.resize = False
 
         # update statusbar
-        # Debug.msg (3, "BufferedWindow.UpdateHist(%s): region=%s" % self.Map.region)
         self.Map.SetRegion()
         self.parent.statusbar.SetStatusText(
             "Image/Raster map <%s>" %
             self.parent.mapname)
 
         # set default font and encoding environmental variables
-        if oldfont != "":
-            os.environ["GRASS_FONT"] = oldfont
-        if oldencoding != "":
-            os.environ["GRASS_ENCODING"] = oldencoding
+        if self._oldfont:
+            os.environ["GRASS_FONT"] = self._oldfont
+        if self._oldencoding:
+            os.environ["GRASS_ENCODING"] = self._oldencoding
 
     def EraseMap(self):
         """Erase the map display
