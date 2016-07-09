@@ -357,7 +357,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
     addon_path_var=_("set additional path(s) to local GRASS modules or user scripts"),
     addon_base_var=_("set additional GISBASE for locally installed GRASS Addons"),
     batch_var=_("shell script to be processed as batch job"),
-    python_var=_("set python shell name to override 'python'"),
+    python_var=_("set Python interpreter name to override 'python'"),
     exec_=_("execute GRASS module or script"),
     exec_detail=_("provided executable will be executed in GRASS session"),
     executable=_("GRASS module, script or any other executable"),
