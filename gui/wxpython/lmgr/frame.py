@@ -1474,22 +1474,34 @@ class GMFrame(wx.Frame):
         for i, display in enumerate(gxwXml.displays):
             mapdisplay[i].mapWindowProperties.autoRender = display['render']
 
-        for idx, mdisp in enumerate(mapdisplay):
+            for overlay in gxwXml.overlays:
+                # overlay["cmd"][0] name of command e.g. d.barscale, d.legend
+                # overlay["cmd"][1:] parameters and flags
+                if overlay['display'] == i:
+                    if overlay['cmd'][0] == "d.legend":
+                        mapdisplay[i].AddLegend(overlay['cmd'])
+                    if overlay['cmd'][0] == "d.barscale":
+                        mapdisplay[i].AddBarscale(overlay['cmd'])
+                    if overlay['cmd'][0] == "d.northarrow":
+                        mapdisplay[i].AddArrow(overlay['cmd'])
+                    if overlay['cmd'][0] == "d.text":
+                        mapdisplay[i].AddDtext(overlay['cmd'])
+
             # avoid double-rendering when loading workspace
             # mdisp.MapWindow2D.UpdateMap()
             # nviz
-            if gxwXml.displays[idx]['viewMode'] == '3d':
-                mdisp.AddNviz()
+            if gxwXml.displays[i]['viewMode'] == '3d':
+                mapdisplay[i].AddNviz()
                 self.nviz.UpdateState(view=gxwXml.nviz_state['view'],
                                       iview=gxwXml.nviz_state['iview'],
                                       light=gxwXml.nviz_state['light'])
-                mdisp.MapWindow3D.constants = gxwXml.nviz_state['constants']
-                for idx, constant in enumerate(mdisp.MapWindow3D.constants):
-                    mdisp.MapWindow3D.AddConstant(constant, idx + 1)
+                mapdisplay[i].MapWindow3D.constants = gxwXml.nviz_state['constants']
+                for idx, constant in enumerate(mapdisplay[i].MapWindow3D.constants):
+                    mapdisplay[i].MapWindow3D.AddConstant(constant, i + 1)
                 for page in ('view', 'light', 'fringe', 'constant', 'cplane'):
                     self.nviz.UpdatePage(page)
                 self.nviz.UpdateSettings()
-                mdisp.toolbars['map'].combo.SetSelection(1)
+                mapdisplay[i].toolbars['map'].combo.SetSelection(1)
 
         return True
 
@@ -2410,10 +2422,10 @@ class GMFrame(wx.Frame):
             self.Destroy()
             return
 
-        # save changes in the workspace
-        maptree = self.GetLayerTree()
-        if self.workspaceChanged and UserSettings.Get(
-                group='manager', key='askOnQuit', subkey='enabled'):
+        if UserSettings.Get(group='manager', key='askOnQuit',
+                            subkey='enabled') and self.workspaceChanged:
+            maptree = self.GetLayerTree()
+
             if self.workspaceFile:
                 message = _("Do you want to save changes in the workspace?")
             else:
