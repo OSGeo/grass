@@ -62,10 +62,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("spatial query"));
+    G_add_keyword(_("clip"));
+    G_add_keyword(_("difference"));
     G_add_keyword(_("intersection"));
     G_add_keyword(_("union"));
-    G_add_keyword(_("clip"));
-    module->description = _("Overlays two vector maps.");
+    module->description = _("Overlays two vector maps offering clip, intersection, difference, symmetrical difference, union operators.");
 
     in_opt[0] = G_define_standard_option(G_OPT_V_INPUT);
     in_opt[0]->label = _("Name of input vector map (A)");
@@ -113,8 +114,9 @@ int main(int argc, char *argv[])
 	       "and;%s;or;%s;not;%s;xor;%s",
 	       _("also known as 'intersection' in GIS"),
 	       _("also known as 'union' in GIS (only for atype=area)"),
-	       _("features from ainput not overlayed by features from binput"),
-	       _("features from either ainput or binput but "
+	       _("also known as 'difference' (features from ainput not "
+                 "overlayed by features from binput)"),
+	       _("also known as 'symmetrical difference' (features from either ainput or binput but "
 		 "not those from ainput overlayed by binput (only "
 		 "for atype=area)"));
     operator_opt->descriptions = desc;
