@@ -17,6 +17,7 @@ List of classes:
  - :class:`SqlQueryFrame`
  - :class:`SymbolDialog`
  - :class:`QuitDialog`
+ - :class:`DefaultFontDialog`
 
 (C) 2008-2016 by the GRASS Development Team
 
@@ -34,7 +35,7 @@ import re
 import wx
 
 from grass.script import core as grass
-from grass.script.utils import natural_sort
+from grass.script.utils import natural_sort, try_remove
 
 from grass.pydispatch.signal import Signal
 
@@ -2382,3 +2383,206 @@ class QuitDialog(wx.Dialog):
 
     def OnQuit(self, event):
         self.EndModal(wx.ID_YES)
+
+
+class DefaultFontDialog(wx.Dialog):
+    """
+    Opens a file selection dialog to select default font
+    to use in all GRASS displays
+    """
+
+    def __init__(self, parent, title, id=wx.ID_ANY,
+                 style=wx.DEFAULT_DIALOG_STYLE |
+                 wx.RESIZE_BORDER,
+                 settings=UserSettings,
+                 type='font'):
+
+        self.settings = settings
+        self.type = type
+
+        wx.Dialog.__init__(self, parent, id, title, style=style)
+
+        panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.tmp_file = grass.tempfile(False) + '.png'
+
+        self.fontdict, fontdict_reverse, self.fontlist = self.GetFonts()
+
+        border = wx.BoxSizer(wx.VERTICAL)
+        box = wx.StaticBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=" %s " %
+            _("Font settings"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+
+        gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
+
+        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                              label=_("Select font:"))
+        gridSizer.Add(item=label,
+                      flag=wx.ALIGN_TOP,
+                      pos=(0, 0))
+
+        self.fontlb = wx.ListBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            pos=wx.DefaultPosition,
+            choices=self.fontlist,
+            style=wx.LB_SINGLE)
+        self.Bind(wx.EVT_LISTBOX, self.EvtListBox, self.fontlb)
+        self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, self.fontlb)
+
+        gridSizer.Add(item=self.fontlb,
+                      flag=wx.EXPAND, pos=(1, 0))
+
+        self.renderfont = wx.StaticBitmap(panel, bitmap=wx.EmptyBitmapRGBA(100, 50, 255, 255, 255))
+        gridSizer.Add(item=self.renderfont,
+                      flag=wx.EXPAND, pos=(2, 0))
+
+        if self.type == 'font':
+            if "GRASS_FONT" in os.environ:
+                self.font = os.environ["GRASS_FONT"]
+            else:
+                self.font = self.settings.Get(group='display',
+                                              key='font', subkey='type')
+            self.encoding = self.settings.Get(group='display',
+                                              key='font', subkey='encoding')
+
+            label = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                  label=_("Character encoding:"))
+            gridSizer.Add(item=label,
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos=(3, 0))
+
+            self.textentry = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
+                                         value=self.encoding)
+            gridSizer.Add(item=self.textentry,
+                          flag=wx.EXPAND, pos=(4, 0))
+
+            self.textentry.Bind(wx.EVT_TEXT, self.OnEncoding)
+
+        elif self.type == 'outputfont':
+            self.font = self.settings.Get(group='appearance',
+                                          key='outputfont', subkey='type')
+            self.fontsize = self.settings.Get(group='appearance',
+                                              key='outputfont', subkey='size')
+            label = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                  label=_("Font size:"))
+            gridSizer.Add(item=label,
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos=(2, 0))
+
+            self.spin = wx.SpinCtrl(parent=panel, id=wx.ID_ANY)
+            if self.fontsize:
+                self.spin.SetValue(int(self.fontsize))
+            self.spin.Bind(wx.EVT_SPINCTRL, self.OnSizeSpin)
+            self.spin.Bind(wx.EVT_TEXT, self.OnSizeSpin)
+            gridSizer.Add(item=self.spin,
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos=(3, 0))
+
+        else:
+            return
+
+        if self.font:
+            self.fontlb.SetStringSelection(fontdict_reverse[self.font], True)
+
+        gridSizer.AddGrowableCol(0)
+        sizer.Add(item=gridSizer, proportion=1,
+                  flag=wx.EXPAND | wx.ALL,
+                  border=5)
+
+        border.Add(item=sizer, proportion=1,
+                   flag=wx.ALL | wx.EXPAND, border=3)
+
+        btnsizer = wx.StdDialogButtonSizer()
+
+        btn = wx.Button(parent=panel, id=wx.ID_OK)
+        btn.SetDefault()
+        btnsizer.AddButton(btn)
+
+        btn = wx.Button(parent=panel, id=wx.ID_CANCEL)
+        btnsizer.AddButton(btn)
+        btnsizer.Realize()
+
+        border.Add(item=btnsizer, proportion=0,
+                   flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border=5)
+
+        panel.SetAutoLayout(True)
+        panel.SetSizer(border)
+        border.Fit(self)
+        row, col = gridSizer.GetItemPosition(self.renderfont)
+        self.renderfont.SetSize(gridSizer.GetCellSize(row, col))
+        if self.font:
+            self.RenderText(self.font, _("Example"), size=self.renderfont.GetSize())
+
+        self.Layout()
+
+    def OnEncoding(self, event):
+        self.encoding = event.GetString()
+
+    def EvtListBox(self, event):
+        self.font = self.fontdict[event.GetString()]
+        self.RenderText(self.font, "Example", size=self.renderfont.GetSize())
+        event.Skip()
+
+    def EvtListBoxDClick(self, event):
+        self.font = self.fontdict[event.GetString()]
+        event.Skip()
+
+    def OnSizeSpin(self, event):
+        self.fontsize = self.spin.GetValue()
+        event.Skip()
+
+    def GetFonts(self):
+        """
+        parses fonts directory or fretypecap file to get a list of fonts
+        for the listbox
+        """
+        fontlist = []
+        fontdict = {}
+        fontdict_reverse = {}
+        env = os.environ.copy()
+        driver = UserSettings.Get(group='display', key='driver', subkey='type')
+        if driver == 'png':
+            env['GRASS_RENDER_IMMEDIATE'] = 'png'
+        else:
+            env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+        ret = RunCommand('d.fontlist', flags='v',
+                         read=True,
+                         env=env)
+        if not ret:
+            return fontlist
+
+        dfonts = ret.splitlines()
+        for line in dfonts:
+            shortname = line.split('|')[0]
+            longname = line.split('|')[1]
+            # not sure when this happens?
+            if shortname.startswith('#'):
+                continue
+            fontlist.append(longname)
+            fontdict[longname] = shortname
+            fontdict_reverse[shortname] = longname
+        fontlist = natural_sort(list(set(fontlist)))
+
+        return fontdict, fontdict_reverse, fontlist
+
+    def RenderText(self, font, text, size):
+        """Renders an example text with the selected font and resets the bitmap widget"""
+        env = os.environ.copy()
+        driver = UserSettings.Get(group='display', key='driver', subkey='type')
+        if driver == 'png':
+            env['GRASS_RENDER_IMMEDIATE'] = 'png'
+        else:
+            env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+        env['GRASS_RENDER_WIDTH'] = str(size[0])
+        env['GRASS_RENDER_HEIGHT'] = str(size[1])
+        env['GRASS_RENDER_FILE'] = self.tmp_file
+        ret = RunCommand('d.text', text=text, font=font, align='cc', at='50,50',
+                         size=80, color='black', env=env)
+        if ret == 0:
+            self.renderfont.SetBitmap(wx.Bitmap(self.tmp_file))
+        else:
+            self.renderfont.SetBitmap(wx.EmptyBitmapRGBA(size[0], size[1]))
+        try_remove(self.tmp_file)
