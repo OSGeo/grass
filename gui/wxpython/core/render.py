@@ -41,7 +41,7 @@ from grass.exceptions import CalledModuleError
 from core import utils
 from core.utils import _
 from core.ws import RenderWMSMgr
-from core.gcmd import GException, GError, RunCommand
+from core.gcmd import GException, GError, RunCommand, EncodeString
 from core.debug import Debug
 from core.settings import UserSettings
 from core.gthread import gThread
@@ -1408,9 +1408,9 @@ class Map(object):
 
         renderMgr = overlay.GetRenderMgr()
         Debug.msg(
-            1, "Map.AddOverlay(): cmd={}".format(
+            1, "Map.AddOverlay(): cmd={}".format(EncodeString(
                 overlay.GetCmd(
-                    string=True)))
+                    string=True))))
         if renderMgr:
             renderMgr.updateProgress.connect(self.renderMgr.ReportProgress)
         overlay.forceRender = render
