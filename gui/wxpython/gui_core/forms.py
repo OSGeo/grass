@@ -486,14 +486,23 @@ class TaskFrame(wx.Frame):
         # buttons
         btnsizer = wx.BoxSizer(orient = wx.HORIZONTAL)
         # cancel
-        self.btn_cancel = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
-        self.btn_cancel.SetToolTipString(_("Close this window without executing the command (Ctrl+Q)"))
-        btnsizer.Add(item = self.btn_cancel, proportion = 0, flag = wx.ALL | wx.ALIGN_CENTER, border = 10)
+        if sys.platform == 'darwin':
+            # stock id automatically adds ctrl-c shortcut to close dialog
+            self.btn_cancel = wx.Button(parent=self.panel, label=_("Close"))
+        else:
+            self.btn_cancel = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btn_cancel.SetToolTipString(
+            _("Close this window without executing the command (Ctrl+Q)"))
+        btnsizer.Add(
+            item=self.btn_cancel,
+            proportion=0,
+            flag=wx.ALL | wx.ALIGN_CENTER,
+            border=10)
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         # bind closing to ESC and CTRL+Q
         self.Bind(wx.EVT_MENU, self.OnCancel, id=wx.ID_CLOSE)
         accelTableList = [(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CLOSE)]
-        accelTableList = [(wx.ACCEL_CTRL, ord('Q'), wx.ID_CLOSE)]
+        accelTableList.append((wx.ACCEL_CTRL, ord('Q'), wx.ID_CLOSE))
         # TODO: bind Ctrl-t for tile windows here (trac #2004)
 
         if self.get_dcmd is not None: # A callback has been set up
@@ -526,7 +535,11 @@ class TaskFrame(wx.Frame):
             accelTableList.append((wx.ACCEL_CTRL, ord('R'), wx.ID_OK))
 
         # copy
-        self.btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
+        if sys.platform == 'darwin':
+            # stock id automatically adds ctrl-c shortcut to copy command
+            self.btn_clipboard = wx.Button(parent=self.panel, label=_("Copy"))
+        else:
+            self.btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
         self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard"))
         btnsizer.Add(item=self.btn_clipboard, proportion=0,
                          flag=wx.ALL | wx.ALIGN_CENTER,
