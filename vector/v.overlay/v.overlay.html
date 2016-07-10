@@ -97,6 +97,8 @@ d.mon wx0
 
 <h3>AND operator</h3>
 
+Clipping example (no attribute table is generated here):
+
 <div class="code"><pre>
 d.vect map=zipcodes_wake fill_color=0:128:0
 d.vect map=box fill_color=85:130:176
@@ -111,6 +113,8 @@ v.overlay with AND operator (selected polygons in grey color)
 
 
 <h3>OR operator</h3>
+
+Union example of areas:
 
 <div class="code"><pre>
 d.vect map=zipcodes_wake fill_color=0:128:0
@@ -127,6 +131,8 @@ v.overlay with OR operator (selected polygons in grey color)
 
 <h3>XOR operator</h3>
 
+Symmetrical difference example:
+
 <div class="code"><pre>
 d.vect map=zipcodes_wake fill_color=0:128:0
 d.vect map=box fill_color=85:130:176
@@ -141,6 +147,8 @@ v.overlay with XOR operator (selected polygons in grey color)
 
 
 <h3>NOT operator</h3>
+
+Difference example:
 
 <div class="code"><pre>
 d.vect map=zipcodes_wake fill_color=0:128:0
@@ -157,7 +165,7 @@ v.overlay with NOT operator (selected polygon in grey color)
 
 <h3>Overlay operations: AND, OR, NOT, XOR</h3>
 
-Examples based on North Carolina sample dataset:
+ZIP code examples, based on North Carolina sample dataset:
 
 <div class="code"><pre>
 # creation of simple dataset
