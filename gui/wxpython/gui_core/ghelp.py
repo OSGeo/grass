@@ -249,9 +249,9 @@ class AboutWindow(wx.Frame):
 
         # put text into a scrolling panel
         copyrightwin = ScrolledPanel(self.aboutNotebook)
-        copyrightwin.SetBackgroundColour('WHITE')
-        copyrighttxt = wx.StaticText(
-            copyrightwin, id=wx.ID_ANY, label=copytext)
+        copyrighttxt = wx.TextCtrl(
+            copyrightwin, id=wx.ID_ANY, value=copytext,
+        style=wx.TE_MULTILINE | wx.TE_READONLY)
         copyrightwin.SetAutoLayout(True)
         copyrightwin.sizer = wx.BoxSizer(wx.VERTICAL)
         copyrightwin.sizer.Add(item=copyrighttxt, proportion=1,
@@ -273,8 +273,9 @@ class AboutWindow(wx.Frame):
             license = _('%s file missing') % 'GPL.TXT'
         # put text into a scrolling panel
         licensewin = ScrolledPanel(self.aboutNotebook)
-        licensewin.SetBackgroundColour('WHITE')
-        licensetxt = wx.StaticText(licensewin, id=wx.ID_ANY, label=license)
+        licensetxt = wx.TextCtrl(
+            licensewin, id=wx.ID_ANY, value=license,
+        style=wx.TE_MULTILINE | wx.TE_READONLY)
         licensewin.SetAutoLayout(True)
         licensewin.sizer = wx.BoxSizer(wx.VERTICAL)
         licensewin.sizer.Add(item=licensetxt, proportion=1,
@@ -298,9 +299,9 @@ class AboutWindow(wx.Frame):
 
         # put text into a scrolling panel
         window = ScrolledPanel(self.aboutNotebook)
-        window.SetBackgroundColour('WHITE')
-        stat_text = wx.StaticText(
-            window, id=wx.ID_ANY, label=text)
+        stat_text = wx.TextCtrl(
+            window, id=wx.ID_ANY, value=text,
+        style=wx.TE_MULTILINE | wx.TE_READONLY)
         window.SetAutoLayout(True)
         window.sizer = wx.BoxSizer(wx.VERTICAL)
         window.sizer.Add(item=stat_text, proportion=1,
@@ -322,8 +323,9 @@ class AboutWindow(wx.Frame):
         else:
             authors = _('%s file missing') % 'AUTHORS'
         authorwin = ScrolledPanel(self.aboutNotebook)
-        authorwin.SetBackgroundColour('WHITE')
-        authortxt = wx.StaticText(authorwin, id=wx.ID_ANY, label=authors)
+        authortxt = wx.TextCtrl(
+            authorwin, id=wx.ID_ANY, value=authors,
+        style=wx.TE_MULTILINE | wx.TE_READONLY)
         authorwin.SetAutoLayout(True)
         authorwin.SetupScrolling()
         authorwin.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -374,7 +376,6 @@ class AboutWindow(wx.Frame):
             contribs = None
 
         contribwin = ScrolledPanel(self.aboutNotebook)
-        contribwin.SetBackgroundColour('WHITE')
         contribwin.SetAutoLayout(True)
         contribwin.SetupScrolling()
         contribwin.sizer = wx.BoxSizer(wx.VERTICAL)
