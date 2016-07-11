@@ -84,6 +84,48 @@ int create_isegs(struct globals *globals)
 	}
     }
 
+    if (globals->method == ORM_RG) {
+	/* renumber */
+	int i, *new_id, max_id;
+
+	G_debug(1, "Largest assigned ID: %d", globals->max_rid);
+
+	new_id = G_malloc((globals->max_rid + 1) * sizeof(int));
+	
+	for (i = 0; i <= globals->max_rid; i++)
+	    new_id[i] = 0;
+
+	for (row = 0; row < globals->nrows; row++) {
+	    for (col = 0; col < globals->ncols; col++) {
+		Segment_get(&globals->rid_seg, &rid, row, col);
+		if (!Rast_is_c_null_value(&rid))
+		    new_id[rid]++;
+	    }
+	}
+
+	max_id = 0;
+	for (i = 0; i <= globals->max_rid; i++) {
+	    if (new_id[i] > 0) {
+		max_id++;
+		new_id[i] = max_id;
+	    }
+	}
+	globals->max_rid = max_id;
+	G_debug(1, "Largest renumbered ID: %d", globals->max_rid);
+	
+	for (row = 0; row < globals->nrows; row++) {
+	    for (col = 0; col < globals->ncols; col++) {
+		Segment_get(&globals->rid_seg, &rid, row, col);
+		if (!Rast_is_c_null_value(&rid)) {
+		    rid = new_id[rid];
+		    Segment_put(&globals->rid_seg, &rid, row, col);
+		}
+	    }
+	}
+
+	G_free(new_id);
+    }
+
     return successflag;
 }
 

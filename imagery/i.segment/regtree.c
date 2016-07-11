@@ -77,6 +77,7 @@ struct RG_TREE *rgtree_create(int nbands, size_t rb_datasize)
 int rgtree_insert(struct RG_TREE *tree, struct reg_stats *data)
 {
     assert(tree && data);
+    assert(data->id > 0);
 
     if (tree->root == NULL) {
 	/* create a new root node for tree */

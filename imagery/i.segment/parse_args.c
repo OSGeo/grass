@@ -97,7 +97,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     endt->key = "iterations";
     endt->type = TYPE_INTEGER;
     endt->required = NO;
-    endt->answer = "20";
+    endt->answer = "50";
     endt->description = _("Maximum number of iterations");
     endt->guisection = _("Settings");
 
@@ -146,9 +146,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     else
 	G_fatal_error("Invalid output raster name");
 
-    /* Note: this threshold is scaled after we know more at the beginning of create_isegs() */
     globals->alpha = atof(threshold->answer);
-
     if (globals->alpha <= 0 || globals->alpha >= 1)
 	G_fatal_error(_("Threshold should be > 0 and < 1"));
 
@@ -241,6 +239,23 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     globals->nrows = Rast_window_rows();
     globals->ncols = Rast_window_cols();
 
+    if (sizeof(LARGEINT) < 8) {
+	int i;
+
+	LARGEINT intmax;
+
+	intmax = ((LARGEINT)1 << (sizeof(LARGEINT) * 8 - 2)) - 1;
+	intmax += ((LARGEINT)1 << (sizeof(LARGEINT) * 8 - 2));
+
+	globals->ncells = globals->ncols;
+	for (i = 1; i < globals->nrows; i++) {
+	    if (globals->ncols > intmax - globals->ncells)
+		G_fatal_error(_("Integer overflow: too many cells in current region"));
+
+	    globals->ncells += globals->ncols;
+	}
+    }
+
     /* debug help */
     if (outband->answer == NULL)
 	globals->out_band = NULL;
@@ -255,12 +270,13 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 	if (atoi(endt->answer) > 0)
 	    globals->end_t = atoi(endt->answer);
 	else {
-	    globals->end_t = 100;
-	    G_warning(_("Invalid number of iterations, 100 will be used"));
+	    globals->end_t = 50;
+	    G_warning(_("Invalid number of iterations, %d will be used"),
+	              globals->end_t);
 	}
     }
     else
-	globals->end_t = 1000;
+	globals->end_t = 50;
 
     if (mem->answer && atoi(mem->answer) > 10)
 	globals->mb = atoi(mem->answer);

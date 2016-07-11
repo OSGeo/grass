@@ -44,7 +44,13 @@ static int is_red(struct NB_NODE *);
 
 int cmp_ngbr(struct ngbr_stats *a, struct ngbr_stats *b)
 {
-    return (a->id - b->id);
+    if (a->id > 0 || b->id > 0)
+	return (a->id - b->id);
+
+    /* a->id == b->id == 0 */
+    if (a->row == b->row)
+	return (a->col - b->col);
+    return (a->row - b->row);
 }
 
 
@@ -417,7 +423,7 @@ static struct ngbr_stats *nbtree_next(struct NB_TRAV *trav)
 	return NULL;		/* finished traversing */
 }
 
-/* destroy the tree */
+/* clear the tree: remove all nodes */
 void nbtree_clear(struct NB_TREE *tree)
 {
     struct NB_NODE *it;
@@ -447,6 +453,15 @@ void nbtree_clear(struct NB_TREE *tree)
     tree->root = NULL;
 
     tree->count = 0;
+    
+    return;
+}
+
+/* destroy the tree */
+void nbtree_destroy(struct NB_TREE *tree)
+{
+    nbtree_clear(tree);
+    free(tree);
     
     return;
 }

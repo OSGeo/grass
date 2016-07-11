@@ -25,6 +25,15 @@
 #endif
 #define MIN(a,b) ( ((a) < (b)) ? (a) : (b) )
 
+struct idlist
+{
+    int *ids;
+    int nids, nalloc;
+    CELL cellmax;
+};
+
+static struct idlist idlist;
+
 /* internal functions */
 static int merge_regions(struct ngbr_stats *, struct reg_stats *, /* Ri */
                          struct ngbr_stats *, struct reg_stats *, /* Rk */
@@ -44,6 +53,61 @@ static int find_best_neighbor(struct ngbr_stats *, struct reg_stats *,
 			      struct globals *);
 static int calculate_reg_stats(int, int, struct reg_stats *, 
                          struct globals *);
+
+void init_free_ids(void)
+{
+    idlist.nalloc = 10;
+    idlist.nids = 0;
+    
+    idlist.ids = G_malloc(idlist.nalloc * sizeof(int));
+
+    idlist.cellmax = ((CELL)1 << (sizeof(CELL) * 8 - 2)) - 1;
+    idlist.cellmax += ((CELL)1 << (sizeof(CELL) * 8 - 2));
+
+    return;
+}
+
+void add_free_id(int id)
+{
+    if (id <= 0)
+	return;
+
+    if (idlist.nalloc <= idlist.nids) {
+	idlist.nalloc = idlist.nids + 10;
+	idlist.ids = G_realloc(idlist.ids, idlist.nalloc * sizeof(int));
+    }
+    idlist.ids[idlist.nids++] = id;
+
+    return;
+}
+
+int get_free_id(struct globals *globals)
+{
+    if (idlist.nids > 0) {
+	idlist.nids--;
+
+	return idlist.ids[idlist.nids];
+    }
+
+    if (globals->max_rid == idlist.cellmax)
+	G_fatal_error(_("Too many objects: integer overflow"));
+
+    globals->max_rid++;
+    
+    return globals->max_rid;
+}
+
+void free_free_ids(void)
+{
+    if (idlist.nalloc) {
+	G_free(idlist.ids);
+	idlist.ids = NULL;
+	idlist.nalloc = 0;
+	idlist.nids = 0;
+    }
+    
+    return;
+}
 
 /* function used by binary tree to compare items */
 static int compare_rc(const void *first, const void *second)
@@ -73,21 +137,39 @@ static int compare_ints(const void *first, const void *second)
 
 static int compare_double(double first, double second)
 {
-
-    /* standard comparison, gives good results */
     if (first < second)
 	return -1;
     return (first > second);
+}
 
-    /* fuzzy comparison, 
-     * can give weird results if EPSILON is too large or 
-     * if the formula is changed because this is operating at the 
-     * limit of double fp precision */
-    if (first < second && first + first * EPSILON < second)
-	    return -1;
-    if (first > second && first > second + second * EPSILON)
-	    return 1;
-    return 0;
+static int compare_sim_ngbrs(double simi, double simk, int candi, int candk,
+                             struct ngbr_stats *Ri, struct ngbr_stats *Rk)
+{
+    if (simi < simk)
+	return -1;
+
+    if (simi > simk)
+	return 1;
+
+    if (Rk->count == 0 || Ri->count < Rk->count)
+	return -1;
+    if (Ri->count > Rk->count)
+	return 1;
+
+    if (candi && !candk)
+	return -1;
+    
+    if (candk && !candi)
+	return 1;
+
+    if (Ri->row < Rk->row)
+	return -1;
+    if (Ri->row > Rk->row)
+	return 1;
+
+    if (Ri->col < Rk->col)
+	return -1;
+    return (Ri->col > Rk->col);
 }
 
 static int dump_Ri(struct ngbr_stats *Ri, struct reg_stats *Ri_rs, double *Ri_sim,
@@ -132,8 +214,15 @@ int region_growing(struct globals *globals)
     struct reg_stats Ri_rs, Rk_rs, Rk_bestn_rs;
     double *dp;
     struct NB_TREE *tmpnbtree;
+    CELL cellmax;
+    struct Cell_head cellhd;
 
     G_verbose_message("Running region growing algorithm");
+
+    cellmax = ((CELL)1 << (sizeof(CELL) * 8 - 2)) - 1;
+    cellmax += ((CELL)1 << (sizeof(CELL) * 8 - 2));
+
+    init_free_ids();
 
     /* init neighbor stats */
     Ri.mean = G_malloc(globals->datasize);
@@ -159,8 +248,10 @@ int region_growing(struct globals *globals)
     threshold = alpha2;
     G_debug(1, "Squared threshold: %g", threshold);
 
-    /* make the divisor a constant ? */
-    divisor = globals->nrows + globals->ncols;
+    Rast_get_cellhd(globals->Ref.file[0].name, globals->Ref.file[0].mapset, &cellhd);
+    divisor = cellhd.rows + cellhd.cols;
+
+    /* TODO: renumber seeds */
 
     while (t < globals->end_t && n_merges > 1) {
 
@@ -208,11 +299,6 @@ int region_growing(struct globals *globals)
 
 		/* get Ri's segment ID */
 		Segment_get(&globals->rid_seg, (void *)&Ri.id, Ri.row, Ri.col);
-		
-		if (Ri.id < 0)
-		    continue;
-		if (Ri.id == 0)
-		    G_fatal_error("Zero segment id at row %d, col %d", Ri.row, Ri.col);
 
 		/* find segment neighbors */
 		/* find Ri's best neighbor, clear candidate flag */
@@ -230,12 +316,18 @@ int region_growing(struct globals *globals)
 		Ri_nn = find_best_neighbor(&Ri, &Ri_rs, Ri_ngbrs,
 					   &Rk, &Rk_rs, &Ri_similarity,
 					   1, globals);
+
 		/* Rk is now complete */
 		G_debug(4, "Rk is now complete");
 
-		if (Rk.id == 0) {
+		if (Rk.id < 0) {
 		    /* this can only happen if the segment is surrounded by NULL data */
 		    G_debug(4, "Segment had no valid neighbors");
+		    continue;
+		}
+
+		if (compare_double(Ri_similarity, threshold) >= 0) {
+		    G_debug(4, "Best neighbor is not similar enough");
 		    continue;
 		}
 
@@ -264,16 +356,13 @@ int region_growing(struct globals *globals)
 
 		    pathflag = FALSE;
 		}
-		/* this is slow ??? */
-		if (/* t & */ 1) {
-		    if ((globals->nn < 8 && Rk.count <= 8) || 
-		        (globals->nn >= 8 && Rk.count <= globals->nn))
-		    candidates_only = FALSE;
-		}
 
 		while (pathflag) {
 		    pathflag = FALSE;
-		    
+
+		    if (Rk.count <= globals->nn || Rk.count <= globals->min_segment_size)
+			candidates_only = FALSE;
+
 		    /* optional check if Rk is candidate
 		     * to prevent backwards merging */
 		    if (candidates_only && 
@@ -331,11 +420,13 @@ int region_growing(struct globals *globals)
 			    Ri_nn -= Ri_ngbrs->count;
 			    Ri_nn += (Rk_nn - Rk_ngbrs->count);
 			    globals->ns.id = Rk.id;
+			    globals->ns.row = Rk.row;
+			    globals->ns.col = Rk.col;
 			    nbtree_remove(Ri_ngbrs, &(globals->ns));
 
 			    nbtree_init_trav(&travngbr, Rk_ngbrs);
 			    while ((next = nbtree_traverse(&travngbr))) {
-				if (!nbtree_find(Ri_ngbrs, next) && next->id != Ri.id)
+				if (!nbtree_find(Ri_ngbrs, next) && cmp_ngbr(next, &Ri) != 0)
 				    nbtree_insert(Ri_ngbrs, next);
 			    }
 			    nbtree_clear(Rk_ngbrs);
@@ -358,14 +449,14 @@ int region_growing(struct globals *globals)
 			    search_neighbors(&Ri, &Ri_rs, Ri_ngbrs, &Ri_similarity,
 					     &Rk, &Rk_rs, globals);
 
-			    if (Rk.id != 0 && Ri_nn > 0 && 
+			    if (Rk.id >= 0 && Ri_nn > 0 &&
 			        compare_double(Ri_similarity, threshold) == -1) {
 
 				pathflag = TRUE;
 				/* candidates_only:
-				 * FALSE: less passes, takes a bit longer, but less memory
-				 * TRUE: more passes, is a bit faster */
-				candidates_only = FALSE;
+				 * FALSE: less passes, slower, but less memory
+				 * TRUE: more passes but faster */
+				candidates_only = TRUE;
 			    }
 			    /* else end of Ri -> Rk chain since we merged Ri and Rk
 			     * go to next row, col */
@@ -381,16 +472,16 @@ int region_growing(struct globals *globals)
 			    if (Rk_nn < 2)
 				pathflag = FALSE;
 
-			    if (Rk.id < 1)
+			    if (Rk.id < 0)
 				pathflag = FALSE;
 
-			    if (Rk_bestn.id == 0) {
-				G_debug(4, "Rk's best neighour is zero");
+			    if (Rk_bestn.id < 0) {
+				G_debug(4, "Rk's best neighour is negative");
 				pathflag = FALSE;
 			    }
 
 			    if (pathflag) {
-				
+
 				/* clear candidate flag for Rk */
 				if (FLAG_GET(globals->candidate_flag, Rk.row, Rk.col)) {
 				    set_candidate_flag(&Rk, FALSE, globals);
@@ -409,7 +500,7 @@ int region_growing(struct globals *globals)
 
 				Ri_rs.id = Rk_rs.id;
 				Rk_rs.id = Rk_bestn_rs.id;
-				Rk_bestn_rs.id = 0;
+				Rk_bestn_rs.id = -1;
 				Ri_rs.count = Rk_rs.count;
 				Rk_rs.count = Rk_bestn_rs.count;
 				Rk_bestn_rs.count = 0;
@@ -446,6 +537,25 @@ int region_growing(struct globals *globals)
     else
 	G_message(_("Segmentation converged after %d iterations"), t);
 
+    /* assign region IDs to remaining 0 IDs */
+    G_message(_("Assigning region IDs to remaining single-cell regions..."));
+    for (row = globals->row_min; row < globals->row_max; row++) {
+	G_percent(row - globals->row_min,
+		  globals->row_max - globals->row_min, 4);
+	for (col = globals->col_min; col < globals->col_max; col++) {
+	    if (!(FLAG_GET(globals->null_flag, row, col))) {
+		/* get segment id */
+		Segment_get(&globals->rid_seg, (void *) &Ri.id, row, col);
+		if (Ri.id == 0) {
+		    Ri.id = get_free_id(globals);
+		    Segment_put(&globals->rid_seg, (void *) &Ri.id, row, col);
+		}
+	    }
+	}
+    }
+    G_percent(1, 1, 1);
+
+    free_free_ids();
 
     /* ****************************************************************************************** */
     /* final pass, ignore threshold and force a merge for small segments with their best neighbor */
@@ -518,7 +628,7 @@ int region_growing(struct globals *globals)
 		    Ri_nn = 0;
 		    Ri_similarity = 2;
 		    
-		    Rk.id = 0;
+		    Rk.id = -1;
 
 		    if (do_merge) {
 
@@ -530,7 +640,7 @@ int region_growing(struct globals *globals)
 		    }
 		    do_merge = 0;
 
-		    if (Rk.id != 0) {
+		    if (Rk.id >= 0) {
 			/* merge Ri with Rk */
 			/* do not clear candidate flag for Rk */
 			merge_regions(&Ri, &Ri_rs, &Rk, &Rk_rs, 0, globals);
@@ -547,7 +657,7 @@ int region_growing(struct globals *globals)
 	/* finished one pass for processing candidate pixels */
 	G_verbose_message("%d merges", n_merges);
     }
-    
+
     /* free neighbor stats */
     G_free(Ri.mean);
     G_free(Rk.mean);
@@ -585,15 +695,14 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
     int neighbors[8][2];
     struct RB_TREE *no_check_tree;	/* cells already checked */
     struct reg_stats *rs_found;
+    int candk, candtmp;
 
     G_debug(4, "find_best_neighbor()");
 
     if (Ri->id != Ri_rs->id)
 	G_fatal_error("Ri = %d but Ri_rs = %d", Ri->id, Ri_rs->id);
-    if (Ri->id <= 0)
+    if (Ri->id < 0)
 	G_fatal_error("Ri is %d", Ri->id);
-    if (Ri_rs->id <= 0)
-	G_fatal_error("Ri_rs is %d", Ri_rs->id);
 
     /* dynamics of the region growing algorithm
      * some regions are growing fast, often surrounded by many small regions
@@ -609,8 +718,9 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
     nbtree_clear(Ri_ngbrs);
     n_ngbrs = 0;
     /* TODO: add size of largest region to reg_tree, use this as min */
-    Rk->count = globals->ncells + 1;
-    Rk->id = Rk_rs->id = 0;
+    Rk->count = Rk_rs->count = 0;
+    Rk->id = Rk_rs->id = -1;
+    candk = 0;
 
     /* go through segment, spreading outwards from head */
     rclist_init(&rilist);
@@ -659,7 +769,7 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
 				    (void *) &(globals->ns.id),
 				    ngbr_rc.row, ngbr_rc.col);
 
-			if (globals->ns.id == Ri->id) {
+			if (Ri->id > 0 && globals->ns.id == Ri->id) {
 
 			    /* want to check this neighbor's neighbors */
 			    rclist_add(&rilist, ngbr_rc.row, ngbr_rc.col);
@@ -684,10 +794,13 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
 				/* globals->ns is now complete */
 
 				tempsim = (globals->calculate_similarity)(Ri, &globals->ns, globals);
+				candtmp = (FLAG_GET(globals->candidate_flag, ngbr_rc.row, ngbr_rc.col)) != 0;
 
-				cmp = compare_double(tempsim, *sim);
+				cmp = compare_sim_ngbrs(tempsim, *sim, candtmp, candk, &globals->ns, Rk);
+
 				if (cmp == -1) {
 				    *sim = tempsim;
+				    candk = candtmp;
 				    /* copy temp Rk to Rk */
 				    Rk->row = ngbr_rc.row;
 				    Rk->col = ngbr_rc.col;
@@ -704,27 +817,6 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
 				    memcpy(Rk_rs->sum, rs_found->sum,
 				           globals->datasize);
 				}
-				else if (cmp == 0) {
-				    /* resolve ties: prefer smaller regions */
-
-				    if (Rk->count > globals->ns.count) {
-					/* copy temp Rk to Rk */
-					Rk->row = ngbr_rc.row;
-					Rk->col = ngbr_rc.col;
-
-					Rk->id = rs_found->id;
-					Rk->count = rs_found->count;
-					memcpy(Rk->mean, rs_found->mean,
-					       globals->datasize);
-
-					Rk_rs->id = Rk->id;
-					Rk_rs->count = Rk->count;
-					memcpy(Rk_rs->mean, rs_found->mean,
-					       globals->datasize);
-					memcpy(Rk_rs->sum, rs_found->sum,
-					       globals->datasize);
-				    }
-				}
 
 				n_ngbrs++;
 				nbtree_insert(Ri_ngbrs, &globals->ns);
@@ -738,10 +830,12 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
 
     /* clean up */
     rbtree_destroy(no_check_tree);
+    rclist_destroy(&rilist);
 
     return n_ngbrs;
 }
 
+#ifdef _OR_SHAPE_
 double calculate_shape(struct reg_stats *rsi, struct reg_stats *rsk,
                        int nshared, struct globals *globals)
 {
@@ -817,7 +911,7 @@ double calculate_shape(struct reg_stats *rsi, struct reg_stats *rsk,
 
     return globals->smooth_weight * smooth + (1 - globals->smooth_weight) * compact;
 }
-
+#endif
 
 static int search_neighbors(struct ngbr_stats *Ri,
 			    struct reg_stats *Ri_rs,
@@ -830,7 +924,7 @@ static int search_neighbors(struct ngbr_stats *Ri,
     double tempsim, *dp;
     struct NB_TRAV travngbr;
     struct ngbr_stats *next;
-    int cmp;
+    int cmp, candk, candtmp;
 
     G_debug(4, "search_neighbors");
 
@@ -842,36 +936,29 @@ static int search_neighbors(struct ngbr_stats *Ri,
 	G_fatal_error("Ri_rs is %d", Ri_rs->id);
 
     nbtree_init_trav(&travngbr, Ri_ngbrs);
-    Rk->count = globals->ncells + 1;
-    Rk->id = Rk_rs->id = 0;
+    Rk->count = 0;
+    Rk->id = Rk_rs->id = -1;
+    candk = 0;
 
     while ((next = nbtree_traverse(&travngbr))) {
 	tempsim = (globals->calculate_similarity)(Ri, next, globals);
+	candtmp = (FLAG_GET(globals->candidate_flag, next->row, next->col)) != 0;
 
-	cmp = compare_double(tempsim, *sim);
+	cmp = compare_sim_ngbrs(tempsim, *sim, candtmp, candk, next, Rk);
+
 	if (cmp == -1) {
 	    *sim = tempsim;
+	    candk = candtmp;
 
 	    dp = Rk->mean;
 	    *Rk = *next;
 	    Rk->mean = dp;
 	    memcpy(Rk->mean, next->mean, globals->datasize);
 	}
-	else if (cmp == 0) {
-	    /* resolve ties, prefer smaller regions */
-	    G_debug(4, "resolve ties");
-
-	    if (Rk->count > next->count) {
-		dp = Rk->mean;
-		*Rk = *next;
-		Rk->mean = dp;
-		memcpy(Rk->mean, next->mean, globals->datasize);
-	    }
-	}
     }
     Rk_rs->id = Rk->id;
 
-    if (Rk->id != 0) {
+    if (Rk->id >= 0) {
 	fetch_reg_stats(Rk->row, Rk->col, Rk_rs, globals);
     }
 
@@ -897,6 +984,10 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
     
     if (rid != rs->id) {
 	G_fatal_error(_("Region ids are different"));
+    }
+
+    if (rs->id < 1) {
+	G_fatal_error(_("Region id %d is invalid"), rs->id);
     }
 
     if (rs->count == 1) {
@@ -1032,9 +1123,10 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
     G_debug(4, "merge_regions");
 
     /* Ri ID must always be positive */
-    if (Ri_rs->id < 1)
-	G_fatal_error("Ri id is not positive: %d", Ri_rs->id);
-    /* if Rk ID is negative (no seed), Rk count must be 1  */
+    if (Ri_rs->id < 1 && Ri_rs->count > 1)
+	G_fatal_error("Ri id is not positive: %d, but count is > 1: %d",
+	              Ri_rs->id, Ri_rs->count);
+    /* if Rk ID is zero (no seed), Rk count must be 1  */
     if (Rk_rs->id < 1 && Rk_rs->count > 1)
 	G_fatal_error("Rk id is not positive: %d, but count is > 1: %d",
 	              Rk_rs->id, Rk_rs->count);
@@ -1058,6 +1150,12 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
     } while (n--);
 
     if (Ri->count >= Rk->count) {
+	
+	if (Ri->id == 0) {
+	    Ri->id = get_free_id(globals);
+	    Ri_rs->id = Ri->id;
+	    Segment_put(&globals->rid_seg, (void *) &Ri->id, Ri->row, Ri->col);
+	}
 
 	if (Rk->count >= globals->min_reg_size) {
 	    if (rgtree_find(globals->reg_tree, Rk_rs) == NULL)
@@ -1065,6 +1163,7 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 	    /* remove from tree */
 	    rgtree_remove(globals->reg_tree, Rk_rs);
 	}
+	add_free_id(Rk->id);
     }
     else {
 
@@ -1074,6 +1173,7 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 	    /* remove from tree */
 	    rgtree_remove(globals->reg_tree, Ri_rs);
 	}
+	add_free_id(Ri->id);
 
 	/* magic switch */
 	Ri_rs->id = Rk->id;
@@ -1093,7 +1193,19 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
     Ri->count = Ri_rs->count;
     memcpy(Ri->mean, Ri_rs->mean, globals->datasize);
 
-    if (Ri->id == Ri_rs->id) {
+    if (Rk->id == 0) {
+	/* the actual merge: change region id */
+	Segment_put(&globals->rid_seg, (void *) &Ri->id, Rk->row, Rk->col);
+
+	if (do_cand) {
+	    if (FLAG_GET(globals->candidate_flag, Rk->row, Rk->col)) {
+		/* clear candidate flag */
+		FLAG_UNSET(globals->candidate_flag, Rk->row, Rk->col);
+		globals->candidate_count--;
+	    }
+	}
+    }
+    else if (Ri->id == Ri_rs->id) {
 	/* Ri is already updated, including candidate flags
 	 * need to clear candidate flag for Rk and set new id */
 	 
@@ -1111,7 +1223,8 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 	}
 
 	rclist_init(&rlist);
-	rclist_add(&rlist, Rk->row, Rk->col);
+	if (Rk->count > 1)
+	    rclist_add(&rlist, Rk->row, Rk->col);
 
 	while (rclist_drop(&rlist, &next)) {
 
@@ -1137,9 +1250,9 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 		    if (!(FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col))) {
 
 			Segment_get(&globals->rid_seg, (void *) &R_id,
-			            ngbr_rc.row, ngbr_rc.col);
+				    ngbr_rc.row, ngbr_rc.col);
 
-			if (R_id == Rk->id) {
+			if (Rk->id > 0 && R_id == Rk->id) {
 			    /* the actual merge: change region id */
 			    Segment_put(&globals->rid_seg, (void *) &Ri->id, ngbr_rc.row, ngbr_rc.col);
 
@@ -1166,7 +1279,8 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 	Segment_put(&globals->rid_seg, (void *) &Rk->id, Ri->row, Ri->col);
 
 	rclist_init(&rlist);
-	rclist_add(&rlist, Ri->row, Ri->col);
+	if (Ri->count > 1)
+	    rclist_add(&rlist, Ri->row, Ri->col);
 
 	while (rclist_drop(&rlist, &next)) {
 
@@ -1188,7 +1302,7 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 
 			Segment_get(&globals->rid_seg, (void *) &R_id, ngbr_rc.row, ngbr_rc.col);
 
-			if (R_id == Ri->id) {
+			if (Ri->id > 0 && R_id == Ri->id) {
 			    /* the actual merge: change region id */
 			    Segment_put(&globals->rid_seg, (void *) &Rk->id, ngbr_rc.row, ngbr_rc.col);
 
@@ -1205,12 +1319,9 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 	if (Ri->id != Rk->id)
 	    G_fatal_error("Ri ID should be set to Rk ID");
     }
-    
-    if (Rk->id > 0)
-	globals->n_regions--;
 
     /* disable Rk */
-    Rk->id = Rk_rs->id = 0;
+    Rk->id = Rk_rs->id = -1;
     Rk->count = Rk_rs->count = 0;
     
     /* update Ri */
@@ -1232,13 +1343,10 @@ static int set_candidate_flag(struct ngbr_stats *head, int value, struct globals
 
     G_debug(4, "set_candidate_flag");
 
-    if (!(FLAG_GET(globals->candidate_flag, head->row, head->col)) != value) {
+    if ((!(FLAG_GET(globals->candidate_flag, head->row, head->col))) != value) {
 	G_warning(_("Candidate flag is already %s"), value ? _("set") : _("unset"));
 	return FALSE;
     }
-
-    rclist_init(&rlist);
-    rclist_add(&rlist, head->row, head->col);
 
     /* (un)set candidate flag */
     if (value == TRUE) {
@@ -1249,6 +1357,12 @@ static int set_candidate_flag(struct ngbr_stats *head, int value, struct globals
 	FLAG_UNSET(globals->candidate_flag, head->row, head->col);
 	globals->candidate_count--;
     }
+    
+    if (head->id == 0)
+	return TRUE;
+
+    rclist_init(&rlist);
+    rclist_add(&rlist, head->row, head->col);
 
     while (rclist_drop(&rlist, &next)) {
 
@@ -1267,7 +1381,7 @@ static int set_candidate_flag(struct ngbr_stats *head, int value, struct globals
 
 		if (!(FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col))) {
 
-		    if (!(FLAG_GET(globals->candidate_flag, ngbr_rc.row, ngbr_rc.col)) == value) {
+		    if ((!(FLAG_GET(globals->candidate_flag, ngbr_rc.row, ngbr_rc.col))) == value) {
 
 			Segment_get(&globals->rid_seg, (void *) &R_id, ngbr_rc.row, ngbr_rc.col);
 
@@ -1290,6 +1404,7 @@ static int set_candidate_flag(struct ngbr_stats *head, int value, struct globals
 	    }
 	} while (n--);
     }
+    rclist_destroy(&rlist);
 
     return TRUE;
 }
@@ -1298,11 +1413,11 @@ int fetch_reg_stats(int row, int col, struct reg_stats *rs,
                            struct globals *globals)
 {
     struct reg_stats *rs_found;
-    
-    if (rs->id <= 0)
+
+    if (rs->id < 0)
 	G_fatal_error("fetch_reg_stats(): invalid region id %d", rs->id);
 
-    if ((rs_found = rgtree_find(globals->reg_tree, rs)) != NULL) {
+    if (rs->id > 0 && (rs_found = rgtree_find(globals->reg_tree, rs)) != NULL) {
 
 	memcpy(rs->mean, rs_found->mean, globals->datasize);
 	memcpy(rs->sum, rs_found->sum, globals->datasize);
@@ -1323,13 +1438,19 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
 
     G_debug(4, "calculate_reg_stats()");
 
-    if (rs->id <= 0)
+    if (rs->id < 0)
 	G_fatal_error("Invalid region id %d", rs->id);
 
     Segment_get(&globals->bands_seg, (void *)globals->bands_val,
 		row, col);
     rs->count = 1;
     memcpy(rs->sum, globals->bands_val, globals->datasize);
+
+    if (rs->id == 0) {
+	memcpy(rs->mean, rs->sum, globals->datasize);
+
+	return 1;
+    }
 
     if (globals->min_reg_size < 3)
 	ret = 1;
