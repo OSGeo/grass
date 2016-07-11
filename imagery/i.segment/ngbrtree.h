@@ -110,9 +110,11 @@ struct NB_TRAV
 /* tree functions */
 struct NB_TREE *nbtree_create(int, size_t);
 void nbtree_clear(struct NB_TREE *);
+void nbtree_destroy(struct NB_TREE *);
 int nbtree_insert(struct NB_TREE *, struct ngbr_stats *);
 int nbtree_remove(struct NB_TREE *, struct ngbr_stats *);
 struct ngbr_stats *nbtree_find(struct NB_TREE *, struct ngbr_stats *);
+int cmp_ngbr(struct ngbr_stats *, struct ngbr_stats *);
 
 /* tree traversal functions */
 int nbtree_init_trav(struct NB_TRAV *, struct NB_TREE *);

@@ -20,6 +20,7 @@
  *****************************************************************************/
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "iseg.h"
@@ -40,7 +41,7 @@ int main(int argc, char *argv[])
 	_("Identifies segments (objects) from imagery data.");
 
     parse_args(argc, argv, &globals);
-	
+
     G_debug(1, "Main: starting open_files()");
     if (open_files(&globals) != TRUE)
 	G_fatal_error(_("Error in reading data"));
@@ -50,13 +51,23 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Error in creating segments"));
 
     G_debug(1, "Main: starting write_output()");
-    if (write_output(&globals) != TRUE)
-	G_fatal_error(_("Error in writing data"));
+    if (write_ids(&globals) != TRUE)
+	G_fatal_error(_("Error in writing IDs"));
+
+    if (globals.method == ORM_RG && globals.out_band) {
+	if (write_gof_rg(&globals) != TRUE)
+	    G_fatal_error(_("Error in writing goodness of fit"));
+    }
+
+    if (globals.method == ORM_MS) {
+	if (write_bands_ms(&globals) != TRUE)
+	    G_fatal_error(_("Error in writing new band values"));
+    }
 
     G_debug(1, "Main: starting close_files()");
     close_files(&globals);
 
-    G_done_msg(_("Number of segments created: %d"), globals.n_regions);
+    G_done_msg(_("Number of segments created: %d"), globals.max_rid);
 
     exit(EXIT_SUCCESS);
 }
