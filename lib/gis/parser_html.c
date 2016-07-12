@@ -256,9 +256,13 @@ void G__usage_html(void)
                             else if (strcmp(opt->gisprompt,
                                             "old,barscale,barscale") == 0)
                                 thumbnails = "barscales";
-                            
+                            else if (strcmp(opt->gisprompt,
+                                            "old,northarrow,northarrow") == 0)
+                                thumbnails = "northarrows";
+
                             if (thumbnails)
-                                fprintf(stdout, "<img width=\"80\" height=\"12\" "
+                                fprintf(stdout, "<img height=\"12\" "
+                                        "style=\"max-width: 80;\""
                                         "src=\"%s/%s.png\" alt=\"%s\"> ",
                                         thumbnails, opt->opts[i], opt->opts[i]);
                         }
