@@ -118,6 +118,7 @@ int main(int argc, char *argv[])
     struct Option *filter_opt, *class_opt;
     struct Option *base_raster_opt;
     struct Flag *base_rast_res_flag;
+    struct Flag *only_valid_flag;
 
     G_gisinit(argv[0]);
 
@@ -211,10 +212,22 @@ int main(int argc, char *argv[])
     base_rast_res_flag->description =
         _("Use base raster actual resolution instead of computational region");
 
+    only_valid_flag = G_define_flag();
+    only_valid_flag->key = 'v';
+    only_valid_flag->label = _("Use only valid points");
+    only_valid_flag->description =
+        _("Points invalid according to APSRS LAS specification will be"
+          " filtered out");
+    only_valid_flag->guisection = _("Selection");
+
     G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    int only_valid = FALSE;
+    if (only_valid_flag->answer)
+        only_valid = TRUE;
 
     LASReaderH LAS_reader;
 
@@ -332,11 +345,17 @@ int main(int argc, char *argv[])
     long unsigned in_nulls = 0; /* or outside */
     long unsigned n_return_filtered = 0;
     long unsigned n_class_filtered = 0;
+    long unsigned n_invalid = 0;
 
     while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
-        if (!LASPoint_IsValid(LAS_point))
-            continue;
-
+        /* We always count them and report because r.in.lidar behavior
+         * changed in between 7.0 and 7.2 from undefined (but skipping
+         * invalid points) to filtering them out only when requested. */
+        if (!LASPoint_IsValid(LAS_point)) {
+            n_invalid++;
+            if (only_valid)
+                continue;
+        }
         if (use_return_filter) {
             int return_n = LASPoint_GetReturnNumber(LAS_point);
             int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
@@ -397,10 +416,16 @@ int main(int argc, char *argv[])
              outside + in_nulls);
     else
         G_message("Number of points outside: %lu", outside);
+    if (n_invalid && only_valid)
+        G_message(_("%lu input points were not valid and filtered out"),
+                  n_invalid);
     if (n_return_filtered)
         G_message(_("%lu input points were filtered out by return number"), n_return_filtered);
     if (n_class_filtered)
         G_message(_("%lu input points were filtered out by class number"), n_class_filtered);
+    if (n_invalid && !only_valid)
+        G_message(_("%lu input points were not valid, use -%c flag to filter"
+                    " them out"), n_invalid, only_valid_flag->key);
 
     Rast3d_close(binning.prop_sum_raster);
     Rast3d_close(binning.prop_count_raster);
