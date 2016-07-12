@@ -2076,6 +2076,9 @@ class CmdPanel(wx.Panel):
         pLocation = None
         pMapset = None
         for p in self.task.params:
+            if self.task.blackList['enabled'] and self.task.get_name() in self.task.blackList['items'] and \
+               p.get('name', '') in self.task.blackList['items'][self.task.get_name()]['params']:
+                continue
             guidep = p.get('guidependency', '')
 
             if guidep:

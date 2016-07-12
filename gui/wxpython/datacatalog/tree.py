@@ -30,6 +30,7 @@ from gui_core.dialogs import TextEntryDialog
 from core.giface import StandaloneGrassInterface
 from core.treemodel import TreeModel, DictNode
 from gui_core.treeview import TreeView
+from datacatalog.dialogs import CatalogReprojectionDialog
 
 from grass.pydispatch.signal import Signal
 
@@ -97,25 +98,11 @@ def cleanUpTree(model):
     for node in reversed(nodesToRemove):
         model.RemoveNode(node)
 
-def getEnvironment(gisdbase, location, mapset):
-    """Creates environment to be passed in run_command for example.
-    Returns tuple with temporary file path and the environment. The user
-    of this function is responsile for deleting the file."""
-    tmp_gisrc_file = gscript.tempfile()
-    with open(tmp_gisrc_file, 'w') as f:
-        f.write('MAPSET: {mapset}\n'.format(mapset=mapset))
-        f.write('GISDBASE: {g}\n'.format(g=gisdbase))
-        f.write('LOCATION_NAME: {l}\n'.format(l=location))
-        f.write('GUI: text\n')
-    env = os.environ.copy()
-    env['GISRC'] = tmp_gisrc_file
-    return tmp_gisrc_file, env
-
 
 def getLocationTree(gisdbase, location, queue, mapsets=None):
     """Creates dictionary with mapsets, elements, layers for given location.
     Returns tuple with the dictionary and error (or None)"""
-    tmp_gisrc_file, env = getEnvironment(gisdbase, location, 'PERMANENT')
+    tmp_gisrc_file, env = gscript.create_environment(gisdbase, location, 'PERMANENT')
     env['GRASS_SKIP_MAPSET_OWNER_CHECK'] = '1'
 
     maps_dict = {}
@@ -176,7 +163,7 @@ def map_exists(name, element, env, mapset=None):
 
     :param name: name of the map
     :param element: data type ('raster', 'raster_3d', and 'vector')
-    :param env environment created by function getEnvironment
+    :param env environment created by function gscript.create_environment
     """
     if not mapset:
         mapset = gscript.run_command('g.mapset', flags='p', env=env).strip()
@@ -591,7 +578,7 @@ class DataCatalogTree(LocationMapTree):
     def OnRenameMap(self, event):
         """Rename layer with dialog"""
         old_name = self.selected_layer.label
-        gisrc, env = getEnvironment(
+        gisrc, env = gscript.create_environment(
             gisenv()['GISDBASE'],
             self.selected_location.label, mapset=self.selected_mapset.label)
         new_name = self._getNewMapName(
@@ -624,7 +611,7 @@ class DataCatalogTree(LocationMapTree):
     def Rename(self, old, new):
         """Rename layer"""
         string = old + ',' + new
-        gisrc, env = getEnvironment(
+        gisrc, env = gscript.create_environment(
             gisenv()['GISDBASE'],
             self.selected_location.label, self.selected_mapset.label)
         label = _("Renaming map <{name}>...").format(name=string)
@@ -652,7 +639,7 @@ class DataCatalogTree(LocationMapTree):
             GMessage(_("No map selected for copying."), parent=self)
             return
         if self.selected_location == self.copy_location:
-            gisrc, env = getEnvironment(
+            gisrc, env = gscript.create_environment(
                 gisenv()['GISDBASE'], self.selected_location.label, mapset=self.selected_mapset.label)
             new_name = self._getNewMapName(
                 _('New name'),
@@ -725,9 +712,15 @@ class DataCatalogTree(LocationMapTree):
                     message=_("g.copy completed").format(cmd=cmd))
             gscript.try_remove(gisrc)
         else:
-            GError(
-                _("Failed to copy map: action is allowed only within the same location."),
-                parent=self)
+            if self.copy_type.label == 'raster_3d':
+                 GError(_("Reprojection is not implemented for 3D rasters"), parent=self)
+                 return
+            gisdbase = gisenv()['GISDBASE']
+            dlg = CatalogReprojectionDialog(self, self._giface, gisdbase, self.copy_location.label,
+                                            self.copy_mapset.label, self.copy_layer.label,
+                                            gisdbase, self.selected_location.label, self.selected_mapset.label,
+                                            etype=self.copy_type.label)
+            dlg.Show()
 
         # expand selected mapset
         self.ExpandNode(self.selected_mapset, recursive=True)
@@ -752,7 +745,7 @@ class DataCatalogTree(LocationMapTree):
     def OnDeleteMap(self, event):
         """Delete layer or mapset"""
         name = self.selected_layer.label
-        gisrc, env = getEnvironment(
+        gisrc, env = gscript.create_environment(
             gisenv()['GISDBASE'],
             self.selected_location.label, self.selected_mapset.label)
         if self._confirmDialog(
@@ -894,30 +887,31 @@ class DataCatalogTree(LocationMapTree):
         dlg.Destroy()
         return res
 
-    def _popupMenuLayer(self):
-        """Create popup menu for layers"""
-        menu = wx.Menu()
-        genv = gisenv()
+    def _isCurrent(self, genv):
         if self._restricted:
             currentMapset = currentLocation = False
             if self.selected_location.label == genv['LOCATION_NAME']:
                 currentLocation = True
                 if self.selected_mapset.label == genv['MAPSET']:
                     currentMapset = True
+            return currentLocation, currentMapset
         else:
-            currentMapset = currentLocation = True
+            return True, True
+
+    def _popupMenuLayer(self):
+        """Create popup menu for layers"""
+        menu = wx.Menu()
+        genv = gisenv()
+        currentLocation, currentMapset = self._isCurrent(genv)
 
         item = wx.MenuItem(menu, wx.NewId(), _("&Copy"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyMap, item)
-        item.Enable(currentLocation)
 
         item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
-        if not(
-                currentLocation and self.copy_layer and self.selected_location ==
-                self.copy_location):
+        if not(currentLocation and self.copy_layer):
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.NewId(), _("&Delete"))
@@ -944,11 +938,12 @@ class DataCatalogTree(LocationMapTree):
         """Create popup menu for mapsets"""
         menu = wx.Menu()
         genv = gisenv()
+        currentLocation, currentMapset = self._isCurrent(genv)
 
         item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
-        if not (self.copy_layer and self.selected_location == self.copy_location):
+        if not(currentLocation and self.copy_layer):
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.NewId(), _("&Switch mapset"))
@@ -966,7 +961,9 @@ class DataCatalogTree(LocationMapTree):
         item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
-        if not (self.copy_layer and self.selected_location == self.copy_location):
+        genv = gisenv()
+        currentLocation, currentMapset = self._isCurrent(genv)
+        if not(currentLocation and self.copy_layer):
             item.Enable(False)
 
         self.PopupMenu(menu)
