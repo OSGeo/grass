@@ -25,14 +25,14 @@
 #include <grass/glocale.h>
 #include "options.h"
 
-int fg_color, bg_color;
-int do_background = TRUE;
+int fg_color, bg_color, text_color;
+//int do_background = TRUE;
 
 int main(int argc, char **argv)
 {
     struct GModule *module;
     struct Option *bg_color_opt, *fg_color_opt, *coords, *n_arrow, *fsize,
-        *width_opt, *rotation_opt, *lbl_opt;
+        *width_opt, *rotation_opt, *lbl_opt, *text_color_opt;
     struct Flag *no_text, *rotate_text, *rads;
     double east, north;
     double rotation;
@@ -99,15 +99,20 @@ int main(int argc, char **argv)
         _("Displayed letter on the top of arrow");
     lbl_opt->guisection = _("Text");
 
-    fg_color_opt = G_define_standard_option(G_OPT_C);
+    fg_color_opt = G_define_standard_option(G_OPT_CN);
     fg_color_opt->label = _("Line color");
     fg_color_opt->guisection = _("Colors");
 
     bg_color_opt = G_define_standard_option(G_OPT_CN);
     bg_color_opt->key = "fill_color";
     bg_color_opt->label = _("Fill color");
-    bg_color_opt->answer = _("black");
     bg_color_opt->guisection = _("Colors");
+
+    text_color_opt = G_define_standard_option(G_OPT_C);
+    text_color_opt->key = "text_color";
+    text_color_opt->label = _("Text color");
+    text_color_opt->answer = NULL;
+    text_color_opt->guisection = _("Colors");
 
     width_opt = G_define_option();
     width_opt->key = "width";
@@ -168,12 +173,21 @@ int main(int argc, char **argv)
         rotation += 2.0 * M_PI;
 
     /* Parse and select foreground color */
-    fg_color = D_parse_color(fg_color_opt->answer, 0);
+    fg_color = D_parse_color(fg_color_opt->answer, 1);
 
     /* Parse and select background color */
     bg_color = D_parse_color(bg_color_opt->answer, 1);
-    if (bg_color == 0)
-        do_background = FALSE;
+
+    /* Parse and select text color */
+    if (text_color_opt->answer)
+        text_color = D_parse_color(text_color_opt->answer, 0);
+    else if (strcmp(fg_color_opt->answer, "none") != 0)
+        text_color = D_parse_color(fg_color_opt->answer, 1);
+    else if (strcmp(bg_color_opt->answer, "none") != 0)
+        text_color = D_parse_color(bg_color_opt->answer, 1);
+    else
+        text_color = 0;
+
 
     line_width = atof(width_opt->answer);
     if (line_width < 0)
