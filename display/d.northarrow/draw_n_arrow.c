@@ -46,7 +46,7 @@ int draw_n_arrow(double east, double north, double rotation, char *lbl,
         if (rot_with_text)
             D_text_rotation(rotation * 180.0 / M_PI);
         D_get_text_box(lbl, &tt, &tb, &tl, &tr);
-        D_use_color(fg_color);
+        D_use_color(text_color);
 
         /* positions manually tuned */
         switch (n_arrow_num[0]) {
@@ -114,23 +114,21 @@ int draw_n_arrow(double east, double north, double rotation, char *lbl,
     fill_color = G_malloc(sizeof(RGBA_Color));
 
     if (D_color_number_to_RGB(fg_color, &R, &G, &B) == 0)
-        /* fall back to black on failure */
-        G_str_to_color(DEFAULT_FG_COLOR, &R, &G, &B);
+        line_color->a = RGBA_COLOR_TRANSPARENT;
+    else
+        line_color->a = RGBA_COLOR_OPAQUE;
     line_color->r = (unsigned char)R;
     line_color->g = (unsigned char)G;
     line_color->b = (unsigned char)B;
-    line_color->a = RGBA_COLOR_OPAQUE;
+
 
     if (D_color_number_to_RGB(bg_color, &R, &G, &B) == 0)
-        /* fall back to black on failure */
-        G_str_to_color(DEFAULT_FG_COLOR, &R, &G, &B);
+        fill_color->a = RGBA_COLOR_TRANSPARENT;
+    else
+        fill_color->a = RGBA_COLOR_OPAQUE;
     fill_color->r = (unsigned char)R;
     fill_color->g = (unsigned char)G;
     fill_color->b = (unsigned char)B;
-    fill_color->a = RGBA_COLOR_OPAQUE;
-
-    if (n_arrow_num[0] == '2' || n_arrow_num[0] == '9')
-        fill_color->a = RGBA_COLOR_TRANSPARENT;
 
     /* sizes manually tuned */
     switch (n_arrow_num[0]) {
