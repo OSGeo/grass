@@ -1570,6 +1570,21 @@ def legal_name(s):
     return True
 
 
+def create_environment(gisdbase, location, mapset):
+    """Creates environment to be passed in run_command for example.
+    Returns tuple with temporary file path and the environment. The user
+    of this function is responsile for deleting the file."""
+    tmp_gisrc_file = tempfile()
+    with open(tmp_gisrc_file, 'w') as f:
+        f.write('MAPSET: {mapset}\n'.format(mapset=mapset))
+        f.write('GISDBASE: {g}\n'.format(g=gisdbase))
+        f.write('LOCATION_NAME: {l}\n'.format(l=location))
+        f.write('GUI: text\n')
+    env = os.environ.copy()
+    env['GISRC'] = tmp_gisrc_file
+    return tmp_gisrc_file, env
+
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
