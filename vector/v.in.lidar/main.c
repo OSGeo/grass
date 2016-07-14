@@ -85,6 +85,7 @@ int main(int argc, char *argv[])
     struct Flag *nocats_flag;
     struct Flag *over_flag, *extend_flag, *no_import_flag;
     struct Flag *invert_mask_flag;
+    struct Flag *only_valid_flag;
     char buf[2000];
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
     struct Key_Value *proj_info, *proj_units;
@@ -285,6 +286,14 @@ int main(int argc, char *argv[])
     invert_mask_flag->description = _("Invert mask when selecting points");
     invert_mask_flag->guisection = _("Selection");
 
+    only_valid_flag = G_define_flag();
+    only_valid_flag->key = 'v';
+    only_valid_flag->label = _("Use only valid points");
+    only_valid_flag->description =
+        _("Points invalid according to APSRS LAS specification will be"
+          " filtered out");
+    only_valid_flag->guisection = _("Selection");
+
     extend_flag = G_define_flag();
     extend_flag->key = 'e';
     extend_flag->description =
@@ -372,6 +381,10 @@ int main(int argc, char *argv[])
 
 	exit(EXIT_SUCCESS);
     }
+
+    int only_valid = FALSE;
+    if (only_valid_flag->answer)
+        only_valid = TRUE;
 
     struct ReturnFilter return_filter_struct;
     return_filter_create_from_string(&return_filter_struct, filter_opt->answer);
@@ -598,11 +611,15 @@ int main(int argc, char *argv[])
 	double x, y, z;
 
 	G_percent(feature_count++, n_features, 1);	/* show something happens */
-	
-	if (!LASPoint_IsValid(LAS_point)) {
-	    not_valid++;
-	    continue;
-	}
+
+        /* We always count them and report because r.in.lidar behavior
+         * changed in between 7.0 and 7.2 from undefined (but skipping
+         * invalid points) to filtering them out only when requested. */
+        if (!LASPoint_IsValid(LAS_point)) {
+            not_valid++;
+            if (only_valid)
+                continue;
+        }
 
 	Vect_reset_line(Points);
 	Vect_reset_cats(Cats);
@@ -709,10 +726,18 @@ int main(int argc, char *argv[])
 	Vect_build(&Map);
     Vect_close(&Map);
 
+#ifdef HAVE_LONG_LONG_INT
+    unsigned long long not_valid_filtered = 0;
+#else
+    unsigned long not_valid_filtered = 0;
+#endif
+    if (only_valid)
+        not_valid_filtered = not_valid;
+
     /* can be easily determined only when iterated over all points */
     if (!count_decimation_control.limit_n && !cat_max_reached
             && points_imported != n_features
-            - not_valid - n_outside - n_filtered - n_class_filtered
+            - not_valid_filtered - n_outside - n_filtered - n_class_filtered
             - n_outside_mask - count_decimation_control.offset_n_counter
             - count_decimation_control.n_count_filtered - zrange_filtered)
         G_warning(_("The underlying libLAS library is at its limits."
@@ -728,8 +753,8 @@ int main(int argc, char *argv[])
     else {
         G_message(_("%llu points imported"), points_imported);
     }
-    if (not_valid)
-	G_message(_("%llu input points were not valid"), not_valid);
+    if (not_valid && only_valid)
+        G_message(_("%llu input points were not valid and filtered out"), not_valid);
     if (n_outside)
 	G_message(_("%llu input points were outside of the selected area"), n_outside);
     if (n_outside_mask)
@@ -753,8 +778,8 @@ int main(int argc, char *argv[])
                   count_decimation_control.limit_n);
     else
         G_message(_("%lu points imported"), points_imported);
-    if (not_valid)
-	G_message(_("%lu input points were not valid"), not_valid);
+    if (not_valid && only_valid)
+        G_message(_("%lu input points were not valid and filtered out"), not_valid);
     if (n_outside)
 	G_message(_("%lu input points were outside of the selected area"), n_outside);
     if (n_outside_mask)
@@ -775,6 +800,16 @@ int main(int argc, char *argv[])
 #endif
     if (count_decimation_control.limit_n)
         G_message(_("The rest of points was ignored"));
+
+#ifdef HAVE_LONG_LONG_INT
+    if (not_valid && !only_valid)
+        G_message(_("%llu input points were not valid, use -%c flag to filter"
+                    " them out"), not_valid, only_valid_flag->key);
+#else
+    if (not_valid && !only_valid)
+        G_message(_("%lu input points were not valid, use -%c flag to filter"
+                    " them out"), not_valid, only_valid_flag->key);
+#endif
 
     if (cat_max_reached)
         G_warning(_("Maximum number of categories reached (%d). Import ended prematurely."
