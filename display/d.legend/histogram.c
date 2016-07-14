@@ -232,27 +232,27 @@ double histogram(const char *map_name, int x0, int y0, int width,
 
                 if (horiz) {
                     if (flip)
-                        D_box_abs(x0 + width + y0_adjust + ((i - 1) * dy),
+                        D_box_abs(x0 + width + y0_adjust + ((i - 2) * dy),
                                   y0 - 1,
-                                  x0 + width + y0_adjust + 1 + (i * dy),
+                                  x0 + width + y0_adjust + 1 + ((i - 1) * dy),
                                   y0 - 1 - dx);
                     else
-                        D_box_abs(x0 + y0_adjust + ((i - 1) * dy),
+                        D_box_abs(x0 + y0_adjust + ((i - 2) * dy),
                                   y0 - 1,
-                                  x0 - 1 + y0_adjust + (i * dy), y0 - 1 - dx);
+                                  x0 - 1 + y0_adjust + ((i - 1) * dy), y0 - 1 - dx);
                 }
                 else {          /* vertical */
 
                     if (flip)
                         /* GRASS_EPSILON fudge around D_box_abs() weirdness + PNG driver */
                         D_box_abs(x0 - 1 - GRASS_EPSILON * 10,
-                                  y0 + height + y0_adjust + ((i - 1) * dy),
+                                  y0 + height + y0_adjust + ((i - 2) * dy),
                                   x0 - 1 - dx,
-                                  y0 + height + y0_adjust + 1 + (i * dy));
+                                  y0 + height + y0_adjust + 1 + ((i - 1) * dy));
                     else
                         D_box_abs(x0 - 1 - GRASS_EPSILON * 10,
-                                  y0 + y0_adjust + ((i - 1) * dy),
-                                  x0 - 1 - dx, y0 + y0_adjust - 1 + (i * dy));
+                                  y0 + y0_adjust + ((i - 2) * dy),
+                                  x0 - 1 - dx, y0 + y0_adjust - 1 + ((i - 1) * dy));
                 }
             }
         }

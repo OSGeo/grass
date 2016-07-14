@@ -460,7 +460,7 @@ int main(int argc, char **argv)
              cats, colors, X0, X1, Y0, Y1, flip, UserRange, UserRangeMin,
              UserRangeMax, catlist, catlistCount, use_catlist, ticksCount,
              fontsize, tit_fontsize, title, tick_values, t_step, colorb,
-             colorbg, opt_use, opt_at, opt_fontsize, opt_ticks, opt_tstep,
+             colorbg, opt_use, opt_at, opt_fontsize, opt_tstep,
              opt_range, histo, hidestr, log_scale, 0, digits);
 
     draw(map_name, maptype, color, thin, lines, steps, fp, label_indent,
@@ -468,7 +468,7 @@ int main(int argc, char **argv)
          colors, X0, X1, Y0, Y1, flip, UserRange, UserRangeMin, UserRangeMax,
          catlist, catlistCount, use_catlist, ticksCount, fontsize,
          tit_fontsize, title, tick_values, t_step, colorb, colorbg, opt_use,
-         opt_at, opt_fontsize, opt_ticks, opt_tstep, opt_range, histo,
+         opt_at, opt_fontsize, opt_tstep, opt_range, histo,
          hidestr, log_scale, 1, digits);
 
     D_close_driver();
