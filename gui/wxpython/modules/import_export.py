@@ -315,7 +315,7 @@ class ImportDialog(wx.Dialog):
 
         if differentProjLayers and '-o' not in self.getSettingsPageCmd():
 
-            dlg = RerojectionDialog(
+            dlg = ReprojectionDialog(
                 parent=self,
                 giface=self._giface,
                 data=differentProjLayers)
@@ -829,7 +829,7 @@ class DxfImportDialog(ImportDialog):
         return ['overwrite']
 
 
-class RerojectionDialog(wx.Dialog):
+class ReprojectionDialog(wx.Dialog):
     """ """
 
     def __init__(self, parent, giface, data,
