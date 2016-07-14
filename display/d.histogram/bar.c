@@ -308,7 +308,7 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 		sprintf(txt, "null");
 	    else if (is_fp) {
 		dmin = range_dmin + i * (range_dmax - range_dmin) / nsteps;
-		if ((range_dmax - range_dmin) <= 1.0)
+		if ((tic_every * (range_dmax - range_dmin) / nsteps) < 1.0)
 		    sprintf(txt, "%.2f", dmin / (double)tic_unit);
 		else
 		    sprintf(txt, "%d", (int)(dmin / (double)tic_unit));
