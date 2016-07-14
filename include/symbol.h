@@ -67,6 +67,8 @@ typedef struct
 typedef struct
 {
     double scale;		/* to get symbol of size 1, each vertex must be multiplied by this scale */
+    double yscale;		/* scale in x dimension */
+    double xscale;		/* scale in y dimension */
     int count, alloc;		/* numer of parts */
     SYMBPART **part;		/* objects ( parts ) */
 } SYMBOL;
