@@ -242,8 +242,8 @@ class LegendController(OverlayController):
         OverlayController.__init__(self, renderer, giface)
         self._name = 'legend'
         self._removeLabel = _("Remove legend")
-        # TODO: synchronize with d.legend?
-        self._defaultAt = 'at=5,50,7,10'
+        # default is in the center to avoid trimmed legend on the edge
+        self._defaultAt = 'at=5,50,47,50'
         self._cmd = ['d.legend', self._defaultAt]
 
     def GetPlacement(self, screensize):
@@ -256,8 +256,12 @@ class LegendController(OverlayController):
         for param in self._cmd:
             if not param.startswith('at'):
                 continue
-            b, t, l, r = [float(number) for number in param.split(
-                '=')[1].split(',')]  # pylint: disable-msg=W0612
+            # if the at= is the default, we will move the legend from the center to bottom left
+            if param == self._defaultAt:
+                b, t, l, r = 5, 50, 7, 10
+            else:
+                b, t, l, r = [float(number) for number in param.split(
+                    '=')[1].split(',')]  # pylint: disable-msg=W0612
             x = int((l / 100.) * screensize[0])
             y = int((1 - t / 100.) * screensize[1])
 
