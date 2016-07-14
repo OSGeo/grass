@@ -59,7 +59,7 @@ def main():
         if num_bound == 0:
             gscript.fatal(_("Input vector map contains no boundaries."))
 
-        gscript.exec_command("v.category", type='area', **options)
+        gscript.run_command("v.category", type='area', **options)
 
     sys.exit(0)
 
