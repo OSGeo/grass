@@ -20,11 +20,13 @@
 #define __LOCAL_PROTO_H__
 
 /* clump.c */
-CELL clump(int, int, int, int);
+CELL clump(int *, int, int, int);
 CELL clump_n(int *, char **, int, double, int, int, int);
 int print_time(long *);
 
-/* main.c */
-int main(int, char *[]);
+/* minsize.c */
+int merge_small_clumps(int *in_fd, int nin, DCELL *rng,
+                        int diag, int min_size, int *n_clumps,
+			int cfd, int out_fd);
 
 #endif /* __LOCAL_PROTO_H__ */

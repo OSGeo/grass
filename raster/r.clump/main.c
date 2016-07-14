@@ -19,6 +19,8 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <inttypes.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -34,6 +36,7 @@ int main(int argc, char *argv[])
     int *in_fd, out_fd;
     int i, n;
     double threshold;
+    int minsize;
     char title[512];
     char name[GNAME_MAX];
     char *OUTPUT;
@@ -42,6 +45,7 @@ int main(int argc, char *argv[])
     struct Option *opt_in;
     struct Option *opt_out;
     struct Option *opt_thresh;
+    struct Option *opt_minsize;
     struct Option *opt_title;
     struct Flag *flag_diag;
     struct Flag *flag_print;
@@ -78,6 +82,14 @@ int main(int argc, char *argv[])
     opt_thresh->label = _("Threshold to identify similar cells");
     opt_thresh->description = _("Valid range: 0 = identical to < 1 = maximal difference");
 
+    opt_minsize = G_define_option();
+    opt_minsize->key = "minsize";
+    opt_minsize->type = TYPE_INTEGER;
+    opt_minsize->required = NO;
+    opt_minsize->answer = "1";
+    opt_minsize->label = _("Minimum clump size in cells");
+    opt_minsize->description = _("Clumps smaller than minsize will be merged to form larger clumps");
+
     flag_diag = G_define_flag();
     flag_diag->key = 'd';
     flag_diag->label = _("Clump also diagonal cells");
@@ -94,10 +106,23 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+#if defined(int64_t)
+    G_message("have int64_t");
+#endif
+#if defined(_int64_t)
+    G_message("have _int64_t");
+#endif
+#if defined(__int64_t)
+    G_message("have __int64_t");
+#endif
+
+
     threshold = atof(opt_thresh->answer);
     if (threshold < 0 || threshold >= 1)
 	G_fatal_error(_("Valid range for option <%s> is 0 <= value < 1"),
 	              opt_thresh->key);
+
+    minsize = atoi(opt_minsize->answer);
 
     n = 0;
     while (opt_in->answers[n])
@@ -119,9 +144,10 @@ int main(int argc, char *argv[])
     }
 
     if (n == 1 && threshold == 0)
-	clump(in_fd[0], out_fd, flag_diag->answer, flag_print->answer);
+	clump(in_fd, out_fd, flag_diag->answer, minsize);
     else
-	clump_n(in_fd, opt_in->answers, n, threshold, out_fd, flag_diag->answer, flag_print->answer);
+	clump_n(in_fd, opt_in->answers, n, threshold, out_fd,
+	        flag_diag->answer, minsize);
 
     for (i = 0; i < n; i++)
 	Rast_close(in_fd[i]);
