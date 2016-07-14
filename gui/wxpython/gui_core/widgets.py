@@ -1594,16 +1594,9 @@ class NArrowsComboBox(PictureComboBox):
     """ComboBox with north arrows for d.barscale."""
 
     def _getPath(self, name):
-        path = os.path.join(os.getenv("GISBASE"), "gui", "images",
-                            'symbols', 'n_arrows')
-        try:
-            int(name[0])
-            return os.path.join(path, 'n_arrow{name}.png'.format(name=name))
-        except ValueError:
-            return os.path.join(path, '{name}.png'.format(name=name))
-
-    def OnMeasureItem(self, item):
-        return 32
+        return os.path.join(
+            os.getenv("GISBASE"),
+            "docs", "html", "northarrows", "%s.png" % name)
 
 
 class LayersList(GListCtrl, listmix.TextEditMixin):

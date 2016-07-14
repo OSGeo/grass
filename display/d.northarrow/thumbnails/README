@@ -1,0 +1,25 @@
+#How to generate new scale bar thumbnail
+#=======================================
+#Expects North Carolina dataset. The thumbnail height should be 24 px.
+#
+
+export GRASS_RENDER_IMMEDIATE=png
+export GRASS_RENDER_TRUECOLOR=TRUE
+export GRASS_RENDER_WIDTH=300
+export GRASS_RENDER_HEIGHT=300
+g.region raster=elevation
+
+#PREFIX=n_arrow_
+PREFIX=""
+
+for STYLE in 1a 1b 2 3 4 5 6 7a 7b 8a 8b 9 fancy_compass basic_compass arrow1 arrow2 arrow3 star
+do
+	echo ${STYLE}
+	export GRASS_RENDER_FILE=${PREFIX}${STYLE}.png
+	d.northarrow -t style=${STYLE} at=20,20
+	mogrify -trim ${PREFIX}${STYLE}.png
+	identify -format "%[fx:w]x%[fx:h]" ${PREFIX}${STYLE}.png
+	# first resize it to max size and then place it into a bigger rectangle
+	mogrify -resize 24x24 -background white -gravity Center -extent 24x24 ${PREFIX}${STYLE}.png
+	optipng -o5 ${PREFIX}${STYLE}.png ${PREFIX}${STYLE}.png --quiet
+done
