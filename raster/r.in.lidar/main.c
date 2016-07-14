@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
     int pass, npasses;
     unsigned long line, line_total;
     unsigned int counter;
+    unsigned long n_invalid;
     char buff[BUFFSIZE];
     double x, y, z;
     double intensity;
@@ -87,6 +88,7 @@ int main(int argc, char *argv[])
     struct Flag *intens_flag, *intens_import_flag;
     struct Flag *set_region_flag;
     struct Flag *base_rast_res_flag;
+    struct Flag *only_valid_flag;
 
     /* LAS */
     LASReaderH LAS_reader;
@@ -334,10 +336,23 @@ int main(int argc, char *argv[])
         _("For getting values from base raster, use its actual"
           " resolution instead of computational region resolution");
 
+    only_valid_flag = G_define_flag();
+    only_valid_flag->key = 'v';
+    only_valid_flag->label = _("Use only valid points");
+    only_valid_flag->description =
+        _("Points invalid according to APSRS LAS specification will be"
+          " filtered out");
+    only_valid_flag->guisection = _("Selection");
+
     G_option_exclusive(intens_flag, intens_import_flag, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    int only_valid = FALSE;
+    n_invalid = 0;
+    if (only_valid_flag->answer)
+        only_valid = TRUE;
 
     /* we could use rules but this gives more info and allows continuing */
     if (set_region_flag->answer && !(extents_flag->answer || res_opt->answer)) {
@@ -638,8 +653,13 @@ int main(int argc, char *argv[])
                     counter = 0;
                 }
 
+                /* We always count them and report because behavior
+                 * changed in between 7.0 and 7.2 from undefined (but skipping
+                 * invalid points) to filtering them out only when requested. */
                 if (!LASPoint_IsValid(LAS_point)) {
-                    continue;
+                    n_invalid++;
+                    if (only_valid)
+                        continue;
                 }
 
                 x = LASPoint_GetX(LAS_point);
@@ -767,6 +787,12 @@ int main(int argc, char *argv[])
     if (set_region_flag->answer)
         G_put_window(&region);
 
+    if (n_invalid && only_valid)
+        G_message(_("%lu input points were invalid and filtered out"),
+                  n_invalid);
+    if (n_invalid && !only_valid)
+        G_message(_("%lu input points were invalid, use -%c flag to filter"
+                    " them out"), n_invalid, only_valid_flag->key);
     if (infiles.num_items > 1) {
         sprintf(buff, _("Raster map <%s> created."
                         " %lu points from %d files found in region."),

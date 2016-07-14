@@ -112,9 +112,7 @@ int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents, int update,
     while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
         line++;
 
-        if (!LASPoint_IsValid(LAS_point)) {
-            continue;
-        }
+        /* we don't do any filtering here */
 
         x = LASPoint_GetX(LAS_point);
         y = LASPoint_GetY(LAS_point);
