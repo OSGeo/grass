@@ -60,7 +60,7 @@ def main():
 	if num_bound == 0:
 	    grass.fatal(_("Input vector map contains no boundaries."))
 
-	grass.exec_command("v.category", type = 'area', **options)
+	grass.run_command("v.category", type = 'area', **options)
 
     sys.exit(0)
 
