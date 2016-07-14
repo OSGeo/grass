@@ -29,16 +29,159 @@
 
 #define INCR 1024
 
-CELL clump(int in_fd, int out_fd, int diag, int print)
+static CELL do_renumber(int *in_fd, DCELL *rng, int nin,
+                        int diag, int minsize, 
+			int cfd, CELL label, CELL *index, int out_fd)
+{
+    int row, col, nrows, ncols;
+    int n;
+    CELL OLD, NEW;
+    CELL *temp_cell, *temp_clump;
+    CELL *cur_clump, *out_cell;
+    CELL *clumpid;
+    CELL cat;
+    int csize;
+
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
+
+    csize = ncols * sizeof(CELL);
+
+    /* generate a renumbering scheme */
+    G_message(_("Generating renumbering scheme..."));
+    G_debug(1, "%d initial labels", label);
+    /* allocate final clump ID */
+    clumpid = (CELL *) G_malloc((label + 1) * sizeof(CELL));
+    clumpid[0] = 0;
+    cat = 0;
+    G_percent(0, label, 1);
+    for (n = 1; n <= label; n++) {
+	G_percent(n, label, 1);
+	OLD = n;
+	NEW = index[n];
+	if (OLD != NEW) {
+	    clumpid[n] = 0;
+	    /* find valid clump ID */
+	    while (OLD != NEW) {
+		OLD = NEW;
+		NEW = index[OLD];
+	    }
+	    index[n] = NEW;
+	}
+	else
+	    /* set final clump id */
+	    clumpid[n] = ++cat;
+    }
+
+    /****************************************************
+     *                      PASS 2                      *
+     * apply renumbering scheme to initial clump labels *
+     ****************************************************/
+
+    G_message(_("Pass 2 of 2..."));
+
+    if (minsize > 1) {
+	int do_write;
+	off_t coffset;
+	CELL new_clump;
+
+	cur_clump = Rast_allocate_c_buf();
+
+	for (row = 0; row < nrows; row++) {
+
+	    G_percent(row, nrows, 2);
+
+	    coffset = (off_t)row * csize;
+	    lseek(cfd, coffset, SEEK_SET);
+	    if (read(cfd, cur_clump, csize) != csize)
+		G_fatal_error(_("Unable to read from temp file"));
+
+	    temp_clump = cur_clump;
+
+	    do_write = 0;
+	    for (col = 0; col < ncols; col++) {
+		new_clump = clumpid[index[*temp_clump]];
+		if (*temp_clump != new_clump) {
+		    *temp_clump = new_clump;
+		    do_write = 1;
+		}
+		temp_clump++;
+	    }
+	    if (do_write) {
+		lseek(cfd, coffset, SEEK_SET);
+		if (write(cfd, cur_clump, csize) != csize)
+		    G_fatal_error(_("Unable to write to temp file"));
+	    }
+	}
+	G_percent(1, 1, 1);
+
+	G_free(cur_clump);
+	G_free(index);
+	G_free(clumpid);
+
+	G_message(_("%d initial clumps"), cat);
+
+	return merge_small_clumps(in_fd, nin, rng,
+                        diag, minsize, &cat, 
+			cfd, out_fd);
+    }
+
+    if (out_fd < 0) {
+	fprintf(stdout, "clumps=%d\n", cat);
+	
+	return cat;
+    }
+
+    /* the input raster is no longer needed, 
+     * using instead the temp file with initial clump labels */
+
+    /* rewind temp file */
+    lseek(cfd, 0, SEEK_SET);
+
+    cur_clump = Rast_allocate_c_buf();
+    out_cell = Rast_allocate_c_buf();
+
+    G_message(_("Pass 2 of 2..."));
+    for (row = 0; row < nrows; row++) {
+
+	G_percent(row, nrows, 2);
+
+	if (read(cfd, cur_clump, csize) != csize)
+	    G_fatal_error(_("Unable to read from temp file"));
+
+	temp_clump = cur_clump;
+	temp_cell = out_cell;
+
+	for (col = 0; col < ncols; col++) {
+	    *temp_cell = clumpid[index[*temp_clump]];
+	    if (*temp_cell == 0) {
+		Rast_set_c_null_value(temp_cell, 1);
+	    }
+	    temp_clump++;
+	    temp_cell++;
+	}
+	Rast_put_row(out_fd, out_cell, CELL_TYPE);
+    }
+    G_percent(1, 1, 1);
+
+    G_free(cur_clump);
+    G_free(out_cell);
+    G_free(index);
+    G_free(clumpid);
+
+    return cat;
+}
+
+CELL clump(int *in_fd, int out_fd, int diag, int minsize)
 {
     register int col;
     register int n;
     CELL NEW, OLD;
     CELL *temp_cell, *temp_clump;
-    CELL *prev_in, *cur_in, *out_cell;
+    CELL *prev_in, *cur_in;
     CELL *prev_clump, *cur_clump;
     CELL X, LEFT;
-    CELL *index, *renumber;
+    CELL *index;
     CELL label;
     int nrows, ncols;
     int row;
@@ -47,7 +190,6 @@ CELL clump(int in_fd, int out_fd, int diag, int print)
     long cur_time;
     char *cname;
     int cfd, csize;
-    CELL cat;
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
@@ -56,7 +198,6 @@ CELL clump(int in_fd, int out_fd, int diag, int print)
     nalloc = INCR;
     index = (CELL *) G_malloc(nalloc * sizeof(CELL));
     index[0] = 0;
-    renumber = NULL;
 
     /* allocate CELL buffers two columns larger than current window */
     len = (ncols + 2) * sizeof(CELL);
@@ -64,7 +205,6 @@ CELL clump(int in_fd, int out_fd, int diag, int print)
     cur_in = (CELL *) G_malloc(len);
     prev_clump = (CELL *) G_malloc(len);
     cur_clump = (CELL *) G_malloc(len);
-    out_cell = (CELL *) G_malloc(len);
 
     /* temp file for initial clump IDs */
     cname = G_tempfile();
@@ -93,7 +233,7 @@ CELL clump(int in_fd, int out_fd, int diag, int print)
 
     G_message(_("Pass 1 of 2..."));
     for (row = 0; row < nrows; row++) {
-	Rast_get_c_row(in_fd, cur_in + 1, row);
+	Rast_get_c_row(*in_fd, cur_in + 1, row);
 
 	G_percent(row, nrows, 2);
 	Rast_set_c_null_value(&X, 1);
@@ -220,69 +360,14 @@ CELL clump(int in_fd, int out_fd, int diag, int print)
 	G_fatal_error(_("Unable to write to temp file"));
     G_percent(1, 1, 1);
 
-    /* generate a renumbering scheme */
-    G_message(_("Generating renumbering scheme..."));
-    G_debug(1, "%d initial labels", label);
-    /* allocate final clump ID */
-    renumber = (CELL *) G_malloc((label + 1) * sizeof(CELL));
-    renumber[0] = 0;
-    cat = 1;
-    G_percent(0, label, 1);
-    for (n = 1; n <= label; n++) {
-	G_percent(n, label, 1);
-	OLD = n;
-	NEW = index[n];
-	if (OLD != NEW) {
-	    renumber[n] = 0;
-	    /* find valid clump ID */
-	    while (OLD != NEW) {
-		OLD = NEW;
-		NEW = index[OLD];
-	    }
-	    index[n] = NEW;
-	}
-	else
-	    /* set final clump id */
-	    renumber[n] = cat++;
-    }
-    
-    /* rewind temp file */
-    lseek(cfd, 0, SEEK_SET);
+    /* free */
+    G_free(prev_clump);
+    G_free(cur_clump);
 
-    if (print) {
-	fprintf(stdout, "clumps=%d\n", cat - 1);
-    }
-    else {
-	/****************************************************
-	 *                      PASS 2                      *
-	 * apply renumbering scheme to initial clump labels *
-	 ****************************************************/
+    G_free(prev_in);
+    G_free(cur_in);
 
-	/* the input raster is no longer needed, 
-	 * using instead the temp file with initial clump labels */
-
-	G_message(_("Pass 2 of 2..."));
-	for (row = 0; row < nrows; row++) {
-
-	    G_percent(row, nrows, 2);
-	
-	    if (read(cfd, cur_clump, csize) != csize)
-		G_fatal_error(_("Unable to read from temp file"));
-
-	    temp_clump = cur_clump;
-	    temp_cell = out_cell;
-
-	    for (col = 0; col < ncols; col++) {
-		*temp_cell = renumber[index[*temp_clump]];
-		if (*temp_cell == 0)
-		    Rast_set_c_null_value(temp_cell, 1);
-		temp_clump++;
-		temp_cell++;
-	    }
-	    Rast_put_row(out_fd, out_cell, CELL_TYPE);
-	}
-	G_percent(1, 1, 1);
-    }
+    do_renumber(in_fd, NULL, 1, diag, minsize, cfd, label, index, out_fd);
 
     close(cfd);
     unlink(cname);
@@ -292,8 +377,7 @@ CELL clump(int in_fd, int out_fd, int diag, int print)
     return 0;
 }
 
-static int cmp_cells(DCELL **a, int acol, DCELL **b, int bcol,
-                     DCELL *rng, int n, double threshold2)
+static double get_diff2(DCELL **a, int acol, DCELL **b, int bcol, DCELL *rng, int n)
 {
     int i;
     double diff, diff2;
@@ -301,7 +385,7 @@ static int cmp_cells(DCELL **a, int acol, DCELL **b, int bcol,
     diff2 = 0;
     for (i = 0; i < n; i++) {
 	if (Rast_is_d_null_value(&b[i][bcol]))
-	    return 0;
+	    return 2;
 	diff = a[i][acol] - b[i][bcol];
 	/* normalize with the band's range */
 	if (rng[i])
@@ -311,10 +395,11 @@ static int cmp_cells(DCELL **a, int acol, DCELL **b, int bcol,
     /* normalize difference to the range [0, 1] */
     diff2 /= n;
     
-    return (diff2 <= threshold2);
+    return diff2;
 }
 
-CELL clump_n(int *in_fd, char **inname, int nin, double threshold, int out_fd, int diag, int print)
+CELL clump_n(int *in_fd, char **inname, int nin, double threshold,
+             int out_fd, int diag, int minsize)
 {
     register int col;
     register int i, n;
@@ -325,9 +410,9 @@ CELL clump_n(int *in_fd, char **inname, int nin, double threshold, int out_fd, i
     double thresh2;
     /* output */
     CELL OLD, NEW;
-    CELL *temp_clump, *out_cell, *out_cellp;
+    CELL *temp_clump;
     CELL *prev_clump, *cur_clump;
-    CELL *index, *renumber;
+    CELL *index;
     CELL label;
     int nrows, ncols;
     int row;
@@ -337,7 +422,6 @@ CELL clump_n(int *in_fd, char **inname, int nin, double threshold, int out_fd, i
     long cur_time;
     char *cname;
     int cfd, csize;
-    CELL cat;
 
     G_message(_("%d-band clumping with threshold %g"), nin, threshold);
 
@@ -350,7 +434,6 @@ CELL clump_n(int *in_fd, char **inname, int nin, double threshold, int out_fd, i
     nalloc = INCR;
     index = (CELL *) G_malloc(nalloc * sizeof(CELL));
     index[0] = 0;
-    renumber = NULL;
 
     /* allocate DCELL buffers two columns larger than current window */
     len = (ncols + 2) * sizeof(DCELL);
@@ -386,7 +469,6 @@ CELL clump_n(int *in_fd, char **inname, int nin, double threshold, int out_fd, i
     len = (ncols + 2) * sizeof(CELL);
     prev_clump = (CELL *) G_malloc(len);
     cur_clump = (CELL *) G_malloc(len);
-    out_cell = (CELL *) G_malloc(len);
 
     /* temp file for initial clump IDs */
     cname = G_tempfile();
@@ -437,7 +519,7 @@ CELL clump_n(int *in_fd, char **inname, int nin, double threshold, int out_fd, i
 	    /* try to connect the current cell to an existing clump */
 	    OLD = NEW = 0;
 	    /* same clump as to the left */
-	    if (cmp_cells(cur_in, col, cur_in, col - 1, rng, nin, thresh2)) {
+	    if (get_diff2(cur_in, col, cur_in, col - 1, rng, nin) <= thresh2) {
 		OLD = cur_clump[col] = cur_clump[col - 1];
 	    }
 
@@ -446,7 +528,7 @@ CELL clump_n(int *in_fd, char **inname, int nin, double threshold, int out_fd, i
 		temp_clump = prev_clump + col + 1;
 		bcol = col + 1;
 		do {
-		    if (cmp_cells(cur_in, col, prev_in, bcol, rng, nin, thresh2)) {
+		    if (get_diff2(cur_in, col, prev_in, bcol, rng, nin) <= thresh2) {
 			cur_clump[col] = *temp_clump;
 			if (OLD == 0) {
 			    OLD = *temp_clump;
@@ -497,7 +579,7 @@ CELL clump_n(int *in_fd, char **inname, int nin, double threshold, int out_fd, i
 	    }
 	    else {
 		/* check above */
-		if (cmp_cells(cur_in, col, prev_in, col, rng, nin, thresh2)) {
+		if (get_diff2(cur_in, col, prev_in, col, rng, nin) <= thresh2) {
 		    temp_clump = prev_clump + col;
 		    cur_clump[col] = *temp_clump;
 		    if (OLD == 0) {
@@ -579,71 +661,18 @@ CELL clump_n(int *in_fd, char **inname, int nin, double threshold, int out_fd, i
 	G_fatal_error(_("Unable to write to temp file"));
     G_percent(1, 1, 1);
 
-    /* generate a renumbering scheme */
-    G_message(_("Generating renumbering scheme..."));
-    G_debug(1, "%d initial labels", label);
-    /* allocate final clump ID */
-    renumber = (CELL *) G_malloc((label + 1) * sizeof(CELL));
-    renumber[0] = 0;
-    cat = 1;
-    G_percent(0, label, 1);
-    for (n = 1; n <= label; n++) {
-	G_percent(n, label, 1);
-	OLD = n;
-	NEW = index[n];
-	if (OLD != NEW) {
-	    renumber[n] = 0;
-	    /* find valid clump ID */
-	    while (OLD != NEW) {
-		OLD = NEW;
-		NEW = index[OLD];
-		if (NEW == n)
-		    G_fatal_error("Circular relabelling for %d", n);
-	    }
-	    index[n] = NEW;
-	}
-	else
-	    /* set final clump id */
-	    renumber[n] = cat++;
+    /* free */
+    G_free(prev_clump);
+    G_free(cur_clump);
+
+    for (i = 0; i < nin; i++) {
+	G_free(prev_in[i]);
+	G_free(cur_in[i]);
     }
-    
-    /* rewind temp file */
-    lseek(cfd, 0, SEEK_SET);
+    G_free(prev_in);
+    G_free(cur_in);
 
-    if (print) {
-	fprintf(stdout, "clumps=%d\n", cat - 1);
-    }
-    else {
-	/****************************************************
-	 *                      PASS 2                      *
-	 * apply renumbering scheme to initial clump labels *
-	 ****************************************************/
-
-	/* the input raster is no longer needed, 
-	 * using instead the temp file with initial clump labels */
-
-	G_message(_("Pass 2 of 2..."));
-	for (row = 0; row < nrows; row++) {
-
-	    G_percent(row, nrows, 2);
-	
-	    if (read(cfd, cur_clump, csize) != csize)
-		G_fatal_error(_("Unable to read from temp file"));
-
-	    temp_clump = cur_clump;
-	    out_cellp = out_cell;
-
-	    for (col = 0; col < ncols; col++) {
-		*out_cellp = renumber[index[*temp_clump]];
-		if (*out_cellp == 0)
-		    Rast_set_c_null_value(out_cellp, 1);
-		temp_clump++;
-		out_cellp++;
-	    }
-	    Rast_put_row(out_fd, out_cell, CELL_TYPE);
-	}
-	G_percent(1, 1, 1);
-    }
+    do_renumber(in_fd, rng, nin, diag, minsize, cfd, label, index, out_fd);
 
     close(cfd);
     unlink(cname);
