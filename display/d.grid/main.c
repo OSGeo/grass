@@ -1,3 +1,4 @@
+
 /****************************************************************
  *
  * MODULE:       d.grid
@@ -32,16 +33,17 @@ int main(int argc, char **argv)
     int colorg = 0;
     int colorb = 0;
     int colort = 0;
-    double size = 0., gsize = 0.;	/* initialize to zero */
+    int colorbg = 0;
+    double size = 0., gsize = 0.;       /* initialize to zero */
     double east, north;
     int do_text, fontsize, mark_type, line_width, dirn;
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3, *opt4, *fsize, *tcolor, *lwidth,
-	*direction;
+        *direction, *bgcolor;
     struct Flag *noborder, *notext, *geogrid, *nogrid, *wgs84, *cross,
-	*fiducial, *dot, *align;
-    struct pj_info info_in;	/* Proj structures */
-    struct pj_info info_out;	/* Proj structures */
+        *fiducial, *dot, *align;
+    struct pj_info info_in;     /* Proj structures */
+    struct pj_info info_out;    /* Proj structures */
     struct Cell_head wind;
 
     /* Initialize the GIS calls */
@@ -52,8 +54,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("cartography"));
     G_add_keyword(_("graticule"));
     module->description =
-	_("Overlays a user-specified grid "
-	  "in the active display frame on the graphics monitor.");
+        _("Overlays a user-specified grid "
+          "in the active display frame on the graphics monitor.");
 
     opt2 = G_define_option();
     opt2->key = "size";
@@ -61,9 +63,10 @@ int main(int argc, char **argv)
     opt2->type = TYPE_STRING;
     opt2->required = YES;
     opt2->label = _("Size of grid to be drawn (in map units)");
-    opt2->description = _("0 for north-south resolution of the current region. "
-                          "In map units or DDD:MM:SS format. "
-			  "Example: \"1000\" or \"0:10\"");
+    opt2->description =
+        _("0 for north-south resolution of the current region. "
+          "In map units or DDD:MM:SS format. "
+          "Example: \"1000\" or \"0:10\"");
 
     opt3 = G_define_standard_option(G_OPT_M_COORDS);
     opt3->key = "origin";
@@ -78,7 +81,7 @@ int main(int argc, char **argv)
     direction->answer = "both";
     direction->options = "both,east-west,north-south";
     direction->description =
-	_("Draw only east-west lines, north-south lines, or both ");
+        _("Draw only east-west lines, north-south lines, or both ");
     direction->guisection = _("Disable");
 
     lwidth = G_define_option();
@@ -103,6 +106,12 @@ int main(int argc, char **argv)
     tcolor->label = _("Text color");
     tcolor->guisection = _("Color");
 
+    bgcolor = G_define_standard_option(G_OPT_CN);
+    bgcolor->key = "bgcolor";
+    bgcolor->answer = "none";
+    bgcolor->label = _("Background color");
+    bgcolor->guisection = _("Color");
+
     fsize = G_define_option();
     fsize->key = "fontsize";
     fsize->type = TYPE_INTEGER;
@@ -113,18 +122,19 @@ int main(int argc, char **argv)
 
     align = G_define_flag();
     align->key = 'a';
-    align->description = _("Align the origin to the east-north corner of the current region");
+    align->description =
+        _("Align the origin to the east-north corner of the current region");
 
     geogrid = G_define_flag();
     geogrid->key = 'g';
     geogrid->description =
-	_("Draw geographic grid (referenced to current ellipsoid)");
+        _("Draw geographic grid (referenced to current ellipsoid)");
     geogrid->guisection = _("Draw");
 
     wgs84 = G_define_flag();
     wgs84->key = 'w';
     wgs84->description =
-	_("Draw geographic grid (referenced to WGS84 ellipsoid)");
+        _("Draw geographic grid (referenced to WGS84 ellipsoid)");
     wgs84->guisection = _("Draw");
 
     cross = G_define_flag();
@@ -141,7 +151,7 @@ int main(int argc, char **argv)
     fiducial->key = 'f';
     fiducial->description = _("Draw fiducial marks instead of grid lines");
     fiducial->guisection = _("Draw");
-    
+
     nogrid = G_define_flag();
     nogrid->key = 'n';
     nogrid->description = _("Disable grid drawing");
@@ -159,131 +169,141 @@ int main(int argc, char **argv)
 
     /* Check command line */
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
 
     /* do some checking */
     if (nogrid->answer && noborder->answer)
-	G_fatal_error(_("Both grid and border drawing are disabled"));
+        G_fatal_error(_("Both grid and border drawing are disabled"));
     if (wgs84->answer)
-	geogrid->answer = 1;	/* -w implies -g */
+        geogrid->answer = 1;    /* -w implies -g */
     if (geogrid->answer && G_projection() == PROJECTION_LL)
-	G_fatal_error(_("Geo-grid option not available for LL projection, use without -g/-w"));
+        G_fatal_error(_("Geo-grid option not available for LL projection, use without -g/-w"));
     if (geogrid->answer && G_projection() == PROJECTION_XY)
-	G_fatal_error(_("Geo-grid option not available for XY projection, use without -g/-w"));
+        G_fatal_error(_("Geo-grid option not available for XY projection, use without -g/-w"));
 
     if (notext->answer)
-	do_text = FALSE;
+        do_text = FALSE;
     else
-	do_text = TRUE;
+        do_text = TRUE;
 
     if (lwidth->answer) {
-	line_width = atoi(lwidth->answer);
-	if(line_width < 0 || line_width > 1e3)
-	    G_fatal_error("Invalid line width");
+        line_width = atoi(lwidth->answer);
+        if (line_width < 0 || line_width > 1e3)
+            G_fatal_error("Invalid line width");
     }
     else
-	line_width = 0;
+        line_width = 0;
 
     fontsize = atoi(fsize->answer);
 
     mark_type = MARK_GRID;
     if (cross->answer + fiducial->answer + dot->answer > 1)
-	G_fatal_error(_("Choose a single mark style"));
+        G_fatal_error(_("Choose a single mark style"));
     if (cross->answer)
-	mark_type = MARK_CROSS;
+        mark_type = MARK_CROSS;
     if (fiducial->answer)
-	mark_type = MARK_FIDUCIAL;
+        mark_type = MARK_FIDUCIAL;
     if (dot->answer)
-	mark_type = MARK_DOT;
+        mark_type = MARK_DOT;
 
     if (G_strcasecmp(direction->answer, "both") == 0)
-	dirn = DIRN_BOTH;
+        dirn = DIRN_BOTH;
     else if (G_strcasecmp(direction->answer, "east-west") == 0)
-	dirn = DIRN_LAT;
+        dirn = DIRN_LAT;
     else if (G_strcasecmp(direction->answer, "north-south") == 0)
-	dirn = DIRN_LON;
+        dirn = DIRN_LON;
     else
-	G_fatal_error("Invalid direction: %s", direction->answer);
+        G_fatal_error("Invalid direction: %s", direction->answer);
 
     if (align->answer || strcmp(opt2->answer, "0") == 0)
-	G_get_element_window(&wind, "", "WIND", G_mapset());
+        G_get_element_window(&wind, "", "WIND", G_mapset());
 
     if (strcmp(opt2->answer, "0") == 0) {
-	if (geogrid->answer)
-	    gsize = wind.ns_res;
-	else
-	    size = wind.ns_res;
-    } else {
+        if (geogrid->answer)
+            gsize = wind.ns_res;
+        else
+            size = wind.ns_res;
+    }
+    else {
         /* get grid size */
         if (geogrid->answer) {
-	    if (!G_scan_resolution(opt2->answer, &gsize, PROJECTION_LL) ||
-    	        gsize <= 0.0)
-    	        G_fatal_error(_("Invalid geo-grid size <%s>"), opt2->answer);
+            if (!G_scan_resolution(opt2->answer, &gsize, PROJECTION_LL) ||
+                gsize <= 0.0)
+                G_fatal_error(_("Invalid geo-grid size <%s>"), opt2->answer);
         }
         else {
-    	    if (!G_scan_resolution(opt2->answer, &size, G_projection()) ||
-    	        size <= 0.0)
-    	        G_fatal_error(_("Invalid grid size <%s>"), opt2->answer);
+            if (!G_scan_resolution(opt2->answer, &size, G_projection()) ||
+                size <= 0.0)
+                G_fatal_error(_("Invalid grid size <%s>"), opt2->answer);
         }
     }
 
     if (align->answer) {
-	/* reduce accumulated errors when ew_res is not the same as ns_res. */
-	struct Cell_head w;
+        /* reduce accumulated errors when ew_res is not the same as ns_res. */
+        struct Cell_head w;
 
-	G_get_set_window(&w);
-	east = wind.west + (int)((w.west - wind.west) / wind.ew_res) * wind.ew_res;
-	north = wind.south + (int)((w.south - wind.south) / wind.ns_res) * wind.ns_res;
-    } else {
+        G_get_set_window(&w);
+        east =
+            wind.west +
+            (int)((w.west - wind.west) / wind.ew_res) * wind.ew_res;
+        north =
+            wind.south +
+            (int)((w.south - wind.south) / wind.ns_res) * wind.ns_res;
+    }
+    else {
         /* get grid easting start */
         if (!G_scan_easting(opt3->answers[0], &east, G_projection())) {
-    	    G_usage();
-    	    G_fatal_error(_("Illegal east coordinate <%s>"), opt3->answers[0]);
+            G_usage();
+            G_fatal_error(_("Illegal east coordinate <%s>"),
+                          opt3->answers[0]);
         }
-    
+
         /* get grid northing start */
         if (!G_scan_northing(opt3->answers[1], &north, G_projection())) {
-    	    G_usage();
-    	    G_fatal_error(_("Illegal north coordinate <%s>"), opt3->answers[1]);
+            G_usage();
+            G_fatal_error(_("Illegal north coordinate <%s>"),
+                          opt3->answers[1]);
         }
     }
 
     /* Setup driver and check important information */
     D_open_driver();
-    
+
     /* Parse and select grid color */
     colorg = D_parse_color(opt1->answer, FALSE);
     /* Parse and select border color */
     colorb = D_parse_color(opt4->answer, FALSE);
     /* Parse and select text color */
     colort = D_parse_color(tcolor->answer, FALSE);
+    /* Parse and select background color */
+    colorbg = D_parse_color(bgcolor->answer, TRUE);
 
 
     D_setup(0);
 
     /* draw grid */
     if (!nogrid->answer) {
-	if (geogrid->answer) {
-	    /* initialzie proj stuff */
-	    init_proj(&info_in, &info_out, wgs84->answer);
-	    plot_geogrid(gsize, info_in, info_out, do_text, colorg, colort,
-			 fontsize, mark_type, line_width, dirn);
-	}
-	else {
-	    /* Do the grid plotting */
-	    plot_grid(size, east, north, do_text, colorg, colort, fontsize,
-		      mark_type, line_width, dirn);
-	}
+        if (geogrid->answer) {
+            /* initialzie proj stuff */
+            init_proj(&info_in, &info_out, wgs84->answer);
+            plot_geogrid(gsize, info_in, info_out, do_text, colorg, colort,
+                         colorbg, fontsize, mark_type, line_width, dirn);
+        }
+        else {
+            /* Do the grid plotting */
+            plot_grid(size, east, north, do_text, colorg, colort, colorbg,
+                      fontsize, mark_type, line_width, dirn);
+        }
     }
 
     /* Draw border */
     if (!noborder->answer) {
-	/* Set border color */
-	D_use_color(colorb);
+        /* Set border color */
+        D_use_color(colorb);
 
-	/* Do the border plotting */
-	plot_border(size, east, north, dirn);
+        /* Do the border plotting */
+        plot_border(size, east, north, dirn);
     }
 
     D_save_command(G_recreate_command());

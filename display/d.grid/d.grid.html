@@ -3,49 +3,26 @@
 <em>d.grid</em> overlays a grid of user-defined size and
 color in the active display frame on the graphics monitor.
 The grid can be created as a standard rectangular grid or
-a geographic grid. The grid will overlay, not overwrite,
-the contents of the active display frame.
+a geographic grid.
 
 <p>
-<em>d.grid</em> can be run non-interactively or
-interactively.  If the user specifies the grid
-<em>size</em> and (optionally) the grid <em>color</em> on
-the command line the program will run non-interactively; if
-no grid <em>color</em> is given the default will be used.
-Alternately, the user may simply type <b>d.grid</b> on the
-command line; in this case, the program will prompt the
-user for parameter values using the standard GRASS graphical 
-user interface.
-
-
-<h2>NOTES</h2>
-
-<em>d.grid</em> will not erase grids already displayed in
-the active graphics display frame by previous invocations
-of <em>d.grid</em>; multiple invocations of <em>d.grid</em>
-will therefore result in the drawing of multiple grids
-inside the active graphics frame.  (A command like 
-<em><a href="d.erase.html">d.erase</a></em>, which erases the
-entire contents of the active display frame, must be run to
-erase previously drawn grids from the display frame.)
-
-<p>
-If the user provides a <em>-g</em> flag a geographic (projected) grid
-will be drawn. With the <em>-g</em> flag the <em>size</em>
+If the user provides a <b>-g</b> flag a geographic (projected) grid
+will be drawn. With the <b>-g</b> flag the <b>size</b>
 argument accepts both decimal degrees and colon separated
 ddd:mm:ss coordinates (eg. <tt>00:30:00</tt> for half of a degree).
-
-<p>
 A geographic grid cannot be drawn for a <em>latitude/longitude</em> 
 or <em>XY</em> projection.
-<p>
-Colors may be standard named GRASS colors (red, green, aqua, etc.) or
-a numerical R:G:B triplet, where component values range from 0-255.<br>
 
 <p>
-The grid drawing may be turned off by using the <em>-n</em> flag.<br>
-The border drawing may be turned off by using the <em>-b</em> flag.<br>
-The coordinate text may be turned off by using the <em>-t</em> flag.<br>
+Colors may be standard named GRASS colors (red, green, aqua, etc.) or
+a numerical R:G:B triplet, where component values range from 0-255.
+Grid color can be set with option <b>color</b>. Options <b>text_color</b> and 
+<b>bgcolor</b> set the color of the text and its background.
+
+<p>
+The grid drawing may be turned off by using the <b>-n</b> flag.<br>
+The border drawing may be turned off by using the <b>-b</b> flag.<br>
+The coordinate text may be turned off by using the <b>-t</b> flag.<br>
 
 <p>
 To draw grid lines at different intervals, e.g. at high latitudes, you
@@ -94,6 +71,7 @@ James Westervelt, U.S. Army Construction Engineering Research Laboratory<br>
 Geogrid support: Bob Covill<br>
 Border support: Markus Neteler<br>
 Text and RGB support: Hamish Bowman<br>
+Background color implemented as part of GSoC 2016 by Adam Laza, CTU in Prague 
 
 <p>
 <i>Last changed: $Date$</i>
