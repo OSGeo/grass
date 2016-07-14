@@ -84,8 +84,7 @@ Preparation of example data (North Carolina sample dataset):
 
 <div class="code"><pre>
 # Create an empty box for overlaying to ZIP code vector map
-v.mkgrid map=box grid=1,1 position=coor \
-         coordinates=584037.093198,201970.387191 box=50000,50000
+v.mkgrid map=box grid=1,1 position=coor coordinates=584037,201970 box=50000,50000
 
 # set region to ZIP codes and box vector maps
 g.region vector=zipcodes_wake,box -p res=100 -a
@@ -255,13 +254,10 @@ of city of Raleigh, preserving road attributes in layer 1:
 g.region vector=zipcodes_wake
 
 # extract Raleigh city:
-v.extract in=zipcodes_wake out=raleigh \
-            where="ZIPNAME = 'RALEIGH'"
+v.extract in=zipcodes_wake out=raleigh where="ZIPNAME = 'RALEIGH'"
 
 # clip road network to city polygon:
-v.overlay ainput=roadsmajor atype=line binput=raleigh \
-            out=roadsmajor_raleigh operator=and \
-	    olayer=0,1,0
+v.overlay ainput=roadsmajor atype=line binput=raleigh out=roadsmajor_raleigh operator=and olayer=0,1,0
 </pre></div>
 
 <center>
