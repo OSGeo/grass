@@ -28,9 +28,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
           double tit_fontsize, const char *title, double *tick_values,
           double t_step, int colorb, int colorbg, struct Option *opt_use,
           struct Option *opt_at, struct Option *opt_fontsize,
-          struct Option *opt_ticks, struct Option *opt_tstep,
-          struct Option *opt_range, struct Flag *histo, struct Flag *hidestr,
-          int log_sc, int draw, int digits)
+          struct Option *opt_tstep, struct Option *opt_range, struct Flag *histo,
+          struct Flag *hidestr, int log_sc, int draw, int digits)
 {
     char buff[512];
     int black, white;
@@ -395,12 +394,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 else{
                 if (!fp) {
                     if (!flip)
-                        tcell =
-                            min_ind + k * (double)(1 + max_ind -
-                                                   min_ind) / lleg;
+                        tcell = min_ind + k * (double)(1 + max_ind - min_ind) / lleg;
                     else
-                        D_box_abs(x0, y0 + k, x0 - (dx ? -dx : 1),
-                                  y0 + k + (dy ? -dy : 1));
+                        tcell = (max_ind + 1) - k * (double)(1 + max_ind - min_ind) / lleg;
+                    D_color((CELL) tcell, &colors);
                 }
                 else {
                     if (!flip)
@@ -424,8 +421,6 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         if (!fp) {              /* cut down labelnum so they don't repeat */
             if (do_cats < steps)
                 steps = do_cats;
-            if ((steps < 2))
-                steps = 2;      /* ward off the ppl floating point exception */
         }
 
         /* Draw text and ticks */
@@ -586,12 +581,18 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             }                   /* for */
         }
 
+        if (!fp) {
+            dmin = min_ind;
+            dmax = max_ind;
+            sprintf(DispFormat, "%s", "%.0f");
+        }
+
         /* LABEL_VALUE OPTION */
         if (ticksCount > 0) {
             for (i = 0; i < ticksCount; i++) {
                 if ((tick_values[i] < dmin) || (tick_values[i] > dmax)) {
-                    G_fatal_error(_("tick_value=%s out of range [%.3f, %.3f]"),
-                                  opt_ticks->answers[i], dmin, dmax);
+                    G_fatal_error(_("tick_value=%.3f out of range [%.3f, %.3f]"),
+                                  tick_values[i], dmin, dmax);
                 }
                 sprintf(buff, DispFormat, tick_values[i]);
 
@@ -722,7 +723,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
 
             if (!flip) {
                 if (!horiz)
-                    while (t_start < dmax) {
+                    while (t_start <= dmax) {
                         sprintf(buff, DispFormat, t_start);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
@@ -746,7 +747,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         t_start += t_step;
                     }
                 else
-                    while (t_start < dmax) {
+                    while (t_start <= dmax) {
                         sprintf(buff, DispFormat, t_start);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
@@ -774,7 +775,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             }
             else {
                 if (!horiz)
-                    while (t_start < dmax) {
+                    while (t_start <= dmax) {
                         sprintf(buff, DispFormat, t_start);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
@@ -799,7 +800,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         t_start += t_step;
                     }
                 else
-                    while (t_start < dmax) {
+                    while (t_start <= dmax) {
                         sprintf(buff, DispFormat, t_start);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
@@ -964,8 +965,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     y0bg = y0 - titsiz - max_hist;
             }
 
-            D_use_color(colorbg);
-            D_box_abs(x0bg, y0bg, x1bg, y1bg);
+            if (colorbg != 0) {
+                D_use_color(colorbg);
+                D_box_abs(x0bg, y0bg, x1bg, y1bg);
+            }
 
             D_use_color(colorb);
             D_begin();
