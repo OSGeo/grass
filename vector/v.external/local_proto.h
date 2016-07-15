@@ -6,7 +6,7 @@ struct _options {
 };
 
 struct _flags {
-    struct Flag *format, *layer, *tlist, *topo, *list;
+    struct Flag *format, *layer, *tlist, *topo, *list, *override;
 };
 
 /* args.c */
