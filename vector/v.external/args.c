@@ -37,6 +37,13 @@ void parse_args(int argc, char **argv,
     options->output->required = NO;
     options->output->description = _("Name for output GRASS vector map (default: input layer)");
 
+    flags->override = G_define_flag();
+    flags->override->key = 'o';
+    flags->override->label =
+	_("Override projection check (use current location's projection)");
+    flags->override->description =
+	_("Assume that the dataset has the same projection as the current location");
+
     flags->format = G_define_flag();
     flags->format->key = 'f';
     flags->format->description = _("List supported formats and exit");
