@@ -141,7 +141,6 @@ static CELL do_renumber(int *in_fd, DCELL *rng, int nin,
     cur_clump = Rast_allocate_c_buf();
     out_cell = Rast_allocate_c_buf();
 
-    G_message(_("Pass 2 of 2..."));
     for (row = 0; row < nrows; row++) {
 
 	G_percent(row, nrows, 2);

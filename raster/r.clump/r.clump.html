@@ -21,7 +21,9 @@ scaled to the range [0, 1] and compared to the <em>threshold</em>
 value. Cells are clumped together if their spectral distance is &le; 
 <em>threshold</em>. The result is very sensitive to this 
 <em>threshold</em> value, a recommended start value is 0.01, then 
-increasing or decreasing this value according to the desired output.
+increasing or decreasing this value according to the desired output. 
+Once a suitable threshold has been determined, noise can be reduced by 
+merging small clumps with the <em>minsize</em> option.
 
 <p>
 <em>r.clump</em> can also use multiple raster maps of any kind (CELL, 
@@ -74,7 +76,11 @@ Perform fuzzy clumping on Landsat 7 2002 imagery (North Carolina sample dataset)
 <div class="code"><pre>
 g.region raster=lsat7_2002_10 -p
 r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
-        out=lsat7_2002_clump_4 threshold=0.045
+        out=lsat7_2002_clump threshold=0.045
+
+# reduce noise
+r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
+        out=lsat7_2002_clump_min10 threshold=0.045 minsize=10
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -97,7 +103,7 @@ r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50
 
 Michael Shapiro, U.S. Army Construction Engineering Research
 Laboratory<br>
-Markus Metz (diagonal clump tracing)
+Markus Metz (diagonal clump tracing, fuzzy clumping)
 
 <p>
 <i>Last changed: $Date$</i>
