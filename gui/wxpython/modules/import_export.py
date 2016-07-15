@@ -11,7 +11,7 @@ List of classes:
  - :class:`DxfImportDialog`
  - :class:`ReprojectionDialog`
 
-(C) 2008-2015 by the GRASS Development Team
+(C) 2008-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -79,6 +79,10 @@ class ImportDialog(wx.Dialog):
 
         self.list = LayersList(parent=self.panel, columns=columns)
         self.list.LoadData()
+
+        self.override = wx.CheckBox(
+            parent=self.panel, id=wx.ID_ANY,
+            label=_("Override projection check (use current location's projection)"))
 
         self.overwrite = wx.CheckBox(
             parent=self.panel, id=wx.ID_ANY,
@@ -166,6 +170,9 @@ class ImportDialog(wx.Dialog):
             proportion=1,
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5)
+
+        dialogSizer.Add(item=self.override, proportion=0,
+                        flag=wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
         dialogSizer.Add(item=self.overwrite, proportion=0,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
@@ -313,7 +320,9 @@ class ImportDialog(wx.Dialog):
 
         layers = self.list.GetLayers()
 
-        if differentProjLayers and '-o' not in self.getSettingsPageCmd():
+        if not self.link and \
+           differentProjLayers and \
+           not self.override.IsChecked(): # '-o' not in self.getSettingsPageCmd():
 
             dlg = ReprojectionDialog(
                 parent=self,
@@ -437,6 +446,9 @@ class GdalImportDialog(ImportDialog):
             cmd.append('input=%s' % idsn)
             cmd.append('output=%s' % output)
 
+            if self.override.IsChecked():
+                cmd.append('-o')
+
             if self.overwrite.IsChecked():
                 cmd.append('--overwrite')
 
@@ -474,7 +486,7 @@ class GdalImportDialog(ImportDialog):
 
     def _getBlackListedFlags(self):
         """Get flags which will not be showed in Settings page"""
-        return ['overwrite']
+        return ['overwrite', 'o']
 
 
 class OgrImportDialog(ImportDialog):
@@ -574,6 +586,9 @@ class OgrImportDialog(ImportDialog):
             cmd.append('layer=%s' % layer)
             cmd.append('output=%s' % output)
 
+            if self.override.IsChecked():
+                cmd.append('-o')
+
             if self.overwrite.IsChecked():
                 cmd.append('--overwrite')
 
@@ -615,7 +630,7 @@ class OgrImportDialog(ImportDialog):
 
     def _getBlackListedFlags(self):
         """Get flags which will not be showed in Settings page"""
-        return ['overwrite']
+        return ['overwrite', 'o', 'l', 'f']
 
 
 class GdalOutputDialog(wx.Dialog):
