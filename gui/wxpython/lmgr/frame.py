@@ -1264,13 +1264,14 @@ class GMFrame(wx.Frame):
         """Import maps menu (import, link)
         """
         self._popupMenu((('rastImport', self.OnImportGdalLayers),
-                         ('rastLink', self.OnLinkGdalLayers),
-                         ('rastUnpack', self.OnUnpackRaster),
-                         ('rastOut', self.OnRasterOutputFormat),
-                         (None, None),
                          ('vectImport', self.OnImportOgrLayers),
-                         ('vectLink', self.OnLinkOgrLayers),
+                         (None, None),
+                         ('rastUnpack', self.OnUnpackRaster),
                          ('vectUnpack', self.OnUnpackVector),
+                         (None, None),
+                         ('rastLink', self.OnLinkGdalLayers),
+                         ('vectLink', self.OnLinkOgrLayers),
+                         ('rastOut', self.OnRasterOutputFormat),
                          ('vectOut', self.OnVectorOutputFormat)))
 
     def OnWorkspaceNew(self, event=None):
