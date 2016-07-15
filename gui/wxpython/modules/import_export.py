@@ -320,7 +320,9 @@ class ImportDialog(wx.Dialog):
 
         layers = self.list.GetLayers()
 
-        if differentProjLayers and not self.override.IsChecked(): # '-o' not in self.getSettingsPageCmd():
+        if not self.link and \
+           differentProjLayers and \
+           not self.override.IsChecked(): # '-o' not in self.getSettingsPageCmd():
 
             dlg = ReprojectionDialog(
                 parent=self,
