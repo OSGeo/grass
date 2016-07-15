@@ -628,7 +628,7 @@ class OgrImportDialog(ImportDialog):
 
     def _getBlackListedFlags(self):
         """Get flags which will not be showed in Settings page"""
-        return ['overwrite', 'o']
+        return ['overwrite', 'o', 'l', 'f']
 
 
 class GdalOutputDialog(wx.Dialog):
