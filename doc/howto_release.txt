@@ -57,7 +57,7 @@ Contents
 
 #example:
 7
-1
+2
 0RC1
 2016
       rm -f include/VERSION~
@@ -95,7 +95,7 @@ Contents
           echo $RELEASETAG
 
           URL=https://svn.osgeo.org/grass
-          svn copy $URL/grass/branches/releasebranch_7_0 \
+          svn copy $URL/grass/branches/releasebranch_7_2 \
 	       $URL/grass/tags/$RELEASETAG \
 	       -m "Tagging release grass_${MAJOR}_${MINOR}_${RELEASE}"
       
@@ -120,7 +120,7 @@ Contents
 
 #example
 7
-1
+2
 0svn
 2016
 
@@ -269,7 +269,7 @@ Contents
    http://svnbook.red-bean.com/en/1.1/ch04s07.html
 
    GRASS 7.2 release branch:
-          BRANCH=releasebranch_7_0
+          BRANCH=releasebranch_7_2
           URL=https://svn.osgeo.org/grass
           svn copy $URL/grass/trunk \
                    $URL/grass/branches/$BRANCH \
@@ -279,7 +279,7 @@ Contents
    Switching current local copy to above development branch:
    (http://svnbook.red-bean.com/en/1.1/ch04s05.html)
            cd /path/to/your/local/copy/trunk
-           svn switch https://svn.osgeo.org/grass/grass/branches/releasebranch_7_0 .
+           svn switch https://svn.osgeo.org/grass/grass/branches/releasebranch_7_2 .
 
 ----------
 Example: GRASS GIS 7.2 release branch creation
