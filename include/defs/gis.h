@@ -626,6 +626,7 @@ const char *G_projection_name(int);
 
 /* proj3.c */
 const char *G_database_unit_name(int);
+int G_database_unit();
 const char *G_database_projection_name(void);
 const char *G_database_datum_name(void);
 const char *G_database_ellipse_name(void);
