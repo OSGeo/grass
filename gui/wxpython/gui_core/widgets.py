@@ -936,10 +936,6 @@ class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnPopupMenu)  # wxMSW
         self.Bind(wx.EVT_RIGHT_UP, self.OnPopupMenu)  # wxGTK
 
-    def LoadData(self):
-        """Load data into list"""
-        pass
-
     def OnPopupMenu(self, event):
         """Show popup menu"""
         if self.GetItemCount() < 1:
@@ -1020,10 +1016,12 @@ class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         if data is None:
             return
 
+        idx = 0
         for item in data:
-            index = self.InsertStringItem(sys.maxsize, str(item[0]))
+            index = self.InsertStringItem(idx, str(item[0]))
             for i in range(1, self.GetColumnCount()):
                 self.SetStringItem(index, i, item[i])
+            idx += 1
 
         # check by default only on one item
         if len(data) == 1 and selectOne:
