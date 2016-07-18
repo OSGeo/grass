@@ -149,6 +149,7 @@ double histogram(const char *map_name, int x0, int y0, int width,
             dist_stats.maxcat);
 
     for (i = dist_stats.mincat, ystep = 0; i <= dist_stats.maxcat; i++) {
+        cell_count = 0;
         if (!ptr)
             break;
 

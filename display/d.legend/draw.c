@@ -29,7 +29,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
           double t_step, int colorb, int colorbg, struct Option *opt_use,
           struct Option *opt_at, struct Option *opt_fontsize,
           struct Option *opt_tstep, struct Option *opt_range, struct Flag *histo,
-          struct Flag *hidestr, int log_sc, int draw, int digits)
+          struct Flag *hidestr, int log_sc, int draw, int digits, char *units)
 {
     char buff[512];
     int black, white;
@@ -53,7 +53,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
     char DispFormat[5];         /*  %.Xf\0  */
     double maxCat;
     int horiz;
-    char *units;
+    char *units_bottom;
     double t_start;
     double max_hist;
     double txsiz, titsiz;
@@ -482,9 +482,26 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         sprintf(buff, DispFormat, tcell);
                         if (!hide_catstr)       /* both */
                             strcat(buff, ")");
+                        D_text_size(txsiz, txsiz);
+                        D_get_text_box(buff,&bb,&bt, &bl, &br);
+                        LabelW = br - bl;
+                        if (LabelW > MaxLabelW) {
+                            MaxLabelW = LabelW;
+                            sprintf(MaxLabel, "%s", buff);
                     }
-                    if (!hide_catstr)   /* str */
+                    }
+                    if (!hide_catstr) {  /* str */
                         sprintf(buff + strlen(buff), " %s", cstr);
+                        if (strlen(units)>0)
+                            strcat(buff, units);
+                        D_text_size(txsiz, txsiz);
+                        D_get_text_box(buff,&bb,&bt, &bl, &br);
+                        LabelW = br - bl;
+                        if (LabelW > MaxLabelW) {
+                            MaxLabelW = LabelW;
+                            sprintf(MaxLabel, "%s", buff);
+                }
+                    }
                 }
                 else {          /* ie FP map */
                     if (hide_catnum)
@@ -501,7 +518,16 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                             val = dmax - k * (dmax - dmin) / (steps - 1);
                         }
                         sprintf(buff, DispFormat, val);
+                        if (strlen(units)>0)
+                            strcat(buff, units);
+                        D_text_size(txsiz, txsiz);
+                        D_get_text_box(buff,&bb,&bt, &bl, &br);
+                        LabelW = br - bl;
+                        if (LabelW > MaxLabelW) {
+                            MaxLabelW = LabelW;
+                            sprintf(MaxLabel, "%s", buff);
                     }
+                }
                 }
 
                 if (draw) {
@@ -571,13 +597,6 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                             D_text(buff);
                     }
                 }
-                D_text_size(txsiz, txsiz);
-                D_get_text_box(buff,&bb,&bt, &bl, &br);
-                LabelW = br - bl;
-                if (LabelW > MaxLabelW) {
-                    MaxLabelW = LabelW;
-                    sprintf(MaxLabel, DispFormat, val);
-                }
             }                   /* for */
         }
 
@@ -595,6 +614,15 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                                   tick_values[i], dmin, dmax);
                 }
                 sprintf(buff, DispFormat, tick_values[i]);
+                if (strlen(units)>0)
+                    strcat(buff, units);
+                D_text_size(txsiz, txsiz);
+                D_get_text_box(buff,&bb,&bt, &bl, &br);
+                LabelW = br - bl;
+                if (LabelW > MaxLabelW) {
+                    MaxLabelW = LabelW;
+                    sprintf(MaxLabel, "%s", buff);
+                }
 
                 if (log_sc) {
                     coef = (log10(tick_values[i]) - log10(dmin)) / (log10(dmax) - log10(dmin));
@@ -648,14 +676,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     D_use_color(color);
                     D_text(buff);
                 }
-                D_text_size(txsiz, txsiz);
-                D_get_text_box(buff,&bb,&bt, &bl, &br);
-                LabelW = br - bl;
-                if (LabelW > MaxLabelW) {
-                    MaxLabelW = LabelW;
-                    sprintf(MaxLabel, DispFormat, tick_values[i]);
             }
-        }
         }
 
         /* LABEL_STEP OPTION */
@@ -666,6 +687,15 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     num = ceil(log10(dmin)) + t_start;
                     val = pow(10,num);
                     sprintf(buff, DispFormat, val);
+                    if (strlen(units)>0)
+                        strcat(buff, units);
+                    D_text_size(txsiz, txsiz);
+                    D_get_text_box(buff,&bb,&bt, &bl, &br);
+                    LabelW = br - bl;
+                    if (LabelW > MaxLabelW) {
+                        MaxLabelW = LabelW;
+                        sprintf(MaxLabel, "%s", buff);
+                    }
                     coef = (log10(val) - log10(dmin)) / (log10(dmax) - log10(dmin));
                     if (draw){
                         if (!flip){
@@ -712,6 +742,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         }
                         D_use_color(color);
                         D_text(buff);
+
                     }
                 t_start += t_step;
                 }
@@ -725,12 +756,14 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 if (!horiz)
                     while (t_start <= dmax) {
                         sprintf(buff, DispFormat, t_start);
+                        if (strlen(units)>0)
+                            strcat(buff, units);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
                         LabelW = br - bl;
                         if (LabelW > MaxLabelW) {
                             MaxLabelW = LabelW;
-                            sprintf(MaxLabel, DispFormat, t_start);
+                            sprintf(MaxLabel, "%s", buff);
                         }
                         if (draw) {
                             coef = (t_start - dmin) / ((dmax - dmin) * 1.0);
@@ -749,12 +782,14 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 else
                     while (t_start <= dmax) {
                         sprintf(buff, DispFormat, t_start);
+                        if (strlen(units)>0)
+                            strcat(buff, units);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
                         LabelW = br - bl;
                         if (LabelW > MaxLabelW) {
                             MaxLabelW = LabelW;
-                            sprintf(MaxLabel, DispFormat, t_start);
+                            sprintf(MaxLabel, "%s", buff);
                         }
 
                         if (draw) {
@@ -777,12 +812,14 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 if (!horiz)
                     while (t_start <= dmax) {
                         sprintf(buff, DispFormat, t_start);
+                        if (strlen(units)>0)
+                            strcat(buff, units);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
                         LabelW = br - bl;
                         if (LabelW > MaxLabelW) {
                             MaxLabelW = LabelW;
-                            sprintf(MaxLabel, DispFormat, t_start);
+                            sprintf(MaxLabel, "%s", buff);
                         }
 
                         if (draw) {
@@ -802,12 +839,14 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 else
                     while (t_start <= dmax) {
                         sprintf(buff, DispFormat, t_start);
+                        if (strlen(units)>0)
+                            strcat(buff, units);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
                         LabelW = br - bl;
                         if (LabelW > MaxLabelW) {
                             MaxLabelW = LabelW;
-                            sprintf(MaxLabel, DispFormat, t_start);
+                            sprintf(MaxLabel, "%s", buff);
                         }
 
                         if (draw) {
@@ -906,16 +945,16 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             /* units */
             /* print units label, if present */
             if (maptype == MAP_TYPE_RASTER2D)
-                units = Rast_read_units(map_name, "");
+                units_bottom = Rast_read_units(map_name, "");
             else
                 units = "";
             /* FIXME: does the raster3d really need to be opened to read the units?
-               units = Rast3d_get_unit(map_fid); */
+               units_bottom = Rast3d_get_unit(map_fid); */
 
-            if (!units)
-                units = "";
+            if (!units_bottom)
+                units_bottom = "";
 
-            if (strlen(units)) {
+            if (strlen(units_bottom)) {
                 D_text_size(titsiz, titsiz);
                 D_get_text_box(title, &bb, &bt, &bl, &br);
                 if (horiz) {
@@ -931,7 +970,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 if (draw) {
                     D_use_color(color);
                     D_pos_abs(x_tit, y_tit);
-                    D_text(units);
+                    D_text(units_bottom);
                 }
             }
         }                       /* end of display units) */
@@ -1128,33 +1167,38 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 buff[0] = 0;
                 if (!hide_catnum) {     /* num */
                     sprintf(buff, DispFormat, (int)catlist[i]);
+                    if (strlen(units)>0)
+                        strcat(buff, units);
                     D_text_size(txsiz, txsiz);
                     D_get_text_box(buff,&bb,&bt, &bl, &br);
                     LabelW = br - bl;
                     if (LabelW > MaxLabelW) {
                         MaxLabelW = LabelW;
-                        sprintf(MaxLabel, DispFormat, (int)catlist[i]);
+                        sprintf(MaxLabel, "%s", buff);
                     }
                     if (!flip) {
                         sprintf(buff, DispFormat, (int)catlist[i]);
+                        if (strlen(units)>0)
+                            strcat(buff, units);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
                         LabelW = br - bl;
                         if (LabelW > MaxLabelW) {
                             MaxLabelW = LabelW;
-                            sprintf(MaxLabel, DispFormat, (int)catlist[i]);
+                            sprintf(MaxLabel, "%s", buff);
                         }
                     }
                     else {
                         sprintf(buff, DispFormat,
                                 (int)catlist[catlistCount - i - 1]);
+                        if (strlen(units)>0)
+                            strcat(buff, units);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
                         LabelW = br - bl;
                         if (LabelW > MaxLabelW) {
                             MaxLabelW = LabelW;
-                            sprintf(MaxLabel, DispFormat,
-                                    (int)catlist[catlistCount - i - 1]);
+                            sprintf(MaxLabel, "%s", buff);
                         }
                     }
                     if (!hide_catstr)   /* both */
@@ -1162,6 +1206,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 }
                 if (!hide_catstr) {       /* str */
                     sprintf(buff + strlen(buff), " %s", cstr);
+                    if (strlen(units)>0)
+                        strcat(buff, units);
                     D_text_size(txsiz, txsiz);
                     D_get_text_box(buff,&bb,&bt, &bl, &br);
                     LabelW = br - bl;
@@ -1177,45 +1223,53 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         /* pass through format exactly as given by the user in
                            the use= command line parameter (helps with log scale) */
                         sprintf(buff, "%s", opt_use->answers[i]);
+                        if (strlen(units)>0)
+                            strcat(buff, units);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
                         LabelW = br - bl;
                         if (LabelW > MaxLabelW) {
                             MaxLabelW = LabelW;
-                            sprintf(MaxLabel, " %s", opt_use->answers[i]);
+                            sprintf(MaxLabel, " %s", buff);
                         }
                     }
                     else {
                         /* automatically generated/tuned decimal precision format */
                         sprintf(buff, DispFormat, catlist[i]);
+                        if (strlen(units)>0)
+                            strcat(buff, units);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
                         LabelW = br - bl;
                         if (LabelW > MaxLabelW) {
                             MaxLabelW = LabelW;
-                            sprintf(MaxLabel, DispFormat, catlist[i]);
+                            sprintf(MaxLabel, "%s", buff);
                 }
                     }
                 }
                 else {
                     if (use_catlist){
                         sprintf(buff, "%s", opt_use->answers[catlistCount - i - 1]);
+                        if (strlen(units)>0)
+                            strcat(buff, units);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
                         LabelW = br - bl;
                         if (LabelW > MaxLabelW) {
                             MaxLabelW = LabelW;
-                            sprintf(MaxLabel, " %s", opt_use->answers[catlistCount - i - 1]);
+                            sprintf(MaxLabel, " %s", buff);
                 }
             }
                     else {
                         sprintf(buff, DispFormat, catlist[catlistCount - i - 1]);
+                        if (strlen(units)>0)
+                            strcat(buff, units);
                         D_text_size(txsiz, txsiz);
                         D_get_text_box(buff,&bb,&bt, &bl, &br);
                         LabelW = br - bl;
                         if (LabelW > MaxLabelW) {
                             MaxLabelW = LabelW;
-                            sprintf(MaxLabel, " %s", opt_use->answers[catlistCount - i - 1]);
+                            sprintf(MaxLabel, " %s", buff);
             }
                     }
                 }

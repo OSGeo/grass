@@ -42,4 +42,4 @@ void draw(const char *, int, int, int, int, int, int, int, int, int, int, int,
           double, int, int, double, double, double *, int, int, int, double,
           double, const char *, double *, double, int, int, struct Option *,
           struct Option *, struct Option *, struct Option *, struct Option *,
-          struct Flag *, struct Flag *, int, int, int);
+          struct Flag *, struct Flag *, int, int, int, char *);
