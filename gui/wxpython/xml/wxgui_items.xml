@@ -180,6 +180,11 @@
     <description>Add multiple raster or vector map layers to current display</description>
     <shortcut>Ctrl+Shift+L</shortcut>
   </wxgui-item>
+  <wxgui-item name="AddRGB">
+    <label>Add RGB raster layer</label>
+    <handler>OnAddRasterRGB</handler>
+    <description>Add RGB raster map layer to current display</description>
+  </wxgui-item>
   <wxgui-item name="AddWebServiceLayer">
     <label>Add web service layer</label>
     <handler>OnAddWS</handler>
