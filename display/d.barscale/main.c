@@ -268,12 +268,15 @@ int main(int argc, char **argv)
             label = "km";
             break;
         case U_FEET:
+            use_feet = 1;
             label = "ft";
             break;
         case U_USFEET:
+            use_feet = 1;
             label = "ft";
             break;
         case U_MILES:
+            use_feet = 1;
             label = "mi";
             break;
         default:
