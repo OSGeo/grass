@@ -223,6 +223,7 @@
       <wxgui-item name="AddRaster"/>
       <wxgui-item name="AddVector"/>
       <wxgui-item name="AddMultipleRastersOrVectors"/>
+      <wxgui-item name="AddRGB"/>
       <wxgui-item name="AddWebServiceLayer"/>
       <separator/>
       <wxgui-item name="NewMapDisplayWindow"/>
