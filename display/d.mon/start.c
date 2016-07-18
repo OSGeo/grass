@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <libgen.h>
 #include <grass/gis.h>
 #include <grass/spawn.h>
 #include <grass/display.h>
@@ -57,7 +58,18 @@ char *start(const char *name, const char *output, int width, int height, int upd
         putenv("GRASS_RENDER_IMMEDIATE=");
     }
     else {
+        char *dir_name;
+        
         output_name = output;
+        /* check write permission */
+        dir_name = G_store(output_name);
+        dirname(dir_name);
+        if (access(dir_name, W_OK) != 0)
+            G_fatal_error(_("Unable to start monitor, don't have "
+                            "write permission for <%s>"), output_name);
+        G_free(dir_name);
+        
+        /* check if file exists */
         if (!update && access(output_name, F_OK) == 0) {
             if (G_get_overwrite()) {
                 G_warning(_("File <%s> already exists and will be overwritten"), output_name);
