@@ -54,7 +54,7 @@ int main(int argc, char **argv)
         *opt_thin, *opt_labelnum, *opt_at, *opt_use, *opt_range,
         *opt_font, *opt_path, *opt_charset, *opt_fontsize, *opt_title,
         *opt_ticks, *opt_tstep, *opt_brdcolor, *opt_bgcolor,
-        *opt_tit_fontsize, *opt_digits;
+        *opt_tit_fontsize, *opt_digits, *opt_units;
     struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *histo,
         *showtick, *showbg, *log_sc;
     double X0, X1, Y0, Y1;
@@ -64,6 +64,7 @@ int main(int argc, char **argv)
     int catlistCount, use_catlist, ticksCount;
     double fontsize;
     char *title;
+    char *units;
     double *tick_values;
     double t_step;
     int colorb, colorbg;
@@ -125,6 +126,14 @@ int main(int argc, char **argv)
     opt_thin->description =
         _("Thinning factor (thin=10 gives cats 0,10,20...)");
     opt_thin->guisection = _("Advanced");
+
+    opt_units = G_define_option();
+    opt_units->key = "units";
+    opt_units->type = TYPE_STRING;
+    opt_units->required = NO;
+    opt_units->description =
+            _("Units to display after labels (e.g. meters)");
+    opt_units->guisection = _("Advanced");
 
     opt_labelnum = G_define_option();
     opt_labelnum->key = "labelnum";
@@ -306,6 +315,12 @@ int main(int argc, char **argv)
     else
         title = "";
 
+    if (opt_units->answer) {
+        units = opt_units->answer;
+    }
+    else
+        units = "";
+
     hide_catstr = hidestr->answer;      /* note hide_catstr gets changed and re-read below */
     hide_catnum = hidenum->answer;
     show_ticks = showtick->answer;
@@ -461,7 +476,7 @@ int main(int argc, char **argv)
              UserRangeMax, catlist, catlistCount, use_catlist, ticksCount,
              fontsize, tit_fontsize, title, tick_values, t_step, colorb,
              colorbg, opt_use, opt_at, opt_fontsize, opt_tstep,
-             opt_range, histo, hidestr, log_scale, 0, digits);
+             opt_range, histo, hidestr, log_scale, 0, digits, units);
 
     draw(map_name, maptype, color, thin, lines, steps, fp, label_indent,
          hide_catnum, hide_catstr, show_ticks, hide_nodata, do_smooth, cats,
@@ -469,7 +484,7 @@ int main(int argc, char **argv)
          catlist, catlistCount, use_catlist, ticksCount, fontsize,
          tit_fontsize, title, tick_values, t_step, colorb, colorbg, opt_use,
          opt_at, opt_fontsize, opt_tstep, opt_range, histo,
-         hidestr, log_scale, 1, digits);
+         hidestr, log_scale, 1, digits, units);
 
     D_close_driver();
 
