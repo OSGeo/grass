@@ -754,9 +754,9 @@ class GMFrame(wx.Frame):
                 self.GetMapDisplay().AddBarscale()
         elif layertype == 'rastleg':
             if len(command) > 1:
-                self.GetMapDisplay().AddLegend(cmd=command, showDialog=False)
+                self.GetMapDisplay().AddLegend(cmd=command)
             else:
-                self.GetMapDisplay().AddLegend(showDialog=True)
+                self.GetMapDisplay().AddLegend()
         elif layertype == 'northarrow':
             if len(command) > 1:
                 self.GetMapDisplay().AddArrow(cmd=command)

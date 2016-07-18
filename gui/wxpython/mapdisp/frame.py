@@ -1228,7 +1228,7 @@ class MapFrame(SingleMapFrame):
 
         self.MapWindow.mouse['use'] = 'pointer'
 
-    def AddLegend(self, cmd=None, showDialog=None):
+    def AddLegend(self, cmd=None):
         """Handler for legend map decoration menu selection."""
 
         if cmd:
