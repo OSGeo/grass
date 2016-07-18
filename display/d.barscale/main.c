@@ -256,10 +256,10 @@ int main(int argc, char **argv)
         label = "ft";
     }
     else {
-        if (!units_opt->answer){
-            units = G_projection_units(G_projection());
-        }
-        units = G_units(units_opt->answer);
+        if (!units_opt->answer)
+            units = G_database_unit();
+        else
+            units = G_units(units_opt->answer);
         switch (units) {
         case U_METERS:
             label = "m";
