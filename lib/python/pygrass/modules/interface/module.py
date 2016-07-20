@@ -15,7 +15,6 @@ from .typedict import TypeDict
 from .read import GETFROMTAG, DOC
 from .env import G_debug
 
-
 if sys.version_info[0] == 2:
     from itertools import izip_longest as zip_longest
 else:
@@ -372,6 +371,8 @@ class Module(object):
     Multiple run test
     >>> colors = Module("r.colors", map="test_a",
     ...                                            color="ryb", run_=False)
+    >>> colors.get_bash()
+    u'r.colors map=test_a color=ryb'
     >>> colors.run()
     Module('r.colors')
     >>> colors(color="gyr")
@@ -584,11 +585,11 @@ class Module(object):
         return self
 
     def get_bash(self):
-        """Return a BASH rapresentation of the Module."""
+        """Return a BASH representation of the Module."""
         return ' '.join(self.make_cmd())
 
     def get_python(self):
-        """Return a Python rapresentation of the Module."""
+        """Return a Python representation of the Module."""
         prefix = self.name.split('.')[0]
         name = '_'.join(self.name.split('.')[1:])
         params = ', '.join([par.get_python() for par in self.params_list
