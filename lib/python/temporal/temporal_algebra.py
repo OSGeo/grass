@@ -737,9 +737,15 @@ class TemporalAlgebraParser(object):
         ('left', 'AND', 'OR', 'T_COMP_OPERATOR'), #2
         )
 
-    def __init__(self, pid=None, run = True, debug = False, spatial = False,
-                        null = False, register_null = False,  nprocs = 1):
+    def __init__(self, pid=None, run=True, debug=False, spatial=False,
+                 null=False, register_null=False, dry_run=False,  nprocs=1):
         self.run = run
+        self.dry_run = dry_run              # Compute the processes and output but Do not start the processes
+        self.process_chain_dict = {}        # This dictionary stores all processes, as well as the maps to register and remove
+        self.process_chain_dict["processes"] = []
+        self.process_chain_dict["insert"] = []
+        self.process_chain_dict["update"] = []
+        self.process_chain_dict["remove"] = []
         self.debug = debug
         self.pid = pid
         # Intermediate vector map names
@@ -768,11 +774,11 @@ class TemporalAlgebraParser(object):
              space time datasets in the expression to generate the map lists.
 
              This function will analyze the expression to detect space time datasets
-             and computes the common granularity from all granularities.
+             and computes the common granularity from all granularities of the input space time datasets.
 
              This granularity is then be used to generate the map lists. Hence, all
              maps from all STDS will have equidistant temporal extents. The only meaningful
-             temporal relation is "equal".
+             temporal relation is therefore "equal".
 
              :param expression: The algebra expression to analyze
 
@@ -848,8 +854,19 @@ class TemporalAlgebraParser(object):
 
         return True
 
-    def parse(self, expression, stdstype = 'strds', maptype = 'rast',  mapclass = RasterDataset,
-                      basename = None, overwrite=False):
+    def parse(self, expression, stdstype='strds',
+              maptype='rast',  mapclass=RasterDataset,
+              basename=None, overwrite=False):
+        """Parse the algebra expression and run the computation
+
+        :param expression:
+        :param stdstype:
+        :param maptype:
+        :param mapclass:
+        :param basename:
+        :param overwrite:
+        :return: The process chain dictionary
+        """
         self.lexer = TemporalAlgebraLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self, debug=self.debug)
@@ -862,6 +879,8 @@ class TemporalAlgebraParser(object):
         self.basename = basename
         self.expression = expression
         self.parser.parse(expression)
+
+        return self.process_chain_dict
 
     def generate_map_name(self):
         """Generate an unique  map name and register it in the objects map list
@@ -878,8 +897,9 @@ class TemporalAlgebraParser(object):
         self.names[name] = name
         return name
 
-    def generate_new_map(self, base_map, bool_op = 'and', copy = True,  rename = True,
-                                              remove = False):
+    def generate_new_map(self, base_map, bool_op='and',
+                         copy=True,  rename=True,
+                         remove=False):
         """Generate a new map using the spatio-temporal extent of the base map
 
            :param base_map: This map is used to create the new map
@@ -988,7 +1008,7 @@ class TemporalAlgebraParser(object):
                 other map list and given temporal operator.
 
             :param maplist: List of map objects for which relations has been build
-                                        correctely.
+                                        correctly.
             :param topolist: List of strings of temporal relations.
             :param temporal: The temporal operator specifying the temporal
                                             extent operation (intersection, union, disjoint
@@ -1002,26 +1022,26 @@ class TemporalAlgebraParser(object):
             # Loop over temporal related maps and create overlay modules.
             tbrelations = map_i.get_temporal_relations()
             # Generate an intermediate map for the result map list.
-            map_new = self.generate_new_map(base_map=map_i, bool_op = 'and',
-                                                                        copy = True,  rename = True)
+            map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                            copy=True,  rename=True)
             # Combine temporal and spatial extents of intermediate map with related maps.
             for topo in topolist:
                 if topo in tbrelations.keys():
                     for map_j in (tbrelations[topo]):
                         if temporal == 'r':
                             # Generate an intermediate map for the result map list.
-                            map_new = self.generate_new_map(base_map=map_i, bool_op = 'and',
-                                                                                        copy = True,  rename = True)
+                            map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                            copy=True,  rename=True)
                         # Create overlayed map extent.
-                        returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                                temp_op = temporal)
+                        returncode = self.overlay_map_extent(map_new, map_j, 'and',
+                                                             temp_op=temporal)
                         # Stop the loop if no temporal or spatial relationship exist.
                         if returncode == 0:
                             break
                         # Append map to result map list.
                         elif returncode == 1:
-                            print(map_new.get_id() + " " + str(map_new.get_temporal_extent_as_tuple()))
-                            print(map_new.condition_value)
+                            # print(map_new.get_id() + " " + str(map_new.get_temporal_extent_as_tuple()))
+                            # print(map_new.condition_value)
                             # print(map_new.cmd_list)
                             # resultlist.append(map_new)
                             resultdict[map_new.get_id()] = map_new
@@ -1079,10 +1099,10 @@ class TemporalAlgebraParser(object):
                 m.inputs["type"].value = map_type
                 m.inputs["name"].value = stringlist
                 m.flags["f"].value = True
-                print(m.get_bash())
+                # print(m.get_bash())
                 m.run()
 
-    def check_stds(self, input, clear = False,  stds_type = None,  check_type=True):
+    def check_stds(self, input, clear=False,  stds_type=None,  check_type=True):
         """ Check if input space time dataset exist in database and return its map list.
 
             :param input: Name of space time data set as string or list of maps.
@@ -1115,7 +1135,8 @@ class TemporalAlgebraParser(object):
                 if self.use_granularity:
                     # We create the maplist out of the map array from none-gap objects
                     maplist = []
-                    map_array = stds.get_registered_maps_as_objects_by_granularity(gran=self.granularity,  dbif=self.dbif)
+                    map_array = stds.get_registered_maps_as_objects_by_granularity(gran=self.granularity,
+                                                                                   dbif=self.dbif)
                     for entry in map_array:
                         # Ignore gap objects
                         if entry[0].get_id() is not None:
@@ -1838,13 +1859,13 @@ class TemporalAlgebraParser(object):
         # Get topology of then statement map list in relation to the other maplist
         # and assign boolean values of the maplist to the thenlist.
         containlist = self.perform_temporal_selection(thenlist, maplist,
-                                                        assign_val = True,
-                                                        topolist = topolist)
+                                                      assign_val=True,
+                                                      topolist=topolist)
         # Inverse selection of maps from thenlist and assigning False values.
         #excludelist = self.perform_temporal_selection(thenlist, maplist,
-         #                                               assign_val = True,
-          #                                              inverse = True,
-          #                                              topolist = topolist)
+        #                                              assign_val = True,
+        #                                              inverse = True,
+        #                                              topolist = topolist)
         # Combining the selection and inverse selection list.
         resultlist = containlist# + excludelist
 
@@ -1895,10 +1916,6 @@ class TemporalAlgebraParser(object):
             resultlist = self.eval_map_list(tvarexpr, thenlist, topolist)
         elif len(tvarexpr) % 2 != 0:
             # Define variables for map list comparisons.
-            left_obj = []
-            operator = []
-            right_obj =[]
-            count = 0
             #self.msgr.fatal("Condition list is not complete. Elements missing")
             for iter in range(len(tvarexpr)):
                 expr = tvarexpr[iter]
@@ -2017,14 +2034,16 @@ class TemporalAlgebraParser(object):
         """
         if self.run:
             dbif, connected = init_dbif(self.dbif)
-            map_stds_type = None
             map_type = None
             if isinstance(t[3], list):
                 num = len(t[3])
                 count = 0
                 register_list = []
                 if num > 0:
-                    process_queue = pymod.ParallelModuleQueue(int(self.nprocs))
+
+                    if self.dry_run is False:
+                        process_queue = pymod.ParallelModuleQueue(int(self.nprocs))
+
                     for map_i in t[3]:
                         # Test if temporal extents have been changed by temporal
                         # relation operators (i|r).
@@ -2032,28 +2051,27 @@ class TemporalAlgebraParser(object):
                             maps_stds_type = map_i.get_new_stds_instance(None).get_type()
                             map_type = map_i.get_type()
                             if maps_stds_type != self.stdstype:
-                                self.msgr.warning(_("The resulting space time dataset type <%(a)s> is "\
-                                                                "different from the requested type <%(b)s>"\
-                                                                %({"a":maps_stds_type,  "b":self.stdstype})))
+                                self.msgr.warning(_("The resulting space time dataset type <%(a)s> is "
+                                                    "different from the requested type <%(b)s>"
+                                                    %({"a":maps_stds_type,  "b":self.stdstype})))
                         else:
                             map_type_2 = map_i.get_type()
                             if map_type != map_type_2:
                                 self.msgr.fatal(_("Maps that should be registered in the "\
-                                                           "resulting space time dataset have different types."))
+                                                  "resulting space time dataset have different types."))
 
-                        map_i_extent = map_i.get_temporal_extent_as_tuple()
-                        map_test = map_i.get_new_instance(map_i.get_id())
-                        map_test.select(dbif)
-                        map_test_extent = map_test.get_temporal_extent_as_tuple()
-                        if map_test_extent != map_i_extent:
+                        map_a_extent = map_i.get_temporal_extent_as_tuple()
+                        map_b = map_i.get_new_instance(map_i.get_id())
+                        map_b.select(dbif)
+                        map_b_extent = map_b.get_temporal_extent_as_tuple()
+                        if map_a_extent != map_b_extent:
                             # Create new map with basename
                             newident = self.basename + "_" + str(count)
                             map_result = map_i.get_new_instance(newident + "@" + self.mapset)
 
-                            if map_test.map_exists() and self.overwrite == False:
-                                self.msgr.fatal("Error raster maps with basename %s exist. "\
-                                                        "Use --o flag to overwrite existing file" \
-                                                        %(mapname))
+                            if map_b.map_exists() and self.overwrite == False:
+                                self.msgr.fatal("Error raster maps with basename %s exist. "
+                                                "Use --o flag to overwrite existing file"%map_i.get_id())
 
                             map_result.set_temporal_extent(map_i.get_temporal_extent())
                             map_result.set_spatial_extent(map_i.get_spatial_extent())
@@ -2062,34 +2080,36 @@ class TemporalAlgebraParser(object):
                             register_list.append(map_result)
 
                             # Copy the map
+                            m = copy.deepcopy(self.m_copy)
+                            m.flags["overwrite"].value = self.overwrite
+
                             if map_i.get_type() == 'raster':
-                                m = copy.deepcopy(self.m_copy)
                                 m.inputs["raster"].value = map_i.get_id(),  newident
-                                m.flags["overwrite"].value = self.overwrite
-                                process_queue.put(m)
                             elif map_i.get_type() == 'raster3d':
-                                m = copy.deepcopy(self.m_copy)
                                 m.inputs["raster_3d"].value = map_i.get_id(),  newident
-                                m.flags["overwrite"].value = self.overwrite
-                                process_queue.put(m)
                             elif map_i.get_type() == 'vector':
-                                m = copy.deepcopy(self.m_copy)
                                 m.inputs["vector"].value = map_i.get_id(),  newident
-                                m.flags["overwrite"].value = self.overwrite
+
+                            # Add the process description to the dict
+                            self.process_chain_dict["processes"].append(m.get_dict())
+
+                            if self.dry_run is False:
                                 process_queue.put(m)
                         else:
                             register_list.append(map_i)
-                        count  += 1
+
+                        count += 1
 
                     # Wait for running processes
-                    process_queue.wait()
+                    if self.dry_run is False:
+                        process_queue.wait()
 
                     # Open connection to temporal database.
                     # Create result space time dataset based on the map stds type
-                    resultstds = open_new_stds(t[1],maps_stds_type, \
-                                                             'absolute', t[1], t[1], \
-                                                             'mean', self.dbif, \
-                                                             overwrite = self.overwrite)
+                    resultstds = open_new_stds(t[1],maps_stds_type,
+                                               'absolute', t[1], t[1],
+                                               'mean', self.dbif,
+                                               overwrite=self.overwrite)
                     for map_i in register_list:
                         # Get meta data from grass database.
                         map_i.load()
@@ -2102,29 +2122,39 @@ class TemporalAlgebraParser(object):
                                 if not self.register_null:
                                     self.removable_maps[map_i.get_name()] = map_i
                                     continue
+
+                            start, end = map_i.get_temporal_extent_as_tuple()
+
                             if map_i.is_in_db(dbif) and self.overwrite:
                                 # Update map in temporal database.
-                                map_i.update_all(dbif)
+                                self.process_chain_dict["update"].append((map_i.get_name(), str(start), str(end)))
+                                if self.dry_run is False:
+                                    map_i.update_all(dbif)
                             elif map_i.is_in_db(dbif) and self.overwrite == False:
                                 # Raise error if map exists and no overwrite flag is given.
                                 self.msgr.fatal("Error map %s exist in temporal database. "
-                                                        "Use overwrite flag.  : \n%s" \
-                                                        %(map_i.get_map_id(), cmd.popen.stderr))
+                                                        "Use overwrite flag."%map_i.get_map_id())
                             else:
                                 # Insert map into temporal database.
-                                map_i.insert(dbif)
+                                self.process_chain_dict["insert"].append((map_i.get_name(), str(start), str(end)))
+                                if self.dry_run is False:
+                                    map_i.insert(dbif)
                         # Register map in result space time dataset.
-                        success = resultstds.register_map(map_i, dbif)
-                    resultstds.update_from_registered_maps(dbif)
+                        if self.dry_run is False:
+                            success = resultstds.register_map(map_i, dbif)
+                    if self.dry_run is False:
+                        resultstds.update_from_registered_maps(dbif)
                 elif num == 0:
-                    self.msgr.warning("Empty result space time dataset. "\
-                                                  "No map has been registered in %s"  %(t[1] ))
+                    self.msgr.warning("Empty result space time dataset. "
+                                      "No map has been registered in %s"%(t[1]))
                     # Open connection to temporal database.
                     # Create result space time dataset.
-                    resultstds = open_new_stds(t[1], self.stdstype, \
-                                                             'absolute', t[1], t[1], \
-                                                             'mean', dbif, \
-                                                             overwrite = self.overwrite)
+                    if self.dry_run is False:
+                        resultstds = open_new_stds(t[1], self.stdstype,
+                                                   'absolute', t[1], t[1],
+                                                   'mean', dbif,
+                                                   overwrite=self.overwrite)
+
             if connected:
                 dbif.close()
             t[0] = t[3]
@@ -2214,14 +2244,13 @@ class TemporalAlgebraParser(object):
                 # Check for occurrence of space time dataset.
                 if map_i.map_exists() == False:
                     raise FatalError(_("%s map <%s> not found in GRASS spatial database") %
-                        (map_i.get_type(), id_input))
+                                      (map_i.get_type(), id_input))
                 else:
                     # Select dataset entry from database.
                     map_i.select(dbif=self.dbif)
             else:
-                raise FatalError(_("Wrong map type <%s> . TMAP only supports single "\
-                                             "maps that are registered in the temporal GRASS database")\
-                                              %(map_i.get_type()))
+                raise FatalError(_("Wrong map type. TMAP only supports single "
+                                   "maps that are registered in the temporal GRASS database"))
             # Return map object.
             t[0] = [map_i]
         else:
@@ -2466,7 +2495,6 @@ class TemporalAlgebraParser(object):
 
             t[0] = resultlist
 
-
         if self.debug:
             print(t[1], t[3],  t[5], t[6])
 
@@ -2591,7 +2619,7 @@ class TemporalAlgebraParser(object):
             maplistA     = self.check_stds(t[1])
             maplistB     = self.check_stds(t[3])
             # Evaluate temporal operator.
-            operators  = self.eval_toperator(t[2],  optype = 'select')
+            operators  = self.eval_toperator(t[2],  optype='select')
             # Check for negative selection.
             if operators[2] == "!:":
                 negation = True
@@ -2599,7 +2627,8 @@ class TemporalAlgebraParser(object):
                 negation = False
             # Perform selection.
             selectlist = self.perform_temporal_selection(maplistA, maplistB,
-                         topolist = operators[0], inverse = negation)
+                                                         topolist=operators[0],
+                                                         inverse=negation)
             selectlist = self.set_granularity(selectlist, maplistB, operators[1],
                 operators[0])
             # Return map list.
@@ -2647,7 +2676,7 @@ class TemporalAlgebraParser(object):
             thenlist     = self.check_stds(t[7])
             # Get temporal conditional statement.
             tvarexpr     = t[5]
-            topolist     = self.eval_toperator(t[3],  optype = 'relation')[0]
+            topolist     = self.eval_toperator(t[3],  optype='relation')[0]
             thencond     = self.build_condition_list(tvarexpr, thenlist, topolist)
             thenresult   = self.eval_condition_list(thencond)
             # Clear the map and conditional values of the map list.
