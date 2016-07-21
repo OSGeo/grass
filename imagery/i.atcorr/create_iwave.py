@@ -51,8 +51,9 @@ def read_input(csvfile):
     should be a .csv file with the values
     of the filter function for each band in the sensor
     one column for band
-    first line must have a header with sensor band name
+    first line must have a header with sensor band names
     first column is wavelength
+    values are those of the discrete band filter functions
     """
     infile = open(csvfile, 'r')
         
@@ -60,7 +61,7 @@ def read_input(csvfile):
     bands = infile.readline().split(',')
     bands.remove(bands[0])
     bands[-1] = bands[-1].strip()
-    
+    print "Number of bands found: %d" % len(bands)
     infile.close()
     
     # create converter dictionary for import

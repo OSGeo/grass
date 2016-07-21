@@ -170,6 +170,23 @@ c        130 Green    "               ( 0.530-0.590 )                  c
 c        131 Red      "               ( 0.625-0.695 )                  c 
 c        132 NIR      "               ( 0.760-0.890 )                  c 
 c        133 Pan      "               ( 0.480-0.830 )                  c 
+c        134 Pan  band of Worldview 3
+c        135 Coastal_MS7  "           
+c        136 Blue_MS4 "
+c        137 Green_MS3
+c        138 Yellow_MS6
+c        139 Red_MS2  "
+c        140 Red Edge_MS5
+c        141 NIR1_MS1 "
+c        142 NIR2_MS8 "
+c        143 SWIR1    "
+c        144 SWIR2    "
+c        145 SWIR3    "
+c        146 SWIR4    "
+c        147 SWIR5    "
+c        148 SWIR6    "
+c        149 SWIR7    "
+c        150 SWIR8    "
 c                                                                      c
 c  note: wl has to be in micrometer                                    c
 c**********************************************************************/
@@ -220,6 +237,7 @@ private:
 	void spot7(int iwa);
 	void pleiades1a(int iwa);
 	void pleiades1b(int iwa);
+	void worldview3(int iwa);
 
 public:
 	/* To compute the equivalent wavelength needed for the calculation of the
