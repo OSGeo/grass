@@ -37,6 +37,7 @@ class TestTemporalRasterAlgebra(TestCase):
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="d2 = 11")
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="d3 = 12")
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="singletmap = 99")
+        cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="nullmap = null()")
 
         tgis.open_new_stds(name="A", type="strds", temporaltype="absolute",
                                          title="A", descr="A", semantic="field", overwrite=True)
@@ -61,6 +62,8 @@ class TestTemporalRasterAlgebra(TestCase):
                                                  start="2001-05-01", increment="5 days", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap", 
                                                 start="2001-03-01", end="2001-04-01")
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="nullmap",
+                                                start="2001-01-01", end="2001-07-01")
         
     def tearDown(self):
         return
@@ -95,13 +98,87 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual( D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 month')
 
+        tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True, dry_run=True)
+        tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        pc = tra.parse(expression=expr, basename="r", overwrite=True)
+
+        self.assertEqual(len(pc["register"]), 6)
+        self.assertEqual(len(pc["processes"]), 6)
+        self.assertEqual(pc["processes"][0]["name"], "r.mapcalc")
+        self.assertEqual(pc["processes"][5]["name"], "r.mapcalc")
+        self.assertEqual(pc["STDS"]["name"], "R")
+        self.assertEqual(pc["STDS"]["stdstype"], "strds")
+
     def test_2(self):
+        """Simple arithmetik test"""
+        tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
+        expr = "R = A + B + C"
+        ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        self.assertEqual(ret, True)
+
+        tra.parse(expression=expr, basename="r", overwrite=True)
+
+        D = tgis.open_old_stds("R", type="strds")
+
+        self.assertEqual(D.metadata.get_number_of_maps(), 6)
+        self.assertEqual(D.metadata.get_min_min(), 17) # 1 + 7 + 9
+        self.assertEqual(D.metadata.get_max_max(), 23) # 6 + 8 + 9
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 7, 1))
+        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.get_granularity(),  u'1 month')
+
+        tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True, dry_run=True)
+        tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        pc = tra.parse(expression=expr, basename="r", overwrite=True)
+
+        self.assertEqual(len(pc["register"]), 6)
+        self.assertEqual(len(pc["processes"]), 6)
+        self.assertEqual(pc["processes"][0]["name"], "r.mapcalc")
+        self.assertEqual(pc["processes"][5]["name"], "r.mapcalc")
+        self.assertEqual(pc["STDS"]["name"], "R")
+        self.assertEqual(pc["STDS"]["stdstype"], "strds")
+
+    def test_3(self):
+        """Simple arithmetik test with null map"""
+        tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
+        expr = "R = A + B + C + tmap(nullmap)"
+        ret = tra.setup_common_granularity(expression=expr,
+                                           lexer=tgis.TemporalRasterAlgebraLexer())
+        self.assertEqual(ret, True)
+
+        tra.parse(expression=expr, basename="r", overwrite=True)
+
+        D = tgis.open_old_stds("R", type="strds")
+
+        self.assertEqual(D.metadata.get_number_of_maps(), 0)
+        self.assertEqual(D.metadata.get_min_min(), None)
+        self.assertEqual(D.metadata.get_max_max(), None)
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, None)
+        self.assertEqual(end, None)
+        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.get_granularity(),  None)
+
+        tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True, dry_run=True)
+        tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
+        pc = tra.parse(expression=expr, basename="r", overwrite=True)
+
+        print(pc)
+
+        self.assertEqual(len(pc["register"]), 0)
+        self.assertEqual(len(pc["processes"]), 0)
+        self.assertEqual(pc["STDS"]["name"], "R")
+        self.assertEqual(pc["STDS"]["stdstype"], "strds")
+
+    def test_4(self):
         """Simple arithmetik test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         expr = "R = if(D == 11,  A - 1, A + 1)"
         ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
-        
+
         tra.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -149,7 +226,7 @@ class TestTemporalRasterAlgebra(TestCase):
         expr = 'R = A + td(A:D)'
         ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
-        
+
         tra.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -169,7 +246,7 @@ class TestTemporalRasterAlgebra(TestCase):
         expr = 'R = if(start_date(A) >= "2001-02-01", A + A)'
         ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
-        
+
         tra.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -187,7 +264,7 @@ class TestTemporalRasterAlgebra(TestCase):
         expr = 'R = if(A#A == 1, A - A)'
         ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
-        
+
         tra.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -205,7 +282,7 @@ class TestTemporalRasterAlgebra(TestCase):
         expr = 'R = if(start_date(A) < "2001-03-01" && A#A == 1, A+C, A-C)'
         ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
-        
+
         tra.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -223,7 +300,7 @@ class TestTemporalRasterAlgebra(TestCase):
         expr ='R = (A[0,0,-1] : D) + (A[0,0,1] : D)'
         ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
-        
+
         tra.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -234,14 +311,14 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 5, 6))
-    
+
     def test_map(self):
         """Test STDS + single map without timestamp"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         expr = "R = A + map(singletmap)"
         ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
-        
+
         tra.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -252,20 +329,20 @@ class TestTemporalRasterAlgebra(TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
-        
+
     def test_tmap_map(self):
         """Test STDS + single map with and without timestamp"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         expr = "R = tmap(singletmap) + A + map(singletmap)"
         ret = tra.setup_common_granularity(expression=expr,  lexer = tgis.TemporalRasterAlgebraLexer())
         self.assertEqual(ret, True)
-        
+
         tra.parse(expression=expr, basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
 
         self.assertEqual(D.metadata.get_number_of_maps(),1)
-        self.assertEqual(D.metadata.get_min_min(), 201) 
+        self.assertEqual(D.metadata.get_min_min(), 201)
         self.assertEqual(D.metadata.get_max_max(), 201)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 3, 1))
