@@ -159,27 +159,27 @@ class TemporalOperatorLexer(object):
     tokens = tokens + tuple(relations.values())
 
     # Regular expression rules for simple tokens
-    t_T_SELECT                = r':'
-    t_T_NOT_SELECT        = r'!:'
-    t_COMMA                    = r','
-    t_LEFTREF                  = '^[l|left]'
-    t_RIGHTREF                ='^[r|right]'
-    t_UNION                     = '^[u|union]'
-    t_DISJOINT                 = '^[d|disjoint]'
-    t_INTERSECT             = '^[i|intersect]'
-    t_HASH                      = r'\#'
-    t_OR                          = r'[\|]'
-    t_AND                        = r'[&]'
-    t_DISOR                     = r'\+'
-    t_XOR                         = r'\^'
-    t_NOT                         = r'\~'
-    t_MOD                       = r'[\%]'
-    t_DIV                         = r'[\/]'
-    t_MULT                      = r'[\*]'
-    t_ADD                       = r'[\+]'
-    t_SUB                        = r'[-]'
-    t_CLPAREN                = r'\{'
-    t_CRPAREN                = r'\}'
+    t_T_SELECT       = r':'
+    t_T_NOT_SELECT   = r'!:'
+    t_COMMA          = r','
+    t_LEFTREF        = '^[l|left]'
+    t_RIGHTREF       ='^[r|right]'
+    t_UNION          = '^[u|union]'
+    t_DISJOINT       = '^[d|disjoint]'
+    t_INTERSECT      = '^[i|intersect]'
+    t_HASH           = r'\#'
+    t_OR             = r'[\|]'
+    t_AND            = r'[&]'
+    t_DISOR          = r'\+'
+    t_XOR            = r'\^'
+    t_NOT            = r'\~'
+    t_MOD            = r'[\%]'
+    t_DIV            = r'[\/]'
+    t_MULT           = r'[\*]'
+    t_ADD            = r'[\+]'
+    t_SUB            = r'[-]'
+    t_CLPAREN        = r'\{'
+    t_CRPAREN        = r'\}'
 
     # These are the things that should be ignored.
     t_ignore = ' \t'
@@ -221,7 +221,7 @@ class TemporalOperatorLexer(object):
     # Handle errors.
     def t_error(self, t):
         raise SyntaxError("syntax error on line %d near '%s'" %
-            (t.lineno, t.value))
+                          (t.lineno, t.value))
 
     # Build the lexer
     def build(self,**kwargs):
@@ -246,17 +246,27 @@ class TemporalOperatorParser(object):
         self.lexer = TemporalOperatorLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self)
-        self.relations = None
-        self.temporal  = None
-        self.function  = None
-        self.aggregate = None
+        self.relations = None   # Temporal relations equals, contain, during, ...
+        self.temporal  = None   # Temporal operation like intersect, left, right, ...
+        self.function  = None   # Actual operation
+        self.aggregate = None   # Aggregation function
 
-    def parse(self, expression,  optype = 'relation'):
+    def parse(self, expression,  optype='relation'):
+        """Parse the expression and fill the object variables
+
+        :param expression:
+        :param optype: The parameter optype can be of type:
+                       - select   { :, during,   r}
+                       - boolean  {&&, contains, |}
+                       - raster   { *, equal,    |}
+                       - vector   { |, starts,   &}
+                       - hash     { #, during,   l}
+                       - relation {during}
+        :return:
+        """
         self.optype = optype
         self.parser.parse(expression)
-        # The parameter optype can be of type: select {:, during, r}, boolean{&&, contains, |},
-        #                                                            raster{*, equal, |}, vector {|, starts, &},
-        #                                                            hash{#, during, l} or relation {during}.
+        #
 
     # Error rule for syntax errors.
     def p_error(self, t):
@@ -266,7 +276,6 @@ class TemporalOperatorParser(object):
     tokens = TemporalOperatorLexer.tokens
 
     def p_relation_operator(self, t):
-        # The expression should always return a list of maps.
         """
         operator : CLPAREN relation CRPAREN
                  | CLPAREN relationlist CRPAREN
@@ -286,12 +295,11 @@ class TemporalOperatorParser(object):
             t[0] = t[2]
 
     def p_relation_bool_operator(self, t):
-        # The expression should always return a list of maps.
         """
-        operator : CLPAREN OR OR COMMA relation CRPAREN
-                | CLPAREN AND AND COMMA relation CRPAREN
-                | CLPAREN OR OR COMMA relationlist CRPAREN
-                | CLPAREN AND AND COMMA relationlist CRPAREN
+        operator : CLPAREN OR  OR  COMMA relation     CRPAREN
+                 | CLPAREN AND AND COMMA relation     CRPAREN
+                 | CLPAREN OR  OR  COMMA relationlist CRPAREN
+                 | CLPAREN AND AND COMMA relationlist CRPAREN
         """
         if not self.optype == 'boolean':
             raise SyntaxError("invalid syntax")
@@ -308,16 +316,15 @@ class TemporalOperatorParser(object):
             t[0] = t[2]
 
     def p_relation_bool_combi_operator(self, t):
-        # The expression should always return a list of maps.
         """
-        operator : CLPAREN OR OR COMMA relation COMMA OR CRPAREN
-                | CLPAREN OR OR COMMA relation COMMA AND CRPAREN
-                | CLPAREN AND AND COMMA relation COMMA OR CRPAREN
-                | CLPAREN AND AND COMMA relation COMMA AND CRPAREN
-                | CLPAREN OR OR COMMA relationlist COMMA OR CRPAREN
-                | CLPAREN OR OR COMMA relationlist COMMA AND CRPAREN
-                | CLPAREN AND AND COMMA relationlist COMMA OR CRPAREN
-                | CLPAREN AND AND COMMA relationlist COMMA AND CRPAREN
+        operator : CLPAREN OR  OR  COMMA relation     COMMA OR  CRPAREN
+                 | CLPAREN OR  OR  COMMA relation     COMMA AND CRPAREN
+                 | CLPAREN AND AND COMMA relation     COMMA OR  CRPAREN
+                 | CLPAREN AND AND COMMA relation     COMMA AND CRPAREN
+                 | CLPAREN OR  OR  COMMA relationlist COMMA OR  CRPAREN
+                 | CLPAREN OR  OR  COMMA relationlist COMMA AND CRPAREN
+                 | CLPAREN AND AND COMMA relationlist COMMA OR  CRPAREN
+                 | CLPAREN AND AND COMMA relationlist COMMA AND CRPAREN
         """
         if not self.optype == 'boolean':
             raise SyntaxError("invalid syntax")
@@ -334,12 +341,11 @@ class TemporalOperatorParser(object):
             t[0] = t[2]
 
     def p_relation_bool_combi_operator2(self, t):
-        # The expression should always return a list of maps.
         """
-        operator : CLPAREN OR OR COMMA relation COMMA temporal CRPAREN
-                | CLPAREN AND AND COMMA relation COMMA temporal CRPAREN
-                | CLPAREN OR OR COMMA relationlist COMMA temporal CRPAREN
-                | CLPAREN AND AND COMMA relationlist COMMA temporal CRPAREN
+        operator : CLPAREN OR  OR  COMMA relation     COMMA temporal CRPAREN
+                 | CLPAREN AND AND COMMA relation     COMMA temporal CRPAREN
+                 | CLPAREN OR  OR  COMMA relationlist COMMA temporal CRPAREN
+                 | CLPAREN AND AND COMMA relationlist COMMA temporal CRPAREN
         """
         if not self.optype == 'boolean':
             raise SyntaxError("invalid syntax")
@@ -356,16 +362,15 @@ class TemporalOperatorParser(object):
             t[0] = t[2]
 
     def p_relation_bool_combi_operator3(self, t):
-        # The expression should always return a list of maps.
         """
-        operator : CLPAREN OR OR COMMA relation COMMA OR COMMA temporal CRPAREN
-                | CLPAREN OR OR COMMA relation COMMA AND COMMA temporal CRPAREN
-                | CLPAREN AND AND COMMA relation COMMA OR COMMA temporal CRPAREN
-                | CLPAREN AND AND COMMA relation COMMA AND COMMA temporal CRPAREN
-                | CLPAREN OR OR COMMA relationlist COMMA OR COMMA temporal CRPAREN
-                | CLPAREN OR OR COMMA relationlist COMMA AND COMMA temporal CRPAREN
-                | CLPAREN AND AND COMMA relationlist COMMA OR COMMA temporal CRPAREN
-                | CLPAREN AND AND COMMA relationlist COMMA AND COMMA temporal CRPAREN
+        operator : CLPAREN OR  OR  COMMA relation     COMMA OR  COMMA temporal CRPAREN
+                 | CLPAREN OR  OR  COMMA relation     COMMA AND COMMA temporal CRPAREN
+                 | CLPAREN AND AND COMMA relation     COMMA OR  COMMA temporal CRPAREN
+                 | CLPAREN AND AND COMMA relation     COMMA AND COMMA temporal CRPAREN
+                 | CLPAREN OR  OR  COMMA relationlist COMMA OR  COMMA temporal CRPAREN
+                 | CLPAREN OR  OR  COMMA relationlist COMMA AND COMMA temporal CRPAREN
+                 | CLPAREN AND AND COMMA relationlist COMMA OR  COMMA temporal CRPAREN
+                 | CLPAREN AND AND COMMA relationlist COMMA AND COMMA temporal CRPAREN
         """
         if not self.optype == 'boolean':
             raise SyntaxError("invalid syntax")
@@ -382,13 +387,12 @@ class TemporalOperatorParser(object):
             t[0] = t[2]
 
     def p_select_relation_operator(self, t):
-        # The expression should always return a list of maps.
         """
         operator : CLPAREN select CRPAREN
-                    | CLPAREN select COMMA relation CRPAREN
-                    | CLPAREN select COMMA relationlist CRPAREN
-                    | CLPAREN select COMMA relation COMMA temporal CRPAREN
-                    | CLPAREN select COMMA relationlist COMMA temporal CRPAREN
+                 | CLPAREN select COMMA relation     CRPAREN
+                 | CLPAREN select COMMA relationlist CRPAREN
+                 | CLPAREN select COMMA relation     COMMA temporal CRPAREN
+                 | CLPAREN select COMMA relationlist COMMA temporal CRPAREN
         """
         if not self.optype == 'select':
             raise SyntaxError("invalid syntax")
@@ -397,10 +401,6 @@ class TemporalOperatorParser(object):
                 # Set three operator components.
                 self.relations = ['equal']
                 self.temporal  = "l"
-                self.function  = t[2]
-            elif len(t) == 5:
-                self.relations = ['equal']
-                self.temporal  = t[3]
                 self.function  = t[2]
             elif len(t) == 6:
                 if isinstance(t[4], list):
@@ -419,13 +419,12 @@ class TemporalOperatorParser(object):
             t[0] = t[2]
 
     def p_hash_relation_operator(self, t):
-        # The expression should always return a list of maps.
         """
         operator : CLPAREN HASH CRPAREN
-                    | CLPAREN HASH COMMA relation CRPAREN
-                    | CLPAREN HASH COMMA relationlist CRPAREN
-                    | CLPAREN HASH COMMA relation COMMA temporal CRPAREN
-                    | CLPAREN HASH COMMA relationlist COMMA temporal CRPAREN
+                 | CLPAREN HASH COMMA relation     CRPAREN
+                 | CLPAREN HASH COMMA relationlist CRPAREN
+                 | CLPAREN HASH COMMA relation     COMMA temporal CRPAREN
+                 | CLPAREN HASH COMMA relationlist COMMA temporal CRPAREN
         """
         if not self.optype == 'hash':
             raise SyntaxError("invalid syntax")
@@ -434,10 +433,6 @@ class TemporalOperatorParser(object):
                 # Set three operator components.
                 self.relations = ['equal']
                 self.temporal  = "l"
-                self.function  = t[2]
-            elif len(t) == 5:
-                self.relations = ['equal']
-                self.temporal  = t[3]
                 self.function  = t[2]
             elif len(t) == 6:
                 if isinstance(t[4], list):
@@ -459,10 +454,10 @@ class TemporalOperatorParser(object):
         # The expression should always return a list of maps.
         """
         operator : CLPAREN arithmetic CRPAREN
-                    | CLPAREN arithmetic COMMA relation CRPAREN
-                    | CLPAREN arithmetic COMMA relationlist CRPAREN
-                    | CLPAREN arithmetic COMMA relation COMMA temporal CRPAREN
-                    | CLPAREN arithmetic COMMA relationlist COMMA temporal CRPAREN
+                 | CLPAREN arithmetic COMMA relation     CRPAREN
+                 | CLPAREN arithmetic COMMA relationlist CRPAREN
+                 | CLPAREN arithmetic COMMA relation     COMMA temporal CRPAREN
+                 | CLPAREN arithmetic COMMA relationlist COMMA temporal CRPAREN
         """
         if not self.optype == 'raster':
             raise SyntaxError("invalid syntax")
@@ -471,10 +466,6 @@ class TemporalOperatorParser(object):
                 # Set three operator components.
                 self.relations = ['equal']
                 self.temporal  = "l"
-                self.function  = t[2]
-            elif len(t) == 5:
-                self.relations = ['equal']
-                self.temporal  = t[3]
                 self.function  = t[2]
             elif len(t) == 6:
                 if isinstance(t[4], list):
@@ -496,10 +487,10 @@ class TemporalOperatorParser(object):
         # The expression should always return a list of maps.
         """
         operator : CLPAREN overlay CRPAREN
-                    | CLPAREN overlay COMMA relation CRPAREN
-                    | CLPAREN overlay COMMA relationlist CRPAREN
-                    | CLPAREN overlay COMMA relation COMMA temporal CRPAREN
-                    | CLPAREN overlay COMMA relationlist COMMA temporal CRPAREN
+                 | CLPAREN overlay COMMA relation     CRPAREN
+                 | CLPAREN overlay COMMA relationlist CRPAREN
+                 | CLPAREN overlay COMMA relation     COMMA temporal CRPAREN
+                 | CLPAREN overlay COMMA relationlist COMMA temporal CRPAREN
         """
         if not self.optype == 'overlay':
             raise SyntaxError("invalid syntax")
@@ -508,10 +499,6 @@ class TemporalOperatorParser(object):
                 # Set three operator components.
                 self.relations = ['equal']
                 self.temporal  = "l"
-                self.function  = t[2]
-            elif len(t) == 5:
-                self.relations = ['equal']
-                self.temporal  = t[3]
                 self.function  = t[2]
             elif len(t) == 6:
                 if isinstance(t[4], list):
@@ -572,10 +559,10 @@ class TemporalOperatorParser(object):
         # The list of relations.
         """
         temporal : LEFTREF
-                | RIGHTREF
-                | UNION
-                | DISJOINT
-                | INTERSECT
+                 | RIGHTREF
+                 | UNION
+                 | DISJOINT
+                 | INTERSECT
         """
         t[0] = t[1]
 
@@ -602,10 +589,10 @@ class TemporalOperatorParser(object):
         # The list of relations.
         """
         overlay : AND
-                   | OR
-                   | XOR
-                   | DISOR
-                   | NOT
+                | OR
+                | XOR
+                | DISOR
+                | NOT
         """
         t[0] = t[1]
 ###############################################################################
