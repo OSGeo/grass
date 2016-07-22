@@ -254,7 +254,8 @@ class TemporalOperatorLexer(object):
 
     # Build the lexer
     def build(self,**kwargs):
-        self.lexer = lex.lex(module=self, **kwargs)
+        self.lexer = lex.lex(module=self, optimize=False,
+                             nowarn=True, debug=0, **kwargs)
 
     # Just for testing
     def test(self,data):
@@ -274,7 +275,7 @@ class TemporalOperatorParser(object):
     def __init__(self):
         self.lexer = TemporalOperatorLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self)
+        self.parser = yacc.yacc(module=self, debug=0)
         self.relations = None   # Temporal relations (equals, contain, during, ...)
         self.temporal  = None   # Temporal operation (intersect, left, right, ...)
         self.function  = None   # Actual operation (+, -, /, *, ... )

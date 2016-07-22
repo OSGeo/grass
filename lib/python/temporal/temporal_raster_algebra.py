@@ -95,8 +95,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         self.expression = expression
         self.parser.parse(expression)
 
-        if self.dry_run is True:
-            return self.process_chain_dict
+        return self.process_chain_dict
 
     ######################### Temporal functions ##############################
 

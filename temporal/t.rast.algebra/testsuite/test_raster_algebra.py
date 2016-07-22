@@ -74,8 +74,10 @@ class TestTRastAlgebra(TestCase):
         """Testing the conditional time dimension bug, that uses the time 
             dimension of the conditional statement instead the time dimension 
             of the then/else statement."""
-        self.assertModule("t.rast.algebra",  expression="R = if({contains}, B == 5,  A - 1,  A + 1)", 
-                                                                 basename="r")
+        self.assertModule("t.rast.algebra", expression="R = if({contains}, B == 5, "
+                                                       "A - 1,  A + 1)", basename="r", flags="d")
+        self.assertModule("t.rast.algebra", expression="R = if({contains}, B == 5, "
+                                                       "A - 1,  A + 1)", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -90,8 +92,9 @@ class TestTRastAlgebra(TestCase):
 
     def test_simple_arith_hash_1(self):
         """Simple arithmetic test including the hash operator"""
-       
-        self.assertModule("t.rast.algebra",  expression='R = A + (A {#, equal,l} A)', basename="r")
+
+        self.assertModule("t.rast.algebra", expression='R = A + (A {#, equal,l} A)', basename="r", flags="d")
+        self.assertModule("t.rast.algebra", expression='R = A + (A {#, equal,l} A)', basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -106,7 +109,8 @@ class TestTRastAlgebra(TestCase):
     def test_simple_arith_td_1(self):
         """Simple arithmetic test"""
        
-        self.assertModule("t.rast.algebra",  expression='R = A + td(A)', basename="r")
+        self.assertModule("t.rast.algebra", expression='R = A + td(A)', basename="r", flags="d")
+        self.assertModule("t.rast.algebra", expression='R = A + td(A)', basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -120,7 +124,8 @@ class TestTRastAlgebra(TestCase):
     def test_simple_arith_td_2(self):
         """Simple arithmetic test"""
        
-        self.assertModule("t.rast.algebra",  expression='R = A / td(A)', basename="r")
+        self.assertModule("t.rast.algebra", expression='R = A / td(A)', basename="r", flags="d")
+        self.assertModule("t.rast.algebra", expression='R = A / td(A)', basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -134,7 +139,8 @@ class TestTRastAlgebra(TestCase):
     def test_simple_arith_td_3(self):
         """Simple arithmetic test"""
        
-        self.assertModule("t.rast.algebra",  expression='R = A {+,equal} td(A)', basename="r")
+        self.assertModule("t.rast.algebra", expression='R = A {+,equal} td(A)', basename="r", flags="d")
+        self.assertModule("t.rast.algebra", expression='R = A {+,equal} td(A)', basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -148,7 +154,8 @@ class TestTRastAlgebra(TestCase):
     def test_simple_arith_td_4(self):
         """Simple arithmetic test"""
        
-        self.assertModule("t.rast.algebra",  expression='R = A {/, equal} td(A)', basename="r")
+        self.assertModule("t.rast.algebra", expression='R = A {/, equal} td(A)', basename="r", flags="d")
+        self.assertModule("t.rast.algebra", expression='R = A {/, equal} td(A)', basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -163,7 +170,8 @@ class TestTRastAlgebra(TestCase):
     def test_simple_arith_if_1(self):
         """Simple arithmetic test with if condition"""
        
-        self.assertModule("t.rast.algebra",  expression='R = if({equal}, start_date(A) >= "2001-01-02", A + A)', basename="r")
+        self.assertModule("t.rast.algebra", expression='R = if({equal}, start_date(A)'
+                                                       ' >= "2001-01-02", A + A)', basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -177,7 +185,7 @@ class TestTRastAlgebra(TestCase):
     def test_simple_arith_if_2(self):
         """Simple arithmetic test with if condition"""
        
-        self.assertModule("t.rast.algebra",  expression='R = if({equal}, A#A == 1, A - A)', basename="r")
+        self.assertModule("t.rast.algebra", expression='R = if({equal}, A#A == 1, A - A)', basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -191,8 +199,9 @@ class TestTRastAlgebra(TestCase):
     def test_complex_arith_if_1(self):
         """Complex arithmetic test with if condition"""
        
-        self.assertModule("t.rast.algebra",  expression='R = if(start_date(A) < "2001-01-03" && A#A == 1, A{+, starts,l}C, A{+, finishes,l}C)', \
-                  basename="r")
+        self.assertModule("t.rast.algebra", expression='R = if(start_date(A) < "2001-01-03" && A#A == 1,'
+                                                        ' A{+, starts,l}C, A{+, finishes,l}C)',
+                          basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -206,7 +215,7 @@ class TestTRastAlgebra(TestCase):
     def test_simple_arith_1(self):
         """Simple arithmetic test"""
        
-        self.assertModule("t.rast.algebra",  expression="R = A {*, equal} A {+, equal} A", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A {*, equal} A {+, equal} A", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -220,7 +229,7 @@ class TestTRastAlgebra(TestCase):
     def test_simple_arith_2(self):
         """Simple arithmetic test that creates an empty strds"""
        
-        self.assertModule("t.rast.algebra",  expression="R = A {*, during} A {+, during} A", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A {*, during} A {+, during} A", basename="r")
         D = tgis.open_old_stds("R", type="strds")
         
         self.assertEqual(D.metadata.get_number_of_maps(), 0)
@@ -228,7 +237,7 @@ class TestTRastAlgebra(TestCase):
     def test_simple_arith_3(self):
         """Simple arithmetic test"""
        
-        self.assertModule("t.rast.algebra",  expression="R = A / A + A*A/A", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A / A + A*A/A", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -242,7 +251,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_intersection_1(self):
         """Simple temporal intersection test"""
        
-        self.assertModule("t.rast.algebra",  expression="R = A {+,equal,i} B", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A {+,equal,i} B", basename="r")
         D = tgis.open_old_stds("R", type="strds")
         
         self.assertEqual(D.metadata.get_number_of_maps(), 0)
@@ -250,7 +259,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_intersection_2(self):
         """Simple temporal intersection test"""
        
-        self.assertModule("t.rast.algebra",  expression="R = A {+,during,i} B", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A {+,during,i} B", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -264,7 +273,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_intersection_3(self):
         """Simple temporal intersection test"""
        
-        self.assertModule("t.rast.algebra",  expression="R = A {+,starts,i} B", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A {+,starts,i} B", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -278,7 +287,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_intersection_4(self):
         """Simple temporal intersection test"""
        
-        self.assertModule("t.rast.algebra",  expression="R = A {+,finishes,intersect} B", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A {+,finishes,intersect} B", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -292,7 +301,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_intersection_5(self):
         """Simple temporal intersection test"""
        
-        self.assertModule("t.rast.algebra",  expression="R = A {+,starts|finishes,i} B", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A {+,starts|finishes,i} B", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -306,7 +315,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_intersection_6(self):
         """Simple temporal intersection test"""
        
-        self.assertModule("t.rast.algebra",  expression="R = B {+,overlaps,u} C", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = B {+,overlaps,u} C", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -320,7 +329,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_intersection_7(self):
         """Simple temporal intersection test"""
        
-        self.assertModule("t.rast.algebra",  expression="R = B {+,overlapped,u} C", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = B {+,overlapped,u} C", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -334,7 +343,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_intersection_8(self):
         """Simple temporal intersection test"""
        
-        self.assertModule("t.rast.algebra",  expression='R = A {+,during,l} buff_t(C, "1 day") ',
+        self.assertModule("t.rast.algebra", expression='R = A {+,during,l} buff_t(C, "1 day") ',
                   basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
@@ -349,7 +358,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_neighbors_1(self):
         """Simple temporal neighborhood computation test"""
        
-        self.assertModule("t.rast.algebra",  expression='R = A[-1] + A[1]',
+        self.assertModule("t.rast.algebra", expression='R = A[-1] + A[1]',
                   basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
@@ -364,7 +373,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_neighbors_2(self):
         """Simple temporal neighborhood computation test"""
        
-        self.assertModule("t.rast.algebra",  expression='R = A[0,0,-1] + A[0,0,1]',
+        self.assertModule("t.rast.algebra", expression='R = A[0,0,-1] + A[0,0,1]',
                   basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
@@ -379,7 +388,7 @@ class TestTRastAlgebra(TestCase):
     def test_tmap_function1(self):
         """Testing the tmap function. """
        
-        self.assertModule("t.rast.algebra",  expression='R = tmap(singletmap)', basename="r")
+        self.assertModule("t.rast.algebra", expression='R = tmap(singletmap)', basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -396,7 +405,7 @@ class TestTRastAlgebra(TestCase):
     def test_tmap_function2(self):
         """Testing the tmap function. """
        
-        self.assertModule("t.rast.algebra",  expression='R = tmap(singletmap) + 1', basename="r")
+        self.assertModule("t.rast.algebra", expression='R = tmap(singletmap) + 1', basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -413,7 +422,7 @@ class TestTRastAlgebra(TestCase):
     def test_map_function1(self):
         """Testing the map function. """
        
-        self.assertModule("t.rast.algebra",  expression='R = map(singlemap) + A', basename="r")
+        self.assertModule("t.rast.algebra", expression='R = map(singlemap) + A', basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -430,7 +439,7 @@ class TestTRastAlgebra(TestCase):
     def test_map_function2(self):
         """Testing the map function. """
        
-        self.assertModule("t.rast.algebra",  expression='R =  A * map(singlemap)', basename="r")
+        self.assertModule("t.rast.algebra", expression='R =  A * map(singlemap)', basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -447,7 +456,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_select(self):
         """Testing the temporal select operator. """
        
-        self.assertModule("t.rast.algebra",  expression="R = A : A", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A : A", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -463,7 +472,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_select(self):
         """Testing the temporal select operator. """
        
-        self.assertModule("t.rast.algebra",  expression="R = A : D", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A : D", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -479,7 +488,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_select_operators1(self):
         """Testing the temporal select operator. Including temporal relations. """
        
-        self.assertModule("t.rast.algebra",  expression="R = A : D", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A : D", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -495,7 +504,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_select_operators2(self):
         """Testing the temporal select operator. Including temporal relations. """
        
-        self.assertModule("t.rast.algebra",  expression="R = A {!:,during} C", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A {!:,during} C", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -512,7 +521,7 @@ class TestTRastAlgebra(TestCase):
         """Testing the temporal select operator. Including temporal relations and 
             different temporal operators (lr|+&)"""
        
-        self.assertModule("t.rast.algebra",  expression="R = A {:,during,d} B", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A {:,during,d} B", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -529,7 +538,7 @@ class TestTRastAlgebra(TestCase):
         """Testing the temporal select operator. Including temporal relations and 
             different temporal operators (lr|+&)"""
        
-        self.assertModule("t.rast.algebra",  expression="R = A {:,equal|during,r} C", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A {:,equal|during,r} C", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -550,7 +559,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_hash_operator1(self):
         """Testing the temporal hash operator in the raster algebra. """
        
-        self.assertModule("t.rast.algebra",  expression="R = if(A # D == 1, A)", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = if(A # D == 1, A)", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -566,7 +575,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_hash_operator2(self):
         """Testing the temporal hash operator in the raster algebra. """
        
-        self.assertModule("t.rast.algebra",  expression="R = A # D", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = A # D", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -582,7 +591,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_hash_operator3(self):
         """Testing the temporal hash operator in the raster algebra. """
        
-        self.assertModule("t.rast.algebra",  expression="R = C {#,contains} A", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = C {#,contains} A", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -598,7 +607,7 @@ class TestTRastAlgebra(TestCase):
     def test_temporal_hash_operator4(self):
         """Testing the temporal hash operator in the raster algebra. """
        
-        self.assertModule("t.rast.algebra",  expression="R = if({contains},A # D == 1, C {#,contains} A)", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = if({contains},A # D == 1, C {#,contains} A)", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -614,7 +623,7 @@ class TestTRastAlgebra(TestCase):
     def test_raster_arithmetic_relation_1(self):
         """Arithmetic test with temporal intersection"""
        
-        self.assertModule("t.rast.algebra",  expression="R = B {+,contains,l} A ", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = B {+,contains,l} A ", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -630,7 +639,7 @@ class TestTRastAlgebra(TestCase):
     def test_raster_arithmetic_relation_2(self):
         """Arithmetic test with temporal intersection"""
        
-        self.assertModule("t.rast.algebra",  expression="R = B {*,contains,l} A ", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = B {*,contains,l} A ", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -646,7 +655,7 @@ class TestTRastAlgebra(TestCase):
     def test_raster_arithmetic_relation_3(self):
         """Arithmetic test with temporal intersection"""
        
-        self.assertModule("t.rast.algebra",  expression="R = B {+,contains,l} A ", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = B {+,contains,l} A ", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -661,8 +670,8 @@ class TestTRastAlgebra(TestCase):
     
     def test_raster_arithmetic_relation_4(self):
         """Arithmetic test with temporal intersection"""
-       
-        self.assertModule("t.rast.algebra",  expression="R = B {+,contains,r} A ", basename="r")
+
+        self.assertModule("t.rast.algebra", expression="R = B {+,contains,r} A ", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -678,7 +687,9 @@ class TestTRastAlgebra(TestCase):
     def test_raster_arithmetic_relation_5(self):
         """Complex arithmetic test with temporal intersection"""
        
-        self.assertModule("t.rast.algebra",  expression="R = tmap(singletmap) {+,equal| precedes| follows,l} A + map(singlemap)", basename="r")
+        self.assertModule("t.rast.algebra", expression="R = tmap(singletmap) "
+                                                        "{+,equal| precedes| follows,l} "
+                                                        "A + map(singlemap)", basename="r")
 
         D = tgis.open_old_stds("R", type="strds")
         
