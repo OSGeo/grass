@@ -63,6 +63,10 @@
 #% description: Use granularity sampling instead of the temporal topology approach
 #%end
 
+#%flag
+#% key: d
+#% description: Perform a dry run, compute all depenencies and module calls but don't run them
+#%end
 
 import grass.script
 import grass.temporal as tgis
@@ -75,6 +79,7 @@ def main():
     spatial = flags["s"]
     register_null = flags["n"]
     granularity = flags["g"]
+    dry_run = flags["d"]
 
     # Check for PLY istallation
     try:
@@ -86,13 +91,22 @@ def main():
                              "t.rast.algebra without PLY requirement."))
 
     tgis.init(True)
-    p = tgis.TemporalRasterAlgebraParser(run = True, debug=False, spatial = spatial, nprocs = nprocs, register_null = register_null)
+    p = tgis.TemporalRasterAlgebraParser(run = True,
+                                         debug=False,
+                                         spatial=spatial,
+                                         nprocs=nprocs,
+                                         register_null=register_null,
+                                         dry_run=dry_run)
     
     if granularity:
         if not p.setup_common_granularity(expression=expression,  lexer = tgis.TemporalRasterAlgebraLexer()):
             grass.script.fatal(_("Unable to process the expression in granularity algebra mode"))
     
-    p.parse(expression, basename, grass.script.overwrite())
+    pc = p.parse(expression, basename, grass.script.overwrite())
+
+    if dry_run is True:
+        import pprint
+        pprint.pprint(pc)
 
 if __name__ == "__main__":
     options, flags = grass.script.parser()

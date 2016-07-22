@@ -77,14 +77,14 @@ class TestTemporalRasterAlgebra(TestCase):
         D.select()
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 2) 
-        self.assertEqual(D.metadata.get_max_max(), 3) 
+        self.assertEqual(D.metadata.get_min_min(), 2)
+        self.assertEqual(D.metadata.get_max_max(), 3)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
         self.assertEqual( D.check_temporal_topology(),  False)
         self.assertEqual(D.get_granularity(),  u'2 days')
-        
+
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True, dry_run=True)
         pc = ta.parse(expression="R = A {:,during,r} C", basename="r", overwrite=True)
 
@@ -717,6 +717,30 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual( D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
+    def test_capacity_1(self):
+        """Arithmetic test with temporal intersection"""
+        tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
+        expr = "R = (((((((A + A) - A) * A) / A) % A) - td(A)) - (A # A))"
+        tra.parse(expression=expr, basename="r", overwrite=True)
+
+        D = tgis.open_old_stds("R", type="strds")
+        D.select()
+        self.assertEqual(D.metadata.get_number_of_maps(), 4)
+        self.assertEqual(D.metadata.get_min_min(), -2)
+        self.assertEqual(D.metadata.get_max_max(), -2)
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 1, 5))
+        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.get_granularity(),  u'1 day')
+
+        tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True, dry_run=True)
+        pc = tra.parse(expression=expr, basename="r", overwrite=True)
+
+        self.assertEqual(len(pc["register"]), 4)
+        self.assertEqual(len(pc["processes"]), 4)
+        self.assertEqual(pc["STDS"]["name"], "R")
+        self.assertEqual(pc["STDS"]["stdstype"], "strds")
 
 if __name__ == '__main__':
     test()
