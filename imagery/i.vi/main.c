@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
     G_asprintf(&desc,
 	       "arvi;%s;dvi;%s;evi;%s;evi2;%s;gvi;%s;gari;%s;gemi;%s;ipvi;%s;msavi;%s;"
 	       "msavi2;%s;ndvi;%s;pvi;%s;savi;%s;sr;%s;vari;%s;wdvi;%s",
-	       _("Atmospherically Resistant Vegetation Indices"),
+	       _("Atmospherically Resistant Vegetation Index"),
 	       _("Difference Vegetation Index"),
 	       _("Enhanced Vegetation Index"),
 	       _("Enhanced Vegetation Index 2"),
@@ -222,6 +222,7 @@ int main(int argc, char *argv[])
     if(opt.bits->answer)
         dnbits = atof(opt.bits->answer);
     result = opt.output->answer;
+    G_message(_("Calculating %s"), viflag);
 
     if (!strcasecmp(viflag, "sr") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("sr index requires red and nir maps"));
