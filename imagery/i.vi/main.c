@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
     G_asprintf(&desc,
 	       "arvi;%s;dvi;%s;evi;%s;evi2;%s;gvi;%s;gari;%s;gemi;%s;ipvi;%s;msavi;%s;"
 	       "msavi2;%s;ndvi;%s;pvi;%s;savi;%s;sr;%s;vari;%s;wdvi;%s",
-	       _("Atmospherically Resistant Vegetation Indices"),
+	       _("Atmospherically Resistant Vegetation Index"),
 	       _("Difference Vegetation Index"),
 	       _("Enhanced Vegetation Index"),
 	       _("Enhanced Vegetation Index 2"),
@@ -222,6 +222,7 @@ int main(int argc, char *argv[])
     if(opt.bits->answer)
         dnbits = atof(opt.bits->answer);
     result = opt.output->answer;
+    G_message(_("Calculating %s"), viflag);
 
     if (!strcasecmp(viflag, "sr") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("sr index requires red and nir maps"));
@@ -534,11 +535,20 @@ int main(int argc, char *argv[])
     G_free(outrast);
     Rast_close(outfd);
 
-    /* Color from -1.0 to +1.0 in grey */
-    Rast_init_colors(&colors);
-    val1 = -1;
-    val2 = 1;
-    Rast_add_c_color_rule(&val1, 0, 0, 0, &val2, 255, 255, 255, &colors);
+    if (!strcasecmp(viflag, "ndvi")) {
+ 	/* apply predefined NDVI color table */
+	const char *style = "ndvi";
+	if (G_find_color_rule("ndvi")) {
+	   Rast_make_fp_colors(&colors, style, -1.0, 1.0);
+	} else
+	   G_fatal_error(_("Unknown color request '%s'"), style);
+    } else {
+	/* Color from -1.0 to +1.0 in grey */
+	Rast_init_colors(&colors);
+	val1 = -1;
+	val2 = 1;
+	Rast_add_c_color_rule(&val1, 0, 0, 0, &val2, 255, 255, 255, &colors);
+    }
     Rast_write_colors(result, G_mapset(), &colors);
 
     Rast_short_history(result, "raster", &history);
