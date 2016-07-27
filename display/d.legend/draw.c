@@ -1343,8 +1343,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 y0bg = y0 - txsiz;
 
 
-            D_use_color(colorbg);
-            D_box_abs(x0bg, y0bg, x1bg, y1bg);
+            if (colorbg != 0) {
+                D_use_color(colorbg);
+                D_box_abs(x0bg, y0bg, x1bg, y1bg);
+            }
 
             D_use_color(colorb);
             D_begin();
