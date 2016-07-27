@@ -63,7 +63,9 @@ or used together to suppress all text of categorial raster maps.
 <p>
 The text produced from floating-point raster maps will automatically create
 output with a meaningful number of significant digits. For very small values,
-numbers will be expressed in scientific notation, e.g.&nbsp;"1.7e-9".
+numbers will be expressed in scientific notation, e.g.&nbsp;"1.7e-9". Option
+<b>digits</b> can be used to determine how many digits after decimal point
+will be displayed.
 <p>
 When the <b>-d</b> flag is used to display a histogram distribution along
 side the smoothed gradient legend, note that the statistics are calculated
@@ -73,7 +75,25 @@ If the histogram appears empty, check your region settings.
 <p>
 If the raster map's <i>units</i> metadata has been set with the
 <em>r.support</em> module then it will be displayed along side the legend.
-
+<p>
+The option <b>title</b> will display the custom title at the top of the legend. 
+In case of vertical legend the title is aligned to the left edge of legend, in case
+of horizontal legend the title is aligned to the center. <b>title_fontsize</b> can
+be used to set the size of legend title. By default the legend title font size is
+the same as labels font size. 
+<p>
+There are different options to customize displayed labels. The <b>labelnum</b> set
+the number of labels which are displayed in regular intervals. The <b>label_values</b>
+will specify the values where the labels will be displayed. The <b>label_step</b> will
+display labels at values which are divisible by this value.
+<p>
+The flag <b>-t</b> will show ticks at labels.
+<p>
+The flag <b>-b</b> will show the background. Options <b>bgcolor</b> and <b>border_color</b> can be
+used to choose the color of border and background fill.
+<p>
+The flag <b>-l</b> will switch to logarithmic scale. In case this flag is used,
+the provided step in <b>label_step</b> is interpreted in the logarithmic space.
 <h2>EXAMPLE</h2>
 
 Displaying the legend along with a histogram (North Carolina Sample dataset):
@@ -87,6 +107,32 @@ d.legend -d elevation
 <center>
 <img src="d_legend.png" alt="Elevation map with legend" border=1>
 </center>
+
+Displaying the legend with custom labels and background:
+
+<div class="code"><pre>
+g.region raster=elevation -p
+d.rast elevation
+d.legend raster=elevation -t label_step=20 label_values=108 title=Legend -b bgcolor=255:255:204 border_color=gray
+</pre></div>
+
+<center>
+<img src="d_legend_custom_labels_and_background.png" alt="Elevation map with custom legend" border=1>
+</center>
+
+Displaying the legend with logarithmic scale:
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.watershed -a elevation=elevation threshold=1000 accumulation=flowacc
+d.rast flowacc
+d.legend raster=flowacc -t -l label_step=1
+</pre></div>
+
+<center>
+<img src="d_legend_logarithmic.png" alt="Flow accumulation map with logarithmic legend" border=1>
+</center>
+
 
 
 <h2>SEE ALSO</h2>

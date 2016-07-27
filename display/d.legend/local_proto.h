@@ -3,9 +3,9 @@
 #define MAP_TYPE_RASTER2D 1
 #define MAP_TYPE_RASTER3D 2
 /* possibles for the future:
-#define MAP_TYPE_VECTOR 3
-#define MAP_TYPE_RULES 4
-*/
+   #define MAP_TYPE_VECTOR 3
+   #define MAP_TYPE_RULES 4
+ */
 
 struct stat_node
 {
@@ -29,9 +29,17 @@ struct stat_list
 
 
 /* histogram.c */
-void draw_histogram(const char *, int, int, int, int, int, int, int, int,
-		    int, struct FPRange);
+double histogram(const char *, int, int, int, int, int, int, int, int,
+                 int, struct FPRange, int);
 
 /* get_stats.c */
 void get_stats(const char *, struct stat_list *, int, int);
 void run_stats(const char *, int, const char *, int);
+
+/* draw.c */
+void draw(const char *, int, int, int, int, int, int, int, int, int, int, int,
+          int, struct Categories, struct Colors, double, double, double,
+          double, int, int, double, double, double *, int, int, int, double,
+          double, const char *, double *, double, int, int, struct Option *,
+          struct Option *, struct Option *, struct Option *, struct Option *,
+          struct Flag *, struct Flag *, int, int, int, char *);
