@@ -203,13 +203,14 @@ original papers).
 ndvi( redchan, nirchan )
 
 
-Data Type Band Numbers ([NIR, Red])
-  MSS Bands     = [ 7,  5]
-  TM1-5,7 Bands = [ 4,  3]
-  TM8 Bands     = [ 5,  4]
-  AVHRR Bands   = [ 2,  1]
-  SPOT XS Bands = [ 3,  2]
-  AVIRIS Bands  = [51, 29]
+Satellite specific band numbers ([NIR, Red]):
+  MSS Bands        = [ 7,  5]
+  TM1-5,7 Bands    = [ 4,  3]
+  TM8 Bands        = [ 5,  4]
+  Sentinel-2 Bands = [ 5,  4]
+  AVHRR Bands      = [ 2,  1]
+  SPOT XS Bands    = [ 3,  2]
+  AVIRIS Bands     = [51, 29]
 
 NDVI = (NIR - Red) / (NIR + Red)
 </pre></div>
@@ -271,10 +272,177 @@ if(soil_weight_line == None):
 
 <h2>EXAMPLES</h2>
 
-This example is based on a LANDSAT TM7 scene included in the North Carolina
+<h3>Calculation of DVI</h3>
+
+The calculation of DVI from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.1 -p
+i.vi blue=band.1 red=band.3 nir=band.4 viname=dvi output=dvi
+r.univar -e dvi
+</pre></div>
+
+<h3>Calculation of EVI</h3>
+
+The calculation of EVI from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.1 -p
+i.vi blue=band.1 red=band.3 nir=band.4 viname=evi output=evi
+r.univar -e evi
+</pre></div>
+
+
+<h3>Calculation of EVI2</h3>
+
+The calculation of EVI2 from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+i.vi red=band.3 nir=band.4 viname=evi2 output=evi2
+r.univar -e evi2
+</pre></div>
+
+
+<h3>Calculation of GARI</h3>
+
+The calculation of GARI from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.1 -p
+i.vi blue=band.1 green=band.2 red=band.3 nir=band.4 viname=gari output=gari
+r.univar -e gari
+</pre></div>
+
+
+<h3>Calculation of GEMI</h3>
+
+The calculation of GEMI from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+i.vi red=band.3 nir=band.4 viname=gemi output=gemi
+r.univar -e gemi
+</pre></div>
+
+
+<h3>Calculation of GVI</h3>
+
+The calculation of GVI from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+i.vi blue=band.1 green=band.2 red=band.3 nir=band.4 band5=band.5 band7=band.7 viname=gvi output=gvi
+r.univar -e gvi
+</pre></div>
+
+
+<h3>Calculation of IPVI</h3>
+
+The calculation of IPVI from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+i.vi red=band.3 nir=band.4 viname=ipvi output=ipvi
+r.univar -e ipvi
+</pre></div>
+
+<h3>Calculation of MSAVI</h3>
+
+The calculation of MSAVI from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+i.vi red=band.3 nir=band.4 viname=msavi output=msavi
+r.univar -e msavi
+</pre></div>
+
+<!-- quite unclear how to calculate the 3 parameters, example needed:
+<h3>Calculation of MSAVI2</h3>
+
+The calculation of MSAVI2 from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+i.vi red=band.3 nir=band.4 viname=msavi2 output=msavi2 \
+     soil_line_slope=0.698364 soil_line_intercept=10 soil_noise_reduction=10
+r.univar -e msavi2
+</pre></div>
+-->
+
+<h3>Calculation of NDVI</h3>
+
+The calculation of NDVI from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+i.vi red=band.3 nir=band.4 viname=ndvi output=ndvi
+r.univar -e ndvi
+</pre></div>
+
+
+<h3>Calculation of PVI</h3>
+
+The calculation of PVI from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+i.vi red=band.3 nir=band.4 viname=pvi output=pvi
+r.univar -e pvi
+</pre></div>
+
+
+<h3>Calculation of SAVI</h3>
+
+The calculation of SAVI from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+i.vi red=band.3 nir=band.4 viname=savi output=savi
+r.univar -e savi
+</pre></div>
+
+
+<h3>Calculation of SR</h3>
+
+The calculation of SR from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+i.vi red=band.3 nir=band.4 viname=sr output=sr
+r.univar -e sr
+</pre></div>
+
+
+<h3>Calculation of VARI</h3>
+
+The calculation of VARI from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+i.vi blue=band.2 green=band.3 red=band.4 viname=vari output=vari
+r.univar -e vari
+</pre></div>
+
+
+<!-- quite unclear how to calculate the 1 parameter, example needed:
+<h3>Calculation of WDVI</h3>
+
+The calculation of WDVI from the reflectance values is done as follows:
+
+<div class="code"><pre>
+g.region raster=band.3 -p
+i.vi red=band.3 nir=band.4 viname=wdvi output=wdvi
+r.univar -e wdvi
+</pre></div>
+-->
+
+<h3>Landsat TM7 example</h3>
+
+The following examples are based on a LANDSAT TM7 scene included in the North Carolina
 sample dataset. 
 
-<h3>Preparation: DN to reflectance</h3>
+<h4>Preparation: DN to reflectance</h4>
 
 As a first step, the original DN (digital number) pixel values must be
 converted to reflectance using <em>i.landsat.toar</em>. To do so, we 
@@ -307,7 +475,7 @@ i.landsat.toar input=lsat7_2002. output=lsat7_2002_toar. sensor=tm7 \
 
 The resulting Landsat channels are names <tt>lsat7_2002_toar.1 .. lsat7_2002_toar.8</tt>.
 
-<h3>Calculation of NDVI</h3>
+<h4>Calculation of NDVI</h4>
 
 The calculation of NDVI from the reflectance values is done as follows:
 
@@ -327,7 +495,7 @@ North Carolina dataset: NDVI
 </center>
 
 
-<h3>Calculation of ARVI</h3>
+<h4>Calculation of ARVI</h4>
 
 The calculation of ARVI from the reflectance values is done as follows:
 
@@ -346,7 +514,7 @@ North Carolina dataset: ARVI
 </center>
 
 
-<h3>Calculation of GARI</h3>
+<h4>Calculation of GARI</h4>
 
 The calculation of GARI from the reflectance values is done as follows:
 
