@@ -177,22 +177,22 @@ int main(int argc, char *argv[])
     opt.sl_slope->key = "soil_line_slope";
     opt.sl_slope->type = TYPE_DOUBLE;
     opt.sl_slope->required = NO;
-    opt.sl_slope->description = _("Value of the slope of the soil line (MSAVI2 only)");
-    opt.sl_slope->guisection = _("MSAVI2 settings");
+    opt.sl_slope->description = _("Value of the slope of the soil line (MSAVI only)");
+    opt.sl_slope->guisection = _("MSAVI settings");
 
     opt.sl_int = G_define_option();
     opt.sl_int->key = "soil_line_intercept";
     opt.sl_int->type = TYPE_DOUBLE;
     opt.sl_int->required = NO;
-    opt.sl_int->description = _("Value of the intercept of the soil line (MSAVI2 only)");
-    opt.sl_int->guisection = _("MSAVI2 settings");
+    opt.sl_int->description = _("Value of the intercept of the soil line (MSAVI only)");
+    opt.sl_int->guisection = _("MSAVI settings");
 
     opt.sl_red = G_define_option();
     opt.sl_red->key = "soil_noise_reduction";
     opt.sl_red->type = TYPE_DOUBLE;
     opt.sl_red->required = NO;
-    opt.sl_red->description = _("Value of the factor of reduction of soil noise (MSAVI2 only)");
-    opt.sl_red->guisection = _("MSAVI2 settings");
+    opt.sl_red->description = _("Value of the factor of reduction of soil noise (MSAVI only)");
+    opt.sl_red->guisection = _("MSAVI settings");
 
     opt.bits = G_define_option();
     opt.bits->key = "storage_bit";
@@ -245,13 +245,13 @@ int main(int argc, char *argv[])
     if (!strcasecmp(viflag, "savi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("savi index requires red and nir maps"));
 
-    if (!strcasecmp(viflag, "msavi") && (!(opt.red->answer) || !(opt.nir->answer)) )
-	G_fatal_error(_("msavi index requires red and nir maps"));
-
-    if (!strcasecmp(viflag, "msavi2") && (!(opt.red->answer) || !(opt.nir->answer) || 
+    if (!strcasecmp(viflag, "msavi") && (!(opt.red->answer) || !(opt.nir->answer) || 
                                           !(opt.sl_slope->answer) || !(opt.sl_int->answer) || 
                                           !(opt.sl_red->answer)) )
-	G_fatal_error(_("msavi2 index requires red and nir maps, and 3 parameters related to soil line"));
+	G_fatal_error(_("msavi index requires red and nir maps, and 3 parameters related to soil line"));
+
+    if (!strcasecmp(viflag, "msavi2") && (!(opt.red->answer) || !(opt.nir->answer)) )
+	G_fatal_error(_("msavi2 index requires red and nir maps"));
 
     if (!strcasecmp(viflag, "gemi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("gemi index requires red and nir maps"));
