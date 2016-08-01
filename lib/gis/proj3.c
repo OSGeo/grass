@@ -50,14 +50,26 @@ static void init(void)
 const char *G_database_unit_name(int plural)
 {
     int units;
+    units = G_database_unit();
+    return G_get_units_name(units, plural, FALSE);
+}
+
+/*!
+  \brief Get units id for the current location
+  
+  \return units id
+*/
+int G_database_unit()
+{
+    int units;
     const char *name;
     
     units = G_projection_units(G_projection());
     
     if (units == U_UNDEFINED) {
-	name = lookup_units(plural ? "units" : "unit");
+	name = lookup_units("unit");
 	if (!name)
-	    return plural ? _("units") : _("unit");
+	    return U_UNKNOWN;
 	
 	if (strcasecmp(name, "meter") == 0 || strcasecmp(name, "metre") == 0 
             || strcasecmp(name, "meters") == 0 || strcasecmp(name, "metres") == 0)
@@ -80,8 +92,7 @@ const char *G_database_unit_name(int plural)
 	else
 	    units = U_UNKNOWN;
     }
-    
-    return G_get_units_name(units, plural, FALSE);
+    return units;
 }
 
 /*!
