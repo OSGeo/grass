@@ -289,7 +289,7 @@ class CoordinateSystemPage(TitledPage):
         self.sizer.Add(item=self.radioXy,
                        flag=wx.ALIGN_LEFT, pos=(5, 1))
         self.sizer.Add(item=wx.StaticText(parent=self, label=_("Advanced methods:")),
-                       flag=wx.ALIGN_LEFT, pos=(6, 1))                    
+                       flag=wx.ALIGN_LEFT, pos=(6, 1))
         self.sizer.Add(item=self.radioSrs,
                        flag=wx.ALIGN_LEFT, pos=(7, 1))
         self.sizer.Add(item=self.radioProj,
@@ -759,7 +759,7 @@ class ProjParamsPage(TitledPage):
         param = self.pparam[id]
         win = self.FindWindowById(id)
         if param['type'] == 'zone':
-            val = event.GetInt()
+            val = self.FindWindowById(id).GetValue()
             if val < 1:
                 win.SetValue(1)
             elif val > 60:
