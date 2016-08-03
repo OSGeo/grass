@@ -696,7 +696,7 @@ class ProjParamsPage(TitledPage):
         param = self.pparam[id]
         win = self.FindWindowById(id)
         if param['type'] == 'zone':
-            val = event.GetInt()
+            val = self.FindWindowById(id).GetValue()
             if val < 1:
                 win.SetValue(1)
             elif val > 60:
