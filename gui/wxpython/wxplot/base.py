@@ -19,8 +19,12 @@ import os
 import sys
 
 import wx
+from core.globalvar import CheckWxVersion
 try:
-    import wx.lib.plot as plot
+    if CheckWxVersion(version=[3, 0, 0]):
+        import gui_core.wxlibplot as plot
+    else:
+        import wx.lib.plot as plot
 except ImportError as e:
     print >> sys.stderr, e
 
