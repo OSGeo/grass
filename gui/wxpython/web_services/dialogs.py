@@ -67,7 +67,7 @@ class WSDialogBase(wx.Dialog):
             'OSM-WMS-EUROPE':
             ['http://watzmann-geog.urz.uni-heidelberg.de/cached/osm', '', ''],
             'irs.gis-lab.info (OSM)': ['http://irs.gis-lab.info', '', ''],
-            'NASA OnEarth': ['http://onearth.jpl.nasa.gov/wms.cgi', '', '']}
+            'NASA GIBS WMTS': ['http://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi', '', '']}
 
         # holds reference to web service panel which is showed
         self.active_ws_panel = None
