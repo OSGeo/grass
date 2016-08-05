@@ -9,7 +9,7 @@ IMGSRC := $(wildcard *.png)
 IMGDST := $(patsubst %,$(DSTDIR)/%,$(IMGSRC))
 
 # symbols
-CATEGORIES = basic demo extra geology n_arrows
+CATEGORIES = basic demo extra geology legend n_arrows
 SYMSRC := $(foreach dir,$(CATEGORIES),$(wildcard symbols/$(dir)/*.png))
 SYMDST := $(patsubst symbols/%,$(DSTDIR)/symbols/%,$(SYMSRC))
 

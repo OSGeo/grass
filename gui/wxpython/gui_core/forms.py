@@ -873,7 +873,7 @@ class TaskFrame(wx.Frame):
                                           'MapWindow'):
             # display decorations and
             # pressing OK or cancel after setting layer properties
-            if self.task.name in ['d.barscale', 'd.legend', 'd.northarrow', 'd.histogram', 'd.text'] \
+            if self.task.name in ['d.barscale', 'd.legend', 'd.northarrow', 'd.histogram', 'd.text', 'd.legend.vect'] \
                     or len(self.parent.GetLayerInfo(self.layer, key='cmd')) >= 1:
                 self.Hide()
             # canceled layer with nothing set
@@ -1230,7 +1230,7 @@ class CmdPanel(wx.Panel):
                         title_txt.SetLabel(title + ':')
                         value = self._getValue(p)
 
-                        if p['name'] == 'icon':  # symbols
+                        if p['name'] in ('icon', 'icon_area', 'icon_line'):  # symbols
                             bitmap = wx.Bitmap(
                                 os.path.join(
                                     globalvar.SYMBDIR,

@@ -4,6 +4,7 @@
  * MODULE:       d.vect
  * AUTHOR(S):    CERL, Radim Blazek, others
  *               Updated to GRASS7 by Martin Landa <landa.martin gmail.com>
+ *               Support for vector legend by Adam Laza <ad.laza32 gmail.com >
  * PURPOSE:      Display the vector map in map display
  * COPYRIGHT:    (C) 2004-2014 by the GRASS Development Team
  *
@@ -52,8 +53,11 @@ int main(int argc, char **argv)
     struct Option *lsize_opt, *font_opt, *enc_opt, *xref_opt, *yref_opt;
     struct Option *attrcol_opt, *maxreg_opt, *minreg_opt;
     struct Option *width_opt, *wcolumn_opt, *wscale_opt;
+    struct Option *leglab_opt;
+    struct Option *icon_line_opt, *icon_area_opt;
     struct Flag *id_flag, *cats_acolors_flag, *sqrt_flag;
     char *desc;
+    char *leg_file;
     
     struct cat_list *Clist;
     LATTR lattr;
@@ -61,6 +65,9 @@ int main(int argc, char **argv)
     struct Cell_head window;
     struct bound_box box;
     double overlap;
+    int gv_point, gv_line, gv_boundary, gv_centroid;
+
+    FILE *fd;
 
     stat = 0;
     /* Initialize the GIS calls */
@@ -188,6 +195,32 @@ int main(int argc, char **argv)
 	_("Name of numeric column containing symbol rotation angle");
     rotcolumn_opt->description =
 	_("Measured in degrees CCW from east");
+
+    icon_area_opt = G_define_option();
+    icon_area_opt->key = "icon_area";
+    icon_area_opt->type = TYPE_STRING;
+    icon_area_opt->required = NO;
+    icon_area_opt->multiple = NO;
+    icon_area_opt->guisection = _("Legend");
+    icon_area_opt->answer = "legend/area";
+    icon_area_opt->options = icon_files();
+    icon_area_opt->description = _("Area/boundary symbol for legend");
+
+    icon_line_opt = G_define_option();
+    icon_line_opt->key = "icon_line";
+    icon_line_opt->type = TYPE_STRING;
+    icon_line_opt->required = NO;
+    icon_line_opt->multiple = NO;
+    icon_line_opt->guisection = _("Legend");
+    icon_line_opt->answer = "legend/line";
+    icon_line_opt->options = icon_files();
+    icon_line_opt->description = _("Line symbol for legend");
+
+    leglab_opt = G_define_option();
+    leglab_opt->key = "legend_label";
+    leglab_opt->type = TYPE_STRING;
+    leglab_opt->guisection = _("Legend");
+    leglab_opt->description = _("Label to display after symbol in vector legend");
 
     /* Labels */
     lfield_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -423,6 +456,85 @@ int main(int argc, char **argv)
 	    if (display & DISP_DIR)
 		stat += display_dir(&Map, type, Clist, chcat, size);
 	}
+
+        /* Write into legend file */
+        leg_file = getenv("GRASS_LEGEND_FILE");
+        if (leg_file) {
+            fd = fopen(leg_file, "a");
+            
+            /* Point */
+            if (strstr(type_opt->answer, "point") != NULL){
+                gv_point = Vect_get_num_primitives(&Map, GV_POINT);
+                if (gv_point > 0) {
+                    if (leglab_opt->answer)
+                        fprintf(fd, "%s|", leglab_opt->answer);
+                    else {
+                        char map[128];
+                        char *ptr;
+                        strcpy(map, map_opt->answer);
+                        strtok_r(map, "@", &ptr);
+                        fprintf(fd, "%s|", map);
+                    }
+                    fprintf(fd, "%s|%s|%s|%s|%s", icon_opt->answer, size_opt->answer, color_opt->answer, fcolor_opt->answer, width_opt->answer);
+                    fprintf(fd, "|%s|%d\n", "point", gv_point);
+                }
+            }
+            
+            /* Line */
+            if (strstr(type_opt->answer, "line") != NULL){
+                gv_line = Vect_get_num_primitives(&Map, GV_LINE);
+                if (gv_line > 0){
+                    if (leglab_opt->answer)
+                        fprintf(fd, "%s|", leglab_opt->answer);
+                    else {
+                        char map[128];
+                        char *ptr;
+                        strcpy(map, map_opt->answer);
+                        strtok_r(map, "@", &ptr);
+                        fprintf(fd, "%s|", map);
+                    }
+                    fprintf(fd, "%s|%s|%s|%s|%s", icon_line_opt->answer, size_opt->answer, color_opt->answer, fcolor_opt->answer, width_opt->answer);
+                    fprintf(fd, "|%s|%d\n", "line", gv_line);
+                }
+            }
+            
+            /* Area */
+            if (strstr(type_opt->answer, "area") != NULL){
+                gv_boundary = Vect_get_num_primitives(&Map, GV_BOUNDARY);
+                if (gv_boundary > 0) {
+                    if (leglab_opt->answer)
+                        fprintf(fd, "%s|", leglab_opt->answer);
+                    else {
+                        char map[128];
+                        char *ptr;
+                        strcpy(map, map_opt->answer);
+                        strtok_r(map, "@", &ptr);
+                        fprintf(fd, "%s|", map);
+                    }
+                    fprintf(fd, "%s|%s|%s|%s|%s", icon_area_opt->answer, size_opt->answer, color_opt->answer, fcolor_opt->answer, width_opt->answer);
+                    fprintf(fd, "|%s|%d\n", "area", gv_boundary);
+                }
+            }
+            /* Centroid */
+            if (strstr(type_opt->answer, "centroid") != NULL){
+                gv_centroid = Vect_get_num_primitives(&Map, GV_CENTROID);
+                if (gv_centroid > 0) {
+                    if (leglab_opt->answer)
+                        fprintf(fd, "%s|", leglab_opt->answer);
+                    else {
+                        char map[128];
+                        char *ptr;
+                        strcpy(map, map_opt->answer);
+                        strtok_r(map, "@", &ptr);
+                        fprintf(fd, "%s|", map);
+                    }
+                    fprintf(fd, "%s|%s|%s|%s|%s", icon_opt->answer, size_opt->answer, color_opt->answer, fcolor_opt->answer, width_opt->answer);
+                    fprintf(fd, "|%s|%d\n", "centroid", gv_centroid);
+                }
+            }
+            
+            fclose(fd);
+        }
 
 	/* reset line width: Do we need to get line width from display
 	 * driver (not implemented)?  It will help restore previous line
