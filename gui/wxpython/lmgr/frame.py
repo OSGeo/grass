@@ -757,6 +757,11 @@ class GMFrame(wx.Frame):
                 self.GetMapDisplay().AddLegend(cmd=command)
             else:
                 self.GetMapDisplay().AddLegend()
+        elif layertype == 'vectleg':
+            if len(command) > 1:
+                self.GetMapDisplay().AddLegendVect(cmd=command, showDialog=False)
+            else:
+                self.GetMapDisplay().AddLegendVect(showDialog=True)
         elif layertype == 'northarrow':
             if len(command) > 1:
                 self.GetMapDisplay().AddArrow(cmd=command)
@@ -1485,6 +1490,8 @@ class GMFrame(wx.Frame):
                 # overlay["cmd"][0] name of command e.g. d.barscale, d.legend
                 # overlay["cmd"][1:] parameters and flags
                 if overlay['display'] == i:
+                    if overlay['cmd'][0] == "d.legend.vect":
+                        mapdisplay[i].AddLegendVect(overlay['cmd'])
                     if overlay['cmd'][0] == "d.legend":
                         mapdisplay[i].AddLegend(overlay['cmd'])
                     if overlay['cmd'][0] == "d.barscale":

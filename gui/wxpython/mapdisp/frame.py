@@ -44,7 +44,7 @@ from mapwin.base import MapWindowProperties
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import LegendController, BarscaleController, \
-    ArrowController, DtextController
+    ArrowController, DtextController, LegendVectController
 from modules.histogram import HistogramFrame
 from wxplot.histogram import HistogramPlotFrame
 from wxplot.profile import ProfileFrame
@@ -1247,6 +1247,22 @@ class MapFrame(SingleMapFrame):
 
         self.MapWindow.mouse['use'] = 'pointer'
 
+    def AddLegendVect(self, cmd=None, showDialog=None):
+        """Handler for legend map decoration menu selection."""
+
+        if cmd:
+            show = False
+        else:
+            show = True
+            cmd = ['d.legend.vect']
+            layers = self._giface.GetLayerList().GetSelectedLayers()
+
+        GUI(parent=self, giface=self._giface, show=show, modal=False).ParseCommand(
+            cmd, completed=(self.GetOptData, None, None))
+
+        self.MapWindow.mouse['use'] = 'pointer'
+
+
     def AddArrow(self, cmd=None):
         """Handler for north arrow menu selection."""
         if self.IsPaneShown('3d'):
@@ -1303,6 +1319,8 @@ class MapFrame(SingleMapFrame):
                 overlay = BarscaleController(self.Map, self._giface)
             elif cmd == 'd.legend':
                 overlay = LegendController(self.Map, self._giface)
+            elif cmd == 'd.legend.vect':
+                overlay = LegendVectController(self.Map, self._giface)
             elif cmd == 'd.text':
                 overlay = DtextController(self.Map, self._giface)
 

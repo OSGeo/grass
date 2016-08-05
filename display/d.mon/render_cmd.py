@@ -8,7 +8,7 @@ from grass.script import task as gtask
 
 # read environment variables from file
 def read_env_file(env_file):
-    width = height = None
+    width = height = legfile = None
     fd = open(env_file, 'r')
     if fd is None:
         grass.fatal("Unable to open file '{}'".format(env_file))
@@ -22,16 +22,19 @@ def read_env_file(env_file):
             width = int(v)
         if height is None and k == 'GRASS_RENDER_HEIGHT':
             height = int(v)
+        if legfile is None and k == 'GRASS_LEGEND_FILE':
+            legfile = v
     fd.close()
 
     if width is None or height is None:
         grass.fatal("Unknown monitor size")
 
-    return width, height
+    return width, height, legfile
 
 # run display command
 def render(cmd, mapfile):
     env = os.environ.copy()
+
     if mapfile:
         env['GRASS_RENDER_FILE'] = mapfile
     try:
@@ -101,7 +104,7 @@ if __name__ == "__main__":
     path = os.path.dirname(os.path.abspath(__file__))
     mon = os.path.split(path)[-1]
 
-    width, height = read_env_file(os.path.join(path, 'env'))
+    width, height, legfile = read_env_file(os.path.join(path, 'env'))
     if mon.startswith('wx'):
         mapfile = tempfile.NamedTemporaryFile(dir=path).name
         if cmd[0] in ('d.barscale', 'd.legend', 'd.northarrow'):
@@ -114,5 +117,8 @@ if __name__ == "__main__":
 
     render(cmd, mapfile)
     update_cmd_file(os.path.join(path, 'cmd'), cmd, mapfile)
+    if cmd[0] == 'd.erase':
+        os.remove(legfile)
+
 
     sys.exit(0)

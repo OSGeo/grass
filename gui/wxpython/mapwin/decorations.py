@@ -236,6 +236,18 @@ class ArrowController(OverlayController):
         self._cmd = ['d.northarrow', self._defaultAt]
 
 
+class LegendVectController(OverlayController):
+
+    def __init__(self, renderer, giface):
+        OverlayController.__init__(self, renderer, giface)
+        self._name = 'vectleg'
+        self._removeLabel = _("Remove vector legend")
+        # different from default because the reference point is not in the
+        # middle
+        self._defaultAt = 'at=20.0,80.0'
+        self._cmd = ['d.legend.vect', self._defaultAt]
+
+
 class LegendController(OverlayController):
 
     def __init__(self, renderer, giface):

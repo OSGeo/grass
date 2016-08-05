@@ -35,6 +35,8 @@ MapIcons = {
                             label=_('Add scale bar')),
     'addLegend': MetaIcon(img='legend-add',
                           label=_('Add legend')),
+    'addVectorLegend': MetaIcon(img='legend-add',
+                                label=_('Add vector legend')),
     'addNorthArrow': MetaIcon(img='north-arrow-add',
                               label=_('Add north arrow')),
     'analyze': MetaIcon(img='layer-raster-analyze',
@@ -269,6 +271,8 @@ class MapToolbar(BaseToolbar):
         self._onMenu(
             ((MapIcons["addLegend"],
               lambda evt: self.parent.AddLegend()),
+             (MapIcons["addVectorLegend"],
+              lambda evt: self.parent.AddLegendVect()),
              (MapIcons["addBarscale"],
               lambda evt: self.parent.AddBarscale()),
              (MapIcons["addNorthArrow"],

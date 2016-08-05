@@ -324,6 +324,7 @@ class MapLayer(Layer):
         """Represents map layer in the map canvas
         """
         Layer.__init__(self, *args, **kwargs)
+        self.legrow = grass.tempfile(create=True)
 
     def GetMapset(self):
         """Get mapset of map layer
@@ -384,6 +385,10 @@ class RenderLayerMgr(wx.EvtHandler):
         env_cmd = env.copy()
         env_cmd.update(self._render_env)
         env_cmd['GRASS_RENDER_FILE'] = self.layer.mapfile
+        if type(self.layer).__name__ == "MapLayer":
+            if os.path.isfile(self.layer.legrow):
+                os.remove(self.layer.legrow)
+            env_cmd['GRASS_LEGEND_FILE'] = self.layer.legrow
 
         cmd_render = copy.deepcopy(cmd)
         cmd_render[1]['quiet'] = True  # be quiet
@@ -455,7 +460,9 @@ class RenderMapMgr(wx.EvtHandler):
         self._render_env = {"GRASS_RENDER_BACKGROUNDCOLOR": "000000",
                             "GRASS_RENDER_FILE_COMPRESSION": "0",
                             "GRASS_RENDER_TRUECOLOR": "TRUE",
-                            "GRASS_RENDER_TRANSPARENT": "TRUE"}
+                            "GRASS_RENDER_TRANSPARENT": "TRUE",
+                            "GRASS_LEGEND_FILE": self.Map.legfile
+                            }
 
         self._init()
         self._rendering = False
@@ -516,6 +523,7 @@ class RenderMapMgr(wx.EvtHandler):
         env['GRASS_REGION'] = self.Map.SetRegion(windres)
         env['GRASS_RENDER_WIDTH'] = str(self.Map.width)
         env['GRASS_RENDER_HEIGHT'] = str(self.Map.height)
+
         if UserSettings.Get(group='display', key='driver',
                             subkey='type') == 'png':
             env['GRASS_RENDER_IMMEDIATE'] = 'png'
@@ -562,6 +570,7 @@ class RenderMapMgr(wx.EvtHandler):
         if self._renderLayers(env, force) == 0:
             self.renderDone.emit()
 
+
     def OnRenderDone(self):
         """Rendering process done
 
@@ -607,6 +616,17 @@ class RenderMapMgr(wx.EvtHandler):
         stop = time.time()
         Debug.msg(1, "RenderMapMgr.OnRenderDone() time=%f sec (comp: %f)" %
                   (stop - self._startTime, stop - startCompTime))
+
+        # Update legfile
+        with open(self.Map.legfile, "w") as outfile:
+            for layer in reversed(self.layers):
+                if layer.GetType() == 'overlay':
+                    continue
+
+                if os.path.isfile(layer.legrow) and layer.legrow[-1].isdigit() \
+                   and layer.hidden is False:
+                    with open(layer.legrow) as infile:
+                        outfile.write(infile.read())
 
         self._rendering = False
         if wx.IsBusy():
@@ -704,7 +724,10 @@ class Map(object):
         self.gisrc = gisrc
 
         # generated file for g.pnmcomp output for rendering the map
+        self.legfile = grass.tempfile(create=False) + '.leg'
+        self.tmpdir = os.path.dirname(self.legfile)
         self.mapfile = grass.tempfile(create=False) + '.ppm'
+
 
         # setting some initial env. variables
         if not self.GetWindow():
@@ -1276,6 +1299,10 @@ class Map(object):
                 basefile = os.path.join(base, tempbase) + r'.*'
                 for f in glob.glob(basefile):
                     os.remove(f)
+
+            if not overlay:
+                os.remove(layer.legrow)
+
             list.remove(layer)
 
             self.layerRemoved.emit(layer=layer)
