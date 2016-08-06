@@ -1,11 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.in.ogr</em> imports vector data
-using <a href="http://www.gdal.org/">OGR</a> library to GRASS
-vector map. OGR (Simple Features Library) is part of the
-<a href="http://www.gdal.org">GDAL</a> library, so you need to
-install GDAL to use <em>v.in.ogr</em>.
- 
+<em>v.in.ogr</em> imports vector data from files and database connections
+supported by the <a href="http://www.gdal.org/">OGR</a> library) into the
+current location and mapset.
+
 <p>
 If the <b>layer</b> parameter is not given, all available OGR layers
 are imported as separate GRASS layers into one GRASS vector map. If
@@ -20,6 +18,21 @@ partially falling into this rectangle subregion are imported.
 The <b>-r</b> current region flag is identical, but uses the current
 region settings as the spatial bounds
 (see <em><a href="g.region.html">g.region</a></em>).
+
+<h3>Supported Vector Formats</h3>
+
+<em>v.in.ogr</em> uses the OGR library which supports various vector data
+formats including <a href="http://www.gdal.org/drv_shapefile.html">ESRI
+Shapefile</a>, <a href="http://www.gdal.org/drv_mitab.html">Mapinfo
+File</a>, UK .NTF, SDTS, TIGER, IHO S-57 (ENC), DGN, GML, GPX, AVCBin, REC,
+Memory, OGDI, and PostgreSQL, depending on the local OGR installation.
+For details see the <a href="http://www.gdal.org/ogr_formats.html">OGR web
+site</a>. The OGR (Simple Features Library) is part of the
+<a href="http://www.gdal.org">GDAL</a> library, hence GDAL needs to be
+installed to use <em>v.in.ogr</em>.
+
+<p>
+The list of actually supported formats can be printed by <b>-f</b> flag.
 
 <h3>Topology cleaning</h3>
 Topology cleaning on areas is automatically performed, but may fail in
@@ -42,19 +55,6 @@ The <b>snap</b> threshold value is used to snap boundary vertices to
 each other if the distance in map units between two vertices is not
 larger than the threshold. Snapping is by default disabled with
 -1. See also the <em><a href="v.clean.html">v.clean</a></em> manual.
-
-<h3>Supported OGR Vector Formats</h3>
-
-OGR library supports various vector data formats
-including <a href="http://www.gdal.org/drv_shapefile.html">ESRI
-Shapefile</a>, <a href="http://www.gdal.org/drv_mitab.html">Mapinfo
-File</a>, UK .NTF, SDTS, TIGER, IHO S-57 (ENC), DGN, GML, AVCBin, REC,
-Memory, OGDI, and PostgreSQL depend on the local installation, for
-details see <a href="http://www.gdal.org/ogr_formats.html">OGR web
-site</a>.
-
-<p>
-List of locally supported formats can be printed by <b>-f</b> flag.
 
 <h3>Overlapping polygons</h3>
 
@@ -83,8 +83,7 @@ location&quot;).
 <p>
 If the user wishes to ignore the difference between the apparent
 coordinate system of the source data and the current location, they
-may pass the
-<b>-o</b> flag to override the projection check.
+may pass the <b>-o</b> flag to override the projection check.
 
 <p>
 If the user wishes to import the data with the full projection
@@ -95,10 +94,15 @@ the new location via the <b>location</b> parameter.  Upon completion
 of the command, a new location will have been created (with only a
 PERMANENT mapset), and the vector map will have been imported with the
 indicated <b>output</b> name into the PERMANENT mapset.
+<p>
+An interesting wrapper command around <em>v.in.ogr</em> is
+<a href="v.import.html">v.import</a> which reprojects (if needed) the
+vector dataset during import to the projection of the current location.
 
 <h2>NOTES</h2>
 
-The characters used for table column names are limited. Supported are:
+The characters which are eligible for table column names are limited
+by the SQL standard. Supported are:
 
 <div class="code"><pre>
 [A-Za-z][A-Za-z0-9_]*
