@@ -5,7 +5,10 @@ PACKAGE = "grasslibs"
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
 MODULES = date gis raster gmath proj imagery vector rtree display stats \
-	dbmi raster3d arraystats cluster vedit ogsf nviz segment rowio temporal
+	dbmi raster3d arraystats cluster vedit segment rowio temporal
+ifneq ($(USE_OPENGL),)
+MODULES += ogsf nviz
+endif
 
 date_LIBS       = $(DATETIMELIB)
 gis_LIBS        = $(GISLIB)
