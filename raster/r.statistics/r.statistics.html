@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.statistics</em> is a tool to analyse exploratory statistics of a "cover
-layer" according to how it intersects with objects in a "base layer".  A
+<em>r.statistics</em> is a tool to analyse exploratory statistics of a categorical
+"cover layer" according to how it intersects with objects in a "base layer".  A
 variety of standard statistical measures are possible (called "zonal statistics"
 in some GIS). 
 
@@ -11,19 +11,20 @@ all areas of contiguous cell category values in the base layer are uniquely
 identified, which can be done with <em>r.clump</em>.
 <br>
 
-The available methods are the following (english - german):
+The available methods are the following (English - German language):
 <ul>
-<li>average - Durchschnitt</li>
-<li>mode - Modalwert</li>
-<li>median - Median</li>
 <li>average deviation - Durchschnittliche Abweichung</li>
-<li>standard deviation - Standardabweichung</li>
-<li>variance - Varianz</li>
-<li>skewness - Schiefe der Verteilung</li>
+<li>average - Durchschnitt</li>
+<li>diversity - Diversit&auml;t</li>
 <li>kurtosis - Relative Abflachung (-) oder Zuspitzung (+)</li>
-<li>minimum - Minimum</li>
 <li>maximum - Maximum</li>
+<li>median - Median</li>
+<li>minimum - Minimum</li>
+<li>mode - Modalwert</li>
+<li>skewness - Schiefe der Verteilung</li>
+<li>standard deviation - Standardabweichung</li>
 <li>sum - Summe</li>
+<li>variance - Varianz</li>
 </ul>
 
 The calculations will be performed on each area of data of the
@@ -37,6 +38,14 @@ stored.
 layer is a reclassified version of the base layer with identical
 category values, but modified category labels - the results of the calculations
 are stored in the category labels of the output layer.
+
+<h2>NOTES</h2>
+
+For floating-point cover map support, see the alternative
+<em><a href="r.stats.zonal.html">r.stats.zonal</a></em>.
+
+For quantile calculations with support for floating-point cover maps, see the
+alternative <em><a href="r.stats.quantile.html">r.stats.quantile</a></em>.
 
 <h2>EXAMPLES</h2>
 
