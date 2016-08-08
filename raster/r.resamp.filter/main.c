@@ -384,6 +384,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("resample"));
     G_add_keyword(_("kernel filter"));
+    G_add_keyword(_("filter"));
     module->description =
 	_("Resamples raster map layers using an analytic kernel.");
 
