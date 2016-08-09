@@ -1312,7 +1312,7 @@ class Map(object):
 
     def SetLayers(self, layers):
         self.layers = layers
-        Debug.msg(5, "Map.SetLayers(): layers=%s" % (layers))
+        Debug.msg(5, "Map.SetLayers(): layers={}".format([EncodeString(layer.GetCmd(string=True)) for layer in layers]))
 
     def ChangeLayer(self, layer, render=False, **kargs):
         """Change map layer properties
