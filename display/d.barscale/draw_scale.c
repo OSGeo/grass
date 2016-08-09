@@ -87,8 +87,8 @@ int draw_scale(double east, double north, int style, int text_posn,
     D_setup_unity(0);
     D_get_src(&t, &b, &l, &r);
 
-    x_pos = east * (r - l) / 100.;
-    y_pos = (100. - north) * (b - t) / 100.;
+    x_pos = l + (int)(east * (r - l) / 100.);
+    y_pos = t + (int)((100. - north) * (b - t) / 100.);
 
 
     D_setup(0); /* back to regular coordinate settings */
