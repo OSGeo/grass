@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     struct Option *width_opt, *wcolumn_opt, *wscale_opt;
     struct Option *leglab_opt;
     struct Option *icon_line_opt, *icon_area_opt;
-    struct Flag *id_flag, *cats_acolors_flag, *sqrt_flag;
+    struct Flag *id_flag, *cats_acolors_flag, *sqrt_flag, *legend_flag;
     char *desc;
     
     struct cat_list *Clist;
@@ -324,6 +324,11 @@ int main(int argc, char **argv)
 	  "instead of circle radius");
     sqrt_flag->guisection = _("Symbols");
 
+    legend_flag = G_define_flag();
+    legend_flag->key = 'l';
+    legend_flag->label = _("Do not add this layer to vector legend");
+    legend_flag->guisection = _("Legend");
+
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -453,10 +458,13 @@ int main(int argc, char **argv)
 		stat += display_dir(&Map, type, Clist, chcat, size);
 	}
 
-	write_into_legfile(&Map, type, leglab_opt->answer, map_name,
-			   icon_opt->answer, size_opt->answer, color_opt->answer,
-			   fcolor_opt->answer, width_opt->answer, icon_area_opt->answer,
+	if (!legend_flag->answer) {
+		write_into_legfile(&Map, type, leglab_opt->answer, map_name,
+			   icon_opt->answer, size_opt->answer, 
+			   color_opt->answer, fcolor_opt->answer, 
+			   width_opt->answer, icon_area_opt->answer,
 			   icon_line_opt->answer);
+	}
 
 	/* reset line width: Do we need to get line width from display
 	 * driver (not implemented)?  It will help restore previous line
