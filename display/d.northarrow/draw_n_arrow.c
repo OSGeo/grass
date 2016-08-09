@@ -33,8 +33,8 @@ int draw_n_arrow(double east, double north, double fontsize,
     D_setup_unity(0);
     D_get_src(&t, &b, &l, &r);
 
-    x_pos = east * (r - l) / 100.;
-    y_pos = (100. - north) * (b - t) / 100.;
+    x_pos = l + (int)(east * (r - l) / 100.);
+    y_pos = t + (int)((100. - north) * (b - t) / 100.);
 
     if (line_width > 0)
 	D_line_width(line_width);
