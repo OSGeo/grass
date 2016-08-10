@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2014 Richard Hughes <richard@hughsie.com> -->
-<application>
-  <id type="desktop">grass.desktop</id>
+<component type="desktop">
+  <id>grass.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <summary>GRASS GIS, the Open Source Geographic Information System</summary>
@@ -30,11 +30,28 @@
     </p>
   </description>
   <screenshots>
-    <screenshot type="default">http://grass.osgeo.org/uploads/images/Gallery/gui/wxgui_histogram.png</screenshot>
-    <screenshot>http://grass.osgeo.org/uploads/images/Gallery/platforms/grass7_RaspberryPI.png</screenshot>
-    <screenshot>http://grass.osgeo.org/uploads/images/Gallery/LiDAR/jockeyposter1.jpg</screenshot>
-    <screenshot>http://grass.osgeo.org/uploads/images/Gallery/gui/grass7_wxNviz_volume_slices_1.png</screenshot>
+    <screenshot type="default">
+      <image>http://grass.osgeo.org/uploads/images/Gallery/gui/wxgui_histogram.png</image>
+      <caption/>
+    </screenshot>
+    <screenshot>
+      <image>http://grass.osgeo.org/uploads/images/Gallery/platforms/grass7_RaspberryPI.png</image>
+      <caption/>
+    </screenshot>
+    <screenshot>
+      <image>http://grass.osgeo.org/uploads/images/Gallery/LiDAR/jockeyposter1.jpg</image>
+      <caption/>
+    </screenshot>
+    <screenshot>
+      <image>http://grass.osgeo.org/uploads/images/Gallery/gui/grass7_wxNviz_volume_slices_1.png</image>
+      <caption/>
+    </screenshot>
   </screenshots>
-  <updatecontact>grass-web@lists.osgeo.org</updatecontact>
   <url type="homepage">http://grass.osgeo.org/</url>
-</application>
+  <url type="translate">https://grass.osgeo.org/development/translations/</url>
+  <url type="donation">https://grass.osgeo.org/donations/</url>
+  <url type="bugtracker">https://grass.osgeo.org/development/bug-tracking/</url>
+  <url type="help">https://grass.osgeo.org/documentation/</url>
+  <update_contact>grass-web@lists.osgeo.org</update_contact>
+  <developer_name>GRASS Development Team</developer_name>
+</component>
