@@ -434,7 +434,7 @@ int kdtree_knn(struct kdtree *t, double *c, int *uid, double *d, int k, int *ski
 			uid[i] = uid[i - 1];
 			i--;
 		    }
-		    if (d[i] == dist && uid[i] == n->uid)
+		    if (i < found && d[i] == dist && uid[i] == n->uid)
 			G_fatal_error("knn: inserting duplicate");
 		    d[i] = dist;
 		    uid[i] = n->uid;
