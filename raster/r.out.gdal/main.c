@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 {
 
     struct GModule *module;
-    struct Flag *flag_l, *flag_c, *flag_f, *flag_t;
+    struct Flag *flag_l, *flag_c, *flag_m, *flag_f, *flag_t;
     struct Option *input, *format, *type, *output, *createopt, *metaopt,
 	*nodataopt;
 
@@ -147,6 +147,12 @@ int main(int argc, char *argv[])
     flag_c->label = _("Do not write GDAL standard colortable");
     flag_c->description = _("Only applicable to Byte or UInt16 data types");
     flag_c->guisection = _("Creation");
+
+    flag_m = G_define_flag();
+    flag_m->key = 'm';
+    flag_m->label = _("Do not write non-standard metadata");
+    flag_m->description = _("Enhances compatibility with other GIS software");
+    flag_m->guisection = _("Creation");
 
     flag_t = G_define_flag();
     flag_t->key = 't';
@@ -220,8 +226,12 @@ int main(int argc, char *argv[])
     nodataopt = G_define_option();
     nodataopt->key = "nodata";
     nodataopt->type = TYPE_DOUBLE;
-    nodataopt->description =
+    nodataopt->label =
 	_("Assign a specified nodata value to output bands");
+    nodataopt->description =
+	_("If given, the nodata value is always written to metadata "
+	  "even if there are no NULL cells in the input band "
+	  "(enhances output compatibility).");
     nodataopt->multiple = NO;
     nodataopt->required = NO;
     nodataopt->guisection = _("Creation");
@@ -581,6 +591,28 @@ int main(int argc, char *argv[])
 
     /* Add metadata */
     AttachMetadata(hCurrDS, metaopt->answers);
+    if (strcmp(format->answer, "GTiff") == 0) {
+	char *pszKey;
+	char *pszValue;
+
+	pszKey = "TIFFTAG_SOFTWARE";
+	G_asprintf(&pszValue, "GRASS GIS %s with GDAL %d.%d.%d",
+	           GRASS_VERSION_NUMBER,
+		   GDAL_VERSION_MAJOR, GDAL_VERSION_MINOR, GDAL_VERSION_REV);
+	GDALSetMetadataItem(hCurrDS, pszKey, pszValue, NULL);
+	G_free(pszValue);
+    }
+    else if (!flag_m->answer) {
+	char *pszKey;
+	char *pszValue;
+
+	pszKey = "SOFTWARE";
+	G_asprintf(&pszValue, "GRASS GIS %s with GDAL %d.%d.%d",
+	           GRASS_VERSION_NUMBER,
+		   GDAL_VERSION_MAJOR, GDAL_VERSION_MINOR, GDAL_VERSION_REV);
+	GDALSetMetadataItem(hCurrDS, pszKey, pszValue, NULL);
+	G_free(pszValue);
+    }
 
     /* Export to GDAL raster */
     G_message(_("Exporting raster data to %s format..."), format->answer);
@@ -595,7 +627,7 @@ int main(int argc, char *argv[])
 	retval = export_band
 	    (hCurrDS, band + 1, ref.file[band].name,
 	     ref.file[band].mapset, &cellhead, maptype, nodataval,
-	     flag_c->answer);
+	     flag_c->answer, flag_m->answer, (nodataopt->answer != NULL));
 
 	/* read/write error */
 	if (retval == -1) {
@@ -604,8 +636,7 @@ int main(int argc, char *argv[])
 	}
 	else if (flag_t->answer) {
 	    retval = export_attr(hCurrDS, band + 1, ref.file[band].name,
-	     ref.file[band].mapset, maptype);
-
+	                         ref.file[band].mapset, maptype);
 	}
     }
 
