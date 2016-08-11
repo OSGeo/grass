@@ -202,7 +202,8 @@ int exact_checks(GDALDataType export_datatype,
 int export_band(GDALDatasetH hMEMDS, int band,
 		const char *name, const char *mapset,
 		struct Cell_head *cellhead, RASTER_MAP_TYPE maptype,
-		double nodataval, int suppress_main_colortable)
+		double nodataval, int suppress_main_colortable, 
+		int no_metadata, int writenodata)
 {
     struct Colors sGrassColors;
     GDALColorTableH hCT;
@@ -236,9 +237,6 @@ int export_band(GDALDatasetH hMEMDS, int band,
 	bHaveMinMax = TRUE;
 	Rast_get_fp_range_min_max(&sRange, &dfCellMin, &dfCellMax);
     }
-
-    sprintf(value, "GRASS GIS %s", GRASS_VERSION_NUMBER);
-    GDALSetMetadataItem(hBand, "Generated_with", value, NULL);
 
     /* use default color rules if no color rules are given */
     if (Rast_read_colors(name, mapset, &sGrassColors) >= 0) {
@@ -312,28 +310,30 @@ int export_band(GDALDatasetH hMEMDS, int band,
 	    GDALSetRasterColorTable(hBand, hCT);
 	}
 
-	if (rcount > 0) {
-	    /* Create metadata entries for color table rules */
-	    sprintf(value, "%d", rcount);
-	    GDALSetMetadataItem(hBand, "COLOR_TABLE_RULES_COUNT", value,
-				NULL);
-	}
+	if (!no_metadata) {
+	    if (rcount > 0) {
+		/* Create metadata entries for color table rules */
+		sprintf(value, "%d", rcount);
+		GDALSetMetadataItem(hBand, "COLOR_TABLE_RULES_COUNT", value,
+				    NULL);
+	    }
 
-	/* Add the rules in reverse order */
-	/* This can cause a GDAL warning with many rules, something like
-	 * Warning 1: Lost metadata writing to GeoTIFF ... too large to fit in tag. */
-	for (i = rcount - 1; i >= 0; i--) {
-	    DCELL val1, val2;
-	    unsigned char r1, g1, b1, r2, g2, b2;
+	    /* Add the rules in reverse order */
+	    /* This can cause a GDAL warning with many rules, something like
+	     * Warning 1: Lost metadata writing to GeoTIFF ... too large to fit in tag. */
+	    for (i = rcount - 1; i >= 0; i--) {
+		DCELL val1, val2;
+		unsigned char r1, g1, b1, r2, g2, b2;
 
-	    Rast_get_fp_color_rule(&val1, &r1, &g1, &b1, &val2, &r2, &g2, &b2,
-			       &sGrassColors, i);
+		Rast_get_fp_color_rule(&val1, &r1, &g1, &b1, &val2, &r2, &g2, &b2,
+				   &sGrassColors, i);
 
 
-	    sprintf(key, "COLOR_TABLE_RULE_RGB_%d", rcount - i - 1);
-	    sprintf(value, "%e %e %d %d %d %d %d %d", val1, val2, r1, g1, b1,
-		    r2, g2, b2);
-	    GDALSetMetadataItem(hBand, key, value, NULL);
+		sprintf(key, "COLOR_TABLE_RULE_RGB_%d", rcount - i - 1);
+		sprintf(value, "%e %e %d %d %d %d %d %d", val1, val2, r1, g1, b1,
+			r2, g2, b2);
+		GDALSetMetadataItem(hBand, key, value, NULL);
+	    }
 	}
     }
 
@@ -442,6 +442,8 @@ int export_band(GDALDatasetH hMEMDS, int band,
 	    G_percent(row + 1, rows, 2);
 	}
     }
+    if (writenodata && n_nulls == 0)
+	GDALSetRasterNoDataValue(hBand, nodataval);
 
     Rast_close(fd);
 
