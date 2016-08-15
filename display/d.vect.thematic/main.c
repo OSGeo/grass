@@ -30,7 +30,6 @@
 #include "plot.h"
 #include "local_proto.h"
 
-
 int main(int argc, char **argv)
 {
     int ret, level;
@@ -55,6 +54,8 @@ int main(int argc, char **argv)
     struct Option *where_opt;
     struct Option *field_opt;
     struct Option *legend_file_opt;
+    struct Option *icon_opt;
+    struct Option *size_opt;
     struct Flag *legend_flag, *algoinfo_flag, *nodraw_flag;
     char *desc;
 
@@ -70,6 +71,7 @@ int main(int argc, char **argv)
     double overlap, *breakpoints, *data = NULL, class_info = 0.0;
     struct GASTATS stats;
     FILE *fd;
+    double size;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -159,6 +161,25 @@ int main(int argc, char **argv)
     legend_file_opt->required = NO;
     legend_file_opt->guisection = _("Legend");
 
+    /* Symbols */
+    icon_opt = G_define_option();
+    icon_opt->key = "icon";
+    icon_opt->type = TYPE_STRING;
+    icon_opt->required = NO;
+    icon_opt->multiple = NO;
+    icon_opt->guisection = _("Symbols");
+    icon_opt->answer = "basic/x";
+    /* This could also use ->gisprompt = "old,symbol,symbol" instead of ->options */
+    icon_opt->options = icon_files();
+    icon_opt->description = _("Point and centroid symbol");
+
+    size_opt = G_define_option();
+    size_opt->key = "size";
+    size_opt->type = TYPE_DOUBLE;
+    size_opt->answer = "5";
+    size_opt->guisection = _("Symbols");
+    size_opt->label = _("Symbol size");
+
     legend_flag = G_define_flag();
     legend_flag->key = 'l';
     legend_flag->description =
@@ -184,6 +205,8 @@ int main(int argc, char **argv)
 	verbose = TRUE;
 
     G_get_set_window(&window);
+
+    size = atof(size_opt->answer);
 
     /* Read map options */
 
@@ -400,11 +423,17 @@ int main(int argc, char **argv)
 	    /* default line width */
 	    D_line_width(default_width);
 
-
+        if (Vect_get_num_primitives(&Map, GV_BOUNDARY) > 0)
 	    stat =
 		dareatheme(&Map, Clist, &cvarr, breakpoints, nbreaks, colors,
 			   has_color ? &bcolor : NULL, chcat, &window,
 			   default_width);
+
+        else if ((Vect_get_num_primitives(&Map, GV_POINT) > 0) ||
+                 (Vect_get_num_primitives(&Map, GV_LINE) > 0)){
+            stat = display_lines(&Map, Clist, chcat, icon_opt->answer, size,
+                   default_width, &cvarr, breakpoints, nbreaks, colors);
+        }
 
 
 	    /* reset line width: Do we need to get line width from display
@@ -526,4 +555,78 @@ int main(int argc, char **argv)
     Vect_destroy_cat_list(Clist);
 
     exit(stat);
+}
+
+int cmp(const void *a, const void *b)
+{
+    return (strcmp(*(char **)a, *(char **)b));
+}
+
+/* adopted from r.colors */
+char *icon_files(void)
+{
+    char **list, *ret;
+    char buf[GNAME_MAX], path[GPATH_MAX], path_i[GPATH_MAX];
+    int i, count;
+    size_t len;
+    DIR *dir, *dir_i;
+    struct dirent *d, *d_i;
+
+    list = NULL;
+    len = 0;
+    sprintf(path, "%s/etc/symbol", G_gisbase());
+
+    dir = opendir(path);
+    if (!dir)
+    return NULL;
+
+    count = 0;
+
+    /* loop over etc/symbol */
+    while ((d = readdir(dir))) {
+    if (d->d_name[0] == '.')
+        continue;
+
+    sprintf(path_i, "%s/etc/symbol/%s", G_gisbase(), d->d_name);
+    dir_i = opendir(path_i);
+
+    if (!dir_i)
+        continue;
+
+    /* loop over each directory in etc/symbols */
+    while ((d_i = readdir(dir_i))) {
+        if (d_i->d_name[0] == '.')
+        continue;
+
+        list = G_realloc(list, (count + 1) * sizeof(char *));
+
+        sprintf(buf, "%s/%s", d->d_name, d_i->d_name);
+        list[count++] = G_store(buf);
+
+        len += strlen(d->d_name) + strlen(d_i->d_name) + 2; /* '/' + ',' */
+    }
+
+    closedir(dir_i);
+    }
+
+    closedir(dir);
+
+    qsort(list, count, sizeof(char *), cmp);
+
+    if (len > 0) {
+    ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
+    *ret = '\0';
+    for (i = 0; i < count; i++) {
+        if (i > 0)
+        strcat(ret, ",");
+        strcat(ret, list[i]);
+        G_free(list[i]);
+    }
+    G_free(list);
+    }
+    else {
+    ret = G_store("");
+    }
+
+    return ret;
 }
