@@ -69,4 +69,4 @@ int display_zcoor(struct Map_info *, int, LATTR *);
 /* legend.c */
 void write_into_legfile(struct Map_info *, int, const char *, const char *,
 			const char *, const char *, const char *, const char *,
-			const char *, const char *, const char *);
+			const char *, const char *, const char *, const char *);
