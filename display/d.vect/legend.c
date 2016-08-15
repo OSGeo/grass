@@ -4,7 +4,7 @@
 
 void write_into_legfile(struct Map_info *Map, int type, const char *leglab, const char *name_map, const char *icon,
                        const char *size, const char *color, const char *fcolor, const char *width, const char *icon_area,
-                       const char *icon_line)
+                       const char *icon_line, const char *size_column)
 {
     int nfeatures;
     FILE *fd;
@@ -13,6 +13,9 @@ void write_into_legfile(struct Map_info *Map, int type, const char *leglab, cons
     char *ptr;
     strcpy(map, name_map);
     strtok_r(map, "@", &ptr);
+
+    if (size_column)
+        size = "-1";
 
     /* Write into legend file */
     leg_file = getenv("GRASS_LEGEND_FILE");

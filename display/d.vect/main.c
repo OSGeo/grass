@@ -463,7 +463,7 @@ int main(int argc, char **argv)
 			   icon_opt->answer, size_opt->answer, 
 			   color_opt->answer, fcolor_opt->answer, 
 			   width_opt->answer, icon_area_opt->answer,
-			   icon_line_opt->answer);
+			   icon_line_opt->answer, sizecolumn_opt->answer);
 	}
 
 	/* reset line width: Do we need to get line width from display
