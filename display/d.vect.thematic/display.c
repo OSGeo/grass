@@ -19,14 +19,15 @@
 int display_lines(struct Map_info *Map, struct cat_list *Clist,
                   int chcat, const char *symbol_name, double size,
                   int default_width, dbCatValArray * cvarr, double *breaks,
-                  int nbreaks, const struct color_rgb *colors)
+                  int nbreaks, const struct color_rgb *colors, const struct
+                  color_rgb *bcolor)
 {
     int ltype, line, nlines;
     struct line_pnts *Points;
     struct line_cats *Cats;
 
     int n_points, n_lines, n_centroids, n_boundaries, n_faces;
-    RGBA_Color *primary_color, *sec_color;
+    RGBA_Color *primary_color, *secondary_color;
     SYMBOL *Symb;
 
     Symb = NULL;
@@ -38,6 +39,8 @@ int display_lines(struct Map_info *Map, struct cat_list *Clist,
 
     primary_color = G_malloc(sizeof(RGBA_Color));
     primary_color->a = RGBA_COLOR_OPAQUE;
+    secondary_color = G_malloc(sizeof(RGBA_Color));
+    secondary_color->a = RGBA_COLOR_OPAQUE;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -97,9 +100,15 @@ int display_lines(struct Map_info *Map, struct cat_list *Clist,
         primary_color->g = colors[i].g;
         primary_color->b = colors[i].b;
 
+        if (bcolor !=NULL) {
+            secondary_color->r = bcolor->r;
+            secondary_color->g = bcolor->g;
+            secondary_color->b = bcolor->b;
+        }
+
         draw_line(ltype, line, Points, Cats, chcat, size, default_width,
                   Clist, Symb, primary_color, &n_points, &n_lines,
-                  &n_centroids, &n_boundaries, &n_faces);
+                  &n_centroids, &n_boundaries, &n_faces, secondary_color);
     }
 
     if (n_points > 0)
@@ -134,7 +143,7 @@ int draw_line(int ltype, int line,
               const struct cat_list *Clist, SYMBOL * Symb,
               RGBA_Color * primary_color,
               int *n_points, int *n_lines, int *n_centroids,
-              int *n_boundaries, int *n_faces)
+              int *n_boundaries, int *n_faces, RGBA_Color *secondary_color)
 {
     double var_size, rotation;
     int i;
@@ -194,7 +203,7 @@ int draw_line(int ltype, int line,
             return 0;
 
         D_line_width(default_width);
-        D_symbol(Symb, x0, y0, primary_color, primary_color);
+        D_symbol2(Symb, x0, y0, primary_color, secondary_color);
     }
     else {
         /* Plot the lines */
