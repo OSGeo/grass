@@ -432,7 +432,8 @@ int main(int argc, char **argv)
         else if ((Vect_get_num_primitives(&Map, GV_POINT) > 0) ||
                  (Vect_get_num_primitives(&Map, GV_LINE) > 0)){
             stat = display_lines(&Map, Clist, chcat, icon_opt->answer, size,
-                   default_width, &cvarr, breakpoints, nbreaks, colors);
+                   default_width, &cvarr, breakpoints, nbreaks, colors,
+                   has_color ? &bcolor : NULL);
         }
 
 

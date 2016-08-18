@@ -21,10 +21,11 @@ int draw_line(int ltype, int line,
            int chcat, double size, int default_width,
               const struct cat_list *Clist, SYMBOL *Symb,
               RGBA_Color *primary_color, int *n_points, int *n_lines,
-              int *n_centroids, int *n_boundaries, int *n_faces);
+              int *n_centroids, int *n_boundaries, int *n_faces,
+              RGBA_Color *secondary_color);
 
 int display_lines(struct Map_info *, struct cat_list *, int,
           const char *, double, int, dbCatValArray *, double *, int,
-          const struct color_rgb *);
+          const struct color_rgb *, const struct color_rgb *);
 
 
