@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 import os
 import types
 
+import grass.script as gscript
 from core import globalvar
 from core.utils import _
 import wx
@@ -252,7 +253,7 @@ class DisplayAttributesDialog(wx.Dialog):
                             if ctype != str:
                                 updatedValues.append(str(newvalue))
                             else:
-                                updatedValues.append("'" + newvalue + "'")
+                                updatedValues.append("'" + newvalue.replace("'", "''") + "'")
                         columns[name]['values'][idx] = newvalue
 
                 if self.action != "add" and len(updatedValues) == 0:
