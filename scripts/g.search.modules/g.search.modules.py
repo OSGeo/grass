@@ -31,6 +31,11 @@
 #% guisection: Output
 #%end
 #%flag
+#% key: n
+#% description: Invert selection (logical NOT)
+#% guisection: Output
+#%end
+#%flag
 #% key: m
 #% description: Search in manual pages too (can be slow)
 #% guisection: Output
@@ -69,6 +74,7 @@ def main():
     global COLORIZE
     keywords = options['keyword'].lower().split(',')
     AND = flags['a']
+    NOT = flags['n']
     manpages = flags['m']
     out_format = None
     if flags['g']:
@@ -78,7 +84,7 @@ def main():
     else:
         COLORIZE = flags['c']
 
-    modules = _search_module(keywords, AND, manpages)
+    modules = _search_module(keywords, AND, NOT, manpages)
 
     print_results(modules, out_format)
 
@@ -162,7 +168,7 @@ def colorize(text, attrs=None, pattern=None):
         return colored(text, attrs=attrs)
 
 
-def _search_module(keywords, logical_and=False, manpages=False):
+def _search_module(keywords, logical_and=False, invert=False, manpages=False):
     """Search modules by given keywords
 
     :param list.<str> keywords: list of keywords
@@ -212,7 +218,10 @@ def _search_module(keywords, logical_and=False, manpages=False):
                                            attrs=['underline'],
                                            pattern=keyword)
 
-        if False not in found:
+        add = False not in found
+        if invert:
+            add = not add
+        if add:
             found_modules.append({
                 'name': name,
                 'attributes': {
