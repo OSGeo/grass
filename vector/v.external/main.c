@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
 	    strcat(error_msg,
 		   _("Consider generating a new location with 'location' parameter"
 		    " from input data set.\n"));
-            G_fatal_error(error_msg);
+            G_fatal_error("%s", error_msg);
 	}
 	else {
             G_verbose_message(_("Projection of input dataset and current location "
