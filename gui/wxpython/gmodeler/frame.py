@@ -789,9 +789,12 @@ class ModelFrame(wx.Frame):
             x = width/2 - 200 + self._randomShift()
             y = height/2 + self._randomShift()
             for p in params['params']:
-                if p.get('prompt', '') in ('raster', 'vector', 'raster_3d', 'dbtable') and \
-                        (p.get('value', None) or \
-                             (p.get('age', 'old') != 'old' and p.get('required', 'no') == 'yes')):
+                if p.get('prompt', '') not in ('raster', 'vector', 'raster_3d', 'dbtable'):
+                    continue
+
+                # add new data item if defined or required
+                if p.get('value', None) or \
+                   (p.get('age', 'old') != 'old' and p.get('required', 'no') == 'yes'):
                     data = layer.FindData(p.get('name', ''))
                     if data:
                         data.SetValue(p.get('value', ''))
@@ -830,7 +833,19 @@ class ModelFrame(wx.Frame):
                     data.AddRelation(rel)
                     self.AddLine(rel)
                     data.Update()
+
+                # remove dead data items
+                if not p.get('value', ''):
+                    data = layer.FindData(p.get('name', ''))
+                    if data:
+                        remList, upList = self.model.RemoveItem(data, layer)
+                        for item in remList:
+                            self.canvas.diagram.RemoveShape(item)
+                            item.__del__()
             
+                        for item in upList:
+                            item.Update()
+
             # valid / parameterized ?
             layer.SetValid(params)
             

@@ -192,16 +192,18 @@ class Model(object):
         """Reset model"""
         self.items = list()
 
-    def RemoveItem(self, item):
+    def RemoveItem(self, item, reference=None):
         """Remove item from model
         
+        :item: item to be removed
+        :reference: reference item valid for deletion
+
         :return: list of related items to remove/update
         """
         relList = list()
         upList = list()
-        
-        self.items.remove(item)
-        
+        doRemove = True
+
         if isinstance(item, ModelAction):
             for rel in item.GetRelations():
                 relList.append(rel)
@@ -213,17 +215,24 @@ class Model(object):
             
         elif isinstance(item, ModelData):
             for rel in item.GetRelations():
+                otherItem = rel.GetTo() if rel.GetFrom() == item else rel.GetFrom()
+                if reference and reference != otherItem:
+                    doRemove = False
+                    continue # avoid recursive deletion
                 relList.append(rel)
-                if rel.GetFrom() == self:
-                    relList.append(rel.GetTo())
-                else:
-                    relList.append(rel.GetFrom())
-        
+                if reference and reference != otherItem:
+                    relList.append(otherItem)
+            if not doRemove:
+                upList.append(item)
+
         elif isinstance(item, ModelLoop):
             for rel in item.GetRelations():
                 relList.append(rel)
             for action in self.GetItems():
                 action.UnSetBlock(item)
+
+        if doRemove and item in self.items:
+            self.items.remove(item)
         
         return relList, upList
     
