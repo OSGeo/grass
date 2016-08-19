@@ -153,129 +153,11 @@ map's edges.  To perform the latter function, use the
 </dl>
 
 
-
 <h2>EXAMPLES</h2>
 
+<h3>Printing extent and raster resolution in 2D and 3D</h3>
+
 <dl>
-<dt><span class="code"><tt>
-g.region n=7360100 e=699000
-</tt></span>
-
-<dd> will reset the northing and easting for the current
-region, but leave the south edge, west edge, and the region
-cell resolutions unchanged.
-
-<p>
-<dt><span class="code"><tt>
-g.region n=51:36:05N e=10:10:05E s=51:29:55N w=9:59:55E res=0:00:01
-</tt></span>
-
-<dd> will reset the northing, easting, southing, westing and resolution
-for the current region, here in DMS latitude-longitude style
-(decimal degrees and degrees with decimal minutes can also be used).
-
-<p>
-<dt><span class="code"><tt>
-g.region -dp s=698000
-</tt></span>
-
-<dd> will set the current region from the default region
-for the GRASS data base location, reset the south edge to
-698000, and then print the result.
-
-<p>
-<dt><span class="code"><tt>
-g.region n=n+1000 w=w-500
-</tt></span>
-
-<dd> The n=<em>value</em> may also be specified as a
-function of its current value:  n=n+<em>value</em>
-increases the current northing, while n=n-<em>value</em>
-decreases it.  This is also true for s=<em>value</em>,
-e=<em>value</em>, and w=<em>value</em>.  In this example
-the current region's northern boundary is extended by 1000
-units and the current region's western boundary is
-decreased by 500 units.
-
-<p>
-<dt><span class="code"><tt>
-g.region n=s+1000 e=w+1000
-</tt></span>
-
-<dd> This form allows the user to set the region boundary
-values relative to one another.  Here, the northern
-boundary coordinate is set equal to 1000 units larger than
-the southern boundary's coordinate value, and the eastern
-boundary's coordinate value is set equal to 1000 units
-larger than the western boundary's coordinate value.  The
-corresponding forms s=n-<em>value</em> and
-
-<p>
-w=e-<em>value</em> may be used to set the values of the
-region's southern and western boundaries, relative to the
-northern and eastern boundary values.
-
-
-<dt><span class="code"><tt>
-g.region raster=soils
-</tt></span>
-
-<dd> This form will make the current region settings
-exactly the same as those given in the cell header file for
-the raster map layer <em>soils</em>.
-
-<p>
-
-<dt><span class="code"><tt>
-g.region raster=soils zoom=soils
-</tt></span>
-
-<dd> This form will first look up the cell header file for
-the raster map layer <em>soils</em>, use this as the
-current region setting, and then shrink the region down to
-the smallest region which still encompasses all non-NULL
-data in the map layer <em>soils</em>.  Note that if the
-parameter <em>raster=soils</em> were not specified, the
-zoom would shrink to encompass all non-NULL data values in
-the soils map that were located within the <i>current region</i>
-settings.
-
-<p>
-
-<dt><span class="code"><tt>
-g.region -up raster=soils
-</tt></span>
-
-<dd> The <b>-u</b> option suppresses the re-setting of the
-current region definition.  This can be useful when it is
-desired to only extract region information.  In this case,
-the cell header file for the soils map layer is printed
-without changing the current region settings.
-
-<p>
-<dt><span class="code"><tt>
-g.region -up zoom=soils save=soils
-</tt></span>
-
-<dd> This will zoom into the smallest region which
-encompasses all non-NULL soils data values, and save the
-new region settings in a file to be called <em>soils</em>
-and stored under the <kbd>windows</kbd> directory in the
-user's current mapset.  The current region settings are not
-changed.
-<p>
-
-<dt><span class="code"><tt>
-g.region b=0 t=3000 tbres=200 res3=100
-g.region -p3
-</tt></span>
-
-<dd> This will define the 3D region for voxel computations.
-In this example a volume with bottom (0m) to top (3000m)
-at horizontal resolution (100m) and vertical resolution (200m)
-is defined.
-
-<p>
 <dt><span class="code"><tt>
 g.region -p
 </tt></span>
@@ -412,13 +294,139 @@ rows:       6000
 cols:       4800
 </pre></div>
 Note that the resolution is here reported in meters, not decimal degrees.
-
 </dl>
 
-<p>Usage example of <em>g.region</em> in a shell with external software:<br>
+<h3>Changing extent and raster resolution using values</h3>
+<dl>
+<dt><span class="code"><tt>
+g.region n=7360100 e=699000
+</tt></span>
+
+<dd> will reset the northing and easting for the current
+region, but leave the south edge, west edge, and the region
+cell resolutions unchanged.
+
+<p>
+<dt><span class="code"><tt>
+g.region n=51:36:05N e=10:10:05E s=51:29:55N w=9:59:55E res=0:00:01
+</tt></span>
+
+<dd> will reset the northing, easting, southing, westing and resolution
+for the current region, here in DMS latitude-longitude style
+(decimal degrees and degrees with decimal minutes can also be used).
+
+<p>
+<dt><span class="code"><tt>
+g.region -dp s=698000
+</tt></span>
+
+<dd> will set the current region from the default region
+for the GRASS data base location, reset the south edge to
+698000, and then print the result.
+
+<p>
+<dt><span class="code"><tt>
+g.region n=n+1000 w=w-500
+</tt></span>
+
+<dd> The n=<em>value</em> may also be specified as a
+function of its current value:  n=n+<em>value</em>
+increases the current northing, while n=n-<em>value</em>
+decreases it.  This is also true for s=<em>value</em>,
+e=<em>value</em>, and w=<em>value</em>.  In this example
+the current region's northern boundary is extended by 1000
+units and the current region's western boundary is
+decreased by 500 units.
+
+<p>
+<dt><span class="code"><tt>
+g.region n=s+1000 e=w+1000
+</tt></span>
+
+<dd> This form allows the user to set the region boundary
+values relative to one another.  Here, the northern
+boundary coordinate is set equal to 1000 units larger than
+the southern boundary's coordinate value, and the eastern
+boundary's coordinate value is set equal to 1000 units
+larger than the western boundary's coordinate value.  The
+corresponding forms s=n-<em>value</em> and
+
+<p>
+w=e-<em>value</em> may be used to set the values of the
+region's southern and western boundaries, relative to the
+northern and eastern boundary values.
+</dl>
+
+<h3>Changing extent and raster resolution using maps</h3>
+<dl>
+<dt><span class="code"><tt>
+g.region raster=soils
+</tt></span>
+
+<dd> This form will make the current region settings
+exactly the same as those given in the cell header file for
+the raster map layer <em>soils</em>.
+
+<p>
+
+<dt><span class="code"><tt>
+g.region raster=soils zoom=soils
+</tt></span>
+
+<dd> This form will first look up the cell header file for
+the raster map layer <em>soils</em>, use this as the
+current region setting, and then shrink the region down to
+the smallest region which still encompasses all non-NULL
+data in the map layer <em>soils</em>.  Note that if the
+parameter <em>raster=soils</em> were not specified, the
+zoom would shrink to encompass all non-NULL data values in
+the soils map that were located within the <i>current region</i>
+settings.
+
+<p>
+
+<dt><span class="code"><tt>
+g.region -up raster=soils
+</tt></span>
+
+<dd> The <b>-u</b> option suppresses the re-setting of the
+current region definition.  This can be useful when it is
+desired to only extract region information.  In this case,
+the cell header file for the soils map layer is printed
+without changing the current region settings.
+
+<p>
+<dt><span class="code"><tt>
+g.region -up zoom=soils save=soils
+</tt></span>
+
+<dd> This will zoom into the smallest region which
+encompasses all non-NULL soils data values, and save the
+new region settings in a file to be called <em>soils</em>
+and stored under the <kbd>windows</kbd> directory in the
+user's current mapset.  The current region settings are not
+changed.
+</dl>
+
+<h3>Changing extent and raster resolution in 3D</h3>
+<dl>
+<dt><span class="code"><tt>
+g.region b=0 t=3000 tbres=200 res3=100
+g.region -p3
+</tt></span>
+
+<dd> This will define the 3D region for voxel computations.
+In this example a volume with bottom (0m) to top (3000m)
+at horizontal resolution (100m) and vertical resolution (200m)
+is defined.
+</dl>
+
+<h3>Using g.region in a shell in combination with OGR</h3>
+
 <!-- why not 'v.in.ogr spatial=' ?? -->
-Extract spatial subset of external vector map 'soils.shp' to new external
-vector map 'soils_cut.shp' using the OGR 'ogr2ogr' tool:<br>
+Extracting a spatial subset of the external vector map
+<tt>soils.shp</tt> into new external vector map <tt>soils_cut.shp</tt>
+using the OGR <em>ogr2ogr</em> tool:<br>
 
 <div class="code"><pre>
 eval `g.region -g`
@@ -427,11 +435,12 @@ ogr2ogr -spat $w $s $e $n soils_cut.shp soils.shp
 
 This requires that the location/SHAPE file projection match.
 
+<h3>Using g.region in a shell in combination with GDAL</h3>
 
-<p>Usage example of <em>g.proj</em> and <em>g.region</em> in a shell with external software:<br>
-Extract spatial subset of external raster map 'p016r035_7t20020524_z17_nn30.tif'
-to new external raster map'p016r035_7t20020524_nc_spm_wake_nn30.tif using the GDAL
-'gdalwarp' tool:<br>
+Extracting a spatial subset of the external raster map
+<tt>p016r035_7t20020524_z17_nn30.tif</tt> into new external raster
+map <tt>p016r035_7t20020524_nc_spm_wake_nn30.tif</tt> using the GDAL
+<em>gdalwarp</em> tool:<br>
 
 <div class="code"><pre>
 eval `g.region -g`
