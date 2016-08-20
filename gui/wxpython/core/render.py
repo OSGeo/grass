@@ -481,6 +481,9 @@ class RenderMapMgr(wx.EvtHandler):
         if os.path.exists(self.Map.mapfile):
             os.remove(self.Map.mapfile)
 
+    def UpdateRenderEnv(self, env):
+        self._render_env.update(env)
+
     def _renderLayers(self, env, force=False, overlaysOnly=False):
         """Render all map layers into files
 

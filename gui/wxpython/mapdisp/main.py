@@ -104,6 +104,15 @@ class DMonMap(Map):
 
         self.renderMgr = RenderMapMgr(self)
 
+        # update legend file variable with the one d.mon uses
+        with open(monFile['env'], 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                if 'GRASS_LEGEND_FILE' in line:
+                    legfile = line.split('=', 1)[1].strip()
+                    self.renderMgr.UpdateRenderEnv({'GRASS_LEGEND_FILE': legfile})
+                    break
+
     def GetLayersFromCmdFile(self):
         """Get list of map layers from cmdfile
         """
@@ -142,6 +151,12 @@ class DMonMap(Map):
                     self.query.emit(ltype=utils.split(dWhatCmd)[
                                     0].split('.')[-1], maps=maps)
                     return
+            else:
+                # clean overlays after erase
+                self.oldOverlays = []
+                overlays = self._giface.GetMapDisplay().decorations.keys()
+                for each in overlays:
+                    self._giface.GetMapDisplay().RemoveOverlay(each)
 
             existingLayers = self.GetListOfLayers()
 
@@ -177,7 +192,7 @@ class DMonMap(Map):
 
                 args = {}
 
-                if ltype in ('barscale', 'rastleg', 'northarrow', 'text'):
+                if ltype in ('barscale', 'rastleg', 'northarrow', 'text', 'vectleg'):
                     # TODO: this is still not optimal
                     # it is there to prevent adding the same overlay multiple times
                     if cmd in self.oldOverlays:
@@ -190,6 +205,8 @@ class DMonMap(Map):
                         self._giface.GetMapDisplay().AddArrow(cmd=cmd)
                     elif ltype == 'text':
                         self._giface.GetMapDisplay().AddDtext(cmd=cmd)
+                    elif ltype == 'vectleg':
+                        self._giface.GetMapDisplay().AddLegendVect(cmd=cmd)
                     self.oldOverlays.append(cmd)
                     continue
 
