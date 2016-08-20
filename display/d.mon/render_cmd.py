@@ -107,7 +107,7 @@ if __name__ == "__main__":
     width, height, legfile = read_env_file(os.path.join(path, 'env'))
     if mon.startswith('wx'):
         mapfile = tempfile.NamedTemporaryFile(dir=path).name
-        if cmd[0] in ('d.barscale', 'd.legend', 'd.northarrow'):
+        if cmd[0] in ('d.barscale', 'd.legend', 'd.northarrow', 'd.legend.vect'):
             mapfile += '.png'
         else:
             mapfile += '.ppm'
@@ -117,7 +117,7 @@ if __name__ == "__main__":
 
     render(cmd, mapfile)
     update_cmd_file(os.path.join(path, 'cmd'), cmd, mapfile)
-    if cmd[0] == 'd.erase':
+    if cmd[0] == 'd.erase' and os.path.exists(legfile):
         os.remove(legfile)
 
 

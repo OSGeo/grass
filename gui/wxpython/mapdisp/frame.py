@@ -142,8 +142,8 @@ class MapFrame(SingleMapFrame):
             properties=self.mapWindowProperties, overlays=self.decorations)
         self.MapWindow2D.mapQueried.connect(self.Query)
         self.MapWindow2D.overlayActivated.connect(self._activateOverlay)
-        self.MapWindow2D.overlayRemoved.connect(self._removeOverlay)
-        self.MapWindow2D.overlayRemoved.connect(self._removeOverlay)
+        self.MapWindow2D.overlayRemoved.connect(self.RemoveOverlay)
+        self.MapWindow2D.overlayRemoved.connect(self.RemoveOverlay)
         self._setUpMapWindow(self.MapWindow2D)
 
         self.MapWindow2D.mouseHandlerUnregistered.connect(self.ResetPointer)
@@ -407,7 +407,7 @@ class MapFrame(SingleMapFrame):
             self.MapWindow3D.ResetViewHistory()
             self.MapWindow3D.UpdateView(None)
             self.MapWindow3D.overlayActivated.connect(self._activateOverlay)
-            self.MapWindow3D.overlayRemoved.connect(self._removeOverlay)
+            self.MapWindow3D.overlayRemoved.connect(self.RemoveOverlay)
         else:
             self._switchMapWindow(self.MapWindow3D)
             os.environ['GRASS_REGION'] = self.Map.SetRegion(
@@ -1201,7 +1201,7 @@ class MapFrame(SingleMapFrame):
         else:
             dlg.Show()
 
-    def _removeOverlay(self, overlayId):
+    def RemoveOverlay(self, overlayId):
         """Hide overlay.
 
         :param overlayId: id of overlay
@@ -1255,13 +1255,11 @@ class MapFrame(SingleMapFrame):
         else:
             show = True
             cmd = ['d.legend.vect']
-            layers = self._giface.GetLayerList().GetSelectedLayers()
 
         GUI(parent=self, giface=self._giface, show=show, modal=False).ParseCommand(
             cmd, completed=(self.GetOptData, None, None))
 
         self.MapWindow.mouse['use'] = 'pointer'
-
 
     def AddArrow(self, cmd=None):
         """Handler for north arrow menu selection."""
