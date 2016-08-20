@@ -162,37 +162,47 @@ overviews.
 
 <h2>EXAMPLES</h2>
 
-<h3>Export the integer raster basin_50K map to GeoTIFF format:</h3>
+<h3>Export the integer raster basin_50K map to GeoTIFF format</h3>
+
 <div class="code"><pre>
 g.region raster=basin_50K -p
 r.out.gdal input=basin_50K output=basin_50K.tif
 </pre></div>
-<p>
-<h3>Export a DCELL raster map in GeoTIFF format suitable for ESRI software:</h3>
+
+
+<h3>Export a DCELL raster map in GeoTIFF format suitable for ESRI software</h3>
+
 <div class="code"><pre>
 g.region raster=elevation -p
 r.out.gdal in=elevation output=elevation.tif createopt="PROFILE=GeoTIFF,TFW=YES"
 </pre></div>
-<p>
-<h3>Export a raster map in "Deflate" compressed GeoTIFF format:</h3>
+
+
+<h3>Export a raster map in "Deflate" compressed GeoTIFF format</h3>
+
 <div class="code"><pre>
 g.region raster=elevation -p
 r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE"
 </pre></div>
-<p>
-<h3>Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software:</h3>
+
+
+<h3>Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software</h3>
+
 <div class="code"><pre>
 i.group group=nc_landsat_rgb input=lsat7_2002_30,lsat7_2002_20,lsat7_2002_10
 g.region raster=lsat7_2002_30 -p
 r.out.gdal in=nc_landsat_rgb output=nc_landsat_rgb.tif type=Byte \
   createopt="PROFILE=GeoTIFF,INTERLEAVE=PIXEL,TFW=YES"
 </pre></div>
-<p>
-<h3>Export the floating point raster elevation map to ERDAS/IMG format:</h3>
+
+
+<h3>Export the floating point raster elevation map to ERDAS/IMG format</h3>
+
 <div class="code"><pre>
 g.region raster=elevation -p
 r.out.gdal input=elevation output=elelevation.img format=HFA type=Float32
 </pre></div>
+
 
 <h3>Export group of image maps as multi-band file</h3>
 <div class="code"><pre>
@@ -204,6 +214,61 @@ r.out.gdal tm7 output=lsat_multiband.tif
 gdalinfo lsat_multiband.tif
 </pre></div>
 
+
+<h3>Export RGB with alpha channel that encodes NULL cells</h3>
+
+When exporting exporting RGB data rather than GIS data for Web applications
+or generally the scope of visualization, the alpha channel is of use. Here
+the export type is commonly the Byte data type.
+<p>
+When exporting data with <em>r.out.gdal</em>, assigning a <b>nodata</b>
+value (specific parameter of the module) means that any band values
+equal to this nodata value will be interpreted as nodata. Using an additional
+alpha channel means that all pixels with an alpha value of 0 are
+transparent. The alpha channel thus represents per-pixel encoding of 
+nodata, just like the GRASS MASK (null file). That means when using an alpha 
+channel, you do not need to "free up" any particular value, but you can
+use any value you like to replace NULL cells, as long as the value can be 
+represented by the Byte data type. It does not matter if that value is 
+already present in any of the input bands.
+<p>
+Hence for "visual-only" RGB data export it is needed to create an additional
+alpha channel that encodes all NULL cells and in the RGB bands to be exported
+replace NULL cells with some value in the range 0-255. For example:
+<p>
+<div class="code"><pre>
+# for simplicity variables are used
+RMAP="lsat7_2000_30"
+GMAP="lsat7_2000_20"
+BMAP="lsat7_2000_10"
+
+OUTNAME="lsat7_2000_RGBA.tif"
+
+# extract alpha
+r.mapcalc "out_a = if(isnull($RMAP) || isnull($GMAP) || isnull($BMAP), 0, 255)"
+
+# replace NULL cells with a valid value, extract colors
+
+# exporting 8 bit RGB data, not GIS data, therefore the `#` operator:
+r.mapcalc "out_r = if(isnull($RMAP), 0, #$RMAP)"
+r.mapcalc "out_g = if(isnull($GMAP), 0, #$GMAP)"
+r.mapcalc "out_b = if(isnull($BMAP), 0, #$BMAP)"
+
+# create group for export
+i.group group=out_rgba input=out_r,out_g,out_b,out_a
+
+# remove any MASK because this works only if there are 
+# no NULL cells in the bands to be exported 
+r.mask -r
+
+# export the group:
+# add PROFILE=BASELINE to createopt to produce a standard TIFF file
+# without any GTiff extensions
+r.out.gdal input=out_rgba output=$OUTNAME -cm createopt="PHOTOMETRIC=RGB,ALPHA=YES"
+gdalinfo $OUTNAME
+</pre></div>
+
+The resulting GeoTIFF file can be used e.g. for Web server applications.
 
 <h2>GDAL RELATED ERROR MESSAGES</h2>
 
@@ -218,7 +283,8 @@ gdalinfo lsat_multiband.tif
 
 <li> "Warning 1: Lost metadata writing to GeoTIFF ... too large to fit in
  tag.": The color table metadata may be too large. It is recommended to
- simplify or not write the color table, or use a different output format.</li>
+ simplify or not write the color table, or use a different output format or
+ the flags <b>-c</b> and <b>-m</b>.</li>
 </ul>
 
 
