@@ -754,9 +754,9 @@ class GMFrame(wx.Frame):
                 self.GetMapDisplay().AddBarscale()
         elif layertype == 'rastleg':
             if len(command) > 1:
-                self.GetMapDisplay().AddLegend(cmd=command)
+                self.GetMapDisplay().AddLegendRast(cmd=command)
             else:
-                self.GetMapDisplay().AddLegend()
+                self.GetMapDisplay().AddLegendRast()
         elif layertype == 'vectleg':
             if len(command) > 1:
                 self.GetMapDisplay().AddLegendVect(cmd=command, showDialog=False)
@@ -1493,7 +1493,7 @@ class GMFrame(wx.Frame):
                     if overlay['cmd'][0] == "d.legend.vect":
                         mapdisplay[i].AddLegendVect(overlay['cmd'])
                     if overlay['cmd'][0] == "d.legend":
-                        mapdisplay[i].AddLegend(overlay['cmd'])
+                        mapdisplay[i].AddLegendRast(overlay['cmd'])
                     if overlay['cmd'][0] == "d.barscale":
                         mapdisplay[i].AddBarscale(overlay['cmd'])
                     if overlay['cmd'][0] == "d.northarrow":
