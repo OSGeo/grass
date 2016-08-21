@@ -142,7 +142,8 @@ void print_proj4(int dontprettify)
     if (check_xy(FALSE))
 	return;
 
-    pj_get_kv(&pjinfo, projinfo, projunits);
+    if (pj_get_kv(&pjinfo, projinfo, projunits) == -1)
+        G_fatal_error(_("Unable to convert projection information to PROJ.4 format"));
     proj4 = pj_get_def(pjinfo.pj, 0);
     pj_free(pjinfo.pj);
 
