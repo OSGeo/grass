@@ -324,7 +324,10 @@ class MapLayer(Layer):
         """Represents map layer in the map canvas
         """
         Layer.__init__(self, *args, **kwargs)
-        self.legrow = grass.tempfile(create=True)
+        if self.type in ('vector'):  # will add d.vect.thematic
+            self._legrow = grass.tempfile(create=True)
+        else:
+            self._legrow = ''
 
     def GetMapset(self):
         """Get mapset of map layer
@@ -385,10 +388,10 @@ class RenderLayerMgr(wx.EvtHandler):
         env_cmd = env.copy()
         env_cmd.update(self._render_env)
         env_cmd['GRASS_RENDER_FILE'] = self.layer.mapfile
-        if type(self.layer).__name__ == "MapLayer":
-            if os.path.isfile(self.layer.legrow):
-                os.remove(self.layer.legrow)
-            env_cmd['GRASS_LEGEND_FILE'] = self.layer.legrow
+        if self.layer.GetType() in ('vector'):
+            if os.path.isfile(self.layer._legrow):
+                os.remove(self.layer._legrow)
+            env_cmd['GRASS_LEGEND_FILE'] = self.layer._legrow
 
         cmd_render = copy.deepcopy(cmd)
         cmd_render[1]['quiet'] = True  # be quiet
@@ -627,12 +630,12 @@ class RenderMapMgr(wx.EvtHandler):
         new_legend = []
         with open(self.Map.legfile, "w") as outfile:
             for layer in reversed(self.layers):
-                if layer.GetType() == 'overlay':
+                if layer.GetType() not in ('vector'):
                     continue
 
-                if os.path.isfile(layer.legrow) and layer.legrow[-1].isdigit() \
+                if os.path.isfile(layer._legrow) and layer._legrow[-1].isdigit() \
                    and layer.hidden is False:
-                    with open(layer.legrow) as infile:
+                    with open(layer._legrow) as infile:
                         line = infile.read()
                         outfile.write(line)
                         new_legend.append(line)
@@ -1317,8 +1320,8 @@ class Map(object):
                 for f in glob.glob(basefile):
                     os.remove(f)
 
-            if not overlay:
-                os.remove(layer.legrow)
+            if layer.GetType() in ('vector'):
+                os.remove(layer._legrow)
 
             list.remove(layer)
 
