@@ -1,6 +1,5 @@
-
-/**
-   \file ellipse.c
+/*!
+   \file lib/proj/ellipse.c
 
    \brief GProj library - Functions for reading datum parameters from the location database
 
@@ -11,7 +10,7 @@
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
    for details.
-**/
+*/
 
 #include <unistd.h>
 #include <ctype.h>
@@ -25,15 +24,22 @@
 
 static int get_a_e2_rf(const char *, const char *, double *, double *,
 		       double *);
-
-/**
- * This routine returns the ellipsoid parameters from the database.
+  
+/*!
+ * \brief Get the ellipsoid parameters from the database.
+ *
  * If the PROJECTION_FILE exists in the PERMANENT mapset, read info from
  * that file, otherwise return WGS 84 values.
  *
- * \return 1 ok, 0 default values used.
- *         Dies with diagnostic if there is an error
- **/
+ * Dies with diagnostic if there is an error.
+ *
+ * \param[out] a semi-major axis 
+ * \param[out] e2 first eccentricity squared
+ * \param[out] rf reciprocal of the ellipsoid flattening term
+ *
+ * \return 1 on success
+ * \return 0 default values used.
+ */
 int GPJ_get_ellipsoid_params(double *a, double *e2, double *rf)
 {
     int ret;
@@ -48,9 +54,24 @@ int GPJ_get_ellipsoid_params(double *a, double *e2, double *rf)
     return ret;
 }
 
-int
-GPJ__get_ellipsoid_params(const struct Key_Value *proj_keys,
-			  double *a, double *e2, double *rf)
+/*!
+ * \brief Get the ellipsoid parameters from proj keys structure.
+ *
+ * If the PROJECTION_FILE exists in the PERMANENT mapset, read info from
+ * that file, otherwise return WGS 84 values.
+ *
+ * Dies with diagnostic if there is an error.
+ *
+ * \param proj_keys proj definition
+ * \param[out] a semi-major axis 
+ * \param[out] e2 first eccentricity squared
+ * \param[out] rf reciprocal of the ellipsoid flattening term
+ *
+ * \return 1 on success
+ * \return 0 default values used.
+ */
+int GPJ__get_ellipsoid_params(const struct Key_Value *proj_keys,
+                              double *a, double *e2, double *rf)
 {
     struct gpj_ellps estruct;
     struct gpj_datum dstruct;
@@ -125,12 +146,15 @@ GPJ__get_ellipsoid_params(const struct Key_Value *proj_keys,
 }
 
 
-/**
- * \brief looks up ellipsoid in ellipsoid table and returns the
- * a, e2 parameters for the ellipsoid
+/*!
+ * \brief Looks up ellipsoid in ellipsoid table and returns the a, e2
+ * parameters for the ellipsoid.
  *
- * \return 1 if ok,
- *         -1 if not found in table
+ * \param name ellipsoid name
+ * \param[out] estruct ellipsoid
+ *
+ * \return 1 on success
+ * \return -1 if not found in table
  */
 
 int GPJ_get_ellipsoid_by_name(const char *name, struct gpj_ellps *estruct)
@@ -155,9 +179,8 @@ int GPJ_get_ellipsoid_by_name(const char *name, struct gpj_ellps *estruct)
     return -1;
 }
 
-static int
-get_a_e2_rf(const char *s1, const char *s2, double *a, double *e2,
-	    double *recipf)
+int get_a_e2_rf(const char *s1, const char *s2, double *a, double *e2,
+                double *recipf)
 {
     double b, f;
 
@@ -278,6 +301,11 @@ struct ellps_list *read_ellipsoid_table(int fatal)
     return outputlist;
 }
 
+/*!
+  \brief Free ellipsoid data structure.
+
+  \param estruct data structure to be freed
+*/
 void GPJ_free_ellps(struct gpj_ellps *estruct)
 {
     G_free(estruct->name);
