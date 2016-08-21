@@ -4,6 +4,7 @@
  * MODULE:       d.vect
  * AUTHOR(S):    CERL, Radim Blazek, others
  *               Updated to GRASS7 by Martin Landa <landa.martin gmail.com>
+ *               Support for vector legend by Adam Laza <ad.laza32 gmail.com >
  * PURPOSE:      Display the vector map in map display
  * COPYRIGHT:    (C) 2004-2014 by the GRASS Development Team
  *
@@ -52,7 +53,9 @@ int main(int argc, char **argv)
     struct Option *lsize_opt, *font_opt, *enc_opt, *xref_opt, *yref_opt;
     struct Option *attrcol_opt, *maxreg_opt, *minreg_opt;
     struct Option *width_opt, *wcolumn_opt, *wscale_opt;
-    struct Flag *id_flag, *cats_acolors_flag, *sqrt_flag;
+    struct Option *leglab_opt;
+    struct Option *icon_line_opt, *icon_area_opt;
+    struct Flag *id_flag, *cats_acolors_flag, *sqrt_flag, *legend_flag;
     char *desc;
     
     struct cat_list *Clist;
@@ -189,6 +192,32 @@ int main(int argc, char **argv)
     rotcolumn_opt->description =
 	_("Measured in degrees CCW from east");
 
+    icon_area_opt = G_define_option();
+    icon_area_opt->key = "icon_area";
+    icon_area_opt->type = TYPE_STRING;
+    icon_area_opt->required = NO;
+    icon_area_opt->multiple = NO;
+    icon_area_opt->guisection = _("Legend");
+    icon_area_opt->answer = "legend/area";
+    icon_area_opt->options = icon_files();
+    icon_area_opt->description = _("Area/boundary symbol for legend");
+
+    icon_line_opt = G_define_option();
+    icon_line_opt->key = "icon_line";
+    icon_line_opt->type = TYPE_STRING;
+    icon_line_opt->required = NO;
+    icon_line_opt->multiple = NO;
+    icon_line_opt->guisection = _("Legend");
+    icon_line_opt->answer = "legend/line";
+    icon_line_opt->options = icon_files();
+    icon_line_opt->description = _("Line symbol for legend");
+
+    leglab_opt = G_define_option();
+    leglab_opt->key = "legend_label";
+    leglab_opt->type = TYPE_STRING;
+    leglab_opt->guisection = _("Legend");
+    leglab_opt->description = _("Label to display after symbol in vector legend");
+
     /* Labels */
     lfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     lfield_opt->key = "label_layer";
@@ -294,6 +323,11 @@ int main(int argc, char **argv)
 	_("This makes circle areas proportionate to the size_column values "
 	  "instead of circle radius");
     sqrt_flag->guisection = _("Symbols");
+
+    legend_flag = G_define_flag();
+    legend_flag->key = 'l';
+    legend_flag->label = _("Do not add this layer to vector legend");
+    legend_flag->guisection = _("Legend");
 
     /* Check command line */
     if (G_parser(argc, argv))
@@ -422,6 +456,14 @@ int main(int argc, char **argv)
 	    D_RGB_color(color.r, color.g, color.b);
 	    if (display & DISP_DIR)
 		stat += display_dir(&Map, type, Clist, chcat, size);
+	}
+
+	if (!legend_flag->answer) {
+		write_into_legfile(&Map, type, leglab_opt->answer, map_name,
+			   icon_opt->answer, size_opt->answer, 
+			   color_opt->answer, fcolor_opt->answer, 
+			   width_opt->answer, icon_area_opt->answer,
+			   icon_line_opt->answer, sizecolumn_opt->answer);
 	}
 
 	/* reset line width: Do we need to get line width from display

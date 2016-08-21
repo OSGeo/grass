@@ -83,6 +83,7 @@ class DMonMap(Map):
         # TODO temporary solution, layer managment by different tools in GRASS
         # should be resovled
         self.ownedLayers = []
+        self.oldOverlays = []
 
         if mapfile:
             self.mapfileCmd = mapfile
@@ -102,6 +103,15 @@ class DMonMap(Map):
         self.query = Signal('DMonMap.query')
 
         self.renderMgr = RenderMapMgr(self)
+
+        # update legend file variable with the one d.mon uses
+        with open(monFile['env'], 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                if 'GRASS_LEGEND_FILE' in line:
+                    legfile = line.split('=', 1)[1].strip()
+                    self.renderMgr.UpdateRenderEnv({'GRASS_LEGEND_FILE': legfile})
+                    break
 
     def GetLayersFromCmdFile(self):
         """Get list of map layers from cmdfile
@@ -141,6 +151,12 @@ class DMonMap(Map):
                     self.query.emit(ltype=utils.split(dWhatCmd)[
                                     0].split('.')[-1], maps=maps)
                     return
+            else:
+                # clean overlays after erase
+                self.oldOverlays = []
+                overlays = self._giface.GetMapDisplay().decorations.keys()
+                for each in overlays:
+                    self._giface.GetMapDisplay().RemoveOverlay(each)
 
             existingLayers = self.GetListOfLayers()
 
@@ -175,28 +191,36 @@ class DMonMap(Map):
                                                  layerType=ltype)[0]
 
                 args = {}
-                if ltype in ('barscale', 'rastleg', 'northarrow'):
-                    classLayer = Overlay
-                    if ltype == 'rastleg':
-                        args['id'] = 0
-                    elif ltype == 'barscale':
-                        args['id'] = 1
-                    else:
-                        args['id'] = 2
-                else:
-                    classLayer = MapLayer
-                    args['ltype'] = ltype
 
-                mapLayer = classLayer(
-                    name=name,
-                    cmd=cmd,
-                    Map=None,
-                    hidden=True,
-                    render=False,
-                    mapfile=mapFile,
-                    **args)
-                mapLayer.GetRenderMgr().updateProgress.connect(
-                    self.GetRenderMgr().ReportProgress)
+                if ltype in ('barscale', 'rastleg', 'northarrow', 'text', 'vectleg'):
+                    # TODO: this is still not optimal
+                    # it is there to prevent adding the same overlay multiple times
+                    if cmd in self.oldOverlays:
+                        continue
+                    if ltype == 'rastleg':
+                        self._giface.GetMapDisplay().AddLegendRast(cmd=cmd)
+                    elif ltype == 'barscale':
+                        self._giface.GetMapDisplay().AddBarscale(cmd=cmd)
+                    elif ltype == 'northarrow':
+                        self._giface.GetMapDisplay().AddArrow(cmd=cmd)
+                    elif ltype == 'text':
+                        self._giface.GetMapDisplay().AddDtext(cmd=cmd)
+                    elif ltype == 'vectleg':
+                        self._giface.GetMapDisplay().AddLegendVect(cmd=cmd)
+                    self.oldOverlays.append(cmd)
+                    continue
+
+                classLayer = MapLayer
+                args['ltype'] = ltype
+
+                mapLayer = classLayer(name=name,
+                                      cmd=cmd,
+                                      Map=None,
+                                      hidden=True,
+                                      render=False,
+                                      mapfile=mapFile,
+                                      **args)
+                mapLayer.GetRenderMgr().updateProgress.connect(self.GetRenderMgr().ReportProgress)
                 if render_env:
                     mapLayer.GetRenderMgr().UpdateRenderEnv(render_env)
                     render_env = dict()
@@ -316,6 +340,22 @@ class LayerList(object):
     def __init__(self, map, giface):
         self._map = map
         self._giface = giface
+        self._index = 0
+
+    def __len__(self):
+        return len(self._map.GetListOfLayers())
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        items = self._map.GetListOfLayers()
+        try:
+            result = items[self._index]
+        except IndexError:
+            raise StopIteration
+        self._index += 1
+        return result
 
     def GetSelectedLayers(self, checkedOnly=True):
         # hidden and selected vs checked and selected

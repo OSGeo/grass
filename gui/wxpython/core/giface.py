@@ -285,7 +285,7 @@ class StandaloneGrassInterface():
         os.environ["GRASS_MESSAGE_FORMAT"] = orig
 
     def GetLayerList(self):
-        raise NotImplementedError()
+        return []
 
     def GetLayerTree(self):
         return None

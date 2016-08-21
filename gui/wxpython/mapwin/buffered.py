@@ -160,14 +160,11 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.img = None   # wx.Image object (self.mapfile)
         # decoration overlays
         self.overlays = overlays
-        self._overlayNames = {
-            0: _("legend"),
-            1: _("scale bar"),
-            2: _("north arrow")}
         # images and their PseudoDC ID's for painting and dragging
         self.imagedict = {}
         self.select = {}      # selecting/unselecting decorations for dragging
         self.textdict = {}    # text, font, and color indexed by id
+
 
         # zoom objects
         self.zoomhistory = []  # list of past zoom extents
@@ -274,27 +271,20 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         pos = self.ScreenToClient(event.GetPosition())
         idlist = self.pdc.FindObjects(pos[0], pos[1], self.hitradius)
-        separator = True
-        if idlist and idlist[0] in (0, 1, 2):  # legend, scale bar, north arrow
-            if separator:
-                menu.AppendSeparator()
-                separator = False
-            self._hide = wx.NewId()
+        if self.overlays and idlist and [i for i in idlist if i in self.overlays.keys()]:  # legend, scale bar, north arrow, dtext
+            menu.AppendSeparator()
+            removeId = wx.NewId()
             self.Bind(wx.EVT_MENU,
-                      lambda evt: self.overlayHidden.emit(overlayId=idlist[0]),
-                      id=self._hide)
-            menu.Append(
-                self._hide,
-                _("Hide {overlay}").format(
-                    overlay=self._overlayNames[
-                        idlist[0]]))
+                      lambda evt: self.overlayRemoved.emit(overlayId=idlist[0]),
+                      id=removeId)
+            menu.Append(removeId, self.overlays[idlist[0]].removeLabel)
 
-            if idlist[0] == 0:
-                self._resizeLegend = wx.NewId()
+            if self.overlays[idlist[0]].name == 'legend':
+                resizeLegendId = wx.NewId()
                 self.Bind(wx.EVT_MENU,
                           lambda evt: self.overlays[idlist[0]].StartResizing(),
-                          id=self._resizeLegend)
-                menu.Append(self._resizeLegend, _("Resize legend"))
+                          id=resizeLegendId)
+                menu.Append(resizeLegendId, _("Resize legend"))
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -1071,20 +1061,22 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         if isinstance(r, list):
             r = wx.Rect(r[0], r[1], r[2], r[3])
-        if id > 100:  # text dragging
+        if id in self.textdict:  # text dragging
             rtop = (r[0], r[1] - r[3], r[2], r[3])
             r = r.Union(rtop)
             rleft = (r[0] - r[2], r[1], r[2], r[3])
             r = r.Union(rleft)
+
         self.pdc.TranslateId(id, dx, dy)
 
         r2 = self.pdc.GetIdBounds(id)
         if isinstance(r2, list):
             r2 = wx.Rect(r[0], r[1], r[2], r[3])
-        if id > 100:  # text
+        if id in self.textdict:  # text
             self.textdict[id]['bbox'] = r2
             self.textdict[id]['coords'][0] += dx
             self.textdict[id]['coords'][1] += dy
+
         r = r.Union(r2)
         r.Inflate(4, 4)
         self.RefreshRect(r, False)
@@ -1514,6 +1506,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                 idlist.remove(99)
             if idlist != []:
                 self.dragid = idlist[0]  # drag whatever is on top
+
         else:
             pass
         coords = self.Pixel2Cell(self.mouse['begin'])
@@ -1561,13 +1554,12 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                 self.dragid >= 0):
             # end drag of overlay decoration
 
-            if self.dragid < 99 and self.dragid in self.overlays:
+            if self.overlays and self.dragid in self.overlays:
                 self.overlays[
                     self.dragid].coords = self.pdc.GetIdBounds(
                     self.dragid)
-            elif self.dragid > 100 and self.dragid in self.textdict:
-                self.textdict[self.dragid][
-                    'bbox'] = self.pdc.GetIdBounds(self.dragid)
+            elif self.dragid in self.textdict:
+                self.textdict[self.dragid]['bbox'] = self.pdc.GetIdBounds(self.dragid)
             else:
                 pass
             self.dragid = None
@@ -1689,6 +1681,13 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                 self.digit:
             self._onMouseMoving(event)
 
+        pos = event.GetPosition()
+        idlist = self.pdc.FindObjects(pos[0], pos[1], self.hitradius)
+        if self.overlays and idlist and [i for i in idlist if i in self.overlays.keys()]:  # legend, scale bar, north arrow, dtext
+            self.SetToolTipString("Double click in Pointer mode to set object"
+                                  " properties,\nright click to remove")
+        else:
+            self.SetToolTip(None)
         event.Skip()
 
     def OnCopyCoordinates(self, event):

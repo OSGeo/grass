@@ -133,7 +133,7 @@ int start_mon(const char *name, const char *output, int select,
 	      int truecolor, int x_only, int update)
 {
     char *mon_path;
-    char *out_file, *env_file, *cmd_file;
+    char *out_file, *env_file, *cmd_file, *leg_file;
     char  buf[1024];
     char file_path[GPATH_MAX], render_cmd_path[GPATH_MAX];
     int  fd;
@@ -158,6 +158,8 @@ int start_mon(const char *name, const char *output, int select,
     env_file = G_store(file_path);
     G_file_name(file_path, mon_path, "cmd", G_mapset());
     cmd_file = G_store(file_path);
+    G_file_name(file_path, mon_path, "leg", G_mapset());
+    leg_file = G_store(file_path);
 
     /* create py file (renderer) */
     sprintf(render_cmd_path, "%s/etc/d.mon/render_cmd.py", getenv("GISBASE"));
@@ -199,6 +201,10 @@ int start_mon(const char *name, const char *output, int select,
     write(fd, buf, strlen(buf));
     sprintf(buf, "GRASS_RENDER_HEIGHT=%d\n", height);
     write(fd, buf, strlen(buf));
+    sprintf(buf, "GRASS_LEGEND_FILE=%s\n", leg_file);
+    write(fd, buf, strlen(buf));
+
+
     if (bgcolor) {
 	if (strcmp(bgcolor, "none") == 0)
 	    sprintf(buf, "GRASS_RENDER_TRANSPARENT=TRUE\n");

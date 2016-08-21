@@ -651,10 +651,10 @@ class GMFrame(wx.Frame):
         Also close associated map display
         """
 
-        if UserSettings.Get(group='manager', key='askOnQuit',
-                            subkey='enabled') and self.workspaceChanged:
-            maptree = self.GetLayerTree()
-
+        # save changes in the workspace
+        maptree = self.GetLayerTree()
+        if  self.workspaceChanged and UserSettings.Get(
+                group='manager', key='askOnQuit', subkey='enabled'):
             if self.workspaceFile:
                 message = _("Do you want to save changes in the workspace?")
             else:
@@ -749,19 +749,29 @@ class GMFrame(wx.Frame):
 
         if layertype == 'barscale':
             if len(command) > 1:
-                self.GetMapDisplay().AddBarscale(cmd=command, showDialog=False)
+                self.GetMapDisplay().AddBarscale(cmd=command)
             else:
-                self.GetMapDisplay().AddBarscale(showDialog=True)
+                self.GetMapDisplay().AddBarscale()
         elif layertype == 'rastleg':
             if len(command) > 1:
-                self.GetMapDisplay().AddLegend(cmd=command, showDialog=False)
+                self.GetMapDisplay().AddLegendRast(cmd=command)
             else:
-                self.GetMapDisplay().AddLegend(showDialog=True)
+                self.GetMapDisplay().AddLegendRast()
+        elif layertype == 'vectleg':
+            if len(command) > 1:
+                self.GetMapDisplay().AddLegendVect(cmd=command, showDialog=False)
+            else:
+                self.GetMapDisplay().AddLegendVect(showDialog=True)
         elif layertype == 'northarrow':
             if len(command) > 1:
-                self.GetMapDisplay().AddArrow(cmd=command, showDialog=False)
+                self.GetMapDisplay().AddArrow(cmd=command)
             else:
-                self.GetMapDisplay().AddArrow(showDialog=True)
+                self.GetMapDisplay().AddArrow()
+        elif layertype == 'text':
+            if len(command) > 1:
+                self.GetMapDisplay().AddDtext(cmd=command)
+            else:
+                self.GetMapDisplay().AddDtext()
         elif layertype == 'redraw':
             self.GetMapDisplay().OnRender(None)
         elif layertype == 'export':
@@ -1469,6 +1479,7 @@ class GMFrame(wx.Frame):
             else:
                 maptree.SelectItem(layer, select=False)
 
+
         busy.Destroy()
 
         # set render property again when all layers are loaded
@@ -1479,8 +1490,10 @@ class GMFrame(wx.Frame):
                 # overlay["cmd"][0] name of command e.g. d.barscale, d.legend
                 # overlay["cmd"][1:] parameters and flags
                 if overlay['display'] == i:
+                    if overlay['cmd'][0] == "d.legend.vect":
+                        mapdisplay[i].AddLegendVect(overlay['cmd'])
                     if overlay['cmd'][0] == "d.legend":
-                        mapdisplay[i].AddLegend(overlay['cmd'])
+                        mapdisplay[i].AddLegendRast(overlay['cmd'])
                     if overlay['cmd'][0] == "d.barscale":
                         mapdisplay[i].AddBarscale(overlay['cmd'])
                     if overlay['cmd'][0] == "d.northarrow":

@@ -18,6 +18,7 @@ SUBDIRS = \
 	d.info \
 	d.labels \
 	d.legend \
+	d.legend.vect \
 	d.linegraph \
 	d.mon \
 	d.northarrow \

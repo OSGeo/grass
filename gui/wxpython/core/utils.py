@@ -1022,7 +1022,8 @@ command2ltype = {'d.rast': 'raster',
                  'd.to.rast': 'torast',
                  'd.text': 'text',
                  'd.northarrow': 'northarrow',
-                 'd.polar': 'polar'
+                 'd.polar': 'polar',
+                 'd.legend.vect': 'vectleg'
                  }
 ltype2command = {}
 for (cmd, ltype) in command2ltype.items():

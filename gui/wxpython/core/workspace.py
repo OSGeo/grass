@@ -1517,21 +1517,8 @@ class WriteWorkspaceFile(object):
         """Function for writing map elements (barscale, northarrow etc.)
         """
         disp_size = mapdisp.GetMapWindow().GetClientSize()
-
-        if mapdisp.arrow.IsShown():
-            cmd = mapdisp.arrow.cmd
-            coord_px = mapdisp.arrow.coords
-            self.__writeOverlayParams(disp_size, cmd, coord_px)
-
-        if (mapdisp.legend) and mapdisp.legend.IsShown():
-            cmd = mapdisp.legend.cmd
-            coord_px = mapdisp.legend.coords
-            self.__writeOverlayParams(disp_size, cmd, coord_px)
-
-        if mapdisp.barscale and mapdisp.barscale.IsShown():
-            cmd = mapdisp.barscale.cmd
-            coord_px = mapdisp.barscale.coords
-            self.__writeOverlayParams(disp_size, cmd, coord_px)
+        for overlay in mapdisp.decorations.values():
+            self.__writeOverlayParams(disp_size, overlay.cmd, overlay.coords)
 
     def __writeOverlayParams(self, disp_size, cmd, coord_px):
         """

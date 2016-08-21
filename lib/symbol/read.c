@@ -312,10 +312,14 @@ SYMBOL *S_read(const char *sname)
 		sprintf(buf, "Incorrect box definition: '%s'", data);
 		return (err(fp, symb, buf));
 	    }
-	    if (x2 - x > y2 - y)
-		symb->scale = 1 / (x2 - x);
-	    else
-		symb->scale = 1 / (y2 - y);
+	    symb->xscale = 1 / (x2 - x);
+	    symb->yscale = 1 / (y2 - y);
+	    if (x2 - x > y2 - y) {
+		symb->scale = symb->xscale;
+	    }
+	    else {
+		symb->scale = symb->yscale;
+	    }
 	}
 	else if (strcmp(key, "STRING") == 0) {
 	    G_debug(4, "  STRING >");

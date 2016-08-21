@@ -324,6 +324,10 @@ class MapLayer(Layer):
         """Represents map layer in the map canvas
         """
         Layer.__init__(self, *args, **kwargs)
+        if self.type in ('vector'):  # will add d.vect.thematic
+            self._legrow = grass.tempfile(create=True)
+        else:
+            self._legrow = ''
 
     def GetMapset(self):
         """Get mapset of map layer
@@ -364,6 +368,7 @@ class RenderLayerMgr(wx.EvtHandler):
         self.thread = gThread()
 
         self.updateProgress = Signal('RenderLayerMgr.updateProgress')
+        self.renderingFailed = Signal('RenderLayerMgr.renderingFailed')
 
         self._startTime = None
         self._render_env = env
@@ -383,20 +388,26 @@ class RenderLayerMgr(wx.EvtHandler):
         env_cmd = env.copy()
         env_cmd.update(self._render_env)
         env_cmd['GRASS_RENDER_FILE'] = self.layer.mapfile
+        if self.layer.GetType() in ('vector'):
+            if os.path.isfile(self.layer._legrow):
+                os.remove(self.layer._legrow)
+            env_cmd['GRASS_LEGEND_FILE'] = self.layer._legrow
 
         cmd_render = copy.deepcopy(cmd)
         cmd_render[1]['quiet'] = True  # be quiet
 
         self._startTime = time.time()
         self.thread.Run(callable=self._render, cmd=cmd_render, env=env_cmd,
-                        ondone=self.OnRenderDone)
+                        ondone=self.OnRenderDone, userdata={'cmd': cmd})
         self.layer.forceRender = False
 
     def _render(self, cmd, env):
-        try:
-            return grass.run_command(cmd[0], env=env, **cmd[1])
-        except CalledModuleError as e:
-            return 1
+        p = grass.start_command(cmd[0], env=env, stderr=grass.PIPE, **cmd[1])
+        stdout, stderr = p.communicate()
+        if p.returncode:
+            return stderr
+        else:
+            return None
 
     def Abort(self):
         """Abort rendering process"""
@@ -419,13 +430,14 @@ class RenderLayerMgr(wx.EvtHandler):
 
         Emits updateProcess
         """
-        Debug.msg(1, "RenderLayerMgr.OnRenderDone(%s): ret=%d time=%f" %
+        Debug.msg(1, "RenderLayerMgr.OnRenderDone(%s): err=%s time=%f" %
                   (self.layer, event.ret, time.time() - self._startTime))
-        if event.ret != 0:
-            try:
-                os.remove(self.layer.mapfile)
-            except:
-                pass
+        if event.ret is not None:
+            cmd = cmdtuple_to_list(event.userdata['cmd'])
+            self.renderingFailed.emit(cmd=cmd, error=event.ret)
+            # don't remove layer if overlay, we need to keep the old one
+            if self.layer.type != 'overlay':
+                try_remove(self.layer.mapfile)
 
         self.updateProgress.emit(layer=self.layer)
 
@@ -443,6 +455,7 @@ class RenderMapMgr(wx.EvtHandler):
 
         self.updateMap = Signal('RenderMapMgr.updateMap')
         self.updateProgress = Signal('RenderMapMgr.updateProgress')
+        self.renderingFailed = Signal('RenderMapMgr.renderingFailed')
         self.renderDone = Signal('RenderMapMgr.renderDone')
         self.renderDone.connect(self.OnRenderDone)
 
@@ -450,10 +463,13 @@ class RenderMapMgr(wx.EvtHandler):
         self._render_env = {"GRASS_RENDER_BACKGROUNDCOLOR": "000000",
                             "GRASS_RENDER_FILE_COMPRESSION": "0",
                             "GRASS_RENDER_TRUECOLOR": "TRUE",
-                            "GRASS_RENDER_TRANSPARENT": "TRUE"}
+                            "GRASS_RENDER_TRANSPARENT": "TRUE",
+                            "GRASS_LEGEND_FILE": self.Map.legfile
+                            }
 
         self._init()
         self._rendering = False
+        self._old_legend = []
 
     def _init(self, env=None):
         """Init render manager
@@ -468,6 +484,9 @@ class RenderMapMgr(wx.EvtHandler):
         # re-render from scratch
         if os.path.exists(self.Map.mapfile):
             os.remove(self.Map.mapfile)
+
+    def UpdateRenderEnv(self, env):
+        self._render_env.update(env)
 
     def _renderLayers(self, env, force=False, overlaysOnly=False):
         """Render all map layers into files
@@ -511,6 +530,7 @@ class RenderMapMgr(wx.EvtHandler):
         env['GRASS_REGION'] = self.Map.SetRegion(windres)
         env['GRASS_RENDER_WIDTH'] = str(self.Map.width)
         env['GRASS_RENDER_HEIGHT'] = str(self.Map.height)
+
         if UserSettings.Get(group='display', key='driver',
                             subkey='type') == 'png':
             env['GRASS_RENDER_IMMEDIATE'] = 'png'
@@ -518,6 +538,25 @@ class RenderMapMgr(wx.EvtHandler):
             env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
 
         return env
+
+    def RenderOverlays(self, force=False):
+        """Render only overlays
+
+        :param bool force: force rendering all map layers
+        """
+        if self._rendering:
+            Debug.msg(
+                1, "RenderMapMgr().RenderOverlays(): cancelled (already rendering)")
+            return
+
+        wx.BeginBusyCursor()
+        self._rendering = True
+
+        env = self.GetRenderEnv()
+        self._init(env)
+        # no layer composition afterwards
+        if self._renderLayers(env, force, overlaysOnly=True) == 0:
+            self.renderDone.emit()
 
     def Render(self, force=False, windres=False):
         """Render map composition
@@ -535,8 +574,9 @@ class RenderMapMgr(wx.EvtHandler):
 
         env = self.GetRenderEnv(windres)
         self._init(env)
-        if self._renderLayers(env, force, windres) == 0:
+        if self._renderLayers(env, force) == 0:
             self.renderDone.emit()
+
 
     def OnRenderDone(self):
         """Rendering process done
@@ -549,6 +589,8 @@ class RenderMapMgr(wx.EvtHandler):
         masks = list()
         opacities = list()
 
+        # TODO: g.pnmcomp is now called every time
+        # even when only overlays are rendered
         for layer in self.layers:
             if layer.GetType() == 'overlay':
                 continue
@@ -584,11 +626,33 @@ class RenderMapMgr(wx.EvtHandler):
         Debug.msg(1, "RenderMapMgr.OnRenderDone() time=%f sec (comp: %f)" %
                   (stop - self._startTime, stop - startCompTime))
 
+        # Update legfile
+        new_legend = []
+        with open(self.Map.legfile, "w") as outfile:
+            for layer in reversed(self.layers):
+                if layer.GetType() not in ('vector'):
+                    continue
+
+                if os.path.isfile(layer._legrow) and layer._legrow[-1].isdigit() \
+                   and layer.hidden is False:
+                    with open(layer._legrow) as infile:
+                        line = infile.read()
+                        outfile.write(line)
+                        new_legend.append(line)
+
         self._rendering = False
         if wx.IsBusy():
             wx.EndBusyCursor()
 
-        self.updateMap.emit()
+        # if legend file changed, rerender vector legend
+        if new_legend != self._old_legend:
+            self._old_legend = new_legend
+            for layer in self.layers:
+                if layer.GetType() == 'overlay' and layer.GetName() == 'vectleg':
+                    layer.forceRender = True
+            self.Render()
+        else:
+            self.updateMap.emit()
 
     def Abort(self):
         """Abort all rendering processes"""
@@ -652,6 +716,9 @@ class RenderMapMgr(wx.EvtHandler):
                 'progresVal'] == self.progressInfo['range']:
             self.renderDone.emit()
 
+    def RenderingFailed(self, cmd, error):
+        self.renderingFailed.emit(cmd=cmd, error=error)
+
 
 class Map(object):
 
@@ -677,7 +744,10 @@ class Map(object):
         self.gisrc = gisrc
 
         # generated file for g.pnmcomp output for rendering the map
+        self.legfile = grass.tempfile(create=False) + '.leg'
+        self.tmpdir = os.path.dirname(self.legfile)
         self.mapfile = grass.tempfile(create=False) + '.ppm'
+
 
         # setting some initial env. variables
         if not self.GetWindow():
@@ -1249,6 +1319,10 @@ class Map(object):
                 basefile = os.path.join(base, tempbase) + r'.*'
                 for f in glob.glob(basefile):
                     os.remove(f)
+
+            if layer.GetType() in ('vector'):
+                os.remove(layer._legrow)
+
             list.remove(layer)
 
             self.layerRemoved.emit(layer=layer)
@@ -1413,6 +1487,7 @@ class Map(object):
                     string=True))))
         if renderMgr:
             renderMgr.updateProgress.connect(self.renderMgr.ReportProgress)
+            renderMgr.renderingFailed.connect(self.renderMgr.RenderingFailed)
         overlay.forceRender = render
 
         return overlay
@@ -1511,9 +1586,7 @@ class Map(object):
 
     def RenderOverlays(self, force):
         """Render overlays only (for nviz)"""
-        for layer in self.overlays:
-            if force or layer.forceRender:
-                layer.Render()
+        self.renderMgr.RenderOverlays(force)
 
     def AbortAllThreads(self):
         """Abort all layers threads e. g. donwloading data"""
