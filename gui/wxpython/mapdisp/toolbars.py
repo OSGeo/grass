@@ -33,8 +33,8 @@ MapIcons = {
                        desc=_('Select features interactively from vector map')),
     'addBarscale': MetaIcon(img='scalebar-add',
                             label=_('Add scale bar')),
-    'addLegend': MetaIcon(img='legend-add',
-                          label=_('Add legend')),
+    'addRasterLegend': MetaIcon(img='legend-add',
+                          label=_('Add raster legend')),
     'addVectorLegend': MetaIcon(img='legend-add',
                                 label=_('Add vector legend')),
     'addNorthArrow': MetaIcon(img='north-arrow-add',
@@ -269,7 +269,7 @@ class MapToolbar(BaseToolbar):
         """Decorations overlay menu
         """
         self._onMenu(
-            ((MapIcons["addLegend"],
+            ((MapIcons["addRasterLegend"],
               lambda evt: self.parent.AddLegend()),
              (MapIcons["addVectorLegend"],
               lambda evt: self.parent.AddLegendVect()),
