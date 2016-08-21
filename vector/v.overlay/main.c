@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
 
     /* Create dblinks */
     if (ofield[0] > 0) {
-	Fi = Vect_default_field_info(&Out, ofield[0], NULL, GV_MTABLE);
+	Fi = Vect_default_field_info(&Out, ofield[0], NULL, GV_1TABLE);
     }
 
     db_init_string(&sql);
@@ -652,7 +652,7 @@ void copy_table(struct Map_info *In, struct Map_info *Out, int infield,
     list = Vect_new_list();
     Vect_cidx_get_unique_cats_by_index(Out, findex, list);
     Vect_copy_table_by_cats(In, Out, infield, outfield, NULL,
-                            GV_MTABLE, list->value, list->n_values);
+                            GV_1TABLE, list->value, list->n_values);
     
     Vect_destroy_list(list);
 }
