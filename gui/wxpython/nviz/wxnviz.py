@@ -49,7 +49,7 @@ from grass.lib.nviz import *
 from grass.lib.raster import *
 
 from core.debug import Debug
-from core.utils import _
+from core.utils import _, autoCropImageFromFile
 import grass.script as grass
 
 log = None
@@ -2041,12 +2041,11 @@ class Texture(object):
         :param coords: image coordinates
         """
         self.path = filepath
-        self.image = wx.Image(filepath, wx.BITMAP_TYPE_ANY)
-        self.width = self.image.GetWidth()
-        self.height = self.image.GetHeight()
+        self.image = autoCropImageFromFile(filepath)
+        self.width = self.orig_width = self.image.GetWidth()
+        self.height = self.orig_height = self.image.GetHeight()
         self.id = overlayId
-        self.coords = [0, 0]
-        self.bounds = wx.Rect()
+        self.coords = coords
         self.active = True
 
         # alpha needs to be initialized
@@ -2131,12 +2130,8 @@ class Texture(object):
             self.height,
             self.textureId)
 
-    def SetBounds(self, rect):
-        """Set Bounding Rectangle"""
-        self.bounds = rect
-
     def HitTest(self, x, y, radius):
-        copy = wx.Rect(*self.bounds)
+        copy = wx.Rect(self.coords[0], self.coords[1], self.orig_width, self.orig_height)
         copy.Inflate(radius, radius)
         return copy.ContainsXY(x, y)
 
@@ -2144,7 +2139,6 @@ class Texture(object):
         """Move texture on the screen"""
         self.coords[0] += dx
         self.coords[1] += dy
-        self.bounds.OffsetXY(dx, dy)
 
     def SetCoords(self, coords):
         """Set coordinates"""
@@ -2188,37 +2182,3 @@ class ImageTexture(Texture):
 
     def Corresponds(self, item):
         return sorted(self.GetCmd()) == sorted(item.GetCmd())
-
-
-class TextTexture(Texture):
-    """Class representing OpenGL texture as a text label"""
-
-    def __init__(self, filepath, overlayId, coords, textDict):
-        """Load image to texture
-
-        :param filepath: path to image file
-        :param overlayId: id of overlay (101 and more for text)
-        :param coords: text coordinates
-        :param textDict: text properties
-        """
-        Texture.__init__(
-            self,
-            filepath=filepath,
-            overlayId=overlayId,
-            coords=coords)
-
-        self.textDict = textDict
-
-    def GetTextDict(self):
-        """Returns text properties."""
-        return self.textDict
-
-    def Corresponds(self, item):
-        t = self.GetTextDict()
-        for prop in t.keys():
-            if prop in ('coords', 'bbox'):
-                continue
-            if t[prop] != item[prop]:
-                return False
-
-        return True

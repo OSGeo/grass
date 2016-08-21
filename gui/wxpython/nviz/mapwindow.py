@@ -160,7 +160,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.imagelist = []
         self.overlay = wx.Overlay()
         #self.pdc = wx.PseudoDC()
-        self.textdict = {}
         self.dragid = -1
         self.hitradius = 5
         # layer manager toolwindow
@@ -473,125 +472,36 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             if texture.IsActive():
                 texture.Draw()
 
-    def GetLegendRect(self):
-        """Estimates legend size for dragging"""
-        size = None
-        if 0 in self.overlays:
-            for param in self.overlays[0].cmd[1:]:
-                if param.startswith("at="):
-                    size = map(float, param.split("=")[-1].split(','))
-                    break
-        if size:
-            wSize = self.GetClientSizeTuple()
-            x, y = size[
-                2] / 100. * wSize[0], wSize[1] - (size[1] / 100. * wSize[1])
-            x += self.overlays[1].coords[0]
-            y += self.overlays[1].coords[1]
-            w = (size[3] - size[2]) / 100. * wSize[0]
-            h = (size[1] - size[0]) / 100. * wSize[1]
-
-            rect = wx.Rect(x, y, w, h)
-            return rect
-
-        return wx.Rect()
-
-    def DrawTextImage(self, textDict, relCoords):
-        """Draw overlay text"""
-        bmp = wx.EmptyBitmap(textDict['bbox'][2], textDict['bbox'][3])
-        memDC = wx.MemoryDC()
-        memDC.SelectObject(bmp)
-
-        mask = self.view['background']['color']
-        if mask == textDict['color']:
-            mask = wx.WHITE
-        memDC.SetBackground(wx.Brush(mask))
-        memDC.Clear()
-        memDC.SetFont(textDict['font'])
-        memDC.SetTextForeground(textDict['color'])
-        if textDict['rotation'] == 0:
-            memDC.DrawText(textDict['text'], 0, 0)
-        else:
-            memDC.DrawRotatedText(textDict['text'], relCoords[0], relCoords[1],
-                                  textDict['rotation'])
-        bmp.SetMaskColour(mask)
-        memDC.DrawBitmap(bmp, 0, 0, 1)
-
-        filename = grass.tempfile(create=False) + '.png'
-        bmp.SaveFile(filename, wx.BITMAP_TYPE_PNG)
-        memDC.SelectObject(wx.NullBitmap)
-
-        return filename
-
     def UpdateOverlays(self):
-        """Converts rendered overlay files and text labels to wx.Image
-            and then to textures so that they can be rendered by OpenGL.
-            Updates self.imagelist"""
+        """Renders overlays (legend, text).
+        Once this is done _onUpdateOverlays is called"""
         self.Map.ChangeMapSize(self.GetClientSize())
         self.Map.RenderOverlays(force=True)
 
-        # delete textures
-        for texture in self.imagelist:
-            # inactive overlays, remove text labels
-            if texture.GetId() < 100:
-                if not self.overlays[texture.GetId()].IsShown():
-                    texture.SetActive(False)
-                else:
-                    texture.SetActive(True)
-            else:  # text label
-                if texture.GetId() not in self.textdict:
-                    self.imagelist.remove(texture)
-
-        # update images (only legend so far)
+    def _onUpdateOverlays(self):
+        """Converts rendered overlay files and text labels to wx.Image
+            and then to textures so that they can be rendered by OpenGL.
+            Updates self.imagelist"""
+        # update images (legend and text)
         for oid, overlay in self.overlays.iteritems():
-            if not overlay.IsShown() or oid in (1, 2):  # 0 for barscale
+            if not overlay.IsShown() or overlay.name in ('barscale', 'northarrow'):
                 continue
             if oid not in [t.GetId() for t in self.imagelist]:  # new
-                self.CreateTexture(overlay=overlay.layer)
+                self.CreateTexture(overlay=overlay)
             else:
                 for t in self.imagelist:
                     if t.GetId() == oid:  # check if it is the same
                         if not t.Corresponds(overlay):
                             self.imagelist.remove(t)
-                            t = self.CreateTexture(overlay=overlay.layer)
+                            t = self.CreateTexture(overlay=overlay)
 
-        # update text labels
-        for textId in self.textdict.keys():
-            if textId not in [t.GetId() for t in self.imagelist]:  # new
-                self.CreateTexture(textId=textId)
-            else:
-                for t in self.imagelist:
-                    if t.GetId() == textId:  # check if it is the same
-                        self.textdict[textId]['bbox'] = t.textDict['bbox']
-                        if not t.Corresponds(self.textdict[textId]):
-                            self.imagelist.remove(t)
-                            t = self.CreateTexture(textId=textId)
-                        # always set coordinates, needed for synchr. 2D and 3D
-                        # modes
-                        t.SetCoords(self.textdict[textId]['coords'])
         self.Refresh()
 
-    def CreateTexture(self, overlay=None, textId=None):
-        """Create texture from overlay image or from textdict"""
-        if overlay:  # legend
-            texture = wxnviz.ImageTexture(
-                filepath=overlay.mapfile,
-                overlayId=overlay.id,
-                coords=list(
-                    self.overlays[
-                        overlay.id].coords),
-                cmd=overlay.GetCmd())
-            if overlay.id == 0:  # legend
-                texture.SetBounds(self.GetLegendRect())
-        else:  # text
-            coords, bbox, relCoords = self.TextBounds(self.textdict[textId])
-            self.textdict[textId]['coords'] = coords
-            self.textdict[textId]['bbox'] = bbox
-            file = self.DrawTextImage(self.textdict[textId], relCoords)
-            texture = wxnviz.TextTexture(
-                filepath=file, overlayId=textId, coords=coords,
-                textDict=self.textdict[textId])
-            bbox.OffsetXY(*relCoords)
-            texture.SetBounds(bbox)
+    def CreateTexture(self, overlay):
+        """Create texture from overlay image"""
+        texture = wxnviz.ImageTexture(
+                filepath=overlay.layer.mapfile, overlayId=overlay.id,
+                coords=list(overlay.coords), cmd=overlay.GetCmd())
 
         if not texture.textureId:  # texture too big
             GMessage(
@@ -604,6 +514,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.imagelist.append(texture)
 
         return texture
+
+    def ClearTextures(self):
+        self.imagelist = []
 
     def FindObjects(self, mouseX, mouseY, radius):
         """Find object which was clicked on"""
@@ -783,11 +696,12 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.SetDrawScalebar((pos[0], size[1] - pos[1]))
 
         if self.mouse['use'] == 'pointer':
-            # get decoration or text id
+            # get decoration id
             self.dragid = self.FindObjects(
                 self.mouse['tmp'][0],
                 self.mouse['tmp'][1],
                 self.hitradius)
+
         if self.mouse['use'] == 'fly':
             if not self.timerFly.IsRunning():
                 self.timerFly.Start(self.fly['interval'])
@@ -895,17 +809,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             if self.dragid >= 0:
                 dx = self.mouse['end'][0] - self.mouse['begin'][0]
                 dy = self.mouse['end'][1] - self.mouse['begin'][1]
-                if self.dragid < 99:
+                if self.dragid in self.overlays:
                     coords = self.overlays[self.dragid].coords
                     self.overlays[
                         self.dragid].coords = [
                         coords[0] + dx, coords[1] + dy]
-                else:  # text
-                    coords = self.textdict[self.dragid]['coords']
-                    self.textdict[
-                        self.dragid]['coords'] = [
-                        coords[0] + dx,
-                        coords[1] + dy]
                 self.dragid = -1
                 self.render['quick'] = False
                 self.Refresh(False)
@@ -2763,13 +2671,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         :param layers: so far unused
         """
         self.lmgr.nviz.OnResetView(None)
-
-    def TextBounds(self, textinfo):
-        """Return text boundary data
-
-        :param textinfo: text metadata (text, font, color, rotation)
-        """
-        return self.parent.MapWindow2D.TextBounds(textinfo, relcoords=True)
 
     def DisactivateWin(self):
         """Use when the class instance is hidden in MapFrame."""
