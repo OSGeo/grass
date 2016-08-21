@@ -22,6 +22,7 @@ static void F_generate(const char *drvname, const char *dbname,
     int col, ncols, sqltype, more;
     char buf[5000];
     const char *colname;
+    char *formbuf;
     dbString sql, html, str;
     dbDriver *driver;
     dbHandle handle;
@@ -88,8 +89,10 @@ static void F_generate(const char *drvname, const char *dbname,
 
 	    G_debug(2, "%s: %s", colname, db_get_string(&str));
 	    if (json) {
+		formbuf = G_str_replace(db_get_string(&str), "\\", "\\\\");
 		sprintf(buf, "%s\"%s\": \"%s\"", col == 0 ? "" : ",\n",
-			colname, db_get_string(&str));
+			colname, formbuf);
+		G_free(formbuf);
 	    }
 	    else if (script)
 		sprintf(buf, "%s=%s\n", colname, db_get_string(&str));
