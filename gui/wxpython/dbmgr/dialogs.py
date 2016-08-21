@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 import os
 import types
 
-import grass.script as gscript
 from core import globalvar
 from core.utils import _
 import wx
