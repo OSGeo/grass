@@ -270,7 +270,7 @@ class MapToolbar(BaseToolbar):
         """
         self._onMenu(
             ((MapIcons["addRasterLegend"],
-              lambda evt: self.parent.AddLegend()),
+              lambda evt: self.parent.AddLegendRast()),
              (MapIcons["addVectorLegend"],
               lambda evt: self.parent.AddLegendVect()),
              (MapIcons["addBarscale"],

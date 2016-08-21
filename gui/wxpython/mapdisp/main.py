@@ -198,7 +198,7 @@ class DMonMap(Map):
                     if cmd in self.oldOverlays:
                         continue
                     if ltype == 'rastleg':
-                        self._giface.GetMapDisplay().AddLegend(cmd=cmd)
+                        self._giface.GetMapDisplay().AddLegendRast(cmd=cmd)
                     elif ltype == 'barscale':
                         self._giface.GetMapDisplay().AddBarscale(cmd=cmd)
                     elif ltype == 'northarrow':

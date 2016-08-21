@@ -1228,8 +1228,8 @@ class MapFrame(SingleMapFrame):
 
         self.MapWindow.mouse['use'] = 'pointer'
 
-    def AddLegend(self, cmd=None):
-        """Handler for legend map decoration menu selection."""
+    def AddLegendRast(self, cmd=None):
+        """Handler for legend raster map decoration menu selection."""
 
         if cmd:
             show = False
@@ -1248,7 +1248,7 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.mouse['use'] = 'pointer'
 
     def AddLegendVect(self, cmd=None, showDialog=None):
-        """Handler for legend map decoration menu selection."""
+        """Handler for legend vector map decoration menu selection."""
 
         if cmd:
             show = False
