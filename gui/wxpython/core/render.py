@@ -466,6 +466,7 @@ class RenderMapMgr(wx.EvtHandler):
 
         self._init()
         self._rendering = False
+        self._old_legend = []
 
     def _init(self, env=None):
         """Init render manager
@@ -585,6 +586,8 @@ class RenderMapMgr(wx.EvtHandler):
         masks = list()
         opacities = list()
 
+        # TODO: g.pnmcomp is now called every time
+        # even when only overlays are rendered
         for layer in self.layers:
             if layer.GetType() == 'overlay':
                 continue
@@ -621,6 +624,7 @@ class RenderMapMgr(wx.EvtHandler):
                   (stop - self._startTime, stop - startCompTime))
 
         # Update legfile
+        new_legend = []
         with open(self.Map.legfile, "w") as outfile:
             for layer in reversed(self.layers):
                 if layer.GetType() == 'overlay':
@@ -629,13 +633,23 @@ class RenderMapMgr(wx.EvtHandler):
                 if os.path.isfile(layer.legrow) and layer.legrow[-1].isdigit() \
                    and layer.hidden is False:
                     with open(layer.legrow) as infile:
-                        outfile.write(infile.read())
+                        line = infile.read()
+                        outfile.write(line)
+                        new_legend.append(line)
 
         self._rendering = False
         if wx.IsBusy():
             wx.EndBusyCursor()
 
-        self.updateMap.emit()
+        # if legend file changed, rerender vector legend
+        if new_legend != self._old_legend:
+            self._old_legend = new_legend
+            for layer in self.layers:
+                if layer.GetType() == 'overlay' and layer.GetName() == 'vectleg':
+                    layer.forceRender = True
+            self.Render()
+        else:
+            self.updateMap.emit()
 
     def Abort(self):
         """Abort all rendering processes"""
