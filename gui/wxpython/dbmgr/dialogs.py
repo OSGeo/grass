@@ -252,7 +252,7 @@ class DisplayAttributesDialog(wx.Dialog):
                             if ctype != str:
                                 updatedValues.append(str(newvalue))
                             else:
-                                updatedValues.append("'" + newvalue + "'")
+                                updatedValues.append("'" + newvalue.replace("'", "''") + "'")
                         columns[name]['values'][idx] = newvalue
 
                 if self.action != "add" and len(updatedValues) == 0:
