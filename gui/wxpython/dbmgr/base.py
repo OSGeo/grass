@@ -1480,7 +1480,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                     columnsString += '%s,' % columnName[i]
                     
                     if tlist.columns[columnName[i]]['ctype'] == str:
-                        valuesString += "'%s'," % values[i]
+                        valuesString += "'%s'," % values[i].replace("'", "''")
                     else:
                         valuesString += "%s," % values[i]
                 
