@@ -43,6 +43,8 @@ def main():
         grass.run_command('d.erase')
 
         for cmd in cmdList:
+            if cmd.startswith('#'):
+                continue
             grass.call(split(cmd))
     except IOError as e:
         grass.fatal(_("Unable to open file '%s' for reading. Details: %s") %
