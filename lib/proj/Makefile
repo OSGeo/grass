@@ -37,7 +37,7 @@ $(FTOL_OBJ): $(OBJDIR)/ftol.o
 	$(INSTALL) $< $@
 endif
 
-$(NAD_DSTFILES): $(NAD_DIR)/%: $(NAD_BINFILES) | $(NAD_DIR)
+$(NAD_DSTFILES): $(NAD_DIR)/%: $(OBJDIR)/% | $(NAD_DIR)
 	$(INSTALL_DATA) $< $@
 
 $(NAD_BINFILES): $(OBJDIR)/%: %.lla
