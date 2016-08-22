@@ -13,10 +13,10 @@ LEX_SOURCES  := $(wildcard *.l)
 YACC_SOURCES := $(wildcard *.y)
 
 AUTO_OBJS := \
-	$(subst .c,.o,$(C_SOURCES)) \
-	$(subst .cpp,.o,$(CPP_SOURCES)) \
-	$(subst .l,.yy.o,$(LEX_SOURCES)) \
-	$(subst .y,.tab.o,$(YACC_SOURCES))
+	$(sort $(subst .c,.o,$(C_SOURCES))) \
+	$(sort $(subst .cpp,.o,$(CPP_SOURCES))) \
+	$(sort $(subst .l,.yy.o,$(LEX_SOURCES))) \
+	$(sort $(subst .y,.tab.o,$(YACC_SOURCES)))
 
 ifndef MOD_OBJS
 MOD_OBJS = $(AUTO_OBJS)

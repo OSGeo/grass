@@ -51,7 +51,7 @@ def parse_modules(fd):
     # TODO: what about ms windows? does gtask handle this? 
     mlist = list(gcore.get_commands()[0])
     indent = 4
-    for m in mlist:
+    for m in sorted(mlist):
         # TODO: get rid of g.mapsets_picker.py
         if m == 'g.mapsets_picker.py' or m == 'g.parser':
             continue
