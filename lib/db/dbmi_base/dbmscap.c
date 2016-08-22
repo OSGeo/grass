@@ -209,19 +209,22 @@ dbDbmscap *db_read_dbmscap(void)
     return list;
 }
 
+static int cmp_entry(dbDbmscap *a, dbDbmscap *b) {
+  return( a->driverName && b->driverName ? strcmp(a->driverName,b->driverName) : 0 );
+}
+
 static void add_entry(dbDbmscap ** list, char *name, char *startup, char *comment)
 {
+    /* add an entry to the list, so that the list remains ordered (by driverName) */
+
     dbDbmscap *head, *cur, *tail;
 
-    /* add this entry to the head of a linked list */
-    tail = head = *list;
-    while (tail && tail->next)
-	tail = tail->next;
-    *list = NULL;
-
     cur = (dbDbmscap *) db_malloc(sizeof(dbDbmscap));
-    if (cur == NULL)
-	return;			/* out of memory */
+    if (cur == NULL) {
+        *list = NULL;
+	return;
+        /* out of memory */
+    }
     cur->next = NULL;
 
     /* copy each item to the dbmscap structure */
@@ -229,11 +232,21 @@ static void add_entry(dbDbmscap ** list, char *name, char *startup, char *commen
     strcpy(cur->startup, startup);
     strcpy(cur->comment, comment);
 
+    /* find the last entry that is less than cur */
+    tail = head = *list;
+    while (tail && tail->next && cmp_entry(tail->next,cur)<0)
+	tail = tail->next;
+
     /* handle the first call (head == NULL) */
-    if (tail)
-	tail->next = cur;
-    else
-	head = cur;
+    if (tail && cmp_entry(tail,cur)<0) {
+        /* insert right after tail */
+        cur->next = tail->next;
+        tail->next = cur;
+    } else {
+        /* insert at first position */
+        cur->next = head;
+        head = cur;
+    }
 
     *list = head;
 }
