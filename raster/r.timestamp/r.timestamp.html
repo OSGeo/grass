@@ -96,29 +96,37 @@ the map consists of a single date or two dates (ie start and end
 dates).
 
 <div class="code"><pre>
-    r.timestamp map=soils
+r.timestamp map=soils
 </pre></div>
 
 Sets the timestamp for "soils" to the single date "15 sep 1987".
 
 <div class="code"><pre>
-    r.timestamp map=soils date='15 sep 1987'
+r.timestamp map=soils date='15 sep 1987'
 </pre></div>
 
 Sets the timestamp for "soils" to have the start date "15 sep 1987"
 and the end date "20 feb 1988".
 
 <div class="code"><pre>
-    r.timestamp map=soils date='15 sep 1987/20 feb 1988'
+r.timestamp map=soils date='15 sep 1987/20 feb 1988'
+</pre></div>
+
+Sets the timestamp for "soils" to have the start date "18 feb 2005
+10:30:00" and the end date "20 jul 2007 20:30:00".
+
+<div class="code"><pre>
+r.timestamp map=soils date='18 feb 2005 10:30:00/20 jul 2007 20:30:00'
 </pre></div>
 
 Removes the timestamp for the "soils" raster map.
 
 <div class="code"><pre>
-    r.timestamp map=soils date=none
+r.timestamp map=soils date=none
 </pre></div>
 
 <h2>KNOWN ISSUES</h2>
+
 Spaces in the timestamp value are required.
 
 <h2>SEE ALSO</h2>
