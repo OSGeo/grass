@@ -153,7 +153,8 @@ int main(int argc, char *argv[])
 
     if (Vect_open_new(&Map, out_opt->answer, z_flg->answer) < 0)
 	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
-
+    Vect_set_error_handler_io(NULL, &Map);
+                              
     Vect_hist_command(&Map);
 
     Cats = Vect_new_cats_struct();
