@@ -867,7 +867,8 @@ class MapFrame(SingleMapFrame):
         rastQuery = []
         vectQuery = []
         if rast:
-            rastQuery = grass.raster_what(map=rast, coord=(east, north))
+            rastQuery = grass.raster_what(map=rast, coord=(east, north),
+                                          localized=True)
         if vect:
             encoding = UserSettings.Get(group='atm', key='encoding', subkey='value')
             try:

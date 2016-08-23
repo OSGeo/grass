@@ -149,7 +149,7 @@ def mapcalc_start(exp, quiet=False, verbose=False, overwrite=False,
     return p
 
 
-def raster_what(map, coord, env=None):
+def raster_what(map, coord, env=None, localized=False):
     """Interface to r.what
 
     >>> raster_what('elevation', [[640000, 228000]])
@@ -187,7 +187,10 @@ def raster_what(map, coord, env=None):
     if not ret:
         return data
 
-    labels = (_("value"), _("label"), _("color"))
+    if localized:
+        labels = (_("value"), _("label"), _("color"))
+    else:
+        labels = ('value', 'label', 'color')
     for item in ret.splitlines():
         line = item.split(sep)[3:]
         for i, map_name in enumerate(map_list):
