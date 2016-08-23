@@ -129,12 +129,59 @@ d.grid 5000
 Hexagon map
 </center>
 
+<h3>Using hexagons for point density</h3>
+
+To compute point density in a hexagonal grid for the vector map
+<em>points_of_interest</em> in the basic North Carolina sample dataset,
+the vector map itself is used to set extent of the computational region.
+The resolution is based on the desired size of hexagons.
+
+<div class="code"><pre>
+g.region vector=points_of_interest res=2000 -pa
+</pre></div>
+
+The hexagonal grid is created as a vector map based on the previously
+selected extent and size of the grid.
+
+<div class="code"><pre>
+v.mkgrid map=hexagons -h
+</pre></div>
+
+The following counts the number of points per hexagon using the
+<em><a href="v.vect.stats.html">v.vect.stats</a></em> module.
+
+<div class="code"><pre>
+v.vect.stats points=points_of_interest areas=hexagons count_column=count
+</pre></div>
+
+User should note that some of the points may be outside the grid
+since the hexagons cannot cover all the area around the edges
+(the computational region extent needs to be enlarged if all points
+should be considered).
+The last command sets the vector map color table to <tt>viridis</tt>
+based on the <tt>count</tt> column.
+
+<div class="code"><pre>
+v.colors map=hexagons use=attr column=count color=viridis
+</pre></div>
+
+<!--
+d.erase 77:77:77
+mogrify -trim .png
+-->
+
+<center>
+<img src="v_mkgrid.png"><br>
+Point density in a hexagonal grid
+</center>
+
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="d.grid.html">d.grid</a>,
 <a href="v.in.region.html">v.in.region</a>,
-<a href="v.patch.html">v.patch</a>
+<a href="v.patch.html">v.patch</a>,
+<a href="v.vect.stats.html">v.vect.stats</a>
 </em>
 
 <h2>AUTHORS</h2>
