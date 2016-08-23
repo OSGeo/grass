@@ -249,7 +249,8 @@ def test():
     from grass.script import vector as gvect
     from grass.script import raster as grast
     testdata1 = grast.raster_what(map = ('elevation_shade@PERMANENT','landclass96'),
-                                  coord = [(638509.051416,224742.348346)])
+                                  coord = [(638509.051416,224742.348346)],
+                                  localized=True)
 
     testdata2 = gvect.vector_what(map=('firestations','bridges'),
                                   coord=(633177.897487,221352.921257), distance=10)
