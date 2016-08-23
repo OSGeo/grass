@@ -9,7 +9,7 @@
 #define RAD2DEG(a) ((a) * 180.0 / M_PI)
 
 
-void print_window(struct Cell_head *window, int print_flag)
+void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 {
     const char *prj, *datum, *ellps;
     int x, width = 11;
@@ -17,6 +17,7 @@ void print_window(struct Cell_head *window, int print_flag)
     char north[30], south[30], east[30], west[30], nsres[30], ewres[30],
 	nsres3[30], ewres3[30], tbres[30];
     char buf[50];
+    char *sep = "\n";
 
     double ew_dist1, ew_dist2, ns_dist1, ns_dist2;
     double longitude, latitude;
@@ -132,44 +133,48 @@ void print_window(struct Cell_head *window, int print_flag)
 	}
 
 	if (print_flag & PRINT_SH) {
-	    fprintf(stdout, "n=%s\n", north);
-	    fprintf(stdout, "s=%s\n", south);
-	    fprintf(stdout, "w=%s\n", west);
-	    fprintf(stdout, "e=%s\n", east);
+	    if (flat_flag)
+		sep=" ";
+	    fprintf(stdout, "n=%s%s", north, sep);
+	    fprintf(stdout, "s=%s%s", south, sep);
+	    fprintf(stdout, "w=%s%s", west, sep);
+	    fprintf(stdout, "e=%s%s", east, sep);
 	    if (print_flag & PRINT_3D) {
-		fprintf(stdout, "t=%g\n", window->top);
-		fprintf(stdout, "b=%g\n", window->bottom);
+		fprintf(stdout, "t=%g%s", window->top, sep);
+		fprintf(stdout, "b=%g%s", window->bottom, sep);
 	    }
-	    fprintf(stdout, "nsres=%s\n", nsres);
+	    fprintf(stdout, "nsres=%s%s", nsres, sep);
 	    if (print_flag & PRINT_3D) {
-		fprintf(stdout, "nsres3=%s\n", nsres3);
+		fprintf(stdout, "nsres3=%s%s", nsres3, sep);
 	    }
-	    fprintf(stdout, "ewres=%s\n", ewres);
+	    fprintf(stdout, "ewres=%s%s", ewres, sep);
 	    if (print_flag & PRINT_3D) {
-		fprintf(stdout, "ewres3=%s\n", ewres3);
-		fprintf(stdout, "tbres=%s\n", tbres);
+		fprintf(stdout, "ewres3=%s%s", ewres3, sep);
+		fprintf(stdout, "tbres=%s%s", tbres, sep);
 	    }
-	    fprintf(stdout, "rows=%d\n", window->rows);
+	    fprintf(stdout, "rows=%d%s", window->rows, sep);
 	    if (print_flag & PRINT_3D)
-		fprintf(stdout, "rows3=%d\n", window->rows3);
-	    fprintf(stdout, "cols=%d\n", window->cols);
+		fprintf(stdout, "rows3=%d%s", window->rows3, sep);
+	    fprintf(stdout, "cols=%d%s", window->cols, sep);
 	    if (print_flag & PRINT_3D) {
-		fprintf(stdout, "cols3=%d\n", window->cols3);
-		fprintf(stdout, "depths=%d\n", window->depths);
+		fprintf(stdout, "cols3=%d%s", window->cols3, sep);
+		fprintf(stdout, "depths=%d%s", window->depths, sep);
 	    }
 #ifdef HAVE_LONG_LONG_INT
-	    fprintf(stdout, "cells=%lld\n",
-		    (long long)window->rows * window->cols);
+	    fprintf(stdout, "cells=%lld%s",
+		    (long long)window->rows * window->cols, sep);
 	    if (print_flag & PRINT_3D)
-		fprintf(stdout, "cells3=%lld\n",
+		fprintf(stdout, "cells3=%lld%s",
 			(long long)window->rows3 * window->cols3 *
-			window->depths);
+			window->depths, sep);
 #else
-	    fprintf(stdout, "cells=%ld\n", (long)window->rows * window->cols);
+	    fprintf(stdout, "cells=%ld%s", (long)window->rows * window->cols, sep);
 	    if (print_flag & PRINT_3D)
-		fprintf(stdout, "cells3=%ld\n",
-			(long)window->rows3 * window->cols3 * window->depths);
+		fprintf(stdout, "cells3=%ld%s",
+			(long)window->rows3 * window->cols3 * window->depths, sep);
 #endif
+	    if (flat_flag)
+		fprintf(stdout, "\n");
 	}
 	else {
 	    fprintf(stdout, "%-*s %s\n", width, "north:", north);
