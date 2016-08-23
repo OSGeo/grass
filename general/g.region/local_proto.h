@@ -17,6 +17,6 @@
 int zoom(struct Cell_head *, const char *, const char *);
 
 /* printwindow.c */
-void print_window(struct Cell_head *, int);
+void print_window(struct Cell_head *, int, int);
 
 #endif

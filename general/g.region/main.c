@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
 {
     int i;
     int print_flag = 0;
+    int flat_flag; 
     int set_flag;
     double x;
     int ival;
@@ -44,7 +45,7 @@ int main(int argc, char *argv[])
     struct
     {
 	struct Flag
-	    *update, *print, *gprint, *lprint, *eprint, *nangle,
+	    *update, *print, *gprint, *flprint, *lprint, *eprint, *nangle,
 	    *center, *res_set, *dist_res, *dflt, *z, *savedefault,
 	    *bbox, *gmt_style, *wms_style;
     } flag;
@@ -141,6 +142,11 @@ int main(int argc, char *argv[])
     flag.gprint->key = 'g';
     flag.gprint->description = _("Print in shell script style");
     flag.gprint->guisection = _("Print");
+
+    flag.flprint = G_define_flag();
+    flag.flprint->key = 'f';
+    flag.flprint->description = _("Print in shell script style, but in one line (flat)");
+    flag.flprint->guisection = _("Print");
 
     flag.res_set = G_define_flag();
     flag.res_set->key = 'a';
@@ -351,6 +357,7 @@ int main(int argc, char *argv[])
     G_get_default_window(&window);
 
     set_flag = !flag.update->answer;
+    flat_flag = flag.flprint->answer;
 
     if (flag.print->answer)
 	print_flag |= PRINT_REG;
@@ -778,7 +785,7 @@ int main(int argc, char *argv[])
 
 
     if (print_flag)
-	print_window(&window, print_flag);
+	print_window(&window, print_flag, flat_flag);
 
     exit(EXIT_SUCCESS);
 }
