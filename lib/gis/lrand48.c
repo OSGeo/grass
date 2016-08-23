@@ -70,7 +70,12 @@ void G_srand48(long seedval)
 
 long G_srand48_auto(void)
 {
-    unsigned long seed = (unsigned long) getpid();
+    unsigned long seed;
+    char *grass_random_seed = getenv("GRASS_RANDOM_SEED");
+    if(grass_random_seed) {
+        seed = strtoull(grass_random_seed, NULL, 10);
+    } else {  
+        seed = (unsigned long) getpid();
 
 #ifdef HAVE_GETTIMEOFDAY
     {
@@ -86,6 +91,7 @@ long G_srand48_auto(void)
 	seed += (unsigned long) t;
     }
 #endif
+    }
 
     G_srand48((long) seed);
     return (long) seed;
