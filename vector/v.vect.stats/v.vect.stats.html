@@ -155,14 +155,16 @@ region. The extent is based on the vector map
 g.region vector=points_of_interest res=2000 -pa
 </pre></div>
 
-The hexagonal grid is created as a vector map based on the previously
+The hexagonal grid is created using
+the <em><a href="v.mkgrid.html">v.mkgrid</a></em> module
+as a vector map based on the previously
 selected extent and size of the grid.
 
 <div class="code"><pre>
 v.mkgrid map=hexagons -h
 </pre></div>
 
-The <em><a href="v.vect.stats.html">v.vect.stats</a></em> module
+The <em>v.vect.stats</em> module
 counts the number of points and does one statistics on a selected
 column (here: <em>elev_m</em>).
 
@@ -235,7 +237,8 @@ associated with point, standard deviation)
 <a href="v.distance.html">v.distance</a>,
 <a href="r.distance.html">r.distance</a>,
 <a href="v.rast.stats.html">v.rast.stats</a>,
-<a href="v.what.vect.html">v.what.vect</a>
+<a href="v.what.vect.html">v.what.vect</a>,
+<a href="v.mkgrid.html">v.mkgrid</a>
 </em>
 
 
