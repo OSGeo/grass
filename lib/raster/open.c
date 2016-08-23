@@ -619,10 +619,11 @@ static int open_raster_new(const char *name, int open_mode,
     tempname = G_tempfile();
     cell_fd = creat(tempname, 0666);
     if (cell_fd < 0) {
+        int err = errno;
 	G_free(mapset);
 	G_free(tempname);
 	G_free(map);
-	G_fatal_error(_("No temp files available: %s"), strerror(errno));
+	G_fatal_error(_("No temp files available: %s"), strerror(err));
     }
 
     fd = new_fileinfo();
@@ -696,12 +697,13 @@ static int open_raster_new(const char *name, int open_mode,
     tempname = G_tempfile();
     fcb->null_fd = creat(tempname, 0666);
     if (fcb->null_fd < 0) {
+        int err = errno;
 	G_free(tempname);
 	G_free(fcb->name);
 	G_free(fcb->mapset);
 	G_free(fcb->temp_name);
 	close(cell_fd);
-	G_fatal_error(_("No temp files available: %s"), strerror(errno));
+	G_fatal_error(_("No temp files available: %s"), strerror(err));
     }
 
     fcb->null_temp_name = tempname;
@@ -772,10 +774,11 @@ int Rast__open_null_write(const char *name)
     tempname = G_tempfile();
     fcb->null_fd = creat(tempname, 0666);
     if (fcb->null_fd < 0) {
+        int err = errno;
 	G_free(tempname);
 	G_free(fcb->name);
 	G_free(fcb->mapset);
-	G_fatal_error(_("No temp files available: %s"), strerror(errno));
+	G_fatal_error(_("No temp files available: %s"), strerror(err));
     }
     fcb->null_temp_name = tempname;
 
