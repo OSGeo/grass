@@ -133,6 +133,9 @@ class TplotFrame(wx.Frame):
         if self._giface.GetMapDisplay():
             self.coorval.OnClose()
             self.cats.OnClose()
+        if self.dbif.connected is True:
+            self.dbif.close()
+        tgis.stop_subprocesses()
         self.Destroy()
 
     def _layout(self):
