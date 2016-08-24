@@ -1485,8 +1485,14 @@ int main(int argc, char *argv[])
 	    cat = 0;		/* field = layer + 1 */
 	    G_percent(cat, n_features, 2);
 	    while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
-		cat++;
 		G_percent(cat, n_features, 2);
+
+                /* Category */
+                if (key_idx > -1)
+                    cat = OGR_F_GetFieldAsInteger(Ogr_feature, key_idx);
+                else
+                    cat++;
+
 		/* Geometry */
 #if GDAL_VERSION_NUM >= 1110000
                 for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
