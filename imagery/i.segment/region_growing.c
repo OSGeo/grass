@@ -128,13 +128,6 @@ static int compare_rc(const void *first, const void *second)
     return 0;
 }
 
-static int compare_ints(const void *first, const void *second)
-{
-    int a = *(int *)first, b = *(int *)second;
-
-    return (a < b ? -1 : (a > b));
-}
-
 static int compare_double(double first, double second)
 {
     if (first < second)

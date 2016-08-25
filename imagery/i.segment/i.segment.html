@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 Image segmentation or object recognition is the process of grouping 
-similar pixels into unique segments, also referred to as objects. 
+similar pixels into unique segments, also refered to as objects. 
 Boundary and region based algorithms are described in the literature, 
 currently a region growing and merging algorithm is implemented. Each 
 object found during the segmentation process is given a unique ID and 
@@ -28,7 +28,7 @@ distance will be smaller than to any other neighbor), and</li>
 process is repeated until no merges are made during a complete pass.</li>
 </ol>
 
-<h3>Similarity and Threshold</h3>
+<h4>Similarity and Threshold</h4>
 The similarity between segments and unmerged objects is used to 
 determine which objects are merged. Smaller distance values indicate a 
 closer match, with a similarity score of zero for identical pixels.
@@ -63,7 +63,7 @@ and <tt>smoothness = Perimeter Length / Bounding Box</tt>. The
 perimeter length is estimated as the number of pixel sides the segment
 has.
 
-<h3>Seeds</h3>
+<h4>Seeds</h4>
 The seeds map can be used to provide either seed pixels (random or 
 selected points from which to start the segmentation process) or 
 seed segments. If the seeds are the results of a previous segmentation 
@@ -71,25 +71,41 @@ with lower threshold, hierarchical segmentation can be performed. The
 different approaches are automatically detected by the program: any 
 pixels that have identical seed values and are contiguous will be 
 assigned a unique segment ID.
+
+<h4>Maximum number of segments</h4>
+
+The current limit with CELL storage used for segment IDs is 2
+billion starting segment IDs. Segment IDs are assigned whenever a yet 
+unprocessed pixel is merged with another segment. Integer overflow can 
+happen for computational regions with more than 2 billion cells and 
+very low threshold values, resulting in many segments. If integer 
+overflow occurs durin region growing, starting segments can be used 
+(created by initial classification or other methods).
+
+<h4>Goodness of Fit</h4>
+The <b>goodness</b> of fit for each pixel is calculated as 1 - distance 
+of the pixel to the object it belongs to. The distance is calculated 
+with the selected <b>similarity</b> method. A value of 1 means 
+identical values, perfect fit, and a value of 0 means maximum possible 
+distance, worst possible fit.
+
+<h3>Mean shift</h3>
+Mean shift image segmentation consists of 2 steps: anisotrophic 
+filtering and 2. clustering. For anisotrophic filtering new cell values 
+are calculated from all pixels not farther than <b>hs</b> pixels away 
+from the current pixel and with a spectral difference not larger than 
+<b>hr</b>. That means that pixels that are too different from the current 
+pixel are not considered in the calculation of new pixel values. 
+<b>hs</b> and <b>hr</b> are the spatial and spectral (range) bandwidths 
+for anisotrophic filtering. Cell values are iteratively recalculated 
+(shifted to the segment's mean) until the maximum number of iterations 
+is reached or until the largest shift is smaller than <b>threshold</b>.
+
 <p>
-It is expected that the <b>minsize</b> will be set to 1 if a seed 
-map is used, but the program will allow other values to be used. If 
-both options are used, the final iteration that ignores the 
-threshold will also ignore the seed map and force merges for all 
-pixels (not just segments that have grown/merged from the seeds).
-
-<h3>Maximum number of starting segments</h3>
-
-For the region growing algorithm without starting seeds, each pixel is
-sequentially numbered.  The current limit with CELL storage is 2
-billion starting segment IDs.  If the initial map has a larger number
-of non-null pixels, there are two workarounds:
-<ol>
-  <li>Use starting seed pixels. (Maximum 2 billion pixels can be 
-labeled with positive integers.)</li>
-  <li>Use starting seed segments. (By initial classification or other 
-methods.)</li>
-</ol>
+If input bands have been reprojected, they should not be reprojected 
+with bilinear resampling because that method causes smooth transitions 
+between objects. More appropriate methods are bicubic or lanczos 
+resampling.
 
 <h3>Boundary Constraints</h3>
 Boundary constraints limit the adjacency of pixels and segments. 
@@ -98,18 +114,13 @@ considered as a MASK. Thus no segments in the final segmentated map
 will cross a boundary, even if their spectral data is very similar.
 
 <h3>Minimum Segment Size</h3>
-To reduce the salt and pepper affect, a <b>minsize</b> greater 
+To reduce the salt and pepper effect, a <b>minsize</b> greater 
 than 1 will add one additional pass to the processing. During the 
 final pass, the threshold is ignored for any segments smaller then 
 the set size, thus forcing very small segments to merge with their 
-most similar neighbor.
-
-<h3>Goodness of Fit</h3>
-The <b>goodness</b> of fit for each pixel is calculated as 1 - distance 
-of the pixel to the object it belongs to. The distance is calculated 
-with the selected <b>similarity</b> method. A value of 1 means 
-identical values, perfect fit, and a value of 0 means maximum possible 
-distance, worst possible fit.
+most similar neighbor. A minimum segment size larger than 1 is 
+recommended when using adaptive bandwith selected with the <b>-a</b> 
+flag.
 
 <h2>EXAMPLES</h2>
 

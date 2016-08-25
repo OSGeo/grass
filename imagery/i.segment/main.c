@@ -54,12 +54,12 @@ int main(int argc, char *argv[])
     if (write_ids(&globals) != TRUE)
 	G_fatal_error(_("Error in writing IDs"));
 
-    if (globals.method == ORM_RG && globals.out_band) {
+    if (globals.method == ORM_RG && globals.gof) {
 	if (write_gof_rg(&globals) != TRUE)
 	    G_fatal_error(_("Error in writing goodness of fit"));
     }
 
-    if (globals.method == ORM_MS) {
+    if (globals.method == ORM_MS && globals.bsuf) {
 	if (write_bands_ms(&globals) != TRUE)
 	    G_fatal_error(_("Error in writing new band values"));
     }
