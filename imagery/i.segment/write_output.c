@@ -79,7 +79,7 @@ int write_gof_rg(struct globals *globals)
     struct History hist;
     DCELL *min, *max;
 
-    mean_fd = Rast_open_new(globals->out_band, FCELL_TYPE);
+    mean_fd = Rast_open_new(globals->gof, FCELL_TYPE);
     meanbuf = Rast_allocate_f_buf();
 
     /* goodness of fit for each cell: 1 = good fit, 0 = bad fit */
@@ -190,11 +190,11 @@ int write_gof_rg(struct globals *globals)
 
     Rast_init_colors(&colors);
     Rast_make_grey_scale_fp_colors(&colors, mingood, 1);
-    Rast_write_colors(globals->out_band, G_mapset(), &colors);
+    Rast_write_colors(globals->gof, G_mapset(), &colors);
 
-    Rast_short_history(globals->out_band, "raster", &hist);
+    Rast_short_history(globals->gof, "raster", &hist);
     Rast_command_history(&hist);
-    Rast_write_history(globals->out_band, &hist);
+    Rast_write_history(globals->gof, &hist);
 
     G_free(meanbuf);
 
@@ -227,12 +227,13 @@ int write_bands_ms(struct globals *globals)
     outbuf = G_malloc(sizeof(DCELL) * globals->nbands);
     for (n = 0; n < globals->nbands; n++) {
 	outbuf[n] = Rast_allocate_d_buf();
-	G_asprintf(&name[n], "%s%s", globals->Ref.file[n].name, globals->ms_suf);
+	G_asprintf(&name[n], "%s%s", globals->Ref.file[n].name, globals->bsuf);
 	out_fd[n] = Rast_open_new(name[n], DCELL_TYPE);
     }
     
     Rout.mean = G_malloc(globals->datasize);
 
+    G_message(_("Writing out shifted band values..."));
 
     for (row = 0; row < globals->nrows; row++) {
 

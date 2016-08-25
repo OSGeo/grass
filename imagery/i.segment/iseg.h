@@ -67,9 +67,8 @@ struct globals
     /* output */
     /* region growing */
     char *out_name;		/* name of output raster map with regions */
-    char *out_band;		/* indicator for segment heterogeneity / goodness of fit */
-    /* mean_shift */
-    char *ms_suf;		/* suffix to be appended to input bands */
+    char *gof;			/* indicator for segment heterogeneity / goodness of fit */
+    char *bsuf;			/* suffix to be appended to input bands */
 
     /* general segmentation */
     int method;			/* Segmentation method code */
@@ -88,6 +87,8 @@ struct globals
 
     /* mean shift */
     double hs, hr;		/* spectral and range bandwidth */
+    int ms_adaptive;		/* use adaptive bandwidth */
+    int ms_progressive;		/* use progressive bandwidth */
 
     /* region info */
     int nrows, ncols;
@@ -158,6 +159,9 @@ int region_growing(struct globals *);
 
 /* mean_shift.c */
 int mean_shift(struct globals *);
+
+/* cluster.c */
+CELL cluster_bands(struct globals *globals);
 
 /* watershed.c */
 int watershed(struct globals *);

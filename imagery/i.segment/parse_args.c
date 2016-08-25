@@ -11,17 +11,23 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 {
     struct Option *group, *seeds, *bounds, *output,
                   *method, *similarity, *threshold, *min_segment_size,
+		  *hs, *hr, *bsuf,
 #ifdef _OR_SHAPE_
 		  *shape_weight, *smooth_weight,
 #endif
 		   *mem;
-    struct Flag *diagonal, *weighted;
-    struct Option *outband, *endt;
+    struct Flag *diagonal, *weighted, *ms_a, *ms_p;
+    struct Option *gof, *endt;
 
     /* required parameters */
     group = G_define_standard_option(G_OPT_I_GROUP);
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
+
+    bsuf = G_define_standard_option(G_OPT_R_OUTPUT);
+    bsuf->key = "band_suffix";
+    bsuf->required = NO;
+    bsuf->label = _("Suffix for output bands with modified band values");
 
     threshold = G_define_option();
     threshold->key = "threshold";
@@ -31,6 +37,21 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     threshold->description = _("Threshold = 0 merges only identical segments; threshold = 1 merges all");
 
     /* optional parameters */
+
+    hs = G_define_option();
+    hs->key = "radius";
+    hs->type = TYPE_DOUBLE;
+    hs->required = NO;
+    hs->answer = "1.5";
+    hs->label = _("Spatial radius in number of cells");
+    hs->description = _("Must be >= 1, only cells within spatial bandwidth are considered for mean shift");
+
+    hr = G_define_option();
+    hr->key = "hr";
+    hr->type = TYPE_DOUBLE;
+    hr->required = NO;
+    hr->label = _("Range (spectral) bandwidth [0, 1]");
+    hr->description = _("Only cells within range (spectral) bandwidth are considered for mean shift. Range bandwidth is used as conductance parameter for adaptive bandwidth");
 
     method = G_define_option();
     method->key = "method";
@@ -97,7 +118,6 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     endt->key = "iterations";
     endt->type = TYPE_INTEGER;
     endt->required = NO;
-    endt->answer = "50";
     endt->description = _("Maximum number of iterations");
     endt->guisection = _("Settings");
 
@@ -107,6 +127,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     seeds->key = "seeds";
     seeds->required = NO;
     seeds->description = _("Name for input raster map with starting seeds");
+    seeds->guisection = _("Settings");
 
     /* Polygon constraints. */
     bounds = G_define_standard_option(G_OPT_R_INPUT);
@@ -115,12 +136,14 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     bounds->label = _("Name of input bounding/constraining raster map");
     bounds->description =
 	_("Must be integer values, each area will be segmented independent of the others");
+    bounds->guisection = _("Settings");
 
-    outband = G_define_standard_option(G_OPT_R_OUTPUT);
-    outband->key = "goodness";
-    outband->required = NO;
-    outband->description =
+    gof = G_define_standard_option(G_OPT_R_OUTPUT);
+    gof->key = "goodness";
+    gof->required = NO;
+    gof->description =
 	_("Name for output goodness of fit estimate map");
+    gof->guisection = _("Settings");
 
     diagonal = G_define_flag();
     diagonal->key = 'd';
@@ -134,6 +157,19 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 	_("Weighted input, do not perform the default scaling of input raster maps");
     weighted->guisection = _("Settings");
 
+    ms_a = G_define_flag();
+    ms_a->key = 'a';
+    ms_a->label = _("Use adaptive bandwidth for mean shift");
+    ms_a->description = _("Range (spectral) bandwidth is adapted for each moving window");
+    ms_a->guisection = _("Settings");
+
+    ms_p = G_define_flag();
+    ms_p->key = 'p';
+    ms_p->label = _("Use progressive bandwidth for mean shift");
+    ms_p->description =
+	_("Spatial bandwidth is increased, range (spectral) bandwidth is decreased in each iteration");
+    ms_p->guisection = _("Settings");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -146,9 +182,36 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     else
 	G_fatal_error("Invalid output raster name");
 
+    globals->bsuf = bsuf->answer;
+
     globals->alpha = atof(threshold->answer);
     if (globals->alpha <= 0 || globals->alpha >= 1)
 	G_fatal_error(_("Threshold should be > 0 and < 1"));
+
+    globals->hs = -1;
+    if (hs->answer) {
+	globals->hs = atof(hs->answer);
+	if (globals->hs < 1) {
+	    G_fatal_error(_("Option '%s' must be >= 1"), hs->key);
+	}
+    }
+
+    globals->hr = -1;
+    if (hr->answer) {
+	globals->hr = atof(hr->answer);
+	if (globals->hr < 0) {
+	    G_warning(_("Negative value %s for option '%s': disabling"),
+	              hr->answer, hr->key);
+	    globals->hr = -1;
+	}
+	if (globals->hr >= 1) {
+	    G_warning(_("Value %s for option '%s' is >= 1: disabling"),
+	              hr->answer, hr->key);
+	    globals->hr = -1;
+	}
+    }
+    globals->ms_adaptive = ms_a->answer;
+    globals->ms_progressive = ms_p->answer;
 
     /* segmentation methods */
     if (strcmp(method->answer, "region_growing") == 0) {
@@ -166,7 +229,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     else
 	G_fatal_error(_("Unable to assign segmentation method"));
 
-    G_debug(1, "segmentation method: %s", method->answer);
+    G_debug(1, "segmentation method: %s (%d)", method->answer, globals->method);
 
     /* distance methods for similarity measurement */
     if (strcmp(similarity->answer, "euclidean") == 0)
@@ -257,26 +320,33 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     }
 
     /* debug help */
-    if (outband->answer == NULL)
-	globals->out_band = NULL;
+    if (gof->answer == NULL)
+	globals->gof = NULL;
     else {
-	if (G_legal_filename(outband->answer) == TRUE)
-	    globals->out_band = outband->answer;
+	if (G_legal_filename(gof->answer) == TRUE)
+	    globals->gof = gof->answer;
 	else
 	    G_fatal_error(_("Invalid output raster name for goodness of fit"));
     }
 
-    if (endt->answer) {
+    if (!endt->answer) {
+	globals->end_t = 50;
+	if (globals->method == ORM_MS)
+	    globals->end_t = 10;
+	G_message(_("Maximum number of iterations set to %d"),
+		  globals->end_t);
+    }
+    else {
 	if (atoi(endt->answer) > 0)
 	    globals->end_t = atoi(endt->answer);
 	else {
 	    globals->end_t = 50;
+	    if (globals->method == ORM_MS)
+		globals->end_t = 10;
 	    G_warning(_("Invalid number of iterations, %d will be used"),
 	              globals->end_t);
 	}
     }
-    else
-	globals->end_t = 50;
 
     if (mem->answer && atoi(mem->answer) > 10)
 	globals->mb = atoi(mem->answer);
