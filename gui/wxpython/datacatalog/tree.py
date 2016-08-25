@@ -360,7 +360,6 @@ class LocationMapTree(TreeView):
         if errors:
             wx.CallAfter(GWarning, '\n'.join(errors))
         Debug.msg(1, "Tree filled")
-        self.RefreshNode(self._model.root)
         self.RefreshItems()
 
     def InitTreeItems(self):
@@ -371,7 +370,6 @@ class LocationMapTree(TreeView):
         """Reload locations, mapsets and layers in the tree."""
         self._orig_model = self._model
         self._model.RemoveNode(self._model.root)
-        self.RefreshNode(self._model.root)
         self.InitTreeItems()
 
     def ReloadCurrentMapset(self):
@@ -870,7 +868,6 @@ class DataCatalogTree(LocationMapTree):
             name = text.strip()
 
         self._model = filterModel(self._orig_model, name=name, element=element)
-        self.RefreshNode(self._model.root)
         self.RefreshItems()
         self.ExpandCurrentMapset()
 
