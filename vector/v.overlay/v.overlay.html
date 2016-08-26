@@ -30,6 +30,15 @@ There are 3 links attached to features in output map,
 <li><b>field 3</b>: category of <i>bfield</i> from <i>binput</i>
 </ul>
 -->
+
+<h2>NOTES</h2>
+Currently only areas in <b>ainput</b> are supported for the operators 
+<em>or</em> and <em>xor</em>! See also <em><a href="v.select.html">v.select</a></em>.
+
+The operator defines what kind of operation will be done. Features are 
+written to output, if the result of an operation <b>ainput</b> operator <b>binput</b> 
+is true.
+
 <p>
 If the <i>first</i> number of the <b>olayer</b> option is greater than 0, then the 
 resulting output map has a merged attribute table in the given layer 
@@ -43,24 +52,6 @@ the output layer with the second number.
 If the <i>third</i> number of the <b>olayer</b> option is greater than 0, then the 
 categories of <b>binput</b> in layer <em>blayer</em> are transferred to
 the output layer with the third number.
-
-<h2>NOTES</h2>
-Currently only areas in <b>ainput</b> are supported for the operators 
-<em>or</em> and <em>xor</em>! See also <em><a href="v.select.html">v.select</a></em>.
-
-The operator defines what kind of operation will be done. Features are 
-written to output, if the result of an operation <b>ainput</b> operator <b>binput</b> 
-is true.
-<p>
-If the <i>first</i> number of the <b>olayer</b> option is greater than 0, then attributes 
-of the tables from <b>ainput</b> and <b>binput</b> are joined into a new table linked 
-to the output map with a new cat column. 
-<p>
-If the <i>second</i> number of the <b>olayer</b> option is greater than 0, then the 
-attribute table of <b>ainput</b> is copied to the output map. 
-<p>
-If the <i>third</i> number of the <b>olayer</b> option is greater than 0, then the 
-attribute table of <b>binput</b> is copied to the output map. 
 
 <p>
 If <b>atype</b>=auto is given than <em>v.overlay</em> determines
@@ -107,7 +98,7 @@ d.vect map=v_overlay_AND
 
 <center>
 <img src="v_overlay_op_and.png" alt="v.overlay with AND operator"><br>
-v.overlay with AND operator (selected polygons in grey color)
+<i>Figure: v.overlay with AND operator (selected polygons in grey color)</i>
 </center>
 
 
@@ -124,7 +115,7 @@ d.vect map=v_overlay_OR
 
 <center>
 <img src="v_overlay_op_or.png" alt="v.overlay with OR operator"><br>
-v.overlay with OR operator (selected polygons in grey color)
+<i>Figure: v.overlay with OR operator (selected polygons in grey color)</i>
 </center>
 
 
@@ -141,7 +132,7 @@ d.vect map=v_overlay_XOR
 
 <center>
 <img src="v_overlay_op_xor.png" alt="v.overlay with XOR operator"><br>
-v.overlay with XOR operator (selected polygons in grey color)
+<i>Figure: v.overlay with XOR operator (selected polygons in grey color)</i>
 </center>
 
 
@@ -158,7 +149,7 @@ d.vect map=v_overlay_NOT
 
 <center>
 <img src="v_overlay_op_not.png" alt="v.overlay with NOT operator"><br>
-v.overlay with NOT operator (selected polygon in grey color)
+<i>Figure: v.overlay with NOT operator (selected polygon in grey color)</i>
 </center>
 
 
@@ -180,13 +171,13 @@ v.overlay ainput=poly1 binput=poly2 operator=xor output=poly_1_2_xor
 <center>
 <img src="v_overlay_poly_1_2.png" alt="GRASS v.overlay: input polygons (1 and 2)" border=0>
 <br>
-<i>v.overlay operations: original input polygons</i>
+<i>Figure: v.overlay operations: original input polygons</i>
 </center>
 <p>
 <center>
 <img src="v_overlay_poly_1_2_a_o_n_x.png" alt="GRASS v.overlay results: AND, OR, NOT, XOR operations" border=0>
 <br>
-<i>v.overlay results of AND, OR, NOT, XOR operations</i>
+<i>Figure: v.overlay results of AND, OR, NOT, XOR operations</i>
 </center>
 
 
@@ -238,7 +229,7 @@ b_UA_TYPE|UA
 <img src="v_overlay_census_wake2000.png" alt="GRASS v.overlay: polygon to polygon union (input 2)" border=1>
 <img src="v_overlay_urban_census2000.png" alt="GRASS v.overlay: polygon to polygon union (result)" border=1>
 <br>
-<i>v.overlay: Polygon union (right) of urban area (left) and Census 2000 (middle) areas (North Carolina dataset)</i>
+<i>Figure: v.overlay: Polygon union (right) of urban area (left) and Census 2000 (middle) areas (North Carolina dataset)</i>
 </center>
 
 <p>
@@ -264,7 +255,7 @@ v.overlay ainput=roadsmajor atype=line binput=raleigh out=roadsmajor_raleigh ope
 <img src="v_overlay_area_lines.png" alt="GRASS v.overlay: Line to polygon clipping"><br>
 <table border=0 width=590>
 <tr><td><center>
-<i>v.overlay: Line to polygon clipping</i>
+<i>Figure: v.overlay: Line to polygon clipping</i>
 </center></td></tr>
 </table>
 </center>
