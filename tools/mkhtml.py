@@ -56,12 +56,17 @@ header_pgm_desc = """<h2>NAME</h2>
 <em><b>${PGM}</b></em> - ${PGM_DESC}
 """
 
+sourcecode = string.Template(
+"""<h2>SOURCE CODE</h2>
+<p>Available at: <a href="${URL}">${PGM} source code</a></p>
+"""
+)
+
 footer_index = string.Template(
 """<hr class="header">
 <p>
 <a href="index.html">Main index</a> |
 <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> |
-<a href="${URL}">Source code</a> |
 <a href="topics.html">Topics index</a> |
 <a href="keywords.html">Keywords index</a> |
 <a href="graphical_index.html">Graphical index</a> |
@@ -300,6 +305,7 @@ pgmdir = curdir.replace(topdir, '').lstrip('/')
 url = urlparse.urljoin(source_url, pgmdir)
 
 if index_name:
+    sys.stdout.write(sourcecode.substitute(URL=url, PGM=pgm))
     sys.stdout.write(footer_index.substitute(INDEXNAME=index_name,
                                              INDEXNAMECAP=index_name_cap,
                                              YEAR=year, URL=url,
