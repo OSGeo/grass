@@ -11,7 +11,7 @@
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               Markus Metz
  * PURPOSE:      
- * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2016 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -645,9 +645,11 @@ void copy_table(struct Map_info *In, struct Map_info *Out, int infield,
     struct ilist *list;
     int findex;
     
-    list = Vect_new_list();
     findex = Vect_cidx_get_field_index(Out, outfield);
-    
+    if (findex < 0) 
+        return;
+
+    list = Vect_new_list();
     Vect_cidx_get_unique_cats_by_index(Out, findex, list);
     Vect_copy_table_by_cats(In, Out, infield, outfield, NULL,
                             GV_1TABLE, list->value, list->n_values);
