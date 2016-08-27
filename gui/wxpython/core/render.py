@@ -324,7 +324,7 @@ class MapLayer(Layer):
         """Represents map layer in the map canvas
         """
         Layer.__init__(self, *args, **kwargs)
-        if self.type in ('vector'):  # will add d.vect.thematic
+        if self.type in ('vector', 'thememap'):
             self._legrow = grass.tempfile(create=True)
         else:
             self._legrow = ''
@@ -388,7 +388,7 @@ class RenderLayerMgr(wx.EvtHandler):
         env_cmd = env.copy()
         env_cmd.update(self._render_env)
         env_cmd['GRASS_RENDER_FILE'] = self.layer.mapfile
-        if self.layer.GetType() in ('vector'):
+        if self.layer.GetType() in ('vector', 'thememap'):
             if os.path.isfile(self.layer._legrow):
                 os.remove(self.layer._legrow)
             env_cmd['GRASS_LEGEND_FILE'] = self.layer._legrow
@@ -630,7 +630,7 @@ class RenderMapMgr(wx.EvtHandler):
         new_legend = []
         with open(self.Map.legfile, "w") as outfile:
             for layer in reversed(self.layers):
-                if layer.GetType() not in ('vector'):
+                if layer.GetType() not in ('vector', 'thememap'):
                     continue
 
                 if os.path.isfile(layer._legrow) and layer._legrow[-1].isdigit() \
@@ -1279,6 +1279,7 @@ class Map(object):
             if layer.type == 'wms':
                 renderMgr.dataFetched.connect(self.renderMgr.ReportProgress)
             renderMgr.updateProgress.connect(self.renderMgr.ReportProgress)
+            renderMgr.renderingFailed.connect(self.renderMgr.RenderingFailed)
         layer.forceRender = render
 
         self.layerAdded.emit(layer=layer)
@@ -1320,7 +1321,7 @@ class Map(object):
                 for f in glob.glob(basefile):
                     os.remove(f)
 
-            if layer.GetType() in ('vector'):
+            if layer.GetType() in ('vector', 'thememap'):
                 os.remove(layer._legrow)
 
             list.remove(layer)

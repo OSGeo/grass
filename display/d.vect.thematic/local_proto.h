@@ -28,4 +28,7 @@ int display_lines(struct Map_info *, struct cat_list *, int,
           const char *, double, int, dbCatValArray *, double *, int,
           const struct color_rgb *, const struct color_rgb *);
 
-
+/* legend.c */
+void write_into_legend_file(const char *, const char *, const char *, double, double,
+                            double *, int, int, struct color_rgb,
+                            struct color_rgb *, int, int, const char *);
