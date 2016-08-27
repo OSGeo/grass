@@ -70,6 +70,9 @@ Contents
     - Update OSGeo4W setup.hint file
       mswindows/osgeo4w/setup.hint
 
+      for RC candidates use 'test' keyword
+      for final version use 'curr' keyword
+      
      #version:
      MAJOR=`cat include/VERSION | head -1 | tail -1`
      MINOR=`cat include/VERSION | head -2 | tail -1`
