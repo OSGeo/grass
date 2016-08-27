@@ -58,7 +58,7 @@ header_pgm_desc = """<h2>NAME</h2>
 
 sourcecode = string.Template(
 """<h2>SOURCE CODE</h2>
-<p>Available at: <a href="${URL}">${PGM} source code</a></p>
+<p>Available at: <a href="${URL_SOURCE}">${PGM} source code</a> (<a href="${URL_LOG}">history</a>)</p>
 """
 )
 
@@ -302,14 +302,14 @@ if not year:
 topdir = os.path.abspath(os.getenv("MODULE_TOPDIR"))
 curdir = os.path.abspath(os.path.curdir)
 pgmdir = curdir.replace(topdir, '').lstrip('/')
-url = urlparse.urljoin(source_url, pgmdir)
+url_source = urlparse.urljoin(source_url, pgmdir)
 
 if index_name:
-    sys.stdout.write(sourcecode.substitute(URL=url, PGM=pgm))
+    sys.stdout.write(sourcecode.substitute(URL_SOURCE=url_source, PGM=pgm,
+                                           URL_LOG=url_source.replace('browser',  'log')))
     sys.stdout.write(footer_index.substitute(INDEXNAME=index_name,
                                              INDEXNAMECAP=index_name_cap,
-                                             YEAR=year, URL=url,
-                                             GRASS_VERSION=grass_version))
+                                             YEAR=year, GRASS_VERSION=grass_version))
 else:
     sys.stdout.write(footer_noindex.substitute(YEAR=year,
                                                GRASS_VERSION=grass_version))
