@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 {
     int ret, level;
     int i, stat = 0;
-    int nclass = 0, nbreaks, *frequencies, boxsize, textsize, ypos;
+    int nclass = 0, nbreaks, *frequencies;
     int chcat = 0;
     int r, g, b;
     int has_color = 0;
@@ -55,7 +55,10 @@ int main(int argc, char **argv)
     struct Option *field_opt;
     struct Option *legend_file_opt;
     struct Option *icon_opt;
+    struct Option *icon_line_opt;
+    struct Option *icon_area_opt;
     struct Option *size_opt;
+    struct Option *title_opt;
     struct Flag *legend_flag, *algoinfo_flag, *nodraw_flag;
     char *desc;
 
@@ -70,8 +73,10 @@ int main(int argc, char **argv)
     struct bound_box box;
     double overlap, *breakpoints, *data = NULL, class_info = 0.0;
     struct GASTATS stats;
-    FILE *fd;
-    double size;
+    int size;
+    int nfeatures;
+    char title[128];
+    char *leg_file;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -145,21 +150,14 @@ int main(int argc, char **argv)
     bwidth_opt = G_define_option();
     bwidth_opt->key = "boundary_width";
     bwidth_opt->type = TYPE_INTEGER;
-    bwidth_opt->answer = "0";
+    bwidth_opt->answer = "1";
     bwidth_opt->guisection = _("Boundaries");
     bwidth_opt->description = _("Boundary width");
 
-    bcolor_opt = G_define_standard_option(G_OPT_C);
+    bcolor_opt = G_define_standard_option(G_OPT_CN);
     bcolor_opt->key = "boundary_color";
     bcolor_opt->label = _("Boundary color");
     bcolor_opt->guisection = _("Boundaries");
-
-    legend_file_opt = G_define_standard_option(G_OPT_F_OUTPUT);
-    legend_file_opt->key = "legendfile";
-    legend_file_opt->description =
-	_("File in which to save d.graph instructions for legend display");
-    legend_file_opt->required = NO;
-    legend_file_opt->guisection = _("Legend");
 
     /* Symbols */
     icon_opt = G_define_option();
@@ -180,6 +178,41 @@ int main(int argc, char **argv)
     size_opt->guisection = _("Symbols");
     size_opt->label = _("Symbol size");
 
+    icon_line_opt = G_define_option();
+    icon_line_opt->key = "icon_line";
+    icon_line_opt->type = TYPE_STRING;
+    icon_line_opt->required = NO;
+    icon_line_opt->multiple = NO;
+    icon_line_opt->guisection = _("Legend");
+    icon_line_opt->answer = "legend/line";
+    /* This could also use ->gisprompt = "old,symbol,symbol" instead of ->options */
+    icon_line_opt->options = icon_files();
+    icon_line_opt->description = _("Legend symbol for lines");
+
+    icon_area_opt = G_define_option();
+    icon_area_opt->key = "icon_area";
+    icon_area_opt->type = TYPE_STRING;
+    icon_area_opt->required = NO;
+    icon_area_opt->multiple = NO;
+    icon_area_opt->guisection = _("Legend");
+    icon_area_opt->answer = "legend/area";
+    /* This could also use ->gisprompt = "old,symbol,symbol" instead of ->options */
+    icon_area_opt->options = icon_files();
+    icon_area_opt->description = _("Legend symbol for areas");
+
+    title_opt = G_define_option();
+    title_opt->key = "legend_title";
+    title_opt->type = TYPE_STRING;
+    title_opt->guisection = _("Legend");
+    title_opt->description = _("Thematic map title");
+
+    legend_file_opt = G_define_standard_option(G_OPT_F_OUTPUT);
+    legend_file_opt->key = "legendfile";
+    legend_file_opt->description =
+    _("Output legend file");
+    legend_file_opt->required = NO;
+    legend_file_opt->guisection = _("Legend");
+
     legend_flag = G_define_flag();
     legend_flag->key = 'l';
     legend_flag->description =
@@ -197,6 +230,10 @@ int main(int argc, char **argv)
     nodraw_flag->description = _("Do not draw map, only output the legend");
     nodraw_flag->guisection = _("Legend");
     
+    G_option_required(algo_opt, breaks_opt, NULL);
+    G_option_exclusive(algo_opt, breaks_opt, NULL);
+    G_option_requires(algo_opt, nbclass_opt, NULL);
+
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -209,15 +246,18 @@ int main(int argc, char **argv)
     size = atof(size_opt->answer);
 
     /* Read map options */
-
     strcpy(map_name, map_opt->answer);
 
     /* open vector */
     level = Vect_open_old(&Map, map_name, "");
-
+    
     if (level < 2)
 	G_fatal_error(_("%s: You must build topology on vector map. Run v.build."),
 		      map_name);
+    if (title_opt->answer)
+        strcpy(title, title_opt->answer);
+    else
+        strcpy(title, Map.name);
 
     /* Check database connection and open it */
     Clist = Vect_new_cat_list();
@@ -236,8 +276,6 @@ int main(int argc, char **argv)
 	if (db_open_database(driver, &handle) != DB_OK)
 	    G_fatal_error(_("Unable to open database <%s>"), fi->database);
     }
-
-
 
     /*Get CatValArray needed for plotting and for legend calculations */
     db_CatValArray_init(&cvarr);
@@ -458,11 +496,11 @@ int main(int argc, char **argv)
     /*Get basic statistics about the data */
     AS_basic_stats(data, nrec, &stats);
 
-    if (legend_flag->answer) {
-
+    /* Print legfile to stdout */
+    if ((legend_flag->answer) ||
+            ((legend_file_opt->answer) && (strcmp(legend_file_opt->answer,"-") == 0))) {
+    /* Print statistics */
 	if (algoinfo_flag->answer) {
-
-
 	    fprintf(stdout, _("\nTotal number of records: %.0f\n"),
 		    stats.count);
 	    fprintf(stdout, _("Classification of %s into %i classes\n"),
@@ -479,74 +517,98 @@ int main(int argc, char **argv)
 			_("Stdev multiplied by %.4f to define step\n"),
 			class_info);
 	    fprintf(stdout, "\n");
-
 	}
 
-        if(stats.min > breakpoints[0]){
-	fprintf(stdout, "<%f|%i|%d:%d:%d\n",
-		breakpoints[0], frequencies[0], colors[0].r,
-		colors[0].g, colors[0].b);
-
-        } else {
-	fprintf(stdout, "%f|%f|%i|%d:%d:%d\n",
-		stats.min, breakpoints[0], frequencies[0], colors[0].r,
-		colors[0].g, colors[0].b);
+    while (TRUE) {
+    nfeatures = Vect_get_num_primitives(&Map, GV_POINT);
+        if (nfeatures > 0) {
+            write_into_legend_file("stdout", icon_opt->answer,
+                                   title, stats.min, stats.max, breakpoints,
+                                   nbreaks, size, bcolor, colors, default_width,
+                                   nfeatures, "point");
+            break;
         }
-
-	for (i = 1; i < nbreaks; i++) {
-	    fprintf(stdout, "%f|%f|%i|%d:%d:%d\n",
-		    breakpoints[i - 1], breakpoints[i], frequencies[i],
-		    colors[i].r, colors[i].g, colors[i].b);
+        nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
+        if (nfeatures > 0) {
+            write_into_legend_file("stdout", icon_line_opt->answer,
+                                   title, stats.min, stats.max, breakpoints,
+                                   nbreaks, size, bcolor, colors, default_width,
+                                   nfeatures, "line");
+            break;
 	}
-
-        if(stats.max < breakpoints[nbreaks-1]){
-	fprintf(stdout, ">%f|%i|%d:%d:%d\n",
-		breakpoints[nbreaks - 1], frequencies[nbreaks],
-		colors[nbreaks].r, colors[nbreaks].g, colors[nbreaks].b);
-        } else {
-	fprintf(stdout, "%f|%f|%i|%d:%d:%d\n",
-		breakpoints[nbreaks - 1], stats.max, frequencies[nbreaks],
-		colors[nbreaks].r, colors[nbreaks].g, colors[nbreaks].b);
+        nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
+        if (nfeatures > 0) {
+            write_into_legend_file("stdout", icon_area_opt->answer,
+                                   title, stats.min, stats.max, breakpoints,
+                                   nbreaks, size, bcolor, colors, default_width,
+                                   nfeatures, "area");
+            break;
         }
     }
+    }
+
+    /* Write into default legfile */
+    leg_file = getenv("GRASS_LEGEND_FILE");
+    if (leg_file) {
+        while (TRUE) {
+        nfeatures = Vect_get_num_primitives(&Map, GV_POINT);
+            if (nfeatures > 0) {
+                write_into_legend_file(leg_file, icon_opt->answer,
+                                       title, stats.min, stats.max, breakpoints,
+                                       nbreaks, size, bcolor, colors, default_width,
+                                       nfeatures, "point");
+                break;
+        }
+            nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
+            if (nfeatures > 0) {
+                write_into_legend_file(leg_file, icon_line_opt->answer,
+                                       title, stats.min, stats.max, breakpoints,
+                                       nbreaks, size, bcolor, colors, default_width,
+                                       nfeatures, "line");
+                break;
+    }
+            nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
+            if (nfeatures > 0) {
+                write_into_legend_file(leg_file, icon_area_opt->answer,
+                                       title, stats.min, stats.max, breakpoints,
+                                       nbreaks, size, bcolor, colors, default_width,
+                                       nfeatures, "area");
+                break;
+            }
+        }
+    }
+    else
+        G_fatal_error(_("Unable to open legend file %s."), leg_file);
+
+    /* Write into user-specified output file */
 
     if (legend_file_opt->answer) {
-	fd = fopen(legend_file_opt->answer, "w");
-	boxsize = 25;
-	textsize = 8;
-	fprintf(fd, "size %i %i\n", textsize, textsize);
-	ypos = 10;
-	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
-		ypos, colors[0].r, colors[0].g, colors[0].b);
-	fprintf(fd, "move 8 %i \n", ypos-1);
-        if(stats.min > breakpoints[0]){
-	fprintf(fd, "text <%f | %i\n", breakpoints[0],
-		frequencies[0]);
-        } else {
-	fprintf(fd, "text %f - %f | %i\n", stats.min, breakpoints[0],
-		frequencies[0]);
+        while (TRUE) {
+        nfeatures = Vect_get_num_primitives(&Map, GV_POINT);
+            if (nfeatures > 0) {
+                write_into_legend_file(legend_file_opt->answer, icon_opt->answer,
+                                       title, stats.min, stats.max, breakpoints,
+                                       nbreaks, size, bcolor, colors, default_width,
+                                       nfeatures, "point");
+                break;
         }
-	for (i = 1; i < nbreaks; i++) {
-	    ypos = 10 + i * 6;
-	    fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
-		    ypos, colors[i].r, colors[i].g, colors[i].b);
-	    fprintf(fd, "move 8 %i\n", ypos-1);
-	    fprintf(fd, "text %f - %f | %i\n", breakpoints[i - 1],
-		    breakpoints[i], frequencies[i]);
+            nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
+            if (nfeatures > 0) {
+                write_into_legend_file(legend_file_opt->answer, icon_line_opt->answer,
+                                       title, stats.min, stats.max, breakpoints,
+                                       nbreaks, size, bcolor, colors, default_width,
+                                       nfeatures, "line");
+                break;
 	}
-	ypos = 10 + i * 6;
-	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
-		ypos, colors[nbreaks].r, colors[nbreaks].g,
-		colors[nbreaks].b);
-	fprintf(fd, "move 8 %i\n", ypos -1);
-        if(stats.max < breakpoints[nbreaks-1]){
-	fprintf(fd, "text >%f | %i\n", breakpoints[nbreaks - 1],
-		frequencies[nbreaks]);
-        } else {
-	fprintf(fd, "text %f - %f | %i\n", breakpoints[nbreaks - 1],
-		stats.max, frequencies[nbreaks]);
+            nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
+            if (nfeatures > 0) {
+                write_into_legend_file(legend_file_opt->answer, icon_area_opt->answer,
+                                       title, stats.min, stats.max, breakpoints,
+                                       nbreaks, size, bcolor, colors, default_width,
+                                       nfeatures, "area");
+                break;
         }
-	fclose(fd);
+    }
     }
 
     if (verbose)

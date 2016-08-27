@@ -105,6 +105,8 @@ int display_lines(struct Map_info *Map, struct cat_list *Clist,
             secondary_color->g = bcolor->g;
             secondary_color->b = bcolor->b;
         }
+        else
+            secondary_color->a = 0;
 
         draw_line(ltype, line, Points, Cats, chcat, size, default_width,
                   Clist, Symb, primary_color, &n_points, &n_lines,
