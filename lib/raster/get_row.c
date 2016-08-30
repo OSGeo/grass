@@ -426,7 +426,7 @@ static void gdal_values_double(int fd, const double *data,
    finally the values in work_buf are converted into 
    type Y and put into 'cell'.
    if type X == type Y the intermediate step of storing the values in 
-   work_buf might be ommited. check the appropriate function for XY to
+   work_buf might be omitted. check the appropriate function for XY to
    determine the procedure of conversion. 
  */
 static void transfer_to_cell_XX(int fd, void *cell)
