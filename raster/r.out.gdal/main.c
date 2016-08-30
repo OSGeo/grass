@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
     mapset = G_find_raster2(input->answer, "");
 
     if (mapset != NULL) {
-	/* Add input to "group". "Group" whith 1 raster (band) will exist only in memory. */
+	/* Add input to "group". "Group" with 1 raster (band) will exist only in memory. */
 	I_init_group_ref(&ref);
 	I_add_file_to_group_ref(input->answer, mapset, &ref);
     }
