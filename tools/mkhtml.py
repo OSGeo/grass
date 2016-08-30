@@ -29,7 +29,7 @@ pgm = sys.argv[1]
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
 
-source_url = "https://trac.osgeo.org/grass/browser/grass/trunk/"
+source_url = "https://trac.osgeo.org/grass/browser/grass/branches/releasebranch_7_2/"
 
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
