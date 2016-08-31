@@ -59,7 +59,7 @@ int main(int argc, char **argv)
     struct Option *icon_area_opt;
     struct Option *size_opt;
     struct Option *title_opt;
-    struct Flag *legend_flag, *algoinfo_flag, *nodraw_flag;
+    struct Flag *legend_flag, *algoinfo_flag, *nodraw_flag, *vlegend_flag;
     char *desc, *deprecated;
 
     struct cat_list *Clist;
@@ -237,6 +237,11 @@ int main(int argc, char **argv)
 	        _("When printing legend info, include extended statistical info from classification algorithm"));
     algoinfo_flag->description = deprecated;
     algoinfo_flag->guisection = _("Legend");
+    
+    vlegend_flag = G_define_flag();
+    vlegend_flag->key = 's';
+    vlegend_flag->label = _("Do not show this layer in vector legend");
+    vlegend_flag->guisection = _("Legend");
     
     G_option_required(algo_opt, breaks_opt, NULL);
     G_option_exclusive(algo_opt, breaks_opt, NULL);
@@ -563,7 +568,7 @@ int main(int argc, char **argv)
 
     /* Write into default legfile */
     leg_file = getenv("GRASS_LEGEND_FILE");
-    if (leg_file) {
+    if (leg_file && !vlegend_flag->answer) {
         while (TRUE) {
         nfeatures = Vect_get_num_primitives(&Map, GV_POINT);
             if (nfeatures > 0) {
