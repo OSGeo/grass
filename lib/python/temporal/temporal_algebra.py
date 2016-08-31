@@ -302,14 +302,14 @@ for details.
     >>> expression =  "D = A {!:} B {:,during} C"
     >>> print(expression)
     D = A {!:} B {:,during} C
-    >>> p.parse(expression)
+    >>> ret = p.parse(expression)
     A* =  A {!:} B
     A** =  A* {:,during} C
     D = A**
     >>> expression =  "D = A {:} B {!:,during} C"
     >>> print(expression)
     D = A {:} B {!:,during} C
-    >>> p.parse(expression)
+    >>> ret = p.parse(expression)
     A* =  A {:} B
     A** =  A* {!:,during} C
     D = A**
@@ -318,49 +318,49 @@ for details.
     >>> expression =  "C = test1 : test2"
     >>> print(expression)
     C = test1 : test2
-    >>> p.parse(expression, 'stvds')
+    >>> ret = p.parse(expression, 'stvds')
     >>> expression =  'D = buff_t(test1,"10 months")'
     >>> print(expression)
     D = buff_t(test1,"10 months")
-    >>> p.parse(expression, 'stvds')
+    >>> ret = p.parse(expression, 'stvds')
     >>> expression =  'E = test2 {:,during} buff_t(test1,"1 days")'
     >>> print(expression)
     E = test2 {:,during} buff_t(test1,"1 days")
-    >>> p.parse(expression, 'stvds')
+    >>> ret = p.parse(expression, 'stvds')
     >>> expression =  'F = test2 {:,equal} buff_t(test1,"1 days")'
     >>> print(expression)
     F = test2 {:,equal} buff_t(test1,"1 days")
-    >>> p.parse(expression, 'stvds')
+    >>> ret = p.parse(expression, 'stvds')
     >>> p.debug = True
     >>> expression =  'H = tsnap(test2 {:,during} buff_t(test1, "1 days"))'
-    >>> p.parse(expression, 'stvds')
+    >>> ret = p.parse(expression, 'stvds')
     test1* = buff_t( test1 , " 1 days " )
     test2* =  test2 {:,during} test1*
     test2** = tsnap( test2* )
     H = test2**
     >>> expression =  'H = tshift(test2 {:,during} test1, "1 days")'
-    >>> p.parse(expression, 'stvds')
+    >>> ret = p.parse(expression, 'stvds')
     test2* =  test2 {:,during} test1
     test2** = tshift( test2* , " 1 days " )
     H = test2**
     >>> expression =  'H = tshift(H, 3)'
-    >>> p.parse(expression, 'stvds')
+    >>> ret = p.parse(expression, 'stvds')
     H* = tshift( H , 3 )
     H = H*
     >>> expression =  'C = if(td(A) == 2, A)'
-    >>> p.parse(expression, 'stvds')
+    >>> ret = p.parse(expression, 'stvds')
     td(A)
     td(A) == 2
     A* =  if condition None  then  A
     C = A*
     >>> expression =  'C = if(td(A) == 5, A, B)'
-    >>> p.parse(expression, 'stvds')
+    >>> ret = p.parse(expression, 'stvds')
     td(A)
     td(A) == 5
     A* =  if condition None  then  A  else  B
     C = A*
     >>> expression =  'C = if(td(A) == 5 || start_date(A) > "2010-01-01", A, B)'
-    >>> p.parse(expression, 'stvds')
+    >>> ret = p.parse(expression, 'stvds')
     td(A)
     td(A) == 5
     start_date A > "2010-01-01"
