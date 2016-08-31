@@ -370,8 +370,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     vectormap = VectorDataset(vectorname + "@" + get_current_mapset())
                     if vectormap.map_exists() and self.overwrite == False:
                         self.msgr.fatal(_("Error vector maps with basename %s exist. "
-                                      "Use --o flag to overwrite existing file") \
-                                      %(vectorname))
+                                          "Use --o flag to overwrite existing file") \
+                                          %(vectorname))
                 for map_i in t[3]:
                     if "cmd_list" in dir(map_i):
                         # Execute command list.
@@ -381,7 +381,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                 # otherwise v.overlay will break
                                 if cmd.name == "v.overlay":
                                     for name in (cmd.inputs["ainput"].value,
-                                                    cmd.inputs["binput"].value):
+                                                 cmd.inputs["binput"].value):
                                         #self.msgr.message("Check if map <" + name + "> exists")
                                         if name.find("@") < 0:
                                             name = name + "@" + get_current_mapset()
@@ -400,10 +400,11 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             # print the command that will be executed
                             self.msgr.message("Run command:\n" + cmd.get_bash())
                             cmd.run()
+
                             if cmd.popen.returncode != 0:
-                                self.msgr.fatal(_("Error starting %s : \n%s") \
-                                                    %(cmd.get_bash(), \
-                                                    cmd.popen.stderr))
+                                self.msgr.fatal(_("Error starting %s : \n%s")
+                                                  %(cmd.get_bash(),
+                                                  cmd.popen.stderr))
                             mapname = cmd.outputs['output'].value
                             if mapname.find("@") >= 0:
                                 map_test = map_i.get_new_instance(mapname)
@@ -438,9 +439,10 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             newident = self.basename + "_" + str(count)
                             map_result = map_i.get_new_instance(newident + "@" + self.mapset)
 
-                            if map_test.map_exists() and self.overwrite == False:
-                                self.msgr.fatal("Error raster maps with basename %s exist. Use --o flag to overwrite existing file" \
-                                                    %(mapname))
+                            if map_test.map_exists() and self.overwrite is False:
+                                self.msgr.fatal("Error raster maps with basename %s exist. "
+                                                "Use --o flag to overwrite existing file"
+                                                %(mapname))
 
                             map_result.set_temporal_extent(map_i.get_temporal_extent())
                             map_result.set_spatial_extent(map_i.get_spatial_extent())
@@ -459,10 +461,10 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
                 if len(register_list) > 0:
                     # Create result space time dataset.
-                    resultstds = open_new_stds(t[1], self.stdstype, \
-                                                                'absolute', t[1], t[1], \
-                                                                "temporal vector algebra", self.dbif,
-                                                                overwrite = self.overwrite)
+                    resultstds = open_new_stds(t[1], self.stdstype,
+                                               'absolute', t[1], t[1],
+                                               "temporal vector algebra", self.dbif,
+                                               overwrite=self.overwrite)
                     for map_i in register_list:
                         # Check if modules should be executed from command list.
                         if hasattr(map_i, "cmd_list") or hasattr(map_i, "is_new"):

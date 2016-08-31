@@ -53,6 +53,8 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
         self.expression = expression
         self.parser.parse(expression)
 
+        return self.process_chain_dict
+
     ######################### Temporal functions ##############################
 
     def p_statement_assign(self, t):

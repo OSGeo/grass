@@ -71,9 +71,8 @@ def main():
     pc = p.parse(expression, stdstype,  overwrite=grass.overwrite)
 
     if dry_run is True:
-        import simplejson
-        s = simplejson.dumps(pc)
-        print(s)
+        import pprint
+        pprint.pprint(pc)
 
 
 if __name__ == "__main__":
