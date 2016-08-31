@@ -742,10 +742,11 @@ class TemporalAlgebraParser(object):
         self.run = run
         self.dry_run = dry_run              # Compute the processes and output but Do not start the processes
         self.process_chain_dict = {}        # This dictionary stores all processes, as well as the maps to register and remove
-        self.process_chain_dict["processes"] = []
-        self.process_chain_dict["insert"] = []
-        self.process_chain_dict["update"] = []
-        self.process_chain_dict["remove"] = []
+        self.process_chain_dict["processes"] = []       # process decsription
+        self.process_chain_dict["register"] = []        # Maps that must be registered/updated or inserted in a new STDS
+        self.process_chain_dict["remove"] = []          # Maps that must be removed
+        self.process_chain_dict["STDS"] = {}            # The STDS that must be created
+
         self.debug = debug
         self.pid = pid
         # Intermediate vector map names
@@ -2045,8 +2046,7 @@ class TemporalAlgebraParser(object):
                         process_queue = pymod.ParallelModuleQueue(int(self.nprocs))
 
                     for map_i in t[3]:
-                        # Test if temporal extents have been changed by temporal
-                        # relation operators (i|r).
+                        # Check if the map type and stds type are compatible
                         if count == 0:
                             maps_stds_type = map_i.get_new_stds_instance(None).get_type()
                             map_type = map_i.get_type()
@@ -2059,7 +2059,11 @@ class TemporalAlgebraParser(object):
                             if map_type != map_type_2:
                                 self.msgr.fatal(_("Maps that should be registered in the "\
                                                   "resulting space time dataset have different types."))
+                        count += 1
 
+                        # Test if temporal extents was been modified by temporal
+                        # relation operators (i|r).
+                        # If it was modified, then the map will be copied
                         map_a_extent = map_i.get_temporal_extent_as_tuple()
                         map_b = map_i.get_new_instance(map_i.get_id())
                         map_b.select(dbif)
@@ -2069,7 +2073,7 @@ class TemporalAlgebraParser(object):
                             newident = self.basename + "_" + str(count)
                             map_result = map_i.get_new_instance(newident + "@" + self.mapset)
 
-                            if map_b.map_exists() and self.overwrite == False:
+                            if map_result.map_exists() and self.overwrite == False:
                                 self.msgr.fatal("Error raster maps with basename %s exist. "
                                                 "Use --o flag to overwrite existing file"%map_i.get_id())
 
@@ -2098,52 +2102,65 @@ class TemporalAlgebraParser(object):
                         else:
                             register_list.append(map_i)
 
-                        count += 1
-
                     # Wait for running processes
                     if self.dry_run is False:
                         process_queue.wait()
 
                     # Open connection to temporal database.
                     # Create result space time dataset based on the map stds type
-                    resultstds = open_new_stds(t[1],maps_stds_type,
-                                               'absolute', t[1], t[1],
-                                               'mean', self.dbif,
-                                               overwrite=self.overwrite)
+                    if self.dry_run is False:
+                        resultstds = open_new_stds(t[1],maps_stds_type,
+                                                   'absolute', t[1], t[1],
+                                                   'mean', self.dbif,
+                                                   overwrite=self.overwrite)
+
                     for map_i in register_list:
                         # Get meta data from grass database.
                         map_i.load()
+
+                        # Put the map into the process dictionary
+                        start, end = map_i.get_temporal_extent_as_tuple()
+                        self.process_chain_dict["register"].append((map_i.get_name(), str(start), str(end)))
+
                         # Check if temporal extents have changed and a new map was created
-                        if hasattr(map_i,  "is_new") is True:
+                        if hasattr(map_i, "is_new") is True:
                             # Do not register empty maps if not required
                             # In case of a null map continue, do not register null maps
-                            if map_i.metadata.get_min() is None and \
-                               map_i.metadata.get_max() is None:
-                                if not self.register_null:
-                                    self.removable_maps[map_i.get_name()] = map_i
-                                    continue
 
-                            start, end = map_i.get_temporal_extent_as_tuple()
+                            if map_i.get_type() is "raster" or map_i.get_type() is "raster3d":
+                                if map_i.metadata.get_min() is None and \
+                                   map_i.metadata.get_max() is None:
+                                    if not self.register_null:
+                                        self.removable_maps[map_i.get_name()] = map_i
+                                        continue
 
                             if map_i.is_in_db(dbif) and self.overwrite:
                                 # Update map in temporal database.
-                                self.process_chain_dict["update"].append((map_i.get_name(), str(start), str(end)))
                                 if self.dry_run is False:
                                     map_i.update_all(dbif)
-                            elif map_i.is_in_db(dbif) and self.overwrite == False:
+                            elif map_i.is_in_db(dbif) and self.overwrite is False:
                                 # Raise error if map exists and no overwrite flag is given.
                                 self.msgr.fatal("Error map %s exist in temporal database. "
-                                                        "Use overwrite flag."%map_i.get_map_id())
+                                                "Use overwrite flag."%map_i.get_map_id())
                             else:
                                 # Insert map into temporal database.
-                                self.process_chain_dict["insert"].append((map_i.get_name(), str(start), str(end)))
                                 if self.dry_run is False:
                                     map_i.insert(dbif)
+
                         # Register map in result space time dataset.
                         if self.dry_run is False:
                             success = resultstds.register_map(map_i, dbif)
+                            if not success:
+                                self.msgr.warning("Unabe to register map layers "
+                                                  "in STDS %s"%(t[1]))
+
                     if self.dry_run is False:
                         resultstds.update_from_registered_maps(dbif)
+
+                    self.process_chain_dict["STDS"]["name"] = t[1]
+                    self.process_chain_dict["STDS"]["stdstype"] = self.stdstype
+                    self.process_chain_dict["STDS"]["temporal_type"] = 'absolute'
+
                 elif num == 0:
                     self.msgr.warning("Empty result space time dataset. "
                                       "No map has been registered in %s"%(t[1]))
