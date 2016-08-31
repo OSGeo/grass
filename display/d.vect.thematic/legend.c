@@ -17,7 +17,7 @@
 
 void write_into_legend_file(const char *legfile, const char *icon, const char *title, double stats_min, double stats_max,
                             double *breakpoints, int nbreaks, int size, struct color_rgb bcolor,
-                            struct color_rgb *colors, int default_width, int nfeatures, const char *topo)
+                            struct color_rgb *colors, int default_width, int* frequencies, const char *topo)
 {
     FILE *fd;
     int i;
@@ -40,14 +40,14 @@ void write_into_legend_file(const char *legfile, const char *icon, const char *t
     fprintf(fd, "%s|%d|%d:%d:%d|%d:%d:%d|%d|%s|%d\n",
             icon, size, bcolor.r, bcolor.g, bcolor.b,
             colors[0].r, colors[0].g, colors[0].b, default_width,
-            topo, nfeatures);
+            topo, frequencies[0]);
     /* Middle lines */
     for (i = 1; i < nbreaks; i++){
         fprintf(fd, "%.2f - %.2f|%s|%d|%d:%d:%d|%d:%d:%d|%d|%s|%d\n",
                 breakpoints[i-1],breakpoints[i],
                 icon, size, bcolor.r, bcolor.g, bcolor.b,
                 colors[i].r, colors[i].g, colors[i].b, default_width,
-                topo, nfeatures);
+                topo, frequencies[i]);
     }
     /* Last one */
     if(stats_max < breakpoints[nbreaks-1]){
@@ -59,7 +59,7 @@ void write_into_legend_file(const char *legfile, const char *icon, const char *t
     fprintf(fd, "%s|%d|%d:%d:%d|%d:%d:%d|%d|%s|%d\n",
             icon, size, bcolor.r, bcolor.g, bcolor.b,
             colors[nbreaks].r, colors[nbreaks].g, colors[nbreaks].b, default_width,
-            topo, nfeatures);
+            topo, frequencies[nbreaks]);
 
     fclose(fd);
 }
