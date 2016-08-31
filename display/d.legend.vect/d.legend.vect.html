@@ -9,7 +9,8 @@ Flag <b>-b</b> is used to draw background of specified color (<b>bgcolor</b>),
 border color and border width (<b>border_color</b> and <b>border_width</b>).
 Parameter <b>symbol_size</b> defines the size of line and area symbols.
 The size of point symbols is based on currently set symbology of vector maps using
-<em><a href="d.vect.html">d.vect</a></em>.
+<em><a href="d.vect.html">d.vect</a></em> or
+<em><a href="d.vect.thematic.html">d.vect.thematic</a></em>.
 <p>Module <em>d.vect.legend</em> supports subtitles (see section Notes).
 Their font and font size can be set using parameters <b>sub_font</b>
 and <b>sub_fontsize</b>.
@@ -17,15 +18,19 @@ and <b>sub_fontsize</b>.
 <h3>Changing legend symbols and labels</h3>
 Symbols for vector areas and lines, and labels for individual vector labels
 can be changed in the symbology setting of each vector map in
-<em><a href="d.vect.html">d.vect</a></em> module (in Legend tab). Use its parameters
+<em><a href="d.vect.html">d.vect</a></em> or
+<em><a href="d.vect.thematic.html">d.vect.thematic</a></em>
+module (in Legend tab). Use its parameters
 <b>icon_area</b> and <b>icon_line</b> to pick from available symbols.
 By using parameter <b>legend_label</b> of <em>d.vect</em> module, users can change
 the default label, which is the map name.
 
 <h3>Modifying the order of legend entries and omitting certain vector maps
 from legend</h3>
-Module <em><a href="d.vect.html">d.vect</a></em> has a flag <b>-l</b>
-which when used removes the particular vector from vector legend.
+Modules <em><a href="d.vect.html">d.vect</a></em> and 
+<em><a href="d.vect.thematic.html">d.vect.thematic</a></em>
+have a flag <b>-s</b>
+which removes the particular vector or thematic vector from vector legend.
 <p>The order of entries is defined by the order in Layer Manager (if used
 in GRASS GIS GUI). If that's not desired, one can export the legend file
 into a text file using parameter <b>output</b>, change the order of entries
@@ -82,6 +87,7 @@ d.legend.vect -b at=2,40 title="Hospitals in North Carolina" symbol_size=26 font
 
 <em>
 <a href="d.vect.html">d.vect</a>,
+<a href="d.vect.thematic.html">d.vect.thematic</a>,
 <a href="d.legend.html">d.legend</a>
 </em>
 

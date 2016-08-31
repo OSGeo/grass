@@ -325,8 +325,8 @@ int main(int argc, char **argv)
     sqrt_flag->guisection = _("Symbols");
 
     legend_flag = G_define_flag();
-    legend_flag->key = 'l';
-    legend_flag->label = _("Do not add this layer to vector legend");
+    legend_flag->key = 's';
+    legend_flag->label = _("Do not show this layer in vector legend");
     legend_flag->guisection = _("Legend");
 
     /* Check command line */
