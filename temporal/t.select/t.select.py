@@ -40,6 +40,11 @@
 #% description: Activate spatial topology
 #%end
 
+#%flag
+#% key: d
+#% description: Perform a dry run, compute all depenencies and module calls but don't run them
+#%end
+
 
 import grass.script as grass
 import grass.temporal as tgis
@@ -51,6 +56,7 @@ def main():
 
     expression = options['expression']
     spatial = flags["s"]
+    dry_run = flags["d"]
     stdstype = options["type"]
 
     # Check for PLY istallation
@@ -61,8 +67,14 @@ def main():
         grass.fatal(_("Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules."))
 
     tgis.init(True)
-    p = tgis.TemporalAlgebraParser(run=True, debug=False, spatial = spatial)
-    p.parse(expression, stdstype,  overwrite=grass.overwrite)
+    p = tgis.TemporalAlgebraParser(run=True, debug=False, spatial=spatial, dry_run=dry_run)
+    pc = p.parse(expression, stdstype,  overwrite=grass.overwrite)
+
+    if dry_run is True:
+        import simplejson
+        s = simplejson.dumps(pc)
+        print(s)
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()
