@@ -530,13 +530,16 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     ###########################################################################
 
     def p_statement_assign(self, t):
-        # The expression should always return a list of maps.
+        # This function executes the processing of raster/raster3d algebra
+        # that was build based on the expression
         """
         statement : stds EQUALS expr
         """
         if self.run:
             # Create the process queue for parallel mapcalc processing
-            process_queue = pymod.ParallelModuleQueue(int(self.nprocs))
+            if self.dry_run is False:
+                process_queue = pymod.ParallelModuleQueue(int(self.nprocs))
+
             if isinstance(t[3], list):
                 num = len(t[3])
                 count = 0
@@ -550,8 +553,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     else:
                         new_map = Raster3DDataset(map_name)
                     if new_map.map_exists() and self.overwrite == False:
-                        self.msgr.fatal("Error maps with basename %s exist. Use --o flag to overwrite existing file" \
-                                            %(map_name))
+                        self.msgr.fatal("Error maps with basename %s exist. "
+                                        "Use --o flag to overwrite existing file"%map_name)
                 map_test_list = []
                 for map_i in t[3]:
                     newident = self.basename + "_" + str(count)
@@ -569,7 +572,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         m_expression = newident + "=" + map_i.cmd_list
                         m.inputs["expression"].value = str(m_expression)
                         m.flags["overwrite"].value = self.overwrite
-                        process_queue.put(m)
+
+                        if self.dry_run is False:
+                            process_queue.put(m)
 
                     elif map_i.map_exists():
                         # Copy map if it exists
@@ -582,14 +587,16 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         m_expression = newident + "=" + map_i.get_map_id()
                         m.inputs["expression"].value = str(m_expression)
                         m.flags["overwrite"].value = self.overwrite
-                        print(m.get_bash())
-                        process_queue.put(m)
+
+                        if self.dry_run is False:
+                            process_queue.put(m)
 
                     else:
-                        self.msgr.error(_("Error computing map <%s>"%(map_i.get_id()) ))
+                        self.msgr.error(_("Error computing map <%s>"%map_i.get_id()))
                     count  += 1
 
-                process_queue.wait()
+                if self.dry_run is False:
+                    process_queue.wait()
 
                 for map_i in map_test_list:
                     register_list.append(map_i)
@@ -597,10 +604,12 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Open connection to temporal database.
                 dbif, connect = init_dbif(self.dbif)
                 # Create result space time dataset.
-                resultstds = open_new_stds(t[1], self.stdstype, \
-                                                         'absolute', t[1], t[1], \
-                                                         'mean', self.dbif, \
-                                                         overwrite = self.overwrite)
+
+                if self.dry_run is False:
+                    resultstds = open_new_stds(t[1], self.stdstype,
+                                               'absolute', t[1], t[1],
+                                               'mean', self.dbif,
+                                               overwrite = self.overwrite)
                 for map_i in register_list:
                     # Get meta data from grass database.
                     map_i.load()
@@ -614,20 +623,25 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
                     if map_i.is_in_db(dbif) and self.overwrite:
                         # Update map in temporal database.
-                        map_i.update_all(dbif)
+                        if self.dry_run is False:
+                            map_i.update_all(dbif)
                     elif map_i.is_in_db(dbif) and self.overwrite == False:
                         # Raise error if map exists and no overwrite flag is given.
-                        self.msgr.fatal("Error raster map %s exist in temporal database. Use overwrite flag.  : \n%s" \
-                                            %(map_i.get_map_id(), cmd.popen.stderr))
+                        self.msgr.fatal("Error raster map %s exist in temporal database. "
+                                        "Use overwrite flag."%map_i.get_map_id())
                     else:
                         # Insert map into temporal database.
-                        map_i.insert(dbif)
+                        if self.dry_run is False:
+                            map_i.insert(dbif)
                     # Register map in result space time dataset.
-                    success = resultstds.register_map(map_i, dbif)
-                resultstds.update_from_registered_maps(dbif)
+                    if self.dry_run is False:
+                        success = resultstds.register_map(map_i, dbif)
+                if self.dry_run is False:
+                    resultstds.update_from_registered_maps(dbif)
+
                 dbif.close()
                 t[0] = register_list
-
+                # Remove intermediate maps
                 self.remove_maps()
 
     def p_expr_spmap_function(self, t):
