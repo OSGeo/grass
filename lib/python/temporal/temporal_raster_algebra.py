@@ -59,8 +59,12 @@ from .temporal_raster_base_algebra import *
 class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
     """The temporal raster algebra class"""
 
-    def __init__(self, pid=None, run=False, debug=True, spatial = False, nprocs = 1, register_null = False):
-        TemporalRasterBaseAlgebraParser.__init__(self, pid, run, debug, spatial, nprocs, register_null)
+    def __init__(self, pid=None, run=False, debug=True, spatial=False,
+                 register_null=False, dry_run=False, nprocs=1):
+
+        TemporalRasterBaseAlgebraParser.__init__(self, pid=pid, run=run, debug=debug,
+                                                 spatial=spatial, register_null=register_null,
+                                                 dry_run=dry_run, nprocs=nprocs)
 
         self.m_mapcalc = pymod.Module('r.mapcalc')
         self.m_mremove = pymod.Module('g.remove')
@@ -91,6 +95,9 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         self.expression = expression
         self.parser.parse(expression)
 
+        if self.dry_run is True:
+            return self.process_chain_dict
+
     ######################### Temporal functions ##############################
 
     def p_statement_assign(self, t):
@@ -101,6 +108,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         TemporalRasterBaseAlgebraParser.p_statement_assign(self, t)
 
     def p_ts_neighbour_operation(self, t):
+        # Spatial and temporal neighbour operations via indexing
         # Examples:
         # A[1,0]
         # B[-2]

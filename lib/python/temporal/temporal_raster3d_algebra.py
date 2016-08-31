@@ -17,8 +17,12 @@ from .temporal_raster_base_algebra import *
 class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
     """The temporal raster algebra class"""
 
-    def __init__(self, pid=None, run=False, debug=True, spatial = False, nprocs = 1, register_null = False):
-        TemporalRasterBaseAlgebraParser.__init__(self, pid, run, debug, spatial, nprocs, register_null)
+    def __init__(self, pid=None, run=False, debug=True, spatial=False,
+                 register_null=False, dry_run=False, nprocs=1):
+
+        TemporalRasterBaseAlgebraParser.__init__(self, pid=pid, run=run, debug=debug,
+                                                 spatial=spatial, register_null=register_null,
+                                                 dry_run=dry_run, nprocs=nprocs)
 
         self.m_mapcalc = pymod.Module('r3.mapcalc')
         self.m_mremove = pymod.Module('g.remove')
