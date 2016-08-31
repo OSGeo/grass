@@ -138,11 +138,14 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         ('left', 'AND', 'OR', 'T_COMP_OPERATOR', 'MOD', 'DIV', 'MULT',
          'T_ARITH1_OPERATOR'))
 
-    def __init__(self, pid=None, run = True, debug = False, spatial = False, \
-                  nprocs = 1, register_null = False):
-        TemporalAlgebraParser.__init__(self, pid, run, debug, spatial)
-        self.nprocs = nprocs
-        self.register_null = register_null
+    def __init__(self, pid=None, run=True,
+                 debug=False, spatial=False,
+                 register_null=False,
+                 dry_run=False, nprocs=1):
+
+        TemporalAlgebraParser.__init__(self, pid=pid, run=run, debug=debug,
+                                       spatial=spatial, register_null=register_null,
+                                       dry_run=dry_run, nprocs=nprocs)
 
     def check_null(self, t):
         try:
@@ -152,10 +155,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             return "null()"
 
     ######################### Temporal functions ##############################
-    def get_temporal_topo_list(self, maplistA, maplistB = None, topolist = ["EQUAL"],
-                               assign_val = False, count_map = False, compare_bool = False,
-                               compare_cmd = False,  compop = None, aggregate = None,
-                               new = False,  convert = False,  operator_cmd = False):
+    def get_temporal_topo_list(self, maplistA, maplistB=None, topolist=["EQUAL"],
+                               assign_val=False, count_map=False, compare_bool=False,
+                               compare_cmd=False,  compop=None, aggregate=None,
+                               new=False,  convert=False,  operator_cmd=False):
         """Build temporal topology for two space time data sets, copy map objects
           for given relation into map list.
 
@@ -182,8 +185,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
           :return: List of maps from maplistA that fulfil the topological relationships
                   to maplistB specified in topolist.
         """
-        topologylist = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED", \
-                        "DURING", "STARTS", "FINISHES", "CONTAINS", "STARTED", \
+        topologylist = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED",
+                        "DURING", "STARTS", "FINISHES", "CONTAINS", "STARTED",
                         "FINISHED"]
         complementdict = {"EQUAL": "EQUAL", "FOLLOWS" : "PRECEDES",
                           "PRECEDES" : "FOLLOWS", "OVERLAPS" : "OVERLAPPED",
@@ -284,7 +287,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             leftsub = sub_cmdstring(map_i)
             rightsub = sub_cmdstring(relmap)
             if operator == None:
-                self.msgr.fatal("Error: Can't build command string for map %s, operator is missing" \
+                self.msgr.fatal("Error: Can't build command string for map %s, operator is missing"
                     %(map_i.get_map_id()))
             cmdstring = "(%s %s %s)" %(leftsub, operator,  rightsub)
         return(cmdstring)
@@ -360,17 +363,17 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 for relationmap in relationmaplist:
                     # Create r.mapcalc expression string for the operation.
                     cmdstring = self.build_command_string(leftcmd,
-                                                                                        relationmap,
-                                                                                        operator = operator,
-                                                                                        cmd_type = "operator")
+                                                          relationmap,
+                                                          operator=operator,
+                                                          cmd_type="operator")
                     leftcmd = cmdstring
         # Add command list to result map.
         map_i.cmd_list = cmdstring
 
         return(cmdstring)
 
-    def set_temporal_extent_list(self, maplist, topolist = ["EQUAL"], temporal = 'l' ,
-                                                        cmd_bool = False, cmd_type = None,  operator = None):
+    def set_temporal_extent_list(self, maplist, topolist=["EQUAL"], temporal='l' ,
+                                 cmd_bool=False, cmd_type=None,  operator=None):
         """ Change temporal extent of map list based on temporal relations to
                 other map list and given temporal operator.
 
@@ -393,8 +396,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             # Loop over temporal related maps and create overlay modules.
             tbrelations = map_i.get_temporal_relations()
             # Generate an intermediate map for the result map list.
-            map_new = self.generate_new_map(base_map=map_i, bool_op = 'and',
-                                                                        copy = True,  rename = True)
+            map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                            copy=True,  rename=True)
 
             # Combine temporal and spatial extents of intermediate map with related maps.
             for topo in topolist:
@@ -402,11 +405,11 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     for map_j in (tbrelations[topo]):
                         if temporal == 'r':
                             # Generate an intermediate map for the result map list.
-                            map_new = self.generate_new_map(base_map=map_i, bool_op = 'and',
-                                                                                        copy = True,  rename = True)
+                            map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                            copy=True,  rename=True)
                         # Create overlayed map extent.
-                        returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                                temp_op = temporal)
+                        returncode = self.overlay_map_extent(map_new, map_j, 'and',
+                                                             temp_op = temporal)
 
                         # Stop the loop if no temporal or spatial relationship exist.
                         if returncode == 0:
@@ -418,9 +421,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                             if cmd_bool:
                                 # Create r.mapcalc expression string for the operation.
                                 cmdstring = self.build_command_string(map_i,
-                                                                                                    map_j,
-                                                                                                    operator = operator,
-                                                                                                    cmd_type = cmd_type)
+                                                                      map_j,
+                                                                      operator=operator,
+                                                                      cmd_type=cmd_type)
                                 # Conditional append of module command.
                                 map_new.cmd_list = cmdstring
                             # Write map object to result dictionary.
@@ -436,10 +439,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
         return(resultlist)
 
-    def build_condition_cmd_list(self, iflist, thenlist,  elselist = None,
-                                                        condition_topolist = ["EQUAL"],
-                                                        conclusion_topolist = ["EQUAL"],
-                                                        temporal = 'l', null = False):
+    def build_condition_cmd_list(self, iflist, thenlist,  elselist=None,
+                                 condition_topolist=["EQUAL"],
+                                 conclusion_topolist=["EQUAL"],
+                                 temporal='l', null=False):
         """This function build the r.mapcalc command strings for spatial conditionals.
             For Example: 'if(a1 == 1, b1, c2)'
 
@@ -464,10 +467,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             # Build conclusion command map list.
             conclusiontopolist = self.get_temporal_topo_list(thenlist, elselist,  conclusion_topolist)
             conclusionlist = self.set_temporal_extent_list(conclusiontopolist,
-                                                                                    topolist = conclusion_topolist,
-                                                                                    temporal = temporal ,
-                                                                                    cmd_bool = True,
-                                                                                    cmd_type = "conclusion")
+                                                           topolist = conclusion_topolist,
+                                                           temporal = temporal ,
+                                                           cmd_bool = True,
+                                                           cmd_type = "conclusion")
         # Check if any conclusion is a numeric statements.
         elif any([isinstance(thenlist, str), isinstance(elselist, str)]):
             conclusionlist = []
@@ -477,9 +480,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 numinput = elselist
                 for map_i in listinput:
                     # Create r.mapcalc expression string for the operation.
-                    cmdstring = self.build_command_string( map_i,
-                                                                                            numinput,
-                                                                                            cmd_type = 'conclusion')
+                    cmdstring = self.build_command_string(map_i,
+                                                          numinput,
+                                                          cmd_type = 'conclusion')
                     # Conditional append of module command.
                     map_i.cmd_list = cmdstring
                     # Append map to result map list.
@@ -491,8 +494,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 for map_i in listinput:
                     # Create r.mapcalc expression string for the operation.
                     cmdstring = self.build_command_string(numinput,
-                                                                                            map_i,
-                                                                                            cmd_type = 'conclusion')
+                                                          map_i,
+                                                          cmd_type = 'conclusion')
                     # Conditional append of module command.
                     map_i.cmd_list = cmdstring
                     # Append map to result map list.
@@ -509,8 +512,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map_i in iflist:
                 # Create r.mapcalc expression string for the operation.
                 cmdstring = self.build_command_string(map_i,
-                                                                                        conclusionlist,
-                                                                                        cmd_type = 'condition')
+                                                      conclusionlist,
+                                                      cmd_type = 'condition')
                 # Conditional append of module command.
                 map_i.cmd_list = cmdstring
                 # Append map to result map list.
@@ -519,12 +522,12 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         elif isinstance(conclusionlist,  list):
             # Build result command map list between conditions and conclusions.
             conditiontopolist = self.get_temporal_topo_list(iflist, conclusionlist,
-                                                                                        topolist = condition_topolist)
+                                                            topolist=condition_topolist)
             resultlist = self.set_temporal_extent_list(conditiontopolist,
-                                                                            topolist = condition_topolist,
-                                                                            temporal = 'r' ,
-                                                                            cmd_bool = True,
-                                                                            cmd_type = "condition")
+                                                       topolist=condition_topolist,
+                                                       temporal='r',
+                                                       cmd_bool=True,
+                                                       cmd_type="condition")
             return(resultlist)
 
     ###########################################################################
@@ -543,7 +546,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             if isinstance(t[3], list):
                 num = len(t[3])
                 count = 0
-                returncode = 0
                 register_list = []
                 for i in range(num):
                     # Check if resultmap names exist in GRASS database.
@@ -572,12 +574,14 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         m_expression = newident + "=" + map_i.cmd_list
                         m.inputs["expression"].value = str(m_expression)
                         m.flags["overwrite"].value = self.overwrite
+                        #print(m.get_bash())
+                        self.process_chain_dict["processes"].append(m.get_dict())
 
                         if self.dry_run is False:
                             process_queue.put(m)
 
                     elif map_i.map_exists():
-                        # Copy map if it exists
+                        # Copy map if it exists b = a
                         map_test = map_i.get_new_instance(newident + "@" + self.mapset)
                         map_test.set_temporal_extent(map_i.get_temporal_extent())
                         map_test.set_spatial_extent(map_i.get_spatial_extent())
@@ -588,12 +592,16 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         m.inputs["expression"].value = str(m_expression)
                         m.flags["overwrite"].value = self.overwrite
 
+                        #print(m.get_bash())
+
+                        self.process_chain_dict["processes"].append(m.get_dict())
+
                         if self.dry_run is False:
                             process_queue.put(m)
 
                     else:
                         self.msgr.error(_("Error computing map <%s>"%map_i.get_id()))
-                    count  += 1
+                    count += 1
 
                 if self.dry_run is False:
                     process_queue.wait()
@@ -603,29 +611,35 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
                 # Open connection to temporal database.
                 dbif, connect = init_dbif(self.dbif)
-                # Create result space time dataset.
 
+                # Create result space time dataset.
                 if self.dry_run is False:
                     resultstds = open_new_stds(t[1], self.stdstype,
                                                'absolute', t[1], t[1],
                                                'mean', self.dbif,
                                                overwrite = self.overwrite)
                 for map_i in register_list:
-                    # Get meta data from grass database.
-                    map_i.load()
-                    # Do not register empty maps if not required
-                    # In case of a null map continue, do not register null maps
-                    if map_i.metadata.get_min() is None and \
-                       map_i.metadata.get_max() is None:
-                        if not self.register_null:
-                            self.removable_maps[map_i.get_name()] = map_i
-                            continue
+
+                    # Put the map into the process dictionary
+                    start, end = map_i.get_temporal_extent_as_tuple()
+                    self.process_chain_dict["register"].append((map_i.get_name(), str(start), str(end)))
+
+                    if self.dry_run is False:
+                        # Get meta data from grass database.
+                        map_i.load()
+                        # Do not register empty maps if not required
+                        # In case of a null map continue, do not register null maps
+                        if map_i.metadata.get_min() is None and \
+                           map_i.metadata.get_max() is None:
+                            if not self.register_null:
+                                self.removable_maps[map_i.get_name()] = map_i
+                                continue
 
                     if map_i.is_in_db(dbif) and self.overwrite:
                         # Update map in temporal database.
                         if self.dry_run is False:
                             map_i.update_all(dbif)
-                    elif map_i.is_in_db(dbif) and self.overwrite == False:
+                    elif map_i.is_in_db(dbif) and self.overwrite is False:
                         # Raise error if map exists and no overwrite flag is given.
                         self.msgr.fatal("Error raster map %s exist in temporal database. "
                                         "Use overwrite flag."%map_i.get_map_id())
@@ -638,6 +652,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         success = resultstds.register_map(map_i, dbif)
                 if self.dry_run is False:
                     resultstds.update_from_registered_maps(dbif)
+
+                self.process_chain_dict["STDS"]["name"] = t[1]
+                self.process_chain_dict["STDS"]["stdstype"] = self.stdstype
+                self.process_chain_dict["STDS"]["temporal_type"] = 'absolute'
 
                 dbif.close()
                 t[0] = register_list
@@ -713,14 +731,14 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             resultlist = []
             for map_i in topolist:
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and', copy=True)
                 # Loop over temporal related maps and create overlay modules.
                 tbrelations = map_i.get_temporal_relations()
                 count = 0
                 for map_j in (tbrelations['EQUAL']):
                     # Create overlayed map extent.
                     returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                            temp_op = 'l')
+                                                         temp_op='l')
                     # Stop the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
                         break
@@ -733,8 +751,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
                     # Create r.mapcalc expression string for the operation.
                     cmdstring = self.build_command_string(map_i, map_j,
-                                                                                    operator = t[2],
-                                                                                    cmd_type = "operator")
+                                                          operator=t[2],
+                                                          cmd_type="operator")
                     # Conditional append of module command.
                     map_new.cmd_list = cmdstring
                     count += 1
@@ -751,23 +769,23 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     def p_arith1_operation_numeric1(self, t):
         """
         expr : stds MOD number
-            | expr MOD number
-            | stds DIV number
-            | expr DIV number
-            | stds MULT number
-            | expr MULT number
-            | stds MOD numberstr
-            | expr MOD numberstr
-            | stds DIV numberstr
-            | expr DIV numberstr
-            | stds MULT numberstr
-            | expr MULT numberstr
-            | stds MOD mapexpr
-            | expr MOD mapexpr
-            | stds DIV mapexpr
-            | expr DIV mapexpr
-            | stds MULT mapexpr
-            | expr MULT mapexpr
+             | expr MOD number
+             | stds DIV number
+             | expr DIV number
+             | stds MULT number
+             | expr MULT number
+             | stds MOD numberstr
+             | expr MOD numberstr
+             | stds DIV numberstr
+             | expr DIV numberstr
+             | stds MULT numberstr
+             | expr MULT numberstr
+             | stds MOD mapexpr
+             | expr MOD mapexpr
+             | stds DIV mapexpr
+             | expr DIV mapexpr
+             | stds MULT mapexpr
+             | expr MULT mapexpr
         """
         # Check input stds.
         maplist = self.check_stds(t[1])
@@ -796,23 +814,23 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     def p_arith1_operation_numeric2(self, t):
         """
         expr : number MOD stds
-            | number MOD expr
-            | number DIV stds
-            | number DIV expr
-            | number MULT stds
-            | number MULT expr
-            | numberstr MOD stds
-            | numberstr MOD expr
-            | numberstr DIV stds
-            | numberstr DIV expr
-            | numberstr MULT stds
-            | numberstr MULT expr
-            | mapexpr MOD stds
-            | mapexpr MOD expr
-            | mapexpr DIV stds
-            | mapexpr DIV expr
-            | mapexpr MULT stds
-            | mapexpr MULT expr
+             | number MOD expr
+             | number DIV stds
+             | number DIV expr
+             | number MULT stds
+             | number MULT expr
+             | numberstr MOD stds
+             | numberstr MOD expr
+             | numberstr DIV stds
+             | numberstr DIV expr
+             | numberstr MULT stds
+             | numberstr MULT expr
+             | mapexpr MOD stds
+             | mapexpr MOD expr
+             | mapexpr DIV stds
+             | mapexpr DIV expr
+             | mapexpr MULT stds
+             | mapexpr MULT expr
         """
         # Check input stds.
         maplist = self.check_stds(t[3])
@@ -863,15 +881,15 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             resultlist = []
             for map_i in topolist:
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and', copy=True)
 
                 # Loop over temporal related maps and create overlay modules.
                 tbrelations = map_i.get_temporal_relations()
                 count = 0
                 for map_j in (tbrelations['EQUAL']):
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                            temp_op = 'l')
+                    returncode = self.overlay_map_extent(map_new, map_j, 'and',
+                                                         temp_op='l')
                     # Stop the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
                         break
@@ -884,8 +902,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
                     # Create r.mapcalc expression string for the operation.
                     cmdstring = self.build_command_string(map_i, map_j,
-                                                                                    operator = t[2],
-                                                                                    cmd_type = "operator")
+                                                          operator=t[2],
+                                                          cmd_type="operator")
                     # Conditional append of module command.
                     map_new.cmd_list = cmdstring
                     count += 1
@@ -903,17 +921,17 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     def p_arith2_operation_numeric1(self, t):
         """
         expr : stds ADD number
-            | expr ADD number
-            | stds SUB number
-            | expr SUB number
-            | stds ADD numberstr
-            | expr ADD numberstr
-            | stds SUB numberstr
-            | expr SUB numberstr
-            | stds ADD mapexpr
-            | expr ADD mapexpr
-            | stds SUB mapexpr
-            | expr SUB mapexpr
+             | expr ADD number
+             | stds SUB number
+             | expr SUB number
+             | stds ADD numberstr
+             | expr ADD numberstr
+             | stds SUB numberstr
+             | expr SUB numberstr
+             | stds ADD mapexpr
+             | expr ADD mapexpr
+             | stds SUB mapexpr
+             | expr SUB mapexpr
         """
         # Check input stds.
         maplist = self.check_stds(t[1])
@@ -941,17 +959,17 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     def p_arith2_operation_numeric2(self, t):
         """
         expr : number ADD stds
-            | number ADD expr
-            | number SUB stds
-            | number SUB expr
-            | numberstr ADD stds
-            | numberstr ADD expr
-            | numberstr SUB stds
-            | numberstr SUB expr
-            | mapexpr ADD stds
-            | mapexpr ADD expr
-            | mapexpr SUB stds
-            | mapexpr SUB expr
+             | number ADD expr
+             | number SUB stds
+             | number SUB expr
+             | numberstr ADD stds
+             | numberstr ADD expr
+             | numberstr SUB stds
+             | numberstr SUB expr
+             | mapexpr ADD stds
+             | mapexpr ADD expr
+             | mapexpr SUB stds
+             | mapexpr SUB expr
         """
         # Check input stds.
         maplist = self.check_stds(t[3])
@@ -989,13 +1007,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             # Check input stds.
             maplistA = self.check_stds(t[1])
             maplistB = self.check_stds(t[3])
-            relations, temporal, function, aggregate = self.eval_toperator(t[2],  optype = 'raster')
+            relations, temporal, function, aggregate = self.eval_toperator(t[2],  optype='raster')
             # Build conditional values based on topological relationships.
-            complist = self.get_temporal_topo_list(maplistA, maplistB, topolist = relations,
-                               operator_cmd = True, compop = function)
+            complist = self.get_temporal_topo_list(maplistA, maplistB, topolist=relations,
+                                                   operator_cmd=True, compop=function)
             # Set temporal extent based on topological relationships.
-            resultlist = self.set_temporal_extent_list(complist, topolist = relations,
-                                temporal = temporal)
+            resultlist = self.set_temporal_extent_list(complist, topolist=relations,
+                                                       temporal=temporal)
 
         t[0] = resultlist
 
@@ -1018,11 +1036,11 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             maplistB = self.check_stds(t[3])
             relations, temporal, function, aggregate = self.eval_toperator(t[2],  optype = 'raster')
             # Build conditional values based on topological relationships.
-            complist = self.get_temporal_topo_list(maplistA, maplistB, topolist = relations,
-                               operator_cmd = True, compop = function)
+            complist = self.get_temporal_topo_list(maplistA, maplistB, topolist=relations,
+                                                   operator_cmd=True, compop=function)
             # Set temporal extent based on topological relationships.
-            resultlist = self.set_temporal_extent_list(complist, topolist = relations,
-                                temporal = temporal)
+            resultlist = self.set_temporal_extent_list(complist, topolist=relations,
+                                                       temporal=temporal)
 
         t[0] = resultlist
 
@@ -1033,10 +1051,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     def p_arith_operation_numeric_string(self, t):
         """
         numberstr : number ADD number
-            | number SUB number
-            | number DIV number
-            | number MULT number
-            | number MOD number
+                  | number SUB number
+                  | number DIV number
+                  | number MULT number
+                  | number MOD number
         """
         numstring = "(%s %s %s)" %(t[1], t[2], t[3])
 
@@ -1064,8 +1082,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         t[0] = t[1]
 
         if self.debug:
-            for map in resultlist:
-                print(map.cmd_list)
+            print(t[1])
 
 
     def p_mapcalc_operation1(self, t):
@@ -1248,8 +1265,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             function = t[2] + t[3]
             aggregate = t[2]
             # Build conditional values based on topological relationships.
-            complist = self.get_temporal_topo_list(s_var_exprA, s_var_exprB, topolist = relations,
-                               compare_cmd = True, compop = function, aggregate = aggregate)
+            complist = self.get_temporal_topo_list(s_var_exprA, s_var_exprB, topolist=relations,
+                                                   compare_cmd=True, compop=function,
+                                                   aggregate=aggregate)
             # Set temporal extent based on topological relationships.
             resultlist = self.set_temporal_extent_list(complist, topolist = relations,
                                 temporal = temporal)
@@ -1272,13 +1290,14 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             s_var_exprA = self.check_stds(t[1])
             s_var_exprB = self.check_stds(t[3])
             # Evaluate temporal comparison operator.
-            relations, temporal, function, aggregate  = self.eval_toperator(t[2],  optype = 'boolean')
+            relations, temporal, function, aggregate = self.eval_toperator(t[2],  optype='boolean')
             # Build conditional values based on topological relationships.
-            complist = self.get_temporal_topo_list(s_var_exprA, s_var_exprB, topolist = relations,
-                               compare_cmd = True, compop = function, aggregate = aggregate)
+            complist = self.get_temporal_topo_list(s_var_exprA, s_var_exprB, topolist=relations,
+                                                   compare_cmd=True, compop=function,
+                                                   aggregate=aggregate)
             # Set temporal extent based on topological relationships.
-            resultlist = self.set_temporal_extent_list(complist, topolist = relations,
-                                temporal = temporal)
+            resultlist = self.set_temporal_extent_list(complist, topolist=relations,
+                                                       temporal=temporal)
 
             t[0] = resultlist
 
@@ -1299,10 +1318,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         ifmaplist = self.check_stds(t[3])
         thenmaplist = self.check_stds(t[5])
         resultlist = self.build_condition_cmd_list(ifmaplist, thenmaplist,
-                                                                            elselist = None,
-                                                                            condition_topolist = ["EQUAL"],
-                                                                            conclusion_topolist = ["EQUAL"],
-                                                                            temporal = 'r', null = False)
+                                                   elselist=None,
+                                                   condition_topolist=["EQUAL"],
+                                                   conclusion_topolist=["EQUAL"],
+                                                   temporal='r', null=False)
         t[0] = resultlist
 
         if self.debug:
@@ -1355,10 +1374,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         ifmaplist = self.check_stds(t[5])
         thenmaplist = self.check_stds(t[7])
         resultlist = self.build_condition_cmd_list(ifmaplist, thenmaplist,
-                                                                            elselist = None,
-                                                                            condition_topolist = relations,
-                                                                            conclusion_topolist = ["EQUAL"],
-                                                                            temporal = 'r', null = False)
+                                                   elselist=None,
+                                                   condition_topolist=relations,
+                                                   conclusion_topolist=["EQUAL"],
+                                                   temporal='r', null=False)
         t[0] = resultlist
 
         if self.debug:
@@ -1384,10 +1403,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         elsemaplist = self.check_stds(t[7])
         # Create conditional command map list.
         resultlist = self.build_condition_cmd_list(ifmaplist, thenmaplist,
-                                                                            elselist = elsemaplist,
-                                                                            condition_topolist = ["EQUAL"],
-                                                                            conclusion_topolist = ["EQUAL"],
-                                                                            temporal = 'r', null = False)
+                                                   elselist=elsemaplist,
+                                                   condition_topolist=["EQUAL"],
+                                                   conclusion_topolist=["EQUAL"],
+                                                   temporal='r', null=False)
 
         t[0] = resultlist
 
@@ -1429,9 +1448,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         print(numthen + " " +numelse )
         # Create conditional command map list.
         resultlist = self.build_condition_cmd_list(ifmaplist, numthen,  numelse,
-                                                        condition_topolist = ["EQUAL"],
-                                                        conclusion_topolist = ["EQUAL"],
-                                                        temporal = 'r', null = False)
+                                                   condition_topolist=["EQUAL"],
+                                                   conclusion_topolist=["EQUAL"],
+                                                   temporal='r', null=False)
 
         t[0] = resultlist
 
@@ -1480,9 +1499,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
         # Create conditional command map list.
         resultlist = self.build_condition_cmd_list(ifmaplist, theninput,  elseinput,
-                                                        condition_topolist = ["EQUAL"],
-                                                        conclusion_topolist = ["EQUAL"],
-                                                        temporal = 'r', null = False)
+                                                   condition_topolist=["EQUAL"],
+                                                   conclusion_topolist=["EQUAL"],
+                                                   temporal='r', null=False)
 
         t[0] = resultlist
 
@@ -1532,9 +1551,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
         # Create conditional command map list.
         resultlist = self.build_condition_cmd_list(ifmaplist, theninput,  elseinput,
-                                                        condition_topolist = relations,
-                                                        conclusion_topolist = ["EQUAL"],
-                                                        temporal = 'r', null = False)
+                                                   condition_topolist=relations,
+                                                   conclusion_topolist=["EQUAL"],
+                                                   temporal='r', null=False)
 
         t[0] = resultlist
 
@@ -1563,9 +1582,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
         # Create conditional command map list.
         resultlist = self.build_condition_cmd_list(ifmaplist, thenmaplist,  elsemaplist,
-                                                        condition_topolist = relations,
-                                                        conclusion_topolist = ["EQUAL"],
-                                                        temporal = 'r', null = False)
+                                                   condition_topolist=relations,
+                                                   conclusion_topolist=["EQUAL"],
+                                                   temporal='r', null=False)
 
         t[0] = resultlist
 
@@ -1604,12 +1623,12 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             aggregate = t[2]
             # Build conditional values based on topological relationships.
             complist = self.get_temporal_topo_list(s_var_exprA, s_var_exprB,
-                                                                            topolist = relations, compare_cmd = True,
-                                                                            compop = function, aggregate = aggregate,
-                                                                            convert = True)
+                                                   topolist=relations, compare_cmd=True,
+                                                   compop=function, aggregate=aggregate,
+                                                   convert=True)
             # Set temporal extent based on topological relationships.
-            resultlist = self.set_temporal_extent_list(complist, topolist = relations,
-                                temporal = temporal)
+            resultlist = self.set_temporal_extent_list(complist, topolist=relations,
+                                                       temporal=temporal)
 
         t[0] = resultlist
 

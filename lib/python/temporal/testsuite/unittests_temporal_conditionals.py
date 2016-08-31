@@ -77,7 +77,7 @@ class TestTemporalConditionals(TestCase):
 
     def test_temporal_condition_1(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(expression='R = if(start_date(A) >= "2001-01-03", A)', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -93,7 +93,7 @@ class TestTemporalConditionals(TestCase):
 
     def test_temporal_condition_2(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(expression='R = if(td(A) == 1, A)', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -109,7 +109,7 @@ class TestTemporalConditionals(TestCase):
     
     def test_temporal_condition_3(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(expression='R = if(td(A) == 1 || start_date(A) >= "2001-01-03", A)', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -125,7 +125,7 @@ class TestTemporalConditionals(TestCase):
     
     def test_temporal_condition_4(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(expression='R = if(start_date(A) >= "2001-01-03", A)', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -141,7 +141,7 @@ class TestTemporalConditionals(TestCase):
 
     def test_temporal_condition_5(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(expression='R = if(start_day(A) <= 2, A)', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -157,8 +157,9 @@ class TestTemporalConditionals(TestCase):
     
     def test_temporal_condition_6(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = if(td(A) == 1 {||,during} start_date(C) < "2001-01-02", A)', basename="r", overwrite=True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
+        ta.parse(expression='R = if(td(A) == 1 {||,during} start_date(C) < "2001-01-02", A)',
+                 basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -173,8 +174,9 @@ class TestTemporalConditionals(TestCase):
 
     def test_temporal_condition_7(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = if({over},start_date(C) == "2001-01-02" {&&,contains} td(A) == 1, B)', basename="r", overwrite=True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
+        ta.parse(expression='R = if({over},start_date(C) == "2001-01-02" {&&,contains} td(A) == 1, B)',
+                 basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -189,8 +191,9 @@ class TestTemporalConditionals(TestCase):
 
     def test_temporal_condition_8(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = if(start_date(B) <= "2001-01-01" {||,over,|} td(E) == 2, B)', basename="r", overwrite=True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
+        ta.parse(expression='R = if(start_date(B) <= "2001-01-01" {||,over,|} td(E) == 2, B)',
+                 basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -205,8 +208,9 @@ class TestTemporalConditionals(TestCase):
 
     def test_temporal_condition_9(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = if(start_date(B) <= "2001-01-01" {&&,over,&} td(E) == 2, B)', basename="r", overwrite=True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
+        ta.parse(expression='R = if(start_date(B) <= "2001-01-01" {&&,over,&} td(E) == 2, B)',
+                 basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -221,8 +225,9 @@ class TestTemporalConditionals(TestCase):
 
     def test_temporal_condition_10(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = if(start_date(B) <= "2001-01-01" {||,over,|,r} td(E) == 2, E)', basename="r", overwrite=True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
+        ta.parse(expression='R = if(start_date(B) <= "2001-01-01" {||,over,|,r} td(E) == 2, E)',
+                 basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -237,8 +242,9 @@ class TestTemporalConditionals(TestCase):
  
     def test_temporal_condition_11(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = if(start_date(B) <= "2001-01-01" {&&,over,r} td(E) == 2, E)', basename="r", overwrite=True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
+        ta.parse(expression='R = if(start_date(B) <= "2001-01-01" {&&,over,r} td(E) == 2, E)',
+                 basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -253,8 +259,9 @@ class TestTemporalConditionals(TestCase):
 
     def test_temporal_condition_12(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = if(start_date(B) <= "2001-01-01" {&&,over,|,r} td(E) == 2, E)', basename="r", overwrite=True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
+        ta.parse(expression='R = if(start_date(B) <= "2001-01-01" {&&,over,|,r} td(E) == 2, E)',
+                 basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -269,8 +276,9 @@ class TestTemporalConditionals(TestCase):
     
     def test_temporal_conditional_13(self):
         """Testing the hash operator function in conditional statement. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = if({equal|during},td(B) == 2 {&&,contains} td(A) == 1, A)', basename="r", overwrite=True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
+        ta.parse(expression='R = if({equal|during},td(B) == 2 {&&,contains} td(A) == 1, A)',
+                 basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -286,8 +294,9 @@ class TestTemporalConditionals(TestCase):
  
     def test_temporal_condition_else_1(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = if(start_date(A) <= "2001-01-03", A, D)', basename="r", overwrite=True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
+        ta.parse(expression='R = if(start_date(A) <= "2001-01-03", A, D)',
+                 basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -302,8 +311,9 @@ class TestTemporalConditionals(TestCase):
     
     def test_temporal_condition_else_2(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = if(td(D) == 1 && start_date(A) >= "2001-01-04", A, D)', basename="r", overwrite=True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
+        ta.parse(expression='R = if(td(D) == 1 && start_date(A) >= "2001-01-04", A, D)',
+                 basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -318,13 +328,14 @@ class TestTemporalConditionals(TestCase):
 
     def test_temporal_condition_else_3(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = if({during},td(B) == 2 {&&,contains} start_date(D) >= "2001-01-04", A, D)', basename="r", overwrite=True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
+        ta.parse(expression='R = if({during},td(B) == 2 {&&,contains} start_date(D) >= "2001-01-04", A, D)',
+                 basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 8) 
+        self.assertEqual(D.metadata.get_min_min(), 8)
         self.assertEqual(D.metadata.get_max_max(), 9) 
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
@@ -334,8 +345,9 @@ class TestTemporalConditionals(TestCase):
 
     def test_temporal_condition_else_4(self):
         """Testing the temporal select operator with equal relations. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = if({equal|over},start_date(B) <= "2001-01-01" {&&,over,|,r} td(E) == 2, E, B)', basename="r", overwrite=True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
+        ta.parse(expression='R = if({equal|over},start_date(B) <= "2001-01-01" {&&,over,|,r} td(E) == 2, E, B)',
+                 basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
