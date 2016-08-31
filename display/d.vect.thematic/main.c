@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     struct Option *size_opt;
     struct Option *title_opt;
     struct Flag *legend_flag, *algoinfo_flag, *nodraw_flag;
-    char *desc;
+    char *desc, *deprecated;
 
     struct cat_list *Clist;
     int *cats, ncat, nrec, ctype;
@@ -208,8 +208,12 @@ int main(int argc, char **argv)
 
     legend_file_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     legend_file_opt->key = "legendfile";
-    legend_file_opt->description =
-    _("Output legend file");
+    deprecated = NULL;
+    G_asprintf(&deprecated,
+	        "[%s] %s",
+	        _("DEPRECATED"),
+	        _("Output legend file"));
+    legend_file_opt->description = deprecated;
     legend_file_opt->required = NO;
     legend_file_opt->guisection = _("Legend");
 
@@ -219,16 +223,20 @@ int main(int argc, char **argv)
 	_("Create legend information and send to stdout");
     legend_flag->guisection = _("Legend");
 
-    algoinfo_flag = G_define_flag();
-    algoinfo_flag->key = 'e';
-    algoinfo_flag->description =
-	_("When printing legend info, include extended statistical info from classification algorithm");
-    algoinfo_flag->guisection = _("Legend");
-
     nodraw_flag = G_define_flag();
     nodraw_flag->key = 'n';
-    nodraw_flag->description = _("Do not draw map, only output the legend");
+    nodraw_flag->description = _("Do not draw map, only output the legend information");
     nodraw_flag->guisection = _("Legend");
+
+    algoinfo_flag = G_define_flag();
+    algoinfo_flag->key = 'e';
+    deprecated = NULL;
+    G_asprintf(&deprecated,
+	        "[%s] %s",
+	        _("DEPRECATED"),
+	        _("When printing legend info, include extended statistical info from classification algorithm"));
+    algoinfo_flag->description = deprecated;
+    algoinfo_flag->guisection = _("Legend");
     
     G_option_required(algo_opt, breaks_opt, NULL);
     G_option_exclusive(algo_opt, breaks_opt, NULL);
@@ -237,6 +245,15 @@ int main(int argc, char **argv)
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if (algoinfo_flag->answer)
+        G_warning(_("Flag -e is deprecated, set verbose mode with --v to get the extended statistical info."));
+
+    if (legend_file_opt->answer)
+        G_warning(_("Option legendfile is deprecated, either use flag -l "
+                    "to print legend to standard output, "
+                    "or set GRASS_LEGEND_FILE environment variable "
+                    "(see d.legend.vect for details)."));
 
     if (G_verbose() > G_verbose_std())
 	verbose = TRUE;
@@ -496,36 +513,33 @@ int main(int argc, char **argv)
     /*Get basic statistics about the data */
     AS_basic_stats(data, nrec, &stats);
 
-    /* Print legfile to stdout */
+    /* Print statistics */
+    G_verbose_message(_("\nTotal number of records: %.0f\n"),
+                      stats.count);
+    G_verbose_message(_("Classification of %s into %i classes\n"),
+                      column_opt->answer, nbreaks + 1);
+    G_verbose_message(_("Using algorithm: *** %s ***\n"),
+                      algo_opt->answer);
+    G_verbose_message(_("Mean: %f\tStandard deviation = %f\n"),
+                      stats.mean, stats.stdev);
+    
+    if (G_strcasecmp(algo_opt->answer, "dis") == 0)
+        G_verbose_message(_("Last chi2 = %f\n"), class_info);
+    if (G_strcasecmp(algo_opt->answer, "std") == 0)
+        G_verbose_message(_("Stdev multiplied by %.4f to define step\n"),
+                          class_info);
+    G_verbose_message("\n");
+
+	/* Print legfile to stdout */
     if ((legend_flag->answer) ||
             ((legend_file_opt->answer) && (strcmp(legend_file_opt->answer,"-") == 0))) {
-    /* Print statistics */
-	if (algoinfo_flag->answer) {
-	    fprintf(stdout, _("\nTotal number of records: %.0f\n"),
-		    stats.count);
-	    fprintf(stdout, _("Classification of %s into %i classes\n"),
-		    column_opt->answer, nbreaks + 1);
-	    fprintf(stdout, _("Using algorithm: *** %s ***\n"),
-		    algo_opt->answer);
-	    fprintf(stdout, _("Mean: %f\tStandard deviation = %f\n"),
-		    stats.mean, stats.stdev);
-
-	    if (G_strcasecmp(algo_opt->answer, "dis") == 0)
-		fprintf(stdout, _("Last chi2 = %f\n"), class_info);
-	    if (G_strcasecmp(algo_opt->answer, "std") == 0)
-		fprintf(stdout,
-			_("Stdev multiplied by %.4f to define step\n"),
-			class_info);
-	    fprintf(stdout, "\n");
-	}
-
     while (TRUE) {
     nfeatures = Vect_get_num_primitives(&Map, GV_POINT);
         if (nfeatures > 0) {
             write_into_legend_file("stdout", icon_opt->answer,
                                    title, stats.min, stats.max, breakpoints,
                                    nbreaks, size, bcolor, colors, default_width,
-                                   nfeatures, "point");
+                                   frequencies, "point");
             break;
         }
         nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
@@ -533,7 +547,7 @@ int main(int argc, char **argv)
             write_into_legend_file("stdout", icon_line_opt->answer,
                                    title, stats.min, stats.max, breakpoints,
                                    nbreaks, size, bcolor, colors, default_width,
-                                   nfeatures, "line");
+                                   frequencies, "line");
             break;
 	}
         nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
@@ -541,7 +555,7 @@ int main(int argc, char **argv)
             write_into_legend_file("stdout", icon_area_opt->answer,
                                    title, stats.min, stats.max, breakpoints,
                                    nbreaks, size, bcolor, colors, default_width,
-                                   nfeatures, "area");
+                                   frequencies, "area");
             break;
         }
     }
@@ -556,7 +570,7 @@ int main(int argc, char **argv)
                 write_into_legend_file(leg_file, icon_opt->answer,
                                        title, stats.min, stats.max, breakpoints,
                                        nbreaks, size, bcolor, colors, default_width,
-                                       nfeatures, "point");
+                                       frequencies, "point");
                 break;
         }
             nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
@@ -564,7 +578,7 @@ int main(int argc, char **argv)
                 write_into_legend_file(leg_file, icon_line_opt->answer,
                                        title, stats.min, stats.max, breakpoints,
                                        nbreaks, size, bcolor, colors, default_width,
-                                       nfeatures, "line");
+                                       frequencies, "line");
                 break;
     }
             nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
@@ -572,13 +586,11 @@ int main(int argc, char **argv)
                 write_into_legend_file(leg_file, icon_area_opt->answer,
                                        title, stats.min, stats.max, breakpoints,
                                        nbreaks, size, bcolor, colors, default_width,
-                                       nfeatures, "area");
+                                       frequencies, "area");
                 break;
             }
         }
     }
-    else
-        G_fatal_error(_("Unable to open legend file %s."), leg_file);
 
     /* Write into user-specified output file */
 
@@ -589,7 +601,7 @@ int main(int argc, char **argv)
                 write_into_legend_file(legend_file_opt->answer, icon_opt->answer,
                                        title, stats.min, stats.max, breakpoints,
                                        nbreaks, size, bcolor, colors, default_width,
-                                       nfeatures, "point");
+                                       frequencies, "point");
                 break;
         }
             nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
@@ -597,7 +609,7 @@ int main(int argc, char **argv)
                 write_into_legend_file(legend_file_opt->answer, icon_line_opt->answer,
                                        title, stats.min, stats.max, breakpoints,
                                        nbreaks, size, bcolor, colors, default_width,
-                                       nfeatures, "line");
+                                       frequencies, "line");
                 break;
 	}
             nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
@@ -605,7 +617,7 @@ int main(int argc, char **argv)
                 write_into_legend_file(legend_file_opt->answer, icon_area_opt->answer,
                                        title, stats.min, stats.max, breakpoints,
                                        nbreaks, size, bcolor, colors, default_width,
-                                       nfeatures, "area");
+                                       frequencies, "area");
                 break;
         }
     }
