@@ -12,27 +12,22 @@ classification <b>algorithm</b> and a number of classes
 <em><a href="v.class.html">v.class</a></em> for more information on
 these different algorithms.
 
-<p>
-<b>Important note:</b> The module currently supports only <i>area</i>
-vector type. For displaying thematic choropleth vector maps of other
-types (points, lines) can be
-used <em><a href="http://grass.osgeo.org/grass70/manuals/addons/d.vect.thematic2.html">d.vect.thematic2</a></em>
-available in AddOns
-via <em><a href="g.extension.html">g.extension</a></em>.
 
 <h2>NOTES</h2>
 
 The <b>-l</b> flag instructs the module to print legend information
-(<i>class min | class max | number of observations in class |
-color</i>) to standard output for further use in graphical software.
-When combined with the <b>-e</b> flag, the legend information will
+in vector legend format as described in <em><a href="d.legend.vect.html">d.legend.vect</a></em>
+ to standard output for further use in graphical software.
+When combined with the verbose flag, the legend information will
 be extended with some additional statistical information. If the
 <b>-n</b> flag is set, the module will only print the legend 
-information without drawing the map. If the user gives a
-<b>legendfile</b>, the module will
-write <em><a href="d.graph.html">d.graph</a></em> instructions for
-painting a legend into that file.
+information without drawing the map.
 
+<p>Option <b>legendfile</b>, is deprecated, instead
+use the GRASS_LEGEND_FILE environmental variable
+(see <em><a href="d.legend.vect.html">d.legend.vect</a></em>)
+to save legend into a file.
+Flag <b>-e</b> is deprecated, instead use verbose flag.
 
 <h2>EXAMPLES</h2>
 
@@ -55,78 +50,51 @@ d.vect.thematic -l map=communes2 column=pop/area algorithm=std \
   nbclasses=5 colors="0:0:255,50:100:255,255:100:50,255:0:0,156:0:0"
 </pre></div>
 
-To actually draw the legend for the polygons in the graphical
-display, the procedure is:
-
-<div class="code"><pre>
-# first save legend instructions to a file	
-d.vect.thematic -n map=communes2 column=pop/area algorithm=std \
-  nbclasses=5 colors="0:0:255,50:100:255,255:100:50,255:0:0,156:0:0" \
-  legendfile=legend_pop_dens  
-
-# open a monitor
-d.mon wx0
-
-# draw the map
-d.vect.thematic map=communes2 column=pop/area algorithm=std \
-  nbclasses=5 colors="0:0:255,50:100:255,255:100:50,255:0:0,156:0:0"
-
-# draw the legend
-d.graph input=legend_pop_dens
-</pre></div>
-
-In order to further enhance this legend, edit the legend file accordingly
-and rerun the process.
-
-<h3>Thematic map with calculated class breaks</h3>
+<h3>Thematic map with legend</h3>
 
 Example for the North Carolina sample dataset, colorizing basin polygons by
-average elevation:
+average elevation and displaying school capacity:
 
 <div class="code"><pre>
 # create watersheds from elevation map
+g.region raster=elevation
 r.watershed elevation=elevation threshold=10000 basin=basins_10k
 
 # convert raster to vector
 r.to.vect input=basins_10k output=basins_10k type=area column=basin_num
 
 # upload raster statistics to each polygon in vector map
-v.rast.stats map=basins_10k raster=elevation column_prefix=elev_
-
-# save legend instructions to a file
-d.vect.thematic -n map=basins_10k column=elev_average algorithm=int \
-  nclasses=5 colors=228:26:28,55:126:184,77:175:74,152:78:163,255:127:0 \
-  legendfile=d_vect_thematic_leg.txt
+v.rast.stats map=basins_10k raster=elevation column_prefix=elev
 
 # open a graphical display
 d.mon wx0
 
-# draw outline of polygons
-d.vect map=basins_10k type=boundary
-
-# draw color fill
+# draw thematic polygons and specify legend title
 d.vect.thematic map=basins_10k column=elev_average algorithm=int \
-  nclasses=5 colors=228:26:28,55:126:184,77:175:74,152:78:163,255:127:0
+  nclasses=5 colors=0:195:176,39:255:0,251:253:0,242:127:11,193:126:60 \
+  legend_title="Average elevation (m)"
 
-# set a different font (list fonts with: d.font -l)
-export GRASS_FONT="sans"
+# draw thematic points and specify legend title
+d.vect.thematic map=schools_wake@PERMANENT column=CORECAPACI algorithm=std \
+  nclasses=3 colors=149:203:255,45:143:240,0:81:161 icon=basic/circle size=15 \
+  legend_title="School capacity"
 
-# and finally draw legend, but edit the legend file first (for example:
-# set size to 20, remove feature counts and most decimal digits)
-d.graph input=d_vect_thematic_leg.txt
+# and finally draw legend
+d.legend.vect -b at=2,80 font=Sans symbol_size=25
 </pre></div>
 
 <center>
 <a href="d_vect_thematic.png">
-<img src="d_vect_thematic.png" alt="d_vect_thematic example" border=1 width="600"></a>
+<img src="d_vect_thematic.png" alt="d_vect_thematic example" width="600"></a>
 <br>
-<i>Thematic map of area sizes</i>
+<i>Thematic map of average elevation and school capacity</i>
 </center>
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="v.class.html">v.class</a>,
+<a href="d.legend.vect.html">d.legend.vect</a>,
 <a href="d.vect.html">d.vect</a>,
 <a href="d.graph.html">d.graph</a>,
 <a href="v.univar.html">v.univar</a>
