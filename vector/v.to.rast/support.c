@@ -39,37 +39,6 @@ int update_hist(const char *raster_name, const char *vector_name, long scale)
     return 0;
 }
 
-
-int update_colors(const char *raster_name)
-{
-    struct Range range;
-    struct Colors colors;
-    CELL min, max;
-
-    Rast_read_range(raster_name, G_mapset(), &range);
-    Rast_get_range_min_max(&range, &min, &max);
-    Rast_make_rainbow_colors(&colors, min, max);
-    Rast_write_colors(raster_name, G_mapset(), &colors);
-
-    return 0;
-}
-
-
-int update_fcolors(const char *raster_name)
-{
-    struct FPRange range;
-    struct Colors colors;
-    DCELL min, max;
-
-    Rast_read_fp_range(raster_name, G_mapset(), &range);
-    Rast_get_fp_range_min_max(&range, &min, &max);
-    Rast_make_rainbow_colors(&colors, (CELL) min, (CELL) max);
-    Rast_write_colors(raster_name, G_mapset(), &colors);
-
-    return 0;
-}
-
-
 int update_cats(const char *raster_name)
 {
     /* TODO: maybe attribute transfer from vector map? 
