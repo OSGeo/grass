@@ -139,9 +139,7 @@ int main(int argc, char **argv)
     int temp_fd;
     int row, col;
     struct Colors colors;
-    struct FPRange range;
     struct History hist;
-    DCELL min, max;
     DCELL *out_row;
     double scale = 1.0;
     int invert;
@@ -392,10 +390,6 @@ int main(int argc, char **argv)
     }
 
     if (dist_name) {
-	Rast_init_colors(&colors);
-	Rast_read_fp_range(dist_name, G_mapset(), &range);
-	Rast_get_fp_range_min_max(&range, &min, &max);
-
 	Rast_short_history(dist_name, "raster", &hist);
 	Rast_set_history(&hist, HIST_DATSRC_1, in_name);
 	Rast_append_format_history(&hist, "%s distance to nearest feature", opt.met->answer);
