@@ -43,11 +43,9 @@ int set_dcat(DCELL);
 
 /* support.c */
 int update_hist(const char *, const char *, long);
-int update_colors(const char *);
 int update_dbcolors(const char *, const char *, int, const char *, int, const char *);
 int update_labels(const char *, const char *, int, const char *, int, int, const char *);
 int update_cats(const char *);
-int update_fcolors(const char *);
 
 /* vect2rast.c */
 int vect_to_rast(const char *, const char *, const char *, const char *, int, int,

@@ -202,17 +202,12 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
     if (rgbcolumn) {
 	if (use != USE_ATTR && use != USE_CAT) {
 	    G_warning(_("Color can be updated from database only if use=attr"));
-	    update_colors(raster_map);
 	}
 	else {
 	  update_dbcolors(raster_map, vector_map, field, rgbcolumn, is_fp,
 			  column);
 	}
     }
-    else if (use == USE_D)
-	update_fcolors(raster_map);
-    else
-	update_colors(raster_map);
 
     update_cats(raster_map);
 
