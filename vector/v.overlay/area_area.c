@@ -199,7 +199,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 			if (Cats->field[i] == field[input]) {
 			    ATTR *at;
 
-			    Vect_cat_set(Centr[area].cat[input], ofield[input + 1],
+			    Vect_cat_set(Centr[area].cat[input], field[input],
 					 Cats->cat[i]);
 
 			    /* Mark as used */
