@@ -426,7 +426,7 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 
 	    if (ofield[2] > 0 && field[1] > 0 && ofield[1] != ofield[2]) {
 		for (i = 0; i < ACats->n_cats; i++) {
-		    if (Cats->field[i] == field[1])
+		    if (ACats->field[i] == field[1])
 			Vect_cat_set(OCats, ofield[2], ACats->cat[i]);
 		}
 	    }
