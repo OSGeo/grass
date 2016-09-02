@@ -57,7 +57,8 @@ maximum: 16572.8
 
 Generate 20 random points with binary attributes (only 0 or 1):
 <div class="code"><pre>
-v.random output=binary_random npoints=20 zmin=0 zmax=1 column='binary' column_type=integer
+v.random output=binary_random npoints=20 zmin=0 zmax=1 \
+         column='binary' column_type=integer
 v.db.select binary_random
 cat|binary
 1|0
@@ -101,6 +102,45 @@ mv map.png vrandom_z.png
 <img src="vrandom_z.png" border=1><br>
 Random points with different X, Y, and Z coordinates
 </center>
+
+
+<h3>Generating random adjacent polygons</h3>
+
+To generate random adjacent polygons, first the centroids are generated as
+points, then a triangulation is run (North Carolina sample dataset:
+
+<div class="code"><pre>
+g.region vector=nc_state
+v.random output=randpoints6k npoints=6000
+v.voronoi input=randpoints6k output=randareas6k
+v.info -t randareas6k
+v.category randareas6k option=print
+
+# plot vector polygons
+d.mon wx0
+d.vect randareas6k -c
+</pre></div>
+<p>
+<center>
+<img src="vrandom_polygons.png" border=1><br>
+Random adjacent polygons from random points (here: used as centroids)
+</center>
+
+<p>
+To eventually obtain isolated polygons, selected polygons can be extracted with
+<em>v.extract</em>.
+<p>
+
+These vector polygons can also be rasterized:
+<div class="code"><pre>
+# rasterize polygons
+# note: rastermaps must result in at least 6k pixel in this example
+g.region vector=nc_state res=500 -p -a
+v.to.rast randareas6k out=randareas6k use=cat
+r.colors randareas6k color=random
+d.rast randareas6k
+</pre></div>
+
 
 <h3>Random sampling from raster map</h3>
 
