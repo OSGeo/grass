@@ -69,6 +69,7 @@ class RenderWMSMgr(wx.EvtHandler):
 
         self.dataFetched = Signal('RenderWMSMgr.dataFetched')
         self.updateProgress = Signal('RenderWMSMgr.updateProgress')
+        self.renderingFailed = Signal('RenderWMSMgr.renderingFailed')
 
     def __del__(self):
         try_remove(self.tempMap)
