@@ -736,6 +736,10 @@ class HelpWindow(HtmlWindow):
 
         super(HelpWindow, self).OnLinkClicked(linkinfo)
 
+    def LoadPage(self, path):
+        super(HelpWindow, self).LoadPage(path)
+        self.loaded = True
+
     def fillContentsFromFile(self, htmlFile, skipDescription=True):
         """Load content from file.
 
