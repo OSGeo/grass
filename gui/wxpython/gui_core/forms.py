@@ -58,11 +58,6 @@ import codecs
 
 from threading import Thread
 
-if not os.getenv("GISBASE"):
-    sys.write("We don't seem to be properly installed, or we are being run "
-              "outside GRASS. Expect glitches.\n")
-    gisbase = os.path.join(os.path.dirname(sys.argv[0]), os.path.pardir)
-
 import wx
 try:
     import wx.lib.agw.flatnotebook as FN
@@ -77,13 +72,19 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree  # Python <= 2.4
 
+# needed when started from command line and for testing
+if __name__ == '__main__':
+    if os.getenv("GISBASE") is None:
+        # intentionally not translatable
+        sys.exit("Failed to start. GRASS GIS is not running"
+                 " or the installation is broken.")
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+
 from grass.pydispatch.signal import Signal
 
 from grass.script import core as grass
 from grass.script import task as gtask
-
-from grass.script.setup import set_gui_path
-set_gui_path()
 
 from core import globalvar
 from gui_core.widgets import StaticWrapText, ScrolledPanel, ColorTablesComboBox, \
