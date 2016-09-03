@@ -38,6 +38,8 @@ static char *get_td(const struct Option *option)
         sep = G_store("\"");
     else if (strcmp(option->answer, "singlequote") == 0)
         sep = G_store("\'");
+    else if (strcmp(option->answer, "none") == 0)
+        sep = NULL;
     else
         sep = G_store(option->answer);
 
@@ -101,7 +103,7 @@ int main(int argc, char *argv[])
     tdelim_opt->key = "text";
     tdelim_opt->label = "Text delimiter";
     tdelim_opt->answer = "doublequote";
-    tdelim_opt->description = _("Special characters: doublequote, singlequote");
+    tdelim_opt->description = _("Special characters: doublequote, singlequote, none");
     tdelim_opt->guisection = _("Input format");
 
     skip_opt = G_define_option();
@@ -331,6 +333,8 @@ int main(int argc, char *argv[])
 	if (t_flag->answer) {
 	    make_table = FALSE;
 	}
+
+	coltype2 = NULL;
 
 	if (make_table) {
 	    Fi = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
