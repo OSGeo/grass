@@ -28,7 +28,6 @@ if __name__ == '__main__':
 
 from core.utils import _
 from core.gcmd import EncodeString, GError
-from core.giface import StandaloneGrassInterface
 from gui_core.pystc import PyStc
 from core import globalvar
 from core.menutree import MenuTreeModelBuilder
@@ -683,6 +682,8 @@ class PyEditFrame(wx.Frame):
 
 def main():
     """Test application (potentially useful as g.gui.pyedit)"""
+    from core.giface import StandaloneGrassInterface
+
     app = wx.App()
     giface = StandaloneGrassInterface()
     simple_editor = PyEditFrame(parent=None, giface=giface)

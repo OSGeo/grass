@@ -27,6 +27,11 @@ from wx import stc
 
 from grass.pydispatch.signal import Signal
 
+# needed just for testing
+if __name__ == '__main__':
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+
 from core.gcmd import GError, EncodeString
 from core.gconsole   import GConsole, \
     EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, EVT_CMD_RUN, EVT_CMD_DONE, \

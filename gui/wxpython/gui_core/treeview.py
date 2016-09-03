@@ -24,6 +24,11 @@ except ImportError:
     import wx.lib.customtreectrl as CT
 import wx.gizmos as gizmos
 
+# needed just for testing
+if __name__ == '__main__':
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+
 from core.globalvar import hasAgw
 from core.treemodel import TreeModel, DictNode
 from core.utils import _

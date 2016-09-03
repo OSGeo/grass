@@ -33,6 +33,11 @@ except ImportError:
 
 import grass.script as grass
 
+# needed just for testing
+if __name__ == '__main__':
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+
 from core import globalvar
 from core.utils import _
 from core.gcmd import GError, DecodeString
@@ -922,3 +927,17 @@ def _grassDevTeam(start):
 
     return '%(c)s %(start)s-%(end)s by the GRASS Development Team' % {
         'c': unichr(169), 'start': start, 'end': end}
+
+
+def main():
+    """Test application (potentially useful as g.gui.gmanual)"""
+    app = wx.App()
+    frame = HelpFrame(parent=None, id=wx.ID_ANY,
+                      title="Test help application",
+                      size=(600, 800), file=sys.argv[1])
+    frame.Show()
+    app.MainLoop()
+
+
+if __name__ == '__main__':
+    main()

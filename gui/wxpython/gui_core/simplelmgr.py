@@ -22,6 +22,11 @@ import wx.aui
 
 from grass.pydispatch.signal import Signal
 
+# needed just for testing
+if __name__ == '__main__':
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 from gui_core.forms import GUI
@@ -479,7 +484,8 @@ icons = {
 class TestFrame(wx.Frame):
 
     def __init__(self, parent):
-        wx.Frame.__init__(self, parent=parent)
+        wx.Frame.__init__(self, parent=parent,
+                          title="Simple layer manager test")
         SimpleLayerManager(parent=self, layerList=LayerList())
 
 
