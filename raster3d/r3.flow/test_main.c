@@ -41,8 +41,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     module = G_define_module();
     G_add_keyword(_("raster3d"));
-    G_add_keyword(_("hydrology"));
-    G_add_keyword(_("voxel"));
+    G_add_keyword(_("unit test"));
     module->description = _("Testing flow lines.");
 
     test_opt = G_define_option();
