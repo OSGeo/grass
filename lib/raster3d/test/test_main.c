@@ -93,11 +93,10 @@ int main(int argc, char *argv[]) {
     G_gisinit(argv[0]);
 
     module = G_define_module();
+    G_add_keyword(_("raster3d"));
+    G_add_keyword(_("unit test"));
     module->description
             = "Performs unit and integration tests for the raster3d library";
-    G_add_keyword(_("raster3d"));
-    G_add_keyword(_("test"));
-
 
     /* Get parameters from user */
     set_params();
