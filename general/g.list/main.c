@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
     G_add_keyword(_("list"));
+    G_add_keyword(_("search"));
     module->description =
 	_("Lists available GRASS data base files of "
 	  "the user-specified data type optionally using the search pattern.");
