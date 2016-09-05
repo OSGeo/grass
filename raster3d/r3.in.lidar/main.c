@@ -448,24 +448,6 @@ int main(int argc, char *argv[])
     raster3d_divide(binning.sum_raster, binning.count_raster,
                     binning.mean_raster, &binning.region);
 
-    G_message("Number of points inside: %lu", inside);
-    if (use_segment)
-        G_message
-            ("Number of points outside or in base raster NULL cells: %lu",
-             outside + in_nulls);
-    else
-        G_message("Number of points outside: %lu", outside);
-    if (n_invalid && only_valid)
-        G_message(_("%lu input points were not valid and filtered out"),
-                  n_invalid);
-    if (n_return_filtered)
-        G_message(_("%lu input points were filtered out by return number"), n_return_filtered);
-    if (n_class_filtered)
-        G_message(_("%lu input points were filtered out by class number"), n_class_filtered);
-    if (n_invalid && !only_valid)
-        G_message(_("%lu input points were not valid, use -%c flag to filter"
-                    " them out"), n_invalid, only_valid_flag->key);
-
     G_verbose_message(_("Closing the maps..."));
 
     G_percent_reset();
@@ -486,6 +468,24 @@ int main(int argc, char *argv[])
 
     if (use_segment)
         Segment_close(&base_segment);
+
+    G_message("Number of points inside: %lu", inside);
+    if (use_segment)
+        G_message
+            ("Number of points outside or in base raster NULL cells: %lu",
+             outside + in_nulls);
+    else
+        G_message("Number of points outside: %lu", outside);
+    if (n_invalid && only_valid)
+        G_message(_("%lu input points were not valid and filtered out"),
+                  n_invalid);
+    if (n_return_filtered)
+        G_message(_("%lu input points were filtered out by return number"), n_return_filtered);
+    if (n_class_filtered)
+        G_message(_("%lu input points were filtered out by class number"), n_class_filtered);
+    if (n_invalid && !only_valid)
+        G_message(_("%lu input points were not valid, use -%c flag to filter"
+                    " them out"), n_invalid, only_valid_flag->key);
 
     exit(EXIT_SUCCESS);
 }
