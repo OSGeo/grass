@@ -33,6 +33,7 @@ struct PointBinning3D
     RASTER3D_Map *prop_count_raster, *prop_sum_raster;
 };
 
+/* TODO: do this in some more efficient way, perhaps function in the lib */
 static void raster3d_set_value_float(RASTER3D_Map * raster,
                                      RASTER3D_Region * region, float value)
 {
@@ -51,8 +52,10 @@ static void raster3d_divide(RASTER3D_Map * a, RASTER3D_Map * b,
     int col, row, depth;
     double tmp;
 
-    for (depth = 0; depth < region->depths; depth++)
-        for (row = 0; row < region->rows; row++)
+    G_percent_reset();
+    for (depth = 0; depth < region->depths; depth++) {
+        G_percent(depth, region->depths, 5);
+        for (row = 0; row < region->rows; row++) {
             for (col = 0; col < region->cols; col++) {
                 tmp = Rast3d_get_double(b, col, row, 0);
                 /* TODO: compare to epsilon */
@@ -66,6 +69,9 @@ static void raster3d_divide(RASTER3D_Map * a, RASTER3D_Map * b,
                     Rast3d_put_double(c, col, row, depth, tmp);
                 }
             }
+        }
+    }
+    G_percent(1, 1, 1);    /* flush */
 }
 
 /* c = a / b where b has depth 1 */
@@ -76,8 +82,10 @@ static void raster3d_divide_by_flat(RASTER3D_Map * a, RASTER3D_Map * b,
     int col, row, depth;
     double tmp;
 
-    for (depth = 0; depth < region->depths; depth++)
-        for (row = 0; row < region->rows; row++)
+    G_percent_reset();
+    for (depth = 0; depth < region->depths; depth++) {
+        G_percent(depth, region->depths, 5);
+        for (row = 0; row < region->rows; row++) {
             for (col = 0; col < region->cols; col++) {
                 tmp = Rast3d_get_double(b, col, row, 0);
                 /* since it is count, using cast to integer to check
@@ -92,6 +100,9 @@ static void raster3d_divide_by_flat(RASTER3D_Map * a, RASTER3D_Map * b,
                     Rast3d_put_double(c, col, row, depth, tmp);
                 }
             }
+        }
+    }
+    G_percent(1, 1, 1);    /* flush */
 }
 
 void binning_add_point(struct PointBinning3D binning, int row, int col,
@@ -230,11 +241,16 @@ int main(int argc, char *argv[])
         only_valid = TRUE;
 
     LASReaderH LAS_reader;
+    LASHeaderH LAS_header;
 
     LAS_reader = LASReader_Create(input_opt->answer);
     if (LAS_reader == NULL)
         G_fatal_error(_("Unable to open file <%s>"), input_opt->answer);
-
+    LAS_header = LASReader_GetHeader(LAS_reader);
+    if  (LAS_header == NULL) {
+            G_fatal_error(_("Input file <%s> is not a LAS LiDAR point cloud"),
+                            input_opt->answer);
+    }
     Rast3d_init_defaults();
     Rast3d_set_error_fun(Rast3d_fatal_error_noargs);
 
@@ -326,12 +342,19 @@ int main(int argc, char *argv[])
         Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
                            prop_sum_output_opt->answer);
 
+    G_verbose_message(_("Preparing the maps..."));
+
+    G_percent_reset();
     raster3d_set_value_float(binning.count_raster, &binning.region, 0);
+    G_percent(25, 100, 1);
     raster3d_set_value_float(binning.sum_raster, &binning.region, 0);
+    G_percent(50, 100, 1);
     raster3d_set_value_float(binning.count_flat_raster, &binning.flat_region,
                              0);
+    G_percent(75, 100, 1);
     raster3d_set_value_float(binning.sum_flat_raster, &binning.flat_region,
                              0);
+    G_percent(1, 1, 1);    /* flush */
 
     LASPointH LAS_point;
     double east, north, top;
@@ -346,8 +369,20 @@ int main(int argc, char *argv[])
     long unsigned n_return_filtered = 0;
     long unsigned n_class_filtered = 0;
     long unsigned n_invalid = 0;
+    long unsigned counter = 0;
+
+    long unsigned header_count = LASHeader_GetPointRecordsCount(LAS_header);
+
+    G_verbose_message(_("Reading points..."));
+    G_percent_reset();
 
     while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
+        if (counter == 100000) {        /* report only some for speed */
+            if (inside < header_count)  /* TODO: inside can greatly underestimate */
+                G_percent(inside, header_count, 3);
+            counter = 0;
+        }
+        counter++;
         /* We always count them and report because r.in.lidar behavior
          * changed in between 7.0 and 7.2 from undefined (but skipping
          * invalid points) to filtering them out only when requested. */
@@ -401,11 +436,15 @@ int main(int argc, char *argv[])
         inside += 1;
     }
 
+    G_percent(1, 1, 1);    /* flush */
+
+    G_verbose_message(_("Computing proportional count map..."));
     raster3d_divide_by_flat(binning.count_raster, binning.count_flat_raster,
                             binning.prop_count_raster, &binning.region);
+    G_verbose_message(_("Computing proportional sum map..."));
     raster3d_divide_by_flat(binning.sum_raster, binning.sum_flat_raster,
                             binning.prop_sum_raster, &binning.region);
-
+    G_verbose_message(_("Computing mean map..."));
     raster3d_divide(binning.sum_raster, binning.count_raster,
                     binning.mean_raster, &binning.region);
 
@@ -427,13 +466,23 @@ int main(int argc, char *argv[])
         G_message(_("%lu input points were not valid, use -%c flag to filter"
                     " them out"), n_invalid, only_valid_flag->key);
 
+    G_verbose_message(_("Closing the maps..."));
+
+    G_percent_reset();
     Rast3d_close(binning.prop_sum_raster);
+    G_percent(1, 7, 1);
     Rast3d_close(binning.prop_count_raster);
+    G_percent(2, 7, 1);
     Rast3d_close(binning.sum_flat_raster);      /* TODO: delete */
+    G_percent(3, 7, 1);
     Rast3d_close(binning.count_flat_raster);    /* TODO: delete */
+    G_percent(4, 7, 1);
     Rast3d_close(binning.mean_raster);
+    G_percent(5, 7, 1);
     Rast3d_close(binning.sum_raster);
+    G_percent(6, 7, 1);
     Rast3d_close(binning.count_raster);
+    G_percent(1, 1, 1);
 
     if (use_segment)
         Segment_close(&base_segment);
