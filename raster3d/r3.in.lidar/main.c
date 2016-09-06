@@ -297,22 +297,20 @@ int main(int argc, char *argv[])
     print_flag = G_define_flag();
     print_flag->key = 'p';
     print_flag->description = _("Print LAS file info and exit");
-    print_flag->suppress_required = YES;
 
     scan_flag = G_define_flag();
     scan_flag->key = 's';
     scan_flag->description = _("Scan data file for extent then exit");
-    scan_flag->suppress_required = YES;
 
     shell_style = G_define_flag();
     shell_style->key = 'g';
     shell_style->description = _("In scan mode, print using shell script style");
-    shell_style->suppress_required = YES;
 
     G_option_required(input_opt, file_list_opt, NULL);
     G_option_exclusive(input_opt, file_list_opt, NULL);
     G_option_required(count_output_opt, sum_output_opt, mean_output_opt,
-                      prop_count_output_opt, prop_sum_output_opt, NULL);
+                      prop_count_output_opt, prop_sum_output_opt,
+                      print_flag, scan_flag, shell_style, NULL);
     G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
     G_option_requires_all(mean_output_opt, count_output_opt, sum_output_opt, NULL);
     G_option_requires_all(prop_count_output_opt, count_output_opt, NULL);
