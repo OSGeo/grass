@@ -108,19 +108,35 @@ static void raster3d_divide_by_flat(RASTER3D_Map * a, RASTER3D_Map * b,
     G_percent(1, 1, 1);    /* flush */
 }
 
-void binning_add_point(struct PointBinning3D binning, int row, int col,
+/* initialize raster pointers */
+void binning_init(struct PointBinning3D *binning)
+{
+    binning->count_raster = binning->sum_raster = binning->mean_raster = NULL;
+    binning->count_flat_raster = binning->sum_flat_raster = NULL;
+    binning->prop_count_raster = binning->prop_sum_raster = NULL;
+}
+
+void binning_add_point(struct PointBinning3D *binning, int row, int col,
                        int depth, double value)
 {
     double tmp;                 /* TODO: check if these should be in binning struct */
 
-    tmp = Rast3d_get_double(binning.count_raster, col, row, depth);
-    Rast3d_put_double(binning.count_raster, col, row, depth, tmp + 1);
-    tmp = Rast3d_get_double(binning.count_flat_raster, col, row, 0);
-    Rast3d_put_double(binning.count_flat_raster, col, row, 0, tmp + 1);
-    tmp = Rast3d_get_double(binning.sum_raster, col, row, depth);
-    Rast3d_put_double(binning.sum_raster, col, row, depth, tmp + value);
-    tmp = Rast3d_get_double(binning.sum_flat_raster, col, row, 0);
-    Rast3d_put_double(binning.sum_flat_raster, col, row, 0, tmp + value);
+    if (binning->count_raster) {
+        tmp = Rast3d_get_double(binning->count_raster, col, row, depth);
+        Rast3d_put_double(binning->count_raster, col, row, depth, tmp + 1);
+    }
+    if (binning->count_flat_raster) {
+        tmp = Rast3d_get_double(binning->count_flat_raster, col, row, 0);
+        Rast3d_put_double(binning->count_flat_raster, col, row, 0, tmp + 1);
+    }
+    if (binning->sum_raster) {
+        tmp = Rast3d_get_double(binning->sum_raster, col, row, depth);
+        Rast3d_put_double(binning->sum_raster, col, row, depth, tmp + value);
+    }
+    if (binning->sum_flat_raster) {
+        tmp = Rast3d_get_double(binning->sum_flat_raster, col, row, 0);
+        Rast3d_put_double(binning->sum_flat_raster, col, row, 0, tmp + value);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -169,26 +185,26 @@ int main(int argc, char *argv[])
 
     count_output_opt = G_define_standard_option(G_OPT_R3_OUTPUT);
     count_output_opt->key = "n";
-    count_output_opt->required = YES;
+    count_output_opt->required = NO;
     count_output_opt->label = _("Count of points per cell");
     count_output_opt->guisection = _("Output");
 
     sum_output_opt = G_define_standard_option(G_OPT_R3_OUTPUT);
     sum_output_opt->key = "sum";
-    sum_output_opt->required = YES;
+    sum_output_opt->required = NO;
     sum_output_opt->label = _("Sum of values of point intensities per cell");
     sum_output_opt->guisection = _("Output");
 
     mean_output_opt = G_define_standard_option(G_OPT_R3_OUTPUT);
     mean_output_opt->key = "mean";
-    mean_output_opt->required = YES;
+    mean_output_opt->required = NO;
     mean_output_opt->label = _("Mean of point intensities per cell");
     mean_output_opt->guisection = _("Output");
 
     /* TODO: proportional versus relative in naming */
     prop_count_output_opt = G_define_standard_option(G_OPT_R3_OUTPUT);
     prop_count_output_opt->key = "proportional_n";
-    prop_count_output_opt->required = YES;
+    prop_count_output_opt->required = NO;
     prop_count_output_opt->label =
         _("3D raster map of proportional point count");
     prop_count_output_opt->description =
@@ -198,7 +214,7 @@ int main(int argc, char *argv[])
 
     prop_sum_output_opt = G_define_standard_option(G_OPT_R3_OUTPUT);
     prop_sum_output_opt->key = "proportional_sum";
-    prop_sum_output_opt->required = YES;
+    prop_sum_output_opt->required = NO;
     prop_sum_output_opt->label =
         _("3D raster map of proportional sum of values");
     prop_sum_output_opt->description =
@@ -295,7 +311,12 @@ int main(int argc, char *argv[])
 
     G_option_required(input_opt, file_list_opt, NULL);
     G_option_exclusive(input_opt, file_list_opt, NULL);
+    G_option_required(count_output_opt, sum_output_opt, mean_output_opt,
+                      prop_count_output_opt, prop_sum_output_opt, NULL);
     G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
+    G_option_requires_all(mean_output_opt, count_output_opt, sum_output_opt, NULL);
+    G_option_requires_all(prop_count_output_opt, count_output_opt, NULL);
+    G_option_requires_all(prop_sum_output_opt, sum_output_opt, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -450,70 +471,90 @@ int main(int argc, char *argv[])
     int type = FCELL_TYPE;
     int max_tile_size = 32;
 
+    binning_init(&binning);
     /* TODO: this should probably happen before we change 2D region just to be sure */
     Rast3d_get_window(&binning.region);
     Rast3d_get_window(&binning.flat_region);
     binning.flat_region.depths = 1;
     Rast3d_adjust_region(&binning.flat_region);
 
-    binning.count_raster =
-        Rast3d_open_new_opt_tile_size(count_output_opt->answer, cache,
-                                      &binning.region, type, max_tile_size);
-    if (!binning.count_raster)
-        Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                           count_output_opt->answer);
-    binning.sum_raster = Rast3d_open_new_opt_tile_size(sum_output_opt->answer,
-                                                       cache,
-                                                       &binning.region, type,
-                                                       max_tile_size);
-    if (!binning.sum_raster)
-        Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                           sum_output_opt->answer);
-    binning.mean_raster =
-        Rast3d_open_new_opt_tile_size(mean_output_opt->answer, cache,
-                                      &binning.region, type, max_tile_size);
-    if (!binning.mean_raster)
-        Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                           mean_output_opt->answer);
-    binning.count_flat_raster =
-        Rast3d_open_new_opt_tile_size("r3_in_lidar_tmp_sum_flat", cache,
-                                      &binning.flat_region, type,
-                                      max_tile_size);
-    if (!binning.count_flat_raster)
-        Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                           count_output_opt->answer);
-    binning.sum_flat_raster =
-        Rast3d_open_new_opt_tile_size("r3_in_lidar_tmp_count_flat", cache,
-                                      &binning.flat_region, type,
-                                      max_tile_size);
-    if (!binning.sum_flat_raster)
-        Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                           count_output_opt->answer);
-    binning.prop_count_raster =
-        Rast3d_open_new_opt_tile_size(prop_count_output_opt->answer, cache,
-                                      &binning.region, type, max_tile_size);
-    if (!binning.prop_count_raster)
-        Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                           prop_count_output_opt->answer);
-    binning.prop_sum_raster =
-        Rast3d_open_new_opt_tile_size(prop_sum_output_opt->answer, cache,
-                                      &binning.region, type, max_tile_size);
-    if (!binning.prop_sum_raster)
-        Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                           prop_sum_output_opt->answer);
+    if (count_output_opt->answer) {
+        binning.count_raster =
+            Rast3d_open_new_opt_tile_size(count_output_opt->answer, cache,
+                                          &binning.region, type, max_tile_size);
+        if (!binning.count_raster)
+            Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
+                               count_output_opt->answer);
+    }
+    if (sum_output_opt->answer) {
+        binning.sum_raster =
+            Rast3d_open_new_opt_tile_size(sum_output_opt->answer, cache,
+                                          &binning.region, type,
+                                          max_tile_size);
+        if (!binning.sum_raster)
+            Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
+                               sum_output_opt->answer);
+    }
+    if (mean_output_opt->answer) {
+        binning.mean_raster =
+            Rast3d_open_new_opt_tile_size(mean_output_opt->answer, cache,
+                                          &binning.region, type, max_tile_size);
+        if (!binning.mean_raster)
+            Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
+                               mean_output_opt->answer);
+    }
+    if (prop_count_output_opt->answer) {
+        binning.prop_count_raster =
+            Rast3d_open_new_opt_tile_size(prop_count_output_opt->answer, cache,
+                                          &binning.region, type, max_tile_size);
+        if (!binning.prop_count_raster)
+            Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
+                               prop_count_output_opt->answer);
+    }
+    if (prop_sum_output_opt->answer) {
+        binning.prop_sum_raster =
+            Rast3d_open_new_opt_tile_size(prop_sum_output_opt->answer, cache,
+                                          &binning.region, type, max_tile_size);
+        if (!binning.prop_sum_raster)
+            Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
+                               prop_sum_output_opt->answer);
+    }
+    if (prop_count_output_opt->answer) {
+        binning.count_flat_raster =
+            Rast3d_open_new_opt_tile_size("r3_in_lidar_tmp_sum_flat", cache,
+                                          &binning.flat_region, type,
+                                          max_tile_size);
+    
+        if (!binning.count_flat_raster)
+            Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
+                               count_output_opt->answer);
+    }
+    if (prop_sum_output_opt->answer) {
+        binning.sum_flat_raster =
+            Rast3d_open_new_opt_tile_size("r3_in_lidar_tmp_count_flat", cache,
+                                          &binning.flat_region, type,
+                                          max_tile_size);
+        if (!binning.sum_flat_raster)
+            Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
+                               count_output_opt->answer);
+    }
 
     G_verbose_message(_("Preparing the maps..."));
 
     G_percent_reset();
-    raster3d_set_value_float(binning.count_raster, &binning.region, 0);
+    if (binning.count_raster)
+        raster3d_set_value_float(binning.count_raster, &binning.region, 0);
     G_percent(25, 100, 1);
-    raster3d_set_value_float(binning.sum_raster, &binning.region, 0);
+    if (binning.sum_raster)
+        raster3d_set_value_float(binning.sum_raster, &binning.region, 0);
     G_percent(50, 100, 1);
-    raster3d_set_value_float(binning.count_flat_raster, &binning.flat_region,
-                             0);
+    if (binning.count_flat_raster)
+        raster3d_set_value_float(binning.count_flat_raster, &binning.flat_region,
+                                 0);
     G_percent(75, 100, 1);
-    raster3d_set_value_float(binning.sum_flat_raster, &binning.flat_region,
-                             0);
+    if (binning.sum_flat_raster)
+        raster3d_set_value_float(binning.sum_flat_raster, &binning.flat_region,
+                                 0);
     G_percent(1, 1, 1);    /* flush */
 
     LASPointH LAS_point;
@@ -603,7 +644,7 @@ int main(int argc, char *argv[])
                 outside += 1;
                 continue;
             }
-            binning_add_point(binning, row, col, depth, value);
+            binning_add_point(&binning, row, col, depth, value);
             inside += 1;
         }
         /* close input LAS file */
@@ -613,32 +654,45 @@ int main(int argc, char *argv[])
 
     G_percent(1, 1, 1);    /* flush */
 
-    G_verbose_message(_("Computing proportional count map..."));
-    raster3d_divide_by_flat(binning.count_raster, binning.count_flat_raster,
-                            binning.prop_count_raster, &binning.region);
-    G_verbose_message(_("Computing proportional sum map..."));
-    raster3d_divide_by_flat(binning.sum_raster, binning.sum_flat_raster,
-                            binning.prop_sum_raster, &binning.region);
-    G_verbose_message(_("Computing mean map..."));
-    raster3d_divide(binning.sum_raster, binning.count_raster,
-                    binning.mean_raster, &binning.region);
+    if (binning.prop_count_raster) {
+        G_verbose_message(_("Computing proportional count map..."));
+        raster3d_divide_by_flat(binning.count_raster, binning.count_flat_raster,
+                                binning.prop_count_raster, &binning.region);
+    }
+    if (binning.prop_sum_raster) {
+        G_verbose_message(_("Computing proportional sum map..."));
+        raster3d_divide_by_flat(binning.sum_raster, binning.sum_flat_raster,
+                                binning.prop_sum_raster, &binning.region);
+    }
+    if (binning.mean_raster) {
+        G_verbose_message(_("Computing mean map..."));
+        raster3d_divide(binning.sum_raster, binning.count_raster,
+                        binning.mean_raster, &binning.region);
+    }
 
     G_verbose_message(_("Closing the maps..."));
 
     G_percent_reset();
-    Rast3d_close(binning.prop_sum_raster);
+    if (binning.sum_flat_raster)
+        Rast3d_close(binning.sum_flat_raster);      /* TODO: delete */
     G_percent(1, 7, 1);
-    Rast3d_close(binning.prop_count_raster);
+    if (binning.count_flat_raster)
+        Rast3d_close(binning.count_flat_raster);    /* TODO: delete */
     G_percent(2, 7, 1);
-    Rast3d_close(binning.sum_flat_raster);      /* TODO: delete */
-    G_percent(3, 7, 1);
-    Rast3d_close(binning.count_flat_raster);    /* TODO: delete */
+    if (binning.prop_sum_raster)
+        Rast3d_close(binning.prop_sum_raster);
+    G_percent(2, 7, 1);
+    if (binning.prop_count_raster)
+        Rast3d_close(binning.prop_count_raster);
     G_percent(4, 7, 1);
-    Rast3d_close(binning.mean_raster);
+    if (binning.mean_raster)
+        Rast3d_close(binning.mean_raster);
     G_percent(5, 7, 1);
-    Rast3d_close(binning.sum_raster);
+    if (binning.sum_raster)
+        Rast3d_close(binning.sum_raster);
     G_percent(6, 7, 1);
-    Rast3d_close(binning.count_raster);
+    if (binning.count_raster)
+        Rast3d_close(binning.count_raster);
     G_percent(1, 1, 1);
 
     if (use_segment)
