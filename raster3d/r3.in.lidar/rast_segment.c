@@ -1,3 +1,16 @@
+/*
+ * segment library convenient wrapper functions
+ *
+ * Authors:
+ *  Vaclav Petras
+ *
+ * Copyright 2015 by Vaclav Petras, and the GRASS Development Team
+ *
+ * This program is free software licensed under the GPL (>=v2).
+ * Read the COPYING file that comes with GRASS for details.
+ *
+ */
+
 
 #include <grass/gis.h>
 #include <grass/glocale.h>

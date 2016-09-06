@@ -1,10 +1,11 @@
 /*
- * v.in.lidar filtering functions
+ * lidar-related filtering functions
  *
- * Copyright 2011-2015 by Markus Metz, and The GRASS Development Team
  * Authors:
  *  Markus Metz (r.in.lidar)
- *  Vaclav Petras (move code to a separate files)
+ *  Vaclav Petras (refactoring and various additions)
+ *
+ * Copyright 2011-2016 by Markus Metz, and The GRASS Development Team
  *
  * This program is free software licensed under the GPL (>=v2).
  * Read the COPYING file that comes with GRASS for details.
@@ -19,6 +20,24 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+int range_filter_from_option(struct Option *option, double *min, double *max)
+{
+    if (option->answer != NULL) {
+        if (option->answers[0] == NULL || option->answers[1] == NULL)
+            G_fatal_error(_("Invalid range <%s> for option %s"), option->answer, option->key);
+        sscanf(option->answers[0], "%lf", min);
+        sscanf(option->answers[1], "%lf", max);
+        /* for convenience, switch order to make valid input */
+        if (*min > *max) {
+            double tmp = *max;
+
+            *max = *min;
+            *min = tmp;
+        }
+        return TRUE;
+    }
+    return FALSE;
+}
 
 int return_filter_create_from_string(struct ReturnFilter *return_filter,
                                      const char *name)
