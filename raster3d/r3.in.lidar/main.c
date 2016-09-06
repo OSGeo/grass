@@ -22,6 +22,9 @@
 #include <grass/glocale.h>
 #include <liblas/capi/liblas.h>
 
+#include "info.h"
+#include "string_list.h"
+#include "projection.h"
 #include "rast_segment.h"
 #include "filters.h"
 
@@ -124,12 +127,18 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *input_opt;
+    struct Option *file_list_opt;
     struct Option *count_output_opt, *sum_output_opt, *mean_output_opt;
     struct Option *prop_count_output_opt, *prop_sum_output_opt;
     struct Option *filter_opt, *class_opt;
+    struct Option *zscale_opt;
+    struct Option *iscale_opt;
+    struct Option *irange_opt;
     struct Option *base_raster_opt;
     struct Flag *base_rast_res_flag;
     struct Flag *only_valid_flag;
+    struct Flag *print_flag, *scan_flag, *shell_style;
+    struct Flag *over_flag;
 
     G_gisinit(argv[0]);
 
@@ -142,14 +151,21 @@ int main(int argc, char *argv[])
     G_add_keyword(_("aggregation"));
     G_add_keyword(_("binning"));
     module->description =
-	_("Creates a 3D raster map from LAS LiDAR points using univariate statistics.");
+        _("Creates a 3D raster map from LAS LiDAR points using univariate statistics.");
 
     input_opt = G_define_standard_option(G_OPT_F_BIN_INPUT);
-    input_opt->required = YES;
+    input_opt->required = NO;
     input_opt->label = _("LAS input file");
     input_opt->description =
         _("LiDAR input file in LAS format (*.las or *.laz)");
     input_opt->guisection = _("Input");
+
+    file_list_opt = G_define_standard_option(G_OPT_F_INPUT);
+    file_list_opt->key = "file";
+    file_list_opt->label = _("File containing names of LAS input files");
+    file_list_opt->description = _("LiDAR input files in LAS format (*.las or *.laz)");
+    file_list_opt->required = NO;
+    file_list_opt->guisection = _("Input");
 
     count_output_opt = G_define_standard_option(G_OPT_R3_OUTPUT);
     count_output_opt->key = "n";
@@ -223,6 +239,30 @@ int main(int argc, char *argv[])
     base_rast_res_flag->description =
         _("Use base raster actual resolution instead of computational region");
 
+    zscale_opt = G_define_option();
+    zscale_opt->key = "zscale";
+    zscale_opt->type = TYPE_DOUBLE;
+    zscale_opt->required = NO;
+    zscale_opt->answer = "1.0";
+    zscale_opt->description = _("Scale to apply to Z data");
+    zscale_opt->guisection = _("Transform");
+
+    irange_opt = G_define_option();
+    irange_opt->key = "intensity_range";
+    irange_opt->type = TYPE_DOUBLE;
+    irange_opt->required = NO;
+    irange_opt->key_desc = "min,max";
+    irange_opt->description = _("Filter range for intensity values (min,max)");
+    irange_opt->guisection = _("Selection");
+
+    iscale_opt = G_define_option();
+    iscale_opt->key = "intensity_scale";
+    iscale_opt->type = TYPE_DOUBLE;
+    iscale_opt->required = NO;
+    iscale_opt->answer = "1.0";
+    iscale_opt->description = _("Scale to apply to intensity values");
+    iscale_opt->guisection = _("Transform");
+
     only_valid_flag = G_define_flag();
     only_valid_flag->key = 'v';
     only_valid_flag->label = _("Use only valid points");
@@ -231,28 +271,147 @@ int main(int argc, char *argv[])
           " filtered out");
     only_valid_flag->guisection = _("Selection");
 
+    over_flag = G_define_flag();
+    over_flag->key = 'o';
+    over_flag->label =
+        _("Override projection check (use current location's projection)");
+    over_flag->description =
+        _("Assume that the dataset has same projection as the current location");
+
+    print_flag = G_define_flag();
+    print_flag->key = 'p';
+    print_flag->description = _("Print LAS file info and exit");
+    print_flag->suppress_required = YES;
+
+    scan_flag = G_define_flag();
+    scan_flag->key = 's';
+    scan_flag->description = _("Scan data file for extent then exit");
+    scan_flag->suppress_required = YES;
+
+    shell_style = G_define_flag();
+    shell_style->key = 'g';
+    shell_style->description = _("In scan mode, print using shell script style");
+    shell_style->suppress_required = YES;
+
+    G_option_required(input_opt, file_list_opt, NULL);
+    G_option_exclusive(input_opt, file_list_opt, NULL);
     G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    if (shell_style->answer && !scan_flag->answer) {
+        scan_flag->answer = TRUE;
+    }
+
+    /* check intensity range and extent relation */
+    if (scan_flag->answer) {
+        if (irange_opt->answer)
+            G_warning(_("%s will not be taken into account during scan"), irange_opt->key);
+    }
+
     int only_valid = FALSE;
     if (only_valid_flag->answer)
         only_valid = TRUE;
 
+    struct StringList infiles;
+
+    if (file_list_opt->answer) {
+        if (access(file_list_opt->answer, F_OK) != 0)
+            G_fatal_error(_("File <%s> does not exist"), file_list_opt->answer);
+        string_list_from_file(&infiles, file_list_opt->answer);
+    }
+    else {
+        string_list_from_one_item(&infiles, input_opt->answer);
+    }
+
+    double zscale = 1.0;
+    double iscale = 1.0;
+    if (zscale_opt->answer)
+        zscale = atof(zscale_opt->answer);
+    if (iscale_opt->answer)
+        iscale = atof(iscale_opt->answer);
+
     LASReaderH LAS_reader;
     LASHeaderH LAS_header;
+    LASSRSH LAS_srs;
+    char *infile;
 
-    LAS_reader = LASReader_Create(input_opt->answer);
-    if (LAS_reader == NULL)
-        G_fatal_error(_("Unable to open file <%s>"), input_opt->answer);
-    LAS_header = LASReader_GetHeader(LAS_reader);
-    if  (LAS_header == NULL) {
+    /* for the CRS info */
+    const char *projstr;
+    struct Cell_head current_region;
+    struct Cell_head file_region;
+    G_get_set_window(&current_region);
+
+    /* extent for all data */
+    struct Cell_head data_region;
+
+    long unsigned header_count = 0;
+    int i;
+    for (i = 0; i < infiles.num_items; i++) {
+        infile = infiles.items[i];
+        /* don't if file not found */
+        if (access(infile, F_OK) != 0)
+            G_fatal_error(_("Input file <%s> does not exist"), infile);
+        /* Open LAS file*/
+        LAS_reader = LASReader_Create(infile);
+        if (LAS_reader == NULL)
+            G_fatal_error(_("Unable to open file <%s>"), infile);
+        LAS_header = LASReader_GetHeader(LAS_reader);
+        if  (LAS_header == NULL) {
             G_fatal_error(_("Input file <%s> is not a LAS LiDAR point cloud"),
-                            input_opt->answer);
+                            infile);
+        }
+
+        LAS_srs = LASHeader_GetSRS(LAS_header);
+
+        /* print info or check projection if we are actually importing */
+        if (print_flag->answer) {
+            /* print filename when there is more than one file */
+            if (infiles.num_items > 1)
+                fprintf(stdout, "File: %s\n", infile);
+            /* Print LAS header */
+            print_lasinfo(LAS_header, LAS_srs);
+        }
+        else {
+            /* report that we are checking more files */
+            if (i == 1)
+                G_message(_("First file's projection checked,"
+                            " checking projection of the other files..."));
+            /* Fetch input map projection in GRASS form. */
+            projstr = LASSRS_GetWKT_CompoundOK(LAS_srs);
+            /* we are printing the non-warning messages only for first file */
+            projection_check_wkt(file_region, current_region, projstr,
+                                 over_flag->answer, shell_style->answer || i);
+            /* if there is a problem in some other file, first OK message
+             * is printed but than a warning, this is not ideal but hopefully
+             * not so confusing when importing multiple files */
+        }
+        if (scan_flag->answer) {
+            /* we assign to the first one (i==0) but update for the rest */
+            scan_bounds(LAS_reader, shell_style->answer, FALSE, i,
+                        zscale, &data_region);
+        }
+        /* number of estimated point across all files */
+        /* TODO: this should be ull which won't work with percent report */
+        header_count += LASHeader_GetPointRecordsCount(LAS_header);
+        /* We are closing all again and we will be opening them later,
+         * so we don't have to worry about limit for open files. */
+        LASSRS_Destroy(LAS_srs);
+        LASHeader_Destroy(LAS_header);
+        LASReader_Destroy(LAS_reader);
     }
+    /* if we are not importing, end */
+    if (print_flag->answer || scan_flag->answer)
+        exit(EXIT_SUCCESS);
+
     Rast3d_init_defaults();
     Rast3d_set_error_fun(Rast3d_fatal_error_noargs);
+
+    double irange_min;
+    double irange_max;
+    int use_irange =
+        range_filter_from_option(irange_opt, &irange_min, &irange_max);
 
     struct ReturnFilter return_filter_struct;
     int use_return_filter =
@@ -291,6 +450,7 @@ int main(int argc, char *argv[])
     int type = FCELL_TYPE;
     int max_tile_size = 32;
 
+    /* TODO: this should probably happen before we change 2D region just to be sure */
     Rast3d_get_window(&binning.region);
     Rast3d_get_window(&binning.flat_region);
     binning.flat_region.depths = 1;
@@ -368,73 +528,88 @@ int main(int argc, char *argv[])
     long unsigned in_nulls = 0; /* or outside */
     long unsigned n_return_filtered = 0;
     long unsigned n_class_filtered = 0;
+    long unsigned irange_filtered = 0;
     long unsigned n_invalid = 0;
     long unsigned counter = 0;
-
-    long unsigned header_count = LASHeader_GetPointRecordsCount(LAS_header);
 
     G_verbose_message(_("Reading points..."));
     G_percent_reset();
 
-    while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
-        if (counter == 100000) {        /* report only some for speed */
-            if (inside < header_count)  /* TODO: inside can greatly underestimate */
-                G_percent(inside, header_count, 3);
-            counter = 0;
-        }
-        counter++;
-        /* We always count them and report because r.in.lidar behavior
-         * changed in between 7.0 and 7.2 from undefined (but skipping
-         * invalid points) to filtering them out only when requested. */
-        if (!LASPoint_IsValid(LAS_point)) {
-            n_invalid++;
-            if (only_valid)
-                continue;
-        }
-        if (use_return_filter) {
-            int return_n = LASPoint_GetReturnNumber(LAS_point);
-            int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
-            if (return_filter_is_out(&return_filter_struct, return_n, n_returns)) {
-                n_return_filtered++;
+    /* loop of input files */
+    for (i = 0; i < infiles.num_items; i++) {
+        infile = infiles.items[i];
+        /* we already know file is there, so just do basic checks */
+        LAS_reader = LASReader_Create(infile);
+        while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
+            if (counter == 100000) {        /* report only some for speed */
+                if (inside < header_count)  /* TODO: inside can greatly underestimate */
+                    G_percent(inside, header_count, 3);
+                counter = 0;
+            }
+            counter++;
+            /* We always count them and report because r.in.lidar behavior
+             * changed in between 7.0 and 7.2 from undefined (but skipping
+             * invalid points) to filtering them out only when requested. */
+            if (!LASPoint_IsValid(LAS_point)) {
+                n_invalid++;
+                if (only_valid)
+                    continue;
+            }
+            if (use_return_filter) {
+                int return_n = LASPoint_GetReturnNumber(LAS_point);
+                int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
+                if (return_filter_is_out(&return_filter_struct, return_n, n_returns)) {
+                    n_return_filtered++;
+                    continue;
+                }
+            }
+            if (use_class_filter) {
+                int point_class = (int) LASPoint_GetClassification(LAS_point);
+                if (class_filter_is_out(&class_filter, point_class)) {
+                    n_class_filtered++;
+                    continue;
+                }
+            }
+            value = LASPoint_GetIntensity(LAS_point);
+            value *= iscale;
+            if (use_irange && (value < irange_min || value > irange_max)) {
+                irange_filtered++;
                 continue;
             }
-        }
-        if (use_class_filter) {
-            int point_class = (int) LASPoint_GetClassification(LAS_point);
-            if (class_filter_is_out(&class_filter, point_class)) {
-                n_class_filtered++;
-                continue;
-            }
-        }
 
-        east = LASPoint_GetX(LAS_point);
-        north = LASPoint_GetY(LAS_point);
-        top = LASPoint_GetZ(LAS_point);
+            east = LASPoint_GetX(LAS_point);
+            north = LASPoint_GetY(LAS_point);
+            top = LASPoint_GetZ(LAS_point);
+            top *= zscale;
 
-        if (use_segment) {
-            if (rast_segment_get_value_xy(&base_segment, &input_region,
-                                          base_raster_data_type, east, north,
-                                          &base_z)) {
-                top -= base_z;
+            if (use_segment) {
+                if (rast_segment_get_value_xy(&base_segment, &input_region,
+                                              base_raster_data_type, east, north,
+                                              &base_z)) {
+                    top -= base_z;
+                }
+                else {
+                    /* TODO: separate message for this */
+                    in_nulls += 1;
+                    continue;
+                }
             }
-            else {
-                in_nulls += 1;
+
+            Rast3d_location2coord(&binning.region, north, east, top, &col, &row,
+                                  &depth);
+            if (col >= binning.region.cols || row >= binning.region.rows ||
+                depth >= binning.region.depths || col < 0 || row < 0 ||
+                depth < 0) {
+                outside += 1;
                 continue;
             }
+            binning_add_point(binning, row, col, depth, value);
+            inside += 1;
         }
-
-        Rast3d_location2coord(&binning.region, north, east, top, &col, &row,
-                              &depth);
-        if (col >= binning.region.cols || row >= binning.region.rows ||
-            depth >= binning.region.depths || col < 0 || row < 0 ||
-            depth < 0) {
-            outside += 1;
-            continue;
-        }
-        value = LASPoint_GetIntensity(LAS_point);
-        binning_add_point(binning, row, col, depth, value);
-        inside += 1;
+        /* close input LAS file */
+        LASReader_Destroy(LAS_reader);
     }
+    /* end of loop for all input files */
 
     G_percent(1, 1, 1);    /* flush */
 
@@ -483,6 +658,8 @@ int main(int argc, char *argv[])
         G_message(_("%lu input points were filtered out by return number"), n_return_filtered);
     if (n_class_filtered)
         G_message(_("%lu input points were filtered out by class number"), n_class_filtered);
+    if (irange_filtered)
+        G_message(_("%lu input points had intensity out of range"), irange_filtered);
     if (n_invalid && !only_valid)
         G_message(_("%lu input points were not valid, use -%c flag to filter"
                     " them out"), n_invalid, only_valid_flag->key);

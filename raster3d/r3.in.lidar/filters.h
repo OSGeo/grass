@@ -1,10 +1,11 @@
 /*
- * v.in.lidar filtering functions
+ * lidar-related filtering functions
  *
- * Copyright 2011-2015 by Markus Metz, and The GRASS Development Team
  * Authors:
  *  Markus Metz (r.in.lidar)
- *  Vaclav Petras (move code to a separate files)
+ *  Vaclav Petras (refactoring and various additions)
+ *
+ * Copyright 2011-2016 by Markus Metz, and The GRASS Development Team
  *
  * This program is free software licensed under the GPL (>=v2).
  * Read the COPYING file that comes with GRASS for details.
@@ -33,13 +34,7 @@ struct ClassFilter
 
 struct Option;
 
-int spatial_filter_from_option(struct Option *option, double *xmin,
-                               double *ymin, double *xmax, double *ymax);
-int spatial_filter_from_current_region(double *xmin, double *ymin,
-                                       double *xmax, double *ymax);
-
-int zrange_filter_from_option(struct Option *option,
-                              double *zmin, double *zmax);
+int range_filter_from_option(struct Option *option, double *min, double *max);
 
 int return_filter_create_from_string(struct ReturnFilter *return_filter,
                                      const char *name);
