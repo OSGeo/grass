@@ -18,7 +18,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#include "local_proto.h"
+#include "string_list.h"
 
 #define SIZE_INCREMENT 10
 

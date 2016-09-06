@@ -19,7 +19,7 @@
 #include <grass/glocale.h>
 #include <grass/gprojects.h>
 
-#include "local_proto.h"
+#include "projection.h"
 
 
 void projection_mismatch_report(struct Cell_head cellhd,
