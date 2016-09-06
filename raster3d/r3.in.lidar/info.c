@@ -18,7 +18,7 @@
 
 #include <liblas/capi/liblas.h>
 
-#include "local_proto.h"
+#include "info.h"
 
 
 void print_lasinfo(LASHeaderH LAS_header, LASSRSH LAS_srs)
