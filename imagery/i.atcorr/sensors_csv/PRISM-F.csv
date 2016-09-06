@@ -1,5 +1,4 @@
-,"B-CCD4_reflection","B-CCD4_reflect","B-CCD5_transmit","B-CCD5_transmit"
-"WL(nm)","ODD(4975)","EVEN(4976)","ODD(15)","EVEN(16)"
+"WL(nm)","B-CCD4_reflection","B-CCD4_reflect","B-CCD5_transmit","B-CCD5_transmit"
 450,0.0037,0.0000,0.0000,0.0000
 460,0.0060,0.0013,0.0053,0.0080
 470,0.0039,0.0061,0.0042,0.0049
