@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
     input_opt->guisection = _("Input");
 
     output_opt = G_define_standard_option(G_OPT_R_OUTPUT);
-    output_opt->required = YES;
+    output_opt->required = NO;
     output_opt->guisection = _("Output");
 
     file_list_opt = G_define_standard_option(G_OPT_F_INPUT);
@@ -274,7 +274,6 @@ int main(int argc, char *argv[])
     print_flag->key = 'p';
     print_flag->description =
 	_("Print LAS file info and exit");
-    print_flag->suppress_required = YES;
 
     extents_flag = G_define_flag();
     extents_flag->key = 'e';
@@ -304,7 +303,6 @@ int main(int argc, char *argv[])
     scan_flag = G_define_flag();
     scan_flag->key = 's';
     scan_flag->description = _("Scan data file for extent then exit");
-    scan_flag->suppress_required = YES;
 
     shell_style = G_define_flag();
     shell_style->key = 'g';
@@ -340,7 +338,11 @@ int main(int argc, char *argv[])
           " filtered out");
     only_valid_flag->guisection = _("Selection");
 
+    G_option_required(input_opt, file_list_opt, NULL);
+    G_option_exclusive(input_opt, file_list_opt, NULL);
+    G_option_required(output_opt, print_flag, scan_flag, shell_style, NULL);
     G_option_exclusive(intens_flag, intens_import_flag, NULL);
+    G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -462,6 +464,8 @@ int main(int argc, char *argv[])
     class_filter_create_from_strings(&class_filter, class_opt->answers);
 
     percent = atoi(percent_opt->answer);
+    /* TODO: we already used zscale */
+    /* TODO: we don't report intensity range */
     if (zscale_opt->answer)
         zscale = atof(zscale_opt->answer);
     if (iscale_opt->answer)
