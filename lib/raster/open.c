@@ -344,7 +344,7 @@ int Rast__open_old(const char *name, const char *mapset)
 	    fcb->null_file_exists = 0;
 	    /* check for compressed null file */
 	    if (G_find_file2_misc("cell_misc", NULLC_FILE, r_name, r_mapset)) {
-		G_fatal_error(_("Unable to read compressed null file for <%s@%s>"), r_name, r_mapset);
+		G_fatal_error(_("Unable to read compressed null file for <%s@%s>. At least GRASS GIS 7.2 is needed"), r_name, r_mapset);
 		return -1;
 	    }
 	}
