@@ -861,7 +861,7 @@ class GMFrame(wx.Frame):
 
         # check list of dummy commands for GUI modules that do not have GRASS
         # bin modules or scripts.
-        if cmd in ['vcolors', 'r.mapcalc', 'r3.mapcalc', 'v.krige']:
+        if cmd in ['vcolors', 'r.mapcalc', 'r3.mapcalc']:
             return cmdlist
 
         try:
