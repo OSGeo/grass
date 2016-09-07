@@ -44,7 +44,7 @@ from gui_core.forms import GUI
 from core.debug import Debug
 from core.settings import UserSettings
 from core.giface import Notification
-
+from gui_core.widgets import FormNotebook
 
 wxCmdOutput, EVT_CMD_OUTPUT = NewEvent()
 wxCmdProgress, EVT_CMD_PROGRESS = NewEvent()
@@ -494,9 +494,11 @@ class GConsole(wx.EvtHandler):
                                                                       'opt': p.get('name', '')})
                             return
 
+                # no arguments given
                 if len(command) == 1 and hasParams and \
-                        command[0] != 'v.krige':
-                    # no arguments given
+                   not isinstance(self._guiparent, FormNotebook) and \
+                   command[0] != 'v.krige':
+                    # also parent must be checked, see #3135 for details
                     try:
                         GUI(parent=self._guiparent, giface=self._giface).ParseCommand(command)
                     except GException as e:
