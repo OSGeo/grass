@@ -75,8 +75,7 @@ SUBDIRS = \
 	v.unpack \
 	v.what.strds \
 	v.what.vect \
-	wxpyimgview \
-	v.krige
+	wxpyimgview
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
