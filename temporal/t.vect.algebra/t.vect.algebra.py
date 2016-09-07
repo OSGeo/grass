@@ -5,7 +5,7 @@
 # MODULE:       t.vect.algebra
 # AUTHOR(S):    Thomas Leppelt, Soeren Gebbert
 #
-# PURPOSE:      Provide temporal vector algebra to perform spatial an temporal operations
+# PURPOSE:      Provide temporal vector algebra to perform spatial and temporal operations
 #               for space time datasets by topological relationships to other space time
 #               datasets.
 # COPYRIGHT:    (C) 2014 by the GRASS Development Team
@@ -17,7 +17,7 @@
 #############################################################################
 
 #%module
-#% description: Apply temporal and spatial oeprations on space time vector datasets using temporal vector algebra.
+#% description: Apply temporal and spatial operations on space time vector datasets using temporal vector algebra.
 #% keyword: temporal
 #% keyword: algebra
 #% keyword: vector
