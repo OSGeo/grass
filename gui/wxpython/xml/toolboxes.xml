@@ -1039,8 +1039,6 @@
         <label>Raster series interpolation</label> 
       </module-item> 
       <separator/>
-      <wxgui-item name="OrdinaryOrBlockKriging"/>
-      <separator/>
       <module-item name="r.fillnulls">
         <label>Fill NULL cells</label>
       </module-item>

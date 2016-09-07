@@ -334,12 +334,6 @@
     <description>Configuration editor for r.li.'index'</description>
     <keywords>raster,landscape structure analysis</keywords>
   </wxgui-item>
-  <wxgui-item name="OrdinaryOrBlockKriging">
-    <label>Ordinary or block kriging</label>
-    <command>v.krige</command>
-    <description>Performs ordinary or block kriging.</description>
-    <keywords>vector,raster,interpolation,kriging</keywords>
-  </wxgui-item>
   <wxgui-item name="CreateNewVectorMap">
     <label>Create new vector map</label>
     <handler>OnNewVector</handler>

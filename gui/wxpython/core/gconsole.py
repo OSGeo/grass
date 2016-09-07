@@ -534,8 +534,7 @@ class GConsole(wx.EvtHandler):
 
                     # no arguments given
                     if hasParams and \
-                       not isinstance(self._guiparent, FormNotebook) and \
-                       command[0] != 'v.krige':
+                       not isinstance(self._guiparent, FormNotebook):
                         # also parent must be checked, see #3135 for details
                         try:
                             GUI(parent=self._guiparent,
