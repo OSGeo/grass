@@ -3,58 +3,92 @@
 <em>r.compress</em> can be used to compress and decompress
 raster map layers. Additionally, it prints information about the
 compression method and data type of the input raster map(s).
+<p>
+Raster maps are compressed by default using the ZLIB compression method 
+(see below). Related no data files (i.e.: NULL files), if present, are 
+not compressed by default unless a specific environment variable is set 
+(<tt>GRASS_COMPRESS_NULLS</tt>, see below).
 
 <p>
-During (re-)compression, <em>r.compress</em> compresses raster maps 
-using the method spcified with the environment variable 
-<b>GRASS_COMPRESSOR</b>. The default is  ZLIB's "deflate" (LZ77-based) 
-algorithm. Raster map layers which contain very little information 
-(such as boundary, geology, soils and land use maps) can be greatly 
-reduced in size. Some raster map layers are shrunk to roughly 1% of 
-their original sizes. All newly generated raster maps are automatically 
-stored in compressed form (see FORMATS below). All GRASS modules can 
-read both compressed and uncompressed file formats.
+During compression or re-compression, <em>r.compress</em> compresses 
+raster maps using the method specified by means of the environment 
+variable <b>GRASS_COMPRESSOR</b>. The default compression method is  
+ZLIB's "deflate" algorithm (LZ77-based). Raster map layers which 
+contain very little information (such as boundary, geology, soils and 
+land use maps) can be greatly reduced in size. Some raster map layers 
+are shrunk to roughly 1% of their original sizes. 
+All newly generated raster maps are automatically stored as compressed
+data with varying methods depending of the raster format (i.e.,
+CELL: integer; FCELL: single precision; DCELL: double precision; see
+below). All GRASS GIS modules are able to read both compressed and
+uncompressed raster data.
 
+<!-- too old and RLE only example
 <p>
 As an example, the Spearfish data base raster map layer
 <em>owner</em> was originally a size of 26600 bytes.  After
 it was RLE compressed, the raster map became only 1249 bytes
 (25351 bytes smaller).
+-->
 
 <p>
-Raster maps that are already compressed are again compressed. This is 
-useful if either the compression method set with the environment 
-variable <b>GRASS_COMPRESSOR</b> (RLE, ZLIB, LZ4, BZIP2) is changed or 
-if the ZLIB compression level is manually changed by setting the 
-environment variable GRASS_ZLIB_LEVEL.
+Raster maps that are already compressed might be compressed again, 
+either by setting a different method with <tt>GRASS_COMPRESSOR</tt> (RLE, 
+ZLIB, LZ4, BZIP2) or, for the case of ZLIB compression, by changing the
+compression level with the environment variable <tt>GRASS_ZLIB_LEVEL</tt>.
 
 <p>
-Raster files may be decompressed manually to return them to their 
-original format, using the <b>-u</b> flag of <em>r.compress</em>. If a 
-raster map is already decompressed, it simply informs the user the map 
-is already decompressed and exits.
+Compressed raster maps may be decompressed using <em>r.compress</em> to return
+them to their original format, using the <b>-u</b> flag. If a raster map was 
+already decompressed and the <b>-u</b> flag is set, the module simply 
+informs the user that the map is already decompressed and exits.
 
 
 <h3>TERMINOLOGY</h3>
 
 <ul>
-<li> INTEGER map (CELL data type): a raster map from INTEGER type (whole
+<li> INTEGER map (CELL data type): a raster map of INTEGER type (whole
   numbers only)</li>
-<li> FLOAT map (FCELL data type): a raster map from FLOAT type (4 bytes,
+<li> FLOAT map (FCELL data type): a raster map of FLOAT type (4 bytes,
   7-9 digits precision)</li>
-<li> DOUBLE map (DCELL data type): a raster map from DOUBLE type (8 bytes,
+<li> DOUBLE map (DCELL data type): a raster map of DOUBLE type (8 bytes,
   15-17 digits precision)</li>
-<li> NULL: represents "no data" in raster maps, to be distinguished from
+<li> NULL: represents "no data" in raster maps; to be distinguished from
   0 (zero) data value</li>
 </ul>
 
-<h3>USED COMPRESSION ALGORITHMS</h3>
+<h3>OVERVIEW OF AVAILABLE COMPRESSION ALGORITHMS</h3>
+
+The following compression methods are provided (set by
+<tt>export GRASS_COMPRESSOR=<em>method</em></tt>):
+
+<ul>
+<li><tt>NONE</tt> (uncompressed)</li>
+<li><tt>RLE</tt>  (generic Run-Length Encoding of single bytes)</li>
+<li><tt>ZLIB</tt> (DEFLATE, good speed and compression - <b>default compression</b>)
+<ul>
+<li>with zlib compression levels (<tt>export GRASS_ZLIB_LEVEL=X</tt>): -1..9
+   (-1 is default which corresponds to ZLIB level 6)</li>
+<li>note: <tt>export GRASS_ZLIB_LEVEL=0</tt> is equal to copying the data
+    as-is from source to destination</li>
+</ul>
+</li>
+<li><tt>LZ4</tt>  (fastest, low compression)</li>
+<li><tt>BZIP2</tt> (slowest, high compression)</li>
+</ul>
+
+Importantly, the NULL file compression must be explicitly turned on with
+<tt>export GRASS_COMPRESS_NULLS=1</tt> - such raster maps can then only be
+opened  with GRASS GIS 7.2.0 or later. NULL file compression can be managed
+with <b>r.null -z</b>.
+
+<h3>COMPRESSION ALGORITHM DETAILS</h3>
 <!-- keep in sync with raster/rasterintro.html -->
 
-Raster maps are by default ZLIB compressed. If the environment variable 
-<tt>GRASS_INT_ZLIB</tt> exists and has the value 0, newly generated 
+Raster maps are by default ZLIB compressed. If the environment variable
+<tt>GRASS_INT_ZLIB</tt> exists and is set to value 0, newly generated 
 compressed integer (CELL type) raster maps will be compressed using RLE 
-compression instead of ZLIB.
+compression instead of ZLIB (not recommended).
 <p>
 Floating point (FCELL, DCELL) raster maps never use RLE compression;
 they are either compressed with ZLIB, LZ4, BZIP2 or are uncompressed.
@@ -66,9 +100,10 @@ variable GRASS_COMPRESSOR which can be set to RLE, ZLIB, LZ4, or BZIP2.
 <dl>
 <dt><strong>RLE</strong></dt>
 <dd><b>DEPRECATED</b> Run-Length Encoding, poor compression ratio but 
-fast. Kept for backwards compatibility to read raster maps created with 
-GRASS 6. Only used for raster maps of type CELL. FCELL and DCELL maps 
-are never and have never been compressed with RLE.</dd>
+fast. It is kept for backwards compatibility to read raster maps 
+created with GRASS 6. It is only used for raster maps of type CELL. 
+Both, FCELL and DCELL maps are never and have never been compressed 
+with RLE.</dd>
 <dt><strong>ZLIB</strong></dt>
 <dd>ZLIB's deflate is the default compression method for all raster 
 maps. GRASS 7 uses by default 1 as ZLIB compression level which is the 
@@ -78,41 +113,32 @@ the range [1, 9] and can be set with the environment variable
 GRASS_ZLIB_LEVEL.</dd>
 <dt><strong>LZ4</strong></dt>
 <dd>LZ4 is a very fast compression method, about as fast as no 
-compression, decompression is also very fast. The compression ration is 
-generally higher than for RLE. LZ4 is recommended if disk space is not 
-a limiting factor, but some sving on disk space is welcomed without 
-increasing processing speed. The compression ratio of LZ4 is generally 
-better than for RLE but worse than for ZLIB.</dd>
+compression. Decompression is also very fast. The compression ratio is 
+generally higher than for RLE but worse than for ZLIB. LZ4 is 
+recommended if disk space is not a limiting factor.</dd>
 <dt><strong>BZIP2</strong></dt>
-<dd>BZIP2 can provide compression ratios much higher than for the other 
+<dd>BZIP2 can provide compression ratios much higher than the other 
 methods, but only for large raster maps (&gt; 10000 columns). For large 
 raster maps, disk space consumption can be reduced by 30 - 50% when 
 using BZIP2 instead of ZLIB's deflate. BZIP2 is the slowest compression 
 and decompression method. However, if reading from / writing to a 
 storage device is the limiting factor, BZIP2 compression can speed up 
 raster map processing. Be aware that for smaller raster maps, BZIP2 
-compression ratio can be worse than for other compression methods.</dd> 
+compression ratio can be worse than other compression methods.</dd> 
 </dl>
 
-<p>
-In the internal cellhd file, the value for "compressed" is 1 for RLE, 2 
+
+<h2>NOTES</h2>
+
+<h3>Compression method number scheme</h3>
+The used compression method is encoded with numbers. In the internal
+<tt>cellhd</tt> file, the value for "compressed" is 1 for RLE, 2
 for ZLIB, 3 for LZ4, and 4 for BZIP2.
 <p>
 Obviously, decompression is controlled by the raster map's compression,
 not the environment variable.
 
-<h2>NOTES</h2>
-
-<em>r.compress</em> can be run either non-interactively or
-interactively.  In non-interactive use, the user must
-specify the name(s) of the raster map layer(s) to be
-compressed (or decompressed) on the command line, using the
-form <b>map=</b><em>name</em>[,<em>name</em>,...] (where
-each <em>name</em> is the name of a raster map layer to be
-compressed or decompressed). The default behavior is to 
-compress the named map(s).  
-
-<h3>FORMATS</h3>
+<h3>Formats</h3>
 
 Conceptually, a raster data file consists of rows of cells, with each 
 row containing the same number of cells. A cell consists of one or more 
@@ -122,22 +148,23 @@ require 1 byte per cell, while category values in the range 256-65535
 require 2 bytes, and category values in the range above 65535 require 3 
 (or more) bytes per cell.
 <p>
-FCELL maps always have 4 bytes per cell and DCELL maps have always 8 
+FCELL maps always have 4 bytes per cell and DCELL maps always have 8 
 bytes per cell.
 
 <p>
 Since GRASS GIS 7.0.0, the default compression method for 
-Integer (CELL) maps is ZLIB and not any more the RLE compression.
+Integer (CELL) maps is ZLIB and no longer RLE.
 
-<h4>ZLIB compression level</h4>
+<h3>ZLIB compression levels</h3>
 
 If the environment variable <tt>GRASS_ZLIB_LEVEL</tt> exists and
 its value can be parsed as an integer, it determines the compression
-level used when newly generated raster maps are compressed using zlib
+level used when newly generated raster maps are compressed using ZLIB
 compression. This applies to all raster map types (CELL, FCELL, DCELL).
 <p>
+<!-- TODO: check with implementation in lib/gis/gisinit.c line 128 -->
 If the variable does not exist, or the value cannot be parsed as an
-integer, zlib's default compression level will be used.
+integer, ZLIB's compression level 1 will be used.
 
 
 <h2>EXAMPLES</h2>
@@ -149,9 +176,9 @@ r.compress compressed_no -p
 </pre></div>
 
 <p>
-Applying RLE compression to a copy of the uncompressed map:
+Applying RLE compression to a copy of the uncompressed map (not recommended!):
 <div class="code"><pre>
-# compression of map using RLE compression
+# compression of map using the deprecated RLE compression
 g.copy raster=compressed_no,compressed_RLE
 
 export GRASS_INT_ZLIB=0 # RLE
@@ -191,6 +218,7 @@ unset GRASS_COMPRESSOR
 
 <em>
 <a href="r.info.html">r.info</a>,
+<a href="r.null.html">r.null</a>,
 <a href="r.support.html">r.support</a>
 </em>
 
