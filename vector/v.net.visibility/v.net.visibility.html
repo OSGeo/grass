@@ -122,6 +122,73 @@ d.vect graph
 d.vect archsites col=red
 </pre></div>
 
+<h3>Example 6</h3>
+
+Here is an example with artificial data.
+
+<p>
+<img src="v_net_visibility.png">
+
+Load data using here document syntax (Bash and unix-like commands lines only):
+
+<div class="code"><pre>
+v.in.ascii input=- output=simple format=standard &lt;&lt;EOF
+VERTI:
+B  6
+ 82.19908257  75.21788991
+ 81.67889908  71.40321101
+ 83.58623853  71.72522936
+ 84.3293578   75.21788991
+ 82.24862385  76.06009174
+ 82.19908257  75.21788991
+C  1 1
+ 82.88897401  73.66318782
+ 1     1
+C  1 1
+ 90.72645705  75.61248675
+ 1     2
+C  1 1
+ 89.37944702  69.51012912
+ 1     3
+C  1 1
+ 81.60108979  67.78669725
+ 1     4
+B  5
+ 89.92752294  73.95458716
+ 92.37981651  75.11880734
+ 91.56238532  77.29862385
+ 88.96146789  75.88669725
+ 89.92752294  73.95458716
+B  10
+ 88.54036697  70.70963303
+ 87.92192518  70.04087417
+ 87.89633028  69.00045872
+ 88.66460807  68.13372867
+ 90.15108904  68.23290821
+ 90.9426344   68.97588202
+ 90.86880734  70.11513761
+ 90.00144697  70.78336312
+ 89.06055046  70.95733945
+ 88.54036697  70.70963303
+B  9
+ 78.73119266  71.35366972
+ 80.76238532  68.90137615
+ 84.20550459  66.91972477
+ 89.87798165  65.35917431
+ 83.23494031  66.27685175
+ 80.34278748  68.00837238
+ 78.38484005  71.40292009
+ 78.40917431  72.27018349
+ 78.73119266  71.35366972
+EOF
+</pre></div>
+
+Compute the graph:
+
+<div class="code"><pre>
+v.net.visibility input=simple output=graph
+</pre></div>
+
 <h2>KNOWN ISSUES</h2>
 In some cases when 3 points or nodes are collinear, some wrong edges 
 are added. This happens only really rarly and shouldn't be a big 
