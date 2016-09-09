@@ -101,8 +101,8 @@ v.extract input=zipcodes_wake output=areas_7_11_25 cats=7,11,25
 g.region vector=zipcodes_wake
 d.mon wx0
 d.vect areas_7_11_25
-v.net.visibility input=zipcodes_wake output=graph
-v.net.visibility input=zipcodes_wake visibility=graph output=new_graph \
+v.net.visibility input=areas_7_11_25 output=graph
+v.net.visibility input=areas_7_11_25 visibility=graph output=new_graph \
       coordinates=669547.97,208348.20
 d.erase
 d.vect areas_7_11_25
@@ -129,6 +129,7 @@ Here is an example with artificial data.
 <p>
 <img src="v_net_visibility.png">
 
+<p>
 Load data using here document syntax (Bash and unix-like commands lines only):
 
 <div class="code"><pre>
