@@ -173,7 +173,7 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
     dst = read_gisrc(gisrc_dst)
     rm = True if src[2] != dst[2] else False
     all_rasts = [r[0]
-                 for r in findmaps('rast', location=dst[1], gisdbase=dst[2])]
+                 for r in findmaps('raster', location=dst[1], gisdbase=dst[2])]
     for grp in groups:
         # change gisdbase to src
         env['GISRC'] = gisrc_src
