@@ -66,12 +66,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("compression"));
     module->description = _("Compresses and decompresses raster maps.");
 
-    map = G_define_option();
-    map->key = "map";
-    map->type = TYPE_STRING;
-    map->required = YES;
-    map->gisprompt = "old,cell,raster";
-    map->multiple = YES;
+    map = G_define_standard_option(G_OPT_R_MAPS);
     map->description = _("Name of existing raster map(s)");
 
     uncompress = G_define_flag();
