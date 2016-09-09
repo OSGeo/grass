@@ -189,10 +189,10 @@ class Info(object):
 
     def items(self):
         return [(k, self.__getattribute__(k)) for k in self.keys()]
-        
+
     def __iter__(self):
         return ((k, self.__getattribute__(k)) for k in self.keys())
-        
+
     def _repr_html_(self):
         return dict2html(dict(self.items()), keys=self.keys(),
                          border='1', kdec='b')
@@ -436,6 +436,8 @@ class RasterAbstractBase(object):
 
            call C function `Rast_get_cellhd`, `Rast_set_window`
 
+           return: The region that was used to set the computational region
+
            """
         if self.is_open():
             fatal("You cannot change the region if map is open")
@@ -449,6 +451,7 @@ class RasterAbstractBase(object):
         libraster.Rast_get_cellhd(rastname, mapset,
                                   region.byref())
         self._set_raster_window(region)
+        return region
 
     def set_region(self, region):
         """Set the computational region that can be different from the
@@ -473,13 +476,17 @@ class RasterAbstractBase(object):
         """This method returns the pixel value of a given pair of coordinates:
 
         :param point: pair of coordinates in tuple object or class object with coords() method
+        :param region: The region that should be used for sampling,
+                       default is the current computational region that can be set with set_region()
+                       or set_region_from_rast()
         """
         # Check for tuple
         if type(point) != type([]) and type(point) != type(()):
             point = point.coords()
-
+        # If no region was set, use the current computational region
         if not region:
             region = Region()
+            libraster.Rast_get_window(region.byref())
         row, col = utils.coor2pixel(point, region)
         if col < 0 or col > region.cols or row < 0 or row > region.rows:
             return None
