@@ -157,6 +157,7 @@
 
 import os
 import sys
+import shutil
 
 from grass.script import core as grass
 
@@ -202,7 +203,7 @@ def main():
         wms = WMSGdalDrv()
     
     temp_map = wms.GetMap(options, flags) 
-    os.rename(temp_map, os.environ["GRASS_RENDER_FILE"])
+    shutil.move(temp_map, os.environ["GRASS_RENDER_FILE"])
 
     return 0
 
