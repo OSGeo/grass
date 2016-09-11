@@ -19,7 +19,7 @@ Cells containing null data will be marked with an "X".
 You can disable drawing of null data and unknown aspect values by
 setting its color to "<tt>none</tt>".
 
-<p>If you specify the <em>magnitude_map</em> option, arrow lengths
+<p>When specifying the <em>magnitude_map</em> option, arrow lengths
 denoting magnitude will be extracted from the cell values of the specified
 map. In this case the tail of the arrow will be centered on the source cell.
 You may adjust the overall scale using the <em>scale</em> option.
@@ -62,7 +62,9 @@ direction "to", as opposed to atmospheric conventions (direction "from").
 
 <h2>EXAMPLE</h2>
 
-Convert U,V velocity component maps into magnitide,direction maps for use
+<!-- TODO: add NC example: where to get U and V maps from? -->
+
+Convert U,V velocity component maps into magnitude,direction maps for use
 with <em>d.rast.arrow</em>:
 
 <div class="code"><pre>
@@ -73,14 +75,16 @@ d.rast.arrow map=direction type=grass magnitude_map=magnitude skip=3 grid=none
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.frame.html">d.frame</a></em><br>
-<em><a href="d.rast.html">d.rast</a></em><br>
-<em><a href="d.rast.edit.html">d.rast.edit</a></em><br>
-<em><a href="d.rast.num.html">d.rast.num</a></em><br>
-<em><a href="g.region.html">g.region</a></em><br>
-<em><a href="r.slope.aspect.html">r.slope.aspect</a></em><br>
-<em><a href="r.watershed.html">r.watershed</a></em><br>
-<br>
+<em>
+<a href="d.frame.html">d.frame</a>,
+<a href="d.rast.html">d.rast</a>,
+<a href="d.rast.edit.html">d.rast.edit</a>,
+<a href="d.rast.num.html">d.rast.num</a>,
+<a href="g.region.html">g.region</a>,
+<a href="r.slope.aspect.html">r.slope.aspect</a>,
+<a href="r.watershed.html">r.watershed</a>
+</em>
+
 
 <h2>AUTHORS</h2>
 
