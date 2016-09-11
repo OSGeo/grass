@@ -4,7 +4,8 @@
 These parameters are then taken as default values by modules so that the
 user does not need to enter the parameters each time.
 <p>
-The default database backend in GRASS GIS 7 is SQLite.
+The default database backend in GRASS GIS 7
+is <a href="grass-sqlite.html">SQLite</a>.
 
 <h2>NOTES</h2>
 
@@ -14,8 +15,9 @@ the connection is not tested for validity.
 <p>The <b>-c</b> flag will silently check if the connection parameters have
 been set, and if not will set them to use GRASS's default values.
 (useful in scripts before you attempt to create a new database table)
-<p>To connect a vector map to a database table, use <em>v.db.connect</em>
-or <em>v.db.addtable</em>.
+<p>To connect a vector map to a database table,
+use <em><a href="v.db.connect.html">v.db.connect</a></em> or
+<em><a href="v.db.addtable.html">v.db.addtable</a></em>.
 
 
 <h2>EXAMPLES</h2>
@@ -30,7 +32,7 @@ db.connect -p
 db.tables -p
 </pre></div>
 <p>The SQLite database file is created automatically when used the first time.
-
+<p>See <a href="grass-sqlite.html">SQLite</a> database driver for details.
 
 <h3>PostgreSQL (local connection)</h3>
 
@@ -43,7 +45,7 @@ db.login user=myname pass=secret
 db.connect -p
 db.tables -p
 </pre></div>
-
+<p>See <a href="grass-pg.html">PostgreSQL</a> database driver for details.
 
 <h3>PostgreSQL (network connection)</h3>
 
@@ -56,7 +58,7 @@ db.login user=myname pass=secret host=myserver.com port=6666
 db.connect -p
 db.tables -p
 </pre></div>
-
+<p>See <a href="grass-pg.html">PostgreSQL</a> database driver for details.
 
 <h3>MySQL (local connection)</h3>
 
@@ -69,7 +71,7 @@ db.login user=myname pass=secret
 db.connect -p
 db.tables -p
 </pre></div>
-
+<p>See <a href="grass-mysql.html">MySQL</a> database driver for details.
 
 <h3>MySQL (network connection)</h3>
 
@@ -82,7 +84,8 @@ db.login user=myname pass=secret host=myserver.com
 db.connect -p
 db.tables -p
 </pre></div>
-
+<p>See <a href="grass-mysql.html">MySQL</a> database driver for details.
+  
 <h3>ODBC</h3>
 
 Network storage, database tables stored in database "mydb"
@@ -94,7 +97,7 @@ db.login user=myname pass=secret
 db.connect -p
 db.tables -p
 </pre></div>
-
+<p>See <a href="grass-odbc.html">ODBC</a> database driver for details.
 
 <h3>DBF (local, not recommended)</h3>
 
@@ -105,7 +108,8 @@ created by the user):
 db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
 db.tables -p
 </pre></div>
-
+<p>See <a href="grass-dbf.html">DBF</a> database driver for details.
+  
 <h2>SEE ALSO</h2>
 
 <em>

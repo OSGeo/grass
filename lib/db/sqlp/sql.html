@@ -186,7 +186,7 @@ d.vect roads where="cat&gt;exprtest"
 
 <h3>Example of changing a SQL type (type casting)</h3>
 
-<i>Note: not supported for DBF driver.</i>
+<i>Note: not supported for <a href="grass-dbf.html">DBF driver</a>.</i>
 <p>
 North Carolina data set: convert string column to double precision:
 <p>
@@ -203,7 +203,7 @@ v.db.update mygeodetic_pts col=zval \
 
 <h3>Example of concatenation of fields</h3>
 
-<i>Note: not supported for DBF driver.</i>
+<i>Note: not supported for <a href="grass-dbf.html">DBF driver</a>.</i>
 
 <div class="code"><pre>
 v.db.update vectormap column=column3 qcolumn="column1 || column2"
@@ -224,8 +224,10 @@ v.db.update vectormap column=species qcolumn="CASE WHEN col1 &gt;= 1 THEN cat WH
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="db.connect.html">db.connect</a>,
 <a href="db.select.html">db.select</a>,
 <a href="db.execute.html">db.execute</a>,
+<a href="v.db.connect.html">v.db.connect</a>,
 <a href="v.db.select.html">v.db.select</a>,
 <a href="v.db.update.html">v.db.update</a>
 </em>
