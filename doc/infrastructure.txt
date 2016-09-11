@@ -151,6 +151,12 @@ Maintainer: OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
 Wiki Macro definitions for manual pages G7:modulename
 * https://trac.osgeo.org/grass/wiki/InterMapTxt
 
+ZIP file download support in trac (needed for g.extension) - on trac.osgeo.org:
+/var/www/trac/grass/conf/trac.ini
+[browser]
+downloadable_paths = /grass-addons/grass7/*/*,/sandbox/*/*
+
+
 == GRASS Bugtracker ==
 
 Current bugtracker (Jan 2008 - today):
