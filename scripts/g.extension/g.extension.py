@@ -164,6 +164,7 @@ def expand_module_class_name(c):
              'r'   : 'raster',
              'r3'  : 'raster3d',
              's'   : 'sites',
+             't'   : 'temporal',
              'v'   : 'vector',
              'wx'  : 'gui/wxpython'
              }
@@ -348,7 +349,7 @@ def list_available_extensions_svn():
         grass.warning(_("Flag 'g' ignored, addons metadata file not available"))
 
     prefix = ['d', 'db', 'g', 'i', 'm', 'ps',
-              'p', 'r', 'r3', 's', 'v']
+              'p', 'r', 'r3', 's', 't', 'v']
     for d in prefix:
         modclass = expand_module_class_name(d)
         grass.verbose(_("Checking for '%s' modules...") % modclass)
