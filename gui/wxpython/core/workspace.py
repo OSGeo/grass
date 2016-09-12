@@ -1537,9 +1537,15 @@ class WriteWorkspaceFile(object):
         self.file.write('%s<overlay name="%s">\n' % (' ' * self.indent, cmd[0]))
         self.indent += 4
         for prm in cmd[1:]:
-            if prm[0] == "-":
-                for i in range(1, len(prm)):
-                    self.file.write('%s<flag name="%s" />\n' % (' ' * self.indent, prm[i]))
+            if prm.startswith('-'):
+                flags = []
+                if prm.startswith('--'):
+                    flags.append(prm[2:])
+                else:
+                    flags = list(prm[1:])
+                for f in flags:
+                    self.file.write('%s<flag name="%s" />\n' % (' ' * self.indent, f))
+
             elif prm.startswith("at="):
                 # legend "at" argument takes 4 numbers not 2
                 if cmd[0] == "d.legend":
