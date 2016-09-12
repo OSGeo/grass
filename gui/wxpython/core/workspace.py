@@ -72,6 +72,7 @@ class ProcessWorkspaceFile:
         """
         value = value.replace('&lt;', '<')
         value = value.replace('&gt;', '>')
+        value = value.replace('&', '&amp;')
         
         return value
 
