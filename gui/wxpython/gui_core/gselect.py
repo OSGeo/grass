@@ -1184,8 +1184,7 @@ class LocationSelect(wx.ComboBox):
     def __init__(
             self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_COMBOBOX_SIZE,
             gisdbase=None, **kwargs):
-        super(LocationSelect, self).__init__(parent, id, size=size,
-                                             style=wx.CB_READONLY, **kwargs)
+        super(LocationSelect, self).__init__(parent, id, size=size, **kwargs)
         self.SetName("LocationSelect")
 
         if not gisdbase:
@@ -2231,8 +2230,7 @@ class ProjSelect(wx.ComboBox):
 
     def __init__(self, parent, isRaster, id=wx.ID_ANY,
                  size=globalvar.DIALOG_COMBOBOX_SIZE, **kwargs):
-        super(ProjSelect, self).__init__(parent, id, size=size,
-                                         style=wx.CB_READONLY, **kwargs)
+        super(ProjSelect, self).__init__(parent, id, size=size, **kwargs)
         self.SetName("ProjSelect")
         self.isRaster = isRaster
 
