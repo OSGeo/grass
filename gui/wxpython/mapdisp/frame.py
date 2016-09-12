@@ -143,7 +143,6 @@ class MapFrame(SingleMapFrame):
         self.MapWindow2D.mapQueried.connect(self.Query)
         self.MapWindow2D.overlayActivated.connect(self._activateOverlay)
         self.MapWindow2D.overlayRemoved.connect(self.RemoveOverlay)
-        self.MapWindow2D.overlayRemoved.connect(self.RemoveOverlay)
         self._setUpMapWindow(self.MapWindow2D)
 
         self.MapWindow2D.mouseHandlerUnregistered.connect(self.ResetPointer)
@@ -1325,7 +1324,7 @@ class MapFrame(SingleMapFrame):
             self.decorations[overlay.id] = overlay
             overlay.overlayChanged.connect(lambda: self.MapWindow2D.UpdateMap(
                                            render=False, renderVector=False))
-            if self.MapWindow3D:
+            if self.IsPaneShown('3d'):
                 overlay.overlayChanged.connect(self.MapWindow3D.UpdateOverlays)
 
             overlay.dialog = propwin
