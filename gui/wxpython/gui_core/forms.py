@@ -1670,8 +1670,8 @@ class CmdPanel(wx.Panel):
                         elif prompt == 'location':
                             win = gselect.LocationSelect(parent=which_panel,
                                                          value=value)
-                            win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
-                            win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                            win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                            win.Bind(wx.EVT_TEXT, self.OnSetValue)
 
                         elif prompt == 'mapset':
                             if p.get('age', 'old') == 'old':
