@@ -267,7 +267,7 @@ class ExtensionTreeModelBuilder:
         for prefix in ('display', 'database',
                        'general', 'imagery',
                        'misc', 'postscript', 'paint',
-                       'raster', 'raster3D', 'sites', 'vector', 'wxGUI', 'other'):
+                       'raster', 'raster3D', 'sites', 'temporal', 'vector', 'wxGUI', 'other'):
             node = self.model.AppendNode(parent=self.model.root, label=prefix)
             self.mainNodes[prefix] = node
         
@@ -291,6 +291,7 @@ class ExtensionTreeModelBuilder:
                  'r'  : 'raster',
                  'r3' : 'raster3D',
                  's'  : 'sites',
+                 't'  : 'temporal',
                  'v'  : 'vector',
                  'wx' : 'wxGUI',
                  ''   : 'other' }
