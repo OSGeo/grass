@@ -452,6 +452,8 @@ int main(int argc, char *argv[])
 			    Vect_field_cat_del(Cats, fields[0], Cats->cat[found]);
 			nmodified++;
 		    }
+		    else
+			i++;
 		}
 	    }
 	    Vect_write_line(&Out, type, Points, Cats);
