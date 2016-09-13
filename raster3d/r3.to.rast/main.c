@@ -178,8 +178,8 @@ void g3d_to_raster(void *map, RASTER3D_Region region, int *fd,
     /*Every Rastermap */
     for (z = 0; z < depths; z++) { /*From the bottom to the top */
         G_debug(2, "Writing raster map %d of %d", z + 1, depths);
+        G_percent(z, depths - 1, 2);
         for (y = 0; y < rows; y++) {
-            G_percent(y, rows - 1, 10);
             ptr = cell;  /* reset at the beginning of a row */
             for (x = 0; x < cols; x++) {
                 if (typeIntern == FCELL_TYPE) {
@@ -210,6 +210,7 @@ void g3d_to_raster(void *map, RASTER3D_Region region, int *fd,
         G_debug(2, "Finished writing map %d.", z + 1);
         pos++;
     }
+    G_percent(1, 1, 1);
     G_free(cell);
 
 }
