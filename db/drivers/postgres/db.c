@@ -54,19 +54,18 @@ int db__driver_open_database(dbHandle * handle)
 	return DB_FAILED;
     }
 
-    G_debug(3,
-	    "db_driver_open_database(): host = %s, port = %s, options = %s, tty = %s, "
-	    "dbname = %s, user = %s, password = %s, host = %s, port = %s "
-	    "schema = %s", pgconn.host, pgconn.port, pgconn.options,
-	    pgconn.tty, pgconn.dbname, pgconn.user, pgconn.password,
-            pgconn.host, pgconn.port,
-	    pgconn.schema);
-
     db_get_login2("pg", name, &user, &password, &host, &port);
 
     pg_conn = PQsetdbLogin(host, port, pgconn.options, pgconn.tty,
 			   pgconn.dbname, user, password);
-    
+
+    G_debug(3,
+	    "db_driver_open_database(): host = %s, port = %s, options = %s, tty = %s, "
+	    "dbname = %s, user = %s, password = %s "
+	    "schema = %s", host, port, pgconn.options,
+	    pgconn.tty, pgconn.dbname, user, password,
+	    pgconn.schema);
+
     if (PQstatus(pg_conn) == CONNECTION_BAD) {
 	db_d_append_error("%s\n%s",
 			  _("Connection failed."),
