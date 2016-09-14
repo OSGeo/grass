@@ -1,6 +1,6 @@
 #ifndef __PROTO_H__
 #define __PROTO_H__
-#define DEFAULT_WIDTH 640
+#define DEFAULT_WIDTH 720
 #define DEFAULT_HEIGHT 480
 
 
