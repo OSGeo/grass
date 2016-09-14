@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     width_opt = G_define_option();
     width_opt->key = "width";
     width_opt->label = _("Width for display monitor if not set by GRASS_RENDER_WIDTH");
-    width_opt->description = _("Default value: 640");
+    width_opt->description = _("Default value: 720");
     width_opt->type = TYPE_INTEGER;
     width_opt->key_desc = "value";
     width_opt->guisection = _("Settings");
