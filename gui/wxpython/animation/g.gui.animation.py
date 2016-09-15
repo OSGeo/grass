@@ -105,7 +105,7 @@ def main():
         layer = AnimLayer()
         layer.mapType = 'vector'
         layer.name = vect
-        layer.cmd = ['d.vect', 'map={name=}'.format(name=vect.split(',')[0])]
+        layer.cmd = ['d.vect', 'map={name}'.format(name=vect.split(',')[0])]
         layerList.AddLayer(layer)
     if strds:
         layer = AnimLayer()
