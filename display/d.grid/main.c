@@ -53,6 +53,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("display"));
     G_add_keyword(_("cartography"));
     G_add_keyword(_("graticule"));
+    G_add_keyword(_("grid"));
     module->description =
         _("Overlays a user-specified grid "
           "in the active display frame on the graphics monitor.");
