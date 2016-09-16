@@ -260,6 +260,7 @@ class DataProvider(RPCServerBase):
            .. code-block:: python
 
             >>> from grass.pygrass.rpc import DataProvider
+            >>> import time
             >>> provider = DataProvider()
             >>> ret = provider.get_raster_image_as_np(name=test_raster_name)
             >>> len(ret)
@@ -284,6 +285,7 @@ class DataProvider(RPCServerBase):
             ...                                       extent=extent)
 
             >>> provider.stop()
+            >>> time.sleep(1)
 
             >>> extent = {"rows":3, "cols":1}
             >>> ret = provider.get_raster_image_as_np(name=test_raster_name,

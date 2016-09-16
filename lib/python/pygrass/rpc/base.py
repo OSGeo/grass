@@ -47,6 +47,7 @@ class RPCServerBase(object):
 
         >>> import grass.script as gscript
         >>> from grass.pygrass.rpc.base import RPCServerBase
+        >>> import time
         >>> provider = RPCServerBase()
 
         >>> provider.is_server_alive()
@@ -56,6 +57,7 @@ class RPCServerBase(object):
         True
 
         >>> provider.stop()
+        >>> time.sleep(1)
         >>> provider.is_server_alive()
         False
 
