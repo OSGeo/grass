@@ -57,11 +57,11 @@ class TestRowAboveAndBelowBug(TestCase):
     def setUp(self):
         self.use_temp_region()
         self.runModule('r.in.ascii', input='-', stdin_=INPUT,
-                       output=self.input)
+                       output=self.input, overwrite=True)
         self.to_remove.append(self.input)
         self.runModule('g.region', raster=self.input)
         self.runModule('r.in.ascii', input='-', stdin_=OUTPUT,
-                       output=self.output_ref)
+                       output=self.output_ref, overwrite=True)
         self.to_remove.append(self.output_ref)
 
     def tearDown(self):
@@ -74,7 +74,7 @@ class TestRowAboveAndBelowBug(TestCase):
         """Expects just RHS and inputs as ``{m}`` for format function"""
         expression = expression.format(m=self.input)
         expression = "{} = {}".format(self.output, expression)
-        self.assertModule('r.mapcalc', expression=expression)
+        self.assertModule('r.mapcalc', expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
         self.to_remove.append(self.output)
         ref_univar = dict(null_cells=6, cells=9)
