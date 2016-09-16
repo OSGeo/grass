@@ -64,11 +64,9 @@
 
 #%flag
 #% key: s
-#% description: Check spatial overlap
+#% description: Check the spatial topology of temporally related maps and process only spatially related maps
 #%end
 
-from multiprocessing import Process
-import copy
 import grass.script as grass
 import grass.temporal as tgis
 

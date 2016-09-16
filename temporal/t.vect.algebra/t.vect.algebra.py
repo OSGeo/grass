@@ -43,7 +43,7 @@
 
 #%flag
 #% key: s
-#% description: Activate spatial topology
+#% description: Check the spatial topology of temporally related maps and process only spatially related maps
 #%end
 
 import grass.script
