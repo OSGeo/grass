@@ -84,7 +84,6 @@
 #% description: Register Null maps
 #%end
 
-
 #%flag
 #% key: r
 #% description: Ignore the current region settings and use the raster map regions

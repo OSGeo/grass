@@ -57,7 +57,7 @@
 
 #%flag
 #% key: s
-#% description: Check spatial overlap
+#% description: Check for spatial topological overlap
 #%end
 
 import grass.script as grass

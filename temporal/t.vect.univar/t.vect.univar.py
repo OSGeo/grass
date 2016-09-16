@@ -62,7 +62,7 @@
 #%end
 
 #%flag
-#% key: s
+#% key: u
 #% description: Suppress printing of column names
 #% guisection: Formatting
 #%end
@@ -83,7 +83,7 @@ def main():
     column = options["column"]
     where = options["where"]
     extended = flags["e"]
-    header = flags["s"]
+    header = flags["u"]
     separator = grass.separator(options["separator"])
 
     # Make sure the temporal database exists

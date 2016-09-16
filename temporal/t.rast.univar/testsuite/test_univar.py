@@ -25,23 +25,23 @@ class TestRasterUnivar(TestCase):
         cls.runModule("r.mapcalc", expression="a_3 = 300",  overwrite=True)
         cls.runModule("r.mapcalc", expression="a_4 = 400",  overwrite=True)
 
-        cls.runModule("t.create",  type="strds",  temporaltype="absolute",  
-                                 output="A",  title="A test",  description="A test",  
+        cls.runModule("t.create",  type="strds",  temporaltype="absolute",
+                                 output="A",  title="A test",  description="A test",
                                  overwrite=True)
-        cls.runModule("t.register",  flags="i",  type="raster",  input="A",  
-                                     maps="a_1,a_2,a_3,a_4",  start="2001-01-01", 
+        cls.runModule("t.register",  flags="i",  type="raster",  input="A",
+                                     maps="a_1,a_2,a_3,a_4",  start="2001-01-01",
                                      increment="3 months",  overwrite=True)
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
         """
-        cls.runModule("t.remove",  flags="rf",  type="strds",  
+        cls.runModule("t.remove",  flags="rf",  type="strds",
                                    inputs="A")
         cls.del_temp_region()
 
     def test_1(self):
-        
+
         t_rast_univar = SimpleModule("t.rast.univar", input="A",
                                                       where="start_time >= '2001-01-01'",
                                                       overwrite=True, verbose=True)
@@ -122,7 +122,7 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|384000
     def test_5(self):
 
         self.runModule("g.region", res=10)
-        self.assertModule("t.rast.univar", input="A", flags="rs",
+        self.assertModule("t.rast.univar", input="A", flags="ru",
                                            output="univar_output.txt",
                                            where="start_time >= '2001-03-01'",
                                            overwrite=True, verbose=True)
