@@ -10,4 +10,4 @@ from grass.pygrass.modules.interface import module
 from grass.pygrass.modules.interface import typedict
 from grass.pygrass.modules.interface import read
 
-from grass.pygrass.modules.interface.module import Module, ParallelModuleQueue
+from grass.pygrass.modules.interface.module import Module, MultiModule, ParallelModuleQueue
