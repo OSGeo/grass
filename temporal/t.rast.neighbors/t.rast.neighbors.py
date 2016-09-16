@@ -83,6 +83,13 @@
 #% key: n
 #% description: Register Null maps
 #%end
+
+
+#%flag
+#% key: r
+#% description: Ignore the current region settings and use the raster map regions
+#%end
+
 from __future__ import print_function
 
 import copy
@@ -102,6 +109,7 @@ def main():
     size = options["size"]
     base = options["basename"]
     register_null = flags["n"]
+    use_raster_region = flags["r"]
     method = options["method"]
     nprocs = options["nprocs"]
     time_suffix = options["suffix"]
@@ -131,6 +139,9 @@ def main():
                                    method=method, overwrite=overwrite,
                                    quiet=True)
 
+    gregion_module =  pymod.Module("g.region", raster="dummy", run_=False,
+                                   finish_=False,)
+
     # The module queue for parallel execution
     process_queue = pymod.ParallelModuleQueue(int(nprocs))
 
@@ -158,11 +169,31 @@ def main():
 
         mod = copy.deepcopy(neighbor_module)
         mod(input=map.get_id(), output=new_map.get_id())
-        print(mod.get_bash())
-        process_queue.put(mod)
+
+        if use_raster_region is True:
+            reg = copy.deepcopy(gregion_module)
+            reg(raster=map.get_id())
+            print(reg.get_bash())
+            print(mod.get_bash())
+            mm = pymod.MultiModule([reg, mod], sync=False, set_temp_region=True)
+            process_queue.put(mm)
+        else:
+            print(mod.get_bash())
+            process_queue.put(mod)
 
     # Wait for unfinished processes
     process_queue.wait()
+    proc_list = process_queue.get_finished_modules()
+
+    # Check return status of all finished modules
+    error = 0
+    for proc in proc_list:
+        if proc.popen.returncode != 0:
+            grass.error(_("Error running module: %\n    stderr: %s") %(proc.get_bash(), proc.outputs.stderr))
+            error += 1
+
+    if error > 0:
+        grass.fatal(_("Error running modules."))
 
     # Open the new space time raster dataset
     ttype, stype, title, descr = sp.get_initial_values()
