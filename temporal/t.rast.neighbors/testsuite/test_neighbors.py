@@ -55,7 +55,7 @@ class TestAggregationAbsolute(TestCase):
         self.assertRasterExists('b_2001_01')
         self.assertRasterMinMax('b_2001_02', 1, 10)
         self.assertRasterDoesNotExist('b_2001_03')
-        
+
     def test_simple(self):
         """Test simple t.rast.neighbors"""
         trast_list = SimpleModule("t.rast.neighbors", quiet=True, input="A",
@@ -80,6 +80,16 @@ class TestAggregationAbsolute(TestCase):
                                   suffix="num%03", overwrite=True)
         self.assertModule(trast_list)
         self.assertRasterExists('b_001')
+
+    def test_num_region(self):
+        """Test t.rast.neighbors with parallel region processes"""
+        trast_list = SimpleModule("t.rast.neighbors", quiet=True, input="A",
+                                  output="B", size="5", basename='b', nprocs=2,
+                                  suffix="num%03", flags="r", overwrite=True)
+        self.assertModule(trast_list)
+        self.assertRasterExists('b_001')
+        self.assertRasterExists('b_002')
+        self.assertRasterExists('b_003')
 
 if __name__ == '__main__':
     from grass.gunittest.main import test
