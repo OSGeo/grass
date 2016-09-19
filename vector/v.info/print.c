@@ -165,12 +165,12 @@ void print_columns(const struct Map_info *Map, const char *input_opt, const char
     db_shutdown_driver(driver);
 }
 
-void print_shell(const struct Map_info *Map)
+void print_shell(const struct Map_info *Map, const char *field_opt)
 {
     int map_type;
     int time_ok, first_time_ok, second_time_ok;
     char timebuff[256];
-    
+    struct field_info *fi;
     struct TimeStamp ts;
         
     time_ok = first_time_ok = second_time_ok = FALSE;
@@ -263,6 +263,18 @@ void print_shell(const struct Map_info *Map)
     if (Vect_level(Map) > 0) {
         fprintf(stdout, "num_dblinks=%d\n",
                 Vect_get_num_dblinks(Map));
+
+        if (Vect_get_num_dblinks(Map) > 0) {
+            fi = Vect_get_field2(Map, field_opt);
+            if(fi != NULL) {
+                fprintf(stdout, "attribute_layer_number=%i\n",fi->number);
+                fprintf(stdout, "attribute_layer_name=%s\n",fi->name);
+                fprintf(stdout, "attribute_database=%s\n",fi->database);
+                fprintf(stdout, "attribute_database_driver=%s\n",fi->driver);
+                fprintf(stdout, "attribute_table=%s\n",fi->table);
+                fprintf(stdout, "attribute_primary_key=%s\n",fi->key);
+            }
+        }
     }
 
     fprintf(stdout, "projection=%s\n",
