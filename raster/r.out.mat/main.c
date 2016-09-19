@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
 	fwrite(&format_block, sizeof(int), 1, fp1);
 	/* fprintf(stderr, "bounds data format is [%04ld]\n", format_block); */
 
-	/* 4 byte number of rows , 4 byte number of colums */
+	/* 4 byte number of rows , 4 byte number of columns */
 	fwrite(&mrows, sizeof(int), 1, fp1);
 	fwrite(&ncols, sizeof(int), 1, fp1);
 

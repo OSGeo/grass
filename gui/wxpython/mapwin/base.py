@@ -207,7 +207,7 @@ class MapWindowBase(object):
 
         Call event.Skip() in handler to allow default processing in MapWindow.
 
-        If any error occures inside of handler, the handler is removed.
+        If any error occurs inside of handler, the handler is removed.
 
         Before handler is unregistered it is called with
         string value "unregistered" of event parameter.

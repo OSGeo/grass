@@ -30,7 +30,7 @@ int db__driver_execute_immediate(dbString * sql)
      * text contains string \' GRASS modules escape ' by another ' and
      * string passed to driver is \'' postgres takes \' as ' but
      * second ' remains not escaped, result is error.  Because of
-     * this, all occurencies of \ in sql are escaped by \ */
+     * this, all occurrences of \ in sql are escaped by \ */
     str = G_str_replace(db_get_string(sql), "\\", "\\\\");
 
     G_debug(3, "db__driver_execute_immediate(): Escaped SQL: '%s'", str);

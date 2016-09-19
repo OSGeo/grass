@@ -6970,7 +6970,7 @@ msgstr "Primero cambie su número de columnas a nsizc %d %d."
 
 #: ../lib/rst/interp_float/interp2d.c:232
 #, c-format
-msgid "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
+msgid "Overshoot - increase in tension suggested. Overshoot occurs at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
 msgstr "Sobrepico o rebasamiento- Se sugiere un aumento en la tensión. El sobrepico ocurre en las celdas (%d,%d). Valor-Z %f, zmin %f, zmax %f."
 
 #: ../lib/rst/interp_float/resout2d.c:77

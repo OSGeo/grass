@@ -520,7 +520,7 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 				fprintf(stderr,
 					"Overshoot -- increase in tension suggested.\n");
 				fprintf(stderr,
-					"Overshoot occures at (%d,%d,%d) cell\n",
+					"Overshoot occurs at (%d,%d,%d) cell\n",
 					l, k, i);
 				fprintf(stderr,
 					"The w-value is %lf, wmin is %lf,wmax is %lf\n",

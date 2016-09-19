@@ -30,7 +30,7 @@ int db__driver_execute_immediate(dbString * sql)
      * escape ' by another ' and the string passed to the driver is \''
      * MySQL converts \' to ' but second ' remains not escaped and 
      * result is error. 
-     * Because of this, all occurencies of \ in sql must be 
+     * Because of this, all occurrences of \ in sql must be 
      * escaped by \ */
     str = G_str_replace(db_get_string(sql), "\\", "\\\\");
 
