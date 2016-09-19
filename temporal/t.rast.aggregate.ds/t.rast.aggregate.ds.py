@@ -31,7 +31,7 @@
 #%end
 
 #%option G_OPT_STDS_TYPE
-#% description: Type of the aggregation space time dataset
+#% description: Type of the space time dataset from which aggregation will be copied
 #%end
 
 #%option G_OPT_STRDS_OUTPUT
