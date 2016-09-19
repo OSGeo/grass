@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
     region_flag->description = _("Limit import to the current region");
 
     invert_mask_flag = G_define_flag();
-    invert_mask_flag->key = 'i';
+    invert_mask_flag->key = 'u';
     invert_mask_flag->description = _("Invert mask when selecting points");
     invert_mask_flag->guisection = _("Selection");
 
