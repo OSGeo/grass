@@ -230,7 +230,7 @@ int IL_grid_calc_2d(struct interp_params *params,
 		    if (!once) {
 			once = 1;
 			G_warning(_("Overshoot - increase in tension suggested. "
-				    "Overshoot occures at (%d,%d) cell. "
+				    "Overshoot occurs at (%d,%d) cell. "
 				    "Z-value %f, zmin %f, zmax %f."),
 				  l, k, zz, zmin, zmax);
 		    }
