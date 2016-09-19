@@ -61,7 +61,7 @@ void clean_dir(const char *pathname, uid_t uid, pid_t pid, time_t now,
 	     G_snprintf(buf, BUF_MAX, "%s/%s", pathname,
 			cur_entry->d_name)) >= BUF_MAX)
 	    G_fatal_error
-		("clean_temp: exceeded maximum pathname length %d, got %d, should'nt happen",
+		("clean_temp: exceeded maximum pathname length %d, got %d, shouldn't happen",
 		 BUF_MAX, pathlen);
 
 	if (stat(buf, &info) != 0) {

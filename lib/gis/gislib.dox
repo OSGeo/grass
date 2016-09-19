@@ -1135,7 +1135,7 @@ The next routines replaces character(s) from string.
 
  - G_strchg()
 
-Replace all occurencies of character in string with new.
+Replace all occurrences of character in string with new.
 
 This next routine copies a string to allocated memory.
 

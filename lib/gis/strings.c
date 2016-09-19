@@ -148,7 +148,7 @@ char *G_store_lower(const char *s)
 }
 
 /*!
-  \brief Replace all occurencies of character in string bug with new
+  \brief Replace all occurrences of character in string bug with new
   
   \param[in,out] bug base string
   \param character character to replace
@@ -169,7 +169,7 @@ char *G_strchg(char *bug, char character, char new)
 }
 
 /*!
-  \brief Replace all occurencies of old_str in buffer with new_str
+  \brief Replace all occurrences of old_str in buffer with new_str
   
   Code example:
   \code

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# g.parser demo script for shell programing
+# g.parser demo script for shell programming
 
 #%module
 #% description: g.parser test script (shell)

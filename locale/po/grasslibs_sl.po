@@ -7412,7 +7412,7 @@ msgstr ""
 #: ../lib/rst/interp_float/interp2d.c:232
 #, c-format
 msgid ""
-"Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
+"Overshoot - increase in tension suggested. Overshoot occurs at (%d,%d) "
 "cell. Z-value %f, zmin %f, zmax %f."
 msgstr ""
 

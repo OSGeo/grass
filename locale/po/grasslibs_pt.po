@@ -7439,7 +7439,7 @@ msgstr "Altere primeiro os número das suas cols para nsizc %d %d"
 #: ../lib/rst/interp_float/interp2d.c:232
 #, c-format
 msgid ""
-"Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
+"Overshoot - increase in tension suggested. Overshoot occurs at (%d,%d) "
 "cell. Z-value %f, zmin %f, zmax %f."
 msgstr ""
 "Estimativa por excesso - aumento na tensão sugerida. Estimativa por excesso "
