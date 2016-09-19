@@ -102,7 +102,7 @@ struct vector
     int fontsize;		/* legend font size */
     char *font;			/* legend font */
     double width;		/* width of legend symbols */
-    int cols;			/* number of colums  */
+    int cols;			/* number of columns  */
     PSCOLOR border;		/* border color */
     double span;		/* column separation in inches */
     LAYER *layer;

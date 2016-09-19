@@ -113,7 +113,7 @@ int execute(char *sql, cursor * c)
     ncols = st->nCol;
     if (st->command == SQLP_INSERT || st->command == SQLP_SELECT
 	|| st->command == SQLP_UPDATE || st->command == SQLP_DROP_COLUMN) {
-	if (ncols > 0) {	/* colums were specified */
+	if (ncols > 0) {	/* columns were specified */
 	    cols = (int *)G_malloc(ncols * sizeof(int));
 	    for (i = 0; i < ncols; i++) {
 		cols[i] = find_column(tab, st->Col[i].s);

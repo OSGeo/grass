@@ -82,8 +82,8 @@ G_rle_compress(unsigned char *src, int src_sz, unsigned char *dst,
 
     /* modified RLE:
      * unit is 1 byte, only sequences longer than 1 are encoded
-     * single occurences don't have a following count
-     * multiple occurences are twice in dst, followed by the count
+     * single occurrences don't have a following count
+     * multiple occurrences are twice in dst, followed by the count
      * example:
      * ABBCCC
      * is encoded as
@@ -152,8 +152,8 @@ G_rle_expand(unsigned char *src, int src_sz, unsigned char *dst,
     nbytes = 0;
     i = 1;
     while (i < src_sz) {
-	/* single occurences don't have a following count
-	 * multiple occurences are twice in src, followed by the count */
+	/* single occurrences don't have a following count
+	 * multiple occurrences are twice in src, followed by the count */
 	if (cnt == 2) {
 	    if (i >= src_sz)
 		return -1;
