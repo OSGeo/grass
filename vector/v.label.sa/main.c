@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
     label_candidate_overlap(labels, n_labels);
     /*   3. position selection */
     simulate_annealing(labels, n_labels, &p);
-    /* write lables to file */
+    /* write labels to file */
     fprintf(stderr, "Writing labels to file: ...");
     labelf = G_fopen_new("paint/labels", p.labels->answer);
     for (i = 0; i < n_labels; i++) {

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# g.parser demo script for python programing
+# g.parser demo script for python programming
 
 #%module
 #% description: g.parser test script (python)

@@ -118,7 +118,7 @@ def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
     graph.plot(x, successes, color=color,
                linestyle=style.linestyle, linewidth=style.linewidth)
 
-    # rotates the xlables
+    # rotates the xlabels
     fig.autofmt_xdate()
     graph.set_xticks(xticks)
     graph.set_xticklabels(xlabels)

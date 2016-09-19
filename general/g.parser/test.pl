@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
-# g.parser demo script for perl programing
+# g.parser demo script for perl programming
 
 #%module
 #% description: g.parser test script (perl)
