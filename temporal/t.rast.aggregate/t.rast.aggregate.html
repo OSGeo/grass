@@ -53,8 +53,7 @@ available for aggregation computation. Internally several
 specified parallel processes (<em>nprocs</em>) and the number of
 intervals to aggregate.
 <p>
-The flag <b>-s</b> allows storing a date as map name suffix rather than
-using consecutive numbering. See the examples below for details.
+
 
 <h2>EXAMPLES</h2>
 
@@ -129,7 +128,7 @@ t.info tempmean_yearly
 <h3>Different aggregations and map name suffix variants</h3>
 
 Examples of resulting naming schemes for different aggregations when
-using the <b>-s</b> flag:
+using the <b>suffix</b> option:
 
 <h4>Weekly aggregation</h4>
 
@@ -148,10 +147,11 @@ weekly_avg_temp_2003_06|climate|2003-02-07 00:00:00|2003-02-14 00:00:00
 weekly_avg_temp_2003_07|climate|2003-02-14 00:00:00|2003-02-21 00:00:00
 </pre></div>
 
-Variant with <b>-s</b> flag:
+Variant with <b>suffix</b> set to granularity:
 <div class="code"><pre>
-t.rast.aggregate -s input=daily_temp output=weekly_avg_temp \
-  basename=weekly_avg_temp method=average granularity="1 weeks"
+t.rast.aggregate input=daily_temp output=weekly_avg_temp \
+  basename=weekly_avg_temp suffix=gran method=average \
+  granularity="1 weeks"
 
 t.rast.list weekly_avg_temp
 name|mapset|start_time|end_time
@@ -167,8 +167,9 @@ weekly_avg_temp_2003_02_14|climate|2003-02-14 00:00:00|2003-02-21 00:00:00
 <h4>Monthly aggregation</h4>
 
 <div class="code"><pre>
-t.rast.aggregate -s input=daily_temp output=monthly_avg_temp \
-basename=monthly_avg_temp method=average granularity="1 months"
+t.rast.aggregate input=daily_temp output=monthly_avg_temp \
+  basename=monthly_avg_temp suffix=gran method=average \
+  granularity="1 months"
 
 t.rast.list monthly_avg_temp
 name|mapset|start_time|end_time
@@ -183,8 +184,9 @@ monthly_avg_temp_2003_06|climate|2003-06-01 00:00:00|2003-07-01 00:00:00
 <h4>Yearly aggregation</h4>
 
 <div class="code"><pre>
-t.rast.aggregate -s input=daily_temp output=yearly_avg_temp \
-  basename=yearly_avg_temp method=average granularity="1 years"
+t.rast.aggregate input=daily_temp output=yearly_avg_temp \
+  basename=yearly_avg_temp suffix=gran method=average \
+  granularity="1 years"
 
 t.rast.list yearly_avg_temp
 name|mapset|start_time|end_time
