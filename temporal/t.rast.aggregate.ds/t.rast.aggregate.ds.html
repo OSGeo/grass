@@ -323,9 +323,9 @@ t.info input=8day_ts
 t.rast.list input=8day_ts
 
 # finally, copy the aggregation to a daily time series
-t.rast.aggregate.ds -s input=daily_ts sample=8day_ts \
-   output=8day_agg basename=8day_agg \
-   method=average sampling=contains
+t.rast.aggregate.ds input=daily_ts sample=8day_ts \
+   output=8day_agg basename=8day_agg method=average \
+   sampling=contains suffix=gran
 
 # add metadata
 t.support input=8day_agg \
