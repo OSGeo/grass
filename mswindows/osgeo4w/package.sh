@@ -183,7 +183,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-odbc \
 	        --with-cairo \
                 --with-postgres \
-	        --with-opengl=windows
+	        --with-opengl=windows \
+                --with-bzlib
 	
 	touch mswindows/osgeo4w/configure-stamp
 fi
