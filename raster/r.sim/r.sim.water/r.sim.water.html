@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<i>r.sim.water</i> is a landscape scale simulation model 
+<em>r.sim.water</em> is a landscape scale simulation model 
 of overland flow designed for spatially variable terrain, soil, cover 
 and rainfall excess conditions. A 2D shallow water flow is described by 
 the bivariate form of Saint Venant equations. The numerical solution is based
@@ -8,15 +8,15 @@ on the concept of duality between the field and particle representation of
 the modeled quantity. Green's function Monte Carlo method, used to solve the equation,
 provides robustness necessary for spatially variable conditions and high
 resolutions (Mitas and Mitasova 1998). The key inputs of the model include
-elevation (<i>elevation</i> raster map), flow gradient vector given by
-first-order partial derivatives of elevation field (<i>dx</i> and <i>dy</i>
-raster maps), rainfall excess rate (<i>rain</i> raster map or <i>rain_value</i> single
+elevation (<b>elevation</b> raster map), flow gradient vector given by
+first-order partial derivatives of elevation field (<b>dx</b> and <b>dy</b>
+raster maps), rainfall excess rate (<b>rain</b> raster map or <b>rain_value</b> single
 value) and a surface roughness coefficient given by Manning's n 
-(<i>man</i> raster map or <i>man_value</i> single value). Partial
+(<b>man</b> raster map or <b>man_value</b> single value). Partial
 derivatives raster maps can be computed along with interpolation of a DEM using
-the -d option in <a href="v.surf.rst.html">v.surf.rst</a> module. If elevation raster 
+the -d option in <em><a href="v.surf.rst.html">v.surf.rst</a></em> module. If elevation raster 
 map is already provided, partial derivatives can be computed using
-<a href="r.slope.aspect.html">r.slope.aspect</a> module. Partial derivatives are used
+<em><a href="r.slope.aspect.html">r.slope.aspect</a></em> module. Partial derivatives are used
 to determine the direction and magnitude of water flow velocity. To include a 
 predefined direction of flow, map algebra can be used to replace terrain-derived
 partial derivatives with pre-defined partial derivatives in selected grid cells such 
@@ -39,22 +39,22 @@ For saturated soil and steady-state water flow it can be estimated using
 saturated hydraulic conductivity rates based on field measurements or using
 reference values which can be found in literature.
 Optionally, user can provide an overland flow infiltration rate map 
-<i>infil</i> or a single value <i>infil_value</i> in [mm/hr] that control the rate of
+<b>infil</b> or a single value <b>infil_value</b> in [mm/hr] that control the rate of
 infiltration for the already flowing water, effectively reducing the flow depth and 
 discharge.
 Overland flow can be further controlled by permeable check dams or similar type of structures,
 the user can provide a map of these structures and their permeability ratio
-in the map <i>flow_control</i> that defines the probability of particles to pass
+in the map <b>flow_control</b> that defines the probability of particles to pass
 through the structure (the values will be 0-1).
 
 <p>
-Output includes a water depth raster map <i>depth</i> in [m], and a water discharge 
-raster map <i>discharge</i> in [m3/s]. Error of the numerical solution can be analyzed using 
-the <i>error</i> raster map (the resulting water depth is an average, and err is its RMSE).
-The output vector points map <i>output_walkers</i> can be used to analyze and visualize 
+Output includes a water depth raster map <b>depth</b> in [m], and a water discharge 
+raster map <b>discharge</b> in [m3/s]. Error of the numerical solution can be analyzed using 
+the <b>error</b> raster map (the resulting water depth is an average, and err is its RMSE).
+The output vector points map <b>output_walkers</b> can be used to analyze and visualize 
 spatial distribution of walkers at different simulation times (note that 
 the resulting water depth is based on the density of these walkers). 
-<!--Number of the output walkers is controlled by the <i>density</i> parameter, which controls
+<!--Number of the output walkers is controlled by the <b>density</b> parameter, which controls
 how many walkers used in simulation should be written into the output. -->
 <!-- from
 http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Mitasova_Helena_2.pdf
@@ -62,13 +62,13 @@ http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdf
 The spatial distribution of numerical error associated with path sampling solution can be
 analysed using the output error raster file [m]. This error is a function of the number
 of particles used in the simulation and can be reduced by increasing the number of walkers
-given by parameter <i>nwalkers</i>.
+given by parameter <b>nwalkers</b>.
 <!--(<font color="#ff0000"> toto treba upresnit/zmenit, lebo nwalk ide prec</font>). -->
-Duration of simulation is controlled by the <i>niterations</i> parameter. The default value 
+Duration of simulation is controlled by the <b>niterations</b> parameter. The default value 
 is 10 minutes, reaching the steady-state may require much longer time, 
 depending on the time step, complexity of terrain, land cover and size of the area. 
 Output walker, water depth and discharge maps can be saved during simulation using 
-the time series flag <i>-t</i> and <i>output_step</i> parameter 
+the time series flag <b>-t</b> and <b>output_step</b> parameter 
 defining the time step in minutes for writing output files. 
 Files are saved with a suffix representing time since the start of simulation in minutes 
 (e.g. wdepth.05, wdepth.10).
@@ -82,12 +82,12 @@ In case of invalid water depth data the value -1 is used.
 <p>
 Overland flow is routed based on partial derivatives of elevation
 field or other landscape features influencing water flow. Simulation
-equations include a diffusion term (<i>diffusion_coeff</i> parameter) which enables 
+equations include a diffusion term (<b>diffusion_coeff</b> parameter) which enables 
 water flow to overcome elevation depressions or obstacles when water depth exceeds 
-a threshold water depth value (<i>hmax)</i>, given in [m]. When it is reached, 
-diffusion term increases as given by <i>halpha</i> and advection term 
+a threshold water depth value (<b>hmax)</b>, given in [m]. When it is reached, 
+diffusion term increases as given by <b>halpha</b> and advection term 
 (direction of flow) is given as "prevailing" direction of flow computed
-as average of flow directions from the previous <i>hbeta</i> number of grid cells.
+as average of flow directions from the previous <b>hbeta</b> number of grid cells.
 
 <h2>NOTES</h2>
 
@@ -149,15 +149,13 @@ r.mapcalc "manning = if(elevation.10m, 0.05, null())"
 r.mapcalc "infilt  = if(elevation.10m, 0.0, null())"
 
 # simulate
-r.sim.water elevation=elevation.10m dx=elev_dx dy=elev_dy \
-            rain=rain man=manning infil=infilt \
-            nwalkers=5000000 depth=depth
+r.sim.water elevation=elevation.10m dx=elev_dx dy=elev_dy rain=rain man=manning infil=infilt nwalkers=5000000 depth=depth
 </pre></div>
 
 <p>
 <center>
 <img src="r_sim_water.png" alt="r.sim.water generated depth map"><br>
-<i>Water depth map in the Spearfish (SD) area</i>
+<i>Figure: Water depth map in the Spearfish (SD) area</i>
 </center>
 
 
@@ -169,31 +167,7 @@ If the module fails with
 ERROR: nwalk (7000001) &gt; maxw (7000000)!
 </pre></div>
 
-then a lower <em>nwalkers</em> parameter value has to be selected.
-
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="v.surf.rst.html">v.surf.rst</a>,
-<a href="r.slope.aspect.html">r.slope.aspect</a>,
-<a href="r.sim.sediment.html">r.sim.sediment</a>
-</em>
-
-<h2>AUTHORS</h2>
-
-Helena Mitasova, Lubos Mitas<br>
-North Carolina State University<br>
-<i><a href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a></i>
-
-<p>
-Jaroslav Hofierka<br>
-GeoModel, s.r.o. Bratislava, Slovakia<br>
-<i><a href="mailto:hofi@geomodel.sk">hofierka@geomodel.sk</a></i>
-
-<p>
-Chris Thaxton<br>
-North Carolina State University<br>
-<i><a href="mailto:csthaxto@unity.ncsu.edu">csthaxto@unity.ncsu.edu</a></i>
+then a lower <b>nwalkers</b> parameter value has to be selected.
 
 <h2>REFERENCES</h2>
 
@@ -236,5 +210,29 @@ April 2015
 <a href="http://www.grassbook.org">Open Source GIS: A GRASS GIS Approach. Third Edition.</a>
 The International Series in Engineering and Computer Science: Volume 773. Springer New York Inc, p. 406.
 </ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.surf.rst.html">v.surf.rst</a>,
+<a href="r.slope.aspect.html">r.slope.aspect</a>,
+<a href="r.sim.sediment.html">r.sim.sediment</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Helena Mitasova, Lubos Mitas<br>
+North Carolina State University<br>
+<i><a href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a></i>
+
+<p>
+Jaroslav Hofierka<br>
+GeoModel, s.r.o. Bratislava, Slovakia<br>
+<i><a href="mailto:hofi@geomodel.sk">hofierka@geomodel.sk</a></i>
+
+<p>
+Chris Thaxton<br>
+North Carolina State University<br>
+<i><a href="mailto:csthaxto@unity.ncsu.edu">csthaxto@unity.ncsu.edu</a></i>
 
 <p><i>Last changed: $Date$</i>
