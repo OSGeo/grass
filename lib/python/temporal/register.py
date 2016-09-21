@@ -448,7 +448,7 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
 ##############################################################################
 
 def register_map_object_list(type,  map_list, output_stds,
-                             delete_empty, unit, dbif=None):
+                             delete_empty=False, unit=None, dbif=None):
     """Register a list of AbstractMapDataset objects in the temporal database
        and optional in a space time dataset.
 
