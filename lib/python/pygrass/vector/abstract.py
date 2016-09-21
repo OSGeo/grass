@@ -363,7 +363,7 @@ class Info(object):
             self.dblinks.add(link)
             # create the table
             table = link.table()
-            table.create(tab_cols)
+            table.create(tab_cols, overwrite=overwrite)
             table.conn.commit()
 
         # check the C function result.

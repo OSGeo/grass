@@ -41,9 +41,12 @@ test_vector_name = "table_doctest_map"
 DRIVERS = ('sqlite', 'pg')
 
 
-def get_path(path):
+def get_path(path, vect_name=None):
     """Return the full path to the database; replacing environment variable
     with real values
+
+    :param path: The path with substitutional parameter
+    :param vect_name: The name of the vector map
 
     >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
     >>> new_path = get_path(path)
@@ -51,6 +54,15 @@ def get_path(path):
     >>> import os
     >>> new_path2 = os.path.join(gisenv()['GISDBASE'], gisenv()['LOCATION_NAME'],
     ...                          gisenv()['MAPSET'], 'sqlite', 'sqlite.db')
+    >>> new_path.replace("//","/") == new_path2.replace("//","/")
+    True
+
+    >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/vector/$MAP/sqlite.db'
+    >>> new_path = get_path(path, "test")
+    >>> from grass.script.core import gisenv
+    >>> import os
+    >>> new_path2 = os.path.join(gisenv()['GISDBASE'], gisenv()['LOCATION_NAME'],
+    ...                          gisenv()['MAPSET'], 'vector', 'test', 'sqlite.db')
     >>> new_path.replace("//","/") == new_path2.replace("//","/")
     True
 
@@ -62,6 +74,7 @@ def get_path(path):
         path = path.replace('$GISDBASE', mapset.gisdbase)
         path = path.replace('$LOCATION_NAME', mapset.location)
         path = path.replace('$MAPSET', mapset.name)
+        path = path.replace('$MAP', vect_name)
         return path
 
 
@@ -745,7 +758,7 @@ class Link(object):
             for t in (np.int8, np.int16, np.int32, np.int64, np.uint8,
                       np.uint16, np.uint32, np.uint64):
                 sqlite3.register_adapter(t, long)
-            dbpath = get_path(self.database)
+            dbpath = get_path(self.database, self.table_name)
             dbdirpath = os.path.split(dbpath)[0]
             if not os.path.exists(dbdirpath):
                 os.mkdir(dbdirpath)
