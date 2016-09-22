@@ -377,7 +377,8 @@ void GeomCond::parse()
     case 21: /* spot7            * enter month,day,hh.ddd,long.,lat. */
     case 22: /* pleiades1a       * enter month,day,hh.ddd,long.,lat. */
     case 23: /* pleiades1b       * enter month,day,hh.ddd,long.,lat. */
-    {
+    case 24: /* worldview3       * enter month,day,hh.ddd,long.,lat. */
+   {
 	cin >> month;
 	cin >> jday;
 	cin >> tu;
@@ -446,7 +447,8 @@ void GeomCond::print()
 	string(" spot6 observation           "),
 	string(" spot7 observation           "),
 	string(" pleiades1a observation      "),
-	string(" pleiades1b observation      ")
+	string(" pleiades1b observation      "),
+	string(" worldview3 observation      ")
 	};
 
     static const string head(" geometrical conditions identity  ");
