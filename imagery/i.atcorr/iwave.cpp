@@ -6089,10 +6089,10 @@ void IWave::parse()
 	else G_warning(_("Unsupported iwave value: %d"), iwave);
     }
 
-    iinf = (int)((ffu.wlinf - 0.25f) / 0.0025f + 1.5f) - 1;	/* remember indexing*/
-    isup = (int)((ffu.wlsup - 0.25f) / 0.0025f + 1.5f) - 1;	/*		   "*/
+    iinf = (int)((ffu.wlinf - 0.25f) / 0.0025f + 1.5f) - 1;	/* remember indexing */
+    isup = (int)((ffu.wlsup - 0.25f) / 0.0025f + 1.5f) - 1;	/*		   "         */
 
-    if(iwave == 1)	/* moved here to avoid unnecessery gotos */
+    if(iwave == 1)	/* moved here to avoid unnecessary gotos */
     {
 	for(int i = iinf; i <= isup; i++) cin >> ffu.s[i];
 	cin.ignore(numeric_limits<int>::max(),'\n');
