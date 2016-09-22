@@ -43,8 +43,8 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
                         const char **colname, int doatt, int nocat,
                         int *n_noatt, int *n_nocat)
 {
-    int i, j;
-    int centroid, cat, area, n_areas;
+    int i;
+    int cat, area, n_areas;
     int n_exported;
     
     struct line_pnts *Points;
@@ -59,28 +59,21 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
     n_exported = 0;
 
     n_areas = Vect_get_num_areas(In);
-    for (i = 1; i <= n_areas; i++) {
-        G_percent(i, n_areas, 5);
+    for (area = 1; area <= n_areas; area++) {
+        G_percent(area, n_areas, 5);
         
-        /* get centroid's category */
-        centroid = Vect_get_area_centroid(In, i);
+        /* get area's category */
+        Vect_get_area_cats(In, area, Cats);
         cat = -1;
-        if (centroid > 0) {
-            Vect_read_line(In, NULL, Cats, centroid);
+        if (Cats->n_cats > 0) {
             Vect_cat_get(Cats, field, &cat);
         }
-        G_debug(3, "area = %d centroid = %d ncats = %d", i, centroid,
-                Cats->n_cats);
+        G_debug(3, "area = %d ncats = %d", area, Cats->n_cats);
         if (cat < 0 && !donocat) {
             (*n_nocat)++;
             continue; /* skip areas without category, do not export
                        * not labeled */
         }
-        
-        /* find corresponding area */
-        area = Vect_get_centroid_area(In, centroid);
-        if (area == 0)
-            continue;
 
         /* create polygon from area */
         Ogr_geometry = create_polygon(In, area, Points);
@@ -90,15 +83,15 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
         OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
         
         /* output one feature for each category */
-        for (j = -1; j < Cats->n_cats; j++) {
-            if (j == -1) {
+        for (i = -1; i < Cats->n_cats; i++) {
+            if (i == -1) {
                 if (cat >= 0)
                     continue;	/* cat(s) exists */
 		(*n_nocat)++;
             }
             else {
-                if (Cats->field[j] == field)
-                    cat = Cats->cat[j];
+                if (Cats->field[i] == field)
+                    cat = Cats->cat[i];
                 else
                     continue;
             }
@@ -186,7 +179,7 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
             
             /* find corresponding area */
             area = Vect_get_centroid_area(In, line);
-            if (area == 0)
+            if (area <= 0)
                 continue;
                 
             /* create polygon from area */
@@ -224,6 +217,9 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
      * one multi-feature */
     Ogr_geometry = OGR_G_CreateGeometry(wkbtype);
     
+    /* TODO: if donocat, also export areas without centroid
+     * -> loop over areas, not centroids */
+
     Vect_rewind(In);
     Vect_set_constraint_type(In, GV_CENTROID);
     while(TRUE) {
@@ -244,7 +240,7 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
         /* find corresponding area */
 	line = Vect_get_next_line_id(In);
         area = Vect_get_centroid_area(In, line);
-        if (area == 0)
+        if (area <= 0)
             continue;
                 
         /* create polygon from area */
