@@ -271,7 +271,7 @@ def main():
     
     print " > Filter functions exported to %s" % ("sensors_csv/"+sensor+"_cpp_template.txt")
     print " > Please check this file for possible errors before inserting the code into file iwave.cpp"
-    print " > Don't forget to add the necessary data to file iwave.h and to i.atcorr.html"
+    print " > Don't forget to add the necessary data to the files iwave.h, geomcond.h, geomcond.cpp, and to i.atcorr.html"
     print
     
     return
