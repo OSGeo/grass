@@ -216,18 +216,10 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
     /* check lines without category, if -c flag is given write them as
      * one multi-feature */
     Ogr_geometry = OGR_G_CreateGeometry(wkbtype);
-    
-    /* TODO: if donocat, also export areas without centroid
-     * -> loop over areas, not centroids */
 
-    Vect_rewind(In);
-    Vect_set_constraint_type(In, GV_CENTROID);
-    while(TRUE) {
-        type = Vect_read_next_line(In, NULL, Cats);
-        if (type < 0)
-            break;
-
-        /* get centroid's category */
+    for (area = 1; area <= Vect_get_num_areas(In); area++) {
+        /* get areas's category */
+	Vect_get_area_cats(In, area, Cats);
         Vect_cat_get(Cats, field, &cat);
         if (cat > 0)
             continue; /* skip features with category */
@@ -237,12 +229,6 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
                        * not labeled */
         }
 
-        /* find corresponding area */
-	line = Vect_get_next_line_id(In);
-        area = Vect_get_centroid_area(In, line);
-        if (area <= 0)
-            continue;
-                
         /* create polygon from area */
         Ogr_geometry_part = create_polygon(In, area, Points);
         
