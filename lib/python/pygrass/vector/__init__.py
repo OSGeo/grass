@@ -535,8 +535,8 @@ class VectorTopo(Vector):
 
         Generate a new vector map
 
-            >>> test_vect = VectorTopo(test_vector_name)
-            >>> test_vect.open('w', tab_name='newvect', tab_cols=cols,
+            >>> test_vect = VectorTopo('newvect_2')
+            >>> test_vect.open('w', tab_name='newvect_2', tab_cols=cols,
             ...                overwrite=True)
 
         import a geometry feature ::
@@ -554,12 +554,14 @@ class VectorTopo(Vector):
             >>> test_vect.write(point0, cat=1, attrs=('pub',))
             >>> test_vect.write(point1, cat=2, attrs=('resturant',))
             >>> test_vect.table.conn.commit()  # save changes in the DB
+            >>> test_vect.table_to_dict()
+            {1: [1, u'pub'], 2: [2, u'resturant']}
             >>> test_vect.close()
 
-        Now rewrite on point of the vector map: ::
+        Now rewrite one point of the vector map: ::
 
             >>> test_vect.open('rw')
-            >>> test_vect.rewrite(point2, cat=1, attrs('Irish Pub'))
+            >>> test_vect.rewrite(point2, cat=1, attrs=('Irish Pub',))
             >>> test_vect.table.conn.commit()  # save changes in the DB
             >>> test_vect.close()
 
@@ -571,6 +573,7 @@ class VectorTopo(Vector):
             >>> test_vect[1].attrs['name'] == 'Irish Pub'
             True
             >>> test_vect.close()
+            >>> test_vect.remove()
         """
         if self.table is not None and attrs:
             self.table.update(key=cat, values=attrs)
