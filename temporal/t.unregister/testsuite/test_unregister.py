@@ -82,14 +82,14 @@ class TestUnregister(TestCase):
         self.assertModule("t.unregister",  input="A",  maps="a1,a2,a3")
 
         lister = SimpleModule("t.rast.list", input="A", columns="name", 
-                              flags="s")
+                              flags="u")
         self.runModule(lister)
         self.assertEqual(a456, lister.outputs.stdout)
 
 
         # Check if all maps are present in STRDS B
         lister = SimpleModule("t.rast.list", input="B", columns="name", 
-                              flags="s")
+                              flags="u")
         self.runModule(lister)
         self.assertEqual(al, lister.outputs.stdout)
 
@@ -112,7 +112,7 @@ class TestUnregister(TestCase):
 
         # Check that masp a1, a2 and a3 are not present in STRDS B
         lister = SimpleModule("t.rast.list", input="B", columns="name", 
-                              flags="s")
+                              flags="u")
         self.runModule(lister)
         self.assertEqual(a456, lister.outputs.stdout)
 
