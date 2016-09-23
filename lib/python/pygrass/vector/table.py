@@ -48,19 +48,16 @@ def get_path(path, vect_name=None):
     :param path: The path with substitutional parameter
     :param vect_name: The name of the vector map
 
-    >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-    >>> new_path = get_path(path)
     >>> from grass.script.core import gisenv
     >>> import os
+    >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+    >>> new_path = get_path(path)
     >>> new_path2 = os.path.join(gisenv()['GISDBASE'], gisenv()['LOCATION_NAME'],
     ...                          gisenv()['MAPSET'], 'sqlite', 'sqlite.db')
     >>> new_path.replace("//","/") == new_path2.replace("//","/")
     True
-
     >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/vector/$MAP/sqlite.db'
     >>> new_path = get_path(path, "test")
-    >>> from grass.script.core import gisenv
-    >>> import os
     >>> new_path2 = os.path.join(gisenv()['GISDBASE'], gisenv()['LOCATION_NAME'],
     ...                          gisenv()['MAPSET'], 'vector', 'test', 'sqlite.db')
     >>> new_path.replace("//","/") == new_path2.replace("//","/")
@@ -74,7 +71,8 @@ def get_path(path, vect_name=None):
         path = path.replace('$GISDBASE', mapset.gisdbase)
         path = path.replace('$LOCATION_NAME', mapset.location)
         path = path.replace('$MAPSET', mapset.name)
-        path = path.replace('$MAP', vect_name)
+        if vect_name is not None:
+            path = path.replace('$MAP', vect_name)
         return path
 
 
