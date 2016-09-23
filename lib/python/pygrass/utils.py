@@ -200,46 +200,68 @@ def pixel2coor(pixel, region):
 def get_raster_for_points(poi_vector, raster, column=None, region=None):
     """Query a raster map for each point feature of a vector
 
-    test_vector_name="Utils_test_vector"
-    test_raster_name="Utils_test_raster"
-
     Example
 
-    >>> from grass.pygrass.vector import VectorTopo
     >>> from grass.pygrass.raster import RasterRow
     >>> from grass.pygrass.gis.region import Region
+    >>> from grass.pygrass.vector import VectorTopo
+    >>> from grass.pygrass.vector.geometry import Point
+
+    Create a vector map
+
+    >>> cols = [(u'cat', 'INTEGER PRIMARY KEY'),
+    ...         (u'value', 'double precision')]
+    >>> vect = VectorTopo("test_vect_2")
+    >>> vect.open("w",tab_name="test_vect_2",
+    ...           tab_cols=cols)
+    >>> vect.write(Point(10, 6), cat=1, attrs=[10, ])
+    >>> vect.write(Point(12, 6), cat=2, attrs=[12, ])
+    >>> vect.write(Point(14, 6), cat=3, attrs=[14, ])
+    >>> vect.table.conn.commit()
+    >>> vect.close()
+
+    Setup the raster sampling
+
     >>> region = Region()
     >>> region.from_rast(test_raster_name)
     >>> region.set_raster_region()
     >>> ele = RasterRow(test_raster_name)
-    >>> copy(test_vector_name,'test_vect_2','vector')
-    >>> fire = VectorTopo('test_vect_2')
-    >>> fire.open(mode='r')
-    >>> l = get_raster_for_points(fire, ele, region=region)
+
+    Sample the raster layer at the given points, return a list of values
+
+    >>> l = get_raster_for_points(vect, ele, region=region)
     >>> l[0]                                        # doctest: +ELLIPSIS
-    (1, 620856.9585876337, 230066.3831321055, 111.2153883384)
+    (1, 10.0, 6.0, 1)
     >>> l[1]                                        # doctest: +ELLIPSIS
-    (2, 625331.9185974908, 229990.82160762616, 89.978796115200012)
-    >>> fire.table.columns.add(test_raster_name,'double precision')
-    >>> test_raster_name in fire.table.columns
+    (2, 12.0, 6.0, 1)
+
+    Add a new column and sample again
+
+    >>> vect.open("r")
+    >>> vect.table.columns.add(test_raster_name,'double precision')
+    >>> vect.table.conn.commit()
+    >>> test_raster_name in vect.table.columns
     True
-    >>> get_raster_for_points(fire, ele, column=test_raster_name, region=region)
+    >>> get_raster_for_points(vect, ele, column=test_raster_name, region=region)
     True
-    >>> fire.table.filters.select('name', test_raster_name)
-    Filters(u'SELECT name, Utils_test_raster FROM test_vect_2;')
-    >>> cur = fire.table.execute()
+    >>> vect.table.filters.select('value', test_raster_name)
+    Filters(u'SELECT value, Utils_test_raster FROM test_vect_2;')
+    >>> cur = vect.table.execute()
     >>> r = cur.fetchall()
     >>> r[0]                                        # doctest: +ELLIPSIS
-    (u'Morrisville #3', 111.2153883384)
+    (10.0, 1.0)
     >>> r[1]                                        # doctest: +ELLIPSIS
-    (u'Morrisville #1', 89.97879611520001)
+    (12.0, 1.0)
     >>> remove('test_vect_2','vect')
 
-
-    :param point: point vector object
+    :param point: A VectorTopo object that contains points
     :param raster: raster object
-    :param str column: column name to update
+    :param str column: column name to update in the attrinute table,
+                       if set to None a list of sampled values will be returned
+    :param region: The region to work with, if not set the current computational region will be used
 
+    :return: True in case of success and a specified column for update,
+             if column name for update was not set a list of (id, x, y, value) is returned
     """
     from math import isnan
     if not column:
@@ -248,9 +270,9 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
         from grass.pygrass.gis.region import Region
         region = Region()
     if not poi_vector.is_open():
-        poi_vector.open()
+        poi_vector.open("r")
     if not raster.is_open():
-        raster.open()
+        raster.open("r")
     if poi_vector.num_primitive_of('point') == 0:
         raise GrassError(_("Vector doesn't contain points"))
 
