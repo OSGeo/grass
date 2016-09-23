@@ -91,7 +91,7 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
 	/* remove duplicate points */
 	Vect_line_prune(Points1);
 
-	if (Points1->n_points == 1) {
+	if (Points1->n_points < 2) {
 	    G_debug(3, "Vedit_merge_lines(): skipping zero length line");
 	    continue;
 	}
