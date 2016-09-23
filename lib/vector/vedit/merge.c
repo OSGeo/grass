@@ -64,6 +64,8 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
 	return 0;
     }
 
+    G_debug(1, "Vedit_merge_lines(): merging %d lines", List->n_values);
+
     Points1 = Vect_new_line_struct();
     Cats1 = Vect_new_cats_struct();
     Points2 = Vect_new_line_struct();
@@ -85,6 +87,14 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
 
 	if (!(type1 & GV_LINES))
 	    continue;
+
+	/* remove duplicate points */
+	Vect_line_prune(Points1);
+
+	if (Points1->n_points == 1) {
+	    G_debug(3, "Vedit_merge_lines(): skipping zero length line");
+	    continue;
+	}
 
 	Vect_reset_line(Points);
 
@@ -110,8 +120,9 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
 	     * merge lines only if two lines found in the region
 	     * i.e. the current line and an adjacent line
 	     */
-	    if (1 < Vect_select_lines_by_polygon(Map, Points2, 0, NULL,
-						 GV_LINES, List_in_box)) {
+	    if (0 < Vect_find_line_list(Map, Points1->x[i], Points1->y[i],
+	                                Points1->z[i], GV_LINES, 0, 0,
+					NULL, List_in_box)) {
 		do_merge = 1;
 		line2 = -1;
 		for (j = 0; do_merge && j < List->n_values; j++) {
