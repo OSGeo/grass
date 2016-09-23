@@ -28,6 +28,14 @@ doctest.SkipDocTestCase = type('SkipDocTestCase',
 def load_tests(loader, tests, ignore):
     # TODO: this must be somewhere when doctest is called, not here
     # TODO: ultimate solution is not to use _ as a buildin in lib/python
+    from grass.script.core import run_command
+
+    gutils.create_test_vector_map(gutils.test_vector_name)
+
+    run_command("g.region", n=50, s=0, e=60, w=0, res=1)
+    run_command("r.mapcalc", expression="%s = 1"%(gutils.test_raster_name),
+                             overwrite=True)
+
     # for now it is the only place where it works
     grass.gunittest.utils.do_doctest_gettext_workaround()
     # this should be called at some top level
