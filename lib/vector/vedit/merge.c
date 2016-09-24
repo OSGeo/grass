@@ -120,17 +120,33 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
 	     * merge lines only if two lines found in the region
 	     * i.e. the current line and an adjacent line
 	     */
+	    /* NOTE
+	     * - this merges two lines also if more than two lines are 
+	     *   found in the region, but only two of these lines are 
+	     *   in the List
+	     * - this not only merges lines connected by end points 
+	     *   but also any adjacent line with a mid point identical 
+	     *   to one of the end points of the current line 
+	     */
 	    if (0 < Vect_find_line_list(Map, Points1->x[i], Points1->y[i],
 	                                Points1->z[i], GV_LINES, 0, 0,
 					NULL, List_in_box)) {
 		do_merge = 1;
 		line2 = -1;
-		for (j = 0; do_merge && j < List->n_values; j++) {
-		    if (List->value[j] == line1 ||
-			!Vect_line_alive(Map, List->value[j]))
+		for (j = 0; do_merge && j < List_in_box->n_values; j++) {
+		    if (List_in_box->value[j] == line1 ||
+			!Vect_line_alive(Map, List_in_box->value[j]))
 			continue;
 
-		    if (Vect_val_in_list(List_in_box, List->value[j])) {
+		    if (Vect_val_in_list(List, List_in_box->value[j])) {
+			
+			Vect_read_line(Map, Points2, Cats2, List_in_box->value[j]);
+			Vect_line_prune(Points2);
+			if (Points2->n_points == 1) {
+			    line2 = List_in_box->value[j];
+			    do_merge = 1;
+			    break;
+			}
 			if (line2 > 0) {
 			    /* three lines found
 			     * selected lines will be not merged
@@ -138,7 +154,7 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
 			    do_merge = 0;
 			}
 			else {
-			    line2 = List->value[j];
+			    line2 = List_in_box->value[j];
 			}
 		    }
 		}
@@ -173,7 +189,7 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
 		nlines_merged++;
 
 	    /* update number of lines */
-	    Vect_list_append(List, line);
+	    G_ilist_add(List, line);
 	}
     }				/* for each line */
 
