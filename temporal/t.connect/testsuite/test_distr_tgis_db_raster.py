@@ -32,7 +32,7 @@ class TestRasterExtraction(TestCase):
             cls.runModule("g.region", s=0, n=80,
                           w=0, e=120, b=0, t=50, res=10, res3=10)
             cls.runModule("t.connect", flags="d")
-            cls.runModule("t.info", flags="s")
+            cls.runModule("t.info", flags="d")
             cls.runModule("r.mapcalc", expression="a1 = 100")
             cls.runModule("r.mapcalc", expression="a2 = 200")
             cls.runModule("r.mapcalc", expression="a3 = 300")
