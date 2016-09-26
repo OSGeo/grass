@@ -394,7 +394,8 @@ class Settings:
                 # snapping
                 'snapping': {
                     'value': 10,
-                    'units': 0
+                    'unit': 0,  # new
+                    'units': 'screen pixels'  # old for backwards comp.
                 },
                 'snapToVertex': {
                     'enabled': True

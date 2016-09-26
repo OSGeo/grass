@@ -1107,7 +1107,7 @@ class DisplayDriver:
             value = UserSettings.Get(group='vdigit', key=type, subkey='value')
 
         if units is None:
-            units = UserSettings.Get(group='vdigit', key=type, subkey='units')
+            units = UserSettings.Get(group='vdigit', key=type, subkey='unit')
 
         if value < 0:
             value = (self.region['nsres'] + self.region['ewres']) / 2.0

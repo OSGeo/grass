@@ -220,7 +220,7 @@ class VDigitSettingsDialog(wx.Dialog):
         try:
             self.snappingUnit.SetSelection(UserSettings.Get(group='vdigit',
                                                             key="snapping",
-                                                            subkey='units'))
+                                                            subkey='unit'))
         except:
             self.snappingUnit.SetSelection(0)
         self.snappingUnit.Bind(wx.EVT_CHOICE, self.OnChangeSnappingUnits)
@@ -1003,7 +1003,7 @@ class VDigitSettingsDialog(wx.Dialog):
         # snapping
         UserSettings.Set(group='vdigit', key="snapping", subkey='value',
                          value=int(self.snappingValue.GetValue()))
-        UserSettings.Set(group='vdigit', key="snapping", subkey='units',
+        UserSettings.Set(group='vdigit', key="snapping", subkey='unit',
                          value=self.snappingUnit.GetSelection())
         UserSettings.Set(group='vdigit', key="snapToVertex", subkey='enabled',
                          value=self.snapVertex.IsChecked())
