@@ -1112,7 +1112,7 @@ class DisplayDriver:
         if value < 0:
             value = (self.region['nsres'] + self.region['ewres']) / 2.0
 
-        if units == "screen pixels":
+        if units == _("screen pixels"):
             # pixel -> cell
             res = max(self.region['nsres'], self.region['ewres'])
             return value * res
