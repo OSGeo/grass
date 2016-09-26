@@ -110,7 +110,8 @@ def mapcalc(exp, quiet=False, verbose=False, overwrite=False,
         write_command('r.mapcalc', file='-', stdin=e, env=env, seed=seed,
                       quiet=quiet, verbose=verbose, overwrite=overwrite)
     except CalledModuleError:
-        fatal(_("An error occurred while running r.mapcalc"))
+        fatal(_("An error occurred while running r.mapcalc"
+                " with expression: %s") % e)
 
 
 def mapcalc_start(exp, quiet=False, verbose=False, overwrite=False,
