@@ -394,7 +394,7 @@ class Settings:
                 # snapping
                 'snapping': {
                     'value': 10,
-                    'units': 'screen pixels'
+                    'units': 0
                 },
                 'snapToVertex': {
                     'enabled': True
