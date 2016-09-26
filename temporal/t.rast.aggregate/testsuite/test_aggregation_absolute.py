@@ -103,7 +103,7 @@ class TestAggregationAbsolute(TestCase):
 
         # Check the map names are correct
         lister = SimpleModule("t.rast.list", input="B", columns="name",
-                              flags="s")
+                              flags="u")
         self.runModule(lister)
         #print lister.outputs.stdout
         maps="b_2001_01" + os.linesep + "b_2001_02" + os.linesep + \
@@ -144,7 +144,7 @@ class TestAggregationAbsolute(TestCase):
 
         # Check the map names are correct
         lister = SimpleModule("t.rast.list", input="B", columns="name",
-                              flags="s")
+                              flags="u")
         self.runModule(lister)
         #print lister.outputs.stdout
         maps="b_11" + os.linesep + "b_12" + os.linesep
@@ -177,7 +177,7 @@ class TestAggregationAbsolute(TestCase):
 
         # Check the map names are correct
         lister = SimpleModule("t.rast.list", input="B", columns="name",
-                              flags="s")
+                              flags="u")
         self.runModule(lister)
         #print lister.outputs.stdout
         maps="b_101" + os.linesep
