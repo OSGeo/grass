@@ -789,25 +789,30 @@ class Module(object):
 
 
 class MultiModule(object):
-    """This class is designed to run a list of modules in serial in the provided order.
+    """This class is designed to run a list of modules in serial in the provided order
+    within a temporary region environment.
 
     Module can be run in serial synchronously or asynchronously.
 
     - Synchronously:  When calling run() all modules will run in serial order
-                      until they are finished and then return. The modules can be accessed by
-                      calling get_modules().
-    - Asynchronously: When calling run() all modules will run in serial order in a background process,
-                      run() will return after starting the modules without waiting for them to finish.
+                      until they are finished, The run() method will return until all modules finished.
+                      The modules objects can be accessed by calling get_modules() to check their return
+                      values.
+    - Asynchronously: When calling run() all modules will run in serial order in a background process.
+                      Method run() will return after starting the modules without waiting for them to finish.
                       The user must call the wait() method to wait for the modules to finish.
-                      Asynchonously called module can be optionally run in a temporary region.
+                      Asynchronously called module can be optionally run in a temporary region
+                      environment, hence invokeing g.region will not alter the current
+                      region or the region of other MultiModule runs.
 
                       Note:
 
                           Modules run in asynchronous mode can only be accessed via the wait() method.
-                          The wait/( method will return all finished modules as list.
+                          The wait() method will return all finished module objects as list.
 
-    This class can be passed to the ParallelModuleQueue to run lists of modules in parallel. This
-    is meaningful if region settings must be applied to each parallel module run.
+    Objects of this class can be passed to the ParallelModuleQueue to run serial stacks
+    of modules in parallel. This is meaningful if region settings must be applied
+    to each parallel module run.
 
     >>> from grass.pygrass.modules import Module
     >>> from grass.pygrass.modules import MultiModule
@@ -880,13 +885,17 @@ class MultiModule(object):
     def __init__(self, module_list, sync=True, set_temp_region=False):
         """Constructor of the multi module class
 
-        :param module_list: A list of pre-configured modules that should be run by this module
+        :param module_list: A list of pre-configured Module objects that should be run
         :param sync: If set True the run() method will wait for all processes to finish -> synchronously run.
                      If set False, the run() method will return after starting the processes -> asynchronously run.
                      The wait() method must be called to finish the modules.
         :param set_temp_region: Set a temporary region in which the modules should be run, hence
                                 region settings in the process list will not affect the current
                                 computation region.
+
+                                Note:
+
+                                    This flag is only available in asynchronous mode!
         :return:
         """
         self.module_list = module_list
@@ -909,7 +918,7 @@ class MultiModule(object):
         return self.module_list
 
     def run(self):
-        """Start the modules in the list. if self.finished_ is set True
+        """Start the modules in the list. If self.finished_ is set True
         this method will return after all processes finished.
 
         If self.finish_ is set False, this method will return
@@ -917,7 +926,8 @@ class MultiModule(object):
         In a background process, the processes in the list will
         be run one after the another.
 
-        :return: None in case of self.finish_ is True, Process object that runs the module otherwise
+        :return: None in case of self.finish_ is True,
+                 otherwise a multiprocessing.Process object that invokes the modules
         """
 
         if self.finish_ is True:
@@ -937,7 +947,8 @@ class MultiModule(object):
             return self.p
 
     def wait(self):
-        """Wait for all processes to finish. Call this method if finished was set False.
+        """Wait for all processes to finish. Call this method
+        in asynchronous mode, hence if finished was set False.
 
         :return: The process list with finished processes to check their return states
         """
@@ -949,7 +960,10 @@ class MultiModule(object):
 
 
 def run_modules_in_temp_region(module_list, q):
-    """Run the modules in a temporary region
+    """Run the modules in a temporary region environment
+
+    This function is the argument for multiprocessing.Process class
+    in the MultiModule asynchronous execution.
 
     :param module_list: The list of modules to run in serial
     :param q: The process queue to put the finished process list
@@ -968,6 +982,9 @@ def run_modules_in_temp_region(module_list, q):
 
 def run_modules(module_list, q):
     """Run the modules
+
+    This function is the argument for multiprocessing.Process class
+    in the MultiModule asynchronous execution.
 
     :param module_list: The list of modules to run in serial
     :param q: The process queue to put the finished process list
