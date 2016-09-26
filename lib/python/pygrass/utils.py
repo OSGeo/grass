@@ -254,7 +254,7 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     (12.0, 1.0)
     >>> remove('test_vect_2','vect')
 
-    :param point: A VectorTopo object that contains points
+    :param poi_vector: A VectorTopo object that contains points
     :param raster: raster object
     :param str column: column name to update in the attrinute table,
                        if set to None a list of sampled values will be returned
