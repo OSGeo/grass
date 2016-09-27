@@ -10,7 +10,7 @@ import string
 from build_html import *
 
 
-no_into_page_classes = ['general', 'misc', 'postscript']
+no_intro_page_classes = ['display', 'general', 'misc', 'postscript']
 
 os.chdir(html_dir)
 
@@ -30,7 +30,7 @@ f = open(filename + ".tmp", 'wb')
 write_html_header(f, "GRASS GIS %s Reference Manual: %s" % (grass_version, modclass))
 modclass_lower = modclass.lower()
 modclass_visible = modclass
-if modclass_lower not in no_into_page_classes:
+if modclass_lower not in no_intro_page_classes:
     if modclass_visible == 'raster3d':
         # covert keyword to nice form
         modclass_visible = '3D raster'
