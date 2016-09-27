@@ -173,7 +173,7 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Miscellaneous&nbsp;&amp;&nbsp;Variables</h3>
        <ul>
-        <li class="box"><a href="misc.html">Miscellaneous commands manual</a></li>
+        <li class="box"><a href="miscellaneous.html">Miscellaneous commands manual</a></li>
         <li class="box"><a href="variables.html">GRASS variables and environment variables</a></li>
        </ul>
       </td>

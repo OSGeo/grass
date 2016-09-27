@@ -98,7 +98,7 @@ index_items = [
     ('imagery_graphical.html', std_img_name('imagery'), 'Imagery'),
     ('raster3d_graphical.html', std_img_name('raster3d'), '3D raster'),
     ('temporal_graphical.html', std_img_name('temporal'), 'Temporal'),
-    ('misc_graphical.html', std_img_name('misc'), 'Miscellaneous'),
+    ('miscellaneous_graphical.html', std_img_name('miscellaneous'), 'Miscellaneous'),
     ('postscript_graphical.html', std_img_name('cartography'), 'Cartography'),
     ('wxGUI_graphical.html', std_img_name('gui'), 'GUI'),
     ('wxGUI.nviz.html', std_img_name('3dview'), '3D view'),

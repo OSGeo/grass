@@ -99,7 +99,7 @@ index_names = {
     'db': 'database',
     'g': 'general',
     'i': 'imagery',
-    'm': 'misc',
+    'm': 'miscellaneous',
     'ps': 'postscript',
     'p': 'paint',
     'r': 'raster',

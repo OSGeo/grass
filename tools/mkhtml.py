@@ -258,7 +258,7 @@ index_names = {
     'db': 'database',
     'g' : 'general',
     'i' : 'imagery',
-    'm' : 'misc',
+    'm' : 'miscellaneous',
     'ps': 'postscript',
     'p' : 'paint',
     'r' : 'raster',
@@ -269,7 +269,7 @@ index_names = {
     }
 
 
-# TODO: special code for ps/postscript/PostScirpt and m/misc/Miscellaneous
+# TODO: special code for ps/postscript/PostScirpt
 def to_title(name):
     """Convert name of command class/family to form suitable for title"""
     if name == 'raster3d':
