@@ -139,7 +139,7 @@ Miscellaneous & Variables
 .. toctree::
     :maxdepth: 1
     
-        Miscellaneous commands manual <misc>
+        Miscellaneous commands manual <miscellaneous>
         GRASS variables and environment variables <variables>
 
 Temporal processing

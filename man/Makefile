@@ -17,7 +17,7 @@ categories = \
 	db:database \
 	g:general \
 	i:imagery \
-	m:misc \
+	m:miscellaneous \
 	ps:postscript \
 	r:raster \
 	r3:raster3d \

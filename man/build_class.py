@@ -10,7 +10,7 @@ import string
 from build_html import *
 
 
-no_intro_page_classes = ['display', 'general', 'misc', 'postscript']
+no_intro_page_classes = ['display', 'general', 'miscellaneous', 'postscript']
 
 os.chdir(html_dir)
 
