@@ -63,8 +63,8 @@ static int compare_cats(struct line_cats *ACats, struct line_cats *BCats)
    Useful for generalization and smoothing.
    Adjacent boundaries are merged as long as topology is maintained.
    Adjacent lines are merged as long as there are exactly two different 
-   lines connected at a given node.
-   Categories are added up when merging.
+   lines with identical categories connected at a given node.
+   Zero-length lines need to be removed first.
    GV_BUILD_BASE as topo build level is sufficient, areas need not be built.
 
    \param Map input vector map 
@@ -122,7 +122,7 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
 	 *  - loop back to start boundary via several other boundaries
 	 *  - one boundary forming closed loop
 	 *  - node with 3 entries but only 2 boundaries, one of them connecting twice,
-	 *    the other one must then be topologically incorrect in case of boundary */
+	 *    the other one must then be topologically incorrect (a bridge) in case of boundary */
 
 	/* go backward as long as there is only one other line/boundary at the current node */
 	G_debug(3, "go backward");
