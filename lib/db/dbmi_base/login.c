@@ -63,6 +63,10 @@ static void add_login(LOGIN * login, const char *dr, const char *db, const char 
 {
     int login_idx;
     
+    G_debug(3, "add_login(): drv='%s' db='%s' usr='%s' pwd='%s' host='%s', port='%s'",
+            dr, db, usr ? usr : "null", pwd ? pwd : "null", host ? host : "null",
+            port ? port : "null");
+
     if (login->n == login->a) {
 	login->a += 10;
 	login->data =
@@ -93,7 +97,8 @@ static int read_file(LOGIN * login)
     int ret;
     const char *file;
     FILE *fd;
-    char buf[2001], dr[500], db[500], usr[500], pwd[500], host[500], port[500];
+    char buf[DB_SQL_MAX];
+    char **tokens;
 
     login->n = 0;
     file = login_filename();
@@ -114,19 +119,24 @@ static int read_file(LOGIN * login)
     while (G_getl2(buf, 2000, fd)) {
 	G_chop(buf);
 
-	usr[0] = pwd[0] = host[0] = port[0] = '\0';
-	ret = sscanf(buf, "%[^|]|%[^|]|%[^|]|%[^|]|%[^|]|%[^\n]",
-                     dr, db, usr, pwd, host, port);
-
-	G_debug(3, "ret = %d : drv=[%s] db=[%s] usr=[%s] pwd=[%s] host=[%s], port=[%s]",
-		ret, dr, db, usr, pwd, host, port);
+        tokens = G_tokenize(buf, "|");
+        ret = G_number_of_tokens(tokens);
 
 	if (ret < 2) {
 	    G_warning(_("Login file (%s) corrupted (line: %s)"), file, buf);
+            G_free_tokens(tokens);
 	    continue;
 	}
 
-	add_login(login, dr, db, usr, pwd, host, port, -1);
+	add_login(login,
+                  tokens[0],                  /* driver */
+                  tokens[1],                  /* database */
+                  ret > 2 ? tokens[2] : NULL, /* user*/
+                  ret > 3 ? tokens[3] : NULL, /* password */
+                  ret > 4 ? tokens[4] : NULL, /* host */
+                  ret > 5 ? tokens[5] : NULL, /* port */
+                  -1);
+        G_free_tokens(tokens);
     }
 
     fclose(fd);
