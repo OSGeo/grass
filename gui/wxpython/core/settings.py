@@ -387,13 +387,14 @@ class Settings:
                     'units' : 'screen pixels'
                     },
                 # snapping
-                'snapping' : {
-                    'value' : 10,
-                    'units' : 'screen pixels'
-                    },
-                'snapToVertex' : {
-                    'enabled' : True
-                    },
+                'snapping': {
+                    'value': 10,
+                    'unit': 0,  # new
+                    'units': 'screen pixels'  # old for backwards comp.
+                },
+                'snapToVertex': {
+                    'enabled': True
+                },
                 # digitize new record
                 'addRecord' : {
                     'enabled' : True

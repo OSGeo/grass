@@ -163,9 +163,14 @@ class VDigitSettingsDialog(wx.Dialog):
                                          min = -1, max = 1e6)
         self.snappingValue.Bind(wx.EVT_SPINCTRL, self.OnChangeSnappingValue)
         self.snappingValue.Bind(wx.EVT_TEXT, self.OnChangeSnappingValue)
-        self.snappingUnit = wx.Choice(parent = panel, id = wx.ID_ANY, size = (125, -1),
-                                      choices = [_("screen pixels"), _("map units")])
-        self.snappingUnit.SetStringSelection(UserSettings.Get(group = 'vdigit', key = "snapping", subkey = 'units'))
+        self.snappingUnit = wx.Choice(parent=panel, id=wx.ID_ANY, size=(
+            125, -1), choices=[_("screen pixels"), _("map units")])
+        try:
+            self.snappingUnit.SetSelection(UserSettings.Get(group='vdigit',
+                                                            key="snapping",
+                                                            subkey='unit'))
+        except:
+            self.snappingUnit.SetSelection(0)
         self.snappingUnit.Bind(wx.EVT_CHOICE, self.OnChangeSnappingUnits)
         flexSizer.Add(text, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(self.snappingValue, proportion = 0, flag = wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
@@ -609,7 +614,7 @@ class VDigitSettingsDialog(wx.Dialog):
             res = (region['nsres'] + region['ewres']) / 2.
             threshold = self.digit.GetDisplay().GetThreshold(value = res)
         else:
-            if self.snappingUnit.GetStringSelection() == "map units":
+            if self.snappingUnit.GetSelection() == 1:  # map units
                 threshold = value
             else:
                 threshold = self.digit.GetDisplay().GetThreshold(value = value)
@@ -632,10 +637,10 @@ class VDigitSettingsDialog(wx.Dialog):
         """Snapping units change -> update static text
         """
         value = self.snappingValue.GetValue()
-        units = self.snappingUnit.GetStringSelection()
+        units = self.snappingUnit.GetSelection()
         threshold = self.digit.GetDisplay().GetThreshold(value = value, units = units)
 
-        if units == "map units":
+        if units == 1:  # map units
             self.snappingInfo.SetLabel(_("Snapping threshold is %(value).1f %(units)s") % 
                                        {'value' : value,
                                         'units' : self.mapUnits})
@@ -721,13 +726,13 @@ class VDigitSettingsDialog(wx.Dialog):
                          value = int(self.lineWidthValue.GetValue()))
 
         # snapping
-        UserSettings.Set(group = 'vdigit', key = "snapping", subkey = 'value',
-                         value = int(self.snappingValue.GetValue()))
-        UserSettings.Set(group = 'vdigit', key = "snapping", subkey = 'units',
-                         value = self.snappingUnit.GetStringSelection())
-        UserSettings.Set(group = 'vdigit', key = "snapToVertex", subkey = 'enabled',
-                         value = self.snapVertex.IsChecked())
-        
+        UserSettings.Set(group='vdigit', key="snapping", subkey='value',
+                         value=int(self.snappingValue.GetValue()))
+        UserSettings.Set(group='vdigit', key="snapping", subkey='unit',
+                         value=self.snappingUnit.GetSelection())
+        UserSettings.Set(group='vdigit', key="snapToVertex", subkey='enabled',
+                         value=self.snapVertex.IsChecked())
+
         # digitize new feature
         UserSettings.Set(group = 'vdigit', key = "addRecord", subkey = 'enabled',
                          value = self.addRecord.IsChecked())
