@@ -33,7 +33,7 @@ for cmd in rest_files(cls):
     if desc is None:
         desc = get_desc(cmd)
     f.write(desc2_tmpl.substitute(basename = basename,
-    			      desc = desc))
+                                  desc = desc))
 
 write_rest_footer(f, "index.txt")
 

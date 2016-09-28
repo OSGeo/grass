@@ -152,9 +152,9 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
       </ul></td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Database</h3>
        <ul>
-	<li class="box"><a href="databaseintro.html">Intro: database management</a></li>
-	<li class="box"><a href="sql.html">SQL support in GRASS GIS</a></li>
-	<li class="box"><a href="database.html">Database commands manual</a></li>
+        <li class="box"><a href="databaseintro.html">Intro: database management</a></li>
+        <li class="box"><a href="sql.html">SQL support in GRASS GIS</a></li>
+        <li class="box"><a href="database.html">Database commands manual</a></li>
        </ul>
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Temporal processing</h3>

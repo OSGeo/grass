@@ -67,7 +67,7 @@ Quick Introduction
 .. toctree::
     :maxdepth: 1
 
-	How to start with GRASS <helptext.html>
+        How to start with GRASS <helptext.html>
         Intro projections and spatial transformations <projectionintro>
         Intro 2D raster map processing <rasterintro>
         Intro 3D raster map (voxel) processing <raster3dintro>

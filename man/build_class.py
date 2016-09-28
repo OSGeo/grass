@@ -44,8 +44,8 @@ for cmd in html_files(cls):
     if desc is None:
         desc = get_desc(cmd)
     f.write(desc2_tmpl.substitute(cmd = cmd,
-    			      basename = basename,
-    			      desc = desc))
+                                  basename = basename,
+                                  desc = desc))
 f.write("</table>\n")
 
 write_html_footer(f, "index.html", year)
