@@ -15,13 +15,14 @@ if len(sys.argv) > 1:
 
 os.chdir(html_dir)
 
+# TODO: create some master function/dict somewhere
 class_labels = {
     'd' : 'display',
     'db' : 'database',
     'g' : 'general',
     'i' : 'imagery',
     'm' : 'miscellaneous',
-    'ps' : 'postscript',
+    'ps' : 'PostScript',
     'r' : 'raster',
     'r3' : '3D raster',
     't' : 'temporal',

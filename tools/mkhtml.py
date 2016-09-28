@@ -269,11 +269,12 @@ index_names = {
     }
 
 
-# TODO: special code for ps/postscript/PostScirpt
 def to_title(name):
     """Convert name of command class/family to form suitable for title"""
     if name == 'raster3d':
         return '3D raster'
+    elif name == 'postscript':
+        return 'PostScript'
     else:
         return name.capitalize()
 

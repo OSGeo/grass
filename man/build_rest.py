@@ -156,7 +156,7 @@ Printing
 .. toctree::
     :maxdepth: 1
     
-        Postscript commands manual <postscript>
+        PostScript commands manual <postscript>
 
 """)
 
