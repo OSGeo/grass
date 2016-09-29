@@ -64,6 +64,9 @@ static void usage(FILE *fp, int markers)
     int maxlen;
     int len, n;
     int new_prompt = 0;
+    int extensive = 0;  /* include also less important parts */
+    int standard = 0;  /* include also standard flags */
+    int detailed = 0;  /* details for each flag and option */
 
     new_prompt = G__uses_new_gisprompt();
 
@@ -73,16 +76,27 @@ static void usage(FILE *fp, int markers)
 	st->pgm_name = "??";
 
     if (st->module_info.label || st->module_info.description) {
-	fprintf(fp, "\n");
+        if (extensive)
+            fprintf(fp, "\n");
 	if (markers)
 	    fprintf(fp, "{{{DESCRIPTION}}}\n");
-	fprintf(fp, "%s\n", _("Description:"));
-	if (st->module_info.label)
-	    fprintf(fp, " %s\n", st->module_info.label);
-	if (st->module_info.description)
-	    fprintf(fp, " %s\n", st->module_info.description);
+        if (extensive) {
+            fprintf(fp, "%s\n", _("Description:"));
+            if (st->module_info.label)
+                fprintf(fp, " %s\n", st->module_info.label);
+            if (st->module_info.description)
+                fprintf(fp, " %s\n", st->module_info.description);
+        }
+        else {
+            /* print label, if no label, try description */
+            /* no leading space without heading */
+            if (st->module_info.label)
+                fprintf(fp, "%s\n", st->module_info.label);
+            else if (st->module_info.description)
+                fprintf(fp, "%s\n", st->module_info.description);
+        }
     }
-    if (st->module_info.keywords) {
+    if (extensive &&& st->module_info.keywords) {
 	fprintf(fp, "\n");
 	if (markers)
 	    fprintf(fp, "{{{KEYWORDS}}}\n");
@@ -183,7 +197,7 @@ static void usage(FILE *fp, int markers)
 
 	    if (flag->label) {
 		fprintf(fp, "%s\n", flag->label);
-		if (flag->description)
+		if (detailed && flag->description)
 		    fprintf(fp, "        %s\n", flag->description);
 
 	    }
@@ -195,16 +209,18 @@ static void usage(FILE *fp, int markers)
 	}
     }
 
-    if (new_prompt)
-	fprintf(fp, " --o   %s\n",
-		_("Allow output files to overwrite existing files"));
+    if (standard) {
+        if (new_prompt)
+            fprintf(fp, " --o   %s\n",
+                    _("Allow output files to overwrite existing files"));
 
-    fprintf(fp, " --h   %s\n", _("Print usage summary"));
-    fprintf(fp, " --v   %s\n", _("Verbose module output"));
-    fprintf(fp, " --q   %s\n", _("Quiet module output"));
-    fprintf(fp, " --qq  %s\n", _("Super quiet module output"));
-    fprintf(fp, " --ui  %s\n", _("Force launching GUI dialog"));
-    
+        fprintf(fp, " --h   %s\n", _("Print usage summary"));
+        fprintf(fp, " --v   %s\n", _("Verbose module output"));
+        fprintf(fp, " --q   %s\n", _("Quiet module output"));
+        fprintf(fp, " --qq  %s\n", _("Super quiet module output"));
+        fprintf(fp, " --ui  %s\n", _("Force launching GUI dialog"));
+    }
+
     /* Print help info for options */
 
     if (st->n_opts) {
@@ -218,7 +234,7 @@ static void usage(FILE *fp, int markers)
 
 	    if (opt->label) {
 		fprintf(fp, "%s\n", opt->label);
-		if (opt->description) {
+                if (detailed && opt->description) {
 		    fprintf(fp, "  %*s    %s\n",
 			    maxlen, " ", opt->description);
 		}
@@ -237,7 +253,7 @@ static void usage(FILE *fp, int markers)
 		fprintf(fp, _("  %*s   default: %s\n"), maxlen, " ",
 			opt->def);
 
-	    if (opt->descs) {
+            if (detailed && opt->descs) {
 		int i = 0;
 
 		while (opt->opts[i]) {
