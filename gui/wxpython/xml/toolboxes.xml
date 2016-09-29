@@ -1779,6 +1779,9 @@
   <toolbox name="TemporalManageDatasets">
     <label>Manage datasets</label>
     <items>
+      <module-item name="t.connect">
+        <label>Connect temporal database</label>
+      </module-item>
       <module-item name="t.create">
         <label>Create</label>
       </module-item>
@@ -1911,14 +1914,17 @@
   <toolbox name="TemporalSampling">
     <label>Sampling</label>
     <items>
-      <module-item name="t.sample">
-        <label>Temporal sampling</label>
+      <module-item name="t.rast.what">
+        <label>Sample a space time raster dataset at point coordinates</label>
       </module-item>
       <module-item name="t.vect.what.strds">
         <label>Query raster dataset by vector points dataset</label>
       </module-item>
       <module-item name="t.vect.observe.strds">
         <label>Observe specific locations in raster dataset</label>
+      </module-item>
+      <module-item name="t.sample">
+        <label>Temporal sampling</label>
       </module-item>
     </items>
   </toolbox>
