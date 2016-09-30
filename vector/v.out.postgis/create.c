@@ -69,10 +69,13 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
 	    G_debug(1, "option: %s=%s", tokens[0], tokens[1]);
             /* force lower case */
             G_str_to_lower(tokens[0]);
-
-            if (strcmp(tokens[0], "srid") && epsg)
-                G_warning(_("EPSG code (%s) defined for current location will be ignored"),
-                          epsg);
+            /* strip whitespace for key/value */
+            G_strip(tokens[0]);
+            G_strip(tokens[1]);
+            
+            if (strcmp(tokens[0], "srid") == 0 && (epsg && strcmp(tokens[1], epsg) != 0))
+                G_warning(_("EPSG code defined for current location (%s) is overridden by %s"),
+                          epsg, tokens[1]);
             
 	    G_set_key_value(tokens[0], tokens[1], key_val);
 	    
