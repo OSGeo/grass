@@ -38,8 +38,12 @@
 #include <grass/glocale.h>
 #include "linegraph.h"
 
+#ifndef MAX
 #define MAX(x,y) ((x) > (y) ? (x) : (y))
+#endif
+#ifndef MIN
 #define MIN(x,y) ((x) < (y) ? (x) : (y))
+#endif
 
 /* the default order of precedence of colors to use for Y lines */
 int default_y_colors[] = {
