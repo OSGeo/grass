@@ -38,7 +38,7 @@
 #define MAX(a,b)      ((a) > (b) ? (a) : (b))
 
 static void ImportBand(GDALRasterBandH hBand, const char *output,
-		       struct Ref *group_ref, const struct Cell_head*);
+		       struct Ref *group_ref);
 static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 			     struct pj_info *iproj, struct pj_info *oproj);
 static int dump_rat(GDALRasterBandH hBand, char *outrat, int nBand);
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 	              *rat;
     } parm;
     struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c, *flag_p,
-        *flag_j, *flag_r;
+        *flag_j;
 
     /* -------------------------------------------------------------------- */
     /*      Initialize.                                                     */
@@ -214,10 +214,6 @@ int main(int argc, char *argv[])
 	_("Create the location specified by the \"location\" parameter and exit."
           " Do not import the raster file.");
 
-    flag_r = G_define_flag();
-    flag_r->key = 'r';
-    flag_r->description = _("Limit import to the current region");
-      
     flag_p = G_define_flag();
     flag_p->key = 'p';
     flag_p->description = _("Print number of bands and exit");
@@ -362,64 +358,30 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     G_debug(3, "GDAL size: row = %d, col = %d", GDALGetRasterYSize(hDS),
 	    GDALGetRasterXSize(hDS));
-    if (flag_r->answer) {
-        G_get_set_window(&cellhd);
-    }
-    else {
-        cellhd.rows = GDALGetRasterYSize(hDS);
-        cellhd.rows3 = GDALGetRasterYSize(hDS);
-        cellhd.cols = GDALGetRasterXSize(hDS);
-        cellhd.cols3 = GDALGetRasterXSize(hDS);
-    }
+    cellhd.rows = GDALGetRasterYSize(hDS);
+    cellhd.rows3 = GDALGetRasterYSize(hDS);
+    cellhd.cols = GDALGetRasterXSize(hDS);
+    cellhd.cols3 = GDALGetRasterXSize(hDS);
 
     if (GDALGetGeoTransform(hDS, adfGeoTransform) == CE_None) {
 	if (adfGeoTransform[2] != 0.0 || adfGeoTransform[4] != 0.0 ||
 	    adfGeoTransform[1] <= 0.0 || adfGeoTransform[5] >= 0.0)
 	    G_fatal_error(_("Input raster map is flipped or rotated - cannot import. "
 			    "You may use 'gdalwarp' to transform the map to North-up."));
-        
-        cellhd.ns_res = fabs(adfGeoTransform[5]);
+	cellhd.north = adfGeoTransform[3];
+	cellhd.ns_res = fabs(adfGeoTransform[5]);
 	cellhd.ns_res3 = fabs(adfGeoTransform[5]);
+	cellhd.south = cellhd.north - cellhd.ns_res * cellhd.rows;
+	cellhd.west = adfGeoTransform[0];
 	cellhd.ew_res = fabs(adfGeoTransform[1]);
 	cellhd.ew_res3 = fabs(adfGeoTransform[1]);
-
-        if (flag_r->answer) {
-            int pixel_start, pixel_end, line_start, line_end;
-            
-            /* get pixel coordinates defined by current region */
-            pixel_start = (int) (cellhd.west - adfGeoTransform[0]) / adfGeoTransform[1];
-            line_start = (int) (cellhd.north - adfGeoTransform[3]) / adfGeoTransform[5];
-            pixel_end = (int) (cellhd.east - adfGeoTransform[0]) / adfGeoTransform[1];
-            line_end = (int) (cellhd.south - adfGeoTransform[3]) / adfGeoTransform[5];
-
-            /* align region extent to input raster */
-            cellhd.west = adfGeoTransform[0] + pixel_start * adfGeoTransform[1] +
-                line_start * adfGeoTransform[2];
-            cellhd.north = adfGeoTransform[3] + pixel_start * adfGeoTransform[4] +
-                line_start * adfGeoTransform[5];
-            cellhd.east = adfGeoTransform[0] + pixel_end * adfGeoTransform[1] +
-                line_end * adfGeoTransform[2] + adfGeoTransform[1];
-            cellhd.south = adfGeoTransform[3] + pixel_end * adfGeoTransform[4] +
-                line_end * adfGeoTransform[5] + adfGeoTransform[5];
-            cellhd.rows = cellhd.rows3 = line_end - line_start + 1;
-            cellhd.cols = cellhd.cols3 = pixel_end - pixel_start + 1;
-        }
-        else {
-            cellhd.north = adfGeoTransform[3];
-            cellhd.south = cellhd.north - cellhd.ns_res * cellhd.rows;
-            cellhd.west = adfGeoTransform[0];
-            cellhd.east = cellhd.west + cellhd.cols * cellhd.ew_res;
-        }
+	cellhd.east = cellhd.west + cellhd.cols * cellhd.ew_res;
 	cellhd.top = 1.;
 	cellhd.bottom = 0.;
 	cellhd.tb_res = 1.;
 	cellhd.depths = 1;
     }
     else {
-        if (flag_r->answer) {
-            G_fatal_error(_("Unable to fetch the affine transformation coefficients. "
-                            "Flag -%c cannot be used in this case."), flag_r->key);
-        }
 	cellhd.north = cellhd.rows;
 	cellhd.south = 0.0;
 	cellhd.ns_res = 1.0;
@@ -647,7 +609,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Selected band (%d) does not exist"), nBand);
 	}
 
-	ImportBand(hBand, output, NULL, flag_r->answer ? &cellhd : NULL);
+	ImportBand(hBand, output, NULL);
 	if (parm.rat->answer)
 	    dump_rat(hBand, parm.rat->answer, nBand);
 
@@ -735,7 +697,7 @@ int main(int argc, char *argv[])
               }
             }
 
-	    ImportBand(hBand, szBandName, &ref, flag_r->answer ? &cellhd : NULL);
+	    ImportBand(hBand, szBandName, &ref);
 
 	    if(map_names_file)
 	        fprintf(map_names_file, "%s\n", szBandName);
@@ -1000,13 +962,13 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 /************************************************************************/
 
 static void ImportBand(GDALRasterBandH hBand, const char *output,
-		       struct Ref *group_ref, const struct Cell_head *cellhd)
+		       struct Ref *group_ref)
 {
     RASTER_MAP_TYPE data_type;
     GDALDataType eGDT, eRawGDT;
     int row, nrows, ncols, complex;
     int cf, cfR, cfI, bNoDataEnabled;
-    int indx, row_offset, col_offset;
+    int indx;
     void *cell, *cellReal, *cellImg;
     void *bufComplex;
     double dfNoData;
@@ -1061,24 +1023,11 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     }
 
     /* -------------------------------------------------------------------- */
-    /*      Create the new raster(s)                                        */
+    /*      Create the new raster(s)                                          */
     /* -------------------------------------------------------------------- */
-    row_offset = col_offset = 0;
-    if (cellhd) {
-        double adfGeoTransform[6];
-        
-        ncols = cellhd->cols;
-        nrows = cellhd->rows;
-        if (GDALGetGeoTransform(GDALGetBandDataset(hBand), adfGeoTransform) == CE_None) {
-            col_offset = (int) (cellhd->west - adfGeoTransform[0]) / adfGeoTransform[1];
-            row_offset = (int) (cellhd->north - adfGeoTransform[3]) / adfGeoTransform[5];
-        }
-    }
-    else {
-        ncols = GDALGetRasterBandXSize(hBand);
-        nrows = GDALGetRasterBandYSize(hBand);
-    }
-    
+    ncols = GDALGetRasterBandXSize(hBand);
+    nrows = GDALGetRasterBandYSize(hBand);
+
     if (complex) {
 	sprintf(outputReal, "%s.real", output);
 	cfR = Rast_open_new(outputReal, data_type);
@@ -1124,7 +1073,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     if (!l1bdriver) {		/* no AVHRR */
 	for (row = 1; row <= nrows; row++) {
 	    if (complex) {	/* CEOS SAR et al.: import flipped to match GRASS coordinates */
-		GDALRasterIO(hBand, GF_Read, col_offset, row_offset + row - 1, ncols, 1,
+		GDALRasterIO(hBand, GF_Read, 0, row - 1, ncols, 1,
 			     bufComplex, ncols, 1, eGDT, 0, 0);
 
 		for (indx = ncols - 1; indx >= 0; indx--) {	/* CEOS: flip east-west during import - MN */
@@ -1151,7 +1100,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 		Rast_put_row(cfI, cellImg, data_type);
 	    }			/* end of complex */
 	    else {		/* single band */
-		GDALRasterIO(hBand, GF_Read, col_offset, row_offset + row - 1, ncols, 1,
+		GDALRasterIO(hBand, GF_Read, 0, row - 1, ncols, 1,
 			     cell, ncols, 1, eGDT, 0, 0);
 
 		if (nullFlags != NULL) {
