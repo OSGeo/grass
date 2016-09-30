@@ -8,7 +8,7 @@
  *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>, 
  *               Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2016 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -110,6 +110,7 @@ int main(int argc, char **argv)
     struct Option *y_color_opt;
     struct Option *title[3];
     struct Option *t_color_opt;
+    struct Option *y_min, *y_max;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -180,6 +181,17 @@ int main(int argc, char **argv)
     title[2]->required = NO;
     title[2]->answer = "";
 
+    y_min = G_define_option();
+    y_min->key = "y_min";
+    y_min->description = _("Minimum value for Y axis");
+    y_min->type = TYPE_DOUBLE;
+    y_min->required = NO;
+
+    y_max = G_define_option();
+    y_max->key = "y_max";
+    y_max->description = _("Maximum value for Y axis");
+    y_max->type = TYPE_DOUBLE;
+    y_max->required = NO;
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -320,6 +332,11 @@ int main(int argc, char **argv)
 			  (in[i].num_pnts - in[0].num_pnts));
 	}
     }
+
+    if (y_min->answer)
+        min_y = atof(y_min->answer);
+    if (y_max->answer)
+        max_y = atof(y_max->answer);
 
     /* close all files */
 
