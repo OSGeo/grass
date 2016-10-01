@@ -86,6 +86,7 @@ int main(int argc, char **argv)
     {
 	int num_pnts;		/* number of lines in file  */
 	int color;		/* color to use for y lines */
+        int r, g, b;
 	float max;		/* maximum value in file    */
 	float min;		/* minimum value in file    */
 	float value;		/* current value read in    */
@@ -112,6 +113,7 @@ int main(int argc, char **argv)
 
     struct Option *dir_opt, *x_opt, *y_opt;
     struct Option *y_color_opt;
+    struct Option *color_table_opt;
     struct Option *title[3];
     struct Option *t_color_opt;
     struct Option *y_min, *y_max;
@@ -155,6 +157,10 @@ int main(int argc, char **argv)
     y_color_opt->multiple = YES;
     y_color_opt->gisprompt = "old_color,color,color";
     y_color_opt->answers = NULL;
+
+    color_table_opt = G_define_standard_option(G_OPT_M_COLR);
+    color_table_opt->key = "color_table";
+    color_table_opt->guisection = _("Define");
 
     t_color_opt = G_define_option();
     t_color_opt->key = "title_color";
@@ -270,6 +276,29 @@ int main(int argc, char **argv)
 	if (j < num_y_files)
 	    G_fatal_error(_("Only <%d> colors given for <%d> lines"), j,
 			  num_y_files);
+    }
+    else if (color_table_opt->answer) {
+        struct Colors colors;
+        Rast_init_colors(&colors);
+        Rast_make_colors(&colors, color_table_opt->answer, 1, num_y_files);
+        int* values = G_malloc(sizeof(int));
+        unsigned char* r = G_malloc(sizeof(unsigned char));
+        unsigned char* g = G_malloc(sizeof(unsigned char));
+        unsigned char* b = G_malloc(sizeof(unsigned char));
+        unsigned char* set = G_malloc(sizeof(unsigned char));
+        for (i = 0; i < num_y_files; i++)
+            values[i] = i + 1;
+        Rast_lookup_c_colors(values, r, g, b, set, num_y_files, &colors);
+        for (i = 0; i < num_y_files; i++) {
+            /* the in list is indexed from 1 */
+            in[i + 1].r = r[i];
+            in[i + 1].g = g[i];
+            in[i + 1].b = b[i];
+        }
+        G_free(r);
+        G_free(g);
+        G_free(b);
+        G_free(set);
     }
     else
 	/* no colors given on command line, use default list */
@@ -417,7 +446,10 @@ int main(int argc, char **argv)
 
 		/* draw increment of each Y file's data */
 
-		D_use_color(in[i].color);
+                if (color_table_opt->answer)
+                    D_RGB_color(in[i].r, in[i].g, in[i].b);
+                else
+                    D_use_color(in[i].color);
 
 		/* find out position of where Y should be drawn. */
 		/* if our minimum value of y is not negative, this is easy */
