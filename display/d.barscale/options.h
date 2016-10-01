@@ -28,4 +28,4 @@ extern int do_background;
 extern int north_arrow;
 
 /* draw_scale.c */
-int draw_scale(double, double, int, int, int, char *, int, int, double);
+int draw_scale(double, double, int, int, int, char *, int, int, double, double);
