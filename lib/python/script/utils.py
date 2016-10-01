@@ -150,26 +150,31 @@ class KeyValue(dict):
         self[key] = value
 
 
-def decode(bytes):
-    """Decode bytes with default locale
+def decode(bytes_):
+    """Decode bytes with default locale and return (unicode) string
 
-    :param bytes bytes: the bytes to decode
+    No-op if parameter is not bytes (assumed unicode string).
+
+    :param bytes bytes_: the bytes to decode
     """
-    enc = locale.getdefaultlocale()[1]
-    if hasattr(bytes, 'decode'):
-        return bytes.decode(enc) if enc else bytes.decode()
-    return bytes
+    if isinstance(bytes_, bytes):
+        enc = locale.getdefaultlocale()[1]
+        return bytes_.decode(enc) if enc else bytes_.decode()
+    return bytes_
 
 
 def encode(string):
-    """Encode string with default locale -> bytes
+    """Encode string with default locale and return bytes with that encoding
+
+    No-op if parameter is bytes (assumed already encoded).
+    This ensures garbage in, garbage out.
 
     :param str string: the string to encode
     """
+    if isinstance(string, bytes):
+        return string
     enc = locale.getdefaultlocale()[1]
-    if hasattr(string, 'encode'):
-        return string.encode(enc) if enc else string.encode()
-    return string
+    return string.encode(enc) if enc else string.encode()
 
 
 def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):

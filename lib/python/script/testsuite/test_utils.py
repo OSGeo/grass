@@ -39,6 +39,10 @@ class TestEncode(TestCase):
     def test_unicode(self):
         self.assertEqual(b'text', utils.encode(u'text'))
 
+    def test_bytes_grabage_in_out(self):
+        """If the input is bytes we should not touch it for encoding"""
+        self.assertEqual(b'Příšerný kůň', utils.encode(b'Příšerný kůň'))
+
 
 class TestDecode(TestCase):
     """Tests function `encode` that convert value to unicode."""
