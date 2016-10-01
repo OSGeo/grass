@@ -75,6 +75,52 @@ of <em>d.linegraph</em>.
 (You can make GNUplot output pretty by using its SVG or PostScript output
 driver and converting that back into a rasterized image in a paint program)
 
+<h2>EXAMPLE</h2>
+
+The following can be executed in Bash to create the input data for this
+example. The user can just create these files in a text editor, save
+them and specify path to them.
+
+<div class="code"><pre>
+cat > x.txt &lt;&lt;EOF
+1
+3
+4
+6
+9
+EOF
+cat > y1.txt &lt;&lt;EOF
+50
+58
+65
+34
+27
+EOF
+cat > y2.txt &lt;&lt;EOF
+10
+20
+35
+50
+45
+EOF
+</pre></div>
+
+<!--
+export GRASS_FONT=sans  # fixes bad default font
+d.mon start=cairo output=plot.png width=400 height=400 --o
+d.erase  # previous image is not cleaned
+-->
+
+The series of commands creates a file <tt>plot.png</tt> in the current
+directory which is the drawing make by <em>d.linegraph</em>.
+
+<div class="code"><pre>
+d.mon start=cairo output=plot.png width=400 height=400
+d.linegraph x_file=x.txt y_file=y1.txt,y2.txt
+d.mon stop=cairo
+</pre></div>
+
+
 <h2>SEE ALSO</h2>
 <em>
 <a href="d.frame.html">d.frame</a>,
