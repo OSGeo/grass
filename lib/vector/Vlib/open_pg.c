@@ -522,9 +522,11 @@ void connect_db(struct Format_info_pg *pg_info)
         /* try connection settings for given database first, then try
          * any settings defined for pg driver */
         db_get_login2("pg", dbname, &user, &passwd, &host, &port);
+        /* any settings defined for pg driver disabled - can cause
+           problems when running multiple local/remote db clusters
         if (strlen(dbname) > 0 && !user && !passwd)
             db_get_login2("pg", NULL, &user, &passwd, &host, &port);
-        
+        */
         if (user || passwd || host || port) {
             char  conninfo[DB_SQL_MAX];
 
