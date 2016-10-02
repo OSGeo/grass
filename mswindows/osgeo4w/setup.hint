@@ -3,6 +3,5 @@ ldesc: "Geographic Resources Analysis Support System (GRASS GIS) - stable releas
 category: Desktop
 requires: liblas avce00 gpsbabel gs gdal-python matplotlib msvcrt iconv libtiff gdal proj freetype-mingw pdcurses zlib fftw libpng wxpython python-numpy python-pil pyopengl cairo psycopg2
 maintainer: MartinLanda
-curr: 7.0.4-1
-prev: 7.0.3-1
-test: 7.0.5RC2-1
+curr: 7.0.5-1
+prev: 7.0.4-1
