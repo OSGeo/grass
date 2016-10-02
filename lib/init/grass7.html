@@ -30,6 +30,9 @@
 <dt><b>-c EPSG:code:datum_trans</b>
 <dd> Creates new GRASS projected location in specified GISDBASE with given EPSG code and datum transform parameters
 
+<dt><b>-e</b>
+<dd> Exit after creation of location or mapset. Only with <b>-c</b> flag
+
 <dt><b>-f</b>
 <dd> Forces removal of .gislock if exists (use with care!). Only with -text flag
 
@@ -46,7 +49,7 @@
 <dt><b>--config</b>
 <dd> Prints GRASS configuration parameters (options: arch, build, compiler, path, revision)
 
-<dt><b>-exec EXECUTABLE</b>
+<dt><b>--exec EXECUTABLE</b>
 <dd> Execute GRASS module or script. The provided executable will be executed in a GRASS GIS non-interactive session.
 </dl>
 
@@ -271,7 +274,8 @@ r.out.gdal input=basin_50K output=basins.tiff
 Region issues ignored.
 -->
 
-Create a new Location based on a projection of a file:
+Create a new Location based on a geodata file's projection (<b>-c</b>)
+and exit (<b>-e</b>):
 
 <div class="code"><pre>
 grass72 -c elevation.tiff -e /path/to/grassdata/test1/
