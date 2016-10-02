@@ -58,12 +58,12 @@ Contents
 #example:
 7
 0
-5RC1
+6RC1
 2016
       rm -f include/VERSION~
 
     - Update OSGeo4W setup.hint file
-      mswindows/osgeo4w/setup.hint
+      vim mswindows/osgeo4w/setup.hint
 
       for RC candidates use 'test' keyword
       for final version use 'curr' keyword
@@ -119,7 +119,7 @@ Contents
 #example
 7
 0
-5svn
+6svn
 2016
 
     rm -f include/VERSION~
@@ -177,13 +177,12 @@ Contents
  o Trac updates:
       - Add new release to https://trac.osgeo.org/grass/admin/ticket/versions
       - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.0.x --> Edit Milestone
-        (this ideally batch-migrates assigned tickets to next milestone)
-      - batch modify tickets, set to next milestone (update this query accordingly)
+      - Batch modify tickets, set to next milestone (update this query accordingly: two entries to change)
         https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.0.4&milestone=7.0.5&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority
-        - under "Comment" add Field "Milestone" and set to next version
-        - Select all shown tickets via Status: assigned/new/reopened
-        - then "Change ticket" button
-      - Only in case of new release branch
+        - Set max items to 1000, then select all shown tickets via Status: assigned/new/reopened sections
+        - Scroll down to "Batch modify": under the "Comment" section, add Field "Milestone" and set to next version
+        - then use "Change ticket" button, done.
+      - Only in case of new release branch being created:
          Add Wiki Macro definitions for manual pages G7X:modulename
          - Edit: https://trac.osgeo.org/grass/wiki/InterMapTxt
 
@@ -194,15 +193,15 @@ Contents
 
      set MAJOR=7
      set MINOR=0
-     set PATCH=5RC1
+     set PATCH=6RC1
 
    Update addons (grass_addons.sh) rules, eg.
 
-     compile $SVN_PATH/grass7 $GISBASE_PATH/grass705RC1   $ADDON_PATH/grass705RC1/addons
+     compile $SVN_PATH/grass7 $GISBASE_PATH/grass706RC1   $ADDON_PATH/grass706RC1/addons
 
    Modify grass_copy_wwwroot.sh accordingly, eg.
 
-     copy_addon 705RC1 7.0.5RC1
+     copy_addon 706RC1 7.0.6RC1
 
  o Launchpad notes:
 
