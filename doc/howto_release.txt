@@ -63,7 +63,7 @@ Contents
       rm -f include/VERSION~
 
     - Update OSGeo4W setup.hint file
-      mswindows/osgeo4w/setup.hint
+      vim mswindows/osgeo4w/setup.hint
 
       for RC candidates use 'test' keyword
       for final version use 'curr' keyword
@@ -176,14 +176,13 @@ Contents
 
  o Trac updates:
       - Add new release to https://trac.osgeo.org/grass/admin/ticket/versions
-      - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.0.x --> Edit Milestone
-        (this ideally batch-migrates assigned tickets to next milestone)
-      - batch modify tickets, set to next milestone (update this query accordingly)
+      - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.2.x --> Edit Milestone
+      - Batch modify tickets, set to next milestone (update this query accordingly: two entries to change)
         https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.2.0&milestone=7.2.1&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority
-        - under "Comment" add Field "Milestone" and set to next version
-        - Select all shown tickets via Status: assigned/new/reopened
-        - then "Change ticket" button
-      - Only in case of new release branch
+        - Set max items to 1000, then select all shown tickets via Status: assigned/new/reopened sections
+        - Scroll down to "Batch modify": under the "Comment" section, add Field "Milestone" and set to next version
+        - then use "Change ticket" button, done.
+      - Only in case of new release branch being created:
          Add Wiki Macro definitions for manual pages G7X:modulename
          - Edit: https://trac.osgeo.org/grass/wiki/InterMapTxt
 
@@ -289,4 +288,5 @@ Example: GRASS GIS 7.2 release branch creation
 
 svn copy https://svn.osgeo.org/grass/grass/trunk/ \
     https://svn.osgeo.org/grass/grass/branches/releasebranch_7_2 \
-    -m "Creating the GRASS GIS 7.2 release branch"
+    -m "Creating the GRASS GIS 7.2 release branch (branch started in 05/2016, r68500)"
+
