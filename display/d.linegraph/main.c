@@ -283,10 +283,11 @@ int main(int argc, char **argv)
 		color_name[c++] = y_color_opt->answer[i];
 	    }
 	}
-	/* this is lame. I could come up with a color or prompt for one or something */
-	if (j < num_y_files)
-	    G_fatal_error(_("Only <%d> colors given for <%d> lines"), j,
-			  num_y_files);
+        /* in theory we could repeat the colors but that may seem random */
+        /* TODO: repeat the colors if only one provided (as with width) */
+        if (j - 1 < num_y_files)
+            G_fatal_error(_("Only <%d> colors given for <%d> lines"),
+                          j - 1, num_y_files);
     }
     else if (color_table_opt->answer) {
         struct Colors colors;
@@ -322,6 +323,7 @@ int main(int argc, char **argv)
     if (line_width_opt->answer) {
         i = 0;
         while (line_width_opt->answers[i]) {
+            /* we could relax this and just stop/warn reading as with the colors */
             if (i + 1 > num_y_files)
                 G_fatal_error(_("Number of widths (%d) is higher then"
                                 " the number of files (%d)"), i + 1, num_y_files);
