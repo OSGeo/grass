@@ -87,6 +87,7 @@ int main(int argc, char **argv)
 	int num_pnts;		/* number of lines in file  */
 	int color;		/* color to use for y lines */
         int r, g, b;
+        double width;
 	float max;		/* maximum value in file    */
 	float min;		/* minimum value in file    */
 	float value;		/* current value read in    */
@@ -114,6 +115,7 @@ int main(int argc, char **argv)
     struct Option *dir_opt, *x_opt, *y_opt;
     struct Option *y_color_opt;
     struct Option *color_table_opt;
+    struct Option *line_width_opt;
     struct Option *title[3];
     struct Option *t_color_opt;
     struct Option *y_min, *y_max;
@@ -163,6 +165,13 @@ int main(int argc, char **argv)
     color_table_opt = G_define_standard_option(G_OPT_M_COLR);
     color_table_opt->key = "color_table";
     color_table_opt->guisection = _("Define");
+
+    line_width_opt = G_define_option();
+    line_width_opt->key = "width";
+    line_width_opt->description = _("Width of the lines");
+    line_width_opt->type = TYPE_INTEGER;
+    line_width_opt->required = NO;
+    line_width_opt->multiple = YES;
 
     t_color_opt = G_define_option();
     t_color_opt->key = "title_color";
@@ -310,11 +319,36 @@ int main(int argc, char **argv)
 	}
     }
 
+    if (line_width_opt->answer) {
+        i = 0;
+        while (line_width_opt->answers[i]) {
+            if (i + 1 > num_y_files)
+                G_fatal_error(_("Number of widths (%d) is higher then"
+                                " the number of files (%d)"), i + 1, num_y_files);
+            /* TODO: remove indexing from 1 in the whole file */
+            in[i + 1].width = atof(line_width_opt->answers[i]);
+            i++;
+        }
+        if (i == 1) {
+            for (j = 1; j <= num_y_files; j++) {
+                in[j].width = atof(line_width_opt->answer);
+            }
+        }
+        else if (num_y_files != i)
+            G_fatal_error(_("Number of widths (%d) is lower then"
+                            " the number of files (%d)"), i, num_y_files);
+    }
+
     /* get coordinates of current screen window, in pixels */
     D_open_driver();
     
     D_setup_unity(0);
     D_get_src(&t, &b, &l, &r);
+
+    /* this seems to be the width when none set */
+    double default_width = 2;
+    
+    D_line_width(default_width);
 
     /* create axis lines, to be drawn later */
     height = b - t;
@@ -452,6 +486,8 @@ int main(int argc, char **argv)
                     D_RGB_color(in[i].r, in[i].g, in[i].b);
                 else
                     D_use_color(in[i].color);
+                if (line_width_opt->answer)
+                    D_line_width(in[i].width);
 
 		/* find out position of where Y should be drawn. */
 		/* if our minimum value of y is not negative, this is easy */
@@ -485,6 +521,9 @@ int main(int argc, char **argv)
 	prev_x = new_x;
 
 	/* draw x-axis tic-marks and numbers */
+
+    /* default width for the tics */
+    D_line_width(default_width);
 
 	if (rem((long int)in[0].value, tic_every) == 0.0) {
 
@@ -529,6 +568,9 @@ int main(int argc, char **argv)
 	    D_stroke();
 	}
     }
+
+    /* reset so the following doesn't use the special width */
+    D_line_width(default_width);
 
     /* close all input files */
     for (i = 0; i <= num_y_files; i++) {
