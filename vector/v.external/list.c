@@ -18,10 +18,10 @@ static int cmp(const void *, const void *);
 static char **format_list(int *, size_t *);
 static char *feature_type(const char *);
 #ifdef HAVE_OGR
-static int list_layers_ogr(FILE *, const char *, const char *, int);
+static int list_layers_ogr(FILE *, const char *, char **, int);
 #endif /* HAVE_OGR */
 #ifdef HAVE_POSTGRES
-static int list_layers_pg(FILE *, const char *, const char *, int);
+static int list_layers_pg(FILE *, const char *, char **, int);
 #endif /* HAVE_POSTGRES */
 
 int cmp(const void *a, const void *b)
@@ -102,7 +102,7 @@ void list_formats(void)
     G_free(list);
 }
 
-int list_layers(FILE *fd, const char *dsn, const char *layer, int print_types, int use_ogr)
+int list_layers(FILE *fd, const char *dsn, char **layer, int print_types, int use_ogr)
 {
     if (!use_ogr) {
 #ifdef HAVE_POSTGRES
@@ -139,7 +139,7 @@ void get_table_name(const char *table, char **table_name, char **schema_name)
 }
 
 #ifdef HAVE_POSTGRES
-int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_types)
+int list_layers_pg(FILE *fd, const char *conninfo, char **table, int print_types)
 {
     int   row, ntables, ret, print_schema;
     char *value_schema, *value_table, *value_type, *value_column;
@@ -171,7 +171,7 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
     /* get schema & table_name */
     table_name = schema_name = NULL;
     if (table)
-	get_table_name(table, &table_name, &schema_name);
+	get_table_name(*table, &table_name, &schema_name);
     
     ntables = PQntuples(res);
     G_debug(3, "   nrows = %d", ntables);
@@ -235,7 +235,7 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
 #endif /* HAVE_POSTGRES */
 
 #ifdef HAVE_OGR
-int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_types)
+int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 {
     int i, ret;
     int nlayers;
@@ -263,12 +263,22 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
     /* Make a list of available layers */
     nlayers = OGR_DS_GetLayerCount(Ogr_ds);
 
-    if (fd)
+    if (fd) {
 	G_message(n_("Data source <%s> (format '%s') contains %d layer:",
                      "Data source <%s> (format '%s') contains %d layers:",
                      nlayers),
 		  dsn, OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds)), nlayers);
-    
+    }
+    else if (layer && !(*layer)) {
+        /* return first layer by default (if layer not defined) */
+        if (nlayers > 0) {
+            Ogr_layer = OGR_DS_GetLayer(Ogr_ds, 0);
+            Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+            *layer = G_store((char *) OGR_FD_GetName(Ogr_featuredefn));
+            return 0;
+        }
+        return -1;
+    }
 
     G_get_default_window(&loc_wind);
     if (print_types && loc_wind.proj != PROJECTION_XY) {
@@ -333,7 +343,7 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
 	    }
 	}
 	if (layer)
-	    if (strcmp(layer_name, layer) == 0) {
+	    if (strcmp(layer_name, *layer) == 0) {
 		ret = i;
 	    }
     }

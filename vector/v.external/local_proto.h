@@ -18,7 +18,7 @@ char *get_datasource_name(const char *, int);
 
 /* list.c */
 void list_formats();
-int list_layers(FILE *, const char *, const char *, int, int);
+int list_layers(FILE *, const char *, char **, int, int);
 void get_table_name(const char *, char **, char **);
 
 #endif
