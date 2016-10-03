@@ -129,22 +129,24 @@ int main(int argc, char **argv)
 
     out = stdout;
 
+    if (eflag->answer || (!gflag->answer && !rflag->answer && !hflag->answer)) {
+	title = "";
+	/* empty title by default */
+	/* use title from category file as the primary (and only) title */
+	if (cats_ok)
+	    title = cats.title;
+	/* only use hist file title if there is none in the category file */
+	if ((!title || title[0] == '\0') && hist_ok) {
+	    title = Rast_get_history(&hist, HIST_TITLE);
+	    /* if the title is the same as name of the map, don't use it */
+	    if (strcmp(title, name) == 0)
+		title = "";
+	}
+    }
+
     if (!gflag->answer && !rflag->answer &&
 	!eflag->answer && !hflag->answer) {
 	divider('+');
-
-    /* empty title by default */
-    title = "";
-    /* use title from category file as the primary (and only) title */
-    if (cats_ok)
-        title = cats.title;
-    /* only use hist file title if there is none in the category file */
-    if ((!title || title[0] == '\0') && hist_ok) {
-        title = Rast_get_history(&hist, HIST_TITLE);
-        /* if the title is the same as name of the map, don't use it */
-        if (strcmp(title, name) == 0)
-            title = "";
-    }
 
 	compose_line(out, "Map:      %-29.29s  Date: %s", name,
 		     hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
@@ -380,8 +382,7 @@ int main(int argc, char **argv)
             fprintf(out, "database=%s\n", G_gisdbase());
             fprintf(out, "date=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
             fprintf(out, "creator=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
-	    fprintf(out, "title=\"%s (%s)\"\n", cats_ok ? cats.title :
-		    "??", hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??");
+	    fprintf(out, "title=\"%s\"\n", title);
 	    if (time_ok && (first_time_ok || second_time_ok)) {
 
 		G_format_timestamp(&ts, timebuff);
