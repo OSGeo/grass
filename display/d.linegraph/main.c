@@ -291,25 +291,29 @@ int main(int argc, char **argv)
     }
     else if (color_table_opt->answer) {
         struct Colors colors;
+
         Rast_init_colors(&colors);
         Rast_make_colors(&colors, color_table_opt->answer, 1, num_y_files);
-        int* values = G_malloc(sizeof(int));
-        unsigned char* r = G_malloc(sizeof(unsigned char));
-        unsigned char* g = G_malloc(sizeof(unsigned char));
-        unsigned char* b = G_malloc(sizeof(unsigned char));
-        unsigned char* set = G_malloc(sizeof(unsigned char));
+
+        int* values = G_malloc(num_y_files * sizeof(int));
+        unsigned char* rbuf = G_malloc(num_y_files * sizeof(unsigned char));
+        unsigned char* gbuf = G_malloc(num_y_files * sizeof(unsigned char));
+        unsigned char* bbuf = G_malloc(num_y_files * sizeof(unsigned char));
+        unsigned char* set = G_malloc(num_y_files * sizeof(unsigned char));
+
         for (i = 0; i < num_y_files; i++)
             values[i] = i + 1;
-        Rast_lookup_c_colors(values, r, g, b, set, num_y_files, &colors);
+        Rast_lookup_c_colors(values, rbuf, gbuf, bbuf, set, num_y_files, &colors);
+        /* no need to check 'set' because we generated the range */
         for (i = 0; i < num_y_files; i++) {
             /* the in list is indexed from 1 */
-            in[i + 1].r = r[i];
-            in[i + 1].g = g[i];
-            in[i + 1].b = b[i];
+            in[i + 1].r = rbuf[i];
+            in[i + 1].g = gbuf[i];
+            in[i + 1].b = bbuf[i];
         }
-        G_free(r);
-        G_free(g);
-        G_free(b);
+        G_free(rbuf);
+        G_free(gbuf);
+        G_free(bbuf);
         G_free(set);
     }
     else
