@@ -167,6 +167,10 @@ int main(int argc, char **argv)
     fl_bg->description = _("Display legend background");
     fl_bg->guisection = _("Background");
 
+    opt_sep = G_define_standard_option(G_OPT_F_SEP);
+    opt_sep->guisection = _("In/Out");
+    opt_sep->label = _("Field separator for input file");
+
     opt_input = G_define_standard_option(G_OPT_F_INPUT);
     opt_input->label = _("Input legend file");
     opt_input->description = _("Path to legend file ");
@@ -180,8 +184,6 @@ int main(int argc, char **argv)
     opt_output->required = NO;
     opt_output->guisection = _("In/Out");
 
-    opt_sep = G_define_standard_option(G_OPT_F_SEP);
-    opt_sep->guisection = _("In/Out");
 
     /* Check command line */
     if (G_parser(argc, argv)) {
@@ -250,14 +252,14 @@ int main(int argc, char **argv)
     fontcolor = D_parse_color(opt_fontcolor->answer, FALSE); /*default color: black */
 
     /* I/O */
-    sep = G_option_to_separator(opt_sep);
-
     if (opt_input->answer) {
+        sep = G_option_to_separator(opt_sep);
         file_name = opt_input->answer;
         if (!file_name)
             G_fatal_error(_("Unable to open input file <%s>"), file_name);
     }
     else {
+        sep = "|";
         file_name = getenv("GRASS_LEGEND_FILE");
         if (!file_name)
             G_fatal_error("No legend file defined.");
