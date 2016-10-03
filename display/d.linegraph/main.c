@@ -217,6 +217,7 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    /* TODO: put this to variables, and avoid -Wsign-compare */
     for (i = 0; i < 3; i++) {
 	for (j = 0; j < strlen(title[i]->answer); j++)
 	    if (title[i]->answer[j] == '_')
@@ -263,6 +264,7 @@ int main(int argc, char **argv)
 
     title_color = D_translate_color(t_color_opt->answer);
 
+    /* TODO: use parser for the following and avoid -Wsign-compare */
     /* I had an argument with the parser, and couldn't get a neat list of
        the input colors as I thought I should. I did a quick hack to get
        my list from the answer var, which gives us the colors input
