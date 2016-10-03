@@ -516,11 +516,9 @@ int main(int argc, char **argv)
 		}
 
 		new_x = xoffset + (line * xscale);
-		if (line == 0) {
-		    prev_x = xoffset;
-		    prev_y[i] = yoffset;
-		}
-		D_line_abs(prev_x, prev_y[i], new_x, new_y[i]);
+                /* draw only when we the previous point to start from */
+                if (line > 0)
+                    D_line_abs(prev_x, prev_y[i], new_x, new_y[i]);
 		prev_y[i] = new_y[i];
 	    }
 	}
