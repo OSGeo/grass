@@ -93,6 +93,12 @@ When an original flow accumulation map is adjusted or weighed, the
 adjustment or weighing should not convert valid accumulation values to 
 NULL (nodata) values.
 
+<p>
+In case of getting the error message
+<tt>ERROR: Accumulation raster map is NULL but elevation map is not NULL</tt>
+the computational region must be carefully adjusted to exclude NULL pixels
+in the accumulation raster map prior to stream extraction.
+
 <h3>Weighed flow accumulation</h3>
 
 Flow accumulation can be calculated first, e.g. with
@@ -206,17 +212,17 @@ Display both the original and the weighed accumulation map.
 Compare them and proceed if the weighed accumulation map makes sense.
 
 <div class="code"><pre>
-# extract streams from weighed map
-r.stream.extract elevation=elev_ned_30m@PERMANENT \
-                 accumulation=elev_ned_30m.acc.weighed \
-		 threshold=1000 \
-		 stream_rast=elev_ned_30m.streams
-
 # extract streams using the original accumulation map
 r.stream.extract elevation=elev_ned_30m@PERMANENT \
                  accumulation=elev_ned_30m.acc \
 		 threshold=1000 \
 		 stream_rast=elev_ned_30m.streams.noweight
+
+# extract streams from weighed map
+r.stream.extract elevation=elev_ned_30m@PERMANENT \
+                 accumulation=elev_ned_30m.acc.weighed \
+		 threshold=1000 \
+		 stream_rast=elev_ned_30m.streams
 </pre></div>
 
 <p>
@@ -229,13 +235,11 @@ d.shade color=elev_ned_30m_streams_noweight shade=elevation_shade brighten=20
 <img src="r_stream_extract_streams_noweight.png" width="400"></a><br>
 Extracted streams from original flow accumulation map
 
-<!-- 
-TODO: ERROR: Accumulation raster map is NULL but elevation map is not NULL
 <p>
-<a href="r_stream_extract_streams_weight.png">
-<img src="r_stream_extract_streams_weight.png" width="400"></a><br>
+<a href="r_stream_extract_streams_weighed.png">
+<img src="r_stream_extract_streams_weighed.png" width="400"></a><br>
 Extracted streams from weighed flow accumulation map
--->
+
 
 <h2>REFERENCES</h2>
 
