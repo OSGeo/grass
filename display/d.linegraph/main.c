@@ -143,7 +143,9 @@ int main(int argc, char **argv)
 
     dir_opt = G_define_option();
     dir_opt->key = "directory";
-    dir_opt->description = _("Path to file location");
+    dir_opt->label = _("Path to files");
+    dir_opt->description =
+        _("Path to the directory where the input files are located");
     dir_opt->type = TYPE_STRING;
     dir_opt->required = NO;
     /* Remove answer because create problem with full path */

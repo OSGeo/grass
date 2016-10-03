@@ -1,8 +1,11 @@
 <h2>DESCRIPTION</h2>
 
 <em>d.linegraph</em> is a primitive program to draw simple x,y line graphs
-based on numerical data contained in separate files.
-<p>Data file format<br>
+(plots) based on numerical data contained in separate files.
+
+
+<h3>Data format</h3>
+
 The X and Y data files for the graph are essentially a column of numbers in
 each file, with one input number per line.  The program expects that each X
 value will have a corresponding Y value, therefore the number of lines in
@@ -16,64 +19,97 @@ according to that Y scale. Therefore, if multiple Y data inputs are used
 with dissimilar units, the graph produced comparing the two will be
 deceptive.
 
-<p><dl>
-<dt><b>directoryname</b>
-<dd>Path to the directory where the input files are located. 
-<dd>Example format: /usr/grass/data/graph
 
-<dt><b>ycoloroption[,option,...]]</b>
-<dd>Color to be used for drawing the lines in the graph. If multiple Y data
-files are used, an equal number of colors may be used to control the colors
-of the lines. Colors will be assigned to Y data in respect to the sequence
-of instantiation on the command  line.  Options are listed below.  By
-default, a series of colors will be chosen by the program if none are
-provided upon invocation.
-<dd>Order of default colors: yellow, red, green, violet, blue, orange, gray,
-brown, magenta, white, indigo).
+<h3>File inputs</h3>
 
-<dt><b>titlecoloroption</b>
-<dd>The color to be used for titles, axis lines, tics, and scale numbers.  
-<dd>Default: "white"
-<dd>Color options: red, orange, yellow, green, blue, indigo, violet,
-magenta, brown, gray, white, and black.
+<p>
+If <b>directory</b> option is provided, the paths to files can (and
+should) be only relative paths to the files. This is not recommended
+for scripting, but it can be advantageous when typing the paths
+manually. For example when all the files are stored in the directory
+<tt>/home/john/data</tt>, use can provide the following in the command
+line:
 
-<dt><b>xtitlevalue</b>
-<dd>Title to describe X data. Will be centered beneath the graph. Default
-is no title unless the need for a unit descriptor is computed by the program
-(i.e. X: title in hundreds).  Also, see NOTES section (below) for a format
-caveat for multi-word titles.
+<div class="code"><pre>
+d.linegraph directory=/home/john/data x_file=x.txt y_file=y1.txt,y2.txt
+</pre></div>
 
-<dt><b>ytitlevalue</b>
-<dd>Title to describe Y data. Will be centered beneath the X data title.
-Default is no title unless the need for a unit descriptor is computed by
-the program (i.e. Y: ttiittllee in thousands). Also, see NOTES section
-(below) for a format caveat for multi-word titles. In the case of graphs
-with multiple lines, one may wish to use more specific title placement by
-using the <em>d.text</em> or <em>v.label</em> programs.
 
-<dt><b>titlevalue</b>
-<dd>Title to describe the graph. Will be centered over the top of graph.
-Default is no title. See NOTES section (below) for a format caveat for
-multi-word titles.
-</dl>
+<h3>Managing colors</h3>
+
+User can specify the <b>y_color</b> option, the <b>color_table</b>
+option or just leave the defaults to influence the color of the
+plotted lines.
+
+<p>
+Color specified by <b>y_color</b> option is used for drawing the lines
+in the graph. If multiple Y data files are used, an equal number of
+colors may be used to control the colors of the lines. Colors will be
+assigned to Y data in respect to the sequence of instantiation on the
+command line. It can be one of GRASS GIS named colors or the RGB
+values from 0-255 separated by colon.
+
+<p>
+Alternatively, user can use <b>color_table</b> option to specify one
+of the GRASS GIS predefined color tables.
+
+<p>
+By default, a series of colors will be chosen by the program if none are
+provided upon invocation. Order of default colors is red, green,
+violet, blue, orange, gray, brown, magenta, white, and indigo. User is
+advised not to rely on the order of default colors and use <b>y_color</b>
+or <b>color_table</b> option to obtain predictable and reproducible
+results.
+
+<p>
+The color to be used for titles, axis lines, tics, and scale numbers
+is determined by the <b>title_color</b> option.
+User can provide one of the GRASS GIS named colors (such as gray, white, or black)
+or use the GRASS GIS colon-separated format for RGB.
+
+<h3>Titles, labels, and tics</h3>
+
+The <b>title</b> option specifies the text for the title of the graph.
+It will be centered over the top of graph.
+
+The <b>x_title</b> option is a text to describe data for X axis. It will be
+centered beneath the graph. Default is no text unless there is a need
+for a unit descriptor determined by the <em>d.linegraph</em> module,
+then string such as "in hundreds" is generated.
+
+The <b>y_title</b> option is a text to describe data for Y axis. It
+will be centered beneath the X data description. Similarly, to the
+<b>x_title</b> option, default is no text unless there is a need for an
+auto-generated description. In the case of graphs with multiple lines
+(multiple inputs for Y axis), user may wish to use more specific text
+placement using the <em><a href="d.text.html">d.text</a></em> or
+<em><a href="v.label.html">v.label</a></em> programs.
+
 
 <h2>NOTES</h2>
-Since the command line parser is not amiable to multiple word inputs, to
-input titles of more than one word, use the underscore character ("") to
-represent spaces (" ").
-<p>Example: "titleCensusdata1990" would be printed over the graph as "Census
-data 1990".
-<p>The way the program locates and labels tic marks is less than perfect: 1)
+
+For historical reasons, the <em>d.linegraph</em> module accepts
+titles of more than one word where the underscore character ("_")
+is used to represent spaces (" "). For example "Census_data_1990"
+would be printed over the graph as "Census data 1990". This is not
+necessary to use as long as the parameter is quoted in the command line.
+In general, this is not recommended to use and there is no need to use
+it at all in Python or GUI.
+
+<p>
+The way the program locates and labels tic marks is less than perfect: 1)
 although distances between Y tics is proportional to the value, they are
 not proportional on the X axis; 2) decimal values between -1 and 1 can be
 printed on the X axis, but not on Y. (With respect to the later, the input
 for Y values can all be multiplied by a factor of 10 before graphing).
 
-<p>It might be easier to use a 3rd party tool such as xgraph or GNUplot instead
-of <em>d.linegraph</em>.
-.
-(You can make GNUplot output pretty by using its SVG or PostScript output
-driver and converting that back into a rasterized image in a paint program)
+<p>
+Depending on the user needs, it might be easier or more appropriate
+to use a 3rd party tool such as xgraph, gnuplot, Matplotlib in Python,
+or R instead of <em>d.linegraph</em>.
+For a more general solution for plotting in GRASS GIS, user is
+advised to use the <em><a href="d.graph.html">d.graph</a></em> module.
+
 
 <h2>EXAMPLE</h2>
 
@@ -125,8 +161,11 @@ d.mon stop=cairo
 <em>
 <a href="d.frame.html">d.frame</a>,
 <a href="d.text.html">d.text</a>,
-<a href="v.label.html">v.label</a>
+<a href="v.label.html">v.label</a>,
+<a href="d.graph.html">d.graph</a>,
+<a href="d.histogram.html">d.histogram</a>
 </em>
+
 
 <h2>AUTHOR</h2>
 Chris Rewerts, Agricultural Engineering, Purdue University
