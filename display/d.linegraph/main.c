@@ -7,6 +7,8 @@
  *               Roberto Flor <flor itc.it>, Bernhard Reiter <bernhard intevation.de>, 
  *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>, 
  *               Hamish Bowman <hamish_b yahoo.com>
+ *               Vaclav Petras <wenzeslaus gmail com> (various features)
+ *
  * PURPOSE:      
  * COPYRIGHT:    (C) 1999-2016 by the GRASS Development Team
  *
@@ -118,7 +120,7 @@ int main(int argc, char **argv)
     struct Option *line_width_opt;
     struct Option *title[3];
     struct Option *t_color_opt;
-    struct Option *y_min, *y_max;
+    struct Option *y_range_opt;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -202,17 +204,12 @@ int main(int argc, char **argv)
     title[2]->required = NO;
     title[2]->answer = "";
 
-    y_min = G_define_option();
-    y_min->key = "y_min";
-    y_min->description = _("Minimum value for Y axis");
-    y_min->type = TYPE_DOUBLE;
-    y_min->required = NO;
-
-    y_max = G_define_option();
-    y_max->key = "y_max";
-    y_max->description = _("Maximum value for Y axis");
-    y_max->type = TYPE_DOUBLE;
-    y_max->required = NO;
+    y_range_opt = G_define_option();
+    y_range_opt->key = "y_range";
+    y_range_opt->description = _("Minimum and maximun value for Y axis (min,max)");
+    y_range_opt->type = TYPE_DOUBLE;
+    y_range_opt->key_desc = "min,max";
+    y_range_opt->required = NO;
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -410,10 +407,19 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (y_min->answer)
-        min_y = atof(y_min->answer);
-    if (y_max->answer)
-        max_y = atof(y_max->answer);
+    /* parse and set y min max */
+    if (y_range_opt->answer != NULL) {
+        /* all checks should be done by the parser */
+        sscanf(y_range_opt->answers[0], "%f", &min_y);
+        sscanf(y_range_opt->answers[1], "%f", &max_y);
+        if (min_y > max_y) {
+            /* swap values to tolerate some errors */
+            double d_tmp = max_y;
+
+            max_y = min_y;
+            min_y = d_tmp;
+        }
+    }
 
     /* close all files */
 
