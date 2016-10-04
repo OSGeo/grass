@@ -17,7 +17,9 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from .abstract_dataset import *
+from __future__ import print_function
+# i18N
+import gettext
 from .datetime_math import *
 from functools import reduce
 

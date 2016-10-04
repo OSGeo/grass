@@ -17,8 +17,12 @@ for details.
 
 :authors: Soeren Gebbert
 """
+# i18N
+import gettext
+from .core import get_tgis_message_interface
+from .space_time_datasets import SpaceTimeRaster3DDataset, SpaceTimeRasterDataset, \
+    SpaceTimeVectorDataset, Raster3DDataset, RasterDataset, VectorDataset
 
-from .space_time_datasets import *
 
 ###############################################################################
 

@@ -25,16 +25,16 @@ for details.
 :authors: Soeren Gebbert
 """
 
+# i18N
+import gettext
 import shutil
 import os
 import tarfile
 import tempfile
 
-from .space_time_datasets import *
-from .factory import *
-from .open_stds import *
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
+from .open_stds import open_old_stds
 
 
 proj_file_name = "proj.txt"

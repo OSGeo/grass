@@ -11,11 +11,9 @@ for details.
 :authors: Soeren Gebbert
 """
 from abc import ABCMeta, abstractmethod
-from .temporal_extent import *
-from .spatial_extent import *
-from .metadata import *
-from .temporal_topology_dataset_connector import *
-from .spatial_topology_dataset_connector import *
+from .core import get_tgis_message_interface, init_dbif, get_enable_mapset_check, get_current_mapset
+from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
+from .spatial_topology_dataset_connector import SpatialTopologyDatasetConnector
 
 ###############################################################################
 

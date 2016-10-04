@@ -16,9 +16,15 @@ for details.
 
 :authors: Soeren Gebbert
 """
-
-from .open_stds import *
+# i18N
+import gettext
+from datetime import datetime
 import grass.script as gscript
+from .core import get_tgis_message_interface, init_dbif, get_current_mapset
+from .open_stds import open_old_stds
+from .abstract_map_dataset import AbstractMapDataset
+from .factory import dataset_factory
+from .datetime_math import check_datetime_string, increment_datetime_by_string, string_to_datetime
 
 ###############################################################################
 

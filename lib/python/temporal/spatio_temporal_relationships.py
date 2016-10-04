@@ -18,13 +18,15 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-
-from .abstract_dataset import *
-from .datetime_math import *
+# i18N
+import gettext
+from datetime import datetime
+from .core import init_dbif
+from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
+from .datetime_math import time_delta_to_relative_time_seconds
 import grass.lib.vector as vector
 import grass.lib.rtree as rtree
 import grass.lib.gis as gis
-from ctypes import *
 
 ###############################################################################
 

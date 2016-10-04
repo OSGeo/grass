@@ -13,9 +13,20 @@ for details.
 from __future__ import print_function
 import sys
 import uuid
-from .abstract_dataset import *
-from .temporal_granularity import *
-from .spatio_temporal_relationships import *
+import os
+import copy
+from datetime import datetime
+import gettext
+from abc import ABCMeta, abstractmethod
+from .core import init_dbif, get_sql_template_path, get_tgis_metadata, get_current_mapset, \
+    get_enable_mapset_check
+from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
+from .temporal_granularity import check_granularity_string, compute_absolute_time_granularity,\
+    compute_relative_time_granularity
+from .spatio_temporal_relationships import count_temporal_topology_relationships, \
+    print_spatio_temporal_topology_relationships, SpatioTemporalTopologyBuilder, \
+    create_temporal_relation_sql_where_statement
+from .datetime_math import increment_datetime_by_string
 
 ###############################################################################
 
@@ -1567,7 +1578,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             return None
 
         if not check_granularity_string(gran, maps[-1].get_temporal_type()):
-            self.msgr.error(_("Wrong granularity format: %s" % (gran)))
             return None
 
         for map in maps:

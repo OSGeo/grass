@@ -42,9 +42,23 @@ for details.
 
 """
 from __future__ import print_function
+
+try:
+    import ply.lex as lex
+    import ply.yacc as yacc
+except:
+    pass
+
 import grass.pygrass.modules as pygrass
-from .temporal_operator import *
-from .temporal_algebra import *
+
+import copy
+from .temporal_algebra import TemporalAlgebraLexer, TemporalAlgebraParser, GlobalTemporalVar
+from .core import init_dbif, get_current_mapset
+from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
+from .open_stds import open_new_stds
+from spatio_temporal_relationships import SpatioTemporalTopologyBuilder
+from .space_time_datasets import VectorDataset
+
 
 ##############################################################################
 

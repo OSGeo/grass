@@ -29,14 +29,15 @@ for details.
 :authors: Soeren Gebbert
 """
 
+# i18N
+import gettext
 import os
 import os.path
 import tarfile
 
-from .space_time_datasets import *
-from .register import *
-from . import factory
-from .factory import *
+from .core import get_current_mapset, get_tgis_message_interface
+from .register import register_maps_in_space_time_dataset
+from .factory import dataset_factory
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
 
@@ -198,7 +199,6 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
         :param memory: Cache size for raster rows, used in r.in.gdal
     """
 
-    global raise_on_error
     old_state = gscript.raise_on_error
     gscript.set_raise_on_error(True)
 
@@ -308,7 +308,8 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
 
     try:
         # Make sure the temporal database exists
-        factory.init()
+        from .core import init
+        init()
 
         fs = "|"
         maplist = []
@@ -498,6 +499,6 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
                                     location=old_env["LOCATION_NAME"],
                                     gisdbase=old_env["GISDBASE"])
             except CalledModuleError:
-                grass.warning(_("Switching to original location failed"))
+                gscript.warning(_("Switching to original location failed"))
 
         gscript.set_raise_on_error(old_state)

@@ -8,12 +8,16 @@ for details.
 
 :authors: Soeren Gebbert
 """
-
-from .space_time_datasets import *
-from .open_stds import *
+# i18N
+import gettext
+import copy
+from datetime import datetime
 from multiprocessing import Process
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
+from .core import SQLDatabaseInterfaceConnection, get_current_mapset, get_tgis_message_interface
+from .open_stds import open_new_stds, open_old_stds, check_new_stds
+from .datetime_math import time_delta_to_relative_time
 
 ############################################################################
 
