@@ -41,9 +41,24 @@ for details.
 
 """
 from __future__ import print_function
+
+try:
+    import ply.lex as lex
+    import ply.yacc as yacc
+except:
+    pass
+
+import copy
 import grass.pygrass.modules as pymod
-from .temporal_operator import *
-from .temporal_algebra import *
+from grass.exceptions import FatalError
+from .temporal_algebra import TemporalAlgebraLexer, TemporalAlgebraParser, GlobalTemporalVar
+from .core import init_dbif
+from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
+from .factory import dataset_factory
+from .open_stds import open_new_stds
+from spatio_temporal_relationships import SpatioTemporalTopologyBuilder
+from .space_time_datasets import Raster3DDataset, RasterDataset
+
 
 ##############################################################################
 

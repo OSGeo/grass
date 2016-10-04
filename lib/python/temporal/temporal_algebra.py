@@ -446,13 +446,25 @@ try:
 except:
     pass
 
+# i18N
+import gettext
 import os
 import copy
+from datetime import datetime
 import grass.pygrass.modules as pymod
-from .space_time_datasets import *
-from .factory import *
-from .open_stds import *
-from .temporal_operator import *
+from .core import init_dbif, get_tgis_message_interface, get_current_mapset,\
+    SQLDatabaseInterfaceConnection
+from .temporal_granularity import compute_common_absolute_time_granularity, \
+    compute_common_relative_time_granularity
+from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
+from .abstract_map_dataset import AbstractMapDataset
+from .space_time_datasets import RasterDataset
+from .factory import dataset_factory
+from .open_stds import open_new_stds, open_old_stds
+from .temporal_operator import TemporalOperatorParser
+from spatio_temporal_relationships import SpatioTemporalTopologyBuilder
+from .datetime_math import time_delta_to_relative_time
+from abstract_space_time_dataset import AbstractSpaceTimeDataset
 
 ##############################################################################
 

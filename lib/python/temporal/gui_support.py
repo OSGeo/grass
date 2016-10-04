@@ -9,9 +9,10 @@ for details.
 
 :authors: Soeren Gebbert
 """
-
-from .space_time_datasets import *
-from .factory import *
+# i18N
+import gettext
+from .core import get_available_temporal_mapsets, init_dbif
+from .factory import dataset_factory
 import grass.script as gscript
 
 ###############################################################################
@@ -26,6 +27,7 @@ def tlist_grouped(type, group_type=False, dbif=None):
 
     .. code-block:: python
 
+        >>> import grass.temporalas tgis
         >>> tgis.tlist_grouped('strds')['PERMANENT']
         ['precipitation', 'temperature']
 

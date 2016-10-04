@@ -8,10 +8,25 @@ for details.
 
 :authors: Soeren Gebbert
 """
+# i18N
+import gettext
 import getpass
-from .abstract_map_dataset import *
-from .abstract_space_time_dataset import *
+from datetime import datetime
+from .core import get_current_mapset
+from .abstract_map_dataset import AbstractMapDataset
+from .abstract_space_time_dataset import AbstractSpaceTimeDataset
+from .base import Raster3DBase, RasterBase, VectorBase, STR3DSBase, STVDSBase, STRDSBase,\
+    VectorSTDSRegister, Raster3DSTDSRegister, RasterSTDSRegister
+from .metadata import Raster3DMetadata, RasterMetadata, VectorMetadata, STRDSMetadata,\
+    STR3DSMetadata, STVDSMetadata
+from .spatial_extent import RasterSpatialExtent, Raster3DSpatialExtent, VectorSpatialExtent,\
+    STRDSSpatialExtent, STR3DSSpatialExtent, STVDSSpatialExtent
+from .temporal_extent import RasterAbsoluteTime, RasterRelativeTime, Raster3DAbsoluteTime, \
+    Raster3DRelativeTime, VectorAbsoluteTime, VectorRelativeTime, STRDSAbsoluteTime,\
+    STRDSRelativeTime, STR3DSAbsoluteTime, STR3DSRelativeTime, STVDSAbsoluteTime, STVDSRelativeTime
 import grass.script.array as garray
+from .core import init
+from datetime import datetime
 
 ###############################################################################
 
@@ -205,7 +220,7 @@ class RasterDataset(AbstractMapDataset):
         self.stds_register = RasterSTDSRegister(ident=ident)
 
     def has_grass_timestamp(self):
-        """Check if a grass file bsased time stamp exists for this map.
+        """Check if a grass file based time stamp exists for this map.
 
            :return: True if success, False on error
         """

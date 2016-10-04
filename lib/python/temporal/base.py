@@ -26,7 +26,8 @@ for details.
 """
 from __future__ import print_function
 from datetime import datetime
-from .core import *
+from .core import get_tgis_message_interface, get_tgis_dbmi_paramstyle, \
+    SQLDatabaseInterfaceConnection, init, get_current_mapset
 
 ###############################################################################
 
@@ -376,8 +377,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         if len(row) > 0:
             self.deserialize(row)
         else:
-            self.msgr.fatal(_("Object <%s> not found in the temporal database")
-                            % self.get_id())
+            self.msgr.fatal(_("Object not found in the temporal database"))
 
         return True
 
@@ -610,6 +610,7 @@ class DatasetBase(SQLDatabaseInterface):
         """
         self.ident = ident
         self.D["id"] = ident
+        name = ""
 
         if ident is not None:
             if ident.find("@") >= 0:

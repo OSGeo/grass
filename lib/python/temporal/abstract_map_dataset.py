@@ -11,8 +11,16 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-from .abstract_dataset import *
-from .datetime_math import *
+import gettext
+from grass.exceptions import ImplementationError
+from datetime import datetime
+from abc import ABCMeta, abstractmethod
+from .core import get_tgis_c_library_interface, get_enable_timestamp_write, \
+    get_enable_mapset_check, get_current_mapset, init_dbif
+from .abstract_dataset import AbstractDataset
+from .temporal_extent import RelativeTemporalExtent, AbsoluteTemporalExtent
+from .datetime_math import datetime_to_grass_datetime_string, \
+    increment_datetime_by_string, decrement_datetime_by_string
 
 
 class AbstractMapDataset(AbstractDataset):
@@ -530,7 +538,7 @@ class AbstractMapDataset(AbstractDataset):
         """Convenient method to set the temporal extent from a temporal extent
            object
 
-           :param temporal_extent: The temporal extent that should be set for
+           :param extent: The temporal extent that should be set for
                                    this object
 
            .. code-block: : python
@@ -722,6 +730,9 @@ class AbstractMapDataset(AbstractDataset):
            spatial directions.
 
            :param size: The buffer size, using the unit of the grass region
+           :param update: If True perform an immediate database update, otherwise only the
+                          internal variables are set
+           :param dbif: The database interface to be used
 
            .. code-block: : python
 
@@ -749,6 +760,9 @@ class AbstractMapDataset(AbstractDataset):
            spatial directions.
 
            :param size: The buffer size, using the unit of the grass region
+           :param update: If True perform an immediate database update, otherwise only the
+                          internal variables are set
+           :param dbif: The database interface to be used
 
            .. code-block: : python
 
@@ -770,7 +784,10 @@ class AbstractMapDataset(AbstractDataset):
             self.spatial_extent.update(dbif)
 
     def check_for_correct_time(self):
-        """Check for correct time"""
+        """Check for correct time
+
+           :return: True in case of success, False otherwise
+        """
         if self.is_time_absolute():
             start, end = self.get_absolute_time()
         else:

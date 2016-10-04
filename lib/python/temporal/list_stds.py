@@ -18,9 +18,13 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-from .space_time_datasets import *
-from .factory import *
-from .open_stds import *
+# i18N
+import gettext
+from .core import get_tgis_message_interface, get_available_temporal_mapsets, init_dbif
+from .datetime_math import time_delta_to_relative_time
+from .space_time_datasets import RasterDataset
+from .factory import dataset_factory
+from .open_stds import open_old_stds
 
 ###############################################################################
 
@@ -49,18 +53,19 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
         .. code-block:: python
 
             >>> import grass.temporal as tgis
-            >>> tgis.init()
+            >>> tgis.core.init()
             >>> name = "list_stds_test"
-            >>> sp = tgis.open_new_stds(name=name, type="strds",
-            ... temporaltype="absolute", title="title", descr="descr", semantic="mean", dbif=None, overwrite=True)
+            >>> sp = tgis.open_stds.open_new_stds(name=name, type="strds",
+            ... temporaltype="absolute", title="title", descr="descr",
+            ... semantic="mean", dbif=None, overwrite=True)
             >>> mapset = tgis.get_current_mapset()
-            >>> stds_list = tgis.get_dataset_list("strds", "absolute", columns="name")
+            >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name")
             >>> rows =  stds_list[mapset]
             >>> for row in rows:
             ...     if row["name"] == name:
             ...         print(True)
             True
-            >>> stds_list = tgis.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
+            >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
             >>> rows =  stds_list[mapset]
             >>> for row in rows:
             ...     if row["name"] == name and row["mapset"] == mapset:

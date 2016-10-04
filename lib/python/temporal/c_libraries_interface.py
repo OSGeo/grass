@@ -12,13 +12,12 @@ for details.
 """
 
 from grass.exceptions import FatalError
-import time
-import threading
+import gettext
 import sys
 from multiprocessing import Process, Lock, Pipe
 import logging
 from ctypes import *
-from .core import *
+from datetime import datetime
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.lib.vector as libvector

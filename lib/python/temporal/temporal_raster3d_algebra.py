@@ -10,7 +10,21 @@ for details.
 :authors: Thomas Leppelt and Soeren Gebbert
 
 """
-from .temporal_raster_base_algebra import *
+from __future__ import print_function
+
+try:
+    import ply.lex as lex
+    import ply.yacc as yacc
+except:
+    pass
+
+# i18N
+import gettext
+from .temporal_raster_base_algebra import TemporalRasterBaseAlgebraParser,\
+    TemporalRasterAlgebraLexer
+import grass.pygrass.modules as pymod
+from .space_time_datasets import Raster3DDataset
+
 
 ###############################################################################
 

@@ -20,7 +20,9 @@ for details.
 """
 from __future__ import print_function
 
-from .open_stds import *
+from .core import SQLDatabaseInterfaceConnection, get_current_mapset
+from .factory import dataset_factory
+from .open_stds import open_old_stds
 import grass.script as gscript
 
 ###############################################################################

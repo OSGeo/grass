@@ -30,6 +30,7 @@ for details.
 """
 #import traceback
 import os
+import grass.script as gscript
 # i18N
 import gettext
 gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
@@ -40,8 +41,6 @@ except ImportError:
     # python3
     long = int
 
-import grass.script as gscript
-from datetime import datetime
 from .c_libraries_interface import *
 from grass.pygrass import messages
 # Import all supported database backends

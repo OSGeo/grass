@@ -17,13 +17,16 @@ for details.
 :author: Soeren Gebbert
 """
 
-from .space_time_datasets import *
+import gettext
+import grass.script as gscript
+from grass.exceptions import CalledModuleError
+from .space_time_datasets import RasterDataset
 from .datetime_math import create_suffix_from_datetime
 from .datetime_math import create_time_suffix
 from .datetime_math import create_numeric_suffic
-import grass.script as gscript
-from grass.exceptions import CalledModuleError
-
+from .core import get_current_mapset, get_tgis_message_interface, init_dbif
+from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder, \
+    create_temporal_relation_sql_where_statement
 ###############################################################################
 
 
