@@ -64,6 +64,39 @@ class StringToColorTestCase(TestCase):
         """Test with whitespace (spaces) around the string"""
         self.convert_color("  50:150:250    ", 50, 150, 250)
 
+    def test_html_hash_hex(self):
+        """Test HTML format with hash and hexadecimal (6 letters, #RRGGBB)"""
+        self.convert_color("#3296FA", 50, 150, 250)
+
+    def test_html_hash_hex_more_colors(self):
+        """Test HTML format with more colors"""
+        self.convert_color("#A6CEE3", 166, 206, 227)
+        self.convert_color("#33A02C", 51, 160, 44)
+        self.convert_color("#FB9A99", 251, 154, 153)
+        self.convert_color("#FF7F00", 255, 127, 0)
+
+    def test_html_hash_hex_more_colors_lowercase(self):
+        """Test HTML format with lowercase letters"""
+        self.convert_color("#a6cee3", 166, 206, 227)
+        self.convert_color("#33a02c", 51, 160, 44)
+        self.convert_color("#fb9a99", 251, 154, 153)
+        self.convert_color("#ff7f00", 255, 127, 0)
+
+    def test_html_hash_hex_more_colors_mixedcase(self):
+        """Test HTML format with mixed case letters"""
+        self.convert_color("#a6CeE3", 166, 206, 227)
+        self.convert_color("#33a02C", 51, 160, 44)
+        self.convert_color("#fB9A99", 251, 154, 153)
+        self.convert_color("#Ff7f00", 255, 127, 0)
+
+    def test_html_hash_hex_black(self):
+        """Test HTML format black color"""
+        self.convert_color("#000000", 0, 0, 0)
+
+    def test_html_hash_hex_white(self):
+        """Test HTML format white color"""
+        self.convert_color("#FFFFFF", 255, 255, 255)
+
     def test_grass_named_black(self):
         """Test GRASS GIS color black color"""
         self.convert_color("black", 0, 0, 0)
