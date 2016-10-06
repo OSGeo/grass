@@ -32,7 +32,7 @@ rowio_LIBS	= $(ROWIOLIB)
 temporal_LIBS	= $(TEMPORALLIB)
 
 date_HDRS       = datetime.h defs/datetime.h
-gis_HDRS        = gis.h defs/gis.h
+gis_HDRS        = gis.h defs/gis.h colors.h defs/colors.h
 raster_HDRS     = raster.h defs/raster.h
 gmath_HDRS      = gmath.h defs/gmath.h
 proj_HDRS       = gprojects.h defs/gprojects.h
