@@ -61,6 +61,22 @@ static double rem(long int x, long int y)
     return ((double)(x - y * d));
 }
 
+/* TODO: remove constants */
+/* TODO: include X? (common fun for X and Y) */
+static void set_optimal_text_size(double text_width, double text_height,
+                                  const char* text, double *tt, double *tb,
+                                  double *tl, double *tr)
+{
+    D_text_size(text_width, text_height);
+    D_get_text_box(text, tt, tb, tl, tr);
+    while ((tt - tb) > YTIC_DIST) {
+        text_width *= 0.75;
+        text_height *= 0.75;
+        D_text_size(text_width, text_height);
+        D_get_text_box(text, tt, tb, tl, tr);
+    }
+}
+
 int main(int argc, char **argv)
 {
     double xoffset;		/* offset for x-axis */
@@ -121,6 +137,7 @@ int main(int argc, char **argv)
     struct Option *title[3];
     struct Option *t_color_opt;
     struct Option *y_range_opt;
+    struct Option *ytics_opt;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -210,6 +227,13 @@ int main(int argc, char **argv)
     y_range_opt->type = TYPE_DOUBLE;
     y_range_opt->key_desc = "min,max";
     y_range_opt->required = NO;
+
+    ytics_opt = G_define_option();
+    ytics_opt->key = "y_tics";
+    ytics_opt->description = _("Tic values for the Y axis");
+    ytics_opt->type = TYPE_DOUBLE;
+    ytics_opt->required = NO;
+    ytics_opt->multiple = YES;
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -407,6 +431,7 @@ int main(int argc, char **argv)
 	}
     }
 
+    /* TODO: parse range option function */
     /* parse and set y min max */
     if (y_range_opt->answer != NULL) {
         /* all checks should be done by the parser */
@@ -608,58 +633,89 @@ int main(int argc, char **argv)
        tic_every tells how often to place a tic-number.  tic_unit tells
        the unit to use in expressing tic-numbers. */
 
-    if (yscale < YTIC_DIST) {
-	max_tics = (y_line[1] - y_line[0]) / YTIC_DIST;
-	i = 1;
-	while (((max_y - min_y) / tics[i].every) > max_tics)
-	    i++;
-	tic_every = tics[i].every;
-	tic_unit = tics[i].unit;
-	strcpy(tic_name, tics[i].name);
+    /* user versus automatic Y tics */
+    if (ytics_opt->answer) {
+        /* user-provided Y tics, no intermediate tics supported */
+        char *text;
+
+        i = 0;
+        while ((text = ytics_opt->answers[i])) {
+            i++;
+
+            double val = atof(text);
+            /* using original user's text for the text later */
+
+            /* for scripting convenience ignore out of range */
+            if (val < min_y || val > max_y) {
+                G_debug(2, "tic %f out of range %f,%f", val, min_y, max_y);
+                continue;
+            }
+            /* we don't care about order, so just continue, not break */
+
+            D_begin();
+            D_move_abs(x_line[0], yoffset - yscale * val);
+            D_cont_rel((-(r - l) * BIG_TIC), 0);
+            D_end();
+            D_stroke();
+
+            /* draw a tic-mark number */
+            text_height = (b - t) * TEXT_HEIGHT;
+            text_width = (r - l) * TEXT_WIDTH;
+            /* this would be useful, but with some other numbers */
+            set_optimal_text_size(text_width, text_height, txt, &tt, &tb, &tl, &tr);
+            D_pos_abs(l + (r - l) * YNUMS_X - (tr - tl) / 2,
+                  yoffset - (yscale * val + 0.5 * (tt - tb)));
+            D_text(text);
+        }
+        /* no automatic tics comment */
+        strcpy(tic_name, "");
     }
     else {
-	tic_every = 1;
-	tic_unit = 1;
-	strcpy(tic_name, "");
-    }
+        /* automatic Y tics, decimal places (e.g. range 0-1) not supported */
+        if (yscale < YTIC_DIST) {
+            max_tics = (y_line[1] - y_line[0]) / YTIC_DIST;
+            i = 1;
+            while (((max_y - min_y) / tics[i].every) > max_tics)
+                i++;
+            tic_every = tics[i].every;
+            tic_unit = tics[i].unit;
+            strcpy(tic_name, tics[i].name);
+        }
+        else {
+            tic_every = 1;
+            tic_unit = 1;
+            strcpy(tic_name, "");
+        }
+        /* Y-AXIS LOOP */
+        for (i = (int)min_y; i <= (int)max_y; i += tic_unit) {
+            if (rem(i, tic_every) == 0.0) {
+                /* draw a tic-mark */
 
-    /* Y-AXIS LOOP */
+                D_begin();
+                D_move_abs(x_line[0], yoffset - yscale * (i - min_y));
+                D_cont_rel(-(r - l) * BIG_TIC, 0);
+                D_end();
+                D_stroke();
 
-    for (i = (int)min_y; i <= (int)max_y; i += tic_unit) {
-	if (rem(i, tic_every) == 0.0) {
-	    /* draw a tic-mark */
+                /* draw a tic-mark number */
 
-	    D_begin();
-	    D_move_abs(x_line[0], yoffset - yscale * (i - min_y));
-	    D_cont_rel(-(r - l) * BIG_TIC, 0);
-	    D_end();
-	    D_stroke();
-
-	    /* draw a tic-mark number */
-
-	    sprintf(txt, "%d", (i / tic_unit));
-	    text_height = (b - t) * TEXT_HEIGHT;
-	    text_width = (r - l) * TEXT_WIDTH;
-	    D_text_size(text_width, text_height);
-	    D_get_text_box(txt, &tt, &tb, &tl, &tr);
-	    while ((tt - tb) > YTIC_DIST) {
-		text_width *= 0.75;
-		text_height *= 0.75;
-		D_text_size(text_width, text_height);
-		D_get_text_box(txt, &tt, &tb, &tl, &tr);
-	    }
-	    D_pos_abs(l + (r - l) * YNUMS_X - (tr - tl) / 2,
-		      yoffset - (yscale * (i - min_y) + 0.5 * (tt - tb)));
-	    D_text(txt);
-	}
-	else if (rem(i, tic_unit) == 0.0) {
-	    /* draw a tic-mark */
-	    D_begin();
-	    D_move_abs(x_line[0], (yoffset - yscale * (i - min_y)));
-	    D_cont_rel(-(r - l) * SMALL_TIC, 0);
-	    D_end();
-	    D_stroke();
-	}
+                sprintf(txt, "%d", (i / tic_unit));
+                text_height = (b - t) * TEXT_HEIGHT;
+                text_width = (r - l) * TEXT_WIDTH;
+                set_optimal_text_size(text_width, text_height, txt, &tt, &tb, &tl, &tr);
+                D_pos_abs(l + (r - l) * YNUMS_X - (tr - tl) / 2,
+                          yoffset - (yscale * (i - min_y) + 0.5 * (tt - tb)));
+                D_text(txt);
+            }
+            else if (rem(i, tic_unit) == 0.0) {
+                /* draw a tic-mark */
+                D_begin();
+                D_move_abs(x_line[0], (yoffset - yscale * (i - min_y)));
+                D_cont_rel(-(r - l) * SMALL_TIC, 0);
+                D_end();
+                D_stroke();
+            }
+        }
     }
 
     /* draw the y-axis label */
