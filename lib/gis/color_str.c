@@ -131,6 +131,19 @@ int G_str_to_color(const char *str, int *red, int *grn, int *blu)
 	return 1;
     }
 
+    int hex;
+
+    if (sscanf(buf, "#%x", &hex) == 1) {
+	*red = (hex >> 16) & 0xFF;
+	*grn = (hex >> 8) & 0xFF;
+	*blu = hex & 0xFF;
+	if (*red < 0 || *red > 255 ||
+	    *grn < 0 || *grn > 255 || *blu < 0 || *blu > 255)
+	    return 0;
+
+	return 1;
+    }
+
     /* Look for this color in the standard (preallocated) colors */
     for (i = 0; i < num_names; i++) {
 	const struct color_name *name = &standard_color_names[i];
