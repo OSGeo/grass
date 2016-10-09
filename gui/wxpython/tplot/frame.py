@@ -899,7 +899,7 @@ class TplotFrame(wx.Frame):
                 break
         if found:
             try:
-                vect_list = grass.read_command('t.vect.list', flags='s',
+                vect_list = grass.read_command('t.vect.list', flags='u',
                                                input=dataset, column='name')
             except Exception:
                 self.attribute.Clear()
