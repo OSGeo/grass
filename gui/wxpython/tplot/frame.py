@@ -228,7 +228,7 @@ class TplotFrame(wx.Frame):
         self.datasetSelectV = gselect.Select(
             parent=self.controlPanelVector, id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE, type='stvds', multiple=True)
-        self.datasetSelectV.Bind(wx.EVT_COMBOBOX_CLOSEUP,
+        self.datasetSelectV.Bind(wx.EVT_TEXT,
                                  self.OnVectorSelected)
 
         self.attribute = gselect.ColumnSelect(parent=self.controlPanelVector)
@@ -886,7 +886,18 @@ class TplotFrame(wx.Frame):
     def OnVectorSelected(self, event):
         """Update the controlbox related to stvds"""
         dataset = self.datasetSelectV.GetValue().strip()
-        if dataset:
+        name = dataset.split('@')[0]
+        mapset = dataset.split('@')[1] if len(dataset.split('@')) > 1 else ''
+        found = False
+        for each in tgis.tlist(type='stvds', dbif=self.dbif):
+            each_name, each_mapset = each.split('@')
+            if name == each_name:
+                if mapset and mapset != each_mapset:
+                    continue
+                dataset = name + '@' + each_mapset
+                found = True
+                break
+        if found:
             try:
                 vect_list = grass.read_command('t.vect.list', flags='s',
                                                input=dataset, column='name')
@@ -901,7 +912,7 @@ class TplotFrame(wx.Frame):
             for vec in vect_list:
                 self.attribute.InsertColumns(vec, 1)
         else:
-            return
+            self.attribute.Clear()
 
 
 class LookUp:
