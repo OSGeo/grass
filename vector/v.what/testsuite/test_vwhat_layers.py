@@ -112,6 +112,49 @@ text=yyy
 number=8.09
 """
 
+out4 = """East=634243
+North=226193
+
+Map=test_vector
+Mapset=...
+Type=Area
+Sq_Meters=633834.281
+Hectares=63.383
+Acres=156.624
+Sq_Miles=0.2447
+Layer=1
+Category=2
+Driver=...
+Database=...
+Table=t1
+Key_column=cat_
+Layer=1
+Category=1
+Driver=...
+Database=...
+Table=t1
+Key_column=cat_
+cat_=1
+text=Petrášová
+number=6
+"""
+
+out5 = """East=634243
+North=226193
+
+Map=test_vector
+Mapset=...
+Type=Area
+Sq_Meters=633834.281
+Hectares=63.383
+Acres=156.624
+Sq_Miles=0.2447
+Layer=2
+Category=3
+Layer=2
+Category=4
+"""
+
 
 class TestMultiLayerMap(TestCase):
 
@@ -156,6 +199,21 @@ class TestMultiLayerMap(TestCase):
         except ValueError:
             self.fail(msg="No JSON object could be decoded:\n" + self.vwhat.outputs.stdout)
 
+    def test_selected_layers(self):
+        self.vwhat.inputs.layer = -1
+        self.vwhat.flags['g'].value = True
+        self.vwhat.flags['a'].value = True
+        self.assertModule(self.vwhat)
+        self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout)
+
+        self.vwhat.inputs.layer = 1
+        self.assertModule(self.vwhat)
+        self.assertLooksLike(reference=out4, actual=self.vwhat.outputs.stdout)
+
+        self.vwhat.inputs.layer = 2
+        self.vwhat.flags['a'].value = False
+        self.assertModule(self.vwhat)
+        self.assertLooksLike(reference=out5, actual=self.vwhat.outputs.stdout)
 
 if __name__ == '__main__':
     test()
