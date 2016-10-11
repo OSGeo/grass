@@ -37,7 +37,12 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     method->type = TYPE_STRING;
     method->required = NO;
     method->answer = "region_growing";
+    method->options = "region_growing";
+    /*
+      Watershed and Mean Shift methods disabled, it's not implemented yet, see 
+      https://trac.osgeo.org/grass/ticket/3181
     method->options = "region_growing,mean_shift,watershed";
+    */
     method->description = _("Segmentation method");
     method->guisection = _("Settings");
 
