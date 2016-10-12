@@ -34,6 +34,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <dirent.h>
 #include <grass/gis.h>
 #include <grass/display.h>
 #include <grass/colors.h>
@@ -75,6 +76,82 @@ static void set_optimal_text_size(double text_width, double text_height,
         D_text_size(text_width, text_height);
         D_get_text_box(text, tt, tb, tl, tr);
     }
+}
+
+/* copied from d.vect */
+static int cmp(const void *a, const void *b) 
+{
+    return (strcmp(*(char **)a, *(char **)b));
+}
+
+/* TODO: this should go to the library with new gisprompt and std opt */
+/* copied from d.vect, requires dirent.h */
+static char *icon_files(void)
+{
+    char **list, *ret;
+    char buf[GNAME_MAX], path[GPATH_MAX], path_i[GPATH_MAX];
+    int i, count;
+    size_t len;
+    DIR *dir, *dir_i;
+    struct dirent *d, *d_i;
+
+    list = NULL;
+    len = 0;
+    sprintf(path, "%s/etc/symbol", G_gisbase());
+
+    dir = opendir(path);
+    if (!dir)
+        return NULL;
+
+    count = 0;
+    
+    /* loop over etc/symbol */
+    while ((d = readdir(dir))) {
+        if (d->d_name[0] == '.')
+            continue;
+
+        sprintf(path_i, "%s/etc/symbol/%s", G_gisbase(), d->d_name);
+        dir_i = opendir(path_i);
+
+        if (!dir_i)
+            continue;
+
+        /* loop over each directory in etc/symbols */
+        while ((d_i = readdir(dir_i))) {
+            if (d_i->d_name[0] == '.')
+                continue;
+
+            list = G_realloc(list, (count + 1) * sizeof(char *));
+            
+            sprintf(buf, "%s/%s", d->d_name, d_i->d_name);
+            list[count++] = G_store(buf);
+
+            len += strlen(d->d_name) + strlen(d_i->d_name) + 2; /* '/' + ',' */
+        }
+
+        closedir(dir_i);
+    }
+
+    closedir(dir);
+
+    qsort(list, count, sizeof(char *), cmp);
+    
+    if (len > 0) {
+        ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
+        *ret = '\0';
+        for (i = 0; i < count; i++) {
+            if (i > 0)
+                strcat(ret, ",");
+            strcat(ret, list[i]);
+            G_free(list[i]);
+        }
+        G_free(list);
+    }
+    else {
+        ret = G_store("");
+    }
+
+    return ret;
 }
 
 int main(int argc, char **argv)
@@ -138,6 +215,11 @@ int main(int argc, char **argv)
     struct Option *t_color_opt;
     struct Option *y_range_opt;
     struct Option *ytics_opt;
+    struct Option *point_symbol_opt;
+    struct Option *point_size_opt;
+    struct Option *point_color2_opt;
+    struct Option *secondary_width_opt;
+    struct Flag *do_points_flg, *no_lines_flg;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -235,6 +317,55 @@ int main(int argc, char **argv)
     ytics_opt->required = NO;
     ytics_opt->multiple = YES;
 
+    point_symbol_opt = G_define_option();
+    /* TODO: name must be icon to get GUI dialog */
+    point_symbol_opt->key = "icon";
+    point_symbol_opt->type = TYPE_STRING;
+    point_symbol_opt->required = NO;
+    point_symbol_opt->multiple = NO;
+    point_symbol_opt->answer = "basic/circle";
+    /* This could also use ->gisprompt = "old,symbol,symbol" instead of ->options */
+    point_symbol_opt->options = icon_files();
+    point_symbol_opt->description = _("Symbol for point");
+    point_symbol_opt->guisection = _("Points");
+
+    point_size_opt = G_define_option();
+    point_size_opt->key = "point_size";
+    point_size_opt->type = TYPE_DOUBLE;
+    point_size_opt->required = NO;
+    point_size_opt->multiple = NO;
+    point_size_opt->answer = "5";
+    point_size_opt->label = _("Point size");
+    point_size_opt->guisection = _("Points");
+
+    /* theoretically for other things than points */
+    point_color2_opt = G_define_standard_option(G_OPT_CN);
+    point_color2_opt->key = "secondary_color";
+    point_color2_opt->type = TYPE_STRING;
+    point_color2_opt->required = NO;
+    point_color2_opt->multiple = NO;
+    point_color2_opt->description = _("Color for point symbol edge color");
+    point_color2_opt->guisection = _("Points");
+
+    /* theoretically for other things than points */
+    secondary_width_opt = G_define_option();
+    secondary_width_opt->key = "secondary_width";
+    secondary_width_opt->description = _("Width of point symbol lines");
+    secondary_width_opt->type = TYPE_INTEGER;
+    secondary_width_opt->required = NO;
+    secondary_width_opt->multiple = YES;
+    secondary_width_opt->answer = "0.1";
+
+    /* TODO: change this to option, use filled/empty symbol option for this */
+    do_points_flg = G_define_flag();
+    do_points_flg->key = 's';
+    do_points_flg->description = "Draw points";
+    do_points_flg->guisection = _("Points");
+
+    no_lines_flg = G_define_flag();
+    no_lines_flg->key = 'l';
+    no_lines_flg->description = "Do not draw lines";
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -284,6 +415,58 @@ int main(int argc, char **argv)
     /* set colors  */
 
     title_color = D_translate_color(t_color_opt->answer);
+
+    int draw_lines = TRUE;
+    int draw_points = FALSE;
+
+    if (do_points_flg->answer)
+        draw_points = TRUE;
+    if (no_lines_flg->answer)
+        draw_lines = FALSE;
+
+    SYMBOL *point_symbol = NULL;
+    double symbol_size;
+    double symbol_rotation = 0; /* not supported here */
+    int symbol_tolerance = 0; /* not supported by S_stroke */
+    double symbol_line_width;
+
+    if (point_size_opt->answer)
+        symbol_size = atof(point_size_opt->answer);
+
+    if (secondary_width_opt->answer)
+        symbol_line_width = atof(secondary_width_opt->answer);
+
+    /* TODO: symbol vs point in iface and vars */
+    /* there seems there is no free for symbol */
+    if (draw_points && point_symbol_opt->answer) {
+        point_symbol = S_read(point_symbol_opt->answer);
+        /* S_read gives warning only */
+        if (!point_symbol)
+            G_fatal_error(_("Cannot find/open symbol: '%s'"), point_symbol_opt->answer);
+    }
+    RGBA_Color primary_color;
+    RGBA_Color secondary_color;
+
+    if (draw_points) {
+        S_stroke(point_symbol, symbol_size, symbol_rotation, symbol_tolerance);
+        primary_color.a = RGBA_COLOR_OPAQUE;
+
+        if (point_color2_opt->answer) {
+            int rgb_r, rgb_g, rgb_b;
+            int ret = G_str_to_color(point_color2_opt->answer, &rgb_r, &rgb_g, &rgb_b);
+            if (ret == 0)
+                G_fatal_error(_("Color <%s> cannot for option %s be parsed"),
+                              point_color2_opt->answer, point_color2_opt->key);
+            else if (ret == 2)
+                secondary_color.a = RGBA_COLOR_TRANSPARENT;
+            else
+                secondary_color.a = RGBA_COLOR_OPAQUE;
+            secondary_color.r = rgb_r;
+            secondary_color.g = rgb_g;
+            secondary_color.b = rgb_b;
+            
+        }
+    }
 
     /* TODO: use parser for the following and avoid -Wsign-compare */
     /* I had an argument with the parser, and couldn't get a neat list of
@@ -521,13 +704,6 @@ int main(int argc, char **argv)
 
 		/* draw increment of each Y file's data */
 
-                if (color_table_opt->answer)
-                    D_RGB_color(in[i].r, in[i].g, in[i].b);
-                else
-                    D_use_color(in[i].color);
-                if (line_width_opt->answer)
-                    D_line_width(in[i].width);
-
 		/* find out position of where Y should be drawn. */
 		/* if our minimum value of y is not negative, this is easy */
 
@@ -549,9 +725,40 @@ int main(int argc, char **argv)
 		}
 
 		new_x = xoffset + (line * xscale);
+
                 /* draw only when we the previous point to start from */
-                if (line > 0)
+                if (draw_lines && line > 0) {
+                    if (color_table_opt->answer)
+                        D_RGB_color(in[i].r, in[i].g, in[i].b);
+                    else
+                        D_use_color(in[i].color);
+                    if (line_width_opt->answer)
+                        D_line_width(in[i].width);
                     D_line_abs(prev_x, prev_y[i], new_x, new_y[i]);
+                }
+                /* draw points after lines, last point after last line */
+                if (draw_points && line > 0) {
+                    if (color_table_opt->answer) {
+                        primary_color.r = in[i].r;
+                        primary_color.g = in[i].g;
+                        primary_color.b = in[i].b;
+                    }
+                    else {
+                        /* TODO: do this ahead. store in .r .g .b in .rgb */
+                        int rgb_r, rgb_g, rgb_b;
+                        D_color_number_to_RGB(in[i].color, &rgb_r, &rgb_g, &rgb_b);
+                        primary_color.r = rgb_r;
+                        primary_color.g = rgb_g;
+                        primary_color.b = rgb_b;
+                    }
+                    D_line_width(symbol_line_width);
+                    D_symbol2(point_symbol, prev_x, prev_y[i], &primary_color,
+                              &secondary_color);
+                    /* last point */
+                    if (line == in[i].num_pnts - 1)
+                        D_symbol2(point_symbol, new_x, new_y[i], &primary_color,
+                                  &secondary_color);
+                }
 		prev_y[i] = new_y[i];
 	    }
 	}
