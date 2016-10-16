@@ -29,7 +29,7 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
     char buf[BUFFSIZE];
     int got_new;
     SYMBOL *Symb;
-    char *symb_name, *line_color_str, *fill_color_str, *label, *type_str;
+    char *symb_name, *line_color_str, *fill_color_str, *label, *type_str, *color_type;
     double size, line_width;
     double row_w, text_h, title_h, title_w;
     RGBA_Color *line_color, *fill_color;
@@ -67,7 +67,7 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
 
     file_in = fopen(file_name, "r");
     sub_delim = G_malloc(GNAME_MAX);
-    snprintf(sub_delim, sizeof(GNAME_MAX), "%s%s%s%s%s", sep, sep, sep, sep, sep);
+    snprintf(sub_delim, sizeof(GNAME_MAX), "%s%s%s%s%s%s", sep, sep, sep, sep, sep, sep);
     if (!file_in)
         G_fatal_error(_("Unable to open input file <%s>"), file_name);
 
@@ -83,7 +83,7 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
             tokens = G_tokenize(buf, sep);
             symb_name = G_store(tokens[1]);
             size = atof(tokens[2]);
-            type_str = G_store(tokens[6]);
+            type_str = G_store(tokens[7]);
             G_free_tokens(tokens);
 
             /* Symbol */
@@ -167,10 +167,11 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
             label = G_store(tokens[0]);
             symb_name = G_store(tokens[1]);
             size = atof(tokens[2]);
-            line_color_str = G_store(tokens[3]);
-            fill_color_str = G_store(tokens[4]);
-            line_width = atof(tokens[5]);
-            type_str = G_store(tokens[6]);
+            color_type = G_store(tokens[3]);
+            line_color_str = G_store(tokens[4]);
+            fill_color_str = G_store(tokens[5]);
+            line_width = atof(tokens[6]);
+            type_str = G_store(tokens[7]);
             G_free_tokens(tokens);
 
             /* Symbol */
@@ -233,8 +234,17 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
                 x = x0 + offs_x + def_symb_w/2.;
                 y = y0 + offs_y - symb_h/2;
                 D_line_width(line_width);
-                D_symbol(Symb, x, y, line_color, fill_color);
-
+                /* lf - line, fill (as in d.vect)*/
+                if (strcmp(color_type, "lf") == 0)
+                    D_symbol(Symb, x, y, line_color, fill_color);
+                /* ps - primary, secondary (as in d.vect.thematic) */
+                else if (strcmp(color_type, "ps") == 0)
+                    D_symbol2(Symb, x, y, line_color, fill_color);
+                else {
+                    G_warning(_("Invalid value for color type in legend file. "
+                                "Use one of 'lf' or 'ps'."));
+                    D_symbol(Symb, x, y, line_color, fill_color);
+                }
                 x = x0 + offs_x + def_symb_w + sym_lbl_space;
                 y = y0 + offs_y - symb_h/2. + text_h/2.;
                 D_pos_abs(x, y);
