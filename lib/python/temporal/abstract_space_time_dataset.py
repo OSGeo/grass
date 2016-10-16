@@ -408,7 +408,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
 
         if maps is None:
-            maps = get_registered_maps_as_objects(
+            maps = self.get_registered_maps_as_objects(
                 where=None, order="start_time", dbif=dbif)
 
         time_invalid = 0

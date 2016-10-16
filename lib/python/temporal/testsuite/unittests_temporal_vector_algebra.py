@@ -73,6 +73,7 @@ class TestTemporalVectorAlgebra(TestCase):
         tva.parse(expression="R = A : A", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="stvds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_number_of_points(), 80) 
@@ -90,6 +91,7 @@ class TestTemporalVectorAlgebra(TestCase):
         ta.parse(expression="R = A {:,during,r} C",  basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="stvds")
+        self.assertTrue(D.is_in_db())
         D.select()
         D.print_info()
         maplist = D.get_registered_maps_as_objects()
@@ -106,6 +108,7 @@ class TestTemporalVectorAlgebra(TestCase):
         tva.parse(expression="R = A {:,during} C", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="stvds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_number_of_points(), 40) 
@@ -123,6 +126,7 @@ class TestTemporalVectorAlgebra(TestCase):
         tva.parse(expression="R = buff_p(A,0.5)", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="stvds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_number_of_points(), 0) 
@@ -140,6 +144,7 @@ class TestTemporalVectorAlgebra(TestCase):
         tva.parse(expression="R = buff_a(buff_p(A,1),10)", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="stvds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_number_of_points(), 0) 
@@ -157,6 +162,7 @@ class TestTemporalVectorAlgebra(TestCase):
         tva.parse(expression="R = buff_p(A,2) & buff_p(D,2)", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="stvds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_number_of_points(), 0)
@@ -174,6 +180,7 @@ class TestTemporalVectorAlgebra(TestCase):
         tva.parse(expression="R = buff_p(A,1.5) {&,during,r} buff_p(B,1.5)", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="stvds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_number_of_points(), 0)
@@ -191,6 +198,7 @@ class TestTemporalVectorAlgebra(TestCase):
         tva.parse(expression="R = buff_p(A,2.5) {&,during,l} buff_p(C,2.5)", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="stvds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_number_of_points(), 0)
