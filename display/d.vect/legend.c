@@ -30,7 +30,7 @@ void write_into_legfile(struct Map_info *Map, int type, const char *leglab, cons
                     fprintf(fd, "%s|", leglab);
                 else
                     fprintf(fd, "%s|", map);
-                fprintf(fd, "%s|%s|%s|%s|%s", icon, size, color, fcolor, width);
+                fprintf(fd, "%s|%s|lf|%s|%s|%s", icon, size, color, fcolor, width);
                 fprintf(fd, "|%s|%d\n", "point", nfeatures);
             }
         }
@@ -43,7 +43,7 @@ void write_into_legfile(struct Map_info *Map, int type, const char *leglab, cons
                     fprintf(fd, "%s|", leglab);
                 else
                     fprintf(fd, "%s|", map);
-                fprintf(fd, "%s|%s|%s|%s|%s", icon_line, size, color, fcolor, width);
+                fprintf(fd, "%s|%s|lf|%s|%s|%s", icon_line, size, color, fcolor, width);
                 fprintf(fd, "|%s|%d\n", "line", nfeatures);
             }
         }
@@ -56,7 +56,7 @@ void write_into_legfile(struct Map_info *Map, int type, const char *leglab, cons
                     fprintf(fd, "%s|", leglab);
                 else
                     fprintf(fd, "%s|", map);
-                fprintf(fd, "%s|%s|%s|%s|%s", icon_area, size, color, fcolor, width);
+                fprintf(fd, "%s|%s|lf|%s|%s|%s", icon_area, size, color, fcolor, width);
                 fprintf(fd, "|%s|%d\n", "area", nfeatures);
             }
         }
@@ -68,7 +68,7 @@ void write_into_legfile(struct Map_info *Map, int type, const char *leglab, cons
                     fprintf(fd, "%s|", leglab);
                 else
                     fprintf(fd, "%s|", map);
-                fprintf(fd, "%s|%s|%s|%s|%s", icon, size, color, fcolor, width);
+                fprintf(fd, "%s|%s|lf|%s|%s|%s", icon, size, color, fcolor, width);
                 fprintf(fd, "|%s|%d\n", "centroid", nfeatures);
             }
         }
