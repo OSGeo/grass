@@ -97,6 +97,10 @@ class RasterDataset(AbstractMapDataset):
             (2, None)
             >>> rmap.get_relative_time_unit()
             'years'
+            >>> rmap.is_in_db()
+            False
+            >>> rmap.is_stds()
+            False
 
             >>> newmap = rmap.get_new_instance("new@PERMANENT")
             >>> isinstance(newmap, RasterDataset)
@@ -426,6 +430,10 @@ class Raster3DDataset(AbstractMapDataset):
             (2, None)
             >>> r3map.get_relative_time_unit()
             'years'
+            >>> r3map.is_in_db()
+            False
+            >>> r3map.is_stds()
+            False
 
             >>> newmap = r3map.get_new_instance("new@PERMANENT")
             >>> isinstance(newmap, Raster3DDataset)
@@ -767,6 +775,10 @@ class VectorDataset(AbstractMapDataset):
             (2, None)
             >>> vmap.get_relative_time_unit()
             'years'
+            >>> vmap.is_in_db()
+            False
+            >>> vmap.is_stds()
+            False
 
             >>> newmap = vmap.get_new_instance("new@PERMANENT")
             >>> isinstance(newmap, VectorDataset)
@@ -1005,6 +1017,35 @@ class VectorDataset(AbstractMapDataset):
 
 class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
     """Space time raster dataset class
+
+        .. code-block:: python
+
+            >>> import grass.temporal as tgis
+            >>> tgis.init()
+            >>> strds = tgis.SpaceTimeRasterDataset("old@PERMANENT")
+            >>> strds.is_in_db()
+            False
+            >>> strds.is_stds()
+            True
+            >>> strds.get_type()
+            'strds'
+            >>> newstrds = strds.get_new_instance("newstrds@PERMANENT")
+            >>> isinstance(newstrds, SpaceTimeRasterDataset)
+            True
+            >>> newmap = strds.get_new_map_instance("newmap@PERMANENT")
+            >>> isinstance(newmap, RasterDataset)
+            True
+            >>> strds.reset("new@PERMANENT")
+            >>> strds.is_in_db()
+            False
+            >>> strds.get_id()
+            'new@PERMANENT'
+            >>> strds.reset(None)
+            >>> strds.is_in_db()
+            False
+            >>> strds.get_id()
+
+        ...
     """
     def __init__(self, ident):
         AbstractSpaceTimeDataset.__init__(self, ident)
@@ -1085,6 +1126,35 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
 
 class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
     """Space time raster3d dataset class
+
+        .. code-block:: python
+
+            >>> import grass.temporal as tgis
+            >>> tgis.init()
+            >>> str3ds = tgis.SpaceTimeRaster3DDataset("old@PERMANENT")
+            >>> str3ds.is_in_db()
+            False
+            >>> str3ds.is_stds()
+            True
+            >>> str3ds.get_type()
+            'str3ds'
+            >>> newstrds = str3ds.get_new_instance("newstrds@PERMANENT")
+            >>> isinstance(newstrds, SpaceTimeRaster3DDataset)
+            True
+            >>> newmap = str3ds.get_new_map_instance("newmap@PERMANENT")
+            >>> isinstance(newmap, Raster3DDataset)
+            True
+            >>> str3ds.reset("new@PERMANENT")
+            >>> str3ds.is_in_db()
+            False
+            >>> str3ds.get_id()
+            'new@PERMANENT'
+            >>> str3ds.reset(None)
+            >>> str3ds.is_in_db()
+            False
+            >>> str3ds.get_id()
+
+        ...
     """
 
     def __init__(self, ident):
@@ -1184,6 +1254,35 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
 
 class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
     """Space time vector dataset class
+
+        .. code-block:: python
+
+            >>> import grass.temporal as tgis
+            >>> tgis.init()
+            >>> stvds = tgis.SpaceTimeVectorDataset("old@PERMANENT")
+            >>> stvds.is_in_db()
+            False
+            >>> stvds.is_stds()
+            True
+            >>> stvds.get_type()
+            'stvds'
+            >>> newstvds = stvds.get_new_instance("newstvds@PERMANENT")
+            >>> isinstance(newstvds, SpaceTimeVectorDataset)
+            True
+            >>> newmap = stvds.get_new_map_instance("newmap@PERMANENT")
+            >>> isinstance(newmap, VectorDataset)
+            True
+            >>> stvds.reset("new@PERMANENT")
+            >>> stvds.is_in_db()
+            False
+            >>> stvds.get_id()
+            'new@PERMANENT'
+            >>> stvds.reset(None)
+            >>> stvds.is_in_db()
+            False
+            >>> stvds.get_id()
+
+        ...
     """
 
     def __init__(self, ident):

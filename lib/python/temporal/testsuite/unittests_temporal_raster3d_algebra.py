@@ -54,6 +54,7 @@ class TestTemporalRaster3dAlgebra(TestCase):
                   basename="d", overwrite=True)
 
         D = tgis.open_old_stds("D", type="str3ds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 4)  # 1 + 3
@@ -69,6 +70,7 @@ class TestTemporalRaster3dAlgebra(TestCase):
                   basename="d", overwrite=True)
 
         D = tgis.open_old_stds("D", type="str3ds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 4)  # 1 + 3

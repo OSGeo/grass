@@ -74,6 +74,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression="R = A : A",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 1)
@@ -90,6 +91,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression="R = A : D",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 3)
@@ -106,6 +108,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression="R = A !: D",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 1)
@@ -122,6 +125,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression="R = A {:,during} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 2)
@@ -138,6 +142,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression="R = A {:,equal|during} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 2)
@@ -155,6 +160,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression="R = A {!:,during} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 1)
@@ -172,6 +178,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression="R = A {:,during,d} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         maplist = D.get_registered_maps_as_objects()
         for map_i in maplist:
@@ -194,6 +201,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression="R = C {:,contains} A",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         maplist = D.get_registered_maps_as_objects()
         for map_i in maplist:
@@ -215,6 +223,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression="R = A {:,during,r} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
@@ -232,6 +241,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression="R = A {:,during,d} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
@@ -249,6 +259,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression="R = A {:,during,u} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         maplist = D.get_registered_maps_as_objects()
         for map_i in maplist:
@@ -270,6 +281,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression="R = if(A # D == 1, A)",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
@@ -288,6 +300,7 @@ class TestTemporalAlgebra(TestCase):
                                        basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
@@ -306,6 +319,7 @@ class TestTemporalAlgebra(TestCase):
                                                  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
@@ -323,6 +337,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression='R = tmap(singletmap)',  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
@@ -340,6 +355,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression='R = A : tmap(singletmap)',  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
@@ -357,6 +373,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression='R = merge(A,D)',  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 7)
@@ -374,6 +391,7 @@ class TestTemporalAlgebra(TestCase):
         ta.parse(expression='R = merge(A, B {!:,contains} A)',  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
+        self.assertTrue(D.is_in_db())
         D.select()
         maplist = D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
