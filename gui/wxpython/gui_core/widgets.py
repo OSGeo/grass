@@ -1611,9 +1611,12 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         for i in range(len(columns)):
             self.InsertColumn(i, columns[i])
 
-        if len(columns) == 4:
+        width = []
+        if len(columns) == 3:
+            width = (65, 200)
+        elif len(columns) == 4:
             width = (65, 200, 90)
-        else:
+        elif len(columns) == 5:
             width = (65, 180, 90, 70)
 
         for i in range(len(width)):
