@@ -1,9 +1,9 @@
 /*!
-  \file lib/raster/color_read.c
+  \file lib/raster/color_rules.c
   
   \brief Raster Library - Read and parse color rules file
   
-  (C) 2007 by the GRASS Development Team
+  (C) 2007-2016 by the GRASS Development Team
   
   This program is free software under the GNU General Public
   License (>=v2). Read the file COPYING that comes with GRASS
@@ -15,6 +15,7 @@
 #include <stdio.h>
 
 #include <grass/gis.h>
+#include <grass/colors.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
@@ -28,9 +29,8 @@ struct rule
 enum rule_error
 {
     CR_OK = 0,
-    CR_ERROR_SYNTAX,
-    CR_ERROR_RGB,
-    CR_ERROR_COLOR,
+    CR_ERROR_RULE_SYNTAX,
+    CR_ERROR_COLOR_SYNTAX,
     CR_ERROR_PERCENT,
     CR_ERROR_VALUE,
 };
@@ -38,16 +38,24 @@ enum rule_error
 /*!
   \brief Read color rule
 
-  \param min, max min & max values (used only when color rules are in percentage)
-  \param buf
-  \param val value
-  \param[out] r,g,b color values
-  \param norm
-  \param nval
-  \param dflt
+  The val output parameter is always an absolute value and is derived
+  from the rule and the min and max values in case the rule is in percents.
 
-  \return 0 on failure
-  \return 1 on success
+  Always only one of the norm, nval, and dflt output parameters is set
+  to non-zero value, the others are set to zero.
+
+  The return code can be translated to an error message using
+  the Rast_parse_color_rule_error() function.
+
+  \param min, max min & max values (used only when color rules are in percentage)
+  \param buf string with the color rule
+  \param[out] val value which the color is assigned to
+  \param[out] r,g,b color values
+  \param[out] norm set to non-zero value if the value and color are set
+  \param[out] nval set to non-zero value if rule is for null value
+  \param[out] dflt set to non-zero value if rule specifies the default color
+
+  \returns enum rule_error values (non-zero on failure)
 */
 int Rast_parse_color_rule(DCELL min, DCELL max, const char *buf,
 			  DCELL * val, int *r, int *g, int *b,
@@ -60,25 +68,12 @@ int Rast_parse_color_rule(DCELL min, DCELL max, const char *buf,
     *norm = *nval = *dflt = 0;
 
     if (sscanf(buf, "%s %[^\n]", value, color) != 2)
-	return CR_ERROR_SYNTAX;
+	return CR_ERROR_RULE_SYNTAX;
 
-    G_chop(color);
-
-    if (sscanf(color, "%d:%d:%d", r, g, b) == 3 ||
-	sscanf(color, "%d %d %d", r, g, b) == 3) {
-	if (*r < 0 || *r > 255 || *g < 0 || *g > 255 || *b < 0 || *b > 255)
-	    return CR_ERROR_RGB;
-    }
-    else {
-	float fr, fg, fb;
-
-	if (G_color_values(color, &fr, &fg, &fb) < 0)
-	    return CR_ERROR_COLOR;
-
-	*r = (int)(fr * 255.99);
-	*g = (int)(fg * 255.99);
-	*b = (int)(fb * 255.99);
-    }
+    /* we don't allow 'none' color here (ret == 2) */
+    /* G_str_to_color chops and has only 1 error state */
+    if (G_str_to_color(color, r, g, b) != 1)
+	    return CR_ERROR_COLOR_SYNTAX;
 
     G_chop(value);
 
@@ -121,12 +116,16 @@ const char *Rast_parse_color_rule_error(int code)
     switch (code) {
     case CR_OK:
 	return "";
-    case CR_ERROR_SYNTAX:
-	return _("syntax error");
+    case CR_ERROR_RULE_SYNTAX:
+	return _("syntax error in the color rule");
+    case CR_ERROR_COLOR_SYNTAX:
+	return _("syntax error in the color format");
+/* we no longer distinguish between these two errors
     case CR_ERROR_RGB:
 	return _("R/G/B not in range 0-255");
     case CR_ERROR_COLOR:
 	return _("invalid color name");
+*/
     case CR_ERROR_PERCENT:
 	return _("percentage not in range 0-100");
     case CR_ERROR_VALUE:
