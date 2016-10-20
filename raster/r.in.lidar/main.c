@@ -398,11 +398,11 @@ int main(int argc, char *argv[])
         /* Open LAS file*/
         LAS_reader = LASReader_Create(infile);
         if (LAS_reader == NULL)
-            G_fatal_error(_("Unable to open file <%s>"), infile);
+            G_fatal_error(_("Unable to open file <%s> as a LiDAR point cloud"),
+                          infile);
         LAS_header = LASReader_GetHeader(LAS_reader);
         if  (LAS_header == NULL) {
-            G_fatal_error(_("Input file <%s> is not a LAS LiDAR point cloud"),
-                            infile);
+            G_fatal_error(_("Unable to read LAS header of <%s>"), infile);
         }
 
         LAS_srs = LASHeader_GetSRS(LAS_header);
