@@ -45,6 +45,9 @@ d.rast map=basin_A30
 # overlay with transparency
 r.colors map=basin_A30 color=grey
 d.his h=accum_5K i=basin_A30
+
+# report outlet size in ha
+r.report map=basin_A30 units=h
 </pre></div>
 
 <p>
