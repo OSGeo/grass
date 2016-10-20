@@ -20,37 +20,69 @@ are based on the GRASS GIS temporal framework.
 
 <h3>Temporal data management in general</h3>
 
-Space time datasets are stored in a temporal database. SQLite3 or 
-PostgreSQL are supported as SQL database back end. Temporal databases
-stored in other mapsets can be used as long as they are in the
+<p>Space time datasets are stored in a temporal database.
+A core principle of the temporal framework is that temporal databases are mapset specific.
+A new temporal databases is created, when a temporal command is invoked in a mapset
+that does not contain a temporal database. For example if a mapset was recently created.
+<b>As a result, space-time datasets are mapset specific and can only register raster, 3D raster or
+vector maps from the same mapset.</b> By default space-time datasets can not register
+maps from other mapsets. This is a security measure, since the registration of maps in
+a space-time dataset will always modify the metadata of the registered map. This is critical if:
+</p>
+<ul>
+    <li>
+        The user has no write access to the maps from other mapsets he wants to register
+    </li>
+    <li>
+        If registered maps are removed from other mapsets, the temporal database will not be updated
+        and will contain ghost maps
+    </li>
+</ul>
+
+SQLite3 or PostgreSQL are supported as temporal database back end.
+Temporal databases stored in other mapsets can be accessed as long as they are in the
 user's current mapset search path (managed with <a href="g.mapsets.html">g.mapsets</a>).
+Access to space-time datasets from other mapsets is read only.
+They can not be modified or removed.
 <p>
 Connection settings are performed with <a href="t.connect.html">t.connect</a>.
 As default a sqlite3 database will be created in the current mapset that
 stores all space time datasets and registered time series maps.
-<p>
+</p>
 New space time datasets are created in the temporal database with
 <a href="t.create.html">t.create</a>. The name of the new dataset, the
 type (strds, str3ds, stvds), the title and the description must be
 provided for creation. Optional the temporal type (absolute, relative)
 and semantic information can be provided. 
 <p>
+The module <a href="t.register.html">t.register</a> is designed to
+register raster, 3D raster and vector maps in the temporal database and
+in space time datasets. It supports different input options. Maps
+to register can be provided as a comma separated string at the command line, or
+in an input file. The module supports the definition of time stamps
+(time instances or intervals) for each map in the input file.
+With  <a href="t.unregister.html">t.unregister</a> maps can be unregistered
+from space time datasets and the temporal database.
+</p>
+
+<b>Important</b><br>
+<i>Use only temporal commands like t.register to attach a time stamp to
+raster, 3D raster and vector maps. The commands r.timestamp, r3.timestamp and
+v.timestamp should not be used, since they do not register maps in
+the temporal database and modify only the metadata of the map in the
+spatial database. However maps with timestamps attached with *.timestamp modules
+and be registered in space-time datasets using the existing timestamp.</i>
+
+<p>
 The module <a href="t.remove.html">t.remove</a> will remove the space time datasets
-from the temporal database. Use  <a href="t.support.html">t.support</a>
+from the temporal database and optionally all registered maps. It will take care of multiple map registration,
+hence if maps are registered in several space-time datasets in the current mapset.
+Use  <a href="t.support.html">t.support</a>
 to modify the metadata of space time datasets or to update the metadata
 that is derived from registered maps. This module also checks for removed
 and modified maps and updates the space time datasets accordingly. 
 Rename a space time dataset with <a href="t.rename.html">t.rename</a>. 
-<p>
-The module <a href="t.register.html">t.register</a> is designed to 
-register raster, 3D raster and vector maps in the temporal database and
-optionally in a space time dataset. It supports different input options. Maps
-to register can be provided as a comma separated string at the command line, or
-in an input file. The module supports the definition of time stamps 
-(time instances or intervals) for each map in the input file.
-With  <a href="t.unregister.html">t.unregister</a> maps can be unregistered
-from space time datasets and the temporal database.
-<p>
+</p>
 To print information about space time datasets or registered maps, the
 module  <a href="t.info.html">t.info</a> can be used.
 <a href="t.list.html">t.list</a> will list all space time datasets and
@@ -61,8 +93,10 @@ module <a href="t.topology.html">t.topology</a> was designed. The module
 <a href="t.sample.html">t.sample</a> samples input space time dataset(s)
 with a sample space time dataset and print the result to standard output.
 Several different sample methods are supported that can be combined.
+</p>
 <p>
-List of general management modules: 
+List of general management modules:
+</p>
 <ul>
     <li><a href="t.connect.html">t.connect</a></li>
     <li><a href="t.create.html">t.create</a></li>
