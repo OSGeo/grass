@@ -29,7 +29,7 @@
 struct menu
 {
     stat_func *method;		/* routine to compute new value */
-    int half;			/* whether to add 0.5 to result */
+    int is_int;			/* whether the result is an integer (unused) */
     char *name;			/* method name */
     char *text;			/* menu display - full description */
 };
@@ -37,18 +37,18 @@ struct menu
 /* modify this table to add new methods */
 static struct menu menu[] = {
     {c_sum, 0, "sum", "sum of values"},
-    {c_ave, 1, "average", "average value"},
+    {c_ave, 0, "average", "average value"},
     {c_median, 0, "median", "median value"},
     {c_mode, 0, "mode", "most frequently occurring value"},
     {c_min, 0, "minimum", "lowest value"},
-    {c_minx, 0, "min_cat", "category number of lowest value"},
+    {c_minx, 1, "min_cat", "category number of lowest value"},
     {c_max, 0, "maximum", "highest value"},
-    {c_maxx, 0, "max_cat", "category number of highest value"},
+    {c_maxx, 1, "max_cat", "category number of highest value"},
     {c_range, 0, "range", "range of values"},
-    {c_stddev, 1, "stddev", "standard deviation"},
-    {c_var, 1, "variance", "statistical variance"},
-    {c_divr, 0, "diversity", "number of different values"},
-    {0, 0, 0, 0}
+    {c_stddev, 0, "stddev", "standard deviation"},
+    {c_var, 0, "variance", "statistical variance"},
+    {c_divr, 1, "diversity", "number of different values"},
+    {NULL, 0, NULL, NULL}
 };
 
 /* Structure to store info for each area category */
@@ -68,18 +68,14 @@ static int cmp_area(const void *pa, const void *pb)
     AREA_CAT *p1 = (AREA_CAT *) pa;
     AREA_CAT *p2 = (AREA_CAT *) pb;
 
-    if (p1->area_cat < p2->area_cat)
-	return -1;
-    if (p1->area_cat > p2->area_cat)
-	return 1;
-    return 0;
+    return (p1->area_cat - p2->area_cat);
 }
 
 int main(int argc, char *argv[])
 {
     char *p;
     int i, j, k;
-    int method, half, use_catno;
+    int method, use_catno;
     const char *mapset;
     struct GModule *module;
     struct Option *point_opt,	/* point vector */
@@ -258,7 +254,6 @@ int main(int argc, char *argv[])
 
     method = -1;
     use_catno = 0;
-    half = 0;
     if (method_opt->answer) {
 	/* get the method */
 	for (method = 0; (p = menu[method].name); method++)
@@ -287,6 +282,7 @@ int main(int argc, char *argv[])
     /* Open database driver */
     db_init_string(&stmt);
     Adriver = NULL;
+    AFi = NULL;
 
     if (!print_flag->answer) {
 
@@ -358,8 +354,6 @@ int main(int argc, char *argv[])
 	    }
 	}
     }
-    else
-	AFi = NULL;
 
     Pdriver = NULL;
     if (method_opt->answer) {
@@ -400,11 +394,7 @@ int main(int argc, char *argv[])
 	ctype =
 	    db_column_Ctype(Pdriver, PFi->table, point_column_opt->answer);
 
-	if (ctype == DB_C_TYPE_INT)
-	    half = menu[method].half;
-	else if (ctype == DB_C_TYPE_DOUBLE)
-	    half = 0;
-	else
+	if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
 	    G_fatal_error(_("column for points vector must be numeric"));
 
 	db_CatValArray_init(&cvarr);
@@ -443,6 +433,8 @@ int main(int argc, char *argv[])
 		Area_cat[nacats].count = 0;
 		Area_cat[nacats].nvalues = 0;
 		Area_cat[nacats].nalloc = 0;
+		Area_cat[nacats].values = NULL;
+		Area_cat[nacats].cats = NULL;
 		nacats++;
 		if (nacats >= nacatsalloc) {
 		    nacatsalloc += 100;
@@ -458,18 +450,22 @@ int main(int argc, char *argv[])
 
     G_debug(1, "%d cats loaded from vector (including duplicates)", nacats);
 
+    if (nacats == 0)
+	G_fatal_error(_("No area categories in vector <%s>, layer <%s>"),
+		      area_opt->answer, area_field_opt->answer);
+
     /* Sort by category */
     qsort((void *)Area_cat, nacats, sizeof(AREA_CAT), cmp_area);
 
     /* remove duplicate categories */
+    j = 1;
     for (i = 1; i < nacats; i++) {
-	if (Area_cat[i].area_cat == Area_cat[i - 1].area_cat) {
-	    for (j = i; j < nacats - 1; j++) {
-		Area_cat[j].area_cat = Area_cat[j + 1].area_cat;
-	    }
-	    nacats--;
+	if (Area_cat[i].area_cat != Area_cat[i - 1].area_cat) {
+	    Area_cat[j].area_cat = Area_cat[i].area_cat;
+	    j++;
 	}
     }
+    nacats = j;
 
     G_debug(1, "%d cats loaded from vector (unique)", nacats);
 
@@ -658,9 +654,7 @@ int main(int argc, char *argv[])
 	    statsvalue(&result, Area_cat[i].values, Area_cat[i].nvalues,
 			NULL);
 
-	    if (half)
-		result += 0.5;
-	    else if (use_catno)
+	    if (use_catno)
 		result = Area_cat[i].cats[(int)result];
 	}
 	if (print_flag->answer) {
