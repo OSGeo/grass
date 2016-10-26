@@ -229,3 +229,8 @@ table.compact tr:nth-child(odd) {
 table.compact tr:nth-child(even) {
     background: #FFF;
 }
+
+/* soft strike through so that we can still see the text */
+s {
+    text-decoration-color: rgba(0, 0, 0, 0.53);
+}
