@@ -608,6 +608,17 @@ and the existing <tt>elev_200</tt> will be left intact and will not be used.
 If a user want to use the existing map, the name of the temporary variable
 (map) must be changed.
 
+<h3>Using the same map for input and output results</h3>
+A map cannot be used both as an input and as an output as in
+this invalid expression <tt>oldmap = oldmap + 1</tt>, instead
+a subsequent rename using <em><a href="g.rename.html">g.rename</a></em> is
+needed when the same name is desired:
+
+<div class="code"><pre>
+r.mapcalc "newmap = oldmap + 1"
+g.rename raster=newmap,oldmap
+</pre></div>
+
 <h3>Random number generator initialization</h3>
 <p>The pseudo-random number generator used by the rand() function can
 be initialised to a specific value using the <b>seed</b> option. 
@@ -623,6 +634,7 @@ either specified in the script or generated from a determenistic process
 such as a pseudo-random number generator given an explicit seed.
 <p>Note that the rand() function will generate a fatal error if neither
 the <b>seed</b> option nor the <b>-s</b> flag are given.
+
 
 <h2>EXAMPLES</h2>
 
@@ -721,6 +733,7 @@ command has completed. All maps are generated concurrently, row-by-row
 (i.e. there is an implicit "for row in rows {...}" around the entire expression).
 Thus the <tt>#</tt>, <tt>@</tt>, and <tt>[ ]</tt> operators cannot be used on a map
 generated within same <em>r.mapcalc</em> command run.
+Consequently, the following (strikethrough code) does not work:
 
 <div class="code"><pre>
 newmap = oldmap * 3.14
