@@ -165,20 +165,42 @@ def print_frames(monitor, current_only=False, full=False):
 def get_frame_name(line):
     return line.rstrip('\n').rsplit('#', 1)[1].strip(' ')
 
-# calculate position of the frame in percent
-
 
 def calculate_frame(frame, at, width, height):
+    """Calculate absolute position of the frame from percentages
+
+    at is from bottom left in percents (bottom,top,left,right)
+    output is in pixels from top left (top,bottom,left,right)
+
+    This function does also the necessary formating.
+
+    >>> calculate_frame('apple', "0,49.8,0,50.2", 500, 500)
+    'GRASS_RENDER_FRAME=251,500,0,251 # apple\\n'
+    >>> calculate_frame('orange', "50.2,0,49.8,100", 500, 500)
+    'GRASS_RENDER_FRAME=500,249,249,500 # orange\\n'
+    >>> calculate_frame('odd_number', "0,49.8,0,50.2", 367, 367)
+    'GRASS_RENDER_FRAME=184,367,0,184 # odd_number\\n'
+
+    The following would give 182,367,0,184 if we would be truncating
+    to integers instead of rounding, but that would be wrong because
+    height of the frame would be 367 minus 182 which is 185 while
+    0.502 times 367 is 184.234 which fits with the (correct) width of
+    the frame which is 184.
+
+    >>> calculate_frame('test_truncating_bug', "0,50.2,0,50.2", 367, 367)
+    'GRASS_RENDER_FRAME=183,367,0,184 # test_truncating_bug\\n'
+    """
     try:
         b, t, l, r = list(map(float, at.split(',')))
     except:
         fatal(_("Invalid frame position: %s") % at)
 
-    top = height - (t / 100. * height)
-    bottom = height - (b / 100. * height)
-    left = l / 100. * width
-    right = r / 100. * width
+    top = round(height - (t / 100. * height))
+    bottom = round(height - (b / 100. * height))
+    left = round(l / 100. * width)
+    right = round(r / 100. * width)
 
+    # %d for floats works like int() - truncates
     return 'GRASS_RENDER_FRAME=%d,%d,%d,%d # %s%s' % \
         (top, bottom, left, right, frame, '\n')
 
@@ -276,5 +298,9 @@ def main():
     select_frame(monitor, options['frame'])
 
 if __name__ == "__main__":
+    if len(sys.argv) == 2 and sys.argv[1] == '--doctest':
+        import doctest
+        _ = str  # doctest gettext workaround
+        sys.exit(doctest.testmod().failed)
     options, flags = parser()
     sys.exit(main())
