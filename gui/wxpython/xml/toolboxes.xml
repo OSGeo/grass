@@ -174,8 +174,14 @@
       <module-item name="r3.cross.rast">
         <label>Cross section</label>
       </module-item>
+      <module-item name="r3.flow">
+        <label>Compute 3D flow</label>
+      </module-item>
       <module-item name="r3.gwflow">
         <label>Groundwater modeling</label>
+      </module-item>
+      <module-item name="r3.gradient">
+        <label>Compute gradient</label>
       </module-item>
       <module-item name="v.vol.rst">
         <label>Interpolate 3D raster from points</label>
@@ -348,6 +354,9 @@
       <module-item name="r3.in.ascii">
         <label>ASCII 3D import</label>
       </module-item>
+      <module-item name="r3.in.lidar">
+        <label>LAS LiDAR points import</label>
+      </module-item>
       <module-item name="r3.in.bin">
         <label>Raw binary array 3D import</label>
       </module-item>
@@ -428,6 +437,9 @@
       </module-item>
       <module-item name="v.out.dxf">
         <label>DXF export</label>
+      </module-item>
+      <module-item name="v.out.lidar">
+        <label>LAS LiDAR points export</label>
       </module-item>
       <module-item name="v.out.postgis">
         <label>PostGIS export</label>
@@ -1223,6 +1235,9 @@
   <toolbox name="LidarAnalysis">
     <label>Lidar analysis</label>
     <items>
+      <module-item name="v.decimate">
+        <label>Decimates a point cloud</label>
+      </module-item>
       <module-item name="v.outlier">
         <label>Identify and remove outliers</label>
       </module-item>
@@ -1750,6 +1765,9 @@
       <module-item name="t.rast.to.rast3">
         <label>Convert raster dataset to 3D raster</label>
       </module-item>
+      <module-item name="t.rast.to.vect">
+        <label>Convert raster dataset to vector dataset </label>
+      </module-item>
       <separator/>
       <subtoolbox name="TemporalExtraction"/>
       <module-item name="t.vect.db.select">
@@ -1770,8 +1788,12 @@
       <module-item name="t.rast.gapfill">
         <label>Interpolate gaps in raster datasets</label>
       </module-item>
+      <module-item name="t.rast.contour">
+        <label>Contours from a space time raster dataset</label>
+      </module-item>
       <subtoolbox name="TemporalAggregation"/>
       <subtoolbox name="TemporalSampling"/>
+      <subtoolbox name="TemporalMapAlgebra"/>
       <subtoolbox name="TemporalReportsAndStatistics"/>
       <subtoolbox name="TemporalGuiTools"/>
     </items>
@@ -1908,6 +1930,20 @@
       </module-item>
       <module-item name="t.rast.aggregate.ds">
         <label>Temporal aggregation by dataset</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TemporalMapAlgebra">
+    <label>Aggregation</label>
+    <items>
+      <module-item name="t.rast.algebra">
+        <label>Temporal raster algebra</label>
+      </module-item>
+      <module-item name="t.rast3d.algebra">
+        <label>Temporal raster 3D algebra</label>
+      </module-item>
+      <module-item name="t.vect.algebra">
+        <label>Temporal vector algebra</label>
       </module-item>
     </items>
   </toolbox>
