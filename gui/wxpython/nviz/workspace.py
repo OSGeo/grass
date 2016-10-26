@@ -194,7 +194,7 @@ class NvizSettings(object):
                 subkey='transp'))
         return data
 
-    def SetVectorDefaultProp(self, data=None):
+    def SetVectorDefaultProp(self, longDim, data=None):
         """Set default vector data properties"""
         if not data:
             data = dict()
@@ -202,7 +202,7 @@ class NvizSettings(object):
             data[sec] = {}
 
         self.SetVectorLinesDefaultProp(data['lines'])
-        self.SetVectorPointsDefaultProp(data['points'])
+        self.SetVectorPointsDefaultProp(data['points'], longDim)
 
         return data
 
@@ -250,11 +250,17 @@ class NvizSettings(object):
             for attrb in ('color', 'width', 'mode', 'height', 'thematic'):
                 data[attrb]['update'] = None
 
-    def SetVectorPointsDefaultProp(self, data):
+    def SetVectorPointsDefaultProp(self, data, longDim):
         """Set default vector properties -- points"""
+        size_fraction = 0.005
         # size
-        data['size'] = {'value': UserSettings.Get(group='nviz', key='vector',
-                                                  subkey=['points', 'size'])}
+        autosize = UserSettings.Get(group='nviz', key='vector',
+                                    subkey=['points', 'autosize'])
+        if autosize:
+            data['size'] = {'value': longDim * size_fraction}
+        else:
+            data['size'] = {'value': UserSettings.Get(group='nviz', key='vector',
+                                                      subkey=['points', 'size'])}
 
         # width
         data['width'] = {'value': UserSettings.Get(group='nviz', key='vector',
