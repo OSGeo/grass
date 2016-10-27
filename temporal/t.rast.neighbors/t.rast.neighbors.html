@@ -7,19 +7,19 @@ module supports a subset of options that are available in
 and the aggregation method can be chosen.
 <p>
 The user must provide an input and an output space time raster dataset and
-the basename  of the resulting raster maps. The resulting STRDS will have
+the basename of the resulting raster maps. The resulting STRDS will have
 the same temporal resolution as the input dataset.
 All maps will be processed using the current region settings.
 <p>
 The user can select a subset of the input space time raster dataset for
 processing using a SQL WHERE statement. The number of CPU's to be used
 for parallel processing can be specified with the <em>nprocs</em>
-option, to speedup the computation on multi-core system.
+option to speedup the computation on multi-core system.
 
 
 <h2>EXAMPLE</h2>
 
-To smooth the maps contained into a space time dataset run:
+To smooth the maps contained in a space time dataset run:
 
 <div class="code"><pre>
 t.rast.neighbors input=tempmean_monthly output=smooth_tempmean_monthly \
@@ -76,8 +76,7 @@ t.info smooth_tempmean_monthly
  +----------------------------------------------------------------------------+
 
 
-# now compare the values between original data and the smoothed one
-t.rast.list input=smooth_tempmean_monthly columns=name,start_time,min,max
+# now compare the values between the original and the smoothed dataset
 
 t.rast.list input=smooth_tempmean_monthly columns=name,start_time,min,max
 name|start_time|min|max
