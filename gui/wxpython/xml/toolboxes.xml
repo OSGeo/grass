@@ -175,7 +175,7 @@
         <label>Cross section</label>
       </module-item>
       <module-item name="r3.flow">
-        <label>Compute 3D flow</label>
+        <label>Compute 3D flow lines</label>
       </module-item>
       <module-item name="r3.gwflow">
         <label>Groundwater modeling</label>
@@ -1940,7 +1940,7 @@
         <label>Temporal raster algebra</label>
       </module-item>
       <module-item name="t.rast3d.algebra">
-        <label>Temporal raster 3D algebra</label>
+        <label>Temporal 3D raster algebra</label>
       </module-item>
       <module-item name="t.vect.algebra">
         <label>Temporal vector algebra</label>
