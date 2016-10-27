@@ -1934,7 +1934,7 @@
     </items>
   </toolbox>
   <toolbox name="TemporalMapAlgebra">
-    <label>Aggregation</label>
+    <label>Temporal algebra</label>
     <items>
       <module-item name="t.rast.algebra">
         <label>Temporal raster algebra</label>
