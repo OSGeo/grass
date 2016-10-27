@@ -27,6 +27,27 @@ size of a second, the monthly intervals will be sampled by a second
 based granularity as well. This may result in millions of space time
 voxel cube layers!
 
+<h3>Management of open file limits</h3>
+The maximum number of raster maps that can be processed is given by the 
+per-user limit of the operating system. For example, both the the hard and soft
+limit for users is typically 1024. The soft limit can be changed with e.g. 
+ulimit -n 4096 (UNIX-based operating systems) but not higher than the 
+hard limit. If the latter is too low, you can as superuser add an entry in
+
+<div class="code"><pre>
+/etc/security/limits.conf
+# &lt;domain&gt;      &lt;type&gt;  &lt;item&gt;         &lt;value&gt;
+your_username  hard    nofile          4096
+</pre></div>
+
+This will raise the hard limit to 4096 files. Also have a look at the overall 
+limit of the operating system
+<div class="code"><pre>
+cat /proc/sys/fs/file-max
+</pre></div>
+which, on modern Linux systems, is several 100,000 files.
+
+
 <h2>EXAMPLE</h2>
 To create a voxel map layer from a subset of the <em>tempmean_monthly</em>
 space time dataset, run:
