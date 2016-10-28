@@ -378,7 +378,7 @@ void set_MSS5(lsat_data * lsat)
     /* Spectral radiances at detector */
     double Lmax[][4] = {
 	{240., 170., 150., 127.},	/* before   April 6, 1984    */
-	{268., 179., 159., 123.},	/* betweeen                  */
+	{268., 179., 159., 123.},	/* between                   */
 	{268., 179., 148., 123.}	/* after    November 9, 1984 */
     };
     double Lmin[][4] = {
