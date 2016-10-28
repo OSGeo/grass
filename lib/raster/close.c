@@ -155,6 +155,8 @@ static int close_old(int fd)
 
     if (fcb->null_bits)
 	G_free(fcb->null_bits);
+    if (fcb->null_row_ptr)
+	G_free(fcb->null_row_ptr);
     if (fcb->null_fd >= 0)
 	close(fcb->null_fd);
     fcb->null_fd = -1;
@@ -477,6 +479,9 @@ static int close_new(int fd, int ok)
     G_free(fcb->mapset);
 
     G_free(fcb->null_bits);
+
+    if (fcb->null_row_ptr)
+	G_free(fcb->null_row_ptr);
 
     if (fcb->map_type != CELL_TYPE)
 	Rast_quant_free(&fcb->quant);

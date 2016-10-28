@@ -708,6 +708,7 @@ static int open_raster_new(const char *name, int open_mode,
 
     fcb->null_temp_name = tempname;
 
+    fcb->null_row_ptr = NULL;
     if (R__.compress_nulls) {
 	fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
 	G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
