@@ -42,7 +42,7 @@
 
 #%flag
 #% key: d
-#% description: Perform a dry run, compute all depenencies and module calls but don't run them
+#% description: Perform a dry run, compute all dependencies and module calls but don't run them
 #%end
 
 
