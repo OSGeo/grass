@@ -671,7 +671,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         event.Skip()
 
-    def SaveToFile(self, FileName, FileType, width, height):
+    def SaveToFile(self, FileName, FileType, width, height, callback=None):
         """This draws the pseudo DC to a buffer that can be saved to
         a file.
 
@@ -689,18 +689,22 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         self._fileName = FileName
         self._fileType = FileType
+        self._saveToFileCallback = callback
 
         self._busy = wx.BusyInfo(message=_("Please wait, exporting image..."),
                                  parent=self)
         wx.Yield()
 
         self.Map.ChangeMapSize((width, height))
-        self.Map.Render(force=True, windres=self._properties.resolution)
         renderMgr = self.Map.GetRenderMgr()
+        # this seems wrong, rendering should have callback
+        # when callback present, rendering does not emit signal
+        # just calls callback
         renderMgr.renderDone.disconnect(self._updateMFinished)
         renderMgr.renderDone.connect(self._saveToFileDone)
+        self.Map.Render(force=True, windres=self._properties.resolution)
 
-    def _saveToFileDone(self):
+    def _saveToFileDone(self, callback=None):
         renderMgr = self.Map.GetRenderMgr()
         renderMgr.renderDone.disconnect(self._saveToFileDone)
 
@@ -756,6 +760,8 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         self.UpdateMap(render=True)
         self.Refresh()
+        if self._saveToFileCallback:
+            self._saveToFileCallback()
 
     def GetOverlay(self):
         """Converts rendered overlay files to wx.Image
