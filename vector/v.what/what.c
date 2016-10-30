@@ -538,13 +538,16 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 	}			/* if area > 0 */
 
 	if (Cats->n_cats > 0) {
-	    int j;
+	    int j, k;
 	    char *formbuf1;
 	    char *formbuf2;
 	    if (json) {
 		fprintf(stdout, ",\n\"Categories\": [");
 	    }
+	    k = 0;
 	    for (j = 0; j < Cats->n_cats; j++) {
+		if (field[i] == -1 || Cats->field[j] == field[i]) {
+		k++;
 		G_debug(2, "field = %d  category = %d\n", Cats->field[j],
 			Cats->cat[j]);
 		if (script) {
@@ -552,7 +555,7 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 			    Cats->cat[j]);
 		}
 		else if (json) {
-		    fprintf(stdout, "%s\n{\"Layer\": %d, \"Category\": %d", j == 0 ? "": ",", 
+		    fprintf(stdout, "%s\n{\"Layer\": %d, \"Category\": %d", k == 1 ? "": ",", 
 			    Cats->field[j], Cats->cat[j]);
 		}
 		else {
@@ -597,6 +600,7 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		if (json) {
 		    fprintf(stdout, "}"); /* for cat */
 		}
+	      }
 	    }
 	    if (json) {
 		fprintf(stdout, "]"); /* for list of cats */
