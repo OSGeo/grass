@@ -41,13 +41,13 @@ struct basecat
 
 static int num_quants;
 static DCELL *quants;
-static DCELL f_min, f_max;
+static DCELL min, max;
 static int num_slots;
 static DCELL slot_size;
 
 static int rows, cols;
 
-static int min, max;
+static CELL cmin, cmax;
 static int num_cats;
 static struct basecat *basecats;
 
@@ -90,7 +90,7 @@ static void get_slot_counts(int basefile, int coverfile)
 		continue;
 
 	    i = get_slot(coverbuf[col]);
-	    bc = &basecats[basebuf[col] - min];
+	    bc = &basecats[basebuf[col] - cmin];
 
 	    bc->slots[i]++;
 	    bc->total++;
@@ -181,7 +181,7 @@ static void fill_bins(int basefile, int coverfile)
 		continue;
 
 	    i = get_slot(coverbuf[col]);
-	    bc = &basecats[basebuf[col] - min];
+	    bc = &basecats[basebuf[col] - cmin];
 	    if (!bc->slot_bins[i])
 		continue;
 
@@ -246,7 +246,7 @@ static void print_quantiles(void)
 	int quant;
 
 	for (quant = 0; quant < num_quants; quant++)
-	    printf("%d:%d:%f:%f\n", min + cat, quant, 100 * quants[quant], bc->quants[quant]);
+	    printf("%d:%d:%f:%f\n", cmin + cat, quant, 100 * quants[quant], bc->quants[quant]);
     }
 }
 
@@ -274,6 +274,9 @@ static void compute_quantiles(void)
 	    k = next - b->origin;
 	    i0 = (int)floor(k);
 	    i1 = (int)ceil(k);
+
+	    if (i1 > b->count - 1)
+		i1 = b->count - 1;
 
 	    v = (i0 == i1)
 		? bc->values[b->base + i0]
@@ -309,7 +312,7 @@ static void do_reclass(const char *basemap, char **outputs)
 	    G_fatal_error(_("Unable to open temporary file"));
 
 	for (cat = 0; cat < num_cats; cat++)
-	    fprintf(fp, "%d = %d %f\n", min + cat, min + cat, basecats[cat].quants[quant]);
+	    fprintf(fp, "%d = %d %f\n", cmin + cat, cmin + cat, basecats[cat].quants[quant]);
 
 	fclose(fp);
 
@@ -326,6 +329,7 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
     DCELL *out_buf = Rast_allocate_d_buf();
     const char *mapset = G_mapset();
     struct Colors colors;
+    struct History history;
     int have_colors;
     int quant;
     int row, col;
@@ -348,7 +352,7 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
 		if (Rast_is_c_null_value(&base_buf[col]))
 		    Rast_set_d_null_value(&out_buf[col], 1);
 		else
-		    out_buf[col] = basecats[base_buf[col] - min].quants[quant];
+		    out_buf[col] = basecats[base_buf[col] - cmin].quants[quant];
 
 	    Rast_put_d_row(out_fd[quant], out_buf);
 	}
@@ -360,6 +364,9 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
 
     for (quant = 0; quant < num_quants; quant++) {
 	Rast_close(out_fd[quant]);
+	Rast_short_history(outputs[quant], "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(outputs[quant], &history);
 	if (have_colors)
 	    Rast_write_colors(outputs[quant], mapset, &colors);
     }
@@ -482,15 +489,15 @@ int main(int argc, char *argv[])
     if (Rast_read_range(basemap, "", &range) < 0)
 	G_fatal_error(_("Unable to read range of base map <%s>"), basemap);
 
-    Rast_get_range_min_max(&range, &min, &max);
-    num_cats = max - min + 1;
+    Rast_get_range_min_max(&range, &cmin, &cmax);
+    num_cats = cmax - cmin + 1;
     if (num_cats > MAX_CATS)
 	G_fatal_error(_("Base map <%s> has too many categories (max: %d)"),
 		      basemap, MAX_CATS);
 
     Rast_read_fp_range(covermap, "", &fprange);
-    Rast_get_fp_range_min_max(&fprange, &f_min, &f_max);
-    slot_size = (f_max - f_min) / num_slots;
+    Rast_get_fp_range_min_max(&fprange, &min, &max);
+    slot_size = (max - min) / num_slots;
 
     basecats = G_calloc(num_cats, sizeof(struct basecat));
 
