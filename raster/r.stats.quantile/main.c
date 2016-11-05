@@ -132,7 +132,7 @@ static void get_slot_counts(int basefile, int coverfile)
 	    continue;
 
 	bc->num_slots = 1;
-	if (bc->total * sizeof(DCELL) > num_slots * sizeof(struct bin))
+	if (bc->total * 10 > (unsigned long) num_slots)
 	    bc->num_slots = num_slots;
 
 	bc->slots = G_calloc(bc->num_slots, sizeof(unsigned int));
