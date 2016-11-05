@@ -52,6 +52,9 @@ static inline int get_slot(DCELL c)
 
 static inline double get_quantile(int n)
 {
+    if (n >= num_quants)
+	return (double)total + total;
+
     return (double)total * quants[n];
 }
 
@@ -103,7 +106,8 @@ static void initialize_bins(void)
 	unsigned int count = slots[slot];
 	unsigned long accum2 = accum + count;
 
-	if (accum2 > next) {
+	if (accum2 > next ||
+	    (slot == num_slots - 1 && accum2 == next)) {
 	    struct bin *b = &bins[bin];
 
 	    slot_bins[slot] = ++bin;
@@ -196,7 +200,7 @@ static void compute_quantiles(int recode)
     int quant;
 
     for (quant = 0; quant < num_quants; quant++) {
-	struct bin *b;
+	struct bin *b = &bins[bin];
 	double next = get_quantile(quant);
 	double k, v;
 	int i0, i1;
@@ -212,6 +216,8 @@ static void compute_quantiles(int recode)
 	    i0 = (int)floor(k);
 	    i1 = (int)ceil(k);
 
+	    if (i0 > b->count - 1)
+		i0 = b->count - 1;
 	    if (i1 > b->count - 1)
 		i1 = b->count - 1;
 
