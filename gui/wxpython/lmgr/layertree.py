@@ -1275,7 +1275,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         event.Skip()
 
     def AddLayer(self, ltype, lname=None, lchecked=None, lopacity=1.0,
-                 lcmd=None, lgroup=None, lvdigit=None, lnviz=None, multiple=True):
+                 lcmd=None, lgroup=None, lvdigit=None, lnviz=None,
+                 multiple=True, loadWorkspace=False):
         """Add new item to the layer tree, create corresponding MapLayer instance.
         Launch property dialog if needed (raster, vector, etc.)
 
@@ -1288,6 +1289,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         :param lvdigit: vector digitizer settings (eg. geometry attributes)
         :param lnviz: layer Nviz properties
         :param bool multiple: True to allow multiple map layers in layer tree
+        :param bool loadWorkspace: True if called when loading workspace
         """
         if lname and not multiple:
             # check for duplicates
@@ -1323,36 +1325,36 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             ctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, ctrl)
         # add layer to the layer tree
-        if selectedLayer and selectedLayer != self.GetRootItem():
-            if self.GetLayerInfo(selectedLayer, key='type') == 'group' \
-                    and self.IsExpanded(selectedLayer):
-                # add to group (first child of self.layer_selected) if group
-                # expanded
-                layer = self.PrependItem(parent=selectedLayer,
-                                         text='', ct_type=1, wnd=ctrl)
-            else:
-                # prepend to individual layer or non-expanded group
-                if lgroup == -1:
-                    # -> last child of root (loading from workspace)
-                    layer = self.AppendItem(parentId=self.root,
-                                            text='', ct_type=1, wnd=ctrl)
-                elif lgroup > -1:
-                    # -> last child of group (loading from workspace)
-                    parent = self.FindItemByIndex(index=lgroup)
-                    if not parent:
-                        parent = self.root
-                    layer = self.AppendItem(parentId=parent,
-                                            text='', ct_type=1, wnd=ctrl)
-                elif lgroup is None:
+        if loadWorkspace:
+            # when loading workspace, we always append
+            if lgroup == -1:
+                # -> last child of root (loading from workspace)
+                layer = self.AppendItem(parentId=self.root,
+                                        text='', ct_type=1, wnd=ctrl)
+            elif lgroup > -1:
+                # -> last child of group (loading from workspace)
+                parent = self.FindItemByIndex(index=lgroup)
+                if not parent:
+                    parent = self.root
+                layer = self.AppendItem(parentId=parent,
+                                        text='', ct_type=1, wnd=ctrl)
+        else:
+            if selectedLayer and selectedLayer != self.GetRootItem():
+                if selectedLayer and self.GetLayerInfo(selectedLayer, key='type') == 'group' \
+                        and self.IsExpanded(selectedLayer):
+                    # add to group (first child of self.layer_selected) if group
+                    # expanded
+                    layer = self.PrependItem(parent=selectedLayer,
+                                             text='', ct_type=1, wnd=ctrl)
+                else:
                     # -> previous sibling of selected layer
                     parent = self.GetItemParent(selectedLayer)
                     layer = self.InsertItem(
-                        parentId=parent, input=self.GetPrevSibling(
-                            selectedLayer),
-                        text='', ct_type=1, wnd=ctrl)
-        else:  # add first layer to the layer tree (first child of root)
-            layer = self.PrependItem(
-                parent=self.root, text='', ct_type=1, wnd=ctrl)
+                                parentId=parent, input=self.GetPrevSibling(selectedLayer),
+                                text='', ct_type=1, wnd=ctrl)
+            else:  # add first layer to the layer tree (first child of root)
+                layer = self.PrependItem(
+                    parent=self.root, text='', ct_type=1, wnd=ctrl)
 
         # layer is initially unchecked as inactive (beside 'command')
         # use predefined value if given
