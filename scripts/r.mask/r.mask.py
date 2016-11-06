@@ -67,6 +67,7 @@
 #%end
 
 import os
+import sys
 import atexit
 
 import grass.script as grass
@@ -101,8 +102,12 @@ def main():
     if remove:
         # -> remove
         if exists:
-            grass.run_command('g.remove', flags='f', quiet=True,
-                              type='raster', name='MASK')
+            if sys.platform == 'win32':
+                grass.run_command('g.remove', flags='if', quiet=True,
+                                  type='raster', name='MASK')
+            else:
+                grass.run_command('g.remove', flags='f', quiet=True,
+                                  type='raster', name='MASK')
             grass.message(_("Raster MASK removed"))
         else:
             grass.fatal(_("No existing MASK to remove"))
