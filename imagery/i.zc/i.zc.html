@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>i.zc</em> is an image processing program used for edge
+<em>i.zc</em> is an image processing module used for edge
 detection.  The raster map produced shows the location of
 "boundaries" on the input map.  Boundaries tend to be found
 in regions of changing cell values and tend to run
@@ -8,63 +8,6 @@ perpendicular to the direction of the slope.  The algorithm
 used for edge detection is one of the "zero-crossing"
 algorithms and is discussed briefly below.
 
-<h2>OPTIONS</h2>
-
-<h3>Parameters:</h3>
-
-<dl>
-
-<dt><b>input_map=</b><em>name</em> 
-
-<dd>Name of input raster map layer.
-
-<dt><b>zc_map=</b><em>name</em> 
-
-<dd>Name of raster map layer to be used for zero-crossing values.
-
-<dt><b>width=</b><em>value</em> 
-
-<dd>This parameter determines the x-y extent of the
-Gaussian filter.  The default value is 9;  higher and lower
-values can be tested by the user.  Increasing the width
-will result in finding "edges" representing more gradual
-changes in cell values.
-
-<br>
-
-Default:  9
-
-<dt><b>threshold=</b><em>value</em> 
-
-<dd>This parameter determines the "sensitivity" of the
-Gaussian filter.  The default value is 10;  higher and
-lower values can be tested by the user.  Increasing the
-threshold value will result in fewer edges being found.
-
-<br>
-
-Default:  10
-
-<dt><b>orientations=</b><em>value</em> 
-
-<dd>This value is the number of azimuth directions the
-cells on the output raster map layer are categorized into
-(similar to the aspect raster map layer produced by the
-
-<em><a href="r.slope.aspect.html">r.slope.aspect</a></em>
-
-program).  For example, a value of 16 would result in
-detected edges being categorized into one of 16 bins
-depending on the direction of the edge at that point.
-
-<br>
-
-Default:  1
-
-</dl>
-
-The current region definition and mask settings are respected
-when reading the input map.
 
 <h2>NOTES</h2>
 
@@ -83,13 +26,40 @@ is marked as an edge and an orientation is assigned to it.
 The resulting raster map layer is output.
 </ol>
 
+The <b>width=</b> parameter determines the x-y extent of the
+Gaussian filter.  The default value is <b>9</b>; higher and lower
+values can be tested by the user.  Increasing the width
+will result in finding "edges" representing more gradual
+changes in cell values.
+
+<p>
+The <b>threshold=</b> parameter determines the "sensitivity" of the
+Gaussian filter.  The default value is <b>10</b>;  higher and
+lower values can be tested by the user.  Increasing the
+threshold value will result in fewer edges being found.
+
+<p>
+The <b>orientations=</b> value is the number of azimuth directions the
+cells on the output raster map layer are categorized into
+(similar to the aspect raster map layer produced by
+<em><a href="r.slope.aspect.html">r.slope.aspect</a></em>.
+For example, a value of <b>16</b> would result in
+detected edges being categorized into one of 16 bins
+depending on the direction of the edge at that point.
+
+<p>
+The current region definition and mask settings are respected
+when reading the input map.
+
 <h2>SEE ALSO</h2>
 
-<em><a href="i.fft.html">i.fft</a></em>,
-<em><a href="i.ifft.html">i.ifft</a></em>,
-<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
-<em><a href="r.mfilter.html">r.mfilter</a></em>,
-<em><a href="r.slope.aspect.html">r.slope.aspect</a></em>
+<em>
+<a href="i.fft.html">i.fft</a>,
+<a href="i.ifft.html">i.ifft</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.mfilter.html">r.mfilter</a>,
+<a href="r.slope.aspect.html">r.slope.aspect</a>
+</em>
 
 <h2>AUTHOR</h2>
 
