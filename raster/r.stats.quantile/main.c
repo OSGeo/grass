@@ -307,22 +307,50 @@ static void sort_bins(void)
     G_percent(cat, num_cats, 2);
 }
 
-static void print_quantiles(void)
+static void print_quantiles(char *fs, char *name, int table_frmt)
 {
-    int cat;
+    int cat, quant;
+    struct basecat *bc;
 
     G_message(_("Printing quantiles"));
 
-    for (cat = 0; cat < num_cats; cat++) {
-	struct basecat *bc = &basecats[cat];
-	int quant;
-
-	if (bc->total == 0)
-	    continue;
-
-	for (quant = 0; quant < num_quants; quant++)
-	    printf("%d:%d:%f:%f\n", cmin + cat, quant, 100 * quants[quant], bc->quants[quant]);
+    if (name != NULL && strcmp(name, "-") != 0) {
+	if (NULL == freopen(name, "w", stdout)) {
+	    G_fatal_error(_("Unable to open file <%s> for writing"), name);
+	}
     }
+
+    if (!table_frmt) {
+	for (cat = 0; cat < num_cats; cat++) {
+	    bc = &basecats[cat];
+
+	    if (bc->total == 0)
+		continue;
+
+	    for (quant = 0; quant < num_quants; quant++)
+		fprintf(stdout, "%d%s%d%s%f%s%f\n", cmin + cat, fs, quant, fs,
+		       100 * quants[quant], fs, bc->quants[quant]);
+	}
+    }
+    else {
+	fprintf(stdout, "cat");
+	for (quant = 0; quant < num_quants; quant++)
+	    fprintf(stdout, "%s%f", fs, 100 * quants[quant]);
+	fprintf(stdout, "\n");
+
+	for (cat = 0; cat < num_cats; cat++) {
+	    bc = &basecats[cat];
+
+	    if (bc->total == 0)
+		continue;
+
+	    fprintf(stdout, "%d", cmin + cat);
+	    for (quant = 0; quant < num_quants; quant++)
+		fprintf(stdout, "%s%f", fs, bc->quants[quant]);
+	    fprintf(stdout, "\n");
+	}
+    }
+
 }
 
 static void compute_quantiles(void)
@@ -468,13 +496,14 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *quant, *perc, *slots, *basemap, *covermap, *output;
+	struct Option *quant, *perc, *slots, *basemap, *covermap,
+	              *output, *file, *fs;
     } opt;
     struct {
-	struct Flag *r, *p;
+	struct Flag *r, *p, *t;
     } flag;
     const char *basemap, *covermap;
-    char **outputs;
+    char **outputs, *fs;
     int reclass, print;
     int cover_fd, base_fd;
     struct Range range;
@@ -517,6 +546,16 @@ int main(int argc, char *argv[])
     opt.output->required = NO;
     opt.output->multiple = YES;
 
+    opt.file = G_define_standard_option(G_OPT_F_OUTPUT);
+    opt.file->key = "file";
+    opt.file->required = NO;
+    opt.file->description =
+	_("Name for output file (if omitted or \"-\" output to stdout)");
+
+    opt.fs = G_define_standard_option(G_OPT_F_SEP);
+    opt.fs->answer = ":";
+    opt.fs->guisection = _("Formatting");
+
     flag.r = G_define_flag();
     flag.r->key = 'r';
     flag.r->description =
@@ -527,6 +566,11 @@ int main(int argc, char *argv[])
     flag.p->description =
 	_("Do not create output maps; just print statistics");
 
+    flag.t = G_define_flag();
+    flag.t->key = 't';
+    flag.t->description =
+	_("Print statistics in table format");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -534,7 +578,7 @@ int main(int argc, char *argv[])
     covermap = opt.covermap->answer;
     outputs = opt.output->answers;
     reclass = flag.r->answer;
-    print = flag.p->answer;
+    print = flag.p->answer || flag.t->answer;
 
     if (!print && !opt.output->answers)
 	G_fatal_error(_("Either -%c or %s= must be given"),
@@ -599,8 +643,12 @@ int main(int argc, char *argv[])
     sort_bins();
     compute_quantiles();
 
-    if (print)
-	print_quantiles();
+    if (print) {
+	/* get field separator */
+	fs = G_option_to_separator(opt.fs);
+	
+	print_quantiles(fs, opt.file->answer, flag.t->answer);
+    }
     else if (reclass)
 	do_reclass(basemap, outputs);
     else
