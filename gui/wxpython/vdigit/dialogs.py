@@ -28,6 +28,7 @@ from core.gcmd import RunCommand, GError
 from core.debug import Debug
 from core.settings import UserSettings
 from core.utils import _
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 
 class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
@@ -125,7 +126,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             newCat = max(self.cats[self.fid][1]) + 1
         except KeyError:
             newCat = 1
-        self.catNew = wx.SpinCtrl(parent=self, id=wx.ID_ANY, size=(75, -1),
+        self.catNew = SpinCtrl(parent=self, id=wx.ID_ANY, size=(75, -1),
                                   initial=newCat, min=0, max=1e9)
         btnAddCat = wx.Button(self, wx.ID_ADD)
         flexSizer.Add(item=layerNewTxt, proportion=0,
@@ -634,7 +635,7 @@ class VDigitZBulkDialog(wx.Dialog):
         # starting value
         txt = wx.StaticText(parent=self,
                             label=_("Starting value"))
-        self.value = wx.SpinCtrl(parent=self, id=wx.ID_ANY, size=(150, -1),
+        self.value = SpinCtrl(parent=self, id=wx.ID_ANY, size=(150, -1),
                                  initial=0,
                                  min=-1e6, max=1e6)
         flexSizer.Add(txt, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
@@ -646,7 +647,7 @@ class VDigitZBulkDialog(wx.Dialog):
         # step
         txt = wx.StaticText(parent=self,
                             label=_("Step"))
-        self.step = wx.SpinCtrl(parent=self, id=wx.ID_ANY, size=(150, -1),
+        self.step = SpinCtrl(parent=self, id=wx.ID_ANY, size=(150, -1),
                                 initial=0,
                                 min=0, max=1e6)
         flexSizer.Add(txt, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)

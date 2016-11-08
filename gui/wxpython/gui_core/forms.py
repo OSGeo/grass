@@ -97,6 +97,7 @@ from core.settings import UserSettings
 from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
 from core.giface import Notification
 from gui_core.widgets import LayersList
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
 
@@ -1199,7 +1200,7 @@ class CmdPanel(wx.Panel):
                             except ValueError:
                                 minValue = -1e6
                                 maxValue = 1e6
-                            txt2 = wx.SpinCtrl(
+                            txt2 = SpinCtrl(
                                 parent=which_panel,
                                 id=wx.ID_ANY,
                                 size=globalvar.DIALOG_SPIN_SIZE,
@@ -1215,7 +1216,7 @@ class CmdPanel(wx.Panel):
                         value = self._getValue(p)
                         # parameter previously set
                         if value:
-                            if isinstance(txt2, wx.SpinCtrl):
+                            if isinstance(txt2, SpinCtrl):
                                 txt2.SetValue(int(value))
                             else:
                                 txt2.SetValue(value)
@@ -1316,7 +1317,7 @@ class CmdPanel(wx.Panel):
                     maxValue = 1e9
                     value = self._getValue(p)
 
-                    win = wx.SpinCtrl(
+                    win = SpinCtrl(
                         parent=which_panel,
                         value=p.get(
                             'default',
@@ -1619,7 +1620,7 @@ class CmdPanel(wx.Panel):
                                 win.SetValue(
                                     str(value))    # default or previously set value
                             else:
-                                win = wx.SpinCtrl(
+                                win = SpinCtrl(
                                     parent=which_panel, id=wx.ID_ANY, min=1,
                                     max=100, initial=int(p['default']))
                                 win.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
@@ -2596,7 +2597,7 @@ class CmdPanel(wx.Panel):
             if pLayer:
                 pLayer['value'] = ''
         else:
-            if isinstance(me, wx.SpinCtrl):
+            if isinstance(me, SpinCtrl):
                 porf['value'] = str(me.GetValue())
             elif isinstance(me, wx.ComboBox):
                 porf['value'] = me.GetValue()

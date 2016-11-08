@@ -57,6 +57,7 @@ from dbmgr.vinfo import VectorDBInfo
 from gui_core.gselect import Select
 from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 from psmap.utils import *
 from psmap.instructions import *
 
@@ -401,7 +402,7 @@ class PsmapDialog(wx.Dialog):
             parent.font['fontCtrl'].SetStringSelection(dialogDict['font'])
         else:
             parent.font['fontCtrl'].SetStringSelection('Helvetica')
-        parent.font['fontSizeCtrl'] = wx.SpinCtrl(
+        parent.font['fontSizeCtrl'] = SpinCtrl(
             parent, id=wx.ID_ANY, min=4, max=50, initial=10)
         parent.font['fontSizeCtrl'].SetValue(dialogDict['fontsize'])
 
@@ -1046,7 +1047,7 @@ class MapFramePanel(wx.Panel):
 
         resolutionText = wx.StaticText(
             self, id=wx.ID_ANY, label=_("Map max resolution (dpi):"))
-        self.resolutionSpin = wx.SpinCtrl(
+        self.resolutionSpin = SpinCtrl(
             self, id=wx.ID_ANY, min=1, max=1000, initial=300)
 
         flexSizer.Add(
@@ -1099,7 +1100,7 @@ class MapFramePanel(wx.Panel):
         self.borderWidthText = wx.StaticText(
             self, id=wx.ID_ANY, label=_("border width (pts):"))
         self.borderColourPicker = wx.ColourPickerCtrl(self, id=wx.ID_ANY)
-        self.borderWidthCtrl = wx.SpinCtrl(
+        self.borderWidthCtrl = SpinCtrl(
             self, id=wx.ID_ANY, min=1, max=100, initial=1)
 
         if self.mapFrameDict['border'] == 'y':
@@ -2346,7 +2347,7 @@ class VPropertiesDialog(PsmapDialog):
             self.widthSpin.SetFormat("%f")
             self.widthSpin.SetDigits(2)
         else:
-            self.widthSpin = wx.SpinCtrl(
+            self.widthSpin = SpinCtrl(
                 panel, id=wx.ID_ANY, min=1, max=25, initial=1,
                 size=self.spinCtrlSize)
 
@@ -2510,7 +2511,7 @@ class VPropertiesDialog(PsmapDialog):
             self.outWidthSpin.SetFormat("%f")
             self.outWidthSpin.SetDigits(1)
         else:
-            self.outWidthSpin = wx.SpinCtrl(
+            self.outWidthSpin = SpinCtrl(
                 panel, id=wx.ID_ANY, min=1, max=30, initial=1,
                 size=self.spinCtrlSize)
 
@@ -2720,13 +2721,13 @@ class VPropertiesDialog(PsmapDialog):
         self.sizeRadio = wx.RadioButton(
             panel, id=wx.ID_ANY, label=_("size:"),
             style=wx.RB_GROUP)
-        self.sizeSpin = wx.SpinCtrl(
+        self.sizeSpin = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=50, initial=1)
         self.sizecolumnRadio = wx.RadioButton(
             panel, id=wx.ID_ANY, label=_("size from map table column:"))
         self.sizeColChoice = self.getColsChoice(panel)
         self.scaleText = wx.StaticText(panel, id=wx.ID_ANY, label=_("scale:"))
-        self.scaleSpin = wx.SpinCtrl(
+        self.scaleSpin = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=25, initial=1)
 
         self.sizeRadio.SetValue(self.vPropertiesDict['size'] is not None)
@@ -2798,7 +2799,7 @@ class VPropertiesDialog(PsmapDialog):
             panel, id=wx.ID_ANY, label=_("rotate symbols:"))
         self.rotateRadio = wx.RadioButton(panel, id=wx.ID_ANY, label=_(
             "counterclockwise in degrees:"), style=wx.RB_GROUP)
-        self.rotateSpin = wx.SpinCtrl(
+        self.rotateSpin = SpinCtrl(
             panel, id=wx.ID_ANY, min=0, max=360, initial=0)
         self.rotatecolumnRadio = wx.RadioButton(
             panel, id=wx.ID_ANY, label=_("from map table column:"))
@@ -2889,7 +2890,7 @@ class VPropertiesDialog(PsmapDialog):
             self.widthSpin.SetFormat("%f")
             self.widthSpin.SetDigits(1)
         else:
-            self.widthSpin = wx.SpinCtrl(
+            self.widthSpin = SpinCtrl(
                 panel, id=wx.ID_ANY, min=1, max=30, initial=1)
 
         self.cwidthCheck = wx.CheckBox(
@@ -3012,11 +3013,11 @@ class VPropertiesDialog(PsmapDialog):
             fileMode=wx.FD_OPEN)
         self.patWidthText = wx.StaticText(
             panel, id=wx.ID_ANY, label=_("pattern line width (pts):"))
-        self.patWidthSpin = wx.SpinCtrl(
+        self.patWidthSpin = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=25, initial=1)
         self.patScaleText = wx.StaticText(
             panel, id=wx.ID_ANY, label=_("pattern scale factor:"))
-        self.patScaleSpin = wx.SpinCtrl(
+        self.patScaleSpin = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=25, initial=1)
 
         self.patternCheck.SetValue(bool(self.vPropertiesDict['pat']))
@@ -3872,7 +3873,7 @@ class LegendDialog(PsmapDialog):
                 minVect = 1
                 maxVect = min(10, len(self.instruction[self.vectorId]['list']))
             cols = wx.StaticText(panel, id=wx.ID_ANY, label=_("Columns:"))
-            panel.colsCtrl = wx.SpinCtrl(
+            panel.colsCtrl = SpinCtrl(
                 panel,
                 id=wx.ID_ANY,
                 value="",
@@ -4037,7 +4038,7 @@ class LegendDialog(PsmapDialog):
         self.panelRaster.heightOrColumnsCtrl.Destroy()
         if self.discrete.GetValue():
             self.panelRaster.heightOrColumnsLabel.SetLabel(_("Columns:"))
-            self.panelRaster.heightOrColumnsCtrl = wx.SpinCtrl(
+            self.panelRaster.heightOrColumnsCtrl = SpinCtrl(
                 self.panelRaster, id=wx.ID_ANY, value="", min=1, max=10,
                 initial=self.rLegendDict['cols'])
             self.panelRaster.heightOrColumnsCtrl.Enable(enabledSize)
@@ -4949,21 +4950,21 @@ class ScalebarDialog(PsmapDialog):
 
         sbSegmentsText = wx.StaticText(
             panel, id=wx.ID_ANY, label=_("Number of segments:"))
-        self.sbSegmentsCtrl = wx.SpinCtrl(
+        self.sbSegmentsCtrl = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=30, initial=4)
         self.sbSegmentsCtrl.SetValue(self.scalebarDict['segment'])
 
         sbLabelsText1 = wx.StaticText(
             panel, id=wx.ID_ANY, label=_("Label every "))
         sbLabelsText2 = wx.StaticText(panel, id=wx.ID_ANY, label=_("segments"))
-        self.sbLabelsCtrl = wx.SpinCtrl(
+        self.sbLabelsCtrl = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=30, initial=1)
         self.sbLabelsCtrl.SetValue(self.scalebarDict['numbers'])
 
         # font
         fontsizeText = wx.StaticText(
             panel, id=wx.ID_ANY, label=_("Font size:"))
-        self.fontsizeCtrl = wx.SpinCtrl(
+        self.fontsizeCtrl = SpinCtrl(
             panel, id=wx.ID_ANY, min=4, max=30, initial=10)
         self.fontsizeCtrl.SetValue(self.scalebarDict['fontsize'])
 
@@ -5265,7 +5266,7 @@ class TextDialog(PsmapDialog):
             panel, id=wx.ID_ANY, label=_("highlight"))
         self.effect['highlightColor'] = wx.ColourPickerCtrl(
             panel, id=wx.ID_ANY)
-        self.effect['highlightWidth'] = wx.SpinCtrl(
+        self.effect['highlightWidth'] = SpinCtrl(
             panel, id=wx.ID_ANY, size=self.spinCtrlSize, min=0, max=5, initial=1)
         self.effect['highlightWidthLabel'] = wx.StaticText(
             panel, id=wx.ID_ANY, label=_("Width (pts):"))
@@ -5273,7 +5274,7 @@ class TextDialog(PsmapDialog):
         self.effect['borderCtrl'] = wx.CheckBox(
             panel, id=wx.ID_ANY, label=_("text border"))
         self.effect['borderColor'] = wx.ColourPickerCtrl(panel, id=wx.ID_ANY)
-        self.effect['borderWidth'] = wx.SpinCtrl(
+        self.effect['borderWidth'] = SpinCtrl(
             panel, id=wx.ID_ANY, size=self.spinCtrlSize, min=1, max=25, initial=1)
         self.effect['borderWidthLabel'] = wx.StaticText(
             panel, id=wx.ID_ANY, label=_("Width (pts):"))
@@ -5387,10 +5388,10 @@ class TextDialog(PsmapDialog):
             panel, id=wx.ID_ANY, label=_("horizontal (pts):"))
         self.yoffLabel = wx.StaticText(
             panel, id=wx.ID_ANY, label=_("vertical (pts):"))
-        self.xoffCtrl = wx.SpinCtrl(
+        self.xoffCtrl = SpinCtrl(
             panel, id=wx.ID_ANY, size=(50, -1),
             min=-50, max=50, initial=0)
-        self.yoffCtrl = wx.SpinCtrl(
+        self.yoffCtrl = SpinCtrl(
             panel, id=wx.ID_ANY, size=(50, -1),
             min=-50, max=50, initial=0)
         self.xoffCtrl.SetValue(self.textDict['xoffset'])
@@ -5486,7 +5487,7 @@ class TextDialog(PsmapDialog):
             panel,
             id=wx.ID_ANY,
             label=_("rotate text (counterclockwise)"))
-        self.rotValue = wx.SpinCtrl(
+        self.rotValue = SpinCtrl(
             panel, wx.ID_ANY, size=(50, -1),
             min=0, max=360, initial=0)
         if self.textDict['rotate']:
@@ -5886,7 +5887,7 @@ class ImageDialog(PsmapDialog):
             panel.image['rotate'].SetFormat("%f")
             panel.image['rotate'].SetDigits(1)
         else:
-            panel.image['rotate'] = wx.SpinCtrl(
+            panel.image['rotate'] = SpinCtrl(
                 parent=panel,
                 id=wx.ID_ANY,
                 size=self.spinCtrlSize,
@@ -6444,7 +6445,7 @@ class PointDialog(PsmapDialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Size (pt):"))
-        self.sizeCtrl = wx.SpinCtrl(
+        self.sizeCtrl = SpinCtrl(
             panel, id=wx.ID_ANY, size=self.spinCtrlSize)
         self.sizeCtrl.SetToolTipString(_("Symbol size in points"))
         self.sizeCtrl.SetValue(self.pointDict['size'])
@@ -6474,7 +6475,7 @@ class PointDialog(PsmapDialog):
             self.rotCtrl.SetFormat("%f")
             self.rotCtrl.SetDigits(1)
         else:
-            self.rotCtrl = wx.SpinCtrl(
+            self.rotCtrl = SpinCtrl(
                 parent=panel,
                 id=wx.ID_ANY,
                 size=self.spinCtrlSize,
@@ -6810,7 +6811,7 @@ class RectangleDialog(PsmapDialog):
             self.widthCtrl.SetFormat("%f")
             self.widthCtrl.SetDigits(1)
         else:
-            self.widthCtrl = wx.SpinCtrl(
+            self.widthCtrl = SpinCtrl(
                 parent=panel,
                 id=wx.ID_ANY,
                 size=self.spinCtrlSize,

@@ -27,6 +27,7 @@ from gui_core.preferences import PreferencesBaseDialog
 from core.gcmd import GMessage
 from core.layerlist import LayerList
 from core.settings import UserSettings
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 from gui_core.simplelmgr import SimpleLayerManager, SIMPLE_LMGR_RASTER, \
     SIMPLE_LMGR_VECTOR, SIMPLE_LMGR_RGB, SIMPLE_LMGR_TB_LEFT, SIMPLE_LMGR_TB_RIGHT
 
@@ -328,7 +329,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             pos=(
                 row,
                 0))
-        width = wx.SpinCtrl(
+        width = SpinCtrl(
             parent=panel,
             min=1,
             max=10,
@@ -351,7 +352,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             pos=(
                 row,
                 0))
-        size = wx.SpinCtrl(
+        size = SpinCtrl(
             parent=panel,
             min=4,
             max=50,

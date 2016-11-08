@@ -47,6 +47,7 @@ from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, MapV
 from core.utils import _
 from core.settings import UserSettings
 from core.debug import Debug
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 
 class SimpleDialog(wx.Dialog):
@@ -1893,12 +1894,12 @@ class ImageSizeDialog(wx.Dialog):
                                 label=' % s' % _("Image size"))
 
         size = self.parent.GetWindow().GetClientSize()
-        self.width = wx.SpinCtrl(parent=self.panel, id=wx.ID_ANY,
+        self.width = SpinCtrl(parent=self.panel, id=wx.ID_ANY,
                                  style=wx.SP_ARROW_KEYS)
         self.width.SetRange(20, 1e6)
         self.width.SetValue(size.width)
         wx.CallAfter(self.width.SetFocus)
-        self.height = wx.SpinCtrl(parent=self.panel, id=wx.ID_ANY,
+        self.height = SpinCtrl(parent=self.panel, id=wx.ID_ANY,
                                   style=wx.SP_ARROW_KEYS)
         self.height.SetRange(20, 1e6)
         self.height.SetValue(size.height)
@@ -2472,7 +2473,7 @@ class DefaultFontDialog(wx.Dialog):
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(2, 0))
 
-            self.spin = wx.SpinCtrl(parent=panel, id=wx.ID_ANY)
+            self.spin = SpinCtrl(parent=panel, id=wx.ID_ANY)
             if self.fontsize:
                 self.spin.SetValue(int(self.fontsize))
             self.spin.Bind(wx.EVT_SPINCTRL, self.OnSizeSpin)

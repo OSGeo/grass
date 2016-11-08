@@ -49,6 +49,7 @@ from core.gcmd import RunCommand, GMessage, GError, GWarning, EncodeString
 from core.settings import UserSettings
 from gcp.mapdisplay import MapFrame
 from core.giface import Notification
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 from location_wizard.wizard import TitledPage as TitledPage
 
@@ -2793,7 +2794,7 @@ class GrSettingsDialog(wx.Dialog):
                 group='gcpman',
                 key='symbol',
                 subkey='size'))
-        sizeWin = wx.SpinCtrl(parent=panel, id=wx.ID_ANY,
+        sizeWin = SpinCtrl(parent=panel, id=wx.ID_ANY,
                               min=1, max=20)
         sizeWin.SetValue(symsize)
         self.symbol['size'] = sizeWin.GetId()
@@ -2815,7 +2816,7 @@ class GrSettingsDialog(wx.Dialog):
                 group='gcpman',
                 key='symbol',
                 subkey='width'))
-        widWin = wx.SpinCtrl(parent=panel, id=wx.ID_ANY,
+        widWin = SpinCtrl(parent=panel, id=wx.ID_ANY,
                              min=1, max=10)
         widWin.SetValue(width)
         self.symbol['width'] = widWin.GetId()

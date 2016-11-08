@@ -30,6 +30,7 @@ from core.settings import UserSettings
 from core.globalvar import ICONDIR
 from core.utils import _
 from gui_core.gselect import Select
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 from grass.script import core as grass
 
@@ -194,7 +195,7 @@ class ScatterRasterDialog(wx.Dialog):
                               label=_("Number of bins (for FP maps)"))
         box.Add(item=label,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
-        self.spinbins = wx.SpinCtrl(
+        self.spinbins = SpinCtrl(
             parent=self, id=wx.ID_ANY, value="", pos=(
                 30, 50), size=(
                 100, -1), style=wx.SP_ARROW_KEYS)
@@ -501,7 +502,7 @@ class HistRasterDialog(wx.Dialog):
                               label=_("Number of bins (for FP maps)"))
         box.Add(item=label,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(3, 0))
-        self.spinbins = wx.SpinCtrl(
+        self.spinbins = SpinCtrl(
             parent=self, id=wx.ID_ANY, value="", pos=(
                 30, 50), size=(
                 100, -1), style=wx.SP_ARROW_KEYS)
@@ -686,7 +687,7 @@ class TextDialog(wx.Dialog):
             id=wx.ID_ANY,
             label=_("Title font size (pts):"))
         gridSizer.Add(item=tlabel, flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
-        self.ptitlesize = wx.SpinCtrl(
+        self.ptitlesize = SpinCtrl(
             parent=self, id=wx.ID_ANY, value="", pos=(
                 30, 50), size=(
                 50, -1), style=wx.SP_ARROW_KEYS)
@@ -731,7 +732,7 @@ class TextDialog(wx.Dialog):
             id=wx.ID_ANY,
             label=_("Label font size (pts):"))
         gridSizer.Add(item=llabel, flag=wx.ALIGN_CENTER_VERTICAL, pos=(4, 0))
-        self.axislabelsize = wx.SpinCtrl(
+        self.axislabelsize = SpinCtrl(
             parent=self, id=wx.ID_ANY, value="", pos=(
                 30, 50), size=(
                 50, -1), style=wx.SP_ARROW_KEYS)
@@ -1057,7 +1058,7 @@ class OptDialog(wx.Dialog):
                 pos=(
                     row,
                     0))
-            width = wx.SpinCtrl(parent=self, id=wx.ID_ANY, value="",
+            width = SpinCtrl(parent=self, id=wx.ID_ANY, value="",
                                 size=(50, -1), style=wx.SP_ARROW_KEYS)
             width.SetRange(1, 10)
             width.SetValue(self.raster[self.map]['pwidth'])
@@ -1126,7 +1127,7 @@ class OptDialog(wx.Dialog):
                 pos=(
                     1,
                     0))
-            ptsize = wx.SpinCtrl(parent=self, id=wx.ID_ANY, value="",
+            ptsize = SpinCtrl(parent=self, id=wx.ID_ANY, value="",
                                  size=(50, -1), style=wx.SP_ARROW_KEYS)
             ptsize.SetRange(1, 10)
             ptsize.SetValue(self.properties['marker']['size'])
@@ -1207,7 +1208,7 @@ class OptDialog(wx.Dialog):
                 pos=(
                     1,
                     0))
-            ptsize = wx.SpinCtrl(parent=self, id=wx.ID_ANY, value="",
+            ptsize = SpinCtrl(parent=self, id=wx.ID_ANY, value="",
                                  size=(50, -1), style=wx.SP_ARROW_KEYS)
             ptsize.SetRange(1, 10)
             ptsize.SetValue(self.raster[self.map]['psize'])
@@ -1381,7 +1382,7 @@ class OptDialog(wx.Dialog):
             id=wx.ID_ANY,
             label=_("Legend font size"))
         gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        legendfontsize = wx.SpinCtrl(parent=self, id=wx.ID_ANY, value="",
+        legendfontsize = SpinCtrl(parent=self, id=wx.ID_ANY, value="",
                                      size=(50, -1), style=wx.SP_ARROW_KEYS)
         legendfontsize.SetRange(5, 100)
         legendfontsize.SetValue(
