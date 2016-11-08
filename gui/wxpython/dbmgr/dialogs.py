@@ -30,6 +30,7 @@ from core.debug import Debug
 from core.settings import UserSettings
 from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue
 from gui_core.widgets import IntegerValidator, FloatValidator
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 
 class DisplayAttributesDialog(wx.Dialog):
@@ -642,7 +643,7 @@ class ModifyTableRecord(wx.Dialog):
                     cId += 1
                     continue
                 else:
-                    valueWin = wx.SpinCtrl(
+                    valueWin = SpinCtrl(
                         parent=self.dataPanel, id=wx.ID_ANY, value=value,
                         min=-1e9, max=1e9, size=(250, -1))
             else:
@@ -763,7 +764,7 @@ class AddColumnDialog(wx.Dialog):
         self.data['addColType'].SetSelection(0)
         self.data['addColType'].Bind(wx.EVT_CHOICE, self.OnTableChangeType)
 
-        self.data['addColLength'] = wx.SpinCtrl(
+        self.data['addColLength'] = SpinCtrl(
             parent=self, id=wx.ID_ANY, size=(
                 65, -1), initial=250, min=1, max=1e6)
         self.data['addColLength'].Enable(False)

@@ -49,6 +49,7 @@ from dbmgr.vinfo import VectorDBInfo
 from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
 from gui_core.gselect import Select, LayerSelect, ColumnSelect
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 from vnet.widgets import PointsList
 from vnet.toolbars import MainToolbar, PointListToolbar, AnalysisToolbar
@@ -245,7 +246,7 @@ class VNETDialog(wx.Dialog):
         maxDistLabel = wx.StaticText(
             parent=maxDistPanel, id=wx.ID_ANY,
             label=_("Maximum distance of point to the network:"))
-        self.anSettings["max_dist"] = wx.SpinCtrl(
+        self.anSettings["max_dist"] = SpinCtrl(
             parent=maxDistPanel, id=wx.ID_ANY, min=0, max=maxValue)
         self.anSettings["max_dist"].Bind(
             wx.EVT_SPINCTRL, lambda event: self.MaxDist())
@@ -1285,7 +1286,7 @@ class SettingsDialog(wx.Dialog):
         for settKey, sett in self.sizeSetts.iteritems():
             settsLabels[settKey] = wx.StaticText(
                 parent=self, id=wx.ID_ANY, label=sett[1])
-            self.settings[settKey] = wx.SpinCtrl(
+            self.settings[settKey] = SpinCtrl(
                 parent=self, id=wx.ID_ANY, min=1, max=50)
             size = int(
                 UserSettings.Get(

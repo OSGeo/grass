@@ -25,6 +25,7 @@ from gui_core.gselect import ColumnSelect
 from core.units import Units
 from core.settings import UserSettings
 from core.utils import _
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 
 class VDigitSettingsDialog(wx.Dialog):
@@ -163,7 +164,7 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer.AddGrowableCol(0)
         # line width
         text = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Line width"))
-        self.lineWidthValue = wx.SpinCtrl(
+        self.lineWidthValue = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(75, -1),
             initial=UserSettings.Get(
                 group='vdigit', key="lineWidth", subkey='value'),
@@ -208,7 +209,7 @@ class VDigitSettingsDialog(wx.Dialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Snapping threshold"))
-        self.snappingValue = wx.SpinCtrl(
+        self.snappingValue = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(75, -1),
             initial=UserSettings.Get(
                 group='vdigit', key="snapping", subkey='value'),
@@ -285,7 +286,7 @@ class VDigitSettingsDialog(wx.Dialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Select threshold"))
-        self.selectThreshValue = wx.SpinCtrl(
+        self.selectThreshValue = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(75, -1),
             initial=UserSettings.Get(
                 group='vdigit', key="selectThresh", subkey='value'),
@@ -477,7 +478,7 @@ class VDigitSettingsDialog(wx.Dialog):
                 group='vdigit',
                 key="queryLength",
                 subkey='than-selection'))
-        self.queryLengthValue = wx.SpinCtrl(
+        self.queryLengthValue = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(
                 100, -1), initial=1, min=0, max=1e6)
         self.queryLengthValue.SetValue(
@@ -531,7 +532,7 @@ class VDigitSettingsDialog(wx.Dialog):
                 group='vdigit',
                 key="queryDangle",
                 subkey='than-selection'))
-        self.queryDangleValue = wx.SpinCtrl(
+        self.queryDangleValue = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(
                 100, -1), initial=1, min=0, max=1e6)
         self.queryDangleValue.SetValue(
@@ -612,7 +613,7 @@ class VDigitSettingsDialog(wx.Dialog):
                     (_("Mode"), _("Next to use")))
         # layer
         text = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Layer"))
-        self.layer = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(125, -1),
+        self.layer = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(125, -1),
                                  min=1, max=1e3)
         self.layer.SetValue(int(UserSettings.Get(
             group='vdigit', key="layer", subkey='value')))
@@ -624,7 +625,7 @@ class VDigitSettingsDialog(wx.Dialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Category number"))
-        self.category = wx.SpinCtrl(
+        self.category = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(125, -1),
             initial=UserSettings.Get(
                 group='vdigit', key="category", subkey='value'),

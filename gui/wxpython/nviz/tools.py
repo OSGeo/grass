@@ -53,6 +53,7 @@ from modules.colorrules import ThematicVectorTable
 from core.settings import UserSettings
 from gui_core.widgets import ScrolledPanel, NumTextCtrl, FloatSlider, SymbolButton
 from gui_core.gselect import Select
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 from core.debug import Debug
 try:
     from nviz.mapwindow import wxUpdateProperties, wxUpdateView,\
@@ -548,7 +549,7 @@ class NvizToolWindow(FN.FlatNotebook):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Frame rate (FPS):"))
-        fps = wx.SpinCtrl(
+        fps = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(65, -1),
             initial=UserSettings.Get(
                 group='nviz', key='animation', subkey='fps'),
@@ -897,7 +898,7 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("resolution:")),
                       pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL)
-        resC = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        resC = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=6,
                            min=1,
                            max=100)
@@ -943,7 +944,7 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("resolution:")),
                       pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
-        resF = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        resF = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=3,
                            min=1,
                            max=100)
@@ -1018,7 +1019,7 @@ class NvizToolWindow(FN.FlatNotebook):
             elif code == 'mask':
                 value = None
             else:
-                value = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+                value = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                                     initial=0)
                 value.SetRange(minVal=0, maxVal=100)
                 value.Bind(wx.EVT_TEXT, self.OnSurfaceMap)
@@ -1383,7 +1384,7 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Fine resolution:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
-        resF = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        resF = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=3,
                            min=1,
                            max=100)
@@ -1398,7 +1399,7 @@ class NvizToolWindow(FN.FlatNotebook):
                                          label=_("Value:")), pos=(1, 0),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
-        value = wx.SpinCtrl(panel, id=wx.ID_ANY,
+        value = SpinCtrl(panel, id=wx.ID_ANY,
                             min=-1e9, max=1e9,
                             size=(65, -1))
         self.win['constant']['value'] = value.GetId()
@@ -1410,7 +1411,7 @@ class NvizToolWindow(FN.FlatNotebook):
                                          label=_("Transparency:")), pos=(2, 0),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
-        transp = wx.SpinCtrl(panel, id=wx.ID_ANY,
+        transp = SpinCtrl(panel, id=wx.ID_ANY,
                              min=0, max=100,
                              size=(65, -1))
         self.win['constant']['transp'] = transp.GetId()
@@ -1496,7 +1497,7 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_RIGHT)
 
-        width = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        width = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                             initial=1,
                             min=1,
                             max=100)
@@ -1667,7 +1668,7 @@ class NvizToolWindow(FN.FlatNotebook):
             isize.SetDigits(1)
             isize.Bind(fs.EVT_FLOATSPIN, self.OnVectorPoints)
         else:
-            isize = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+            isize = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                                 initial=1,
                                 min=1,
                                 max=1e6)
@@ -1921,7 +1922,7 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Resolution:")),
                       pos=(0, 4), flag=wx.ALIGN_CENTER_VERTICAL)
-        resol = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        resol = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                             initial=1,
                             min=1,
                             max=100)
@@ -2279,7 +2280,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 label=_("Elevation of fringe from bottom:")),
             pos=(0, 0),
             flag=wx.ALIGN_CENTER_VERTICAL)
-        spin = wx.SpinCtrl(parent=panel, id=wx.ID_ANY,
+        spin = SpinCtrl(parent=panel, id=wx.ID_ANY,
                            size=(65, -1), min=-1e6, max=1e6)
         spin.SetValue(
             UserSettings.Get(
@@ -2886,7 +2887,7 @@ class NvizToolWindow(FN.FlatNotebook):
 ##                value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
             else:
                 size = (65, -1)
-                value = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=size,
+                value = SpinCtrl(parent=panel, id=wx.ID_ANY, size=size,
                                     initial=0)
                 if code == 'topo':
                     value.SetRange(minVal=-1e9, maxVal=1e9)
@@ -3029,7 +3030,7 @@ class NvizToolWindow(FN.FlatNotebook):
         hSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                       label=_("Transparency:")), proportion=0,
                    flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT | wx.TOP, border=7)
-        spin = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        spin = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            min=0, max=100, initial=0)
         spin.Bind(wx.EVT_SPINCTRL, self.OnSliceTransparency)
         self.win['volume']['slice']['transp'] = spin.GetId()

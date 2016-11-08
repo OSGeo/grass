@@ -31,6 +31,7 @@ from core import globalvar
 from core.gcmd import GMessage
 from core.settings import UserSettings
 from gui_core.dialogs import SimpleDialog
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 
 class AddScattPlotDialog(wx.Dialog):
@@ -375,7 +376,7 @@ class SettingsDialog(wx.Dialog):
         for settKey, sett in self.sizeSetts.iteritems():
             settsLabels[settKey] = wx.StaticText(
                 parent=self, id=wx.ID_ANY, label=sett[1])
-            self.settings[settKey] = wx.SpinCtrl(
+            self.settings[settKey] = SpinCtrl(
                 parent=self, id=wx.ID_ANY, min=0, max=100)
             size = int(
                 UserSettings.Get(
