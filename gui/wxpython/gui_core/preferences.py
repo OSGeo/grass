@@ -50,6 +50,7 @@ from core.settings import UserSettings
 from gui_core.dialogs import SymbolDialog, DefaultFontDialog
 from gui_core.widgets import IntegerValidator, ColorTablesComboBox
 from core.debug import Debug
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 
 class PreferencesBaseDialog(wx.Dialog):
@@ -647,7 +648,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             key='gSelectPopupHeight',
             subkey='value')
 
-        popupHeightSpin = wx.SpinCtrl(
+        popupHeightSpin = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(100, -1))
         popupHeightSpin.SetRange(min, max)
         popupHeightSpin.SetValue(value)
@@ -1362,7 +1363,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Line width:")),
                       flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, col))
-        hlWidth = wx.SpinCtrl(
+        hlWidth = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(50, -1),
             initial=self.settings.Get(
                 group='vectorLayer', key='line', subkey='width'),
@@ -1379,7 +1380,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Symbol size:")),
                       flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, col))
-        ptSize = wx.SpinCtrl(
+        ptSize = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(50, -1),
             initial=self.settings.Get(
                 group='vectorLayer', key='point', subkey='size'),
@@ -1473,7 +1474,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Line width (in pixels):"))
-        hlWidth = wx.SpinCtrl(
+        hlWidth = SpinCtrl(
             parent=panel, id=wx.ID_ANY, size=(50, -1),
             initial=self.settings.Get(
                 group='atm', key='highlight', subkey='width'),
@@ -1757,7 +1758,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             ll.SetSelection(1)
 
         # precision
-        precision = wx.SpinCtrl(parent=panel, id=wx.ID_ANY,
+        precision = SpinCtrl(parent=panel, id=wx.ID_ANY,
                                 min=0, max=12,
                                 name="GetValue")
         precision.SetValue(int(self.settings.Get(

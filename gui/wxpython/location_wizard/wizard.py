@@ -46,6 +46,7 @@ from core import utils
 from core.utils import _
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from gui_core.widgets import GenericValidator
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 from location_wizard.base import BaseClass
 from location_wizard.dialogs import SelectTransformDialog
 
@@ -860,7 +861,7 @@ class ProjParamsPage(TitledPage):
                     win.SetSelection(param['value'])
                     win.Bind(wx.EVT_CHOICE, self.OnParamEntry)
                 elif param['type'] == 'zone':
-                    win = wx.SpinCtrl(parent=self.panel, id=id,
+                    win = SpinCtrl(parent=self.panel, id=id,
                                       size=(100, -1),
                                       style=wx.SP_ARROW_KEYS | wx.SP_WRAP,
                                       min=1, max=60)

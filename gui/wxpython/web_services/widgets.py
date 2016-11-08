@@ -43,6 +43,7 @@ from web_services.cap_interface import WMSCapabilities, WMTSCapabilities, OnEart
 
 from gui_core.widgets import GNotebook
 from gui_core.widgets import ManageSettingsWidget
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 import grass.script as grass
 
@@ -274,13 +275,13 @@ class WSPanel(wx.Panel):
         labels['maxcols'] = wx.StaticText(
             parent=adv_setts_panel, id=wx.ID_ANY,
             label=_("Maximum columns to request from server at time:"))
-        self.params['maxcols'] = wx.SpinCtrl(
+        self.params['maxcols'] = SpinCtrl(
             parent=adv_setts_panel, id=wx.ID_ANY, size=(100, -1))
 
         labels['maxrows'] = wx.StaticText(
             parent=adv_setts_panel, id=wx.ID_ANY,
             label=_("Maximum rows to request from server at time:"))
-        self.params['maxrows'] = wx.SpinCtrl(
+        self.params['maxrows'] = SpinCtrl(
             parent=adv_setts_panel, id=wx.ID_ANY, size=(100, -1))
 
         min = 100
