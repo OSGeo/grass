@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
     if(opt.bits->answer)
         dnbits = atof(opt.bits->answer);
     result = opt.output->answer;
-    G_message(_("Calculating %s"), viflag);
+    G_verbose_message(_("Calculating %s..."), viflag);
 
     if (!strcasecmp(viflag, "sr") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("sr index requires red and nir maps"));
