@@ -45,6 +45,7 @@ from gui_core.forms import GUI
 from core.debug import Debug as Debug
 from core.settings import UserSettings
 from gui_core.widgets import ColorTablesComboBox
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 
 class RulesPanel:
@@ -80,7 +81,7 @@ class RulesPanel:
         # clear button
         self.clearAll = wx.Button(parent, id=wx.ID_ANY, label=_("Clear all"))
         #  determines how many rules should be added
-        self.numRules = wx.SpinCtrl(parent, id=wx.ID_ANY,
+        self.numRules = SpinCtrl(parent, id=wx.ID_ANY,
                                     min=1, max=1e6, initial=1)
         # add rules
         self.btnAdd = wx.Button(parent, id=wx.ID_ADD)
@@ -154,7 +155,7 @@ class RulesPanel:
                 init = 2
                 if self.attributeType == 'size':
                     init = 100
-                columnCtrl = wx.SpinCtrl(self.mainPanel, id=2000 + num,
+                columnCtrl = SpinCtrl(self.mainPanel, id=2000 + num,
                                          size=(50, -1), min=1, max=1e4,
                                          initial=init)
                 columnCtrl.Bind(wx.EVT_SPINCTRL, self.OnRuleSize)

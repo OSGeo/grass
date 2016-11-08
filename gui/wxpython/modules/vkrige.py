@@ -39,6 +39,7 @@ from gui_core import goutput
 from core.settings import UserSettings
 from gui_core.widgets import GNotebook
 from core.giface import Notification
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 #import help
 
 import wx
@@ -502,7 +503,7 @@ class RBookPanel(wx.Panel):
                 setattr(
                     self,
                     n + "Ctrl",
-                    (wx.SpinCtrl(
+                    (SpinCtrl(
                         self,
                         id=wx.ID_ANY,
                         min=MinValues[
@@ -550,7 +551,7 @@ class RBookPanel(wx.Panel):
         # block kriging parameters. Size.
         BlockSizer = wx.BoxSizer(wx.HORIZONTAL)
         BlockLabel = wx.StaticText(self, id=wx.ID_ANY, label=_("Block size:"))
-        self.BlockSpinBox = wx.SpinCtrl(self, id=wx.ID_ANY, min=1, max=maxint)
+        self.BlockSpinBox = SpinCtrl(self, id=wx.ID_ANY, min=1, max=maxint)
         # default choice is Ordinary kriging so block param is disabled
         self.BlockSpinBox.Enable(False)
         BlockSizer.Add(

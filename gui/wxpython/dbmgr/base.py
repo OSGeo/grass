@@ -53,6 +53,7 @@ from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc
 from core.debug import Debug
 from dbmgr.dialogs import ModifyTableRecord, AddColumnDialog
 from core.settings import UserSettings
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 
 class Log:
@@ -2326,7 +2327,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
                      flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                      border=5)
 
-        length = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        length = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                              initial=250,
                              min=1, max=1e6)
         length.Enable(False)
@@ -3055,7 +3056,7 @@ class LayerBook(wx.Notebook):
         self.addLayerWidgets = {'layer':
                                 (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
                                                label='%s:' % _("Layer")),
-                                 wx.SpinCtrl(parent=self.addPanel, id=wx.ID_ANY, size=(65, -1),
+                                 SpinCtrl(parent=self.addPanel, id=wx.ID_ANY, size=(65, -1),
                                              initial=maxLayer + 1,
                                              min=1, max=1e6)),
                                 'driver':

@@ -36,6 +36,7 @@ from core.settings import UserSettings
 from core.utils import _
 from gui_core.gselect import Select
 from gui_core.widgets import FloatValidator
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 from animation.utils import TemporalMode, getRegisteredMaps, getNameAndLayer, getCpuCount
 from animation.data import AnimationData, AnimLayer
@@ -103,7 +104,7 @@ class SpeedDialog(wx.Dialog):
         labelDuration = wx.StaticText(
             self, id=wx.ID_ANY, label=_("Frame duration:"))
         labelUnits = wx.StaticText(self, id=wx.ID_ANY, label=_("ms"))
-        self.spinDuration = wx.SpinCtrl(
+        self.spinDuration = SpinCtrl(
             self,
             id=wx.ID_ANY,
             min=self.minimumDuration,
@@ -144,7 +145,7 @@ class SpeedDialog(wx.Dialog):
         labelDuration = wx.StaticText(
             self, id=wx.ID_ANY, label=_("Duration of time unit:"))
         labelUnits = wx.StaticText(self, id=wx.ID_ANY, label=_("ms"))
-        self.spinDurationTemp = wx.SpinCtrl(
+        self.spinDurationTemp = SpinCtrl(
             self, id=wx.ID_ANY, min=self.minimumDuration, max=10000,
             initial=self.defaultSpeed)
         self.choiceUnits = wx.Choice(self, id=wx.ID_ANY)
@@ -1115,9 +1116,9 @@ class ExportDialog(wx.Dialog):
                 "Placement as percentage of"
                 " screen coordinates (X: 0, Y: 0 is top left):"))
         label.Wrap(400)
-        self.spinX = wx.SpinCtrl(
+        self.spinX = SpinCtrl(
             panel, id=wx.ID_ANY, min=0, max=100, initial=10)
-        self.spinY = wx.SpinCtrl(
+        self.spinY = SpinCtrl(
             panel, id=wx.ID_ANY, min=0, max=100, initial=10)
         self.spinX.Bind(
             wx.EVT_SPINCTRL,
@@ -1895,7 +1896,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                 key='nprocs',
                 subkey='value',
                 value=getCpuCount())
-        nprocs = wx.SpinCtrl(
+        nprocs = SpinCtrl(
             parent=panel,
             initial=UserSettings.Get(
                 group='animation',

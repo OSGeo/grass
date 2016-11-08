@@ -217,6 +217,8 @@ toolbarSize = (24, 24)
 hasAgw = CheckWxVersion([2, 8, 11, 0])
 wxPython3 = CheckWxVersion([3, 0, 0, 0])
 
+gtk3 = True if 'gtk3' in wx.PlatformInfo else False
+
 """@Add GUIDIR/scripts into path"""
 os.environ['PATH'] = os.path.join(
     GUIDIR, 'scripts') + os.pathsep + os.environ['PATH']

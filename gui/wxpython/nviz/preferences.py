@@ -26,6 +26,7 @@ from core import globalvar
 from core.settings import UserSettings
 from core.utils import _
 from gui_core.preferences import PreferencesBaseDialog
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 
 class NvizPreferencesDialog(PreferencesBaseDialog):
@@ -89,7 +90,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                 parent=panel, id=wx.ID_ANY, label=_("value:")), pos=(
                 row, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
-        pval = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        pval = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=pvals['value'],
                            min=ipvals['min'],
                            max=ipvals['max'])
@@ -102,7 +103,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                 parent=panel, id=wx.ID_ANY, label=_("step:")), pos=(
                 row, 3), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
-        pstep = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        pstep = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                             initial=pvals['step'],
                             min=ipvals['min'],
                             max=ipvals['max'] - 1)
@@ -121,7 +122,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                 parent=panel, id=wx.ID_ANY, label=_("x:")), pos=(
                 row, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
-        px = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        px = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                          initial=posvals['x'] * 100,
                          min=0,
                          max=100)
@@ -134,7 +135,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                 parent=panel, id=wx.ID_ANY, label="y:"), pos=(
                 row, 3), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
-        py = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        py = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                          initial=posvals['y'] * 100,
                          min=0,
                          max=100)
@@ -160,7 +161,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                 parent=panel, id=wx.ID_ANY, label=_("value:")), pos=(
                 row, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
-        tval = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        tval = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=tvals['value'],
                            min=itvals['min'],
                            max=itvals['max'])
@@ -179,7 +180,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                 parent=panel, id=wx.ID_ANY, label=_("value:")), pos=(
                 row, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
-        zval = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        zval = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=zvals['value'],
                            min=-1e6,
                            max=1e6)
@@ -246,7 +247,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                                          label=_("Move exag:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        moveExag = wx.SpinCtrl(
+        moveExag = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=20, initial=UserSettings.Get(
                 group='nviz', key='fly', subkey=[
                     'exag', 'move']), size=(
@@ -259,7 +260,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                                          label=_("Turn exag:")),
                       pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        turnExag = wx.SpinCtrl(
+        turnExag = SpinCtrl(
             panel, id=wx.ID_ANY, min=1, max=20, initial=UserSettings.Get(
                 group='nviz', key='fly', subkey=[
                     'exag', 'turn']), size=(
@@ -303,7 +304,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                 parent=panel, id=wx.ID_ANY, label=_("x:")), pos=(
                 0, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
-        px = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        px = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                          initial=posvals['x'] * 100,
                          min=-100,
                          max=100)
@@ -316,7 +317,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                 parent=panel, id=wx.ID_ANY, label="y:"), pos=(
                 0, 3), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
-        py = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        py = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                          initial=posvals['y'] * 100,
                          min=-100,
                          max=100)
@@ -329,7 +330,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                 parent=panel, id=wx.ID_ANY, label=_("z:")), pos=(
                 0, 5), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
-        pz = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        pz = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                          initial=posvals['z'],
                          min=0,
                          max=100)
@@ -344,7 +345,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                                          label=_("Brightness:")),
                       pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        bright = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        bright = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                              initial=brightval,
                              min=0,
                              max=100)
@@ -358,7 +359,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                                          label=_("Ambient:")),
                       pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        amb = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        amb = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                           initial=ambval,
                           min=0,
                           max=100)
@@ -448,7 +449,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
             pos=(
                 1,
                 1))
-        fine = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        fine = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=res,
                            min=1,
                            max=100)
@@ -479,7 +480,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
             pos=(
                 2,
                 1))
-        coarse = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        coarse = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                              initial=res,
                              min=1,
                              max=100)
@@ -558,7 +559,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                                          label=_("Width:")),
                       pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        iwidth = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        iwidth = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                              initial=12,
                              min=1,
                              max=100)
@@ -598,7 +599,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                                          label=_("Size:")),
                       pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        isize = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        isize = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                             initial=100,
                             min=1,
                             max=1e6)

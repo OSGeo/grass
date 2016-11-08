@@ -22,6 +22,7 @@ from core import globalvar
 from gui_core.preferences import PreferencesBaseDialog
 from core.settings import UserSettings
 from core.utils import _
+from gui_core.wrap import GSpinCtrl as SpinCtrl
 
 
 class PreferencesDialog(PreferencesBaseDialog):
@@ -185,7 +186,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
 
-        width = wx.SpinCtrl(
+        width = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
             min=0,
@@ -211,7 +212,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
 
-        height = wx.SpinCtrl(
+        height = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
             min=0,
@@ -351,7 +352,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
 
-        width = wx.SpinCtrl(
+        width = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
             min=0,
@@ -377,7 +378,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
 
-        height = wx.SpinCtrl(
+        height = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
             min=0,
@@ -463,7 +464,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
 
-        width = wx.SpinCtrl(
+        width = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
             min=0,
@@ -489,7 +490,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
 
-        height = wx.SpinCtrl(
+        height = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
             min=0,
@@ -579,7 +580,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
 
-        width = wx.SpinCtrl(
+        width = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
             min=0,
@@ -605,7 +606,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
 
-        height = wx.SpinCtrl(
+        height = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
             min=0,
