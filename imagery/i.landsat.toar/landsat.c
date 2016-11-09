@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 
 #include "landsat.h"
 
@@ -111,6 +112,8 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
 		    TAUv = Tv;
 		    Lp = Ro - percent * TAUv * (lsat->band[i].esun * sin_e * TAUz + PI * Lp) / pi_d2;
 		    Tz = 1. - (4. * pi_d2 * Lp) / (lsat->band[i].esun * sin_e);
+		    if (Tz <= 0)
+			G_fatal_error(_("The DOS4 method is not applicable here: approximation of atmospheric transmittance coefficients is unstable. Use another DOS method or use other sun_elevation parameter"));
 		    Tv = exp(sin_e * log(Tz) / cos_v);
 		} while (TAUv != Tv && TAUz != Tz);
 		TAUz = (Tz < 1. ? Tz : 1.);
