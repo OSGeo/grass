@@ -18,17 +18,9 @@ This program is free software under the GNU General Public License
 import sys
 
 import wx
-from core.globalvar import CheckWxVersion
-try:
-    if CheckWxVersion(version=[3, 0, 0]):
-        import gui_core.wxlibplot as plot
-    else:
-        import wx.lib.plot as plot
-except ImportError as e:
-    print >> sys.stderr, e
 
 import grass.script as grass
-
+import gui_core.wxlibplot as plot
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from wxplot.dialogs import ScatterRasterDialog, PlotStatsFrame
