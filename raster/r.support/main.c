@@ -45,7 +45,6 @@ int main(int argc, char *argv[])
     struct Flag *stats_flag, *null_flag, *del_flag;
     int is_reclass;		/* Is raster reclass? */
     const char *infile;
-    char title[MAX_TITLE_LEN + 1];
     struct History hist;
 
     /* Initialize GIS engine */
@@ -151,13 +150,8 @@ int main(int argc, char *argv[])
     is_reclass = (Rast_is_reclass(raster->answer, "", rname, rmapset) > 0);
 
     if (title_opt->answer) {
-	strncpy(title, title_opt->answer, MAX_TITLE_LEN);
-	title[MAX_TITLE_LEN - 1] = '\0';	/* strncpy doesn't null terminate oversized input */
-	G_strip(title);
-	G_debug(3, "map title= [%s]  (%li chars)", title, strlen(title));
-	Rast_read_history(raster->answer, "", &hist);
-	Rast_set_history(&hist, HIST_TITLE, title);
-	Rast_write_history(raster->answer, &hist);
+        Rast_put_cell_title(raster->answer, title_opt->answer);
+	G_debug(3, "map title= [%s]  (%li chars)", title_opt->answer, strlen(title_opt->answer));
     }
 
     if (save_opt->answer) {
