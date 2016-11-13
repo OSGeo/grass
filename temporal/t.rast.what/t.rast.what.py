@@ -217,7 +217,7 @@ def main(options, flags):
                                         overwrite=overwrite, flags=flags, 
                                         quiet=True)
     else: 
-        grass.error(_("Please specify points or coordinates"))
+        gscript.error(_("Please specify points or coordinates"))
 
     if len(maps) < nprocs:
         nprocs = len(maps)
@@ -262,6 +262,11 @@ def main(options, flags):
     if remaining_maps > 0:
         # Use a single process if less then 100 maps
         if remaining_maps <= 100:
+            map_names = []
+            for i in range(remaining_maps):
+                map = maps[count]
+                map_names.append(map.get_id())
+                count += 1
             mod = copy.deepcopy(r_what)
             mod(map=map_names, output=file_name)
             process_queue.put(mod)
