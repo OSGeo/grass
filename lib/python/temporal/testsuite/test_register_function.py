@@ -44,7 +44,7 @@ class TestRegisterFunctions(TestCase):
                        expression="register_map_2 = 2")
 
         self.strds_abs = tgis.open_new_stds(name="register_test_abs", type="strds", temporaltype="absolute",
-                                            title="Test strds", descr="Test strds", semantic="field", 
+                                            title="Test strds", descr="Test strds", semantic="field",
                                             overwrite=True)
         self.strds_rel = tgis.open_new_stds(name="register_test_rel", type="strds", temporaltype="relative",
                                             title="Test strds", descr="Test strds", semantic="field",
@@ -113,6 +113,58 @@ class TestRegisterFunctions(TestCase):
         start, end = self.strds_abs.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
+
+    def test_absolute_time_strds_3(self):
+        """Test the registration of maps with absolute time in a
+           space time raster dataset. The timestamps are set via method arguments and with the
+           c-interface. The timestamps of the method arguments should overwrite the
+           time stamps set via the C-interface.
+        """
+
+        ciface = tgis.get_tgis_c_library_interface()
+        ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1 Jan 2001/2 Jan 2001")
+
+        tgis.register_maps_in_space_time_dataset(type="raster", name=self.strds_abs.get_name(),
+                                                 maps="register_map_1",
+                                                 start="2001-02-01", increment="1 day",
+                                                 interval=True)
+
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map.select()
+        start, end = map.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 2, 1))
+        self.assertEqual(end, datetime.datetime(2001, 2, 2))
+
+        self.strds_abs.select()
+        start, end = self.strds_abs.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 2, 1))
+        self.assertEqual(end, datetime.datetime(2001, 2, 2))
+
+    def test_absolute_time_strds_4(self):
+        """Test the registration of maps with absolute time in a
+           space time raster dataset. The timestamps are set via method arguments and with the
+           c-interface. The timestamps of the method arguments should overwrite the
+           time stamps set via the C-interface. The C-interface sets relative time stamps.
+        """
+
+        ciface = tgis.get_tgis_c_library_interface()
+        ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1 day")
+
+        tgis.register_maps_in_space_time_dataset(type="raster", name=self.strds_abs.get_name(),
+                                                 maps="register_map_1",
+                                                 start="2001-02-01", increment="1 day",
+                                                 interval=True)
+
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map.select()
+        start, end = map.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 2, 1))
+        self.assertEqual(end, datetime.datetime(2001, 2, 2))
+
+        self.strds_abs.select()
+        start, end = self.strds_abs.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 2, 1))
+        self.assertEqual(end, datetime.datetime(2001, 2, 2))
 
     def test_absolute_time_1(self):
         """Test the registration of maps with absolute time
