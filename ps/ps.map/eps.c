@@ -3,7 +3,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-/*  test if file is realy EPS file and find bbox 
+/*  test if file is really EPS file and find bbox 
  *  returns  1 if OK
  *           0 on error               
  */
@@ -13,7 +13,7 @@ int eps_bbox(char *eps, double *llx, double *lly, double *urx, double *ury)
     FILE *fp;
     int v1, v2, v3, v4;
 
-    /* test if file is realy eps and find bbox */
+    /* test if file is really eps and find bbox */
     if ((fp = fopen(eps, "r")) == NULL) {
 	G_warning(_("Can't open eps file <%s>"), eps);
 	return (0);

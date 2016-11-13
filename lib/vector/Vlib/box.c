@@ -384,7 +384,7 @@ int Vect_get_isle_box(const struct Map_info *Map, int isle, struct bound_box *Bo
    \brief Get bounding box of map (all features in the map)
 
    \param Map vector map
-   \param[out] Box bouding box
+   \param[out] Box bounding box
 
    \return 1 on success
    \return 0 on error

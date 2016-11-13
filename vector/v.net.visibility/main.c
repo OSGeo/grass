@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     ovis = G_define_standard_option(G_OPT_V_MAP);
     ovis->key = "visibility";
     ovis->required = NO;
-    ovis->label = _("Name of input vector map containing visable points");
+    ovis->label = _("Name of input vector map containing visible points");
     ovis->description = _("Add points after computing the visibility graph");
 
     /* options and flags parser */

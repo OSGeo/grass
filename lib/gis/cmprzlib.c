@@ -191,7 +191,7 @@ G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
     c_stream.avail_out = dst_sz;
     c_stream.next_out = dst;
 
-    /* Call zlib initilization function */
+    /* Call zlib initialization function */
     err = inflateInit(&c_stream);
 
     /* If not Z_OK return error -1 */

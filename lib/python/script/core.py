@@ -238,7 +238,7 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
 # This function also could skip the check for platform but depends
 # how will be used, this is most general but not most effective.
 def get_real_command(cmd):
-    """Returns the real file commad for a module (cmd)
+    """Returns the real file command for a module (cmd)
 
     For Python scripts on MS Windows it returns full path to the script
     and adds a '.py' extension.

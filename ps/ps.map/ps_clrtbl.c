@@ -10,7 +10,7 @@
 
 #define NSTEPS 5		/* number of steps to divide color box when
 				    showing color for category data range */
-#define FONTFIT_FACT 4.0	/* how agressive to be with shrinking the font size
+#define FONTFIT_FACT 4.0	/* how aggressive to be with shrinking the font size
 				    to get it to fit in the column (normal range: 2-4) */
 #define PRETEXT_MULT 2.0	/* space between box and text (this*fontsize) */
 

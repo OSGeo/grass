@@ -47,7 +47,7 @@ void G_write_key_value_file(const char *file,
 
    \param[in]  file filename for reading
 
-   \return poiter to allocated Key_Value structure
+   \return pointer to allocated Key_Value structure
    \return NULL on error
  */
 struct Key_Value *G_read_key_value_file(const char *file)

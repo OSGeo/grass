@@ -56,7 +56,7 @@ This code is based on gifmaker (in the scripts folder of the source
 distribution of PIL)
 
 
-Usefull links:
+Useful links:
 
   * http://tronche.com/computer-graphics/gif/
   * http://en.wikipedia.org/wiki/Graphics_Interchange_Format
@@ -145,7 +145,7 @@ def checkImages(images):
 
 def intToBin(i):
     """Integer to two bytes"""
-    # devide in two parts (bytes)
+    # divide in two parts (bytes)
     i1 = i % 256
     i2 = int(i / 256)
     # make string (little endian)
@@ -197,7 +197,7 @@ class GifWriter:
         # reserved00, lct size111=7=2^(7 + 1)=256.
         bb += '\x87'
 
-        # LZW min size code now comes later, begining of [image data] blocks
+        # LZW min size code now comes later, beginning of [image data] blocks
         return bb
 
     def getAppExt(self, loops=float('inf')):
@@ -223,7 +223,7 @@ class GifWriter:
 
     def getGraphicsControlExt(self, duration=0.1, dispose=2):
         """Graphics Control Extension. A sort of header at the start of
-        each image. Specifies duration and transparancy.
+        each image. Specifies duration and transparency.
 
         Dispose:
 
@@ -245,7 +245,7 @@ class GifWriter:
         # 2nd bit 1 == user input , next 3 bits, the low two of which are used,
         # are dispose.
         bb += intToBin(int(duration * 100))  # in 100th of seconds
-        bb += '\x00'  # no transparant color
+        bb += '\x00'  # no transparent color
         bb += '\x00'  # end
         return bb
 
@@ -406,7 +406,7 @@ class GifWriter:
 
         """
 
-        # Obtain palette for all images and count each occurance
+        # Obtain palette for all images and count each occurrence
         palettes, occur = [], []
         for im in images:
             if not pillow:
@@ -1013,7 +1013,7 @@ class NeuQuant:
         return Image.fromarray(px).convert("RGB").quantize(palette=self.paletteImage())
 
     def quantize_without_scipy(self, image):
-        """" This function can be used if no scipy is availabe.
+        """" This function can be used if no scipy is available.
         It's 7 times slower though.
 
         :param image:

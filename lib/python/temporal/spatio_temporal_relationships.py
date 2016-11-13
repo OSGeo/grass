@@ -446,7 +446,7 @@ class SpatioTemporalTopologyBuilder(object):
 
     def _map_to_rect(self, tree, map_, spatial=None):
         """Use the spatio-temporal extent of a map to create and
-           return a RTree rectange
+           return a RTree rectangle
 
            :param spatial: This indicates if the spatial topology is created
                            as well: spatial can be None (no spatial topology),
@@ -506,7 +506,7 @@ class SpatioTemporalTopologyBuilder(object):
 
            This method builds the temporal or spatio-temporal topology from
            mapsA to mapsB and vice verse. The spatio-temporal topology
-           structure of each map will be reseted and rebuild for mapsA and
+           structure of each map will be reset and rebuild for mapsA and
            mapsB.
 
            After building the temporal or spatio-temporal topology the modified

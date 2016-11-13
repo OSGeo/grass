@@ -1525,7 +1525,7 @@ SHPReadObject( SHPHandle psSHP, int hEntity )
         {
             char szError[200];
 
-            /* Reallocate previous successfull size for following features */
+            /* Reallocate previous successful size for following features */
             psSHP->pabyRec = malloc(psSHP->nBufSize);
 
             sprintf( szError, 
@@ -1535,7 +1535,7 @@ SHPReadObject( SHPHandle psSHP, int hEntity )
             return NULL;
         }
 
-        /* Only set new buffer size after successfull alloc */
+        /* Only set new buffer size after successful alloc */
 	psSHP->nBufSize = nEntitySize;
     }
 

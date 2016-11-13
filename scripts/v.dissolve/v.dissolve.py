@@ -2,7 +2,7 @@
 ############################################################################
 #
 # MODULE:       v.dissolve
-# AUTHOR:       M. Hamish Bowman, Dept. Marine Science, Otago Univeristy,
+# AUTHOR:       M. Hamish Bowman, Dept. Marine Science, Otago University,
 #                 New Zealand
 #               Markus Neteler for column support
 #               Converted to Python by Glynn Clements

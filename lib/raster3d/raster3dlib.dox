@@ -1145,7 +1145,7 @@ The values stored are of <EM>type</EM>.
 Returns 1 ... if successful, 0 ... otherwise.
 
 <P>
-int Rast3d_getAllignedVolume(void *map, double originNorth, double
+int Rast3d_getAlignedVolume(void *map, double originNorth, double
   originWest, double originBottom, double lengthNorth, double lengthWest,
   double lengthBottom, int nx, int ny, int nz, char *volumeBuf, int type)
   Resamples the axis-parallel cube defined by <EM>origin</EM> and the lengths of

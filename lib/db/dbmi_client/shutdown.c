@@ -30,7 +30,7 @@
 
   \param driver pointer to dbDriver to be freed
 
-  \return 0 on sucess
+  \return 0 on success
   \return -1 on error
 */
 int db_shutdown_driver(dbDriver * driver)

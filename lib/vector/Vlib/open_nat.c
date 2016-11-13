@@ -30,7 +30,7 @@ static int check_coor(struct Map_info *Map);
   
   Map->name and Map->mapset must be set before.
   
-  \param Map poiter to Map_info structure
+  \param Map pointer to Map_info structure
   \param update non-zero for write mode, otherwise read-only
 
   \return 0 success

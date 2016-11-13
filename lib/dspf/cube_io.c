@@ -124,7 +124,7 @@ static char *fptr = NULL;
 
 /*
  ** expects headfax->dspfinfp to be pointing to current cube
- **  i.e. already searched up to this point  (alowing of course
+ **  i.e. already searched up to this point  (allowing of course
  **  for 0 data already read in 
  **
  **  returns num_thresholds  or 0 for no data  or  -1 on error

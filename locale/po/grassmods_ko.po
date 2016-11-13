@@ -10318,7 +10318,7 @@ msgstr "출력할 격자지도"
 #: ../vector/v.lidar.edgedetection/main.c:192
 #: ../vector/v.lidar.edgedetection/main.c:204 ../vector/v.outlier/main.c:193
 #: ../vector/v.lidar.correction/main.c:172
-msgid "Old auxiliar table could not be dropped"
+msgid "Old auxiliary table could not be dropped"
 msgstr ""
 
 #: ../vector/v.lidar.edgedetection/main.c:223 ../vector/v.outlier/main.c:205
@@ -10387,7 +10387,7 @@ msgstr ""
 
 #: ../vector/v.lidar.edgedetection/main.c:467
 #: ../vector/v.lidar.correction/main.c:439
-msgid "Auxiliar table could not be dropped"
+msgid "Auxiliary table could not be dropped"
 msgstr ""
 
 #: ../vector/v.lidar.edgedetection/edgedetection.c:228

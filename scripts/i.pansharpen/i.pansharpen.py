@@ -418,7 +418,7 @@ def matchhist(original, target, matched):
         min_difference = min(difference_list)
 
         for j in arrays[target]:
-            # find the grey value in target that correspondes to the cdf
+            # find the grey value in target that corresponds to the cdf
             #   closest to the original cdf
             if j[1] == i[1] + min_difference or j[1] == i[1] - min_difference:
                 # build a reclass rules file from the original grey value and

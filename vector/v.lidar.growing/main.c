@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
     }
 
-    /* Setting auxiliar table's name */
+    /* Setting auxiliary table's name */
     if (G_name_is_fully_qualified(in_opt->answer, xname, xmapset)) {
 	sprintf(table_name, "%s_edge_Interpolation", xname);
     }

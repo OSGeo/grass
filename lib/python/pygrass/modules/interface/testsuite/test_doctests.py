@@ -16,7 +16,7 @@ import grass.pygrass.modules as gmodules
 # and test suite, so we need to create a new type which inherits from our class
 # and contains doctest's methods
 # the alternative is to copy 500 from doctest and change what is needed
-# (this might be necessary anyway beacuse of the reports and stdout and stderr)
+# (this might be necessary anyway because of the reports and stdout and stderr)
 doctest.DocFileCase = type('DocFileCase',
                            (grass.gunittest.case.TestCase,),
                            dict(doctest.DocFileCase.__dict__))

@@ -197,7 +197,7 @@ void G_ls_format(char **list, int num_items, int perline, FILE * stream)
 	    perline = 1;
     }
 
-    /* Field width to accomodate longest filename */
+    /* Field width to accommodate longest filename */
     field_width = screen_width / perline;
     /* Longest column height (i.e. num_items <= perline * column_height) */
     column_height = (num_items / perline) + ((num_items % perline) > 0);

@@ -9,7 +9,7 @@ class TestVNet(TestCase):
 
     def tearDown(cls):
         """Remove viewshed map after each test method"""
-        # TODO: eventually, removing maps should be handled through testing framework fucntions
+        # TODO: eventually, removing maps should be handled through testing framework functions
         cls.runModule('g.remove', flags='f', type='vector',
                       name=cls.network)
 

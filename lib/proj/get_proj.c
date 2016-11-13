@@ -52,7 +52,7 @@ static int nopt1;
  *          2 if "default" 3-parameter datum shift values from datum.table
  *            were used
  *          3 if an unrecognised datum name was passed on to PROJ.4 (and
- *            initialisation was successful
+ *            initialization was successful
  *          1 otherwise
  **/
 

@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
     /*
        If no output type specified: determine one automatically.
        Centroids, Boundaries and Kernels always have to be exported
-       explicitely, using the "type=" option.
+       explicitly, using the "type=" option.
      */
     if (!flags.new->answer) {
 	/* open input vector (topology required) */

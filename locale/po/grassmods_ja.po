@@ -10564,7 +10564,7 @@ msgstr "ドライバー名を読み込めません"
 #: ../vector/v.lidar.edgedetection/main.c:192
 #: ../vector/v.lidar.edgedetection/main.c:204 ../vector/v.outlier/main.c:193
 #: ../vector/v.lidar.correction/main.c:172
-msgid "Old auxiliar table could not be dropped"
+msgid "Old auxiliary table could not be dropped"
 msgstr "古いAuxiliarテーブルを削除できませんでした"
 
 #: ../vector/v.lidar.edgedetection/main.c:223 ../vector/v.outlier/main.c:205
@@ -10634,7 +10634,7 @@ msgstr "ドロップしています <%s>  "
 
 #: ../vector/v.lidar.edgedetection/main.c:467
 #: ../vector/v.lidar.correction/main.c:439
-msgid "Auxiliar table could not be dropped"
+msgid "Auxiliary table could not be dropped"
 msgstr "Auxiliarテーブルはドロップできませんでした"
 
 #: ../vector/v.lidar.edgedetection/edgedetection.c:228

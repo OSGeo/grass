@@ -66,7 +66,7 @@ CELL x
 printf ("%ld", (long) x);
 .DE
 The way to handle scanf for CELL data is to use %ld into a long
-and assign to the CELL varaible:
+and assign to the CELL variable:
 .DS
 CELL x;
 long t;

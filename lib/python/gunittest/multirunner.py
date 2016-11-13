@@ -53,7 +53,7 @@ def main():
 
     main_report = args.main_report
     grasssrc = args.grasssrc  # TODO: can be guessed from dist    
-    # TODO: create directory accoring to date and revision and create reports there
+    # TODO: create directory according to date and revision and create reports there
 
     # some predefined variables, name of the GRASS launch script + location/mapset
     #grass7bin = 'C:\Program Files (x86)\GRASS GIS 7.2.svn\grass72svn.bat'

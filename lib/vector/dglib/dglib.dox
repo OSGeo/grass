@@ -136,7 +136,7 @@ Trento, Italy, 11-13 September 2002. University of Trento, Italy,
 
 Directed graph library is responsible for network analysis operations
 done on vector maps. For this purpose directed graph library converts
-the vector attibutes into form of a graph. This graph structure and
+the vector attributes into form of a graph. This graph structure and
 related structures are defined in dglib/graph.h This header file
 contains defination of all structers required for storing components
 of graph, transversing, accessing and modifying it.
@@ -174,7 +174,7 @@ typedef struct _dglGraph
 	void *				pEdgeTree;	//pointer to tree of edges
 	dglByte_t * 			pNodeBuffer;	//pointer to node buffer. this points contiguous memory location containing pointers to nodes of  graph.
 	dglInt32_t			iNodeBuffer; //current index of node being accessed. This is used as offset index from pNodeBuffer
-	dglByte_t * 			pEdgeBuffer; //pointer to edge buffer. this points to contiguous memory ,containing pointer to edgesets passing through each node. Here as per i remeber means orignating.
+	dglByte_t * 			pEdgeBuffer; //pointer to edge buffer. this points to contiguous memory ,containing pointer to edgesets passing through each node. Here as per i remember means orignating.
 	dglInt32_t			iEdgeBuffer; // offset index counter for edge buffer.
 
 			//rest i have not studied yet (NKD).

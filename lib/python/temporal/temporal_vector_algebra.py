@@ -326,7 +326,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             map_new = self.generate_new_map(base_map=map_i, bool_op = 'and',
                                                                                         copy = True,  rename = False,
                                                                                         remove = True)
-                        # Create overlayed map extent.
+                        # Create overlaid map extent.
                         returncode = self.overlay_map_extent(map_new, map_j, 'and', \
                                                                 temp_op = temporal)
                         # Stop the loop if no temporal or spatial relationship exist.
@@ -525,7 +525,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             relations = ["EQUAL"]
             temporal = 'l'
             function = t[2]
-            # Build commmand list for related maps.
+            # Build command list for related maps.
             complist = self.get_temporal_topo_list(maplistA, maplistB, topolist = relations,
                                                                     compop = function, overlay_cmd = True)
             # Set temporal extent based on topological relationships.
@@ -548,7 +548,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             maplistA = self.check_stds(t[1])
             maplistB = self.check_stds(t[3])
             relations, temporal, function,  aggregate = self.eval_toperator(t[2],  optype = 'overlay')
-            # Build commmand list for related maps.
+            # Build command list for related maps.
             complist = self.get_temporal_topo_list(maplistA, maplistB, topolist = relations,
                                                                     compop = function, overlay_cmd = True)
             # Set temporal extent based on topological relationships.

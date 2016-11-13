@@ -169,7 +169,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *E
 	 * prune line first */
 	Vect_line_prune(Points);
 
-	/* If first and last point are identical it is close polygon, we dont need to register last point
+	/* If first and last point are identical it is close polygon, we don't need to register last point
 	 * and we can calculate angle for first.
 	 * If first and last point are not identical we have to mark for break both */
 	last_point = Points->n_points - 1;
@@ -448,7 +448,7 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type, struct Map_info *Er
 	 * prune line first */
 	Vect_line_prune(Points);
 
-	/* If first and last point are identical it is close polygon, we dont need to register last point
+	/* If first and last point are identical it is close polygon, we don't need to register last point
 	 * and we can calculate angle for first.
 	 * If first and last point are not identical we have to mark for break both */
 	last_point = Points->n_points - 1;

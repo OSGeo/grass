@@ -1,7 +1,7 @@
 /*!
   \file lib/db/dbmi_base/valuefmt.c
   
-  \brief DBMI Library (base) - value formating
+  \brief DBMI Library (base) - value formatting
   
   (C) 1999-2009, 2011 by the GRASS Development Team
   

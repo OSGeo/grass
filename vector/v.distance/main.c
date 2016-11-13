@@ -1508,7 +1508,7 @@ int main(int argc, char *argv[])
 			    break;
 
 			case DB_C_TYPE_DATETIME:
-			    /* TODO: formating datetime */
+			    /* TODO: formatting datetime */
 			    sprintf(buf2, " null");
 			    break;
 			}
@@ -1606,7 +1606,7 @@ int main(int argc, char *argv[])
 				break;
 
 			    case DB_C_TYPE_DATETIME:
-				/* TODO: formating datetime */
+				/* TODO: formatting datetime */
 				sprintf(buf2, " null");
 				break;
 			    }

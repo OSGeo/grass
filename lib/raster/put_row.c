@@ -39,7 +39,7 @@ static void put_raster_row(int, const void *, RASTER_MAP_TYPE, int);
    file must have been opened with Rast_open_new() and be written
    sequentially, ie no skipping rows.
 
-   When the null values are embeded into the data, corresponding cells
+   When the null values are embedded into the data, corresponding cells
    are changed to 0's and the corresponding null value row is written
    into null file.
 
@@ -50,7 +50,7 @@ static void put_raster_row(int, const void *, RASTER_MAP_TYPE, int);
 
    Keeps track of the minimum and maximum cell value for use in
    updating the range file upon close of the cell file.  HOWEVER when
-   nulls are not embeded, the cells are considered 0's as far as
+   nulls are not embedded, the cells are considered 0's as far as
    updating range is concerned, even if the corresponding cell is null
    in the resulting null file, so programmer should be carefult to set
    all the null values using Rast_set_null_value() or
@@ -147,7 +147,7 @@ static void convert_float(float *work_buf, int size, char *null_buf,
     for (i = 0; i < n; i++) {
 	FCELL f;
 
-	/* substitute embeded null vals by 0's */
+	/* substitute embedded null vals by 0's */
 	if (Rast_is_f_null_value(&rast[i])) {
 	    f = 0.;
 	    null_buf[i] = 1;
@@ -167,7 +167,7 @@ static void convert_double(double *work_buf, int size, char *null_buf,
     for (i = 0; i < n; i++) {
 	DCELL d;
 
-	/* substitute embeded null vals by 0's */
+	/* substitute embedded null vals by 0's */
 	if (Rast_is_d_null_value(&rast[i])) {
 	    d = 0.;
 	    null_buf[i] = 1;
@@ -224,7 +224,7 @@ static void convert_int(unsigned char *wk, char *null_buf, const CELL * rast,
 	int neg;
 	int k;
 
-	/* substitute embeded null vals by 0's */
+	/* substitute embedded null vals by 0's */
 	if (Rast_is_c_null_value(&v)) {
 	    v = 0;
 	    null_buf[i] = 1;

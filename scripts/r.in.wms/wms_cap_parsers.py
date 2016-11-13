@@ -570,7 +570,7 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
                 if not self.gettilepatternurldata(url):
                     urls.remove(url)
 
-            # check if there are any vaild urls
+            # check if there are any valid urls
             if not urls:
                 grass.debug('<TilePattern>  was removed. It has no valid url.', 4)
                 layer.remove(patt)

@@ -238,7 +238,7 @@ int NetA_distance_to_points(dglGraph_s *graph, struct ilist *to,
    \param graph input graph
    \param from 'from' position
    \param to 'to' position
-   \param edges array of edges indicating wether an edge should be used
+   \param edges array of edges indicating whether an edge should be used
    \param[out] list list of edges
 
    \return number of edges

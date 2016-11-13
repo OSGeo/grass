@@ -420,7 +420,7 @@ static int scan_tz(const char *word, int *tz)
 
 /* returns
    0 not a recognized term
-   1 valid term, but perhaps illiegal value
+   1 valid term, but perhaps illegal value
  */
 static int relative_term(const char **s,
 			 double *x, int *ndigits, int *ndecimal, int *pos)

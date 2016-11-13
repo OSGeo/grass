@@ -106,7 +106,7 @@ static void print_escaped_for_xml(FILE * fp, const char *str)
  *
  * Currently only raster and vector modules are supported, but the
  * generation works with any module (more or less meaningful).
- * Most of the input options are catched:
+ * Most of the input options are caught:
  * * single and multiple raster and vector maps
  * * single and multiple string, float and integer data with default
  * values and value options (range is missing)
@@ -201,7 +201,7 @@ void G__wps_print_process_description(void)
     }
 
     wps_print_process_descriptions_begin();
-    /* store and status are supported as default. The WPS server should change this if nessessary */
+    /* store and status are supported as default. The WPS server should change this if necessary */
     wps_print_process_description_begin(store, status, identifier, title, abstract, keywords, num_keywords);
     wps_print_data_inputs_begin();
 

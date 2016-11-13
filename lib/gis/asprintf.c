@@ -88,7 +88,7 @@ int G_asprintf(char **out, const char *fmt, ...)
  * terminating NULL, and return the number of characters printed.  
  * Contrary to <i>G_asprintf()</i>, any existing buffer pointed to by 
  * out of size osize is used to hold the output and enlarged if 
- * necessary. This is usefull when <i>G_rasprintf</i> is called many 
+ * necessary. This is useful when <i>G_rasprintf</i> is called many 
  * times in a loop.
  *
  * \param[out] out

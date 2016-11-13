@@ -203,7 +203,7 @@ struct Flag *G_define_flag(void)
  * specified by user on command line. The option string can either
  * specify a range of values (e.g. "10-100") or a list of acceptable
  * values (e.g. "red,orange,yellow"). Unless the option string is
- * NULL, user provided input will be evaluated agaist this string.
+ * NULL, user provided input will be evaluated against this string.
  *
  * \return pointer to an Option struct
  */
@@ -497,7 +497,7 @@ int G_parser(int argc, char **argv)
 	    exit(EXIT_SUCCESS);
 	}
 
-	/* Loop thru all command line arguments */
+	/* Loop through all command line arguments */
 
 	while (--argc) {
 	    ptr = *(++argv);

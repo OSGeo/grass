@@ -17,7 +17,7 @@ That is SQLite feature followed also in the driver.
 SQLite uses "type affinity", (http://www.sqlite.org/datatype3.html)
 that means column types are recommended, but not required.
 
-If the driver in GRASS has to determin column type, it first reads 
+If the driver in GRASS has to determine column type, it first reads 
 "affinity" if available (table column) and then data types of values
 in the first row. If a column in a query does not come from table and there 
 are no results, the driver cannot recognize column type.

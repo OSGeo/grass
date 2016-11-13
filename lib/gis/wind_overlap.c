@@ -18,7 +18,7 @@
 
 
 /**
- * \brief Determins if a box overlays a map window.
+ * \brief Determines if a box overlays a map window.
  *
  * Given a map <b>window</b>, and a box of <b>N</b>,<b>S</b>,<b>E</b>,<b>W</b>
  * does the box overlap the map <b>window</b>?<br>

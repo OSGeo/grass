@@ -3,7 +3,7 @@
 *
 * MODULE:       SQL statement parser library 
 *   	    	
-* AUTHOR(S):    lex.l and yac.y were originaly taken from unixODBC and
+* AUTHOR(S):    lex.l and yac.y were originally taken from unixODBC and
 *               probably written by Peter Harvey <pharvey@codebydesigns.com>,
 *               original modifications & added code by 
 *                     Radim Blazek <radim.blazek gmail.com>

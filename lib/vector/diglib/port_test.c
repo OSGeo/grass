@@ -34,7 +34,7 @@
  **  table is then built, and then all file reads and writes must go through
  **  through these routines to correct the numbers if need be.
  **
- **  As long as the byte switching is symetrical, the conversion routines
+ **  As long as the byte switching is symmetrical, the conversion routines
  **  will work both directions.
 
  **  The integer test patterns are quite simple, and their choice was
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
     printf("#define NATIVE_SHORT  %d\n", (nat_shrt = sizeof(short)));
     printf("#define NATIVE_CHAR   %d\n", (nat_char = sizeof(char)));
 
-    /* Following code checks only if all assumptions are fullfilled */
+    /* Following code checks only if all assumptions are fulfilled */
     /* Check sizes */
     if (nat_dbl != PORT_DOUBLE) {
 	fprintf(stderr, "ERROR, sizeof (double) != %d\n", PORT_DOUBLE);

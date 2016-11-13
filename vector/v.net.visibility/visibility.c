@@ -112,7 +112,7 @@ void init_vis(struct Point *points, int num_points, struct Line *lines,
 
 
 
-/** for a pair (p, q) of points, add the edge pq if their are visibile to each other
+/** for a pair (p, q) of points, add the edge pq if their are visible to each other
 */
 void handle(struct Point *p, struct Point *q, struct Map_info *out)
 {

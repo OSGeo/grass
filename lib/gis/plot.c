@@ -363,7 +363,7 @@ static double wrap_east(double e0, double e1)
  *
  * \param x coordinates of vertices
  * \param y coordinates of vertices
- * \param n number of verticies
+ * \param n number of vertices
  *
  * \return 0 on success
  * \return 2 n < 3

@@ -44,7 +44,7 @@
  *
  * The implementation is based on an old integer routine (optimised
  * for machine without math coprocessor), itself inspired by a PL/1
- * routine written after a fortran programm on some prehistoric
+ * routine written after a fortran program on some prehistoric
  * hardware (IBM 360 probably). Yeah, I'm older than before :-)
  *
  * The algorithm used doesn't eliminate "duplicate" points (following

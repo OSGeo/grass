@@ -35,7 +35,7 @@ def message_server(lock, conn):
        The data that is send through the pipe must provide an
        identifier string to specify which C-function should be called.
 
-       The following identifers are supported:
+       The following identifiers are supported:
 
        - "INFO"       Prints an info message, see G_message() for details
        - "IMPORTANT"  Prints an important info message,

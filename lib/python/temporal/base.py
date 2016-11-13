@@ -459,7 +459,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
            :param ident: The identifier to be updated, useful for renaming
         """
         if self.ident is None:
-            self.msgr.fatal(_("Missing identifer"))
+            self.msgr.fatal(_("Missing identifier"))
 
         sql, args = self.get_update_statement(ident)
         #print(sql)
@@ -510,7 +510,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
            :param ident: The identifier to be updated, useful for renaming
         """
         if self.ident is None:
-            self.msgr.fatal(_("Missing identifer"))
+            self.msgr.fatal(_("Missing identifier"))
 
         sql, args = self.get_update_all_statement(ident)
         #print(sql)
@@ -983,7 +983,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
                           the dataset name, layer name and the mapset
                           "name@mapset" or "name:layer@mapset"
                           used as as primary key in the temporal database
-            :param stds: A comma separted list of space time dataset ids
+            :param stds: A comma separated list of space time dataset ids
         """
 
         SQLDatabaseInterface.__init__(self, table, ident)

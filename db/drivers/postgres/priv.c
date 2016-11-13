@@ -1,7 +1,7 @@
 /*!
   \file db/driver/postgres/priv.c
   
-  \brief DBMI - Low Level PostgreSQL database driver - privilages
+  \brief DBMI - Low Level PostgreSQL database driver - privileges
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.

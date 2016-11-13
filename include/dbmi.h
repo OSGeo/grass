@@ -300,7 +300,7 @@ typedef struct _db_connection
     char *user;
     char *password;
     char *keycol;		/* name of default key column */
-    char *group;		/* deafault group to which select privilege is granted */
+    char *group;		/* default group to which select privilege is granted */
 } dbConnection;
 
 /* reclass rule */

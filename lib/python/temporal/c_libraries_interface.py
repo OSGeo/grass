@@ -287,7 +287,7 @@ def _available_mapsets(lock, conn, data):
     count = 0
     mapset_list = []
     try:
-        # Initialize the accessable mapset list, this is bad C design!!!
+        # Initialize the accessible mapset list, this is bad C design!!!
         libgis.G_get_mapset_name(0)
         mapsets = libgis.G_get_available_mapsets()
         while mapsets[count]:
@@ -913,7 +913,7 @@ def c_library_server(lock, conn):
     def error_handler(data):
         """This function will be called in case of a fatal error in libgis"""
         #sys.stderr.write("Error handler was called\n")
-        # We send an exeption that will be handled in
+        # We send an exception that will be handled in
         # the parent process, then close the pipe
         # and release any possible lock
         conn.send(FatalError())
@@ -1190,7 +1190,7 @@ class CLibrariesInterface(RPCServerBase):
         return self.safe_receive("read_raster_full_info")
 
     def has_raster_timestamp(self, name, mapset):
-        """Check if a file based raster timetamp exists
+        """Check if a file based raster timestamp exists
 
            :param name: The name of the map
            :param mapset: The mapset of the map
@@ -1202,7 +1202,7 @@ class CLibrariesInterface(RPCServerBase):
         return self.safe_receive("has_raster_timestamp")
 
     def remove_raster_timestamp(self, name, mapset):
-        """Remove a file based raster timetamp
+        """Remove a file based raster timestamp
 
            Please have a look at the documentation G_remove_raster_timestamp
            for the return values description.
@@ -1217,7 +1217,7 @@ class CLibrariesInterface(RPCServerBase):
         return self.safe_receive("remove_raster_timestamp")
 
     def read_raster_timestamp(self, name, mapset):
-        """Read a file based raster timetamp
+        """Read a file based raster timestamp
 
            Please have a look at the documentation G_read_raster_timestamp
            for the return values description.
@@ -1239,7 +1239,7 @@ class CLibrariesInterface(RPCServerBase):
         return self.safe_receive("read_raster_timestamp")
 
     def write_raster_timestamp(self, name, mapset, timestring):
-        """Write a file based raster timetamp
+        """Write a file based raster timestamp
 
            Please have a look at the documentation G_write_raster_timestamp
            for the return values description.
@@ -1284,7 +1284,7 @@ class CLibrariesInterface(RPCServerBase):
         return self.safe_receive("read_raster3d_info")
 
     def has_raster3d_timestamp(self, name, mapset):
-        """Check if a file based 3D raster timetamp exists
+        """Check if a file based 3D raster timestamp exists
 
            :param name: The name of the map
            :param mapset: The mapset of the map
@@ -1296,7 +1296,7 @@ class CLibrariesInterface(RPCServerBase):
         return self.safe_receive("has_raster3d_timestamp")
 
     def remove_raster3d_timestamp(self, name, mapset):
-        """Remove a file based 3D raster timetamp
+        """Remove a file based 3D raster timestamp
 
            Please have a look at the documentation G_remove_raster3d_timestamp
            for the return values description.
@@ -1311,7 +1311,7 @@ class CLibrariesInterface(RPCServerBase):
         return self.safe_receive("remove_raster3d_timestamp")
 
     def read_raster3d_timestamp(self, name, mapset):
-        """Read a file based 3D raster timetamp
+        """Read a file based 3D raster timestamp
 
            Please have a look at the documentation G_read_raster3d_timestamp
            for the return values description.
@@ -1333,7 +1333,7 @@ class CLibrariesInterface(RPCServerBase):
         return self.safe_receive("read_raster3d_timestamp")
 
     def write_raster3d_timestamp(self, name, mapset, timestring):
-        """Write a file based 3D raster timetamp
+        """Write a file based 3D raster timestamp
 
            Please have a look at the documentation G_write_raster3d_timestamp
            for the return values description.
@@ -1393,7 +1393,7 @@ class CLibrariesInterface(RPCServerBase):
         return self.safe_receive("read_vector_full_info")
 
     def has_vector_timestamp(self, name, mapset, layer=None):
-        """Check if a file based vector timetamp exists
+        """Check if a file based vector timestamp exists
 
            :param name: The name of the map
            :param mapset: The mapset of the map
@@ -1406,7 +1406,7 @@ class CLibrariesInterface(RPCServerBase):
         return self.safe_receive("has_vector_timestamp")
 
     def remove_vector_timestamp(self, name, mapset, layer=None):
-        """Remove a file based vector timetamp
+        """Remove a file based vector timestamp
 
            Please have a look at the documentation G_remove_vector_timestamp
            for the return values description.
@@ -1422,7 +1422,7 @@ class CLibrariesInterface(RPCServerBase):
         return self.safe_receive("remove_vector_timestamp")
 
     def read_vector_timestamp(self, name, mapset, layer=None):
-        """Read a file based vector timetamp
+        """Read a file based vector timestamp
 
            Please have a look at the documentation G_read_vector_timestamp
            for the return values description.

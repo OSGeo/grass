@@ -71,7 +71,7 @@ int main()
     N_gwflow_data2d *data = NULL; 	/* data structure with the groundwater data		*/
     N_geom_data *geom = NULL; 		/* geometry of the calculation area (region)		*/
     N_les *les = NULL; 		/* the linear equation system structure			*/
-    N_les_callback_2d *call = NULL;	/* the callback for the groundwater flow calulation	*/
+    N_les_callback_2d *call = NULL;	/* the callback for the groundwater flow calculation	*/
 
     /* allocate the callback structure */
     call = N_alloc_les_callback_2d();
@@ -358,7 +358,7 @@ N_data_star *#N_alloc_7star(void);
 <p>
 N_data_star *#N_alloc_9star(void);
 <p>
-Memory allocation with initialisation<br>
+Memory allocation with initialization<br>
 N_data_star *#N_create_5star(double C, double W, double E, double N, double S, double V);
 <p>
 N_data_star *#N_create_7star(double C, double W, double E, double N, double S, double T, double B, double V);
@@ -538,7 +538,7 @@ typedef struct
 } N_geom_data;
 \endverbatim
 
-Use the follwoing functions to handle the geometric data structures:
+Use the following functions to handle the geometric data structures:
 
 <p>
 Creating a N_geom_data structure<br>

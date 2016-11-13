@@ -959,7 +959,7 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
 	 * the bbox could be used for a first check: */
 
 	/* Vect_line_box(Points, &lbox);
-	 * dont check lines that obviously do not intersect with test ray */
+	 * don't check lines that obviously do not intersect with test ray */
 	/* if ((lbox.N < Y) || (lbox.S > Y) || (lbox.E < X))
 	    continue;
 	 */

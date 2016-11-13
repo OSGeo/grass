@@ -2,7 +2,7 @@
 ############################################################################
 #
 # MODULE:       r.out.xyz
-# AUTHOR:       M. Hamish Bowman, Dept. Marine Science, Otago Univeristy,
+# AUTHOR:       M. Hamish Bowman, Dept. Marine Science, Otago University,
 #                 New Zealand
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Export a raster map as x,y,z values based on cell centers

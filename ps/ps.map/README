@@ -136,7 +136,7 @@ The following p.map requests have been modified in ps.map:
       end (required)
 
     comments (has the following additional sub-requests)   
-      where x y (positons the comments x and y inches from the left and top 
+      where x y (positions the comments x and y inches from the left and top 
 	edges of the page - optonal - default is immediately below the last
 	item printed, starting at the left edge of the map)
       font fontname (optional - default = Helvetica)
@@ -184,7 +184,7 @@ The following new script requests have been added:
 	immediately below the header starting at the left margin.)
 
     mapinfo
-      where x y (positons the information about the scale, the grid, and
+      where x y (positions the information about the scale, the grid, and
 	the region x and y inches from the left and top edges of the page -
 	optonal - default is immediately below the map, starting at the
 	left edge of the map)
@@ -197,7 +197,7 @@ The following new script requests have been added:
 	request can appear up to 20 times in a ps.map script.)
 
     vlegend
-      where x y (positons the vector legend x and y inches from the left 
+      where x y (positions the vector legend x and y inches from the left 
 	and top edges of the page - optonal - default is immediately below the
 	map_info, starting at the left edge of the map)
       font fontname (optional - default = Helvetica)

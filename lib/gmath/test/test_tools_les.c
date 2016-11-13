@@ -435,7 +435,7 @@ void G_math_free_les(G_math_les * les)
 		}
 		else
 		{
-			/*We dont know if the rows have been changed by pivoting, 
+			/*We don't know if the rows have been changed by pivoting, 
 			 * so we restore the data pointer*/
 			les->A[0] = les->data;
 			G_free_matrix(les->A);
@@ -467,7 +467,7 @@ void G_math_free_f_les(G_math_f_les * les)
 		if (les->b)
 			G_free(les->b);
 
-		/*We dont know if the rows have been changed by pivoting, 
+		/*We don't know if the rows have been changed by pivoting, 
 		 * so we restore the data pointer*/
 		les->A[0] = les->data;
 		G_free_fmatrix(les->A);

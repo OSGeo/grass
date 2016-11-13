@@ -454,7 +454,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            time dataset or for each map of the optional list of maps
 
            :param maps: a ordered by start_time list of map objects, if None
-                        the registred maps of the space time dataset are used
+                        the registered maps of the space time dataset are used
            :param spatial: This indicates if the spatial topology is created as
                            well: spatial can be None (no spatial topology),
                            "2D" using west, east, south, north or "3D" using
@@ -741,7 +741,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             #        print(key, map_relations[key][0].get_temporal_extent_as_tuple())
 
             result["granule"] = map
-            # Append the maps that fullfill the relations
+            # Append the maps that fulfill the relations
             for relation in relations:
                 if relation in map_relations.keys():
                     for sample_map in map_relations[relation]:

@@ -326,7 +326,7 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None, skip_attrib
     :param ttype: list of topology types (default of v.what are point, line,
                   area, face)
     :param encoding: attributes encoding
-    :param skip_attributes: True to skip quering attributes
+    :param skip_attributes: True to skip querying attributes
 
     :return: parsed list
     """

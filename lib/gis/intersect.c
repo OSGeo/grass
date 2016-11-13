@@ -1,6 +1,6 @@
 
 /**************************************************************
- * find interesection between two lines defined by points on the lines
+ * find intersection between two lines defined by points on the lines
  * line segment A is (ax1,ay1) to (ax2,ay2)
  * line segment B is (bx1,by1) to (bx2,by2)
  * returns

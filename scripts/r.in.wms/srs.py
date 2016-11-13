@@ -89,7 +89,7 @@ class Srs:
 
     def getcode(self):
         """Create for example "EPSG:4326" string and return back
-        :returns: String code formated in "authority:code"
+        :returns: String code formatted in "authority:code"
         """
 
         if self.authority is not None and self.code is not None:
@@ -98,7 +98,7 @@ class Srs:
 
     def getcodeurn(self):
         """Create for example "urn:ogc:def:crs:EPSG::4326" string and return back
-        :returns: String code formated in "urn:ogc:def:authority:code"
+        :returns: String code formatted in "urn:ogc:def:authority:code"
         """
 
         return 'urn:%s:def:crs:%s:%s:%s' % (

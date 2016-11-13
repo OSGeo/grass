@@ -23,7 +23,7 @@
   \param with_z WITH_Z for 3D data
   \param[out] mindistidx index of minimal distance
   
-  \return minimal distance betwen two lines (their nodes)
+  \return minimal distance between two lines (their nodes)
 */
 double Vedit_get_min_distance(struct line_pnts *Points1,
 			      struct line_pnts *Points2, int with_z,

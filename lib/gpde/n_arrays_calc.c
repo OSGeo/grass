@@ -5,7 +5,7 @@
 * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
 * 		soerengebbert <at> gmx <dot> de
 *               
-* PURPOSE:     	Higher level array managment functions 
+* PURPOSE:     	Higher level array management functions 
 * 		part of the gpde library
 *
 * COPYRIGHT:    (C) 2000 by the GRASS Development Team
@@ -137,7 +137,7 @@ void N_copy_array_2d(N_array_2d * source, N_array_2d * target)
  * The norm can be of type N_MAXIMUM_NORM or N_EUKLID_NORM.
  * All arrays must have equal sizes and offsets.
  * The complete data array inclusively offsets is used for norm calucaltion.
- * Only non-null values are used to calcualte the norm.
+ * Only non-null values are used to calculate the norm.
  *
 
  * \param a N_array_2d *
@@ -369,7 +369,7 @@ N_array_2d *N_math_array_2d(N_array_2d * a, N_array_2d * b,
 	for (i = 0 - a->offset; i < a->cols + a->offset; i++) {
 	    if (!N_is_array_2d_value_null(a, i, j) &&
 		!N_is_array_2d_value_null(b, i, j)) {
-		/*we always calulate internally with double values */
+		/*we always calculate internally with double values */
 		va = (double)N_get_array_2d_d_value(a, i, j);
 		vb = (double)N_get_array_2d_d_value(b, i, j);
 		vc = 0;
@@ -566,7 +566,7 @@ void N_copy_array_3d(N_array_3d * source, N_array_3d * target)
  * The norm can be of type N_MAXIMUM_NORM or N_EUKLID_NORM.
  * All arrays must have equal sizes and offsets.
  * The complete data array inclusively offsets is used for norm calucaltion.
- * Only non-null values are used to calcualte the norm.
+ * Only non-null values are used to calculate the norm.
  *
  * \param a N_array_3d *
  * \param b N_array_3d *
@@ -794,7 +794,7 @@ N_array_3d *N_math_array_3d(N_array_3d * a, N_array_3d * b,
 	    for (i = 0 - a->offset; i < a->cols + a->offset; i++) {
 		if (!N_is_array_3d_value_null(a, i, j, k) &&
 		    !N_is_array_3d_value_null(a, i, j, k)) {
-		    /*we always calulate internally with double values */
+		    /*we always calculate internally with double values */
 		    va = (double)N_get_array_3d_d_value(a, i, j, k);
 		    vb = (double)N_get_array_3d_d_value(b, i, j, k);
 		    vc = 0;

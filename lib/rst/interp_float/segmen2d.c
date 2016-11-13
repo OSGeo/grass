@@ -113,8 +113,8 @@ int IL_interp_segments_2d(struct interp_params *params,
 	ymx = ((struct quaddata *)(tree->data))->ymax;
 	i = 0;
 	MAXENC = 0;
-	/* data is a window with zero points; some fields don't make sence in this case
-	   so they are zero (like resolution,dimentions */
+	/* data is a window with zero points; some fields don't make sense in this case
+	   so they are zero (like resolution,dimensions */
 	/* CHANGE */
 	/* Calcutaing kmin for surrent segment (depends on the size) */
 

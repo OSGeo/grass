@@ -340,7 +340,7 @@ def cmd_exe(args):
     - bbox (dict): a dict with the region parameters (n, s, e, w, etc.)
       that we want to set before to apply the command.
     - mapnames (dict): a dictionary to substitute the input if the domain has
-      been splitted in several tiles.
+      been split in several tiles.
     - gisrc_src (str): path of the GISRC file from where we want to copy the
       groups.
     - gisrc_dst (str): path of the GISRC file where the groups will be created.

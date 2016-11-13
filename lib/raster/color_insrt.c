@@ -1,7 +1,7 @@
 /* This routine is public only because source is in different files.
  * It should NEVER be called directly.
  * It is used by Rast_add_c_color_rule() and G__read_old_colors().
- * These routines know when it is approriate to call this routine.
+ * These routines know when it is appropriate to call this routine.
  */
 #include <grass/gis.h>
 #include <grass/raster.h>

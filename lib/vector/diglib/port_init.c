@@ -12,7 +12,7 @@
    table is then built, and then all file reads and writes must go
    through these routines to correct the numbers if need be.
 
-   As long as the byte switching is symetrical, the conversion routines
+   As long as the byte switching is symmetrical, the conversion routines
    will work both directions.
    
    The integer test patterns are quite simple, and their choice was
@@ -190,7 +190,7 @@ void port_init(void)
 
     done = 1;
 
-    /* Following code checks only if all assumptions are fullfilled */
+    /* Following code checks only if all assumptions are fulfilled */
     /* Check sizes */
     if (nat_dbl != PORT_DOUBLE)
 	G_fatal_error("sizeof(double) != %d", PORT_DOUBLE);
