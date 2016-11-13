@@ -283,7 +283,9 @@ def register_maps_in_space_time_dataset(
 
         # Try to read an existing time stamp from the grass spatial database
         # in case this map wasn't already registered in the temporal database
-        if not is_in_db:
+        # Read the spatial database time stamp only, if no time stamp was provided for this map
+        # as method argument or in the input file
+        if not is_in_db and not start:
             map.read_timestamp_from_grass()
 
         # Set the valid time
