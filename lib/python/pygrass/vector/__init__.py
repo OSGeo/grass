@@ -179,7 +179,18 @@ class Vector(Info):
 
         """
         self.n_lines += 1
+        if not isinstance(cat, int) and not isinstance(cat, str):
+            # likely the case of using 7.0 API
+            import warnings
+            warnings.warn("Vector.write(geo_obj, attrs=(...)) is"
+                          " depreciated, specify cat explicitly",
+                          DeprecationWarning)
+            # try to accommodate
+            attrs = cat
+            cat = None
         if attrs and cat is None:
+            # TODO: this does not work as expected when there are
+            # already features in the map when we opened it
             cat = (self._cats[-1] if self._cats else 0) + 1
 
         if cat is not None and cat not in self._cats:
