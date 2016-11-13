@@ -1107,7 +1107,7 @@ int Vect__load_plus_head(struct Map_info *Map)
     plus->off_t_size = -1;
     
     /* get map bounding box
-       fisrt try to get info from 'topology.grass' table */
+       first try to get info from 'topology.grass' table */
     sprintf(stmt,
             "SELECT %s FROM \"%s\".\"%s\" WHERE %s = %d",
             TOPO_BBOX, TOPO_SCHEMA, TOPO_TABLE, TOPO_ID, pg_info->toposchema_id);

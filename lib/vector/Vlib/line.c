@@ -399,7 +399,7 @@ int Vect_copy_pnts_to_xyz(const struct line_pnts *Points, double *x, double *y,
 /*!
   \brief  Find point on line in the specified distance.
 
-  From the begining, measured along line.
+  From the beginning, measured along line.
 
   If the distance is greater than line length or negative, error is returned.
 

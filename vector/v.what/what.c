@@ -55,7 +55,7 @@ static void F_generate(const char *drvname, const char *dbname,
 
     G_debug(2, "Database opened");
 
-    /* TODO: test if table exist first, but this should be tested by application befor
+    /* TODO: test if table exist first, but this should be tested by application before
      *        F_generate() is called, because it may be correct (connection defined in DB
      *        but table does not exist) */
 

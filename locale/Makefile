@@ -75,7 +75,7 @@ update-po:
 		    echo "Merging failed"; \
 		fi \
 		done
-	@echo "Be careful with SVN commits as .po file updates must be syncronized with the individual translators."
+	@echo "Be careful with SVN commits as .po file updates must be synchronized with the individual translators."
 
 verify:
 	@cd ./po/ ; for po in `ls *_*.po 2>/dev/null` ; do \

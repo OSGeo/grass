@@ -495,7 +495,7 @@ void Rast_init_range(struct Range *range)
 /*!
  * \brief Get range min and max
  *
- * The mininum and maximum CELL values are extracted from the
+ * The minimum and maximum CELL values are extracted from the
  * <i>range</i> structure.
  *
  * If the range structure has no defined min/max (first!=0) there will

@@ -43,7 +43,7 @@
  *     int src_sz, dst_sz;                                          *
  *     unsigned char *src, *dst;                                    *
  * ---------------------------------------------------------------- *
- * This function decompresses data compresed with RLE.              *
+ * This function decompresses data compressed with RLE.              *
  * It is equivalent to a single pass call to an external expansion  * 
  * function.                                                        *
  * If you need a continuous expansion scheme, you'll have to code   *

@@ -67,7 +67,7 @@ int Rast__check_format(int fd)
 
     /*
      * Check to see if the file is in compress mode
-     * 4 possibilites
+     * 4 possibilities
      *   compressed flag in cellhd is negative (meaning pre 3.0 cell file)
      *       compression flag is first 3 bytes of cell file
      *   compression flag is 0 - not compressed

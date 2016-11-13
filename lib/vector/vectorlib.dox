@@ -138,7 +138,7 @@ There are two levels of read access to the vector data:
   programmer, more memory, and longer startup time. Without this level,
   areas are not available.
 
-The level of access is retured by Vect_open_old().
+The level of access is returned by Vect_open_old().
 
 <b>Example for sequential read access without topology:</b>
 \code
@@ -229,7 +229,7 @@ int main
 	/* process the area */
 	/* example: get area categories */
 	if (Vect_get_area_cats(&Map, area, Cats) == -1)
-	    G_message(_("No catagory available for area %d"), area);
+	    G_message(_("No category available for area %d"), area);
     }
     
     exit(EXIT_SUCCESS);

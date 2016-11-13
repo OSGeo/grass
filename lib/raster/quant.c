@@ -186,7 +186,7 @@ void Rast_quant_init(struct Quant *quant)
 }
 
 /*!
-   \brief Returns wether or not quant rules are set to truncate map
+   \brief Returns whether or not quant rules are set to truncate map
 
    \param quant pointer to Quant structure which holds quant rules info
 
@@ -199,7 +199,7 @@ int Rast_quant_is_truncate(const struct Quant *quant)
 }
 
 /*!
-   \brief  Returns wether or not quant rules are set to round map
+   \brief  Returns whether or not quant rules are set to round map
    \param quant pointer to Quant structure which holds quant rules info
 
    \return 1 is round
@@ -466,7 +466,7 @@ int Rast_quant_get_pos_infinite_rule(const struct Quant *q,
    rules are not removed. This can't be changed because Categories
    structure HEAVILY depends of quant rules stored in exactly the same
    order they are entered. So if the cleanup or rearrangement is done in
-   the future make a flag for add_rule wether or not to do it, then
+   the future make a flag for add_rule whether or not to do it, then
    quant will not set this flag.
 
    \param q pointer to Quant structure which holds quant rules info

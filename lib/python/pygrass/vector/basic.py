@@ -203,7 +203,7 @@ class BoxList(object):
 
     def append(self, box):
         """Append a Bbox object to a Boxlist object, using the
-        ``Vect_boxlist_append`` C fuction.
+        ``Vect_boxlist_append`` C function.
 
         :param bbox: the bounding box to add to the list
         :param bbox: a Bbox object

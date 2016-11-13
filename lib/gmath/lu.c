@@ -53,7 +53,7 @@ int G_ludcmp(double **a, int n, int *indx, double *d)
 	}
 
 	big = 0.0;
-/* not very efficent, but this pragma helps speed things up a bit */
+/* not very efficient, but this pragma helps speed things up a bit */
 #pragma omp parallel for private(i, k, sum, dum) shared(j, n, a, vv, big, imax)
 	for (i = j; i < n; i++) {
 	    sum = a[i][j];

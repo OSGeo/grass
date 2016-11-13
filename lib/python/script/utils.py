@@ -48,7 +48,7 @@ def separator(sep):
     >>> separator('comma')
     ','
 
-    If the string does not match any of the spearator keywords,
+    If the string does not match any of the separator keywords,
     it is returned as is:
 
     >>> separator(', ')
@@ -234,7 +234,7 @@ def get_num_suffix(number, max_number):
     depending on maximum number, used for creating suffix for data series.
     Does not include the suffix separator.
 
-    :param number: number to be formated as map suffix
+    :param number: number to be formatted as map suffix
     :param max_number: maximum number of the series to get number of digits
 
     >>> get_num_suffix(10, 1000)

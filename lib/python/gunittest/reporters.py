@@ -52,7 +52,7 @@ def keyvalue_to_text(keyvalue, sep='=', vsep='\n', isep=',',
 def replace_in_file(file_path, pattern, repl):
     """
 
-    :param repl: a repl paramter of ``re.sub()`` function
+    :param repl: a repl parameter of ``re.sub()`` function
     """
     # using tmp file to store the replaced content
     tmp_file_path = file_path + '.tmp'
@@ -392,7 +392,7 @@ class GrassTestFilesCountingReporter(object):
             self.file_pass_per = 100 * float(self.files_pass) / self.test_files
             self.file_fail_per = 100 * float(self.files_fail) / self.test_files
         else:
-            # if no tests were executed, probably something bad happend
+            # if no tests were executed, probably something bad happened
             # try to report at least something
             self.file_pass_per = None
             self.file_fail_per = None
@@ -625,7 +625,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         super(GrassTestFilesHtmlReporter, self).end_file_test(
             module=module, cwd=cwd, returncode=returncode,
             stdout=stdout, stderr=stderr)
-        # considering others accoring to total is OK when we more or less
+        # considering others according to total is OK when we more or less
         # know that input data make sense (total >= errors + failures)
         total = test_summary.get('total', None)
         failures = test_summary.get('failures', 0)
@@ -742,7 +742,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             # will do it for use
             # the solution is perhaps do the multi reporter more grass-specific
             # and do all common things, so that other can rely on it and
-            # moreover something can be shared with other explicity
+            # moreover something can be shared with other explicitly
             # using constructors as seems advantageous for counting
             self._file_anonymizer.anonymize(supplementary_files)
             for f in supplementary_files:
@@ -759,7 +759,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 
         if returncode:
             pass
-            # TODO: here we don't have oportunity to write error file
+            # TODO: here we don't have opportunity to write error file
             # to stream (stdout/stderr)
             # a stream can be added and if not none, we could write
 
@@ -854,7 +854,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
         super(GrassTestFilesKeyValueReporter, self).end_file_test(
             module=module, cwd=cwd, returncode=returncode,
             stdout=stdout, stderr=stderr)
-        # TODO: considering others accoring to total, OK?
+        # TODO: considering others according to total, OK?
         # here we are using 0 for total but HTML reporter is using None
         total = test_summary.get('total', 0)
         failures = test_summary.get('failures', 0)
@@ -992,7 +992,7 @@ class TestsuiteDirReporter(object):
     def report_for_dir(self, root, directory, test_files):
         # TODO: create object from this, so that it can be passed from
         # one function to another
-        # TODO: put the inside of for loop to another fucntion
+        # TODO: put the inside of for loop to another function
         dir_failures = 0
         dir_errors = 0
         dir_skipped = 0
@@ -1133,7 +1133,7 @@ class TestsuiteDirReporter(object):
         return row
 
     def report_for_dirs(self, root, directories):
-        # TODO: this will need chanages accoring to potential chnages in absolute/relative paths
+        # TODO: this will need chanages according to potential changes in absolute/relative paths
 
         page_name = os.path.join(root, self.main_page_name)
         page = open(page_name, 'w')

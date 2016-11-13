@@ -1,6 +1,6 @@
 Postgres driver.
 
-This driver was originaly written by Alex Shevlakov using dbf driver
+This driver was originally written by Alex Shevlakov using dbf driver
 (PostgreSQL driver forked from DBF driver by Radim Blazek).
 DBF driver was not good starting point, so I (R. Blazek) have rewritten it again
 using ODBC, postgres driver and adding new code.

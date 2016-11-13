@@ -105,7 +105,7 @@ typedef doublereal E_f;		/* real function with -R not specified */
 #define MAX_NEG         -1	/* Indicates minimum value         */
 #define MAX_ABS          0	/* Indicates absolute value        */
 
-#define DO_COMPACT       0	/* Elliminate unnecessary rows (cols) in matrix  */
+#define DO_COMPACT       0	/* Eliminate unnecessary rows (cols) in matrix  */
 #define NO_COMPACT       1	/* ... or not                                    */
 
 

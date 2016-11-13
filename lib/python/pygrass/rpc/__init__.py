@@ -199,7 +199,7 @@ def data_provider_server(lock, conn):
     def error_handler(data):
         """This function will be called in case of a fatal error in libgis"""
         # sys.stderr.write("Error handler was called\n")
-        # We send an exeption that will be handled in
+        # We send an exception that will be handled in
         # the parent process, then close the pipe
         # and release any possible lock
         conn.send(FatalError("G_fatal_error() was called in the server process"))

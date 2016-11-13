@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
     if (!(dvr = G_getenv_nofatal2("DB_DRIVER", G_VAR_MAPSET)))
 	G_fatal_error(_("Unable to read name of driver"));
 
-    /* Setting auxiliar table's name */
+    /* Setting auxiliary table's name */
     if (G_name_is_fully_qualified(out_opt->answer, xname, xmapset)) {
 	sprintf(table_name, "%s_aux", xname);
     }
@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
         db_set_error_handler_driver(driver);
         
 	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
-	    G_fatal_error(_("Old auxiliar table could not be dropped"));
+	    G_fatal_error(_("Old auxiliary table could not be dropped"));
 	db_close_database_shutdown_driver(driver);
     }
 
@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
 		      dvr);
     db_set_error_handler_driver(driver);
 
-    /* Create auxiliar table */
+    /* Create auxiliary table */
     if ((flag_auxiliar =
 	 P_Create_Aux2_Table(driver, table_name)) == FALSE) {
 	Vect_close(&In);
@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
     /*------------------------------------------------------------------
       | Subdividing and working with tiles: 									
       | Each original region will be divided into several subregions. 
-      | Each one will be overlaped by its neighbouring subregions. 
+      | Each one will be overlapped by its neighbouring subregions. 
       | The overlapping is calculated as a fixed OVERLAP_SIZE times
       | the largest spline step plus 2 * edge
       ----------------------------------------------------------------*/
@@ -432,11 +432,11 @@ int main(int argc, char *argv[])
 	}			/*! END WHILE; last_column = TRUE */
     }				/*! END WHILE; last_row = TRUE */
 
-    /* Dropping auxiliar table */
+    /* Dropping auxiliary table */
     if (npoints > 0) {
 	G_debug(1, _("Dropping <%s>"), table_name);
 	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
-	    G_fatal_error(_("Auxiliar table could not be dropped"));
+	    G_fatal_error(_("Auxiliary table could not be dropped"));
     }
 
     db_close_database_shutdown_driver(driver);

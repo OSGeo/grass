@@ -16,7 +16,7 @@
 /*!
   \brief Allocate Cluster structure
 
-  \param C poiter to Cluster structure
+  \param C pointer to Cluster structure
 
   \return 1 on success
   \return 0 on error

@@ -154,7 +154,7 @@ struct field_info
     */
     char *table;
     /*!
-      \brief Name of key column (usualy 'cat')
+      \brief Name of key column (usually 'cat')
     */
     char *key;
 };
@@ -502,7 +502,7 @@ struct Format_info_cache {
     /*! 
       \brief Cache type
 
-      Currenly used only by PostGIS Topology which allows caching the
+      Currently used only by PostGIS Topology which allows caching the
       whole map (CACHE_MAP) */
     int ctype;
 };
@@ -676,7 +676,7 @@ struct Format_info_pg
     
     /*! 
       \brief Offset list used for building pseudo-topology (simple
-      features acccess)
+      features access)
     */
     struct Format_info_offset offset;
 

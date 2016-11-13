@@ -680,7 +680,7 @@ static void free_compute_scatts_data(int *fd_bands,
    \param cats_rasts_conds paths to category raster conditions files representing 
     	  selected areas from mapwindow (conditions) in rasters for every category 
    \param cats_rasts_conds index in array represents corresponding category id
-   \param cats_rasts_conds for manupulation with category raster conditions file 
+   \param cats_rasts_conds for manipulation with category raster conditions file 
                 see also I_id_scatt_to_bands and I_insert_patch_to_cat_rast
    \param bands names of analyzed bands, order of bands is defined by their id
    \param n_bands number of bands
@@ -852,7 +852,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
    Implementd for speeding up of scatter plots rendering.
 
    \param merged_arr array which will be overlayd with overlay_arr
-   \param overlay_arr array to be merged_arr overlayed with
+   \param overlay_arr array to be merged_arr overlaid with
    \param rows number of rows for the both arrays
    \param cols number of columns for the both arrays
    \param alpha transparency (0-1) of the overlay array for merging

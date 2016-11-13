@@ -24,7 +24,7 @@ int outputHull(struct Map_info *Map, struct Point *P, int *hull,
 	tmpx[i] = P[pointIdx].x;
 	tmpy[i] = P[pointIdx].y;
 	/* average coordinates calculation... may introduce a little
-	   numerical error but guaratees that no overflow will occurr */
+	   numerical error but guaratees that no overflow will occur */
 	xc = xc + tmpx[i] / numPoints;
 	yc = yc + tmpy[i] / numPoints;
     }

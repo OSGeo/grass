@@ -3,7 +3,7 @@
  *
  * Program will read vector line records, outputting lines
  * which match the user list of names/categories.
- * The resulting map attribute is arbitarily set to first category
+ * The resulting map attribute is arbitrarily set to first category
  * of the user list or a user selected category number (cat_new).
  */
 
@@ -222,7 +222,7 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
     /* sort list */
     qsort(cats_array, ncats_array, sizeof(int), cmp);
 
-    /* writting OGR layers directly */
+    /* writing OGR layers directly */
     native = Vect_maptype(Out) == GV_FORMAT_NATIVE;
     if (!native && Vect_level(In) < 2)
 	G_warning(_("Topology level required for extracting areas "

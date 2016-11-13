@@ -604,7 +604,7 @@ Location specific tests
     NC in SPF, NC in LL, NC in XY, and perhaps NC in UTM, and NC in some
     custom projection (in case of strange not-fitting projection, there is
     a danger that the results of analyses can differer significantly).
-    Moreover, the set can be extened by GRASS locations which are using
+    Moreover, the set can be extended by GRASS locations which are using
     different storage backends, e.g. PostGIS for vectors and PostgreSQL for
     temporal database. Tests can specify one or preferably more of these
     standard locations.

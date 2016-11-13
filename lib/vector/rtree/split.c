@@ -433,9 +433,9 @@ static void RTreeQuicksortBranchBuf(int side, struct RTree *t)
 |
 | Pick the axis with the smallest margin increase (keep rectangles 
 | square).
-| Along the chosen split axis, choose the distribution with the mimimum 
+| Along the chosen split axis, choose the distribution with the minimum 
 | overlap-value. Resolve ties by choosing the distribution with the
-| mimimum area-value.
+| minimum area-value.
 | If one group gets too full (more would force other group to violate min
 | fill requirement) then other group gets the rest.
 | These last are the ones that can go in either group most easily.

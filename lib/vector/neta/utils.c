@@ -160,7 +160,7 @@ int NetA_get_node_costs(struct Map_info *In, int layer, char *column,
    \brief Get list of nodes from varray
 
    Returns the list of all nodes on features selected by varray.
-   nodes_to_features conains the index of a feature adjecent to each
+   nodes_to_features contains the index of a feature adjacent to each
    node or -1 if no such feature specified by varray
    exists. Nodes_to_features might be NULL, in which case it is left
    unitialised. Nodes_to_features will be wrong if several lines connect 

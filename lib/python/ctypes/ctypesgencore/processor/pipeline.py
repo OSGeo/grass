@@ -104,7 +104,7 @@ def calculate_final_inclusion(data, opts):
 def print_errors_encountered(data, opts):
     # See descriptions.py for an explanation of the error-handling mechanism
     for desc in data.all:
-        # If description would not have been included, dont bother user by
+        # If description would not have been included, don't bother user by
         # printing warnings.
         if desc.included or opts.show_all_errors:
             if opts.show_long_errors or len(desc.errors) + len(desc.warnings) <= 2:

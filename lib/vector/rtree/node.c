@@ -171,7 +171,7 @@ void RTreeNodeCover(struct RTree_Node *n, struct RTree_Rect *r, struct RTree *t)
  * This will result in the least ambiguous node covering the new 
  * rectangle, improving search speed.
  * In case of a tie, pick the one which needs the smallest increase in
- * area to accomodate the new rectangle, then the smallest area before,
+ * area to accommodate the new rectangle, then the smallest area before,
  * to get the best resolution when searching.
  */
 
@@ -228,7 +228,7 @@ static int RTreePickLeafBranch(struct RTree_Rect *r, struct RTree_Node *n, struc
 
 /*
  * Pick a branch.  Pick the one that will need the smallest increase
- * in area to accomodate the new rectangle.  This will result in the
+ * in area to accommodate the new rectangle.  This will result in the
  * least total area for the covering rectangles in the current node.
  * In case of a tie, pick the one which was smaller before, to get
  * the best resolution when searching.

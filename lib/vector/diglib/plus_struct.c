@@ -23,7 +23,7 @@
 /*
  * Routines for reading and writing Dig+ structures.
  * return 0 on success, -1 on failure of whatever kind
- * if you dont want it written out, then dont call these routines
+ * if you don't want it written out, then don't call these routines
  * ie  check for deleted status before calling a write routine
  * in as much as it would be nice to hide that code in here,
  * this is a library routine and we chose to make it dependent on

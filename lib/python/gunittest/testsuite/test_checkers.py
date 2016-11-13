@@ -112,7 +112,7 @@ no_defs: defined
 """
 
 PROJ_UNITS_TEXT_2 = """unit: Metre
-units: Metres
+units: Meters
 meters: 1
 """
 # what about keys and lower/upper case letters

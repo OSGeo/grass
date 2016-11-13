@@ -1,7 +1,7 @@
 /*!
  * \file lib/vector/Vlib/net_build.c
  *
- * \brief Vector library - releated fns for vector network building
+ * \brief Vector library - related fns for vector network building
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
@@ -81,7 +81,7 @@ Vect_net_ttb_build_graph(struct Map_info *Map,
 
     dglInt32_t dgl_cost = cost;
 
-    /*TODO attributes of turntable shoud be stored in one place */
+    /*TODO attributes of turntable should be stored in one place */
     const char *tcols[] = { "cat", "ln_from", "ln_to", "cost", "isec", NULL
     };
     dbCatValArray tvarrs[5];

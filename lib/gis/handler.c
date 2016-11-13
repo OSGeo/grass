@@ -76,7 +76,7 @@ void G_add_error_handler(void (*func)(void *), void *closure)
 }
 
 /*!
-  \brief Remove existing error hander
+  \brief Remove existing error handler
 
   \param func handler to be remove
   \param closure pointer to closure data

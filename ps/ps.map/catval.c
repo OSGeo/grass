@@ -26,7 +26,7 @@
  *
  * \brief Loads categories and RGB color definition into dbCatValArray structure
  *
- * \param map: poiter to a vector Map_info structure
+ * \param map: pointer to a vector Map_info structure
  * \param level: layer number identifier
  * \param level: output dbCatValArray structure
  *
@@ -88,7 +88,7 @@ int load_catval_array_rgb(struct Map_info *map, int vec,
  *
  * \brief Loads categories and dynamic size values into dbCatValArray structure
  *
- * \param map: poiter to a vector Map_info structure
+ * \param map: pointer to a vector Map_info structure
  * \param level: layer number identifier
  * \param level: output dbCatValArray structure
  *
@@ -154,7 +154,7 @@ int load_catval_array_size(struct Map_info *map, int vec,
  *
  * \brief Loads categories and dynamic rotation values into dbCatValArray structure
  *
- * \param map: poiter to a vector Map_info structure
+ * \param map: pointer to a vector Map_info structure
  * \param level: layer number identifier
  * \param level: output dbCatValArray structure
  *

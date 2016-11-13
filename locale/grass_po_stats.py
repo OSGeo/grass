@@ -82,7 +82,7 @@ def langDefinition(fil):
         return ""
 
 def get_stats(languages, directory):
-    """Return a dictionay with the statistic for each language"""
+    """Return a dictionary with the statistic for each language"""
     # output dictionary to transform in json file
     output = {}
     # TO DO TOTALS OF ENGLISH WORD FOR EACH FILE

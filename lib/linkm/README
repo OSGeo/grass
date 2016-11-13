@@ -14,7 +14,7 @@ Assumption:  malloc/free is inefficient and wasteful for things like
 Workaround:  I found myself frequently writing a program specific memory
 	     manager to allocate large chunks which were then parcelled out.
 
-Solution:   Develop a generic linked list memory manger which does all the
+Solution:   Develop a generic linked list memory manager which does all the
 	    work for you.   
 	    
 	    

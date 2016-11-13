@@ -120,7 +120,7 @@ extern dglTreeTouchI32_s *dglTreeTouchI32Add(void *pvAVL, dglInt32_t nKey);
 
 
 /*
- * Define a entry to mantain a predecessor/distance network in shortest-path computation
+ * Define a entry to maintain a predecessor/distance network in shortest-path computation
  */
 typedef struct _dglTreePredist
 {

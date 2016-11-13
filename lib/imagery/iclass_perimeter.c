@@ -265,10 +265,10 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
     }
 
     /*
-     * now decide which verticies should be included
+     * now decide which vertices should be included
      *    local extrema are excluded
      *    local non-extrema are included
-     *    verticies of horizontal edges which are pseudo-extrema
+     *    vertices of horizontal edges which are pseudo-extrema
      *      are excluded.
      *    one vertex of horizontal edges which are pseudo-non-extrema
      *      are included.
@@ -363,7 +363,7 @@ int edge2perimeter(IClass_perimeter * perimeter, int x0, int y0, int x1,
 /*!
    \brief Adds point to perimeter.
 
-   \a perimeter has to have allocated space for \c points memeber.
+   \a perimeter has to have allocated space for \c points member.
 
    \param perimeter perimeter
    \param x,y point row and cell

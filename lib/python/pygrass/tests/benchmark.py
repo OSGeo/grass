@@ -389,7 +389,7 @@ def main(testdict):
     # res
     parser.add_option("-r", "--resolution", action="store", type="string",
                       dest="res", default = '1,0.25',
-                      help="Resolution list separete by comma.")
+                      help="Resolution list separate by comma.")
     # fmt
     parser.add_option("-f", "--fmt", action="store", type="string",
                       dest="fmt", default = 'txt',

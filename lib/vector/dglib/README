@@ -56,7 +56,7 @@
  * initialize a new graph. When reading a graph from a stream, the library understands by the first byte what version
  * is it, and initializes it appropriately.
  *
- * Verion 1 graph file format:
+ * Version 1 graph file format:
  *
  * Field                          Size/Type                     Value range          Description
  * [VERSION...................]   1 byte                        1                    Version 1 graphs always keep value 1

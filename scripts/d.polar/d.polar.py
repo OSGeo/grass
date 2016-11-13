@@ -419,7 +419,7 @@ def main():
             _("xgraph required, please install first (www.xgraph.org)"))
 
     #################################
-    # this file contains everthing:
+    # this file contains everything:
     rawfile = tmp + "_raw"
     rawf = file(rawfile, 'w')
     gcore.run_command('r.stats', flags='1', input=map, stdout=rawf)

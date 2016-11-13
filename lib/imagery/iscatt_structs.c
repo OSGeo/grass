@@ -112,7 +112,7 @@ void I_sc_init_cats(struct scCats *cats, int n_bands, int type)
 }
 
 /*!
-   \brief Free data of struct scCats, the structure itself remains alocated.
+   \brief Free data of struct scCats, the structure itself remains allocated.
 
    \param cats pointer to existing scCats struct
  */

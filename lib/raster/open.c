@@ -138,7 +138,7 @@ int Rast_open_old(const char *name, const char *mapset)
    for use by the get_map_row family of routines.
 
    Diagnostics: Errors other than actual open failure will cause a
-   diagnostic to be delivered thru G_warning() open failure messages
+   diagnostic to be delivered through G_warning() open failure messages
    are left to the calling routine since the masking logic will want to
    issue a different warning.
 

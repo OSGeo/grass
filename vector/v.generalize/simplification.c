@@ -92,7 +92,7 @@ int douglas_peucker(struct line_pnts *Points, double thresh, int with_z)
 	    index[icount++] = last;
 	}
 	else {
-	    /* break line into two parts, the order of pushing is crucial! It gurantees, that we are going to the left */
+	    /* break line into two parts, the order of pushing is crucial! It guarantees, that we are going to the left */
 	    stack[top++] = maxindex;
 	    stack[top++] = last;
 	    stack[top++] = first;

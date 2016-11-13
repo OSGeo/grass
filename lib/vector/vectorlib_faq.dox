@@ -44,7 +44,7 @@ list of categories to be selected.
 number of categories is zero or more than one, I cannot continue in processing.
 Should I print warning or should I call G_fatal_error()?</dt>
 <dd>
-Both cases are generaly valid in GRASS. Do not print a warning, maybe a verbose
+Both cases are generally valid in GRASS. Do not print a warning, maybe a verbose
 message. It is the responsibility of a module to make a reasonable plan how to
 handle these cases.
 </dd>

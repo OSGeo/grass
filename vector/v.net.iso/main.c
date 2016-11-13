@@ -554,7 +554,7 @@ int main(int argc, char **argv)
 	    }
 	    G_debug(3, "  npnts2 cut = %d", npnts2);
 
-	    /* Biggest cost shoud be equal if exist (npnts > 0). Cut out overlapping segments,
+	    /* Biggest cost should be equal if exist (npnts > 0). Cut out overlapping segments,
 	     *  this can cut only points on line but not first points */
 	    if (npnts1 > 1 && npnts2 > 1) {
 		while (npnts1 > 1 && npnts2 > 1) {

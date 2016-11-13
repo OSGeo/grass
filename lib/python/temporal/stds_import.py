@@ -245,7 +245,7 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
         proj_name = os.path.abspath(proj_file_name)
 
         # We need to convert projection strings generated
-        # from other programms than g.proj into
+        # from other programs than g.proj into
         # new line format so that the grass file comparison function
         # can be used to compare the projections
         proj_name_tmp = temp_name + "_in_projection"

@@ -140,7 +140,7 @@ typedef struct
 #define SC_SCATT_DATA          0 
 #define SC_SCATT_CONDITIONS    1
 
-/*! Holds list of all catagories. 
+/*! Holds list of all categories. 
     It can contain selected areas for scatter plots (SC_SCATT_CONDITIONS type) 
     or computed scatter plots (SC_SCATT_DATA type).
 */
@@ -149,7 +149,7 @@ struct scCats
     int type;        /*!< SC_SCATT_DATA -> computed scatter plots, SC_SCATT_CONDITIONS -> 
                           set conditions for scatter plots to be computed */
 
-    int n_cats;      /*!< number of alocated categories */
+    int n_cats;      /*!< number of allocated categories */
     
     int n_bands;     /*!< number of analyzed bands */
     int n_scatts;    /*!< number of possible scattter plots, which can be created from bands */
