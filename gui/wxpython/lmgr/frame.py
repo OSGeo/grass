@@ -1458,7 +1458,6 @@ class GMFrame(wx.Frame):
         for layer in gxwXml.layers:
             display = layer['display']
             maptree = self.notebookLayers.GetPage(display).maptree
-
             newItem = maptree.AddLayer(ltype=layer['type'],
                                        lname=layer['name'],
                                        lchecked=layer['checked'],
@@ -1466,7 +1465,8 @@ class GMFrame(wx.Frame):
                                        lcmd=layer['cmd'],
                                        lgroup=layer['group'],
                                        lnviz=layer['nviz'],
-                                       lvdigit=layer['vdigit'])
+                                       lvdigit=layer['vdigit'],                                       
+                                       loadWorkspace=True)
 
             if 'selected' in layer:
                 selectList.append((maptree, newItem, layer['selected']))
