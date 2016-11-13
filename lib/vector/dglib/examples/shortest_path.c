@@ -40,7 +40,7 @@ extern int errno;
  * the traversing of the graph toward its direction is abandoned.
  * Try to change the return value to 1 and see that the program
  * will not find any more paths to destinations.
- * The clipper receives data relating the network segment being examinated.
+ * The clipper receives data relating the network segment being examined.
  * The pvarg is a user pointer registered to dglShortestPath() and
  * passed back to the clipper.
  * As a demo, the main uses the ClipperContext_s structure to store a nodeid

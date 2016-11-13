@@ -63,7 +63,7 @@ static int clipper(dglGraph_s * pgraph,
 /*!
    \brief Initialize graph structure
 
-   \param graph poiter to graph structure
+   \param graph pointer to graph structure
    \param nodes_costs use node costs
 
    \return void
@@ -90,7 +90,7 @@ void Vect_graph_init(dglGraph_s * graph, int nodes_costs)
    before conversion to int by 1000.  Costs -1 for infinity i.e. arc
    or node is closed and cannot be traversed.
 
-   \param graph poiter to graph structure
+   \param graph pointer to graph structure
 
    \return void
  */
@@ -112,7 +112,7 @@ void Vect_graph_build(dglGraph_s * graph)
    before conversion to int by 1000.  Costs -1 for infinity i.e. arc
    or node is closed and cannot be traversed.
 
-   \param graph poiter to graph structure
+   \param graph pointer to graph structure
    \param from from node
    \param to to node
    \param costs costs value
@@ -145,7 +145,7 @@ Vect_graph_add_edge(dglGraph_s * graph, int from, int to, double costs, int id)
    before conversion to int by 1000.  Costs -1 for infinity i.e. arc
    or node is closed and cannot be traversed.
 
-   \param graph poiter to graph structure
+   \param graph pointer to graph structure
    \param node node id
    \param costs costs value
 

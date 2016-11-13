@@ -60,7 +60,7 @@ dbDriver *Driver;
 dbCatValArray Cvarr;
 int otype, ofield;
 int compatible = 1;		/* types are compatible: point+centroid or line+boundary or area */
-int nmissing = 0;		/* number of missing atttributes */
+int nmissing = 0;		/* number of missing attributes */
 int nnull = 0;		/* number of null values */
 int nzero = 0;		/* number of zero distances */
 int first = 1;

@@ -442,7 +442,7 @@ void operator delete[] (void *ptr) noexcept {
   MM_DEBUG cout << "delete[]: ptr=" << ptr << ","; 
 
   if (!ptr) {
-    //can this hapen? -- it does: see delete above
+    //can this happen? -- it does: see delete above
     cerr << "MM warning: operator delete [] was given a NULL pointer\n";
     cerr.flush();
     //assert(0);
@@ -486,7 +486,7 @@ MM_mode MM_register::register_new = MM_IGNORE_MEMORY_EXCEEDED;
 
 
 /* ************************************************************ */
-// The counter of mm_register_init instances.  It is implicity set to 0.
+// The counter of mm_register_init instances.  It is implicitly set to 0.
 unsigned int mm_register_init::count;
 
 // The constructor and destructor that ensure that the memory manager is

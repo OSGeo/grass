@@ -400,7 +400,7 @@ int Rast_set_histogram(CELL cat, long count, struct Histogram *histogram)
 
 
 /*!
- * \brief Extends histogram struct to accomodate a new value
+ * \brief Extends histogram struct to accommodate a new value
  *
  * \param cat: category
  * \param count

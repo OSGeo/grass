@@ -129,7 +129,7 @@ class Signal(object):
 
         Usually, it is not needed to set the weak parameter. This method
         creates weak references for all handlers but for lambda functions, it
-        automaticaly creates (standard) references (otherwise, lambdas would be
+        automatically creates (standard) references (otherwise, lambdas would be
         garbage collected. If you want to force some behaviour, specify the
         weak parameter.
 
@@ -205,11 +205,11 @@ class Signal(object):
 
         Calling a signal from outside the class is usually not good
         practice. The only case when it is permitted is when signal is the part
-        of some globaly shared object and permision to emit is stayed in the
+        of some globaly shared object and permission to emit is stayed in the
         documentation.
 
         The parameters of the emit function must be the same as the parameters
-        of the handlers. However, handler can ommit some parameters.
+        of the handlers. However, handler can omit some parameters.
         The associated parameters shall be documented for each Signal instance.
         Use only keyword arguments when emitting.
 
@@ -233,7 +233,7 @@ class Signal(object):
         """Allows emitting signal with function call syntax.
 
         It allows handling signal as a function or other callable object.
-        So, the signal can be in the list of fuctions or can be connected as
+        So, the signal can be in the list of functions or can be connected as
         a handler for another signal.
         However, it is strongly recommended to use emit method for direct
         signal emitting.

@@ -61,7 +61,7 @@ int print_upload(NEAR * Near, UPLOAD * Upload, int i,
 			break;
 
 		    case DB_C_TYPE_DATETIME:
-			/* TODO: formating datetime */
+			/* TODO: formatting datetime */
 			fprintf(stdout, "%s", sep);
 			break;
 		    }

@@ -1020,7 +1020,7 @@ int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
   Note: string is allocated by G_store(). Free allocated memory with
   G_free().
   
-  Currently are implemeted:
+  Currently are implemented:
    - Native format  (native)
    - OGR format     (ogr)
    - PostGIS format (postgis)
@@ -1056,7 +1056,7 @@ const char *Vect_maptype_info(const struct Map_info *Map)
 /*!
   \brief Gets vector map format
 
-  Currently are implemeted:
+  Currently are implemented:
    - Native format                    (GV_FORMAT_NATIVE)
    - OGR format linked via v.external (GV_FORMAT_OGR)
    - OGR format                       (GV_FORMAT_OGR_DIRECT)

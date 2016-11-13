@@ -104,7 +104,7 @@ Topological relations must be specified in {} parentheses. <br>
 The temporal algebra defines temporal operators that can be combined with other 
 operators to perform spatio-temporal operations. 
 The temporal operators process the time instances and intervals of two temporal 
-related maps and calculate the result temporal extent by five differnt possibilities.
+related maps and calculate the result temporal extent by five different possibilities.
 <div class="code"><pre>
 LEFT REFERENCE     l       Use the time stamp of the left space time dataset
 INTERSECTION       i       Intersection
@@ -338,7 +338,7 @@ the temporal extent of single map 'event'
 <h2>Examples</h2>
 
 Select all maps from space time dataset A which have equal time stamps
-with space time dataset B and C and are ealier that Jan. 1. 2005 and
+with space time dataset B and C and are earlier that Jan. 1. 2005 and
 store them in space time dataset D.
 <div class="code"><pre>
 D = if(start_date(A) < "2005-01-01", A : B : C)

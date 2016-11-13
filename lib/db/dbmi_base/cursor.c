@@ -114,7 +114,7 @@ void db_set_cursor_type_readonly(dbCursor *cursor)
 }
 
 /*!
-   \brief Set cursor to be writeable (update)
+   \brief Set cursor to be writable (update)
 
    \param cursor pointer to dbCursor
 */
@@ -124,7 +124,7 @@ void db_set_cursor_type_update(dbCursor *cursor)
 }
 
 /*!
-   \brief Set cursor to be writeable (insert)
+   \brief Set cursor to be writable (insert)
 
    \param cursor pointer to dbCursor
 */

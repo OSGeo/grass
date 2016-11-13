@@ -1042,7 +1042,7 @@ class TemporalAlgebraParser(object):
                             # Generate an intermediate map for the result map list.
                             map_new = self.generate_new_map(base_map=map_i, bool_op='and',
                                                             copy=True,  rename=True)
-                        # Create overlayed map extent.
+                        # Create overlaid map extent.
                         returncode = self.overlay_map_extent(map_new, map_j, 'and',
                                                              temp_op=temporal)
                         # Stop the loop if no temporal or spatial relationship exist.
@@ -1921,7 +1921,7 @@ class TemporalAlgebraParser(object):
              In the second step the aggregated condition map list will be compared with the
              map list of conclusion statements by the given temporal relation.
 
-             The result is writen as 'condition_value' attribute to the resulting map objects.
+             The result is written as 'condition_value' attribute to the resulting map objects.
              These attribute consists of boolean expressions and operators which can be
              evaluated with the eval_condition_list function.
              [True,  '||', False, '&&', True]

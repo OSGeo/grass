@@ -1,7 +1,7 @@
 /*!
   \file lib/db/dbmi_base/columnfmt.c
   
-  \brief DBMI Library (base) - columns formating
+  \brief DBMI Library (base) - columns formatting
   
   (C) 1999-2009, 2011 by the GRASS Development Team
   

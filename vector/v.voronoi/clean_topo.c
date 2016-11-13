@@ -61,7 +61,7 @@ int clean_topo(void)
     }
 
     /* cleaning part 2: snap */
-    /* TODO: adjust snapping treshold to ULP */
+    /* TODO: adjust snapping threshold to ULP */
     Vect_get_map_box(&Out, &box);
     snap_thresh = fabs(box.W);
     if (snap_thresh < fabs(box.E))

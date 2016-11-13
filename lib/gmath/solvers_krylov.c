@@ -53,8 +53,8 @@ static int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x,
  * \param rows (int)
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
- * \param prec (int) -- the preconditioner which shoudl be used 1,2 or 3
- * \return (int) -- 1 - success, 2 - not finisehd but success, 0 - matrix singular, -1 - could not solve the les
+ * \param prec (int) -- the preconditioner which should be used 1,2 or 3
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
  * 
  * */
 int G_math_solver_pcg(double **A, double *x, double *b, int rows, int maxit,
@@ -85,8 +85,8 @@ int G_math_solver_pcg(double **A, double *x, double *b, int rows, int maxit,
  * \param bandwidth (int) -- bandwidth of matrix A
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
- * \param prec (int) -- the preconditioner which shoudl be used 1,2 or 3
- * \return (int) -- 1 - success, 2 - not finisehd but success, 0 - matrix singular, -1 - could not solve the les
+ * \param prec (int) -- the preconditioner which should be used 1,2 or 3
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
  * 
  * */
 int G_math_solver_pcg_sband(double **A, double *x, double *b, int rows, int bandwidth, int maxit,
@@ -115,8 +115,8 @@ int G_math_solver_pcg_sband(double **A, double *x, double *b, int rows, int band
  * \param rows (int)
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
- * \param prec (int) -- the preconditioner which shoudl be used 1,2 or 3
- * \return (int) -- 1 - success, 2 - not finisehd but success, 0 - matrix singular, -1 - could not solve the les
+ * \param prec (int) -- the preconditioner which should be used 1,2 or 3
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
  * 
  * */
 int G_math_solver_sparse_pcg(G_math_spvector ** Asp, double *x, double *b,
@@ -303,7 +303,7 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
  * \param rows (int)
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
- * \return (int) -- 1 - success, 2 - not finisehd but success, 0 - matrix singular, -1 - could not solve the les
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
  * 
  * */
 int G_math_solver_cg(double **A, double *x, double *b, int rows, int maxit,
@@ -324,14 +324,14 @@ int G_math_solver_cg(double **A, double *x, double *b, int rows, int maxit,
  * solver will abort the calculation and writes the current result into the vector x.
  * The parameter <i>err</i> defines the error break criteria for the solver.
  *
- * \param A (double **) -- the symmetric positive definit band matrix
+ * \param A (double **) -- the symmetric positive definite band matrix
  * \param x (double *) -- the value vector
  * \param b (double *) -- the right hand side
  * \param rows (int)
  * \param bandwidth (int) -- the bandwidth of matrix A
  * \param maxit (int) -- the maximum number of iterations
  * \param err (double) -- defines the error break criteria
- * \return (int) -- 1 - success, 2 - not finisehd but success, 0 - matrix singular, -1 - could not solve the les
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
  * 
  * */
 int G_math_solver_cg_sband(double **A, double *x, double *b, int rows, int bandwidth, int maxit, double err)
@@ -357,8 +357,8 @@ int G_math_solver_cg_sband(double **A, double *x, double *b, int rows, int bandw
  * \param b (double *) -- the right hand side
  * \param rows (int)
  * \param maxit (int) -- the maximum number of iterations
- * \param err (double) -- defines the error break criterias
- * \return (int) -- 1 - success, 2 - not finisehd but success, 0 - matrix singular, -1 - could not solve the les
+ * \param err (double) -- defines the error break criteria
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
  * 
  * */
 int G_math_solver_sparse_cg(G_math_spvector ** Asp, double *x, double *b,
@@ -528,8 +528,8 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
  * \param b (double *) -- the right hand side
  * \param rows (int)
  * \param maxit (int) -- the maximum number of iterations
- * \param err (double) -- defines the error break criterias
- * \return (int) -- 1 - success, 2 - not finisehd but success, 0 - matrix singular, -1 - could not solve the les
+ * \param err (double) -- defines the error break criteria
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
  * 
  * */
 int G_math_solver_bicgstab(double **A, double *x, double *b, int rows,
@@ -555,8 +555,8 @@ int G_math_solver_bicgstab(double **A, double *x, double *b, int rows,
  * \param b (double *) -- the right hand side
  * \param rows (int)
  * \param maxit (int) -- the maximum number of iterations
- * \param err (double) -- defines the error break criterias
- * \return (int) -- 1 - success, 2 - not finisehd but success, 0 - matrix singular, -1 - could not solve the les
+ * \param err (double) -- defines the error break criteria
+ * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
  * 
  * */
 int G_math_solver_sparse_bicgstab(G_math_spvector ** Asp, double *x,

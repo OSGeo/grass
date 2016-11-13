@@ -775,7 +775,7 @@ int count_node_arcs(struct Map_info *Map, int node)
     return count;
 }
 
-/* Compute gausian for x, y along Net, using all points in In */
+/* Compute Gaussian for x, y along Net, using all points in In */
 void compute_net_distance(double x, double y, struct Map_info *In,
 			  struct Map_info *Net, double netmax, double sigma,
 			  double term, double *gaussian, double dmax, int node_method)

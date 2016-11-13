@@ -179,7 +179,7 @@ class ParallelModuleQueue(object):
         """Constructor
 
         :param nprocs: The maximum number of Module processes that
-                       can be run in parallel, defualt is 1, if None
+                       can be run in parallel, default is 1, if None
                        then use all the available CPUs.
         :type nprocs: int
         """

@@ -33,7 +33,7 @@ void Rast_append_history(struct History *hist, const char *str)
 }
 
 /*!
- * \brief Append a formated string to a History structure
+ * \brief Append a formatted string to a History structure
  *
  *
  * \param hist pointer to History structure which holds history info

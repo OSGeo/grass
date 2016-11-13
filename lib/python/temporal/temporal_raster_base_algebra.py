@@ -418,7 +418,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                                                             bool_op='and',
                                                             copy=True,
                                                             rename=True)
-                        # Create overlayed map extent.
+                        # Create overlaid map extent.
                         returncode = self.overlay_map_extent(map_new, map_j,
                                                              'and',
                                                              temp_op = temporal)
@@ -759,7 +759,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 tbrelations = map_i.get_temporal_relations()
                 count = 0
                 for map_j in (tbrelations['EQUAL']):
-                    # Create overlayed map extent.
+                    # Create overlaid map extent.
                     returncode = self.overlay_map_extent(map_new, map_j,
                                                          'and',
                                                          temp_op='l')
@@ -929,7 +929,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 tbrelations = map_i.get_temporal_relations()
                 count = 0
                 for map_j in (tbrelations['EQUAL']):
-                    # Create overlayed map extent.
+                    # Create overlaid map extent.
                     returncode = self.overlay_map_extent(map_new,
                                                          map_j,
                                                          'and',

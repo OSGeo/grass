@@ -5,7 +5,7 @@
 * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
 * 		soerengebbert <at> gmx <dot> de
 *
-* PURPOSE:     	Array managment functions
+* PURPOSE:     	Array management functions
 * 		part of the gpde library
 *
 * COPYRIGHT:    (C) 2000 by the GRASS Development Team
@@ -217,7 +217,7 @@ void N_get_array_2d_value(N_array_2d * data, int col, int row, void *value)
 }
 
 /*!
- * \brief Returns 1 if the value of N_array_2d struct at postion col, row
+ * \brief Returns 1 if the value of N_array_2d struct at position col, row
  * is of type null, otherwise 0
  *
  * This function checks automatically the type of the array and checks for the

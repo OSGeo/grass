@@ -313,7 +313,7 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
                 mod = copy.deepcopy(r_series)
                 mod(file=filename, output=output_name)
                 if len(aggregation_list) > int(file_limit):
-                    msgr.warning(_("The limit of open fiels (%i) was "\
+                    msgr.warning(_("The limit of open files (%i) was "\
                                    "reached (%i). The module r.series will "\
                                    "be run with flag z, to avoid open "\
                                    "files limit exceeding."%(int(file_limit),

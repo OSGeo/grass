@@ -215,7 +215,7 @@ def main():
                 grass.fatal(_("Unable to connect table <%s> to vector map <%s>") %
                              (to_table, map_name))
 
-    grass.message(_("Vector map <%s> succesfully unpacked") % map_name)
+    grass.message(_("Vector map <%s> successfully unpacked") % map_name)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

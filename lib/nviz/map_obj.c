@@ -48,7 +48,7 @@ int Nviz_new_map_obj(int type, const char *name, double value, nv_data * data)
 
     /*
      * For each type of map obj do the following --
-     *   1) Verify we havn't maxed out the number of
+     *   1) Verify we haven't maxed out the number of
      *      allowed objects.
      *   2) Call the internal library to generate a new
      *      map object of the specified type.

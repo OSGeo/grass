@@ -35,7 +35,7 @@ def function(receiver):
         # an instance-method...
         return receiver, getattr(getattr(receiver, im_func), func_code), 1
     elif not hasattr(receiver, func_code):
-        raise ValueError('unknown reciever type %s %s' % (receiver,
+        raise ValueError('unknown receiver type %s %s' % (receiver,
                                                           type(receiver)))
     return receiver, getattr(receiver, func_code), 0
 

@@ -278,7 +278,7 @@ def info_plot(x, xticks, xlabels, results, filename, style):
     fig.savefig(filename)
 
 
-# TODO: solve the directory inconsitencies, implemement None
+# TODO: solve the directory inconsitencies, implement None
 def main_page(results, filename, images, captions, title='Test reports',
               directory=None):
     filename = os.path.join(directory, filename)

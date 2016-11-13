@@ -90,7 +90,7 @@ int test_blas_level_1_double(void)
 	sum++;
     }
     
-    /*test the ATALS implemenation*/
+    /*test the ATLAS implementation*/
     a = G_math_dnrm2(x, rows);
     b = G_math_dasum(x, rows);
     c = G_math_ddot(x, y, rows);
@@ -266,7 +266,7 @@ int test_blas_level_1_float(void)
 	sum++;
     }
     
-    /*test the ATALS implemenation*/
+    /*test the ATLAS implementation*/
     a = G_math_snrm2(x, rows);
     b = G_math_sasum(x, rows);
     c = G_math_sdot(x, y, rows);

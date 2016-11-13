@@ -322,7 +322,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Input file <%s> does not exist"), in_opt->answer);
     }
 
-    // we use full qualification because the dim ns conatins too general names
+    // we use full qualification because the dim ns contains too general names
     pdal::Dimension::Id::Enum dim_to_use_as_z = pdal::Dimension::Id::Z;
 
     struct GLidarLayers layers;
@@ -490,7 +490,7 @@ int main(int argc, char *argv[])
     // TODO: the falses for filters should be perhaps fatal error
     // (bad input) or warning if filter was requested by the user
 
-    // update layers we are writting based on what is in the data
+    // update layers we are writing based on what is in the data
     // update usage of our filters as well
     if (point_view->hasDim(pdal::Dimension::Id::ReturnNumber) &&
         point_view->hasDim(pdal::Dimension::Id::NumberOfReturns)) {
@@ -540,7 +540,7 @@ int main(int argc, char *argv[])
     if (height_filter_flag->answer) {
         dim_to_use_as_z = point_view->layout()->findDim("Height");
         if (dim_to_use_as_z == pdal::Dimension::Id::Unknown)
-            G_fatal_error(_("Cannot indentify the height dimension"
+            G_fatal_error(_("Cannot identify the height dimension"
                             " (probably something changed in PDAL)"));
     }
 

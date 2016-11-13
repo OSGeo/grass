@@ -1,7 +1,7 @@
 TODO
 Date_ 2009-10-03
 * Add ATLAS wrapper for blas level 2 and level 3 functions.
-* Inlcude the HAVE_ATLAS definition in the configure system
+* Include the HAVE_ATLAS definition in the configure system
 * Replace the lu-solver in lu.c with the one from the ccmath library
   and patch all modules using lu.c
 * Implement a robust parallelizable LU solver with pivoting

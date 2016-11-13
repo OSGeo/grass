@@ -36,7 +36,7 @@ def print_gridded_dataset_univar_statistics(type, input, output, where, extended
        :param output: Name of the optional output file, if None stdout is used
        :param where: A temporal database where statement
        :param extended: If True compute extended statistics
-       :param no_header: Supress the printing of column names
+       :param no_header: Suppress the printing of column names
        :param fs: Field separator
        :param rast_region: If set True ignore the current region settings
               and use the raster map regions for univar statistical calculation.
@@ -141,7 +141,7 @@ def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, c
        :param column: The name of the attribute column
        :param where: A temporal database where statement
        :param extended: If True compute extended statistics
-       :param no_header: Supress the printing of column names
+       :param no_header: Suppress the printing of column names
        :param fs: Field separator
     """
 

@@ -88,7 +88,7 @@ int g3d_vertical_unit_default = U_UNDEFINED;
  *
  * Calls Rast3d_fatal_error() if a wrong parameter value is provided.
  *
- * \param doCompress specifies if a compression should be perfomed
+ * \param doCompress specifies if a compression should be performed
  * \param precision a precision of compression
  */
 

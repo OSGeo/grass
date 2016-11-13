@@ -85,7 +85,7 @@ Correct:
     G_warning( n_("One feature without geometry skipped", 
         "%d features without geometry skipped", n), n);
     G_message( n_("%d map selected", "%d maps selected", n), n);
-    /* Altough in English it is not necessary to provide a separate
+    /* Although in English it is not necessary to provide a separate
     text if "n" always is >1, in other languages is a difference if "n"
     is i.e. 2-4, or n==10 etc. */
     G_message( n_("Remove map", "Remove maps", n));
@@ -324,7 +324,7 @@ NOTES
     6. Press "Apply".
 
     Note!: You can change between the new and the original layouts by
-    pressing Alt+Ctrl+k or by clicking the keyboad icon in the system
+    pressing Alt+Ctrl+k or by clicking the keyboard icon in the system
     tray.
 
     Command line alternative:

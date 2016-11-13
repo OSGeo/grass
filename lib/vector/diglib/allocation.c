@@ -112,7 +112,7 @@ void *dig_frealloc(void *oldptr, int nelem, int elsize, int oldnelem)
     return (ret);
 }
 
-/*  these functions don't exit on "no more memory",  calling funtion should
+/*  these functions don't exit on "no more memory",  calling function should
    check the return value  */
 
 void *dig__falloc(int nelem, int elsize)

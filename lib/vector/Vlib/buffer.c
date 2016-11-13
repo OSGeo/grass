@@ -338,12 +338,12 @@ static void parallel_line(struct line_pnts *Points, double d, double tol,
 }
 
 /*!
-   \brief Create parrallel line
+   \brief Create parallel line
 
    This function is replaced by Vect_line_parallel2().
 
    \param InPoints input line
-   \param distance create parrallel line in distance
+   \param distance create parallel line in distance
    \param tolerance maximum distance between theoretical arc and polygon segments
    \param rm_end remove end points falling into distance
    \param[out] OutPoints output line

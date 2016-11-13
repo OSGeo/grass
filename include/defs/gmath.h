@@ -95,7 +95,7 @@ extern double **G_math_matrix_to_sband_matrix(double **, int, int);
 extern double **G_math_sband_matrix_to_matrix(double **, int, int);
 extern void G_math_Ax_sband(double ** A, double *x, double *y, int rows, int bandwidth);
 
-/*linear equation solver, most of them are multithreaded wih OpenMP*/
+/*linear equation solver, most of them are multithreaded with OpenMP*/
 extern int G_math_solver_gauss(double **, double *, double *, int );
 extern int G_math_solver_lu(double **, double *, double *, int );
 extern int G_math_solver_cholesky(double **, double *, double *, int , int );

@@ -57,7 +57,7 @@ def open_old_stds(name, type, dbif=None):
     elif type == "stvds" or type == "vect" or type == "vector":
         sp = dataset_factory("stvds", id)
     else:
-        msgr.fatal(_("Unkown type: %s") % (type))
+        msgr.fatal(_("Unknown type: %s") % (type))
 
     dbif, connected = init_dbif(dbif)
 
@@ -113,7 +113,7 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
     elif type == "stvds" or type == "vect" or type == "vector":
         sp = dataset_factory("stvds", id)
     else:
-        msgr.error(_("Unkown type: %s") % (type))
+        msgr.error(_("Unknown type: %s") % (type))
         return None
 
     dbif, connected = init_dbif(dbif)

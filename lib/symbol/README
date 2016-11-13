@@ -2,7 +2,7 @@ Symbol drawing commands are stored in a text file (one file for each symbol)
 which are located in $GISBASE/etc/symbol/group/name or mapset/symbol/group/name
 
 S_read() searches first in mapsets and then in $GISBASE (symbol names in 
-$GISBASE may be overidden by symbols of the same group/name in mapset).
+$GISBASE may be overridden by symbols of the same group/name in mapset).
 
 
 File format example: 

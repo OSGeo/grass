@@ -858,7 +858,7 @@ class DBlinks(object):
         return Link(c_fieldinfo=c_fieldinfo) if c_fieldinfo else None
 
     def by_layer(self, layer):
-        """Return the choosen Link using the layer
+        """Return the chosen Link using the layer
 
         :param layer: the number of layer
         :type layer: int
@@ -867,7 +867,7 @@ class DBlinks(object):
         return Link(c_fieldinfo=c_fieldinfo) if c_fieldinfo else None
 
     def by_name(self, name):
-        """Return the choosen Link using the name
+        """Return the chosen Link using the name
 
         :param name: the name of Link
         :type name: str

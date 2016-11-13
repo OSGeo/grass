@@ -70,7 +70,7 @@ This chapter is divided as follows:
 \section gislibintro Introduction
 
 The <em>GIS Library</em> is the primary programming library provided
-with the GRASS system. <b>Programs must use this libary to access the
+with the GRASS system. <b>Programs must use this library to access the
 GIS database.</b> It contains the routines which locate, create, open,
 rename, and remove GRASS database files. It contains the routines
 which read and write raster files. It contains routines which

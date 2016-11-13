@@ -440,7 +440,7 @@ double find_minimum(double *values, int *l_min)
 
 struct Point *swap(struct Point *point, int a, int b)
 {
-    /* Once the last value is left out, it is swaped with j-value */
+    /* Once the last value is left out, it is swapped with j-value */
     SWAP(point[a].coordX, point[b].coordX);
     SWAP(point[a].coordY, point[b].coordY);
     SWAP(point[a].coordZ, point[b].coordZ);

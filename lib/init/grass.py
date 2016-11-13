@@ -675,7 +675,7 @@ def set_browser():
     browser = os.getenv('GRASS_HTML_BROWSER')
     if not browser:
         if macosx:
-            # OSX doesn't execute browsers from the shell PATH - route thru a
+            # OSX doesn't execute browsers from the shell PATH - route through a
             # script
             browser = gpath('etc', "html_browser_mac.sh")
             os.environ['GRASS_HTML_BROWSER_MACOSX'] = "-b com.apple.helpviewer"
@@ -695,7 +695,7 @@ def set_browser():
                     break
 
     elif macosx:
-        # OSX doesn't execute browsers from the shell PATH - route thru a
+        # OSX doesn't execute browsers from the shell PATH - route through a
         # script
         os.environ['GRASS_HTML_BROWSER_MACOSX'] = "-b %s" % browser
         browser = gpath('etc', "html_browser_mac.sh")
@@ -966,7 +966,7 @@ def gui_startup(grass_gui):
     if ret == 0:
         pass
     elif ret in [1, 2]:
-        # 1 probably error comming from gis_set.py
+        # 1 probably error coming from gis_set.py
         # 2 probably file not found from python interpreter
         # formerly we were starting in text mode instead, now we just fail
         # which is more straightforward for everybody
@@ -1213,10 +1213,10 @@ def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
                           'user': user, 'file': lockfile}))
     elif ret != 0:
         msg = _("Unable to properly access '%s'.\n"
-                "Please notify system personel.") % lockfile
+                "Please notify system personnel.") % lockfile
 
     # TODO: the gui decision should be done by the caller
-    # this needs some change to the function interafce, return tupple or
+    # this needs some change to the function interface, return tuple or
     # use exceptions (better option)
     if msg:
         if grass_gui == "wxpython":
@@ -1511,7 +1511,7 @@ def bash_startup(location, location_name, grass_env_file):
         os.environ['HISTSIZE'] = "3000"
 
     # instead of changing $HOME, start bash with: --rcfile "$LOCATION/.bashrc" ?
-    #   if so, must care be taken to explicity call .grass.bashrc et al for
+    #   if so, must care be taken to explicitly call .grass.bashrc et al for
     #   non-interactive bash batch jobs?
     userhome = os.getenv('HOME')      # save original home
     home = location                   # save .bashrc in $LOCATION

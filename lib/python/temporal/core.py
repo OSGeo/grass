@@ -244,7 +244,7 @@ message_interface = None
 
 
 def _init_tgis_message_interface(raise_on_error=False):
-    """Initiate the global mesage interface
+    """Initiate the global message interface
 
        :param raise_on_error: If True raise a FatalError exception in case of
                               a fatal error, call sys.exit(1) otherwise
@@ -409,7 +409,7 @@ def get_tgis_database_string():
 
        This string is the temporal database string set with t.connect
        that was processed to substitue location, gisdbase and mapset
-       varibales.
+       variables.
     """
     global tgis_database_string
     return tgis_database_string
@@ -442,7 +442,7 @@ atexit.register(stop_subprocesses)
 
 def get_available_temporal_mapsets():
     """Return a list of of mapset names with temporal database driver and names
-        that are accessable from the current mapset.
+        that are accessible from the current mapset.
 
         :returns: A dictionary, mapset names are keys, the tuple (driver,
                   database) are the values
@@ -1025,7 +1025,7 @@ class SQLDatabaseInterfaceConnection(object):
           return("You have no permission to "
                  "access mapset <%(mapset)s>, or "
                  "mapset <%(mapset)s> has no temporal database. "
-                 "Accessable mapsets are: <%(mapsets)s>" % \
+                 "Accessible mapsets are: <%(mapsets)s>" % \
                  {"mapset": mapset,
                   "mapsets":','.join(self.tgis_mapsets.keys())})
 

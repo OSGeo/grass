@@ -57,7 +57,7 @@ of the Association of American Geographers, 53, pp.15-26.
 [3] Grimmeau, J.P. (1977) Cartographie par plages et discontinuités
 spatiales, Paris, Espace géographique, VI, pp.49-58.
 
-\section listOfFunctios List of functions
+\section listOfFunctions List of functions
 
 - AS_option_to_algorithm()
 - AS_class_apply_algorithm()

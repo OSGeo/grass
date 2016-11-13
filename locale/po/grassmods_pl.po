@@ -10587,7 +10587,7 @@ msgstr "Nie możn odczytać wiersza %i\n"
 #: ../vector/v.lidar.edgedetection/main.c:204 ../vector/v.outlier/main.c:193
 #: ../vector/v.lidar.correction/main.c:172
 #, fuzzy
-msgid "Old auxiliar table could not be dropped"
+msgid "Old auxiliary table could not be dropped"
 msgstr "Nie można otworzyć rastra <%s>"
 
 #: ../vector/v.lidar.edgedetection/main.c:223 ../vector/v.outlier/main.c:205
@@ -10660,7 +10660,7 @@ msgstr "Kasowanie <%s>"
 #: ../vector/v.lidar.edgedetection/main.c:467
 #: ../vector/v.lidar.correction/main.c:439
 #, fuzzy
-msgid "Auxiliar table could not be dropped"
+msgid "Auxiliary table could not be dropped"
 msgstr "Nie można otworzyć rastra <%s>"
 
 #: ../vector/v.lidar.edgedetection/edgedetection.c:228

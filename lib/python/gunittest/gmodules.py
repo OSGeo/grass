@@ -97,7 +97,7 @@ def call_module(module, stdin=None,
     """
     # TODO: remove this:
     do_doctest_gettext_workaround()
-    # implemenation inspired by subprocess.check_output() function
+    # implementation inspired by subprocess.check_output() function
     if stdin:
         if 'input' in kwargs and kwargs['input'] != '-':
             raise ValueError(_("input='-' must be used when stdin is specified"))

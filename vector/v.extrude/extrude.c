@@ -25,7 +25,7 @@ static struct line_cats *Cats_floor;
   \param type feature type
   \param centroid number of centroid for area
 
-  \return number of writen objects
+  \return number of written objects
 */
 int extrude(struct Map_info *In, struct Map_info *Out,
             const struct line_cats *Cats, const struct line_pnts *Points,

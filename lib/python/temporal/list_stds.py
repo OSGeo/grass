@@ -28,7 +28,7 @@ from .open_stds import *
 def get_dataset_list(type, temporal_type, columns=None, where=None,
                      order=None, dbif=None):
     """ Return a list of time stamped maps or space time datasets of a specific
-        temporal type that are registred in the temporal database
+        temporal type that are registered in the temporal database
 
         This method returns a dictionary, the keys are the available mapsets,
         the values are the rows from the SQL database query.
@@ -140,7 +140,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
             - "gran" List map using the granularity of the space time dataset,
                columns are identical to deltagaps
 
-        :param no_header: Supress the printing of column names
+        :param no_header: Suppress the printing of column names
         :param gran: The user defined granule to be used if method=gran is
                      set, in case gran=None the granule of the space time
                      dataset is used

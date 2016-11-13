@@ -47,7 +47,7 @@ void P_zero_dim(struct Reg_dimens *dim)
  Interpolated points in Overlap are taken as they are
 
  The buffer zones Elaboration - General and General - Overlap must be
- large enough to avoid artefacts 
+ large enough to avoid artifacts 
  */
 
 int
@@ -189,13 +189,13 @@ int P_get_edge(int interpolator, struct Reg_dimens *dim, double pe, double pn)
     /* Set the edge regions dimension
      * Returns 1 on success of bilinear; 2 on success of bicubic, 0 on failure */
     if (interpolator == P_BILINEAR) {
-       	/* in case of edge artefacts, increase as multiples of 3 */
+       	/* in case of edge artifacts, increase as multiples of 3 */
 	dim->edge_v = 9 * pe;
 	dim->edge_h = 9 * pn;
 	return 1;
     }
     else if (interpolator == P_BICUBIC) {
-       	/* in case of edge artefacts, increase as multiples of 4 */
+       	/* in case of edge artifacts, increase as multiples of 4 */
 	dim->edge_v = 12 * pe;	/*3 */
 	dim->edge_h = 12 * pn;
 	return 2;

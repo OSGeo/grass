@@ -127,7 +127,7 @@ if [ "$MINGW_POSTFIX" = "64" ]; then
     dll_to_a $OSGEO4W_ROOT_MSYS/bin/libpng16.dll    mswindows/osgeo4w/lib/libpng
     dll_to_a $OSGEO4W_ROOT_MSYS/bin/jpeg.dll        mswindows/osgeo4w/lib/libjpeg
 else
-# TODO (related to dependecies)
+# TODO (related to dependencies)
 #   dll_to_a $OSGEO4W_ROOT_MSYS/bin/libpng12-0.dll  mswindows/osgeo4w/lib/libpng
     dll_to_a $OSGEO4W_ROOT_MSYS/bin/jpeg_osgeo.dll  mswindows/osgeo4w/lib/libjpeg
 fi
@@ -235,7 +235,7 @@ if [ -n "$PACKAGE_PATCH" ]; then
     unix2dos etc/postinstall/grass${PACKAGE_POSTFIX}.bat
     unix2dos etc/preremove/grass${PACKAGE_POSTFIX}.bat
     
-    # copy dependecies (TODO: to be reduced)
+    # copy dependencies (TODO: to be reduced)
     if [ "$MINGW_POSTFIX" = "64" ]; then
 	mingw_libgcc=libgcc_s_seh-1.dll
     else

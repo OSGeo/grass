@@ -24,7 +24,7 @@ The following rules apply to the vector data:
   On the contrary, lines can cross each other, e.g. bridges over rivers.
 - Lines and boundaries share nodes only if their endpoints are identical.
   Lines or boundaries can be forced to share a common node by snapping
-  them together. This is particulary important since nodes
+  them together. This is particularly important since nodes
   are not represented in the coor file, but only implicitly as
   endpoints of lines and boundaries.
 - Common area boundaries should appear only once (i.e., should not be

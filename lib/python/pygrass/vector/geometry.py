@@ -961,7 +961,7 @@ class Line(Geo):
 
     def prune_thresh(self, threshold):
         """Remove points in threshold, using the ``Vect_line_prune_thresh``
-        C funtion.
+        C function.
 
         :param threshold: the threshold value where prune points
         :type threshold: num
@@ -1017,10 +1017,10 @@ class Line(Geo):
     def segment(self, start, end):
         """Create line segment. using the ``Vect_line_segment`` C function.
 
-        :param start: distance from the begining of the line where
+        :param start: distance from the beginning of the line where
                       the segment start
         :type start: float
-        :param end: distance from the begining of the line where
+        :param end: distance from the beginning of the line where
                     the segment end
         :type end: float
 

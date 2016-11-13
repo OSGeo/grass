@@ -5,7 +5,7 @@
 
 
 /* this is actually the Weisberg-Bingham stat. I need to
-   OCR the constants and implment this Cdhc_correctly */
+   OCR the constants and implement this Cdhc_correctly */
 
 double *Cdhc_shapiro_francia(double *x, int n)
 {

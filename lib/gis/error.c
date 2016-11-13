@@ -119,7 +119,7 @@ void G_verbose_message(const char *msg, ...)
 /*!
  * \brief Print a message to stderr even in brief mode (verbosity=1)
  *
- * Ususally just G_percent()/G_clicker() would be shown at this level.
+ * Usually just G_percent()/G_clicker() would be shown at this level.
  * This allows important non-error/warning messages to display as well.
  *
  * The output format depends on environment variables

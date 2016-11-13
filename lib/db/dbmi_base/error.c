@@ -205,7 +205,7 @@ void db_print_error(void)
 static int debug_on = 0;
 
 /*!
-  \brief Turn on debuging
+  \brief Turn on debugging
 */
 void db_debug_on(void)
 {
@@ -213,7 +213,7 @@ void db_debug_on(void)
 }
 
 /*!
-  \brief Turn off debuging
+  \brief Turn off debugging
 */
 void db_debug_off(void)
 {

@@ -846,7 +846,7 @@ def install_extension_xml(url, mlist):
 
     Uses the remote/repository XML files for modules to obtain the metadata.
 
-    :returns: list of executables (useable for ``update_manual_page()``)
+    :returns: list of executables (usable for ``update_manual_page()``)
     """
     if len(mlist) > 1:
         # read metadata from remote server (toolboxes)
@@ -968,7 +968,7 @@ def download_source_code_svn(url, name, outdev, directory=None):
     :param url: URL of the repository
         (module class/family and name are attached)
     :param name: module name
-    :param outdev: output devide for the standard output of the svn command
+    :param outdev: output divide for the standard output of the svn command
     :param directory: directory where the source code will be downloaded
         (default is the current directory with name attached)
 
@@ -992,7 +992,7 @@ def move_extracted_files(extract_dir, target_dir, files):
 
     When extracting, it is not clear what will be the root directory
     or if there will be one at all. So this function moves the files to
-    a different directory in the way that if there was one direcory extracted,
+    a different directory in the way that if there was one directory extracted,
     the contained files are moved.
     """
     gscript.debug("move_extracted_files({})".format(locals()))
@@ -1123,7 +1123,7 @@ def download_source_code(source, url, name, outdev,
 
 
 def install_extension_std_platforms(name, source, url):
-    """Install extension on standard plaforms"""
+    """Install extension on standard platforms"""
     gisbase = os.getenv('GISBASE')
     if source == 'official':
         gscript.message(_("Fetching <%s> from "
@@ -1538,7 +1538,7 @@ def resolve_known_host_service(url):
             if url.startswith(start + value['domain']):
                 match = value
                 actual_start = start
-                gscript.verbose(_("Indentified {} as known hosting service")
+                gscript.verbose(_("Identified {} as known hosting service")
                                 .format(key))
                 for suffix in value['ignored_suffixes']:
                     if url.endswith(suffix):
@@ -1572,7 +1572,7 @@ def resolve_source_code(url=None, name=None):
     as remote URLs. When path is not evaluated, Subversion is assumed for
     backwards compatibility. When GitHub repository is specified, ZIP file
     link is returned. The ZIP is for master branch, not the default one because
-    GitHub does not provide the deafult branch in the URL (July 2015).
+    GitHub does not provide the default branch in the URL (July 2015).
 
     :returns: tuple with type of source and full URL or path
 
@@ -1662,7 +1662,7 @@ def resolve_source_code(url=None, name=None):
 
 
 def main():
-    # check dependecies
+    # check dependencies
     if not flags['a'] and sys.platform != "win32":
         check_progs()
 

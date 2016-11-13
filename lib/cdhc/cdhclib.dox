@@ -32,7 +32,7 @@ $(CDHCLIB)
 
 in the <tt>Makefile</tt>.
 
-\section listOfFunctios List of functions (incomplete)
+\section listOfFunctions List of functions (incomplete)
 
 - Cdhc_anderson_darling()
 - Cdhc_anderson_darling_exp()

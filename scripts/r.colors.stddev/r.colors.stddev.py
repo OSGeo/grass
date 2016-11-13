@@ -2,7 +2,7 @@
 ############################################################################
 #
 # MODULE:       r.colors.stddev
-# AUTHOR:       M. Hamish Bowman, Dept. Marine Science, Otago Univeristy,
+# AUTHOR:       M. Hamish Bowman, Dept. Marine Science, Otago University,
 #                 New Zealand
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Set color rules based on stddev from a map's mean value.

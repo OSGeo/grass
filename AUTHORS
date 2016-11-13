@@ -48,13 +48,13 @@ Summary view:
 https://www.openhub.net/p/grass_gis
 
 
-GRASS 7.0 major project contributers
+GRASS 7.0 major project contributors
 ------------------------------------
 
 LEAD ARCHITECTS
  - Glynn Clements <glynn at gclements plus com>: libraries
  - Markus Metz <markus.metz.giswork gmail.com>: Vector library lead
- - Soeren Gebbert: temporal framwork lead
+ - Soeren Gebbert: temporal framework lead
  - Pietro Zambelli: Python API lead
 
 GUI
@@ -136,7 +136,7 @@ Power user tester:
    Maciej "Maciek" Sieczka <msieczka at sieczka.org>
 
 
-GRASS 6.0 - 6.2 major project contributers
+GRASS 6.0 - 6.2 major project contributors
 ------------------------------------------
 
 PROJECT INTEGRATION
