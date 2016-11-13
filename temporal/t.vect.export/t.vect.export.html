@@ -15,6 +15,7 @@ exported from. The file "readme.txt" describes the file format. The
 output of <em>v.info</em> for each vector map in the space time dataset is
 stored in "metadata.txt".
 <p>
+
 The tar archive can be compressed using the <b>compress</b> option. Gzip
 and bzip2 (default) are available. A <b>where</b> option can be specified,
 to export only a subset of the space time dataset. Archives exported
@@ -22,8 +23,8 @@ with <em>t.vect.export</em> can be imported with
 <em><a href="t.vect.import.html">t.vect.import</a></em>.
 
 <h2>NOTES</h2>
-The name of output file has to specify the suffix of the archive, the
-following suffix has to be added:
+The name of output file has to carry the suffix of the archive type, the
+following suffix can be used:
 <ul>
 <li><b>.tar</b> in the case of <b>compress=no</b></li>
 <li><b>.tar.bzip2</b> in the case of <b>compress=bzip2</b></li>
