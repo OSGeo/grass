@@ -108,8 +108,7 @@ int main(int argc, char *argv[])
     opt.rules = G_define_standard_option(G_OPT_F_INPUT);
     opt.rules->key = "rules";
     opt.rules->required = NO;
-    opt.rules->label = _("Path to rules file");
-    opt.rules->description = _("\"-\" to read rules from stdin");
+    opt.rules->description = _("Path to rules file");
     opt.rules->guisection = _("Define");
 
     opt.rgbcol = G_define_standard_option(G_OPT_DB_COLUMN);
@@ -232,7 +231,7 @@ int main(int argc, char *argv[])
 
     is_from_stdin = rules && strcmp(rules, "-") == 0;
     if (is_from_stdin)
-        rules = NULL;
+        G_fatal_error(_("Reading rules from standard input is not implemented yet, please provide path to rules file instead."));
 
     mapset = G_find_vector(name, "");
     if (!mapset)
