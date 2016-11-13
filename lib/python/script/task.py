@@ -636,7 +636,7 @@ def cmdtuple_to_list(cmd):
         if k in ('flags', 'help', 'verbose', 'quiet', 'overwrite'):
             continue
         if ' ' in v:
-            v = '"{}"'.format(v)
+            v = '"%s"' % v
         cmdList.append('%s=%s' % (k, v))
 
     return cmdList
