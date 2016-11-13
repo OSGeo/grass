@@ -4,16 +4,17 @@
 archive. The archive contains the raster maps either as GeoTIFF files or as GRASS
 binary files exported using <em>r.pack</em>. The map specific color tables
 are exported in case of GeoTIFF files. In addition several metadata files
-are created in the archive that describe the temporal layout.
-All time stamps are stored in the file "list.txt". For each map
-one row. The name of the map, the start time and the end time are
-written. In case of a time instance, the start time is equal to the end
-time. The "init.txt" files stores the temporal type, the number of
-maps, the chosen export format and some other metadata. The "proj.txt"
-files stores the projection information as proj4 string of the location
-the space time raster dataset was exported from. The file "readme.txt"
-describes the file format. The output of <em>r.info</em> is stored in
-"metadata.txt".
+are created in the archive that describe the
+temporal layout. All time stamps are stored in the file "list.txt",
+for each map one row. The name of the map, the start time and the
+end time are written. In case of a time instance, the start time is
+equal to the end time. The "init.txt" file stores the temporal type,
+the number of maps, the chosen export format and some other
+metadata. The "proj.txt" file stores the projection information as a
+proj4 string of the location the space time raster dataset was
+exported from. The file "readme.txt" describes the file format. The
+output of <em>r.info</em> for each raster map in the space time dataset is
+stored in "metadata.txt".
 <p>
 
 The tar archive can be compressed using the <b>compress</b> option. Gzip
@@ -23,17 +24,17 @@ with <em>t.rast.export</em> can be imported with
 <em><a href="t.vect.import.html">t.rast.import</a></em>.
 
 <h2>NOTES</h2>
-The name of output file has to specify the suffix of the archive, the
-following suffix has to be added:
+The name of output file has to carry the suffix of the archive type, the
+following suffix can be used:
 <ul>
 <li><b>.tar</b> in the case of <b>compress=no</b></li>
 <li><b>.tar.bzip2</b> in the case of <b>compress=bzip2</b></li>
 <li><b>.tar.gzip</b> in the case of <b>compress=gzip</b></li>
-</ul> 
+</ul>
 
 <h2>EXAMPLE</h2>
 
-In this example, all the maps of 2012 of "tempmean_monthly" will be exported:
+In this example, all the raster maps of 2012 of "tempmean_monthly" will be exported:
 
 <div class="code"><pre>
 t.rast.export input=tempmean_monthly output=tempmean_monthly.tar.bzip2 \
