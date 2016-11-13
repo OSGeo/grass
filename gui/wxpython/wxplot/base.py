@@ -19,15 +19,8 @@ import os
 import sys
 
 import wx
-from core.globalvar import CheckWxVersion
-try:
-    if CheckWxVersion(version=[3, 0, 0]):
-        import gui_core.wxlibplot as plot
-    else:
-        import wx.lib.plot as plot
-except ImportError as e:
-    print >> sys.stderr, e
 
+import gui_core.wxlibplot as plot
 from core.globalvar import ICONDIR
 from core.settings import UserSettings
 from wxplot.dialogs import TextDialog, OptDialog
