@@ -482,7 +482,7 @@ int add_geometry_ogr(struct Plus_head *plus,
 	    }
 	}
 
-	/* go thru rings */
+	/* go through rings */
 	for (iPart = 0; iPart < nRings; iPart++) {
 	    ogr_info->cache.lines_types[iPart] = GV_BOUNDARY;
 	    hRing = OGR_G_GetGeometryRef(hGeom, iPart);
@@ -589,7 +589,7 @@ int add_geometry_ogr(struct Plus_head *plus,
 	    }
 	}
 	
-	/* go thru all parts */
+	/* go through all parts */
 	for (i = 0; i < nParts; i++) {
 	    add_part(parts, i);
 	    hGeom2 = OGR_G_GetGeometryRef(hGeom, i);
@@ -673,7 +673,7 @@ void build_ogr(struct Map_info *Map, int build)
 /*!
    \brief Build pseudo-topology (for simple features) - internal use only
 
-   See Vect_build_ogr() and Vect_build_pg() for implemetation issues.
+   See Vect_build_ogr() and Vect_build_pg() for implementation issues.
    
    Build levels:
     - GV_BUILD_NONE

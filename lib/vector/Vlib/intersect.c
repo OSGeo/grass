@@ -190,7 +190,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     G_debug(2, "Vect_segment_intersection(): d = %f, d1 = %f, d2 = %f", d, d1,
 	    d2);
 
-    /* TODO: dtol was originaly set to 1.0e-10, which was usualy working but not always. 
+    /* TODO: dtol was originally set to 1.0e-10, which was usually working but not always. 
      *       Can it be a problem to set the tolerance to 0.0 ? */
     dtol = 0.0;
     if (fabs(d) > dtol) {

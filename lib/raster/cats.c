@@ -456,7 +456,7 @@ char *Rast_get_cat(void *rast,
 /*!
  * \brief Sets marks for all categories to 0.
  *
- * This initializes Categories structure for subsequest calls to
+ * This initializes Categories structure for subsequent calls to
  * Rast_mark_cats() for each row of data, where non-zero mark for
  * i-th label means that some of the cells in rast_row are labeled
  * with i-th label and fall into i-th data range. These marks help
@@ -822,7 +822,7 @@ int Rast_set_d_cat(const DCELL * rast1, const DCELL * rast2,
        want to store both rules with identical range even though the result
        of get_cat() will be correct, since it will use rule added later.
        we don't want to overuse memory and we don't want rules which are
-       not used to be writen out in cats file. So we first look if
+       not used to be written out in cats file. So we first look if
        the label for this range has been sen, and if it has, overwrite it */
 
     for (i = 0; i < pcats->ncats; i++) {

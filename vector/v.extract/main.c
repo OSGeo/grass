@@ -299,13 +299,13 @@ int main(int argc, char **argv)
 			  nfeatures, opt.type->answer);
 
 	/* Let's create an array of uniq CAT values
-	   According to Vlib/build.c, cidx should be allready sorted by dig_cidx_sort() */
+	   According to Vlib/build.c, cidx should be already sorted by dig_cidx_sort() */
 	ci = &(In.plus.cidx[Vect_cidx_get_field_index(&In, field)]);
 	ucat_count = 0;
 	for (c = 0; c < ci->n_cats; c++) {
 	    /* Bitwise AND compares ci feature type with user's requested types */
 	    if (ci->cat[c][1] & type) {
-		/* Don't do anything if such value allready exists */
+		/* Don't do anything if such value already exists */
 		if (ucat_count > 0 &&
 		    ucat_array[ucat_count - 1] == ci->cat[c][0])
 		    continue;

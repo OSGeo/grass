@@ -33,8 +33,8 @@ arrays in an SWF movie, that can be played on a wide range of OS's.
 This module came into being because I wanted to store a series of images
 in a movie that can be viewed by other people, and which I can embed in
 flash presentations. For writing AVI or MPEG you really need a c/c++
-library, and allthough the filesize is then very small, the quality is
-sometimes not adequate. Besides I'd like to be independant of yet another
+library, and although the filesize is then very small, the quality is
+sometimes not adequate. Besides I'd like to be independent of yet another
 package. I tried writing animated gif using PIL (which is widely available),
 but the quality is so poor because it only allows for 256 different colors.
 [EDIT: thanks to Ant1, now the quality of animated gif isn't so bad!]
@@ -247,7 +247,7 @@ else:
 
     def intToUint16(i):
         i = int(i)
-        # devide in two parts (bytes)
+        # divide in two parts (bytes)
         i1 = i % 256
         i2 = int(i // 256)
         # make string (little endian)
@@ -546,7 +546,7 @@ class DoActionTag(Tag):
             elif action == 'play':
                 bb += '\x06'.encode('ascii')
             else:
-                print("warning, unkown action: %s" % action)
+                print("warning, unknown action: %s" % action)
 
         bb += intToUint8(0)
         self.bytes = bb

@@ -62,7 +62,7 @@ int do_geogrid(void)
      * start with first grid line just south of the window north
      */
 
-    /* initialze projection stuff */
+    /* initialize projection stuff */
     init_proj(&info_in, &info_out);
 
     /* get lat long min max */
@@ -258,7 +258,7 @@ int do_geogrid_numbers(void)
 }
 
 /******************************************************
- * initialze projection stuff and return proj structures
+ * initialize projection stuff and return proj structures
 ********************************************************/
 void init_proj(struct pj_info *info_in, struct pj_info *info_out)
 {

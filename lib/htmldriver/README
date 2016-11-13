@@ -65,7 +65,7 @@ that exists in a vector file will have the same HREF tag.
 
 	export GRASS_RENDER_HTMLMINBBOX
 	GRASS_RENDER_HTMLMINBBOX=xx
-	    specifies the minimum bounding box dimenions (both width and
+	    specifies the minimum bounding box dimensions (both width and
 	    height) in order to store a polygon.  The default is '2', which
 	    means any polygon having bounding box width or height extent
 	    of less than 2 pixels will not be output as a clickable area.  

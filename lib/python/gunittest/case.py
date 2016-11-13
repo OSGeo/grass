@@ -113,7 +113,7 @@ class TestCase(unittest.TestCase):
         ``g.region save=``, then sets ``WIND_OVERRIDE`` to refer
         to that region.
         """
-        # we use just the class name since we rely on the invokation system
+        # we use just the class name since we rely on the invocation system
         # where each test file is separate process and nothing runs
         # in parallel inside
         name = "tmp.%s" % (cls.__name__)
@@ -136,7 +136,7 @@ class TestCase(unittest.TestCase):
                                " or temporary region in general\n"
                                "Region to which should be now deleted ({n})"
                                " by TestCase class"
-                               "does not corresond to currently set"
+                               "does not correspond to currently set"
                                " WIND_OVERRIDE ({c})",
                                n=cls._temp_region, c=name)
         call_module("g.remove", quiet=True, flags='f', type='region', name=name)
@@ -158,7 +158,7 @@ class TestCase(unittest.TestCase):
         package which preserves the original newline characters.
 
         This function removes the burden of getting the newline characters
-        right on each platfrom. You can just use ``\n`` everywhere and this
+        right on each platform. You can just use ``\n`` everywhere and this
         function will ensure that it does not matter if for example,
         a module generates (as expected) ``\r\n`` (CRLF) newline characters
         on MS Windows.
@@ -176,7 +176,7 @@ class TestCase(unittest.TestCase):
             first=first, second=second, msg=msg)
 
     def assertLooksLike(self, actual, reference, msg=None):
-        r"""Test that ``actual`` text is the same as ``referece`` with ellipses.
+        r"""Test that ``actual`` text is the same as ``reference`` with ellipses.
 
         If ``actual`` contains platform dependent newline characters,
         these will replaced by ``\n`` which is expected to be in the test data.
@@ -599,7 +599,7 @@ class TestCase(unittest.TestCase):
 
             md5sum some_file.png
 
-        Finaly, you can use Python ``hashlib`` to obtain MD5::
+        Finally, you can use Python ``hashlib`` to obtain MD5::
 
             import hashlib
             hasher = hashlib.md5()
@@ -723,7 +723,7 @@ class TestCase(unittest.TestCase):
 
         :returns: name of a new vector
         """
-        # hash is the easiest way how to get a valied vector name
+        # hash is the easiest way how to get a valid vector name
         # TODO: introduce some function which will make file valid
         hasher = hashlib.md5()
         hasher.update(filename)
@@ -770,7 +770,7 @@ class TestCase(unittest.TestCase):
                 call_module('g.remove', flags='f', type='raster', name=diff)
         else:
             # general case
-            # TODO: we are using r.info min max and r.univar min max interchangably
+            # TODO: we are using r.info min max and r.univar min max interchangeably
             # but they might be different if region is different from map
             # not considered as an huge issue since we expect the tested maps
             # to match with region, however a documentation should containe a notice
@@ -817,7 +817,7 @@ class TestCase(unittest.TestCase):
                 call_module('g.remove', flags='f', type='raster_3d', name=diff)
         else:
             # general case
-            # TODO: we are using r.info min max and r.univar min max interchangably
+            # TODO: we are using r.info min max and r.univar min max interchangeably
             # but they might be different if region is different from map
             # not considered as an huge issue since we expect the tested maps
             # to match with region, however a documentation should contain a notice

@@ -46,7 +46,7 @@ class TestTextAssertions(TestCase):
                              "abc = 689...")
         self.assertLooksLike("abc = 689.159589",
                              "abc = 689.15...")
-        # this should fail accoring to the implementation
+        # this should fail according to the implementation
         # first three dots are considered as ellipses
         self.assertRaises(self.failureException,
                           self.assertLooksLike,

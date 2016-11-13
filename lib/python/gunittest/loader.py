@@ -134,7 +134,7 @@ def discover_modules(start_dir, skip_dirs, testsuite_dir,
                     modules.append(GrassTestPythonModule(
                         name=name, module=None, tested_dir=root, file_dir=full,
                         abs_file_path=abs_file_path, file_type=file_type))
-                # in else with some verbose we could tell about skiped test
+                # in else with some verbose we could tell about skipped test
     return modules
 
 

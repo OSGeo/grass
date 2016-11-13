@@ -241,7 +241,7 @@ static int compare_ellipse_names(const void *pa, const void *pb)
   \param fatal non-zero value for G_fatal_error(), otherwise
   G_warning() is used
 
-  \return 1 on sucess
+  \return 1 on success
   \return 0 on error
 */
 int G_read_ellipsoid_table(int fatal)

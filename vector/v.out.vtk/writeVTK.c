@@ -24,7 +24,7 @@
 
 
 /*Prototype */
-/*Formated coordinates output */
+/*Formatted coordinates output */
 static void write_point_coordinates(struct line_pnts *Points, int dp,
 				    double scale, FILE * ascii);
 

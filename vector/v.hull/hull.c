@@ -75,7 +75,7 @@ int convexHull(struct Point *P, int numPoints, int **hull)
     G_debug(3, "numPoints:%d loPoints:%d upPoints:%d",
 	    numPoints, loPoints, upPoints);
 
-    /* reclaim uneeded memory */
+    /* reclaim unneeded memory */
     *hull = (int *)G_realloc(*hull, (loPoints + upPoints) * sizeof(int));
     return loPoints + upPoints;
 }

@@ -34,6 +34,6 @@ P db_driver_open_database      - add user and password, ? datasource
 x db_driver_version
 
 + implemented and works, but you can improve it
-P partialy implemented, needs improvements
+P partially implemented, needs improvements
 - not implemented, waiting for you
-x not planed now - impossible or not urgent
+x not planned now - impossible or not urgent

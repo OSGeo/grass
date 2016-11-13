@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   These routines can affect the Vect_read_next_line() funtions by
+   These routines can affect the Vect_read_next_line() functions by
    restricting what they return. They are applied on a per map basis.
 
    These do not affect the lower level direct read functions.

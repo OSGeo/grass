@@ -56,7 +56,7 @@ static double compute_lines_angle(struct line_pnts *line_pnts_from,
     int n_points_to = Vect_get_num_line_points(line_pnts_to);
 
 
-    /* If one of the lines has same begining and end, the angle cannot be 
+    /* If one of the lines has same beginning and end, the angle cannot be 
        calculated, because the angle is computed between lines given by start and 
        end point regardless line segments between the points. */
     Vect_line_get_point(line_pnts_from, 0, &x1, &y1, &z);

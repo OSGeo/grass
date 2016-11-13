@@ -24,7 +24,7 @@
    \param height window height
 
    \return 1 on success
-   \return 0 on failure (window resized by dafault to 20x20 px)
+   \return 0 on failure (window resized by default to 20x20 px)
  */
 int Nviz_resize_window(int width, int height)
 {

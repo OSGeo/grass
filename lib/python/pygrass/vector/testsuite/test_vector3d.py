@@ -49,7 +49,7 @@ class VectorTopo3DTestCase(TestCase):
         with VectorTopo(self.tmpname, mode="r") as vect:
             # reading the generated vector points map
             arr = np.array([(p.x, p.y, p.z) for p in vect])
-            # verify the correspondance
+            # verify the correspondence
             for i, coords in enumerate((self.x, self.y, self.z)):
                 np.testing.assert_almost_equal(arr.T[i], coords)
 

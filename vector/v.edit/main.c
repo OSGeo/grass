@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct GParams params;
     struct Map_info Map;
-    struct Map_info **BgMap;	/* backgroud vector maps */
+    struct Map_info **BgMap;	/* background vector maps */
     int nbgmaps;		/* number of registrated background maps */
     enum mode action_mode;
     FILE *ascii;
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 
     G_debug(1, "Map opened");
     
-    /* open backgroud maps */
+    /* open background maps */
     if (params.bmaps->answer) {
 	i = 0;
 

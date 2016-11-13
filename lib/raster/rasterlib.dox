@@ -1029,7 +1029,7 @@ based on the number of columns in the current region.
 
  - Rast_incr_void_ptr()
 
-Advances void pointer by n bytes. Returns new pointer value. Usefull
+Advances void pointer by n bytes. Returns new pointer value. Useful
 in raster row processing loops, substitutes
 
 \code
@@ -1044,7 +1044,7 @@ rast = Rast_incr_void_ptr(rast, Rast_raster_size(data_type));
 \endcode
 
 Where <i>rast</i> is void* and data_type is RASTER_MAP_TYPE can be
-used instead of rast++.) Very usefull to generalize the row processing
+used instead of rast++.) Very useful to generalize the row processing
 - loop (i.e. void * buf_ptr += Rast_raster_size(data_type))
 
  - Rast_raster_size()
@@ -1599,7 +1599,7 @@ Sets the quant rules to perform simple rounding on floats.
 Organizes fp_lookup table for faster (logarithmic) lookup time
 Rast_quant_organize_fp_lookup() creates a list of min and max for each
 quant rule, sorts this list, and stores the pointer to quant rule that
-should be used inbetween any 2 numbers in this list Also it stores
+should be used in between any 2 numbers in this list Also it stores
 extreme points for 2 infinite rules, if exist After the call to
 Rast_quant_organize_fp_lookup() instead of linearly searching through
 list of rules to find a rule to apply, quant lookup will perform a
@@ -1678,7 +1678,7 @@ directly either do not compile with new gis library or work exactly
 the same as bnefore.  A programmer might want to read the data in a
 floating point map in a way that each cell value stores index of it's
 category label and data range. The way to do it is to call
-Rast_set_quant_rules() after openning the map.
+Rast_set_quant_rules() after opening the map.
 
 This is helpful when trying to collect statistics (how many cells of
 each category are in the map. (although there is another new mechanism
@@ -1782,7 +1782,7 @@ Returns pointer to a string with title.
  - Rast_unmark_cats()
 
 Sets marks for all categories to 0. This initializes Categories
-structure for subsequest calls to Rast_mark_cats () for each row
+structure for subsequent calls to Rast_mark_cats () for each row
 of data, where non-zero mark for i-th label means that some of the
 cells in rast_row are labeled with i-th label and fall into i-th data
 range.
@@ -1917,7 +1917,7 @@ $(RASTERLIB)
 
 in the <tt>Makefile</tt>.
 
-\section listOfFunctios List of functions
+\section listOfFunctions List of functions
 
 <b>TODO: Reorder functions</b>
 

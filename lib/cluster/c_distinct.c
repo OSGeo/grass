@@ -19,7 +19,7 @@
   \param C pointer to Cluster structure
   \param separation separation value
 
-  \return distiction value
+  \return distinction value
 */
 int I_cluster_distinct(struct Cluster *C, double separation)
 {

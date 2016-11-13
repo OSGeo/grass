@@ -65,7 +65,7 @@ def get_table_random_values(nrows, columns):
     vals, dtype = [], []
     for cname, ctype in columns:
         if ctype not in COL2VALS:
-            raise TypeError("Unkown column type %s for: %s" % (ctype, cname))
+            raise TypeError("Unknown column type %s for: %s" % (ctype, cname))
         vals.append(COL2VALS[ctype](nrows))
         dtype.append((cname, vals[-1].dtype.str))
     return np.array([v for v in zip(*vals)], dtype=dtype)

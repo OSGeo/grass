@@ -53,7 +53,7 @@ int left_turn(struct Point *p1, struct Point *p2, struct Point *p3)
     }
 }
 
-/** returns true if p is inbetween the segment e along the x axis
+/** returns true if p is in between the segment e along the x axis
 */
 int in_between(struct Point *p, struct Line *e)
 {

@@ -254,7 +254,7 @@ class AttributeExpressionNode(ExpressionNode):
         ExpressionNode.visit(self, visitor)
 
     def evaluate(self, context):
-        return self.op(self.base.evalute(context), self.attribute)
+        return self.op(self.base.evaluate(context), self.attribute)
 
     def py_string(self, can_be_ctype):
         if can_be_ctype:

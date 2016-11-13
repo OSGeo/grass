@@ -319,7 +319,7 @@ class RasterDataset(AbstractMapDataset):
            the metadata of the map is put into this object and True is returned
 
            :return: True is the map exists and the metadata was filled
-                    successfully and getting the data was successfull,
+                    successfully and getting the data was successful,
                     False otherwise
         """
 
@@ -664,7 +664,7 @@ class Raster3DDataset(AbstractMapDataset):
            the metadata of the map is put into this object and True is returned
 
            :return: True is the map exists and the metadata was filled
-                    successfully and getting the data was successfull,
+                    successfully and getting the data was successful,
                     False otherwise
         """
 
@@ -969,7 +969,7 @@ class VectorDataset(AbstractMapDataset):
            the metadata of the map is put into this object and True is returned
 
            :return: True is the map exists and the metadata was filled
-                    successfully and getting the data was successfull,
+                    successfully and getting the data was successful,
                     False otherwise
         """
 

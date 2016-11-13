@@ -193,7 +193,7 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
 	}
     }				/* for each line */
 
-    /* destroy stuctures */
+    /* destroy structures */
     Vect_destroy_line_struct(Points1);
     Vect_destroy_line_struct(Points2);
     Vect_destroy_line_struct(Points);

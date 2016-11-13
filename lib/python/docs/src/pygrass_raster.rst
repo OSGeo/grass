@@ -177,17 +177,17 @@ methods to read a map:
     * ``get_row`` calls the C function ``Segment_get_row`` and returns a buffer
       object with the row. ::
 
-        >>> # call explicity the method
+        >>> # call explicitly the method
         >>> elev_row0 = elev.get_row(0)
-        >>> # call implicity the method
+        >>> # call implicitly the method
         >>> elev_row0 = elev[0]
 
     * ``get`` calls the C function ``Segment_get`` and returns the value of the
       map cell. ::
 
-        >>> # call explicity the method
+        >>> # call explicitly the method
         >>> elev_val_0_0 = elev.get(0, 0)
-        >>> # call implicity the method
+        >>> # call implicitly the method
         >>> elev_val_0_0 = elev[0, 0]
 
 Similarly, writing to a map uses two methods: ``put_row`` to write a row and

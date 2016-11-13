@@ -126,7 +126,7 @@ double G_distance_point_to_line_segment(double xp, double yp,
     double xq, yq, ra, rb;
     int t;
 
-    /* define the perpendicular to the segment thru the point */
+    /* define the perpendicular to the segment through the point */
     dx = x1 - x2;
     dy = y1 - y2;
 

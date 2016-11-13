@@ -239,11 +239,11 @@ def main():
     max_rows = int(options['maxrows']) - int(options['overlap'])
 
     if max_cols == 0:
-        gcore.fatal(_("It is not possibile to set 'maxcols=%s' and "
+        gcore.fatal(_("It is not possible to set 'maxcols=%s' and "
                       "'overlap=%s'. Please set maxcols>overlap" %
                       (options['maxcols'], options['overlap'])))
     elif max_rows == 0:
-        gcore.fatal(_("It is not possibile to set 'maxrows=%s' and "
+        gcore.fatal(_("It is not possible to set 'maxrows=%s' and "
                       "'overlap=%s'. Please set maxrows>overlap" %
                       (options['maxrows'], options['overlap'])))
     # destination projection
@@ -327,7 +327,7 @@ def main():
     # In the direction (x or y) in which the world is least skewed (ie north south in lat long)
     # Divide the world into strips. These strips are as big as possible contrained by max_
     # In the other direction do the same thing.
-    # Theres some recomputation of the size of the world that's got to come in
+    # There's some recomputation of the size of the world that's got to come in
     # here somewhere.
 
     # For now, however, we are going to go ahead and request more data than is necessary.

@@ -1,7 +1,7 @@
 /*!
  * \file lib/vector/Vlib/net_analyze.c
  *
- * \brief Vector library - releated fns for vector network analyses
+ * \brief Vector library - related fns for vector network analyses
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *

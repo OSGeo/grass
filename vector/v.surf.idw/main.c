@@ -484,7 +484,7 @@ void calculate_distances(int row, int column, double north,
 	}
 	else {
 
-	    /* go thru rest of the points now */
+	    /* go through rest of the points now */
 	    dy = points[row][column][j].north - north;
 	    dx = points[row][column][j].east - east;
 	    dist = dy * dy + dx * dx;
@@ -524,7 +524,7 @@ void calculate_distances_noindex(double north, double east)
 	if (maxdist < list[n].dist)
 	    maxdist = list[max = n].dist;
     }
-    /* go thru rest of the points now */
+    /* go through rest of the points now */
     for (; i < npoints; i++) {
 	dy = noidxpoints[i].north - north;
 	dx = noidxpoints[i].east - east;

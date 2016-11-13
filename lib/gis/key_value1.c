@@ -18,7 +18,7 @@
 /*!
    \brief Allocate and initialize Key_Value structure
 
-   \return poiter to allocated Key_Value structure
+   \return pointer to allocated Key_Value structure
  */
 struct Key_Value *G_create_key_value(void)
 {
@@ -78,7 +78,7 @@ void G_set_key_value(const char *key, const char *value, struct Key_Value *kv)
    \param key key to be found
    \param kv pointer to Key_value structure
 
-   \return poiter to value of key
+   \return pointer to value of key
    \return NULL if no key found
  */
 const char *G_find_key_value(const char *key, const struct Key_Value *kv)

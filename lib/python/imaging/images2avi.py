@@ -32,7 +32,7 @@
 
 Uses ffmpeg to read and write AVI files. Requires PIL
 
-I found these sites usefull:
+I found these sites useful:
 http://www.catswhocode.com/blog/19-ffmpeg-commands-for-all-needs
 http://linux.die.net/man/1/ffmpeg
 

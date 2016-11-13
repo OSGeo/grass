@@ -173,7 +173,7 @@ double G_database_units_to_meters_factor(void)
   
   Returns a pointer to the name of the map datum of the current
   database. If there is no map datum explicitely associated with the
-  acutal database, the standard map datum WGS84 is returned, on error
+  actual database, the standard map datum WGS84 is returned, on error
   a NULL pointer is returned.
   
   \return datum name

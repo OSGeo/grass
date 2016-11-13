@@ -1153,7 +1153,7 @@ if test -n "$USE_MYSQL"; then
 
   LOC_CHECK_LIBS(mysqlclient,mysql_query,MySQL,$MYSQLLIBPATH,MYSQLLIB,,,,$ZLIB,$SOCKLIB,$MATHLIB)
 
-  # Check for libmysqld (for embeded version of the driver)
+  # Check for libmysqld (for embedded version of the driver)
   AC_PATH_PROG(MYSQLD_CONFIG, mysql_config, no)
 
   if test "$MYSQLD_CONFIG" = "no" ; then

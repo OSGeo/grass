@@ -18,7 +18,7 @@ r.mapcalc --o expr="prec_6 = rand(60, 650)" -s
 t.register -i --o maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
     start="2001-01-01" increment="1 month"
 
-# We need to create three space time dataset and registe the maps
+# We need to create three space time dataset and register the maps
 # in several space time datasets
 t.create --o type=strds temporaltype=absolute output=precip_abs1 \
 	title="Test" descr="This is the 1 test strds" semantictype=sum

@@ -767,7 +767,7 @@ N_les *N_assemble_les_2d_param(int les_type, N_geom_data * geom,
  *
  * The provided les will be modified:
  *
- * Ax = b will be splitted into Ax_u + Ax_d = b
+ * Ax = b will be split into Ax_u + Ax_d = b
  *
  * x_u - the unknowns
  * x_d - the Dirichlet cells
@@ -1220,7 +1220,7 @@ N_les *N_assemble_les_3d_param(int les_type, N_geom_data * geom,
  *
  * The provided les will be modified:
  *
- * Ax = b will be splitted into Ax_u + Ax_d = b
+ * Ax = b will be split into Ax_u + Ax_d = b
  *
  * x_u - the unknowns
  * x_d - the Dirichlet cells

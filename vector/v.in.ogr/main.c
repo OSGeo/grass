@@ -1038,7 +1038,7 @@ int main(int argc, char *argv[])
 		    Ogr_fieldname = G_store(namebuf);
 		}
 
-		/* captial column names are a pain in SQL */
+		/* capital column names are a pain in SQL */
 		if (flag.tolower->answer)
 		    G_str_to_lower(Ogr_fieldname);
 

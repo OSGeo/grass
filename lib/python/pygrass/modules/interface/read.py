@@ -105,10 +105,10 @@ underscore.
 run_: True, optional
     If True execute the module.
 finish_: True, optional
-    If True wait untill the end of the module execution, and store the module
+    If True wait until the end of the module execution, and store the module
     outputs into stdout, stderr attributes of the class.
 stdin_: PIPE, optional
     Set the standard input.
 env_: dictionary, optional
-    Set the evironment variables.
+    Set the environment variables.
 """}

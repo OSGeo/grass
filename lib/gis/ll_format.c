@@ -14,7 +14,7 @@ G_llres_format (res, buf)
 
   formats lat (latitude in degrees), or lon (longitude in degrees)
   into buf as dd:mm:ssH, where H (hemishpere) is
-      N for nothern hemishpere, S for southern,
+      N for northern hemishpere, S for southern,
       W for western hemishpere, E for eastern
       none for resolution
   (lat > 0 is northern, lat < 0 is southern)

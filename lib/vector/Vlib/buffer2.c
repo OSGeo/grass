@@ -68,7 +68,7 @@ static void rotate_vector(double x, double y, double cosa, double sina,
 }
 
 /*
- * (x,y) shoud be normalized vector for common transforms; This func transforms (x,y) to a vector corresponding to da, db, dalpha params
+ * (x,y) should be normalized vector for common transforms; This func transforms (x,y) to a vector corresponding to da, db, dalpha params
  * dalpha is in radians
  */
 static void elliptic_transform(double x, double y, double da, double db,
@@ -278,7 +278,7 @@ static void parallel_line(struct line_pnts *Points, double da, double db,
 	    res = line_intersection(a0, b0, c0, a1, b1, c1, &rx, &ry);
 	    /*                if (res == 0) {
 	       G_debug(4, "a0=%.18f, b0=%.18f, c0=%.18f, a1=%.18f, b1=%.18f, c1=%.18f", a0, b0, c0, a1, b1, c1);
-	       G_fatal_error("Two consequtive line segments are parallel, but not on one straight line! This should never happen.");
+	       G_fatal_error("Two consecutive line segments are parallel, but not on one straight line! This should never happen.");
 	       return;
 	       }  */
 	    if (res == 1) {
@@ -503,7 +503,7 @@ static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
     struct pg_edge *edge;	/* current edge; must be edge of vert */
 
     /*    int cs; *//* on which side are we turning along the contour */
-    /* we will always turn right and dont need that one */
+    /* we will always turn right and don't need that one */
     double opt_angle, tangle;
     int opt_j, opt_side, opt_flag;
 
@@ -946,7 +946,7 @@ static void buffer_lines(struct line_pnts *area_outer, struct line_pnts **area_i
 
 		/* we need to check if the area is in the buffer.
 		   I've simplfied convolution_line(), so that it runs faster,
-		   however that leads to ocasional problems */
+		   however that leads to occasional problems */
 		if (check_poly && Vect_point_in_poly
 		    (cPoints->x[0], cPoints->y[0], area_isles[i])) {
 		    if (Vect_get_point_in_poly(cPoints, &px, &py) == 0) {
@@ -1166,7 +1166,7 @@ void Vect_point_buffer2(double px, double py, double da, double db,
 
 
 /*
-   \brief Create parrallel line
+   \brief Create parallel line
 
    See also Vect_line_parallel().
    

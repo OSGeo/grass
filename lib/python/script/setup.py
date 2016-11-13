@@ -132,7 +132,7 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     which is a common operating system limitation).
 
     To create a (fake) GRASS session a ``gisrc`` file is created.
-    Caller is resposible for deleting the ``gisrc`` file.
+    Caller is responsible for deleting the ``gisrc`` file.
 
     Basic usage::
 

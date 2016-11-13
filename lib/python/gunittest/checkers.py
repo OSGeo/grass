@@ -21,7 +21,7 @@ except (ImportError, AttributeError):
     # interface, should be replaced by central keyvalue module
     # this can happen when translations are not available
     # TODO: grass should survive are give better error when tranlsations are not available
-    # even the lazy loading after firts _ call would be interesting
+    # even the lazy loading after first _ call would be interesting
     # File "...grass/script/core.py", line 40, in <module>
     # AttributeError: 'NoneType' object has no attribute 'endswith'
     KeyValue = dict
@@ -317,7 +317,7 @@ def keyvalue_equals(dict_a, dict_b, precision,
     :param dict key_equal: dictionary of functions used for comparison
         of specific keys, `def_equal` is used for the rest,
         keys in dictionary are keys in `dict_a` and `dict_b` dictionaries,
-        values are the fuctions used to comapare the given key
+        values are the functions used to comapare the given key
     :param a_is_subset: `True` if `dict_a` is a subset of `dict_b`,
         `False` otherwise
 
@@ -429,7 +429,7 @@ def proj_info_equals(text_a, text_b):
 def proj_units_equals(text_a, text_b):
     """Test if two PROJ_UNITS texts are equal."""
     def lowercase_equals(string_a, string_b, precision=None):
-        # we don't need a waring for unused precision
+        # we don't need a warning for unused precision
         # pylint: disable=W0613
         """Test equality of two strings ignoring their case using ``lower()``.
 

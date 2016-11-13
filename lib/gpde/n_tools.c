@@ -5,7 +5,7 @@
 * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
 * 		soerengebbert <at> gmx <dot> de
 *               
-* PURPOSE:     	Array managment functions 
+* PURPOSE:     	Array management functions 
 * 		part of the gpde library
 *
 * COPYRIGHT:    (C) 2000 by the GRASS Development Team

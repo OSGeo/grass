@@ -6,7 +6,7 @@
 * 		soerengebbert <at> gmx <dot> de
 *               
 * PURPOSE:      part of the gpde library
-* 		allocation, destroing and initializing the geometric struct
+* 		allocation, destroying and initializing the geometric struct
 *
 * COPYRIGHT:    (C) 2000 by the GRASS Development Team
 *
@@ -137,7 +137,7 @@ N_geom_data *N_init_geom_data_2d(struct Cell_head * region,
 
 	meters = G_database_units_to_meters_factor();	/*this function is not thread safe */
 
-	/*set the dim to 2d if it was not initiated with 3, thats a bit ugly :( */
+	/*set the dim to 2d if it was not initiated with 3, that's a bit ugly :( */
 	if (geom->dim != 3)
 	    geom->dim = 2;
 
