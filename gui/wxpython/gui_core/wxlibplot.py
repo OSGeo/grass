@@ -118,17 +118,20 @@ import sys
 import wx
 
 # Needs NumPy
-try:
-    import numpy as np
-except:
-    msg = """
-    This module requires the NumPy module, which could not be
-    imported.  It probably is not installed (it's not part of the
-    standard Python distribution). See the Numeric Python site
-    (http://numpy.scipy.org) for information on downloading source or
-    binaries."""
-    raise ImportError("NumPy not found.\n" + msg)
+import numpy as np
 
+from core.globalvar import CheckWxVersion
+if CheckWxVersion([3, 0, 0]):
+    from wx import PENSTYLE_SOLID
+    from wx import PENSTYLE_DOT_DASH
+    from wx import PENSTYLE_DOT
+    from wx import BRUSHSTYLE_SOLID
+    from wx import BRUSHSTYLE_TRANSPARENT
+else:
+    from wx import SOLID as PENSTYLE_SOLID
+    from wx import SOLID as BRUSHSTYLE_SOLID
+    from wx import DOT_DASH as PENSTYLE_DOT_DASH
+    from wx import TRANSPARENT as BRUSHSTYLE_TRANSPARENT
 
 #
 # Plotting classes...
@@ -230,7 +233,7 @@ class PolyLine(PolyPoints):
 
     _attributes = {'colour': 'black',
                    'width': 1,
-                   'style': wx.PENSTYLE_SOLID,
+                   'style': PENSTYLE_SOLID,
                    'legend': ''}
 
     def __init__(self, points, **attr):
@@ -280,7 +283,7 @@ class PolySpline(PolyLine):
 
     _attributes = {'colour': 'black',
                    'width': 1,
-                   'style': wx.PENSTYLE_SOLID,
+                   'style': PENSTYLE_SOLID,
                    'legend': ''}
 
     def __init__(self, points, **attr):
@@ -326,7 +329,7 @@ class PolyMarker(PolyPoints):
                    'width': 1,
                    'size': 2,
                    'fillcolour': None,
-                   'fillstyle': wx.BRUSHSTYLE_SOLID,
+                   'fillstyle': BRUSHSTYLE_SOLID,
                    'marker': 'circle',
                    'legend': ''}
 
@@ -1179,7 +1182,7 @@ class PlotCanvas(wx.Panel):
         if dc is None:
             # sets new dc and clears it
             dc = wx.BufferedDC(wx.ClientDC(self.canvas), self._Buffer)
-            bbr = wx.Brush(self.GetBackgroundColour(), wx.BRUSHSTYLE_SOLID)
+            bbr = wx.Brush(self.GetBackgroundColour(), BRUSHSTYLE_SOLID)
             dc.SetBackground(bbr)
             dc.SetBackgroundMode(wx.SOLID)
             dc.Clear()
@@ -1696,7 +1699,7 @@ class PlotCanvas(wx.Panel):
         # draw rectangle
         dc = wx.ClientDC(self.canvas)
         dc.SetPen(wx.Pen(wx.BLACK))
-        dc.SetBrush(wx.Brush(wx.WHITE, wx.BRUSHSTYLE_TRANSPARENT))
+        dc.SetBrush(wx.Brush(wx.WHITE, BRUSHSTYLE_TRANSPARENT))
         dc.SetLogicalFunction(wx.INVERT)
         dc.DrawRectangle(ptx, pty, rectWidth, rectHeight)
         dc.SetLogicalFunction(wx.COPY)
@@ -2142,14 +2145,14 @@ def _draw2Objects():
     data1.shape = (100, 2)
     data1[:, 1] = np.sin(data1[:, 0])
     line1 = PolySpline(
-        data1, legend='Green Line', colour='green', width=6, style=wx.PENSTYLE_DOT)
+        data1, legend='Green Line', colour='green', width=6, style=PENSTYLE_DOT)
 
     # 50 points cos function, plotted as red dot-dash
     data1 = 2. * np.pi * np.arange(100) / 100.
     data1.shape = (50, 2)
     data1[:, 1] = np.cos(data1[:, 0])
     line2 = PolySpline(
-        data1, legend='Red Line', colour='red', width=3, style=wx.PENSTYLE_DOT_DASH)
+        data1, legend='Red Line', colour='red', width=3, style=PENSTYLE_DOT_DASH)
 
     # A few more points...
     pi = np.pi
@@ -2352,7 +2355,7 @@ class TestFrame(wx.Frame):
         """
         # ----------
         dc.SetPen(wx.Pen(wx.BLACK))
-        dc.SetBrush(wx.Brush(wx.BLACK, wx.BRUSHSTYLE_SOLID))
+        dc.SetBrush(wx.Brush(wx.BLACK, BRUSHSTYLE_SOLID))
 
         sx, sy = mDataDict["scaledXY"]  # scaled x,y of closest point
         # 10by10 square centered on point

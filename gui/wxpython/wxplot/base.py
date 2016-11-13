@@ -19,20 +19,13 @@ import os
 import sys
 
 import wx
-from core.globalvar import CheckWxVersion
-try:
-    if CheckWxVersion(version=[3, 0, 0]):
-        import gui_core.wxlibplot as plot
-    else:
-        import wx.lib.plot as plot
-except ImportError as e:
-    print >> sys.stderr, e
 
-from core.globalvar    import ICONDIR
-from core.settings     import UserSettings
-from wxplot.dialogs    import TextDialog, OptDialog
-from core.render       import Map
-from icons.icon        import MetaIcon
+import gui_core.wxlibplot as plot
+from core.globalvar import ICONDIR
+from core.settings import UserSettings
+from wxplot.dialogs import TextDialog, OptDialog
+from core.render import Map
+from icons.icon import MetaIcon
 from gui_core.toolbars import BaseIcons
 from core.utils import _
 
