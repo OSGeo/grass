@@ -18,31 +18,13 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import math
+import numpy
 
 import wx
-from core.globalvar import CheckWxVersion
-try:
-    if CheckWxVersion(version=[3, 0, 0]):
-        import gui_core.wxlibplot as plot
-    else:
-        import wx.lib.plot as plot
-except ImportError as e:
-    print >> sys.stderr, e
 
+import gui_core.wxlibplot as plot
 import grass.script as grass
 from core.utils import _
-
-try:
-    import numpy
-except ImportError:
-    msg = _(
-        "This module requires the NumPy module, which could not be "
-        "imported. It probably is not installed (it's not part of the "
-        "standard Python distribution). See the Numeric Python site "
-        "(http://numpy.scipy.org) for information on downloading source or "
-        "binaries.")
-    print >> sys.stderr, "wxplot.py: " + msg
-
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from wxplot.dialogs import ProfileRasterDialog, PlotStatsFrame
