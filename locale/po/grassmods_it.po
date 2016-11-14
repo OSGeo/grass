@@ -9953,6 +9953,9 @@ msgstr ""
 "Eseguire db.connect."
 
 #: ../vector/v.surf.bspline/main.c:252
+#: ../vector/v.lidar.edgedetection/main.c:192
+#: ../vector/v.lidar.edgedetection/main.c:204 ../vector/v.outlier/main.c:193
+#: ../vector/v.lidar.correction/main.c:172
 msgid "Old auxiliary table could not be dropped"
 msgstr ""
 
@@ -10104,6 +10107,8 @@ msgid "No data within this subregion. Consider increasing spline step values."
 msgstr ""
 
 #: ../vector/v.surf.bspline/main.c:942 ../vector/v.outlier/main.c:458
+#: ../vector/v.lidar.edgedetection/main.c:467
+#: ../vector/v.lidar.correction/main.c:439
 msgid "Auxiliary table could not be dropped"
 msgstr ""
 
@@ -10546,12 +10551,6 @@ msgstr "Non è possibile leggere il nome del database"
 msgid "Unable to read name of driver"
 msgstr "Non è possibile leggere il nome del driver"
 
-#: ../vector/v.lidar.edgedetection/main.c:192
-#: ../vector/v.lidar.edgedetection/main.c:204 ../vector/v.outlier/main.c:193
-#: ../vector/v.lidar.correction/main.c:172
-msgid "Old auxiliary table could not be dropped"
-msgstr ""
-
 #: ../vector/v.lidar.edgedetection/main.c:223 ../vector/v.outlier/main.c:205
 #: ../vector/v.lidar.correction/main.c:190
 #, c-format
@@ -10613,11 +10612,6 @@ msgstr ""
 #: ../vector/v.lidar.correction/main.c:437
 #, c-format
 msgid "Dropping <%s>"
-msgstr ""
-
-#: ../vector/v.lidar.edgedetection/main.c:467
-#: ../vector/v.lidar.correction/main.c:439
-msgid "Auxiliary table could not be dropped"
 msgstr ""
 
 #: ../vector/v.lidar.edgedetection/edgedetection.c:228
