@@ -10671,7 +10671,7 @@ msgstr "ไม่สามารถอ่าน ชื่อของ ตัว�
 #: ../vector/v.lidar.edgedetection/main.c:204 ../vector/v.outlier/main.c:193
 #: ../vector/v.lidar.correction/main.c:172
 #, fuzzy
-msgid "Old auxiliary table could not be dropped"
+msgid "Old auxiliar table could not be dropped"
 msgstr "ตาราง Auxiliar ไม่สามารถ dropped"
 
 #: ../vector/v.lidar.edgedetection/main.c:223 ../vector/v.outlier/main.c:205
@@ -10742,7 +10742,7 @@ msgstr "Dropping <%s>"
 
 #: ../vector/v.lidar.edgedetection/main.c:467
 #: ../vector/v.lidar.correction/main.c:439
-msgid "Auxiliary table could not be dropped"
+msgid "Auxiliar table could not be dropped"
 msgstr "ตาราง Auxiliar ไม่สามารถ dropped"
 
 #: ../vector/v.lidar.edgedetection/edgedetection.c:228

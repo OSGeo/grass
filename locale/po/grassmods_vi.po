@@ -10072,7 +10072,7 @@ msgstr ""
 #: ../vector/v.surf.bspline/main.c:252
 #, fuzzy
 msgid "Old auxiliary table could not be dropped"
-msgstr "Không thể bỏ bảng phụ (auxiliary table)"
+msgstr "Không thể bỏ bảng phụ (auxiliar table)"
 
 #: ../vector/v.surf.bspline/main.c:262 ../vector/v.surf.bspline/main.c:330
 #: ../vector/v.outlier/main.c:200
@@ -10224,7 +10224,7 @@ msgstr ""
 #: ../vector/v.surf.bspline/main.c:942 ../vector/v.outlier/main.c:458
 #, fuzzy
 msgid "Auxiliary table could not be dropped"
-msgstr "Không thể bỏ bảng phụ (auxiliary table)"
+msgstr "Không thể bỏ bảng phụ (auxiliar table)"
 
 #: ../vector/v.surf.bspline/crosscorr.c:75
 #, c-format
@@ -10683,8 +10683,8 @@ msgstr "Không thể đọc tên trình điều khiển"
 #: ../vector/v.lidar.edgedetection/main.c:192
 #: ../vector/v.lidar.edgedetection/main.c:204 ../vector/v.outlier/main.c:193
 #: ../vector/v.lidar.correction/main.c:172
-msgid "Old auxiliary table could not be dropped"
-msgstr "Không thể bỏ bảng phụ (auxiliary table)"
+msgid "Old auxiliar table could not be dropped"
+msgstr "Không thể bỏ bảng phụ (auxiliar table)"
 
 #: ../vector/v.lidar.edgedetection/main.c:223 ../vector/v.outlier/main.c:205
 #: ../vector/v.lidar.correction/main.c:190
@@ -10752,8 +10752,8 @@ msgstr "Đang bỏ <%s>"
 
 #: ../vector/v.lidar.edgedetection/main.c:467
 #: ../vector/v.lidar.correction/main.c:439
-msgid "Auxiliary table could not be dropped"
-msgstr "Không thể bỏ bảng phụ (auxiliary table)"
+msgid "Auxiliar table could not be dropped"
+msgstr "Không thể bỏ bảng phụ (auxiliar table)"
 
 #: ../vector/v.lidar.edgedetection/edgedetection.c:228
 #: ../vector/v.lidar.edgedetection/edgedetection.c:274
