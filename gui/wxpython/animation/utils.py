@@ -245,7 +245,7 @@ def ComputeScaledRect(sourceSize, destSize):
 
 def RenderText(text, font, bgcolor, fgcolor):
     """Renderes text with given font to bitmap."""
-    dc = wx.MemoryDC()
+    dc = wx.MemoryDC(wx.EmptyBitmap(20, 20))
     dc.SetFont(font)
     w, h = dc.GetTextExtent(text)
     bmp = wx.EmptyBitmap(w + 2, h + 2)
