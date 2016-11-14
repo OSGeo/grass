@@ -4341,7 +4341,7 @@ msgstr ""
 #: ../lib/python/temporal/aggregation.py:316
 #, python-format
 msgid ""
-"The limit of open files (%i) was reached (%i). The module r.series will be "
+"The limit of open fiels (%i) was reached (%i). The module r.series will be "
 "run with flag z, to avoid open files limit exceeding."
 msgstr ""
 

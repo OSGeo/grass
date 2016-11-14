@@ -10721,7 +10721,7 @@ msgstr "Nelze číst jméno ovladače"
 #: ../vector/v.lidar.edgedetection/main.c:192
 #: ../vector/v.lidar.edgedetection/main.c:204 ../vector/v.outlier/main.c:193
 #: ../vector/v.lidar.correction/main.c:172
-msgid "Old auxiliary table could not be dropped"
+msgid "Old auxiliar table could not be dropped"
 msgstr "Nemohla být odstraněna pomocná tabulka"
 
 #: ../vector/v.lidar.edgedetection/main.c:223 ../vector/v.outlier/main.c:205
@@ -10789,7 +10789,7 @@ msgstr "Odstranění <%s>"
 
 #: ../vector/v.lidar.edgedetection/main.c:467
 #: ../vector/v.lidar.correction/main.c:439
-msgid "Auxiliary table could not be dropped"
+msgid "Auxiliar table could not be dropped"
 msgstr "Nemohla být odstraněna pomocná tabulka"
 
 #: ../vector/v.lidar.edgedetection/edgedetection.c:228
