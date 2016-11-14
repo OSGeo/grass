@@ -10059,8 +10059,9 @@ msgstr ""
 "Kết nối CSDL cho trình điều khiển <%s> không được định nghĩa. Hãy chạy db."
 "connect."
 
-#: ../vector/v.surf.bspline/main.c:252
-#, fuzzy
+#: ../vector/v.lidar.edgedetection/main.c:192
+#: ../vector/v.lidar.edgedetection/main.c:204 ../vector/v.outlier/main.c:193
+#: ../vector/v.lidar.correction/main.c:172
 msgid "Old auxiliary table could not be dropped"
 msgstr "Không thể bỏ bảng phụ (auxiliary table)"
 
@@ -10211,8 +10212,8 @@ msgstr "Nội suy: (%d,%d): Không có bản ghi cho điểm (cat = %d)"
 msgid "No data within this subregion. Consider increasing spline step values."
 msgstr ""
 
-#: ../vector/v.surf.bspline/main.c:942 ../vector/v.outlier/main.c:458
-#, fuzzy
+#: ../vector/v.lidar.edgedetection/main.c:467
+#: ../vector/v.lidar.correction/main.c:439
 msgid "Auxiliary table could not be dropped"
 msgstr "Không thể bỏ bảng phụ (auxiliary table)"
 
@@ -10669,12 +10670,6 @@ msgstr "Không thể nào đọc tên CSDL"
 msgid "Unable to read name of driver"
 msgstr "Không thể đọc tên trình điều khiển"
 
-#: ../vector/v.lidar.edgedetection/main.c:192
-#: ../vector/v.lidar.edgedetection/main.c:204 ../vector/v.outlier/main.c:193
-#: ../vector/v.lidar.correction/main.c:172
-msgid "Old auxiliary table could not be dropped"
-msgstr "Không thể bỏ bảng phụ (auxiliary table)"
-
 #: ../vector/v.lidar.edgedetection/main.c:223 ../vector/v.outlier/main.c:205
 #: ../vector/v.lidar.correction/main.c:190
 #, c-format
@@ -10738,11 +10733,6 @@ msgstr ""
 #, c-format
 msgid "Dropping <%s>"
 msgstr "Đang bỏ <%s>"
-
-#: ../vector/v.lidar.edgedetection/main.c:467
-#: ../vector/v.lidar.correction/main.c:439
-msgid "Auxiliary table could not be dropped"
-msgstr "Không thể bỏ bảng phụ (auxiliary table)"
 
 #: ../vector/v.lidar.edgedetection/edgedetection.c:228
 #: ../vector/v.lidar.edgedetection/edgedetection.c:274
