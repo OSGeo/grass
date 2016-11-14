@@ -862,6 +862,9 @@ class ReprojectionDialog(wx.Dialog):
         columns = [_('Layer id'),
                    _('Name for output GRASS map')]
 
+        self.layerBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY)
+        self.layerSizer = wx.StaticBoxSizer(self.layerBox, wx.HORIZONTAL)
+
         self.list = GListCtrl(parent=self.panel)
 
         for i in range(len(columns)):
@@ -873,8 +876,6 @@ class ReprojectionDialog(wx.Dialog):
             self.list.SetColumnWidth(col=i, width=width[i])
 
         self.list.LoadData(data)
-
-        self.layerBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY)
 
         self.labelText = wx.StaticText(parent=self.panel, id=wx.ID_ANY, label=_(
             "Projection of following layers do not match with projection of current location. "))
@@ -906,13 +907,11 @@ class ReprojectionDialog(wx.Dialog):
         dialogSizer.Add(item=self.labelText,
                         flag=wx.ALL | wx.EXPAND, border=5)
 
-        layerSizer = wx.StaticBoxSizer(self.layerBox, wx.HORIZONTAL)
-
-        layerSizer.Add(item=self.list, proportion=1,
-                       flag=wx.ALL | wx.EXPAND, border=5)
+        self.layerSizer.Add(item=self.list, proportion=1,
+                            flag=wx.ALL | wx.EXPAND, border=5)
 
         dialogSizer.Add(
-            item=layerSizer,
+            item=self.layerSizer,
             proportion=1,
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5)
