@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
     /* Release memory resources */
     G_free(data);
 
-    G_done_msg(_(" "));
+    G_done_msg(_("FFT is now complete"));
 
     exit(EXIT_SUCCESS);
 }

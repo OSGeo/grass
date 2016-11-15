@@ -327,7 +327,7 @@ int main(int argc, char *argv[])
 	G_message(n_("Calculating %d texture measure", 
         "Calculating %d texture measures", n_measures), n_measures);
     else
-	G_message(_("Calculating %s"), menu[measure_idx[0]].desc);
+	G_message(_("Calculating %s..."), menu[measure_idx[0]].desc);
     alloc_vars(size, dist);
     for (row = first_row; row < last_row; row++) {
 	G_percent(row, nrows, 2);

@@ -157,7 +157,7 @@ int main(int argc, char **argv)
     /* max intensity val */
     fprintf(fp, "255\n");
 
-    G_message(_("Converting ... "));
+    G_message(_("Converting... "));
 
     for (row = 0; row < w.rows; row++) {
 	G_percent(row, w.rows, 5);
