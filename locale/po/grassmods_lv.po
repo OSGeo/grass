@@ -3,23 +3,23 @@
 # Copyright (C) 2005-2016, GRASS Development Team
 #
 # Peteris Bruns <peteris.bruns@gmail.com>, 2005.
-# Maris Nartiss <maris.kde@gmail.com>, 2006, 2012, 2014.
+# Maris Nartiss <maris.kde@gmail.com>, 2006, 2012, 2014, 2016.
 # Māris Nartišs <mn@sungis.lv>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_lv\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-14 14:55+0100\n"
-"PO-Revision-Date: 2015-03-08 13:28+0200\n"
-"Last-Translator: Māris Nartišs <mn@sungis.lv>\n"
+"PO-Revision-Date: 2016-11-15 10:16+0200\n"
+"Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian <grass-translations@lists.osgeo.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 :"
+" 2);\n"
 
 #: ../raster3d/r3.out.netcdf/main.c:81
 #, fuzzy, c-format
@@ -385,9 +385,8 @@ msgid "Calculate statistics based on equal value groups"
 msgstr ""
 
 #: ../raster3d/r3.stats/main.c:71
-#, fuzzy
 msgid "Only print cell counts"
-msgstr "Drukāt šūnu skaitu"
+msgstr "Tikai izdrukāt šūnu skaitu"
 
 #: ../raster3d/r3.stats/main.c:91
 msgid "The number of subranges has to be equal or greater than 1"
@@ -1176,10 +1175,9 @@ msgstr "Importējamais rastra fails"
 #: ../raster3d/r3.in.ascii/main.c:87 ../db/db.execute/main.c:139
 #: ../db/db.select/main.c:208 ../raster/r.reclass/main.c:66
 #: ../raster/r.in.ascii/main.c:79 ../raster/r.recode/main.c:61
-#: ../locale/scriptstrings/m.proj_to_translate.c:8
-#: ../general/g.proj/main.c:141 ../general/g.proj/main.c:150
-#: ../vector/v.segment/main.c:80 ../vector/v.edit/args.c:89
-#: ../vector/v.what/main.c:76
+#: ../locale/scriptstrings/m.proj_to_translate.c:8 ../general/g.proj/main.c:141
+#: ../general/g.proj/main.c:150 ../vector/v.segment/main.c:80
+#: ../vector/v.edit/args.c:89 ../vector/v.what/main.c:76
 #, fuzzy
 msgid "'-' for standard input"
 msgstr "%-5d punkti nolasīti un ierakstīti izejā\n"
@@ -1405,9 +1403,8 @@ msgstr "Nezināms/nepazīstms tips"
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:5
 #: ../vector/v.out.lidar/main.c:473 ../vector/v.decimate/main.c:124
 #: ../vector/v.lidar.growing/main.c:76 ../vector/v.in.lidar/main.c:138
-#: ../vector/v.surf.bspline/main.c:94
-#: ../vector/v.lidar.edgedetection/main.c:73 ../vector/v.outlier/main.c:74
-#: ../vector/v.lidar.correction/main.c:69
+#: ../vector/v.surf.bspline/main.c:94 ../vector/v.lidar.edgedetection/main.c:73
+#: ../vector/v.outlier/main.c:74 ../vector/v.lidar.correction/main.c:69
 msgid "LIDAR"
 msgstr ""
 
@@ -1576,9 +1573,8 @@ msgstr "Nederīgs soļu skaits: %s"
 #: ../vector/v.in.ogr/main.c:270 ../vector/v.in.ogr/main.c:276
 #: ../vector/v.in.ogr/main.c:318 ../vector/v.out.ascii/args.c:35
 #: ../vector/v.out.ascii/args.c:81
-#, fuzzy
 msgid "Output"
-msgstr "Izejas rastra kartes nosaukums"
+msgstr "Izvade"
 
 #: ../raster3d/r3.in.lidar/main.c:195
 #, fuzzy
@@ -1892,41 +1888,38 @@ msgstr "%d punkti ielādēti\n"
 msgid "%lu input points were not valid, use -%c flag to filter them out"
 msgstr "%d punkti ielādēti\n"
 
-#: ../raster3d/r3.in.lidar/projection.c:36
-#: ../raster/r.in.lidar/projection.c:34 ../raster/r.external/proj.c:42
-#: ../raster/r.in.gdal/main.c:479 ../vector/v.in.pdal/projection.c:31
-#: ../vector/v.in.lidar/projection.c:32 ../vector/v.in.ogr/main.c:627
-#: ../vector/v.external/proj.c:51
+#: ../raster3d/r3.in.lidar/projection.c:36 ../raster/r.in.lidar/projection.c:34
+#: ../raster/r.external/proj.c:42 ../raster/r.in.gdal/main.c:479
+#: ../vector/v.in.pdal/projection.c:31 ../vector/v.in.lidar/projection.c:32
+#: ../vector/v.in.ogr/main.c:627 ../vector/v.external/proj.c:51
 msgid ""
 "Projection of dataset does not appear to match current location.\n"
 "\n"
 msgstr ""
 
-#: ../raster3d/r3.in.lidar/projection.c:42
-#: ../raster/r.in.lidar/projection.c:40 ../vector/v.in.pdal/projection.c:37
-#: ../vector/v.in.lidar/projection.c:38 ../vector/v.in.ogr/main.c:633
-#: ../vector/v.external/proj.c:57
+#: ../raster3d/r3.in.lidar/projection.c:42 ../raster/r.in.lidar/projection.c:40
+#: ../vector/v.in.pdal/projection.c:37 ../vector/v.in.lidar/projection.c:38
+#: ../vector/v.in.ogr/main.c:633 ../vector/v.external/proj.c:57
 #, fuzzy
 msgid "GRASS LOCATION PROJ_INFO is:\n"
 msgstr "nevar atvērt %s"
 
 #: ../raster3d/r3.in.lidar/projection.c:51
-#: ../raster3d/r3.in.lidar/projection.c:57
-#: ../raster/r.in.lidar/projection.c:49 ../raster/r.in.lidar/projection.c:55
-#: ../raster/r.external/proj.c:85 ../raster/r.in.gdal/main.c:531
-#: ../vector/v.in.pdal/projection.c:46 ../vector/v.in.pdal/projection.c:52
-#: ../vector/v.in.lidar/projection.c:47 ../vector/v.in.lidar/projection.c:53
-#: ../vector/v.in.ogr/main.c:643 ../vector/v.in.ogr/main.c:650
-#: ../vector/v.external/proj.c:67 ../vector/v.external/proj.c:74
+#: ../raster3d/r3.in.lidar/projection.c:57 ../raster/r.in.lidar/projection.c:49
+#: ../raster/r.in.lidar/projection.c:55 ../raster/r.external/proj.c:85
+#: ../raster/r.in.gdal/main.c:531 ../vector/v.in.pdal/projection.c:46
+#: ../vector/v.in.pdal/projection.c:52 ../vector/v.in.lidar/projection.c:47
+#: ../vector/v.in.lidar/projection.c:53 ../vector/v.in.ogr/main.c:643
+#: ../vector/v.in.ogr/main.c:650 ../vector/v.external/proj.c:67
+#: ../vector/v.external/proj.c:74
 #, fuzzy
 msgid "Import dataset PROJ_INFO is:\n"
 msgstr "nevar atvērt %s"
 
-#: ../raster3d/r3.in.lidar/projection.c:93
-#: ../raster/r.in.lidar/projection.c:91 ../raster/r.external/proj.c:107
-#: ../raster/r.in.gdal/main.c:549 ../vector/v.in.pdal/projection.c:88
-#: ../vector/v.in.lidar/projection.c:89 ../vector/v.in.ogr/main.c:689
-#: ../vector/v.external/proj.c:113
+#: ../raster3d/r3.in.lidar/projection.c:93 ../raster/r.in.lidar/projection.c:91
+#: ../raster/r.external/proj.c:107 ../raster/r.in.gdal/main.c:549
+#: ../vector/v.in.pdal/projection.c:88 ../vector/v.in.lidar/projection.c:89
+#: ../vector/v.in.ogr/main.c:689 ../vector/v.external/proj.c:113
 #, c-format
 msgid ""
 "\n"
@@ -1934,10 +1927,9 @@ msgid ""
 "-o flag to ignore them and use current location definition.\n"
 msgstr ""
 
-#: ../raster3d/r3.in.lidar/projection.c:97
-#: ../raster/r.in.lidar/projection.c:95 ../vector/v.in.pdal/projection.c:92
-#: ../vector/v.in.lidar/projection.c:93 ../vector/v.in.ogr/main.c:693
-#: ../vector/v.external/proj.c:117
+#: ../raster3d/r3.in.lidar/projection.c:97 ../raster/r.in.lidar/projection.c:95
+#: ../vector/v.in.pdal/projection.c:92 ../vector/v.in.lidar/projection.c:93
+#: ../vector/v.in.ogr/main.c:693 ../vector/v.external/proj.c:117
 msgid ""
 "Consider generating a new location with 'location' parameter from input data "
 "set.\n"
@@ -2253,22 +2245,22 @@ msgstr "Kalkulējam ēnas no DEM..."
 #: ../vector/v.in.db/main.c:302 ../vector/v.edit/select.c:516
 #: ../vector/v.out.ogr/main.c:635 ../vector/v.mkgrid/main.c:278
 #: ../vector/v.net.components/main.c:180 ../vector/v.in.ogr/main.c:1143
-#: ../vector/v.surf.bspline/main.c:378
-#: ../vector/v.surf.bspline/crosscorr.c:123 ../vector/v.in.dwg/main.c:213
-#: ../vector/v.to.points/main.c:167 ../vector/v.buffer/main.c:417
-#: ../vector/v.random/main.c:238 ../vector/v.kcv/main.c:126
-#: ../vector/v.in.dxf/write_vect.c:211 ../vector/v.what.rast/main.c:144
-#: ../vector/v.sample/main.c:179 ../vector/v.select/copy_tabs.c:77
-#: ../vector/v.patch/main.c:154 ../vector/v.patch/main.c:186
-#: ../vector/v.patch/main.c:307 ../vector/v.patch/main.c:389
-#: ../vector/v.in.ascii/main.c:346 ../vector/v.out.postgis/table.c:34
-#: ../vector/v.to.rast/vect2rast.c:60 ../vector/v.to.rast/support.c:109
-#: ../vector/v.to.rast/support.c:284 ../vector/v.to.rast/support.c:523
-#: ../vector/v.colors.out/make_colors.c:36 ../vector/v.to.db/query.c:89
-#: ../vector/v.to.db/update.c:46 ../vector/v.out.vtk/writeVTK.c:649
-#: ../vector/v.db.select/main.c:177 ../vector/v.to.3d/trans2.c:55
-#: ../vector/v.to.3d/trans3.c:57 ../vector/v.extrude/main.c:229
-#: ../vector/v.vol.rst/user1.c:99 ../vector/v.vol.rst/main.c:600
+#: ../vector/v.surf.bspline/main.c:378 ../vector/v.surf.bspline/crosscorr.c:123
+#: ../vector/v.in.dwg/main.c:213 ../vector/v.to.points/main.c:167
+#: ../vector/v.buffer/main.c:417 ../vector/v.random/main.c:238
+#: ../vector/v.kcv/main.c:126 ../vector/v.in.dxf/write_vect.c:211
+#: ../vector/v.what.rast/main.c:144 ../vector/v.sample/main.c:179
+#: ../vector/v.select/copy_tabs.c:77 ../vector/v.patch/main.c:154
+#: ../vector/v.patch/main.c:186 ../vector/v.patch/main.c:307
+#: ../vector/v.patch/main.c:389 ../vector/v.in.ascii/main.c:346
+#: ../vector/v.out.postgis/table.c:34 ../vector/v.to.rast/vect2rast.c:60
+#: ../vector/v.to.rast/support.c:109 ../vector/v.to.rast/support.c:284
+#: ../vector/v.to.rast/support.c:523 ../vector/v.colors.out/make_colors.c:36
+#: ../vector/v.to.db/query.c:89 ../vector/v.to.db/update.c:46
+#: ../vector/v.out.vtk/writeVTK.c:649 ../vector/v.db.select/main.c:177
+#: ../vector/v.to.3d/trans2.c:55 ../vector/v.to.3d/trans3.c:57
+#: ../vector/v.extrude/main.c:229 ../vector/v.vol.rst/user1.c:99
+#: ../vector/v.vol.rst/main.c:600
 #, fuzzy, c-format
 msgid "Unable to open database <%s> by driver <%s>"
 msgstr "Nevar atvērt datubāzi  %s pēc adreses %s"
@@ -2482,8 +2474,7 @@ msgstr ""
 #: ../vector/v.extrude/main.c:196 ../vector/v.vol.rst/main.c:580
 #: ../vector/v.vol.rst/main.c:583 ../vector/v.outlier/main.c:224
 #: ../vector/v.outlier/main.c:229 ../vector/v.outlier/main.c:235
-#: ../vector/v.net.visibility/main.c:77
-#: ../vector/v.lidar.correction/main.c:209
+#: ../vector/v.net.visibility/main.c:77 ../vector/v.lidar.correction/main.c:209
 #: ../vector/v.lidar.correction/main.c:215
 #: ../vector/v.net.connectivity/main.c:136
 #, fuzzy, c-format
@@ -2554,8 +2545,7 @@ msgstr "Rastra kartes nosaukums"
 #: ../vector/v.net.salesman/main.c:250 ../vector/v.to.3d/main.c:72
 #: ../vector/v.extrude/main.c:190 ../vector/v.vol.rst/main.c:560
 #: ../vector/v.univar/main.c:158 ../vector/v.net.visibility/main.c:73
-#: ../vector/v.net.visibility/main.c:82
-#: ../vector/v.lidar.correction/main.c:186
+#: ../vector/v.net.visibility/main.c:82 ../vector/v.lidar.correction/main.c:186
 #: ../vector/v.net.connectivity/main.c:130
 #, fuzzy, c-format
 msgid "Unable to open vector map <%s>"
@@ -2634,8 +2624,7 @@ msgstr ""
 msgid "Scale factor affects the origin"
 msgstr "neiespējami atvērt <%s>"
 
-#: ../raster3d/r3.out.vtk/parameters.c:123
-#: ../raster/r.out.vtk/parameters.c:128
+#: ../raster3d/r3.out.vtk/parameters.c:123 ../raster/r.out.vtk/parameters.c:128
 msgid "Correct the coordinates to match the VTK-OpenGL precision"
 msgstr ""
 
@@ -3250,9 +3239,8 @@ msgid "Power 2 values : %d rows %d columns"
 msgstr "%d rastrs %s, %d vektors %s\n"
 
 #: ../imagery/i.zc/main.c:142
-#, fuzzy
 msgid "Initializing data..."
-msgstr "Drukā ... "
+msgstr "Inicializē datus..."
 
 #: ../imagery/i.zc/main.c:152 ../raster/r.carve/raster.c:13
 #: ../raster/r.texture/main.c:288
@@ -3643,7 +3631,7 @@ msgstr "cnevar atvērt nepieciešamo daļu faila priekš %s"
 
 #: ../imagery/i.landsat.toar/main.c:204
 msgid "Date"
-msgstr ""
+msgstr "Datums"
 
 #: ../imagery/i.landsat.toar/main.c:205
 #, fuzzy
@@ -3737,9 +3725,8 @@ msgstr "Nevar ierakstīt ezera rastra karti <%s>!"
 
 #: ../imagery/i.landsat.toar/main.c:535 ../raster/r.topidx/topidx.c:41
 #: ../raster/r.flow/main.c:314
-#, fuzzy
 msgid "Calculating..."
-msgstr "Kalkulējam ēnas no DEM..."
+msgstr "Aprēķina..."
 
 #: ../imagery/i.landsat.toar/main.c:549 ../raster/r.relief/main.c:194
 #: ../raster/r.in.gdal/main.c:346 ../raster/r.in.gdal/main.c:693
@@ -4085,7 +4072,7 @@ msgstr ""
 #: ../imagery/i.rectify/main.c:342
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:393
 msgid "Exit!"
-msgstr ""
+msgstr "Iziet!"
 
 #: ../imagery/i.rectify/readcell.c:58
 #: ../imagery/i.ortho.photo/i.ortho.rectify/readcell.c:64
@@ -4674,9 +4661,8 @@ msgstr ""
 
 #: ../imagery/i.pca/main.c:109 ../imagery/i.pca/main.c:120
 #: ../raster/r.mfilter/main.c:80 ../raster/r.mfilter/main.c:99
-#, fuzzy
 msgid "Filter"
-msgstr "No tipa"
+msgstr "Filtrs"
 
 #: ../imagery/i.pca/main.c:113
 msgid "Normalize (center and scale) input maps"
@@ -5196,9 +5182,8 @@ msgstr "Pabeigts: "
 #: ../imagery/i.segment/flag.c:21 ../imagery/i.segment/flag.c:28
 #: ../vector/v.distance/main.c:748 ../vector/v.distance/main.c:825
 #: ../vector/v.distance/main.c:1033
-#, fuzzy
 msgid "Out of memory!"
-msgstr "Nav vairs operatīvās atmiņas!"
+msgstr "Pietrūkst atmiņas!"
 
 #: ../imagery/i.segment/watershed.c:19
 #, fuzzy
@@ -5588,9 +5573,9 @@ msgid ""
 msgstr ""
 
 #: ../imagery/i.vi/main.c:225
-#, fuzzy, c-format
+#, c-format
 msgid "Calculating %s..."
-msgstr "Kalkulējam ēnas no DEM..."
+msgstr "Aprēķina %s..."
 
 #: ../imagery/i.vi/main.c:228
 msgid "sr index requires red and nir maps"
@@ -6998,9 +6983,8 @@ msgid "Use initial values at run time"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:125
-#, fuzzy
 msgid "Print initial values"
-msgstr "Tabulu kopēšana"
+msgstr "Drukāt sākotnējās vērtības"
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:137
 #, fuzzy, c-format
@@ -7980,10 +7964,9 @@ msgstr ""
 msgid "illegal request"
 msgstr "izejas līmeņa nosaukums"
 
-#: ../ps/ps.map/catval.c:48 ../ps/ps.map/catval.c:110
-#: ../ps/ps.map/catval.c:176 ../vector/v.label.sa/labels.c:75
-#: ../vector/v.class/main.c:111 ../vector/v.label/main.c:274
-#: ../vector/v.vol.rst/user1.c:95
+#: ../ps/ps.map/catval.c:48 ../ps/ps.map/catval.c:110 ../ps/ps.map/catval.c:176
+#: ../vector/v.label.sa/labels.c:75 ../vector/v.class/main.c:111
+#: ../vector/v.label/main.c:274 ../vector/v.vol.rst/user1.c:95
 #, fuzzy
 msgid "Unable to get layer info for vector map"
 msgstr "Vektorkartes nosaukums"
@@ -7993,13 +7976,12 @@ msgstr "Vektorkartes nosaukums"
 msgid "Column type not supported (must be string)"
 msgstr "Kolonas tips nav atbalstīts"
 
-#: ../ps/ps.map/catval.c:66 ../ps/ps.map/catval.c:131
-#: ../ps/ps.map/catval.c:198 ../vector/v.out.lidar/main.c:132
-#: ../vector/v.out.lidar/main.c:167 ../vector/v.class/main.c:132
-#: ../vector/v.to.rast3/main.c:95 ../vector/v.surf.idw/read_sites.c:68
-#: ../vector/v.normal/main.c:134 ../vector/v.surf.bspline/main.c:392
-#: ../vector/v.sample/main.c:152 ../vector/v.vol.rst/user1.c:112
-#: ../vector/v.univar/main.c:366
+#: ../ps/ps.map/catval.c:66 ../ps/ps.map/catval.c:131 ../ps/ps.map/catval.c:198
+#: ../vector/v.out.lidar/main.c:132 ../vector/v.out.lidar/main.c:167
+#: ../vector/v.class/main.c:132 ../vector/v.to.rast3/main.c:95
+#: ../vector/v.surf.idw/read_sites.c:68 ../vector/v.normal/main.c:134
+#: ../vector/v.surf.bspline/main.c:392 ../vector/v.sample/main.c:152
+#: ../vector/v.vol.rst/user1.c:112 ../vector/v.univar/main.c:366
 #, fuzzy
 msgid "Unable to select data from table"
 msgstr "Nevar atlasīt datus no tabulas"
@@ -8055,9 +8037,8 @@ msgstr ""
 #: ../locale/scriptstrings/v.unpack_to_translate.c:11
 #: ../locale/scriptstrings/r.unpack_to_translate.c:7
 #: ../locale/scriptstrings/r.unpack_to_translate.c:10
-#, fuzzy
 msgid "Output settings"
-msgstr "Izejas rastra kartes nosaukums"
+msgstr "Izvades iestatījumi"
 
 #: ../ps/ps.map/main.c:105
 msgid "List paper formats (name width height left right top bottom(margin))"
@@ -8238,12 +8219,11 @@ msgid "illegal header sub-request"
 msgstr "izejas līmeņa nosaukums"
 
 #: ../db/db.connect/main.c:43 ../db/db.databases/main.c:95
-#: ../db/db.copy/main.c:35 ../db/db.execute/main.c:125
-#: ../db/db.login/main.c:40 ../db/db.select/main.c:265
-#: ../db/db.columns/main.c:99 ../db/db.dropdb/main.c:71
-#: ../db/db.drivers/main.c:71 ../db/db.describe/main.c:129
-#: ../db/db.createdb/main.c:71 ../db/db.tables/main.c:97
-#: ../locale/scriptstrings/db.in.ogr_to_translate.c:2
+#: ../db/db.copy/main.c:35 ../db/db.execute/main.c:125 ../db/db.login/main.c:40
+#: ../db/db.select/main.c:265 ../db/db.columns/main.c:99
+#: ../db/db.dropdb/main.c:71 ../db/db.drivers/main.c:71
+#: ../db/db.describe/main.c:129 ../db/db.createdb/main.c:71
+#: ../db/db.tables/main.c:97 ../locale/scriptstrings/db.in.ogr_to_translate.c:2
 #: ../locale/scriptstrings/db.test_to_translate.c:2
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:4
 #: ../locale/scriptstrings/v.db.update_to_translate.c:4
@@ -8442,9 +8422,8 @@ msgid "Lists all databases for a given driver and location."
 msgstr "Izveidot datubāzu sarakstu priekš dotā draivera un atrašanās vietas."
 
 #: ../db/db.copy/main.c:38
-#, fuzzy
 msgid "Copy a table."
-msgstr "Tabulu kopēšana"
+msgstr "Kopēt tabulu."
 
 #: ../db/db.copy/main.c:40
 #, fuzzy
@@ -8543,9 +8522,8 @@ msgid "For SELECT statements use 'db.select'."
 msgstr ""
 
 #: ../db/db.execute/main.c:132
-#, fuzzy
 msgid "SQL statement"
-msgstr "drukāt tikai sql formulējums"
+msgstr "SQL izteikums"
 
 #: ../db/db.execute/main.c:133
 msgid "Example: update rybniky set kapri = 'hodne' where kapri = 'malo'"
@@ -8562,9 +8540,8 @@ msgstr "Ignorēt SQL kļūdas un turpināt"
 
 #: ../db/db.execute/main.c:161 ../vector/v.build/main.c:51
 #: ../vector/v.build/main.c:77
-#, fuzzy
 msgid "Errors"
-msgstr "Kļūda: %s"
+msgstr "Kļūdas"
 
 #: ../db/db.execute/main.c:167
 #, fuzzy, c-format
@@ -8669,8 +8646,7 @@ msgstr ""
 
 #: ../db/db.select/main.c:241 ../raster/r.what/main.c:125
 #: ../raster/r.stats.quantile/main.c:553 ../raster/r.stats/main.c:119
-#: ../raster/r.univar/r.univar_main.c:41
-#: ../raster/r.univar/r3.univar_main.c:42
+#: ../raster/r.univar/r.univar_main.c:41 ../raster/r.univar/r3.univar_main.c:42
 #: ../locale/scriptstrings/i.oif_to_translate.c:5
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:6
 #: ../vector/v.db.select/main.c:95
@@ -9627,51 +9603,50 @@ msgstr ""
 #: ../vector/v.net.spanningtree/main.c:46
 #: ../vector/v.lrs/v.lrs.segment/main.c:71
 #: ../vector/v.lrs/v.lrs.create/main.c:121
-#: ../vector/v.lrs/v.lrs.where/main.c:57
-#: ../vector/v.lrs/v.lrs.label/main.c:102 ../vector/v.class/main.c:45
-#: ../vector/v.transform/main.c:69 ../vector/v.segment/main.c:60
-#: ../vector/v.overlay/main.c:63 ../vector/v.label/main.c:59
-#: ../vector/v.to.rast3/main.c:48 ../vector/v.drape/main.c:56
-#: ../vector/v.decimate/main.c:123 ../vector/v.net.steiner/main.c:346
-#: ../vector/v.type/main.c:38 ../vector/v.out.dxf/main.c:56
-#: ../vector/v.surf.idw/main.c:87 ../vector/v.normal/main.c:72
-#: ../vector/v.net.allpairs/main.c:61 ../vector/v.colors/main.c:55
-#: ../vector/v.net.timetable/main.c:260 ../vector/v.hull/main.c:52
-#: ../vector/v.db.connect/main.c:52 ../vector/v.generalize/main.c:76
-#: ../vector/v.vect.stats/main.c:124 ../vector/v.out.svg/main.c:77
-#: ../vector/v.distance/main.c:90 ../vector/v.net.path/main.c:42
-#: ../vector/v.perturb/main.c:62 ../vector/v.voronoi/main.c:123
-#: ../vector/v.lidar.growing/main.c:75 ../vector/v.in.lidar/main.c:136
-#: ../vector/v.surf.rst/main.c:141 ../vector/v.clean/main.c:51
-#: ../vector/v.clean/test/topocheck.c:42 ../vector/v.category/main.c:75
-#: ../vector/v.delaunay/main.c:85 ../vector/v.neighbors/main.c:50
-#: ../vector/v.build.polylines/main.c:111 ../vector/v.net.distance/main.c:66
-#: ../vector/v.in.db/main.c:52 ../vector/v.in.region/main.c:41
-#: ../vector/v.net.alloc/main.c:57 ../vector/v.edit/main.c:54
-#: ../vector/v.out.ogr/main.c:81 ../vector/v.net.bridge/main.c:47
-#: ../vector/v.support/main.c:39 ../vector/v.mkgrid/main.c:70
-#: ../vector/v.net.components/main.c:72 ../vector/v.in.ogr/main.c:135
-#: ../vector/v.kernel/main.c:109 ../vector/v.external/main.c:50
-#: ../vector/v.out.pov/main.c:46 ../vector/v.what/main.c:60
-#: ../vector/v.surf.bspline/main.c:91 ../vector/v.in.dwg/main.c:82
-#: ../vector/v.to.points/main.c:53 ../vector/v.buffer/main.c:221
-#: ../vector/v.random/main.c:97 ../vector/v.kcv/main.c:55
-#: ../vector/v.in.dxf/main.c:64 ../vector/v.what.rast/main.c:71
-#: ../vector/v.sample/main.c:75 ../vector/v.out.ascii/main.c:47
-#: ../vector/v.qcount/main.c:60 ../vector/v.select/main.c:48
-#: ../vector/v.external.out/main.c:43 ../vector/v.patch/main.c:69
-#: ../vector/v.lidar.edgedetection/main.c:72 ../vector/v.net/main.c:47
-#: ../vector/v.in.ascii/main.c:70 ../vector/v.out.postgis/main.c:44
-#: ../vector/v.to.rast/main.c:44 ../vector/v.build/main.c:36
-#: ../vector/v.colors.out/main.c:49 ../vector/v.split/main.c:54
-#: ../vector/v.proj/main.c:67 ../vector/v.to.db/main.c:36
-#: ../vector/v.parallel/main.c:49 ../vector/v.out.vtk/main.c:47
-#: ../vector/v.db.select/main.c:54 ../vector/v.net.iso/main.c:72
-#: ../vector/v.rectify/main.c:70 ../vector/v.net.salesman/main.c:127
-#: ../vector/v.to.3d/main.c:36 ../vector/v.extrude/main.c:67
-#: ../vector/v.vol.rst/main.c:235 ../vector/v.univar/main.c:92
-#: ../vector/v.outlier/main.c:69 ../vector/v.net.visibility/main.c:45
-#: ../vector/v.lidar.correction/main.c:68
+#: ../vector/v.lrs/v.lrs.where/main.c:57 ../vector/v.lrs/v.lrs.label/main.c:102
+#: ../vector/v.class/main.c:45 ../vector/v.transform/main.c:69
+#: ../vector/v.segment/main.c:60 ../vector/v.overlay/main.c:63
+#: ../vector/v.label/main.c:59 ../vector/v.to.rast3/main.c:48
+#: ../vector/v.drape/main.c:56 ../vector/v.decimate/main.c:123
+#: ../vector/v.net.steiner/main.c:346 ../vector/v.type/main.c:38
+#: ../vector/v.out.dxf/main.c:56 ../vector/v.surf.idw/main.c:87
+#: ../vector/v.normal/main.c:72 ../vector/v.net.allpairs/main.c:61
+#: ../vector/v.colors/main.c:55 ../vector/v.net.timetable/main.c:260
+#: ../vector/v.hull/main.c:52 ../vector/v.db.connect/main.c:52
+#: ../vector/v.generalize/main.c:76 ../vector/v.vect.stats/main.c:124
+#: ../vector/v.out.svg/main.c:77 ../vector/v.distance/main.c:90
+#: ../vector/v.net.path/main.c:42 ../vector/v.perturb/main.c:62
+#: ../vector/v.voronoi/main.c:123 ../vector/v.lidar.growing/main.c:75
+#: ../vector/v.in.lidar/main.c:136 ../vector/v.surf.rst/main.c:141
+#: ../vector/v.clean/main.c:51 ../vector/v.clean/test/topocheck.c:42
+#: ../vector/v.category/main.c:75 ../vector/v.delaunay/main.c:85
+#: ../vector/v.neighbors/main.c:50 ../vector/v.build.polylines/main.c:111
+#: ../vector/v.net.distance/main.c:66 ../vector/v.in.db/main.c:52
+#: ../vector/v.in.region/main.c:41 ../vector/v.net.alloc/main.c:57
+#: ../vector/v.edit/main.c:54 ../vector/v.out.ogr/main.c:81
+#: ../vector/v.net.bridge/main.c:47 ../vector/v.support/main.c:39
+#: ../vector/v.mkgrid/main.c:70 ../vector/v.net.components/main.c:72
+#: ../vector/v.in.ogr/main.c:135 ../vector/v.kernel/main.c:109
+#: ../vector/v.external/main.c:50 ../vector/v.out.pov/main.c:46
+#: ../vector/v.what/main.c:60 ../vector/v.surf.bspline/main.c:91
+#: ../vector/v.in.dwg/main.c:82 ../vector/v.to.points/main.c:53
+#: ../vector/v.buffer/main.c:221 ../vector/v.random/main.c:97
+#: ../vector/v.kcv/main.c:55 ../vector/v.in.dxf/main.c:64
+#: ../vector/v.what.rast/main.c:71 ../vector/v.sample/main.c:75
+#: ../vector/v.out.ascii/main.c:47 ../vector/v.qcount/main.c:60
+#: ../vector/v.select/main.c:48 ../vector/v.external.out/main.c:43
+#: ../vector/v.patch/main.c:69 ../vector/v.lidar.edgedetection/main.c:72
+#: ../vector/v.net/main.c:47 ../vector/v.in.ascii/main.c:70
+#: ../vector/v.out.postgis/main.c:44 ../vector/v.to.rast/main.c:44
+#: ../vector/v.build/main.c:36 ../vector/v.colors.out/main.c:49
+#: ../vector/v.split/main.c:54 ../vector/v.proj/main.c:67
+#: ../vector/v.to.db/main.c:36 ../vector/v.parallel/main.c:49
+#: ../vector/v.out.vtk/main.c:47 ../vector/v.db.select/main.c:54
+#: ../vector/v.net.iso/main.c:72 ../vector/v.rectify/main.c:70
+#: ../vector/v.net.salesman/main.c:127 ../vector/v.to.3d/main.c:36
+#: ../vector/v.extrude/main.c:67 ../vector/v.vol.rst/main.c:235
+#: ../vector/v.univar/main.c:92 ../vector/v.outlier/main.c:69
+#: ../vector/v.net.visibility/main.c:45 ../vector/v.lidar.correction/main.c:68
 #: ../vector/v.net.connectivity/main.c:52
 msgid "vector"
 msgstr "vektors"
@@ -9866,8 +9841,7 @@ msgstr ""
 msgid "Unable to write raster maps"
 msgstr "Rastra kartes nosaukums"
 
-#: ../raster/r.sim/simlib/hydro.c:465
-#: ../raster/r.sim/r.sim.sediment/main.c:411
+#: ../raster/r.sim/simlib/hydro.c:465 ../raster/r.sim/r.sim.sediment/main.c:411
 #, fuzzy
 msgid "Cannot write raster maps"
 msgstr "Nevaratvērt datubāzi %s"
@@ -10287,9 +10261,8 @@ msgid "Removing null file for [%s]...\n"
 msgstr ""
 
 #: ../raster/r.support/main.c:312
-#, fuzzy
 msgid "Done."
-msgstr "Padarīts.\n"
+msgstr "Padarīts."
 
 #: ../raster/r.support/check.c:26
 #, c-format
@@ -11242,9 +11215,9 @@ msgid "[%s]: No such color"
 msgstr ""
 
 #: ../raster/r.out.png/main.c:257
-#, fuzzy, c-format
+#, c-format
 msgid "Converting <%s>..."
-msgstr "Rakstu jaunu failu... \n"
+msgstr "Konvertē <%s>..."
 
 #: ../raster/r.out.png/main.c:272 ../raster/r.univar/r.univar_main.c:201
 #, fuzzy, c-format
@@ -11506,9 +11479,8 @@ msgstr "Izejas rastra kartes nosaukums"
 #: ../vector/v.vol.rst/main.c:372 ../vector/v.vol.rst/main.c:379
 #: ../vector/v.vol.rst/main.c:385 ../vector/v.vol.rst/main.c:391
 #: ../vector/v.vol.rst/main.c:397 ../vector/v.vol.rst/main.c:403
-#, fuzzy
 msgid "Outputs"
-msgstr "Izejas rastra kartes nosaukums"
+msgstr "Izvades"
 
 #: ../raster/r.slope.aspect/main.c:171 ../vector/v.surf.rst/main.c:201
 #, fuzzy
@@ -11647,7 +11619,64 @@ msgstr "3d skata fails <%s> nav atrasts"
 msgid "E-W slope raster map <%s> complete"
 msgstr "3d skata fails <%s> nav atrasts"
 
-#: ../raster/r.slope.aspect/main.c:1310
+#: ../raster/r.flow/precomp.c:48
+#, fuzzy
+msgid "Precomputing e/w distances..."
+msgstr "Drukā ... "
+
+#: ../raster/r.flow/precomp.c:50
+#, fuzzy
+msgid "Precomputing quantization tolerances..."
+msgstr "Tabulu kopēšana"
+
+#: ../raster/r.flow/precomp.c:53
+msgid "Precomputing inverted elevations..."
+msgstr ""
+
+#: ../raster/r.flow/precomp.c:57
+msgid "Precomputing interpolated border elevations..."
+msgstr ""
+
+#: ../raster/r.flow/precomp.c:63
+#, fuzzy
+msgid "Precomputing re-oriented aspects..."
+msgstr "Lasam dig_att failu...\n"
+
+#: ../raster/r.flow/precomp.c:67
+#, fuzzy
+msgid "Precomputing aspects..."
+msgstr "Drukā ... "
+
+#: ../raster/r.flow/precomp.c:111
+#, c-format
+msgid ""
+"Resolution too unbalanced:\n"
+"atan2(%f deg, %f deg) =%f < %f tolerance\n"
+"please resample input map"
+msgstr ""
+
+#: ../raster/r.flow/precomp.c:116
+#, c-format
+msgid "Resolution too unbalanced (%f x %f); please resample input map"
+msgstr ""
+
+#: ../raster/r.resamp.interp/main.c:77 ../raster/r.resamp.bspline/main.c:82
+#: ../raster/r.resamp.rst/main.c:149 ../raster/r.resamp.filter/main.c:390
+#: ../raster/r.resample/main.c:55 ../raster/r.resamp.stats/main.c:259
+#, fuzzy
+msgid "resample"
+msgstr "Attēlojamā rastra karte"
+
+#: ../raster/r.resamp.interp/main.c:80
+#, fuzzy
+msgid "Resamples raster map to a finer grid using interpolation."
+msgstr "Izejas rastra kartes nosaukums"
+
+#: ../raster/r.resamp.interp/main.c:88
+msgid "Method"
+msgstr "Metode"
+
+#: ../raster/r.resamp.interp/main.c:102 ../imagery/i.topo.corr/main.c:158
 #, fuzzy, c-format
 msgid "N-S slope raster map <%s> complete"
 msgstr "3d skata fails <%s> nav atrasts"
@@ -11688,13 +11717,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Raster map <%s> not found %s"
 msgstr "rastra karte <%s> nav atrasta"
-
-#: ../raster/r.resamp.bspline/main.c:82 ../raster/r.resample/main.c:55
-#: ../raster/r.resamp.rst/main.c:149 ../raster/r.resamp.filter/main.c:390
-#: ../raster/r.resamp.stats/main.c:259 ../raster/r.resamp.interp/main.c:77
-#, fuzzy
-msgid "resample"
-msgstr "Attēlojamā rastra karte"
 
 #: ../raster/r.resamp.bspline/main.c:83 ../raster/r.resamp.interp/main.c:78
 #: ../raster/r.series.interp/main.c:66 ../raster/r.surf.contour/main.c:62
@@ -12634,9 +12656,8 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.in.lidar/main.c:606
-#, fuzzy
 msgid "Reading data ..."
-msgstr "Drukā ... "
+msgstr "Nolasa datus..."
 
 #: ../raster/r.in.lidar/main.c:614 ../raster/r.in.xyz/main.c:636
 #: ../raster/r.in.poly/poly2rast.c:56
@@ -15033,7 +15054,7 @@ msgstr ""
 
 #: ../raster/r.stream.extract/do_astar.c:40
 msgid "A* Search..."
-msgstr ""
+msgstr "A* meklēšana..."
 
 #: ../raster/r.stream.extract/do_astar.c:62
 #, c-format
@@ -15217,9 +15238,8 @@ msgstr "Izejas rastra kartes nosaukums"
 #: ../raster/r.stream.extract/main.c:149 ../raster/r.stream.extract/main.c:156
 #: ../raster/r.stream.extract/main.c:163 ../raster/r.flow/main.c:459
 #: ../raster/r.flow/main.c:465 ../raster/r.flow/main.c:471
-#, fuzzy
 msgid "Output maps"
-msgstr "Izejas rastra kartes nosaukums"
+msgstr "Izvades kartes"
 
 #: ../raster/r.stream.extract/main.c:154
 #, fuzzy
@@ -15468,7 +15488,7 @@ msgstr ""
 
 #: ../raster/r.drain/main.c:123 ../raster/r.drain/main.c:164
 msgid "Cost surface"
-msgstr ""
+msgstr "Izmaksu virsma"
 
 #: ../raster/r.drain/main.c:131
 #, fuzzy
@@ -15797,13 +15817,11 @@ msgstr "Līmeņa nosaukums kuru izmantos RED(sarkanais)"
 msgid "Name of output layer to be used for blue"
 msgstr "Līmeņa nosaukums kuru izmantos RED(sarkanais)"
 
-#: ../raster/r.his/main.c:121
-#: ../locale/scriptstrings/r.shade_to_translate.c:12
+#: ../raster/r.his/main.c:121 ../locale/scriptstrings/r.shade_to_translate.c:12
 msgid "Color to use instead of NULL values"
 msgstr ""
 
-#: ../raster/r.his/main.c:126
-#: ../locale/scriptstrings/r.shade_to_translate.c:14
+#: ../raster/r.his/main.c:126 ../locale/scriptstrings/r.shade_to_translate.c:14
 #, fuzzy
 msgid "Use colors from color tables for NULL values"
 msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
@@ -15973,9 +15991,8 @@ msgstr ""
 #: ../vector/v.colors/main.c:106 ../vector/v.colors/main.c:112
 #: ../vector/v.colors/main.c:138 ../vector/v.colors/main.c:143
 #: ../vector/v.colors/main.c:148
-#, fuzzy
 msgid "Define"
-msgstr "Padarīts\n"
+msgstr "Definēt"
 
 #: ../raster/r.colors/edit_colors.c:96
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:8
@@ -16393,9 +16410,8 @@ msgstr ""
 #: ../vector/v.in.ascii/main.c:156 ../vector/v.in.ascii/main.c:166
 #: ../vector/v.in.ascii/main.c:190 ../vector/v.in.ascii/main.c:194
 #: ../vector/v.in.ascii/main.c:200 ../vector/v.in.ascii/main.c:205
-#, fuzzy
 msgid "Points"
-msgstr "Drukāt"
+msgstr "Punkti"
 
 #: ../raster/r.random/main.c:133
 #, fuzzy, c-format
@@ -16676,9 +16692,8 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.in.bin/main.c:575
-#, fuzzy
 msgid "File Size %"
-msgstr "No tipa"
+msgstr "Faila izmērs %"
 
 #: ../raster/r.in.bin/main.c:595
 #, fuzzy, c-format
@@ -17106,9 +17121,9 @@ msgid "%s: complete ... "
 msgstr ""
 
 #: ../raster/r.topmodel/file_io.c:56
-#, fuzzy, c-format
+#, c-format
 msgid "%s cannot be 0"
-msgstr "nevar atvērt %s"
+msgstr "%s nevar būt 0"
 
 #: ../raster/r.topmodel/file_io.c:209 ../raster/r.topmodel/topmodel.c:75
 #: ../vector/v.out.pov/main.c:104
@@ -18359,7 +18374,7 @@ msgstr ""
 
 #: ../raster/r.sunhours/main.c:118
 msgid "Day"
-msgstr ""
+msgstr "Diena"
 
 #: ../raster/r.sunhours/main.c:126
 msgid "Hour"
@@ -18541,23 +18556,13 @@ msgid "Unable to open file <%s> for write"
 msgstr "Neiespējami atvērt šūnu failu[%s]"
 
 #: ../raster/r.out.ppm/main.c:154
-#, fuzzy
 msgid "Converting..."
-msgstr "Drukā ... "
+msgstr "Konvertē..."
 
 #: ../raster/r.out.ppm/main.c:234
 #, fuzzy, c-format
 msgid "File <%s> created"
 msgstr "Novietojums %s ir izveidots!"
-
-#: ../raster/r.resamp.interp/main.c:80
-#, fuzzy
-msgid "Resamples raster map to a finer grid using interpolation."
-msgstr "Izejas rastra kartes nosaukums"
-
-#: ../raster/r.resamp.interp/main.c:88
-msgid "Method"
-msgstr ""
 
 #: ../raster/r.out.vrml/put_grid.c:38
 #, fuzzy
@@ -18622,9 +18627,8 @@ msgid "Vertical scale"
 msgstr "Vertikālais mērogs"
 
 #: ../raster/r.surf.area/main.c:93
-#, fuzzy
 msgid "Output units"
-msgstr "Izejas rastra kartes nosaukums"
+msgstr "Izvades vienības"
 
 #: ../raster/r.surf.area/main.c:94
 #, fuzzy
@@ -18928,8 +18932,7 @@ msgstr "%s: Nevarēja nolasīt krāsu tabulu priekš <%s@%s>"
 msgid "Raster map used for zoning, must be of type CELL"
 msgstr ""
 
-#: ../raster/r.univar/r.univar_main.c:52
-#: ../raster/r.univar/r3.univar_main.c:52
+#: ../raster/r.univar/r.univar_main.c:52 ../raster/r.univar/r3.univar_main.c:52
 #: ../locale/scriptstrings/db.univar_to_translate.c:6
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:6
 #: ../vector/v.univar/main.c:122
@@ -18940,14 +18943,12 @@ msgstr ""
 msgid "Extended"
 msgstr ""
 
-#: ../raster/r.univar/r.univar_main.c:61
-#: ../raster/r.univar/r3.univar_main.c:59 ../vector/v.what/main.c:98
-#: ../vector/v.univar/main.c:126
+#: ../raster/r.univar/r.univar_main.c:61 ../raster/r.univar/r3.univar_main.c:59
+#: ../vector/v.what/main.c:98 ../vector/v.univar/main.c:126
 msgid "Print the stats in shell script style"
 msgstr "Drukāt statistiku komandrindas skripta stilā"
 
-#: ../raster/r.univar/r.univar_main.c:66
-#: ../raster/r.univar/r3.univar_main.c:63
+#: ../raster/r.univar/r.univar_main.c:66 ../raster/r.univar/r3.univar_main.c:63
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:9
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:10
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:10
@@ -18955,8 +18956,7 @@ msgstr "Drukāt statistiku komandrindas skripta stilā"
 msgid "Calculate extended statistics"
 msgstr ""
 
-#: ../raster/r.univar/r.univar_main.c:71
-#: ../raster/r.univar/r3.univar_main.c:67
+#: ../raster/r.univar/r.univar_main.c:71 ../raster/r.univar/r3.univar_main.c:67
 msgid "Table output format instead of standard output format"
 msgstr ""
 
@@ -19400,9 +19400,8 @@ msgid "Seed point outside the current region"
 msgstr "Sākuma punkts ir ārpus pašreizējā reģiona."
 
 #: ../raster/r.lake/main.c:254
-#, fuzzy
 msgid "G_malloc: out of memory"
-msgstr "Nav vairs operatīvās atmiņas!"
+msgstr "G_malloc: pietrūkst atmiņas"
 
 #: ../raster/r.lake/main.c:276
 #, fuzzy
@@ -19705,9 +19704,8 @@ msgid "Expression to evaluate"
 msgstr ""
 
 #: ../raster/r.mapcalc/main.c:79 ../raster/r.mapcalc/main.c:85
-#, fuzzy
 msgid "Expression"
-msgstr "Rakstuzīmju kodējums"
+msgstr "Izteiksme"
 
 #: ../raster/r.mapcalc/main.c:84
 #, fuzzy
@@ -19967,8 +19965,7 @@ msgstr "Ieejas karte: vidējā virszemes plūssma uz šūnu"
 msgid "Name of input raster map percent of disturbed land"
 msgstr "Rastra kartes nosaukums"
 
-#: ../raster/r.watershed/front/main.c:97
-#: ../raster/r.watershed/front/main.c:122
+#: ../raster/r.watershed/front/main.c:97 ../raster/r.watershed/front/main.c:122
 msgid "For USLE"
 msgstr ""
 
@@ -20742,8 +20739,7 @@ msgstr "Rakstu jaunu failu... \n"
 msgid "mosaicking"
 msgstr ""
 
-#: ../raster/r.patch/main.c:61
-#: ../locale/scriptstrings/t.merge_to_translate.c:4
+#: ../raster/r.patch/main.c:61 ../locale/scriptstrings/t.merge_to_translate.c:4
 msgid "merge"
 msgstr ""
 
@@ -21112,8 +21108,7 @@ msgstr ""
 msgid "GDAL datatype: %s, valid range: %g - %g"
 msgstr ""
 
-#: ../raster/r.out.gdal/export_band.c:52
-#: ../raster/r.out.gdal/export_band.c:344
+#: ../raster/r.out.gdal/export_band.c:52 ../raster/r.out.gdal/export_band.c:344
 #, fuzzy
 msgid "Unable to allocate buffer for reading raster map"
 msgstr "Nevar noteikt laukuma centroīdu"
@@ -21714,47 +21709,6 @@ msgstr "cnevar atvērt nepieciešamo daļu faila priekš %s"
 msgid "Unable to write segment file for %s"
 msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
 
-#: ../raster/r.flow/precomp.c:48
-#, fuzzy
-msgid "Precomputing e/w distances..."
-msgstr "Drukā ... "
-
-#: ../raster/r.flow/precomp.c:50
-#, fuzzy
-msgid "Precomputing quantization tolerances..."
-msgstr "Tabulu kopēšana"
-
-#: ../raster/r.flow/precomp.c:53
-msgid "Precomputing inverted elevations..."
-msgstr ""
-
-#: ../raster/r.flow/precomp.c:57
-msgid "Precomputing interpolated border elevations..."
-msgstr ""
-
-#: ../raster/r.flow/precomp.c:63
-#, fuzzy
-msgid "Precomputing re-oriented aspects..."
-msgstr "Lasam dig_att failu...\n"
-
-#: ../raster/r.flow/precomp.c:67
-#, fuzzy
-msgid "Precomputing aspects..."
-msgstr "Drukā ... "
-
-#: ../raster/r.flow/precomp.c:111
-#, c-format
-msgid ""
-"Resolution too unbalanced:\n"
-"atan2(%f deg, %f deg) =%f < %f tolerance\n"
-"please resample input map"
-msgstr ""
-
-#: ../raster/r.flow/precomp.c:116
-#, c-format
-msgid "Resolution too unbalanced (%f x %f); please resample input map"
-msgstr ""
-
 #: ../raster/r.null/main.c:62
 #, fuzzy
 msgid "Manages NULL-values of given raster map."
@@ -21777,7 +21731,7 @@ msgstr ""
 #: ../raster/r.null/main.c:87 ../raster/r.null/main.c:92
 #: ../raster/r.null/main.c:98
 msgid "Check"
-msgstr ""
+msgstr "Pārbaudīt"
 
 #: ../raster/r.null/main.c:91
 msgid "Only do the work if the map is integer"
@@ -22244,9 +22198,8 @@ msgid "Add comments to describe the region"
 msgstr ""
 
 #: ../raster/r.out.ppm3/main.c:160
-#, fuzzy
 msgid "Converting ... "
-msgstr "Drukā ... "
+msgstr "Konvertē..."
 
 #: ../raster/r.in.ascii/main.c:74
 #, fuzzy
@@ -22371,7 +22324,12 @@ msgstr ""
 msgid "recode categories"
 msgstr "%-5d līniju kategorijas nolasītas\n"
 
-#: ../raster/r.recode/main.c:51
+#: ../display/d.barscale/main.c:79 ../display/d.barscale/main.c:88
+#: ../display/d.barscale/main.c:149 ../display/d.northarrow/main.c:73
+msgid "Style"
+msgstr "Stils"
+
+#: ../display/d.barscale/main.c:83
 #, fuzzy
 msgid "Recodes categorical raster maps."
 msgstr "Pārkodēt rastra kartes."
@@ -23027,7 +22985,7 @@ msgstr "Nevar izveidot tabulu: %s"
 #: ../locale/scriptstrings/r.mask_to_translate.c:18
 #: ../general/g.mapset/main.c:70 ../general/g.proj/main.c:201
 msgid "Create"
-msgstr ""
+msgstr "Izveidot"
 
 #: ../locale/scriptstrings/r.mask_to_translate.c:19
 msgid "Remove existing mask (overrides other options)"
@@ -24235,9 +24193,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:8
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:10
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:8
-#, fuzzy
 msgid "Area"
-msgstr "Laukums\n"
+msgstr ""
 
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:7
 msgid "Lesser or greater than specified value"
@@ -26815,9 +26772,8 @@ msgstr ""
 
 #: ../display/d.vect.thematic/main.c:111 ../display/d.vect.thematic/main.c:129
 #: ../display/d.vect.thematic/main.c:137
-#, fuzzy
 msgid "Classes"
-msgstr "datu tipi"
+msgstr "Klases"
 
 #: ../display/d.vect.thematic/main.c:119 ../vector/v.class/main.c:68
 msgid "Algorithm to use for classification"
@@ -26959,8 +26915,7 @@ msgstr "Nav definēts datubāzes savienojums"
 msgid "Data (%s) not numeric. Column must be numeric."
 msgstr "vektora karte <%s> nav atrasta"
 
-#: ../display/d.vect.thematic/main.c:316
-#: ../display/d.vect.thematic/plot1.c:135
+#: ../display/d.vect.thematic/main.c:316 ../display/d.vect.thematic/plot1.c:135
 #: ../display/d.vect.thematic/plot1.c:163
 #, fuzzy, c-format
 msgid "Cannot select data (%s) from table"
@@ -27156,11 +27111,6 @@ msgstr ""
 #, fuzzy
 msgid "Display north-arrow symbol."
 msgstr "Izvēlies fontu kurš tiks parādīts lietotāja grafiskajā vidē."
-
-#: ../display/d.barscale/main.c:79 ../display/d.barscale/main.c:88
-#: ../display/d.barscale/main.c:149 ../display/d.northarrow/main.c:73
-msgid "Style"
-msgstr ""
 
 #: ../display/d.barscale/main.c:83
 #, fuzzy
@@ -27738,9 +27688,8 @@ msgid "No graphics device selected"
 msgstr "Nav izvēlēta grafiskā iekārta"
 
 #: ../display/d.extract/main.c:122
-#, fuzzy
 msgid "Copying tables..."
-msgstr "Tabulu kopēšana"
+msgstr "Kopē tabulas..."
 
 #: ../display/d.extract/main.c:130
 msgid "Cannot get db link info -> cannot copy table."
@@ -28862,17 +28811,16 @@ msgstr ""
 #: ../vector/v.net.centrality/main.c:97 ../vector/v.net.spanningtree/main.c:47
 #: ../vector/v.lrs/v.lrs.segment/main.c:73
 #: ../vector/v.lrs/v.lrs.create/main.c:123
-#: ../vector/v.lrs/v.lrs.where/main.c:59
-#: ../vector/v.lrs/v.lrs.label/main.c:104 ../vector/v.net.steiner/main.c:347
-#: ../vector/v.net.allpairs/main.c:62 ../vector/v.net.timetable/main.c:261
-#: ../vector/v.net.path/main.c:43 ../vector/v.net.distance/main.c:67
-#: ../vector/v.net.alloc/main.c:58 ../vector/v.net.bridge/main.c:48
-#: ../vector/v.net.components/main.c:73 ../vector/v.net/main.c:48
-#: ../vector/v.net.iso/main.c:73 ../vector/v.net.salesman/main.c:128
-#: ../vector/v.net.visibility/main.c:46 ../vector/v.net.connectivity/main.c:53
-#, fuzzy
+#: ../vector/v.lrs/v.lrs.where/main.c:59 ../vector/v.lrs/v.lrs.label/main.c:104
+#: ../vector/v.net.steiner/main.c:347 ../vector/v.net.allpairs/main.c:62
+#: ../vector/v.net.timetable/main.c:261 ../vector/v.net.path/main.c:43
+#: ../vector/v.net.distance/main.c:67 ../vector/v.net.alloc/main.c:58
+#: ../vector/v.net.bridge/main.c:48 ../vector/v.net.components/main.c:73
+#: ../vector/v.net/main.c:48 ../vector/v.net.iso/main.c:73
+#: ../vector/v.net.salesman/main.c:128 ../vector/v.net.visibility/main.c:46
+#: ../vector/v.net.connectivity/main.c:53
 msgid "network"
-msgstr "Lasam dig failu... \n"
+msgstr "tīkls"
 
 #: ../display/d.path/main.c:52
 msgid "Finds shortest path for selected starting and ending node."
@@ -28887,36 +28835,33 @@ msgid "Arc type"
 msgstr "datu tipi"
 
 #: ../display/d.path/main.c:70 ../vector/v.net.flow/main.c:70
-#: ../vector/v.net.centrality/main.c:109
-#: ../vector/v.net.spanningtree/main.c:59 ../vector/v.net.steiner/main.c:368
-#: ../vector/v.net.allpairs/main.c:74 ../vector/v.net.timetable/main.c:274
-#: ../vector/v.net.path/main.c:54 ../vector/v.net.distance/main.c:82
-#: ../vector/v.net.alloc/main.c:91 ../vector/v.net.bridge/main.c:60
-#: ../vector/v.net.components/main.c:84 ../vector/v.net/args.c:56
-#: ../vector/v.net.iso/main.c:104 ../vector/v.net.salesman/main.c:149
-#: ../vector/v.net.connectivity/main.c:64
+#: ../vector/v.net.centrality/main.c:109 ../vector/v.net.spanningtree/main.c:59
+#: ../vector/v.net.steiner/main.c:368 ../vector/v.net.allpairs/main.c:74
+#: ../vector/v.net.timetable/main.c:274 ../vector/v.net.path/main.c:54
+#: ../vector/v.net.distance/main.c:82 ../vector/v.net.alloc/main.c:91
+#: ../vector/v.net.bridge/main.c:60 ../vector/v.net.components/main.c:84
+#: ../vector/v.net/args.c:56 ../vector/v.net.iso/main.c:104
+#: ../vector/v.net.salesman/main.c:149 ../vector/v.net.connectivity/main.c:64
 msgid "Arc layer"
 msgstr ""
 
 #: ../display/d.path/main.c:75 ../vector/v.net.flow/main.c:76
-#: ../vector/v.net.centrality/main.c:115
-#: ../vector/v.net.spanningtree/main.c:65 ../vector/v.net.allpairs/main.c:80
-#: ../vector/v.net.timetable/main.c:280 ../vector/v.net.path/main.c:67
-#: ../vector/v.net.distance/main.c:95 ../vector/v.net.alloc/main.c:104
-#: ../vector/v.net.bridge/main.c:66 ../vector/v.net.components/main.c:90
-#: ../vector/v.net/args.c:70 ../vector/v.net.iso/main.c:117
-#: ../vector/v.net.connectivity/main.c:70
+#: ../vector/v.net.centrality/main.c:115 ../vector/v.net.spanningtree/main.c:65
+#: ../vector/v.net.allpairs/main.c:80 ../vector/v.net.timetable/main.c:280
+#: ../vector/v.net.path/main.c:67 ../vector/v.net.distance/main.c:95
+#: ../vector/v.net.alloc/main.c:104 ../vector/v.net.bridge/main.c:66
+#: ../vector/v.net.components/main.c:90 ../vector/v.net/args.c:70
+#: ../vector/v.net.iso/main.c:117 ../vector/v.net.connectivity/main.c:70
 msgid "Node layer"
 msgstr ""
 
 #: ../display/d.path/main.c:81 ../vector/v.net.flow/main.c:90
-#: ../vector/v.net.centrality/main.c:129
-#: ../vector/v.net.spanningtree/main.c:72 ../vector/v.net.allpairs/main.c:93
-#: ../vector/v.net.timetable/main.c:288 ../vector/v.net.path/main.c:79
-#: ../vector/v.net.distance/main.c:141 ../vector/v.net.alloc/main.c:110
-#: ../vector/v.net.bridge/main.c:73 ../vector/v.net.components/main.c:97
-#: ../vector/v.net.iso/main.c:122 ../vector/v.net.salesman/main.c:168
-#: ../vector/v.net.connectivity/main.c:77
+#: ../vector/v.net.centrality/main.c:129 ../vector/v.net.spanningtree/main.c:72
+#: ../vector/v.net.allpairs/main.c:93 ../vector/v.net.timetable/main.c:288
+#: ../vector/v.net.path/main.c:79 ../vector/v.net.distance/main.c:141
+#: ../vector/v.net.alloc/main.c:110 ../vector/v.net.bridge/main.c:73
+#: ../vector/v.net.components/main.c:97 ../vector/v.net.iso/main.c:122
+#: ../vector/v.net.salesman/main.c:168 ../vector/v.net.connectivity/main.c:77
 msgid "Arc forward/both direction(s) cost column (number)"
 msgstr ""
 
@@ -29056,7 +29001,7 @@ msgstr ""
 #: ../display/d.grid/main.c:86 ../display/d.grid/main.c:159
 #: ../display/d.grid/main.c:164 ../display/d.grid/main.c:169
 msgid "Disable"
-msgstr ""
+msgstr "Atslēgt"
 
 #: ../display/d.grid/main.c:92
 #, fuzzy
@@ -29089,7 +29034,7 @@ msgstr ""
 #: ../misc/m.nviz.image/args.c:288 ../misc/m.nviz.image/args.c:298
 #: ../misc/m.nviz.image/args.c:608 ../misc/m.nviz.image/args.c:620
 msgid "Draw"
-msgstr ""
+msgstr "Zīmēt"
 
 #: ../display/d.grid/main.c:138
 msgid "Draw geographic grid (referenced to WGS84 ellipsoid)"
@@ -30086,7 +30031,7 @@ msgstr ""
 
 #: ../general/g.gui/main.c:79 ../general/g.gui/main.c:85
 msgid "Default"
-msgstr ""
+msgstr "Noklusējuma"
 
 #: ../general/g.gui/main.c:84
 msgid "Do not launch GUI after updating the default user interface settings"
@@ -30896,7 +30841,7 @@ msgstr "Trūkst projekcijas failu"
 #: ../general/g.proj/main.c:167 ../general/g.proj/main.c:180
 #: ../general/g.proj/main.c:186
 msgid "Datum"
-msgstr ""
+msgstr "Datums"
 
 #: ../general/g.proj/main.c:169
 msgid "Datum (overrides any datum specified in input co-ordinate system)"
@@ -32102,7 +32047,7 @@ msgstr ""
 #: ../vector/v.net.connectivity/main.c:84
 #: ../vector/v.net.connectivity/main.c:92
 msgid "Cost"
-msgstr ""
+msgstr "Izmaksas"
 
 #: ../vector/v.net.flow/main.c:84
 #, fuzzy
@@ -32178,10 +32123,9 @@ msgid "No sinks"
 msgstr "rotēt/grozīt izdruku"
 
 #: ../vector/v.net.flow/main.c:226 ../vector/v.net.centrality/main.c:284
-#: ../vector/v.net.spanningtree/main.c:124
-#: ../vector/v.net.timetable/main.c:405 ../vector/v.generalize/network.c:89
-#: ../vector/v.net.distance/main.c:264 ../vector/v.net.bridge/main.c:134
-#: ../vector/v.net.components/main.c:163
+#: ../vector/v.net.spanningtree/main.c:124 ../vector/v.net.timetable/main.c:405
+#: ../vector/v.generalize/network.c:89 ../vector/v.net.distance/main.c:264
+#: ../vector/v.net.bridge/main.c:134 ../vector/v.net.components/main.c:163
 #: ../vector/v.net.connectivity/main.c:178
 #, fuzzy, c-format
 msgid "Unable to build graph for vector map <%s>"
@@ -32806,13 +32750,12 @@ msgid "Feature type:"
 msgstr "Objektu tips:"
 
 #: ../vector/v.info/print.c:392
-#, fuzzy
 msgid "DB table:"
-msgstr "DB tabula"
+msgstr "DB tabula:"
 
 #: ../vector/v.info/print.c:395
 msgid "DB name:"
-msgstr ""
+msgstr "DB nosaukums:"
 
 #: ../vector/v.info/print.c:399
 #, fuzzy
@@ -33002,9 +32945,8 @@ msgstr "Nevajag taisīt atribūtu tabulu"
 #: ../vector/v.out.lidar/main.c:512 ../vector/v.out.lidar/main.c:519
 #: ../vector/v.in.lidar/main.c:152 ../vector/v.in.lidar/main.c:160
 #: ../vector/v.in.lidar/main.c:168 ../vector/v.in.lidar/main.c:176
-#, fuzzy
 msgid "Categories"
-msgstr "%-5d līniju kategorijas nolasītas\n"
+msgstr "Kategorijas"
 
 #: ../vector/v.out.lidar/main.c:503
 #, fuzzy
@@ -33033,9 +32975,8 @@ msgstr "vektora karte <%s> nav atrasta"
 #: ../vector/v.out.lidar/main.c:564 ../vector/v.net.centrality/main.c:149
 #: ../vector/v.net.centrality/main.c:155 ../vector/v.net.centrality/main.c:161
 #: ../vector/v.net.centrality/main.c:167
-#, fuzzy
 msgid "Columns"
-msgstr "kolona 2"
+msgstr "Kolonas"
 
 #: ../vector/v.out.lidar/main.c:543
 #, fuzzy
@@ -33357,8 +33298,7 @@ msgstr ""
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:72
 #: ../vector/v.lrs/v.lrs.create/main.c:122
-#: ../vector/v.lrs/v.lrs.where/main.c:58
-#: ../vector/v.lrs/v.lrs.label/main.c:103
+#: ../vector/v.lrs/v.lrs.where/main.c:58 ../vector/v.lrs/v.lrs.label/main.c:103
 #, fuzzy
 msgid "linear reference system"
 msgstr "Jaunas rastra kartes nosaukums"
@@ -33372,8 +33312,7 @@ msgstr "Izveidot punktus visā garumā ilīniju garumā"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:79
 #: ../vector/v.lrs/v.lrs.create/main.c:128
-#: ../vector/v.lrs/v.lrs.where/main.c:66
-#: ../vector/v.lrs/v.lrs.label/main.c:109
+#: ../vector/v.lrs/v.lrs.where/main.c:66 ../vector/v.lrs/v.lrs.label/main.c:109
 #, fuzzy
 msgid "Input vector map containing lines"
 msgstr "Ieejošā karte satur līnijas"
@@ -33385,23 +33324,20 @@ msgstr "Izejas karte kurā tiks ierakstīti punkti"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:88
 #: ../vector/v.lrs/v.lrs.create/main.c:147
-#: ../vector/v.lrs/v.lrs.where/main.c:75
-#: ../vector/v.lrs/v.lrs.label/main.c:118
+#: ../vector/v.lrs/v.lrs.where/main.c:75 ../vector/v.lrs/v.lrs.label/main.c:118
 #, fuzzy
 msgid "Line layer"
 msgstr "Uz slāni"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:94
 #: ../vector/v.lrs/v.lrs.create/main.c:207
-#: ../vector/v.lrs/v.lrs.where/main.c:86
-#: ../vector/v.lrs/v.lrs.label/main.c:124
+#: ../vector/v.lrs/v.lrs.where/main.c:86 ../vector/v.lrs/v.lrs.label/main.c:124
 msgid "Driver name for reference system table"
 msgstr ""
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:102
 #: ../vector/v.lrs/v.lrs.create/main.c:215
-#: ../vector/v.lrs/v.lrs.where/main.c:94
-#: ../vector/v.lrs/v.lrs.label/main.c:132
+#: ../vector/v.lrs/v.lrs.where/main.c:94 ../vector/v.lrs/v.lrs.label/main.c:132
 msgid "Database name for reference system table"
 msgstr ""
 
@@ -34466,7 +34402,7 @@ msgstr "neiespējami atvērt <%s>"
 #: ../vector/v.surf.rst/main.c:144 ../vector/v.out.postgis/main.c:49
 #: ../vector/v.to.3d/main.c:38 ../vector/v.extrude/main.c:70
 msgid "3D"
-msgstr ""
+msgstr "3D"
 
 #: ../vector/v.drape/main.c:62
 #, fuzzy
@@ -34554,7 +34490,7 @@ msgstr "Importējamais rastra fails"
 #: ../vector/v.decimate/main.c:163 ../vector/v.decimate/main.c:174
 #: ../vector/v.decimate/main.c:184 ../vector/v.decimate/main.c:193
 msgid "Count"
-msgstr ""
+msgstr "Skaits"
 
 #: ../vector/v.decimate/main.c:170
 #, fuzzy
@@ -34847,7 +34783,7 @@ msgstr ""
 
 #: ../vector/v.out.dxf/main.c:58
 msgid "DXF"
-msgstr ""
+msgstr "DXF"
 
 #: ../vector/v.out.dxf/main.c:60
 #, fuzzy
@@ -37888,9 +37824,8 @@ msgstr "Rastra kartes nosaukums"
 #: ../vector/v.in.db/main.c:85 ../vector/v.random/main.c:135
 #: ../vector/v.random/main.c:144 ../vector/v.random/main.c:157
 #: ../vector/v.random/main.c:167 ../vector/v.random/main.c:172
-#, fuzzy
 msgid "3D output"
-msgstr "Pilns izvads"
+msgstr "3D izvade"
 
 #: ../vector/v.in.db/main.c:90
 #, fuzzy
@@ -39712,9 +39647,8 @@ msgstr "Izejas rastra kartes nosaukums"
 #: ../vector/v.kernel/main.c:128 ../vector/v.kernel/main.c:157
 #: ../vector/v.kernel/main.c:165 ../vector/v.kernel/main.c:187
 #: ../vector/v.kernel/main.c:212 ../vector/v.kernel/main.c:218
-#, fuzzy
 msgid "Network"
-msgstr "Lasam dig failu... \n"
+msgstr "Tīkls"
 
 #: ../vector/v.kernel/main.c:135
 #, fuzzy
@@ -40645,7 +40579,7 @@ msgstr "Bufera izmērs kartes vienībās"
 #: ../vector/v.buffer/main.c:272 ../vector/v.buffer/main.c:277
 #: ../vector/v.buffer/main.c:285 ../vector/v.buffer/main.c:294
 msgid "Distance"
-msgstr ""
+msgstr "Attālums"
 
 #: ../vector/v.buffer/main.c:263
 #, fuzzy
@@ -42790,9 +42724,8 @@ msgid "Build topology or dump topology or indices to standard output"
 msgstr ""
 
 #: ../vector/v.build/main.c:65
-#, fuzzy
 msgid "build topology"
-msgstr "Lasam dig_att failu...\n"
+msgstr "būvēt topoloģiju"
 
 #: ../vector/v.build/main.c:66
 #, fuzzy
@@ -43429,9 +43362,8 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.db.select/main.c:101
-#, fuzzy
 msgid "Region"
-msgstr "Lasam dig failu... \n"
+msgstr "Reģions"
 
 #: ../vector/v.db.select/main.c:115
 #, fuzzy
@@ -44478,9 +44410,9 @@ msgstr ""
 
 #: ../vector/v.net.connectivity/main.c:167
 #: ../vector/v.net.connectivity/main.c:170
-#, fuzzy, c-format
+#, c-format
 msgid "%s is empty"
-msgstr "Nevar ierakstīt ezera rastra karti <%s>!"
+msgstr "%s ir tukšs"
 
 #, fuzzy
 #~ msgid "Vector map profiling tool"
@@ -44752,14 +44684,6 @@ msgstr "Nevar ierakstīt ezera rastra karti <%s>!"
 #, fuzzy
 #~ msgid "Overlays two vector maps."
 #~ msgstr "Vektorkartes nosaukums"
-
-#, fuzzy
-#~ msgid "Old auxiliar table could not be dropped"
-#~ msgstr "rastrs <%s> nav atrasts"
-
-#, fuzzy
-#~ msgid "Auxiliar table could not be dropped"
-#~ msgstr "rastrs <%s> nav atrasts"
 
 #, fuzzy
 #~ msgid "Type of raster map to be created"

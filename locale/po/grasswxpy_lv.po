@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: grasswxpy_lv\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-14 14:55+0100\n"
-"PO-Revision-Date: 2016-01-24 11:27+0200\n"
+"PO-Revision-Date: 2016-11-15 10:40+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian <grass-translations@lists.osgeo.org>\n"
 "Language: lv_LV\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 :"
+" 2);\n"
 
 #: ../gui/wxpython/gcp/manager.py:143
 msgid "Setup for georectification"
@@ -51,7 +51,7 @@ msgstr "vektors"
 
 #: ../gui/wxpython/gcp/manager.py:370
 msgid "Select source location:"
-msgstr ""
+msgstr "Avota novietojums:"
 
 #: ../gui/wxpython/gcp/manager.py:391
 msgid "Select source mapset:"
@@ -79,7 +79,7 @@ msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:531 ../gui/wxpython/iclass/dialogs.py:78
 msgid "Create/edit group..."
-msgstr ""
+msgstr "Veidot / rediģēt grupu"
 
 #: ../gui/wxpython/gcp/manager.py:535
 msgid "Add vector map to group..."
@@ -135,11 +135,11 @@ msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:1324
 msgid "source"
-msgstr ""
+msgstr "avots"
 
 #: ../gui/wxpython/gcp/manager.py:1326
 msgid "target"
-msgstr ""
+msgstr "mērķis"
 
 #: ../gui/wxpython/gcp/manager.py:1328
 msgid "Set GCP coordinates"
@@ -492,10 +492,9 @@ msgstr ""
 
 #: ../gui/wxpython/gcp/mapdisplay.py:426 ../gui/wxpython/psmap/toolbars.py:76
 #: ../gui/wxpython/mapdisp/frame.py:816 ../gui/wxpython/wxplot/base.py:610
-#: ../gui/wxpython/modules/histogram.py:500
-#: ../gui/wxpython/menustrings.py:1985
+#: ../gui/wxpython/modules/histogram.py:500 ../gui/wxpython/menustrings.py:1985
 msgid "Page setup"
-msgstr ""
+msgstr "Lapas iestatīšana"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:430 ../gui/wxpython/mapdisp/frame.py:820
 #: ../gui/wxpython/wxplot/base.py:611 ../gui/wxpython/modules/histogram.py:504
@@ -779,8 +778,7 @@ msgstr ""
 msgid "Invalid scale or map center!"
 msgstr ""
 
-#: ../gui/wxpython/psmap/dialogs.py:1527
-#: ../gui/wxpython/lmgr/layertree.py:1015
+#: ../gui/wxpython/psmap/dialogs.py:1527 ../gui/wxpython/lmgr/layertree.py:1015
 #: ../gui/wxpython/nviz/mapwindow.py:1675 ../gui/wxpython/nviz/tools.py:827
 #: ../gui/wxpython/menustrings.py:2002
 msgid "Raster map"
@@ -878,8 +876,7 @@ msgstr ""
 msgid "Data selection"
 msgstr ""
 
-#: ../gui/wxpython/psmap/dialogs.py:2163
-#: ../gui/wxpython/gui_core/forms.py:2007
+#: ../gui/wxpython/psmap/dialogs.py:2163 ../gui/wxpython/gui_core/forms.py:2007
 #: ../gui/wxpython/modules/import_export.py:75
 msgid "Feature type"
 msgstr ""
@@ -1007,15 +1004,14 @@ msgid "Choose a file"
 msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:2717 ../gui/wxpython/psmap/dialogs.py:3791
-#: ../gui/wxpython/psmap/dialogs.py:4839
-#: ../gui/wxpython/wxplot/dialogs.py:1123
+#: ../gui/wxpython/psmap/dialogs.py:4839 ../gui/wxpython/wxplot/dialogs.py:1123
 #: ../gui/wxpython/wxplot/dialogs.py:1204
 msgid "Size"
-msgstr ""
+msgstr "Izmērs"
 
 #: ../gui/wxpython/psmap/dialogs.py:2722 ../gui/wxpython/nviz/tools.py:1659
 msgid "size:"
-msgstr ""
+msgstr "izmērs:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2727
 msgid "size from map table column:"
@@ -1023,11 +1019,11 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:2729
 msgid "scale:"
-msgstr ""
+msgstr "mērogs:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2794
 msgid "Rotation"
-msgstr ""
+msgstr "Rotācija"
 
 #: ../gui/wxpython/psmap/dialogs.py:2799
 msgid "rotate symbols:"
@@ -1155,9 +1151,8 @@ msgstr ""
 msgid "Choose vector maps and their order in legend"
 msgstr ""
 
-#: ../gui/wxpython/psmap/dialogs.py:3631
-#: ../gui/wxpython/lmgr/layertree.py:1019 ../gui/wxpython/nviz/tools.py:1453
-#: ../gui/wxpython/menustrings.py:2004
+#: ../gui/wxpython/psmap/dialogs.py:3631 ../gui/wxpython/lmgr/layertree.py:1019
+#: ../gui/wxpython/nviz/tools.py:1453 ../gui/wxpython/menustrings.py:2004
 msgid "Vector map"
 msgstr "Vektoru karte"
 
@@ -1190,8 +1185,7 @@ msgstr "Novietojums un izmērs"
 msgid "Position"
 msgstr "Novietojums"
 
-#: ../gui/wxpython/psmap/dialogs.py:3818
-#: ../gui/wxpython/rdigit/toolbars.py:100
+#: ../gui/wxpython/psmap/dialogs.py:3818 ../gui/wxpython/rdigit/toolbars.py:100
 #: ../gui/wxpython/nviz/preferences.py:559
 #: ../gui/wxpython/gmodeler/preferences.py:184
 #: ../gui/wxpython/gmodeler/preferences.py:350
@@ -1288,11 +1282,10 @@ msgstr ""
 msgid "default"
 msgstr ""
 
-#: ../gui/wxpython/psmap/dialogs.py:4929
-#: ../gui/wxpython/wxplot/dialogs.py:1164
+#: ../gui/wxpython/psmap/dialogs.py:4929 ../gui/wxpython/wxplot/dialogs.py:1164
 #: ../gui/wxpython/wxplot/dialogs.py:1245
 msgid "Style"
-msgstr ""
+msgstr "Stils"
 
 #: ../gui/wxpython/psmap/dialogs.py:4933
 msgid "Type:"
@@ -1376,8 +1369,7 @@ msgstr ""
 #: ../gui/wxpython/psmap/dialogs.py:5581 ../gui/wxpython/lmgr/layertree.py:974
 #: ../gui/wxpython/gis_set.py:277 ../gui/wxpython/gis_set.py:672
 #: ../gui/wxpython/gis_set.py:716 ../gui/wxpython/vdigit/dialogs.py:253
-#: ../gui/wxpython/vdigit/dialogs.py:447
-#: ../gui/wxpython/gmodeler/frame.py:1086
+#: ../gui/wxpython/vdigit/dialogs.py:447 ../gui/wxpython/gmodeler/frame.py:1086
 #: ../gui/wxpython/location_wizard/dialogs.py:142
 #: ../gui/wxpython/location_wizard/dialogs.py:161
 #: ../gui/wxpython/location_wizard/dialogs.py:490
@@ -1486,11 +1478,11 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/preferences.py:421
 #: ../gui/wxpython/gmodeler/preferences.py:533
 msgid "Color"
-msgstr ""
+msgstr "Krāsa"
 
 #: ../gui/wxpython/psmap/dialogs.py:6373 ../gui/wxpython/psmap/dialogs.py:6732
 msgid "Outline color:"
-msgstr ""
+msgstr "Maliņas krāsa:"
 
 #: ../gui/wxpython/psmap/dialogs.py:6376 ../gui/wxpython/psmap/dialogs.py:6403
 #: ../gui/wxpython/psmap/dialogs.py:6735 ../gui/wxpython/psmap/dialogs.py:6765
@@ -1500,7 +1492,7 @@ msgstr "caurspīdīgs"
 
 #: ../gui/wxpython/psmap/dialogs.py:6400 ../gui/wxpython/psmap/dialogs.py:6762
 msgid "Fill color:"
-msgstr ""
+msgstr "Aizpildījuma krāsa:"
 
 #: ../gui/wxpython/psmap/dialogs.py:6439
 msgid "Size and Rotation"
@@ -1541,43 +1533,43 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/utils.py:105
 msgid "inch"
-msgstr ""
+msgstr "colla"
 
 #: ../gui/wxpython/psmap/utils.py:106 ../gui/wxpython/modules/vclean.py:222
 msgid "point"
-msgstr ""
+msgstr "punkts"
 
 #: ../gui/wxpython/psmap/utils.py:107
 msgid "centimeter"
-msgstr ""
+msgstr "centimetrs"
 
 #: ../gui/wxpython/psmap/utils.py:108
 msgid "millimeter"
-msgstr ""
+msgstr "milimetrs"
 
 #: ../gui/wxpython/psmap/utils.py:112
 msgid "meters"
-msgstr ""
+msgstr "metrs"
 
 #: ../gui/wxpython/psmap/utils.py:115
 msgid "kilometers"
-msgstr ""
+msgstr "kilometrs"
 
 #: ../gui/wxpython/psmap/utils.py:118
 msgid "feet"
-msgstr ""
+msgstr "pēda"
 
 #: ../gui/wxpython/psmap/utils.py:121
 msgid "miles"
-msgstr ""
+msgstr "jūdzes"
 
 #: ../gui/wxpython/psmap/utils.py:124 ../gui/wxpython/psmap/utils.py:128
 msgid "nautical miles"
-msgstr ""
+msgstr "jūras jūdzes"
 
 #: ../gui/wxpython/psmap/utils.py:126
 msgid "pixel"
-msgstr ""
+msgstr "pikselis"
 
 #: ../gui/wxpython/psmap/utils.py:127
 msgid "meter"
@@ -1585,7 +1577,7 @@ msgstr "metrs"
 
 #: ../gui/wxpython/psmap/utils.py:130
 msgid "degree"
-msgstr ""
+msgstr "grāds"
 
 #: ../gui/wxpython/psmap/utils.py:397
 msgid "Unable to run `ps.map -b`"
@@ -2305,13 +2297,12 @@ msgstr ""
 msgid "Add command layer"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:76
-#: ../gui/wxpython/gui_core/toolbars.py:73 ../gui/wxpython/menustrings.py:1997
+#: ../gui/wxpython/lmgr/layertree.py:76 ../gui/wxpython/gui_core/toolbars.py:73
+#: ../gui/wxpython/menustrings.py:1997
 msgid "Quit"
 msgstr "Iziet"
 
-#: ../gui/wxpython/lmgr/layertree.py:78
-#: ../gui/wxpython/gui_core/toolbars.py:75
+#: ../gui/wxpython/lmgr/layertree.py:78 ../gui/wxpython/gui_core/toolbars.py:75
 msgid "Add raster map layer"
 msgstr "Pievienot rastra karti"
 
@@ -2336,8 +2327,7 @@ msgstr ""
 msgid "Add raster cell numbers"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:90
-#: ../gui/wxpython/gui_core/toolbars.py:77
+#: ../gui/wxpython/lmgr/layertree.py:90 ../gui/wxpython/gui_core/toolbars.py:77
 msgid "Add vector map layer"
 msgstr "Pievienot vektoru karti"
 
@@ -2382,9 +2372,8 @@ msgid "Set options"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/layertree.py:111
-#, fuzzy
 msgid "Editing mode"
-msgstr "Krīginga modulis"
+msgstr "Rediģēšanas režīms"
 
 #: ../gui/wxpython/lmgr/layertree.py:113
 #, fuzzy
@@ -2414,8 +2403,7 @@ msgstr "Pārsaukt"
 msgid "Change opacity level"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:486
-#: ../gui/wxpython/gmodeler/frame.py:1511
+#: ../gui/wxpython/lmgr/layertree.py:486 ../gui/wxpython/gmodeler/frame.py:1511
 msgid "Properties"
 msgstr "Īpašības"
 
@@ -2573,8 +2561,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/layertree.py:1146 ../gui/wxpython/mapdisp/frame.py:279
 #: ../gui/wxpython/mapdisp/frame.py:339 ../gui/wxpython/mapdisp/toolbars.py:97
-#: ../gui/wxpython/mapdisp/toolbars.py:301
-#: ../gui/wxpython/animation/data.py:45
+#: ../gui/wxpython/mapdisp/toolbars.py:301 ../gui/wxpython/animation/data.py:45
 msgid "2D view"
 msgstr "2D skats"
 
@@ -2610,12 +2597,10 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/layertree.py:1946 ../gui/wxpython/lmgr/frame.py:2353
 msgid "opacity:"
-msgstr ""
+msgstr "caurspīdīgums:"
 
-#: ../gui/wxpython/lmgr/layertree.py:1964
-#: ../gui/wxpython/animation/utils.py:97
-#: ../gui/wxpython/animation/utils.py:105
-#: ../gui/wxpython/mapswipe/frame.py:420
+#: ../gui/wxpython/lmgr/layertree.py:1964 ../gui/wxpython/animation/utils.py:97
+#: ../gui/wxpython/animation/utils.py:105 ../gui/wxpython/mapswipe/frame.py:420
 #, python-format
 msgid "Map <%s> not found."
 msgstr "Karte <%s> nav atrasta."
@@ -2637,7 +2622,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:154
 msgid "Data Toolbar"
-msgstr ""
+msgstr "Datu rīkjosla"
 
 #: ../gui/wxpython/lmgr/frame.py:157 ../gui/wxpython/animation/frame.py:182
 #: ../gui/wxpython/mapswipe/frame.py:315
@@ -2646,7 +2631,7 @@ msgstr "Dažādu rīku rīkjosla"
 
 #: ../gui/wxpython/lmgr/frame.py:160
 msgid "Tools Toolbar"
-msgstr ""
+msgstr "Rīku rīkjosla"
 
 #: ../gui/wxpython/lmgr/frame.py:163
 msgid "Vector Toolbar"
@@ -2667,9 +2652,8 @@ msgid "Layers"
 msgstr "Slāņi"
 
 #: ../gui/wxpython/lmgr/frame.py:339
-#, fuzzy
 msgid "Console"
-msgstr "Komandu konsole"
+msgstr "Konsole"
 
 #: ../gui/wxpython/lmgr/frame.py:364
 #: ../gui/wxpython/gui_core/preferences.py:330
@@ -2684,9 +2668,8 @@ msgstr "Dati"
 
 #: ../gui/wxpython/lmgr/frame.py:388
 #: ../gui/wxpython/gui_core/preferences.py:347
-#, fuzzy
 msgid "Python"
-msgstr "Python čaula"
+msgstr "Python"
 
 #: ../gui/wxpython/lmgr/frame.py:440 ../gui/wxpython/mapdisp/toolbars.py:104
 #: ../gui/wxpython/animation/data.py:46
@@ -2868,7 +2851,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1211
 msgid "System Info"
-msgstr ""
+msgstr "Sistēmas informācija"
 
 #: ../gui/wxpython/lmgr/frame.py:1226
 msgid "GRASS version"
@@ -2879,23 +2862,20 @@ msgid "unknown version"
 msgstr "nezināma versija"
 
 #: ../gui/wxpython/lmgr/frame.py:1227
-#, fuzzy
 msgid "GRASS SVN revision"
-msgstr "SVN revīzija:"
+msgstr "GRASS SVN revīzija"
 
 #: ../gui/wxpython/lmgr/frame.py:1229
-#, fuzzy
 msgid "Build date"
-msgstr "SQL veidotājs"
+msgstr "Būvējuma datums"
 
 #: ../gui/wxpython/lmgr/frame.py:1231
-#, fuzzy
 msgid "Build platform"
-msgstr "SQL veidotājs"
+msgstr "Būvēšanas platforma"
 
 #: ../gui/wxpython/lmgr/frame.py:1244
 msgid "Platform"
-msgstr ""
+msgstr "Platforma"
 
 #: ../gui/wxpython/lmgr/frame.py:1306
 msgid ""
@@ -3124,7 +3104,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/toolbars.py:203
 msgid "GUI settings"
-msgstr ""
+msgstr "GUI iestatījumi"
 
 #: ../gui/wxpython/lmgr/toolbars.py:204
 msgid "GRASS manual"
@@ -3177,9 +3157,8 @@ msgstr "Datu katalogs"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:30
 #: ../gui/wxpython/modules/import_export.py:851
-#, fuzzy
 msgid "Reprojection"
-msgstr "Projekcija"
+msgstr "Pārprojecēšana"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:64
 #: ../gui/wxpython/gui_core/forms.py:680
@@ -3188,9 +3167,8 @@ msgid "Close dialog on finish"
 msgstr "Aizvērt dialogu, kad darbs ir pabeigts"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:76
-#, fuzzy
 msgid "Reproject"
-msgstr "Projekcija"
+msgstr "Pārprojecēt"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:78
 #, fuzzy
@@ -3235,9 +3213,8 @@ msgid "Click to allow editing other mapsets"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:54
-#, fuzzy
 msgid "Search:"
-msgstr "Meklēt moduli"
+msgstr "Meklēt:"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:56
 msgid ""
@@ -3407,9 +3384,8 @@ msgid "&Display layer"
 msgstr "&Attēlot slāni"
 
 #: ../gui/wxpython/datacatalog/tree.py:946
-#, fuzzy
 msgid "&Switch mapset"
-msgstr "karšu kopa"
+msgstr "Pār&slēgt karšu kopu"
 
 #: ../gui/wxpython/gis_set.py:120
 msgid "1. Select GRASS GIS database directory"
@@ -3702,7 +3678,7 @@ msgstr ""
 
 #: ../gui/wxpython/gis_set.py:1035 ../gui/wxpython/gis_set.py:1048
 msgid "Lock file found"
-msgstr ""
+msgstr "Atrasts lock fails"
 
 #: ../gui/wxpython/gis_set.py:1044
 msgid ""
@@ -3757,7 +3733,7 @@ msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:94
 msgid "WARNING"
-msgstr ""
+msgstr "BRĪDINĀJUMS"
 
 #: ../gui/wxpython/rlisetup/frame.py:114
 msgid "GRASS GIS Setup for r.li modules"
@@ -4076,7 +4052,7 @@ msgstr ""
 #: ../gui/wxpython/rlisetup/wizard.py:1354
 #: ../gui/wxpython/rlisetup/wizard.py:1444
 msgid "Circle"
-msgstr ""
+msgstr "Aplis"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1207
 #: ../gui/wxpython/rlisetup/wizard.py:1365
@@ -4209,19 +4185,16 @@ msgid "Configuration file name:"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1748
-#, fuzzy
 msgid "Raster name:"
-msgstr "Rastrs:"
+msgstr "Rastra nosaukums:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1758
-#, fuzzy
 msgid "Vector name:"
-msgstr "Vektori:"
+msgstr "Vektoru nosaukums:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1767
-#, fuzzy
 msgid "Region type:"
-msgstr "Reģions:"
+msgstr "Reģiona tips:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1785
 msgid "Sampling area type:"
@@ -4234,9 +4207,8 @@ msgstr ""
 #: ../gui/wxpython/rlisetup/wizard.py:1862
 #: ../gui/wxpython/rlisetup/wizard.py:1887
 #: ../gui/wxpython/rlisetup/wizard.py:1891
-#, fuzzy
 msgid "Type of shape:"
-msgstr "Leģendas tips"
+msgstr "Formas tips:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1865
 #: ../gui/wxpython/rlisetup/wizard.py:1894
@@ -4334,13 +4306,11 @@ msgstr "Karte <%s> nav atrasta."
 msgid "Name of map is missing."
 msgstr "Karšu kopas nosaukums:"
 
-#: ../gui/wxpython/iclass/dialogs.py:257
-#: ../gui/wxpython/gmodeler/dialogs.py:89
+#: ../gui/wxpython/iclass/dialogs.py:257 ../gui/wxpython/gmodeler/dialogs.py:89
 msgid "Name of raster map:"
 msgstr "Rastra kartes nosaukums:"
 
-#: ../gui/wxpython/iclass/dialogs.py:259
-#: ../gui/wxpython/gmodeler/dialogs.py:91
+#: ../gui/wxpython/iclass/dialogs.py:259 ../gui/wxpython/gmodeler/dialogs.py:91
 #: ../gui/wxpython/gui_core/dialogs.py:239
 msgid "Name of vector map:"
 msgstr "Vektordatu kartes nosaukums:"
@@ -4416,8 +4386,7 @@ msgid ""
 "There is no class yet, do you want to create one?"
 msgstr ""
 
-#: ../gui/wxpython/iclass/digit.py:76
-#: ../gui/wxpython/iscatt/controllers.py:413
+#: ../gui/wxpython/iclass/digit.py:76 ../gui/wxpython/iscatt/controllers.py:413
 msgid "No class selected"
 msgstr ""
 
@@ -4430,16 +4399,16 @@ msgstr ""
 msgid "Subgroup <%s> not found"
 msgstr "Karte <%s> nav atrasta."
 
-#: ../gui/wxpython/iclass/g.gui.iclass.py:91
-#: ../gui/wxpython/nviz/wxnviz.py:344 ../gui/wxpython/nviz/wxnviz.py:355
+#: ../gui/wxpython/iclass/g.gui.iclass.py:91 ../gui/wxpython/nviz/wxnviz.py:344
+#: ../gui/wxpython/nviz/wxnviz.py:355
 #: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:79
 #: ../gui/wxpython/modules/histogram.py:399
 #, python-format
 msgid "Raster map <%s> not found"
 msgstr ""
 
-#: ../gui/wxpython/iclass/g.gui.iclass.py:98
-#: ../gui/wxpython/nviz/wxnviz.py:432 ../gui/wxpython/dbmgr/g.gui.dbmgr.py:48
+#: ../gui/wxpython/iclass/g.gui.iclass.py:98 ../gui/wxpython/nviz/wxnviz.py:432
+#: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:48
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:62
 #, python-format
 msgid "Vector map <%s> not found"
@@ -4780,8 +4749,7 @@ msgstr "Digitizēt jaunu punktu"
 msgid "Save raster map"
 msgstr "Sapakot rastra karti"
 
-#: ../gui/wxpython/rdigit/toolbars.py:33
-#: ../gui/wxpython/vdigit/toolbars.py:184
+#: ../gui/wxpython/rdigit/toolbars.py:33 ../gui/wxpython/vdigit/toolbars.py:184
 msgid "Undo"
 msgstr "Atdarīt"
 
@@ -5001,7 +4969,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:415
 msgid "here"
-msgstr ""
+msgstr "šeit"
 
 #: ../gui/wxpython/nviz/tools.py:418
 msgid ""
@@ -5011,7 +4979,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:424
 msgid "center"
-msgstr ""
+msgstr "centrs"
 
 #: ../gui/wxpython/nviz/tools.py:428
 msgid "Resets the view to the original default center of view"
@@ -5019,7 +4987,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:432
 msgid "top"
-msgstr ""
+msgstr "no augšas"
 
 #: ../gui/wxpython/nviz/tools.py:436
 msgid ""
@@ -5184,7 +5152,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:914 ../gui/wxpython/nviz/preferences.py:496
 msgid "style:"
-msgstr ""
+msgstr "stils:"
 
 #: ../gui/wxpython/nviz/tools.py:917 ../gui/wxpython/nviz/preferences.py:502
 msgid "wire"
@@ -5216,7 +5184,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:985 ../gui/wxpython/nviz/tools.py:2839
 msgid "map"
-msgstr ""
+msgstr "karte"
 
 #: ../gui/wxpython/nviz/tools.py:988 ../gui/wxpython/nviz/tools.py:2844
 msgid "unset"
@@ -5245,7 +5213,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:1164
 msgid "clear"
-msgstr ""
+msgstr "notīrīt"
 
 #: ../gui/wxpython/nviz/tools.py:1165
 msgid "top color"
@@ -5308,7 +5276,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:1399
 msgid "Value:"
-msgstr ""
+msgstr "Vērtība:"
 
 #: ../gui/wxpython/nviz/tools.py:1411 ../gui/wxpython/nviz/tools.py:3031
 msgid "Transparency:"
@@ -5324,15 +5292,15 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:1493
 msgid "Line:"
-msgstr ""
+msgstr "Līnija:"
 
 #: ../gui/wxpython/nviz/tools.py:1496
 msgid "width:"
-msgstr ""
+msgstr "platums:"
 
 #: ../gui/wxpython/nviz/tools.py:1512 ../gui/wxpython/nviz/tools.py:1684
 msgid "color:"
-msgstr ""
+msgstr "krāsa:"
 
 #: ../gui/wxpython/nviz/tools.py:1529 ../gui/wxpython/nviz/tools.py:1733
 msgid "use color for thematic mapping"
@@ -5360,7 +5328,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:1580 ../gui/wxpython/nviz/tools.py:5442
 #: ../gui/wxpython/nviz/tools.py:5497
 msgid "as 3D"
-msgstr ""
+msgstr "kā 3D"
 
 #: ../gui/wxpython/nviz/tools.py:1589 ../gui/wxpython/nviz/tools.py:1796
 msgid "Height above surface:"
@@ -5457,8 +5425,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:2272 ../gui/wxpython/vnet/dialogs.py:945
 #: ../gui/wxpython/gui_core/toolbars.py:84
-#: ../gui/wxpython/iscatt/toolbars.py:48
-#: ../gui/wxpython/iscatt/toolbars.py:146
+#: ../gui/wxpython/iscatt/toolbars.py:48 ../gui/wxpython/iscatt/toolbars.py:146
 msgid "Settings"
 msgstr "Iestatījumi"
 
@@ -5529,7 +5496,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:3099
 msgid "W"
-msgstr ""
+msgstr "R"
 
 #: ../gui/wxpython/nviz/tools.py:3100
 msgid "N"
@@ -5537,15 +5504,15 @@ msgstr "Z"
 
 #: ../gui/wxpython/nviz/tools.py:3101
 msgid "S"
-msgstr ""
+msgstr "D"
 
 #: ../gui/wxpython/nviz/tools.py:3102
 msgid "E"
-msgstr ""
+msgstr "A"
 
 #: ../gui/wxpython/nviz/tools.py:3103
 msgid "NW"
-msgstr ""
+msgstr "ZR"
 
 #: ../gui/wxpython/nviz/tools.py:3104
 msgid "NE"
@@ -5553,7 +5520,7 @@ msgstr "ZA"
 
 #: ../gui/wxpython/nviz/tools.py:3105
 msgid "SE"
-msgstr ""
+msgstr "DA"
 
 #: ../gui/wxpython/nviz/tools.py:3106
 msgid "SW"
@@ -5608,10 +5575,9 @@ msgstr ""
 msgid "%(features)d features (%(points)d points)"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:5444 ../gui/wxpython/nviz/tools.py:5499
-#, fuzzy
-msgid "on surface"
-msgstr "Virsma"
+#: ../gui/wxpython/menustrings.py:580 ../gui/wxpython/menustrings.py:1488
+msgid "Add centroids"
+msgstr "Pievienot centroīdus"
 
 #: ../gui/wxpython/nviz/tools.py:5597
 msgid "range:"
@@ -5694,11 +5660,11 @@ msgstr ""
 #: ../gui/wxpython/nviz/preferences.py:161
 #: ../gui/wxpython/nviz/preferences.py:180
 msgid "value:"
-msgstr ""
+msgstr "vērtība:"
 
 #: ../gui/wxpython/nviz/preferences.py:103
 msgid "step:"
-msgstr ""
+msgstr "solis:"
 
 #: ../gui/wxpython/nviz/preferences.py:118
 #: ../gui/wxpython/nviz/preferences.py:300
@@ -5733,7 +5699,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/preferences.py:292
 msgid "Light"
-msgstr ""
+msgstr "Apgaismojums"
 
 #: ../gui/wxpython/nviz/preferences.py:330
 msgid "z:"
@@ -5755,7 +5721,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/preferences.py:607
 #: ../gui/wxpython/mapswipe/dialogs.py:350
 msgid "Size:"
-msgstr ""
+msgstr "Izmērs:"
 
 #: ../gui/wxpython/nviz/preferences.py:623
 msgid "Marker:"
@@ -5810,10 +5776,9 @@ msgstr "Pārvaldīt slāņus"
 msgid "Close Attribute Table Manager"
 msgstr "Aizvērt atribūtu tabulas pārvaldnieku"
 
-#: ../gui/wxpython/dbmgr/manager.py:136
-#, fuzzy
-msgid "Reload currently selected attribute data"
-msgstr "Izveidot atribūtu tabulu"
+#: ../gui/wxpython/menustrings.py:633 ../gui/wxpython/menustrings.py:1541
+msgid "Allocate subnets"
+msgstr "Izdalīt apakštīklus"
 
 #: ../gui/wxpython/dbmgr/manager.py:139
 msgid "Reload all attribute data (drop current selection)"
@@ -5837,9 +5802,9 @@ msgstr ""
 "Atribūtu tabula nav atrasta. Vai vēlaties izveidot jaunu atribūtu tabulu un "
 "piesaistīt to vektordatu kartei <%s>?"
 
-#: ../gui/wxpython/dbmgr/dialogs.py:83
-msgid "Create table?"
-msgstr "Izveidot tabulu?"
+#: ../gui/wxpython/menustrings.py:637 ../gui/wxpython/menustrings.py:1545
+msgid "Shortest path"
+msgstr "Īsākais ceļš"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:104
 msgid "Close dialog on submit"
@@ -5930,9 +5895,9 @@ msgstr ""
 msgid "Apply SQL statement in Attribute Table Manager"
 msgstr "Aizvērt atribūtu tabulas pārvaldnieku"
 
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:132
-msgid "Close the dialog"
-msgstr "Aizvērt dialogu"
+#: ../gui/wxpython/menustrings.py:657 ../gui/wxpython/menustrings.py:1565
+msgid "Steiner tree"
+msgstr "Šteinera koks"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:219
 msgid "Columns"
@@ -5946,9 +5911,9 @@ msgstr ""
 msgid "Values"
 msgstr "Vērtības"
 
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:257
-msgid "Get all values"
-msgstr "Saņemt visas vērtības"
+#: ../gui/wxpython/menustrings.py:661 ../gui/wxpython/menustrings.py:1569
+msgid "Traveling salesman analysis"
+msgstr "Ceļojošā pārdevēja analīze"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:262
 msgid "Get sample"
@@ -6003,8 +5968,11 @@ msgstr ""
 msgid "SQL statement is not valid"
 msgstr "SQL izteikums nav derīgs"
 
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:546
-#, python-format
+#: ../gui/wxpython/menustrings.py:674 ../gui/wxpython/menustrings.py:1582
+msgid "Update area attributes from raster"
+msgstr "Atjaunināt poligonu atribūtus no rastra datiem"
+
+#: ../gui/wxpython/menustrings.py:675 ../gui/wxpython/menustrings.py:1583
 msgid ""
 "SQL statement is not valid.\n"
 "\n"
@@ -6014,9 +5982,9 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:548
-msgid "SQL statement is valid"
-msgstr "SQL izteiksme ir derīga"
+#: ../gui/wxpython/menustrings.py:676 ../gui/wxpython/menustrings.py:1584
+msgid "Update area attributes from vector"
+msgstr "Atjaunināt poligonu atribūtus no vektordatiem"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:619
 msgid "Column to set (SET clause)"
@@ -6080,8 +6048,11 @@ msgstr "Nezināma vērtība"
 msgid "Unable to decode value. Set encoding in GUI preferences ('Attributes')."
 msgstr ""
 
-#: ../gui/wxpython/dbmgr/base.py:343
-#, python-format
+#: ../gui/wxpython/menustrings.py:691 ../gui/wxpython/menustrings.py:1599
+msgid "Delaunay triangles"
+msgstr "Delonē triangulācija"
+
+#: ../gui/wxpython/menustrings.py:692 ../gui/wxpython/menustrings.py:1600
 msgid ""
 "Error loading attribute data. Record number: %(rec)d. Unable to convert "
 "value '%(val)s' in key column (%(key)s) to integer.\n"
@@ -6748,8 +6719,7 @@ msgstr ""
 msgid "Switching back to 2D view mode..."
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:519
-#: ../gui/wxpython/mapdisp/toolbars.py:116
+#: ../gui/wxpython/mapdisp/frame.py:519 ../gui/wxpython/mapdisp/toolbars.py:116
 #: ../gui/wxpython/vdigit/toolbars.py:953
 msgid "Vector digitizer"
 msgstr "Vektoru digitizēšana"
@@ -6824,19 +6794,16 @@ msgid "Select features interactively from vector map"
 msgstr "Vaicājums izvēlētajai rastra/vektoru kartei"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:35
-#, fuzzy
 msgid "Add scale bar"
-msgstr "mērogjosla"
+msgstr "Pievienot mērogjoslu"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:37
-#, fuzzy
 msgid "Add raster legend"
-msgstr "Rādīt rastra leģendu"
+msgstr "Pievienot rastra leģendu"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:39
-#, fuzzy
 msgid "Add vector legend"
-msgstr "Vektoru leģenda"
+msgstr "Pievienot vektoru leģendu"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:41 ../gui/wxpython/menustrings.py:2017
 msgid "Add north arrow"
@@ -6867,8 +6834,7 @@ msgid "Create bivariate scatterplot of raster maps"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:54
-#: ../gui/wxpython/animation/dialogs.py:988
-#: ../gui/wxpython/menustrings.py:2013
+#: ../gui/wxpython/animation/dialogs.py:988 ../gui/wxpython/menustrings.py:2013
 msgid "Add text"
 msgstr "Pievienot tekstu"
 
@@ -6997,8 +6963,7 @@ msgstr ""
 msgid "Comma separated value (*.csv)|*.csv"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:372
-#: ../gui/wxpython/gmodeler/frame.py:1981
+#: ../gui/wxpython/wxplot/profile.py:372 ../gui/wxpython/gmodeler/frame.py:1981
 #: ../gui/wxpython/gui_core/pyedit.py:333
 #, python-format
 msgid "File <%s> already exists. Do you want to overwrite this file?"
@@ -7128,8 +7093,7 @@ msgstr "Stils:"
 msgid "Weight:"
 msgstr "Svars:"
 
-#: ../gui/wxpython/wxplot/dialogs.py:832
-#: ../gui/wxpython/wxplot/dialogs.py:1430
+#: ../gui/wxpython/wxplot/dialogs.py:832 ../gui/wxpython/wxplot/dialogs.py:1430
 msgid "Apply changes for the current session and close dialog"
 msgstr ""
 
@@ -7246,8 +7210,8 @@ msgid "Histogram of"
 msgstr "Histogramma"
 
 #: ../gui/wxpython/wxplot/histogram.py:52
-#: ../gui/wxpython/wxplot/histogram.py:156
-#: ../gui/wxpython/wxplot/scatter.py:52 ../gui/wxpython/wxplot/scatter.py:53
+#: ../gui/wxpython/wxplot/histogram.py:156 ../gui/wxpython/wxplot/scatter.py:52
+#: ../gui/wxpython/wxplot/scatter.py:53
 msgid "Raster cell values"
 msgstr ""
 
@@ -8139,9 +8103,8 @@ msgid "Adjust speed of animation"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:100
-#, fuzzy
 msgid "Simple mode"
-msgstr "Vienkārši"
+msgstr "Vienkāršs režīms"
 
 #: ../gui/wxpython/animation/dialogs.py:105
 #, fuzzy
@@ -8344,8 +8307,7 @@ msgstr "Animācija"
 msgid "Add time stamp"
 msgstr "Pievienot laika zīmogu"
 
-#: ../gui/wxpython/animation/dialogs.py:988
-#: ../gui/wxpython/menustrings.py:2015
+#: ../gui/wxpython/animation/dialogs.py:988 ../gui/wxpython/menustrings.py:2015
 msgid "Add image"
 msgstr "Pievienot attēlu"
 
@@ -8533,9 +8495,8 @@ msgid "Space time 3D raster dataset"
 msgstr "Importēt 3D rastra datus"
 
 #: ../gui/wxpython/animation/dialogs.py:1682
-#, fuzzy
 msgid "Input data type:"
-msgstr "Ievades dati"
+msgstr "Ievades datu tips:"
 
 #: ../gui/wxpython/animation/dialogs.py:1763
 #, fuzzy
@@ -8645,8 +8606,7 @@ msgstr ""
 msgid "GRASS GIS Animation tool"
 msgstr "GRASS GIS animācijas rīks"
 
-#: ../gui/wxpython/animation/frame.py:160
-#: ../gui/wxpython/mapswipe/frame.py:303
+#: ../gui/wxpython/animation/frame.py:160 ../gui/wxpython/mapswipe/frame.py:303
 msgid "Main Toolbar"
 msgstr "Galvenā rīkjosla"
 
@@ -8746,53 +8706,44 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:197
-#, fuzzy
 msgid "Remove text"
-msgstr "Dzēst virsotni"
+msgstr "Noņemt tekstu"
 
 #: ../gui/wxpython/mapwin/decorations.py:220
-#, fuzzy
 msgid "Remove scale bar"
-msgstr "mērogjosla"
+msgstr "Noņemt mērogjoslu"
 
 #: ../gui/wxpython/mapwin/decorations.py:232
-#, fuzzy
 msgid "Remove north arrow"
-msgstr "ziemeļu bulta"
+msgstr "Noņemt ziemeļu bultu"
 
 #: ../gui/wxpython/mapwin/decorations.py:244
-#, fuzzy
 msgid "Remove vector legend"
-msgstr "Vektoru leģenda"
+msgstr "Noņemt vektoru leģendu"
 
 #: ../gui/wxpython/mapwin/decorations.py:256
-#, fuzzy
 msgid "Remove legend"
-msgstr "Rastra leģenda"
+msgstr "Noņemt leģendu"
 
 #: ../gui/wxpython/mapwin/buffered.py:252
 msgid "Copy coordinates to clipboard"
 msgstr "Kopēt koordinātas uz starpliktuvi"
 
 #: ../gui/wxpython/mapwin/buffered.py:260
-#, fuzzy
 msgid "Hide toolbars"
-msgstr "Analīze"
+msgstr "Slēpt rīkjoslas"
 
 #: ../gui/wxpython/mapwin/buffered.py:262
-#, fuzzy
 msgid "Show toolbars"
-msgstr "Kopēt koordinātas uz starpliktuvi"
+msgstr "Rādīt rīkjoslas"
 
 #: ../gui/wxpython/mapwin/buffered.py:269
-#, fuzzy
 msgid "Hide statusbar"
-msgstr "Rādīt iestatījumus"
+msgstr "Slēpt statusa joslu"
 
 #: ../gui/wxpython/mapwin/buffered.py:270
-#, fuzzy
 msgid "Show statusbar"
-msgstr "Rādīt iestatījumus"
+msgstr "Rādīt statusa joslu"
 
 #: ../gui/wxpython/mapwin/buffered.py:287
 #, fuzzy
@@ -9078,9 +9029,8 @@ msgid "Add vector map into layer tree"
 msgstr "Pievienot izveidoto karti slāņu sarakstam"
 
 #: ../gui/wxpython/vnet/dialogs.py:524
-#, fuzzy
 msgid "Input tables"
-msgstr "Ievades dati"
+msgstr "Ievades tabulas"
 
 #: ../gui/wxpython/vnet/dialogs.py:552
 #, fuzzy
@@ -9136,9 +9086,8 @@ msgid "Invert colors %s:"
 msgstr "Pārvaldīt krāsas"
 
 #: ../gui/wxpython/vnet/dialogs.py:1256
-#, fuzzy
 msgid "Line color:"
-msgstr "Līnijas krāsa"
+msgstr "Līnijas krāsa:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1259
 msgid "Color for unused point:"
@@ -9158,9 +9107,8 @@ msgid "Color for selected point:"
 msgstr "Tuvināt līdz izvēlētajām kartēm"
 
 #: ../gui/wxpython/vnet/dialogs.py:1280
-#, fuzzy
 msgid "Point size:"
-msgstr "Fonta izmērs:"
+msgstr "Punkta izmērs:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1281
 #, fuzzy
@@ -9242,8 +9190,7 @@ msgstr ""
 msgid "Vector network analysis settings"
 msgstr "Vektordatu tīkla analīzes iestatījumi"
 
-#: ../gui/wxpython/vnet/toolbars.py:137
-#: ../gui/wxpython/gui_core/toolbars.py:71
+#: ../gui/wxpython/vnet/toolbars.py:137 ../gui/wxpython/gui_core/toolbars.py:71
 #: ../gui/wxpython/iscatt/toolbars.py:51
 msgid "Show manual"
 msgstr "Rādīt pamācību"
@@ -9302,8 +9249,7 @@ msgid ""
 "map '%s'.\n"
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_data.py:259
-#: ../gui/wxpython/gui_core/vselect.py:49
+#: ../gui/wxpython/vnet/vnet_data.py:259 ../gui/wxpython/gui_core/vselect.py:49
 msgid "type"
 msgstr "tips"
 
@@ -9507,15 +9453,14 @@ msgid "Delete intermediate data when finish"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/model.py:2809
-#: ../gui/wxpython/gmodeler/frame.py:1887
-#: ../gui/wxpython/gui_core/forms.py:591 ../gui/wxpython/gui_core/menu.py:170
+#: ../gui/wxpython/gmodeler/frame.py:1887 ../gui/wxpython/gui_core/forms.py:591
+#: ../gui/wxpython/gui_core/menu.py:170
 #: ../gui/wxpython/modules/mcalc_builder.py:148
 #: ../gui/wxpython/modules/vclean.py:173 ../gui/wxpython/modules/vkrige.py:210
 msgid "&Run"
 msgstr "&Darbināt"
 
-#: ../gui/wxpython/gmodeler/model.py:2853
-#: ../gui/wxpython/gmodeler/frame.py:153
+#: ../gui/wxpython/gmodeler/model.py:2853 ../gui/wxpython/gmodeler/frame.py:153
 msgid "Variables"
 msgstr "Mainīgie"
 
@@ -9555,8 +9500,7 @@ msgid "Label:"
 msgstr "Birka"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:239
-#: ../gui/wxpython/gmodeler/frame.py:829
-#: ../gui/wxpython/gmodeler/frame.py:1552
+#: ../gui/wxpython/gmodeler/frame.py:829 ../gui/wxpython/gmodeler/frame.py:1552
 msgid "Comment:"
 msgstr "Komentārs:"
 
@@ -9691,8 +9635,7 @@ msgstr "Vienumi"
 msgid "Python editor"
 msgstr "Python redaktors"
 
-#: ../gui/wxpython/gmodeler/frame.py:161
-#: ../gui/wxpython/gui_core/forms.py:2224
+#: ../gui/wxpython/gmodeler/frame.py:161 ../gui/wxpython/gui_core/forms.py:2224
 #: ../gui/wxpython/modules/vkrige.py:135
 msgid "Command output"
 msgstr "Komandas izvade"
@@ -9701,8 +9644,7 @@ msgstr "Komandas izvade"
 msgid "Python script contains local modifications"
 msgstr "Python skripts satur lokālas izmaiņas"
 
-#: ../gui/wxpython/gmodeler/frame.py:245
-#: ../gui/wxpython/gmodeler/frame.py:2044
+#: ../gui/wxpython/gmodeler/frame.py:245 ../gui/wxpython/gmodeler/frame.py:2044
 msgid "Python script is up-to-date"
 msgstr ""
 
@@ -10037,9 +9979,8 @@ msgid "Vector:"
 msgstr "Vektori:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:316
-#, fuzzy
 msgid "Table:"
-msgstr "Tabula"
+msgstr "Tabula:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:416
 msgid "Loop"
@@ -10549,8 +10490,7 @@ msgstr "Komanda pārtraukta"
 msgid "Command finished"
 msgstr "Komanda izpildīta"
 
-#: ../gui/wxpython/core/gconsole.py:747
-#: ../gui/wxpython/gui_core/goutput.py:497
+#: ../gui/wxpython/core/gconsole.py:747 ../gui/wxpython/gui_core/goutput.py:497
 #, python-format
 msgid ""
 "Unable to write file '%(filePath)s'.\n"
@@ -11528,9 +11468,8 @@ msgid "Character encoding:"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2518
-#, fuzzy
 msgid "Example"
-msgstr "Paraugs: %s"
+msgstr "Piemērs"
 
 #: ../gui/wxpython/gui_core/forms.py:545
 msgid "Enter parameters for '"
@@ -12311,9 +12250,8 @@ msgid "Remove selected map(s) from list"
 msgstr "Pārsaukt izvēlēto karšu kopu"
 
 #: ../gui/wxpython/gui_core/simplelmgr.py:466
-#, fuzzy
 msgid "Layer up"
-msgstr "Slāņu grupa:"
+msgstr "Slāni uz augšu"
 
 #: ../gui/wxpython/gui_core/simplelmgr.py:467
 #, fuzzy
@@ -12321,9 +12259,8 @@ msgid "Move selected layer(s) up"
 msgstr "Saitēt izvēlētos slāņus"
 
 #: ../gui/wxpython/gui_core/simplelmgr.py:469
-#, fuzzy
 msgid "Layer down"
-msgstr "Slāņa ID"
+msgstr "Slāni uz leju"
 
 #: ../gui/wxpython/gui_core/simplelmgr.py:470
 #, fuzzy
@@ -12337,19 +12274,16 @@ msgid "Edit layer properties"
 msgstr "Vienuma īpašības"
 
 #: ../gui/wxpython/gui_core/simplelmgr.py:475
-#, fuzzy
 msgid "Change opacity"
-msgstr "Mainīt karšu kopu"
+msgstr "Mainīt slāņa caurspīdīgumu"
 
 #: ../gui/wxpython/gui_core/simplelmgr.py:476
-#, fuzzy
 msgid "Change layer opacity"
-msgstr "Pārvaldīt slāņus"
+msgstr "Mainīt slāņa caurspīdīgumu"
 
 #: ../gui/wxpython/gui_core/pyedit.py:377
-#, fuzzy
 msgid "Open file"
-msgstr "Teksta faili"
+msgstr "Atvērt failu"
 
 #: ../gui/wxpython/gui_core/pyedit.py:448
 msgid "Replace the content by the template?"
@@ -12764,9 +12698,8 @@ msgid "Delete currently selected settings"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/widgets.py:1248
-#, fuzzy
 msgid "Load:"
-msgstr "Ielādēt"
+msgstr "Ielādēt:"
 
 #: ../gui/wxpython/gui_core/widgets.py:1266
 #, python-format
@@ -12929,9 +12862,8 @@ msgid "Rename class"
 msgstr "Pārsaukt klasi"
 
 #: ../gui/wxpython/iscatt/frame.py:576
-#, fuzzy
 msgid "Set color"
-msgstr "Līnijas krāsa"
+msgstr "Iestatīt krāsu"
 
 #: ../gui/wxpython/iscatt/frame.py:584
 msgid "Hide"
@@ -13664,9 +13596,8 @@ msgid "Save"
 msgstr "Saglabāt"
 
 #: ../gui/wxpython/modules/colorrules.py:465
-#, fuzzy
 msgid "&Set"
-msgstr "Ie&statījumi"
+msgstr "Ie&stat"
 
 #: ../gui/wxpython/modules/colorrules.py:473
 #, fuzzy
@@ -13967,9 +13898,8 @@ msgid "%d extensions loaded"
 msgstr ""
 
 #: ../gui/wxpython/modules/extensions.py:238
-#, fuzzy
 msgid "Install"
-msgstr "&Instalēt"
+msgstr "Instalēt"
 
 #: ../gui/wxpython/modules/extensions.py:243
 #, fuzzy
@@ -14798,7 +14728,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:1211 ../gui/wxpython/menustrings.py:1503
 #: ../gui/wxpython/menustrings.py:1735
 msgid "Map type conversions"
-msgstr ""
+msgstr "Kartes tipa konvertēšana"
 
 #: ../gui/wxpython/menustrings.py:175 ../gui/wxpython/menustrings.py:306
 #: ../gui/wxpython/menustrings.py:1212
@@ -14942,7 +14872,6 @@ msgid "Launches script file."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:207
-#, fuzzy
 msgid "Quit wxGUI session."
 msgstr "Iziet no wxGUI sesijas."
 
@@ -15551,7 +15480,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:357 ../gui/wxpython/menustrings.py:1263
 msgid "Cost surface"
-msgstr ""
+msgstr "Izmaksu virsma"
 
 #: ../gui/wxpython/menustrings.py:358 ../gui/wxpython/menustrings.py:1264
 msgid ""
@@ -16034,7 +15963,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:465 ../gui/wxpython/menustrings.py:669
 #: ../gui/wxpython/menustrings.py:1371 ../gui/wxpython/menustrings.py:1575
 msgid "Reclassify"
-msgstr ""
+msgstr "Pārklasificēt"
 
 #: ../gui/wxpython/menustrings.py:466 ../gui/wxpython/menustrings.py:1372
 msgid ""
@@ -16163,7 +16092,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:494 ../gui/wxpython/menustrings.py:1400
 msgid "IDW from raster points"
-msgstr ""
+msgstr "IDW no rastra punktiem"
 
 #: ../gui/wxpython/menustrings.py:495 ../gui/wxpython/menustrings.py:1401
 msgid ""
@@ -16173,7 +16102,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:496 ../gui/wxpython/menustrings.py:1402
 msgid "IDW from vector points"
-msgstr ""
+msgstr "IDW no vektoru punktiem"
 
 #: ../gui/wxpython/menustrings.py:497 ../gui/wxpython/menustrings.py:1403
 msgid ""
@@ -16447,7 +16376,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:563 ../gui/wxpython/menustrings.py:1469
 msgid "Topology maintenance"
-msgstr ""
+msgstr "Topoloģijas uzturēšana"
 
 #: ../gui/wxpython/menustrings.py:564 ../gui/wxpython/menustrings.py:1470
 msgid "Create or rebuild topology"
@@ -16478,7 +16407,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:570 ../gui/wxpython/menustrings.py:1476
 msgid "Split lines"
-msgstr ""
+msgstr "Sadalīt līnijas"
 
 #: ../gui/wxpython/menustrings.py:571 ../gui/wxpython/menustrings.py:1477
 msgid "Splits vector lines to shorter segments."
@@ -16506,10 +16435,6 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:577 ../gui/wxpython/menustrings.py:1483
 msgid "Performs vector based generalization."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:578 ../gui/wxpython/menustrings.py:1484
-msgid "Add centroids"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:579 ../gui/wxpython/menustrings.py:1485
@@ -16688,10 +16613,6 @@ msgstr "Tīkla sagatavošana"
 msgid "Performs network maintenance."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:631 ../gui/wxpython/menustrings.py:1537
-msgid "Allocate subnets"
-msgstr ""
-
 #: ../gui/wxpython/menustrings.py:632 ../gui/wxpython/menustrings.py:1538
 msgid ""
 "Allocates subnets for nearest centers (direction from center). center node "
@@ -16707,10 +16628,6 @@ msgid ""
 "Splits net by cost isolines. Splits net to bands between cost isolines "
 "(direction from center). Center node must be opened (costs >= 0). Costs of "
 "center node are used in calculation."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:635 ../gui/wxpython/menustrings.py:1541
-msgid "Shortest path"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:636 ../gui/wxpython/menustrings.py:1542
@@ -16747,7 +16664,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:643 ../gui/wxpython/menustrings.py:1549
 msgid "Visibility network"
-msgstr ""
+msgstr "Redzamības tīkls"
 
 #: ../gui/wxpython/menustrings.py:644 ../gui/wxpython/menustrings.py:1550
 msgid "Performs visibility graph construction."
@@ -16795,10 +16712,6 @@ msgid ""
 "centrality measures in the network."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:655 ../gui/wxpython/menustrings.py:1561
-msgid "Steiner tree"
-msgstr ""
-
 #: ../gui/wxpython/menustrings.py:656 ../gui/wxpython/menustrings.py:1562
 msgid ""
 "Creates Steiner tree for the network and given terminals. Note that 'Minimum "
@@ -16814,10 +16727,6 @@ msgstr ""
 msgid "Computes minimum spanning tree for the network."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:659 ../gui/wxpython/menustrings.py:1565
-msgid "Traveling salesman analysis"
-msgstr ""
-
 #: ../gui/wxpython/menustrings.py:660 ../gui/wxpython/menustrings.py:1566
 msgid ""
 "Creates a cycle connecting given nodes (Traveling salesman problem). Note "
@@ -16828,7 +16737,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:661 ../gui/wxpython/menustrings.py:662
 #: ../gui/wxpython/menustrings.py:1567 ../gui/wxpython/menustrings.py:1568
 msgid "Overlay vector maps"
-msgstr ""
+msgstr "Pārklāt vektoru kartes"
 
 #: ../gui/wxpython/menustrings.py:663 ../gui/wxpython/menustrings.py:1569
 msgid ""
@@ -16846,7 +16755,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:666 ../gui/wxpython/menustrings.py:1572
 msgid "Manage categories"
-msgstr ""
+msgstr "Pārvaldīt kategorijas"
 
 #: ../gui/wxpython/menustrings.py:667 ../gui/wxpython/menustrings.py:1573
 msgid "Change or report categories"
@@ -16862,18 +16771,10 @@ msgid ""
 "results of SQL queries or a value in attribute table column."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:672 ../gui/wxpython/menustrings.py:1578
-msgid "Update area attributes from raster"
-msgstr ""
-
 #: ../gui/wxpython/menustrings.py:673 ../gui/wxpython/menustrings.py:1579
 msgid ""
 "Calculates univariate statistics from a raster map based on a vector map and "
 "uploads statistics to new attribute columns."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:674 ../gui/wxpython/menustrings.py:1580
-msgid "Update area attributes from vector"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:675 ../gui/wxpython/menustrings.py:1581
@@ -16932,10 +16833,6 @@ msgstr ""
 msgid "Produces a 2D/3D convex hull for a given vector map."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:689 ../gui/wxpython/menustrings.py:1595
-msgid "Delaunay triangles"
-msgstr ""
-
 #: ../gui/wxpython/menustrings.py:690 ../gui/wxpython/menustrings.py:1596
 msgid ""
 "Creates a Delaunay triangulation from an input vector map containing points "
@@ -16954,7 +16851,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:693 ../gui/wxpython/menustrings.py:1599
 msgid "Generate grid"
-msgstr ""
+msgstr "Ģenerēt tīklu"
 
 #: ../gui/wxpython/menustrings.py:694 ../gui/wxpython/menustrings.py:1600
 msgid "Creates a vector map of a user-defined grid."
@@ -17354,7 +17251,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:789 ../gui/wxpython/menustrings.py:1695
 msgid "Vegetation indices"
-msgstr ""
+msgstr "Veģetācijas indeksi"
 
 #: ../gui/wxpython/menustrings.py:790 ../gui/wxpython/menustrings.py:1696
 msgid ""
@@ -17372,7 +17269,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:793 ../gui/wxpython/menustrings.py:1699
 msgid "Albedo"
-msgstr ""
+msgstr "Albedo"
 
 #: ../gui/wxpython/menustrings.py:794 ../gui/wxpython/menustrings.py:1700
 msgid "Computes broad band albedo from surface reflectance."
@@ -18147,7 +18044,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:981 ../gui/wxpython/menustrings.py:1887
 msgid "Sampling"
-msgstr ""
+msgstr "Paraugošana"
 
 #: ../gui/wxpython/menustrings.py:982 ../gui/wxpython/menustrings.py:1888
 #, fuzzy
