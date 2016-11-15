@@ -8,19 +8,19 @@ msgstr ""
 "Project-Id-Version: grasslibs_lv\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-14 14:55+0100\n"
-"PO-Revision-Date: 2016-01-24 11:11+0200\n"
+"PO-Revision-Date: 2016-11-15 09:36+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian <grass-translations@lists.osgeo.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 2.0\n"
 "X-Poedit-Language: Latvian\n"
 "X-Poedit-Country: LATVIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 :"
+" 2);\n"
 
 #: ../lib/symbol/read.c:211
 #, c-format
@@ -1724,8 +1724,7 @@ msgstr ""
 msgid "Unknown dataset type: %s"
 msgstr "nezināns interpolācijas tips"
 
-#: ../lib/python/temporal/sampling.py:95
-#: ../lib/python/temporal/sampling.py:100
+#: ../lib/python/temporal/sampling.py:95 ../lib/python/temporal/sampling.py:100
 #, fuzzy, python-format
 msgid "Dataset <%s> not found in temporal database"
 msgstr "neiespējami atvērt rastra karti [%s iekš %s]"
@@ -2456,10 +2455,10 @@ msgstr "%s nav atrasts"
 msgid "Parameter '%(name)s' (%(desc)s) is missing."
 msgstr ""
 
-#: ../lib/python/script/task.py:243
-#, fuzzy
-msgid "<required>"
-msgstr "prasītais: %s\n"
+#: ../lib/proj/get_proj.c:236
+#, c-format
+msgid "The error message: %s"
+msgstr "Kļūdas paziņojums: %s"
 
 #: ../lib/python/script/task.py:503 ../lib/python/script/task.py:507
 #, python-format
@@ -2572,7 +2571,37 @@ msgid ""
 "++ Running blas level 3 unit tests ++"
 msgstr "nezināns interpolācijas tips"
 
-#: ../lib/gmath/test/test_blas3.c:44
+#: ../lib/nviz/render.c:119
+msgid "Unable to create rendering context"
+msgstr ""
+
+#: ../lib/lidar/zones.c:473 ../lib/lidar/zones.c:510
+#, c-format
+msgid "<%s> created in database."
+msgstr "Datubāzē ir izveidots <%s>."
+
+#: ../lib/lidar/zones.c:477 ../lib/lidar/zones.c:514
+#, c-format
+msgid "<%s> has not been created in database."
+msgstr "<%s> nav izveidots datubāzē."
+
+#: ../lib/lidar/raster.c:74 ../lib/lidar/raster.c:89 ../lib/lidar/raster.c:102
+#: ../lib/lidar/raster.c:119 ../lib/lidar/raster.c:134
+#: ../lib/lidar/raster.c:147 ../lib/lidar/raster.c:162
+#: ../lib/lidar/raster.c:175
+#, c-format
+msgid "Unable to access table <%s>"
+msgstr "Nav iespējams piekļūt tabulai <%s>"
+
+#: ../lib/segment/open.c:53
+msgid "Segment file name is NULL"
+msgstr ""
+
+#: ../lib/segment/open.c:58
+msgid "Segment file exists already"
+msgstr "Segmentu fails jau eksistē"
+
+#: ../lib/segment/open.c:66
 #, fuzzy
 msgid ""
 "\n"
@@ -2960,24 +2989,6 @@ msgstr ""
 msgid "    taking inverse FFT..."
 msgstr ""
 
-#: ../lib/lidar/raster.c:74 ../lib/lidar/raster.c:89 ../lib/lidar/raster.c:102
-#: ../lib/lidar/raster.c:119 ../lib/lidar/raster.c:134
-#: ../lib/lidar/raster.c:147 ../lib/lidar/raster.c:162
-#: ../lib/lidar/raster.c:175
-#, fuzzy, c-format
-msgid "Unable to access table <%s>"
-msgstr "Neiespējami atvērt failu %s iekš %s"
-
-#: ../lib/lidar/zones.c:473 ../lib/lidar/zones.c:510
-#, fuzzy, c-format
-msgid "<%s> created in database."
-msgstr "neiespējami atvērt elipsoīda tabulas failu: %s"
-
-#: ../lib/lidar/zones.c:477 ../lib/lidar/zones.c:514
-#, c-format
-msgid "<%s> has not been created in database."
-msgstr ""
-
 #: ../lib/db/dbmi_base/index.c:180
 msgid "db_set_index_column_name(): invalid column number"
 msgstr ""
@@ -3110,7 +3121,7 @@ msgstr ""
 
 #: ../lib/db/dbmi_base/error.c:91
 msgid "dbmi: Protocol error"
-msgstr ""
+msgstr "dbmi: protokola kļūda"
 
 #: ../lib/db/dbmi_base/error.c:136
 #, fuzzy
@@ -3246,10 +3257,6 @@ msgstr ""
 #, fuzzy
 msgid "Unable to get visual info"
 msgstr "Neiespējami atvērt failu %s iekš %s"
-
-#: ../lib/nviz/render.c:119
-msgid "Unable to create rendering context"
-msgstr ""
 
 #: ../lib/nviz/map_obj.c:59
 msgid "Maximum surfaces loaded!"
@@ -3955,7 +3962,7 @@ msgstr ""
 #: ../lib/raster/color_rules.c:327
 #, c-format
 msgid "Unable to load color rules <%s>"
-msgstr ""
+msgstr "Nav iespējams ielādēt krāsu noteikumus <%s>"
 
 #: ../lib/raster/history.c:115 ../lib/raster/history.c:123
 #, c-format
@@ -4364,7 +4371,7 @@ msgstr "%s failu ir pieejami karšu biblotēkā %s:\n"
 
 #: ../lib/gis/list.c:204
 msgid "G_list: Unknown element type"
-msgstr ""
+msgstr "G_list: nezināms elementa tips"
 
 #: ../lib/gis/proj3.c:121 ../lib/vector/Vlib/header.c:552
 msgid "Unknown projection"
@@ -5554,10 +5561,9 @@ msgstr "nav apraksta"
 msgid "CreateProcess() failed: error = %d"
 msgstr ""
 
-#: ../lib/gis/spawn.c:421
-#, fuzzy, c-format
-msgid "G_spawn: unable to redirect descriptor %d"
-msgstr "G_spawn: neiespējami dubultot deskriptoru %d to %d"
+#: ../lib/vector/Vlib/write_ogr.c:129 ../lib/vector/Vlib/open_ogr.c:65
+msgid "OGR layer not defined"
+msgstr "OGR slānis nav definēts"
 
 #: ../lib/gis/spawn.c:429 ../lib/gis/spawn.c:619
 #, c-format
@@ -6310,7 +6316,7 @@ msgstr "GRASS GIS mājas lapa:"
 #. GTC Running through: SHELL NAME
 #: ../lib/init/grass.py:1457
 msgid "This version running through:"
-msgstr "Šo versiju darbina"
+msgstr "Šo versiju darbina:"
 
 #: ../lib/init/grass.py:1459
 msgid "Help is available with the command:"
@@ -6597,10 +6603,6 @@ msgstr "GRASS nav kompilēts ar OGR atbalstu"
 #: ../lib/vector/Vlib/write_ogr.c:96 ../lib/vector/Vlib/write_pg.c:187
 #: ../lib/vector/Vlib/write_pg.c:255 ../lib/vector/Vlib/write_sfa.c:164
 msgid "Unable to rewrite feature (incompatible feature types)"
-msgstr ""
-
-#: ../lib/vector/Vlib/write_ogr.c:129 ../lib/vector/Vlib/open_ogr.c:65
-msgid "OGR layer not defined"
 msgstr ""
 
 #: ../lib/vector/Vlib/write_ogr.c:134 ../lib/vector/Vlib/write_pg.c:326
@@ -9298,14 +9300,6 @@ msgid ""
 "node %d, line %d"
 msgstr ""
 
-#: ../lib/segment/open.c:53
-msgid "Segment file name is NULL"
-msgstr ""
-
-#: ../lib/segment/open.c:58
-msgid "Segment file exists already"
-msgstr ""
-
 #: ../lib/segment/open.c:66
 #, fuzzy
 msgid "Unable to create segment file"
@@ -9409,11 +9403,6 @@ msgstr "Nederīgs mezgla ID: %d"
 
 #: ../lib/proj/get_proj.c:228
 msgid "Unable to initialise PROJ.4 with the following parameter list:"
-msgstr ""
-
-#: ../lib/proj/get_proj.c:236
-#, c-format
-msgid "The error message: %s"
 msgstr ""
 
 #: ../lib/proj/get_proj.c:294
@@ -9614,9 +9603,8 @@ msgid ""
 msgstr ""
 
 #: ../lib/pngdriver/read_png.c:42
-#, fuzzy
 msgid "Unable to read PNG"
-msgstr "Nevar pārsaukt %s"
+msgstr "Nevar nolasīt PNG"
 
 #: ../lib/pngdriver/read_png.c:60
 #, fuzzy
