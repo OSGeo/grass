@@ -37,7 +37,7 @@ class TestRasterExtraction(TestCase):
             cls.runModule("v.random", output="a3", npoints=20)
             # Create the temporal database
             cls.runModule("t.connect", flags="d")
-            cls.runModule("t.info", flags="s")
+            cls.runModule("t.info", flags="d")
             cls.runModule("t.create", type="stvds", temporaltype="absolute",
                           output="A", title="A testvect", description="A testvect")
             cls.runModule("t.register", flags="i", type="vector", input="A",
@@ -102,7 +102,7 @@ class TestRasterExtraction(TestCase):
                                 a2|testvect1|2001-02-01 00:00:00|2001-03-01 00:00:00
                                 a3|testvect1|2001-03-01 00:00:00|2001-04-01 00:00:00"""
 
-        trast_list = SimpleModule("t.vect.list", quiet=True, flags="s",
+        trast_list = SimpleModule("t.vect.list", quiet=True, flags="u",
                                   columns=[
                                       "name", "mapset", "start_time", "end_time"],
                                   input="A@testvect1")
@@ -118,7 +118,7 @@ class TestRasterExtraction(TestCase):
                                 a3|testvect2|2001-05-01 00:00:00|2001-07-01 00:00:00"""
 
         trast_list = SimpleModule(
-            "t.vect.list", quiet=True, flags="s",
+            "t.vect.list", quiet=True, flags="u",
             columns=["name", "mapset", "start_time", "end_time"],
             input="A@testvect2")
         self.assertModule(trast_list)
@@ -132,7 +132,7 @@ class TestRasterExtraction(TestCase):
                                 a2|testvect3|2001-04-01 00:00:00|2001-07-01 00:00:00
                                 a3|testvect3|2001-07-01 00:00:00|2001-10-01 00:00:00"""
 
-        trast_list = SimpleModule("t.vect.list", quiet=True, flags="s",
+        trast_list = SimpleModule("t.vect.list", quiet=True, flags="u",
                                   columns=[
                                       "name", "mapset", "start_time", "end_time"],
                                   input="A@testvect3")
@@ -148,7 +148,7 @@ class TestRasterExtraction(TestCase):
                                 a3|testvect4|2001-09-01 00:00:00|2002-01-01 00:00:00"""
 
         trast_list = SimpleModule(
-            "t.vect.list", quiet=True, flags="s",
+            "t.vect.list", quiet=True, flags="u",
             columns=["name", "mapset", "start_time", "end_time"],
             input="A@testvect4")
         self.assertModule(trast_list)
@@ -158,7 +158,7 @@ class TestRasterExtraction(TestCase):
         for a, b in zip(list_string.split("\n"), out.split("\n")):
             self.assertEqual(a.strip(), b.strip())
 
-        trast_list = SimpleModule("t.vect.list", quiet=True, flags="s",
+        trast_list = SimpleModule("t.vect.list", quiet=True, flags="u",
                                   columns=["name", "mapset", "start_time", "end_time"],
                                   input="A@testvect4", output=self.outfile)
         self.assertModule(trast_list)

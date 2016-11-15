@@ -37,7 +37,7 @@ class testRaster3dExtraction(TestCase):
             cls.runModule("r3.mapcalc", expression="a3 = 300")
             # Create the temporal database
             cls.runModule("t.connect", flags="d")
-            cls.runModule("t.info", flags="s")
+            cls.runModule("t.info", flags="d")
             cls.runModule("t.create", type="str3ds", temporaltype="absolute",
                           output="A", title="A test3d", description="A test3d")
             cls.runModule(

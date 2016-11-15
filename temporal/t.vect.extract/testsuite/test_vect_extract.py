@@ -30,7 +30,7 @@ class TestVectorExtraction(TestCase):
                           column="value", value="'random()'")
         # Create the temporal database
         cls.runModule("t.connect", flags="d")
-        cls.runModule("t.info", flags="s")
+        cls.runModule("t.info", flags="d")
         cls.runModule("t.create", type="stvds", temporaltype="absolute",
                       output="A", title="A testvect", description="A testvect",
                       overwrite=True)

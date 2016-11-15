@@ -2,7 +2,7 @@
 # Test the info output
 
 # We need to set a specific region in the
-# @preprocess step of this test. 
+# @preprocess step of this test.
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 export GRASS_OVERWRITE=1
@@ -17,8 +17,8 @@ v.random -z output=lidar_abs_1 n=20 zmin=0 zmax=100 column=height
 v.random -z output=lidar_abs_2 n=20 zmin=0 zmax=100 column=height
 
 # The first @test
-t.info -s
-t.info -sg
+t.info -d
+t.info -dg
 
 t.create type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
 t.create type=strds temporaltype=absolute output=precip_abs2 title="A test" descr="A test"
