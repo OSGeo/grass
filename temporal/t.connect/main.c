@@ -31,9 +31,9 @@ int main(int argc, char *argv[])
 
     /* Set description */
     module = G_define_module();
-    G_add_keyword(_("database"));
-    G_add_keyword(_("attribute table"));
-    G_add_keyword(_("connection settings"));
+    G_add_keyword(_("temporal"));
+    G_add_keyword(_("settings"));
+    G_add_keyword(_("metadata"));
     module->description =
 	_("Prints/sets general temporal GIS database connection for current mapset.");
 

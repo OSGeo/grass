@@ -37,7 +37,7 @@
 
 #%flag
 #% key: s
-#% description: Activate spatial topology
+#% description: Check the spatial topology of temporally related maps and select only spatially related maps
 #%end
 
 #%flag

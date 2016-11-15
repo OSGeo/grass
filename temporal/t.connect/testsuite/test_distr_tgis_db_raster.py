@@ -32,7 +32,7 @@ class TestRasterExtraction(TestCase):
             cls.runModule("g.region", s=0, n=80,
                           w=0, e=120, b=0, t=50, res=10, res3=10)
             cls.runModule("t.connect", flags="d")
-            cls.runModule("t.info", flags="s")
+            cls.runModule("t.info", flags="d")
             cls.runModule("r.mapcalc", expression="a1 = 100")
             cls.runModule("r.mapcalc", expression="a2 = 200")
             cls.runModule("r.mapcalc", expression="a3 = 300")
@@ -104,7 +104,7 @@ class TestRasterExtraction(TestCase):
                                 a3|test1|2001-03-01 00:00:00|2001-04-01 00:00:00"""
 
         trast_list = SimpleModule(
-            "t.rast.list", quiet=True, flags="s", input="A@test1")
+            "t.rast.list", quiet=True, flags="u", input="A@test1")
         self.assertModule(trast_list)
 
         out = trast_list.outputs["stdout"].value
@@ -117,7 +117,7 @@ class TestRasterExtraction(TestCase):
                                 a3|test2|2001-05-01 00:00:00|2001-07-01 00:00:00"""
 
         trast_list = SimpleModule(
-            "t.rast.list", quiet=True, flags="s", input="A@test2")
+            "t.rast.list", quiet=True, flags="u", input="A@test2")
         self.assertModule(trast_list)
 
         out = trast_list.outputs["stdout"].value
@@ -130,7 +130,7 @@ class TestRasterExtraction(TestCase):
                                 a3|test3|2001-07-01 00:00:00|2001-10-01 00:00:00"""
 
         trast_list = SimpleModule(
-            "t.rast.list", quiet=True, flags="s", input="A@test3")
+            "t.rast.list", quiet=True, flags="u", input="A@test3")
         self.assertModule(trast_list)
 
         out = trast_list.outputs["stdout"].value
@@ -143,7 +143,7 @@ class TestRasterExtraction(TestCase):
                                 a3|test4|2001-09-01 00:00:00|2002-01-01 00:00:00"""
 
         trast_list = SimpleModule(
-            "t.rast.list", quiet=True, flags="s", input="A@test4")
+            "t.rast.list", quiet=True, flags="u", input="A@test4")
         self.assertModule(trast_list)
 
         out = trast_list.outputs["stdout"].value
@@ -156,7 +156,7 @@ class TestRasterExtraction(TestCase):
                                 a3|test5|2001-11-01 00:00:00|2002-04-01 00:00:00"""
 
         trast_list = SimpleModule(
-            "t.rast.list", quiet=True, flags="s", input="A@test5")
+            "t.rast.list", quiet=True, flags="u", input="A@test5")
         self.assertModule(trast_list)
 
         out = trast_list.outputs["stdout"].value
@@ -164,7 +164,7 @@ class TestRasterExtraction(TestCase):
         for a, b in zip(list_string.split("\n"), out.split("\n")):
             self.assertEqual(a.strip(), b.strip())
 
-        trast_list = SimpleModule("t.rast.list", quiet=True, flags="s",
+        trast_list = SimpleModule("t.rast.list", quiet=True, flags="u",
                                   input="A@test5", output=self.outfile)
         self.assertModule(trast_list)
         self.assertFileExists(self.outfile)
