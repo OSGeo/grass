@@ -219,10 +219,11 @@ class TplotFrame(wx.Frame):
             parent=self.controlPanelVector, id=wx.ID_ANY,
             label=_(
                 'Vector temporal '
-                'dataset (strds)\n'
-                'Please press enter if'
-                ' you digit the name'
-                ' instead select with'
+                'dataset (stvds)\n'
+                'Press ENTER if you'
+                ' type the name of the'
+                ' stvds instead of'
+                ' selecting with the'
                 ' combobox'))
         self.datasetSelectV = gselect.Select(
             parent=self.controlPanelVector, id=wx.ID_ANY,
