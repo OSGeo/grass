@@ -6,6 +6,7 @@
  *               with hints from: 
  * 			prof. Giulio Antoniol - antoniol@ieee.org
  * 			prof. Michele Ceccarelli - ceccarelli@unisannio.it
+ *               Markus Metz (optimization and bug fixes)
  *
  * PURPOSE:      Create map raster with textural features.
  *
@@ -40,19 +41,19 @@ struct menu
 
 /* modify this table to add new measures */
 static struct menu menu[] = {
-    {"asm",      "Angular Second Moment",    "_ASM",   0,  0},
-    {"contrast", "Contrast",                 "_Contr", 0,  1},
-    {"corr",     "Correlation",              "_Corr",  0,  2},
-    {"var",      "Variance",                 "_Var",   0,  3},
-    {"idm",      "Inverse Diff Moment",      "_IDM",   0,  4},
-    {"sa",       "Sum Average",              "_SA",    0,  5},
-    {"se",       "Sum Entropy",              "_SE",    0,  6},
+    {"asm",      "Angular Second Moment",    "_ASM",   0,  1},
+    {"contrast", "Contrast",                 "_Contr", 0,  2},
+    {"corr",     "Correlation",              "_Corr",  0,  3},
+    {"var",      "Variance",                 "_Var",   0,  4},
+    {"idm",      "Inverse Diff Moment",      "_IDM",   0,  5},
+    {"sa",       "Sum Average",              "_SA",    0,  6},
     {"sv",       "Sum Variance",             "_SV",    0,  7},
-    {"entr",     "Entropy",                  "_Entr",  0,  8},
-    {"dv",       "Difference Variance",      "_DV",    0,  9},
-    {"de",       "Difference Entropy",       "_DE",    0, 10},
-    {"moc1",     "Measure of Correlation-1", "_MOC-1", 0, 11},
-    {"moc2",     "Measure of Correlation-2", "_MOC-2", 0, 12},
+    {"se",       "Sum Entropy",              "_SE",    0,  8},
+    {"entr",     "Entropy",                  "_Entr",  0,  9},
+    {"dv",       "Difference Variance",      "_DV",    0, 10},
+    {"de",       "Difference Entropy",       "_DE",    0, 11},
+    {"moc1",     "Measure of Correlation-1", "_MOC-1", 0, 12},
+    {"moc2",     "Measure of Correlation-2", "_MOC-2", 0, 13},
     {NULL, NULL, NULL, 0, -1}
 };
 
@@ -86,9 +87,9 @@ int main(int argc, char *argv[])
     FCELL measure;		/* Containing measure done */
     int dist, size;	/* dist = value of distance, size = s. of moving window */
     int offset;
-    int have_px, have_py, have_sentr, have_pxpys, have_pxpyd;
+    int have_px, have_py, have_pxpys, have_pxpyd;
     int infd, *outfd;
-    RASTER_MAP_TYPE data_type, out_data_type;
+    RASTER_MAP_TYPE out_data_type;
     struct GModule *module;
     struct Option *opt_input, *opt_output, *opt_size, *opt_dist, *opt_measure;
     struct Flag *flag_ind, *flag_all;
@@ -127,7 +128,8 @@ int main(int argc, char *argv[])
     opt_dist->key_desc = "value";
     opt_dist->type = TYPE_INTEGER;
     opt_dist->required = NO;
-    opt_dist->description = _("The distance between two samples (>= 1)");
+    opt_dist->label = _("The distance between two samples (>= 1)");
+    opt_dist->description = _("The distance must be smaller than the size of the moving window");
     opt_dist->answer = "1";
 
     for (i = 0; menu[i].name; i++) {
@@ -166,6 +168,8 @@ int main(int argc, char *argv[])
     dist = atoi(opt_dist->answer);
     if (dist <= 0)
 	G_fatal_error(_("The distance between two samples must be > 0"));
+    if (dist >= size)
+	G_fatal_error(_("The distance between two samples must be smaller than the size of the moving window"));
 
     n_measures = 0;
     if (flag_all->answer) {
@@ -192,7 +196,7 @@ int main(int argc, char *argv[])
     j = 0;
     for (i = 0; menu[i].name; i++) {
 	if (menu[i].useme == 1) {
-	    measure_idx[j] = menu[i].idx;
+	    measure_idx[j] = i;
 	    j++;
 	}
     }
@@ -206,10 +210,6 @@ int main(int argc, char *argv[])
 	have_py = 1;
     else
 	have_py = 0;
-    if (menu[6].useme || menu[7].useme)
-	have_sentr = 1;
-    else
-	have_sentr = 0;
     if (menu[5].useme || menu[6].useme || menu[7].useme)
 	have_pxpys = 1;
     else
@@ -220,9 +220,6 @@ int main(int argc, char *argv[])
 	have_pxpyd = 0;
 
     infd = Rast_open_old(name, "");
-
-    /* determine the inputmap type (CELL/FCELL/DCELL) */
-    data_type = Rast_get_map_type(infd);
 
     Rast_get_cellhd(name, "", &cellhd);
 
@@ -327,8 +324,8 @@ int main(int argc, char *argv[])
 	G_message(n_("Calculating %d texture measure", 
         "Calculating %d texture measures", n_measures), n_measures);
     else
-	G_message(_("Calculating %s"), menu[measure_idx[0]].desc);
-    alloc_vars(size, dist);
+	G_message(_("Calculating %s..."), menu[measure_idx[0]].desc);
+    alloc_vars(size);
     for (row = first_row; row < last_row; row++) {
 	G_percent(row, nrows, 2);
 
@@ -346,11 +343,11 @@ int main(int argc, char *argv[])
 
 	    /* for all angles (0, 45, 90, 135) */
 	    for (i = 0; i < 4; i++) {
-		set_angle_vars(i, have_px, have_py, have_sentr, have_pxpys, have_pxpyd);
+		set_angle_vars(i, have_px, have_py, have_pxpys, have_pxpyd);
 		/* for all requested textural measures */
 		for (j = 0; j < n_measures; j++) {
 
-		    measure = (FCELL) h_measure(measure_idx[j]);
+		    measure = (FCELL) h_measure(menu[measure_idx[j]].idx);
 
 		    if (flag_ind->answer) {
 			/* output for each angle separately */
