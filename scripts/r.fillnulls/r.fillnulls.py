@@ -173,10 +173,10 @@ def main():
         # creating binary (0/1) map
         if usermask:
             grass.message(_("Skipping masked raster parts"))
-            grass.mapcalc("$tmp1 = if(isnull($input) && !($mask == 0 || isnull($mask)),1,null())",
+            grass.mapcalc("$tmp1 = if(isnull(\"$input\") && !($mask == 0 || isnull($mask)),1,null())",
                           tmp1=prefix + 'nulls', input=input, mask=usermask)
         else:
-            grass.mapcalc("$tmp1 = if(isnull($input),1,null())",
+            grass.mapcalc("$tmp1 = if(isnull(\"$input\"),1,null())",
                           tmp1=prefix + 'nulls', input=input)
         tmp_rmaps.append(prefix + 'nulls')
 
@@ -311,7 +311,7 @@ def main():
                               "user mask if needed:"))
 
             # no idea why r.grow old=-1 doesn't replace existing values with NULL
-            grass.mapcalc("$out = if($inp == -1, null(), $dem)",
+            grass.mapcalc("$out = if($inp == -1, null(), \"$dem\")",
                           out=holename + '_edges', inp=holename + '_grown', dem=input)
             tmp_rmaps.append(holename + '_edges')
 
