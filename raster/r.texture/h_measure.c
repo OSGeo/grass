@@ -6,6 +6,7 @@
  *               with hints from: 
  * 			prof. Giulio Antoniol - antoniol@ieee.org
  * 			prof. Michele Ceccarelli - ceccarelli@unisannio.it
+ *               Markus Metz (optimization and bug fixes)
  *
  * PURPOSE:      Create map raster with textural features.
  *
@@ -28,9 +29,6 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#define RADIX 2.0
-#define EPSILON 0.000000001
-
 #define BL  "Direction             "
 #define F1  "Angular Second Moment "
 #define F2  "Contrast              "
@@ -46,28 +44,25 @@
 #define F12 "Measure of Correlation-1 "
 #define F13 "Measure of Correlation-2 "
 
-#define SIGN(x,y) ((y)<0 ? -fabs(x) : fabs(x))
-#define SWAP(a,b) {y=(a);(a)=(b);(b)=y;}
-
 #define PGM_MAXMAXVAL 255
 #define MAX_MATRIX_SIZE 512
 
 float **matrix(int nr, int nc);
 float *vector(int n);
 
-float f1_asm(float **P, int Ng);
-float f2_contrast(float **P, int Ng);
-float f3_corr(float **P, int Ng);
-float f4_var(float **P, int Ng);
-float f5_idm(float **P, int Ng);
-float f6_savg(float **P, int Ng);
-float f7_svar(float **P, int Ng, double S);
-float f8_sentropy(float **P, int Ng);
-float f9_entropy(float **P, int Ng);
-float f10_dvar(float **P, int Ng);
-float f11_dentropy(float **P, int Ng);
-float f12_icorr(float **P, int Ng);
-float f13_icorr(float **P, int Ng);
+float f1_asm(void);
+float f2_contrast(void);
+float f3_corr(void);
+float f4_var(void);
+float f5_idm(void);
+float f6_savg(void);
+float f7_svar(void);
+float f8_sentropy(void);
+float f9_entropy(void);
+float f10_dvar(void);
+float f11_dentropy(void);
+float f12_icorr(void);
+float f13_icorr(void);
 
 static float **P_matrix = NULL;
 static float **P_matrix0 = NULL;
@@ -76,16 +71,15 @@ static float **P_matrix90 = NULL;
 static float **P_matrix135 = NULL;
 
 int tone[PGM_MAXMAXVAL + 1];
-static int tones = 0;
-static float sentropy = 0.0;
+static int Ng = 0;
 static float *px, *py;
 static float Pxpys[2 * PGM_MAXMAXVAL + 2];
 static float Pxpyd[2 * PGM_MAXMAXVAL + 2];
 
 
-void alloc_vars(int size, int dist)
+void alloc_vars(int size)
 {
-    int Ng;
+    int msize2;
 
     /* Allocate memory for gray-tone spatial dependence matrix */
     P_matrix0 = matrix(MAX_MATRIX_SIZE + 1, MAX_MATRIX_SIZE + 1);
@@ -94,12 +88,34 @@ void alloc_vars(int size, int dist)
     P_matrix135 = matrix(MAX_MATRIX_SIZE + 1, MAX_MATRIX_SIZE + 1);
 
     if (size * size < 256)
-	Ng = size * size;
+	msize2 = size * size;
     else
-	Ng = 256;
+	msize2 = 256;
 
-    px = vector(Ng + 1);
-    py = vector(Ng + 1);
+    px = vector(msize2 + 1);
+    py = vector(msize2 + 1);
+}
+
+static int bsearch_gray(int *array, int n, int val)
+{
+    int lo, hi, mid;
+
+    lo = 0;
+    hi = n - 1;
+
+    while (lo <= hi) {
+	mid = (lo + hi) >> 1;
+	
+	if (array[mid] == val)
+	    return mid;
+
+	if (array[mid] > val)
+	    hi = mid - 1;
+	else
+	    lo = mid + 1;
+    }
+
+    return -1;
 }
 
 int set_vars(int **grays, int curr_row, int curr_col,
@@ -108,90 +124,102 @@ int set_vars(int **grays, int curr_row, int curr_col,
     int R0, R45, R90, R135, x, y;
     int row, col, row2, col2, rows, cols;
     int itone, jtone;
+    int cnt;
 
     rows = cols = size;
 
     /* Determine the number of different gray scales (not maxval) */
     for (row = 0; row <= PGM_MAXMAXVAL; row++)
 	tone[row] = -1;
+    cnt = 0;
     for (row = curr_row - offset; row <= curr_row + offset; row++) {
 	for (col = curr_col - offset; col <= curr_col + offset; col++) {
 	    if (grays[row][col] < 0) {	/* No data pixel found */
-		return 0;
+		continue;
 	    }
 	    if (grays[row][col] > PGM_MAXMAXVAL)
 		G_fatal_error(_("Too many categories (found: %i, max: %i). "
 				"Try to rescale or reclassify the map"),
 			      grays[row][col], PGM_MAXMAXVAL);
 	    tone[grays[row][col]] = grays[row][col];
+	    cnt++;
 	}
     }
+    /* what is the minimum number of pixels 
+     * to get reasonable texture measurements ? */
+    if (cnt < t_d * t_d * 4)
+	return 0;
 
     /* Collapse array, taking out all zero values */
-    tones = 0;
+    Ng = 0;
     for (row = 0; row <= PGM_MAXMAXVAL; row++) {
 	if (tone[row] != -1)
-	    tone[tones++] = tone[row];
+	    tone[Ng++] = tone[row];
     }
 
     /* Now array contains only the gray levels present (in ascending order) */
 
-    for (row = 0; row < tones; row++)
-	for (col = 0; col < tones; col++) {
+    for (row = 0; row < Ng; row++)
+	for (col = 0; col < Ng; col++) {
 	    P_matrix0[row][col] = P_matrix45[row][col] = 0;
 	    P_matrix90[row][col] = P_matrix135[row][col] = 0;
 	}
 
-    /* Find gray-tone spatial dependence matrix */
+    /* Find normalizing constants */
+    /* not correct in case of NULL cells: */
+    /*
+    R0 = 2 * rows * (cols - t_d);
+    R45 = 2 * (rows - t_d) * (cols - t_d);
+    R90 = 2 * (rows - t_d) * cols;
+    R135 = R45;
+    */
 
+    /* count actual cooccurrences for each angle */
+    R0 = R45 = R90 = R135 = 0;
+
+    /* Find gray-tone spatial dependence matrix */
     for (row = 0; row < rows; row++) {
 	row2 = curr_row - offset + row;
 	for (col = 0; col < cols; col++) {
 	    col2 = curr_col - offset + col;
-	    x = 0;
-	    while (tone[x] != grays[row2][col2])
-		x++;
-	    if (col + t_d < cols) {
-		y = 0;
-		while (tone[y] != grays[row2][col2 + t_d])
-		    y++;
+	    if (grays[row2][col2] < 0)
+		continue;
+	    x = bsearch_gray(tone, Ng, grays[row2][col2]);
+	    if (col + t_d < cols &&
+	        grays[row2][col2 + t_d] >= 0) {
+		y = bsearch_gray(tone, Ng, grays[row2][col2 + t_d]);
 		P_matrix0[x][y]++;
 		P_matrix0[y][x]++;
+		R0 += 2;
 	    }
-	    if (row + t_d < rows) {
-		y = 0;
-		while (tone[y] != grays[row2 + t_d][col2])
-		    y++;
+	    if (row + t_d < rows &&
+	        grays[row2 + t_d][col2] >= 0) {
+		y = bsearch_gray(tone, Ng, grays[row2 + t_d][col2]);
 		P_matrix90[x][y]++;
 		P_matrix90[y][x]++;
+		R90 += 2;
 	    }
-	    if (row + t_d < rows && col - t_d >= 0) {
-		y = 0;
-		while (tone[y] != grays[row2 + t_d][col2 - t_d])
-		    y++;
+	    if (row + t_d < rows && col - t_d >= 0 &&
+	        grays[row2 + t_d][col2 - t_d] >= 0) {
+		y = bsearch_gray(tone, Ng, grays[row2 + t_d][col2 - t_d]);
 		P_matrix45[x][y]++;
 		P_matrix45[y][x]++;
+		R45 += 2;
 	    }
-	    if (row + t_d < rows && col + t_d < cols) {
-		y = 0;
-		while (tone[y] != grays[row2 + t_d][col2 + t_d])
-		    y++;
+	    if (row + t_d < rows && col + t_d < cols &&
+	        grays[row2 + t_d][col2 + t_d] >= 0) {
+		y = bsearch_gray(tone, Ng, grays[row2 + t_d][col2 + t_d]);
 		P_matrix135[x][y]++;
 		P_matrix135[y][x]++;
+		R135 += 2;
 	    }
 	}
     }
     /* Gray-tone spatial dependence matrices are complete */
 
-    /* Find normalizing constants */
-    R0 = 2 * rows * (cols - 1);
-    R45 = 2 * (rows - 1) * (cols - 1);
-    R90 = 2 * (rows - 1) * cols;
-    R135 = R45;
-
     /* Normalize gray-tone spatial dependence matrix */
-    for (itone = 0; itone < tones; itone++) {
-	for (jtone = 0; jtone < tones; jtone++) {
+    for (itone = 0; itone < Ng; itone++) {
+	for (jtone = 0; jtone < Ng; jtone++) {
 	    P_matrix0[itone][jtone] /= R0;
 	    P_matrix45[itone][jtone] /= R45;
 	    P_matrix90[itone][jtone] /= R90;
@@ -202,10 +230,10 @@ int set_vars(int **grays, int curr_row, int curr_col,
     return 1;
 }
 
-int set_angle_vars(int angle, int have_px, int have_py, int have_sentr,
+int set_angle_vars(int angle, int have_px, int have_py,
                    int have_pxpys, int have_pxpyd)
 {
-    int i, j, Ng;
+    int i, j;
     float **P;
 
     switch (angle) {
@@ -223,10 +251,6 @@ int set_angle_vars(int angle, int have_px, int have_py, int have_sentr,
 	break;
     }
 
-    if (have_sentr)
-	sentropy = f8_sentropy(P_matrix, tones);
-
-    Ng = tones;
     P = P_matrix;
 
     /*
@@ -276,68 +300,68 @@ float h_measure(int t_m)
 {
     switch (t_m) {
 	/* Angular Second Moment */
-    case 0:
-	return (f1_asm(P_matrix, tones));
+    case 1:
+	return (f1_asm());
 	break;
 
     /* Contrast */
-    case 1:
-	return (f2_contrast(P_matrix, tones));
+    case 2:
+	return (f2_contrast());
 	break;
 
     /* Correlation */
-    case 2:
-	return (f3_corr(P_matrix, tones));
+    case 3:
+	return (f3_corr());
 	break;
 
     /* Variance */
-    case 3:
-	return (f4_var(P_matrix, tones));
+    case 4:
+	return (f4_var());
 	break;
 
     /* Inverse Diff Moment */
-    case 4:
-	return (f5_idm(P_matrix, tones));
+    case 5:
+	return (f5_idm());
 	break;
 
     /* Sum Average */
-    case 5:
-	return (f6_savg(P_matrix, tones));
-	break;
-
-    /* Sum Entropy */
     case 6:
-	return (sentropy);
+	return (f6_savg());
 	break;
 
     /* Sum Variance */
     case 7:
-	return (f7_svar(P_matrix, tones, sentropy));
+	return (f7_svar());
+	break;
+
+    /* Sum Entropy */
+    case 8:
+	return (f8_sentropy());
 	break;
 
     /* Entropy */
-    case 8:
-	return (f9_entropy(P_matrix, tones));
+    case 9:
+	return (f9_entropy());
 	break;
 
     /* Difference Variance */
-    case 9:
-	return (f10_dvar(P_matrix, tones));
+    case 10:
+	return (f10_dvar());
 	break;
 
     /* Difference Entropy */
-    case 10:
-	return (f11_dentropy(P_matrix, tones));
+    case 11:
+	return (f11_dentropy());
 	break;
 
     /* Measure of Correlation-1 */
-    case 11:
-	return (f12_icorr(P_matrix, tones));
+    case 12:
+	return (f12_icorr());
 	break;
 
     /* Measure of Correlation-2 */
-    case 12:
-	return (f13_icorr(P_matrix, tones));
+    case 13:
+	return (f13_icorr());
 	break;
     }
 
@@ -361,10 +385,11 @@ void MatrixDealloc(float **A, int N)
  * gray-tone transitions. Hence the P matrix for such an image will have
  * fewer entries of large magnitude.
  */
-float f1_asm(float **P, int Ng)
+float f1_asm(void)
 {
     int i, j;
     float sum = 0;
+    float **P = P_matrix;
 
     for (i = 0; i < Ng; i++)
 	for (j = 0; j < Ng; j++)
@@ -379,22 +404,36 @@ float f1_asm(float **P, int Ng)
  * measure of the contrast or the amount of local variations present in an
  * image.
  */
-float f2_contrast(float **P, int Ng)
+float f2_contrast(void)
 {
-    int i, j, n;
+    int i, j /*, n */;
     float sum, bigsum = 0;
+    float **P = P_matrix;
 
+    /*
     for (n = 0; n < Ng; n++) {
 	sum = 0;
 	for (i = 0; i < Ng; i++) {
 	    for (j = 0; j < Ng; j++) {
-		if ((i - j) == n || (j - i) == n) {
+		if ((tone[i] - tone[j]) == tone[n] ||
+		    (tone[j] - tone[i]) == tone[n]) {
 		    sum += P[i][j];
 		}
 	    }
 	}
-	bigsum += n * n * sum;
+	bigsum += tone[n] * tone[n] * sum;
     }
+    */
+
+    /* two-loop version */
+    for (i = 0; i < Ng; i++) {
+	for (j = 0; j < Ng; j++) {
+	    if (i != j) {
+		sum += P[i][j] * (tone[i] - tone[j]) * (tone[i] - tone[j]);
+	    }
+	}
+    }
+
     return bigsum;
 }
 
@@ -403,12 +442,12 @@ float f2_contrast(float **P, int Ng)
  * This correlation feature is a measure of gray-tone linear-dependencies
  * in the image.
  */
-float f3_corr(float **P, int Ng)
+float f3_corr(void)
 {
     int i, j;
-    float sum_sqrx = 0, sum_sqry = 0, tmp = 0;
-    float meanx = 0, meany = 0, stddevx, stddevy;
-
+    float sum_sqr = 0, tmp = 0;
+    float mean = 0, stddev;
+    float **P = P_matrix;
 
     /* Now calculate the means and standard deviations of px and py */
 
@@ -418,25 +457,23 @@ float f3_corr(float **P, int Ng)
      *     after realizing that meanx=meany and stddevx=stddevy
      */
     for (i = 0; i < Ng; i++) {
-	meanx += px[i] * i;
-	sum_sqrx += px[i] * i * i;
+	mean += px[i] * tone[i];
+	sum_sqr += px[i] * tone[i] * tone[i];
 
 	for (j = 0; j < Ng; j++)
-	    tmp += i * j * P[i][j];
+	    tmp += tone[i] * tone[j] * P[i][j];
     }
-    meany = meanx;
-    sum_sqry = sum_sqrx;
-    stddevx = sqrt(sum_sqrx - (meanx * meanx));
-    stddevy = stddevx;
+    stddev = sqrt(sum_sqr - (mean * mean));
 
-    return (tmp - meanx * meany) / (stddevx * stddevy);
+    return (tmp - mean * mean) / (stddev * stddev);
 }
 
 /* Sum of Squares: Variance */
-float f4_var(float **P, int Ng)
+float f4_var(void)
 {
     int i, j;
     float mean = 0, var = 0;
+    float **P = P_matrix;
 
     /*- Corrected by James Darrell McCauley, 16 Aug 1991
      *  calculates the mean intensity level instead of the mean of
@@ -444,73 +481,102 @@ float f4_var(float **P, int Ng)
      */
     for (i = 0; i < Ng; i++)
 	for (j = 0; j < Ng; j++)
-	    mean += i * P[i][j];
+	    mean += tone[i] * P[i][j];
 
     for (i = 0; i < Ng; i++)
 	for (j = 0; j < Ng; j++)
-	    var += (i + 1 - mean) * (i + 1 - mean) * P[i][j];
+	    var += (tone[i] - mean) * (tone[j] - mean) * P[i][j];
 
     return var;
 }
 
 /* Inverse Difference Moment */
-float f5_idm(float **P, int Ng)
+float f5_idm(void)
 {
     int i, j;
     float idm = 0;
+    float **P = P_matrix;
 
     for (i = 0; i < Ng; i++)
 	for (j = 0; j < Ng; j++)
-	    idm += P[i][j] / (1 + (i - j) * (i - j));
+	    idm += P[i][j] / (1 + (tone[i] - tone[j]) * (tone[i] - tone[j]));
 
     return idm;
 }
 
 /* Sum Average */
-float f6_savg(float **P, int Ng)
+float f6_savg(void)
 {
-    int i;
+    int i, j, k;
     float savg = 0;
+    float *P = Pxpys;
 
+    /*
     for (i = 0; i < 2 * Ng - 1; i++)
 	savg += (i + 2) * Pxpys[i];
+    */
+
+    for (i = 0; i < Ng; i++) {
+	for (j = 0; j < Ng; j++) {
+	    k = i + j;
+	    savg += (tone[i] + tone[j]) * P[k];
+	}
+    }
 
     return savg;
 }
 
 /* Sum Variance */
-float f7_svar(float **P, int Ng, double S)
+float f7_svar(void)
 {
-    int i;
+    int i, j, k;
     float var = 0;
+    float *P = Pxpys;
+    float savg = f6_savg();
+    float tmp;
 
+    /*
     for (i = 0; i < 2 * Ng - 1; i++)
-	var += (i + 2 - S) * (i + 2 - S) * Pxpys[i];
+	var += (i + 2 - savg) * (i + 2 - savg) * Pxpys[i];
+    */
+
+    for (i = 0; i < Ng; i++) {
+	for (j = 0; j < Ng; j++) {
+	    k = i + j;
+	    tmp = tone[i] + tone[j] - savg;
+	    var += tmp * tmp * P[k];
+	}
+    }
 
     return var;
 }
 
 /* Sum Entropy */
-float f8_sentropy(float **P, int Ng)
+float f8_sentropy(void)
 {
     int i;
     float sentr = 0;
+    float *P = Pxpys;
 
-    for (i = 0; i < 2 * Ng - 1; i++)
-	sentr -= Pxpys[i] * log10(Pxpys[i] + EPSILON);
+    for (i = 0; i < 2 * Ng - 1; i++) {
+	if (P[i] > 0)
+	    sentr -= P[i] * log2(P[i]);
+    }
 
     return sentr;
 }
 
 /* Entropy */
-float f9_entropy(float **P, int Ng)
+float f9_entropy(void)
 {
     int i, j;
     float entropy = 0;
+    float **P = P_matrix;
 
     for (i = 0; i < Ng; i++) {
 	for (j = 0; j < Ng; j++) {
-	    entropy += P[i][j] * log10(P[i][j] + EPSILON);
+	    if (P[i][j] > 0)
+		entropy += P[i][j] * log2(P[i][j]);
 	}
     }
 
@@ -518,50 +584,60 @@ float f9_entropy(float **P, int Ng)
 }
 
 /* Difference Variance */
-float f10_dvar(float **P, int Ng)
+float f10_dvar(void)
 {
     int i, tmp;
     float sum = 0, sum_sqr = 0, var = 0;
+    float *P = Pxpyd;
 
     /* Now calculate the variance of Pxpy (Px-y) */
     for (i = 0; i < Ng; i++) {
-	sum += Pxpyd[i];
-	sum_sqr += Pxpyd[i] * Pxpyd[i];
+	sum += P[i];
+	sum_sqr += P[i] * P[i];
     }
-    tmp = Ng * Ng;
+    /* tmp = Ng * Ng; */
+    tmp = (tone[Ng - 1] - tone[0]) * (tone[Ng - 1] - tone[0]);
     var = ((tmp * sum_sqr) - (sum * sum)) / (tmp * tmp);
 
     return var;
 }
 
 /* Difference Entropy */
-float f11_dentropy(float **P, int Ng)
+float f11_dentropy(void)
 {
     int i;
     float sum = 0;
+    float *P = Pxpyd;
 
-    for (i = 0; i < Ng; i++)
-	sum += Pxpyd[i] * log10(Pxpyd[i] + EPSILON);
+    for (i = 0; i < Ng; i++) {
+	if (P[i] > 0)
+	    sum += P[i] * log2(P[i]);
+    }
 
     return -sum;
 }
 
 /* Information Measures of Correlation */
-float f12_icorr(float **P, int Ng)
+float f12_icorr(void)
 {
     int i, j;
     float hx = 0, hy = 0, hxy = 0, hxy1 = 0;
+    float **P = P_matrix;
 
     for (i = 0; i < Ng; i++)
 	for (j = 0; j < Ng; j++) {
-	    hxy1 -= P[i][j] * log10(px[i] * py[j] + EPSILON);
-	    hxy -= P[i][j] * log10(P[i][j] + EPSILON);
+	    if (px[i] * py[j] > 0)
+		hxy1 -= P[i][j] * log2(px[i] * py[j]);
+	    if (P[i][j] > 0)
+		hxy -= P[i][j] * log2(P[i][j]);
 	}
 
     /* Calculate entropies of px and py - is this right? */
     for (i = 0; i < Ng; i++) {
-	hx -= px[i] * log10(px[i] + EPSILON);
-	hy -= py[i] * log10(py[i] + EPSILON);
+	if (px[i] > 0)
+	    hx -= px[i] * log2(px[i]);
+	if (py[i] > 0)
+	    hy -= py[i] * log2(py[i]);
     }
 
     /* fprintf(stderr,"hxy1=%f\thxy=%f\thx=%f\thy=%f\n",hxy1,hxy,hx,hy); */
@@ -569,15 +645,18 @@ float f12_icorr(float **P, int Ng)
 }
 
 /* Information Measures of Correlation */
-float f13_icorr(float **P, int Ng)
+float f13_icorr(void)
 {
     int i, j;
     float hxy = 0, hxy2 = 0;
+    float **P = P_matrix;
 
     for (i = 0; i < Ng; i++) {
 	for (j = 0; j < Ng; j++) {
-	    hxy2 -= px[i] * py[j] * log10(px[i] * py[j] + EPSILON);
-	    hxy -= P[i][j] * log10(P[i][j] + EPSILON);
+	    if (px[i] * py[j] > 0)
+		hxy2 -= px[i] * py[j] * log2(px[i] * py[j]);
+	    if (P[i][j] > 0)
+		hxy -= P[i][j] * log2(P[i][j]);
 	}
     }
 

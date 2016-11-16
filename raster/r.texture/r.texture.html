@@ -8,14 +8,21 @@ degrees for a <em>distance</em> (default = 1).
 <em>r.texture</em> assumes grey levels ranging from 0 to 255 as input. 
 The input is automatically rescaled to 0 to 255 if the input map range is outside
 of this range.
+
+<p>
+In order to reduce noise in the input data, and to speed up processing, 
+the input map can be recoded using equal-probability quantization. 
+Quantization rules for <em>r.recode</em> can be generated with 
+<em>r.quantile -r</em> using e.g 16 or 32 quantiles (see example below). 
+
 <p>
 In general, several variables constitute texture: differences in grey level values,
 coarseness as scale of grey level differences, presence or lack of directionality
 and regular patterns. A texture can be characterized by tone (grey level intensity
 properties) and structure (spatial relationships). Since textures are highly scale
 dependent, hierarchical textures may occur.
+
 <p>
-    
 <em>r.texture</em> reads a GRASS raster map as input and calculates
 textural features based on spatial dependence matrices for north-south,
 east-west, northwest, and southwest directions using a side by side
@@ -122,6 +129,15 @@ d.shade color=ortho_texture_ASM_0 shade=ortho_2001_t792_1m
 This calculates four maps (requested texture at four orientations):
 ortho_texture_ASM_0, ortho_texture_ASM_45, ortho_texture_ASM_90, ortho_texture_ASM_135.
 
+Reducing the number of gray levels (equal-probability quantizing):
+
+<div class="code"><pre>
+g.region -p rast=ortho_2001_t792_1m
+r.quantile in=ortho_2001_t792_1m quantiles=16 -r | r.recode in=ortho_2001_t792_1m out=ortho_2001_t792_1m_q16 rules=-
+</pre></div>
+
+The recoded raster map can then be used as input for r.texture as before.
+
 <h2>KNOWN ISSUES</h2>
 The program can run incredibly slow for large raster maps.
 
@@ -162,6 +178,7 @@ of <a href="http://netpbm.sourceforge.net/doc/pgmtexture.html">pgmtexture</a>.
 <h2>AUTHORS</h2>
 <a href="mailto:antoniol@ieee.org">G. Antoniol</a> - RCOST (Research Centre on Software Technology - Viale Traiano - 82100 Benevento)<br>
 C. Basco -  RCOST (Research Centre on Software Technology - Viale Traiano - 82100 Benevento)<br>
-M. Ceccarelli - Facolta di Scienze, Universita del Sannio, Benevento
+M. Ceccarelli - Facolta di Scienze, Universita del Sannio, Benevento<br>
+Markus Metz
 
 <p><i>Last changed: $Date$</i>
