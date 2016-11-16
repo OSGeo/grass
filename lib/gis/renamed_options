@@ -448,6 +448,16 @@ t.rast.export|extrdir:directory
 t.vect.import|extrdir:directory
 # t.vect.export
 t.vect.export|extrdir:directory
+# t.info
+t.info|-s|-d
+# t.rast.list
+t.rast.list|-s|-u
+# t.rast.univar
+t.rast.univar|-s|-u
+# t.vect.list
+t.vect.list|-s|-u
+# t.vect.univar
+t.vect.univar|-s|-u
 #########################
 ### Vector module changes
 #########################
