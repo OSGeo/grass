@@ -178,8 +178,10 @@ class TplotFrame(wx.Frame):
             id=wx.ID_ANY,
             label=_(
                 'Raster temporal '
-                'dataset (strds)'))
-
+                'dataset (strds)\n'
+                'Press ENTER after'
+                ' typing the name or select'
+                ' with the combobox'))
         self.datasetSelectR = gselect.Select(
             parent=self.controlPanelRaster, id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE, type='strds', multiple=True)
@@ -220,11 +222,10 @@ class TplotFrame(wx.Frame):
             parent=self.controlPanelVector, id=wx.ID_ANY,
             label=_(
                 'Vector temporal '
-                'dataset (strds)\n'
-                'Please press enter if'
-                ' you digit the name'
-                ' instead select with'
-                ' combobox'))
+                'dataset (stvds)\n'
+                'Press ENTER after'
+                ' typing the name or select'
+                ' with the combobox'))
         self.datasetSelectV = gselect.Select(
             parent=self.controlPanelVector, id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE, type='stvds', multiple=True)
