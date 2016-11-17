@@ -35,9 +35,11 @@ e.g: <tt>urlparams='time=2012-1-1'</tt>.
 <h3>General Get Capabilities Request</h3>
 
 <div class="code"><pre>
-# TelaScience's OSGeo/FlightGear landcover server
-r.in.wms -c url="http://mapserver.flightgear.org/ms"
+# Topographic WMS with OpenStreetMap by mundialis
+r.in.wms -c url="http://ows.mundialis.de/services/service?"
+r.in.wms -c url="http://ows.mundialis.de/services/service?" | grep Name
 
+# Czech WMS
 r.in.wms -c url="http://wms.cuzk.cz/wms.asp"
 </pre></div>
 
@@ -59,6 +61,18 @@ More OSM WMS servers can be found online, e.g. on the OSM wiki in a
 and on the <a href="http://wiki.openstreetmap.org/wiki/OSM-WMS-EUROPE">OSM-WMS-EUROPE</a> page.
 
 <h4>World data</h4>
+
+<div class="code"><pre>
+# OSM Overlay WMS (can be used as an overlay for other maps)
+r.in.wms url="http://ows.mundialis.de/services/service?" layer=OSM-Overlay-WMS output=osm_overlay format=png
+
+# TOPO-OSM-WMS
+r.in.wms url="http://ows.mundialis.de/services/service?" layer=TOPO-OSM-WMS output=topo_osm format=png
+
+# TOPO-WMS
+r.in.wms url="http://ows.mundialis.de/services/service?" layer=TOPO-WMS output=topo format=png
+</pre></div>
+<p>
 
 <div class="code"><pre>
 r.in.wms url=http://iceds.ge.ucl.ac.uk/cgi-bin/icedswms layers=bluemarble,landsat_1_01 styles=default,default output=landsat srs=4326 format=png 
