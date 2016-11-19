@@ -6,7 +6,7 @@ List of classes:
  - wms_base::GRASSImporter
  - wms_base::WMSDriversInfo
 
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -246,10 +246,13 @@ class WMSBase:
                     _("Authorization failed to <%s> when fetching capabilities") %
                     options['url'])
             else:
-                msg = _("Unable to fetch capabilities from <%s>: %s") % (options['url'], e)
+                msg = _("Unable to fetch capabilities from <{}>. Reason: ").format(
+                    options['url'])
 
                 if hasattr(e, 'reason'):
-                    msg += _("\nReason: ") + e.reason
+                    msg += '{}'.format(e.reason)
+                else:
+                    msg += '{}'.format(e)
 
                 grass.fatal(msg)
 
