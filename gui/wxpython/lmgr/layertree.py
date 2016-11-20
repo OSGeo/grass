@@ -1964,11 +1964,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                          message=_("Map <%s> not found.") % mapName)
                 return
 
-            if not mapLayer.IsActive():
-                self.forceCheck = True
-                self.CheckItem(layer, True)
-                mapLayer.SetActive(True)
-
         # update layer data
         if params:
             self.SetPyData(layer, (self.GetLayerInfo(layer), params))
@@ -1992,39 +1987,49 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.first = False  # first layer has been already added to
             # the layer tree
 
-        # update nviz session
-        if self.mapdisplay.IsPaneShown('3d') and dcmd:
-            mapLayer = self.GetLayerInfo(layer, key='maplayer')
-            mapWin = self.mapdisplay.MapWindow
-            if len(mapLayer.GetCmd()) > 0:
-                if mapLayer.type == 'raster':
-                    if mapWin.IsLoaded(layer):
-                        mapWin.UnloadRaster(layer)
+        if dcmd:
+            if not mapLayer.IsActive():
+                self.forceCheck = True
+                self.CheckItem(layer, True)
+                mapLayer.SetActive(True)
+                # no need to update nviz here, already done by OnLayerChecked
 
-                    mapWin.LoadRaster(layer)
-
-                elif mapLayer.type == 'raster_3d':
-                    if mapWin.IsLoaded(layer):
-                        mapWin.UnloadRaster3d(layer)
-
-                    mapWin.LoadRaster3d(layer)
-
-                elif mapLayer.type == 'vector':
-                    if mapWin.IsLoaded(layer):
-                        mapWin.UnloadVector(layer)
-
-                    mapWin.LoadVector(layer)
-
-                # reset view when first layer loaded
-                nlayers = len(
-                    mapWin.Map.GetListOfLayers(
-                        ltype=(
-                            'raster',
-                            'raster_3d',
-                            'vector'),
-                        active=True))
-                if nlayers < 2:
-                    mapWin.ResetView()
+            # update nviz session
+            elif self.mapdisplay.IsPaneShown('3d'):
+                mapLayer = self.GetLayerInfo(layer, key='maplayer')
+                mapWin = self.mapdisplay.MapWindow
+                if len(mapLayer.GetCmd()) > 0:
+                    if mapLayer.type == 'raster':
+                        if mapWin.IsLoaded(layer):
+                            mapWin.UnloadRaster(layer)
+    
+                        mapWin.LoadRaster(layer)
+    
+                    elif mapLayer.type == 'raster_3d':
+                        if mapWin.IsLoaded(layer):
+                            mapWin.UnloadRaster3d(layer)
+    
+                        mapWin.LoadRaster3d(layer)
+    
+                    elif mapLayer.type == 'vector':
+                        if mapWin.IsLoaded(layer):
+                            mapWin.UnloadVector(layer)
+                        vInfo = gvector.vector_info_topo(mapLayer.GetName())
+                        if (vInfo['points'] + vInfo['centroids']) > 0:
+                            mapWin.LoadVector(layer, points=True)
+                        if (vInfo['lines'] + vInfo['boundaries']) > 0:
+                            mapWin.LoadVector(layer, points=False)
+    
+                    # reset view when first layer loaded
+                    nlayers = len(
+                        mapWin.Map.GetListOfLayers(
+                            ltype=(
+                                'raster',
+                                'raster_3d',
+                                'vector'),
+                            active=True))
+                    if nlayers < 2:
+                        mapWin.ResetView()
 
     def GetVisibleLayers(self, skipDigitized=False):
         # make a list of visible layers
