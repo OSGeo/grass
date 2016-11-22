@@ -427,10 +427,8 @@ float f2_contrast(void)
 
     /* two-loop version */
     for (i = 0; i < Ng; i++) {
-	for (j = 0; j < Ng; j++) {
-	    if (i != j) {
-		sum += P[i][j] * (tone[i] - tone[j]) * (tone[i] - tone[j]);
-	    }
+	for (j = 0; j < i; j++) {
+	    bigsum += 2 * P[i][j] * (tone[i] - tone[j]) * (tone[i] - tone[j]);
 	}
     }
 
