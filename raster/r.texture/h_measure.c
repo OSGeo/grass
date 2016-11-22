@@ -407,21 +407,24 @@ float f1_asm(void)
 float f2_contrast(void)
 {
     int i, j /*, n */;
-    float sum, bigsum = 0;
+    float /* sum,*/ bigsum = 0;
     float **P = P_matrix;
 
+    /* the three-loop version does not work 
+     * when gray tones that do not occur in the current window 
+     * have been removed in tone and P* */
     /*
     for (n = 0; n < Ng; n++) {
 	sum = 0;
 	for (i = 0; i < Ng; i++) {
 	    for (j = 0; j < Ng; j++) {
-		if ((tone[i] - tone[j]) == tone[n] ||
-		    (tone[j] - tone[i]) == tone[n]) {
+		if ((i - j) == n ||
+		    (j - i) == n) {
 		    sum += P[i][j];
 		}
 	    }
 	}
-	bigsum += tone[n] * tone[n] * sum;
+	bigsum += n * n * sum;
     }
     */
 
@@ -462,6 +465,9 @@ float f3_corr(void)
 	    tmp += tone[i] * tone[j] * P[i][j];
     }
     stddev = sqrt(sum_sqr - (mean * mean));
+    
+    if (stddev == 0)	/* stddev < GRASS_EPSILON or similar ? */
+	return 0;
 
     return (tmp - mean * mean) / (stddev * stddev);
 }
@@ -594,8 +600,10 @@ float f10_dvar(void)
 	sum_sqr += P[i] * P[i];
     }
     /* tmp = Ng * Ng; */
-    tmp = (tone[Ng - 1] - tone[0]) * (tone[Ng - 1] - tone[0]);
-    var = ((tmp * sum_sqr) - (sum * sum)) / (tmp * tmp);
+    if (Ng > 1) {
+	tmp = (tone[Ng - 1] - tone[0]) * (tone[Ng - 1] - tone[0]);
+	var = ((tmp * sum_sqr) - (sum * sum)) / (tmp * tmp);
+    }
 
     return var;
 }
@@ -639,6 +647,9 @@ float f12_icorr(void)
     }
 
     /* fprintf(stderr,"hxy1=%f\thxy=%f\thx=%f\thy=%f\n",hxy1,hxy,hx,hy); */
+    if (hx == 0 && hy == 0)
+	return 0;
+
     return ((hxy - hxy1) / (hx > hy ? hx : hy));
 }
 
