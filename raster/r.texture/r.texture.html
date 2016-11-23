@@ -4,6 +4,11 @@
 user-specified raster map layer. The module calculates textural features 
 based on spatial dependence matrices at 0, 45, 90, and 135 
 degrees for a <em>distance</em> (default = 1).
+
+<p>
+The output of <em>r.texture</em> can be used as additional input for 
+image classification or image segmentation (object recognition).
+
 <p>
 <em>r.texture</em> assumes grey levels ranging from 0 to 255 as input. 
 The input is automatically rescaled to 0 to 255 if the input map range is outside
@@ -31,9 +36,7 @@ over all angles for each measure. Optionally, using flag <b>-s</b> the output
 consists of four images for each textural feature, one for every direction
 (0, 45, 90, 135).
 
-<p>
-The user must carefully set the resolution (using <em>g.region</em>) before
-running this program, or the computer may run out of memory.
+<h2>NOTES</h2>
 
 <p>
 A commonly used texture model is based on the so-called grey level co-occurrence
@@ -104,9 +107,14 @@ level co-occurrence matrices (GLCM; after Haralick 1979).
 
 <li> Maximal Correlation Coefficient (MCC)</li>
 </ul>
-   
-<h2>NOTES</h2>
 
+<p>
+The computational region should be set to the input map with 
+<b>g.region rast=&lt;input map&gt;</b>, or aligned to the input map 
+with <b>g.region align=&lt;input map&gt;</b> if only a subregion 
+should be analyzed.
+
+<p>
 Importantly, the input raster map cannot have more than 255 categories.
 
 <h2>EXAMPLE</h2>
