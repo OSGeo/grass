@@ -489,7 +489,7 @@ float f4_var(void)
 
     for (i = 0; i < Ng; i++)
 	for (j = 0; j < Ng; j++)
-	    var += (tone[i] - mean) * (tone[j] - mean) * P[i][j];
+	    var += (tone[i] - mean) * (tone[i] - mean) * P[i][j];
 
     return var;
 }
@@ -670,7 +670,7 @@ float f13_icorr(void)
     }
 
     /* fprintf(stderr,"hx=%f\thxy2=%f\n",hx,hxy2); */
-    return (sqrt(abs(1 - exp(-2.0 * (hxy2 - hxy)))));
+    return (sqrt(fabs(1 - exp(-2.0 * (hxy2 - hxy)))));
 }
 
 float *vector(int n)
