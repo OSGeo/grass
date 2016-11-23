@@ -391,9 +391,17 @@ float f1_asm(void)
     float sum = 0;
     float **P = P_matrix;
 
+    /*
     for (i = 0; i < Ng; i++)
 	for (j = 0; j < Ng; j++)
 	    sum += P[i][j] * P[i][j];
+    */
+
+    for (i = 0; i < Ng; i++) {
+	sum += P[i][i] * P[i][i];
+	for (j = 0; j < i; j++)
+	    sum += 2 * P[i][j] * P[i][j];
+    }
 
     return sum;
 }
@@ -501,9 +509,17 @@ float f5_idm(void)
     float idm = 0;
     float **P = P_matrix;
 
+    /*
     for (i = 0; i < Ng; i++)
 	for (j = 0; j < Ng; j++)
 	    idm += P[i][j] / (1 + (tone[i] - tone[j]) * (tone[i] - tone[j]));
+    */
+
+    for (i = 0; i < Ng; i++) {
+	idm += P[i][i];
+	for (j = 0; j < i; j++)
+	    idm += 2 * P[i][j] / (1 + (tone[i] - tone[j]) * (tone[i] - tone[j]));
+    }
 
     return idm;
 }
@@ -577,10 +593,21 @@ float f9_entropy(void)
     float entropy = 0;
     float **P = P_matrix;
 
+    /*
     for (i = 0; i < Ng; i++) {
 	for (j = 0; j < Ng; j++) {
 	    if (P[i][j] > 0)
 		entropy += P[i][j] * log2(P[i][j]);
+	}
+    }
+    */
+
+    for (i = 0; i < Ng; i++) {
+	if (P[i][i] > 0)
+	    entropy += P[i][i] * log2(P[i][i]);
+	for (j = 0; j < i; j++) {
+	    if (P[i][j] > 0)
+		entropy += 2 * P[i][j] * log2(P[i][j]);
 	}
     }
 
@@ -630,7 +657,7 @@ float f12_icorr(void)
     float hx = 0, hy = 0, hxy = 0, hxy1 = 0;
     float **P = P_matrix;
 
-    for (i = 0; i < Ng; i++)
+    for (i = 0; i < Ng; i++) {
 	for (j = 0; j < Ng; j++) {
 	    if (px[i] * py[j] > 0)
 		hxy1 -= P[i][j] * log2(px[i] * py[j]);
@@ -639,7 +666,6 @@ float f12_icorr(void)
 	}
 
     /* Calculate entropies of px and py - is this right? */
-    for (i = 0; i < Ng; i++) {
 	if (px[i] > 0)
 	    hx -= px[i] * log2(px[i]);
 	if (py[i] > 0)
