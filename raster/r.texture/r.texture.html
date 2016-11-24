@@ -6,27 +6,23 @@ based on spatial dependence matrices at 0, 45, 90, and 135
 degrees for a <em>distance</em> (default = 1).
 
 <p>
-The output of <em>r.texture</em> can be used as additional input for 
-image classification or image segmentation (object recognition). The output
-of <em>r.texture</em> can thus be used as input to supervised classification
-algorithms such as <a href="i.maxlik.html">i.maxlik</a> or
-<a href="i.smap.html">i.smap</a>, or for characterizing objects resulting
-from <a href="i.segment.html">i.segment</a>, for example as one of the
-raster inputs of the 
+Texture is a feature of specific land cover classes in satellite imagery.
+For example an inland water body will generally have a quite homogeneous 
+texture (unless strong winds create many waves), but mixed forests or urban
+areas will have more heterogeneity amongst neighboring pixels. Obviously, 
+this is highly dependend on the resolution of satellite imagery (also see the 
+discussion of scale dependency below).
+
+<p>
+The output of <em>r.texture</em> can thus constitute additional variables 
+usable as input for image classification or image segmentation (object 
+recognition). It can be used in supervised classification algorithms such 
+as <a href="i.maxlik.html">i.maxlik</a> or <a href="i.smap.html">i.smap</a>,
+or for the identification of objects in <a href="i.segment.html">i.segment</a>,
+and/or for the characterization of these objects and thus, for example, as one 
+of the raster inputs of the 
 <a href="https://grass.osgeo.org/grass70/manuals/addons/i.segment.stats.html">
 	i.segment.stats</a> addon.
-
-<p>
-<em>r.texture</em> assumes grey levels ranging from 0 to 255 as input. 
-The input is automatically rescaled to 0 to 255 if the input map range is outside
-of this range.
-
-<p>
-In order to reduce noise in the input data, and to speed up processing, 
-the input map it is recommended that the user recode the data using 
-equal-probability quantization. Quantization rules for <em>r.recode</em> 
-can be generated with <em>r.quantile -r</em> using e.g 16 or 32 quantiles 
-(see example below).
 
 <p>
 In general, several variables constitute texture: differences in grey level values,
@@ -40,6 +36,15 @@ variables in 4 different orientations (flag <em>-s</em>). Please note that angle
 are defined in degrees of east and they increase counterclockwise, so 0 is 
 East - West, 45 is North-East - South-West, 90 is North - South, 135 is 
 North-West - South-East.
+
+<p>
+<em>r.texture</em> assumes grey levels ranging from 0 to 255 as input. 
+The input is automatically rescaled to 0 to 255 if the input map range is outside
+of this range.  In order to reduce noise in the input data, and to speed up processing, 
+it is recommended that the user recode the data using equal-probability quantization. 
+Quantization rules for <em>r.recode</em> can be generated with <em>r.quantile -r</em>
+using e.g 16 or 32 quantiles (see example below).
+
 
 <h2>NOTES</h2>
 
