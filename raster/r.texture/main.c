@@ -149,7 +149,9 @@ int main(int argc, char *argv[])
 
     flag_ind = G_define_flag();
     flag_ind->key = 's';
-    flag_ind->description = _("Separate output for each angle (0, 45, 90, 135)");
+    flag_ind->label = _("Separate output for each angle (0, 45, 90, 135)");
+    flag_ind->description = _("Angles are counterclockwise from east: "
+                              "0 is East to West, 45 is North-East to South-West");
 
     flag_all = G_define_flag();
     flag_all->key = 'a';

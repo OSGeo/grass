@@ -40,9 +40,10 @@ North-West - South-East.
 <p>
 <em>r.texture</em> assumes grey levels ranging from 0 to 255 as input. 
 The input is automatically rescaled to 0 to 255 if the input map range is outside
-of this range.  In order to reduce noise in the input data, and to speed up processing, 
-it is recommended that the user recode the data using equal-probability quantization. 
-Quantization rules for <em>r.recode</em> can be generated with <em>r.quantile -r</em>
+of this range or within the range [0, 1]. In order to reduce noise in the 
+input data, and to speed up processing, it is recommended that the user 
+recode the data using equal-probability quantization. Quantization rules 
+for <em>r.recode</em> can be generated with <em>r.quantile -r</em>
 using e.g 16 or 32 quantiles (see example below).
 
 
