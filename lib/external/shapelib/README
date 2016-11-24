@@ -14,8 +14,9 @@ Last update
 Additional fixes:
 * dbfopen.c
    around line 1270: GDAL bug #809 (http://trac.osgeo.org/gdal/ticket/809)
-   define CPLsnprintf
-   define CPL_IGNORE_RET_VAL_INT
+   remove CPLsnprintf
+   remove CPL_IGNORE_RET_VAL_INT
+   for WIN32, define snprintf as in shpopen.c
 
 * shpopen.c
   define CPL_UNUSED
@@ -31,7 +32,7 @@ full fix for dbf_open.c
 -->
 diff -up shapelib_gdal/dbfopen.c shapelib/dbfopen.c 
 --- shapelib_gdal/dbfopen.c	2016-10-24 13:00:32.000000000 +0200
-+++ shapelib/dbfopen.c	2016-11-24 10:25:24.423021915 +0100
++++ shapelib/dbfopen.c	2016-11-24 11:34:23.996675393 +0100
 @@ -157,7 +157,7 @@
   * Treat all blank numeric fields as null too.
   */
@@ -41,32 +42,38 @@ diff -up shapelib_gdal/dbfopen.c shapelib/dbfopen.c
  
  #include <math.h>
  #include <stdlib.h>
-@@ -168,6 +168,12 @@
- #include "cpl_string.h"
- #else
+@@ -170,6 +170,12 @@
  #define CPLsprintf sprintf
+ #endif
+ 
 +#if defined(WIN32) || defined(_WIN32)
 +#  ifndef snprintf
 +#     define snprintf _snprintf
 +#  endif
 +#endif
-+#define CPLsnprintf snprintf
- #endif
- 
++
  SHP_CVSID("$Id$")
-@@ -177,7 +183,11 @@ SHP_CVSID("$Id: dbfopen.c,v 1.89 2011-07
+ 
+ #ifndef FALSE
+@@ -177,8 +183,6 @@ SHP_CVSID("$Id: dbfopen.c,v 1.89 2011-07
  #  define TRUE		1
  #endif
  
-+#ifdef USE_CPL
- CPL_INLINE static void CPL_IGNORE_RET_VAL_INT(CPL_UNUSED int unused) {}
-+#else
-+#define CPL_IGNORE_RET_VAL_INT(ret_val_int)	return
-+#endif
- 
+-CPL_INLINE static void CPL_IGNORE_RET_VAL_INT(CPL_UNUSED int unused) {}
+-
  /************************************************************************/
  /*                             SfRealloc()                              */
-@@ -1273,8 +1283,8 @@ DBFGetFieldInfo( DBFHandle psDBF, int iF
+ /*                                                                      */
+@@ -616,7 +620,7 @@ DBFClose(DBFHandle psDBF)
+     if( psDBF->bNoHeader )
+         DBFWriteHeader( psDBF );
+ 
+-    CPL_IGNORE_RET_VAL_INT(DBFFlushRecord( psDBF ));
++    DBFFlushRecord( psDBF );
+ 
+ /* -------------------------------------------------------------------- */
+ /*      Update last access date, and number of records if we have	*/
+@@ -1273,8 +1277,8 @@ DBFGetFieldInfo( DBFHandle psDBF, int iF
      else if( psDBF->pachFieldType[iField] == 'N'
               || psDBF->pachFieldType[iField] == 'F' )
      {
@@ -77,6 +84,15 @@ diff -up shapelib_gdal/dbfopen.c shapelib/dbfopen.c
  	    return( FTDouble );
  	else
  	    return( FTInteger );
+@@ -1364,7 +1368,7 @@ static int DBFWriteAttribute(DBFHandle p
+ 
+         snprintf( szFormat, sizeof(szFormat), "%%%d.%df",
+                     nWidth, psDBF->panFieldDecimals[iField] );
+-        CPLsnprintf(szSField, sizeof(szSField), szFormat, *((double *) pValue) );
++        snprintf(szSField, sizeof(szSField), szFormat, *((double *) pValue) );
+         if( (int) strlen(szSField) > psDBF->panFieldSize[iField] )
+         {
+             szSField[psDBF->panFieldSize[iField]] = '\0';
 <--
 
 full fix for shpopen.c
