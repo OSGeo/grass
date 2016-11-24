@@ -63,7 +63,7 @@ Contents
       rm -f include/VERSION~
 
     - Update OSGeo4W setup.hint file
-      vim mswindows/osgeo4w/setup.hint
+      vim mswindows/osgeo4w/setup.hint.tmpl
 
       for RC candidates use 'test' keyword
       for final version use 'curr' keyword
@@ -75,7 +75,7 @@ Contents
      VERSION=${MAJOR}.${MINOR}.${RELEASE}
      echo $VERSION
 
-     svn ci -m"GRASS GIS $VERSION" include/VERSION mswindows/osgeo4w/setup.hint
+     svn ci -m"GRASS GIS $VERSION" include/VERSION mswindows/osgeo4w/setup.hint.tmpl
      svn up
 
  o Create Changelog file on release branch:
