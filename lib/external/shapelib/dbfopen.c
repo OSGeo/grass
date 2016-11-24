@@ -168,12 +168,12 @@
 #include "cpl_string.h"
 #else
 #define CPLsprintf sprintf
+#endif
+
 #if defined(WIN32) || defined(_WIN32)
 #  ifndef snprintf
 #     define snprintf _snprintf
 #  endif
-#endif
-#define CPLsnprintf snprintf
 #endif
 
 SHP_CVSID("$Id$")
@@ -181,12 +181,6 @@ SHP_CVSID("$Id$")
 #ifndef FALSE
 #  define FALSE		0
 #  define TRUE		1
-#endif
-
-#ifdef USE_CPL
-CPL_INLINE static void CPL_IGNORE_RET_VAL_INT(CPL_UNUSED int unused) {}
-#else
-#define CPL_IGNORE_RET_VAL_INT(ret_val_int)	return
 #endif
 
 /************************************************************************/
@@ -626,7 +620,7 @@ DBFClose(DBFHandle psDBF)
     if( psDBF->bNoHeader )
         DBFWriteHeader( psDBF );
 
-    CPL_IGNORE_RET_VAL_INT(DBFFlushRecord( psDBF ));
+    DBFFlushRecord( psDBF );
 
 /* -------------------------------------------------------------------- */
 /*      Update last access date, and number of records if we have	*/
@@ -1374,7 +1368,7 @@ static int DBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField,
 
         snprintf( szFormat, sizeof(szFormat), "%%%d.%df",
                     nWidth, psDBF->panFieldDecimals[iField] );
-        CPLsnprintf(szSField, sizeof(szSField), szFormat, *((double *) pValue) );
+        snprintf(szSField, sizeof(szSField), szFormat, *((double *) pValue) );
         if( (int) strlen(szSField) > psDBF->panFieldSize[iField] )
         {
             szSField[psDBF->panFieldSize[iField]] = '\0';
