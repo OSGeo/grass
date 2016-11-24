@@ -11,7 +11,7 @@ image classification or image segmentation (object recognition). The output
 of <em>r.texture</em> can thus be used as input to supervised classification
 algorithms such as <a href="i.maxlik.html">i.maxlik</a> or
 <a href="i.smap.html">i.smap</a>, or for characterizing objects resulting
-from a href="i.segment.html">i.segment</a>, for example as one of the
+from <a href="i.segment.html">i.segment</a>, for example as one of the
 raster inputs of the 
 <a href="https://grass.osgeo.org/grass70/manuals/addons/i.segment.stats.html">
 	i.segment.stats</a> addon.
@@ -120,6 +120,12 @@ with <b>g.region align=&lt;input map&gt;</b> if only a subregion
 should be analyzed.
 
 <p>
+Note that the output of <em>r.texture</em> will always be smaller than 
+the current region as only cells for which there are no null cells and 
+for which all cells of the moving window are within the current region 
+will contain a value. The output will thus appear cropped at the margins.
+
+<p>
 Importantly, the input raster map cannot have more than 255 categories.
 
 <h2>EXAMPLE</h2>
@@ -151,6 +157,52 @@ r.quantile in=ortho_2001_t792_1m quantiles=16 -r | r.recode in=ortho_2001_t792_1
 
 The recoded raster map can then be used as input for r.texture as before.
 
+<p>
+Second example: analysis of IDM (homogeneity) on a simple raster with 
+North-South line pattern.
+
+<div class="code"><pre>
+# import raster
+r.in.ascii in=- output=lines << EOF
+> north: 9
+> south: 0
+> east: 9
+> west: 0
+> rows: 9
+> cols: 9
+> 0 0 0 1 0 0 0 1 0
+> 0 0 0 1 0 0 0 1 0
+> 0 0 0 1 0 0 0 1 0
+> 0 0 0 1 0 0 0 1 0
+> 0 0 0 1 0 0 0 1 0
+> 0 0 0 1 0 0 0 1 0
+> 0 0 0 1 0 0 0 1 0
+> 0 0 0 1 0 0 0 1 0
+> 0 0 0 1 0 0 0 1 0
+> EOF
+
+# adjust region to raster
+g.region rast=lines
+
+# calculate IDM (homogeneity) in all directions
+r.texture -s lines method=idm out=text_lines
+</pre></div>
+
+<p>
+The following image shows the original map, the result in East-West direction
+and the result in North-South direction, showing how texture can depend on
+direction, with texture perfectly homogeneous (value=1) in the North-South 
+direction, but quite heterogeneous in East-West direction, except for those 
+areas where there are three columns of equal values (as size=3). 
+The overlayed grid highlights that the texture measures output maps
+are cropped at the margins.
+
+<center>
+	<img src="r_texture_directions_example.png" border=1><br>
+	<i>IDM textures according to direction</i>
+</center>
+
+
 <h2>KNOWN ISSUES</h2>
 The program can run incredibly slow for large raster maps.
 
@@ -181,8 +233,12 @@ of <a href="http://netpbm.sourceforge.net/doc/pgmtexture.html">pgmtexture</a>.
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="i.maxlik.html">i.maxlik</a>,
+<a href="i.gensig.html">i.gensig</a>,
 <a href="i.smap.html">i.smap</a>,
 <a href="i.gensigset.html">i.gensigset</a>,
+<a href="https://grass.osgeo.org/grass70/manuals/addons/i.segment.stats.html">
+	        i.segment.stats</a>,
 <a href="i.pca.html">i.pca</a>,
 <a href="r.neighbors.html">r.neighbors</a>,
 <a href="r.rescale.html">r.rescale</a>
