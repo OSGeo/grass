@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: safileio.c,v 1.4 2008/01/16 20:05:14 bram Exp $
+ * $Id: safileio.c,v 1.4 2008-01-16 20:05:14 bram Exp $
  *
  * Project:  Shapelib
  * Purpose:  Default implementation of file io based on stdio.
@@ -34,7 +34,7 @@
  ******************************************************************************
  *
  * $Log: safileio.c,v $
- * Revision 1.4  2008/01/16 20:05:14  bram
+ * Revision 1.4  2008-01-16 20:05:14  bram
  * Add file hooks that accept UTF-8 encoded filenames on some platforms.  Use SASetupUtf8Hooks
  *  tosetup the hooks and check SHPAPI_UTF8_HOOKS for its availability.  Currently, this
  *  is only available on the Windows platform that decodes the UTF-8 filenames to wide
@@ -56,7 +56,7 @@
  *
  */
 
-#include "shapefil.h"
+#include <grass/shapefil.h>
 
 #include <math.h>
 #include <limits.h>
@@ -65,7 +65,7 @@
 #include <string.h>
 #include <stdio.h>
 
-SHP_CVSID("$Id: safileio.c,v 1.4 2008/01/16 20:05:14 bram Exp $");
+SHP_CVSID("$Id: safileio.c,v 1.4 2008-01-16 20:05:14 bram Exp $");
 
 #ifdef SHPAPI_UTF8_HOOKS
 #   ifdef SHPAPI_WINDOWS
@@ -182,8 +182,10 @@ void SASetupDefaultHooks( SAHooks *psHooks )
     psHooks->FTell   = SADFTell;
     psHooks->FFlush  = SADFFlush;
     psHooks->FClose  = SADFClose;
+    psHooks->Remove  = SADRemove;
 
     psHooks->Error   = SADError;
+    psHooks->Atof    = atof;
 }
 
 
