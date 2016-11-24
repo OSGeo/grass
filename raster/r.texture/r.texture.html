@@ -7,7 +7,14 @@ degrees for a <em>distance</em> (default = 1).
 
 <p>
 The output of <em>r.texture</em> can be used as additional input for 
-image classification or image segmentation (object recognition).
+image classification or image segmentation (object recognition). The output
+of <em>r.texture</em> can thus be used as input to supervised classification
+algorithms such as <a href="i.maxlik.html">i.maxlik</a> or
+<a href="i.smap.html">i.smap</a>, or for characterizing objects resulting
+from a href="i.segment.html">i.segment</a>, for example as one of the
+raster inputs of the 
+<a href="https://grass.osgeo.org/grass70/manuals/addons/i.segment.stats.html">
+	i.segment.stats</a> addon.
 
 <p>
 <em>r.texture</em> assumes grey levels ranging from 0 to 255 as input. 
@@ -16,25 +23,23 @@ of this range.
 
 <p>
 In order to reduce noise in the input data, and to speed up processing, 
-the input map can be recoded using equal-probability quantization. 
-Quantization rules for <em>r.recode</em> can be generated with 
-<em>r.quantile -r</em> using e.g 16 or 32 quantiles (see example below). 
+the input map it is recommended that the user recode the data using 
+equal-probability quantization. Quantization rules for <em>r.recode</em> 
+can be generated with <em>r.quantile -r</em> using e.g 16 or 32 quantiles 
+(see example below).
 
 <p>
 In general, several variables constitute texture: differences in grey level values,
 coarseness as scale of grey level differences, presence or lack of directionality
 and regular patterns. A texture can be characterized by tone (grey level intensity
 properties) and structure (spatial relationships). Since textures are highly scale
-dependent, hierarchical textures may occur.
-
-<p>
-<em>r.texture</em> reads a GRASS raster map as input and calculates
-textural features based on spatial dependence matrices for north-south,
-east-west, northwest, and southwest directions using a side by side
-neighborhood (i.e., a distance of 1), and writes out by default the average
-over all angles for each measure. Optionally, using flag <b>-s</b> the output
-consists of four images for each textural feature, one for every direction
-(0, 45, 90, 135).
+dependent, hierarchical textures may occur. <em>r.texture</em> thus allows the user
+to define the moving window <em>size</em> and the <em>distance</em> at which to
+compare pixel grey values. The user can also request output of the texture 
+variables in 4 different orientations (flag <em>-s</em>). Please note that angles 
+are defined in degrees of east and they increase counterclockwise, so 0 is 
+East - West, 45 is North-East - South-West, 90 is North - South, 135 is 
+North-West - South-East.
 
 <h2>NOTES</h2>
 
