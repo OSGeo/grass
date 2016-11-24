@@ -168,23 +168,23 @@ North-South line pattern.
 
 <div class="code"><pre>
 # import raster
-r.in.ascii in=- output=lines << EOF
-> north: 9
-> south: 0
-> east: 9
-> west: 0
-> rows: 9
-> cols: 9
-> 0 0 0 1 0 0 0 1 0
-> 0 0 0 1 0 0 0 1 0
-> 0 0 0 1 0 0 0 1 0
-> 0 0 0 1 0 0 0 1 0
-> 0 0 0 1 0 0 0 1 0
-> 0 0 0 1 0 0 0 1 0
-> 0 0 0 1 0 0 0 1 0
-> 0 0 0 1 0 0 0 1 0
-> 0 0 0 1 0 0 0 1 0
-> EOF
+r.in.ascii in=- output=lines &lt;&lt; EOF
+north: 9
+south: 0
+east: 9
+west: 0
+rows: 9
+cols: 9
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+0 0 0 1 0 0 0 1 0
+EOF
 
 # adjust region to raster
 g.region rast=lines
@@ -209,7 +209,8 @@ are cropped at the margins.
 
 
 <h2>KNOWN ISSUES</h2>
-The program can run incredibly slow for large raster maps.
+The program can run incredibly slow for large raster maps and large 
+moving windows (<em>size</em> option).
 
 <h2>REFERENCES</h2>
 
@@ -253,6 +254,7 @@ of <a href="http://netpbm.sourceforge.net/doc/pgmtexture.html">pgmtexture</a>.
 <a href="mailto:antoniol@ieee.org">G. Antoniol</a> - RCOST (Research Centre on Software Technology - Viale Traiano - 82100 Benevento)<br>
 C. Basco -  RCOST (Research Centre on Software Technology - Viale Traiano - 82100 Benevento)<br>
 M. Ceccarelli - Facolta di Scienze, Universita del Sannio, Benevento<br>
-Markus Metz
+Markus Metz (correction and optimization of the initial version)<br>
+Moritz Lennert (documentation)
 
 <p><i>Last changed: $Date$</i>
