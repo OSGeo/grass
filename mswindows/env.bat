@@ -19,6 +19,9 @@ REM set RStudio temporarily to %PATH% if it exists
 
 IF EXIST "%ProgramFiles%\RStudio\bin\rstudio.exe" set PATH=%PATH%;%ProgramFiles%\RStudio\bin
 
+REM set R_USER if %USERPROFILE%\Documents\R\ exists to catch most common cases of private R libraries
+IF EXIST "%USERPROFILE%\Documents\R\" set R_USER=%USERPROFILE%\Documents\
+
 REM set R temporarily to %PATH%
 
 IF EXIST "%ProgramFiles%\R\" ("%GISBASE%\extrabin\R" path)
