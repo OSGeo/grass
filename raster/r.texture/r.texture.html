@@ -3,21 +3,53 @@
 <em>r.texture</em> creates raster maps with textural features from a
 user-specified raster map layer. The module calculates textural features 
 based on spatial dependence matrices at 0, 45, 90, and 135 
-degrees for a <em>distance</em> (default = 1).
+degrees.
+
+<p>
+In order to take into account the scale of the texture to be measured,
+<em>r.texture</em> allows the user to define the <em>size</em> of the moving
+window and the <em>distance</em> at which to compare pixel grey values.  By
+default the module averages the results over the 4 orientations, but the user
+can also request output of the texture variables in 4 different orientations
+(flag <em>-s</em>). Please note that angles are defined in degrees of east and
+they increase counterclockwise, so 0 is East - West, 45 is North-East -
+South-West, 90 is North - South, 135 is North-West - South-East.
+
+<p>
+The user can either chose one or several texture measures (see below for their
+description) using the <em>method</em> parameter, or can request the creating
+of maps for all available methods with the <em>-a</em>.
+
+<p>
+<em>r.texture</em> assumes grey levels ranging from 0 to 255 as input.  The
+input is automatically rescaled to 0 to 255 if the input map range is outside of
+this range.  In order to reduce noise in the input data (thus generally
+reinforcing the textural features), and to speed up processing, it is
+recommended that the user recode the data using equal-probability quantization.
+Quantization rules for <em>r.recode</em> can be generated with <em>r.quantile
+-r</em> using e.g 16 or 32 quantiles (see example below).
+
+
+<h2>NOTES</h2>
 
 <p>
 Texture is a feature of specific land cover classes in satellite imagery.
-For example an inland water body will generally have a quite homogeneous 
-texture (unless strong winds create many waves), but mixed forests or urban
-areas will have more heterogeneity amongst neighboring pixels. Obviously, 
-this is highly dependend on the resolution of satellite imagery (also see the 
-discussion of scale dependency below).
+It is particularly useful in situations where spectral differences between
+classes are small, but classes are distinguishable by their organisation on the 
+ground, often opposing natural to human-made spaces: cultivated fields vs meadows
+or golf courses, palm tree plantations vs natural rain forest, but texture can
+also be a natural phenomen: dune fields, different canopies due to different
+tree species. The usefulness and use of texture is highly dependend on the 
+resolution of satellite imagery and on the scale of the human intervention or 
+the phenomenon that created the texture (also see the discussion of scale 
+dependency below). The user should observe the phenomenon visually in order to
+determine an adequat setting of the <em>size</em> parameter.
 
 <p>
-The output of <em>r.texture</em> can thus constitute additional variables 
-usable as input for image classification or image segmentation (object 
-recognition). It can be used in supervised classification algorithms such 
-as <a href="i.maxlik.html">i.maxlik</a> or <a href="i.smap.html">i.smap</a>,
+The output of <em>r.texture</em> can constitute very useful additional variables 
+as input for image classification or image segmentation (object recognition). 
+It can be used in supervised classification algorithms such as 
+<a href="i.maxlik.html">i.maxlik</a> or <a href="i.smap.html">i.smap</a>,
 or for the identification of objects in <a href="i.segment.html">i.segment</a>,
 and/or for the characterization of these objects and thus, for example, as one 
 of the raster inputs of the 
@@ -29,36 +61,19 @@ In general, several variables constitute texture: differences in grey level valu
 coarseness as scale of grey level differences, presence or lack of directionality
 and regular patterns. A texture can be characterized by tone (grey level intensity
 properties) and structure (spatial relationships). Since textures are highly scale
-dependent, hierarchical textures may occur. <em>r.texture</em> thus allows the user
-to define the moving window <em>size</em> and the <em>distance</em> at which to
-compare pixel grey values. The user can also request output of the texture 
-variables in 4 different orientations (flag <em>-s</em>). Please note that angles 
-are defined in degrees of east and they increase counterclockwise, so 0 is 
-East - West, 45 is North-East - South-West, 90 is North - South, 135 is 
-North-West - South-East.
+dependent, hierarchical textures may occur.
 
 <p>
-<em>r.texture</em> assumes grey levels ranging from 0 to 255 as input. 
-The input is automatically rescaled to 0 to 255 if the input map range is outside
-of this range or within the range [0, 1]. In order to reduce noise in the 
-input data, and to speed up processing, it is recommended that the user 
-recode the data using equal-probability quantization. Quantization rules 
-for <em>r.recode</em> can be generated with <em>r.quantile -r</em>
-using e.g 16 or 32 quantiles (see example below).
-
-
-<h2>NOTES</h2>
+<em>r.texture</em> uses the common texture model based on the so-called grey 
+level co-occurrence matrix as described by Haralick et al (1973). This matrix 
+is a two-dimensional histogram of grey levels for a pair of pixels which are 
+separated by a fixed spatial relationship. The matrix approximates the joint 
+probability distribution of a pair of pixels. Several texture measures are 
+directly computed from the grey level co-occurrence matrix. 
 
 <p>
-A commonly used texture model is based on the so-called grey level co-occurrence
-matrix. This matrix is a two-dimensional histogram of grey levels
-for a pair of pixels which are separated by a fixed spatial relationship. 
-The matrix approximates the joint probability distribution of a pair of pixels.
-Several texture measures are directly computed from the grey level co-occurrence
-matrix. 
-<p>
-The following part offers brief explanations of texture measures (after
-Jensen 1996).
+The following part offers brief explanations of the Haralick et al texture 
+measures (after Jensen 1996).
 
 <h3>First-order statistics in the spatial domain</h3>
 <ul>
