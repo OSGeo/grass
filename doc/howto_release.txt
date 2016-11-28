@@ -21,6 +21,8 @@ Contents
         ( cd doc/raster/r.example/ ; make clean ; make )
         ( cd doc/vector/v.example/ ; make clean ; make )
       still compile; fix otherwise
+
+   - fix typos with tools/fix_typos.sh
  
    - Check that autoconf scripts are up-to-date (to do only in RC cycle!):
 
