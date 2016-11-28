@@ -1,25 +1,28 @@
-/* Produced by texiweb from libavl.w on 2002/02/09 at 01:45. */
+/* Produced by texiweb from libavl.w. */
 
 /* libavl - library for manipulation of binary trees.
-   Copyright (C) 1998-2002 Free Software Foundation, Inc.
+   Copyright (C) 1998, 1999, 2000, 2001, 2002, 2004 Free Software
+   Foundation, Inc.
 
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 3 of the License, or (at your option) any later version.
 
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-   See the GNU General Public License for more details.
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+   You should have received a copy of the GNU Lesser General Public
+   License along with this library; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+   02110-1301 USA.
+ */
 
-   The author may be contacted at <blp@gnu.org> on the Internet, or
-   as Ben Pfaff, 12167 Airport Rd, DeWitt MI 48820, USA through more
-   mundane means.
+/* Nov 2016, Markus Metz
+ * from libavl-2.0.3
+ * added safety checks and speed optimizations
  */
 
 #include <assert.h>
@@ -63,10 +66,7 @@ void *tavl_find(const struct tavl_table *tree, const void *item)
     assert(tree != NULL && item != NULL);
 
     p = tree->tavl_root;
-    if (p == NULL)
-	return NULL;
-
-    for (;;) {
+    while (p != NULL) {
 	int cmp, dir;
 
 	cmp = tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
@@ -77,8 +77,10 @@ void *tavl_find(const struct tavl_table *tree, const void *item)
 	if (p->tavl_tag[dir] == TAVL_CHILD)
 	    p = p->tavl_link[dir];
 	else
-	    return NULL;
+	    p = NULL;
     }
+
+    return NULL;
 }
 
 /* Inserts |item| into |tree| and returns a pointer to |item|'s address.
@@ -100,24 +102,21 @@ void **tavl_probe(struct tavl_table *tree, void *item)
 
     z = (struct tavl_node *)&tree->tavl_root;
     y = tree->tavl_root;
-    if (y != NULL) {
-	for (q = z, p = y;; q = p, p = p->tavl_link[dir]) {
-	    int cmp =
-		tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
-	    if (cmp == 0)
-		return &p->tavl_data;
+    dir = 0;
+    q = z, p = y;
+    while (p != NULL) {
+	int cmp =
+	    tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
+	if (cmp == 0)
+	    return &p->tavl_data;
 
-	    if (p->tavl_balance != 0)
-		z = q, y = p, k = 0;
-	    da[k++] = dir = cmp > 0;
+	if (p->tavl_balance != 0)
+	    z = q, y = p, k = 0;
+	da[k++] = dir = cmp > 0;
 
-	    if (p->tavl_tag[dir] == TAVL_THREAD)
-		break;
-	}
-    }
-    else {
-	p = z;
-	dir = 0;
+	if (p->tavl_tag[dir] == TAVL_THREAD)
+	    break;
+	q = p, p = p->tavl_link[dir];
     }
 
     n = tree->tavl_alloc->libavl_malloc(tree->tavl_alloc, sizeof *n);
@@ -127,23 +126,26 @@ void **tavl_probe(struct tavl_table *tree, void *item)
     tree->tavl_count++;
     n->tavl_data = item;
     n->tavl_tag[0] = n->tavl_tag[1] = TAVL_THREAD;
-    n->tavl_link[dir] = p->tavl_link[dir];
-    if (tree->tavl_root != NULL) {
-	p->tavl_tag[dir] = TAVL_CHILD;
-	n->tavl_link[!dir] = p;
-    }
-    else
-	n->tavl_link[1] = NULL;
-    p->tavl_link[dir] = n;
     n->tavl_balance = 0;
-    if (tree->tavl_root == n)
-	return &n->tavl_data;
+    if (y == NULL) {
+	n->tavl_link[0] = n->tavl_link[1] = NULL;
+	tree->tavl_root = n;
 
-    for (p = y, k = 0; p != n; p = p->tavl_link[da[k]], k++)
+	return &n->tavl_data;
+    }
+    n->tavl_link[dir] = p->tavl_link[dir];
+    n->tavl_link[!dir] = p;
+    p->tavl_tag[dir] = TAVL_CHILD;
+    p->tavl_link[dir] = n;
+
+    p = y, k = 0;
+    while (p != n) {
 	if (da[k] == 0)
 	    p->tavl_balance--;
 	else
 	    p->tavl_balance++;
+	p = p->tavl_link[da[k]], k++;
+    }
 
     if (y->tavl_balance == -2) {
 	struct tavl_node *x = y->tavl_link[0];
@@ -259,6 +261,7 @@ void *tavl_replace(struct tavl_table *table, void *item)
 	void *r = *p;
 
 	*p = item;
+
 	return r;
     }
 }
@@ -308,19 +311,26 @@ void *tavl_delete(struct tavl_table *tree, const void *item)
 
     assert(tree != NULL && item != NULL);
 
-    if (tree->tavl_root == NULL)
-	return NULL;
+    q = (struct tavl_node *)&tree->tavl_root;
+    p = tree->tavl_root;
+    dir = 0;
+    while (p != NULL) {
+	cmp = tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
 
-    p = (struct tavl_node *)&tree->tavl_root;
-    for (cmp = -1; cmp != 0;
-	 cmp = tree->tavl_compare(item, p->tavl_data, tree->tavl_param)) {
+	if (cmp == 0)
+	    break;
+
 	dir = cmp > 0;
 
 	q = p;
-	if (p->tavl_tag[dir] == TAVL_THREAD)
-	    return NULL;
-	p = p->tavl_link[dir];
+	if (p->tavl_tag[dir] == TAVL_CHILD)
+	    p = p->tavl_link[dir];
+	else
+	    p = NULL;
     }
+    if (p == NULL)
+	return NULL;
+
     item = p->tavl_data;
 
     if (p->tavl_tag[1] == TAVL_THREAD) {
@@ -359,7 +369,7 @@ void *tavl_delete(struct tavl_table *tree, const void *item)
 	else {
 	    struct tavl_node *s;
 
-	    for (;;) {
+	    while (r != NULL) {
 		s = r->tavl_link[0];
 		if (s->tavl_tag[0] == TAVL_THREAD)
 		    break;
@@ -527,6 +537,7 @@ void *tavl_delete(struct tavl_table *tree, const void *item)
     }
 
     tree->tavl_count--;
+
     return (void *)item;
 }
 
@@ -590,15 +601,13 @@ void *tavl_t_find(struct tavl_traverser *trav, struct tavl_table *tree,
     trav->tavl_node = NULL;
 
     p = tree->tavl_root;
-    if (p == NULL)
-	return NULL;
-
-    for (;;) {
+    while (p != NULL) {
 	int cmp, dir;
 
 	cmp = tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
 	if (cmp == 0) {
 	    trav->tavl_node = p;
+
 	    return p->tavl_data;
 	}
 
@@ -606,8 +615,12 @@ void *tavl_t_find(struct tavl_traverser *trav, struct tavl_table *tree,
 	if (p->tavl_tag[dir] == TAVL_CHILD)
 	    p = p->tavl_link[dir];
 	else
-	    return NULL;
+	    p = NULL;
     }
+
+    trav->tavl_node = NULL;
+
+    return NULL;
 }
 
 /* Attempts to insert |item| into |tree|.
@@ -634,6 +647,7 @@ void *tavl_t_insert(struct tavl_traverser *trav,
     }
     else {
 	tavl_t_init(trav, tree);
+
 	return NULL;
     }
 }
@@ -705,11 +719,12 @@ void *tavl_t_cur(struct tavl_traverser *trav)
    The new item must not upset the ordering of the tree. */
 void *tavl_t_replace(struct tavl_traverser *trav, void *new)
 {
-    struct tavl_node *old;
+    void *old;
 
     assert(trav != NULL && trav->tavl_node != NULL && new != NULL);
     old = trav->tavl_node->tavl_data;
     trav->tavl_node->tavl_data = new;
+
     return old;
 }
 
@@ -748,6 +763,9 @@ copy_node(struct tavl_table *tree,
     return 1;
 }
 
+/* Destroys |new| with |tavl_destroy (new, destroy)|,
+   first initializing the right link in |new| that has
+   not yet been initialized. */
 static void
 copy_error_recovery(struct tavl_node *p,
 		    struct tavl_table *new, tavl_item_func * destroy)
@@ -798,7 +816,7 @@ struct tavl_table *tavl_copy(const struct tavl_table *org,
     rq.tavl_link[0] = NULL;
     rq.tavl_tag[0] = TAVL_THREAD;
 
-    for (;;) {
+    while (p != NULL) {
 	if (p->tavl_tag[0] == TAVL_CHILD) {
 	    if (!copy_node(new, q, 0, p->tavl_link[0], copy)) {
 		copy_error_recovery(rq.tavl_link[0], new, destroy);
@@ -830,6 +848,8 @@ struct tavl_table *tavl_copy(const struct tavl_table *org,
 		return NULL;
 	    }
     }
+
+    return new;
 }
 
 /* Frees storage allocated for |tree|.
@@ -840,9 +860,10 @@ void tavl_destroy(struct tavl_table *tree, tavl_item_func * destroy)
     struct tavl_node *n;	/* Next node. */
 
     p = tree->tavl_root;
-    if (p != NULL)
+    if (p != NULL) {
 	while (p->tavl_tag[0] == TAVL_CHILD)
 	    p = p->tavl_link[0];
+    }
 
     while (p != NULL) {
 	n = p->tavl_link[1];
@@ -881,6 +902,9 @@ struct libavl_allocator tavl_allocator_default = {
     tavl_free
 };
 
+#undef NDEBUG
+#include <assert.h>
+
 /* Asserts that |tavl_insert()| succeeds at inserting |item| into |table|. */
 void (tavl_assert_insert) (struct tavl_table * table, void *item)
 {
@@ -896,5 +920,6 @@ void *(tavl_assert_delete) (struct tavl_table * table, void *item)
     void *p = tavl_delete(table, item);
 
     assert(p != NULL);
+
     return p;
 }

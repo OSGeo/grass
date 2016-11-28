@@ -1,25 +1,28 @@
-/* Produced by texiweb from libavl.w on 2002/02/09 at 01:45. */
+/* Produced by texiweb from libavl.w. */
 
 /* libavl - library for manipulation of binary trees.
-   Copyright (C) 1998-2002 Free Software Foundation, Inc.
+   Copyright (C) 1998, 1999, 2000, 2001, 2002, 2004 Free Software
+   Foundation, Inc.
 
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 3 of the License, or (at your option) any later version.
 
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-   See the GNU General Public License for more details.
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+   You should have received a copy of the GNU Lesser General Public
+   License along with this library; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+   02110-1301 USA.
+ */
 
-   The author may be contacted at <blp@gnu.org> on the Internet, or
-   as Ben Pfaff, 12167 Airport Rd, DeWitt MI 48820, USA through more
-   mundane means.
+/* Nov 2016, Markus Metz
+ * from libavl-2.0.3
+ * added safety checks and speed optimizations
  */
 
 #include <assert.h>
@@ -63,15 +66,15 @@ void *avl_find(const struct avl_table *tree, const void *item)
     const struct avl_node *p;
 
     assert(tree != NULL && item != NULL);
-    for (p = tree->avl_root; p != NULL;) {
+
+    p = tree->avl_root;
+    while (p != NULL) {
 	int cmp = tree->avl_compare(item, p->avl_data, tree->avl_param);
 
-	if (cmp < 0)
-	    p = p->avl_link[0];
-	else if (cmp > 0)
-	    p = p->avl_link[1];
-	else			/* |cmp == 0| */
+	if (cmp == 0)
 	    return p->avl_data;
+
+	p = p->avl_link[cmp > 0];
     }
 
     return NULL;
@@ -97,7 +100,8 @@ void **avl_probe(struct avl_table *tree, void *item)
     z = (struct avl_node *)&tree->avl_root;
     y = tree->avl_root;
     dir = 0;
-    for (q = z, p = y; p != NULL; q = p, p = p->avl_link[dir]) {
+    q = z, p = y;
+    while (p != NULL) {
 	int cmp = tree->avl_compare(item, p->avl_data, tree->avl_param);
 
 	if (cmp == 0)
@@ -106,25 +110,33 @@ void **avl_probe(struct avl_table *tree, void *item)
 	if (p->avl_balance != 0)
 	    z = q, y = p, k = 0;
 	da[k++] = dir = cmp > 0;
+	q = p, p = p->avl_link[dir];
     }
 
-    n = q->avl_link[dir] =
-	tree->avl_alloc->libavl_malloc(tree->avl_alloc, sizeof *n);
+    n = tree->avl_alloc->libavl_malloc(tree->avl_alloc, sizeof *n);
     if (n == NULL)
 	return NULL;
 
     tree->avl_count++;
-    n->avl_data = item;
+    tree->avl_generation++;
     n->avl_link[0] = n->avl_link[1] = NULL;
+    n->avl_data = item;
     n->avl_balance = 0;
-    if (y == NULL)
-	return &n->avl_data;
+    if (y == NULL) {
+	tree->avl_root = n;
 
-    for (p = y, k = 0; p != n; p = p->avl_link[da[k]], k++)
+	return &n->avl_data;
+    }
+    q->avl_link[dir] = n;
+
+    p = y, k = 0;
+    while (p != n) {
 	if (da[k] == 0)
 	    p->avl_balance--;
 	else
 	    p->avl_balance++;
+	p = p->avl_link[da[k]], k++;
+    }
 
     if (y->avl_balance == -2) {
 	struct avl_node *x = y->avl_link[0];
@@ -180,7 +192,6 @@ void **avl_probe(struct avl_table *tree, void *item)
 	return &n->avl_data;
     z->avl_link[y != z->avl_link[0]] = w;
 
-    tree->avl_generation++;
     return &n->avl_data;
 }
 
@@ -209,6 +220,7 @@ void *avl_replace(struct avl_table *table, void *item)
 	void *r = *p;
 
 	*p = item;
+
 	return r;
     }
 }
@@ -223,23 +235,31 @@ void *avl_delete(struct avl_table *tree, const void *item)
     int k;			/* Stack pointer. */
 
     struct avl_node *p;		/* Traverses tree to find node to delete. */
+    int dir;			/* Side of |pa[k]| on which |p| is linked. */
     int cmp;			/* Result of comparison between |item| and |p|. */
 
     assert(tree != NULL && item != NULL);
 
-    k = 0;
-    p = (struct avl_node *)&tree->avl_root;
-    for (cmp = -1; cmp != 0;
-	 cmp = tree->avl_compare(item, p->avl_data, tree->avl_param)) {
-	int dir = cmp > 0;
+    pa[0] = (struct avl_node *)&tree->avl_root;
+    da[0] = 0;
+    k = 1;
+    p = tree->avl_root;
+    while (p != NULL) {
+	cmp = tree->avl_compare(item, p->avl_data, tree->avl_param);
+
+	if (cmp == 0)
+	    break;
+
+	dir = cmp > 0;
 
 	pa[k] = p;
 	da[k++] = dir;
 
 	p = p->avl_link[dir];
-	if (p == NULL)
-	    return NULL;
     }
+    if (p == NULL)
+	return NULL;
+
     item = p->avl_data;
 
     if (p->avl_link[1] == NULL)
@@ -258,7 +278,7 @@ void *avl_delete(struct avl_table *tree, const void *item)
 	    struct avl_node *s;
 	    int j = k++;
 
-	    for (;;) {
+	    while (r != NULL) {
 		da[k] = 0;
 		pa[k++] = r;
 		s = r->avl_link[0];
@@ -367,6 +387,7 @@ void *avl_delete(struct avl_table *tree, const void *item)
 
     tree->avl_count--;
     tree->avl_generation++;
+
     return (void *)item;
 }
 
@@ -463,31 +484,30 @@ void *avl_t_last(struct avl_traverser *trav, struct avl_table *tree)
 void *avl_t_find(struct avl_traverser *trav, struct avl_table *tree,
 		 void *item)
 {
-    struct avl_node *p, *q;
+    struct avl_node *p;
 
     assert(trav != NULL && tree != NULL && item != NULL);
     trav->avl_table = tree;
     trav->avl_height = 0;
     trav->avl_generation = tree->avl_generation;
-    for (p = tree->avl_root; p != NULL; p = q) {
+    p = tree->avl_root;
+    while (p != NULL) {
 	int cmp = tree->avl_compare(item, p->avl_data, tree->avl_param);
 
-	if (cmp < 0)
-	    q = p->avl_link[0];
-	else if (cmp > 0)
-	    q = p->avl_link[1];
-	else {			/* |cmp == 0| */
-
+	if (cmp == 0) {
 	    trav->avl_node = p;
+
 	    return p->avl_data;
 	}
 
 	assert(trav->avl_height < AVL_MAX_HEIGHT);
 	trav->avl_stack[trav->avl_height++] = p;
+	p = p->avl_link[cmp > 0];
     }
 
     trav->avl_height = 0;
     trav->avl_node = NULL;
+
     return NULL;
 }
 
@@ -512,10 +532,12 @@ void *avl_t_insert(struct avl_traverser *trav, struct avl_table *tree,
 			  ((char *)p - offsetof(struct avl_node, avl_data)));
 
 	trav->avl_generation = tree->avl_generation - 1;
+
 	return *p;
     }
     else {
 	avl_t_init(trav, tree);
+
 	return NULL;
     }
 }
@@ -644,14 +666,18 @@ void *avl_t_cur(struct avl_traverser *trav)
    The new item must not upset the ordering of the tree. */
 void *avl_t_replace(struct avl_traverser *trav, void *new)
 {
-    struct avl_node *old;
+    void *old;
 
     assert(trav != NULL && trav->avl_node != NULL && new != NULL);
     old = trav->avl_node->avl_data;
     trav->avl_node->avl_data = new;
+
     return old;
 }
 
+/* Destroys |new| with |avl_destroy (new, destroy)|,
+   first setting right links of nodes in |stack| within |new|
+   to null pointers to avoid touching uninitialized data. */
 static void
 copy_error_recovery(struct avl_node **stack, int height,
 		    struct avl_table *new, avl_item_func * destroy)
@@ -688,13 +714,14 @@ struct avl_table *avl_copy(const struct avl_table *org, avl_copy_func * copy,
 		     allocator != NULL ? allocator : org->avl_alloc);
     if (new == NULL)
 	return NULL;
+
     new->avl_count = org->avl_count;
     if (new->avl_count == 0)
 	return new;
 
     x = (const struct avl_node *)&org->avl_root;
     y = (struct avl_node *)&new->avl_root;
-    for (;;) {
+    while (x != NULL) {
 	while (x->avl_link[0] != NULL) {
 	    assert(height < 2 * (AVL_MAX_HEIGHT + 1));
 
@@ -754,6 +781,8 @@ struct avl_table *avl_copy(const struct avl_table *org, avl_copy_func * copy,
 	    x = stack[--height];
 	}
     }
+
+    return new;
 }
 
 /* Frees storage allocated for |tree|.
@@ -764,7 +793,8 @@ void avl_destroy(struct avl_table *tree, avl_item_func * destroy)
 
     assert(tree != NULL);
 
-    for (p = tree->avl_root; p != NULL; p = q)
+    p = tree->avl_root;
+    while (p != NULL) {
 	if (p->avl_link[0] == NULL) {
 	    q = p->avl_link[1];
 	    if (destroy != NULL && p->avl_data != NULL)
@@ -776,6 +806,8 @@ void avl_destroy(struct avl_table *tree, avl_item_func * destroy)
 	    p->avl_link[0] = q->avl_link[1];
 	    q->avl_link[1] = p;
 	}
+	p = q;
+    }
 
     tree->avl_alloc->libavl_free(tree->avl_alloc, tree);
 }
@@ -785,6 +817,7 @@ void avl_destroy(struct avl_table *tree, avl_item_func * destroy)
 void *avl_malloc(struct libavl_allocator *allocator, size_t size)
 {
     assert(allocator != NULL && size > 0);
+
     return malloc(size);
 }
 
@@ -801,6 +834,9 @@ struct libavl_allocator avl_allocator_default = {
     avl_free
 };
 
+#undef NDEBUG
+#include <assert.h>
+
 /* Asserts that |avl_insert()| succeeds at inserting |item| into |table|. */
 void (avl_assert_insert) (struct avl_table * table, void *item)
 {
@@ -816,5 +852,6 @@ void *(avl_assert_delete) (struct avl_table * table, void *item)
     void *p = avl_delete(table, item);
 
     assert(p != NULL);
+
     return p;
 }
