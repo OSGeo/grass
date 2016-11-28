@@ -126,12 +126,12 @@ def main():
             if band in allbands:
                 dataset = bands[proctype][band]
                 srcfile = "HDF4_EOS:EOS_SWATH:%s:%s" % (input, dataset)
-                import_aster(proj, srcfile, tempfile, band)
+                import_aster(proj, srcfile, tempfile, output, band)
             else:
                 grass.fatal(_('band %s is not an available Terra/ASTER band') % band)
     elif proctype == "DEM":
         srcfile = input
-        import_aster(proj, srcfile, tempfile, "DEM")
+        import_aster(proj, srcfile, tempfile, output, "DEM")
 
     # cleanup
     grass.message(_("Cleaning up ..."))
@@ -141,7 +141,7 @@ def main():
     return
 
 
-def import_aster(proj, srcfile, tempfile, band):
+def import_aster(proj, srcfile, tempfile, output, band):
     # run gdalwarp with selected options (must be in $PATH)
     # to translate aster image to geotiff
     grass.message(_("Georeferencing aster image ..."))
