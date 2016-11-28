@@ -32,17 +32,20 @@ from scipy import interpolate
 def usage():
     """How to use this..."""
     print "create_iwave.py <csv file>"
-    print "Generate filter function IWave.cpp template from csv file"
-    print "csv file must have wl response for each band in each column"
-    print "first line must be a header with wl followed by band names"
-    print "following lines will be the data."
-    print "If response is null, leave empty in csv file. Ex.:"
+    print
+    print "Generates filter function template for iwave.cpp from csv file. Note:"
+    print "- csv file must have wl response for each band in each column"
+    print "- first line must be a header with wl followed by band names"
+    print "- all following lines will be the data."
+    print "If spectral response is null, leave field empty in csv file. Example:"
+    print
     print "WL(nm),band 1,band 2,band 3,band 4"
     print "455,0.93,,,"
     print "485,0.94,0.00,,"
     print "545,0.00,0.87,0.00,"
-    print "Program will interpolate filter function to 2.5 nm steps"
-    print "and output a cpp template file in the IWave format"
+    print
+    print "This script will interpolate the filter functions to 2.5 nm steps"
+    print "and output a cpp template file in the IWave format to be added to iwave.cpp"
 
 def read_input(csvfile):
     """
@@ -51,29 +54,30 @@ def read_input(csvfile):
     should be a .csv file with the values
     of the filter function for each band in the sensor
     one column for band
-    first line must have a header with sensor band name
+    first line must have a header with sensor band names
     first column is wavelength
+    values are those of the discrete band filter functions
     """
     infile = open(csvfile, 'r')
-        
+
     # get number of bands and band names
     bands = infile.readline().split(',')
     bands.remove(bands[0])
     bands[-1] = bands[-1].strip()
-    
+    print " > Number of bands found: %d" % len(bands)
     infile.close()
-    
+
     # create converter dictionary for import
     # fix nodata or \n
     conv = {}
     for b in range(len(bands)):
         conv[b+1] = lambda s: float(s or -99)
-    
+
     values = np.loadtxt(csvfile, delimiter=',', skiprows=1, converters = conv)
-    
+
     return (bands, values)
 
-def interpolate_band(values):
+def interpolate_band(values, step = 2.5):
     """
     Receive wavelength and response for one band
     interpolate at 2.5 nm steps
@@ -84,19 +88,47 @@ def interpolate_band(values):
     # These 2 lines select the subarray 
     # remove nodata (-99) lines in values array
     # where response is nodata?
+
     w = values[:,1] >= 0
     response = values[w]
-    
+
+    wavelengths = response[:,0]  # 1st column of input array
+    spectral_response = response[:,1]  # 2nd column
+    assert len(wavelengths) == len(spectral_response), "Number of wavelength slots and spectral responses are not equal!"
 
     # interpolating
-    f = interpolate.interp1d(response[:,0],response[:,1])
-    
-    filter_f = f(np.arange(response[0,0], response[-1,0] + 2.5, 2.5))
-    
+    f = interpolate.interp1d(wavelengths, spectral_response)
+    start = wavelengths[0]
+
+    # considering last entry for np.arange
+    input_step = wavelengths[-1] - wavelengths[-2]
+
+    # if wavelength step in input data is 1 nm
+    # print "  > Wavelength step in input data is", input_step, "nm"
+    if input_step == 1:
+        addendum = 0
+        # print "    i No need to modify the stop value for the np.arrange function."
+
+    # what if input step != 1 and input step != 2.5?
+    else:
+        addendum = step
+        # print "  ! Wavelength step in input data is nor 1 nm, neither 2.5 nm.",
+        # print "Internally setting the \"stop\" value for the np.arrange()",
+        # print "function so as to not exceed the end value", wavelengths[-1],
+        # print "of the open half ended range."
+
+    stop = wavelengths[-1] + addendum
+
+    filter_f = f(np.arange(start, stop, step))
+   
+    # how many spectral responses?
+    expected = np.ceil((stop - start) / step)
+    assert len(filter_f) == expected, "Number of interpolated spectral responses not equal to expected number of interpolations" 
+
     # convert limits from nanometers to micrometers
-    lowerlimit = response[0,0]/1000
-    upperlimit = response[-1,0]/1000
-    
+    lowerlimit = wavelengths[0]/1000
+    upperlimit = wavelengths[-1]/1000
+
     return(filter_f, (lowerlimit, upperlimit))
 
 def plot_filter(values):
@@ -228,7 +260,8 @@ def main():
     # getting sensor name from full csv file name
     sensor = os.path.splitext(os.path.basename(inputfile))[0]
     
-    print "Getting sensor name from csv file: %s" % (sensor)
+    print
+    print " > Getting sensor name from csv file: %s" % (sensor)
     
     # getting data from file
     bands, values = read_input(inputfile)
@@ -236,9 +269,10 @@ def main():
     # writing file in same folder of input file
     write_cpp(bands, values, sensor, os.path.dirname(inputfile))
     
-    print "Filter function written to %s" % (sensor+"_cpp_template.txt")
-    print "Please check file for possible errors before inserting into IWave.cpp"
-    print "Don't forget to add necessary data to IWave.h"
+    print " > Filter functions exported to %s" % ("sensors_csv/"+sensor+"_cpp_template.txt")
+    print " > Please check this file for possible errors before inserting the code into file iwave.cpp"
+    print " > Don't forget to add the necessary data to the files iwave.h, geomcond.h, geomcond.cpp, and to i.atcorr.html"
+    print
     
     return
 
