@@ -25,7 +25,11 @@ specified saves the user from using a temporary raster map for the result of
 
 As with most GRASS raster modules, <em>r.univar</em> operates on the raster
 array defined by the current region settings, not the original extent and
-resolution of the input map. See <em><a href="g.region.html">g.region</a></em>.
+resolution of the input map. See <em><a href="g.region.html">g.region</a></em>,
+but also 
+<a href="https://grasswiki.osgeo.org/wiki/Computational_region#Understanding_the_impact_of_region_settings">
+the wiki page on the computational region</a> to understand the impact of the 
+region settings on the calculations.
 
 <p>
 This module can use large amounts of system memory when the <b>-e</b>
