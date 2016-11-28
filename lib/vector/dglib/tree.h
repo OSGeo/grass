@@ -22,13 +22,10 @@
 #ifndef _DGL_TREE_H_
 #define _DGL_TREE_H_
 
-#include "avl.h"
-#include "tavl.h"
-
-
 #define USE_THREADED_AVL
 
 #if defined(USE_THREADED_AVL)
+#include "tavl.h"
 #define avl_table tavl_table
 #define avl_traverser tavl_traverser
 #define avl_create tavl_create
@@ -51,6 +48,8 @@
 #define avl_t_prev tavl_t_prev
 #define avl_t_cur tavl_t_cur
 #define avl_t_replace tavl_t_replace
+#else
+#include "avl.h"
 #endif
 
 
