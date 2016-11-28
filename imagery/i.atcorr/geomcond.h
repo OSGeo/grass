@@ -61,7 +61,7 @@
 /*                                                                        */
 /*         16      worldview2        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         17      quickbird        * enter month,day,hh.ddd,long.,lat.   */
+/*         17      quickbird2       * enter month,day,hh.ddd,long.,lat.   */
 /*                                                                        */
 /*         18      Landsat 8        * enter month,day,hh.ddd,long.,lat.   */
 /*                                                                        */
