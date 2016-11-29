@@ -1,25 +1,23 @@
-/* Produced by texiweb from libavl.w on 2002/02/09 at 01:45. */
+/* Produced by texiweb from libavl.w. */
 
 /* libavl - library for manipulation of binary trees.
-   Copyright (C) 1998-2002 Free Software Foundation, Inc.
+   Copyright (C) 1998, 1999, 2000, 2001, 2002, 2004 Free Software
+   Foundation, Inc.
 
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 3 of the License, or (at your option) any later version.
 
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-   See the GNU General Public License for more details.
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-
-   The author may be contacted at <blp@gnu.org> on the Internet, or
-   as Ben Pfaff, 12167 Airport Rd, DeWitt MI 48820, USA through more
-   mundane means.
+   You should have received a copy of the GNU Lesser General Public
+   License along with this library; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+   02110-1301 USA.
  */
 
 #ifndef AVL_H
@@ -48,9 +46,9 @@ extern struct libavl_allocator avl_allocator_default;
 void *avl_malloc(struct libavl_allocator *, size_t);
 void avl_free(struct libavl_allocator *, void *);
 
-/* Maximum AVL height. */
+/* Maximum AVL tree height. */
 #ifndef AVL_MAX_HEIGHT
-#define AVL_MAX_HEIGHT 32
+#define AVL_MAX_HEIGHT 92
 #endif
 
 /* Tree data structure. */
