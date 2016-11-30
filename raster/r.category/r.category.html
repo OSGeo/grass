@@ -39,7 +39,8 @@ another program.
 The <b>rules</b> option allows the user to assign category labels from values
 found in a file. The label can refer to a single category, range of
 categories, floating point value, or a range of floating point values.
-The format is given as follows (when separator is set to colon).
+The format is given as follows (when separator is set to colon; no white space
+must be used after the separator):
 <div class="code"><pre>
 cat:Label
 val1:val2:Label
@@ -110,50 +111,52 @@ avoid unwanted shell substitution.
 
 Spearfish sample dataset:
 
-<p><dl>
-<dt><span class="code"><tt>
+<h3>Printing categories</h3>
+<div class="code"><pre>
 r.category map=soils
-</tt></span>
-<dd>
+</pre></div>
+
 prints the values and labels associated with all of the categories in the
-<em>soils</em> raster map layer;
+<em>soils</em> raster map layer.
 
-<dt><span class="code"><tt>
+<p>
+<div class="code"><pre>
 r.category map=soils cats=10,12,15-20 
-</tt></span>
-<dd>
-prints only the category values and labels for <em>soils</em> map layer
-categories <tt>10, 12</tt>, and <tt>15</tt> through <tt>20</tt>; and
+</pre></div>
 
-<dt><span class="code"><tt>
+prints only the category values and labels for <em>soils</em> map layer
+categories <tt>10, 12</tt>, and <tt>15</tt> through <tt>20</tt>.
+
+<p>
+<div class="code"><pre>
 r.category map=soils cats=10,20 separator=':'
-</tt></span>
-<dd>
+</pre></div>
+
 prints the values and labels for <em>soils</em> map layer categories
 <tt>10</tt> and <tt>20</tt>, but uses "<tt>:</tt>" (instead of a tab)
 as the character separating the category values from the category
-values in the output.
-</dl>
+values in the output:
 
-<dl>
-<dt>Example output: 
-<dd>
-<p><div class="code"><pre>
+Example output:
+<div class="code"><pre>
 10:Dumps, mine, Cc 
 20:Kyle clay, KaA 
 </pre></div>
-</dl>
 
-<dl>
-<dt>Example defining category labels:
-<dd><div class="code"><pre>
+<h3>Adding categories</h3>
+
+Example for defining new category labels:
+<div class="code"><pre>
 r.category diseasemap separator=: rules=- &lt;&lt; EOF
 1:potential absence
 2:potential presence
 EOF
 </pre></div>
-<p>sets the categoy values 1 and 2 to respective text labels.
-</dl>
+
+This sets the categoy values 1 and 2 to respective text labels.
+
+Alternatively, the rules can be stored in an ASCII text file and loaded
+via the <em>rules</em> parameter.
 
 
 <h2>SEE ALSO</h2>
