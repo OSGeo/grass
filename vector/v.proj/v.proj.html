@@ -36,6 +36,10 @@ appropriate, but can cause errors the input vector crosses the datum line
 at 180E/W. In this case wrapping of east coordinates to -180,180 needs 
 to be disabled with the <b>-w</b> flag.
 
+<p>When reprojecting massive point clouds for which topology is not necessary,
+the user can set the <b>-b</b> flag to suppress the building of topology of
+the output map.
+
 <p>
 In order to preserve spatial detail, <em>v.proj</em> performs automated
 vertex densification (as an alternative, <em><a href="v.split.html">v.split</a></em>

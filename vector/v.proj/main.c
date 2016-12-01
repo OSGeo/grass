@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     flag.no_topol = G_define_flag();
     flag.no_topol->key = 'b';
     flag.no_topol->label = _("Do not build vector topology");
-    flag.no_topol->description = _("Recommended for massive point conversion");
+    flag.no_topol->description = _("Recommended for massive point projection");
 
     /* The parser checks if the map already exists in current mapset,
        we switch out the check and do it
