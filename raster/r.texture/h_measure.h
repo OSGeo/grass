@@ -26,6 +26,6 @@
 float h_measure(int);
 void alloc_vars(int);
 int set_vars(int **grays, int curr_rrow, int curr_col,
-                int size, int offset, int t_d);
+                int size, int offset, int t_d, int with_nulls);
 int set_angle_vars(int angle, int have_px, int have_py,
                    int have_pxpys, int have_pxpyd);

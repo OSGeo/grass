@@ -119,21 +119,36 @@ static int bsearch_gray(int *array, int n, int val)
 }
 
 int set_vars(int **grays, int curr_row, int curr_col,
-                int size, int offset, int t_d)
+                int size, int offset, int t_d, int with_nulls)
 {
     int R0, R45, R90, R135, x, y;
     int row, col, row2, col2, rows, cols;
+    int rowmin, rowmax, colmin, colmax, wrows, wcols, rowd, cold;
     int itone, jtone;
     int cnt;
 
     rows = cols = size;
+    wrows = Rast_window_rows();
+    wcols = Rast_window_cols();
 
     /* Determine the number of different gray scales (not maxval) */
     for (row = 0; row <= PGM_MAXMAXVAL; row++)
 	tone[row] = -1;
     cnt = 0;
-    for (row = curr_row - offset; row <= curr_row + offset; row++) {
-	for (col = curr_col - offset; col <= curr_col + offset; col++) {
+    rowmin = curr_row - offset;
+    if (rowmin < 0)
+	rowmin = 0;
+    rowmax = curr_row + offset;
+    if (rowmax > wrows - 1)
+	rowmax = wrows - 1;
+    colmin = curr_col - offset;
+    if (colmin < 0)
+	colmin = 0;
+    colmax = curr_col + offset;
+    if (colmax > wcols - 1)
+	colmax = wcols - 1;
+    for (row = rowmin; row <= rowmax; row++) {
+	for (col = colmin; col <= colmax; col++) {
 	    if (grays[row][col] < 0) {	/* No data pixel found */
 		continue;
 	    }
@@ -146,8 +161,9 @@ int set_vars(int **grays, int curr_row, int curr_col,
 	}
     }
     /* what is the minimum number of pixels 
-     * to get reasonable texture measurements ? */
-    if (cnt < t_d * t_d * 4)
+     * to get reasonable texture measurements ? 
+     * at the very least, any of R0, R45, R90, R135 must be > 1 */
+    if (cnt < size * size / 4 || (!with_nulls && cnt < size * size))
 	return 0;
 
     /* Collapse array, taking out all zero values */
@@ -180,35 +196,49 @@ int set_vars(int **grays, int curr_row, int curr_col,
     /* Find gray-tone spatial dependence matrix */
     for (row = 0; row < rows; row++) {
 	row2 = curr_row - offset + row;
+	if (row2 < 0 || row2 >= wrows)
+	    continue;
 	for (col = 0; col < cols; col++) {
 	    col2 = curr_col - offset + col;
+	    if (col2 < 0 || col2 >= wcols)
+		continue;
 	    if (grays[row2][col2] < 0)
 		continue;
 	    x = bsearch_gray(tone, Ng, grays[row2][col2]);
-	    if (col + t_d < cols &&
-	        grays[row2][col2 + t_d] >= 0) {
-		y = bsearch_gray(tone, Ng, grays[row2][col2 + t_d]);
+	    rowd = row2;
+	    cold = col2 + t_d;
+	    if (col + t_d < cols && cold < wcols &&
+	        grays[rowd][cold] >= 0) {
+		y = bsearch_gray(tone, Ng, grays[rowd][cold]);
 		P_matrix0[x][y]++;
 		P_matrix0[y][x]++;
 		R0 += 2;
 	    }
-	    if (row + t_d < rows &&
-	        grays[row2 + t_d][col2] >= 0) {
-		y = bsearch_gray(tone, Ng, grays[row2 + t_d][col2]);
+	    rowd = row2 + t_d;
+	    cold = col2;
+	    if (row + t_d < rows && rowd < wrows &&
+	        grays[rowd][cold] >= 0) {
+		y = bsearch_gray(tone, Ng, grays[rowd][cold]);
 		P_matrix90[x][y]++;
 		P_matrix90[y][x]++;
 		R90 += 2;
 	    }
-	    if (row + t_d < rows && col - t_d >= 0 &&
-	        grays[row2 + t_d][col2 - t_d] >= 0) {
-		y = bsearch_gray(tone, Ng, grays[row2 + t_d][col2 - t_d]);
+	    rowd = row2 + t_d;
+	    cold = col2 - t_d;
+	    if (row + t_d < rows && rowd < wrows &&
+	        col - t_d >= 0 && cold >= 0 &&
+	        grays[rowd][cold] >= 0) {
+		y = bsearch_gray(tone, Ng, grays[rowd][cold]);
 		P_matrix45[x][y]++;
 		P_matrix45[y][x]++;
 		R45 += 2;
 	    }
-	    if (row + t_d < rows && col + t_d < cols &&
-	        grays[row2 + t_d][col2 + t_d] >= 0) {
-		y = bsearch_gray(tone, Ng, grays[row2 + t_d][col2 + t_d]);
+	    rowd = row2 + t_d;
+	    cold = col2 + t_d;
+	    if (row + t_d < rows && rowd < wrows &&
+	        col + t_d < cols && cold < wcols &&
+	        grays[rowd][cold] >= 0) {
+		y = bsearch_gray(tone, Ng, grays[rowd][cold]);
 		P_matrix135[x][y]++;
 		P_matrix135[y][x]++;
 		R135 += 2;
