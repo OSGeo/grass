@@ -14,3 +14,5 @@ extern func_t f_z;
 extern func_t f_ewres;
 extern func_t f_nsres;
 extern func_t f_tbres;
+
+extern func_t f_area;

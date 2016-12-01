@@ -123,7 +123,7 @@ static void cache_setup(struct row_cache *cache, int fd, int nrows)
     cache->sub[CELL_TYPE] = NULL;
     cache->sub[FCELL_TYPE] = NULL;
     cache->sub[DCELL_TYPE] = NULL;
-};
+}
 
 static void cache_release(struct row_cache *cache)
 {
@@ -144,7 +144,7 @@ static void cache_release(struct row_cache *cache)
 
 	G_free(sub);
     }
-};
+}
 
 static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
 {
@@ -209,7 +209,7 @@ static void cache_get(struct row_cache *cache, void *buf, int row, int res_type)
 {
     void *p = cache_get_raw(cache, row, res_type);
     memcpy(buf, p, columns * Rast_cell_size(res_type));
-};
+}
 
 /****************************************************************************/
 
