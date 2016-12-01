@@ -23,6 +23,8 @@ func_desc local_func_descs[] = {
     {"nsres", c_double0, f_nsres},
     {"tbres", c_double0, f_tbres},
 
+    {"area", c_double0, f_area},
+
     {NULL, NULL, NULL}
 };
 
