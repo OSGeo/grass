@@ -1857,7 +1857,7 @@ def main():
         message(_("Starting GRASS GIS..."))
 
     # Ensure GUI is set
-    if batch_job:
+    if batch_job or params.exit_grass:
         grass_gui = 'text'
     else:
         if not grass_gui:
