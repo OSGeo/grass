@@ -220,6 +220,8 @@ int main(int argc, char **argv)
     struct Option *point_color2_opt;
     struct Option *secondary_width_opt;
     struct Flag *do_points_flg, *no_lines_flg;
+    struct Option *x_scale_opt, *y_scale_opt;
+    struct Flag *x_scale_labels_flg, *y_scale_labels_flg;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -317,6 +319,26 @@ int main(int argc, char **argv)
     ytics_opt->required = NO;
     ytics_opt->multiple = YES;
 
+    x_scale_opt = G_define_option();
+    x_scale_opt->key = "x_scale";
+    x_scale_opt->description = _("Scale for X values");
+    x_scale_opt->type = TYPE_DOUBLE;
+    x_scale_opt->required = NO;
+
+    y_scale_opt = G_define_option();
+    y_scale_opt->key = "y_scale";
+    y_scale_opt->description = _("Scale for Y values");
+    y_scale_opt->type = TYPE_DOUBLE;
+    y_scale_opt->required = NO;
+
+    x_scale_labels_flg = G_define_flag();
+    x_scale_labels_flg->key = 'x';
+    x_scale_labels_flg->description = "Scale only X labels, not values";
+
+    y_scale_labels_flg = G_define_flag();
+    y_scale_labels_flg->key = 'y';
+    y_scale_labels_flg->description = "Scale only Y labels, not values";
+
     point_symbol_opt = G_define_option();
     /* TODO: name must be icon to get GUI dialog */
     point_symbol_opt->key = "icon";
@@ -410,6 +432,30 @@ int main(int argc, char **argv)
 	num_y_files++;
 	if (num_y_files > 10)
 	    G_fatal_error(_("Maximum of 10 Y data files exceeded"));
+    }
+
+    /* scales */
+
+    int scale_x_values = 0;
+    int scale_y_values = 0;
+    int scale_x_labels = 0;
+    int scale_y_labels = 0;
+    double x_scale = 1;
+    double y_scale = 1;
+
+    if (x_scale_opt->answer) {
+        sscanf(x_scale_opt->answer, "%lf", &x_scale);
+        if (x_scale_labels_flg->answer)
+            scale_x_labels = 1;
+        else
+            scale_x_values = 1;
+    }
+    if (y_scale_opt->answer) {
+        sscanf(y_scale_opt->answer, "%lf", &y_scale);
+        if (y_scale_labels_flg->answer)
+            scale_y_labels = 1;
+        else
+            scale_y_values = 1;
     }
 
     /* set colors  */
@@ -588,6 +634,8 @@ int main(int argc, char **argv)
 	in[i].num_pnts = 0;
 
 	while ((err = fscanf(in[i].fp, "%f", &in[i].value)) != EOF) {
+            if (scale_y_values)
+                in[i].value *= y_scale;
 	    in[i].num_pnts++;
 	    in[i].max = MAX(in[i].max, in[i].value);
 	    in[i].min = MIN(in[i].min, in[i].value);
@@ -660,6 +708,9 @@ int main(int argc, char **argv)
 	strcpy(tic_name, "");
     }
 
+    if (tic_unit != 1 && scale_x_labels)
+        G_fatal_error(_("Scale X labels cannot be used with this range"
+                        " of data (%f, %f)"), in[0].min, in[0].max);
 
     /* open all the data files again */
 
@@ -681,6 +732,8 @@ int main(int argc, char **argv)
     for (line = 0; line < in[0].num_pnts; line++) {
 	/* scan in an X value */
 	err = fscanf(in[0].fp, "%f", &in[0].value);
+    if (scale_x_values)
+        in[0].value *= x_scale;
 
 	/* didn't find a number or hit EOF before our time */
 	if ((err != 1) || (err == EOF)) {
@@ -693,6 +746,8 @@ int main(int argc, char **argv)
 	    /* check to see that we do indeed have data for this point */
 	    if (line < in[i].num_pnts) {
 		err = fscanf(in[i].fp, "%f", &in[i].value);
+                if (scale_y_values)
+                    in[i].value *= y_scale;
 		if ((in[i].num_pnts >= line) && (err != 1)) {
 		    D_close_driver();
 		    G_fatal_error(_("Problem reading <%s> data file at line %d"),
@@ -780,11 +835,17 @@ int main(int argc, char **argv)
 	    D_end();
 	    D_stroke();
 
-	    if ((in[0].value >= 1) || (in[0].value <= -1) ||
-		(in[0].value == 0))
-		sprintf(txt, "%.0f", (in[0].value / tic_unit));
-	    else
-		sprintf(txt, "%.2f", (in[0].value));
+            double value = in[0].value;
+            /* the scale goes against the auto units scaling
+             * (but doing the scaling before would place the values
+             * differently which is not what we want with label scaling
+             */
+            if (scale_x_labels)
+                value *= x_scale;
+            if ((value >= 1) || (value <= -1) || (value == 0))
+                sprintf(txt, "%.0f", (value / tic_unit));
+            else
+                sprintf(txt, "%.2f", (value));
 	    text_height = (b - t) * TEXT_HEIGHT;
 	    text_width = (r - l) * TEXT_WIDTH;
 	    D_text_size(text_width, text_height);
@@ -893,6 +954,9 @@ int main(int argc, char **argv)
             tic_unit = 1;
             strcpy(tic_name, "");
         }
+        if (tic_unit != 1 && scale_y_labels)
+            G_fatal_error(_("Scale Y labels cannot be used with this"
+                            "range of data (%f, %f)"), min_y, max_y);
         /* Y-AXIS LOOP */
         for (i = (int)min_y; i <= (int)max_y; i += tic_unit) {
             if (rem(i, tic_every) == 0.0) {
@@ -906,7 +970,10 @@ int main(int argc, char **argv)
 
                 /* draw a tic-mark number */
 
-                sprintf(txt, "%d", (i / tic_unit));
+                if (scale_y_labels)
+                    sprintf(txt, "%f.0", (i / tic_unit * y_scale));
+                else
+                    sprintf(txt, "%d", (i / tic_unit));
                 text_height = (b - t) * TEXT_HEIGHT;
                 text_width = (r - l) * TEXT_WIDTH;
                 set_optimal_text_size(text_width, text_height, txt, &tt, &tb, &tl, &tr);
