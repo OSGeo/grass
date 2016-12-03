@@ -22,7 +22,7 @@ Classes:
  - wizard::LocationWizard
  - wizard::WizardWithHelpButton
 
-(C) 2007-2013 by the GRASS Development Team
+(C) 2007-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -122,6 +122,20 @@ class DatabasePage(TitledPage):
                 self._nameValidationFailed))
         self.tlocTitle = self.MakeTextCtrl(size=(400, -1))
 
+        # checkbox
+        self.tlocRegion = self.MakeCheckBox(_("Set default region extent and resolution"),
+                                            tooltip=_("This option allows setting default "
+                                                      "computation region immediately after "
+                                                      "new location is created. Default "
+                                                      "computation region can be defined later "
+                                                      "using g.region based on imported data."))
+
+        self.tlocUserMapset = self.MakeCheckBox(_("Create user mapset"),
+                                                tooltip=_("This option allows creating user "
+                                                          "mapset immediately after new location "
+                                                          "is created. Note that GRASS always creates "
+                                                          "PERMANENT mapset."))
+
         # layout
         self.sizer.Add(item=self.MakeLabel(_("GIS Data Directory:")),
                        flag=wx.ALIGN_RIGHT |
@@ -146,9 +160,8 @@ class DatabasePage(TitledPage):
                 tooltip=_("Name of location directory in GIS Data Directory")),
             flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                2,
-                1))
+            pos=(2, 1)
+        )
         self.sizer.Add(item=self.tlocation,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
@@ -164,14 +177,23 @@ class DatabasePage(TitledPage):
                     "you can leave this field blank.")),
             flag=wx.ALIGN_RIGHT | wx.ALIGN_TOP | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                3,
-                1))
+            pos=(3, 1)
+        )
         self.sizer.Add(item=self.tlocTitle,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(3, 2), span=(1, 2))
+        self.sizer.Add(item=self.tlocRegion,
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=5,
+                       pos=(4, 2), span=(1, 2))
+        self.sizer.Add(item=self.tlocUserMapset,
+                       flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border=5,
+                       pos=(5, 2), span=(1, 2))
         self.sizer.AddGrowableCol(3)
 
         # bindings
@@ -2233,6 +2255,10 @@ class LocationWizard(wx.Object):
         # file from which new location is created
         self.georeffile = None
 
+        # additional settings
+        self.default_region = False
+        self.user_mapset = False
+
         #
         # define wizard pages
         #
@@ -2330,6 +2356,8 @@ class LocationWizard(wx.Object):
                 self.location = self.startpage.location
                 self.grassdatabase = self.startpage.grassdatabase
                 self.georeffile = self.filepage.georeffile
+                self.default_region = self.startpage.tlocRegion.IsChecked()
+                self.user_mapset = self.startpage.tlocUserMapset.IsChecked()
                 # FIXME here was code for setting default region, what for is this if:
                 # if self.altdb == False:
 
