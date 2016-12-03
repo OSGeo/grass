@@ -546,45 +546,30 @@ class GRASSStartup(wx.Frame):
                 dlg.CenterOnScreen()
                 if dlg.ShowModal() == wx.ID_YES:
                     self.ImportFile(gWizard.georeffile)
-                else:
-                    self.SetDefaultRegion(location=gWizard.location)
                 dlg.Destroy()
-            else:
-                self.SetDefaultRegion(location=gWizard.location)
+            if gWizard.default_region:
+                defineRegion = RegionDef(self, location=gWizard.location)
+                defineRegion.CenterOnScreen()
+                defineRegion.ShowModal()
+                defineRegion.Destroy()
 
-            dlg = TextEntryDialog(
-                parent=self,
-                message=_("Do you want to create new mapset?"),
-                caption=_("Create new mapset"),
-                defaultValue=self._getDefaultMapsetName(),
-                validator=GenericValidator(
-                    grass.legal_name,
-                    self._nameValidationFailed),
-                style=wx.OK | wx.CANCEL | wx.HELP)
-            help = dlg.FindWindowById(wx.ID_HELP)
-            help.Bind(wx.EVT_BUTTON, self.OnHelp)
-            if dlg.ShowModal() == wx.ID_OK:
-                mapsetName = dlg.GetValue()
-                self.CreateNewMapset(mapsetName)
-
-    def SetDefaultRegion(self, location):
-        """Asks to set default region."""
-        caption = _("Location <%s> created") % location
-        message = _("Do you want to set the default "
-                    "region extents and resolution now?")
-        dlg = wx.MessageDialog(
-            parent=self, message="%(caption)s.\n\n%(extent)s" %
-            ({'caption': caption, 'extent': message}),
-            caption=caption, style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
-        dlg.CenterOnScreen()
-        if dlg.ShowModal() == wx.ID_YES:
-            dlg.Destroy()
-            defineRegion = RegionDef(self, location=location)
-            defineRegion.CenterOnScreen()
-            defineRegion.ShowModal()
-            defineRegion.Destroy()
-        else:
-            dlg.Destroy()
+            if gWizard.user_mapset:
+                dlg = TextEntryDialog(
+                    parent=self,
+                    message=_("New mapset:"),
+                    caption=_("Create new mapset"),
+                    defaultValue=self._getDefaultMapsetName(),
+                    validator=GenericValidator(
+                        grass.legal_name,
+                        self._nameValidationFailed
+                    ),
+                    style=wx.OK | wx.CANCEL | wx.HELP
+                )
+                help = dlg.FindWindowById(wx.ID_HELP)
+                help.Bind(wx.EVT_BUTTON, self.OnHelp)
+                if dlg.ShowModal() == wx.ID_OK:
+                    mapsetName = dlg.GetValue()
+                    self.CreateNewMapset(mapsetName)
 
     def ImportFile(self, filePath):
         """Tries to import file as vector or raster.
