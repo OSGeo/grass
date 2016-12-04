@@ -119,7 +119,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
                                              dbif=dbif)
 
             # In case samples are not found
-            if not list and len(list) == 0:
+            if not list or len(list) == 0:
                 dbif.close()
                 msgr.message(_("No samples found for map calculation"))
                 return 0
@@ -196,8 +196,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
         for i in range(num):
 
             count += 1
-            if count % 10 == 0:
-                msgr.percent(count, num, 1)
+            msgr.percent(count, num, 10)
 
             # Create the r.mapcalc statement for the current time step
             map_name = "{base}_{suffix}".format(base=base,
@@ -294,8 +293,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
         for new_map in map_list:
 
             count += 1
-            if count % 10 == 0:
-                msgr.percent(count, num, 1)
+            msgr.percent(count, num, 10)
 
             # Read the map data
             new_map.load()
@@ -314,8 +312,6 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
         # Update the spatio-temporal extent and the metadata table entries
         new_sp.update_from_registered_maps(dbif)
-
-        msgr.percent(1, 1, 1)
 
         # Remove empty maps
         if len(empty_maps) > 0:
