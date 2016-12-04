@@ -111,8 +111,8 @@ static const char *find_file(int misc, const char *dir,
 		if (!pselmapset)
 		    pselmapset = pmapset;
 		else if (element == pelement)
-		    G_warning(_("'%s/%s' was found in more mapsets (also found in <%s>)"),
-			      element, pname, pmapset);
+		    G_important_message(_("Data element '%s/%s' was found in more mapsets (also found in <%s>)"),
+                                        element, pname, pmapset);
 		cnt++;
 	    }
 	}
@@ -124,7 +124,7 @@ static const char *find_file(int misc, const char *dir,
 	    if (access(path, 0) == 0) {
 		/* If the same name exists in more mapsets and print a warning */
 		if (cnt > 1 && element == pelement)
-		    G_warning(_("Using <%s@%s>"),
+		    G_important_message(_("Using <%s@%s>..."),
 			      pname, pselmapset);
 	    
 		return G_store(pselmapset);
