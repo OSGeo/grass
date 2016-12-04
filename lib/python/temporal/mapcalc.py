@@ -123,7 +123,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
                                              dbif=dbif)
 
             # In case samples are not found
-            if not list and len(list) == 0:
+            if not list or len(list) == 0:
                 dbif.close()
                 msgr.message(_("No samples found for map calculation"))
                 return 0
