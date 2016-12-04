@@ -508,7 +508,8 @@ int main(int argc, char *argv[])
 	}
 	Rast_put_d_row(outfd, outrast);
     }
-
+    G_percent(1, 1, 1);
+      
     G_free(inrast_redchan);
     Rast_close(infd_redchan);
     if (nirchan) {
