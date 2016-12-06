@@ -180,7 +180,7 @@ class LMToolsToolbar(BaseToolbar):
                                      ('script-load', icons['script-load'],
                                       self.parent.OnRunScript),
                                      ('python', icons['python'],
-                                      self.parent.pyshell.OnSimpleEditor),
+                                      self.parent.OnSimpleEditor),
                                      ))
 
 
