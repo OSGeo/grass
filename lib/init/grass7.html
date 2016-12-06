@@ -285,14 +285,14 @@ r.out.gdal input=basin_50K output=basins.tiff
 Region issues ignored.
 -->
 
-Create a new Location based on a geodata file's projection (<b>-c</b>)
-and exit (<b>-e</b>):
+Creating a new Location based on a geodata file's projection (<b>-c</b>)
+and exit (<b>-e</b>) immediately:
 
 <div class="code"><pre>
 grass73 -c elevation.tiff -e /path/to/grassdata/test1/
 </pre></div>
 
-Link external raster data to PERMANENT Mapset:
+Linking external raster data to PERMANENT Mapset:
 
 <div class="code"><pre>
 grass73 /path/to/grassdata/test1/PERMANENT/ --exec r.external input=basins.tiff output=basins
@@ -311,14 +311,62 @@ Compare the rasters visually:
 grass73 /path/to/grassdata/test1/PERMANENT/ --exec g.gui.mapswipe first=elevation second=basins
 </pre></div>
 
-<p>
-Note: The exec interface is also able to execute entire scripts.
+<h4>Execution of shell and Python scripts instead of single commands</h4>
 
-<p><b>Troubleshooting</b>:
+A sequence of commands can be bundled in a script and executed using the
+exec interface.
+<p>
+<b>Shell script example:</b> the command to execute a shell script might be:
+
+<div class="code"><pre>
+grass73 /path/to/grassdata/test1/PERMANENT/ --exec sh test.sh
+</pre></div>
+
+A very simple bash script ("test.sh") may look like this:
+
+<div class="code"><pre>
+#!/bin/bash
+
+g.region -p
+g.list type=raster
+r.info elevation
+</pre></div>
+
+<p>
+<b>Python script example:</b> the command to execute a Python script might be:
+
+<div class="code"><pre>
+grass73 /path/to/grassdata/test1/PERMANENT/ --exec python test.py
+</pre></div>
+
+A very simple Python script ("test.py") may look like this:
+
+<!-- TODO: how to find GISBASE? must be defined -->
+<div class="code"><pre>
+#!/usr/bin/env python
+
+# import GRASS Python bindings (see also pygrass)
+import grass.script as gscript
+import grass.script.setup as gsetup
+
+gscript.message('Current GRASS GIS 7 environment:')
+print gscript.gisenv()
+ 
+gscript.message('Available raster maps:')
+for raster in gscript.list_strings(type = 'raster'):
+    print raster
+ 
+gscript.message('Available vector maps:')
+for vector in gscript.list_strings(type = 'vector'):
+    print vector
+</pre></div>
+
+<h4>Troubleshooting</h4>
 Importantly, to avoid an <tt>"[Errno 8] Exec format error"</tt> there must be a 
 <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a> line at the top of
 the script (like <tt>#!/bin/sh</tt>, <tt>#!/bin/bash</tt>, or <tt>#!/usr/bin/env python</tt>)
-indicating which interpreter to be used for the script.
+indicating which interpreter to be used for the script. The script file must 
+have its executable bit set. 
 
 <h3>Other examples</h3>
 
