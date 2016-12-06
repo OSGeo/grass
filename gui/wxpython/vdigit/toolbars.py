@@ -817,15 +817,14 @@ class VDigitToolbar(BaseToolbar):
                                   disableAdd=True)
 
             if dlg and dlg.GetName():
-                # add layer to map layer tree
-                if self._giface.GetLayerTree():
-                    mapName = dlg.GetName() + '@' + grass.gisenv()['MAPSET']
-                    self._giface.GetLayerList().AddLayer(
+                # add layer to map layer tree/map display
+                mapName = dlg.GetName() + '@' + grass.gisenv()['MAPSET']
+                self._giface.GetLayerList().AddLayer(
                         ltype='vector', name=mapName, checked=True,
                         cmd=['d.vect', 'map=%s' % mapName])
 
-                    vectLayers = self.UpdateListOfLayers(updateTool=True)
-                    selection = vectLayers.index(mapName)
+                vectLayers = self.UpdateListOfLayers(updateTool=True)
+                selection = vectLayers.index(mapName)
 
                 # create table ?
                 if dlg.IsChecked('table'):
