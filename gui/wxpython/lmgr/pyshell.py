@@ -33,7 +33,7 @@ from core.utils import _
 class PyShellWindow(wx.Panel):
     """Python Shell Window"""
 
-    def __init__(self, parent, giface, id=wx.ID_ANY, **kwargs):
+    def __init__(self, parent, giface, id=wx.ID_ANY, simpleEditorHandler=None, **kwargs):
         self.parent = parent
         self.giface = giface
 
@@ -53,11 +53,13 @@ class PyShellWindow(wx.Panel):
         self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btnClear.SetToolTipString(_("Delete all text from the shell"))
 
-        self.btnSimpleEditor = wx.Button(
-            self, id=wx.ID_ANY, label=_("Simple &editor"))
-        self.btnSimpleEditor.Bind(wx.EVT_BUTTON, self.OnSimpleEditor)
-        self.btnSimpleEditor.SetToolTipString(
-            _("Open a simple Python code editor"))
+        self.simpleEditorHandler = simpleEditorHandler
+        if simpleEditorHandler:
+            self.btnSimpleEditor = wx.Button(
+                self, id=wx.ID_ANY, label=_("Simple &editor"))
+            self.btnSimpleEditor.Bind(wx.EVT_BUTTON, simpleEditorHandler)
+            self.btnSimpleEditor.SetToolTipString(
+                _("Open a simple Python code editor"))
 
         self._layout()
 
@@ -71,8 +73,9 @@ class PyShellWindow(wx.Panel):
                   flag=wx.EXPAND)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item=self.btnSimpleEditor, proportion=0,
-                     flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
+        if self.simpleEditorHandler:
+            btnSizer.Add(item=self.btnSimpleEditor, proportion=0,
+                         flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
         btnSizer.AddStretchSpacer()
         btnSizer.Add(item=self.btnClear, proportion=0,
                      flag=wx.EXPAND | wx.ALIGN_RIGHT, border=5)
@@ -127,14 +130,3 @@ class PyShellWindow(wx.Panel):
         self.shell.clear()
         self.shell.showIntro(self.intro)
         self.shell.prompt()
-
-    def OnSimpleEditor(self, event):
-        # import on demand
-        from gui_core.pyedit import PyEditFrame
-
-        # we don't keep track of them and we don't care about open files
-        # there when closing the main GUI
-        simpleEditor = PyEditFrame(parent=self, giface=self.giface)
-        simpleEditor.SetSize(self.parent.GetSize())
-        simpleEditor.CenterOnScreen()
-        simpleEditor.Show()
