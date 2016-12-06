@@ -382,7 +382,7 @@ class GMFrame(wx.Frame):
         if not UserSettings.Get(
                 group='manager', key='hideTabs', subkey='pyshell'):
             self.pyshell = PyShellWindow(
-                parent=self.notebook, giface=self._giface)
+                parent=self.notebook, giface=self._giface, simpleEditorHandler=self.OnSimpleEditor)
             self.notebook.AddPage(
                 page=self.pyshell,
                 text=_("Python"),
@@ -1929,6 +1929,17 @@ class GMFrame(wx.Frame):
         x, y = dlg.GetPosition()
         dlg.SetPosition((x, y - 200))
         dlg.Show()
+
+    def OnSimpleEditor(self, event):
+        # import on demand
+        from gui_core.pyedit import PyEditFrame
+
+        # we don't keep track of them and we don't care about open files
+        # there when closing the main GUI
+        simpleEditor = PyEditFrame(parent=self, giface=self._giface)
+        simpleEditor.SetSize(self.GetSize())
+        simpleEditor.CenterOnScreen()
+        simpleEditor.Show()
 
     def OnShowAttributeTable(self, event, selection=None):
         """Show attribute table of the given vector map layer
