@@ -32,6 +32,10 @@
 #%end
 #%option G_OPT_F_SEP
 #%end
+#%flag
+#% key: i
+#% description: Include no data values
+#%end
 
 import sys
 from grass.script import core as grass
@@ -41,8 +45,13 @@ from grass.exceptions import CalledModuleError
 def main():
     # if no output filename, output to stdout
     output = options['output']
+    donodata = flags['i']
 
-    parameters = dict(flags="1gn",
+    if donodata:
+	statsflags="1g"
+    else:
+	statsflags="1gn"
+    parameters = dict(flags=statsflags,
                       input=options['input'],
                       separator=options['separator'])
     if output:
