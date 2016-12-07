@@ -43,7 +43,14 @@ the threshold.
 <p>
 The <b>threshold</b> must be larger than 0.0 and smaller than 1.0. A threshold 
 of 0 would allow only identical valued pixels to be merged, while a 
-threshold of 1 would allow everything to be merged. Initial empirical 
+threshold of 1 would allow everything to be merged. The threshold is scaled to
+the data range of the entire input data, not the current computational region.
+This allows the application of the same threshold to different computational
+regions when working on the same dataset, ensuring that this threshold has the
+same meaning in all subregions.
+
+<p> 
+Initial empirical 
 tests indicate threshold values of 0.01 to 0.05 are reasonable values 
 to start. It is recommended to start with a low value, e.g. 0.01, and 
 then perform hierarchical segmentation by using the output of the last 
