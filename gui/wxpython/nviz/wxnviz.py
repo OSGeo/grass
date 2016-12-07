@@ -50,6 +50,7 @@ from grass.lib.raster import *
 
 from core.debug import Debug
 from core.utils import _, autoCropImageFromFile
+from core.gcmd import EncodeString
 import grass.script as grass
 
 log = None
@@ -1832,6 +1833,7 @@ class Nviz(object):
         """
         widthOrig = self.width
         heightOrig = self.height
+        filename = EncodeString(filename)
 
         self.ResizeWindow(width, height)
         GS_clear(Nviz_get_bgcolor(self.data))
