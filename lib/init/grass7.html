@@ -349,15 +349,15 @@ import grass.script as gscript
 import grass.script.setup as gsetup
 
 gscript.message('Current GRASS GIS 7 environment:')
-print (gscript.gisenv())
- 
+print(gscript.gisenv())
+
 gscript.message('Available raster maps:')
-for raster in gscript.list_strings(type = 'raster'):
-    print (raster)
- 
+for raster in gscript.list_strings(type='raster'):
+    print(raster)
+
 gscript.message('Available vector maps:')
-for vector in gscript.list_strings(type = 'vector'):
-    print (vector)
+for vector in gscript.list_strings(type='vector'):
+    print(vector)
 </pre></div>
 
 <h4>Troubleshooting</h4>
