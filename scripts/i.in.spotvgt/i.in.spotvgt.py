@@ -33,6 +33,8 @@
 #% description: Imports SPOT VGT NDVI data into a raster map.
 #% keyword: imagery
 #% keyword: import
+#% keyword: NDVI
+#% keyword: SPOT
 #%end
 #%flag
 #% key: a
