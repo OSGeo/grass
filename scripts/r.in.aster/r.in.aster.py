@@ -26,7 +26,8 @@
 #% keyword: raster
 #% keyword: import
 #% keyword: imagery
-#% keyword: Terra-ASTER
+#% keyword: ASTER
+#% keyword: elevation
 #%End
 #%option G_OPT_F_INPUT
 #% description: Name of input ASTER image
