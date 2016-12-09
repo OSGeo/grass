@@ -32,16 +32,38 @@ with contour levels from 1000m to 2000m, 100m contour step, and a minimum of 200
 points contributing to the contour line:
 
 <div class="code"><pre>
-r.contour input=elevation.dem output=elevation_dem_contours minlevel=1000 maxlevel=2000 step=100 cut=200
+r.contour input=elevation.dem output=elevation_dem_contours \
+          minlevel=1000 maxlevel=2000 step=100 cut=200
 </pre></div>
 
 <p>
+For an example of using levels with <em>r.contour</em> this example uses
+the elevation map from the North Carolina database:
 
-North Carolina example:
+<div class="code"><pre>
+g.region raster=elevation
+r.contour in=elevation out=contours levels=60,90,120,150 --o
+d.mon wx0
+d.rast elevation_shade
+d.vect contours color=red
+</pre></div>
+
+<div align="center" style="margin: 10px">
+<a href="r_contour_using_levels.png">
+<img src="r_contour_using_levels.png" width="600" alt="r.contours example" border=0><br>
+</a>
+<i>Contour lines shown on shaded terrain map</i>
+</div>
+
+
 <p>
+For an example of using steps with <em>r.contour</em> this example uses
+the LiDAR data derived elevation map from the North Carolina database:
+
 <div class="code"><pre>
 g.region raster=elev_lid792_1m -p
-r.contour input=elev_lid792_1m output=elev_lid792_1m_contours minlevel=100 maxlevel=150 step=10
+r.contour input=elev_lid792_1m output=elev_lid792_1m_contours \
+          minlevel=100 maxlevel=150 step=10
 </pre></div>
 
 <h2>AUTHORS</h2>
