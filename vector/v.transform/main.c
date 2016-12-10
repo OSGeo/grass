@@ -46,7 +46,8 @@ int main(int argc, char *argv[])
 
     struct Option *vold, *vnew, *xshift, *yshift, *zshift,
 	*xscale, *yscale, *zscale, *zrot, *columns, *field_opt;
-    struct Flag *tozero_flag, *swap_flag, *no_topo;
+    struct Flag *tozero_flag, *no_topo;
+    struct Flag *swap_flag, *swap_xz_flag, *swap_yz_flag, *swap_after_flag;
 
     char mon[4], date[40], buf[1000];
     struct Map_info Old, New;
@@ -82,7 +83,22 @@ int main(int argc, char *argv[])
     swap_flag->key = 'w';
     swap_flag->description =
 	_("Swap coordinates x, y and then apply other parameters");
-    
+
+    swap_xz_flag = G_define_flag();
+    swap_xz_flag->key = 'x';
+    swap_xz_flag->description =
+        _("Swap coordinates x, z and then apply other parameters");
+
+    swap_yz_flag = G_define_flag();
+    swap_yz_flag->key = 'y';
+    swap_yz_flag->description =
+        _("Swap coordinates y, z and then apply other parameters");
+
+    swap_after_flag = G_define_flag();
+    swap_after_flag->key = 'a';
+    swap_after_flag->description =
+        _("Swap coordinates after the other transformations");
+
     no_topo = G_define_flag();
     no_topo->key = 'b';
     no_topo->description = _("Do not build topology");
@@ -164,6 +180,9 @@ int main(int argc, char *argv[])
     columns->description =
 	_("Format: parameter:column, e.g. xshift:xs,yshift:ys,zrot:zr");
     columns->guisection = _("Custom");
+
+    /* we don't define order of swapping, so only one can be used safely */
+    G_option_exclusive(swap_flag, swap_xz_flag, swap_yz_flag, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -275,9 +294,10 @@ int main(int argc, char *argv[])
 
     /* do the transformation */
     G_important_message(_("Transforming features..."));
-    transform_digit_file(&Old, &New,
-			 ztozero, swap_flag->answer, trans_params,
-			 columns_name, field);
+    transform_digit_file(&Old, &New, ztozero, swap_flag->answer,
+                         swap_xz_flag->answer, swap_yz_flag->answer,
+                         swap_after_flag->answer, trans_params, columns_name,
+                         field);
 
     G_important_message(_("Copying attributes..."));
     if (Vect_copy_tables(&Old, &New, 0))
