@@ -8,14 +8,15 @@
 #define PI M_PI
 
 int transform_digit_file(struct Map_info *Old, struct Map_info *New,
-			 double ztozero, int swap, double *trans_params_def,
-			 char **columns, int field)
+                         double ztozero, int swap_xy, int swap_xz,
+                         int swap_yz, int swap_after,
+                         double *trans_params_def, char **columns, int field)
 {
     int i, type, cat, line, ret;
     int verbose, format;
     unsigned int j;
     double *trans_params;
-    double ang, x, y;
+    double ang, x, y, tmp;
     static struct line_pnts *Points;
     static struct line_cats *Cats;
 
@@ -73,15 +74,29 @@ int transform_digit_file(struct Map_info *Old, struct Map_info *New,
 	    else
 		fprintf(stderr, "%11d\b\b\b\b\b\b\b\b\b\b\b", line);
 	}
-	
-	if (swap) {
-	    for (i = 0; i < Points->n_points; i++) {
-		x = Points->x[i];
-		Points->x[i] = Points->y[i];
-		Points->y[i] = x;
-	    }
-	} 
-	
+
+        if (swap_xy && !swap_after) {
+            for (i = 0; i < Points->n_points; i++) {
+                x = Points->x[i];
+                Points->x[i] = Points->y[i];
+                Points->y[i] = x;
+            }
+        }
+        if (swap_xz && !swap_after) {
+            for (i = 0; i < Points->n_points; i++) {
+                tmp = Points->z[i];
+                Points->z[i] = Points->x[i];
+                Points->x[i] = tmp;
+            }
+        }
+        if (swap_yz && !swap_after) {
+            for (i = 0; i < Points->n_points; i++) {
+                tmp = Points->z[i];
+                Points->z[i] = Points->y[i];
+                Points->y[i] = tmp;
+            }
+        }
+
 	/* get transformation parameters */
 	if (field > 0) {
 	    Vect_cat_get(Cats, field, &cat);	/* get first category */
@@ -153,6 +168,24 @@ int transform_digit_file(struct Map_info *Old, struct Map_info *New,
 	    Points->z[i] =
 		((Points->z[i] + ztozero) * trans_params[IDX_ZSCALE]) +
 		trans_params[IDX_ZSHIFT];
+
+            if (swap_after) {
+                if (swap_xy) {
+                    tmp = Points->x[i];
+                    Points->x[i] = Points->y[i];
+                    Points->y[i] = tmp;
+                }
+                if (swap_xz) {
+                    tmp = Points->z[i];
+                    Points->z[i] = Points->x[i];
+                    Points->x[i] = tmp;
+                }
+                if (swap_yz) {
+                    tmp = Points->z[i];
+                    Points->z[i] = Points->y[i];
+                    Points->y[i] = tmp;
+                }
+            }
 	}
 
 	Vect_write_line(New, type, Points, Cats);
