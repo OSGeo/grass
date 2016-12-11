@@ -11,8 +11,11 @@ the flow direction map. The <i>agnps</i> format gives category values from
 The <i>answers</i> format gives category values from 0-360 degrees, with 0
 (360) facing east and values increasing in the counter clockwise direction
 at 45 degree increments. The <i>grass</i> format gives the same category
-values as the <em><a href="r.slope.aspect.html">r.slope.aspect</a></em>
-program.<p>
+values as <em><a href="r.slope.aspect.html">r.slope.aspect</a></em>.
+<p>
+The flow direction map can be visualized with
+<em><a href="d.rast.arrow.html">d.rast.arrow</a></em>.
+<p>
 The method adopted to filter the elevation map and rectify it is
 based on the paper titled "Software Tools to Extract Structure from Digital
 Elevation Data for Geographic Information System Analysis" by S.K. Jenson
@@ -32,9 +35,9 @@ direction to the highest slope out of the cell.  If there is more than one
 equal, non-zero slope then the code picks one direction based on preferences
 that are hard-coded into the program.  If the highest slope is flat and in
 more than one direction then the code first tries to select an alternative
-based on flow directions in the adjacent cells. <em>r.fill.dir</em> iteratates that process,
+based on flow directions in the adjacent cells. <em>r.fill.dir</em> iterates that process,
 effectively propagating flow directions from areas where the directions are
-known into the area where the flow direction can't otherwise be resolved.
+known into the area where the flow direction cannot otherwise be resolved.
 
 <p>The flow direction map can be encoded in either ANSWERS (Beasley et.al,
 1982) or AGNPS (Young et.al, 1985) form, so that it can be readily used as
@@ -53,24 +56,63 @@ the best way to solve a drainage problem. These options let the user get a
 partially-fixed elevation map, identify the remaining problems and fix the
 problems appropriately.
 <p>
-<em>r.fill.dir</em> is sensitive to the current window setting. Thus 
-the program can be used to generate a flow direction map for any 
+<em>r.fill.dir</em> is sensitive to the computational region settings. Thus 
+the module can be used to generate a flow direction map for any 
 sub-area within the full map layer. Also, <em>r.fill.dir</em> is
-sensitive to any <em>mask</em> in effect.
+sensitive to any raster <em>MASK</em> in effect.
 <p>
 In some cases it may be necessary to run <em>r.fill.dir</em> repeatedly (using output
 from one run as input to the next run) before all of problem areas are
 filled.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
+Generic example: create a depressionless (sinkless) elevation
+map <i>ansi.fill.elev</i> and a flow direction map <i>ansi.asp</i> for the
+type &quot;grass&quot;:
 <div class="code"><pre>
 r.fill.dir input=ansi.elev output=ansi.fill.elev direction=ansi.asp
 </pre></div>
 
-Will create a depressionless (sinkless) elevation
-map <i>ansi.fill.elev</i> and a flow direction map <i>ansi.asp</i> for the
-type &quot;grass&quot;.
+<p>
+
+North Carolina sample dataset example: The LiDAR derived 1m elevation map is
+sink-filled. The outcome are a depressionless elevation map, the flow direction
+map and an error map.
+
+<div class="code"><pre>
+# set computational region to elevation map
+g.region raster=elev_lid792_1m -p
+# generate depressionless DEM and related maps
+r.fill.dir input=elev_lid792_1m output=elev_lid792_1m_filled \
+           direction=elev_lid792_1m_dir areas=elev_lid792_1m_error
+
+# generate elevation map of pixelwise differences to see obtained terrain alterations
+r.mapcalc "elev_lid792_1m_diff = elev_lid792_1m_filled - elev_lid792_1m"
+r.colors elev_lid792_1m_diff color=differences
+
+# assess univariate statistics of differences
+r.univar -e elev_lid792_1m_diff
+
+# vectorize filled areas (here all fills are of positive value, see r.univar output)
+r.mapcalc "elev_lid792_1m_fill_area = if(elev_lid792_1m_diff > 0.0, 1, null() )"
+r.to.vect input=elev_lid792_1m_fill_area output=elev_lid792_1m_fill_area type=area
+
+# generate shaded terrain for better visibility of results
+r.relief input=elev_lid792_1m output=elev_lid792_1m_shade
+
+d.mon wx0
+d.shade shade=elev_lid792_1m_shade color=elev_lid792_1m_filled
+d.vect elev_lid792_1m_fill_area type=boundary color=red
+</pre></div>
+
+<div align="center" style="margin: 10px">
+<a href="r_fill_dir.png">
+<img src="r_fill_dir.png" width="900" alt="r.fill.dir example" border=0><br>
+</a>
+<i>Sink-filled DEM (shown as shaded terrain) with areas of filling shown as vector polygons</i>
+</div>
+
 
 <h2>REFERENCES</h2>
 
@@ -85,7 +127,11 @@ Service.
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="d.rast.arrow.html">d.rast.arrow</a>,
+<a href="d.shade.html">d.shade</a>,
+<a href="g.region.html">g.region</a>,
 <a href="r.fillnulls.html">r.fillnulls</a>,
+<a href="r.relief.html">r.relief</a>,
 <a href="r.slope.aspect.html">r.slope.aspect</a>
 </em>
 
