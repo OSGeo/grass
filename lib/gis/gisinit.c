@@ -119,6 +119,10 @@ static int gisinit(void)
     G__.little_endian = G_is_little_endian();
 
     zlib = getenv("GRASS_ZLIB_LEVEL");
+    /* Valid zlib compression levels -1 - 9 */
+    /* zlib default: Z_DEFAULT_COMPRESSION = -1, equivalent to 6 
+     * level 0 means no compression
+     * as used here, 1 gives the best compromise between speed and compression */
     G__.compression_level = (zlib && *zlib && isdigit(*zlib)) ? atoi(zlib) : 1;
     if (G__.compression_level < -1 || G__.compression_level > 9)
 	G__.compression_level = 1;
