@@ -30,7 +30,8 @@ class Layer(object):
         It only provides all attributes of existing layer as used in lmgr.
     """
 
-    def __init__(self, pydata):
+    def __init__(self, layer, pydata):
+        self._layer = layer
         self._pydata = pydata
 
     def __getattr__(self, name):
@@ -56,7 +57,7 @@ class LayerList(object):
         """Iterates over the contents of the list."""
         item = self._tree.GetFirstChild(self._tree.root)[0]
         while item and item.IsOk():
-            yield Layer(self._tree.GetPyData(item))
+            yield Layer(item, self._tree.GetPyData(item))
             item = self._tree.GetNextItem(item)
 
     def __getitem__(self, index):
@@ -72,7 +73,7 @@ class LayerList(object):
                                             checkedOnly=checkedOnly)
         layers = []
         for item in items:
-            layer = Layer(self._tree.GetPyData(item))
+            layer = Layer(item, self._tree.GetPyData(item))
             layers.append(layer)
         return layers
 
@@ -85,11 +86,11 @@ class LayerList(object):
             return None
         else:
             data = self._tree.GetPyData(item)
-            return Layer(data)
+            return Layer(item, data)
 
     def GetLayerInfo(self, layer):
         """For compatibility only, will be removed."""
-        return Layer(self._tree.GetPyData(layer))
+        return Layer(layer, self._tree.GetPyData(layer))
 
     def AddLayer(self, ltype, name=None, checked=None,
                  opacity=1.0, cmd=None):
@@ -105,6 +106,19 @@ class LayerList(object):
         """
         self._tree.AddLayer(ltype=ltype, lname=name, lchecked=checked,
                             lopacity=opacity, lcmd=cmd)
+                            
+    def DeleteLayer(self, layer):
+        """Remove layer from layer list"""
+        self._tree.Delete(layer._layer)
+
+    def CheckLayer(self, layer, checked=True):
+        """Check or uncheck layer"""
+        self._tree.forceCheck = True
+        self._tree.CheckItem(layer._layer, checked=checked)
+
+    def IsLayerChecked(self, layer):
+        """Returns True if layer is checked, False otherwise"""
+        return self._tree.IsItemChecked(layer._layer)
 
     def GetLayersByName(self, name):
         items = self._tree.FindItemByData(key='name', value=name)
@@ -113,7 +127,7 @@ class LayerList(object):
         else:
             layers = []
             for item in items:
-                layer = Layer(self._tree.GetPyData(item))
+                layer = Layer(item, self._tree.GetPyData(item))
                 layers.append(layer)
             return layers
 
@@ -130,7 +144,7 @@ class LayerList(object):
         if item is None:
             return None
         else:
-            return Layer(self._tree.GetPyData(item))
+            return Layer(item, self._tree.GetPyData(item))
 
 
 class LayerManagerGrassInterface(object):
