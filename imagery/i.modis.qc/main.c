@@ -426,24 +426,24 @@ int main(int argc, char *argv[])
 
     /*mod09CMG*/
     if (strcmp(product, "mod09CMGi")  /*if not mod09CGMi but its qcflag was entered, issue error*/
-    && !strcmp(qcflag, "icm_cloudy") || !strcmp(qcflag, "icm_clear")  ||
+    && (!strcmp(qcflag, "icm_cloudy") || !strcmp(qcflag, "icm_clear")  ||
 	!strcmp(qcflag, "icm_high_clouds") || !strcmp(qcflag, "icm_low_clouds") ||
 	!strcmp(qcflag, "icm_snow") || !strcmp(qcflag, "icm_fire") ||
 	!strcmp(qcflag, "icm_sun_glint") || !strcmp(qcflag, "icm_dust") ||
 	!strcmp(qcflag, "icm_cloud_shadow") || !strcmp(qcflag, "icm_pixel_is_adjacent_to_cloud") ||
 	!strcmp(qcflag, "icm_cirrus") || !strcmp(qcflag, "icm_pan_flag") ||
-	!strcmp(qcflag, "icm_criteria_for_aerosol_retrieval") || !strcmp(qcflag, "icm_aot_has_clim_val"))
+	!strcmp(qcflag, "icm_criteria_for_aerosol_retrieval") || !strcmp(qcflag, "icm_aot_has_clim_val")))
 	G_fatal_error(_("This bit flag is only available for mod09CMGi @ 5000m products"));
    
     /*mod13A2*/
     if (strcmp(product, "mod13A2") /*if not mod13A2 but its qcflag was entered, issue error*/
-    && !strcmp(qcflag, "vi_usefulness") || !strcmp(qcflag, "mixed_clouds")  ||
-        !strcmp(qcflag, "possible_snow_ice") || !strcmp(qcflag, "possible_shadow"))
+    && (!strcmp(qcflag, "vi_usefulness") || !strcmp(qcflag, "mixed_clouds")  ||
+        !strcmp(qcflag, "possible_snow_ice") || !strcmp(qcflag, "possible_shadow")))
         G_fatal_error(_("This bit flag is only available for MOD13A2 @ 1km products"));
 
     /*mcd43B2*/
     if (strcmp(product, "mcd43B2") /*if not mcd43B2 but its qcflag was entered, issue error*/
-    && !strcmp(qcflag, "platform")||!strcmp(qcflag, "land_water") ||!strcmp(qcflag, "sun_z_angle_at_local_noon"))
+    && (!strcmp(qcflag, "platform")||!strcmp(qcflag, "land_water") ||!strcmp(qcflag, "sun_z_angle_at_local_noon")))
         G_fatal_error(_("This bit flag is only available for MCD43B2 @ 1km products"));
 
     /*mcd43B2q*/
@@ -452,8 +452,8 @@ int main(int argc, char *argv[])
 
     /*mod13Q1*/
     if (strcmp(product, "mod13Q1") /*if not mod13Q1 but its qcflag was entered, issue error*/
-    && !strcmp(qcflag, "vi_usefulness") || !strcmp(qcflag, "mixed_clouds") ||
-        !strcmp(qcflag, "possible_snow_ice") || !strcmp(qcflag, "possible_shadow"))
+    && (!strcmp(qcflag, "vi_usefulness") || !strcmp(qcflag, "mixed_clouds") ||
+        !strcmp(qcflag, "possible_snow_ice") || !strcmp(qcflag, "possible_shadow")))
         G_fatal_error(_("This bit flag is only available for MOD13Q1 @ 250m products"));
 
     infd = Rast_open_old(qcchan, "");
