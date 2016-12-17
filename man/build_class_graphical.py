@@ -138,7 +138,7 @@ def generate_page_for_category(short_family, module_family, imgs, year,
               "Manual: Graphical index" % grass_version))
     output.write(header_graphical_index_tmpl)
 
-    if module_family.lower() not in ['general', 'miscellaneous', 'postscript']:
+    if module_family.lower() not in ['general', 'postscript']:
         if module_family == 'raster3d':
             # covert keyword to nice form
             module_family = '3D raster'
