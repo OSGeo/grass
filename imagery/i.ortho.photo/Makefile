@@ -4,7 +4,8 @@ MODULE_TOPDIR = ../..
 SUBDIRS1 = \
 	i.ortho.camera \
 	i.ortho.elev \
-	i.ortho.rectify
+	i.ortho.rectify \
+	i.ortho.transform
 
 SUBDIRS = lib $(SUBDIRS1)
 
