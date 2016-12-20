@@ -6,13 +6,14 @@
 
 #include "proto.h"
 
-void select_lines(struct Map_info *aIn, int atype, int afield,
+int select_lines(struct Map_info *aIn, int atype, int afield,
                   struct Map_info *bIn, int btype, int bfield,
                   int cat_flag, int operator, const char *relate,
                   int *ALines, int *AAreas, int* nskipped)
 {
     int i;
     int nalines, aline, ltype;
+    int nfound = 0;
     
     struct line_pnts *APoints, *BPoints;
     struct ilist *BoundList, *LList;
@@ -115,6 +116,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 		
 		if (found) {
 		    ALines[aline] = 1;
+		    nfound += 1;
 		    continue;	/* Go to next A line */
 		}
 	    }
@@ -139,6 +141,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 			if(area_relate_geos(bIn, AGeom,
 					    barea, operator, relate)) {
 			    ALines[aline] = 1;
+			    nfound += 1;
 			    break;
 			}
 #endif
@@ -146,6 +149,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 		    else {
 			if (line_overlap_area(APoints, bIn, barea)) {
 			    ALines[aline] = 1;
+			    nfound += 1;
 			    break;
 			}
 		    }
@@ -212,6 +216,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 			if(line_relate_geos(bIn, AGeom,
 					    bline, operator, relate)) {
 			    add_aarea(aIn, aarea, ALines, AAreas);
+			    nfound += 1;
 			    break;
 			}
 #endif
@@ -221,6 +226,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 
 			if (line_overlap_area(BPoints, aIn, aarea)) {
 			    add_aarea(aIn, aarea, ALines, AAreas);
+			    nfound += 1;
 			    continue;
 			}
 		    }
@@ -311,6 +317,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 		    }
 		    if (found) {
 			add_aarea(aIn, aarea, ALines, AAreas);
+		        nfound += 1;
 			break;
 		    }
 		}
@@ -331,5 +338,5 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
     Vect_destroy_boxlist(List);
     Vect_destroy_boxlist(TmpList);
 
-    return;
+    return nfound;
 }
