@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 {
     int iopt;
     int operator;
-    int nskipped[2], native;
+    int nskipped[2], native, nfound;
     int itype[2], ifield[2];
 
     int *ALines; /* List of lines: 0 do not output, 1 - write to output */
@@ -133,13 +133,13 @@ int main(int argc, char *argv[])
     
     /* Select features */
 #ifdef HAVE_GEOS
-    select_lines(&(In[0]), itype[0], ifield[0],
+    nfound = select_lines(&(In[0]), itype[0], ifield[0],
                  &(In[1]), itype[1], ifield[1],
                  flag.cat->answer ? 1 : 0, operator,
                  parm.relate->answer,
                  ALines, AAreas, nskipped);
 #else
-    select_lines(&(In[0]), itype[0], ifield[0],
+    nfound = select_lines(&(In[0]), itype[0], ifield[0],
                  &(In[1]), itype[1], ifield[1],
                  flag.cat->answer ? 1 : 0, operator,
                  NULL,
@@ -149,6 +149,8 @@ int main(int argc, char *argv[])
 #ifdef HAVE_GEOS
     finishGEOS();
 #endif
+
+    if (nfound != 0) {
 
     native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
 
@@ -186,6 +188,9 @@ int main(int argc, char *argv[])
     Vect_close(&Out);
 
     G_done_msg(_("%d features written to output."), Vect_get_num_lines(&Out));
+    } else {
+    G_done_msg(_("No features found !"));
+    }
 
     exit(EXIT_SUCCESS);
 }
