@@ -11,6 +11,7 @@
  *
  *****************************************************************************/
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
@@ -230,9 +231,9 @@ static void compute_quantiles(int recode)
 	    v = max;
 
 	if (recode)
-	    printf("%f:%f:%i\n", prev_v, v, quant + 1);
+	    fprintf(stdout, "%f:%f:%i\n", prev_v, v, quant + 1);
 	else
-	    printf("%d:%f:%f\n", quant, 100 * quants[quant], v);
+	    fprintf(stdout, "%d:%f:%f\n", quant, 100 * quants[quant], v);
 
 	prev_v = v;
     }
@@ -246,7 +247,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *input, *quant, *perc, *slots;
+	struct Option *input, *quant, *perc, *slots, *file;
     } opt;
     struct {
 	struct Flag *r;
@@ -286,6 +287,12 @@ int main(int argc, char *argv[])
     opt.slots->description = _("Number of bins to use");
     opt.slots->answer = "1000000";
 
+    opt.file = G_define_standard_option(G_OPT_F_OUTPUT);
+    opt.file->key = "file";
+    opt.file->required = NO;
+    opt.file->description =
+	_("Name for output file (if omitted or \"-\" output to stdout)");
+
     flag.r = G_define_flag();
     flag.r->key = 'r';
     flag.r->description = _("Generate recode rules based on quantile-defined intervals");
@@ -295,6 +302,12 @@ int main(int argc, char *argv[])
 
     num_slots = atoi(opt.slots->answer);
     recode = flag.r->answer;
+
+    if (opt.file->answer != NULL && strcmp(opt.file->answer, "-") != 0) {
+	if (NULL == freopen(opt.file->answer, "w", stdout)) {
+	    G_fatal_error(_("Unable to open file <%s> for writing"), opt.file->answer);
+	}
+    }
 
     if (opt.perc->answer) {
 	int i;
