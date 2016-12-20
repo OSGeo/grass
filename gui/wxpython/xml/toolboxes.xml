@@ -103,6 +103,7 @@
       <module-item name="v.buffer">
         <label>Buffer vectors</label>
       </module-item>
+      <subtoolbox name="PointAnalysis"/>
       <subtoolbox name="LidarAnalysis"/>
       <subtoolbox name="LinearReferencing"/>
       <module-item name="v.distance">
@@ -1229,6 +1230,23 @@
       </module-item>
       <module-item name="v.to.3d">
         <label>2D vector to 3D vector</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="PointAnalysis">
+    <label>Point analysis</label>
+    <items>
+      <module-item name="v.outlier">
+        <label>Identify and remove outliers</label>
+      </module-item>
+      <module-item name="v.cluster">
+        <label>Identify point clusters</label>
+      </module-item>
+      <module-item name="v.perturb">
+        <label>Perturb points</label>
+      </module-item>
+      <module-item name="v.kcv">
+        <label>Test/training point sets</label>
       </module-item>
     </items>
   </toolbox>
