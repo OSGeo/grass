@@ -850,7 +850,7 @@ Function DownloadInstallMSRuntime
 	    DetailPrint "Installing vcredist_2010_x86.exe ..."
 	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2010_x86.exe" /q' 
 	    DetailPrint "Installing vcredist_2013_x86.exe ..."
-	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2010_x86.exe" /q'
+	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2013_x86.exe" /q'
         !else
             DetailPrint "Installing vcredist_2008_x64.exe ..."
 	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist-2008-sp1-x64.exe" /q'
