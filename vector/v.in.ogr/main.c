@@ -1456,7 +1456,6 @@ int main(int argc, char *argv[])
 	    OGR_L_ResetReading(Ogr_layer);
 
 	    cat = 0;		/* field = layer + 1 */
-	    G_percent(cat, n_features, 2);
 	    while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
 		G_percent(cat, n_features, 2);
 
@@ -1485,6 +1484,7 @@ int main(int argc, char *argv[])
 #endif
 		OGR_F_Destroy(Ogr_feature);
 	    }
+            G_percent(1, 1, 1);
 	}
 
 	/* Write centroids */
