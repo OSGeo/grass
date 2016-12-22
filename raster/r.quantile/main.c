@@ -255,6 +255,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("algebra"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("percentile"));
+    G_add_keyword(_("quantile"));
     module->description = _("Compute quantiles using two passes.");
 
     opt.input = G_define_standard_option(G_OPT_R_INPUT);
