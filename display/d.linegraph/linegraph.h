@@ -50,9 +50,9 @@
 /* structures for determining tic-mark numbering scheme */
 struct units
 {
-    char *name;			/* name of unit (text) */
-    int unit;			/* tic-mark interval */
-    int every;			/* tic_mark number interval */
+    char *name;                 /* name of unit (text) */
+    int unit;                   /* tic-mark interval */
+    int every;                  /* tic_mark number interval */
 };
 
 
@@ -85,4 +85,3 @@ struct units tics[] = {
     {"in hundreds of millions", 100000000, 500000000},
     {"in billions", 1000000000, 1000000000}
 };
-
