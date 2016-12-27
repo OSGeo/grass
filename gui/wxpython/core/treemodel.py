@@ -200,20 +200,26 @@ class ModuleNode(DictNode):
     def __init__(self, label, data=None):
         super(ModuleNode, self).__init__(label=label, data=data)
 
-    def match(self, key, value):
+    def match(self, key, value, case_sensitive=False):
         """Method used for searching according to command,
         keywords or description."""
         if not self.data:
             return False
-        if key in ('command', 'keywords', 'description'):
-            try:
-                return len(
-                    self.data[key]) and(
-                    value in self.data[key] or value == '*')
-            except KeyError:
-                return False
-
-        return False
+        if key not in ('command', 'keywords', 'description'):
+            return False
+        try:
+            text = self.data[key]
+        except KeyError:
+            return False
+        if not text:
+            return False
+        if case_sensitive:
+            # start supported but unused, so testing last
+            return value in text or value == '*'
+        else:
+            # this works fully only for English and requires accents
+            # to be exact match (even Python 3 casefold() does not help)
+            return value.lower() in text.lower() or value == '*'
 
 
 def main():
