@@ -2,21 +2,25 @@ Introduction to Vector classes
 ==============================
 
 Details about the GRASS GIS vector architecture can be found in the
-`GRASS GIS 7 Programmer's Manual: GRASS Vector Library <http://grass.osgeo.org/programming7/vectorlib.html>`_
+`GRASS GIS 7 Programmer's Manual: GRASS Vector Library
+<http://grass.osgeo.org/programming7/vectorlib.html>`_.
 
-PyGrass has two classes for vector maps: :ref:`Vector-label` and :ref:`VectorTopo-label`.
-As the names suggest, the Vector class is for vector maps, while VectorTopo
-opens vector maps with `GRASS GIS topology <http://grass.osgeo.org/programming7/vlibTopology.html>`_.
-VectorTopo is an extension of the Vector class, so supports all the Vector class methods, with additions.
+PyGRASS has two classes for vector maps: :ref:`Vector-label` and
+:ref:`VectorTopo-label`.  As the names suggest, the Vector class is
+for vector maps, while VectorTopo opens vector maps with `GRASS GIS
+topology <http://grass.osgeo.org/programming7/vlibTopology.html>`_.
+VectorTopo is an extension of the Vector class, so supports all the
+Vector class methods, with additions. The classes are part of the
+:mod:`~pygrass.vector` module.
 
 .. _Vector-label:
 
 Vector
 ------
 
-The :class:`~pygrass.vector.Vector` class is part of the :mod:`~pygrass.vector`
-module. It is based on the :class:`~pygrass.vector.abstract.Info` class, which
-provides methods for accessing basic information about the vector map: ::
+The :class:`~pygrass.vector.Vector` class is based on the
+:class:`~pygrass.vector.abstract.Info` class, which provides methods
+for accessing basic information about the vector map: ::
 
     >>> from grass.pygrass.vector import Vector
     >>> cens = Vector('census')
@@ -55,8 +59,8 @@ like the Vector class: ::
     'user1'
 
 
-Working with Vector Objects
----------------------------
+Working with Vector Maps
+------------------------
 
 As the VectorTopo class is so similar to the Vector class, the following examples
 exclusively demonstrate the VectorTopo class.
@@ -67,13 +71,16 @@ To begin using a vector map, it must first be opened: ::
     >>> municip = VectorTopo('boundary_municp_sqlite')
     >>> municip.open(mode='r')
 
-The ``open()`` method supports a number of option arguments (see the :class:`~pygrass.vector.abstract.Info`
-documentation for a complete list). In particular, the mode argument can take a
-a value of:
+The ``open()`` method supports a number of option arguments (see the
+:class:`~pygrass.vector.abstract.Info` documentation for a complete
+list). In particular, the mode argument can take a a value of:
 
-'r': read-only mode, vector features are read-only (attribute table is modifiable since are handle by a database);
-'w': write-only mode, write a new vector map in case of an old vector map all the previous features will be removed/overwritten;
-'rw': read-write mode, add new/update vector features without removing the existing ones. Add/remove vector layers.
+* 'r': read-only mode, vector features are read-only (attribute table
+  is modifiable since are handle by a database);
+* 'w': write-only mode, write a new vector map in case of an old
+  vector map all the previous features will be removed/overwritten;
+* 'rw': read-write mode, add new/update vector features without
+  removing the existing ones. Add/remove vector layers.
 
 
 The geometry of a vector map can be read sequentially using the ``next()`` method.
@@ -118,7 +125,7 @@ Write the two points to the map:
     >>> new.write(point0, cat=1, attrs=('pub',))
     >>> new.write(point1, cat=2, attrs=('resturant',))
 
-Commit the db changes:
+Commit the DB changes (attributes):
 
     >>> new.table.conn.commit()
     >>> new.table.execute().fetchall()
@@ -208,19 +215,25 @@ requesting the table from each of the returned links: ::
     Link(1, census, sqlite)
     >>> table = link.table()
 
-Here, ``DBlinks()`` is a class (:class:`~pygrass.vector.table.DBlinks`) that
-contains all the links of a vector map. Each link is also a class
+Here, :class:`~pygrass.vector.table.DBlinks` is a class that contains
+all the links of a vector map. Each link is also a class
 (:class:`~pygrass.vector.table.Link`) that contains a specific link's
-parameters. The ``table()`` method of the link class return the linked table as
-a table object (:class:`~pygrass.vector.table.Table`).
+parameters. The ``table()`` method of the link class return the linked
+table as a table object (:class:`~pygrass.vector.table.Table`).
 
 Geometry Classes
 ----------------
 
-The vector package also includes a number of geometry classes, including Area,
-Boundary, Centroid, Isle, Line, and Point classes. Please consult the
-:mod:`~pygrass.vector.geometry` module for a complete list of methods for these
-classes, as there are many. Some basic examples are given below.
+The vector package also includes a number of geometry classes,
+including :class:`~pygrass.vector.geometry.Area`,
+:class:`~pygrass.vector.geometry.Boundary`,
+:class:`~pygrass.vector.geometry.Centroid`,
+:class:`~pygrass.vector.geometry.Isle`,
+:class:`~pygrass.vector.geometry.Line`, and
+:class:`~pygrass.vector.geometry.Point` classes. Please consult the
+:mod:`~pygrass.vector.geometry` module for a complete list of methods
+for these classes, as there are many. Some basic examples are given
+below.
 
 Instantiate a Point object that could be 2 or 3D, default parameters are 0: ::
 
@@ -278,7 +291,7 @@ Find all areas larger than 10000m2: ::
     >>> big = [area for area in municip.viter('areas')
     ...        if area.alive() and area.area >= 10000]
 
-The PyGrass vector methods make complex operations rather easy. Notice the
+The PyGRASS vector methods make complex operations rather easy. Notice the
 ``viter()`` method: this returns an iterator object of the vector features, so
 the user can choose on which vector features to iterate without loading all the
 features into memory.
@@ -292,7 +305,6 @@ We can then sort the areas by size: ::
     Area(3102) 697521857.848
     Area(2682) 320224369.66
     Area(2552) 298356117.948
-
 
 Or sort for the number of isles that are contained inside: ::
 
