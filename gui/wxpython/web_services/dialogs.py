@@ -36,6 +36,7 @@ from core.utils import GetSettingsPath, _
 from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 
 from gui_core.gselect import Select
+from gui_core.wrap import Button
 
 from web_services.widgets import WSPanel, WSManageSettingsWidget
 
@@ -98,9 +99,9 @@ class WSDialogBase(wx.Dialog):
                                         id=wx.ID_ANY, label=_("Server:"))
         self.server = wx.TextCtrl(parent=self, id=wx.ID_ANY)
 
-        self.btn_connect = wx.Button(parent=self,
-                                     id=wx.ID_ANY, label=_("&Connect"))
-        self.btn_connect.SetToolTipString(_("Connect to the server"))
+        self.btn_connect = Button(parent=self,
+                                  id=wx.ID_ANY, label=_("&Connect"))
+        self.btn_connect.SetToolTip(_("Connect to the server"))
         if not self.server.GetValue():
             self.btn_connect.Enable(False)
 
@@ -140,8 +141,8 @@ class WSDialogBase(wx.Dialog):
                 self.OnLayerSelected)
 
         # buttons
-        self.btn_close = wx.Button(parent=self, id=wx.ID_CLOSE)
-        self.btn_close.SetToolTipString(_("Close dialog"))
+        self.btn_close = Button(parent=self, id=wx.ID_CLOSE)
+        self.btn_close.SetToolTip(_("Close dialog"))
 
         # statusbar
         self.statusbar = wx.StatusBar(parent=self, id=wx.ID_ANY)
@@ -166,7 +167,7 @@ class WSDialogBase(wx.Dialog):
 
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
 
-        dialogSizer.Add(item=self.settsManager, proportion=0,
+        dialogSizer.Add(self.settsManager, proportion=0,
                         flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=5)
 
         # connectin settings
@@ -174,21 +175,21 @@ class WSDialogBase(wx.Dialog):
 
         serverSizer = wx.FlexGridSizer(cols=3, vgap=5, hgap=5)
 
-        serverSizer.Add(item=self.serverText,
+        serverSizer.Add(self.serverText,
                         flag=wx.ALIGN_CENTER_VERTICAL)
         serverSizer.AddGrowableCol(1)
-        serverSizer.Add(item=self.server,
+        serverSizer.Add(self.server,
                         flag=wx.EXPAND | wx.ALL)
 
-        serverSizer.Add(item=self.btn_connect)
+        serverSizer.Add(self.btn_connect)
 
-        settingsSizer.Add(item=serverSizer, proportion=0,
+        settingsSizer.Add(serverSizer, proportion=0,
                           flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
 
-        settingsSizer.Add(item=self.adv_conn,
+        settingsSizer.Add(self.adv_conn,
                           flag=wx.ALL | wx.EXPAND, border=5)
 
-        dialogSizer.Add(item=settingsSizer, proportion=0,
+        dialogSizer.Add(settingsSizer, proportion=0,
                         flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=5)
 
         # layer name, parsed capabilites
@@ -197,29 +198,29 @@ class WSDialogBase(wx.Dialog):
 
         layerNameSizer = wx.StaticBoxSizer(self.layerNameBox, wx.HORIZONTAL)
 
-        layerNameSizer.Add(item=self.layerNameText,
+        layerNameSizer.Add(self.layerNameText,
                            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
 
-        layerNameSizer.Add(item=self.layerName,
+        layerNameSizer.Add(self.layerName,
                            flag=wx.EXPAND, proportion=1)
 
-        reqDataSizer.Add(item=layerNameSizer, flag=wx.TOP |
+        reqDataSizer.Add(layerNameSizer, flag=wx.TOP |
                          wx.LEFT | wx.RIGHT | wx.EXPAND, border=5)
 
         self.ch_ws_sizer = wx.BoxSizer(wx.VERTICAL)
 
-        reqDataSizer.Add(item=self.ch_ws_sizer, proportion=0,
+        reqDataSizer.Add(self.ch_ws_sizer, proportion=0,
                          flag=wx.TOP | wx.EXPAND, border=5)
 
         for ws in self.ws_panels.iterkeys():
             reqDataSizer.Add(
-                item=self.ws_panels[ws]['panel'],
+                self.ws_panels[ws]['panel'],
                 proportion=1,
                 flag=wx.TOP | wx.LEFT | wx.RIGHT | wx.EXPAND,
                 border=5)
             self.ws_panels[ws]['panel'].Hide()
 
-        dialogSizer.Add(item=self.reqDataPanel, proportion=1,
+        dialogSizer.Add(self.reqDataPanel, proportion=1,
                         flag=wx.EXPAND)
 
         self.reqDataPanel.SetSizer(reqDataSizer)
@@ -228,17 +229,17 @@ class WSDialogBase(wx.Dialog):
         # buttons
         self.btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
 
-        self.btnsizer.Add(item=self.btn_close, proportion=0,
+        self.btnsizer.Add(self.btn_close, proportion=0,
                           flag=wx.ALL | wx.ALIGN_CENTER,
                           border=10)
 
-        dialogSizer.Add(item=self.btnsizer, proportion=0,
+        dialogSizer.Add(self.btnsizer, proportion=0,
                         flag=wx.ALIGN_CENTER)
 
         # expand wxWidget wx.StatusBar
         statusbarSizer = wx.BoxSizer(wx.HORIZONTAL)
-        statusbarSizer.Add(item=self.statusbar, proportion=1, flag=wx.EXPAND)
-        dialogSizer.Add(item=statusbarSizer,
+        statusbarSizer.Add(self.statusbar, proportion=1, flag=wx.EXPAND)
+        dialogSizer.Add(statusbarSizer,
                         proportion=0,
                         flag=wx.EXPAND)
 
@@ -266,24 +267,24 @@ class WSDialogBase(wx.Dialog):
 
         usernameSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        usernameSizer.Add(item=self.usernameText,
+        usernameSizer.Add(self.usernameText,
                           flag=wx.ALIGN_CENTER_VERTICAL, border=5)
 
-        usernameSizer.Add(item=self.username, proportion=1,
+        usernameSizer.Add(self.username, proportion=1,
                           flag=wx.EXPAND, border=5)
 
-        adv_conn_sizer.Add(item=usernameSizer,
+        adv_conn_sizer.Add(usernameSizer,
                            flag=wx.ALL | wx.EXPAND, border=5)
 
         passwSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        passwSizer.Add(item=self.passwText,
+        passwSizer.Add(self.passwText,
                        flag=wx.ALIGN_CENTER_VERTICAL, border=5)
 
-        passwSizer.Add(item=self.password, proportion=1,
+        passwSizer.Add(self.password, proportion=1,
                        flag=wx.EXPAND, border=5)
 
-        adv_conn_sizer.Add(item=passwSizer,
+        adv_conn_sizer.Add(passwSizer,
                            flag=wx.ALL | wx.EXPAND, border=5)
 
         pane.SetSizer(adv_conn_sizer)
@@ -371,7 +372,7 @@ class WSDialogBase(wx.Dialog):
         """
         server = self.server.GetValue().strip()
 
-        self.ch_ws_sizer.Clear(deleteWindows=True)
+        self.ch_ws_sizer.Clear(True)
 
         if self.active_ws_panel is not None:
             self.reqDataPanel.Hide()
@@ -457,7 +458,7 @@ class WSDialogBase(wx.Dialog):
 
             self.Bind(wx.EVT_RADIOBOX, self.OnChooseWs, self.choose_ws_rb)
             self.ch_ws_sizer.Add(
-                item=self.choose_ws_rb,
+                self.choose_ws_rb,
                 flag=wx.TOP | wx.LEFT | wx.RIGHT | wx.EXPAND,
                 border=5)
             self._showWsPanel(
@@ -530,11 +531,11 @@ class AddWSDialog(WSDialogBase):
 
         WSDialogBase._createWidgets(self)
 
-        self.btn_add = wx.Button(
+        self.btn_add = Button(
             parent=self,
             id=wx.ID_ANY,
             label=_("&Add layer"))
-        self.btn_add.SetToolTipString(
+        self.btn_add.SetToolTip(
             _("Add selected web service layers as map layer into layer tree"))
         self.btn_add.Enable(False)
 
@@ -544,7 +545,7 @@ class AddWSDialog(WSDialogBase):
 
         WSDialogBase._doLayout(self)
 
-        self.btnsizer.Add(item=self.btn_add, proportion=0,
+        self.btnsizer.Add(self.btn_add, proportion=0,
                           flag=wx.ALL | wx.ALIGN_CENTER,
                           border=10)
 
@@ -679,14 +680,14 @@ class WSPropertiesDialog(WSDialogBase):
 
         WSDialogBase._createWidgets(self)
 
-        self.btn_apply = wx.Button(
+        self.btn_apply = Button(
             parent=self, id=wx.ID_ANY, label=_("&Apply"))
-        self.btn_apply.SetToolTipString(_("Apply changes"))
+        self.btn_apply.SetToolTip(_("Apply changes"))
         self.btn_apply.Enable(False)
         self.run_btns.append(self.btn_apply)
 
-        self.btn_ok = wx.Button(parent=self, id=wx.ID_ANY, label=_("&OK"))
-        self.btn_ok.SetToolTipString(_("Apply changes and close dialog"))
+        self.btn_ok = Button(parent=self, id=wx.ID_ANY, label=_("&OK"))
+        self.btn_ok.SetToolTip(_("Apply changes and close dialog"))
         self.btn_ok.Enable(False)
         self.run_btns.append(self.btn_ok)
 
@@ -694,11 +695,11 @@ class WSPropertiesDialog(WSDialogBase):
 
         WSDialogBase._doLayout(self)
 
-        self.btnsizer.Add(item=self.btn_apply, proportion=0,
+        self.btnsizer.Add(self.btn_apply, proportion=0,
                           flag=wx.ALL | wx.ALIGN_CENTER,
                           border=10)
 
-        self.btnsizer.Add(item=self.btn_ok, proportion=0,
+        self.btnsizer.Add(self.btn_ok, proportion=0,
                           flag=wx.ALL | wx.ALIGN_CENTER,
                           border=10)
 
@@ -711,7 +712,7 @@ class WSPropertiesDialog(WSDialogBase):
 
         For parameters description, see the constructor.
         """
-        self.ch_ws_sizer.Clear(deleteWindows=True)
+        self.ch_ws_sizer.Clear(True)
 
         self.cmd_to_set = cmd
 
@@ -895,14 +896,14 @@ class SaveWMSLayerDialog(wx.Dialog):
             size=globalvar.DIALOG_GSELECT_SIZE)
 
         # buttons
-        self.btn_close = wx.Button(parent=self, id=wx.ID_CLOSE)
-        self.btn_close.SetToolTipString(_("Close dialog"))
+        self.btn_close = Button(parent=self, id=wx.ID_CLOSE)
+        self.btn_close.SetToolTip(_("Close dialog"))
 
-        self.btn_ok = wx.Button(
+        self.btn_ok = Button(
             parent=self,
             id=wx.ID_OK,
             label=_("&Save layer"))
-        self.btn_ok.SetToolTipString(_("Save web service layer as raster map"))
+        self.btn_ok.SetToolTip(_("Save web service layer as raster map"))
 
         # statusbar
         self.statusbar = wx.StatusBar(parent=self, id=wx.ID_ANY)
@@ -916,48 +917,48 @@ class SaveWMSLayerDialog(wx.Dialog):
 
         regionSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        dialogSizer.Add(item=self._addSelectSizer(title=self.labels['output'],
-                                                  sel=self.params['output']))
+        dialogSizer.Add(self._addSelectSizer(title=self.labels['output'],
+                                             sel=self.params['output']))
 
         regionSizer = wx.StaticBoxSizer(self.regionStBoxLabel, wx.VERTICAL)
 
         regionTypeSizer = wx.BoxSizer(wx.HORIZONTAL)
         for r_type in self.region_types_order:
             regionTypeSizer.Add(
-                item=self.region_types[r_type],
+                self.region_types[r_type],
                 flag=wx.RIGHT, border=8)
 
-        regionSizer.Add(item=regionTypeSizer)
+        regionSizer.Add(regionTypeSizer)
 
         self.named_reg_panel.SetSizer(
             self._addSelectSizer(
                 title=self.labels['region'],
                 sel=self.params['region']))
-        regionSizer.Add(item=self.named_reg_panel)
+        regionSizer.Add(self.named_reg_panel)
         self.named_reg_panel.Hide()
 
-        dialogSizer.Add(item=regionSizer, flag=wx.EXPAND)
+        dialogSizer.Add(regionSizer, flag=wx.EXPAND)
 
-        dialogSizer.Add(item=self.overwrite, flag=wx.TOP, border=10)
+        dialogSizer.Add(self.overwrite, flag=wx.TOP, border=10)
 
         # buttons
         self.btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
 
-        self.btnsizer.Add(item=self.btn_close, proportion=0,
+        self.btnsizer.Add(self.btn_close, proportion=0,
                           flag=wx.ALL | wx.ALIGN_CENTER,
                           border=10)
 
-        self.btnsizer.Add(item=self.btn_ok, proportion=0,
+        self.btnsizer.Add(self.btn_ok, proportion=0,
                           flag=wx.ALL | wx.ALIGN_CENTER,
                           border=10)
 
-        dialogSizer.Add(item=self.btnsizer, proportion=0,
+        dialogSizer.Add(self.btnsizer, proportion=0,
                         flag=wx.ALIGN_CENTER)
 
-        self._border.Add(item=dialogSizer, proportion=0,
+        self._border.Add(dialogSizer, proportion=0,
                          flag=wx.ALL, border=5)
 
-        self._border.Add(item=self.statusbar, proportion=0)
+        self._border.Add(self.statusbar, proportion=0)
 
         self.SetSizer(self._border)
         self.Layout()
@@ -982,13 +983,13 @@ class SaveWMSLayerDialog(wx.Dialog):
         selSizer = wx.BoxSizer(orient=wx.VERTICAL)
 
         selTitleSizer = wx.BoxSizer(wx.HORIZONTAL)
-        selTitleSizer.Add(item=title, proportion=1,
+        selTitleSizer.Add(title, proportion=1,
                           flag=wx.LEFT | wx.TOP | wx.EXPAND, border=5)
 
-        selSizer.Add(item=selTitleSizer, proportion=0,
+        selSizer.Add(selTitleSizer, proportion=0,
                      flag=wx.EXPAND)
 
-        selSizer.Add(item=sel, proportion=1,
+        selSizer.Add(sel, proportion=1,
                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER_VERTICAL,
                      border=5)
 

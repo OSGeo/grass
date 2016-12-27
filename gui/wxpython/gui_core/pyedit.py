@@ -604,7 +604,7 @@ class PyEditFrame(wx.Frame):
         self.panel.SetText(script_template())
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(item=self.panel, proportion=1,
+        sizer.Add(self.panel, proportion=1,
                   flag=wx.EXPAND)
         sizer.Fit(self)
         sizer.SetSizeHints(self)

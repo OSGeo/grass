@@ -45,7 +45,7 @@ from gui_core.forms import GUI
 from core.debug import Debug as Debug
 from core.settings import UserSettings
 from gui_core.widgets import ColorTablesComboBox
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl, PseudoDC
 
 
 class RulesPanel:
@@ -69,7 +69,7 @@ class RulesPanel:
         self.mainSizer = wx.FlexGridSizer(cols=3, vgap=6, hgap=4)
         # put small border at the top of panel
         for i in range(3):
-            self.mainSizer.Add(item=wx.Size(3, 3))
+            self.mainSizer.Add(wx.Size(3, 3))
 
         self.mainPanel = scrolled.ScrolledPanel(
             parent, id=wx.ID_ANY, size=(self.panelWidth, 300),
@@ -82,7 +82,7 @@ class RulesPanel:
         self.clearAll = wx.Button(parent, id=wx.ID_ANY, label=_("Clear all"))
         #  determines how many rules should be added
         self.numRules = SpinCtrl(parent, id=wx.ID_ANY,
-                                    min=1, max=1e6, initial=1)
+                                 min=1, max=1e6, initial=1)
         # add rules
         self.btnAdd = wx.Button(parent, id=wx.ID_ADD)
 
@@ -97,7 +97,7 @@ class RulesPanel:
     def Clear(self):
         """Clear and widgets and delete information"""
         self.ruleslines.clear()
-        self.mainSizer.Clear(deleteWindows=True)
+        self.mainSizer.Clear(True)
 
     def OnCheckAll(self, event):
         """(Un)check all rules"""
@@ -156,8 +156,8 @@ class RulesPanel:
                 if self.attributeType == 'size':
                     init = 100
                 columnCtrl = SpinCtrl(self.mainPanel, id=2000 + num,
-                                         size=(50, -1), min=1, max=1e4,
-                                         initial=init)
+                                      size=(50, -1), min=1, max=1e4,
+                                      initial=init)
                 columnCtrl.Bind(wx.EVT_SPINCTRL, self.OnRuleSize)
                 columnCtrl.Bind(wx.EVT_TEXT, self.OnRuleSize)
                 columnCtrl.SetName('target')
@@ -167,11 +167,11 @@ class RulesPanel:
                         'value': '',
                         self.attributeType: init}
 
-            self.mainSizer.Add(item=enable, proportion=0,
+            self.mainSizer.Add(enable, proportion=0,
                                flag=wx.ALIGN_CENTER_VERTICAL)
-            self.mainSizer.Add(item=txt_ctrl, proportion=0,
+            self.mainSizer.Add(txt_ctrl, proportion=0,
                                flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
-            self.mainSizer.Add(item=columnCtrl, proportion=0,
+            self.mainSizer.Add(columnCtrl, proportion=0,
                                flag=wx.ALIGN_CENTER | wx.RIGHT, border=10)
 
         self.mainPanel.Layout()
@@ -422,7 +422,7 @@ class ColorTable(wx.Frame):
                                      type=self.mapType)
         # layout
         inputSizer.Add(
-            item=self.selectionInput,
+            self.selectionInput,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=5)
 
@@ -470,24 +470,24 @@ class ColorTable(wx.Frame):
         # layout
         gridSizer = wx.GridBagSizer(hgap=2, vgap=2)
 
-        gridSizer.Add(item=wx.StaticText(parent, label=_("Load color table:")),
+        gridSizer.Add(wx.StaticText(parent, label=_("Load color table:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=colorTable, pos=(0, 1))
-        gridSizer.Add(item=self.btnSet, pos=(0, 2), flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(colorTable, pos=(0, 1))
+        gridSizer.Add(self.btnSet, pos=(0, 2), flag=wx.ALIGN_RIGHT)
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent, label=_('Load color table from file:')), pos=(
                 1, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.loadRules, pos=(
+            self.loadRules, pos=(
                 1, 1), span=(
                 1, 2), flag=wx.EXPAND)
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent, label=_('Save color table to file:')), pos=(
                 2, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.saveRules, pos=(
+            self.saveRules, pos=(
                 2, 1), span=(
                 1, 2), flag=wx.EXPAND)
 
@@ -546,7 +546,7 @@ class ColorTable(wx.Frame):
         row = 0
         # label with range
         self.cr_label = wx.StaticText(parent, id=wx.ID_ANY)
-        bodySizer.Add(item=self.cr_label, pos=(row, 0), span=(1, 3),
+        bodySizer.Add(self.cr_label, pos=(row, 0), span=(1, 3),
                       flag=wx.ALL, border=5)
 
         row += 1
@@ -557,30 +557,30 @@ class ColorTable(wx.Frame):
             attributeType=self.attributeType,
             properties=self.properties)
 
-        bodySizer.Add(item=self.rulesPanel.mainPanel, pos=(row, 0),
+        bodySizer.Add(self.rulesPanel.mainPanel, pos=(row, 0),
                       span=(1, 2), flag=wx.EXPAND)
         # add two rules as default
         self.rulesPanel.AddRules(2)
 
         # preview window
         self._createPreview(parent=parent)
-        bodySizer.Add(item=self.preview, pos=(row, 2),
+        bodySizer.Add(self.preview, pos=(row, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER)
 
         row += 1
         # add ckeck all and clear all
         bodySizer.Add(
-            item=self.rulesPanel.checkAll,
+            self.rulesPanel.checkAll,
             flag=wx.ALIGN_CENTER_VERTICAL,
             pos=(
                 row,
                 0))
-        bodySizer.Add(item=self.rulesPanel.clearAll, pos=(row, 1))
+        bodySizer.Add(self.rulesPanel.clearAll, pos=(row, 1))
 
         # preview button
         self.btnPreview = wx.Button(parent, id=wx.ID_ANY,
                                     label=_("Preview"))
-        bodySizer.Add(item=self.btnPreview, pos=(row, 2),
+        bodySizer.Add(self.btnPreview, pos=(row, 2),
                       flag=wx.ALIGN_RIGHT)
         self.btnPreview.Enable(False)
         self.btnPreview.SetToolTipString(
@@ -588,9 +588,9 @@ class ColorTable(wx.Frame):
 
         row += 1
         # add rules button and spin to sizer
-        bodySizer.Add(item=self.rulesPanel.numRules, pos=(row, 0),
+        bodySizer.Add(self.rulesPanel.numRules, pos=(row, 0),
                       flag=wx.ALIGN_CENTER_VERTICAL)
-        bodySizer.Add(item=self.rulesPanel.btnAdd, pos=(row, 1))
+        bodySizer.Add(self.rulesPanel.btnAdd, pos=(row, 1))
 
         bodySizer.AddGrowableRow(1)
         bodySizer.AddGrowableCol(2)
@@ -902,29 +902,29 @@ class RasterColorTable(ColorTable):
         # map selection
         #
         mapSelection = self._createMapSelection(parent=self.panel)
-        sizer.Add(item=mapSelection, proportion=0,
+        sizer.Add(mapSelection, proportion=0,
                   flag=wx.ALL | wx.EXPAND, border=5)
         #
         # manage extern tables
         #
         fileSelection = self._createFileSelection(parent=self.panel)
-        sizer.Add(item=fileSelection, proportion=0,
+        sizer.Add(fileSelection, proportion=0,
                   flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=5)
         #
         # body & preview
         #
         bodySizer = self._createBody(parent=self.panel)
-        sizer.Add(item=bodySizer, proportion=1,
+        sizer.Add(bodySizer, proportion=1,
                   flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
         #
         # buttons
         #
         btnSizer = self._createButtons(parent=self.panel)
-        sizer.Add(item=wx.StaticLine(parent=self.panel, id=wx.ID_ANY,
-                                     style=wx.LI_HORIZONTAL), proportion=0,
+        sizer.Add(wx.StaticLine(parent=self.panel, id=wx.ID_ANY,
+                                style=wx.LI_HORIZONTAL), proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=5)
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.panel.SetSizer(sizer)
@@ -1173,7 +1173,7 @@ class VectorColorTable(ColorTable):
         vSizer.Add(self.addColumn, pos=(row, 2),
                    flag=wx.ALIGN_CENTER_VERTICAL)
         inputSizer.Add(
-            item=vSizer,
+            vSizer,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=5)
         self.colorColumnSizer = vSizer
@@ -1189,7 +1189,7 @@ class VectorColorTable(ColorTable):
         # map selection
         #
         mapSelection = self._createMapSelection(parent=scrollPanel)
-        sizer.Add(item=mapSelection, proportion=0,
+        sizer.Add(mapSelection, proportion=0,
                   flag=wx.ALL | wx.EXPAND, border=5)
         #
         # manage extern tables
@@ -1206,19 +1206,19 @@ class VectorColorTable(ColorTable):
                 self.cp)
 
             self._createFileSelection(parent=self.cp.GetPane())
-            sizer.Add(item=self.cp, proportion=0,
+            sizer.Add(self.cp, proportion=0,
                       flag=wx.ALL | wx.EXPAND, border=5)
         #
         # set vector attributes
         #
         vectorAttrb = self._createVectorAttrb(parent=scrollPanel)
-        sizer.Add(item=vectorAttrb, proportion=0,
+        sizer.Add(vectorAttrb, proportion=0,
                   flag=wx.ALL | wx.EXPAND, border=5)
         #
         # body & preview
         #
         bodySizer = self._createBody(parent=scrollPanel)
-        sizer.Add(item=bodySizer, proportion=1,
+        sizer.Add(bodySizer, proportion=1,
                   flag=wx.ALL | wx.EXPAND, border=5)
 
         scrollPanel.SetSizer(sizer)
@@ -1235,10 +1235,10 @@ class VectorColorTable(ColorTable):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        mainsizer.Add(item=wx.StaticLine(parent=self.panel, id=wx.ID_ANY,
-                                         style=wx.LI_HORIZONTAL), proportion=0,
+        mainsizer.Add(wx.StaticLine(parent=self.panel, id=wx.ID_ANY,
+                                    style=wx.LI_HORIZONTAL), proportion=0,
                       flag=wx.EXPAND | wx.ALL, border=5)
-        mainsizer.Add(item=btnSizer, proportion=0,
+        mainsizer.Add(btnSizer, proportion=0,
                       flag=wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND, border=5)
 
         self.panel.SetSizer(mainsizer)
@@ -1956,7 +1956,7 @@ class BufferedWindow(wx.Window):
         # wx.Image object (self.mapfile)
         self.img = None
 
-        self.pdc = wx.PseudoDC()
+        self.pdc = PseudoDC()
         # will store an off screen empty bitmap for saving to file
         self._Buffer = None
 

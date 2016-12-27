@@ -25,7 +25,7 @@ from gui_core.gselect import ColumnSelect
 from core.units import Units
 from core.settings import UserSettings
 from core.utils import _
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl, Button
 
 
 class VDigitSettingsDialog(wx.Dialog):
@@ -54,23 +54,23 @@ class VDigitSettingsDialog(wx.Dialog):
         self._createQueryPage(notebook)
 
         # buttons
-        btnApply = wx.Button(self, wx.ID_APPLY)
-        btnCancel = wx.Button(self, wx.ID_CLOSE)
-        btnSave = wx.Button(self, wx.ID_SAVE)
+        btnApply = Button(self, wx.ID_APPLY)
+        btnCancel = Button(self, wx.ID_CLOSE)
+        btnSave = Button(self, wx.ID_SAVE)
         btnSave.SetDefault()
 
         # bindigs
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
-        btnApply.SetToolTipString(_("Apply changes for this session"))
+        btnApply.SetToolTip(_("Apply changes for this session"))
         btnApply.SetDefault()
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
-        btnSave.SetToolTipString(
+        btnSave.SetToolTip(
             _("Close dialog and save changes to user settings file"))
         btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
-        btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
+        btnCancel.SetToolTip(_("Close dialog and ignore changes"))
 
         # sizers
-        btnSizer = wx.wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(btnCancel, proportion=0,
                      flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
         btnSizer.Add(btnApply, proportion=0,
@@ -80,11 +80,11 @@ class VDigitSettingsDialog(wx.Dialog):
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(
-            item=notebook,
+            notebook,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        mainSizer.Add(item=btnSizer, proportion=0,
+        mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.ALIGN_RIGHT, border=5)
 
         self.Bind(wx.EVT_CLOSE, self.OnCancel)
@@ -135,7 +135,7 @@ class VDigitSettingsDialog(wx.Dialog):
             color.SetName("GetColour")
 
         sizer.Add(
-            item=flexSizer,
+            flexSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=10)
@@ -186,11 +186,11 @@ class VDigitSettingsDialog(wx.Dialog):
             border=10)
 
         sizer.Add(
-            item=flexSizer,
+            flexSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=1)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         #
         # snapping section
@@ -243,19 +243,19 @@ class VDigitSettingsDialog(wx.Dialog):
                 group='vdigit',
                 key="snapToVertex",
                 subkey='enabled'))
-        vertexSizer.Add(item=self.snapVertex, proportion=0, flag=wx.EXPAND)
+        vertexSizer.Add(self.snapVertex, proportion=0, flag=wx.EXPAND)
         self.mapUnits = self.parent.MapWindow.Map.GetProjInfo()['units']
         self.snappingInfo = wx.StaticText(
             parent=panel, id=wx.ID_ANY,
             label=_("Snapping threshold is %(value).1f %(units)s") %
             {'value': self.digit.GetDisplay().GetThreshold(),
              'units': self.mapUnits})
-        vertexSizer.Add(item=self.snappingInfo, proportion=0,
+        vertexSizer.Add(self.snappingInfo, proportion=0,
                         flag=wx.ALL | wx.EXPAND, border=1)
 
-        sizer.Add(item=flexSizer, proportion=1, flag=wx.EXPAND)
-        sizer.Add(item=vertexSizer, proportion=1, flag=wx.EXPAND)
-        border.Add(item=sizer, proportion=0, flag=wx.LEFT |
+        sizer.Add(flexSizer, proportion=1, flag=wx.EXPAND)
+        sizer.Add(vertexSizer, proportion=1, flag=wx.EXPAND)
+        border.Add(sizer, proportion=0, flag=wx.LEFT |
                    wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
 
         #
@@ -276,9 +276,9 @@ class VDigitSettingsDialog(wx.Dialog):
             self.selectFeature[feature] = chkbox.GetId()
             chkbox.SetValue(UserSettings.Get(group='vdigit', key='selectType',
                                              subkey=[feature, 'enabled']))
-            inSizer.Add(item=chkbox, proportion=0,
+            inSizer.Add(chkbox, proportion=0,
                         flag=wx.EXPAND | wx.ALL, border=5)
-        sizer.Add(item=inSizer, proportion=0, flag=wx.EXPAND)
+        sizer.Add(inSizer, proportion=0, flag=wx.EXPAND)
         # threshold
         flexSizer = wx.FlexGridSizer(cols=3, hgap=5, vgap=5)
         flexSizer.AddGrowableCol(0)
@@ -323,18 +323,18 @@ class VDigitSettingsDialog(wx.Dialog):
                 key="checkForDupl",
                 subkey='enabled'))
 
-        sizer.Add(item=flexSizer, proportion=0, flag=wx.EXPAND)
+        sizer.Add(flexSizer, proportion=0, flag=wx.EXPAND)
         sizer.Add(
-            item=self.selectIn,
+            self.selectIn,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=1)
         sizer.Add(
-            item=self.checkForDupl,
+            self.checkForDupl,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=1)
-        border.Add(item=sizer, proportion=0, flag=wx.EXPAND |
+        border.Add(sizer, proportion=0, flag=wx.EXPAND |
                    wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
         #
@@ -354,12 +354,12 @@ class VDigitSettingsDialog(wx.Dialog):
                 subkey='enabled'))
 
         sizer.Add(
-            item=self.intersect,
+            self.intersect,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=1)
 
-        border.Add(item=sizer, proportion=0, flag=wx.EXPAND |
+        border.Add(sizer, proportion=0, flag=wx.EXPAND |
                    wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
         #
@@ -381,12 +381,12 @@ class VDigitSettingsDialog(wx.Dialog):
                 subkey='enabled'))
 
         sizer.Add(
-            item=self.closeBoundary,
+            self.closeBoundary,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=1)
 
-        border.Add(item=sizer, proportion=0, flag=wx.EXPAND |
+        border.Add(sizer, proportion=0, flag=wx.EXPAND |
                    wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
         #
@@ -406,11 +406,11 @@ class VDigitSettingsDialog(wx.Dialog):
                 key='saveOnExit',
                 subkey='enabled'))
         sizer.Add(
-            item=self.save,
+            self.save,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=1)
-        border.Add(item=sizer, proportion=0, flag=wx.EXPAND |
+        border.Add(sizer, proportion=0, flag=wx.EXPAND |
                    wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
         panel.SetSizer(border)
@@ -447,7 +447,7 @@ class VDigitSettingsDialog(wx.Dialog):
                 subkey='box'))
 
         sizer.Add(
-            item=self.queryBox,
+            self.queryBox,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=1)
@@ -460,7 +460,7 @@ class VDigitSettingsDialog(wx.Dialog):
             parent=panel, id=wx.ID_ANY, label=_("length"))
         self.queryLength.Bind(wx.EVT_RADIOBUTTON, self.OnChangeQuery)
         sizer.Add(
-            item=self.queryLength,
+            self.queryLength,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=1)
@@ -502,7 +502,7 @@ class VDigitSettingsDialog(wx.Dialog):
             flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
         flexSizer.Add(units, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(
-            item=flexSizer,
+            flexSizer,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=1)
@@ -514,7 +514,7 @@ class VDigitSettingsDialog(wx.Dialog):
             parent=panel, id=wx.ID_ANY, label=_("dangle"))
         self.queryDangle.Bind(wx.EVT_RADIOBUTTON, self.OnChangeQuery)
         sizer.Add(
-            item=self.queryDangle,
+            self.queryDangle,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=1)
@@ -556,7 +556,7 @@ class VDigitSettingsDialog(wx.Dialog):
             flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
         flexSizer.Add(units, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(
-            item=flexSizer,
+            flexSizer,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=1)
@@ -570,7 +570,7 @@ class VDigitSettingsDialog(wx.Dialog):
         # enable & disable items
         self.OnChangeQuery(None)
 
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
 
@@ -602,7 +602,7 @@ class VDigitSettingsDialog(wx.Dialog):
                 key="addRecord",
                 subkey='enabled'))
         sizer.Add(
-            item=self.addRecord,
+            self.addRecord,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=1)
@@ -614,11 +614,11 @@ class VDigitSettingsDialog(wx.Dialog):
         # layer
         text = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Layer"))
         self.layer = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(125, -1),
-                                 min=1, max=1e3)
+                              min=1, max=1e3)
         self.layer.SetValue(int(UserSettings.Get(
             group='vdigit', key="layer", subkey='value')))
-        flexSizer.Add(item=text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
-        flexSizer.Add(item=self.layer, proportion=0,
+        flexSizer.Add(text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
+        flexSizer.Add(self.layer, proportion=0,
                       flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
         # category number
         text = wx.StaticText(
@@ -633,8 +633,8 @@ class VDigitSettingsDialog(wx.Dialog):
         if UserSettings.Get(group='vdigit', key="categoryMode",
                             subkey='selection') != 1:
             self.category.Enable(False)
-        flexSizer.Add(item=text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
-        flexSizer.Add(item=self.category, proportion=0,
+        flexSizer.Add(text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
+        flexSizer.Add(self.category, proportion=0,
                       flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
         # category mode
         text = wx.StaticText(
@@ -648,16 +648,16 @@ class VDigitSettingsDialog(wx.Dialog):
                 group='vdigit',
                 key="categoryMode",
                 subkey='selection'))
-        flexSizer.Add(item=text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
-        flexSizer.Add(item=self.categoryMode, proportion=0,
+        flexSizer.Add(text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
+        flexSizer.Add(self.categoryMode, proportion=0,
                       flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
 
         sizer.Add(
-            item=flexSizer,
+            flexSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=1)
-        border.Add(item=sizer, proportion=0,
+        border.Add(sizer, proportion=0,
                    flag=wx.ALL | wx.EXPAND, border=5)
 
         #
@@ -677,11 +677,11 @@ class VDigitSettingsDialog(wx.Dialog):
                 key="delRecord",
                 subkey='enabled'))
         sizer.Add(
-            item=self.deleteRecord,
+            self.deleteRecord,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=1)
-        border.Add(item=sizer, proportion=0,
+        border.Add(sizer, proportion=0,
                    flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
 
         #
@@ -755,26 +755,26 @@ class VDigitSettingsDialog(wx.Dialog):
             self.geomAttrb[attrb]['column'] = column.GetId()
             self.geomAttrb[attrb]['units'] = win_units.GetId()
 
-            gridSizer.Add(item=check,
+            gridSizer.Add(check,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(row, 0))
-            gridSizer.Add(item=column,
+            gridSizer.Add(column,
                           pos=(row, 1))
-            gridSizer.Add(item=win_units,
+            gridSizer.Add(win_units,
                           pos=(row, 2))
             row += 1
 
         note = '\n'.join(textwrap.wrap(_("Note: These settings are stored "
                                          "in the workspace not in the vector digitizer "
                                          "preferences."), 55))
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=note),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=note),
                       pos=(3, 0), span=(1, 3))
 
         gridSizer.AddGrowableCol(0)
-        sizer.Add(item=gridSizer, proportion=1,
+        sizer.Add(gridSizer, proportion=1,
                   flag=wx.ALL | wx.EXPAND, border=1)
-        border.Add(item=sizer, proportion=0,
+        border.Add(sizer, proportion=0,
                    flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
 
         # bindings

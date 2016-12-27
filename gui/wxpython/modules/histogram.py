@@ -32,6 +32,7 @@ from gui_core.preferences import DefaultFontDialog
 from core.debug import Debug
 from core.gcmd import GError
 from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.wrap import PseudoDC
 
 
 class BufferedWindow(wx.Window):
@@ -77,7 +78,7 @@ class BufferedWindow(wx.Window):
 
         self.imagedict = {}  # images and their PseudoDC ID's for painting and dragging
 
-        self.pdc = wx.PseudoDC()
+        self.pdc = PseudoDC()
         # will store an off screen empty bitmap for saving to file
         self._buffer = wx.EmptyBitmap(
             max(1, self.Map.width),

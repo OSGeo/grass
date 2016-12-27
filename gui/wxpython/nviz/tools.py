@@ -53,7 +53,7 @@ from modules.colorrules import ThematicVectorTable
 from core.settings import UserSettings
 from gui_core.widgets import ScrolledPanel, NumTextCtrl, FloatSlider, SymbolButton
 from gui_core.gselect import Select
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl, PseudoDC
 from core.debug import Debug
 try:
     from nviz.mapwindow import wxUpdateProperties, wxUpdateView,\
@@ -264,9 +264,9 @@ class NvizToolWindow(FN.FlatNotebook):
                                   mapwindow=self.mapWindow)
         self.win['view']['position'] = view.GetId()
         posSizer.Add(
-            item=view, pos=(1, 1),
+            view, pos=(1, 1),
             flag=wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=posSizer, pos=(0, 0))
+        gridSizer.Add(posSizer, pos=(0, 0))
 
         # perspective
         # set initial defaults here (or perhaps in a default values file), not in user settings
@@ -288,15 +288,15 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.OnViewChangedText))
 
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 panel, id=wx.ID_ANY, label=_("Perspective:")), pos=(
                 1, 0), flag=wx.ALIGN_CENTER)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['view']['persp']['slider']), pos=(
                 2, 0), flag=wx.ALIGN_CENTER)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['view']['persp']['text']), pos=(
                 3, 0), flag=wx.ALIGN_CENTER)
 
@@ -312,15 +312,15 @@ class NvizToolWindow(FN.FlatNotebook):
                                   self.OnViewChanged,
                                   self.OnViewChangedText))
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 panel, id=wx.ID_ANY, label=_("Tilt:")), pos=(
                 1, 1), flag=wx.ALIGN_CENTER)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['view']['twist']['slider']), pos=(
                 2, 1))
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['view']['twist']['text']), pos=(
                 3, 1), flag=wx.ALIGN_CENTER)
 
@@ -362,26 +362,26 @@ class NvizToolWindow(FN.FlatNotebook):
 
         heightSizer = wx.GridBagSizer(vgap=3, hgap=3)
         heightSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 panel, id=wx.ID_ANY, label=_("Height:")), pos=(
                 0, 0), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, span=(
                 1, 2))
         heightSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['view']['height']['slider']),
             flag=wx.ALIGN_RIGHT,
             pos=(
                 1,
                 0))
         heightSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['view']['height']['text']),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
             pos=(
                 1,
                 1))
         heightSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 panel,
                 id=wx.ID_ANY,
                 label=_("Z-exag:")),
@@ -393,23 +393,23 @@ class NvizToolWindow(FN.FlatNotebook):
                 1,
                 2))
         heightSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['view']['z-exag']['slider']),
             flag=wx.ALIGN_RIGHT,
             pos=(
                 1,
                 2))
-        heightSizer.Add(item=self.FindWindowById(
+        heightSizer.Add(self.FindWindowById(
             self.win['view']['z-exag']['text']),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT | wx.TOP |
             wx.BOTTOM | wx.RIGHT, pos=(1, 3))
 
-        gridSizer.Add(item=heightSizer, pos=(0, 1), flag=wx.ALIGN_CENTER)
+        gridSizer.Add(heightSizer, pos=(0, 1), flag=wx.ALIGN_CENTER)
 
         # view setup + reset
         viewSizer = wx.BoxSizer(wx.HORIZONTAL)
-        viewSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY,
-                                         label=_("Look:")),
+        viewSizer.Add(wx.StaticText(panel, id=wx.ID_ANY,
+                                    label=_("Look:")),
                       flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL,
                       border=5)
         here = wx.ToggleButton(panel, id=wx.ID_ANY, label=_("here"))
@@ -418,7 +418,7 @@ class NvizToolWindow(FN.FlatNotebook):
         here.SetToolTipString(_("Allows you to select a point on the surface "
                                 "that becomes the new center of view. "
                                 "Click on the button and then on the surface."))
-        viewSizer.Add(item=here, flag=wx.TOP | wx.BOTTOM |
+        viewSizer.Add(here, flag=wx.TOP | wx.BOTTOM |
                       wx.LEFT | wx.ALIGN_CENTER_VERTICAL, border=5)
 
         center = wx.Button(panel, id=wx.ID_ANY, label=_("center"))
@@ -426,7 +426,7 @@ class NvizToolWindow(FN.FlatNotebook):
         center.SetName('center')
         center.SetToolTipString(
             _("Resets the view to the original default center of view"))
-        viewSizer.Add(item=center, flag=wx.TOP | wx.BOTTOM |
+        viewSizer.Add(center, flag=wx.TOP | wx.BOTTOM |
                       wx.ALIGN_CENTER_VERTICAL, border=5)
 
         top = wx.Button(panel, id=wx.ID_ANY, label=_("top"))
@@ -434,23 +434,23 @@ class NvizToolWindow(FN.FlatNotebook):
         top.SetName('top')
         top.SetToolTipString(
             _("Sets the viewer directly over the scene's center position. This top view orients approximately north south."))
-        viewSizer.Add(item=top, flag=wx.TOP | wx.BOTTOM |
+        viewSizer.Add(top, flag=wx.TOP | wx.BOTTOM |
                       wx.ALIGN_CENTER_VERTICAL, border=5)
 
         reset = wx.Button(panel, id=wx.ID_ANY, label=_("reset"))
         reset.SetToolTipString(_("Reset to default view"))
         reset.Bind(wx.EVT_BUTTON, self.OnResetView)
-        viewSizer.Add(item=reset, proportion=0,
+        viewSizer.Add(reset, proportion=0,
                       flag=wx.TOP | wx.BOTTOM | wx.RIGHT | wx.ALIGN_RIGHT,
                       border=5)
 
-        gridSizer.Add(item=viewSizer, pos=(4, 0), span=(1, 3),
+        gridSizer.Add(viewSizer, pos=(4, 0), span=(1, 3),
                       flag=wx.EXPAND)
 
         # body
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=2)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL,
                       border=3)
 
@@ -461,8 +461,8 @@ class NvizToolWindow(FN.FlatNotebook):
 
         # background color
         self.win['view']['background'] = {}
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Background color:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Background color:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
         color = csel.ColourSelect(
@@ -477,12 +477,12 @@ class NvizToolWindow(FN.FlatNotebook):
             size=globalvar.DIALOG_COLOR_SIZE)
         self.win['view']['background']['color'] = color.GetId()
         color.Bind(csel.EVT_COLOURSELECT, self.OnBgColor)
-        gridSizer.Add(item=color, pos=(0, 1))
+        gridSizer.Add(color, pos=(0, 1))
         gridSizer.AddGrowableCol(0)
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=3)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
                       border=3)
 
@@ -511,8 +511,8 @@ class NvizToolWindow(FN.FlatNotebook):
                 "It is recommended to use fly-through mode "
                 "(Map Display toolbar) to achieve smooth motion."))
         self.win['anim']['help'] = help.GetId()
-        hSizer.Add(item=help, proportion=0)
-        boxSizer.Add(item=hSizer, proportion=1,
+        hSizer.Add(help, proportion=0)
+        boxSizer.Add(hSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=5)
 
         # animation controls
@@ -564,47 +564,47 @@ class NvizToolWindow(FN.FlatNotebook):
         pause.Bind(wx.EVT_BUTTON, self.OnPause)
         fps.Bind(wx.EVT_SPINCTRL, self.OnFPS)
 
-        hSizer.Add(item=record, proportion=0)
-        hSizer.Add(item=play, proportion=0)
-        hSizer.Add(item=pause, proportion=0)
-        hSizer.Add(item=stop, proportion=0)
-        boxSizer.Add(item=hSizer, proportion=0,
+        hSizer.Add(record, proportion=0)
+        hSizer.Add(play, proportion=0)
+        hSizer.Add(pause, proportion=0)
+        hSizer.Add(stop, proportion=0)
+        boxSizer.Add(hSizer, proportion=0,
                      flag=wx.ALL | wx.EXPAND, border=3)
 
         sliderBox = wx.BoxSizer(wx.HORIZONTAL)
         sliderBox.Add(
-            item=frameSlider,
+            frameSlider,
             proportion=1,
             border=5,
             flag=wx.EXPAND | wx.RIGHT)
         sliderBox.Add(
-            item=frameText,
+            frameText,
             proportion=0,
             border=5,
             flag=wx.EXPAND | wx.RIGHT | wx.LEFT)
-        boxSizer.Add(item=sliderBox, proportion=0, flag=wx.EXPAND)
+        boxSizer.Add(sliderBox, proportion=0, flag=wx.EXPAND)
 
         # total number of frames
         hSizer = wx.BoxSizer(wx.HORIZONTAL)
-        hSizer.Add(item=infoLabel, proportion=0, flag=wx.RIGHT, border=5)
-        hSizer.Add(item=info, proportion=0, flag=wx.LEFT, border=5)
+        hSizer.Add(infoLabel, proportion=0, flag=wx.RIGHT, border=5)
+        hSizer.Add(info, proportion=0, flag=wx.LEFT, border=5)
 
-        boxSizer.Add(item=hSizer, proportion=0,
+        boxSizer.Add(hSizer, proportion=0,
                      flag=wx.ALL | wx.EXPAND, border=5)
 
         # frames per second
         hSizer = wx.BoxSizer(wx.HORIZONTAL)
         hSizer.Add(
-            item=fpsLabel,
+            fpsLabel,
             proportion=0,
             flag=wx.RIGHT | wx.ALIGN_CENTER_VERTICAL,
             border=5)
-        hSizer.Add(item=fps, proportion=0, flag=wx.LEFT |
+        hSizer.Add(fps, proportion=0, flag=wx.LEFT |
                    wx.ALIGN_CENTER_VERTICAL, border=5)
 
-        boxSizer.Add(item=hSizer, proportion=0,
+        boxSizer.Add(hSizer, proportion=0,
                      flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -650,28 +650,28 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['anim']['save']['image']['format'] = fileTypeCtrl.GetId()
         self.win['anim']['save']['image']['confirm'] = save.GetId()
 
-        boxSizer.Add(item=dir, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+        boxSizer.Add(dir, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
 
         gridSizer.Add(
-            item=prefixLabel, pos=(0, 0),
+            prefixLabel, pos=(0, 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
-        gridSizer.Add(item=prefixCtrl, pos=(0, 1), flag=wx.EXPAND)
+        gridSizer.Add(prefixCtrl, pos=(0, 1), flag=wx.EXPAND)
         gridSizer.Add(
-            item=fileTypeLabel, pos=(1, 0),
+            fileTypeLabel, pos=(1, 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
-        gridSizer.Add(item=fileTypeCtrl, pos=(1, 1), flag=wx.EXPAND)
+        gridSizer.Add(fileTypeCtrl, pos=(1, 1), flag=wx.EXPAND)
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=5)
         boxSizer.Add(
-            item=save,
+            save,
             proportion=0,
             flag=wx.ALL | wx.ALIGN_RIGHT,
             border=5)
 
         save.Bind(wx.EVT_BUTTON, self.OnSaveAnimation)
 
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -832,13 +832,13 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['surface']['map'] = rmaps.GetId()
         desc = wx.StaticText(parent=panel, id=wx.ID_ANY)
         self.win['surface']['desc'] = desc.GetId()
-        boxSizer.Add(item=rmaps, proportion=0,
+        boxSizer.Add(rmaps, proportion=0,
                      flag=wx.ALL,
                      border=3)
-        boxSizer.Add(item=desc, proportion=0,
+        boxSizer.Add(desc, proportion=0,
                      flag=wx.ALL,
                      border=3)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -852,8 +852,8 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
 
         # mode
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Mode:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Mode:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         mode = wx.Choice(parent=panel, id=wx.ID_ANY, size=(-1, -1),
                          choices=[_("coarse"),
@@ -862,12 +862,12 @@ class NvizToolWindow(FN.FlatNotebook):
         mode.SetName("selection")
         mode.Bind(wx.EVT_CHOICE, self.OnSurfaceMode)
         self.win['surface']['draw']['mode'] = mode.GetId()
-        gridSizer.Add(item=mode, flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+        gridSizer.Add(mode, flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos=(0, 1), span=(1, 2))
 
         # shading
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("Shading:")), pos=(
                 0, 3), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
         shade = wx.Choice(parent=panel, id=wx.ID_ANY, size=(-1, -1),
@@ -876,7 +876,7 @@ class NvizToolWindow(FN.FlatNotebook):
         shade.SetName("selection")
         self.win['surface']['draw']['shading'] = shade.GetId()
         shade.Bind(wx.EVT_CHOICE, self.OnSurfaceMode)
-        gridSizer.Add(item=shade, flag=wx.ALIGN_CENTER_VERTICAL,
+        gridSizer.Add(shade, flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 4))
 
         # set to all
@@ -884,7 +884,7 @@ class NvizToolWindow(FN.FlatNotebook):
         all.SetToolTipString(_("Use draw settings for all loaded surfaces"))
         all.Bind(wx.EVT_BUTTON, self.OnSurfaceModeAll)
         gridSizer.Add(
-            item=all,
+            all,
             flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
             pos=(
                 3,
@@ -892,26 +892,26 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['surface']['all'] = all.GetId()
 
         # resolution coarse
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Coarse mode:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Coarse mode:")),
                       pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("resolution:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("resolution:")),
                       pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL)
         resC = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
-                           initial=6,
-                           min=1,
-                           max=100)
+                        initial=6,
+                        min=1,
+                        max=100)
         resC.SetName("value")
         self.win['surface']['draw']['res-coarse'] = resC.GetId()
         resC.Bind(wx.EVT_SPINCTRL, self.OnSurfaceResolution)
         gridSizer.Add(
-            item=resC, pos=(2, 2),
+            resC, pos=(2, 2),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
         # Coarse style
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("style:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("style:")),
                       pos=(3, 1), flag=wx.ALIGN_CENTER_VERTICAL)
         style = wx.Choice(parent=panel, id=wx.ID_ANY, size=(100, -1),
                           choices=[_("wire"),
@@ -919,7 +919,7 @@ class NvizToolWindow(FN.FlatNotebook):
         style.SetName("selection")
         self.win['surface']['draw']['style'] = style.GetId()
         style.Bind(wx.EVT_CHOICE, self.OnSurfaceMode)
-        gridSizer.Add(item=style, flag=wx.ALIGN_CENTER_VERTICAL,
+        gridSizer.Add(style, flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(3, 2))
 
         # color
@@ -930,35 +930,35 @@ class NvizToolWindow(FN.FlatNotebook):
         color.SetToolTipString(_("Change wire color"))
         self.win['surface']['draw']['wire-color'] = color.GetId()
         gridSizer.Add(
-            item=color,
+            color,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
             pos=(
                 3,
                 3))
 
         # resolution fine
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Fine mode:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Fine mode:")),
                       pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("resolution:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("resolution:")),
                       pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
         resF = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
-                           initial=3,
-                           min=1,
-                           max=100)
+                        initial=3,
+                        min=1,
+                        max=100)
         resF.SetName("value")
         self.win['surface']['draw']['res-fine'] = resF.GetId()
         resF.Bind(wx.EVT_SPINCTRL, self.OnSurfaceResolution)
         gridSizer.Add(
-            item=resF, pos=(1, 2),
+            resF, pos=(1, 2),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
         gridSizer.AddGrowableCol(3)
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=3)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -978,8 +978,8 @@ class NvizToolWindow(FN.FlatNotebook):
                             ('transp', _("Transparency")),
                             ('shine', _("Shininess"))):
             self.win['surface'][code] = {}
-            gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                             label=attrb + ':'),
+            gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                        label=attrb + ':'),
                           pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
             use = wx.Choice(parent=panel, id=wx.ID_ANY, size=(100, -1),
                             choices=[_("map")])
@@ -993,7 +993,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 use.Append(item=_('constant'))
             self.win['surface'][code]['use'] = use.GetId()
             use.Bind(wx.EVT_CHOICE, self.OnMapObjUse)
-            gridSizer.Add(item=use, flag=wx.ALIGN_CENTER_VERTICAL,
+            gridSizer.Add(use, flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(row, 1))
 
             map = Select(parent=panel, id=wx.ID_ANY,
@@ -1005,7 +1005,7 @@ class NvizToolWindow(FN.FlatNotebook):
             else:
                 self.win['surface'][code]['map'] = map.GetTextCtrl().GetId()
             map.Bind(wx.EVT_TEXT, self.OnSurfaceMap)
-            gridSizer.Add(item=map, flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            gridSizer.Add(map, flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                           pos=(row, 2))
 
             if code == 'color':
@@ -1020,14 +1020,14 @@ class NvizToolWindow(FN.FlatNotebook):
                 value = None
             else:
                 value = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
-                                    initial=0)
+                                 initial=0)
                 value.SetRange(minVal=0, maxVal=100)
                 value.Bind(wx.EVT_TEXT, self.OnSurfaceMap)
 
             if value:
                 self.win['surface'][code]['const'] = value.GetId()
                 value.Enable(False)
-                gridSizer.Add(item=value, flag=wx.ALIGN_CENTER_VERTICAL,
+                gridSizer.Add(value, flag=wx.ALIGN_CENTER_VERTICAL,
                               pos=(row, 3))
             else:
                 self.win['surface'][code]['const'] = None
@@ -1037,9 +1037,9 @@ class NvizToolWindow(FN.FlatNotebook):
 
             row += 1
         gridSizer.AddGrowableCol(2)
-        boxSizer.Add(item=gridSizer, proportion=0,
+        boxSizer.Add(gridSizer, proportion=0,
                      flag=wx.ALL | wx.EXPAND, border=3)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL,
                       border=3)
         #
@@ -1082,21 +1082,21 @@ class NvizToolWindow(FN.FlatNotebook):
         ptext = self.FindWindowById(self.win['surface']['position']['text'])
         ptext.SetValue('0')
 
-        gridSizer.Add(item=axis, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
-        gridSizer.Add(item=pslide, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 1))
-        gridSizer.Add(item=ptext, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 2))
+        gridSizer.Add(axis, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
+        gridSizer.Add(pslide, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 1))
+        gridSizer.Add(ptext, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 2))
         gridSizer.Add(
-            item=reset,
+            reset,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
             pos=(
                 0,
                 3))
         gridSizer.AddGrowableCol(3)
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=3)
 
-        pageSizer.Add(item=boxSizer, proportion=1,
+        pageSizer.Add(boxSizer, proportion=1,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
         #
@@ -1148,18 +1148,18 @@ class NvizToolWindow(FN.FlatNotebook):
         horSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         # planes
-        horSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                        label=_("Active cutting plane:")),
+        horSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                   label=_("Active cutting plane:")),
                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
         choice = wx.Choice(parent=panel, id=wx.ID_ANY, choices=[])
         self.win['cplane']['planes'] = choice.GetId()
         choice.Bind(wx.EVT_CHOICE, self.OnCPlaneSelection)
-        horSizer.Add(item=choice, flag=wx.ALL, border=5)
+        horSizer.Add(choice, flag=wx.ALL, border=5)
 
         # shading
-        horSizer.Add(item=wx.Size(-1, -1), proportion=1)
-        horSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                        label=_("Shading:")),
+        horSizer.Add(wx.Size(-1, -1), proportion=1)
+        horSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                   label=_("Shading:")),
                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
         choices = [_("clear"),
                    _("top color"),
@@ -1169,15 +1169,15 @@ class NvizToolWindow(FN.FlatNotebook):
         choice = wx.Choice(parent=panel, id=wx.ID_ANY, choices=choices)
         self.win['cplane']['shading'] = choice.GetId()
         choice.Bind(wx.EVT_CHOICE, self.OnCPlaneShading)
-        horSizer.Add(item=choice, flag=wx.ALL, border=5)
-        boxSizer.Add(item=horSizer, flag=wx.EXPAND)
+        horSizer.Add(choice, flag=wx.ALL, border=5)
+        boxSizer.Add(horSizer, flag=wx.EXPAND)
 
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         # cutting plane horizontal x position
         self.win['cplane']['position'] = {}
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Horizontal X:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Horizontal X:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         tooltip = _("Sets the X coordinate of the current cutting plane")
         self._createControl(panel,
@@ -1197,17 +1197,17 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['cplane']['position'][
                             'x']['text']).SetValue(0)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['cplane']['position']['x']['slider']), pos=(
                 0, 1), flag=wx.EXPAND | wx.ALIGN_RIGHT)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['cplane']['position']['x']['text']), pos=(
                 0, 2), flag=wx.ALIGN_CENTER)
 
         # cutting plane horizontal y position
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Horizontal Y:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Horizontal Y:")),
                       pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         tooltip = _("Sets the Y coordinate of the current cutting plane")
         self._createControl(panel,
@@ -1227,18 +1227,18 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['cplane']['position'][
                             'y']['text']).SetValue(0)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['cplane']['position']['y']['slider']), pos=(
                 1, 1), flag=wx.EXPAND | wx.ALIGN_RIGHT)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['cplane']['position']['y']['text']), pos=(
                 1, 2), flag=wx.ALIGN_CENTER)
 
         # cutting plane rotation
         self.win['cplane']['rotation'] = {}
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Rotation:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Rotation:")),
                       pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         tooltip = _("Rotates the current cutting plane about vertical axis")
         self._createControl(
@@ -1250,17 +1250,17 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['cplane']['rotation'][
                             'rot']['text']).SetValue(180)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['cplane']['rotation']['rot']['slider']), pos=(
                 2, 1), flag=wx.EXPAND | wx.ALIGN_RIGHT)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['cplane']['rotation']['rot']['text']), pos=(
                 2, 2), flag=wx.ALIGN_CENTER)
 
         # cutting plane tilt
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Tilt:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Tilt:")),
                       pos=(3, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         tooltip = _("Rotates the current cutting plane about horizontal axis")
         self._createControl(
@@ -1272,17 +1272,17 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['cplane']['rotation'][
                             'tilt']['text']).SetValue(0)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['cplane']['rotation']['tilt']['slider']), pos=(
                 3, 1), flag=wx.EXPAND | wx.ALIGN_RIGHT)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['cplane']['rotation']['tilt']['text']), pos=(
                 3, 2), flag=wx.ALIGN_CENTER)
 
         # cutting pland height
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Height:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Height:")),
                       pos=(4, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         tooltip = _(
             "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)")
@@ -1302,11 +1302,11 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['cplane']['position'][
                             'z']['text']).SetValue(0)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['cplane']['position']['z']['slider']), pos=(
                 4, 1), flag=wx.EXPAND | wx.ALIGN_RIGHT)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['cplane']['position']['z']['text']), pos=(
                 4, 2), flag=wx.ALIGN_CENTER)
 
@@ -1317,12 +1317,12 @@ class NvizToolWindow(FN.FlatNotebook):
             border=5)
 
         horSizer = wx.BoxSizer(wx.HORIZONTAL)
-        horSizer.Add(item=wx.Size(-1, -1), proportion=1, flag=wx.ALL, border=5)
+        horSizer.Add(wx.Size(-1, -1), proportion=1, flag=wx.ALL, border=5)
         # reset
         reset = wx.Button(parent=panel, id=wx.ID_ANY, label=_("Reset"))
         self.win['cplane']['reset'] = reset.GetId()
         reset.Bind(wx.EVT_BUTTON, self.OnCPlaneReset)
-        horSizer.Add(item=reset, flag=wx.ALL, border=5)
+        horSizer.Add(reset, flag=wx.ALL, border=5)
         boxSizer.Add(horSizer, proportion=0, flag=wx.EXPAND)
 
         pageSizer.Add(boxSizer, proportion=0, flag=wx.EXPAND)
@@ -1366,71 +1366,71 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['constant']['delete'] = delete.GetId()
 
         horsizer.Add(
-            item=addNew,
+            addNew,
             proportion=0,
             flag=wx.RIGHT | wx.LEFT,
             border=3)
         horsizer.Add(
-            item=delete,
+            delete,
             proportion=0,
             flag=wx.RIGHT | wx.LEFT,
             border=3)
 
-        boxSizer.Add(item=horsizer, proportion=0, flag=wx.ALL | wx.EXPAND,
+        boxSizer.Add(horsizer, proportion=0, flag=wx.ALL | wx.EXPAND,
                      border=5)
 
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
         # fine resolution
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Fine resolution:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Fine resolution:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         resF = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
-                           initial=3,
-                           min=1,
-                           max=100)
+                        initial=3,
+                        min=1,
+                        max=100)
         resF.SetName("value")
         self.win['constant']['resolution'] = resF.GetId()
         resF.Bind(wx.EVT_SPINCTRL, self.OnSetConstantProp)
         gridSizer.Add(
-            item=resF, pos=(0, 1),
+            resF, pos=(0, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
         # value
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Value:")), pos=(1, 0),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Value:")), pos=(1, 0),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         value = SpinCtrl(panel, id=wx.ID_ANY,
-                            min=-1e9, max=1e9,
-                            size=(65, -1))
+                         min=-1e9, max=1e9,
+                         size=(65, -1))
         self.win['constant']['value'] = value.GetId()
         value.Bind(wx.EVT_SPINCTRL, self.OnSetConstantProp)
-        gridSizer.Add(item=value, pos=(1, 1))
+        gridSizer.Add(value, pos=(1, 1))
 
         # transparency
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Transparency:")), pos=(2, 0),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Transparency:")), pos=(2, 0),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         transp = SpinCtrl(panel, id=wx.ID_ANY,
-                             min=0, max=100,
-                             size=(65, -1))
+                          min=0, max=100,
+                          size=(65, -1))
         self.win['constant']['transp'] = transp.GetId()
         transp.Bind(wx.EVT_SPINCTRL, self.OnSetConstantProp)
-        gridSizer.Add(item=transp, pos=(2, 1))
+        gridSizer.Add(transp, pos=(2, 1))
 
         # color
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Color:")), pos=(3, 0),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Color:")), pos=(3, 0),
                       flag=wx.ALIGN_CENTER_VERTICAL)
         color = csel.ColourSelect(panel, id=wx.ID_ANY,
                                   colour=(0, 0, 0),
                                   size=globalvar.DIALOG_COLOR_SIZE)
         self.win['constant']['color'] = color.GetId()
         color.Bind(csel.EVT_COLOURSELECT, self.OnSetConstantProp)
-        gridSizer.Add(item=color, pos=(3, 1))
-        boxSizer.Add(item=gridSizer, proportion=0, flag=wx.ALL,
+        gridSizer.Add(color, pos=(3, 1))
+        boxSizer.Add(gridSizer, proportion=0, flag=wx.ALL,
                      border=5)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL,
                       border=3)
 
@@ -1458,13 +1458,13 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['vector']['map'] = vmaps.GetId()
         desc = wx.StaticText(parent=panel, id=wx.ID_ANY)
         self.win['vector']['desc'] = desc.GetId()
-        boxSizer.Add(item=vmaps, proportion=0,
+        boxSizer.Add(vmaps, proportion=0,
                      flag=wx.ALL,
                      border=3)
-        boxSizer.Add(item=desc, proportion=0,
+        boxSizer.Add(desc, proportion=0,
                      flag=wx.ALL,
                      border=3)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -1480,7 +1480,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['vector']['lines']['show'] = showLines.GetId()
         showLines.Bind(wx.EVT_CHECKBOX, self.OnVectorShow)
 
-        pageSizer.Add(item=showLines, proportion=0, flag=wx.LEFT |
+        pageSizer.Add(showLines, proportion=0, flag=wx.LEFT |
                       wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
 
         box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
@@ -1489,27 +1489,27 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
 
         # width
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Line:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Line:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("width:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("width:")),
                       pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_RIGHT)
 
         width = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
-                            initial=1,
-                            min=1,
-                            max=100)
+                         initial=1,
+                         min=1,
+                         max=100)
         width.SetValue(1)
         self.win['vector']['lines']['width'] = width.GetId()
         width.Bind(wx.EVT_SPINCTRL, self.OnVectorLines)
-        gridSizer.Add(item=width, pos=(0, 2),
+        gridSizer.Add(width, pos=(0, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
 
         # color
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("color:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("color:")),
                       pos=(0, 3), flag=wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_RIGHT)
 
@@ -1519,7 +1519,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['vector']['lines']['color'] = color.GetId()
         color.Bind(csel.EVT_COLOURSELECT, self.OnVectorLines)
 
-        gridSizer.Add(item=color, pos=(0, 4), flag=wx.ALIGN_CENTER_VERTICAL |
+        gridSizer.Add(color, pos=(0, 4), flag=wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_LEFT)
 
         # thematic mapping
@@ -1541,37 +1541,37 @@ class NvizToolWindow(FN.FlatNotebook):
 
         vSizer = wx.BoxSizer(wx.VERTICAL)
         hSizer = wx.BoxSizer(wx.HORIZONTAL)
-        hSizer.Add(item=checkThematicColor, flag=wx.ALIGN_CENTER_VERTICAL,
+        hSizer.Add(checkThematicColor, flag=wx.ALIGN_CENTER_VERTICAL,
                    border=5)
         setThematic = wx.Button(parent=panel, id=wx.ID_ANY,
                                 label=_("Set options..."))
         self.win['vector']['lines']['thematic'][
             'buttoncolor'] = setThematic.GetId()
         setThematic.Bind(wx.EVT_BUTTON, self.OnSetThematic)
-        hSizer.Add(item=wx.Size(-1, -1), proportion=1)
-        hSizer.Add(item=setThematic, flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
+        hSizer.Add(wx.Size(-1, -1), proportion=1)
+        hSizer.Add(setThematic, flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
                    border=5, proportion=0)
         vSizer.Add(hSizer, flag=wx.EXPAND)
 
         hSizer = wx.BoxSizer(wx.HORIZONTAL)
-        hSizer.Add(item=checkThematicWidth, flag=wx.ALIGN_CENTER_VERTICAL,
+        hSizer.Add(checkThematicWidth, flag=wx.ALIGN_CENTER_VERTICAL,
                    border=5)
         setThematic = wx.Button(parent=panel, id=wx.ID_ANY,
                                 label=_("Set options..."))
         self.win['vector']['lines']['thematic'][
             'buttonwidth'] = setThematic.GetId()
         setThematic.Bind(wx.EVT_BUTTON, self.OnSetThematic)
-        hSizer.Add(item=wx.Size(-1, -1), proportion=1)
-        hSizer.Add(item=setThematic, flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
+        hSizer.Add(wx.Size(-1, -1), proportion=1)
+        hSizer.Add(setThematic, flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
                    border=5, proportion=0)
 
         vSizer.Add(hSizer, flag=wx.EXPAND)
-        gridSizer.Add(item=vSizer, flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+        gridSizer.Add(vSizer, flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos=(1, 1), span=(1, 5))
 
         # display
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Display")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Display")),
                       pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_LEFT)
 
@@ -1581,12 +1581,12 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['vector']['lines']['3d'] = display.GetId()
         display.Bind(wx.EVT_CHOICE, self.OnVectorLinesMode)
 
-        gridSizer.Add(item=display, flag=wx.ALIGN_CENTER_VERTICAL |
+        gridSizer.Add(display, flag=wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_LEFT | wx.EXPAND, pos=(2, 1), span=(1, 4))
 
         # height
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Height above surface:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Height above surface:")),
                       pos=(3, 5), flag=wx.ALIGN_BOTTOM | wx.EXPAND)
 
         surface = wx.CheckListBox(parent=panel, id=wx.ID_ANY, size=(-1, 60),
@@ -1594,7 +1594,7 @@ class NvizToolWindow(FN.FlatNotebook):
         surface.Bind(wx.EVT_CHECKLISTBOX, self.OnVectorSurface)
 
         self.win['vector']['lines']['surface'] = surface.GetId()
-        gridSizer.Add(item=surface,
+        gridSizer.Add(surface,
                       pos=(3, 0), span=(3, 5),
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
@@ -1616,18 +1616,18 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['vector']['lines'][
                             'height']['text']).SetValue(0)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['vector']['lines']['height']['slider']), pos=(
                 4, 5), flag=wx.EXPAND | wx.ALIGN_RIGHT)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['vector']['lines']['height']['text']), pos=(
                 5, 5), flag=wx.ALIGN_CENTER)
         gridSizer.AddGrowableCol(5)
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=3)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -1642,7 +1642,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['vector']['points']['show'] = showPoints.GetId()
         showPoints.Bind(wx.EVT_CHECKBOX, self.OnVectorShow)
 
-        pageSizer.Add(item=showPoints, proportion=0, flag=wx.LEFT |
+        pageSizer.Add(showPoints, proportion=0, flag=wx.LEFT |
                       wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
 
         box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
@@ -1652,11 +1652,11 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
 
         # icon size
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Icon:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Icon:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("size:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("size:")),
                       pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_RIGHT)
 
@@ -1669,19 +1669,19 @@ class NvizToolWindow(FN.FlatNotebook):
             isize.Bind(fs.EVT_FLOATSPIN, self.OnVectorPoints)
         else:
             isize = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
-                                initial=1,
-                                min=1,
-                                max=1e6)
+                             initial=1,
+                             min=1,
+                             max=1e6)
             isize.Bind(wx.EVT_SPINCTRL, self.OnVectorPoints)
         isize.SetName('value')
         isize.SetValue(100)
         self.win['vector']['points']['size'] = isize.GetId()
-        gridSizer.Add(item=isize, pos=(0, 2),
+        gridSizer.Add(isize, pos=(0, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
 
         # icon color
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("color:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("color:")),
                       pos=(0, 3), flag=wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_RIGHT)
         icolor = csel.ColourSelect(panel, id=wx.ID_ANY,
@@ -1690,7 +1690,7 @@ class NvizToolWindow(FN.FlatNotebook):
         icolor.SetColour((0, 0, 255))
         self.win['vector']['points']['color'] = icolor.GetId()
         icolor.Bind(csel.EVT_COLOURSELECT, self.OnVectorPoints)
-        gridSizer.Add(item=icolor, flag=wx.ALIGN_CENTER_VERTICAL |
+        gridSizer.Add(icolor, flag=wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_LEFT,
                       pos=(0, 4))
 
@@ -1713,7 +1713,7 @@ class NvizToolWindow(FN.FlatNotebook):
 # flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
         # icon symbol
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("symbol:")), pos=(
                 0, 5), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
         isym = wx.Choice(
@@ -1724,7 +1724,7 @@ class NvizToolWindow(FN.FlatNotebook):
         isym.SetName("selection")
         self.win['vector']['points']['marker'] = isym.GetId()
         isym.Bind(wx.EVT_CHOICE, self.OnVectorPoints)
-        gridSizer.Add(item=isym, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
+        gridSizer.Add(isym, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
                       pos=(0, 6))
         # thematic mapping
         self.win['vector']['points']['thematic'] = {}
@@ -1744,7 +1744,7 @@ class NvizToolWindow(FN.FlatNotebook):
         checkThematicSize.SetValue(False)
 
         gridSizer.Add(
-            item=checkThematicColor,
+            checkThematicColor,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
             pos=(
                 1,
@@ -1757,11 +1757,11 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['vector']['points']['thematic'][
             'buttoncolor'] = setThematic.GetId()
         setThematic.Bind(wx.EVT_BUTTON, self.OnSetThematic)
-        gridSizer.Add(item=setThematic, flag=wx.ALIGN_CENTER_VERTICAL,
+        gridSizer.Add(setThematic, flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(1, 6))
 
         gridSizer.Add(
-            item=checkThematicSize,
+            checkThematicSize,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
             pos=(
                 2,
@@ -1774,7 +1774,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['vector']['points']['thematic'][
             'buttonsize'] = setThematic.GetId()
         setThematic.Bind(wx.EVT_BUTTON, self.OnSetThematic)
-        gridSizer.Add(item=setThematic, flag=wx.ALIGN_CENTER_VERTICAL,
+        gridSizer.Add(setThematic, flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(2, 6))
         gridSizer.AddGrowableCol(0)
         gridSizer.AddGrowableCol(2)
@@ -1784,23 +1784,23 @@ class NvizToolWindow(FN.FlatNotebook):
         # high
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel, label=_("Display")), pos=(
                 0, 0), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
         display = wx.Choice(parent=panel)
         self.win['vector']['points']['3d'] = display.GetId()
         display.Bind(wx.EVT_CHOICE, self.OnVectorPointsMode)
-        gridSizer.Add(item=display,
+        gridSizer.Add(display,
                       pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Height above surface:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Height above surface:")),
                       pos=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
 
         surface = wx.CheckListBox(parent=panel, id=wx.ID_ANY, size=(-1, 60),
                                   choices=[], style=wx.LB_NEEDED_SB)
         surface.Bind(wx.EVT_CHECKLISTBOX, self.OnVectorSurface)
         self.win['vector']['points']['surface'] = surface.GetId()
-        gridSizer.Add(item=surface,
+        gridSizer.Add(surface,
                       pos=(1, 0), span=(3, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
@@ -1823,19 +1823,19 @@ class NvizToolWindow(FN.FlatNotebook):
                             'height']['text']).SetValue(0)
 
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['vector']['points']['height']['slider']), pos=(
                 2, 2), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['vector']['points']['height']['text']), pos=(
                 3, 2), flag=wx.ALIGN_CENTER)
         gridSizer.AddGrowableCol(2)
 
         vertSizer.Add(gridSizer, proportion=0, flag=wx.EXPAND, border=0)
-        boxSizer.Add(item=vertSizer, proportion=1,
+        boxSizer.Add(vertSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=3)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -1871,13 +1871,13 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['volume']['map'] = rmaps.GetId()
         desc = wx.StaticText(parent=panel, id=wx.ID_ANY)
         self.win['volume']['desc'] = desc.GetId()
-        boxSizer.Add(item=rmaps, proportion=0,
+        boxSizer.Add(rmaps, proportion=0,
                      flag=wx.ALL,
                      border=3)
-        boxSizer.Add(item=desc, proportion=0,
+        boxSizer.Add(desc, proportion=0,
                      flag=wx.ALL,
                      border=3)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -1892,8 +1892,8 @@ class NvizToolWindow(FN.FlatNotebook):
 # gridSizer.AddGrowableCol(4)
 
         # mode
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Mode:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Mode:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         mode = wx.Choice(parent=panel, id=wx.ID_ANY, size=(-1, -1),
                          choices=[_("isosurfaces"),
@@ -1902,12 +1902,12 @@ class NvizToolWindow(FN.FlatNotebook):
         mode.SetName("selection")
         mode.Bind(wx.EVT_CHOICE, self.OnVolumeMode)
         self.win['volume']['draw']['mode'] = mode.GetId()
-        gridSizer.Add(item=mode, flag=wx.ALIGN_CENTER_VERTICAL,
+        gridSizer.Add(mode, flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 1))
 
         # shading
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Shading:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Shading:")),
                       pos=(0, 2), flag=wx.ALIGN_CENTER_VERTICAL)
         shade = wx.Choice(parent=panel, id=wx.ID_ANY, size=(100, -1),
                           choices=[_("flat"),
@@ -1915,22 +1915,22 @@ class NvizToolWindow(FN.FlatNotebook):
         shade.SetName("selection")
         self.win['volume']['draw']['shading'] = shade.GetId()
         shade.Bind(wx.EVT_CHOICE, self.OnVolumeDrawMode)
-        gridSizer.Add(item=shade, flag=wx.ALIGN_CENTER_VERTICAL,
+        gridSizer.Add(shade, flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 3))
 
         # resolution (mode)
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Resolution:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Resolution:")),
                       pos=(0, 4), flag=wx.ALIGN_CENTER_VERTICAL)
         resol = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
-                            initial=1,
-                            min=1,
-                            max=100)
+                         initial=1,
+                         min=1,
+                         max=100)
         resol.SetName("value")
         self.win['volume']['draw']['resolution'] = resol.GetId()
         resol.Bind(wx.EVT_SPINCTRL, self.OnVolumeResolution)
         resol.Bind(wx.EVT_TEXT, self.OnVolumeResolution)
-        gridSizer.Add(item=resol, pos=(0, 5))
+        gridSizer.Add(resol, pos=(0, 5))
 
         # draw wire box
         box = wx.CheckBox(parent=panel, id=wx.ID_ANY,
@@ -1938,11 +1938,11 @@ class NvizToolWindow(FN.FlatNotebook):
         box.SetName("value")
         self.win['volume']['draw']['box'] = box.GetId()
         box.Bind(wx.EVT_CHECKBOX, self.OnVolumeDrawBox)
-        gridSizer.Add(item=box, pos=(1, 0), span=(1, 6))
+        gridSizer.Add(box, pos=(1, 0), span=(1, 6))
 
-        boxSizer.Add(item=gridSizer, proportion=0,
+        boxSizer.Add(gridSizer, proportion=0,
                      flag=wx.ALL | wx.EXPAND, border=3)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL,
                       border=3)
 
@@ -1963,36 +1963,36 @@ class NvizToolWindow(FN.FlatNotebook):
 
         self.win['volume']['isosurfs'] = isolevel.GetId()
         self.win['volume']['slices'] = isolevel.GetId()
-        gridSizer.Add(item=isolevel, pos=(0, 0), span=(4, 1))
+        gridSizer.Add(isolevel, pos=(0, 0), span=(4, 1))
 
         # buttons (add, delete, move up, move down)
         btnAdd = wx.Button(parent=panel, id=wx.ID_ADD)
         self.win['volume']['btnAdd'] = btnAdd.GetId()
         btnAdd.Bind(wx.EVT_BUTTON, self.OnVolumeAdd)
-        gridSizer.Add(item=btnAdd,
+        gridSizer.Add(btnAdd,
                       pos=(0, 1))
         btnDelete = wx.Button(parent=panel, id=wx.ID_DELETE)
         self.win['volume']['btnDelete'] = btnDelete.GetId()
         btnDelete.Bind(wx.EVT_BUTTON, self.OnVolumeDelete)
         btnDelete.Enable(False)
-        gridSizer.Add(item=btnDelete,
+        gridSizer.Add(btnDelete,
                       pos=(1, 1))
         btnMoveUp = wx.Button(parent=panel, id=wx.ID_UP)
         self.win['volume']['btnMoveUp'] = btnMoveUp.GetId()
         btnMoveUp.Bind(wx.EVT_BUTTON, self.OnVolumeMoveUp)
         btnMoveUp.Enable(False)
-        gridSizer.Add(item=btnMoveUp,
+        gridSizer.Add(btnMoveUp,
                       pos=(2, 1))
         btnMoveDown = wx.Button(parent=panel, id=wx.ID_DOWN)
         self.win['volume']['btnMoveDown'] = btnMoveDown.GetId()
         btnMoveDown.Bind(wx.EVT_BUTTON, self.OnVolumeMoveDown)
         btnMoveDown.Enable(False)
-        gridSizer.Add(item=btnMoveDown,
+        gridSizer.Add(btnMoveDown,
                       pos=(3, 1))
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=3)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
         # isosurface/slice
@@ -2010,7 +2010,7 @@ class NvizToolWindow(FN.FlatNotebook):
             flag=wx.EXPAND | wx.ALL,
             border=0)
         sizer.Hide(self.slicePanel)
-        pageSizer.Add(item=sizer, proportion=0,
+        pageSizer.Add(sizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL,
                       border=3)
         #
@@ -2051,21 +2051,21 @@ class NvizToolWindow(FN.FlatNotebook):
         ptext = self.FindWindowById(self.win['volume']['position']['text'])
         ptext.SetValue('0')
 
-        gridSizer.Add(item=axis, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
-        gridSizer.Add(item=pslide, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 1))
-        gridSizer.Add(item=ptext, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 2))
+        gridSizer.Add(axis, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
+        gridSizer.Add(pslide, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 1))
+        gridSizer.Add(ptext, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 2))
         gridSizer.Add(
-            item=reset,
+            reset,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
             pos=(
                 0,
                 3))
         gridSizer.AddGrowableCol(3)
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=3)
 
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
         panel.SetSizer(pageSizer)
@@ -2088,7 +2088,7 @@ class NvizToolWindow(FN.FlatNotebook):
         show.Bind(wx.EVT_CHECKBOX, self.OnShowLightModel)
         show.SetValue(True)
         self._display.showLight = True
-        pageSizer.Add(item=show, proportion=0,
+        pageSizer.Add(show, proportion=0,
                       flag=wx.ALL, border=3)
 # surface = wx.CheckBox(parent = panel, id = wx.ID_ANY,
 # label = _("Follow source viewpoint"))
@@ -2109,9 +2109,9 @@ class NvizToolWindow(FN.FlatNotebook):
                                   mapwindow=self.mapWindow)
         self.win['light']['position'] = pos.GetId()
         posSizer.Add(
-            item=pos, pos=(1, 1),
+            pos, pos=(1, 1),
             flag=wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=posSizer, pos=(0, 0))
+        gridSizer.Add(posSizer, pos=(0, 0))
 
         # height
         tooltip = _("Adjusts the light height")
@@ -2122,24 +2122,24 @@ class NvizToolWindow(FN.FlatNotebook):
 
         heightSizer = wx.GridBagSizer(vgap=3, hgap=3)
         heightSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 panel, id=wx.ID_ANY, label=_("Height:")), pos=(
                 0, 0), flag=wx.ALIGN_LEFT, span=(
                 1, 2))
         heightSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['light']['z']['slider']), flag=wx.ALIGN_RIGHT, pos=(
                 1, 0))
-        heightSizer.Add(item=self.FindWindowById(
+        heightSizer.Add(self.FindWindowById(
             self.win['light']['z']['text']),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT | wx.TOP |
             wx.BOTTOM | wx.RIGHT, pos=(1, 1))
 
-        gridSizer.Add(item=heightSizer, pos=(0, 2), flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(heightSizer, pos=(0, 2), flag=wx.ALIGN_RIGHT)
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=2)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -2150,7 +2150,7 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
 
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 panel, id=wx.ID_ANY, label=_("Color:")), pos=(
                 0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         color = csel.ColourSelect(
@@ -2159,10 +2159,10 @@ class NvizToolWindow(FN.FlatNotebook):
             size=globalvar.DIALOG_COLOR_SIZE)
         self.win['light']['color'] = color.GetId()
         color.Bind(csel.EVT_COLOURSELECT, self.OnLightColor)
-        gridSizer.Add(item=color, pos=(0, 2))
+        gridSizer.Add(color, pos=(0, 2))
 
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 panel, id=wx.ID_ANY, label=_("Brightness:")), pos=(
                 1, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         tooltip = _("Adjusts the brightness of the light")
@@ -2171,15 +2171,15 @@ class NvizToolWindow(FN.FlatNotebook):
                 0, 100), tooltip=tooltip, bind=(
                 self.OnLightValue, self.OnLightChanged, self.OnLightValue))
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['light']['bright']['slider']), pos=(
                 1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['light']['bright']['text']), pos=(
                 1, 2), flag=wx.ALIGN_CENTER)
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 panel, id=wx.ID_ANY, label=_("Ambient:")), pos=(
                 2, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         tooltip = _("Adjusts the ambient light")
@@ -2188,17 +2188,17 @@ class NvizToolWindow(FN.FlatNotebook):
                 0, 100), tooltip=tooltip, bind=(
                 self.OnLightValue, self.OnLightChanged, self.OnLightValue))
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['light']['ambient']['slider']), pos=(
                 2, 1), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.win['light']['ambient']['text']), pos=(
                 2, 2), flag=wx.ALIGN_CENTER)
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=2)
-        pageSizer.Add(item=boxSizer, proportion=0,
+        pageSizer.Add(boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -2239,10 +2239,10 @@ class NvizToolWindow(FN.FlatNotebook):
                        onPopup=self.GselectOnPopup)
         rmaps.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnSetSurface)
         self.win['fringe']['map'] = rmaps.GetId()
-        rboxSizer.Add(item=rmaps, proportion=0,
+        rboxSizer.Add(rmaps, proportion=0,
                       flag=wx.ALL,
                       border=3)
-        pageSizer.Add(item=rboxSizer, proportion=0,
+        pageSizer.Add(rboxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -2258,13 +2258,13 @@ class NvizToolWindow(FN.FlatNotebook):
                                  name=edge[1])
             self.win['fringe'][edge[1]] = chkbox.GetId()
             eboxSizer.Add(
-                item=chkbox,
+                chkbox,
                 proportion=0,
                 flag=wx.ADJUST_MINSIZE | wx.LEFT | wx.RIGHT,
                 border=5)
             chkbox.Bind(wx.EVT_CHECKBOX, self.OnFringe)
 
-        pageSizer.Add(item=eboxSizer, proportion=0,
+        pageSizer.Add(eboxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -2275,13 +2275,13 @@ class NvizToolWindow(FN.FlatNotebook):
 
         # elevation
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel, id=wx.ID_ANY,
                 label=_("Elevation of fringe from bottom:")),
             pos=(0, 0),
             flag=wx.ALIGN_CENTER_VERTICAL)
         spin = SpinCtrl(parent=panel, id=wx.ID_ANY,
-                           size=(65, -1), min=-1e6, max=1e6)
+                        size=(65, -1), min=-1e6, max=1e6)
         spin.SetValue(
             UserSettings.Get(
                 group='nviz',
@@ -2289,11 +2289,11 @@ class NvizToolWindow(FN.FlatNotebook):
                 subkey='elev'))
         spin.Bind(wx.EVT_SPINCTRL, self.OnFringe)
         self.win['fringe']['elev'] = spin.GetId()
-        gridSizer.Add(item=spin, pos=(0, 1))
+        gridSizer.Add(spin, pos=(0, 1))
 
         # color
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Color:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Color:")),
                       pos=(1, 0),
                       flag=wx.ALIGN_CENTER_VERTICAL)
         color = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
@@ -2302,11 +2302,11 @@ class NvizToolWindow(FN.FlatNotebook):
                                          subkey='color'))
         color.Bind(csel.EVT_COLOURSELECT, self.OnFringe)
         self.win['fringe']['color'] = color.GetId()
-        gridSizer.Add(item=color, pos=(1, 1))
+        gridSizer.Add(color, pos=(1, 1))
 
-        sboxSizer.Add(item=gridSizer, proportion=1,
+        sboxSizer.Add(gridSizer, proportion=1,
                       flag=wx.ALL | wx.EXPAND, border=3)
-        pageSizer.Add(item=sboxSizer, proportion=0,
+        pageSizer.Add(sboxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -2333,8 +2333,8 @@ class NvizToolWindow(FN.FlatNotebook):
         naboxSizer = wx.StaticBoxSizer(nabox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
         # size
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Arrow length (in map units):")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Arrow length (in map units):")),
                       pos=(0, 0), span=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
         sizeCtrl = NumTextCtrl(
             parent=panel, id=wx.ID_ANY, size=(
@@ -2345,8 +2345,8 @@ class NvizToolWindow(FN.FlatNotebook):
         sizeCtrl.Bind(wx.EVT_KILL_FOCUS, self.OnDecorationProp)
 
         # color
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Arrow color:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Arrow color:")),
                       pos=(1, 0), span=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
         color = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
                                   size=globalvar.DIALOG_COLOR_SIZE)
@@ -2359,19 +2359,19 @@ class NvizToolWindow(FN.FlatNotebook):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Place arrow"))
-        gridSizer.Add(item=toggle, pos=(2, 0))
+        gridSizer.Add(toggle, pos=(2, 0))
         toggle.Bind(wx.EVT_TOGGLEBUTTON, self.OnDecorationPlacement)
         self.win['decoration']['arrow']['place'] = toggle.GetId()
         toggle.SetName('placeArrow')
 
         delete = wx.Button(parent=panel, id=wx.ID_ANY, label=_("Delete"))
         self.win['decoration']['arrow']['delete'] = delete.GetId()
-        gridSizer.Add(item=delete, pos=(2, 1))
+        gridSizer.Add(delete, pos=(2, 1))
         delete.Bind(wx.EVT_BUTTON, self.OnArrowDelete)
         shown = self.mapWindow.decoration['arrow']['show']
         delete.Enable(shown)
-        naboxSizer.Add(item=gridSizer, proportion=0, flag=wx.EXPAND, border=3)
-        pageSizer.Add(item=naboxSizer, proportion=0,
+        naboxSizer.Add(gridSizer, proportion=0, flag=wx.EXPAND, border=3)
+        pageSizer.Add(naboxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -2382,8 +2382,8 @@ class NvizToolWindow(FN.FlatNotebook):
         naboxSizer = wx.StaticBoxSizer(nabox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
         # size
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Scale bar length (in map units):")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Scale bar length (in map units):")),
                       pos=(0, 0), span=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
         sizeCtrl = NumTextCtrl(
             parent=panel, id=wx.ID_ANY, size=(
@@ -2394,8 +2394,8 @@ class NvizToolWindow(FN.FlatNotebook):
         sizeCtrl.Bind(wx.EVT_KILL_FOCUS, self.OnDecorationProp)
 
         # color
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Scale bar color:")),
+        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=_("Scale bar color:")),
                       pos=(1, 0), span=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
         color = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
                                   size=globalvar.DIALOG_COLOR_SIZE)
@@ -2408,20 +2408,20 @@ class NvizToolWindow(FN.FlatNotebook):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Place new scale bar"))
-        gridSizer.Add(item=toggle, pos=(2, 0))
+        gridSizer.Add(toggle, pos=(2, 0))
         toggle.Bind(wx.EVT_TOGGLEBUTTON, self.OnDecorationPlacement)
         self.win['decoration']['scalebar']['place'] = toggle.GetId()
         toggle.SetName('placeScalebar')
 
         scalebarChoice = wx.Choice(parent=panel, id=wx.ID_ANY, choices=[])
         self.win['decoration']['scalebar']['choice'] = scalebarChoice.GetId()
-        gridSizer.Add(item=scalebarChoice, pos=(3, 0), flag=wx.EXPAND)
+        gridSizer.Add(scalebarChoice, pos=(3, 0), flag=wx.EXPAND)
         delete = wx.Button(parent=panel, id=wx.ID_ANY, label=_("Delete"))
         self.win['decoration']['scalebar']['delete'] = delete.GetId()
-        gridSizer.Add(item=delete, pos=(3, 1))
+        gridSizer.Add(delete, pos=(3, 1))
         delete.Bind(wx.EVT_BUTTON, self.OnScalebarDelete)
-        naboxSizer.Add(item=gridSizer, proportion=0, flag=wx.EXPAND, border=3)
-        pageSizer.Add(item=naboxSizer, proportion=0,
+        naboxSizer.Add(gridSizer, proportion=0, flag=wx.EXPAND, border=3)
+        pageSizer.Add(naboxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=3)
 
@@ -2805,7 +2805,7 @@ class NvizToolWindow(FN.FlatNotebook):
         inout = wx.CheckBox(parent=panel, id=wx.ID_ANY,
                             label=_("toggle normal direction"))
         gridSizer.Add(
-            item=inout, pos=(
+            inout, pos=(
                 0, 0), span=(
                 1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
         inout.Bind(wx.EVT_CHECKBOX, self.OnInOutMode)
@@ -2823,7 +2823,7 @@ class NvizToolWindow(FN.FlatNotebook):
             if code == 'topo':
                 colspan = 2
             gridSizer.Add(
-                item=wx.StaticText(
+                wx.StaticText(
                     parent=panel,
                     id=wx.ID_ANY,
                     label=attrb + ':'),
@@ -2850,7 +2850,7 @@ class NvizToolWindow(FN.FlatNotebook):
             if use:
                 self.win['volume'][code]['use'] = use.GetId()
                 use.Bind(wx.EVT_CHOICE, self.OnMapObjUse)
-                gridSizer.Add(item=use, flag=wx.ALIGN_CENTER_VERTICAL,
+                gridSizer.Add(use, flag=wx.ALIGN_CENTER_VERTICAL,
                               pos=(row, 1))
 
             if code != 'topo':
@@ -2863,7 +2863,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 else:
                     self.win['volume'][code]['map'] = map.GetTextCtrl().GetId()
                 map.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
-                gridSizer.Add(item=map, flag=wx.ALIGN_CENTER_VERTICAL,
+                gridSizer.Add(map, flag=wx.ALIGN_CENTER_VERTICAL,
                               pos=(row, 2))
             else:
                 map = None
@@ -2888,7 +2888,7 @@ class NvizToolWindow(FN.FlatNotebook):
             else:
                 size = (65, -1)
                 value = SpinCtrl(parent=panel, id=wx.ID_ANY, size=size,
-                                    initial=0)
+                                 initial=0)
                 if code == 'topo':
                     value.SetRange(minVal=-1e9, maxVal=1e9)
                 elif code in ('shine', 'transp'):
@@ -2900,11 +2900,11 @@ class NvizToolWindow(FN.FlatNotebook):
             if value:
                 self.win['volume'][code]['const'] = value.GetId()
                 if code == 'topo':
-                    gridSizer.Add(item=value, flag=wx.ALIGN_CENTER_VERTICAL,
+                    gridSizer.Add(value, flag=wx.ALIGN_CENTER_VERTICAL,
                                   pos=(row, 2))
                 else:
                     value.Enable(False)
-                    gridSizer.Add(item=value, flag=wx.ALIGN_CENTER_VERTICAL,
+                    gridSizer.Add(value, flag=wx.ALIGN_CENTER_VERTICAL,
                                   pos=(row, 3))
             else:
                 self.win['volume'][code]['const'] = None
@@ -2915,9 +2915,9 @@ class NvizToolWindow(FN.FlatNotebook):
 
             row += 1
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=3)
-        vSizer.Add(item=boxSizer, proportion=1,
+        vSizer.Add(boxSizer, proportion=1,
                    flag=wx.EXPAND, border=0)
         panel.SetSizer(vSizer)
 
@@ -2935,7 +2935,7 @@ class NvizToolWindow(FN.FlatNotebook):
 
         self.win['volume']['slice'] = {}
         hSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("Slice parallel to axis:")),
@@ -2956,21 +2956,21 @@ class NvizToolWindow(FN.FlatNotebook):
         for i in range(2):
             label = wx.StaticText(parent=panel, id=wx.ID_ANY)
             label.SetName('label_edge_' + str(i))
-            gridSizer.Add(item=label, pos=(0, i + 1),
+            gridSizer.Add(label, pos=(0, i + 1),
                           flag=wx.ALIGN_CENTER)
         for i in range(2, 4):
             label = wx.StaticText(parent=panel, id=wx.ID_ANY)
             label.SetName('label_edge_' + str(i))
-            gridSizer.Add(item=label, pos=(3, i - 1),
+            gridSizer.Add(label, pos=(3, i - 1),
                           flag=wx.ALIGN_CENTER)
         for i in range(2):
             label = wx.StaticText(parent=panel, id=wx.ID_ANY)
             label.SetName('label_coord_' + str(i))
-            gridSizer.Add(item=label, pos=(i + 1, 0),
+            gridSizer.Add(label, pos=(i + 1, 0),
                           flag=wx.ALIGN_CENTER_VERTICAL)
         label = wx.StaticText(parent=panel, id=wx.ID_ANY)
         label.SetName('label_coord_2')
-        gridSizer.Add(item=label, pos=(4, 0),
+        gridSizer.Add(label, pos=(4, 0),
                       flag=wx.ALIGN_CENTER_VERTICAL)
         # sliders
         for i, coord in enumerate(('x1', 'x2')):
@@ -2985,7 +2985,7 @@ class NvizToolWindow(FN.FlatNotebook):
             slider.Bind(
                 wx.EVT_SCROLL_THUMBRELEASE,
                 self.OnSlicePositionChanged)
-            gridSizer.Add(item=slider, pos=(1, i + 1),
+            gridSizer.Add(slider, pos=(1, i + 1),
                           flag=wx.ALIGN_CENTER | wx.EXPAND)
 
         for i, coord in enumerate(('y1', 'y2')):
@@ -3000,7 +3000,7 @@ class NvizToolWindow(FN.FlatNotebook):
             slider.Bind(
                 wx.EVT_SCROLL_THUMBRELEASE,
                 self.OnSlicePositionChanged)
-            gridSizer.Add(item=slider, pos=(2, i + 1),
+            gridSizer.Add(slider, pos=(2, i + 1),
                           flag=wx.ALIGN_CENTER | wx.EXPAND)
 
         for i, coord in enumerate(('z1', 'z2')):
@@ -3015,34 +3015,34 @@ class NvizToolWindow(FN.FlatNotebook):
             slider.Bind(
                 wx.EVT_SCROLL_THUMBRELEASE,
                 self.OnSlicePositionChanged)
-            gridSizer.Add(item=slider, pos=(4, i + 1),
+            gridSizer.Add(slider, pos=(4, i + 1),
                           flag=wx.ALIGN_CENTER | wx.EXPAND)
 
         gridSizer.AddGrowableCol(0, 1)
         gridSizer.AddGrowableCol(1, 2)
         gridSizer.AddGrowableCol(2, 2)
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=3)
 
         # transparency, reset
         hSizer = wx.BoxSizer()
-        hSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                      label=_("Transparency:")), proportion=0,
+        hSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Transparency:")), proportion=0,
                    flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT | wx.TOP, border=7)
         spin = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
-                           min=0, max=100, initial=0)
+                        min=0, max=100, initial=0)
         spin.Bind(wx.EVT_SPINCTRL, self.OnSliceTransparency)
         self.win['volume']['slice']['transp'] = spin.GetId()
-        hSizer.Add(item=spin, proportion=0,
+        hSizer.Add(spin, proportion=0,
                    flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.TOP, border=7)
 
-        hSizer.Add(item=wx.Size(-1, -1), proportion=1,
+        hSizer.Add(wx.Size(-1, -1), proportion=1,
                    flag=wx.EXPAND)
         reset = wx.Button(parent=panel, id=wx.ID_ANY, label=_("Reset"))
         reset.Bind(wx.EVT_BUTTON, self.OnSliceReset)
         self.win['volume']['slice']['reset'] = reset.GetId()
-        hSizer.Add(item=reset, proportion=0,
+        hSizer.Add(reset, proportion=0,
                    flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP, border=7)
 
         boxSizer.Add(hSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
@@ -3113,14 +3113,14 @@ class NvizToolWindow(FN.FlatNotebook):
             win.SetMinSize((minWidth, -1))
             win.Bind(wx.EVT_BUTTON, self.OnLookFrom)
             win.SetName(type + '_' + name)
-        sizer.Add(item=nw, pos=(0, 0), flag=wx.ALIGN_CENTER)
-        sizer.Add(item=n, pos=(0, 1), flag=wx.ALIGN_CENTER)
-        sizer.Add(item=ne, pos=(0, 2), flag=wx.ALIGN_CENTER)
-        sizer.Add(item=e, pos=(1, 2), flag=wx.ALIGN_CENTER)
-        sizer.Add(item=se, pos=(2, 2), flag=wx.ALIGN_CENTER)
-        sizer.Add(item=s, pos=(2, 1), flag=wx.ALIGN_CENTER)
-        sizer.Add(item=sw, pos=(2, 0), flag=wx.ALIGN_CENTER)
-        sizer.Add(item=w, pos=(1, 0), flag=wx.ALIGN_CENTER)
+        sizer.Add(nw, pos=(0, 0), flag=wx.ALIGN_CENTER)
+        sizer.Add(n, pos=(0, 1), flag=wx.ALIGN_CENTER)
+        sizer.Add(ne, pos=(0, 2), flag=wx.ALIGN_CENTER)
+        sizer.Add(e, pos=(1, 2), flag=wx.ALIGN_CENTER)
+        sizer.Add(se, pos=(2, 2), flag=wx.ALIGN_CENTER)
+        sizer.Add(s, pos=(2, 1), flag=wx.ALIGN_CENTER)
+        sizer.Add(sw, pos=(2, 0), flag=wx.ALIGN_CENTER)
+        sizer.Add(w, pos=(1, 0), flag=wx.ALIGN_CENTER)
 
     def __GetWindowName(self, data, id):
         for name in data.iterkeys():
@@ -5731,7 +5731,7 @@ class PositionWindow(wx.Window):
 
         self.SetBackgroundColour("WHITE")
 
-        self.pdc = wx.PseudoDC()
+        self.pdc = PseudoDC()
 
         self.pdc.SetBrush(wx.Brush(colour='dark green', style=wx.SOLID))
         self.pdc.SetPen(wx.Pen(colour='dark green', width=2, style=wx.SOLID))

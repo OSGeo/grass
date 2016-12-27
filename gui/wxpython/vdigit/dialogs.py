@@ -28,7 +28,7 @@ from core.gcmd import RunCommand, GError
 from core.debug import Debug
 from core.settings import UserSettings
 from core.utils import _
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 
 
 class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
@@ -103,7 +103,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             self.fidMulti.SetItems(choices)
             self.fidMulti.SetSelection(0)
 
-        listSizer.Add(item=self.list, proportion=1, flag=wx.EXPAND)
+        listSizer.Add(self.list, proportion=1, flag=wx.EXPAND)
 
         # add new category
         box = wx.StaticBox(parent=self, id=wx.ID_ANY,
@@ -127,21 +127,21 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         except KeyError:
             newCat = 1
         self.catNew = SpinCtrl(parent=self, id=wx.ID_ANY, size=(75, -1),
-                                  initial=newCat, min=0, max=1e9)
+                               initial=newCat, min=0, max=1e9)
         btnAddCat = wx.Button(self, wx.ID_ADD)
-        flexSizer.Add(item=layerNewTxt, proportion=0,
+        flexSizer.Add(layerNewTxt, proportion=0,
                       flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
-        flexSizer.Add(item=self.layerNew, proportion=0,
+        flexSizer.Add(self.layerNew, proportion=0,
                       flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
-        flexSizer.Add(item=catNewTxt, proportion=0,
+        flexSizer.Add(catNewTxt, proportion=0,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT,
                       border=10)
-        flexSizer.Add(item=self.catNew, proportion=0,
+        flexSizer.Add(self.catNew, proportion=0,
                       flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
-        flexSizer.Add(item=btnAddCat, proportion=0,
+        flexSizer.Add(btnAddCat, proportion=0,
                       flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
         addSizer.Add(
-            item=flexSizer,
+            flexSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=5)
@@ -165,23 +165,23 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         btnSizer.Realize()
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(item=listSizer, proportion=1,
+        mainSizer.Add(listSizer, proportion=1,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
-        mainSizer.Add(item=addSizer, proportion=0,
+        mainSizer.Add(addSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALIGN_CENTER |
                       wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
         fidSizer = wx.BoxSizer(wx.HORIZONTAL)
-        fidSizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY,
-                                        label=_("Feature id:")),
+        fidSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
+                                   label=_("Feature id:")),
                      proportion=0, border=5,
                      flag=wx.ALIGN_CENTER_VERTICAL)
-        fidSizer.Add(item=self.fidMulti, proportion=0,
+        fidSizer.Add(self.fidMulti, proportion=0,
                      flag=wx.EXPAND | wx.ALL, border=5)
-        fidSizer.Add(item=self.fidText, proportion=0,
+        fidSizer.Add(self.fidText, proportion=0,
                      flag=wx.EXPAND | wx.ALL, border=5)
-        mainSizer.Add(item=fidSizer, proportion=0,
+        mainSizer.Add(fidSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL, border=5)
-        mainSizer.Add(item=btnSizer, proportion=0,
+        mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.SetSizer(mainSizer)
@@ -621,7 +621,7 @@ class VDigitZBulkDialog(wx.Dialog):
             parent=self,
             label=_("%d lines selected for z bulk-labeling") %
             nselected)
-        border.Add(item=txt, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(txt, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         box = wx.StaticBox(
             parent=self,
@@ -636,8 +636,8 @@ class VDigitZBulkDialog(wx.Dialog):
         txt = wx.StaticText(parent=self,
                             label=_("Starting value"))
         self.value = SpinCtrl(parent=self, id=wx.ID_ANY, size=(150, -1),
-                                 initial=0,
-                                 min=-1e6, max=1e6)
+                              initial=0,
+                              min=-1e6, max=1e6)
         flexSizer.Add(txt, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(
             self.value,
@@ -648,8 +648,8 @@ class VDigitZBulkDialog(wx.Dialog):
         txt = wx.StaticText(parent=self,
                             label=_("Step"))
         self.step = SpinCtrl(parent=self, id=wx.ID_ANY, size=(150, -1),
-                                initial=0,
-                                min=0, max=1e6)
+                             initial=0,
+                             min=0, max=1e6)
         flexSizer.Add(txt, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(
             self.step,
@@ -657,11 +657,11 @@ class VDigitZBulkDialog(wx.Dialog):
             flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
 
         sizer.Add(
-            item=flexSizer,
+            flexSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=1)
-        border.Add(item=sizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=0)
+        border.Add(sizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=0)
 
         # buttons
         btnCancel = wx.Button(self, wx.ID_CANCEL)
@@ -676,11 +676,11 @@ class VDigitZBulkDialog(wx.Dialog):
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(
-            item=border,
+            border,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        mainSizer.Add(item=btnSizer, proportion=0,
+        mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.SetSizer(mainSizer)
@@ -723,7 +723,7 @@ class VDigitDuplicatesDialog(wx.Dialog):
             win = CheckListFeature(parent=panel, data=list(self.data[key]))
             self.winList.append(win.GetId())
 
-            border.Add(item=win, proportion=1,
+            border.Add(win, proportion=1,
                        flag=wx.ALL | wx.EXPAND, border=5)
 
             panel.SetSizer(border)
@@ -743,11 +743,11 @@ class VDigitDuplicatesDialog(wx.Dialog):
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(
-            item=self.notebook,
+            self.notebook,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        mainSizer.Add(item=btnSizer, proportion=0,
+        mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.SetSizer(mainSizer)

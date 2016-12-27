@@ -18,18 +18,24 @@ import os
 
 import wx
 from wx.lib.mixins.treemixin import VirtualTree, ExpansionState
+from core.globalvar import hasAgw, wxPythonPhoenix
 try:
     import wx.lib.agw.customtreectrl as CT
 except ImportError:
     import wx.lib.customtreectrl as CT
-import wx.gizmos as gizmos
+if wxPythonPhoenix:
+    try:
+        from agw.hypertreelist import HyperTreeList as TreeListCtrl
+    except ImportError: # if it's not there locally, try the wxPython lib.
+        from wx.lib.agw.hypertreelist import HyperTreeList as TreeListCtrl
+else:
+    from wx.gizmos import TreeListCtrl
 
 # needed just for testing
 if __name__ == '__main__':
     from grass.script.setup import set_gui_path
     set_gui_path()
 
-from core.globalvar import hasAgw
 from core.treemodel import TreeModel, DictNode
 from core.utils import _
 
@@ -192,10 +198,14 @@ class CTreeView(AbstractTreeViewMixin, CT.CustomTreeCtrl):
         self.RefreshItems()
 
 
-class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
+class TreeListView(AbstractTreeViewMixin, ExpansionState, TreeListCtrl):
 
     def __init__(self, model, parent, columns, **kw):
         self._columns = columns
+        if wxPythonPhoenix and 'style' in kw:
+            flags = kw['style']
+            kw['agwStyle'] = flags
+            del kw['style']
         super(TreeListView, self).__init__(parent=parent, model=model, **kw)
         for column in columns:
             self.AddColumn(column)

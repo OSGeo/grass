@@ -31,7 +31,7 @@ from core import globalvar
 from core.gcmd import GMessage
 from core.settings import UserSettings
 from gui_core.dialogs import SimpleDialog
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 
 
 class AddScattPlotDialog(wx.Dialog):
@@ -88,14 +88,14 @@ class AddScattPlotDialog(wx.Dialog):
 
         regionSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        dialogSizer.Add(item=self._addSelectSizer(title=self.band_1_label,
-                                                  sel=self.band_1_ch))
+        dialogSizer.Add(self._addSelectSizer(title=self.band_1_label,
+                                             sel=self.band_1_ch))
 
-        dialogSizer.Add(item=self._addSelectSizer(title=self.band_2_label,
-                                                  sel=self.band_2_ch))
+        dialogSizer.Add(self._addSelectSizer(title=self.band_2_label,
+                                             sel=self.band_2_ch))
 
         dialogSizer.Add(
-            item=self.btn_add,
+            self.btn_add,
             proportion=0,
             flag=wx.TOP | wx.ALIGN_RIGHT,
             border=5)
@@ -106,18 +106,18 @@ class AddScattPlotDialog(wx.Dialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         sizer.Add(
-            item=self.scattsBox,
+            self.scattsBox,
             proportion=1,
             flag=wx.EXPAND | wx.TOP,
             border=5)
         sizer.Add(
-            item=self.btn_remove,
+            self.btn_remove,
             proportion=0,
             flag=wx.TOP | wx.ALIGN_RIGHT,
             border=5)
 
         dialogSizer.Add(
-            item=sizer,
+            sizer,
             proportion=1,
             flag=wx.EXPAND | wx.TOP,
             border=5)
@@ -125,18 +125,18 @@ class AddScattPlotDialog(wx.Dialog):
         # buttons
         self.btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
 
-        self.btnsizer.Add(item=self.btn_close, proportion=0,
+        self.btnsizer.Add(self.btn_close, proportion=0,
                           flag=wx.RIGHT | wx.LEFT | wx.ALIGN_CENTER,
                           border=10)
 
-        self.btnsizer.Add(item=self.btn_ok, proportion=0,
+        self.btnsizer.Add(self.btn_ok, proportion=0,
                           flag=wx.RIGHT | wx.LEFT | wx.ALIGN_CENTER,
                           border=10)
 
-        dialogSizer.Add(item=self.btnsizer, proportion=0,
+        dialogSizer.Add(self.btnsizer, proportion=0,
                         flag=wx.ALIGN_CENTER | wx.TOP, border=5)
 
-        border.Add(item=dialogSizer, proportion=0,
+        border.Add(dialogSizer, proportion=0,
                    flag=wx.LEFT | wx.RIGHT | wx.BOTTOM, border=10)
 
         self.SetSizer(border)
@@ -163,13 +163,13 @@ class AddScattPlotDialog(wx.Dialog):
         selSizer = wx.BoxSizer(orient=wx.VERTICAL)
 
         selTitleSizer = wx.BoxSizer(wx.HORIZONTAL)
-        selTitleSizer.Add(item=title, proportion=1,
+        selTitleSizer.Add(title, proportion=1,
                           flag=wx.TOP | wx.EXPAND, border=5)
 
-        selSizer.Add(item=selTitleSizer, proportion=0,
+        selSizer.Add(selTitleSizer, proportion=0,
                      flag=wx.EXPAND)
 
-        selSizer.Add(item=sel, proportion=1,
+        selSizer.Add(sel, proportion=1,
                      flag=wx.EXPAND | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
                      border=5)
 
@@ -275,7 +275,7 @@ class ExportCategoryRaster(wx.Dialog):
         dataSizer = wx.BoxSizer(wx.VERTICAL)
 
         dataSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
                 label=_("Enter name of new vector map:")),
@@ -287,7 +287,7 @@ class ExportCategoryRaster(wx.Dialog):
                                      size=globalvar.DIALOG_GSELECT_SIZE)
         if self.rasterName:
             self.vectorNameCtrl.SetValue(self.rasterName)
-        dataSizer.Add(item=self.vectorNameCtrl,
+        dataSizer.Add(self.vectorNameCtrl,
                       proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
 
         # buttons
@@ -296,10 +296,10 @@ class ExportCategoryRaster(wx.Dialog):
         btnSizer.AddButton(self.btnOK)
         btnSizer.Realize()
 
-        sizer.Add(item=dataSizer, proportion=1,
+        sizer.Add(dataSizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.panel.SetSizer(sizer)
@@ -422,18 +422,18 @@ class SettingsDialog(wx.Dialog):
         for settKey in settsOrder:
             sett = setts[settKey]
             gridSizer.Add(
-                item=settsLabels[settKey],
+                settsLabels[settKey],
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     row,
                     0))
-            gridSizer.Add(item=self.settings[settKey],
+            gridSizer.Add(self.settings[settKey],
                           flag=wx.ALIGN_RIGHT | wx.ALL, border=5,
                           pos=(row, 1))
             row += 1
 
         gridSizer.AddGrowableCol(1)
-        selPolBoxSizer.Add(item=gridSizer, flag=wx.EXPAND)
+        selPolBoxSizer.Add(gridSizer, flag=wx.EXPAND)
 
         ell_box = wx.StaticBox(parent=self, id=wx.ID_ANY,
                                label=" %s " % _("Ellipses settings:"))
@@ -443,22 +443,22 @@ class SettingsDialog(wx.Dialog):
         sett = setts[settKey]
 
         row = 0
-        gridSizer.Add(item=self.settings["show_ellips"],
+        gridSizer.Add(self.settings["show_ellips"],
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
 
         gridSizer.AddGrowableCol(1)
-        ellPolBoxSizer.Add(item=gridSizer, flag=wx.EXPAND)
+        ellPolBoxSizer.Add(gridSizer, flag=wx.EXPAND)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(self.btnApply, flag=wx.LEFT | wx.RIGHT, border=5)
         btnSizer.Add(self.btnSave, flag=wx.LEFT | wx.RIGHT, border=5)
         btnSizer.Add(self.btnClose, flag=wx.LEFT | wx.RIGHT, border=5)
 
-        sizer.Add(item=selPolBoxSizer, flag=wx.EXPAND | wx.ALL, border=5)
-        sizer.Add(item=ellPolBoxSizer, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(selPolBoxSizer, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(ellPolBoxSizer, flag=wx.EXPAND | wx.ALL, border=5)
         sizer.Add(
-            item=btnSizer,
+            btnSizer,
             flag=wx.EXPAND | wx.ALL,
             border=5,
             proportion=0)

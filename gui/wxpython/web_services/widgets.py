@@ -21,19 +21,31 @@ import sys
 import shutil
 
 from copy import deepcopy
+from core import globalvar
 try:
     from xml.etree.ElementTree import ParseError
 except ImportError:  # < Python 2.7
     from xml.parsers.expat import ExpatError as ParseError
 
 import wx
-import wx.lib.flatnotebook as FN
+if globalvar.wxPythonPhoenix:
+    try:
+        import agw.flatnotebook as FN
+    except ImportError: # if it's not there locally, try the wxPython lib.
+        import wx.lib.agw.flatnotebook as FN
+else:
+    import wx.lib.flatnotebook as FN
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
 from wx.lib.newevent import NewEvent
-from wx.gizmos import TreeListCtrl
+if globalvar.wxPythonPhoenix:
+    try:
+        from agw.hypertreelist import HyperTreeList as TreeListCtrl
+    except ImportError: # if it's not there locally, try the wxPython lib.
+        from wx.lib.agw.hypertreelist import HyperTreeList as TreeListCtrl
+else:
+    from wx.gizmos import TreeListCtrl
 
-from core import globalvar
 from core.debug import Debug
 from core.gcmd import GWarning, GMessage
 from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
@@ -43,7 +55,7 @@ from web_services.cap_interface import WMSCapabilities, WMTSCapabilities, OnEart
 
 from gui_core.widgets import GNotebook
 from gui_core.widgets import ManageSettingsWidget
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 
 import grass.script as grass
 
@@ -148,7 +160,7 @@ class WSPanel(wx.Panel):
         grass.try_remove(self.cap_file)
 
     def _layout(self):
-        self._nb_sizer.Add(item=self.notebook, proportion=1, flag=wx.EXPAND)
+        self._nb_sizer.Add(self.notebook, proportion=1, flag=wx.EXPAND)
         self.SetSizer(self._nb_sizer)
 
     def _requestPage(self):
@@ -190,13 +202,13 @@ class WSPanel(wx.Panel):
         layersSizer = wx.StaticBoxSizer(self.layersBox, wx.HORIZONTAL)
 
         layersSizer.Add(
-            item=self.list,
+            self.list,
             proportion=1,
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5)
 
         self.req_page_sizer.Add(
-            item=layersSizer,
+            layersSizer,
             proportion=1,
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5)
@@ -205,22 +217,22 @@ class WSPanel(wx.Panel):
 
         if self.params['format'] is not None:
             self.source_sizer.Add(
-                item=self.params['format'],
+                self.params['format'],
                 flag=wx.LEFT | wx.RIGHT | wx.BOTTOM,
                 border=5)
 
         if self.params['srs'] is not None:
             self.source_sizer.Add(
-                item=projText,
+                projText,
                 flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
                 border=5)
             self.source_sizer.Add(
-                item=self.params['srs'],
+                self.params['srs'],
                 flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT | wx.TOP | wx.BOTTOM,
                 border=5)
 
         self.req_page_sizer.Add(
-            item=self.source_sizer,
+            self.source_sizer,
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5)
 
@@ -346,7 +358,7 @@ class WSPanel(wx.Panel):
                          flag=wx.EXPAND | wx.ALL,
                          border=5)
 
-            border.Add(item=boxSizer,
+            border.Add(boxSizer,
                        flag=wx.LEFT | wx.RIGHT | wx.UP | wx.EXPAND,
                        border=5)
 
@@ -375,14 +387,14 @@ class WSPanel(wx.Panel):
                               pos=(row, 0))
 
             if k != 'o':
-                gridSizer.Add(item=param,
+                gridSizer.Add(param,
                               flag=wx.ALIGN_RIGHT |
                               wx.ALIGN_CENTER_VERTICAL,
                               pos=(row, 1))
             row += 1
 
         gridSizer.AddGrowableCol(0)
-        border.Add(item=gridSizer,
+        border.Add(gridSizer,
                    flag=wx.LEFT | wx.RIGHT | wx.TOP | wx.EXPAND,
                    border=5)
 
@@ -395,14 +407,14 @@ class WSPanel(wx.Panel):
                           wx.ALIGN_CENTER_VERTICAL,
                           pos=(row, 0))
 
-            gridSizer.Add(item=self.params['urlparams'],
+            gridSizer.Add(self.params['urlparams'],
                           flag=wx.ALIGN_RIGHT |
                           wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                           pos=(row, 1))
 
             gridSizer.AddGrowableCol(1)
 
-            border.Add(item=gridSizer,
+            border.Add(gridSizer,
                        flag=wx.LEFT | wx.RIGHT | wx.TOP | wx.EXPAND,
                        border=5)
 
@@ -1156,7 +1168,7 @@ class WSManageSettingsWidget(ManageSettingsWidget):
         self.btnAddDefaultServers.Bind(wx.EVT_BUTTON, self.OnAddDefaultServers)
 
         ManageSettingsWidget._layout(self)
-        self.settingsSizer.Add(item=self.btnAddDefaultServers,
+        self.settingsSizer.Add(self.btnAddDefaultServers,
                                flag=wx.RIGHT,
                                border=5)
 

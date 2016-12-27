@@ -28,6 +28,7 @@ import grass.script as grass
 from grass.script.utils import try_remove
 
 from core.utils import _
+from gui_core.wrap import Button
 
 
 class PyShellWindow(wx.Panel):
@@ -49,16 +50,16 @@ class PyShellWindow(wx.Panel):
 
         sys.displayhook = self._displayhook
 
-        self.btnClear = wx.Button(self, wx.ID_CLEAR)
+        self.btnClear = Button(self, wx.ID_CLEAR)
         self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
-        self.btnClear.SetToolTipString(_("Delete all text from the shell"))
+        self.btnClear.SetToolTip(_("Delete all text from the shell"))
 
         self.simpleEditorHandler = simpleEditorHandler
         if simpleEditorHandler:
-            self.btnSimpleEditor = wx.Button(
+            self.btnSimpleEditor = Button(
                 self, id=wx.ID_ANY, label=_("Simple &editor"))
             self.btnSimpleEditor.Bind(wx.EVT_BUTTON, simpleEditorHandler)
-            self.btnSimpleEditor.SetToolTipString(
+            self.btnSimpleEditor.SetToolTip(
                 _("Open a simple Python code editor"))
 
         self._layout()
@@ -69,17 +70,17 @@ class PyShellWindow(wx.Panel):
     def _layout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        sizer.Add(item=self.shell, proportion=1,
+        sizer.Add(self.shell, proportion=1,
                   flag=wx.EXPAND)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         if self.simpleEditorHandler:
-            btnSizer.Add(item=self.btnSimpleEditor, proportion=0,
+            btnSizer.Add(self.btnSimpleEditor, proportion=0,
                          flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
         btnSizer.AddStretchSpacer()
-        btnSizer.Add(item=self.btnClear, proportion=0,
+        btnSizer.Add(self.btnClear, proportion=0,
                      flag=wx.EXPAND | wx.ALIGN_RIGHT, border=5)
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALIGN_RIGHT | wx.ALL | wx.EXPAND, border=5)
 
         sizer.Fit(self)

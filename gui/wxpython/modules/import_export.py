@@ -23,17 +23,24 @@ This program is free software under the GNU General Public License
 import os
 
 import wx
-import wx.lib.flatnotebook as FN
+from core import globalvar
+if globalvar.wxPythonPhoenix:
+    try:
+        import agw.flatnotebook as FN
+    except ImportError: # if it's not there locally, try the wxPython lib.
+        import wx.lib.agw.flatnotebook as FN
+else:
+    import wx.lib.flatnotebook as FN
 import wx.lib.filebrowsebutton as filebrowse
 
 from grass.script import core as grass
 from grass.script import task as gtask
 
-from core import globalvar
 from core.gcmd import RunCommand, GMessage, GWarning
 from gui_core.forms import CmdPanel
 from gui_core.gselect import OgrTypeSelect, GdalSelect, SubGroupSelect
 from gui_core.widgets import LayersList, GListCtrl, GNotebook
+from gui_core.wrap import Button
 from core.utils import GetValidLayerName, _
 from core.settings import UserSettings, GetDisplayVectSettings
 
@@ -106,15 +113,15 @@ class ImportDialog(wx.Dialog):
         # buttons
         #
         # cancel
-        self.btn_close = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btn_close.SetToolTipString(_("Close dialog"))
+        self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btn_close.SetToolTip(_("Close dialog"))
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         # run
-        self.btn_run = wx.Button(
+        self.btn_run = Button(
             parent=self.panel,
             id=wx.ID_OK,
             label=_("&Import"))
-        self.btn_run.SetToolTipString(_("Import selected layers"))
+        self.btn_run.SetToolTip(_("Import selected layers"))
         self.btn_run.SetDefault()
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
 
@@ -154,7 +161,7 @@ class ImportDialog(wx.Dialog):
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
 
         # dsn input
-        dialogSizer.Add(item=self.dsnInput, proportion=0,
+        dialogSizer.Add(self.dsnInput, proportion=0,
                         flag=wx.EXPAND)
 
         #
@@ -162,41 +169,41 @@ class ImportDialog(wx.Dialog):
         #
         layerSizer = wx.StaticBoxSizer(self.layerBox, wx.HORIZONTAL)
 
-        layerSizer.Add(item=self.list, proportion=1,
+        layerSizer.Add(self.list, proportion=1,
                        flag=wx.ALL | wx.EXPAND, border=5)
 
         dialogSizer.Add(
-            item=layerSizer,
+            layerSizer,
             proportion=1,
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5)
 
-        dialogSizer.Add(item=self.override, proportion=0,
+        dialogSizer.Add(self.override, proportion=0,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
-        dialogSizer.Add(item=self.overwrite, proportion=0,
+        dialogSizer.Add(self.overwrite, proportion=0,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
-        dialogSizer.Add(item=self.add, proportion=0,
+        dialogSizer.Add(self.add, proportion=0,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
-        dialogSizer.Add(item=self.closeOnFinish, proportion=0,
+        dialogSizer.Add(self.closeOnFinish, proportion=0,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
         #
         # buttons
         #
         btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
 
-        btnsizer.Add(item=self.btn_close, proportion=0,
+        btnsizer.Add(self.btn_close, proportion=0,
                      flag=wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER,
                      border=10)
 
-        btnsizer.Add(item=self.btn_run, proportion=0,
+        btnsizer.Add(self.btn_run, proportion=0,
                      flag=wx.RIGHT | wx.ALIGN_CENTER,
                      border=10)
 
         dialogSizer.Add(
-            item=btnsizer,
+            btnsizer,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.ALIGN_RIGHT,
             border=10)
@@ -388,10 +395,10 @@ class GdalImportDialog(ImportDialog):
 
         if link:
             self.btn_run.SetLabel(_("&Link"))
-            self.btn_run.SetToolTipString(_("Link selected layers"))
+            self.btn_run.SetToolTip(_("Link selected layers"))
         else:
             self.btn_run.SetLabel(_("&Import"))
-            self.btn_run.SetToolTipString(_("Import selected layers"))
+            self.btn_run.SetToolTip(_("Import selected layers"))
 
         self.doLayout()
 
@@ -529,10 +536,10 @@ class OgrImportDialog(ImportDialog):
 
         if link:
             self.btn_run.SetLabel(_("&Link"))
-            self.btn_run.SetToolTipString(_("Link selected layers"))
+            self.btn_run.SetToolTip(_("Link selected layers"))
         else:
             self.btn_run.SetLabel(_("&Import"))
-            self.btn_run.SetToolTipString(_("Import selected layers"))
+            self.btn_run.SetToolTip(_("Import selected layers"))
 
         self.doLayout()
 
@@ -659,10 +666,10 @@ class GdalOutputDialog(wx.Dialog):
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
         # buttons
-        self.btnCancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
-        self.btnCancel.SetToolTipString(_("Close dialog"))
-        self.btnOk = wx.Button(parent=self.panel, id=wx.ID_OK)
-        self.btnOk.SetToolTipString(_("Set external format and close dialog"))
+        self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btnCancel.SetToolTip(_("Close dialog"))
+        self.btnOk = Button(parent=self.panel, id=wx.ID_OK)
+        self.btnOk.SetToolTip(_("Set external format and close dialog"))
         self.btnOk.SetDefault()
 
         self.dsnInput = GdalSelect(parent=self, panel=self.panel,
@@ -678,19 +685,19 @@ class GdalOutputDialog(wx.Dialog):
     def _layout(self):
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
 
-        dialogSizer.Add(item=self.dsnInput, proportion=1,
+        dialogSizer.Add(self.dsnInput, proportion=1,
                         flag=wx.EXPAND)
 
         btnSizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        btnSizer.Add(item=self.btnCancel, proportion=0,
+        btnSizer.Add(self.btnCancel, proportion=0,
                      flag=wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER,
                      border=10)
-        btnSizer.Add(item=self.btnOk, proportion=0,
+        btnSizer.Add(self.btnOk, proportion=0,
                      flag=wx.RIGHT | wx.ALIGN_CENTER,
                      border=10)
 
         dialogSizer.Add(
-            item=btnSizer,
+            btnSizer,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.TOP | wx.ALIGN_RIGHT,
             border=10)
@@ -891,11 +898,11 @@ class ReprojectionDialog(wx.Dialog):
         self.btn_close = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
 
         # run
-        self.btn_run = wx.Button(
+        self.btn_run = Button(
             parent=self.panel,
             id=wx.ID_OK,
             label=_("&Import && reproject"))
-        self.btn_run.SetToolTipString(_("Reproject selected layers"))
+        self.btn_run.SetToolTip(_("Reproject selected layers"))
         self.btn_run.SetDefault()
 
         self.doLayout()
@@ -904,14 +911,14 @@ class ReprojectionDialog(wx.Dialog):
         """Do layout"""
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
 
-        dialogSizer.Add(item=self.labelText,
+        dialogSizer.Add(self.labelText,
                         flag=wx.ALL | wx.EXPAND, border=5)
 
-        self.layerSizer.Add(item=self.list, proportion=1,
+        self.layerSizer.Add(self.list, proportion=1,
                             flag=wx.ALL | wx.EXPAND, border=5)
 
         dialogSizer.Add(
-            item=self.layerSizer,
+            self.layerSizer,
             proportion=1,
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5)
@@ -921,16 +928,16 @@ class ReprojectionDialog(wx.Dialog):
         #
         btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
 
-        btnsizer.Add(item=self.btn_close, proportion=0,
+        btnsizer.Add(self.btn_close, proportion=0,
                      flag=wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER,
                      border=10)
 
-        btnsizer.Add(item=self.btn_run, proportion=0,
+        btnsizer.Add(self.btn_run, proportion=0,
                      flag=wx.RIGHT | wx.ALIGN_CENTER,
                      border=10)
 
         dialogSizer.Add(
-            item=btnsizer,
+            btnsizer,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.ALIGN_RIGHT,
             border=10)

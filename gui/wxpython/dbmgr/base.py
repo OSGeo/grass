@@ -40,7 +40,14 @@ import math
 from core import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
-import wx.lib.flatnotebook as FN
+
+if globalvar.wxPythonPhoenix:
+    try:
+        import agw.flatnotebook as FN
+    except ImportError: # if it's not there locally, try the wxPython lib.
+        import wx.lib.agw.flatnotebook as FN
+else:
+    import wx.lib.flatnotebook as FN
 import wx.lib.scrolledpanel as scrolled
 
 import grass.script as grass
@@ -53,7 +60,7 @@ from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc
 from core.debug import Debug
 from dbmgr.dialogs import ModifyTableRecord, AddColumnDialog
 from core.settings import UserSettings
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 
 
 class Log:
@@ -109,10 +116,10 @@ class VirtualAttributeList(wx.ListCtrl,
         self.attr2.SetBackgroundColour("white")
         self.il = wx.ImageList(16, 16)
         self.sm_up = self.il.Add(
-            wx.ArtProvider_GetBitmap(
+            wx.ArtProvider.GetBitmap(
                 wx.ART_GO_UP, wx.ART_TOOLBAR, (16, 16)))
         self.sm_dn = self.il.Add(
-            wx.ArtProvider_GetBitmap(
+            wx.ArtProvider.GetBitmap(
                 wx.ART_GO_DOWN, wx.ART_TOOLBAR, (16, 16)))
         self.SetImageList(self.il, wx.IMAGE_LIST_SMALL)
 
@@ -233,16 +240,24 @@ class VirtualAttributeList(wx.ListCtrl,
 
         i = 0
         info = wx.ListItem()
-        info.m_mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
-        info.m_image = -1
-        info.m_format = 0
+        if globalvar.wxPythonPhoenix:
+            info.Mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
+            info.Image = -1
+            info.Format = 0
+        else:
+            info.m_mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
+            info.m_image = -1
+            info.m_format = 0
         for column in columns:
-            info.m_text = column
-            self.InsertColumnInfo(i, info)
+            if globalvar.wxPythonPhoenix:
+                info.Text = column
+                self.InsertColumn(i, info)
+            else:
+                info.m_text = column
+                self.InsertColumnInfo(i, info)
             i += 1
-
             if i >= 256:
-                self.log.write(_("Can display only 256 columns."))
+                    self.log.write(_("Can display only 256 columns."))
 
         i = 0
         outFile.seek(0)
@@ -1149,7 +1164,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             win.Bind(wx.EVT_LEFT_DCLICK, self.OnDataDrawSelected)
             win.Bind(wx.EVT_COMMAND_LEFT_DCLICK, self.OnDataDrawSelected)
 
-        listSizer.Add(item=win, proportion=1,
+        listSizer.Add(win, proportion=1,
                       flag=wx.EXPAND | wx.ALL,
                       border=3)
 
@@ -1232,24 +1247,24 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         sqlSimpleWhereSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         sqlSimpleWhereSizer.Add(
-            item=sqlWhereColumn,
+            sqlWhereColumn,
             flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
             border=3)
         sqlSimpleWhereSizer.Add(
-            item=sqlWhereCond,
+            sqlWhereCond,
             flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
             border=3)
         sqlSimpleWhereSizer.Add(
-            item=sqlWhereValue,
+            sqlWhereValue,
             proportion=1,
             flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
             border=3)
         whereSimpleSqlPanel.SetSizer(sqlSimpleWhereSizer)
-        simpleSqlSizer.Add(item=sqlLabel, border=5, pos=(0, 0),
+        simpleSqlSizer.Add(sqlLabel, border=5, pos=(0, 0),
                            flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.LEFT)
-        simpleSqlSizer.Add(item=whereSimpleSqlPanel, border=5, pos=(0, 1),
+        simpleSqlSizer.Add(whereSimpleSqlPanel, border=5, pos=(0, 1),
                            flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.EXPAND)
-        simpleSqlSizer.Add(item=btnApply, border=5, pos=(0, 2),
+        simpleSqlSizer.Add(btnApply, border=5, pos=(0, 2),
                            flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP)
         simpleSqlSizer.AddGrowableCol(1)
 
@@ -1259,27 +1274,27 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         advancedSqlSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
         advancedSqlSizer.AddGrowableCol(0)
 
-        advancedSqlSizer.Add(item=sqlStatement,
+        advancedSqlSizer.Add(sqlStatement,
                              flag=wx.EXPAND | wx.ALL, border=5)
         advancedSqlSizer.Add(
-            item=btnSqlBuilder,
+            btnSqlBuilder,
             flag=wx.ALIGN_RIGHT | wx.TOP | wx.RIGHT | wx.BOTTOM,
             border=5)
 
-        sqlSizer.Add(item=sqlNtb,
+        sqlSizer.Add(sqlNtb,
                      flag=wx.ALL | wx.EXPAND,
                      border=3)
 
         advancedSqlPanel.SetSizer(advancedSqlSizer)
 
-        pageSizer.Add(item=listSizer,
+        pageSizer.Add(listSizer,
                       proportion=1,
                       flag=wx.ALL | wx.EXPAND,
                       border=5)
 
         sqlQueryPanel.SetSizer(sqlSizer)
 
-        pageSizer.Add(item=sqlQueryPanel,
+        pageSizer.Add(sqlQueryPanel,
                       proportion=0,
                       flag=wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.EXPAND,
                       border=5)
@@ -2261,7 +2276,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
                              label=" %s " % _("Database connection"))
         dbSizer = wx.StaticBoxSizer(dbBox, wx.VERTICAL)
         dbSizer.Add(
-            item=CreateDbInfoDesc(
+            CreateDbInfoDesc(
                 panel,
                 self.dbMgrData['mapDBInfo'],
                 layer),
@@ -2298,13 +2313,13 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         column.Bind(wx.EVT_TEXT_ENTER, self.OnTableItemAdd)
         self.layerPage[layer]['addColName'] = column.GetId()
         addSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("Column")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
             border=5)
-        addSizer.Add(item=column, proportion=1,
+        addSizer.Add(column, proportion=1,
                      flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                      border=5)
 
@@ -2317,29 +2332,29 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         ctype.Bind(wx.EVT_CHOICE, self.OnTableChangeType)
         self.layerPage[layer]['addColType'] = ctype.GetId()
         addSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("Type")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
             border=5)
-        addSizer.Add(item=ctype,
+        addSizer.Add(ctype,
                      flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                      border=5)
 
         length = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
-                             initial=250,
-                             min=1, max=1e6)
+                          initial=250,
+                          min=1, max=1e6)
         length.Enable(False)
         self.layerPage[layer]['addColLength'] = length.GetId()
         addSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("Length")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
             border=5)
-        addSizer.Add(item=length,
+        addSizer.Add(length,
                      flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                      border=5)
 
@@ -2347,7 +2362,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         btnAddCol.Bind(wx.EVT_BUTTON, self.OnTableItemAdd)
         btnAddCol.Enable(False)
         self.layerPage[layer]['addColButton'] = btnAddCol.GetId()
-        addSizer.Add(item=btnAddCol, flag=wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND,
+        addSizer.Add(btnAddCol, flag=wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND,
                      border=3)
 
         # manage columns (rename)
@@ -2362,13 +2377,13 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         columnFrom.SetSelection(0)
         self.layerPage[layer]['renameCol'] = columnFrom.GetId()
         renameSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("Column")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
             border=5)
-        renameSizer.Add(item=columnFrom, proportion=1,
+        renameSizer.Add(columnFrom, proportion=1,
                         flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                         border=5)
 
@@ -2378,13 +2393,13 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         columnTo.Bind(wx.EVT_TEXT_ENTER, self.OnTableItemChange)
         self.layerPage[layer]['renameColTo'] = columnTo.GetId()
         renameSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_("To")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
             border=5)
-        renameSizer.Add(item=columnTo, proportion=1,
+        renameSizer.Add(columnTo, proportion=1,
                         flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                         border=5)
 
@@ -2396,30 +2411,30 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         btnRenameCol.Enable(False)
         self.layerPage[layer]['renameColButton'] = btnRenameCol.GetId()
         renameSizer.Add(
-            item=btnRenameCol,
+            btnRenameCol,
             flag=wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND,
             border=3)
 
-        tableSizer.Add(item=tlist,
+        tableSizer.Add(tlist,
                        flag=wx.ALL | wx.EXPAND,
                        proportion=1,
                        border=3)
 
-        pageSizer.Add(item=dbSizer,
+        pageSizer.Add(dbSizer,
                       flag=wx.ALL | wx.EXPAND,
                       proportion=0,
                       border=3)
 
-        pageSizer.Add(item=tableSizer,
+        pageSizer.Add(tableSizer,
                       flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
                       proportion=1,
                       border=3)
 
-        pageSizer.Add(item=addSizer,
+        pageSizer.Add(addSizer,
                       flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
                       proportion=0,
                       border=3)
-        pageSizer.Add(item=renameSizer,
+        pageSizer.Add(renameSizer,
                       flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
                       proportion=0,
                       border=3)
@@ -2759,12 +2774,12 @@ class DbMgrLayersPage(wx.Panel):
             self.OnLayerRightUp)  # wxMSW
         self.layerList.Bind(wx.EVT_RIGHT_UP, self.OnLayerRightUp)  # wxGTK
 
-        layerSizer.Add(item=self.layerList,
+        layerSizer.Add(self.layerList,
                        flag=wx.ALL | wx.EXPAND,
                        proportion=1,
                        border=3)
 
-        panelListSizer.Add(item=layerSizer,
+        panelListSizer.Add(layerSizer,
                            flag=wx.ALL | wx.EXPAND,
                            proportion=1,
                            border=3)
@@ -2783,13 +2798,13 @@ class DbMgrLayersPage(wx.Panel):
         if not self.dbMgrData['editable']:
             self.manageLayerBook.Enable(False)
 
-        manageSizer.Add(item=self.manageLayerBook,
+        manageSizer.Add(self.manageLayerBook,
                         proportion=1,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
                         border=5)
 
         panelSizer = wx.BoxSizer(wx.VERTICAL)
-        panelSizer.Add(item=splitterWin,
+        panelSizer.Add(splitterWin,
                        proportion=1,
                        flag=wx.EXPAND)
 
@@ -3057,8 +3072,8 @@ class LayerBook(wx.Notebook):
                                 (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
                                                label='%s:' % _("Layer")),
                                  SpinCtrl(parent=self.addPanel, id=wx.ID_ANY, size=(65, -1),
-                                             initial=maxLayer + 1,
-                                             min=1, max=1e6)),
+                                          initial=maxLayer + 1,
+                                          min=1, max=1e6)),
                                 'driver':
                                     (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
                                                    label='%s:' % _("Driver")),
@@ -3155,7 +3170,7 @@ class LayerBook(wx.Notebook):
                 span = (1, 2)
             else:
                 span = (1, 1)
-            dataSizer.Add(item=label,
+            dataSizer.Add(label,
                           flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0),
                           span=span)
 
@@ -3168,34 +3183,34 @@ class LayerBook(wx.Notebook):
             else:
                 style = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND
 
-            dataSizer.Add(item=value,
+            dataSizer.Add(value,
                           flag=style, pos=(row, 1))
 
             row += 1
 
         dataSizer.AddGrowableCol(1)
-        layerSizer.Add(item=dataSizer,
+        layerSizer.Add(dataSizer,
                        proportion=1,
                        flag=wx.ALL | wx.EXPAND,
                        border=5)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item=btnDefault,
+        btnSizer.Add(btnDefault,
                      proportion=0,
                      flag=wx.ALL | wx.ALIGN_LEFT,
                      border=5)
 
-        btnSizer.Add(item=(5, 5),
+        btnSizer.Add((5, 5),
                      proportion=1,
                      flag=wx.ALL | wx.EXPAND,
                      border=5)
 
-        btnSizer.Add(item=btnLayer,
+        btnSizer.Add(btnLayer,
                      proportion=0,
                      flag=wx.ALL | wx.ALIGN_RIGHT,
                      border=5)
 
-        layerSizer.Add(item=btnSizer,
+        layerSizer.Add(btnSizer,
                        proportion=0,
                        flag=wx.ALL | wx.EXPAND,
                        border=0)
@@ -3205,27 +3220,27 @@ class LayerBook(wx.Notebook):
         dataSizer.AddGrowableCol(1)
         for key in ['table', 'key']:
             label, value = self.tableWidgets[key]
-            dataSizer.Add(item=label,
+            dataSizer.Add(label,
                           flag=wx.ALIGN_CENTER_VERTICAL)
-            dataSizer.Add(item=value,
+            dataSizer.Add(value,
                           flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
-        tableSizer.Add(item=dataSizer,
+        tableSizer.Add(dataSizer,
                        proportion=1,
                        flag=wx.ALL | wx.EXPAND,
                        border=5)
 
-        tableSizer.Add(item=btnTable,
+        tableSizer.Add(btnTable,
                        proportion=0,
                        flag=wx.ALL | wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT,
                        border=5)
 
-        pageSizer.Add(item=layerSizer,
+        pageSizer.Add(layerSizer,
                       proportion=3,
                       flag=wx.ALL | wx.EXPAND,
                       border=3)
 
-        pageSizer.Add(item=tableSizer,
+        pageSizer.Add(tableSizer,
                       proportion=2,
                       flag=wx.TOP | wx.BOTTOM | wx.RIGHT | wx.EXPAND,
                       border=3)
@@ -3284,27 +3299,27 @@ class LayerBook(wx.Notebook):
 
         flexSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
 
-        flexSizer.Add(item=label,
+        flexSizer.Add(label,
                       flag=wx.ALIGN_CENTER_VERTICAL)
-        flexSizer.Add(item=self.deleteLayer,
+        flexSizer.Add(self.deleteLayer,
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
-        dataSizer.Add(item=flexSizer,
+        dataSizer.Add(flexSizer,
                       proportion=0,
                       flag=wx.ALL | wx.EXPAND,
                       border=1)
 
-        dataSizer.Add(item=self.deleteTable,
+        dataSizer.Add(self.deleteTable,
                       proportion=0,
                       flag=wx.ALL | wx.EXPAND,
                       border=1)
 
-        pageSizer.Add(item=dataSizer,
+        pageSizer.Add(dataSizer,
                       proportion=1,
                       flag=wx.ALL | wx.EXPAND,
                       border=5)
 
-        pageSizer.Add(item=btnDelete,
+        pageSizer.Add(btnDelete,
                       proportion=0,
                       flag=wx.ALL | wx.ALIGN_RIGHT,
                       border=5)
@@ -3404,21 +3419,21 @@ class LayerBook(wx.Notebook):
         dataSizer.AddGrowableCol(1)
         for key in ('layer', 'driver', 'database', 'table', 'key'):
             label, value = self.modifyLayerWidgets[key]
-            dataSizer.Add(item=label,
+            dataSizer.Add(label,
                           flag=wx.ALIGN_CENTER_VERTICAL)
             if key == 'layer':
-                dataSizer.Add(item=value,
+                dataSizer.Add(value,
                               flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
             else:
-                dataSizer.Add(item=value,
+                dataSizer.Add(value,
                               flag=wx.ALIGN_CENTER_VERTICAL)
 
-        pageSizer.Add(item=dataSizer,
+        pageSizer.Add(dataSizer,
                       proportion=1,
                       flag=wx.ALL | wx.EXPAND,
                       border=5)
 
-        pageSizer.Add(item=btnModify,
+        pageSizer.Add(btnModify,
                       proportion=0,
                       flag=wx.ALL | wx.ALIGN_RIGHT,
                       border=5)
@@ -3789,28 +3804,28 @@ class FieldStatistics(wx.Frame):
         txtSizer = wx.BoxSizer(wx.VERTICAL)
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        txtSizer.Add(item=self.text, proportion=1, flag=wx.EXPAND |
+        txtSizer.Add(self.text, proportion=1, flag=wx.EXPAND |
                      wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
 
         self.sp.SetSizer(txtSizer)
         self.sp.SetAutoLayout(True)
         self.sp.SetupScrolling()
 
-        sizer.Add(item=self.sp, proportion=1, flag=wx.GROW |
+        sizer.Add(self.sp, proportion=1, flag=wx.GROW |
                   wx.LEFT | wx.RIGHT | wx.BOTTOM, border=3)
 
         line = wx.StaticLine(parent=self.panel, id=wx.ID_ANY,
                              size=(20, -1), style=wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0, flag=wx.GROW |
+        sizer.Add(line, proportion=0, flag=wx.GROW |
                   wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=3)
 
         # buttons
-        btnSizer.Add(item=self.btnClipboard, proportion=0,
+        btnSizer.Add(self.btnClipboard, proportion=0,
                      flag=wx.ALIGN_LEFT | wx.ALL, border=5)
-        btnSizer.Add(item=self.btnCancel, proportion=0,
+        btnSizer.Add(self.btnCancel, proportion=0,
                      flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
         sizer.Add(
-            item=btnSizer,
+            btnSizer,
             proportion=0,
             flag=wx.ALIGN_RIGHT | wx.ALL,
             border=5)

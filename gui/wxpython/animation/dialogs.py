@@ -36,7 +36,7 @@ from core.settings import UserSettings
 from core.utils import _
 from gui_core.gselect import Select
 from gui_core.widgets import FloatValidator
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 
 from animation.utils import TemporalMode, getRegisteredMaps, getNameAndLayer, getCpuCount
 from animation.data import AnimationData, AnimLayer
@@ -113,22 +113,22 @@ class SpeedDialog(wx.Dialog):
         # TODO total time
 
         gridSizer.Add(
-            item=labelDuration, pos=(0, 0),
+            labelDuration, pos=(0, 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
-        gridSizer.Add(item=self.spinDuration, pos=(0, 1), flag=wx.ALIGN_CENTER)
+        gridSizer.Add(self.spinDuration, pos=(0, 1), flag=wx.ALIGN_CENTER)
         gridSizer.Add(
-            item=labelUnits, pos=(0, 2),
+            labelUnits, pos=(0, 2),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
         gridSizer.AddGrowableCol(0)
 
         box.Add(
-            item=gridSizer,
+            gridSizer,
             proportion=1,
             border=5,
             flag=wx.ALL | wx.EXPAND)
         self.nontemporalSizer = gridSizer
         mainSizer.Add(
-            item=box,
+            box,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=5)
@@ -153,29 +153,29 @@ class SpeedDialog(wx.Dialog):
         # TODO total time
 
         gridSizer.Add(
-            item=labelTimeUnit, pos=(0, 0),
+            labelTimeUnit, pos=(0, 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
-        gridSizer.Add(item=self.choiceUnits, pos=(0, 1),
+        gridSizer.Add(self.choiceUnits, pos=(0, 1),
                       flag=wx.ALIGN_CENTER | wx.EXPAND)
         gridSizer.Add(
-            item=labelDuration, pos=(1, 0),
+            labelDuration, pos=(1, 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
         gridSizer.Add(
-            item=self.spinDurationTemp, pos=(
+            self.spinDurationTemp, pos=(
                 1, 1), flag=wx.ALIGN_CENTER | wx.EXPAND)
         gridSizer.Add(
-            item=labelUnits, pos=(1, 2),
+            labelUnits, pos=(1, 2),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
         gridSizer.AddGrowableCol(1)
 
         self.temporalSizer = gridSizer
         box.Add(
-            item=gridSizer,
+            gridSizer,
             proportion=1,
             border=5,
             flag=wx.ALL | wx.EXPAND)
         mainSizer.Add(
-            item=box,
+            box,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=5)
@@ -196,7 +196,7 @@ class SpeedDialog(wx.Dialog):
         btnStdSizer.AddButton(self.btnCancel)
         btnStdSizer.Realize()
 
-        mainSizer.Add(item=btnStdSizer, proportion=0,
+        mainSizer.Add(btnStdSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.SetSizer(mainSizer)
@@ -359,7 +359,7 @@ class InputDialog(wx.Dialog):
         btnStdSizer.AddButton(self.btnCancel)
         btnStdSizer.Realize()
 
-        sizer.Add(item=btnStdSizer, proportion=0,
+        sizer.Add(btnStdSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -396,33 +396,33 @@ class InputDialog(wx.Dialog):
 
         gridSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 panel,
                 id=wx.ID_ANY,
                 label=_("Name:")),
             flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=self.nameCtrl, proportion=1, flag=wx.EXPAND)
+        gridSizer.Add(self.nameCtrl, proportion=1, flag=wx.EXPAND)
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 panel,
                 id=wx.ID_ANY,
                 label=_("Window position:")),
             flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.windowChoice,
+            self.windowChoice,
             proportion=1,
             flag=wx.ALIGN_RIGHT)
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 panel,
                 id=wx.ID_ANY,
                 label=_("View mode:")),
             flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=self.nDChoice, proportion=1, flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(self.nDChoice, proportion=1, flag=wx.ALIGN_RIGHT)
         gridSizer.AddGrowableCol(0, 1)
         gridSizer.AddGrowableCol(1, 1)
         mainSizer.Add(
-            item=gridSizer,
+            gridSizer,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=5)
@@ -431,9 +431,9 @@ class InputDialog(wx.Dialog):
             "or one series of map layers.")
         self.warning3DLayers = wx.StaticText(panel, label=label)
         self.warning3DLayers.SetForegroundColour(
-            wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT))
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
         mainSizer.Add(
-            item=self.warning3DLayers,
+            self.warning3DLayers,
             proportion=0,
             flag=wx.EXPAND | wx.LEFT,
             border=5)
@@ -441,12 +441,12 @@ class InputDialog(wx.Dialog):
         self.dataPanel = self._createDataPanel(panel)
         self.threeDPanel = self._create3DPanel(panel)
         mainSizer.Add(
-            item=self.dataPanel,
+            self.dataPanel,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=3)
         mainSizer.Add(
-            item=self.threeDPanel,
+            self.threeDPanel,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=3)
@@ -477,10 +477,10 @@ class InputDialog(wx.Dialog):
         self.legendBtn.Bind(wx.EVT_BUTTON, self.OnLegendProperties)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.Add(item=self.legend, proportion=1, flag=wx.ALIGN_CENTER_VERTICAL)
-        hbox.Add(item=self.legendBtn, proportion=0, flag=wx.LEFT, border=5)
+        hbox.Add(self.legend, proportion=1, flag=wx.ALIGN_CENTER_VERTICAL)
+        hbox.Add(self.legendBtn, proportion=0, flag=wx.LEFT, border=5)
         slmgrSizer.Add(
-            item=hbox,
+            hbox,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=3)
@@ -519,23 +519,23 @@ class InputDialog(wx.Dialog):
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.Add(
-            item=self.fileSelector,
+            self.fileSelector,
             proportion=1,
             flag=wx.EXPAND | wx.ALIGN_CENTER)
         dataBoxSizer.Add(
-            item=hbox,
+            hbox,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=3)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.Add(
-            item=self.paramLabel,
+            self.paramLabel,
             proportion=1,
             flag=wx.ALIGN_CENTER_VERTICAL)
-        hbox.Add(item=self.paramChoice, proportion=1, flag=wx.EXPAND)
+        hbox.Add(self.paramChoice, proportion=1, flag=wx.EXPAND)
         dataBoxSizer.Add(
-            item=hbox,
+            hbox,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=3)
@@ -795,7 +795,7 @@ class EditDialog(wx.Dialog):
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=5)
-        mainSizer.Add(item=sizer, proportion=0,
+        mainSizer.Add(sizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL, border=5)
 
         # buttons
@@ -809,7 +809,7 @@ class EditDialog(wx.Dialog):
         btnStdSizer.AddButton(self.btnCancel)
         btnStdSizer.Realize()
 
-        mainSizer.Add(item=btnStdSizer, proportion=0,
+        mainSizer.Add(btnStdSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.SetSizer(mainSizer)
@@ -927,7 +927,7 @@ class ExportDialog(wx.Dialog):
         notebook.AddPage(
             page=self._createDecorationsPanel(notebook),
             text=_("Decorations"))
-        mainSizer.Add(item=notebook, proportion=0,
+        mainSizer.Add(notebook, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.btnExport = wx.Button(self, wx.ID_OK)
@@ -943,7 +943,7 @@ class ExportDialog(wx.Dialog):
         btnStdSizer.AddButton(self.btnCancel)
         btnStdSizer.Realize()
 
-        mainSizer.Add(item=btnStdSizer, proportion=0,
+        mainSizer.Add(btnStdSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
         self.SetSizer(mainSizer)
 
@@ -1156,7 +1156,7 @@ class ExportDialog(wx.Dialog):
             lambda event: self.ChangeFormat(
                 event.GetSelection()))
         hSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 panel,
                 id=wx.ID_ANY,
                 label=_("Export to:")),
@@ -1164,12 +1164,12 @@ class ExportDialog(wx.Dialog):
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=2)
         hSizer.Add(
-            item=self.formatChoice,
+            self.formatChoice,
             proportion=1,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.ALL,
             border=2)
         borderSizer.Add(
-            item=hSizer,
+            hSizer,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=3)
@@ -1216,7 +1216,7 @@ class ExportDialog(wx.Dialog):
         dirGridSizer.Fit(imSeqPanel)
 
         self.formatPanelSizer.Add(
-            item=imSeqPanel,
+            imSeqPanel,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
@@ -1241,7 +1241,7 @@ class ExportDialog(wx.Dialog):
         gifGridSizer.Fit(gifPanel)
 
         self.formatPanelSizer.Add(
-            item=gifPanel,
+            gifPanel,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
@@ -1265,7 +1265,7 @@ class ExportDialog(wx.Dialog):
         swfGridSizer.Fit(swfPanel)
 
         self.formatPanelSizer.Add(
-            item=swfPanel,
+            swfPanel,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
@@ -1325,7 +1325,7 @@ class ExportDialog(wx.Dialog):
         aviGridSizer.Fit(aviPanel)
 
         self.formatPanelSizer.Add(
-            item=aviPanel,
+            aviPanel,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
@@ -1859,7 +1859,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row = 0
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 label=_("Background color:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -1876,11 +1876,11 @@ class PreferencesDialog(PreferencesBaseDialog):
         color.SetName('GetColour')
         self.winId['animation:bgcolor:color'] = color.GetId()
 
-        gridSizer.Add(item=color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
 
         row += 1
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 label=_("Number of parallel processes:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -1905,11 +1905,11 @@ class PreferencesDialog(PreferencesBaseDialog):
         nprocs.SetName('GetValue')
         self.winId['animation:nprocs:value'] = nprocs.GetId()
 
-        gridSizer.Add(item=nprocs, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(nprocs, pos=(row, 1), flag=wx.ALIGN_RIGHT)
 
         row += 1
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 label=_("Text foreground color:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -1926,11 +1926,11 @@ class PreferencesDialog(PreferencesBaseDialog):
         color.SetName('GetColour')
         self.winId['animation:font:fgcolor'] = color.GetId()
 
-        gridSizer.Add(item=color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
 
         row += 1
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 label=_("Text background color:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -1947,15 +1947,15 @@ class PreferencesDialog(PreferencesBaseDialog):
         color.SetName('GetColour')
         self.winId['animation:font:bgcolor'] = color.GetId()
 
-        gridSizer.Add(item=color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
 
         gridSizer.AddGrowableCol(1)
         sizer.Add(
-            item=gridSizer,
+            gridSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=3)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
         panel.SetSizer(border)
 
         return panel
@@ -1972,7 +1972,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row = 0
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 label=_("Absolute time format:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -1983,7 +1983,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.tempFormat.SetItems(self._timeFormats)
         self.tempFormat.SetValue(self._initFormat)
         self.winId['animation:temporal:format'] = self.tempFormat.GetId()
-        gridSizer.Add(item=self.tempFormat, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(self.tempFormat, pos=(row, 1), flag=wx.ALIGN_RIGHT)
         self.infoTimeLabel = wx.StaticText(parent=panel)
         self.tempFormat.Bind(
             wx.EVT_COMBOBOX,
@@ -1998,7 +1998,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                 "different date and time formats. "
                 "Type custom format string."))
         row += 1
-        gridSizer.Add(item=self.infoTimeLabel, pos=(row, 0), span=(1, 2),
+        gridSizer.Add(self.infoTimeLabel, pos=(row, 0), span=(1, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
         self._setTimeFormat(self.tempFormat.GetValue())
 
@@ -2009,12 +2009,12 @@ class PreferencesDialog(PreferencesBaseDialog):
             url="http://docs.python.org/2/library/datetime.html#"
             "strftime-and-strptime-behavior")
         link.SetNormalColour(
-            wx.SystemSettings_GetColour(
+            wx.SystemSettings.GetColour(
                 wx.SYS_COLOUR_GRAYTEXT))
         link.SetVisitedColour(
-            wx.SystemSettings_GetColour(
+            wx.SystemSettings.GetColour(
                 wx.SYS_COLOUR_GRAYTEXT))
-        gridSizer.Add(item=link, pos=(row, 0), span=(1, 2),
+        gridSizer.Add(link, pos=(row, 0), span=(1, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
 
         row += 2
@@ -2033,16 +2033,16 @@ class PreferencesDialog(PreferencesBaseDialog):
                     'nodata',
                     'enable']))
         self.winId['animation:temporal:nodata:enable'] = noDataCheck.GetId()
-        gridSizer.Add(item=noDataCheck, pos=(row, 0), span=(1, 2),
+        gridSizer.Add(noDataCheck, pos=(row, 0), span=(1, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
 
         gridSizer.AddGrowableCol(1)
         sizer.Add(
-            item=gridSizer,
+            gridSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=3)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
         panel.SetSizer(border)
 
         return panel

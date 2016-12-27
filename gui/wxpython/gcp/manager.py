@@ -35,11 +35,16 @@ from copy import copy
 import wx
 from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, ListCtrlAutoWidthMixin
 import wx.lib.colourselect as csel
-import wx.wizard as wiz
+
+from core import globalvar
+if globalvar.wxPythonPhoenix:
+    from wx.adv import Wizard as wiz
+else:
+    import wx.wizard as wiz
 
 import grass.script as grass
 
-from core import globalvar
+
 from core import utils
 from core.render import Map
 from core.utils import _
@@ -49,7 +54,7 @@ from core.gcmd import RunCommand, GMessage, GError, GWarning, EncodeString
 from core.settings import UserSettings
 from gcp.mapdisplay import MapFrame
 from core.giface import Notification
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 
 from location_wizard.wizard import TitledPage as TitledPage
 
@@ -358,13 +363,13 @@ class LocationPage(TitledPage):
             parent=self, id=wx.ID_ANY, label=' %s ' %
             _("Map type to georectify"), choices=[
                 _('raster'), _('vector')], majorDimension=wx.RA_SPECIFY_COLS)
-        self.sizer.Add(item=self.rb_maptype,
+        self.sizer.Add(self.rb_maptype,
                        flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND, border=5,
                        pos=(1, 1), span=(1, 2))
 
         # location
         self.sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select source location:')),
@@ -376,7 +381,7 @@ class LocationPage(TitledPage):
         self.cb_location = LocationSelect(
             parent=self, gisdbase=self.grassdatabase)
         self.sizer.Add(
-            item=self.cb_location,
+            self.cb_location,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(
@@ -385,7 +390,7 @@ class LocationPage(TitledPage):
 
         # mapset
         self.sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select source mapset:')),
@@ -396,7 +401,7 @@ class LocationPage(TitledPage):
                 1))
         self.cb_mapset = MapsetSelect(parent=self, gisdbase=self.grassdatabase,
                                       setItems=False)
-        self.sizer.Add(item=self.cb_mapset, flag=wx.ALIGN_LEFT |
+        self.sizer.Add(self.cb_mapset, flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5, pos=(3, 2))
         self.sizer.AddGrowableCol(2)
 
@@ -498,7 +503,7 @@ class GroupPage(TitledPage):
         #
         # group
         self.sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select group:')),
@@ -510,12 +515,12 @@ class GroupPage(TitledPage):
         self.cb_group = wx.ComboBox(parent=self, id=wx.ID_ANY,
                                     choices=self.groupList, size=(350, -1),
                                     style=wx.CB_DROPDOWN | wx.CB_READONLY)
-        self.sizer.Add(item=self.cb_group, flag=wx.ALIGN_LEFT |
+        self.sizer.Add(self.cb_group, flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5, pos=(1, 2))
 
         # create group
         self.sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Create group if none exists')),
@@ -533,14 +538,14 @@ class GroupPage(TitledPage):
             parent=self,
             id=wx.ID_ANY,
             label=_("Add vector map to group..."))
-        btnSizer.Add(item=self.btn_mkgroup,
+        btnSizer.Add(self.btn_mkgroup,
                      flag=wx.RIGHT, border=5)
 
-        btnSizer.Add(item=self.btn_vgroup,
+        btnSizer.Add(self.btn_vgroup,
                      flag=wx.LEFT, border=5)
 
         self.sizer.Add(
-            item=btnSizer,
+            btnSizer,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(
@@ -549,7 +554,7 @@ class GroupPage(TitledPage):
 
         # extension
         self.sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Extension for output maps:')),
@@ -562,7 +567,7 @@ class GroupPage(TitledPage):
             parent=self, id=wx.ID_ANY, value="", size=(
                 350, -1))
         self.ext_txt.SetValue(self.extension)
-        self.sizer.Add(item=self.ext_txt, flag=wx.ALIGN_LEFT |
+        self.sizer.Add(self.ext_txt, flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5, pos=(3, 2))
 
         self.sizer.AddGrowableCol(2)
@@ -701,7 +706,7 @@ class DispMapPage(TitledPage):
         # layout
         #
         self.sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select source map to display:')),
@@ -719,7 +724,7 @@ class DispMapPage(TitledPage):
             updateOnPopup=False)
 
         self.sizer.Add(
-            item=self.srcselection,
+            self.srcselection,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(
@@ -727,7 +732,7 @@ class DispMapPage(TitledPage):
                 2))
 
         self.sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select target raster map to display:')),
@@ -742,7 +747,7 @@ class DispMapPage(TitledPage):
             type='raster', updateOnPopup=False)
 
         self.sizer.Add(
-            item=self.tgtrastselection,
+            self.tgtrastselection,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(
@@ -750,7 +755,7 @@ class DispMapPage(TitledPage):
                 2))
 
         self.sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select target vector map to display:')),
@@ -765,7 +770,7 @@ class DispMapPage(TitledPage):
             type='vector', updateOnPopup=False)
 
         self.sizer.Add(
-            item=self.tgtvectselection,
+            self.tgtvectselection,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(
@@ -2412,21 +2417,21 @@ class VectGroup(wx.Dialog):
 
         box = wx.BoxSizer(wx.HORIZONTAL)
         box.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_('Select vector map(s) to add to group:')),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT,
             border=5)
 
-        box.Add(item=self.listMap,
+        box.Add(self.listMap,
                 flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT,
                 border=5)
 
         sizer.Add(box, flag=wx.ALIGN_RIGHT | wx.ALL,
                   border=3)
 
-        sizer.Add(item=line, proportion=0,
+        sizer.Add(line, proportion=0,
                   flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                   border=5)
 
@@ -2436,7 +2441,7 @@ class VectGroup(wx.Dialog):
         btnSizer.AddButton(self.btnOK)
         btnSizer.Realize()
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER,
                   border=5)
 
@@ -2503,14 +2508,14 @@ class EditGCP(wx.Dialog):
                            (_("target N:"), self.ncoord)):
             label = wx.StaticText(parent=panel, id=wx.ID_ANY,
                                   label=label)
-            gridSizer.Add(item=label,
+            gridSizer.Add(label,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(row, col))
 
             col += 1
             win.SetValue(str(data[idx]))
 
-            gridSizer.Add(item=win,
+            gridSizer.Add(win,
                           pos=(row, col))
 
             col += 1
@@ -2520,10 +2525,10 @@ class EditGCP(wx.Dialog):
                 row += 1
                 col = 0
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.EXPAND | wx.ALL, border=5)
 
-        sizer.Add(item=boxSizer, proportion=1,
+        sizer.Add(boxSizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL, border=5)
 
         #
@@ -2538,7 +2543,7 @@ class EditGCP(wx.Dialog):
         btnSizer.AddButton(self.btnOk)
         btnSizer.Realize()
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         panel.SetSizer(sizer)
@@ -2622,11 +2627,11 @@ class GrSettingsDialog(wx.Dialog):
         # sizers
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(
-            item=notebook,
+            notebook,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        mainSizer.Add(item=btnSizer, proportion=0,
+        mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
         #              flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
@@ -2650,7 +2655,7 @@ class GrSettingsDialog(wx.Dialog):
         hh = UserSettings.Get(group='gcpman', key='rms', subkey='highestonly')
         self.highlighthighest.SetValue(hh)
         rmsgridSizer.Add(
-            item=self.highlighthighest,
+            self.highlighthighest,
             flag=wx.ALIGN_CENTER_VERTICAL,
             pos=(
                 0,
@@ -2667,7 +2672,7 @@ class GrSettingsDialog(wx.Dialog):
                     "mean + standard deviation * given factor. \n"
                     "Recommended values for this factor are between 1 and 2.")))
         rmsgridSizer.Add(
-            item=rmslabel,
+            rmslabel,
             flag=wx.ALIGN_CENTER_VERTICAL,
             pos=(
                 1,
@@ -2681,9 +2686,9 @@ class GrSettingsDialog(wx.Dialog):
             self.rmsWin.Disable()
 
         self.symbol['sdfactor'] = self.rmsWin.GetId()
-        rmsgridSizer.Add(item=self.rmsWin, flag=wx.ALIGN_RIGHT, pos=(1, 1))
+        rmsgridSizer.Add(self.rmsWin, flag=wx.ALIGN_RIGHT, pos=(1, 1))
         rmsgridSizer.AddGrowableCol(1)
-        sizer.Add(item=rmsgridSizer, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(rmsgridSizer, flag=wx.EXPAND | wx.ALL, border=5)
 
         box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
                            label=" %s " % _("Symbol settings"))
@@ -2695,7 +2700,7 @@ class GrSettingsDialog(wx.Dialog):
         #
         row = 0
         label = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Color:"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         col = UserSettings.Get(group='gcpman', key='symbol', subkey='color')
         colWin = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
                                    colour=wx.Colour(col[0],
@@ -2703,7 +2708,7 @@ class GrSettingsDialog(wx.Dialog):
                                                     col[2],
                                                     255))
         self.symbol['color'] = colWin.GetId()
-        gridSizer.Add(item=colWin,
+        gridSizer.Add(colWin,
                       flag=wx.ALIGN_RIGHT,
                       pos=(row, 1))
 
@@ -2715,7 +2720,7 @@ class GrSettingsDialog(wx.Dialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Color for high RMS error:"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         hcol = UserSettings.Get(group='gcpman', key='symbol', subkey='hcolor')
         hcolWin = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
                                     colour=wx.Colour(hcol[0],
@@ -2723,7 +2728,7 @@ class GrSettingsDialog(wx.Dialog):
                                                      hcol[2],
                                                      255))
         self.symbol['hcolor'] = hcolWin.GetId()
-        gridSizer.Add(item=hcolWin,
+        gridSizer.Add(hcolWin,
                       flag=wx.ALIGN_RIGHT,
                       pos=(row, 1))
 
@@ -2735,7 +2740,7 @@ class GrSettingsDialog(wx.Dialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Color for selected GCP:"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         scol = UserSettings.Get(group='gcpman', key='symbol', subkey='scolor')
         scolWin = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
                                     colour=wx.Colour(scol[0],
@@ -2743,7 +2748,7 @@ class GrSettingsDialog(wx.Dialog):
                                                      scol[2],
                                                      255))
         self.symbol['scolor'] = scolWin.GetId()
-        gridSizer.Add(item=scolWin,
+        gridSizer.Add(scolWin,
                       flag=wx.ALIGN_RIGHT,
                       pos=(row, 1))
 
@@ -2755,7 +2760,7 @@ class GrSettingsDialog(wx.Dialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Color for unused GCPs:"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         ucol = UserSettings.Get(group='gcpman', key='symbol', subkey='ucolor')
         ucolWin = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
                                     colour=wx.Colour(ucol[0],
@@ -2763,7 +2768,7 @@ class GrSettingsDialog(wx.Dialog):
                                                      ucol[2],
                                                      255))
         self.symbol['ucolor'] = ucolWin.GetId()
-        gridSizer.Add(item=ucolWin,
+        gridSizer.Add(ucolWin,
                       flag=wx.ALIGN_RIGHT,
                       pos=(row, 1))
 
@@ -2774,7 +2779,7 @@ class GrSettingsDialog(wx.Dialog):
         shuu = UserSettings.Get(group='gcpman', key='symbol', subkey='unused')
         self.showunused.SetValue(shuu)
         gridSizer.Add(
-            item=self.showunused,
+            self.showunused,
             flag=wx.ALIGN_CENTER_VERTICAL,
             pos=(
                 row,
@@ -2788,17 +2793,17 @@ class GrSettingsDialog(wx.Dialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Symbol size:"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         symsize = int(
             UserSettings.Get(
                 group='gcpman',
                 key='symbol',
                 subkey='size'))
         sizeWin = SpinCtrl(parent=panel, id=wx.ID_ANY,
-                              min=1, max=20)
+                           min=1, max=20)
         sizeWin.SetValue(symsize)
         self.symbol['size'] = sizeWin.GetId()
-        gridSizer.Add(item=sizeWin,
+        gridSizer.Add(sizeWin,
                       flag=wx.ALIGN_RIGHT,
                       pos=(row, 1))
 
@@ -2810,23 +2815,23 @@ class GrSettingsDialog(wx.Dialog):
             parent=panel,
             id=wx.ID_ANY,
             label=_("Line width:"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         width = int(
             UserSettings.Get(
                 group='gcpman',
                 key='symbol',
                 subkey='width'))
         widWin = SpinCtrl(parent=panel, id=wx.ID_ANY,
-                             min=1, max=10)
+                          min=1, max=10)
         widWin.SetValue(width)
         self.symbol['width'] = widWin.GetId()
-        gridSizer.Add(item=widWin,
+        gridSizer.Add(widWin,
                       flag=wx.ALIGN_RIGHT,
                       pos=(row, 1))
         gridSizer.AddGrowableCol(1)
 
-        boxSizer.Add(item=gridSizer, flag=wx.EXPAND)
-        sizer.Add(item=boxSizer, flag=wx.EXPAND | wx.ALL, border=5)
+        boxSizer.Add(gridSizer, flag=wx.EXPAND)
+        sizer.Add(boxSizer, flag=wx.EXPAND | wx.ALL, border=5)
 
         #
         # maps to display
@@ -2858,7 +2863,7 @@ class GrSettingsDialog(wx.Dialog):
         self.tgtvectselection.GetElementList()
 
         sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Select source map to display:')),
@@ -2866,13 +2871,13 @@ class GrSettingsDialog(wx.Dialog):
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)
         sizer.Add(
-            item=self.srcselection,
+            self.srcselection,
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)
         self.srcselection.SetValue(src_map)
         sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Select target raster map to display:')),
@@ -2880,13 +2885,13 @@ class GrSettingsDialog(wx.Dialog):
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)
         sizer.Add(
-            item=self.tgtrastselection,
+            self.tgtrastselection,
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)
         self.tgtrastselection.SetValue(tgt_map['raster'])
         sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Select target vector map to display:')),
@@ -2894,7 +2899,7 @@ class GrSettingsDialog(wx.Dialog):
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)
         sizer.Add(
-            item=self.tgtvectselection,
+            self.tgtvectselection,
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)
@@ -2930,14 +2935,14 @@ class GrSettingsDialog(wx.Dialog):
                 _('2nd order'),
                 _('3rd order')],
             majorDimension=wx.RA_SPECIFY_COLS)
-        sizer.Add(item=self.rb_grorder, proportion=0,
+        sizer.Add(self.rb_grorder, proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=5)
         self.rb_grorder.SetSelection(self.parent.gr_order - 1)
 
         # interpolation method
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Select interpolation method:')),
@@ -2948,22 +2953,22 @@ class GrSettingsDialog(wx.Dialog):
             border=5)
         self.grmethod = wx.Choice(parent=panel, id=wx.ID_ANY,
                                   choices=self.methods)
-        gridSizer.Add(item=self.grmethod, pos=(0, 1),
+        gridSizer.Add(self.grmethod, pos=(0, 1),
                       flag=wx.ALIGN_RIGHT, border=5)
         self.grmethod.SetStringSelection(self.parent.gr_method)
         gridSizer.AddGrowableCol(1)
-        sizer.Add(item=gridSizer, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(gridSizer, flag=wx.EXPAND | wx.ALL, border=5)
 
         # clip to region
         self.check = wx.CheckBox(parent=panel, id=wx.ID_ANY, label=_(
             "clip to computational region in target location"))
-        sizer.Add(item=self.check, proportion=0,
+        sizer.Add(self.check, proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=5)
         self.check.SetValue(self.parent.clip_to_region)
 
         # extension
         sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Extension for output maps:')),
@@ -2975,7 +2980,7 @@ class GrSettingsDialog(wx.Dialog):
                 350, -1))
         self.ext_txt.SetValue(self.parent.extension)
         sizer.Add(
-            item=self.ext_txt,
+            self.ext_txt,
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)

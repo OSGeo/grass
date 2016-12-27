@@ -80,7 +80,7 @@ class DataCatalogFrame(wx.Frame):
         btnSizer.AddStretchSpacer()
         btnSizer.Add(self.btnClose)
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND,
                   border=5)
 

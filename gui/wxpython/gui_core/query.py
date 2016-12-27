@@ -42,15 +42,15 @@ class QueryDialog(wx.Dialog):
         helpText = wx.StaticText(self.panel, wx.ID_ANY, label=_(
             "Right click to copy selected values to clipboard."))
         helpText.SetForegroundColour(
-            wx.SystemSettings_GetColour(
+            wx.SystemSettings.GetColour(
                 wx.SYS_COLOUR_GRAYTEXT))
-        self.mainSizer.Add(item=helpText, proportion=0, flag=wx.ALL, border=5)
+        self.mainSizer.Add(helpText, proportion=0, flag=wx.ALL, border=5)
 
         self._colNames = [_("Feature"), _("Value")]
         self._model = QueryTreeBuilder(self.data, column=self._colNames[1])
         self.tree = TreeListView(model=self._model, parent=self.panel,
                                  columns=self._colNames,
-                                 style=wx.TR_DEFAULT_STYLE |
+                                 style=wx.TR_DEFAULT_STYLE | wx.TR_HIDE_ROOT |
                                  wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_MULTIPLE)
 
         self.tree.SetColumnWidth(0, 220)
@@ -58,7 +58,7 @@ class QueryDialog(wx.Dialog):
         self.tree.ExpandAll(self._model.root)
         self.tree.contextMenu.connect(self.ShowContextMenu)
         self.mainSizer.Add(
-            item=self.tree,
+            self.tree,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
@@ -80,16 +80,16 @@ class QueryDialog(wx.Dialog):
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.Add(
-            item=self.redirect,
+            self.redirect,
             proportion=0,
             flag=wx.EXPAND | wx.RIGHT,
             border=5)
         hbox.AddStretchSpacer(1)
-        hbox.Add(item=copy, proportion=0, flag=wx.EXPAND | wx.RIGHT, border=5)
-        hbox.Add(item=close, proportion=0, flag=wx.EXPAND | wx.ALL, border=0)
+        hbox.Add(copy, proportion=0, flag=wx.EXPAND | wx.RIGHT, border=5)
+        hbox.Add(close, proportion=0, flag=wx.EXPAND | wx.ALL, border=0)
 
         self.mainSizer.Add(
-            item=hbox,
+            hbox,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=5)

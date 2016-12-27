@@ -99,17 +99,17 @@ class ModelDataDialog(SimpleDialog):
         """Do layout"""
         if self.etype:
             self.dataSizer.Add(
-                item=wx.StaticText(
+                wx.StaticText(
                     parent=self.panel,
                     id=wx.ID_ANY,
                     label=_("Type of element:")),
                 proportion=0,
                 flag=wx.ALL,
                 border=1)
-            self.dataSizer.Add(item=self.typeSelect,
+            self.dataSizer.Add(self.typeSelect,
                                proportion=0, flag=wx.ALL, border=1)
-        self.dataSizer.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                              label=_("Name of element:")),
+        self.dataSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                         label=_("Name of element:")),
                            proportion=0, flag=wx.ALL, border=1)
         self.dataSizer.Add(self.element, proportion=0,
                            flag=wx.EXPAND | wx.ALL, border=1)
@@ -227,21 +227,21 @@ class ModelSearchDialog(wx.Dialog):
 
     def _layout(self):
         cmdSizer = wx.StaticBoxSizer(self.cmdBox, wx.VERTICAL)
-        cmdSizer.Add(item=self.cmd_prompt, proportion=1,
+        cmdSizer.Add(self.cmd_prompt, proportion=1,
                      flag=wx.EXPAND)
         labelSizer = wx.StaticBoxSizer(self.labelBox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
-        gridSizer.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                         label=_("Label:")),
+        gridSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                    label=_("Label:")),
                       flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
-        gridSizer.Add(item=self.label, pos=(0, 1), flag=wx.EXPAND)
-        gridSizer.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                         label=_("Comment:")),
+        gridSizer.Add(self.label, pos=(0, 1), flag=wx.EXPAND)
+        gridSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                    label=_("Comment:")),
                       flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
-        gridSizer.Add(item=self.comment, pos=(1, 1), flag=wx.EXPAND)
+        gridSizer.Add(self.comment, pos=(1, 1), flag=wx.EXPAND)
         gridSizer.AddGrowableRow(1)
         gridSizer.AddGrowableCol(1)
-        labelSizer.Add(item=gridSizer, proportion=1, flag=wx.EXPAND)
+        labelSizer.Add(gridSizer, proportion=1, flag=wx.EXPAND)
 
         btnSizer = wx.StdDialogButtonSizer()
         btnSizer.AddButton(self.btnCancel)
@@ -249,13 +249,13 @@ class ModelSearchDialog(wx.Dialog):
         btnSizer.Realize()
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(item=self.search, proportion=0,
+        mainSizer.Add(self.search, proportion=0,
                       flag=wx.EXPAND | wx.ALL, border=3)
-        mainSizer.Add(item=cmdSizer, proportion=1,
+        mainSizer.Add(cmdSizer, proportion=1,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=3)
-        mainSizer.Add(item=labelSizer, proportion=1,
+        mainSizer.Add(labelSizer, proportion=1,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=3)
-        mainSizer.Add(item=btnSizer, proportion=0,
+        mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.panel.SetSizer(mainSizer)
@@ -382,11 +382,11 @@ class ModelRelationDialog(wx.Dialog):
         btnSizer.AddButton(self.btnOk)
         btnSizer.Realize()
 
-        mainSizer.Add(item=fromSizer, proportion=0,
+        mainSizer.Add(fromSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL, border=5)
-        mainSizer.Add(item=toSizer, proportion=0, flag=wx.EXPAND |
+        mainSizer.Add(toSizer, proportion=0, flag=wx.EXPAND |
                       wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
-        mainSizer.Add(item=btnSizer, proportion=0,
+        mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.panel.SetSizer(mainSizer)
@@ -397,25 +397,25 @@ class ModelRelationDialog(wx.Dialog):
 
     def _layoutShape(self, shape, sizer):
         if isinstance(shape, ModelData):
-            sizer.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                         label=_("Data: %s") % shape.GetLog()),
+            sizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                    label=_("Data: %s") % shape.GetLog()),
                       proportion=1, flag=wx.EXPAND | wx.ALL,
                       border=5)
         elif isinstance(shape, ModelAction):
             gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
-            gridSizer.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                             label=_("Command:")),
+            gridSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                        label=_("Command:")),
                           pos=(0, 0))
-            gridSizer.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                             label=shape.GetLabel()),
+            gridSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                        label=shape.GetLabel()),
                           pos=(0, 1))
-            gridSizer.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                             label=_("Option:")),
+            gridSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                        label=_("Option:")),
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(1, 0))
-            gridSizer.Add(item=self.option,
+            gridSizer.Add(self.option,
                           pos=(1, 1))
-            sizer.Add(item=gridSizer,
+            sizer.Add(gridSizer,
                       proportion=1, flag=wx.EXPAND | wx.ALL,
                       border=5)
 
@@ -535,13 +535,13 @@ class ModelLoopDialog(ModelItemDialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         condSizer = wx.StaticBoxSizer(self.condBox, wx.HORIZONTAL)
-        condSizer.Add(item=self.condText, proportion=1,
+        condSizer.Add(self.condText, proportion=1,
                       flag=wx.ALL, border=3)
-        condSizer.Add(item=self.btnSeries, proportion=0,
+        condSizer.Add(self.btnSeries, proportion=0,
                       flag=wx.EXPAND)
 
         listSizer = wx.StaticBoxSizer(self.listBox, wx.VERTICAL)
-        listSizer.Add(item=self.itemList, proportion=1,
+        listSizer.Add(self.itemList, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=3)
 
         btnSizer = wx.StdDialogButtonSizer()
@@ -549,11 +549,11 @@ class ModelLoopDialog(ModelItemDialog):
         btnSizer.AddButton(self.btnOk)
         btnSizer.Realize()
 
-        sizer.Add(item=condSizer, proportion=0,
+        sizer.Add(condSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=3)
-        sizer.Add(item=listSizer, proportion=1,
+        sizer.Add(listSizer, proportion=1,
                   flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=3)
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.panel.SetSizer(sizer)
@@ -616,14 +616,14 @@ class ModelConditionDialog(ModelItemDialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         condSizer = wx.StaticBoxSizer(self.condBox, wx.VERTICAL)
-        condSizer.Add(item=self.condText, proportion=1,
+        condSizer.Add(self.condText, proportion=1,
                       flag=wx.EXPAND)
 
         listIfSizer = wx.StaticBoxSizer(self.listBoxIf, wx.VERTICAL)
-        listIfSizer.Add(item=self.itemListIf, proportion=1,
+        listIfSizer.Add(self.itemListIf, proportion=1,
                         flag=wx.EXPAND)
         listElseSizer = wx.StaticBoxSizer(self.listBoxElse, wx.VERTICAL)
-        listElseSizer.Add(item=self.itemListElse, proportion=1,
+        listElseSizer.Add(self.itemListElse, proportion=1,
                           flag=wx.EXPAND)
 
         btnSizer = wx.StdDialogButtonSizer()
@@ -631,13 +631,13 @@ class ModelConditionDialog(ModelItemDialog):
         btnSizer.AddButton(self.btnOk)
         btnSizer.Realize()
 
-        sizer.Add(item=condSizer, proportion=0,
+        sizer.Add(condSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=3)
-        sizer.Add(item=listIfSizer, proportion=1,
+        sizer.Add(listIfSizer, proportion=1,
                   flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=3)
-        sizer.Add(item=listElseSizer, proportion=1,
+        sizer.Add(listElseSizer, proportion=1,
                   flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=3)
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.panel.SetSizer(sizer)

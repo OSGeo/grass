@@ -46,6 +46,7 @@ from core.gcmd import GWarning, GError, RunCommand
 from icons.icon import MetaIcon
 from web_services.dialogs import SaveWMSLayerDialog
 from gui_core.widgets import MapValidator
+from gui_core.wrap import Menu
 from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 from core.giface import Notification
 
@@ -432,7 +433,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # get current mapset
         currentMapset = grass.gisenv()['MAPSET']
 
-        self.popupMenu = wx.Menu()
+        self.popupMenu = Menu()
 
         numSelected = len(self.GetSelections())
 
@@ -448,7 +449,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             id=self.popupID['remove'])
 
         if ltype != "command" and numSelected == 1:
-            self.popupMenu.Append(self.popupID['rename'], text=_("Rename"))
+            self.popupMenu.Append(self.popupID['rename'], _("Rename"))
             self.Bind(
                 wx.EVT_MENU,
                 self.OnRenameLayer,
@@ -554,8 +555,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.Enable(self.popupID['export'], False)
 
             self.popupMenu.Append(
-                self.popupID['export-pg'],
-                text=_("Export PostGIS"))
+                self.popupID['export-pg'], _("Export PostGIS"))
             self.Bind(
                 wx.EVT_MENU,
                 lambda x: self.lmgr.OnMenuCmd(
@@ -568,8 +568,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.Enable(self.popupID['export-pg'], False)
 
             self.popupMenu.Append(
-                self.popupID['export-attr'],
-                text=_("Export attribute table"))
+                self.popupID['export-attr'], _("Export attribute table"))
             self.Bind(
                 wx.EVT_MENU,
                 lambda x: self.lmgr.OnMenuCmd(
@@ -599,8 +598,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.layer_selected, key='maplayer').GetMapset()
             if lmapset != currentMapset:
                 self.popupMenu.Append(
-                    self.popupID['copy'],
-                    text=_("Make a copy in the current mapset"))
+                    self.popupID['copy'], _("Make a copy in the current mapset"))
                 self.Bind(wx.EVT_MENU, self.OnCopyMap, id=self.popupID['copy'])
 
             self.popupMenu.AppendSeparator()
@@ -661,8 +659,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             #     self.popupMenu.Check(self.popupID['bgmap'], True)
 
             self.popupMenu.Append(
-                self.popupID['topo'],
-                text=_("Rebuild topology"))
+                self.popupID['topo'], _("Rebuild topology"))
             self.Bind(wx.EVT_MENU, self.OnTopology, id=self.popupID['topo'])
 
             # determine format
@@ -704,8 +701,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif mltype and mltype == "raster":
             if same:
                 self.popupMenu.Append(
-                    self.popupID['zoom1'],
-                    text=_("Zoom to selected map(s) (ignore NULLs)"))
+                    self.popupID['zoom1'], _("Zoom to selected map(s) (ignore NULLs)"))
                 self.Bind(
                     wx.EVT_MENU,
                     self.mapdisplay.OnZoomToRaster,
@@ -748,8 +744,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     self.layer_selected, key='maplayer').GetMapset()
                 if lmapset != currentMapset:
                     self.popupMenu.Append(
-                        self.popupID['copy'],
-                        text=_("Make a copy in the current mapset"))
+                        self.popupID['copy'], _("Make a copy in the current mapset"))
                     self.Bind(
                         wx.EVT_MENU,
                         self.OnCopyMap,
@@ -861,8 +856,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # web service layers (specific item)
         elif mltype and mltype == "wms":
             self.popupMenu.Append(
-                self.popupID['save_ws'],
-                text=_("Save web service layer"))
+                self.popupID['save_ws'], _("Save web service layer"))
             self.Bind(wx.EVT_MENU, self.OnSaveWs, id=self.popupID['save_ws'])
 
         self.PopupMenu(self.popupMenu)

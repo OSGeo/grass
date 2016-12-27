@@ -38,15 +38,22 @@ import locale
 
 import wx
 import wx.lib.mixins.listctrl as listmix
-import wx.wizard as wiz
+from core import globalvar
+if globalvar.wxPythonPhoenix:
+    from wx import adv as wiz
+    from wx.adv import Wizard
+    from wx.adv import WizardPageSimple
+else:
+    from wx import wizard as wiz
+    from wx.wizard import Wizard
+    from wx.wizard import WizardPageSimple
 import wx.lib.scrolledpanel as scrolled
 
-from core import globalvar
 from core import utils
 from core.utils import _
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from gui_core.widgets import GenericValidator
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 from location_wizard.base import BaseClass
 from location_wizard.dialogs import SelectTransformDialog
 
@@ -63,19 +70,17 @@ global wizerror
 global translist
 
 
-class TitledPage(BaseClass, wiz.WizardPageSimple):
+class TitledPage(WizardPageSimple):
     """Class to make wizard pages. Generic methods to make labels,
     text entries, and buttons.
     """
 
     def __init__(self, parent, title):
-
-        self.page = wiz.WizardPageSimple.__init__(self, parent)
+        self.page = WizardPageSimple.__init__(self, parent)
 
         # page title
         self.title = wx.StaticText(parent=self, id=wx.ID_ANY, label=title)
         self.title.SetFont(wx.Font(13, wx.SWISS, wx.NORMAL, wx.BOLD))
-
         # main sizers
         self.pagesizer = wx.BoxSizer(wx.VERTICAL)
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
@@ -84,18 +89,62 @@ class TitledPage(BaseClass, wiz.WizardPageSimple):
 
     def DoLayout(self):
         """Do page layout"""
-        self.pagesizer.Add(item=self.title, proportion=0,
+        self.pagesizer.Add(self.title, proportion=0,
                            flag=wx.ALIGN_CENTRE | wx.ALL,
                            border=5)
-        self.pagesizer.Add(item=wx.StaticLine(self, -1), proportion=0,
+        self.pagesizer.Add(wx.StaticLine(self, -1), proportion=0,
                            flag=wx.EXPAND | wx.ALL,
                            border=0)
-        self.pagesizer.Add(item=self.sizer, proportion=1,
+        self.pagesizer.Add(self.sizer, proportion=1,
                            flag=wx.EXPAND)
 
         self.SetAutoLayout(True)
         self.SetSizer(self.pagesizer)
         self.Layout()
+
+    def MakeLabel(self, text="", style=wx.ALIGN_LEFT,
+                  parent=None, tooltip=None):
+        """Make aligned label"""
+        if not parent:
+            parent = self
+        label = wx.StaticText(parent=parent, id=wx.ID_ANY, label=text,
+                              style=style)
+        if tooltip:
+            label.SetToolTipString(tooltip)
+        return label
+
+    def MakeTextCtrl(self, text='', size=(100, -1),
+                     style=0, parent=None, tooltip=None):
+        """Generic text control"""
+        if not parent:
+            parent = self
+        textCtrl = wx.TextCtrl(parent=parent, id=wx.ID_ANY, value=text,
+                               size=size, style=style)
+        if tooltip:
+            textCtrl.SetToolTipString(tooltip)
+        return textCtrl
+
+    def MakeButton(self, text, id=wx.ID_ANY, size=(-1, -1),
+                   parent=None, tooltip=None):
+        """Generic button"""
+        if not parent:
+            parent = self
+        button = wx.Button(parent=parent, id=id, label=text,
+                           size=size)
+        if tooltip:
+            button.SetToolTipString(tooltip)
+        return button
+
+    def MakeCheckBox(self, text, id=wx.ID_ANY, size=(-1, -1),
+                     parent=None, tooltip=None):
+        """Generic checkbox"""
+        if not parent:
+            parent = self
+        chbox = wx.CheckBox(parent=parent, id=id, label=text,
+                            size=size)
+        if tooltip:
+            chbox.SetToolTipString(tooltip)
+        return chbox
 
 
 class DatabasePage(TitledPage):
@@ -137,24 +186,24 @@ class DatabasePage(TitledPage):
                                                           "PERMANENT mapset."))
 
         # layout
-        self.sizer.Add(item=self.MakeLabel(_("GIS Data Directory:")),
+        self.sizer.Add(self.MakeLabel(_("GIS Data Directory:")),
                        flag=wx.ALIGN_RIGHT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(1, 1))
-        self.sizer.Add(item=self.tgisdbase,
+        self.sizer.Add(self.tgisdbase,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(1, 2))
-        self.sizer.Add(item=self.bbrowse,
+        self.sizer.Add(self.bbrowse,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(1, 3))
 
         self.sizer.Add(
-            item=self.MakeLabel(
+            self.MakeLabel(
                 "%s:" %
                 _("Project Location"),
                 tooltip=_("Name of location directory in GIS Data Directory")),
@@ -162,14 +211,14 @@ class DatabasePage(TitledPage):
             border=5,
             pos=(2, 1)
         )
-        self.sizer.Add(item=self.tlocation,
+        self.sizer.Add(self.tlocation,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(2, 2))
 
         self.sizer.Add(
-            item=self.MakeLabel(
+            self.MakeLabel(
                 "%s:" %
                 _("Location Title"),
                 tooltip=_(
@@ -179,17 +228,17 @@ class DatabasePage(TitledPage):
             border=5,
             pos=(3, 1)
         )
-        self.sizer.Add(item=self.tlocTitle,
+        self.sizer.Add(self.tlocTitle,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(3, 2), span=(1, 2))
-        self.sizer.Add(item=self.tlocRegion,
+        self.sizer.Add(self.tlocRegion,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
                        pos=(4, 2), span=(1, 2))
-        self.sizer.Add(item=self.tlocUserMapset,
+        self.sizer.Add(self.tlocUserMapset,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5,
@@ -299,23 +348,23 @@ class CoordinateSystemPage(TitledPage):
 
         # layout
         self.sizer.SetVGap(10)
-        self.sizer.Add(item=wx.StaticText(parent=self, label=_("Simple methods:")),
+        self.sizer.Add(wx.StaticText(parent=self, label=_("Simple methods:")),
                        flag=wx.ALIGN_LEFT, pos=(1, 1))
-        self.sizer.Add(item=self.radioEpsg,
+        self.sizer.Add(self.radioEpsg,
                        flag=wx.ALIGN_LEFT, pos=(2, 1))
-        #self.sizer.Add(item=self.radioIau,
+        #self.sizer.Add(self.radioIau,
         #               flag=wx.ALIGN_LEFT, pos=(1, 1))
-        self.sizer.Add(item=self.radioFile,
+        self.sizer.Add(self.radioFile,
                        flag=wx.ALIGN_LEFT, pos=(3, 1))
-        self.sizer.Add(item=self.radioWkt,
+        self.sizer.Add(self.radioWkt,
                        flag=wx.ALIGN_LEFT, pos=(4, 1))
-        self.sizer.Add(item=self.radioXy,
+        self.sizer.Add(self.radioXy,
                        flag=wx.ALIGN_LEFT, pos=(5, 1))
-        self.sizer.Add(item=wx.StaticText(parent=self, label=_("Advanced methods:")),
+        self.sizer.Add(wx.StaticText(parent=self, label=_("Advanced methods:")),
                        flag=wx.ALIGN_LEFT, pos=(6, 1))
-        self.sizer.Add(item=self.radioSrs,
+        self.sizer.Add(self.radioSrs,
                        flag=wx.ALIGN_LEFT, pos=(7, 1))
-        self.sizer.Add(item=self.radioProj,
+        self.sizer.Add(self.radioProj,
                        flag=wx.ALIGN_LEFT, pos=(8, 1))
         self.sizer.AddGrowableCol(1)
 
@@ -434,22 +483,22 @@ class ProjectionsPage(TitledPage):
         self.projlist.resizeLastColumn(30)
 
         # layout
-        self.sizer.Add(item=self.MakeLabel(_("Projection code:")),
+        self.sizer.Add(self.MakeLabel(_("Projection code:")),
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(1, 1))
-        self.sizer.Add(item=self.tproj,
+        self.sizer.Add(self.tproj,
                        flag=wx.ALIGN_RIGHT | wx.EXPAND | wx.ALL,
                        border=5, pos=(1, 2))
 
-        self.sizer.Add(item=self.MakeLabel(_("Search in description:")),
+        self.sizer.Add(self.MakeLabel(_("Search in description:")),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
                        border=5, pos=(2, 1))
-        self.sizer.Add(item=self.searchb,
+        self.sizer.Add(self.searchb,
                        flag=wx.ALIGN_RIGHT | wx.EXPAND | wx.ALL,
                        border=5, pos=(2, 2))
 
-        self.sizer.Add(item=self.projlist,
+        self.sizer.Add(self.projlist,
                        flag=wx.EXPAND |
                        wx.ALIGN_LEFT |
                        wx.ALL, border=5, pos=(3, 1), span=(1, 3))
@@ -572,10 +621,10 @@ class ItemList(wx.ListCtrl,
 
         self.il = wx.ImageList(16, 16)
         self.sm_up = self.il.Add(
-            wx.ArtProvider_GetBitmap(
+            wx.ArtProvider.GetBitmap(
                 wx.ART_GO_UP, wx.ART_TOOLBAR, (16, 16)))
         self.sm_dn = self.il.Add(
-            wx.ArtProvider_GetBitmap(
+            wx.ArtProvider.GetBitmap(
                 wx.ART_GO_DOWN, wx.ART_TOOLBAR, (16, 16)))
         self.SetImageList(self.il, wx.IMAGE_LIST_SMALL)
 
@@ -742,7 +791,7 @@ class ProjParamsPage(TitledPage):
             parent=self, id=wx.ID_ANY, label=" %s " %
             _("Select datum or ellipsoid (next page)"))
         radioSBSizer = wx.StaticBoxSizer(radioSBox)
-        self.sizer.Add(item=radioSBSizer, pos=(0, 1),
+        self.sizer.Add(radioSBSizer, pos=(0, 1),
                        flag=wx.EXPAND | wx.ALIGN_TOP | wx.TOP, border=10)
         self.sizer.AddGrowableCol(1)
 
@@ -759,9 +808,9 @@ class ProjParamsPage(TitledPage):
             self.SetNext(self.parent.datumpage)
             #            self.parent.sumpage.SetPrev(self.parent.datumpage)
 
-        radioSBSizer.Add(item=self.radio1,
+        radioSBSizer.Add(self.radio1,
                          flag=wx.ALIGN_LEFT | wx.RIGHT, border=20)
-        radioSBSizer.Add(item=self.radioEpsg,
+        radioSBSizer.Add(self.radioEpsg,
                          flag=wx.ALIGN_LEFT)
 
         # bindings
@@ -837,10 +886,10 @@ class ProjParamsPage(TitledPage):
 
             self.prjParamSizer = wx.GridBagSizer(vgap=0, hgap=0)
 
-            self.sizer.Add(item=paramSBSizer, pos=(1, 1),
+            self.sizer.Add(paramSBSizer, pos=(1, 1),
                            flag=wx.EXPAND)
             self.sizer.AddGrowableRow(1)
-            paramSBSizer.Add(item=self.panel, proportion=1,
+            paramSBSizer.Add(self.panel, proportion=1,
                              flag=wx.ALIGN_CENTER | wx.EXPAND)
 
             paramSBSizer.Fit(self.panel)
@@ -884,9 +933,9 @@ class ProjParamsPage(TitledPage):
                     win.Bind(wx.EVT_CHOICE, self.OnParamEntry)
                 elif param['type'] == 'zone':
                     win = SpinCtrl(parent=self.panel, id=id,
-                                      size=(100, -1),
-                                      style=wx.SP_ARROW_KEYS | wx.SP_WRAP,
-                                      min=1, max=60)
+                                   size=(100, -1),
+                                   style=wx.SP_ARROW_KEYS | wx.SP_WRAP,
+                                   min=1, max=60)
                     win.SetValue(param['value'])
                     win.Bind(wx.EVT_SPINCTRL, self.OnParamEntry)
                     win.Bind(wx.EVT_TEXT, self.OnParamEntry)
@@ -898,11 +947,11 @@ class ProjParamsPage(TitledPage):
                     if paramgrp[1] == 'noask':
                         win.Enable(False)
 
-                self.prjParamSizer.Add(item=label, pos=(row, 1),
+                self.prjParamSizer.Add(label, pos=(row, 1),
                                        flag=wx.ALIGN_RIGHT |
                                        wx.ALIGN_CENTER_VERTICAL |
                                        wx.RIGHT, border=5)
-                self.prjParamSizer.Add(item=win, pos=(row, 2),
+                self.prjParamSizer.Add(win, pos=(row, 2),
                                        flag=wx.ALIGN_LEFT |
                                        wx.ALIGN_CENTER_VERTICAL |
                                        wx.LEFT, border=5)
@@ -961,25 +1010,25 @@ class DatumPage(TitledPage):
         self.datumlist.resizeLastColumn(10)
 
         # layout
-        self.sizer.Add(item=self.MakeLabel(_("Datum code:")),
+        self.sizer.Add(self.MakeLabel(_("Datum code:")),
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(1, 1))
-        self.sizer.Add(item=self.tdatum,
+        self.sizer.Add(self.tdatum,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(1, 2))
 
-        self.sizer.Add(item=self.MakeLabel(_("Search in description:")),
+        self.sizer.Add(self.MakeLabel(_("Search in description:")),
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(2, 1))
-        self.sizer.Add(item=self.searchb,
+        self.sizer.Add(self.searchb,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(2, 2))
 
-        self.sizer.Add(item=self.datumlist,
+        self.sizer.Add(self.datumlist,
                        flag=wx.EXPAND |
                        wx.ALIGN_LEFT |
                        wx.ALL, border=5, pos=(3, 1), span=(1, 4))
@@ -1143,31 +1192,31 @@ class EllipsePage(TitledPage):
 
         # layout
 
-        self.sizer.Add(item=self.MakeLabel(_("Ellipsoid code:")),
+        self.sizer.Add(self.MakeLabel(_("Ellipsoid code:")),
                        flag=wx.ALIGN_RIGHT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(1, 1))
-        self.sizer.Add(item=self.tellipse,
+        self.sizer.Add(self.tellipse,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(1, 2))
-        self.sizer.Add(item=self.radio1,
+        self.sizer.Add(self.radio1,
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
                        border=25, pos=(1, 3))
 
-        self.sizer.Add(item=self.MakeLabel(_("Search in description:")),
+        self.sizer.Add(self.MakeLabel(_("Search in description:")),
                        flag=wx.ALIGN_RIGHT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(2, 1))
-        self.sizer.Add(item=self.searchb,
+        self.sizer.Add(self.searchb,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(2, 2))
-        self.sizer.Add(item=self.radioEpsg,
+        self.sizer.Add(self.radioEpsg,
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
                        border=25, pos=(2, 3))
 
-        self.sizer.Add(item=self.ellipselist,
+        self.sizer.Add(self.ellipselist,
                        flag=wx.EXPAND |
                        wx.ALIGN_LEFT |
                        wx.ALL, border=5, pos=(3, 1), span=(1, 4))
@@ -1295,13 +1344,13 @@ class GeoreferencedFilePage(TitledPage):
         self.bbrowse = self.MakeButton(_("Browse"))
 
         # do layout
-        self.sizer.Add(item=self.lfile, flag=wx.ALIGN_LEFT |
+        self.sizer.Add(self.lfile, flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTRE_VERTICAL |
                        wx.ALL, border=5, pos=(1, 1))
-        self.sizer.Add(item=self.tfile, flag=wx.ALIGN_LEFT |
+        self.sizer.Add(self.tfile, flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTRE_VERTICAL |
                        wx.ALL, border=5, pos=(1, 2))
-        self.sizer.Add(item=self.bbrowse, flag=wx.ALIGN_LEFT |
+        self.sizer.Add(self.bbrowse, flag=wx.ALIGN_LEFT |
                        wx.ALL, border=5, pos=(1, 3))
         self.sizer.AddGrowableCol(3)
 
@@ -1371,13 +1420,13 @@ class WKTPage(TitledPage):
         self.bbrowse = self.MakeButton(_("Browse"))
 
         # do layout
-        self.sizer.Add(item=self.lfile, flag=wx.ALIGN_LEFT |
+        self.sizer.Add(self.lfile, flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTRE_VERTICAL |
                        wx.ALL, border=5, pos=(1, 1))
-        self.sizer.Add(item=self.tfile, flag=wx.ALIGN_LEFT |
+        self.sizer.Add(self.tfile, flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTRE_VERTICAL |
                        wx.ALL, border=5, pos=(1, 2))
-        self.sizer.Add(item=self.bbrowse, flag=wx.ALIGN_LEFT |
+        self.sizer.Add(self.bbrowse, flag=wx.ALIGN_LEFT |
                        wx.ALL, border=5, pos=(1, 3))
         self.sizer.AddGrowableCol(3)
 
@@ -1473,32 +1522,32 @@ class EPSGPage(TitledPage):
                 _('Parameters')])
 
         # layout
-        self.sizer.Add(item=self.lfile,
+        self.sizer.Add(self.lfile,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(1, 1), span=(1, 2))
-        self.sizer.Add(item=self.tfile,
+        self.sizer.Add(self.tfile,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(1, 3))
-        self.sizer.Add(item=self.bbrowse,
+        self.sizer.Add(self.bbrowse,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(1, 4))
-        self.sizer.Add(item=self.lcode,
+        self.sizer.Add(self.lcode,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(2, 1), span=(1, 2))
-        self.sizer.Add(item=self.tcode,
+        self.sizer.Add(self.tcode,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(2, 3))
-        self.sizer.Add(item=self.searchb,
+        self.sizer.Add(self.searchb,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(3, 3))
 
-        self.sizer.Add(item=self.epsglist,
+        self.sizer.Add(self.epsglist,
                        flag=wx.ALIGN_LEFT | wx.EXPAND, pos=(4, 1),
                        span=(1, 4))
         self.sizer.AddGrowableCol(3)
@@ -1701,32 +1750,32 @@ class IAUPage(TitledPage):
                 _('Parameters')])
 
         # layout
-        self.sizer.Add(item=self.lfile,
+        self.sizer.Add(self.lfile,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(1, 1), span=(1, 2))
-        self.sizer.Add(item=self.tfile,
+        self.sizer.Add(self.tfile,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(1, 3))
-        self.sizer.Add(item=self.bbrowse,
+        self.sizer.Add(self.bbrowse,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(1, 4))
-        self.sizer.Add(item=self.lcode,
+        self.sizer.Add(self.lcode,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(2, 1), span=(1, 2))
-        self.sizer.Add(item=self.tcode,
+        self.sizer.Add(self.tcode,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(2, 3))
-        self.sizer.Add(item=self.searchb,
+        self.sizer.Add(self.searchb,
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border=5, pos=(3, 3))
 
-        self.sizer.Add(item=self.epsglist,
+        self.sizer.Add(self.epsglist,
                        flag=wx.ALIGN_LEFT | wx.EXPAND, pos=(4, 1),
                        span=(1, 4))
         self.sizer.AddGrowableCol(3)
@@ -2043,17 +2092,17 @@ class SummaryPage(TitledPage):
         """Do page layout"""
 
         titleSizer = wx.BoxSizer(wx.VERTICAL)
-        titleSizer.Add(item=self.llocTitle, proportion=1,
+        titleSizer.Add(self.llocTitle, proportion=1,
                        flag=wx.EXPAND | wx.ALL, border=5)
         self.panelTitle.SetSizer(titleSizer)
 
         projSizer = wx.BoxSizer(wx.VERTICAL)
-        projSizer.Add(item=self.lprojection, proportion=1,
+        projSizer.Add(self.lprojection, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=5)
         self.panelProj.SetSizer(projSizer)
 
         proj4stringSizer = wx.BoxSizer(wx.VERTICAL)
-        proj4stringSizer.Add(item=self.lproj4string, proportion=1,
+        proj4stringSizer.Add(self.lproj4string, proportion=1,
                              flag=wx.EXPAND | wx.ALL, border=5)
         self.panelProj4string.SetSizer(proj4stringSizer)
 
@@ -2061,39 +2110,39 @@ class SummaryPage(TitledPage):
         self.panelProj.SetupScrolling(scroll_y=False)
         self.panelTitle.SetupScrolling(scroll_y=False)
 
-        self.sizer.Add(item=self.MakeLabel(_("GRASS Database:")),
+        self.sizer.Add(self.MakeLabel(_("GRASS Database:")),
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(1, 0))
-        self.sizer.Add(item=self.ldatabase,
+        self.sizer.Add(self.ldatabase,
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(1, 1))
-        self.sizer.Add(item=self.MakeLabel(_("Location Name:")),
+        self.sizer.Add(self.MakeLabel(_("Location Name:")),
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(2, 0))
-        self.sizer.Add(item=self.llocation,
+        self.sizer.Add(self.llocation,
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(2, 1))
-        self.sizer.Add(item=self.MakeLabel(_("Location Title:")),
+        self.sizer.Add(self.MakeLabel(_("Location Title:")),
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(3, 0))
-        self.sizer.Add(item=self.panelTitle,
+        self.sizer.Add(self.panelTitle,
                        flag=wx.ALIGN_LEFT | wx.ALL | wx.EXPAND,
                        border=0, pos=(3, 1))
-        self.sizer.Add(item=self.MakeLabel(_("Projection:")),
+        self.sizer.Add(self.MakeLabel(_("Projection:")),
                        flag=wx.ALIGN_LEFT | wx.ALL,
                        border=5, pos=(4, 0))
-        self.sizer.Add(item=self.panelProj,
+        self.sizer.Add(self.panelProj,
                        flag=wx.ALIGN_LEFT | wx.ALL | wx.EXPAND,
                        border=0, pos=(4, 1))
         self.sizer.Add(
-            item=self.MakeLabel(
+            self.MakeLabel(
                 _("PROJ.4 definition:\n (non-definitive)")),
             flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
             pos=(
                 5,
                 0))
-        self.sizer.Add(item=self.panelProj4string,
+        self.sizer.Add(self.panelProj4string,
                        flag=wx.ALIGN_LEFT | wx.ALL | wx.EXPAND,
                        border=0, pos=(5, 1))
         self.sizer.AddGrowableCol(1)
@@ -2652,10 +2701,15 @@ class LocationWizard(wx.Object):
         RunCommand('g.manual', entry='helptext')
 
 
-class WizardWithHelpButton(wiz.Wizard):
+class WizardWithHelpButton(Wizard):
 
     def __init__(self, parent, id, title, bitmap):
-        pre = wiz.PreWizard()
-        pre.SetExtraStyle(wx.wizard.WIZARD_EX_HELPBUTTON)
-        pre.Create(parent=parent, id=id, title=title, bitmap=bitmap)
-        self.PostCreate(pre)
+        if globalvar.wxPythonPhoenix:
+            Wizard.__init__(self)
+            self.SetExtraStyle(wx.adv.WIZARD_EX_HELPBUTTON)
+            self.Create(parent=parent, id=id, title=title, bitmap=bitmap)
+        else:
+            pre = wiz.PreWizard()
+            pre.SetExtraStyle(wx.wizard.WIZARD_EX_HELPBUTTON)
+            pre.Create(parent=parent, id=id, title=title, bitmap=bitmap)
+            self.PostCreate(pre)

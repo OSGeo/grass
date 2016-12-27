@@ -37,6 +37,7 @@ from core.gconsole   import GConsole, \
     EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, EVT_CMD_RUN, EVT_CMD_DONE, \
     Notification
 from gui_core.prompt import GPromptSTC
+from gui_core.wrap import Button, ToggleButton
 from core.settings import UserSettings
 from core.utils import _
 from gui_core.widgets import SearchModuleWidget
@@ -154,23 +155,23 @@ class GConsoleWindow(wx.SplitterWindow):
                                        label=" %s " % cmdLabel)
 
         # buttons
-        self.btnOutputClear = wx.Button(
+        self.btnOutputClear = Button(
             parent=self.panelOutput, id=wx.ID_CLEAR)
-        self.btnOutputClear.SetToolTipString(_("Clear output window content"))
-        self.btnCmdClear = wx.Button(parent=self.panelOutput, id=wx.ID_CLEAR)
-        self.btnCmdClear.SetToolTipString(_("Clear command prompt content"))
-        self.btnOutputSave = wx.Button(parent=self.panelOutput, id=wx.ID_SAVE)
-        self.btnOutputSave.SetToolTipString(
+        self.btnOutputClear.SetToolTip(_("Clear output window content"))
+        self.btnCmdClear = Button(parent=self.panelOutput, id=wx.ID_CLEAR)
+        self.btnCmdClear.SetToolTip(_("Clear command prompt content"))
+        self.btnOutputSave = Button(parent=self.panelOutput, id=wx.ID_SAVE)
+        self.btnOutputSave.SetToolTip(
             _("Save output window content to the file"))
-        self.btnCmdAbort = wx.Button(parent=self.panelProgress, id=wx.ID_STOP)
-        self.btnCmdAbort.SetToolTipString(_("Abort running command"))
-        self.btnCmdProtocol = wx.ToggleButton(
+        self.btnCmdAbort = Button(parent=self.panelProgress, id=wx.ID_STOP)
+        self.btnCmdAbort.SetToolTip(_("Abort running command"))
+        self.btnCmdProtocol = ToggleButton(
             parent=self.panelOutput,
             id=wx.ID_ANY,
             label=_("&Log file"),
             size=self.btnCmdClear.GetSize())
-        self.btnCmdProtocol.SetToolTipString(_("Toggle to save list of executed commands into "
-                                               "a file; content saved when switching off."))
+        self.btnCmdProtocol.SetToolTip(_("Toggle to save list of executed commands into "
+                                         "a file; content saved when switching off."))
 
         if not self._gcstyle & GC_PROMPT:
             self.btnCmdClear.Hide()
@@ -198,24 +199,22 @@ class GConsoleWindow(wx.SplitterWindow):
 
         if self._gcstyle & GC_PROMPT:
             promptSizer = wx.BoxSizer(wx.VERTICAL)
-            promptSizer.Add(
-                item=self.cmdPrompt,
-                proportion=1,
-                flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
-                border=3)
+            promptSizer.Add(self.cmdPrompt, proportion=1,
+                            flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
+                            border=3)
             helpText = wx.StaticText(
                 self.panelPrompt, id=wx.ID_ANY,
                 label="Press Tab to display command help, Ctrl+Space to autocomplete")
             helpText.SetForegroundColour(
-                wx.SystemSettings_GetColour(
+                wx.SystemSettings.GetColour(
                     wx.SYS_COLOUR_GRAYTEXT))
-            promptSizer.Add(item=helpText,
+            promptSizer.Add(helpText,
                             proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
 
         if self._gcstyle & GC_SEARCH:
-            self.outputSizer.Add(item=self.searchPane, proportion=0,
+            self.outputSizer.Add(self.searchPane, proportion=0,
                                  flag=wx.EXPAND | wx.ALL, border=3)
-        self.outputSizer.Add(item=self.cmdOutput, proportion=1,
+        self.outputSizer.Add(self.cmdOutput, proportion=1,
                              flag=wx.EXPAND | wx.ALL, border=3)
         if self._gcstyle & GC_PROMPT:
             proportion = 1
@@ -224,25 +223,25 @@ class GConsoleWindow(wx.SplitterWindow):
             outBtnSizer.AddStretchSpacer()
 
         outBtnSizer.Add(
-            item=self.btnOutputClear,
+            self.btnOutputClear,
             proportion=proportion,
             flag=wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT | wx.BOTTOM,
             border=5)
 
-        outBtnSizer.Add(item=self.btnOutputSave, proportion=proportion,
+        outBtnSizer.Add(self.btnOutputSave, proportion=proportion,
                         flag=wx.ALIGN_RIGHT | wx.RIGHT | wx.BOTTOM, border=5)
 
         cmdBtnSizer.Add(
-            item=self.btnCmdProtocol,
+            self.btnCmdProtocol,
             proportion=1,
             flag=wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT | wx.BOTTOM,
             border=5)
-        cmdBtnSizer.Add(item=self.btnCmdClear, proportion=1,
+        cmdBtnSizer.Add(self.btnCmdClear, proportion=1,
                         flag=wx.ALIGN_CENTER | wx.RIGHT | wx.BOTTOM, border=5)
-        progressSizer.Add(item=self.btnCmdAbort, proportion=0,
+        progressSizer.Add(self.btnCmdAbort, proportion=0,
                           flag=wx.ALL | wx.ALIGN_CENTER, border=5)
         progressSizer.Add(
-            item=self.progressbar,
+            self.progressbar,
             proportion=1,
             flag=wx.ALIGN_CENTER | wx.RIGHT | wx.TOP | wx.BOTTOM,
             border=5)
@@ -250,16 +249,16 @@ class GConsoleWindow(wx.SplitterWindow):
         self.panelProgress.SetSizer(progressSizer)
         progressSizer.Fit(self.panelProgress)
 
-        btnSizer.Add(item=outBtnSizer, proportion=1,
+        btnSizer.Add(outBtnSizer, proportion=1,
                      flag=wx.ALL | wx.ALIGN_CENTER, border=5)
         btnSizer.Add(
-            item=cmdBtnSizer,
+            cmdBtnSizer,
             proportion=1,
             flag=wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM | wx.RIGHT,
             border=5)
-        self.outputSizer.Add(item=self.panelProgress, proportion=0,
+        self.outputSizer.Add(self.panelProgress, proportion=0,
                              flag=wx.EXPAND)
-        self.outputSizer.Add(item=btnSizer, proportion=0,
+        self.outputSizer.Add(btnSizer, proportion=0,
                              flag=wx.EXPAND)
 
         self.outputSizer.Fit(self)
@@ -299,7 +298,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
         self.search.showNotification.connect(self.showNotification)
 
-        border.Add(item=self.search, proportion=0,
+        border.Add(self.search, proportion=0,
                    flag=wx.EXPAND | wx.ALL, border=1)
 
         pane.SetSizer(border)
@@ -805,7 +804,7 @@ class GConsoleFrame(wx.Frame):
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(
-            item=self.goutput,
+            self.goutput,
             proportion=1,
             flag=wx.EXPAND,
             border=0)

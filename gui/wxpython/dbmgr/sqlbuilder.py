@@ -95,7 +95,7 @@ class SQLBuilder(wx.Frame):
                                    label=" %s " % _("Database connection"))
         databaseboxsizer = wx.StaticBoxSizer(databasebox, wx.VERTICAL)
         databaseboxsizer.Add(
-            item=CreateDbInfoDesc(
+            CreateDbInfoDesc(
                 self.panel,
                 self.dbInfo,
                 layer=self.layer),
@@ -118,7 +118,7 @@ class SQLBuilder(wx.Frame):
         self.text_sql.SetInsertionPointEnd()
         wx.CallAfter(self.text_sql.SetFocus)
 
-        sqlboxsizer.Add(item=self.text_sql, flag=wx.EXPAND)
+        sqlboxsizer.Add(self.text_sql, flag=wx.EXPAND)
 
         #
         # buttons
@@ -151,60 +151,60 @@ class SQLBuilder(wx.Frame):
             self.btn_logic[key].append(btn.GetId())
 
         self.buttonsizer = wx.FlexGridSizer(cols=4, hgap=5, vgap=5)
-        self.buttonsizer.Add(item=self.btn_clear)
-        self.buttonsizer.Add(item=self.btn_apply)
-        self.buttonsizer.Add(item=self.btn_close)
+        self.buttonsizer.Add(self.btn_clear)
+        self.buttonsizer.Add(self.btn_apply)
+        self.buttonsizer.Add(self.btn_close)
 
         btn_logicsizer = wx.GridBagSizer(5, 5)
         btn_logicsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_logic['is'][1]), pos=(
                 0, 0))
         btn_logicsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_logic['isnot'][1]), pos=(
                 1, 0))
         btn_logicsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_logic['like'][1]), pos=(
                 2, 0))
 
         btn_logicsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_logic['gt'][1]), pos=(
                 0, 1))
         btn_logicsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_logic['ge'][1]), pos=(
                 1, 1))
         btn_logicsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_logic['or'][1]), pos=(
                 2, 1))
 
         btn_logicsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_logic['lt'][1]), pos=(
                 0, 2))
         btn_logicsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_logic['le'][1]), pos=(
                 1, 2))
         btn_logicsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_logic['not'][1]), pos=(
                 2, 2))
 
         btn_logicsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_logic['brac'][1]), pos=(
                 0, 3))
         btn_logicsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_logic['prc'][1]), pos=(
                 1, 3))
         btn_logicsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_logic['and'][1]), pos=(
                 2, 3))
 
@@ -224,7 +224,7 @@ class SQLBuilder(wx.Frame):
             choices=self.dbInfo.GetColumns(
                 self.tablename),
             style=wx.LB_MULTIPLE)
-        columnsizer.Add(item=self.list_columns, proportion=1,
+        columnsizer.Add(self.list_columns, proportion=1,
                         flag=wx.EXPAND)
 
         modesizer = wx.BoxSizer(wx.VERTICAL)
@@ -236,7 +236,7 @@ class SQLBuilder(wx.Frame):
                                 majorDimension=1)
 
         self.mode.SetSelection(1)  # default 'values'
-        modesizer.Add(item=self.mode, proportion=1,
+        modesizer.Add(self.mode, proportion=1,
                       flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border=5)
 
         # self.list_columns.SetMinSize((-1,130))
@@ -249,7 +249,7 @@ class SQLBuilder(wx.Frame):
         self.list_values = wx.ListBox(parent=self.valuespanel, id=wx.ID_ANY,
                                       choices=self.colvalues,
                                       style=wx.LB_MULTIPLE)
-        valuesizer.Add(item=self.list_values, proportion=1,
+        valuesizer.Add(self.list_values, proportion=1,
                        flag=wx.EXPAND)
         self.valuespanel.SetSizer(valuesizer)
 
@@ -265,12 +265,12 @@ class SQLBuilder(wx.Frame):
         self.btn_uniquesample.Enable(False)
 
         buttonsizer3 = wx.BoxSizer(wx.HORIZONTAL)
-        buttonsizer3.Add(item=self.btn_uniquesample, proportion=0,
+        buttonsizer3.Add(self.btn_uniquesample, proportion=0,
                          flag=wx.ALIGN_CENTER_HORIZONTAL | wx.RIGHT, border=5)
-        buttonsizer3.Add(item=self.btn_unique, proportion=0,
+        buttonsizer3.Add(self.btn_unique, proportion=0,
                          flag=wx.ALIGN_CENTER_HORIZONTAL)
 
-        valuesizer.Add(item=buttonsizer3, proportion=0,
+        valuesizer.Add(buttonsizer3, proportion=0,
                        flag=wx.TOP, border=5)
 
         # go to
@@ -279,45 +279,45 @@ class SQLBuilder(wx.Frame):
             parent=self.valuespanel,
             id=wx.ID_ANY,
             style=wx.TE_PROCESS_ENTER)
-        gotosizer.Add(item=wx.StaticText(parent=self.valuespanel, id=wx.ID_ANY,
-                                         label=_("Go to:")), proportion=0,
+        gotosizer.Add(wx.StaticText(parent=self.valuespanel, id=wx.ID_ANY,
+                                    label=_("Go to:")), proportion=0,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border=5)
-        gotosizer.Add(item=self.goto, proportion=1,
+        gotosizer.Add(self.goto, proportion=1,
                       flag=wx.EXPAND)
-        valuesizer.Add(item=gotosizer, proportion=0,
+        valuesizer.Add(gotosizer, proportion=0,
                        flag=wx.ALL | wx.EXPAND, border=5)
 
-        self.hsizer.Add(item=columnsizer, proportion=1,
+        self.hsizer.Add(columnsizer, proportion=1,
                         flag=wx.EXPAND)
-        self.hsizer.Add(item=self.valuespanel, proportion=1,
+        self.hsizer.Add(self.valuespanel, proportion=1,
                         flag=wx.EXPAND)
 
         self.close_onapply = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
                                          label=_("Close dialog on apply"))
         self.close_onapply.SetValue(True)
 
-        self.pagesizer.Add(item=databaseboxsizer,
+        self.pagesizer.Add(databaseboxsizer,
                            flag=wx.ALL | wx.EXPAND, border=5)
         self.pagesizer.Add(
-            item=modesizer,
+            modesizer,
             proportion=0,
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5)
         self.pagesizer.Add(
-            item=self.hsizer,
+            self.hsizer,
             proportion=1,
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5)
         # self.pagesizer.Add(self.btn_uniqe,0,wx.ALIGN_LEFT|wx.TOP,border=5)
         # self.pagesizer.Add(self.btn_uniqesample,0,wx.ALIGN_LEFT|wx.TOP,border=5)
-        self.pagesizer.Add(item=self.btn_logicpanel, proportion=0,
+        self.pagesizer.Add(self.btn_logicpanel, proportion=0,
                            flag=wx.ALIGN_CENTER_HORIZONTAL)
-        self.pagesizer.Add(item=sqlboxsizer, proportion=0,
+        self.pagesizer.Add(sqlboxsizer, proportion=0,
                            flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
-        self.pagesizer.Add(item=self.buttonsizer, proportion=0,
+        self.pagesizer.Add(self.buttonsizer, proportion=0,
                            flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
         self.pagesizer.Add(
-            item=self.close_onapply,
+            self.close_onapply,
             proportion=0,
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5)
@@ -491,7 +491,7 @@ class SQLBuilderSelect(SQLBuilder):
                                     label=_("Verify"))
         self.btn_verify.SetToolTipString(_("Verify SQL statement"))
 
-        self.buttonsizer.Insert(item=self.btn_verify, before=1)
+        self.buttonsizer.Insert(1, self.btn_verify)
 
         self.text_sql.Bind(wx.EVT_TEXT, self.OnText)
         self.btn_verify.Bind(wx.EVT_BUTTON, self.OnVerify)
@@ -656,35 +656,35 @@ class SQLBuilderUpdate(SQLBuilder):
         btn_arithmeticsizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         btn_arithmeticsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_arithmetic['eq'][1]), pos=(
                 0, 0))
         btn_arithmeticsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_arithmetic['brac'][1]), pos=(
                 1, 0))
 
         btn_arithmeticsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_arithmetic['plus'][1]), pos=(
                 0, 1))
         btn_arithmeticsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_arithmetic['minus'][1]), pos=(
                 1, 1))
 
         btn_arithmeticsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_arithmetic['divide'][1]), pos=(
                 0, 2))
         btn_arithmeticsizer.Add(
-            item=self.FindWindowById(
+            self.FindWindowById(
                 self.btn_arithmetic['multiply'][1]), pos=(
                 1, 2))
 
         self.btn_arithmeticpanel.SetSizer(btn_arithmeticsizer)
 
-        self.pagesizer.Insert(item=self.btn_arithmeticpanel, before=3,
+        self.pagesizer.Insert(3, self.btn_arithmeticpanel,
                               proportion=0, flag=wx.ALIGN_CENTER_HORIZONTAL)
 
         self.funcpanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
@@ -696,12 +696,12 @@ class SQLBuilderUpdate(SQLBuilder):
                                     choices=self.sqlFuncs['sqlite'].keys(),
                                     style=wx.LB_SORT)
 
-        funcsizer.Add(item=self.list_func, proportion=1,
+        funcsizer.Add(self.list_func, proportion=1,
                       flag=wx.EXPAND)
 
         self.funcpanel.SetSizer(funcsizer)
 
-        self.hsizer.Insert(item=self.funcpanel, before=2,
+        self.hsizer.Insert(2, self.funcpanel,
                            proportion=1, flag=wx.EXPAND)
 
         self.list_func.Bind(wx.EVT_LISTBOX, self.OnAddFunc)

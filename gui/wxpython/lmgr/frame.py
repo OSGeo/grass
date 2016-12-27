@@ -59,7 +59,8 @@ from gui_core.goutput import GConsoleWindow, GC_SEARCH, GC_PROMPT
 from modules.import_export import GdalOutputDialog, DxfImportDialog, GdalImportDialog, OgrImportDialog
 from gui_core.dialogs import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog, MapLayersDialog, QuitDialog
 from modules.colorrules import RasterColorTable, VectorColorTable
-from gui_core.menu import Menu, SearchModuleWindow
+from gui_core.menu import SearchModuleWindow
+from gui_core.menu import Menu as GMenu
 from gmodeler.model import Model
 from gmodeler.frame import ModelFrame
 from psmap.frame import PsMapFrame
@@ -72,6 +73,7 @@ from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
+from gui_core.wrap import Menu
 from gcp.manager import GCPWizard
 from nviz.main import haveNviz
 from nviz.preferences import NvizPreferencesDialog
@@ -267,7 +269,7 @@ class GMFrame(wx.Frame):
 
     def _createMenuBar(self):
         """Creates menu bar"""
-        self.menubar = Menu(
+        self.menubar = GMenu(
             parent=self,
             model=self._menuTreeBuilder.GetModel(
                 separators=True))
@@ -279,7 +281,7 @@ class GMFrame(wx.Frame):
 
         Used to rename display.
         """
-        menu = wx.Menu()
+        menu = Menu()
         item = wx.MenuItem(menu, id=wx.ID_ANY, text=_("Rename Map Display"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameDisplay, item)
@@ -434,7 +436,7 @@ class GMFrame(wx.Frame):
             tree=self.GetLayerTree(),
             display=self.GetMapDisplay())
         idx = self.notebook.GetPageIndexByName('layers')
-        self.notebook.InsertPage(
+        self.notebook.InsertNBPage(
             index=idx + 1,
             page=self.nviz,
             text=_("3D view"),
@@ -452,7 +454,7 @@ class GMFrame(wx.Frame):
         # if more mapwindow3D were possible, check here if nb page should be
         # removed
         self.notebook.SetSelectionByName('layers')
-        self.notebook.DeletePage('nviz')
+        self.notebook.DeleteNBPage('nviz')
 
         # hide toolbar
         self._auimgr.GetPane('toolbarNviz').Hide()
@@ -1254,7 +1256,7 @@ class GMFrame(wx.Frame):
     def _popupMenu(self, data):
         """Create popup menu
         """
-        menu = wx.Menu()
+        menu = Menu()
 
         for key, handler in data:
             if key is None:

@@ -27,6 +27,7 @@ from core.gcmd import EncodeString
 from core.utils import _
 from gui_core.widgets import SearchModuleWidget
 from gui_core.treeview import CTreeView
+from gui_core.wrap import Menu as MenuWidget
 from icons.icon import MetaIcon
 
 from grass.pydispatch.signal import Signal
@@ -47,7 +48,7 @@ class Menu(wx.MenuBar):
 
     def _createMenu(self, node):
         """Creates menu"""
-        menu = wx.Menu()
+        menu = MenuWidget()
         for child in node.children:
             if child.children:
                 label = child.label
@@ -163,7 +164,7 @@ class SearchModuleWindow(wx.Panel):
             parent=self, id=wx.ID_ANY,
             label="Press Enter for next match, Ctrl+Enter to run command")
         self._helpText.SetForegroundColour(
-            wx.SystemSettings_GetColour(
+            wx.SystemSettings.GetColour(
                 wx.SYS_COLOUR_GRAYTEXT))
 
         # buttons
@@ -187,23 +188,23 @@ class SearchModuleWindow(wx.Panel):
 
         # body
         dataSizer = wx.BoxSizer(wx.HORIZONTAL)
-        dataSizer.Add(item=self._tree, proportion=1,
+        dataSizer.Add(self._tree, proportion=1,
                       flag=wx.EXPAND)
 
         # buttons
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item=self._btnRun, proportion=0)
+        btnSizer.Add(self._btnRun, proportion=0)
 
-        sizer.Add(item=dataSizer, proportion=1,
+        sizer.Add(dataSizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL, border=5)
 
-        sizer.Add(item=self._search, proportion=0,
+        sizer.Add(self._search, proportion=0,
                   flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALIGN_RIGHT | wx.BOTTOM | wx.RIGHT, border=5)
 
-        sizer.Add(item=self._helpText,
+        sizer.Add(self._helpText,
                   proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
 
         sizer.Fit(self)

@@ -31,9 +31,11 @@ import wx
 
 from grass.pydispatch.signal import Signal
 
+from core.globalvar import wxPythonPhoenix
 import grass.script as grass
 
 from gui_core.dialogs import SavedRegion
+from gui_core.wrap import DragImage, PseudoDC, EmptyBitmap, BitmapFromImage
 from core.gcmd import RunCommand, GException, GError, GMessage
 from core.debug import Debug
 from core.settings import UserSettings
@@ -184,7 +186,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.redrawAll = True
 
         # will store an off screen empty bitmap for saving to file
-        self._buffer = wx.EmptyBitmap(
+        self._buffer = EmptyBitmap(
             max(1, self.Map.width),
             max(1, self.Map.height))
 
@@ -219,13 +221,13 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """
         # create PseudoDC used for background map, map decorations like scales
         # and legends
-        self.pdc = wx.PseudoDC()
+        self.pdc = PseudoDC()
         # used for digitization tool
         self.pdcVector = None
         # transparent objects (region box, raster digitizer)
-        self.pdcTransparent = wx.PseudoDC()
+        self.pdcTransparent = PseudoDC()
         # pseudoDC for temporal objects (select box, measurement tool, etc.)
-        self.pdcTmp = wx.PseudoDC()
+        self.pdcTmp = PseudoDC()
 
     def _bindMouseEvents(self):
         self.Bind(wx.EVT_MOUSE_EVENTS, self.MouseActions)
@@ -339,7 +341,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             return
 
         if pdctype == 'image':  # draw selected image
-            bitmap = wx.BitmapFromImage(img)
+            bitmap = BitmapFromImage(img)
             w, h = bitmap.GetSize()
             pdc.DrawBitmap(
                 bitmap, coords[0],
@@ -566,7 +568,10 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         # create a clipping rect from our position and size
         # and update region
         rgn = self.GetUpdateRegion().GetBox()
-        dc.SetClippingRect(rgn)
+        if wxPythonPhoenix:
+            dc.SetClippingRegion(rgn)
+        else:
+            dc.SetClippingRect(rgn)
 
         switchDraw = False
         if self.redrawAll is None:
@@ -648,7 +653,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             # current drawing in it, so it can be used to save the image to
             # a file, or whatever.
             self._buffer.Destroy()
-            self._buffer = wx.EmptyBitmap(
+            self._buffer = EmptyBitmap(
                 max(1, self.Map.width),
                 max(1, self.Map.height))
 
@@ -1045,7 +1050,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         dc.SetBackground(wx.Brush("White"))
         dc.Clear()
 
-        self.dragimg = wx.DragImage(self._buffer)
+        self.dragimg = DragImage(self._buffer)
         self.dragimg.BeginDrag((0, 0), self)
         self.dragimg.GetImageRect(moveto)
         self.dragimg.Move(moveto)
@@ -1399,7 +1404,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             self.OnMouseEnter(event)
 
         elif event.Moving():
-            pixelCoordinates = event.GetPositionTuple()[:]
+            pixelCoordinates = event.GetPosition()
             coordinates = self.Pixel2Cell(pixelCoordinates)
             self.mouseMoving.emit(x=coordinates[0], y=coordinates[1])
             self.OnMouseMoving(event)
@@ -1415,7 +1420,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             return
 
         self.processMouse = False
-        current = event.GetPositionTuple()[:]
+        current = event.GetPosition()
         wheel = event.GetWheelRotation()
         Debug.msg(5, "BufferedWindow.MouseAction(): wheel=%d" % wheel)
 
@@ -1450,7 +1455,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """Mouse dragging
         """
         Debug.msg(5, "BufferedWindow.MouseAction(): Dragging")
-        current = event.GetPositionTuple()[:]
+        current = event.GetPosition()
         previous = self.mouse['begin']
         move = (current[0] - previous[0],
                 current[1] - previous[1])
@@ -1469,7 +1474,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         elif (self.mouse['use'] == 'pointer' and
                 not digitToolbar and
                 self.dragid is not None):
-            coords = event.GetPositionTuple()
+            coords = event.GetPosition()
             self.DragItem(self.dragid, coords)
 
         # dragging anything else - rubber band box or line
@@ -1478,7 +1483,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                     not digitToolbar):
                 return
 
-            self.mouse['end'] = event.GetPositionTuple()[:]
+            self.mouse['end'] = event.GetPosition()
             if (event.LeftIsDown() and
                 not (digitToolbar and
                      digitToolbar.GetAction() in ("moveLine",) and
@@ -1491,7 +1496,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         Debug.msg(5, "BufferedWindow.OnLeftDown(): use=%s" %
                   self.mouse["use"])
 
-        self.mouse['begin'] = event.GetPositionTuple()[:]
+        self.mouse['begin'] = event.GetPosition()
 
         # vector digizer
         if self.mouse["use"] == "pointer" and \
@@ -1528,7 +1533,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         Debug.msg(5, "BufferedWindow.OnLeftUp(): use=%s" %
                   self.mouse["use"])
 
-        self.mouse['end'] = event.GetPositionTuple()[:]
+        self.mouse['end'] = event.GetPosition()
         coordinates = self.Pixel2Cell(self.mouse['end'])
 
         if self.mouse['use'] in ["zoom", "pan"]:
@@ -1656,12 +1661,12 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         if not event:
             return
 
-        self.mouse['begin'] = event.GetPositionTuple()[:]
+        self.mouse['begin'] = event.GetPosition()
 
     def OnMiddleUp(self, event):
         """Middle mouse button released
         """
-        self.mouse['end'] = event.GetPositionTuple()[:]
+        self.mouse['end'] = event.GetPosition()
 
         # set region in zoom or pan
         begin = self.mouse['begin']

@@ -46,6 +46,12 @@ except IOError:
 from grass.script.core import get_commands
 
 
+def CheckWxPhoenix():
+    if 'phoenix' in wx.version():
+        return True
+    return False
+
+
 def CheckWxVersion(version):
     """Check wx version"""
     ver = wx.__version__
@@ -66,9 +72,12 @@ def CheckForWx(forceVersion=os.getenv('GRASS_WXVERSION', None)):
     minVersion = [2, 8, 10, 1]
     try:
         try:
+            # Note that Phoenix doesn't have wxversion anymore
             import wxversion
         except ImportError as e:
-            raise ImportError(e)
+            # if there is no wx raises ImportError
+            import wx
+            return
         if forceVersion:
             wxversion.select(forceVersion)
         wxversion.ensureMinimal(str(minVersion[0]) + '.' + str(minVersion[1]))
@@ -94,7 +103,16 @@ def CheckForWx(forceVersion=os.getenv('GRASS_WXVERSION', None)):
 if not os.getenv("GRASS_WXBUNDLED"):
     CheckForWx()
 import wx
-import wx.lib.flatnotebook as FN
+
+if CheckWxPhoenix():
+    try:
+        import agw.flatnotebook as FN
+    except ImportError: # if it's not there locally, try the wxPython lib.
+        import wx.lib.agw.flatnotebook as FN
+else:
+    import wx.lib.flatnotebook as FN
+
+
 
 """
 Query layer (generated for example by selecting item in the Attribute Table Manager)
@@ -216,6 +234,7 @@ toolbarSize = (24, 24)
 """@Check version of wxPython, use agwStyle for 2.8.11+"""
 hasAgw = CheckWxVersion([2, 8, 11, 0])
 wxPython3 = CheckWxVersion([3, 0, 0, 0])
+wxPythonPhoenix = CheckWxPhoenix()
 
 gtk3 = True if 'gtk3' in wx.PlatformInfo else False
 

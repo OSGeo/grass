@@ -294,7 +294,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         Based on visualization/nviz/src/togl_flythrough.c.
         :param x,y: screen coordinates
         """
-        sx, sy = self.GetClientSizeTuple()
+        sx, sy = self.GetClientSize()
         dx = dy = 0.01
 
         mx = 2 * (float(x) / sx) - 1
@@ -556,7 +556,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         elif key in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT):
             if not self.fly['mouseControl']:
                 if not self.timerFly.IsRunning():
-                    sx, sy = self.GetClientSizeTuple()
+                    sx, sy = self.GetClientSize()
                     self.fly['pos']['x'] = sx / 2
                     self.fly['pos']['y'] = sy / 2
                     self.fly['mouseControl'] = False  # controlled by keyboard
@@ -632,7 +632,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.OnDClick(event)
 
         elif event.Moving():
-            pixelCoordinates = event.GetPositionTuple()[:]
+            pixelCoordinates = event.GetPosition()
             coordinates = self.Pixel2Cell(pixelCoordinates)
             # coordinates are none when no map is loaded
             # TODO: handle in more clever way: check the state
@@ -661,15 +661,15 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                                 key='scrollDirection',
                                 subkey='selection'):
                 wheel *= -1
-            self.DoZoom(zoomtype=wheel, pos=event.GetPositionTuple())
+            self.DoZoom(zoomtype=wheel, pos=event.GetPosition())
 
         # update statusbar
         # self.parent.StatusbarUpdate()
 
     def OnLeftDown(self, event):
         """On left mouse down"""
-        self.mouse['begin'] = event.GetPositionTuple()
-        self.mouse['tmp'] = event.GetPositionTuple()
+        self.mouse['begin'] = event.GetPosition()
+        self.mouse['tmp'] = event.GetPosition()
         if self.mouse['use'] == "lookHere":
             size = self.GetClientSize()
             self._display.LookHere(
@@ -713,7 +713,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         if self.mouse['use'] == 'pointer':
             if self.dragid >= 0:
-                self.DragItem(self.dragid, event.GetPositionTuple())
+                self.DragItem(self.dragid, event.GetPosition())
 
         if self.mouse['use'] == 'rotate':
             dx, dy = event.GetX(
@@ -728,7 +728,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         if self.mouse['use'] == 'pan':
             self.FocusPanning(event)
 
-        self.mouse['tmp'] = event.GetPositionTuple()
+        self.mouse['tmp'] = event.GetPosition()
 
         event.Skip()
 
@@ -785,7 +785,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.DoPaint()
 
     def OnLeftUp(self, event):
-        self.mouse['end'] = event.GetPositionTuple()
+        self.mouse['end'] = event.GetPosition()
         if self.mouse["use"] == "query":
             # here changed from 'begin' to 'end' because it is more common
             # behavior used also in 2d map window
@@ -851,13 +851,13 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """On mouse double click"""
         if self.mouse['use'] != 'pointer':
             return
-        pos = event.GetPositionTuple()
+        pos = event.GetPosition()
         self.dragid = self.FindObjects(pos[0], pos[1], self.hitradius)
         self.overlayActivated.emit(overlayId=self.dragid)
 
     def FocusPanning(self, event):
         """Simulation of panning using focus"""
-        size = self.GetClientSizeTuple()
+        size = self.GetClientSize()
         id1, x1, y1, z1 = self._display.GetPointOnSurface(
             self.mouse['tmp'][0], size[1] - self.mouse['tmp'][1])
         id2, x2, y2, z2 = self._display.GetPointOnSurface(
@@ -873,7 +873,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             # update properties
             self.PostViewEvent()
 
-            self.mouse['tmp'] = event.GetPositionTuple()
+            self.mouse['tmp'] = event.GetPosition()
             self.render['quick'] = True
             self.Refresh(False)
 
@@ -881,7 +881,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """Move all layers in horizontal (x, y) direction.
         Currently not used.
         """
-        size = self.GetClientSizeTuple()
+        size = self.GetClientSize()
         id1, x1, y1, z1 = self._display.GetPointOnSurface(
             self.mouse['tmp'][0], size[1] - self.mouse['tmp'][1])
         id2, x2, y2, z2 = self._display.GetPointOnSurface(
@@ -920,7 +920,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     evt = wxUpdateProperties(data=data)
                     wx.PostEvent(self, evt)
 
-            self.mouse['tmp'] = event.GetPositionTuple()
+            self.mouse['tmp'] = event.GetPosition()
             self.render['quick'] = True
             self.Refresh(False)
 
@@ -1014,7 +1014,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def QuerySurface(self, x, y):
         """Query surface on given position"""
-        size = self.GetClientSizeTuple()
+        size = self.GetClientSize()
         result = self._display.QueryMap(x, size[1] - y)
         if result:
             self.qpoints.append((result['x'], result['y'], result['z']))
@@ -2625,7 +2625,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # output
         subcmd = 'output=nviz_output '
         subcmd += 'format=ppm '
-        subcmd += 'size=%d,%d ' % self.GetClientSizeTuple()
+        subcmd += 'size=%d,%d ' % self.GetClientSize()
         cmd += subcmd
 
         return cmd

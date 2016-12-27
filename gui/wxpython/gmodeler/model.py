@@ -1133,7 +1133,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         if self.regionComment is None:
             self.regionComment = ogl.ShapeRegion()
             self.regionComment.SetFormatMode(ogl.FORMAT_CENTRE_HORIZ)
-            font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+            font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
             font.SetStyle(wx.ITALIC)
             self.regionComment.SetFont(font)
 
@@ -1803,7 +1803,7 @@ class ModelComment(ModelObject, ogl.RectangleShape):
             self.SetCanvas(parent)
             self.SetX(x)
             self.SetY(y)
-            font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+            font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
             font.SetStyle(wx.ITALIC)
             self.SetFont(font)
             self._setPen()
@@ -2824,18 +2824,18 @@ class ModelParamDialog(wx.Dialog):
         btnSizer.Realize()
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(item=self.notebook, proportion=1,
+        mainSizer.Add(self.notebook, proportion=1,
                       flag=wx.EXPAND)
         if self.interData.IsShown():
-            mainSizer.Add(item=self.interData, proportion=0,
+            mainSizer.Add(self.interData, proportion=0,
                           flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
-            mainSizer.Add(item=wx.StaticLine(parent=self, id=wx.ID_ANY,
-                                             style=wx.LI_HORIZONTAL),
+            mainSizer.Add(wx.StaticLine(parent=self, id=wx.ID_ANY,
+                                        style=wx.LI_HORIZONTAL),
                           proportion=0,
                           flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
 
-        mainSizer.Add(item=btnSizer, proportion=0,
+        mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.SetSizer(mainSizer)

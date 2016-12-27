@@ -253,10 +253,9 @@ class _MouseEvent(wx.PyCommandEvent):
         Debug.msg(5, "_MouseEvent:__init__()")
 
         wx.PyCommandEvent.__init__(self)
-
+        self.__dict__['_NativeEvent'] = NativeEvent
+        self.__dict__['changed'] = changed
         self.SetEventType(EventType)
-        self._NativeEvent = NativeEvent
-        self.changed = changed
 
     def GetPosition(self):
         return wx.Point(*self.changed)
