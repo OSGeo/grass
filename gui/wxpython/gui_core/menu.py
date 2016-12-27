@@ -27,6 +27,7 @@ from core.gcmd import EncodeString
 from core.utils import _
 from gui_core.widgets import SearchModuleWidget
 from gui_core.treeview import CTreeView
+from gui_core.wrap import Button
 from gui_core.wrap import Menu as MenuWidget
 from icons.icon import MetaIcon
 
@@ -137,9 +138,11 @@ class SearchModuleWindow(wx.Panel):
         showNotification - attribute 'message'
     """
 
-    def __init__(self, parent, handlerObj, model, id=wx.ID_ANY, **kwargs):
+    def __init__(self, parent, handlerObj, giface, model, id=wx.ID_ANY,
+                 **kwargs):
         self.parent = parent
-        self.handlerObj = handlerObj
+        self._handlerObj = handlerObj
+        self._giface = giface
 
         self.showNotification = Signal('SearchModuleWindow.showNotification')
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
@@ -168,11 +171,21 @@ class SearchModuleWindow(wx.Panel):
                 wx.SYS_COLOUR_GRAYTEXT))
 
         # buttons
-        self._btnRun = wx.Button(self, id=wx.ID_OK, label=_("&Run"))
-        self._btnRun.SetToolTipString(_("Run selected module from the tree"))
+        self._btnRun = Button(self, id=wx.ID_OK, label=_("&Run"))
+        self._btnRun.SetToolTip(_("Run selected module from the tree"))
+        self._btnHelp = Button(self, id=wx.ID_ANY, label=_("H&elp"))
+        self._btnHelp.SetToolTip(
+            _("Show manual for selected module from the tree"))
+        self._btnAdvancedSearch = Button(self, id=wx.ID_ANY,
+                                         label=_("Adva&nced search..."))
+        self._btnAdvancedSearch.SetToolTip(
+            _("Do advanced search using %s module") % 'g.search.module')
 
         # bindings
         self._btnRun.Bind(wx.EVT_BUTTON, lambda evt: self.Run())
+        self._btnHelp.Bind(wx.EVT_BUTTON, lambda evt: self.Help())
+        self._btnAdvancedSearch.Bind(wx.EVT_BUTTON,
+                                     lambda evt: self.AdvancedSearch())
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
 
         self._tree.selectionChanged.connect(self.OnItemSelected)
@@ -193,6 +206,9 @@ class SearchModuleWindow(wx.Panel):
 
         # buttons
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(self._btnAdvancedSearch, proportion=0)
+        btnSizer.AddStretchSpacer()
+        btnSizer.Add(self._btnHelp, proportion=0)
         btnSizer.Add(self._btnRun, proportion=0)
 
         sizer.Add(dataSizer, proportion=1,
@@ -201,8 +217,8 @@ class SearchModuleWindow(wx.Panel):
         sizer.Add(self._search, proportion=0,
                   flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
-        sizer.Add(btnSizer, proportion=0,
-                  flag=wx.ALIGN_RIGHT | wx.BOTTOM | wx.RIGHT, border=5)
+        sizer.Add(item=btnSizer, proportion=0,
+                  flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
         sizer.Add(self._helpText,
                   proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
@@ -216,26 +232,60 @@ class SearchModuleWindow(wx.Panel):
         self.SetAutoLayout(True)
         self.Layout()
 
-    def Run(self, module=None):
+    def _GetSelectedNode(self):
+        selection = self._tree.GetSelected()
+        if not selection:
+            return None
+        return selection[0]
+
+    def Run(self, node=None):
         """Run selected command.
 
-        :param module: module (represented by tree node)
+        :param node: a tree node associated with the module or other item
         """
-        if module is None:
-            if not self._tree.GetSelected():
-                return
-
-            module = self._tree.GetSelected()[0]
-        data = module.data
+        if not node:
+            node = self._GetSelectedNode()
+        # nothing selected
+        if not node:
+            return
+        data = node.data
+        # non-leaf nodes
         if not data:
             return
 
-        handler = 'self.handlerObj.' + data['handler'].lstrip('self.')
+        # extract name of the handler and create a new call
+        handler = 'self._handlerObj.' + data['handler'].lstrip('self.')
 
         if data['command']:
             eval(handler)(event=None, cmd=data['command'].split())
         else:
             eval(handler)(event=None)
+
+    def Help(self, node=None):
+        """Show documentation for a module"""
+        if not node:
+            node = self._GetSelectedNode()
+        # nothing selected
+        if not node:
+            return
+        data = node.data
+        # non-leaf nodes
+        if not data:
+            return
+
+        if not data['command']:
+            # showing nothing for non-modules
+            return
+        # strip parameters from command if present
+        name = data['command'].split()[0]
+        self._giface.Help(name)
+        self.showNotification.emit(
+            message=_("Documentation for %s is now open in the web browser")
+            % name)
+
+    def AdvancedSearch(self):
+        """Show advanced search window"""
+        self._handlerObj.RunMenuCmd(cmd=['g.search.modules'])
 
     def OnKeyUp(self, event):
         """Key or key combination pressed"""
