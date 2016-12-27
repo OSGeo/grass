@@ -61,7 +61,7 @@ class PlotPanel(scrolled.ScrolledPanel):
 
         self.canvasPanel = wx.Panel(parent=self)
         self.mainSizer.Add(
-            item=self.canvasPanel,
+            self.canvasPanel,
             proportion=1,
             flag=wx.EXPAND,
             border=0)
@@ -183,7 +183,7 @@ class PlotPanel(scrolled.ScrolledPanel):
             self.canvasList.append(canvas)
 
             self.canvasSizer.Add(
-                item=canvas,
+                canvas,
                 proportion=1,
                 flag=wx.EXPAND,
                 border=0)

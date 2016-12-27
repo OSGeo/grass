@@ -39,6 +39,7 @@ from core.utils import _, PilImageToWxImage
 from gui_core.forms import GUI
 from gui_core.dialogs import HyperlinkDialog
 from gui_core.ghelp import ShowAboutDialog
+from gui_core.wrap import PseudoDC
 from psmap.menudata import PsMapMenuData
 from gui_core.toolbars import ToolSwitcher
 
@@ -1247,11 +1248,11 @@ class PsMapBufferedWindow(wx.Window):
         self.itemLabels = {}
 
         # define PseudoDC
-        self.pdc = wx.PseudoDC()
-        self.pdcObj = wx.PseudoDC()
-        self.pdcPaper = wx.PseudoDC()
-        self.pdcTmp = wx.PseudoDC()
-        self.pdcImage = wx.PseudoDC()
+        self.pdc = PseudoDC()
+        self.pdcObj = PseudoDC()
+        self.pdcPaper = PseudoDC()
+        self.pdcTmp = PseudoDC()
+        self.pdcImage = PseudoDC()
 
         self.SetClientSize((700, 510))  # ?
         self._buffer = wx.EmptyBitmap(*self.GetClientSize())
@@ -2046,7 +2047,10 @@ class PsMapBufferedWindow(wx.Window):
         if not self.preview:
             # redraw paper
             pRect = self.pdcPaper.GetIdBounds(self.pageId)
-            pRect.OffsetXY(-view[0], -view[1])
+            if globalvar.wxPythonPhoenix:
+                pRect.Offset(-view[0], -view[1])
+            else:
+                pRect.OffsetXY(-view[0], -view[1])
             pRect = self.ScaleRect(rect=pRect, scale=zoomFactor)
             self.DrawPaper(pRect)
 

@@ -28,6 +28,7 @@ from core.utils import ListOfCatsToRange, _
 from core.globalvar import QUERYLAYER
 from vdigit.dialogs import VDigitCategoryDialog, VDigitZBulkDialog, VDigitDuplicatesDialog
 from gui_core import gselect
+from gui_core.wrap import PseudoDC
 
 
 class VDigitWindow(BufferedMapWindow):
@@ -42,7 +43,7 @@ class VDigitWindow(BufferedMapWindow):
                                    style=style, **kwargs)
         self.lmgr = lmgr
         self.tree = tree
-        self.pdcVector = wx.PseudoDC()
+        self.pdcVector = PseudoDC()
         self.toolbar = self.parent.GetToolbar('vdigit')
         self.digit = None  # wxvdigit.IVDigit
         self._digitizingInfo = False  # digitizing with info
@@ -216,7 +217,7 @@ class VDigitWindow(BufferedMapWindow):
             # add new point to the line
             self.polycoords.append(
                 self.Pixel2Cell(
-                    event.GetPositionTuple()[:]))
+                    event.GetPosition()))
             self.DrawLines(pdc=self.pdcTmp)
 
     def _geomAttrb(self, fid, dialog, attrb):
@@ -463,7 +464,7 @@ class VDigitWindow(BufferedMapWindow):
         if len(self.polycoords) > 1:  # start new line
             self.polycoords = []
             self.ClearLines(pdc=self.pdcTmp)
-        self.polycoords.append(self.Pixel2Cell(event.GetPositionTuple()[:]))
+        self.polycoords.append(self.Pixel2Cell(event.GetPosition()))
         if len(self.polycoords) == 1:
             begin = self.Pixel2Cell(self.polycoords[-1])
             end = self.Pixel2Cell(self.mouse['end'])
@@ -923,7 +924,7 @@ class VDigitWindow(BufferedMapWindow):
         if action in ("moveLine", "moveVertex") and \
                 hasattr(self, "moveInfo"):
             pFrom = self.moveInfo['begin']
-            pTo = self.Pixel2Cell(event.GetPositionTuple())
+            pTo = self.Pixel2Cell(event.GetPosition())
 
             move = (pTo[0] - pFrom[0],
                     pTo[1] - pFrom[1])
@@ -1109,7 +1110,7 @@ class VDigitWindow(BufferedMapWindow):
             self.UpdateMap(render=False)
 
     def _onMouseMoving(self, event):
-        self.mouse['end'] = event.GetPositionTuple()[:]
+        self.mouse['end'] = event.GetPosition()
 
         Debug.msg(5, "VDigitWindow.OnMouseMoving(): coords=%f,%f" %
                   (self.mouse['end'][0], self.mouse['end'][1]))

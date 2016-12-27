@@ -27,7 +27,7 @@ from gui_core.preferences import PreferencesBaseDialog
 from core.gcmd import GMessage
 from core.layerlist import LayerList
 from core.settings import UserSettings
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 from gui_core.simplelmgr import SimpleLayerManager, SIMPLE_LMGR_RASTER, \
     SIMPLE_LMGR_VECTOR, SIMPLE_LMGR_RGB, SIMPLE_LMGR_TB_LEFT, SIMPLE_LMGR_TB_RIGHT
 
@@ -98,9 +98,9 @@ class SwipeMapDialog(wx.Dialog):
         self.btnSizer.AddButton(self.btnApply)
         self.btnSizer.Realize()
 
-        mainSizer.Add(item=self.btnSwitch, proportion=0,
+        mainSizer.Add(self.btnSwitch, proportion=0,
                       flag=wx.ALL | wx.ALIGN_LEFT, border=5)
-        mainSizer.Add(item=self.btnSizer, proportion=0,
+        mainSizer.Add(self.btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
         self.mainSizer = mainSizer
         self._switchMode(simple=True)
@@ -275,7 +275,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row = 0
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 label=_("Color:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -292,11 +292,11 @@ class PreferencesDialog(PreferencesBaseDialog):
         color.SetName('GetColour')
         self.winId['mapswipe:cursor:color'] = color.GetId()
 
-        gridSizer.Add(item=color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
 
         row += 1
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 label=_("Shape:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -317,12 +317,12 @@ class PreferencesDialog(PreferencesBaseDialog):
                                                subkey=['type', 'selection']))
         self.winId['mapswipe:cursor:type:selection'] = cursors.GetId()
 
-        gridSizer.Add(item=cursors, flag=wx.ALIGN_RIGHT |
+        gridSizer.Add(cursors, flag=wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos=(row, 1))
 
         row += 1
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 label=_("Line width:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -340,12 +340,12 @@ class PreferencesDialog(PreferencesBaseDialog):
             name="GetValue")
         self.winId['mapswipe:cursor:width'] = width.GetId()
 
-        gridSizer.Add(item=width, flag=wx.ALIGN_RIGHT |
+        gridSizer.Add(width, flag=wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos=(row, 1))
 
         row += 1
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel,
                 label=_("Size:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
@@ -363,16 +363,16 @@ class PreferencesDialog(PreferencesBaseDialog):
             name="GetValue")
         self.winId['mapswipe:cursor:size'] = size.GetId()
 
-        gridSizer.Add(item=size, flag=wx.ALIGN_RIGHT |
+        gridSizer.Add(size, flag=wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos=(row, 1))
 
         gridSizer.AddGrowableCol(1)
         sizer.Add(
-            item=gridSizer,
+            gridSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=3)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
         panel.SetSizer(border)
 
         return panel

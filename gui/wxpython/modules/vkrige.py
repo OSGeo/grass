@@ -39,7 +39,7 @@ from gui_core import goutput
 from core.settings import UserSettings
 from gui_core.widgets import GNotebook
 from core.giface import Notification
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 #import help
 
 import wx
@@ -76,7 +76,7 @@ class KrigingPanel(wx.Panel):
         flexSizer.AddGrowableCol(1)
 
         flexSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 self,
                 id=wx.ID_ANY,
                 label=_("Point dataset:")),
@@ -85,27 +85,27 @@ class KrigingPanel(wx.Panel):
                                                  ftype='points',
                                                  updateOnPopup=False)
         self.InputDataMap.SetFocus()
-        flexSizer.Add(item=self.InputDataMap, flag=wx.ALIGN_CENTER_VERTICAL)
+        flexSizer.Add(self.InputDataMap, flag=wx.ALIGN_CENTER_VERTICAL)
 
         RefreshButton = wx.Button(self, id=wx.ID_REFRESH)
         RefreshButton.Bind(wx.EVT_BUTTON, self.OnButtonRefresh)
-        flexSizer.Add(item=RefreshButton, flag=wx.ALIGN_CENTER_VERTICAL)
+        flexSizer.Add(RefreshButton, flag=wx.ALIGN_CENTER_VERTICAL)
 
         flexSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 self,
                 id=wx.ID_ANY,
                 label=_("Numeric column:")),
             flag=wx.ALIGN_CENTER_VERTICAL)
         self.InputDataColumn = gselect.ColumnSelect(self, id=wx.ID_ANY)
-        flexSizer.Add(item=self.InputDataColumn)
+        flexSizer.Add(self.InputDataColumn)
 
         self.InputDataMap.GetChildren()[0].Bind(
             wx.EVT_TEXT, self.OnInputMapChanged)
         self.InputDataColumn.GetChildren()[0].Bind(
             wx.EVT_TEXT, self.OnInputColumnChanged)
 
-        InputBoxSizer.Add(item=flexSizer)
+        InputBoxSizer.Add(flexSizer)
 
         # 2. Kriging. In book pages one for each R package. Includes variogram
         # fit.
@@ -156,19 +156,19 @@ class KrigingPanel(wx.Panel):
 
         OutputParameters = wx.GridBagSizer(hgap=5, vgap=5)
         OutputParameters.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 self, id=wx.ID_ANY,
                 label=_("Name for the output raster map:")),
             flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
         self.OutputMapName = gselect.Select(parent=self, id=wx.ID_ANY,
                                             type='raster',
                                             mapsets=[grass.gisenv()['MAPSET']])
-        OutputParameters.Add(item=self.OutputMapName, flag=wx.EXPAND | wx.ALL,
+        OutputParameters.Add(self.OutputMapName, flag=wx.EXPAND | wx.ALL,
                              pos=(0, 1))
         self.VarianceRasterCheckbox = wx.CheckBox(
             self, id=wx.ID_ANY, label=_("Export variance map as well: "))
         self.VarianceRasterCheckbox.SetValue(state=True)
-        OutputParameters.Add(item=self.VarianceRasterCheckbox,
+        OutputParameters.Add(self.VarianceRasterCheckbox,
                              flag=wx.ALIGN_CENTER_VERTICAL,
                              pos=(1, 0))
         self.OutputVarianceMapName = gselect.Select(
@@ -177,7 +177,7 @@ class KrigingPanel(wx.Panel):
         self.VarianceRasterCheckbox.Bind(
             wx.EVT_CHECKBOX, self.OnVarianceCBChecked)
         OutputParameters.Add(
-            item=self.OutputVarianceMapName,
+            self.OutputVarianceMapName,
             flag=wx.EXPAND | wx.ALL,
             pos=(
                 1,
@@ -190,7 +190,7 @@ class KrigingPanel(wx.Panel):
                 group='cmd',
                 key='overwrite',
                 subkey='enabled'))
-        OutputParameters.Add(item=self.OverwriteCheckBox,
+        OutputParameters.Add(self.OverwriteCheckBox,
                              pos=(2, 0), span=(1, 2))
 
         OutputParameters.AddGrowableCol(1)
@@ -630,12 +630,12 @@ class RBookgstatPanel(RBookPanel):
         self.ModelChoicebox.Enable(False)
 
         VariogramSubSizer = wx.BoxSizer(wx.HORIZONTAL)
-        VariogramSubSizer.Add(item=wx.StaticText(self,
-                                                 id=wx.ID_ANY,
-                                                 label=_("Model: ")),
+        VariogramSubSizer.Add(wx.StaticText(self,
+                                            id=wx.ID_ANY,
+                                            label=_("Model: ")),
                               flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
                               border=4)
-        VariogramSubSizer.Add(item=self.ModelChoicebox,
+        VariogramSubSizer.Add(self.ModelChoicebox,
                               flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
                               border=4)
 

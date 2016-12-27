@@ -89,25 +89,25 @@ class CatalogReprojectionDialog(wx.Dialog):
 
         dialogSizer.Add(wx.StaticText(self.panel, label=_("The copied layer needs to be reprojected:")),
                         flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=5)
-        dialogSizer.Add(item=self.settingsPanel, proportion=1,
+        dialogSizer.Add(self.settingsPanel, proportion=1,
                         flag=wx.ALL | wx.EXPAND, border=5)
-        dialogSizer.Add(item=self.closeOnFinished, flag=wx.ALL | wx.EXPAND, border=5)
+        dialogSizer.Add(self.closeOnFinished, flag=wx.ALL | wx.EXPAND, border=5)
 
         #
         # buttons
         #
         btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
 
-        btnsizer.Add(item=self.btn_close, proportion=0,
+        btnsizer.Add(self.btn_close, proportion=0,
                      flag=wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER,
                      border=10)
 
-        btnsizer.Add(item=self.btn_run, proportion=0,
+        btnsizer.Add(self.btn_run, proportion=0,
                      flag=wx.RIGHT | wx.ALIGN_CENTER,
                      border=10)
 
         dialogSizer.Add(
-            item=btnsizer,
+            btnsizer,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
             border=5)

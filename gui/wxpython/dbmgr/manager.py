@@ -26,11 +26,18 @@ import sys
 import os
 
 import wx
-import wx.lib.flatnotebook as FN
+from core import globalvar
+if globalvar.wxPythonPhoenix:
+    try:
+        import agw.flatnotebook as FN
+    except ImportError: # if it's not there locally, try the wxPython lib.
+        import wx.lib.agw.flatnotebook as FN
+else:
+    import wx.lib.flatnotebook as FN
 
 import grass.script as grass
 
-from core import globalvar
+
 from core.gcmd import GMessage
 from core.debug import Debug
 from core.utils import _
@@ -95,7 +102,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
                     "'Manage layers' tab.") %
                 self.dbMgrData['vectName'])
 
-        busy = wx.BusyInfo(message=_("Please wait, loading attribute data..."),
+        busy = wx.BusyInfo(_("Please wait, loading attribute data..."),
                            parent=self.parent)
         wx.SafeYield()
         self.CreateStatusBar(number=1)
@@ -161,15 +168,15 @@ class AttributeManager(wx.Frame, DbMgrBase):
 
         # buttons
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item=self.btnReset, proportion=1,
+        btnSizer.Add(self.btnReset, proportion=1,
                      flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
-        btnSizer.Add(item=self.btnReload, proportion=1,
+        btnSizer.Add(self.btnReload, proportion=1,
                      flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
-        btnSizer.Add(item=self.btnClose, proportion=1,
+        btnSizer.Add(self.btnClose, proportion=1,
                      flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
 
-        mainSizer.Add(item=self.notebook, proportion=1, flag=wx.EXPAND)
-        mainSizer.Add(item=btnSizer, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
+        mainSizer.Add(self.notebook, proportion=1, flag=wx.EXPAND)
+        mainSizer.Add(btnSizer, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(mainSizer)

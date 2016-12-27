@@ -40,6 +40,8 @@ from core.utils import GetListOfLocations, GetListOfMapsets
 from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator, StaticWrapText
+from gui_core.wrap import Button
+from gui_core.wrap import ListCtrl
 
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
@@ -161,51 +163,48 @@ class GRASSStartup(wx.Frame):
         try:
             for label in [self.ldbase, self.llocation, self.lmapset]:
                 label.SetForegroundColour(
-                    wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT))
+                    wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
         except AttributeError:
             # for explanation of try-except see above
             pass
 
         # buttons
-        self.bstart = wx.Button(parent=self.panel, id=wx.ID_ANY,
-                                label=_("Start &GRASS session"))
+        self.bstart = Button(parent=self.panel, id=wx.ID_ANY,
+                             label=_("Start &GRASS session"))
         self.bstart.SetDefault()
-        self.bexit = wx.Button(parent=self.panel, id=wx.ID_EXIT)
+        self.bexit = Button(parent=self.panel, id=wx.ID_EXIT)
         self.bstart.SetMinSize((180, self.bexit.GetSize()[1]))
-        self.bhelp = wx.Button(parent=self.panel, id=wx.ID_HELP)
-        self.bbrowse = wx.Button(parent=self.gisdbase_panel, id=wx.ID_ANY,
-                                 label=_("&Browse"))
-        self.bmapset = wx.Button(parent=self.mapset_panel, id=wx.ID_ANY,
-                                 # GTC New mapset
-                                 label=_("&New"))
-        self.bmapset.SetToolTipString(
-            _("Create a new Mapset in selected Location"))
-        self.bwizard = wx.Button(parent=self.location_panel, id=wx.ID_ANY,
-                                 # GTC New location
-                                 label=_("N&ew"))
-        self.bwizard.SetToolTipString(
+        self.bhelp = Button(parent=self.panel, id=wx.ID_HELP)
+        self.bbrowse = Button(parent=self.gisdbase_panel, id=wx.ID_ANY,
+                              label=_("&Browse"))
+        self.bmapset = Button(parent=self.mapset_panel, id=wx.ID_ANY,
+                              # GTC New mapset
+                              label=_("&New"))
+        self.bmapset.SetToolTip(_("Create a new Mapset in selected Location"))
+        self.bwizard = Button(parent=self.location_panel, id=wx.ID_ANY,
+                              # GTC New location
+                              label=_("N&ew"))
+        self.bwizard.SetToolTip(
             _(
                 "Create a new location using location wizard."
                 " After location is created successfully,"
                 " GRASS session is started."))
-        self.rename_location_button = wx.Button(parent=self.location_panel, id=wx.ID_ANY,
-                                                # GTC Rename location
-                                                label=_("Ren&ame"))
-        self.rename_location_button.SetToolTipString(
-            _("Rename selected location"))
-        self.delete_location_button = wx.Button(parent=self.location_panel, id=wx.ID_ANY,
-                                                # GTC Delete location
-                                                label=_("De&lete"))
-        self.delete_location_button.SetToolTipString(
-            _("Delete selected location"))
-        self.rename_mapset_button = wx.Button(parent=self.mapset_panel, id=wx.ID_ANY,
-                                              # GTC Rename mapset
-                                              label=_("&Rename"))
-        self.rename_mapset_button.SetToolTipString(_("Rename selected mapset"))
-        self.delete_mapset_button = wx.Button(parent=self.mapset_panel, id=wx.ID_ANY,
-                                              # GTC Delete mapset
-                                              label=_("&Delete"))
-        self.delete_mapset_button.SetToolTipString(_("Delete selected mapset"))
+        self.rename_location_button = Button(parent=self.location_panel, id=wx.ID_ANY,
+                                             # GTC Rename location
+                                             label=_("Ren&ame"))
+        self.rename_location_button.SetToolTip(_("Rename selected location"))
+        self.delete_location_button = Button(parent=self.location_panel, id=wx.ID_ANY,
+                                             # GTC Delete location
+                                             label=_("De&lete"))
+        self.delete_location_button.SetToolTip(_("Delete selected location"))
+        self.rename_mapset_button = Button(parent=self.mapset_panel, id=wx.ID_ANY,
+                                           # GTC Rename mapset
+                                           label=_("&Rename"))
+        self.rename_mapset_button.SetToolTip(_("Rename selected mapset"))
+        self.delete_mapset_button = Button(parent=self.mapset_panel, id=wx.ID_ANY,
+                                           # GTC Delete mapset
+                                           label=_("&Delete"))
+        self.delete_mapset_button.SetToolTip(_("Delete selected mapset"))
 
         # textinputs
         self.tgisdbase = wx.TextCtrl(
@@ -255,7 +254,7 @@ class GRASSStartup(wx.Frame):
                              wx.BITMAP_TYPE_ICO))
 
         self.bstart.SetForegroundColour(wx.Colour(35, 142, 35))
-        self.bstart.SetToolTipString(_("Enter GRASS session"))
+        self.bstart.SetToolTip(_("Enter GRASS session"))
         self.bstart.Enable(False)
         self.bmapset.Enable(False)
         # this all was originally a choice, perhaps just mapset needed
@@ -333,21 +332,21 @@ class GRASSStartup(wx.Frame):
 
         # gis data directory
 
-        gisdbase_boxsizer.Add(item=self.gisdbase_panel, proportion=1,
+        gisdbase_boxsizer.Add(self.gisdbase_panel, proportion=1,
                               flag=wx.EXPAND | wx.ALL,
                               border=1)
 
-        gisdbase_panel_sizer.Add(item=dbase_sizer, proportion=1,
+        gisdbase_panel_sizer.Add(dbase_sizer, proportion=1,
                                  flag=wx.EXPAND | wx.ALL,
                                  border=1)
-        gisdbase_panel_sizer.Add(item=self.ldbase, proportion=0,
+        gisdbase_panel_sizer.Add(self.ldbase, proportion=0,
                                  flag=wx.EXPAND | wx.ALL,
                                  border=1)
 
-        dbase_sizer.Add(item=self.tgisdbase, proportion=1,
+        dbase_sizer.Add(self.tgisdbase, proportion=1,
                         flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
                         border=1)
-        dbase_sizer.Add(item=self.bbrowse, proportion=0,
+        dbase_sizer.Add(self.bbrowse, proportion=0,
                         flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
                         border=1)
 
@@ -364,25 +363,23 @@ class GRASSStartup(wx.Frame):
             panel.SetSizer(panel_sizer)
             panel_sizer.Fit(panel)
 
-            main_sizer.Add(item=list_box, proportion=1,
+            main_sizer.Add(list_box, proportion=1,
                            flag=wx.EXPAND | wx.ALL,
                            border=1)
-            main_sizer.Add(item=buttons_sizer, proportion=0,
+            main_sizer.Add(buttons_sizer, proportion=0,
                            flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
                            border=1)
             for button in buttons:
-                buttons_sizer.Add(
-                    item=button,
-                    proportion=0,
-                    flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
-                    border=3)
-            box_sizer.Add(item=panel, proportion=1,
+                buttons_sizer.Add(button, proportion=0,
+                                  flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                                  border=3)
+            box_sizer.Add(panel, proportion=1,
                           flag=wx.EXPAND | wx.ALL,
                           border=1)
-            panel_sizer.Add(item=main_sizer, proportion=1,
+            panel_sizer.Add(main_sizer, proportion=1,
                             flag=wx.EXPAND | wx.ALL,
                             border=1)
-            panel_sizer.Add(item=description, proportion=0,
+            panel_sizer.Add(description, proportion=0,
                             flag=wx.EXPAND | wx.ALL,
                             border=1)
             return box_sizer
@@ -403,51 +400,51 @@ class GRASSStartup(wx.Frame):
             description=self.lmapset)
 
         # location and mapset sizer
-        location_mapset_sizer.Add(item=location_boxsizer, proportion=1,
+        location_mapset_sizer.Add(location_boxsizer, proportion=1,
                                   flag=wx.LEFT | wx.RIGHT | wx.EXPAND,
                                   border=3)
-        location_mapset_sizer.Add(item=mapset_boxsizer, proportion=1,
+        location_mapset_sizer.Add(mapset_boxsizer, proportion=1,
                                   flag=wx.RIGHT | wx.EXPAND,
                                   border=3)
 
         # buttons
-        btns_sizer.Add(item=self.bstart, proportion=0,
+        btns_sizer.Add(self.bstart, proportion=0,
                        flag=wx.ALIGN_CENTER_HORIZONTAL |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL,
                        border=5)
-        btns_sizer.Add(item=self.bexit, proportion=0,
+        btns_sizer.Add(self.bexit, proportion=0,
                        flag=wx.ALIGN_CENTER_HORIZONTAL |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL,
                        border=5)
-        btns_sizer.Add(item=self.bhelp, proportion=0,
+        btns_sizer.Add(self.bhelp, proportion=0,
                        flag=wx.ALIGN_CENTER_HORIZONTAL |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL,
                        border=5)
 
         # main sizer
-        sizer.Add(item=self.hbitmap,
+        sizer.Add(self.hbitmap,
                   proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.ALL,
                   border=3)  # image
-        sizer.Add(item=gisdbase_boxsizer, proportion=0,
+        sizer.Add(gisdbase_boxsizer, proportion=0,
                   flag=wx.ALIGN_CENTER_HORIZONTAL |
                   wx.RIGHT | wx.LEFT | wx.TOP | wx.EXPAND,
                   border=3)  # GISDBASE setting
 
         # warning/error message
-        sizer.Add(item=self.lmessage,
+        sizer.Add(self.lmessage,
                   proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_LEFT | wx.ALL | wx.EXPAND, border=5)
-        sizer.Add(item=location_mapset_sizer, proportion=1,
+        sizer.Add(location_mapset_sizer, proportion=1,
                   flag=wx.RIGHT | wx.LEFT | wx.EXPAND,
                   border=1)
-        sizer.Add(item=btns_sizer, proportion=0,
+        sizer.Add(btns_sizer, proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.RIGHT | wx.LEFT,
@@ -1098,13 +1095,13 @@ class GRASSStartup(wx.Frame):
         GError(parent=self, message=message, caption=_("Invalid name"))
 
 
-class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
+class GListBox(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """Use wx.ListCtrl instead of wx.ListBox, different style for
     non-selectable items (e.g. mapsets with denied permission)"""
 
     def __init__(self, parent, id, size,
                  choices, disabled=[]):
-        wx.ListCtrl.__init__(
+        ListCtrl.__init__(
             self, parent, id, size=size, style=wx.LC_REPORT | wx.LC_NO_HEADER |
             wx.LC_SINGLE_SEL | wx.BORDER_SUNKEN)
 

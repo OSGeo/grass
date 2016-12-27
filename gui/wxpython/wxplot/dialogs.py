@@ -30,7 +30,7 @@ from core.settings import UserSettings
 from core.globalvar import ICONDIR
 from core.utils import _
 from gui_core.gselect import Select
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 
 from grass.script import core as grass
 
@@ -80,7 +80,7 @@ class ProfileRasterDialog(wx.Dialog):
 
         txt = _("Select raster map(s) to profile:")
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=txt)
-        box.Add(item=label,
+        box.Add(label,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
 
         selection = Select(self, id=wx.ID_ANY,
@@ -89,15 +89,15 @@ class ProfileRasterDialog(wx.Dialog):
         selection.SetValue(rastText)
         selection.Bind(wx.EVT_TEXT, self.OnSelection)
 
-        box.Add(item=selection, pos=(0, 1))
+        box.Add(selection, pos=(0, 1))
 
-        sizer.Add(item=box, proportion=0,
+        sizer.Add(box, proportion=0,
                   flag=wx.ALL, border=10)
 
         line = wx.StaticLine(
             parent=self, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0, flag=wx.GROW |
+        sizer.Add(line, proportion=0, flag=wx.GROW |
                   wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=5)
 
         btnsizer = wx.StdDialogButtonSizer()
@@ -111,7 +111,7 @@ class ProfileRasterDialog(wx.Dialog):
         btnsizer.Realize()
 
         sizer.Add(
-            item=btnsizer,
+            btnsizer,
             proportion=0,
             flag=wx.ALIGN_RIGHT | wx.ALL,
             border=5)
@@ -179,7 +179,7 @@ class ScatterRasterDialog(wx.Dialog):
         # select rasters
         txt = _("Select pairs of raster maps for bivariate scatterplots:")
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=txt)
-        box.Add(item=label,
+        box.Add(label,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
 
         selection = Select(self, id=wx.ID_ANY,
@@ -188,12 +188,12 @@ class ScatterRasterDialog(wx.Dialog):
         selection.SetValue(rastText)
         selection.Bind(wx.EVT_TEXT, self.OnSelection)
 
-        box.Add(item=selection, pos=(0, 1))
+        box.Add(selection, pos=(0, 1))
 
         # Nsteps for FP maps
         label = wx.StaticText(parent=self, id=wx.ID_ANY,
                               label=_("Number of bins (for FP maps)"))
-        box.Add(item=label,
+        box.Add(label,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
         self.spinbins = SpinCtrl(
             parent=self, id=wx.ID_ANY, value="", pos=(
@@ -201,7 +201,7 @@ class ScatterRasterDialog(wx.Dialog):
                 100, -1), style=wx.SP_ARROW_KEYS)
         self.spinbins.SetRange(1, 1000)
         self.spinbins.SetValue(self.bins)
-        box.Add(item=self.spinbins,
+        box.Add(self.spinbins,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 1))
 
 # TODO possibly make bubble plots with marker size proportional to cell counts
@@ -217,13 +217,13 @@ class ScatterRasterDialog(wx.Dialog):
 #        box.Add(item = scattertype,
 #                flag = wx.ALIGN_CENTER_VERTICAL, pos = (2, 1))
 
-        sizer.Add(item=box, proportion=0,
+        sizer.Add(box, proportion=0,
                   flag=wx.ALL, border=10)
 
         line = wx.StaticLine(
             parent=self, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0, flag=wx.GROW |
+        sizer.Add(line, proportion=0, flag=wx.GROW |
                   wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=5)
 
         btnsizer = wx.StdDialogButtonSizer()
@@ -237,7 +237,7 @@ class ScatterRasterDialog(wx.Dialog):
         btnsizer.Realize()
 
         sizer.Add(
-            item=btnsizer,
+            btnsizer,
             proportion=0,
             flag=wx.ALIGN_RIGHT | wx.ALL,
             border=5)
@@ -318,38 +318,38 @@ class PlotStatsFrame(wx.Frame):
             parent=self.panel,
             id=wx.ID_ANY,
             label=self.title)
-        sizer.Add(item=statstitle, proportion=0,
+        sizer.Add(statstitle, proportion=0,
                   flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=3)
         line = wx.StaticLine(
             parent=self.panel, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0,
+        sizer.Add(line, proportion=0,
                   flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=3)
         for stats in self.message:
             statstxt = wx.StaticText(parent=sp, id=wx.ID_ANY, label=stats)
             statstxt.SetBackgroundColour("WHITE")
             txtSizer.Add(
-                item=statstxt,
+                statstxt,
                 proportion=1,
                 flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                 border=3)
             line = wx.StaticLine(
                 parent=sp, id=wx.ID_ANY, size=(
                     20, -1), style=wx.LI_HORIZONTAL)
-            txtSizer.Add(item=line, proportion=0, flag=wx.GROW |
+            txtSizer.Add(line, proportion=0, flag=wx.GROW |
                          wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=3)
 
         sp.SetSizer(txtSizer)
         sp.SetAutoLayout(1)
         sp.SetupScrolling()
 
-        sizer.Add(item=sp, proportion=1,
+        sizer.Add(sp, proportion=1,
                   flag=wx.GROW | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=3)
 
         line = wx.StaticLine(
             parent=self.panel, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0, flag=wx.GROW |
+        sizer.Add(line, proportion=0, flag=wx.GROW |
                   wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=3)
 
         #
@@ -361,7 +361,7 @@ class PlotStatsFrame(wx.Frame):
         btn_clipboard.SetToolTipString(
             _("Copy regression statistics the clipboard (Ctrl+C)"))
         btnSizer.Add(
-            item=btn_clipboard,
+            btn_clipboard,
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALL,
             border=5)
@@ -369,13 +369,13 @@ class PlotStatsFrame(wx.Frame):
         btnCancel = wx.Button(self.panel, wx.ID_CLOSE)
         btnCancel.SetDefault()
         btnSizer.Add(
-            item=btnCancel,
+            btnCancel,
             proportion=0,
             flag=wx.ALIGN_RIGHT | wx.ALL,
             border=5)
 
         sizer.Add(
-            item=btnSizer,
+            btnSizer,
             proportion=0,
             flag=wx.ALIGN_RIGHT | wx.ALL,
             border=5)
@@ -448,13 +448,13 @@ class HistRasterDialog(wx.Dialog):
         elif self.maptype == 'group':
             self.groupRadio.SetValue(True)
         box.Add(
-            item=self.rasterRadio,
+            self.rasterRadio,
             flag=wx.ALIGN_CENTER_VERTICAL,
             pos=(
                 0,
                 0))
         box.Add(
-            item=self.groupRadio,
+            self.groupRadio,
             flag=wx.ALIGN_CENTER_VERTICAL,
             pos=(
                 0,
@@ -465,7 +465,7 @@ class HistRasterDialog(wx.Dialog):
         #
         label = wx.StaticText(parent=self, id=wx.ID_ANY,
                               label=_("Select raster map:"))
-        box.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
+        box.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
         self.rselection = Select(self, id=wx.ID_ANY,
                                  size=globalvar.DIALOG_GSELECT_SIZE,
                                  type='cell')
@@ -477,14 +477,14 @@ class HistRasterDialog(wx.Dialog):
                 rastText += '%s,' % r
             rastText = rastText.rstrip(',')
             self.rselection.SetValue(rastText)
-        box.Add(item=self.rselection, pos=(1, 1))
+        box.Add(self.rselection, pos=(1, 1))
 
         #
         # Select an image group to histogram
         #
         label = wx.StaticText(parent=self, id=wx.ID_ANY,
                               label=_("Select image group:"))
-        box.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(2, 0))
+        box.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(2, 0))
         self.gselection = Select(self, id=wx.ID_ANY,
                                  size=globalvar.DIALOG_GSELECT_SIZE,
                                  type='group')
@@ -493,14 +493,14 @@ class HistRasterDialog(wx.Dialog):
         else:
             if self.group is not None:
                 self.gselection.SetValue(self.group)
-        box.Add(item=self.gselection, pos=(2, 1))
+        box.Add(self.gselection, pos=(2, 1))
 
         #
         # Nsteps for FP maps and histogram type selection
         #
         label = wx.StaticText(parent=self, id=wx.ID_ANY,
                               label=_("Number of bins (for FP maps)"))
-        box.Add(item=label,
+        box.Add(label,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(3, 0))
         self.spinbins = SpinCtrl(
             parent=self, id=wx.ID_ANY, value="", pos=(
@@ -508,27 +508,27 @@ class HistRasterDialog(wx.Dialog):
                 100, -1), style=wx.SP_ARROW_KEYS)
         self.spinbins.SetRange(1, 1000)
         self.spinbins.SetValue(self.bins)
-        box.Add(item=self.spinbins,
+        box.Add(self.spinbins,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(3, 1))
 
         label = wx.StaticText(parent=self, id=wx.ID_ANY,
                               label=_("Histogram type"))
-        box.Add(item=label,
+        box.Add(label,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(4, 0))
         types = ['count', 'percent', 'area']
         histtype = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(250, -1),
                                choices=types, style=wx.CB_DROPDOWN)
         histtype.SetStringSelection(self.histtype)
-        box.Add(item=histtype,
+        box.Add(histtype,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(4, 1))
 
-        sizer.Add(item=box, proportion=0,
+        sizer.Add(box, proportion=0,
                   flag=wx.ALL, border=10)
 
         line = wx.StaticLine(
             parent=self, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0, flag=wx.GROW |
+        sizer.Add(line, proportion=0, flag=wx.GROW |
                   wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=5)
 
         btnsizer = wx.StdDialogButtonSizer()
@@ -542,7 +542,7 @@ class HistRasterDialog(wx.Dialog):
         btnsizer.Realize()
 
         sizer.Add(
-            item=btnsizer,
+            btnsizer,
             proportion=0,
             flag=wx.ALIGN_RIGHT | wx.ALL,
             border=5)
@@ -672,12 +672,12 @@ class TextDialog(wx.Dialog):
             parent=self,
             id=wx.ID_ANY,
             label=_("Profile title:"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
         self.ptitleentry = wx.TextCtrl(
             parent=self, id=wx.ID_ANY, value="", size=(250, -1))
         # self.ptitleentry.SetFont(self.font)
         self.ptitleentry.SetValue(self.ptitle)
-        gridSizer.Add(item=self.ptitleentry, pos=(0, 1))
+        gridSizer.Add(self.ptitleentry, pos=(0, 1))
 
         #
         # title font
@@ -686,7 +686,7 @@ class TextDialog(wx.Dialog):
             parent=self,
             id=wx.ID_ANY,
             label=_("Title font size (pts):"))
-        gridSizer.Add(item=tlabel, flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
+        gridSizer.Add(tlabel, flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
         self.ptitlesize = SpinCtrl(
             parent=self, id=wx.ID_ANY, value="", pos=(
                 30, 50), size=(
@@ -694,7 +694,7 @@ class TextDialog(wx.Dialog):
         self.ptitlesize.SetRange(5, 100)
         self.ptitlesize.SetValue(
             int(self.properties['font']['prop']['titleSize']))
-        gridSizer.Add(item=self.ptitlesize, pos=(1, 1))
+        gridSizer.Add(self.ptitlesize, pos=(1, 1))
 
         #
         # x-axis label
@@ -703,12 +703,12 @@ class TextDialog(wx.Dialog):
             parent=self,
             id=wx.ID_ANY,
             label=_("X-axis label:"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(2, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(2, 0))
         self.xlabelentry = wx.TextCtrl(
             parent=self, id=wx.ID_ANY, value="", size=(250, -1))
         # self.xlabelentry.SetFont(self.font)
         self.xlabelentry.SetValue(self.xlabel)
-        gridSizer.Add(item=self.xlabelentry, pos=(2, 1))
+        gridSizer.Add(self.xlabelentry, pos=(2, 1))
 
         #
         # y-axis label
@@ -717,12 +717,12 @@ class TextDialog(wx.Dialog):
             parent=self,
             id=wx.ID_ANY,
             label=_("Y-axis label:"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(3, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(3, 0))
         self.ylabelentry = wx.TextCtrl(
             parent=self, id=wx.ID_ANY, value="", size=(250, -1))
         # self.ylabelentry.SetFont(self.font)
         self.ylabelentry.SetValue(self.ylabel)
-        gridSizer.Add(item=self.ylabelentry, pos=(3, 1))
+        gridSizer.Add(self.ylabelentry, pos=(3, 1))
 
         #
         # font size
@@ -731,7 +731,7 @@ class TextDialog(wx.Dialog):
             parent=self,
             id=wx.ID_ANY,
             label=_("Label font size (pts):"))
-        gridSizer.Add(item=llabel, flag=wx.ALIGN_CENTER_VERTICAL, pos=(4, 0))
+        gridSizer.Add(llabel, flag=wx.ALIGN_CENTER_VERTICAL, pos=(4, 0))
         self.axislabelsize = SpinCtrl(
             parent=self, id=wx.ID_ANY, value="", pos=(
                 30, 50), size=(
@@ -739,10 +739,10 @@ class TextDialog(wx.Dialog):
         self.axislabelsize.SetRange(5, 100)
         self.axislabelsize.SetValue(
             int(self.properties['font']['prop']['axisSize']))
-        gridSizer.Add(item=self.axislabelsize, pos=(4, 1))
+        gridSizer.Add(self.axislabelsize, pos=(4, 1))
 
-        boxSizer.Add(item=gridSizer)
-        sizer.Add(item=boxSizer, flag=wx.ALL | wx.EXPAND, border=3)
+        boxSizer.Add(gridSizer)
+        sizer.Add(boxSizer, flag=wx.ALL | wx.EXPAND, border=3)
 
         #
         # font settings
@@ -759,7 +759,7 @@ class TextDialog(wx.Dialog):
             parent=self,
             id=wx.ID_ANY,
             label=_("Font family:"))
-        gridSizer.Add(item=label1, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
+        gridSizer.Add(label1, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
         self.ffamilycb = wx.ComboBox(
             parent=self, id=wx.ID_ANY, size=(250, -1),
             choices=self.ffamilydict.keys(),
@@ -769,13 +769,13 @@ class TextDialog(wx.Dialog):
             if self.fontfamily == item[1]:
                 self.ffamilycb.SetStringSelection(item[0])
                 break
-        gridSizer.Add(item=self.ffamilycb, pos=(0, 1), flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(self.ffamilycb, pos=(0, 1), flag=wx.ALIGN_RIGHT)
 
         #
         # font style
         #
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Style:"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
         self.fstylecb = wx.ComboBox(
             parent=self, id=wx.ID_ANY, size=(250, -1),
             choices=self.fstyledict.keys(),
@@ -785,13 +785,13 @@ class TextDialog(wx.Dialog):
             if self.fontstyle == item[1]:
                 self.fstylecb.SetStringSelection(item[0])
                 break
-        gridSizer.Add(item=self.fstylecb, pos=(1, 1), flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(self.fstylecb, pos=(1, 1), flag=wx.ALIGN_RIGHT)
 
         #
         # font weight
         #
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Weight:"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(2, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(2, 0))
         self.fwtcb = wx.ComboBox(
             parent=self, size=(250, -1),
             choices=self.fwtdict.keys(),
@@ -802,17 +802,17 @@ class TextDialog(wx.Dialog):
                 self.fwtcb.SetStringSelection(item[0])
                 break
 
-        gridSizer.Add(item=self.fwtcb, pos=(2, 1), flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(self.fwtcb, pos=(2, 1), flag=wx.ALIGN_RIGHT)
 
         gridSizer.AddGrowableCol(1)
-        boxSizer.Add(item=gridSizer, flag=wx.EXPAND)
-        sizer.Add(item=boxSizer, flag=wx.LEFT | wx.RIGHT |
+        boxSizer.Add(gridSizer, flag=wx.EXPAND)
+        sizer.Add(boxSizer, flag=wx.LEFT | wx.RIGHT |
                   wx.BOTTOM | wx.EXPAND, border=3)
 
         line = wx.StaticLine(
             parent=self, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0, flag=wx.GROW |
+        sizer.Add(line, proportion=0, flag=wx.GROW |
                   wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=3)
 
         #
@@ -846,17 +846,17 @@ class TextDialog(wx.Dialog):
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(
-            item=btnSave,
+            btnSave,
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALL,
             border=5)
         btnSizer.Add(
-            item=btnStdSizer,
+            btnStdSizer,
             proportion=0,
             flag=wx.ALIGN_RIGHT | wx.ALL,
             border=5)
         sizer.Add(
-            item=btnSizer,
+            btnSizer,
             proportion=0,
             flag=wx.ALIGN_RIGHT | wx.ALL,
             border=5)
@@ -1023,7 +1023,7 @@ class OptDialog(wx.Dialog):
         else:
             self.mapchoice.SetStringSelection(str(self.map))
 
-        gridSizer.Add(item=self.mapchoice, flag=wx.ALIGN_CENTER_VERTICAL,
+        gridSizer.Add(self.mapchoice, flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0), span=(1, 2))
 
         #
@@ -1036,7 +1036,7 @@ class OptDialog(wx.Dialog):
                 id=wx.ID_ANY,
                 label=_("Line color"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     row,
@@ -1045,7 +1045,7 @@ class OptDialog(wx.Dialog):
                 parent=self, id=wx.ID_ANY, colour=self.raster[
                     self.map]['pcolor'])
             self.wxId['pcolor'] = color.GetId()
-            gridSizer.Add(item=color, pos=(row, 1))
+            gridSizer.Add(color, pos=(row, 1))
 
             row += 1
             label = wx.StaticText(
@@ -1053,17 +1053,17 @@ class OptDialog(wx.Dialog):
                 id=wx.ID_ANY,
                 label=_("Line width"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     row,
                     0))
             width = SpinCtrl(parent=self, id=wx.ID_ANY, value="",
-                                size=(50, -1), style=wx.SP_ARROW_KEYS)
+                             size=(50, -1), style=wx.SP_ARROW_KEYS)
             width.SetRange(1, 10)
             width.SetValue(self.raster[self.map]['pwidth'])
             self.wxId['pwidth'] = width.GetId()
-            gridSizer.Add(item=width, pos=(row, 1))
+            gridSizer.Add(width, pos=(row, 1))
 
             row += 1
             label = wx.StaticText(
@@ -1071,7 +1071,7 @@ class OptDialog(wx.Dialog):
                 id=wx.ID_ANY,
                 label=_("Line style"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     row,
@@ -1081,19 +1081,19 @@ class OptDialog(wx.Dialog):
                     120, -1), choices=self.linestyledict.keys())
             style.SetStringSelection(self.raster[self.map]['pstyle'])
             self.wxId['pstyle'] = style.GetId()
-            gridSizer.Add(item=style, pos=(row, 1))
+            gridSizer.Add(style, pos=(row, 1))
 
         row += 1
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Legend"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         legend = wx.TextCtrl(parent=self, id=wx.ID_ANY,
                              value="", size=(200, -1))
         legend.SetValue(self.raster[self.map]['plegend'])
-        gridSizer.Add(item=legend, pos=(row, 1))
+        gridSizer.Add(legend, pos=(row, 1))
         self.wxId['plegend'] = legend.GetId()
 
-        boxSizer.Add(item=gridSizer)
-        boxMainSizer.Add(item=boxSizer, flag=wx.ALL, border=3)
+        boxSizer.Add(gridSizer)
+        boxMainSizer.Add(boxSizer, flag=wx.ALL, border=3)
 
         #
         # segment marker settings for profiles only
@@ -1108,7 +1108,7 @@ class OptDialog(wx.Dialog):
             gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
             label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Color"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     0,
@@ -1118,25 +1118,25 @@ class OptDialog(wx.Dialog):
                 id=wx.ID_ANY,
                 colour=self.properties['marker']['color'])
             self.wxId['marker']['color'] = ptcolor.GetId()
-            gridSizer.Add(item=ptcolor, pos=(0, 1))
+            gridSizer.Add(ptcolor, pos=(0, 1))
 
             label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Size"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     1,
                     0))
             ptsize = SpinCtrl(parent=self, id=wx.ID_ANY, value="",
-                                 size=(50, -1), style=wx.SP_ARROW_KEYS)
+                              size=(50, -1), style=wx.SP_ARROW_KEYS)
             ptsize.SetRange(1, 10)
             ptsize.SetValue(self.properties['marker']['size'])
             self.wxId['marker']['size'] = ptsize.GetId()
-            gridSizer.Add(item=ptsize, pos=(1, 1))
+            gridSizer.Add(ptsize, pos=(1, 1))
 
             label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Fill"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     2,
@@ -1145,11 +1145,11 @@ class OptDialog(wx.Dialog):
                                size=(120, -1), choices=self.ptfilldict.keys())
             ptfill.SetStringSelection(self.properties['marker']['fill'])
             self.wxId['marker']['fill'] = ptfill.GetId()
-            gridSizer.Add(item=ptfill, pos=(2, 1))
+            gridSizer.Add(ptfill, pos=(2, 1))
 
             label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Legend"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     3,
@@ -1159,11 +1159,11 @@ class OptDialog(wx.Dialog):
                     200, -1))
             ptlegend.SetValue(self.properties['marker']['legend'])
             self.wxId['marker']['legend'] = ptlegend.GetId()
-            gridSizer.Add(item=ptlegend, pos=(3, 1))
+            gridSizer.Add(ptlegend, pos=(3, 1))
 
             label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Style"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     4,
@@ -1173,10 +1173,10 @@ class OptDialog(wx.Dialog):
                 choices=self.pttypelist)
             pttype.SetStringSelection(self.properties['marker']['type'])
             self.wxId['marker']['type'] = pttype.GetId()
-            gridSizer.Add(item=pttype, pos=(4, 1))
+            gridSizer.Add(pttype, pos=(4, 1))
 
-            boxSizer.Add(item=gridSizer)
-            boxMainSizer.Add(item=boxSizer, flag=wx.ALL, border=3)
+            boxSizer.Add(gridSizer)
+            boxMainSizer.Add(boxSizer, flag=wx.ALL, border=3)
 
         #
         # point options for scatterplots
@@ -1190,7 +1190,7 @@ class OptDialog(wx.Dialog):
             gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
             label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Color"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     0,
@@ -1199,25 +1199,25 @@ class OptDialog(wx.Dialog):
                 parent=self, id=wx.ID_ANY, colour=self.raster[
                     self.map]['pcolor'])
             self.wxId['pcolor'] = ptcolor.GetId()
-            gridSizer.Add(item=ptcolor, pos=(0, 1))
+            gridSizer.Add(ptcolor, pos=(0, 1))
 
             label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Size"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     1,
                     0))
             ptsize = SpinCtrl(parent=self, id=wx.ID_ANY, value="",
-                                 size=(50, -1), style=wx.SP_ARROW_KEYS)
+                              size=(50, -1), style=wx.SP_ARROW_KEYS)
             ptsize.SetRange(1, 10)
             ptsize.SetValue(self.raster[self.map]['psize'])
             self.wxId['psize'] = ptsize.GetId()
-            gridSizer.Add(item=ptsize, pos=(1, 1))
+            gridSizer.Add(ptsize, pos=(1, 1))
 
             label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Fill"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     2,
@@ -1226,11 +1226,11 @@ class OptDialog(wx.Dialog):
                                size=(120, -1), choices=self.ptfilldict.keys())
             ptfill.SetStringSelection(self.raster[self.map]['pfill'])
             self.wxId['pfill'] = ptfill.GetId()
-            gridSizer.Add(item=ptfill, pos=(2, 1))
+            gridSizer.Add(ptfill, pos=(2, 1))
 
             label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Legend"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     3,
@@ -1240,11 +1240,11 @@ class OptDialog(wx.Dialog):
                     200, -1))
             ptlegend.SetValue(self.raster[self.map]['plegend'])
             self.wxId['plegend'] = ptlegend.GetId()
-            gridSizer.Add(item=ptlegend, pos=(3, 1))
+            gridSizer.Add(ptlegend, pos=(3, 1))
 
             label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Style"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     4,
@@ -1254,12 +1254,12 @@ class OptDialog(wx.Dialog):
                 choices=self.pttypelist)
             pttype.SetStringSelection(self.raster[self.map]['ptype'])
             self.wxId['ptype'] = pttype.GetId()
-            gridSizer.Add(item=pttype, pos=(4, 1))
+            gridSizer.Add(pttype, pos=(4, 1))
 
-            boxSizer.Add(item=gridSizer)
-            boxMainSizer.Add(item=boxSizer, flag=wx.ALL, border=3)
+            boxSizer.Add(gridSizer)
+            boxMainSizer.Add(boxSizer, flag=wx.ALL, border=3)
 
-        sizer.Add(item=boxMainSizer, flag=wx.ALL | wx.EXPAND, border=3)
+        sizer.Add(boxMainSizer, flag=wx.ALL | wx.EXPAND, border=3)
 
         #
         # axis options for all plots
@@ -1283,7 +1283,7 @@ class OptDialog(wx.Dialog):
             row = 0
             label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Scale"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     row,
@@ -1295,7 +1295,7 @@ class OptDialog(wx.Dialog):
             type.SetToolTipString(
                 _("Automatic axis scaling, custom max and min, or scale matches data range (min)"))
             self.wxId[atype]['type'] = type.GetId()
-            gridSizer.Add(item=type, pos=(row, 1))
+            gridSizer.Add(type, pos=(row, 1))
 
             row += 1
             label = wx.StaticText(
@@ -1303,7 +1303,7 @@ class OptDialog(wx.Dialog):
                 id=wx.ID_ANY,
                 label=_("Custom min"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     row,
@@ -1312,7 +1312,7 @@ class OptDialog(wx.Dialog):
                               value="", size=(70, -1))
             min.SetValue(str(prop['min']))
             self.wxId[atype]['min'] = min.GetId()
-            gridSizer.Add(item=min, pos=(row, 1))
+            gridSizer.Add(min, pos=(row, 1))
 
             row += 1
             label = wx.StaticText(
@@ -1320,7 +1320,7 @@ class OptDialog(wx.Dialog):
                 id=wx.ID_ANY,
                 label=_("Custom max"))
             gridSizer.Add(
-                item=label,
+                label,
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     row,
@@ -1329,25 +1329,25 @@ class OptDialog(wx.Dialog):
                               value="", size=(70, -1))
             max.SetValue(str(prop['max']))
             self.wxId[atype]['max'] = max.GetId()
-            gridSizer.Add(item=max, pos=(row, 1))
+            gridSizer.Add(max, pos=(row, 1))
 
             row += 1
             log = wx.CheckBox(parent=self, id=wx.ID_ANY, label=_("Log scale"))
             log.SetValue(prop['log'])
             self.wxId[atype]['log'] = log.GetId()
-            gridSizer.Add(item=log, pos=(row, 0), span=(1, 2))
+            gridSizer.Add(log, pos=(row, 0), span=(1, 2))
 
             if idx == 0:
                 flag = wx.ALL | wx.EXPAND
             else:
                 flag = wx.TOP | wx.BOTTOM | wx.RIGHT | wx.EXPAND
 
-            boxSizer.Add(item=gridSizer, flag=wx.ALL, border=3)
-            boxMainSizer.Add(item=boxSizer, flag=flag, border=3)
+            boxSizer.Add(gridSizer, flag=wx.ALL, border=3)
+            boxMainSizer.Add(boxSizer, flag=flag, border=3)
 
             idx += 1
 
-        middleSizer.Add(item=boxMainSizer, flag=wx.ALL | wx.EXPAND, border=3)
+        middleSizer.Add(boxMainSizer, flag=wx.ALL | wx.EXPAND, border=3)
 
         #
         # grid & legend options for all plots
@@ -1362,33 +1362,33 @@ class OptDialog(wx.Dialog):
 
         row = 0
         label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Grid color"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         gridcolor = csel.ColourSelect(
             parent=self,
             id=wx.ID_ANY,
             colour=self.properties['grid']['color'])
         self.wxId['grid']['color'] = gridcolor.GetId()
-        gridSizer.Add(item=gridcolor, pos=(row, 1))
+        gridSizer.Add(gridcolor, pos=(row, 1))
 
         row += 1
         gridshow = wx.CheckBox(parent=self, id=wx.ID_ANY, label=_("Show grid"))
         gridshow.SetValue(self.properties['grid']['enabled'])
         self.wxId['grid']['enabled'] = gridshow.GetId()
-        gridSizer.Add(item=gridshow, pos=(row, 0), span=(1, 2))
+        gridSizer.Add(gridshow, pos=(row, 0), span=(1, 2))
 
         row += 1
         label = wx.StaticText(
             parent=self,
             id=wx.ID_ANY,
             label=_("Legend font size"))
-        gridSizer.Add(item=label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         legendfontsize = SpinCtrl(parent=self, id=wx.ID_ANY, value="",
-                                     size=(50, -1), style=wx.SP_ARROW_KEYS)
+                                  size=(50, -1), style=wx.SP_ARROW_KEYS)
         legendfontsize.SetRange(5, 100)
         legendfontsize.SetValue(
             int(self.properties['font']['prop']['legendSize']))
         self.wxId['font']['legendSize'] = legendfontsize.GetId()
-        gridSizer.Add(item=legendfontsize, pos=(row, 1))
+        gridSizer.Add(legendfontsize, pos=(row, 1))
 
         row += 1
         legendshow = wx.CheckBox(
@@ -1397,14 +1397,14 @@ class OptDialog(wx.Dialog):
             label=_("Show legend"))
         legendshow.SetValue(self.properties['legend']['enabled'])
         self.wxId['legend']['enabled'] = legendshow.GetId()
-        gridSizer.Add(item=legendshow, pos=(row, 0), span=(1, 2))
+        gridSizer.Add(legendshow, pos=(row, 0), span=(1, 2))
 
-        boxMainSizer.Add(item=gridSizer, flag=flag, border=3)
+        boxMainSizer.Add(gridSizer, flag=flag, border=3)
 
-        middleSizer.Add(item=boxMainSizer, flag=wx.LEFT |
+        middleSizer.Add(boxMainSizer, flag=wx.LEFT |
                         wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
 
-        sizer.Add(item=middleSizer, flag=wx.ALL, border=0)
+        sizer.Add(middleSizer, flag=wx.ALL, border=0)
 
         #
         # line & buttons
@@ -1412,7 +1412,7 @@ class OptDialog(wx.Dialog):
         line = wx.StaticLine(
             parent=self, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0, flag=wx.GROW |
+        sizer.Add(line, proportion=0, flag=wx.GROW |
                   wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=3)
 
         #
@@ -1441,17 +1441,17 @@ class OptDialog(wx.Dialog):
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(
-            item=btnSave,
+            btnSave,
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALL,
             border=5)
         btnSizer.Add(
-            item=btnStdSizer,
+            btnStdSizer,
             proportion=0,
             flag=wx.ALIGN_RIGHT | wx.ALL,
             border=5)
         sizer.Add(
-            item=btnSizer,
+            btnSizer,
             proportion=0,
             flag=wx.ALIGN_RIGHT | wx.ALL,
             border=5)

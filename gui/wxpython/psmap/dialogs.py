@@ -49,15 +49,28 @@ try:
 except ImportError:
     fs = None
 
+from core import globalvar
+
+if globalvar.wxPythonPhoenix:
+    import wx.adv
+    from wx.adv import OwnerDrawnComboBox
+else:
+    import wx.combo
+    from wx.combo import OwnerDrawnComboBox
+
+if globalvar.wxPythonPhoenix:
+    from wx import Validator as Validator
+else:
+    from wx import PyValidator as Validator
+
 import grass.script as grass
 
-from core import globalvar
 from core.utils import _, PilImageToWxImage
 from dbmgr.vinfo import VectorDBInfo
 from gui_core.gselect import Select
 from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 from psmap.utils import *
 from psmap.instructions import *
 
@@ -82,11 +95,11 @@ PSMAP_COLORS = [
     'yellow']
 
 
-class TCValidator(wx.PyValidator):
+class TCValidator(Validator):
     """validates input in textctrls, combobox, taken from wxpython demo"""
 
     def __init__(self, flag=None):
-        wx.PyValidator.__init__(self)
+        Validator.__init__(self)
         self.flag = flag
         self.Bind(wx.EVT_CHAR, self.OnChar)
 
@@ -125,7 +138,7 @@ class TCValidator(wx.PyValidator):
         return
 
 
-class PenStyleComboBox(wx.combo.OwnerDrawnComboBox):
+class PenStyleComboBox(OwnerDrawnComboBox):
     """Combo for selecting line style, taken from wxpython demo"""
 
     # Overridden from OwnerDrawnComboBox, called to draw each
@@ -475,11 +488,11 @@ class PsmapDialog(wx.Dialog):
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(
-            item=panel,
+            panel,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        mainSizer.Add(item=btnSizer, proportion=0,
+        mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.SetSizer(mainSizer)
@@ -1075,7 +1088,7 @@ class MapFramePanel(wx.Panel):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # border
         # GTC Line around legend or map frame
@@ -1138,7 +1151,7 @@ class MapFramePanel(wx.Panel):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.SetSizer(border)
         self.Fit()
@@ -1602,7 +1615,7 @@ class RasterPanel(wx.Panel):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         #self.rasterSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnRaster)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnRaster, self.rasterNoRadio)
@@ -1735,7 +1748,7 @@ class VectorPanel(wx.Panel):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # manage vector layers
 
@@ -1798,7 +1811,7 @@ class VectorPanel(wx.Panel):
         gridBagSizer.AddGrowableCol(0, 2)
         gridBagSizer.AddGrowableCol(1, 1)
         sizer.Add(gridBagSizer, proportion=0, flag=wx.ALL, border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_BUTTON, self.OnAddVector, self.AddVector)
         self.Bind(wx.EVT_BUTTON, self.OnDelete, self.btnDel)
@@ -2194,7 +2207,7 @@ class VPropertiesDialog(PsmapDialog):
                 flag=wx.EXPAND | wx.ALL,
                 border=5)
             border.Add(
-                item=sizer,
+                sizer,
                 proportion=0,
                 flag=wx.ALL | wx.EXPAND,
                 border=5)
@@ -2287,7 +2300,7 @@ class VPropertiesDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # mask
         box = wx.StaticBox(
@@ -2305,7 +2318,7 @@ class VPropertiesDialog(PsmapDialog):
             self.mask.SetValue(False)
 
         sizer.Add(self.mask, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_CHOICE, self.OnLayer, self.layerChoice)
 
@@ -2389,7 +2402,7 @@ class VPropertiesDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_CHECKBOX, self.OnOutline, self.outlineCheck)
 
@@ -2459,7 +2472,7 @@ class VPropertiesDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_CHECKBOX, self.OnFill, self.fillCheck)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnColor, self.colorColRadio)
@@ -2550,7 +2563,7 @@ class VPropertiesDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_CHECKBOX, self.OnOutline, self.outlineCheck)
 
@@ -2618,7 +2631,7 @@ class VPropertiesDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_RADIOBUTTON, self.OnColor, self.colorColRadio)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnColor, self.colorPickerRadio)
@@ -2702,7 +2715,7 @@ class VPropertiesDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_BUTTON, self.OnSymbolSelection, self.symbolButton)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnSymbology, self.symbolRadio)
@@ -2781,7 +2794,7 @@ class VPropertiesDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_RADIOBUTTON, self.OnSize, self.sizeRadio)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnSize, self.sizecolumnRadio)
@@ -2846,7 +2859,7 @@ class VPropertiesDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_CHECKBOX, self.OnRotation, self.rotateCheck)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnRotationType, self.rotateRadio)
@@ -2919,7 +2932,7 @@ class VPropertiesDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # style
         box = wx.StaticBox(
@@ -2978,7 +2991,7 @@ class VPropertiesDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
         panel.Fit()
@@ -3052,7 +3065,7 @@ class VPropertiesDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_CHECKBOX, self.OnPattern, self.patternCheck)
 
@@ -3385,7 +3398,7 @@ class LegendDialog(PsmapDialog):
         self.isRLegend.SetValue(self.rLegendDict['rLegend'])
         self.isRLegend.SetName("showRLegend")
         border.Add(
-            item=self.isRLegend,
+            self.isRLegend,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=5)
@@ -3447,11 +3460,11 @@ class LegendDialog(PsmapDialog):
         flexSizer.AddGrowableCol(1)
 
         sizer.Add(
-            item=flexSizer,
+            flexSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=1)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # type of legend
 
@@ -3480,8 +3493,8 @@ class LegendDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=0)
-        sizer.Add(item=vbox, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(vbox, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # size, position and font
         self.sizePositionFont(
@@ -3577,7 +3590,7 @@ class LegendDialog(PsmapDialog):
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
             border=0)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
         panel.Fit()
@@ -3609,7 +3622,7 @@ class LegendDialog(PsmapDialog):
         self.isVLegend.SetValue(self.vLegendDict['vLegend'])
         self.isVLegend.SetName("showVLegend")
         border.Add(
-            item=self.isVLegend,
+            self.isVLegend,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=5)
@@ -3679,7 +3692,7 @@ class LegendDialog(PsmapDialog):
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
             border=0)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # size, position and font
         self.sizePositionFont(
@@ -3720,11 +3733,11 @@ class LegendDialog(PsmapDialog):
             flag=wx.ALIGN_CENTER_VERTICAL,
             border=0)
         sizer.Add(
-            item=flexGridSizer,
+            flexGridSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=1)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_BUTTON, self.OnUp, self.btnUp)
         self.Bind(wx.EVT_BUTTON, self.OnDown, self.btnDown)
@@ -3924,7 +3937,7 @@ class LegendDialog(PsmapDialog):
         hBox.Add(posSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
         hBox.Add(sizeSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
         sizer.Add(hBox, proportion=0, flag=wx.EXPAND, border=0)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # font
         box = wx.StaticBox(
@@ -3973,12 +3986,12 @@ class LegendDialog(PsmapDialog):
         flexSizer.AddGrowableCol(1)
 
         fontSizer.Add(
-            item=flexSizer,
+            flexSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=1)
         border.Add(
-            item=fontSizer,
+            fontSizer,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
             border=5)
@@ -4531,7 +4544,7 @@ class MapinfoDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # font
         box = wx.StaticBox(
@@ -4562,11 +4575,11 @@ class MapinfoDialog(PsmapDialog):
 
         gridBagSizer.AddGrowableCol(1)
         sizer.Add(
-            item=gridBagSizer,
+            gridBagSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=1)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # colors
         box = wx.StaticBox(
@@ -4629,11 +4642,11 @@ class MapinfoDialog(PsmapDialog):
         flexSizer.AddGrowableCol(1)
 
         sizer.Add(
-            item=flexSizer,
+            flexSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=1)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
 
@@ -4828,7 +4841,7 @@ class ScalebarDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
         #
         # size
         #
@@ -4918,7 +4931,7 @@ class ScalebarDialog(PsmapDialog):
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
         #
         # style
         #
@@ -5013,7 +5026,7 @@ class ScalebarDialog(PsmapDialog):
             proportion=1,
             flag=wx.ALIGN_CENTER_VERTICAL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
 
@@ -5195,7 +5208,7 @@ class TextDialog(PsmapDialog):
             proportion=1,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # font
         box = wx.StaticBox(
@@ -5241,11 +5254,11 @@ class TextDialog(PsmapDialog):
         flexGridSizer.AddGrowableCol(1)
 
         sizer.Add(
-            item=flexGridSizer,
+            flexGridSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=1)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # text effects
         box = wx.StaticBox(
@@ -5337,11 +5350,11 @@ class TextDialog(PsmapDialog):
             2, 3), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
 
         sizer.Add(
-            item=gridBagSizer,
+            gridBagSizer,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
             border=1)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(EVT_ETC_LAYOUT_NEEDED, self.OnRefit, self.textCtrl)
         self.Bind(
@@ -5473,7 +5486,7 @@ class TextDialog(PsmapDialog):
             proportion=1,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # rotation
         box = wx.StaticBox(
@@ -5507,7 +5520,7 @@ class TextDialog(PsmapDialog):
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT | wx.ALL,
             border=5)
 
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
         panel.Fit()
@@ -5785,7 +5798,7 @@ class ImageDialog(PsmapDialog):
             changeCallback=self.OnDirChanged)
         panel.image['dir'] = dir
 
-        sizer.Add(item=dir, proportion=0, flag=wx.EXPAND, border=0)
+        sizer.Add(dir, proportion=0, flag=wx.EXPAND, border=0)
 
         # image list
         hSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -5795,7 +5808,7 @@ class ImageDialog(PsmapDialog):
         imageList.Bind(wx.EVT_LISTBOX, self.OnImageSelectionChanged)
 
         hSizer.Add(
-            item=imageList,
+            imageList,
             proportion=1,
             flag=wx.EXPAND | wx.RIGHT,
             border=10)
@@ -5805,31 +5818,31 @@ class ImageDialog(PsmapDialog):
         self.previewSize = (150, 150)
         img = wx.EmptyImage(*self.previewSize)
         panel.image['preview'] = wx.StaticBitmap(
-            parent=panel, id=wx.ID_ANY, bitmap=wx.BitmapFromImage(img))
+            panel, wx.ID_ANY, wx.BitmapFromImage(img))
         vSizer.Add(
-            item=panel.image['preview'],
+            panel.image['preview'],
             proportion=0,
             flag=wx.EXPAND | wx.BOTTOM,
             border=5)
         panel.image['sizeInfo'] = wx.StaticText(parent=panel, id=wx.ID_ANY)
         vSizer.Add(
-            item=panel.image['sizeInfo'],
+            panel.image['sizeInfo'],
             proportion=0,
             flag=wx.ALIGN_CENTER,
             border=0)
 
-        hSizer.Add(item=vSizer, proportion=0, flag=wx.EXPAND, border=0)
-        sizer.Add(item=hSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
+        hSizer.Add(vSizer, proportion=0, flag=wx.EXPAND, border=0)
+        sizer.Add(hSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
         epsInfo = wx.StaticText(parent=panel, id=wx.ID_ANY,
                                 label=_("Note: only EPS format supported"))
         sizer.Add(
-            item=epsInfo,
+            epsInfo,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=3)
 
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         #
         # rotation
@@ -5869,10 +5882,10 @@ class ImageDialog(PsmapDialog):
         panel.image['scale'].SetValue(value)
 
         gridSizer.Add(
-            item=scaleLabel, pos=(0, 0),
+            scaleLabel, pos=(0, 0),
             flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=panel.image['scale'],
+            panel.image['scale'],
             pos=(0, 1),
             flag=wx.ALIGN_CENTER_VERTICAL)
 
@@ -5902,23 +5915,23 @@ class ImageDialog(PsmapDialog):
             panel.image['rotate'].SetValue(0)
 
         gridSizer.Add(
-            item=rotLabel,
+            rotLabel,
             pos=(
                 1,
                 0),
             flag=wx.ALIGN_CENTER_VERTICAL,
             border=0)
         gridSizer.Add(
-            item=panel.image['rotate'], pos=(
+            panel.image['rotate'], pos=(
                 1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
         self._addConvergence(panel=panel, gridBagSizer=gridSizer)
         sizer.Add(
-            item=gridSizer,
+            gridSizer,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
         panel.Fit()
@@ -5961,7 +5974,7 @@ class ImageDialog(PsmapDialog):
             proportion=1,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
         panel.Fit()
@@ -6243,7 +6256,7 @@ class NorthArrowDialog(ImageDialog):
     def _addConvergence(self, panel, gridBagSizer):
         convergence = wx.Button(parent=panel, id=wx.ID_ANY,
                                 label=_("Compute convergence"))
-        gridBagSizer.Add(item=convergence, pos=(1, 2),
+        gridBagSizer.Add(convergence, pos=(1, 2),
                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
         convergence.Bind(wx.EVT_BUTTON, self.OnConvergence)
         panel.image['convergence'] = convergence
@@ -6319,13 +6332,13 @@ class PointDialog(PsmapDialog):
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=panel, id=wx.ID_ANY, label=_("Select symbol:")), pos=(
                 0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
         self.symbolLabel = wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=self.pointDict['symbol'])
-        gridSizer.Add(item=self.symbolLabel, pos=(0, 1),
+        gridSizer.Add(self.symbolLabel, pos=(0, 1),
                       flag=wx.ALIGN_CENTER_VERTICAL)
         bitmap = wx.Bitmap(os.path.join(globalvar.SYMBDIR,
                                         self.pointDict['symbol']) + '.png')
@@ -6346,12 +6359,12 @@ class PointDialog(PsmapDialog):
 
         gridSizer.AddGrowableCol(1)
         sizer.Add(
-            item=gridSizer,
+            gridSizer,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
 
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         #
         # outline/fill color
@@ -6385,13 +6398,13 @@ class PointDialog(PsmapDialog):
                 convertRGB(self.defaultDict['color']))
 
         gridSizer.Add(
-            item=outlineLabel, pos=(0, 0),
+            outlineLabel, pos=(0, 0),
             flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.outlineColorCtrl, pos=(
+            self.outlineColorCtrl, pos=(
                 0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.outlineTranspCtrl, pos=(
+            self.outlineTranspCtrl, pos=(
                 0, 2), flag=wx.ALIGN_CENTER_VERTICAL)
 
         fillLabel = wx.StaticText(
@@ -6411,21 +6424,21 @@ class PointDialog(PsmapDialog):
                 convertRGB(self.defaultDict['fcolor']))
 
         gridSizer.Add(
-            item=fillLabel, pos=(1, 0),
+            fillLabel, pos=(1, 0),
             flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.fillColorCtrl, pos=(
+            self.fillColorCtrl, pos=(
                 1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.fillTranspCtrl, pos=(
+            self.fillTranspCtrl, pos=(
                 1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
 
         sizer.Add(
-            item=gridSizer,
+            gridSizer,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         #
         # size and rotation
@@ -6451,10 +6464,10 @@ class PointDialog(PsmapDialog):
         self.sizeCtrl.SetValue(self.pointDict['size'])
 
         gridSizer.Add(
-            item=sizeLabel, pos=(0, 0),
+            sizeLabel, pos=(0, 0),
             flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.sizeCtrl, pos=(
+            self.sizeCtrl, pos=(
                 0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
         # rotation
@@ -6487,22 +6500,22 @@ class PointDialog(PsmapDialog):
         self.rotCtrl.SetValue(float(self.pointDict['rotate']))
 
         gridSizer.Add(
-            item=rotLabel,
+            rotLabel,
             pos=(
                 1,
                 0),
             flag=wx.ALIGN_CENTER_VERTICAL,
             border=0)
         gridSizer.Add(
-            item=self.rotCtrl, pos=(1, 1),
+            self.rotCtrl, pos=(1, 1),
             flag=wx.ALIGN_CENTER_VERTICAL)
 
         sizer.Add(
-            item=gridSizer,
+            gridSizer,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
         panel.Fit()
@@ -6545,7 +6558,7 @@ class PointDialog(PsmapDialog):
             proportion=1,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
         panel.Fit()
@@ -6747,13 +6760,13 @@ class RectangleDialog(PsmapDialog):
             self.outlineTranspCtrl.Hide()
 
         gridSizer.Add(
-            item=outlineLabel, pos=(0, 0),
+            outlineLabel, pos=(0, 0),
             flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.outlineColorCtrl, pos=(
+            self.outlineColorCtrl, pos=(
                 0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.outlineTranspCtrl, pos=(
+            self.outlineTranspCtrl, pos=(
                 0, 2), flag=wx.ALIGN_CENTER_VERTICAL)
 
         # fill color only in rectangle
@@ -6773,17 +6786,17 @@ class RectangleDialog(PsmapDialog):
                 self.fillColorCtrl.SetColour(wx.WHITE)
 
             gridSizer.Add(
-                item=fillLabel, pos=(1, 0),
+                fillLabel, pos=(1, 0),
                 flag=wx.ALIGN_CENTER_VERTICAL)
             gridSizer.Add(
-                item=self.fillColorCtrl, pos=(
+                self.fillColorCtrl, pos=(
                     1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
             gridSizer.Add(
-                item=self.fillTranspCtrl, pos=(
+                self.fillTranspCtrl, pos=(
                     1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
 
         sizer.Add(gridSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         # width
@@ -6822,14 +6835,14 @@ class RectangleDialog(PsmapDialog):
         self.widthCtrl.SetValue(float(self.rectDict['width']))
 
         gridSizer.Add(
-            item=widthLabel, pos=(0, 0),
+            widthLabel, pos=(0, 0),
             flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
-            item=self.widthCtrl, pos=(
+            self.widthCtrl, pos=(
                 0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
         sizer.Add(gridSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
-        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
 
@@ -6923,7 +6936,7 @@ class LabelsDialog(PsmapDialog):
         self.select.SetValue(','.join(self.labelsDict['labels']))
         self.select.SetFocus()
         sizer.Add(
-            item=self.select,
+            self.select,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
@@ -6934,7 +6947,7 @@ class LabelsDialog(PsmapDialog):
             wx.SystemSettings_GetColour(
                 wx.SYS_COLOUR_GRAYTEXT))
         sizer.Add(
-            item=helpText,
+            helpText,
             proportion=0,
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
             border=5)

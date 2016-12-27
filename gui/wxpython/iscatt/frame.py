@@ -67,14 +67,14 @@ class IClassIScattPanel(wx.Panel, ManageBusyCursorMixin):
 
         self.mainsizer = wx.BoxSizer(wx.VERTICAL)
         self.mainsizer.Add(
-            item=self.toolbars['mainToolbar'],
+            self.toolbars['mainToolbar'],
             proportion=0, flag=wx.EXPAND)
         self.mainsizer.Add(
-            item=self.toolbars['editingToolbar'],
+            self.toolbars['editingToolbar'],
             proportion=0, flag=wx.EXPAND)
-        self.mainsizer.Add(item=self.catsPanel, proportion=0,
+        self.mainsizer.Add(self.catsPanel, proportion=0,
                            flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
-        self.mainsizer.Add(item=self.plot_panel, proportion=1, flag=wx.EXPAND)
+        self.mainsizer.Add(self.plot_panel, proportion=1, flag=wx.EXPAND)
 
         self.catsPanel.Hide()
         self.toolbars['editingToolbar'].Hide()
@@ -144,12 +144,12 @@ class IClassIScattPanel(wx.Panel, ManageBusyCursorMixin):
             self.catsPanel)
 
         catsSizer.Add(
-            item=self.cats_list,
+            self.cats_list,
             proportion=1,
             flag=wx.EXPAND | wx.TOP,
             border=5)
         if self.toolbars['categoryToolbar']:
-            catsSizer.Add(item=self.toolbars['categoryToolbar'], proportion=0)
+            catsSizer.Add(self.toolbars['categoryToolbar'], proportion=0)
 
         self.catsPanel.SetSizer(catsSizer)
 
@@ -182,7 +182,7 @@ class IScattDialog(wx.Dialog):
         self.iscatt_panel = MapDispIScattPanel(self, giface)
 
         mainsizer = wx.BoxSizer(wx.VERTICAL)
-        mainsizer.Add(item=self.iscatt_panel, proportion=1, flag=wx.EXPAND)
+        mainsizer.Add(self.iscatt_panel, proportion=1, flag=wx.EXPAND)
 
         self.SetSizer(mainsizer)
 
@@ -325,7 +325,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
     def _doLayout(self):
 
         mainsizer = wx.BoxSizer(wx.VERTICAL)
-        mainsizer.Add(item=self.mainPanel, proportion=1, flag=wx.EXPAND)
+        mainsizer.Add(self.mainPanel, proportion=1, flag=wx.EXPAND)
         self.SetSizer(mainsizer)
 
         self.Layout()

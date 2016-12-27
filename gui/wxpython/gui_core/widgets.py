@@ -50,13 +50,19 @@ import string
 import re
 from bisect import bisect
 from datetime import datetime
+from core.globalvar import wxPythonPhoenix
 
 import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
 from wx.lib.stattext import GenStaticText
 from wx.lib.wordwrap import wordwrap
-import wx.combo
+if wxPythonPhoenix:
+    import wx.adv
+    from wx.adv import OwnerDrawnComboBox
+else:
+    import wx.combo
+    from wx.combo import OwnerDrawnComboBox
 try:
     import wx.lib.agw.flatnotebook as FN
 except ImportError:
@@ -70,6 +76,11 @@ try:
 except ImportError:
     import wx.lib.customtreectrl as CT
 
+if wxPythonPhoenix:
+    from wx import Validator as Validator
+else:
+    from wx import PyValidator as Validator
+
 from grass.script import core as grass
 
 from grass.pydispatch.signal import Signal
@@ -78,6 +89,7 @@ from core import globalvar
 from core.utils import _
 from core.gcmd import GMessage, GError
 from core.debug import Debug
+from gui_core.wrap import Button
 
 
 class NotebookController:
@@ -120,6 +132,7 @@ class NotebookController:
         if 'name' in kwargs:
             self.notebookPages[kwargs['name']] = kwargs['page']
             del kwargs['name']
+
         try:
             self.classObject.InsertPage(self.widget, **kwargs)
         except TypeError as e:  # documentation says 'index', but certain versions of wx require 'n'
@@ -247,6 +260,7 @@ class FlatNotebookController(NotebookController):
         if 'name' in kwargs:
             self.notebookPages[kwargs['name']] = kwargs['page']
             del kwargs['name']
+
         kwargs['indx'] = kwargs['index']
         del kwargs['index']
         self.classObject.InsertPage(self.widget, **kwargs)
@@ -274,15 +288,15 @@ class GNotebook(FN.FlatNotebook):
         """@copydoc NotebookController::AddPage()"""
         self.controller.AddPage(**kwargs)
 
-    def InsertPage(self, **kwargs):
+    def InsertNBPage(self, **kwargs):
         """@copydoc NotebookController::InsertPage()"""
         self.controller.InsertPage(**kwargs)
 
-    def DeletePage(self, page):
+    def DeleteNBPage(self, page):
         """@copydoc NotebookController::DeletePage()"""
         return self.controller.DeletePage(page)
 
-    def RemovePage(self, page):
+    def RemoveNBPage(self, page):
         """@copydoc NotebookController::RemovePage()"""
         return self.controller.RemovePage(page)
 
@@ -309,15 +323,15 @@ class FormNotebook(wx.Notebook):
         """@copydoc NotebookController::AddPage()"""
         self.controller.AddPage(**kwargs)
 
-    def InsertPage(self, **kwargs):
+    def InsertNBPage(self, **kwargs):
         """@copydoc NotebookController::InsertPage()"""
         self.controller.InsertPage(**kwargs)
 
-    def DeletePage(self, page):
+    def DeleteNBPage(self, page):
         """@copydoc NotebookController::DeletePage()"""
         return self.controller.DeletePage(page)
 
-    def RemovePage(self, page):
+    def RemoveNBPage(self, page):
         """@copydoc NotebookController::RemovePage()"""
         return self.controller.RemovePage(page)
 
@@ -344,7 +358,7 @@ class FormListbook(wx.Listbook):
         """@copydoc NotebookController::AddPage()"""
         self.controller.AddPage(**kwargs)
 
-    def InsertPage(self, **kwargs):
+    def InsertPage_(self, **kwargs):
         """@copydoc NotebookController::InsertPage()"""
         self.controller.InsertPage(**kwargs)
 
@@ -526,8 +540,9 @@ class StaticWrapText(GenStaticText):
     def DoGetBestSize(self):
         """Overriden method which reports widget's best size."""
         if not self.init:
-            self._updateLabel()
             self.init = True
+            self._updateLabel()
+
         parent = self.GetParent()
         newExtent = wx.ClientDC(parent).GetMultiLineTextExtent(self.GetLabel())
         # when starting, width is very small and height is big which creates
@@ -553,10 +568,10 @@ class StaticWrapText(GenStaticText):
         self._updateLabel()
 
 
-class BaseValidator(wx.PyValidator):
+class BaseValidator(Validator):
 
     def __init__(self):
-        wx.PyValidator.__init__(self)
+        Validator.__init__(self)
 
         self.Bind(wx.EVT_TEXT, self.OnText)
 
@@ -591,7 +606,7 @@ class BaseValidator(wx.PyValidator):
     def _valid(self):
         textCtrl = self.GetWindow()
 
-        sysColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW)
+        sysColor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
         textCtrl.SetBackgroundColour(sysColor)
 
         textCtrl.Refresh()
@@ -709,11 +724,11 @@ class TimeISOValidator(BaseValidator):
         return TimeISOValidator()
 
 
-class NTCValidator(wx.PyValidator):
+class NTCValidator(Validator):
     """validates input in textctrls, taken from wxpython demo"""
 
     def __init__(self, flag=None):
-        wx.PyValidator.__init__(self)
+        Validator.__init__(self)
         self.flag = flag
         self.Bind(wx.EVT_CHAR, self.OnChar)
 
@@ -735,7 +750,7 @@ class NTCValidator(wx.PyValidator):
         return
 
 
-class SimpleValidator(wx.PyValidator):
+class SimpleValidator(Validator):
     """This validator is used to ensure that the user has entered something
         into the text object editor dialog's text field.
     """
@@ -743,7 +758,7 @@ class SimpleValidator(wx.PyValidator):
     def __init__(self, callback):
         """Standard constructor.
         """
-        wx.PyValidator.__init__(self)
+        Validator.__init__(self)
         self.callback = callback
 
     def Clone(self):
@@ -783,7 +798,7 @@ class SimpleValidator(wx.PyValidator):
         return True  # Prevent wxDialog from complaining.
 
 
-class GenericValidator(wx.PyValidator):
+class GenericValidator(Validator):
     """This validator checks condition and calls callback
     in case the condition is not fulfilled.
     """
@@ -794,7 +809,7 @@ class GenericValidator(wx.PyValidator):
         :param condition: function which accepts string value and returns T/F
         :param callback: function which is called when condition is not fulfilled
         """
-        wx.PyValidator.__init__(self)
+        Validator.__init__(self)
         self._condition = condition
         self._callback = callback
 
@@ -878,7 +893,7 @@ class SingleSymbolPanel(wx.Panel):
 
         sizer = wx.BoxSizer()
         sizer.Add(
-            item=self.sBmp,
+            self.sBmp,
             proportion=0,
             flag=wx.ALL | wx.ALIGN_CENTER,
             border=5)
@@ -1089,21 +1104,21 @@ class SearchModuleWidget(wx.Panel):
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         boxSizer = wx.BoxSizer(wx.VERTICAL)
 
-        boxSizer.Add(item=self._search,
+        boxSizer.Add(self._search,
                      flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.BOTTOM,
                      border=5)
         if self._showChoice:
             hSizer = wx.BoxSizer(wx.HORIZONTAL)
-            hSizer.Add(item=self._searchChoice,
+            hSizer.Add(self._searchChoice,
                        flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.BOTTOM,
                        border=5)
             hSizer.AddStretchSpacer()
-            boxSizer.Add(item=hSizer, flag=wx.EXPAND)
+            boxSizer.Add(hSizer, flag=wx.EXPAND)
         if self._showTip:
-            boxSizer.Add(item=self._searchTip,
+            boxSizer.Add(self._searchTip,
                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
-        sizer.Add(item=boxSizer, proportion=1)
+        sizer.Add(boxSizer, proportion=1)
 
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -1216,12 +1231,12 @@ class ManageSettingsWidget(wx.Panel):
 
         self.settingsChoice = wx.Choice(parent=self, id=wx.ID_ANY)
         self.settingsChoice.Bind(wx.EVT_CHOICE, self.OnSettingsChanged)
-        self.btnSettingsSave = wx.Button(parent=self, id=wx.ID_SAVE)
+        self.btnSettingsSave = Button(parent=self, id=wx.ID_SAVE)
         self.btnSettingsSave.Bind(wx.EVT_BUTTON, self.OnSettingsSave)
-        self.btnSettingsSave.SetToolTipString(_("Save current settings"))
-        self.btnSettingsDel = wx.Button(parent=self, id=wx.ID_REMOVE)
+        self.btnSettingsSave.SetToolTip(_("Save current settings"))
+        self.btnSettingsDel = Button(parent=self, id=wx.ID_REMOVE)
         self.btnSettingsDel.Bind(wx.EVT_BUTTON, self.OnSettingsDelete)
-        self.btnSettingsSave.SetToolTipString(
+        self.btnSettingsSave.SetToolTip(
             _("Delete currently selected settings"))
 
         # escaping with '$' character - index in self.esc_chars
@@ -1242,20 +1257,20 @@ class ManageSettingsWidget(wx.Panel):
 
         self.settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
         self.settingsSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_("Load:")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT | wx.LEFT,
             border=5)
         self.settingsSizer.Add(
-            item=self.settingsChoice,
+            self.settingsChoice,
             proportion=1,
             flag=wx.EXPAND | wx.BOTTOM,
             border=3)
-        self.settingsSizer.Add(item=self.btnSettingsSave,
+        self.settingsSizer.Add(self.btnSettingsSave,
                                flag=wx.LEFT | wx.RIGHT | wx.BOTTOM, border=3)
-        self.settingsSizer.Add(item=self.btnSettingsDel,
+        self.settingsSizer.Add(self.btnSettingsDel,
                                flag=wx.RIGHT | wx.BOTTOM, border=3)
 
     def OnSettingsChanged(self, event):
@@ -1512,7 +1527,7 @@ class ManageSettingsWidget(wx.Panel):
         return data
 
 
-class PictureComboBox(wx.combo.OwnerDrawnComboBox):
+class PictureComboBox(OwnerDrawnComboBox):
     """Abstract class of ComboBox with pictures.
 
         Derived class has to specify has to specify _getPath method.

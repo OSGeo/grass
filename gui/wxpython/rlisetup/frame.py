@@ -57,19 +57,19 @@ class ViewFrame(wx.Frame):
         mainsizer = wx.BoxSizer(wx.VERTICAL)
         # CONFILES
         confilesSizer = wx.StaticBoxSizer(self.confilesBox, wx.HORIZONTAL)
-        confilesSizer.Add(item=self.textCtrl, proportion=1, flag=wx.EXPAND)
+        confilesSizer.Add(self.textCtrl, proportion=1, flag=wx.EXPAND)
         # END CONFILES
         # BUTTONS
         buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
-        buttonSizer.Add(item=self.btn_ok, flag=wx.ALL, border=5)
-        buttonSizer.Add(item=self.btn_close, flag=wx.ALL, border=5)
+        buttonSizer.Add(self.btn_ok, flag=wx.ALL, border=5)
+        buttonSizer.Add(self.btn_close, flag=wx.ALL, border=5)
         # END BUTTONS
         # add listbox to staticbox
-        panelsizer.Add(item=confilesSizer, pos=(0, 0), flag=wx.EXPAND,
+        panelsizer.Add(confilesSizer, pos=(0, 0), flag=wx.EXPAND,
                        border=3)
         # add panel and buttons
-        mainsizer.Add(item=self.panel, proportion=1, flag=wx.EXPAND, border=3)
-        mainsizer.Add(item=buttonSizer, proportion=0, flag=wx.EXPAND, border=3)
+        mainsizer.Add(self.panel, proportion=1, flag=wx.EXPAND, border=3)
+        mainsizer.Add(buttonSizer, proportion=0, flag=wx.EXPAND, border=3)
         panelsizer.AddGrowableRow(0)
         panelsizer.AddGrowableCol(0)
         self.panel.SetAutoLayout(True)
@@ -169,25 +169,25 @@ class RLiSetupFrame(wx.Frame):
         mainsizer = wx.BoxSizer(wx.VERTICAL)
         # CONFILES
         confilesSizer = wx.StaticBoxSizer(self.confilesBox, wx.HORIZONTAL)
-        confilesSizer.Add(item=self.listfileBox, proportion=1,
+        confilesSizer.Add(self.listfileBox, proportion=1,
                           flag=wx.EXPAND)
         # END CONFILES
         # BUTTONS
         buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
-        buttonSizer.Add(item=self.btn_new, flag=wx.ALL, border=5)
-        buttonSizer.Add(item=self.btn_rename, flag=wx.ALL, border=5)
-        buttonSizer.Add(item=self.btn_view, flag=wx.ALL, border=5)
-        buttonSizer.Add(item=self.btn_remove, flag=wx.ALL, border=5)
-        buttonSizer.Add(item=self.btn_help, flag=wx.ALL, border=5)
-        buttonSizer.Add(item=self.btn_close, flag=wx.ALL, border=5)
+        buttonSizer.Add(self.btn_new, flag=wx.ALL, border=5)
+        buttonSizer.Add(self.btn_rename, flag=wx.ALL, border=5)
+        buttonSizer.Add(self.btn_view, flag=wx.ALL, border=5)
+        buttonSizer.Add(self.btn_remove, flag=wx.ALL, border=5)
+        buttonSizer.Add(self.btn_help, flag=wx.ALL, border=5)
+        buttonSizer.Add(self.btn_close, flag=wx.ALL, border=5)
         # END BUTTONS
         # add listbox to staticbox
-        panelsizer.Add(item=confilesSizer, pos=(0, 0), flag=wx.EXPAND,
+        panelsizer.Add(confilesSizer, pos=(0, 0), flag=wx.EXPAND,
                        border=3)
 
         # add panel and buttons
-        mainsizer.Add(item=self.panel, proportion=1, flag=wx.EXPAND, border=3)
-        mainsizer.Add(item=buttonSizer, proportion=0, flag=wx.EXPAND, border=3)
+        mainsizer.Add(self.panel, proportion=1, flag=wx.EXPAND, border=3)
+        mainsizer.Add(buttonSizer, proportion=0, flag=wx.EXPAND, border=3)
 
         panelsizer.AddGrowableRow(0)
         panelsizer.AddGrowableCol(0)

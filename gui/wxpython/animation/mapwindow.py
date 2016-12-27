@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 import wx
 from core.debug import Debug
+from gui_core.wrap import PseudoDC, EmptyBitmap
 from utils import ComputeScaledRect
 
 
@@ -70,7 +71,7 @@ class BufferedWindow(wx.Window):
         # Make new offscreen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
         # a file, or whatever.
-        self._Buffer = wx.EmptyBitmap(*size)
+        self._Buffer = EmptyBitmap(*size)
         self.UpdateDrawing()
         # event.Skip()
 
@@ -105,9 +106,9 @@ class AnimationWindow(BufferedWindow):
                  wx.BORDER_RAISED):
         Debug.msg(2, "AnimationWindow.__init__()")
 
-        self.bitmap = wx.EmptyBitmap(1, 1)
+        self.bitmap = EmptyBitmap(1, 1)
         self.parent = parent
-        self._pdc = wx.PseudoDC()
+        self._pdc = PseudoDC()
         self._overlay = None
         self._tmpMousePos = None
         self.x = self.y = 0

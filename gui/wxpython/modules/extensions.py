@@ -139,41 +139,41 @@ class InstallExtensionWindow(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         repoSizer = wx.StaticBoxSizer(self.repoBox, wx.VERTICAL)
         repo1Sizer = wx.BoxSizer(wx.HORIZONTAL)
-        repo1Sizer.Add(item=self.repo, proportion=1,
+        repo1Sizer.Add(self.repo, proportion=1,
                        flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=1)
-        repo1Sizer.Add(item=self.btnFetch, proportion=0,
+        repo1Sizer.Add(self.btnFetch, proportion=0,
                        flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=1)
-        repoSizer.Add(item=repo1Sizer,
+        repoSizer.Add(repo1Sizer,
                       flag=wx.EXPAND)
 
         findSizer = wx.BoxSizer(wx.HORIZONTAL)
-        findSizer.Add(item=self.search, proportion=1)
+        findSizer.Add(self.search, proportion=1)
 
         treeSizer = wx.StaticBoxSizer(self.treeBox, wx.HORIZONTAL)
-        treeSizer.Add(item=self.tree, proportion=1,
+        treeSizer.Add(self.tree, proportion=1,
                       flag=wx.ALL | wx.EXPAND, border=1)
 
         # options
         optionSizer = wx.StaticBoxSizer(self.optionBox, wx.VERTICAL)
         for key in self.options.keys():
-            optionSizer.Add(item=self.options[key], proportion=0)
+            optionSizer.Add(self.options[key], proportion=0)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item=self.btnHelp, proportion=0)
+        btnSizer.Add(self.btnHelp, proportion=0)
         btnSizer.AddStretchSpacer()
-        btnSizer.Add(item=self.btnClose, proportion=0,
+        btnSizer.Add(self.btnClose, proportion=0,
                      flag=wx.RIGHT, border=5)
-        btnSizer.Add(item=self.btnInstall, proportion=0)
+        btnSizer.Add(self.btnInstall, proportion=0)
 
-        sizer.Add(item=repoSizer, proportion=0,
+        sizer.Add(repoSizer, proportion=0,
                   flag=wx.ALL | wx.EXPAND, border=3)
-        sizer.Add(item=findSizer, proportion=0,
+        sizer.Add(findSizer, proportion=0,
                   flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
-        sizer.Add(item=treeSizer, proportion=1,
+        sizer.Add(treeSizer, proportion=1,
                   flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
-        sizer.Add(item=optionSizer, proportion=0,
+        sizer.Add(optionSizer, proportion=0,
                   flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALIGN_RIGHT | wx.ALL | wx.EXPAND, border=5)
 
         self.panel.SetSizer(sizer)
@@ -434,22 +434,22 @@ class ManageExtensionWindow(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         extSizer = wx.StaticBoxSizer(self.extBox, wx.HORIZONTAL)
-        extSizer.Add(item=self.extList, proportion=1,
+        extSizer.Add(self.extList, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=1)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item=self.btnClose, proportion=0,
+        btnSizer.Add(self.btnClose, proportion=0,
                      flag=wx.RIGHT, border=5)
         btnSizer.Add(
-            item=self.btnUpdate,
+            self.btnUpdate,
             proportion=0,
             flag=wx.RIGHT,
             border=5)
-        btnSizer.Add(item=self.btnUninstall, proportion=0)
+        btnSizer.Add(self.btnUninstall, proportion=0)
 
-        sizer.Add(item=extSizer, proportion=1,
+        sizer.Add(extSizer, proportion=1,
                   flag=wx.ALL | wx.EXPAND, border=3)
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         self.panel.SetSizer(sizer)

@@ -27,6 +27,7 @@ from core.utils import _
 from icons.icon import MetaIcon
 from collections import defaultdict
 from core.globalvar import IMGDIR
+from gui_core.wrap import ToolBar
 
 from grass.pydispatch.signal import Signal
 
@@ -85,7 +86,7 @@ BaseIcons = {
 }
 
 
-class BaseToolbar(wx.ToolBar):
+class BaseToolbar(ToolBar):
     """Abstract toolbar class.
 
     Following code shows how to create new basic toolbar:

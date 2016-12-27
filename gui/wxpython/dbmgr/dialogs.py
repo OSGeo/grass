@@ -30,7 +30,7 @@ from core.debug import Debug
 from core.settings import UserSettings
 from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue
 from gui_core.widgets import IntegerValidator, FloatValidator
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 
 
 class DisplayAttributesDialog(wx.Dialog):
@@ -140,27 +140,27 @@ class DisplayAttributesDialog(wx.Dialog):
         btnSizer.AddButton(btnSubmit)
         btnSizer.Realize()
 
-        mainSizer.Add(item=self.noFoundMsg, proportion=0,
+        mainSizer.Add(self.noFoundMsg, proportion=0,
                       flag=wx.EXPAND | wx.ALL, border=5)
-        mainSizer.Add(item=self.notebook, proportion=1,
+        mainSizer.Add(self.notebook, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=5)
         fidSizer = wx.BoxSizer(wx.HORIZONTAL)
-        fidSizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY,
-                                        label=_("Feature id:")),
+        fidSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
+                                   label=_("Feature id:")),
                      proportion=0, border=5,
                      flag=wx.ALIGN_CENTER_VERTICAL)
-        fidSizer.Add(item=self.fidMulti, proportion=0,
+        fidSizer.Add(self.fidMulti, proportion=0,
                      flag=wx.EXPAND | wx.ALL, border=5)
-        fidSizer.Add(item=self.fidText, proportion=0,
+        fidSizer.Add(self.fidText, proportion=0,
                      flag=wx.EXPAND | wx.ALL, border=5)
-        mainSizer.Add(item=fidSizer, proportion=0,
+        mainSizer.Add(fidSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
         mainSizer.Add(
-            item=self.closeDialog,
+            self.closeDialog,
             proportion=0,
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
             border=5)
-        mainSizer.Add(item=btnSizer, proportion=0,
+        mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         # bindigs
@@ -565,7 +565,7 @@ class DisplayAttributesDialog(wx.Dialog):
                         colValue.GetId())  # name, type, values, id
                 # for each attribute (including category) END
                 border.Add(
-                    item=flexSizer,
+                    flexSizer,
                     proportion=1,
                     flag=wx.ALL | wx.EXPAND,
                     border=5)
@@ -693,7 +693,7 @@ class ModifyTableRecord(wx.Dialog):
         dataSizer.Fit(self.dataPanel)
 
         if self.usebox:
-            self.boxSizer.Add(item=self.dataPanel, proportion=1,
+            self.boxSizer.Add(self.dataPanel, proportion=1,
                               flag=wx.EXPAND | wx.ALL, border=5)
 
         # buttons
@@ -703,13 +703,13 @@ class ModifyTableRecord(wx.Dialog):
         btnSizer.Realize()
 
         if not self.usebox:
-            sizer.Add(item=self.dataPanel, proportion=1,
+            sizer.Add(self.dataPanel, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=5)
         else:
-            sizer.Add(item=self.boxSizer, proportion=1,
+            sizer.Add(self.boxSizer, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=5)
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=5)
 
         framewidth = self.GetBestSize()[0] + 25
@@ -782,39 +782,39 @@ class AddColumnDialog(wx.Dialog):
         addSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         addSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_("Column")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
             border=5)
-        addSizer.Add(item=self.data['addColName'], proportion=1,
+        addSizer.Add(self.data['addColName'], proportion=1,
                      flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                      border=5)
 
         addSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_("Type")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
             border=5)
-        addSizer.Add(item=self.data['addColType'],
+        addSizer.Add(self.data['addColType'],
                      flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                      border=5)
 
         addSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_("Length")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
             border=5)
-        addSizer.Add(item=self.data['addColLength'],
+        addSizer.Add(self.data['addColLength'],
                      flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                      border=5)
 
-        sizer.Add(item=addSizer, proportion=0,
+        sizer.Add(addSizer, proportion=0,
                   flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         btnSizer = wx.StdDialogButtonSizer()
@@ -822,7 +822,7 @@ class AddColumnDialog(wx.Dialog):
         btnSizer.AddButton(self.btnOk)
         btnSizer.Realize()
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         self.SetSizer(sizer)

@@ -93,14 +93,14 @@ class AboutWindow(wx.Frame):
 
     def _doLayout(self):
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item=self.btnClose, proportion=0,
+        btnSizer.Add(self.btnClose, proportion=0,
                      flag=wx.ALL | wx.ALIGN_RIGHT,
                      border=5)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(item=self.aboutNotebook, proportion=1,
+        sizer.Add(self.aboutNotebook, proportion=1,
                   flag=wx.EXPAND | wx.ALL, border=1)
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALL | wx.ALIGN_RIGHT, border=1)
 
         self.SetMinSize((400, 400))
@@ -123,10 +123,9 @@ class AboutWindow(wx.Frame):
         infoSizer = wx.BoxSizer(wx.VERTICAL)
         infoGridSizer = wx.GridBagSizer(vgap=5, hgap=5)
         logo = os.path.join(globalvar.ICONDIR, "grass-64x64.png")
-        logoBitmap = wx.StaticBitmap(parent=infoTxt, id=wx.ID_ANY,
-                                     bitmap=wx.Bitmap(name=logo,
-                                                      type=wx.BITMAP_TYPE_PNG))
-        infoSizer.Add(item=logoBitmap, proportion=0,
+        logoBitmap = wx.StaticBitmap(infoTxt, wx.ID_ANY,
+                                     wx.Bitmap(name=logo, type=wx.BITMAP_TYPE_PNG))
+        infoSizer.Add(logoBitmap, proportion=0,
                       flag=wx.ALL | wx.ALIGN_CENTER, border=20)
 
         infoLabel = 'GRASS GIS %s' % vInfo.get('version', _('unknown version'))
@@ -136,43 +135,43 @@ class AboutWindow(wx.Frame):
                              label=infoLabel + os.linesep)
         info.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
         info.SetForegroundColour(wx.Colour(35, 142, 35))
-        infoSizer.Add(item=info, proportion=0,
+        infoSizer.Add(info, proportion=0,
                       flag=wx.BOTTOM | wx.ALIGN_CENTER, border=1)
 
         team = wx.StaticText(parent=infoTxt, label=_grassDevTeam(1999) + '\n')
-        infoSizer.Add(item=team, proportion=0,
+        infoSizer.Add(team, proportion=0,
                       flag=wx.BOTTOM | wx.ALIGN_CENTER, border=1)
 
         row = 0
-        infoGridSizer.Add(item=wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                             label=_('Official GRASS site:')),
+        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                        label=_('Official GRASS site:')),
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
 
-        infoGridSizer.Add(item=HyperLinkCtrl(parent=infoTxt, id=wx.ID_ANY,
-                                             label='http://grass.osgeo.org'),
+        infoGridSizer.Add(HyperLinkCtrl(parent=infoTxt, id=wx.ID_ANY,
+                                        label='http://grass.osgeo.org'),
                           pos=(row, 1),
                           flag=wx.ALIGN_LEFT)
 
         row += 2
-        infoGridSizer.Add(item=wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                             label='%s:' % _('Code Revision')),
+        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                        label='%s:' % _('Code Revision')),
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
 
-        infoGridSizer.Add(item=wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                             label=vInfo.get('revision', '?')),
+        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                        label=vInfo.get('revision', '?')),
                           pos=(row, 1),
                           flag=wx.ALIGN_LEFT)
 
         row += 1
-        infoGridSizer.Add(item=wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                             label='%s:' % _('Build Date')),
+        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                        label='%s:' % _('Build Date')),
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
 
         infoGridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=infoTxt, id=wx.ID_ANY, label=vInfo.get(
                     'build_date', '?')), pos=(
                 row, 1), flag=wx.ALIGN_LEFT)
@@ -191,37 +190,37 @@ class AboutWindow(wx.Frame):
         #                   flag = wx.ALIGN_LEFT)
 
         row += 2
-        infoGridSizer.Add(item=wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                             label='Python:'),
+        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                        label='Python:'),
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
 
-        infoGridSizer.Add(item=wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                             label=platform.python_version()),
+        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                        label=platform.python_version()),
                           pos=(row, 1),
                           flag=wx.ALIGN_LEFT)
 
         row += 1
-        infoGridSizer.Add(item=wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                             label='wxPython:'),
+        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                        label='wxPython:'),
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
 
-        infoGridSizer.Add(item=wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                             label=wx.__version__),
+        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                        label=wx.__version__),
                           pos=(row, 1),
                           flag=wx.ALIGN_LEFT)
 
         infoGridSizer.AddGrowableCol(0)
         infoGridSizer.AddGrowableCol(1)
         infoSizer.Add(
-            item=infoGridSizer,
+            infoGridSizer,
             proportion=1,
             flag=wx.EXPAND | wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
 
         row += 2
-        infoGridSizer.Add(item=wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                             label="%s:" % _('Language')),
+        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                        label="%s:" % _('Language')),
                           pos=(row, 0),
                           flag=wx.ALIGN_RIGHT)
         self.langUsed = grass.gisenv().get('LANG', None)
@@ -232,8 +231,8 @@ class AboutWindow(wx.Frame):
                 self.langUsed = _('unknown')
             else:
                 self.langUsed = u'%s.%s' % (loc[0], loc[1])
-        infoGridSizer.Add(item=wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
-                                             label=self.langUsed),
+        infoGridSizer.Add(wx.StaticText(parent=infoTxt, id=wx.ID_ANY,
+                                        label=self.langUsed),
                           pos=(row, 1),
                           flag=wx.ALIGN_LEFT)
 
@@ -259,7 +258,7 @@ class AboutWindow(wx.Frame):
         style=wx.TE_MULTILINE | wx.TE_READONLY)
         copyrightwin.SetAutoLayout(True)
         copyrightwin.sizer = wx.BoxSizer(wx.VERTICAL)
-        copyrightwin.sizer.Add(item=copyrighttxt, proportion=1,
+        copyrightwin.sizer.Add(copyrighttxt, proportion=1,
                                flag=wx.EXPAND | wx.ALL, border=3)
         copyrightwin.SetSizer(copyrightwin.sizer)
         copyrightwin.Layout()
@@ -283,7 +282,7 @@ class AboutWindow(wx.Frame):
         style=wx.TE_MULTILINE | wx.TE_READONLY)
         licensewin.SetAutoLayout(True)
         licensewin.sizer = wx.BoxSizer(wx.VERTICAL)
-        licensewin.sizer.Add(item=licensetxt, proportion=1,
+        licensewin.sizer.Add(licensetxt, proportion=1,
                              flag=wx.EXPAND | wx.ALL, border=3)
         licensewin.SetSizer(licensewin.sizer)
         licensewin.Layout()
@@ -309,7 +308,7 @@ class AboutWindow(wx.Frame):
         style=wx.TE_MULTILINE | wx.TE_READONLY)
         window.SetAutoLayout(True)
         window.sizer = wx.BoxSizer(wx.VERTICAL)
-        window.sizer.Add(item=stat_text, proportion=1,
+        window.sizer.Add(stat_text, proportion=1,
                          flag=wx.EXPAND | wx.ALL, border=3)
         window.SetSizer(window.sizer)
         window.Layout()
@@ -334,7 +333,7 @@ class AboutWindow(wx.Frame):
         authorwin.SetAutoLayout(True)
         authorwin.SetupScrolling()
         authorwin.sizer = wx.BoxSizer(wx.VERTICAL)
-        authorwin.sizer.Add(item=authortxt, proportion=1,
+        authorwin.sizer.Add(authortxt, proportion=1,
                             flag=wx.EXPAND | wx.ALL, border=3)
         authorwin.SetSizer(authorwin.sizer)
         authorwin.Layout()
@@ -391,7 +390,7 @@ class AboutWindow(wx.Frame):
                 id=wx.ID_ANY,
                 label=_('%s file missing') %
                 contribfile)
-            contribwin.sizer.Add(item=contribtxt, proportion=1,
+            contribwin.sizer.Add(contribtxt, proportion=1,
                                  flag=wx.EXPAND | wx.ALL, border=3)
         else:
             if extra:
@@ -410,15 +409,15 @@ class AboutWindow(wx.Frame):
                         wx.BOLD,
                         0,
                         ""))
-                contribBox.Add(item=text)
+                contribBox.Add(text)
             for vals in sorted(contribs, key=lambda x: x[0]):
                 for item in vals:
                     contribBox.Add(
-                        item=wx.StaticText(
+                        wx.StaticText(
                             parent=contribwin,
                             id=wx.ID_ANY,
                             label=item))
-            contribwin.sizer.Add(item=contribBox, proportion=1,
+            contribwin.sizer.Add(contribBox, proportion=1,
                                  flag=wx.EXPAND | wx.ALL, border=3)
 
         contribwin.SetSizer(contribwin.sizer)
@@ -465,7 +464,7 @@ class AboutWindow(wx.Frame):
                 id=wx.ID_ANY,
                 label=_('%s file missing') %
                 'translators.csv')
-            translatorswin.sizer.Add(item=translatorstxt, proportion=1,
+            translatorswin.sizer.Add(translatorstxt, proportion=1,
                                      flag=wx.EXPAND | wx.ALL, border=3)
         else:
             translatorsBox = wx.FlexGridSizer(cols=4, vgap=5, hgap=5)
@@ -473,36 +472,36 @@ class AboutWindow(wx.Frame):
             tname = wx.StaticText(parent=translatorswin, id=wx.ID_ANY,
                                   label=_('Name'))
             tname.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
-            translatorsBox.Add(item=tname)
+            translatorsBox.Add(tname)
             temail = wx.StaticText(parent=translatorswin, id=wx.ID_ANY,
                                    label=_('E-mail'))
             temail.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
-            translatorsBox.Add(item=temail)
+            translatorsBox.Add(temail)
             tlang = wx.StaticText(parent=translatorswin, id=wx.ID_ANY,
                                   label=_('Language'))
             tlang.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
-            translatorsBox.Add(item=tlang)
+            translatorsBox.Add(tlang)
             tnat = wx.StaticText(parent=translatorswin, id=wx.ID_ANY,
                                  label=_('Nation'))
             tnat.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
-            translatorsBox.Add(item=tnat)
+            translatorsBox.Add(tnat)
             for lang in languages:
                 for translator in translators[lang]:
                     name, email = translator
                     translatorsBox.Add(
-                        item=wx.StaticText(
+                        wx.StaticText(
                             parent=translatorswin,
                             id=wx.ID_ANY,
                             label=unicode(
                                 name,
                                 "utf-8")))
                     translatorsBox.Add(
-                        item=wx.StaticText(
+                        wx.StaticText(
                             parent=translatorswin,
                             id=wx.ID_ANY,
                             label=email))
                     translatorsBox.Add(
-                        item=wx.StaticText(
+                        wx.StaticText(
                             parent=translatorswin,
                             id=wx.ID_ANY,
                             label=lang))
@@ -510,18 +509,17 @@ class AboutWindow(wx.Frame):
                         globalvar.ICONDIR, "flags", "%s.png" %
                         lang.lower())
                     if os.path.exists(flag):
-                        flagBitmap = wx.StaticBitmap(
-                            parent=translatorswin, id=wx.ID_ANY, bitmap=wx.Bitmap(
-                                name=flag, type=wx.BITMAP_TYPE_PNG))
-                        translatorsBox.Add(item=flagBitmap)
+                        flagBitmap = wx.StaticBitmap(translatorswin, wx.ID_ANY, wx.Bitmap(
+                                                     name=flag, type=wx.BITMAP_TYPE_PNG))
+                        translatorsBox.Add(flagBitmap)
                     else:
                         translatorsBox.Add(
-                            item=wx.StaticText(
+                            wx.StaticText(
                                 parent=translatorswin,
                                 id=wx.ID_ANY,
                                 label=lang))
 
-            translatorswin.sizer.Add(item=translatorsBox, proportion=1,
+            translatorswin.sizer.Add(translatorsBox, proportion=1,
                                      flag=wx.EXPAND | wx.ALL, border=3)
 
         translatorswin.SetSizer(translatorswin.sizer)
@@ -551,34 +549,34 @@ class AboutWindow(wx.Frame):
         langBox = wx.FlexGridSizer(cols=4, vgap=5, hgap=5)
         tkey = wx.StaticText(parent=par, id=wx.ID_ANY,
                              label=k.upper())
-        langBox.Add(item=tkey)
+        langBox.Add(tkey)
         try:
             tgood = wx.StaticText(parent=par, id=wx.ID_ANY,
                                   label=_("%d translated" % v['good']))
             tgood.SetForegroundColour(wx.Colour(35, 142, 35))
-            langBox.Add(item=tgood)
+            langBox.Add(tgood)
         except:
             tgood = wx.StaticText(parent=par, id=wx.ID_ANY,
                                   label="")
-            langBox.Add(item=tgood)
+            langBox.Add(tgood)
         try:
             tfuzzy = wx.StaticText(parent=par, id=wx.ID_ANY,
                                    label=_("   %d fuzzy" % v['fuzzy']))
             tfuzzy.SetForegroundColour(wx.Colour(255, 142, 0))
-            langBox.Add(item=tfuzzy)
+            langBox.Add(tfuzzy)
         except:
             tfuzzy = wx.StaticText(parent=par, id=wx.ID_ANY,
                                    label="")
-            langBox.Add(item=tfuzzy)
+            langBox.Add(tfuzzy)
         try:
             tbad = wx.StaticText(parent=par, id=wx.ID_ANY,
                                  label=_("   %d untranslated" % v['bad']))
             tbad.SetForegroundColour(wx.Colour(255, 0, 0))
-            langBox.Add(item=tbad)
+            langBox.Add(tbad)
         except:
             tbad = wx.StaticText(parent=par, id=wx.ID_ANY,
                                  label="")
-            langBox.Add(item=tbad)
+            langBox.Add(tbad)
         return langBox
 
     def _langPanel(self, lang, js):
@@ -598,7 +596,7 @@ class AboutWindow(wx.Frame):
         for k, v in js.iteritems():
             if k != 'total' and k != 'name':
                 box = self._langBox(win, k, v)
-                pageSizer.Add(item=box, proportion=1,
+                pageSizer.Add(box, proportion=1,
                               flag=wx.EXPAND | wx.ALL, border=3)
 
         win.SetSizer(pageSizer)
@@ -630,7 +628,7 @@ class AboutWindow(wx.Frame):
             statsSizer = wx.BoxSizer(wx.VERTICAL)
             statstext = wx.StaticText(self.statswin, id=wx.ID_ANY,
                                       label=_('%s file missing') % fname)
-            statsSizer.Add(item=statstext, proportion=1,
+            statsSizer.Add(statstext, proportion=1,
                            flag=wx.EXPAND | wx.ALL, border=3)
         else:
             languages = sorted(jsStats['langs'].keys())
@@ -675,7 +673,7 @@ class HelpFrame(wx.Dialog):
         content = HelpPanel(parent=self)
         content.LoadPage(file)
 
-        sizer.Add(item=content, proportion=1, flag=wx.EXPAND)
+        sizer.Add(content, proportion=1, flag=wx.EXPAND)
 
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
@@ -815,15 +813,15 @@ class HelpPanel(wx.Panel):
         sizer = wx.BoxSizer(wx.VERTICAL)
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        btnSizer.Add(item=self.btnPrev, proportion=0,
+        btnSizer.Add(self.btnPrev, proportion=0,
                      flag=wx.ALL, border=5)
-        btnSizer.Add(item=wx.Size(1, 1), proportion=1)
-        btnSizer.Add(item=self.btnNext, proportion=0,
+        btnSizer.Add(wx.Size(1, 1), proportion=1)
+        btnSizer.Add(self.btnNext, proportion=0,
                      flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
-        sizer.Add(item=self.content, proportion=1,
+        sizer.Add(self.content, proportion=1,
                   flag=wx.EXPAND)
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.EXPAND)
 
         self.SetSizer(sizer)

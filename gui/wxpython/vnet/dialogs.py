@@ -33,7 +33,10 @@ from grass.script import core as grass
 
 import wx
 import wx.aui
-import wx.lib.flatnotebook as FN
+try:
+    import wx.lib.agw.flatnotebook as FN
+except ImportError:
+    import wx.lib.flatnotebook as FN
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as scrolled
@@ -49,7 +52,7 @@ from dbmgr.vinfo import VectorDBInfo
 from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
 from gui_core.gselect import Select, LayerSelect, ColumnSelect
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 
 from vnet.widgets import PointsList
 from vnet.toolbars import MainToolbar, PointListToolbar, AnalysisToolbar
@@ -207,10 +210,10 @@ class VNETDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        sizer.Add(item=self.notebook, proportion=1,
+        sizer.Add(self.notebook, proportion=1,
                   flag=wx.EXPAND)
 
-        sizer.Add(item=self.stBar, proportion=0, flag=wx.EXPAND)
+        sizer.Add(self.stBar, proportion=0, flag=wx.EXPAND)
 
         self.mainPanel.SetSizer(sizer)
 
@@ -273,18 +276,18 @@ class VNETDialog(wx.Dialog):
         # Layout
         AnalysisSizer = wx.BoxSizer(wx.VERTICAL)
 
-        listSizer.Add(item=self.toolbars['pointsList'], proportion=0)
-        listSizer.Add(item=self.list, proportion=1, flag=wx.EXPAND)
+        listSizer.Add(self.toolbars['pointsList'], proportion=0)
+        listSizer.Add(self.list, proportion=1, flag=wx.EXPAND)
 
         maxDistSizer = wx.BoxSizer(wx.HORIZONTAL)
         maxDistSizer.Add(
-            item=maxDistLabel,
+            maxDistLabel,
             flag=wx.ALIGN_CENTER_VERTICAL,
             proportion=1)
-        maxDistSizer.Add(item=self.anSettings["max_dist"],
+        maxDistSizer.Add(self.anSettings["max_dist"],
                          flag=wx.EXPAND | wx.ALL, border=5, proportion=0)
         maxDistPanel.SetSizer(maxDistSizer)
-        anSettingsSizer.Add(item=maxDistPanel, proportion=1, flag=wx.EXPAND)
+        anSettingsSizer.Add(maxDistPanel, proportion=1, flag=wx.EXPAND)
 
         #showCutSizer = wx.BoxSizer(wx.HORIZONTAL)
         # showCutPanel.SetSizer(showCutSizer)
@@ -294,21 +297,21 @@ class VNETDialog(wx.Dialog):
 
         isoLinesSizer = wx.BoxSizer(wx.HORIZONTAL)
         isoLinesSizer.Add(
-            item=isoLineslabel,
+            isoLineslabel,
             flag=wx.ALIGN_CENTER_VERTICAL,
             proportion=1)
-        isoLinesSizer.Add(item=self.anSettings["iso_lines"],
+        isoLinesSizer.Add(self.anSettings["iso_lines"],
                           flag=wx.EXPAND | wx.ALL, border=5, proportion=1)
         isoLinesPanel.SetSizer(isoLinesSizer)
-        anSettingsSizer.Add(item=isoLinesPanel, proportion=1, flag=wx.EXPAND)
+        anSettingsSizer.Add(isoLinesPanel, proportion=1, flag=wx.EXPAND)
 
         AnalysisSizer.Add(
-            item=listSizer,
+            listSizer,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
         AnalysisSizer.Add(
-            item=anSettingsPanel,
+            anSettingsPanel,
             proportion=0,
             flag=wx.EXPAND | wx.RIGHT | wx.LEFT | wx.BOTTOM,
             border=5)
@@ -350,7 +353,7 @@ class VNETDialog(wx.Dialog):
 
         # Layout
         outputSizer = wx.BoxSizer(wx.VERTICAL)
-        outputSizer.Add(item=self.gwindow, proportion=1, flag=wx.EXPAND)
+        outputSizer.Add(self.gwindow, proportion=1, flag=wx.EXPAND)
         self.gwindow.SetMinSize((-1, -1))
 
         outputPanel.SetSizer(outputSizer)
@@ -432,7 +435,7 @@ class VNETDialog(wx.Dialog):
         # Layout
         mainSizer = wx.BoxSizer(wx.VERTICAL)
 
-        mainSizer.Add(item=bsizer, proportion=0,
+        mainSizer.Add(bsizer, proportion=0,
                       flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=5)
 
         # , 'turn_layer', 'turn_cat_layer']:
@@ -450,10 +453,10 @@ class VNETDialog(wx.Dialog):
             selPanels[sel].SetSizer(self._doSelLayout(title=label[sel],
                                                       sel=self.inputData[sel],
                                                       btn=btn))
-            bsizer.Add(item=selPanels[sel], proportion=0,
+            bsizer.Add(selPanels[sel], proportion=0,
                        flag=wx.EXPAND)
 
-        mainSizer.Add(item=bsizer2, proportion=0,
+        mainSizer.Add(bsizer2, proportion=0,
                       flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=5)
 
         for sel in ['arc_column', 'arc_backward_column', 'node_column']:
@@ -461,7 +464,7 @@ class VNETDialog(wx.Dialog):
                 self._doSelLayout(
                     title=label[sel],
                     sel=self.inputData[sel]))
-            bsizer2.Add(item=selPanels[sel], proportion=0,
+            bsizer2.Add(selPanels[sel], proportion=0,
                         flag=wx.EXPAND)
 
         dataPanel.SetSizer(mainSizer)
@@ -475,25 +478,25 @@ class VNETDialog(wx.Dialog):
         selSizer = wx.BoxSizer(orient=wx.VERTICAL)
 
         selTitleSizer = wx.BoxSizer(wx.HORIZONTAL)
-        selTitleSizer.Add(item=title, proportion=1,
+        selTitleSizer.Add(title, proportion=1,
                           flag=wx.LEFT | wx.TOP | wx.EXPAND, border=5)
 
-        selSizer.Add(item=selTitleSizer, proportion=0,
+        selSizer.Add(selTitleSizer, proportion=0,
                      flag=wx.EXPAND)
 
         if btn:
             selFiledSizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-            selFiledSizer.Add(item=sel, proportion=1,
+            selFiledSizer.Add(sel, proportion=1,
                               flag=wx.EXPAND | wx.ALL)
 
-            selFiledSizer.Add(item=btn, proportion=0,
+            selFiledSizer.Add(btn, proportion=0,
                               flag=wx.EXPAND | wx.ALL)
 
-            selSizer.Add(item=selFiledSizer, proportion=0,
+            selSizer.Add(selFiledSizer, proportion=0,
                          flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER_VERTICAL,
                          border=5)
         else:
-            selSizer.Add(item=sel, proportion=1,
+            selSizer.Add(sel, proportion=1,
                          flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER_VERTICAL,
                          border=5)
         return selSizer
@@ -680,13 +683,13 @@ class VNETDialog(wx.Dialog):
             ptListToolbar = self.toolbars['pointsList']
             if ptListToolbar:
                 ptListToolbar.ToggleTool(
-                    id=ptListToolbar.GetToolId("insertPoint"), toggle=False)
+                    ptListToolbar.GetToolId("insertPoint"), False)
 
         if method == "EditMode" and kwargs["activated"]:
             ptListToolbar = self.toolbars['pointsList']
             if ptListToolbar:
                 ptListToolbar.ToggleTool(
-                    id=ptListToolbar.GetToolId("insertPoint"), toggle=True)
+                    ptListToolbar.GetToolId("insertPoint"), True)
 
         if method == "SetPointData" and (
                 "e" in kwargs.keys() or "n" in kwargs.keys()):
@@ -909,8 +912,7 @@ class VNETDialog(wx.Dialog):
 
         mainToolbar = self.toolbars['mainToolbar']
         id = vars(mainToolbar)['showResult']
-        mainToolbar.ToggleTool(id=id,
-                               toggle=True)
+        mainToolbar.ToggleTool(id, True)
 
         self.stBar.RemoveStatusItem(key='analyze')
 
@@ -926,8 +928,7 @@ class VNETDialog(wx.Dialog):
         toggleState = mainToolbar.GetToolState(id)
 
         if not self.tmp_result:
-            mainToolbar.ToggleTool(id=id,
-                                   toggle=False)
+            mainToolbar.ToggleTool(id, False)
         elif toggleState:
             self.vnet_mgr.ShowResult(True)
         else:
@@ -1005,8 +1006,7 @@ class VNETDialog(wx.Dialog):
         if evt == "deactivated":
             self.stBar.RemoveStatusItem(key='snap')
             ptListToolbar = self.toolbars['pointsList']
-            ptListToolbar.ToggleTool(id=ptListToolbar.GetToolId("snapping"),
-                                     toggle=False)
+            ptListToolbar.ToggleTool(ptListToolbar.GetToolId("snapping"), False)
 
         elif evt == "computing_points":
             self.stBar.AddStatusItem(text=_('Computing nodes...'),
@@ -1322,46 +1322,46 @@ class SettingsDialog(wx.Dialog):
 
         row = 0
         gridSizer.Add(
-            item=settsLabels["line_color"],
+            settsLabels["line_color"],
             flag=wx.ALIGN_CENTER_VERTICAL,
             pos=(
                 row,
                 0))
-        gridSizer.Add(item=self.settings["line_color"],
+        gridSizer.Add(self.settings["line_color"],
                       flag=wx.ALIGN_RIGHT | wx.ALL, border=5,
                       pos=(row, 1))
 
         row += 1
         gridSizer.Add(
-            item=settsLabels["line_width"],
+            settsLabels["line_width"],
             flag=wx.ALIGN_CENTER_VERTICAL,
             pos=(
                 row,
                 0))
-        gridSizer.Add(item=self.settings["line_width"],
+        gridSizer.Add(self.settings["line_width"],
                       flag=wx.ALIGN_RIGHT | wx.ALL, border=5,
                       pos=(row, 1))
         row += 1
         gridSizer.Add(
-            item=settsLabels['color_table'],
+            settsLabels['color_table'],
             flag=wx.ALIGN_CENTER_VERTICAL,
             pos=(
                 row,
                 0))
-        gridSizer.Add(item=self.settings['color_table'],
+        gridSizer.Add(self.settings['color_table'],
                       flag=wx.ALIGN_RIGHT | wx.ALL, border=5,
                       pos=(row, 1))
 
         row += 1
         gridSizer.Add(
-            item=self.settings["invert_colors"],
+            self.settings["invert_colors"],
             flag=wx.ALIGN_CENTER_VERTICAL,
             pos=(
                 row,
                 0))
 
         gridSizer.AddGrowableCol(1)
-        styleBoxSizer.Add(item=gridSizer, flag=wx.EXPAND)
+        styleBoxSizer.Add(gridSizer, flag=wx.EXPAND)
 
         # Point style layout
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
@@ -1379,18 +1379,18 @@ class SettingsDialog(wx.Dialog):
         for settKey in settsOrder:
             sett = setts[settKey]
             gridSizer.Add(
-                item=settsLabels[settKey],
+                settsLabels[settKey],
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     row,
                     0))
-            gridSizer.Add(item=self.settings[settKey],
+            gridSizer.Add(self.settings[settKey],
                           flag=wx.ALIGN_RIGHT | wx.ALL, border=5,
                           pos=(row, 1))
             row += 1
 
         gridSizer.AddGrowableCol(1)
-        ptsStyleBoxSizer.Add(item=gridSizer, flag=wx.EXPAND)
+        ptsStyleBoxSizer.Add(gridSizer, flag=wx.EXPAND)
 
         # Other settings layout
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
@@ -1398,29 +1398,29 @@ class SettingsDialog(wx.Dialog):
         row = 0
         for otherSettName in ["snap_tresh", "max_hist_steps"]:
             gridSizer.Add(
-                item=settsLabels[otherSettName],
+                settsLabels[otherSettName],
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(
                     row,
                     0))
-            gridSizer.Add(item=self.settings[otherSettName],
+            gridSizer.Add(self.settings[otherSettName],
                           flag=wx.ALIGN_RIGHT | wx.ALL, border=5,
                           pos=(row, 1))
             row += 1
 
         gridSizer.AddGrowableCol(1)
-        otherBoxSizer.Add(item=gridSizer, flag=wx.EXPAND)
+        otherBoxSizer.Add(gridSizer, flag=wx.EXPAND)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(self.btnApply, flag=wx.LEFT | wx.RIGHT, border=5)
         btnSizer.Add(self.btnSave, flag=wx.LEFT | wx.RIGHT, border=5)
         btnSizer.Add(self.btnClose, flag=wx.LEFT | wx.RIGHT, border=5)
 
-        sizer.Add(item=styleBoxSizer, flag=wx.EXPAND | wx.ALL, border=5)
-        sizer.Add(item=ptsStyleBoxSizer, flag=wx.EXPAND | wx.ALL, border=5)
-        sizer.Add(item=otherBoxSizer, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(styleBoxSizer, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(ptsStyleBoxSizer, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(otherBoxSizer, flag=wx.EXPAND | wx.ALL, border=5)
         sizer.Add(
-            item=btnSizer,
+            btnSizer,
             flag=wx.EXPAND | wx.ALL,
             border=5,
             proportion=0)
@@ -1524,7 +1524,7 @@ class CreateTtbDialog(wx.Dialog):
         # Layout
         mainSizer = wx.BoxSizer(wx.VERTICAL)
 
-        mainSizer.Add(item=bsizer, proportion=0,
+        mainSizer.Add(bsizer, proportion=0,
                       flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=5)
 
         btn = None
@@ -1534,7 +1534,7 @@ class CreateTtbDialog(wx.Dialog):
             selPanels[sel].SetSizer(self._doSelLayout(title=label[sel],
                                                       sel=self.inputData[sel],
                                                       btn=btn))
-            bsizer.Add(item=selPanels[sel], proportion=0,
+            bsizer.Add(selPanels[sel], proportion=0,
                        flag=wx.EXPAND)
 
         for k, v in init_data.iteritems():
@@ -1549,7 +1549,7 @@ class CreateTtbDialog(wx.Dialog):
         btnSizer.AddButton(self.btnOk)
         btnSizer.Realize()
 
-        mainSizer.Add(item=btnSizer, proportion=0,
+        mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         self.SetSizer(mainSizer)
@@ -1561,25 +1561,25 @@ class CreateTtbDialog(wx.Dialog):
         selSizer = wx.BoxSizer(orient=wx.VERTICAL)
 
         selTitleSizer = wx.BoxSizer(wx.HORIZONTAL)
-        selTitleSizer.Add(item=title, proportion=1,
+        selTitleSizer.Add(title, proportion=1,
                           flag=wx.LEFT | wx.TOP | wx.EXPAND, border=5)
 
-        selSizer.Add(item=selTitleSizer, proportion=0,
+        selSizer.Add(selTitleSizer, proportion=0,
                      flag=wx.EXPAND)
 
         if btn:
             selFiledSizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-            selFiledSizer.Add(item=sel, proportion=1,
+            selFiledSizer.Add(sel, proportion=1,
                               flag=wx.EXPAND | wx.ALL)
 
-            selFiledSizer.Add(item=btn, proportion=0,
+            selFiledSizer.Add(btn, proportion=0,
                               flag=wx.EXPAND | wx.ALL)
 
-            selSizer.Add(item=selFiledSizer, proportion=0,
+            selSizer.Add(selFiledSizer, proportion=0,
                          flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER_VERTICAL,
                          border=5)
         else:
-            selSizer.Add(item=sel, proportion=1,
+            selSizer.Add(sel, proportion=1,
                          flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER_VERTICAL,
                          border=5)
         return selSizer
@@ -1654,14 +1654,14 @@ class OutputVectorDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.boxSizer.Add(item=self.vectSellabel,
+        self.boxSizer.Add(self.vectSellabel,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           proportion=0)
 
-        self.boxSizer.Add(item=self.vectSel, proportion=1,
+        self.boxSizer.Add(self.vectSel, proportion=1,
                           flag=wx.EXPAND | wx.ALL, border=5)
 
-        sizer.Add(item=self.boxSizer, proportion=1,
+        sizer.Add(self.boxSizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL, border=5)
 
         btnSizer = wx.StdDialogButtonSizer()
@@ -1669,7 +1669,7 @@ class OutputVectorDialog(wx.Dialog):
         btnSizer.AddButton(self.btnOk)
         btnSizer.Realize()
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         self.panel.SetSizer(sizer)
@@ -1756,7 +1756,7 @@ class DefIntesectionTurnCostDialog(wx.Dialog):
     def layout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        sizer.Add(item=self.browsePage, proportion=1,
+        sizer.Add(self.browsePage, proportion=1,
                   flag=wx.EXPAND)
 
         self.SetSizer(sizer)
@@ -1815,40 +1815,40 @@ class DefGlobalTurnsDialog(wx.Dialog):
         closeSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         addRemoveSizer.Add(
-            item=self.btnAdd,
+            self.btnAdd,
             proportion=0,
             flag=wx.ALIGN_RIGHT,
             border=10)
         addRemoveSizer.Add(
-            item=self.btnRemove,
+            self.btnRemove,
             proportion=0,
             flag=wx.ALIGN_RIGHT,
             border=10)
 
         labelSizer.Add(
-            item=self.angle_list,
+            self.angle_list,
             proportion=1,
             flag=wx.EXPAND,
             border=10)
         labelSizer.Add(
-            item=addRemoveSizer,
+            addRemoveSizer,
             proportion=0,
             flag=wx.ALIGN_RIGHT,
             border=10)
 
         closeSizer.Add(
-            item=self.useUTurns,
+            self.useUTurns,
             proportion=1,
             flag=wx.ALIGN_LEFT,
             border=10)
         closeSizer.Add(
-            item=self.btnClose,
+            self.btnClose,
             proportion=0,
             flag=wx.ALIGN_RIGHT,
             border=10)
 
-        sizer.Add(item=labelSizer, proportion=1, flag=wx.EXPAND)
-        sizer.Add(item=closeSizer, proportion=0, flag=wx.EXPAND)
+        sizer.Add(labelSizer, proportion=1, flag=wx.EXPAND)
+        sizer.Add(closeSizer, proportion=0, flag=wx.EXPAND)
 
         self.SetSizer(sizer)
 

@@ -60,10 +60,10 @@ class DataCatalog(wx.Panel):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        sizer.Add(item=self.toolbar, proportion=0,
+        sizer.Add(self.toolbar, proportion=0,
                   flag=wx.EXPAND)
 
-        sizer.Add(item=self.tree.GetControl(), proportion=1,
+        sizer.Add(self.tree.GetControl(), proportion=1,
                   flag=wx.EXPAND)
 
         self.SetAutoLayout(True)

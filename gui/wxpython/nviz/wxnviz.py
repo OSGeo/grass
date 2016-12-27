@@ -51,6 +51,8 @@ from grass.lib.raster import *
 from core.debug import Debug
 from core.utils import _, autoCropImageFromFile
 from core.gcmd import EncodeString
+from core.globalvar import wxPythonPhoenix
+from gui_core.wrap import Rect
 import grass.script as grass
 
 log = None
@@ -2097,8 +2099,12 @@ class Texture(object):
         bytes1 = self.width * self.height
         imageData = struct.unpack(str(bytes3) + 'B', self.image.GetData())
         if self.image.HasAlpha():
-            alphaData = struct.unpack(
-                str(bytes1) + 'B', self.image.GetAlphaData())
+            if wxPythonPhoenix:
+                alphaData = struct.unpack(
+                    str(bytes1) + 'B', self.image.GetAlpha())
+            else:
+                alphaData = struct.unpack(
+                    str(bytes1) + 'B', self.image.GetAlphaData())
 
         # this takes too much time
         wx.BeginBusyCursor()
@@ -2133,7 +2139,7 @@ class Texture(object):
             self.textureId)
 
     def HitTest(self, x, y, radius):
-        copy = wx.Rect(self.coords[0], self.coords[1], self.orig_width, self.orig_height)
+        copy = Rect(self.coords[0], self.coords[1], self.orig_width, self.orig_height)
         copy.Inflate(radius, radius)
         return copy.ContainsXY(x, y)
 

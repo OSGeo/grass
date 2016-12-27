@@ -29,6 +29,7 @@ from core.utils import _
 from gui_core.gselect import Select
 from gui_core.forms import GUI
 from gui_core.widgets import IntegerValidator
+from gui_core.wrap import Button, TextCtrl
 from core.settings import UserSettings
 
 
@@ -140,96 +141,96 @@ class MapCalcFrame(wx.Frame):
         #
         # Buttons
         #
-        self.btn_clear = wx.Button(parent=self.panel, id=wx.ID_CLEAR)
-        self.btn_help = wx.Button(parent=self.panel, id=wx.ID_HELP)
-        self.btn_run = wx.Button(
+        self.btn_clear = Button(parent=self.panel, id=wx.ID_CLEAR)
+        self.btn_help = Button(parent=self.panel, id=wx.ID_HELP)
+        self.btn_run = Button(
             parent=self.panel,
             id=wx.ID_ANY,
             label=_("&Run"))
         self.btn_run.SetForegroundColour(wx.Colour(35, 142, 35))
         self.btn_run.SetDefault()
-        self.btn_close = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btn_save = wx.Button(parent=self.panel, id=wx.ID_SAVE)
-        self.btn_save.SetToolTipString(_('Save expression to file'))
-        self.btn_load = wx.Button(parent=self.panel, id=wx.ID_ANY,
-                                  label=_("&Load"))
-        self.btn_load.SetToolTipString(_('Load expression from file'))
-        self.btn_copy = wx.Button(parent=self.panel, id=wx.ID_COPY)
-        self.btn_copy.SetToolTipString(
+        self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btn_save = Button(parent=self.panel, id=wx.ID_SAVE)
+        self.btn_save.SetToolTip(_('Save expression to file'))
+        self.btn_load = Button(parent=self.panel, id=wx.ID_ANY,
+                               label=_("&Load"))
+        self.btn_load.SetToolTip(_('Load expression from file'))
+        self.btn_copy = Button(parent=self.panel, id=wx.ID_COPY)
+        self.btn_copy.SetToolTip(
             _("Copy the current command string to the clipboard"))
 
         self.btn = dict()
-        self.btn['pow'] = wx.Button(parent=self.panel, id=wx.ID_ANY, label="^")
-        self.btn['pow'].SetToolTipString(_('exponent'))
-        self.btn['div'] = wx.Button(parent=self.panel, id=wx.ID_ANY, label="/")
-        self.btn['div'].SetToolTipString(_('divide'))
-        self.btn['add'] = wx.Button(parent=self.panel, id=wx.ID_ANY, label="+")
-        self.btn['add'].SetToolTipString(_('add'))
-        self.btn['minus'] = wx.Button(
+        self.btn['pow'] = Button(parent=self.panel, id=wx.ID_ANY, label="^")
+        self.btn['pow'].SetToolTip(_('exponent'))
+        self.btn['div'] = Button(parent=self.panel, id=wx.ID_ANY, label="/")
+        self.btn['div'].SetToolTip(_('divide'))
+        self.btn['add'] = Button(parent=self.panel, id=wx.ID_ANY, label="+")
+        self.btn['add'].SetToolTip(_('add'))
+        self.btn['minus'] = Button(
             parent=self.panel, id=wx.ID_ANY, label="-")
-        self.btn['minus'].SetToolTipString(_('subtract'))
-        self.btn['mod'] = wx.Button(parent=self.panel, id=wx.ID_ANY, label="%")
-        self.btn['mod'].SetToolTipString(_('modulus'))
-        self.btn['mult'] = wx.Button(
+        self.btn['minus'].SetToolTip(_('subtract'))
+        self.btn['mod'] = Button(parent=self.panel, id=wx.ID_ANY, label="%")
+        self.btn['mod'].SetToolTip(_('modulus'))
+        self.btn['mult'] = Button(
             parent=self.panel, id=wx.ID_ANY, label="*")
-        self.btn['mult'].SetToolTipString(_('multiply'))
+        self.btn['mult'].SetToolTip(_('multiply'))
 
-        self.btn['parenl'] = wx.Button(
+        self.btn['parenl'] = Button(
             parent=self.panel, id=wx.ID_ANY, label="(")
-        self.btn['parenr'] = wx.Button(
+        self.btn['parenr'] = Button(
             parent=self.panel, id=wx.ID_ANY, label=")")
-        self.btn['lshift'] = wx.Button(
+        self.btn['lshift'] = Button(
             parent=self.panel, id=wx.ID_ANY, label="<<")
-        self.btn['lshift'].SetToolTipString(_('left shift'))
-        self.btn['rshift'] = wx.Button(
+        self.btn['lshift'].SetToolTip(_('left shift'))
+        self.btn['rshift'] = Button(
             parent=self.panel, id=wx.ID_ANY, label=">>")
-        self.btn['rshift'].SetToolTipString(_('right shift'))
-        self.btn['rshiftu'] = wx.Button(
+        self.btn['rshift'].SetToolTip(_('right shift'))
+        self.btn['rshiftu'] = Button(
             parent=self.panel, id=wx.ID_ANY, label=">>>")
-        self.btn['rshiftu'].SetToolTipString(_('right shift (unsigned)'))
-        self.btn['gt'] = wx.Button(parent=self.panel, id=wx.ID_ANY, label=">")
-        self.btn['gt'].SetToolTipString(_('greater than'))
-        self.btn['gteq'] = wx.Button(
+        self.btn['rshiftu'].SetToolTip(_('right shift (unsigned)'))
+        self.btn['gt'] = Button(parent=self.panel, id=wx.ID_ANY, label=">")
+        self.btn['gt'].SetToolTip(_('greater than'))
+        self.btn['gteq'] = Button(
             parent=self.panel, id=wx.ID_ANY, label=">=")
-        self.btn['gteq'].SetToolTipString(_('greater than or equal to'))
-        self.btn['lt'] = wx.Button(parent=self.panel, id=wx.ID_ANY, label="<")
-        self.btn['lt'].SetToolTipString(_('less than'))
-        self.btn['lteq'] = wx.Button(
+        self.btn['gteq'].SetToolTip(_('greater than or equal to'))
+        self.btn['lt'] = Button(parent=self.panel, id=wx.ID_ANY, label="<")
+        self.btn['lt'].SetToolTip(_('less than'))
+        self.btn['lteq'] = Button(
             parent=self.panel, id=wx.ID_ANY, label="<=")
-        self.btn['lteq'].SetToolTipString(_('less than or equal to'))
-        self.btn['eq'] = wx.Button(parent=self.panel, id=wx.ID_ANY, label="==")
-        self.btn['eq'].SetToolTipString(_('equal to'))
-        self.btn['noteq'] = wx.Button(
+        self.btn['lteq'].SetToolTip(_('less than or equal to'))
+        self.btn['eq'] = Button(parent=self.panel, id=wx.ID_ANY, label="==")
+        self.btn['eq'].SetToolTip(_('equal to'))
+        self.btn['noteq'] = Button(
             parent=self.panel, id=wx.ID_ANY, label="!=")
-        self.btn['noteq'].SetToolTipString(_('not equal to'))
+        self.btn['noteq'].SetToolTip(_('not equal to'))
 
-        self.btn['compl'] = wx.Button(
+        self.btn['compl'] = Button(
             parent=self.panel, id=wx.ID_ANY, label="~")
-        self.btn['compl'].SetToolTipString(_('one\'s complement'))
-        self.btn['not'] = wx.Button(parent=self.panel, id=wx.ID_ANY, label="!")
-        self.btn['not'].SetToolTipString(_('NOT'))
-        self.btn['andbit'] = wx.Button(
+        self.btn['compl'].SetToolTip(_('one\'s complement'))
+        self.btn['not'] = Button(parent=self.panel, id=wx.ID_ANY, label="!")
+        self.btn['not'].SetToolTip(_('NOT'))
+        self.btn['andbit'] = Button(
             parent=self.panel, id=wx.ID_ANY, label='&&')
-        self.btn['andbit'].SetToolTipString(_('bitwise AND'))
-        self.btn['orbit'] = wx.Button(
+        self.btn['andbit'].SetToolTip(_('bitwise AND'))
+        self.btn['orbit'] = Button(
             parent=self.panel, id=wx.ID_ANY, label="|")
-        self.btn['orbit'].SetToolTipString(_('bitwise OR'))
-        self.btn['and'] = wx.Button(
+        self.btn['orbit'].SetToolTip(_('bitwise OR'))
+        self.btn['and'] = Button(
             parent=self.panel, id=wx.ID_ANY, label="&&&&")
-        self.btn['and'].SetToolTipString(_('logical AND'))
-        self.btn['andnull'] = wx.Button(
+        self.btn['and'].SetToolTip(_('logical AND'))
+        self.btn['andnull'] = Button(
             parent=self.panel, id=wx.ID_ANY, label="&&&&&&")
-        self.btn['andnull'].SetToolTipString(_('logical AND (ignores NULLs)'))
-        self.btn['or'] = wx.Button(parent=self.panel, id=wx.ID_ANY, label="||")
-        self.btn['or'].SetToolTipString(_('logical OR'))
-        self.btn['ornull'] = wx.Button(
+        self.btn['andnull'].SetToolTip(_('logical AND (ignores NULLs)'))
+        self.btn['or'] = Button(parent=self.panel, id=wx.ID_ANY, label="||")
+        self.btn['or'].SetToolTip(_('logical OR'))
+        self.btn['ornull'] = Button(
             parent=self.panel, id=wx.ID_ANY, label="|||")
-        self.btn['ornull'].SetToolTipString(_('logical OR (ignores NULLs)'))
-        self.btn['cond'] = wx.Button(
+        self.btn['ornull'].SetToolTip(_('logical OR (ignores NULLs)'))
+        self.btn['cond'] = Button(
             parent=self.panel,
             id=wx.ID_ANY,
             label="a ? b : c")
-        self.btn['cond'].SetToolTipString(_('conditional'))
+        self.btn['cond'].SetToolTip(_('conditional'))
 
         #
         # Text area
@@ -278,9 +279,9 @@ class MapCalcFrame(wx.Frame):
             label=_("Generate random seed for rand()"))
         self.randomSeedStaticText = wx.StaticText(
             parent=self.panel, label=_("Seed:"))
-        self.randomSeedText = wx.TextCtrl(parent=self.panel, size=(100, -1),
-                                          validator=IntegerValidator())
-        self.randomSeedText.SetToolTipString(
+        self.randomSeedText = TextCtrl(parent=self.panel, size=(100, -1),
+                                       validator=IntegerValidator())
+        self.randomSeedText.SetToolTip(
             _("Integer seed for rand() function"))
         self.randomSeed.SetValue(True)
         self.randomSeedStaticText.Disable()
@@ -345,123 +346,123 @@ class MapCalcFrame(wx.Frame):
         outOpeSizer = wx.BoxSizer(wx.VERTICAL)
 
         buttonSizer1 = wx.GridBagSizer(5, 1)
-        buttonSizer1.Add(item=self.btn['add'], pos=(0, 0))
-        buttonSizer1.Add(item=self.btn['minus'], pos=(0, 1))
-        buttonSizer1.Add(item=self.btn['mod'], pos=(5, 0))
-        buttonSizer1.Add(item=self.btn['mult'], pos=(1, 0))
-        buttonSizer1.Add(item=self.btn['div'], pos=(1, 1))
-        buttonSizer1.Add(item=self.btn['pow'], pos=(5, 1))
-        buttonSizer1.Add(item=self.btn['gt'], pos=(2, 0))
-        buttonSizer1.Add(item=self.btn['gteq'], pos=(2, 1))
-        buttonSizer1.Add(item=self.btn['eq'], pos=(4, 0))
-        buttonSizer1.Add(item=self.btn['lt'], pos=(3, 0))
-        buttonSizer1.Add(item=self.btn['lteq'], pos=(3, 1))
-        buttonSizer1.Add(item=self.btn['noteq'], pos=(4, 1))
+        buttonSizer1.Add(self.btn['add'], pos=(0, 0))
+        buttonSizer1.Add(self.btn['minus'], pos=(0, 1))
+        buttonSizer1.Add(self.btn['mod'], pos=(5, 0))
+        buttonSizer1.Add(self.btn['mult'], pos=(1, 0))
+        buttonSizer1.Add(self.btn['div'], pos=(1, 1))
+        buttonSizer1.Add(self.btn['pow'], pos=(5, 1))
+        buttonSizer1.Add(self.btn['gt'], pos=(2, 0))
+        buttonSizer1.Add(self.btn['gteq'], pos=(2, 1))
+        buttonSizer1.Add(self.btn['eq'], pos=(4, 0))
+        buttonSizer1.Add(self.btn['lt'], pos=(3, 0))
+        buttonSizer1.Add(self.btn['lteq'], pos=(3, 1))
+        buttonSizer1.Add(self.btn['noteq'], pos=(4, 1))
 
         buttonSizer2 = wx.GridBagSizer(5, 1)
-        buttonSizer2.Add(item=self.btn['and'], pos=(0, 0))
-        buttonSizer2.Add(item=self.btn['andbit'], pos=(1, 0))
-        buttonSizer2.Add(item=self.btn['andnull'], pos=(2, 0))
-        buttonSizer2.Add(item=self.btn['or'], pos=(0, 1))
-        buttonSizer2.Add(item=self.btn['orbit'], pos=(1, 1))
-        buttonSizer2.Add(item=self.btn['ornull'], pos=(2, 1))
-        buttonSizer2.Add(item=self.btn['lshift'], pos=(3, 0))
-        buttonSizer2.Add(item=self.btn['rshift'], pos=(3, 1))
-        buttonSizer2.Add(item=self.btn['rshiftu'], pos=(4, 0))
-        buttonSizer2.Add(item=self.btn['cond'], pos=(5, 0))
-        buttonSizer2.Add(item=self.btn['compl'], pos=(5, 1))
-        buttonSizer2.Add(item=self.btn['not'], pos=(4, 1))
+        buttonSizer2.Add(self.btn['and'], pos=(0, 0))
+        buttonSizer2.Add(self.btn['andbit'], pos=(1, 0))
+        buttonSizer2.Add(self.btn['andnull'], pos=(2, 0))
+        buttonSizer2.Add(self.btn['or'], pos=(0, 1))
+        buttonSizer2.Add(self.btn['orbit'], pos=(1, 1))
+        buttonSizer2.Add(self.btn['ornull'], pos=(2, 1))
+        buttonSizer2.Add(self.btn['lshift'], pos=(3, 0))
+        buttonSizer2.Add(self.btn['rshift'], pos=(3, 1))
+        buttonSizer2.Add(self.btn['rshiftu'], pos=(4, 0))
+        buttonSizer2.Add(self.btn['cond'], pos=(5, 0))
+        buttonSizer2.Add(self.btn['compl'], pos=(5, 1))
+        buttonSizer2.Add(self.btn['not'], pos=(4, 1))
 
         outputSizer = wx.StaticBoxSizer(self.outputBox, wx.VERTICAL)
-        outputSizer.Add(item=self.newmaplabel,
+        outputSizer.Add(self.newmaplabel,
                         flag=wx.ALIGN_CENTER | wx.BOTTOM | wx.TOP, border=5)
-        outputSizer.Add(item=self.newmaptxt,
+        outputSizer.Add(self.newmaptxt,
                         flag=wx.EXPAND)
 
         operandSizer = wx.StaticBoxSizer(self.operandBox, wx.HORIZONTAL)
 
         buttonSizer3 = wx.GridBagSizer(7, 1)
-        buttonSizer3.Add(item=self.functlabel, pos=(0, 0),
+        buttonSizer3.Add(self.functlabel, pos=(0, 0),
                          span=(1, 2), flag=wx.ALIGN_CENTER)
-        buttonSizer3.Add(item=self.function, pos=(1, 0),
+        buttonSizer3.Add(self.function, pos=(1, 0),
                          span=(1, 2))
-        buttonSizer3.Add(item=self.mapsellabel, pos=(2, 0),
+        buttonSizer3.Add(self.mapsellabel, pos=(2, 0),
                          span=(1, 2), flag=wx.ALIGN_CENTER)
-        buttonSizer3.Add(item=self.mapselect, pos=(3, 0),
+        buttonSizer3.Add(self.mapselect, pos=(3, 0),
                          span=(1, 2))
         threebutton = wx.GridBagSizer(1, 2)
-        threebutton.Add(item=self.btn['parenl'], pos=(0, 0),
+        threebutton.Add(self.btn['parenl'], pos=(0, 0),
                         span=(1, 1), flag=wx.ALIGN_LEFT)
-        threebutton.Add(item=self.btn['parenr'], pos=(0, 1),
+        threebutton.Add(self.btn['parenr'], pos=(0, 1),
                         span=(1, 1), flag=wx.ALIGN_CENTER)
-        threebutton.Add(item=self.btn_clear, pos=(0, 2),
+        threebutton.Add(self.btn_clear, pos=(0, 2),
                         span=(1, 1), flag=wx.ALIGN_RIGHT)
-        buttonSizer3.Add(item=threebutton, pos=(4, 0),
+        buttonSizer3.Add(threebutton, pos=(4, 0),
                          span=(1, 1), flag=wx.ALIGN_CENTER)
 
         buttonSizer4 = wx.BoxSizer(wx.HORIZONTAL)
-        buttonSizer4.Add(item=self.btn_load,
+        buttonSizer4.Add(self.btn_load,
                          flag=wx.ALL, border=5)
-        buttonSizer4.Add(item=self.btn_save,
+        buttonSizer4.Add(self.btn_save,
                          flag=wx.ALL, border=5)
-        buttonSizer4.Add(item=self.btn_copy,
+        buttonSizer4.Add(self.btn_copy,
                          flag=wx.ALL, border=5)
         buttonSizer4.AddSpacer(30)
-        buttonSizer4.Add(item=self.btn_help,
+        buttonSizer4.Add(self.btn_help,
                          flag=wx.ALL, border=5)
-        buttonSizer4.Add(item=self.btn_run,
+        buttonSizer4.Add(self.btn_run,
                          flag=wx.ALL, border=5)
-        buttonSizer4.Add(item=self.btn_close,
+        buttonSizer4.Add(self.btn_close,
                          flag=wx.ALL, border=5)
 
-        operatorSizer.Add(item=buttonSizer1, proportion=0,
+        operatorSizer.Add(buttonSizer1, proportion=0,
                           flag=wx.ALL | wx.EXPAND, border=5)
         operatorSizer.Add(
-            item=buttonSizer2,
+            buttonSizer2,
             proportion=0,
             flag=wx.TOP | wx.BOTTOM | wx.RIGHT | wx.EXPAND,
             border=5)
 
-        operandSizer.Add(item=buttonSizer3, proportion=0,
+        operandSizer.Add(buttonSizer3, proportion=0,
                          flag=wx.TOP | wx.BOTTOM | wx.RIGHT, border=5)
 
-        controlSizer.Add(item=operatorSizer, proportion=1,
+        controlSizer.Add(operatorSizer, proportion=1,
                          flag=wx.RIGHT | wx.EXPAND, border=5)
-        outOpeSizer.Add(item=outputSizer, proportion=0,
+        outOpeSizer.Add(outputSizer, proportion=0,
                         flag=wx.EXPAND)
-        outOpeSizer.Add(item=operandSizer, proportion=1,
+        outOpeSizer.Add(operandSizer, proportion=1,
                         flag=wx.EXPAND | wx.TOP, border=5)
-        controlSizer.Add(item=outOpeSizer, proportion=0,
+        controlSizer.Add(outOpeSizer, proportion=0,
                          flag=wx.EXPAND)
 
         expressSizer = wx.StaticBoxSizer(self.expressBox, wx.HORIZONTAL)
-        expressSizer.Add(item=self.text_mcalc, proportion=1,
+        expressSizer.Add(self.text_mcalc, proportion=1,
                          flag=wx.EXPAND)
 
-        sizer.Add(item=controlSizer, proportion=0,
+        sizer.Add(controlSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL,
                   border=5)
-        sizer.Add(item=expressSizer, proportion=1,
+        sizer.Add(expressSizer, proportion=1,
                   flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
                   border=5)
-        sizer.Add(item=buttonSizer4, proportion=0,
+        sizer.Add(buttonSizer4, proportion=0,
                   flag=wx.ALIGN_RIGHT | wx.ALL, border=3)
 
         randomSizer = wx.BoxSizer(wx.HORIZONTAL)
-        randomSizer.Add(item=self.randomSeed, proportion=0,
+        randomSizer.Add(self.randomSeed, proportion=0,
                         flag=wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, border=20)
-        randomSizer.Add(item=self.randomSeedStaticText, proportion=0,
+        randomSizer.Add(self.randomSeedStaticText, proportion=0,
                         flag=wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, border=5)
-        randomSizer.Add(item=self.randomSeedText, proportion=0)
-        sizer.Add(item=randomSizer, proportion=0,
+        randomSizer.Add(self.randomSeedText, proportion=0)
+        sizer.Add(randomSizer, proportion=0,
                   flag=wx.LEFT | wx.RIGHT,
                   border=5)
 
-        sizer.Add(item=self.overwrite, proportion=0,
+        sizer.Add(self.overwrite, proportion=0,
                   flag=wx.LEFT | wx.RIGHT,
                   border=5)
         if self.addbox.IsShown():
-            sizer.Add(item=self.addbox, proportion=0,
+            sizer.Add(self.addbox, proportion=0,
                       flag=wx.LEFT | wx.RIGHT,
                       border=5)
 

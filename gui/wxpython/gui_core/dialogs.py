@@ -47,7 +47,7 @@ from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, MapV
 from core.utils import _
 from core.settings import UserSettings
 from core.debug import Debug
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 
 
 class SimpleDialog(wx.Dialog):
@@ -84,11 +84,11 @@ class SimpleDialog(wx.Dialog):
         btnSizer.AddButton(self.btnOK)
         btnSizer.Realize()
 
-        self.sizer.Add(item=self.dataSizer, proportion=1,
+        self.sizer.Add(self.dataSizer, proportion=1,
                        flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         # self.sizer.Add(item = self.informLabel, proportion = 0, flag = wx.ALL, border = 5)
-        self.sizer.Add(item=btnSizer, proportion=0,
+        self.sizer.Add(btnSizer, proportion=0,
                        flag=wx.EXPAND | wx.ALL, border=5)
 
     def ValidatorCallback(self, win):
@@ -126,7 +126,7 @@ class LocationDialog(SimpleDialog):
     def _layout(self):
         """Do layout"""
         self.dataSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
                 label=_("Name of GRASS location:")),
@@ -196,8 +196,8 @@ class MapsetDialog(SimpleDialog):
 
     def _layout(self):
         """Do layout"""
-        self.dataSizer.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                              label=_("Name of mapset:")),
+        self.dataSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                         label=_("Name of mapset:")),
                            proportion=0, flag=wx.ALL, border=1)
         self.dataSizer.Add(self.element, proportion=0,
                            flag=wx.EXPAND | wx.ALL, border=1)
@@ -235,10 +235,10 @@ class VectorDialog(SimpleDialog):
 
     def _layout(self):
         """Do layout"""
-        self.dataSizer.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                              label=_("Name of vector map:")),
+        self.dataSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                         label=_("Name of vector map:")),
                            proportion=0, flag=wx.ALL, border=1)
-        self.dataSizer.Add(item=self.element, proportion=0,
+        self.dataSizer.Add(self.element, proportion=0,
                            flag=wx.EXPAND | wx.ALL, border=1)
 
         self.panel.SetSizer(self.sizer)
@@ -326,40 +326,40 @@ class NewVectorDialog(VectorDialog):
     def _layout(self):
         """Do layout"""
         self.dataSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
                 label=_("Name for new vector map:")),
             proportion=0,
             flag=wx.ALL,
             border=1)
-        self.dataSizer.Add(item=self.element, proportion=0,
+        self.dataSizer.Add(self.element, proportion=0,
                            flag=wx.EXPAND | wx.ALL, border=1)
         if self.ftype:
             self.dataSizer.AddSpacer(1)
-            self.dataSizer.Add(item=self.ftype, proportion=0,
+            self.dataSizer.Add(self.ftype, proportion=0,
                                flag=wx.EXPAND | wx.ALL, border=1)
 
-        self.dataSizer.Add(item=self.table, proportion=0,
+        self.dataSizer.Add(self.table, proportion=0,
                            flag=wx.EXPAND | wx.ALL, border=1)
 
         if self.keycol:
             keySizer = wx.BoxSizer(wx.HORIZONTAL)
             keySizer.Add(
-                item=wx.StaticText(
+                wx.StaticText(
                     parent=self.panel,
                     label=_("Key column:")),
                 proportion=0,
                 flag=wx.ALIGN_CENTER_VERTICAL)
             keySizer.AddSpacer(10)
-            keySizer.Add(item=self.keycol, proportion=0,
+            keySizer.Add(self.keycol, proportion=0,
                          flag=wx.ALIGN_RIGHT)
-            self.dataSizer.Add(item=keySizer, proportion=1,
+            self.dataSizer.Add(keySizer, proportion=1,
                                flag=wx.EXPAND | wx.ALL, border=1)
 
         self.dataSizer.AddSpacer(5)
 
-        self.dataSizer.Add(item=self.addbox, proportion=0,
+        self.dataSizer.Add(self.addbox, proportion=0,
                            flag=wx.EXPAND | wx.ALL, border=1)
 
         self.panel.SetSizer(self.sizer)
@@ -553,7 +553,7 @@ class SavedRegion(wx.Dialog):
         box = wx.BoxSizer(wx.HORIZONTAL)
         label = wx.StaticText(parent=self, id=wx.ID_ANY)
         box.Add(
-            item=label,
+            label,
             proportion=0,
             flag=wx.ALIGN_CENTRE | wx.ALL,
             border=5)
@@ -574,20 +574,20 @@ class SavedRegion(wx.Dialog):
                 fullyQualified=False)
 
         box.Add(
-            item=self._selection,
+            self._selection,
             proportion=0,
             flag=wx.ALIGN_CENTRE | wx.ALL,
             border=5)
         self._selection.SetFocus()
         self._selection.Bind(wx.EVT_TEXT, self.OnRegion)
 
-        sizer.Add(item=box, proportion=0, flag=wx.GROW |
+        sizer.Add(box, proportion=0, flag=wx.GROW |
                   wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
 
         line = wx.StaticLine(
             parent=self, id=wx.ID_ANY, size=(
                 20, -1), style=wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0, flag=wx.GROW |
+        sizer.Add(line, proportion=0, flag=wx.GROW |
                   wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=5)
 
         btnsizer = wx.StdDialogButtonSizer()
@@ -601,7 +601,7 @@ class SavedRegion(wx.Dialog):
         btnsizer.Realize()
 
         sizer.Add(
-            item=btnsizer,
+            btnsizer,
             proportion=0,
             flag=wx.ALIGN_RIGHT | wx.ALL,
             border=5)
@@ -685,13 +685,13 @@ class GroupDialog(wx.Dialog):
         btnSizer.Realize()
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(item=self.bodySizer, proportion=1,
+        mainSizer.Add(self.bodySizer, proportion=1,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10)
-        mainSizer.Add(item=wx.StaticLine(parent=self, id=wx.ID_ANY,
-                                         style=wx.LI_HORIZONTAL), proportion=0,
+        mainSizer.Add(wx.StaticLine(parent=self, id=wx.ID_ANY,
+                                    style=wx.LI_HORIZONTAL), proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10)
 
-        mainSizer.Add(item=btnSizer, proportion=0, flag=wx.LEFT |
+        mainSizer.Add(btnSizer, proportion=0, flag=wx.LEFT |
                       wx.RIGHT | wx.BOTTOM | wx.ALIGN_RIGHT, border=10)
 
         self.SetSizer(mainSizer)
@@ -715,28 +715,28 @@ class GroupDialog(wx.Dialog):
                            " and '$' for the end.")
 
         # group selection
-        bodySizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY,
-                                         label=_("Select existing group or "
-                                                 "enter name of new group:")),
+        bodySizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
+                                    label=_("Select existing group or "
+                                            "enter name of new group:")),
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP, border=10)
         self.groupSelect = Select(parent=self, type='group',
                                   mapsets=[grass.gisenv()['MAPSET']],
                                   size=globalvar.DIALOG_GSELECT_SIZE,
                                   fullyQualified=False)  # searchpath?
 
-        bodySizer.Add(item=self.groupSelect, flag=wx.TOP | wx.EXPAND, border=5)
+        bodySizer.Add(self.groupSelect, flag=wx.TOP | wx.EXPAND, border=5)
 
         self.subg_chbox = wx.CheckBox(parent=self, id=wx.ID_ANY,
                                       label=_("Edit/create subgroup"))
 
-        bodySizer.Add(item=self.subg_chbox,
+        bodySizer.Add(self.subg_chbox,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP, border=10)
 
         self.subg_panel = wx.Panel(self)
         subg_sizer = wx.BoxSizer(wx.VERTICAL)
 
         subg_sizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self.subg_panel,
                 id=wx.ID_ANY,
                 label=_(
@@ -747,13 +747,13 @@ class GroupDialog(wx.Dialog):
         self.subGroupSelect = SubGroupSelect(parent=self.subg_panel)
 
         subg_sizer.Add(
-            item=self.subGroupSelect,
+            self.subGroupSelect,
             flag=wx.EXPAND | wx.TOP,
             border=5)
 
         self.subg_panel.SetSizer(subg_sizer)
 
-        bodySizer.Add(item=self.subg_panel, flag=wx.TOP | wx.EXPAND, border=5)
+        bodySizer.Add(self.subg_panel, flag=wx.TOP | wx.EXPAND, border=5)
 
         bodySizer.AddSpacer(10)
 
@@ -767,12 +767,12 @@ class GroupDialog(wx.Dialog):
         self.g_sel_all = wx.CheckBox(parent=self.gListPanel, id=wx.ID_ANY,
                                      label=_("Select all"))
 
-        gListSizer.Add(item=self.g_sel_all,
+        gListSizer.Add(self.g_sel_all,
                        flag=wx.ALIGN_CENTER_VERTICAL,
                        pos=(0, 1))
 
         gListSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self.gListPanel,
                 label=_("Pattern:")),
             flag=wx.ALIGN_CENTER_VERTICAL,
@@ -785,12 +785,12 @@ class GroupDialog(wx.Dialog):
                                    size=(250, -1))
         self.gfilter.SetToolTipString(filter_tooltip)
 
-        gListSizer.Add(item=self.gfilter,
+        gListSizer.Add(self.gfilter,
                        flag=wx.EXPAND,
                        pos=(1, 1))
 
         gListSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self.gListPanel,
                 label=_("List of maps:")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM,
@@ -804,25 +804,25 @@ class GroupDialog(wx.Dialog):
         self.gLayerBox = wx.ListBox(
             parent=self.gListPanel, id=wx.ID_ANY, size=(-1, 150),
             style=wx.LB_MULTIPLE | wx.LB_NEEDED_SB)
-        sizer.Add(item=self.gLayerBox, proportion=1, flag=wx.EXPAND)
+        sizer.Add(self.gLayerBox, proportion=1, flag=wx.EXPAND)
 
         self.addLayer = wx.Button(self.gListPanel, id=wx.ID_ADD)
         self.addLayer.SetToolTipString(
             _("Select map layers and add them to the list."))
-        buttonSizer.Add(item=self.addLayer, flag=wx.BOTTOM, border=10)
+        buttonSizer.Add(self.addLayer, flag=wx.BOTTOM, border=10)
 
         self.removeLayer = wx.Button(self.gListPanel, id=wx.ID_REMOVE)
         self.removeLayer.SetToolTipString(
             _("Remove selected layer(s) from list."))
-        buttonSizer.Add(item=self.removeLayer)
-        sizer.Add(item=buttonSizer, flag=wx.LEFT, border=5)
+        buttonSizer.Add(self.removeLayer)
+        sizer.Add(buttonSizer, flag=wx.LEFT, border=5)
 
-        gListSizer.Add(item=sizer, flag=wx.EXPAND, pos=(2, 1))
+        gListSizer.Add(sizer, flag=wx.EXPAND, pos=(2, 1))
         gListSizer.AddGrowableCol(1)
         gListSizer.AddGrowableRow(2)
 
         self.gListPanel.SetSizer(gListSizer)
-        bodySizer.Add(item=self.gListPanel, proportion=1, flag=wx.EXPAND)
+        bodySizer.Add(self.gListPanel, proportion=1, flag=wx.EXPAND)
 
         # layers in subgroup
         self.subgListPanel = wx.Panel(self)
@@ -835,12 +835,12 @@ class GroupDialog(wx.Dialog):
             id=wx.ID_ANY,
             label=_("Select all"))
 
-        subgListSizer.Add(item=self.subg_sel_all,
+        subgListSizer.Add(self.subg_sel_all,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(0, 1))
 
         subgListSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self.subgListPanel,
                 label=_("Pattern:")),
             flag=wx.ALIGN_CENTER_VERTICAL,
@@ -853,12 +853,12 @@ class GroupDialog(wx.Dialog):
                                       size=(250, -1))
         self.subgfilter.SetToolTipString(filter_tooltip)
 
-        subgListSizer.Add(item=self.subgfilter,
+        subgListSizer.Add(self.subgfilter,
                           flag=wx.EXPAND,
                           pos=(1, 1))
 
         subgListSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self.subgListPanel,
                 label=_("List of maps:")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM,
@@ -872,16 +872,16 @@ class GroupDialog(wx.Dialog):
         self.subgListBox.SetToolTipString(
             _("Check maps from group to be included into subgroup."))
 
-        subgListSizer.Add(item=self.subgListBox, flag=wx.EXPAND, pos=(2, 1))
+        subgListSizer.Add(self.subgListBox, flag=wx.EXPAND, pos=(2, 1))
         subgListSizer.AddGrowableCol(1)
         subgListSizer.AddGrowableRow(2)
 
         self.subgListPanel.SetSizer(subgListSizer)
-        bodySizer.Add(item=self.subgListPanel, proportion=1, flag=wx.EXPAND)
+        bodySizer.Add(self.subgListPanel, proportion=1, flag=wx.EXPAND)
 
         self.infoLabel = wx.StaticText(parent=self, id=wx.ID_ANY)
         bodySizer.Add(
-            item=self.infoLabel,
+            self.infoLabel,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM,
             border=5)
 
@@ -1384,7 +1384,7 @@ class MapLayersDialogBase(wx.Dialog):
 
         # dialog body
         self.bodySizer = self._createDialogBody()
-        self.mainSizer.Add(item=self.bodySizer, proportion=1,
+        self.mainSizer.Add(self.bodySizer, proportion=1,
                            flag=wx.EXPAND | wx.ALL, border=5)
 
         # update list of layer to be loaded
@@ -1407,7 +1407,7 @@ class MapLayersDialogBase(wx.Dialog):
         self._addApplyButton()
         self.btnSizer.Realize()
 
-        self.mainSizer.Add(item=self.btnSizer, proportion=0,
+        self.mainSizer.Add(self.btnSizer, proportion=0,
                            flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.SetSizer(self.mainSizer)
@@ -1435,7 +1435,7 @@ class MapLayersDialogBase(wx.Dialog):
             parent=self, id=wx.ID_ANY,
             label=_("Use fully-qualified map names"))
         self.fullyQualified.SetValue(True)
-        self.mainSizer.Add(item=self.fullyQualified, proportion=0,
+        self.mainSizer.Add(self.fullyQualified, proportion=0,
                            flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
 
     def _useFullyQualifiedNames(self):
@@ -1459,7 +1459,7 @@ class MapLayersDialogBase(wx.Dialog):
         bodySizer = wx.GridBagSizer(vgap=3, hgap=3)
 
         # layer type
-        bodySizer.Add(item=wx.StaticText(parent=self, label=_("Map type:")),
+        bodySizer.Add(wx.StaticText(parent=self, label=_("Map type:")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 0))
 
@@ -1468,7 +1468,7 @@ class MapLayersDialogBase(wx.Dialog):
 
         self.layerType.SetSelection(0)
 
-        bodySizer.Add(item=self.layerType,
+        bodySizer.Add(self.layerType,
                       pos=(0, 1))
         self.layerType.Bind(wx.EVT_CHOICE, self.OnChangeParams)
 
@@ -1476,29 +1476,29 @@ class MapLayersDialogBase(wx.Dialog):
         self.toggle = wx.CheckBox(parent=self, id=wx.ID_ANY,
                                   label=_("Select toggle"))
         self.toggle.SetValue(self._selectAll())
-        bodySizer.Add(item=self.toggle,
+        bodySizer.Add(self.toggle,
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 2))
 
         # mapset filter
-        bodySizer.Add(item=wx.StaticText(parent=self, label=_("Mapset:")),
+        bodySizer.Add(wx.StaticText(parent=self, label=_("Mapset:")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(1, 0))
 
         self.mapset = MapsetSelect(parent=self, searchPath=True)
         self.mapset.SetStringSelection(grass.gisenv()['MAPSET'])
-        bodySizer.Add(item=self.mapset,
+        bodySizer.Add(self.mapset,
                       pos=(1, 1), span=(1, 2))
 
         # map name filter
-        bodySizer.Add(item=wx.StaticText(parent=self, label=_("Pattern:")),
+        bodySizer.Add(wx.StaticText(parent=self, label=_("Pattern:")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(2, 0))
 
         self.filter = wx.TextCtrl(parent=self, id=wx.ID_ANY,
                                   value="",
                                   size=(250, -1))
-        bodySizer.Add(item=self.filter,
+        bodySizer.Add(self.filter,
                       flag=wx.EXPAND,
                       pos=(2, 1), span=(1, 2))
 
@@ -1513,7 +1513,7 @@ class MapLayersDialogBase(wx.Dialog):
 
         # layer list
         bodySizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self,
                 label=_("List of maps:")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_TOP,
@@ -1523,7 +1523,7 @@ class MapLayersDialogBase(wx.Dialog):
         self.layers = wx.CheckListBox(parent=self, id=wx.ID_ANY,
                                       size=(250, 100),
                                       choices=[])
-        bodySizer.Add(item=self.layers,
+        bodySizer.Add(self.layers,
                       flag=wx.EXPAND,
                       pos=(3, 1), span=(1, 2))
 
@@ -1620,7 +1620,7 @@ class MapLayersDialogBase(wx.Dialog):
 
     def OnToggle(self, event):
         """Select toggle (check or uncheck all layers)"""
-        check = event.Checked()
+        check = event.IsChecked()
         for item in range(self.layers.GetCount()):
             self.layers.Check(item, check)
 
@@ -1719,7 +1719,7 @@ class MapLayersDialogForModeler(MapLayersDialogBase):
         self.dseries = wx.CheckBox(parent=self, id=wx.ID_ANY,
                                    label=_("Dynamic series (%s)") % 'g.list')
         self.dseries.SetValue(False)
-        self.mainSizer.Add(item=self.dseries, proportion=0,
+        self.mainSizer.Add(self.dseries, proportion=0,
                            flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
 
     def GetDSeries(self):
@@ -1772,22 +1772,22 @@ class SetOpacityDialog(wx.Dialog):
             style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | wx.SL_TOP | wx.SL_LABELS,
             minValue=0, maxValue=100, size=(350, -1))
 
-        box.Add(item=self.value,
+        box.Add(self.value,
                 flag=wx.ALIGN_CENTRE, pos=(0, 0), span=(1, 2))
-        box.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                   label=_("transparent")),
+        box.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                              label=_("transparent")),
                 pos=(1, 0))
-        box.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                   label=_("opaque")),
+        box.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                              label=_("opaque")),
                 flag=wx.ALIGN_RIGHT,
                 pos=(1, 1))
 
-        sizer.Add(item=box, proportion=0,
+        sizer.Add(box, proportion=0,
                   flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
 
         line = wx.StaticLine(parent=panel, id=wx.ID_ANY,
                              style=wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0,
+        sizer.Add(line, proportion=0,
                   flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
 
         # buttons
@@ -1805,7 +1805,7 @@ class SetOpacityDialog(wx.Dialog):
         btnsizer.AddButton(btnApply)
         btnsizer.Realize()
 
-        sizer.Add(item=btnsizer, proportion=0,
+        sizer.Add(btnsizer, proportion=0,
                   flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
 
         panel.SetSizer(sizer)
@@ -1895,12 +1895,12 @@ class ImageSizeDialog(wx.Dialog):
 
         size = self.parent.GetWindow().GetClientSize()
         self.width = SpinCtrl(parent=self.panel, id=wx.ID_ANY,
-                                 style=wx.SP_ARROW_KEYS)
+                              style=wx.SP_ARROW_KEYS)
         self.width.SetRange(20, 1e6)
         self.width.SetValue(size.width)
         wx.CallAfter(self.width.SetFocus)
         self.height = SpinCtrl(parent=self.panel, id=wx.ID_ANY,
-                                  style=wx.SP_ARROW_KEYS)
+                               style=wx.SP_ARROW_KEYS)
         self.height.SetRange(20, 1e6)
         self.height.SetValue(size.height)
         self.template = wx.Choice(parent=self.panel, id=wx.ID_ANY,
@@ -1929,22 +1929,22 @@ class ImageSizeDialog(wx.Dialog):
         # body
         box = wx.StaticBoxSizer(self.box, wx.HORIZONTAL)
         fbox = wx.FlexGridSizer(cols=2, vgap=5, hgap=5)
-        fbox.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                    label=_("Width:")),
+        fbox.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                               label=_("Width:")),
                  flag=wx.ALIGN_CENTER_VERTICAL)
-        fbox.Add(item=self.width)
-        fbox.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                    label=_("Height:")),
+        fbox.Add(self.width)
+        fbox.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                               label=_("Height:")),
                  flag=wx.ALIGN_CENTER_VERTICAL)
-        fbox.Add(item=self.height)
-        fbox.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                    label=_("Template:")),
+        fbox.Add(self.height)
+        fbox.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                               label=_("Template:")),
                  flag=wx.ALIGN_CENTER_VERTICAL)
-        fbox.Add(item=self.template)
+        fbox.Add(self.template)
 
-        box.Add(item=fbox, proportion=1,
+        box.Add(fbox, proportion=1,
                 flag=wx.EXPAND | wx.ALL, border=5)
-        sizer.Add(item=box, proportion=1,
+        sizer.Add(box, proportion=1,
                   flag=wx.EXPAND | wx.ALL, border=3)
 
         # buttons
@@ -1953,7 +1953,7 @@ class ImageSizeDialog(wx.Dialog):
         btnsizer.AddButton(self.btnCancel)
         btnsizer.Realize()
 
-        sizer.Add(item=btnsizer, proportion=0,
+        sizer.Add(btnsizer, proportion=0,
                   flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         self.panel.SetSizer(sizer)
@@ -2012,7 +2012,7 @@ class SqlQueryFrame(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         sqlSizer = wx.StaticBoxSizer(self.sqlBox, wx.HORIZONTAL)
-        sqlSizer.Add(item=self.sql, proportion=1,
+        sqlSizer.Add(self.sql, proportion=1,
                      flag=wx.EXPAND)
 
         btnSizer = wx.StdDialogButtonSizer()
@@ -2020,9 +2020,9 @@ class SqlQueryFrame(wx.Frame):
         btnSizer.AddButton(self.btnCancel)
         btnSizer.Realize()
 
-        sizer.Add(item=sqlSizer, proportion=1,
+        sizer.Add(sqlSizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL, border=5)
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
         self.panel.SetSizer(sizer)
@@ -2074,14 +2074,14 @@ class SymbolDialog(wx.Dialog):
         self.folderChoice.Bind(wx.EVT_CHOICE, self.OnFolderSelect)
 
         fgSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 mainPanel,
                 id=wx.ID_ANY,
                 label=_("Symbol directory:")),
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL)
 
-        fgSizer.Add(item=self.folderChoice, proportion=0,
+        fgSizer.Add(self.folderChoice, proportion=0,
                     flag=wx.ALIGN_CENTER, border=0)
 
         self.infoLabel = wx.StaticText(mainPanel, id=wx.ID_ANY)
@@ -2110,7 +2110,7 @@ class SymbolDialog(wx.Dialog):
         btnSizer.AddButton(self.btnCancel)
         btnSizer.AddButton(self.btnOK)
         btnSizer.Realize()
-        mainSizer.Add(item=btnSizer, proportion=0,
+        mainSizer.Add(btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL, border=5)
 
         # show panel with the largest number of images and fit size
@@ -2162,7 +2162,7 @@ class SymbolDialog(wx.Dialog):
             for img in images:
                 iP = SingleSymbolPanel(parent=panel, symbolPath=img)
                 iP.symbolSelectionChanged.connect(self.SelectionChanged)
-                sizer.Add(item=iP, proportion=0, flag=wx.ALIGN_CENTER)
+                sizer.Add(iP, proportion=0, flag=wx.ALIGN_CENTER)
                 symbolPanels.append(iP)
 
             panel.SetSizerAndFit(sizer)
@@ -2245,7 +2245,7 @@ class TextEntryDialog(wx.Dialog):
         vbox = wx.BoxSizer(wx.VERTICAL)
 
         stline = wx.StaticText(self, id=wx.ID_ANY, label=message)
-        vbox.Add(item=stline, proportion=0, flag=wx.EXPAND | wx.ALL, border=10)
+        vbox.Add(stline, proportion=0, flag=wx.EXPAND | wx.ALL, border=10)
 
         self._textCtrl = wx.TextCtrl(
             self,
@@ -2257,14 +2257,14 @@ class TextEntryDialog(wx.Dialog):
         wx.CallAfter(self._textCtrl.SetFocus)
 
         vbox.Add(
-            item=self._textCtrl,
+            self._textCtrl,
             proportion=0,
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
             border=10)
         self._textCtrl.SetFocus()
 
         sizer = self.CreateSeparatedButtonSizer(style)
-        vbox.Add(item=sizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=10)
+        vbox.Add(sizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=10)
 
         self.SetSizerAndFit(vbox)
 
@@ -2296,7 +2296,7 @@ class HyperlinkDialog(wx.Dialog):
 
         label = wx.StaticText(self, label=message)
         sizer.Add(
-            item=label,
+            label,
             proportion=0,
             flag=wx.ALIGN_CENTRE | wx.ALL,
             border=10)
@@ -2305,14 +2305,14 @@ class HyperlinkDialog(wx.Dialog):
             self, id=wx.ID_ANY, label=hyperlinkLabel, url=hyperlink,
             style=wx.HL_ALIGN_LEFT | wx.HL_CONTEXTMENU)
         sizer.Add(
-            item=hyperlinkCtrl,
+            hyperlinkCtrl,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=10)
 
         btnsizer = self.CreateSeparatedButtonSizer(style)
         sizer.Add(
-            item=btnsizer,
+            btnsizer,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=10)
@@ -2333,9 +2333,8 @@ class QuitDialog(wx.Dialog):
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
         self._icon = wx.StaticBitmap(
-            parent=self.panel,
-            id=wx.ID_ANY,
-            bitmap=wx.ArtProvider().GetBitmap(
+            self.panel, wx.ID_ANY,
+            wx.ArtProvider().GetBitmap(
                 wx.ART_QUESTION,
                 client=wx.ART_MESSAGE_BOX))
 
@@ -2361,17 +2360,17 @@ class QuitDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item=self.btnCancel, flag=wx.RIGHT, border=5)
-        btnSizer.Add(item=self.btnClose, flag=wx.RIGHT, border=5)
-        btnSizer.Add(item=self.btnQuit, flag=wx.RIGHT, border=5)
+        btnSizer.Add(self.btnCancel, flag=wx.RIGHT, border=5)
+        btnSizer.Add(self.btnClose, flag=wx.RIGHT, border=5)
+        btnSizer.Add(self.btnQuit, flag=wx.RIGHT, border=5)
 
         bodySizer = wx.BoxSizer(wx.HORIZONTAL)
-        bodySizer.Add(item=self._icon, flag=wx.RIGHT, border=10)
-        bodySizer.Add(item=self.informLabel, proportion=1, flag=wx.EXPAND)
+        bodySizer.Add(self._icon, flag=wx.RIGHT, border=10)
+        bodySizer.Add(self.informLabel, proportion=1, flag=wx.EXPAND)
 
-        sizer.Add(item=bodySizer, proportion=1,
+        sizer.Add(bodySizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL, border=15)
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.panel.SetSizer(sizer)
@@ -2419,7 +2418,7 @@ class DefaultFontDialog(wx.Dialog):
 
         label = wx.StaticText(parent=panel, id=wx.ID_ANY,
                               label=_("Select font:"))
-        gridSizer.Add(item=label,
+        gridSizer.Add(label,
                       flag=wx.ALIGN_TOP,
                       pos=(0, 0))
 
@@ -2432,11 +2431,11 @@ class DefaultFontDialog(wx.Dialog):
         self.Bind(wx.EVT_LISTBOX, self.EvtListBox, self.fontlb)
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, self.fontlb)
 
-        gridSizer.Add(item=self.fontlb,
+        gridSizer.Add(self.fontlb,
                       flag=wx.EXPAND, pos=(1, 0))
 
-        self.renderfont = wx.StaticBitmap(panel, bitmap=wx.EmptyBitmapRGBA(100, 50, 255, 255, 255))
-        gridSizer.Add(item=self.renderfont,
+        self.renderfont = wx.StaticBitmap(panel, -1, wx.EmptyBitmapRGBA(100, 50, 255, 255, 255))
+        gridSizer.Add(self.renderfont,
                       flag=wx.EXPAND, pos=(2, 0))
 
         if self.type == 'font':
@@ -2450,13 +2449,13 @@ class DefaultFontDialog(wx.Dialog):
 
             label = wx.StaticText(parent=panel, id=wx.ID_ANY,
                                   label=_("Character encoding:"))
-            gridSizer.Add(item=label,
+            gridSizer.Add(label,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(3, 0))
 
             self.textentry = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
                                          value=self.encoding)
-            gridSizer.Add(item=self.textentry,
+            gridSizer.Add(self.textentry,
                           flag=wx.EXPAND, pos=(4, 0))
 
             self.textentry.Bind(wx.EVT_TEXT, self.OnEncoding)
@@ -2468,7 +2467,7 @@ class DefaultFontDialog(wx.Dialog):
                                               key='outputfont', subkey='size')
             label = wx.StaticText(parent=panel, id=wx.ID_ANY,
                                   label=_("Font size:"))
-            gridSizer.Add(item=label,
+            gridSizer.Add(label,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(2, 0))
 
@@ -2477,7 +2476,7 @@ class DefaultFontDialog(wx.Dialog):
                 self.spin.SetValue(int(self.fontsize))
             self.spin.Bind(wx.EVT_SPINCTRL, self.OnSizeSpin)
             self.spin.Bind(wx.EVT_TEXT, self.OnSizeSpin)
-            gridSizer.Add(item=self.spin,
+            gridSizer.Add(self.spin,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(3, 0))
 
@@ -2488,11 +2487,11 @@ class DefaultFontDialog(wx.Dialog):
             self.fontlb.SetStringSelection(fontdict_reverse[self.font], True)
 
         gridSizer.AddGrowableCol(0)
-        sizer.Add(item=gridSizer, proportion=1,
+        sizer.Add(gridSizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL,
                   border=5)
 
-        border.Add(item=sizer, proportion=1,
+        border.Add(sizer, proportion=1,
                    flag=wx.ALL | wx.EXPAND, border=3)
 
         btnsizer = wx.StdDialogButtonSizer()
@@ -2505,7 +2504,7 @@ class DefaultFontDialog(wx.Dialog):
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 
-        border.Add(item=btnsizer, proportion=0,
+        border.Add(btnsizer, proportion=0,
                    flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         panel.SetAutoLayout(True)

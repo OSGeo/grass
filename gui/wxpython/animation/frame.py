@@ -344,11 +344,11 @@ class AnimationsPanel(wx.Panel):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, style=wx.NO_BORDER)
         self.shown = []
         self.count = initialCount
-        self.mainSizer = wx.FlexGridSizer(rows=2, hgap=0, vgap=0)
+        self.mainSizer = wx.FlexGridSizer(cols=2, hgap=0, vgap=0)
         for i in range(initialCount):
             w = AnimationWindow(self)
             windows.append(w)
-            self.mainSizer.Add(item=w, proportion=1, flag=wx.EXPAND)
+            self.mainSizer.Add(w, proportion=1, flag=wx.EXPAND)
 
         self.mainSizer.AddGrowableCol(0)
         self.mainSizer.AddGrowableCol(1)
@@ -478,12 +478,12 @@ class SimpleAnimationSlider(AnimationSliderBase):
 
     def _doLayout(self):
         hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.Add(item=self.indexField, proportion=0,
+        hbox.Add(self.indexField, proportion=0,
                  flag=wx.ALIGN_CENTER | wx.LEFT, border=5)
-        hbox.Add(item=self.label1, proportion=0,
+        hbox.Add(self.label1, proportion=0,
                  flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT, border=5)
         hbox.Add(
-            item=self.slider,
+            self.slider,
             proportion=1,
             flag=wx.ALIGN_CENTER | wx.EXPAND,
             border=0)
@@ -523,25 +523,25 @@ class TimeAnimationSlider(AnimationSliderBase):
     def _doLayout(self):
         vbox = wx.BoxSizer(wx.VERTICAL)
         hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.Add(item=self.label1, proportion=0,
+        hbox.Add(self.label1, proportion=0,
                  flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         hbox.AddStretchSpacer()
-        hbox.Add(item=self.indexField, proportion=0,
+        hbox.Add(self.indexField, proportion=0,
                  flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        hbox.Add(item=self.label2, proportion=0,
+        hbox.Add(self.label2, proportion=0,
                  flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT, border=3)
         hbox.AddStretchSpacer()
-        hbox.Add(item=self.label3, proportion=0,
+        hbox.Add(self.label3, proportion=0,
                  flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        vbox.Add(item=hbox, proportion=0, flag=wx.EXPAND, border=0)
+        vbox.Add(hbox, proportion=0, flag=wx.EXPAND, border=0)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.Add(
-            item=self.slider,
+            self.slider,
             proportion=1,
             flag=wx.ALIGN_CENTER | wx.EXPAND,
             border=0)
-        vbox.Add(item=hbox, proportion=0, flag=wx.EXPAND, border=0)
+        vbox.Add(hbox, proportion=0, flag=wx.EXPAND, border=0)
 
         self._setTemporalType()
         self.SetSizerAndFit(vbox)

@@ -24,6 +24,7 @@ import wx
 from core.settings import UserSettings
 from core.gcmd import GError
 from core.utils import _
+from gui_core.wrap import StockCursor
 
 from grass.script import core as grass
 from grass.pydispatch.signal import Signal
@@ -162,11 +163,11 @@ class MapWindowBase(object):
 
         # available cursors
         self._cursors = {
-            "default": wx.StockCursor(wx.CURSOR_ARROW),
-            "cross": wx.StockCursor(wx.CURSOR_CROSS),
-            "hand": wx.StockCursor(wx.CURSOR_HAND),
-            "pencil": wx.StockCursor(wx.CURSOR_PENCIL),
-            "sizenwse": wx.StockCursor(wx.CURSOR_SIZENWSE)
+            "default": StockCursor(cursorId=wx.CURSOR_ARROW),
+            "cross": StockCursor(cursorId=wx.CURSOR_CROSS),
+            "hand": StockCursor(cursorId=wx.CURSOR_HAND),
+            "pencil": StockCursor(cursorId=wx.CURSOR_PENCIL),
+            "sizenwse": StockCursor(cursorId=wx.CURSOR_SIZENWSE)
         }
 
         # default cursor for window is arrow (at least we rely on it here)
@@ -344,7 +345,7 @@ class MapWindowBase(object):
         :func:`GetLastEN`
         """
         try:
-            self.lastEN = self.Pixel2Cell(event.GetPositionTuple())
+            self.lastEN = self.Pixel2Cell(event.GetPosition())
         except (ValueError):
             self.lastEN = None
 

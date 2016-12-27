@@ -30,9 +30,15 @@ import random
 
 import wx
 from wx.lib import ogl
-import wx.lib.flatnotebook as FN
-
 from core import globalvar
+if globalvar.wxPythonPhoenix:
+    try:
+        import agw.flatnotebook as FN
+    except ImportError: # if it's not there locally, try the wxPython lib.
+        import wx.lib.agw.flatnotebook as FN
+else:
+    import wx.lib.flatnotebook as FN
+
 from core.utils import _
 from gui_core.widgets import GNotebook
 from core.gconsole        import GConsole, \
@@ -181,7 +187,7 @@ class ModelFrame(wx.Frame):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        sizer.Add(item=self.notebook, proportion=1,
+        sizer.Add(self.notebook, proportion=1,
                   flag=wx.EXPAND)
 
         self.SetAutoLayout(True)
@@ -1673,48 +1679,48 @@ class VariablePanel(wx.Panel):
     def _layout(self):
         """Layout dialog"""
         listSizer = wx.StaticBoxSizer(self.listBox, wx.VERTICAL)
-        listSizer.Add(item=self.list, proportion=1,
+        listSizer.Add(self.list, proportion=1,
                       flag=wx.EXPAND)
 
         addSizer = wx.StaticBoxSizer(self.addBox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
-        gridSizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY,
-                                         label="%s:" % _("Name")),
+        gridSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
+                                    label="%s:" % _("Name")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 0))
-        gridSizer.Add(item=self.name,
+        gridSizer.Add(self.name,
                       pos=(0, 1),
                       flag=wx.EXPAND)
-        gridSizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY,
-                                         label="%s:" % _("Data type")),
+        gridSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
+                                    label="%s:" % _("Data type")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 2))
-        gridSizer.Add(item=self.type,
+        gridSizer.Add(self.type,
                       pos=(0, 3))
-        gridSizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY,
-                                         label="%s:" % _("Default value")),
+        gridSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
+                                    label="%s:" % _("Default value")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(1, 0))
-        gridSizer.Add(item=self.value,
+        gridSizer.Add(self.value,
                       pos=(1, 1), span=(1, 3),
                       flag=wx.EXPAND)
-        gridSizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY,
-                                         label="%s:" % _("Description")),
+        gridSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
+                                    label="%s:" % _("Description")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(2, 0))
-        gridSizer.Add(item=self.desc,
+        gridSizer.Add(self.desc,
                       pos=(2, 1), span=(1, 3),
                       flag=wx.EXPAND)
         gridSizer.AddGrowableCol(1)
-        addSizer.Add(item=gridSizer,
+        addSizer.Add(gridSizer,
                      flag=wx.EXPAND)
-        addSizer.Add(item=self.btnAdd, proportion=0,
+        addSizer.Add(self.btnAdd, proportion=0,
                      flag=wx.TOP | wx.ALIGN_RIGHT, border=5)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(item=listSizer, proportion=1,
+        mainSizer.Add(listSizer, proportion=1,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
-        mainSizer.Add(item=addSizer, proportion=0,
+        mainSizer.Add(addSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALIGN_CENTER |
                       wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
@@ -1810,20 +1816,20 @@ class ItemPanel(wx.Panel):
     def _layout(self):
         """Layout dialog"""
         listSizer = wx.StaticBoxSizer(self.listBox, wx.VERTICAL)
-        listSizer.Add(item=self.list, proportion=1,
+        listSizer.Add(self.list, proportion=1,
                       flag=wx.EXPAND)
 
         manageSizer = wx.BoxSizer(wx.VERTICAL)
-        manageSizer.Add(item=self.btnMoveUp, border=5, flag=wx.ALL)
-        manageSizer.Add(item=self.btnMoveDown, border=5,
+        manageSizer.Add(self.btnMoveUp, border=5, flag=wx.ALL)
+        manageSizer.Add(self.btnMoveDown, border=5,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM)
-        manageSizer.Add(item=self.btnRefresh, border=5,
+        manageSizer.Add(self.btnRefresh, border=5,
                         flag=wx.LEFT | wx.RIGHT)
 
         mainSizer = wx.BoxSizer(wx.HORIZONTAL)
-        mainSizer.Add(item=listSizer, proportion=1,
+        mainSizer.Add(listSizer, proportion=1,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=3)
-        mainSizer.Add(item=manageSizer, proportion=0,
+        mainSizer.Add(manageSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=3)
 
         self.SetSizer(mainSizer)
@@ -1902,20 +1908,20 @@ class PythonPanel(wx.Panel):
         bodySizer = wx.StaticBoxSizer(self.bodyBox, wx.HORIZONTAL)
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        bodySizer.Add(item=self.body, proportion=1,
+        bodySizer.Add(self.body, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=3)
 
-        btnSizer.Add(item=self.btnRefresh, proportion=0,
+        btnSizer.Add(self.btnRefresh, proportion=0,
                      flag=wx.LEFT | wx.RIGHT, border=5)
         btnSizer.AddStretchSpacer()
-        btnSizer.Add(item=self.btnSaveAs, proportion=0,
+        btnSizer.Add(self.btnSaveAs, proportion=0,
                      flag=wx.RIGHT | wx.ALIGN_RIGHT, border=5)
-        btnSizer.Add(item=self.btnRun, proportion=0,
+        btnSizer.Add(self.btnRun, proportion=0,
                      flag=wx.RIGHT | wx.ALIGN_RIGHT, border=5)
 
-        sizer.Add(item=bodySizer, proportion=1,
+        sizer.Add(bodySizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL, border=3)
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=3)
 
         sizer.Fit(self)

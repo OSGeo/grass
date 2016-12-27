@@ -50,31 +50,31 @@ def CreateDbInfoDesc(panel, mapDBInfo, layer):
     infoFlexSizer = wx.FlexGridSizer(cols=2, hgap=1, vgap=1)
     infoFlexSizer.AddGrowableCol(1)
 
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label="Driver:"))
+    infoFlexSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label="Driver:"))
     infoFlexSizer.Add(
-        item=wx.StaticText(
+        wx.StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=mapDBInfo.layers[layer]['driver']))
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label="Database:"))
+    infoFlexSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label="Database:"))
     infoFlexSizer.Add(
-        item=wx.StaticText(
+        wx.StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=mapDBInfo.layers[layer]['database']))
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label="Table:"))
+    infoFlexSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label="Table:"))
     infoFlexSizer.Add(
-        item=wx.StaticText(
+        wx.StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=mapDBInfo.layers[layer]['table']))
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label="Key:"))
-    infoFlexSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=mapDBInfo.layers[layer]['key']))
+    infoFlexSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label="Key:"))
+    infoFlexSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                    label=mapDBInfo.layers[layer]['key']))
 
     return infoFlexSizer
 

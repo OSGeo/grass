@@ -204,14 +204,14 @@ class VectorCleaningFrame(wx.Frame):
         inSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         inSizer.Add(
-            item=self.inmaplabel,
+            self.inmaplabel,
             pos=(
                 0,
                 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=1)
         inSizer.Add(
-            item=self.selectionInput,
+            self.selectionInput,
             pos=(
                 1,
                 0),
@@ -232,32 +232,32 @@ class VectorCleaningFrame(wx.Frame):
             type_box = self.ftype_check[num]
             if self.ftype[num] in ('point', 'line', 'area'):
                 type_box.SetValue(True)
-            typeoptSizer.Add(item=type_box, flag=wx.ALIGN_LEFT, border=1)
+            typeoptSizer.Add(type_box, flag=wx.ALIGN_LEFT, border=1)
 
-        self.ftypeSizer.Add(item=typeoptSizer,
+        self.ftypeSizer.Add(typeoptSizer,
                             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=2)
 
         outSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         outSizer.Add(
-            item=self.outmaplabel,
+            self.outmaplabel,
             pos=(
                 0,
                 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=1)
         outSizer.Add(
-            item=self.selectionOutput,
+            self.selectionOutput,
             pos=(
                 1,
                 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=1)
         replaceSizer = wx.BoxSizer(wx.HORIZONTAL)
-        replaceSizer.Add(item=self.overwrite, proportion=1,
+        replaceSizer.Add(self.overwrite, proportion=1,
                          flag=wx.ALL | wx.EXPAND, border=1)
 
-        outSizer.Add(item=replaceSizer, pos=(2, 0),
+        outSizer.Add(replaceSizer, pos=(2, 0),
                      flag=wx.ALL | wx.EXPAND, border=1)
 
         #
@@ -265,27 +265,27 @@ class VectorCleaningFrame(wx.Frame):
         #
         bodySizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        bodySizer.Add(item=self.ct_label, pos=(0, 0), span=(1, 2),
+        bodySizer.Add(self.ct_label, pos=(0, 0), span=(1, 2),
                       flag=wx.ALL, border=5)
 
-        bodySizer.Add(item=self.ct_panel, pos=(1, 0), span=(1, 2))
+        bodySizer.Add(self.ct_panel, pos=(1, 0), span=(1, 2))
 
         manageBoxSizer = wx.GridBagSizer(hgap=10, vgap=1)
         # start with row 1 for nicer layout
         manageBoxSizer.Add(
-            item=self.btn_add, pos=(1, 0),
+            self.btn_add, pos=(1, 0),
             border=2, flag=wx.ALL | wx.EXPAND)
         manageBoxSizer.Add(
-            item=self.btn_remove, pos=(2, 0),
+            self.btn_remove, pos=(2, 0),
             border=2, flag=wx.ALL | wx.EXPAND)
         manageBoxSizer.Add(
-            item=self.btn_moveup, pos=(3, 0),
+            self.btn_moveup, pos=(3, 0),
             border=2, flag=wx.ALL | wx.EXPAND)
         manageBoxSizer.Add(
-            item=self.btn_movedown, pos=(4, 0),
+            self.btn_movedown, pos=(4, 0),
             border=2, flag=wx.ALL | wx.EXPAND)
 
-        bodySizer.Add(item=manageBoxSizer, pos=(1, 2),
+        bodySizer.Add(manageBoxSizer, pos=(1, 2),
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
 
         bodySizer.AddGrowableCol(2)
@@ -306,27 +306,27 @@ class VectorCleaningFrame(wx.Frame):
         #
         # put it all together
         #
-        sizer.Add(item=inSizer, proportion=0,
+        sizer.Add(inSizer, proportion=0,
                   flag=wx.ALL | wx.EXPAND, border=5)
 
-        sizer.Add(item=self.ftypeSizer, proportion=0,
+        sizer.Add(self.ftypeSizer, proportion=0,
                   flag=wx.ALL | wx.EXPAND, border=5)
 
-        sizer.Add(item=outSizer, proportion=0,
+        sizer.Add(outSizer, proportion=0,
                   flag=wx.ALL | wx.EXPAND, border=5)
 
-        sizer.Add(item=wx.StaticLine(parent=self, id=wx.ID_ANY,
-                                     style=wx.LI_HORIZONTAL), proportion=0,
+        sizer.Add(wx.StaticLine(parent=self, id=wx.ID_ANY,
+                                style=wx.LI_HORIZONTAL), proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=5)
 
-        sizer.Add(item=bodySizer, proportion=1,
+        sizer.Add(bodySizer, proportion=1,
                   flag=wx.ALL | wx.EXPAND, border=5)
 
-        sizer.Add(item=wx.StaticLine(parent=self, id=wx.ID_ANY,
-                                     style=wx.LI_HORIZONTAL), proportion=0,
+        sizer.Add(wx.StaticLine(parent=self, id=wx.ID_ANY,
+                                style=wx.LI_HORIZONTAL), proportion=0,
                   flag=wx.EXPAND | wx.ALL, border=5)
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.panel.SetAutoLayout(True)
@@ -375,11 +375,11 @@ class VectorCleaningFrame(wx.Frame):
         self.Bind(wx.EVT_CHECKBOX, self.OnSelect, select)
 
         # start with row 1 and col 1 for nicer layout
-        self.ct_sizer.Add(item=select, pos=(num, 1),
+        self.ct_sizer.Add(select, pos=(num, 1),
                           flag=wx.ALIGN_CENTER | wx.RIGHT)
-        self.ct_sizer.Add(item=tool_cbox, pos=(num, 2),
+        self.ct_sizer.Add(tool_cbox, pos=(num, 2),
                           flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
-        self.ct_sizer.Add(item=txt_ctrl, pos=(num, 3),
+        self.ct_sizer.Add(txt_ctrl, pos=(num, 3),
                           flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
 
         self.toolslines[num] = {'tool_desc': '',

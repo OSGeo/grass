@@ -141,12 +141,18 @@ class PointsList(wx.ListCtrl,
             info.SetMask(
                 wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT)
             info.SetImage(-1)
-            info.m_format = wx.LIST_FORMAT_LEFT
+            if globalvar.wxPythonPhoenix:
+                info.Format = wx.LIST_FORMAT_LEFT
+            else:
+                info.m_format = wx.LIST_FORMAT_LEFT
 
             for col in enumerate(self.colsData):
                 iLabel = self.dataTypes["colLabel"]
                 info.SetText(col[1][iLabel])
-                self.InsertColumnInfo(col[0], info)
+                if globalvar.wxPythonPhoenix:
+                    self.InsertColumn(col[0], info)
+                else:
+                    self.InsertColumnInfo(col[0], info)
 
     def AddItem(self):
         """Appends an item to list with default values"""
@@ -597,13 +603,13 @@ class EditItem(wx.Dialog):
                         cell[0]).GetText()) +
                 ":")  # name of column)
 
-            gridSizer.Add(item=label,
+            gridSizer.Add(label,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(row, col))
 
             col += 1
 
-            gridSizer.Add(item=self.fields[iField],
+            gridSizer.Add(self.fields[iField],
                           pos=(row, col))
 
             if col % 3 == 0:
@@ -614,10 +620,10 @@ class EditItem(wx.Dialog):
 
             iField += 1
 
-        boxSizer.Add(item=gridSizer, proportion=1,
+        boxSizer.Add(gridSizer, proportion=1,
                      flag=wx.EXPAND | wx.ALL, border=5)
 
-        sizer.Add(item=boxSizer, proportion=1,
+        sizer.Add(boxSizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL, border=5)
 
         #
@@ -632,7 +638,7 @@ class EditItem(wx.Dialog):
         btnSizer.AddButton(self.btnOk)
         btnSizer.Realize()
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         panel.SetSizer(sizer)

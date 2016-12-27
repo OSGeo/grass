@@ -273,24 +273,24 @@ class RegionDef(BaseClass, wx.Dialog):
             self.cells3)
 
         # top
-        gridSizer.Add(item=wx.StaticText(parent=pane, label=_("Top")),
+        gridSizer.Add(wx.StaticText(parent=pane, label=_("Top")),
                       flag=wx.ALIGN_CENTER |
                       wx.LEFT | wx.RIGHT | wx.TOP, border=5,
                       pos=(0, 1))
-        gridSizer.Add(item=self.ttop,
+        gridSizer.Add(self.ttop,
                       flag=wx.ALIGN_CENTER_HORIZONTAL |
                       wx.ALL, border=5, pos=(1, 1))
         # bottom
-        gridSizer.Add(item=wx.StaticText(parent=pane, label=_("Bottom")),
+        gridSizer.Add(wx.StaticText(parent=pane, label=_("Bottom")),
                       flag=wx.ALIGN_CENTER |
                       wx.LEFT | wx.RIGHT | wx.TOP, border=5,
                       pos=(0, 2))
-        gridSizer.Add(item=self.tbottom,
+        gridSizer.Add(self.tbottom,
                       flag=wx.ALIGN_CENTER_HORIZONTAL |
                       wx.ALL, border=5, pos=(1, 2))
         # tbres
         gridSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=pane,
                 label=_("T-B resolution")),
             flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT | wx.TOP,
@@ -298,7 +298,7 @@ class RegionDef(BaseClass, wx.Dialog):
             pos=(
                 0,
                 3))
-        gridSizer.Add(item=self.ttbres,
+        gridSizer.Add(self.ttbres,
                       flag=wx.ALIGN_CENTER_HORIZONTAL |
                       wx.ALL, border=5, pos=(1, 3))
 
@@ -319,15 +319,15 @@ class RegionDef(BaseClass, wx.Dialog):
         #                       wx.ALL, border = 5, pos = (3, 3))
 
         # rows/cols/cells
-        gridSizer.Add(item=self.ldepth,
+        gridSizer.Add(self.ldepth,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
                       wx.ALL, border=5, pos=(2, 1))
 
-        gridSizer.Add(item=self.lcells3,
+        gridSizer.Add(self.lcells3,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
                       wx.ALL, border=5, pos=(2, 2))
 
-        border.Add(item=gridSizer, proportion=1,
+        border.Add(gridSizer, proportion=1,
                    flag=wx.ALL | wx.ALIGN_CENTER | wx.EXPAND, border=5)
 
         pane.SetSizer(border)
@@ -357,25 +357,25 @@ class RegionDef(BaseClass, wx.Dialog):
         buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         # north
-        gridSizer.Add(item=self.MakeLabel(text=_("North"), parent=panel),
+        gridSizer.Add(self.MakeLabel(text=_("North"), parent=panel),
                       flag=wx.ALIGN_BOTTOM | wx.ALIGN_CENTER_HORIZONTAL |
                       wx.TOP | wx.LEFT | wx.RIGHT, border=5, pos=(0, 2))
-        gridSizer.Add(item=self.tnorth,
+        gridSizer.Add(self.tnorth,
                       flag=wx.ALIGN_CENTER_HORIZONTAL |
                       wx.ALIGN_CENTER_VERTICAL |
                       wx.ALL, border=5, pos=(1, 2))
         # west
-        gridSizer.Add(item=self.MakeLabel(text=_("West"), parent=panel),
+        gridSizer.Add(self.MakeLabel(text=_("West"), parent=panel),
                       flag=wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL |
                       wx.LEFT | wx.TOP | wx.BOTTOM, border=5, pos=(2, 0))
-        gridSizer.Add(item=self.twest,
+        gridSizer.Add(self.twest,
                       flag=wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL |
                       wx.ALL, border=5, pos=(2, 1))
 
         gridSizer.Add(
-            item=wx.StaticBitmap(
+            wx.StaticBitmap(
                 panel, wx.ID_ANY, self.img, (-1, -1),
                 (self.img.GetWidth(),
                  self.img.GetHeight())),
@@ -383,71 +383,71 @@ class RegionDef(BaseClass, wx.Dialog):
             pos=(2, 2))
 
         # east
-        gridSizer.Add(item=self.teast,
+        gridSizer.Add(self.teast,
                       flag=wx.ALIGN_CENTER_HORIZONTAL |
                       wx.ALIGN_CENTER_VERTICAL |
                       wx.ALL, border=5, pos=(2, 3))
-        gridSizer.Add(item=self.MakeLabel(text=_("East"), parent=panel),
+        gridSizer.Add(self.MakeLabel(text=_("East"), parent=panel),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL |
                       wx.RIGHT | wx.TOP | wx.BOTTOM, border=5, pos=(2, 4))
         # south
-        gridSizer.Add(item=self.tsouth,
+        gridSizer.Add(self.tsouth,
                       flag=wx.ALIGN_CENTER_HORIZONTAL |
                       wx.ALIGN_CENTER_VERTICAL |
                       wx.ALL, border=5, pos=(3, 2))
-        gridSizer.Add(item=self.MakeLabel(text=_("South"), parent=panel),
+        gridSizer.Add(self.MakeLabel(text=_("South"), parent=panel),
                       flag=wx.ALIGN_TOP | wx.ALIGN_CENTER_HORIZONTAL |
                       wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5, pos=(4, 2))
         # ns-res
-        gridSizer.Add(item=self.MakeLabel(text=_("N-S resolution"), parent=panel),
+        gridSizer.Add(self.MakeLabel(text=_("N-S resolution"), parent=panel),
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
                       wx.TOP | wx.LEFT | wx.RIGHT, border=5, pos=(5, 1))
-        gridSizer.Add(item=self.tnsres,
+        gridSizer.Add(self.tnsres,
                       flag=wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL |
                       wx.ALL, border=5, pos=(6, 1))
         # ew-res
-        gridSizer.Add(item=self.MakeLabel(text=_("E-W resolution"), parent=panel),
+        gridSizer.Add(self.MakeLabel(text=_("E-W resolution"), parent=panel),
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
                       wx.TOP | wx.LEFT | wx.RIGHT, border=5, pos=(5, 3))
-        gridSizer.Add(item=self.tewres,
+        gridSizer.Add(self.tewres,
                       flag=wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL |
                       wx.ALL, border=5, pos=(6, 3))
         # rows/cols/cells
-        gridSizer.Add(item=self.lrows,
+        gridSizer.Add(self.lrows,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
                       wx.ALL, border=5, pos=(7, 1))
 
-        gridSizer.Add(item=self.lcells,
+        gridSizer.Add(self.lcells,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
                       wx.ALL, border=5, pos=(7, 2))
 
-        gridSizer.Add(item=self.lcols,
+        gridSizer.Add(self.lcols,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER |
                       wx.ALL, border=5, pos=(7, 3))
 
         # 3D
-        settings3DSizer.Add(item=self.settings3D,
+        settings3DSizer.Add(self.settings3D,
                             flag=wx.ALL,
                             border=5)
 
         # buttons
-        buttonSizer.Add(item=self.bcancel, proportion=1,
+        buttonSizer.Add(self.bcancel, proportion=1,
                         flag=wx.ALIGN_RIGHT |
                         wx.ALIGN_CENTER_VERTICAL |
                         wx.ALL, border=10)
-        buttonSizer.Add(item=self.bset, proportion=1,
+        buttonSizer.Add(self.bset, proportion=1,
                         flag=wx.ALIGN_CENTER |
                         wx.ALIGN_CENTER_VERTICAL |
                         wx.ALL, border=10)
 
-        frameSizer.Add(item=gridSizer, proportion=1,
+        frameSizer.Add(gridSizer, proportion=1,
                        flag=wx.ALL | wx.ALIGN_CENTER, border=5)
-        frameSizer.Add(item=settings3DSizer, proportion=0,
+        frameSizer.Add(settings3DSizer, proportion=0,
                        flag=wx.ALL | wx.ALIGN_CENTER, border=5)
-        frameSizer.Add(item=buttonSizer, proportion=0,
+        frameSizer.Add(buttonSizer, proportion=0,
                        flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.SetAutoLayout(True)
@@ -646,7 +646,7 @@ class SelectTransformDialog(wx.Dialog):
         self.Bind(wx.EVT_LISTBOX, self.ClickTrans, self.translist)
 
         bodySizer.Add(
-            item=self.translist,
+            self.translist,
             proportion=1,
             flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND)
 
@@ -663,10 +663,10 @@ class SelectTransformDialog(wx.Dialog):
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 
-        sizer.Add(item=bodySizer, proportion=1,
+        sizer.Add(bodySizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
-        sizer.Add(item=btnsizer, proportion=0,
+        sizer.Add(btnsizer, proportion=0,
                   flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         sizer.Fit(panel)

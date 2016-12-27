@@ -21,6 +21,7 @@ from grass.pydispatch.signal import Signal
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.dialogs import CreateNewVector, VectorDialog
+from gui_core.wrap import PseudoDC
 from vdigit.preferences import VDigitSettingsDialog
 from core.debug import Debug
 from core.settings import UserSettings
@@ -903,7 +904,7 @@ class VDigitToolbar(BaseToolbar):
                                         "opening vector map <%s> for editing...") %
                                       mapLayer.GetName(), 0)
 
-        self.MapWindow.pdcVector = wx.PseudoDC()
+        self.MapWindow.pdcVector = PseudoDC()
         self.digit = self.MapWindow.digit = self.digitClass(
             mapwindow=self.MapWindow)
 

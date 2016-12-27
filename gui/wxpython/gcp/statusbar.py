@@ -22,7 +22,7 @@ import wx
 from core.gcmd import GMessage
 from core.utils import _
 from mapdisp.statusbar import SbItem, SbTextItem
-from gui_core.wrap import GSpinCtrl as SpinCtrl
+from gui_core.wrap import SpinCtrl
 
 
 class SbGoToGCP(SbItem):
@@ -38,7 +38,7 @@ class SbGoToGCP(SbItem):
         self.label = _("Go to GCP No.")
 
         self.widget = SpinCtrl(parent=self.statusbar, id=wx.ID_ANY,
-                                  value="", min=0)
+                               value="", min=0)
         self.widget.Hide()
 
         self.widget.Bind(wx.EVT_TEXT_ENTER, self.OnGoToGCP)

@@ -301,31 +301,31 @@ class IClassCategoryManagerDialog(wx.Dialog):
         deleteButton = wx.Button(panel, id=wx.ID_DELETE)
 
         gridSizer.Add(
-            item=self.catList, pos=(
+            self.catList, pos=(
                 0, 0), span=(
                 3, 1), flag=wx.EXPAND)
-        gridSizer.Add(item=addButton, pos=(0, 1), flag=wx.EXPAND)
-        gridSizer.Add(item=deleteButton, pos=(1, 1), flag=wx.EXPAND)
+        gridSizer.Add(addButton, pos=(0, 1), flag=wx.EXPAND)
+        gridSizer.Add(deleteButton, pos=(1, 1), flag=wx.EXPAND)
 
         gridSizer.AddGrowableCol(0)
         gridSizer.AddGrowableRow(2)
         sizer.Add(
-            item=gridSizer,
+            gridSizer,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
         mainSizer.Add(
-            item=sizer,
+            sizer,
             proportion=1,
             flag=wx.EXPAND | wx.ALL,
             border=5)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         closeButton = wx.Button(panel, id=wx.ID_CLOSE)
-        btnSizer.Add(item=wx.Size(-1, -1), proportion=1, flag=wx.EXPAND)
-        btnSizer.Add(item=closeButton, proportion=0, flag=wx.ALIGN_RIGHT)
+        btnSizer.Add(wx.Size(-1, -1), proportion=1, flag=wx.EXPAND)
+        btnSizer.Add(closeButton, proportion=0, flag=wx.ALIGN_RIGHT)
         mainSizer.Add(
-            item=btnSizer,
+            btnSizer,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=5)
@@ -662,7 +662,7 @@ class IClassSignatureFileDialog(wx.Dialog):
         dataSizer = wx.BoxSizer(wx.VERTICAL)
 
         dataSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
                 label=_("Enter name of signature file:")),
@@ -673,11 +673,11 @@ class IClassSignatureFileDialog(wx.Dialog):
             parent=self.panel, id=wx.ID_ANY, size=(400, -1))
         if self.fileName:
             self.fileNameCtrl.SetValue(self.fileName)
-        dataSizer.Add(item=self.fileNameCtrl,
+        dataSizer.Add(self.fileNameCtrl,
                       proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
 
-        dataSizer.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                         label=_("Signature file path:")),
+        dataSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                    label=_("Signature file path:")),
                       proportion=0, flag=wx.ALL, border=3)
 
         self.pathPanel = scrolled.ScrolledPanel(self.panel, size=(-1, 40))
@@ -692,7 +692,7 @@ class IClassSignatureFileDialog(wx.Dialog):
         self.pathPanel.SetupScrolling(scroll_x=True, scroll_y=False)
         self.pathPanel.SetSizer(pathSizer)
 
-        dataSizer.Add(item=self.pathPanel,
+        dataSizer.Add(self.pathPanel,
                       proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
 
         # buttons
@@ -701,10 +701,10 @@ class IClassSignatureFileDialog(wx.Dialog):
         btnSizer.AddButton(self.btnOK)
         btnSizer.Realize()
 
-        sizer.Add(item=dataSizer, proportion=1,
+        sizer.Add(dataSizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.panel.SetSizer(sizer)
@@ -771,7 +771,7 @@ class IClassExportAreasDialog(wx.Dialog):
         dataSizer = wx.BoxSizer(wx.VERTICAL)
 
         dataSizer.Add(
-            item=wx.StaticText(
+            wx.StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
                 label=_("Enter name of new vector map:")),
@@ -784,7 +784,7 @@ class IClassExportAreasDialog(wx.Dialog):
             size=globalvar.DIALOG_GSELECT_SIZE)
         if self.vectorName:
             self.vectorNameCtrl.SetValue(self.vectorName)
-        dataSizer.Add(item=self.vectorNameCtrl,
+        dataSizer.Add(self.vectorNameCtrl,
                       proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
         self.withTableCtrl = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
                                          label=_("Export attribute table"))
@@ -792,7 +792,7 @@ class IClassExportAreasDialog(wx.Dialog):
         self.withTableCtrl.SetToolTipString(
             _("Export attribute table containing" " computed statistical data"))
 
-        dataSizer.Add(item=self.withTableCtrl,
+        dataSizer.Add(self.withTableCtrl,
                       proportion=0, flag=wx.ALL, border=3)
 
         # buttons
@@ -801,10 +801,10 @@ class IClassExportAreasDialog(wx.Dialog):
         btnSizer.AddButton(self.btnOK)
         btnSizer.Realize()
 
-        sizer.Add(item=dataSizer, proportion=1,
+        sizer.Add(dataSizer, proportion=1,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.panel.SetSizer(sizer)
