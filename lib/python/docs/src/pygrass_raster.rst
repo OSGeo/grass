@@ -4,18 +4,20 @@ Introduction to Raster classes
 ==============================
 
 Details about the GRASS GIS raster architecture can be found in the
-`GRASS GIS 7 Programmer's Manual: GRASS Raster Library <http://grass.osgeo.org/programming7/rasterlib.html>`_
+`GRASS GIS 7 Programmer's Manual: GRASS Raster Library
+<http://grass.osgeo.org/programming7/rasterlib.html>`_.
 
-PyGRASS uses 3 different Raster classes, that respect the 3 different approaches
-of GRASS-C API. The classes use a standardized interface to keep methods
-consistent between them. The read access is row wise for :ref:`RasterRow-label`
-and :ref:`RasterRowIO-label` and additionally
-cached in the RowIO class. Both classes write sequentially.
-RowIO is row cached, :ref:`RasterSegment-label` 
-is tile cached for reading and writing; therefore, random access is possible.
-Hence RasterRow and RasterRowIO should be used for fast (cached)
-row read access and RasterRow for fast sequential writing.
-RasterSegment should be used for random access.
+PyGRASS uses 3 different raster classes, that respect the 3 different
+approaches of GRASS-C API. The classes use a standardized interface to
+keep methods consistent between them. The read access is row wise for
+:ref:`RasterRow-label` and :ref:`RasterRowIO-label` and additionally
+cached in the RowIO class. Both classes write sequentially.  RowIO is
+row cached, :ref:`RasterSegment-label` is tile cached for reading and
+writing; therefore, random access is possible.  Hence RasterRow and
+RasterRowIO should be used for fast (cached) row read access and
+RasterRow for fast sequential writing.  RasterSegment should be used
+for random access. The classes are part of the :mod:`~pygrass.raster`
+module.
 
 
 ==========================  =======================  ========  ============
@@ -64,12 +66,12 @@ We can rename the map: ::
 RasterRow
 ---------
 
-The PyGrass :class:`~pygrass.raster.RasterRow` class allow user to open maps row
+The PyGRASS :class:`~pygrass.raster.RasterRow` class allow user to open maps row
 by row in either read or write mode using the `Raster library`_. Reading and writing
 to the same map at the same time is not supported. For this functionality,
 please see the :ref:`RasterSegment-label` class.
 The RasterRow class allows map rows to be read in any order, but map rows can
-only be written in sequential order. Therefore, each now row written to a map is
+only be written in sequential order. Therefore, each row written to a map is
 added to the file as the last row. ::
 
     >>> raster = reload(raster)
@@ -124,7 +126,7 @@ RasterRowIO
 The :class:`~pygrass.raster.RasterRowIO` class uses the GRASS `RowIO library`_, and implements a row
 cache. The RasterRowIO class only supports reading rasters; because raster rows
 can only be written in sequential order, writing by row id is not
-supported by design. Hence, the rowio lib can only be used to cache rows
+supported by design. Hence, the RowIO lib can only be used to cache rows
 for reading, and any write access should use the :ref:`RasterRow-label` class. ::
 
     >>> raster = reload(raster)
@@ -174,7 +176,7 @@ opening maps in a read-write mode. ::
 Due to the unique behavior of this class, the RasterSegment class defines two
 methods to read a map:
 
-    * ``get_row`` calls the C function ``Segment_get_row`` and returns a buffer
+    * ``get_row`` calls the C function ``Segment_get_row()`` and returns a buffer
       object with the row. ::
 
         >>> # call explicitly the method
@@ -182,7 +184,7 @@ methods to read a map:
         >>> # call implicitly the method
         >>> elev_row0 = elev[0]
 
-    * ``get`` calls the C function ``Segment_get`` and returns the value of the
+    * ``get`` calls the C function ``Segment_get()`` and returns the value of the
       map cell. ::
 
         >>> # call explicitly the method
@@ -190,8 +192,8 @@ methods to read a map:
         >>> # call implicitly the method
         >>> elev_val_0_0 = elev[0, 0]
 
-Similarly, writing to a map uses two methods: ``put_row`` to write a row and
-``put`` to write a single value to the map. ::
+Similarly, writing to a map uses two methods: ``put_row()`` to write a row and
+``put()`` to write a single value to the map. ::
 
     >>> # compare the cell value get using the ``get`` method, and take the first
     >>> # value of the row with the ``get_row`` method
