@@ -358,6 +358,7 @@ class GMFrame(wx.Frame):
                 group='manager', key='hideTabs', subkey='search'):
             self.search = SearchModuleWindow(
                 parent=self.notebook, handlerObj=self,
+                giface=self._giface,
                 model=self._moduleTreeBuilder.GetModel())
             self.search.showNotification.connect(
                 lambda message: self.SetStatusText(message))
