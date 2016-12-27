@@ -1,9 +1,11 @@
 Interface to GRASS GIS modules
 ==============================
 
-In "modules", GRASS GIS modules are represented as objects. These objects
-are generated based on the XML module description that is used also for
-the generation of the graphical user interface (GUI). ::
+In :mod:`~pygrass.modules` module, GRASS GIS modules are represented
+by :class:`~pygrass.modules.interface.module.Module` class
+objects. These objects are generated based on the XML module
+description that is used also for the generation of the graphical user
+interface (GUI). ::
 
     >>> from grass.pygrass.modules import Module
     >>> slope_aspect = Module("r.slope.aspect", elevation='elevation',
@@ -138,7 +140,7 @@ For each input and output parameter it is possible to obtain specific
 information. To see all module inputs, just type: ::
 
     >>> slope_aspect.inputs #doctest: +NORMALIZE_WHITESPACE
-    TypeDict([('elevation', Parameter <elevation> (required:yes, type:raster, multiple:no)), ('format', Parameter <format> (required:no, type:string, multiple:no)), ('prec', Parameter <prec> (required:no, type:string, multiple:no)), ('zfactor', Parameter <zfactor> (required:no, type:float, multiple:no)), ('min_slp_allowed', Parameter <min_slp_allowed> (required:no, type:float, multiple:no))])
+    TypeDict([('elevation', Parameter <elevation> (required:yes, type:raster, multiple:no)), ('format', Parameter <format> ...)])
 
 To get information for each parameter: ::
 
@@ -204,6 +206,13 @@ Another example of use: ::
     >>> category = Module("r.category", map="elevation",
     ...                   stdin_=info.popen.stdout, finish_=True)
 
+Launching GRASS GIS modules in parallel
+---------------------------------------
 
+PyGRASS implements simple mechanism for launching GRASS modules in
+parallel. See
+:class:`~pygrass.modules.interface.module.ParallelModuleQueue` class
+for details.
 
+   
 .. _Popen: http://docs.python.org/library/subprocess.html#Popen
