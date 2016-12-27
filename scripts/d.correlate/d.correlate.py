@@ -30,7 +30,7 @@ import sys
 import os
 from grass.script.utils import try_remove
 from grass.script import core as gcore
-
+from grass.exceptions import CalledModuleError
 
 def main():
     layers = options['map'].split(',')
@@ -44,9 +44,12 @@ def main():
         if not gcore.find_file(map, element='cell')['file']:
             gcore.fatal(_("Raster map <%s> not found") % map)
 
-    gcore.write_command('d.text', color='black', size=4, line=1,
-                        stdin="CORRELATION")
-
+    try:
+        gcore.write_command('d.text', color='black', size=4, line=1,
+                            stdin="CORRELATION")
+    except CalledModuleError:
+        return 1
+    
     os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
 
     colors = "red black blue green gray violet".split()
@@ -108,6 +111,8 @@ def main():
 
     try_remove(tmpfile)
 
+    return 0
+
 if __name__ == "__main__":
     options, flags = gcore.parser()
-    main()
+    sys.exit(main())
