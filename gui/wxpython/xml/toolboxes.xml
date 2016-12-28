@@ -1242,11 +1242,17 @@
       <module-item name="v.cluster">
         <label>Identify point clusters</label>
       </module-item>
+      <module-item name="v.qcount">
+        <label>Indices for quadrat counts of vector point lists</label>
+      </module-item>
       <module-item name="v.perturb">
         <label>Perturb points</label>
       </module-item>
       <module-item name="v.kcv">
         <label>Test/training point sets</label>
+      </module-item>
+      <module-item name="v.normal">
+        <label>Tests for normality for vector points</label>
       </module-item>
     </items>
   </toolbox>
