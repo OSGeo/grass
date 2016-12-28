@@ -359,6 +359,7 @@ class Module(object):
     "Color table for raster map <test_a> set to 'rules'"
 
     Run a second time
+
     >>> colors.run()
     Module('r.colors')
     >>> stdout, stderr = colors.popen.communicate(input="1 blue")
@@ -369,6 +370,7 @@ class Module(object):
     "Color table for raster map <test_a> set to 'rules'"
 
     Multiple run test
+
     >>> colors = Module("r.colors", map="test_a",
     ...                                            color="ryb", run_=False)
     >>> colors.get_bash()
