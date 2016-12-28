@@ -222,7 +222,6 @@ int main(int argc, char *argv[])
 	       _("VI 250m 16-days"));
     productname->descriptions = desc_productname;
     productname->options = "mod09Q1,mod09A1,mod09A1s,mod09GA,mod09GAs,mod09CMG,mod09CMGs,mod09CMGi,mod11A1,mod11A2,mod13A2,mcd43B2,mcd43B2q,mod13Q1";
-    productname->answer = "mod13A2";
     
     qcname = G_define_option();
     qcname->key = "qcname";
@@ -357,7 +356,6 @@ int main(int argc, char *argv[])
 	       _("mod13Q1: if shadow is present in pixel"));
     qcname->descriptions = desc_qcname;
     qcname->options = "adjcorr,atcorr,cloud,data_quality,diff_orbit_from_500m,modland_qa,mandatory_qa_11A1,data_quality_flag_11A1,emis_error_11A1,lst_error_11A1,data_quality_flag_11A2,emis_error_11A2,mandatory_qa_11A2,lst_error_11A2,aerosol_quantity,brdf_correction_performed,cirrus_detected,cloud_shadow,cloud_state,internal_cloud_algorithm,internal_fire_algorithm,internal_snow_mask,land_water,mod35_snow_ice,pixel_adjacent_to_cloud,salt_pan,icm_cloudy,icm_clear,icm_high_clouds,icm_low_clouds,icm_snow,icm_fire,icm_sun_glint,icm_dust,icm_cloud_shadow,icm_pixel_is_adjacent_to_cloud,icm_cirrus,icm_pan_flag,icm_criteria_for_aerosol_retrieval,icm_aot_has_clim_val,modland_qa,vi_usefulness,aerosol_quantity,pixel_adjacent_to_cloud,brdf_correction_performed,mixed_clouds,land_water,possible_snow_ice,possible_shadow,platform,land_water,sun_z_angle_at_local_noon,brdf_correction_performed,modland_qa,vi_usefulness,aerosol_quantity,pixel_adjacent_to_cloud,brdf_correction_performed,mixed_clouds,land_water,possible_snow_ice,possible_shadow";
-    qcname->answer = "modland_qa";
 
     input_band = G_define_option();
     input_band->key = "band";
@@ -390,6 +388,12 @@ int main(int argc, char *argv[])
 
     result = output->answer;
 
+    if (!product)
+	G_fatal_error(_("Please specify a product to extract"));
+
+    if (!qcflag)
+	G_fatal_error(_("Please specify a valid QC flag to extract"));
+
     /*mod09Q1*/
     if (strcmp(product, "mod09Q1") /*if not mod09Q1 but its qcflag was entered, issue error*/
     && (!strcmp(qcflag, "cloud") || !strcmp(qcflag, "diff_orbit_from_500m")))
@@ -421,7 +425,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("This bit flag is only available for MOD09A1s @ 500m or MOD09CMG @ 5000m products"));
 
     /*mod09GA stateqa*/
-    if ((strcmp(qcflag, "salt_pan") && strcmp(product, "mod09GAs")) )
+    if ((!strcmp(qcflag, "salt_pan") && strcmp(product, "mod09GAs")) )
 	G_fatal_error(_("This bit flag is only available for MOD09GAs @ 500m products"));
 
     /*mod09CMG*/
