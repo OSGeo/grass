@@ -39,7 +39,7 @@ classes are small, but classes are distinguishable by their organisation on the
 ground, often opposing natural to human-made spaces: cultivated fields vs meadows
 or golf courses, palm tree plantations vs natural rain forest, but texture can
 also be a natural phenomen: dune fields, different canopies due to different
-tree species. The usefulness and use of texture is highly dependend on the 
+tree species. The usefulness and use of texture is highly dependent on the 
 resolution of satellite imagery and on the scale of the human intervention or 
 the phenomenon that created the texture (also see the discussion of scale 
 dependency below). The user should observe the phenomenon visually in order to
@@ -136,7 +136,7 @@ level co-occurrence matrices (GLCM; after Haralick 1979).
 
 <p>
 The computational region should be set to the input map with 
-<b>g.region rast=&lt;input map&gt;</b>, or aligned to the input map 
+<b>g.region raster=&lt;input map&gt;</b>, or aligned to the input map 
 with <b>g.region align=&lt;input map&gt;</b> if only a subregion 
 should be analyzed.
 
@@ -172,11 +172,14 @@ ortho_texture_ASM_0, ortho_texture_ASM_45, ortho_texture_ASM_90, ortho_texture_A
 Reducing the number of gray levels (equal-probability quantizing):
 
 <div class="code"><pre>
-g.region -p rast=ortho_2001_t792_1m
-r.quantile in=ortho_2001_t792_1m quantiles=16 -r | r.recode in=ortho_2001_t792_1m out=ortho_2001_t792_1m_q16 rules=-
+g.region -p raster=ortho_2001_t792_1m
+
+# enter as one line or with \
+r.quantile input=ortho_2001_t792_1m quantiles=16 -r | r.recode \
+           input=ortho_2001_t792_1m output=ortho_2001_t792_1m_q16 rules=-
 </pre></div>
 
-The recoded raster map can then be used as input for r.texture as before.
+The recoded raster map can then be used as input for <em>r.texture</em> as before.
 
 <p>
 Second example: analysis of IDM (homogeneity) on a simple raster with 
@@ -203,10 +206,10 @@ cols: 9
 EOF
 
 # adjust region to raster
-g.region rast=lines
+g.region raster=lines
 
 # calculate IDM (homogeneity) in all directions
-r.texture -s lines method=idm out=text_lines
+r.texture -s lines method=idm output=text_lines
 </pre></div>
 
 <p>
@@ -233,10 +236,11 @@ moving windows (<em>size</em> option).
 The algorithm was implemented after Haralick et al., 1973 and 1979.
 
 <p>
-The code was taken by permission from <em>pgmtexture</em>, part of
+The original code was taken by permission from <em>pgmtexture</em>, part of
 PBMPLUS (Copyright 1991, Jef Poskanser and Texas Agricultural Experiment
 Station, employer for hire of James Darrell McCauley). Manual page 
 of <a href="http://netpbm.sourceforge.net/doc/pgmtexture.html">pgmtexture</a>.
+Over the years, the source code of <em>r.texture</em> was further improved.
 
 <ul> 
 <li>Haralick, R.M., K. Shanmugam, and I. Dinstein (1973). Textural features for
