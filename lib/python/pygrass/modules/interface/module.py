@@ -102,6 +102,7 @@ class ParallelModuleQueue(object):
     0
 
     Check MultiModule approach with three by two processes running in a background process
+
     >>> gregion = Module("g.region", flags="p", run_=False)
     >>> queue = ParallelModuleQueue(nprocs=3)
     >>> proc_list = []
@@ -129,6 +130,7 @@ class ParallelModuleQueue(object):
     0
 
     Check with a queue size of 8 and 4 processes
+
     >>> queue = ParallelModuleQueue(nprocs=8)
     >>> mapcalc_list = []
     >>> new_mapcalc = copy.deepcopy(mapcalc)
@@ -417,6 +419,7 @@ class Module(object):
     "Color table for raster map <test_a> set to 'rules'"
 
     Run a second time
+
     >>> colors.run()
     Module('r.colors')
     >>> stdout, stderr = colors.popen.communicate(input="1 blue")
@@ -427,6 +430,7 @@ class Module(object):
     "Color table for raster map <test_a> set to 'rules'"
 
     Multiple run test
+
     >>> colors = Module("r.colors", map="test_a",
     ...                                            color="ryb", run_=False)
     >>> colors.get_bash()
@@ -820,6 +824,7 @@ class MultiModule(object):
     >>> import copy
 
     Synchronous module run
+
     >>> region_1 = Module("g.region", run_=False)
     >>> region_1.flags.p = True
     >>> region_2 = copy.deepcopy(region_1)
@@ -833,6 +838,7 @@ class MultiModule(object):
     0
 
     Asynchronous module run, setting finish = False
+
     >>> region_1 = Module("g.region", run_=False)
     >>> region_1.flags.p = True
     >>> region_2 = copy.deepcopy(region_1)
@@ -861,6 +867,7 @@ class MultiModule(object):
     0
 
     Asynchronous module run, setting finish = False and using temporary region
+
     >>> mm = MultiModule(module_list=[region_1, region_2, region_3, region_4, region_5],
     ...                  sync=False, set_temp_region=True)
     >>> str(mm)
