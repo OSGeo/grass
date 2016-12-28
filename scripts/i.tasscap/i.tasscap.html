@@ -6,13 +6,13 @@ for Landsat TM data (TM4, TM5, ETM7) and MODIS data.
 The tasseled cap transformation is effectively a compression method to
 reduce multiple spectral data into a few bands. The method was originally
 developed for understanding important phenomena of crop development in
-spectral space (Kauth and Thomas 1976).
+spectral space (Kauth and Thomas, 1976).
 <p>
 Tasseled cap coefficients for Landsat 7 ETM+ are at-satellite reflectance
 values (C. Huang et al., 2001), the conversion can be achieved with
 <em>i.landsat.toar</em>.
 <p>
-The following TC components are generated:
+The following tasseled cap components are generated:
 
 <ul>
 <li> tasscap.1: corresponds to brightness,
@@ -27,10 +27,13 @@ The following TC components are generated:
 Calculation of TC maps from North Carolina Landsat 7 ETM scene:
 
 <div class="code"><pre>
-g.region raster=lsat7_2002_10 -p
+# See manual page of i.landsat.toar for preprocessing
+
+g.region raster=lsat7_2002_toar.1 -p
+
 i.tasscap sensor=landsat7_etm \
-  input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
-  output=tasscap
+  input=lsat7_2002_toar.1,lsat7_2002_toar.2,lsat7_2002_toar.3,lsat7_2002_toar.4,lsat7_2002_toar.5,lsat7_2002_toar.7 \
+  output=lsat7_2002_tasscap
 </pre></div>
 
 Results:
@@ -98,13 +101,17 @@ Results:
 
 <em>
 <a href="i.albedo.html">i.albedo</a>,
-<a href="i.aster.toar.html">i.aster.toar</a>,
-<a href="i.landsat.toar.html">i.landsat.toar</a>,
 <a href="i.atcorr.html">i.atcorr</a>,
+<a href="i.landsat.toar.html">i.landsat.toar</a>,
 <a href="i.vi.html">i.vi</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Markus Neteler, ITC-irst, based on a script by Agustin Lobo
+Dr. Agustin Lobo, original script, 1997
+<p>
+Markus Neteler, ITC-irst, 2001
+<p>
+Converted to Python by Glynn Clements
+
 <p><i>Last changed: $Date$</i>
