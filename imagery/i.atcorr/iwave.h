@@ -83,6 +83,7 @@ private:
 	void pleiades1a(int iwa);
 	void pleiades1b(int iwa);
 	void worldview3(int iwa);
+	void sentinel2a(int iwa);
 
 public:
 	/* To compute the equivalent wavelength needed for the calculation of the
