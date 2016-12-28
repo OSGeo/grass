@@ -17,6 +17,7 @@ Contents
 1. Local work (done by release coordinator)
 
    - svn up
+   - svn status --no-ignore
    - check if
         ( cd doc/raster/r.example/ ; make clean ; make )
         ( cd doc/vector/v.example/ ; make clean ; make )
@@ -63,11 +64,11 @@ Contents
       rm -f include/VERSION~
 
     - Update OSGeo4W setup.hint file
+       - for RC candidates use 'test' keyword
+       - for final version use 'curr' keyword
+
       vim mswindows/osgeo4w/setup.hint
 
-      for RC candidates use 'test' keyword
-      for final version use 'curr' keyword
-      
      #version:
      MAJOR=`cat include/VERSION | head -1 | tail -1`
      MINOR=`cat include/VERSION | head -2 | tail -1`
