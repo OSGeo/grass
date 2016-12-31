@@ -134,17 +134,18 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unable to create PostGIS layer <%s>"),
                       olayer);
     G_add_error_handler(output_handler, &Out);
-    
+
+    /* copy attributes (must be done before checking output type
+       otherwise attributes are not copied) */
+    field = Vect_get_field_number(&In, params.layer->answer);
+    if (!flags.table->answer)
+        Vect_copy_map_dblinks(&In, &Out, TRUE);
+
     /* check output type */
     if (otype > 0) { /* type is not 'auto' */
         if (Vect_write_line(&Out, otype, NULL, NULL) < 0)
             G_fatal_error(_("Feature type %d is not supported"), otype);
     }
-
-    /* copy attributes */
-    field = Vect_get_field_number(&In, params.layer->answer);
-    if (!flags.table->answer)
-        Vect_copy_map_dblinks(&In, &Out, TRUE);
 
     /* copy vector features & create PostGIS table */
     if (Vect_copy_map_lines_field(&In, field, &Out) != 0)
