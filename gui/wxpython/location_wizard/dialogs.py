@@ -506,11 +506,20 @@ class RegionDef(BaseClass, wx.Dialog):
 
     def __UpdateInfo(self):
         """Update number of rows/cols/cells"""
-        self.rows = int((self.north - self.south) / self.nsres)
-        self.cols = int((self.east - self.west) / self.ewres)
+        try:
+            rows = int((self.north - self.south) / self.nsres)
+            cols = int((self.east - self.west) / self.ewres)
+        except ZeroDivisionError:
+            return
+        self.rows = rows
+        self.cols = cols
         self.cells = self.rows * self.cols
 
-        self.depth = int((self.top - self.bottom) / self.tbres)
+        try:
+            depth = int((self.top - self.bottom) / self.tbres)
+        except ZeroDivisionError:
+            return
+        self.depth = depth
         self.cells3 = self.rows * self.cols * self.depth
 
         # 2D
@@ -524,7 +533,7 @@ class RegionDef(BaseClass, wx.Dialog):
     def OnSetButton(self, event=None):
         """Set default region"""
         ret = RunCommand('g.region',
-                         flags='sgpa',
+                         flags='sa',
                          n=self.north,
                          s=self.south,
                          e=self.east,
