@@ -36,9 +36,8 @@ class BaseClass(wx.Object):
             label.SetToolTipString(tooltip)
         return label
 
-    def MakeTextCtrl(
-            self, text='', size=(100, -1),
-            style=0, parent=None, tooltip=None):
+    def MakeTextCtrl(self, text='', size=(100, -1),
+                     style=0, parent=None, tooltip=None):
         """Generic text control"""
         if not parent:
             parent = self
@@ -48,9 +47,8 @@ class BaseClass(wx.Object):
             textCtrl.SetToolTipString(tooltip)
         return textCtrl
 
-    def MakeButton(
-            self, text, id=wx.ID_ANY, size=(-1, -1),
-            parent=None, tooltip=None):
+    def MakeButton(self, text, id=wx.ID_ANY, size=(-1, -1),
+                   parent=None, tooltip=None):
         """Generic button"""
         if not parent:
             parent = self
@@ -59,3 +57,14 @@ class BaseClass(wx.Object):
         if tooltip:
             button.SetToolTipString(tooltip)
         return button
+
+    def MakeCheckBox(self, text, id=wx.ID_ANY, size=(-1, -1),
+                     parent=None, tooltip=None):
+        """Generic checkbox"""
+        if not parent:
+            parent = self
+        chbox = wx.CheckBox(parent=parent, id=id, label=text,
+                             size=size)
+        if tooltip:
+            chbox.SetToolTipString(tooltip)
+        return chbox
