@@ -189,11 +189,17 @@ int GPJ__get_datum_params(const struct Key_Value *projinfo,
 	returnval = 2;
     }
     else if (G_find_key_value("nadgrids", projinfo) != NULL) {
-	const char *gisbase = G_gisbase();
+        const char *projshare = getenv("GRASS_PROJSHARE");
 
-	G_asprintf(params, "nadgrids=%s%s/%s", gisbase, GRIDDIR,
-		   G_find_key_value("nadgrids", projinfo));
-	returnval = 2;
+        if (!projshare) {
+            G_warning(_("Failed to detect nadgrids path, GRASS_PROJSHARE not defined"));
+            returnval = -1;
+        }
+        else {
+            G_asprintf(params, "nadgrids=%s%c%s", projshare, HOST_DIRSEP,
+                       G_find_key_value("nadgrids", projinfo));
+            returnval = 2;
+        }
     }
     else if (G_find_key_value("towgs84", projinfo) != NULL) {
 	G_asprintf(params, "towgs84=%s",
