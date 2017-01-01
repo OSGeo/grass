@@ -22,11 +22,14 @@ import string
 import re
 from datetime import datetime
 from HTMLParser import HTMLParser
+import urlparse
 
 pgm = sys.argv[1]
 
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
+
+source_url = "https://trac.osgeo.org/grass/browser/grass/branches/releasebranch_7_0/"
 
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -53,7 +56,13 @@ header_pgm_desc = """<h2>NAME</h2>
 <em><b>${PGM}</b></em> - ${PGM_DESC}
 """
 
-footer_index = string.Template(\
+sourcecode = string.Template(
+"""<h2>SOURCE CODE</h2>
+<p>Available at: <a href="${URL_SOURCE}">${PGM} source code</a> (<a href="${URL_LOG}">history</a>)</p>
+"""
+)
+
+footer_index = string.Template(
 """<hr class="header">
 <p>
 <a href="index.html">Main index</a> |
@@ -73,7 +82,7 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 </html>
 """)
 
-footer_noindex = string.Template(\
+footer_noindex = string.Template(
 """<hr class="header">
 <p>
 <a href="index.html">Main index</a> |
@@ -287,11 +296,18 @@ year = os.getenv("VERSION_DATE")
 if not year:
     year = str(datetime.now().year)
 
+# check the names of scripts to assign the right folder
+topdir = os.path.abspath(os.getenv("MODULE_TOPDIR"))
+curdir = os.path.abspath(os.path.curdir)
+pgmdir = curdir.replace(topdir, '').lstrip('/')
+url_source = urlparse.urljoin(source_url, pgmdir)
+
 if index_name:
+    sys.stdout.write(sourcecode.substitute(URL_SOURCE=url_source, PGM=pgm,
+                                           URL_LOG=url_source.replace('browser',  'log')))
     sys.stdout.write(footer_index.substitute(INDEXNAME=index_name,
                                              INDEXNAMECAP=index_name_cap,
-                                             YEAR=year,
-                                             GRASS_VERSION=grass_version))
+                                             YEAR=year, GRASS_VERSION=grass_version))
 else:
     sys.stdout.write(footer_noindex.substitute(YEAR=year,
                                                GRASS_VERSION=grass_version))
