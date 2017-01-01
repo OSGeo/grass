@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# GRASS 7.0 Documentation documentation build configuration file, created by
+# GRASS 7.3 Documentation documentation build configuration file, created by
 # sphinx-quickstart on Thu Aug  9 17:16:28 2012.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -40,15 +40,15 @@ source_suffix = '.txt'
 master_doc = 'index'
 
 # General information about the project.
-project = u'GRASS 7.0 Documentation'
-copyright = u'2012, GRASS Development Team'
+project = u'GRASS 7.3 Documentation'
+copyright = u'2017, GRASS Development Team'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
-version = '7.0'
+version = '7.3'
 # The full version, including alpha/beta/rc tags.
 release = 'svn'
 
@@ -164,7 +164,7 @@ html_use_index = False
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'GRASS70Documentationdoc'
+htmlhelp_basename = 'GRASS73Documentationdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -183,7 +183,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('content', 'GRASS70Documentation.tex', u'GRASS 7.0 Documentation Documentation',
+  ('content', 'GRASS73Documentation.tex', u'GRASS 7.3 Documentation Documentation',
    u'GRASS Development Team', 'manual'),
 ]
 
@@ -213,7 +213,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('content', 'grass70documentation', u'GRASS 7.0 Documentation Documentation',
+    ('content', 'grass73documentation', u'GRASS 7.3 Documentation Documentation',
      [u'GRASS Development Team'], 1)
 ]
 
@@ -227,8 +227,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('content', 'GRASS70Documentation', u'GRASS 7.0 Documentation Documentation',
-   u'GRASS Development Team', 'GRASS70Documentation', 'One line description of project.',
+  ('content', 'GRASS73Documentation', u'GRASS 7.3 Documentation Documentation',
+   u'GRASS Development Team', 'GRASS73Documentation', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -245,10 +245,10 @@ texinfo_documents = [
 # -- Options for Epub output ---------------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = u'GRASS 7.0 Documentation'
+epub_title = u'GRASS 7.3 Documentation'
 epub_author = u'GRASS Development Team'
 epub_publisher = u'GRASS Development Team'
-epub_copyright = u'2012, GRASS Development Team'
+epub_copyright = u'2017, GRASS Development Team'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.
