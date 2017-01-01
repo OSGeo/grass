@@ -90,8 +90,13 @@ def main():
     tmp = str(os.getpid())
 
     temp_dist = "r.grow.tmp.%s.dist" % tmp
+    
+    shrink = False
+    if radius < 0.0:
+        shrink = True
+        radius = -radius
 
-    if new == '':
+    if new == '' and shrink == False:
         temp_val = "r.grow.tmp.%s.val" % tmp
         new = temp_val
     else:
@@ -113,16 +118,28 @@ def main():
     if not grass.find_file(input)['file']:
         grass.fatal(_("Raster map <%s> not found") % input)
 
-    try:
-        grass.run_command('r.grow.distance', input=input, metric=metric,
-                          distance=temp_dist, value=temp_val)
-    except CalledModuleError:
-        grass.fatal(_("Growing failed. Removing temporary maps."))
+    if shrink == False:
+        try:
+            grass.run_command('r.grow.distance', input=input, metric=metric,
+                              distance=temp_dist, value=temp_val)
+        except CalledModuleError:
+            grass.fatal(_("Growing failed. Removing temporary maps."))
 
-    grass.mapcalc(
-        "$output = if(!isnull($input),$old,if($dist < $radius,$new,null()))",
-        output=output, input=input, radius=radius,
-        old=old, new=new, dist=temp_dist)
+        grass.mapcalc(
+            "$output = if(!isnull($input),$old,if($dist < $radius,$new,null()))",
+            output=output, input=input, radius=radius,
+            old=old, new=new, dist=temp_dist)
+    else:
+        # shrink
+        try:
+            grass.run_command('r.grow.distance', input=input, metric=metric,
+                              distance=temp_dist, value=temp_val, flags='n')
+        except CalledModuleError:
+            grass.fatal(_("Shrinking failed. Removing temporary maps."))
+
+        grass.mapcalc(
+            "$output = if($dist < $radius,null(),$old)",
+            output=output, radius=radius, old=old, dist=temp_dist)
 
     grass.run_command('r.colors', map=output, raster=input)
 
