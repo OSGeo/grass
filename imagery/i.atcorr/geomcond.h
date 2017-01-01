@@ -1,80 +1,90 @@
 #ifndef GEOMETRICAL_CONTITIONS_H
 #define GEOMETRICAL_CONTITIONS_H
 
-/* **********************************************************************c */
-/*       igeom               geometrical conditions                     c */
-/*               --------------------------------------                 c */
-/*                                                                      c */
-/*                                                                      c */
-/*   you choose your own conditions; igeom=0                            c */
-/*         0     enter solar zenith angle   (in degrees )               c */
-/*                     solar azimuth angle        "                     c */
-/*                     satellite zenith angle     "                     c */
-/*                     satellite azimuth angle    "                     c */
-/*                     month                                            c */
-/*                     day of the month                                 c */
-/*                                                                      c */
-/*   or you select one of the following satellite conditions:igeom=1to7 c */
-/*         1       meteosat observation                                 c */
-/*                 enter month,day,decimal hour (universal time-hh.ddd) c */
-/*                       n. of column,n. of line.(full scale 5000*2500) c */
-/*                                                                      c */
-/*         2       goes east observation                                c */
-/*                 enter month,day,decimal hour (universal time-hh.ddd) c */
-/*                      n. of column,n. of line.(full scale 17000*12000)c */
-/*                                                                      c */
-/*         3       goes west observation                                c */
-/*                 enter month,day,decimal hour (universal time-hh.ddd) c */
-/*                      n. of column,n. of line.(full scale 17000*12000)c */
-/*                                                                      c */
-/*         4       avhrr ( PM noaa )                                    c */
-/*                 enter month,day,decimal hour (universal time-hh.ddd) c */
-/*                       n. of column(1-2048),xlonan,hna                c */
-/*                       give long.(xlonan) and overpass hour (hna) at  c */
-/*                       the ascendant node at equator                  c */
-/*                                                                      c */
-/*         5       avhrr ( AM noaa )                                    c */
-/*                 enter month,day,decimal hour (universal time-hh.ddd) c */
-/*                       n. of column(1-2048),xlonan,hna                c */
-/*                       give long.(xlonan) and overpass hour (hna) at  c */
-/*                       the ascendant node at equator                  c */
-/*                                                                      c */
-/*         6       hrv   ( spot )    * enter month,day,hh.ddd,long.,lat.c */
-/*                                                                      c */
-/*         7       tm    ( landsat ) * enter month,day,hh.ddd,long.,lat.c */
-/*                                                                      c */
-/*         8       etm+  ( landsat7) * enter month,day,hh.ddd,long.,lat.c */
-/*                                                                      c */
-/*         9       liss  ( IRC 1C )  * enter month,day,hh.ddd,long.,lat.c */
-/*                                                                      c */
-/*         10      aster             * enter month,day,hh.ddd,long.,lat.c */
-/*                                                                      c */
-/*         11      avnir             * enter month,day,hh.ddd,long.,lat.c */
-/*                                                                      c */
-/*         12      ikonos            * enter month,day,hh.ddd,long.,lat.c */
-/*                                                                      c */
-/*         13      rapideye          * enter month,day,hh.ddd,long.,lat.c */
-/*                                                                      c */
-/*         14      vgt1_spot4        * enter month,day,hh.ddd,long.,lat.c */
-/*                                                                      c */
-/*         15      vgt2_spot5        * enter month,day,hh.ddd,long.,lat.c */
-/*                                                                      c */
-/*         16      worldview2        * enter month,day,hh.ddd,long.,lat.c */
-/*                                                                      c */
-/*         17      quickbird2       * enter month,day,hh.ddd,long.,lat. c */
-/*                                                                      c */
-/*         18      Landsat 8        * enter month,day,hh.ddd,long.,lat. c */
-/*                                                                      c */
-/*         19      geoeye1          * enter month,day,hh.ddd,long.,lat. c */
-/*                                                                      c */
-/*     note:       for hrv and tm experiments long. and lat. are the    c */
-/*                 coordinates of the scene center.                     c */
-/*                 lat. must be > 0 for north lat., < 0 for south lat.  c */
-/*                 long. must be > 0 for east long., < 0 for west long. c */
-/*                                                                      c */
-/*                 solar and viewing positions are computed             c */
-/*                                                                      c */
-/* *********************************************************************c */
+/* ************************************************************************/
+/*       igeom               geometrical conditions                       */
+/*               --------------------------------------                   */
+/*                                                                        */
+/*                                                                        */
+/*   you choose your own conditions; igeom=0                              */
+/*         0     enter solar zenith angle   (in degrees )                 */
+/*                     solar azimuth angle        "                       */
+/*                     satellite zenith angle     "                       */
+/*                     satellite azimuth angle    "                       */
+/*                     month                                              */
+/*                     day of the month                                   */
+/*                                                                        */
+/*   or you select one of the following satellite conditions:igeom=1to7   */
+/*         1       meteosat observation                                   */
+/*                 enter month,day,decimal hour (universal time-hh.ddd)   */
+/*                       n. of column,n. of line.(full scale 5000*2500)   */
+/*                                                                        */
+/*         2       goes east observation                                  */
+/*                 enter month,day,decimal hour (universal time-hh.ddd)   */
+/*                      n. of column,n. of line.(full scale 17000*12000)  */
+/*                                                                        */
+/*         3       goes west observation                                  */
+/*                 enter month,day,decimal hour (universal time-hh.ddd)   */
+/*                      n. of column,n. of line.(full scale 17000*12000)  */
+/*                                                                        */
+/*         4       avhrr ( PM noaa )                                      */
+/*                 enter month,day,decimal hour (universal time-hh.ddd)   */
+/*                       n. of column(1-2048),xlonan,hna                  */
+/*                       give long.(xlonan) and overpass hour (hna) at    */
+/*                       the ascendant node at equator                    */
+/*                                                                        */
+/*         5       avhrr ( AM noaa )                                      */
+/*                 enter month,day,decimal hour (universal time-hh.ddd)   */
+/*                       n. of column(1-2048),xlonan,hna                  */
+/*                       give long.(xlonan) and overpass hour (hna) at    */
+/*                       the ascendant node at equator                    */
+/*                                                                        */
+/*         6       hrv   ( spot )    * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         7       tm    ( landsat ) * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         8       etm+  ( landsat7) * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         9       liss  ( IRC 1C )  * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         10      aster             * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         11      avnir             * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         12      ikonos            * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         13      rapideye          * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         14      vgt1_spot4        * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         15      vgt2_spot5        * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         16      worldview2        * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         17      quickbird2       * enter month,day,hh.ddd,long.,lat.   */
+/*                                                                        */
+/*         18      Landsat 8        * enter month,day,hh.ddd,long.,lat.   */
+/*                                                                        */
+/*         19      geoeye1          * enter month,day,hh.ddd,long.,lat.   */
+/*                                                                        */
+/*         20      spot6            * enter month,day,hh.ddd,long.,lat.   */
+/*                                                                        */
+/*         21      spot7            * enter month,day,hh.ddd,long.,lat.   */
+/*                                                                        */
+/*         22      pleiades1a       * enter month,day,hh.ddd,long.,lat.   */
+/*                                                                        */
+/*         23      pleiades1b       * enter month,day,hh.ddd,long.,lat.   */
+/*                                                                        */
+/*         24      worldview3       * enter month,day,hh.ddd,long.,lat.   */
+/*                                                                        */
+/*     note:       for hrv and tm experiments long. and lat. are the      */
+/*                 coordinates of the scene center.                       */
+/*                 lat. must be > 0 for north lat., < 0 for south lat.    */
+/*                 long. must be > 0 for east long., < 0 for west long.   */
+/*                                                                        */
+/*                 solar and viewing positions are computed               */
+/*                                                                        */
+/* ************************************************************************/
 
 struct GeomCond
 {
