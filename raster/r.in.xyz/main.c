@@ -180,13 +180,9 @@ int main(int argc, char *argv[])
     method_opt->answer = "mean";
     method_opt->guisection = _("Statistic");
 
-    type_opt = G_define_option();
-    type_opt->key = "type";
-    type_opt->type = TYPE_STRING;
+    type_opt = G_define_standard_option(G_OPT_R_TYPE);
     type_opt->required = NO;
-    type_opt->options = "CELL,FCELL,DCELL";
     type_opt->answer = "FCELL";
-    type_opt->description = _("Storage type for resultant raster map");
 
     delim_opt = G_define_standard_option(G_OPT_F_SEP);
     delim_opt->guisection = _("Input");
