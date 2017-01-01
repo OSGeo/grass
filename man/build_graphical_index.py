@@ -98,13 +98,14 @@ index_items = [
     ('imagery_graphical.html', std_img_name('imagery'), 'Imagery'),
     ('raster3d_graphical.html', std_img_name('raster3d'), '3D raster'),
     ('temporal_graphical.html', std_img_name('temporal'), 'Temporal'),
-    ('misc_graphical.html', std_img_name('misc'), 'Miscellaneous'),
+    ('miscellaneous_graphical.html', std_img_name('miscellaneous'), 'Miscellaneous'),
     ('postscript_graphical.html', std_img_name('cartography'), 'Cartography'),
     ('wxGUI_graphical.html', std_img_name('gui'), 'GUI'),
     ('wxGUI.nviz.html', std_img_name('3dview'), '3D view'),
     ('https://grass.osgeo.org/grass72/manuals/libpython/index.html', std_img_name('python'), 'Python'),
     ('https://grass.osgeo.org/programming7/', std_img_name('c'), 'C library'),
     ('manual_gallery.html', std_img_name('gallery'), 'Gallery'),
+    ('http://grass.osgeo.org/grass72/manuals/addons/', std_img_name('addons'), 'Addons'),
 ]
 
 

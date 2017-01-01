@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
+    G_add_keyword(_("miscellaneous"));
     G_add_keyword(_("visualization"));
     G_add_keyword(_("graphics"));
     G_add_keyword(_("raster"));

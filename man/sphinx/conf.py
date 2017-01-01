@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# GRASS 7.0 Documentation documentation build configuration file, created by
+# GRASS 7.2 Documentation documentation build configuration file, created by
 # sphinx-quickstart on Thu Aug  9 17:16:28 2012.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'GRASS 7.2 Documentation'
-copyright = u'2016, GRASS Development Team'
+copyright = u'2017, GRASS Development Team'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -164,7 +164,7 @@ html_use_index = False
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'GRASS70Documentationdoc'
+htmlhelp_basename = 'GRASS72Documentationdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -228,7 +228,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('content', 'GRASS72Documentation', u'GRASS 7.2 Documentation Documentation',
-   u'GRASS Development Team', 'GRASS70Documentation', 'One line description of project.',
+   u'GRASS Development Team', 'GRASS72Documentation', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -248,7 +248,7 @@ texinfo_documents = [
 epub_title = u'GRASS 7.2 Documentation'
 epub_author = u'GRASS Development Team'
 epub_publisher = u'GRASS Development Team'
-epub_copyright = u'2012, GRASS Development Team'
+epub_copyright = u'2017, GRASS Development Team'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.

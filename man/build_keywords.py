@@ -42,6 +42,9 @@ for fname in htmlfiles:
             key = key.split('>')[1].split('<')[0]
         except:
             pass
+        if not key:
+            exit("Empty keyword from file %s line: %s"
+                 % (fname, lines[index_keys]))
         if key not in keywords.keys():
             keywords[key] = []
             keywords[key].append(fname)

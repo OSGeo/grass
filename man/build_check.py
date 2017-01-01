@@ -15,7 +15,7 @@ sys.stdout.write(message_tmpl.substitute(html_dir = html_dir))
 
 for cmd in html_files('*'):
     if "DESCRIPTION" not in read_file(cmd):
-	sys.stdout.write("%s\n" % cmd[:-5])
+        sys.stdout.write("%s\n" % cmd[:-5])
 
 sys.stdout.write(r"""
 ----------------------------------------------------------------------

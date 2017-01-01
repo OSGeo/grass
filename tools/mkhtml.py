@@ -258,7 +258,7 @@ index_names = {
     'db': 'database',
     'g' : 'general',
     'i' : 'imagery',
-    'm' : 'misc',
+    'm' : 'miscellaneous',
     'ps': 'postscript',
     'p' : 'paint',
     'r' : 'raster',
@@ -271,14 +271,17 @@ index_names = {
 
 def to_title(name):
     """Convert name of command class/family to form suitable for title"""
-    return name.capitalize()
+    if name == 'raster3d':
+        return '3D raster'
+    elif name == 'postscript':
+        return 'PostScript'
+    else:
+        return name.capitalize()
+
 
 index_titles = {}
 for key, name in index_names.iteritems():
-    if key == 'r3':
-        index_titles[key] = '3D raster'
-    else:
-        index_titles[key] = to_title(name)
+    index_titles[key] = to_title(name)
 
 # process footer
 index = re.search('(<!-- meta page index:)(.*)(-->)', src_data, re.IGNORECASE)
@@ -287,7 +290,7 @@ if index:
     if '|' in index_name:
         index_name, index_name_cap = index_name.split('|', 1)
     else:
-        index_name_cap = index_name
+        index_name_cap = to_title(index_name)
 else:
     mod_class = pgm.split('.', 1)[0]
     index_name = index_names.get(mod_class, '')

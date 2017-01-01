@@ -67,7 +67,7 @@ Quick Introduction
 .. toctree::
     :maxdepth: 1
 
-	How to start with GRASS <helptext.html>
+        How to start with GRASS <helptext.html>
         Intro projections and spatial transformations <projectionintro>
         Intro 2D raster map processing <rasterintro>
         Intro 3D raster map (voxel) processing <raster3dintro>
@@ -139,7 +139,7 @@ Miscellaneous & Variables
 .. toctree::
     :maxdepth: 1
     
-        Miscellaneous commands manual <misc>
+        Miscellaneous commands manual <miscellaneous>
         GRASS variables and environment variables <variables>
 
 Temporal processing
@@ -156,7 +156,7 @@ Printing
 .. toctree::
     :maxdepth: 1
     
-        Postscript commands manual <postscript>
+        PostScript commands manual <postscript>
 
 """)
 
