@@ -9,6 +9,9 @@ import string
 
 from build_html import *
 
+
+no_intro_page_classes = ['display', 'general', 'miscellaneous', 'postscript']
+
 os.chdir(html_dir)
 
 #write separate module pages:
@@ -25,12 +28,14 @@ filename = modclass + ".html"
 f = open(filename + ".tmp", 'wb')
 
 write_html_header(f, "GRASS GIS %s Reference Manual: %s" % (grass_version, modclass))
-if modclass.lower() not in ['general', 'misc', 'postscript']:
-    if modclass == 'raster3d':
+modclass_lower = modclass.lower()
+modclass_visible = modclass
+if modclass_lower not in no_intro_page_classes:
+    if modclass_visible == 'raster3d':
         # covert keyword to nice form
-        modclass = '3D raster'
-    f.write(modclass_intro_tmpl.substitute(modclass = modclass, modclass_lower = modclass.lower()))
-f.write(modclass_tmpl.substitute(modclass=to_title(modclass)))
+        modclass_visible = '3D raster'
+    f.write(modclass_intro_tmpl.substitute(modclass=modclass_visible, modclass_lower=modclass_lower))
+f.write(modclass_tmpl.substitute(modclass=to_title(modclass_visible)))
 
 #for all modules:
 for cmd in html_files(cls):
@@ -39,8 +44,8 @@ for cmd in html_files(cls):
     if desc is None:
         desc = get_desc(cmd)
     f.write(desc2_tmpl.substitute(cmd = cmd,
-    			      basename = basename,
-    			      desc = desc))
+                                  basename = basename,
+                                  desc = desc))
 f.write("</table>\n")
 
 write_html_footer(f, "index.html", year)

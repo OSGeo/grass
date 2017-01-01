@@ -45,6 +45,8 @@ int main(int argc, char **argv)
     module->description = _("Measures the lengths and areas of features.");
     G_add_keyword(_("miscellaneous"));
     G_add_keyword(_("measurement"));
+    G_add_keyword(_("distance"));
+    G_add_keyword(_("area"));
 
     coords = G_define_standard_option(G_OPT_M_COORDS);
     coords->required = YES;

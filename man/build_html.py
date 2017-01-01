@@ -152,9 +152,9 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
       </ul></td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Database</h3>
        <ul>
-	<li class="box"><a href="databaseintro.html">Intro: database management</a></li>
-	<li class="box"><a href="sql.html">SQL support in GRASS GIS</a></li>
-	<li class="box"><a href="database.html">Database commands manual</a></li>
+        <li class="box"><a href="databaseintro.html">Intro: database management</a></li>
+        <li class="box"><a href="sql.html">SQL support in GRASS GIS</a></li>
+        <li class="box"><a href="database.html">Database commands manual</a></li>
        </ul>
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Temporal processing</h3>
@@ -167,13 +167,13 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
     <tr>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Cartography</h3>
        <ul>
-        <li class="box"><a href="postscript.html">Postscript commands manual</a></li>
+        <li class="box"><a href="postscript.html">PostScript commands manual</a></li>
         <li class="box"><a href="g.gui.psmap.html">wxGUI Cartographic Composer</a></li>
        </ul>
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Miscellaneous&nbsp;&amp;&nbsp;Variables</h3>
        <ul>
-        <li class="box"><a href="misc.html">Miscellaneous commands manual</a></li>
+        <li class="box"><a href="miscellaneous.html">Miscellaneous commands manual</a></li>
         <li class="box"><a href="variables.html">GRASS variables and environment variables</a></li>
        </ul>
       </td>
@@ -435,6 +435,8 @@ def get_desc(cmd):
 
 def to_title(name):
     """Convert name of command class/family to form suitable for title"""
+    if name == 'PostScript':
+        return name
     return name.capitalize()
 
 ############################################################################

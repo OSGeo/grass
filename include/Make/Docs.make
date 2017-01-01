@@ -58,7 +58,7 @@ indices = \
 	display.html \
 	general.html \
 	imagery.html \
-	misc.html \
+	miscellaneous.html \
 	photo.html \
 	postscript.html \
 	raster.html \
@@ -83,7 +83,7 @@ html2pdfdoccomplete:
 	$(call html_pdf display,d.*.html)
 	$(call html_pdf general,g.*.html)
 	$(call html_pdf imagery,i.*.html)
-	$(call html_pdf misc,m.*.html)
+	$(call html_pdf miscellaneous,m.*.html)
 	$(call html_pdf photo,i.ortho*.html photo*.html)
 	$(call html_pdf postscript,ps.*.html)
 	$(call html_pdf raster,r.*.html)

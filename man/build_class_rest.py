@@ -22,7 +22,7 @@ filename = modclass + ".txt"
 f = open(filename + ".tmp", 'wb')
 
 write_rest_header(f, "GRASS GIS %s Reference Manual: %s" % (grass_version, modclass))
-if modclass.lower() not in ['general', 'misc', 'postscript']:
+if modclass.lower() not in ['general', 'miscellaneous', 'postscript']:
     f.write(modclass_intro_tmpl.substitute(modclass = modclass, modclass_lower = modclass.lower()))
 f.write(modclass_tmpl.substitute(modclass = modclass))
 
@@ -33,7 +33,7 @@ for cmd in rest_files(cls):
     if desc is None:
         desc = get_desc(cmd)
     f.write(desc2_tmpl.substitute(basename = basename,
-    			      desc = desc))
+                                  desc = desc))
 
 write_rest_footer(f, "index.txt")
 

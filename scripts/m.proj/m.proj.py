@@ -29,6 +29,7 @@ COPYRIGHT: (c) 2006-2014 Hamish Bowman, and the GRASS Development Team
 #% description: Converts coordinates from one projection to another (cs2cs frontend).
 #% keyword: miscellaneous
 #% keyword: projection
+#% keyword: transformation
 #%end
 #%option G_OPT_M_COORDS
 #% description: Input coordinates to reproject
