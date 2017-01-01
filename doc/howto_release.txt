@@ -62,7 +62,7 @@ Contents
 7
 2
 1RC1
-2016
+2017
       rm -f include/VERSION~
 
     - Update OSGeo4W setup.hint file
@@ -123,7 +123,7 @@ Contents
 7
 2
 1svn
-2016
+2017
 
     rm -f include/VERSION~
     svn ci -m"back to SVN" include/VERSION
