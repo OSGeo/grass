@@ -57,12 +57,9 @@
 #% description: Elevation coordinate of a point on the plane
 #% required : yes
 #%end
-#%option
-#% key: type
-#% type: string
-#% options: CELL,FCELL,DCELL
-#% description: Type of raster map to be created
+#%option G_OPT_R_TYPE
 #% answer: FCELL
+#% required: no
 #%end
 
 import math

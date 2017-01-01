@@ -237,6 +237,7 @@ typedef enum
     G_OPT_R_COVER,		/*!< old input cover raster map */
     G_OPT_R_ELEV,		/*!< old input elevation raster map */
     G_OPT_R_ELEVS,		/*!< old input elevation raster maps */
+    G_OPT_R_TYPE,               /*!< raster map type */
     G_OPT_R_INTERP_TYPE,        /*!< interpolation type */
     G_OPT_R_BASENAME_INPUT,     /*!< old input basename raster maps */
     G_OPT_R_BASENAME_OUTPUT,    /*!< new output basename raster maps */
