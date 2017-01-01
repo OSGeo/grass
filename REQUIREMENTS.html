@@ -9,14 +9,14 @@
 
 <h2>REQUIREMENTS to compile GRASS GIS 7</h2>
 
-A workstation running some flavor of UNIX like Solaris, IRIX,
-GNU/Linux, BSD, Mac OS X, Cygwin or MinGW (on Win32). Ideally, you
-should have at least 500 Mb. The source code package needs around 80
-MB compressed. The resulting binaries may need between 20 MB and 180
-MB depending on your platform. During a full compilation you may need
+A workstation running some flavor of UNIX including GNU/Linux, Solaris, IRIX, BSD,
+Mac OSX, Cygwin or MinGW (on Win32/Win64). Ideally, you should have at least 800 MB of
+free disk space. The source code package needs disk space of around 26 MB compressed
+and 440MB uncompressed. The resulting binaries may need between 20 MB and 180 MB
+depending on your platform and compiler flags. During a full compilation you may need
 temporarily up to 550MB including the source code.
 <p>
-To disable features please read the <a href="INSTALL">INSTALL</a> file.
+To enable and disable features please read the <a href="INSTALL">INSTALL</a> file.
 
 <h3>General requirements:</h3>
 
@@ -64,7 +64,8 @@ map formats<br>
 
 <h3>Optional requirements:</h3>
 
-Note: also the respective xxx-dev or xxx-devel packages need to be installed.
+Note: also the respective development packages (commonly named xxx-dev or xxx-devel) need
+to be installed.
 
 <ul>
 
@@ -91,8 +92,8 @@ to the v.select module<br>
 <a href="http://www.unidata.ucar.edu/software/netcdf/">http://www.unidata.ucar.edu/software/netcdf/</a>
 </li>
 
-<li>If hardware openGL support is missing in the X
-Server, <b>Mesa-3.x</b> (openGL clone) may be required for wxNVIZ<br>
+<li>If hardware openGL support is missing in the X Server, <b>Mesa-3.x</b> (openGL clone)
+may be required for wxNVIZ<br>
 <a href="http://mesa3d.sourceforge.net">http://mesa3d.sourceforge.net</a>
 </li>
 
@@ -157,7 +158,7 @@ Ctypes can be added as a third-party module in Python 2.3 and 2.4
 
 <li><b>Python Imaging Library or PILLOW</b> (highly recommended for wxGUI and necessary for wxGUI Cartographic Composer)<br>
 <a href="http://www.pythonware.com/products/pil">http://www.pythonware.com/products/pil</a>,
-a newer version is "python-pillow"
+newer versions are named "python-pillow"
 </li>
 
 <li><b>Python matplotlib &gt; 1.2</b> ("python-matplotlib", needed for the several wxGUI tools)<br>
@@ -181,8 +182,13 @@ a newer version is "python-pillow"
 <a href="http://cairographics.org">http://cairographics.org</a>
 </li>
 
+<!-- really needed? -->
 <li><b>AVCE00 and E00Compr Libraries</b> (avcimport)<br>
 <a href="http://avce00.maptools.org">http://avce00.maptools.org</a>
+</li>
+
+<li><b>Subversion</b> (svn for g.extension)<br>
+<a href="https://subversion.apache.org/">https://subversion.apache.org/</a><br>
 </li>
 
 </ul>
@@ -190,10 +196,12 @@ a newer version is "python-pillow"
 
 <h3>Note:</h3>
 
+<!-- since 2014 no longer supported: -->
 SUN Solaris users may go here to download precompiled libraries etc.:
 <br><a href="http://www.sunfreeware.com">http://www.sunfreeware.com</a>
 
 <p>
+<!-- no longer supported: -->
 SGI IRIX users may go here to download precompiled libraries etc.:
 <br><a href="http://freeware.sgi.com">http://freeware.sgi.com</a>
 
@@ -204,7 +212,7 @@ MacOSX users may go here to download precompiled libraries etc.:
 <p>
 
 <hr width="100%">
-<i>&copy; GRASS Development Team 2001-2016</i>
+<i>&copy; GRASS Development Team 1997-2017</i>
 <p>Please report bugs here:
 <br><a href="http://grass.osgeo.org/development/bug-tracking/">http://grass.osgeo.org/development/bug-tracking/</a>
 
