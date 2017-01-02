@@ -58,23 +58,23 @@ name of selected spreadsheet list, the <b>key</b> option is the identifier
 column:
 
 <div class="code"><pre>
-# preview table structure with OGR tool:
-ogrinfo -so meteodata.ods mysheet
+# preview table structure with OGR tool (table name is "Layer name" here):
+ogrinfo -al -so meteodata.ods
 
-# import from ODS into map
+# import sheet from ODS into map
 v.in.db key=ID table=mysheet x=long y=lat z=height output=meteodata \
-         driver=ogr datatabase=meteodata.ods
+         driver=ogr database=meteodata.ods
 </pre></div>
 
 <h3>Creating a map from MS Excel file</h3>
 
 A new vector point map is created from given sheet in MS Excel file. The
 <b>database</b> option points to the file in MS Excel
-format. Option <b>table</b> is name of the selected spreadsheet list:
+format. Option <b>table</b> is name of the selected spreadsheet "List1":
 
 <div class="code"><pre>
 v.in.db table=List1 x=long y=lat z=height output=meteodata \
-         driver=ogr datatabase=meteodata.xls
+         driver=ogr database=meteodata.xls
 </pre></div>
 
 Note that in this example the <b>key</b> option is omitted. In this case
@@ -135,6 +135,7 @@ v.in.db driver=sqlite database=/home/user/tables/mysqlite.db table=pointsfile x=
 <a href="db.execute.html">db.execute</a>,
 <a href="db.in.ogr.html">db.in.ogr</a>,
 <a href="v.info.html">v.info</a>,
+<a href="v.in.geonames.html">v.in.geonames</a>,
 <a href="v.in.ogr.html">v.in.ogr</a>,
 <a href="v.to.db.html">v.to.db</a>
 </em>
