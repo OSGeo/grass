@@ -63,7 +63,7 @@ static const struct scale
 };
 
 int draw_scale(double east, double north, int length, int seg, int units,
-               char *label_cstm, int style, int text_posn, double fontsize)
+               char *label_cstm, int style, int text_posn, double width_scale, double fontsize)
 {
     double meters;
     double line_len;
@@ -82,6 +82,8 @@ int draw_scale(double east, double north, int length, int seg, int units,
     double symbol_size;
     char *label;
     double size;
+    double xspace_bf_N, x_pos_start, xspace_around_line, xsize_N;
+    double ysize, ysize_solid, ysize_checker, ysize_ticks;
 
 
     /* Establish text size */
@@ -133,70 +135,68 @@ int draw_scale(double east, double north, int length, int seg, int units,
 
     D_setup_unity(0);
 
+    /* setup size variables */
+    xspace_bf_N = 5 * width_scale;
+    xspace_around_line = 10 * width_scale;
+    xsize_N = 10 * width_scale;
+    x_pos_start = x_pos + (north_arrow ? (xspace_bf_N + xsize_N + xspace_around_line) : xspace_around_line);
+    ysize = 30 * width_scale;
+    ysize_solid = 8 * width_scale;
+    ysize_checker = 6 * width_scale;
+    ysize_ticks = 20 * width_scale; /* the length of the edge tick */
+
     if (do_background) {
         /* Blank out area with background color */
         D_get_text_box(label, &tt, &tb, &tl, &tr);
-
+        pl = x_pos + 0;
+        pr = x_pos + line_len + 2 * xspace_around_line + 
+                (north_arrow ? xspace_bf_N + xsize_N : 0);
         if (text_posn == TEXT_OVER) {
-            pr = x_pos + 35 + line_len;
-            pl = x_pos + 0;
-            pt = y_pos + tb - 5;
-            pb = y_pos + 30;
-            if (style != STYLE_CLASSIC_BAR && style != STYLE_THIN_WITH_ENDS)
-                pl += 15;
+            pt = y_pos + tb - 5 * width_scale;
+            pb = y_pos + ysize;
             if (style == STYLE_TICKS_DOWN)
-                pb += 12;
+                pb += 12 * width_scale;
         }
         if (text_posn == TEXT_UNDER) {
-            pr = x_pos + 35 + line_len;
-            pl = x_pos + 0;
             pt = y_pos + 0;
-            pb = y_pos + 30 - tb + 5;
-            if (style != STYLE_CLASSIC_BAR && style != STYLE_THIN_WITH_ENDS)
-                pl += 15;
+            pb = y_pos + ysize - tb + 5 * width_scale;
             if (style == STYLE_TICKS_UP)
-                pt -= 12;
+                pt -= 12 * width_scale;
         }
         else if (text_posn == TEXT_RIGHT) {
-            pr = x_pos + 35 + line_len + tr + 5;
-            pl = x_pos + 0;
+            pr = pr + tr + xspace_around_line;
             pt = y_pos + 0;
-            pb = y_pos + 30;
+            pb = y_pos + ysize;
             if (style == STYLE_TICKS_UP) {
-                pt -= 12;
-                pb -= 6;
-                pl += 15;
+                pt -= 12 * width_scale;
+                pb -= 6 * width_scale;
             }
             if (style == STYLE_TICKS_DOWN) {
-                pt += 4;
-                pb += 12;
-                pl += 15;
+                pt += 4 * width_scale;
+                pb += 12 * width_scale;
             }
         }
         else if (text_posn == TEXT_LEFT) {
-            pr = x_pos + 35 + line_len;
-            pl = x_pos - tr - 13;
+            pl = x_pos - tr - 13 * width_scale;
             pt = y_pos + 0;
-            pb = y_pos + 30;
+            pb = y_pos + ysize;
             if (style == STYLE_TICKS_UP) {
-                pt -= 12;
-                pb -= 4;
+                pt -= 12 * width_scale;
+                pb -= 4 * width_scale;
             }
             if (style == STYLE_TICKS_DOWN) {
-                pt += 3;
-                pb += 11;
+                pt += 3 * width_scale;
+                pb += 11 * width_scale;
             }
         }
 
         if (fontsize < 0) {     /* no text */
+            pl = x_pos + 0;
+            pr = x_pos + line_len + 2 * xspace_around_line + 
+                    (north_arrow ? xspace_bf_N + xsize_N : 0);
             switch (style) {
             case STYLE_CLASSIC_BAR:
             case STYLE_THIN_WITH_ENDS:
-                pr = x_pos + 35 + line_len;
-                pl = x_pos + 0;
-                pt = y_pos + 0;
-                pb = y_pos + 30;
-                break;
             case STYLE_PART_CHECKER:
             case STYLE_FULL_CHECKER:
             case STYLE_MIXED_CHECKER:
@@ -205,22 +205,16 @@ int draw_scale(double east, double north, int length, int seg, int units,
             case STYLE_HOLLOW_BAR:
             case STYLE_TICKS_BOTH:
             case STYLE_ARROW_ENDS:
-                pr = x_pos + 35 + line_len;
-                pl = x_pos + 15;
                 pt = y_pos + 0;
-                pb = y_pos + 30;
+                pb = y_pos + ysize;
                 break;
             case STYLE_TICKS_UP:
-                pr = x_pos + 35 + line_len;
-                pl = x_pos + 15;
-                pt = y_pos - 12;
-                pb = y_pos + 25;
+                pt = y_pos - 12 * width_scale;
+                pb = y_pos + 25 * width_scale;
                 break;
             case STYLE_TICKS_DOWN:
-                pr = x_pos + 35 + line_len;
-                pl = x_pos + 15;
-                pt = y_pos + 3;
-                pb = y_pos + 40;
+                pt = y_pos + 3 * width_scale;
+                pb = y_pos + 40 * width_scale;
                 break;
             default:
                 G_fatal_error(_("Programmer error"));
@@ -236,7 +230,6 @@ int draw_scale(double east, double north, int length, int seg, int units,
             pl = l;
         if (pr > r)
             pr = r;
-
         D_use_color(bg_color);
         D_box_abs(pl, pt, pr, pb);
     }
@@ -245,16 +238,16 @@ int draw_scale(double east, double north, int length, int seg, int units,
     D_use_color(fg_color);
     if (north_arrow) {
         D_begin();
-        D_move_abs(x_pos + 5, y_pos + 20);
-        D_cont_rel(0, -10);
-        D_cont_rel(10, 10);
-        D_cont_rel(0, -10);
-        D_move_rel(-5, 14);
-        D_cont_rel(0, -17);
-        D_cont_rel(-2.5, -0);
-        D_cont_rel(2.5, -4);
-        D_cont_rel(2.5, 4);
-        D_cont_rel(-2.5, -0);
+        D_move_abs(x_pos + xspace_bf_N, y_pos + 2 * ysize / 3);
+        D_cont_rel(0, -10 * width_scale);
+        D_cont_rel(10 * width_scale, 10 * width_scale);
+        D_cont_rel(0, -10 * width_scale);
+        D_move_rel(-5 * width_scale, 14 * width_scale);
+        D_cont_rel(0, -17 * width_scale);
+        D_cont_rel(-2.5 * width_scale, -0);
+        D_cont_rel(2.5 * width_scale, -4 * width_scale);
+        D_cont_rel(2.5 * width_scale, 4 * width_scale);
+        D_cont_rel(-2.5 * width_scale, -0);
         D_close();
         D_end();
         D_stroke();
@@ -264,87 +257,87 @@ int draw_scale(double east, double north, int length, int seg, int units,
        and (x_pos + 25 + line_len, y_pos + 15) */
     if (style == STYLE_CLASSIC_BAR) {
         D_begin();
-        D_move_abs(x_pos + 25, y_pos + 17);
-        /* actual width is line_len-1+1=line_len and height is 4+1=5 */
+        D_move_abs(x_pos_start, y_pos + ysize / 2 + ysize_checker / 2);
+        /* actual width is line_len-1+1=line_len */
         D_cont_rel(line_len - 1, 0);
-        D_cont_rel(0, -4);
+        D_cont_rel(0, -ysize_checker);
         D_cont_rel(-line_len + 1, 0);
-        D_cont_rel(0, 4);
+        D_cont_rel(0, ysize_checker);
         D_end();
         D_close();
         D_stroke();
 
         for (i = 1; i <= seg; i += 2) {
             /* width is seg_len and height is 5 */
-            D_box_rel(seg_len, -4);
+            D_box_rel(seg_len, -ysize_checker);
             D_pos_rel(seg_len * 2, 0);
         }
     }
     else if (style == STYLE_THIN_WITH_ENDS) {
         /* draw simple line scale */
         D_begin();
-        D_move_abs(x_pos + 25, y_pos + 5);
-        D_cont_abs(x_pos + 25, y_pos + 25);
-        D_move_abs(x_pos + 25, y_pos + 15);
-        D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
-        D_move_abs(x_pos + 25 + line_len, y_pos + 5);
-        D_cont_abs(x_pos + 25 + line_len, y_pos + 25);
+        D_move_abs(x_pos_start, y_pos + (ysize - ysize_ticks) / 2);
+        D_cont_abs(x_pos_start, y_pos + ysize - (ysize - ysize_ticks) / 2);
+        D_move_abs(x_pos_start, y_pos + ysize / 2);
+        D_cont_abs(x_pos_start + line_len, y_pos + ysize / 2);
+        D_move_abs(x_pos_start + line_len, y_pos + (ysize - ysize_ticks) / 2);
+        D_cont_abs(x_pos_start + line_len, y_pos + ysize - (ysize - ysize_ticks) / 2);
         D_close();
         D_end();                /* no-op? */
     }
     else if (style == STYLE_SOLID_BAR) {
         /* draw simple solid-bar scale */
         xarr[0] = 0;
-        yarr[0] = +8;
+        yarr[0] = ysize_solid;
         xarr[1] = line_len;
         yarr[1] = 0;
         xarr[2] = 0;
-        yarr[2] = -8;
+        yarr[2] = -ysize_solid;
         xarr[3] = -line_len;
         yarr[3] = 0;
         xarr[4] = 0;
-        yarr[4] = +8;
+        yarr[4] = ysize_solid;
 
-        D_move_abs(x_pos + 25, y_pos + 15 - 4);
+        D_move_abs(x_pos_start, y_pos + ysize / 2 - ysize_solid / 2);
         D_polygon_rel(xarr, yarr, 5);
     }
     else if (style == STYLE_HOLLOW_BAR) {
         /* draw hollow-bar scale */
         D_use_color(fg_color);
         D_begin();
-        D_move_abs(x_pos + 25, y_pos + 15 - 4);
-        D_cont_rel(0, +8);
+        D_move_abs(x_pos_start, y_pos + ysize / 2 - ysize_solid / 2);
+        D_cont_rel(0, ysize_solid);
         D_cont_rel(line_len, 0);
-        D_cont_rel(0, -8);
+        D_cont_rel(0, -ysize_solid);
         D_cont_rel(-line_len, 0);
-        D_cont_rel(0, +8);
+        D_cont_rel(0, ysize_solid);
         D_close();
         D_end();                /* no-op? */
     }
     else if (style == STYLE_FULL_CHECKER) {
         D_begin();
-        D_move_abs(x_pos + 25, y_pos + 15 + 6);
+        D_move_abs(x_pos_start, y_pos + ysize / 2 + ysize_checker);
         /* actual width is line_len-1+1=line_len and height is 7+1=8 */
         D_cont_rel(line_len, 0);
-        D_cont_rel(0, -12);
+        D_cont_rel(0, -2 * ysize_checker);
         D_cont_rel(-line_len, 0);
-        D_cont_rel(0, +12);
+        D_cont_rel(0, +2 * ysize_checker);
         D_close();
         D_end();                /* no-op? */
         D_stroke();
 
-        D_pos_rel(0, -6);
+        D_pos_rel(0, -ysize_checker);
         for (i = 1; i <= seg; i++) {
             xarr[0] = 0;
             yarr[0] = 0;
             xarr[1] = seg_len;
             yarr[1] = 0;
             xarr[2] = 0;
-            yarr[2] = (i % 2 ? -6 : 6);
+            yarr[2] = (i % 2 ? -ysize_checker : ysize_checker);
             xarr[3] = -seg_len;
             yarr[3] = 0;
             xarr[4] = 0;
-            yarr[4] = (i % 2 ? 6 : -6);
+            yarr[4] = (i % 2 ? ysize_checker : -ysize_checker);
             /* width is seg_len and height is 6 */
             D_polygon_rel(xarr, yarr, 5);
             D_pos_rel(seg_len, 0);
@@ -352,17 +345,17 @@ int draw_scale(double east, double north, int length, int seg, int units,
     }
     else if (style == STYLE_PART_CHECKER) {
         D_begin();
-        D_move_abs(x_pos + 25, y_pos + 15 + 6);
+        D_move_abs(x_pos_start, y_pos + ysize / 2 + ysize_checker);
         /* actual width is line_len-1+1=line_len and height is 7+1=8 */
         D_cont_rel(line_len, 0);
-        D_cont_rel(0, -12);
+        D_cont_rel(0, -2 * ysize_checker);
         D_cont_rel(-line_len, 0);
-        D_cont_rel(0, +12);
+        D_cont_rel(0, +2 * ysize_checker);
         D_close();
         D_end();                /* no-op? */
         D_stroke();
 
-        D_pos_rel(0, -6);
+        D_pos_rel(0, -ysize_checker);
         for (i = 1; i <= seg; i++) {
             if (i <= (seg == 5 ? 2 : 4)) {
                 xarr[0] = 0;
@@ -370,11 +363,11 @@ int draw_scale(double east, double north, int length, int seg, int units,
                 xarr[1] = seg_len / 2.;
                 yarr[1] = 0;
                 xarr[2] = 0;
-                yarr[2] = -6;
+                yarr[2] = -ysize_checker;
                 xarr[3] = -seg_len / 2.;
                 yarr[3] = 0;
                 xarr[4] = 0;
-                yarr[4] = 6;
+                yarr[4] = ysize_checker;
                 D_polygon_rel(xarr, yarr, 5);
                 D_pos_rel(seg_len / 2., 0);
 
@@ -383,11 +376,11 @@ int draw_scale(double east, double north, int length, int seg, int units,
                 xarr[1] = seg_len / 2.;
                 yarr[1] = 0;
                 xarr[2] = 0;
-                yarr[2] = 6;
+                yarr[2] = ysize_checker;
                 xarr[3] = -seg_len / 2.;
                 yarr[3] = 0;
                 xarr[4] = 0;
-                yarr[4] = -6;
+                yarr[4] = -ysize_checker;
                 D_polygon_rel(xarr, yarr, 5);
                 D_pos_rel(seg_len / 2., 0);
             }
@@ -397,11 +390,11 @@ int draw_scale(double east, double north, int length, int seg, int units,
                 xarr[1] = seg_len;
                 yarr[1] = 0;
                 xarr[2] = 0;
-                yarr[2] = (i % 2 ? -6 : 6);
+                yarr[2] = (i % 2 ? -ysize_checker : ysize_checker);
                 xarr[3] = -seg_len;
                 yarr[3] = 0;
                 xarr[4] = 0;
-                yarr[4] = (i % 2 ? 6 : -6);
+                yarr[4] = (i % 2 ? ysize_checker : -ysize_checker);
                 /* width is seg_len and height is 6 */
                 D_polygon_rel(xarr, yarr, 5);
                 D_pos_rel(seg_len, 0);
@@ -410,21 +403,21 @@ int draw_scale(double east, double north, int length, int seg, int units,
     }
     else if (style == STYLE_MIXED_CHECKER) {
         D_begin();
-        D_move_abs(x_pos + 25, y_pos + 15 + 6);
+        D_move_abs(x_pos_start, y_pos + ysize / 2 + ysize_checker);
         /* actual width is line_len-1+1=line_len and height is 7+1=8 */
         D_cont_rel(line_len, 0);
-        D_cont_rel(0, -12);
+        D_cont_rel(0, -2 * ysize_checker);
         D_cont_rel(-line_len, 0);
-        D_cont_rel(0, +12);
+        D_cont_rel(0, +2 * ysize_checker);
 
         /* horizontal line across the middle to separate white from white */
-        D_move_abs(x_pos + 25, y_pos + 15);
+        D_move_abs(x_pos_start, y_pos + ysize / 2);
         D_cont_rel(line_len, 0);
         D_end();                /* no-op? */
         D_close();
         D_stroke();
 
-        D_move_abs(x_pos + 25, y_pos + 15);
+        D_move_abs(x_pos_start, y_pos + ysize / 2);
 
         for (i = 1; i <= seg; i++) {
             if (i <= (seg == 5 ? 2 : 6)) {
@@ -434,11 +427,11 @@ int draw_scale(double east, double north, int length, int seg, int units,
                     xarr[1] = seg_len;
                     yarr[1] = 0;
                     xarr[2] = 0;
-                    yarr[2] = -6;
+                    yarr[2] = -ysize_checker;
                     xarr[3] = -seg_len;
                     yarr[3] = 0;
                     xarr[4] = 0;
-                    yarr[4] = +6;
+                    yarr[4] = +ysize_checker;
                     D_polygon_rel(xarr, yarr, 5);
                 }
 
@@ -447,11 +440,11 @@ int draw_scale(double east, double north, int length, int seg, int units,
                 xarr[1] = seg_len / 2.;
                 yarr[1] = 0;
                 xarr[2] = 0;
-                yarr[2] = +6;
+                yarr[2] = +ysize_checker;
                 xarr[3] = -seg_len / 2.;
                 yarr[3] = 0;
                 xarr[4] = 0;
-                yarr[4] = -6;
+                yarr[4] = -ysize_checker;
                 D_pos_rel(seg_len / 2., 0);
                 D_polygon_rel(xarr, yarr, 5);
                 D_pos_rel(seg_len / 2., 0);
@@ -462,30 +455,30 @@ int draw_scale(double east, double north, int length, int seg, int units,
                 xarr[1] = seg_len;
                 yarr[1] = 0;
                 xarr[2] = 0;
-                yarr[2] = (i % 2 ? 6 : +6);
+                yarr[2] = (i % 2 ? ysize_checker : +ysize_checker);
                 xarr[3] = -seg_len;
                 yarr[3] = 0;
                 xarr[4] = 0;
-                yarr[4] = (i % 2 ? -6 : 6);
+                yarr[4] = (i % 2 ? -ysize_checker : ysize_checker);
                 /* width is seg_len and height is 6 */
                 D_polygon_rel(xarr, yarr, 5);
-                D_pos_rel(seg_len, -6);
+                D_pos_rel(seg_len, -ysize_checker);
             }
         }
     }
     else if (style == STYLE_TAIL_CHECKER) {
         /* first draw outside box */
         D_begin();
-        D_move_abs(x_pos + 25, y_pos + 15 + 6);
+        D_move_abs(x_pos_start, y_pos + ysize / 2 + ysize_checker);
         D_cont_rel(line_len, 0);
-        D_cont_rel(0, -12);
+        D_cont_rel(0, -2 * ysize_checker);
         D_cont_rel(-line_len, 0);
-        D_cont_rel(0, +12);
+        D_cont_rel(0, +2 * ysize_checker);
         D_close();
         D_end();                /* no-op? */
         D_stroke();
 
-        D_pos_rel(0, -6);
+        D_pos_rel(0, -ysize_checker);
         for (i = 1; i <= (seg == 5 ? 3 : 5); i++) {
             /* width is seg_len and height is 6 */
             xarr[0] = 0;
@@ -493,23 +486,23 @@ int draw_scale(double east, double north, int length, int seg, int units,
             xarr[1] = seg_len;
             yarr[1] = 0;
             xarr[2] = 0;
-            yarr[2] = (i % 2 ? -6 : 6);
+            yarr[2] = (i % 2 ? -ysize_checker : ysize_checker);
             xarr[3] = -seg_len;
             yarr[3] = 0;
             xarr[4] = 0;
-            yarr[4] = (i % 2 ? 6 : -6);
+            yarr[4] = (i % 2 ? ysize_checker : -ysize_checker);
             D_polygon_rel(xarr, yarr, 5);
             D_pos_rel(seg_len, 0);
         }
         /* draw a vertical cross line */
         D_begin();
-        D_move_rel(0, 6);
-        D_cont_rel(0, -12);
+        D_move_rel(0, ysize_checker);
+        D_cont_rel(0, -2 * ysize_checker);
         D_close();
         D_end();                /* no-op? */
         D_stroke();
 
-        D_pos_rel(0, 6);
+        D_pos_rel(0, ysize_checker);
         xarr[0] = 0;
         yarr[0] = 0;
         xarr[1] = line_len / 2.;
@@ -517,49 +510,49 @@ int draw_scale(double east, double north, int length, int seg, int units,
             xarr[1] -= seg_len / 2.;
         yarr[1] = 0;
         xarr[2] = 0;
-        yarr[2] = 6;
+        yarr[2] = ysize_checker;
         xarr[3] = -line_len / 2.;
         if (seg == 5)
             xarr[3] += seg_len / 2.;
         yarr[3] = 0;
         xarr[4] = 0;
-        yarr[4] = -6;
+        yarr[4] = -ysize_checker;
         D_polygon_rel(xarr, yarr, 5);
         D_pos_rel(seg_len, 0);
     }
     else if (style == STYLE_TICKS_BOTH) {
         /* draw simple line scale with corssing ticks */
         D_begin();
-        D_move_abs(x_pos + 25, y_pos + 5);
-        D_cont_abs(x_pos + 25, y_pos + 25);
-        D_move_abs(x_pos + 25, y_pos + 15);
-        D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
-        D_move_abs(x_pos + 25 + line_len, y_pos + 5);
-        D_cont_abs(x_pos + 25 + line_len, y_pos + 25);
+        D_move_abs(x_pos_start, y_pos + (ysize - ysize_ticks) / 2);
+        D_cont_abs(x_pos_start, y_pos + ysize - (ysize - ysize_ticks) / 2);
+        D_move_abs(x_pos_start, y_pos + ysize / 2);
+        D_cont_abs(x_pos_start + line_len, y_pos + ysize / 2);
+        D_move_abs(x_pos_start + line_len, y_pos + (ysize - ysize_ticks) / 2);
+        D_cont_abs(x_pos_start + line_len, y_pos + ysize - (ysize - ysize_ticks) / 2);
 
-        D_move_abs(x_pos + 25, y_pos + 15);
-        D_move_rel(0, +6);
+        D_move_abs(x_pos_start, y_pos + ysize / 2);
+        D_move_rel(0, ysize_ticks / 4);
         for (i = 0; i <= seg - 2; i++) {
             D_move_rel(seg_len, 0);
-            D_cont_rel(0, -11); /* 5 above, on px on line, and 5 below */
-            D_move_rel(0, +11);
+            D_cont_rel(0, -ysize_ticks/2); /* 5 above, on px on line, and 5 below */
+            D_move_rel(0, +ysize_ticks/2);
         }
         D_end();                /* no-op? */
     }
     else if (style == STYLE_TICKS_UP) {
         /* draw simple line scale with up facing ticks */
         D_begin();
-        D_move_abs(x_pos + 25, y_pos - 2);
-        D_cont_abs(x_pos + 25, y_pos + 15);
-        D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
-        D_move_abs(x_pos + 25 + line_len, y_pos - 2);
-        D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
+        D_move_abs(x_pos_start, y_pos - 2 * width_scale);
+        D_cont_abs(x_pos_start, y_pos + ysize / 2);
+        D_cont_abs(x_pos_start + line_len, y_pos + ysize / 2);
+        D_move_abs(x_pos_start + line_len,y_pos - 2 * width_scale);
+        D_cont_abs(x_pos_start + line_len, y_pos + ysize / 2);
 
-        D_move_abs(x_pos + 25, y_pos + 15);
+        D_move_abs(x_pos_start, y_pos + ysize / 2);
         for (i = 0; i <= seg - 2; i++) {
             D_move_rel(seg_len, 0);
-            D_cont_rel(0, -7);  /* 5 above, on px on line, and 5 below */
-            D_move_rel(0, +7);
+            D_cont_rel(0, -ysize_ticks/2);  /* 5 above, on px on line, and 5 below */
+            D_move_rel(0, +ysize_ticks/2);
         }
         D_end();                /* no-op? */
         D_close();
@@ -567,17 +560,17 @@ int draw_scale(double east, double north, int length, int seg, int units,
     else if (style == STYLE_TICKS_DOWN) {
         /* draw simple line scale with down facing ticks */
         D_begin();
-        D_move_abs(x_pos + 25, y_pos + 15 + 17);
-        D_cont_abs(x_pos + 25, y_pos + 15);
-        D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
-        D_move_abs(x_pos + 25 + line_len, y_pos + 15 + 17);
-        D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
+        D_move_abs(x_pos_start, y_pos + ysize / 2 + 17 * width_scale);
+        D_cont_abs(x_pos_start, y_pos + ysize / 2);
+        D_cont_abs(x_pos_start + line_len, y_pos + ysize / 2);
+        D_move_abs(x_pos_start + line_len, y_pos + ysize / 2 + 17 * width_scale);
+        D_cont_abs(x_pos_start + line_len, y_pos + ysize / 2);
 
-        D_move_abs(x_pos + 25, y_pos + 15);
+        D_move_abs(x_pos_start, y_pos + ysize / 2);
         for (i = 0; i <= seg - 2; i++) {
             D_move_rel(seg_len, 0);
-            D_cont_rel(0, +7);  /* 5 above, on px on line, and 5 below */
-            D_move_rel(0, -7);
+            D_cont_rel(0, +ysize_ticks/2);  /* 5 above, on px on line, and 5 below */
+            D_move_rel(0, -ysize_ticks/2);
         }
         D_end();                /* no-op? */
         D_close();
@@ -585,8 +578,8 @@ int draw_scale(double east, double north, int length, int seg, int units,
     else if (style == STYLE_ARROW_ENDS) {
         /* draw line scale with |<--dimension arrows-->| on the ends */
         D_begin();
-        D_cont_abs(x_pos + 25, y_pos + 15);
-        D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
+        D_cont_abs(x_pos_start, y_pos + ysize / 2);
+        D_cont_abs(x_pos_start + line_len, y_pos + ysize / 2);
         D_end();
 
         /* display the symbol */
@@ -609,10 +602,10 @@ int draw_scale(double east, double north, int length, int seg, int units,
         fill_color->b = (unsigned char)B;
         fill_color->a = RGBA_COLOR_OPAQUE;
 
-        symbol_size = 12;
+        symbol_size = 12 * width_scale;
 
-        x0 = D_d_to_u_col(x_pos + 25);
-        y0 = D_d_to_u_row(y_pos + 15);
+        x0 = D_d_to_u_col(x_pos_start);
+        y0 = D_d_to_u_row(y_pos + ysize / 2);
         Symb = S_read("extra/dim_arrow");
         if (!Symb)
             G_fatal_error(_("Could not read symbol \"%s\""),
@@ -621,8 +614,8 @@ int draw_scale(double east, double north, int length, int seg, int units,
         D_symbol(Symb, x0, y0, line_color, fill_color);
         G_free(Symb);
 
-        x0 = D_d_to_u_col(x_pos + line_len + 25);
-        y0 = D_d_to_u_row(y_pos + 15);
+        x0 = D_d_to_u_col(line_len + x_pos_start);
+        y0 = D_d_to_u_row(y_pos + ysize / 2);
         Symb = S_read("extra/dim_arrow");
         S_stroke(Symb, symbol_size, 180., 0);
         D_symbol(Symb, x0, y0, line_color, fill_color);
@@ -633,8 +626,8 @@ int draw_scale(double east, double north, int length, int seg, int units,
 
         /* draw simple line between the two ends */
         D_begin();
-        D_move_abs(x_pos + 25, y_pos + 15);
-        D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
+        D_move_abs(x_pos_start, y_pos + ysize / 2);
+        D_cont_abs(x_pos_start + line_len, y_pos + ysize / 2);
         D_end();                /* no-op? */
     }
     D_stroke();
@@ -648,34 +641,38 @@ int draw_scale(double east, double north, int length, int seg, int units,
     D_get_text_box(label, &tt, &tb, &tl, &tr);
 
     if (text_posn == TEXT_OVER) {
-        D_pos_abs(x_pos + 25 + line_len / 2.
-                  - strlen(label) * fontsize * 0.81 / 2, y_pos);
+        D_pos_abs(x_pos + line_len/2 + xspace_around_line + 
+                          (north_arrow ? xspace_bf_N + xsize_N : 0) - (tr - tl) / 2,
+                  y_pos);
         D_text(label);
     }
     else if (text_posn == TEXT_UNDER) {
-        D_pos_abs(x_pos + 25 + line_len / 2.
-                  - strlen(label) * fontsize * 0.81 / 2, y_pos + 43);
+        D_pos_abs(x_pos + line_len/2 + xspace_around_line + 
+                  (north_arrow ? xspace_bf_N + xsize_N : 0) - (tr - tl) / 2,
+                  y_pos + 40 * width_scale);
         D_text(label);
     }
     else if (text_posn == TEXT_RIGHT) {
         if (style == STYLE_TICKS_UP)
-            y_pos -= 8;
+            y_pos -= 8 * width_scale;
         else if (style == STYLE_TICKS_DOWN)
-            y_pos += 9;
+            y_pos += 9 * width_scale;
 
-        D_pos_abs(x_pos + 35 + line_len, y_pos + 20);
+        D_pos_abs(x_pos + line_len + 2 * xspace_around_line + 
+                  (north_arrow ? xspace_bf_N + xsize_N : 0),
+                  y_pos + ysize / 2 + (tt - tb) /2);
         D_text(label);
     }
     else if (text_posn == TEXT_LEFT) {
         if (style == STYLE_TICKS_UP)
-            y_pos -= 8;
+            y_pos -= 8 * width_scale;
         else if (style == STYLE_TICKS_DOWN)
-            y_pos += 9;
+            y_pos += 9 * width_scale;
 
         if (style == STYLE_CLASSIC_BAR || style == STYLE_THIN_WITH_ENDS)
-            x_pos -= 13;
+            x_pos -= 13 * width_scale;
 
-        D_pos_abs(x_pos + 5 - (tr - tl), y_pos + 20);
+        D_pos_abs(x_pos + 5 - (tr - tl), y_pos + ysize / 2 + (tt - tb) /2);
         D_text(label);
     }
 
