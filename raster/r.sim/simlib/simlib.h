@@ -85,12 +85,12 @@ struct options
 	*observation, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
 	*density, *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
 	*tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval,
-	*infilval, *logfile;
+	*infilval, *logfile, *seed;
 };
 
 struct flags
 {
-    struct Flag *mscale, *tserie;
+    struct Flag *mscale, *tserie, *generateSeed;
 };
 
 #endif /* __SIMLIB_H__ */
