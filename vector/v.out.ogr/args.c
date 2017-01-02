@@ -21,10 +21,7 @@ void parse_args(int argc, char **argv,
 	  "by all output formats. Default is to use first type found in input vector map.");
     options->type->guisection = _("Selection");
 
-    options->dsn = G_define_option();
-    options->dsn->key = "output";
-    options->dsn->type = TYPE_STRING;
-    options->dsn->required = YES;
+    options->dsn = G_define_standard_option(G_OPT_F_OUTPUT);
     options->dsn->label = _("Name of output OGR datasource");
     options->dsn->description =
 	_("For example: ESRI Shapefile: filename or directory for storage\n"
