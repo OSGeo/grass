@@ -72,10 +72,11 @@ Maintainer: M. Neteler
 ** OSGeo: awstats (http://grass.osgeo.org/stats/awstats.pl)
 *** configuration at: /etc/awstats/awstats.grass.osgeo.org.conf
 ***                   /etc/httpd/conf.d/sites/grass.osgeo.org.conf
+***                   /etc/apache2/includes/grass.osgeo.org.inc
 *** httpd logs: /var/log/httpd/grass_*
-*** awstats processed log files: /osgeo/download/logs
+*** awstats processed log files: /osgeo/download/logs   - https://grass.osgeo.org/stats/
 *** cronjob script: /osgeo/scripts/update_logs.sh
-** FBK Mirror: Webalizer (http://grass.fbk.eu/webalizer/) runs daily as cronjob
+** OLD FBK Mirror: Webalizer (http://grass.fbk.eu/webalizer/) runs daily as cronjob
 ** OLD: Sitemeter: http://www.sitemeter.com/?a=stats&s=s24grassgis
 
 Summary: The system should run almost autonomously.
@@ -109,7 +110,7 @@ Notes:
   * moderated by M. Neteler
   * has monthly password reminder disabled to avoid leakage into publicly archived lists
 * grass-commit is receiving posts from the GRASS SVN at osgeo.org.
-  Not open for other postings.
+  Not open for other postings, they will be trashed automatically
 * grass-web is an open list (posting without subscription possible) with (Google) spam filter
 * OLD, UNUSED: grass-qa is receiving posts from the GRASS Quality Control System at
   Ecole Polytechnique de Montreal, Canada. Not open for other postings.
@@ -117,15 +118,17 @@ Notes:
 
 == GRASS Wiki ==
 
-Maintainer: Markus Neteler
+Maintainer: Martin Landa, Markus Neteler
 
-* http://grass.osgeo.org
+* http://grasswiki.osgeo.org
 * Mediawiki
 * mirrored at CZ Tech University
 * requires registration to keep spammers out
 
 Summary: The system should run almost autonomous. An eye must be
          be kept on people trying to spam the site
+
+Macro for manual pages: https://grasswiki.osgeo.org/wiki/Template:Cmd
 
 == GRASS IRC ==
 
@@ -145,10 +148,10 @@ Web based client: See http://grasswiki.osgeo.org/wiki/IRC
 
 Maintainer: OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
 
-* http://trac.osgeo.org/grass/browser
-* SVN
+* https://trac.osgeo.org/grass/browser
+* SVN: https://trac.osgeo.org/grass/wiki/HowToSVN
 
-Wiki Macro definitions for manual pages G7:modulename
+Trac Wiki Macro definitions for manual pages G7:modulename
 * https://trac.osgeo.org/grass/wiki/InterMapTxt
 
 == GRASS Bugtracker ==
@@ -170,6 +173,21 @@ Very old bugtracker (Dec 2000 - Dec 2006):
   * spamassasin spamfilter locally, bogofilter at grass-dev list
   * reports are directly sent to GRASS Developers mailing list for notification
   * TODO: migrate to trac
+
+
+== GRASS Addons ==
+
+Maintainer: Martin Landa
+
+Details:
+ grass-addons/tools/addons/README.txt
+
+Installed with g.extension
+Manuals: https://grass.osgeo.org/grass7/manuals/addons/
+
+Procedure: Addons module are compiled on build server, currently at the
+  CTU in Prague) and publishing their manual pages on publishing server, i.e.
+  grass.osgeo.org
 
 == GRASS Travis CI ==
 

@@ -212,6 +212,12 @@ Contents
 
    Update daily recipe contents: https://code.launchpad.net/~grass/+recipe/grass70-release-daily
 
+ o Packaging notes:
+   https://trac.osgeo.org/grass/wiki/BuildHints
+   - https://trac.osgeo.org/grass/wiki/DebianUbuntuPackaging
+   - https://trac.osgeo.org/grass/wiki/CompileOnWindows
+
+
 2. Tell others about it:
 
  * If release candidate:
