@@ -453,6 +453,7 @@ int main(int argc, char *argv[])
 			continue;
 		    }
 		    fprintf(stdout, "%s%ld", fs, (long)cache[point].value[i]);
+		    cache[point].dvalue[i] = cache[point].value[i];
 		}
 		else {		/* FCELL or DCELL */
 
@@ -473,7 +474,7 @@ int main(int argc, char *argv[])
 		}
 		if (flg.label->answer)
 		    fprintf(stdout, "%s%s", fs,
-			    Rast_get_c_cat(&(cache[point].value[i]), &cats[i]));
+			    Rast_get_d_cat(&(cache[point].dvalue[i]), &cats[i]));
 		if (flg.color->answer)
 		    fprintf(stdout, "%s%s", fs, cache[point].clr_buf[i]);
 	    }
