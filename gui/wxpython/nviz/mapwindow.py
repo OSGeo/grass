@@ -1452,7 +1452,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
             elif mapType == 'vector':
                 # reset to default properties (lines/points)
-                data['vector'] = self.nvizDefault.SetVectorDefaultProp()
+                data['vector'] = self.nvizDefault.SetVectorDefaultProp(longDim=self._display.GetLongDim())
                 self.SetVectorFromCmd(item, data['vector'])
                 self.SetVectorSurface(data['vector']['points'])
                 self.SetVectorSurface(data['vector']['lines'])
@@ -1477,9 +1477,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                         ['lines'])
                 if not data['vector']['points']:
                     self.nvizDefault.SetVectorPointsDefaultProp(
-                        data
-                        ['vector']
-                        ['points'])
+                        data['vector']['points'], self._display.GetLongDim())
             # set updates
             for sec in data.keys():
                 for sec1 in data[sec].keys():
@@ -2310,9 +2308,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 vInfo = grass.vector_info_topo(layer.GetName())
                 if (vInfo['points'] + vInfo['centroids']) > 0:
                     self.nvizDefault.SetVectorPointsDefaultProp(
-                        data
-                        ['vector']
-                        ['points'])
+                        data['vector']['points'], self._display.GetLongDim())
                 if (vInfo['lines'] + vInfo['boundaries']) > 0:
                     self.nvizDefault.SetVectorLinesDefaultProp(
                         data

@@ -595,6 +595,14 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         row = 0
         # icon size
+        autosize = wx.CheckBox(parent=panel, label=_("Automatic size"))
+        autosize.SetToolTipString(_("Icon size is set automatically based on landscape dimensions."))
+        gridSizer.Add(autosize, pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        self.winId['nviz:vector:points:autosize'] = autosize.GetId()
+        autosize.SetValue(UserSettings.Get(group='nviz', key='vector',
+                                           subkey=['points', 'autosize']))
+
+        row += 1
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Size:")),
                       pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
@@ -610,9 +618,10 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         # icon symbol
+        row += 1
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Marker:")),
-                      pos=(row, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+                      pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         isym = wx.Choice(
             parent=panel, id=wx.ID_ANY, size=(100, -1),
             choices=UserSettings.Get(
@@ -623,12 +632,13 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         isym.SetSelection(UserSettings.Get(group='nviz', key='vector',
                                            subkey=['points', 'marker']))
         gridSizer.Add(item=isym, flag=wx.ALIGN_CENTER_VERTICAL,
-                      pos=(row, 3))
+                      pos=(row, 1))
 
         # icon color
+        row += 1
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Color:")),
-                      pos=(row, 4), flag=wx.ALIGN_CENTER_VERTICAL)
+                      pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         icolor = csel.ColourSelect(panel, id=wx.ID_ANY,
                                    size=globalvar.DIALOG_COLOR_SIZE)
         icolor.SetName('GetColour')
@@ -636,7 +646,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         icolor.SetColour(UserSettings.Get(group='nviz', key='vector',
                                           subkey=['points', 'color']))
         gridSizer.Add(item=icolor, flag=wx.ALIGN_CENTER_VERTICAL,
-                      pos=(row, 5))
+                      pos=(row, 1))
 
         boxSizer.Add(item=gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=5)

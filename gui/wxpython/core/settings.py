@@ -672,6 +672,7 @@ class Settings:
                     'points': {
                         'show': False,
                         'size': 100,
+                        'autosize': True,
                         'width': 2,
                         'marker': 2,
                         'color': (0, 0, 0, 255),
