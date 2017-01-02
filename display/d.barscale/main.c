@@ -12,8 +12,9 @@
  *               Glynn Clements <glynn gclements.plus.com>, 
  *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>
- *		 Major rewrite for GRASS 7 by Hamish Bowman, June 2013
+ *               Major rewrite for GRASS 7 by Hamish Bowman, June 2013
  *               Adam Laza <ad.laza32@gmail.com>, GSoC 2016
+ *               Anna Petrasova <kratochanna gmail.com>, width_scale added
  *
  * PURPOSE:      Displays a barscale on graphics monitor
  *
@@ -43,7 +44,8 @@ int main(int argc, char **argv)
 {
     struct GModule *module;
     struct Option *bg_color_opt, *fg_color_opt, *coords, *fsize, *barstyle,
-            *text_placement, *length_opt, *segm_opt, *units_opt, *label_opt;
+            *text_placement, *length_opt, *segm_opt, *units_opt, *label_opt,
+            *width_scale_opt;
     struct Flag *feet, *no_text, *n_symbol;
     struct Cell_head W;
     double east, north;
@@ -52,6 +54,7 @@ int main(int argc, char **argv)
     double length;
     int segm;
     char *label;
+    double width_scale;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -161,6 +164,14 @@ int main(int argc, char **argv)
     text_placement->options = "under,over,left,right";
     text_placement->answer = "right";
     text_placement->guisection = _("Text");
+    
+    width_scale_opt = G_define_option();
+    width_scale_opt->key = "width_scale";
+    width_scale_opt->type = TYPE_DOUBLE;
+    width_scale_opt->required = NO;
+    width_scale_opt->answer = "1";
+    width_scale_opt->options = "0.5-100";
+    width_scale_opt->description = _("Scale factor to change bar width");
 
     fsize = G_define_option();
     fsize->key = "fontsize";
@@ -293,6 +304,8 @@ int main(int argc, char **argv)
     if (no_text->answer)
         fontsize = -1;
 
+    width_scale = atof(width_scale_opt->answer);
+
     /* Parse and select foreground color */
     fg_color = D_parse_color(fg_color_opt->answer, 0);
 
@@ -306,7 +319,7 @@ int main(int argc, char **argv)
 
     D_setup(0);
 
-    draw_scale(east, north, length, segm, units, label, bar_style, text_position, fontsize);
+    draw_scale(east, north, length, segm, units, label, bar_style, text_position, width_scale, fontsize);
 
     D_save_command(G_recreate_command());
     D_close_driver();
