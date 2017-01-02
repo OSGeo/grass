@@ -637,7 +637,7 @@ int main(int argc, char *argv[])
 		}
 	    }
 	} else
-	  G_warning(_("Unable to create cellout raster map without cellinp"));
+	  G_warning(_("Unable to create <%s> raster map without cross_input raster map being specified"), cellout);
 	ertot = 0.;
         
 	out_cond1 = (outz != NULL) || (gradient != NULL) || (aspect1 != NULL)
