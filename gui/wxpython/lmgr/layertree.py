@@ -466,6 +466,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 break
 
         # map layer items
+        try:
+            mltype = self.GetLayerInfo(self.layer_selected, key='type')
+        except:
+            mltype = None
+
         if ltype not in ("group", "command"):
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
@@ -516,6 +521,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     self.mapdisplay.OnZoomToMap,
                     id=self.popupID['zoom'])
 
+                # raster-specific zoom
+                if mltype and mltype == "raster" and same:
+                    self.popupMenu.Append(
+                        self.popupID['zoom1'], _("Zoom to selected map(s) (ignore NULLs)"))
+                    self.Bind(
+                        wx.EVT_MENU,
+                        self.mapdisplay.OnZoomToRaster,
+                        id=self.popupID['zoom1'])
+
                 item = wx.MenuItem(
                     self.popupMenu,
                     id=self.popupID['region'],
@@ -526,12 +540,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     wx.EVT_MENU,
                     self.OnSetCompRegFromMap,
                     id=self.popupID['region'])
-
-        # specific items
-        try:
-            mltype = self.GetLayerInfo(self.layer_selected, key='type')
-        except:
-            mltype = None
 
         # vector layers (specific items)
         if mltype and mltype == "vector" and numSelected == 1:
@@ -699,14 +707,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # raster layers (specific items)
         elif mltype and mltype == "raster":
-            if same:
-                self.popupMenu.Append(
-                    self.popupID['zoom1'], _("Zoom to selected map(s) (ignore NULLs)"))
-                self.Bind(
-                    wx.EVT_MENU,
-                    self.mapdisplay.OnZoomToRaster,
-                    id=self.popupID['zoom1'])
-
             self.popupMenu.AppendSeparator()
 
             if numSelected == 1:
