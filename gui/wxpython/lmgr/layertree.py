@@ -465,12 +465,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 same = False
                 break
 
-        # map layer items
-        try:
-            mltype = self.GetLayerInfo(self.layer_selected, key='type')
-        except:
-            mltype = None
-
         if ltype not in ("group", "command"):
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
@@ -522,7 +516,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     id=self.popupID['zoom'])
 
                 # raster-specific zoom
-                if mltype and mltype == "raster" and same:
+                if ltype and ltype == "raster" and same:
                     self.popupMenu.Append(
                         self.popupID['zoom1'], _("Zoom to selected map(s) (ignore NULLs)"))
                     self.Bind(
@@ -542,7 +536,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     id=self.popupID['region'])
 
         # vector layers (specific items)
-        if mltype and mltype == "vector" and numSelected == 1:
+        if ltype and ltype == "vector" and numSelected == 1:
             self.popupMenu.AppendSeparator()
             item = wx.MenuItem(
                 self.popupMenu,
@@ -706,7 +700,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind(wx.EVT_MENU, self.OnMetadata, id=self.popupID['meta'])
 
         # raster layers (specific items)
-        elif mltype and mltype == "raster":
+        elif ltype and ltype == "raster":
             self.popupMenu.AppendSeparator()
 
             if numSelected == 1:
@@ -819,7 +813,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     self.OnMetadata,
                     id=self.popupID['meta'])
 
-        elif mltype and mltype == 'raster_3d':
+        elif ltype and ltype == 'raster_3d':
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
                 self.popupMenu.Append(
@@ -854,7 +848,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     id=self.popupID['meta'])
 
         # web service layers (specific item)
-        elif mltype and mltype == "wms":
+        elif ltype and ltype == "wms":
             self.popupMenu.Append(
                 self.popupID['save_ws'], _("Save web service layer"))
             self.Bind(wx.EVT_MENU, self.OnSaveWs, id=self.popupID['save_ws'])
