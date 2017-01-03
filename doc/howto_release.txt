@@ -259,14 +259,12 @@ Contents
    https://joinup.ec.europa.eu/software/grassgis/home (submit news, MN)
    http://www.macnn.com/contact/newstips/1
    http://www10.giscafe.com/submit_material/submit_options.php#Press (MN)   --> Press releases
-   http://www.freegis.org   (update, MN)
    http://www.directionsmag.com/pressreleases/ (News -> Submit Press Release)
    http://directory.fsf.org/wiki/GRASS_%28Geographic_Resources_Analysis_Support_System%29
-   http://www.kde-apps.org/content/show.php?content=19776
-   http://www.opendesktop.org/content/show.php?content=19776
+   https://www.linux-apps.com/p/1128004/edit/ (MN)
    https://news.eoportal.org/web/eoportal/share-your-news (MN)
             -> Share your news with the EO community
-   http://www.heise.de/software/download/edit_7105 (update, MN)
+   https://www.heise.de/download/product/grass-gis-7105 (update, MN)
 
    See also: http://grass.osgeo.org/wiki/Contact_Databases
    ... anywhere else? Please add here.
