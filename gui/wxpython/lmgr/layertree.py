@@ -916,7 +916,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self._giface.RunCmd(cmd, notification=Notification.NO_NOTIFICATION)
 
         # re-render map display
-        self._giface.GetMapWindow().UpdateMap(render=True)
+        self._giface.GetMapWindow().UpdateMap(render=False)
 
     def OnSetCompRegFromMap(self, event):
         """Set computational region from selected raster/vector map
@@ -954,7 +954,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                 notification=Notification.NO_NOTIFICATION)
 
         # re-render map display
-        self._giface.GetMapWindow().UpdateMap(render=True)
+        self._giface.GetMapWindow().UpdateMap(render=False)
 
     def OnProfile(self, event):
         """Plot profile of given raster map layer"""
