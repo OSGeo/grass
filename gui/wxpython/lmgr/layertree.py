@@ -928,6 +928,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # print output to command log area
         if kwargs:
+            if UserSettings.Get(group='general',
+                                key='region', subkey=['resAlign', 'enabled']):
+                kwargs['flags'] = 'a'
             # command must run in main thread otherwise it can be
             # launched after rendering is done (region extent will
             # remain untouched)
