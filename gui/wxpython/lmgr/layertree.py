@@ -501,7 +501,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         self.OnNvizProperties,
                         id=self.popupID['nviz'])
 
-            if same and ltype in ('raster', 'vector', 'rgb', 'raster_3d'):
+            if ltype in ('raster', 'vector', 'rgb', 'raster_3d'):
                 self.popupMenu.AppendSeparator()
                 item = wx.MenuItem(
                     self.popupMenu,
