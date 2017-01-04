@@ -419,7 +419,7 @@ References
 * Supplementary material of the publication *The GRASS GIS Temporal Framework*
   to be published in
   *International Journal of Geographical Information Science* in 2017, Download  
-  :download:`The GRASS GIS Temporal Framework: Object orientd code design with examples <Temporal-Framework-API-Description.pdf>`
+  :download:`The GRASS GIS Temporal Framework: Object oriented code design with examples <Temporal-Framework-API-Description.pdf>`
 
 :Authors: Soeren Gebbert
 
