@@ -14,7 +14,7 @@ Classes:
  - preferences::MapsetAccess
  - preferences::CheckListMapset
 
-(C) 2007-2014 by the GRASS Development Team
+(C) 2007-2017 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -57,7 +57,7 @@ class PreferencesBaseDialog(wx.Dialog):
     """Base preferences dialog"""
 
     def __init__(self, parent, giface, settings, title=_("User settings"),
-                 size=(500, 475),
+                 size=(-1, 500),
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         self.parent = parent  # ModelerFrame
         self.title = title
@@ -443,6 +443,41 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId['general:defWindowPos:enabled'] = defaultPos.GetId()
 
         gridSizer.Add(defaultPos,
+                      pos=(row, 0), span=(1, 2))
+
+        gridSizer.AddGrowableCol(0)
+        sizer.Add(
+            gridSizer,
+            proportion=1,
+            flag=wx.ALL | wx.EXPAND,
+            border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+
+        #
+        # region
+        #
+        box = wx.StaticBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=" %s " %
+            _("Region settings"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+
+        gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
+
+        row = 0
+        resAlign = wx.CheckBox(parent=panel, id=wx.ID_ANY, label=_(
+            "Align region to resolution"), name='IsChecked')
+        resAlign.SetValue(
+            self.settings.Get(
+                group='general',
+                key='region',
+                subkey=[
+                    'resAlign',
+                    'enabled']))
+        self.winId['general:region:resAlign:enabled'] = resAlign.GetId()
+
+        gridSizer.Add(resAlign,
                       pos=(row, 0), span=(1, 2))
 
         gridSizer.AddGrowableCol(0)
