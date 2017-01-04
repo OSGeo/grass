@@ -305,8 +305,14 @@ if not year:
 topdir = os.path.abspath(os.getenv("MODULE_TOPDIR"))
 curdir = os.path.abspath(os.path.curdir)
 pgmdir = curdir.replace(topdir, '').lstrip('/')
-url_source = urlparse.urljoin(source_url, pgmdir)
-
+if os.getenv('SOURCE_URL', ''):
+    # addons
+    pgmname = os.path.basename(pgmdir)
+    classname = index_names[pgmname[:pgmname.find('.')]]
+    url_source = urlparse.urljoin('{}{}/'.format(os.environ['SOURCE_URL'], classname),
+                                  pgmname)
+else:
+    url_source = urlparse.urljoin(source_url, pgmdir)
 if index_name:
     sys.stdout.write(sourcecode.substitute(URL_SOURCE=url_source, PGM=pgm,
                                            URL_LOG=url_source.replace('browser',  'log')))
