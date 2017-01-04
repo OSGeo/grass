@@ -739,6 +739,11 @@ class GMFrame(wx.Frame):
         """
         if not self.currentPage:
             self.NewDisplay(show=True)
+        # here should be the d.* commands which are not layers
+        if command[0] == 'd.erase':
+            # rest of d.erase is ignored
+            self.GetLayerTree().DeleteAllLayers()
+            return
         try:
             # display GRASS commands
             layertype = command2ltype[command[0]]
@@ -1321,11 +1326,7 @@ class GMFrame(wx.Frame):
             dlg.Destroy()
 
         # delete all items
-        maptree.DeleteAllItems()
-
-        # add new root element
-        maptree.root = maptree.AddRoot("Map Layers")
-        self.GetLayerTree().SetPyData(maptree.root, (None, None))
+        maptree.DeleteAllLayers()
 
         # no workspace file loaded
         self.workspaceFile = None
