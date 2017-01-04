@@ -1125,6 +1125,8 @@ def download_source_code(source, url, name, outdev,
 def install_extension_std_platforms(name, source, url):
     """Install extension on standard platforms"""
     gisbase = os.getenv('GISBASE')
+    source_url = "https://trac.osgeo.org/grass/browser/grass-addons/grass7/"
+
     if source == 'official':
         gscript.message(_("Fetching <%s> from "
                           "GRASS GIS Addons repository (be patient)...") % name)
@@ -1167,7 +1169,8 @@ def install_extension_std_platforms(name, source, url):
         'MANBASEDIR=%s' % dirs['man'],
         'SCRIPTDIR=%s' % dirs['script'],
         'STRINGDIR=%s' % dirs['string'],
-        'ETC=%s' % os.path.join(dirs['etc'])
+        'ETC=%s' % os.path.join(dirs['etc']),
+        'SOURCE_URL=%s' % source_url
     ]
 
     install_cmd = [
