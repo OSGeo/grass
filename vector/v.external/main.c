@@ -85,8 +85,9 @@ int main(int argc, char *argv[])
     }
     
 #ifdef HAVE_OGR
-    if (use_ogr)
-        OGRRegisterAll();
+    /* GDAL drivers must be registered since check_projection()
+     * depends on it (even use_ogr is false)*/
+    OGRRegisterAll();
 #endif
 
     if (flags.format->answer) {
@@ -135,7 +136,9 @@ int main(int argc, char *argv[])
 
     /* check projection match */
     if (!flags.override->answer) {
-        check_projection(dsn, ilayer);
+        /* here must be used original dsn since check_projection() is
+         * using GDAL library */
+        check_projection(options.dsn->answer, ilayer);
     }
     
     /* create new vector map */
