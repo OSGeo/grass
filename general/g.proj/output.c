@@ -30,7 +30,7 @@ static int check_xy(int shell);
 
 void print_projinfo(int shell, const char *force_epsg)
 {
-    int i, quote;
+    int i;
     char path[GPATH_MAX];
 
     if (check_xy(shell))
@@ -40,19 +40,10 @@ void print_projinfo(int shell, const char *force_epsg)
 	fprintf(stdout,
 		"-PROJ_INFO-------------------------------------------------\n");
     for (i = 0; i < projinfo->nitems; i++) {
-        quote = FALSE;
-        if (strcmp(projinfo->key[i], "name") == 0)
-            quote = TRUE;
-
-        if (shell) {
-            if (quote)
-                fprintf(stdout, "%s=\"%s\"\n", projinfo->key[i], projinfo->value[i]);
-            else
-                fprintf(stdout, "%s=%s\n", projinfo->key[i], projinfo->value[i]);
-        }
-        else {
-            fprintf(stdout, "%-11s: %s\n", projinfo->key[i], projinfo->value[i]);
-        }
+	if (shell)
+	    fprintf(stdout, "%s=%s\n", projinfo->key[i], projinfo->value[i]);
+	else
+	    fprintf(stdout, "%-11s: %s\n", projinfo->key[i], projinfo->value[i]);
     }
 
     /* EPSG code is preserved for historical metadata interest only:
