@@ -903,20 +903,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # print output to command log area
         self._giface.RunCmd(cmd)
 
-    def OnSetCompRegFromRaster(self, event):
-        """Set computational region from selected raster map (ignore NULLs).
-        Unused, removed item from layer context menu"""
-        mapLayer = self.GetLayerInfo(self.layer_selected, key='maplayer')
-
-        cmd = ['g.region', 'raster=%s' % mapLayer.GetName(),
-               'zoom=%s' % mapLayer.GetName()]
-
-        # print output to command log area
-        self._giface.RunCmd(cmd, notification=Notification.NO_NOTIFICATION)
-
-        # re-render map display
-        self._giface.GetMapWindow().UpdateMap(render=False)
-
     def OnSetCompRegFromMap(self, event):
         """Set computational region from selected raster/vector map
         """
@@ -937,20 +923,20 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 for rname in mapLayer.GetName().splitlines():
                     rast.append(rname)
 
-        cmd = ['g.region']
+        kwargs = {}
         if rast:
-            cmd.append('raster=%s' % ','.join(rast))
+            kwargs['raster'] = ','.join(rast)
         if vect:
-            cmd.append('vector=%s' % ','.join(vect))
+            kwargs['vector'] = ','.join(vect)
         if rast3d:
-            cmd.append('raster_3d=%s' % ','.join(rast3d))
+            kwargs['raster_3d'] = ','.join(rast3d)
 
         # print output to command log area
-        if len(cmd) > 1:
-            if mltype == 'raster_3d':
-                cmd.append('-3')
-            self._giface.RunCmd(cmd, compReg=False,
-                                notification=Notification.NO_NOTIFICATION)
+        if kwargs:
+            # command must run in main thread otherwise it can be
+            # launched after rendering is done (region extent will
+            # remain untouched)
+            RunCommand('g.region', **kwargs)
 
         # re-render map display
         self._giface.GetMapWindow().UpdateMap(render=False)
