@@ -54,7 +54,7 @@ static int geometry_collection_from_wkb(const unsigned char *, int, int, int,
                                         struct feat_parts *);
 static int error_corrupted_data(const char *);
 static void add_fpart(struct feat_parts *, SF_FeatureType, int, int);
-static int get_centroid(struct Map_info *, int, struct line_pnts *);
+static int get_centroid(struct Map_info *, int, struct line_pnts *, struct line_cats *);
 static void error_tuples(struct Format_info_pg *);
 #endif
 
@@ -348,7 +348,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         Vect_reset_line(line_p);
     if (Line->type == GV_CENTROID && !pg_info->toposchema_name) {
         /* simple features access: get centroid from sidx */
-        return get_centroid(Map, line, line_p);
+        return get_centroid(Map, line, line_p, line_c);
     }
     
     /* get feature id */
@@ -1633,7 +1633,7 @@ void add_fpart(struct feat_parts *fparts, SF_FeatureType ftype,
   \return -1 on error
 */
 int get_centroid(struct Map_info *Map, int centroid,
-                 struct line_pnts *line_p)
+                 struct line_pnts *line_p, struct line_cats *line_c)
 {
     int i, found;
     struct bound_box box;
@@ -1664,6 +1664,9 @@ int get_centroid(struct Map_info *Map, int centroid,
     if (line_p) {
         Vect_reset_line(line_p);
         Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
+    }
+    if (line_c) {
+        Vect_cat_set(line_c, 1, topo->area);
     }
     
     return GV_CENTROID;
