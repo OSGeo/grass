@@ -30,6 +30,7 @@ except ImportError:
 
 from grass.script import core as grass
 from grass.script import vector as gvector
+from grass.script import utils as gutils
 
 from core import globalvar
 from gui_core.dialogs import SqlQueryFrame, SetOpacityDialog, TextEntryDialog
@@ -1381,7 +1382,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 cmd = []
                 if ltype == 'command' and lname:
                     for c in lname.split(';'):
-                        cmd.append(c.split(' '))
+                        cmd.append(gutils.split(c))
 
                 name = None
 
