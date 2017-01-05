@@ -127,11 +127,11 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
 	}
 
 	if (gpgtype == PG_TYPE_INT8)
-	    G_warning(_("column '%s' : type int8 (bigint) is stored as integer (4 bytes) "
+	    G_warning(_("Column '%s' : type int8 (bigint) is stored as integer (4 bytes) "
 		       "some data may be damaged"), fname);
 
 	if (gpgtype == PG_TYPE_VARCHAR && fsize < 0) {
-	    G_warning(_("column '%s' : type character varying is stored as varchar(250) "
+	    G_warning(_("Column '%s' : type character varying is stored as varchar(250) "
 		       "some data may be lost"), fname);
 	    fsize = 250;
 	}
