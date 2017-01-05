@@ -121,7 +121,7 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
        </ul>
         <h3>&nbsp;Addons</h3>
         <ul>
-        <li class="box"><a href="http://grass.osgeo.org/grass70/manuals/addons/">Addons manual pages</a></li>
+        <li class="box"><a href="https://grass.osgeo.org/grass7/manuals/addons/">Addons manual pages</a></li>
        </ul>
       </td>
     </tr>
