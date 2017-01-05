@@ -625,6 +625,9 @@ void build_ogr(struct Map_info *Map, int build)
 
     /* Note: Do not use OGR_L_GetFeatureCount (it may scan all features) */
     OGR_L_ResetReading(ogr_info->layer);
+    if (ogr_info->where)
+        /* set attribute filter if where sql statement defined */
+        OGR_L_SetAttributeFilter(ogr_info->layer, ogr_info->where);
     npoints = iFeature = nskipped = 0;
     G_message(_("Registering primitives..."));
     while ((hFeature = OGR_L_GetNextFeature(ogr_info->layer)) != NULL) {

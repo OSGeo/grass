@@ -111,6 +111,8 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
                 finfo->ogr.dsn = G_store(ptr);
             if (G_strcasecmp(buf1, "LAYER") == 0)
                 finfo->ogr.layer_name = G_store(ptr);
+            if (G_strcasecmp(buf1, "WHERE") == 0)
+                finfo->ogr.where = G_store(ptr);
         }
 #endif
 #ifdef HAVE_POSTGRES
@@ -123,6 +125,8 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
                 finfo->pg.table_name = G_store(ptr);
             if (G_strcasecmp(buf1, "FID") == 0)
                 finfo->pg.fid_column = G_store(ptr);
+            if (G_strcasecmp(buf1, "WHERE") == 0)
+                finfo->pg.where = G_store(ptr);
         }
 #endif
     }

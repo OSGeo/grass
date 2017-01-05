@@ -2,7 +2,7 @@
 #define V_EXTERNAL_LOCAL_PROTO_H
 
 struct _options {
-    struct Option *dsn, *output, *layer;
+    struct Option *dsn, *output, *layer, *where;
 };
 
 struct _flags {
