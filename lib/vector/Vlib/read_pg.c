@@ -1245,10 +1245,17 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all
     if (!pg_info->toposchema_name) {
         /* simple feature access (geom, fid) */
         /* TODO: start_fid */
-        sprintf(stmt,
-                "DECLARE %s CURSOR FOR SELECT %s,%s FROM \"%s\".\"%s\" ORDER BY %s",
-                pg_info->cursor_name, pg_info->geom_column, pg_info->fid_column, pg_info->schema_name,
-                pg_info->table_name, pg_info->fid_column);
+        if (pg_info->where)
+            /* set attribute filter if where sql statement defined */
+            sprintf(stmt,
+                    "DECLARE %s CURSOR FOR SELECT %s,%s FROM \"%s\".\"%s\" WHERE %s ORDER BY %s",
+                    pg_info->cursor_name, pg_info->geom_column, pg_info->fid_column, pg_info->schema_name,
+                    pg_info->table_name, pg_info->where, pg_info->fid_column);
+        else
+            sprintf(stmt,
+                    "DECLARE %s CURSOR FOR SELECT %s,%s FROM \"%s\".\"%s\" ORDER BY %s",
+                    pg_info->cursor_name, pg_info->geom_column, pg_info->fid_column, pg_info->schema_name,
+                    pg_info->table_name, pg_info->fid_column);
     }
     else {
         /* topology access (geom,id,fid,type) */
@@ -1666,7 +1673,7 @@ int get_centroid(struct Map_info *Map, int centroid,
         Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
     }
     if (line_c) {
-        Vect_cat_set(line_c, 1, topo->area);
+        Vect_cat_set(line_c, 1, Line->offset);
     }
     
     return GV_CENTROID;

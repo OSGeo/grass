@@ -527,6 +527,10 @@ struct Format_info_ogr
       \brief OGR layer name
     */
     char *layer_name;
+    /*!
+      \brief SQL where statement (to filter features)
+    */
+    char *where;
 #ifdef HAVE_OGR
     /*!
       \brief Pointer to OGRDriver
@@ -613,6 +617,10 @@ struct Format_info_pg
       \brief Table name
     */
     char    *table_name;
+    /*!
+      \brief SQL where statement (fo filter features)
+    */
+    char *where;
     /*!
       \brief FID column
     */

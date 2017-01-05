@@ -32,7 +32,9 @@ void parse_args(int argc, char **argv,
     options->layer->required = NO;
     options->layer->key_desc = "name";
     options->layer->gisprompt = "old,datasource_layer,datasource_layer";
-        
+
+    options->where = G_define_standard_option(G_OPT_DB_WHERE);
+
     options->output = G_define_standard_option(G_OPT_V_OUTPUT);
     options->output->required = NO;
     options->output->description = _("Name for output GRASS vector map (default: input layer)");

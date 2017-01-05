@@ -8,7 +8,7 @@
  *               
  * PURPOSE:      Create a new vector as a link to OGR layer
  *               
- * COPYRIGHT:    (C) 2003-2016 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2017 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
         if (schema_name)
             fprintf(fd, "schema: %s\n", schema_name);
         fprintf(fd, "table: %s\n", table_name);
-
+          
         G_free(table_name);
         G_free(schema_name);
     }
@@ -184,6 +184,9 @@ int main(int argc, char *argv[])
         fprintf(fd, "dsn: %s\n", dsn);
         fprintf(fd, "layer: %s\n", layer);
     }
+    if (options.where->answer)
+        fprintf(fd, "where: %s\n", options.where->answer);
+    
     fclose(fd);
     
     if (!flags.topo->answer) {
