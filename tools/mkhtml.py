@@ -21,8 +21,18 @@ import os
 import string
 import re
 from datetime import datetime
-from HTMLParser import HTMLParser
-import urlparse
+
+try:
+    # Python 2 import
+    from HTMLParser import HTMLParser
+except:
+    # Python 3 import
+    from html.parser import HTMLParser
+try:
+    import urlparse
+except:
+    import urllib.parse as urlparse
+
 
 pgm = sys.argv[1]
 
