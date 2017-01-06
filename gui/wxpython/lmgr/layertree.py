@@ -535,6 +535,27 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     wx.EVT_MENU,
                     self.OnSetCompRegFromMap,
                     id=self.popupID['region'])
+            elif not same:
+                align = True
+                nrast = 0
+                for layer in selected:
+                    if self.GetLayerInfo(layer, key='type') == 'raster':
+                        nrast += 1
+                    if self.GetLayerInfo(layer, key='type') not in ('raster', 'vector'):
+                        align = False
+                        break
+
+                if align and nrast == 1:
+                    item = wx.MenuItem(
+                        self.popupMenu,
+                        id=self.popupID['region'],
+                        text=_("Set computational region from selected vector(s) align to raster"))
+                    item.SetBitmap(MetaIcon(img='region').GetBitmap(self.bmpsize))
+                    self.popupMenu.AppendItem(item)
+                    self.Bind(
+                        wx.EVT_MENU,
+                        self.OnSetCompRegFromMap,
+                        id=self.popupID['region'])
 
         # vector layers (specific items)
         if ltype and ltype == "vector" and numSelected == 1:
@@ -920,7 +941,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     rast.append(rname)
 
         kwargs = {}
-        if rast:
+        if vect and len(rast) == 1:
+            kwargs['align'] = ','.join(rast)
+        elif rast:
             kwargs['raster'] = ','.join(rast)
         if vect:
             kwargs['vector'] = ','.join(vect)
