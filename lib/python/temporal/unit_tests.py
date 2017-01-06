@@ -113,7 +113,7 @@ def test_adjust_datetime_to_granularity():
     # Second test
     print("Test 2")
     result = adjust_datetime_to_granularity(dt, "20 minutes")
-    correct = datetime(2001, 8, 8, 12, 30, 00)
+    correct = datetime(2001, 8, 8, 12, 30, 0)
 
     delta = correct - result
 
@@ -123,7 +123,7 @@ def test_adjust_datetime_to_granularity():
     # Third test
     print("Test 2")
     result = adjust_datetime_to_granularity(dt, "20 minutes")
-    correct = datetime(2001, 8, 8, 12, 30, 00)
+    correct = datetime(2001, 8, 8, 12, 30, 0)
 
     delta = correct - result
 
@@ -133,7 +133,7 @@ def test_adjust_datetime_to_granularity():
     # 4. test
     print("Test 4")
     result = adjust_datetime_to_granularity(dt, "3 hours")
-    correct = datetime(2001, 8, 8, 12, 00, 00)
+    correct = datetime(2001, 8, 8, 12, 0, 0)
 
     delta = correct - result
 
@@ -143,7 +143,7 @@ def test_adjust_datetime_to_granularity():
     # 5. test
     print("Test 5")
     result = adjust_datetime_to_granularity(dt, "5 days")
-    correct = datetime(2001, 8, 8, 00, 00, 00)
+    correct = datetime(2001, 8, 8, 0, 0, 0)
 
     delta = correct - result
 
@@ -153,7 +153,7 @@ def test_adjust_datetime_to_granularity():
     # 6. test
     print("Test 6")
     result = adjust_datetime_to_granularity(dt, "2 weeks")
-    correct = datetime(2001, 8, 6, 00, 00, 00)
+    correct = datetime(2001, 8, 6, 0, 0, 0)
 
     delta = correct - result
 
@@ -163,7 +163,7 @@ def test_adjust_datetime_to_granularity():
     # 7. test
     print("Test 7")
     result = adjust_datetime_to_granularity(dt, "6 months")
-    correct = datetime(2001, 8, 1, 00, 00, 00)
+    correct = datetime(2001, 8, 1, 0, 0, 0)
 
     delta = correct - result
 
@@ -173,7 +173,7 @@ def test_adjust_datetime_to_granularity():
     # 8. test
     print("Test 8")
     result = adjust_datetime_to_granularity(dt, "2 years")
-    correct = datetime(2001, 1, 1, 00, 00, 00)
+    correct = datetime(2001, 1, 1, 0, 0, 0)
 
     delta = correct - result
 
@@ -194,7 +194,7 @@ def test_adjust_datetime_to_granularity():
     # 10. test
     print("Test 10")
     result = adjust_datetime_to_granularity(dt, "3 months, 5 days, 3 minutes")
-    correct = datetime(2001, 8, 8, 12, 30, 00)
+    correct = datetime(2001, 8, 8, 12, 30, 0)
 
     delta = correct - result
 
@@ -204,7 +204,7 @@ def test_adjust_datetime_to_granularity():
     # 11. test
     print("Test 11")
     result = adjust_datetime_to_granularity(dt, "3 weeks, 5 days")
-    correct = datetime(2001, 8, 8, 00, 00, 00)
+    correct = datetime(2001, 8, 8, 0, 0, 0)
 
     delta = correct - result
 
@@ -217,8 +217,8 @@ def test_adjust_datetime_to_granularity():
 def test_compute_datetime_delta():
 
     print("Test 1")
-    start = datetime(2001, 1, 1, 00, 00, 00)
-    end = datetime(2001, 1, 1, 00, 00, 00)
+    start = datetime(2001, 1, 1, 0, 0, 0)
+    end = datetime(2001, 1, 1, 0, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -231,8 +231,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 2")
-    start = datetime(2001, 1, 1, 00, 00, 14)
-    end = datetime(2001, 1, 1, 00, 00, 44)
+    start = datetime(2001, 1, 1, 0, 0, 14)
+    end = datetime(2001, 1, 1, 0, 0, 44)
 
     comp = compute_datetime_delta(start, end)
 
@@ -245,8 +245,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 3")
-    start = datetime(2001, 1, 1, 00, 00, 44)
-    end = datetime(2001, 1, 1, 00, 01, 14)
+    start = datetime(2001, 1, 1, 0, 0, 44)
+    end = datetime(2001, 1, 1, 0, 1, 14)
 
     comp = compute_datetime_delta(start, end)
 
@@ -259,8 +259,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 4")
-    start = datetime(2001, 1, 1, 00, 00, 30)
-    end = datetime(2001, 1, 1, 00, 05, 30)
+    start = datetime(2001, 1, 1, 0, 0, 30)
+    end = datetime(2001, 1, 1, 0, 5, 30)
 
     comp = compute_datetime_delta(start, end)
 
@@ -273,8 +273,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 5")
-    start = datetime(2001, 1, 1, 00, 00, 00)
-    end = datetime(2001, 1, 1, 00, 01, 00)
+    start = datetime(2001, 1, 1, 0, 0, 0)
+    end = datetime(2001, 1, 1, 0, 1, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -287,8 +287,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 6")
-    start = datetime(2011, 10, 31, 00, 45, 00)
-    end = datetime(2011, 10, 31, 01, 45, 00)
+    start = datetime(2011, 10, 31, 0, 45, 0)
+    end = datetime(2011, 10, 31, 1, 45, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -301,8 +301,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 7")
-    start = datetime(2011, 10, 31, 00, 45, 00)
-    end = datetime(2011, 10, 31, 01, 15, 00)
+    start = datetime(2011, 10, 31, 0, 45, 0)
+    end = datetime(2011, 10, 31, 1, 15, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -315,8 +315,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 8")
-    start = datetime(2011, 10, 31, 00, 45, 00)
-    end = datetime(2011, 10, 31, 12, 15, 00)
+    start = datetime(2011, 10, 31, 0, 45, 0)
+    end = datetime(2011, 10, 31, 12, 15, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -329,8 +329,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 9")
-    start = datetime(2011, 10, 31, 00, 00, 00)
-    end = datetime(2011, 10, 31, 01, 00, 00)
+    start = datetime(2011, 10, 31, 0, 0, 0)
+    end = datetime(2011, 10, 31, 1, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -343,8 +343,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 10")
-    start = datetime(2011, 10, 31, 00, 00, 00)
-    end = datetime(2011, 11, 01, 01, 00, 00)
+    start = datetime(2011, 10, 31, 0, 0, 0)
+    end = datetime(2011, 11, 1, 1, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -357,8 +357,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 11")
-    start = datetime(2011, 10, 31, 12, 00, 00)
-    end = datetime(2011, 11, 01, 06, 00, 00)
+    start = datetime(2011, 10, 31, 12, 0, 0)
+    end = datetime(2011, 11, 1, 6, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -371,8 +371,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 12")
-    start = datetime(2011, 11, 01, 00, 00, 00)
-    end = datetime(2011, 12, 01, 01, 00, 00)
+    start = datetime(2011, 11, 1, 0, 0, 0)
+    end = datetime(2011, 12, 1, 1, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -385,8 +385,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 13")
-    start = datetime(2011, 11, 01, 00, 00, 00)
-    end = datetime(2011, 11, 05, 00, 00, 00)
+    start = datetime(2011, 11, 1, 0, 0, 0)
+    end = datetime(2011, 11, 5, 0, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -399,8 +399,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 14")
-    start = datetime(2011, 10, 06, 00, 00, 00)
-    end = datetime(2011, 11, 05, 00, 00, 00)
+    start = datetime(2011, 10, 6, 0, 0, 0)
+    end = datetime(2011, 11, 5, 0, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -413,8 +413,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 15")
-    start = datetime(2011, 12, 02, 00, 00, 00)
-    end = datetime(2012, 01, 01, 00, 00, 00)
+    start = datetime(2011, 12, 2, 0, 0, 0)
+    end = datetime(2012, 1, 1, 0, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -427,8 +427,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 16")
-    start = datetime(2011, 01, 01, 00, 00, 00)
-    end = datetime(2011, 02, 01, 00, 00, 00)
+    start = datetime(2011, 1, 1, 0, 0, 0)
+    end = datetime(2011, 2, 1, 0, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -441,8 +441,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 17")
-    start = datetime(2011, 12, 01, 00, 00, 00)
-    end = datetime(2012, 01, 01, 00, 00, 00)
+    start = datetime(2011, 12, 1, 0, 0, 0)
+    end = datetime(2012, 1, 1, 0, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -455,8 +455,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 18")
-    start = datetime(2011, 12, 01, 00, 00, 00)
-    end = datetime(2012, 06, 01, 00, 00, 00)
+    start = datetime(2011, 12, 1, 0, 0, 0)
+    end = datetime(2012, 6, 1, 0, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -469,8 +469,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 19")
-    start = datetime(2011, 06, 01, 00, 00, 00)
-    end = datetime(2021, 06, 01, 00, 00, 00)
+    start = datetime(2011, 6, 1, 0, 0, 0)
+    end = datetime(2021, 6, 1, 0, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -483,8 +483,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 20")
-    start = datetime(2011, 06, 01, 00, 00, 00)
-    end = datetime(2012, 06, 01, 12, 00, 00)
+    start = datetime(2011, 6, 1, 0, 0, 0)
+    end = datetime(2012, 6, 1, 12, 0, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -498,8 +498,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 21")
-    start = datetime(2011, 06, 01, 00, 00, 00)
-    end = datetime(2012, 06, 01, 12, 30, 00)
+    start = datetime(2011, 6, 1, 0, 0, 0)
+    end = datetime(2012, 6, 1, 12, 30, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -513,8 +513,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 22")
-    start = datetime(2011, 06, 01, 00, 00, 00)
-    end = datetime(2012, 06, 01, 12, 00, 05)
+    start = datetime(2011, 6, 1, 0, 0, 0)
+    end = datetime(2012, 6, 1, 12, 0, 5)
 
     comp = compute_datetime_delta(start, end)
 
@@ -528,8 +528,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 23")
-    start = datetime(2011, 06, 01, 00, 00, 00)
-    end = datetime(2012, 06, 01, 00, 30, 00)
+    start = datetime(2011, 6, 1, 0, 0, 0)
+    end = datetime(2012, 6, 1, 0, 30, 0)
 
     comp = compute_datetime_delta(start, end)
 
@@ -543,8 +543,8 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
     print("Test 24")
-    start = datetime(2011, 06, 01, 00, 00, 00)
-    end = datetime(2012, 06, 01, 00, 00, 05)
+    start = datetime(2011, 6, 1, 0, 0, 0)
+    end = datetime(2012, 6, 1, 0, 0, 5)
 
     comp = compute_datetime_delta(start, end)
 
@@ -812,7 +812,7 @@ def test_compute_absolute_time_granularity():
 
     print("Test 14")
     maps = []
-    a = datetime(2001, 12, 31, 00, 00, 00)
+    a = datetime(2001, 12, 31, 0, 0, 0)
     increment = "20 days"
     for i in range(24):
         start = increment_datetime_by_string(a, increment, i)
@@ -828,7 +828,7 @@ def test_compute_absolute_time_granularity():
 
     print("Test 15")
     maps = []
-    a = datetime(2001, 12, 01, 00, 00, 00)
+    a = datetime(2001, 12, 1, 0, 0, 0)
     increment = "5 months"
     for i in range(24):
         start = increment_datetime_by_string(a, increment, i)
@@ -856,7 +856,7 @@ def test_compute_absolute_time_granularity():
         map.set_absolute_time(start, end)
         maps.append(map)
 
-    a = datetime(2002, 02, 01, 12, 30, 30)
+    a = datetime(2002, 2, 1, 12, 30, 30)
     for i in range(24):
         start = increment_datetime_by_string(a, increment, i)
         end = None
@@ -881,7 +881,7 @@ def test_compute_absolute_time_granularity():
         map.set_absolute_time(start, end)
         maps.append(map)
 
-    a = datetime(2001, 02, 02)
+    a = datetime(2001, 2, 2)
     for i in range(8):
         start = increment_datetime_by_string(a, increment, i)
         end = None
@@ -1374,19 +1374,19 @@ def test_temporal_topology_builder():
     map_listA = []
 
     _map = RasterDataset(ident="1@a")
-    _map.set_absolute_time(datetime(2001, 01, 01), datetime(2001, 02, 01))
+    _map.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
     map_listA.append(copy.copy(_map))
     _map = RasterDataset(ident="2@a")
-    _map.set_absolute_time(datetime(2001, 02, 01), datetime(2001, 03, 01))
+    _map.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
     map_listA.append(copy.copy(_map))
     _map = RasterDataset(ident="3@a")
-    _map.set_absolute_time(datetime(2001, 03, 01), datetime(2001, 04, 01))
+    _map.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
     map_listA.append(copy.copy(_map))
     _map = RasterDataset(ident="4@a")
-    _map.set_absolute_time(datetime(2001, 04, 01), datetime(2001, 05, 01))
+    _map.set_absolute_time(datetime(2001, 4, 1), datetime(2001, 5, 1))
     map_listA.append(copy.copy(_map))
     _map = RasterDataset(ident="5@a")
-    _map.set_absolute_time(datetime(2001, 05, 01), datetime(2001, 06, 01))
+    _map.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 6, 1))
     map_listA.append(copy.copy(_map))
 
     tb = SpatioTemporalTopologyBuilder()
@@ -1404,19 +1404,19 @@ def test_temporal_topology_builder():
     map_listB = []
 
     _map = RasterDataset(ident="1@b")
-    _map.set_absolute_time(datetime(2001, 01, 14), datetime(2001, 03, 14))
+    _map.set_absolute_time(datetime(2001, 1, 14), datetime(2001, 3, 14))
     map_listB.append(copy.copy(_map))
     _map = RasterDataset(ident="2@b")
-    _map.set_absolute_time(datetime(2001, 02, 01), datetime(2001, 04, 01))
+    _map.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 4, 1))
     map_listB.append(copy.copy(_map))
     _map = RasterDataset(ident="3@b")
-    _map.set_absolute_time(datetime(2001, 02, 14), datetime(2001, 04, 30))
+    _map.set_absolute_time(datetime(2001, 2, 14), datetime(2001, 4, 30))
     map_listB.append(copy.copy(_map))
     _map = RasterDataset(ident="4@b")
-    _map.set_absolute_time(datetime(2001, 04, 02), datetime(2001, 04, 30))
+    _map.set_absolute_time(datetime(2001, 4, 2), datetime(2001, 4, 30))
     map_listB.append(copy.copy(_map))
     _map = RasterDataset(ident="5@b")
-    _map.set_absolute_time(datetime(2001, 05, 01), datetime(2001, 05, 14))
+    _map.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 5, 14))
     map_listB.append(copy.copy(_map))
 
     tb = SpatioTemporalTopologyBuilder()
@@ -1481,13 +1481,13 @@ def test_map_list_sorting():
     map_list = []
 
     _map = RasterDataset(ident="1@a")
-    _map.set_absolute_time(datetime(2001, 02, 01), datetime(2001, 03, 01))
+    _map.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
     map_list.append(copy.copy(_map))
     _map = RasterDataset(ident="2@a")
-    _map.set_absolute_time(datetime(2001, 01, 01), datetime(2001, 02, 01))
+    _map.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
     map_list.append(copy.copy(_map))
     _map = RasterDataset(ident="3@a")
-    _map.set_absolute_time(datetime(2001, 03, 01), datetime(2001, 04, 01))
+    _map.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
     map_list.append(copy.copy(_map))
 
     print("Original")
