@@ -773,13 +773,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 wx.EVT_MENU,
                 self.OnRasterColorTable,
                 id=self.popupID['color'])
-            self.popupMenu.Append(
-                self.popupID['colori'],
-                _("Set color table interactively"))
-            self.Bind(
-                wx.EVT_MENU,
-                self.lmgr.OnRasterRules,
-                id=self.popupID['colori'])
+            if len(selected) < 2:
+                self.popupMenu.Append(
+                    self.popupID['colori'],
+                    _("Set color table interactively"))
+                self.Bind(
+                    wx.EVT_MENU,
+                    self.lmgr.OnRasterRules,
+                    id=self.popupID['colori'])
 
             item = wx.MenuItem(
                 self.popupMenu,
