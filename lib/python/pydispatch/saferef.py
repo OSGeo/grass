@@ -1,4 +1,6 @@
 """Refactored "safe reference" from dispatcher.py"""
+from __future__ import print_function
+
 import weakref, traceback, sys
 
 if sys.hexversion >= 0x3000000:
@@ -128,8 +130,9 @@ class BoundMethodWeakref(object):
                     try:
                         traceback.print_exc()
                     except AttributeError:
-                        print '''Exception during saferef %s cleanup ''' \
-                              '''function %s: %s''' % (self, function, e)
+                        print('''Exception during saferef %s cleanup '''
+                              '''function %s: %s''' % (self, function, e),
+                              file=sys.stderr)
         self.deletionMethods = [onDelete]
         self.key = self.calculateKey(target)
         self.weakSelf = weakref.ref(getattr(target, im_self), remove)
