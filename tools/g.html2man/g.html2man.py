@@ -1,9 +1,15 @@
 #!/usr/bin/env python
 import sys
 import re
-from html import HTMLParser, HTMLParseError
-from groff import Formatter
-from StringIO import StringIO
+from ghtml import HTMLParser, HTMLParseError
+from ggroff import Formatter
+
+try:
+    # Python 2 str - bytes version
+    from StringIO import StringIO
+except ImportError:
+    # Python 3 str - unicode version
+    from io import StringIO
 
 entities = {
     'nbsp': " ",
@@ -32,7 +38,7 @@ def fix(content):
 def main():
     # parse HTML
     infile = sys.argv[1]
-    inf = file(infile)
+    inf = open(infile)
     p = HTMLParser(entities)
     for n, line in enumerate(inf):
         try:
@@ -63,7 +69,7 @@ def main():
     s = s.lstrip()
 
     # write groff
-    outf = file(sys.argv[2], 'w')
+    outf = open(sys.argv[2], 'w')
     outf.write(s)
     outf.close()
 

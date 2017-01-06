@@ -1,10 +1,26 @@
 from __future__ import (absolute_import, division, generators, nested_scopes,
                         print_function, unicode_literals, with_statement)
 import sys
-import HTMLParser as base
-import htmlentitydefs
 
-HTMLParseError = base.HTMLParseError
+try:
+    # Python 2 import
+    import HTMLParser as base
+    HTMLParseError = base.HTMLParseError
+except:
+    # Python 3 import
+    import html.parser as base
+    # TODO: this needs a better fix since HTMLParseError is actually
+    # used including its attributes, so that actually fails
+    # HTMLParseError is depreciated, parsing is not strict
+    HTMLParseError = Exception
+
+try:
+    # Python 3
+    from html.entities import entitydefs
+except ImportError:
+    # Python 2
+    from htmlentitydefs import entitydefs
+
 
 __all__ = ["HTMLParser", "HTMLParseError"]
 
@@ -35,12 +51,12 @@ head_content = ["title", "isindex", "base"]
 
 
 def setify(d):
-    return dict([(key, frozenset(val)) for key, val in d.iteritems()])
+    return dict([(key, frozenset(val)) for key, val in d.items()])
 
 
 def omit(allowed, tags):
     result = {}
-    for k, v in allowed.iteritems():
+    for k, v in allowed.items():
         for t in tags:
             if t in v:
                 v = v.union(allowed[t])
@@ -199,8 +215,8 @@ class HTMLParser(base.HTMLParser):
     def handle_entityref(self, name):
         if name in self.entities:
             self.handle_data(self.entities[name])
-        elif name in htmlentitydefs.entitydefs:
-            self.handle_data(htmlentitydefs.entitydefs[name])
+        elif name in entitydefs:
+            self.handle_data(entitydefs[name])
         else:
             sys.stderr.write("unrecognized entity: %s\n" % name)
 
