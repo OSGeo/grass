@@ -7,7 +7,7 @@ x,y,z points may also be imported.
 
 <p>
 Please note that the current region extents and resolution are used for
-the import. It is therefore recommended to first use the <em>-s</em>
+the import. It is therefore recommended to first use the <b>-s</b>
 flag to get the extents of the input points to be imported, then
 adjust the current region accordingly, and only then proceed with the
 actual import.
@@ -19,7 +19,7 @@ datasets as large as tens of billion of points (705GB in a single file).
  <!-- Doug Newcomb, US Fish & Wildlife Service -->
 
 <p>
-Available statistics for populating the raster are:
+Available statistics for populating the raster are (<b>method</b>):
 <p>
 <blockquote>
 <table>
@@ -65,9 +65,9 @@ input data's bounds. GRASS uses the cell-center raster convention where
 data points fall within the center of a cell, as opposed to the grid-node
 convention. Therefore you will need to grow the region out by half a cell
 in all directions beyond what the scan found in the file. After the region
-bounds and resolution are set correctly with <em>g.region</em>, run
+bounds and resolution are set correctly with <em><a href="g.region.html">g.region</a></em>, run
 <em>r.in.xyz</em> using the <i>n</i> method and verify that n=1 at all places.
-<em>r.univar</em> can help. Once you are confident that the region exactly
+<em><a href="r.univar.html">r.univar</a></em> can help. Once you are confident that the region exactly
 matches the data proceed to run <em>r.in.xyz</em> using one of the <i>mean,
 min, max</i>, or <i>median</i> methods. With n=1 throughout, the result
 should be identical regardless of which of those methods are used.
@@ -102,8 +102,8 @@ a single pass.
 
 You can use the <b>-s</b> scan flag to find the extent of the input data
 (and thus point density) before performing the full import. Use
-<em>g.region</em> to adjust the region bounds to match. The <b>-g</b> shell
-style flag prints the extent suitable as parameters for <em>g.region</em>.
+<em><a href="g.region.html">g.region</a></em> to adjust the region bounds to match. The <b>-g</b> shell
+style flag prints the extent suitable as parameters for <em><a href="g.region.html">g.region</a></em>.
 A suitable resolution can be found by dividing the number of input points
 by the area covered. e.g.
 
@@ -121,8 +121,8 @@ g.region -e
 </pre></div>
 
 <p>
-If you only intend to interpolate the data with <em>r.to.vect</em> and
-<em>v.surf.rst</em>, then there is little point to setting the region
+If you only intend to interpolate the data with <em><a href="r.to.vect.html">r.to.vect</a></em> and
+<em><a href="v.surf.rst.html">v.surf.rst</a></em>, then there is little point to setting the region
 resolution so fine that you only catch one data point per cell -- you might
 as well use "<tt>v.in.ascii&nbsp;-zbt</tt>" directly.
 
@@ -132,14 +132,14 @@ as well use "<tt>v.in.ascii&nbsp;-zbt</tt>" directly.
 Points falling outside the current region will be skipped. This includes
 points falling <em>exactly</em> on the southern region bound.
 (to capture those adjust the region with "<tt>g.region s=s-0.000001</tt>";
-see <em>g.region</em>)
+see <em><a href="g.region.html">g.region</a></em>)
 <p>Blank lines and comment lines starting with the hash symbol (<tt>#</tt>)
 will be skipped.
 
 <p>
 The <b>zrange</b> parameter may be used for filtering the input data by
 vertical extent. Example uses might include preparing multiple raster
-sections to be combined into a 3D raster array with <em>r.to.rast3</em>, or
+sections to be combined into a 3D raster array with <em><a href="r.to.rast3.html">r.to.rast3</a></em>, or
 for filtering outliers on relatively flat terrain.
 
 <p>
@@ -150,10 +150,10 @@ environment if the cells are over sampled.
 
 <p>
 The user can use a combination of <em>r.in.xyz</em> <b>output</b> maps to create
-custom filters. e.g. use <em>r.mapcalc</em> to create a <tt>mean-(2*stddev)</tt>
+custom filters. e.g. use <em><a href="r.mapcalc.html">r.mapcalc</a></em> to create a <tt>mean-(2*stddev)</tt>
 map. [In this example the user may want to include a lower bound filter in
-<em>r.mapcalc</em> to remove highly variable points (small <em>n</em>) or run
-<em>r.neighbors</em> to smooth the stddev map before further use.]
+<em><a href="r.mapcalc.html">r.mapcalc</a></em> to remove highly variable points (small <em>n</em>) or run
+<em><a href="r.neighbors.html">r.neighbors</a></em> to smooth the stddev map before further use.]
 
 
 <h3>Alternate value column</h3>
@@ -171,7 +171,7 @@ factor may be applied.
 <h3>Reprojection</h3>
 
 If the raster map is to be reprojected, it may be more appropriate to reproject
-the input points with <em>m.proj</em> or <em>cs2cs</em> before running
+the input points with <em><a href="m.proj.html">m.proj</a></em> or <em>cs2cs</em> before running
 <em>r.in.xyz</em>.
 
 
@@ -179,11 +179,11 @@ the input points with <em>m.proj</em> or <em>cs2cs</em> before running
 
 The vector engine's topographic abilities introduce a finite memory overhead
 per vector point which will typically limit a vector map to approximately
-3 million points (~ 1750^2 cells). If you want more, use the <em>r.to.vect</em>
+3 million points (~ 1750^2 cells). If you want more, use the <em><a href="r.to.vect.html">r.to.vect</a></em>
 <b>-b</b> flag to skip building topology. Without topology, however, all
-you'll be able to do with the vector map is display with <em>d.vect</em> and
-interpolate with <em>v.surf.rst</em>.
-Run <em>r.univar</em> on your raster map to check the number of non-NULL cells
+you'll be able to do with the vector map is display with <em><a href="d.vect.html">d.vect</a></em> and
+interpolate with <em><a href="v.surf.rst.html">v.surf.rst</a></em>.
+Run <em><a href="r.univar.html">r.univar</a></em> on your raster map to check the number of non-NULL cells
 and adjust bounds and/or resolution as needed before proceeding.
 
 <p>
@@ -226,7 +226,7 @@ r.stats -1g elevation > elevation.xyz
 # The point distance is 15m here.
 
 # detect extent, print result as g.region parameters
-r.in.xyz input=elevation.xyz separator=space -s output=dummy -g
+r.in.xyz input=elevation.xyz separator=space -s -g
 # ... n=228492.5 s=215007.5 e=644992.5 w=630007.5 b=55.578793 t=156.32986
 
 # set computational region, along with the actual raster resolution
@@ -251,7 +251,7 @@ into a clean DEM:
 
 <div class="code"><pre>
 # scan and set region bounds
-r.in.xyz -s separator="," in=lidaratm2.txt out=test
+r.in.xyz -s separator="," in=lidaratm2.txt
 g.region n=35.969493 s=35.949693 e=-75.620999 w=-75.639999
 g.region res=0:00:00.075 -a
 
@@ -259,7 +259,7 @@ g.region res=0:00:00.075 -a
 r.in.xyz in=lidaratm2.txt out=lidar_n separator="," method=n zrange=-2,50
 
 # check point density [rho = n_sum / (rows*cols)]
-r.univar lidar_n | grep sum
+r.univar lidar_n
 # create "min" map (elevation filtered for premature hits)
 r.in.xyz in=lidaratm2.txt out=lidar_min separator="," method=min zrange=-2,50
 
@@ -267,7 +267,7 @@ r.in.xyz in=lidaratm2.txt out=lidar_min separator="," method=min zrange=-2,50
 g.region n=35:57:56.25N s=35:57:13.575N w=75:38:23.7W e=75:37:15.675W
 
 # check number of non-null cells (try and keep under a few million)
-r.univar lidar_min | grep '^n:'
+r.univar lidar_min
 
 # convert to points 
 r.to.vect -z type=point in=lidar_min out=lidar_min_pt
@@ -291,10 +291,6 @@ r.colors lidar_min.rst_scaled rule=bcyr -n -e
      <tt>method=string[,string,...] output=name[,name,...]</tt><br>
      This can be easily handled by a wrapper script, with the added
      benefit of it being very simple to parallelize that way.
-<li> Add two new flags for support for direct binary input from libLAS
-     for LIDAR data and MB-System's mbio for multi-beam bathymetry data.
-     <!-- Bob Covill has supplied patches for MBIO interface already -->
-     <br><i>note</i>: See the new <em>r.in.lidar</em> module for this.
 </ul>
 
 
@@ -345,10 +341,7 @@ Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation
 
 <h2>AUTHORS</h2>
 
-Hamish Bowman<br> <i>
-Department of Marine Science<br>
-University of Otago<br>
-New Zealand</i><br>
+Hamish Bowman, Department of Marine Science, University of Otagom New Zealand
 <br>
 Extended by Volker Wichmann to support the aggregate functions
 <i>median, percentile, skewness</i> and <i>trimmed mean</i>.
