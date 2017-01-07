@@ -124,9 +124,7 @@ int main(int argc, char *argv[])
     struct multtree *tree;
     int open_check, with_z;
     char buf[1024];
-#if defined(_OPENMP)
     int threads;
-#endif
 
     struct GModule *module;
     struct
@@ -253,7 +251,6 @@ int main(int argc, char *argv[])
 	_("Name for output vector map showing overlapping windows");
     parm.overfile->guisection = _("Outputs");
 
-#if defined(_OPENMP)
     parm.threads = G_define_option();
     parm.threads->key = "nprocs";
     parm.threads->type = TYPE_INTEGER;
@@ -262,7 +259,6 @@ int main(int argc, char *argv[])
     parm.threads->description =
 	_("Number of threads for parallel computing");
     parm.threads->guisection = _("Parameters");
-#endif
 
     parm.maskmap = G_define_standard_option(G_OPT_R_INPUT);
     parm.maskmap->key = "mask";
@@ -401,7 +397,6 @@ int main(int argc, char *argv[])
     treefile = parm.treefile->answer;
     overfile = parm.overfile->answer;
 
-#if defined(_OPENMP)
     sscanf(parm.threads->answer, "%d", &threads);
     if (threads < 1)
     {
@@ -413,7 +408,11 @@ int main(int argc, char *argv[])
         G_warning(_("Parallel computation disabled when deviation output is required"));
         threads = 1;
     }
+#if defined(_OPENMP)
     omp_set_num_threads(threads);
+#else
+    if (threads > 1)
+        G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel computation is disabled."));
 #endif
 
     if (devi) {
