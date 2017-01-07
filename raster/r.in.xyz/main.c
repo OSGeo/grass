@@ -166,12 +166,12 @@ int main(int argc, char *argv[])
     module->description =
 	_("Creates a raster map from an assemblage of many coordinates using univariate statistics.");
 
-    input_opt = G_define_standard_option(G_OPT_F_INPUT);
+    input_opt = G_define_standard_option(G_OPT_F_BIN_INPUT);
     input_opt->description =
 	_("ASCII file containing input data (or \"-\" to read from stdin)");
 
     output_opt = G_define_standard_option(G_OPT_R_OUTPUT);
-
+    
     method_opt = G_define_option();
     method_opt->key = "method";
     method_opt->type = TYPE_STRING;
@@ -205,13 +205,9 @@ int main(int argc, char *argv[])
                _("Variance of point values in cell"),
                _("Coefficient of variance of point values in cell"),
                _("Median value of point values in cell"),
-               _("pth (nth) percentile of point values in cell"),
+               _("Pth (nth) percentile of point values in cell"),
                _("Skewness of point values in cell"),
                _("Trimmed mean of point values in cell"));
-
-    type_opt = G_define_standard_option(G_OPT_R_TYPE);
-    type_opt->required = NO;
-    type_opt->answer = "FCELL";
 
     delim_opt = G_define_standard_option(G_OPT_F_SEP);
     delim_opt->guisection = _("Input");
@@ -295,6 +291,11 @@ int main(int argc, char *argv[])
     vscale_opt->description = _("Scale to apply to alternate value column data");
     vscale_opt->guisection = _("Advanced Input");
 
+    type_opt = G_define_standard_option(G_OPT_R_TYPE);
+    type_opt->required = NO;
+    type_opt->answer = "FCELL";
+    type_opt->guisection = _("Output");
+
     percent_opt = G_define_option();
     percent_opt->key = "percent";
     percent_opt->type = TYPE_INTEGER;
@@ -310,7 +311,7 @@ int main(int argc, char *argv[])
     pth_opt->type = TYPE_INTEGER;
     pth_opt->required = NO;
     pth_opt->options = "1-100";
-    pth_opt->description = _("pth percentile of the values");
+    pth_opt->description = _("Pth percentile of the values");
     pth_opt->guisection = _("Statistic");
 
     trim_opt = G_define_option();
@@ -325,16 +326,24 @@ int main(int argc, char *argv[])
     scan_flag = G_define_flag();
     scan_flag->key = 's';
     scan_flag->description = _("Scan data file for extent then exit");
-
+    scan_flag->guisection = _("Scan");
+    scan_flag->suppress_required = YES;
+    
     shell_style = G_define_flag();
     shell_style->key = 'g';
     shell_style->description =
 	_("In scan mode, print using shell script style");
-
+    shell_style->guisection = _("Scan");
+    shell_style->suppress_required = YES;
+        
     skipline = G_define_flag();
     skipline->key = 'i';
     skipline->description = _("Ignore broken lines");
 
+    G_option_required(output_opt, scan_flag, shell_style, NULL);
+    G_option_requires(scan_flag, input_opt, NULL);
+    G_option_requires(shell_style, input_opt, NULL);
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
