@@ -18,7 +18,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#if defined(_OPENMP)
 #include <omp.h>
+#endif
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/interpf.h>
