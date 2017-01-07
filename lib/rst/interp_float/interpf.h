@@ -138,6 +138,8 @@ int IL_grid_calc_2d(struct interp_params *, struct quaddata *, struct BM *,
 /* matrix.c */
 int IL_matrix_create(struct interp_params *, struct triple *, int, double **,
 		     int *);
+int IL_matrix_create_alloc(struct interp_params *, struct triple *, int, double **,
+		     int *, double *);
 /* minmax.c */
 int min1(int, int);
 int max1(int, int);
@@ -176,11 +178,18 @@ int IL_secpar_loop_2d(struct interp_params *, int, int, int, struct BM *,
 		      double *, double *, double *, double *, double *,
 		      double *, int, int);
 /* segmen2d.c */
+double smallest_segment(struct multtree *, int);
 int IL_interp_segments_2d(struct interp_params *, struct tree_info *,
 			  struct multtree *, struct BM *, double, double,
 			  double *, double *, double *, double *, double *,
 			  double *, double *, double *, double *, int, off_t,
 			  double);
+/* segmen2d_parallel.c */
+int IL_interp_segments_2d_parallel(struct interp_params *, struct tree_info *,
+				   struct multtree *, struct BM *, double, double,
+				   double *, double *, double *, double *, double *,
+				   double *, double *, double *, double *, int, off_t,
+				   double, int);
 /* vinput2d.c */
 int IL_vector_input_data_2d(struct interp_params *, struct Map_info *, int,
 			    char *, char *, struct tree_info *, double *,

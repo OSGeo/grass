@@ -36,6 +36,25 @@
 #include <grass/gmath.h>
 
 
+int IL_matrix_create(struct interp_params *params,
+		     struct triple *points,	/* points for interpolation */
+		     int n_points,	/* number of points */
+		     double **matrix,	/* matrix */
+		     int *indx)
+{
+    static double *A = NULL;
+
+    if (!A) {
+	if (!
+	    (A =
+	     G_alloc_vector((params->KMAX2 + 2) * (params->KMAX2 + 2) + 1))) {
+	    fprintf(stderr, "Cannot allocate memory for A\n");
+	    return -1;
+	}
+    }
+    return IL_matrix_create_alloc(params, points, n_points, matrix, indx, A);
+}
+
 /*!
  * \brief Creates system of linear equations from interpolated points
  *
@@ -50,18 +69,18 @@
  *
  * \return -1 on failure, 1 on success
  */
-int IL_matrix_create(struct interp_params *params,
-		     struct triple *points,	/* points for interpolation */
-		     int n_points,	/* number of points */
-		     double **matrix,	/* matrix */
-		     int *indx)
+int IL_matrix_create_alloc(struct interp_params *params,
+			   struct triple *points,	/* points for interpolation */
+			   int n_points,	/* number of points */
+			   double **matrix,	/* matrix */
+			   int *indx,
+			   double *A /* temporary matrix unique for all threads */)
 {
     double xx, yy;
     double rfsta2, r;
     double d;
     int n1, k1, k2, k, i1, l, m, i, j;
     double fstar2 = params->fi * params->fi / 4.;
-    static double *A = NULL;
     double RO, amaxa;
     double rsin = 0, rcos = 0, teta, scale = 0;	/*anisotropy parameters - added by JH 2002 */
     double xxr, yyr;
@@ -76,15 +95,6 @@ int IL_matrix_create(struct interp_params *params,
 
 
     n1 = n_points + 1;
-
-    if (!A) {
-	if (!
-	    (A =
-	     G_alloc_vector((params->KMAX2 + 2) * (params->KMAX2 + 2) + 1))) {
-	    fprintf(stderr, "Cannot allocate memory for A\n");
-	    return -1;
-	}
-    }
 
     /*
        C      GENERATION OF MATRIX

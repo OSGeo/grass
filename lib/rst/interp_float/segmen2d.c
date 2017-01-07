@@ -23,8 +23,6 @@
 #include <grass/interpf.h>
 #include <grass/gmath.h>
 
-static double smallest_segment(struct multtree *, int);
-
 
 /*!
  * Interpolate recursively a tree of segments
@@ -345,7 +343,7 @@ int IL_interp_segments_2d(struct interp_params *params,
     return 1;
 }
 
-static double smallest_segment(struct multtree *tree, int n_leafs)
+double smallest_segment(struct multtree *tree, int n_leafs)
 {
     static int first_time = 1;
     int ii;

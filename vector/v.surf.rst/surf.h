@@ -31,5 +31,6 @@
 #define TOPPARAM "0"
 #define PREPROCESS "0"
 #define ZMULT   "1.0"
+#define NUM_THREADS "1"
 
 int print_tree(struct multtree *, double, double, struct Map_info *);
