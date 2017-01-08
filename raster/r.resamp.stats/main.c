@@ -33,6 +33,7 @@ static const struct menu
     {c_mode,   w_mode,   "mode",     "most frequently occurring value"},
     {c_min,    w_min,    "minimum",  "lowest value"},
     {c_max,    w_max,    "maximum",  "highest value"},
+    {c_range,  NULL,     "range",    "range value"},
     {c_quart1, w_quart1, "quart1",   "first quartile"},
     {c_quart3, w_quart3, "quart3",   "third quartile"},
     {c_perc90, w_perc90, "perc90",   "ninetieth percentile"},
@@ -40,6 +41,8 @@ static const struct menu
     {c_var,    w_var,    "variance", "variance value"},
     {c_stddev, w_stddev, "stddev",   "standard deviation"},
     {c_quant,  w_quant,  "quantile", "arbitrary quantile"},
+    {c_count,  w_count,  "count",    "count of non-NULL values"},
+    {c_divr,   NULL,     "diversity", "number of different values"},
     {NULL, NULL, NULL, NULL}
 };
 
@@ -384,11 +387,14 @@ int main(int argc, char *argv[])
     Rast_write_history(parm.rastout->answer, &history);
 
     /* copy color table from source map */
-    if (strcmp(parm.method->answer, "sum") != 0) {
+    if (strcmp(parm.method->answer, "sum") != 0 &&
+        strcmp(parm.method->answer, "range") != 0 &&
+        strcmp(parm.method->answer, "count") != 0 &&
+        strcmp(parm.method->answer, "diversity") != 0) {
 	if (Rast_read_colors(parm.rastin->answer, "", &colors) < 0)
 	    G_fatal_error(_("Unable to read color table for %s"),
 			  parm.rastin->answer);
-	Rast_mark_colors_as_fp(&colors);
+        Rast_mark_colors_as_fp(&colors);
 	Rast_write_colors(parm.rastout->answer, G_mapset(), &colors);
     }
 
