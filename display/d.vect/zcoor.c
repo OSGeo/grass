@@ -31,20 +31,27 @@ int display_zcoor(struct Map_info *Map, int type, LATTR *lattr)
 	D_encoding(lattr->enc);
 
     Vect_rewind(Map);
-
-    num = Vect_get_num_lines(Map);
-    G_debug(1, "n_lines = %d", num);
     /* Points - no nodes registered */
-    for (el = 1; el <= num; el++) {
-	if (!Vect_line_alive(Map, el))
-	    continue;
-	ltype = Vect_read_line(Map, Points, NULL, el);
-	if ((ltype != GV_POINT) && (ltype & type))
-	    continue;
-	G_debug(3, "point = %d", el);
-	
-	sprintf(text, "%.2f", Points->z[0]);
-	show_label(&Points->x[0], &Points->y[0], lattr, text);
+    while (TRUE) {
+        ltype = Vect_read_next_line(Map, Points, NULL);
+        if (ltype == -1) {
+            G_warning(_("Unable to read vector map"));
+            return 1;
+        }
+        else if (ltype == -2) {
+            break;
+        }
+        if ((ltype != GV_POINT) && (ltype & type))
+            continue;
+        
+        sprintf(text, "%.2f", Points->z[0]);
+        show_label(&Points->x[0], &Points->y[0], lattr, text);
+    }
+    Vect_destroy_line_struct(Points);
+    
+    if (Vect_level(Map) < 2) {
+        /* no topology */
+        return 0;
     }
     
     num = Vect_get_num_nodes(Map);
@@ -61,7 +68,5 @@ int display_zcoor(struct Map_info *Map, int type, LATTR *lattr)
 	show_label(&xl, &yl, lattr, text);
     }
 
-    Vect_destroy_line_struct(Points);
-    
     return 0;
 }
