@@ -475,19 +475,62 @@ int main(int argc, char *argv[])
 
 	    temp_window = window;
 
-	    Vect_set_open_level(2);
-	    if (2 > Vect_open_old_head(&Map, vect_name, mapset))
-		G_fatal_error(_("Unable to open vector map <%s> on topological level"),
-			      vect_name);
+            /* try to open head-only on level 2 */
+            if (Vect_open_old_head(&Map, vect_name, mapset) < 2) {
+                /* force level 1, open fully */
+                Vect_close(&Map);
+                Vect_set_open_level(1); /* no topology */
+                if (Vect_open_old(&Map, vect_name, mapset) < 1)
+                    G_fatal_error(_("Unable to open vector map <%s>"),
+                                  vect_name);
+            }
             
-	    Vect_get_map_box(&Map, &box);
-	    map_window = window;
-	    map_window.north = box.N;
-	    map_window.south = box.S;
-	    map_window.west = box.W;
-	    map_window.east = box.E;
-	    map_window.top = box.T;
-	    map_window.bottom = box.B;
+            if (Vect_level(&Map) > 1) {
+                /* topology available */
+                Vect_get_map_box(&Map, &box);
+            }
+            else {
+                /* no topology
+                   NOTE: number of points, lines, boundaries,
+                   centroids, faces, kernels is still available */
+
+                int type;
+                int first = TRUE;
+                struct line_pnts *Points;
+                struct bound_box line_box;
+
+                Points = Vect_new_line_struct();
+                Vect_rewind(&Map);
+                G_message(_("Topology not available for vector map <%s>. "
+                            "Registering primitives..."), vect_name);
+                while (TRUE) {
+                    /* register line */
+                    type = Vect_read_next_line(&Map, Points, NULL);
+                    
+                    if (type == -1) {
+                        G_fatal_error(_("Unable to read vector map"));
+                    }
+                    else if (type == -2) {
+                        break;
+                    }
+                    dig_line_box(Points, &line_box);
+                    if (first == TRUE) {
+                        Vect_box_copy(&box, &line_box);
+                        first = FALSE;
+                    }
+                    else
+                        Vect_box_extend(&box, &line_box);
+                }
+                Vect_destroy_line_struct(Points);
+            }
+
+            map_window = window;
+            map_window.north = box.N;
+            map_window.south = box.S;
+            map_window.west = box.W;
+            map_window.east = box.E;
+            map_window.top = box.T;
+            map_window.bottom = box.B;
 
 	    if (!first) {
 		window = map_window;
