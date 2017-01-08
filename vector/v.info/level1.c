@@ -6,7 +6,7 @@
 int level_one_info(struct Map_info *Map)
 {
     struct Plus_head *plus;
-    int i, type, first = 1;
+    int type, first = 1;
     off_t offset;
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -26,8 +26,8 @@ int level_one_info(struct Map_info *Map)
     Cats = Vect_new_cats_struct();
     
     Vect_rewind(Map);
-    /* G_message(_("Registering primitives...")); */
-    i = 1;
+    G_message(_("Topology not available for vector map <%s>. "
+                "Registering primitives..."), Vect_get_full_name(Map));
     while (1) {
 	/* register line */
 	type = Vect_read_next_line(Map, Points, Cats);
