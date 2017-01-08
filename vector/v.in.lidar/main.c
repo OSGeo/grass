@@ -349,8 +349,8 @@ int main(int argc, char *argv[])
     /* Open LAS file*/
     LAS_reader = LASReader_Create(in_opt->answer);
     if (LAS_reader == NULL)
-        G_fatal_error(_("Unable to open file <%s> as a LiDAR point cloud"),
-                      in_opt->answer);
+        G_fatal_error(_("Unable to open file <%s> as a LiDAR point cloud. %s"),
+                      in_opt->answer, LASError_GetLastErrorMsg());
     LAS_header = LASReader_GetHeader(LAS_reader);
     if  (LAS_header == NULL) {
         G_fatal_error(_("Unable to read LAS header of <%s>"), in_opt->answer);
