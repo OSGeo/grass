@@ -855,6 +855,7 @@ class MapFrame(SingleMapFrame):
             if pgnum > -1:
                 self.layerbook.RemovePage(pgnum)
         Debug.msg(2, "MapFrame.OnCloseWindow(): function ends")
+        self._mgr.UnInit()
         self.Destroy()
 
     def Query(self, x, y):
