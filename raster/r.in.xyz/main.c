@@ -832,7 +832,7 @@ int main(int argc, char *argv[])
 	G_percent(1, 1, 1);	/* flush */
 	G_debug(2, "pass %d finished, %lu coordinates in box", pass, count);
 	count_total += count;
-
+        G_message(_("%lu points found in input file"), line);
 
 	/* calc stats and output */
 	G_message(_("Writing to output raster map..."));
@@ -1174,13 +1174,9 @@ int main(int argc, char *argv[])
     Rast_set_history(&history, HIST_DATSRC_1, infile);
     Rast_write_history(outmap, &history);
 
-
-    sprintf(buff, _("%lu points found in region."), count_total);
-    G_done_msg("%s", buff);
-    G_debug(1, "Processed %lu lines.", line);
+    G_done_msg(_("%lu points found in region."), count_total);
 
     exit(EXIT_SUCCESS);
-
 }
 
 
