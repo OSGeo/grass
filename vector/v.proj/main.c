@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
 	struct Flag *list;	/* list files in source location */
 	struct Flag *transformz;	/* treat z as ellipsoidal height */
 	struct Flag *wrap;		/* latlon output: wrap to 0,360 */
+	struct Flag *no_topol;		/* do not build topology */
     } flag;
 
     G_gisinit(argv[0]);
@@ -123,6 +124,11 @@ int main(int argc, char *argv[])
     flag.wrap->label =
 	_("Disable wrapping to -180,180 for latlon output");
     flag.transformz->guisection = _("Target");
+
+    flag.no_topol = G_define_flag();
+    flag.no_topol->key = 'b';
+    flag.no_topol->label = _("Do not build vector topology");
+    flag.no_topol->description = _("Recommended for massive point conversion");
 
     /* The parser checks if the map already exists in current mapset,
        we switch out the check and do it
@@ -498,7 +504,8 @@ int main(int argc, char *argv[])
 
     Vect_close(&Map);
 
-    Vect_build(&Out_Map);
+    if (!flag.no_topol->answer)
+        Vect_build(&Out_Map);
     Vect_close(&Out_Map);
 
     if (recommend_nowrap)
