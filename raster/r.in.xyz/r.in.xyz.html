@@ -257,7 +257,7 @@ into a clean DEM:
 
 <div class="code"><pre>
 # scan and set region bounds
-r.in.xyz -s separator="," in=lidaratm2.txt
+r.in.xyz -s -g separator="," in=lidaratm2.txt output=dummy
 g.region n=35.969493 s=35.949693 e=-75.620999 w=-75.639999
 g.region res=0:00:00.075 -a
 
