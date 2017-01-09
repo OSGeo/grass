@@ -232,7 +232,7 @@ r.stats -1g elevation > elevation.xyz
 # In this example the distance is 15m in x and y direction.
 
 # detect extent, print result as g.region parameters
-r.in.xyz input=elevation.xyz output=dummy separator=space -s -g
+r.in.xyz input=elevation.xyz separator=space -s -g
 # ... n=228492.5 s=215007.5 e=644992.5 w=630007.5 b=55.578793 t=156.32986
 
 # set computational region, along with the actual raster resolution
@@ -257,7 +257,7 @@ into a clean DEM:
 
 <div class="code"><pre>
 # scan and set region bounds
-r.in.xyz -s -g separator="," in=lidaratm2.txt output=dummy
+r.in.xyz -s -g separator="," in=lidaratm2.txt
 g.region n=35.969493 s=35.949693 e=-75.620999 w=-75.639999
 g.region res=0:00:00.075 -a
 
