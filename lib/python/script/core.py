@@ -78,6 +78,7 @@ STDOUT = subprocess.STDOUT
 
 
 raise_on_error = False  # raise exception instead of calling fatal()
+_capture_stderr = False  # capture stderr of subprocesses if possible
 
 
 def call(*args, **kwargs):
@@ -405,8 +406,16 @@ def run_command(*args, **kwargs):
 
     :raises: ``CalledModuleError`` when module returns non-zero return code
     """
+    if _capture_stderr and 'stderr' not in kwargs.keys():
+        kwargs['stderr'] = PIPE
     ps = start_command(*args, **kwargs)
-    returncode = ps.wait()
+    if _capture_stderr:
+        stdout, stderr = ps.communicate()
+        returncode = ps.poll()
+        if returncode:
+            sys.stderr.write(stderr)
+    else:
+        returncode = ps.wait()
     return handle_errors(returncode, returncode, args, kwargs)
 
 
@@ -455,9 +464,13 @@ def read_command(*args, **kwargs):
 
     :return: stdout
     """
+    if _capture_stderr and 'stderr' not in kwargs.keys():
+        kwargs['stderr'] = PIPE
     process = pipe_command(*args, **kwargs)
-    stdout, unused = process.communicate()
+    stdout, stderr = process.communicate()
     returncode = process.poll()
+    if _capture_stderr and returncode:
+        sys.stderr.write(stderr)
     return handle_errors(returncode, stdout, args, kwargs)
 
 
@@ -526,9 +539,13 @@ def write_command(*args, **kwargs):
     """
     # TODO: should we delete it from kwargs?
     stdin = kwargs['stdin']
+    if _capture_stderr and 'stderr' not in kwargs.keys():
+        kwargs['stderr'] = PIPE
     process = feed_command(*args, **kwargs)
-    process.communicate(stdin)
+    unused, stderr = process.communicate(stdin)
     returncode = process.poll()
+    if _capture_stderr and returncode:
+        sys.stderr.write(stderr)
     return handle_errors(returncode, returncode, args, kwargs)
 
 
@@ -667,6 +684,46 @@ def get_raise_on_error():
     """
     global raise_on_error
     return raise_on_error
+
+
+# TODO: solve also warnings (not printed now)
+def set_capture_stderr(capture=True):
+    """Enable capturing standard error output of modules and print it.
+
+    By default, standard error output (stderr) of child processes shows
+    in the same place as output of the parent process. This may not
+    always be the same place as ``sys.stderr`` is written.
+    After calling this function, functions in the ``grass.script``
+    package will capture the stderr of child processes and pass it
+    to ``sys.stderr`` if there is an error.
+
+    .. note::
+
+        This is advantages for interactive shells such as the one in GUI
+        and interactive notebooks such as Jupyer Notebook.
+
+    The capturing can be applied only in certain cases, for example
+    in case of run_command() it is applied because run_command() nor
+    its callers do not handle the streams, however feed_command()
+    cannot do capturing because its callers handle the streams.
+
+    The previous state is returned. Passing ``False`` disables the
+    capturing.
+
+    .. versionadded:: 7.4
+    """
+    global _capture_stderr
+    tmp = _capture_stderr
+    _capture_stderr = capture
+    return tmp
+
+def get_capture_stderr():
+    """Return True if stderr is captured, False otherwise.
+
+    See set_capture_stderr().
+    """
+    global _capture_stderr
+    return _capture_stderr
 
 # interface to g.parser
 
