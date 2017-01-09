@@ -206,8 +206,14 @@ number of points per grid cell), the z values are ignored anyway.
 
 <h3>Import of x,y,z ASCII into DEM</h3>
 
-Sometimes elevation data are delivered as x,y,z ASCII files instead of
-a raster matrix:
+Sometimes elevation data are delivered as x,y,z ASCII files instead of a raster
+matrix. The import procedure consists of a few steps: calculation of the
+map extent, setting of the computational region accordingly with an additional
+extension into all directions by half a raster cell in order to register the
+elevation points at raster cell centers.
+<p>
+Note: if the z column is separated by several spaces from the coordinate columns,
+it may be sufficient to adapt the <b>z</b> position value.
 
 <!-- NC: preparation for this example
 g.region raster=elevation res=15 -p 
@@ -223,17 +229,17 @@ r.stats -1g elevation > elevation.xyz
 # 630037.5 228492.5 142.29822
 # 630052.5 228492.5 143.97987
 # ...
-# The point distance is 15m here.
+# In this example the distance is 15m in x and y direction.
 
 # detect extent, print result as g.region parameters
-r.in.xyz input=elevation.xyz separator=space -s -g
+r.in.xyz input=elevation.xyz output=dummy separator=space -s -g
 # ... n=228492.5 s=215007.5 e=644992.5 w=630007.5 b=55.578793 t=156.32986
 
 # set computational region, along with the actual raster resolution
-# which is defined by the ASCII file point spacing:
+# as defined by the point spacing in the ASCII file:
 g.region n=228492.5 s=215007.5 e=644992.5 w=630007.5 res=15 -p
 
-# enlarge computational region by half a raster cell (here 7.5m) to
+# now enlarge computational region by half a raster cell (here 7.5m) to
 # store the points as cell centers:
 g.region n=n+7.5 s=s-7.5 w=w-7.5 e=e+7.5 -p
 
