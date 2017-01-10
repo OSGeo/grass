@@ -200,6 +200,7 @@ int main(int argc, char *argv[])
 
     G_important_message(_("Reading features from vector map..."));
     Vect_set_constraint_type(&Map, vtype);
+    i = 0;
     while (TRUE) {
         /* register line */
         type = Vect_read_next_line(&Map, Points, Cats);
