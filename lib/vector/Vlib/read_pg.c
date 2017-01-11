@@ -1245,17 +1245,25 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all
     if (!pg_info->toposchema_name) {
         /* simple feature access (geom, fid) */
         /* TODO: start_fid */
-        if (pg_info->where)
+        if (pg_info->where) {
             /* set attribute filter if where sql statement defined */
+            char **tokens = G_tokenize(pg_info->where, "=");
+            if (G_number_of_tokens(tokens) != 2) {
+                G_warning(_("Unable to parse '%s'"), pg_info->where);
+                return -1;
+            }
             sprintf(stmt,
-                    "DECLARE %s CURSOR FOR SELECT %s,%s FROM \"%s\".\"%s\" WHERE %s ORDER BY %s",
+                    "DECLARE %s CURSOR FOR SELECT \"%s\",\"%s\" FROM \"%s\".\"%s\" WHERE \"%s\"=%s ORDER BY \"%s\"",
                     pg_info->cursor_name, pg_info->geom_column, pg_info->fid_column, pg_info->schema_name,
-                    pg_info->table_name, pg_info->where, pg_info->fid_column);
-        else
+                    pg_info->table_name, tokens[0], tokens[1], pg_info->fid_column);
+            G_free_tokens(tokens);
+        }
+        else {
             sprintf(stmt,
-                    "DECLARE %s CURSOR FOR SELECT %s,%s FROM \"%s\".\"%s\" ORDER BY %s",
+                    "DECLARE %s CURSOR FOR SELECT \"%s\",\"%s\" FROM \"%s\".\"%s\" ORDER BY \"%s\"",
                     pg_info->cursor_name, pg_info->geom_column, pg_info->fid_column, pg_info->schema_name,
                     pg_info->table_name, pg_info->fid_column);
+        }
     }
     else {
         /* topology access (geom,id,fid,type) */
