@@ -138,7 +138,17 @@ int main(int argc, char *argv[])
     if (!flags.override->answer) {
         /* here must be used original dsn since check_projection() is
          * using GDAL library */
-        check_projection(options.dsn->answer, ilayer);
+        char dsn_ogr[DB_SQL_MAX];
+
+        if (!use_ogr && G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
+            /* make dsn OGR-compatible */
+            strcpy(dsn_ogr, "PG:");
+            strcat(dsn_ogr, dsn);
+        }
+        else {
+            sprintf(dsn_ogr, "%s", dsn);
+        }
+        check_projection(dsn_ogr, ilayer);
     }
     
     /* create new vector map */
