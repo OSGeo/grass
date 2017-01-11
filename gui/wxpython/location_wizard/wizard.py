@@ -57,6 +57,7 @@ from gui_core.wrap import SpinCtrl
 from location_wizard.base import BaseClass
 from location_wizard.dialogs import SelectTransformDialog
 
+from grass.script import decode
 from grass.script import core as grass
 from grass.exceptions import OpenError
 
@@ -2560,7 +2561,7 @@ class LocationWizard(wx.Object):
             return None
 
         # current GISDbase or a new one?
-        current_gdb = grass.gisenv()['GISDBASE'].decode(sys.stdin.encoding)
+        current_gdb = decode(grass.gisenv()['GISDBASE'])
         if current_gdb != database:
             # change to new GISDbase or create new one
             if os.path.isdir(database) != True:
