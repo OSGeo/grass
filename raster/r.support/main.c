@@ -306,7 +306,7 @@ int main(int argc, char *argv[])
 
 	G_file_name_misc(path, "cell_misc", "null", raster->answer, G_mapset());
 	unlink(path);
-	G_file_name_misc(path, "cell_misc", "null2", raster->answer, G_mapset());
+	G_file_name_misc(path, "cell_misc", "nullcmpr", raster->answer, G_mapset());
 	unlink(path);
 
 	G_done_msg(_("Done."));
