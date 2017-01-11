@@ -150,6 +150,13 @@ class KeyValue(dict):
         self[key] = value
 
 
+def _get_encoding():
+    encoding = locale.getdefaultlocale()[1]
+    if not encoding:
+        encoding = 'UTF-8'
+    return encoding
+
+
 def decode(bytes_):
     """Decode bytes with default locale and return (unicode) string
 
@@ -158,8 +165,8 @@ def decode(bytes_):
     :param bytes bytes_: the bytes to decode
     """
     if isinstance(bytes_, bytes):
-        enc = locale.getdefaultlocale()[1]
-        return bytes_.decode(enc) if enc else bytes_.decode()
+        enc = _get_encoding()
+        return bytes_.decode(enc)
     return bytes_
 
 
@@ -173,8 +180,8 @@ def encode(string):
     """
     if isinstance(string, bytes):
         return string
-    enc = locale.getdefaultlocale()[1]
-    return string.encode(enc) if enc else string.encode()
+    enc = _get_encoding()
+    return string.encode(enc)
 
 
 def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
