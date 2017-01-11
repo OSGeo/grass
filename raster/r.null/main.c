@@ -197,7 +197,8 @@ int main(int argc, char *argv[])
 
     if (recreate) {
 	int in_fd;
-	/* write a file of no-nulls */
+
+	/* (un-)compress NULL file */
 	null_bits = Rast__allocate_null_bits(cellhd.cols);
 	Rast__init_null_bits(null_bits, cellhd.cols);
 
@@ -223,12 +224,12 @@ int main(int argc, char *argv[])
     }
 
     if (remove) {
-	/* write a file of no-nulls */
+	/* remove NULL file */
 	G_verbose_message(_("Removing null file for raster map <%s>..."),
 			   name);
 	G_file_name_misc(path, "cell_misc", "null", name, mapset);
 	unlink(path);
-	G_file_name_misc(path, "cell_misc", "null2", name, mapset);
+	G_file_name_misc(path, "cell_misc", "nullcmpr", name, mapset);
 	unlink(path);
 
 	G_done_msg(_("Raster map <%s> modified."), name);
