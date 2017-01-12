@@ -599,7 +599,7 @@ int main(int argc, char *argv[])
     /* allocate memory for a single row of output data */
     raster_row = Rast_allocate_output_buf(rtype);
 
-    G_message(_("Reading data ..."));
+    G_message(_("Reading data..."));
 
     count_total = line_total = 0;
 
@@ -607,7 +607,7 @@ int main(int argc, char *argv[])
     for (pass = 1; pass <= npasses; pass++) {
 
 	if (npasses > 1)
-	    G_message(_("Pass #%d (of %d) ..."), pass, npasses);
+	    G_message(_("Pass #%d (of %d)..."), pass, npasses);
 
 	/* figure out segmentation */
 	row0 = (pass - 1) * rows;
@@ -624,7 +624,7 @@ int main(int argc, char *argv[])
 
 	G_debug(2, "pass=%d/%d  rows=%d", pass, npasses, rows);
 
-    point_binning_allocate(&point_binning, rows, cols, rtype);
+        point_binning_allocate(&point_binning, rows, cols, rtype);
 
 	line = 0;
 	count = 0;
@@ -746,13 +746,16 @@ int main(int argc, char *argv[])
 	line_total += line;
 
 	/* calc stats and output */
-	G_message(_("Writing to map ..."));
+	G_message(_("Writing output raster map..."));
 	for (row = 0; row < rows; row++) {
-        /* potentially vector writing can be independent on the binning */
-        write_values(&point_binning, &bin_index_nodes, raster_row, row,
-            cols, rtype, NULL);
+            /* potentially vector writing can be independent on the binning */
+            write_values(&point_binning, &bin_index_nodes, raster_row, row,
+                         cols, rtype, NULL);
+
+            G_percent(row, rows, 10);
+
 	    /* write out line of raster data */
-        Rast_put_row(out_fd, raster_row, rtype);
+            Rast_put_row(out_fd, raster_row, rtype);
 	}
 
 	/* free memory */
@@ -765,6 +768,8 @@ int main(int argc, char *argv[])
 
     G_percent(1, 1, 1);		/* flush */
     G_free(raster_row);
+
+    G_message(_("%lu points found in input file(s)"), line_total);
 
     /* close raster file & write history */
     Rast_close(out_fd);
