@@ -167,7 +167,7 @@ stability of the computation):
     is applied to normalized data (<em>x/dnorm</em>) and
     therefore <b>dnorm</b> cancels out) so here <b>tension</b> truly
     works as a rescaling parameter.  For regional applications with
-    distances between points in km. the suitable tension can be 500 or
+    distances between points in km the suitable tension can be 500 or
     higher, for detailed field scale analysis it can be 0.1. To help
     select how much the data need to be rescaled the program
     writes <b>dnorm</b> and rescaled tension
@@ -262,7 +262,7 @@ must be done outside <em>v.surf.rst</em>.
 
 <p>
 The &quot;optimal&quot; approximation parameters for given data can be
-found using a cross-validation (CV) procedure (<b>-c</b>flag).  The
+found using a cross-validation (CV) procedure (<b>-c</b> flag).  The
 CV procedure is based on removing one input data point at a time,
 performing the approximation for the location of the removed point
 using the remaining data points and calculating the difference between
