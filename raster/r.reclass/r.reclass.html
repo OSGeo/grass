@@ -117,9 +117,9 @@ input.
 <h3>Reclass rules examples</h3>
 
 The following examples may help clarify the reclass rules.
-<p><dl>
-<dt> 
-<dd>1. This example reclassifies categories 1, 2 and 3 in the input raster
+
+<p>
+The first example reclassifies categories 1, 2 and 3 in the input raster
 map layer "roads" to category 1 with category label "good quality" in the output map
 layer, and reclassifies input raster map layer categories 4 and 5 to
 category 2 with the label "poor quality" in the output map layer.
@@ -129,8 +129,8 @@ category 2 with the label "poor quality" in the output map layer.
     4 5     = 2    poor quality
 </pre></div>
 
-
-<p><dd>2. This example reclassifies categories 1, 3 and 5 in the input raster
+<p>
+The following example reclassifies categories 1, 3 and 5 in the input raster
 map layer to category 1 with category label "poor quality" in the output
 map layer, and reclassifies input raster map layer categories 2, 4, and 6
 to category 2 with the label "good quality" in the output map layer.
@@ -141,7 +141,9 @@ All other values are reclassified to NULL.
     *       = NULL
 </pre></div>
 
-<p><dd>3. This example reclassifies input raster map layer categories 1 thru 10 to output 
+<p>
+The following example reclassifies input raster map layer categories
+1 thru 10 to output 
 map layer category 1, input map layer categories 11 thru 20 to output map layer
 category 2, and input map layer categories 21 thru 30 to output map layer
 category 3, all without labels. The range from 30 to 40 is reclassified as
@@ -153,7 +155,9 @@ NULL.
     30 thru 40  = NULL
 </pre></div>
 
-<p><dd>4. Subsequent rules override previous rules.  Therefore, the below example
+<p>
+The following example shows overlapping rules. Subsequent rules override
+previous rules. Therefore, the below example
 reclassifies input raster map layer categories 1 thru 19 and 51 thru 100
 to category 1 in the output map layer,
 input raster map layer categories 20 thru 24 and 26 thru 50 to
@@ -165,7 +169,8 @@ to the output category 3.
     25	        = 3    good quality
 </pre></div>
 
-<p><dd>5. The previous example could also have been entered as:
+<p>
+The previous example could also have been entered as:
 <div class="code"><pre>
      1 thru 19  51 thru 100	= 1    poor quality
     20 thru 24  26 thru 50	= 2    medium quality
@@ -179,14 +184,14 @@ or as:
     26 thru 50	 = 2    medium quality
     25		 = 3    good quality
 </pre></div>
-</dd>
-</dl>
+
 <p>
 The final example was given to show how the labels are handled.  If a new
 category value appears in more than one rule (as is the case with new 
 category values 1 and 2),
 the last label which was specified becomes the label for that category.
 In this case the labels are assigned exactly as in the two previous examples.
+
 
 <h3>Usage example</h3>
 
