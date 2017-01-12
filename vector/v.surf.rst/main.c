@@ -11,7 +11,8 @@
  *               modified by Mitasova in November 1999 (dmax, timestamp update)
  *               dnorm independent tension - -t flag
  *               cross-validation -v flag by Jaro Hofierka 2004
- *               Parallel version: S. Zubal 2015
+ *               Stanislav Zubal, Michal Lacko 2015 (OpenMP version)
+ *               Anna Petrasova (OpenMP version GRASS integration)
  *
  * PURPOSE:      Surface interpolation from vector point data by splines
  * COPYRIGHT:    (C) 2003-2009, 2013 by the GRASS Development Team
