@@ -5,7 +5,7 @@
 # brew audit -v $RECIPE
 
 ## install GRASS trunk
-travis_wait brew install --HEAD \
+brew install --HEAD \
              --enable-shared \
              --with-postgresql \
              --with-cxx \
