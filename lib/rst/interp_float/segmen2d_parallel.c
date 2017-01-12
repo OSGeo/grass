@@ -1,10 +1,12 @@
 /*!
  * \file segmen2d.c
  *
- * \author H. Mitasova, I. Kosinovsky, D. Gerdes
+ * \author H. Mitasova, I. Kosinovsky, D. Gerdes (single core)
+ * \author Stanislav Zubal, Michal Lacko (OpenMP version)
+ * \author Anna Petrasova (OpenMP version GRASS integration)
  *
  * \copyright
- * (C) 1993 by Helena Mitasova and the GRASS Development Team
+ * (C) 1993-2017 by Helena Mitasova and the GRASS Development Team
  *
  * \copyright
  * This program is free software under the
