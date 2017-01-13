@@ -248,10 +248,16 @@
     <description>Defines vector output format utilizing OGR library.</description>
     <keywords>vector,export,output,external,OGR,PostGIS</keywords>
   </wxgui-item>
-  <wxgui-item name="DisplayRegion">
-    <label>Display region</label>
+  <wxgui-item name="ShowRegion">
+    <label>Show current region</label>
     <command>g.region -p</command>
-    <description>Manages the boundary definitions for the geographic region.</description>
+    <description>Shows the extent and resolution of the computational region.</description>
+    <keywords>general,settings</keywords>
+  </wxgui-item>
+  <wxgui-item name="ShowRegionLL">
+    <label>Show region using latitude and longitude</label>
+    <command>g.region -pl</command>
+    <description>Shows the extent and resolution of the computational region.</description>
     <keywords>general,settings</keywords>
   </wxgui-item>
   <wxgui-item name="MapsetAccess">

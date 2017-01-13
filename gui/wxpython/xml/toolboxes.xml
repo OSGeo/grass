@@ -531,9 +531,10 @@
     </items>
   </toolbox>
   <toolbox name="Region">
-    <label>Region</label>
+    <label>Computational region</label>
     <items>
-      <wxgui-item name="DisplayRegion"/>
+      <wxgui-item name="ShowRegion"/>
+      <wxgui-item name="ShowRegionLL"/>
       <module-item name="g.region">
         <label>Set region</label>
       </module-item>
