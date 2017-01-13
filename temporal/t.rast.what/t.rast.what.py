@@ -112,13 +112,14 @@
 import sys
 import copy
 import grass.script as gscript
-import grass.temporal as tgis
-import grass.pygrass.modules as pymod
 
 
 ############################################################################
 
 def main(options, flags):
+    # lazy imports
+    import grass.temporal as tgis
+    import grass.pygrass.modules as pymod
 
     # Get the options
     points = options["points"]

@@ -130,7 +130,9 @@
 #%end
 
 import grass.script as grass
-import grass.temporal as tgis
+
+
+# lazy imports at the end of the file
 
 
 ############################################################################
@@ -585,4 +587,6 @@ def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
 
 if __name__ == "__main__":
     options, flags = grass.parser()
+    # lazy imports
+    import grass.temporal as tgis
     main()

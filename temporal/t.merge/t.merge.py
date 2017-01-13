@@ -33,13 +33,15 @@
 #% guisection: Required
 #%end
 
-import grass.temporal as tgis
 import grass.script as grass
+
 
 ############################################################################
 grass.set_raise_on_error(True)
 
 def main():
+    # lazy imports
+    import grass.temporal as tgis
 
     # Get the options
     inputs = options["inputs"]

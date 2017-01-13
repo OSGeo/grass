@@ -33,7 +33,6 @@ from __future__ import print_function
 
 import os
 import grass.script as grass
-import grass.temporal as tgis
 from datetime import datetime
 from grass.exceptions import CalledModuleError
 
@@ -41,6 +40,8 @@ from grass.exceptions import CalledModuleError
 
 
 def main():
+    # lazy imports
+    import grass.temporal as tgis
 
     # Get the options
     input = options["input"]

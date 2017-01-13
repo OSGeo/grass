@@ -80,15 +80,17 @@
 #% description: Print the column names as first row
 #% guisection: Formatting
 #%end
+
 from __future__ import print_function
 import grass.script as gscript
-import grass.temporal as tgis
 import sys
 
 ############################################################################
 
 
 def main():
+    # lazy imports
+    import grass.temporal as tgis
 
     # Get the options
     type = options["type"]
