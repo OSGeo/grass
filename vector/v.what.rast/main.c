@@ -124,6 +124,7 @@ int main(int argc, char *argv[])
     Vect_region_box(&window, &box);	/* T and B set to +/- PORT_DOUBLE_MAX */
 
     /* Open vector */
+    Vect_set_open_level(2);
     if (Vect_open_old2(&Map, opt.vect->answer,
 		   print_flag->answer ? "" : G_mapset(),
 		   opt.field->answer) < 0)
