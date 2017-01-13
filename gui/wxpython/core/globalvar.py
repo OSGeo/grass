@@ -91,6 +91,8 @@ def CheckForWx(forceVersion=os.getenv('GRASS_WXVERSION', None)):
 
     except ImportError as e:
         print >> sys.stderr, 'ERROR: wxGUI requires wxPython. %s' % str(e)
+        print >> sys.stderr, ('You can still use GRASS GIS modules in'
+                              ' the command line or in Python.')
         sys.exit(1)
     except (ValueError, wxversion.VersionError) as e:
         print >> sys.stderr, 'ERROR: wxGUI requires wxPython >= %d.%d.%d.%d. ' % tuple(
