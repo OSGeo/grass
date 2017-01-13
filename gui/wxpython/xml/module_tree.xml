@@ -5,6 +5,7 @@
   <items>
     <subtoolbox name="ImportExportLink"/>
     <subtoolbox name="ManageMaps"/>
+    <subtoolbox name="Region"/>
     <subtoolbox name="Raster"/>
     <subtoolbox name="Vector"/>
     <subtoolbox name="Imagery"/>
