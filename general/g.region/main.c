@@ -63,6 +63,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
+    G_add_keyword(_("computational region"));
+    G_add_keyword(_("extent"));
+    G_add_keyword(_("resolution"));
     module->description =
 	_("Manages the boundary definitions for the " "geographic region.");
 
