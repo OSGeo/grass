@@ -65,15 +65,15 @@ import sys
 import copy
 from multiprocessing import Process
 import grass.script as grass
-import grass.temporal as tgis
-
-import grass.pygrass.modules as pymod
 from grass.exceptions import FatalError
 
 ############################################################################
 
 
 def main():
+    # lazy imports
+    import grass.temporal as tgis
+    import grass.pygrass.modules as pymod
 
     # Get the options
     input = options["input"]

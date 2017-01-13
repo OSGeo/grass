@@ -93,13 +93,14 @@ from __future__ import print_function
 
 import copy
 import grass.script as grass
-import grass.temporal as tgis
-import grass.pygrass.modules as pymod
 
 
 ############################################################################
 
 def main():
+    # lazy imports
+    import grass.temporal as tgis
+    import grass.pygrass.modules as pymod
 
     # Get the options
     input = options["input"]

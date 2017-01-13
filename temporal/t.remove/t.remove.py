@@ -56,13 +56,13 @@
 #%end
 
 import grass.script as grass
-import grass.temporal as tgis
-import grass.pygrass.modules as pyg
+
+
+# lazy imports at the end of the file
 
 ############################################################################
 
 def main():
-
     # Get the options
     datasets = options["inputs"]
     file = options["file"]
@@ -163,5 +163,9 @@ def main():
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    
+
+    # lazy imports
+    import grass.temporal as tgis
+    import grass.pygrass.modules as pyg
+
     tgis.profile_function(main)

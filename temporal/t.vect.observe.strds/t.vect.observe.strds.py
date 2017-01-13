@@ -49,7 +49,6 @@
 #%end
 
 import grass.script as grass
-import grass.temporal as tgis
 import grass.script.raster as raster
 from grass.exceptions import CalledModuleError
 
@@ -70,6 +69,8 @@ class Sample(object):
 ############################################################################
 
 def main():
+    #lazy imports
+    import grass.temporal as tgis
 
     # Get the options
     input = options["input"]
