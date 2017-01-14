@@ -92,27 +92,27 @@ int main(int argc, char *argv[])
     omega_opt->description = _("Initial Camera Omega (roll) degrees");
 
     phi_opt = G_define_option();
-    phi_opt->key = "omega";
+    phi_opt->key = "phi";
     phi_opt->type = TYPE_DOUBLE;
     phi_opt->description = _("Initial Camera Phi (pitch) degrees");
 
     kappa_opt = G_define_option();
-    kappa_opt->key = "omega";
+    kappa_opt->key = "kappa";
     kappa_opt->type = TYPE_DOUBLE;
     kappa_opt->description = _("Initial Camera Kappa (yaw) degrees");
 
     omegasd_opt = G_define_option();
-    omegasd_opt->key = "omega";
+    omegasd_opt->key = "omega_sd";
     omegasd_opt->type = TYPE_DOUBLE;
     omegasd_opt->description = _("Omega (roll) standard deviation");
 
     phisd_opt = G_define_option();
-    phisd_opt->key = "omega";
+    phisd_opt->key = "phi_sd";
     phisd_opt->type = TYPE_DOUBLE;
     phisd_opt->description = _("Phi (pitch) standard deviation");
 
     kappasd_opt = G_define_option();
-    kappasd_opt->key = "omega";
+    kappasd_opt->key = "kappa_sd";
     kappasd_opt->type = TYPE_DOUBLE;
     kappasd_opt->description = _("Kappa (yaw) standard deviation");
 
