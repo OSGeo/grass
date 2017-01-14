@@ -6,6 +6,7 @@ SUBDIRS1 = \
 	i.ortho.elev \
 	i.ortho.init \
 	i.ortho.rectify \
+	i.ortho.target \
 	i.ortho.transform
 
 SUBDIRS = lib $(SUBDIRS1)
