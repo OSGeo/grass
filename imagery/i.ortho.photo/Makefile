@@ -4,6 +4,7 @@ MODULE_TOPDIR = ../..
 SUBDIRS1 = \
 	i.ortho.camera \
 	i.ortho.elev \
+	i.ortho.init \
 	i.ortho.rectify \
 	i.ortho.transform
 
