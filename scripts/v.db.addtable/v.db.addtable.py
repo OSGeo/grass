@@ -86,7 +86,7 @@ def main():
         grass.verbose(_("Using user specified table name: %s") % table)
 
     # check if DB parameters are set, and if not set them.
-    grass.run_command('db.connect', flags='c')
+    grass.run_command('db.connect', flags='c', quiet=True)
     grass.verbose(_("Creating new DB connection based on default mapset settings..."))
     kv = grass.db_connection()
     database = kv['database']
@@ -133,10 +133,17 @@ def main():
                       map=map_name, database=database, driver=driver,
                       layer=layer, table=table, key=key)
 
-    # finally we have to add cats into the attribute DB to make modules such as v.what.rast happy:
-    # (creates new row for each vector line):
-    grass.run_command('v.to.db', map=map_name, layer=layer,
-                      option='cat', column=key, qlayer=layer)
+    # finally we have to add cats into the attribute DB to make
+    # modules such as v.what.rast happy: (creates new row for each
+    # vector line):
+    try:
+        grass.run_command('v.to.db', map=map_name, layer=layer,
+                          option='cat', column=key, qlayer=layer)
+    except CalledModuleError:
+        # remove link
+        grass.run_command('v.db.connect', quiet=True, flags='d',
+                          map=map_name, layer=layer)
+        return 1
 
     grass.verbose(_("Current attribute table links:"))
     if grass.verbosity() > 2:
