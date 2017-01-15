@@ -66,7 +66,16 @@ v.category in=streets_net2 op=report
 
 # shortest paths from schools (points in layer 2) to nearest hospitals (points in layer 3)
 v.net.distance in=streets_net2 out=schools_to_hospitals flayer=2 to_layer=3
+
+# visualization
+g.region vector=streets_wake
+d.mon wx0
+d.vect streets_wake color=220:220:220
+d.vect schools_wake color=green size=10
+d.vect map=hospitals icon=basic/cross3 size=15 color=black fcolor=red
+d.vect schools_to_hospitals
 </pre></div>
+
 
 <h3>Distance between point source of pollution and sample points along streams</h3>
 
