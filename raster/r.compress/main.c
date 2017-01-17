@@ -37,6 +37,7 @@
  *****************************************************************************/
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <limits.h>
 #include <string.h>
 #include <sys/types.h>
@@ -46,8 +47,11 @@
 #include <grass/glocale.h>
 
 static int process(char *, int);
-static int pprint(char *);
+static int pprint(char *, int);
 static int doit(char *, int, RASTER_MAP_TYPE);
+
+/* compressed null file, see lib/raster/open.c */
+#define NULLC_FILE "nullcmpr"
 
 int main(int argc, char *argv[])
 {
@@ -56,7 +60,7 @@ int main(int argc, char *argv[])
     char *name;
     struct GModule *module;
     struct Option *map;
-    struct Flag *uncompress, *pflag;
+    struct Flag *uncompress, *pflag, *gflag;
 
     G_gisinit(argv[0]);
 
@@ -77,12 +81,16 @@ int main(int argc, char *argv[])
     pflag->key = 'p';
     pflag->description = _("Print compression information and data type of input map(s)");
 
+    gflag = G_define_flag();
+    gflag->key = 'g';
+    gflag->description = _("Print compression information in shell script style");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (pflag->answer) {
+    if (pflag->answer || gflag->answer) {
         for (n = 0; (name = map->answers[n]); n++)
-            pprint(name);
+            pprint(name, gflag->answer);
         exit(EXIT_SUCCESS);
     }
 
@@ -284,7 +292,7 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
 }
 
 
-static int pprint(char *name)
+static int pprint(char *name, int shell_style)
 {
     struct Cell_head cellhd;
     char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
@@ -323,19 +331,41 @@ static int pprint(char *name)
     if (cellhd.compressed == 1 && map_type != CELL_TYPE)
 	cellhd.compressed = 2;
 
-    if (cellhd.compressed == 0) {
-        G_message(_("<%s> is uncompressed (method %i: %s). Data type: %s"), name, cellhd.compressed,
-                    "NONE",
-                     (map_type == CELL_TYPE ? "CELL" :
-                       (map_type == DCELL_TYPE ? "DCELL" :
-                         (map_type == FCELL_TYPE ? "FCELL" : "??"))));
+    if (!shell_style) {
+	if (cellhd.compressed == 0) {
+	    G_message(_("<%s> is uncompressed (method %i: %s). Data type: %s"), name, cellhd.compressed,
+			"NONE",
+			 (map_type == CELL_TYPE ? "CELL" :
+			   (map_type == DCELL_TYPE ? "DCELL" :
+			     (map_type == FCELL_TYPE ? "FCELL" : "??"))));
+	}
+	else if (cellhd.compressed > 0) {
+	    G_message(_("<%s> is compressed (method %i: %s). Data type: %s"), name, cellhd.compressed,
+			G_compressor_name(cellhd.compressed),
+			 (map_type == CELL_TYPE ? "CELL" :
+			   (map_type == DCELL_TYPE ? "DCELL" :
+			     (map_type == FCELL_TYPE ? "FCELL" : "??"))));
+	}
+
+	if (G_find_file2_misc("cell_misc", NULLC_FILE, name, G_mapset())) {
+	    G_message(_("<%s> has a compressed NULL file"), name);
+	} else {
+	    G_message(_("<%s> has an uncompressed NULL file"), name);
+	}
     }
-    else if (cellhd.compressed > 0) {
-        G_message(_("<%s> is compressed (method %i: %s). Data type: %s"), name, cellhd.compressed,
-                    G_compressor_name(cellhd.compressed),
-                     (map_type == CELL_TYPE ? "CELL" :
-                       (map_type == DCELL_TYPE ? "DCELL" :
-                         (map_type == FCELL_TYPE ? "FCELL" : "??"))));
+    else {
+	fprintf(stdout, "%s|%s", name,
+			(map_type == CELL_TYPE ? "CELL" :
+			   (map_type == DCELL_TYPE ? "DCELL" :
+			     (map_type == FCELL_TYPE ? "FCELL" : "??"))));
+	if (cellhd.compressed == 0)
+	    fprintf(stdout, "|NONE");
+	else
+	    fprintf(stdout, "|%s", G_compressor_name(cellhd.compressed));
+	if (G_find_file2_misc("cell_misc", NULLC_FILE, name, G_mapset()))
+	    fprintf(stdout, "|YES\n");
+	else
+	    fprintf(stdout, "|NO\n");
     }
 
     return 0;
