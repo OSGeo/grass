@@ -27,7 +27,7 @@ char *get_datasource_name(const char *opt_dsn, int use_ogr)
         database[i] = '\0';
         
         /* build connection string */
-        sprintf(connect_str, "dbname=%s", database);
+        sprintf(connect_str, "%s", opt_dsn);
         
         /* add db.login settings (user, password, host, port) */
         if (DB_OK == db_get_login2("pg", database, &user, &passwd, &host, &port)) {
@@ -61,11 +61,15 @@ char *get_datasource_name(const char *opt_dsn, int use_ogr)
             }
         }
         
-        if (!use_ogr)
-            /* be friendly, ignored 'PG:' prefix for PostGIS links */
+        if (use_ogr) {
             dsn = G_store(connect_str);
-        else
-            G_asprintf(&dsn, "PG:%s", connect_str);
+        }
+        else {
+            /* strip PG: prefix */
+            p = (char *)connect_str;
+            p += strlen("PG:");
+            dsn = G_store(p);
+        }
     }
     else {
         /* other datasources */
