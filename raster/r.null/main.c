@@ -196,9 +196,26 @@ int main(int argc, char *argv[])
     }
 
     if (recreate) {
-	int in_fd;
-
 	/* (un-)compress NULL file */
+	int in_fd;
+	char *nullcompr = getenv("GRASS_COMPRESS_NULLS");
+        int donullcompr = (nullcompr && atoi(nullcompr)) ? 1 : 0;
+
+	G_debug(1, "NULL compression is currently %s", donullcompr ? "enabled" : "disabled");
+
+	if (donullcompr) {
+	    if (G_find_file2_misc("cell_misc", "nullcmpr", name, mapset)) {
+		G_message(_("The NULL file is already compressed, nothing to do."));
+		exit(EXIT_SUCCESS);
+	    }
+	}
+	else {
+	    if (G_find_file2_misc("cell_misc", "null", name, mapset)) {
+		G_message(_("The NULL file is already uncompressed, nothing to do."));
+		exit(EXIT_SUCCESS);
+	    }
+	}
+
 	null_bits = Rast__allocate_null_bits(cellhd.cols);
 	Rast__init_null_bits(null_bits, cellhd.cols);
 
