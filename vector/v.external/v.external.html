@@ -8,6 +8,20 @@ GDAL to use <em>v.external</em> for external OGR layers. Note that a
 PostGIS feature table can be linked also using built-in <em>GRASS-PostGIS
 data driver</em> (requires GRASS to be built with PostgreSQL support).
 
+<h2>NOTES</h2>
+
+<p>The simple feature data model used by OGR (or PostGIS) is very
+different from the topological format used by GRASS. Instead of true
+topology, so called 'pseudo topology' is created for data linked by
+<em>v.external</em>. User should learn the difference between those
+two formats, because <b>some modules</b> working correctly with GRASS native
+data, <b>can produce wrong results</b> with input vector maps created
+by <em>v.external</em>.
+
+<p>See <em><a href="v.db.connect.html">v.db.connect</a></em> for an
+example of maintaining attributes in external DBMS in also writable
+mode.
+
 <h3>Supported OGR vector formats</h3>
 
 To list supported OGR formats, type
@@ -17,7 +31,7 @@ v.external -f
 </pre></div>
 
 For details see
-<a href="http://www.gdal.org/ogr_formats.html">OGR web site</a>.
+<a href="http://www.gdal.org/ogr_formats.html">GDAL web site</a>.
 
 <h2>EXAMPLES</h2>
 
@@ -30,7 +44,36 @@ Assuming that 'test_shape.shp' is located in directory
 v.external input=/home/user/shape_data layer=test_shape output=grass_map 
 </pre></div>
 
+<h3>PostGIS layers</h3>
+
+By default, PostGIS links are created by built-in PostGIS support,
+ie. using <em>GRASS-PostGIS data driver</em>. If the environment
+variable <tt>GRASS_VECTOR_OGR</tt> exists, or GRASS is compiled
+without PostgreSQL support then GRASS will use OGR-PostgreSQL driver
+for creating a link.
+
+<p>List of layers for given data source can be printed by <b>-l</b>
+flag.
+
+<div class="code"><pre>
+v.external input="PG:host=localhost user=postgres dbname=postgis" -l
+
+...
+polymap
+...
+</pre></div>
+
+<div class="code"><pre>
+v.external input="PG:host=localhost user=postgres dbname=postgis" layer=polymap
+</pre></div>
+
+Note: Authentication details (user password) can be preferably defined
+by <em><a href="db.login.html">db.login</a></em>.
+
 <h3>MapInfo files</h3>
+
+Assuming that 'mapinfo_test' MapInfo file is located in the current
+directory (&quot;.&quot;).
 
 <div class="code"><pre>
 v.external input=./ layer=mapinfo_test output=grass_map
@@ -50,34 +93,10 @@ v.external input=CITXCATD.DDF output=cities
 v.external input=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all
 </pre></div>
 
-<h3>PostGIS layers</h3>
-
-PostGIS links are by default created by built-in PostGIS support,
-ie. using <em>GRASS-PostGIS data driver</em>. If the environment
-variable <tt>GRASS_VECTOR_OGR</tt> exists, or GRASS is compiled
-without PostgreSQL support then GRASS will use OGR-PostgreSQL driver
-for creating a link.
-
-<div class="code"><pre>
-v.external input="PG:host=localhost user=postgres dbname=postgis" layer=polymap
-</pre></div>
-
-<h2>NOTES</h2>
-
-The simple feature data model used by OGR (or PostGIS) is very
-different from the topological format used by GRASS. Instead of true
-topology, so called 'pseudo topology' is created for data linked by
-<em>v.external</em>. User should learn the difference between those
-two formats, because some modules working correctly with GRASS native
-data, can produce wrong results with input vector maps created
-by <em>v.external</em>.
-
-<p>See <em><a href="v.db.connect.html">v.db.connect</a></em> for an example of
-maintaining attributes in external DBMS in also writable mode.
-
 <h2>REFERENCES</h2>
 
-<a href="http://www.gdal.org/ogr__api_8h.html">OGR vector library C API</a> documentation
+<a href="http://www.gdal.org/ogr__api_8h.html">OGR vector library C
+API</a> documentation
 
 <h2>SEE ALSO</h2>
 
@@ -92,7 +111,7 @@ maintaining attributes in external DBMS in also writable mode.
 </em>
 
 <p>
-<a href="http://www.gdal.org/">OGR Library</a>
+<a href="http://www.gdal.org/">GDAL Library</a>
 <br>
 <a href="http://postgis.org/">PostGIS</a>
 
@@ -104,7 +123,8 @@ also GRASS <a href="http://grasswiki.osgeo.org/wiki/Working_with_external_data_i
 
 Radim Blazek, ITC-Irst, Trento, Italy
 <br>
-PostGIS support by Martin Landa, Czech Technical University in Prague, Czech Republic
+PostGIS support by Martin Landa, GeoForAll (OSGeoREL) Lab, Czech
+Technical University in Prague, Czech Republic
 
 <p>
 <i>Last changed: $Date$</i>
