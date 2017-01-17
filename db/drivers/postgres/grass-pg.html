@@ -13,9 +13,8 @@ manual</a> for details.
 
 <div class="code"><pre>
 # example for connecting to a PostgreSQL server:
-db.connect driver=pg database="host=myserver.osgeo.org,dbname=mydb"
-# password is asked interactively if not specified:
-db.login user=myname [pass=secret]
+db.connect driver=pg database=mydb
+db.login user=myname pass=secret host=myserver.osgeo.org
 db.connect -p
 db.tables -p
 </pre></div>
