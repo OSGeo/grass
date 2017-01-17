@@ -28,7 +28,7 @@
 
 int main(int argc, char *argv[])
 {
-    int i, j, type, field, cat, vtype;
+    int i, j, type, field, cat, vtype, open_level;
     int fd;
 
     /* struct Categories RCats; */ /* TODO */
@@ -124,10 +124,10 @@ int main(int argc, char *argv[])
     Vect_region_box(&window, &box);	/* T and B set to +/- PORT_DOUBLE_MAX */
 
     /* Open vector */
-    Vect_set_open_level(2);
-    if (Vect_open_old2(&Map, opt.vect->answer,
-		   print_flag->answer ? "" : G_mapset(),
-		   opt.field->answer) < 0)
+    open_level = Vect_open_old2(&Map, opt.vect->answer,
+                                print_flag->answer ? "" : G_mapset(),
+                                opt.field->answer);
+    if (open_level < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), opt.vect->answer);
 
     field = Vect_get_field_number(&Map, opt.field->answer);
@@ -192,9 +192,13 @@ int main(int argc, char *argv[])
 
     vtype = Vect_option_to_types(opt.type);
     /* Read vector points to cache */
-    Cache_size = Vect_get_num_primitives(&Map, vtype);
-    /* Note: Some space may be wasted (outside region or no category) */
-
+    if (open_level > 1) {
+        Cache_size = Vect_get_num_primitives(&Map, vtype);
+        /* Note: Some space may be wasted (outside region or no category) */
+    }
+    else {
+        Cache_size = 1000;
+    }
     cache = (struct order *)G_calloc(Cache_size, sizeof(struct order));
 
     point_cnt = outside_cnt = nocat_cnt = 0;
@@ -230,6 +234,14 @@ int main(int argc, char *argv[])
 
 	G_debug(4, "    cat = %d", cat);
 
+        /* Resize cache on level 1 if needed */
+        if (open_level < 2) {
+            if (point_cnt >= Cache_size) {
+                Cache_size += 1000;
+                cache = (struct order *)G_realloc(cache, Cache_size * sizeof(struct order));
+            }
+        }
+        
 	/* Add point to cache */
 	row = Rast_northing_to_row(Points->y[0], &window);
 	col = Rast_easting_to_col(Points->x[0], &window);
