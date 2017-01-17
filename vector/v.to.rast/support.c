@@ -5,6 +5,7 @@
  *          -1  -  error
  */
 
+#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <grass/gis.h>
@@ -14,6 +15,13 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 #include "local.h"
+
+struct My_labels_rule
+{
+    dbString label;
+    double d;
+    int i;
+};
 
 
 int update_hist(const char *raster_name, const char *vector_name, long scale)
@@ -38,37 +46,6 @@ int update_hist(const char *raster_name, const char *vector_name, long scale)
 
     return 0;
 }
-
-
-int update_colors(const char *raster_name)
-{
-    struct Range range;
-    struct Colors colors;
-    CELL min, max;
-
-    Rast_read_range(raster_name, G_mapset(), &range);
-    Rast_get_range_min_max(&range, &min, &max);
-    Rast_make_rainbow_colors(&colors, min, max);
-    Rast_write_colors(raster_name, G_mapset(), &colors);
-
-    return 0;
-}
-
-
-int update_fcolors(const char *raster_name)
-{
-    struct FPRange range;
-    struct Colors colors;
-    DCELL min, max;
-
-    Rast_read_fp_range(raster_name, G_mapset(), &range);
-    Rast_get_fp_range_min_max(&range, &min, &max);
-    Rast_make_rainbow_colors(&colors, (CELL) min, (CELL) max);
-    Rast_write_colors(raster_name, G_mapset(), &colors);
-
-    return 0;
-}
-
 
 int update_cats(const char *raster_name)
 {
@@ -233,13 +210,31 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
     return 1;
 }
 
+static int cmp_labels_d(const void *a, const void *b)
+{
+    struct My_labels_rule *al = (struct My_labels_rule *) a;
+    struct My_labels_rule *bl = (struct My_labels_rule *) b;
+
+    if (al->d < bl->d)
+	return -1;
+
+    return (al->d > bl->d);
+}
+
+static int cmp_labels_i(const void *a, const void *b)
+{
+    struct My_labels_rule *al = (struct My_labels_rule *) a;
+    struct My_labels_rule *bl = (struct My_labels_rule *) b;
+
+    return (al->i - bl->i);
+}
 
 /* add labels to raster cells */
 int update_labels(const char *rast_name, const char *vector_map, int field,
 		  const char *label_column, int use, int val,
 		  const char *attr_column)
 {
-    int i;
+    int i, j;
 
     /* Map */
     struct Map_info Map;
@@ -254,12 +249,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
     /* labels */
     struct Categories rast_cats;
     int labels_n_values = 0;
-    struct My_labels_rule
-    {
-	dbString label;
-	double d;
-	int i;
-    } *my_labels_rules;
+    struct My_labels_rule *my_labels_rules;
 
     /* init raster categories */
     Rast_init_cats("Categories", &rast_cats);
@@ -364,21 +354,107 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    /* close the database driver */
 	    db_close_database_shutdown_driver(Driver);
 
-	    /* set the color rules: for each rule */
-	    if (is_fp) {
-		/* add label */
-		for (i = 0; i < labels_n_values - 1; i++)
-		    Rast_set_cat(&my_labels_rules[i].d,
-				     &my_labels_rules[i + 1].d,
-				     db_get_string(&my_labels_rules[i].label),
-				     &rast_cats, DCELL_TYPE);
+	    /* set the labels */
+	    if (labels_n_values > 0) {
+		char *lblstr;
+
+		/* remove values without labels */
+		j = 0;
+		for (i = 0; i < labels_n_values; i++) {
+		    lblstr = db_get_string(&my_labels_rules[i].label);
+		    if (lblstr && *lblstr) {
+			my_labels_rules[j] = my_labels_rules[i];
+			j++;
+		    }
+		}
+		labels_n_values = j;
 	    }
-	    else {
-		for (i = 0; i < labels_n_values; i++)
-		  Rast_set_c_cat(&(my_labels_rules[i].i),
-				 &(my_labels_rules[i].i),
-				 db_get_string(&my_labels_rules[i].label),
-				 &rast_cats);
+
+	    if (labels_n_values > 0) {
+		char *lblstr;
+
+		if (is_fp) {
+		    DCELL val1, val2;
+
+		    qsort(my_labels_rules, labels_n_values, 
+			  sizeof(struct My_labels_rule), cmp_labels_d);
+
+		    /* remove duplicate values */
+		    j = 1;
+		    for (i = 1; i < labels_n_values; i++) {
+			if (my_labels_rules[i - 1].d != my_labels_rules[i].d) {
+			    my_labels_rules[j] = my_labels_rules[i];
+			    j++;
+			}
+			else {
+			    if (strcmp(db_get_string(&my_labels_rules[i].label),
+			               db_get_string(&my_labels_rules[i - 1].label)) != 0) {
+				G_warning(_("Different labels for the same value are not supported"));
+			    }
+			}
+		    }
+		    labels_n_values = j;
+
+		    /* add labels */
+		    i = 0;
+		    val1 = val2 = my_labels_rules[i].d;
+		    lblstr = db_get_string(&my_labels_rules[i].label);
+
+		    for (i = 1; i < labels_n_values; i++) {
+			if (strcmp(lblstr, db_get_string(&my_labels_rules[i].label)) == 0) {
+			    val2 = my_labels_rules[i].d;
+			}
+			else {
+			    Rast_set_d_cat(&val1, &val2, lblstr,
+					 &rast_cats);
+
+			    val1 = val2 = my_labels_rules[i].d;
+			    lblstr = db_get_string(&my_labels_rules[i].label);
+			}
+		    }
+		    Rast_set_d_cat(&val1, &val2, lblstr, &rast_cats);
+		}
+		else {
+		    CELL val1, val2;
+
+		    qsort(my_labels_rules, labels_n_values, 
+			  sizeof(struct My_labels_rule), cmp_labels_i);
+
+		    /* remove duplicate values */
+		    j = 1;
+		    for (i = 1; i < labels_n_values; i++) {
+			if (my_labels_rules[i - 1].i != my_labels_rules[i].i) {
+			    my_labels_rules[j] = my_labels_rules[i];
+			    j++;
+			}
+			else {
+			    if (strcmp(db_get_string(&my_labels_rules[i].label),
+			               db_get_string(&my_labels_rules[i - 1].label)) != 0) {
+				G_warning(_("Different labels for the same value are not supported"));
+			    }
+			}
+		    }
+		    labels_n_values = j;
+
+		    /* add labels */
+		    i = 0;
+		    val1 = val2 = my_labels_rules[i].i;
+		    lblstr = db_get_string(&my_labels_rules[i].label);
+
+		    for (i = 1; i < labels_n_values; i++) {
+			if (strcmp(lblstr, db_get_string(&my_labels_rules[i].label)) == 0) {
+			    val2 = my_labels_rules[i].i;
+			}
+			else {
+			    Rast_set_c_cat(&val1, &val2, lblstr,
+					   &rast_cats);
+
+			    val1 = val2 = my_labels_rules[i].i;
+			    lblstr = db_get_string(&my_labels_rules[i].label);
+			}
+		    }
+		    Rast_set_c_cat(&val1, &val2, lblstr, &rast_cats);
+		}
 	    }
 	}
 	break;
