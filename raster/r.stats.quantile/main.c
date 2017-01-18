@@ -2,7 +2,8 @@
 /****************************************************************************
  *
  * MODULE:       r.stats.quantile
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor),
+ * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
+ *               Markus Metz: dynamic bins to reduce memory consumptions
  * PURPOSE:      Compute category or object oriented quantiles using two passes
  *
  *               This program is free software under the GNU General Public
@@ -18,12 +19,9 @@
 #include <grass/glocale.h>
 #include <grass/spawn.h>
 
-#define MAX_CATS 1000
-
 struct bin
 {
     unsigned long origin;
-    DCELL min, max;
     int base, count;
 };
 
@@ -32,6 +30,8 @@ struct basecat
     unsigned int *slots;
     unsigned long total;
     int num_values;
+    DCELL min, max, slot_size;
+    int num_slots;
     unsigned char *slot_bins;
     int num_bins;
     struct bin *bins;
@@ -43,7 +43,6 @@ static int num_quants;
 static DCELL *quants;
 static DCELL min, max;
 static int num_slots;
-static DCELL slot_size;
 
 static int rows, cols;
 
@@ -51,19 +50,27 @@ static CELL cmin, cmax;
 static int num_cats;
 static struct basecat *basecats;
 
-static inline int get_slot(DCELL c)
+static inline int get_slot(struct basecat *bc, DCELL c)
 {
-    int i = (int)floor((c - min) / slot_size);
+    int i;
+
+    if (bc->num_slots == 0)
+	return -1;
+
+    i = (int)floor((c - bc->min) / bc->slot_size);
 
     if (i < 0)
 	i = 0;
-    if (i > num_slots - 1)
-	i = num_slots - 1;
+    if (i > bc->num_slots - 1)
+	i = bc->num_slots - 1;
     return i;
 }
 
 static inline double get_quantile(struct basecat *bc, int n)
 {
+    if (n >= num_quants)
+	return (double)bc->total + bc->total;
+
     return (double)bc->total * quants[n];
 }
 
@@ -71,35 +78,91 @@ static void get_slot_counts(int basefile, int coverfile)
 {
     CELL *basebuf = Rast_allocate_c_buf();
     DCELL *coverbuf = Rast_allocate_d_buf();
+    struct basecat *bc;
     int row, col;
+    int i;
+    int allnull;
 
     G_message(_("Computing histograms"));
 
+    for (i = 0; i < num_cats; i++) {
+	bc = &basecats[i];
+	bc->min = max;
+	bc->max = min;
+    }
+
+    allnull = 1;
     for (row = 0; row < rows; row++) {
+	G_percent(row, rows, 2);
+
 	Rast_get_c_row(basefile, basebuf, row);
 	Rast_get_d_row(coverfile, coverbuf, row);
 
 	for (col = 0; col < cols; col++) {
-	    struct basecat *bc;
-	    int i;
-
 	    if (Rast_is_c_null_value(&basebuf[col]))
 		continue;
 
 	    if (Rast_is_d_null_value(&coverbuf[col]))
 		continue;
 
-	    i = get_slot(coverbuf[col]);
+	    allnull = 0;
+
 	    bc = &basecats[basebuf[col] - cmin];
 
-	    bc->slots[i]++;
 	    bc->total++;
-	}
 
-	G_percent(row, rows, 2);
+	    if (bc->min > coverbuf[col])
+		bc->min = coverbuf[col];
+	    if (bc->max < coverbuf[col])
+		bc->max = coverbuf[col];
+	}
+    }
+    G_percent(rows, rows, 2);
+
+    if (allnull)
+	G_fatal_error(_("No cells found where both base and cover are not NULL"));
+
+    for (i = 0; i < num_cats; i++) {
+	bc = &basecats[i];
+
+	bc->num_slots = 0;
+	bc->slot_size = 0;
+
+	if (bc->max <= bc->min)
+	    continue;
+
+	bc->num_slots = 1;
+	if (bc->total * 10 > (unsigned long) num_slots)
+	    bc->num_slots = num_slots;
+
+	bc->slots = G_calloc(bc->num_slots, sizeof(unsigned int));
+	bc->slot_size = (bc->max - bc->min) / bc->num_slots;
     }
 
+    for (row = 0; row < rows; row++) {
+	G_percent(row, rows, 2);
+
+	Rast_get_c_row(basefile, basebuf, row);
+	Rast_get_d_row(coverfile, coverbuf, row);
+
+	for (col = 0; col < cols; col++) {
+	    if (Rast_is_c_null_value(&basebuf[col]))
+		continue;
+
+	    if (Rast_is_d_null_value(&coverbuf[col]))
+		continue;
+
+	    bc = &basecats[basebuf[col] - cmin];
+
+	    if (bc->num_slots == 0)
+		continue;
+
+	    i = get_slot(bc, coverbuf[col]);
+	    bc->slots[i]++;
+	}
+    }
     G_percent(rows, rows, 2);
+
     G_free(basebuf);
     G_free(coverbuf);
 }
@@ -119,16 +182,20 @@ static void initialize_bins(void)
 	unsigned long accum = 0;
 	int quant = 0;
 
+	if (bc->num_slots == 0)
+	    continue;
+
 	bc->bins = G_calloc(num_quants, sizeof(struct bin));
-	bc->slot_bins = G_calloc(num_slots, sizeof(unsigned char));
+	bc->slot_bins = G_calloc(bc->num_slots, sizeof(unsigned char));
 
 	next = get_quantile(bc, quant);
 
-	for (slot = 0; slot < num_slots; slot++) {
+	for (slot = 0; slot < bc->num_slots; slot++) {
 	    unsigned int count = bc->slots[slot];
 	    unsigned long accum2 = accum + count;
 
-	    if (accum2 > next) {
+	    if (accum2 > next ||
+	        (slot == bc->num_slots - 1 && accum2 == next)) {
 		struct bin *b = &bc->bins[bin];
 
 		bc->slot_bins[slot] = ++bin;
@@ -136,8 +203,6 @@ static void initialize_bins(void)
 		b->origin = accum;
 		b->base = num_values;
 		b->count = 0;
-		b->min = min + slot_size * slot;
-		b->max = min + slot_size * (slot + 1);
 
 		while (accum2 > next)
 		    next = get_quantile(bc, ++quant);
@@ -180,8 +245,12 @@ static void fill_bins(int basefile, int coverfile)
 	    if (Rast_is_d_null_value(&coverbuf[col]))
 		continue;
 
-	    i = get_slot(coverbuf[col]);
 	    bc = &basecats[basebuf[col] - cmin];
+
+	    if (bc->num_slots == 0)
+		continue;
+
+	    i = get_slot(bc, coverbuf[col]);
 	    if (!bc->slot_bins[i])
 		continue;
 
@@ -193,8 +262,8 @@ static void fill_bins(int basefile, int coverfile)
 
 	G_percent(row, rows, 2);
     }
-
     G_percent(rows, rows, 2);
+
     G_free(basebuf);
     G_free(coverbuf);
 }
@@ -221,6 +290,9 @@ static void sort_bins(void)
 	struct basecat *bc = &basecats[cat];
 	int bin;
 
+	if (bc->num_slots == 0)
+	    continue;
+
 	G_free(bc->slot_bins);
 
 	for (bin = 0; bin < bc->num_bins; bin++) {
@@ -235,19 +307,50 @@ static void sort_bins(void)
     G_percent(cat, num_cats, 2);
 }
 
-static void print_quantiles(void)
+static void print_quantiles(char *fs, char *name, int table_frmt)
 {
-    int cat;
+    int cat, quant;
+    struct basecat *bc;
 
     G_message(_("Printing quantiles"));
 
-    for (cat = 0; cat < num_cats; cat++) {
-	struct basecat *bc = &basecats[cat];
-	int quant;
-
-	for (quant = 0; quant < num_quants; quant++)
-	    printf("%d:%d:%f:%f\n", cmin + cat, quant, 100 * quants[quant], bc->quants[quant]);
+    if (name != NULL && strcmp(name, "-") != 0) {
+	if (NULL == freopen(name, "w", stdout)) {
+	    G_fatal_error(_("Unable to open file <%s> for writing"), name);
+	}
     }
+
+    if (!table_frmt) {
+	for (cat = 0; cat < num_cats; cat++) {
+	    bc = &basecats[cat];
+
+	    if (bc->total == 0)
+		continue;
+
+	    for (quant = 0; quant < num_quants; quant++)
+		fprintf(stdout, "%d%s%d%s%f%s%f\n", cmin + cat, fs, quant, fs,
+		       100 * quants[quant], fs, bc->quants[quant]);
+	}
+    }
+    else {
+	fprintf(stdout, "cat");
+	for (quant = 0; quant < num_quants; quant++)
+	    fprintf(stdout, "%s%f", fs, 100 * quants[quant]);
+	fprintf(stdout, "\n");
+
+	for (cat = 0; cat < num_cats; cat++) {
+	    bc = &basecats[cat];
+
+	    if (bc->total == 0)
+		continue;
+
+	    fprintf(stdout, "%d", cmin + cat);
+	    for (quant = 0; quant < num_quants; quant++)
+		fprintf(stdout, "%s%f", fs, bc->quants[quant]);
+	    fprintf(stdout, "\n");
+	}
+    }
+
 }
 
 static void compute_quantiles(void)
@@ -258,31 +361,43 @@ static void compute_quantiles(void)
 
     for (cat = 0; cat < num_cats; cat++) {
 	struct basecat *bc = &basecats[cat];
-	struct bin *b = &bc->bins[0];
 	int quant;
+
+	if (bc->max < bc->min)
+	    continue;
 
 	bc->quants = G_malloc(num_quants * sizeof(DCELL));
 
-	for (quant = 0; quant < num_quants; quant++) {
-	    double next = get_quantile(bc, quant);
-	    double k, v;
-	    int i0, i1;
+	if (bc->max == bc->min) {
+	    for (quant = 0; quant < num_quants; quant++)
+		bc->quants[quant] = bc->min;
+	}
+	else {
+	    struct bin *b = &bc->bins[0];
 
-	    while (b->origin + b->count < next)
-		b++;
+	    for (quant = 0; quant < num_quants; quant++) {
+		double next = get_quantile(bc, quant);
+		double k, v;
+		int i0, i1;
 
-	    k = next - b->origin;
-	    i0 = (int)floor(k);
-	    i1 = (int)ceil(k);
+		while (b->origin + b->count < next)
+		    b++;
 
-	    if (i1 > b->count - 1)
-		i1 = b->count - 1;
+		k = next - b->origin;
+		i0 = (int)floor(k);
+		i1 = (int)ceil(k);
 
-	    v = (i0 == i1)
-		? bc->values[b->base + i0]
-		: bc->values[b->base + i0] * (i1 - k) + bc->values[b->base + i1] * (k - i0);
+		if (i0 > b->count - 1)
+		    i0 = b->count - 1;
+		if (i1 > b->count - 1)
+		    i1 = b->count - 1;
 
-	    bc->quants[quant] = v;
+		v = (i0 == i1)
+		    ? bc->values[b->base + i0]
+		    : bc->values[b->base + i0] * (i1 - k) + bc->values[b->base + i1] * (k - i0);
+
+		bc->quants[quant] = v;
+	    }
 	}
     }
 }
@@ -311,8 +426,10 @@ static void do_reclass(const char *basemap, char **outputs)
 	if (!fp)
 	    G_fatal_error(_("Unable to open temporary file"));
 
-	for (cat = 0; cat < num_cats; cat++)
-	    fprintf(fp, "%d = %d %f\n", cmin + cat, cmin + cat, basecats[cat].quants[quant]);
+	for (cat = 0; cat < num_cats; cat++) {
+	    if (basecats[cat].total > 0)
+		fprintf(fp, "%d = %d %f\n", cmin + cat, cmin + cat, basecats[cat].quants[quant]);
+	}
 
 	fclose(fp);
 
@@ -351,6 +468,8 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
 	    for (col = 0; col < cols; col++)
 		if (Rast_is_c_null_value(&base_buf[col]))
 		    Rast_set_d_null_value(&out_buf[col], 1);
+		else if (basecats[base_buf[col] - cmin].total == 0)
+		    Rast_set_d_null_value(&out_buf[col], 1);
 		else
 		    out_buf[col] = basecats[base_buf[col] - cmin].quants[quant];
 
@@ -377,13 +496,14 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *quant, *perc, *slots, *basemap, *covermap, *output;
+	struct Option *quant, *perc, *slots, *basemap, *covermap,
+	              *output, *file, *fs;
     } opt;
     struct {
-	struct Flag *r, *p;
+	struct Flag *r, *p, *t;
     } flag;
     const char *basemap, *covermap;
-    char **outputs;
+    char **outputs, *fs;
     int reclass, print;
     int cover_fd, base_fd;
     struct Range range;
@@ -428,6 +548,16 @@ int main(int argc, char *argv[])
     opt.output->required = NO;
     opt.output->multiple = YES;
 
+    opt.file = G_define_standard_option(G_OPT_F_OUTPUT);
+    opt.file->key = "file";
+    opt.file->required = NO;
+    opt.file->description =
+	_("Name for output file (if omitted or \"-\" output to stdout)");
+
+    opt.fs = G_define_standard_option(G_OPT_F_SEP);
+    opt.fs->answer = ":";
+    opt.fs->guisection = _("Formatting");
+
     flag.r = G_define_flag();
     flag.r->key = 'r';
     flag.r->description =
@@ -438,6 +568,11 @@ int main(int argc, char *argv[])
     flag.p->description =
 	_("Do not create output maps; just print statistics");
 
+    flag.t = G_define_flag();
+    flag.t->key = 't';
+    flag.t->description =
+	_("Print statistics in table format");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -445,7 +580,7 @@ int main(int argc, char *argv[])
     covermap = opt.covermap->answer;
     outputs = opt.output->answers;
     reclass = flag.r->answer;
-    print = flag.p->answer;
+    print = flag.p->answer || flag.t->answer;
 
     if (!print && !opt.output->answers)
 	G_fatal_error(_("Either -%c or %s= must be given"),
@@ -493,33 +628,29 @@ int main(int argc, char *argv[])
 
     Rast_get_range_min_max(&range, &cmin, &cmax);
     num_cats = cmax - cmin + 1;
-    if (num_cats > MAX_CATS)
-	G_fatal_error(_("Base map <%s> has too many categories (max: %d)"),
-		      basemap, MAX_CATS);
+    if (num_cats > 100000)
+	G_warning(_("Base map <%s> has many categories (%d), computation might be slow and might need a lot of memory"),
+		  basemap, num_cats);
 
     Rast_read_fp_range(covermap, "", &fprange);
     Rast_get_fp_range_min_max(&fprange, &min, &max);
-    slot_size = (max - min) / num_slots;
 
     basecats = G_calloc(num_cats, sizeof(struct basecat));
-
-    for (i = 0; i < num_cats; i++)
-	basecats[i].slots = G_calloc(num_slots, sizeof(unsigned int));
-
     rows = Rast_window_rows();
     cols = Rast_window_cols();
 
     get_slot_counts(base_fd, cover_fd);
-
     initialize_bins();
     fill_bins(base_fd, cover_fd);
-
-
     sort_bins();
     compute_quantiles();
 
-    if (print)
-	print_quantiles();
+    if (print) {
+	/* get field separator */
+	fs = G_option_to_separator(opt.fs);
+	
+	print_quantiles(fs, opt.file->answer, flag.t->answer);
+    }
     else if (reclass)
 	do_reclass(basemap, outputs);
     else
