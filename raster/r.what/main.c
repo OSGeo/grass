@@ -198,8 +198,9 @@ int main(int argc, char *argv[])
 	char name[GNAME_MAX];
 
 	if (nfiles >= NFILES)
-	    G_fatal_error(_("Can only do up to %d raster maps (%d given)"),
-			  NFILES, nfiles);
+	    G_fatal_error(_("Can only do up to %d raster maps"
+				" (more than %d given)"),
+			  NFILES, NFILES);
 
 	strcpy(name, *ptr);
 	fd[nfiles] = Rast_open_old(name, "");
