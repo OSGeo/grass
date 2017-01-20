@@ -882,13 +882,16 @@ class TaskFrame(wx.Frame):
                 self.parent and \
                 self.parent.GetName() in ('LayerTree',
                                           'MapWindow'):
+            Debug.msg(1, "TaskFrame.OnCancel(): known parent")
             # display decorations and
             # pressing OK or cancel after setting layer properties
             if self.task.name in ['d.barscale', 'd.legend', 'd.northarrow', 'd.histogram', 'd.text', 'd.legend.vect'] \
                     or len(self.parent.GetLayerInfo(self.layer, key='cmd')) >= 1:
+                # TODO: do this through policy
                 self.Hide()
             # canceled layer with nothing set
             elif len(self.parent.GetLayerInfo(self.layer, key='cmd')) < 1:
+                # TODO: do this through callback or signal
                 try:
                     self.parent.Delete(self.layer)
                 except ValueError:
@@ -897,6 +900,7 @@ class TaskFrame(wx.Frame):
                     pass
                 self.Destroy()
         else:
+            Debug.msg(1, "TaskFrame.OnCancel(): no parent")
             # cancel for non-display commands
             self.Destroy()
 
