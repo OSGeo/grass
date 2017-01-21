@@ -247,7 +247,7 @@ int main(int argc, char **argv)
 		continue;
 
 	    if (f_flag->answer) {
-		Vect_cidx_find_all(&Map, field_number, -1, cat, list_lines);
+		Vect_cidx_find_all(&Map, field_number, ~GV_AREA, cat, list_lines);
 		/* if no features are found for this category, don't print
 		 * anything. */
 		if (list_lines->n_values == 0)
@@ -276,7 +276,7 @@ int main(int argc, char **argv)
 
 	if (r_flag->answer) {
 	    /* get minimal region extent */
-	    Vect_cidx_find_all(&Map, field_number, -1, cat, list_lines);
+	    Vect_cidx_find_all(&Map, field_number, ~GV_AREA, cat, list_lines);
 	    for (i = 0; i < list_lines->n_values; i++) {
 		line = list_lines->value[i];
 		if (Vect_get_line_type(&Map, line) == GV_CENTROID) {
