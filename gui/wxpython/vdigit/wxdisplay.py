@@ -1107,12 +1107,16 @@ class DisplayDriver:
             value = UserSettings.Get(group='vdigit', key=type, subkey='value')
 
         if units is None:
-            units = UserSettings.Get(group='vdigit', key=type, subkey='units')
+            units = UserSettings.Get(group='vdigit', key=type, subkey='unit')
+            if units is None:
+                # old for backwards comp.
+                units = UserSettings.Get(group='vdigit', key=type, subkey='units')
+                units = 0 if units == 'screen pixels' else 1
 
         if value < 0:
             value = (self.region['nsres'] + self.region['ewres']) / 2.0
 
-        if units == 'screen pixels':
+        if units == 0:
             # pixel -> cell
             res = max(self.region['nsres'], self.region['ewres'])
             return value * res
