@@ -99,6 +99,7 @@ from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbo
 from core.giface import Notification
 from gui_core.widgets import LayersList
 from gui_core.wrap import BitmapFromImage, Button, StaticText, StaticBox, SpinCtrl
+from core.debug import Debug
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
 
@@ -2969,7 +2970,6 @@ if __name__ == "__main__":
 
     if sys.argv[1] != 'test':
         q = wx.LogNull()
-        from core.debug import Debug
         Debug.msg(1, "forms.py called using command: %s" % sys.argv[1])
         cmd = utils.split(sys.argv[1])
         task = gtask.grassTask(cmd[0])
