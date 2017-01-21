@@ -423,7 +423,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if not hasattr(self, "popupID"):
             self.popupID = dict()
             for key in (
-                    'remove', 'rename', 'opacity', 'nviz', 'zoom', 'region',
+                    'remove', 'rename', 'opacity', 'nviz', 'zoom', 'region', 'align',
                     'export', 'attr', 'edit', 'save_ws', 'bgmap', 'topo', 'meta',
                     'null', 'zoom1', 'color', 'colori', 'hist', 'univar', 'prof',
                     'properties', 'sql', 'copy', 'report', 'export-pg',
@@ -534,6 +534,19 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     wx.EVT_MENU,
                     self.OnSetCompRegFromMap,
                     id=self.popupID['region'])
+                
+                # raster align 
+                if ltype and ltype == "raster" and len(selected) == 1:
+                    item = wx.MenuItem(
+                        self.popupMenu,
+                        id=self.popupID['align'],
+                        text=_("Align computational region to selected map"))
+                    item.SetBitmap(MetaIcon(img='region').GetBitmap(self.bmpsize))
+                    self.popupMenu.AppendItem(item)
+                    self.Bind(
+                        wx.EVT_MENU,
+                        self.OnAlignCompRegToRaster,
+                        id=self.popupID['align'])
 
         # vector layers (specific items)
         if ltype and ltype == "vector" and numSelected == 1:
@@ -906,7 +919,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self._giface.RunCmd(cmd)
 
     def OnSetCompRegFromMap(self, event):
-        """Set computational region from selected raster/vector map
+        """Set computational region from selected raster/vector map(s)
         """
         rast = []
         vect = []
@@ -933,12 +946,37 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if rast3d:
             kwargs['raster_3d'] = ','.join(rast3d)
 
-        # print output to command log area
         if kwargs:
+            if UserSettings.Get(group='general',
+                                key='region', subkey=['resAlign', 'enabled']):
+                kwargs['flags'] = 'a'
             # command must run in main thread otherwise it can be
             # launched after rendering is done (region extent will
             # remain untouched)
             RunCommand('g.region', **kwargs)
+
+        # re-render map display
+        self._giface.GetMapWindow().UpdateMap(render=False)
+
+    def OnAlignCompRegToRaster(self, event):
+        """Align computational region to selected raster map
+        """
+        selected = self.GetSelections()
+        if len(selected) != 1 or \
+           self.GetLayerInfo(selected[0], key='type') != 'raster':
+            return
+
+        kwargs = {'align': self.GetLayerInfo(selected[0],
+                                             key='maplayer').GetName()
+        }
+
+        if UserSettings.Get(group='general',
+                            key='region', subkey=['resAlign', 'enabled']):
+            kwargs['flags'] = 'a'
+        # command must run in main thread otherwise it can be
+        # launched after rendering is done (region extent will
+        # remain untouched)
+        RunCommand('g.region', **kwargs)
 
         # re-render map display
         self._giface.GetMapWindow().UpdateMap(render=False)
