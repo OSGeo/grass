@@ -191,10 +191,16 @@ Details:
 Installed with g.extension
 Manuals: https://grass.osgeo.org/grass7/manuals/addons/
 
-Procedure:
+Procedure building of binaries (Windows):
   Addons module are compiled on build server, currently at the CTU in Prague)
   and publishing their manual pages on publishing server, i.e. grass.osgeo.org.
   A new compilation is triggered everytime when a commit is done in the Addons-SVN.
+
+Procedure of granting write access to Addons DVN repo:
+* Request procedure: https://trac.osgeo.org/grass/wiki/HowToContribute#WriteaccesstotheGRASS-Addons-SVNrepository
+* Adding OSGeo-ID:   https://www.osgeo.org/cgi-bin/auth/ldap_group.py?group=grass_addons
+* Adding contributor: https://trac.osgeo.org/grass/browser/grass-addons/contributors.csv (via SVN commit)
+* Confirm request in grass-psc and give instructions concerning code style etc (see archive for examples)
 
 == GRASS Travis CI ==
 
