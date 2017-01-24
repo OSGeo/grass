@@ -1395,8 +1395,16 @@ int map_format(struct Map_info *Map)
             
             /* srid (default: 0) */
             p = G_find_key_value("srid", key_val);
-            if (p)
+            if (p) {
                 pg_info->srid = atoi(p);
+            }
+            else {
+                /* not defined by v.external.out, so try if EPSG code
+                 * is defined */
+                p = G_database_epsg_code();
+                if (p)
+                    pg_info->srid = atoi(p);
+            }
             G_debug(1, "PG: srid = %d", pg_info->srid);
             
             /* table name */
