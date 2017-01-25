@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     /*      Setup and fetch parameters.                                     */
     /* -------------------------------------------------------------------- */
-    parm.input = G_define_standard_option(G_OPT_F_INPUT);
+    parm.input = G_define_standard_option(G_OPT_F_BIN_INPUT);
     parm.input->description = _("Name of raster file to be imported");
     
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -106,6 +106,7 @@ int main(int argc, char *argv[])
     parm.band->multiple = YES;
     parm.band->required = NO;
     parm.band->description = _("Band(s) to select (default is all bands)");
+    parm.band->guisection = _("Bands");
 
     parm.memory = G_define_option();
     parm.memory->key = "memory";
@@ -124,7 +125,8 @@ int main(int argc, char *argv[])
     parm.target->description =
 	_("Name of location to create or to read projection from for GCPs transformation");
     parm.target->key_desc = "name";
-
+    parm.target->guisection = _("Projection");
+    
     parm.title = G_define_option();
     parm.title->key = "title";
     parm.title->key_desc = "phrase";
@@ -178,12 +180,14 @@ int main(int argc, char *argv[])
 	_("Override projection check (use current location's projection)");
     flag_o->description =
 	_("Assume that the dataset has same projection as the current location");
-
+    flag_o->guisection = _("Projection");
+ 
     flag_j = G_define_flag();
     flag_j->key = 'j';
     flag_j->description =
 	_("Perform projection check only and exit");
     flag_j->suppress_required = YES;
+    flag_j->guisection = _("Projection");
     G_option_requires(flag_j, parm.input, NULL);
     
     flag_e = G_define_flag();
@@ -191,7 +195,8 @@ int main(int argc, char *argv[])
     flag_e->label = _("Extend region extents based on new dataset");
     flag_e->description =
 	_("Also updates the default region if in the PERMANENT mapset");
-
+    flag_e->guisection = _("Region");
+ 
     flag_f = G_define_flag();
     flag_f->key = 'f';
     flag_f->description = _("List supported formats and exit");
@@ -207,6 +212,7 @@ int main(int argc, char *argv[])
     flag_k->key = 'k';
     flag_k->description =
 	_("Keep band numbers instead of using band color names");
+    flag_k->guisection = _("Bands");
 
     flag_c = G_define_flag();
     flag_c->key = 'c';
@@ -217,6 +223,7 @@ int main(int argc, char *argv[])
     flag_p = G_define_flag();
     flag_p->key = 'p';
     flag_p->description = _("Print number of bands and exit");
+    flag_p->guisection = _("Print");
     flag_p->suppress_required = YES;
     G_option_requires(flag_p, parm.input, NULL);
     
