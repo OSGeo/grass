@@ -1,20 +1,19 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.in.bin</em> allows a user to create a (binary) GRASS raster map layer 
+<em>r.in.bin</em> allows the user to create a (binary) GRASS raster map layer 
 from a variety of binary raster data formats. 
 
 <p>The <b> -s</b> flag is used for importing two's-complement signed data.
 <p>The <b> -h</b> flag is used to read region information from a Generic
 Mapping Tools (GMT) type binary header. It is compatible with GMT binary
 grid types 1 and 2.
-<p>The north, south, east, and west field values entered 
-are the coordinates of the edges of the geographic region. 
-The rows and cols field values entered describe the dimensions 
-of the matrix of data to follow. If input is a
+<p>The north, south, east, and west field values are the coordinates of the 
+edges of the geographic region. The rows and cols values describe the dimensions 
+of the matrix of data to follow. If the input is a
 <a href="http://gmt.soest.hawaii.edu/">GMT</a> binary array
-(-h flag), the six dimension fields are obtained from the GMT header. 
-If the bytes field is entered incorrectly an error will be generated
-suggesting a closer bytes value. 
+(-h flag), the six dimension fields (north, south, east, west, rows and cols)
+are obtained from the GMT header. If the bytes field is entered incorrectly an 
+error will be generated suggesting a closer bytes value. 
 
 <p><em>r.in.bin</em> can be used to import numerous binary arrays including:
 ETOPO30, ETOPO-5, ETOPO-2, Globe DEM, BIL, AVHRR and GMT binary arrays
@@ -28,13 +27,12 @@ not entered, <b>r.in.bin</b> automatically calculates them by subtracting
 south from north and west from east. This will only produce correct
 results if the raster resolution equals 1. Also, if the north, south, 
 east, and west parameters are not entered, <b>r.in.bin</b> assigns 
-them from the rows and columns parameters. In the above AVHRR example, 
+them from the rows and columns parameters. In the AVHRR example (see below), 
 the raster would be assigned a north=128, south=0, east=128, west=0.
 <p>The geographic coordinates north, south, east, and west
-describe the outer edges of the geographic region.  They
-run along the edges of the cells at the edge of the
-geographic region and <em>not</em> through the center of the cells
-at the edges.
+describe the outer edges of the geographic region. They run along the edges of 
+the cells at the edge of the geographic region and <em>not</em> through the 
+center of the cells at the edges.
 <p>Eastern limit of geographic region (in projected coordinates must be east
 of the west parameter value, but in geographical coordinates will wrap
 around the globe; user errors can be detected by comparing the <em>ewres</em> and
@@ -44,11 +42,11 @@ Western limit of geographic region (in projected coordinates must be west
 of the east parameter value, but in geographical coordinates will wrap
 around the globe; user errors can be detected by comparing the <em>ewres</em> and
 <em>nsres</em> values of the imported map layer carefully).
-<p>Notes on (non)signed data:<p>If you use the -s flag the highest bit is the sign bit. If this is 1 the
-data is negative, and the data interval is half of the unsigned (not
-exactly).
-<p>This flag is only used if <b>bytes=</b> 1. If <b>bytes=</b> is greater
-than 1 the flag is ignored.
+<p>Notes on (non)signed data:<p>If you use the <b>-s</b> flag, the highest bit is the 
+sign bit. If this is 1, the data is negative, and the data interval is half of 
+the unsigned (not exactly).
+<p>This flag is only used if <b>bytes=</b> 1. If <b>bytes</b> is greater
+than 1, the flag is ignored.
 
 <h2>EXAMPLES</h2>
 
@@ -90,7 +88,7 @@ r.colors ETOPO2min rules=terrain
 The following is a sample call of <em>r.in.bin</em> to import 
 <a href="http://topex.ucsd.edu/WWW_html/srtm30_plus.html">SRTM30 PLUS</a> data:
 <p><div class="code"><pre>
-r.in.bin -sb input=e020n40.Bathmetry.srtm output=e020n40_topex \
+r.in.bin -sb input=e020n40.Bathymetry.srtm output=e020n40_topex \
          bytes=2 north=40 south=-10 east=60 west=20 r=6000 c=4800
 r.colors e020n40_topex rules=etopo2
 </pre></div>
