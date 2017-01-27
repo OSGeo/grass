@@ -495,6 +495,18 @@ In MOD09A1: It seems that cloud related info is not filled properly in the
 standard QC (MOD09A1 in this module) since version 3, State-QA 500m images
 (MOD09A1s in this module) should be used (see Vermote et al., 2008).
 
+MOD11A2 quality control (QC) bands do not have a FillValue (No-data) according 
+to <a href="https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/mod11a2_v006">MODIS Land Products site</a>. 
+However, the metadata of the QC bands (i.e.: <tt>gdalinfo QC_band</tt>) shows <tt>No-data=0</tt>. 
+This value is then transformed into GRASS NULLs when data is imported though 
+<a href="r.in.gdal.html">r.in.gdal</a>. Applying <em>i.modis.qc</em> on those QC bands
+will not give the expected range of values in the different QC bits. Therefore, 
+before using <em>i.modis.qc</em>, the user needs to set the NULL value in QC bands 
+back to zero (i.e.: <tt>r.null map=QC_band null=0</tt>) or just edit the metadata with GDAL 
+utilities before importing into GRASS GIS. This is a known issue for MOD11A2 
+(8-day LST product), but other MODIS products might be affected as well.
+
+
 <h2>TODO</h2>
 Add more daily products.
 
