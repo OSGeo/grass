@@ -19,6 +19,7 @@ int read_areas(struct Map_info *Map)
     int i, idx, found;
     int area_num, nareas;
     struct line_cats *Cats;
+    struct bound_box Bbox;
     double area, perimeter;
 
     Cats = Vect_new_cats_struct();
@@ -41,6 +42,9 @@ int read_areas(struct Map_info *Map)
 	    if (G_projection() != PROJECTION_LL && G_projection() != PROJECTION_XY)
 		    perimeter = perimeter * G_database_units_to_meters_factor();
 	}
+	if (options.option == O_BBOX) {
+	    Vect_get_area_box(Map, area_num, &Bbox);
+	}
 
 	found = 0;
 	if (Vect_get_area_cats(Map, area_num, Cats) == 0) {
@@ -60,6 +64,16 @@ int read_areas(struct Map_info *Map)
 			break;
 		    case O_FD:
 			Values[idx].d1 = 2.0 * log(perimeter) / log(area);
+			break;
+		    case O_BBOX:
+			if (Values[idx].d1 < Bbox.N) 
+			    Values[idx].d1 = Bbox.N;
+			if (Values[idx].d2 > Bbox.S) 
+			    Values[idx].d2 = Bbox.S;
+			if (Values[idx].d3 < Bbox.E) 
+			    Values[idx].d3 = Bbox.E;
+			if (Values[idx].d4 > Bbox.W) 
+			    Values[idx].d4 = Bbox.W;
 			break;
 		    }
 		    found = 1;
@@ -81,6 +95,16 @@ int read_areas(struct Map_info *Map)
 		    break;
 		case O_FD:
 		    Values[idx].d1 = 2.0 * log(perimeter) / log(area);
+		    break;
+	        case O_BBOX:
+		    if (Values[idx].d1 < Bbox.N) 
+			Values[idx].d1 = Bbox.N;
+		    if (Values[idx].d2 > Bbox.S) 
+			Values[idx].d2 = Bbox.S;
+		    if (Values[idx].d3 < Bbox.E) 
+			Values[idx].d3 = Bbox.E;
+		    if (Values[idx].d4 > Bbox.W) 
+			Values[idx].d4 = Bbox.W;
 		    break;
 		}
 	    }

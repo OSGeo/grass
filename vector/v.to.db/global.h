@@ -9,7 +9,7 @@ struct value
     /* for sides set to 2, if more than 1 area category was found, */
     /* including no category (cat = -1)! */
     int i1, i2;			/* values; i1: query (result int), sides; i2: sides */
-    double d1, d2, d3;		/* values (length, area, x/y/z, query) */
+    double d1, d2, d3, d4;		/* values (length, area, x/y/z, bbox, query) */
     char *str1;			/* string value (query) */
     int *qcat;			/* array query categories */
     int nqcats;			/* number of query cats */
@@ -23,7 +23,7 @@ struct options
 {
     char *name;
     int field;
-    char *col[3];
+    char *col[4];
     char *qcol;
     int type;
     int option;
@@ -71,6 +71,8 @@ extern struct vstat vstat;
 #define O_SINUOUS       14	/* sinuousity of a line (length / <distance between end points>) */
 
 #define O_AZIMUTH	15	/* line azimuth */
+
+#define O_BBOX		16	/* bounding box */
 
 /* areas.c */
 int read_areas(struct Map_info *);

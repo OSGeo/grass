@@ -50,7 +50,7 @@ int parse_command_line(int argc, char *argv[])
     parms.option->required = YES;
     parms.option->multiple = NO;
     parms.option->options =
-	"cat,area,compact,fd,perimeter,length,count,coor,start,end,sides,query,slope,sinuous,azimuth";
+	"cat,area,compact,fd,perimeter,length,count,coor,start,end,sides,query,slope,sinuous,azimuth,bbox";
     parms.option->description = _("Value to upload");
     desc = NULL;
     G_asprintf(&desc,
@@ -68,7 +68,8 @@ int parse_command_line(int argc, char *argv[])
 	       "query;%s;"
 	       "slope;%s;"
 	       "sinuous;%s;"
-	       "azimuth;%s;",
+	       "azimuth;%s;"
+	       "bbox;%s;",
 	       _("insert new row for each category if doesn't exist yet"),
 	       _("area size"),
 	       _("compactness of an area, calculated as \n"
@@ -87,7 +88,8 @@ int parse_command_line(int argc, char *argv[])
 		 "(or geometries) from table specified by 'query_layer' option"),
 	       _("slope steepness of vector line or boundary"),
 	       _("line sinuousity, calculated as line length / distance between end points"),
-	       _("line azimuth, calculated as angle between North direction and endnode direction at startnode"));
+	       _("line azimuth, calculated as angle between North direction and endnode direction at startnode"),
+	       _("bounding box of area, N,S,E,W"));
     parms.option->descriptions = desc;
 
     parms.col = G_define_standard_option(G_OPT_DB_COLUMNS);
@@ -164,6 +166,7 @@ int parse_command_line(int argc, char *argv[])
     options.col[0] = NULL;
     options.col[1] = NULL;
     options.col[2] = NULL;
+    options.col[3] = NULL;
     while (parms.col->answers && parms.col->answers[ncols]) {
 	options.col[ncols] = G_store(parms.col->answers[ncols]);
 	ncols++;
@@ -188,6 +191,12 @@ int parse_command_line(int argc, char *argv[])
 		G_fatal_error(_("This option requires at least two columns"));
 	    }
 	}
+	else if (options.option == O_BBOX) {
+	    if (ncols != 4) {
+		G_fatal_error(_("This option requires four columns"));
+	    }
+	}
+
     }
 
     if (options.option == O_QUERY && !parms.qcol->answers)
@@ -266,6 +275,8 @@ int parse_option(char *s)
 	x = O_SINUOUS;
     else if (strcmp(s, "azimuth") == 0)
 	x = O_AZIMUTH;
+    else if (strcmp(s, "bbox") == 0)
+	x = O_BBOX;
 
     return x;
 }
