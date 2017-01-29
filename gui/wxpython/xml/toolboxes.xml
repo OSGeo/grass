@@ -228,6 +228,7 @@
       <wxgui-item name="AddWebServiceLayer"/>
       <separator/>
       <wxgui-item name="NewMapDisplayWindow"/>
+      <wxgui-item name="RenderAllMapDisplays"/>
       <wxgui-item name="CloseCurrentMapDisplayWindow"/>
       <wxgui-item name="CloseAllOpenMapDisplayWindows"/>
     </items>
