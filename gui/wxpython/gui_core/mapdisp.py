@@ -114,13 +114,20 @@ class MapFrameBase(wx.Frame):
         self._toolSwitcher = ToolSwitcher()
         self._toolSwitcher.toggleToolChanged.connect(self._onToggleTool)
 
+        self._initShortcuts()
+
+    def _initShortcuts(self):
+
         # set accelerator table (fullscreen, close window)
+        shortcuts_table = (
+            (self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11),
+            (self.OnCloseWindow, wx.ACCEL_CTRL, ord('W')),
+            (self.OnRender, wx.ACCEL_CTRL, ord('R')),
+            (self.OnRender, wx.ACCEL_NORMAL, wx.WXK_F5),
+        )
         accelTable = []
-        for wxId, handler, entry, kdb in (
-            (wx.NewId(),
-             self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11),
-            (wx.NewId(),
-             self.OnCloseWindow, wx.ACCEL_CTRL, ord('W'))):
+        for handler, entry, kdb in shortcuts_table:
+            wxId = wx.NewId()
             self.Bind(wx.EVT_MENU, handler, id=wxId)
             accelTable.append((entry, kdb, wxId))
 
