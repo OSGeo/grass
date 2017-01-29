@@ -75,6 +75,7 @@ int update(struct Map_info *Map)
     case O_START:
     case O_END:
     case O_SIDES:
+    case O_BBOX:
 	sprintf(buf1, "update %s set ", Fi->table);
 	break;
     }
@@ -107,6 +108,14 @@ int update(struct Map_info *Map)
 	case O_AZIMUTH:
 	    sprintf(buf2, "%s %f where %s = %d", buf1, Values[i].d1, Fi->key,
 		    Values[i].cat);
+	    break;
+	
+	case O_BBOX:
+	    sprintf(buf2,
+	    	"%s %s = %.15g, %s = %.15g, %s = %.15g, %s = %.15g where %s = %d",
+		buf1, options.col[0], Values[i].d1, options.col[1],
+		Values[i].d2, options.col[2], Values[i].d3, options.col[3],
+	       	Values[i].d4, Fi->key, Values[i].cat);
 	    break;
 
 	case O_COOR:

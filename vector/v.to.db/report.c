@@ -77,6 +77,16 @@ int report(void)
 	    fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs, Values[i].d1);
 	break;
 
+    case O_BBOX:
+	if (G_verbose() > G_verbose_min())
+	    fprintf(stdout, "cat%sN%sS%sE%sW\n", options.fs, options.fs, options.fs,options.fs);
+	for (i = 0; i < vstat.rcat; i++) {
+	    fprintf(stdout, "%d%s%.15g%s%.15g%s%.15g%s%.15g\n", Values[i].cat, options.fs,
+	    Values[i].d1, options.fs, Values[i].d2, options.fs, Values[i].d3,
+	    options.fs, Values[i].d4);
+	}
+	break;
+
     case O_LENGTH:
         if (options.print) {
             if (G_verbose() > G_verbose_min())
