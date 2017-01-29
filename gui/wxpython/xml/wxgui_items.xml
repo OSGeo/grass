@@ -65,13 +65,12 @@
   <wxgui-item name="CloseGUI">
     <label>Close GUI</label>
     <handler>OnCloseWindow</handler>
-    <description>Quit wxGUI session.</description>
-    <shortcut>Ctrl+W</shortcut>
+    <description>Close graphical user interface.</description>
   </wxgui-item>
   <wxgui-item name="Quit">
     <label>Quit GRASS GIS</label>
     <handler>OnCloseWindowOrExit</handler>
-    <description>Quit wxGUI session and exit GRASS shell.</description>
+    <description>Close GUI and exit GRASS GIS shell.</description>
     <shortcut>Ctrl+Q</shortcut>
     <wx-id>ID_EXIT</wx-id>
   </wxgui-item>
@@ -379,4 +378,3 @@
     <keywords>general,gui,imagery,classification,signatures</keywords>
   </wxgui-item>
 </wxgui-items>
-
