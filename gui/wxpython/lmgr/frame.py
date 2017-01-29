@@ -50,23 +50,14 @@ from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
 from gui_core.widgets import GNotebook, FormNotebook
-from modules.mcalc_builder import MapCalcFrame
-from dbmgr.manager import AttributeManager
 from core.workspace import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
 from core.gconsole import GConsole, EVT_IGNORED_CMD_RUN
 from core.giface import Notification
-from gui_core.goutput import GConsoleWindow, GC_SEARCH, GC_PROMPT
-from modules.import_export import GdalOutputDialog, DxfImportDialog, GdalImportDialog, OgrImportDialog
+from gui_core.goutput import GConsoleWindow, GC_PROMPT
 from gui_core.dialogs import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog, MapLayersDialog, QuitDialog
-from modules.colorrules import RasterColorTable, VectorColorTable
 from gui_core.menu import SearchModuleWindow
 from gui_core.menu import Menu as GMenu
-from gmodeler.model import Model
-from gmodeler.frame import ModelFrame
-from psmap.frame import PsMapFrame
 from core.debug import Debug
-from gui_core.ghelp import AboutWindow
-from modules.extensions import InstallExtensionWindow, ManageExtensionWindow
 from lmgr.toolbars import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar
 from lmgr.toolbars import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
 from lmgr.pyshell import PyShellWindow
@@ -74,11 +65,6 @@ from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu
-from gcp.manager import GCPWizard
-from nviz.main import haveNviz
-from nviz.preferences import NvizPreferencesDialog
-from mapswipe.frame import SwipeMapFrame
-from rlisetup.frame import RLiSetupFrame
 
 
 class GMFrame(wx.Frame):
@@ -418,6 +404,7 @@ class GMFrame(wx.Frame):
                           first time
         """
         Debug.msg(5, "GMFrame.AddNvizTools()")
+        from nviz.main import haveNviz
         if not haveNviz:
             return
 
@@ -534,27 +521,28 @@ class GMFrame(wx.Frame):
         self._setCopyingOfSelectedText()
 
     def OnGCPManager(self, event=None, cmd=None):
-        """Launch georectifier module. See OnIClass documentation.
-        """
+        """Launch georectifier module. See OnIClass documentation"""
+        from gcp.manager import GCPWizard
         GCPWizard(self, self._giface)
 
     def OnGModeler(self, event=None, cmd=None):
-        """Launch Graphical Modeler. See OnIClass documentation."""
+        """Launch Graphical Modeler. See OnIClass documentation"""
+        from gmodeler.frame import ModelFrame
         win = ModelFrame(parent=self, giface=self._giface)
         win.CentreOnScreen()
-
         win.Show()
 
     def OnPsMap(self, event=None, cmd=None):
-        """Launch Cartographic Composer. See OnIClass documentation.
-        """
+        """Launch Cartographic Composer. See OnIClass documentation"""
+        from psmap.frame import PsMapFrame
         win = PsMapFrame(parent=self)
         win.CentreOnScreen()
-
         win.Show()
 
     def OnMapSwipe(self, event=None, cmd=None):
-        """Launch Map Swipe. See OnIClass documentation."""
+        """Launch Map Swipe. See OnIClass documentation"""
+        from mapswipe.frame import SwipeMapFrame
+
         win = SwipeMapFrame(parent=self, giface=self._giface)
 
         rasters = []
@@ -578,10 +566,10 @@ class GMFrame(wx.Frame):
         win.Show()
 
     def OnRLiSetup(self, event=None, cmd=None):
-        """Launch r.li Setup. See OnIClass documentation."""
+        """Launch r.li setup. See OnIClass documentation"""
+        from rlisetup.frame import RLiSetupFrame
         win = RLiSetupFrame(parent=self)
         win.CentreOnScreen()
-
         win.Show()
 
     def OnDone(self, event):
@@ -604,13 +592,13 @@ class GMFrame(wx.Frame):
             dlg.Destroy()
             return
 
+        from gmodeler.model import Model
         self.model = Model()
         self.model.LoadModel(filename)
         self.model.Run(
             log=self.GetLogWindow(),
             onDone=self.OnDone,
             parent=self)
-
         dlg.Destroy()
 
     def OnMapsets(self, event):
@@ -1259,6 +1247,7 @@ class GMFrame(wx.Frame):
 
     def OnAboutGRASS(self, event):
         """Display 'About GRASS' dialog"""
+        from gui_core.ghelp import AboutWindow
         win = AboutWindow(self)
         win.CentreOnScreen()
         win.Show(True)
@@ -1714,15 +1703,15 @@ class GMFrame(wx.Frame):
         dlg.Destroy()
 
     def OnRasterRules(self, event):
-        """Launches dialog for raster color rules
-        """
+        """Launches dialog for raster color rules"""
+        from modules.colorrules import RasterColorTable
         ctable = RasterColorTable(self, layerTree=self.GetLayerTree())
         ctable.Show()
         ctable.CentreOnScreen()
 
     def OnVectorRules(self, event):
-        """Launches dialog for vector color rules
-        """
+        """Launches dialog for vector color rules"""
+        from modules.colorrules import VectorColorTable
         ctable = VectorColorTable(self, layerTree=self.GetLayerTree(),
                                   attributeType='color')
         ctable.Show()
@@ -1737,13 +1726,15 @@ class GMFrame(wx.Frame):
 
     def OnInstallExtension(self, event):
         """Install extension from GRASS Addons SVN repository"""
+        from modules.extensions import InstallExtensionWindow
         win = InstallExtensionWindow(
             self, giface=self._giface, size=(650, 550))
         win.CentreOnScreen()
         win.Show()
 
     def OnManageExtension(self, event):
-        """Uninstall extension"""
+        """Manage or uninstall extensions"""
+        from modules.extensions import ManageExtensionWindow
         win = ManageExtensionWindow(self, size=(650, 300))
         win.CentreOnScreen()
         win.Show()
@@ -1768,10 +1759,10 @@ class GMFrame(wx.Frame):
     def OnNvizPreferences(self, event):
         """Show nviz preferences"""
         if not self.dialogs['nvizPreferences']:
+            from nviz.preferences import NvizPreferencesDialog
             dlg = NvizPreferencesDialog(parent=self, giface=self._giface)
             self.dialogs['nvizPreferences'] = dlg
             self.dialogs['nvizPreferences'].CenterOnScreen()
-
         self.dialogs['nvizPreferences'].Show()
 
     def OnHelp(self, event):
@@ -1865,12 +1856,12 @@ class GMFrame(wx.Frame):
     def OnMapCalculator(self, event, cmd=''):
         """Init map calculator for interactive creation of mapcalc statements
         """
+        from modules.mcalc_builder import MapCalcFrame
         if event:
             try:
                 cmd = self.GetMenuCmd(event)
             except KeyError:
                 cmd = ['r.mapcalc']
-
         win = MapCalcFrame(parent=self,
                            giface=self._giface,
                            cmd=cmd[0])
@@ -1891,6 +1882,7 @@ class GMFrame(wx.Frame):
 
     def OnVectorOutputFormat(self, event):
         """Set vector output format handler"""
+        from modules.import_export import GdalOutputDialog
         dlg = GdalOutputDialog(parent=self, ogr=True)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -1905,30 +1897,35 @@ class GMFrame(wx.Frame):
 
     def OnImportDxfFile(self, event, cmd=None):
         """Convert multiple DXF layers to GRASS vector map layers"""
+        from modules.import_export import DxfImportDialog
         dlg = DxfImportDialog(parent=self, giface=self._giface)
         dlg.CentreOnScreen()
         dlg.Show()
 
     def OnImportGdalLayers(self, event, cmd=None):
         """Convert multiple GDAL layers to GRASS raster map layers"""
+        from modules.import_export import GdalImportDialog
         dlg = GdalImportDialog(parent=self, giface=self._giface)
         dlg.CentreOnScreen()
         dlg.Show()
 
     def OnLinkGdalLayers(self, event, cmd=None):
         """Link multiple GDAL layers to GRASS raster map layers"""
+        from modules.import_export import GdalImportDialog
         dlg = GdalImportDialog(parent=self, giface=self._giface, link=True)
         dlg.CentreOnScreen()
         dlg.Show()
 
     def OnImportOgrLayers(self, event, cmd=None):
         """Convert multiple OGR layers to GRASS vector map layers"""
+        from modules.import_export import OgrImportDialog
         dlg = OgrImportDialog(parent=self, giface=self._giface)
         dlg.CentreOnScreen()
         dlg.Show()
 
     def OnLinkOgrLayers(self, event, cmd=None):
         """Links multiple OGR layers to GRASS vector map layers"""
+        from modules.import_export import OgrImportDialog
         dlg = OgrImportDialog(parent=self, giface=self._giface, link=True)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -1984,14 +1981,13 @@ class GMFrame(wx.Frame):
         if not dcmd:
             return
 
+        from dbmgr.manager import AttributeManager
         dbmanager = AttributeManager(parent=self, id=wx.ID_ANY,
                                      size=wx.Size(500, 300),
                                      item=layer, log=self._gconsole,
                                      selection=selection)
-
         # register ATM dialog
         self.dialogs['atm'].append(dbmanager)
-
         # show ATM window
         dbmanager.Show()
 
