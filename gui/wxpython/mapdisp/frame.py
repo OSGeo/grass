@@ -30,11 +30,9 @@ from core import globalvar
 import wx
 import wx.aui
 
-from core.render import Map
 from mapdisp.toolbars import MapToolbar, NvizIcons
 from mapdisp.gprint import PrintOptions
 from core.gcmd import GError, GMessage, RunCommand
-from dbmgr.dialogs import DisplayAttributesDialog
 from core.utils import ListOfCatsToRange, GetLayerNameFromCmd, _
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
@@ -45,16 +43,11 @@ from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import LegendController, BarscaleController, \
     ArrowController, DtextController, LegendVectController
-from modules.histogram import HistogramFrame
-from wxplot.histogram import HistogramPlotFrame
-from wxplot.profile import ProfileFrame
-from wxplot.scatter import ScatterFrame
 from mapwin.analysis import ProfileController, MeasureDistanceController, \
     MeasureAreaController
 from gui_core.forms import GUI
 from core.giface import Notification
 from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
-
 from mapdisp import statusbar as sb
 
 import grass.script as grass
@@ -1138,6 +1131,8 @@ class MapFrame(SingleMapFrame):
 
     def Profile(self, rasters=None):
         """Launch profile tool"""
+        from wxplot.profile import ProfileFrame
+
         self.profileController = ProfileController(
             self._giface, mapWindow=self.GetMapWindow())
         win = ProfileFrame(parent=self, rasterList=rasters,
@@ -1157,6 +1152,7 @@ class MapFrame(SingleMapFrame):
             if layer.maplayer.GetType() == 'raster':
                 raster.append(layer.maplayer.GetName())
 
+        from wxplot.histogram import HistogramPlotFrame
         win = HistogramPlotFrame(parent=self, rasterList=raster)
         win.CentreOnParent()
         win.Show()
@@ -1170,6 +1166,7 @@ class MapFrame(SingleMapFrame):
             if layer.maplayer.GetType() == 'raster':
                 raster.append(layer.maplayer.GetName())
 
+        from wxplot.scatter import ScatterFrame
         win = ScatterFrame(parent=self, rasterList=raster)
 
         win.CentreOnParent()
@@ -1181,6 +1178,7 @@ class MapFrame(SingleMapFrame):
     def OnHistogram(self, event):
         """Init histogram display canvas and tools
         """
+        from modules.histogram import HistogramFrame
         win = HistogramFrame(self, giface=self._giface)
 
         win.CentreOnParent()
