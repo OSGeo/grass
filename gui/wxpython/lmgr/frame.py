@@ -840,6 +840,10 @@ class GMFrame(wx.Frame):
 
             return mlist
 
+    def GetAllMapDisplays(self):
+        """Get all (open) map displays"""
+        return self.GetMapDisplay(onlyCurrent=False)
+
     def GetLogWindow(self):
         """Gets console for command output and messages"""
         return self._gconsole
@@ -1685,6 +1689,10 @@ class GMFrame(wx.Frame):
         """
         for display in self.GetMapDisplay(onlyCurrent=False):
             display.OnCloseWindow(event)
+
+    def OnRenderAllMapDisplays(self, event=None):
+        for display in self.GetAllMapDisplays():
+            display.OnRender(None)
 
     def OnRenameDisplay(self, event):
         """Change Map Display name"""

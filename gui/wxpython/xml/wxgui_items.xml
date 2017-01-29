@@ -194,6 +194,12 @@
     <handler>OnNewDisplay</handler>
     <description>Open new map display window</description>
   </wxgui-item>
+  <wxgui-item name="RenderAllMapDisplays">
+    <label>Render all map displays</label>
+    <handler>OnRenderAllMapDisplays</handler>
+    <description>Re-render maps in all open map display windows</description>
+    <shortcut>Ctrl+R</shortcut>
+  </wxgui-item>
   <wxgui-item name="CloseCurrentMapDisplayWindow">
     <label>Close current map display window</label>
     <handler>OnDisplayClose</handler>
