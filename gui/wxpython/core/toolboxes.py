@@ -100,13 +100,21 @@ def _(string):
 # attribute translate of function _
 _.translate = None
 
+# TODO: this should be part of some reader object
+_MESSAGES = []
+
 
 def _warning(message):
     """Show warning"""
-    # TODO: enable choice between GUI and script behavior
-    # import only when really needed
-    from core.gcmd import GError
-    GError(message)
+    _MESSAGES.append("WARNING: %s" % message)
+
+
+def getMessages():
+    return _MESSAGES
+
+
+def clearMessages():
+    del _MESSAGES[:]
 
 
 def _debug(level, message):
@@ -505,9 +513,10 @@ def _removeUserToolboxesItem(root):
 def _getAddons():
     try:
         output = gcore.read_command('g.extension', quiet=True, flags='ag')
-    except CalledModuleError:
+    except CalledModuleError as error:
         _warning(_("List of addons cannot be obtained"
-                   " because g.extension failed."))
+                   " because g.extension failed."
+                   " Details: %s") % error)
         return []
 
     flist = []

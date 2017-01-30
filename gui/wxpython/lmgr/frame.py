@@ -113,10 +113,21 @@ class GMFrame(wx.Frame):
 
         self._giface = LayerManagerGrassInterface(self)
 
+        menu_errors = []
+        def add_menu_error(message):
+            menu_errors.append(message)
+        def show_menu_errors(messages):
+            if messages:
+                self._gconsole.WriteError(
+                    _("There were some issues when loading menu"
+                      " or Modules tab:"))
+                for message in messages:
+                    self._gconsole.WriteError(message)
+
         # the main menu bar
-        self._menuTreeBuilder = LayerManagerMenuData()
+        self._menuTreeBuilder = LayerManagerMenuData(message_handler=add_menu_error)
         # the search tree and command console
-        self._moduleTreeBuilder = LayerManagerModuleTree()
+        self._moduleTreeBuilder = LayerManagerModuleTree(message_handler=add_menu_error)
         self._auimgr = wx.aui.AuiManager(self)
 
         # list of open dialogs
@@ -235,6 +246,8 @@ class GMFrame(wx.Frame):
         self.goutput.SetSashPosition(int(self.GetSize()[1] * .8))
 
         self.workspaceChanged = False
+
+        show_menu_errors(menu_errors)
 
         # start with layer manager on top
         if self.currentPage:
