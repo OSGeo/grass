@@ -46,6 +46,9 @@ import wx
 from core.treemodel import TreeModel, ModuleNode
 from core.settings import UserSettings
 from core.toolboxes import expandAddons as expAddons
+from core.toolboxes import getMessages as getToolboxMessages
+from core.toolboxes import clearMessages as clearToolboxMessages
+from core.gcmd import GError
 from core.utils import _
 
 if not os.getenv("GISBASE"):
@@ -56,7 +59,9 @@ if not os.getenv("GISBASE"):
 class MenuTreeModelBuilder:
     """Abstract menu data class"""
 
-    def __init__(self, filename, expandAddons=True):
+    # TODO: message_handler=GError is just for backwards compatibility
+    # message_handler=GError should be replaced by None
+    def __init__(self, filename, expandAddons=True, message_handler=GError):
 
         self.menustyle = UserSettings.Get(group='appearance',
                                           key='menustyle',
@@ -65,6 +70,9 @@ class MenuTreeModelBuilder:
         xmlTree = etree.parse(filename)
         if expandAddons:
             expAddons(xmlTree)
+            for message in getToolboxMessages():
+                message_handler(message)
+            clearToolboxMessages()
 
         self.model = TreeModel(ModuleNode)
         self._createModel(xmlTree)
