@@ -409,8 +409,8 @@ class PyEditController(object):
         Used for example to check if content should be saved before closing.
         The content is not valuable for example if it already saved in a file.
         """
-        Debug.msg(2, "pyedit IsContentValuable? empty={}, modified={}",
-                  self.IsEmpty(), self.IsModified())
+        Debug.msg(2, "pyedit IsContentValuable? empty=%s, modified=%s" % (
+                  self.IsEmpty(), self.IsModified()))
         return not self.IsEmpty() and self.IsModified()
 
     def SetScriptTemplate(self, event):
