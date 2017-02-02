@@ -120,21 +120,21 @@ example. The user can just create these files in a text editor, save
 them and specify path to them.
 
 <div class="code"><pre>
-cat > x.txt &lt;&lt;EOF
+cat &gt; x.txt &lt;&lt;EOF
 1
 3
 4
 6
 9
 EOF
-cat > y1.txt &lt;&lt;EOF
+cat &gt; y1.txt &lt;&lt;EOF
 50
 58
 65
 34
 27
 EOF
-cat > y2.txt &lt;&lt;EOF
+cat &gt; y2.txt &lt;&lt;EOF
 10
 20
 35
@@ -145,7 +145,7 @@ EOF
 
 <!--
 export GRASS_FONT=sans  # fixes bad default font
-d.mon start=cairo output=plot.png width=400 height=400 --o
+d.mon start=cairo output=plot.png width=400 height=400
 d.erase  # previous image is not cleaned
 -->
 
