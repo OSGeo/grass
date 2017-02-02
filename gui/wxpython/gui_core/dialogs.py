@@ -2484,7 +2484,12 @@ class DefaultFontDialog(wx.Dialog):
             return
 
         if self.font:
-            self.fontlb.SetStringSelection(fontdict_reverse[self.font], True)
+            long_name = fontdict_reverse.get(self.font, None)
+            if long_name:
+                self.fontlb.SetStringSelection(long_name, True)
+            else:
+                # font is not in the list of GRASS recognized fonts
+                self.font = None
 
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1,
