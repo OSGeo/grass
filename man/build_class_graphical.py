@@ -55,12 +55,11 @@ header_graphical_index_tmpl = """\
     float: left;
     margin: 0 15px 0 0;
     background: white;
+    object-fit: scale-down;
 }
 
 .img-list li img.default-img {
-    width: 40px;
-    padding-left: 30px;
-    padding-right: 30px;
+    max-height: 5ex;
 }
 
 .img-list li .desc {
