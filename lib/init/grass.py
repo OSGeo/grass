@@ -1071,7 +1071,7 @@ def load_env(grass_env_file):
         except:
             continue
 
-        debug("Environmental variable set {}={}".format(k, v))
+        debug("Environmental variable set {0}={1}".format(k, v))
         os.environ[k] = v
 
     # Allow for mixed ISIS-GRASS Environment
@@ -1399,11 +1399,11 @@ def close_gui():
         return
     import signal
     for pid in env['GUI_PID'].split(','):
-        debug("Exiting GUI with pid={}".format(pid))
+        debug("Exiting GUI with pid={0}".format(pid))
         try:
             os.kill(int(pid), signal.SIGTERM)
         except OSError as e:
-            message(_("Unable to close GUI. {}").format(e))
+            message(_("Unable to close GUI. {0}").format(e))
         
 def clear_screen():
     """Clear terminal"""
@@ -1891,7 +1891,7 @@ def main():
         # User selects LOCATION and MAPSET if not set
         if not set_mapset_interactive(grass_gui):
             # No GUI available, update gisrc file
-            fatal(_("<{}> requested, but not available. Run GRASS in text "
+            fatal(_("<{0}> requested, but not available. Run GRASS in text "
                     "mode (-text) or install missing package (usually "
                     "'grass-gui').").format(grass_gui))
     else:

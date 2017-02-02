@@ -11,7 +11,7 @@ def read_env_file(env_file):
     width = height = legfile = None
     fd = open(env_file, 'r')
     if fd is None:
-        grass.fatal("Unable to open file '{}'".format(env_file))
+        grass.fatal("Unable to open file '{0}'".format(env_file))
     lines = fd.readlines()
     for l in lines:
         if l.startswith('#'):
@@ -40,7 +40,7 @@ def render(cmd, mapfile):
     try:
         grass.run_command(cmd[0], env=env, **cmd[1])
     except Exception as e:
-        grass.debug(1, "Unable to render: {}".format(e))
+        grass.debug(1, "Unable to render: {0}".format(e))
 
 # update cmd file
 def update_cmd_file(cmd_file, cmd, mapfile):
@@ -54,13 +54,13 @@ def update_cmd_file(cmd_file, cmd, mapfile):
     # update cmd file
     fd = open(cmd_file, mode)
     if fd is None:
-        grass.fatal("Unable to open file '{}'".format(cmd_file))
+        grass.fatal("Unable to open file '{0}'".format(cmd_file))
     if mode == 'a':
         frame = os.getenv('GRASS_RENDER_FRAME', None)
         if frame:
-            fd.write('# GRASS_RENDER_FRAME={}\n'.format(frame))
+            fd.write('# GRASS_RENDER_FRAME={0}\n'.format(frame))
         if mapfile:
-            fd.write('# GRASS_RENDER_FILE={}\n'.format(mapfile))
+            fd.write('# GRASS_RENDER_FILE={0}\n'.format(mapfile))
         fd.write(' '.join(gtask.cmdtuple_to_list(cmd)))
         fd.write('\n')
     else:

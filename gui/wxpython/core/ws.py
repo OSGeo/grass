@@ -245,7 +245,7 @@ class RenderWMSMgr(wx.EvtHandler):
 
     def Abort(self):
         """Abort rendering process"""
-        Debug.msg(1, "RenderWMSMgr({}).Abort()".format(self.layer))
+        Debug.msg(1, "RenderWMSMgr({0}).Abort()".format(self.layer))
         self.thread.Terminate()
 
         # force rendering layer next time

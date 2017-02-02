@@ -307,10 +307,10 @@ def get_installed_modules(force=False):
     for tnode in tree.findall('task'):
         if flags['g']:
             desc, keyw = get_optional_params(tnode)
-            ret.append('name={}'.format(tnode.get('name').strip()))
-            ret.append('description={}'.format(desc))
-            ret.append('keywords={}'.format(keyw))
-            ret.append('executables={}'.format(','.join(
+            ret.append('name={0}'.format(tnode.get('name').strip()))
+            ret.append('description={0}'.format(desc))
+            ret.append('keywords={0}'.format(keyw))
+            ret.append('executables={0}'.format(','.join(
                 get_module_executables(tnode))
             ))
         else:
@@ -326,7 +326,7 @@ def list_available_extensions(url):
 
     For toolboxes it lists also all modules.
     """
-    gscript.debug("list_available_extensions(url={})".format(url))
+    gscript.debug("list_available_extensions(url={0})".format(url))
     if flags['t']:
         grass.message(_("List of available extensions (toolboxes):"))
         tlist = get_available_toolboxes(url)
@@ -808,10 +808,10 @@ def get_addons_metadata(url, mlist):
         tree = etree_fromurl(url, proxies=PROXIES)
     except (HTTPError, URLError, IOError, OSError) as error:
         grass.error(_("Unable to read addons metadata file"
-                      " from the remote server: {}").format(error))
+                      " from the remote server: {0}").format(error))
         return data, bin_list
     except ETREE_EXCEPTIONS as error:
-        grass.warning(_("Unable to parse '%s': {}").format(error) % url)
+        grass.warning(_("Unable to parse '%s': {0}").format(error) % url)
         return data, bin_list
     for mnode in tree.findall('task'):
         name = mnode.get('name')
@@ -938,7 +938,7 @@ def install_extension_win(name):
                 'patch': version[2]}
 
     # resolve ZIP URL
-    source, url = resolve_source_code(url='{}/{}.zip'.format(base_url, name))
+    source, url = resolve_source_code(url='{0}/{1}.zip'.format(base_url, name))
 
     # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:
@@ -995,7 +995,7 @@ def move_extracted_files(extract_dir, target_dir, files):
     a different directory in the way that if there was one directory extracted,
     the contained files are moved.
     """
-    gscript.debug("move_extracted_files({})".format(locals()))
+    gscript.debug("move_extracted_files({0})".format(locals()))
     if len(files) == 1:
         shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
     else:
@@ -1056,7 +1056,7 @@ def extract_zip(name, directory, tmpdir):
         move_extracted_files(extract_dir=extract_dir,
                              target_dir=directory, files=files)
     except zipfile.BadZipfile as error:
-        gscript.fatal(_("ZIP file is unreadable: {}").format(error))
+        gscript.fatal(_("ZIP file is unreadable: {0}").format(error))
 
 
 # TODO: solve the other related formats
@@ -1075,7 +1075,7 @@ def extract_tar(name, directory, tmpdir):
         move_extracted_files(extract_dir=extract_dir,
                              target_dir=directory, files=files)
     except tarfile.TarError as error:
-        gscript.fatal(_("Archive file is unreadable: {}").format(error))
+        gscript.fatal(_("Archive file is unreadable: {0}").format(error))
 
 extract_tar.supported_formats = ['tar.gz', 'gz', 'bz2', 'tar', 'gzip', 'targz']
 
@@ -1116,7 +1116,7 @@ def download_source_code(source, url, name, outdev,
         fix_newlines(directory)
     else:
         # probably programmer error
-        grass.fatal(_("Unknown extension (addon) source type '{}'."
+        grass.fatal(_("Unknown extension (addon) source type '{0}'."
                       " Please report this to the grass-user mailing list.")
                     .format(source))
     assert os.path.isdir(directory)
@@ -1459,8 +1459,8 @@ def resolve_install_prefix(path, to_system):
             path = os.environ['GRASS_ADDON_BASE']
     if os.path.exists(path) and \
        not os.access(path, os.W_OK):
-        grass.fatal(_("You don't have permission to install extension to <{}>."
-                      " Try to run {} with administrator rights"
+        grass.fatal(_("You don't have permission to install extension to <{0}>."
+                      " Try to run {1} with administrator rights"
                       " (su or sudo).")
                     .format(path, 'g.extension'))
     # ensure dir sep at the end for cases where path is used as URL and pasted
@@ -1481,7 +1481,7 @@ def resolve_xmlurl_prefix(url, source=None):
     >>> resolve_xmlurl_prefix('http://grass.osgeo.org/addons/')
     'http://grass.osgeo.org/addons/'
     """
-    gscript.debug("resolve_xmlurl_prefix(url={}, source={})".format(url, source))
+    gscript.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
     if source == 'official':
         # use pregenerated modules XML file
         url = 'http://grass.osgeo.org/addons/grass%s/' % version[0]
@@ -1541,7 +1541,7 @@ def resolve_known_host_service(url):
             if url.startswith(start + value['domain']):
                 match = value
                 actual_start = start
-                gscript.verbose(_("Identified {} as known hosting service")
+                gscript.verbose(_("Identified {0} as known hosting service")
                                 .format(key))
                 for suffix in value['ignored_suffixes']:
                     if url.endswith(suffix):
@@ -1558,7 +1558,7 @@ def resolve_known_host_service(url):
         url = '{prefix}{base}{suffix}'.format(prefix=actual_start,
                                               base=url.rstrip('/'),
                                               suffix=match['url_end'])
-        gscript.verbose(_("Will use the following URL for download: {}")
+        gscript.verbose(_("Will use the following URL for download: {0}")
                         .format(url))
         return 'remote_zip', url
     else:

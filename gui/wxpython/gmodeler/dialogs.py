@@ -922,7 +922,7 @@ class ItemListCtrl(ModelListCtrl):
                 options = action.GetParameterizedParams()
                 params = []
                 for f in options['flags']:
-                    params.append('-{}'.format(f['name']))
+                    params.append('-{0}'.format(f['name']))
                 for p in options['params']:
                     params.append(p['name'])
 

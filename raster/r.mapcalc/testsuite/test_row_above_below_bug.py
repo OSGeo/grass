@@ -73,7 +73,7 @@ class TestRowAboveAndBelowBug(TestCase):
     def r_mapcalc_with_test(self, expression):
         """Expects just RHS and inputs as ``{m}`` for format function"""
         expression = expression.format(m=self.input)
-        expression = "{} = {}".format(self.output, expression)
+        expression = "{0} = {1}".format(self.output, expression)
         self.assertModule('r.mapcalc', expression=expression, overwrite=True)
         self.assertRasterExists(self.output)
         self.to_remove.append(self.output)

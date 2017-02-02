@@ -1693,7 +1693,7 @@ class EPSGPage(TitledPage):
         except OpenError as e:
             GError(
                 parent=self,
-                message=_("Unable to read EPGS codes: {}").format(e),
+                message=_("Unable to read EPGS codes: {0}").format(e),
                 showTraceback=False)
             self.epsglist.Populate(list(), update=True)
             return
@@ -1940,7 +1940,7 @@ class IAUPage(TitledPage):
         except OpenError as e:
             GError(
                 parent=self,
-                message=_("Unable to read IAU codes: {}").format(e),
+                message=_("Unable to read IAU codes: {0}").format(e),
                 showTraceback=False)
             self.epsglist.Populate(list(), update=True)
             return
