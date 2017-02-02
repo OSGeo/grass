@@ -1882,7 +1882,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             epsgCombo.SetItems([])
             GError(
                 parent=self,
-                message=_("Unable to read EPGS codes: {}").format(e),
+                message=_("Unable to read EPGS codes: {0}").format(e),
                 showTraceback=False)
             return
 

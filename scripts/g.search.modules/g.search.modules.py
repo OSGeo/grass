@@ -146,9 +146,9 @@ def _print_results(data):
     import textwrap
 
     for item in data:
-        print('\n{}'.format(colorize(item['name'], attrs=['bold'])))
+        print('\n{0}'.format(colorize(item['name'], attrs=['bold'])))
         for attr in item['attributes']:
-            out = '{}: {}'.format(attr, item['attributes'][attr])
+            out = '{0}: {1}'.format(attr, item['attributes'][attr])
             out = textwrap.wrap(out, width=79, initial_indent=4 * ' ',
                                 subsequent_indent=4 * ' ' + len(attr) * ' ' + '  ')
             for line in out:

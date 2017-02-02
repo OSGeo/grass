@@ -772,7 +772,7 @@ class GRASSStartup(wx.Frame):
         except (UnicodeEncodeError, UnicodeDecodeError) as e:
             GError(parent=self,
                    message=_("Unicode error detected. "
-                             "Check your locale settings. Details: {}").format(e),
+                             "Check your locale settings. Details: {0}").format(e),
                    showTraceback=False)
 
         self.lblocations.Clear()
