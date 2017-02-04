@@ -500,7 +500,7 @@ static int do_spawn(struct spawn *sp, const char *command)
     status = win_spawn(command, sp->args, env, sp->directory, handles, sp->background, 1);
 
     if (!sp->background && status < 0)
-	G_warning(_("Unable to execute command"));
+	G_warning(_("G_spawn: unable to execute command"));
 
     return status;
 }
