@@ -11,8 +11,6 @@ matrix:
       - os: linux
         compiler: clang
         sudo: required
-      - language: objective-c
-        os: osx
 
 env:
   global:
@@ -35,7 +33,3 @@ notifications:
                 - wenzeslaus@gmail.com
             on_success: change
             on_failure: always
-
-
-## TODO Change so that the .travis.yml files are in one repo and the
-## grass repo is downloaded automatically
