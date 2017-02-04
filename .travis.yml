@@ -17,13 +17,13 @@ env:
     - CFLAGS="-Werror=implicit-function-declaration"
 
 before_install:
-  - ./.travis/.travis.$TRAVIS_OS_NAME.before_install.sh
+  - ./.travis/$TRAVIS_OS_NAME.before_install.sh
 
 install:
-  - ./.travis/.travis.$TRAVIS_OS_NAME.install.sh
+  - ./.travis/$TRAVIS_OS_NAME.install.sh
 
 script:
-  - ./.travis/.travis.$TRAVIS_OS_NAME.script.sh
+  - ./.travis/$TRAVIS_OS_NAME.script.sh
 
 notifications:
         email:
