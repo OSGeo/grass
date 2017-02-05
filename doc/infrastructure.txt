@@ -33,10 +33,6 @@ Maintainer: M. Neteler
    then offered as rsync mirror (tier-2) to other mirror sites
 ** RSS feed: offered by CMSMS
 
-* i18N translation statistics (http://grass.osgeo.org/development/translations/#statistics)
-** based in Linux weekly snapshot
-** GRASS version is coded in devel/i18n_stats.inc
-
 * Weekly snapshots (generated Saturday morning California time):
 ** Source code tarball of SVN HEAD
 ** Linux binary snapshot is compiled
@@ -51,10 +47,11 @@ Maintainer: M. Neteler
 ** HTML: cronjob run Saturday morning California time
 ** disabled: PDF: cronjob run Saturday morning California time
 
-* i18N translation statistics:
+* i18N translation statistics (http://grass.osgeo.org/development/translations/#statistics)
 ** generated during compilation of Linux binary snapshot, stats of
    (cd locale; make) are extracted into text file
 ** text file parsed by PHP page and shown as table
+** GRASS version is coded in devel/i18n_stats.inc
 
 * Mailman mailing lists + greylisting (at lists.osgeo.org since 11/2007)
 ** Mailman is doing the job, only registered users can post
@@ -146,7 +143,7 @@ Web based client: See http://grasswiki.osgeo.org/wiki/IRC
 
 == GRASS Source code repository ==
 
-Maintainer: OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
+Maintainer: Markus Neteler, Martin Landa, OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
 
 * https://trac.osgeo.org/grass/browser
 * SVN: https://trac.osgeo.org/grass/wiki/HowToSVN
@@ -159,6 +156,8 @@ ZIP file download support in trac (needed for g.extension) - on trac.osgeo.org:
 [browser]
 downloadable_paths = /grass-addons/grass7/*/*,/sandbox/*/*
 
+Statistics:
+https://trac.osgeo.org/grass/stats/code
 
 == GRASS Bugtracker ==
 
@@ -208,6 +207,13 @@ Maintainer: Martin Landa
 
 * https://travis-ci.org/GRASS-GIS
 * https://github.com/GRASS-GIS/grass-ci
+
+Travis CI control files:
+ trunk/.travis/
+   linux.before_install.sh
+   linux.install.sh
+   linux.script.sh
+
 
 Coverity Scan:
 * https://scan.coverity.com/projects/grass?tab=overview
