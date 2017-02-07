@@ -64,7 +64,7 @@ int centroids(int fd,		/* File descriptor of map layer to process */
 
     /* compute averages */
     if (method > 0)
-	for (i = 0; i <= max; i++) {
+	for (i = 1; i <= max; i++) {
 	    if (count[i]) {
 		numb = count[i];
 		e[i] /= numb;
