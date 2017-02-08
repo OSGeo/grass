@@ -193,10 +193,6 @@ int main(int argc, char *argv[])
     if (!options.layer->answer) {
 	char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
-	if (flags.append->answer)
-	    G_fatal_error(_("Appending to OGR layer requires option '%s'"),
-	                  options.layer->key);
-
 	if (G_name_is_fully_qualified(options.input->answer, xname, xmapset))
 	    options.layer->answer = G_store(xname);
 	else
