@@ -453,7 +453,8 @@ class Settings:
                 },
                 'selectThresh': {
                     'value': 10,
-                    'units': 'screen pixels'
+                    'unit': 0,  # new
+                    'units': 'screen pixels'  # old for backwards comp.
                 },
                 'checkForDupl': {
                     'enabled': False
