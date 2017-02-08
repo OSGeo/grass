@@ -12,7 +12,7 @@ static void error_handler(void *p)
     const struct handler_input *input = (const struct handler_input *)p;
 
     if (input->driver && *input->driver)
-	db_close_database_shutdown_driver(*(input->driver));
+	db_close_database_shutdown_driver(*input->driver);
     if (input->Map) {
 	if (input->Map->open == VECT_OPEN_CODE)
 	    Vect_close(input->Map);
