@@ -126,6 +126,8 @@ void parse_args(int argc, char **argv,
 	_("Create a new empty layer in defined OGR datasource "
 	  "and exit. Nothing is read from input.");
     flags->new->guisection = _("Creation");
+
+    G_option_requires(flags->append, options->layer, NULL);
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
