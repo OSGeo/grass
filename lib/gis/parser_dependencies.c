@@ -266,9 +266,13 @@ static void check_requires(const struct rule *rule)
 	return;
     if (count_present(rule, 1) < 1) {
 	char *err;
-	G_asprintf(&err, _("Option %s requires at least one of %s"),
-		   get_name(rule->opts[0]), describe_rule(rule, 1, 1));
-	append_error(err);
+        if (rule->count > 2)
+            G_asprintf(&err, _("Option <%s> requires at least one of %s"),
+                       get_name(rule->opts[0]), describe_rule(rule, 1, 1));
+        else
+            G_asprintf(&err, _("Option <%s> requires <%s>"),
+                       get_name(rule->opts[0]), describe_rule(rule, 1, 1));
+        append_error(err);
     }
 }
 
