@@ -1085,12 +1085,13 @@ int create_pg_layer(struct Map_info *Map, int type)
     
     switch (type) {
     case GV_POINT:
+    case GV_CENTROID:
         pg_info->feature_type = SF_POINT;
         break;
     case GV_LINE:
+    case GV_BOUNDARY:
         pg_info->feature_type = SF_LINESTRING;
         break;
-    case GV_BOUNDARY:
     case GV_AREA:
         pg_info->feature_type = SF_POLYGON;
         break;
@@ -1259,11 +1260,17 @@ off_t write_line_sf(struct Map_info *Map, int type,
             return 0;
         }
     }
-    else if (type & GV_BOUNDARY || type & GV_CENTROID) {
-        if (sf_type != SF_POLYGON) {
-            G_warning(_("Boundary/centroid skipped (output feature type: %s)"),
+    else if (type & GV_CENTROID) {
+        if (sf_type != SF_POLYGON && sf_type != SF_POINT) {
+            G_warning(_("Centroid skipped (output feature type: %s)"),
                       Vect_get_finfo_geometry_type(Map));
-            G_warning(_("Feature is not a polygon. Skipping."));
+            return 0;
+        }
+    }
+    else if (type & GV_BOUNDARY) {
+        if (sf_type != SF_POLYGON && sf_type != SF_LINESTRING) {
+            G_warning(_("Boundary skipped (output feature type: %s)"),
+                      Vect_get_finfo_geometry_type(Map));
             return 0;
         }
     }
@@ -1772,7 +1779,8 @@ char *line_to_wkb(struct Format_info_pg *pg_info,
     wkb_data = NULL;
     if (type & GV_POINTS) /* point or centroid */
         wkb_data = point_to_wkb(byte_order, points[0], with_z, &nbytes);
-    else if (type == GV_LINE)
+    else if (type == GV_LINE ||
+             (type == GV_BOUNDARY && pg_info->feature_type == SF_LINESTRING))
         wkb_data = linestring_to_wkb(byte_order, points[0], with_z, &nbytes);
     else if (type & (GV_BOUNDARY | GV_FACE | GV_AREA)) {
         if (!pg_info->toposchema_name || type == GV_AREA) {
