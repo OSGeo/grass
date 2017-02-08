@@ -14,9 +14,11 @@ static void error_handler(void *p)
     if (input->driver && *input->driver)
 	db_close_database_shutdown_driver(*input->driver);
     if (input->Map) {
+	char *name = G_store(input->Map->name);
 	if (input->Map->open == VECT_OPEN_CODE)
 	    Vect_close(input->Map);
-	Vect_delete(input->Map->name);
+	Vect_delete(name);
+	G_free(name);
     }
 }
 
