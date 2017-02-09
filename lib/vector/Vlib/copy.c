@@ -526,11 +526,13 @@ int Vect__copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
             /* no centroid - check if area forms an isle */
 	    /* this check does not make sense because the area is also
 	     * not exported if it is part of an isle inside another
-	     * area: the isle gets exported as an inner ring */
+	     * area: the isle gets exported as an inner ring
             if (!is_isle(In, area))
                 G_warning(_("No centroid defined for area %d. "
                             "Area not exported."),
                           area);
+            */
+            G_debug(3, "Area %d: is_isle() -> %d", area, is_isle(In, area));
             continue;
         }
         
