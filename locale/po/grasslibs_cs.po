@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-14 14:30+0100\n"
-"PO-Revision-Date: 2017-02-09 09:46+0100\n"
+"PO-Revision-Date: 2017-02-09 15:16+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <cs@li.org>\n"
 "Language: cs_CS\n"
@@ -3930,7 +3930,7 @@ msgstr "Prvek %d bez geometrie je ignorován"
 #, c-format
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
-msgstr[0] "%d primitivum zaregistrováno"
+msgstr[0] "Jedno primitivum zaregistrováno"
 msgstr[1] "%d primitiv zaregistrováno"
 
 #: ../lib/vector/Vlib/build_sfa.c:386 ../lib/vector/Vlib/build_sfa.c:662
@@ -3938,7 +3938,7 @@ msgstr[1] "%d primitiv zaregistrováno"
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] "%d opěrný bod zaregistrován"
+msgstr[0] "Jeden opěrný bod zaregistrován"
 msgstr[1] "%d opěrných bodů zaregistrováno"
 
 #: ../lib/vector/Vlib/build_sfa.c:603 ../lib/vector/Vlib/read_ogr.c:344
