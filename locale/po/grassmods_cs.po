@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: grassmods_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-26 20:33+0200\n"
-"PO-Revision-Date: 2017-02-09 11:07+0100\n"
+"PO-Revision-Date: 2017-02-09 15:18+0100\n"
 "Last-Translator: \n"
 "Language-Team: cs@li.org\n"
 "Language: cs_CS\n"
@@ -4519,7 +4519,7 @@ msgid "%d feature added"
 msgid_plural "%d features added"
 msgstr[0] "%d prvek přidán"
 msgstr[1] "%d prvky přidáky"
-msgstr[2] "prvků přidáno"
+msgstr[2] "%d prvků přidáno"
 
 #: ../vector/v.edit/main.c:282 ../vector/v.edit/main.c:311
 #: ../vector/v.edit/main.c:322 ../vector/v.edit/main.c:354
@@ -4550,7 +4550,7 @@ msgid "%d feature moved"
 msgid_plural "%d features moved"
 msgstr[0] "%d prvek přesunut"
 msgstr[1] "%d prvky přesunuty"
-msgstr[2] " %d prvků přesunuto"
+msgstr[2] "%d prvků přesunuto"
 
 #: ../vector/v.edit/main.c:325
 #, c-format
@@ -30851,8 +30851,8 @@ msgstr "Vypiš statistiku ve stylu pro shell skript"
 msgid "%d clump."
 msgid_plural "%d clumps."
 msgstr[0] "%d třída."
-msgstr[1] "%d tříd."
-msgstr[2] ""
+msgstr[1] "%d třídy."
+msgstr[2] "%d tříd."
 
 #: ../raster/r.clump/clump.c:72
 #, fuzzy
