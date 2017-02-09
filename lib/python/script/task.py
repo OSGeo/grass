@@ -155,22 +155,19 @@ class grassTask:
         :param str element: element name
         :param bool raiseError: True for raise on error
         """
-        try:
-            for p in self.params:
-                val = p[element]
-                if val is None:
-                    continue
-                if isinstance(val, (list, tuple)):
-                    if value in val:
-                        return p
-                elif isinstance(val, (bytes, unicode)):
-                    if p[element][:len(value)] ==  value:
-                        return p
-                else:
-                    if p[element] ==  value:
-                        return p
-        except KeyError:
-            pass
+        for p in self.params:
+            val = p.get(element, None)
+            if val is None:
+                continue
+            if isinstance(val, (list, tuple)):
+                if value in val:
+                    return p
+            elif isinstance(val, (bytes, unicode)):
+                if p[element][:len(value)] == value:
+                    return p
+            else:
+                if p[element] == value:
+                    return p
 
         if raiseError:
             raise ValueError(_("Parameter element '%(element)s' not found: '%(value)s'") % \

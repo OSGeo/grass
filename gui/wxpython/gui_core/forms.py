@@ -317,12 +317,15 @@ class UpdateThread(Thread):
 
             elif name == 'ColumnSelect':
                 if map:
-                    if map in cparams:
-                        if not cparams[map]['dbInfo']:
-                            cparams[map]['dbInfo'] = gselect.VectorDBInfo(map)
-                        self.data[win.GetParent().InsertColumns] = {
-                            'vector': map, 'layer': layer,
-                            'dbInfo': cparams[map]['dbInfo']}
+                    if map not in cparams:
+                        cparams[map] = {'dbInfo': None,
+                                        'layers': None, }
+
+                    if not cparams[map]['dbInfo']:
+                        cparams[map]['dbInfo'] = gselect.VectorDBInfo(map)
+                    self.data[win.GetParent().InsertColumns] = {
+                        'vector': map, 'layer': layer,
+                        'dbInfo': cparams[map]['dbInfo']}
                 else:  # table
                     if driver and db:
                         self.data[win.GetParent().InsertTableColumns] = {
