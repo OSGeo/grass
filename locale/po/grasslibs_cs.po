@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-14 14:30+0100\n"
-"PO-Revision-Date: 2015-03-15 18:32+0100\n"
+"PO-Revision-Date: 2017-02-09 09:46+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <cs@li.org>\n"
 "Language: cs_CS\n"
@@ -3927,18 +3927,18 @@ msgstr "Prvek %d bez geometrie je ignorován"
 
 #: ../lib/vector/Vlib/build_sfa.c:385 ../lib/vector/Vlib/build_sfa.c:661
 #: ../lib/vector/Vlib/build_nat.c:117
-#, fuzzy, c-format
+#, c-format
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
-msgstr[0] "%d primitiv zaregistrováno"
+msgstr[0] "%d primitivum zaregistrováno"
 msgstr[1] "%d primitiv zaregistrováno"
 
 #: ../lib/vector/Vlib/build_sfa.c:386 ../lib/vector/Vlib/build_sfa.c:662
 #: ../lib/vector/Vlib/build_nat.c:118
-#, fuzzy, c-format
+#, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] "%d opěrných bodů zaregistrováno"
+msgstr[0] "%d opěrný bod zaregistrován"
 msgstr[1] "%d opěrných bodů zaregistrováno"
 
 #: ../lib/vector/Vlib/build_sfa.c:603 ../lib/vector/Vlib/read_ogr.c:344
@@ -3948,11 +3948,11 @@ msgid "OGR feature type %d not supported"
 msgstr "Typ prvku OGR %d není podporován"
 
 #: ../lib/vector/Vlib/build_sfa.c:665
-#, fuzzy, c-format
+#, c-format
 msgid "One feature without geometry skipped"
 msgid_plural "%d features without geometry skipped"
-msgstr[0] "Prvek %d bez geometrie je ignorován"
-msgstr[1] "Prvek %d bez geometrie je ignorován"
+msgstr[0] "Jeden prvek bez geometrie ignorován"
+msgstr[1] "%d prvků bez geometrie ignorováno"
 
 #: ../lib/vector/Vlib/build_sfa.c:711 ../lib/vector/Vlib/header_finfo.c:41
 #: ../lib/vector/Vlib/header_finfo.c:80 ../lib/vector/Vlib/header_finfo.c:113
@@ -4076,11 +4076,11 @@ msgid "Unable select records from table <%s>"
 msgstr "Nelze vybrat záznam z tabulky <%s>"
 
 #: ../lib/vector/Vlib/cats.c:605
-#, fuzzy, c-format
+#, c-format
 msgid "One category loaded"
 msgid_plural "%d categories loaded"
-msgstr[0] "Kategorie"
-msgstr[1] "Kategorie"
+msgstr[0] "Jedna kategorie načtena"
+msgstr[1] "%d kategorií načteno"
 
 #: ../lib/vector/Vlib/cats.c:627
 #, c-format
@@ -5234,17 +5234,17 @@ msgid "Building areas..."
 msgstr "Vytváření ploch..."
 
 #: ../lib/vector/Vlib/build_nat.c:153
-#, fuzzy, c-format
+#, c-format
 msgid "One area built"
 msgid_plural "%d areas built"
-msgstr[0] "%d ploch vytvořeno"
+msgstr[0] "Jedna plocha vytvořena"
 msgstr[1] "%d ploch vytvořeno"
 
 #: ../lib/vector/Vlib/build_nat.c:154
-#, fuzzy, c-format
+#, c-format
 msgid "One isle built"
 msgid_plural "%d isles built"
-msgstr[0] "%d ostrovů vytvořeno"
+msgstr[0] "Jeden ostrov vytvořen"
 msgstr[1] "%d ostrovů vytvořeno"
 
 #: ../lib/vector/Vlib/build_nat.c:163

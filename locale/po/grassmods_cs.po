@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: grassmods_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-26 20:33+0200\n"
-"PO-Revision-Date: 2016-04-10 15:14+0200\n"
+"PO-Revision-Date: 2017-02-09 11:07+0100\n"
 "Last-Translator: \n"
 "Language-Team: cs@li.org\n"
 "Language: cs_CS\n"
@@ -3772,12 +3772,12 @@ msgid "Unable select records from table <%s>"
 msgstr "Nelze vybrat data z tabulky <%s>"
 
 #: ../vector/v.extract/main.c:271
-#, fuzzy, c-format
+#, c-format
 msgid "%d category loaded"
 msgid_plural "%d categories loaded"
-msgstr[0] "%d kategorií bylo načteno z tabulky"
-msgstr[1] "%d kategorií bylo načteno z tabulky"
-msgstr[2] ""
+msgstr[0] "%d kategorie načtena"
+msgstr[1] "%d kategorie načteny"
+msgstr[2] "%d kategorií načteno"
 
 #: ../vector/v.extract/main.c:286
 msgid ""
@@ -4514,12 +4514,12 @@ msgstr ""
 "Prosím změňte vektor na 3D pomocí např.%s."
 
 #: ../vector/v.edit/main.c:274
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature added"
 msgid_plural "%d features added"
-msgstr[0] "%d prvků přidáno"
-msgstr[1] "%d prvků přidáno"
-msgstr[2] ""
+msgstr[0] "%d prvek přidán"
+msgstr[1] "%d prvky přidáky"
+msgstr[2] "prvků přidáno"
 
 #: ../vector/v.edit/main.c:282 ../vector/v.edit/main.c:311
 #: ../vector/v.edit/main.c:322 ../vector/v.edit/main.c:354
@@ -4529,84 +4529,84 @@ msgid "Threshold value for snapping is %.2f"
 msgstr "Prahová hodnota pro rpzdělení je %.2f"
 
 #: ../vector/v.edit/main.c:294
-#, fuzzy, c-format
+#, c-format
 msgid "%d boundary closed"
 msgid_plural "%d boundaries closed"
-msgstr[0] "%d hranic uzavřeno"
-msgstr[1] "%d hranic uzavřeno"
-msgstr[2] ""
+msgstr[0] "%d hranice uzavřena"
+msgstr[1] "%d hranice uzavřeny"
+msgstr[2] "%d hranic uzavřeno"
 
 #: ../vector/v.edit/main.c:303
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature deleted"
 msgid_plural "%d features deleted"
-msgstr[0] "%d prvků smazáno"
-msgstr[1] "%d prvků smazáno"
-msgstr[2] ""
+msgstr[0] "%d prvek smazán"
+msgstr[1] "%d prvky smazány"
+msgstr[2] "%d prvků smazáno"
 
 #: ../vector/v.edit/main.c:314
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature moved"
 msgid_plural "%d features moved"
-msgstr[0] "%d prvků přesunuto"
-msgstr[1] "%d prvků přesunuto"
-msgstr[2] ""
+msgstr[0] "%d prvek přesunut"
+msgstr[1] "%d prvky přesunuty"
+msgstr[2] " %d prvků přesunuto"
 
 #: ../vector/v.edit/main.c:325
-#, fuzzy, c-format
+#, c-format
 msgid "%d vertex moved"
 msgid_plural "%d vertices moved"
-msgstr[0] "%d lomových bodů přesunuto"
-msgstr[1] "%d lomových bodů přesunuto"
-msgstr[2] ""
+msgstr[0] "%d lomový bod přesunut"
+msgstr[1] "%d lomové bodů přesunuty"
+msgstr[2] "%d lomových bodů přesunuto"
 
 #: ../vector/v.edit/main.c:331
-#, fuzzy, c-format
+#, c-format
 msgid "%d vertex added"
 msgid_plural "%d vertices added"
-msgstr[0] "%d lomových bodů přidáno"
-msgstr[1] "%d lomových bodů přidáno"
-msgstr[2] ""
+msgstr[0] "%d lomový bod přidán"
+msgstr[1] "%d lomové body přidány"
+msgstr[2] "%d lomových bodů přidáno"
 
 #: ../vector/v.edit/main.c:337
-#, fuzzy, c-format
+#, c-format
 msgid "%d vertex removed"
 msgid_plural "%d vertices removed"
-msgstr[0] "%d lomových bodů smazáno"
-msgstr[1] "%d lomových bodů smazáno"
-msgstr[2] ""
+msgstr[0] "%d lomový bod smazán"
+msgstr[1] "%d lomové body smazány"
+msgstr[2] "%d lomových bodů smazáno"
 
 #: ../vector/v.edit/main.c:349
-#, fuzzy, c-format
+#, c-format
 msgid "%d line broken"
 msgid_plural "%d lines broken"
-msgstr[0] "%d linií zlomeno"
-msgstr[1] "%d linií zlomeno"
-msgstr[2] ""
+msgstr[0] "%d linie rozdělena"
+msgstr[1] "%d linie rozděleny"
+msgstr[2] "%d linií rozdělono"
 
 #: ../vector/v.edit/main.c:357
-#, fuzzy, c-format
+#, c-format
 msgid "%d line connected"
 msgid_plural "%d lines connected"
-msgstr[0] "%d linií připojeno"
-msgstr[1] "%d linií připojeno"
-msgstr[2] ""
+msgstr[0] "%d linie připojena"
+msgstr[1] "%d linie připojeny"
+msgstr[2] "%d linií připojeno"
 
 #: ../vector/v.edit/main.c:363
-#, fuzzy, c-format
+#, c-format
 msgid "%d line merged"
 msgid_plural "%d lines merged"
-msgstr[0] "%d linií spojeno"
-msgstr[1] "%d linií spojeno"
-msgstr[2] ""
+msgstr[0] "%d linie spojena"
+msgstr[1] "%d linie spojeny"
+msgstr[2] "%d linií spojeno"
 
 #: ../vector/v.edit/main.c:372 ../vector/v.edit/main.c:378
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature modified"
 msgid_plural "%d features modified"
-msgstr[0] "%d prvků změněno"
-msgstr[1] "%d prvků změněno"
-msgstr[2] ""
+msgstr[0] "%d prvek změněn"
+msgstr[1] "%d prvky změněny"
+msgstr[2] "%d prvků změněno"
 
 #: ../vector/v.edit/main.c:385
 #, c-format
@@ -4618,36 +4618,36 @@ msgstr ""
 "vektorové mapy <%s>."
 
 #: ../vector/v.edit/main.c:395
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature copied"
 msgid_plural "%d features copied"
-msgstr[0] "%d prvků zkopírováno"
-msgstr[1] "%d prvků zkopírováno"
-msgstr[2] ""
+msgstr[0] "%d prvek zkopírován"
+msgstr[1] "%d prvky zkopírovány"
+msgstr[2] "%d prvků zkopírováno"
 
 #: ../vector/v.edit/main.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "%d line flipped"
 msgid_plural "%d lines flipped"
-msgstr[0] "%d linií otočeno"
-msgstr[1] "%d linií otočeno"
-msgstr[2] ""
+msgstr[0] "%d linie otočena"
+msgstr[1] "%d linie otočeny"
+msgstr[2] "%d linií otočeno"
 
 #: ../vector/v.edit/main.c:427
-#, fuzzy, c-format
+#, c-format
 msgid "%d line labeled"
 msgid_plural "%d lines labeled"
-msgstr[0] "%d linií popsáno"
-msgstr[1] "%d linií popsáno"
-msgstr[2] ""
+msgstr[0] "%d linie popsána"
+msgstr[1] "%d linie popsány"
+msgstr[2] "%d linií popsáno"
 
 #: ../vector/v.edit/main.c:436
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature converted"
 msgid_plural "%d features converted"
-msgstr[0] "%d prvků přeměněno"
-msgstr[1] "%d prvků přeměněno"
-msgstr[2] ""
+msgstr[0] "%d prvek konvertován"
+msgstr[1] "%d prvky konvertovány"
+msgstr[2] "%d prvků konvertováno"
 
 #: ../vector/v.edit/main.c:441
 msgid "No feature modified"
@@ -4659,12 +4659,12 @@ msgid "Select feature %d is not centroid, ignoring..."
 msgstr ""
 
 #: ../vector/v.edit/main.c:455
-#, fuzzy, c-format
+#, c-format
 msgid "%d area removed"
 msgid_plural "%d areas removed"
-msgstr[0] "%d lomových bodů smazáno"
-msgstr[1] "%d lomových bodů smazáno"
-msgstr[2] ""
+msgstr[0] "%d lomový bod smazán"
+msgstr[1] "%d lomové body smazány"
+msgstr[2] "%d lomových bodů smazáno"
 
 #: ../vector/v.edit/main.c:461
 msgid "Operation not implemented"
@@ -4950,12 +4950,12 @@ msgid "Threshold value for querying is %.2f"
 msgstr "Prahová hodnota pro dotazování je %.2f"
 
 #: ../vector/v.edit/select.c:176
-#, fuzzy, c-format
+#, c-format
 msgid "%d of %d feature selected from vector map <%s>"
 msgid_plural "%d of %d features selected from vector map <%s>"
-msgstr[0] "%d z %d prvků vybráno pro vektorovou mapu <%s>"
-msgstr[1] "%d z %d prvků vybráno pro vektorovou mapu <%s>"
-msgstr[2] ""
+msgstr[0] "%d z %d prvku vybrán z vektorové mapy <%s>"
+msgstr[1] "%d z %d prvků vybráno z vektorové mapy <%s>"
+msgstr[2] "%d z %d prvků vybrán z vektorové mapy <%s>"
 
 #: ../vector/v.edit/select.c:496
 msgid "Layer must be > 0 for 'where'"
@@ -6173,12 +6173,12 @@ msgid "Failed to update key column <%s>"
 msgstr "Nelze použít sloupec <%s>"
 
 #: ../vector/v.in.db/main.c:340
-#, fuzzy, c-format
+#, c-format
 msgid "%d point written to vector map."
 msgid_plural "%d points written to vector map."
-msgstr[0] "%d bodů zapsáno do vektorové mapy."
-msgstr[1] "%d bodů zapsáno do vektorové mapy."
-msgstr[2] ""
+msgstr[0] "%d bod zapsán do vektorové mapy."
+msgstr[1] "%d body zapsány do vektorové mapy."
+msgstr[2] "%d bodů zapsáno do vektorové mapy."
 
 #: ../vector/v.in.pdal/projection.c:31 ../vector/v.in.lidar/projection.c:32
 #: ../vector/v.in.ogr/main.c:627 ../raster/r.in.lidar/projection.c:34
@@ -6980,12 +6980,12 @@ msgid "Snapping boundaries with %g ..."
 msgstr "Spojování hranic..."
 
 #: ../vector/v.overlay/area_area.c:99
-#, fuzzy, c-format
+#, c-format
 msgid "%d boundary snapped"
 msgid_plural "%d boundaries snapped"
-msgstr[0] "%d hranic uzavřeno"
-msgstr[1] "%d hranic uzavřeno"
-msgstr[2] ""
+msgstr[0] "%d hranice uzavřena"
+msgstr[1] "%d hranice uzavřeny"
+msgstr[2] "%d hranic uzavřeno"
 
 #: ../vector/v.overlay/area_area.c:109 ../vector/v.overlay/line_area.c:255
 msgid "Breaking lines..."
@@ -8075,12 +8075,12 @@ msgid "Incorrect segment type: %s"
 msgstr "Špatný typ segmentů: %s"
 
 #: ../vector/v.segment/main.c:261
-#, fuzzy, c-format
+#, c-format
 msgid "%d point read from input"
 msgid_plural "%d points read from input"
-msgstr[0] "%d bodů načteno ze vstupu"
-msgstr[1] "%d bodů načteno ze vstupu"
-msgstr[2] ""
+msgstr[0] "%d bod načten ze vstupu"
+msgstr[1] "%d body načteny ze vstupu"
+msgstr[2] "%d bodů načteno ze vstupu"
 
 #. GTC Number of lost points
 #. GTC Number of lost lines
@@ -8096,29 +8096,29 @@ msgstr[2] ""
 
 #. GTC %s is replaced with message indicating number of lost points.
 #: ../vector/v.segment/main.c:267
-#, fuzzy, c-format
+#, c-format
 msgid "%d point written to output map (%s)"
 msgid_plural "%d points written to output map (%s)"
-msgstr[0] "%d bodů zapsáno do výstupní mapy( %d ztraceno)"
-msgstr[1] "%d bodů zapsáno do výstupní mapy( %d ztraceno)"
-msgstr[2] ""
+msgstr[0] "%d bod zapsán do výstupní mapy (%s)"
+msgstr[1] "%d body zapsány do výstupní mapy (%s)"
+msgstr[2] "%d bodů zapsáno do výstupní mapy (%s)"
 
 #: ../vector/v.segment/main.c:272
-#, fuzzy, c-format
+#, c-format
 msgid "%d line read from input"
 msgid_plural "%d lines read from input"
-msgstr[0] "%d linií načteno ze vstupu"
-msgstr[1] "%d linií načteno ze vstupu"
-msgstr[2] ""
+msgstr[0] "%d linie načtena ze vstupu"
+msgstr[1] "%d linie načteny ze vstupu"
+msgstr[2] "%d linií načteno ze vstupu"
 
 #. GTC %s is replaced with message indicating number of lost lines.
 #: ../vector/v.segment/main.c:278
-#, fuzzy, c-format
+#, c-format
 msgid "%d line written to output map (%s)"
 msgid_plural "%d lines written to output map (%s)"
-msgstr[0] "%d linií zapsáno do výstupní mapy( %d ztraceno)"
-msgstr[1] "%d linií zapsáno do výstupní mapy( %d ztraceno)"
-msgstr[2] ""
+msgstr[0] "%d linie zapsána do výstupní mapy (%s)"
+msgstr[1] "%d linie zapsány do výstupní mapy (%s)"
+msgstr[2] "%d linií zapsáno do výstupní mapy (%s)"
 
 #: ../vector/v.type/main.c:41 ../vector/v.category/main.c:693
 #: ../vector/v.buffer/main.c:223
@@ -8476,9 +8476,9 @@ msgstr "Nelze otevřít vektorový soubor <%s> v úrovni topologie %d"
 #, fuzzy, c-format
 msgid "%d error in <%s> option"
 msgid_plural "%d errors in <%s> option"
-msgstr[0] "%d chyb ve volbě id"
-msgstr[1] "%d chyb ve volbě id"
-msgstr[2] ""
+msgstr[0] "%d chyba v parametru <%s>"
+msgstr[1] "%d chyby v parametru <%s>"
+msgstr[2] "%d chyb v parametru <%s>"
 
 #: ../vector/v.out.ascii/main.c:141
 msgid "dig_att file already exist"
@@ -9876,8 +9876,8 @@ msgstr "Location <%s> vytvořena"
 #, fuzzy, c-format
 msgid "Voronoi triangulation for %d point..."
 msgid_plural "Voronoi triangulation for %d points..."
-msgstr[0] "Delaunay triangulace...."
-msgstr[1] "Delaunay triangulace...."
+msgstr[0] ""
+msgstr[1] ""
 msgstr[2] ""
 
 #: ../vector/v.voronoi/main.c:230 ../vector/v.delaunay/in_out.c:93
@@ -11139,9 +11139,9 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%d error in id option"
 msgid_plural "%d errors in id option"
-msgstr[0] "%d chyb ve volbě id"
-msgstr[1] "%d chyb ve volbě id"
-msgstr[2] ""
+msgstr[0] "%d chyba ve volbě id"
+msgstr[1] "%d chyby ve volbě id"
+msgstr[2] "%d chyb ve volbě id"
 
 #: ../vector/v.category/main.c:228
 msgid "Output vector wasn't entered"
@@ -11166,12 +11166,12 @@ msgid "Unable to calculate area centroid"
 msgstr "Nelze vypočítat centroid plochy"
 
 #: ../vector/v.category/main.c:378
-#, fuzzy, c-format
+#, c-format
 msgid "%d new centroid placed in output map"
 msgid_plural "%d new centroids placed in output map"
-msgstr[0] "%d nové centroidy byly zapsány do výstupního souboru"
-msgstr[1] "%d nové centroidy byly zapsány do výstupního souboru"
-msgstr[2] ""
+msgstr[0] "%d nový centroid zapsán do výstupní mapy"
+msgstr[1] "%d nové centroidy zapsány do výstupní mapy"
+msgstr[2] "%d nových centroidů zapsáno do výstupní mapy"
 
 #: ../vector/v.category/main.c:670
 msgid "Layer/table"
@@ -11219,12 +11219,12 @@ msgid "Categories copied from layer %d to layer %d"
 msgstr "Načteno %d kategorií z vektorové mapy (vrstva %d)"
 
 #: ../vector/v.category/main.c:773
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature modified."
 msgid_plural "%d features modified."
-msgstr[0] "%d prvků změněno."
-msgstr[1] "%d prvků změněno."
-msgstr[2] ""
+msgstr[0] "%d prvek změněn."
+msgstr[1] "%d prvky změněny."
+msgstr[2] "%d prvků změněno."
 
 #: ../vector/v.reclass/main.c:68 ../raster/r.reclass/main.c:51
 #: ../raster/r.recode/main.c:50
@@ -11648,28 +11648,24 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:312
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%d point found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural ""
 "%d points found, but not requested to be exported. Verify 'type' parameter."
-msgstr[0] ""
-"Nalezeno %d bodů, nebyly však požadovány pro export. Ověřte parametr 'type'."
-msgstr[1] ""
-"Nalezeno %d bodů, nebyly však požadovány pro export. Ověřte parametr 'type'."
-msgstr[2] ""
+msgstr[0] "Nalezen %d bod, nebyl však požadován pro export. Ověřte parametr 'type'."
+msgstr[1] "Nalezeny %d body, nebyly však požadovány pro export. Ověřte parametr 'type'."
+msgstr[2] "Nalezeno %d bodů, nebyly však požadovány pro export. Ověřte parametr 'type'."
 
 #: ../vector/v.out.ogr/main.c:320
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%d line found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural ""
 "%d line(s) found, but not requested to be exported. Verify 'type' parameter."
-msgstr[0] ""
-"Nalezeno %d linií, nebyly však požadovány pro export. Ověřte parametr 'type'."
-msgstr[1] ""
-"Nalezeno %d linií, nebyly však požadovány pro export. Ověřte parametr 'type'."
-msgstr[2] ""
+msgstr[0] "Nalezena %d linie, nebyla však požadována pro export. Ověřte parametr 'type'."
+msgstr[1] "Nalezeny %d linie, nebyly však požadovány pro export. Ověřte parametr 'type'."
+msgstr[2] "Nalezeno %d linií, nebyly však požadovány pro export. Ověřte parametr 'type'."
 
 #: ../vector/v.out.ogr/main.c:329
 #, fuzzy, c-format
@@ -11678,13 +11674,9 @@ msgid ""
 msgid_plural ""
 "%d boundaries found, but not requested to be exported. Verify 'type' "
 "parameter."
-msgstr[0] ""
-"Nalezeno %d hraničních linií, nebyly však požadovány pro export. Ověřte "
-"parametr 'type'."
-msgstr[1] ""
-"Nalezeno %d hraničních linií, nebyly však požadovány pro export. Ověřte "
-"parametr 'type'."
-msgstr[2] ""
+msgstr[0] "Nalezena %d hraniční linie, nebyla však požadována pro export. Ověřte parametr 'type'."
+msgstr[1] "Nalezeny %d hraniční linie, nebyly však požadovány pro export. Ověřte parametr 'type'."
+msgstr[2] "Nalezeno %d hraničních linií, nebyly však požadovány pro export. Ověřte parametr 'type'."
 
 #: ../vector/v.out.ogr/main.c:338
 #, fuzzy, c-format
@@ -11693,51 +11685,39 @@ msgid ""
 msgid_plural ""
 "%d centroids found, but not requested to be exported. Verify 'type' "
 "parameter."
-msgstr[0] ""
-"Nalezeno %d centroidů, nebyly však požadovány pro export. Ověřte parametr "
-"'type'."
-msgstr[1] ""
-"Nalezeno %d centroidů, nebyly však požadovány pro export. Ověřte parametr "
-"'type'."
-msgstr[2] ""
+msgstr[0] "Nalezen %d centroid, nebyl však požadován pro export. Ověřte parametr 'type'."
+msgstr[1] "Nalezeny %d centroidy, nebyly však požadovány pro export. Ověřte parametr 'type'."
+msgstr[2] "Nalezeno %d centroidů, nebyly však požadovány pro export. Ověřte parametr 'type'."
 
 #: ../vector/v.out.ogr/main.c:346
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%d area found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural ""
 "%d areas found, but not requested to be exported. Verify 'type' parameter."
-msgstr[0] ""
-"Nalezeno %d ploch, nebyly však požadovány pro export. Ověřte parametr 'type'."
-msgstr[1] ""
-"Nalezeno %d ploch, nebyly však požadovány pro export. Ověřte parametr 'type'."
-msgstr[2] ""
+msgstr[0] "Nalezena %d plocha, nebyla však požadována pro export. Ověřte parametr 'type'."
+msgstr[1] "Nalezeny %d plochy, nebyly však požadovány pro export. Ověřte parametr 'type'."
+msgstr[2] "Nalezeno %d ploch, nebyly však požadovány pro export. Ověřte parametr 'type'."
 
 #: ../vector/v.out.ogr/main.c:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%d face found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural ""
 "%d faces found, but not requested to be exported. Verify 'type' parameter."
-msgstr[0] ""
-"Nalezeno %d 3D polygonů, nebyly však požadovány pro export. Ověřte parametr "
-"'type'."
-msgstr[1] ""
-"Nalezeno %d 3D polygonů, nebyly však požadovány pro export. Ověřte parametr "
-"'type'."
-msgstr[2] ""
+msgstr[0] "Nalezen %d 3D polygon, nebyl však požadován pro export. Ověřte parametr 'type'."
+msgstr[1] "Nalezeny %d 3D polygony, nebyly však požadovány pro export. Ověřte parametr 'type'."
+msgstr[2] "Nalezeno %d 3D polygonů, nebyly však požadovány pro export. Ověřte parametr 'type'."
 
 #: ../vector/v.out.ogr/main.c:362
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%d volume found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural ""
 "%d volumes found, but not requested to be exported. Verify 'type' parameter."
-msgstr[0] ""
-"Nalezeno %d linií, nebyly však požadovány pro export. Ověřte parametr 'type'."
-msgstr[1] ""
-"Nalezeno %d linií, nebyly však požadovány pro export. Ověřte parametr 'type'."
-msgstr[2] ""
+msgstr[0] "Nalezen %d objem, nebyl však požadován pro export. Ověřte parametr 'type'."
+msgstr[1] "Nalezeny %d objemy, nebyly však požadovány pro export. Ověřte parametr 'type'."
+msgstr[2] "Nalezeno %d objemů, nebyly však požadovány pro export. Ověřte parametr 'type'."
 
 #: ../vector/v.out.ogr/main.c:372
 #, fuzzy
@@ -11887,7 +11867,7 @@ msgid "Exporting %d feature..."
 msgid_plural "Exporting %d features..."
 msgstr[0] "Exportuje se %d prvek..."
 msgstr[1] "Exportují se %d prvky..."
-msgstr[2] "Exportuje se %d prvků..."
+msgstr[2] "Exportuje se %d prvků"
 
 #: ../vector/v.out.ogr/main.c:732
 #, c-format
@@ -11901,9 +11881,9 @@ msgstr[2] "Exportuje se %d ploch (může to chvíli trvat)..."
 #, fuzzy, c-format
 msgid "Exporting %d volume..."
 msgid_plural "Exporting %d volumes..."
-msgstr[0] "Exportuji %i body/linie..."
+msgstr[0] "Exportuji %i bod/linii..."
 msgstr[1] "Exportuji %i body/linie..."
-msgstr[2] ""
+msgstr[2] "Exportuji %i bodů/linií..."
 
 #: ../vector/v.out.ogr/main.c:755
 msgid "Export of volumes not implemented yet. Skipping."
@@ -11913,17 +11893,17 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%d feature without attributes was written"
 msgid_plural "%d features without attributes were written"
-msgstr[0] "%d prvků  bez atributů bylo zapsáno"
-msgstr[1] "%d prvků  bez atributů bylo zapsáno"
-msgstr[2] ""
+msgstr[0] "%d prvek bez atributů zapsán"
+msgstr[1] "%d prvky bez atributů bylo zapsáno"
+msgstr[2] "%d prvků bez atributů bylo zapsáno"
 
 #: ../vector/v.out.ogr/main.c:778
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature without category was written"
 msgid_plural "%d features without category were written"
-msgstr[0] "%d prvků bez kategorie bylo zapsáno"
-msgstr[1] "%d prvků bez kategorie bylo zapsáno"
-msgstr[2] ""
+msgstr[0] "%d prvek bez kategorie zapsán"
+msgstr[1] "%d prvky bez kategorie bylo zapsáno"
+msgstr[2] "%d prvků bez kategorie bylo zapsáno"
 
 #: ../vector/v.out.ogr/main.c:782
 #, c-format
@@ -11942,11 +11922,11 @@ msgid "Output layer is empty, no features written"
 msgstr "Výstupní vrstva je prázdná, nebyly zapsány žádné prvky"
 
 #: ../vector/v.out.ogr/main.c:799
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature (%s type) written to <%s> (%s format)."
 msgid_plural "%d features (%s type) written to <%s> (%s format)."
-msgstr[0] "%d prvků zapsáno do '%s'."
-msgstr[1] "%d prvků zapsáno do '%s'."
+msgstr[0] ""
+msgstr[1] ""
 msgstr[2] ""
 
 #: ../vector/v.out.ogr/export_areas.c:150
@@ -12164,12 +12144,12 @@ msgid "Unable to create output file <%s>"
 msgstr "Nelze otevřít výstupní soubor <%s>"
 
 #: ../vector/v.out.pov/main.c:218
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature written."
 msgid_plural "%d features written."
-msgstr[0] "%d prvků zapsáno"
-msgstr[1] "%d prvků zapsáno"
-msgstr[2] ""
+msgstr[0] "%d prvek zapsán"
+msgstr[1] "%d prvky zapsány"
+msgstr[2] "%d prvků zapsáno"
 
 #: ../vector/v.net.distance/main.c:69
 msgid ""
@@ -12254,12 +12234,12 @@ msgid "Tracing paths from 'from' features ..."
 msgstr "Převádím prvky..."
 
 #: ../vector/v.net.distance/main.c:423
-#, fuzzy, c-format
+#, c-format
 msgid "%d 'from' feature was not reachable"
 msgid_plural "%d 'from' features were not reachable"
-msgstr[0] "%d prvky 'od' ('from') nejsou dosažitelné"
+msgstr[0] "%d prvek 'od' ('from') není dosažitelný"
 msgstr[1] "%d prvky 'od' ('from') nejsou dosažitelné"
-msgstr[2] ""
+msgstr[2] "%d prvky 'od' ('from') není dosažitelných"
 
 #: ../vector/v.outlier/main.c:73 ../raster3d/r3.neighbors/main.c:215
 #: ../raster/r.mfilter/main.c:59 ../raster/r.neighbors/main.c:173
@@ -13462,11 +13442,11 @@ msgid "Unable to open data source '%s'"
 msgstr "Nelze otevřít OGR zdroj dat '%s'"
 
 #: ../vector/v.external/list.c:267
-#, fuzzy, c-format
+#, c-format
 msgid "Data source <%s> (format '%s') contains %d layer:"
 msgid_plural "Data source <%s> (format '%s') contains %d layers:"
-msgstr[0] "Zdroj dat obsahuje %d vrstev:"
-msgstr[1] "Zdroj dat obsahuje %d vrstev:"
+msgstr[0] ""
+msgstr[1] ""
 msgstr[2] ""
 
 #: ../vector/v.external/list.c:300
@@ -14138,9 +14118,9 @@ msgstr "%s=%s - neplatný počet bodů pro interpolaci"
 #, c-format
 msgid "%d row"
 msgid_plural "%d rows"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d řádka"
+msgstr[1] "%d řádky"
+msgstr[2] "%d řádek"
 
 #. GTC Count of window columns
 #. GTC Count of raster columns
@@ -14148,12 +14128,12 @@ msgstr[2] ""
 #: ../vector/v.surf.idw/main.c:261 ../vector/v.kernel/main.c:304
 #: ../raster/r.thin/io.c:107 ../raster/r.thin/io.c:174
 #: ../raster/r.thin/io.c:183
-#, fuzzy, c-format
+#, c-format
 msgid "%d column"
 msgid_plural "%d columns"
-msgstr[0] "sloupec(ce)"
-msgstr[1] "sloupec(ce)"
-msgstr[2] ""
+msgstr[0] "%d sloupec"
+msgstr[1] "%d sloupce"
+msgstr[2] "%d sloupců"
 
 #. GTC First argument is map name, second - message about number of rows, third - columns.
 #: ../vector/v.surf.idw/main.c:263
@@ -14172,20 +14152,20 @@ msgid "Input vector map <%s> is 3D - using z-coordinates to interpolate"
 msgstr "vektorová mapa <%s> bude interpolována"
 
 #: ../vector/v.surf.idw/read_sites.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "One record selected from table"
 msgid_plural "%d records selected from table"
-msgstr[0] "%d záznamů bylo vybráno z tabulky"
-msgstr[1] "%d záznamů bylo vybráno z tabulky"
-msgstr[2] ""
+msgstr[0] "Jeden záznam vybrán z tabulky"
+msgstr[1] "%d záznamy vybrány z tabulky"
+msgstr[2] "%d záznamů vybráno z tabulky"
 
 #: ../vector/v.surf.idw/read_sites.c:123
-#, fuzzy, c-format
+#, c-format
 msgid "%ld point loaded"
 msgid_plural "%ld points loaded"
-msgstr[0] "%d bodů načteno"
-msgstr[1] "%d bodů načteno"
-msgstr[2] ""
+msgstr[0] "%ld bod načten"
+msgstr[1] "%ld body načteny"
+msgstr[2] "%ld bodů načteno"
 
 #: ../vector/v.transform/main.c:74
 #, fuzzy
@@ -14499,38 +14479,38 @@ msgstr ""
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:356
 #: ../vector/v.lrs/v.lrs.where/main.c:222
-#, fuzzy, c-format
+#, c-format
 msgid "[%d] point read from input"
 msgid_plural "[%d] points read from input"
-msgstr[0] "[%d] bodů načteno ze vstupu"
-msgstr[1] "[%d] bodů načteno ze vstupu"
-msgstr[2] ""
+msgstr[0] "[%d] bod načten ze vstupu"
+msgstr[1] "[%d] body načteny ze vstupu"
+msgstr[2] "[%d] bodů načteno ze vstupu"
 
 #. GTC %s will be replaced with a message about lost points.
 #: ../vector/v.lrs/v.lrs.segment/main.c:363
-#, fuzzy, c-format
+#, c-format
 msgid "[%d] point written to output map (%s)"
 msgid_plural "[%d] points written to output map (%s)"
-msgstr[0] "[%d] bodů zapsáno do výstupní mapy (%d ztraceno)"
-msgstr[1] "[%d] bodů zapsáno do výstupní mapy (%d ztraceno)"
-msgstr[2] ""
+msgstr[0] "[%d] bod zapsán do výstupní mapy (%s)"
+msgstr[1] "[%d] body zapsány do výstupní mapy (%s)"
+msgstr[2] "[%d] bodů zapsáno do výstupní mapy (%s)"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:368
-#, fuzzy, c-format
+#, c-format
 msgid "[%d] line read from input"
 msgid_plural "[%d] lines read from input"
-msgstr[0] "[%d] linií načteno ze vstupu"
-msgstr[1] "[%d] linií načteno ze vstupu"
-msgstr[2] ""
+msgstr[0] "[%d] linie načteno ze vstupu"
+msgstr[1] "[%d] linie načteny ze vstupu"
+msgstr[2] "[%d] linií načteno ze vstupu"
 
 #. GTC %s will be replaced with a message about lost lines.
 #: ../vector/v.lrs/v.lrs.segment/main.c:375
-#, fuzzy, c-format
+#, c-format
 msgid "[%d] line written to output map (%s)"
 msgid_plural "[%d] lines written to output map (%s)"
-msgstr[0] "[%d] linií zapsáno do výstupní mapy (%d ztraceno)"
-msgstr[1] "[%d] linií zapsáno do výstupní mapy (%d ztraceno)"
-msgstr[2] ""
+msgstr[0] "[%d] linie zapsána do výstupní mapy (%s)"
+msgstr[1] "[%d] linie zapsány do výstupní mapy (%s)"
+msgstr[2] "[%d] linií zapsáno do výstupní mapy (%s)"
 
 #: ../vector/v.lrs/v.lrs.where/main.c:61
 msgid ""
@@ -14554,36 +14534,36 @@ msgid "Maximum distance to nearest line"
 msgstr "Maximální vzdálenost k nejbližšímu prvku"
 
 #: ../vector/v.lrs/v.lrs.where/main.c:225
-#, fuzzy, c-format
+#, c-format
 msgid "[%d] position found"
 msgid_plural "[%d] positions found"
-msgstr[0] "[%d] pozic nalezeno"
-msgstr[1] "[%d] pozic nalezeno"
-msgstr[2] ""
+msgstr[0] "[%d] pozice nalezena"
+msgstr[1] "[%d] pozice nalezeny"
+msgstr[2] "[%d] pozic nalezeno"
 
 #: ../vector/v.lrs/v.lrs.where/main.c:229
-#, fuzzy, c-format
+#, c-format
 msgid "[%d] point outside threshold"
 msgid_plural "[%d] points outside threshold"
-msgstr[0] "[%d] bodů mimo mezní hodnotu"
-msgstr[1] "[%d] bodů mimo mezní hodnotu"
-msgstr[2] ""
+msgstr[0] "[%d] bod mimo mezní hodnotu"
+msgstr[1] "[%d] body mimo mezní hodnotu"
+msgstr[2] "[%d] bodů mimo mezní hodnotu"
 
 #: ../vector/v.lrs/v.lrs.where/main.c:233
-#, fuzzy, c-format
+#, c-format
 msgid "[%d] point - no record found"
 msgid_plural "[%d] points - no record found"
-msgstr[0] "[%d] bodů  - nenalezen žádný záznam"
-msgstr[1] "[%d] bodů  - nenalezen žádný záznam"
-msgstr[2] ""
+msgstr[0] "[%d] bod - nenalezen žádný záznam"
+msgstr[1] "[%d] body - nenalezen žádný záznam"
+msgstr[2] "[%d] bodů - nenalezen žádný záznam"
 
 #: ../vector/v.lrs/v.lrs.where/main.c:237
-#, fuzzy, c-format
+#, c-format
 msgid "[%d] point - too many records found"
 msgid_plural "[%d] points - too many records found"
-msgstr[0] "[%d] bodů - nalezeno příliš mnoh záznamů"
-msgstr[1] "[%d] bodů - nalezeno příliš mnoh záznamů"
-msgstr[2] ""
+msgstr[0] "[%d] bod - nalezeno příliš mnoho záznamů"
+msgstr[1] "[%d] body - nalezeno příliš mnoho záznamů"
+msgstr[2] "[%d] bodů - nalezeno příliš mnoho záznamů"
 
 #: ../vector/v.lrs/v.lrs.create/main.c:124
 #, fuzzy
@@ -15570,20 +15550,20 @@ msgid "Low threshold for terrain to object reclassification"
 msgstr "Dolní práh pro terén do reklasifikace objektů"
 
 #: ../vector/v.lidar.correction/main.c:273
-#, fuzzy, c-format
+#, c-format
 msgid "adjusted EW spline %d"
 msgid_plural "adjusted EW splines %d"
-msgstr[0] "Upravené V-Z křivky %d"
-msgstr[1] "Upravené V-Z křivky %d"
-msgstr[2] ""
+msgstr[0] "upravená V-Z křivka %d"
+msgstr[1] "upravené V-Z křivky %d"
+msgstr[2] "upravených V-Z křivek %d"
 
 #: ../vector/v.lidar.correction/main.c:276
-#, fuzzy, c-format
+#, c-format
 msgid "adjusted NS spline %d"
 msgid_plural "adjusted NS splines %d"
-msgstr[0] "Upravené S-J křivky %d"
-msgstr[1] "Upravené S-J křivky %d"
-msgstr[2] ""
+msgstr[0] "upravená S-J křivek %d"
+msgstr[1] "upravené S-J křivky %d"
+msgstr[2] "upravených S-J křivek %d"
 
 #: ../vector/v.lidar.correction/main.c:324
 #, c-format
@@ -16148,12 +16128,12 @@ msgstr ""
 "Typ sloupce <%s> není podporován (musí být integer nebo double precision)"
 
 #: ../vector/v.sample/main.c:154
-#, fuzzy, c-format
+#, c-format
 msgid "%d record selected from table"
 msgid_plural "%d records selected from table"
-msgstr[0] "%d záznamů bylo vybráno z tabulky"
-msgstr[1] "%d záznamů bylo vybráno z tabulky"
-msgstr[2] ""
+msgstr[0] "%d záznam vybrán z tabulky"
+msgstr[1] "%d záznamy vybrány z tabulky"
+msgstr[2] "%d záznamů vybráno z tabulky"
 
 #: ../vector/v.sample/main.c:200
 #, fuzzy
@@ -16262,20 +16242,20 @@ msgid "Column type not supported, please use a column with double type"
 msgstr "Typ sloupce není podporován (musí být string)"
 
 #: ../vector/v.what.rast3/main.c:215
-#, fuzzy, c-format
+#, c-format
 msgid "%d point outside current region was skipped"
 msgid_plural "%d points outside current region were skipped"
-msgstr[0] "%d bodů je mimo současný region, vynechávám"
-msgstr[1] "%d bodů je mimo současný region, vynechávám"
-msgstr[2] ""
+msgstr[0] "%d bod mimo současný region, vynechávám"
+msgstr[1] "%d body je mimo současný region, vynechávám"
+msgstr[2] "%d bodů je mimo současný region, vynechávám"
 
 #: ../vector/v.what.rast3/main.c:220
-#, fuzzy, c-format
+#, c-format
 msgid "%d point without category was skipped"
 msgid_plural "%d points without category were skipped"
-msgstr[0] "%d bodů bez kategorie, vynechávám"
-msgstr[1] "%d bodů bez kategorie, vynechávám"
-msgstr[2] ""
+msgstr[0] "%d bod bez kategorie, vynechávám"
+msgstr[1] "%d body bez kategorie, vynechávám"
+msgstr[2] "%d bodů bez kategorie, vynechávám"
 
 #: ../vector/v.what.rast3/main.c:259
 #, c-format
@@ -16283,52 +16263,52 @@ msgid "More points (%d) of category %d, value set to 'NULL'"
 msgstr "Více bodů (%d) kategorie %d, hodnota nastavena na 'NULL'"
 
 #: ../vector/v.what.rast3/main.c:329
-#, fuzzy, c-format
+#, c-format
 msgid "%d category loaded from table"
 msgid_plural "%d categories loaded from table"
-msgstr[0] "%d kategorií bylo načteno z tabulky"
-msgstr[1] "%d kategorií bylo načteno z tabulky"
-msgstr[2] ""
+msgstr[0] "%d kategorie načtena z tabulky"
+msgstr[1] "%d kategorie načteny z tabulky"
+msgstr[2] "%d kategorií načteno z tabulky"
 
 #: ../vector/v.what.rast3/main.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "%d category loaded from vector"
 msgid_plural "%d categories loaded from vector"
-msgstr[0] "%d kategorií bylo načteno z vektorové mapy"
-msgstr[1] "%d kategorií bylo načteno z vektorové mapy"
-msgstr[2] ""
+msgstr[0] "%d kategorie načtena z vektorové mapy"
+msgstr[1] "%d kategorie načteny z vektorové mapy"
+msgstr[2] "%d kategorií načteno z vektorové mapy"
 
 #: ../vector/v.what.rast3/main.c:335
-#, fuzzy, c-format
+#, c-format
 msgid "%d category from vector missing in table"
 msgid_plural "%d categories from vector missing in table"
-msgstr[0] "%d kategorií z vektorové mapy chybí v tabulce"
-msgstr[1] "%d kategorií z vektorové mapy chybí v tabulce"
-msgstr[2] ""
+msgstr[0] "%d kategorie z vektorové mapy chybí v tabulce"
+msgstr[1] "%d kategorie z vektorové mapy chybí v tabulce"
+msgstr[2] "%d kategorií z vektorové mapy chybí v tabulce"
 
 #: ../vector/v.what.rast3/main.c:339
-#, fuzzy, c-format
+#, c-format
 msgid "%d duplicate category in vector"
 msgid_plural "%d duplicate categories in vector"
-msgstr[0] "%d duplicitních kategorií ve vektorové mapě"
+msgstr[0] "%d duplicitní kategorie ve vektorové mapě"
 msgstr[1] "%d duplicitních kategorií ve vektorové mapě"
-msgstr[2] ""
+msgstr[2] "%d duplicitní kategorií ve vektorové mapě"
 
 #: ../vector/v.what.rast3/main.c:343
-#, fuzzy, c-format
+#, c-format
 msgid "%d update error"
 msgid_plural "%d update errors"
-msgstr[0] "%d chyb při aktualizaci"
-msgstr[1] "%d chyb při aktualizaci"
-msgstr[2] ""
+msgstr[0] "%d chyba při aktualizaci"
+msgstr[1] "%d chyby při aktualizaci"
+msgstr[2] "%d chyb při aktualizaci"
 
 #: ../vector/v.what.rast3/main.c:347
-#, fuzzy, c-format
+#, c-format
 msgid "%d record updated."
 msgid_plural "%d records updated."
-msgstr[0] "%d záznamů aktualizováno"
-msgstr[1] "%d záznamů aktualizováno"
-msgstr[2] ""
+msgstr[0] "%d záznam aktualizován."
+msgstr[1] "%d záznamy aktualizovány."
+msgstr[2] "%d záznamů aktualizováno."
 
 #: ../vector/v.in.ogr/main.c:138
 msgid "Imports vector data into a GRASS vector map using OGR library."
@@ -17418,12 +17398,12 @@ msgid "Output raster map resolution: %f"
 msgstr "Titulek výstupního rastru"
 
 #: ../vector/v.kernel/main.c:358
-#, fuzzy, c-format
+#, c-format
 msgid "%d point outside threshold"
 msgid_plural "%d points outside threshold"
-msgstr[0] "%d bodů mimo práhovou hodnotu"
-msgstr[1] "%d bodů mimo práhovou hodnotu"
-msgstr[2] ""
+msgstr[0] "%d bod mimo práhovou hodnotu"
+msgstr[1] "%d body mimo práhovou hodnotu"
+msgstr[2] "%d bodů mimo práhovou hodnotu"
 
 #: ../vector/v.kernel/main.c:381
 #, fuzzy, c-format
@@ -17445,12 +17425,12 @@ msgid "Number of input points: %d."
 msgstr "Počet vstupních bodů: %d."
 
 #: ../vector/v.kernel/main.c:403
-#, fuzzy, c-format
+#, c-format
 msgid "%d distance read from the map."
 msgid_plural "%d distances read from the map."
-msgstr[0] "%d vzdáleností čteno z mapy."
-msgstr[1] "%d vzdáleností čteno z mapy."
-msgstr[2] ""
+msgstr[0] "%d vzdálenost načtena z mapy."
+msgstr[1] "%d vzdálenosti načteny z mapy."
+msgstr[2] "%d vzdáleností načteno z mapy."
 
 #: ../vector/v.kernel/main.c:408
 #, c-format
@@ -17520,20 +17500,20 @@ msgid "Create polyline from lines with same categories"
 msgstr "Vytvořit rovnoběžky ke vstupním liniím."
 
 #: ../vector/v.build.polylines/main.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "%d line or boundaries found in input vector map"
 msgid_plural "%d lines or boundaries found in input vector map"
-msgstr[0] "%d linií nebo hranic nalezeno ve vektorové mapě <%s@%s>"
-msgstr[1] "%d linií nebo hranic nalezeno ve vektorové mapě <%s@%s>"
-msgstr[2] ""
+msgstr[0] "%d linie nebo hranice nalezena ve vektorové mapě"
+msgstr[1] "%d linie nebo hranice nalezeny ve vektorové mapě"
+msgstr[2] "%d linií nebo hranic nalezeno ve vektorové mapě"
 
 #: ../vector/v.build.polylines/main.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "%d polyline stored in output vector map"
 msgid_plural "%d polylines stored in output vector map"
-msgstr[0] "%d zdvojených linií uloženo ve vektorové mapě <%s@%s>"
-msgstr[1] "%d zdvojených linií uloženo ve vektorové mapě <%s@%s>"
-msgstr[2] ""
+msgstr[0] "%d polylinie uložena ve vektorové mapě"
+msgstr[1] "%d polylinie uloženy ve vektorové mapě"
+msgstr[2] "%d polylinií uloženo ve vektorové mapě"
 
 #: ../vector/v.to.points/main.c:61
 #, fuzzy
@@ -17637,20 +17617,20 @@ msgid "No features exported. PostGIS layer <%s> not created."
 msgstr "Žádná pravidla nebyla zadána. Rastr <%s> nebyl vytvořen."
 
 #: ../vector/v.out.postgis/main.c:167
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature (%s type) written to <%s>."
 msgid_plural "%d features (%s type) written to <%s>."
-msgstr[0] "%d prvků zapsáno do '%s'."
-msgstr[1] "%d prvků zapsáno do '%s'."
-msgstr[2] ""
+msgstr[0] "%d prvek zapsán do <%s>."
+msgstr[1] "%d prvky zapsány do <%s>."
+msgstr[2] "%d prvků zapsáno do <%s>."
 
 #: ../vector/v.out.postgis/main.c:173
-#, fuzzy, c-format
+#, c-format
 msgid "%d primitive written to <%s>."
 msgid_plural "%d primitives written to <%s>."
-msgstr[0] "%d prvků zapsáno do '%s'."
-msgstr[1] "%d prvků zapsáno do '%s'."
-msgstr[2] ""
+msgstr[0] "%d primitivum zapsáno do <%s>."
+msgstr[1] "%d primitiva zapsány do <%s>."
+msgstr[2] "%d primitiv zapsáno do <%s>."
 
 #: ../vector/v.out.postgis/main.c:212
 #, fuzzy, c-format
@@ -18019,12 +17999,12 @@ msgid "Unparsable latitude value in column %d: %s"
 msgstr "Nezpracovatelná hodnota zem. výšky ve sloiupci <%d>: %s"
 
 #: ../vector/v.in.ascii/points.c:298
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping %d of %d row falling outside of current region"
 msgid_plural "Skipping %d of %d rows falling outside of current region"
-msgstr[0] "Přeskakuji %d z %d řádků spadajících mimo aktuální region"
-msgstr[1] "Přeskakuji %d z %d řádků spadajících mimo aktuální region"
-msgstr[2] ""
+msgstr[0] "Přeskakuji %d z %d řádky spadajících mimo aktuální region"
+msgstr[1] "Přeskakuji %d z %d řádek spadajících mimo aktuální region"
+msgstr[2] "Přeskakuji %d z %d řádků spadajících mimo aktuální region"
 
 #: ../vector/v.in.ascii/points.c:328
 msgid "Importing points..."
@@ -29375,21 +29355,21 @@ msgid "Suppress printing of PPM header"
 msgstr "Potlač výpis informací z hlavičky"
 
 #: ../raster/r.out.ppm/main.c:101 ../raster/r.out.ppm3/main.c:95
-#, fuzzy, c-format
+#, c-format
 msgid "row = %d"
 msgid_plural "rows = %d"
-msgstr[0] "Řádky = %d"
+msgstr[0] "Řádka = %d"
 msgstr[1] "Řádky = %d"
-msgstr[2] ""
+msgstr[2] "Řádky = %d"
 
 #. GTC Raster columns
 #: ../raster/r.out.ppm/main.c:102 ../raster/r.out.ppm3/main.c:97
-#, fuzzy, c-format
+#, c-format
 msgid "column = %d"
 msgid_plural "columns = %d"
-msgstr[0] "Sloupce = %d"
+msgstr[0] "Sloupec = %d"
 msgstr[1] "Sloupce = %d"
-msgstr[2] ""
+msgstr[2] "Sloupce = %d"
 
 #: ../raster/r.out.ppm/main.c:124
 #, c-format
@@ -30501,12 +30481,12 @@ msgid "Upward pass %d"
 msgstr "Zvýšený průchod %d"
 
 #: ../raster/r.fill.dir/dopolys.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d unresolved area"
 msgid_plural "Found %d unresolved areas"
-msgstr[0] "Nalezeno %d nevyřešených oblastí"
-msgstr[1] "Nalezeno %d nevyřešených oblastí"
-msgstr[2] ""
+msgstr[0] "Nalezena %d nevyřešená oblast"
+msgstr[1] "Nalezeno %d nevyřešené oblasti"
+msgstr[2] "Nalezeno %d nevyřešených oblastí"
 
 #: ../raster/r.relief/main.c:112
 #, fuzzy
@@ -30867,10 +30847,10 @@ msgid "Print only the number of clumps in shell script style"
 msgstr "Vypiš statistiku ve stylu pro shell skript"
 
 #: ../raster/r.clump/main.c:125
-#, fuzzy, c-format
+#, c-format
 msgid "%d clump."
 msgid_plural "%d clumps."
-msgstr[0] "%d tříd."
+msgstr[0] "%d třída."
 msgstr[1] "%d tříd."
 msgstr[2] ""
 
@@ -32099,12 +32079,12 @@ msgid "Subprocess failed with exit code %d"
 msgstr "Podproces selhal s návratovým kódem %d"
 
 #: ../raster/r.watershed/seg/init_vars.c:139
-#, fuzzy, c-format
+#, c-format
 msgid "SECTION 1 beginning: Initiating Variables. %d section total."
 msgid_plural "SECTION 1 beginning: Initiating Variables. %d sections total."
-msgstr[0] "ČÁST 1 začínám: Nastavuji proměnné. Celkem proběhne %d částí."
-msgstr[1] "ČÁST 1 začínám: Nastavuji proměnné. Celkem proběhne %d částí."
-msgstr[2] ""
+msgstr[0] "ČÁST 1 začínám: Nastavuji proměnné. Celkem proběhne %d část."
+msgstr[1] "ČÁST 1 začínám: Nastavuji proměnné. Celkem proběhne %d části."
+msgstr[2] "ČÁST 1 začínám: Nastavuji proměnné. Celkem proběhne %d částí."
 
 #: ../raster/r.watershed/seg/init_vars.c:175
 #, fuzzy
@@ -33363,9 +33343,9 @@ msgstr "Průchod číslo %d"
 #, fuzzy, c-format
 msgid "Deleted %d pixel"
 msgid_plural "Deleted %d pixels"
-msgstr[0] "%d pixelů smazáno "
-msgstr[1] "%d pixelů smazáno "
-msgstr[2] ""
+msgstr[0] "%d pixel smazán"
+msgstr[1] "%d pixely smazány"
+msgstr[2] "%d pixelů smazáno"
 
 #: ../raster/r.thin/thin_lines.c:171
 msgid "Thinning completed successfully."
@@ -33710,20 +33690,20 @@ msgid "Displacing data..."
 msgstr "Přemisťuji data:.."
 
 #: ../raster/r.contour/cont.c:82
-#, fuzzy, c-format
+#, c-format
 msgid "Writing vector contour (one level)..."
 msgid_plural "Writing vector contours (total levels %d)..."
-msgstr[0] "Zapisuji vektorové vrstevnice (celkový počet vrstevni %d)..."
-msgstr[1] "Zapisuji vektorové vrstevnice (celkový počet vrstevni %d)..."
-msgstr[2] ""
+msgstr[0] "Zapisuji vektorové vrstevnice (jedna úroveň)..."
+msgstr[1] "Zapisuji vektorové vrstevnice (celkový počet úrovní %d)..."
+msgstr[2] "Zapisuji vektorové vrstevnice (celkový počet úrovní %d)..."
 
 #: ../raster/r.contour/cont.c:213
-#, fuzzy, c-format
+#, c-format
 msgid "%d crossing found"
 msgid_plural "%d crossings found"
 msgstr[0] "%d překřížení nalezeno"
-msgstr[1] "%d překřížení nalezeno"
-msgstr[2] ""
+msgstr[1] "%d překřížení nalezeny"
+msgstr[2] "%d překřížení nalezeno"
 
 #: ../raster/r.contour/cont.c:266
 msgid "Illegal edge number"
@@ -34085,12 +34065,12 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: ../raster/r.stream.extract/del_streams.c:193
-#, fuzzy, c-format
+#, c-format
 msgid "%d stream segment deleted"
 msgid_plural "%d stream segments deleted"
-msgstr[0] "%d prvků smazáno"
-msgstr[1] "%d prvků smazáno"
-msgstr[2] ""
+msgstr[0] "%d segment smazán"
+msgstr[1] "%d segmenty smazány"
+msgstr[2] "%d segmentů smazáno"
 
 #: ../raster/r.stream.extract/init_search.c:24
 #, fuzzy
@@ -35322,12 +35302,12 @@ msgid "This module currently only works for integer (CELL) maps"
 msgstr "Tento modul zatím pracuje jenom pro mapy typu integer (CELL)"
 
 #: ../raster/r.surf.idw/main.c:260
-#, fuzzy, c-format
+#, c-format
 msgid "Interpolating raster map <%s> (%d row)..."
 msgid_plural "Interpolating raster map <%s> (%d rows)..."
-msgstr[0] "Interpoluji rastrovou mapu <%s> (%d řádků)... "
-msgstr[1] "Interpoluji rastrovou mapu <%s> (%d řádků)... "
-msgstr[2] ""
+msgstr[0] "Interpoluji rastrovou mapu <%s> (%d řádek)..."
+msgstr[1] "Interpoluji rastrovou mapu <%s> (%d řádky)..."
+msgstr[2] "Interpoluji rastrovou mapu <%s> (%d řádků)..."
 
 #: ../raster/r.to.vect/areas.c:120
 msgid "Extracting areas..."
@@ -35502,12 +35482,12 @@ msgid "Mean Mannings \t= %f\n"
 msgstr "Průměrná Manningova drsnost \t= %f\n"
 
 #: ../raster/r.sim/simlib/input.c:504
-#, fuzzy, c-format
+#, c-format
 msgid "Number of iterations \t= %d cell\n"
 msgid_plural "Number of iterations \t= %d cells\n"
-msgstr[0] "Počet opakování \t= %d buňek\n"
-msgstr[1] "Počet opakování \t= %d buňek\n"
-msgstr[2] ""
+msgstr[0] "Počet opakování \t= %d buňka\n"
+msgstr[1] "Počet opakování \t= %d buňky\n"
+msgstr[2] "Počet opakování \t= %d buňek\n"
 
 #: ../raster/r.sim/simlib/input.c:506
 #, c-format
@@ -36519,12 +36499,12 @@ msgstr ""
 "%d je příliš mnoho bodů. Křížová validace by zabrala příliš mnoho času."
 
 #: ../raster/r.resamp.bspline/crosscorr.c:169
-#, fuzzy, c-format
+#, c-format
 msgid "%d point read in region"
 msgid_plural "%d points read in region"
-msgstr[0] "%d bodů načteno v regionu"
-msgstr[1] "%d bodů načteno v regionu"
-msgstr[2] ""
+msgstr[0] "%d bod načten v regionu"
+msgstr[1] "%d body načteny v regionu"
+msgstr[2] "%d bodů načteno v regionu"
 
 #: ../raster/r.resamp.bspline/crosscorr.c:174
 msgid "Maybe it takes too long. Consider reducing the region extents."
@@ -37574,12 +37554,12 @@ msgid "No start points found in vector map <%s>"
 msgstr "%d linií nebo hranic nalezeno ve vektorové mapě <%s@%s>"
 
 #: ../raster/r.cost/main.c:584
-#, fuzzy, c-format
+#, c-format
 msgid "%d point found"
 msgid_plural "%d points found"
-msgstr[0] "Žádná bodová data nenalezena"
-msgstr[1] "Žádná bodová data nenalezena"
-msgstr[2] ""
+msgstr[0] "%d bod nalezen"
+msgstr[1] "%d body nalezeny"
+msgstr[2] "%d bodů nalezeno"
 
 #: ../raster/r.cost/main.c:1036
 #, fuzzy, c-format
@@ -37760,12 +37740,12 @@ msgid "%.2f KB of disk space for temp files."
 msgstr "%d bytů prostoru na disku pro dočasné soubory."
 
 #: ../raster/r.resamp.rst/main.c:400
-#, fuzzy, c-format
+#, c-format
 msgid "%d byte of disk space for temp files."
 msgid_plural "%d bytes of disk space for temp files."
-msgstr[0] "%d bytů prostoru na disku pro dočasné soubory."
-msgstr[1] "%d bytů prostoru na disku pro dočasné soubory."
-msgstr[2] ""
+msgstr[0] "%d byt prostoru na disku pro dočasné soubory."
+msgstr[1] "%d byty prostoru na disku pro dočasné soubory."
+msgstr[2] "%d bytů prostoru na disku pro dočasné soubory."
 
 #: ../raster/r.resamp.rst/main.c:436
 msgid "Maximum value of a raster map is NULL."
@@ -37863,11 +37843,11 @@ msgid "Nothing to compute. Use at least one textural measure."
 msgstr "Není co počítat. Použijte prosím některý z přepínačů."
 
 #: ../raster/r.texture/main.c:327
-#, fuzzy, c-format
+#, c-format
 msgid "Calculating %d texture measure"
 msgid_plural "Calculating %d texture measures"
-msgstr[0] "Výpočet polohy středu..."
-msgstr[1] "Výpočet polohy středu..."
+msgstr[0] ""
+msgstr[1] ""
 msgstr[2] ""
 
 #: ../raster/r.texture/main.c:330
@@ -38552,12 +38532,12 @@ msgid "Text encoding (only applicable to TrueType fonts)"
 msgstr ""
 
 #: ../display/d.rast.num/main.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "%d col"
 msgid_plural "%d cols"
-msgstr[0] "Barva rámečku"
-msgstr[1] "Barva rámečku"
-msgstr[2] ""
+msgstr[0] "%d sloupec"
+msgstr[1] "%d sloupce"
+msgstr[2] "%d sloupců"
 
 #. GTC %s will be replaced by strings "X rows" and "Y cols"
 #: ../display/d.rast.num/main.c:202
@@ -38589,11 +38569,11 @@ msgid "Invalid area %d skipped (not enough points)"
 msgstr "Špatné jméno oblasti"
 
 #: ../display/d.vect/area.c:236
-#, fuzzy, c-format
+#, c-format
 msgid "%d invalid color rule for areas skipped"
 msgid_plural "%d invalid color rules for areas skipped"
-msgstr[0] "Špatné jméno oblasti"
-msgstr[1] "Špatné jméno oblasti"
+msgstr[0] ""
+msgstr[1] ""
 msgstr[2] ""
 
 #: ../display/d.vect/main.c:73
@@ -38803,12 +38783,12 @@ msgid "Option <%s> must be > 0"
 msgstr "Volba <%s> musí být > 0"
 
 #: ../display/d.vect/main.c:367
-#, fuzzy, c-format
+#, c-format
 msgid "%d error in cat option"
 msgid_plural "%d errors in cat option"
-msgstr[0] "%d chyb ve volbě id"
-msgstr[1] "%d chyb ve volbě id"
-msgstr[2] ""
+msgstr[0] "%d chyba v parametru cat"
+msgstr[1] "%d chyby v parametru cat"
+msgstr[2] "%d chyb v parametru cat"
 
 #: ../display/d.vect/main.c:383
 #, fuzzy
@@ -38912,52 +38892,52 @@ msgid ""
 msgstr ""
 
 #: ../display/d.vect/lines.c:169
-#, fuzzy, c-format
+#, c-format
 msgid "%d invalid color rule for lines skipped"
 msgid_plural "%d invalid color rules for lines skipped"
-msgstr[0] "[%d] mrtvých linií přeskočeno"
-msgstr[1] "[%d] mrtvých linií přeskočeno"
+msgstr[0] ""
+msgstr[1] ""
 msgstr[2] ""
 
 #: ../display/d.vect/lines.c:175
-#, fuzzy, c-format
+#, c-format
 msgid "%d point plotted"
 msgid_plural "%d points plotted"
-msgstr[0] "%d bodů načteno"
-msgstr[1] "%d bodů načteno"
-msgstr[2] ""
+msgstr[0] "%d bod vykreslen"
+msgstr[1] "%d body vykresleny"
+msgstr[2] "%d bodů vykresleno"
 
 #: ../display/d.vect/lines.c:177
-#, fuzzy, c-format
+#, c-format
 msgid "%d line plotted"
 msgid_plural "%d lines plotted"
-msgstr[0] "%d linií připojeno"
-msgstr[1] "%d linií připojeno"
-msgstr[2] ""
+msgstr[0] "%d linie vykreslena"
+msgstr[1] "%d linie vykresleny"
+msgstr[2] "%d linií vykresleno"
 
 #: ../display/d.vect/lines.c:179
 #, fuzzy, c-format
 msgid "%d centroid plotted"
 msgid_plural "%d centroids plotted"
-msgstr[0] "[%d] centroidů načteno"
-msgstr[1] "[%d] centroidů načteno"
-msgstr[2] ""
+msgstr[0] "%d centroid vykreslen"
+msgstr[1] "%d centroidy vykresleny"
+msgstr[2] "%d centroidů vykresleno"
 
 #: ../display/d.vect/lines.c:181
 #, fuzzy, c-format
 msgid "%d boundary plotted"
 msgid_plural "%d boundaries plotted"
-msgstr[0] "%d hranic uzavřeno"
-msgstr[1] "%d hranic uzavřeno"
-msgstr[2] ""
+msgstr[0] "%d hranice vykreslen"
+msgstr[1] "%d hranice vykresleny"
+msgstr[2] "%d hranic vykresleno"
 
 #: ../display/d.vect/lines.c:183
-#, fuzzy, c-format
+#, c-format
 msgid "%d face plotted"
 msgid_plural "%d faces plotted"
-msgstr[0] "%d prvků smazáno"
-msgstr[1] "%d prvků smazáno"
-msgstr[2] ""
+msgstr[0] "%d stěna vykreslena"
+msgstr[1] "%d stěny vykresleny"
+msgstr[2] "%d stěn vykresleno"
 
 #: ../display/d.vect/attr.c:28
 #, fuzzy
