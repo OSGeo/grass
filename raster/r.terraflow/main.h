@@ -26,7 +26,7 @@ typedef struct {
   char* stats;         /* stats file */
   int   d8;            /* 1 if d8 flow model, 0 otherwise */ 
   int   mem;           /* main memory, in MB */
-  int verbose;         /* 1 if verbose, 0 otherwise */ 
+  int verbose;         /* 1 if verbose, 0 otherwise */
 } user_options;
 
 

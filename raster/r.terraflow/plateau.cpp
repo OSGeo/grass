@@ -296,9 +296,9 @@ detectPlateaus::generatePlateaus(AMI_STREAM<elevation_type> &elstr) {
   dirQueue = new queue<direction_type>();
   platQueue = new queue<plateauType>();
   /* scan3(elstr, hdr, hdr.get_nodata(), *this);  */
-  if (opt->verbose) STRACE("starting memscan");
+  //  if (opt->verbose) STRACE("starting memscan");
   memoryScan(elstr, nrows, ncols, nodata_value, *this); 
-  if (opt->verbose) STRACE("memscan done");
+  //if (opt->verbose) STRACE("memscan done");
   delete dirQueue;
   delete platQueue;
 }

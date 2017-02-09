@@ -218,20 +218,17 @@ fillstr2sweepstr(AMI_STREAM<waterWindowBaseType>* fillStream) {
 				nodataType::ELEVATION_NODATA, sweepstr);
   delete fillStream;
 
-  if (opt->verbose) {
-    fprintf(stderr,  "sweep stream size: %.2fMB",
-			(double)sweepstr->stream_len()*sizeof(sweepItem)/(1<<20));
-    fprintf(stderr,  " (%d items, item size=%d B\n ", 
-			(int)sweepstr->stream_len(), sizeof(sweepItem));;
-  }
+  G_debug(1, "sweep stream size: %.2fMB",
+          (double)sweepstr->stream_len()*sizeof(sweepItem)/(1<<20));
+  G_debug(1, " (%d items, item size=%d B\n ", 
+          (int)sweepstr->stream_len(), sizeof(sweepItem));;
+
   if (stats)
     stats->recordLength("sweep stream", sweepstr);
   
   /* sort sweep stream by (increasing) priority */
-  if (opt->verbose) {
-    fprintf(stderr, "sorting sweep stream (%.2fMB) in priority order\n", 
-	    (double)sweepstr->stream_len()*sizeof(sweepItem)/(1<<20));
-  }
+  G_debug(1, "Sorting sweep stream (%.2fMB) in priority order", 
+          (double)sweepstr->stream_len()*sizeof(sweepItem)/(1<<20));
   if (stats)
     stats->comment("sorting sweep stream");
   sort(&sweepstr, PrioCmpSweepItem());

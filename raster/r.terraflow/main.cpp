@@ -71,31 +71,41 @@ parse_args(int argc, char *argv[]) {
   output_elev = G_define_standard_option(G_OPT_R_OUTPUT);
   output_elev->key        = "filled";
   output_elev->description= _("Name for output filled (flooded) elevation raster map");
+  output_elev->required = NO;
+  output_elev->guisection = _("Outputs");
   
  /* output direction  grid */
   struct Option *output_dir;
   output_dir = G_define_standard_option(G_OPT_R_OUTPUT);
   output_dir->key        = "direction";
   output_dir->description= _("Name for output flow direction raster map");
-
+  output_dir->required = NO;
+  output_dir->guisection = _("Outputs");
+    
   /* output sinkwatershed  grid */
   struct Option *output_watershed;
   output_watershed = G_define_standard_option(G_OPT_R_OUTPUT);
   output_watershed->key        = "swatershed";
   output_watershed->description= _("Name for output sink-watershed raster map");
-
+  output_watershed->required = NO;
+  output_watershed->guisection = _("Outputs");
+   
   /* output flow accumulation grid */
   struct Option *output_accu;
   output_accu = G_define_standard_option(G_OPT_R_OUTPUT);
   output_accu->key        = "accumulation";
   output_accu->description= _("Name for output flow accumulation raster map");
-
+  output_accu->required = NO;
+  output_accu->guisection = _("Outputs");
+   
 #ifdef OUTPUT_TCI
   struct Option *output_tci;
   output_tci = G_define_standard_option(G_OPT_R_OUTPUT);
   output_tci->key        = "tci";
   output_tci->description=
     _("Name for output topographic convergence index (tci) raster map");
+  output_tci->required = NO;
+  output_tci->guisection = _("Outputs");
 #endif
 
   /* MFD/SFD flag */
@@ -144,8 +154,11 @@ parse_args(int argc, char *argv[]) {
   stats_opt->type       = TYPE_STRING;
   stats_opt->required   = NO;
   stats_opt->description= _("Name of file containing runtime statistics");
-
-
+  stats_opt->guisection = _("Outputs");
+  
+  G_option_requires(input_elev, output_elev, output_dir, output_watershed,
+                    output_accu, output_tci, NULL);
+  
   if (G_parser(argc, argv)) {
     exit (EXIT_FAILURE);
   }
@@ -179,9 +192,9 @@ parse_args(int argc, char *argv[]) {
   else
     opt->streamdir = streamdir->answer;
 
-  opt->verbose = G_verbose() == G_verbose_max();
-
   opt->stats = stats_opt->answer;
+
+  opt->verbose = G_verbose() == G_verbose_max();
 
   /* somebody should delete the options */
 }
@@ -203,42 +216,39 @@ void check_header(char* cellname) {
   /* check compatibility with module region */
   if (!((region->ew_res == cell_hd.ew_res)
 		&& (region->ns_res == cell_hd.ns_res))) {
-    G_fatal_error(_("cell file %s resolution differs from current region"),
-				  cellname);
+    G_fatal_error(_("Raster map <%s> resolution differs from current region"),
+                  cellname);
   } else {
-    if (opt->verbose) { 
-      G_message(_("cell %s header compatible with region header"),
-	      cellname);
-      fflush(stderr);
-    }
+      G_verbose_message(_("Header of raster map <%s> compatible with region header"),
+                        cellname);
   }
 
 
   /* check type of input elevation raster and check if precision is lost */
     RASTER_MAP_TYPE data_type;
-	data_type = Rast_map_type(opt->elev_grid, mapset);
+    data_type = Rast_map_type(opt->elev_grid, mapset);
 #ifdef ELEV_SHORT
 	G_verbose_message(_("Elevation stored as SHORT (%dB)"),
 		sizeof(elevation_type));
 	if (data_type == FCELL_TYPE) {
-	  G_warning(_("raster %s is of type FCELL_TYPE "
-			"--precision may be lost."), opt->elev_grid); 
+	  G_warning(_("Raster map <%s> is of type FCELL_TYPE "
+                      "-- precision may be lost"), opt->elev_grid); 
 	}
 	if (data_type == DCELL_TYPE) {
-	  G_warning(_("raster %s is of type DCELL_TYPE "
-			"--precision may be lost."),  opt->elev_grid);
+	  G_warning(_("Raster map <%s> is of type DCELL_TYPE "
+                      "-- precision may be lost"),  opt->elev_grid);
 	}
 #endif 
 #ifdef ELEV_FLOAT
 	G_verbose_message( _("Elevation stored as FLOAT (%dB)"), 
 			sizeof(elevation_type));
 	if (data_type == CELL_TYPE) {
-	  G_warning(_("raster %s is of type CELL_TYPE "
-		"--you should use r.terraflow.short"), opt->elev_grid); 
+	  G_warning(_("Raster map <%s> is of type CELL_TYPE "
+                      "-- you should use r.terraflow.short"), opt->elev_grid); 
 	}
 	if (data_type == DCELL_TYPE) {
-	  G_warning(_("raster %s is of type DCELL_TYPE "
-		"--precision may be lost."),  opt->elev_grid);
+	  G_warning(_("Raster map <%s> is of type DCELL_TYPE "
+                      "-- precision may be lost"),  opt->elev_grid);
 	}
 #endif
 	
@@ -251,24 +261,21 @@ void check_header(char* cellname) {
 void check_args() {
 
   /* check if filled elevation grid name is  valid */
-  if (G_legal_filename (opt->filled_grid) < 0) {
+  if (opt->filled_grid && G_legal_filename (opt->filled_grid) < 0) {
     G_fatal_error(_("<%s> is an illegal file name"), opt->filled_grid);
   }
   /* check if output grid names are valid */
-  if (G_legal_filename (opt->dir_grid) < 0) {
+  if (opt->dir_grid && G_legal_filename (opt->dir_grid) < 0) {
     G_fatal_error(_("<%s> is an illegal file name"), opt->dir_grid);
   }
-  if (G_legal_filename (opt->filled_grid) < 0) {
-    G_fatal_error(_("<%s> is an illegal file name"), opt->filled_grid);
-  }
-  if (G_legal_filename (opt->flowaccu_grid) < 0) {
+  if (opt->flowaccu_grid && G_legal_filename (opt->flowaccu_grid) < 0) {
     G_fatal_error(_("<%s> is an illegal file name"), opt->flowaccu_grid);
   }
-  if (G_legal_filename (opt->watershed_grid) < 0) {
+  if (opt->watershed_grid && G_legal_filename (opt->watershed_grid) < 0) {
     G_fatal_error(_("<%s> is an illegal file name"), opt->watershed_grid);
   }
-#ifdef OUTPU_TCI
-  if (G_legal_filename (opt->tci_grid) < 0) {
+#ifdef OUTPUT_TCI
+  if (opt->tci_grid && G_legal_filename (opt->tci_grid) < 0) {
   G_fatal_error(_("<%s> is an illegal file name"), opt->tci_grid);
   }
 #endif
@@ -308,12 +315,17 @@ void record_args(int argc, char **argv) {
   *stats << endl;
   
   *stats << "input elevation grid: " << opt->elev_grid << "\n";
-  *stats << "output (flooded) elevations grid: " << opt->filled_grid << "\n";
-  *stats << "output directions grid: " << opt->dir_grid << "\n";
-  *stats << "output sinkwatershed grid: " << opt->watershed_grid << "\n";
-  *stats << "output accumulation grid: " << opt->flowaccu_grid << "\n";
+  if (opt->filled_grid)
+      *stats << "output (flooded) elevations grid: " << opt->filled_grid << "\n";
+  if (opt->dir_grid)
+      *stats << "output directions grid: " << opt->dir_grid << "\n";
+  if (opt->watershed_grid)
+      *stats << "output sinkwatershed grid: " << opt->watershed_grid << "\n";
+  if (opt->flowaccu_grid)
+      *stats << "output accumulation grid: " << opt->flowaccu_grid << "\n";
 #ifdef OUTPUT_TCI
-  *stats <<  "output tci grid: " << opt->tci_grid << "\n";
+  if (opt->tci_grid)
+      *stats <<  "output tci grid: " << opt->tci_grid << "\n";
 #endif
   if (opt->d8) {
     stats ->comment("SFD (D8) flow direction");
@@ -347,7 +359,7 @@ setFlowAccuColorTable(char* cellname) {
   if (Rast_read_range(cellname, mapset, &r) == -1) {
     G_fatal_error(_("cannot read range"));
   }
-  /*fprintf(stderr, "%s range is: min=%d, max=%d\n", cellname, r.min, r.max);*/
+  /*G_debug(1, "%s range is: min=%d, max=%d\n", cellname, r.min, r.max);*/
   int v[6];
   v[0] = r.min;
   v[1] = 5;
@@ -406,32 +418,31 @@ printMaxSortSize(long nodata_count) {
   long long maxneed = (fillmaxsize > flowmaxsize) ? fillmaxsize: flowmaxsize;
   maxneed =  2*maxneed; /* need 2*N to sort */
 
-  G_message( "total elements=%ld, nodata elements=%ld",
-		(long)nrows * ncols, nodata_count);
-  G_message( "largest temporary files: ");
-  G_message( "\t\t FILL: %s [%ld elements, %dB each]",
-		  formatNumber(buf, fillmaxsize),
-		  (long)nrows * ncols, sizeof(waterWindowType));
-  G_message( "\t\t FLOW: %s [%ld elements, %dB each]",
-		  formatNumber(buf, flowmaxsize),
-		  (long)nrows * ncols - nodata_count, sizeof(sweepItem));
-  G_message( "Will need at least %s space available in %s",
-		  formatNumber(buf, maxneed),  	  /* need 2*N to sort */
-		  getenv(STREAM_TMPDIR));
+  G_debug(1, "total elements=%ld, nodata elements=%ld",
+          (long)nrows * ncols, nodata_count);
+  G_debug(1, "largest temporary files: ");
+  G_debug(1, "\t\t FILL: %s [%ld elements, %dB each]",
+          formatNumber(buf, fillmaxsize),
+          (long)nrows * ncols, sizeof(waterWindowType));
+  G_debug(1, "\t\t FLOW: %s [%ld elements, %dB each]",
+          formatNumber(buf, flowmaxsize),
+          (long)nrows * ncols - nodata_count, sizeof(sweepItem));
+  G_debug(1, "Will need at least %s space available in %s",
+          formatNumber(buf, maxneed),  	  /* need 2*N to sort */
+          getenv(STREAM_TMPDIR));
 
 #ifdef HAVE_STATVFS_H
-  fprintf(stderr, "Checking current space in %s: ", getenv(STREAM_TMPDIR));
+  G_debug(1, "Checking current space in %s: ", getenv(STREAM_TMPDIR));
   struct statvfs statbuf;
   statvfs(getenv(STREAM_TMPDIR), &statbuf);
 
   float avail = statbuf.f_bsize*statbuf.f_bavail;
-  fprintf(stderr, "available %ld blocks x %ldB = %.0fB",
-		  (long)statbuf.f_bavail, statbuf.f_bsize, avail);
+  G_debug(1, "available %ld blocks x %ldB = %.0fB",
+          (long)statbuf.f_bavail, statbuf.f_bsize, avail);
   if (avail > maxneed) {
-	fprintf(stderr, ". OK.\n");
+      G_debug(1, ". OK.");
   } else {
-	fprintf(stderr, ". Not enough space available.\n");
-	exit(EXIT_FAILURE);
+      G_fatal_error("Not enough space available");
   }
 #endif
 }
@@ -495,12 +506,13 @@ main(int argc, char *argv[]) {
   /* don't pass an automatic variable; putenv() isn't guaranteed to make a copy */
   putenv(G_store(buf));
   if (getenv(STREAM_TMPDIR) == NULL) {
-    fprintf(stderr, "%s:", STREAM_TMPDIR);
-    G_fatal_error("not set");
+      G_fatal_error(_("%s not set"), STREAM_TMPDIR);
   } else {
-    fprintf(stderr, "STREAM temporary files in %s  ",
-	    getenv(STREAM_TMPDIR)); 
-	fprintf(stderr, "(THESE INTERMEDIATE STREAMS WILL NOT BE DELETED IN CASE OF ABNORMAL TERMINATION OF THE PROGRAM. TO SAVE SPACE PLEASE DELETE THESE FILES MANUALLY!)\n");
+      G_verbose_message(_("STREAM temporary files in <%s>. "
+                          "THESE INTERMEDIATE STREAMS WILL NOT BE DELETED "
+                          "IN CASE OF ABNORMAL TERMINATION OF THE PROGRAM. "
+                          "TO SAVE SPACE PLEASE DELETE THESE FILES MANUALLY!"),
+                        getenv(STREAM_TMPDIR));
   }
   
   if (opt->stats) {
@@ -521,11 +533,12 @@ main(int argc, char *argv[]) {
   size_t mm_size = (size_t) opt->mem << 20; /* opt->mem is in MB */
   MM_manager.set_memory_limit(mm_size);
   if (opt->verbose) {
-	MM_manager.warn_memory_limit();
+      MM_manager.warn_memory_limit();
   } else {
-	MM_manager.ignore_memory_limit();
+      MM_manager.ignore_memory_limit();
   }
-  MM_manager.print_limit_mode();
+  if (opt->verbose)
+      MM_manager.print_limit_mode();
 
 
   /* initialize nodata */
@@ -558,18 +571,23 @@ main(int argc, char *argv[]) {
   delete elstr;
 
   /* write streams to GRASS raster maps */
-  stream2_CELL(dirstr, nrows, ncols, opt->dir_grid);
+  if (opt->dir_grid)
+      stream2_CELL(dirstr, nrows, ncols, opt->dir_grid);
   delete dirstr;
+  if (opt->filled_grid) {
 #ifdef ELEV_SHORT
-  stream2_CELL(filledstr, nrows, ncols, opt->filled_grid);
+      stream2_CELL(filledstr, nrows, ncols, opt->filled_grid);
 #else
-  stream2_CELL(filledstr, nrows, ncols, opt->filled_grid,true);
+      stream2_CELL(filledstr, nrows, ncols, opt->filled_grid,true);
 #endif
+  }
   delete filledstr; 
 
-  stream2_CELL(labeledWater, nrows, ncols, labelElevTypePrintLabel(), 
-			   opt->watershed_grid);
-  setSinkWatershedColorTable(opt->watershed_grid);
+  if (opt->watershed_grid) {
+      stream2_CELL(labeledWater, nrows, ncols, labelElevTypePrintLabel(), 
+                   opt->watershed_grid);
+      setSinkWatershedColorTable(opt->watershed_grid);
+  }
   delete labeledWater;
   
 #else 
@@ -578,8 +596,8 @@ main(int argc, char *argv[]) {
 
   sprintf(path, "%s/flowStream", streamdir->answer);
   flowStream = new AMI_STREAM<waterWindowBaseType>(path);
-  fprintf(stderr, "flowStream opened: len=%d\n", flowStream->stream_len());
-  fprintf(stderr, "jumping to flow accumulation computation\n");
+  G_verbose_message(_("flowStream opened: len=%d\n", flowStream->stream_len());
+  G_verbose_message(_("jumping to flow accumulation computation\n");
 #endif
   
   /* -------------------------------------------------- */
@@ -591,14 +609,22 @@ main(int argc, char *argv[]) {
 
   /* write output stream to GRASS raster maps */
 #ifdef OUTPUT_TCI
-  stream2_FCELL(outstr, nrows, ncols, printAccumulation(), printTci(),
-		opt->flowaccu_grid, opt->tci_grid);
-#else 
-  stream2_FCELL(outstr, nrows, ncols, printAccumulation(), opt->flowaccu_grid);
+  if (opt->flowaccu_grid && opt->tci_grid)
+      stream2_FCELL(outstr, nrows, ncols, printAccumulation(), printTci(),
+                    opt->flowaccu_grid, opt->tci_grid);
+  else if (opt->tci_grid)
+      stream2_FCELL(outstr, nrows, ncols, printTci(),
+                    opt->tci_grid);
+  else if (opt->flowaccu_grid)
+      stream2_FCELL(outstr, nrows, ncols, printAccumulation(),
+                    opt->flowaccu_grid);
+#else
+  if (opt->flowaccu_grid)
+      stream2_FCELL(outstr, nrows, ncols, printAccumulation(),
+                    opt->flowaccu_grid);
 #endif
-
-  setFlowAccuColorTable(opt->flowaccu_grid);
-
+  if (opt->flowaccu_grid)
+      setFlowAccuColorTable(opt->flowaccu_grid);
   delete outstr;
   
   rt_stop(rtTotal);
