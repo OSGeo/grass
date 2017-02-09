@@ -104,7 +104,7 @@ int alloc_lines_bufs(int);
 int extract_lines(void);
 
 /* lines_io.c */
-int write_line(struct COOR *seed);
+int write_line(struct COOR *);
 
 /* areas.c */
 int alloc_areas_bufs(int);
@@ -112,7 +112,7 @@ int extract_areas(void);
 int more_equivs(void);
 
 /* areas_io.c */
-int write_boundary(struct COOR *seed);
+int write_boundary(struct COOR *);
 int write_area(struct area_table *, struct equiv_table *, int, int);
 
 /* points.c */
@@ -124,4 +124,7 @@ struct COOR *find_end(struct COOR *, int, int *, int *);
 int at_end(struct COOR *);
 int read_row(void *);
 void insert_value(int, int, double);
-int free_ptr(struct COOR *ptr);
+int free_ptr(struct COOR *);
+
+/* set_error_handler.c */
+void set_error_handler(struct Map_info *, dbDriver **);

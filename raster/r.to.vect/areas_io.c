@@ -34,7 +34,7 @@ static int write_smooth_bnd(struct COOR *, struct COOR *, int);
 int write_boundary(struct COOR *seed)
 {
     struct COOR *point, *line_begin, *line_end, *last;
-    int dir, line_type, n, n1, i;
+    int dir, line_type, n, n1;
 
     point = seed;
     if ((dir = at_end(point))) {	/* already have one end of line */
