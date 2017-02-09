@@ -182,6 +182,20 @@ def main():
     if output:
         vopts['output'] = output
     vopts['snap'] = options['snap']
+
+    # try v.in.ogr directly
+    if flags['o'] or grass.run_command('v.in.ogr', input=OGRdatasource, flags='j',
+                                       errors='status', quiet=True, overwrite=overwrite) == 0:
+        try:
+            grass.run_command('v.in.ogr', input=OGRdatasource,
+                              flags=vflags, overwrite=overwrite, **vopts)
+            grass.message(
+                _("Input <%s> successfully imported without reprojection") %
+                OGRdatasource)
+            return 0
+        except CalledModuleError:
+            grass.fatal(_("Unable to import <%s>") % OGRdatasource)
+
     try:
         grass.run_command('v.in.ogr', input=OGRdatasource,
                           location=TMPLOC, flags='i', quiet=True, overwrite=overwrite, **vopts)
@@ -199,19 +213,6 @@ def main():
 
     # switch to target location
     os.environ['GISRC'] = str(tgtgisrc)
-
-    # try v.in.ogr directly
-    if flags['o'] or grass.run_command('v.in.ogr', input=OGRdatasource, flags='j',
-                                       errors='status', quiet=True, overwrite=overwrite) == 0:
-        try:
-            grass.run_command('v.in.ogr', input=OGRdatasource,
-                              flags=vflags, overwrite=overwrite, **vopts)
-            grass.message(
-                _("Input <%s> successfully imported without reprojection") %
-                OGRdatasource)
-            return 0
-        except CalledModuleError:
-            grass.fatal(_("Unable to import <%s>") % OGRdatasource)
 
     # make sure target is not xy
     if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
