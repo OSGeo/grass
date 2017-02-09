@@ -34,13 +34,6 @@
 #include "sortutils.h"
 
 
-/* 
-   #define CHECKPARAM        //output the parameters during sweeping 
-   #define CHECK_WEIGHTS     //output weights as computed
-   #define SWEEP_PRINT_PQSIZE      //output priority queue size during sweeping
-   #define CHECK_MEMORY  //enables printing available memory in between steps
-*/
-
 /* frequency; used to print progress dots */
 static const int DOT_CYCLE = 50;
 static const int PQSIZE_CYCLE = 100;
@@ -119,7 +112,7 @@ sweepOutput::compute(elevation_type elev,
     /* assert(correct_tci > 0); //is this true? */
     /* there is no need for this warning. tci can be negative if the flow is small. */
     /* if (correct_tci < 0) {
-       fprintf(stderr, "warning: tci negative, [flow=%f,dx=%f,dy=%f,cont=%f]\n",
+       G_warning(tci negative, [flow=%f,dx=%f,dy=%f,cont=%f]\n",
        flow.get(), weight.dx(), weight.dy(), weight.totalContour());
        }
     */
@@ -162,32 +155,6 @@ initializePQ() {
   return flowpq;
 }
   
-
-#define INIT_PRINT_PROGRESS()						\
-  long out_frequency, pqsize_frequency;					\
-  out_frequency = nrows*ncols / DOT_CYCLE;		\
-  pqsize_frequency = nrows*ncols / PQSIZE_CYCLE;	\
-  assert(out_frequency);						\
-  assert(pqsize_frequency);
-
-#define PRINT_PROGRESS(k) 			\
-  if ((k) % out_frequency == 0) {		\
-    fprintf(stderr,"."); 				\
-    fflush(stderr);				\
-  };
-
-#ifdef SWEEP_PRINT_PQSIZE
-#define PRINT_PQSIZE(k,flowpq)			\
-  if ((k) % pqsize_frequency == 0) {		\
-    fprintf(stderr," %ld ", (long)(flowpq)->size());	\
-    fflush(stderr);				\
-  }
-#else
-#define PRINT_PQSIZE(k,flowpq)
-#endif
-
-
-
 /***************************************************************/
 /* Read the points in order from the sweep stream and process them.
    If trustdir = 1 then trust and use the directions contained in the
@@ -207,15 +174,13 @@ sweep(AMI_STREAM<sweepItem> *sweepstr, const flowaccumulation_type D8CUT,
   Rtimer rt;
   AMI_STREAM<sweepOutput>* outstr;
 
-  /* INIT_PRINT_PROGRESS(); */
-
   rt_start(rt);
 
   assert(sweepstr);
 
   if (stats)
     *stats << "sweeping\n";
-  fprintf(stderr,  "sweeping: ");
+  G_debug(1, "sweeping: ");
   /* create and initialize flow data structure */
   FLOW_DATASTR *flowpq;
   flowpq = initializePQ();
@@ -234,6 +199,7 @@ sweep(AMI_STREAM<sweepItem> *sweepstr, const flowaccumulation_type D8CUT,
   /* scan the sweep stream  */
   ae = sweepstr->seek(0);
   assert(ae == AMI_ERROR_NO_ERROR);
+  G_important_message(_("Sweeping..."));
   for (long k = 0; k < nitems; k++) {
     
     /* cout << k << endl; cout.flush(); */
@@ -305,13 +271,10 @@ sweep(AMI_STREAM<sweepItem> *sweepstr, const flowaccumulation_type D8CUT,
     ae = outstr->write_item(output);
     assert(ae == AMI_ERROR_NO_ERROR);
     
-    /* PRINT_PROGRESS(k); */
-    /* PRINT_PQSIZE(k, flowpq); */
-    
     G_percent(k, nitems, 2);
   } /* for k  */
   
-  G_percent(1, 1, 2); /* finish it */
+  G_percent(1, 1, 1); /* finish it */
 
   if (stats)
     *stats << "sweeping done\n";

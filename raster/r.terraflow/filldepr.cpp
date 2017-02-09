@@ -18,11 +18,9 @@
 
 #include <assert.h>
 
-#include <grass/iostream/ami.h>
 #include "filldepr.h"
 #include "unionFind.h"
 #include "common.h"
-
 
 #define FLOOD_DEBUG if(0)
 
@@ -58,8 +56,9 @@ fill_depression(AMI_STREAM<boundaryType> *boundaryStr,
   }
   
   /* find available memory */
-   size_t mem_avail = getAvailableMemory();
-  MM_manager.print();
+  size_t mem_avail = getAvailableMemory();
+  if (opt->verbose)
+    MM_manager.print();
   
   /* find how much memory filling depression uses */
   size_t mem_usage = inmemory_fill_depression_mmusage(maxWatersheds);
@@ -77,9 +76,7 @@ fill_depression(AMI_STREAM<boundaryType> *boundaryStr,
 elevation_type* 
 ext_fill_depression(AMI_STREAM<boundaryType> *boundaryStr,
 			 cclabel_type maxWatersheds) {
- 
-  fprintf(stderr, "fill_depressions: does not fit in memory\n");
-  G_fatal_error("not implemented yet");
+  G_fatal_error(_("Fill_depressions do not fit in memory. Not implemented yet"));
 }
 
 
@@ -186,8 +183,8 @@ inmemory_fill_depression(AMI_STREAM<boundaryType> *boundaryStr,
   for (cclabel_type i=1; i< maxWatersheds; i++) {
     /* assert(done[unionf.findSet(i)]); sometimes this fails! */
     if (!done[unionf.findSet(i)]) {
-      fprintf(stderr, "warning: watershed %d (R=%d) not done\n", 
-	     i, unionf.findSet(i));
+      G_warning(_("Watershed %d (R=%d) not done"), 
+                i, unionf.findSet(i));
     }
   }
 #endif

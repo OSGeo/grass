@@ -85,11 +85,10 @@ noclobberFile(char *fname) {
 	exit(1);
       } else { /* file exists */
 	char buf[BUFSIZ];
-	fprintf(stderr, "file %s exists - renaming.\n", fname);
+	G_debug(1, "file %s exists - renaming.\n", fname);
 	sprintf(buf, "%s.old", fname);
 	if(rename(fname, buf) != 0) {
-	  perror(fname);
-	  exit(1);
+	  G_fatal_error(fname);
 	}
       }
     }
@@ -107,11 +106,10 @@ noclobberFileName(char *fname) {
       exit(1);
     } else { /* file exists */
       char buf[BUFSIZ];
-      fprintf(stderr, "file %s exists - renaming.\n", fname);
+      G_debug(1, "file %s exists - renaming.\n", fname);
       sprintf(buf, "%s.old", fname);
       if(rename(fname, buf) != 0) {
-	perror(fname);
-	exit(1);
+	G_fatal_error(fname);
       }
       close(fd);
     }
