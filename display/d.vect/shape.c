@@ -187,8 +187,18 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 	    z_style = NULL;
         }
 	else {
-	    Vect_get_map_box(Map, &box);
-	    Rast_make_fp_colors(&zcolors, z_style, box.B, box.T);
+            int ret;
+
+            ret = 0;
+            if (Vect_level(Map) > 1)
+                ret = Vect_get_map_box(Map, &box);
+            else
+                ret = Vect_get_map_box1(Map, &box);
+
+            if (ret == 1)
+                Rast_make_fp_colors(&zcolors, z_style, box.B, box.T);
+            else
+                G_warning(_("Unable to colorize features, unknown map bounding box"));
 	}
     }
 
