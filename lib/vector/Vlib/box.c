@@ -383,6 +383,8 @@ int Vect_get_isle_box(const struct Map_info *Map, int isle, struct bound_box *Bo
 /*!
    \brief Get bounding box of map (all features in the map)
 
+   Requires level 2. On level 1 error code is returned.
+
    \param Map vector map
    \param[out] Box bounding box
 
@@ -393,15 +395,60 @@ int Vect_get_map_box(const struct Map_info *Map, struct bound_box *Box)
 {
     const struct Plus_head *Plus;
 
+    if (Vect_level(Map) < 2)
+        return 0;
+    
     Plus = &(Map->plus);
+    Vect_box_copy(Box, &(Plus->box));
 
-    Box->N = Plus->box.N;
-    Box->S = Plus->box.S;
-    Box->E = Plus->box.E;
-    Box->W = Plus->box.W;
-    Box->T = Plus->box.T;
-    Box->B = Plus->box.B;
+    return 1;
+}
 
+/*!
+   \brief Get bounding box of map on level 1 (all features in the map)
+
+   This subroutine determines bounding box by reading all features
+   sequentially.
+
+   \param Map vector map
+   \param[out] Box bounding box
+
+   \return 1 on success
+   \return 0 on error
+ */
+int Vect_get_map_box1(struct Map_info *Map, struct bound_box *Box)
+{    
+    int type;
+    int first = TRUE;
+    
+    struct line_pnts *Points;
+    struct bound_box line_box;
+    
+    Points = Vect_new_line_struct();
+    Vect_rewind(Map);
+    while (TRUE) {
+        /* register line */
+        type = Vect_read_next_line(Map, Points, NULL);
+        
+        if (type == -1) {
+            G_warning(_("Unable to read vector map"));
+            return 0;
+        }
+        else if (type == -2) {
+            break;
+        }
+        
+        /* update box */
+        dig_line_box(Points, &line_box);
+        if (first == TRUE) {
+            Vect_box_copy(Box, &line_box);
+            first = FALSE;
+        }
+        else
+            Vect_box_extend(Box, &line_box);
+    }
+    Vect_destroy_line_struct(Points);
+    
     return 1;
 }
 

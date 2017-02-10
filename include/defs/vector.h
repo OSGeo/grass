@@ -200,9 +200,13 @@ int Vect_set_thresh(struct Map_info *, double);
 double Vect_get_thresh(const struct Map_info *);
 int Vect_get_constraint_box(const struct Map_info *, struct bound_box *);
 
+/* Get map information */
+int Vect_level(const struct Map_info *);
+
+/* Get map level 1 information */
+int Vect_get_map_box1(struct Map_info *, struct bound_box *);
 
 /* Get map level 2 information */
-int Vect_level(const struct Map_info *);
 int Vect_get_line_type(const struct Map_info *, int);
 plus_t Vect_get_num_nodes(const struct Map_info *);
 plus_t Vect_get_num_primitives(const struct Map_info *, int);
