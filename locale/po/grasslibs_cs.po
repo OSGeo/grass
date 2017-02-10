@@ -3931,7 +3931,8 @@ msgstr "Prvek %d bez geometrie je ignorován"
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
 msgstr[0] "Jedno primitivum zaregistrováno"
-msgstr[1] "%d primitiv zaregistrováno"
+msgstr[1] "%d primitiva zaregistrována"
+msgstr[2] "%d primitiv zaregistrováno"
 
 #: ../lib/vector/Vlib/build_sfa.c:386 ../lib/vector/Vlib/build_sfa.c:662
 #: ../lib/vector/Vlib/build_nat.c:118
@@ -3939,7 +3940,8 @@ msgstr[1] "%d primitiv zaregistrováno"
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
 msgstr[0] "Jeden opěrný bod zaregistrován"
-msgstr[1] "%d opěrných bodů zaregistrováno"
+msgstr[1] "%d opěrné body zaregistrovány"
+msgstr[2] "%d opěrných bodů zaregistrováno"
 
 #: ../lib/vector/Vlib/build_sfa.c:603 ../lib/vector/Vlib/read_ogr.c:344
 #: ../lib/vector/Vlib/read_ogr.c:578
@@ -3952,7 +3954,8 @@ msgstr "Typ prvku OGR %d není podporován"
 msgid "One feature without geometry skipped"
 msgid_plural "%d features without geometry skipped"
 msgstr[0] "Jeden prvek bez geometrie ignorován"
-msgstr[1] "%d prvků bez geometrie ignorováno"
+msgstr[1] "%d prvky bez geometrie ignorovány"
+msgstr[2] "%d prvků bez geometrie ignorováno"
 
 #: ../lib/vector/Vlib/build_sfa.c:711 ../lib/vector/Vlib/header_finfo.c:41
 #: ../lib/vector/Vlib/header_finfo.c:80 ../lib/vector/Vlib/header_finfo.c:113
@@ -4080,7 +4083,8 @@ msgstr "Nelze vybrat záznam z tabulky <%s>"
 msgid "One category loaded"
 msgid_plural "%d categories loaded"
 msgstr[0] "Jedna kategorie načtena"
-msgstr[1] "%d kategorií načteno"
+msgstr[1] "%d kategorie načteny"
+msgstr[2] "%d kategorií načteno"
 
 #: ../lib/vector/Vlib/cats.c:627
 #, c-format
@@ -5238,14 +5242,16 @@ msgstr "Vytváření ploch..."
 msgid "One area built"
 msgid_plural "%d areas built"
 msgstr[0] "Jedna plocha vytvořena"
-msgstr[1] "%d ploch vytvořeno"
+msgstr[1] "%d plochy vytvořeny"
+msgstr[2] "%d ploch vytvořeno"
 
 #: ../lib/vector/Vlib/build_nat.c:154
 #, c-format
 msgid "One isle built"
 msgid_plural "%d isles built"
 msgstr[0] "Jeden ostrov vytvořen"
-msgstr[1] "%d ostrovů vytvořeno"
+msgstr[1] "%d ostrovy vytvořeny"
+msgstr[2] "%d ostrovů vytvořeno"
 
 #: ../lib/vector/Vlib/build_nat.c:163
 msgid "Attaching islands..."
