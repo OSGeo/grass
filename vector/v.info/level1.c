@@ -28,11 +28,12 @@ int level_one_info(struct Map_info *Map)
     Vect_rewind(Map);
     G_message(_("Topology not available for vector map <%s>. "
                 "Registering primitives..."), Vect_get_full_name(Map));
-    while (1) {
+    while (TRUE) {
 	/* register line */
 	type = Vect_read_next_line(Map, Points, Cats);
 
-	/* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+	/* Note: check for dead lines is not needed, because they are
+           skipped by V1_read_next_line_nat() */
 	if (type == -1) {
 	    G_warning(_("Unable to read vector map"));
 	    return 0;
@@ -61,27 +62,17 @@ int level_one_info(struct Map_info *Map)
 
 	G_debug(3, "Register line: offset = %lu", (unsigned long)offset);
 	dig_line_box(Points, &box);
-	if (first == 1) {
+	if (first == TRUE) {
 	    Vect_box_copy(&(plus->box), &box);
-	    first = 0;
+	    first = FALSE;
 	}
 	else
 	    Vect_box_extend(&(plus->box), &box);
-
-	/* can't print progress, unfortunately */
-	/* what about using G_clicker() then. or, check file 
-	   size with stat.st_size and make a rough guess? */
-/*
-	if (G_verbose() > G_verbose_min() && i % 1000 == 0) {
-	    if (format == G_INFO_FORMAT_PLAIN)
-		fprintf(stderr, "%d..", i);
-	    else
-		fprintf(stderr, "%11d\b\b\b\b\b\b\b\b\b\b\b", i);
-	}
-	i++;
-*/
     }
 
+    Vect_destroy_line_struct(Points); 
+    Vect_destroy_cats_struct(Cats);
+   
     /* save result in plus */
     plus->n_lines = n_primitives;
     plus->n_plines = n_points;
