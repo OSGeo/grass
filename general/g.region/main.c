@@ -466,6 +466,7 @@ int main(int argc, char *argv[])
 
 	vect_ptr = parm.vect->answers;
 	for (; *vect_ptr != NULL; vect_ptr++) {
+            int ret;
 	    struct Map_info Map;
 	    struct bound_box box;
 	    char vect_name[GNAME_MAX];
@@ -487,46 +488,15 @@ int main(int argc, char *argv[])
                     G_fatal_error(_("Unable to open vector map <%s>"),
                                   vect_name);
             }
+
+            ret = 0;
+            if (Vect_level(&Map) > 1)            /* level 2 - topology available */
+                ret = Vect_get_map_box(&Map, &box);
+            else                                 /* level 1 */
+                ret = Vect_get_map_box1(&Map, &box);
+            if (ret != 1)
+                G_fatal_error(_("Unable to get map bounding box"));
             
-            if (Vect_level(&Map) > 1) {
-                /* topology available */
-                Vect_get_map_box(&Map, &box);
-            }
-            else {
-                /* no topology
-                   NOTE: number of points, lines, boundaries,
-                   centroids, faces, kernels is still available */
-
-                int type;
-                int first = TRUE;
-                struct line_pnts *Points;
-                struct bound_box line_box;
-
-                Points = Vect_new_line_struct();
-                Vect_rewind(&Map);
-                G_message(_("Topology not available for vector map <%s>. "
-                            "Registering primitives..."), vect_name);
-                while (TRUE) {
-                    /* register line */
-                    type = Vect_read_next_line(&Map, Points, NULL);
-                    
-                    if (type == -1) {
-                        G_fatal_error(_("Unable to read vector map"));
-                    }
-                    else if (type == -2) {
-                        break;
-                    }
-                    dig_line_box(Points, &line_box);
-                    if (first == TRUE) {
-                        Vect_box_copy(&box, &line_box);
-                        first = FALSE;
-                    }
-                    else
-                        Vect_box_extend(&box, &line_box);
-                }
-                Vect_destroy_line_struct(Points);
-            }
-
             map_window = window;
             map_window.north = box.N;
             map_window.south = box.S;
