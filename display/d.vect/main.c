@@ -329,6 +329,8 @@ int main(int argc, char **argv)
     legend_flag->label = _("Do not show this layer in vector legend");
     legend_flag->guisection = _("Legend");
 
+    G_option_exclusive(zcol_opt, rgbcol_opt, cats_acolors_flag, NULL);
+    
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
