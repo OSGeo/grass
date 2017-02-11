@@ -192,8 +192,7 @@ weightWindow::compute(const dimension_type i, const dimension_type j,
 		      const direction_type dir,
 		      const int trustdir) {
   
-  elevation_type elev_crt, elev_neighb, e_diff;
-  dimension_type i_neighb, j_neighb;
+  elevation_type elev_crt, elev_neighb;
   
   /* initialize all weights to 0 */
   init();
@@ -210,10 +209,7 @@ weightWindow::compute(const dimension_type i, const dimension_type j,
     for (short dj = -1; dj <= 1; dj++) {
       
       /* grid coordinates and elevation of neighbour */
-      i_neighb = i + di; 
-      j_neighb = j + dj;
       elev_neighb = elevwin.get(di, dj);
-      e_diff = (elevation_type)(elev_crt - elev_neighb);
 
       skipit = ((di ==0) && (dj==0));
       skipit |= (elev_crt < elev_neighb);
