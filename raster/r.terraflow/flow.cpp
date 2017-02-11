@@ -220,7 +220,7 @@ fillstr2sweepstr(AMI_STREAM<waterWindowBaseType>* fillStream) {
 
   G_debug(1, "sweep stream size: %.2fMB",
           (double)sweepstr->stream_len()*sizeof(sweepItem)/(1<<20));
-  G_debug(1, " (%d items, item size=%d B\n ", 
+  G_debug(1, " (%d items, item size=%ld B\n ", 
           (int)sweepstr->stream_len(), sizeof(sweepItem));;
 
   if (stats)

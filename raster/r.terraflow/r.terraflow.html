@@ -72,11 +72,11 @@ each cell.
 <b>d8cut</b> option, then
 the flow of this cell is routed to its neighbors using the SFD (D8)
 model. This option affects only the flow accumulation raster and is
-meaningful only for MFD flow (i.e. if the -s flag is not used); If
+meaningful only for MFD flow (i.e. if the <b>-s</b> flag is not used); If
 this option is used for SFD flow it is ignored. The default value of
 <b>d8cut</b> is <i>infinity</i>.
 
-<p><em>r.terraflow</em> also computes the tci raster (topographic convergence
+<p><em>r.terraflow</em> also computes the <b>tci</b> raster (topographic convergence
 index, defined as the logarithm of the ratio of flow accumulation and
 local slope).
 
@@ -96,7 +96,7 @@ columns) in the elevation raster (more precisely, 80K bytes, where K
 is the number of valid (not no-data) cells in the input elevation
 raster).
 <p>All these intermediate temporary files are stored in the path specified
-by the <b>STREAM_DIR</b> option. Note: <b>STREAM_DIR</b> must contain
+by the <b>directory</b> option. Note: <b>directory</b> must contain
 enough free disk space in order to store up to 2 x 80N bytes.
 
 <p>The <b>memory</b> option can be used to set the maximum amount of main
@@ -118,8 +118,7 @@ compiled to store elevations internally as floats. Other versions can be
 created by the user if needed.
 
 <p>Hints concerning compilation with storage of elevations internally as
-shorts:
-<br>such a version uses less space (up to 60B per cell, up
+shorts: such a version uses less space (up to 60B per cell, up
 to 60N intermediate file) and therefore is more space and time
 efficient. <em>r.terraflow</em> is intended for use with floating
 point raster data (FCELL), and <em>r.terraflow (short)</em> with integer
@@ -147,12 +146,10 @@ identical for integer raster data (CELL maps).
 
 <h2>EXAMPLES</h2>
 
-Example for small area in North Carolina sample dataset:
+Example for small area in North Carolina sample dataset to calculate flow accumulation:
 <div class="code"><pre>
 g.region raster=elev_lid792_1m
-r.terraflow elevation=elev_lid792_1m filled=elev_lid792_1m_filled \
-    direction=elev_lid792_1m_direction swatershed=elev_lid792_1m_swatershed \
-    accumulation=elev_lid792_1m_accumulation tci=elev_lid792_1m_tci
+r.terraflow elevation=elev_lid792_1m accumulation=elev_lid792_1m_accumulation
 </pre></div>
 
 <div align="center" style="margin: 10px">
@@ -189,44 +186,6 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
 </pre></div>
 
 
-
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="r.flow.html">r.flow</a>,
-<a href="r.basins.fill.html">r.basins.fill</a>,
-<a href="r.drain.html">r.drain</a>,
-<a href="r.topidx.html">r.topidx</a>,
-<a href="r.topmodel.html">r.topmodel</a>,
-<a href="r.water.outlet.html">r.water.outlet</a>,
-<a href="r.watershed.html">r.watershed</a>
-</em>
-
-
-
-<h2>AUTHORS</h2>
-
-<dl>
-  <dt>Original version of program: The
-	<a href="http://www.cs.duke.edu/geo*/terraflow/">TerraFlow</a> project,
-	1999, Duke University.
-	<dd><a href="http://www.daimi.au.dk/~large/">Lars Arge</a>,
-		<a href="http://www.cs.duke.edu/~chase/">Jeff Chase</a>,
-        <a href="http://www.env.duke.edu/faculty/bios/halpin.html">Pat Halpin</a>,
-        <a href="http://www.bowdoin.edu/~ltoma/">Laura Toma</a>,
-        <a href="http://www.env.duke.edu/faculty/bios/urban.html">Dean Urban</a>,
-        <a href="http://www.science.purdue.edu/jsv/">Jeff Vitter</a>,
-        Rajiv Wickremesinghe.
-       
-  <dt>Porting to GRASS GIS, 2002:
-    <dd> <a href="http://www.daimi.au.dk/~large/">Lars Arge</a>,
-	     <a href="http://www4.ncsu.edu/~hmitaso/index.html">Helena Mitasova,</a>
-		 <a href="http://www.bowdoin.edu/~ltoma/">Laura Toma</a>. 
-	   
-	<dt>Contact: <a href="mailto:ltoma@bowdoin.edu "> Laura Toma</a></dt>
-</dl>
-
-
 <h2>REFERENCES</h2>
 
 <ol>
@@ -255,5 +214,39 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
        Advances of Computer Science for Geographic Information
        Systems</em>, 7(4):283-313, December 2003.
 </ol>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.flow.html">r.flow</a>,
+<a href="r.basins.fill.html">r.basins.fill</a>,
+<a href="r.drain.html">r.drain</a>,
+<a href="r.topidx.html">r.topidx</a>,
+<a href="r.topmodel.html">r.topmodel</a>,
+<a href="r.water.outlet.html">r.water.outlet</a>,
+<a href="r.watershed.html">r.watershed</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+<dl>
+  <dt>Original version of program: The
+	<a href="http://www.cs.duke.edu/geo*/terraflow/">TerraFlow</a> project,
+	1999, Duke University.
+	<dd><a href="http://www.daimi.au.dk/~large/">Lars Arge</a>,
+		<a href="http://www.cs.duke.edu/~chase/">Jeff Chase</a>,
+        <a href="http://www.env.duke.edu/faculty/bios/halpin.html">Pat Halpin</a>,
+        <a href="http://www.bowdoin.edu/~ltoma/">Laura Toma</a>,
+        <a href="http://www.env.duke.edu/faculty/bios/urban.html">Dean Urban</a>,
+        <a href="http://www.science.purdue.edu/jsv/">Jeff Vitter</a>,
+        Rajiv Wickremesinghe.
+       
+  <dt>Porting to GRASS GIS, 2002:
+    <dd> <a href="http://www.daimi.au.dk/~large/">Lars Arge</a>,
+	     <a href="http://www4.ncsu.edu/~hmitaso/index.html">Helena Mitasova,</a>
+		 <a href="http://www.bowdoin.edu/~ltoma/">Laura Toma</a>. 
+	   
+	<dt>Contact: <a href="mailto:ltoma@bowdoin.edu "> Laura Toma</a></dt>
+</dl>
 
 <p><i>Last changed: $Date$</i>

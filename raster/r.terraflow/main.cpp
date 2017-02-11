@@ -134,7 +134,7 @@ parse_args(int argc, char *argv[]) {
   mem->key         = "memory";
   mem->type        = TYPE_INTEGER;
   mem->required    = NO;
-  mem->answer      = "300";
+  mem->answer      = (char *) "300";
   mem->description = _("Maximum memory to be used (in MB)");
 
   /* temporary STREAM path */
@@ -153,7 +153,7 @@ parse_args(int argc, char *argv[]) {
   stats_opt->key        = "stats";
   stats_opt->type       = TYPE_STRING;
   stats_opt->required   = NO;
-  stats_opt->description= _("Name of file containing runtime statistics");
+  stats_opt->description= _("Name for output file containing runtime statistics");
   stats_opt->guisection = _("Outputs");
   
   G_option_requires(input_elev, output_elev, output_dir, output_watershed,
@@ -240,8 +240,8 @@ void check_header(char* cellname) {
 	}
 #endif 
 #ifdef ELEV_FLOAT
-	G_verbose_message( _("Elevation stored as FLOAT (%dB)"), 
-			sizeof(elevation_type));
+	G_verbose_message(_("Elevation stored as FLOAT (%ldB)"), 
+                          sizeof(elevation_type));
 	if (data_type == CELL_TYPE) {
 	  G_warning(_("Raster map <%s> is of type CELL_TYPE "
                       "-- you should use r.terraflow.short"), opt->elev_grid); 
@@ -421,10 +421,10 @@ printMaxSortSize(long nodata_count) {
   G_debug(1, "total elements=%ld, nodata elements=%ld",
           (long)nrows * ncols, nodata_count);
   G_debug(1, "largest temporary files: ");
-  G_debug(1, "\t\t FILL: %s [%ld elements, %dB each]",
+  G_debug(1, "\t\t FILL: %s [%ld elements, %ldB each]",
           formatNumber(buf, fillmaxsize),
           (long)nrows * ncols, sizeof(waterWindowType));
-  G_debug(1, "\t\t FLOW: %s [%ld elements, %dB each]",
+  G_debug(1, "\t\t FLOW: %s [%ld elements, %ldB each]",
           formatNumber(buf, flowmaxsize),
           (long)nrows * ncols - nodata_count, sizeof(sweepItem));
   G_debug(1, "Will need at least %s space available in %s",
@@ -461,14 +461,7 @@ main(int argc, char *argv[]) {
 
  
   module = G_define_module();
-#ifdef ELEV_SHORT
-  module->label = _("Performs flow computation for massive grids.");
-  module->description = _("Integer version.");
-#endif
-#ifdef ELEV_FLOAT
-  module->label = _("Performs flow computation for massive grids.");
-  module->description = _("Float version.");
-#endif
+  module->description = _("Performs flow computation for massive grids.");
   G_add_keyword(_("raster"));
   G_add_keyword(_("hydrology"));
   G_add_keyword(_("flow"));
