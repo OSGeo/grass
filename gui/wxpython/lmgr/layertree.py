@@ -154,6 +154,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # if cursor points at layer checkbox (to cancel selection changes)
         self.hitCheckbox = False
         self.forceCheck = False              # force check layer if CheckItem is called
+        # forms default to centering on screen, this will put on lmgr
+        self.centreFromsOnParent = True
 
         try:
             ctstyle |= CT.TR_ALIGN_WINDOWS
@@ -1014,8 +1016,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnVectorColorTable(self, event):
         """Set color table for vector map"""
         name = self.GetLayerInfo(self.layer_selected, key='maplayer').GetName()
-        GUI(parent=self, centreOnParent=False).ParseCommand(['v.colors',
-                                                             'map=%s' % name])
+        GUI(parent=self, centreOnParent=self.centreFromsOnParent).ParseCommand(
+            ['v.colors', 'map=%s' % name])
 
     def OnCopyMap(self, event):
         """Copy selected map into current mapset"""
@@ -1530,7 +1532,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         cmd = None
         if self.GetLayerInfo(layer, key='cmd'):
-            module = GUI(parent=self, show=show, centreOnParent=False)
+            module = GUI(parent=self, show=show,
+                         centreOnParent=self.centreFromsOnParent)
             module.ParseCommand(self.GetLayerInfo(layer, key='cmd'),
                                 completed=(self.GetOptData, layer, params))
             self.SetLayerInfo(layer, key='cmd', value=module.GetCmd())
@@ -1544,7 +1547,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 cmd += GetDisplayVectSettings()
 
         if cmd:
-            module = GUI(parent=self, centreOnParent=False)
+            module = GUI(parent=self, centreOnParent=self.centreFromsOnParent)
             module.ParseCommand(cmd,
                                 completed=(self.GetOptData, layer, params))
 
