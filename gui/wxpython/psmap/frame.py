@@ -514,7 +514,7 @@ class PsMapFrame(wx.Frame):
         """Specify paper size, margins and orientation"""
         id = self.instruction.FindInstructionByType('page').id
         dlg = PageSetupDialog(self, id=id, settings=self.instruction)
-        dlg.CenterOnScreen()
+        dlg.CenterOnParent()
         val = dlg.ShowModal()
         if val == wx.ID_OK:
             self.canvas.SetPage()
