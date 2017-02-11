@@ -540,13 +540,13 @@ class GRASSStartup(wx.Frame):
                     'name': gWizard.georeffile}
                 dlg = wx.MessageDialog(parent=self, message=message, caption=_(
                     "Import data?"), style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-                dlg.CenterOnScreen()
+                dlg.CenterOnParent()
                 if dlg.ShowModal() == wx.ID_YES:
                     self.ImportFile(gWizard.georeffile)
                 dlg.Destroy()
             if gWizard.default_region:
                 defineRegion = RegionDef(self, location=gWizard.location)
-                defineRegion.CenterOnScreen()
+                defineRegion.CenterOnParent()
                 defineRegion.ShowModal()
                 defineRegion.Destroy()
 
