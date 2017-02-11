@@ -1170,8 +1170,7 @@ def install_extension_std_platforms(name, source, url):
         'SCRIPTDIR=%s' % dirs['script'],
         'STRINGDIR=%s' % dirs['string'],
         'ETC=%s' % os.path.join(dirs['etc']),
-        'SOURCE_URL=%s' % source_url,
-        'BASEDIR=%s' % TMPDIR,
+        'SOURCE_URL=%s' % source_url
     ]
 
     install_cmd = [

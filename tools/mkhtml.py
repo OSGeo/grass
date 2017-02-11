@@ -316,8 +316,10 @@ topdir = os.path.abspath(os.getenv("MODULE_TOPDIR"))
 curdir = os.path.abspath(os.path.curdir)
 pgmdir = curdir.replace(topdir, '').lstrip('/')
 if os.getenv('SOURCE_URL', ''):
+    import tempfile
     # addons
-    pgmname = os.getcwd()[len(os.environ['BASEDIR'])+1:]
+    basename = os.getcwd()[len(tempfile.gettempdir())+1:]
+    pgmname = basename[basename.find(os.path.sep)+1:]
     classname = index_names[pgmname[:pgmname.find('.')]]
     url_source = urlparse.urljoin('{0}{1}/'.format(os.environ['SOURCE_URL'], classname),
                                   pgmname)
