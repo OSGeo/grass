@@ -32,7 +32,7 @@ img_patterns = ['*.' + extension for extension in img_extensions]
 img_blacklist = ['grass_logo.png', 'grass_icon.png']
 # circles with numbers from helptext.html (unfortunate we have to list it here)
 # perhaps some general name ending would be good, like *_noindex.png
-img_blacklist.extend(['circle_{}.png'.format(num) for num in range(1, 6)])
+img_blacklist.extend(['circle_{0}.png'.format(num) for num in range(1, 6)])
 
 year = os.getenv("VERSION_DATE")
 
@@ -97,7 +97,7 @@ header_graphical_index_tmpl = """\
 def img_in_html(filename, imagename):
     # for some reason, calling search just once is much faster
     # than calling it on every line (time is spent in _compile)
-    pattern = re.compile('<img .*src=.{}.*>'.format(imagename))
+    pattern = re.compile('<img .*src=.{0}.*>'.format(imagename))
     with open(filename) as file:
         if re.search(pattern, file.read()):
             return True

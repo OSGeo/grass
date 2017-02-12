@@ -246,13 +246,13 @@ class WMSBase:
                     _("Authorization failed to <%s> when fetching capabilities") %
                     options['url'])
             else:
-                msg = _("Unable to fetch capabilities from <{}>. Reason: ").format(
+                msg = _("Unable to fetch capabilities from <{0}>. Reason: ").format(
                     options['url'])
 
                 if hasattr(e, 'reason'):
-                    msg += '{}'.format(e.reason)
+                    msg += '{0}'.format(e.reason)
                 else:
-                    msg += '{}'.format(e)
+                    msg += '{0}'.format(e)
 
                 grass.fatal(msg)
 

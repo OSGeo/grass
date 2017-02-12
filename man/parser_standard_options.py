@@ -107,7 +107,7 @@ class OptTable(object):
 
     def html(self, endline='\n', indent='  ', toptions='border=1'):
         """Return a HTML table with the options"""
-        html = ['<table{}>'.format(' ' + toptions if toptions else '')]
+        html = ['<table{0}>'.format(' ' + toptions if toptions else '')]
         # write headers
         html.append(indent + "<thead>")
         html.append(indent + "<tr>")

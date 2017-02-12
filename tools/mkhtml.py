@@ -309,7 +309,7 @@ if os.getenv('SOURCE_URL', ''):
     # addons
     pgmname = os.path.basename(pgmdir)
     classname = index_names[pgmname[:pgmname.find('.')]]
-    url_source = urlparse.urljoin('{}{}/'.format(os.environ['SOURCE_URL'], classname),
+    url_source = urlparse.urljoin('{0}{1}/'.format(os.environ['SOURCE_URL'], classname),
                                   pgmname)
 else:
     url_source = urlparse.urljoin(source_url, pgmdir)

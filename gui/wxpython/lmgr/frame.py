@@ -2495,7 +2495,7 @@ class GMFrame(wx.Frame):
             grass.warning(_("Unable to exit GRASS shell: unknown PID"))
             return
 
-        Debug.msg(1, "Exiting shell with pid={}".format(shellPid))
+        Debug.msg(1, "Exiting shell with pid={0}".format(shellPid))
         import signal
         os.kill(shellPid, signal.SIGTERM)
 

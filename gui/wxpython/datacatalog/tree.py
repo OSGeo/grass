@@ -138,7 +138,7 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
     else:
         listOfMapsets = mapsets.split(',')
         Debug.msg(
-            4, "Location <{}>: {} mapsets found".format(
+            4, "Location <{0}>: {1} mapsets found".format(
                 location, len(listOfMapsets)))
         for each in listOfMapsets:
             maps_dict[each] = {}
@@ -160,7 +160,7 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
         # fill dictionary
         listOfMaps = maplist.splitlines()
         Debug.msg(
-            4, "Location <{}>: {} maps found".format(
+            4, "Location <{0}>: {1} maps found".format(
                 location, len(listOfMaps)))
         for each in listOfMaps:
             ltype, wholename = each.split('/')
@@ -311,7 +311,7 @@ class LocationMapTree(TreeView):
         location_nodes = []
         nlocations = len(locations)
         grassdata_node = self._model.AppendNode(
-            parent=self._model.root, label=_('GRASS locations in {}').format(
+            parent=self._model.root, label=_('GRASS locations in {0}').format(
                 genv['GISDBASE']), data=dict(
                 type='grassdata'))
         for location in locations:
@@ -323,7 +323,7 @@ class LocationMapTree(TreeView):
             loc_count += 1
 
             Debug.msg(
-                3, "Scanning location <{}> ({}/{})".format(location, loc_count, nlocations))
+                3, "Scanning location <{0}> ({1}/{2})".format(location, loc_count, nlocations))
 
             q = Queue()
             p = Process(target=getLocationTree,

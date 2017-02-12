@@ -64,7 +64,7 @@ class Popen(subprocess.Popen):
             and kwargs.get('executable') is None):
             cmd = shutil_which(args[0])
             if cmd is None:
-                raise OSError(_("Cannot find the executable {}")
+                raise OSError(_("Cannot find the executable {0}")
                               .format(args[0]))
             args = [cmd] + args[1:]
             name, ext = os.path.splitext(cmd)
@@ -1535,10 +1535,10 @@ def debug_level(force=False):
         try:
             _debug_level = int(gisenv().get('DEBUG', 0))
             if _debug_level < 0 or _debug_level > 5:
-                raise ValueError(_("Debug level {}").format(_debug_level))
+                raise ValueError(_("Debug level {0}").format(_debug_level))
         except ValueError as e:
             _debug_level = 0
-            sys.stderr.write(_("WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {}\n").format(e))
+            sys.stderr.write(_("WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {0}\n").format(e))
             
     return _debug_level
 

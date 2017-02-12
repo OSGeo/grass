@@ -721,7 +721,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             if type(modules) is not list:
                 modules = [modules]
             file_index.write(
-                '<tr><td>Tested modules</td><td>{}</td></tr>'.format(
+                '<tr><td>Tested modules</td><td>{0}</td></tr>'.format(
                     ', '.join(sorted(set(modules)))))
         file_index.write('</tbody></table>')
 

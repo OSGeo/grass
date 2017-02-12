@@ -86,7 +86,7 @@ header_graphical_index_tmpl = """\
 
 
 def std_img_name(name):
-    return "gi_{}.jpg".format(name)
+    return "gi_{0}.jpg".format(name)
 
 
 index_items = [

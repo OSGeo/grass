@@ -411,7 +411,7 @@ class RenderLayerMgr(wx.EvtHandler):
 
     def Abort(self):
         """Abort rendering process"""
-        Debug.msg(1, "RenderLayerMgr({}).Abort()".format(self.layer))
+        Debug.msg(1, "RenderLayerMgr({0}).Abort()".format(self.layer))
         self.thread.Terminate()
 
         # force rendering layer next time
@@ -1272,7 +1272,7 @@ class Map(object):
 
         renderMgr = layer.GetRenderMgr()
         Debug.msg(
-            1, "Map.AddLayer(): ltype={}, command={}".format(
+            1, "Map.AddLayer(): ltype={0}, command={1}".format(
                 ltype, layer.GetCmd(
                     string=True)))
         if renderMgr:
@@ -1333,7 +1333,7 @@ class Map(object):
 
     def SetLayers(self, layers):
         self.layers = layers
-        Debug.msg(5, "Map.SetLayers(): layers={}".format([EncodeString(layer.GetCmd(string=True)) for layer in layers]))
+        Debug.msg(5, "Map.SetLayers(): layers={0}".format([EncodeString(layer.GetCmd(string=True)) for layer in layers]))
 
     def ChangeLayer(self, layer, render=False, **kargs):
         """Change map layer properties
@@ -1483,7 +1483,7 @@ class Map(object):
 
         renderMgr = overlay.GetRenderMgr()
         Debug.msg(
-            1, "Map.AddOverlay(): cmd={}".format(EncodeString(
+            1, "Map.AddOverlay(): cmd={0}".format(EncodeString(
                 overlay.GetCmd(
                     string=True))))
         if renderMgr:

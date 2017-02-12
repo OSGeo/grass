@@ -45,12 +45,12 @@ class DebugMsg:
             self.debuglevel = int(grass.gisenv().get('WX_DEBUG', 0))
             if self.debuglevel < 0 or self.debuglevel > 5:
                 raise ValueError(
-                    _("Wx debug level {}.").format(
+                    _("Wx debug level {0}.").format(
                         self.debuglevel))
         except ValueError as e:
             self.debuglevel = 0
             sys.stderr.write(
-                _("WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {}\n").format(e))
+                _("WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n").format(e))
 
     def msg(self, level, message, *args):
         """Print debug message

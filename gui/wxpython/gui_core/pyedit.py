@@ -235,7 +235,7 @@ def main():
     try:
         stats = gscript.parse_command('r.univar', map=input_raster, flags='g')
     except CalledModuleError as e:
-        gscript.fatal('{}'.format(e))
+        gscript.fatal('{0}'.format(e))
     raster_mean = float(stats['mean'])
     raster_stddev = float(stats['stddev'])
     raster_high = raster_mean + raster_stddev

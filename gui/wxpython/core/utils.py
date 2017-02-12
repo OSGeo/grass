@@ -532,7 +532,7 @@ def ReadEpsgCodes(path):
         try:
             f = open(path, "r")
         except IOError:
-            raise OpenError(_("failed to open '{}'").format(path))
+            raise OpenError(_("failed to open '{0}'").format(path))
 
         code = None
         for line in f.readlines():
@@ -547,7 +547,7 @@ def ReadEpsgCodes(path):
                 try:
                     code = int(code.replace('<', '').replace('>', ''))
                 except ValueError as e:
-                    raise OpenError('{}'.format(e))
+                    raise OpenError('{0}'.format(e))
 
             if code is not None:
                 epsgCodeDict[code] = (descr, params)
@@ -555,7 +555,7 @@ def ReadEpsgCodes(path):
 
         f.close()
     except Exception as e:
-        raise OpenError('{}'.format(e))
+        raise OpenError('{0}'.format(e))
 
     return epsgCodeDict
 
@@ -1204,7 +1204,7 @@ def registerPid(pid):
     if 'GUI_PID' in env:
         guiPid = env['GUI_PID'].split(',')
     guiPid.append(str(pid))
-    grass.run_command('g.gisenv', set='GUI_PID={}'.format(','.join(guiPid)))
+    grass.run_command('g.gisenv', set='GUI_PID={0}'.format(','.join(guiPid)))
 
 
 def unregisterPid(pid):
@@ -1222,7 +1222,7 @@ def unregisterPid(pid):
         guiPid.remove(pid)
         grass.run_command(
             'g.gisenv',
-            set='GUI_PID={}'.format(
+            set='GUI_PID={0}'.format(
                 ','.join(guiPid)))
 
 if __name__ == '__main__':

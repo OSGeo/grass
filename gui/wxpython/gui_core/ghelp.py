@@ -295,7 +295,7 @@ class AboutWindow(wx.Frame):
         except CalledModuleError as error:
             text = _("Unable to provide citation suggestion,"
                      " see GRASS GIS website instead."
-                     " The error was: {}").format(error)
+                     " The error was: {0}").format(error)
 
         # put text into a scrolling panel
         window = ScrolledPanel(self.aboutNotebook)
