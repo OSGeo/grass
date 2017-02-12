@@ -326,6 +326,7 @@ int main(int argc, char **argv)
     val->type = TYPE_INTEGER;
     val->required = YES;
     val->options = "1-3";
+    val->answer = "1";
     val->description = _("Rectification polynomial order");
 
     fmt = G_define_option();
