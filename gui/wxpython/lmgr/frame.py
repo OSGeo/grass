@@ -1454,6 +1454,11 @@ class GMFrame(wx.Frame):
                                                 region['s'],
                                                 region['e'],
                                                 region['w'])
+            if 'showStatusbar' in display and not display['showStatusbar']:
+                mapdisp.statusbarManager.Show(False)
+            if 'showToolbars' in display and not display['showToolbars']:
+                for toolbar in mapdisp.GetToolbarNames():
+                    mapdisp.RemoveToolbar(toolbar)
 
             displayId += 1
             mapdisp.Show()  # show mapdisplay
