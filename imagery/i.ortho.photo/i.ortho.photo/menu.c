@@ -63,7 +63,7 @@ int main(int argc, char **argv)
                "i.ortho.target;%s;"
                "i.ortho.elev;%s;"
                "i.ortho.camera;%s;"
-               "i.photo.2image;%s;"
+               "g.gui.iphoto2image;%s;"
                "i.ortho.init;%s;"
                "i.photo.2target;%s;"
                "i.ortho.rectify;%s;",
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
                _("7 - Compute ortho-rectification parameters"),
                _("8 - Ortho-rectify imagery files"));
     ortho_opt->descriptions = desc_ortho_opt;
-    ortho_opt->options = "i.group,i.ortho.target,i.ortho.elev,i.ortho.camera,i.photo.2image,i.ortho.init,i.photo.2target,i.ortho.rectify";
+    ortho_opt->options = "i.group,i.ortho.target,i.ortho.elev,i.ortho.camera,g.gui.iphoto2image,i.ortho.init,i.photo.2target,i.ortho.rectify";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -106,22 +106,25 @@ int main(int argc, char **argv)
     grname=group.name;
     moduletorun=ortho_opt->answer;
     /* run the program chosen */
-    if (strcmp(moduletorun, "i.group") == 0)
-        strcpy(tosystem,"i.group --ui group=");
-    if (strcmp(moduletorun, "i.ortho.target") == 0)
-        strcpy(tosystem,"i.ortho.target --ui group=");
-    if (strcmp(moduletorun, "i.ortho.elev") == 0)
-        strcpy(tosystem,"i.ortho.elev --ui group=");
-    if (strcmp(moduletorun, "i.ortho.camera") == 0)
-        strcpy(tosystem,"i.ortho.camera --ui group=");
-    if (strcmp(moduletorun, "i.photo.2image") == 0)
-        strcpy(tosystem,"i.photo.2image --ui group=");
-    if (strcmp(moduletorun, "i.ortho.init") == 0)
-        strcpy(tosystem,"i.ortho.init --ui group=");
-    if (strcmp(moduletorun, "i.photo.2target") == 0)
-        strcpy(tosystem,"i.photo.2target --ui group=");
-    if (strcmp(moduletorun, "i.ortho.rectify") == 0)
-        strcpy(tosystem,"i.ortho.rectify --ui group=");
-    strcat(tosystem,grname);
-    err=system((const char *)tosystem);
+    if (strcmp(moduletorun, "g.gui.iphoto2image") == 0){
+        strcpy(tosystem,"g.gui.iphoto2image");
+    	err=system((const char *)tosystem);
+    }else{
+        if (strcmp(moduletorun, "i.group") == 0)
+            strcpy(tosystem,"i.group --ui group=");
+        if (strcmp(moduletorun, "i.ortho.target") == 0)
+            strcpy(tosystem,"i.ortho.target --ui group=");
+        if (strcmp(moduletorun, "i.ortho.elev") == 0)
+            strcpy(tosystem,"i.ortho.elev --ui group=");
+        if (strcmp(moduletorun, "i.ortho.camera") == 0)
+            strcpy(tosystem,"i.ortho.camera --ui group=");
+        if (strcmp(moduletorun, "i.ortho.init") == 0)
+            strcpy(tosystem,"i.ortho.init --ui group=");
+        if (strcmp(moduletorun, "i.photo.2target") == 0)
+            strcpy(tosystem,"i.photo.2target --ui group=");
+        if (strcmp(moduletorun, "i.ortho.rectify") == 0)
+            strcpy(tosystem,"i.ortho.rectify --ui group=");
+        strcat(tosystem,grname);
+        err=system((const char *)tosystem);
+    }
 }
