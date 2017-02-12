@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     module->description = _("Menu driver for the photo imagery programs.");
 
     group_opt = G_define_standard_option(G_OPT_I_GROUP);
-    group_opt->required = NO;
+    group_opt->required = YES;
     group_opt->description =
 	_("Name of imagery group for ortho-rectification");
 
@@ -90,12 +90,15 @@ int main(int argc, char **argv)
 	*p = 0;
 
     /* get and check the group reference files */
-    if (!I_get_group_ref(group.name, &group.group_ref))
-	G_fatal_error(_("Pre-selected group <%s> not found"), group.name);
-    I_get_group_ref(group.name, &group.group_ref);
+    /* Skip if you are creating the group right now */
+    if (strcmp(moduletorun, "i.group") != 0){
+    	if (!I_get_group_ref(group.name, &group.group_ref))
+		G_fatal_error(_("Pre-selected group <%s> not found"), group.name);
+	    I_get_group_ref(group.name, &group.group_ref);
 
-    if (group.group_ref.nfiles <= 0)
-	G_fatal_error(_("Group [%s] contains no files"), group.name);
+	    if (group.group_ref.nfiles <= 0)
+		G_fatal_error(_("Group [%s] contains no files"), group.name);
+    }
 
     I_put_group(group.name);
     /*-----------------------------*/
