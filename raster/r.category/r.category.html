@@ -109,45 +109,52 @@ avoid unwanted shell substitution.
 
 <h2>EXAMPLES</h2>
 
-Spearfish sample dataset:
+North Carolina sample dataset:
 
 <h3>Printing categories</h3>
 <div class="code"><pre>
-r.category map=soils
+r.category map=landclass96
+1	developed
+2	agriculture
+3	herbaceous
+4	shrubland
+5	forest
+6	water
+7	sediment
 </pre></div>
 
 prints the values and labels associated with all of the categories in the
-<em>soils</em> raster map layer.
+<em>landclass96</em> raster map layer.
 
 <p>
 <div class="code"><pre>
-r.category map=soils cats=10,12,15-20 
+r.category map=landclass96 cats=2,5-7 
+2	agriculture
+5	forest
+6	water
+7	sediment
 </pre></div>
 
-prints only the category values and labels for <em>soils</em> map layer
-categories <tt>10, 12</tt>, and <tt>15</tt> through <tt>20</tt>.
+prints only the category values and labels for <em>landclass96</em> map layer
+categories <tt>2</tt> and <tt>5</tt> through <tt>7</tt>.
 
 <p>
 <div class="code"><pre>
-r.category map=soils cats=10,20 separator=':'
+r.category map=landclass96 cats=3,4 separator=comma
+3,herbaceous
+4,shrubland
 </pre></div>
 
-prints the values and labels for <em>soils</em> map layer categories
-<tt>10</tt> and <tt>20</tt>, but uses "<tt>:</tt>" (instead of a tab)
+prints the values and labels for <em>landclass96</em> map layer categories
+<tt>3</tt> and <tt>4</tt>, but uses "<tt>,</tt>" (instead of a tab)
 as the character separating the category values from the category
-values in the output:
-
-Example output:
-<div class="code"><pre>
-10:Dumps, mine, Cc 
-20:Kyle clay, KaA 
-</pre></div>
+values in the output.
 
 <h3>Adding categories</h3>
 
-Example for defining new category labels:
+Example for defining new category labels, using a colon as separator:
 <div class="code"><pre>
-r.category diseasemap separator=: rules=- &lt;&lt; EOF
+r.category diseasemap separator=":" rules=- &lt;&lt; EOF
 1:potential absence
 2:potential presence
 EOF
