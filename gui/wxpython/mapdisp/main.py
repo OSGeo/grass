@@ -480,9 +480,9 @@ class DMonFrame(MapFrame):
         width, height = self.MapWindow.GetClientSize()
         for line in fileinput.input(monFile['env'], inplace=True):
             if 'GRASS_RENDER_WIDTH' in line:
-                print 'GRASS_RENDER_WIDTH={}'.format(width)
+                print 'GRASS_RENDER_WIDTH={0}'.format(width)
             elif 'GRASS_RENDER_HEIGHT' in line:
-                print 'GRASS_RENDER_HEIGHT={}'.format(height)
+                print 'GRASS_RENDER_HEIGHT={0}'.format(height)
             else:
                 print line.rstrip('\n')
 

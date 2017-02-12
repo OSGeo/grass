@@ -148,7 +148,7 @@ def generate_page_for_category(short_family, module_family, imgs, year,
     elif module_family == 'guimodules':
         output.write("<h3>g.gui.* modules:</h3>")
     else:
-        output.write("<h3>{} modules:</h3>".format(to_title(module_family)))
+        output.write("<h3>{0} modules:</h3>".format(to_title(module_family)))
     output.write('<ul class="img-list">')
 
     #for all modules:

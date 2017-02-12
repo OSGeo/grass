@@ -1140,7 +1140,7 @@ class TestCase(unittest.TestCase):
         module = _module_from_parameters(module, **kwargs)
         _check_module_run_parameters(module)
         if not shutil_which(module.name):
-            stdmsg = "Cannot find the module '{}'".format(module.name)
+            stdmsg = "Cannot find the module '{0}'".format(module.name)
             self.fail(self._formatMessage(msg, stdmsg))
         try:
             module.run()

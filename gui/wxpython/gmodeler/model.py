@@ -1862,7 +1862,7 @@ class ProcessModelFile:
             else:
                 tabName = _("empty")
             raise GException(
-                _("Details: unsupported tag name '{}'.").format(tagName))
+                _("Details: unsupported tag name '{0}'.").format(tagName))
 
         # list of actions, data
         self.properties = dict()
