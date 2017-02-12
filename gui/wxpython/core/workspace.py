@@ -160,6 +160,8 @@ class ProcessWorkspaceFile:
                 "render": bool(int(display.get('render', "0"))),
                 "mode": int(display.get('mode', 0)),
                 "showCompExtent": bool(int(display.get('showCompExtent', "0"))),
+                "showStatusbar": bool(int(display.get('showStatusbar', "0"))),
+                "showToolbars": bool(int(display.get('showToolbars', "0"))),
                 "pos": pos,
                 "size": size,
                 "extent": extent,
@@ -848,6 +850,8 @@ class WriteWorkspaceFile(object):
                        'mode="%d" showCompExtent="%d" '
                        'alignExtent="%d" '
                        'constrainRes="%d" '
+                       'showStatusbar="%d" '
+                       'showToolbars="%d" '
                        'dim="%d,%d,%d,%d" '
                        'extent="%f,%f,%f,%f,%f,%f" '
                        'tbres="%f" '  # needed only for animation tool
@@ -858,6 +862,8 @@ class WriteWorkspaceFile(object):
                                               int(mapdisp.mapWindowProperties.showRegion),
                                               int(mapdisp.mapWindowProperties.alignExtent),
                                               int(mapdisp.mapWindowProperties.resolution),
+                                              int(mapdisp.statusbarManager.IsShown()),
+                                              int(mapdisp.GetMapToolbar().IsShown()),
                                               displayPos[0],
                                               displayPos[1],
                                               displaySize[0],
