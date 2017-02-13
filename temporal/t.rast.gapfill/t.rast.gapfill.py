@@ -184,7 +184,7 @@ def main():
             
             overwrite_flags[new_id] = False
             if new_map.map_exists() or new_map.is_in_db(dbif):
-                if not grass.overwrite:
+                if not grass.overwrite():
                         grass.fatal(_("Map with name <%s> already exists. "
                                       "Please use another base name." % (_id)))
                 else:
