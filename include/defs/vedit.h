@@ -6,6 +6,9 @@ int Vedit_split_lines(struct Map_info *, struct ilist *,
 		      struct line_pnts *, double, struct ilist *);
 int Vedit_connect_lines(struct Map_info *, struct ilist *, double);
 
+/* extend.c */
+int Vedit_extend_lines(struct Map_info *, struct ilist *, int, int, double);
+
 /* cats.c */
 int Vedit_modify_cats(struct Map_info *, struct ilist *,
 		      int, int, struct cat_list *);
