@@ -16,6 +16,8 @@
 
 static int connect_lines(struct Map_info *, int, int, int,
 			 double, struct ilist *);
+static int find_extended_intersection(double, double, double, double, double,
+				      double, double *, double *);
 
 /*!
   \brief Split selected lines on given position
@@ -137,21 +139,39 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
   \brief Connect lines in given threshold
   
   \code
-        \	             \
-   id1   \           ->	      \
-                               \
-   id2 ---------           -----+---
-   \endcode
+  1. Extend first line only
+          \                      \
+     id1   \             ->       \
+                                   \
+     id2 ----------            -----+----
 
-   If two lines are selected and <i>thresh</i> is -1, no limit is
-   applied.
 
-   \param Map pointer to Map_info
-   \param List list of selected lines
-   \param thresh threshold value
+  2. Extend both lines
+          \                      \
+     id1   \             ->       \
+                                   \
+     id2        ---                 +----
 
-   \return number of modified lines
-   \return -1 on error
+
+  3. Extend first line when both are on the same line
+     id1 ---    --- id2  ->    -----+----
+
+
+  4. Don't connect two lines that don't intersect
+     id1 ------                ------
+                         ->
+     id2     ------                ------
+  \endcode
+
+  If two lines are selected and <i>thresh</i> is -1, no limit is
+  applied.
+
+  \param Map pointer to Map_info
+  \param List list of selected lines
+  \param thresh threshold value
+
+  \return number of modified lines
+  \return -1 on error
  */
 int Vedit_connect_lines(struct Map_info *Map, struct ilist *List,
 			double thresh)
@@ -194,6 +214,9 @@ int Vedit_connect_lines(struct Map_info *Map, struct ilist *List,
 
 	    do {
 		/* find first nearest line */
+		/* thresh=-1 for Vect_find_line_list doesn't mean no limit
+		 * search => inconsistent behavior! Either this is a bug or the
+		 * function description is incorrect. */
 		found = Vect_find_line_list(Map, x, y, z,
 					    GV_LINES, thresh, WITHOUT_Z,
 					    List_exclude, List_found);
@@ -227,8 +250,8 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
     int type_from, type_to;
     int n_points, seg, is;
     double x, y, px, py, x1, y1;
-    double dist, spdist, lpdist, length, dist_p;
-    double angle_t, angle_f, angle;
+    double dist, spdist, lpdist, length;
+    double angle_t, angle_f;
 
     struct line_pnts *Points_from, *Points_to, *Points_final;
     struct line_cats *Cats_from, *Cats_to;
@@ -247,12 +270,13 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 	line_new = -1;
 
     if (line_new > -1) {
+	n_points = Points_from->n_points - 1;
+
 	if (first) {
 	    x = Points_from->x[0];
 	    y = Points_from->y[0];
 	}
 	else {
-	    n_points = Points_from->n_points - 1;
 	    x = Points_from->x[n_points];
 	    y = Points_from->y[n_points];
 	}
@@ -271,22 +295,9 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 		if (Vect_point_on_line(Points_to, lpdist,
 				       NULL, NULL, NULL, &angle_t,
 				       NULL) > 0) {
-		    angle = angle_t - angle_f;
-		    dist_p = fabs(dist / sin(angle));
-		    
-		    if (first) {
-			if (angle_f < 0)
-			    angle_f -= M_PI;
-			else
-			    angle_f += M_PI;
-		    }
-
-		    x1 = x + dist_p * cos(angle_f);
-		    y1 = y + dist_p * sin(angle_f);
-
-		    length = Vect_line_length(Points_to);
-		    Vect_line_insert_point(Points_to, seg, x1, y1, 0.);
-		    if (fabs(Vect_line_length(Points_to) - length) < length * 1e-3) {
+		    /* extend both line_from & line_to and find intersection */
+		    if (find_extended_intersection(x, y, angle_f,
+						   px, py, angle_t, &x1, &y1)) {
 			/* lines connected -> split line_to */
 			/* update line_from */
 			if (first) {
@@ -302,31 +313,37 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 						     Points_from, Cats_from);
 			/* Vect_list_append(List, line_new); */
 			
-			/* update line_to  -- first part */
-			Vect_reset_line(Points_final);
-			for (is = 0; is < seg; is++) {
-			    Vect_append_point(Points_final, Points_to->x[is],
-					  Points_to->y[is],
-					      Points_to->z[is]);
-			}
-			Vect_append_point(Points_final, x1, y1, 0.0);
-			line_new = Vect_rewrite_line(Map, line_to, type_to,
-						     Points_final, Cats_to);
-			/* Vect_list_append(List, line_new); */
+			length = Vect_line_length(Points_to);
+			/* avoid adding duplicate nodes */
+			if (lpdist > 0 && lpdist < length) {
+			    /* update line_to  -- first part */
+			    Vect_reset_line(Points_final);
+			    for (is = 0; is < seg; is++) {
+				Vect_append_point(Points_final,
+						  Points_to->x[is],
+						  Points_to->y[is],
+						  Points_to->z[is]);
+			    }
+			    Vect_append_point(Points_final, x1, y1, 0.0);
+			    line_new = Vect_rewrite_line(Map, line_to, type_to,
+							 Points_final, Cats_to);
+			    /* Vect_list_append(List, line_new); */
 			
-			/* write second part */
-			Vect_reset_line(Points_final);
-			Vect_append_point(Points_final, x1, y1, 0.0);
-			for (is = seg; is < Points_to->n_points; is++) {
-			    Vect_append_point(Points_final, Points_to->x[is],
-					      Points_to->y[is],
-					      Points_to->z[is]);
-			}
+			    /* write second part */
+			    Vect_reset_line(Points_final);
+			    Vect_append_point(Points_final, x1, y1, 0.0);
+			    for (is = seg; is < Points_to->n_points; is++) {
+				Vect_append_point(Points_final,
+						  Points_to->x[is],
+						  Points_to->y[is],
+						  Points_to->z[is]);
+			    }
 			
-			/* rewrite first part */
-			line_new = Vect_write_line(Map, type_to,
-						   Points_final, Cats_to);
-			/* Vect_list_append(List, line_new); */
+			    /* rewrite first part */
+			    line_new = Vect_write_line(Map, type_to,
+						       Points_final, Cats_to);
+			    /* Vect_list_append(List, line_new); */
+			}
 		    }
 		}
 	    }
@@ -340,4 +357,43 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
     Vect_destroy_cats_struct(Cats_to);
 
     return line_new > 0 ? 1 : 0;
+}
+
+static int find_extended_intersection(double x1, double y1, double angle1,
+				      double x2, double y2, double angle2,
+				      double *x, double *y)
+{
+    double c1, s1, c2, s2, d, a;
+
+    if (fabs(sin(angle1 - angle2)) <= 1e-10) {
+	/* two lines are parallel */
+	double angle;
+
+	angle = atan2(y2 - y1, x2 - x1);
+	if (angle == angle1) {
+	    /* they are on the same line */
+	    *x = x2;
+	    *y = y2;
+
+	    return 1;
+	}
+
+	/* two lines don't intersect */
+	return 0;
+    }
+
+    c1 = cos(angle1);
+    s1 = sin(angle1);
+    c2 = cos(angle2);
+    s2 = sin(angle2);
+    d = -c1 * s2 + c2 * s1;
+    if (d == 0.0)
+	/* shouldn't happen again */
+	return 0;
+
+    a = (-s2 * (x2 - x1) + c2 * (y2 - y1)) / d;
+    *x = x1 + a * c1;
+    *y = y1 + a * s1;
+
+    return 1;
 }
