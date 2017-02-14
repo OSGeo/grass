@@ -52,6 +52,9 @@ int parser(int argc, char *argv[], struct GParams *params,
 	       "snap;%s;"
 	       "flip;%s;"
 	       "connect;%s;"
+	       "extend;%s;"
+	       "extendstart;%s;"
+	       "extendend;%s;"
 	       "zbulk;%s;"
 	       "chtype;%s;"
 	       "areadel;%s",
@@ -73,13 +76,16 @@ int parser(int argc, char *argv[], struct GParams *params,
 	       _("Snap vector features in given threshold"),
 	       _("Flip direction of selected vector lines"),
 	       _("Connect two lines"),
+	       _("Extend lines"),
+	       _("Extend start nodes"),
+	       _("Extend end nodes"),
 	       _("Z bulk-labeling (automated assignment of z coordinate to "
 		 "vector lines)"),
 	       _("Change feature type (point<->centroid, line<->boundary)"),
 	       _("Delete selected areas from vector map (based on selected centroids)"));
     params->tool->descriptions = desc_tool;
     params->tool->options = "create,add,delete,copy,move,flip,catadd,catdel,"
-	"merge,break,snap,connect,chtype,"
+	"merge,break,snap,connect,extend,extendstart,extendend,chtype,"
 	"vertexadd,vertexdel,vertexmove,areadel,zbulk,select";
 
     params->in = G_define_standard_option(G_OPT_F_INPUT);
@@ -215,6 +221,11 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->move_first->description =
 	_("Modify only first found feature in bounding box");
 
+    params->extend_parallel = G_define_flag();
+    params->extend_parallel->key = 'p';
+    params->extend_parallel->description =
+	_("Connect parallel lines (using extend tools and threshold distance)");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -251,6 +262,15 @@ int parser(int argc, char *argv[], struct GParams *params,
     }
     else if (strcmp(params->tool->answer, "connect") == 0) {
 	*action_mode = MODE_CONNECT;
+    }
+    else if (strcmp(params->tool->answer, "extend") == 0) {
+	*action_mode = MODE_EXTEND;
+    }
+    else if (strcmp(params->tool->answer, "extendstart") == 0) {
+	*action_mode = MODE_EXTEND_START;
+    }
+    else if (strcmp(params->tool->answer, "extendend") == 0) {
+	*action_mode = MODE_EXTEND_END;
     }
     else if (strcmp(params->tool->answer, "vertexadd") == 0) {
 	*action_mode = MODE_VERTEX_ADD;
