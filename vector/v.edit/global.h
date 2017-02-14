@@ -30,6 +30,9 @@ enum mode
     MODE_MERGE,			/* merge vector lines */
     MODE_BREAK,			/* break (split) vector lines */
     MODE_CONNECT,		/* connect *two* lines */
+    MODE_EXTEND,		/* extend both nodes */
+    MODE_EXTEND_START,		/* extend start node */
+    MODE_EXTEND_END,		/* extend end node */
     MODE_SNAP,			/* snap vector lines */
     /* geometry of feature changed */
     MODE_VERTEX_ADD,		/* add vertex */
@@ -51,7 +54,7 @@ struct GParams
     struct Option *map, *in, *maxdist, *tool,
 	*coord, *cat, *move, *bbox, *fld,
 	*poly, *type, *id, *where, *bmaps, *snap, *query, *zbulk;
-    struct Flag *header, *topo, *close, *reverse, *move_first;
+    struct Flag *header, *topo, *close, *reverse, *move_first, *extend_parallel;
 };
 
 # include "proto.h"

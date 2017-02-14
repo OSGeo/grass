@@ -121,6 +121,20 @@ Additional parameters for vector feature specification are:
     between them is not greater than snapping threshold
     distance <b>threshold</b>.</li>
 
+    <li><b>extend</b> - Extend selected lines or boundaries without changing
+    the current shape. Similar to <b>connect</b>, but the first and second
+    lines are both extended until they intersect. The second line is broken if
+    necessary. The lines are extended only if distance between them is not
+    greater than snapping threshold distance <b>threshold</b>. If the first and
+    second lines are parallel and do not intersect, no lines are extended. Use
+    the <b>-p</b> flag to extend the first line across the parallel gap.</li>
+
+    <li><b>extendstart</b> - Similar to <b>extend</b>, but extend start nodes
+    only.</li>
+
+    <li><b>extendend</b> - Similar to <b>extend</b>, but extend end nodes
+    only.</li>
+
     <li><b>chtype</b> - Change feature type of selected geometry
     objects. Points are converted to centroids, centroids to points,
     lines to boundaries and boundaries to lines.

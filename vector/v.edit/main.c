@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     FILE *ascii;
 
     int i;
-    int move_first, snap;
+    int move_first, snap, extend_parallel;
     int ret, layer;
     double move_x, move_y, move_z, thresh[3];
 
@@ -196,6 +196,7 @@ int main(int argc, char *argv[])
     }
 
     move_first = params.move_first->answer ? 1 : 0;
+    extend_parallel = params.extend_parallel->answer ? 1 : 0;
     snap = NO_SNAP;
     if (strcmp(params.snap->answer, "node") == 0)
 	snap = SNAP;
@@ -356,6 +357,33 @@ int main(int argc, char *argv[])
 	ret = Vedit_connect_lines(&Map, List, thresh[THRESH_SNAP]);
 	G_message(n_("%d line connected",
                      "%d lines connected",
+                     ret), ret);
+	break;
+    case MODE_EXTEND:
+	G_verbose_message(_("Threshold value for snapping is %.2f"),
+			  thresh[THRESH_SNAP]);
+	ret = Vedit_extend_lines(&Map, List, 0, extend_parallel,
+				 thresh[THRESH_SNAP]);
+	G_message(n_("%d line extended",
+                     "%d lines extended",
+                     ret), ret);
+	break;
+    case MODE_EXTEND_START:
+	G_verbose_message(_("Threshold value for snapping is %.2f"),
+			  thresh[THRESH_SNAP]);
+	ret = Vedit_extend_lines(&Map, List, 1, extend_parallel,
+				 thresh[THRESH_SNAP]);
+	G_message(n_("%d line extended",
+                     "%d lines extended",
+                     ret), ret);
+	break;
+    case MODE_EXTEND_END:
+	G_verbose_message(_("Threshold value for snapping is %.2f"),
+			  thresh[THRESH_SNAP]);
+	ret = Vedit_extend_lines(&Map, List, 2, extend_parallel,
+				 thresh[THRESH_SNAP]);
+	G_message(n_("%d line extended",
+                     "%d lines extended",
                      ret), ret);
 	break;
     case MODE_MERGE:
