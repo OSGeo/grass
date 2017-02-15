@@ -7,6 +7,11 @@ Then univariate statistics are calculated per vector category (cat) from
 the raster map and the results uploaded to the vector map attribute table.
 A new column is generated in the attribute table for each statistic requested 
 in <b>method</b> (if not already present).
+<p>
+The univariate statistics include the number of raster cells counted, minimum
+and maximum cell values, range, average, <!-- r.univar: arithmetic mean -->
+standard deviation, variance, coefficient of variation, sum, first quartile,
+median, third quartile, and percentile.
 
 <h2>NOTES</h2>
 <em>v.rast.stats</em> is only meaningful for lines or polygons.
