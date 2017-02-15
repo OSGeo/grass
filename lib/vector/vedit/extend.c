@@ -20,6 +20,8 @@ static int extend_lines(struct Map_info *, int, int, int, int, double,
 			struct ilist *);
 static int find_extended_intersection(double, double, double, double, double,
 				      double, double *, double *);
+static int check_extended_direction(double, double, double, int, double,
+				    double);
 
 /*!
   \brief Extend lines in given threshold
@@ -66,10 +68,8 @@ static int find_extended_intersection(double, double, double, double, double,
 int Vedit_extend_lines(struct Map_info *Map, struct ilist *List, int nodes,
 		       int parallel, double thresh)
 {
-    int nlines_modified, extended;
-    int i, j, node[2], first_node, n_nodes;
-    int line, found;
-    double x, y, z;
+    int nlines_modified;
+    int i, j, first_node, n_nodes;
 
     struct ilist *List_exclude, *List_found;
 
@@ -92,6 +92,8 @@ int Vedit_extend_lines(struct Map_info *Map, struct ilist *List, int nodes,
 
     /* collect lines to be modified */
     for (i = 0; i < List->n_values; i++) {
+	int line, extended, node[2];
+
 	line = List->value[i];
 
 	if (!Vect_line_alive(Map, line))
@@ -109,10 +111,14 @@ int Vedit_extend_lines(struct Map_info *Map, struct ilist *List, int nodes,
 	Vect_reset_list(List_exclude);
 	Vect_list_append(List_exclude, line);
 	for (j = first_node; j < n_nodes && !extended; j++) {
+	    double x, y, z;
+
 	    /* for each line node find lines in threshold */
 	    Vect_get_node_coor(Map, node[j], &x, &y, &z);
 
 	    do {
+		int found;
+
 		/* find first nearest line */
 		found = Vect_find_line_list(Map, x, y, z,
 					    GV_LINES, thresh, WITHOUT_Z,
@@ -151,10 +157,6 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
      */
     int line_new;
     int type_from, type_to;
-    int n_points, seg, is;
-    double x, y, px, py, x1, y1;
-    double dist, spdist, lpdist, length;
-    double angle_t, angle_f;
 
     struct line_pnts *Points_from, *Points_to, *Points_final;
     struct line_cats *Cats_from, *Cats_to;
@@ -174,6 +176,11 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
 
     /* avoid too much indentation */
     do {
+	int n_points, seg, is;
+	double x, y, px, py, x1, y1;
+	double dist, spdist, lpdist, length;
+	double angle_t, angle_f;
+
 	if (line_new == -1)
 	    break;
 
@@ -206,10 +213,10 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
 	/* extend both lines and find intersection */
 	if (!find_extended_intersection(x, y, angle_f, px, py, angle_t,
 					&x1, &y1)) {
+	    /* parallel lines */
 	    if (!parallel)
 		break;
 
-	    /* parallel lines */
 	    x1 = px;
 	    y1 = py;
 	    if (first)
@@ -217,13 +224,40 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
 	    else
 		Vect_append_point(Points_from, x1, y1, 0.0);
 	} else {
-	    /* if intersection point lies on line_from or is beyond threshold,
-	     * skip */
-	    /* TODO: Get rid of tolerance */
+	    /* skip if extended into the wrong direction */
+	    if (!check_extended_direction(x, y, angle_f, first, x1, y1))
+		break;
+
+	    /* skip if extended too far from line_from */
 	    if (!Vect_line_distance(Points_from, x1, y1, 0.0, WITHOUT_Z, NULL,
 				    NULL, NULL, &dist, NULL, NULL) ||
-		dist <= TOL || dist > thresh)
+		dist > thresh)
 		break;
+
+	    Vect_line_distance(Points_to, x1, y1, 0.0, WITHOUT_Z, NULL, NULL,
+			       NULL, &dist, NULL, NULL);
+	    /* if intersection point is not on line_to */
+	    if (dist > TOL) {
+		double x2, y2;
+
+		/* skip if not extended from a line_to node */
+		if (seg > 1 && seg < Points_to->n_points - 1)
+		    break;
+
+		if (seg == 1) {
+		    x2 = Points_to->x[0];
+		    y2 = Points_to->y[0];
+		} else {
+		    x2 = Points_to->x[Points_to->n_points - 1];
+		    y2 = Points_to->y[Points_to->n_points - 1];
+		}
+
+		/* skip if extended into the wrong direction */
+		if (!check_extended_direction(x2, y2, angle_t, seg == 1, x1,
+					      y1))
+		    break;
+	    }
+	    /* otherwise, split line_to later */
 
 	    /* lines extended -> extend/split line_to */
 	    /* update line_from */
@@ -326,6 +360,51 @@ static int find_extended_intersection(double x1, double y1, double angle1,
     a = (-s2 * (x2 - x1) + c2 * (y2 - y1)) / d;
     *x = x1 + a * c1;
     *y = y1 + a * s1;
+
+    return 1;
+}
+
+static int check_extended_direction(double x, double y, double angle,
+				    int start_node, double extx, double exty)
+{
+    double tmp;
+    int xdir, ydir, xext, yext;
+
+    if (start_node)
+	angle += M_PI;
+
+    /* expected directions */
+    tmp = cos(angle);
+    xdir = (fabs(tmp) <= TOL ? 0 : (tmp > 0 ? 1 : -1));
+    tmp = sin(angle);
+    ydir = (fabs(tmp) <= TOL ? 0 : (tmp > 0 ? 1 : -1));
+
+    /* extended directions */
+    tmp = extx - x;
+    xext = (fabs(tmp) <= TOL ? 0 : (tmp > 0 ? 1 : -1));
+    tmp = exty - y;
+    yext = (fabs(tmp) <= TOL ? 0 : (tmp > 0 ? 1 : -1));
+
+    if (xext != 0 && yext != 0) {
+	/* no if extended into the wrong direction */
+	if (xdir / xext <= 0 || ydir / yext <= 0)
+	    return 0;
+	/* otherwise, ok */
+    } else if (xext == 0 && yext == 0) {
+	/* snapped to the node, ok */
+    } else if (xext == 0) {
+	/* vertical extension */
+	/* no if not expected or extended into the wrong direction */
+	if (xdir != 0 || ydir / yext <= 0)
+	    return 0;
+	/* otherwise, ok */
+    } else {
+	/* horizontal extension */
+	/* no if not expected or extended into the wrong direction */
+	if (ydir != 0 || xdir / xext <= 0)
+	    return 0;
+	/* otherwise, ok */
+    }
 
     return 1;
 }
