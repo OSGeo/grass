@@ -55,12 +55,14 @@
 #%end
 
 import grass.script as grass
-import grass.temporal as tgis
+
 
 ############################################################################
 
 
 def main():
+    # lazy imports
+    import grass.temporal as tgis
 
     # Get the options
     input = options["input"]

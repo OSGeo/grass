@@ -149,13 +149,15 @@
 from __future__ import print_function
 
 import grass.script as grass
-import grass.temporal as tgis
-from grass.pygrass.modules import Module
 from copy import copy
 
 ############################################################################
 
 def main():
+    # lazy imports
+    import grass.temporal as tgis
+    from grass.pygrass.modules import Module
+
     # Get the options
     input = options["input"]
     output = options["output"]
