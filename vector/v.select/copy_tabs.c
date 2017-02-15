@@ -55,12 +55,17 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out,
 	OFi =
 	    Vect_default_field_info(Out, IFi->number, IFi->name, ttype);
 	
-	ret =
-	    db_copy_table_by_ints(IFi->driver, IFi->database, IFi->table,
-				  OFi->driver,
-				  Vect_subst_var(OFi->database, Out),
-				  OFi->table, IFi->key, cats[i],
-				  ncats[i]);
+	if (ncats[i] > 0)
+	    ret = db_copy_table_by_ints(IFi->driver, IFi->database, IFi->table,
+					OFi->driver,
+					Vect_subst_var(OFi->database, Out),
+					OFi->table, IFi->key, cats[i],
+					ncats[i]);
+	else
+	    ret = db_copy_table_where(IFi->driver, IFi->database, IFi->table,
+				      OFi->driver,
+				      Vect_subst_var(OFi->database, Out),
+				      OFi->table, "0 = 1");
 	
 	if (ret == DB_FAILED) {
 	    G_warning(_("Unable to copy table for layer %d"), fields[i]);
