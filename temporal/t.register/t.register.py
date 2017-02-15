@@ -99,13 +99,12 @@
 #%end
 
 import grass.script as grass
-import grass.temporal as tgis
+
 
 ############################################################################
 
 
 def main():
-
     # Get the options
     name = options["input"]
     maps = options["maps"]
@@ -130,6 +129,9 @@ def main():
 
 if __name__ == "__main__":
     options, flags = grass.parser()
+
+    # lazy imports
+    import grass.temporal as tgis
 
     try:
         from builtins import StandardError

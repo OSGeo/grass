@@ -50,10 +50,6 @@
 #%end
 
 import grass.script as grass
-import grass.temporal as tgis
-from grass.pygrass.utils import copy as gcopy
-from grass.pygrass.messages import Messenger
-from grass.pygrass.vector import Vector
 from grass.exceptions import CalledModuleError
 
 ############################################################################
@@ -89,6 +85,12 @@ class Sample(object):
 
 
 def main():
+    # lazy imports
+    import grass.temporal as tgis
+    from grass.pygrass.utils import copy as gcopy
+    from grass.pygrass.messages import Messenger
+    from grass.pygrass.vector import Vector
+    
     # Get the options
     input = options["input"]
     output = options["output"]

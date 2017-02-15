@@ -47,10 +47,12 @@
 #%end
 
 import grass.script
-import grass.temporal as tgis
 import sys
 
 def main():
+    # lazy imports
+    import grass.temporal as tgis
+
     expression = options['expression']
     basename = options['basename']
     spatial = flags["s"]

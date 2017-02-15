@@ -114,14 +114,15 @@
 import sys
 import copy
 import grass.script as gscript
-import grass.temporal as tgis
-import grass.pygrass.modules as pymod
 from grass.exceptions import FatalError
 
 
 ############################################################################
 
 def main(options, flags):
+    # lazy imports
+    import grass.temporal as tgis
+    import grass.pygrass.modules as pymod
 
     # Get the options
     input = options["input"]
