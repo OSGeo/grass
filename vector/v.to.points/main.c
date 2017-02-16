@@ -8,7 +8,7 @@
  *               
  * PURPOSE:      Create points along lines 
  *               
- * COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2017 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -35,7 +35,7 @@ int main(int argc, char **argv)
         struct Option *input, *output, *type, *dmax, *lfield, *use;
     } opt;
     struct {
-        struct Flag *table, *inter;
+        struct Flag *table, *inter, *percent, *reverse;
     } flag;
     struct GModule *module;
     struct Map_info In, Out;
@@ -84,12 +84,19 @@ int main(int argc, char **argv)
     opt.dmax->type = TYPE_DOUBLE;
     opt.dmax->required = NO;
     opt.dmax->answer = "100";
-    opt.dmax->description = _("Maximum distance between points in map units");
+    opt.dmax->description = _("Maximum distance between points in map units or percentage with -p");
 
     flag.inter = G_define_flag();
     flag.inter->key = 'i';
     flag.inter->description = _("Interpolate points between line vertices (only for use=vertex)");
-    
+
+    flag.percent = G_define_flag();
+    flag.percent->key = 'p';
+    flag.percent->description = _("Use dmax as percentage of line length");
+
+    flag.reverse = G_define_flag();
+    flag.reverse->key = 'r';
+    flag.reverse->description = _("Start from the end node");
 
     flag.table = G_define_standard_flag(G_FLG_V_TABLE);
 
@@ -102,6 +109,8 @@ int main(int argc, char **argv)
 
     type = Vect_option_to_types(opt.type);
     dmax = atof(opt.dmax->answer);
+    if (dmax <= 0)
+	G_fatal_error(_("Option %s must be positive"), opt.dmax->key);
 
     vertex_type = 0;
     if (opt.use->answer) {
@@ -134,6 +143,7 @@ int main(int argc, char **argv)
     Vect_hist_command(&Out);
 
     /* Table */
+    driver = NULL;
     Fi = NULL;
     if (!flag.table->answer) {
 	struct field_info *Fin;
@@ -222,9 +232,13 @@ int main(int argc, char **argv)
 		write_point(&Out, LPoints->x[0], LPoints->y[0], LPoints->z[0],
 			    cat, 0.0, driver, Fi);
 	    }
-	    else {		/* lines */
-		write_line(&Out, LPoints, cat, vertex_type,
-			   flag.inter->answer, dmax, driver, Fi);
+	    else if (flag.percent->answer) {		/* lines */
+		double dmaxlen = Vect_line_length(LPoints) * dmax / 100.0;
+		write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
+			   flag.reverse->answer, dmaxlen, driver, Fi);
+	    } else {
+		write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
+			   flag.reverse->answer, dmax, driver, Fi);
 	    }
 	}
 
@@ -254,8 +268,14 @@ int main(int argc, char **argv)
 
 	    Vect_get_area_points(&In, area, LPoints);
 
-	    write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
-		       dmax, driver, Fi);
+	    if (flag.percent->answer) {
+		double dmaxlen = Vect_line_length(LPoints) * dmax / 100.0;
+		write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
+			   flag.reverse->answer, dmaxlen, driver, Fi);
+	    } else {
+		write_line(&Out, LPoints, cat, vertex_type, flag.inter->answer,
+			   flag.reverse->answer, dmax, driver, Fi);
+	    }
 
 	    nisles = Vect_get_area_num_isles(&In, area);
 
@@ -263,8 +283,16 @@ int main(int argc, char **argv)
 		isle = Vect_get_area_isle(&In, area, i);
 		Vect_get_isle_points(&In, isle, LPoints);
 
-		write_line(&Out, LPoints, cat, vertex_type,
-			   flag.inter->answer, dmax, driver, Fi);
+		if (flag.percent->answer) {
+		    double dmaxlen = Vect_line_length(LPoints) * dmax / 100.0;
+		    write_line(&Out, LPoints, cat, vertex_type,
+			       flag.inter->answer, flag.reverse->answer,
+			       dmaxlen, driver, Fi);
+		} else {
+		    write_line(&Out, LPoints, cat, vertex_type,
+			       flag.inter->answer, flag.reverse->answer, dmax,
+			       driver, Fi);
+		}
 	    }
 	}
     }

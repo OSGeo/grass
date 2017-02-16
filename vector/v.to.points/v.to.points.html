@@ -70,23 +70,26 @@ this case. Similarly to <b>use=node</b> when only line's node are
 used.
 
 <p>
-If the <b>-i</b> flag is used in conjunction with
-the <b>use=vertex</b> option,
+If the <b>-i</b> flag is used in conjunction with the <b>use=vertex</b> option,
 <em>v.to.points</em> will digitize points on the line vertices, as
 well as interpolate points between line vertices using <b>dmax</b> as
 the maximum allowable spacing.
 
 <p>
-To get points created for the beginning, middle and end only, use
-the <b>-i</b> flag and set <b>dmax</b> so that:
+Use the <b>-p</b> flag to treat <b>dmax</b> as a percentage of each line
+length.  For example, to get points created for the beginning, middle and end
+only, use the <b>-p</b> flag and set <b>dmax</b> so that:
 
 <div class="code"><pre>
- (length of input line / 2) &lt;= <em>dmax</em> &lt;= length of input line
+ 50 &lt; <em>dmax</em> &lt;= 100
 </pre></div>
 
 Hence, if <b>dmax</b> is between 0.5x and 1.0x the line length, you will
 always get points created at exactly the beginning, middle and end of
 the input line.
+
+<p>
+Use the <b>-r</b> flag to create points starting from the end node.
 
 <h2>EXAMPLE</h2>
 
