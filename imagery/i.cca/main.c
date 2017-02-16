@@ -9,7 +9,7 @@
  *               Brad Douglas <rez touchofmadness.com>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      canonical components transformation: takes from two to eight
+ * PURPOSE:      canonical components transformation: takes any number of
  *               (raster) band files and a signature file, and outputs the same
  *               number of raster band files transformed to provide maximum 
  *               separability of the categories indicated by the signatures.  
