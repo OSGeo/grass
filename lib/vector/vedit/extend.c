@@ -176,7 +176,7 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
 
     /* avoid too much indentation */
     do {
-	int n_points, seg, is;
+	int n_points, seg, is, line_to_extended;
 	double x, y, px, py, x1, y1;
 	double dist, spdist, lpdist, length;
 	double angle_t, angle_f;
@@ -209,6 +209,8 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
 	    !Vect_point_on_line(Points_to, lpdist, NULL, NULL, NULL, &angle_t,
 			       NULL))
 	    break;
+
+	line_to_extended = 0;
 
 	/* extend both lines and find intersection */
 	if (!find_extended_intersection(x, y, angle_f, px, py, angle_t,
@@ -245,9 +247,13 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
 		    break;
 
 		if (seg == 1) {
+		    line_to_extended = 1;
+
 		    x2 = Points_to->x[0];
 		    y2 = Points_to->y[0];
 		} else {
+		    line_to_extended = 2;
+
 		    x2 = Points_to->x[Points_to->n_points - 1];
 		    y2 = Points_to->y[Points_to->n_points - 1];
 		}
@@ -274,45 +280,46 @@ int extend_lines(struct Map_info *Map, int first, int line_from, int line_to,
 				     Cats_from);
 	/* Vect_list_append(List, line_new); */
 
-	length = Vect_line_length(Points_to);
 	Vect_reset_line(Points_final);
-	if (lpdist == 0.0) {
-	    /* extend line_to start node */
-	    Vect_append_point(Points_final, x1, y1, 0.0);
-	    for (is = 0; is < Points_to->n_points; is++)
-		Vect_append_point(Points_final, Points_to->x[is],
-				  Points_to->y[is], Points_to->z[is]);
-	    line_new = Vect_rewrite_line(Map, line_to, type_to, Points_final,
-					 Cats_to);
-	} else if (lpdist == length) {
-	    /* extend line_to end node */
-	    for (is = 0; is < Points_to->n_points; is++)
-		Vect_append_point(Points_final, Points_to->x[is],
-				  Points_to->y[is], Points_to->z[is]);
-	    Vect_append_point(Points_final, x1, y1, 0.0);
-	    line_new = Vect_rewrite_line(Map, line_to, type_to, Points_final,
-					 Cats_to);
-	} else {
-	    /* break line_to */
-	    /* update line_to  -- first part */
-	    for (is = 0; is < seg; is++)
-		Vect_append_point(Points_final, Points_to->x[is],
-				  Points_to->y[is], Points_to->z[is]);
-	    Vect_append_point(Points_final, x1, y1, 0.0);
-	    line_new = Vect_rewrite_line(Map, line_to, type_to, Points_final,
-					 Cats_to);
-	    /* Vect_list_append(List, line_new); */
+	switch (line_to_extended) {
+	    case 1:
+		/* extend line_to start node */
+		Vect_append_point(Points_final, x1, y1, 0.0);
+		for (is = 0; is < Points_to->n_points; is++)
+		    Vect_append_point(Points_final, Points_to->x[is],
+				      Points_to->y[is], Points_to->z[is]);
+		line_new = Vect_rewrite_line(Map, line_to, type_to,
+					     Points_final, Cats_to);
+		break;
+	    case 2:
+		/* extend line_to end node */
+		for (is = 0; is < Points_to->n_points; is++)
+		    Vect_append_point(Points_final, Points_to->x[is],
+				      Points_to->y[is], Points_to->z[is]);
+		Vect_append_point(Points_final, x1, y1, 0.0);
+		line_new = Vect_rewrite_line(Map, line_to, type_to,
+					     Points_final, Cats_to);
+		break;
+	    default:
+		/* break line_to */
+		/* update line_to  -- first part */
+		for (is = 0; is < seg; is++)
+		    Vect_append_point(Points_final, Points_to->x[is],
+				      Points_to->y[is], Points_to->z[is]);
+		Vect_append_point(Points_final, x1, y1, 0.0);
+		line_new = Vect_rewrite_line(Map, line_to, type_to,
+					     Points_final, Cats_to);
+		/* Vect_list_append(List, line_new); */
 
-	    /* write second part */
-	    Vect_reset_line(Points_final);
-	    Vect_append_point(Points_final, x1, y1, 0.0);
-	    for (is = seg; is < Points_to->n_points; is++)
-		Vect_append_point(Points_final, Points_to->x[is],
-				  Points_to->y[is], Points_to->z[is]);
-
-	    /* rewrite first part */
-	    line_new = Vect_write_line(Map, type_to, Points_final, Cats_to);
-	    /* Vect_list_append(List, line_new); */
+		/* write second part */
+		Vect_reset_line(Points_final);
+		Vect_append_point(Points_final, x1, y1, 0.0);
+		for (is = seg; is < Points_to->n_points; is++)
+		    Vect_append_point(Points_final, Points_to->x[is],
+				      Points_to->y[is], Points_to->z[is]);
+		line_new = Vect_write_line(Map, type_to, Points_final, Cats_to);
+		/* Vect_list_append(List, line_new); */
+		break;
 	}
     } while(0);
 
