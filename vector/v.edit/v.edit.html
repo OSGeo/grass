@@ -129,10 +129,12 @@ Additional parameters for vector feature specification are:
     second lines are parallel and do not intersect, no lines are extended. Use
     the <b>-p</b> flag to extend the first line across the parallel gap.</li>
 
-    <li><b>extendstart</b> - Similar to <b>extend</b>, but extend start nodes
-    only.</li>
+    <li><b>extendstart</b> - Similar to <b>extend</b>, but extend at start
+    nodes only. Start nodes are used to select the second line and the end node
+    of that line can also be extended if it is within the snapping threshold
+    distance given by <b>threshold</b>.</li>
 
-    <li><b>extendend</b> - Similar to <b>extend</b>, but extend end nodes
+    <li><b>extendend</b> - Similar to <b>extend</b>, but extend at end nodes
     only.</li>
 
     <li><b>chtype</b> - Change feature type of selected geometry
