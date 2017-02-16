@@ -97,7 +97,6 @@ int main(int argc, char **argv)
 
     int polyline;
     int *lines_visited;
-    int points_in_polyline;
     int start_line;
     int nlines;
     int write_cats, copy_tables;
@@ -177,8 +176,10 @@ int main(int argc, char **argv)
 	write_cats = NO_CATS;
     else if (strcmp(cats->answer, "first") == 0)
 	write_cats = ONE_CAT;
-    else
+    else if (strcmp(cats->answer, "multi") == 0)
 	write_cats = MULTI_CATS;
+    else
+	write_cats = SAME_CATS;
 
     if (type_opt->answer)
 	type = Vect_option_to_types(type_opt);
@@ -218,9 +219,8 @@ int main(int argc, char **argv)
 	G_debug(1, "Polyline %d: start line = %d", polyline, start_line);
 
 	/* Walk forward and pick up coordinates */
-	points_in_polyline =
-	    walk_forward_and_pick_up_coords(&map, start_line, ltype, points,
-					    lines_visited, Cats, write_cats);
+	walk_forward_and_pick_up_coords(&map, start_line, ltype, points,
+					lines_visited, Cats, write_cats);
 
 	/* Write the line (type of the first line is used) */
 	Vect_write_line(&Out, ltype, points, Cats);
@@ -230,12 +230,10 @@ int main(int argc, char **argv)
 
     G_verbose_message(n_("%d line or boundaries found in input vector map",
                          "%d lines or boundaries found in input vector map",
-                         nlines),
-		      nlines, Vect_get_name(&map), Vect_get_mapset(&map));
+                         nlines), nlines);
     G_verbose_message(n_("%d polyline stored in output vector map",
                          "%d polylines stored in output vector map",
-                         polyline),
-		      polyline, Vect_get_name(&Out), Vect_get_mapset(&Out));
+                         polyline), polyline);
 
     /* Copy (all linked) tables if needed */
     if (copy_tables) {
