@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
     int i, j;
     int print_as_matrix;	/* only for do_all=TRUE */
     int do_all;			/* calculate from each to each within the threshold */
+    int upload;
     struct GModule *module;
     struct {
 	struct Option *from, *to, *from_type, *to_type,
@@ -81,6 +82,7 @@ int main(int argc, char *argv[])
     char *sep;
 
     do_all = FALSE;
+    upload = FALSE;
     print_as_matrix = FALSE;
     column = NULL;
 
@@ -151,7 +153,7 @@ int main(int argc, char *argv[])
     opt.upload = G_define_option();
     opt.upload->key = "upload";
     opt.upload->type = TYPE_STRING;
-    opt.upload->required = YES;
+    opt.upload->required = NO;
     opt.upload->multiple = YES;
     opt.upload->guisection = _("From");
     opt.upload->options = "cat,dist,to_x,to_y,to_along,to_angle,to_attr";
@@ -217,8 +219,9 @@ int main(int argc, char *argv[])
     flag.all->label =
 	_("Calculate distances to all features within the threshold");
     flag.all->description =
-	_("Output is written to stdout but may be uploaded to a new table "
-	  "created by this module; multiple 'upload' options may be used.");
+	_("Output may be written to stdout using the 'print' flag, "
+	  "or uploaded to a new table created by the 'table' option; "
+	  "multiple 'upload' options may be used.");
 
     /* GUI dependency */
     opt.from->guidependency = G_store(opt.from_field->key);
@@ -227,7 +230,11 @@ int main(int argc, char *argv[])
     opt.to_field->guidependency = G_store(opt.to_column->key);
     
     G_option_exclusive(opt.column, flag.print, NULL);
-    G_option_required(opt.column, flag.print, NULL);
+    G_option_exclusive(opt.table, flag.print, NULL);
+    G_option_requires(opt.upload, flag.print, opt.column, NULL);
+    G_option_requires(opt.column, opt.upload, NULL);
+    G_option_requires(flag.print, opt.upload, NULL);
+    G_option_requires_all(opt.table, flag.all, opt.upload, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -240,6 +247,8 @@ int main(int argc, char *argv[])
 
     if (flag.all->answer)
 	do_all = TRUE;
+    if (opt.column->answer || flag.print->answer)
+	upload = TRUE;
 
     geodesic = G_projection() == PROJECTION_LL;
     if (geodesic)
@@ -250,7 +259,7 @@ int main(int argc, char *argv[])
     /* Read upload and column options */
     /* count */
     i = 0;
-    while (opt.upload->answers[i])
+    while (opt.upload->answer && opt.upload->answers[i])
 	i++;
     if (strcmp(opt.from->answer, opt.to->answer) == 0 &&
 	do_all && !opt.table->answer && i == 1)
@@ -260,7 +269,7 @@ int main(int argc, char *argv[])
     Upload = (UPLOAD *) G_calloc(i + 1, sizeof(UPLOAD));
     /* read upload */
     i = 0;
-    while (opt.upload->answers[i]) {
+    while (opt.upload->answer && opt.upload->answers[i]) {
 	if (strcmp(opt.upload->answers[i], "cat") == 0)
 	    Upload[i].upload = CAT;
 	else if (strcmp(opt.upload->answers[i], "from_x") == 0)
@@ -286,9 +295,8 @@ int main(int argc, char *argv[])
 	    Upload[i].upload = TO_ATTR;
 	}
 
-	/* store relation names if -p is given because column= and -p are
-	 * mutually exclusive */
-	if (flag.print->answer)
+	/* store default column names if column= is not given */
+	if (!opt.column->answer)
 	    Upload[i].column = G_store(opt.upload->answers[i]);
 
 	i++;
@@ -457,7 +465,7 @@ int main(int argc, char *argv[])
     db_init_string(&dbstr);
     driver = NULL;
     Fi = NULL;
-    if (!flag.print->answer && !do_all) {
+    if (upload && !flag.print->answer && !do_all) {
 
 	Fi = Vect_get_field(&From, from_field);
 	if (Fi == NULL)
@@ -525,7 +533,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* Check column types */
-	if (!flag.print->answer && !do_all) {
+	if (upload && !flag.print->answer && !do_all) {
 	    char *fcname = NULL;
 	    int fctype, tctype;
 
@@ -1295,13 +1303,13 @@ int main(int argc, char *argv[])
     }
 
     /* open from driver */
-    if (!flag.print->answer) {
+    if (upload && !flag.print->answer) {
 	if (!do_all) {
 
 	    driver = db_start_driver_open_database(Fi->driver, Fi->database);
 	    if (driver == NULL)
 		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			      Fi->database, Fi->driver);
+				Fi->database, Fi->driver);
 	}
 	else {
 	    driver = db_start_driver_open_database(NULL, NULL);
@@ -1370,7 +1378,7 @@ int main(int argc, char *argv[])
 			  opt.table->answer);
 
     }
-    else if (!do_all) {		/* read existing cats from table */
+    else if (upload && !do_all) {	/* read existing cats from table */
 	ncatexist =
 	    db_select_int(driver, Fi->table, Fi->key, NULL, &catexist);
 	G_debug(1, "%d cats selected from the table", ncatexist);
@@ -1386,13 +1394,13 @@ int main(int argc, char *argv[])
     if (driver)
 	db_begin_transaction(driver);
 
-    if (!(flag.print->answer || (do_all && !opt.table->answer))) /* no printing */
+    if (!flag.print->answer) /* no printing */
 	G_message("Update vector attributes...");
 
     for (i = 0; i < count; i++) {
 	dbCatVal *catval = 0;
 
-	if (!(flag.print->answer || (do_all && !opt.table->answer))) /* no printing */
+	if (!flag.print->answer) /* no printing */
 	    G_percent(i, count, 1);
 
 	/* Write line connecting nearest points */
@@ -1423,7 +1431,7 @@ int main(int argc, char *argv[])
 	    db_CatValArray_get_value(&cvarr, Near[i].to_cat, &catval);
 	}
 
-	if (flag.print->answer || (do_all && !opt.table->answer)) {	/* print only */
+	if (flag.print->answer) {	/* print only */
 	    /*
 	       input and output is the same &&
 	       calculate distances &&
@@ -1455,7 +1463,7 @@ int main(int argc, char *argv[])
 		fprintf(stdout, "\n");
 	    }
 	}
-	else if (do_all) {		/* insert new record */
+	else if (do_all && opt.table->answer) {		/* insert new record */
 	    if (!Outp)
 		sprintf(buf1, "insert into %s values ( %d ", opt.table->answer,
 			Near[i].from_cat);
@@ -1538,7 +1546,7 @@ int main(int argc, char *argv[])
 		update_err++;
 	    }
 	}
-	else {			/* update table */
+	else if (upload) {			/* update table */
 	    /* check if exists in table */
 	    cex =
 		(int *)bsearch((void *)&(Near[i].from_cat), catexist,
@@ -1652,7 +1660,7 @@ int main(int argc, char *argv[])
 	G_message(_("%d categories - no nearest feature found"),
 		  update_notfound);
 
-    if (!flag.print->answer) {
+    if (upload && !flag.print->answer) {
 	db_close_database_shutdown_driver(driver);
 	db_free_string(&stmt);
 
