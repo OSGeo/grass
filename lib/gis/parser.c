@@ -624,8 +624,10 @@ int G_parser(int argc, char **argv)
 	return -1;
     }
 
-    if (check_overwrite())
-	return -1;
+    if (!st->suppress_overwrite) {
+        if (check_overwrite())
+            return -1;
+    }
 
     return 0;
 }
@@ -972,6 +974,8 @@ void set_flag(int f)
 	    flag->answer = 1;
 	    if (flag->suppress_required)
 		st->suppress_required = 1;
+	    if (flag->suppress_overwrite)
+		st->suppress_overwrite = 1;
 	    return;
 	}
 	flag = flag->next_flag;

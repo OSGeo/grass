@@ -540,6 +540,7 @@ struct Flag
     char key;			/*!< Key char used on command line */
     char answer;		/*!< Stores flag state: 0/1 */
     char suppress_required;	/*!< Suppresses checking of required options */
+    char suppress_overwrite;	/*!< Suppresses checking of existing output */
     const char *label;		/*!< Optional short label, used in GUI as item label */
     const char *description;	/*!< String describing flag meaning   */
     const char *guisection;	/*!< GUI Layout guidance: ';' delimited hierarchical tree position */

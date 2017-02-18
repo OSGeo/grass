@@ -21,6 +21,7 @@ struct state {
     int quiet;
     int has_required;
     int suppress_required;
+    int suppress_overwrite;
 
     struct GModule module_info;	/* general information on the corresponding module */
 
