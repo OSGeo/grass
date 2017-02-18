@@ -122,7 +122,10 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
         /* copy features */
         ret += copy_lines_2(In, field, topo, Out);
 
-        if (topo == TOPO_NONE) {
+        if (topo == TOPO_NONE &&
+            /* check output feature type, centroids can be exported as
+             * points; boundaries as linestrings */
+            strcmp(Vect_get_finfo_geometry_type(Out), "polygon") == 0) {
             /* copy areas - external formats and simple features access only */
             ret += Vect__copy_areas(In, field, Out);
         }
@@ -210,6 +213,8 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
     struct line_pnts *Points, *CPoints, *NPoints;
     struct line_cats *Cats, *CCats;
 
+    const char *ftype = NULL;
+    
     Points  = Vect_new_line_struct();
     CPoints = Vect_new_line_struct();
     NPoints = Vect_new_line_struct();
@@ -221,8 +226,6 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
     ret = 0;
     nlines = Vect_get_num_lines(In);
     if (topo == TOPO_NONE) {
-        const char *ftype;
-
         ftype = Vect_get_finfo_geometry_type(Out);
         G_debug(2, "feature type: %s", ftype ? ftype : "?");
         if (!ftype)
@@ -249,12 +252,35 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
         }
         if (type == 0)
             continue;       /* dead line */
-        
-        if (topo == TOPO_NONE && (type == GV_CENTROID || type == GV_BOUNDARY)) {
-            /* OGR/PostGIS layers (simple features): centroids are
-               stored in topo polygon defined by areas (topo required)
-            */
-            continue;
+        if (In->constraint.type_flag) {
+            /* skip feature by type */
+            if (!(type & In->constraint.type))
+                continue;
+        }
+
+        if (topo == TOPO_NONE) {
+            /* OGR/PostGIS layers (simple features) */
+            int skip = FALSE;
+            
+            if (type == GV_BOUNDARY)
+                /* boundaries are written as linestrings when output
+                 * feature type is defined as 'linestring', otherwise
+                 * they are skipped */
+                if (ftype && strcmp(ftype, "linestring") != 0)
+                    skip = TRUE;
+
+            /* centroids are stored in topo polygon defined by areas
+               (topo required) */
+            if (type == GV_CENTROID) {
+                /* centroids are written as points when output feature
+                 * type is defined as 'point', otherwise they are
+                 * skipped */
+                if (ftype && strcmp(ftype, "point") != 0)
+                    skip = TRUE;
+            }
+
+            if (skip)
+                continue;
         }
 
         /* don't skips boundaries if field != -1 */
@@ -500,11 +526,13 @@ int Vect__copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
             /* no centroid - check if area forms an isle */
 	    /* this check does not make sense because the area is also
 	     * not exported if it is part of an isle inside another
-	     * area: the isle gets exported as an inner ring */
+	     * area: the isle gets exported as an inner ring
             if (!is_isle(In, area))
                 G_warning(_("No centroid defined for area %d. "
                             "Area not exported."),
                           area);
+            */
+            G_debug(3, "Area %d: is_isle() -> %d", area, is_isle(In, area));
             continue;
         }
         
