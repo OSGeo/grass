@@ -286,6 +286,11 @@ int main(int argc, char *argv[])
 	    Upload[i].upload = TO_ATTR;
 	}
 
+	/* store relation names if -p is given because column= and -p are
+	 * mutually exclusive */
+	if (flag.print->answer)
+	    Upload[i].column = G_store(opt.upload->answers[i]);
+
 	i++;
     }
     Upload[i].upload = END;
@@ -626,6 +631,9 @@ int main(int argc, char *argv[])
 
     /* Go through all lines in 'from' and find nearest in 'to' for each */
     /* Note: as from_type is restricted to GV_POINTS (for now) everything is simple */
+
+    /* suppress compiler warnings */
+    tx = ty = tz = fx = fy = fz = 0;
 
     count = 0;			/* count of distances in 'do_all' mode */
     /* Find nearest features for 'from' lines */
