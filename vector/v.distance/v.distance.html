@@ -173,7 +173,7 @@ Example for a Latitude-longitude location (EPSG 4326):
 echo "0|-61|1" | v.in.ascii output=pnt1 input=-
 echo "0|-58|1" | v.in.ascii output=pnt2 input=-
 
-# here, distances is in degree units
+# here, distances are in degree units
 v.distance -p --q from=pnt1 to=pnt2 upload=dist
 from_cat|distance
 1|3
