@@ -86,6 +86,7 @@ void parse_args(int argc, char **argv,
     flags->append->key = 'a';
     flags->append->label = _("Append to existing layer");
     flags->append->description = _("A new OGR layer is created if it does not exist");
+    flags->append->suppress_overwrite = YES;
     
     flags->nocat = G_define_flag();
     flags->nocat->key = 's';
