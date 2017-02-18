@@ -1396,7 +1396,7 @@ int main(int argc, char *argv[])
 	    G_percent(i, count, 1);
 
 	/* Write line connecting nearest points */
-	if (Outp != NULL) {
+	if (Near[i].count > 0 && Outp != NULL) {
 	    Vect_reset_line(FPoints);
 	    Vect_reset_cats(FCats);
 
