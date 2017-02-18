@@ -97,7 +97,7 @@ vector map can be used for example to connect points to a network as
 needed for network analysis:
 
 <div class="code"><pre>
-v.distance -p from=pnt to=ln out=connections upload=dist column=dist
+v.distance from=pnt to=ln out=connections upload=dist column=dist
 </pre></div>
 
 <h3>Query information</h3>
@@ -116,7 +116,7 @@ echo "123456|654321|1" | v.in.ascii output=pnt
 Find nearest features:
 
 <div class="code"><pre>
-v.distance from=pnt to=map_to_query upload=cat col=somecol -p
+v.distance -p from=pnt to=map_to_query upload=cat
 </pre></div>
 
 <h3>Point-in-polygon</h3>
@@ -174,7 +174,7 @@ echo "0|-61|1" | v.in.ascii output=pnt1 input=-
 echo "0|-58|1" | v.in.ascii output=pnt2 input=-
 
 # here, distances is in degree units
-v.distance from=pnt1 to=pnt2 upload=dist col=distance -p --q
+v.distance -p --q from=pnt1 to=pnt2 upload=dist
 from_cat|distance
 1|3
 </pre></div>
@@ -186,15 +186,14 @@ given upload option.
 <p>
 Spearfish sample data location:
 <div class="code"><pre>
-v.distance -pa from=archsites to=archsites upload=dist col=dist
+v.distance -pa from=archsites to=archsites upload=dist
 </pre></div>
 
 <p>
 North Carolina sample data location:
 
 <div class="code"><pre>
-v.distance -pa from=hospitals to=hospitals upload=dist \
-  col=dist separator=tab
+v.distance -pa from=hospitals to=hospitals upload=dist separator=tab
 from_cat to_cat       dist            
               1          2          3          4          5 ...
 1             0    7489.10  339112.17   70900.39   70406.23 ...
