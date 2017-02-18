@@ -13,7 +13,7 @@
  *               
  * PURPOSE:      Calculates distance from a point to nearest feature in vector layer. 
  *               
- * COPYRIGHT:    (C) 2002-2015 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2017 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -264,6 +264,12 @@ int main(int argc, char *argv[])
     if (strcmp(opt.from->answer, opt.to->answer) == 0 &&
 	do_all && !opt.table->answer && i == 1)
 	print_as_matrix = TRUE;
+
+    /* TODO: Known issue. Segmentation fault on print_as_matrix with dmin= or
+     * dmax= because count may not be nfrom^2. Needs to populate Near[] fully
+     * even if some near features are not found */
+    if (print_as_matrix && (min >= 0 || max >= 0))
+	G_fatal_error(_("Printng distance matrix not supported with dmin= or dmax="));
 
     /* alloc */
     Upload = (UPLOAD *) G_calloc(i + 1, sizeof(UPLOAD));
