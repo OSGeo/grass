@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
     flag.all->label =
 	_("Calculate distances to all features within the threshold");
     flag.all->description =
-	_("Output may be written to stdout using the 'print' flag, "
+	_("Output may be written to stdout using the 'print' flag "
 	  "or uploaded to a new table created by the 'table' option; "
 	  "multiple 'upload' options may be used.");
 
