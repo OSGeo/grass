@@ -5,13 +5,15 @@
  * 
  * AUTHOR(S):    - J.Soimasuo 15.9.1994, University of Joensuu,
  *                 Faculty of Forestry, Finland
- *               - some additions 2002 Markus Neteler
- *               - updated to 5.7 by Radim Blazek 2003
+ *               - some additions by Markus Neteler (2002)
+ *               - updated to 5.7 by Radim Blazek (2003)
  *               - OGR support by Martin Landa <landa.martin gmail.com> (2009)
- *               - speed-up for dmax != 0 Markus Metz 2010
- *               - support all features Markus Metz 2012
+ *               - speed-up for dmax != 0 by Markus Metz (2010)
+ *               - support all features by Markus Metz (2012)
+ *               - create a new table for non -a runs by Huidae Cho (2017)
  *               
- * PURPOSE:      Calculates distance from a point to nearest feature in vector layer. 
+ * PURPOSE:      Calculates distance from a point to nearest feature in vector
+ *               layer.
  *               
  * COPYRIGHT:    (C) 2002-2017 by the GRASS Development Team
  *
@@ -31,14 +33,37 @@
 #include <grass/vector.h>
 #include "local_proto.h"
 
+/* Supported command lines:
+ * from= to= upload= -p			# print
+ * from= to= upload= column=		# update the "from" table
+ * from= to= output=			# create map
+ * from= to= output= upload= -p		# create map & print
+ * from= to= output= upload= column=	# create map & update the "from" table
+ * from= to= output= upload= column= table=
+ *					# create map & table
+ * -a from= to= upload= -p		# print for all
+ * -a from= to= output=			# create map for all
+ * -a from= to= output=	upload= -p	# create map for all & print
+ * -a from= to= output= upload= column= table=
+ *					# create map for all & create table
+ *
+ * Unsupported command lines:
+ * from= to=				# nothing to do
+ * from= to= upload= column= table=	# cannot create table without output
+ * -a from= to=				# nothing to do
+ *X-a from= to= upload= column=		# cannot update the "from" table
+ *					# because #new != #"from"
+ * -a from= to= upload= column= table=	# cannot create table without output
+ *X-a from= to= output= upload= column=	# cannot update the "from" table
+ *					# because #new != #"from"
+ *
+ * X: manual dependency checks
+ */
+
 /* TODO: support all types (lines, boundaries, areas for 'from' (from_type) */
 
 int main(int argc, char *argv[])
 {
-    int i, j;
-    int print_as_matrix;	/* only for do_all=TRUE */
-    int do_all;			/* calculate from each to each within the threshold */
-    int upload;
     struct GModule *module;
     struct {
 	struct Option *from, *to, *from_type, *to_type,
@@ -50,6 +75,15 @@ int main(int argc, char *argv[])
     struct {
 	struct Flag *print, *all;
     } flag;
+
+    int print;			/* -p: print to stdout */
+    int create_map;		/* output=: create a new map */
+    int create_table;		/* table=: create a new table */
+    int update_table;		/* column= !table=: update the "from" table */
+    int do_all;			/* -a: calculate from each to each within the threshold */
+    int print_as_matrix;	/* only for do_all=TRUE */
+
+    int i, j;
     char *desc;
     struct Map_info From, To, Out, *Outp;
     int from_type, to_type, from_field, to_field, with_z;
@@ -80,11 +114,6 @@ int main(int argc, char *argv[])
     dbCatValArray cvarr;
     dbColumn *column;
     char *sep;
-
-    do_all = FALSE;
-    upload = FALSE;
-    print_as_matrix = FALSE;
-    column = NULL;
 
     G_gisinit(argv[0]);
 
@@ -201,8 +230,7 @@ int main(int argc, char *argv[])
     
     opt.table = G_define_standard_option(G_OPT_DB_TABLE);
     opt.table->gisprompt = "new_dbtable,dbtable,dbtable";
-    opt.table->description =
-	_("Name of table created when the 'distance to all' flag is used");
+    opt.table->description = _("Name of table created");
 
     opt.sep = G_define_standard_option(G_OPT_F_SEP);
     opt.sep->label = _("Field separator for printing output to stdout");
@@ -219,7 +247,7 @@ int main(int argc, char *argv[])
     flag.all->label =
 	_("Calculate distances to all features within the threshold");
     flag.all->description =
-	_("Output may be written to stdout using the 'print' flag "
+	_("Output may be written to stdout using the '-p' flag "
 	  "or uploaded to a new table created by the 'table' option; "
 	  "multiple 'upload' options may be used.");
 
@@ -229,26 +257,16 @@ int main(int argc, char *argv[])
     opt.to->guidependency = G_store(buf1);
     opt.to_field->guidependency = G_store(opt.to_column->key);
     
+    G_option_required(opt.upload, opt.out, NULL);
     G_option_exclusive(opt.column, flag.print, NULL);
     G_option_exclusive(opt.table, flag.print, NULL);
     G_option_requires(opt.upload, flag.print, opt.column, NULL);
     G_option_requires(opt.column, opt.upload, NULL);
     G_option_requires(flag.print, opt.upload, NULL);
-    G_option_requires_all(opt.table, flag.all, opt.upload, NULL);
+    G_option_requires_all(opt.table, opt.out, opt.upload, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    from_type = Vect_option_to_types(opt.from_type);
-    to_type = Vect_option_to_types(opt.to_type);
-
-    max = atof(opt.max->answer);
-    min = atof(opt.min->answer);
-
-    if (flag.all->answer)
-	do_all = TRUE;
-    if (opt.column->answer || flag.print->answer)
-	upload = TRUE;
 
     geodesic = G_projection() == PROJECTION_LL;
     if (geodesic)
@@ -256,14 +274,30 @@ int main(int argc, char *argv[])
     else
 	line_distance = Vect_line_distance;
 
+    from_type = Vect_option_to_types(opt.from_type);
+    to_type = Vect_option_to_types(opt.to_type);
+
+    max = atof(opt.max->answer);
+    min = atof(opt.min->answer);
+
+    print = flag.print->answer;
+    create_map = opt.out->answer != NULL;
+    create_table = opt.table->answer != NULL;
+    update_table = !create_table && opt.column->answer;
+    do_all = flag.all->answer;
+
+    if (do_all && update_table)
+	G_fatal_error(_("Updating the from= table is not supported with -a"));
+
     /* Read upload and column options */
     /* count */
     i = 0;
     while (opt.upload->answer && opt.upload->answers[i])
 	i++;
-    if (strcmp(opt.from->answer, opt.to->answer) == 0 &&
-	do_all && !opt.table->answer && i == 1)
-	print_as_matrix = TRUE;
+
+    /* -a !table= upload=one_value from=map to=map: print as matrix */
+    print_as_matrix = do_all && !create_table && i == 1 &&
+		      strcmp(opt.from->answer, opt.to->answer) == 0;
 
     /* TODO: Known issue. Segmentation fault on print_as_matrix with dmin= or
      * dmax= because count may not be nfrom^2. Needs to populate Near[] fully
@@ -370,7 +404,7 @@ int main(int argc, char *argv[])
     to_field = Vect_get_field_number(&To, opt.to_field->answer);
 
     /* Open output vector */
-    if (opt.out->answer) {
+    if (create_map) {
 	if (Vect_open_new(&Out, opt.out->answer, WITHOUT_Z) < 0)
 	    G_fatal_error(_("Unable to create vector map <%s>"),
 			    opt.out->answer);
@@ -471,8 +505,9 @@ int main(int argc, char *argv[])
     db_init_string(&dbstr);
     driver = NULL;
     Fi = NULL;
-    if (upload && !flag.print->answer && !do_all) {
+    column = NULL;
 
+    if (update_table) {
 	Fi = Vect_get_field(&From, from_field);
 	if (Fi == NULL)
 	    G_fatal_error(_("Database connection not defined for layer <%s>"),
@@ -539,7 +574,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* Check column types */
-	if (upload && !flag.print->answer && !do_all) {
+	if (update_table) {
 	    char *fcname = NULL;
 	    int fctype, tctype;
 
@@ -1309,26 +1344,23 @@ int main(int argc, char *argv[])
     }
 
     /* open from driver */
-    if (upload && !flag.print->answer) {
-	if (!do_all) {
-
-	    driver = db_start_driver_open_database(Fi->driver, Fi->database);
-	    if (driver == NULL)
-		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-				Fi->database, Fi->driver);
-	}
-	else {
-	    driver = db_start_driver_open_database(NULL, NULL);
-	    if (driver == NULL)
-		G_fatal_error(_("Unable to open default database"));
-	}
+    if (update_table) {
+	driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	if (driver == NULL)
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			  Fi->database, Fi->driver);
+    }
+    else if (create_table) {
+	driver = db_start_driver_open_database(NULL, NULL);
+	if (driver == NULL)
+	    G_fatal_error(_("Unable to open default database"));
     }
 
     update_ok = update_err = update_exist = update_notexist = update_dupl =
 	update_notfound = ncatexist = 0;
 
     /* Update database / print to stdout / create output map */
-    if (flag.print->answer) {	/* print header */
+    if (print) {	/* print header */
 	fprintf(stdout, "from_cat");
 	if (do_all)
 	    fprintf(stdout, "%sto_cat", sep);
@@ -1339,7 +1371,7 @@ int main(int argc, char *argv[])
 	}
 	fprintf(stdout, "\n");
     }
-    else if (do_all && opt.table->answer) {	/* create new table */
+    else if (create_table) {	/* create new table */
 	db_set_string(&stmt, "create table ");
 	db_append_string(&stmt, opt.table->answer);
 	if (Outp)
@@ -1384,7 +1416,7 @@ int main(int argc, char *argv[])
 			  opt.table->answer);
 
     }
-    else if (upload && !do_all) {	/* read existing cats from table */
+    else if (update_table) {	/* read existing cats from table */
 	ncatexist =
 	    db_select_int(driver, Fi->table, Fi->key, NULL, &catexist);
 	G_debug(1, "%d cats selected from the table", ncatexist);
@@ -1400,13 +1432,13 @@ int main(int argc, char *argv[])
     if (driver)
 	db_begin_transaction(driver);
 
-    if (!flag.print->answer) /* no printing */
+    if (!print) /* no printing */
 	G_message("Update vector attributes...");
 
     for (i = 0; i < count; i++) {
 	dbCatVal *catval = 0;
 
-	if (!flag.print->answer) /* no printing */
+	if (!print) /* no printing */
 	    G_percent(i, count, 1);
 
 	/* Write line connecting nearest points */
@@ -1437,7 +1469,7 @@ int main(int argc, char *argv[])
 	    db_CatValArray_get_value(&cvarr, Near[i].to_cat, &catval);
 	}
 
-	if (flag.print->answer) {	/* print only */
+	if (print) {	/* print only */
 	    /*
 	       input and output is the same &&
 	       calculate distances &&
@@ -1469,7 +1501,10 @@ int main(int argc, char *argv[])
 		fprintf(stdout, "\n");
 	    }
 	}
-	else if (do_all && opt.table->answer) {		/* insert new record */
+	else if (create_table) {	/* insert new record */
+	    if (Near[i].count == 0)	/* no nearest found */
+		continue;
+
 	    if (!Outp)
 		sprintf(buf1, "insert into %s values ( %d ", opt.table->answer,
 			Near[i].from_cat);
@@ -1552,7 +1587,7 @@ int main(int argc, char *argv[])
 		update_err++;
 	    }
 	}
-	else if (upload) {			/* update table */
+	else if (update_table) {			/* update table */
 	    /* check if exists in table */
 	    cex =
 		(int *)bsearch((void *)&(Near[i].from_cat), catexist,
@@ -1666,18 +1701,18 @@ int main(int argc, char *argv[])
 	G_message(_("%d categories - no nearest feature found"),
 		  update_notfound);
 
-    if (upload && !flag.print->answer) {
+    if (update_table || create_table) {
 	db_close_database_shutdown_driver(driver);
 	db_free_string(&stmt);
 
 	/* print stats */
-	if (do_all && opt.table->answer) {
+	if (create_table) {
 	    G_message(_("%d distances calculated"), count);
 	    G_message(_("%d records inserted"), update_ok);
 	    if (update_err > 0)
 		G_message(_("%d insert errors"), update_err);
 	}
-	else if (!do_all) {
+	else {
 	    if (nfcats > 0)
 		G_verbose_message(_("%d categories read from the map"), nfcats);
 	    if (ncatexist > 0)
@@ -1701,7 +1736,7 @@ int main(int argc, char *argv[])
 
     Vect_close(&From);
     if (Outp != NULL) {
-	if (do_all && opt.table->answer) {
+	if (create_table) {
 	    dbConnection connection;
 
 	    db_set_default_connection();
