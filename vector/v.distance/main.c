@@ -231,7 +231,7 @@ int main(int argc, char *argv[])
 
     opt.table = G_define_standard_option(G_OPT_DB_TABLE);
     opt.table->gisprompt = "new_dbtable,dbtable,dbtable";
-    opt.table->description = _("Name of table created");
+    opt.table->description = _("Name for new attribute table");
 
     opt.sep = G_define_standard_option(G_OPT_F_SEP);
     opt.sep->label = _("Field separator for printing output to stdout");
