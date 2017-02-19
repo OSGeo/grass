@@ -2,7 +2,7 @@
 /***************************************************************
  *
  * MODULE:       v.distance
- * 
+ *
  * AUTHOR(S):    - J.Soimasuo 15.9.1994, University of Joensuu,
  *                 Faculty of Forestry, Finland
  *               - some additions by Markus Neteler (2002)
@@ -11,14 +11,14 @@
  *               - speed-up for dmax != 0 by Markus Metz (2010)
  *               - support all features by Markus Metz (2012)
  *               - create a new table for non -a runs by Huidae Cho (2017)
- *               
+ *
  * PURPOSE:      Calculates distance from a point to nearest feature in vector
  *               layer.
- *               
+ *
  * COPYRIGHT:    (C) 2002-2017 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
@@ -207,12 +207,13 @@ int main(int argc, char *argv[])
 		 "measured CCW from the +x axis, in radians, between -Pi and Pi "
 		 "inclusive"),
 	       _("attribute of nearest feature given by to_column option"));
-    /*  "from_x - x coordinate of the nearest point on 'from' feature;" */
-    /*  "from_y - y coordinate of the nearest point on 'from' feature;" */
-    /* "from_along - distance to the nearest point on 'from' feature along linear feature;" */
-    /* "from_angle - angle between the linear feature in 'to' map and the +x "
-	"axis, at the location of point/centroid in 'from' map, CCW, in "
-	"radians, between -Pi and Pi inclusive;" */
+    /* "from_x - x coordinate of the nearest point on 'from' feature;"
+     * "from_y - y coordinate of the nearest point on 'from' feature;"
+     * "from_along - distance to the nearest point on 'from' feature along linear feature;"
+     * "from_angle - angle between the linear feature in 'to' map and the +x "
+     * "axis, at the location of point/centroid in 'from' map, CCW, in "
+     * "radians, between -Pi and Pi inclusive;"
+     */
     opt.upload->descriptions = desc;
 
     opt.column = G_define_standard_option(G_OPT_DB_COLUMN);
@@ -227,7 +228,7 @@ int main(int argc, char *argv[])
     opt.to_column->description =
 	_("Column name of nearest feature (used with upload=to_attr)");
     opt.to_column->guisection = _("To");
-    
+
     opt.table = G_define_standard_option(G_OPT_DB_TABLE);
     opt.table->gisprompt = "new_dbtable,dbtable,dbtable";
     opt.table->description = _("Name of table created");
@@ -256,7 +257,7 @@ int main(int argc, char *argv[])
     sprintf(buf1, "%s,%s", opt.to_field->key, opt.to_column->key);
     opt.to->guidependency = G_store(buf1);
     opt.to_field->guidependency = G_store(opt.to_column->key);
-    
+
     G_option_required(opt.upload, opt.out, NULL);
     G_option_exclusive(opt.column, flag.print, NULL);
     G_option_exclusive(opt.table, flag.print, NULL);
@@ -378,7 +379,7 @@ int main(int argc, char *argv[])
 	Vect_close(&From);
 	G_fatal_error(_("No features of selected type found in <%s>"), name);
     }
-    
+
     /* Open 'to' vector */
     Vect_set_open_level(2);
     if (Vect_open_old2(&To, opt.to->answer, "", opt.to_field->answer) < 0)
@@ -445,10 +446,11 @@ int main(int argc, char *argv[])
 		max = max_map;
 	}
 
-	/* how to determine a reasonable number of steps to increase the search box? */
-	/* with max > 0 but max <<< tmp_max, 2 steps are sufficient, first 0 then max
-	 * a reasonable number of steps also depends on the number of features in To
-	 * e.g. only one area in To, no need to step */
+	/* how to determine a reasonable number of steps to increase the search
+	 * box? */
+	/* with max > 0 but max <<< tmp_max, 2 steps are sufficient, first 0
+	 * then max a reasonable number of steps also depends on the number of
+	 * features in To e.g. only one area in To, no need to step */
 
 	if (geodesic)
 	    n_max_steps = sqrt(nto);
@@ -556,13 +558,13 @@ int main(int argc, char *argv[])
 	/* check if to_column exists and get its SQL type */
 	db_get_column(to_driver, toFi->table, opt.to_column->answer, &column);
 	if (column) {
-            sqltype = db_get_column_sqltype(column); 
-	    switch(sqltype) { 
-		case DB_SQL_TYPE_CHARACTER: 
-		    sprintf(to_attr_sqltype, "VARCHAR(%d)", db_get_column_length(column)); 
-		    break; 
-		default: 
-		    sprintf(to_attr_sqltype, "%s", db_sqltype_name(sqltype)); 
+            sqltype = db_get_column_sqltype(column);
+	    switch(sqltype) {
+		case DB_SQL_TYPE_CHARACTER:
+		    sprintf(to_attr_sqltype, "VARCHAR(%d)", db_get_column_length(column));
+		    break;
+		default:
+		    sprintf(to_attr_sqltype, "%s", db_sqltype_name(sqltype));
 	    }
 
 	    db_free_column(column);
@@ -631,7 +633,8 @@ int main(int argc, char *argv[])
     lList = Vect_new_boxlist(1); /* line list */
     aList = Vect_new_boxlist(1); /* area list */
 
-    /* Allocate space ( may be more than needed (duplicate cats and elements without cats) ) */
+    /* Allocate space ( may be more than needed (duplicate cats and elements
+     * without cats) ) */
     /* Be careful with do_all, it can easily run out of memory */
     anear = nfrom;
     Near = (NEAR *) G_calloc(nfrom, sizeof(NEAR));
@@ -643,7 +646,8 @@ int main(int argc, char *argv[])
 	for (i = 1; i <= nlines; i++) {
 	    ftype = Vect_read_line(&From, NULL, FCats, i);
 
-	    /* This keeps also categories of areas for future (if area s in from_type) */
+	    /* This keeps also categories of areas for future (if area s in
+	     * from_type) */
 	    if (!(ftype & from_type) &&
 		(ftype != GV_CENTROID || !(from_type & GV_AREA)))
 		continue;
@@ -658,7 +662,7 @@ int main(int argc, char *argv[])
 	}
 	G_debug(1, "%d cats loaded from vector (including duplicates)",
 		nfcats);
-	
+
 	if (nfcats == 0)
 	    G_fatal_error(_("No categories for 'from' for slected type and layer"));
 
@@ -679,7 +683,8 @@ int main(int argc, char *argv[])
     }
 
     /* Go through all lines in 'from' and find nearest in 'to' for each */
-    /* Note: as from_type is restricted to GV_POINTS (for now) everything is simple */
+    /* Note: as from_type is restricted to GV_POINTS (for now) everything is
+     * simple */
 
     /* suppress compiler warnings */
     tx = ty = tz = fx = fy = fz = 0;
@@ -688,7 +693,7 @@ int main(int argc, char *argv[])
     /* Find nearest features for 'from' lines */
     if (nfromlines) {
 	G_message(_("Finding nearest features..."));
-	
+
 	near = NULL;
 	nlines = Vect_get_num_lines(&From);
 
@@ -741,7 +746,7 @@ int main(int argc, char *argv[])
 
 			if (box_edge < tmp_min)
 			    continue;
-			
+
 			box.E = fbox.E + box_edge;
 			box.W = fbox.W - box_edge;
 			box.N = fbox.N + box_edge;
@@ -923,7 +928,7 @@ int main(int argc, char *argv[])
 
 		if (!do_all && curr_step < n_max_steps) {
 		    double dist_map = dist;
-		    
+
 		    if (geodesic && tfeature > 0) {
 			double dx = fx - tx;
 			double dy = fy - ty;
@@ -934,11 +939,13 @@ int main(int argc, char *argv[])
 		    /* enlarging the search box is possible */
 		    if (tfeature > 0 && dist_map > box_edge) {
 			/* line found but distance > search edge:
-			 * line bbox overlaps with search box, line itself is outside search box */
+			 * line bbox overlaps with search box, line itself is
+			 * outside search box */
 			done = FALSE;
 		    }
 		    else if (tfeature == 0) {
-			/* no line within max dist, but search box can still be enlarged */
+			/* no line within max dist, but search box can still be
+			 * enlarged */
 			done = FALSE;
 		    }
 		}
@@ -970,7 +977,7 @@ int main(int argc, char *argv[])
     /* Find nearest features for 'from' areas */
     /* the code is pretty much identical to the one for lines */
     if (nfromareas) {
-	
+
 	near = NULL;
 
 	G_message(_("Finding nearest features for areas..."));
@@ -1023,7 +1030,7 @@ int main(int argc, char *argv[])
 
 			if (box_edge < tmp_min)
 			    continue;
-			
+
 			box.E = fbox.E + box_edge;
 			box.W = fbox.W - box_edge;
 			box.N = fbox.N + box_edge;
@@ -1141,7 +1148,7 @@ int main(int argc, char *argv[])
 			continue;
 
 		    Vect_get_area_points(&To, tarea, TPoints);
-		    
+
 		    ttype = GV_BOUNDARY;
 
 		    /* Find the distance of the outer ring of 'to' area
@@ -1274,7 +1281,7 @@ int main(int argc, char *argv[])
 
 		if (!do_all && curr_step < n_max_steps) {
 		    double dist_map = dist;
-		    
+
 		    if (geodesic && tfeature > 0) {
 			double dx = fx - tx;
 			double dy = fy - ty;
@@ -1285,11 +1292,13 @@ int main(int argc, char *argv[])
 		    /* enlarging the search box is possible */
 		    if (tfeature > 0 && dist_map > box_edge) {
 			/* area found but distance > search edge:
-			 * area bbox overlaps with search box, area itself is outside search box */
+			 * area bbox overlaps with search box, area itself is
+			 * outside search box */
 			done = FALSE;
 		    }
 		    else if (tfeature == 0) {
-			/* no area within max dist, but search box can still be enlarged */
+			/* no area within max dist, but search box can still be
+			 * enlarged */
 			done = FALSE;
 		    }
 		}
@@ -1396,8 +1405,8 @@ int main(int argc, char *argv[])
 	    case TO_ALONG:
 	    case TO_ANGLE:
 		sprintf(buf2, "%s double precision", Upload[j].column);
-                break; 
-	    case TO_ATTR: 
+                break;
+	    case TO_ATTR:
 		sprintf(buf2, "%s %s", Upload[j].column, to_attr_sqltype);
 	    }
 	    db_append_string(&stmt, buf2);
@@ -1587,7 +1596,7 @@ int main(int argc, char *argv[])
 		update_err++;
 	    }
 	}
-	else if (update_table) {			/* update table */
+	else if (update_table) {	/* update table */
 	    /* check if exists in table */
 	    cex =
 		(int *)bsearch((void *)&(Near[i].from_cat), catexist,
@@ -1741,7 +1750,7 @@ int main(int argc, char *argv[])
 
 	    db_set_default_connection();
 	    db_get_connection(&connection);
-	    Vect_map_add_dblink(Outp, 1, NULL, opt.table->answer, "cat", 
+	    Vect_map_add_dblink(Outp, 1, NULL, opt.table->answer, "cat",
 				connection.databaseName,
 				connection.driverName);
 	}
