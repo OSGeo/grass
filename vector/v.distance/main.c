@@ -304,7 +304,7 @@ int main(int argc, char *argv[])
      * dmax= because count may not be nfrom^2. Needs to populate Near[] fully
      * even if some near features are not found */
     if (print_as_matrix && (min >= 0 || max >= 0))
-	G_fatal_error(_("Printing distance matrix not supported with dmin= or dmax="));
+	G_fatal_error(_("Printing distance matrix is not supported with dmin= or dmax="));
 
     /* alloc */
     Upload = (UPLOAD *) G_calloc(i + 1, sizeof(UPLOAD));
