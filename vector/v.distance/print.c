@@ -1,7 +1,7 @@
 #include "local_proto.h"
 
 /*
-   print out upload values 
+   print out upload values
  */
 int print_upload(NEAR * Near, UPLOAD * Upload, int i,
 		 dbCatValArray * cvarr, dbCatVal * catval, char *sep)

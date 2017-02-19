@@ -50,7 +50,7 @@ int cmp_near_to(const void *, const void *);
 int cmp_exist(const void *, const void *);
 
 /* distance.c */
-int get_line_box(const struct line_pnts *Points, 
+int get_line_box(const struct line_pnts *Points,
                  struct bound_box *box);
 int line2line(struct line_pnts *FPoints, int ftype,
               struct line_pnts *TPoints, int ttype,

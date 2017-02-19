@@ -1,29 +1,29 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.distance</em> finds the nearest element in vector map (<b>to</b>) 
-for elements in vector map (<b>from</b>). Various information about 
-the vectors' relationships (distance, category, etc.) may be uploaded to 
-the attribute table attached to the first vector map, or printed to 
-'stdout'. A new vector map may be created where lines connecting 
-nearest points on features are written. <b>dmin</b> and/or 
+<em>v.distance</em> finds the nearest element in vector map (<b>to</b>)
+for elements in vector map (<b>from</b>). Various information about
+the vectors' relationships (distance, category, etc.) may be uploaded to
+the attribute table attached to the first vector map, or printed to
+'stdout'. A new vector map may be created where lines connecting
+nearest points on features are written. <b>dmin</b> and/or
 <b>dmax</b> can be used to limit the search radius (in lat-long locations
 to be given in meters since they are calculated as geodesic distances on
 a sphere).
 
 <p>
-For lines to lines, say line A to line B, <em>v.distance</em> calculates 
-the shortest distance of each vertex in A with each segment (not vertex) 
-in B. The module then calculates the shortest distance of each vertex in 
-B to each segment in A. The overall shortest distance of A points to B 
-segments and B points to A segments is used. Additionally, 
+For lines to lines, say line A to line B, <em>v.distance</em> calculates
+the shortest distance of each vertex in A with each segment (not vertex)
+in B. The module then calculates the shortest distance of each vertex in
+B to each segment in A. The overall shortest distance of A points to B
+segments and B points to A segments is used. Additionally,
 <em>v.distance</em> checks for intersections. In case of intersections,
 the first intersection found is used and the distance set to zero.
 
 <p>
-For lines to areas, the distance is set to zero if a line is (partially) 
-inside an area. The first point of the line that is inside the area is 
-used as common point. The distance is also set to zero if the line 
-intersects with the outer ring or any of the inner rings (isles), in 
+For lines to areas, the distance is set to zero if a line is (partially)
+inside an area. The first point of the line that is inside the area is
+used as common point. The distance is also set to zero if the line
+intersects with the outer ring or any of the inner rings (isles), in
 which case the fist intersection is used as common point.
 
 <p>
@@ -36,7 +36,7 @@ area is used as common point, or the first intersection point.
 
 <p>
 For anything else than points to lines, there can be several common
-locations with zero distance, and the common location would then be the 
+locations with zero distance, and the common location would then be the
 result of an overlay consisting of several points, lines, or areas.
 <em>v.distance</em> selects in these cases a single point, and does
 not create an overlay
@@ -50,14 +50,14 @@ the distance is then set to zero and no further tests are done.
 
 <h2>NOTES</h2>
 
-If a nearest feature does not have a category, the attribute column is 
+If a nearest feature does not have a category, the attribute column is
 updated to NULL.
 
-<p>The upload <b>column</b>(s) must already exist. Create one with 
+<p>The upload <b>column</b>(s) must already exist. Create one with
 <em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>.
 
-<p>In lat-long locations <em>v.distance</em> gives distances 
-(<em>dist</em>, <em>from_along</em>, and <em>to_along</em>) not in 
+<p>In lat-long locations <em>v.distance</em> gives distances
+(<em>dist</em>, <em>from_along</em>, and <em>to_along</em>) not in
 degrees but in meters calculated as geodesic distances on a sphere.
 
 <p>
@@ -98,6 +98,17 @@ needed for network analysis:
 
 <div class="code"><pre>
 v.distance from=pnt to=ln out=connections upload=dist column=dist
+</pre></div>
+
+<h3>Create a new vector map with from and to categories in the attribute table</h3>
+
+Create a new vector map that contains <em>lines connecting nearest
+features</em> of maps &quot;pnt&quot; and map &quot;ln&quot;, and a new
+attribute table that contains distances, from and to categories from the
+input maps:
+
+<div class="code"><pre>
+v.distance from=pnt to=ln out=connections upload=cat,dist column=to_cat,dist table=connections
 </pre></div>
 
 <h3>Query information</h3>
@@ -194,7 +205,7 @@ North Carolina sample data location:
 
 <div class="code"><pre>
 v.distance -pa from=hospitals to=hospitals upload=dist separator=tab
-from_cat to_cat       dist            
+from_cat to_cat       dist
               1          2          3          4          5 ...
 1             0    7489.10  339112.17   70900.39   70406.23 ...
 2       7489.10          0  345749.12   76025.46   75538.87 ...
@@ -221,7 +232,8 @@ Cmd line coordinates support: Markus Neteler, ITC-irst, Trento, Italy<br>
 Updated for 5.1: Radim Blazek, ITC-irst, Trento, Italy<br>
 Matrix-like output by Martin Landa, FBK-irst, Trento, Italy<br>
 Improved processing speed: Markus Metz<br>
-Distance from any feature to any feature: Markus Metz
+Distance from any feature to any feature: Markus Metz<br>
+New table without the -p flag: Huidae Cho
 
 <p>
 <i>Last changed: $Date$</i>
