@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     /* (+ 1 is for cat -1 (no category) reported at the end ) */
     findex = Vect_cidx_get_field_index(&Map, options.field);
     if (findex > -1) {
-	n = Vect_cidx_get_num_unique_cats_by_index(&Map, findex);
+	n = Vect_cidx_get_num_cats_by_index(&Map, findex);
     }
     else {
 	n = 0;
@@ -80,7 +80,6 @@ int main(int argc, char *argv[])
     Values = (struct value *) G_calloc(n + 1, sizeof(struct value));
 
     /* prepopulate Values */
-    n = Vect_cidx_get_num_cats_by_index(&Map, findex);
     i = 0;
     Values[i].cat = -1;		/* features without category */
     Values[i].used = 0;
