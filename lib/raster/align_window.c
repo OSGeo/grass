@@ -40,36 +40,42 @@
 
 void Rast_align_window(struct Cell_head *window, const struct Cell_head *ref)
 {
-    int preserve;
+    G_debug(1, "Rast_align_window()");
 
     window->ns_res = ref->ns_res;
     window->ew_res = ref->ew_res;
     window->zone = ref->zone;
     window->proj = ref->proj;
 
-    preserve = window->proj == PROJECTION_LL &&
-	window->east == (window->west + 360);
-    window->south =
-	Rast_row_to_northing(ceil(Rast_northing_to_row(window->south, ref)), ref);
+    G_debug(1, "before alignment:");
+    G_debug(1, "North: %.15g", window->north);
+    G_debug(1, "South: %.15g", window->south);
+    G_debug(1, "West: %.15g", window->west);
+    G_debug(1, "East: %.15g", window->east);
+
     window->north =
-	Rast_row_to_northing(floor(Rast_northing_to_row(window->north, ref)), ref);
-    window->east =
-	Rast_col_to_easting(ceil(Rast_easting_to_col(window->east, ref)), ref);
+	ref->north - floor((ref->north - window->north) / ref->ns_res) * ref->ns_res;
+    window->south =
+	ref->south - ceil((ref->south - window->south) / ref->ns_res) * ref->ns_res;
+    /* Rast_easting_to_col() wraps easting:
+     * east can become < west, or both west and east are shifted */
     window->west =
-	Rast_col_to_easting(floor(Rast_easting_to_col(window->west, ref)), ref);
+	ref->west + floor((window->west - ref->west) / ref->ew_res) * ref->ew_res;
+    window->east =
+	ref->east + ceil((window->east - ref->east) / ref->ew_res) * ref->ew_res;
 
     if (window->proj == PROJECTION_LL) {
-	while (window->north > 90.0)
+	while (window->north > 90.0 + window->ns_res / 2.0)
 	    window->north -= window->ns_res;
-	while (window->south < -90.0)
+	while (window->south < -90.0 - window->ns_res / 2.0)
 	    window->south += window->ns_res;
-
-	if (preserve)
-	    window->east = window->west + 360;
-	else
-	    while (window->east - window->west > 360.0)
-		window->east -= window->ew_res;
     }
+
+    G_debug(1, "after alignment:");
+    G_debug(1, "North: %.15g", window->north);
+    G_debug(1, "South: %.15g", window->south);
+    G_debug(1, "West: %.15g", window->west);
+    G_debug(1, "East: %.15g", window->east);
 
     G_adjust_Cell_head(window, 0, 0);
 }
