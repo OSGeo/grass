@@ -18,8 +18,8 @@
 /*!
   \brief Adjust east longitude.
  
-  This routine returns an equivalent <i>east</i> that is larger, but
-  no more than 360 larger than the <i>west</i> coordinate.
+  This routine returns an equivalent <i>east</i> that is at least as 
+  large as the <i>west</i> coordinate.
 
   <b>Note:</b> This routine should be used only with
   latitude-longitude coordinates.
@@ -31,22 +31,24 @@
 */
 double G_adjust_east_longitude(double east, double west)
 {
-    while (east > west + 360.0)
-	east -= 360.0;
-    while (east <= west)
-	east += 360.0;
+    double shift;
 
-    return east;
+    shift = 0;
+    while (east + shift < west)
+	shift += 360.0;
+
+    return east + shift;
 }
 
 /*!
-  \brief Returns east larger than west.
+  \brief Returns east not smaller than west.
   
   If the region projection is <tt>PROJECTION_LL</tt>, then this
-  routine returns an equivalent <i>east</i> that is larger, but no
-  more than 360 degrees larger, than the coordinate for the western
-  edge of the region. Otherwise no adjustment is made and the original
-  <i>east</i> is returned.
+  routine returns an equivalent <i>east</i> that is not smaller than 
+  the coordinate for the western edge of the region and, if possible, 
+  smaller than the coordinate for the eastern edge of the region. 
+  Otherwise no adjustment is made and the original <i>east</i> is
+  returned.
   
   \param east east coordinate
   \param window pointer to Cell_head
@@ -55,13 +57,17 @@ double G_adjust_east_longitude(double east, double west)
 */
 double G_adjust_easting(double east, const struct Cell_head *window)
 {
+    double shift;
+
+    shift = 0;
     if (window->proj == PROJECTION_LL) {
-	east = G_adjust_east_longitude(east, window->west);
-	if (east > window->east && east == window->west + 360)
-	    east = window->west;
+	while (east + shift >= window->east)
+	    shift -= 360.0;
+	while (east + shift < window->west)
+	    shift += 360.0;
     }
 
-    return east;
+    return east + shift;
 }
 
 /*!
