@@ -72,10 +72,8 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 	    box.E < window->west || box.W > window->east) {
 	    if (window->proj != PROJECTION_LL)
 		continue;
-	    else { /* out of bounds for -180 to 180, try 0 to 360 as well */
-		if (box.N < window->south || box.S > window->north)
-		    continue;
-		if (box.E + 360 < window->west || box.W + 360 > window->east)
+	    else {
+		if (!G_window_overlap(window, box.N, box.S, box.E, box.W))
 		    continue;
 	    }
 	}
