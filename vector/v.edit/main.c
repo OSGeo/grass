@@ -8,7 +8,7 @@
  *             Jachym Cepicky
  *             Major updates by Martin Landa <landa.martin gmail.com>
  *
- * COPYRIGHT:  (C) 2006-2014 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2006-2017 by the GRASS Development Team
  *
  *             This program is free software under the GNU General
  *             Public License (>=v2). Read the file COPYING that comes
