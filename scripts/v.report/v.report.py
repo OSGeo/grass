@@ -81,7 +81,7 @@ def main():
     else:
         extracolnames = [option]
 
-    if units in ['p', 'percent']:
+    if units == 'percent':
         unitsp = 'meters'
     elif units:
         unitsp = units
@@ -90,6 +90,7 @@ def main():
 
     # NOTE: we suppress -1 cat and 0 cat
     if isConnection:
+        f = grass.vector_db(map=mapname)[int(layer)]
         p = grass.pipe_command('v.db.select', quiet=True, map=mapname, layer=layer)
         records1 = []
         catcol = -1
@@ -97,12 +98,12 @@ def main():
             cols = line.rstrip('\r\n').split('|')
             if catcol == -1:
                 for i in range(0, len(cols)):
-                    if cols[i] == 'cat':
+                    if cols[i] == f['key']:
                         catcol = i
                         break
                 if catcol == -1:
-                    # shouldn't happen, but let's do this
-                    catcol = 0
+                    grass.fatal(_("There is a table connected to input vector map '%s', but "
+                                  "there is no key column '%s'.") % (mapname, f['key']))
                 continue
             if cols[catcol] == '-1' or cols[catcol] == '0':
                 continue
@@ -115,7 +116,6 @@ def main():
 
         if len(records1) == 0:
             try:
-                f = grass.vector_db(map=mapname)[int(layer)]
                 grass.fatal(_("There is a table connected to input vector map '%s', but "
                               "there are no categories present in the key column '%s'. Consider using "
                               "v.to.db to correct this.") % (mapname, f['key']))
@@ -142,6 +142,7 @@ def main():
         for r2 in records2:
             records3.append(filter(lambda r1: r1[catcol] == r2[0], records1)[0] + r2[1:])
     else:
+        catcol = 0
         records1 = []
         p = grass.pipe_command('v.category', inp=mapname, layer=layer, option='print')
         for line in p.stdout:
@@ -172,15 +173,18 @@ def main():
     numcols = len(colnames) + len(extracolnames)
 
     # calculate percents if requested
-    if units != '' and units in ['p', 'percent']:
-        # calculate total area value
-        areatot = 0
+    if units == 'percent' and option != 'coor':
+        # calculate total value
+        total = 0
         for r in records3:
-            areatot += float(r[-1])
+            total += float(r[-1])
 
-        # calculate area percentages
-        records4 = [float(r[-1]) * 100 / areatot for r in records3]
-        records3 = [r1 + [r4] for r1, r4 in zip(records1, records4)]
+        # calculate percentages
+        records4 = [float(r[-1]) * 100 / total for r in records3]
+        if type(records1[0]) == int:
+            records3 = [[r1] + [r4] for r1, r4 in zip(records1, records4)]
+        else:
+            records3 = [r1 + [r4] for r1, r4 in zip(records1, records4)]
 
     # sort results
     if options['sort']:
