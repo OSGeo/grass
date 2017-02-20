@@ -134,6 +134,7 @@ int main(int argc, char **argv)
 	x = window.proj;
 	G_format_resolution(window.ew_res, ewres, x);
 	G_format_resolution(window.ns_res, nsres, x);
+	G_begin_distance_calculations();
 	EW_DIST1 =
 	    G_distance(window.east, window.north, window.west, window.north);
 	/* EW Dist at South Edge */
