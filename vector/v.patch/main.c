@@ -413,8 +413,11 @@ int main(int argc, char *argv[])
     Vect_set_map_name(&OutMap, "Output from v.patch");
     Vect_set_person(&OutMap, G_whoami());
 
-    if (!no_topo->answer)
+    if (!no_topo->answer) {
+	if (append->answer)
+	    Vect_build_partial(&OutMap, GV_BUILD_NONE);
 	Vect_build(&OutMap);
+    }
     Vect_close(&OutMap);
 
     if (bbox_name) {
