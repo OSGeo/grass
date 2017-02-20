@@ -136,10 +136,12 @@ void G_lon_parts(double lon,		/* lon in degrees to be split into parts */
 		 char *h		/* hemisphere */
     )
 {
+#if 0
     while (lon > 180.0)
 	lon -= 360.0;
     while (lon < -180.0)
 	lon += 360.0;
+#endif
 
     if (lon < 0) {
 	*h = 'W';
