@@ -106,15 +106,21 @@ def main():
                                 stderr=nuldev)
 
     if not table in tables.splitlines():
+        colnames = []
         if columns:
-            column_def = [x.strip().lower() for x in columns.strip().split(',')]
+            column_def = []
+            for x in ' '.join(columns.lower().split()).split(','):
+                colname = x.split()[0]
+                if colname in colnames:
+                    grass.fatal(_("Duplicate column name '%s' not allowed") % colname)
+                colnames.append(colname)
+                column_def.append(x)
         else:
             column_def = []
 
         # if not existing, create it:
-        column_def_key = "%s integer" % key
-        if column_def_key not in column_def:
-            column_def.insert(0, column_def_key)
+        if not key in colnames:
+            column_def.insert(0, "%s integer" % key)
         column_def = ','.join(column_def)
 
         grass.verbose(_("Creating table with columns (%s)...") % column_def)
