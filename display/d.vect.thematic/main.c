@@ -461,20 +461,21 @@ int main(int argc, char **argv)
 	if (verbose)
 	    G_message(_("Plotting ..."));
 
+	overlap = 1;
 	Vect_get_map_box(&Map, &box);
+	if (window.proj != PROJECTION_LL) {
+	    overlap =
+		G_window_percentage_overlap(&window, box.N, box.S,
+		                            box.E, box.W);
+	    G_debug(1, "overlap = %f \n", overlap);
+	}
 
-	if (window.north < box.S || window.south > box.N ||
-	    window.east < box.W ||
-	    window.west > G_adjust_easting(box.E, &window)) {
+	if (overlap == 0) {
 	    G_message(_("The bounding box of the map is outside the current region, "
 		       "nothing drawn."));
 	    stat = 0;
 	}
 	else {
-	    overlap =
-		G_window_percentage_overlap(&window, box.N, box.S, box.E,
-					    box.W);
-	    G_debug(1, "overlap = %f \n", overlap);
 	    if (overlap < 1)
 		Vect_set_constraint_region(&Map, window.north, window.south,
 					   window.east, window.west,
@@ -483,18 +484,18 @@ int main(int argc, char **argv)
 	    /* default line width */
 	    D_line_width(default_width);
 
-        if (Vect_get_num_primitives(&Map, GV_BOUNDARY) > 0)
-	    stat =
-		dareatheme(&Map, Clist, &cvarr, breakpoints, nbreaks, colors,
-			   has_color ? &bcolor : NULL, chcat, &window,
-			   default_width);
+	    if (Vect_get_num_primitives(&Map, GV_BOUNDARY) > 0)
+		stat =
+		    dareatheme(&Map, Clist, &cvarr, breakpoints, nbreaks, colors,
+			       has_color ? &bcolor : NULL, chcat, &window,
+			       default_width);
 
-        else if ((Vect_get_num_primitives(&Map, GV_POINT) > 0) ||
-                 (Vect_get_num_primitives(&Map, GV_LINE) > 0)){
-            stat = display_lines(&Map, Clist, chcat, icon_opt->answer, size,
-                   default_width, &cvarr, breakpoints, nbreaks, colors,
-                   has_color ? &bcolor : NULL);
-        }
+	    else if ((Vect_get_num_primitives(&Map, GV_POINT) > 0) ||
+		     (Vect_get_num_primitives(&Map, GV_LINE) > 0)){
+		stat = display_lines(&Map, Clist, chcat, icon_opt->answer, size,
+		       default_width, &cvarr, breakpoints, nbreaks, colors,
+		       has_color ? &bcolor : NULL);
+	    }
 
 
 	    /* reset line width: Do we need to get line width from display
