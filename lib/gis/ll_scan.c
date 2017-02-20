@@ -37,18 +37,20 @@
 ******************************************************************************/
 #include <grass/gis.h>
 
+#define LL_TOLERANCE 10
+
 static int scan_ll(const char *, const char *, double *, int);
 static int check_minutes(const char *);
 static int check_seconds(const char *);
 
 int G_lat_scan(const char *buf, double *lat)
 {
-    return scan_ll(buf, "sn", lat, 90);
+    return scan_ll(buf, "sn", lat, 90 + LL_TOLERANCE);
 }
 
 int G_lon_scan(const char *buf, double *lon)
 {
-    return scan_ll(buf, "we", lon, 180);
+    return scan_ll(buf, "we", lon, 360 + LL_TOLERANCE);
 }
 
 int G_llres_scan(const char *buf, double *res)
