@@ -101,7 +101,7 @@ int G_scan_resolution(const char *buf, double *res, int projection)
 {
     if (projection == PROJECTION_LL) {
 	if (G_llres_scan(buf, res))
-	    return 1;
+	    return (*res > 0.0);
     }
 
     return (scan_double(buf, res) && *res > 0.0);
