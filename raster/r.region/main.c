@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Flag *dflt, *cur;
+	struct Flag *dflt, *cur, *llauto;
     } flag;
     struct
     {
@@ -64,6 +64,12 @@ int main(int argc, char *argv[])
     flag.dflt->key = 'd';
     flag.dflt->description = _("Set from default region");
     flag.dflt->guisection = _("Existing");
+
+    flag.llauto = G_define_flag();
+    flag.llauto->key = 'a';
+    flag.llauto->label = _("Auto-adjustment for lat/lon");
+    flag.llauto->description = _("Attempt to fix small precision errors in resolution and extents");
+    flag.llauto->guisection = _("Existing");
 
     /* parameters */
 
@@ -281,10 +287,16 @@ int main(int argc, char *argv[])
 
     G_adjust_Cell_head(&window, 1, 1);
 
+    if (flag.llauto->answer && cellhd.proj == PROJECTION_LL) {
+	G_adjust_window_ll(&window);
+    }
+
     cellhd.north = window.north;
     cellhd.south = window.south;
     cellhd.east = window.east;
     cellhd.west = window.west;
+    cellhd.ns_res = window.ns_res;
+    cellhd.ew_res = window.ew_res;
 
     Rast_put_cellhd(parm.map->answer, &cellhd);
 
