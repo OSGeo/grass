@@ -138,7 +138,8 @@ void G__read_Cell_head_array(char **array,
 
 	switch (scan_item(buf, label, value)) {
 	case -1:
-	    G_fatal_error(_("Syntax error in cell header"));
+	    G_fatal_error(_("Syntax error in cell header, line %d: %s"),
+	                  line, buf);
 	case 0:
 	    continue;
 	case 1:
@@ -149,7 +150,7 @@ void G__read_Cell_head_array(char **array,
 		G_fatal_error(_("Duplicate projection field"));
 
 	    if (!scan_int(value, &cellhd->proj))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid projection field: %s"), value);
 
 	    SET(F_PROJ);
 	    continue;
@@ -159,7 +160,7 @@ void G__read_Cell_head_array(char **array,
 		G_fatal_error(_("Duplicate zone field"));
 
 	    if (!scan_int(value, &cellhd->zone))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid zone field: %s"), value);
 
 	    SET(F_ZONE);
 	    continue;
@@ -176,7 +177,8 @@ void G__read_Cell_head_array(char **array,
 	G_debug(3, "region item: %s", buf);
 	switch (scan_item(buf, label, value)) {
 	case -1:
-	    G_fatal_error(_("Syntax error in cell header"));
+	    G_fatal_error(_("Syntax error in cell header, line %d: %s"),
+	                  line, buf);
 	case 0:
 	    continue;
 	case 1:
@@ -192,7 +194,7 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_NORTH))
 		G_fatal_error(_("Duplicate north field"));
 	    if (!G_scan_northing(value, &cellhd->north, cellhd->proj))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid north field: %s"), value);
 	    SET(F_NORTH);
 	    continue;
 	}
@@ -200,7 +202,7 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_SOUTH))
 		G_fatal_error(_("Duplicate south field"));
 	    if (!G_scan_northing(value, &cellhd->south, cellhd->proj))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid south field: %s"), value);
 	    SET(F_SOUTH);
 	    continue;
 	}
@@ -208,7 +210,7 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_EAST))
 		G_fatal_error(_("Duplicate east field"));
 	    if (!G_scan_easting(value, &cellhd->east, cellhd->proj))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid east field: %s"), value);
 	    SET(F_EAST);
 	    continue;
 	}
@@ -216,7 +218,7 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_WEST))
 		G_fatal_error(_("Duplicate west field"));
 	    if (!G_scan_easting(value, &cellhd->west, cellhd->proj))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid west field: %s"), value);
 	    SET(F_WEST);
 	    continue;
 	}
@@ -224,7 +226,7 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_TOP))
 		G_fatal_error(_("Duplicate top field"));
 	    if (!scan_double(value, &cellhd->top))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid top field: %s"), value);
 	    SET(F_TOP);
 	    continue;
 	}
@@ -232,7 +234,7 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_BOTTOM))
 		G_fatal_error(_("Duplicate bottom field"));
 	    if (!scan_double(value, &cellhd->bottom))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid bottom field: %s"), value);
 	    SET(F_BOTTOM);
 	    continue;
 	}
@@ -240,9 +242,9 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_EWRES))
 		G_fatal_error(_("Duplicate e-w resolution field"));
 	    if (!G_scan_resolution(value, &cellhd->ew_res, cellhd->proj))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid e-w resolution field: %s"), value);
 	    if (cellhd->ew_res <= 0.0)
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid e-w resolution field: %s"), value);
 	    SET(F_EWRES);
 	    continue;
 	}
@@ -250,9 +252,9 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_EWRES3))
 		G_fatal_error(_("Duplicate 3D e-w resolution field"));
 	    if (!G_scan_resolution(value, &cellhd->ew_res3, cellhd->proj))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid 3D e-w resolution field: %s"), value);
 	    if (cellhd->ew_res3 <= 0.0)
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid 3D e-w resolution field: %s"), value);
 	    SET(F_EWRES3);
 	    continue;
 	}
@@ -260,9 +262,9 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_NSRES))
 		G_fatal_error(_("Duplicate n-s resolution field"));
 	    if (!G_scan_resolution(value, &cellhd->ns_res, cellhd->proj))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid n-s resolution field: %s"), value);
 	    if (cellhd->ns_res <= 0.0)
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid n-s resolution field: %s"), value);
 	    SET(F_NSRES);
 	    continue;
 	}
@@ -270,9 +272,9 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_NSRES3))
 		G_fatal_error(_("Duplicate 3D n-s resolution field"));
 	    if (!G_scan_resolution(value, &cellhd->ns_res3, cellhd->proj))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid 3D n-s resolution field: %s"), value);
 	    if (cellhd->ns_res3 <= 0.0)
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid 3D n-s resolution field: %s"), value);
 	    SET(F_NSRES3);
 	    continue;
 	}
@@ -280,9 +282,9 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_TBRES))
 		G_fatal_error(_("Duplicate t-b resolution field"));
 	    if (!scan_double(value, &cellhd->tb_res))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid t-b resolution field: %s"), value);
 	    if (cellhd->tb_res <= 0.0)
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid t-b resolution field: %s"), value);
 	    SET(F_TBRES);
 	    continue;
 	}
@@ -290,9 +292,9 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_ROWS))
 		G_fatal_error(_("Duplicate rows field"));
 	    if (!scan_int(value, &cellhd->rows))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid rows field: %s"), value);
 	    if (cellhd->rows <= 0)
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid rows field: %s"), value);
 	    SET(F_ROWS);
 	    continue;
 	}
@@ -300,9 +302,9 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_ROWS3))
 		G_fatal_error(_("Duplicate 3D rows field"));
 	    if (!scan_int(value, &cellhd->rows3))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid 3D rows field: %s"), value);
 	    if (cellhd->rows3 <= 0)
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid 3D rows field: %s"), value);
 	    SET(F_ROWS3);
 	    continue;
 	}
@@ -310,9 +312,9 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_COLS))
 		G_fatal_error(_("Duplicate cols field"));
 	    if (!scan_int(value, &cellhd->cols))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid cols field: %s"), value);
 	    if (cellhd->cols <= 0)
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid cols field: %s"), value);
 	    SET(F_COLS);
 	    continue;
 	}
@@ -320,9 +322,9 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_COLS3))
 		G_fatal_error(_("Duplicate 3D cols field"));
 	    if (!scan_int(value, &cellhd->cols3))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid 3D cols field: %s"), value);
 	    if (cellhd->cols3 <= 0)
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid 3D cols field: %s"), value);
 	    SET(F_COLS3);
 	    continue;
 	}
@@ -330,9 +332,9 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_DEPTHS))
 		G_fatal_error(_("Duplicate depths field"));
 	    if (!scan_int(value, &cellhd->depths))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid depths field: %s"), value);
 	    if (cellhd->depths <= 0)
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid depths field: %s"), value);
 	    SET(F_DEPTHS);
 	    continue;
 	}
@@ -340,7 +342,7 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_FORMAT))
 		G_fatal_error(_("Duplicate format field"));
 	    if (!scan_int(value, &cellhd->format))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid format field: %s"), value);
 	    SET(F_FORMAT);
 	    continue;
 	}
@@ -348,11 +350,12 @@ void G__read_Cell_head_array(char **array,
 	    if (TEST(F_COMP))
 		G_fatal_error(_("Duplicate compressed field"));
 	    if (!scan_int(value, &cellhd->compressed))
-		G_fatal_error(_("Syntax error in cell header"));
+		G_fatal_error(_("Invalid compressed field: %s"), value);
 	    SET(F_COMP);
 	    continue;
 	}
-	G_fatal_error(_("Syntax error in cell header"));
+	G_fatal_error(_("Syntax error in cell header, line %d: %s"),
+	              line, buf);
     }
 
     /* check some of the fields */
