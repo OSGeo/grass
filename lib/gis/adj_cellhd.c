@@ -370,7 +370,7 @@ static int ll_check_ns(struct Cell_head *cellhd)
     }
     if (cellhd->north > 90.0) {
 	if (diff <= 0.5 + llepsilon) {
-	    G_verbose_message(_("90 degree north is exceeded by %g cells"),
+	    G_important_message(_("90 degree north is exceeded by %g cells"),
 		      diff);
 	    
 	    if (diff < llepsilon && diff > fpepsilon) {
@@ -420,7 +420,7 @@ static int ll_check_ns(struct Cell_head *cellhd)
     }
     if (cellhd->south < -90.0) {
 	if (diff <= 0.5 + llepsilon) {
-	    G_verbose_message(_("90 degree south is exceeded by %g cells"),
+	    G_important_message(_("90 degree south is exceeded by %g cells"),
 		      diff);
 	    
 	    if (diff < llepsilon && diff > fpepsilon) {
@@ -484,7 +484,7 @@ static int ll_check_ew(struct Cell_head *cellhd)
     if (cellhd->east - cellhd->west > 360.0) {
 	diff = (cellhd->east - cellhd->west - 360.0) / cellhd->ew_res;
 	if (diff > fpepsilon)
-	    G_verbose_message(_("360 degree EW extent is exceeded by %g cells"),
+	    G_important_message(_("360 degree EW extent is exceeded by %g cells"),
 		      diff);
     }
     else if (cellhd->east - cellhd->west < 360.0) {
