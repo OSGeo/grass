@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 	              *rat;
     } parm;
     struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c, *flag_p,
-        *flag_j;
+        *flag_j, *flag_a;
 
     /* -------------------------------------------------------------------- */
     /*      Initialize.                                                     */
@@ -207,6 +207,11 @@ int main(int argc, char *argv[])
     flag_l->key = 'l';
     flag_l->description =
 	_("Force Lat/Lon maps to fit into geographic coordinates (90N,S; 180E,W)");
+
+    flag_a = G_define_flag();
+    flag_a->key = 'a';
+    flag_a->label = _("Auto-adjustment for lat/lon");
+    flag_a->description = _("Attempt to fix small precision errors in resolution and extents");
 
     flag_k = G_define_flag();
     flag_k->key = 'k';
@@ -379,10 +384,12 @@ int main(int argc, char *argv[])
 	cellhd.ns_res = fabs(adfGeoTransform[5]);
 	cellhd.ns_res3 = fabs(adfGeoTransform[5]);
 	cellhd.south = cellhd.north - cellhd.ns_res * cellhd.rows;
+
 	cellhd.west = adfGeoTransform[0];
 	cellhd.ew_res = fabs(adfGeoTransform[1]);
 	cellhd.ew_res3 = fabs(adfGeoTransform[1]);
 	cellhd.east = cellhd.west + cellhd.cols * cellhd.ew_res;
+
 	cellhd.top = 1.;
 	cellhd.bottom = 0.;
 	cellhd.tb_res = 1.;
@@ -581,12 +588,17 @@ int main(int argc, char *argv[])
 	}
     }
 
-    G_message(_("Proceeding with import of %d raster bands..."),
-              GDALGetRasterCount(hDS));
+    if (GDALGetRasterCount(hDS) > 1)
+	G_message(_("Importing %d raster bands..."),
+		  GDALGetRasterCount(hDS));
 
     /* -------------------------------------------------------------------- */
     /*      Set the active window to match the available data.              */
     /* -------------------------------------------------------------------- */
+    if (flag_a->answer && cellhd.proj == PROJECTION_LL) {
+	G_adjust_Cell_head(&cellhd, 1, 1);
+	G_adjust_window_ll(&cellhd);
+    }
     Rast_set_window(&cellhd);
 
     /* -------------------------------------------------------------------- */

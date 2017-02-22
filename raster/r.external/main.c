@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	struct Option *input, *source, *output, *band, *title;
     } parm;
     struct {
-	struct Flag *o, *f, *e, *h, *v, *t;
+	struct Flag *o, *f, *e, *h, *v, *t, *a;
     } flag;
     int min_band, max_band, band;
     struct band_info info;
@@ -107,6 +107,11 @@ int main(int argc, char *argv[])
     flag.e->key = 'e';
     flag.e->label = _("Extend region extents based on new dataset");
     flag.e->description = _("Also updates the default region if in the PERMANENT mapset");
+
+    flag.a = G_define_flag();
+    flag.a->key = 'a';
+    flag.a->label = _("Auto-adjustment for lat/lon");
+    flag.a->description = _("Attempt to fix small precision errors in resolution and extents");
 
     flag.h = G_define_flag();
     flag.h->key = 'h';
@@ -187,6 +192,11 @@ int main(int argc, char *argv[])
     }
 
     check_projection(&cellhd, hDS, flag.o->answer);
+
+    if (flag.a->answer && cellhd.proj == PROJECTION_LL) {
+	G_adjust_Cell_head(&cellhd, 1, 1);
+	G_adjust_window_ll(&cellhd);
+    }
 
     Rast_set_window(&cellhd);
 
