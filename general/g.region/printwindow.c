@@ -8,6 +8,18 @@
 #define DEG2RAD(a) ((a) * M_PI / 180.0)
 #define RAD2DEG(a) ((a) * 180.0 / M_PI)
 
+static double get_shift(double east)
+{
+    double shift;
+
+    shift = 0;
+    while (east + shift > 180)
+	shift -= 360;
+    while (east + shift < -180)
+	shift += 360;
+
+    return shift;
+}
 
 void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 {
@@ -223,11 +235,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	}
     }
 
-    /* flag.lprint: show boundaries in lat/long  MN 2001 */
+    /* flag.lprint: show corners and center in lat/long  MN 2001 */
     if (print_flag & PRINT_LL) {
-	double lo1, la1, lo2, la2, lo3, la3, lo4, la4;
-	double mid_n_lo, mid_n_la, mid_s_lo, mid_s_la, mid_w_lo, mid_w_la,
-	    mid_e_lo, mid_e_la;
+	double lo1, la1, lo2, la2, lo3, la3, lo4, la4, loc, lac;
 
 	/* if coordinates are not in lat/long format, transform them: */
 	if ((G_projection() != PROJECTION_LL) && window->proj != 0) {
@@ -301,52 +311,23 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    lo4 = longitude;
 	    la4 = latitude;
 
-	    /* 
-	     * map corners and side mids:
-	     *          mid_n
-	     *       1 ---+---2
-	     *       |        |
-	     * mid_w +        + mid_e 
-	     *       |        |
-	     *       4----+---3
-	     *          mid_s
-	     *
-	     * lo: longitude
-	     * la: latitude
-	     */
+	    /* center coordinates of the current region,
+	     * not average of the projected corner coordinates */
+	    latitude = (window->north + window->south) / 2.;
+	    longitude = (window->west + window->east) / 2.;
+	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
-	    /* side mids for easting, northing center: */
-	    mid_n_lo = (lo2 + lo1) / 2.;
-	    mid_n_la = (la2 + la1) / 2.;
-	    mid_s_lo = (lo3 + lo4) / 2.;
-	    mid_s_la = (la3 + la4) / 2.;
-	    mid_w_lo = (lo1 + lo4) / 2.;	/* not needed */
-	    mid_w_la = (la1 + la4) / 2.;	/* not needed */
-	    mid_e_lo = (lo3 + lo2) / 2.;	/* not needed */
-	    mid_e_la = (la3 + la2) / 2.;	/* not needed */
-
-	    G_debug(3, "mid_n_lo %f", mid_n_lo);
-	    G_debug(3, "mid_s_lo %f", mid_s_lo);
-	    G_debug(3, "mid_n_la %f", mid_n_la);
-	    G_debug(3, "mid_s_la %f", mid_s_la);
-	    G_debug(3, "mid_w_lo %f", mid_w_lo);
-	    G_debug(3, "mid_e_lo %f", mid_e_lo);
-	    G_debug(3, "mid_w_la %f", mid_w_la);
-	    G_debug(3, "mid_e_la %f", mid_e_la);
+	    loc = longitude;
+	    lac = latitude;
 
 	    if (print_flag & PRINT_SH) {
 		fprintf(stdout, "nw_long=%.8f\nnw_lat=%.8f\n", lo1, la1);
 		fprintf(stdout, "ne_long=%.8f\nne_lat=%.8f\n", lo2, la2);
 		fprintf(stdout, "se_long=%.8f\nse_lat=%.8f\n", lo3, la3);
 		fprintf(stdout, "sw_long=%.8f\nsw_lat=%.8f\n", lo4, la4);
-		G_format_easting((mid_n_lo + mid_s_lo) / 2., buf,
-				 PROJECTION_LL);
-		fprintf(stdout, "center_long=%.8f\n",
-			(mid_n_lo + mid_s_lo) / 2.);
-		G_format_northing((mid_n_la + mid_s_la) / 2., buf,
-				  PROJECTION_LL);
-		fprintf(stdout, "center_lat=%.8f\n",
-			(mid_n_la + mid_s_la) / 2.);
+		fprintf(stdout, "center_long=%.8f\n", loc);
+		fprintf(stdout, "center_lat=%.8f\n", lac);
 
 	    }
 	    else {
@@ -374,13 +355,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 		G_format_northing(la4, buf, PROJECTION_LL);
 		fprintf(stdout, "lat: %s\n", buf);
 
-		G_format_easting((mid_n_lo + mid_s_lo) / 2., buf,
-				 PROJECTION_LL);
+		G_format_easting(loc, buf, PROJECTION_LL);
 		fprintf(stdout, "%-*s %11s\n", width, "center longitude:",
 			buf);
 
-		G_format_northing((mid_n_la + mid_s_la) / 2., buf,
-				  PROJECTION_LL);
+		G_format_northing(lac, buf, PROJECTION_LL);
 		fprintf(stdout, "%-*s %11s\n", width, "center latitude:",
 			buf);
 	    }
@@ -437,25 +416,24 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
     if (print_flag & PRINT_CENTER) {
 	if (print_flag & PRINT_SH) {
 	    fprintf(stdout, "center_easting=%f\n",
-		    ((window->west - window->east) / 2. + window->east));
+		    (window->west + window->east) / 2.);
 	    fprintf(stdout, "center_northing=%f\n",
-		    ((window->north - window->south) / 2. + window->south));
+		    (window->north + window->south) / 2.);
 	}
 	else {
 	    if (G_projection() != PROJECTION_LL) {
 		fprintf(stdout, "%-*s %f\n", width, "center easting:",
-			((window->west - window->east) / 2. + window->east));
+			(window->west + window->east) / 2.);
 		fprintf(stdout, "%-*s %f\n", width, "center northing:",
-			((window->north - window->south) / 2. +
-			 window->south));
+			(window->north + window->south) / 2.);
 	    }
 	    else {
-		G_format_northing((window->north - window->south) / 2. +
-				  window->south, buf, PROJECTION_LL);
+		G_format_northing((window->north + window->south) / 2.,
+				  buf, PROJECTION_LL);
 		fprintf(stdout, "%-*s %s\n", width, "north-south center:",
 			buf);
-		G_format_easting((window->west - window->east) / 2. +
-				 window->east, buf, PROJECTION_LL);
+		G_format_easting((window->west + window->east) / 2.,
+				 buf, PROJECTION_LL);
 		fprintf(stdout, "%-*s %s\n", width, "east-west center:", buf);
 	    }
 	}
@@ -486,11 +464,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    convergence = 0.0;
 	else {
 	    struct Key_Value *in_proj_info, *in_unit_info;
-	    double lo1, la1, lo2, la2, lo3, la3, lo4, la4;
-	    double mid_n_lo, mid_n_la, mid_s_lo, mid_s_la;
-	    double lat_center, lon_center;
 	    struct pj_info iproj, oproj;	/* proj parameters  */
-	    struct FACTORS fact = { {0} };
+	    struct FACTORS fact;
+	    LP lp;
+
+	    G_zero(&fact, sizeof(struct FACTORS));
 
 	    /* read current projection info */
 	    if ((in_proj_info = G_get_projinfo()) == NULL)
@@ -515,69 +493,17 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
 	    /* do the transform
 	     * syntax: pj_do_proj(outx, outy, in_info, out_info) 
-	     *
-	     *  1 ------ 2
-	     *  |        |  map corners
-	     *  |        |
-	     *  4--------3
 	     */
 
-	    latitude = window->north;
-	    longitude = window->west;
+	    /* center coordinates of the current region,
+	     * not average of the projected corner coordinates */
+	    latitude = (window->north + window->south) / 2.;
+	    longitude = (window->west + window->east) / 2.;
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
 		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
-	    lo1 = longitude;
-	    la1 = latitude;
-
-	    latitude = window->north;
-	    longitude = window->east;
-	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
-
-	    lo2 = longitude;
-	    la2 = latitude;
-
-	    latitude = window->south;
-	    longitude = window->east;
-	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
-
-	    lo3 = longitude;
-	    la3 = latitude;
-
-	    latitude = window->south;
-	    longitude = window->west;
-	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
-
-	    lo4 = longitude;
-	    la4 = latitude;
-
-	    /* 
-	     * map corners and side mids:
-	     *          mid_n
-	     *       1 ---+---2
-	     *       |        |
-	     * mid_w +        + mid_e 
-	     *       |        |
-	     *       4----+---3
-	     *          mid_s
-	     *
-	     * lo: longitude
-	     * la: latitude
-	     */
-
-	    /* side mids for easting, northing center: */
-	    mid_n_lo = (lo2 + lo1) / 2.;
-	    mid_n_la = (la2 + la1) / 2.;
-	    mid_s_lo = (lo3 + lo4) / 2.;
-	    mid_s_la = (la3 + la4) / 2.;
-
-	    lat_center = (mid_n_la + mid_s_la) / 2.;
-	    lon_center = (mid_n_lo + mid_s_lo) / 2.;
-
-	    LP lp = { DEG2RAD(lon_center), DEG2RAD(lat_center) };
+	    lp.u = DEG2RAD(longitude);
+	    lp.v = DEG2RAD(latitude);
 	    pj_factors(lp, iproj.pj, 0.0, &fact);
 	    convergence = RAD2DEG(fact.conv);
 
@@ -593,12 +519,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
     }
 
     /* flag.bbox
-       Calculate the largest boudingbox in lat-lon coordinates 
+       Calculate the largest bouding box in lat-lon coordinates 
        and print it to stdout
      */
     if (print_flag & PRINT_MBBOX) {
-	double lo1, la1, lo2, la2, lo3, la3, lo4, la4;
-	double sh_ll_w, sh_ll_e, sh_ll_n, sh_ll_s;
+	double sh_ll_w, sh_ll_e, sh_ll_n, sh_ll_s, loc;
 
 	/*double sh_ll_rows, sh_ll_cols; */
 
@@ -610,10 +535,13 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    struct pj_info iproj;	/* input map proj parameters  */
 	    struct pj_info oproj;	/* output map proj parameters  */
 	    char buff[100], dum[100];
+	    int r, c;
 
 	    /* read current projection info */
 	    if ((in_proj_info = G_get_projinfo()) == NULL)
 		G_fatal_error(_("Can't get projection info of current location"));
+	    /* do not wrap to -180, 180, otherwise east can be < west */
+	    G_set_key_value("+over", "defined", in_proj_info);
 
 	    if ((in_unit_info = G_get_projunits()) == NULL)
 		G_fatal_error(_("Can't get projection units of current location"));
@@ -657,98 +585,104 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
 	    /* do the transform
 	     * syntax: pj_do_proj(outx, outy, in_info, out_info) 
-	     *
-	     *  1 ------ 2
-	     *  |        |  map corners
-	     *  |        |
-	     *  4--------3
 	     */
 
-	    latitude = window->north;
-	    longitude = window->west;
-	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
-
-	    lo1 = longitude;
-	    la1 = latitude;
-
-	    latitude = window->north;
-	    longitude = window->east;
-	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
-
-	    lo2 = longitude;
-	    la2 = latitude;
-
-	    latitude = window->south;
-	    longitude = window->east;
-	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
-
-	    lo3 = longitude;
-	    la3 = latitude;
-
-	    latitude = window->south;
-	    longitude = window->west;
-	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
-
-	    lo4 = longitude;
-	    la4 = latitude;
-
 	    /*Calculate the largest bounding box */
-	    if (fabs(lo3) > fabs(lo4)) {
-		if (fabs(lo4) < fabs(lo1))
-		    sh_ll_w = lo4;
-		else
-		    sh_ll_w = lo1;
-		if (fabs(lo3) > fabs(lo2))
-		    sh_ll_e = lo3;
-		else
-		    sh_ll_e = lo2;
-	    }
-	    else {
-		if (fabs(lo4) > fabs(lo1))
-		    sh_ll_w = lo4;
-		else
-		    sh_ll_w = lo1;
-		if (fabs(lo3) < fabs(lo2))
-		    sh_ll_e = lo3;
-		else
-		    sh_ll_e = lo2;
+
+	    /* center */
+	    latitude = (window->north + window->south) / 2.;
+	    longitude = (window->west + window->east) / 2.;
+	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+
+	    sh_ll_w = sh_ll_e = longitude;
+	    sh_ll_n = sh_ll_s = latitude;
+
+	    /* western and eastern border */
+	    for (r = 0; r <= window->rows; r++) {
+		latitude = window->north - r * window->ns_res;
+		if (r == window->rows)
+		    latitude = window->south;
+		longitude = window->west;
+		if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+		    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+
+		if (sh_ll_n < latitude)
+		    sh_ll_n = latitude;
+		if (sh_ll_s > latitude)
+		    sh_ll_s = latitude;
+
+		if (sh_ll_e < longitude)
+		    sh_ll_e = longitude;
+		if (sh_ll_w > longitude)
+		    sh_ll_w = longitude;
+
+		latitude = window->north - r * window->ns_res;
+		if (r == window->rows)
+		    latitude = window->south;
+		longitude = window->east;
+		if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+		    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+
+		if (sh_ll_n < latitude)
+		    sh_ll_n = latitude;
+		if (sh_ll_s > latitude)
+		    sh_ll_s = latitude;
+
+		if (sh_ll_e < longitude)
+		    sh_ll_e = longitude;
+		if (sh_ll_w > longitude)
+		    sh_ll_w = longitude;
 	    }
 
-	    if (fabs(la4) < fabs(la1)) {
-		if (fabs(la1) > fabs(la2))
-		    sh_ll_n = la1;
-		else
-		    sh_ll_n = la2;
-		if (fabs(la4) < fabs(la3))
-		    sh_ll_s = la4;
-		else
-		    sh_ll_s = la3;
-	    }
-	    else {
-		if (fabs(la1) < fabs(la2))
-		    sh_ll_n = la1;
-		else
-		    sh_ll_n = la2;
-		if (fabs(la4) > fabs(la3))
-		    sh_ll_s = la4;
-		else
-		    sh_ll_s = la3;
+	    /* northern and southern border */
+	    for (c = 1; c < window->cols; c++) {
+		latitude = window->north;
+		longitude = window->west + c * window->ew_res;
+		if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+		    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+
+		if (sh_ll_n < latitude)
+		    sh_ll_n = latitude;
+		if (sh_ll_s > latitude)
+		    sh_ll_s = latitude;
+
+		if (sh_ll_e < longitude)
+		    sh_ll_e = longitude;
+		if (sh_ll_w > longitude)
+		    sh_ll_w = longitude;
+
+		latitude = window->south;
+		longitude = window->west + c * window->ew_res;
+		if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+		    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
+
+		if (sh_ll_n < latitude)
+		    sh_ll_n = latitude;
+		if (sh_ll_s > latitude)
+		    sh_ll_s = latitude;
+
+		if (sh_ll_e < longitude)
+		    sh_ll_e = longitude;
+		if (sh_ll_w > longitude)
+		    sh_ll_w = longitude;
 	    }
 
-	    /* print the larg bounding box */
+	    loc = (sh_ll_e + sh_ll_w) / 2.;
+	    loc += get_shift(loc);
+	    sh_ll_w += get_shift(sh_ll_w);
+	    sh_ll_e += get_shift(sh_ll_e);
+
+	    /* print the largest bounding box */
 	    if (print_flag & PRINT_SH) {
 		fprintf(stdout, "ll_n=%.8f\n", sh_ll_n);
 		fprintf(stdout, "ll_s=%.8f\n", sh_ll_s);
 		fprintf(stdout, "ll_w=%.8f\n", sh_ll_w);
 		fprintf(stdout, "ll_e=%.8f\n", sh_ll_e);
-		fprintf(stdout, "ll_clon=%.8f\n",
-			(sh_ll_e - sh_ll_w) / 2. + sh_ll_w);
+		/* center of the largest bounding box */
+		fprintf(stdout, "ll_clon=%.8f\n", loc);
 		fprintf(stdout, "ll_clat=%.8f\n",
-			(sh_ll_n - sh_ll_s) / 2. + sh_ll_s);
+			(sh_ll_n + sh_ll_s) / 2.);
 	    }
 	    else {
 		G_format_northing(sh_ll_n, buf, PROJECTION_LL);
@@ -759,10 +693,10 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 		fprintf(stdout, "%-*s  %s\n", width, "west longitude:", buf);
 		G_format_easting(sh_ll_e, buf, PROJECTION_LL);
 		fprintf(stdout, "%-*s  %s\n", width, "east longitude:", buf);
-		G_format_easting((sh_ll_e - sh_ll_w) / 2. + sh_ll_w, buf,
-				 PROJECTION_LL);
+		/* center of the largest bounding box */
+		G_format_easting(loc, buf, PROJECTION_LL);
 		fprintf(stdout, "%-*s %s\n", width, "center longitude:", buf);
-		G_format_northing((sh_ll_n - sh_ll_s) / 2. + sh_ll_s, buf,
+		G_format_northing((sh_ll_n + sh_ll_s) / 2., buf,
 				  PROJECTION_LL);
 		fprintf(stdout, "%-*s  %s\n", width, "center latitude:", buf);
 	    }
