@@ -33,7 +33,6 @@ axis, i.e., the reference map layer,  are included in each
 panel.  There is a total at the bottom of each column
 representing the sum of all the rows in that column.
 
-
 <h2>NOTES</h2>
 
 It is recommended to reclassify categories of classified
@@ -45,6 +44,24 @@ information for each and every category.
 <p>
 <em>NA</em>'s in output file mean non-applicable in case
 <em>MASK</em> exists.
+
+<p>
+The <b>Estimated kappa value</b> in <em>r.kappa</em> is the value
+only for one class, i.e. the observed agreement between the
+classifications for those observations that have been classified by
+classifier 1 into the class i. In other words, here the choice of
+reference is important.
+<p>
+It is calculated as:
+<p>
+kpp[i] = (pii[i] - pi[i] * pj[i]) / (pi[i] - pi[i] * pj[i]);
+<p>
+where=
+<ul>
+<li>pii[i] is the probability of agreeement (i.e. number of pixels for which there is agreement divided by total number of assessed pixels)</li>
+<li>Pi[i] is the probability of classification i having classified the point as i</li>
+<li>Pj[i] is the probability of classification j having classified the point as i.</li>
+</ul>
 
 <H2>EXAMPLE</H2>
 
