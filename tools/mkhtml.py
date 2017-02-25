@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007-2014 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2017 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -304,10 +304,10 @@ if not year:
 # check the names of scripts to assign the right folder
 topdir = os.path.abspath(os.getenv("MODULE_TOPDIR"))
 curdir = os.path.abspath(os.path.curdir)
-pgmdir = curdir.replace(topdir, '').lstrip('/')
+pgmdir = curdir.replace(topdir, '').lstrip(os.path.sep)
+url_source = ''
 if os.getenv('SOURCE_URL', ''):
     # addons
-    url_source = ''
     for prefix in index_names.keys():
         cwd = os.getcwd()
         idx = cwd.find('{0}{1}.'.format(os.path.sep, prefix))
@@ -321,6 +321,9 @@ if os.getenv('SOURCE_URL', ''):
             break
 else:
     url_source = urlparse.urljoin(source_url, pgmdir)
+if sys.platform == 'win32':
+    url_source = url_source.replace(os.path.sep, '/')
+
 if index_name:
     sys.stdout.write(sourcecode.substitute(URL_SOURCE=url_source, PGM=pgm,
                                            URL_LOG=url_source.replace('browser',  'log')))
