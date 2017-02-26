@@ -122,6 +122,7 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
     cat = 0;
     formaterr = nopoint = unreachable = 0;
     while (1) {
+	double fdist, tdist;
 
 	if (!filename) {
 	    if (fgets(buf, sizeof(buf), stdin) == NULL)
@@ -132,16 +133,19 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 		break;
 	}
 
-
-	double fdist, tdist;
-
 	G_chop(buf);
+
+	sp = SP_OK;
 
 	ret =
 	    sscanf(buf, "%d %lf %lf %lf %lf %s", &id, &fx, &fy, &tx, &ty,
 		   dummy);
 	if (ret == 5) {
 	    input_mode = INPUT_MODE_COOR;
+	    if (fx == tx && fy == ty) {
+		G_warning(_("From and to are identical (id %d)"), id);
+		continue;
+	    }
 	}
 	else {
 	    ret = sscanf(buf, "%d %d %d %s", &id, &fcat, &tcat, dummy);
@@ -151,15 +155,7 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 		continue;
 	    }
 	    input_mode = INPUT_MODE_NODE;
-	}
 
-	G_debug(3, "mode = %d", input_mode);
-
-	cat++;			/* Output category */
-	sp = SP_OK;
-	cost = fdist = tdist = 0;
-
-	if (input_mode == INPUT_MODE_NODE) {
 	    /* From */
 	    Citem =
 		(CIDX *) bsearch((void *)&fcat, Cidx, npoints, sizeof(CIDX),
@@ -174,7 +170,11 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 	    else {
 		fline = Citem->line;
 		type = Vect_read_line(In, Points, NULL, fline);
-		fnode = Vect_find_node(In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+		fnode =
+		    Vect_find_node(In, Points->x[0], Points->y[0],
+				   Points->z[0], 0, 0);
+		if (fnode == 0)
+		    sp = SP_NOPOINT;
 		/* Vect_get_line_nodes(In, fline, &fnode, NULL); */
 	    }
 	    G_debug(3, "from: cat = %5d point(line) = %5d node = %5d", fcat,
@@ -194,59 +194,79 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 	    else {
 		tline = Citem->line;
 		type = Vect_read_line(In, Points, NULL, tline);
-		tnode = Vect_find_node(In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+		tnode =
+		    Vect_find_node(In, Points->x[0], Points->y[0],
+				   Points->z[0], 0, 0);
+		if (tnode == 0)
+		    sp = SP_NOPOINT;
 		/* Vect_get_line_nodes(In, tline, &tnode, NULL); */
 	    }
 	    G_debug(3, "to  : cat = %5d point(line) = %5d node = %5d", tcat,
 		    tline, tnode);
 
-	    if (sp != SP_NOPOINT) {
-		ret = Vect_net_shortest_path(In, fnode, tnode, AList, &cost);
+	    if (sp == SP_NOPOINT)
+		continue;
 
-		if (ret == -1) {
-		    sp = SP_UNREACHABLE;
-		    unreachable++;
-		    G_warning(_("Point with category [%d] is not reachable "
-				"from point with category [%d]"), tcat, fcat);
-		}
-		else {
-		    /* Write new line connecting 'from' and 'to' */
-		    G_debug(3, "Number of arcs = %d, total costs = %f",
-			    AList->n_values, cost);
+	    if (fnode == tnode) {
+		G_warning(_("From and to are identical (id %d)"), id);
+		continue;
+	    }
+	}
 
-		    Vect_reset_cats(Cats);
-		    Vect_cat_set(Cats, 1, cat);
+	G_debug(3, "mode = %d", input_mode);
 
-		    if (segments) {
-			for (i = 0; i < AList->n_values; i++) {
-			    line = AList->value[i];
-			    Vect_read_line(In, Points, NULL, abs(line));
+	cat++;			/* Output category */
+	cost = fdist = tdist = 0;
 
-			    if (line > 0) {
-				Vect_write_line(Out, GV_LINE, Points, Cats);
-			    }
-			    else {
-				Vect_reset_line(OPoints);
-				Vect_append_points(OPoints, Points,
-						   GV_BACKWARD);
-				Vect_write_line(Out, GV_LINE, OPoints, Cats);
-			    }
+	if (input_mode == INPUT_MODE_NODE) {
+	    ret = Vect_net_shortest_path(In, fnode, tnode, AList, &cost);
+
+	    if (ret == -1) {
+		sp = SP_UNREACHABLE;
+		unreachable++;
+		G_warning(_("Point with category [%d] is not reachable "
+			    "from point with category [%d]"), tcat, fcat);
+	    }
+	    else {
+		/* Write new line connecting 'from' and 'to' */
+		G_debug(3, "Number of arcs = %d, total costs = %f",
+			AList->n_values, cost);
+
+		Vect_reset_cats(Cats);
+		Vect_cat_set(Cats, 1, cat);
+
+		if (segments) {
+		    for (i = 0; i < AList->n_values; i++) {
+			line = AList->value[i];
+			Vect_read_line(In, Points, NULL, abs(line));
+
+			if (line > 0) {
+			    Vect_write_line(Out, GV_LINE, Points, Cats);
+			}
+			else {
+			    Vect_reset_line(OPoints);
+			    Vect_append_points(OPoints, Points,
+					       GV_BACKWARD);
+			    Vect_write_line(Out, GV_LINE, OPoints, Cats);
 			}
 		    }
-		    else {
-			Vect_reset_line(OPoints);
+		}
+		else {
+		    Vect_reset_line(OPoints);
 
-			for (i = 0; i < AList->n_values; i++) {
-			    line = AList->value[i];
-			    Vect_read_line(In, Points, NULL, abs(line));
-			    if (line > 0)
-				Vect_append_points(OPoints, Points,
-						   GV_FORWARD);
-			    else
-				Vect_append_points(OPoints, Points,
-						   GV_BACKWARD);
-			}
-
+		    for (i = 0; i < AList->n_values; i++) {
+			line = AList->value[i];
+			Vect_read_line(In, Points, NULL, abs(line));
+			if (line > 0)
+			    Vect_append_points(OPoints, Points,
+					       GV_FORWARD);
+			else
+			    Vect_append_points(OPoints, Points,
+					       GV_BACKWARD);
+			OPoints->n_points--;
+		    }
+		    if (AList->n_values > 0 && OPoints->n_points > 0) {
+			OPoints->n_points++;
 			Vect_write_line(Out, GV_LINE, OPoints, Cats);
 		    }
 		}
@@ -297,7 +317,8 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 
 		}
 		else {
-		    Vect_write_line(Out, GV_LINE, OPoints, Cats);
+		    if (OPoints->n_points > 0)
+			Vect_write_line(Out, GV_LINE, OPoints, Cats);
 		}
 	    }
 	}
