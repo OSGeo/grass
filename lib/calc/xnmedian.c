@@ -82,6 +82,8 @@ int f_nmedian(int argc, const int *argt, void **args)
 
 		if (!n)
 		    SET_NULL_C(&res[i]);
+                else if (n == 1)
+                    res[i] = *a1;
 		else {
 		    qsort(a, n, sizeof(CELL), icmp);
 		    res[i] = (*a1 + *a2) / 2;
@@ -109,6 +111,8 @@ int f_nmedian(int argc, const int *argt, void **args)
 
 		if (!n)
 		    SET_NULL_F(&res[i]);
+                else if (n == 1)
+                    res[i] = *a1;
 		else {
 		    qsort(a, n, sizeof(FCELL), fcmp);
 		    res[i] = (*a1 + *a2) / 2;
@@ -136,6 +140,8 @@ int f_nmedian(int argc, const int *argt, void **args)
 
 		if (!n)
 		    SET_NULL_D(&res[i]);
+                else if (n == 1)
+                    res[i] = *a1;
 		else {
 		    qsort(a, n, sizeof(DCELL), dcmp);
 		    res[i] = (*a1 + *a2) / 2;
