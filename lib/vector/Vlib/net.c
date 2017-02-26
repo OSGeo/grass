@@ -1038,6 +1038,11 @@ Vect_net_shortest_path_coor2(struct Map_info *Map,
 	Vect_reset_line(SPoints);
 	if (flen == tlen) {
 	    cur_cst = 0;
+
+	    Vect_append_point(SPoints, fx, fy, fz);
+	    Vect_append_point(SPoints, fcx, fcy, fcz);
+	    Vect_append_point(SPoints, tx, ty, tz);
+
 	    reachable = shortcut = 1;
 	}
 	else if (flen < tlen) {
@@ -1152,6 +1157,7 @@ Vect_net_shortest_path_coor2(struct Map_info *Map,
 			Vect_append_points(Points, APoints, GV_FORWARD);
 		    else
 			Vect_append_points(Points, APoints, GV_BACKWARD);
+		    Points->n_points--;
 		}
                 if (NodesList) {
                     int node, node1, node2;
@@ -1170,8 +1176,11 @@ Vect_net_shortest_path_coor2(struct Map_info *Map,
 		    Vect_list_append(List, line);
 	    }
 
-	    if (Points)
+	    if (Points) {
+		if (LList->n_values)
+		    Points->n_points++;
 		Vect_append_points(Points, tPoints[tn], GV_FORWARD);
+	    }
 
 	    if (TPoints)
 		Vect_append_points(TPoints, tPoints[tn], GV_FORWARD);
@@ -1185,6 +1194,8 @@ Vect_net_shortest_path_coor2(struct Map_info *Map,
 
 	if (costs)
 	    *costs = cur_cst;
+	if (Points)
+	    Vect_line_prune(Points);
     }
 
     return reachable;
