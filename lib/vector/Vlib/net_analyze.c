@@ -150,6 +150,9 @@ static int find_shortest_path(struct Map_info *Map, int from, int to,
     /* Note : if from == to dgl goes to nearest node and returns back (dgl feature) => 
      *         check here for from == to */
 
+    if (List != NULL)
+	Vect_reset_list(List);
+
     /* Check if from and to are identical, otherwise dglib returns path to neares node and back! */
     if (from == to) {
 	if (cost != NULL)
@@ -822,6 +825,11 @@ find_shortest_path_coor(struct Map_info *Map,
 	Vect_reset_line(SPoints);
 	if (flen == tlen) {
 	    cur_cst = 0;
+
+	    Vect_append_point(SPoints, fx, fy, fz);
+	    Vect_append_point(SPoints, fcx, fcy, fcz);
+	    Vect_append_point(SPoints, tx, ty, tz);
+
 	    reachable = shortcut = 1;
 	}
 	else if (flen < tlen) {
@@ -948,6 +956,7 @@ find_shortest_path_coor(struct Map_info *Map,
 			Vect_append_points(Points, APoints, GV_FORWARD);
 		    else
 			Vect_append_points(Points, APoints, GV_BACKWARD);
+		    Points->n_points--;
 		}
 		if (NodesList) {
 		    int node, node1, node2;
@@ -966,8 +975,11 @@ find_shortest_path_coor(struct Map_info *Map,
 		    Vect_list_append(List, line);
 	    }
 
-	    if (Points)
+	    if (Points) {
+		if (LList->n_values)
+		    Points->n_points++;
 		Vect_append_points(Points, tPoints[tn], GV_FORWARD);
+	    }
 
 	    if (TPoints)
 		Vect_append_points(TPoints, tPoints[tn], GV_FORWARD);
@@ -981,6 +993,8 @@ find_shortest_path_coor(struct Map_info *Map,
 
 	if (costs)
 	    *costs = cur_cst;
+	if (Points)
+	    Vect_line_prune(Points);
     }
 
     return reachable;
