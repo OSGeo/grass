@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     threshold->required = NO;
     threshold->multiple = NO;
     threshold->description = _("Sensitivity of Gaussian filter");
-    threshold->answer = "0.01";
+    threshold->answer = "1.0";
 
     orientations = G_define_option();
     orientations->key = "orientations";
@@ -106,6 +106,11 @@ int main(int argc, char *argv[])
     Thresh = atof(threshold->answer);
     if (Thresh <= 0.0)
 	G_fatal_error(_("Threshold less than or equal to zero not allowed"));
+    /* A threshold value of 0.01 seems to give fairly good results on average.  */
+    /* So we divide the threshold by 100 to get a value of 0.01 for the default */ 
+    /* parameter value = 1. */
+
+    Thresh = Thresh / 100.0;
 
     sscanf(width->answer, "%f", &Width);
 
