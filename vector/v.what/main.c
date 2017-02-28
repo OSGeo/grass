@@ -5,13 +5,14 @@
  *
  * AUTHOR(S):    Trevor Wiens - derived from d.what.vect - 15 Jan 2006
  *               OGR support by Martin Landa <landa.martin gmail.com>
+ *               Multiple features by Huidae Cho <grass4u gmail.com>
  *
  * PURPOSE:      To select and report attribute information for objects at a
  *               user specified location. This replaces d.what.vect by removing
- *               the interactive component to enable its use with the new 
+ *               the interactive component to enable its use with the new
  *               gis.m and future GUI.
  *
- * COPYRIGHT:    (C) 2006-2010, 2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2010, 2011, 2017 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -33,7 +34,7 @@
 int main(int argc, char **argv)
 {
     struct {
-	struct Flag *print, *topo, *shell, *json;
+	struct Flag *print, *topo, *shell, *json, *multiple;
     } flag;
     struct {
 	struct Option *map, *field, *coords, *maxdist, *type;
@@ -52,6 +53,7 @@ int main(int argc, char **argv)
     double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
     char nsres[30], ewres[30];
     char ch;
+    int output;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -66,7 +68,7 @@ int main(int argc, char **argv)
 
     opt.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
     opt.field->multiple = YES;
-    
+
     opt.type = G_define_standard_option(G_OPT_V3_TYPE);
     opt.type->answer = "point,line,area,face";
 
@@ -82,7 +84,7 @@ int main(int argc, char **argv)
     opt.maxdist->multiple = NO;
     opt.maxdist->description = _("Query threshold distance");
     opt.maxdist->guisection = _("Threshold");
-    
+
     flag.topo = G_define_flag();
     flag.topo->key = 'd';
     flag.topo->description = _("Print topological information (debugging)");
@@ -97,11 +99,18 @@ int main(int argc, char **argv)
     flag.shell->key = 'g';
     flag.shell->description = _("Print the stats in shell script style");
     flag.shell->guisection = _("Print");
-   
+
     flag.json = G_define_flag();
     flag.json->key = 'j';
     flag.json->description = _("Print the stats in JSON");
     flag.json->guisection = _("Print");
+
+    flag.multiple = G_define_flag();
+    flag.multiple->key = 'm';
+    flag.multiple->description = _("Print multiple features if overlapping features are found");
+    flag.multiple->guisection = _("Print");
+
+    G_option_exclusive(flag.shell, flag.json, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -117,17 +126,16 @@ int main(int argc, char **argv)
     else
 	G_fatal_error(_("No input vector maps!"));
 
-    if (flag.shell->answer && flag.json->answer)
-        G_fatal_error(_("Flags g and j are mutually exclusive"));
-
     maxd = atof(opt.maxdist->answer);
     type = Vect_option_to_types(opt.type);
+    output = flag.shell->answer ? OUTPUT_SCRIPT :
+	    (flag.json->answer ? OUTPUT_JSON : OUTPUT_TEXT);
 
     if (maxd == 0.0) {
 	/* this code is a translation from d.what.vect which uses display
 	 * resolution to figure out a querying distance
 	 * display resolution is not available here
-	 * using raster resolution instead to determine vector querying 
+	 * using raster resolution instead to determine vector querying
 	 * distance does not really make sense
 	 * maxd = 0 can make sense */
 	G_get_window(&window);
@@ -159,17 +167,17 @@ int main(int argc, char **argv)
 	for (i = 0; vect[i]; i++)
 	    ;
 	nvects = i;
-	
+
 	for (i = 0; opt.field->answers[i]; i++)
 	    ;
-	
+
 	if (nvects != i)
 	    G_fatal_error(_("Number of given vector maps (%d) differs from number of layers (%d)"),
 			  nvects, i);
-	
+
 	Map = (struct Map_info *) G_malloc(nvects * sizeof(struct Map_info));
 	field = (int *) G_malloc(nvects * sizeof(int));
-	
+
 	for (i = 0; i < nvects; i++) {
 	    level = Vect_open_old2(&Map[i], vect[i], "", opt.field->answers[i]);
 	    if (level < 2)
@@ -186,8 +194,9 @@ int main(int argc, char **argv)
 	while (fgets(buf, sizeof(buf), stdin) != NULL) {
 	    ret = sscanf(buf, "%lf%c%lf", &xval, &ch, &yval);
 	    if (ret == 3 && (ch == ',' || ch == ' ' || ch == '\t')) {
-		what(Map, nvects, vect, xval, yval, maxd, type, flag.topo->answer,
-		     flag.print->answer, flag.shell->answer, flag.json->answer, field);
+		what(Map, nvects, vect, xval, yval, maxd, type,
+		     flag.topo->answer, flag.print->answer, output,
+		     flag.multiple->answer, field);
 	    }
 	    else {
 		G_warning(_("Unknown input format, skipping: '%s'"), buf);
@@ -201,7 +210,7 @@ int main(int argc, char **argv)
 	    xval = atof(opt.coords->answers[i]);
 	    yval = atof(opt.coords->answers[i + 1]);
 	    what(Map, nvects, vect, xval, yval, maxd, type, flag.topo->answer,
-		 flag.print->answer, flag.shell->answer, flag.json->answer, field);
+		 flag.print->answer, output, flag.multiple->answer, field);
 	}
     }
 
