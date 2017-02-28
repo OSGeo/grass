@@ -1,7 +1,10 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.external.out</em> instructs GRASS to write raster maps as data
-files (e.g. GeoTIFF) using GDAL.
+<em>r.external.out</em> instructs GRASS GIS to write subsequently generated
+raster maps as data files (e.g. GeoTIFF) using GDAL instead of storing them
+in GRASS raster format in the current mapset.
+<p>
+Any new raster map is immediately written out through GDAL as a file.
 
 <h2>NOTES</h2>
 
@@ -13,7 +16,36 @@ in the output file being placed in the "gdal/" subdirectory of the
 current mapset directory.
 
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
+
+<h3>Storing results from raster data analysis directly as GeoTIFF</h3>
+
+The module <em>r.external.out</em> is used to write out processing results
+directly in GeoTIFF format (any GDAL supported format can be used here):
+
+<div class="code"><pre>
+# define output directory for files resulting from GRASS calculation(s)
+# and target format:
+mkdir $HOME/gisoutput/
+r.external.out directory=$HOME/gisoutput/ format="GTiff"
+
+# prepare sample analysis
+g.region raster=elevation -p
+
+# perform GRASS calculation (here: filter by height, write > 120m, NULL otherwise)
+# this will store the output map directly as GeoTIFF, so we use .tif extension:
+r.mapcalc "elev_filt.tif = if(elevation &gt; 120.0, elevation, null() )"
+
+# ...the "elev_filt.tif" is immediately written.
+
+# cease GDAL output connection and turn back to write out GRASS raster files:
+r.external.out -r
+
+# verify resulting file
+gdalinfo $HOME/gisoutput/elev_filt.tif
+</pre></div>
+
+<h3>Complete workflow using only external geodata while processing in GRASS GIS</h3>
 
 The module <em>r.external.out</em> can be used along with
 <em>r.external</em> to process external geodata in GRASS
