@@ -146,7 +146,7 @@ void coord2bbox(double east, double north, double maxdist,
 void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
 		int showextra, int output)
 {
-    int j, k;
+    int i, j;
     char *formbuf1;
     char *formbuf2;
 
@@ -156,29 +156,29 @@ void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
     if (output == OUTPUT_JSON)
 	fprintf(stdout, ",\n\"Categories\": [");
 
-    k = 0;
-    for (j = 0; j < Cats->n_cats; j++) {
+    j = 0;
+    for (i = 0; i < Cats->n_cats; i++) {
 	struct field_info *Fi;
 
-	if (field == -1 || Cats->field[j] == field) {
-	    k++;
-	    G_debug(2, "field = %d  category = %d\n", Cats->field[j],
-		    Cats->cat[j]);
+	if (field == -1 || Cats->field[i] == field) {
+	    j++;
+	    G_debug(2, "field = %d  category = %d\n", Cats->field[i],
+		    Cats->cat[i]);
 	    switch (output) {
 	    case OUTPUT_SCRIPT:
-		fprintf(stdout, "Layer=%d\nCategory=%d\n", Cats->field[j],
-			Cats->cat[j]);
+		fprintf(stdout, "Layer=%d\nCategory=%d\n", Cats->field[i],
+			Cats->cat[i]);
 		break;
 	    case OUTPUT_JSON:
 		fprintf(stdout, "%s\n{\"Layer\": %d, \"Category\": %d",
-			k == 1 ? "": ",", Cats->field[j], Cats->cat[j]);
+			j == 1 ? "": ",", Cats->field[i], Cats->cat[i]);
 		break;
 	    default:
-		fprintf(stdout, _("Layer: %d\nCategory: %d\n"), Cats->field[j],
-			Cats->cat[j]);
+		fprintf(stdout, _("Layer: %d\nCategory: %d\n"), Cats->field[i],
+			Cats->cat[i]);
 		break;
 	    }
-	    Fi = Vect_get_field(Map, Cats->field[j]);
+	    Fi = Vect_get_field(Map, Cats->field[i]);
 	    if (Fi != NULL && showextra) {
 		char *form;
 
@@ -203,7 +203,7 @@ void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
 		    break;
 		}
 		F_generate(Fi->driver, Fi->database, Fi->table,
-			   Fi->key, Cats->cat[j], output, &form);
+			   Fi->key, Cats->cat[i], output, &form);
 
 		switch (output) {
 		case OUTPUT_SCRIPT:
@@ -240,7 +240,7 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
     struct line_pnts *box;
     double sqm_to_sqft;
     char buf[1000], *str;
-    int i, ii;
+    int i, j;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -387,11 +387,11 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 
 	first = 1;
 
-	for (ii = 0; ii < lineList->n_values; ii++) {
+	for (j = 0; j < lineList->n_values; j++) {
 	    int line, type;
 	    double l;
 
-	    line = lineList->value[ii];
+	    line = lineList->value[j];
 	    type = Vect_read_line(&Map[i], Points, Cats, line);
 	    l = 0;
 
@@ -559,7 +559,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 
 	    /* Height */
 	    if (Vect_is_3d(&(Map[i]))) {
-		int j;
 		double min, max;
 
 		if (type & GV_POINTS) {
@@ -578,12 +577,14 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 		    }
 		}
 		else if (type & GV_LINES) {
+		    int k;
+
 		    min = max = Points->z[0];
-		    for (j = 1; j < Points->n_points; j++) {
-			if (Points->z[j] < min)
-			    min = Points->z[j];
-			if (Points->z[j] > max)
-			    max = Points->z[j];
+		    for (k = 1; k < Points->n_points; k++) {
+			if (Points->z[k] < min)
+			    min = Points->z[k];
+			if (Points->z[k] > max)
+			    max = Points->z[k];
 		    }
 		    if (min == max) {
 			switch (output) {
@@ -626,7 +627,7 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 		fprintf(stdout, "}");
 	}			/* for lineList */
 
-	for (ii = 0; ii < areaList->n_values; ii++) {
+	for (j = 0; j < areaList->n_values; j++) {
 	    int area, centroid;
 	    double sq_meters, acres, hectares, sq_miles;
 
@@ -645,7 +646,7 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 	    }
 	    first = 0;
 
-	    area = areaList->value[ii];
+	    area = areaList->value[j];
 	    if (Map[i].head.with_z && getz) {
 		switch (output) {
 		case OUTPUT_SCRIPT:
