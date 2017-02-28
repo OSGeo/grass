@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("output"));
     G_add_keyword(_("external"));
     module->description =
-	_("Defines raster output format utilizing GDAL library.");
+	_("Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format.");
 
     parm.dir = G_define_option();
     parm.dir->key = "directory";
