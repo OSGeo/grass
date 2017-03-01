@@ -15,10 +15,33 @@
 #
 #############################################################################
 
+prefix="revision"
+get_prefix=0
+
 # collect revision numbers from command line arguments, if any
 # e.g., r70666, r70637 => -r70666 -r70637
 revs=""
 for i; do
+	if [ "$i" = "-h" -o "$i" = "--help" ]; then
+		cat<<EOT
+Usage: svnlog.sh [OPTION]... [REVISION]...
+
+Options:
+  -h, --help           print this help
+  -p, --prefix PREFIX  print PREFIX followed by a space and the revision number;
+                       print no space if PREFIX is empty
+EOT
+		exit
+	fi
+	if [ "$i" = "-p" -o "$i" = "--prefix" ]; then
+		get_prefix=1
+		continue
+	fi
+	if [ $get_prefix -eq 1 ]; then
+		prefix=`echo $i`
+		get_prefix=0
+		continue
+	fi
 	# remove any non-numeric characters
 	r=`echo $i | sed 's/[^0-9]//g'`
 	if [ "$r" = "" ]; then
@@ -28,21 +51,30 @@ for i; do
 	revs="$revs -r$r"
 done
 
+if [ "$prefix" != "" ]; then
+	prefix="$prefix "
+fi
+
 # retreive and combine log messages
-svn log $revs | awk '
+svn log $revs | awk --assign prefix="$prefix" '
 /^------------------------------------------------------------------------$/{
-	if(msg != ""){
-		gsub(/\n+$/, "", msg)
-		split(msg, lines, /\n/)
-		printf "%s", msg
-		if(length(lines) == 1)
-			printf " (backport %s)\n", rev
-		else
-			# add a separator for multiple lines
-			printf "\n(backport %s)\n%s\n", rev, $0
+	if(rev != ""){
+		gsub(/^[ \t\n]+|[ \t\n]+$/, "", msg)
+		nlines = split(msg, lines, /\n/)
+		if(nlines == 0)
+			printf "No log message (" prefix "%s)\n", rev
+		else if(nlines == 1)
+			printf "%s (" prefix "%s)\n", msg, rev
+		else{
+			# add separators for multiple lines
+			if(!prev_multi)
+				printf "%s\n", $0
+			printf "%s\n(" prefix "%s)\n%s\n", msg, rev, $0
+		}
+		prev_multi = nlines > 1
 	}
 	started = 1
-	msg = ""
+	rev = msg = ""
 	next
 }
 {
