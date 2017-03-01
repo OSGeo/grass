@@ -269,7 +269,7 @@ json = None
 orderedDict = None
 
 
-def vector_what(map, coord, distance=0.0, ttype=None, encoding=None, skip_attributes=False, layer=None):
+def vector_what(map, coord, distance=0.0, ttype=None, encoding=None, skip_attributes=False, layer=None, multiple=False):
     """Query vector map at given locations
 
     To query one vector map at one location
@@ -329,6 +329,7 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None, skip_attrib
     :param skip_attributes: True to skip quering attributes
     :param layer: layer number or list of layers (one for each vector),
                   if None, all layers (-1) are used
+    :param multiple: find multiple features within threshold distance
 
     :return: parsed list
     """
@@ -360,12 +361,17 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None, skip_attrib
         for e, n in coord:
             coord_list.append('%f,%f' % (e, n))
 
-    cmdParams = dict(quiet      = True,
-                     flags      = 'j' if skip_attributes else 'aj',
-                     map        = ','.join(map_list),
-                     layer      = ','.join(layer_list),
-                     coordinates = ','.join(coord_list),
-                     distance   = float(distance))
+    flags = 'j'
+    if not skip_attributes:
+        flags += 'a'
+    if multiple:
+        flags += 'm'
+    cmdParams = dict(quiet=True,
+                     flags=flags,
+                     map=','.join(map_list),
+                     layer=','.join(layer_list),
+                     coordinates=','.join(coord_list),
+                     distance=float(distance))
     if ttype:
         cmdParams['type'] = ','.join(ttype)
 
@@ -406,14 +412,27 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None, skip_attrib
     except ValueError:
         raise ScriptError(_("v.what output is not valid JSON format:\n {ret}").format(ret=ret))
 
-    for vmap in result['Maps']:
-        cats = vmap.pop('Categories', None)
-        if cats:
-            for cat in cats:
-                tmp = vmap.copy()
-                tmp.update(cat)
-                data.append(tmp)
-        else:
-            data.append(vmap)
-
+    if multiple:
+        for vmap in result['Maps']:
+            features = vmap.pop('Features', None)
+            if features:
+                for feature in features:
+                    cats = feature.pop('Categories', None)
+                    if cats:
+                        for cat in cats:
+                            tmp = feature.copy()
+                            tmp.update(cat)
+                            tmp2 = vmap.copy()
+                            tmp2.update(tmp)
+                            data.append(tmp2)
+    else:
+        for vmap in result['Maps']:
+            cats = vmap.pop('Categories', None)
+            if cats:
+                for cat in cats:
+                    tmp = vmap.copy()
+                    tmp.update(cat)
+                    data.append(tmp)
+            else:
+                data.append(vmap)
     return data
