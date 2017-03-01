@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
     Values = (struct value *) G_calloc(n + 1, sizeof(struct value));
 
     /* prepopulate Values */
-    if (n > 0)
+    if (findex > 0)
 	n = Vect_cidx_get_num_cats_by_index(&Map, findex);
     i = 0;
     Values[i].cat = -1;		/* features without category */
