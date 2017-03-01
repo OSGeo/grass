@@ -74,17 +74,17 @@ int main(int argc, char *argv[])
     xcsd_opt = G_define_option();
     xcsd_opt->key = "xc_sd";
     xcsd_opt->type = TYPE_DOUBLE;
-    xcsd_opt->description = _("X-coordinate standard deviation");
+    xcsd_opt->description = _("Apriori X-coordinate standard deviation");
 
     ycsd_opt = G_define_option();
     ycsd_opt->key = "yc_sd";
     ycsd_opt->type = TYPE_DOUBLE;
-    ycsd_opt->description = _("Y-coordinate standard deviation");
+    ycsd_opt->description = _("Apriori Y-coordinate standard deviation");
 
     zcsd_opt = G_define_option();
     zcsd_opt->key = "zc_sd";
     zcsd_opt->type = TYPE_DOUBLE;
-    zcsd_opt->description = _("Z-coordinate standard deviation");
+    zcsd_opt->description = _("Apriori Z-coordinate standard deviation");
     
     omega_opt = G_define_option();
     omega_opt->key = "omega";
@@ -104,17 +104,17 @@ int main(int argc, char *argv[])
     omegasd_opt = G_define_option();
     omegasd_opt->key = "omega_sd";
     omegasd_opt->type = TYPE_DOUBLE;
-    omegasd_opt->description = _("Omega (roll) standard deviation");
+    omegasd_opt->description = _("Apriori Omega (roll) standard deviation");
 
     phisd_opt = G_define_option();
     phisd_opt->key = "phi_sd";
     phisd_opt->type = TYPE_DOUBLE;
-    phisd_opt->description = _("Phi (pitch) standard deviation");
+    phisd_opt->description = _("Apriori Phi (pitch) standard deviation");
 
     kappasd_opt = G_define_option();
     kappasd_opt->key = "kappa_sd";
     kappasd_opt->type = TYPE_DOUBLE;
-    kappasd_opt->description = _("Kappa (yaw) standard deviation");
+    kappasd_opt->description = _("Apriori Kappa (yaw) standard deviation");
 
     use_flag = G_define_flag();
     use_flag->key = 'r';
