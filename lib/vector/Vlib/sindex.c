@@ -44,7 +44,7 @@ Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box *Box,
 	    Box->E, Box->W, Box->T, Box->B);
     plus = &(Map->plus);
 
-    Vect_reset_list(list);
+    Vect_reset_boxlist(list);
 
     ntypes = mtype = 0;
     /* count the number of different primitives in Map */
