@@ -952,7 +952,7 @@ class MapFrame(SingleMapFrame):
             try:
                 vectQuery = grass.vector_what(
                     map=vect, coord=(east, north),
-                    distance=qdist, encoding=encoding)
+                    distance=qdist, encoding=encoding, multiple=True)
             except grass.ScriptError:
                 GError(
                     parent=self, message=_(
