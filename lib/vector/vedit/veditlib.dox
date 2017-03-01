@@ -20,6 +20,8 @@ The library is used by <tt>v.edit</tt> module and wxGUI %vector digitizer.
 
  - Vedit_connect_lines()
 
+ - Vedit_extend_lines()
+
  - Vedit_chtype_lines()
 
  - Vedit_delete_lines()
