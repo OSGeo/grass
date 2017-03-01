@@ -8,7 +8,7 @@
  *
  * PURPOSE:      Converts a raster map into a vector map layer
  *
- * COPYRIGHT:    (C) 2007, 2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2007, 2011, 2017 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
