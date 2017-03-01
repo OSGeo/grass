@@ -2,11 +2,12 @@
 
 ############################################################################
 #
-# MODULE:       Create a combined log message for all or specified SVN revisions
+# MODULE:       svnlog.sh
 # AUTHOR(S):    Huidae Cho <grass4u gmail.com>
-# PURPOSE:      Create a log message for backporting and release news
+# PURPOSE:      Create a combined log message from all or specified SVN
+#		revisions for backporting and release news
 # COPYRIGHT:    (C) 2017 by Huidae Cho
-#                and the GRASS Development Team
+#               and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
