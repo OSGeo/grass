@@ -71,7 +71,7 @@ int Vedit_move_lines(struct Map_info *Map, struct Map_info **BgMap,
 
 		    for (bgi = 0; bgi < nbgmaps; bgi++) {
 			if (Vedit_snap_point
-			    (BgMap[bgi], line, &x[j], &y[j], &z[j], thresh,
+			    (BgMap[bgi], -1, &x[j], &y[j], &z[j], thresh,
 			     (snap == SNAPVERTEX) ? 1 : 0))
 			    break;	/* snapped, don't continue */
 		    }

@@ -247,12 +247,13 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 	line_new = -1;
 
     if (line_new > -1) {
+	n_points = Points_from->n_points - 1;
+
 	if (first) {
 	    x = Points_from->x[0];
 	    y = Points_from->y[0];
 	}
 	else {
-	    n_points = Points_from->n_points - 1;
 	    x = Points_from->x[n_points];
 	    y = Points_from->y[n_points];
 	}

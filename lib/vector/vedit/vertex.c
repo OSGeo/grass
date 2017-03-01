@@ -115,7 +115,7 @@ int Vedit_move_vertex(struct Map_info *Map, struct Map_info **BgMap,
 
 				for (bgi = 0; bgi < nbgmaps; bgi++) {
 				    if (Vedit_snap_point
-					(BgMap[bgi], line, &x[k], &y[k],
+					(BgMap[bgi], -1, &x[k], &y[k],
 					 &z[k], thresh_snap,
 					 (snap == SNAPVERTEX) ? 1 : 0))
 					moved[k] = 2;

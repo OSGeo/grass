@@ -286,6 +286,10 @@ int main(int argc, char *argv[])
 	    Upload[i].upload = TO_ATTR;
 	}
 
+	/* store default column names if column= is not given */
+	if (!opt.column->answer)
+	    Upload[i].column = G_store(opt.upload->answers[i]);
+
 	i++;
     }
     Upload[i].upload = END;
@@ -625,7 +629,11 @@ int main(int argc, char *argv[])
     }
 
     /* Go through all lines in 'from' and find nearest in 'to' for each */
-    /* Note: as from_type is restricted to GV_POINTS (for now) everything is simple */
+    /* Note: as from_type is restricted to GV_POINTS (for now) everything is
+     * simple */
+
+    /* suppress compiler warnings */
+    tx = ty = tz = fx = fy = fz = 0;
 
     count = 0;			/* count of distances in 'do_all' mode */
     /* Find nearest features for 'from' lines */
@@ -1388,7 +1396,7 @@ int main(int argc, char *argv[])
 	    G_percent(i, count, 1);
 
 	/* Write line connecting nearest points */
-	if (Outp != NULL) {
+	if (Near[i].count > 0 && Outp != NULL) {
 	    Vect_reset_line(FPoints);
 	    Vect_reset_cats(FCats);
 
