@@ -27,6 +27,7 @@ for i; do
 	revs="$revs -r$r"
 done
 
+# retreive and combine log messages
 svn log $revs | awk '
 /^------------------------------------------------------------------------$/{
 	if(msg != ""){
