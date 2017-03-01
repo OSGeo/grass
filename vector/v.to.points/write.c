@@ -84,7 +84,7 @@ void write_line(struct Map_info *Out, struct line_pnts *LPoints, int cat,
 		len = hypot(hypot(dx, dy), dz);
 
 		/* interpolate segment */
-		if (interpolate && vert < (LPoints->n_points - 1)) {
+		if (vertex == GV_VERTEX && interpolate) {
 		    int i, n;
 		    double x, y, z, dlen;
 

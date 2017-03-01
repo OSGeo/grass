@@ -129,7 +129,7 @@ int walk_forward_and_pick_up_coords(struct Map_info *map,
 {
     int cat_idx;
     int line, next_line, n1, n2;
-    int type, node, next_node;
+    int node, next_node;
     struct line_pnts *pnts;
     struct line_cats *cats_tmp;
 
@@ -149,9 +149,9 @@ int walk_forward_and_pick_up_coords(struct Map_info *map,
     /* Pick up first set of coordinates */
     lines_visited[line] = 1;
     if (cats_tmp)
-	type = Vect_read_line(map, pnts, Cats, line);
+	Vect_read_line(map, pnts, Cats, line);
     else
-	type = Vect_read_line(map, pnts, NULL, line);
+	Vect_read_line(map, pnts, NULL, line);
 
     Vect_get_line_nodes(map, line, &n1, &n2);
     next_line = find_next_line(map, line, n1, ltype);
@@ -175,7 +175,7 @@ int walk_forward_and_pick_up_coords(struct Map_info *map,
     node = next_node;
     while (line != 0 && line != start_line) {
 	G_debug(2, "  line = %d", line);
-	type = Vect_read_line(map, pnts, cats_tmp, line);
+	Vect_read_line(map, pnts, cats_tmp, line);
 	if (cats_tmp && write_cats == MULTI_CATS) {
 	    for (cat_idx = 0; cat_idx < cats_tmp->n_cats; cat_idx++) {
 		Vect_cat_set(Cats, cats_tmp->field[cat_idx],

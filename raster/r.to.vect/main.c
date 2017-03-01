@@ -8,7 +8,7 @@
  *
  * PURPOSE:      Converts a raster map into a vector map layer
  *
- * COPYRIGHT:    (C) 2007, 2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2007, 2011, 2017 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -151,10 +151,11 @@ int main(int argc, char *argv[])
 	G_warning(_("Categories will be unique sequence, raster values will be lost."));
     }
 
+    set_error_handler(&Map, &driver);
+
     if (Vect_open_new(&Map, out_opt->answer, z_flg->answer) < 0)
 	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
-    Vect_set_error_handler_io(NULL, &Map);
-                              
+
     Vect_hist_command(&Map);
 
     Cats = Vect_new_cats_struct();
@@ -186,7 +187,6 @@ int main(int argc, char *argv[])
 	if (driver == NULL)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
-        db_set_error_handler_driver(driver);
 
 	/* Create new table */
 	db_zero_string(&sql);

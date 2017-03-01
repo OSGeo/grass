@@ -39,6 +39,8 @@ double max_distance(double maxdistance)
     if (maxdistance < 0.0) {
 	G_get_window(&window);
 
+	G_begin_distance_calculations();
+
 	ew_dist1 =
 	    G_distance(window.east, window.north, window.west, window.north);
 	/* EW Dist at South Edge */
