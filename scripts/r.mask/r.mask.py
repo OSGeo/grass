@@ -94,7 +94,7 @@ def main():
     invert = flags['i']
 
     if not remove and not raster and not vector:
-        grass.fatal(_("Either parameter <raster> ot parameter <vector> is required"))
+        grass.fatal(_("Either parameter <raster> or parameter <vector> is required"))
 
     mapset = grass.gisenv()['MAPSET']
     exists = bool(grass.find_file('MASK', element='cell', mapset=mapset)['file'])
