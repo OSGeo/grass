@@ -185,7 +185,8 @@ def main():
 
     # try v.in.ogr directly
     if flags['o'] or grass.run_command('v.in.ogr', input=OGRdatasource, flags='j',
-                                       errors='status', quiet=True, overwrite=overwrite) == 0:
+                                       errors='status', quiet=True, overwrite=overwrite,
+                                       **vopts) == 0:
         try:
             grass.run_command('v.in.ogr', input=OGRdatasource,
                               flags=vflags, overwrite=overwrite, **vopts)
