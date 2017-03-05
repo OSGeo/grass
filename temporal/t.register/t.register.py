@@ -5,7 +5,7 @@
 # MODULE:	t.register
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Register raster, vector and raster3d maps in a space time datasets
+# PURPOSE:	Registers raster, vector and raster3d maps in a space time dataset
 # COPYRIGHT:	(C) 2011-2014, Soeren Gebbert and the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Registers raster, vector and raster3d maps in a space time datasets.
+#% description: Registers raster, vector and raster3d maps in a space time dataset.
 #% keyword: temporal
 #% keyword: map management
 #% keyword: register
@@ -50,7 +50,7 @@
 #% key: start
 #% type: string
 #% label: Valid start date and time of the first map
-#% description: Format absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer).
+#% description: Format for absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer.
 #% required: no
 #% multiple: no
 #% guisection: Time & Date
@@ -60,7 +60,7 @@
 #% key: end
 #% type: string
 #% label: Valid end date and time of all map
-#% description: Format absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer).
+#% description: Format for absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer.
 #% required: no
 #% multiple: no
 #% guisection: Time & Date
@@ -70,7 +70,7 @@
 #% key: unit
 #% type: string
 #% label: Time stamp unit
-#% description: Unit must be set in case of relative time stamps
+#% description: Unit must be set in case of relative timestamps
 #% required: no
 #% multiple: no
 #% options: years,months,days,hours,minutes,seconds
@@ -81,7 +81,7 @@
 #% key: increment
 #% type: string
 #% label: Time increment, works only in conjunction with start option
-#% description: Time increment between maps for valid time interval creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative is integer: 5)
+#% description: Time increment between maps for creation of valid time intervals (format for absolute time: NNN seconds, minutes, hours, days, weeks, months, years; format for relative time is of type integer: 5)
 #% required: no
 #% multiple: no
 #% guisection: Time & Date
