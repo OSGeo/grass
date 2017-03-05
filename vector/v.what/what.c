@@ -667,7 +667,8 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 		    fprintf(stdout, "Type=Area\n");
 		    break;
 		case OUTPUT_JSON:
-		    fprintf(stdout, ",\n\"Type\": \"Area\"");
+		    fprintf(stdout, "%s\n\"Type\": \"Area\"",
+			    multiple ? "" : ",");
 		    break;
 		default:
 		    fprintf(stdout, _("Type: Area\n"));
