@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 #
-# thumbnails.py: Create thumbnail sample images of the various GRASS color rules
+# thumbnails.py: Create thumbnail images of the GRASS color tables
 #
-#  AUTHOR: Python version by Glynn Clements
+#  AUTHOR: Vaclav Petras (non-PPM version using r.mapcalc)
+#          Glynn Clements (Python version)
 #      Earlier Bourne script version by Hamish Bowman,
 #      http://grasswiki.osgeo.org/wiki/Talk:Color_tables
 #
-#   (C) 2009-2013 by the GRASS Development Team
+#   (C) 2009-2017 by the GRASS Development Team
 #       This program is free software under the GNU General Public
 #       License (>=v2). Read the file COPYING that comes with GRASS
 #       for details.
@@ -14,98 +15,22 @@
 
 import sys
 import os
-import shutil
 import atexit
-import string
-import array
 import grass.script as grass
 
-tmp_img = None
+
 tmp_grad_abs = None
 tmp_grad_rel = None
 
-height = 15
-width = 85
 
 def cleanup():
-    if tmp_img:
-        grass.try_remove(tmp_img)
     if tmp_grad_rel:
-        grass.run_command('g.remove', flags = 'f', type = 'raster',
-                          name = tmp_grad_rel, quiet = True)
+        grass.run_command('g.remove', flags='f', type='raster',
+                          name=tmp_grad_rel, quiet=True)
     if tmp_grad_abs:
-        grass.run_command('g.remove', flags = 'f', type = 'raster',
-                          name = tmp_grad_abs, quiet = True)
+        grass.run_command('g.remove', flags='f', type='raster',
+                          name=tmp_grad_abs, quiet=True)
 
-# def rotate(src, dst):
-#     grass.call(["convert", "-rotate", "90", src, dst])
-
-def read_ppm(src):
-    fh = open(src, "rb")
-    text = fh.read()
-    fh.close()
-    i = 0
-    j = text.find('\n', i)
-    if text[i:j] != 'P6':
-        raise IOError
-    i = j + 1
-    j = text.find('\n', i)
-    w, h = text[i:j].split()
-    if int(w) != width or int(h) != height:
-        raise IOError
-    i = j + 1
-    j = text.find('\n', i)
-    maxval = text[i:j]
-    if int(maxval) != 255:
-        raise IOError
-    i = j + 1
-    return array.array('B', text[i:])
-
-def write_ppm(dst, data):
-    w = height
-    h = width
-    fh = open(dst, "wb")
-    fh.write("P6\n%d %d\n%d\n" % (w, h, 255))
-    data.tofile(fh)
-    fh.close()
-
-def rotate_ppm(srcd):
-    dstd = array.array('B', len(srcd) * '\0')
-    for y in xrange(height):
-        for x in xrange(width):
-            for c in xrange(3):
-                dstd[(x * height + (height - 1 - y)) * 3 + c] = srcd[(y * width + x) * 3 + c]
-    return dstd
-
-def flip_ppm(srcd):
-    dstd = array.array('B', len(srcd) * '\0')
-    stride = width * 3
-    for y in xrange(height):
-        dy = (height - 1 - y)
-        dstd[dy * stride:(dy + 1) * stride] = srcd[y * stride:(y + 1) * stride]
-    return dstd
-
-def ppmtopng(dst, src):
-    if grass.find_program("g.ppmtopng", '--help'):
-        grass.run_command('g.ppmtopng', input = src, output = dst, quiet = True)
-    elif grass.find_program("pnmtopng"):
-        fh = open(dst, 'wb')
-        grass.call(["pnmtopng", src], stdout = fh)
-        fh.close()
-    elif grass.find_program("convert"):
-        grass.call(["convert", src, dst])
-    else:
-        grass.fatal(_("Cannot find g.ppmtopng, pnmtopng or convert"))
-
-# TODO: this code is not used and can be moved to some lib function or
-# separate module if useful
-def convert_and_rotate(src, dst, flip = False):
-    ppm = read_ppm(src)
-    if flip:
-        ppm = flip_ppm(ppm)
-    ppm = rotate_ppm(ppm)
-    write_ppm(tmp_img, ppm)
-    ppmtopng(dst, tmp_img)
 
 def make_gradient(path):
     fh = open(path)
@@ -122,7 +47,8 @@ def make_gradient(path):
             # skip empty lines
             continue
         records.append(line.split())
-    records = [record for record in records if record[0] != 'nv' and record[0] != 'default']
+    records = [record for record in records
+               if record[0] != 'nv' and record[0] != 'default']
     relative = False
     absolute = False
     for record in records:
@@ -152,19 +78,25 @@ def make_gradient(path):
         # alternatively, only simpler expression would suffice if frames
         # are used to render raster and then the borders
         grass.mapcalc("$grad = if(col() > 2 && col() < ncols() - 1,"
-                      " float($min) + (col() - 3) * (float($max) - float($min)) / (ncols() - 2),"
+                      " float($min) + (col() - 3) * "
+                      "  (float($max) - float($min)) / (ncols() - 2),"
                       " null())",
-        	      grad = tmp_grad_abs, min = minval, max = maxval, quiet = True)
+                      grad=tmp_grad_abs, min=minval, max=maxval, quiet=True)
     else:
         grad = tmp_grad_rel
 
     return grad
 
-def make_image(output_dir, table, grad):
-    grass.run_command("r.colors", map = grad, color = table, quiet = True)
+
+def make_image(output_dir, table, grad, height, width):
+    outfile = os.path.join(output_dir, "colortables", "%s.png" % table)
+    os.environ['GRASS_RENDER_FILE'] = outfile
+
+    grass.run_command("r.colors", map=grad, color=table, quiet=True)
     grass.run_command("d.rast", map=grad, quiet=True)
     if 1:
-        grass.write_command("d.graph", quiet=True, flags='m', stdin="""width 1
+        grass.write_command("d.graph", quiet=True, flags='m', stdin="""
+        width 1
         color {outcolor}
         polyline
         {x1} {y1}
@@ -182,11 +114,13 @@ def make_image(output_dir, table, grad):
         """.format(x1=1, x2=width, y1=0, y2=height - 1,
                    x3=2, x4=width - 1, y3=1, y4=height - 2,
                    outcolor='white', incolor='black'))
-    outfile = os.path.join(output_dir, "colortables", "%s.png" % table)
-    shutil.move(tmp_img, outfile)
+
 
 def main():
     global tmp_img, tmp_grad_abs, tmp_grad_rel
+
+    height = 15
+    width = 85
 
     os.environ['GRASS_OVERWRITE'] = '1'
 
@@ -199,12 +133,10 @@ def main():
     pid = os.getpid()
     tmp_grad_abs = "tmp_grad_abs_%d" % pid
     tmp_grad_rel = "tmp_grad_rel_%d" % pid
-    tmp_img = grass.tempfile() + ".png"
 
     os.environ['GRASS_RENDER_WIDTH'] = '%d' % width
     os.environ['GRASS_RENDER_HEIGHT'] = '%d' % height
-    os.environ['GRASS_RENDER_FRAME'] = '%f,%f,%f,%f' % (0,height,0,width)
-    os.environ['GRASS_RENDER_FILE'] = tmp_img
+    os.environ['GRASS_RENDER_FRAME'] = '%f,%f,%f,%f' % (0, height, 0, width)
     os.environ['GRASS_RENDER_TRUECOLOR'] = 'TRUE'
     # for multiple d commands (requires to delete/move image each time)
     os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
@@ -225,18 +157,20 @@ def main():
 
     grass.mapcalc("$grad = if(col() > 2 && col() < ncols() - 1,"
                   " float(col()), null())", grad=tmp_grad_rel, quiet=True)
-    
+
     for table in os.listdir(color_dir):
         path = os.path.join(color_dir, table)
         grad = make_gradient(path)
-        make_image(output_dir, table, grad)
+        make_image(output_dir, table, grad,
+                   height=height, width=width)
 
     grass.mapcalc("$grad = if(col() > 2 && col() < ncols() - 1,"
                   " col(), null())", grad=tmp_grad_abs, quiet=True)
     for table in ['grey.eq', 'grey.log', 'random']:
-        make_image(output_dir, table, tmp_grad_abs)
+        make_image(output_dir, table, tmp_grad_abs,
+                   height=height, width=width)
 
- 
+
 if __name__ == "__main__":
     atexit.register(cleanup)
     main()
