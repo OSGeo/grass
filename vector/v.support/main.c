@@ -7,7 +7,7 @@
  *
  * PURPOSE:    updates metadata of vector map
  *
- * COPYRIGHT:  (C) 2007 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2007, 2017 by the GRASS Development Team
  *
  *             This program is free software under the
  *             GNU General Public License (>=v2).
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *map, *organization, *date, *person, *map_name, *map_date,
 	*scale, *comment, *zone, *thresh, *cmdhist;
-    struct Flag *r_flag;
+    struct Flag *r_flag, *h_flag;
 
     /* initialize GIS environment */
     G_gisinit(argv[0]);
@@ -121,6 +121,10 @@ int main(int argc, char *argv[])
     r_flag->key = 'r';
     r_flag->description = _("Replace comment instead of appending it");
 
+    h_flag = G_define_flag();
+    h_flag->key = 'h';
+    h_flag->description = _("Replace command line instead of appending it");
+
     /* options and flags parser */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -178,16 +182,21 @@ int main(int argc, char *argv[])
 
 	/* Open history file for modification */
 	sprintf(buf, "%s/%s", GV_DIRECTORY, Map.name);
-	Map.hist_fp = G_fopen_modify(buf, GV_HIST_ELEMENT);
+	if (h_flag->answer)
+	    Map.hist_fp = G_fopen_new(buf, GV_HIST_ELEMENT);
+	else
+	    Map.hist_fp = G_fopen_modify(buf, GV_HIST_ELEMENT);
 	if (Map.hist_fp == NULL) {
 	    G_warning(_("Unable to open history file for vector map <%s>"),
 		      Vect_get_full_name(&Map));
 	    Vect_close(&Map);
 	    exit(EXIT_FAILURE);
 	}
-	G_fseek(Map.hist_fp, (long)0, SEEK_END);
-	Vect_hist_write(&Map,
-			"---------------------------------------------------------------------------------\n");
+	if (!h_flag->answer) {
+	    G_fseek(Map.hist_fp, (long)0, SEEK_END);
+	    Vect_hist_write(&Map,
+			    "---------------------------------------------------------------------------------\n");
+	}
 	Vect_hist_write(&Map, "COMMAND: ");
 	Vect_hist_write(&Map, cmdhist->answer);
 	Vect_hist_write(&Map, "\n");
