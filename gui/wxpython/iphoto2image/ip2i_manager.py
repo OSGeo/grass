@@ -370,7 +370,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         # make a backup of the current points file if exists
         if os.path.exists(self.file['points']):
             shutil.copy(self.file['points'], self.file['points_bak'])
-            GMessage (_("An POINTS file exists, renaming it to POINTS_BAK"))
+            GMessage (_("A POINTS file exists, renaming it to POINTS_BAK"))
 
         #"""Make a POINTS file """
         import re,sys
@@ -993,7 +993,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
     def OnGeorect(self, event):
         """
-        Georectifies map(s) in group using i.rectify or v.transform
+        Georectifies map(s) in group using i.rectify
         """
         global maptype
         self.SaveGCPs(None)
@@ -1027,7 +1027,28 @@ class GCP(MapFrame, ColumnSorterMixin):
 
             # provide feedback on failure
             if ret != 0:
+                print >> sys.stderr, 'ip2i: Error in i.rectify'
+                print >> sys.stderr, self.grwiz.src_map
                 print >> sys.stderr, msg
+
+            busy = wx.BusyInfo(message=_("Writing output image to group, please wait..."),
+                               parent=self)
+            wx.Yield()
+
+            ret1, msg1 = RunCommand('i.group',
+                                  parent=self,
+                                  getErrorMsg=True,
+                                  quiet=False,
+                                  group=self.xygroup,
+                                  input=''.join([self.grwiz.src_map.split('@')[0],self.extension]))
+
+            busy.Destroy()
+
+            if ret1 != 0:
+                print >> sys.stderr, 'ip2i: Error in i.group'
+                print >> sys.stderr, self.grwiz.src_map.split('@')[0]
+                print >> sys.stderr, self.extension
+                print >> sys.stderr, msg1
 
         self.grwiz.SwitchEnv('target')
 
