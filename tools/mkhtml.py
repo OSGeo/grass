@@ -39,7 +39,8 @@ pgm = sys.argv[1]
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
 
-source_url = "https://trac.osgeo.org/grass/browser/grass/trunk/"
+trunk_url = "https://trac.osgeo.org/grass/browser/grass/trunk/"
+addons_url = "https://trac.osgeo.org/grass/browser/grass-addons/"
 
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -314,7 +315,13 @@ if not year:
 # check the names of scripts to assign the right folder
 topdir = os.path.abspath(os.getenv("MODULE_TOPDIR"))
 curdir = os.path.abspath(os.path.curdir)
-pgmdir = curdir.replace(topdir, '').lstrip(os.path.sep)
+if curdir.startswith(topdir):
+    source_url = trunk_url
+    pgmdir = curdir.replace(topdir, '').lstrip(os.path.sep)
+else:
+    # addons
+    source_url = addons_url
+    pgmdir = os.path.sep.join(curdir.split(os.path.sep)[-3:])
 url_source = ''
 if os.getenv('SOURCE_URL', ''):
     # addons
