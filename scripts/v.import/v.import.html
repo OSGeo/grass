@@ -24,6 +24,17 @@ The list of actually supported formats can be printed by <b>-f</b> flag.
 
 <h2>NOTES</h2>
 
+<em>v.import</em> checks the projection metadata of the dataset to be
+imported against the current location's projection. If not identical a
+related error message is shown.
+<br>
+To override this projection check (i.e. to use current location's projection)
+by assuming that the dataset has the same projection as the current location
+the <b>-o</b> flag can be used. This is also useful when geodata to be
+imported do not contain any projection metadata at all. The user must be
+sure that the projection is identical in order to avoid to introduce data
+errors.
+
 <h3>Topology cleaning</h3>
 
 When importing polygons, non-topological polygons are converted to
