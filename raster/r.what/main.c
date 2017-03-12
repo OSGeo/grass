@@ -414,10 +414,10 @@ int main(int argc, char *argv[])
 		}
 		if (flg.color->answer) {
 		    if (out_type[i] == CELL_TYPE)
-			Rast_get_c_color(&cell[i][cache[point].col],
+			Rast_get_c_color(&(cache[point].value[i]),
 					     &red, &green, &blue, &ncolor[i]);
 		    else
-			Rast_get_d_color(&dcell[i][cache[point].col],
+			Rast_get_d_color(&(cache[point].dvalue[i]),
 					     &red, &green, &blue, &ncolor[i]);
 
 		    sprintf(cache[point].clr_buf[i], "%03d:%03d:%03d", red,
