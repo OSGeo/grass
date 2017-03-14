@@ -15,7 +15,10 @@
 #
 #############################################################################
 
+user=""
+compact=0
 prefix="revision"
+get_user=0
 get_prefix=0
 
 # collect revision numbers from command line arguments, if any
@@ -28,10 +31,25 @@ Usage: svnlog.sh [OPTION]... [REVISION]...
 
 Options:
   -h, --help           print this help
+  -u, --user USER      search for revisions by USERs separated by a comma
+  -c, --compact        print compact log messages; used with --prefix
   -p, --prefix PREFIX  print PREFIX followed by a space and the revision number;
-                       print no space if PREFIX is empty
+                       print no space if PREFIX is empty; used with --compact
 EOT
 		exit
+	fi
+	if [ "$i" = "-u" -o "$i" = "--user" ]; then
+		get_user=1
+		continue
+	fi
+	if [ $get_user -eq 1 ]; then
+		user=`echo $i | sed 's/^/^(/; s/,/|/g; s/$/)$/'`
+		get_user=0
+		continue
+	fi
+	if [ "$i" = "-c" -o "$i" = "--compact" ]; then
+		compact=1
+		continue
 	fi
 	if [ "$i" = "-p" -o "$i" = "--prefix" ]; then
 		get_prefix=1
@@ -56,9 +74,16 @@ if [ "$prefix" != "" ]; then
 fi
 
 # retreive and combine log messages
-svn log $revs | awk --assign prefix="$prefix" '
+svn log $revs |
+awk \
+	--assign user="$user" \
+	--assign compact=$compact \
+	--assign prefix="$prefix" \
+'BEGIN{
+	any = 0
+}
 /^------------------------------------------------------------------------$/{
-	if(rev != ""){
+	if(compact && rev != ""){
 		gsub(/^[ \t\n]+|[ \t\n]+$/, "", msg)
 		nlines = split(msg, lines, /\n/)
 		if(nlines == 0)
@@ -74,15 +99,35 @@ svn log $revs | awk --assign prefix="$prefix" '
 		prev_multi = nlines > 1
 	}
 	started = 1
+	sep = $0
 	rev = msg = ""
 	next
 }
 {
 	if(started){
-		rev = $1
 		started = 0
+		if(user == "" || $3 ~ user){
+			any = 1
+			skip = 0
+			if(compact)
+				rev = $1
+			else{
+				print sep
+				print
+				print ""
+			}
+		}else
+			skip = 1
 		getline
 		next
+	}else if(!skip){
+		if(compact)
+			msg = msg $0 "\n"
+		else
+			print
 	}
-	msg = msg $0 "\n"
+}
+END{
+	if(!compact && any)
+		print sep
 }'
