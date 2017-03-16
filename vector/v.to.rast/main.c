@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 	       _("use category values"),
 	       _("use value specified by value option"),
 	       _("use z coordinate (points or contours only)"),
-	       _("output as flow direction (lines only)"));
+	       _("line direction in degrees CCW from east (lines only)"));
     use_opt->descriptions = desc;
 
     col = G_define_standard_option(G_OPT_DB_COLUMN);

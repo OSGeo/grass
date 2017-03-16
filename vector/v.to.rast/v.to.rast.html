@@ -36,7 +36,7 @@ specified alone when using the <em>dir</em> option.
 <li>
 <em>z</em>    - use z coordinate (points or contours only)
 <li>
-<em>dir</em>  - output as flow direction in degrees (lines only)
+<em>dir</em>  - line direction in degrees counterclockwise from east (lines only)
 </ul>
 <p>The <em><b>column</b></em> parameter uses an existing column from the vector map
 database table as the category value in the output raster map. Existing table 
@@ -58,7 +58,7 @@ original vector line. This tends to be more aggressive than area-only conversion
 Points and orphaned centroids will be converted into single cells on the
 resultant raster map.
 </ul>
-<p><p><b>Flow directions</b> are given in degrees counterclockwise from east.
+<p><p><b>Line directions</b> are given in degrees counterclockwise from east.
 <p><p>Raster category labels are supported for all of <em>use=</em> except <em>use=z</em>.
 <p>
 The <b>-d</b> flag applies only to lines and boundaries, the default is 
@@ -91,6 +91,25 @@ v.to.rast input=vect_map output=raster_map attribute_column=SPEED type=line
 <div class="code"><pre>
 v.to.rast input=streams output=streamsdir use=dir
 </pre></div>
+
+<h3>Calculate slope along path</h3>
+Using slope and aspect maps, compute slope along a bus route (use full NC sample dataset):
+<div class="code"><pre>
+g.region raster=elevation -p
+r.slope.aspect elevation=elevation slope=slope aspect=aspect
+
+# compute direction of the bus route
+v.to.rast input=busroute11 type=line output=busroute11_dir use=dir
+
+# extract steepest slope values and transform them into slope along path
+r.mapcalc "route_slope = if(busroute11, slope)"
+r.mapcalc "route_slope_dir = abs(atan(tan(slope) * cos(aspect - busroute11_dir)))"
+</pre></div>
+
+<center>
+<img src="v_to_rast_direction.png" alt="Slope along path" border=1><br>
+Slope in degrees along bus route
+</center>
 
 <h3>Convert a vector polygon map to raster including descriptive labels (Spearfish)</h3>
 
