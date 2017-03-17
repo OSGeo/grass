@@ -94,6 +94,12 @@ double G_window_percentage_overlap(const struct Cell_head *window,
 	s = S;
     V = n - s;
 
+    if (N == S) {
+	V = (N < window->north && N > window->south);
+	N = 1;
+	S = 0;
+    }
+
     if (V <= 0.0)
 	return 0.0;
 
@@ -114,6 +120,8 @@ double G_window_percentage_overlap(const struct Cell_head *window,
     if ((w = window->west) < W)
 	w = W;
     H = e - w;
+    if (W == E)
+	H = (E > window->west && E < window->east);
     if (H <= 0.0)
 	return 0.0;
 
@@ -133,6 +141,10 @@ double G_window_percentage_overlap(const struct Cell_head *window,
 		w = W;
 	    H += e - w;
 	}
+    }
+    if (W == E) {
+	W = 0;
+	E = 1;
     }
 
     return (H * V) / ((N - S) * (E - W));
