@@ -31,7 +31,7 @@ double calculate_infiltration(int timestep, double R)
      *			    K(z) = K0 * exp(-f * z)
      *
      *			where K(z) is hydraulic conductivity at depth z,
-     *			      z is the soil depth
+     *			      z is the soil depth, and
      *			      f is the parameter controlling the decline rate
      *			        of transmissivity (1/m); can be defined by m as
      *			        f = dtheta / m
