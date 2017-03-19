@@ -101,7 +101,7 @@ double calculate_infiltration(int timestep, double R)
 	    goto cont2;
 
 	/* infiltration rate is less than rainfall intensity */
-	/* Newton-Raphson iteration to solve Eq. (6) for f */
+	/* Newton-Raphson iteration to solve Eq. (6) for I */
 	/* guess new cumulative infiltration */
 	I = cumI + r * input.dt;
 	for (i = 0; i < MAXITER; i++) {
@@ -160,7 +160,7 @@ double calculate_infiltration(int timestep, double R)
 	ponding = 1;
     }
 
-    /* Newton-Raphson iteration to solve Eq. (8) for f */
+    /* Newton-Raphson iteration to solve Eq. (8) for I */
     for (i = 0; i < MAXITER; i++) {
 	IC = I + C;
 	sum = 0.0;
