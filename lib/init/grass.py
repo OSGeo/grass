@@ -1171,14 +1171,24 @@ def set_language(grass_config_dir):
     # Set up environment for subprocesses
     os.environ['LANGUAGE'] = language
     os.environ['LANG'] = language
-    if encoding:
+
+    if language == 'ko_KR' and encoding == 'cp949':
+        # The default encoding for the Korean language in Windows is cp949,
+        # Microsoft's proprietary extension to euc-kr, but gettext prints no
+        # translated messages at all in the Command Prompt window if LC_CTYPE
+        # is set to ko_KR.cp949. Here, force LC_CTYPE to be euc-kr.
+        normalized = 'euc-kr'
+        encoding = None
+    elif encoding:
         normalized = locale.normalize('%s.%s' % (language, encoding))
     else:
         normalized = language
+
     for lc in ('LC_CTYPE', 'LC_MESSAGES', 'LC_TIME', 'LC_COLLATE',
                'LC_MONETARY', 'LC_PAPER', 'LC_NAME', 'LC_ADDRESS',
                'LC_TELEPHONE', 'LC_MEASUREMENT', 'LC_IDENTIFICATION'):
         os.environ[lc] = normalized
+
 
     # Some code in GRASS might not like other decimal separators than .
     # Other potential sources for problems are: LC_TIME LC_CTYPE
