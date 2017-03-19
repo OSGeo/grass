@@ -1189,7 +1189,6 @@ def set_language(grass_config_dir):
                'LC_TELEPHONE', 'LC_MEASUREMENT', 'LC_IDENTIFICATION'):
         os.environ[lc] = normalized
 
-
     # Some code in GRASS might not like other decimal separators than .
     # Other potential sources for problems are: LC_TIME LC_CTYPE
     locale.setlocale(locale.LC_NUMERIC, 'C')
