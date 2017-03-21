@@ -270,11 +270,11 @@ int main(int argc, char *argv[])
     P_get_edge(P_BILINEAR, &dims, stepE, stepN);
     P_set_dim(&dims, stepE, stepN, &nsplx_adj, &nsply_adj);
 
-    G_verbose_message(n_("adjusted EW spline %d",
-                         "adjusted EW splines %d",
+    G_verbose_message(n_("Adjusted EW spline %d",
+                         "Adjusted EW splines %d",
                          nsplx_adj), nsplx_adj);
-    G_verbose_message(n_("adjusted NS spline %d",
-                         "adjusted NS splines %d",
+    G_verbose_message(n_("Adjusted NS spline %d",
+                         "Adjusted NS splines %d",
                          nsply_adj), nsply_adj);
 
     /* calculate number of subregions */
@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
 	    nsply = NSPLY_MAX;
 	}
 	*/
-	G_debug(1, _("nsply = %d"), nsply);
+	G_debug(1, "nsply = %d", nsply);
 
 	elaboration_reg.east = original_reg.west;
 	last_column = FALSE;
@@ -330,7 +330,7 @@ int main(int argc, char *argv[])
 
 	    subregion++;
 	    if (nsubregions > 1)
-		G_message(_("subregion %d of %d"), subregion, nsubregions);
+		G_message(_("Subregion %d of %d"), subregion, nsubregions);
 
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  GENERAL_COLUMN);
@@ -354,21 +354,21 @@ int main(int argc, char *argv[])
 		nsplx = NSPLX_MAX;
 	    }
 	    */
-	    G_debug(1, _("nsplx = %d"), nsplx);
+	    G_debug(1, "nsplx = %d", nsplx);
 
 	    dim_vect = nsplx * nsply;
-	    G_debug(1, _("read vector region map"));
+	    G_debug(1, "read vector region map");
 	    observ =
 		P_Read_Vector_Correction(&In, &elaboration_reg, &npoints,
 					 &nterrain, dim_vect, &lcat);
 
-	    G_debug(5, _("npoints = %d, nterrain = %d"), npoints, nterrain);
+	    G_debug(5, "npoints = %d, nterrain = %d", npoints, nterrain);
 	    if (npoints > 0) {	/* If there is any point falling into elaboration_reg. */
 		count_terrain = 0;
 		nparameters = nsplx * nsply;
 
 		/* Mean calculation */
-		G_debug(3, _("Mean calculation"));
+		G_important_message(_("Performing mean calculation..."));
 		mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
 
 		/*Least Squares system */
@@ -382,7 +382,7 @@ int main(int argc, char *argv[])
 		lineVect = G_alloc_ivector(npoints + 1);
 
 		/* Setting obsVect vector & Q matrix */
-		G_debug(3, _("Only TERRAIN points"));
+		G_debug(3, "Only TERRAIN points");
 		for (i = 0; i < npoints; i++) {
 		    if (observ[i].cat == TERRAIN_SINGLE) {
 			obsVect[count_terrain][0] = observ[i].coordX;
@@ -412,7 +412,7 @@ int main(int argc, char *argv[])
 		G_free_vector(Q);
 		G_free_matrix(obsVect);
 
-		G_verbose_message( _("Correction and creation of terrain vector"));
+		G_important_message( _("Correction and creation of terrain vector..."));
 		P_Sparse_Correction(&In, &Out, &Terrain, &elaboration_reg,
 				    general_box, overlap_box, obsVect_all, lcat,
 				    parVect, lineVect, stepN, stepE,
@@ -434,7 +434,7 @@ int main(int argc, char *argv[])
 
     /* Dropping auxiliary table */
     if (npoints > 0) {
-	G_debug(1, _("Dropping <%s>"), table_name);
+	G_debug(1, "Dropping <%s>", table_name);
 	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
 	    G_fatal_error(_("Auxiliary table could not be dropped"));
     }
