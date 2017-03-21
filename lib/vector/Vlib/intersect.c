@@ -114,6 +114,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 {
     static int first_3d = 1;
     double d, d1, d2, r1, dtol, t;
+    int switched;
 
     /* TODO: Works for points ? */
 
@@ -129,19 +130,17 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 
     /*  'Sort' each segment by x, y 
      *   MUST happen before D, D1, D2 are calculated */
-    if (ax2 < ax1 || (ax2 == ax1 && ay2 < ay1)) {
-	t = ax1;
-	ax1 = ax2;
-	ax2 = t;
-	t = ay1;
-	ay1 = ay2;
-	ay2 = t;
-	t = az1;
-	az1 = az2;
-	az2 = t;
+    /*  'Sort' each segment by x, y 
+     *   MUST happen before D, D1, D2 are calculated */
+    switched = 0;
+    if (bx2 < bx1)
+	switched = 1;
+    else if (bx2 == bx1) {
+	if (by2 < by1)
+	    switched = 1;
     }
 
-    if (bx2 < bx1 || (bx2 == bx1 && by2 < by1)) {
+    if (switched) {
 	t = bx1;
 	bx1 = bx2;
 	bx2 = t;
@@ -151,6 +150,26 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 	t = bz1;
 	bz1 = bz2;
 	bz2 = t;
+    }
+
+    switched = 0;
+    if (ax2 < ax1)
+	switched = 1;
+    else if (ax2 == ax1) {
+	if (ay2 < ay1)
+	    switched = 1;
+    }
+
+    if (switched) {
+	t = ax1;
+	ax1 = ax2;
+	ax2 = t;
+	t = ay1;
+	ay1 = ay2;
+	ay2 = t;
+	t = az1;
+	az1 = az2;
+	az2 = t;
     }
 
     /* Check for identical segments */
