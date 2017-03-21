@@ -130,8 +130,6 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 
     /*  'Sort' each segment by x, y 
      *   MUST happen before D, D1, D2 are calculated */
-    /*  'Sort' each segment by x, y 
-     *   MUST happen before D, D1, D2 are calculated */
     switched = 0;
     if (bx2 < bx1)
 	switched = 1;
