@@ -6,9 +6,9 @@
 /* The Green-and-Ampt Model */
 double calculate_infiltration(int timestep, double R)
 {
-    static double cumf = 0.0, f = 0.0;
+    static double cumf = 0.0, f = 0.0, cnst = 0.0, pt = 0.0;
     static char ponding = 0;
-    double t, df, f1, f2, fc, R2, cnst, pt, psi_dtheta, sum;
+    double t, df, f1, f2, fc, R2, psi_dtheta, sum;
     int factorial;
     int i, j;
 
@@ -21,7 +21,7 @@ double calculate_infiltration(int timestep, double R)
     }
 
     t = timestep * input.dt;
-    f1 = cnst = pt = 0.0;
+    f1 = 0.0;
     psi_dtheta = params.psi * params.dtheta;
     if (!ponding) {
 	if (cumf) {
