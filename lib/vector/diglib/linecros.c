@@ -61,6 +61,7 @@ dig_test_for_intersection(double ax1, double ay1,
 {
     register double d, d1, d2;
     double t;
+    int switched;
 
     if (ax1 > ax2 || (ax1 == ax2 && ay1 > ay2)) {
 	t = ax1;
@@ -79,6 +80,38 @@ dig_test_for_intersection(double ax1, double ay1,
 
 	t = by1;
 	by1 = by2;
+	by2 = t;
+    }
+
+    switched = 0;
+    if (bx1 < ax1)
+	switched = 1;
+    else if (bx1 == ax1) {
+	if (bx2 < ax2)
+	    switched = 1;
+	else if (bx2 == ax2) {
+	    if (by1 < ay1)
+		switched = 1;
+	    else if (by1 == ay1) {
+		if (by2 < ay2)
+		    switched = 1;
+	    }
+	}
+    }
+
+    if (switched) {
+	t = ax1;
+	ax1 = bx1;
+	bx1 = t;
+	t = ax2;
+	ax2 = bx2;
+	bx2 = t;
+
+	t = ay1;
+	ay1 = by1;
+	by1 = t;
+	t = ay2;
+	ay2 = by2;
 	by2 = t;
     }
 
@@ -156,6 +189,7 @@ dig_find_intersection(double ax1, double ay1,
 {
     register double d, r1, r2;
     double t;
+    int switched;
 
     if (ax1 > ax2 || (ax1 == ax2 && ay1 > ay2)) {
 	t = ax1;
@@ -174,6 +208,38 @@ dig_find_intersection(double ax1, double ay1,
 
 	t = by1;
 	by1 = by2;
+	by2 = t;
+    }
+
+    switched = 0;
+    if (bx1 < ax1)
+	switched = 1;
+    else if (bx1 == ax1) {
+	if (bx2 < ax2)
+	    switched = 1;
+	else if (bx2 == ax2) {
+	    if (by1 < ay1)
+		switched = 1;
+	    else if (by1 == ay1) {
+		if (by2 < ay2)
+		    switched = 1;
+	    }
+	}
+    }
+
+    if (switched) {
+	t = ax1;
+	ax1 = bx1;
+	bx1 = t;
+	t = ax2;
+	ax2 = bx2;
+	bx2 = t;
+
+	t = ay1;
+	ay1 = by1;
+	by1 = t;
+	t = ay2;
+	ay2 = by2;
 	by2 = t;
     }
 
