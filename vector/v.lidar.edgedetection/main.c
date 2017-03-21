@@ -67,6 +67,9 @@ int main(int argc, char *argv[])
     dbDriver *driver;
 
 /*------------------------------------------------------------------------------------------*/
+
+    G_gisinit(argv[0]);
+
     /* Options' declaration */
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -77,9 +80,10 @@ int main(int argc, char *argv[])
 
     spline_step_flag = G_define_flag();
     spline_step_flag->key = 'e';
-    spline_step_flag->label = _("Estimate point density and distance");
+    spline_step_flag->label = _("Estimate point density and distance and quit");
     spline_step_flag->description =
 	_("Estimate point density and distance for the input vector points within the current region extends and quit");
+    spline_step_flag->suppress_required = YES;
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -147,9 +151,10 @@ int main(int argc, char *argv[])
     lambdaF_opt->answer = "2";
     lambdaF_opt->guisection = _("Settings");
 
-    /* Parsing */
-    G_gisinit(argv[0]);
+    G_option_required(out_opt, spline_step_flag, NULL);
+    G_option_requires(spline_step_flag, in_opt, NULL);
 
+    /* Parsing */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -164,6 +169,33 @@ int main(int argc, char *argv[])
 
     grad_L = grad_L * grad_L;
     grad_H = grad_H * grad_H;
+
+    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
+	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
+    }
+
+    Vect_set_open_level(1);
+    /* Open input vector */
+    if (1 > Vect_open_old(&In, in_opt->answer, mapset))
+	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
+
+    /* Input vector must be 3D */
+    if (!Vect_is_3d(&In))
+	G_fatal_error(_("Input vector map <%s> is not 3D!"), in_opt->answer);
+
+    /* Estimate point density and mean distance for current region */
+    if (spline_step_flag->answer) {
+	double dens, dist;
+	if (P_estimate_splinestep(&In, &dens, &dist) == 0) {
+            fprintf(stdout, _("Estimated point density: %.4g\n"), dens);
+	    fprintf(stdout, _("Estimated mean distance between points: %.4g\n"), dist);
+	}
+	else
+	    G_warning(_("No points in current region!"));
+	
+	Vect_close(&In);
+	exit(EXIT_SUCCESS);
+    }
 
     if (!(db = G_getenv_nofatal2("DB_DATABASE", G_VAR_MAPSET)))
 	G_fatal_error(_("Unable to read name of database"));
@@ -208,34 +240,6 @@ int main(int argc, char *argv[])
     /* Checking vector names */
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				 G_FATAL_EXIT);
-
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
-    }
-
-    Vect_set_open_level(1);
-    /* Open input vector */
-    if (1 > Vect_open_old(&In, in_opt->answer, mapset))
-	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
-
-    /* Input vector must be 3D */
-    if (!Vect_is_3d(&In))
-	G_fatal_error(_("Input vector map <%s> is not 3D!"), in_opt->answer);
-
-    /* Estimate point density and mean distance for current region */
-    if (spline_step_flag->answer) {
-	double dens, dist;
-	if (P_estimate_splinestep(&In, &dens, &dist) == 0) {
-	    G_message("Estimated point density: %.4g", dens);
-	    G_message("Estimated mean distance between points: %.4g", dist);
-	}
-	else
-	    G_warning(_("No points in current region!"));
-	
-	Vect_close(&In);
-	exit(EXIT_SUCCESS);
-    }
-
     /* Open output vector */
     if (0 > Vect_open_new(&Out, out_opt->answer, WITH_Z))
 	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
