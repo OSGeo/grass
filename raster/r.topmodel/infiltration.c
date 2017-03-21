@@ -227,7 +227,7 @@ double calculate_infiltration(int timestep, double R)
 	cumI = I;
 	/* initial guess for next time step */
 	I += dIdt * input.dt;
-	ponding = PONDING_YES
+	ponding = PONDING_YES;
     } else {
     	/* full infiltration */
 	dIdt = R;
