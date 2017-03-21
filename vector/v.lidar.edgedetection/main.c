@@ -292,8 +292,8 @@ int main(int argc, char *argv[])
     P_get_edge(P_BICUBIC, &dims, stepE, stepN);
     P_set_dim(&dims, stepE, stepN, &nsplx_adj, &nsply_adj);
 
-    G_verbose_message(_("adjusted EW splines %d"), nsplx_adj);
-    G_verbose_message(_("adjusted NS splines %d"), nsply_adj);
+    G_verbose_message(_("Adjusted EW splines %d"), nsplx_adj);
+    G_verbose_message(_("Adjusted NS splines %d"), nsply_adj);
 
     /* calculate number of subregions */
     edgeE = dims.ew_size - dims.overlap - 2 * dims.edge_v;
@@ -348,7 +348,7 @@ int main(int argc, char *argv[])
 
 	    subregion++;
 	    if (nsubregions > 1)
-		G_message(_("subregion %d of %d"), subregion, nsubregions);
+		G_message(_("Subregion %d of %d"), subregion, nsubregions);
 
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  GENERAL_COLUMN);
@@ -390,7 +390,7 @@ int main(int argc, char *argv[])
 		mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
 
 		/* Least Squares system */
-		G_debug(1, _("Allocating memory for bilinear interpolation"));
+		G_debug(1, "Allocating memory for bilinear interpolation");
 		BW = P_get_BandWidth(P_BILINEAR, nsply);	/* Bilinear interpolation */
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
 		TN = G_alloc_vector(nparameters);	/* vector */
@@ -411,7 +411,7 @@ int main(int argc, char *argv[])
 
 		G_free(observ);
 
-		G_verbose_message(_("Bilinear interpolation"));
+		G_important_message(_("Performing bilinear interpolation..."));
 		normalDefBilin(N, TN, Q, obsVect, stepE, stepN, nsplx,
 			       nsply, elaboration_reg.west,
 			       elaboration_reg.south, npoints, nparameters,
@@ -423,12 +423,12 @@ int main(int argc, char *argv[])
 		for (tn = 0; tn < nparameters; tn++)
 		    TN[tn] = 0;
 
-		G_debug(1, _("Allocating memory for bicubic interpolation"));
+		G_debug(1, "Allocating memory for bicubic interpolation");
 		BW = P_get_BandWidth(P_BICUBIC, nsply);
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
 		parVect_bicub = G_alloc_vector(nparameters);	/* Bicubic parameters vector */
 
-		G_verbose_message(_("Bicubic interpolation"));
+		G_important_message(_("Performing bicubic interpolation..."));
 		normalDefBicubic(N, TN, Q, obsVect, stepE, stepN, nsplx,
 				 nsply, elaboration_reg.west,
 				 elaboration_reg.south, npoints, nparameters,
@@ -440,7 +440,7 @@ int main(int argc, char *argv[])
 		G_free_vector(TN);
 		G_free_vector(Q);
 
-		G_verbose_message(_("Point classification"));
+		G_important_message(_("Point classification..."));
 		classification(&Out, elaboration_reg, general_box,
 			       overlap_box, obsVect, parVect_bilin,
 			       parVect_bicub, mean, alpha, grad_H, grad_L,
@@ -462,7 +462,7 @@ int main(int argc, char *argv[])
 
     /* Dropping auxiliary table */
     if (npoints > 0) {
-	G_debug(1, _("Dropping <%s>"), table_name);
+	G_debug(1, "Dropping <%s>", table_name);
 	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
 	    G_warning(_("Auxiliary table could not be dropped"));
     }
