@@ -3,7 +3,14 @@
 #include <grass/glocale.h>
 #include "global.h"
 
-/* Calculates the infiltrate rate (m/hr) for the given timestep. For variable
+#define	TOLERANCE	0.00001
+#define	MAX_ITER	20
+#define	NUM_TERMS	10
+#define	PONDING_NO	0
+#define	PONDING_STARTED	1
+#define	PONDING_YES	2
+
+/* Calculates the infiltrate rate (m/hr) for the given time step. For variable
  * names and equation numbers in comments, refer to Beven (1984).
  *
  * Beven, K. J., 1984. Infiltration into a class of vertically non-uniform
@@ -40,9 +47,9 @@ double calculate_infiltration(int timestep, double R)
      *
      * R		Rainfall intensity (m/h)
      * r		Infiltration rate (m/h)
-     * cumI		Cumulative infiltration at the start of timestep (m)
-     * I		Cumulative infiltration at the end of timestep (m)
-     * dIdt		Infiltration rate for the current timestep (m/hr)
+     * cumI		Cumulative infiltration at the start of time step (m)
+     * I		Cumulative infiltration at the end of time step (m)
+     * dIdt		Infiltration rate for the current time step (m/hr)
      * C		Storage-suction factor (m) (Morel-Seytoux and Khanji,
      *			1974); C = psi * dtheta
      * IC		I + C
@@ -50,61 +57,72 @@ double calculate_infiltration(int timestep, double R)
      *			from params.lambda
      * t		Current time (hr)
      * tp		Time to ponding (hr)
+     * ponding		Ponding indicator
+     * 			PONDING_NO: no ponding
+     * 			PONDING_STARTED: ponding started in this time step
+     * 			PONDING_YES: ponding has started in a previous time step
      */
-    static double cumI = 0.0, I = 0.0;
-    static char ponding = 0;
-    double r, C, IC, lambda, dIdt, t, tp;
+    static double cumI = 0.0, I = 0.0, lambda = 0.0, tp = 0.0;
+    static int ponding = PONDING_NO;
+    double r, C, IC, dIdt, t;
     double f1, f2, df, sum;
     int fact;
     int i, j;
 
     /* reset if there is no rainfall */
     if (R <= 0.0) {
-	cumI = 0.0;
-	I = 0.0;
-	ponding = 0;
+	cumI = I = lambda = tp = 0.0;
+	ponding = PONDING_NO;
 	return 0.0;
     }
 
     t = timestep * input.dt;
-    lambda = tp = f1 = 0.0;
     C = params.psi * params.dtheta;
+    f1 = 0.0;
 
-    /* if no ponding occurred yet */
-    if (!ponding) {
-	if (cumI > 0) {
-	    f1 = cumI;
-	    /* infiltration rate: Eq. (6)
-	     * Note that his Ks = K0 * exp(f * z) in Eq. (1a) instead of
-	     * Ks = K0 * exp(-f * z) used in his TOPMODEL code, TMOD9502.F.
-	     * Substitute f=-dtheta/m for f in Eq. (1a), hence -K0 and
-	     * exp(f1/m), slightly different from the original Eq. (6).
+    /* if ponding hasn't started and cumulative infiltration is greater than 0
+     */
+    if (ponding == PONDING_NO && cumI > 0) {
+	f1 = cumI;
+	/* infiltration rate: Eq. (6)
+	 * Note that his Ks=K0*exp(f*z) in Eq. (1a) instead of Ks=K0*exp(-f*z)
+	 * used in his TOPMODEL code, TMOD9502.F. Substitute f=-dtheta/m for f
+	 * in Eq. (1a), hence -K0 and exp(f1/m), slightly different from the
+	 * original Eq. (6).
+	 */
+	r = -params.K0 / params.m * (C + f1) / (1 - exp(f1 / params.m));
+	/* if infiltration rate is less than rainfall intensity, ponding starts
+	 */
+	if (r < R) {
+	    I = cumI;
+	    /* ponding time: tp will remain the same until next ponding occurs
 	     */
-	    r = -params.K0 / params.m * (C + f1) / (1 - exp(f1 / params.m));
-	    /* rainfall intensity is greater than infiltration
-	     * rate, so ponding starts */
-	    if (r < R) {
-		I = cumI;
-		tp = t - input.dt;
-		ponding = 1;
-		goto cont1;
-	    }
+	    tp = t - input.dt;
+	    ponding = PONDING_STARTED;
 	}
+    }
 
+    /* if ponding hasn't started yet */
+    if (ponding == PONDING_NO) {
 	/* try full infiltration */
 	f2 = cumI + R * input.dt;
 	/* infiltration rate */
 	r = -params.K0 / params.m * (C + f2) / (1 - exp(f2 / params.m));
-	/* if infiltration rate is greater than rainfall intensity, all
-	 * rainfall will be infiltrated */
-	if (f2 == 0.0 || r > R)
-	    goto cont2;
+	/* if potential cumulative infiltration is 0 or infiltration rate is
+	 * greater than rainfall intensity, all rainfall will be infiltrated
+	 */
+	if (f2 == 0.0 || r > R) {
+	    /* full infiltration */
+	    dIdt = R;
+	    cumI += dIdt * input.dt;
+	    return dIdt;
+	}
 
 	/* infiltration rate is less than rainfall intensity */
 	/* Newton-Raphson iteration to solve Eq. (6) for I */
 	/* guess new cumulative infiltration */
 	I = cumI + r * input.dt;
-	for (i = 0; i < MAXITER; i++) {
+	for (i = 0; i < MAX_ITER; i++) {
 	    /* new infiltration rate */
 	    r = -params.K0 / params.m * (C + I) / (1 - exp(I / params.m));
 	    /* if new infiltration rate is greater than rainfall intensity,
@@ -125,12 +143,12 @@ double calculate_infiltration(int timestep, double R)
 	    if (fabs(df) <= TOLERANCE)
 		break;
 	}
-	if (i == MAXITER)
+	if (i == MAX_ITER)
 	    G_warning(
-		_("Maximum number of iterations exceeded at timestep %d"),
+		_("Maximum number of iterations exceeded at time step %d"),
 		timestep);
 
-	/* ponding time */
+	/* ponding time: tp will remain the same until next ponding occurs */
 	tp = t - input.dt + (I - cumI) / R;
 	/* if ponding time is greater than the current time,
 	 * tp = t - dt + (I - cumI) / R > t
@@ -140,32 +158,41 @@ double calculate_infiltration(int timestep, double R)
 	 * total rainfall (R * dt), which cannot happen when there is no
 	 * ponding, so infiltrate all rainfall
 	 */
-	if (tp > t)
-	    goto cont2;
+	if (tp > t) {
+	    /* full infiltration */
+	    dIdt = R;
+	    cumI += dIdt * input.dt;
+	    return dIdt;
+	}
 
-      cont1:
-	/* if additional infiltration is less than the total rainfall, ponding
-	 * starts
+	/* ponding starts if additional infiltration is less than the total
+	 * rainfall because not all rainfall can be infiltrated in this time
+	 * step
 	 */
+	ponding = PONDING_STARTED;
+    }
+
+    /* if ponding just started */
+    if (ponding == PONDING_STARTED) {
+	/* lambda will remain the same until next ponding occurs */
 	lambda = 0.0;
 	fact = 1;
 	IC = I + C;
-	for (j = 1; j <= NTERMS; j++) {
+	for (j = 1; j <= NUM_TERMS; j++) {
 	    fact *= j;
 	    lambda += pow(IC / params.m, (double)j) / (double)(j * fact);
 	}
 	/* lambda in Eq. (8) */
 	lambda = log(IC) - (log(IC) + lambda) / exp(C / params.m);
 	I += R * (t - tp) / 2.0;
-	ponding = 1;
     }
 
     /* Newton-Raphson iteration to solve Eq. (8) for I */
-    for (i = 0; i < MAXITER; i++) {
+    for (i = 0; i < MAX_ITER; i++) {
 	IC = I + C;
 	sum = 0.0;
 	fact = 1;
-	for (j = 1; j <= NTERMS; j++) {
+	for (j = 1; j <= NUM_TERMS; j++) {
 	    fact *= j;
 	    sum += pow(IC / params.m, (double)j) / (double)(j * fact);
 	}
@@ -179,14 +206,15 @@ double calculate_infiltration(int timestep, double R)
 	/* inverse of Eq. (7) in hr/m */
 	f2 = (exp(I / params.m) - 1.0) / (IC * params.K0 / params.m);
 	/* -(Eq. (8) - (t-tp)) * Eq. (7): cumulative infiltration in a short
-	 * time period */
+	 * time period
+	 */
 	df = -f1 / f2;
 	I += df;
 	if (fabs(df) <= TOLERANCE)
 	    break;
     }
-    if (i == MAXITER)
-	G_warning(_("Maximum number of iterations exceeded at timestep %d"),
+    if (i == MAX_ITER)
+	G_warning(_("Maximum number of iterations exceeded at time step %d"),
 			timestep);
 
     /* if new cumulative infiltration is less than the previous cumulative
@@ -194,18 +222,18 @@ double calculate_infiltration(int timestep, double R)
      * infiltration and guess cumulative infiltration for the next time step
      */
     if (I < cumI + R * input.dt) {
+	/* less than full infiltration */
 	dIdt = (I - cumI) / input.dt;
 	cumI = I;
 	/* initial guess for next time step */
 	I += dIdt * input.dt;
-	return dIdt;
+	ponding = PONDING_YES
+    } else {
+    	/* full infiltration */
+	dIdt = R;
+	cumI += dIdt * input.dt;
+	ponding = PONDING_NO;
     }
-
-cont2:
-    /* infiltrate all rainfall */
-    dIdt = R;
-    cumI += dIdt * input.dt;
-    ponding = 0;
 
     return dIdt;
 }

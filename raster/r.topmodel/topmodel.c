@@ -4,6 +4,8 @@
 #include <grass/glocale.h>
 #include "global.h"
 
+#define	ZERO	0.0000001
+
 void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats)
 {
     char input[GPATH_MAX], nsteps[32];

@@ -1,18 +1,6 @@
 #include <stdio.h>
 
-#define	FILL		0x1
-#define	DIR		0x2
-#define	BELEV		0x4
-#define	TOPIDX		0x8
-#define	IDXSTATS	0x10
-#define	OUTPUT		0x20
-
-#define	BUFSIZE		1024
-#define	ZERO		0.0000001
-#define	TOLERANCE	0.00001
-#define	MAXITER		20
-#define	NTERMS		10
-
+#define	BUF_SIZE	1024
 
 /* file_io.c */
 void get_line(FILE * fp, char *buffer);
@@ -140,4 +128,4 @@ GLOBAL struct file file;
 GLOBAL struct misc misc;
 
 /* Miscellaneous variables */
-GLOBAL char buf[BUFSIZE];
+GLOBAL char buf[BUF_SIZE];
