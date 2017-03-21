@@ -71,7 +71,7 @@ typedef struct
 static int fpoint;
 
 /* Function called from RTreeSearch for point found */
-static int srch(int id, const struct RTree_Rect *rect, int *arg)
+static int srch(int id, const struct RTree_Rect *rect, void *arg)
 {
     fpoint = id;
     
@@ -196,7 +196,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *E
 
 	    /* Already in DB? */
 	    fpoint = -1;
-	    RTreeSearch(RTree, &rect, (void *)srch, NULL);
+	    RTreeSearch(RTree, &rect, srch, NULL);
 	    G_debug(3, "fpoint =  %d", fpoint);
 
 	    if (Points->n_points <= 2 ||
@@ -324,7 +324,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *E
 	    /* One point only or 
 	     * last point and line is not broken, do nothing */
 
-	    RTreeSearch(RTree, &rect, (void *)srch, 0);
+	    RTreeSearch(RTree, &rect, srch, NULL);
 	    G_debug(3, "fpoint =  %d", fpoint);
 
 	    /* read point */
@@ -671,7 +671,7 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type, struct Map_info *Er
 void Vect_break_polygons(struct Map_info *Map, int type, struct Map_info *Err)
 {
     if (getenv("GRASS_VECTOR_LOWMEM"))
-	return Vect_break_polygons_file(Map, type, Err);
+	Vect_break_polygons_file(Map, type, Err);
     else
-	return Vect_break_polygons_mem(Map, type, Err);
+	Vect_break_polygons_mem(Map, type, Err);
 }
