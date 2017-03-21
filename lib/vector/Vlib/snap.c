@@ -75,16 +75,16 @@ static int sort_new2(const void *pa, const void *pb)
 }
 
 /* This function is called by RTreeSearch() to find a vertex */
-static int find_item(int id, const struct RTree_Rect *rect, struct ilist *list)
+static int find_item(int id, const struct RTree_Rect *rect, void *list)
 {
-    G_ilist_add(list, id);
+    G_ilist_add((struct ilist *)list, id);
     return 0;
 }
 
 /* This function is called by RTreeSearch() to add selected node/line/area/isle to the list */
-static int add_item(int id, const struct RTree_Rect *rect, struct ilist *list)
+static int add_item(int id, const struct RTree_Rect *rect, void *list)
 {
-    G_ilist_add(list, id);
+    G_ilist_add((struct ilist *)list, id);
     return 1;
 }
 
@@ -235,6 +235,7 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map, const struct ilist *List_lines
 	ltype = Vect_read_line(Map, Points, Cats, line);
 
 	for (v = 0; v < Points->n_points; v++) {
+
 	    G_debug(3, "  vertex v = %d", v);
 	    nvertices++;
 
@@ -259,9 +260,7 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map, const struct ilist *List_lines
     }
     G_percent(line_idx, List_lines->n_values, 2); /* finish it */
 
-    G_debug(1, "KD Tree depth: %d", (int)KDTree->root->depth);
     kdtree_optimize(KDTree, 2);
-    G_debug(1, "KD Tree depth: %d", (int)KDTree->root->depth);
 
     npoints = point - 1;
 
@@ -443,6 +442,7 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map, const struct ilist *List_lines
 	    nnew = 0;
 	    for (i = 0; i < kd_found; i++) {
 		double dist2, along;
+		int status;
 
 		spoint = kduid[i];
 		G_debug(4, "    spoint = %d anchor = %d", spoint,
@@ -458,11 +458,11 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map, const struct ilist *List_lines
 		    dig_distance2_point_to_line(XPnts[spoint].x,
 						XPnts[spoint].y, 0, x1, y1, 0,
 						x2, y2, 0, 0, NULL, NULL,
-						NULL, &along, NULL);
+						NULL, &along, &status);
 
 		G_debug(4, "      distance = %lf", sqrt(dist2));
 
-		if (dist2 <= thresh2) {
+		if (status == 0 && dist2 <= thresh2) {
 		    G_debug(4, "      anchor in thresh, along = %lf", along);
 
 		    if (nnew == anew) {
@@ -607,7 +607,7 @@ Vect_snap_lines_list_rtree(struct Map_info *Map, const struct ilist *List_lines,
 
 	    /* Already registered ? */
 	    Vect_reset_list(List);
-	    RTreeSearch(RTree, &rect, (void *)find_item, List);
+	    RTreeSearch(RTree, &rect, find_item, List);
 	    G_debug(3, "List : nvalues =  %d", List->n_values);
 
 	    if (List->n_values == 0) {	/* Not found */
@@ -658,7 +658,7 @@ Vect_snap_lines_list_rtree(struct Map_info *Map, const struct ilist *List_lines,
 	rect.boundary[5] = 0;
 
 	Vect_reset_list(List);
-	RTreeSearch(RTree, &rect, (void *)add_item, List);
+	RTreeSearch(RTree, &rect, add_item, List);
 	G_debug(4, "  %d points in threshold box", List->n_values);
 
 	for (i = 0; i < List->n_values; i++) {
@@ -736,7 +736,7 @@ Vect_snap_lines_list_rtree(struct Map_info *Map, const struct ilist *List_lines,
 	    /* Find point ( should always find one point ) */
 	    Vect_reset_list(List);
 
-	    RTreeSearch(RTree, &rect, (void *)add_item, List);
+	    RTreeSearch(RTree, &rect, add_item, List);
 
 	    spoint = List->value[0];
 	    anchor = XPnts[spoint].anchor;
@@ -799,7 +799,7 @@ Vect_snap_lines_list_rtree(struct Map_info *Map, const struct ilist *List_lines,
 
 	    /* Find points */
 	    Vect_reset_list(List);
-	    RTreeSearch(RTree, &rect, (void *)add_item, List);
+	    RTreeSearch(RTree, &rect, add_item, List);
 
 	    G_debug(3, "  %d points in box", List->n_values);
 
@@ -807,6 +807,7 @@ Vect_snap_lines_list_rtree(struct Map_info *Map, const struct ilist *List_lines,
 	    nnew = 0;
 	    for (i = 0; i < List->n_values; i++) {
 		double dist2, along;
+		int status;
 
 		spoint = List->value[i];
 		G_debug(4, "    spoint = %d anchor = %d", spoint,
@@ -822,11 +823,11 @@ Vect_snap_lines_list_rtree(struct Map_info *Map, const struct ilist *List_lines,
 		    dig_distance2_point_to_line(XPnts[spoint].x,
 						XPnts[spoint].y, 0, x1, y1, 0,
 						x2, y2, 0, 0, NULL, NULL,
-						NULL, &along, NULL);
+						NULL, &along, &status);
 
 		G_debug(4, "      distance = %lf", sqrt(dist2));
 
-		if (dist2 <= thresh2) {
+		if (status == 0 && dist2 <= thresh2) {
 		    G_debug(4, "      anchor in thresh, along = %lf", along);
 
 		    if (nnew == anew) {
@@ -1191,7 +1192,7 @@ Vect_snap_line(struct Map_info *Map, struct ilist *reflist,
 	for (i = 0; i < List->n_values; i++) {
 	    double x1, y1, z1, x2, y2, z2;
 	    double tmpx, tmpy, tmpz;
-	    int segment, status;
+	    int status;
 	    
 	    segment = List->id[i];
 
