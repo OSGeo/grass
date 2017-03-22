@@ -85,8 +85,8 @@ static int debug_level = -1;
 #if 0
 static int ident(double x1, double y1, double x2, double y2, double thresh);
 #endif
-static int cross_seg(int i, int j);
-static int find_cross(int i, int j);
+static int cross_seg(int i, int j, int b);
+static int find_cross(int i, int j, int b);
 
 
 typedef struct
@@ -179,7 +179,7 @@ static int ident(double x1, double y1, double x2, double y2, double thresh)
 static struct line_pnts *APnts, *BPnts, *ABPnts[2], *IPnts;
 
 /* break segments */
-static int cross_seg(int i, int j)
+static int cross_seg(int i, int j, int b)
 {
     double x1, y1, z1, x2, y2, z2;
     double y1min, y1max, y2min, y2max;
@@ -202,12 +202,28 @@ static int cross_seg(int i, int j)
     if (y1min > y2max || y1max < y2min)
 	return 0;
 
-    ret = Vect_segment_intersection(APnts->x[i], APnts->y[i], APnts->z[i],
-				    APnts->x[i + 1], APnts->y[i + 1],
-				    APnts->z[i + 1], BPnts->x[j], BPnts->y[j],
-				    BPnts->z[j], BPnts->x[j + 1],
-				    BPnts->y[j + 1], BPnts->z[j + 1], &x1,
-				    &y1, &z1, &x2, &y2, &z2, 0);
+    if (b) {
+	ret = Vect_segment_intersection(APnts->x[i], APnts->y[i],
+	                                APnts->z[i],
+					APnts->x[i + 1], APnts->y[i + 1],
+					APnts->z[i + 1],
+					BPnts->x[j], BPnts->y[j], 
+					BPnts->z[j],
+					BPnts->x[j + 1], BPnts->y[j + 1],
+					BPnts->z[j + 1],
+					&x1, &y1, &z1, &x2, &y2, &z2, 0);
+    }
+    else {
+	ret = Vect_segment_intersection(BPnts->x[j], BPnts->y[j],
+					BPnts->z[j],
+					BPnts->x[j + 1], BPnts->y[j + 1],
+					BPnts->z[j + 1], 
+					APnts->x[i], APnts->y[i],
+					APnts->z[i],
+					APnts->x[i + 1], APnts->y[i + 1],
+					APnts->z[i + 1],
+					&x1, &y1, &z1, &x2, &y2, &z2, 0);
+    }
 
     /* add ALL (including end points and duplicates), clean later */
     if (ret > 0) {
@@ -727,7 +743,7 @@ Vect_line_intersection2(struct line_pnts *APoints,
 		/* test for intersection of s with all segments in T */
 		rbtree_init_trav(&bo_t_trav, bo_tb);
 		while ((found = rbtree_traverse(&bo_t_trav))) {
-		    cross_seg(qi.s, found->s);
+		    cross_seg(qi.s, found->s, 0);
 		}
 		
 		/* insert s in T */
@@ -737,7 +753,7 @@ Vect_line_intersection2(struct line_pnts *APoints,
 		/* test for intersection of s with all segments in T */
 		rbtree_init_trav(&bo_t_trav, bo_ta);
 		while ((found = rbtree_traverse(&bo_t_trav))) {
-		    cross_seg(found->s, qi.s);
+		    cross_seg(found->s, qi.s, 1);
 		}
 		
 		/* insert s in T */
@@ -1126,8 +1142,8 @@ Vect_line_intersection2(struct line_pnts *APoints,
 
 static int cross_found;		/* set by find_cross() */
 
-/* break segments */
-static int find_cross(int i, int j)
+/* find segment intersection, used by Vect_line_check_intersection2 */
+static int find_cross(int i, int j, int b)
 {
     double x1, y1, z1, x2, y2, z2;
     double y1min, y1max, y2min, y2max;
@@ -1150,16 +1166,33 @@ static int find_cross(int i, int j)
     if (y1min > y2max || y1max < y2min)
 	return 0;
 
-    ret = Vect_segment_intersection(APnts->x[i], APnts->y[i], APnts->z[i],
-				    APnts->x[i + 1], APnts->y[i + 1],
-				    APnts->z[i + 1], BPnts->x[j], BPnts->y[j],
-				    BPnts->z[j], BPnts->x[j + 1],
-				    BPnts->y[j + 1], BPnts->z[j + 1], &x1,
-				    &y1, &z1, &x2, &y2, &z2, 0);
+    if (b) {
+	ret = Vect_segment_intersection(APnts->x[i], APnts->y[i],
+	                                APnts->z[i],
+					APnts->x[i + 1], APnts->y[i + 1],
+					APnts->z[i + 1],
+					BPnts->x[j], BPnts->y[j], 
+					BPnts->z[j],
+					BPnts->x[j + 1], BPnts->y[j + 1],
+					BPnts->z[j + 1],
+					&x1, &y1, &z1, &x2, &y2, &z2, 0);
+    }
+    else {
+	ret = Vect_segment_intersection(BPnts->x[j], BPnts->y[j],
+					BPnts->z[j],
+					BPnts->x[j + 1], BPnts->y[j + 1],
+					BPnts->z[j + 1], 
+					APnts->x[i], APnts->y[i],
+					APnts->z[i],
+					APnts->x[i + 1], APnts->y[i + 1],
+					APnts->z[i + 1],
+					&x1, &y1, &z1, &x2, &y2, &z2, 0);
+    }
 
     if (!IPnts)
 	IPnts = Vect_new_line_struct();
 
+    /* add ALL (including end points and duplicates), clean later */
     switch (ret) {
     case 0:
     case 5:
@@ -1177,12 +1210,8 @@ static int find_cross(int i, int j)
 	    G_warning(_("Error while adding point to array. Out of memory"));
 	break;
     }
-    /* add ALL (including end points and duplicates), clean later */
-    if (ret > 0) {
-	cross_found = 1;
-	return 0;
-    }
-    return 1;			/* keep going */
+
+    return ret;
 }
 
 /*!
@@ -1195,7 +1224,8 @@ static int find_cross(int i, int j)
  * \param with_z 3D, not supported (only if one or both are points)!
  *
  * \return 0 no intersection 
- * \return 1 intersection found
+ * \return 1 intersection
+ * \return 2 end points only
  */
 int
 Vect_line_check_intersection2(struct line_pnts *APoints,
@@ -1207,6 +1237,8 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
     struct qitem qi, *found;
     struct RB_TREE *bo_ta, *bo_tb;
     struct RB_TRAV bo_t_trav;
+    int ret, intersect;
+    double xa1, ya1, xa2, ya2, xb1, yb1, xb2, yb2, xi, yi;
 
     APnts = APoints;
     BPnts = BPoints;
@@ -1218,6 +1250,7 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 
     if (!IPnts)
 	IPnts = Vect_new_line_struct();
+    Vect_reset_line(IPnts);
 
     /* If one or both are point (Points->n_points == 1) */
     if (APoints->n_points == 1 && BPoints->n_points == 1) {
@@ -1333,7 +1366,15 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
     bo_tb = rbtree_create(cmp_t_y, sizeof(struct qitem));
 
     /* find intersection */
-    cross_found = 0;
+    xa1 = APnts->x[0];
+    ya1 = APnts->y[0];
+    xa2 = APnts->x[APnts->n_points - 1];
+    ya2 = APnts->y[APnts->n_points - 1];
+    xb1 = BPnts->x[0];
+    yb1 = BPnts->y[0];
+    xb2 = BPnts->x[BPnts->n_points - 1];
+    yb2 = BPnts->y[BPnts->n_points - 1];
+    intersect = 0;
     while (boq_drop(&bo_queue, &qi)) {
 
 	if (qi.e == QEVT_IN) {
@@ -1342,9 +1383,33 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 		/* test for intersection of s with all segments in T */
 		rbtree_init_trav(&bo_t_trav, bo_tb);
 		while ((found = rbtree_traverse(&bo_t_trav))) {
-		    find_cross(qi.s, found->s);
+		    ret = find_cross(qi.s, found->s, 0);
 
-		    if (cross_found) {
+		    if (ret > 0) {
+			if (ret != 1) {
+			    intersect = 1;
+			}
+			/* intersect at one point */
+			else if (intersect != 1) {
+			    intersect = 1;
+			    xi = IPnts->x[IPnts->n_points - 1];
+			    yi = IPnts->y[IPnts->n_points - 1];
+			    if (xi == xa1 && yi == ya1) {
+				if ((xi == xb1 && yi == yb1) ||
+				    (xi == xb2 && yi == yb2)) {
+				    intersect = 2;
+				}
+			    }
+			    else if (xi == xa2 && yi == ya2) {
+				if ((xi == xb1 && yi == yb1) ||
+				    (xi == xb2 && yi == yb2)) {
+				    intersect = 2;
+				}
+			    }
+			}
+		    }
+
+		    if (intersect == 1) {
 			break;
 		    }
 		}
@@ -1356,9 +1421,33 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 		/* test for intersection of s with all segments in T */
 		rbtree_init_trav(&bo_t_trav, bo_ta);
 		while ((found = rbtree_traverse(&bo_t_trav))) {
-		    find_cross(found->s, qi.s);
+		    ret = find_cross(found->s, qi.s, 1);
 
-		    if (cross_found) {
+		    if (ret > 0) {
+			if (ret != 1) {
+			    intersect = 1;
+			}
+			/* intersect at one point */
+			else if (intersect != 1) {
+			    intersect = 1;
+			    xi = IPnts->x[IPnts->n_points - 1];
+			    yi = IPnts->y[IPnts->n_points - 1];
+			    if (xi == xa1 && yi == ya1) {
+				if ((xi == xb1 && yi == yb1) ||
+				    (xi == xb2 && yi == yb2)) {
+				    intersect = 2;
+				}
+			    }
+			    else if (xi == xa2 && yi == ya2) {
+				if ((xi == xb1 && yi == yb1) ||
+				    (xi == xb2 && yi == yb2)) {
+				    intersect = 2;
+				}
+			    }
+			}
+		    }
+
+		    if (intersect == 1) {
 			break;
 		    }
 		}
@@ -1385,7 +1474,7 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 		    G_fatal_error("RB tree error!");
 	    }
 	}
-	if (cross_found) {
+	if (intersect == 1) {
 	    break;
 	}
     }
@@ -1393,7 +1482,7 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
     rbtree_destroy(bo_ta);
     rbtree_destroy(bo_tb);
 
-    return cross_found;
+    return intersect;
 }
 
 /*!
