@@ -382,9 +382,18 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
 
 	    AXLines = NULL;
 	    BXLines = NULL;
-	    Vect_line_intersection(APoints, BPoints, &ABox, BBox,
-	                           &AXLines, &BXLines,
-				   &naxlines, &nbxlines, 0);
+
+	    if (aline != bline) {
+		Vect_line_intersection2(APoints, BPoints, &ABox, BBox,
+				       &AXLines, &BXLines,
+				       &naxlines, &nbxlines, 0);
+	    }
+	    else {
+		Vect_line_intersection2(APoints, NULL, &ABox, BBox,
+				       &AXLines, &BXLines,
+				       &naxlines, &nbxlines, 0);
+	    }
+
 	    G_debug(3, "  naxlines = %d nbxlines = %d", naxlines, nbxlines);
 
 	    /* This part handles a special case when aline == bline, no other intersection was found
