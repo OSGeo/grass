@@ -595,7 +595,7 @@ class MapCalcFrame(wx.Frame):
                 seed = " seed={val}".format(
                     val=self.randomSeedText.GetValue().strip())
 
-        return ('{cmd} "{new} = {expr}"{seed}{seed_flag}{overwrite}'
+        return ('{cmd} expression="{new} = {expr}"{seed}{seed_flag}{overwrite}'
                 .format(cmd=cmd, expr=expr, new=self.newmaptxt.GetValue(),
                         seed_flag=seed_flag, seed=seed, overwrite=overwrite))
 
