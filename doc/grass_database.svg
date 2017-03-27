@@ -10,8 +10,8 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="194.78999mm"
-   height="107.56693mm"
-   viewBox="0 0 690.20076 381.14265"
+   height="119.42026mm"
+   viewBox="0 0 690.20076 423.14262"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -29,15 +29,15 @@
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="159.3735"
-     inkscape:cy="218.52638"
+     inkscape:cx="447.04998"
+     inkscape:cy="186.88931"
      inkscape:document-units="px"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer2"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1055"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-width="1877"
+     inkscape:window-height="1056"
+     inkscape:window-x="43"
+     inkscape:window-y="24"
      inkscape:window-maximized="1"
      showguides="true"
      fit-margin-top="0"
@@ -48,7 +48,7 @@
        type="xygrid"
        id="grid4292"
        originx="-20.781704"
-       originy="-264.0025" />
+       originy="-222.00252" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -67,7 +67,7 @@
      id="layer2"
      inkscape:label="lines"
      style="display:inline"
-     transform="translate(-20.781703,-407.21704)">
+     transform="translate(-20.781703,-407.21706)">
     <path
        style="fill:none;fill-rule:evenodd;stroke:#d4d800;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 140,452.3622 30,0"
@@ -75,19 +75,22 @@
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#d4d800;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 155,452.3622 0,280 15,0"
+       d="m 155,452.3622 0,319.90103 17.52538,-0.0796"
        id="path4323"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#d4d800;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 155,732.3622 0,40 15,0"
+       d="m 155,772.21563 0,42.14657 18.15673,0"
        id="path4325"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#d4d800;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 290,452.3622 20,0 -10,0 0,240 10,0"
+       d="m 290,452.3622 20,0 -10,0 0,282.42641 13.125,0"
        id="path4327"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#d4d800;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 300,492.3622 10,0"
@@ -133,13 +136,24 @@
        d="m 570,652.3622 20,0"
        id="path4345"
        inkscape:connector-curvature="0" />
+    <path
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#d4d800;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 440,492.3622 0,160 10,0"
+       id="path4333-7"
+       inkscape:connector-curvature="0" />
+    <path
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#d4d800;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 440,652.3622 0,40 10,0"
+       id="path4333-7-8"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
   </g>
   <g
      inkscape:label="text"
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline"
-     transform="translate(-20.781703,-407.21704)">
+     transform="translate(-20.781703,-407.21706)">
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.43300009;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -168,25 +182,25 @@
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.43300009;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        x="190.54037"
-       y="734.52502"
+       y="776.52502"
        id="text4197-1"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4199-9"
          x="190.54037"
-         y="734.52502"
+         y="776.52502"
          style="font-size:15px;stroke-width:4.43300009;stroke-miterlimit:4;stroke-dasharray:none">usa_albers</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.43300009;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        x="182.01132"
-       y="774.66211"
+       y="816.66211"
        id="text4197-4"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4199-78"
          x="182.01132"
-         y="774.66211"
+         y="816.66211"
          style="font-size:15px;stroke-width:4.43300009;stroke-miterlimit:4;stroke-dasharray:none">world_lat_lon</tspan></text>
     <text
        xml:space="preserve"
@@ -252,13 +266,13 @@
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.43300009;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        x="321.86139"
-       y="694.97174"
+       y="736.97174"
        id="text4197-9-1"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4199-90-9"
          x="321.86139"
-         y="694.97174"
+         y="736.97174"
          style="font-size:15px;stroke-width:4.43300009;stroke-miterlimit:4;stroke-dasharray:none">wake_county</tspan></text>
     <text
        xml:space="preserve"
@@ -326,7 +340,7 @@
      id="layer3"
      inkscape:label="boxes"
      style="display:inline"
-     transform="translate(-20.781703,-407.21704)">
+     transform="translate(-20.781703,-407.21706)">
     <rect
        style="fill:none;stroke:#0092a8;stroke-width:4.43300009;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4155"
@@ -351,7 +365,7 @@
        width="115.67372"
        height="30.820921"
        x="173.04898"
-       y="715.18518"
+       y="757.18518"
        rx="5.7467012"
        ry="5.5560374" />
     <rect
@@ -360,7 +374,7 @@
        width="115.67372"
        height="30.820921"
        x="173.04898"
-       y="755.32227"
+       y="797.32227"
        rx="5.7467012"
        ry="5.5560374" />
     <rect
@@ -414,7 +428,7 @@
        width="115.67372"
        height="30.820921"
        x="312.92468"
-       y="675.63184"
+       y="717.63184"
        rx="5.7467012"
        ry="5.5560374" />
     <rect
@@ -506,5 +520,52 @@
          id="tspan4377"
          x="622"
          y="422.16626">Maps</tspan></text>
+    <path
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#d4d800;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 569.99999,692.36219 20,0"
+       id="path4345-1"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.43300009;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="476.62799"
+       y="696.65985"
+       id="text4197-0-3"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4199-6-1"
+         x="476.62799"
+         y="696.65985"
+         style="font-size:15px;stroke-width:4.43300009;stroke-miterlimit:4;stroke-dasharray:none">temporal</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4.43300009;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="622.74915"
+       y="696.79169"
+       id="text4197-9-10"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4199-90-3"
+         x="622.74915"
+         y="696.79169"
+         style="font-size:15px;stroke-width:4.43300009;stroke-miterlimit:4;stroke-dasharray:none">landsat</tspan></text>
+    <rect
+       style="display:inline;fill:none;stroke:#0092a8;stroke-width:4.43300009;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4155-9-4"
+       width="115.67372"
+       height="30.820921"
+       x="452.27747"
+       y="675.78918"
+       rx="5.7467012"
+       ry="5.5560374" />
+    <rect
+       style="display:inline;fill:none;stroke:#0092a8;stroke-width:4.43300009;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4155-12-03"
+       width="115.67372"
+       height="30.820921"
+       x="593.09222"
+       y="675.78918"
+       rx="5.7467012"
+       ry="5.5560374" />
   </g>
 </svg>
