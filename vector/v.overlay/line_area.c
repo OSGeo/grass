@@ -239,9 +239,10 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 	      dbDriver * driver, int operator, int *ofield,
 	      ATTRIBUTES * attr, struct ilist *BList)
 {
-    int line, nlines, ncat;
+    int i, line, nlines, ncat;
     struct line_pnts *Points;
     struct line_cats *Cats, *ACats, *OCats;
+    double x, y;
 
     char buf[1000];
     dbString stmt;
@@ -303,6 +304,8 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 	 * If the line overlaps the boundary, the result may be both outside and inside
 	 * this should be solved (check angles?)
 	 * This should not happen if Vect_break_lines_list() works correctly
+	 * The problem is the middle of the segment. Use line vertices
+	 * if possible, avoid calculating middle of the segment
 	 */
 
 	/* merge here */
@@ -310,12 +313,42 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 
 	G_debug(3, "line = %d", line);
 
-	point_area(&(In[1]), field[1], (Points->x[0] + Points->x[1]) / 2,
-		   (Points->y[0] + Points->y[1]) / 2, ACats);
+	if (Points->n_points < 2)
+	    continue;
+
+	if (Points->n_points == 2) {
+	    /* only 2 vertices, must use mid-segment point */
+	    x = (Points->x[0] + Points->x[1]) / 2;
+	    y = (Points->y[0] + Points->y[1]) / 2;
+	    point_area(&(In[1]), field[1], x, y, ACats);
+	}
+	else {
+	    /* more than 2 vertices
+	     * find a point that is really outside any area
+	     * this skips points that are on the boundary
+	     * do not calculate mid-segment points because of RE
+	     */
+	    
+	    int ret;
+
+	    i = (Points->n_points - 1) / 2;
+	    x = Points->x[i];
+	    y = Points->y[i];
+	    ret = point_area(&(In[1]), field[1], x, y, ACats);
+	    if (ret && Points->n_points > 3) {
+
+		i++;
+		x = Points->x[i];
+		y = Points->y[i];
+		ret = point_area(&(In[1]), field[1], x, y, ACats);
+		if (!ret)
+		    G_warning(_("Ambiguous line %d: not all vertices are really outside any area"),
+			      line);
+	    }
+	}
 
 	if ((ACats->n_cats > 0 && operator == OP_AND) ||
 	    (ACats->n_cats == 0 && operator == OP_NOT)) {
-	    int i;
 
 	    /* Point is inside */
 	    G_debug(3, "OK, write line, line ncats = %d area ncats = %d",
