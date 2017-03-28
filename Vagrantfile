@@ -87,8 +87,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
     
     if Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/grass-gis-vagrant/*/id").empty?
-      pkg_cmd = "sed -i 's#deb http://us.archive.ubuntu.com/ubuntu/#deb mirror://mirrors.ubuntu.com/mirrors.txt#' /etc/apt/sources.list; "
-      
+      pkg_cmd = "sed -i 's#deb http://archive.ubuntu.com/ubuntu#deb mirror://mirrors.ubuntu.com/mirrors.txt#' /etc/apt/sources.list; "
       pkg_cmd << "apt-get update -qq; apt-get install -q -y python-software-properties; "
       
       if ppaRepos.length > 0
