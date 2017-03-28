@@ -11,12 +11,12 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
   vm_ram = ENV['VAGRANT_VM_RAM'] || 1024
-  vm_cpu = ENV['VAGRANT_VM_CPU'] || 2
+  vm_cpu = ENV['VAGRANT_VM_CPU'] || 1
   
-  config.vm.box = "trusty64"
+  config.vm.box = "xenial64"
   
   config.vm.hostname = "grass-gis-vagrant"
-  config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+  config.vm.box_url = "https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-vagrant.box"
   config.vm.define "grass-gis-vagrant" do |host|
     
     config.vm.network :forwarded_port, guest: 80, host: 8080
@@ -63,10 +63,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "proj-bin",
       "libreadline-dev",
       "libsqlite3-dev",
-      "libwxgtk2.8-dev",
+      "libwxgtk3.0-dev",
       "libxmu-dev",
       "python",
-      "python-wxgtk2.8",
+      "python-wxgtk3.0",
       "python-dev",
       "python-numpy",
       "python-ply",
