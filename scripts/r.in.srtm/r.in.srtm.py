@@ -139,7 +139,7 @@ def main():
     # are we in LatLong location?
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
-    if kv['+proj'] != 'longlat':
+    if not '+proj' in kv.keys() or kv['+proj'] != 'longlat':
         grass.fatal(_("This module only operates in LatLong locations"))
 
     # use these from now on:
