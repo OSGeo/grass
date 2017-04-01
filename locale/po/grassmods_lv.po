@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-01 15:38+0300\n"
-"PO-Revision-Date: 2017-04-01 14:09+0200\n"
+"POT-Creation-Date: 2017-04-01 16:10+0300\n"
+"PO-Revision-Date: 2017-04-01 16:41+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian <grass-translations@lists.osgeo.org>\n"
 "Language: lv\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 2.0\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 :"
+" 2);\n"
 
 #: ../misc/m.nviz.script/main.c:69 ../misc/m.transform/main.c:316
 #: ../misc/m.measure/main.c:46 ../misc/m.cogo/main.c:225
@@ -7039,7 +7039,7 @@ msgstr "Eksistējošas rastra kartes nosaukums"
 #: ../raster/r.in.xyz/main.c:324 ../raster/r.in.lidar/main.c:143
 #: ../raster/r.in.lidar/main.c:234 ../raster/r.in.lidar/main.c:244
 msgid "Statistic"
-msgstr ""
+msgstr "Statistika"
 
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:17
 msgid "Storage type for resultant raster map"
@@ -7157,7 +7157,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:6
 msgid "addons"
-msgstr ""
+msgstr "paplašinājumi"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:7
 msgid "download"
@@ -7840,7 +7840,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.register_to_translate.c:24
 #: ../locale/scriptstrings/t.register_to_translate.c:28
 msgid "Time & Date"
-msgstr ""
+msgstr "Laiks un datums"
 
 #: ../locale/scriptstrings/t.register_to_translate.c:16
 msgid "Valid end date and time of all map"
@@ -8085,7 +8085,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.buffer.lowmem_to_translate.c:6
 #: ../raster/r.buffer/main.c:81
 msgid "Distance zone(s)"
-msgstr ""
+msgstr "Attālumu zonas"
 
 #: ../locale/scriptstrings/r.buffer.lowmem_to_translate.c:7
 #: ../raster/r.buffer/main.c:88
@@ -8999,7 +8999,7 @@ msgstr ""
 
 #: ../raster3d/r3.in.bin/main.c:350 ../raster/r.in.bin/main.c:383
 msgid "Set Value to NULL"
-msgstr ""
+msgstr "Iestatīt vērtību kā NULL"
 
 #: ../raster3d/r3.in.bin/main.c:354 ../raster3d/r3.out.bin/main.c:240
 #: ../raster3d/r3.out.ascii/main.c:106
@@ -9325,15 +9325,15 @@ msgstr "Rastra karte, kuras histogramma tiks parādīta"
 
 #: ../raster3d/r3.null/main.c:63 ../raster/r.null/main.c:73
 msgid "List of cell values to be set to NULL"
-msgstr ""
+msgstr "Šūnu vērtības, ko iestatīt kā NULL"
 
 #: ../raster3d/r3.null/main.c:70 ../raster/r.null/main.c:81
 msgid "The value to replace the null value by"
-msgstr ""
+msgstr "Vērtība, ar ko aizstāt NULL"
 
 #: ../raster3d/r3.null/main.c:85
 msgid "Illegal value for null"
-msgstr ""
+msgstr "Nederīga vērtība priekš NULL"
 
 #: ../raster3d/r3.null/main.c:122
 msgid "modifyNull: error opening tmp file"
@@ -9956,7 +9956,7 @@ msgstr ""
 #: ../db/drivers/postgres/listtab.c:92 ../db/drivers/postgres/listdb.c:88
 #: ../db/drivers/sqlite/listdb.c:134
 msgid "Out of memory"
-msgstr ""
+msgstr "Nepietiek atmiņas"
 
 #: ../raster3d/r3.to.rast/main.c:362
 #, c-format
@@ -10536,7 +10536,7 @@ msgstr ""
 
 #: ../raster/r.mode/main.c:79
 msgid "Output map"
-msgstr ""
+msgstr "Izvades karte"
 
 #: ../raster/r.mode/main.c:92
 #, fuzzy, c-format
@@ -11999,7 +11999,7 @@ msgstr ""
 
 #: ../raster/r.clump/main.c:95
 msgid "Clump also diagonal cells"
-msgstr ""
+msgstr "Pudurot arī pa diognāli"
 
 #: ../raster/r.clump/main.c:96
 msgid "Clumps are also traced along diagonal neighboring cells"
@@ -12254,7 +12254,7 @@ msgstr "maksimālais ierāciju skaits"
 
 #: ../raster/r.resamp.bspline/main.c:126 ../vector/v.surf.bspline/main.c:171
 msgid "Bicubic interpolation"
-msgstr ""
+msgstr "Bikubiskā interpolācija"
 
 #: ../raster/r.resamp.bspline/main.c:138
 #, fuzzy
@@ -13292,7 +13292,7 @@ msgstr "Laukums\n"
 
 #: ../raster/r.report/parse.c:53
 msgid "area in hectares"
-msgstr ""
+msgstr "platība hektāros"
 
 #: ../raster/r.report/parse.c:54
 #, fuzzy
@@ -13406,7 +13406,7 @@ msgstr "Nederīgs izvades faila nosaukums"
 
 #: ../raster/r.report/parse.c:198
 msgid "Illegal page width"
-msgstr ""
+msgstr "Nederīgs lapas platums"
 
 #: ../raster/r.report/parse.c:253
 #, c-format
@@ -13580,7 +13580,7 @@ msgstr ""
 
 #: ../raster/r.composite/main.c:103 ../raster/r.composite/main.c:121
 msgid "Levels"
-msgstr ""
+msgstr "Slāņi"
 
 #: ../raster/r.composite/main.c:118
 #, c-format
@@ -13593,7 +13593,7 @@ msgstr ""
 
 #: ../raster/r.composite/main.c:132
 msgid "Use closest color"
-msgstr ""
+msgstr "Izmantot tuvāko krāsu"
 
 #: ../raster/r.composite/main.c:164
 #, fuzzy, c-format
@@ -13686,7 +13686,7 @@ msgstr ""
 
 #: ../raster/r.describe/main.c:89
 msgid "Use the current region"
-msgstr ""
+msgstr "Izmantot pašreizējo reģionu"
 
 #: ../raster/r.describe/main.c:93
 #, fuzzy
@@ -14234,23 +14234,23 @@ msgstr "Nevar aprakstīt tabulu "
 
 #: ../raster/r.resamp.rst/main.c:303
 msgid "Invalid value for tension"
-msgstr ""
+msgstr "Nederīga vērtība tension parametram"
 
 #: ../raster/r.resamp.rst/main.c:306
 msgid "Invalid value for zmult"
-msgstr ""
+msgstr "Nederīga vērtība zmult parametram"
 
 #: ../raster/r.resamp.rst/main.c:309
 msgid "Invalid value for overlap"
-msgstr ""
+msgstr "Nederīga vērtība overlap parametram"
 
 #: ../raster/r.resamp.rst/main.c:313
 msgid "Invalid value for theta"
-msgstr ""
+msgstr "Nederīga vērtība theta parametram"
 
 #: ../raster/r.resamp.rst/main.c:317
 msgid "Invalid value for scalex"
-msgstr ""
+msgstr "Nederīga vērtība scalex parametram"
 
 #: ../raster/r.resamp.rst/main.c:319
 msgid "When using anisotropy both theta and scalex must be specified"
@@ -14298,7 +14298,7 @@ msgstr[2] "Nevar ierakstīt failus, jo nepietiek diska telpas"
 
 #: ../raster/r.resamp.rst/main.c:436
 msgid "Maximum value of a raster map is NULL."
-msgstr ""
+msgstr "Rastra kartes maksimālā vērtība ir NULL."
 
 #: ../raster/r.resamp.rst/main.c:464
 msgid "Temporarily changing the region to desired resolution ..."
@@ -14377,7 +14377,7 @@ msgstr ""
 
 #: ../raster/r.out.ascii/main.c:131
 msgid "Use -M or -s, not both"
-msgstr ""
+msgstr "Izmantojiet -M vai -s, bet ne abus reizē"
 
 #: ../raster/r.out.ascii/main.c:166
 #, fuzzy, c-format
@@ -14724,12 +14724,12 @@ msgstr "Eksistējošas rastra kartes nosaukums"
 #: ../raster/r.cross/renumber.c:33
 #, c-format
 msgid "%s: STEP 3 ... "
-msgstr ""
+msgstr "%s: 3. SOLIS..."
 
 #: ../raster/r.cross/cross.c:65
 #, c-format
 msgid "%s: STEP 1 ... "
-msgstr ""
+msgstr "%s: 1. SOLIS..."
 
 #: ../raster/r.cross/main.c:72
 msgid ""
@@ -14758,7 +14758,7 @@ msgstr ""
 #: ../raster/r.cross/main.c:136
 #, c-format
 msgid "%s: STEP 2 ..."
-msgstr ""
+msgstr "%s: 2. SOLIS..."
 
 #: ../raster/r.cross/main.c:179
 #, fuzzy, c-format
@@ -15040,7 +15040,7 @@ msgstr "Vienu koordinātu pāri uz līniju, lūdzu"
 #: ../raster/r.cost/main.c:174 ../raster/r.cost/main.c:186
 #: ../raster/r.cost/main.c:193 ../raster/r.cost/main.c:243
 msgid "Start"
-msgstr ""
+msgstr "Sākums"
 
 #: ../raster/r.drain/main.c:142
 #, fuzzy
@@ -15293,7 +15293,7 @@ msgstr ""
 
 #: ../raster/r.sun/main.c:442
 msgid "No. of day of the year (1-365)"
-msgstr ""
+msgstr "Gada dienas numurs (1-365)"
 
 #: ../raster/r.sun/main.c:452
 msgid "Time step when computing all-day radiation sums [decimal hours]"
@@ -15878,7 +15878,7 @@ msgstr "Vektorkartes nosaukums"
 #: ../raster/r.walk/main.c:215 ../raster/r.walk/main.c:235
 #: ../raster/r.cost/main.c:180 ../raster/r.cost/main.c:200
 msgid "Stop"
-msgstr ""
+msgstr "Beigas"
 
 #: ../raster/r.walk/main.c:220 ../raster/r.cost/main.c:185
 #, fuzzy
@@ -16467,7 +16467,7 @@ msgstr "Līniju skaits"
 #: ../imagery/i.eb.hsebal01/main.c:157 ../imagery/i.eb.hsebal01/main.c:164
 #: ../imagery/i.eb.hsebal01/main.c:171 ../imagery/i.eb.hsebal01/main.c:178
 msgid "Parameters"
-msgstr ""
+msgstr "Parametri"
 
 #: ../raster/r.sim/r.sim.sediment/main.c:233
 #: ../raster/r.sim/r.sim.water/main.c:238
@@ -19367,16 +19367,16 @@ msgstr ""
 
 #: ../raster/r.covar/main.c:61
 msgid "Print correlation matrix"
-msgstr ""
+msgstr "Drukāt korelācijas matricu"
 
 #: ../raster/r.covar/main.c:86
 #, c-format
 msgid "%s: complete ... "
-msgstr ""
+msgstr "%s: pabeigts..."
 
 #: ../raster/r.covar/main.c:110 ../imagery/i.pca/main.c:197
 msgid "No non-null values"
-msgstr ""
+msgstr "Ne NULL vērtības"
 
 #: ../raster/r.external/main.c:61
 #, fuzzy
@@ -19664,7 +19664,7 @@ msgstr ""
 #: ../display/d.legend/main.c:268 ../display/d.legend/main.c:278
 #: ../display/d.legend/main.c:293
 msgid "Advanced"
-msgstr ""
+msgstr "Paplašināti"
 
 #: ../raster/r.what/main.c:146
 #, fuzzy
@@ -19842,7 +19842,7 @@ msgstr "Nevar atlasīt datus no tabulas"
 #: ../vector/v.out.postgis/args.c:67 ../vector/v.out.postgis/args.c:73
 #: ../vector/v.out.postgis/args.c:79
 msgid "Creation"
-msgstr ""
+msgstr "Izveide"
 
 #: ../raster/r.out.gdal/main.c:153
 #, fuzzy
@@ -19954,7 +19954,7 @@ msgstr "Nevar ierakstīt ezera rastra karti <%s>!"
 #: ../raster/r.out.gdal/main.c:429
 #, c-format
 msgid "Exporting to GDAL data type: %s"
-msgstr ""
+msgstr "Eksportēt kā GDAL datu tipu: %s"
 
 #: ../raster/r.out.gdal/main.c:444
 msgid "Raster export would result in complete data loss, aborting."
@@ -20446,7 +20446,7 @@ msgstr "Izveido/modificē rastra kartei piesaistīto krāsu tabulu."
 
 #: ../raster/r.colors/edit_colors.c:75 ../raster/r.colors/edit_colors.c:87
 msgid "Map"
-msgstr ""
+msgstr "Karte"
 
 #: ../raster/r.colors/edit_colors.c:81
 #, fuzzy
@@ -20710,7 +20710,7 @@ msgstr ""
 
 #: ../raster/r.in.ascii/main.c:104
 msgid "NULL data"
-msgstr ""
+msgstr "NULL dati"
 
 #: ../raster/r.in.ascii/main.c:109
 msgid "SURFER (Golden Software) ASCII file will be imported"
@@ -20842,7 +20842,7 @@ msgstr "Rastra karte no kuras tiks nolasīts profils"
 
 #: ../raster/r.mapcalc/main.c:78
 msgid "Expression to evaluate"
-msgstr ""
+msgstr "Izpildāmā izteiksme"
 
 #: ../raster/r.mapcalc/main.c:79 ../raster/r.mapcalc/main.c:85
 msgid "Expression"
@@ -20884,7 +20884,7 @@ msgstr ""
 #: ../raster/r.mapcalc/function.c:35
 #, c-format
 msgid "Known functions:"
-msgstr ""
+msgstr "Zināmas funkcijas:"
 
 #: ../raster/r.mapcalc/evaluate.c:140
 #, fuzzy, c-format
@@ -20930,11 +20930,13 @@ msgstr "Nezināms/nepazīstms tips"
 #, c-format
 msgid "output map <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
+"izvades karte <%s> jau eksistē. Lai to pārrakstītu, izmantojiet --overwrite"
+" parametru"
 
 #: ../raster/r.mapcalc/expression.c:206
 #, c-format
 msgid "Undefined variable '%s'"
-msgstr ""
+msgstr "Nedefinēts mainīgais '%s'"
 
 #: ../raster/r.mapcalc/expression.c:221
 #, fuzzy, c-format
@@ -23273,7 +23275,7 @@ msgstr "Rastra kartes nosaukums"
 
 #: ../raster/r.watershed/front/main.c:97 ../raster/r.watershed/front/main.c:122
 msgid "For USLE"
-msgstr ""
+msgstr "Priekš USLE"
 
 #: ../raster/r.watershed/front/main.c:104
 #, fuzzy
@@ -23345,7 +23347,7 @@ msgstr "Izejas rastra kartes nosaukums"
 
 #: ../raster/r.watershed/front/main.c:180
 msgid "Slope length and steepness (LS) factor for USLE"
-msgstr ""
+msgstr "Nogāžu garuma un stāvuma (LS) faktors priekš USLE"
 
 #: ../raster/r.watershed/front/main.c:186
 #, fuzzy
@@ -23354,11 +23356,11 @@ msgstr "Izejas rastra kartes nosaukums"
 
 #: ../raster/r.watershed/front/main.c:187
 msgid "Slope steepness (S) factor for USLE"
-msgstr ""
+msgstr "Nogāžu stāvuma (S) faktors priekš USLE"
 
 #: ../raster/r.watershed/front/main.c:196
 msgid "Convergence factor for MFD (1-10)"
-msgstr ""
+msgstr "MDF koverģences faktors (1-10)"
 
 #: ../raster/r.watershed/front/main.c:198
 msgid "1 = most diverging flow, 10 = most converging flow. Recommended: 5"
@@ -23400,7 +23402,7 @@ msgstr ""
 
 #: ../raster/r.watershed/front/main.c:235
 msgid "Beautify flat areas"
-msgstr ""
+msgstr "Izskaistināt līdzenās platības"
 
 #: ../raster/r.watershed/front/main.c:237
 msgid "Flow direction in flat areas is modified to look prettier"
@@ -23741,7 +23743,7 @@ msgstr "Izejas rastra kartes nosaukums"
 #: ../display/d.mon/main.c:62 ../display/d.mon/main.c:123
 #: ../display/d.mon/main.c:128
 msgid "Manage"
-msgstr ""
+msgstr "Pārvaldīt"
 
 #: ../display/d.mon/main.c:53
 #, fuzzy
@@ -24151,7 +24153,7 @@ msgstr ""
 #: ../display/d.vect.thematic/main.c:224 ../display/d.vect.thematic/main.c:229
 #: ../display/d.vect.thematic/main.c:239 ../display/d.vect.thematic/main.c:244
 msgid "Legend"
-msgstr ""
+msgstr "Leģenda"
 
 #: ../display/d.vect/main.c:203
 msgid "Area/boundary symbol for legend"
@@ -24551,7 +24553,7 @@ msgstr "Oriģinālā līnijas krāsa"
 
 #: ../display/d.extract/main.c:71 ../display/d.path/main.c:107
 msgid "Highlight color"
-msgstr ""
+msgstr "Izcelšanas krāsa"
 
 #: ../display/d.extract/main.c:79 ../vector/v.label/main.c:233
 msgid "No graphics device selected"
@@ -24660,7 +24662,7 @@ msgstr "Izvēlies fontu kurš tiks parādīts lietotāja grafiskajā vidē."
 
 #: ../display/d.legend/main.c:99 ../display/d.legend.vect/main.c:81
 msgid "Legend title"
-msgstr ""
+msgstr "Leģendas virsraksts"
 
 #: ../display/d.legend/main.c:100 ../display/d.legend/main.c:109
 #: ../display/d.legend.vect/main.c:82 ../display/d.legend.vect/main.c:141
@@ -24725,7 +24727,7 @@ msgstr ""
 
 #: ../display/d.legend/main.c:191 ../display/d.legend/main.c:200
 msgid "Subset"
-msgstr ""
+msgstr "Apakškopa"
 
 #: ../display/d.legend/main.c:199
 msgid "Use a subset of the map range for the legend (min,max)"
@@ -24777,7 +24779,7 @@ msgstr ""
 
 #: ../display/d.legend/main.c:287
 msgid "Show background"
-msgstr ""
+msgstr "Rādīt fonu"
 
 #: ../display/d.legend/main.c:292
 #, fuzzy
@@ -24865,7 +24867,7 @@ msgstr "Nav ko zīmēt! (nav kategorijas ar uzrakstiem?)"
 #: ../display/d.barscale/draw_scale.c:220 ../display/d.barscale/main.c:237
 #: ../display/d.barscale/main.c:254
 msgid "Programmer error"
-msgstr ""
+msgstr "Programmētāja kļūda"
 
 #: ../display/d.barscale/draw_scale.c:611
 #: ../display/d.northarrow/draw_n_arrow.c:200
@@ -24894,7 +24896,7 @@ msgstr ""
 #: ../display/d.northarrow/main.c:100 ../display/d.northarrow/main.c:130
 #: ../display/d.northarrow/main.c:135 ../display/d.northarrow/main.c:140
 msgid "Text"
-msgstr ""
+msgstr "Teksts"
 
 #: ../display/d.barscale/main.c:78
 #, fuzzy
@@ -25464,7 +25466,7 @@ msgstr "Kolonu skaits"
 
 #: ../display/d.legend.vect/main.c:75 ../display/d.legend.vect/main.c:90
 msgid "Layout"
-msgstr ""
+msgstr "Izkārtojums"
 
 #: ../display/d.legend.vect/main.c:108
 #, fuzzy
@@ -25634,7 +25636,7 @@ msgstr "datu tipi"
 #: ../vector/v.net.centrality/main.c:109 ../vector/v.net.iso/main.c:104
 #: ../vector/v.net/args.c:56 ../vector/v.net.salesman/main.c:149
 msgid "Arc layer"
-msgstr ""
+msgstr "Līniju slānis"
 
 #: ../display/d.path/main.c:75 ../vector/v.net.spanningtree/main.c:65
 #: ../vector/v.net.components/main.c:90 ../vector/v.net.distance/main.c:95
@@ -25644,7 +25646,7 @@ msgstr ""
 #: ../vector/v.net.path/main.c:67 ../vector/v.net.centrality/main.c:115
 #: ../vector/v.net.iso/main.c:117 ../vector/v.net/args.c:70
 msgid "Node layer"
-msgstr ""
+msgstr "Mezglu slānis"
 
 #: ../display/d.path/main.c:81 ../vector/v.net.spanningtree/main.c:72
 #: ../vector/v.net.components/main.c:97 ../vector/v.net.distance/main.c:141
@@ -25863,7 +25865,7 @@ msgstr ""
 
 #: ../display/d.text/main.c:147
 msgid "Text to display"
-msgstr ""
+msgstr "Attēlojamais teksts"
 
 #: ../display/d.text/main.c:152
 msgid "Input file"
@@ -25898,7 +25900,7 @@ msgstr ""
 
 #: ../display/d.text/main.c:215
 msgid "Text alignment"
-msgstr ""
+msgstr "Teksta līdzināšana"
 
 #: ../display/d.text/main.c:232
 msgid "Height of letters in percentage of available frame height"
@@ -26966,7 +26968,7 @@ msgstr ""
 #: ../vector/v.extrude/main.c:119 ../vector/v.to.3d/args.c:33
 #: ../vector/v.to.3d/args.c:41
 msgid "Height"
-msgstr ""
+msgstr "Augstums"
 
 #: ../vector/v.extrude/main.c:112 ../vector/v.to.3d/args.c:40
 msgid "Fixed height for 3D vector features"
@@ -28109,7 +28111,7 @@ msgstr "Vektorkartes nosaukums"
 
 #: ../vector/v.edit/args.c:36
 msgid "Tool"
-msgstr ""
+msgstr "Rīks"
 
 #: ../vector/v.edit/args.c:61
 #, fuzzy
@@ -33074,7 +33076,7 @@ msgstr ""
 
 #: ../vector/v.parallel/main.c:93
 msgid "Side"
-msgstr ""
+msgstr "Puse"
 
 #: ../vector/v.parallel/main.c:97
 #, fuzzy
@@ -37503,7 +37505,7 @@ msgstr ""
 
 #: ../vector/v.net/args.c:17 ../vector/v.net/args.c:57
 msgid "Arcs"
-msgstr ""
+msgstr "Līnijas"
 
 #: ../vector/v.net/args.c:21
 #, fuzzy
@@ -37517,7 +37519,7 @@ msgstr ""
 #: ../vector/v.net/args.c:25 ../vector/v.net/args.c:71
 #: ../vector/v.net/args.c:93 ../vector/v.net/args.c:100
 msgid "Nodes"
-msgstr ""
+msgstr "Mezgli"
 
 #: ../vector/v.net/args.c:40
 msgid "new point is placed on each node (line end) if doesn't exist"
@@ -38325,7 +38327,7 @@ msgstr "vektors, topoloģija"
 #: ../vector/v.transform/main.c:165 ../vector/v.transform/main.c:175
 #: ../vector/v.transform/main.c:182
 msgid "Custom"
-msgstr ""
+msgstr "Pielāgots"
 
 #: ../vector/v.transform/main.c:118
 msgid "Shifting value for x coordinates"
@@ -38958,7 +38960,7 @@ msgstr ""
 #: ../vector/v.label/main.c:102 ../vector/v.label/main.c:109
 #: ../vector/v.label/main.c:118 ../vector/v.label/main.c:162
 msgid "Placement"
-msgstr ""
+msgstr "Novietojums"
 
 #: ../vector/v.label/main.c:106
 msgid "Offset label in y-direction"
@@ -38974,7 +38976,7 @@ msgstr ""
 
 #: ../vector/v.label/main.c:166
 msgid "Border width"
-msgstr ""
+msgstr "Robežas platums"
 
 #: ../vector/v.label/main.c:251
 msgid ""
@@ -39237,7 +39239,7 @@ msgstr ""
 
 #: ../vector/v.what/main.c:86
 msgid "Threshold"
-msgstr ""
+msgstr "Robežvērtība"
 
 #: ../vector/v.what/main.c:90
 msgid "Print topological information (debugging)"
@@ -45588,7 +45590,7 @@ msgid "Imported <%s> vector map <%s>."
 msgstr "%d punkti ierakstīti izejas kartē\n"
 
 #. GTC Invalid WFS maximum features parameter
-#: ../scripts/v.in.wfs/v.in.wfs.py:108
+#: ../scripts/v.in.wfs/v.in.wfs.py:109
 #, fuzzy
 msgid "Invalid maximum number of features"
 msgstr ""
@@ -45597,31 +45599,51 @@ msgstr ""
 "  Punktu skaits: %d\n"
 
 #. GTC Invalid WFS start index parameter
-#: ../scripts/v.in.wfs/v.in.wfs.py:114
+#: ../scripts/v.in.wfs/v.in.wfs.py:115
 msgid "Features begin with index \"1\""
 msgstr ""
 
 #. GTC Downloading WFS features
-#: ../scripts/v.in.wfs/v.in.wfs.py:129
+#: ../scripts/v.in.wfs/v.in.wfs.py:130
 msgid "Retrieving data..."
 msgstr "Saņem datus..."
 
-#: ../scripts/v.in.wfs/v.in.wfs.py:143
+#. GTC WFS request HTTP failure
+#: ../scripts/v.in.wfs/v.in.wfs.py:135
+#, python-format
+msgid ""
+"The server couldn't fulfill the request.\n"
+"Error code: %s"
+msgstr ""
+"Serveris nespēja izpildīt pieprasījumu.\n"
+"Kļūdas kods: %s"
+
+#. GTC WFS request network failure
+#: ../scripts/v.in.wfs/v.in.wfs.py:138
+#, python-format
+msgid ""
+"Failed to reach the server.\n"
+"Reason: %s"
+msgstr ""
+"Neizdevās sasniegt serveri.\n"
+"Iemesls: %s"
+
+#: ../scripts/v.in.wfs/v.in.wfs.py:153
 msgid "A file called \"wms_capabilities.xml\" already exists here"
 msgstr ""
 
-#: ../scripts/v.in.wfs/v.in.wfs.py:149
+#: ../scripts/v.in.wfs/v.in.wfs.py:159
 #: ../scripts/v.in.mapgen/v.in.mapgen.py:101
 #, fuzzy
 msgid "Importing data..."
 msgstr "Drukā ... "
 
-#: ../scripts/v.in.wfs/v.in.wfs.py:152
+#: ../scripts/v.in.wfs/v.in.wfs.py:162
 #, python-format
 msgid "Vector map <%s> imported from WFS."
 msgstr "WFS vektordatu karte <%s> ir importēta."
 
-#: ../scripts/v.in.wfs/v.in.wfs.py:154
+#: ../scripts/v.in.wfs/v.in.wfs.py:164
 msgid "WFS import failed"
 msgstr "WFS importēšana bija nesekmīga"
 
@@ -47656,7 +47678,7 @@ msgstr "%d papildinājuma/atjauninājuma kļūda\n"
 
 #: ../scripts/r.in.wms/wms_drv.py:187
 msgid "WMS server unknown error"
-msgstr ""
+msgstr "Nezināma WMS servera kļūda"
 
 #: ../scripts/r.in.wms/wms_drv.py:206
 #, fuzzy, python-format
