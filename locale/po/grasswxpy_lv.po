@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-01 15:38+0300\n"
-"PO-Revision-Date: 2017-04-01 15:51+0200\n"
+"POT-Creation-Date: 2017-04-01 16:10+0300\n"
+"PO-Revision-Date: 2017-04-01 17:11+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian <grass-translations@lists.osgeo.org>\n"
 "Language: lv_LV\n"
@@ -3768,9 +3768,8 @@ msgstr "Rastra datu importēšana"
 
 #: ../gui/wxpython/menustrings.py:188 ../gui/wxpython/menustrings.py:608
 #: ../gui/wxpython/menustrings.py:1536
-#, fuzzy
 msgid "2D vector to 3D vector"
-msgstr "Vektordatus par 3D rastru"
+msgstr "2D vektordatus uz 3D vektordatiem"
 
 #: ../gui/wxpython/menustrings.py:189 ../gui/wxpython/menustrings.py:609
 #: ../gui/wxpython/menustrings.py:1537
@@ -3800,9 +3799,8 @@ msgid "Graphical modeler"
 msgstr "Grafiskais modelētājs"
 
 #: ../gui/wxpython/menustrings.py:195 ../gui/wxpython/menustrings.py:1965
-#, fuzzy
 msgid "Launch Graphical modeler"
-msgstr "Grafiskais modelētājs"
+msgstr "Startēt grafisko modelētāju"
 
 #: ../gui/wxpython/menustrings.py:196 ../gui/wxpython/menustrings.py:2015
 msgid "Run model"
@@ -3848,7 +3846,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:204 ../gui/wxpython/menustrings.py:1960
 #: ../gui/wxpython/lmgr/toolbars.py:161
 msgid "Cartographic Composer"
-msgstr ""
+msgstr "Karšu veidotājs"
 
 #: ../gui/wxpython/menustrings.py:205 ../gui/wxpython/menustrings.py:1961
 msgid "Launch Cartographic Composer"
@@ -4093,7 +4091,7 @@ msgstr "Veidot rastra karti"
 
 #: ../gui/wxpython/menustrings.py:261 ../gui/wxpython/menustrings.py:1189
 msgid "Compress/decompress"
-msgstr ""
+msgstr "Saspiest / atspiest"
 
 #: ../gui/wxpython/menustrings.py:262 ../gui/wxpython/menustrings.py:1190
 #, fuzzy
@@ -4259,9 +4257,8 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:298 ../gui/wxpython/menustrings.py:591
 #: ../gui/wxpython/menustrings.py:1226 ../gui/wxpython/menustrings.py:1519
-#, fuzzy
 msgid "Export color table"
-msgstr "Krāsu tabulas"
+msgstr "Eksportēt krāsu tabulu"
 
 #: ../gui/wxpython/menustrings.py:299 ../gui/wxpython/menustrings.py:1227
 #, fuzzy
@@ -4278,9 +4275,8 @@ msgid "Blends color components of two raster maps by a given ratio."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:302 ../gui/wxpython/menustrings.py:1230
-#, fuzzy
 msgid "Create RGB"
-msgstr "Izveidot LRS"
+msgstr "Izveidot RGB"
 
 #: ../gui/wxpython/menustrings.py:303 ../gui/wxpython/menustrings.py:1231
 msgid ""
@@ -4290,7 +4286,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:304 ../gui/wxpython/menustrings.py:755
 #: ../gui/wxpython/menustrings.py:1232 ../gui/wxpython/menustrings.py:1683
 msgid "RGB to HIS"
-msgstr ""
+msgstr "No RGB uz HIS"
 
 #: ../gui/wxpython/menustrings.py:305 ../gui/wxpython/menustrings.py:1233
 msgid ""
@@ -4504,7 +4500,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:356 ../gui/wxpython/menustrings.py:1284
 msgid "Shadows map"
-msgstr ""
+msgstr "Ēnu karte"
 
 #: ../gui/wxpython/menustrings.py:357 ../gui/wxpython/menustrings.py:1285
 msgid ""
@@ -4598,9 +4594,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:375 ../gui/wxpython/menustrings.py:1303
-#, fuzzy
 msgid "Terrain parameters"
-msgstr "Mainīt iestatījumus"
+msgstr "Reljefa parametri"
 
 #: ../gui/wxpython/menustrings.py:376 ../gui/wxpython/menustrings.py:1304
 msgid ""
@@ -4703,9 +4698,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:399 ../gui/wxpython/menustrings.py:1327
-#, fuzzy
 msgid "Flow accumulation"
-msgstr "Lauka kalkulators"
+msgstr "Plūsmas akumulācija"
 
 #: ../gui/wxpython/menustrings.py:400 ../gui/wxpython/menustrings.py:1328
 #, fuzzy
@@ -4713,9 +4707,8 @@ msgid "Performs flow computation for massive grids."
 msgstr "Nosacījums: nav definēts"
 
 #: ../gui/wxpython/menustrings.py:401 ../gui/wxpython/menustrings.py:1329
-#, fuzzy
 msgid "Flow lines"
-msgstr "Rindas:"
+msgstr "Plūsmas līnijas"
 
 #: ../gui/wxpython/menustrings.py:402 ../gui/wxpython/menustrings.py:1330
 msgid ""
@@ -4819,7 +4812,7 @@ msgstr "Pazemes ūdeņu modelēšana"
 
 #: ../gui/wxpython/menustrings.py:424 ../gui/wxpython/menustrings.py:1352
 msgid "Groundwater flow"
-msgstr ""
+msgstr "Pazemes ūdeņu plūsma"
 
 #: ../gui/wxpython/menustrings.py:425 ../gui/wxpython/menustrings.py:1353
 msgid ""
@@ -4962,9 +4955,8 @@ msgid "Calculates shape index on a raster map"
 msgstr "Jaunveidojamās rastra kartes nosaukums"
 
 #: ../gui/wxpython/menustrings.py:457 ../gui/wxpython/menustrings.py:1385
-#, fuzzy
 msgid "Wildfire modeling"
-msgstr "Hidroloģiskā modelēšana"
+msgstr "Ugunsgrēku modelēšana"
 
 #: ../gui/wxpython/menustrings.py:458 ../gui/wxpython/menustrings.py:1386
 msgid "Rate of spread"
@@ -5060,9 +5052,8 @@ msgid "Recodes categorical raster maps."
 msgstr "3D rastra kartes"
 
 #: ../gui/wxpython/menustrings.py:475 ../gui/wxpython/menustrings.py:1403
-#, fuzzy
 msgid "Rescale"
-msgstr "mērogs:"
+msgstr "Mērogot"
 
 #: ../gui/wxpython/menustrings.py:476 ../gui/wxpython/menustrings.py:1404
 msgid "Rescales the range of category values in a raster map layer."
@@ -5105,9 +5096,8 @@ msgid "Generate surfaces"
 msgstr "Ģenerēt virsmas"
 
 #: ../gui/wxpython/menustrings.py:485 ../gui/wxpython/menustrings.py:1413
-#, fuzzy
 msgid "Fractal surface"
-msgstr "Ģenerēt virsmas"
+msgstr "Fraktāļu virsma"
 
 #: ../gui/wxpython/menustrings.py:486 ../gui/wxpython/menustrings.py:1414
 msgid "Creates a fractal surface of a given fractal dimension."
@@ -5200,9 +5190,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:504 ../gui/wxpython/menustrings.py:1432
-#, fuzzy
 msgid "Raster contours"
-msgstr "Rastru par vektoriem"
+msgstr "Rastra izolīnijas"
 
 #: ../gui/wxpython/menustrings.py:505 ../gui/wxpython/menustrings.py:1433
 msgid "Generates surface raster map from rasterized contours."
@@ -5352,9 +5341,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:537 ../gui/wxpython/menustrings.py:1465
-#, fuzzy
 msgid "Linear regression"
-msgstr "Lineārā atskaites sistēma"
+msgstr "Lineārā regresija"
 
 #: ../gui/wxpython/menustrings.py:538 ../gui/wxpython/menustrings.py:1466
 msgid "Calculates linear regression from two raster maps: y = a + b*x."
@@ -5544,9 +5532,8 @@ msgid "Creates points/segments from input vector lines and positions."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:580 ../gui/wxpython/menustrings.py:1508
-#, fuzzy
 msgid "Clean vector map"
-msgstr "Izveidot jaunu vektordatu karti"
+msgstr "Satīrīt vektordatu karti"
 
 #: ../gui/wxpython/menustrings.py:581 ../gui/wxpython/menustrings.py:1509
 #, fuzzy
@@ -5608,14 +5595,12 @@ msgid "Prints vector map attributes."
 msgstr "Izveidot atribūtu tabulu"
 
 #: ../gui/wxpython/menustrings.py:598 ../gui/wxpython/menustrings.py:1526
-#, fuzzy
 msgid "Feature selection"
-msgstr "Kartes izvēle"
+msgstr "Objektu atlase"
 
 #: ../gui/wxpython/menustrings.py:599 ../gui/wxpython/menustrings.py:1527
-#, fuzzy
 msgid "Select by attributes"
-msgstr "Ģeometrijas atribūti"
+msgstr "Atlasīt pēc atribūtiem"
 
 #: ../gui/wxpython/menustrings.py:600 ../gui/wxpython/menustrings.py:1528
 msgid ""
@@ -5624,9 +5609,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:601 ../gui/wxpython/menustrings.py:1529
-#, fuzzy
 msgid "Select by another map"
-msgstr "3D rastra kartes"
+msgstr "Atlasīt pēc citas kartes"
 
 #: ../gui/wxpython/menustrings.py:602 ../gui/wxpython/menustrings.py:1530
 #, fuzzy
@@ -5900,18 +5884,16 @@ msgid "Computes the maximum flow between two sets of nodes in the network."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:668 ../gui/wxpython/menustrings.py:1596
-#, fuzzy
 msgid "Vertex connectivity"
-msgstr "Vektoru datubāzes savienojumi"
+msgstr "Virsotņu savienotība"
 
 #: ../gui/wxpython/menustrings.py:669 ../gui/wxpython/menustrings.py:1597
 msgid "Computes vertex connectivity between two sets of nodes in the network."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:670 ../gui/wxpython/menustrings.py:1598
-#, fuzzy
 msgid "Components"
-msgstr "eksponente"
+msgstr "Komponentes"
 
 #: ../gui/wxpython/menustrings.py:671 ../gui/wxpython/menustrings.py:1599
 msgid "Computes strongly and weakly connected components in the network."
@@ -6067,9 +6049,8 @@ msgid "Creates a vector polygon from the current region extent."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:705 ../gui/wxpython/menustrings.py:1633
-#, fuzzy
 msgid "Generate areas from points"
-msgstr "Importēt 3D rastra datus"
+msgstr "Ģenerēt laukumus no punktiem"
 
 #: ../gui/wxpython/menustrings.py:706 ../gui/wxpython/menustrings.py:1634
 msgid "Convex hull"
@@ -6112,9 +6093,8 @@ msgid "Generate points"
 msgstr "Ģenerēt punktus"
 
 #: ../gui/wxpython/menustrings.py:715 ../gui/wxpython/menustrings.py:1643
-#, fuzzy
 msgid "Generate from database"
-msgstr "Izveidot datubāzi"
+msgstr "Ģenerēt no datubāzes"
 
 #: ../gui/wxpython/menustrings.py:716 ../gui/wxpython/menustrings.py:1644
 msgid ""
@@ -6131,9 +6111,8 @@ msgid "Creates points along input lines in new vector map with 2 layers."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:719 ../gui/wxpython/menustrings.py:1647
-#, fuzzy
 msgid "Generate random points"
-msgstr "Ģenerēt punktus"
+msgstr "Ģenerēt gadījuma punktus"
 
 #: ../gui/wxpython/menustrings.py:720 ../gui/wxpython/menustrings.py:1648
 #, fuzzy
@@ -6145,9 +6124,8 @@ msgid "Remove outliers in point sets"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:728 ../gui/wxpython/menustrings.py:1656
-#, fuzzy
 msgid "Basic vector metadata"
-msgstr "Rastra pamata metadati"
+msgstr "Vektoru pamata metadati"
 
 #: ../gui/wxpython/menustrings.py:729 ../gui/wxpython/menustrings.py:1657
 msgid "Outputs basic information about a vector map."
@@ -6219,9 +6197,8 @@ msgid "Creates, edits, and lists groups of imagery files."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:746 ../gui/wxpython/menustrings.py:1674
-#, fuzzy
 msgid "Target group"
-msgstr "Slāņu grupa:"
+msgstr "Mērķa grupa"
 
 #: ../gui/wxpython/menustrings.py:747 ../gui/wxpython/menustrings.py:1675
 msgid "Targets an imagery group to a GRASS location and mapset."
@@ -6397,9 +6374,8 @@ msgid "Performs raster map matrix filter."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:785 ../gui/wxpython/menustrings.py:1713
-#, fuzzy
 msgid "Transform image"
-msgstr "Klasificēt attēlu"
+msgstr "Pārveidot attēlu"
 
 #: ../gui/wxpython/menustrings.py:786 ../gui/wxpython/menustrings.py:1714
 msgid "Canonical correlation"
@@ -6624,9 +6600,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:838 ../gui/wxpython/menustrings.py:1766
-#, fuzzy
 msgid "Kappa analysis"
-msgstr "LiDAR analīze"
+msgstr "Kappa analīze"
 
 #: ../gui/wxpython/menustrings.py:839 ../gui/wxpython/menustrings.py:1767
 msgid ""
@@ -6683,9 +6658,8 @@ msgid "Creates/modifies the color table associated with a 3D raster map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:853 ../gui/wxpython/menustrings.py:1781
-#, fuzzy
 msgid "Export 3D color table"
-msgstr "3D krāsu tabulas"
+msgstr "Eksportēt 3D krāsu tabulu"
 
 #: ../gui/wxpython/menustrings.py:854 ../gui/wxpython/menustrings.py:1782
 #, fuzzy
@@ -6706,9 +6680,8 @@ msgid "3D raster map calculator"
 msgstr "3D rastra kalkulators"
 
 #: ../gui/wxpython/menustrings.py:859 ../gui/wxpython/menustrings.py:1787
-#, fuzzy
 msgid "Cross section"
-msgstr "Projekcija"
+msgstr "Šķērsprofils"
 
 #: ../gui/wxpython/menustrings.py:860 ../gui/wxpython/menustrings.py:1788
 msgid ""
@@ -6734,9 +6707,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:866 ../gui/wxpython/menustrings.py:1794
-#, fuzzy
 msgid "Basic 3D raster metadata"
-msgstr "Rastra metadati"
+msgstr "3D rastra pamata metadati"
 
 #: ../gui/wxpython/menustrings.py:867 ../gui/wxpython/menustrings.py:1795
 msgid "Outputs basic information about a user-specified 3D raster map layer."
