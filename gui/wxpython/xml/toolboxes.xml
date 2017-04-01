@@ -1647,7 +1647,7 @@
     </items>
   </toolbox>
   <toolbox name="Raster3dReportsAndStatistics">
-    <label>Reports and Statistics</label>
+    <label>Reports and statistics</label>
     <items>
       <module-item name="r3.info">
         <label>Basic 3D raster metadata</label>
