@@ -103,6 +103,10 @@ import atexit
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 tmp_rmaps = list()
 tmp_vmaps = list()
 usermask = None

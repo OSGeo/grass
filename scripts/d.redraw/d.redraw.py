@@ -26,6 +26,10 @@ import sys
 from grass.script import core as grass
 from grass.script.utils import split
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 
 def main():
     mon = grass.gisenv().get('MONITOR', None)

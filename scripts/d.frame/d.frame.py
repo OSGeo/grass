@@ -70,6 +70,10 @@ import sys
 
 from grass.script.core import parser, read_command, fatal, debug, run_command, gisenv, warning, parse_command
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 # check if monitor is running
 
 

@@ -44,6 +44,10 @@ import grass.script as grass
 from grass.exceptions import CalledModuleError
 import os
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 
 def main():
     # Get the options

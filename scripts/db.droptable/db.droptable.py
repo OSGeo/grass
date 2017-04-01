@@ -45,6 +45,11 @@
 import sys
 import grass.script as grass
 
+# i18N
+import os
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 
 def main():
     table = options['table']

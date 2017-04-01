@@ -54,6 +54,10 @@ from grass.script.utils import try_remove
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 
 def cleanup():
     try_remove(tmp)

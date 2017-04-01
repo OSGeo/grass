@@ -47,6 +47,10 @@ import os
 import string
 import grass.script as gscript
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 
 def main():
     first = options['first']

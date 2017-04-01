@@ -90,6 +90,10 @@ except ImportError:
 
 import grass.script as grass
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 
 def main():
     if not hasNumPy:
