@@ -34,6 +34,8 @@ DOMAINS = $(LIBDOMAIN) $(MODDOMAIN) $(WXPYDOMAIN)
 LIB_POTFILES = find ../lib \( -name "*.c" -o -name "*.py" \) | xargs grep -l "_(\"\|n_(\""
 MOD_POTFILES = find ../ -name '*.c' | grep -v '../lib' | xargs grep -l "_(\"\|n_(\""
 WXPY_POTFILES = find ../gui/wxpython -name '*.py' | xargs grep -l "_(\"\|n_(\""
+#For Python script module messages
+MOD_PYFILES = find ../scripts -name '*.py' | xargs grep -l "_(\"\|n_(\""
 
 define po_stats
 GISBASE="$(RUN_GISBASE)" $(PYTHON) ./grass_po_stats.py
@@ -51,6 +53,7 @@ pot:
 	xgettext --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(LIBDOMAIN).pot `$(LIB_POTFILES)`
 	@echo "Generating $(MODDOMAIN)..."
 	xgettext --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(MODDOMAIN).pot `$(MOD_POTFILES)`
+	xgettext -j --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(MODDOMAIN).pot `$(MOD_PYFILES)` 
 	@echo "Generating $(WXPYDOMAIN)..."
 	xgettext --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(WXPYDOMAIN).pot `$(WXPY_POTFILES)` 
 
