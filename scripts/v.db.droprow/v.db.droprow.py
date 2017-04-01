@@ -39,6 +39,11 @@ import sys
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
+# i18N
+import os
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 
 def main():
     # delete vectors via reverse selection

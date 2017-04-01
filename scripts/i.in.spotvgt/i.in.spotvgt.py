@@ -53,6 +53,10 @@ import string
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 
 vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
  <SRS>GEOGCS[&quot;wgs84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;wgs84&quot;,6378137,298.257223563],TOWGS84[0.000,0.000,0.000]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;degree&quot;,0.0174532925199433]]</SRS>

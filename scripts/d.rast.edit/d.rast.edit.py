@@ -79,6 +79,11 @@ import math
 import atexit
 import grass.script as grass
 
+# i18N
+import os
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 try:
     import wxversion
     wxversion.select(['3.0', '2.8', '2.6'])

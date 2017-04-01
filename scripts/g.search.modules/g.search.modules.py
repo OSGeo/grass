@@ -68,6 +68,10 @@ import sys
 from grass.script.utils import diff_files, try_rmdir
 from grass.script import core as grass
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 try:
     import xml.etree.ElementTree as etree
 except ImportError:

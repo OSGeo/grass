@@ -161,6 +161,10 @@ import grass.script as gscript
 from grass.script.utils import try_rmdir
 from grass.script import core as grass
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 # temp dir
 REMOVE_TMPDIR = True
 PROXIES = {}

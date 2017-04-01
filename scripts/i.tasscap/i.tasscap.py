@@ -73,6 +73,11 @@
 
 import grass.script as grass
 
+# i18N
+import os
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 # weights for 6 Landsat bands: TM4, TM5, TM7, OLI
 # MODIS: Red, NIR1, Blue, Green, NIR2, SWIR1, SWIR2
 parms = [[(0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863),  # Landsat TM4

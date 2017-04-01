@@ -71,6 +71,11 @@ import sys
 
 import grass.script as gscript
 
+# i18N
+import os
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 try:
     # new for python 2.6, in 2.5 it may be easy_install'd.
     import multiprocessing as mp

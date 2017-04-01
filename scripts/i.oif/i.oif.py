@@ -45,6 +45,10 @@ import os
 from grass.script.utils import parse_key_val
 from grass.script import core as grass
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 
 def oifcalc(sdev, corr, k1, k2, k3):
     grass.debug(_("Calculating OIF for combination: %s, %s, %s" % (k1, k2,

@@ -60,6 +60,10 @@ from grass.script.utils import try_remove, basename
 from grass.script import core as gcore
 from grass.exceptions import CalledModuleError
 
+# i18N
+import gettext
+gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 
 def main():
     input = options['input']
