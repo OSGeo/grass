@@ -303,7 +303,7 @@ typedef enum
     G_OPT_MAP_TYPE,             /*!< The type of an input map: raster, vect, rast3d */
     G_OPT_T_TYPE,               /*!< The temporal type of a space time dataset */
     G_OPT_T_WHERE,              /*!< A temporal GIS framework SQL WHERE statement */
-    G_OPT_T_SAMPLE,             /*!< Temporal sample methods */
+    G_OPT_T_SAMPLE             /*!< Temporal sample methods */
 
 } STD_OPT;
 
@@ -320,7 +320,7 @@ typedef enum
 {
     G_FLG_UNDEFINED,
     G_FLG_V_TABLE,		/*!< do not create attribute table */
-    G_FLG_V_TOPO,               /*!< do not build topology */
+    G_FLG_V_TOPO               /*!< do not build topology */
 } STD_FLG;
 
 /* Parser rules for G__option_rule() */
@@ -379,7 +379,7 @@ enum
     G_ELEMENT_ASCIIVECTOR = 4,	/*!< ASCII vector */
     G_ELEMENT_LABEL = 5,	/*!< labels */
     G_ELEMENT_REGION = 6,	/*!< region */
-    G_ELEMENT_GROUP = 7,	/*!< group */
+    G_ELEMENT_GROUP = 7		/*!< group */
 };
 
 /*=========================== Typedefs/Structures ==========================*/
