@@ -173,7 +173,7 @@ enum History_field
     HIST_KEYWRD,
 
     /*! \brief Number of fields to be defined in History structure */
-    HIST_NUM_FIELDS,
+    HIST_NUM_FIELDS
 };
 
 /*! \brief Raster history info (metadata) */
