@@ -307,10 +307,10 @@ int main(int argc, char **argv)
     if (opt.charset->answer)
 	D_encoding(opt.charset->answer);
 
-    D_setup_unity(0);
+    D_setup(0);
 
     /* figure out where to put text */
-    D_get_src(&win.t, &win.b, &win.l, &win.r);
+    D_get_dst(&win.t, &win.b, &win.l, &win.r);
 
     if (flag.s->answer)
 	size = atof(opt.size->answer);
@@ -631,6 +631,10 @@ static void draw_text(char *text, double *x, double *y, double size,
 	D_text_rotation(0.0);
 
     D_get_text_box(text, &t, &b, &l, &r);
+    t = D_u_to_d_row(t);
+    b = D_u_to_d_row(b);
+    l = D_u_to_d_col(l);
+    r = D_u_to_d_col(r);
 
     if (rotation != 0.0)
 	D_text_rotation(rotation * 180.0 / M_PI);
@@ -688,13 +692,13 @@ static void draw_text(char *text, double *x, double *y, double size,
  	D_use_color(fg_color); /* restore */
     }
 
-    D_pos_abs(*x, *y);
+    D_pos_abs(D_d_to_u_col(*x), D_d_to_u_row(*y));
     D_text(text);
 
     if (bold) {
-	D_pos_abs(*x, *y + 1);
+	D_pos_abs(D_d_to_u_col(*x), D_d_to_u_row(*y + 1));
 	D_text(text);
-	D_pos_abs(*x + 1, *y);
+	D_pos_abs(D_d_to_u_col(*x + 1), D_d_to_u_row(*y));
 	D_text(text);
     }
 
