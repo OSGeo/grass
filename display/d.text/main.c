@@ -71,9 +71,10 @@ struct rectinfo
 };
 
 static void set_color(char *);
-static int get_coordinates(double *, double *, double *, double *,
-			   struct rectinfo, char **, char, char);
-static void draw_text(char *, double *, double *, double, char *, double, char, int, int, int);
+static void get_coordinates(double *, double *, double *, double *,
+			    struct rectinfo, char **, char, char);
+static void draw_text(char *, double *, double *, double, char *, double, char,
+		      int, int, int);
 
 int main(int argc, char **argv)
 {
@@ -272,19 +273,15 @@ int main(int argc, char **argv)
     flag.s->description = _("Font size is height in pixels");
     flag.s->guisection = _("Font settings");
 
+    G_option_exclusive(opt.line, opt.at, NULL);
+    G_option_exclusive(flag.p, flag.g, NULL);
 
     /* check command line */
     if (G_parser(argc, argv))
 	exit(1);
 
-    /* parse and check options and flags */
-
-    if ((opt.line->answer && opt.at->answer) ||
-	(flag.p->answer && flag.g->answer))
-	G_fatal_error(_("Please choose only one placement method"));
-
+    /* parse options */
     text = opt.text->answer;
-
     line = (opt.line->answer ? atoi(opt.line->answer) : 1);
 
     /* calculate rotation angle in radian */
@@ -330,17 +327,18 @@ int main(int argc, char **argv)
 	bg_color = D_parse_color(opt.bgcolor->answer, TRUE);
 	if (bg_color == 0) /* ie color="none" */
 	    do_background = 0;
-    } else
+    }
+    else {
 	do_background = 0;
+	bg_color = 0;
+    }
     set_color(opt.fgcolor->answer);
 
     orig_x = orig_y = 0;
 
-    if (opt.at->answer) {
-	if (get_coordinates(&x, &y, &east, &north,
-			    win, opt.at->answers,
-			    flag.p->answer, flag.g->answer))
-	    G_fatal_error(_("Invalid coordinates"));
+    if (opt.at->answers) {
+	get_coordinates(&x, &y, &east, &north, win, opt.at->answers,
+			flag.p->answer, flag.g->answer);
 	orig_x = x;
 	orig_y = y;
     }
@@ -581,51 +579,45 @@ static void set_color(char *tcolor)
 	}
 	D_use_color(color);
     }
-
-
-    return;
 }
 
-static int
-get_coordinates(double *x, double *y, double *east, double *north,
-		struct rectinfo win, char **at, char pixel,
-		char geocoor)
+static void get_coordinates(double *x, double *y, double *east, double *north,
+			    struct rectinfo win, char **at, char pixel,
+			    char geocoor)
 {
     double e, n;
 
-    if (at) {
-	e = atof(at[0]);
-	n = atof(at[1]);
-	if (pixel) {
-	    *x = e + win.l;
-	    *y = n + win.t;
-	    e = D_d_to_u_col(*x);
-	    n = D_d_to_u_row(*y);
-	}
-	else if (geocoor) {
-	    *x = D_u_to_d_col(e);
-	    *y = D_u_to_d_row(n);
-	}
-	else {
-	    *x = win.l + (win.r - win.l) * e / 100.0;
-	    *y = win.t + (win.b - win.t) * (100.0 - n) / 100.0;
-	    e = D_d_to_u_col(*x);
-	    n = D_d_to_u_row(*y);
-	}
+    if (!at)
+	G_fatal_error(_("Invalid coordinates"));
+
+    e = atof(at[0]);
+    n = atof(at[1]);
+    if (pixel) {
+	*x = e + win.l;
+	*y = n + win.t;
+	e = D_d_to_u_col(*x);
+	n = D_d_to_u_row(*y);
     }
-    else
-	return 1;
+    else if (geocoor) {
+	*x = D_u_to_d_col(e);
+	*y = D_u_to_d_row(n);
+    }
+    else {
+	*x = win.l + (win.r - win.l) * e / 100.0;
+	*y = win.t + (win.b - win.t) * (100.0 - n) / 100.0;
+	e = D_d_to_u_col(*x);
+	n = D_d_to_u_row(*y);
+    }
 
     if (east)
 	*east = e;
     if (north)
 	*north = n;
-
-    return 0;
 }
 
-static void draw_text(char *text, double *x, double *y, double size, char *align,
-		      double rotation, char bold, int do_background, int fg_color, int bg_color)
+static void draw_text(char *text, double *x, double *y, double size,
+		      char *align, double rotation, char bold,
+		      int do_background, int fg_color, int bg_color)
 {
     double w, h;
     double t, b, l, r;
@@ -708,6 +700,4 @@ static void draw_text(char *text, double *x, double *y, double size, char *align
 
     *x += w * c;
     *y -= w * s;
-
-    return;
 }
