@@ -683,10 +683,10 @@ static void draw_text(char *text, double *x, double *y, double size,
     }
 
     if (do_background) {
- 	pl = *x - size/2; /* some pixels margin for both sides */
- 	pt = *y + size/2;
- 	pr = *x + w + size/2;
- 	pb = *y - h - size/2;
+ 	pl = D_d_to_u_col(*x - size/2); /* some pixels margin for both sides */
+ 	pt = D_d_to_u_row(*y + size/2);
+ 	pr = D_d_to_u_col(*x + w + size/2);
+ 	pb = D_d_to_u_row(*y - h - size/2);
 	D_use_color(bg_color);
  	D_box_abs(pl, pt, pr, pb);    /* draw the box */
  	D_use_color(fg_color); /* restore */
