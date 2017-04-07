@@ -425,12 +425,12 @@ int main(int argc, char **argv)
     xfm_pts->required = NO;
     xfm_pts->label =
 	_("File containing coordinates to transform (\"-\" to read from stdin)");
-    xfm_pts->description = _("Local x,y coordinates to target east,north");
+    xfm_pts->description = _("Local x,y,z coordinates to target east,north,height");
 
     rev_flag = G_define_flag();
     rev_flag->key = 'r';
     rev_flag->label = _("Reverse transform of coords file or coeff. dump");
-    rev_flag->description = _("Target east,north coordinates to local x,y");
+    rev_flag->description = _("Target east,north,height coordinates to local x,y,z");
 
     dump_flag = G_define_flag();
     dump_flag->key = 'x';
