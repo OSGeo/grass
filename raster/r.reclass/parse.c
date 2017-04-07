@@ -17,7 +17,7 @@ int parse(const char *line, RULE ** rules, RULE ** tail, struct Categories *cats
     const char *label;
     const char *save;
     CELL v;
-    CELL lo[100], hi[100], new = (CELL) 0;
+    CELL lo[1024], hi[1024], new = (CELL) 0;
     int count;
     int i, last_null = 0;
 
