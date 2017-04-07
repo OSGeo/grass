@@ -76,7 +76,7 @@ int Vect_build_ogr(struct Map_info *Map, int build)
     if (OGR_L_TestCapability(ogr_info->layer, OLCTransactions)) {
         CPLPushErrorHandler(CPLQuietErrorHandler); 
 	if (OGR_L_CommitTransaction(ogr_info->layer) != OGRERR_NONE)
-            G_debug(1, "Unable to commit transation");
+            G_debug(1, "Unable to commit transaction");
         CPLPushErrorHandler(CPLDefaultErrorHandler); 
     }
 
