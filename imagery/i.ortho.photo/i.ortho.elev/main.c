@@ -128,8 +128,8 @@ int main(int argc, char *argv[])
     	strcpy(location_elev, loc_opt->answer);
     if(mapset_opt->answer)
     	strcpy(mapset_elev, mapset_opt->answer);
-    if(elev_opt->answer)
-    	strcpy(elev_layer, elev_opt->answer);
+    /*if(elev_opt->answer)
+    	strcpy(elev_layer, elev_opt->answer);*/
     if(math_opt->answer)
     	strcpy(math_exp, math_opt->answer);
     if(unit_opt->answer)
@@ -193,16 +193,11 @@ int main(int argc, char *argv[])
 	    select_current_env();
 	    G_fatal_error(_("Raster map <%s> not found"), elev_opt->answer);
 	}
-
+	/* load information from the ELEVATION file in the GROUP*/
 	I_get_group_elev(group, elev_layer, mapset_elev, location_elev, math_exp, units, nd);
-	overwrite = G_getenv_nofatal("OVERWRITE") != NULL;
-	    
-	if (!overwrite && *elev_layer) {
-	G_warning(_("Elevation for group <%s> is already set to <%s>"),
-	          group, elev_layer);
-	}
 	/*Modify ELEVATION file in source GROUP */
-	I_put_group_elev(group,elev_layer,mapset_elev,location_elev, math_exp, units, nd);
+	I_put_group_elev(group,elev_opt->answer,mapset_opt->answer,loc_opt->answer, 
+			math_opt->answer, unit_opt->answer, nd_opt->answer);
 	/* select current location */
 	select_current_env();
 
