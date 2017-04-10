@@ -146,9 +146,12 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Target location [%s] not found\n"), location);
     }
 
+    /*Report the contents of the ELEVATION file as in the GROUP */
     if (print_flag->answer) {
+	/*If the content is empty report an error */
 	if(!I_get_group_elev(group, elev_layer, mapset_elev, location_elev, math_exp, units, nd)){
 		G_fatal_error(_("Cannot find default elevation map for target in group [%s]"),group);
+	/*If there is a content, report it as a message */
 	} else {
 		G_message("map:\t\t\t%s",elev_layer);
 		G_message("mapset:\t\t\t%s",mapset_elev);
@@ -176,7 +179,7 @@ int main(int argc, char *argv[])
 	G_switch_env();
 	/*Switch to alternate search path */
 	G_switch_search_path();
-	/*?*/
+	/*Source Env = 0 ; Target Env = 1 */
 	which_env = 0;
         /*Select the target environment */
 	select_target_env();
@@ -193,7 +196,7 @@ int main(int argc, char *argv[])
 	    select_current_env();
 	    G_fatal_error(_("Raster map <%s> not found"), elev_opt->answer);
 	}
-	/* load information from the ELEVATION file in the GROUP*/
+	/* load information from the ELEVATION file in the GROUP */
 	I_get_group_elev(group, elev_layer, mapset_elev, location_elev, math_exp, units, nd);
 	/*Modify ELEVATION file in source GROUP */
 	I_put_group_elev(group,elev_opt->answer,mapset_opt->answer,loc_opt->answer, 
