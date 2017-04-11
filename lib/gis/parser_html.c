@@ -262,7 +262,7 @@ void G__usage_html(void)
 
                             if (thumbnails)
                                 fprintf(stdout, "<img height=\"12\" "
-                                        "style=\"max-width: 80;\""
+                                        "style=\"max-width: 80;\" "
                                         "src=\"%s/%s.png\" alt=\"%s\"> ",
                                         thumbnails, opt->opts[i], opt->opts[i]);
                         }
