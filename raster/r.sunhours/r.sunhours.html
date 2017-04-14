@@ -2,7 +2,8 @@
 
 <em>r.sunhours</em> calculates sun elevation and sun azimuth angles for
 the given time of day and each grid cell in the current region. 
-Additionally, the photoperiod (sunshine hours) can be calculated.
+Additionally, the photoperiod (sunshine hours on flat terrain) can be
+calculated.
 
 <p>
 Sun elevation, height, height angle, or solar altitude angle is the
@@ -19,8 +20,12 @@ Greenwich standard time.
 <p>
 If a <em>sunhour</em> output map is specified, the module calculates 
 sunshine hours for the given day. This option requires both Greenwhich 
-standard time (<em>-t</em> flag) and the solpos algorithm of NREL 
-(<em>-s</em> flag).
+standard time and the use of the SOLPOS algorithm by NREL.
+
+<h2>NOTESS</h2>
+
+To consider also cast shadow effects of the terrain, <em>r.sun</em> is
+to be used.
 
 <h2>EXAMPLES</h2>
 
@@ -47,10 +52,13 @@ d.legend sun_elev -s
 
 <h3>Calculate map of photoperiod (insolation time)</h3>
 
-Calculate photoperiod of day of year 1 (1st January) 2012:
+Calculate photoperiod of day-of-year 001 (1st January) of 2012 for
+the current computational region, ignoring cast shadow effects of the
+terrain:
 
 <div class="code"><pre>
-r.sunhours -s sunhour=photoperiod_doy_001 year=2012 day=1
+g.region -p
+r.sunhours sunhour=photoperiod_doy_001 year=2012 day=1
 </pre></div>
 
 <h2>Acknowledgements</h2>
@@ -62,7 +70,7 @@ algorithm.
 <em>
 <a href="g.region.html">g.region</a>,
 <a href="r.sun.html">r.sun</a>,
-<a href="r.sunmask.html">r.sunmask</a>,
+<a href="r.sunmask.html">r.sunmask</a>
 </em>
 
 <h2>AUTHOR</h2>
