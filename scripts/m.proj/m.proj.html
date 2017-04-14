@@ -62,16 +62,21 @@ Alternatively, to have <em>m.proj</em> output data in decimal degrees,
 use the <b>-d</b> flag. This flag can also be used with non-lat/long
 data to force a higher number of decimal places (the <em>cs2cs</em>
 default is 2).
-
-<h2>EXAMPLES</h2>
-
-Lat/long output can be converted to GRASS's DMS convention
+<p>
+Note that Lat/long output can be converted to GRASS's DMS convention
 (<tt>DDD:MM:SSS.SSSH</tt>) by piping the results of <em>m.proj</em>
 through the <em>sed</em> stream editor as follows.
 
 <div class="code"><pre>
-m.proj -o | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
+m.proj -o ... | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
 </pre></div>
+
+<h2>EXAMPLES</h2>
+
+The examples are suitable for the North Carolina sample dataset if not
+stated otherwise:
+
+<h3>Reproject vector point coordinate pairs to Long/Lat WGS84</h3>
 
 <p>
 The <em>m.proj</em> module is designed to work seamlessly with point
@@ -80,15 +85,21 @@ with <em><a href="v.out.ascii.html">v.out.ascii</a></em>, as the
 following example shows.
 
 <div class="code"><pre>
-v.out.ascii bugsites | m.proj -o
+# Long/Lat WGS84 output in DMS
+v.out.ascii bridges | m.proj -o input=-
+
+# Long/Lat WGS84 output in decimal degree
+v.out.ascii bridges | m.proj -o input=-
 </pre></div>
 
-<p>
-To convert a WGS84 long/lat coordinate to the current map projection
-using the <b>-i</b> flag to set projection parameters automatically:
+<h3>Reproject Long/Lat WGS84 coordinate pair to current map projection</h3>
+
+To convert a Long/Lat WGS84 coordinate pair to the current map projection
+using the <b>-i</b> flag which sets the target projection parameters
+automatically from the current location definition:
 <div class="code"><pre>
-echo "170.510125 -45.868537" | m.proj -i input=-
-2316541.70|5479193.51|1.23
+echo "-78.61168178 33.92225767" | m.proj -i input=-
+645513.47|19180.31|0.00
 </pre></div>
 
 <p>
@@ -96,22 +107,30 @@ The same, but load points from a file named <tt>waypoints.txt</tt> and
 continue on to import the results into a GRASS vector points map in
 the current map projection:
 <div class="code"><pre>
-m.proj -i in=waypoints.txt | cut -f1-2 -d'|' | v.in.ascii out=test_pt
+# check file content
+cat waypoints.txt 
+-78.43977824 33.89587173
+-78.54944691 33.88964566
+-78.51078074 33.88141495
+-77.14037951 35.60543020
+
+# reproject points and generate vector map on the fly
+m.proj -i input=waypoints.txt | v.in.ascii input=- output=test_pnts 
+
+# verify result
+v.db.select test_pnts cat|dbl_1|dbl_2|dbl_3
+1|661427.74|16329.14|0
+2|651285.43|15586.79|0
+3|654867.21|14690.64|0
+4|778074.58|207402.6|0
 </pre></div>
 
-Here the standard UNIX <em>cut</em> tool is used to discard
-the <tt>z</tt> residual.
 
-<p>
-To convert all coordinates from a vector points map in the current
-projection to WGS84 long/lat, with output in decimal form:
-<div class="code"><pre>
-v.out.ascii bugsites | m.proj -od input=-
-</pre></div>
+<h3>Custom projection parameter usage</h3>
 
-<p>
-To transform points from a UTM projection into the Gauss-Kr&uuml;ger
-Grid System, importing and exporting to files:
+To transform points from a UTM projection (here specified with detailed
+projection definition rather than using an EPSG code) into the
+Gauss-Kr&uuml;ger Grid System, importing from and exporting to files:
 
 <div class="code"><pre>
 m.proj proj_in="+proj=utm +name=utm +a=6378137.0 +es=0.006694380 \
@@ -186,9 +205,9 @@ For more usage examples, see the documentation for the
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="v.proj.html">v.proj</a>,
-<a href="r.proj.html">r.proj</a>,
 <a href="g.proj.html">g.proj</a>,
+<a href="r.proj.html">r.proj</a>,
+<a href="v.proj.html">v.proj</a>,
 <a href="i.rectify.html">i.rectify</a>,
 <a href="v.in.ascii.html">v.in.ascii</a>,
 <a href="v.out.ascii.html">v.out.ascii</a>
