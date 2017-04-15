@@ -1393,18 +1393,28 @@ class GCP(MapFrame, ColumnSorterMixin):
             #TODO ADD ELEVATION FROM MAP AS HEIGHT
             if os.path.exists(self.file['elevation']):
                 #Parse the i.ortho.elev generated file
-                #to get the elevation@mapset map name
-                #FIXME
-                elevationmap='elevation@PERMANENT'
-                #Get the elevation height from the map given by i.ortho.elev
-                ret, msg = RunCommand('r.what',
+                #Get all lines from file
+                lines = open(self.file['elevation']).read().splitlines()
+                #Remove empty spaces in lines
+                lines = [x.replace(' ','') for x in lines]
+                #Extract map@mapset
+                elevationmap=lines[0].split(':')[1]+'@'+lines[1].split(':')[1]
+                #Make sure the region is set to the elevation map
+                ret, msg = RunCommand('g.region',
                                   parent=self,
                                   getErrorMsg=True,
                                   quiet=True,
-                                  _map=elevationmap,
-                                  method=self.gr_method,
-                                  flags=flags)
-                self.mapcoordlist[key][6] = ret
+                                  raster=elevationmap,
+                                  flags=None)
+                #Get the elevation height from the map given by i.ortho.elev
+                from subprocess import PIPE
+                from grass.pygrass.modules import Module
+                rwhat = Module('r.what',
+                                  map=elevationmap,
+                                  coordinates=[coord[0],coord[1]],
+                                  stdout_=PIPE)
+                self.mapcoordlist[key][6] = rwhat.outputs.stdout.split('|')[3].rstrip('\n')
+                self.list.SetStringItem(index, 6, str(self.mapcoordlist[key][6]))
 
             self.pointsToDrawTgt.GetItem(key - 1).SetCoords([coord0, coord1])
 
