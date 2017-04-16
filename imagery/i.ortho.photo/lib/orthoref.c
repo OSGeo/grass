@@ -46,7 +46,8 @@ char msg[120];
 
 
 /* Compute the ortho rectification parameters */
-/* XC,YC,ZC, Omega, Phi, Kappa */
+/* Camera position: XC, YC, ZC */
+/* Camera attitude: Omega, Phi, Kappa */
 int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 			      struct Ortho_Camera_File_Ref *cam_info,
 			      struct Ortho_Camera_Exp_Init *init_info,
