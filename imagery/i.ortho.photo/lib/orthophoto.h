@@ -11,6 +11,7 @@
 #define INITIAL_PHI_VAR     0.01
 #define INITIAL_KAPPA_VAR   0.1
 
+/* REF file in a group doing orthophoto */
 struct Ortho_Image_Group_Ref
 {
     int nfiles;
@@ -30,6 +31,9 @@ struct Ortho_Image_Group_Ref
     } red, grn, blu;
 };
 
+/* camera file inside $MAPSET/CAMERA folder */
+/* has a filename = camera name stored in 
+ * $MAPSET/$GROUP/$GROUPNAME/CAMERA */
 struct Ortho_Camera_File_Ref
 {
     char cam_name[30];
@@ -46,20 +50,22 @@ struct Ortho_Camera_File_Ref
     } fiducials[20];
 };
 
+/* Standard X,Y,Z,E,N,H structure */
 struct Ortho_Photo_Points
 {
     int count;
     double *e1;
     double *n1;
+    double *z1;
     double *e2;
     double *n2;
-    double *z1;
     double *z2;
     int *status;
 };
 
 /* Ortho_Control_Points is identical to Ortho_Photo_Points
  * Why ? */
+/* Standard X,Y,Z,E,N,H structure */
 struct Ortho_Control_Points
 {
     int count;
@@ -72,6 +78,9 @@ struct Ortho_Control_Points
     int *status;
 };
 
+/* Contents of $MAPSET/$GROUP/$GROUPNAME/INIT_EXP
+ * a result of running lib/orthoref.c:
+ * I_compute_ortho_equations()*/
 struct Ortho_Camera_Exp_Init
 {
     double XC_init;
