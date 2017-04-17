@@ -2044,11 +2044,16 @@ class CmdPanel(wx.Panel):
 
                         def OnCheckItem(index, flag):
                             layers = list()
+                            geometry = None
                             for layer, match, listId in self.win1.GetLayers():
+                                if '|' in layer:
+                                    layer, geometry = layer.split('|', 1)
                                 layers.append(layer)
                             porf = self.task.get_param(
                                 'layer', element='name', raiseError=False)
                             porf['value'] = ','.join(layers)
+                            # geometry is currently discarded
+                            # TODO: v.import has no geometry option
                             self.OnUpdateValues()  # TODO: replace by signal
 
                         self.win1.OnCheckItem = OnCheckItem
