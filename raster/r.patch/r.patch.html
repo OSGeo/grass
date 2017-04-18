@@ -105,6 +105,13 @@ This would raise the hard limit to 1500 file. Be warned that more
 files open need more RAM. See also the Wiki page
 <a href="http://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>.
 
+<p>
+Operating systems usually limit the length of the command line
+which limits the number of input raster maps user can pass to the module
+using the option <b>input</b>. In that case,
+<em><a href="r.series.html">r.series</a></em> can be used instead of
+<em>r.patch</em>.
+
 
 <h2>EXAMPLE</h2>
 
@@ -128,6 +135,7 @@ r.patch in=$MAPS out=mosaic
 <a href="g.rename.html">g.rename</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.support.html">r.support</a>,
+<a href="r.series.html">r.series</a>,
 <a href="v.mkgrid.html">v.mkgrid</a>
 </em>
 <p>
