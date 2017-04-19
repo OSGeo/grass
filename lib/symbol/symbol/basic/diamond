@@ -3,6 +3,7 @@ BOX -1 -1 1 1
 POLYGON
   RING
     LINE
+       -0.5 0.5
        0  1
        1  0
        0 -1
