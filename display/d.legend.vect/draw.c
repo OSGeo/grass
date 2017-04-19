@@ -90,11 +90,6 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
             if (((strcmp(type_str,"point") != 0) && (strcmp(type_str, "centroid") != 0)) || size < 0) {
                 size = symb_size;
             }
-            Symb = S_read(symb_name);
-            if (Symb == NULL)
-                G_warning(_("Cannot read symbol"));
-            else
-                S_stroke(Symb, size, 0, 0);
             symb_w = size;
 
             if (symb_w > def_symb_w)
@@ -230,7 +225,6 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
                 maxlblw = row_w;
 
             if (! do_bg) {
-                S_stroke(Symb, size, 0, 0);
                 x = x0 + offs_x + def_symb_w/2.;
                 y = y0 + offs_y - symb_h/2;
                 D_line_width(line_width);
