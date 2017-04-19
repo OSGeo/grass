@@ -188,7 +188,7 @@ static CELL read_cats(const char *element,
 {
     FILE *fd;
     char buff[1024];
-    CELL cat;
+    CELL cat1, cat2;
     DCELL val1, val2;
     int old = 0, fp_map;
     long num = -1;
@@ -243,13 +243,13 @@ static CELL read_cats(const char *element,
     }
 
     /* Read all category names */
-    for (cat = 0;; cat++) {
+    for (cat1 = 0;; cat1++) {
 	char label[1024];
 
 	if (G_getl(buff, sizeof buff, fd) == 0)
 	    break;
 	if (old)
-	    Rast_set_c_cat(&cat, &cat, buff, pcats);
+	    Rast_set_c_cat(&cat1, &cat1, buff, pcats);
 	else {
 	    *label = 0;
 	    if (sscanf(buff, "%1s", label) != 1)
@@ -261,8 +261,11 @@ static CELL read_cats(const char *element,
 	    if (fp_map
 		&& sscanf(buff, "%lf:%lf:%[^\n]", &val1, &val2, label) == 3)
 		Rast_set_cat(&val1, &val2, label, pcats, DCELL_TYPE);
-	    else if (sscanf(buff, "%d:%[^\n]", &cat, label) >= 1)
-		Rast_set_cat(&cat, &cat, label, pcats, CELL_TYPE);
+	    else if (!fp_map
+		&& sscanf(buff, "%d:%d:%[^\n]", &cat1, &cat2, label) == 3)
+		Rast_set_cat(&cat1, &cat2, label, pcats, CELL_TYPE);
+	    else if (sscanf(buff, "%d:%[^\n]", &cat1, label) >= 1)
+		Rast_set_cat(&cat1, &cat1, label, pcats, CELL_TYPE);
 	    else if (sscanf(buff, "%lf:%[^\n]", &val1, label) >= 1)
 		Rast_set_cat(&val1, &val1, label, pcats, DCELL_TYPE);
 	    else
