@@ -1,4 +1,4 @@
-# translation of grasslibs_sl.po to SlovenπËina
+# translation of grasslibs_sl.po to Sloven≈°ƒçina
 # translation of grasslibs_sl.po to slovenian
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2004 GRASS Development Team
@@ -11,10 +11,10 @@ msgstr ""
 "POT-Creation-Date: 2016-11-14 14:55+0100\n"
 "PO-Revision-Date: 2005-04-26 09:38+0200\n"
 "Last-Translator: Miha Staut <mihastaut@yahoo.co.uk>\n"
-"Language-Team: SlovenπËina <grass-translations@lists.osgeo.org>\n"
+"Language-Team: Sloven≈°ƒçina <grass-translations@lists.osgeo.org>\n"
 "Language: sl_SL\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9\n"
 
@@ -144,12 +144,12 @@ msgstr "Vneseni vektor '%s' ni bil najden"
 #: ../lib/ogsf/gsd_legend.c:246
 #, fuzzy, c-format
 msgid "Unable to read color file of raster map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/ogsf/gsd_legend.c:252
 #, fuzzy, c-format
 msgid "Unable to read category file of raster map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/ogsf/gsd_legend.c:269
 #, fuzzy, c-format
@@ -173,7 +173,7 @@ msgstr "Ne morem zapisati povezav z bazo podatkov."
 #: ../lib/ogsf/gsd_legend.c:501
 #, fuzzy
 msgid "Too many categories to show as discrete!"
-msgstr "PreveË reklasifikacijskih kategorij za [%s v %s]"
+msgstr "Preveƒç reklasifikacijskih kategorij za [%s v %s]"
 
 #: ../lib/ogsf/gsd_legend.c:503
 msgid "Try using smaller font!"
@@ -183,7 +183,7 @@ msgstr ""
 #: ../lib/ogsf/gsd_img_tif.c:66 ../lib/ogsf/gk2.c:216
 #, fuzzy, c-format
 msgid "Unable to open file <%s> for writing"
-msgstr "Nezmoæen odpreti %s za pisanje"
+msgstr "Nezmo≈æen odpreti %s za pisanje"
 
 #: ../lib/ogsf/trans.c:180
 msgid "Out of matrix stack space"
@@ -364,7 +364,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/raster3d/range.c:73
 #, fuzzy, c-format
 msgid "Unable to open range file for [%s in %s]"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/raster3d/range.c:88
 #, fuzzy, c-format
@@ -435,7 +435,7 @@ msgstr ""
 #: ../lib/raster3d/open.c:233
 #, fuzzy, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/raster3d/open.c:243
 msgid "Rast3d_open_cell_new: could not open file"
@@ -462,7 +462,7 @@ msgstr "ne morem odpreti rastrskega sloja [%s v %s]"
 #: ../lib/raster3d/close.c:79
 #, fuzzy
 msgid "Unable to flush all tiles"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/raster3d/close.c:84
 #, fuzzy
@@ -472,7 +472,7 @@ msgstr "ne najdem [%s]"
 #: ../lib/raster3d/close.c:94
 #, fuzzy
 msgid "Unable to position file"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/raster3d/close.c:110 ../lib/raster3d/close.c:153
 #, fuzzy, c-format
@@ -512,7 +512,7 @@ msgstr "za izbrati privzeto"
 #: ../lib/raster3d/color.c:354
 #, fuzzy, c-format
 msgid "mapset <%s> is not the current mapset"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/raster3d/maskfn.c:77
 #, c-format
@@ -537,7 +537,7 @@ msgstr "ne morem zapisati \"history\" podatkov za [%s]"
 #: ../lib/imagery/iscatt_core.c:255
 #, fuzzy, c-format
 msgid "Unable to open category raster condtions file <%s>."
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/imagery/iscatt_core.c:263
 #, fuzzy, c-format
@@ -562,7 +562,7 @@ msgstr "ne morem zapisati \"history\" podatkov za [%s]"
 #: ../lib/imagery/iscatt_core.c:526
 #, fuzzy
 msgid "Unable to read from category raster condtition file."
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/imagery/iscatt_core.c:533
 msgid "Invalid size of category raster conditions file."
@@ -582,7 +582,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/imagery/iscatt_core.c:755
 #, fuzzy, c-format
 msgid "Unbale to open raster <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/imagery/iscatt_core.c:761
 #, fuzzy, c-format
@@ -597,7 +597,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/imagery/iscatt_core.c:803
 #, fuzzy, c-format
 msgid "Unable to open category raster condtition file <%s>"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/imagery/iscatt_core.c:817
 msgid "Corrupted category raster conditions file (fseek failed)"
@@ -615,7 +615,7 @@ msgstr ""
 #: ../lib/imagery/target.c:38
 #, fuzzy, c-format
 msgid "Unable to read target file for group [%s]"
-msgstr "Nezmoæen ustvariti vzglavno datoteko za [%s]"
+msgstr "Nezmo≈æen ustvariti vzglavno datoteko za [%s]"
 
 #: ../lib/imagery/georef_tps.c:219
 msgid "Calculating forward transformation coefficients"
@@ -652,17 +652,17 @@ msgstr ""
 #: ../lib/imagery/points.c:124
 #, fuzzy, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/imagery/points.c:132
 #, fuzzy, c-format
 msgid "Bad format in control point file for group [%s in %s]"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/imagery/points.c:159
 #, fuzzy, c-format
 msgid "Unable to create control point file for group [%s in %s]"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/imagery/list_gp.c:34
 #, c-format
@@ -677,12 +677,12 @@ msgstr ""
 #: ../lib/imagery/fopen.c:23
 #, fuzzy, c-format
 msgid "Unable to create file [%s] of group [%s in %s]"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/imagery/fopen.c:36 ../lib/imagery/fopen.c:57
 #, fuzzy, c-format
 msgid "Unable to open file [%s] of group [%s in %s]"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/imagery/fopen.c:49
 #, fuzzy, c-format
@@ -692,12 +692,12 @@ msgstr "ne najdem [%s] v [%s]"
 #: ../lib/imagery/fopen.c:79
 #, fuzzy, c-format
 msgid "Unable to create file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/imagery/fopen.c:101 ../lib/imagery/fopen.c:127
 #, fuzzy, c-format
 msgid "Unable to open file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/imagery/fopen.c:116
 #, c-format
@@ -771,17 +771,17 @@ msgstr ""
 msgid ""
 "Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> "
 "is not current mapset"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/imagery/sigsetfile.c:57
 #, fuzzy, c-format
 msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/imagery/iclass_signatures.c:120
 #, fuzzy, c-format
 msgid "Unable to open output signature file '%s'"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/psdriver/graph_set.c:199
 #, c-format
@@ -818,7 +818,7 @@ msgstr ""
 #: ../lib/cairodriver/write_ppm.c:27 ../lib/cairodriver/write_bmp.c:72
 #, fuzzy, c-format
 msgid "Cairo: unable to open output file <%s>"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/cairodriver/write_ppm.c:34
 #, fuzzy, c-format
@@ -843,7 +843,7 @@ msgstr ""
 #: ../lib/cairodriver/read_ppm.c:46
 #, fuzzy, c-format
 msgid "Cairo: unable to open input mask file <%s>"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/cairodriver/read_ppm.c:50
 #, fuzzy, c-format
@@ -864,12 +864,12 @@ msgstr "G_spawn: ne morem odpreti datoteke %s"
 #: ../lib/cairodriver/read_xid.c:17
 #, fuzzy, c-format
 msgid "Unable to read input file <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/cairodriver/read_xid.c:20
 #, fuzzy, c-format
 msgid "Unable to parse input file <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/cairodriver/raster.c:109
 #, fuzzy
@@ -879,12 +879,12 @@ msgstr "ne morem ustvariti novega procesa"
 #: ../lib/cairodriver/write_xid.c:14 ../lib/pngdriver/read_png.c:71
 #, fuzzy, c-format
 msgid "Unable to open output file <%s>"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/cairodriver/write_xid.c:19
 #, fuzzy, c-format
 msgid "Unable to write output file <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/cairodriver/read_bmp.c:96
 #, c-format
@@ -899,7 +899,7 @@ msgstr "Ne morem odpreti %s"
 #: ../lib/cairodriver/graph.c:85
 #, fuzzy
 msgid "Unable to obtain visual"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/cairodriver/graph.c:160
 #, c-format
@@ -924,7 +924,7 @@ msgstr "Nepoznan \"location\""
 #: ../lib/cairodriver/graph.c:376
 #, fuzzy
 msgid "Failed to initialize Cairo surface"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/cairodriver/draw_bitmap.c:47
 msgid "Cairo_Bitmap: Failed to create source"
@@ -975,7 +975,7 @@ msgstr "Ime vhodnega vektorskega sloja"
 #: ../lib/python/pygrass/raster/category.py:186
 #, fuzzy
 msgid "Error executing: Rast_set_cat"
-msgstr "za obstojeËe rastrske sloje %d\n"
+msgstr "za obstojeƒçe rastrske sloje %d\n"
 
 #: ../lib/python/pygrass/raster/abstract.py:275
 #, fuzzy, python-brace-format
@@ -1000,7 +1000,7 @@ msgstr ""
 #: ../lib/python/pygrass/raster/__init__.py:214
 #, fuzzy, python-brace-format
 msgid "Raster map <{0}> already exists and will be not overwritten"
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/python/pygrass/raster/__init__.py:218
 #, fuzzy
@@ -1020,7 +1020,7 @@ msgstr "Dvojni atributni indeks je izven razpona"
 #: ../lib/python/pygrass/raster/__init__.py:530
 #, fuzzy, python-brace-format
 msgid "Raster map <{0}> already exists. Use overwrite."
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/python/pygrass/raster/__init__.py:561
 #, fuzzy, python-brace-format
@@ -1044,7 +1044,7 @@ msgstr "Ne morem odpreti temp datoteke"
 #: ../lib/python/pygrass/vector/__init__.py:895
 #, fuzzy, python-format
 msgid "Unable to read area with id %i"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/python/pygrass/modules/grid/grid.py:553
 msgid "Execution of subprocesses was not successful"
@@ -1098,7 +1098,7 @@ msgstr "Vneseni vektor '%s' ni bil najden"
 #: ../lib/python/temporal/datetime_math.py:755
 #, fuzzy, python-format
 msgid "Unable to parse time string: %s"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/python/temporal/stds_import.py:85
 #, fuzzy, python-format
@@ -1108,7 +1108,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/python/temporal/stds_import.py:96
 #, fuzzy, python-format
 msgid "Unable to set the color rules for raster map <%s>."
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/stds_import.py:120
 #, fuzzy, python-format
@@ -1143,17 +1143,17 @@ msgstr ""
 #: ../lib/python/temporal/stds_import.py:223
 #, fuzzy, python-format
 msgid "Unable to find init file <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/python/temporal/stds_import.py:225
 #, fuzzy, python-format
 msgid "Unable to find list file <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/python/temporal/stds_import.py:227
 #, fuzzy, python-format
 msgid "Unable to find projection file <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/python/temporal/stds_import.py:229
 #, fuzzy
@@ -1188,7 +1188,7 @@ msgstr "ne morem zapisati \"history\" podatkov za [%s]"
 #: ../lib/python/temporal/stds_import.py:306
 #, fuzzy, python-format
 msgid "Unable to create default temporal database in new location %s"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/python/temporal/stds_import.py:380
 #, python-format
@@ -1206,12 +1206,12 @@ msgstr ""
 #: ../lib/python/temporal/stds_import.py:405
 #, fuzzy, python-format
 msgid "Unable to find GeoTIFF raster file <%s> in archive."
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/python/temporal/stds_import.py:411
 #, fuzzy, python-format
 msgid "Unable to find AAIGrid raster file <%s> in archive."
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/python/temporal/stds_import.py:417
 #, fuzzy, python-format
@@ -1221,7 +1221,7 @@ msgstr "ne morem odpreti rastrskega sloja [%s v %s]"
 #: ../lib/python/temporal/stds_import.py:426
 #, fuzzy, python-format
 msgid "Unable to find GRASS package file <%s> in archive."
-msgstr "Nezmoæen odpreti %s za pisanje"
+msgstr "Nezmo≈æen odpreti %s za pisanje"
 
 #: ../lib/python/temporal/stds_import.py:429
 #, fuzzy
@@ -1233,17 +1233,17 @@ msgstr "Nepoznan \"location\""
 msgid ""
 "Space time %(t)s dataset <%(sp)s> is already in the database. Use the "
 "overwrite flag."
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/python/temporal/stds_import.py:456
 #, fuzzy, python-format
 msgid "Overwrite space time %(sp)s dataset <%(id)s> and unregister all maps."
-msgstr "Nezmoæen ustvariti vzglavno datoteko za [%s]"
+msgstr "Nezmo≈æen ustvariti vzglavno datoteko za [%s]"
 
 #: ../lib/python/temporal/stds_import.py:468
 #, fuzzy, python-format
 msgid "Key word %s not found in init file."
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/python/temporal/stds_import.py:473
 #, fuzzy, python-format
@@ -1273,7 +1273,7 @@ msgstr "Napaka pri zapisu datotek topo. \n"
 msgid ""
 "Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
 "%s"
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/python/temporal/core.py:604
 msgid ""
@@ -1286,7 +1286,7 @@ msgstr ""
 msgid ""
 "Unable to receive temporal database metadata.\n"
 "Current temporal database info:%(info)s"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/python/temporal/core.py:672
 #, fuzzy, python-format
@@ -1295,7 +1295,7 @@ msgid ""
 " %(backup)s Supported temporal API version is: %(api)i.\n"
 "Please update your GRASS GIS installation.\n"
 "Current temporal database info:%(info)s"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/python/temporal/core.py:680
 #, fuzzy, python-format
@@ -1303,7 +1303,7 @@ msgid ""
 "Unsupported temporal database: version mismatch.\n"
 " %(backup)sSupported temporal database version is: %(tdb)i\n"
 "Current temporal database info:%(info)s"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/python/temporal/core.py:768
 #, fuzzy, python-format
@@ -1326,7 +1326,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/python/temporal/core.py:964
 #, fuzzy
 msgid "Unable to check table. "
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/python/temporal/core.py:980
 #, fuzzy
@@ -1341,7 +1341,7 @@ msgstr "ne najdem [%s]"
 #: ../lib/python/temporal/core.py:1000
 #, fuzzy
 msgid "Unable to fetch all. "
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/python/temporal/core.py:1017
 #, fuzzy
@@ -1379,7 +1379,7 @@ msgstr "Vneseni vektor '%s' ni bil najden"
 #: ../lib/python/temporal/univar_statistics.py:101
 #, fuzzy, python-format
 msgid "Unable to get statistics for raster map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/univar_statistics.py:104
 #, fuzzy, python-format
@@ -1394,7 +1394,7 @@ msgstr "Vneseni vektor '%s' ni bil najden"
 #: ../lib/python/temporal/univar_statistics.py:222
 #, fuzzy, python-format
 msgid "Unable to get statistics for vector map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/abstract_dataset.py:386
 #, python-format
@@ -1511,14 +1511,14 @@ msgstr ""
 msgid "Please specify %s= and %s="
 msgstr ""
 "\n"
-"Prosim doloËite fundamentalno toËko\n"
+"Prosim doloƒçite fundamentalno toƒçko\n"
 
 #: ../lib/python/temporal/register.py:103
 #, fuzzy, python-format
 msgid "Please specify %s= or %s="
 msgstr ""
 "\n"
-"Prosim doloËite ime elipsoida\n"
+"Prosim doloƒçite ime elipsoida\n"
 
 #: ../lib/python/temporal/register.py:114
 #, python-format
@@ -1574,14 +1574,14 @@ msgstr ""
 msgid ""
 "Map is already registered in temporal database. Unable to update %(t)s map <"
 "%(id)s> with layer %(l)s. Overwrite flag is not set."
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/python/temporal/register.py:252
 #, fuzzy, python-format
 msgid ""
 "Map is already registered in temporal database. Unable to update %(t)s map <"
 "%(id)s>. Overwrite flag is not set."
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/python/temporal/register.py:276
 #, fuzzy, python-format
@@ -1679,7 +1679,7 @@ msgstr ""
 #, fuzzy, python-format
 msgid ""
 "Map <%s> is already in temporal database, use overwrite flag to overwrite"
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/python/temporal/mapcalc.py:260
 #, python-format
@@ -1769,12 +1769,12 @@ msgstr ""
 #: ../lib/python/temporal/space_time_datasets.py:250
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for raster map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/space_time_datasets.py:274
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for raster map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/space_time_datasets.py:279
 #, fuzzy, python-format
@@ -1790,17 +1790,17 @@ msgstr ""
 #: ../lib/python/temporal/space_time_datasets.py:646
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for raster map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/space_time_datasets.py:598
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for 3D raster map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/space_time_datasets.py:622
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for 3D raster map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/space_time_datasets.py:627
 #, fuzzy, python-format
@@ -1810,12 +1810,12 @@ msgstr "Neveljavna timestamp datoteka za %s sloj %s v \"mapset\" %s"
 #: ../lib/python/temporal/space_time_datasets.py:906
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for vector map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/space_time_datasets.py:929
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for vector map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/space_time_datasets.py:934
 #, fuzzy, python-format
@@ -1825,7 +1825,7 @@ msgstr "Neveljavna timestamp datoteka za %s sloj %s v \"mapset\" %s"
 #: ../lib/python/temporal/space_time_datasets.py:950
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for vector map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:167
 #: ../lib/python/temporal/abstract_space_time_dataset.py:301
@@ -1862,7 +1862,7 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1499
 #, fuzzy, python-format
 msgid "Unable to get map ids from register table <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1609
 #, python-format
@@ -1905,12 +1905,12 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1973
 #, fuzzy, python-format
 msgid "Drop map register table: %s"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2028
 #, fuzzy
 msgid "Error in register table request"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2057
 #, fuzzy, python-format
@@ -1974,7 +1974,7 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2159
 #, fuzzy, python-format
 msgid "Map <%(map)s> with layer %(l)s is already registered."
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2163
 #, python-format
@@ -1994,12 +1994,12 @@ msgstr ""
 msgid ""
 "Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
 "%(base)s>"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2230
 #, fuzzy, python-format
 msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2291
 #, python-format
@@ -2035,13 +2035,13 @@ msgstr "Neveljavna timestamp datoteka za %s sloj %s v \"mapset\" %s"
 msgid ""
 "End time must be greater than start time for %(type)s map <%(id)s> with "
 "layer: %(l)s"
-msgstr "East mora biti veËji od West"
+msgstr "East mora biti veƒçji od West"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:389
 #: ../lib/python/temporal/abstract_map_dataset.py:482
 #, fuzzy, python-format
 msgid "End time must be greater than start time for %(type)s map <%(id)s>"
-msgstr "East mora biti veËji od West"
+msgstr "East mora biti veƒçji od West"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:460
 #, fuzzy, python-format
@@ -2053,14 +2053,14 @@ msgstr "Ne morem ustvariti timestamp datoteke za %s sloj %s v \"mapset\" %s"
 #: ../lib/python/temporal/abstract_map_dataset.py:467
 #, fuzzy, python-format
 msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:476
 #, fuzzy, python-format
 msgid ""
 "End time must be greater than start time for %(typ)s map <%(id)s> with layer "
 "%(l)s"
-msgstr "East mora biti veËji od West"
+msgstr "East mora biti veƒçji od West"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:800
 #, python-format
@@ -2100,7 +2100,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/python/temporal/stds_export.py:115
 #, fuzzy, python-format
 msgid "Unable to export color rules for raster map <%s> r.out.gdal"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/python/temporal/stds_export.py:139
 #, fuzzy, python-format
@@ -2146,7 +2146,7 @@ msgstr "Ime vhodnega rastrskega sloja"
 msgid ""
 "Raster map <%(name)s> is already in temporal database, use overwrite flag to "
 "overwrite"
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/python/temporal/aggregation.py:146
 #, python-format
@@ -2191,20 +2191,20 @@ msgstr "Vneseni vektor '%s' ni bil najden"
 #: ../lib/python/temporal/open_stds.py:108
 #, fuzzy
 msgid "Space time datasets can only be created in the current mapset"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/python/temporal/open_stds.py:125
 #, fuzzy, python-format
 msgid ""
 "Space time %(sp)s dataset <%(name)s> is already in the database. Use the "
 "overwrite flag."
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/python/temporal/open_stds.py:160
 #, fuzzy, python-format
 msgid ""
 "Overwriting space time %(sp)s dataset <%(name)s> and unregistering all maps"
-msgstr "Nezmoæen ustvariti vzglavno datoteko za [%s]"
+msgstr "Nezmo≈æen ustvariti vzglavno datoteko za [%s]"
 
 #: ../lib/python/temporal/open_stds.py:168
 #, fuzzy, python-format
@@ -2290,7 +2290,7 @@ msgstr ""
 #: ../lib/python/script/core.py:1414
 #, fuzzy, python-format
 msgid "Location <%s> already exists and will be overwritten"
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/python/script/core.py:1538
 msgid "Debug level {}"
@@ -2341,7 +2341,7 @@ msgstr ""
 msgid ""
 "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
 "current mapset."
-msgstr "Ne morem izbrisati linije, sloj '%s' ni odprt v zapisovalnem naËinu"
+msgstr "Ne morem izbrisati linije, sloj '%s' ni odprt v zapisovalnem naƒçinu"
 
 #: ../lib/python/script/raster.py:113
 #, python-format
@@ -2369,7 +2369,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:666 ../lib/vector/Vlib/ascii.c:428
 #, fuzzy, c-format, python-format
 msgid "Unable to describe table <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/python/script/db.py:153
 #, python-format
@@ -2380,7 +2380,7 @@ msgstr ""
 #: ../lib/python/script/db.py:163
 #, fuzzy
 msgid "Fetching data failed"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/python/script/array.py:157 ../lib/python/script/array.py:207
 #: ../lib/python/script/array.py:254 ../lib/python/script/array.py:305
@@ -2474,7 +2474,7 @@ msgid ""
 "%s"
 msgstr ""
 "\n"
-"IZBIRA: DoloËite naslednjo izbiro?\n"
+"IZBIRA: Doloƒçite naslednjo izbiro?\n"
 
 #: ../lib/python/exceptions/__init__.py:75
 msgid ". See errors in the (error) output."
@@ -2757,7 +2757,7 @@ msgstr ""
 #: ../lib/gmath/la.c:155
 #, fuzzy
 msgid "Unable to allocate space for matrix copy"
-msgstr "Nezmoæen dodeliti spomin\n"
+msgstr "Nezmo≈æen dodeliti spomin\n"
 
 #: ../lib/gmath/la.c:220
 msgid "Input matrix is uninitialized"
@@ -2778,12 +2778,12 @@ msgstr ""
 #: ../lib/gmath/la.c:310
 #, fuzzy
 msgid "Unable to allocate space for matrix sum"
-msgstr "Nezmoæen dodeliti spomin\n"
+msgstr "Nezmo≈æen dodeliti spomin\n"
 
 #: ../lib/gmath/la.c:374
 #, fuzzy
 msgid "Unable to allocate space for matrix product"
-msgstr "Nezmoæen dodeliti spomin\n"
+msgstr "Nezmo≈æen dodeliti spomin\n"
 
 #: ../lib/gmath/la.c:486
 msgid "Input: one or both data matrices uninitialised"
@@ -2824,7 +2824,7 @@ msgstr ""
 #: ../lib/gmath/la.c:619
 #, fuzzy
 msgid "Unable to allocate space for matrix"
-msgstr "Nezmoæen dodeliti spomin\n"
+msgstr "Nezmo≈æen dodeliti spomin\n"
 
 #: ../lib/gmath/la.c:636
 msgid "Matrix is singular"
@@ -2912,7 +2912,7 @@ msgstr ""
 #: ../lib/gmath/la.c:1371
 #, fuzzy
 msgid "Output vector is not the same type as others"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/gmath/la.c:1437
 msgid "Vector structure is not initialised"
@@ -2948,12 +2948,12 @@ msgstr ""
 #: ../lib/lidar/raster.c:175
 #, fuzzy, c-format
 msgid "Unable to access table <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/lidar/zones.c:473 ../lib/lidar/zones.c:510
 #, fuzzy, c-format
 msgid "<%s> created in database."
-msgstr "Nezmoæen odpreti datoteko s tabelo elipsoida: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo elipsoida: %s"
 
 #: ../lib/lidar/zones.c:477 ../lib/lidar/zones.c:514
 #, c-format
@@ -2977,7 +2977,7 @@ msgstr ""
 #: ../lib/db/dbmi_base/legal_dbname.c:45
 #, fuzzy, c-format
 msgid "Illegal table map name <%s>. Must start with a letter."
-msgstr "Neveljavno ime vektorskega sloja <%s>. ZaËeti se mora s Ërko.\n"
+msgstr "Neveljavno ime vektorskega sloja <%s>. Zaƒçeti se mora s ƒçrko.\n"
 
 #: ../lib/db/dbmi_base/legal_dbname.c:54
 #, fuzzy, c-format
@@ -2999,7 +2999,7 @@ msgstr ""
 #: ../lib/db/dbmi_base/login.c:115
 #, fuzzy, c-format
 msgid "Unable to read file '%s'"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/db/dbmi_base/login.c:126
 #, c-format
@@ -3009,19 +3009,19 @@ msgstr ""
 #: ../lib/db/dbmi_base/login.c:164
 #, fuzzy, c-format
 msgid "Unable to write file '%s'"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/db/dbmi_base/login.c:229
 #, fuzzy, c-format
 msgid "DB connection <%s/%s> already exists and will be overwritten"
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/db/dbmi_base/login.c:232
 #, fuzzy, c-format
 msgid ""
 "DB connection <%s/%s> already exists. Re-run '%s' with '--%s' flag to "
 "overwrite existing settings."
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/db/dbmi_base/test/test_table.c:38
 #, fuzzy
@@ -3118,7 +3118,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:2902 ../lib/vector/Vlib/ascii.c:404
 #, fuzzy, c-format
 msgid "Unable to start driver <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/db/dbmi_client/table.c:46 ../lib/db/dbmi_client/delete_tab.c:40
 #, fuzzy, c-format
@@ -3139,17 +3139,17 @@ msgstr ""
 #: ../lib/db/dbmi_client/copy_tab.c:151
 #, fuzzy, c-format
 msgid "Unable to get list tables in database <%s>"
-msgstr "Nezmoæen odpreti datoteko s tabelo elipsoida: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo elipsoida: %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:189
 #, fuzzy, c-format
 msgid "Table <%s> already exists in database and will be overwritten"
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/db/dbmi_client/copy_tab.c:194
 #, fuzzy, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr "Nezmoæen odpreti datoteko s tabelo elipsoida: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo elipsoida: %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:274
 #, fuzzy, c-format
@@ -3165,13 +3165,13 @@ msgstr "Ne morem zapisati povezav z bazo podatkov."
 #: ../lib/db/dbmi_client/copy_tab.c:294
 #, fuzzy, c-format
 msgid "Unable to create table <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:338 ../lib/vector/Vlib/write_ogr.c:585
 #: ../lib/vector/Vlib/write_pg.c:2009
 #, fuzzy, c-format
 msgid "Unable to fetch data from table <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:394
 #, c-format
@@ -3181,7 +3181,7 @@ msgstr ""
 #: ../lib/db/dbmi_client/delete_tab.c:53
 #, fuzzy, c-format
 msgid "Unable to drop table: '%s'"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:221
 #: ../lib/db/dbmi_client/select.c:288
@@ -3195,7 +3195,7 @@ msgstr ""
 #: ../lib/db/dbmi_client/select.c:317 ../lib/vector/Vlib/cats.c:603
 #, fuzzy, c-format
 msgid "Unable select records from table <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/db/dbmi_client/select.c:333
 #, fuzzy
@@ -3210,7 +3210,7 @@ msgstr ""
 #: ../lib/nviz/lights.c:171
 #, fuzzy
 msgid "Unable to define new light"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/nviz/position.c:56
 #, fuzzy
@@ -3229,7 +3229,7 @@ msgstr ""
 #: ../lib/nviz/render.c:112
 #, fuzzy
 msgid "Unable to get visual info"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/nviz/render.c:119
 #, fuzzy
@@ -3260,7 +3260,7 @@ msgstr ""
 #: ../lib/nviz/map_obj.c:152
 #, fuzzy, c-format
 msgid "Error loading 3d raster map <%s>"
-msgstr "za obstojeËe rastrske sloje %d\n"
+msgstr "za obstojeƒçe rastrske sloje %d\n"
 
 #: ../lib/nviz/map_obj.c:160
 msgid "Nviz_new_map_obj(): unsupported data type"
@@ -3349,7 +3349,7 @@ msgstr ""
 #: ../lib/manage/read_list.c:73
 #, fuzzy, c-format
 msgid "Unable to open data base element list '%s'"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/manage/read_list.c:134
 #, c-format
@@ -3407,7 +3407,7 @@ msgstr "ni poznan"
 #: ../lib/raster/reclass.c:168
 #, fuzzy, c-format
 msgid "Too many reclass categories for <%s@%s>"
-msgstr "PreveË reklasifikacijskih kategorij za [%s v %s]"
+msgstr "Preveƒç reklasifikacijskih kategorij za [%s v %s]"
 
 #: ../lib/raster/reclass.c:171
 #, fuzzy, c-format
@@ -3425,12 +3425,12 @@ msgstr "Neveljaven reklasifikacijski tip"
 #: ../lib/raster/reclass.c:284
 #, fuzzy, c-format
 msgid "Unable to create header file for <%s@%s>"
-msgstr "Nezmoæen ustvariti vzglavno datoteko za [%s]"
+msgstr "Nezmo≈æen ustvariti vzglavno datoteko za [%s]"
 
 #: ../lib/raster/reclass.c:332
 #, fuzzy, c-format
 msgid "Unable to create dependency file in <%s@%s>"
-msgstr "Nezmoæen ustvariti datoteko odvisnosti v [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko odvisnosti v [%s v %s]"
 
 #: ../lib/raster/init.c:61
 #, fuzzy
@@ -3462,7 +3462,7 @@ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
 #: ../lib/raster/range.c:169
 #, fuzzy, c-format
 msgid "Unable to read quant rules for raster map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/raster/range.c:206 ../lib/raster/range.c:226
 #, fuzzy, c-format
@@ -3478,17 +3478,17 @@ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
 #: ../lib/raster/raster_metadata.c:109
 #, fuzzy, c-format
 msgid "Unable to read <%s> for raster map <%s@%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/raster/raster_metadata.c:119 ../lib/raster/raster_metadata.c:148
 #, fuzzy, c-format
 msgid "Error closing <%s> metadata file for raster map <%s@%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/raster/raster_metadata.c:142
 #, fuzzy, c-format
 msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/raster/put_row.c:121
 #, fuzzy, c-format
@@ -3571,7 +3571,7 @@ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
 #: ../lib/raster/quant_io.c:43
 #, fuzzy, c-format
 msgid "Floating data range for raster map <%s> is empty"
-msgstr "Razpon plavajoËih podatkov za %s@%s je prazen"
+msgstr "Razpon plavajoƒçih podatkov za %s@%s je prazen"
 
 #: ../lib/raster/quant_io.c:52
 #, fuzzy, c-format
@@ -3601,7 +3601,7 @@ msgstr ""
 #: ../lib/raster/histogram.c:55
 #, c-format
 msgid "Histogram for [%s in %s] missing (run r.support)"
-msgstr "Histogram za [%s v %s] manjka (poæenite r.support) "
+msgstr "Histogram za [%s v %s] manjka (po≈æenite r.support) "
 
 #: ../lib/raster/histogram.c:62
 #, c-format
@@ -3616,7 +3616,7 @@ msgstr "Neveljavna datoteka histograma za [%s v %s]"
 #: ../lib/raster/histogram.c:331
 #, fuzzy, c-format
 msgid "Unable to create histogram file for <%s>"
-msgstr "Nezmoæen ustvariti vzglavno datoteko za [%s]"
+msgstr "Nezmo≈æen ustvariti vzglavno datoteko za [%s]"
 
 #: ../lib/raster/open.c:193
 #, fuzzy, c-format
@@ -3635,7 +3635,7 @@ msgstr "ne morem brati range datoteke [%s v %s]"
 #: ../lib/raster/open.c:209
 #, fuzzy, c-format
 msgid "Error reading map type for raster map <%s>"
-msgstr "za obstojeËe rastrske sloje %d\n"
+msgstr "za obstojeƒçe rastrske sloje %d\n"
 
 #: ../lib/raster/open.c:217
 #, fuzzy, c-format
@@ -3653,7 +3653,7 @@ msgid ""
 "Raster map <%s> is in different projection than current region. Found <%s>, "
 "should be <%s>."
 msgstr ""
-"[%s] v \"mapset\" [%s] - je v drugaËni projekciji kot trenutna regija:\n"
+"[%s] v \"mapset\" [%s] - je v drugaƒçni projekciji kot trenutna regija:\n"
 "najden sloj [%s] v: <%s>, moral bi biti <%s> "
 
 #: ../lib/raster/open.c:247
@@ -3664,7 +3664,7 @@ msgstr "[%s] v \"mapset\" [%s] - v drugi coni [%d] kot trenutna regija [%d]"
 #: ../lib/raster/open.c:252
 #, fuzzy, c-format
 msgid "Raster map <%s>: bytes per cell (%d) too large"
-msgstr "[%s] v [%s] - bajtov na celico (%d) preveË"
+msgstr "[%s] v [%s] - bajtov na celico (%d) preveƒç"
 
 #: ../lib/raster/open.c:277
 #, c-format
@@ -3685,7 +3685,7 @@ msgstr "napaka pri branju %s sloja [%s] v \"mapset\" [%s], vrstica %d"
 #: ../lib/raster/open.c:527
 #, fuzzy
 msgid "Unable to create GDAL link"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/raster/open.c:599 ../lib/raster/gdal.c:476
 #, fuzzy, c-format
@@ -3695,7 +3695,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/raster/open.c:604 ../lib/raster/open.c:759
 #, fuzzy, c-format
 msgid "Raster map <%s> is not in the current mapset (%s)"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/raster/open.c:611
 #, fuzzy, c-format
@@ -3710,7 +3710,7 @@ msgstr "LOCATION  << %s >>  ne obstaja"
 #: ../lib/raster/open.c:755
 #, fuzzy, c-format
 msgid "Raster map <%s> does not exist in the current mapset (%s)"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/raster/open.c:821
 msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
@@ -3779,17 +3779,17 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/raster/close.c:391 ../lib/raster/close.c:519
 #, fuzzy, c-format
 msgid "Unable to rename null file '%s' to '%s': %s"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/raster/close.c:461
 #, fuzzy, c-format
 msgid "Unable to rename cell file '%s' to '%s': %s"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/raster/close.c:541
 #, fuzzy
 msgid "unable to write f_format file for CELL maps"
-msgstr "Nezmoæen ustvariti vzglavno datoteko za [%s]"
+msgstr "Nezmo≈æen ustvariti vzglavno datoteko za [%s]"
 
 #: ../lib/raster/interp.c:211
 #, fuzzy, c-format
@@ -3816,7 +3816,7 @@ msgstr "barvna podpora za [%s] v \"mapset\" [%s] %s"
 #: ../lib/raster/gdal.c:88
 #, fuzzy, c-format
 msgid "Unable to locate symbol <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/raster/gdal.c:142
 #, fuzzy
@@ -3826,7 +3826,7 @@ msgstr "Ne morem odpreti datoteke topo za pisanje: %s\n"
 #: ../lib/raster/gdal.c:372
 #, fuzzy
 msgid "Unable to open GDAL file"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/raster/gdal.c:482
 #, fuzzy, c-format
@@ -3836,7 +3836,7 @@ msgstr "Ne morem odpreti %s"
 #: ../lib/raster/gdal.c:491
 #, fuzzy, c-format
 msgid "Unable to create <%s> dataset using <%s> driver"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/raster/gdal.c:499
 #, c-format
@@ -3883,17 +3883,17 @@ msgstr "Napaka pri pisanju datoteke sidx.\n"
 #: ../lib/raster/gdal.c:604
 #, fuzzy, c-format
 msgid "Unable to create output file <%s> using driver <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/raster/format.c:162
 #, c-format
 msgid "Fail of initial read of compressed file [%s in %s]"
-msgstr "Napaka pri branju zaËetka stisnjene datoteke [%s v %s]"
+msgstr "Napaka pri branju zaƒçetka stisnjene datoteke [%s v %s]"
 
 #: ../lib/raster/format.c:176
 #, fuzzy, c-format
 msgid "Fail of initial read of compressed null file [%s in %s]"
-msgstr "Napaka pri branju zaËetka stisnjene datoteke [%s v %s]"
+msgstr "Napaka pri branju zaƒçetka stisnjene datoteke [%s v %s]"
 
 #: ../lib/raster/sample.c:70
 #, fuzzy
@@ -3907,7 +3907,7 @@ msgstr ""
 #: ../lib/raster/put_title.c:28
 #, c-format
 msgid "category information for [%s] in [%s] missing or invalid"
-msgstr "neveljavna ali manjkajoËa informacija o kategoriji za [%s] v [%s]"
+msgstr "neveljavna ali manjkajoƒça informacija o kategoriji za [%s] v [%s]"
 
 #: ../lib/raster/put_title.c:37
 msgid "G_put_title - can't create a temp file"
@@ -3944,7 +3944,7 @@ msgstr ""
 msgid "invalid value"
 msgstr ""
 "\n"
-"neveljavna fundamentalna toËka\n"
+"neveljavna fundamentalna toƒçka\n"
 
 #: ../lib/raster/color_rules.c:134
 #, fuzzy
@@ -4060,17 +4060,17 @@ msgstr ""
 #: ../lib/raster/null_val.c:64
 #, fuzzy
 msgid "EmbedGivenNulls: wrong data type"
-msgstr "EmbedGivenNulls: napaËen tip podatkov!"
+msgstr "EmbedGivenNulls: napaƒçen tip podatkov!"
 
 #: ../lib/raster/null_val.c:114
 #, fuzzy
 msgid "Rast_set_null_value: wrong data type!"
-msgstr "G_set_null_value: napaËen tip podatkov!"
+msgstr "G_set_null_value: napaƒçen tip podatkov!"
 
 #: ../lib/raster/auto_mask.c:69
 #, fuzzy
 msgid "Unable to open automatic MASK file"
-msgstr "Nezmoæen odpreti avtomatiËno datoteko MASK"
+msgstr "Nezmo≈æen odpreti avtomatiƒçno datoteko MASK"
 
 #: ../lib/raster/set_window.c:48
 msgid "Rast_set_window() called while window split"
@@ -4082,7 +4082,7 @@ msgid ""
 "Rast_set_read_window(): projection/zone differs from that of currently open "
 "raster maps"
 msgstr ""
-"G_set_window(): projekcija/cona je razliËna od tiste, ki je doloËena za "
+"G_set_window(): projekcija/cona je razliƒçna od tiste, ki je doloƒçena za "
 "trenutno odprte rastrske sloje"
 
 #: ../lib/raster/set_window.c:158
@@ -4098,7 +4098,7 @@ msgstr ""
 #: ../lib/raster/put_cellhd.c:34
 #, fuzzy, c-format
 msgid "Unable to create header file for <%s>"
-msgstr "Nezmoæen ustvariti vzglavno datoteko za [%s]"
+msgstr "Nezmo≈æen ustvariti vzglavno datoteko za [%s]"
 
 #: ../lib/gis/lrand48.c:84
 #, fuzzy, c-format
@@ -4117,12 +4117,12 @@ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
 #: ../lib/gis/timestamp.c:292
 #, fuzzy, c-format
 msgid "Unable to create timestamp file for %s map <%s@%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/gis/timestamp.c:301
 #, fuzzy, c-format
 msgid "Invalid timestamp specified for %s map <%s@%s>"
-msgstr "timestamp doloËen za %s v sloju %s v \"mapset\" %s je neveljaven "
+msgstr "timestamp doloƒçen za %s v sloju %s v \"mapset\" %s je neveljaven "
 
 #: ../lib/gis/timestamp.c:331
 #, fuzzy, c-format
@@ -4147,12 +4147,12 @@ msgstr "Neveljavna timestamp datoteka za %s sloj %s v \"mapset\" %s"
 #: ../lib/gis/timestamp.c:524
 #, fuzzy, c-format
 msgid "Unable to create timestamp file for vector map <%s@%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/gis/timestamp.c:533
 #, fuzzy, c-format
 msgid "Invalid timestamp specified for vector map <%s@%s>"
-msgstr "timestamp doloËen za %s v sloju %s v \"mapset\" %s je neveljaven "
+msgstr "timestamp doloƒçen za %s v sloju %s v \"mapset\" %s je neveljaven "
 
 #: ../lib/gis/location.c:61
 #, fuzzy, c-format
@@ -4210,7 +4210,7 @@ msgstr ""
 #: ../lib/gis/parser_rest.c:223 ../lib/gis/parser_html.c:233
 #, fuzzy
 msgid "Options"
-msgstr "moænosti: %s\n"
+msgstr "mo≈ænosti: %s\n"
 
 #: ../lib/gis/parser_rest.c:230 ../lib/gis/parser_html.c:239
 #, fuzzy
@@ -4228,7 +4228,7 @@ msgstr ""
 
 #: ../lib/gis/proj2.c:63
 msgid "Latitude-Longitude"
-msgstr "©irina-Dolæina"
+msgstr "≈†irina-Dol≈æina"
 
 #: ../lib/gis/proj2.c:65
 msgid "Other Projection"
@@ -4289,7 +4289,7 @@ msgstr ""
 #: ../lib/gis/get_ellipse.c:263 ../lib/proj/ellipse.c:243
 #, fuzzy, c-format
 msgid "Unable to open ellipsoid table file <%s>"
-msgstr "Nezmoæen odpreti datoteko s tabelo elipsoida: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo elipsoida: %s"
 
 #: ../lib/gis/get_ellipse.c:344 ../lib/gis/get_ellipse.c:367
 #, fuzzy, c-format
@@ -4364,7 +4364,7 @@ msgstr "  %*s   privzet: %s\n"
 #: ../lib/gis/parser_help.c:279
 #, c-format
 msgid "  %*s   options: "
-msgstr "  %*s   moænosti: "
+msgstr "  %*s   mo≈ænosti: "
 
 #: ../lib/gis/list.c:83
 #, fuzzy, c-format
@@ -4403,7 +4403,7 @@ msgstr "ne morem izdelati elementa \"mapset\"-a %s (%s)"
 #: ../lib/gis/home.c:39
 #, fuzzy
 msgid "Unable to determine user's home directory"
-msgstr "ne morem doloËiti uporabnikovega domaËega direktorija"
+msgstr "ne morem doloƒçiti uporabnikovega domaƒçega direktorija"
 
 #: ../lib/gis/home.c:120
 #, fuzzy, c-format
@@ -4442,7 +4442,7 @@ msgstr ""
 #, fuzzy
 msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr ""
-"WHERE pogoji SQL stavka brez kljuËne besede 'where': (primer: dohodek < 1000 "
+"WHERE pogoji SQL stavka brez kljuƒçne besede 'where': (primer: dohodek < 1000 "
 "and preb >= 10000)"
 
 #: ../lib/gis/parser_standard_options.c:157
@@ -4692,7 +4692,7 @@ msgstr "Nepoznan \"location\""
 #: ../lib/gis/parser_standard_options.c:525
 #, fuzzy
 msgid "Layer number or name"
-msgstr "©tevilka sloja"
+msgstr "≈†tevilka sloja"
 
 #: ../lib/gis/parser_standard_options.c:527
 msgid ""
@@ -4704,7 +4704,7 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:537
 #, fuzzy
 msgid "Layer number or name ('-1' for all layers)"
-msgstr "©tevilka polja <%d> ali vektor '%s' æe obstaja."
+msgstr "≈†tevilka polja <%d> ali vektor '%s' ≈æe obstaja."
 
 #: ../lib/gis/parser_standard_options.c:539
 msgid ""
@@ -4832,7 +4832,7 @@ msgstr "Ime vhodnega rastrskega sloja"
 #: ../lib/gis/parser_standard_options.c:753
 #, fuzzy
 msgid "Name of the input space time datasets"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/gis/parser_standard_options.c:761
 #, fuzzy
@@ -4887,7 +4887,7 @@ msgstr "Ime izhodnega rastrskega sloja"
 #: ../lib/gis/parser_standard_options.c:845
 #, fuzzy
 msgid "Type of the input space time dataset"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/gis/parser_standard_options.c:853
 #, fuzzy
@@ -4915,7 +4915,7 @@ msgid ""
 "WHERE conditions of SQL statement without 'where' keyword used in the "
 "temporal GIS framework"
 msgstr ""
-"WHERE pogoji SQL stavka brez kljuËne besede 'where': (primer: dohodek < 1000 "
+"WHERE pogoji SQL stavka brez kljuƒçne besede 'where': (primer: dohodek < 1000 "
 "and preb >= 10000)"
 
 #: ../lib/gis/parser_standard_options.c:888
@@ -5197,7 +5197,7 @@ msgstr ""
 #: ../lib/gis/parser.c:585
 #, fuzzy, c-format
 msgid "Sorry <%s> is not a valid option"
-msgstr "Oprostite <%s> ni veljavna moænost\n"
+msgstr "Oprostite <%s> ni veljavna mo≈ænost\n"
 
 #: ../lib/gis/parser.c:598
 msgid "Your installation doesn't include GUI, exiting."
@@ -5211,7 +5211,7 @@ msgstr "NAPAKA: "
 #: ../lib/gis/parser.c:941
 #, fuzzy
 msgid "Unable to determine program name"
-msgstr "ne morem doloËiti uporabnikovega domaËega direktorija"
+msgstr "ne morem doloƒçiti uporabnikovega domaƒçega direktorija"
 
 #: ../lib/gis/parser.c:963 ../lib/gis/parser.c:980
 #, fuzzy, c-format
@@ -5271,7 +5271,7 @@ msgstr ""
 msgid "Missing value for parameter <%s>"
 msgstr ""
 "\n"
-"Napaka: ManjkajoËa vrednost za parameter <%s>\n"
+"Napaka: Manjkajoƒça vrednost za parameter <%s>\n"
 
 #: ../lib/gis/parser.c:1245
 #, fuzzy, c-format
@@ -5299,7 +5299,7 @@ msgid ""
 "\tYou provided %d item(s): %s"
 msgstr ""
 "\n"
-"Napaka: moænost <%s> mora biti podana v veËkratnikih %d\n"
+"Napaka: mo≈ænost <%s> mora biti podana v veƒçkratnikih %d\n"
 
 #: ../lib/gis/parser.c:1584 ../lib/gis/error.c:362
 #, c-format
@@ -5314,7 +5314,7 @@ msgstr ""
 #: ../lib/gis/parser.c:1703
 #, fuzzy, c-format
 msgid "%s= is not a separator option"
-msgstr "Oprostite <%s> ni veljavna moænost\n"
+msgstr "Oprostite <%s> ni veljavna mo≈ænost\n"
 
 #: ../lib/gis/parser.c:1706
 #, c-format
@@ -5324,7 +5324,7 @@ msgstr ""
 #: ../lib/gis/parser.c:1768 ../lib/gis/parser.c:1785
 #, fuzzy, c-format
 msgid "%s= is not a file option"
-msgstr "Oprostite <%s> ni veljavna moænost\n"
+msgstr "Oprostite <%s> ni veljavna mo≈ænost\n"
 
 #: ../lib/gis/parser.c:1770
 #, fuzzy, c-format
@@ -5334,12 +5334,12 @@ msgstr "Vneseni vektor '%s' ni bil najden"
 #: ../lib/gis/parser.c:1776
 #, fuzzy, c-format
 msgid "Unable to open %s file <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/gis/parser.c:1782
 #, fuzzy, c-format
 msgid "Unable to create %s file <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/gis/worker.c:84
 msgid "Task already has a worker"
@@ -5369,7 +5369,7 @@ msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:79 ../lib/gis/adj_cellhd.c:244
 msgid "Illegal latitude for North"
-msgstr "Neveljavna πirina za North"
+msgstr "Neveljavna ≈°irina za North"
 
 #: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:250
 #, c-format
@@ -5378,7 +5378,7 @@ msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:90 ../lib/gis/adj_cellhd.c:255
 msgid "Illegal latitude for South"
-msgstr "Neveljavna πirina za South"
+msgstr "Neveljavna ≈°irina za South"
 
 #: ../lib/gis/adj_cellhd.c:102 ../lib/gis/adj_cellhd.c:267
 #, c-format
@@ -5396,11 +5396,11 @@ msgstr "North mora biti severneje od South"
 
 #: ../lib/gis/adj_cellhd.c:128 ../lib/gis/adj_cellhd.c:293
 msgid "North must be larger than South"
-msgstr "North mora biti veËji od South"
+msgstr "North mora biti veƒçji od South"
 
 #: ../lib/gis/adj_cellhd.c:131 ../lib/gis/adj_cellhd.c:296
 msgid "East must be larger than West"
-msgstr "East mora biti veËji od West"
+msgstr "East mora biti veƒçji od West"
 
 #: ../lib/gis/adj_cellhd.c:150 ../lib/gis/adj_cellhd.c:340
 msgid "Invalid coordinates"
@@ -5437,7 +5437,7 @@ msgstr "Neveljavna vrednost globin"
 #: ../lib/gis/adj_cellhd.c:299
 #, fuzzy
 msgid "Top must be larger than Bottom"
-msgstr "North mora biti veËji od South"
+msgstr "North mora biti veƒçji od South"
 
 #: ../lib/gis/myname.c:46
 msgid "This location has no description."
@@ -5541,22 +5541,22 @@ msgstr "obstajata dve polji za t-b resolucijo"
 #: ../lib/gis/rd_cellhd.c:291
 #, fuzzy
 msgid "Duplicate rows field"
-msgstr "obstajata dve polji za πtevilo vrstic"
+msgstr "obstajata dve polji za ≈°tevilo vrstic"
 
 #: ../lib/gis/rd_cellhd.c:301
 #, fuzzy
 msgid "Duplicate 3D rows field"
-msgstr "obstajata dve polji za 3D πtevilo vrstic"
+msgstr "obstajata dve polji za 3D ≈°tevilo vrstic"
 
 #: ../lib/gis/rd_cellhd.c:311
 #, fuzzy
 msgid "Duplicate cols field"
-msgstr "obstajata dve polji za πtevilo kolon"
+msgstr "obstajata dve polji za ≈°tevilo kolon"
 
 #: ../lib/gis/rd_cellhd.c:321
 #, fuzzy
 msgid "Duplicate 3D cols field"
-msgstr "obstajata polji za 3D πtevilo kolon"
+msgstr "obstajata polji za 3D ≈°tevilo kolon"
 
 #: ../lib/gis/rd_cellhd.c:331
 #, fuzzy
@@ -5576,12 +5576,12 @@ msgstr "obstajata polji o podatku o stiskanju"
 #: ../lib/gis/datum.c:160
 #, c-format
 msgid "unable to open datum table file: %s"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/gis/datum.c:182
 #, c-format
 msgid "error in datum table file, line %d"
-msgstr "napaka v datoteki s tabelo fundamentalne toËke, vrstica %d"
+msgstr "napaka v datoteki s tabelo fundamentalne toƒçke, vrstica %d"
 
 #: ../lib/gis/open_misc.c:49
 #, c-format
@@ -5691,7 +5691,7 @@ msgstr "OPOZORILO: "
 #: ../lib/gis/key_value3.c:33
 #, fuzzy, c-format
 msgid "Unable to open output file <%s>: %s"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/gis/key_value3.c:36
 #, fuzzy, c-format
@@ -5701,7 +5701,7 @@ msgstr "Napaka pri zapisu datotek topo. \n"
 #: ../lib/gis/key_value3.c:39
 #, fuzzy, c-format
 msgid "Error closing output file <%s>: %s"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/gis/key_value3.c:60
 #, fuzzy, c-format
@@ -5766,7 +5766,7 @@ msgstr "Izhodni sloj '%s' je uporabljen kot vhodni"
 #: ../lib/gis/paths.c:201
 #, fuzzy, c-format
 msgid "Unable to open file <%s> for reading"
-msgstr "Nezmoæen odpreti %s za pisanje"
+msgstr "Nezmo≈æen odpreti %s za pisanje"
 
 #: ../lib/gis/paths.c:217
 #, fuzzy, c-format
@@ -5825,12 +5825,12 @@ msgstr ""
 #: ../lib/gis/view.c:176
 #, c-format
 msgid "Unable to open %s for writing"
-msgstr "Nezmoæen odpreti %s za pisanje"
+msgstr "Nezmo≈æen odpreti %s za pisanje"
 
 #: ../lib/gis/view.c:262 ../lib/gis/view.c:479
 #, c-format
 msgid "Unable to open %s for reading"
-msgstr "Nezmoæen odpreti %s za branje"
+msgstr "Nezmo≈æen odpreti %s za branje"
 
 #: ../lib/gis/view.c:465
 #, c-format
@@ -5974,12 +5974,12 @@ msgstr ""
 #: ../lib/display/r_raster.c:150
 #, fuzzy, c-format
 msgid "Unknown display driver <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/display/r_raster.c:151
 #, fuzzy, c-format
 msgid "Using display driver <%s>..."
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/cluster/c_exec.c:44
 #, c-format
@@ -6003,7 +6003,7 @@ msgstr ""
 #: ../lib/init/lock.c:60
 #, fuzzy, c-format
 msgid "Unable to write lockfile %s (%s)"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/init/grass.py:123
 #, fuzzy
@@ -6159,7 +6159,7 @@ msgstr ""
 #, fuzzy, python-format
 msgid ""
 "Unable to create temporary directory <grass7-%(user)s-%(lock)s>! Exiting."
-msgstr "Nezmoæen dodeliti spomin\n"
+msgstr "Nezmo≈æen dodeliti spomin\n"
 
 #: ../lib/init/grass.py:493
 #, python-brace-format
@@ -6275,7 +6275,7 @@ msgstr ""
 msgid ""
 "Invalid return code from GUI startup script.\n"
 "Please advise GRASS developers of this error."
-msgstr "Prosim sporoËite razvijalcem GRASS-a o tej napaki.\n"
+msgstr "Prosim sporoƒçite razvijalcem GRASS-a o tej napaki.\n"
 
 #: ../lib/init/grass.py:1051
 #, python-brace-format
@@ -6376,7 +6376,7 @@ msgstr "Povezava ni uspela.\n"
 #: ../lib/init/grass.py:1375
 #, fuzzy, python-format
 msgid "Execution of <%s> finished."
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/init/grass.py:1406
 #, fuzzy
@@ -6400,7 +6400,7 @@ msgstr ""
 #: ../lib/init/grass.py:1459
 #, fuzzy
 msgid "Help is available with the command:"
-msgstr "Za ukaz [%s] ni na voljo pomoËi\n"
+msgstr "Za ukaz [%s] ni na voljo pomoƒçi\n"
 
 #: ../lib/init/grass.py:1460
 msgid "See the licence terms with:"
@@ -6500,7 +6500,7 @@ msgstr ""
 #: ../lib/init/grass.py:1970
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67
 #: ../lib/vector/neta/spanningtree.c:101 ../lib/vector/neta/flow.c:66
@@ -6532,7 +6532,7 @@ msgstr "Ne morem prebrati histograma za [%s v %s]"
 #: ../lib/vector/vedit/delete.c:72
 #, fuzzy, c-format
 msgid "No area found for centroid %d"
-msgstr "©tevilo obmoËij brez centroida  :    %d\n"
+msgstr "≈†tevilo obmoƒçij brez centroida  :    %d\n"
 
 #: ../lib/vector/vedit/delete.c:76
 #, c-format
@@ -6542,7 +6542,7 @@ msgstr ""
 #: ../lib/vector/vedit/delete.c:105
 #, fuzzy, c-format
 msgid "Area %d without centroid"
-msgstr "©tevilo obmoËij brez centroida  :    %d\n"
+msgstr "≈†tevilo obmoƒçij brez centroida  :    %d\n"
 
 #: ../lib/vector/vedit/delete.c:121
 #, fuzzy, c-format
@@ -6621,7 +6621,7 @@ msgstr "Ne morem dodati povezave z bazo podatkov."
 #: ../lib/vector/neta/utils.c:254
 #, fuzzy
 msgid "Problem loading category values"
-msgstr "za obstojeËe rastrske sloje %d\n"
+msgstr "za obstojeƒçe rastrske sloje %d\n"
 
 #: ../lib/vector/Vlib/write_nat.c:182 ../lib/vector/Vlib/write_nat.c:295
 #: ../lib/vector/Vlib/write_nat.c:651 ../lib/vector/Vlib/read_pg.c:331
@@ -6697,12 +6697,12 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/vector/Vlib/write_ogr.c:140 ../lib/vector/Vlib/write_pg.c:347
 #, fuzzy
 msgid "Unable to delete feature"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/write_ogr.c:239
 #, fuzzy, c-format
 msgid "Creating field <%s> failed"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/write_ogr.c:304 ../lib/vector/Vlib/write_pg.c:1104
 #, c-format
@@ -6712,7 +6712,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_ogr.c:326
 #, fuzzy, c-format
 msgid "Unable to create OGR layer <%s> in '%s'"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/write_ogr.c:338 ../lib/vector/Vlib/write_pg.c:1117
 #, c-format
@@ -6783,7 +6783,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_ogr.c:624
 #, fuzzy, c-format
 msgid "Unable to create field <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/write_ogr.c:653 ../lib/vector/Vlib/write_pg.c:2074
 #, fuzzy, c-format
@@ -6842,14 +6842,14 @@ msgstr "Zahtevani format ni bil preveden v tej verziji"
 #: ../lib/vector/Vlib/field.c:91
 #, fuzzy
 msgid "Layer number must be 1 or greater"
-msgstr "©tevilka polja mora biti 1 ali veË."
+msgstr "≈†tevilka polja mora biti 1 ali veƒç."
 
 #: ../lib/vector/Vlib/field.c:96
 #, fuzzy
 msgid "Unable to add attribute link, vector map is not opened in WRITE mode"
 msgstr ""
 "Ne morem dodati povezave z bazo podatkov, sloj ni odprt v ZAPISOVALNEM "
-"naËinu."
+"naƒçinu."
 
 #: ../lib/vector/Vlib/field.c:103
 #, fuzzy
@@ -6879,7 +6879,7 @@ msgstr ""
 #: ../lib/vector/Vlib/field.c:261
 #, fuzzy, c-format
 msgid "Layer number %d or name <%s> already exists"
-msgstr "©tevilka polja <%d> ali vektor '%s' æe obstaja."
+msgstr "≈†tevilka polja <%d> ali vektor '%s' ≈æe obstaja."
 
 #: ../lib/vector/Vlib/field.c:345
 #, fuzzy, c-format
@@ -6894,7 +6894,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/field.c:352
 msgid "Default driver is not set"
-msgstr "Privzeti gonilnik ni doloËen"
+msgstr "Privzeti gonilnik ni doloƒçen"
 
 #: ../lib/vector/Vlib/field.c:355
 msgid "Default database is not set"
@@ -6903,7 +6903,7 @@ msgstr "Privzeta baza podatkov ni podana"
 #: ../lib/vector/Vlib/field.c:428
 #, c-format
 msgid "Requested dblink %d, maximum link number %d"
-msgstr "Zahtevan dblink %d, najveËja vrednost πtevila povezave %d"
+msgstr "Zahtevan dblink %d, najveƒçja vrednost ≈°tevila povezave %d"
 
 #: ../lib/vector/Vlib/field.c:614 ../lib/vector/Vlib/field.c:622
 #, fuzzy, c-format
@@ -6918,7 +6918,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/vector/Vlib/field.c:707
 #, fuzzy, c-format
 msgid "Unable to open OGR layer <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/field.c:734
 #, fuzzy
@@ -6954,7 +6954,7 @@ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
 #: ../lib/vector/Vlib/field.c:1020
 #, fuzzy
 msgid "Bug: attempt to update map which is not in current mapset"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/vector/Vlib/build_nat.c:74 ../lib/vector/Vlib/build_sfa.c:339
 #: ../lib/vector/Vlib/build_sfa.c:629
@@ -7055,7 +7055,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/vector/Vlib/write.c:299
 #, fuzzy
 msgid "Unable to restore feature/offset %"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/write.c:308
 #, fuzzy, c-format
@@ -7070,7 +7070,7 @@ msgstr "Vneseni vektor '%s' ni bil najden"
 #: ../lib/vector/Vlib/clean_nodes.c:248
 #, fuzzy, c-format
 msgid "Modifications: %d"
-msgstr "moænosti: %s\n"
+msgstr "mo≈ænosti: %s\n"
 
 #: ../lib/vector/Vlib/map.c:139 ../lib/vector/Vlib/map.c:245
 #, fuzzy
@@ -7086,7 +7086,7 @@ msgstr "ne morem odpreti rastrskega sloja [%s v %s]"
 #: ../lib/vector/Vlib/open.c:821
 #, fuzzy, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/vector/Vlib/map.c:159 ../lib/vector/Vlib/open.c:813
 #: ../lib/vector/Vlib/open.c:826
@@ -7103,17 +7103,17 @@ msgstr "ne morem odpreti rastrskega sloja [%s v %s]"
 #: ../lib/vector/Vlib/close_nat.c:102
 #, fuzzy, c-format
 msgid "Unable to copy table <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/map.c:331 ../lib/vector/Vlib/map.c:462
 #, fuzzy, c-format
 msgid "Unable to delete table <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/map.c:346
 #, fuzzy, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/vector/Vlib/map.c:402
 #, c-format
@@ -7148,7 +7148,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/vector/Vlib/map.c:499
 #, fuzzy, c-format
 msgid "Unable to delete file '%s'"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/map.c:519
 #, fuzzy, c-format
@@ -7186,7 +7186,7 @@ msgstr "Nepoznan \"location\""
 #: ../lib/vector/Vlib/read_pg.c:272 ../lib/vector/Vlib/read_pg.c:471
 #, fuzzy, c-format
 msgid "Feature %ld without geometry skipped"
-msgstr "©tevilo obmoËij brez centroida  :    %d\n"
+msgstr "≈†tevilo obmoƒçij brez centroida  :    %d\n"
 
 #: ../lib/vector/Vlib/read_pg.c:365
 #, c-format
@@ -7203,7 +7203,7 @@ msgstr "Nepoznan \"location\""
 #: ../lib/vector/Vlib/build_sfa.c:364
 #, fuzzy, c-format
 msgid "Feature %d without geometry skipped"
-msgstr "©tevilo obmoËij brez centroida  :    %d\n"
+msgstr "≈†tevilo obmoƒçij brez centroida  :    %d\n"
 
 #: ../lib/vector/Vlib/read_pg.c:482 ../lib/vector/Vlib/read_ogr.c:382
 msgid "Feature without geometry. Skipped."
@@ -7287,7 +7287,7 @@ msgstr "Povezava ni uspela.\n"
 msgid ""
 "Unable to read features. Reason:\n"
 "%s"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/header.c:86
 #, fuzzy, c-format
@@ -7312,7 +7312,7 @@ msgstr "Nepoznan \"location\""
 #: ../lib/vector/Vlib/read_sfa.c:90
 #, fuzzy, c-format
 msgid "Unable to construct centroid for area %d. Skipped."
-msgstr "Nezmoæen dodeliti spomin\n"
+msgstr "Nezmo≈æen dodeliti spomin\n"
 
 #: ../lib/vector/Vlib/read_sfa.c:95
 #, c-format
@@ -7327,7 +7327,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:285
 #, fuzzy, c-format
 msgid "Unable to rewrite feature %d"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/write_pg.c:321 ../lib/vector/Vlib/write_pg.c:811
 #: ../lib/vector/Vlib/write_pg.c:1212 ../lib/vector/Vlib/write_pg.c:1364
@@ -7339,7 +7339,7 @@ msgstr "Povezava ni uspela.\n"
 #: ../lib/vector/Vlib/write_pg.c:452
 #, fuzzy, c-format
 msgid "Unable to delete feature (%s) %d"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/write_pg.c:554 ../lib/vector/Vlib/write_pg.c:1294
 #: ../lib/vector/Vlib/write_sfa.c:349
@@ -7350,7 +7350,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:1355 ../lib/vector/Vlib/build_pg.c:411
 #, fuzzy
 msgid "Unable to open PG file"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/write_pg.c:773
 #, fuzzy, c-format
@@ -7388,7 +7388,7 @@ msgstr "Ne morem zapisati linije, sloj ni odprt"
 #: ../lib/vector/Vlib/write_pg.c:1129
 #, fuzzy
 msgid "Unable to create new PostGIS feature table"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/write_pg.c:1143
 #, fuzzy
@@ -7465,7 +7465,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/vector/Vlib/write_pg.c:2269
 #, fuzzy, c-format
 msgid "Unable to determine next left/right edge for edge %d"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/write_pg.c:2274
 #, fuzzy
@@ -7485,7 +7485,7 @@ msgstr "Ne morem prebrati histograma za [%s v %s]"
 #: ../lib/vector/Vlib/write_pg.c:2610
 #, fuzzy
 msgid "Unable to determine next left/right edge"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/write_pg.c:2696
 #, fuzzy
@@ -7512,7 +7512,7 @@ msgstr ""
 #: ../lib/vector/Vlib/dangles.c:262
 #, fuzzy, c-format
 msgid "%s lines: %d"
-msgstr "©tevilo linij            :  %d\n"
+msgstr "≈†tevilo linij            :  %d\n"
 
 #: ../lib/vector/Vlib/dangles.c:263
 #, c-format
@@ -7522,7 +7522,7 @@ msgstr ""
 #: ../lib/vector/Vlib/build_sfa.c:279 ../lib/vector/Vlib/build_sfa.c:546
 #, fuzzy, c-format
 msgid "Unable to calculate centroid for area %d"
-msgstr "Nezmoæen dodeliti spomin\n"
+msgstr "Nezmo≈æen dodeliti spomin\n"
 
 #: ../lib/vector/Vlib/build_sfa.c:305
 #, fuzzy, c-format
@@ -7539,8 +7539,8 @@ msgstr ""
 #, fuzzy, c-format
 msgid "One feature without geometry skipped"
 msgid_plural "%d features without geometry skipped"
-msgstr[0] "©tevilo obmoËij brez centroida  :    %d\n"
-msgstr[1] "©tevilo obmoËij brez centroida  :    %d\n"
+msgstr[0] "≈†tevilo obmoƒçij brez centroida  :    %d\n"
+msgstr[1] "≈†tevilo obmoƒçij brez centroida  :    %d\n"
 
 #: ../lib/vector/Vlib/build_sfa.c:722
 #, fuzzy, c-format
@@ -7605,7 +7605,7 @@ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
 #: ../lib/vector/Vlib/open_ogr.c:191
 #, fuzzy, c-format
 msgid "Unable to get OGR driver <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/open_ogr.c:199
 #, fuzzy, c-format
@@ -7615,17 +7615,17 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/vector/Vlib/open_ogr.c:211
 #, fuzzy, c-format
 msgid "OGR layer <%s> already exists and will be overwritten"
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/vector/Vlib/open_ogr.c:215
 #, fuzzy, c-format
 msgid "Unable to delete OGR layer <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/open_ogr.c:221
 #, fuzzy, c-format
 msgid "OGR layer <%s> already exists in datasource '%s'"
-msgstr "Nezmoæen odpreti datoteko s tabelo elipsoida: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo elipsoida: %s"
 
 #: ../lib/vector/Vlib/open_ogr.c:279
 #, c-format
@@ -7657,7 +7657,7 @@ msgstr ""
 #: ../lib/vector/Vlib/remove_duplicates.c:199
 #, fuzzy, c-format
 msgid "Removed duplicates: %d"
-msgstr "©tevilo linij            :  %d\n"
+msgstr "≈†tevilo linij            :  %d\n"
 
 #: ../lib/vector/Vlib/break_polygons.c:102
 msgid "Break polygons: Bug in binary tree!"
@@ -7692,7 +7692,7 @@ msgstr ""
 #: ../lib/vector/Vlib/legal_vname.c:50
 #, fuzzy, c-format
 msgid "Illegal vector map name <%s>. Must start with a letter."
-msgstr "Neveljavno ime vektorskega sloja <%s>. ZaËeti se mora s Ërko.\n"
+msgstr "Neveljavno ime vektorskega sloja <%s>. Zaƒçeti se mora s ƒçrko.\n"
 
 #: ../lib/vector/Vlib/legal_vname.c:58
 #, fuzzy, c-format
@@ -7708,7 +7708,7 @@ msgstr "Neveljavno ime vektorskega sloja <%s>. Znak <%c> ni dovoljen.\n"
 #: ../lib/vector/Vlib/legal_vname.c:100 ../lib/vector/Vlib/legal_vname.c:104
 #, fuzzy, c-format
 msgid "Output vector map name <%s> is not in the current mapset (%s)"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/vector/Vlib/legal_vname.c:117 ../lib/vector/Vlib/legal_vname.c:121
 #, fuzzy, c-format
@@ -7738,7 +7738,7 @@ msgstr "Ne morem zapisati linije, sloj ni odprt"
 #: ../lib/vector/Vlib/copy.c:104
 #, fuzzy, c-format
 msgid "Unable to create PostGIS layer <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/copy.c:133
 #, fuzzy, c-format
@@ -7762,7 +7762,7 @@ msgstr ""
 #: ../lib/vector/Vlib/copy.c:340
 #, fuzzy, c-format
 msgid "%d features without category or from different layer skipped"
-msgstr "©tevilo obmoËij brez centroida  :    %d\n"
+msgstr "≈†tevilo obmoƒçij brez centroida  :    %d\n"
 
 #: ../lib/vector/Vlib/copy.c:372
 #, fuzzy
@@ -7772,7 +7772,7 @@ msgstr "Pripajanje centroidov: "
 #: ../lib/vector/Vlib/copy.c:400
 #, fuzzy, c-format
 msgid "Writing node %d failed"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/copy.c:478
 #, fuzzy
@@ -7787,7 +7787,7 @@ msgstr ""
 #: ../lib/vector/Vlib/copy.c:534 ../lib/vector/Vlib/copy.c:542
 #, fuzzy, c-format
 msgid "Writing area %d failed"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/copy.c:550
 #, c-format
@@ -7817,22 +7817,22 @@ msgstr "ne morem ustvariti novega procesa"
 #: ../lib/vector/Vlib/copy.c:760
 #, fuzzy, c-format
 msgid "Unable to grant privileges on table <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/open.c:138
 #, fuzzy, c-format
 msgid "Programmer requested unknown access level %d"
-msgstr "Opozorilo, Zaæelen programer: nepoznan open_level\n"
+msgstr "Opozorilo, Za≈æelen programer: nepoznan open_level\n"
 
 #: ../lib/vector/Vlib/open.c:232
 #, fuzzy, c-format
 msgid "Vector map <%s> not found in current mapset"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/vector/Vlib/open.c:252
 #, fuzzy
 msgid "Temporary vector maps can be accessed only in the current mapset"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/vector/Vlib/open.c:277
 #, fuzzy
@@ -7886,7 +7886,7 @@ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
 #: ../lib/vector/Vlib/open.c:777
 #, fuzzy, c-format
 msgid "Unable to create vector map: <%s> is not in the current mapset (%s)"
-msgstr "HroπË: poskus posodobitve sloja, ki ni v trenutnem mapset."
+msgstr "Hro≈°ƒç: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/vector/Vlib/open.c:786
 #, fuzzy, c-format
@@ -7919,7 +7919,7 @@ msgstr "Vect_write_line() za ta format/nivo ni podprt"
 #: ../lib/vector/Vlib/open.c:985
 #, fuzzy, c-format
 msgid "Unable to stat file <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/open.c:1049
 #, c-format
@@ -7930,7 +7930,7 @@ msgstr ""
 #, fuzzy
 msgid "Size of 'coor' file differs from value saved in topology file"
 msgstr ""
-"Velikost datoteke 'coor' je razliËna od vrednosti shranjene v datoteki topo."
+"Velikost datoteke 'coor' je razliƒçna od vrednosti shranjene v datoteki topo."
 
 #: ../lib/vector/Vlib/open.c:1149 ../lib/vector/Vlib/open.c:1248
 #, fuzzy, c-format
@@ -7941,12 +7941,12 @@ msgstr "Prosim ponovno izgradi topologijo vektorja '%s@%s'"
 #, fuzzy
 msgid "Size of 'coor' file differs from value saved in sidx file"
 msgstr ""
-"Velikost datoteke 'coor' je razliËna od vrednosti shranjene v datoteki topo."
+"Velikost datoteke 'coor' je razliƒçna od vrednosti shranjene v datoteki topo."
 
 #: ../lib/vector/Vlib/open.c:1317
 #, fuzzy
 msgid "Unable to open OGR file"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/open.c:1343
 msgid "OGR output also detected, using OGR"
@@ -7965,7 +7965,7 @@ msgstr "Gradim topologijo ...\n"
 #: ../lib/vector/Vlib/close.c:141
 #, fuzzy, c-format
 msgid "Unable to open %s file"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/close.c:226
 #, fuzzy, c-format
@@ -8026,7 +8026,7 @@ msgstr ""
 #: ../lib/vector/Vlib/snap.c:526 ../lib/vector/Vlib/snap.c:888
 #, fuzzy, c-format
 msgid "New vertices: %d"
-msgstr "©tevilo primitivnih enot :  %d\n"
+msgstr "≈†tevilo primitivnih enot :  %d\n"
 
 #: ../lib/vector/Vlib/snap.c:915
 #, fuzzy
@@ -8098,7 +8098,7 @@ msgstr "Nepoznan \"location\""
 #: ../lib/vector/Vlib/build_pg.c:491
 #, fuzzy, c-format
 msgid "Unable to create <%s.%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/build_pg.c:642
 #, fuzzy
@@ -8123,7 +8123,7 @@ msgstr "Ne morem odpreti temp datoteke"
 #: ../lib/vector/Vlib/build_pg.c:790
 #, fuzzy, c-format
 msgid "Topology for centroid %d not available. Area %d skipped"
-msgstr "Za ukaz [%s] ni na voljo pomoËi\n"
+msgstr "Za ukaz [%s] ni na voljo pomoƒçi\n"
 
 #: ../lib/vector/Vlib/build_pg.c:1000
 msgid "Create simple features topology from topogeometry data..."
@@ -8211,7 +8211,7 @@ msgstr "Ne morem prebrati histograma za [%s v %s]"
 #: ../lib/vector/Vlib/geos.c:472
 #, fuzzy, c-format
 msgid "Unable to read feature id %d"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/line.c:184 ../lib/vector/Vlib/line.c:217
 #: ../lib/vector/Vlib/line.c:250
@@ -8226,17 +8226,17 @@ msgstr ""
 #: ../lib/vector/Vlib/close_nat.c:74
 #, fuzzy, c-format
 msgid "Unable to create '%s': %s"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/close_nat.c:81
 #, fuzzy, c-format
 msgid "Unable to copy '%s': %s"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/close_nat.c:167
 #, fuzzy, c-format
 msgid "Unable to drop table <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/constraint.c:150
 msgid "Layer constraint ignored for non-native vector formats"
@@ -8264,7 +8264,7 @@ msgstr "ne morem brati range datoteke [%s v %s]"
 #: ../lib/vector/Vlib/ascii.c:160
 #, fuzzy, c-format
 msgid "Unparsable longitude value: [%s]"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/ascii.c:165
 #, c-format
@@ -8283,7 +8283,7 @@ msgstr "ne morem brati range datoteke [%s v %s]"
 #: ../lib/vector/Vlib/ascii.c:225
 #, fuzzy
 msgid "Unable to copy points"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/ascii.c:238
 #, c-format
@@ -8323,7 +8323,7 @@ msgstr ""
 #: ../lib/vector/Vlib/ascii.c:539
 #, fuzzy, c-format
 msgid "Unable to select record from table <%s> (key %s, column %s)"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/vector/Vlib/ascii.c:661
 #, fuzzy, c-format
@@ -8343,7 +8343,7 @@ msgstr "Ne morem zbrisati linije"
 #: ../lib/vector/Vlib/ascii.c:724
 #, fuzzy
 msgid "Unable to fetch data from table"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/ascii.c:756 ../lib/vector/Vlib/net_build.c:216
 #: ../lib/vector/Vlib/net_build.c:501 ../lib/vector/Vlib/net_build.c:519
@@ -8401,7 +8401,7 @@ msgstr ""
 #: ../lib/vector/Vlib/array.c:292
 #, fuzzy, c-format
 msgid "Unable to select record from table <%s> (key %s, where %s)"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/vector/Vlib/close_ogr.c:104 ../lib/vector/Vlib/close_pg.c:139
 #, fuzzy, c-format
@@ -8446,7 +8446,7 @@ msgstr ""
 #: ../lib/vector/Vlib/cats.c:572 ../lib/vector/Vlib/cats.c:668
 #, fuzzy
 msgid "Layer number must be > 0 for category constraints"
-msgstr "©tevilka polja mora biti 1 ali veË."
+msgstr "≈†tevilka polja mora biti 1 ali veƒç."
 
 #: ../lib/vector/Vlib/cats.c:585
 #, c-format
@@ -8509,7 +8509,7 @@ msgstr ""
 #: ../lib/vector/Vlib/box.c:264
 #, fuzzy, c-format
 msgid "Unable to determine bbox for feature %d"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/box.c:313 ../lib/vector/Vlib/box.c:359
 #, fuzzy, c-format
@@ -8524,7 +8524,7 @@ msgstr "Ne morem odpreti temp datoteke"
 #: ../lib/vector/Vlib/box.c:371
 #, fuzzy, c-format
 msgid "Unable to determine bbox for isle %d"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/net_build.c:101 ../lib/vector/Vlib/net_build.c:727
 #, fuzzy
@@ -8689,7 +8689,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/vector/Vlib/read_ogr.c:215 ../lib/vector/Vlib/read_ogr.c:224
 #, fuzzy, c-format
 msgid "Unable to get feature geometry, fid %ld"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/read_ogr.c:390
 msgid "OGR feature without ID"
@@ -8723,7 +8723,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 #: ../lib/vector/Vlib/level_two.c:316
 #, fuzzy, c-format
 msgid "Nodes not available for line %d"
-msgstr "Za ukaz [%s] ni na voljo pomoËi\n"
+msgstr "Za ukaz [%s] ni na voljo pomoƒçi\n"
 
 #: ../lib/vector/Vlib/level_two.c:357
 #, fuzzy, c-format
@@ -8738,7 +8738,7 @@ msgstr "Vneseni vektor '%s' ni bil najden"
 #: ../lib/vector/Vlib/level_two.c:445
 #, fuzzy, c-format
 msgid "Topology info not available for feature %d"
-msgstr "Za ukaz [%s] ni na voljo pomoËi\n"
+msgstr "Za ukaz [%s] ni na voljo pomoƒçi\n"
 
 #: ../lib/vector/Vlib/intersect.c:127
 msgid "3D not supported by Vect_segment_intersection()"
@@ -8760,12 +8760,12 @@ msgstr "Druga projekcija"
 #: ../lib/vector/Vlib/select.c:116
 #, fuzzy, c-format
 msgid "Unable to delete item %d from spatial index"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/write_sfa.c:117
 #, fuzzy
 msgid "Unable to calculate centroid for area"
-msgstr "Nezmoæen dodeliti spomin\n"
+msgstr "Nezmo≈æen dodeliti spomin\n"
 
 #: ../lib/vector/Vlib/write_sfa.c:219
 #, fuzzy
@@ -8780,22 +8780,22 @@ msgstr "Nepoznan \"location\""
 #: ../lib/vector/Vlib/bridges.c:213
 #, fuzzy, c-format
 msgid "Removed lines: %d"
-msgstr "©tevilo linij            :  %d\n"
+msgstr "≈†tevilo linij            :  %d\n"
 
 #: ../lib/vector/Vlib/bridges.c:214
 #, fuzzy, c-format
 msgid "Removed bridges: %d"
-msgstr "©tevilo primitivnih enot :  %d\n"
+msgstr "≈†tevilo primitivnih enot :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:115
 #, fuzzy
 msgid "Area of size = 0.0 (less than 4 vertices) ignored"
-msgstr "ObmoËje velikosti = 0.0 ignorirano"
+msgstr "Obmoƒçje velikosti = 0.0 ignorirano"
 
 #: ../lib/vector/Vlib/build.c:131
 #, fuzzy
 msgid "Unable to add area (map closed, topo saved)"
-msgstr "Ne morem dodati obmoËja (sloj zaprt, topo shranjen)"
+msgstr "Ne morem dodati obmoƒçja (sloj zaprt, topo shranjen)"
 
 #: ../lib/vector/Vlib/build.c:139
 #, fuzzy
@@ -8804,7 +8804,7 @@ msgstr "Ne morem dodati otoka (sloj zaprt, topo shranjen)"
 
 #: ../lib/vector/Vlib/build.c:149
 msgid "Area of size = 0.0 ignored"
-msgstr "ObmoËje velikosti = 0.0 ignorirano"
+msgstr "Obmoƒçje velikosti = 0.0 ignorirano"
 
 #: ../lib/vector/Vlib/build.c:200
 msgid "Request to find area outside nonexistent isle"
@@ -8821,27 +8821,27 @@ msgstr ""
 #: ../lib/vector/Vlib/build.c:641
 #, fuzzy, c-format
 msgid "Number of lines of length zero: %d"
-msgstr "©tevilo linij            :  %d\n"
+msgstr "≈†tevilo linij            :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:643
 #, fuzzy, c-format
 msgid "Number of boundaries of length zero: %d"
-msgstr "©tevilo meja             :  %d\n"
+msgstr "≈†tevilo meja             :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:652
 #, fuzzy, c-format
 msgid "Number of boundary intersections: %d"
-msgstr "©tevilo meja             :  %d\n"
+msgstr "≈†tevilo meja             :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:676
 #, fuzzy
 msgid "Skipping further checks because of incorrect boundaries"
-msgstr "©tevilo nepravilnih meja :  %d\n"
+msgstr "≈†tevilo nepravilnih meja :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:726
 #, fuzzy, c-format
 msgid "Number of redundant holes: %d"
-msgstr "©tevilo meja             :  %d\n"
+msgstr "≈†tevilo meja             :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:871
 #, fuzzy, c-format
@@ -8856,92 +8856,92 @@ msgstr "Topologija je zgrajena. \n"
 #: ../lib/vector/Vlib/build.c:900
 #, fuzzy, c-format
 msgid "Number of nodes: %d"
-msgstr "©tevilo vozlov           :  %d\n"
+msgstr "≈†tevilo vozlov           :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:901
 #, fuzzy, c-format
 msgid "Number of primitives: %d"
-msgstr "©tevilo primitivnih enot :  %d\n"
+msgstr "≈†tevilo primitivnih enot :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:902
 #, fuzzy, c-format
 msgid "Number of points: %d"
-msgstr "©tevilo toËk             :  %d\n"
+msgstr "≈†tevilo toƒçk             :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:903
 #, fuzzy, c-format
 msgid "Number of lines: %d"
-msgstr "©tevilo linij            :  %d\n"
+msgstr "≈†tevilo linij            :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:904
 #, fuzzy, c-format
 msgid "Number of boundaries: %d"
-msgstr "©tevilo meja             :  %d\n"
+msgstr "≈†tevilo meja             :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:905
 #, fuzzy, c-format
 msgid "Number of centroids: %d"
-msgstr "©tevilo centroidov       :  %d\n"
+msgstr "≈†tevilo centroidov       :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:908
 #, fuzzy, c-format
 msgid "Number of faces: %d"
-msgstr "©tevilo povrπin          :  %d\n"
+msgstr "≈†tevilo povr≈°in          :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:911
 #, fuzzy, c-format
 msgid "Number of kernels: %d"
-msgstr "©tevilo jeder            :  %d\n"
+msgstr "≈†tevilo jeder            :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:957
 #, fuzzy, c-format
 msgid "Number of areas: %d"
-msgstr "©tevilo obmoËij          :  %d\n"
+msgstr "≈†tevilo obmoƒçij          :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:958
 #, fuzzy, c-format
 msgid "Number of isles: %d"
-msgstr "©tevilo otokov           :  %d\n"
+msgstr "≈†tevilo otokov           :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:963
 #, fuzzy, c-format
 msgid "Number of areas without centroid: %d"
-msgstr "©tevilo obmoËij brez centroida  :    %d\n"
+msgstr "≈†tevilo obmoƒçij brez centroida  :    %d\n"
 
 #: ../lib/vector/Vlib/build.c:968
 #, fuzzy, c-format
 msgid "Number of centroids exceeds number of areas: %d > %d"
-msgstr "©tevilo centroidov izven obmoËja:   %d\n"
+msgstr "≈†tevilo centroidov izven obmoƒçja:   %d\n"
 
 #: ../lib/vector/Vlib/build.c:972
 #, fuzzy, c-format
 msgid "Number of incorrect boundaries: %d"
-msgstr "©tevilo nepravilnih meja :  %d\n"
+msgstr "≈†tevilo nepravilnih meja :  %d\n"
 
 #: ../lib/vector/Vlib/build.c:976
 #, fuzzy, c-format
 msgid "Number of centroids outside area: %d"
-msgstr "©tevilo centroidov izven obmoËja:   %d\n"
+msgstr "≈†tevilo centroidov izven obmoƒçja:   %d\n"
 
 #: ../lib/vector/Vlib/build.c:980
 #, fuzzy, c-format
 msgid "Number of duplicate centroids: %d"
-msgstr "©tevilo dvojnih centroidov      :   %d\n"
+msgstr "≈†tevilo dvojnih centroidov      :   %d\n"
 
 #: ../lib/vector/Vlib/build.c:984
 #, fuzzy
 msgid "Number of areas: -"
-msgstr "©tevilo obmoËij    :   -\n"
+msgstr "≈†tevilo obmoƒçij    :   -\n"
 
 #: ../lib/vector/Vlib/build.c:985
 #, fuzzy
 msgid "Number of isles: -"
-msgstr "©tevilo otokov     :   -\n"
+msgstr "≈†tevilo otokov     :   -\n"
 
 #: ../lib/vector/Vlib/build.c:1013
 #, fuzzy, c-format
 msgid "Unable to create topo file for vector map <%s>"
-msgstr "Nezmoæen ustvariti datoteko z vzglavjem za [%s v %s]"
+msgstr "Nezmo≈æen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/vector/Vlib/build.c:1021
 #, fuzzy
@@ -8995,7 +8995,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open_pg.c:109 ../lib/vector/Vlib/open_pg.c:267
 #, fuzzy
 msgid "No feature tables found in database."
-msgstr "Nezmoæen odpreti datoteko s tabelo elipsoida: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo elipsoida: %s"
 
 #: ../lib/vector/Vlib/open_pg.c:133
 #, fuzzy, c-format
@@ -9009,17 +9009,17 @@ msgstr ""
 #: ../lib/vector/Vlib/open_pg.c:273
 #, fuzzy, c-format
 msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
-msgstr "Vektor '%s' æe obstaja in bo prepisan."
+msgstr "Vektor '%s' ≈æe obstaja in bo prepisan."
 
 #: ../lib/vector/Vlib/open_pg.c:276
 #, fuzzy, c-format
 msgid "Unable to delete PostGIS layer <%s>"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/open_pg.c:282
 #, fuzzy, c-format
 msgid "PostGIS layer <%s.%s> already exists in database '%s'"
-msgstr "Nezmoæen odpreti datoteko s tabelo elipsoida: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo elipsoida: %s"
 
 #: ../lib/vector/Vlib/open_pg.c:390
 #, fuzzy
@@ -9075,7 +9075,7 @@ msgstr "Nepoznan \"location\""
 #: ../lib/vector/Vlib/open_pg.c:1003
 #, fuzzy, c-format
 msgid "Area %d without boundary detected"
-msgstr "©tevilo obmoËij brez centroida  :    %d\n"
+msgstr "≈†tevilo obmoƒçij brez centroida  :    %d\n"
 
 #: ../lib/vector/Vlib/open_pg.c:1061
 #, c-format
@@ -9085,14 +9085,14 @@ msgstr ""
 #: ../lib/vector/Vlib/open_pg.c:1128
 #, fuzzy
 msgid "Unable to get map bounding box from topology"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/open_pg.c:1135
 #, fuzzy, c-format
 msgid ""
 "Unable to parse map bounding box:\n"
 "%s"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/Vlib/open_pg.c:1159
 #, c-format
@@ -9328,7 +9328,7 @@ msgstr ""
 #: ../lib/vector/diglib/file.c:197
 #, fuzzy
 msgid "Unable to load file to memory, file not open"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/diglib/file.c:212
 msgid "Vector memory mode not supported, using 'AUTO'"
@@ -9342,12 +9342,12 @@ msgstr "ne najdem [%s]"
 #: ../lib/vector/diglib/spindex.c:450
 #, fuzzy, c-format
 msgid "Unable to delete node %d from spatial index"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/diglib/spindex.c:493
 #, fuzzy, c-format
 msgid "Unable to delete line %d from spatial index"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/diglib/spindex.c:529
 #, fuzzy
@@ -9357,17 +9357,17 @@ msgstr "Ne morem prebrati histograma za [%s v %s]"
 #: ../lib/vector/diglib/spindex.c:546
 #, fuzzy, c-format
 msgid "Unable to delete area %d from spatial index"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/diglib/spindex.c:595
 #, fuzzy, c-format
 msgid "Unable to delete isle %d from spatial index"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/diglib/test.c:58
 #, fuzzy
 msgid "Unable to open test.tmp file"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/vector/diglib/test.c:75
 #, c-format
@@ -9443,7 +9443,7 @@ msgstr ""
 #: ../lib/segment/open.c:87
 #, fuzzy
 msgid "Unable to re-open segment file"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/segment/open.c:94
 msgid "Could not read segment file"
@@ -9543,7 +9543,7 @@ msgstr ""
 #: ../lib/proj/get_proj.c:325
 #, fuzzy, c-format
 msgid "Unable to initialize pj cause: %s"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/proj/get_proj.c:401
 msgid "Input Projection Parameters"
@@ -9568,12 +9568,12 @@ msgstr ""
 #: ../lib/proj/datum.c:278 ../lib/proj/datum.c:358
 #, fuzzy, c-format
 msgid "Unable to open datum table file <%s>"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/proj/datum.c:291 ../lib/proj/datum.c:372
 #, fuzzy, c-format
 msgid "Error in datum table file <%s>, line %d"
-msgstr "napaka v datoteki s tabelo fundamentalne toËke, vrstica %d"
+msgstr "napaka v datoteki s tabelo fundamentalne toƒçke, vrstica %d"
 
 #: ../lib/rst/interp_float/resout2d.c:77
 msgid "Temporarily changing the region to desired resolution..."
@@ -9673,12 +9673,12 @@ msgstr "Ime vhodnega vektorskega sloja"
 #: ../lib/rst/interp_float/vinput2d.c:298
 #, fuzzy, c-format
 msgid "Number of points outside of 2D/3D region %d"
-msgstr "©tevilo centroidov izven obmoËja:   %d\n"
+msgstr "≈†tevilo centroidov izven obmoƒçja:   %d\n"
 
 #: ../lib/rst/interp_float/vinput2d.c:300
 #, fuzzy, c-format
 msgid "Number of points being used %d"
-msgstr "©tevilo toËk             :  %d\n"
+msgstr "≈†tevilo toƒçk             :  %d\n"
 
 #: ../lib/rst/interp_float/vinput2d.c:333
 msgid "Some points outside of region (ignored)"
@@ -9687,12 +9687,12 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:339
 #, fuzzy
 msgid "Unable to allocate memory"
-msgstr "Nezmoæen dodeliti spomin\n"
+msgstr "Nezmo≈æen dodeliti spomin\n"
 
 #: ../lib/rst/interp_float/vinput2d.c:347
 #, fuzzy, c-format
 msgid "Unable to insert %f,%f,%f a = %d"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/rst/interp_float/segmen2d.c:135
 msgid ""
@@ -9741,18 +9741,18 @@ msgstr "Ne morem odpreti %s"
 #: ../lib/pngdriver/read_png.c:60
 #, fuzzy
 msgid "Unable allocate PNG structure"
-msgstr "Nezmoæen dodeliti spomin\n"
+msgstr "Nezmo≈æen dodeliti spomin\n"
 
 #: ../lib/pngdriver/read_png.c:64 ../lib/pngdriver/write_png.c:71
 #: ../lib/pngdriver/write_png.c:75
 #, fuzzy
 msgid "Unable to allocate PNG structure"
-msgstr "Nezmoæen dodeliti spomin\n"
+msgstr "Nezmo≈æen dodeliti spomin\n"
 
 #: ../lib/pngdriver/read_png.c:67
 #, fuzzy
 msgid "Unable to read PNG file"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/pngdriver/read_png.c:81
 msgid "Input PNG file is not 8-bit"
@@ -9783,12 +9783,12 @@ msgstr "Ne morem odpreti temp datoteke"
 #: ../lib/pngdriver/write_png.c:78
 #, fuzzy
 msgid "Unable to write PNG file"
-msgstr "Nezmoæen odpreti datoteko %s v %s"
+msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #: ../lib/pngdriver/write_png.c:82
 #, fuzzy, c-format
 msgid "Unable to open output PNG file <%s>"
-msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #: ../lib/pngdriver/graph_set.c:101
 #, c-format
@@ -9821,7 +9821,7 @@ msgstr ""
 #~ msgid ""
 #~ "Unable to check table. There is no temporal database connection defined "
 #~ "for mapset <%(mapset)s>"
-#~ msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+#~ msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #, fuzzy
 #~ msgid ""
@@ -9837,7 +9837,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to find a temporary null file <%s>"
-#~ msgstr "Nezmoæen odpreti datoteko s tabelo fundamentalne toËke: %s"
+#~ msgstr "Nezmo≈æen odpreti datoteko s tabelo fundamentalne toƒçke: %s"
 
 #, fuzzy
 #~ msgid "Unable to open null file <%s>"
@@ -9845,11 +9845,11 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "ERROR: <%s> is not a valid GRASS location"
-#~ msgstr "Oprostite <%s> ni veljavna moænost\n"
+#~ msgstr "Oprostite <%s> ni veljavna mo≈ænost\n"
 
 #, fuzzy
 #~ msgid "ERROR: option <%s>: <%s> exists.\n"
-#~ msgstr "Napaka: moænost <%s>: <%s> obstaja.\n"
+#~ msgstr "Napaka: mo≈ænost <%s>: <%s> obstaja.\n"
 
 #, fuzzy
 #~ msgid "Invalid offset (%d)"
@@ -9857,7 +9857,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to open file '%s'"
-#~ msgstr "Nezmoæen odpreti datoteko %s v %s"
+#~ msgstr "Nezmo≈æen odpreti datoteko %s v %s"
 
 #, fuzzy
 #~ msgid "Hit RETURN to continue"
