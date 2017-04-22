@@ -55,7 +55,10 @@ def CheckWxPhoenix():
 def CheckWxVersion(version):
     """Check wx version"""
     ver = wx.__version__
-    if map(int, ver.split('.')) < version:
+    # don't fail on wxPython 4.0.0aX
+    if 'a' in ver: # can be removed when 4.0.0 will be out
+        ver = ver[0:ver.find('a')]
+    if list(map(int, ver.split('.'))) < version:
         return False
 
     return True
