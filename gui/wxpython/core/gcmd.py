@@ -33,7 +33,7 @@ import signal
 import traceback
 import locale
 import subprocess
-if subprocess.mswindows:
+if sys.platform == 'win32':
     from win32file import ReadFile, WriteFile
     from win32pipe import PeekNamedPipe
     import msvcrt
@@ -238,7 +238,7 @@ class Popen(subprocess.Popen):
             except OSError:
                 pass
 
-    if subprocess.mswindows:
+    if sys.platform == 'win32':
         def send(self, input):
             if not self.stdin:
                 return None

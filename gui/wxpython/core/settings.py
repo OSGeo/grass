@@ -22,7 +22,6 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
-import types
 
 from core import globalvar
 from core.gcmd import GException, GError
@@ -1028,7 +1027,7 @@ class Settings:
                     file.write('%s%s%s%s' % (group, self.sep, key, self.sep))
                     for idx in range(len(subkeys)):
                         value = settings[group][key][subkeys[idx]]
-                        if isinstance(value, types.DictType):
+                        if isinstance(value, dict):
                             if idx > 0:
                                 file.write(
                                     '%s%s%s%s%s' %
@@ -1047,9 +1046,8 @@ class Settings:
                                     file.write('%s' % self.sep)
                         else:
                             if idx > 0 and isinstance(
-                                    settings[group][key]
-                                    [subkeys[idx - 1]],
-                                    types.DictType):
+                                    settings[group][key][subkeys[idx - 1]],
+                                    dict):
                                 file.write(
                                     '%s%s%s%s%s' %
                                     (os.linesep, group, self.sep, key, self.sep))
@@ -1060,7 +1058,7 @@ class Settings:
                                 (subkeys[idx], self.sep, value))
                             if idx < len(subkeys) - 1 and not isinstance(
                                     settings[group][key][subkeys[idx + 1]],
-                                    types.DictType):
+                                    dict):
                                 file.write('%s' % self.sep)
                     file.write(os.linesep)
         except IOError as e:
@@ -1196,7 +1194,7 @@ class Settings:
             dict[group][key] = {}
             hasValue = False
 
-        if isinstance(subkey, types.ListType):
+        if isinstance(subkey, list):
             # TODO: len(subkey) > 2
             if subkey[0] not in dict[group][key]:
                 dict[group][key][subkey[0]] = {}
