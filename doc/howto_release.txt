@@ -39,6 +39,7 @@ Contents
    - cleanup rubbish:
        rm -f locale/templates/*.pot
        rm -f locale/po/messages.mo
+       rm -f demolocation/PERMANENT/.bash*
        find . -name '*~'     | xargs rm
        find . -name '*.bak'  | xargs rm
        find . -name '.#*'    | xargs rm
