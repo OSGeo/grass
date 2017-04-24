@@ -28,7 +28,21 @@ optimal radius. The value of <em>radius</em> is taken
 as maximum value. The radius is calculated based on the gaussian function, 
 using ALL points, not just those in the current region.
 
-<h2>LIMITATIONS</h2>
+
+<h2>EXAMPLES</h2>
+Compute density of points (using vector map of schools from North Carolina sample dataset):
+<div class="code"><pre>
+g.region region=wake_30m
+v.kernel input=schools_wake output=schools_density radius=5000 multiplier=1000000
+r.colors map=schools_density color=bcyr
+</pre></div>
+
+<center>
+<img src="v_kernel.png" alt="Density of schools" border=0><br>
+School density
+</center>
+
+<h2>KNOWN ISSUES</h2>
 The module only considers the presence of points, but not 
 (yet) any attribute values.
 
