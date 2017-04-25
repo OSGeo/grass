@@ -146,7 +146,7 @@ def main(options, flags):
         gscript.fatal(_("Options coordinates and points are mutually exclusive"))
 
     if not coordinates and not points and not use_stdin: 
-        gscript.fatal(_("Please specify the coordinates, the points option or use the 's' option to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"))
+        gscript.fatal(_("Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"))
 
     if use_stdin:
         coordinates_stdin = str(sys.__stdin__.read())
