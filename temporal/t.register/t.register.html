@@ -1,9 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-The module <em>t.register</em> is designed to register raster, 3D
-raster and vector maps in the temporal database and in specific space
-time datasets (stds). This module must be used to assign timestamps to
-raster, 3D raster and vector maps. The existing timestamp modules
+The module <em>t.register</em> has double functionality: it either only assigns
+timestamps to raster, 3D raster and vector maps in the temporal database
+(if <em>input</em> option is not provided, see below) or additionally, it also registers
+them within input space time datasets (stds). The existing timestamp modules
 <a href="r.timestamp.html">r.timestamp</a>,
 <a href="r3.timestamp.html">r3.timestamp</a> and
 <a href="v.timestamp.html">v.timestamp</a> do not register the maps in the
