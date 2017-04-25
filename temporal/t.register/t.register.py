@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Registers raster, vector and raster3d maps in a space time dataset.
+#% description: Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset.
 #% keyword: temporal
 #% keyword: map management
 #% keyword: register
