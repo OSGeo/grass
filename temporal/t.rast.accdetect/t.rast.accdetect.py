@@ -330,12 +330,13 @@ def main():
                 if input_strds.get_temporal_type() == 'absolute' and time_suffix == 'gran':
                     suffix = tgis.create_suffix_from_datetime(map.temporal_extent.get_start_time(),
                                                               input_strds.get_granularity())
-                    indicator_map_name = "{ba}_{su}".format(ba=base, su=suffix)
+                    indicator_map_name = "{ba}_indicator_{su}".format(ba=base, su=suffix)
                 elif input_strds.get_temporal_type() == 'absolute' and time_suffix == 'time':
                     suffix = tgis.create_time_suffix(map)
-                    indicator_map_name = "{ba}_{su}".format(ba=base, su=suffix)
+                    indicator_map_name = "{ba}_indicator_{su}".format(ba=base, su=suffix)
                 else:
-                    indicator_map_name = tgis.create_numeric_suffic(base, indi_count, time_suffix)
+                    indicator_map_name = tgis.create_numeric_suffic(base + "_indicator",
+                                                                    indi_count, time_suffix)
                 indicator_map_id = dummy.build_id(indicator_map_name, mapset)
                 indicator_map = input_strds.get_new_map_instance(indicator_map_id)
 

@@ -47,11 +47,12 @@ class TestRasterExtraction(TestCase):
     def tearDown(self):
         """Remove generated data"""
         self.runModule("t.remove", flags="rf", type="strds", inputs="B")
+        self.runModule("t.remove", flags="rf", type="strds", inputs="C")
         
     def test_simple(self):
         self.assertModule('t.rast.accdetect', input='A', occurrence='B',
-                          start="2001-01-01", cycle="12 months",
-                          basename='b_occu', range=(1,8))
+                          indicator="C", start="2001-01-01", cycle="12 months",
+                          basename='result', range=(1,8))
         tinfo_string="""semantic_type=mean
         start_time=2001-01-01 00:00:00
         end_time=2009-05-01 00:00:00
@@ -62,10 +63,20 @@ class TestRasterExtraction(TestCase):
         self.assertModuleKeyValue(module=info, reference=tinfo_string,
                                   precision=2, sep="=")
 
+        tinfo_string="""semantic_type=mean
+        start_time=2001-01-01 00:00:00
+        end_time=2009-05-01 00:00:00
+        granularity=1 month
+        map_time=interval
+        number_of_maps=100"""
+        info = SimpleModule("t.info", flags="g", type="strds", input="C")
+        self.assertModuleKeyValue(module=info, reference=tinfo_string,
+                                  precision=2, sep="=")
+
     def test_stop(self):
         self.assertModule('t.rast.accdetect', input='A', occurrence='B',
-                          start="2001-01-01", stop='2008-12-31',
-                          cycle="12 months", basename='b_occu', range=(1,8))
+                          indicator="C", start="2001-01-01", stop='2008-12-31',
+                          cycle="12 months", basename='result', range=(1,8))
         tinfo_string="""semantic_type=mean
         start_time=2001-01-01 00:00:00
         end_time=2009-01-01 00:00:00
@@ -75,21 +86,37 @@ class TestRasterExtraction(TestCase):
         info = SimpleModule("t.info", flags="g", type="strds", input="B")
         self.assertModuleKeyValue(module=info, reference=tinfo_string,
                                   precision=2, sep="=")
-      
+
+        tinfo_string="""semantic_type=mean
+        start_time=2001-01-01 00:00:00
+        end_time=2009-01-01 00:00:00
+        granularity=1 month
+        map_time=interval
+        number_of_maps=96"""
+        info = SimpleModule("t.info", flags="g", type="strds", input="C")
+        self.assertModuleKeyValue(module=info, reference=tinfo_string,
+                                  precision=2, sep="=")
+
     def test_time_suffix(self):
         self.assertModule('t.rast.accdetect', input='A', occurrence='B',
-                          start="2001-01-01", cycle="12 months", suffix='time',
-                          basename='b_occu', range=(1,8))
-        self.assertRasterDoesNotExist('b_occu_2001_01')
-        self.assertRasterExists('b_occu_2001_01_01T00_00_00')
+                          indicator="C", start="2001-01-01", cycle="12 months", suffix='time',
+                          basename='result', range=(1,8))
+        self.assertRasterDoesNotExist('result_2001_01')
+        self.assertRasterExists('result_2001_01_01T00_00_00')
+        self.assertRasterDoesNotExist('result_indicator_2001_01')
+        self.assertRasterExists('result_indicator_2001_01_01T00_00_00')
 
     def test_num_suffix(self):
         self.assertModule('t.rast.accdetect', input='A', occurrence='B',
-                          start="2001-01-01", cycle="12 months",
-                          suffix='count%03', basename='b_occu', range=(1,8))
-        self.assertRasterDoesNotExist('b_occu_2001_01')
-        self.assertRasterExists('b_occu_001')
-        self.assertRasterDoesNotExist('b_occu_00001')
+                          indicator="C", start="2001-01-01", cycle="12 months",
+                          suffix='count%03', basename='result', range=(1,8))
+        self.assertRasterDoesNotExist('result_2001_01')
+        self.assertRasterExists('result_001')
+        self.assertRasterDoesNotExist('result_00001')
+
+        self.assertRasterDoesNotExist('result_indicator_2001_01')
+        self.assertRasterExists('result_indicator_001')
+        self.assertRasterDoesNotExist('result_indicator_00001')
 
 if __name__ == '__main__':
     from grass.gunittest.main import test
