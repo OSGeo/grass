@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	t.list
-# AUTHOR(S):	Soeren Gebbert
+# MODULE: t.list
+# AUTHOR(S): Soeren Gebbert
 #
-# PURPOSE:	List space time datasets and maps registered in the temporal database
-# COPYRIGHT:	(C) 2011-2014, Soeren Gebbert and the GRASS Development Team
+# PURPOSE: List space time datasets and maps registered in the temporal database
+# COPYRIGHT: (C) 2011-2014, Soeren Gebbert and the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (version 2). Read the file COPYING that comes with GRASS
-#		for details.
+# This program is free software under the GNU General Public
+# License (version 2). Read the file COPYING that comes with GRASS
+# for details.
 #
 #############################################################################
 
@@ -113,6 +113,9 @@ def main():
     if  gscript.verbosity() > 0 and not outpath:
         sys.stderr.write("----------------------------------------------\n")
 
+    if outpath:
+        outfile = open(outpath, 'w')
+
     for ttype in temporal_type.split(","):
         if ttype == "absolute":
             time = "absolute time"
@@ -124,9 +127,6 @@ def main():
         # Use the correct order of the mapsets, hence first the current mapset, then
         # alphabetic ordering
         mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-
-        if outpath:
-            outfile = open(outpath, 'w')
 
         # Print for each mapset separately
         for key in mapsets:
