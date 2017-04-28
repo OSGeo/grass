@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     struct params params;
     struct flags flags;
     
-    int ret, field, otype;
+    int ret, field, otype, verbose;
     char *schema, *olayer, *pg_file;
     char *fid_column, *geom_column;
     
@@ -170,12 +170,18 @@ int main(int argc, char *argv[])
     /* close input map */
     Vect_close(&In);
 
-    /* build topology for output map */
+    /* build topology for output map -> write output to DB */
+    G_message(_("Writing output..."));
+    verbose = G_verbose();
+    if (!flags.topo->answer)
+        G_set_verbose(0); /* do not print build info when writing simple features */
+    
     Vect_build_partial(&Out, GV_BUILD_NONE);
     if (Vect_build(&Out) != 1)
         G_fatal_error(_("Building %s topology failed"),
                       flags.topo->answer ? "PostGIS" : "pseudo");
-
+    G_set_verbose(verbose);
+    
     if (Vect_get_num_lines(&Out) < 1)
         G_fatal_error(_("No features exported. PostGIS layer <%s> not created."),
                       Vect_get_name(&Out));
