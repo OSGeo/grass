@@ -52,6 +52,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("sampling"));
     G_add_keyword(_("vector"));
     G_add_keyword(_("random"));
+    G_add_keyword(_("level1"));
+
     module->description =
 	_("Creates a raster map layer and vector point map "
 	  "containing randomly located points.");

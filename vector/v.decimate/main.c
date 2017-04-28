@@ -127,6 +127,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("extract"));
     G_add_keyword(_("select"));
     G_add_keyword(_("points"));
+    G_add_keyword(_("level1"));
+
     module->label = _("Decimates a point cloud");
     module->description = _("Copies points from one vector to another"
                             " while applying different decimations");
