@@ -94,7 +94,7 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
         
         /* get type of first feature from input vector map */
         Vect_rewind(In);
-        Vect_set_constraint_type(In, GV_POINT | GV_LINES);
+        Vect_set_constraint_type(In, GV_POINTS | GV_LINES);
         type = Vect_read_next_line(In, NULL, NULL);
             
         /* create feature table with given feature type */
