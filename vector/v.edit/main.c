@@ -58,6 +58,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("node"));
     G_add_keyword(_("point"));
     G_add_keyword(_("vertex"));
+    G_add_keyword(_("level1"));
+
     module->description = _("Edits a vector map, allows adding, deleting "
 			    "and modifying selected vector features.");
 

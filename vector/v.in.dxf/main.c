@@ -64,6 +64,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("import"));
     G_add_keyword("DXF");
+    G_add_keyword(_("level1"));
+
     module->description =
 	_("Converts file in DXF format to GRASS vector map.");
 
