@@ -990,7 +990,7 @@ class WriteWorkspaceFile(object):
                         self.indent += 4
                         self.file.write(
                             '%s<value>%s</value>\n' %
-                            (' ' * self.indent, self.__filterValue(val)))
+                            (' ' * self.indent, EncodeString(self.__filterValue(val))))
                         self.indent -= 4
                         self.file.write(
                             '%s</parameter>\n' %
