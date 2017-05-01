@@ -22,6 +22,15 @@ imagery map layers in the current LOCATION_NAME.
 
 <p>Subgroup names may not contain more than 12 characters.
 
+<h3>EXAMPLE</h3>
+
+This example runs in the "landsat" mapset of the North Carolina sample
+dataset. The following command creates a group and subgroup containing
+only the visible light bands of Landsat-7:
+
+<div class="code"><pre>
+i.group group=vis_bands subgroup=vis_bands input=lsat7_2000_10,lsat7_2000_20,lsat7_2000_30
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
