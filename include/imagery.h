@@ -42,8 +42,10 @@ struct Control_Points
     int count;
     double *e1;
     double *n1;
+    double *z1;
     double *e2;
     double *n2;
+    double *z2;
     int *status;
 };
 
