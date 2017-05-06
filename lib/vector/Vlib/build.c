@@ -867,7 +867,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
     }
 
     plus = &(Map->plus);
-    if (build > GV_BUILD_NONE && !Map->temporary) {
+    if (build > GV_BUILD_NONE && !Map->temporary && Map->format != GV_FORMAT_POSTGIS) {
 	G_message(_("Building topology for vector map <%s>..."),
 		  Vect_get_full_name(Map));
     }
