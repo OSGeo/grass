@@ -28,6 +28,9 @@ int mk_att(int, struct field_info *, dbDriver *,
 	   int, int *, const char **, int, int,
 	   OGRFeatureH, int *);
 
+/* dsn.c */
+char *get_datasource_name(const char *, int);
+
 /* list.c */
 char *OGR_list_write_drivers();
 
