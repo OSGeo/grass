@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     int num_to_export;
     int field;
     int overwrite, found;
-
+    
     struct GModule *module;
     struct Options options;
     struct Flags flags;
@@ -73,7 +73,8 @@ int main(int argc, char *argv[])
     OGRSpatialReferenceH Ogr_projection;
     char **papszDSCO = NULL, **papszLCO = NULL;
     int num_types;
-
+    char *dsn;
+    
     G_gisinit(argv[0]);
 
     /* Module options */
@@ -280,6 +281,10 @@ int main(int argc, char *argv[])
 	    OSRMorphToESRI(Ogr_projection);
     }
 
+    dsn = NULL;
+    if (options.dsn->answer)
+        dsn = get_datasource_name(options.dsn->answer, TRUE);
+
     /* create new OGR layer in datasource */
     if (flags.new->answer) {
 	const char *name;
@@ -288,7 +293,7 @@ int main(int argc, char *argv[])
 	    options.layer->answer ? options.layer->answer : options.input->
 	    answer;
 
-	create_ogr_layer(options.dsn->answer, options.format->answer, name,
+	create_ogr_layer(dsn, options.format->answer, name,
 			 wkbtype, papszDSCO, papszLCO);
 
 	G_message(_("OGR layer <%s> created in datasource <%s> (format '%s')"),
@@ -464,22 +469,22 @@ int main(int argc, char *argv[])
     
     if (flags.append->answer) {
 	G_debug(1, "Append to OGR layer");
-	Ogr_ds = OGR_Dr_Open(Ogr_driver, options.dsn->answer, TRUE);
+	Ogr_ds = OGR_Dr_Open(Ogr_driver, dsn, TRUE);
 	
 	if (Ogr_ds == NULL) {
 	    G_debug(1, "Create OGR data source");
-	    Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, options.dsn->answer,
+	    Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, dsn,
 					     papszDSCO);
 	}
     }
     else {
 	if (flags.update->answer) {
 	    G_debug(1, "Update OGR data source");
-	    Ogr_ds = OGR_Dr_Open(Ogr_driver, options.dsn->answer, TRUE);
+	    Ogr_ds = OGR_Dr_Open(Ogr_driver, dsn, TRUE);
 	}
 	else {
 	    G_debug(1, "Create OGR data source");
-	    Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, options.dsn->answer,
+	    Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, dsn,
 					     papszDSCO);
 	}
     }
