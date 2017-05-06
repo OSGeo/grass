@@ -1822,9 +1822,17 @@ class CmdPanel(wx.Panel):
                                            style=wx.TE_MULTILINE,
                                            size=(-1, 75))
                         if p.get('value', '') and os.path.isfile(p['value']):
-                            f = open(p['value'])
-                            ifbb.SetValue(''.join(f.readlines()))
-                            f.close()
+                            ifbb.Clear()
+                            enc = locale.getdefaultlocale()[1]
+                            with codecs.open(p['value'], encoding=enc, errors='ignore') as f:
+                                nonascii = bytearray(range(0x80, 0x100))
+                                for line in f.readlines():
+                                    try:
+                                        ifbb.AppendText(line)
+                                    except UnicodeDecodeError:
+                                        # remove non-ascii characters on encoding mismatch (file vs OS)
+                                        ifbb.AppendText(line.translate(None, nonascii))
+                                ifbb.SetInsertionPoint(0)
 
                         ifbb.Bind(wx.EVT_TEXT, self.OnFileText)
 
