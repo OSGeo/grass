@@ -213,6 +213,95 @@ topology is always built for <em>error</em> vector.
 v.clean input=testmap output=cleanmap tool=snap threshold=1
 </pre></div>
 
+<h3>Inspecting the topological errors visually</h3>
+
+Both <em><a href="v.build.html">v.build</a></em> and <em>v.clean</em> can
+collect the topological errors into a vector map:
+
+<div class="code"><pre>
+v.build -e map=imported error=build_errors
+v.clean -c input=imported output=clean error=cleaning_errors tool=snap,rmdangle,rmbridge,chbridge,bpol,prune threshold=5
+</pre></div>
+
+The vector maps can be visualized together with the original data
+by the following set of display commands:
+
+<div class="code"><pre>
+d.vect map=imported color=26:26:26 fill_color=77:77:77 width=5
+d.vect map=build_errors color=255:33:36 fill_color=none width=5 icon=basic/point size=30
+d.vect map=cleaning_errors color=255:33:36 fill_color=none width=5 icon=basic/point size=30
+</pre></div>
+
+<div align="center">
+<img src="v_clean.png" alt="topological errors">
+<br>
+<i>Figure: Topological errors detected in the original data (left)
+and cleaned data (right)</i>
+</div>
+
+<!--
+v.in.ascii -b input=- output=imported format=standard <<EOF
+VERTI:
+C  1 1
+ 20.10795595  60.54319764
+ 1     1
+C  1 1
+ 51.86024171  61.9113356
+ 1     2
+B  10
+40.0278379309 74.22082728
+40.0278379309 62.1579269574
+40.0278379309 55.8642398326
+40.5523118579 46.7733584301
+34.0838000908 42.5775670136
+16.9509851399 45.1999366489
+11.1817719422 58.8362587527
+13.9789662199 72.1229315717
+20.2726533447 75.9690737035
+40.0278379309 74.22082728
+B  12
+37.3774872156 78.2907419083
+38.0278379309 75.22082728
+41.0278379309 61.1579269574
+42.0278379309 56.8642398326
+37.5523118579 45.7733584301
+47.7201221945 39.7803727359
+63.6291646489 52.3677469855
+69.573202489 61.9831023151
+64.3284632183 67.9271401551
+57.6851268088 76.3187229882
+45.7970511286 77.7173201271
+37.3774872156 78.2907419083
+L  3 1
+23 30
+23 23
+23 9
+ 1     3
+L  2 1
+65 23
+20 23
+ 1     4
+EOF
+# v.build shows different set than v.clean, so using both
+v.build -e map=imported error=build_errors
+v.clean -c input=imported output=clean error=cleaning_errors tool=snap,rmdangle,rmbridge,chbridge,bpol,prune threshold=5
+
+g.region vector=imported e=e+5 w=w-5
+d.mon start=cairo output=v_clean.png
+d.frame frame=left at=0,100,0,50 -c
+d.vect map=imported color=26:26:26 fill_color=77:77:77 width=5
+d.vect map=build_errors color=255:33:36 fill_color=none width=5 icon=basic/point size=30
+d.vect map=cleaning_errors color=255:33:36 fill_color=none width=5 icon=basic/point size=30
+d.frame frame=right at=0,100,50,100 -c
+d.vect map=clean color=26:26:26 fill_color=77:77:77 width=5
+d.mon stop=cairo
+
+mogrify -trim v_clean.png
+pngnq -n 128 -s 3 v_clean.png
+optipng -o5 v_clean-nq8.png
+mv v_clean-nq8.png v_clean.png
+-->
+
 <h3>Cleaning OGR imported data (Simple Feature data) such as SHAPE file</h3>
 
 The import of areas with <em><a href="v.in.ogr.html">v.in.ogr</a> -c</em>
