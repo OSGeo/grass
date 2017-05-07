@@ -1292,7 +1292,7 @@ class CmdPanel(wx.Panel):
                     value = self._getValue(p)
                     if value:
                         # parameter previously set
-                        win.SetValue(str(value))
+                        win.SetValue(value if p.get('type', 'string') == 'string' else str(value))
 
                     win.Bind(wx.EVT_TEXT, self.OnSetValue)
                     style = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT
