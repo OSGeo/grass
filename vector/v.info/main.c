@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("extent"));
     G_add_keyword(_("history"));
     G_add_keyword(_("attribute columns"));
+    G_add_keyword(_("level1"));
     
     module->description =
 	_("Outputs basic information about a vector map.");

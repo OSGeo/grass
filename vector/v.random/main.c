@@ -100,6 +100,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("random"));
     G_add_keyword(_("point pattern"));
     G_add_keyword(_("stratified random sampling"));
+    G_add_keyword(_("level1"));
+
     module->description = _("Generates random 2D/3D vector points.");
 
     parm.output = G_define_standard_option(G_OPT_V_OUTPUT);

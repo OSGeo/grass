@@ -52,6 +52,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("external")); 
     G_add_keyword("OGR");
     G_add_keyword("PostGIS");
+    G_add_keyword(_("level1"));
+
     module->description = _("Creates a new pseudo-vector map as a link to an OGR-supported layer "
                             "or a PostGIS feature table.");
     parse_args(argc, argv,

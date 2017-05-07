@@ -64,6 +64,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("statistics"));
     G_add_keyword(_("random"));
     G_add_keyword(_("point pattern"));
+    G_add_keyword(_("level1"));
  
     module->description =
 	_("Random location perturbations of vector points.");

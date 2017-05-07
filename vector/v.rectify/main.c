@@ -69,6 +69,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("rectify"));
+    G_add_keyword(_("level1"));
+
     module->description =
 	_("Rectifies a vector by computing a coordinate "
 	  "transformation for each object in the vector based on the "
