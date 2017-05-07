@@ -18,11 +18,12 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+/* TODO: replace long with either size_t or a guaranteed 64 bit integer */
 struct bin
 {
     unsigned long origin;
     DCELL min, max;
-    int base, count;
+    long base, count;
 };
 
 static int rows, cols;
@@ -34,7 +35,7 @@ static int num_slots;
 static unsigned int *slots;
 static DCELL slot_size;
 static unsigned long total;
-static int num_values;
+static size_t num_values;
 static unsigned short *slot_bins;
 static int num_bins;
 static struct bin *bins;
