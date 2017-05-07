@@ -245,7 +245,7 @@ class MapFrame(SingleMapFrame):
         #
         self.Map.GetRenderMgr().updateProgress.connect(self.statusbarManager.SetProgress)
         self.Map.GetRenderMgr().renderingFailed.connect(lambda cmd, error: self._giface.WriteError(
-            _("Failed to run command '{command}'. Details:\n{error}").format(command=' '.join(cmd), error=error)))
+            _("Failed to run command '%(command)s'. Details:\n%(error)s") % dict(command=' '.join(cmd), error=error)))
 
     def GetMapWindow(self):
         return self.MapWindow
