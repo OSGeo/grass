@@ -73,6 +73,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("display"));
     G_add_keyword(_("graphics"));
     G_add_keyword(_("vector"));
+    G_add_keyword(_("level1"));
     module->description = _("Displays user-specified vector map "
 			    "in the active graphics frame.");
     
