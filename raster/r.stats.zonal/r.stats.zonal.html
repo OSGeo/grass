@@ -12,6 +12,24 @@ in a "base layer". A variety of standard statistical measures are possible
 for floating-point cover maps at the expense of not supporting
 quantiles. For this, see <em>r.stats.quantile</em>.
 
+<h2>EXAMPLE</h2>
+
+In this example, the raster polygon map <tt>zipcodes</tt> in the North 
+Carolina sample dataset is used to calculate zonal raster statistics using
+the <tt>elevation</tt> raster map: 
+
+<div class="code"><pre>
+g.region raster=zipcodes -p
+
+# pixel count in zipcode areas
+r.stats.zonal base=zipcodes cover=elevation method=count output=zipcodes_elev_count
+r.colors zipcodes_elev_count color=gyr -g
+
+# average elevation in zipcode areas
+r.stats.zonal base=zipcodes cover=elevation method=average output=zipcodes_elev_avg
+r.colors zipcodes_elev_avg color=elevation -g
+</pre></div>
+
 <h2>SEE ALSO</h2>
 <em>
 <a href="r.quantile.html">r.quantile</a>,
