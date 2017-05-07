@@ -288,6 +288,15 @@ v.generalize input=boundary_county output=boundary_county_dp20 \
   method=douglas threshold=20 error=boundary_county_dp20_leftover
 </pre></div>
 
+<div align="center" style="margin: 10px">
+<a href="v_generalize_simplify.png">
+<img src="v_generalize_simplify.png" width="600" height="465" alt="v.generalize simplification example" border="0">
+</a><br>
+<i>Figure: Vector simplification example (spatial subset:
+   original map shown in black, simplified map with 26% remaining vertices shown in red)</i>
+</div>
+
+
 <h3>SMOOTHING EXAMPLE</h3>
 
 Smoothing of road network with Chaiken method (North Carolina sample dataset),
@@ -297,6 +306,14 @@ threshold given in mapset units (here: meters):
 v.generalize input=roads output=roads_chaiken method=chaiken \
   threshold=1 error=roads_chaiken_leftover
 </pre></div>
+
+<div align="center" style="margin: 10px">
+<a href="v_generalize_smooth.png">
+<img src="v_generalize_smooth.png" width="600" height="276" alt="v.generalize smoothing example" border="0">
+</a><br>
+<i>Figure: Vector smoothing example (spatial subset:
+   original map shown in black, smoothed map with 500% increased number of vertices shown in red)</i>
+</div>
 
 <!-- TODO: 
 <h3>Displacement</h3>
