@@ -6,7 +6,7 @@
 # AUTHOR(S):    Luca Delucchi
 #
 # PURPOSE:      Unpack up a vector map packed with v.pack
-# COPYRIGHT:    (C) 2010-2013 by the GRASS Development Team
+# COPYRIGHT:    (C) 2010-2017 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -36,6 +36,12 @@
 #% description: Assume that the dataset has same projection as the current location
 #% guisection: Output settings
 #%end
+#%flag
+#% key: p
+#% label: Print projection information of input pack file and exit
+#% guisection: Print
+#%end
+
 
 import os
 import sys
@@ -75,6 +81,18 @@ def main():
     except:
         grass.fatal(_("Pack file unreadable"))
 
+    if flags['p']:
+        # print proj info and exit
+        try:
+            for fname in ['PROJ_INFO', 'PROJ_UNITS']:
+                f = tar.extractfile(fname)
+                sys.stdout.write(f.read())
+        except KeyError:
+            grass.fatal(_("Pack file unreadable: file '{}' missing".format(fname)))
+        tar.close()
+
+        return 0
+
     # set the output name
     if options['output']:
         map_name = options['output']
@@ -101,6 +119,7 @@ def main():
 
     # extract data
     tar.extractall()
+    tar.close()
     if os.path.exists(os.path.join(data_name, 'coor')):
         pass
     elif os.path.exists(os.path.join(data_name, 'cell')):

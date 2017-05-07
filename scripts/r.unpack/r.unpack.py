@@ -5,7 +5,7 @@
 # AUTHOR(S):	Hamish Bowman, Otago University, New Zealand
 #               Converted to Python by Martin Landa <landa.martin gmail.com>
 # PURPOSE:	Unpack up a raster map packed with r.pack
-# COPYRIGHT:	(C) 2004-2008, 2010-2012 by the GRASS Development Team
+# COPYRIGHT:	(C) 2010-2017 by the GRASS Development Team
 #
 #		This program is free software under the GNU General
 #		Public License (>=v2). Read the file COPYING that
@@ -33,6 +33,11 @@
 #% label: Override projection check (use current location's projection)
 #% description: Assume that the dataset has same projection as the current location
 #% guisection: Output settings
+#%end
+#%flag
+#% key: p
+#% label: Print projection information of input pack file and exit
+#% guisection: Print
 #%end
 
 import os
@@ -72,6 +77,18 @@ def main():
     except:
         grass.fatal(_("Pack file unreadable"))
 
+    if flags['p']:
+        # print proj info and exit
+        try:
+            for fname in ['PROJ_INFO', 'PROJ_UNITS']:
+                f = tar.extractfile('{}/{}'.format(data_name, fname))
+                sys.stdout.write(f.read())
+        except KeyError:
+            grass.fatal(_("Pack file unreadable: file '{}' missing".format(fname)))
+        tar.close()
+
+        return 0
+
     if options['output']:
         map_name = options['output']
     else:
@@ -87,6 +104,7 @@ def main():
 
     # extract data
     tar.extractall()
+    tar.close()
     os.chdir(data_name)
 
     if os.path.exists('cell'):
