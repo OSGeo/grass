@@ -97,7 +97,7 @@ label_t *labels_init(struct params *p, int *n_labels)
     else if (error)
 	G_fatal_error(_("Font file can not be loaded"));
     p->font->answer = G_store(font_cap->name);
-    free_fontcap(font_cap);
+    free_freetypecap(font_cap);
 
     font_size = atof(p->size->answer);
     buffer = atof(p->isize->answer);
@@ -1158,7 +1158,6 @@ void label_candidate_overlap(label_t * labels, int n_labels)
 
 		for (l = 0; l < labels[k].n_candidates; l++) {
 		    int overlap = 0;
-		    struct line_pnts *a = NULL, *b = NULL;
 
 		    if ((labels[i].candidates[j].rotation == 0) &&
 			(labels[k].candidates[l].rotation == 0)) {
@@ -1184,6 +1183,8 @@ void label_candidate_overlap(label_t * labels, int n_labels)
 			overlap = box_overlap(&a, &b);
 		    }
 		    else {
+			struct line_pnts *a = NULL, *b = NULL;
+
 			a = box_trans_rot(&labels[i].bb,
 					  &labels[i].candidates[j].point,
 					  labels[i].candidates[j].rotation);
