@@ -143,7 +143,7 @@ int I_inverse_ortho_ref(double, double, double, double *, double *, double *,
 			double, MATRIX);
 /* ref_points.c */
 int I_new_ref_point(struct Ortho_Photo_Points *, double, double, double,
-		    double, int);
+		    double, double, double, int);
 int I_get_ref_points(char *, struct Ortho_Photo_Points *);
 int I_put_ref_points(char *, struct Ortho_Photo_Points *);
 
