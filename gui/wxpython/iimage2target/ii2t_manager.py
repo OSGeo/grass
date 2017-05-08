@@ -15,7 +15,7 @@ Classes:
  - manager::EditGCP
  - manager::GrSettingsDialog
 
-(C) 2006-2014 by the GRASS Development Team
+(C) 2006-2017 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -24,9 +24,12 @@ This program is free software under the GNU General Public License
 @author Original version improved by Martin Landa <landa.martin gmail.com>
 @author Rewritten by Markus Metz redesign georectfier -> GCP Manage
 @author Support for GraphicsSet added by Stepan Turek <stepan.turek seznam.cz> (2012)
-
-TODO: i.ortho.transform has 6 appearances, check each of them and configure
+@author port i.image.2target (v6) to version 7 in 2017 by Yann 
 """
+
+#TODO: i.ortho.transform has 6 appearances, check each of them and configure
+#TODO: i.ortho.transform looks for REF_POINTS/CONTROL_POINTS and not POINTS 
+#TODO: CHECK CONTROL_POINTS format and create it for i.ortho.transform to use.
 
 import os
 import sys
@@ -1003,18 +1006,18 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.VectGRList = []
 
         self.file = {
-            'ii2t_points': os.path.join(self.grassdatabase,
+            'control_points': os.path.join(self.grassdatabase,
                                    self.xylocation,
                                    self.xymapset,
                                    'group',
                                    self.xygroup,
-                                   'II2T_POINTS'),
-            'ii2t_points_bak': os.path.join(self.grassdatabase,
+                                   'CONTROL_POINTS'),
+            'control_points_bak': os.path.join(self.grassdatabase,
                                        self.xylocation,
                                        self.xymapset,
                                        'group',
                                        self.xygroup,
-                                       'II2T_POINTS_BAK'),
+                                       'CONTROL_POINTS_BAK'),
             'rgrp': os.path.join(self.grassdatabase,
                                  self.xylocation,
                                  self.xymapset,
@@ -1042,8 +1045,8 @@ class GCP(MapFrame, ColumnSorterMixin):
         }
 
         # make a backup of the current points file
-        if os.path.exists(self.file['ii2t_points']):
-            shutil.copy(self.file['ii2t_points'], self.file['ii2t_points_bak'])
+        if os.path.exists(self.file['control_points']):
+            shutil.copy(self.file['control_points'], self.file['control_points_bak'])
 
         # polynomial order transformation for georectification
         self.gr_order = 1
@@ -1390,7 +1393,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.list.SetStringItem(index, 5, str(coord1))
             self.mapcoordlist[key][4] = coord[0]
             self.mapcoordlist[key][5] = coord[1]
-            #TODO ADD ELEVATION FROM MAP AS HEIGHT
+            #ADD ELEVATION FROM MAP AS HEIGHT PARAMETER
             if os.path.exists(self.file['elevation']):
                 #Parse the i.ortho.elev generated file
                 #Get all lines from file
@@ -1426,12 +1429,12 @@ class GCP(MapFrame, ColumnSorterMixin):
         # self.list.ResizeColumns()
 
     def SaveGCPs(self, event):
-        """Make a POINTS file or save GCP coordinates to existing
+        """Make a CONTROL_POINTS file or save GCP coordinates to existing
         POINTS file
         """
         self.GCPcount = 0
         try:
-            f = open(self.file['ii2t_points'], mode='w')
+            f = open(self.file['control_points'], mode='w')
             # use os.linesep or '\n' here ???
             f.write('# Ground Control Points File\n')
             f.write("# \n")
@@ -1474,8 +1477,8 @@ class GCP(MapFrame, ColumnSorterMixin):
             GError(
                 parent=self,
                 message="%s <%s>. %s%s" %
-                (_("Writing POINTS file failed"),
-                 self.file['ii2t_points'],
+                (_("Writing CONTROL_POINTS file failed"),
+                 self.file['control_points'],
                     os.linesep,
                     err))
             return
@@ -1484,9 +1487,9 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         # if event != None save also to backup file
         if event:
-            shutil.copy(self.file['ii2t_points'], self.file['ii2t_points_bak'])
+            shutil.copy(self.file['control_points'], self.file['control_points_bak'])
             self._giface.WriteLog(
-                _('POINTS file saved for group <%s>') %
+                _('CONTROL_POINTS file saved for group <%s>') %
                 self.xygroup)
             #self.SetStatusText(_('POINTS file saved'))
 
@@ -1511,7 +1514,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                                          os.linesep, err))
 
         try:
-            f = open(self.file['ii2t_points'], 'r')
+            f = open(self.file['control_points'], 'r')
             GCPcnt = 0
 
             for line in f.readlines():
@@ -1537,8 +1540,8 @@ class GCP(MapFrame, ColumnSorterMixin):
             GError(
                 parent=self,
                 message="%s <%s>. %s%s" %
-                (_("Reading POINTS file failed"),
-                 self.file['ii2t_points'],
+                (_("Reading CONTROL_POINTS file failed"),
+                 self.file['control_points'],
                     os.linesep,
                     err))
             return
@@ -1558,7 +1561,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         """Reload data from file"""
 
         # use backup
-        shutil.copy(self.file['ii2t_points_bak'], self.file['ii2t_points'])
+        shutil.copy(self.file['control_points_bak'], self.file['control_points'])
 
         # delete all items in mapcoordlist
         self.mapcoordlist = []
@@ -1793,11 +1796,11 @@ class GCP(MapFrame, ColumnSorterMixin):
                 self.SaveGCPs(None)
             elif ret == wx.NO:
                 # restore POINTS file from backup
-                if os.path.exists(self.file['ii2t_points_bak']):
-                    shutil.copy(self.file['ii2t_points_bak'], self.file['ii2t_points'])
+                if os.path.exists(self.file['control_points_bak']):
+                    shutil.copy(self.file['control_points_bak'], self.file['control_points'])
 
-            if os.path.exists(self.file['ii2t_points_bak']):
-                os.unlink(self.file['ii2t_points_bak'])
+            if os.path.exists(self.file['control_points_bak']):
+                os.unlink(self.file['control_points_bak'])
 
             self.SrcMap.Clean()
             self.TgtMap.Clean()
@@ -1839,7 +1842,7 @@ class GCP(MapFrame, ColumnSorterMixin):
     def RMSError(self, xygroup, order):
         """
         Uses i.ortho.transform to calculate forward and backward error for each used GCP
-        in POINTS file and insert error values into GCP list.
+        in CONTROL_POINTS file and insert error values into GCP list.
         Calculates total forward and backward RMS error for all used points
         """
         # save GCPs to points file to make sure that all checked GCPs are used
@@ -2238,7 +2241,7 @@ class GCPList(wx.ListCtrl,
         self.DeleteAllItems()
 
         self.render = False
-        if os.path.isfile(self.gcp.file['ii2t_points']):
+        if os.path.isfile(self.gcp.file['control_points']):
             self.gcp.ReadGCPs()
         else:
             # 3 gcp is minimum
@@ -2559,7 +2562,6 @@ class EditGCP(wx.Dialog):
 
         # source coordinates
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
-        #YANN TODO update z and h from i.ortho.elevation selected map
         self.xcoord = wx.TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
         self.ycoord = wx.TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
         self.zcoord = wx.TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
