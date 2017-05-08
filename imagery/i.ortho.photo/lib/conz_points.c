@@ -5,7 +5,8 @@
 
 #define POINT_FILE "CONTROL_POINTS"
 
-/* read the control points from group file "Con_POINTS" into */
+/* This is used in i.image.2target */
+/* read the control points from group file "CONTROL_POINTS" into */
 /* the struct Con_Points */
 int I_read_con_points(FILE * fd, struct Ortho_Control_Points *cp)
 {

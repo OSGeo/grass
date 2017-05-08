@@ -11,7 +11,7 @@
 int I_read_ref_points(FILE * fd, struct Ortho_Photo_Points *cp)
 {
     char buf[100];
-    double e1, e2, n1, n2, z1, z2;
+    double e1, e2, n1, n2;
     int status;
 
     cp->count = 0;
@@ -23,8 +23,6 @@ int I_read_ref_points(FILE * fd, struct Ortho_Photo_Points *cp)
     cp->e2 = NULL;
     cp->n1 = NULL;
     cp->n2 = NULL;
-    cp->z1 = NULL;
-    cp->z2 = NULL;
     cp->status = NULL;
 
     /*fprintf (stderr, "Try to read one point \n"); */
@@ -32,8 +30,8 @@ int I_read_ref_points(FILE * fd, struct Ortho_Photo_Points *cp)
 	G_strip(buf);
 	if (*buf == '#' || *buf == 0)
 	    continue;
-	if (sscanf(buf, "%lf%lf%lf%lf%lf%lf%d", &e1, &n1, &z1, &e2, &n2, &z2, &status) == 7)
-	    I_new_ref_point(cp, e1, n1, z1, e2, n2, z2, status);
+	if (sscanf(buf, "%lf%lf%lf%lf%d", &e1, &n1, &e2, &n2, &status) == 7)
+	    I_new_ref_point(cp, e1, n1, e2, n2, status);
 	else
 	    return -4;
     }
@@ -42,8 +40,8 @@ int I_read_ref_points(FILE * fd, struct Ortho_Photo_Points *cp)
 }
 
 int
-I_new_ref_point(struct Ortho_Photo_Points *cp, double e1, double n1, double z1,
-		double e2, double n2, double z2, int status)
+I_new_ref_point(struct Ortho_Photo_Points *cp, double e1, double n1,
+		double e2, double n2, int status)
 {
     int i;
     size_t size;
@@ -57,8 +55,6 @@ I_new_ref_point(struct Ortho_Photo_Points *cp, double e1, double n1, double z1,
     cp->e2 = (double *)G_realloc(cp->e2, size);
     cp->n1 = (double *)G_realloc(cp->n1, size);
     cp->n2 = (double *)G_realloc(cp->n2, size);
-    cp->z1 = (double *)G_realloc(cp->z1, size);
-    cp->z2 = (double *)G_realloc(cp->z2, size);
     size = cp->count * sizeof(int);
     cp->status = (int *)G_realloc(cp->status, size);
 
@@ -66,8 +62,6 @@ I_new_ref_point(struct Ortho_Photo_Points *cp, double e1, double n1, double z1,
     cp->e2[i] = e2;
     cp->n1[i] = n1;
     cp->n2[i] = n2;
-    cp->z1[i] = z1;
-    cp->z2[i] = z2;
     cp->status[i] = status;
 
     return 0;
@@ -79,14 +73,14 @@ int I_write_ref_points(FILE * fd, struct Ortho_Photo_Points *cp)
 
     fprintf(fd, "# %7s %15s %15s %15s %9s status\n", "", "image", "", "photo",
 	    "");
-    fprintf(fd, "# %15s %15s %15s %15s %15s %15s   (1=ok)\n", "east", "north", "height",
-            "x", "y", "z");
+    fprintf(fd, "# %15s %15s %15s %15s  (1=ok)\n", "east", "north",
+            "x", "y");
     fprintf(fd, "#\n");
     for (i = 0; i < cp->count; i++)
 	if (cp->status[i] >= 0)
-	    fprintf(fd, "  %15f %15f %15f %15f %15f %15f %d\n",
-		    cp->e1[i], cp->n1[i], cp->z1[i], 
-		    cp->e2[i], cp->n2[i], cp->z2[i], 
+	    fprintf(fd, "  %15f %15f %15f %15f %d\n",
+		    cp->e1[i], cp->n1[i],  
+		    cp->e2[i], cp->n2[i],  
 		    cp->status[i]);
 
     return 0;
