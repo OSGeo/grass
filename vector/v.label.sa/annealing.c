@@ -101,11 +101,11 @@ void simulate_annealing(label_t * labels, int n_labels, struct params *p)
 	    }
 	    /* else apply with probability p=e^(-dE/T) */
 	    else {
-		double p, r;
+		double dp, dr;
 
-		p = pow(M_E, -dE / T);
-		r = (double)rand() / RAND_MAX;
-		if (r <= p) {
+		dp = pow(M_E, -dE / T);
+		dr = (double)rand() / RAND_MAX;
+		if (dr <= dp) {
 		    do_label_overlap(lp, cc, c);
 		    lp->current_score += lp->candidates[c].score;
 		    lp->current_candidate = c;

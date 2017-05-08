@@ -179,4 +179,7 @@ void print_label(FILE * labelf, label_t * label, struct params *p);
 struct line_pnts *skyline_trans_rot(struct line_pnts *skyline,
 				    label_point_t * p, double angle);
 
+struct GFONT_CAP *find_font_from_freetypecap(const char *font);
+void free_freetypecap(struct GFONT_CAP *ftcap);
+
 #endif /* _LABELS_H */
