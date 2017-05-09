@@ -31,8 +31,8 @@ int main(int argc, char *argv[])
 {
     short percent;
     double percentage;
-    long targets;
-    long count;
+    gcell_count targets;
+    gcell_count count;
     struct rr_state myState;
 
     struct GModule *module;
@@ -121,13 +121,21 @@ int main(int argc, char *argv[])
     get_stats(&myState);
 
     if (flag.info->answer) {
+#ifdef HAVE_LONG_LONG_INT
 	G_message("Raster:      %s\n"
 		  "Cover:       %s\n"
-		  "Cell Count:  %d\n"
-		  "Null Cells:  %d\n\n",
+		  "Cell Count:  %llu\n"
+		  "Null Cells:  %llu\n\n",
 		  myState.inraster, myState.inrcover,
-		  (int)myState.nCells, (int)myState.nNulls);
-
+		  myState.nCells, myState.nNulls);
+#else
+	G_message("Raster:      %s\n"
+		  "Cover:       %s\n"
+		  "Cell Count:  %lu\n"
+		  "Null Cells:  %lu\n\n",
+		  myState.inraster, myState.inrcover,
+		  myState.nCells, myState.nNulls);
+#endif
 	exit(EXIT_SUCCESS);
     }
 
@@ -145,7 +153,11 @@ int main(int argc, char *argv[])
 	}
     }
     else {
-	if (sscanf(parm.npoints->answer, "%ld", &targets) != 1
+#ifdef HAVE_LONG_LONG_INT
+	if (sscanf(parm.npoints->answer, "%llu", &targets) != 1
+#else
+	if (sscanf(parm.npoints->answer, "%lu", &targets) != 1
+#endif
 	    || targets <= 0) {
 	    G_fatal_error(_("<%s=%s> invalid number of points"),
 			  parm.npoints->key, parm.npoints->answer);
@@ -156,15 +168,24 @@ int main(int argc, char *argv[])
 	myState.nCells - myState.nNulls;
 
     if (percent)
-	myState.nRand = (int)(count * percentage / 100.0 + .5);
+	myState.nRand = (gcell_count)(count * percentage / 100.0 + .5);
     else {
 	if (targets > count) {
+#ifdef HAVE_LONG_LONG_INT
 	    if (myState.use_nulls)
-		G_fatal_error(_("There aren't [%ld] cells in the current region"),
+		G_fatal_error(_("There aren't [%llu] cells in the current region"),
 			      targets);
 	    else
-		G_fatal_error(_("There aren't [%ld] non-NULL cells in the current region"),
+		G_fatal_error(_("There aren't [%llu] non-NULL cells in the current region"),
 			      targets);
+#else
+	    if (myState.use_nulls)
+		G_fatal_error(_("There aren't [%lu] cells in the current region"),
+			      targets);
+	    else
+		G_fatal_error(_("There aren't [%lu] non-NULL cells in the current region"),
+			      targets);
+#endif
 	}
 
 	if (targets <= 0)

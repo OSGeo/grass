@@ -22,12 +22,18 @@ int is_null_value(struct RASTER_MAP_PTR buf, int col);
 
 /* End from Huidae Cho */
 
+#ifdef HAVE_LONG_LONG_INT
+typedef unsigned long long gcell_count;
+#else
+typedef unsigned long gcell_count;
+#endif
+
 /* Put all the state infomation into a struct */
 struct rr_state
 {
     char *inraster, *inrcover, *outraster, *outvector;
     int use_nulls, docover, fd_old, fd_cold, fd_new;
-    long nCells, nNulls, nRand, cnCells, cnNulls;
+    gcell_count nCells, nNulls, nRand, cnCells, cnNulls;
     struct RASTER_MAP_PTR nulls, cnulls, buf, cover, min, max, cmin, cmax;
     FILE *fsites;
     int z_geometry;
