@@ -55,12 +55,12 @@ void get_stats(struct rr_state *theState)
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    theState->nCells = (long) nrows * ncols;
+    theState->nCells = (gcell_count) nrows * ncols;
     theState->nNulls = 0;
     set_min(NULL, 0, &theState->min);
     set_max(NULL, 0, &theState->max);
     if (theState->docover == 1) {
-	theState->cnCells = nrows * ncols;
+	theState->cnCells = (gcell_count) nrows * ncols;
 	theState->cnNulls = 0;
 	set_min(NULL, 0, &theState->cmin);
 	set_max(NULL, 0, &theState->cmax);

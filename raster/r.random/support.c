@@ -48,7 +48,11 @@ int make_support(struct rr_state *theState, int percent, double percentage)
 	else
 	    Rast_format_history(
 		&hist, HIST_DATSRC_2,
-		"%ld random points on the base map <%s>",
+#ifdef HAVE_LONG_LONG_INT
+		"%llu random points on the base map <%s>",
+#else
+		"%lu random points on the base map <%s>",
+#endif
 		theState->nRand, theState->inraster);
 
 	Rast_command_history(&hist);
