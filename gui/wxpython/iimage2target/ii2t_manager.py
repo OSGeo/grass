@@ -1669,7 +1669,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                                   group=self.xygroup,
                                   extension=self.extension,
                                   method=self.gr_method,
-                                  angle=self.cam_angle,
+                                  angle=self.grwiz.cam_angle,
                                   flags=flags)
 
             busy.Destroy()
