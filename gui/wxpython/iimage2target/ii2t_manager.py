@@ -165,6 +165,9 @@ class GCPWizard(object):
         self.source_gisrc = ''
         self.src_maps = []
 
+        # Raster map with camera angle relative to ground surface (i.ortho.rectify)
+        self.cam_angle = ''
+
         #
         # define wizard pages
         #
@@ -940,7 +943,7 @@ class DispMapPage(TitledPage):
 class GCP(MapFrame, ColumnSorterMixin):
     """
     Manages ground control points for georectifying. Calculates RMS statistics.
-    Calls i.rectify or v.rectify to georectify map.
+    Calls i.ortho.rectify or v.rectify to georectify map.
     """
 
     def __init__(self, parent, giface, grwiz=None, id=wx.ID_ANY,
@@ -1639,7 +1642,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
     def OnGeorect(self, event):
         """
-        Georectifies map(s) in group using i.rectify or v.transform
+        Georectifies map(s) in group using i.ortho.rectify or v.rectify
         """
         global maptype
         self.SaveGCPs(None)
@@ -1659,14 +1662,14 @@ class GCP(MapFrame, ColumnSorterMixin):
                                parent=self)
             wx.Yield()
 
-            ret, msg = RunCommand('i.rectify',
+            ret, msg = RunCommand('i.ortho.rectify',
                                   parent=self,
                                   getErrorMsg=True,
                                   quiet=True,
                                   group=self.xygroup,
                                   extension=self.extension,
-                                  order=self.gr_order,
                                   method=self.gr_method,
+                                  angle=self.cam_angle,
                                   flags=flags)
 
             busy.Destroy()
