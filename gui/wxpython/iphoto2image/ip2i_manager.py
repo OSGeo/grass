@@ -341,6 +341,12 @@ class GCP(MapFrame, ColumnSorterMixin):
                                    self.xymapset,
                                    'camera',
                                    self.camera),
+            'ref_points': os.path.join(self.grassdatabase,
+                                   self.xylocation,
+                                   self.xymapset,
+                                   'group',
+                                   self.xygroup,
+                                   'REF_POINTS'),
             'points': os.path.join(self.grassdatabase,
                                    self.xylocation,
                                    self.xymapset,
@@ -370,6 +376,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         # make a backup of the current points file if exists
         if os.path.exists(self.file['points']):
             shutil.copy(self.file['points'], self.file['points_bak'])
+            shutil.copy(self.file['points'], self.file['ref_points'])
             GMessage (_("A POINTS file exists, renaming it to POINTS_BAK"))
 
         #"""Make a POINTS file """
@@ -844,6 +851,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         # if event != None save also to backup file
         if event:
             shutil.copy(self.file['points'], self.file['points_bak'])
+            shutil.copy(self.file['points'], self.file['ref_points'])
             self._giface.WriteLog(
                 _('POINTS file saved for group <%s>') %
                 self.xygroup)
@@ -1117,6 +1125,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 # restore POINTS file from backup
                 if os.path.exists(self.file['points_bak']):
                     shutil.copy(self.file['points_bak'], self.file['points'])
+                    shutil.copy(self.file['points_bak'], self.file['ref_points'])
 
             if os.path.exists(self.file['points_bak']):
                 os.unlink(self.file['points_bak'])
