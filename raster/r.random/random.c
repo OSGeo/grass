@@ -243,7 +243,7 @@ int execute_random(struct rr_state *theState)
 #ifdef HAVE_LONG_LONG_INT
 	G_warning(_("Only [%llu] random points created"),
 		  theState->nRand - nt);
-#elif
+#else
 	G_warning(_("Only [%lu] random points created"),
 		  theState->nRand - nt);
 #endif
