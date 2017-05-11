@@ -21,9 +21,9 @@
 /* TODO: replace long with either size_t or a guaranteed 64 bit integer */
 struct bin
 {
-    unsigned long origin;
+    size_t origin;
     DCELL min, max;
-    long base, count;
+    size_t base, count;
 };
 
 static int rows, cols;
@@ -32,8 +32,9 @@ static DCELL min, max;
 static int num_quants;
 static DCELL *quants;
 static int num_slots;
-static unsigned int *slots;
+static size_t *slots;
 static DCELL slot_size;
+/* total should be a 64bit integer */
 static unsigned long total;
 static size_t num_values;
 static unsigned short *slot_bins;
@@ -96,7 +97,7 @@ static void initialize_bins(void)
     int slot;
     double next;
     int bin = 0;
-    unsigned long accum = 0;
+    size_t accum = 0;
     int quant = 0;
 
     G_message(_("Computing bins"));
@@ -105,8 +106,8 @@ static void initialize_bins(void)
     next = get_quantile(quant);
 
     for (slot = 0; slot < num_slots; slot++) {
-	unsigned int count = slots[slot];
-	unsigned long accum2 = accum + count;
+	size_t count = slots[slot];
+	size_t accum2 = accum + count;
 
 	if (accum2 > next ||
 	    (slot == num_slots - 1 && accum2 == next)) {
@@ -130,6 +131,9 @@ static void initialize_bins(void)
     }
 
     num_bins = bin;
+
+    G_debug(1, "Number of bins: %d", num_bins);
+    G_debug(1, "Number of values: %lu", num_values);
 }
 
 static void fill_bins(int infile)
@@ -188,11 +192,7 @@ static void sort_bins(void)
 	struct bin *b = &bins[bin];
 
 	qsort(&values[b->base], b->count, sizeof(DCELL), compare_dcell);
-	G_percent(bin, num_bins, 2);
     }
-    G_percent(bin, num_bins, 2);
-
-    G_message(_("Computing quantiles"));
 }
 
 static void compute_quantiles(int recode)
@@ -201,11 +201,13 @@ static void compute_quantiles(int recode)
     double prev_v = min;
     int quant;
 
+    G_message(_("Computing quantiles"));
+
     for (quant = 0; quant < num_quants; quant++) {
 	struct bin *b = &bins[bin];
 	double next = get_quantile(quant);
 	double k, v;
-	int i0, i1;
+	size_t i0, i1;
 
 	for (; bin < num_bins; bin++) {
 	    b = &bins[bin];
@@ -215,8 +217,8 @@ static void compute_quantiles(int recode)
 
 	if (bin < num_bins) {
 	    k = next - b->origin;
-	    i0 = (int)floor(k);
-	    i1 = (int)ceil(k);
+	    i0 = (size_t)floor(k);
+	    i1 = (size_t)ceil(k);
 
 	    if (i0 > b->count - 1)
 		i0 = b->count - 1;
@@ -339,7 +341,7 @@ int main(int argc, char *argv[])
     Rast_read_fp_range(opt.input->answer, "", &range);
     Rast_get_fp_range_min_max(&range, &min, &max);
 
-    slots = G_calloc(num_slots, sizeof(unsigned int));
+    slots = G_calloc(num_slots, sizeof(size_t));
     slot_bins = G_calloc(num_slots, sizeof(unsigned short));
 
     slot_size = (max - min) / num_slots;
