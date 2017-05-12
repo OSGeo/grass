@@ -63,9 +63,9 @@ int main(int argc, char **argv)
                "i.ortho.target;%s;"
                "i.ortho.elev;%s;"
                "i.ortho.camera;%s;"
-               "g.gui.iphoto2image;%s;"
+               "g.gui.photo2image;%s;"
                "i.ortho.init;%s;"
-               "g.gui.iphoto2target;%s;"
+               "g.gui.image2target;%s;"
                "i.ortho.rectify;%s;",
                _("1 - Select/Modify imagery group"),
                _("2 - Select/Modify imagery group target"),
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
                _("7 - Compute ortho-rectification parameters"),
                _("8 - Ortho-rectify imagery files"));
     ortho_opt->descriptions = desc_ortho_opt;
-    ortho_opt->options = "i.group,i.ortho.target,i.ortho.elev,i.ortho.camera,g.gui.iphoto2image,i.ortho.init,g.gui.iphoto2target,i.ortho.rectify";
+    ortho_opt->options = "i.group,i.ortho.target,i.ortho.elev,i.ortho.camera,g.gui.photo2image,i.ortho.init,g.gui.image2target,i.ortho.rectify";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -106,11 +106,11 @@ int main(int argc, char **argv)
     grname=group.name;
     moduletorun=ortho_opt->answer;
     /* run the program chosen */
-    if (strcmp(moduletorun, "g.gui.iphoto2image") == 0){
-        strcpy(tosystem,"g.gui.iphoto2image");
+    if (strcmp(moduletorun, "g.gui.photo2image") == 0){
+        strcpy(tosystem,"g.gui.photo2image");
     	err=system((const char *)tosystem);
-    }else if (strcmp(moduletorun, "g.gui.iphoto2target") == 0){
-        strcpy(tosystem,"g.gui.iphoto2target");
+    }else if (strcmp(moduletorun, "g.gui.image2target") == 0){
+        strcpy(tosystem,"g.gui.image2target");
     	err=system((const char *)tosystem);
     }else{
         if (strcmp(moduletorun, "i.group") == 0)
