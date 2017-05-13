@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     const char *args[5];
     struct Popen stats_child, reclass_child;
     struct Categories cover_cats;
+    struct Colors colors;
     FILE *stats, *reclass;
     int first;
     long basecat, covercat, catb, catc;
@@ -137,6 +138,11 @@ int main(int argc, char *argv[])
 
     G_popen_close(&reclass_child);
     G_popen_close(&stats_child);
+
+    if (Rast_read_colors(parm.cover->answer, "", &colors) < 0)
+	G_fatal_error(_("Unable to read color table for %s"),
+			parm.cover->answer);
+    Rast_write_colors(parm.output->answer, G_mapset(), &colors);
 
     return 0;
 }
