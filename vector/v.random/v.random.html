@@ -103,6 +103,27 @@ mv map.png vrandom_z.png
 Random points with different X, Y, and Z coordinates
 </center>
 
+<h3>Generating random points in selected polygons</h3>
+
+Generate 3 random points only in selected polygons ("RALEIGH" related ZIP
+code areas):
+<div class="code"><pre>
+v.random restrict=zipcodes_wake output=zipcodes_local_random_n3 npoints=3 \
+  where="ZIPNAME = 'RALEIGH'" -a 
+
+# visualization
+d.mon wx0
+d.vect zipcodes_wake
+d.vect zipcodes_wake fcolor=yellow where="ZIPNAME = 'RALEIGH'"
+d.vect zipcodes_local_random_n3 color=red icon=basic/circle
+</pre></div>
+
+<div align="center" style="margin: 10px">
+<a href="v_random_points_in_polygon.png">
+<img src="v_random_points_in_polygon.png" width="400" height="368" alt="v.random example" border="0">
+</a><br>
+<i>Fixd number of random points generated in selected polygons</i>
+</div>
 
 <h3>Generating random adjacent polygons</h3>
 
