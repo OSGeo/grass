@@ -74,14 +74,13 @@ double L(double smooth)
 
 int main(int argc, char **argv)
 {
-    struct Option *in_opt, *net_opt, *out_opt;
+    struct Option *in_opt, *net_opt, *out_opt, *net_out_opt;
     struct Option *radius_opt, *dsize_opt, *segmax_opt, *netmax_opt,
 	*multip_opt, *node_opt, *kernel_opt;
     struct Flag *flag_o, *flag_q, *flag_normalize, *flag_multiply;
     char *desc;
 
     struct Map_info In, Net, Out;
-    int overwrite;
     int fdout = -1, maskfd = -1;
     int node_method, kernel_function;
     int row, col;
@@ -119,6 +118,7 @@ int main(int argc, char **argv)
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     in_opt->label = _("Name of input vector map with training points");
     in_opt->description = NULL;
+    in_opt->guisection = _("Basic");
     
     net_opt = G_define_standard_option(G_OPT_V_INPUT);
     net_opt->key = "net";
@@ -127,19 +127,25 @@ int main(int argc, char **argv)
     net_opt->required = NO;
     net_opt->guisection = _("Network");
 
-    out_opt = G_define_option();
+    out_opt = G_define_standard_option(G_OPT_R_OUTPUT);
     out_opt->key = "output";
-    out_opt->type = TYPE_STRING;
-    out_opt->key_desc = "name";
-    out_opt->required = YES;
-    out_opt->label = _("Name for output raster/vector map");
-    out_opt->description = _("Outputs vector map if network map is given, otherwise raster map");
+    out_opt->required = NO;
+    out_opt->label = _("Name for output raster map");
+    out_opt->guisection = _("Basic");
+
+    net_out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
+    net_out_opt->key = "net_output";
+    net_out_opt->required = NO;
+    net_out_opt->label = _("Name for output vector density map");
+    net_out_opt->description = _("Outputs vector map if network map is given");
+    net_out_opt->guisection = _("Network");
 
     radius_opt = G_define_option();
     radius_opt->key = "radius";
     radius_opt->type = TYPE_DOUBLE;
     radius_opt->required = YES;
     radius_opt->description = _("Kernel radius in map units");
+    radius_opt->guisection = _("Basic");
 
     dsize_opt = G_define_option();
     dsize_opt->key = "dsize";
@@ -216,29 +222,21 @@ int main(int argc, char **argv)
     flag_multiply->description =
 	_("In network mode, multiply the result by number of input points");
     flag_multiply->guisection = _("Network");
-    
-    overwrite = G_check_overwrite(argc, argv);
+
+    G_option_required(out_opt, net_out_opt, NULL);
+    G_option_exclusive(out_opt, net_out_opt, NULL);
+    /* this should be activated for GRASS 8
+    G_option_requires(net_opt, net_out_opt, NULL);
+    */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (net_opt->answer) {
-	if (G_find_vector2(out_opt->answer, G_mapset())) {
-            if (overwrite)
-                G_warning(_("Vector map <%s> already exists and will be overwritten"),
-                          out_opt->answer);
-            else
-                G_fatal_error(_("Vector map <%s> already exists"),
-                              out_opt->answer);
-        }
-    } else {
-	if (G_find_raster(out_opt->answer, G_mapset())) {
-            if (overwrite)
-                G_warning(_("Raster map <%s> already exists and will be overwritten"),
-                          out_opt->answer);
-            else
-                G_fatal_error(_("Raster map <%s> already exists"),
-                              out_opt->answer);
-        }
+
+    if (net_opt->answer && out_opt->answer) {
+	G_warning(_("Use option net_output if you compute network density. "
+		"Name provided in option output will be used for net_output."));
+	net_out_opt->answer = out_opt->answer;
+	out_opt->answer = NULL;
     }
 
     /*read options */
@@ -291,9 +289,9 @@ int main(int argc, char **argv)
     }
 
     if (net_opt->answer) {
-	Vect_check_input_output_name(in_opt->answer, out_opt->answer,
+	Vect_check_input_output_name(in_opt->answer, net_out_opt->answer,
 				     G_FATAL_EXIT);
-	Vect_check_input_output_name(net_opt->answer, out_opt->answer,
+	Vect_check_input_output_name(net_opt->answer, net_out_opt->answer,
 				     G_FATAL_EXIT);
     }
 
@@ -334,9 +332,9 @@ int main(int argc, char **argv)
 	Vect_net_build_graph(&Net, GV_LINES, 0, 0, NULL, NULL, NULL, 0, 0);
 
 	if (!flag_q->answer) {
-	    if (Vect_open_new(&Out, out_opt->answer, 0) < 0)
+	    if (Vect_open_new(&Out, net_out_opt->answer, 0) < 0)
 		G_fatal_error(_("Unable to create vector map <%s>"),
-				out_opt->answer);
+				net_out_opt->answer);
 	    Vect_hist_command(&Out);
 	}
 
