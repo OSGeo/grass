@@ -6,8 +6,8 @@
  *               Markus Neteler <neteler itc.it>,Brad Douglas <rez touchofmadness.com>,
  *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>, Soeren Gebbert <soeren.gebbert gmx.de>
- *               Martin Landa <landa.martin gmail.com>
- * PURPOSE:      
+ *               Martin Landa <landa.martin gmail.com>, Luca Delucchi <lucadeluge gmail.com>
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2006, 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -32,6 +32,7 @@ struct order
     int point;
     int row;
     int col;
+    int cat;
     char north_buf[256];
     char east_buf[256];
     char lab_buf[256];
@@ -62,10 +63,11 @@ int main(int argc, char *argv[])
     DCELL *dcell[NFILES];
     struct Map_info Map;
     struct line_pnts *Points;
-    
+    struct line_cats *Cats;
+
     /*   int row, col; */
     double drow, dcol;
-    int row_in_window, in_window;
+    int row_in_window, in_window, cat;
     double east, north;
     int line, ltype;
     char buffer[1024];
@@ -74,7 +76,7 @@ int main(int argc, char *argv[])
         struct Option *input, *cache, *null, *coords, *fs, *points, *output;
     } opt;
     struct _flg {
-	struct Flag *label, *cache, *cat_int, *color, *header;
+	struct Flag *label, *cache, *cat_int, *color, *header, *cat;
     } flg;
     char *fs;
     int Cache_size;
@@ -114,11 +116,11 @@ int main(int argc, char *argv[])
     opt.points->label = _("Name of vector points map for query");
     opt.points->required = NO;
     opt.points->guisection = _("Query");
-    
+
     opt.null = G_define_standard_option(G_OPT_M_NULL_VALUE);
     opt.null->answer = "*";
     opt.null->guisection = _("Print");
-    
+
     opt.output = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.output->required = NO;
     opt.output->description =
@@ -135,7 +137,7 @@ int main(int argc, char *argv[])
     opt.cache->description = _("Size of point cache");
     opt.cache->answer = "500";
     opt.cache->guisection = _("Advanced");
-    
+
     flg.header = G_define_flag();
     flg.header->key = 'n';
     flg.header->description = _("Output header row");
@@ -161,6 +163,11 @@ int main(int argc, char *argv[])
     flg.cache->description = _("Turn on cache reporting");
     flg.cache->guisection = _("Advanced");
 
+    flg.cat = G_define_flag();
+    flg.cat->key = 'v';
+    flg.cat->description = _("Show the category for vector points map");
+    flg.cat->guisection = _("Print");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -174,7 +181,7 @@ int main(int argc, char *argv[])
     tty = isatty(0);
 
     fs = G_option_to_separator(opt.fs);
-    
+
     null_str = opt.null->answer;
 
     if (tty)
@@ -186,6 +193,12 @@ int main(int argc, char *argv[])
 	Cache_size = 1;
 
     cache = (struct order *)G_malloc(sizeof(struct order) * Cache_size);
+
+    /* check if flag v is used with a vector points map */
+    if (flg.cat->answer && !opt.points->answers){
+        G_fatal_error(_("Flag 'v' required option 'points'"));
+    }
+
 
     /* enable cache report */
     if (flg.cache->answer)
@@ -237,10 +250,14 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Unable to open vector map <%s>"), opt.points->answer);
     }
     Points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
     G_get_window(&window);
 
     /* print header row */
     if(flg.header->answer) {
+       if(flg.cat->answer) {
+           fprintf(stdout, "cat%s", fs);
+       }
 	fprintf(stdout, "easting%snorthing%ssite_name", fs, fs);
 
 	ptr = opt.input->answers;
@@ -292,7 +309,7 @@ int main(int argc, char *argv[])
                     }
 		    else {
                         if (opt.points->answer) {
-                            ltype = Vect_read_next_line(&Map, Points, NULL);
+                            ltype = Vect_read_next_line(&Map, Points, Cats);
                             if (ltype == -1)
                                 G_fatal_error(_("Unable to read vector map <%s>"), Vect_get_full_name(&Map));
                             else if (ltype == -2)
@@ -304,6 +321,8 @@ int main(int argc, char *argv[])
                             else {
                                 east = Points->x[0];
                                 north = Points->y[0];
+                                cat = Cats->cat[0];
+                                cache[point_cnt].cat = cat;
                                 sprintf(cache[point_cnt].east_buf, "%.15g", east);
                                 sprintf(cache[point_cnt].north_buf, "%.15g", north);
                             }
@@ -325,25 +344,25 @@ int main(int argc, char *argv[])
                             }
                             if (*(cache[point_cnt].east_buf) == 0)
                                 continue;	/* skip blank lines */
-                            
+
                             if (*(cache[point_cnt].north_buf) == 0) {
                                 oops(line, buffer,
                                      "two coordinates (east north) required");
                                 continue;
                             }
-                        
-                            
+
+
                             if (!G_scan_northing(cache[point_cnt].north_buf, &north, window.proj) ||
                                 !G_scan_easting(cache[point_cnt].east_buf, &east, window.proj)) {
                                 oops(line, buffer, "invalid coordinate(s)");
                                 continue;
                             }
                         }
-                        
+
 			/* convert north, east to row and col */
 			drow = Rast_northing_to_row(north, &window);
 			dcol = Rast_easting_to_col(east, &window);
-                        
+
 			/* a special case.
 			 *   if north falls at southern edge, or east falls on eastern edge,
 			 *   the point will appear outside the window.
@@ -439,7 +458,9 @@ int main(int argc, char *argv[])
 		    cache[point].east_buf, cache[point].north_buf,
 		    cache[point].col, cache[point].row);
 
-
+        if (flg.cat->answer){
+            fprintf(stdout, "%d%s" , cache[point].cat, fs);
+        }
 	    fprintf(stdout, "%s%s%s%s%s", cache[point].east_buf, fs,
 		    cache[point].north_buf, fs, cache[point].lab_buf);
 
@@ -502,7 +523,8 @@ int main(int argc, char *argv[])
         Vect_close(&Map);
     }
     Vect_destroy_line_struct(Points);
-    
+    Vect_destroy_cats_struct(Cats);
+
     exit(EXIT_SUCCESS);
 }
 
