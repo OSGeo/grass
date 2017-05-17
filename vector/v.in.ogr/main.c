@@ -363,9 +363,11 @@ int main(int argc, char *argv[])
 	datetime_type = "datetime";
 
     dsn = NULL;
-    if (param.dsn->answer)
-        dsn = get_datasource_name(param.dsn->answer, TRUE);
-    
+    if (param.dsn->answer) {
+        /* dsn = get_datasource_name(param.dsn->answer, TRUE); */
+	dsn = param.dsn->answer;
+    }
+
     min_area = atof(param.min_area->answer);
     snap = atof(param.snap->answer);
     type = Vect_option_to_types(param.type);
