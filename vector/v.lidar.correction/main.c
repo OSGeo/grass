@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
     stepE_opt->required = NO;
     stepE_opt->answer = "25";
     stepE_opt->description =
-	_("Length of each spline step in the east-west direction");
+	_("Length of each spline step (pixels) in the east-west direction");
     stepE_opt->guisection = _("Settings");
 
     stepN_opt = G_define_option();
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
     stepN_opt->required = NO;
     stepN_opt->answer = "25";
     stepN_opt->description =
-	_("Length of each spline step in the north-south direction");
+	_("Length of each spline step (pixels) in the north-south direction");
     stepN_opt->guisection = _("Settings");
 
     lambda_f_opt = G_define_option();
