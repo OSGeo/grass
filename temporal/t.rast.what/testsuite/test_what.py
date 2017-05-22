@@ -69,6 +69,14 @@ class TestRasterWhat(TestCase):
         self.assertFileMd5("out_row_coords.txt",
                            "cd917ac4848786f1b944512eed1da5bc", text=True)
 
+    def test_row_output_cat(self):
+        self.assertModule("t.rast.what", strds="A", output="out_row_cat.txt",
+                          points="points", flags="nv", layout="row",
+                          nprocs=1, overwrite=True, verbose=True)
+
+        self.assertFileMd5("out_row_cat.txt",
+                           "bddde54bf4f40c41a17305c3442980e5", text=True)
+
     def test_col_output(self):
         self.assertModule("t.rast.what", strds="A", output="out_col.txt",
                           points="points", flags="n", layout="col",
@@ -92,6 +100,22 @@ class TestRasterWhat(TestCase):
 
         self.assertFileMd5("out_timerow.txt",
                            "129fe0b63019e505232efa20ad42c03a", text=True)
+
+    def test_col_output_cat(self):
+        self.assertModule("t.rast.what", strds="A", output="out_col_cat.txt",
+                          points="points", flags="nv", layout="col",
+                          nprocs=1, overwrite=True, verbose=True)
+
+        self.assertFileMd5("out_col_cat.txt",
+                           "e1d8e6651b3bff1c35e366e48d634db4", text=True)
+
+    def test_timerow_output_cat(self):
+        self.assertModule("t.rast.what", strds="A", output="out_col_trow.txt",
+                          points="points", flags="nv", layout="timerow",
+                          nprocs=1, overwrite=True, verbose=True)
+
+        self.assertFileMd5("out_col_trow.txt",
+                           "55e2ff8ddaeb731a73daca48adf2768d", text=True)
 
     def test_timerow_output_coords(self):
         self.assertModule("t.rast.what", strds="A", output="out_timerow_coords.txt",
@@ -119,6 +143,27 @@ class TestRasterWhat(TestCase):
 115.0043586274|36.3593955783|2001-10-01 00:00:00|2002-01-01 00:00:00|400
 79.6816763826|45.2391522853|2001-10-01 00:00:00|2002-01-01 00:00:00|400
 97.4892579600|79.2347263950|2001-10-01 00:00:00|2002-01-01 00:00:00|400
+"""
+        self.assertLooksLike(text, t_rast_what.outputs.stdout)
+
+    def test_row_stdout_where_parallel_cat(self):
+
+        t_rast_what = SimpleModule("t.rast.what", strds="A", output="-",
+                                   points="points", flags="nv",
+                                   where="start_time > '2001-03-01'",
+                                   nprocs=4, overwrite=True, verbose=True)
+        self.assertModule(t_rast_what)
+
+        text = """cat|x|y|start|end|value
+1|115.0043586274|36.3593955783|2001-04-01 00:00:00|2001-07-01 00:00:00|200
+2|79.6816763826|45.2391522853|2001-04-01 00:00:00|2001-07-01 00:00:00|200
+3|97.4892579600|79.2347263950|2001-04-01 00:00:00|2001-07-01 00:00:00|200
+1|115.0043586274|36.3593955783|2001-07-01 00:00:00|2001-10-01 00:00:00|300
+2|79.6816763826|45.2391522853|2001-07-01 00:00:00|2001-10-01 00:00:00|300
+3|97.4892579600|79.2347263950|2001-07-01 00:00:00|2001-10-01 00:00:00|300
+1|115.0043586274|36.3593955783|2001-10-01 00:00:00|2002-01-01 00:00:00|400
+2|79.6816763826|45.2391522853|2001-10-01 00:00:00|2002-01-01 00:00:00|400
+3|97.4892579600|79.2347263950|2001-10-01 00:00:00|2002-01-01 00:00:00|400
 """
         self.assertLooksLike(text, t_rast_what.outputs.stdout)
 

@@ -109,10 +109,16 @@
 ##% description: Output integer category values, not cell values
 ##%end
 
+#%flag
+#% key: v
+#% description: Show the category for vector points map
+#%end
+
 import sys
 import copy
 import grass.script as gscript
 
+import pdb
 
 ############################################################################
 
@@ -130,11 +136,12 @@ def main(options, flags):
     order = options["order"]
     layout = options["layout"]
     null_value = options["null_value"]
-    separator = options["separator"]
+    separator = gscript.separator(options["separator"])
     
     nprocs = int(options["nprocs"])
     write_header = flags["n"]
     use_stdin = flags["i"]
+    vcat = flags["v"]
 
     #output_cat_label = flags["f"]
     #output_color = flags["r"]
@@ -147,6 +154,9 @@ def main(options, flags):
 
     if not coordinates and not points and not use_stdin: 
         gscript.fatal(_("Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"))
+
+    if vcat and not points:
+        gscript.fatal(_("Flag 'v' required option 'points'"))
 
     if use_stdin:
         coordinates_stdin = str(sys.__stdin__.read())
@@ -169,21 +179,8 @@ def main(options, flags):
     maps = sp.get_registered_maps_as_objects(where=where, order=order, 
                                              dbif=dbif)
     dbif.close()
-
     if not maps:
         gscript.fatal(_("Space time raster dataset <%s> is empty") % sp.get_id())
-
-    # Setup separator
-    if separator == "pipe":
-        separator = "|"
-    if separator == "comma":
-        separator = ","
-    if separator == "space":
-        separator = " "
-    if separator == "tab":
-        separator = "\t"
-    if separator == "newline":
-        separator = "\n"
 
     # Setup flags are disabled due to test issues
     flags = ""
@@ -193,6 +190,8 @@ def main(options, flags):
     #    flags += "r"
     #if output_cat is True:
     #    flags += "i"
+    if vcat is True:
+        flags += "v"
 
     # Configure the r.what module
     if points: 
@@ -286,18 +285,18 @@ def main(options, flags):
     # Out the output files in the correct order together
     if layout == "row":
         one_point_per_row_output(separator, output_files, output_time_list,
-                                 output, write_header, site_input)
+                                 output, write_header, site_input, vcat)
     elif layout == "col":
         one_point_per_col_output(separator, output_files, output_time_list,
-                                 output, write_header, site_input)
+                                 output, write_header, site_input, vcat)
     else:
         one_point_per_timerow_output(separator, output_files, output_time_list,
-                                     output, write_header, site_input)
+                                     output, write_header, site_input, vcat)
 
 ############################################################################
 
 def one_point_per_row_output(separator, output_files, output_time_list,
-                             output, write_header, site_input):
+                             output, write_header, site_input, vcat):
     """Write one point per row
        output is of type: x,y,start,end,value
     """
@@ -305,13 +304,15 @@ def one_point_per_row_output(separator, output_files, output_time_list,
     out_file = open(output, 'w') if output != "-" else sys.stdout
     
     if write_header is True:
+        out_str = ""
+        if vcat:
+            out_str += "cat{sep}"
         if site_input:
-            out_file.write("x%(sep)sy%(sep)ssite%(sep)sstart%(sep)send%(sep)svalue\n"\
-                       %({"sep":separator}))
+            out_str += "x{sep}y{sep}site{sep}start{sep}end{sep}value\n"
         else:
-            out_file.write("x%(sep)sy%(sep)sstart%(sep)send%(sep)svalue\n"\
-                       %({"sep":separator}))
-
+            out_str += "x{sep}y{sep}start{sep}end{sep}value\n"
+        out_file.write(out_str.format(sep=separator))
+    
     for count in range(len(output_files)):
         file_name = output_files[count]
         gscript.verbose(_("Transforming r.what output file %s"%(file_name)))
@@ -319,15 +320,28 @@ def one_point_per_row_output(separator, output_files, output_time_list,
         in_file = open(file_name, "r")
         for line in in_file:
             line = line.split(separator)
-            x = line[0]
-            y = line[1]
-            if site_input:
-                site = line[2]
+            if vcat:
+                cat = line[0]
+                x = line[1]
+                y = line[2]
+                values = line[4:]
+                if site_input:
+                    site = line[3]
+                    values = line[5:]
+                
+            else:
+                x = line[0]
+                y = line[1]
+                if site_input:
+                    site = line[2]
+                values = line[3:]
 
-            # We ignore the site name
-            values = line[3:]
             for i in range(len(values)):
                 start, end = map_list[i].get_temporal_extent_as_tuple()
+                if vcat:
+                    cat_str = "{ca}{sep}".format(ca=cat, sep=separator)
+                else:
+                    cat_str = ""
                 if site_input:
                     coor_string = "%(x)10.10f%(sep)s%(y)10.10f%(sep)s%(site_name)s%(sep)s"\
                                %({"x":float(x),"y":float(y),"site_name":str(site),"sep":separator})
@@ -338,7 +352,7 @@ def one_point_per_row_output(separator, output_files, output_time_list,
                                %({"start":str(start), "end":str(end),
                                   "val":(values[i].strip()),"sep":separator})
 
-                out_file.write(coor_string + time_string)
+                out_file.write(cat_str + coor_string + time_string)
         
         in_file.close()
     
@@ -348,7 +362,7 @@ def one_point_per_row_output(separator, output_files, output_time_list,
 ############################################################################
 
 def one_point_per_col_output(separator, output_files, output_time_list,
-                             output, write_header, site_input):
+                             output, write_header, site_input, vcat):
     """Write one point per col
        output is of type: 
        start,end,point_1 value,point_2 value,...,point_n value
@@ -374,38 +388,47 @@ def one_point_per_col_output(separator, output_files, output_time_list,
         
         if first is True:
             if write_header is True:
-                out_file.write("start%(sep)send"%({"sep":separator}))
-                if site_input:
-                    for row in matrix:
+                out_str = "start%(sep)send"%({"sep":separator})
+                for row in matrix:
+                    if vcat:
+                        cat = row[0]
+                        x = row[1]
+                        y = row[2]
+                        out_str += "{sep}{cat}{sep}{x:10.10f};" \
+                                  "{y:10.10f}".format(cat=cat, x=float(x),
+                                                           y=float(y),
+                                                           sep=separator)
+                        if site_input:
+                            site = row[3]
+                            out_str += "{sep}{site}".format(sep=separator,
+                                                            site=site)
+                    else:
                         x = row[0]
                         y = row[1]
-                        site = row[2]
-                        out_file.write("%(sep)s%(x)10.10f;%(y)10.10f;%(site_name)s"\
-                                   %({"sep":separator,
-                                      "x":float(x), 
-                                      "y":float(y),
-                                      "site_name":str(site)}))
-                else:
-                    for row in matrix:
-                        x = row[0]
-                        y = row[1]
-                        out_file.write("%(sep)s%(x)10.10f;%(y)10.10f"\
-                                   %({"sep":separator,
-                                      "x":float(x), 
-                                      "y":float(y)}))
+                        out_str += "{sep}{x:10.10f};" \
+                                   "{y:10.10f}".format(x=float(x), y=float(y),
+                                                       sep=separator)
+                        if site_input:
+                            site = row[2]
+                            out_str += "{sep}{site}".format(sep=separator,
+                                                            site=site)
 
-                out_file.write("\n")
+            out_file.write(out_str + "\n")
 
         first = False
 
-        for col in range(num_cols - 3):
+        if vcat:
+            ncol = 4
+        else:
+            ncol = 3
+        for col in range(num_cols - ncol):
             start, end = output_time_list[count][col].get_temporal_extent_as_tuple()
             time_string = "%(start)s%(sep)s%(end)s"\
                                %({"start":str(start), "end":str(end),
                                   "sep":separator})
             out_file.write(time_string)
             for row in range(len(matrix)):
-                value = matrix[row][col + 3]
+                value = matrix[row][col + ncol]
                 out_file.write("%(sep)s%(value)s"\
                                    %({"sep":separator,
                                       "value":value.strip()}))
@@ -418,7 +441,7 @@ def one_point_per_col_output(separator, output_files, output_time_list,
 ############################################################################
 
 def one_point_per_timerow_output(separator, output_files, output_time_list,
-                             output, write_header, site_input):
+                             output, write_header, site_input, vcat):
     """Use the original layout of the r.what output and print instead of 
        the raster names, the time stamps as header
        
@@ -441,10 +464,14 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
 
         if write_header:
             if first is True:
-                if site_input:
-                    header = "x%(sep)sy%(sep)ssite"%({"sep":separator})
+                if vcat:
+                    header = "cat{sep}".format(sep=separator)
                 else:
-                    header = "x%(sep)sy"%({"sep":separator})
+                    header = ""
+                if site_input:
+                    header += "x%(sep)sy%(sep)ssite"%({"sep":separator})
+                else:
+                    header += "x%(sep)sy"%({"sep":separator})
             for map in map_list:
                 start, end = map.get_temporal_extent_as_tuple()
                 time_string = "%(sep)s%(start)s;%(end)s"\
@@ -458,7 +485,9 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
             cols = lines[i].split(separator)
 
             if first is True:
-                if site_input:
+                if vcat and site_input:
+                    matrix.append(cols[:4])
+                elif vcat or site_input:
                     matrix.append(cols[:3])
                 else:
                     matrix.append(cols[:2])
