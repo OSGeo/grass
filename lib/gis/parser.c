@@ -913,7 +913,7 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
 */
 int G_get_overwrite()
 {
-    return st->overwrite;
+    return st->module_info.overwrite;
 }
 
 void define_keywords(void)
