@@ -211,17 +211,17 @@
     <handler>OnDisplayCloseAll</handler>
     <description>Close all open map display windows</description>
   </wxgui-item>
-  <wxgui-item name="CommonFormatsImport">
-    <label>Common formats import</label>
+  <wxgui-item name="CommonRasterFormats">
+    <label>Simplified raster import with reprojection</label>
     <handler>OnImportGdalLayers</handler>
-    <related-module>r.in.gdal</related-module>
+    <related-module>r.import</related-module>
     <description>Imports raster data into a GRASS raster map using GDAL library.</description>
     <keywords>raster,import</keywords>
   </wxgui-item>
-  <wxgui-item name="CommonImportFormats">
-    <label>Common import formats</label>
+  <wxgui-item name="CommonVectorFormats">
+    <label>Simplified vector import with reprojection</label>
     <handler>OnImportOgrLayers</handler>
-    <related-module>v.in.ogr</related-module>
+    <related-module>v.import</related-module>
     <description>Imports vector data into a GRASS vector map using OGR library.</description>
     <keywords>vector,import</keywords>
   </wxgui-item>

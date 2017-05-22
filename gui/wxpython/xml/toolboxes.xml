@@ -252,9 +252,9 @@
   <toolbox name="ImportRasterData">
     <label>Import raster data</label>
     <items>
-      <wxgui-item name="CommonFormatsImport"/>
-      <module-item name="r.import">
-        <label>Import of common formats with reprojection</label>
+      <wxgui-item name="CommonRasterFormats"/>
+      <module-item name="r.in.gdal">
+        <label>Import of common raster formats</label>
       </module-item>
       <separator/>
       <module-item name="r.in.xyz">
@@ -304,9 +304,9 @@
   <toolbox name="ImportVectorData">
     <label>Import vector data</label>
     <items>
-      <wxgui-item name="CommonImportFormats"/>
-      <module-item name="v.import">
-        <label>Import of common formats with reprojection</label>
+      <wxgui-item name="CommonVectorFormats"/>
+      <module-item name="v.in.ogr">
+        <label>Import of common vector formats</label>
       </module-item>
       <separator/>
       <module-item name="v.in.ascii">

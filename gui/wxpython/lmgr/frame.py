@@ -326,9 +326,9 @@ class GMFrame(wx.Frame):
         # create 'command output' text area
         self._gconsole = GConsole(
             guiparent=self, giface=self._giface,
-            ignoredCmdPattern='^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.in.gdal$|'
+            ignoredCmdPattern='^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|'
             '^r.external$|^r.external.out$|'
-            '^v.in.ogr$|^v.external$|^v.external.out$|'
+            '^v.import$|^v.external$|^v.external.out$|'
             '^cd$|^cd .*')
         self.goutput = GConsoleWindow(
             parent=self.notebook,
@@ -715,13 +715,13 @@ class GMFrame(wx.Frame):
             self.OnMapCalculator(event=None, cmd=command)
         elif command[0] == 'i.group':
             self.OnEditImageryGroups(event=None, cmd=command)
-        elif command[0] == 'r.in.gdal':
+        elif command[0] == 'r.import':
             self.OnImportGdalLayers(event=None, cmd=command)
         elif command[0] == 'r.external':
             self.OnLinkGdalLayers(event=None, cmd=command)
         elif command[0] == 'r.external.out':
             self.OnRasterOutputFormat(event=None)
-        elif command[0] == 'v.in.ogr':
+        elif command[0] == 'v.import':
             self.OnImportOgrLayers(event=None, cmd=command)
         elif command[0] == 'v.external':
             self.OnLinkOgrLayers(event=None, cmd=command)
