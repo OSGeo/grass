@@ -21,8 +21,21 @@ from __future__ import print_function
 # i18N
 import gettext
 from .datetime_math import *
+from .core import get_tgis_message_interface
 from functools import reduce
+from collections import OrderedDict
+import ast
 
+SINGULAR_GRAN = ["second", "minute", "hour", "day", "week", "month", "year"]
+PLURAL_GRAN = ["seconds", "minutes", "hours", "days", "weeks", "months",
+               "years"]
+SUPPORTED_GRAN = SINGULAR_GRAN + PLURAL_GRAN
+CONVERT_GRAN = OrderedDict()
+CONVERT_GRAN['year'] = '12 month'
+CONVERT_GRAN['month'] = '30.436875 day'
+CONVERT_GRAN['day'] = '24 hour'
+CONVERT_GRAN['hour'] = '60 minute'
+CONVERT_GRAN['minute'] = '60 second'
 ###############################################################################
 
 
@@ -82,9 +95,7 @@ def check_granularity_string(granularity, temporal_type):
             num, unit = granularity.split(" ")
         except:
             return False
-        if unit not in ["second", "seconds", "minute", "minutes", "hour",
-                        "hours", "day", "days", "week", "weeks", "month",
-                        "months", "year", "years"]:
+        if unit not in SUPPORTED_GRAN:
             return False
 
         try:
@@ -1006,6 +1017,76 @@ def compute_common_absolute_time_granularity_simple(gran_list):
             gran += "s"
         return "%i %s"%(num,  gran)
 
+
+def gran_to_gran(from_gran, to_gran="days", shell=False):
+    """Converts the computed granularity of a STDS to a smaller
+       granularity based on the Gregorian calendar hierarchy that 1 year
+       equals 12 months or 365.2425 days or 24 * 365.2425 hours or 86400 *
+       365.2425 seconds.
+       
+       :param from_gran: input granularity, this should be bigger than to_gran
+       :param to_gran: output granularity
+       :return: The output granularity
+
+        .. code-block:: python
+
+            >>> import grass.temporal as tgis
+            >>> tgis.init()
+            >>> tgis.gran_to_gran('1 month', 'days')
+            '30.436875 days'
+            
+            >>> tgis.gran_to_gran('1 month', 'days', True)
+            30.436875
+            
+            >>> tgis.gran_to_gran('10 year', 'hour')
+            '87658.20000000001 hours'
+            
+            >>> tgis.gran_to_gran('10 year', 'minutes')
+            '5259492.000000001 minutes'
+            
+            >>> tgis.gran_to_gran('6 months', 'days')
+            '182.62125 days'
+            
+            >>> tgis.gran_to_gran('1 months', 'second')
+            '2629746.0 seconds'
+            
+            >>> tgis.gran_to_gran('1 month', 'seconds', True)
+            2629746.0
+    """
+    #TODO check the leap second
+    msgr = get_tgis_message_interface()
+    if check_granularity_string(from_gran, 'absolute'):
+        output, unit = from_gran.split(" ")
+        if unit in PLURAL_GRAN:
+            unit = unit[:-1]
+        myunit = unit
+        if to_gran in SINGULAR_GRAN:
+            tounit = to_gran
+        elif to_gran in PLURAL_GRAN:
+            tounit = to_gran[:-1]
+        else:
+            lists = "{gr}".format(gr=SUPPORTED_GRAN).replace('[',
+                                                             '').replace(']',
+                                                                         '')
+            msgr.fatal(_("Output granularity seems not to be valid. "
+                         "Please use one of the following values : "
+                         "{gr}".format(gr=lists)))
+        output = ast.literal_eval(output)
+        for k, v in CONVERT_GRAN.items():
+            if k == myunit:
+                num, myunit = v.split(" ")
+                output = output * ast.literal_eval(num)
+            if myunit == tounit:
+                if shell:
+                    return output
+                else:
+                    if output == 1:
+                        return "{val} {unit}".format(val=output, unit=tounit)
+                    else:
+                        return "{val} {unit}s".format(val=output, unit=tounit)
+        msgr.warning(_("Probably you need to invert 'from_gran' and 'to_gran'"))
+        return False
+        
 
 ###############################################################################
 # http://akiscode.com/articles/gcd_of_a_list.shtml
