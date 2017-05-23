@@ -264,7 +264,7 @@ def get_real_command(cmd):
 
 
 def make_command(prog, flags=b"", overwrite=False, quiet=False, verbose=False,
-                 errors=None, **options):
+                 superquiet=False, errors=None, **options):
     """Return a list of strings suitable for use as the args parameter to
     Popen() or call(). Example:
 
@@ -289,6 +289,8 @@ def make_command(prog, flags=b"", overwrite=False, quiet=False, verbose=False,
         args.append(b"--q")
     if verbose:
         args.append(b"--v")
+    if superquiet:
+        args.append(b"--qq")
     if flags:
         flags = _make_val(flags)
         if b'-' in flags:
@@ -330,7 +332,7 @@ def handle_errors(returncode, result, args, kwargs):
                                 returncode=returncode)
 
 def start_command(prog, flags=b"", overwrite=False, quiet=False,
-                  verbose=False, **kwargs):
+                  verbose=False, superquiet=False, **kwargs):
     """Returns a Popen object with the command created by make_command.
     Accepts any of the arguments which Popen() accepts apart from "args"
     and "shell".
@@ -550,7 +552,7 @@ def write_command(*args, **kwargs):
 
 
 def exec_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
-                 env=None, **kwargs):
+                 superquiet=False, env=None, **kwargs):
     """Interface to os.execvpe(), but with the make_command() interface.
 
     :param str prog: GRASS module
@@ -1596,7 +1598,7 @@ def debug_level(force=False):
         except ValueError as e:
             _debug_level = 0
             sys.stderr.write(_("WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {0}\n").format(e))
-            
+
     return _debug_level
 
 
