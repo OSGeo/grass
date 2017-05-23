@@ -151,7 +151,7 @@ def vector_history(map):
     run_command('v.support', map=map, cmdhist=os.environ['CMDLINE'])
 
 
-def vector_info_topo(map):
+def vector_info_topo(map, layer=1):
     """Return information about a vector map (interface to `v.info -t`).
     Example:
 
@@ -161,10 +161,11 @@ def vector_info_topo(map):
     'areas': 1832}
 
     :param str map: map name
+    :param int layer: layer number
 
     :return: parsed output
     """
-    s = read_command('v.info', flags='t', map=map)
+    s = read_command('v.info', flags='t', layer=layer, map=map)
     ret = parse_key_val(s, val_type=int)
     if 'map3d' in ret:
         ret['map3d'] = bool(ret['map3d'])
@@ -172,7 +173,7 @@ def vector_info_topo(map):
     return ret
 
 
-def vector_info(map):
+def vector_info(map, layer=1):
     """Return information about a vector map (interface to
     `v.info`). Example:
 
@@ -180,11 +181,12 @@ def vector_info(map):
     {'comment': '', 'projection': 'Lambert Conformal Conic' ... 'south': 10875.8272320917}
 
     :param str map: map name
+    :param int layer: layer number
 
     :return: parsed vector info
     """
 
-    s = read_command('v.info', flags='get', map=map)
+    s = read_command('v.info', flags='get', layer=layer, map=map)
 
     kv = parse_key_val(s)
     for k in ['north', 'south', 'east', 'west', 'top', 'bottom']:
@@ -217,7 +219,7 @@ def vector_db_select(map, layer=1, **kwargs):
     ['Zml']
 
     :param str map: map name
-    :param str layer: layer number
+    :param int layer: layer number
     :param kwargs: v.db.select options
 
     :return: dictionary ('columns' and 'values')
