@@ -1017,9 +1017,92 @@ def compute_common_absolute_time_granularity_simple(gran_list):
             gran += "s"
         return "%i %s"%(num,  gran)
 
+#######################################################################
+
+def gran_singular_unit(gran):
+    """Return the absolute granularity unit in its singular term
+    
+    :param gran: input granularity
+    :return: granularity unit
+    
+    .. code-block:: python
+
+        >>> import grass.temporal as tgis
+        >>> tgis.init()
+        >>> tgis.gran_singular_unit('1 month')
+        month
+        
+        >>> tgis.gran_singular_unit('2 months')
+        month
+        
+        >>> tgis.gran_singular_unit('6 seconds')
+        second
+        
+        >>> tgis.gran_singular_unit('1 year')
+        year
+    """
+    if check_granularity_string(gran, 'absolute'):
+        output, unit = gran.split(" ")
+        if unit in PLURAL_GRAN:
+            return unit[:-1]
+        elif unit in SINGULAR_GRAN:
+            return unit
+        else:
+            lists = "{gr}".format(gr=SUPPORTED_GRAN).replace('[',
+                                                             '').replace(']',
+                                                                         '')
+            print(_("Output granularity seems not to be valid. Please use "
+                    "one of the following values : {gr}".format(gr=lists)))
+            return False
+    else:
+        print(_("Invalid absolute granularity"))
+        return False
+        
+
+#######################################################################
+
+def gran_plural_unit(gran):
+    """Return the absolute granularity unit in its singular term
+    
+    :param gran: input granularity
+    :return: granularity unit
+    
+    .. code-block:: python
+
+        >>> import grass.temporal as tgis
+        >>> tgis.init()
+        >>> tgis.gran_singular_unit('1 month')
+        months
+        
+        >>> tgis.gran_singular_unit('2 months')
+        months
+        
+        >>> tgis.gran_singular_unit('6 seconds')
+        seconds
+        
+        >>> tgis.gran_singular_unit('1 year')
+        years
+    """
+    if check_granularity_string(gran, 'absolute'):
+        output, unit = gran.split(" ")
+        if unit in PLURAL_GRAN:
+            return unit
+        elif unit in SINGULAR_GRAN:
+            return "{gr}s".format(gr=unit)
+        else:
+            lists = "{gr}".format(gr=SUPPORTED_GRAN).replace('[',
+                                                             '').replace(']',
+                                                                         '')
+            print(_("Output granularity seems not to be valid. Please use "
+                    "one of the following values : {gr}".format(gr=lists)))
+    else:
+        print(_("Invalid absolute granularity"))
+        return False
+
+########################################################################
 
 def gran_to_gran(from_gran, to_gran="days", shell=False):
-    """Converts the computed granularity of a STDS to a smaller
+    """Converts the computed absolute granularity of a STDS to a smaller
        granularity based on the Gregorian calendar hierarchy that 1 year
        equals 12 months or 365.2425 days or 24 * 365.2425 hours or 86400 *
        365.2425 seconds.
@@ -1028,30 +1111,30 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
        :param to_gran: output granularity
        :return: The output granularity
 
-        .. code-block:: python
+       .. code-block:: python
 
-            >>> import grass.temporal as tgis
-            >>> tgis.init()
-            >>> tgis.gran_to_gran('1 month', 'days')
-            '30.436875 days'
+           >>> import grass.temporal as tgis
+           >>> tgis.init()
+           >>> tgis.gran_to_gran('1 month', 'days')
+           '30.436875 days'
             
-            >>> tgis.gran_to_gran('1 month', 'days', True)
-            30.436875
+           >>> tgis.gran_to_gran('1 month', 'days', True)
+           30.436875
             
-            >>> tgis.gran_to_gran('10 year', 'hour')
-            '87658.20000000001 hours'
+           >>> tgis.gran_to_gran('10 year', 'hour')
+           '87658.20000000001 hours'
             
-            >>> tgis.gran_to_gran('10 year', 'minutes')
-            '5259492.000000001 minutes'
+           >>> tgis.gran_to_gran('10 year', 'minutes')
+           '5259492.000000001 minutes'
             
-            >>> tgis.gran_to_gran('6 months', 'days')
-            '182.62125 days'
+           >>> tgis.gran_to_gran('6 months', 'days')
+           '182.62125 days'
             
-            >>> tgis.gran_to_gran('1 months', 'second')
-            '2629746.0 seconds'
+           >>> tgis.gran_to_gran('1 months', 'second')
+           '2629746.0 seconds'
             
-            >>> tgis.gran_to_gran('1 month', 'seconds', True)
-            2629746.0
+           >>> tgis.gran_to_gran('1 month', 'seconds', True)
+           2629746.0
     """
     #TODO check the leap second
     msgr = get_tgis_message_interface()
@@ -1060,17 +1143,8 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
         if unit in PLURAL_GRAN:
             unit = unit[:-1]
         myunit = unit
-        if to_gran in SINGULAR_GRAN:
-            tounit = to_gran
-        elif to_gran in PLURAL_GRAN:
-            tounit = to_gran[:-1]
-        else:
-            lists = "{gr}".format(gr=SUPPORTED_GRAN).replace('[',
-                                                             '').replace(']',
-                                                                         '')
-            msgr.fatal(_("Output granularity seems not to be valid. "
-                         "Please use one of the following values : "
-                         "{gr}".format(gr=lists)))
+        tounit = gran_singular_unit(to_gran)
+
         output = ast.literal_eval(output)
         for k, v in CONVERT_GRAN.items():
             if k == myunit:
@@ -1085,6 +1159,9 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
                     else:
                         return "{val} {unit}s".format(val=output, unit=tounit)
         msgr.warning(_("Probably you need to invert 'from_gran' and 'to_gran'"))
+        return False
+    else:
+        print(_("Invalid absolute granularity"))
         return False
         
 
