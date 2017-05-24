@@ -1,7 +1,7 @@
 /*
  *   r3.stats
  *
- *   Copyright (C) 2004-2007 by the GRASS Development Team
+ *   Copyright (C) 2004-2017 by the GRASS Development Team
  *   Author(s): Soeren Gebbert
  *
  *   Purpose: Generates volume statistics for raster3d maps.           
@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("voxel"));
+    G_add_keyword(_("volume"));
     module->description = _("Generates volume statistics for 3D raster maps.");
 
     /* Define the different options */
