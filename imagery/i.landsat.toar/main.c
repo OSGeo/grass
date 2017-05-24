@@ -121,7 +121,6 @@ int main(int argc, char *argv[])
     metho->required = NO;
     metho->options = "uncorrected,dos1,dos2,dos2b,dos3,dos4";
     metho->label = _("Atmospheric correction method");
-    metho->description = _("Atmospheric correction method");
     metho->answer = "uncorrected";
     metho->guisection = _("Metadata");
 
