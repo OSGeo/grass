@@ -1115,29 +1115,41 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
 
            >>> import grass.temporal as tgis
            >>> tgis.init()
-           >>> tgis.gran_to_gran('1 month', 'days')
+           >>> tgis.gran_to_gran('1 month', '1 day')
            '30.436875 days'
             
-           >>> tgis.gran_to_gran('1 month', 'days', True)
+           >>> tgis.gran_to_gran('1 month', '1 day', True)
            30.436875
             
-           >>> tgis.gran_to_gran('10 year', 'hour')
-           '87658.20000000001 hours'
+           >>> tgis.gran_to_gran('10 year', '1 hour')
+           '87658.2 hours'
             
-           >>> tgis.gran_to_gran('10 year', 'minutes')
-           '5259492.000000001 minutes'
+           >>> tgis.gran_to_gran('10 year', '1 minute')
+           '5259492.0 minutes'
             
-           >>> tgis.gran_to_gran('6 months', 'days')
+           >>> tgis.gran_to_gran('6 months', '1 day')
            '182.62125 days'
             
-           >>> tgis.gran_to_gran('1 months', 'second')
+           >>> tgis.gran_to_gran('1 months', '1 second')
            '2629746.0 seconds'
             
-           >>> tgis.gran_to_gran('1 month', 'seconds', True)
+           >>> tgis.gran_to_gran('1 month', '1 second', True)
            2629746.0
+           
+           >>> tgis.gran_to_gran('30 month', '1 month', True)
+           30
     """
+    def _return(output, tounit, shell):
+        """Fuction to return the output"""
+        if shell:
+            return output
+        else:
+            if output == 1:
+                return "{val} {unit}".format(val=output, unit=tounit)
+            else:
+                return "{val} {unit}s".format(val=output, unit=tounit)
+
     #TODO check the leap second
-    msgr = get_tgis_message_interface()
     if check_granularity_string(from_gran, 'absolute'):
         output, unit = from_gran.split(" ")
         if unit in PLURAL_GRAN:
@@ -1147,18 +1159,14 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
 
         output = ast.literal_eval(output)
         for k, v in CONVERT_GRAN.items():
+            if myunit == tounit:
+                return _return(output, tounit, shell)
             if k == myunit:
                 num, myunit = v.split(" ")
                 output = output * ast.literal_eval(num)
-            if myunit == tounit:
-                if shell:
-                    return output
-                else:
-                    if output == 1:
-                        return "{val} {unit}".format(val=output, unit=tounit)
-                    else:
-                        return "{val} {unit}s".format(val=output, unit=tounit)
-        msgr.warning(_("Probably you need to invert 'from_gran' and 'to_gran'"))
+            if tounit == 'second' and myunit == tounit:
+                return _return(output, tounit, shell)
+        print(_("Probably you need to invert 'from_gran' and 'to_gran'"))
         return False
     else:
         print(_("Invalid absolute granularity"))
