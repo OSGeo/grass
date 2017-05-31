@@ -38,7 +38,7 @@ run_grass = \
 	PATH="$(ARCH_DISTDIR)/bin:$(GISBASE)/bin:$(GISBASE)/scripts:$$PATH" \
 	PYTHONPATH="$(GRASS_PYTHONPATH)" \
 	$(LD_LIBRARY_PATH_VAR)="$(BIN):$(GISBASE)/bin:$(GISBASE)/scripts:$(ARCH_LIBDIR):$(BASE_LIBDIR):$($(LD_LIBRARY_PATH_VAR))" \
-	LC_ALL=C \
+	LC_ALL=C LANG=C LANGUAGE=C \
 	$(1)
 
 # default clean rules
