@@ -79,9 +79,10 @@ import sys
 from grass.script.utils import try_remove
 from grass.script import core as grass
 try:
-    from urllib import urlopen
+    from urllib2 import urlopen, URLError, HTTPError
 except ImportError:
     from urllib.request import urlopen
+    from urllib.error import URLError, HTTPError
 
 
 def main():
@@ -120,7 +121,16 @@ def main():
     grass.debug(wfs_url)
 
     grass.message(_("Retrieving data..."))
-    inf = urlopen(wfs_url)
+    try:
+        inf = urlopen(wfs_url)
+    except HTTPError as e:
+        # GTC WFS request HTTP failure
+        grass.fatal(_("The server couldn't fulfill the request.\nError code: %s") % e.code)
+    except URLError as e:
+        # GTC WFS request network failure
+        grass.fatal(_("Failed to reach the server.\nReason: %s") % e.reason)
+        
+    
     outf = file(tmpxml, 'wb')
     while True:
         s = inf.read()
