@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     double *data[2];		/* Data structure containing real & complex values of FFT */
     struct GModule *module;
     struct Option *input_map, *output_map, *width, *threshold, *orientations;
+    struct History hist;
 
     G_gisinit(argv[0]);
 
@@ -186,6 +187,9 @@ int main(int argc, char *argv[])
 	Rast_put_row(zcfd, cell_row, CELL_TYPE);
     }
     Rast_close(zcfd);
+    Rast_short_history(output_map->answer, "raster", &hist);
+    Rast_command_history(&hist);
+    Rast_write_history(output_map->answer, &hist);
 
     G_free(cell_row);
 
