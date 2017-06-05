@@ -1308,12 +1308,12 @@ class GMFrame(wx.Frame):
         if not self.currentPage:
             self.NewDisplay()
 
-        maptree = self.GetLayerTree()
+        maptrees = [self.notebookLayers.GetPage(i).maptree for i in range(self.notebookLayers.GetPageCount())]
 
         # ask user to save current settings
         if self.workspaceFile and self.workspaceChanged:
             self.OnWorkspaceSave()
-        elif self.workspaceFile is None and maptree.GetCount() > 0:
+        elif self.workspaceFile is None and any(tree.GetCount() for tree in maptrees):
             dlg = wx.MessageDialog(
                 self,
                 message=_(
@@ -1331,8 +1331,14 @@ class GMFrame(wx.Frame):
 
             dlg.Destroy()
 
-        # delete all items
-        maptree.DeleteAllLayers()
+        # delete all layers in map displays
+        for maptree in maptrees:
+            maptree.DeleteAllLayers()
+
+        # delete all decorations
+        for display in self.GetAllMapDisplays():
+            for overlayId in display.decorations.keys():
+                display.RemoveOverlay(overlayId)
 
         # no workspace file loaded
         self.workspaceFile = None
