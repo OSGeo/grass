@@ -1508,6 +1508,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         return layer
 
+    def DeleteAllLayers(self):
+        """Delete all items in the tree"""
+        self.DeleteAllItems()
+        # add new root element
+        self.root = self.AddRoot(_("Map Layers"))
+        self.SetPyData(self.root, (None, None))
+
     def PropertiesDialog(self, layer, show=True):
         """Launch the properties dialog"""
         ltype = self.GetLayerInfo(layer, key='type')
