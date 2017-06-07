@@ -131,6 +131,9 @@ double G_ellipsoid_polygon_area(const double *lon, const double *lat, int n)
     double x1, y1, x2, y2, dx, dy;
     double Qbar1, Qbar2;
     double area;
+    double thresh = 0.1;	/* threshold for latitude differences in arc seconds */
+    
+    thresh = Radians(thresh / 3600.0);
 
     x2 = Radians(lon[n - 1]);
     y2 = Radians(lat[n - 1]);
@@ -155,10 +158,16 @@ double G_ellipsoid_polygon_area(const double *lon, const double *lat, int n)
 		x1 += TWOPI;
 
 	dx = x2 - x1;
-	area += dx * (st->Qp - Q(y2));
 
-	if ((dy = y2 - y1) != 0.0)
-	    area += dx * Q(y2) - (dx / dy) * (Qbar2 - Qbar1);
+	dy = y2 - y1;
+	if (fabs(dy) > thresh) {
+	    /* account for different latitudes y1, y2 */
+	    area += dx * (st->Qp - (Qbar2 - Qbar1) / dy);
+	}
+	else {
+	    /* latitudes y1, y2 are (nearly) identical */
+	    area += dx * (st->Qp - Q(y2));
+	}
     }
     if ((area *= st->AE) < 0.0)
 	area = -area;
