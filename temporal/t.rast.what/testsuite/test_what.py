@@ -215,6 +215,54 @@ class TestRasterWhatFails(TestCase):
         self.assertModuleFail("t.rast.what", points="points", strds="A",
                               coordinates=(30, 30, 45, 45), output="out.txt")
 
+
+class TestRasterWhatNull(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        """Initiate the temporal GIS and set the region
+        """
+        cls.use_temp_region()
+        cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,  t=50,  res=10,  res3=10)
+
+        cls.runModule("r.mapcalc", expression="a_1 = 100",  overwrite=True)
+        cls.runModule("r.mapcalc", expression="a_null = null()",  overwrite=True)
+
+        cls.runModule("v.random", output="points", npoints=1, seed=1, overwrite=True)
+
+        cls.runModule("t.create",  type="strds",  temporaltype="absolute",
+                                 output="A",  title="A test",  description="A test",
+                                 overwrite=True)
+        cls.runModule("t.register",  flags="i",  type="raster",  input="A",
+                                     maps="a_1,a_null",  start="2001-01-01",
+                                     increment="3 months",  overwrite=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove the temporary region
+        """
+        cls.runModule("t.remove",  flags="rf",  type="strds",
+                                   inputs="A")
+        cls.del_temp_region()
+
+    def test_null_value(self):
+        """Test setting the null value
+        """
+
+        t_rast_what = SimpleModule("t.rast.what",  strds="A",  output="-",
+                                   points="points", flags="n",
+                                   where="start_time >= '2001-01-01'",
+                                   null_value="NULL",
+                                   nprocs=4,  overwrite=True,  verbose=True)
+        self.assertModule(t_rast_what)
+
+        text="""x|y|start|end|value
+115.0043586274|36.3593955783|2001-01-01 00:00:00|2001-04-01 00:00:00|100
+115.0043586274|36.3593955783|2001-04-01 00:00:00|2001-07-01 00:00:00|NULL
+"""
+        self.assertLooksLike(text,  t_rast_what.outputs.stdout)
+
+
 if __name__ == '__main__':
     from grass.gunittest.main import test
     test()
