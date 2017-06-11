@@ -18,7 +18,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #else
 #include <sys/mman.h>
@@ -41,9 +41,9 @@ static void map_file(void)
     if (fd < 0)
         return;
 
-#ifdef __MINGW32__
-    png.handle = CreateFileMapping((HANDLE)_get_osfhandle(fd), NULL,
-                                   PAGE_READWRITE, 0, size, NULL);
+#ifdef _WIN32
+    png.handle = CreateFileMapping((HANDLE) _get_osfhandle(fd),
+                                   NULL, PAGE_READWRITE, 0, size, NULL);
     if (!png.handle)
         return;
     ptr = MapViewOfFile(png.handle, FILE_MAP_WRITE, 0, 0, size);

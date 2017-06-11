@@ -12,7 +12,7 @@
  * \author USACERL and many others
  */
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -51,7 +51,7 @@ static void sync_and_close(int fd, char *element, char *name)
      * after you are done writing all your data.
      */
 
-#ifndef __MINGW32__
+#ifndef _WIN32
     if (fsync(fd)) {
         G_warning(_("Unable to flush file %s for raster map %s: %s"), element,
                   name, strerror(errno));

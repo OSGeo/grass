@@ -1047,11 +1047,11 @@ double set_default_nodata_value(GDALDataType datatype, double min, double max)
 
     case GDT_Float32:
     case GDT_CFloat32:
-        return NAN;
+        return INFINITY;
 
     case GDT_Float64:
     case GDT_CFloat64:
-        return NAN;
+        return INFINITY;
 
     default:
         return 0;

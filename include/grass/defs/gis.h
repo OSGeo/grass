@@ -79,6 +79,7 @@
  * if GDAL is compiled with Visual Studio and GRASS is compiled with
  * MinGW. This patch must be applied before other GDAL/OGR headers are
  * included, as done by gprojects.h and vector.h */
+#ifndef _MSC_VER
 #if defined(__MINGW32__) && HAVE_GDAL
 #include <gdal_version.h>
 #if GDAL_VERSION_NUM < 2030000
@@ -90,6 +91,7 @@
 #endif
 #endif
 #endif
+#endif /* _MSC_VER */
 
 /* adj_cellhd.c */
 void G_adjust_Cell_head(struct Cell_head *, int, int);
@@ -498,7 +500,7 @@ void G_ls(const char *, FILE *);
 void G_ls_format(char **, int, int, FILE *);
 
 /* ls_filter.c */
-#ifdef HAVE_REGEX_H
+#if defined(HAVE_REGEX_H) || defined(HAVE_PCRE_H)
 void *G_ls_regex_filter(const char *, int, int, int);
 void *G_ls_glob_filter(const char *, int, int);
 void G_free_ls_filter(void *);

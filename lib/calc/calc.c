@@ -20,7 +20,7 @@ static void handle_fpe(int n UNUSED)
 
 void pre_exec(void)
 {
-#ifndef __MINGW32__
+#ifndef _WIN32
 #ifdef SIGFPE
     struct sigaction act;
 
@@ -37,7 +37,7 @@ void pre_exec(void)
 
 void post_exec(void)
 {
-#ifndef __MINGW32__
+#ifndef _WIN32
 #ifdef SIGFPE
     struct sigaction act;
 

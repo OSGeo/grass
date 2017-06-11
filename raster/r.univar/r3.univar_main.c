@@ -134,8 +134,8 @@ int main(int argc, char *argv[])
 
     dmin = NAN;
     dmax = NAN;
-    zone_info.min = 0;
-    zone_info.max = 0;
+    zone_info.min = NAN;
+    zone_info.max = NAN;
     zone_info.n_zones = 0;
 
     /* open 3D zoning raster with default region */

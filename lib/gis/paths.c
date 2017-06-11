@@ -3,7 +3,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <pwd.h>
 #else
 #include <windows.h>
@@ -26,7 +26,7 @@
 
 int G_mkdir(const char *path)
 {
-#ifdef __MINGW32__
+#ifdef _WIN32
     return mkdir(path);
 #else
     return mkdir(path, 0777);
@@ -62,7 +62,7 @@ int G_is_dirsep(char c)
 int G_is_absolute_path(const char *path)
 {
     if (G_is_dirsep(path[0])
-#ifdef __MINGW32__
+#ifdef _WIN32
         || (isalpha(path[0]) && (path[1] == ':') && G_is_dirsep(path[2]))
 #endif
     )
@@ -144,7 +144,7 @@ int G_stat(const char *file_name, struct stat *buf)
 
 int G_lstat(const char *file_name, struct stat *buf)
 {
-#ifdef __MINGW32__
+#ifdef _WIN32
     return stat(file_name, buf);
 #else
     return lstat(file_name, buf);
@@ -164,7 +164,7 @@ int G_lstat(const char *file_name, struct stat *buf)
 int G_owner(const char *path)
 {
 
-#ifndef __MINGW32__
+#ifndef _WIN32
     struct stat info;
 
     G_stat(path, &info);

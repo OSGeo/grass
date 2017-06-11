@@ -30,9 +30,7 @@
 #include <assert.h>
 #include <unistd.h>
 #include <string.h>
-#include <stdint.h>
-#include <stddef.h>
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <pwd.h>
 #endif
 #include <sys/types.h>
@@ -46,7 +44,7 @@
  * path [caller must G_free ()] on success, or NULL on failure
  *************************************************************************/
 
-#ifndef __MINGW32__ /* TODO */
+#ifndef _WIN32             /* TODO */
 static char *_make_toplevel(void)
 {
     size_t len;

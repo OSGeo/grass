@@ -38,8 +38,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-
-extern "C" {
+extern "C"
+{
 #include <grass/gis.h>
 #include <grass/glocale.h>
 }
