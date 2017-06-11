@@ -1,0 +1,198 @@
+
+macro(make_script_in_dir script_name)
+
+set(SCRIPTDIR ${CMAKE_CURRENT_SOURCE_DIR}/${script_name}) 
+set(PGM ${script_name})
+#message(FATAL_ERROR "SCRIPTDI=${PGM}")
+
+#file(GLOB ETCPYCFILES  "${SCRIPTDIR}/*.pyc")
+
+file(GLOB ETCPYFILES   "${SCRIPTDIR}/*.py")
+
+
+if(NOT ETCPYFILES)
+  message(FATAL_ERROR "ETCPYFILES empty")
+endif()
+
+
+#install(FILES ${ETCPYCFILES} DESTINATION etc)
+
+#set(ETCDIR  "$(ETC)/$(PGM)")
+
+if(MINGW)
+  # $(BIN)/$(PGM).bat: $(MODULE_TOPDIR)/scripts/windows_launch.bat
+  # sed -e "s#SCRIPT_NAME#$(PGM)#" -e "s#SCRIPT_DIR#$(SCRIPT_DIR)#" $(MODULE_TOPDIR)/scripts/windows_launch.bat > $@
+  # unix2dos $@
+  configure_file(
+    ${CMAKE_SOURCE_DIR}/scripts/windows_launch.bat
+    ${CMAKE_BINARY_DIR}/bin/${PGM}.bat
+    )
+  install( PROGRAMS ${CMAKE_BINARY_DIR}/bin/${PGM}.bat DESTINATION bin )
+endif()
+
+foreach(pyfile ${ETCPYFILES})
+  get_filename_component(pyfile_NAME ${pyfile} NAME)
+add_custom_target(generate_locale_for_${pyfile_NAME} 
+  COMMAND ${CMAKE_COMMAND}
+  -DPGM=${pyfile_NAME}
+  -DINPUT_FILE=${pyfile}
+  -DSTRINGDIR=${CMAKE_BINARY_DIR}/locale/scriptstrings
+  -DBIN_DIR=${CMAKE_BINARY_DIR}
+  -P ${CMAKE_SOURCE_DIR}/generate_strings.cmake
+  DEPENDS g.parser
+  )
+
+install(FILES ${pyfile} DESTINATION etc)
+
+add_custom_target(${PGM} DEPENDS generate_locale_for_${pyfile_NAME} )
+endforeach()
+
+endmacro()
+
+# run_grass = \
+# 	GISRC=$(RUN_GISRC) \
+# 	GISBASE=$(RUN_GISBASE) \
+# 	PATH="$(ARCH_DISTDIR)/bin:$(GISBASE)/bin:$(GISBASE)/scripts:$$PATH" \
+# 	PYTHONPATH="$(GRASS_PYTHONPATH)" \
+# 	$(LD_LIBRARY_PATH_VAR)="$(BIN):$(GISBASE)/bin:$(GISBASE)/scripts:$(ARCH_LIBDIR):$(BASE_LIBDIR):$($(LD_LIBRARY_PATH_VAR))" \
+# 	LC_ALL=C \
+# $(1)
+
+set(GRASS_VERSION_MAJOR "7")
+set(GRASS_VERSION_MINOR "2")
+set(GISDBASE ${CMAKE_SOURCE_DIR})
+
+configure_file(${CMAKE_SOURCE_DIR}/demolocation/grassrc.tmpl
+  "${CMAKE_BINARY_DIR}/demolocation/.grassrc${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}")
+
+# macro(run_grass PGM prog)
+#   set(ENV{GISRC} "${CMAKE_BINARY_DIR}/demolocation/.grassrc${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}")
+#   set(ENV{GISBASE} "${CMAKE_BINARY_DIR}")
+#   set(ENV{PATH} "${CMAKE_BINARY_DIR}/bin:${CMAKE_BINARY_DIR}/scripts:$ENV{PATH}")
+#   set(ENV{PYTHONPATH} "${CMAKE_BINARY_DIR}/gui/wxpython:${CMAKE_BINARY_DIR}/etc/python:$ENV{PYTHONPATH}")
+#   set(ENV{LD_LIBRARY_PATH} "${CMAKE_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
+#   set(ENV{LC_ALL} C)
+#   execute_process(COMMAND ${prog} ${ARGN}
+#     OUTPUT_VARIABLE run_grass_OV
+#     ERROR_VARIABLE run_grass_EV
+#     #OUTPUT_FILE /tmp/tt.out
+#     RESULT_VARIABLE run_grass_RV
+#     )
+#   string(REGEX REPLACE "\n" ";" varname "${run_grass_OV}")
+#   set(${PGM}_to_translate_contents)
+    
+#   foreach(line ${varname})
+#     string(REPLACE "\"" "\\\"" line "${line}")
+#     set(line "_(\"${line}\")")
+#     message("line=${line}")
+#     list(APPEND ${PGM}_to_translate_contents "${line}")
+#   endforeach()
+
+#   string(REGEX REPLACE ";" "\n" ${PGM}_to_translate_contents "${${PGM}_to_translate_contents}")
+#   file(WRITE "${STRINGDIR}/${PGM}_to_translate.c" "${${PGM}_to_translate_contents}\n")
+# endmacro() #run_grass
+
+
+# strings = $(call run_grass,g.parser -t $(1) | sed s/\"/\\\\\"/g | sed 's/.*/_("&")/' > $(2))
+
+# $(STRINGDIR)/%_to_translate.c: %.py
+# 	-$(call strings,$<,$@)
+
+# $(STRINGDIR)/%_to_translate.c: %
+# 	-$(call strings,$<,$@)
+
+
+# install:
+# 	$(INSTALL) $(SCRIPT) $(INST_DIR)/scripts/
+# 	$(INSTALL_DATA) $(HTMLDIR)/$(PGM).html $(INST_DIR)/docs/html/
+# 	$(eval IMG := $(wildcard $(HTMLDIR)/*.png) $(wildcard $(HTMLDIR)/*.jpg))
+# 	if [ -n "$(IMG)" ] ; then \
+# 		$(INSTALL_DATA) $(IMG)  $(INST_DIR)/docs/html/ ; \
+# 	fi
+# 	$(INSTALL_DATA) $(ARCH_DISTDIR)/docs/man/man1/$(PGM).1 $(INST_DIR)/docs/man/man1/
+# 	if [ -d "$(ETC)/$(PGM)" ] ; then \
+# 		cp -RL $(ETC)/$(PGM) $(INST_DIR)/etc/ ; \
+# 	fi
+
+# .PHONY: script scriptstrings
+
+make_script_in_dir(r.shade)
+
+make_script_in_dir(d.correlate)
+set(scripts_SUBDIRS
+  d.correlate
+  d.frame
+  d.out.file
+  d.to.rast
+  d.polar
+  d.rast.edit
+  d.rast.leg
+  d.redraw
+  d.shade
+  d.what.rast
+  d.what.vect
+  db.dropcolumn
+  db.droptable
+  db.in.ogr
+  db.out.ogr
+  db.test
+  db.univar
+  g.extension
+  g.extension.all
+  g.manual
+  g.search.modules
+  i.colors.enhance
+  i.image.mosaic
+  i.in.spotvgt
+  i.oif
+  i.pansharpen
+  i.spectral
+  i.tasscap
+  m.proj
+  r.blend
+  r.buffer.lowmem
+  r.colors.stddev
+  r.fillnulls
+  r.grow
+  r.import
+  r.in.aster
+  r.in.srtm
+  r.in.wms
+  r.mask
+  r.out.xyz
+  r.pack
+  r.plane
+  r.reclass.area
+  r.rgb
+  r.shade
+  r.tileset
+  r.unpack
+  r3.in.xyz
+  v.build.all
+  v.centroids
+  v.db.addcolumn
+  v.db.addtable
+  v.db.join
+  v.db.dropcolumn
+  v.db.droprow
+  v.db.droptable
+  v.db.renamecolumn
+  v.db.reconnect.all
+  v.db.univar
+  v.db.update
+  v.dissolve
+  v.import
+  v.in.e00
+  v.in.geonames
+  v.in.lines
+  v.in.mapgen
+  v.in.wfs
+  v.rast.stats
+  v.report
+  v.pack
+  v.to.lines
+  v.unpack
+  v.what.strds
+  v.what.vect
+  wxpyimgview
+  )
