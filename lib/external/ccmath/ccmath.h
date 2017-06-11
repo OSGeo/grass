@@ -33,13 +33,21 @@
 #endif
 
                /* Complex Types */
-
 #ifndef CPX
+#ifndef _MSC_VER
 struct complex
 {
     double re, im;
 };
 typedef struct complex Cpx;
+#else
+/* _MSVC has complex struct and cannot be used */
+struct gcomplex
+{
+    double re, im;
+};
+typedef struct gcomplex Cpx;
+#endif /* _MSC_VER */
 
 #define CPX  1
 #endif

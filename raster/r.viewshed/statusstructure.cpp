@@ -40,7 +40,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-
 extern "C"
 {
 #include <grass/gis.h>

@@ -1,0 +1,4 @@
+GISDBASE: @gisbase_init_dir@
+LOCATION_NAME: demolocation
+MAPSET: PERMANENT
+GUI: text
