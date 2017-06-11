@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
     const char *outpre;
     char output[GNAME_MAX];
     const char *title;
-    double null_val = NAN;
+    double null_val = INFINITY;
     int is_fp;
     int is_signed;
     int bytes, hbytes;

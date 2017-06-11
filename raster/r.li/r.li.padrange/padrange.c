@@ -308,19 +308,19 @@ int calculate(int fd, struct area_entry *ad, double *result)
         cell_size_m = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
                       (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
 
-        /* get min and max patch size */
-        min = INFINITY;
-        max = -INFINITY;
-        for (old_pid = 1; old_pid <= pid; old_pid++) {
-            if (pst[old_pid].count > 0) {
-                area_p = cell_size_m * pst[old_pid].count / 10000;
-                if (min > area_p)
-                    min = area_p;
-                if (max < area_p)
-                    max = area_p;
-            }
-        }
-        *result = max - min;
+	/* get min and max patch size */
+	min = INFINITY;
+	max = -INFINITY;
+	for (old_pid = 1; old_pid <= pid; old_pid++) {
+	    if (pst[old_pid].count > 0) {
+		area_p = cell_size_m * pst[old_pid].count / 10000;
+		if (min > area_p)
+		    min = area_p;
+		if (max < area_p)
+		    max = area_p;
+	    }
+	}
+	*result = max - min;
     }
     else
         Rast_set_d_null_value(result, 1);
@@ -542,19 +542,19 @@ int calculateD(int fd, struct area_entry *ad, double *result)
         cell_size_m = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
                       (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
 
-        /* get min and max patch size */
-        min = INFINITY;
-        max = -INFINITY;
-        for (old_pid = 1; old_pid <= pid; old_pid++) {
-            if (pst[old_pid].count > 0) {
-                area_p = cell_size_m * pst[old_pid].count / 10000;
-                if (min > area_p)
-                    min = area_p;
-                if (max < area_p)
-                    max = area_p;
-            }
-        }
-        *result = max - min;
+	/* get min and max patch size */
+	min = INFINITY;
+	max = -INFINITY;
+	for (old_pid = 1; old_pid <= pid; old_pid++) {
+	    if (pst[old_pid].count > 0) {
+		area_p = cell_size_m * pst[old_pid].count / 10000;
+		if (min > area_p)
+		    min = area_p;
+		if (max < area_p)
+		    max = area_p;
+	    }
+	}
+	*result = max - min;
     }
     else
         Rast_set_d_null_value(result, 1);
@@ -776,19 +776,19 @@ int calculateF(int fd, struct area_entry *ad, double *result)
         cell_size_m = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
                       (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
 
-        /* get min and max patch size */
-        min = INFINITY;
-        max = -INFINITY;
-        for (old_pid = 1; old_pid <= pid; old_pid++) {
-            if (pst[old_pid].count > 0) {
-                area_p = cell_size_m * pst[old_pid].count / 10000;
-                if (min > area_p)
-                    min = area_p;
-                if (max < area_p)
-                    max = area_p;
-            }
-        }
-        *result = max - min;
+	/* get min and max patch size */
+	min = INFINITY;
+	max = -INFINITY;
+	for (old_pid = 1; old_pid <= pid; old_pid++) {
+	    if (pst[old_pid].count > 0) {
+		area_p = cell_size_m * pst[old_pid].count / 10000;
+		if (min > area_p)
+		    min = area_p;
+		if (max < area_p)
+		    max = area_p;
+	    }
+	}
+	*result = max - min;
     }
     else
         Rast_set_d_null_value(result, 1);

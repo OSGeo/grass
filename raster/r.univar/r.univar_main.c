@@ -207,8 +207,8 @@ int main(int argc, char *argv[])
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
-    zone_info.min = 0;
-    zone_info.max = 0;
+    zone_info.min = NAN;
+    zone_info.max = NAN;
     zone_info.n_zones = 0;
 
     /* setting up thread workspace */

@@ -22,7 +22,10 @@
 #include "unionFind.h"
 #include "common.h"
 
-#define FLOOD_DEBUG if (0)
+#ifdef _MSC_VER
+#pragma warning(default:4716)
+#endif
+#define FLOOD_DEBUG if(0)
 
 /************************************************************/
 /* INPUT: stream containing the edgelist of watershed adjacency graph
