@@ -150,7 +150,7 @@ class PreprocessorParser(object):
         if sys.platform == 'darwin':
             cmd += " -U __BLOCKS__"
         cmd += " -U __GNUC__"
-        # fails with GCC 7
+        # fails with GCC 7, https://trac.osgeo.org/grass/ticket/3331
         #cmd += " -dD"
         for path in self.options.include_search_paths:
             cmd += " -I%s" % path
