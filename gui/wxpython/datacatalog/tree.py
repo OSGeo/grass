@@ -842,6 +842,34 @@ class DataCatalogTree(LocationMapTree):
             self.changeLocation.emit(mapset=self.selected_mapset.label, location=self.selected_location.label)
         self.ExpandCurrentMapset()
 
+    def OnMetadata(self, event):
+        """Show metadata of any raster/vector/3draster"""
+        def done(event):
+            gscript.try_remove(gisrc)
+
+        if self.selected_type.label == 'raster':
+            cmd = ['r.info']
+        elif self.selected_type.label == 'vector':
+            cmd = ['v.info']
+        elif self.selected_type.label == 'raster_3d':
+            cmd = ['r3.info']
+        cmd.append('map=%s@%s' % (self.selected_layer.label, self.selected_mapset.label))
+
+        gisrc, env = gscript.create_environment(
+            gisenv()['GISDBASE'],
+            self.selected_location.label, self.selected_mapset.label)
+        # print output to command log area
+        # temp gisrc file must be deleted onDone
+        self._giface.RunCmd(cmd, env=env, onDone=done)
+
+    def OnCopyName(self, event):
+        """Copy layer name to clipboard"""
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            do.SetText('%s@%s' % (self.selected_layer.label, self.selected_mapset.label))
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
+
     def Filter(self, text):
         """Filter tree based on name and type."""
         text = text.strip()
@@ -905,6 +933,10 @@ class DataCatalogTree(LocationMapTree):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyMap, item)
 
+        item = wx.MenuItem(menu, wx.NewId(), _("Copy &name"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyName, item)
+
         item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
@@ -921,12 +953,17 @@ class DataCatalogTree(LocationMapTree):
         self.Bind(wx.EVT_MENU, self.OnRenameMap, item)
         item.Enable(currentMapset)
 
+        menu.AppendSeparator()
+
         if not isinstance(self._giface, StandaloneGrassInterface) and \
            self.selected_location.label == genv['LOCATION_NAME']:
-            menu.AppendSeparator()
             item = wx.MenuItem(menu, wx.NewId(), _("&Display layer"))
             menu.AppendItem(item)
             self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
+
+        item = wx.MenuItem(menu, wx.NewId(), _("Show &metadata"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnMetadata, item)
 
         self.PopupMenu(menu)
         menu.Destroy()
