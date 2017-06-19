@@ -294,6 +294,9 @@ double P_estimate_splinestep(struct Map_info *Map, double *dens, double *dist)
 	    }
 	}
     }
+    Vect_destroy_cats_struct(categories);
+    Vect_destroy_line_struct(points);
+
     if (npoints > 0) {
 	/* estimated average distance between points in map units */
 	*dist = sqrt(((xmax - xmin) * (ymax - ymin)) / npoints);
