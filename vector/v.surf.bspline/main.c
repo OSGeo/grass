@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     spline_step_flag->key = 'e';
     spline_step_flag->label = _("Estimate point density and distance");
     spline_step_flag->description =
-	_("Estimate point density and distance for the input vector points within the current region extends and quit");
+	_("Estimate point density and distance in map units for the input vector points within the current region extents and quit");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     in_opt->label = _("Name of input vector point map");
@@ -285,6 +285,7 @@ int main(int argc, char *argv[])
     /* Estimate point density and mean distance for current region */
     if (spline_step_flag->answer) {
 	double dens, dist;
+
 	if (P_estimate_splinestep(&In, &dens, &dist) == 0) {
 	    fprintf(stdout, _("Estimated point density: %.4g"), dens);
             fprintf(stdout, _("Estimated mean distance between points: %.4g"), dist);
