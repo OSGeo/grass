@@ -23,6 +23,15 @@ The nearest center can be determined using either costs from the
 nearest center or costs to the nearest center with option 
 <b>method</b>. See example below.
 <p>
+By default, the category value of the nearest center is used as 
+category value for output lines. With the <b>-u</b> flag, output lines 
+become unique categories and an attribute table is created with the 
+fields <em>cat, ocat, center</em>. The <em>ocat</em> field holds the 
+original line category in <b>arc_layer</b> and the <em>center</em> 
+field holds the center category in <b>node_layer</b>. Additionally, 
+original line categories are copied from the input <b>arc_layer</b> to 
+layer 2 in the output, together with any attribute table.
+<p>
 Application of flag <b>-t</b> enables a turntable support. 
 This flag requires additional parameters <b>turn_layer</b> and <b>turn_cat_layer</b> 
 that are otherwise ignored.
