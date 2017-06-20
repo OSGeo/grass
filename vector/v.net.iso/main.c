@@ -32,7 +32,7 @@ typedef struct
 
 typedef struct
 {
-    int centre;			/* neares centre, initially -1 *//* currently not used */
+    int centre;			/* nearest centre, initially -1 *//* currently not used */
     double cost;		/* costs from this centre, initially not undefined */
 } NODE;
 
@@ -40,6 +40,7 @@ typedef struct
 {				/* iso point along the line */
     int iso;			/* index of iso line in iso array of costs */
     double distance;		/* distance along the line from the beginning for both directions */
+    int centre;			/* nearest centre */
 } ISOPOINT;
 
 int main(int argc, char **argv)
@@ -51,20 +52,28 @@ int main(int argc, char **argv)
     struct Option *map, *output;
     struct Option *afield_opt, *nfield_opt, *afcol, *abcol, *ncol, *type_opt,
 	*term_opt, *cost_opt, *tfield_opt, *tucfield_opt;
-    struct Flag *geo_f, *turntable_f;
+    struct Flag *geo_f, *turntable_f, *ucat_f;
     struct GModule *module;
     struct Map_info Map, Out;
     struct cat_list *catlist;
     CENTER *Centers = NULL;
     int acentres = 0, ncentres = 0;
     NODE *Nodes;
-    struct line_cats *Cats;
+    struct line_cats *Cats, *ICats, *OCats;
     struct line_pnts *Points, *SPoints;
     int niso, aiso;
     double *iso;
+    char **isolbl;
     int npnts1, apnts1 = 0, npnts2, apnts2 = 0;
     ISOPOINT *pnts1 = NULL, *pnts2 = NULL;
     int next_iso;
+
+    /* Attribute table */
+    int unique_cats, ucat, ocat, n;
+    char buf[2000];
+    dbString sql;
+    dbDriver *driver;
+    struct field_info *Fi;
 
     G_gisinit(argv[0]);
 
@@ -158,12 +167,21 @@ int main(int argc, char **argv)
     geo_f->description =
 	_("Use geodesic calculation for longitude-latitude locations");
 
+    ucat_f = G_define_flag();
+    ucat_f->key = 'u';
+    ucat_f->label =
+	_("Create unique categories and attribute table");
+    ucat_f->description =
+	_("Default: one category for each iso-band");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     Vect_check_input_output_name(map->answer, output->answer, G_FATAL_EXIT);
 
     Cats = Vect_new_cats_struct();
+    ICats = Vect_new_cats_struct();
+    OCats = Vect_new_cats_struct();
     Points = Vect_new_line_struct();
     SPoints = Vect_new_line_struct();
 
@@ -172,9 +190,12 @@ int main(int argc, char **argv)
     catlist = Vect_new_cat_list();
     Vect_str_to_cat_list(term_opt->answer, catlist);
 
+    unique_cats = ucat_f->answer;
+
     /* Iso costs */
     aiso = 1;
     iso = (double *)G_malloc(aiso * sizeof(double));
+    isolbl = (char **)G_malloc(aiso * sizeof(char *));
     /* Set first iso to 0 */
     iso[0] = 0;
     niso = 1;
@@ -183,6 +204,7 @@ int main(int argc, char **argv)
 	if (niso == aiso) {
 	    aiso += 1;
 	    iso = (double *)G_realloc(iso, aiso * sizeof(double));
+	    isolbl = (char **)G_realloc(isolbl, aiso * sizeof(char *));
 	}
 	iso[niso] = atof(cost_opt->answers[i]);
 	if (iso[niso] <= 0)
@@ -190,6 +212,9 @@ int main(int argc, char **argv)
 
 	if (iso[niso] <= iso[niso - 1])
 	    G_fatal_error(_("Iso cost: %f less than previous"), iso[niso]);
+
+	isolbl[niso - 1] = NULL;
+	G_asprintf(&isolbl[niso - 1], "%g - %g", iso[niso - 1], iso[niso]);
 
 	G_verbose_message(_("Iso cost %d: %f"), niso, iso[niso]);
 	niso++;
@@ -200,6 +225,9 @@ int main(int argc, char **argv)
     if (niso < 2)
 	G_warning(_
 		  ("Not enough costs, everything reachable falls to first band"));
+
+    isolbl[niso - 1] = NULL;
+    G_asprintf(&isolbl[niso - 1], "> %g", iso[niso - 1]);
 
     if (geo_f->answer)
 	geo = 1;
@@ -292,7 +320,7 @@ int main(int argc, char **argv)
     apnts2 = 1;
     pnts2 = (ISOPOINT *) G_malloc(apnts2 * sizeof(ISOPOINT));
 
-    /* Fill Nodes by neares centre and costs from that centre */
+    /* Fill Nodes by nearest centre and costs from that centre */
     for (centre = 0; centre < ncentres; centre++) {
 	node1 = Centers[centre].node;
 	Vect_net_get_node_cost(&Map, node1, &n1cost);
@@ -375,12 +403,56 @@ int main(int argc, char **argv)
 
     Vect_hist_command(&Out);
 
+    Fi = NULL;
+    driver = NULL;
+    if (unique_cats) {
+	/* create attribute table:
+	 * cat: new category
+	 * ocat: original category in afield
+	 * centre: nearest centre
+	 * isonr: iso zone number
+	 * isolbl: iso zone label
+	 */
+	Fi = Vect_default_field_info(&Out, 1, NULL, GV_MTABLE);
+	Vect_map_add_dblink(&Out, 1, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
+			    Fi->driver);
+
+	driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	if (driver == NULL)
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			  Fi->database, Fi->driver);
+	db_set_error_handler_driver(driver);
+
+	sprintf(buf,
+		"create table %s ( %s integer, ocat integer, center integer, isonr integer, "
+		"isolbl varchar(255) )",
+		Fi->table, GV_KEY_COLUMN);
+
+	db_init_string(&sql);
+	db_set_string(&sql, buf);
+	G_debug(2, "%s", db_get_string(&sql));
+
+	if (db_execute_immediate(driver, &sql) != DB_OK) {
+	    G_fatal_error(_("Unable to create table: '%s'"), db_get_string(&sql));
+	}
+
+	if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
+	    G_warning(_("Cannot create index"));
+
+	if (db_grant_on_table
+	    (driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
+	    G_fatal_error(_("Cannot grant privileges on table <%s>"), Fi->table);
+
+	db_begin_transaction(driver);
+    }
+
     G_message("Generating isolines...");
     nlines = Vect_get_num_lines(&Map);
+    ucat = 1;
     for (line = 1; line <= nlines; line++) {
 	G_percent(line, nlines, 2);
 
-	ltype = Vect_read_line(&Map, Points, NULL, line);
+	ltype = Vect_read_line(&Map, Points, ICats, line);
 	if (!(ltype & type)) {
 	    continue;
 	}
@@ -388,6 +460,15 @@ int main(int argc, char **argv)
 	l = Vect_line_length(Points);
 	if (l == 0)
 	    continue;
+
+	if (unique_cats) {
+	    Vect_reset_cats(OCats);
+	    for (n = 0; n < ICats->n_cats; n++) {
+		if (ICats->field[n] == afield) {
+		    Vect_cat_set(OCats, 2, ICats->cat[n]);
+		}
+	    }
+	}
 
 	if (turntable_f->answer) {
 	    centre1 = Nodes[line * 2].centre;
@@ -450,6 +531,7 @@ int main(int argc, char **argv)
 		/* Add first */
 		pnts1[0].iso = next_iso;
 		pnts1[0].distance = 0;
+		pnts1[0].centre = centre1;
 		npnts1++;
 		next_iso++;
 
@@ -469,6 +551,7 @@ int main(int argc, char **argv)
 		    }
 		    pnts1[npnts1].iso = next_iso;
 		    pnts1[npnts1].distance = l1;
+		    pnts1[npnts1].centre = centre1;
 		    G_debug(3,
 			    "  forward %d : iso %d : distance %f : cost %f",
 			    npnts1, next_iso, l1, iso[next_iso]);
@@ -492,6 +575,7 @@ int main(int argc, char **argv)
 		/* Add first */
 		pnts2[0].iso = next_iso;
 		pnts2[0].distance = l;
+		pnts2[0].centre = centre2;
 		npnts2++;
 		next_iso++;
 
@@ -511,6 +595,7 @@ int main(int argc, char **argv)
 		    }
 		    pnts2[npnts2].iso = next_iso;
 		    pnts2[npnts2].distance = l - l1;
+		    pnts2[npnts2].centre = centre2;
 		    G_debug(3,
 			    "  backward %d : iso %d : distance %f : cost %f",
 			    npnts2, next_iso, l - l1, iso[next_iso]);
@@ -563,12 +648,29 @@ int main(int argc, char **argv)
 			npnts2--;
 		    }
 		    else {
+			
 			break;
 		    }
 		}
 	    }
 	    G_debug(3, "  npnts1 2. cut = %d", npnts1);
 	    G_debug(3, "  npnts2 2. cut = %d", npnts2);
+	    
+	    if (npnts1 > 0 && npnts2 > 0) {
+		if (pnts1[npnts1 - 1].centre != pnts2[npnts2 - 1].centre) {
+
+		    if (npnts1 == apnts1) {
+			apnts1 += 1;
+			pnts1 =
+			    (ISOPOINT *) G_realloc(pnts1,
+						   apnts1 * sizeof(ISOPOINT));
+		    }
+		    pnts1[npnts1].centre = pnts2[npnts2 - 1].centre;
+		    pnts1[npnts1].iso = pnts2[npnts2 - 1].iso;
+		    pnts1[npnts1].distance = (pnts1[npnts1 - 1].distance + pnts2[npnts2 - 1].distance) / 2.0;
+		    npnts1++;
+		}
+	    }
 
 	    /* Now we have points in both directions which may not overlap, npoints in one
 	     *  direction may be 0 but not both */
@@ -581,6 +683,7 @@ int main(int argc, char **argv)
 			pnts2[npnts2 - 1].iso);
 		pnts1[0].iso = pnts2[npnts2 - 1].iso;	/* use last point iso in reverse direction */
 		pnts1[0].distance = 0;
+		pnts1[0].centre = pnts2[npnts2 - 1].centre;
 		npnts1++;
 	    }
 	    for (i = npnts2 - 1; i >= 0; i--) {
@@ -596,12 +699,14 @@ int main(int argc, char **argv)
 		}
 		pnts1[npnts1].iso = pnts2[i].iso - 1;	/* last may be -1, but it is not used */
 		pnts1[npnts1].distance = pnts2[i].distance;
+		pnts1[npnts1].centre = pnts2[i].centre;
 		npnts1++;
 	    }
 	    /* In case npnts2 == 0 add point at the end */
 	    if (npnts2 == 0) {
 		pnts1[npnts1].iso = 0;	/* not used */
 		pnts1[npnts1].distance = l;
+		pnts1[npnts1].centre = centre1;
 		npnts1++;
 	    }
 
@@ -619,7 +724,29 @@ int main(int argc, char **argv)
 		}
 		else {
 		    Vect_reset_cats(Cats);
-		    Vect_cat_set(Cats, 1, cat);
+		    if (unique_cats) {
+			Vect_cat_set(Cats, 1, ucat);
+			for (n = 0; n < OCats->n_cats; n++) {
+			    Vect_cat_set(Cats, 2, OCats->cat[n]);
+			}
+			ocat = -1;
+			Vect_cat_get(ICats, afield, &ocat);
+
+			sprintf(buf,
+				"insert into %s values ( %d, %d, %d, %d, \'%s\')",
+				Fi->table, ucat, ocat, Centers[pnts1[i - 1].centre].cat,
+				pnts1[i - 1].iso + 1, isolbl[pnts1[i - 1].iso]);
+			db_set_string(&sql, buf);
+			G_debug(3, "%s", db_get_string(&sql));
+
+			if (db_execute_immediate(driver, &sql) != DB_OK) {
+			    G_fatal_error(_("Cannot insert new record: %s"),
+					  db_get_string(&sql));
+			}
+			ucat++;
+		    }
+		    else
+			Vect_cat_set(Cats, 1, cat);
 		    Vect_write_line(&Out, ltype, SPoints, Cats);
 		}
 	    }
@@ -628,8 +755,35 @@ int main(int argc, char **argv)
 	    /* arc is not reachable */
 	    G_debug(3, "  -> arc is not reachable");
 	    Vect_reset_cats(Cats);
+	    if (unique_cats) {
+		Vect_cat_set(Cats, 1, ucat);
+		for (n = 0; n < OCats->n_cats; n++) {
+		    Vect_cat_set(Cats, 2, OCats->cat[n]);
+		}
+		ocat = -1;
+		Vect_cat_get(ICats, afield, &ocat);
+
+		sprintf(buf,
+			"insert into %s values ( %d, %d, %d, %d, \'%s\')",
+			Fi->table, ucat, ocat, -1, 0, "unreachable");
+		db_set_string(&sql, buf);
+		G_debug(3, "%s", db_get_string(&sql));
+
+		if (db_execute_immediate(driver, &sql) != DB_OK) {
+		    G_fatal_error(_("Cannot insert new record: %s"),
+				  db_get_string(&sql));
+		}
+		ucat++;
+	    }
 	    Vect_write_line(&Out, ltype, Points, Cats);
 	}
+    }
+
+    if (unique_cats) {
+	db_commit_transaction(driver);
+	db_close_database_shutdown_driver(driver);
+
+	Vect_copy_table(&Map, &Out, afield, 2, NULL, GV_MTABLE);
     }
 
     Vect_build(&Out);
