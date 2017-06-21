@@ -28,6 +28,12 @@
  /* only include if available */
 #include <grass/la.h>
 #endif
+
+#ifdef CTYPESGEN
+#undef __attribute__
+#define __attribute__(x)
+#endif
+
 #include <stddef.h>
 
 /*solver names */
