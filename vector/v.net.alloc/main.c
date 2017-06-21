@@ -170,6 +170,7 @@ int main(int argc, char **argv)
     Vect_check_input_output_name(map->answer, output->answer, G_FATAL_EXIT);
 
     Cats = Vect_new_cats_struct();
+    ICats = Vect_new_cats_struct();
     OCats = Vect_new_cats_struct();
     Points = Vect_new_line_struct();
     SPoints = Vect_new_line_struct();
@@ -408,7 +409,7 @@ int main(int argc, char **argv)
 		    Vect_cat_get(ICats, afield, &ocat);
 
 		    sprintf(buf,
-			    "insert into %s values ( %d, %d, %d')",
+			    "insert into %s values ( %d, %d, %d )",
 			    Fi->table, ucat, ocat, cat);
 		    db_set_string(&sql, buf);
 		    G_debug(3, "%s", db_get_string(&sql));
@@ -440,7 +441,7 @@ int main(int argc, char **argv)
 			Vect_cat_get(ICats, afield, &ocat);
 
 			sprintf(buf,
-				"insert into %s values ( %d, %d, %d')",
+				"insert into %s values ( %d, %d, %d )",
 				Fi->table, ucat, ocat, cat);
 			db_set_string(&sql, buf);
 			G_debug(3, "%s", db_get_string(&sql));
@@ -471,7 +472,7 @@ int main(int argc, char **argv)
 			Vect_cat_get(ICats, afield, &ocat);
 
 			sprintf(buf,
-				"insert into %s values ( %d, %d, %d')",
+				"insert into %s values ( %d, %d, %d )",
 				Fi->table, ucat, ocat, cat);
 			db_set_string(&sql, buf);
 			G_debug(3, "%s", db_get_string(&sql));
@@ -509,7 +510,7 @@ int main(int argc, char **argv)
 			Vect_cat_get(ICats, afield, &ocat);
 
 			sprintf(buf,
-				"insert into %s values ( %d, %d, %d')",
+				"insert into %s values ( %d, %d, %d )",
 				Fi->table, ucat, ocat, cat);
 			db_set_string(&sql, buf);
 			G_debug(3, "%s", db_get_string(&sql));
@@ -537,7 +538,7 @@ int main(int argc, char **argv)
 			Vect_cat_get(ICats, afield, &ocat);
 
 			sprintf(buf,
-				"insert into %s values ( %d, %d, %d')",
+				"insert into %s values ( %d, %d, %d )",
 				Fi->table, ucat, ocat, cat);
 			db_set_string(&sql, buf);
 			G_debug(3, "%s", db_get_string(&sql));
@@ -588,7 +589,7 @@ int main(int argc, char **argv)
 			    Vect_cat_get(ICats, afield, &ocat);
 
 			    sprintf(buf,
-				    "insert into %s values ( %d, %d, %d')",
+				    "insert into %s values ( %d, %d, %d )",
 				    Fi->table, ucat, ocat, cat);
 			    db_set_string(&sql, buf);
 			    G_debug(3, "%s", db_get_string(&sql));
@@ -624,7 +625,7 @@ int main(int argc, char **argv)
 			    Vect_cat_get(ICats, afield, &ocat);
 
 			    sprintf(buf,
-				    "insert into %s values ( %d, %d, %d')",
+				    "insert into %s values ( %d, %d, %d )",
 				    Fi->table, ucat, ocat, cat);
 			    db_set_string(&sql, buf);
 			    G_debug(3, "%s", db_get_string(&sql));
@@ -655,7 +656,7 @@ int main(int argc, char **argv)
 		Vect_cat_get(ICats, afield, &ocat);
 
 		sprintf(buf,
-			"insert into %s values ( %d, %d, %d)",
+			"insert into %s values ( %d, %d, %d )",
 			Fi->table, ucat, ocat, -1);
 		db_set_string(&sql, buf);
 		G_debug(3, "%s", db_get_string(&sql));
