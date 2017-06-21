@@ -24,6 +24,12 @@
 #define GRASS_GMATH_H
 
 #include <grass/config.h>
+
+#ifdef CTYPESGEN
+#undef __attribute__
+#define __attribute__(x)
+#endif
+
 #include <stddef.h>
 
 /*solver names */
