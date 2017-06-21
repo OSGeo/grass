@@ -31,13 +31,13 @@
 
 #%option G_OPT_STRDS_INPUT
 #% key: lower
-#% description: Input space time raster dataset that defines the lower threshold, values lower this threshold are excluded from accumulation
+#% description: Input space time raster dataset that defines the lower threshold, values lower than this threshold are excluded from accumulation
 #% required: no
 #%end
 
 #%option G_OPT_STRDS_INPUT
 #% key: upper
-#% description: Input space time raster dataset that defines the upper threshold, values upper this threshold are excluded from accumulation
+#% description: Input space time raster dataset that defines the upper threshold, values higher than this threshold are excluded from accumulation
 #% required: no
 #%end
 
@@ -68,7 +68,7 @@
 #%option
 #% key: offset
 #% type: string
-#% description: The temporal offset to the begin of the next cycle, eg '6 months'
+#% description: The temporal offset to the beginning of the next cycle, eg '6 months'
 #% required: no
 #% multiple: no
 #%end
@@ -95,7 +95,7 @@
 #%option
 #% key: suffix
 #% type: string
-#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+#% description: Suffix to add to the basename. Set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
 #% answer: gran
 #% required: no
 #% multiple: no
@@ -105,7 +105,7 @@
 #% key: limits
 #% type: double
 #% key_desc: lower,upper
-#% description: Use these limits in case lower and/or upper input  space time raster datasets are not defined or contain NULL values
+#% description: Use these limits in case lower and/or upper input space time raster datasets are not defined or contain NULL values
 #% required: yes
 #% multiple: no
 #%end
