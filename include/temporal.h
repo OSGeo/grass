@@ -35,7 +35,7 @@ int tgis_set_default_connection(void);
 #define TGIS_RASTER3D_MAP 2
 #define TGIS_VECTOR_MAP   3
 #define TGIS_STRDS        4
-#define TGIS STR3DS       5
+#define TGIS_STR3DS       5
 #define TGIS_STVDS        6
 
 #define TGIS_ABSOLUTE_TIME 0
