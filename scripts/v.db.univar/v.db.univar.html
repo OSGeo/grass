@@ -5,15 +5,15 @@ attributes in a vector attribute table. It will calculate minimum,
 maximum, range, mean, standard deviation, variance, coefficient of 
 variation, quartiles, median, and 90th percentile. 
 
-<p><em>v.db.univar</em> uses <em>db.univar</em> and thus <em>db.select</em>
-to get the attribute values on which it calculates the statistics.
-This means that statistics are calculated based on the entries in the attribute
-table, not based on features. Each attribute value is read once per category 
-present in the attribute table, even if there are more than one feature with 
-the same category value. If a feature has more than one category value, and 
-each of these are present in the attribute table, the attribute will be read 
-once per category value. For feature-based, instead of attribute table-based,
-univariate statistics on attributes see <a href="v.univar.html">v.univar</a>.
+<p><em>v.db.univar</em> uses <em>db.univar</em> which in turn uses
+<em>db.select</em> to get the attribute values on which it calculates the
+statistics.  This means that statistics are calculated based on the entries in
+the attribute table, not based on the features in the map. One attribute value
+is read from each line in the attribute table, whether there are no, one or
+several features with the category value referenced by that line, or whether any
+features have more than one category value.  For feature-based, instead of
+attribute table-based, univariate statistics on attributes see <a
+href="v.univar.html">v.univar</a>.
 
 <em>NOTES</em>
 
