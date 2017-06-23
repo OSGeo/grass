@@ -5,11 +5,11 @@
  *
  * AUTHOR(S):    Radim Blazek
  *               Stepan Turek <stepan.turek seznam.cz> (turns support)
- *               Markus Metz (costs from/to centers)
+ *               Markus Metz (costs from/to centers; attributes)
  *
  * PURPOSE:      Allocate subnets for nearest centers
  *               
- * COPYRIGHT:    (C) 2001, 2016 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001, 2016,2017 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -30,8 +30,8 @@
 int main(int argc, char **argv)
 {
     int i, ret, line, center1, center2;
-    int nlines, nnodes, type, ltype, afield, nfield, geo, cat, tfield,
-	tucfield;
+    int nlines, nnodes, type, ltype, afield, nfield, geo, cat;
+    int tfield, tucfield;
     int node1, node2;
     double e1cost, e2cost, n1cost, n2cost, s1cost, s2cost, l, l1, l2;
     struct Option *map, *output, *method_opt;
@@ -57,19 +57,17 @@ int main(int argc, char **argv)
     struct field_info *Fi;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);		/* reads grass env, stores program name to G_program_name() */
+    G_gisinit(argv[0]);
 
     /* initialize module */
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("cost allocation"));
-    module->label =
-	_("Allocates subnets for nearest centers (direction from center).");
+    module->label = _("Allocates subnets for nearest centers.");
     module->description =
-	_("center node must be opened (costs >= 0). "
-	  "Costs of center node are used in calculation");
-
+	_("Center node must be opened (costs >= 0). "
+	  "Costs of center node are used in calculation.");
 
     map = G_define_standard_option(G_OPT_V_INPUT);
     output = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -110,24 +108,19 @@ int main(int argc, char **argv)
     nfield_opt->required = YES;
     nfield_opt->label = _("Node layer");
 
-    afcol = G_define_option();
+    afcol = G_define_standard_option(G_OPT_DB_COLUMN);
     afcol->key = "arc_column";
-    afcol->type = TYPE_STRING;
-    afcol->required = NO;
-    afcol->description = _("Arc forward/both direction(s) cost column (number)");
+    afcol->description =
+	_("Arc forward/both direction(s) cost column (number)");
     afcol->guisection = _("Cost");
 
-    abcol = G_define_option();
+    abcol = G_define_standard_option(G_OPT_DB_COLUMN);
     abcol->key = "arc_backward_column";
-    abcol->type = TYPE_STRING;
-    abcol->required = NO;
     abcol->description = _("Arc backward direction cost column (number)");
     abcol->guisection = _("Cost");
 
-    ncol = G_define_option();
+    ncol = G_define_standard_option(G_OPT_DB_COLUMN);
     ncol->key = "node_column";
-    ncol->type = TYPE_STRING;
-    ncol->required = NO;
     ncol->description = _("Node cost column (number)");
     ncol->guisection = _("Cost");
 
@@ -199,9 +192,10 @@ int main(int argc, char **argv)
     /* Build graph */
     graph_version = 1;
     from_centers = 1;
-    if (method_opt->answer[0] == 't' && !turntable_f->answer) {
-	graph_version = 2;
+    if (method_opt->answer[0] == 't') {
 	from_centers = 0;
+	if (!turntable_f->answer)
+	    graph_version = 2;
     }
     if (turntable_f->answer)
 	Vect_net_ttb_build_graph(&Map, type, afield, nfield, tfield, tucfield,
@@ -235,7 +229,7 @@ int main(int argc, char **argv)
 	if (Vect_cat_in_cat_list(cat, catlist)) {
 	    Vect_net_get_node_cost(&Map, node, &n1cost);
 	    if (n1cost == -1) {	/* closed */
-		G_warning("Centre at closed node (costs = -1) ignored");
+		G_warning(_("Center at closed node (costs = -1) ignored"));
 	    }
 	    else {
 		if (acenters == ncenters) {
@@ -246,34 +240,47 @@ int main(int argc, char **argv)
 		}
 		Centers[ncenters].cat = cat;
 		Centers[ncenters].node = node;
-		G_debug(2, "centre = %d node = %d cat = %d", ncenters,
+		G_debug(2, "center = %d node = %d cat = %d", ncenters,
 			node, cat);
 		ncenters++;
 	    }
 	}
     }
 
-    G_message(_("Number of centers: [%d] (nlayer: [%d])"), ncenters, nfield);
+    G_message(_("Number of centers: %d (nlayer %d)"), ncenters, nfield);
 
     if (ncenters == 0)
-	G_warning(_("Not enough centers for selected nlayer. "
-		    "Nothing will be allocated."));
+	G_warning(_("Not enough centers for selected nlayer. Nothing will be allocated."));
 
-    /* alloc and reset space for all lines */
+    /* alloc and reset space for all nodes */
     if (turntable_f->answer) {
-	/* if turntable is used we are looking for lines as destinations, not the intersections (nodes) */
+	/* if turntable is used we are looking for lines as destinations, instead of the intersections (nodes) */
 	Nodes = (NODE *) G_calloc((nlines * 2 + 2), sizeof(NODE));
+	for (i = 2; i <= (nlines * 2 + 2); i++) {
+	    Nodes[i].center = -1;/* NOTE: first two items of Nodes are not used */
+	}
+
     }
     else {
 	Nodes = (NODE *) G_calloc((nnodes + 1), sizeof(NODE));
+	for (i = 1; i <= nnodes; i++) {
+	    Nodes[i].center = -1;
+	}
     }
 
     /* Fill Nodes by nearest center and costs from that center */
 
     if (turntable_f->answer) {
-	G_message(_("Calculating costs from centers ..."));
-	alloc_from_centers_loop_tt(&Map, Nodes, Centers, ncenters,
-				   tucfield);
+	if (from_centers) {
+	    G_message(_("Calculating costs from centers ..."));
+	    alloc_from_centers_loop_tt(&Map, Nodes, Centers, ncenters,
+				       tucfield);
+	}
+	else {
+	    G_message(_("Calculating costs to centers ..."));
+	    alloc_to_centers_loop_tt(&Map, Nodes, Centers, ncenters,
+				       tucfield);
+	}
     }
     else {
 	if (from_centers) {
@@ -298,7 +305,7 @@ int main(int argc, char **argv)
 	/* create attribute table:
 	 * cat: new category
 	 * ocat: original category in afield
-	 * centre: nearest centre
+	 * center: nearest center
 	 */
 	Fi = Vect_default_field_info(&Out, 1, NULL, GV_MTABLE);
 	Vect_map_add_dblink(&Out, 1, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
@@ -332,9 +339,12 @@ int main(int argc, char **argv)
 	db_begin_transaction(driver);
     }
 
+    G_message(_("Allocating subnets..."));
     nlines = Vect_get_num_lines(&Map);
     ucat = 1;
     for (line = 1; line <= nlines; line++) {
+	G_percent(line, nlines, 2);
+
 	ltype = Vect_read_line(&Map, Points, ICats, line);
 	if (!(ltype & type)) {
 	    continue;
@@ -362,6 +372,10 @@ int main(int argc, char **argv)
 	    center2 = Nodes[node2].center;
 	    s1cost = Nodes[node1].cost;
 	    s2cost = Nodes[node2].cost;
+	    if (s1cost > 0)
+		s1cost /= Map.dgraph.cost_multip;
+	    if (s2cost > 0)
+		s2cost /= Map.dgraph.cost_multip;
 
 	    Vect_net_get_node_cost(&Map, node1, &n1cost);
 	    Vect_net_get_node_cost(&Map, node2, &n2cost);
