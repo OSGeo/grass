@@ -15,9 +15,13 @@ percentile to the output.
 
 <h2>NOTES</h2>
 
-When using the <b>-d</b> flag, univariate statistics of vector
-geometry are calculated. Depending on the selected vector <b>type</b>,
-distances are calculated as follows:
+When using the <b>-d</b> flag, univariate statistics of distances 
+between vector features are calculated. The distances from all features 
+to all other features are used. Since the distance from feature A to 
+feature B is the same like the distance from feature B to feature A, 
+that distance is considered only once, i.e. all pairwise distances 
+between features are used. Depending on the selected vector 
+<b>type</b>, distances are calculated as follows:
 
 <ul>
 <li> <b>type=point</b>: point distances are considered;</li>
