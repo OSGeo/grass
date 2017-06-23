@@ -15,6 +15,12 @@ Supported are cost assignments for both arcs and nodes,
 and also different costs for both directions of a vector line. 
 For areas, costs will be calculated along boundary lines.
 <p>
+The input vector needs to be prepared with <em>v.net operation=connect</em> 
+in order to connect points representing center nodes to the network.
+<p>
+The nearest center can be determined using either costs from the 
+nearest center or costs to the nearest center with option 
+<b>method</b>.<p>
 By default, the iso band number is used as category value for output 
 lines. With the <b>-u</b> flag, output lines become unique categories 
 and an attribute table is created with the fields <em>cat, ocat, 
@@ -26,17 +32,15 @@ isoband. Additionally, original line categories are copied from the
 input <b>arc_layer</b> to layer 2 in the output, together with any 
 attribute table.
 <p>
-Application of flag <b>-t</b> enables a turntable support. 
-This flag requires additional parameters <b>turn_layer</b> and <b>turn_cat_layer</b> 
-that are otherwise ignored.
- The turntable allows 
-to model e.g. traffic code, where some turns may be prohibited. 
-This means that the input layer is expanded by 
-turntable with costs of every possible turn on any possible node 
-(intersection) in both directions. 
- Turntable can be created by 
- the <em><a href="v.net.html">v.net</a></em> module. 
-For more information about turns in the vector network analyses see
+Application of flag <b>-t</b> enables a turntable support. This flag 
+requires additional parameters <b>turn_layer</b> and 
+<b>turn_cat_layer</b> that are otherwise ignored. The turntable allows 
+to model e.g. traffic code, where some turns may be prohibited. This 
+means that the input layer is expanded by turntable with costs of every 
+possible turn on any possible node (intersection) in both directions. 
+Turntable can be created by the <em><a href="v.net.html">v.net</a></em> 
+module. For more information about turns in the vector network analyses 
+see
 <a href="http://grasswiki.osgeo.org/wiki/Turns_in_the_vector_network_analysis">wiki page</a>.
 
 <h2>NOTES</h2>
