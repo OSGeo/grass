@@ -240,7 +240,7 @@ def t_ANY_float(t):
 
     return t
 
-INT_LITERAL = sub(r"(?P<p1>(?:0x{H}+)|(?:0[0-7]+)|(?:[1-9]{D}+))(?P<suf>{IS})")
+INT_LITERAL = sub(r"(?P<p1>(?:0x{H}+)|(?:{D}+))(?P<suf>{IS})")
 
 
 @TOKEN(INT_LITERAL)
