@@ -309,6 +309,7 @@ int main(int argc, char *argv[])
     /* write centroid attributes and close the map*/
     if (fd_centroids) {
         db_commit_transaction(driver);
+        Vect_build(fd_centroids);
         Vect_close(fd_centroids);
     }
     
