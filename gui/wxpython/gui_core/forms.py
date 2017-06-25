@@ -1910,6 +1910,7 @@ class CmdPanel(wx.Panel):
                             _('Directory')),
                         buttonText=_('Browse'),
                         startDirectory=os.getcwd(),
+                        newDirectory=True,
                         changeCallback=self.OnSetValue)
                     value = self._getValue(p)
                     if value:
