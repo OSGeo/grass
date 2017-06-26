@@ -52,7 +52,7 @@ subs = {
     'L': '[a-zA-Z_]',
     'H': '[a-fA-F0-9]',
     'E': '[Ee][+-]?\s*{D}+',
-    'FS': '[FflL]',
+    'FS': '([FfLl]|d[dfl]|D[DFL]|[fFdD][0-9]+x?)',
     'IS': '[uUlL]*',
 }
 # Helper: substitute {foo} with subs[foo] in string (makes regexes more lexy)
@@ -226,10 +226,10 @@ def t_ANY_float(t):
     exp = m.group("exp")
     suf = m.group("suf")
 
-    if dp or exp or (suf and suf in ("Ff")):
+    if dp or exp or (suf and suf not in ("Ll")):
         s = m.group(0)
         if suf:
-            s = s[:-1]
+            s = s[:-len(suf)]
         # Attach a prefix so the parser can figure out if should become an
         # integer, float, or long
         t.value = "f" + s
