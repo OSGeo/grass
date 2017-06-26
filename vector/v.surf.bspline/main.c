@@ -486,8 +486,8 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 
 	if (mask_opt->answer) {
-	    int row, col, maskfd;
-	    DCELL dval, *drastbuf;
+	    int col, maskfd;
+	    DCELL dval;
 	    char mask_val;
 	    
 	    G_message(_("Load masking map"));
@@ -503,7 +503,6 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Can not initialize temporary file"));
 
 	    maskfd = Rast_open_old(mask_opt->answer, "");
-	    drastbuf = Rast_allocate_buf(DCELL_TYPE);
 
 	    for (row = 0; row < nrows; row++) {
 		G_percent(row, nrows, 2);
@@ -520,11 +519,11 @@ int main(int argc, char *argv[])
 	    }
 
 	    G_percent(row, nrows, 2);
-	    G_free(drastbuf);
 	    Rast_close(maskfd);
 	    
 	    have_mask = 1;
 	}
+	G_free(drastbuf);
     }
 
     /*------------------------------------------------------------------
