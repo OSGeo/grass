@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     stepE_opt->type = TYPE_DOUBLE;
     stepE_opt->required = NO;
     stepE_opt->label =
-	_("Length of each spline step (pixels) in the east-west direction");
+	_("Length of each spline step in the east-west direction");
     stepE_opt->description = _("Default: 10 * east-west resolution");
     stepE_opt->guisection = _("Settings");
 
@@ -107,8 +107,8 @@ int main(int argc, char *argv[])
     stepN_opt->key = "ns_step";
     stepN_opt->type = TYPE_DOUBLE;
     stepN_opt->required = NO;
-    stepN_opt->description =
-	_("Length of each spline step (pixels) in the north-south direction");
+    stepN_opt->label =
+	_("Length of each spline step in the north-south direction");
     stepN_opt->description = _("Default: 10 * north-south resolution");
     stepN_opt->guisection = _("Settings");
 
