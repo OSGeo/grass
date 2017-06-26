@@ -411,7 +411,7 @@ int main(int argc, char *argv[])
 
 		G_free(observ);
 
-		G_important_message(_("Performing bilinear interpolation..."));
+		G_verbose_message(_("Performing bilinear interpolation..."));
 		normalDefBilin(N, TN, Q, obsVect, stepE, stepN, nsplx,
 			       nsply, elaboration_reg.west,
 			       elaboration_reg.south, npoints, nparameters,
@@ -428,7 +428,7 @@ int main(int argc, char *argv[])
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
 		parVect_bicub = G_alloc_vector(nparameters);	/* Bicubic parameters vector */
 
-		G_important_message(_("Performing bicubic interpolation..."));
+		G_verbose_message(_("Performing bicubic interpolation..."));
 		normalDefBicubic(N, TN, Q, obsVect, stepE, stepN, nsplx,
 				 nsply, elaboration_reg.west,
 				 elaboration_reg.south, npoints, nparameters,
@@ -440,7 +440,7 @@ int main(int argc, char *argv[])
 		G_free_vector(TN);
 		G_free_vector(Q);
 
-		G_important_message(_("Point classification..."));
+		G_verbose_message(_("Point classification..."));
 		classification(&Out, elaboration_reg, general_box,
 			       overlap_box, obsVect, parVect_bilin,
 			       parVect_bicub, mean, alpha, grad_H, grad_L,
