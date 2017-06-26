@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
     double N_extension, E_extension, edgeE, edgeN;
     double stepN, stepE;
 
-    const char *inrast, *outrast;
     char title[64];
 
     int dim_vect, nparameters, BW;
@@ -157,9 +156,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    inrast = in_opt->answer;
-    outrast = out_opt->answer;
-
     if (!strcmp(method_opt->answer, "bilinear"))
 	interp_method = P_BILINEAR;
     else
@@ -253,15 +249,15 @@ int main(int argc, char *argv[])
 	double north = dest_reg.north + 2 * dims.edge_h;
 	double south = dest_reg.south - 2 * dims.edge_h;
 	int r0 = (int)(floor(Rast_northing_to_row(north, &src_reg)) - 0.5);
-	int r1 = (int)(floor(Rast_northing_to_row(south, &src_reg)) + 0.5);
+	int r1 = (int)(ceil(Rast_northing_to_row(south, &src_reg)) + 0.5);
 	double east = dest_reg.east + 2 * dims.edge_v;
 	double west = dest_reg.west - 2 * dims.edge_v;
 	/* NOTE: Rast_easting_to_col() is broken because of G_adjust_easting() */
 	/*
-	int c0 = (int)floor(Rast_easting_to_col(east, &src_reg) + 0.5);
+	int c0 = (int)ceil(Rast_easting_to_col(east, &src_reg) + 0.5);
 	int c1 = (int)floor(Rast_easting_to_col(west, &src_reg) + 0.5);
         */
-	int c0 = (int)(floor(((east - src_reg.west) / src_reg.ew_res)) + 0.5);
+	int c0 = (int)(ceil(((east - src_reg.west) / src_reg.ew_res)) + 0.5);
 	int c1 = (int)(floor(((west - src_reg.west) / src_reg.ew_res)) - 0.5);
 
 	src_reg.north -= src_reg.ns_res * (r0);
@@ -320,8 +316,6 @@ int main(int argc, char *argv[])
     if (1) {
 	int got_one = 0;
 	for (row = 0; row < nrows; row++) {
-	    DCELL dval;
-	    
 	    G_percent(row, nrows, 9);
 
 	    Rast_get_d_row_nomask(inrastfd, drastbuf, row);
