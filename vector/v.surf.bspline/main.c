@@ -144,18 +144,18 @@ int main(int argc, char *argv[])
     stepE_opt->key = "ew_step";
     stepE_opt->type = TYPE_DOUBLE;
     stepE_opt->required = NO;
-    stepE_opt->answer = "4";
-    stepE_opt->description =
-	_("Length of each spline step (pixels) in the east-west direction");
+    stepE_opt->label =
+	_("Length of each spline step in the east-west direction");
+    stepE_opt->description = _("Default: 4 * east-west resolution");
     stepE_opt->guisection = _("Settings");
 
     stepN_opt = G_define_option();
     stepN_opt->key = "ns_step";
     stepN_opt->type = TYPE_DOUBLE;
     stepN_opt->required = NO;
-    stepN_opt->answer = "4";
-    stepN_opt->description =
-	_("Length of each spline step (pixels) in the north-south direction");
+    stepN_opt->label =
+	_("Length of each spline step in the north-south direction");
+    stepN_opt->description = _("Default: 4 * north-south resolution");
     stepN_opt->guisection = _("Settings");
 
     type_opt = G_define_option();
@@ -214,8 +214,13 @@ int main(int argc, char *argv[])
     else
 	bilin = P_BICUBIC;
 
-    stepN = atof(stepN_opt->answer);
-    stepE = atof(stepE_opt->answer);
+    G_get_set_window(&original_reg);
+    stepN = 4 * original_reg.ns_res;
+    if (stepN_opt->answer)
+	stepN = atof(stepN_opt->answer);
+    stepE = 4 * original_reg.ew_res;
+    if (stepE_opt->answer)
+	stepE = atof(stepE_opt->answer);
     lambda = atof(lambda_f_opt->answer);
 
     flag_auxiliar = FALSE;
@@ -435,7 +440,6 @@ int main(int argc, char *argv[])
 
     /* Setting regions and boxes */
     G_debug(1, "Interpolation: Setting regions and boxes");
-    G_get_window(&original_reg);
     G_get_window(&elaboration_reg);
     Vect_region_box(&original_reg, &original_box);
     Vect_region_box(&elaboration_reg, &overlap_box);
@@ -487,8 +491,8 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 
 	if (mask_opt->answer) {
-	    int row, col, maskfd;
-	    DCELL dval, *drastbuf;
+	    int col, maskfd;
+	    DCELL dval;
 	    char mask_val;
 	    
 	    G_message(_("Load masking map"));
@@ -504,7 +508,6 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Can not initialize temporary file"));
 
 	    maskfd = Rast_open_old(mask_opt->answer, "");
-	    drastbuf = Rast_allocate_buf(DCELL_TYPE);
 
 	    for (row = 0; row < nrows; row++) {
 		G_percent(row, nrows, 2);
@@ -521,11 +524,11 @@ int main(int argc, char *argv[])
 	    }
 
 	    G_percent(row, nrows, 2);
-	    G_free(drastbuf);
 	    Rast_close(maskfd);
 	    
 	    have_mask = 1;
 	}
+	G_free(drastbuf);
     }
 
     /*------------------------------------------------------------------

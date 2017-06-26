@@ -93,18 +93,18 @@ int main(int argc, char *argv[])
     stepE_opt->key = "ew_step";
     stepE_opt->type = TYPE_DOUBLE;
     stepE_opt->required = NO;
-    stepE_opt->answer = "4";
-    stepE_opt->description =
-	_("Length of each spline step (pixels) in the east-west direction");
+    stepE_opt->label =
+	_("Length of each spline step in the east-west direction");
+    stepE_opt->description = _("Default: 4 * east-west resolution");
     stepE_opt->guisection = _("Settings");
 
     stepN_opt = G_define_option();
     stepN_opt->key = "ns_step";
     stepN_opt->type = TYPE_DOUBLE;
     stepN_opt->required = NO;
-    stepN_opt->answer = "4";
-    stepN_opt->description =
-	_("Length of each spline step (pixels) in the north-south direction");
+    stepN_opt->label =
+	_("Length of each spline step in the north-south direction");
+    stepN_opt->description = _("Default: 4 * north-south resolution");
     stepN_opt->guisection = _("Settings");
 
     lambdaB_opt = G_define_option();
@@ -159,8 +159,14 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     line_out_counter = 1;
-    stepN = atof(stepN_opt->answer);
-    stepE = atof(stepE_opt->answer);
+
+    G_get_set_window(&original_reg);
+    stepN = 4 * original_reg.ns_res;
+    if (stepN_opt->answer)
+	stepN = atof(stepN_opt->answer);
+    stepE = 4 * original_reg.ew_res;
+    if (stepE_opt->answer)
+	stepE = atof(stepE_opt->answer);
     lambda_F = atof(lambdaF_opt->answer);
     lambda_B = atof(lambdaB_opt->answer);
     grad_H = atof(gradH_opt->answer);
@@ -271,7 +277,6 @@ int main(int argc, char *argv[])
     driver = db_start_driver_open_database(dvr, db);
 
     /* Setting regions and boxes */
-    G_get_set_window(&original_reg);
     G_get_set_window(&elaboration_reg);
     Vect_region_box(&elaboration_reg, &overlap_box);
     Vect_region_box(&elaboration_reg, &general_box);
@@ -415,7 +420,7 @@ int main(int argc, char *argv[])
 
 		G_free(observ);
 
-		G_important_message(_("Performing bilinear interpolation..."));
+		G_verbose_message(_("Performing bilinear interpolation..."));
 		normalDefBilin(N, TN, Q, obsVect, stepE, stepN, nsplx,
 			       nsply, elaboration_reg.west,
 			       elaboration_reg.south, npoints, nparameters,
@@ -432,7 +437,7 @@ int main(int argc, char *argv[])
 		N = G_alloc_matrix(nparameters, BW);	/* Normal matrix */
 		parVect_bicub = G_alloc_vector(nparameters);	/* Bicubic parameters vector */
 
-		G_important_message(_("Performing bicubic interpolation..."));
+		G_verbose_message(_("Performing bicubic interpolation..."));
 		normalDefBicubic(N, TN, Q, obsVect, stepE, stepN, nsplx,
 				 nsply, elaboration_reg.west,
 				 elaboration_reg.south, npoints, nparameters,
@@ -444,7 +449,7 @@ int main(int argc, char *argv[])
 		G_free_vector(TN);
 		G_free_vector(Q);
 
-		G_important_message(_("Point classification..."));
+		G_verbose_message(_("Point classification..."));
 		classification(&Out, elaboration_reg, general_box,
 			       overlap_box, obsVect, parVect_bilin,
 			       parVect_bicub, mean, alpha, grad_H, grad_L,

@@ -96,18 +96,18 @@ int main(int argc, char *argv[])
     stepE_opt->key = "ew_step";
     stepE_opt->type = TYPE_DOUBLE;
     stepE_opt->required = NO;
-    stepE_opt->answer = "25";
-    stepE_opt->description =
-	_("Length of each spline step (pixels) in the east-west direction");
+    stepE_opt->label =
+	_("Length of each spline step in the east-west direction");
+    stepE_opt->description = _("Default: 25 * east-west resolution");
     stepE_opt->guisection = _("Settings");
 
     stepN_opt = G_define_option();
     stepN_opt->key = "ns_step";
     stepN_opt->type = TYPE_DOUBLE;
     stepN_opt->required = NO;
-    stepN_opt->answer = "25";
-    stepN_opt->description =
-	_("Length of each spline step (pixels) in the north-south direction");
+    stepN_opt->label =
+	_("Length of each spline step in the north-south direction");
+    stepN_opt->description = _("Default: 25 * north-south resolution");
     stepN_opt->guisection = _("Settings");
 
     lambda_f_opt = G_define_option();
@@ -141,8 +141,13 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    stepN = atof(stepN_opt->answer);
-    stepE = atof(stepE_opt->answer);
+    G_get_set_window(&original_reg);
+    stepN = 25 * original_reg.ns_res;
+    if (stepN_opt->answer)
+	stepN = atof(stepN_opt->answer);
+    stepE = 25 * original_reg.ew_res;
+    if (stepE_opt->answer)
+	stepE = atof(stepE_opt->answer);
     lambda = atof(lambda_f_opt->answer);
     HighThresh = atof(Thresh_A_opt->answer);
     LowThresh = atof(Thresh_B_opt->answer);
@@ -246,7 +251,6 @@ int main(int argc, char *argv[])
     driver = db_start_driver_open_database(dvr, db);
 
     /* Setting regions and boxes */
-    G_get_set_window(&original_reg);
     G_get_set_window(&elaboration_reg);
     Vect_region_box(&elaboration_reg, &overlap_box);
     Vect_region_box(&elaboration_reg, &general_box);
@@ -369,7 +373,7 @@ int main(int argc, char *argv[])
 		nparameters = nsplx * nsply;
 
 		/* Mean calculation */
-		G_important_message(_("Performing mean calculation..."));
+		G_verbose_message(_("Performing mean calculation..."));
 		mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
 
 		/*Least Squares system */
@@ -413,7 +417,7 @@ int main(int argc, char *argv[])
 		G_free_vector(Q);
 		G_free_matrix(obsVect);
 
-		G_important_message( _("Correction and creation of terrain vector..."));
+		G_verbose_message( _("Correction and creation of terrain vector..."));
 		P_Sparse_Correction(&In, &Out, &Terrain, &elaboration_reg,
 				    general_box, overlap_box, obsVect_all, lcat,
 				    parVect, lineVect, stepN, stepE,
