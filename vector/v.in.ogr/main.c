@@ -354,7 +354,9 @@ int main(int argc, char *argv[])
     else
 	datetime_type = "datetime";
 
+#if 0
     /* dsn is 'PG:', check default connection settings */
+    /* TODO: do not replace user-given dbname, user, and/or password */
     dsn = NULL;
     if (driver_name && strcmp(driver_name, "pg") == 0 &&
         G_strcasecmp(param.dsn->answer, "PG:") == 0) {
@@ -392,6 +394,8 @@ int main(int argc, char *argv[])
     else if (param.dsn->answer) {
         dsn = G_store(param.dsn->answer);
     }
+#endif
+    dsn = G_store(param.dsn->answer);
     
     min_area = atof(param.min_area->answer);
     snap = atof(param.snap->answer);
