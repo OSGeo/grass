@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
     double N_extension, E_extension, edgeE, edgeN;
     double stepN, stepE;
 
-    const char *inrast, *outrast;
     char title[64];
 
     int dim_vect, nparameters, BW;
@@ -157,9 +156,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    inrast = in_opt->answer;
-    outrast = out_opt->answer;
-
     if (!strcmp(method_opt->answer, "bilinear"))
 	interp_method = P_BILINEAR;
     else
@@ -241,6 +237,18 @@ int main(int argc, char *argv[])
 
     nsubregions = nsubregion_row * nsubregion_col;
 
+    if (G_projection() == PROJECTION_LL) {
+	/* try to shift source window to overlap with destination window */
+	while (src_reg.west >= dest_reg.east && src_reg.east - 360.0 > dest_reg.west) {
+	    src_reg.east -= 360.0;
+	    src_reg.west -= 360.0;
+	}
+	while (src_reg.east <= dest_reg.west && src_reg.west + 360.0 < dest_reg.east) {
+	    src_reg.east += 360.0;
+	    src_reg.west += 360.0;
+	}
+    }
+
     G_debug(1, "-------------------------------------");
     G_debug(1, "source north %f", src_reg.north);
     G_debug(1, "source south %f", src_reg.south);
@@ -249,19 +257,19 @@ int main(int argc, char *argv[])
     G_debug(1, "-------------------------------------");
 
     /* adjust source window */
-    if (1) {
+    {
 	double north = dest_reg.north + 2 * dims.edge_h;
 	double south = dest_reg.south - 2 * dims.edge_h;
 	int r0 = (int)(floor(Rast_northing_to_row(north, &src_reg)) - 0.5);
-	int r1 = (int)(floor(Rast_northing_to_row(south, &src_reg)) + 0.5);
+	int r1 = (int)(ceil(Rast_northing_to_row(south, &src_reg)) + 0.5);
 	double east = dest_reg.east + 2 * dims.edge_v;
 	double west = dest_reg.west - 2 * dims.edge_v;
-	/* NOTE: Rast_easting_to_col() is broken because of G_adjust_easting() */
+	/* do not use Rast_easting_to_col() because of G_adjust_easting() */
 	/*
-	int c0 = (int)floor(Rast_easting_to_col(east, &src_reg) + 0.5);
+	int c0 = (int)ceil(Rast_easting_to_col(east, &src_reg) + 0.5);
 	int c1 = (int)floor(Rast_easting_to_col(west, &src_reg) + 0.5);
         */
-	int c0 = (int)(floor(((east - src_reg.west) / src_reg.ew_res)) + 0.5);
+	int c0 = (int)(ceil(((east - src_reg.west) / src_reg.ew_res)) + 0.5);
 	int c1 = (int)(floor(((west - src_reg.west) / src_reg.ew_res)) - 0.5);
 
 	src_reg.north -= src_reg.ns_res * (r0);
@@ -320,8 +328,6 @@ int main(int argc, char *argv[])
     if (1) {
 	int got_one = 0;
 	for (row = 0; row < nrows; row++) {
-	    DCELL dval;
-	    
 	    G_percent(row, nrows, 9);
 
 	    Rast_get_d_row_nomask(inrastfd, drastbuf, row);
@@ -331,8 +337,9 @@ int main(int argc, char *argv[])
 		if (!Rast_is_d_null_value(&dval)) {
 		    got_one++;
 		}
+		if (Segment_put(&in_seg, &dval, row, col) < 0)
+		    G_fatal_error(_("Can not write to temp file"));;
 	    }
-	    Segment_put_row(&in_seg, drastbuf, row);
 	    
 	}
 	if (!got_one)
@@ -441,7 +448,8 @@ int main(int argc, char *argv[])
 		    else
 			null_count++;
 		}
-		Segment_put(&mask_seg, &mask_val, row, col);
+		if (Segment_put(&mask_seg, &mask_val, row, col) < 0)
+		    G_fatal_error(_("Can not write to temp file"));;
 	    }
 	}
 
@@ -472,11 +480,13 @@ int main(int argc, char *argv[])
     /* initialize output */
     G_message(_("Initializing output..."));
 
-    drastbuf = Rast_allocate_buf(DCELL_TYPE);
-    Rast_set_d_null_value(drastbuf, ncols);
+    Rast_set_d_null_value(&dval, 1);
     for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 9);
-	Segment_put_row(&out_seg, drastbuf, row);
+	G_percent(row, nrows, 2);
+	for (col = 0; col < ncols; col++) {
+	    if (Segment_put(&out_seg, &dval, row, col) < 0)
+		G_fatal_error(_("Can not write to temp file"));;
+	}
     }
     G_percent(row, nrows, 2);
 
@@ -742,14 +752,13 @@ int main(int argc, char *argv[])
     {
 	int nonulls = 0;
 
-	Segment_flush(&out_seg);
 	drastbuf = Rast_allocate_d_buf();
 
 	for (row = 0; row < dest_reg.rows; row++) {
 	    G_percent(row, dest_reg.rows, 9);
-	    Segment_get_row(&out_seg, drastbuf, row);
 	    for (col = 0; col < dest_reg.cols; col++) {
-		dval = drastbuf[col];
+		Segment_get(&out_seg, &dval, row, col);
+		drastbuf[col] = dval;
 		if (!Rast_is_d_null_value(&dval))
 		    nonulls++;
 	    }
