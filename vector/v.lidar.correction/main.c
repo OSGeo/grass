@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
 		nparameters = nsplx * nsply;
 
 		/* Mean calculation */
-		G_important_message(_("Performing mean calculation..."));
+		G_verbose_message(_("Performing mean calculation..."));
 		mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
 
 		/*Least Squares system */
@@ -412,7 +412,7 @@ int main(int argc, char *argv[])
 		G_free_vector(Q);
 		G_free_matrix(obsVect);
 
-		G_important_message( _("Correction and creation of terrain vector..."));
+		G_verbose_message( _("Correction and creation of terrain vector..."));
 		P_Sparse_Correction(&In, &Out, &Terrain, &elaboration_reg,
 				    general_box, overlap_box, obsVect_all, lcat,
 				    parVect, lineVect, stepN, stepE,
