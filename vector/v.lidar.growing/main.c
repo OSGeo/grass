@@ -303,9 +303,13 @@ int main(int argc, char *argv[])
 		    row =
 			(int)(Rast_northing_to_row
 			      (points->y[0], &elaboration_reg));
+		    /* do not use Rast_easting_to_col() because of possible ll wrap */
+		    /*
 		    col =
 			(int)(Rast_easting_to_col
 			      (points->x[0], &elaboration_reg));
+		    */
+		    col = (points->x[0] - elaboration_reg.west) / elaboration_reg.ew_res;
 
 		    Z_interp = 0;
 		    /* TODO: make sure the current db_fetch() usage works */
@@ -419,9 +423,14 @@ int main(int argc, char *argv[])
 		    row =
 			(int)(Rast_northing_to_row
 			      (points_first->y[0], &elaboration_reg));
+
+		    /* do not use Rast_easting_to_col() because of possible ll wrap */
+		    /*
 		    col =
 			(int)(Rast_easting_to_col
 			      (points_first->x[0], &elaboration_reg));
+		    */
+		    col = (points_first->x[0] - elaboration_reg.west) / elaboration_reg.ew_res;
 
 		    if (fabs
 			(points_first->z[0] - raster_matrix[row][col].orig) >=
@@ -528,9 +537,13 @@ int main(int argc, char *argv[])
 		    row =
 			(int)(Rast_northing_to_row
 			      (points->y[0], &elaboration_reg));
+		    /* do not use Rast_easting_to_col() because of possible ll wrap */
+		    /*
 		    col =
 			(int)(Rast_easting_to_col
 			      (points->x[0], &elaboration_reg));
+		    */
+		    col = (points->x[0] - elaboration_reg.west) / elaboration_reg.ew_res;
 
 		    if (raster_matrix[row][col].clas == PRE_TERRAIN) {
 			if (raster_matrix[row][col].dueImp == SINGLE_PULSE)
