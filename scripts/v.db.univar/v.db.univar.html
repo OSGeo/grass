@@ -3,8 +3,17 @@
 <em>v.db.univar</em> calculates basic univariate statistics for numeric
 attributes in a vector attribute table. It will calculate minimum, 
 maximum, range, mean, standard deviation, variance, coefficient of 
-variation, quartiles, median, and 90th percentile.
-It uses <em>db.select</em> to create list values for statistical calculations.
+variation, quartiles, median, and 90th percentile. 
+
+<p><em>v.db.univar</em> uses <em>db.univar</em> which in turn uses
+<em>db.select</em> to get the attribute values on which it calculates the
+statistics.  This means that statistics are calculated based on the entries in
+the attribute table, not based on the features in the map. One attribute value
+is read from each line in the attribute table, whether there are no, one or
+several features with the category value referenced by that line, or whether any
+features have more than one category value.  For feature-based, instead of
+attribute table-based, univariate statistics on attributes see <a
+href="v.univar.html">v.univar</a>.
 
 <em>NOTES</em>
 
