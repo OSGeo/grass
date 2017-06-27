@@ -132,16 +132,22 @@ Contents
 
 
  o Store the source tarball (twice) in (use scp -p FILES grass:):
-    SERVER1=grass.osgeo.org:/var/www/grass/grass-cms/grass$MAJOR$MINOR/source/
-    SERVER2=upload.osgeo.org:/osgeo/download/grass/grass$MAJOR$MINOR/source/
-    echo $SERVER1
-    echo $SERVER2
+    SERVER1=grass.osgeo.org
+    SERVER1DIR=/var/www/grass/grass-cms/grass$MAJOR$MINOR/source/
+    SERVER2=upload.osgeo.org
+    SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
+    echo $SERVER1:$SERVER1DIR
+    echo $SERVER2:$SERVER2DIR
 
    # copy along with associated files:
      scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-         INSTALL REQUIREMENTS.html SUBMITTING neteler@$SERVER1
+         INSTALL REQUIREMENTS.html SUBMITTING neteler@$SERVER1:$SERVER1DIR
      scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-         INSTALL REQUIREMENTS.html SUBMITTING neteler@$SERVER2
+         INSTALL REQUIREMENTS.html SUBMITTING neteler@$SERVER2:$SERVER2DIR
+
+   # generate link to "latest" source code
+     ssh neteler@$SERVER1 rm -f $SERVER1DIR/grass-$MAJOR.$MINOR-latest.tar.gz
+     ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz $SERVER1DIR/grass-$MAJOR.$MINOR-latest.tar.gz"
 
  o update winGRASS related files
     - Update the winGRASS version
