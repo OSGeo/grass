@@ -111,6 +111,7 @@ int main(int argc, char *argv[])
     double SE;
     double meanYest, meanYres, varYest, varYres, sdYest, sdYres;
     double SStot, SSerr, SSreg;
+    double SAE;
     double **a;
     struct MATRIX *m, *m_all;
     double **B, Rsq, Rsqadj, F, t, AIC, AICc, BIC;
@@ -365,6 +366,7 @@ int main(int argc, char *argv[])
 
     meanY = sumY / count;
     SStot = SSerr = SSreg = 0.0;
+    SAE = 0.0;
     for (r = 0; r < rows; r++) {
 	G_percent(r, rows, 2);
 
@@ -409,6 +411,7 @@ int main(int argc, char *argv[])
 	    SStot += (mapy_val - meanY) * (mapy_val - meanY);
 	    SSreg += (yest - meanY) * (yest - meanY);
 	    SSerr += yres * yres;
+	    SAE += fabs(yres);
 
 	    for (k = 1; k <= n_predictors; k++) {
 		double yesti = 0.0;
@@ -444,6 +447,10 @@ int main(int argc, char *argv[])
     /* adjusted coefficient of determination */
     Rsqadj = 1 - ((SSerr * (count - 1)) / (SStot * (count - n_predictors - 1)));
     fprintf(stdout, "Rsqadj=%f\n", Rsqadj);
+    /* RMSE */
+    fprintf(stdout, "RMSE=%f\n", sqrt(SSerr / count));
+    /* MAE */
+    fprintf(stdout, "MAE=%f\n", SAE / count);
     /* F statistic */
     /* F = ((SStot - SSerr) / (n_predictors)) / (SSerr / (count - n_predictors));
      * , or: */
