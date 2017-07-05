@@ -48,7 +48,7 @@ void Rast_get_row_colors(int fd, int row, struct Colors *colors,
     void *p;
     int i;
 
-    array = G_alloca(cols * size);
+    array = G_malloc(cols * size);
 
     Rast_get_row(fd, array, row, type);
 
@@ -56,10 +56,10 @@ void Rast_get_row_colors(int fd, int row, struct Colors *colors,
 	for (i = 0, p = array; i < cols; i++, p = G_incr_void_ptr(p, size))
 	    nul[i] = Rast_is_null_value(p, type);
 
-    set = G_alloca(cols);
+    set = G_malloc(cols);
 
     Rast_lookup_colors(array, red, grn, blu, set, cols, colors, type);
 
-    G_freea(array);
-    G_freea(set);
+    G_free(array);
+    G_free(set);
 }
