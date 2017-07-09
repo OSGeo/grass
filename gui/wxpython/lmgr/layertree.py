@@ -411,6 +411,17 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Skip event, otherwise causing error when layertree is empty"""
         event.Skip()
 
+    def OnLayerContextMenuButton(self, event):
+        """Contextual menu for item/layer when button pressed"""
+        # determine which tree item has the button
+        button = event.GetEventObject()
+        layer = self.FindItemByWindow(button)
+        if layer:
+            # select the layer in the same way as right click
+            if not self.IsSelected(layer):
+                self.DoSelectItem(layer, True, False)
+            self.OnLayerContextMenu(event)
+
     def OnLayerContextMenu(self, event):
         """Contextual menu for item/layer"""
         if not self.layer_selected:
@@ -1339,7 +1350,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             ctrl = buttons.GenBitmapButton(
                 self, id=wx.ID_ANY, bitmap=btnbmp, size=(24, 24))
             ctrl.SetToolTipString(_("Click to edit layer settings"))
-            self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, ctrl)
+            self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenuButton, ctrl)
         # add layer to the layer tree
         if loadWorkspace:
             # when loading workspace, we always append
@@ -1888,7 +1899,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             newctrl = buttons.GenBitmapButton(
                 self, id=wx.ID_ANY, bitmap=btnbmp, size=(24, 24))
             newctrl.SetToolTipString(_("Click to edit layer settings"))
-            self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, newctrl)
+            self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenuButton, newctrl)
             data = self.GetPyData(dragItem)
 
         elif self.GetLayerInfo(dragItem, key='type') == 'group':
@@ -2171,6 +2182,21 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
             item = self.GetNextItem(item)
             i += 1
+
+        return None
+
+    def FindItemByWindow(self, window):
+        """Find item by window (button for context menu)
+
+        :return: window instance
+        :return: None not found
+        """
+        item = self.GetFirstChild(self.root)[0]
+        while item and item.IsOk():
+            if self.GetItemWindow(item) == window:
+                return item
+
+            item = self.GetNextItem(item)
 
         return None
 
