@@ -123,10 +123,10 @@ class MapToolbar(BaseToolbar):
                 log.WriteWarning(_('Reason: %s') % errorMsg)
                 log.WriteLog(
                     _(
-                        'Note that the wxGUI\'s vector digitizer is currently disabled '
-                        '(hopefully this will be fixed soon). '
+                        'Note that the wxGUI\'s vector digitizer is disabled in this installation. '
                         'Please keep an eye out for updated versions of GRASS. '
-                        'In the meantime you can use "v.digit" from the Develop Vector menu.'),
+                        'In the meantime you can use "v.edit" for non-interactive editing '
+                        'from the Develop vector map menu.'),
                     wrap=60)
 
             self.toolId['vdigit'] = -1
