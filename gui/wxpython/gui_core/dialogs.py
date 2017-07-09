@@ -1746,7 +1746,7 @@ class SetOpacityDialog(wx.Dialog):
 
     def __init__(self, parent, id=wx.ID_ANY, title=_("Set Map Layer Opacity"),
                  size=wx.DefaultSize, pos=wx.DefaultPosition,
-                 style=wx.DEFAULT_DIALOG_STYLE, opacity=1):
+                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, opacity=1):
 
         self.parent = parent    # GMFrame
         self.opacity = opacity  # current opacity
