@@ -247,8 +247,12 @@ class MapCalcFrame(wx.Frame):
                 _('Name for new 3D raster map to create'))
         else:
             self.newmaplabel.SetLabel(_('Name for new raster map to create'))
-        self.newmaptxt = wx.TextCtrl(
-            parent=self.panel, id=wx.ID_ANY, size=(250, -1))
+        # As we can write only to current mapset, names should not be fully qualified
+        # to not confuse end user about writing in other mapset
+        self.newmaptxt = Select(
+            parent=self.panel, id=wx.ID_ANY, size=(
+                250, -1), type=element, multiple=False,
+                fullyQualified=False)
         self.mapsellabel = wx.StaticText(parent=self.panel, id=wx.ID_ANY)
         if self.rast3d:
             self.mapsellabel.SetLabel(_('Insert existing 3D raster map'))
