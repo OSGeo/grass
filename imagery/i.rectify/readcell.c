@@ -110,14 +110,14 @@ block *get_block(struct cache * c, int idx)
 {
     int replace = G_lrand48() % c->nblocks;
     block *p = &c->blocks[replace];
-    int ref = c->refs[replace];
+    int cref = c->refs[replace];
     off_t offset = (off_t) idx * sizeof(DCELL) << L2BSIZE;
 
     if (c->fd < 0)
 	G_fatal_error(_("Internal error: cache miss on fully-cached map"));
 
-    if (ref >= 0)
-	c->grid[ref] = NULL;
+    if (cref >= 0)
+	c->grid[cref] = NULL;
 
     c->grid[idx] = p;
     c->refs[replace] = idx;
