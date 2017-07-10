@@ -186,7 +186,7 @@ CELL clump(int *in_fd, int out_fd, int diag, int minsize)
     int row;
     int len;
     int nalloc;
-    long cur_time;
+    time_t cur_time;
     char *cname;
     int cfd, csize;
 
@@ -418,7 +418,7 @@ CELL clump_n(int *in_fd, char **inname, int nin, double threshold,
     int isnull;
     int len;
     int nalloc;
-    long cur_time;
+    time_t cur_time;
     char *cname;
     int cfd, csize;
 
@@ -681,14 +681,14 @@ CELL clump_n(int *in_fd, char **inname, int nin, double threshold,
     return 0;
 }
 
-int print_time(long *start)
+int print_time(time_t *start)
 {
     int hours, minutes, seconds;
-    long done;
+    time_t done;
 
     time(&done);
 
-    seconds = done - *start;
+    seconds = (int)(done - *start);
     *start = done;
 
     hours = seconds / 3600;
