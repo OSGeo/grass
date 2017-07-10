@@ -5,6 +5,7 @@
 
 #include "proto.h"
 
+#include <grass/spawn.h>
 #include <grass/glocale.h>
 
 int reinvoke_script(const struct context *ctx, const char *filename)
