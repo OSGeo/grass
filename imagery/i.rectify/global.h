@@ -4,6 +4,7 @@
  * mind that although you think the i/o will decrease, system paging
  * (which goes on behind the scenes) may actual increase the i/o.
  */
+#include <time.h>
 #include <grass/gis.h>
 #include <grass/imagery.h>
 
@@ -87,7 +88,7 @@ extern block *get_block(struct cache *, int);
 #define CPTR(c,y,x) (&(*BLOCK((c),HI((y)),HI((x))))[LO((y))][LO((x))])
 
 /* report.c */
-int report(long, int);
+int report(time_t, int);
 
 /* target.c */
 int get_target(char *);

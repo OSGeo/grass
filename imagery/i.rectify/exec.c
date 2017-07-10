@@ -32,7 +32,7 @@ int exec_rectify(int order, char *extension, char *interp_method)
     struct Categories cats;
     struct History hist;
     int colr_ok, cats_ok;
-    long start_time, rectify_time;
+    time_t start_time, rectify_time;
 
     Rast_set_output_window(&target_window);
     G_message("-----------------------------------------------");
@@ -81,7 +81,7 @@ int exec_rectify(int order, char *extension, char *interp_method)
 		report(rectify_time - start_time, 1);
 	    }
 	    else
-		report((long)0, 0);
+		report((time_t)0, 0);
 
 	    G_free(result);
 	}
