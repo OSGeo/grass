@@ -1,6 +1,5 @@
 #include <grass/config.h>
 #include <grass/gis.h>
-#include <rpc/types.h>
 #ifdef HAVE_GDAL
 #include <gdal.h>
 #endif
