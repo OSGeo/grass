@@ -35,7 +35,7 @@ VOID_T *link_new(struct link_head *Head)
 		     malloc(Head->chunk_size * Head->unit_size))) {
 	    if (Head->exit_flag)
 		link_out_of_memory();
-	    return (struct link_head *)NULL;
+	    return NULL;
 	}
 
 	Head->ptr_array[Head->max_ptr++] = (VOID_T *) tmp;
@@ -57,5 +57,5 @@ VOID_T *link_new(struct link_head *Head)
     /* Unused = Unused->next */
     Head->Unused = link__get_next(Head->Unused);
 
-    return (struct link_head *)tmp;
+    return tmp;
 }
