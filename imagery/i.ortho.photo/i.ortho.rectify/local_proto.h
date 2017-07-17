@@ -36,7 +36,7 @@ block *get_block(struct cache *, int);
 void release_cache(struct cache *);
 
 /* report.c */
-int report(long, int);
+int report(int, int);
 
 /* target.c */
 int get_target(char *);
