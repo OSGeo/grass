@@ -130,7 +130,7 @@ int db__driver_drop_table(dbString * name)
     char msg[OD_MSG];
     SQLINTEGER err;
     SQLCHAR ttype[50], *tname;
-    SQLINTEGER nrow = 0;
+    SQLLEN nrow = 0;
 
 
     /* allocate cursor */

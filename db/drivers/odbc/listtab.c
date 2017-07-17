@@ -12,7 +12,7 @@ int db__driver_list_tables(tlist, tcount, system)
     dbString *list;
     int count = 0;
     SQLCHAR tableName[SQL_MAX_TABLE_NAME_LEN];
-    SQLINTEGER indi, nrow = 0;
+    SQLLEN indi, nrow = 0;
     SQLRETURN ret;
     char ttype[50];
 

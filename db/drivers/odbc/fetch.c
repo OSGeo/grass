@@ -14,7 +14,7 @@ int db__driver_fetch(cn, position, more)
     dbColumn *column;
     dbValue *value;
     int col, ncols;
-    SQLINTEGER len;
+    SQLLEN len;
     int htype, sqltype, ctype;
     SQLRETURN ret;
     DATE_STRUCT date;
