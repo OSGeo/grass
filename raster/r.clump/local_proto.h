@@ -22,7 +22,6 @@
 /* clump.c */
 CELL clump(int *, int, int, int);
 CELL clump_n(int *, char **, int, double, int, int, int);
-int print_time(time_t *);
 
 /* minsize.c */
 int merge_small_clumps(int *in_fd, int nin, DCELL *rng,
