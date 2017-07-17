@@ -24,7 +24,7 @@ int exec_rectify(char *extension, char *interp_method, char *angle_map)
     struct Categories cats;
     struct History hist;
     int colr_ok, cats_ok;
-    long start_time, rectify_time;
+    time_t start_time, rectify_time;
     double aver_z;
     int elevfd;
     struct cache *ebuffer;
@@ -105,7 +105,7 @@ int exec_rectify(char *extension, char *interp_method, char *angle_map)
 	    report(rectify_time - start_time, 1);
 	}
 	else
-	    report((long)0, 0);
+	    report(0, 0);
 
 	G_free(result);
     }
