@@ -473,7 +473,7 @@ def read_command(*args, **kwargs):
     returncode = process.poll()
     if _capture_stderr and returncode:
         sys.stderr.write(stderr)
-    return handle_errors(returncode, stdout.decode('utf-8'), args, kwargs)
+    return handle_errors(returncode, stdout, args, kwargs)
 
 
 def parse_command(*args, **kwargs):
