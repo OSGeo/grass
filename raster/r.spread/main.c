@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
     /* FIXME - allow seed to be specified for repeatability */
     G_srand48_auto();
 
-    display = NULL;
+    display = 0;
 
     spotting = flag.spotting->answer;
 
