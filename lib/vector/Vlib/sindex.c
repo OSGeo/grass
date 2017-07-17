@@ -146,9 +146,8 @@ Vect_select_areas_by_box(struct Map_info *Map, const struct bound_box * Box,
     /* avoid loop when not debugging */
     if (debug_level > 2) {
 	for (i = 0; i < list->n_values; i++) {
-	    G_debug(3, "  area = %d pointer to area structure = %lx",
-		    list->id[i],
-		    (unsigned long)Map->plus.Area[list->id[i]]);
+	    G_debug(3, "  area = %d pointer to area structure = %p",
+		    list->id[i], (void *)Map->plus.Area[list->id[i]]);
 	}
     }
 
