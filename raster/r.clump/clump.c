@@ -29,6 +29,8 @@
 
 #define INCR 1024
 
+int print_time(time_t *);
+
 static CELL do_renumber(int *in_fd, DCELL *rng, int nin,
                         int diag, int minsize, 
 			int cfd, CELL label, CELL *index, int out_fd)
