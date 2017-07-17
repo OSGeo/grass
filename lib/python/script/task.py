@@ -434,7 +434,7 @@ class processTask:
         """Get node text"""
         p = node.find(tag)
         if p is not None:
-            return string.join(string.split(p.text), ' ')
+            return ' '.join(p.text.split())
 
         return default
 
@@ -448,17 +448,28 @@ def convert_xml_to_utf8(xml_text):
 
     # modify: fetch encoding from the interface description text(xml)
     # e.g. <?xml version="1.0" encoding="GBK"?>
-    pattern = re.compile('<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
+    pattern = re.compile(b'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
     m = re.match(pattern, xml_text)
     if m is None:
         return xml_text
-    #
-    enc = m.groups()[0]
 
     # modify: change the encoding to "utf-8", for correct parsing
-    xml_text_utf8 = xml_text.decode(enc).encode("utf-8")
+    if (sys.version_info > (3, 0)): # Python 3
+        enc = m.groups()[0].decode()
+        xml_text_utf8 = xml_text.decode(enc)
+    else:                           # Python 2
+        enc = m.groups()[0]
+        xml_text_utf8 = xml_text.decode(enc).encode("utf-8")
+        
     p = re.compile('encoding="' + enc + '"', re.IGNORECASE)
     xml_text_utf8 = p.sub('encoding="utf-8"', xml_text_utf8)
+
+    xml_text_utf8 = xml_text_utf8.replace(
+        'grass-interface.dtd',
+        os.path.join(os.getenv('GISBASE'),
+                     'gui', 'xml',
+                     'grass-interface.dtd')
+    )
 
     return xml_text_utf8
 
@@ -504,11 +515,7 @@ def get_interface_description(cmd):
         raise ScriptError(_("Unable to fetch interface description for command '%(cmd)s'."
                              "\n\nDetails: %(det)s") % {'cmd': cmd, 'det': e})
 
-    desc = cmdout.replace('grass-interface.dtd',
-                          os.path.join(os.getenv('GISBASE'),
-                                       'gui', 'xml',
-                                       'grass-interface.dtd'))
-    return convert_xml_to_utf8(desc)
+    return convert_xml_to_utf8(cmdout)
 
 
 def parse_interface(name, parser=processTask, blackList=None):
