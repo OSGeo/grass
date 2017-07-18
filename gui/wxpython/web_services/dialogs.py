@@ -897,11 +897,11 @@ class SaveWMSLayerDialog(wx.Dialog):
 
         # buttons
         self.btn_close = Button(parent=self, id=wx.ID_CLOSE)
+        self.SetEscapeId(self.btn_close.GetId())
         self.btn_close.SetToolTip(_("Close dialog"))
 
         self.btn_ok = Button(
             parent=self,
-            id=wx.ID_OK,
             label=_("&Save layer"))
         self.btn_ok.SetToolTip(_("Save web service layer as raster map"))
 
@@ -965,7 +965,6 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.Fit()
 
         # bindings
-        self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btn_ok.Bind(wx.EVT_BUTTON, self.OnSave)
 
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
@@ -994,13 +993,6 @@ class SaveWMSLayerDialog(wx.Dialog):
                      border=5)
 
         return selSizer
-
-    def OnClose(self, event):
-        """Close dialog
-        """
-        if not self.IsModal():
-            self.Destroy()
-        event.Skip()
 
     def OnRegionType(self, event):
         selected = event.GetEventObject()
