@@ -119,7 +119,7 @@ log dll.to.a
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/proj.dll        mswindows/osgeo4w/lib/libproj
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/zlib1.dll       mswindows/osgeo4w/lib/libz
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/iconv.dll       mswindows/osgeo4w/lib/libiconv
-dll_to_a $OSGEO4W_ROOT_MSYS/bin/gdal200.dll     mswindows/osgeo4w/lib/libgdal
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/gdal202.dll     mswindows/osgeo4w/lib/libgdal
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/liblas_c.dll    mswindows/osgeo4w/lib/liblas_c
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/geos_c.dll      mswindows/osgeo4w/lib/libgeos_c
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/libtiff.dll     mswindows/osgeo4w/lib/libtiff
