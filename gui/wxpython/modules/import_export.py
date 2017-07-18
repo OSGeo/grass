@@ -577,7 +577,7 @@ class OgrImportDialog(ImportDialog):
             else:
                 geometry = None
 
-                # TODO
+                # TODO: v.import has no geometry option
                 # if geometry:
                 #    cmd.append('geometry=%s' % geometry)
 
