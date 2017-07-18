@@ -216,7 +216,7 @@ int Rast_read_color_rules(struct Colors *colors, DCELL min, DCELL max,
 
     while ((*read_rule)
 	   (closure, min, max, &val, &r, &g, &b, &set, &is_null, &is_dflt)) {
-	struct rule *p;
+	struct rule *p = NULL;
 
 	if (set) {
 	    n = nrules++;
@@ -227,6 +227,9 @@ int Rast_read_color_rules(struct Colors *colors, DCELL min, DCELL max,
 	    p = &dflt;
 	else if (is_null)
 	    p = &null;
+
+	if (!p)
+	    G_fatal_error(_("Unknown error reading color rule"));
 
 	p->r = r;
 	p->g = g;
@@ -337,7 +340,7 @@ static void load_rules_name(struct Colors *colors, const char *name,
 void Rast_make_colors(struct Colors *colors, const char *name, CELL min,
 		      CELL max)
 {
-    return load_rules_name(colors, name, (DCELL) min, (DCELL) max);
+    load_rules_name(colors, name, (DCELL) min, (DCELL) max);
 }
 
 /*!
@@ -350,5 +353,5 @@ void Rast_make_colors(struct Colors *colors, const char *name, CELL min,
 void Rast_make_fp_colors(struct Colors *colors, const char *name, DCELL min,
 			 DCELL max)
 {
-    return load_rules_name(colors, name, min, max);
+    load_rules_name(colors, name, min, max);
 }
