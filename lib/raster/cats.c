@@ -1302,7 +1302,7 @@ int Rast_sort_cats(struct Categories *pcats)
     for (i = 0; i < ncats; i++) {
 	descr = Rast_get_ith_d_cat(&save_cats, indexes[i], &d1, &d2);
 	G_debug(4, "  Write sorted cats, pcats = %p pcats->labels = %p",
-		pcats, pcats->labels);
+		(void *)pcats, (void *)pcats->labels);
 	Rast_set_d_cat(&d1, &d2, descr, pcats);
     }
     Rast_free_cats(&save_cats);

@@ -352,7 +352,6 @@ static void put_data(int fd, char *null_buf, const CELL * cell,
     convert_int(wk, null_buf, cell, n, len, zeros_r_nulls);
 
     if (compressed) {
-	unsigned char *wk = work_buf + 1;
 	int nbytes = count_bytes(wk, n, len);
 	unsigned char *compressed_buf;
 	int total;
@@ -428,6 +427,7 @@ static void put_data_gdal(int fd, const void *rast, int row, int n,
 
     work_buf = G_malloc(n * size);
 
+    datatype = GDT_Unknown;
     switch (map_type) {
     case CELL_TYPE:
 	datatype = GDT_Int32;
