@@ -580,7 +580,7 @@ class GRASSStartup(wx.Frame):
 
         wx.BeginBusyCursor()
         wx.Yield()
-        if mapName in vectors:
+        if vectors:
             # vector detected
             returncode, error = RunCommand(
                 'v.in.ogr', input=filePath, output=mapName, flags='e',
