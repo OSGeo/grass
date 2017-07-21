@@ -145,7 +145,7 @@ void G__wps_print_process_description(void)
     char *s, *top;
     const char *value = NULL;
     int i;
-    char *encoding;
+    const char *encoding;
     int new_prompt = 0;
     int store = 1;
     int status = 1;
