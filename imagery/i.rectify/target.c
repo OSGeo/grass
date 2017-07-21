@@ -1,6 +1,5 @@
-#include <string.h>
 #include <unistd.h>
-#include <grass/glocale.h>
+#include <string.h>
 #include "global.h"
 
 int get_target(char *group)

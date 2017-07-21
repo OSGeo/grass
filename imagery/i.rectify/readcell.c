@@ -10,12 +10,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <grass/gis.h>
-#include <grass/raster.h>
-#include <grass/glocale.h>
 #include "global.h"
 
-struct cache *readcell(int fdi, const char *size)
+struct cache *readcell(int fdi, int size)
 {
     DCELL *tmpbuf;
     struct cache *c;
@@ -35,8 +32,8 @@ struct cache *readcell(int fdi, const char *size)
     ny = (nrows + BDIM - 1) / BDIM;
     nx = (ncols + BDIM - 1) / BDIM;
 
-    if (size)
-	nblocks = atoi(size) * ((1 << 20) / sizeof(block));
+    if (size > 0)
+	nblocks = size * ((1 << 20) / sizeof(block));
     else
 	nblocks = (nx + ny) * 2;	/* guess */
 
@@ -60,6 +57,8 @@ struct cache *readcell(int fdi, const char *size)
     }
     else
 	c->fd = -1;
+	
+    G_debug(1, "%d of %d blocks in memory", nblocks, nx * ny);
 
     G_important_message(_("Allocating memory and reading input map..."));
     G_percent(0, nrows, 5);
@@ -126,7 +125,17 @@ block *get_block(struct cache * c, int idx)
 	G_fatal_error(_("Error seeking on segment file"));
 
     if (read(c->fd, p, sizeof(block)) < 0)
-	G_fatal_error(_("Error writing segment file"));
+	G_fatal_error(_("Error reading segment file"));
 
     return p;
+}
+
+void release_cache(struct cache *c)
+{
+    G_free(c->refs);
+    G_free(c->blocks);
+    G_free(c->grid);
+    
+    G_free(c);
+    c = NULL;
 }

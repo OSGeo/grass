@@ -8,17 +8,15 @@
  *  it falls back to nearest neighbor.
  */
 
-#include <grass/gis.h>
-#include <grass/raster.h>
 #include <math.h>
 #include "global.h"
 
-void p_bilinear_f(struct cache *ibuffer,	/* input buffer                  */
-		void *obufptr,	/* ptr in output buffer          */
-		int cell_type,	/* raster map type of obufptr    */
-		double *row_idx,	/* row index                     */
-		double *col_idx,	/* column index          */
-	    struct Cell_head *cellhd	/* cell header of input layer    */
+void p_bilinear_f(struct cache *ibuffer,    /* input buffer                */
+		  void *obufptr,	    /* ptr in output buffer        */
+		  int cell_type,	    /* raster map type of obufptr  */
+		  double *row_idx,	    /* row index                   */
+		  double *col_idx,	    /* column index                */
+	          struct Cell_head *cellhd  /* cell header of input layer  */
     )
 {
     /* start nearest neighbor to do some basic tests */

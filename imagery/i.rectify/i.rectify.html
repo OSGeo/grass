@@ -66,14 +66,14 @@ The program will calculate the RMSE and check the required number of points.
 <h4>Linear affine transformation (1st order transformation)</h4>
 
 <dl>
-	<dd> x' = ax + by +c
-	<dd> y' = Ax + Bt +C
+	<dd> x' = ax + by + c
+	<dd> y' = Ax + By + C
 </dl>
 
 The a,b,c,A,B,C are determined by least squares regression
 based on the control points entered.  This transformation
 applies scaling, translation and rotation. It is NOT a
-general purpose rubber-sheeting, nor is it ortho-photo
+general purpose rubber-sheeting like TPS, nor is it ortho-photo
 rectification using a DEM, not second order polynomial,
 etc. It can be used if (1) you have geometrically correct
 images, and (2) the terrain or camera distortion effect can

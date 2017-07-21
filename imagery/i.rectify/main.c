@@ -25,37 +25,15 @@
 
 #include <stdlib.h>
 #include <string.h>
-
-#include <grass/raster.h>
-#include <grass/glocale.h>
-
 #include "global.h"
 
-char *seg_mb;
-
-RASTER_MAP_TYPE map_type;
-int *ref_list;
-struct Ref ref;
+int seg_mb_img;
 
 func interpolate;
 
-/* georef coefficients */
-
-double E12[10], N12[10];
-double E21[10], N21[10];
-
-double *E12_t, *N12_t;
-double *E21_t, *N21_t;
-
-struct Control_Points cp;
-
-/* DELETED WITH CRS MODIFICATIONS
-   double E12a, E12b, E12c, N12a, N12b, N12c;
-   double E21a, E21b, E21c, N21a, N21b, N21c;
- */
 struct Cell_head target_window;
 
-void err_exit(char *, char *);
+void err_exit(struct Ref *, char *, char *);
 
 /* modify this table to add new methods */
 struct menu menu[] = {
@@ -63,7 +41,7 @@ struct menu menu[] = {
     {p_bilinear, "linear", "linear interpolation"},
     {p_cubic, "cubic", "cubic convolution"},
     {p_lanczos, "lanczos", "lanczos filter"},
-    {p_bilinear_f, "linear_f", "linear  interpolation with fallback"},
+    {p_bilinear_f, "linear_f", "linear interpolation with fallback"},
     {p_cubic_f, "cubic_f", "cubic convolution with fallback"},
     {p_lanczos_f, "lanczos_f", "lanczos filter with fallback"},
     {NULL, NULL, NULL}
@@ -73,13 +51,19 @@ static char *make_ipol_list(void);
 
 int main(int argc, char *argv[])
 {
-    char group[INAME_LEN], extension[INAME_LEN];
+    char extension[INAME_LEN];
     int order;			/* ADDED WITH CRS MODIFICATIONS */
     char *ipolname;		/* name of interpolation method */
     int method;
-    int n, i, m, k = 0;
+    char *seg_mb;
+    int i, m, k = 0;
     int got_file = 0, target_overwrite = 0;
     char *overstr;
+
+    struct Image_Group group;
+    int *ref_list;
+    int n;
+
     struct Cell_head cellhd;
 
     struct Option *grp,         /* imagery group */
@@ -174,7 +158,7 @@ int main(int argc, char *argv[])
     interpolate = menu[method].method;
 
     G_strip(grp->answer);
-    strcpy(group, grp->answer);
+    strcpy(group.name, grp->answer);
     strcpy(extension, ext->answer);
     order = atoi(val->answer);
 
@@ -189,10 +173,7 @@ int main(int argc, char *argv[])
 
     /* Find out how many files on command line */
     if (!a->answer) {
-	for (m = 0; ifile->answers[m]; m++) {
-	    k = m;
-	}
-	k++;
+	for (k = 0; ifile->answers[k]; k++);
     }
 
     if (!t->answer && (order < 1 || order > 3))  /* MAXORDER in lib/imagery/georef.c */
@@ -201,30 +182,36 @@ int main(int argc, char *argv[])
     if (t->answer)
 	order = 0;
 
-    /* determine the number of files in this group */
-    if (I_get_group_ref(group, &ref) <= 0) {
-	G_warning(_("Location: %s"), G_location());
-	G_warning(_("Mapset: %s"), G_mapset());
-	G_fatal_error(_("Group <%s> does not exist"), grp->answer);
+    /* find group */
+    if (!I_find_group(group.name)) {
+	G_fatal_error(_("Group <%s> not found"), group.name);
     }
 
-    if (ref.nfiles <= 0) {
+    /* determine the number of files in this group */
+    if (!I_get_group_ref(group.name, &group.ref)) {
+	G_warning(_("Location: %s"), G_location());
+	G_warning(_("Mapset: %s"), G_mapset());
+	G_fatal_error(_("Could not read REF file for group <%s>"),
+	              group.name);
+    }
+
+    if (group.ref.nfiles <= 0) {
 	G_important_message(_("Group <%s> contains no raster maps; run i.group"),
 			    grp->answer);
 	exit(EXIT_SUCCESS);
     }
 
-    ref_list = (int *)G_malloc(ref.nfiles * sizeof(int));
+    ref_list = (int *)G_malloc(group.ref.nfiles * sizeof(int));
 
     if (a->answer) {
-	for (n = 0; n < ref.nfiles; n++) {
+	for (n = 0; n < group.ref.nfiles; n++) {
 	    ref_list[n] = 1;
 	}
     }
     else {
 	char xname[GNAME_MAX], xmapset[GMAPSET_MAX], *name, *mapset;
 
-	for (n = 0; n < ref.nfiles; n++)
+	for (n = 0; n < group.ref.nfiles; n++)
 		ref_list[n] = 0;
 
 	for (m = 0; m < k; m++) {
@@ -239,17 +226,17 @@ int main(int argc, char *argv[])
 	    }
 
 	    got_file = 0;
-	    for (n = 0; n < ref.nfiles; n++) {
+	    for (n = 0; n < group.ref.nfiles; n++) {
 		if (mapset) {
-		    if (strcmp(name, ref.file[n].name) == 0 &&
-		        strcmp(mapset, ref.file[n].mapset) == 0) {
+		    if (strcmp(name, group.ref.file[n].name) == 0 &&
+		        strcmp(mapset, group.ref.file[n].mapset) == 0) {
 			got_file = 1;
 			ref_list[n] = 1;
 			break;
 		    }
 		}
 		else {
-		    if (strcmp(name, ref.file[n].name) == 0) {
+		    if (strcmp(name, group.ref.file[n].name) == 0) {
 			got_file = 1;
 			ref_list[n] = 1;
 			break;
@@ -257,15 +244,15 @@ int main(int argc, char *argv[])
 		}
 	    }
 	    if (got_file == 0)
-		err_exit(ifile->answers[m], group);
+		err_exit(&group.ref, ifile->answers[m], group.name);
 	}
     }
 
     /* read the control points for the group */
-    get_control_points(group, order);
+    get_control_points(&group, order);
 
     /* get the target */
-    get_target(group);
+    get_target(group.name);
 
     /* Check the GRASS_OVERWRITE environment variable */
     if ((overstr = getenv("GRASS_OVERWRITE")))  /* OK ? */
@@ -276,11 +263,11 @@ int main(int argc, char *argv[])
 	char result[GNAME_MAX];
 	
 	select_target_env();
-	for (i = 0; i < ref.nfiles; i++) {
+	for (i = 0; i < group.ref.nfiles; i++) {
 	    if (!ref_list[i])
 		continue;
 
-	    strcpy(result, ref.file[i].name);
+	    strcpy(result, group.ref.file[i].name);
 	    strcat(result, extension);
 	    
 	    if (G_legal_filename(result) < 0)
@@ -308,19 +295,22 @@ int main(int argc, char *argv[])
 	    if (!((res = atof(tres->answer)) > 0))
 		G_warning(_("Target resolution must be > 0, ignored"));
 	}
-	/* Calculate smallest region */
-	if (a->answer)
-	    Rast_get_cellhd(ref.file[0].name, ref.file[0].mapset, &cellhd);
-	else
-	    Rast_get_cellhd(ifile->answers[0], ref.file[0].mapset, &cellhd);
-
-	georef_window(&cellhd, &target_window, order, res);
+	/* get reference window from imagery group */
+	get_ref_window(&group.ref, ref_list, &cellhd);
+	georef_window(&group, &cellhd, &target_window, order, res);
     }
 
     G_verbose_message(_("Using region: N=%f S=%f, E=%f W=%f"), target_window.north,
 	      target_window.south, target_window.east, target_window.west);
 
-    exec_rectify(order, extension, interpol->answer);
+    /* determine memory for elevation and imagery */
+    seg_mb_img = -1;
+    if (seg_mb) {
+	seg_mb_img = atoi(seg_mb);
+    }
+
+    /* go do it */
+    exec_rectify(&group, ref_list, extension, interpol->answer, order);
 
     G_done_msg(" ");
 
@@ -328,7 +318,7 @@ int main(int argc, char *argv[])
 }
 
 
-void err_exit(char *file, char *grp)
+void err_exit(struct Ref *ref, char *file, char *grp)
 {
     int n;
 
@@ -336,8 +326,8 @@ void err_exit(char *file, char *grp)
 	    file, grp);
     G_message(_("Try:"));
 
-    for (n = 0; n < ref.nfiles; n++)
-	G_message("%s", ref.file[n].name);
+    for (n = 0; n < ref->nfiles; n++)
+	G_message("%s@%s", ref->file[n].name, ref->file[n].mapset);
 
     G_fatal_error(_("Exit!"));
 }

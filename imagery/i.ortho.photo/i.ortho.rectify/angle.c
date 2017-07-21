@@ -13,12 +13,12 @@
 #include <math.h>
 #include "global.h"
 
-int camera_angle(char *name)
+int camera_angle(struct Ortho_Image_Group * group, char *name)
 {
     int row, col, nrows, ncols;
-    double XC = group.XC;
-    double YC = group.YC;
-    double ZC = group.ZC;
+    double XC = group->XC;
+    double YC = group->YC;
+    double ZC = group->ZC;
     double c_angle, c_angle_min, c_alt, c_az, slope, aspect;
     double radians_to_degrees = 180.0 / M_PI;
     /* double degrees_to_radians = M_PI / 180.0; */
