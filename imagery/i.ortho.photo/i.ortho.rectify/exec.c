@@ -1,19 +1,23 @@
 /*
-   exec.c --
-
-   Loop through all files to be rectified and do the retification.
-   Handles things like support files.
+ * exec.c --
+ *
+ * Loop through all files to be rectified and do the retification.
+ * Handles things like support files.
  */
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
-#include <unistd.h>
-#include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <time.h>
+#include <unistd.h>
+#include <math.h>
 #include "global.h"
 
-int exec_rectify(char *extension, char *interp_method, char *angle_map)
+int exec_rectify(struct Ortho_Image_Group *group, int *ref_list,
+                 char *extension, char *interp_method, char *angle_map)
 {
     char *name;
     char *mapset;
@@ -49,20 +53,20 @@ int exec_rectify(char *extension, char *interp_method, char *angle_map)
 
     /* get an average elevation of the control points */
     /* this is used only if target cells have no elevation */
-    get_aver_elev(&group.control_points, &aver_z);
+    get_aver_elev(&group->control_points, &aver_z);
 
     G_message("-----------------------------------------------");
 
     /* rectify each file */
-    for (n = 0; n < group.group_ref.nfiles; n++) {
+    for (n = 0; n < group->group_ref.nfiles; n++) {
 	if (!ref_list[n])
 	    continue;
 
-	name = group.group_ref.file[n].name;
-	mapset = group.group_ref.file[n].mapset;
+	name = group->group_ref.file[n].name;
+	mapset = group->group_ref.file[n].mapset;
 	result =
-	    G_malloc(strlen(group.group_ref.file[n].name) + strlen(extension) + 1);
-	strcpy(result, group.group_ref.file[n].name);
+	    G_malloc(strlen(group->group_ref.file[n].name) + strlen(extension) + 1);
+	strcpy(result, group->group_ref.file[n].name);
 	strcat(result, extension);
 
 	G_debug(2, "ORTHO RECTIFYING:");
@@ -85,7 +89,7 @@ int exec_rectify(char *extension, char *interp_method, char *angle_map)
 
 	G_debug(2, "Starting the rectification...");
 
-	if (rectify(name, mapset, ebuffer, aver_z, result, interp_method)) {
+	if (rectify(group, name, mapset, ebuffer, aver_z, result, interp_method)) {
 	    G_debug(2, "Done. Writing results...");
 	    select_target_env();
 	    if (cats_ok) {
@@ -114,7 +118,7 @@ int exec_rectify(char *extension, char *interp_method, char *angle_map)
     release_cache(ebuffer);
 
     if (angle_map) {
-	camera_angle(angle_map);
+	camera_angle(group, angle_map);
     }
     
     return 0;

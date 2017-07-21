@@ -3,7 +3,7 @@
 #include <math.h>
 #include "global.h"
 
-int get_ref_window(struct Cell_head *cellhd)
+int get_ref_window(struct Ref *ref, int *ref_list, struct Cell_head *cellhd)
 {
     int i;
     int count;
@@ -11,17 +11,17 @@ int get_ref_window(struct Cell_head *cellhd)
 
     /* from all the files in the group, get max extends and min resolutions */
     count = 0;
-    for (i = 0; i < group.group_ref.nfiles; i++) {
+    for (i = 0; i < ref->nfiles; i++) {
 	if (!ref_list[i])
 	    continue;
 
 	if (count++ == 0) {
-	    Rast_get_cellhd(group.group_ref.file[i].name,
-			 group.group_ref.file[i].mapset, cellhd);
+	    Rast_get_cellhd(ref->file[i].name,
+			    ref->file[i].mapset, cellhd);
 	}
 	else {
-	    Rast_get_cellhd(group.group_ref.file[i].name,
-			 group.group_ref.file[i].mapset, &win);
+	    Rast_get_cellhd(ref->file[i].name,
+			    ref->file[i].mapset, &win);
 	    /* max extends */
 	    if (cellhd->north < win.north)
 		cellhd->north = win.north;
@@ -42,7 +42,7 @@ int get_ref_window(struct Cell_head *cellhd)
     /* if the north-south is not multiple of the resolution,
      *    round the south downward
      */
-    cellhd->rows = (cellhd->north - cellhd->south) /cellhd->ns_res + 0.5;
+    cellhd->rows = (cellhd->north - cellhd->south) / cellhd->ns_res + 0.5;
     cellhd->south = cellhd->north - cellhd->rows * cellhd->ns_res;
 
     /* do the same for the west */
@@ -52,7 +52,8 @@ int get_ref_window(struct Cell_head *cellhd)
     return 1;
 }
 
-int georef_window(struct Cell_head *w1, struct Cell_head *w2, double res)
+int georef_window(struct Ortho_Image_Group *group, struct Cell_head *w1,
+                  struct Cell_head *w2, double res)
 {
     double n, e, z1, ad;
     double n0, e0;
@@ -65,20 +66,20 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, double res)
     /* for mountainous areas this is a very rough approximation
      * which would become more accurate only if actual elevation 
      * values are used */
-    get_aver_elev(&group.control_points, &aver_z);
+    get_aver_elev(&group->control_points, &aver_z);
     G_debug(1, "Aver elev = %f", aver_z);
 
     /* compute ortho ref of all corners */
 
-    I_georef(w1->west, w1->north, &e0, &n0, group.E12, group.N12, 1);
-    I_inverse_ortho_ref(e0, n0, aver_z, &e, &n, &z1, &group.camera_ref,
-			group.XC, group.YC, group.ZC, group.MI);
+    I_georef(w1->west, w1->north, &e0, &n0, group->E12, group->N12, 1);
+    I_inverse_ortho_ref(e0, n0, aver_z, &e, &n, &z1, &group->camera_ref,
+			group->XC, group->YC, group->ZC, group->MI);
 
     G_debug(1, "NORTH WEST CORNER");
-    G_debug(1, "group.E12 = %f %f %f,", group.E12[0], group.E12[1],
-	    group.E12[2]);
-    G_debug(1, "group.N12 = %f %f %f,", group.N12[0], group.N12[1],
-	    group.N12[2]);
+    G_debug(1, "group->E12 = %f %f %f,", group->E12[0], group->E12[1],
+	    group->E12[2]);
+    G_debug(1, "group->N12 = %f %f %f,", group->N12[0], group->N12[1],
+	    group->N12[2]);
     G_debug(1, "image  x = %f y = %f, photo x = %f y = %f", w1->west,
 	    w1->north, e0, n0);
     G_debug(1, "target x = %f y = %f", e, n);
@@ -88,9 +89,9 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, double res)
     nw.n = n;
     nw.e = e;
 
-    I_georef(w1->east, w1->north, &e0, &n0, group.E12, group.N12, 1);
-    I_inverse_ortho_ref(e0, n0, aver_z, &e, &n, &z1, &group.camera_ref,
-			group.XC, group.YC, group.ZC, group.MI);
+    I_georef(w1->east, w1->north, &e0, &n0, group->E12, group->N12, 1);
+    I_inverse_ortho_ref(e0, n0, aver_z, &e, &n, &z1, &group->camera_ref,
+			group->XC, group->YC, group->ZC, group->MI);
 
     G_debug(1, "NORTH EAST CORNER");
     G_debug(1, "image  x = %f y = %f, photo x = %f y = %f", w1->east,
@@ -108,9 +109,9 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, double res)
     if (e < w2->west)
 	w2->west = e;
 
-    I_georef(w1->west, w1->south, &e0, &n0, group.E12, group.N12, 1);
-    I_inverse_ortho_ref(e0, n0, aver_z, &e, &n, &z1, &group.camera_ref,
-			group.XC, group.YC, group.ZC, group.MI);
+    I_georef(w1->west, w1->south, &e0, &n0, group->E12, group->N12, 1);
+    I_inverse_ortho_ref(e0, n0, aver_z, &e, &n, &z1, &group->camera_ref,
+			group->XC, group->YC, group->ZC, group->MI);
 
     G_debug(1, "SOUTH WEST CORNER");
     G_debug(1, "image  x = %f y = %f, photo x = %f y = %f", w1->west,
@@ -128,9 +129,9 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, double res)
     if (e < w2->west)
 	w2->west = e;
 
-    I_georef(w1->east, w1->south, &e0, &n0, group.E12, group.N12, 1);
-    I_inverse_ortho_ref(e0, n0, aver_z, &e, &n, &z1, &group.camera_ref,
-			group.XC, group.YC, group.ZC, group.MI);
+    I_georef(w1->east, w1->south, &e0, &n0, group->E12, group->N12, 1);
+    I_inverse_ortho_ref(e0, n0, aver_z, &e, &n, &z1, &group->camera_ref,
+			group->XC, group->YC, group->ZC, group->MI);
 
     G_debug(1, "SOUTH EAST CORNER");
     G_debug(1, "image  x = %f y = %f, photo x = %f y = %f", w1->east,
@@ -192,7 +193,7 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, double res)
 	}
     }
 
-    /* adjust extends */
+    /* adjust extents */
     ad = w2->north > 0 ? 0.5 : -0.5;
     w2->north = (int) (ceil(w2->north / w2->ns_res) + ad) * w2->ns_res;
     ad = w2->south > 0 ? 0.5 : -0.5;

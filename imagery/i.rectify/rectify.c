@@ -1,10 +1,4 @@
-#include <unistd.h>
-#include <string.h>
-
-#include <grass/raster.h>
-#include <grass/glocale.h>
-
-#include "global.h"
+/* rectification code */
 
 /* Modified to support Grass 5.0 fp format 11 april 2000
  *
@@ -12,13 +6,21 @@
  *
  */
 
-int rectify(char *name, char *mapset, char *result, int order, char *interp_method)
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include "global.h"
+
+int rectify(struct Image_Group *group, char *name, char *mapset,
+            char *result, int order, char *interp_method)
 {
     struct Cell_head cellhd;
     int ncols, nrows;
     int row, col;
     double row_idx, col_idx;
-    int infd, cell_size, outfd;
+    int infd, outfd;
+    RASTER_MAP_TYPE map_type;
+    int cell_size;
     void *trast, *tptr;
     double n1, e1, nx, ex;
     struct cache *ibuffer;
@@ -34,7 +36,7 @@ int rectify(char *name, char *mapset, char *result, int order, char *interp_meth
     map_type = Rast_get_map_type(infd);
     cell_size = Rast_cell_size(map_type);
 
-    ibuffer = readcell(infd, seg_mb);
+    ibuffer = readcell(infd, seg_mb_img);
 
     Rast_close(infd);		/* (pmx) 17 april 2000 */
 
@@ -73,9 +75,9 @@ int rectify(char *name, char *mapset, char *result, int order, char *interp_meth
 
 	    /* backwards transformation of target cell center */
 	    if (order == 0)
-		I_georef_tps(e1, n1, &ex, &nx, E21_t, N21_t, &cp, 0);
+		I_georef_tps(e1, n1, &ex, &nx, group->E21_t, group->N21_t, &group->control_points, 0);
 	    else
-		I_georef(e1, n1, &ex, &nx, E21, N21, order);
+		I_georef(e1, n1, &ex, &nx, group->E21, group->N21, order);
 
 	    /* convert to row/column indices of source raster */
 	    row_idx = (cellhd.north - nx) / cellhd.ns_res;
@@ -94,7 +96,7 @@ int rectify(char *name, char *mapset, char *result, int order, char *interp_meth
     G_free(trast);
 
     close(ibuffer->fd);
-    G_free(ibuffer);
+    release_cache(ibuffer);
 
     Rast_get_cellhd(result, G_mapset(), &cellhd);
 

@@ -11,22 +11,20 @@
  */
 
 #include <math.h>
-#include <grass/gis.h>
-#include <grass/raster.h>
 #include "global.h"
 
-void p_bilinear(struct cache *ibuffer,	/* input buffer                  */
-		void *obufptr,	/* ptr in output buffer          */
-		int cell_type,	/* raster map type of obufptr    */
-		double *row_idx,	/* row index                     */
-		double *col_idx,	/* column index          */
-		struct Cell_head *cellhd	/* information of output map     */
+void p_bilinear(struct cache *ibuffer,	  /* input buffer                */
+		void *obufptr,		  /* ptr in output buffer        */
+		int cell_type,		  /* raster map type of obufptr  */
+		double *row_idx,	  /* row index                   */
+		double *col_idx,	  /* column index                */
+		struct Cell_head *cellhd  /* information of output map   */
     )
 {
     int row;			/* row indices for interp        */
     int col;			/* column indices for interp     */
     int i, j;
-    DCELL t, u;			/* intermediate slope            */
+    double t, u;		/* intermediate slope            */
     DCELL result;		/* result of interpolation       */
     DCELL c[2][2];
 

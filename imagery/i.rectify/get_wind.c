@@ -1,28 +1,82 @@
+#include <stdlib.h>
+#include <string.h>
 #include <math.h>
-#include <grass/glocale.h>
 #include "global.h"
 
-int georef_window(struct Cell_head *w1, struct Cell_head *w2, int order, double res)
+int get_ref_window(struct Ref *ref, int *ref_list, struct Cell_head *cellhd)
+{
+    int i;
+    int count;
+    struct Cell_head win;
+
+    /* from all the files in the group, get max extends and min resolutions */
+    count = 0;
+    for (i = 0; i < ref->nfiles; i++) {
+	if (!ref_list[i])
+	    continue;
+
+	if (count++ == 0) {
+	    Rast_get_cellhd(ref->file[i].name,
+			    ref->file[i].mapset, cellhd);
+	}
+	else {
+	    Rast_get_cellhd(ref->file[i].name,
+			    ref->file[i].mapset, &win);
+	    /* max extends */
+	    if (cellhd->north < win.north)
+		cellhd->north = win.north;
+	    if (cellhd->south > win.south)
+		cellhd->south = win.south;
+	    if (cellhd->west > win.west)
+		cellhd->west = win.west;
+	    if (cellhd->east < win.east)
+		cellhd->east = win.east;
+	    /* min resolution */
+	    if (cellhd->ns_res > win.ns_res)
+		cellhd->ns_res = win.ns_res;
+	    if (cellhd->ew_res > win.ew_res)
+		cellhd->ew_res = win.ew_res;
+	}
+    }
+
+    /* if the north-south is not multiple of the resolution,
+     *    round the south downward
+     */
+    cellhd->rows = (cellhd->north - cellhd->south) / cellhd->ns_res + 0.5;
+    cellhd->south = cellhd->north - cellhd->rows * cellhd->ns_res;
+
+    /* do the same for the west */
+    cellhd->cols = (cellhd->east - cellhd->west) / cellhd->ew_res + 0.5;
+    cellhd->west = cellhd->east - cellhd->cols * cellhd->ew_res;
+
+    return 1;
+}
+
+int georef_window(struct Image_Group *group, struct Cell_head *w1, struct Cell_head *w2, int order, double res)
 {
     double n, e, ad;
     struct _corner {
         double n, e;
     } nw, ne, se, sw;
 
-    /* extends */
+    /* extents */
+
+    /* compute geo ref of all corners */
     if (order == 0)
-	I_georef_tps(w1->west, w1->north, &e, &n, E12_t, N12_t, &cp, 1);
+	I_georef_tps(w1->west, w1->north, &e, &n, group->E12_t,
+	             group->N12_t, &group->control_points, 1);
     else
-	I_georef(w1->west, w1->north, &e, &n, E12, N12, order);
+	I_georef(w1->west, w1->north, &e, &n, group->E12, group->N12, order);
     w2->north = w2->south = n;
     w2->west = w2->east = e;
     nw.n = n;
     nw.e = e;
 
     if (order == 0)
-	I_georef_tps(w1->east, w1->north, &e, &n, E12_t, N12_t, &cp, 1);
+	I_georef_tps(w1->east, w1->north, &e, &n, group->E12_t,
+	             group->N12_t, &group->control_points, 1);
     else
-	I_georef(w1->east, w1->north, &e, &n, E12, N12, order);
+	I_georef(w1->east, w1->north, &e, &n, group->E12, group->N12, order);
     ne.n = n;
     ne.e = e;
     if (n > w2->north)
@@ -35,9 +89,10 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, int order, double 
 	w2->west = e;
 
     if (order == 0)
-	I_georef_tps(w1->west, w1->south, &e, &n, E12_t, N12_t, &cp, 1);
+	I_georef_tps(w1->west, w1->south, &e, &n, group->E12_t,
+	             group->N12_t, &group->control_points, 1);
     else
-	I_georef(w1->west, w1->south, &e, &n, E12, N12, order);
+	I_georef(w1->west, w1->south, &e, &n, group->E12, group->N12, order);
     sw.n = n;
     sw.e = e;
     if (n > w2->north)
@@ -50,9 +105,10 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, int order, double 
 	w2->west = e;
 
     if (order == 0)
-	I_georef_tps(w1->east, w1->south, &e, &n, E12_t, N12_t, &cp, 1);
+	I_georef_tps(w1->east, w1->south, &e, &n, group->E12_t,
+	             group->N12_t, &group->control_points, 1);
     else
-	I_georef(w1->east, w1->south, &e, &n, E12, N12, order);
+	I_georef(w1->east, w1->south, &e, &n, group->E12, group->N12, order);
     se.n = n;
     se.e = e;
     if (n > w2->north)
@@ -108,7 +164,7 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, int order, double 
 	}
     }
 
-    /* adjust extends */
+    /* adjust extents */
     ad = w2->north > 0 ? 0.5 : -0.5;
     w2->north = (int) (ceil(w2->north / w2->ns_res) + ad) * w2->ns_res;
     ad = w2->south > 0 ? 0.5 : -0.5;

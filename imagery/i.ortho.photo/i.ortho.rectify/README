@@ -11,3 +11,4 @@
    typing i.photo.rectify on the commandline pops up a gui if GRASS is started with a gui
  - i.ortho.photo has a new interactive part to set the options for i.photo.rectify 
 
+keep in sync with i.rectify

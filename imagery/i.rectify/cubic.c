@@ -12,23 +12,21 @@
  *  NULL they where filled with their neighbor
  */
 
-#include <grass/gis.h>
-#include <grass/raster.h>
 #include <math.h>
 #include "global.h"
 
-void p_cubic(struct cache *ibuffer,	/* input buffer                  */
-	     void *obufptr,	/* ptr in output buffer          */
-	     int cell_type,	/* raster map type of obufptr    */
-	     double *row_idx,	/* row index (decimal)           */
-	     double *col_idx,	/* column index (decimal)        */
-	     struct Cell_head *cellhd	/* information of output map     */
+void p_cubic(struct cache *ibuffer,    /* input buffer                */
+	     void *obufptr,	       /* ptr in output buffer        */
+	     int cell_type,	       /* raster map type of obufptr  */
+	     double *row_idx,	       /* row index (decimal)         */
+	     double *col_idx,	       /* column index (decimal)      */
+	     struct Cell_head *cellhd  /* information of output map   */
     )
 {
     int row;			/* row indices for interp        */
     int col;			/* column indices for interp     */
     int i, j;
-    DCELL t, u;			/* intermediate slope            */
+    double t, u;		/* intermediate slope            */
     DCELL result;		/* result of interpolation       */
     DCELL val[4];		/* buffer for temporary values   */
     DCELL cell[4][4];

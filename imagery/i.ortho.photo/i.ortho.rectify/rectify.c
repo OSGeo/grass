@@ -9,8 +9,9 @@
 #include <unistd.h>
 #include "global.h"
 
-int rectify(char *name, char *mapset, struct cache *ebuffer,
-            double aver_z, char *result, char *interp_method)
+int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
+            struct cache *ebuffer, double aver_z, char *result,
+	    char *interp_method)
 {
     struct Cell_head cellhd;
     int ncols, nrows;
@@ -84,14 +85,14 @@ int rectify(char *name, char *mapset, struct cache *ebuffer,
 		z1 = *zp;
 
 	    /* target coordinates e1, n1 to photo coordinates ex1, nx1 */
-	    I_ortho_ref(e1, n1, z1, &ex1, &nx1, &zx1, &group.camera_ref,
-			group.XC, group.YC, group.ZC, group.M);
+	    I_ortho_ref(e1, n1, z1, &ex1, &nx1, &zx1, &group->camera_ref,
+			group->XC, group->YC, group->ZC, group->M);
 
 	    G_debug(5, "\t\tAfter ortho ref (photo cords): ex = %f \t nx =  %f",
 		    ex1, nx1);
 
 	    /* photo coordinates ex1, nx1 to image coordinates ex, nx */
-	    I_georef(ex1, nx1, &ex, &nx, group.E21, group.N21, 1);
+	    I_georef(ex1, nx1, &ex, &nx, group->E21, group->N21, 1);
 
 	    G_debug(5, "\t\tAfter geo ref: ex = %f \t nx =  %f", ex, nx);
 

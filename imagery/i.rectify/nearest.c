@@ -1,20 +1,17 @@
-
 /*
  *      nearest.c - returns the nearest neighbor to a given
  *                  x,y position
  */
 
 #include <math.h>
-#include <grass/gis.h>
-#include <grass/raster.h>
 #include "global.h"
 
-void p_nearest(struct cache *ibuffer,	/* input buffer                  */
-	       void *obufptr,	/* ptr in output buffer          */
-	       int cell_type,	/* raster map type of obufptr    */
-	       double *row_idx,	/* row index in input matrix     */
-	       double *col_idx,	/* column index in input matrix  */
-	       struct Cell_head *cellhd	/* cell header of input layer    */
+void p_nearest(struct cache *ibuffer,	 /* input buffer                  */
+	       void *obufptr,	         /* ptr in output buffer          */
+	       int cell_type,	         /* raster map type of obufptr    */
+	       double *row_idx,	         /* row index in input matrix     */
+	       double *col_idx,	         /* column index in input matrix  */
+	       struct Cell_head *cellhd	 /* cell header of input layer    */
     )
 {
     int row, col;		/* row/col of nearest neighbor   */

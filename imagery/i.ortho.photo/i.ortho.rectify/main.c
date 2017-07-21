@@ -25,9 +25,6 @@
 
 int seg_mb_img, seg_mb_elev;
 
-int *ref_list;
-struct Ortho_Image_Group group;
-
 char *elev_name;
 char *elev_mapset;
 
@@ -35,7 +32,7 @@ func interpolate;
 
 struct Cell_head target_window;
 
-void err_exit(char *, char *);
+void err_exit(struct Ref *, char *, char *);
 
 /* modify this table to add new methods */
 struct menu menu[] = {
@@ -61,8 +58,10 @@ int main(int argc, char *argv[])
     int got_file = 0, target_overwrite = 0;
     char *overstr;
 
+    struct Ortho_Image_Group group;
+    int *ref_list;
+    int n;
     char *camera;
-    int n, nfiles;
     char tl[100];
     char math_exp[100];
     char units[100];
@@ -75,9 +74,9 @@ int main(int argc, char *argv[])
      *ext,			/* extension */
      *tres,			/* target resolution */
      *mem,			/* amount of memory for cache */
-     *interpol,			/* interpolation method:
+     *angle,			/* camera angle relative to ground surface */
+     *interpol;			/* interpolation method:
 				   nearest neighbor, bilinear, cubic */
-     *angle;			/* camera angle relative to ground surface */
 
     struct Flag *c, *a;
     struct GModule *module;
@@ -176,20 +175,25 @@ int main(int argc, char *argv[])
     elev_mapset = (char *)G_malloc(GMAPSET_MAX * sizeof(char));
 
     /* find group */
-    if (!I_find_group(group.name))
+    if (!I_find_group(group.name)) {
 	G_fatal_error(_("Group <%s> not found"), group.name);
+    }
 
-    /* get the group ref */
-    if (!I_get_group_ref(group.name, (struct Ref *)&group.group_ref))
-	G_fatal_error(_("Could not read REF file for group <%s>"), group.name);
-    nfiles = group.group_ref.nfiles;
-    if (nfiles <= 0) {
+    /* determine the number of files in this group */
+    if (!I_get_group_ref(group.name, &group.group_ref)) {
+	G_warning(_("Location: %s"), G_location());
+	G_warning(_("Mapset: %s"), G_mapset());
+	G_fatal_error(_("Could not read REF file for group <%s>"),
+	              group.name);
+    }
+
+    if (group.group_ref.nfiles <= 0) {
 	G_important_message(_("Group <%s> contains no raster maps; run i.group"),
 			    grp->answer);
 	exit(EXIT_SUCCESS);
     }
 
-    ref_list = (int *)G_malloc(nfiles * sizeof(int));
+    ref_list = (int *)G_malloc(group.group_ref.nfiles * sizeof(int));
 
     if (a->answer) {
 	for (n = 0; n < group.group_ref.nfiles; n++) {
@@ -232,7 +236,7 @@ int main(int argc, char *argv[])
 		}
 	    }
 	    if (got_file == 0)
-		err_exit(ifile->answers[m], group.name);
+		err_exit(&group.group_ref, ifile->answers[m], group.name);
 	}
     }
 
@@ -253,14 +257,14 @@ int main(int argc, char *argv[])
     }
 
     /* read the reference points for the group, compute image-to-photo trans. */
-    get_ref_points();
+    get_ref_points(&group);
 
     /* read the control points for the group, convert to photo coords. */
-    get_conz_points();
+    get_conz_points(&group);
 
     /* get the target */
     get_target(group.name);
-    
+
     /* Check the GRASS_OVERWRITE environment variable */
     if ((overstr = getenv("GRASS_OVERWRITE")))  /* OK ? */
 	target_overwrite = atoi(overstr);
@@ -312,8 +316,8 @@ int main(int argc, char *argv[])
 		G_warning(_("Target resolution must be > 0, ignored"));
 	}
 	/* get reference window from imagery group */
-	get_ref_window(&cellhd);
-	georef_window(&cellhd, &target_window, res);
+	get_ref_window(&group.group_ref, ref_list, &cellhd);
+	georef_window(&group, &cellhd, &target_window, res);
     }
 
     G_verbose_message(_("Using region: N=%f S=%f, E=%f W=%f"), target_window.north,
@@ -371,7 +375,7 @@ int main(int argc, char *argv[])
     }
 
     /* go do it */
-    exec_rectify(extension, interpol->answer, angle->answer);
+    exec_rectify(&group, ref_list, extension, interpol->answer, angle->answer);
 
     G_done_msg(" ");
 
@@ -379,7 +383,7 @@ int main(int argc, char *argv[])
 }
 
 
-void err_exit(char *file, char *grp)
+void err_exit(struct Ref *ref, char *file, char *grp)
 {
     int n;
 
@@ -387,8 +391,8 @@ void err_exit(char *file, char *grp)
 	    file, grp);
     G_message(_("Try:"));
 
-    for (n = 0; n < group.group_ref.nfiles; n++)
-	G_message("%s@%s", group.group_ref.file[n].name, group.group_ref.file[n].mapset);
+    for (n = 0; n < ref->nfiles; n++)
+	G_message("%s@%s", ref->file[n].name, ref->file[n].mapset);
 
     G_fatal_error(_("Exit!"));
 }

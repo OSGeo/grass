@@ -1,37 +1,24 @@
-/* angle.c */
-int camera_angle(struct Ortho_Image_Group *, char *);
-
-/* aver_z.c */
-int get_aver_elev(struct Ortho_Control_Points *, double *);
 
 /* cp.c */
-int get_conz_points(struct Ortho_Image_Group *);
-int get_ref_points(struct Ortho_Image_Group *);
-
-/* elev_data.c */
-int elev_data(char *, int);
+int get_control_points(struct Image_Group *, int);
 
 /* env.c */
 int select_current_env(void);
 int select_target_env(void);
 int show_env(void);
 
-/* equ.c */
-int Compute_ortho_equation(struct Ortho_Image_Group *);
-int Compute_ref_equation(struct Ortho_Image_Group *);
-
 /* exec.c */
-int exec_rectify(struct Ortho_Image_Group *, int *, char *, char *, char *);
+int exec_rectify(struct Image_Group *, int *, char *, char *, int);
 
 /* get_wind.c */
 int get_ref_window(struct Ref *, int *, struct Cell_head *);
-int georef_window(struct Ortho_Image_Group *, struct Cell_head *, struct Cell_head *, double);
+int georef_window(struct Image_Group *, struct Cell_head *, struct Cell_head *, int, double);
 
 /* rectify.c */
-int rectify(struct Ortho_Image_Group *, char *, char *, struct cache *, double, char *, char *);
+int rectify(struct Image_Group *, char *, char *, char *, int, char *);
 
 /* readcell.c */
-struct cache *readcell(int, int, int);
+struct cache *readcell(int, int);
 block *get_block(struct cache *, int);
 void release_cache(struct cache *);
 
