@@ -23,7 +23,7 @@
 
 #include "local_proto.h"
 
-struct Key_Value *projinfo, *projunits;
+struct Key_Value *projinfo, *projunits, *projepsg;
 struct Cell_head cellhd;
 
 int main(int argc, char *argv[])
