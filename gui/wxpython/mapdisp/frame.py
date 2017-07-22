@@ -243,18 +243,20 @@ class MapFrame(SingleMapFrame):
     def GetMapWindow(self):
         return self.MapWindow
 
-    def SetTitleNumber(self, displayId=1):
-        """Set map display title"""
-        try:
-            grassVersion = grass.version()['version']
-        except KeyError:
-            sys.stderr.write(_("Unable to get GRASS version\n"))
-            grassVersion = "?"
+    def SetTitleWithName(self, name):
+        """Set map display title its name
 
+        This function should be used when there are multiple map
+        displays.
+
+        Sets also other dynamically determined parts of the title
+        specific for GRASS GIS map display,
+        while the standard (inherited) ``SetTitle()`` function sets the
+        raw title and doesn't add or modify anything.
+        """
         gisenv = grass.gisenv()
-        title = _("GRASS GIS %(version)s Map Display: %(id)s - Location: %(loc)s@%(mapset)s") % {
-            'version': grassVersion,
-            'id': str(displayId),
+        title = _("GRASS GIS Map Display: %(name)s - %(loc)s/%(mapset)s") % {
+            'name': str(name),
             'loc': gisenv["LOCATION_NAME"],
             'mapset': gisenv["MAPSET"]}
 
