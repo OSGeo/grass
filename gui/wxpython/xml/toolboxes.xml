@@ -40,6 +40,7 @@
       <wxgui-item name="MapSwipe"/>
       <separator/>
       <wxgui-item name="LaunchScript"/>
+      <wxgui-item name="PyEdit"/>
       <separator/>
       <wxgui-item name="CloseGUI"/>
       <wxgui-item name="Quit"/>
