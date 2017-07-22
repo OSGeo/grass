@@ -521,6 +521,57 @@ class GRASSStartup(wx.Frame):
         else:
             return None
 
+    def SuggestDatabase(self):
+        """Suggest (set) possible GRASS Database value"""
+        # only if nothing is set (<UNKNOWN> comes from init script)
+        if self.GetRCValue("LOCATION_NAME") != "<UNKNOWN>":
+            return
+        home = os.path.expanduser('~')
+        # try some common directories for grassdata
+        # always assuming grassdata (lowercase)
+        # home for Linux
+        # Documents and My Documents for Windows
+        # potential translations (old Windows and some Linux)
+        # but ~ and ~/Documents should cover most of the cases
+        candidates = [
+            os.path.join(home, "grassdata"),
+            os.path.join(home, "Documents", "grassdata"),
+            os.path.join(home, "My Documents", "grassdata"),
+        ]
+        try:
+            # here goes everything which has potential unicode issues
+            candidates.append(os.path.join(home, _("Documents"), "grassdata"))
+            candidates.append(os.path.join(home, _("My Documents"), "grassdata"))
+        except UnicodeDecodeError:
+            # just ignore the errors if it doesn't work
+            pass
+        path = None
+        for candidate in candidates:
+            if os.path.exists(candidate):
+                path = candidate
+        if path:
+            try:
+                self.tgisdbase.SetValue(path)
+            except UnicodeDecodeError:
+                # restore previous state
+                # wizard gives error in this case, we just ignore
+                path = None
+                self.tgisdbase.SetValue(self.gisdbase)
+            # if we still have path
+            if path:
+                self.gisdbase = path
+                self.OnSetDatabase(None)
+        else:
+            # nothing found
+            # TODO: should it be warning, hint or message?
+            self._showWarning(_(
+                'GRASS needs a directory (GRASS database) '
+                'in which to store its data. '
+                'Create one now if you have not already done so. '
+                'A popular choice is "grassdata", located in '
+                'your home directory. '
+                'Press Browse button to select the directory.'))
+
     def OnWizard(self, event):
         """Location wizard started"""
         from location_wizard.wizard import LocationWizard
@@ -1160,20 +1211,7 @@ class StartUp(wx.App):
         StartUp.CenterOnScreen()
         self.SetTopWindow(StartUp)
         StartUp.Show()
-
-        if StartUp.GetRCValue("LOCATION_NAME") == "<UNKNOWN>":
-            # TODO: This is not ideal, either it should be checked elsewhere
-            # where other checks are performed or it should use some public
-            # API. There is no reason for not exposing it.
-            # TODO: another question is what should be warning, hint or message
-            StartUp._showWarning(
-                _(
-                    'GRASS needs a directory (GRASS database) '
-                    'in which to store its data. '
-                    'Create one now if you have not already done so. '
-                    'A popular choice is "grassdata", located in '
-                    'your home directory. '
-                    'Press Browse button to select the directory.'))
+        StartUp.SuggestDatabase()
 
         return 1
 
