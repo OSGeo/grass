@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 
     module->description = _("Converts LAS LiDAR point clouds to a GRASS vector map with libLAS.");
 
-    in_opt = G_define_standard_option(G_OPT_F_INPUT);
+    in_opt = G_define_standard_option(G_OPT_F_BIN_INPUT);
     in_opt->label = _("LAS input file");
     in_opt->description = _("LiDAR input files in LAS format (*.las or *.laz)");
 
