@@ -5,7 +5,7 @@
    \brief GProj Library - Functions for manipulating co-ordinate
    system representations
 
-   (C) 2003-2008, 2012 by the GRASS Development Team
+   (C) 2003-2017 by the GRASS Development Team
  
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -33,34 +33,16 @@
 static void DatumNameMassage(char **);
 #endif
 
-/*!
- * \brief Converts a GRASS co-ordinate system representation to WKT style.
- * 
- * Takes a GRASS co-ordinate system as specified by two sets of
- * key/value pairs derived from the PROJ_INFO and PROJ_UNITS files,
- * and converts it to the 'Well Known Text' format popularised by
- * proprietary GIS
- * 
- * \param proj_info Set of GRASS PROJ_INFO key/value pairs
- * \param proj_units Set of GRASS PROJ_UNIT key/value pairs
- * \param esri_style boolean Output ESRI-style WKT (Use OSRMorphToESRI() 
- *                   function provided by OGR library)
- * \param prettify boolean Use linebreaks and indents to 'prettify' output
- *                 WKT string (Use OSRExportToPrettyWkt() function in OGR)
- *
- * \return Pointer to a string containing the co-ordinate system in
- *         WKT format
- * \return NULL on error
- */
-char *GPJ_grass_to_wkt(const struct Key_Value *proj_info,
-		       const struct Key_Value *proj_units,
-		       int esri_style, int prettify)
+static char *grass_to_wkt(const struct Key_Value *proj_info,
+                          const struct Key_Value *proj_units,
+                          const struct Key_Value *proj_epsg,
+                          int esri_style, int prettify)
 {
 #ifdef HAVE_OGR
     OGRSpatialReferenceH hSRS;
     char *wkt, *local_wkt;
 
-    hSRS = GPJ_grass_to_osr(proj_info, proj_units);
+    hSRS = GPJ_grass_to_osr2(proj_info, proj_units, proj_epsg);
 
     if (hSRS == NULL)
 	return NULL;
@@ -82,6 +64,63 @@ char *GPJ_grass_to_wkt(const struct Key_Value *proj_info,
     G_warning(_("GRASS is not compiled with OGR support"));
     return NULL;
 #endif
+}
+
+/*!
+ * \brief Converts a GRASS co-ordinate system representation to WKT style.
+ * 
+ * Takes a GRASS co-ordinate system as specified by two sets of
+ * key/value pairs derived from the PROJ_INFO and PROJ_UNITS files,
+ * and converts it to the 'Well Known Text' format.
+ * 
+ * \param proj_info Set of GRASS PROJ_INFO key/value pairs
+ * \param proj_units Set of GRASS PROJ_UNIT key/value pairs
+ * \param esri_style boolean Output ESRI-style WKT (Use OSRMorphToESRI() 
+ *                   function provided by OGR library)
+ * \param prettify boolean Use linebreaks and indents to 'prettify' output
+ *                 WKT string (Use OSRExportToPrettyWkt() function in OGR)
+ *
+ * \return Pointer to a string containing the co-ordinate system in
+ *         WKT format
+ * \return NULL on error
+ */
+char *GPJ_grass_to_wkt(const struct Key_Value *proj_info,
+                       const struct Key_Value *proj_units,
+                       int esri_style, int prettify)
+{
+    return grass_to_wkt(proj_info, proj_units, NULL, esri_style, prettify);
+}
+
+/*!
+ * \brief Converts a GRASS co-ordinate system representation to WKT
+ * style. EPSG code is preferred if available.
+ * 
+ * Takes a GRASS co-ordinate system as specified key/value pairs
+ * derived from the PROJ_EPSG file. TOWGS84 parameter is scanned
+ * from PROJ_INFO file and appended to co-ordinate system definition
+ * imported from EPSG code by GDAL library. PROJ_UNITS file is
+ * ignored. The function converts it to the 'Well Known Text' format.
+ * 
+ * \todo Merge with GPJ_grass_to_wkt() in GRASS 8.
+ *
+ * \param proj_info Set of GRASS PROJ_INFO key/value pairs
+ * \param proj_units Set of GRASS PROJ_UNIT key/value pairs
+ * \param proj_epsg Set of GRASS PROJ_EPSG key/value pairs
+ * \param esri_style boolean Output ESRI-style WKT (Use OSRMorphToESRI() 
+ *                   function provided by OGR library)
+ * \param prettify boolean Use linebreaks and indents to 'prettify' output
+ *                 WKT string (Use OSRExportToPrettyWkt() function in OGR)
+ *
+ * \return Pointer to a string containing the co-ordinate system in
+ *         WKT format
+ * \return NULL on error
+ */
+char *GPJ_grass_to_wkt2(const struct Key_Value *proj_info,
+                       const struct Key_Value *proj_units,
+                       const struct Key_Value *proj_epsg,
+                       int esri_style, int prettify)
+{
+    return grass_to_wkt(proj_info, proj_units, proj_epsg, esri_style, prettify);
 }
 
 #ifdef HAVE_OGR
@@ -257,6 +296,67 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
     G_free(end);
 
     return hSRS2;
+}
+
+/*!
+ * \brief Converts a GRASS co-ordinate system to an
+ * OGRSpatialReferenceH object. EPSG code is preferred if available.
+ * 
+ * The co-ordinate system definition is imported from EPSG (by GDAL)
+ * definition if available. TOWGS84 parameter is scanned from
+ * PROJ_INFO file and appended to co-ordinate system definition. If
+ * EPSG code is not available, PROJ_INFO file is used as
+ * GPJ_grass_to_osr() does.
+
+ * \todo Merge with GPJ_grass_to_osr() in GRASS 8.
+ *
+ * \param proj_info Set of GRASS PROJ_INFO key/value pairs
+ * \param proj_units Set of GRASS PROJ_UNIT key/value pairs
+ * \param proj_epsg Set of GRASS PROJ_EPSG key/value pairs
+ * 
+ * \return OGRSpatialReferenceH object representing the co-ordinate system
+ *         defined by proj_info and proj_units or NULL if it fails
+ */
+OGRSpatialReferenceH GPJ_grass_to_osr2(const struct Key_Value * proj_info,
+                                       const struct Key_Value * proj_units,
+                                       const struct Key_Value * proj_epsg)
+{
+    int epsgcode = 0;
+    
+    if (proj_epsg) {
+        const char *epsgstr = G_find_key_value("epsg", proj_epsg);
+        if (epsgstr)
+            epsgcode = atoi(epsgstr);
+    }
+
+    if (epsgcode) {
+        const char *towgs84;
+        OGRSpatialReferenceH hSRS;
+        
+        hSRS = OSRNewSpatialReference(NULL);
+
+        OSRImportFromEPSG(hSRS, epsgcode);
+
+        /* take +towgs84 from projinfo file if defined) */
+        towgs84 = G_find_key_value("towgs84", proj_info);
+        if (towgs84) {
+            char **tokens;
+            int i;
+            double df[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+            
+            tokens = G_tokenize(towgs84, ",");
+
+            for (i = 0; i < G_number_of_tokens(tokens); i++)
+                df[i] = atof(tokens[i]);
+            G_free_tokens(tokens);
+            
+            OSRSetTOWGS84(hSRS, df[0], df[1], df[2], df[3], df[4], df[5], df[6]);
+        }
+        
+        return hSRS;
+    }
+
+    return GPJ_grass_to_osr(proj_info, proj_units);
 }
 
 /*!

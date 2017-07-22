@@ -15,8 +15,10 @@ int pj_print_proj_params(const struct pj_info *, const struct pj_info *);
 
 /* convert.c */
 char *GPJ_grass_to_wkt(const struct Key_Value *, const struct Key_Value *, int, int);
+char *GPJ_grass_to_wkt2(const struct Key_Value *, const struct Key_Value *, const struct Key_Value *, int, int);
 #ifdef HAVE_OGR
 OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value *, const struct Key_Value *);
+OGRSpatialReferenceH GPJ_grass_to_osr2(const struct Key_Value *, const struct Key_Value *, const struct Key_Value *);
 const char *GPJ_set_csv_loc(const char *);
 int GPJ_osr_to_grass(struct Cell_head *, struct Key_Value **,
 		     struct Key_Value **, OGRSpatialReferenceH, int);
