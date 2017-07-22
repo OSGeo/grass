@@ -62,6 +62,11 @@
     <handler>OnRunScript</handler>
     <description>Launches script file.</description>
   </wxgui-item>
+  <wxgui-item name="PyEdit">
+    <label>Simple Python Editor</label>
+    <handler>OnSimpleEditor</handler>
+    <description>Launches Simple Python Editor.</description>
+  </wxgui-item>
   <wxgui-item name="CloseGUI">
     <label>Close GUI</label>
     <handler>OnCloseWindow</handler>
