@@ -537,6 +537,7 @@
     <items>
       <wxgui-item name="ShowRegion"/>
       <wxgui-item name="ShowRegionLL"/>
+      <wxgui-item name="ShowRegionExtent"/>
       <module-item name="g.region">
         <label>Set region</label>
       </module-item>

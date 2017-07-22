@@ -270,6 +270,12 @@
     <description>Shows the extent and resolution of the computational region.</description>
     <keywords>general,settings</keywords>
   </wxgui-item>
+  <wxgui-item name="ShowRegionExtent">
+    <label>Show current region extent in Map Display</label>
+    <handler>OnShowRegionExtent</handler>
+    <description>Shows the extent of the computational region in Map Display.</description>
+    <keywords>general,settings</keywords>
+  </wxgui-item>
   <wxgui-item name="MapsetAccess">
     <label>Mapset access</label>
     <handler>OnMapsets</handler>
