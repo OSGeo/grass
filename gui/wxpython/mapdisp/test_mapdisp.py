@@ -55,6 +55,9 @@ import wx
 
 import grass.script as grass
 
+from grass.script.setup import set_gui_path
+set_gui_path()
+
 from core.utils import _
 from core.settings import UserSettings
 from core.globalvar import CheckWxVersion
@@ -193,11 +196,6 @@ class Tester(object):
         panel.Layout()
 
         window.ZoomToWind()
-
-        from mapdisp.frame import MeasureController
-        self.measureController = MeasureController(giface)
-        self.measureController.StartMeasurement()
-        self._listenToAllMapWindowSignals(window)
 
         self.frame.Show()
 
