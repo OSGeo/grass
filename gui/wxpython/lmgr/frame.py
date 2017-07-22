@@ -1108,9 +1108,11 @@ class GMFrame(wx.Frame):
             GMessage(parent=self,
                      message=_("Current mapset is <%s>.") % mapset)
 
+            # TODO: this does not use the actual names if they were
+            # renamed (it just uses the numbers)
             dispId = 1
             for display in self.GetMapDisplay(onlyCurrent=False):
-                display.SetTitleNumber(dispId)  # TODO: signal ?
+                display.SetTitleWithName(dispId)  # TODO: signal ?
                 dispId += 1
 
     def OnChangeCWD(self, event=None, cmd=None):
@@ -1719,11 +1721,12 @@ class GMFrame(wx.Frame):
             self.notebookLayers.SetPageText(
                 page=self.currentPageNum, text=name)
             mapdisplay = self.GetMapDisplay()
-            mapdisplay.SetTitle(
-                _("GRASS GIS {version} Map Display: {name} - Location: {loc}").format(
-                    version=grass.version()['version'],
-                    name=name,
-                    loc=grass.gisenv()["LOCATION_NAME"]))
+            # There is a slight inconsistency: When creating the display
+            # we use just the number, but when user renames it,
+            # we use the full name. Both cases make sense and each
+            # separately gives expected result, so we keep this
+            # behavior.
+            mapdisplay.SetTitleWithName(name)
         dlg.Destroy()
 
     def OnRasterRules(self, event):
