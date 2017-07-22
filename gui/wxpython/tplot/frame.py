@@ -384,8 +384,8 @@ class TplotFrame(wx.Frame):
         for cat in cats:
             if str(cat) not in categories:
                 GMessage(message=_("Category {ca} is not on vector map"
-                                   " {ma} and it will be used").format(ma=mapp,
-                                                                       ca=cat),
+                                   " {ma} and it will be not used").format(ma=mapp,
+                                                                           ca=cat),
                          parent=self)
                 cats.remove(cat)
         return cats
