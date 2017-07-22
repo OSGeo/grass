@@ -1,6 +1,6 @@
 #include <grass/config.h>
 
-extern struct Key_Value *projinfo, *projunits;
+extern struct Key_Value *projinfo, *projunits, *projepsg;
 extern struct Cell_head cellhd;
 
 /* input.c */

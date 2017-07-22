@@ -52,6 +52,7 @@ void input_currloc(void)
     if (cellhd.proj != PROJECTION_XY) {
 	projinfo = G_get_projinfo();
 	projunits = G_get_projunits();
+        projepsg = G_get_projepsg();
     }
 
     return;

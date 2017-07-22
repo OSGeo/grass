@@ -180,7 +180,7 @@ void print_wkt(int esristyle, int dontprettify)
     if (check_xy(FALSE))
 	return;
 
-    outwkt = GPJ_grass_to_wkt(projinfo, projunits, esristyle,
+    outwkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, esristyle,
 			      !(dontprettify));
     if (outwkt != NULL) {
 	fprintf(stdout, "%s\n", outwkt);
