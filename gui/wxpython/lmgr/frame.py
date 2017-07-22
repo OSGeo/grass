@@ -2384,6 +2384,23 @@ class GMFrame(wx.Frame):
         # show map display
         self.GetMapDisplay().Show()
 
+    def OnShowRegionExtent(self, event):
+        """Add vector labels map layer to the current layer tree"""
+        # start new map display if no display is available
+        if not self.currentPage:
+            self.NewDisplay(show=True)
+        # get current map display
+        mapdisp = self.GetMapDisplay()
+        # change the property
+        mapdisp.mapWindowProperties.showRegion = True
+        # show map display (user said show so make sure it is visible)
+        mapdisp.Show()
+        # redraw map if auto-rendering is enabled
+        # seems little too low level for this place
+        # no redraw when Render is unchecked
+        if mapdisp.IsAutoRendered():
+            mapdisp.GetMapWindow().UpdateMap(render=False)
+
     def OnDeleteLayer(self, event):
         """Remove selected map layer from the current layer Tree
         """
