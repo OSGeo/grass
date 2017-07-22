@@ -16,8 +16,8 @@ static void set_to_null(struct RASTER_MAP_PTR *, int);
 
 int execute_random(struct rr_state *theState)
 {
-    long nt;
-    long nc;
+    gcell_count nt;
+    gcell_count nc;
     struct Cell_head window;
     int nrows, ncols, row, col;
     int infd, cinfd, outfd;
@@ -240,8 +240,13 @@ int execute_random(struct rr_state *theState)
     }
 
     if (nt > 0)
-	G_warning(_("Only [%ld] random points created"),
+#ifdef HAVE_LONG_LONG_INT
+	G_warning(_("Only [%llu] random points created"),
 		  theState->nRand - nt);
+#else
+	G_warning(_("Only [%lu] random points created"),
+		  theState->nRand - nt);
+#endif
 
     /* close files */
     Rast_close(infd);
