@@ -2566,7 +2566,13 @@ class LocationWizard(wx.Object):
             # change to new GISDbase or create new one
             if os.path.isdir(database) != True:
                 # create new directory
-                os.mkdir(database)
+                try:
+                    os.mkdir(database)
+                except OSError as error:
+                    GError(parent=self.wizard, message="%s <%s>" %
+                           (_("Unable to create new GRASS Database"),
+                           database))
+                    return None
 
             # change to new GISDbase directory
             RunCommand('g.gisenv',
