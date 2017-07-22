@@ -157,8 +157,10 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
+    G_add_keyword(_("statistics"));
     G_add_keyword(_("conversion"));
     G_add_keyword(_("aggregation"));
+    G_add_keyword(_("binning"));
     G_add_keyword("ASCII");
     G_add_keyword(_("LIDAR"));
     module->description =
