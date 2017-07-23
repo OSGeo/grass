@@ -999,7 +999,7 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
 # interface to g.gisenv
 
 
-def gisenv():
+def gisenv(env=None):
     """Returns the output from running g.gisenv (with no arguments), as a
     dictionary. Example:
 
@@ -1007,9 +1007,10 @@ def gisenv():
     >>> print(env['GISDBASE'])  # doctest: +SKIP
     /opt/grass-data
 
+    :param env run with different environment
     :return: list of GRASS variables
     """
-    s = read_command("g.gisenv", flags='n')
+    s = read_command("g.gisenv", flags='n', env=env)
     return parse_key_val(s)
 
 # interface to g.region
@@ -1029,12 +1030,13 @@ def locn_is_latlong():
         return False
 
 
-def region(region3d=False, complete=False):
+def region(region3d=False, complete=False, env=None):
     """Returns the output from running "g.region -gu", as a
     dictionary. Example:
 
     :param bool region3d: True to get 3D region
     :param bool complete:
+    :param env env
 
     >>> curent_region = region()
     >>> # obtain n, s, e and w values
@@ -1052,7 +1054,7 @@ def region(region3d=False, complete=False):
     if complete:
         flgs += 'cep'
 
-    s = read_command("g.region", flags=flgs)
+    s = read_command("g.region", flags=flgs, env=env)
     reg = parse_key_val(s, val_type=float)
     for k in ['projection', 'zone', 'rows',  'cols',  'cells',
               'rows3', 'cols3', 'cells3', 'depths']:
@@ -1063,7 +1065,7 @@ def region(region3d=False, complete=False):
     return reg
 
 
-def region_env(region3d=False, **kwargs):
+def region_env(region3d=False, flags=None, env=None, **kwargs):
     """Returns region settings as a string which can used as
     GRASS_REGION environmental variable.
 
@@ -1074,6 +1076,8 @@ def region_env(region3d=False, **kwargs):
     temporary region used for raster-based computation.
 
     :param bool region3d: True to get 3D region
+    :param string flags: for example 'a'
+    :param env: different environment than current
     :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
 
     ::
@@ -1086,9 +1090,9 @@ def region_env(region3d=False, **kwargs):
     :return: empty string on error
     """
     # read proj/zone from WIND file
-    env = gisenv()
-    windfile = os.path.join(env['GISDBASE'], env['LOCATION_NAME'],
-                            env['MAPSET'], "WIND")
+    gis_env = gisenv(env)
+    windfile = os.path.join(gis_env['GISDBASE'], gis_env['LOCATION_NAME'],
+                            gis_env['MAPSET'], "WIND")
     fd = open(windfile, "r")
     grass_region = ''
     for line in fd.readlines():
@@ -1109,8 +1113,10 @@ def region_env(region3d=False, **kwargs):
     flgs = 'ug'
     if region3d:
         flgs += '3'
+    if flags:
+        flgs += flags
 
-    s = read_command('g.region', flags=flgs, **kwargs)
+    s = read_command('g.region', flags=flgs, env=env, **kwargs)
     if not s:
         return ''
     reg = parse_key_val(s)
