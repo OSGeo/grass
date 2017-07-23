@@ -7,7 +7,7 @@
 Classes:
  - dialogs::CatalogReprojectionDialog
 
-(C) 2016 by the GRASS Development Team
+(C) 2017 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -17,63 +17,66 @@ This program is free software under the GNU General Public License
 
 
 import wx
-import grass.script as gscript
-from grass.script import task as gtask
-from gui_core.forms import CmdPanel
+from gui_core.widgets import FloatValidator, IntegerValidator
 from core.giface import Notification
+from core.gcmd import RunCommand
+
+from grass.script import parse_key_val, region_env
 
 
 class CatalogReprojectionDialog(wx.Dialog):
-    """ """
-    def __init__(self, parent, giface, inputGisdbase, inputLocation, inputMapset, inputLayer,
-                 outputGisdbase, outputLocation, outputMapset, etype,
+    def __init__(self, parent, giface, inputGisdbase, inputLocation,
+                 inputMapset, inputLayer, inputEnv,
+                 outputGisdbase, outputLocation, outputMapset, outputLayer,
+                 etype, outputEnv, callback,
                  id=wx.ID_ANY, title=_("Reprojection"),
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
-        self.parent = parent    # GMFrame
-        self._giface = giface  # used to add layers
+
+        self.parent = parent
+        self._giface = giface
 
         wx.Dialog.__init__(self, parent, id, title, style=style,
                            name="ReprojectionDialog")
 
-        self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.panel = wx.Panel(parent=self)
         self.iGisdbase = inputGisdbase
         self.iLocation = inputLocation
         self.iMapset = inputMapset
         self.iLayer = inputLayer
+        self.iEnv = inputEnv
         self.oGisdbase = outputGisdbase
         self.oLocation = outputLocation
         self.oMapset = outputMapset
+        self.oLayer = outputLayer
         self.etype = etype
+        self.oEnv = outputEnv
+        self.callback = callback
 
-        self._blackList = {
-            'enabled': True,
-            'items': {
-                'r.proj': {
-                    'params': ['location', 'mapset', 'input', 'dbase'],
-                    'flags': ['l']},
-                'v.proj': {
-                    'params': ['location', 'mapset', 'input', 'dbase'],
-                    'flags': ['l']}}}
+        self._widgets()
+        self._doLayout()
 
         if self.etype == 'raster':
-            grass_task = gtask.parse_interface('r.proj', blackList=self._blackList)
-        elif self.etype == 'vector':
-            grass_task = gtask.parse_interface('v.proj', blackList=self._blackList)
+            self._estimateResampling()
+            self._estimateResolution()
 
-        self.settingsPanel = CmdPanel(parent=self, giface=self._giface, task=grass_task, frame=None)
-        self.closeOnFinished = wx.CheckBox(self.panel, label=_("Close dialog on finish"))
+    def _widgets(self):
+        if self.etype == 'raster':
+            self.resolution = wx.TextCtrl(self.panel, validator=FloatValidator())
+            self.resampling = wx.Choice(self.panel, size=(200, -1),
+                                        choices=['nearest', 'bilinear', 'bicubic', 'lanczos',
+                                                 'bilinear_f', 'bicubic_f', 'lanczos_f'])
+        else:
+            self.vsplit = wx.TextCtrl(self.panel, validator=IntegerValidator())
+            self.vsplit.SetValue('10000')
+
         #
         # buttons
         #
-        # cancel
         self.btn_close = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btn_close.Bind(wx.EVT_BUTTON, lambda evt: self.Close())
+        self.SetEscapeId(self.btn_close.GetId())
 
         # run
-        self.btn_run = wx.Button(
-            parent=self.panel,
-            id=wx.ID_OK,
-            label=_("Reproject"))
+        self.btn_run = wx.Button(parent=self.panel, id=wx.ID_OK, label=_("Reproject"))
         if self.etype == 'raster':
             self.btn_run.SetToolTipString(_("Reproject raster"))
         elif self.etype == 'vector':
@@ -81,62 +84,98 @@ class CatalogReprojectionDialog(wx.Dialog):
         self.btn_run.SetDefault()
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnReproject)
 
-        self.doLayout()
-
-    def doLayout(self):
+    def _doLayout(self):
         """Do layout"""
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
+        optionsSizer = wx.GridBagSizer(5, 5)
 
-        dialogSizer.Add(wx.StaticText(self.panel, label=_("The copied layer needs to be reprojected:")),
-                        flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=5)
-        dialogSizer.Add(self.settingsPanel, proportion=1,
-                        flag=wx.ALL | wx.EXPAND, border=5)
-        dialogSizer.Add(self.closeOnFinished, flag=wx.ALL | wx.EXPAND, border=5)
-
+        label = _("Map layer <{ml}> needs to be reprojected.\n"
+                  "Please review and modify reprojection parameters:").format(ml=self.iLayer)
+        dialogSizer.Add(wx.StaticText(self.panel, label=label),
+                        flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=10)
+        if self.etype == 'raster':
+            optionsSizer.Add(wx.StaticText(self.panel, label=_("Estimated resolution:")),
+                             pos=(0, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+            optionsSizer.Add(self.resolution, pos=(0, 1), flag=wx.EXPAND)
+            optionsSizer.Add(wx.StaticText(self.panel, label=_("Resampling method:")),
+                             pos=(1, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+            optionsSizer.Add(self.resampling, pos=(1, 1), flag=wx.EXPAND)
+        else:
+            optionsSizer.Add(wx.StaticText(self.panel, label=_("Maximum segment length:")),
+                             pos=(1, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+            optionsSizer.Add(self.vsplit, pos=(1, 1), flag=wx.EXPAND)
+        optionsSizer.AddGrowableCol(1)
+        dialogSizer.Add(optionsSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=10)
+        helptext = wx.StaticText(self.panel,
+                                 label="For more reprojection options,"
+                                       " please see {module}".format(module='r.proj' if self.etype == 'raster'
+                                                                     else 'v.proj'))
+        dialogSizer.Add(helptext, proportion=0, flag=wx.ALL | wx.EXPAND, border=10)
         #
         # buttons
         #
-        btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-
-        btnsizer.Add(self.btn_close, proportion=0,
-                     flag=wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER,
-                     border=10)
-
-        btnsizer.Add(self.btn_run, proportion=0,
-                     flag=wx.RIGHT | wx.ALIGN_CENTER,
-                     border=10)
-
-        dialogSizer.Add(
-            btnsizer,
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
-            border=5)
+        btnStdSizer = wx.StdDialogButtonSizer()
+        btnStdSizer.AddButton(self.btn_run)
+        btnStdSizer.AddButton(self.btn_close)
+        btnStdSizer.Realize()
+        dialogSizer.Add(btnStdSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.panel.SetSizer(dialogSizer)
         dialogSizer.Fit(self.panel)
 
         self.Layout()
-        # sizing not working properly
-        self.SetMinSize(self.GetBestSize())
+        self.SetSize(self.GetBestSize())
 
-    def getSettingsPageCmd(self):
-        return self.settingsPanel.createCmd(
-            ignoreErrors=True, ignoreRequired=True)
+    def _estimateResolution(self):
+        output = RunCommand('r.proj', flags='g', quiet=False, read=True, input=self.iLayer,
+                            dbase=self.iGisdbase, location=self.iLocation, mapset=self.iMapset,
+                            env=self.oEnv).strip()
+        params = parse_key_val(output, vsep=' ')
+        output = RunCommand('g.region', flags='ug', quiet=False, read=True, env=self.oEnv,
+                            parse=lambda x: parse_key_val(x, val_type=float), **params)
+        cell_ns = (output['n'] - output['s']) / output['rows']
+        cell_ew = (output['e'] - output['w']) / output['cols']
+        estimate = (cell_ew + cell_ns) / 2.
+        self.resolution.SetValue(str(estimate))
+        self.params = params
+
+    def _estimateResampling(self):
+        output = RunCommand('r.info', flags='g', quiet=False, read=True, map=self.iLayer,
+                            env=self.iEnv, parse=parse_key_val)
+        if output['datatype'] == 'CELL':
+            self.resampling.SetStringSelection('nearest')
+        else:
+            self.resampling.SetStringSelection('bilinear')
 
     def OnReproject(self, event):
-        cmd = self.getSettingsPageCmd()
-        cmd.append('dbase=' + self.iGisdbase)
-        cmd.append('location=' + self.iLocation)
-        cmd.append('mapset=' + self.iMapset)
-        cmd.append('input=' + self.iLayer)
+        cmd = []
+        if self.etype == 'raster':
+            cmd.append('r.proj')
+            cmd.append('dbase=' + self.iGisdbase)
+            cmd.append('location=' + self.iLocation)
+            cmd.append('mapset=' + self.iMapset)
+            cmd.append('input=' + self.iLayer)
+            cmd.append('output=' + self.oLayer)
+            cmd.append('method=' + self.resampling.GetStringSelection())
 
-        self.tmpfile, env = gscript.create_environment(self.oGisdbase, self.oLocation, self.oMapset)
+            self.oEnv['GRASS_REGION'] = region_env(n=self.params['n'], s=self.params['s'],
+                                                   e=self.params['e'], w=self.params['w'],
+                                                   flags='a', res=float(self.resolution.GetValue()),
+                                                   env=self.oEnv)
+        else:
+            cmd.append('v.proj')
+            cmd.append('dbase=' + self.iGisdbase)
+            cmd.append('location=' + self.iLocation)
+            cmd.append('mapset=' + self.iMapset)
+            cmd.append('input=' + self.iLayer)
+            cmd.append('output=' + self.oLayer)
+            cmd.append('smax=' + self.vsplit.GetValue())
 
-        self._giface.RunCmd(cmd, env=env,
-               onDone=self.OnDone, userData=None,
-               notification=Notification.MAKE_VISIBLE)
+        self._giface.RunCmd(cmd, env=self.oEnv, compReg=False, addLayer=False,
+                            onDone=self._onDone, userData=None,
+                            notification=Notification.MAKE_VISIBLE)
 
-    def OnDone(self, event):
-        gscript.try_remove(self.tmpfile)
-        if self.closeOnFinished.IsChecked() and event.returncode == 0:
-            self.Close()
+        event.Skip()
+
+    def _onDone(self, event):
+        self.callback()

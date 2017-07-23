@@ -247,7 +247,7 @@ class StandaloneGrassInterface():
         event.Skip()
 
     def RunCmd(self, command, compReg=True, env=None, skipInterface=False,
-               onDone=None, onPrepare=None, userData=None,
+               onDone=None, onPrepare=None, userData=None, addLayer=None,
                notification=Notification.MAKE_VISIBLE):
         self._gconsole.RunCmd(
             command=command,
@@ -257,6 +257,7 @@ class StandaloneGrassInterface():
             onDone=onDone,
             onPrepare=onPrepare,
             userData=userData,
+            addLayer=addLayer,
             notification=notification)
 
     def Help(self, entry):
