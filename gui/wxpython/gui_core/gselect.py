@@ -702,7 +702,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             self.Dismiss()
 
         elif event.GetKeyCode() == wx.WXK_RETURN:
-            if self.seltree.GetPyData(item)['node']:
+            if self.seltree.GetItemData(item)['node']:
                 self.value = []
             else:
                 self._selectTreeItem(item)
@@ -716,7 +716,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         if item and flags & wx.TREE_HITTEST_ONITEMLABEL:
             self.curitem = item
 
-            if self.seltree.GetPyData(item)['node']:
+            if self.seltree.GetItemData(item)['node']:
                 evt.Skip()
                 return
 
@@ -727,8 +727,8 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
     def _selectTreeItem(self, item):
         fullName = self.seltree.GetItemText(item)
-        if self.fullyQualified and self.seltree.GetPyData(item)['mapset']:
-            fullName += '@' + self.seltree.GetPyData(item)['mapset']
+        if self.fullyQualified and self.seltree.GetItemData(item)['mapset']:
+            fullName += '@' + self.seltree.GetItemData(item)['mapset']
 
         if self.multiple:
             self.value.append(fullName)
@@ -743,7 +743,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
     def _onItemConfirmed(self, event):
         item = event.GetItem()
-        if self.seltree.GetPyData(item)['node']:
+        if self.seltree.GetItemData(item)['node']:
             self.value = []
         else:
             self._selectTreeItem(item)

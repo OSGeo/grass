@@ -30,6 +30,7 @@ from gui_core.dialogs import TextEntryDialog
 from core.giface import StandaloneGrassInterface
 from core.treemodel import TreeModel, DictNode
 from gui_core.treeview import TreeView
+from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
 
 from grass.pydispatch.signal import Signal
@@ -941,7 +942,7 @@ class DataCatalogTree(LocationMapTree):
 
     def _popupMenuLayer(self):
         """Create popup menu for layers"""
-        menu = wx.Menu()
+        menu = Menu()
         genv = gisenv()
         currentLocation, currentMapset = self._isCurrent(genv)
 

@@ -217,7 +217,7 @@ class SearchModuleWindow(wx.Panel):
         sizer.Add(self._search, proportion=0,
                   flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
-        sizer.Add(item=btnSizer, proportion=0,
+        sizer.Add(btnSizer, proportion=0,
                   flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
         sizer.Add(self._helpText,
