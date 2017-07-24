@@ -11,21 +11,22 @@ of <b>output</b> vector points.
 
 <h2>NOTES</h2>
 
-<p>From a theoretical perspective, the interpolating procedure takes
-place in two parts: the first is an estimate of the linear
-coefficients of a spline function is derived from the observation
-points using a least squares regression; the second is the computation
-of the interpolated surface (or interpolated vector points). As used
-here, the splines are 2D piece-wise non-zero polynomial functions
-calculated within a limited, 2D area. The length of each spline step
-is defined by <b>ew_step</b> for the east-west direction and
-<b>ns_step</b> for the north-south direction. Step is defined in number of 
-pixels. For optimal performance, the length of spline step should be no less
-than the distance between observation points. Each vector point observation is
-modeled as a linear function of the non-zero splines in the area around the 
-observation. The least squares regression predicts the the coefficients of these
-linear functions. Regularization, avoids the need to have one observation and 
-one coefficient for each spline (in order to avoid instability). 
+<p>From a theoretical perspective, the interpolating procedure takes 
+place in two parts: the first is an estimate of the linear coefficients 
+of a spline function is derived from the observation points using a 
+least squares regression; the second is the computation of the 
+interpolated surface (or interpolated vector points). As used here, the 
+splines are 2D piece-wise non-zero polynomial functions calculated 
+within a limited, 2D area. The length (in mapping units) of each spline 
+step is defined by <b>ew_step</b> for the east-west direction and 
+<b>ns_step</b> for the north-south direction. For optimal performance, 
+the length of spline step should be no less than the distance between 
+observation points. Each vector point observation is modeled as a 
+linear function of the non-zero splines in the area around the 
+observation. The least squares regression predicts the the coefficients 
+of these linear functions. Regularization, avoids the need to have one 
+observation and one coefficient for each spline (in order to avoid 
+instability). 
 
 <p>With regularly distributed data points, a spline step corresponding
 to the maximum distance between two points in both the east and north
