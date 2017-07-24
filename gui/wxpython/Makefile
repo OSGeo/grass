@@ -11,7 +11,8 @@ DSTDIR = $(GUIDIR)/wxpython
 SRCFILES := $(wildcard icons/*.py scripts/*.py xml/*) \
 	$(wildcard animation/*.py core/*.py datacatalog/*.py dbmgr/*.py gcp/*.py gmodeler/*.py \
 	gui_core/*.py iclass/*.py lmgr/*.py location_wizard/*.py mapwin/*.py mapdisp/*.py \
-	mapswipe/*.py modules/*.py nviz/*.py psmap/*.py rdigit/*.py rlisetup/*.py timeline/*.py vdigit/*.py \
+	mapswipe/*.py modules/*.py nviz/*.py psmap/*.py rdigit/*.py \
+	rlisetup/*.py startup/*.py timeline/*.py vdigit/*.py \
 	vnet/*.py web_services/*.py wxplot/*.py iscatt/*.py tplot/*.py photo2image/*.py image2target/*.py) \
 	gis_set.py gis_set_error.py wxgui.py README
 
@@ -20,7 +21,8 @@ DSTFILES := $(patsubst %,$(DSTDIR)/%,$(SRCFILES)) \
 
 PYDSTDIRS := $(patsubst %,$(DSTDIR)/%,animation core datacatalog dbmgr gcp gmodeler \
 	gui_core iclass lmgr location_wizard mapwin mapdisp modules nviz psmap \
-	mapswipe vdigit wxplot web_services rdigit rlisetup vnet timeline iscatt tplot photo2image image2target)
+	mapswipe vdigit wxplot web_services rdigit rlisetup startup \
+	vnet timeline iscatt tplot photo2image image2target)
 
 
 DSTDIRS := $(patsubst %,$(DSTDIR)/%,icons scripts xml)

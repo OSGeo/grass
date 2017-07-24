@@ -197,6 +197,10 @@ class GRASSStartup(wx.Frame):
                                              # GTC Delete location
                                              label=_("De&lete"))
         self.delete_location_button.SetToolTip(_("Delete selected location"))
+        self.download_location_button = Button(parent=self.location_panel, id=wx.ID_ANY,
+                                             label=_("Do&wnload"))
+        self.download_location_button.SetToolTip(_("Download sample location"))
+
         self.rename_mapset_button = Button(parent=self.mapset_panel, id=wx.ID_ANY,
                                            # GTC Rename mapset
                                            label=_("&Rename"))
@@ -238,6 +242,7 @@ class GRASSStartup(wx.Frame):
 
         self.rename_location_button.Bind(wx.EVT_BUTTON, self.RenameLocation)
         self.delete_location_button.Bind(wx.EVT_BUTTON, self.DeleteLocation)
+        self.download_location_button.Bind(wx.EVT_BUTTON, self.DownloadLocation)
         self.rename_mapset_button.Bind(wx.EVT_BUTTON, self.RenameMapset)
         self.delete_mapset_button.Bind(wx.EVT_BUTTON, self.DeleteMapset)
 
@@ -389,7 +394,8 @@ class GRASSStartup(wx.Frame):
             panel=self.location_panel,
             list_box=self.lblocations,
             buttons=[self.bwizard, self.rename_location_button,
-                     self.delete_location_button],
+                     self.delete_location_button,
+                     self.download_location_button],
             description=self.llocation)
         mapset_boxsizer = layout_list_box(
             box=self.mapset_box,
@@ -815,6 +821,26 @@ class GRASSStartup(wx.Frame):
                 wx.MessageBox(message=_('Unable to delete location'))
 
         dlg.Destroy()
+
+    def DownloadLocation(self, event):
+        """Download location online"""
+        from startup.locdownload import LocationDownloadDialog
+
+        loc_download = LocationDownloadDialog(parent=self, database=self.gisdbase)
+        loc_download.ShowModal()
+        location = loc_download.GetLocation()
+        if location:
+            # get the new location to the list
+            self.UpdateLocations(self.gisdbase)
+            # seems to be used in similar context
+            self.UpdateMapsets(os.path.join(self.gisdbase, location))
+            self.lblocations.SetSelection(
+                self.listOfLocations.index(location))
+            # wizard does this as well, not sure if needed
+            self.SetLocation(self.gisdbase, location, 'PERMANENT')
+            # seems to be used in similar context
+            self.OnSelectLocation(None)
+        loc_download.Destroy()
 
     def UpdateLocations(self, dbase):
         """Update list of locations"""
