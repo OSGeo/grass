@@ -22,7 +22,7 @@ try:
     import wx.lib.agw.customtreectrl as CT
 except ImportError:
     import wx.lib.customtreectrl as CT
-import wx.lib.buttons as buttons
+
 try:
     import treemixin
 except ImportError:
@@ -47,7 +47,7 @@ from core.gcmd import GWarning, GError, RunCommand
 from icons.icon import MetaIcon
 from web_services.dialogs import SaveWMSLayerDialog
 from gui_core.widgets import MapValidator
-from gui_core.wrap import Menu
+from gui_core.wrap import Menu, GenBitmapButton
 from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 from core.giface import Notification
 
@@ -1349,9 +1349,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.groupnode += 1
         else:
             btnbmp = LMIcons["layerOptions"].GetBitmap((16, 16))
-            ctrl = buttons.GenBitmapButton(
+            ctrl = GenBitmapButton(
                 self, id=wx.ID_ANY, bitmap=btnbmp, size=(24, 24))
-            ctrl.SetToolTipString(_("Click to edit layer settings"))
+            ctrl.SetToolTip(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenuButton, ctrl)
         # add layer to the layer tree
         if loadWorkspace:
@@ -1898,9 +1898,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif self.GetLayerInfo(dragItem, key='ctrl'):
             # recreate data layer
             btnbmp = LMIcons["layerOptions"].GetBitmap((16, 16))
-            newctrl = buttons.GenBitmapButton(
+            newctrl = GenBitmapButton(
                 self, id=wx.ID_ANY, bitmap=btnbmp, size=(24, 24))
-            newctrl.SetToolTipString(_("Click to edit layer settings"))
+            newctrl.SetToolTip(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenuButton, newctrl)
             data = self.GetPyData(dragItem)
 

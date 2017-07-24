@@ -35,7 +35,7 @@ from core.globalvar import wxPythonPhoenix
 import grass.script as grass
 
 from gui_core.dialogs import SavedRegion
-from gui_core.wrap import DragImage, PseudoDC, EmptyBitmap, BitmapFromImage
+from gui_core.wrap import DragImage, PseudoDC, EmptyBitmap, BitmapFromImage, Window
 from core.gcmd import RunCommand, GException, GError, GMessage
 from core.debug import Debug
 from core.settings import UserSettings
@@ -52,7 +52,7 @@ except ImportError:
     haveCtypes = False
 
 
-class BufferedMapWindow(MapWindowBase, wx.Window):
+class BufferedMapWindow(MapWindowBase, Window):
     """A Buffered window class (2D view mode)
 
     Superclass for VDigitWindow (vector digitizer).
@@ -1695,8 +1695,8 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         pos = event.GetPosition()
         idlist = self.pdc.FindObjects(pos[0], pos[1], self.hitradius)
         if self.overlays and idlist and [i for i in idlist if i in self.overlays.keys()]:  # legend, scale bar, north arrow, dtext
-            self.SetToolTipString("Double click in Pointer mode to set object"
-                                  " properties,\nright click to remove")
+            self.SetToolTip("Double click in Pointer mode to set object"
+                            " properties,\nright click to remove")
         else:
             self.SetToolTip(None)
         event.Skip()

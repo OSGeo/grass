@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 """
 
 import wx
+import wx.lib.buttons as buttons
 
 from core.globalvar import gtk3, wxPythonPhoenix
 if wxPythonPhoenix:
@@ -50,6 +51,25 @@ def StockCursor(cursorId):
         return wx.StockCursor(cursorId)
 
 
+class Window(wx.Window):
+    """Wrapper around wx.Window to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.Window.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            if tip is None:
+                wx.Window.UnsetToolTip(self)
+            else:
+                wx.Window.SetToolTip(self, tipString=tip)
+        else:
+            if tip is None:
+                wx.Window.SetToolTip(self, tip)
+            else:
+                wx.Window.SetToolTipString(self, tip)
+
+
 class SpinCtrl(wx.SpinCtrl):
     """Wrapper around wx.SpinCtrl to have more control
     over the widget on different platforms"""
@@ -77,6 +97,19 @@ class Button(wx.Button):
             wx.Button.SetToolTip(self, tipString=tip)
         else:
             wx.Button.SetToolTipString(self, tip)
+
+
+class GenBitmapButton(buttons.GenBitmapButton):
+    """Wrapper around GenBitmapButton to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        buttons.GenBitmapButton.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            buttons.GenBitmapButton.SetToolTip(self, tipString=tip)
+        else:
+            buttons.GenBitmapButton.SetToolTipString(self, tip)
 
 
 class ToggleButton(wx.ToggleButton):
@@ -131,6 +164,19 @@ class TextCtrl(wx.TextCtrl):
             wx.TextCtrl.SetToolTipString(self, tip)
 
 
+class SearchCtrl(wx.SearchCtrl):
+    """Wrapper around wx.SearchCtrl to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.SearchCtrl.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.SearchCtrl.SetToolTip(self, tipString=tip)
+        else:
+            wx.SearchCtrl.SetToolTipString(self, tip)
+
+
 class ListCtrl(wx.ListCtrl):
     """Wrapper around wx.ListCtrl to have more control
     over the widget on different platforms/wxpython versions"""
@@ -161,6 +207,12 @@ class TreeCtrl(wx.TreeCtrl):
             return wx.TreeCtrl.AppendItem(self, parent, text, image, selImage, data)
         else:
             return wx.TreeCtrl.AppendItem(self, parent, text, image, selImage, wx.TreeItemData(data))
+
+    def GetItemData(self, item):
+        if wxPythonPhoenix:
+            return wx.TreeCtrl.GetItemData(self, item)
+        else:
+            return wx.TreeCtrl.GetPyData(self, item)
 
 
 class ToolBar(wx.ToolBar):

@@ -27,7 +27,7 @@ from core.utils import _
 from icons.icon import MetaIcon
 from collections import defaultdict
 from core.globalvar import IMGDIR
-from gui_core.wrap import ToolBar
+from gui_core.wrap import ToolBar, Menu
 
 from grass.pydispatch.signal import Signal
 
@@ -246,7 +246,7 @@ class BaseToolbar(ToolBar):
 
     def _onMenu(self, data):
         """Toolbar pop-up menu"""
-        menu = wx.Menu()
+        menu = Menu()
 
         for icon, handler in data:
             item = wx.MenuItem(menu, wx.ID_ANY, icon.GetLabel())

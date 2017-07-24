@@ -47,7 +47,7 @@ from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, MapV
 from core.utils import _
 from core.settings import UserSettings
 from core.debug import Debug
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, TextCtrl
 
 
 class SimpleDialog(wx.Dialog):
@@ -1495,16 +1495,16 @@ class MapLayersDialogBase(wx.Dialog):
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(2, 0))
 
-        self.filter = wx.TextCtrl(parent=self, id=wx.ID_ANY,
-                                  value="",
-                                  size=(250, -1))
+        self.filter = TextCtrl(parent=self, id=wx.ID_ANY,
+                               value="",
+                               size=(250, -1))
         bodySizer.Add(self.filter,
                       flag=wx.EXPAND,
                       pos=(2, 1), span=(1, 2))
 
         self.filter.SetFocus()
         # TODO same text in GroupDialog
-        self.filter.SetToolTipString(
+        self.filter.SetToolTip(
             _(
                 "Put here a regular expression."
                 " Characters '.*' stand for anything,"

@@ -53,7 +53,7 @@ from core import utils
 from core.utils import _
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from gui_core.widgets import GenericValidator
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, SearchCtrl
 from location_wizard.base import BaseClass
 from location_wizard.dialogs import SelectTransformDialog
 
@@ -475,8 +475,8 @@ class ProjectionsPage(TitledPage):
         self.tproj = self.MakeTextCtrl("", size=(200, -1))
 
         # search box
-        self.searchb = wx.SearchCtrl(self, size=(200, -1),
-                                     style=wx.TE_PROCESS_ENTER)
+        self.searchb = SearchCtrl(self, size=(200, -1),
+                                  style=wx.TE_PROCESS_ENTER)
 
         # projection list
         self.projlist = ItemList(self, data=self.parent.projdesc.items(),
@@ -997,8 +997,8 @@ class DatumPage(TitledPage):
         self.tdatum = self.MakeTextCtrl("", size=(200, -1))
 
         # search box
-        self.searchb = wx.SearchCtrl(self, size=(200, -1),
-                                     style=wx.TE_PROCESS_ENTER)
+        self.searchb = SearchCtrl(self, size=(200, -1),
+                                  style=wx.TE_PROCESS_ENTER)
 
         # create list control for datum/elipsoid list
         data = []
@@ -1172,8 +1172,8 @@ class EllipsePage(TitledPage):
         self.tellipse = self.MakeTextCtrl("", size=(200, -1))
 
         # search box
-        self.searchb = wx.SearchCtrl(self, size=(200, -1),
-                                     style=wx.TE_PROCESS_ENTER)
+        self.searchb = SearchCtrl(self, size=(200, -1),
+                                  style=wx.TE_PROCESS_ENTER)
         # radio buttons
         self.radio1 = wx.RadioButton(parent=self, id=wx.ID_ANY,
                                      label=_("Earth based"),
@@ -1511,8 +1511,8 @@ class EPSGPage(TitledPage):
         self.bbrowse = self.MakeButton(_("Browse"))
 
         # search box
-        self.searchb = wx.SearchCtrl(self, size=(200, -1),
-                                     style=wx.TE_PROCESS_ENTER)
+        self.searchb = SearchCtrl(self, size=(200, -1),
+                                  style=wx.TE_PROCESS_ENTER)
 
         self.epsglist = ItemList(
             self,
@@ -1739,8 +1739,8 @@ class IAUPage(TitledPage):
         self.bbrowse = self.MakeButton(_("Browse"))
 
         # search box
-        self.searchb = wx.SearchCtrl(self, size=(200, -1),
-                                     style=wx.TE_PROCESS_ENTER)
+        self.searchb = SearchCtrl(self, size=(200, -1),
+                                  style=wx.TE_PROCESS_ENTER)
 
         self.epsglist = ItemList(
             self,
