@@ -31,6 +31,11 @@
 #% key: c
 #% description: Continue if upload column(s) already exist
 #%end
+#%flag
+#% key: d
+#% label: Create densified lines (default: thin lines)
+#% description: All cells touched by the line will be set, not only those on the render path
+#%end
 #%option G_OPT_V_MAP
 #%end
 #%option G_OPT_V_FIELD
@@ -131,8 +136,14 @@ def main():
 
     grass.message(_("Preprocessing input data..."))
     try:
-        grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
-                          use='cat', quiet=True)
+        nlines = grass.vector_info_topo(vector)['lines']
+        # Create densified lines rather than thin lines
+        if flags['d'] and nlines > 0:
+            grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
+                              use='cat', flags='d', quiet=True)
+        else:
+            grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
+                              use='cat', quiet=True)
     except CalledModuleError:
         grass.fatal(_("An error occurred while converting vector to raster"))
 

@@ -4,6 +4,8 @@
 """
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
+from grass.pygrass.vector import VectorTopo
+from grass.pygrass.vector.geometry import Line
 
 
 class TestRastStats(TestCase):
@@ -23,6 +25,7 @@ class TestRastStats(TestCase):
         self.runModule("g.remove", flags='f', type="raster", name="map_a")
         self.runModule("g.remove", flags='f', type="raster", name="map_b")
         self.runModule("g.remove", flags='f', type="raster", name="zone_map")
+        self.runModule("g.remove", flags='f', type="raster", name="test_line")
 
     def setUp(self):
         """Create input data
@@ -34,6 +37,16 @@ class TestRastStats(TestCase):
                        overwrite=True)
         self.runModule("r.to.vect", input="zone_map", output="zone_map",
                        type="area", overwrite=True)
+        cols = [(u'cat', 'INTEGER PRIMARY KEY'), (u'name', 'VARCHAR(20)')]
+        vt = VectorTopo('test_line')
+        vt.open('w', tab_cols=cols)
+        line1 = Line([(1, 1), (2, 1), (2, 2)])
+        line2 = Line([(10, 20), (15, 22), (20, 32), (30, 40)])
+        vt.write(line1, ('first',))
+        vt.write(line2, ('second',))
+        vt.table.conn.commit()
+        vt.close()
+        
 
     def test_1(self):
         # Output of v.rast.stats
@@ -49,6 +62,35 @@ class TestRastStats(TestCase):
 
         self.runModule(v_db_select)
         self.assertLooksLike(univar_string, v_db_select.outputs.stdout)
+
+
+    def test_line_d(self):
+        output_str = """cat|name|a_median|a_number|a_range
+1|first|192|3|1
+2|second|181|41|6
+"""
+        self.assertModule("v.rast.stats", map="test_line", raster="map_a",
+                          method=["median", "number", "range"], flags="dc",
+                          column_prefix="a")
+        v_db_select = SimpleModule("v.db.select", map="test_line")
+        
+        self.runModule(v_db_select)
+        self.assertLooksLike(output_str, v_db_select.outputs.stdout)
+
+
+    def test_line(self):
+        output_str = """cat|name|a_median|a_number|a_range
+1|first|192|5|2
+2|second|181|27|5
+
+"""
+        self.assertModule("v.rast.stats", map="test_line", raster="map_a",
+                          method=["median", "number", "range"], flags="c",
+                          column_prefix="a")
+        v_db_select = SimpleModule("v.db.select", map="test_line")
+        
+        self.runModule(v_db_select)
+        self.assertLooksLike(output_str, v_db_select.outputs.stdout)
 
 
 class TestRastStatsFails(TestCase):
