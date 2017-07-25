@@ -1273,15 +1273,14 @@ def remove_modules(mlist, force=False):
                 removed = False
                 err = list()
                 for fpath in flist:
-                    try:
-                        if force:
-                            grass.verbose(fpath)
-                            removed = True
+                    grass.verbose(fpath)
+                    if force:
+                        try:
                             os.remove(fpath)
-                        else:
-                            print(fpath)
-                    except OSError:
-                        err.append((_("Unable to remove file '%s'") % fpath))
+                            removed = True
+                        except OSError:
+                            msg = "Unable to remove file '%s'"
+                            err.append((_(msg) % fpath))
                 if force and not removed:
                     grass.fatal(_("Extension <%s> not found") % name)
 
@@ -1292,6 +1291,13 @@ def remove_modules(mlist, force=False):
                 remove_extension_std(name, force)
         else:
             remove_extension_std(name, force)
+
+    # remove module libraries directories under GRASS_ADDONS/etc/{name}/*
+    libpath = os.path.join(options['prefix'], 'etc', name)
+    if os.path.isdir(libpath):
+        grass.verbose(libpath)
+        if force:
+            shutil.rmtree(libpath)
 
 
 def remove_extension_std(name, force=False):
@@ -1305,11 +1311,16 @@ def remove_extension_std(name, force=False):
                   os.path.join(options['prefix'], 'docs', 'man', 'man1',
                                name + '.1')]:
         if os.path.isfile(fpath):
+            grass.verbose(fpath)
             if force:
-                grass.verbose(fpath)
                 os.remove(fpath)
-            else:
-                print(fpath)
+
+    # remove module libraries under GRASS_ADDONS/etc/{name}/*
+    libpath = os.path.join(options['prefix'], 'etc', name)
+    if os.path.isdir(libpath):
+        grass.verbose(libpath)
+        if force:
+            shutil.rmtree(libpath)
 
 
 def remove_from_toolbox_xml(name):
