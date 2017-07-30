@@ -8,18 +8,45 @@ contain data, contain NULL data, or, optionally contain 0 data,
 with the data from the first input map.
 Once this is done the remaining holes are filled in by the next input map,
 and so on.
+
+<p>
 This program
 is useful for making a composite raster map layer from two or more adjacent
 map layers, for filling in "holes" in a raster map layer's data (e.g., in
 digital elevation data), or for updating an older map layer with more recent
 data. The current geographic region definition and mask settings are
 respected.
+
+<center>
+<img src="r_patch.png">
+<p><em>Figure: Result of patching two raster maps containing NULLs using
+the default settings</em></p>
+</center>
+
 <p>The first <em>name</em> listed in the string
 <b>input=</b><em>name</em>,<em>name</em>,<em>name</em>, ... is the name of
 the first map whose data values will be used to fill in "no data" cells
 in the current region. The second through last input <em>name</em>
 maps will be used, in order, to supply data values for for the remaining
 "no data" cells.
+
+<center>
+<img src="r_patch_zeros_as_nulls.png">
+<p><em>Figure: Result of patching two raster maps using the <b>-z</b> flag
+to treat zeros as NULLs</em></p>
+</center>
+
+<h3>Relation to SQL COALESCE() function</h3>
+
+The module is corresponds to the SQL COALESCE() function.
+This function takes two or more arguments and returns
+a copy of its first non-NULL argument. If all arguments are NULL,
+the function returns NULL.
+
+<p>
+The <em>r.patch</em> module iterates over all cells and for each cell
+of the output raster map uses the first corresponding non-NULL cell
+in the series of the input raster maps.
 
 <h3>Example of filling areas</h3>
 
@@ -113,7 +140,24 @@ using the option <b>input</b>. In that case,
 <em>r.patch</em>.
 
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
+
+<h3>Example with three maps</h3>
+
+The input are three maps called roads, water and forest. Primarily,
+we want to use the values from roads, then from water and if no
+other values are available we want to use forest.
+First we set the computation region assuming that the all three maps
+fully overlap and have the same resolution (so we can safely use the
+just the one without further modifications of the region).
+Then we perform the patching.
+
+<div class="code"><pre>
+g.region raster=roads
+r.patch input=roads,water,forest output=result
+</pre></div>
+
+<h3>Example using Bash syntax</h3>
 
 Create a list of maps matching a pattern, extend the region to include them
 all, and patch them together to create a mosaic. Overlapping maps will be 
@@ -124,7 +168,6 @@ MAPS=`g.list type=raster sep=, pat="map_*"`
 g.region raster=$MAPS
 r.patch in=$MAPS out=mosaic
 </pre></div>
-<br>
 
 
 <h2>SEE ALSO</h2>
