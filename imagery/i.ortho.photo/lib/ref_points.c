@@ -30,7 +30,7 @@ int I_read_ref_points(FILE * fd, struct Ortho_Photo_Points *cp)
 	G_strip(buf);
 	if (*buf == '#' || *buf == 0)
 	    continue;
-	if (sscanf(buf, "%lf%lf%lf%lf%d", &e1, &n1, &e2, &n2, &status) == 7)
+	if (sscanf(buf, "%lf%lf%lf%lf%d", &e1, &n1, &e2, &n2, &status) == 5)
 	    I_new_ref_point(cp, e1, n1, e2, n2, status);
 	else
 	    return -4;
