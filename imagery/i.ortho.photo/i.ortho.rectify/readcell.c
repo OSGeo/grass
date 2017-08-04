@@ -24,15 +24,17 @@ struct cache *readcell(int fdi, int size, int target_env)
     int nblocks;
     int i;
 
-    if (target_env)
+    if (target_env){
 	select_target_env();
-    else
+    	nrows = Rast_output_window_rows();
+    	ncols = Rast_output_window_cols();
+    }else{
 	select_current_env();
-
+    	nrows = Rast_input_window_rows();
+    	ncols = Rast_input_window_cols();
+    }
     G_srand48(0);
 
-    nrows = Rast_window_rows();
-    ncols = Rast_window_cols();
 
     /* Temporary file must be created in the same location/mapset 
      * where the module was called */
