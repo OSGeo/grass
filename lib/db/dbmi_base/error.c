@@ -156,7 +156,7 @@ void db_procedure_not_implemented(const char *name)
 
   \param procnum procedure number
 */
-void db_noproc_error(procnum)
+void db_noproc_error(int procnum)
 {
     char msg[128];
 
