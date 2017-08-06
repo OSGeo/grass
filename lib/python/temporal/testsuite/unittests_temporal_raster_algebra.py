@@ -33,7 +33,7 @@ class TestTemporalRasterAlgebra(TestCase):
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="c1 = 7")
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="d1 = 8")
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="d2 = 9")
-        cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="d3 = 10")        
+        cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="d3 = 10")
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="singletmap = 99")
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="singlemap = 100")
 
@@ -53,16 +53,16 @@ class TestTemporalRasterAlgebra(TestCase):
         tgis.register_maps_in_space_time_dataset(type="raster", name="C", maps="c1",
                                                  start="2001-01-02", increment="2 day", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d1,d2,d3",
-                                                 start="2001-01-03", increment="1 day", interval=True)                                                 
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap", 
+                                                 start="2001-01-03", increment="1 day", interval=True)
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap",
                                                 start="2001-01-03", end="2001-01-04")
-        
+
     def tearDown(self):
         self.runModule("t.remove", flags="rf", inputs="R", quiet=True)
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the temporary region 
+        """Remove the temporary region
         """
         cls.runModule("t.remove", flags="rf", inputs="A,B,C,D", quiet=True)
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
@@ -114,7 +114,20 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.get_granularity(),  u'1 day')
 
     def test_simple_arith_hash_1(self):
-        """Simple arithmetic test including the hash operator"""
+        """Simple arithmetic test including the hash operator
+
+        R = A + (A {#, equal,l} A)
+
+        Since map times are equal, the number of maps in A that are equal to A is 1:
+
+        R = A + 1
+
+        r1 = a1 + 1
+        r2 = a2 + 1
+        r3 = a3 + 1
+        r4 = a4 + 1
+
+        """
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression='R = A + (A {#, equal,l} A)', basename="r", overwrite=True)
 
@@ -129,7 +142,20 @@ class TestTemporalRasterAlgebra(TestCase):
 
 
     def test_simple_arith_td_1(self):
-        """Simple arithmetic test"""
+        """Simple arithmetic test
+
+        R = A + td(A)
+
+        Since maps in A have a length of one day, th expression equals:
+
+        R = A + 1
+
+        r1 = a1 + 1
+        r2 = a2 + 1
+        r3 = a3 + 1
+        r4 = a4 + 1
+
+        """
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression='R = A + td(A)', basename="r", overwrite=True)
 
@@ -143,7 +169,19 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
     def test_simple_arith_td_2(self):
-        """Simple arithmetic test"""
+        """Simple arithmetic test
+
+        R = A / td(A)
+
+        Since maps in A have a length of one day, th expression equals:
+
+        R = A / 1
+
+        r1 = a1 / 1
+        r2 = a2 / 1
+        r3 = a3 / 1
+        r4 = a4 / 1
+        """
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression='R = A / td(A)', basename="r", overwrite=True)
 
@@ -157,7 +195,20 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
     def test_simple_arith_td_3(self):
-        """Simple arithmetic test"""
+        """Simple arithmetic test
+
+        R = A {+,equal} td(A)
+
+        Since maps in A have a length of one day, th expression equals:
+
+        R = A + 1
+
+        r1 = a1 + 1
+        r2 = a2 + 1
+        r3 = a3 + 1
+        r4 = a4 + 1
+
+        """
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression='R = A {+,equal} td(A)', basename="r", overwrite=True)
 
@@ -172,7 +223,20 @@ class TestTemporalRasterAlgebra(TestCase):
 
 
     def test_simple_arith_td_4(self):
-        """Simple arithmetic test"""
+        """Simple arithmetic test
+
+        R = A {/, equal} td(A)
+
+        Since maps in A have a length of one day, th expression equals:
+
+        R = A + 1
+
+        r1 = a1 + 1
+        r2 = a2 + 1
+        r3 = a3 + 1
+        r4 = a4 + 1
+
+        """
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression='R = A {/, equal} td(A)', basename="r", overwrite=True)
 
@@ -187,7 +251,17 @@ class TestTemporalRasterAlgebra(TestCase):
 
 
     def test_simple_arith_if_1(self):
-        """Simple arithmetic test with if condition"""
+        """Simple arithmetic test with if condition
+
+        R = if({equal}, start_date(A) >= "2001-01-02", A + A)
+
+        because start_date(A) will select a2, a3 and a4 the result is:
+
+        r2 = a2 + a2
+        r3 = a3 + a3
+        r4 = a4 + a4
+
+        """
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression='R = if({equal}, start_date(A) >= "2001-01-02", A + A)', basename="r", overwrite=True)
 
@@ -201,7 +275,25 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
     def test_simple_arith_if_2(self):
-        """Simple arithmetic test with if condition"""
+        """Simple arithmetic test with if condition
+
+        R = if({equal}, A#A == 1, A - A)
+
+        because:
+
+        a1 # a1 == 1
+        a2 # a2 == 1
+        a3 # a3 == 1
+        a4 # a4 == 1
+
+        The result is:
+
+        r1 = a1 - a1
+        r2 = a2 - a2
+        r3 = a3 - a3
+        r4 = a4 - a4
+
+        """
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression='R = if({equal}, A#A == 1, A - A)', basename="r", overwrite=True)
 
@@ -215,7 +307,19 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
     def test_complex_arith_if_1(self):
-        """Complex arithmetic test with if condition"""
+        """Complex arithmetic test with if condition
+
+        R = if(start_date(A) < "2001-01-03" && A#A == 1, A{+, starts,l}C, A{+, finishes,l}C)
+
+        IF: start_date(a) < "2001-01-03" selects a1 and a2 AND A#A == 1 is True for all maps in A
+
+        THEN: a1 and a2 are used for equal topological relations of the *then* condition
+              The *starts* topological operation will compute: a2 + c1
+
+        ELSE: a1, a2, a3, and a4 are used in the *else condition*, the finished topological condition
+              will compute a3 + c1
+
+        """
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression='R = if(start_date(A) < "2001-01-03" && A#A == 1, A{+, starts,l}C, A{+, finishes,l}C)', \
                   basename="r", overwrite=True)
