@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     spline_step_flag->key = 'e';
     spline_step_flag->label = _("Estimate point density and distance and quit");
     spline_step_flag->description =
-	_("Estimate point density and distance for the input vector points within the current region extends and quit");
+	_("Estimate point density and distance in map units for the input vector points within the current region extents and quit");
     spline_step_flag->suppress_required = YES;
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
