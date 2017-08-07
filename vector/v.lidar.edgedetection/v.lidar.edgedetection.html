@@ -28,6 +28,11 @@ gradient to two of eight neighboring points is greater than the high
 threshold. Other points are classified as TERRAIN.
 
 <p>
+The length (in mapping units) of each spline step is defined by 
+<b>ew_step</b> for the east-west direction and <b>ns_step</b> for the 
+north-south direction.
+
+<p>
 The output will be a vector map in which points has been classified as 
 TERRAIN, EDGE or UNKNOWN. This vector map should be the input of 
 <em><a href="v.lidar.growing.html">v.lidar.growing</a></em> module.
