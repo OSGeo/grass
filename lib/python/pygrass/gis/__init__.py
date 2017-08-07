@@ -66,14 +66,12 @@ def _check_raise(value, path, type):
              if value is empty return environmental variable
     :rtype: str
     """
-    if value and is_valid(value, path, type):
-        return value
-    elif value is '':
+    if value is '':
         from grass.pygrass.utils import getenv
         return getenv(type)
-    else:
-        raise GrassError("%s <%s> not found" % (type.title(),
-                                                join(path, value)))
+    if is_valid(value, path, type):
+        return value
+    raise GrassError("%s <%s> not found" % (type.title(), join(path, value)))
 
 
 def set_current_mapset(mapset, location=None, gisdbase=None):
