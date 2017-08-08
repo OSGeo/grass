@@ -109,13 +109,35 @@ http://www.gnu.org/software/gettext/manual/gettext.html#Sources
 More advanced tricks like resolving ambiguties and handling of plural forms:
 http://www.gnu.org/software/gettext/manual/gettext.html#Programmers
 
+
+TODO: ADD PYTHON code snippets here
+
 ------------------------------------------------------
 
 GENERAL TRANSLATION PROCEDURE (no programming required)
 
- POT files ----> PO files      ----> MO files
- (original       (translated        (final message file,
-  messages)       messages)          used by GRASS programs)
+ POT files [1] ---->  PO files [2] ----> update PO files [3] ----> PO merge + MO files [4]
+ (original           (translated            (updating of msgs      (final binary message file,
+  messages)           messages)              in Transifex)          used by GRASS GIS modules)
+
+ see also: https://grasswiki.osgeo.org/wiki/GRASS_messages_translation#Get_the_translated_po_files
+
+[1] .pot files are auto-generated on grass.osgeo.org and
+    stored in https://grass.osgeo.org/grass72/binary/linux/snapshot/transifex/
+     --> cronjob: /home/neteler/cronjobs/cron_grass72_releasebranch_72_build_bins.sh
+
+[2] Transifex job copies daily from [1] to here: 
+	https://www.transifex.com/grass-gis/grass72/
+
+[3] Translators work in Transifex,
+
+[4] Updated po files are taken from Transifex and merged into GRASS GIS source repo 
+    (MO files are generated when compiling GRASS GIS)
+    Script: grass-addons/tools/transifex_merge.sh
+
+    # trim disconnected=obsolete translations
+    POFILE=grassYXZ_LANG.po
+    msgattrib --output-file=$POFILE --no-obsolete $POFILE
 
 
 Semi-automated procedure:
@@ -127,9 +149,9 @@ Semi-automated procedure:
 
   2. In the locale/ directory, run:
 
-        make pot        creates grass.pot (containing original messages)
+TODO OLD    make pot        creates grass.pot (containing original messages)
 
-        make update-po  merges new messages into existing *.po files
+TODO OLD    make update-po  merges new messages into existing *.po files
 
   3. Now translate the messages in the po/*.po files (using kbabel or 
      other editor). Just open the .po file(s) in your preferred translation
