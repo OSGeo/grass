@@ -118,7 +118,9 @@ GENERAL TRANSLATION PROCEDURE (no programming required)
 
  POT files [1] ---->  PO files [2] ----> update PO files [3] ----> PO merge + MO files [4]
  (original           (translated            (updating of msgs      (final binary message file,
-  messages)           messages)              in Trensifex)          used by GRASS GIS modules)
+  messages)           messages)              in Transifex)          used by GRASS GIS modules)
+
+ see also: https://grasswiki.osgeo.org/wiki/GRASS_messages_translation#Get_the_translated_po_files
 
 [1] .pot files are auto-generated on grass.osgeo.org and
     stored in https://grass.osgeo.org/grass72/binary/linux/snapshot/transifex/
@@ -131,6 +133,11 @@ GENERAL TRANSLATION PROCEDURE (no programming required)
 
 [4] Updated po files are taken from Transifex and merged into GRASS GIS source repo 
     (MO files are generated when compiling GRASS GIS)
+    Script: grass-addons/tools/transifex_merge.sh
+
+    # trim disconnected=obsolete translations
+    POFILE=grassYXZ_LANG.po
+    msgattrib --output-file=$POFILE --no-obsolete $POFILE
 
 
 Semi-automated procedure:
