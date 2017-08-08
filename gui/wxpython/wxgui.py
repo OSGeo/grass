@@ -77,21 +77,12 @@ class GMApp(wx.App):
                     weight=wx.BOLD))
             splash.SetTextPosition((150, 430))
         else:
-            if globalvar.wxPythonPhoenix:
-                import wx.adv
-                wx.adv.SplashScreen(
-                    bitmap=introBmp,
-                    splashStyle=wx.adv.SPLASH_CENTRE_ON_SCREEN | wx.adv.SPLASH_TIMEOUT,
-                    milliseconds=2000,
-                    parent=None,
-                    id=wx.ID_ANY)
-            else:
-                wx.SplashScreen(
-                    bitmap=introBmp,
-                    splashStyle=wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
-                    milliseconds=2000,
-                    parent=None,
-                    id=wx.ID_ANY)
+            wx.SplashScreen(
+                bitmap=introBmp,
+                splashStyle=wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
+                milliseconds=2000,
+                parent=None,
+                id=wx.ID_ANY)
 
         wx.Yield()
 
