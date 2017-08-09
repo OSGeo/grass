@@ -117,7 +117,11 @@ dll_to_a() {
 log dll.to.a
 [ -d mswindows/osgeo4w/lib ] || mkdir mswindows/osgeo4w/lib 
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/proj.dll        mswindows/osgeo4w/lib/libproj
-dll_to_a $OSGEO4W_ROOT_MSYS/bin/zlib1.dll       mswindows/osgeo4w/lib/libz
+if [ "$MINGW_POSTFIX" = "64" ]; then
+    dll_to_a $OSGEO4W_ROOT_MSYS/bin/zlib1.dll       mswindows/osgeo4w/lib/libz
+else
+    dll_to_a $OSGEO4W_ROOT_MSYS/bin/zlib_osgeo.dll       mswindows/osgeo4w/lib/libz
+fi
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/iconv.dll       mswindows/osgeo4w/lib/libiconv
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/gdal202.dll     mswindows/osgeo4w/lib/libgdal
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/liblas_c.dll    mswindows/osgeo4w/lib/liblas_c
