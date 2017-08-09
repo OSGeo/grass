@@ -150,6 +150,8 @@ class PreprocessorParser(object):
         if sys.platform == 'darwin':
             cmd += " -U __BLOCKS__"
         cmd += " -U __GNUC__"
+        if sys.platform.startswith('freebsd'):
+            cmd += " -D __GNUCLIKE_BUILTIN_STDARG"
         cmd += " -dD"
         for path in self.options.include_search_paths:
             cmd += " -I%s" % path
