@@ -53,7 +53,8 @@ exported_maps = {}
 
 
 def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_,
-                                type_):
+                                type_, **kwargs):
+    kwargs = {key: value for key, value in kwargs.items() if value is not None}
     for row in rows:
         name = row["name"]
         start = row["start_time"]
@@ -83,20 +84,22 @@ def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_,
                         gdal_type = "Int32"
                     gscript.run_command("r.out.gdal", flags="c", input=name,
                                         output=out_name, nodata=nodata,
-                                        type=gdal_type, format="GTiff")
+                                        type=gdal_type, format="GTiff",
+                                        **kwargs)
                 elif type_:
                     gscript.run_command("r.out.gdal", flags="cf", input=name,
                                         output=out_name,
-                                        type=type_, format="GTiff")
+                                        type=type_, format="GTiff", **kwargs)
                 else:
                     gscript.run_command("r.out.gdal", flags="c",
                                         input=name, output=out_name,
-                                        format="GTiff")
+                                        format="GTiff", **kwargs)
             elif format_ == "AAIGrid":
                 # Export the raster map with r.out.gdal as Arc/Info ASCII Grid
                 out_name = name + ".asc"
                 gscript.run_command("r.out.gdal", flags="c", input=name,
-                                    output=out_name, format="AAIGrid")
+                                    output=out_name, format="AAIGrid",
+                                    **kwargs)
 
         except CalledModuleError:
             shutil.rmtree(new_cwd)
@@ -232,7 +235,7 @@ def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs):
 
 
 def export_stds(input, output, compression, directory, where, format_="pack",
-                type_="strds", datatype=None):
+                type_="strds", datatype=None, **kwargs):
     """Export space time datasets as tar archive with optional compression
 
         This method should be used to export space time datasets
@@ -301,7 +304,8 @@ def export_stds(input, output, compression, directory, where, format_="pack",
         if type_ == "strds":
             if format_ == "GTiff" or format_ == "AAIGrid":
                 _export_raster_maps_as_gdal(
-                    rows, tar, list_file, new_cwd, fs, format_, datatype)
+                    rows, tar, list_file, new_cwd, fs, format_, datatype,
+                    **kwargs)
             else:
                 _export_raster_maps(rows, tar, list_file, new_cwd, fs)
         elif type_ == "stvds":
