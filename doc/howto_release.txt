@@ -145,7 +145,7 @@ Contents
      scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
          INSTALL REQUIREMENTS.html SUBMITTING neteler@$SERVER2:$SERVER2DIR
 
-   # generate link to "latest" source code
+   # Only full release: generate link to "latest" source code
      ssh neteler@$SERVER1 rm -f $SERVER1DIR/grass-$MAJOR.$MINOR-latest.tar.gz
      ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz $SERVER1DIR/grass-$MAJOR.$MINOR-latest.tar.gz"
 
