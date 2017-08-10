@@ -8490,7 +8490,7 @@ fi
 LDFLAGS=${ac_save_ldflags}
 
 
-  # Check for libmysqld (for embeded version of the driver)
+  # Check for libmysqld (for embedded version of the driver)
   # Extract the first word of "mysql_config", so it can be a program name with args.
 set dummy mysql_config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
@@ -12193,6 +12193,57 @@ else
   fi
 fi
 
+for ac_declaration in \
+   ''\
+   '#include <stdlib.h>' \
+   'extern "C" void std::exit (int) throw (); using std::exit;' \
+   'extern "C" void std::exit (int); using std::exit;' \
+   'extern "C" void exit (int) throw ();' \
+   'extern "C" void exit (int);' \
+   'void exit (int);'
+do
+  cat > conftest.$ac_ext <<EOF
+#line 12207 "configure"
+#include "confdefs.h"
+#include <stdlib.h>
+$ac_declaration
+int main() {
+exit (42);
+; return 0; }
+EOF
+if { (eval echo configure:12215: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+  :
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  continue
+fi
+rm -f conftest*
+  cat > conftest.$ac_ext <<EOF
+#line 12225 "configure"
+#include "confdefs.h"
+$ac_declaration
+int main() {
+exit (42);
+; return 0; }
+EOF
+if { (eval echo configure:12232: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+  rm -rf conftest*
+  break
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+fi
+rm -f conftest*
+done
+if test -n "$ac_declaration"; then
+  echo '#ifdef __cplusplus' >>confdefs.h
+  echo $ac_declaration      >>confdefs.h
+  echo '#endif'             >>confdefs.h
+fi
+
+
 else
 	CXX=
 	CXXFLAGS=
@@ -12206,7 +12257,7 @@ fi
 
 
 echo $ac_n "checking whether to use openDWG""... $ac_c" 1>&6
-echo "configure:12210: checking whether to use openDWG" >&5
+echo "configure:12261: checking whether to use openDWG" >&5
 echo "$ac_t"""$with_opendwg"" 1>&6
 case "$with_opendwg" in
 	"no")	USE_OPENDWG=	;;
@@ -12226,7 +12277,7 @@ if test -n "${USE_OPENDWG}"; then
 
 
 echo $ac_n "checking for location of openDGW includes""... $ac_c" 1>&6
-echo "configure:12230: checking for location of openDGW includes" >&5
+echo "configure:12281: checking for location of openDGW includes" >&5
 case "$with_opendwg_includes" in
 y | ye | yes | n | no)
 	{ echo "configure: error: *** You must supply a directory to --with-opendwg-includes." 1>&2; exit 1; }
@@ -12252,15 +12303,15 @@ for ac_hdr in ad2.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:12256: checking for $ac_hdr" >&5
+echo "configure:12307: checking for $ac_hdr" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 12259 "configure"
+#line 12310 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:12264: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:12315: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -12294,7 +12345,7 @@ CPPFLAGS=$ac_save_cppflags
 
 
 echo $ac_n "checking for location of openDWG library""... $ac_c" 1>&6
-echo "configure:12298: checking for location of openDWG library" >&5
+echo "configure:12349: checking for location of openDWG library" >&5
 case "$with_opendwg_libs" in
 y | ye | yes | n | no)
 	{ echo "configure: error: *** You must supply a directory to --with-opendwg-libs." 1>&2; exit 1; }
@@ -12335,7 +12386,7 @@ fi # $USE_OPENDWG
 
 
 echo $ac_n "checking whether to use POSIX threads""... $ac_c" 1>&6
-echo "configure:12339: checking whether to use POSIX threads" >&5
+echo "configure:12390: checking whether to use POSIX threads" >&5
 echo "$ac_t"""$with_pthread"" 1>&6
 case "$with_pthread" in
 	"no")	USE_PTHREAD=	;;
@@ -12355,7 +12406,7 @@ if test -n "$USE_PTHREAD"; then
 
 
 echo $ac_n "checking for location of POSIX threads includes""... $ac_c" 1>&6
-echo "configure:12359: checking for location of POSIX threads includes" >&5
+echo "configure:12410: checking for location of POSIX threads includes" >&5
 case "$with_pthread_includes" in
 y | ye | yes | n | no)
 	{ echo "configure: error: *** You must supply a directory to --with-pthread-includes." 1>&2; exit 1; }
@@ -12381,15 +12432,15 @@ for ac_hdr in pthread.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:12385: checking for $ac_hdr" >&5
+echo "configure:12436: checking for $ac_hdr" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 12388 "configure"
+#line 12439 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:12393: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:12444: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -12423,7 +12474,7 @@ CPPFLAGS=$ac_save_cppflags
 
 
 echo $ac_n "checking for location of POSIX threads library""... $ac_c" 1>&6
-echo "configure:12427: checking for location of POSIX threads library" >&5
+echo "configure:12478: checking for location of POSIX threads library" >&5
 case "$with_pthread_libs" in
 y | ye | yes | n | no)
 	{ echo "configure: error: *** You must supply a directory to --with-pthread-libs." 1>&2; exit 1; }
@@ -12448,10 +12499,10 @@ ac_save_ldflags="$LDFLAGS"
 LIBS="  $LIBS"
 LDFLAGS=" $LDFLAGS"
 echo $ac_n "checking for pthread_create""... $ac_c" 1>&6
-echo "configure:12452: checking for pthread_create" >&5
+echo "configure:12503: checking for pthread_create" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 12455 "configure"
+#line 12506 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char pthread_create(); below.  */
@@ -12474,7 +12525,7 @@ pthread_create();
 
 ; return 0; }
 EOF
-if { (eval echo configure:12478: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:12529: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_pthread_create=yes"
 else
@@ -12501,13 +12552,13 @@ LDFLAGS="$PTHREADLIBPATH $LDFLAGS"
 
 
 echo $ac_n "checking for pthread_create in -lpthread""... $ac_c" 1>&6
-echo "configure:12505: checking for pthread_create in -lpthread" >&5
+echo "configure:12556: checking for pthread_create in -lpthread" >&5
 ac_lib_var=`echo pthread'_'pthread_create | sed 'y%./+-%__p_%'`
 
 ac_save_LIBS="$LIBS"
 LIBS="-lpthread  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 12511 "configure"
+#line 12562 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -12518,7 +12569,7 @@ int main() {
 pthread_create()
 ; return 0; }
 EOF
-if { (eval echo configure:12522: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:12573: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -12568,7 +12619,7 @@ fi # $USE_PTHREAD
 
 
 echo $ac_n "checking whether to use OpenMP""... $ac_c" 1>&6
-echo "configure:12572: checking whether to use OpenMP" >&5
+echo "configure:12623: checking whether to use OpenMP" >&5
 echo "$ac_t"""$with_openmp"" 1>&6
 case "$with_openmp" in
 	"no")	USE_OPENMP=	;;
@@ -12589,7 +12640,7 @@ if test -n "$USE_OPENMP"; then
 
 
 echo $ac_n "checking for location of OpenMP includes""... $ac_c" 1>&6
-echo "configure:12593: checking for location of OpenMP includes" >&5
+echo "configure:12644: checking for location of OpenMP includes" >&5
 case "$with_openmp_includes" in
 y | ye | yes | n | no)
 	{ echo "configure: error: *** You must supply a directory to --with-openmp-includes." 1>&2; exit 1; }
@@ -12615,15 +12666,15 @@ for ac_hdr in omp.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:12619: checking for $ac_hdr" >&5
+echo "configure:12670: checking for $ac_hdr" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 12622 "configure"
+#line 12673 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:12627: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:12678: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -12661,7 +12712,7 @@ CPPFLAGS=$ac_save_cppflags
 
 
 echo $ac_n "checking for location of OpenMP library""... $ac_c" 1>&6
-echo "configure:12665: checking for location of OpenMP library" >&5
+echo "configure:12716: checking for location of OpenMP library" >&5
 case "$with_openmp_libs" in
 y | ye | yes | n | no)
 	{ echo "configure: error: *** You must supply a directory to --with-openmp-libs." 1>&2; exit 1; }
@@ -12686,10 +12737,10 @@ ac_save_ldflags="$LDFLAGS"
 LIBS="  $LIBS"
 LDFLAGS=" $LDFLAGS"
 echo $ac_n "checking for GOMP_parallel_start""... $ac_c" 1>&6
-echo "configure:12690: checking for GOMP_parallel_start" >&5
+echo "configure:12741: checking for GOMP_parallel_start" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 12693 "configure"
+#line 12744 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char GOMP_parallel_start(); below.  */
@@ -12712,7 +12763,7 @@ GOMP_parallel_start();
 
 ; return 0; }
 EOF
-if { (eval echo configure:12716: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:12767: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_GOMP_parallel_start=yes"
 else
@@ -12739,13 +12790,13 @@ LDFLAGS="$OMPLIBPATH $LDFLAGS"
 
 
 echo $ac_n "checking for GOMP_parallel_start in -lgomp""... $ac_c" 1>&6
-echo "configure:12743: checking for GOMP_parallel_start in -lgomp" >&5
+echo "configure:12794: checking for GOMP_parallel_start in -lgomp" >&5
 ac_lib_var=`echo gomp'_'GOMP_parallel_start | sed 'y%./+-%__p_%'`
 
 ac_save_LIBS="$LIBS"
 LIBS="-lgomp  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 12749 "configure"
+#line 12800 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -12756,7 +12807,7 @@ int main() {
 GOMP_parallel_start()
 ; return 0; }
 EOF
-if { (eval echo configure:12760: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:12811: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -12829,7 +12880,7 @@ fi # $USE_OPENMP
 
 
 echo $ac_n "checking whether to use OpenCL""... $ac_c" 1>&6
-echo "configure:12833: checking whether to use OpenCL" >&5
+echo "configure:12884: checking whether to use OpenCL" >&5
 echo "$ac_t"""$with_opencl"" 1>&6
 case "$with_opencl" in
 	"no")	USE_OPENCL=	;;
@@ -12849,7 +12900,7 @@ if test -n "$USE_OPENCL"; then
 
 
 echo $ac_n "checking for location of OpenCL includes""... $ac_c" 1>&6
-echo "configure:12853: checking for location of OpenCL includes" >&5
+echo "configure:12904: checking for location of OpenCL includes" >&5
 case "$with_opencl_includes" in
 y | ye | yes | n | no)
 	{ echo "configure: error: *** You must supply a directory to --with-opencl-includes." 1>&2; exit 1; }
@@ -12876,15 +12927,15 @@ for ac_hdr in OpenCL/opencl.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:12880: checking for $ac_hdr" >&5
+echo "configure:12931: checking for $ac_hdr" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 12883 "configure"
+#line 12934 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:12888: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:12939: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -12924,10 +12975,10 @@ ac_save_ldflags="$LDFLAGS"
 LIBS="-framework OpenCL  $LIBS"
 LDFLAGS=" $LDFLAGS"
 echo $ac_n "checking for clGetPlatformInfo""... $ac_c" 1>&6
-echo "configure:12928: checking for clGetPlatformInfo" >&5
+echo "configure:12979: checking for clGetPlatformInfo" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 12931 "configure"
+#line 12982 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char clGetPlatformInfo(); below.  */
@@ -12950,7 +13001,7 @@ clGetPlatformInfo();
 
 ; return 0; }
 EOF
-if { (eval echo configure:12954: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:13005: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_clGetPlatformInfo=yes"
 else
@@ -12989,15 +13040,15 @@ for ac_hdr in CL/cl.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:12993: checking for $ac_hdr" >&5
+echo "configure:13044: checking for $ac_hdr" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 12996 "configure"
+#line 13047 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:13001: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:13052: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -13030,7 +13081,7 @@ CPPFLAGS=$ac_save_cppflags
     # With OpenCL library directory
     
 echo $ac_n "checking for location of OpenCL library""... $ac_c" 1>&6
-echo "configure:13034: checking for location of OpenCL library" >&5
+echo "configure:13085: checking for location of OpenCL library" >&5
 case "$with_opencl_libs" in
 y | ye | yes | n | no)
 	{ echo "configure: error: *** You must supply a directory to --with-opencl-libs." 1>&2; exit 1; }
@@ -13054,13 +13105,13 @@ LDFLAGS="$OCLLIBPATH $LDFLAGS"
 
 
 echo $ac_n "checking for clGetPlatformInfo in -lOpenCL""... $ac_c" 1>&6
-echo "configure:13058: checking for clGetPlatformInfo in -lOpenCL" >&5
+echo "configure:13109: checking for clGetPlatformInfo in -lOpenCL" >&5
 ac_lib_var=`echo OpenCL'_'clGetPlatformInfo | sed 'y%./+-%__p_%'`
 
 ac_save_LIBS="$LIBS"
 LIBS="-lOpenCL  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 13064 "configure"
+#line 13115 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -13071,7 +13122,7 @@ int main() {
 clGetPlatformInfo()
 ; return 0; }
 EOF
-if { (eval echo configure:13075: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:13126: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -13131,7 +13182,7 @@ fi
      fi
 
      echo $ac_n "checking for special C compiler options needed for large files""... $ac_c" 1>&6
-echo "configure:13135: checking for special C compiler options needed for large files" >&5
+echo "configure:13186: checking for special C compiler options needed for large files" >&5
 
 ac_cv_sys_largefile_CC=no
         largefile_cc_opt=""
@@ -13139,7 +13190,7 @@ ac_cv_sys_largefile_CC=no
 	  # IRIX 6.2 and later do not support large files by default,
 	  # so use the C compiler's -n32 option if that helps.
 	  cat > conftest.$ac_ext <<EOF
-#line 13143 "configure"
+#line 13194 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
     /* Check that off_t can represent 2**63 - 1 correctly.
@@ -13155,7 +13206,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:13159: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13210: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   :
 else
   echo "configure: failed program was:" >&5
@@ -13164,7 +13215,7 @@ else
   ac_save_CC="${CC-cc}"
 	     CC="$CC -n32"
 	     cat > conftest.$ac_ext <<EOF
-#line 13168 "configure"
+#line 13219 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
     /* Check that off_t can represent 2**63 - 1 correctly.
@@ -13180,7 +13231,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:13184: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13235: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_sys_largefile_CC=' -n32'
 else
@@ -13207,11 +13258,11 @@ echo "$ac_t""$ac_cv_sys_largefile_CC" 1>&6
      fi
 
      echo $ac_n "checking for _FILE_OFFSET_BITS value needed for large files""... $ac_c" 1>&6
-echo "configure:13211: checking for _FILE_OFFSET_BITS value needed for large files" >&5
+echo "configure:13262: checking for _FILE_OFFSET_BITS value needed for large files" >&5
 
 ac_cv_sys_file_offset_bits=no
       cat > conftest.$ac_ext <<EOF
-#line 13215 "configure"
+#line 13266 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
     /* Check that off_t can represent 2**63 - 1 correctly.
@@ -13227,14 +13278,14 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:13231: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13282: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   :
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
   cat > conftest.$ac_ext <<EOF
-#line 13238 "configure"
+#line 13289 "configure"
 #include "confdefs.h"
 #define _FILE_OFFSET_BITS 64
 #include <sys/types.h>
@@ -13252,7 +13303,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:13256: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13307: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_sys_file_offset_bits=64
 else
@@ -13278,11 +13329,11 @@ EOF
 
    fi
      echo $ac_n "checking for _LARGE_FILES value needed for large files""... $ac_c" 1>&6
-echo "configure:13282: checking for _LARGE_FILES value needed for large files" >&5
+echo "configure:13333: checking for _LARGE_FILES value needed for large files" >&5
 
 ac_cv_sys_large_files=no
       cat > conftest.$ac_ext <<EOF
-#line 13286 "configure"
+#line 13337 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
     /* Check that off_t can represent 2**63 - 1 correctly.
@@ -13298,14 +13349,14 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:13302: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13353: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   :
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
   cat > conftest.$ac_ext <<EOF
-#line 13309 "configure"
+#line 13360 "configure"
 #include "confdefs.h"
 #define _LARGE_FILES 1
 #include <sys/types.h>
@@ -13323,7 +13374,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:13327: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13378: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_sys_large_files=1
 else
@@ -13349,25 +13400,25 @@ EOF
 
    fi
      echo $ac_n "checking for _LARGEFILE_SOURCE value needed for large files""... $ac_c" 1>&6
-echo "configure:13353: checking for _LARGEFILE_SOURCE value needed for large files" >&5
+echo "configure:13404: checking for _LARGEFILE_SOURCE value needed for large files" >&5
 
 ac_cv_sys_largefile_source=no
       cat > conftest.$ac_ext <<EOF
-#line 13357 "configure"
+#line 13408 "configure"
 #include "confdefs.h"
 #include <stdio.h>
 int main() {
 return !fseeko;
 ; return 0; }
 EOF
-if { (eval echo configure:13364: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13415: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   :
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
   cat > conftest.$ac_ext <<EOF
-#line 13371 "configure"
+#line 13422 "configure"
 #include "confdefs.h"
 #define _LARGEFILE_SOURCE 1
 #include <stdio.h>
@@ -13376,7 +13427,7 @@ int main() {
 return !fseeko;
 ; return 0; }
 EOF
-if { (eval echo configure:13380: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13431: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_sys_largefile_source=1
 else
@@ -13408,25 +13459,25 @@ EOF
 ac_save_cflags=${CFLAGS}
 CFLAGS="$LFS_CFLAGS ${ac_save_cflags}"
 echo $ac_n "checking for _LARGEFILE_SOURCE value needed for large files""... $ac_c" 1>&6
-echo "configure:13412: checking for _LARGEFILE_SOURCE value needed for large files" >&5
+echo "configure:13463: checking for _LARGEFILE_SOURCE value needed for large files" >&5
 
 ac_cv_sys_largefile_source=no
       cat > conftest.$ac_ext <<EOF
-#line 13416 "configure"
+#line 13467 "configure"
 #include "confdefs.h"
 #include <stdio.h>
 int main() {
 return !fseeko;
 ; return 0; }
 EOF
-if { (eval echo configure:13423: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13474: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   :
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
   cat > conftest.$ac_ext <<EOF
-#line 13430 "configure"
+#line 13481 "configure"
 #include "confdefs.h"
 #define _LARGEFILE_SOURCE 1
 #include <stdio.h>
@@ -13435,7 +13486,7 @@ int main() {
 return !fseeko;
 ; return 0; }
 EOF
-if { (eval echo configure:13439: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13490: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_sys_largefile_source=1
 else
@@ -13465,18 +13516,18 @@ EOF
    # If you want fseeko and ftello with glibc, upgrade to a fixed glibc.
 
    echo $ac_n "checking for fseeko""... $ac_c" 1>&6
-echo "configure:13469: checking for fseeko" >&5
+echo "configure:13520: checking for fseeko" >&5
 
 ac_cv_func_fseeko=no
       cat > conftest.$ac_ext <<EOF
-#line 13473 "configure"
+#line 13524 "configure"
 #include "confdefs.h"
 #include <stdio.h>
 int main() {
 return fseeko && fseeko (stdin, 0, 0);
 ; return 0; }
 EOF
-if { (eval echo configure:13480: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:13531: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   ac_cv_func_fseeko=yes
 else
@@ -13493,10 +13544,10 @@ EOF
 
    fi
 echo $ac_n "checking if system supports Large Files at all""... $ac_c" 1>&6
-echo "configure:13497: checking if system supports Large Files at all" >&5
+echo "configure:13548: checking if system supports Large Files at all" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 13500 "configure"
+#line 13551 "configure"
 #include "confdefs.h"
 #include <stdio.h>
 #include <sys/types.h>
@@ -13528,7 +13579,7 @@ return !ftello;
 #endif
 ; return 0; }
 EOF
-if { (eval echo configure:13532: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13583: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_largefiles=yes
 else
