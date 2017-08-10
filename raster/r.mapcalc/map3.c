@@ -18,6 +18,7 @@
 
 /****************************************************************************/
 
+static void prepare_region_from_maps(expression **, int, int);
 RASTER3D_Region current_region3;
 
 void setup_region(void)
@@ -668,6 +669,93 @@ void copy_history(const char *dst, int idx)
 
 void create_history(const char *dst, expression * e)
 {
+}
+
+/****************************************************************************/
+
+void prepare_region_from_maps_union(expression **map_list, int num_maps) {
+    prepare_region_from_maps(map_list, 1, num_maps);
+}
+
+void prepare_region_from_maps_intersect(expression **map_list, int num_maps) {
+    prepare_region_from_maps(map_list, 2, num_maps);
+}
+
+void prepare_region_from_maps(expression **map_list, int type, int num_maps) {
+   /* \brief Setup the computational region from all 3d raster maps
+    *
+    * This function computes the disjoint union or intersection extent
+    * that is covered by all 3d raster maps and sets the smallest
+    * resolution that it can find.
+    *
+    * TODO: Must be implemented
+    */
+
+    G_fatal_error("Union or intersection of regions is not implemented");
+
+    int first = 0;
+    struct Cell_head window, temp_window;
+    int i;
+    const char *mapset;
+
+    for (i = 0; i < num_maps; i++) {
+        expression *e = map_list[i];
+
+        char rast_name[GNAME_MAX];
+
+        strcpy(rast_name, e->data.map.name);
+        mapset = G_find_raster2(rast_name, "");
+
+        if (!mapset)
+            G_fatal_error(_("Raster map <%s> not found"), rast_name);
+
+        G_debug(1, "Setting region from raster map: %s@%s", rast_name, mapset);
+
+        Rast_get_cellhd(rast_name, mapset, &temp_window);
+
+        if (!first) {
+            window = temp_window;
+            first = 1;
+        }
+        else {
+            if (type == 1) {
+                /* Union: find the largest extent */
+                window.north = (window.north > temp_window.north) ?
+                    window.north : temp_window.north;
+                window.south = (window.south < temp_window.south) ?
+                    window.south : temp_window.south;
+                window.east = (window.east > temp_window.east) ?
+                    window.east : temp_window.east;
+                window.west = (window.west < temp_window.west) ?
+                    window.west : temp_window.west;
+            }
+            else {
+                /* Intersect: Find the smallest extent */
+                window.north = (window.north < temp_window.north) ?
+                    window.north : temp_window.north;
+                window.south = (window.south > temp_window.south) ?
+                    window.south : temp_window.south;
+                window.east = (window.east < temp_window.east) ?
+                    window.east : temp_window.east;
+                window.west = (window.west > temp_window.west) ?
+                    window.west : temp_window.west;
+            }
+            /* Find the smallest resolution */
+            window.ns_res = (window.ns_res < temp_window.ns_res) ?
+                window.ns_res : temp_window.ns_res;
+            window.ew_res = (window.ew_res < temp_window.ew_res) ?
+                window.ew_res : temp_window.ew_res;
+        }
+    }
+
+    /* Set the region only if a map was found in the expression */
+    if (first == 1) {
+        G_adjust_Cell_head3(&window, 0, 0, 0);
+        G_debug(1, "Region was set to n %g s %g e %g w %g ns_res %g ew_res %g", window.north,
+                  window.south, window.east, window.west, window.ns_res, window.ew_res);
+        G_put_window(&window);
+    }
+
 }
 
 /****************************************************************************/

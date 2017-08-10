@@ -9,16 +9,16 @@ east: 25
 west: 15
 rows: 10
 cols: 10
-121 12 183 55 37 96 138 117 182 40 
-157 70 115 1 149 125 42 193 108 24 
-83 66 82 84 186 182 179 122 67 113 
-151 93 144 173 128 196 61 125 64 193 
-180 175 14 41 44 27 165 27 90 60 
-97 57 12 104 98 13 87 24 83 107 
-174 133 146 114 115 60 78 154 49 130 
-55 138 144 25 32 58 47 137 139 32 
-143 193 155 190 131 124 87 81 160 154 
-56 45 48 66 9 182 69 12 154 19 
+121 12 183 55 37 96 138 117 182 40
+157 70 115 1 149 125 42 193 108 24
+83 66 82 84 186 182 179 122 67 113
+151 93 144 173 128 196 61 125 64 193
+180 175 14 41 44 27 165 27 90 60
+97 57 12 104 98 13 87 24 83 107
+174 133 146 114 115 60 78 154 49 130
+55 138 144 25 32 58 47 137 139 32
+143 193 155 190 131 124 87 81 160 154
+56 45 48 66 9 182 69 12 154 19
 """
 
 dcell_seed_600 = """\
@@ -93,7 +93,7 @@ class TestRandFunction(TestCase):
 
     def test_seed_required(self):
         """Test that seed is required when rand() is used
-        
+
         This test can, and probably should, generate an error message.
         """
         self.assertModuleFail('r.mapcalc', expression='rand_x = rand(1, 200)')
@@ -218,7 +218,7 @@ class TestBasicOperations(TestCase):
             expression='diff_e_e = 3 * x() * y() - 3 * x() * y()')
         self.to_remove.append('diff_e_e')
         self.assertRasterMinMax('diff_e_e', refmin=0, refmax=0)
-    
+
     def test_nrows_ncols_sum(self):
         """Test if sum of nrows and ncols matches one
         expected from current region settigs"""
@@ -226,6 +226,55 @@ class TestBasicOperations(TestCase):
             expression='nrows_ncols_sum = nrows() + ncols()')
         self.to_remove.append('nrows_ncols_sum')
         self.assertRasterMinMax('nrows_ncols_sum', refmin=20, refmax=20)
+
+
+class TestRegionOperations(TestCase):
+
+    # TODO: replace by unified handing of maps
+    to_remove = []
+
+    @classmethod
+    def setUpClass(cls):
+        cls.use_temp_region()
+        cls.runModule('g.region', n=30, s=15, e=30, w=15, res=5)
+        cls.runModule('r.mapcalc', expression="test_region_1 = 1", seed=1)
+        cls.runModule('g.region', n=25, s=10, e=25, w=10, res=5)
+        cls.runModule('r.mapcalc', expression="test_region_2 = 2", seed=1)
+        cls.runModule('g.region', n=20, s=5, e=20, w=5, res=1)
+        cls.runModule('r.mapcalc', expression="test_region_3 = 3", seed=1)
+
+        cls.to_remove.append("test_region_1")
+        cls.to_remove.append("test_region_2")
+        cls.to_remove.append("test_region_3")
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.del_temp_region()
+        if cls.to_remove:
+            cls.runModule('g.remove', flags='f', type='raster',
+                name=','.join(cls.to_remove), verbose=True)
+
+    def test_union(self):
+        """Test the union region option"""
+        self.assertModule('r.mapcalc', region="union", seed=1,
+                          expression='test_region_4 = test_region_1 + test_region_2 + test_region_3')
+        self.to_remove.append('test_region_4')
+
+        self.assertModuleKeyValue('r.info', map='test_region_4', flags='gr',
+                                  reference=dict(min=6, max=6, cells=625, north=30,
+                                  south=5, west=5, east=30, nsres=1, ewres=1),
+                                  precision=0.01, sep='=')
+
+    def test_intersect(self):
+        """Test the intersect region option"""
+        self.assertModule('r.mapcalc', region="intersect", seed=1,
+                          expression='test_region_5 = test_region_1 + test_region_2 + test_region_3')
+        self.to_remove.append('test_region_5')
+
+        self.assertModuleKeyValue('r.info', map='test_region_5', flags='gr',
+                                  reference=dict(min=6, max=6, cells=25, north=20,
+                                  south=15, west=15, east=20, nsres=1, ewres=1),
+                                  precision=0.01, sep='=')
 
 
 if __name__ == '__main__':
