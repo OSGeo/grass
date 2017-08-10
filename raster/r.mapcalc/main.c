@@ -28,6 +28,7 @@ int overwrite_flag;
 
 long seed_value;
 long seeded;
+int region_approach;
 
 /****************************************************************************/
 
@@ -41,11 +42,11 @@ static expr_list *parse_file(const char *filename)
     FILE *fp;
 
     if (strcmp(filename, "-") == 0)
-	return parse_stream(stdin);
+        return parse_stream(stdin);
 
     fp = fopen(filename, "r");
     if (!fp)
-	G_fatal_error(_("Unable to open input file <%s>"), filename);
+        G_fatal_error(_("Unable to open input file <%s>"), filename);
 
     res = parse_stream(fp);
 
@@ -59,7 +60,7 @@ static expr_list *parse_file(const char *filename)
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *expr, *file, *seed;
+    struct Option *expr, *file, *seed, *region;
     struct Flag *random, *describe;
     int all_ok;
 
@@ -78,6 +79,19 @@ int main(int argc, char **argv)
     expr->description = _("Expression to evaluate");
     expr->guisection = _("Expression");
     
+    region = G_define_option();
+    region->key = "region";
+    region->type = TYPE_STRING;
+    region->required = NO;
+    region->answer = "current";
+    region->options = "current,intersect,union";
+    region->description = _("The computational region that should be used.\n"
+                            "               - current uses the current region of the mapset.\n"
+                            "               - intersect computes the intersection region between\n"
+                            "                 all input maps and uses the smallest resolution\n"
+                            "               - union computes the union extent of all map regions\n"
+                            "                 and uses the smallest resolution");
+
     file = G_define_standard_option(G_OPT_F_INPUT);
     file->key = "file";
     file->required = NO;
@@ -100,50 +114,62 @@ int main(int argc, char **argv)
 
     if (argc == 1)
     {
-	char **p = G_malloc(3 * sizeof(char *));
-	p[0] = argv[0];
-	p[1] = G_store("file=-");
-	p[2] = NULL;
-	argv = p;
-	argc = 2;
+        char **p = G_malloc(3 * sizeof(char *));
+        p[0] = argv[0];
+        p[1] = G_store("file=-");
+        p[2] = NULL;
+        argv = p;
+        argc = 2;
     }
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     overwrite_flag = module->overwrite;
 
     if (expr->answer && file->answer)
-	G_fatal_error(_("%s= and %s= are mutually exclusive"),
-			expr->key, file->key);
+        G_fatal_error(_("%s= and %s= are mutually exclusive"),
+                        expr->key, file->key);
 
     if (seed->answer && random->answer)
-	G_fatal_error(_("%s= and -%c are mutually exclusive"),
-		      seed->key, random->key);
+        G_fatal_error(_("%s= and -%c are mutually exclusive"),
+                        seed->key, random->key);
 
     if (expr->answer)
-	result = parse_string(expr->answer);
+        result = parse_string(expr->answer);
     else if (file->answer)
-	result = parse_file(file->answer);
+        result = parse_file(file->answer);
     else
-	result = parse_stream(stdin);
+        result = parse_stream(stdin);
 
     if (!result)
-	G_fatal_error(_("parse error"));
+        G_fatal_error(_("parse error"));
 
     if (seed->answer) {
-	seed_value = atol(seed->answer);
-	G_srand48(seed_value);
-	seeded = 1;
-	G_debug(3, "Read random seed from seed=: %ld", seed_value);
+        seed_value = atol(seed->answer);
+        G_srand48(seed_value);
+        seeded = 1;
+        G_debug(3, "Read random seed from seed=: %ld", seed_value);
     }
 
     if (random->answer) {
-	seed_value = G_srand48_auto();
-	seeded = 1;
-	G_debug(3, "Generated random seed (-s): %ld", seed_value);
+        seed_value = G_srand48_auto();
+        seeded = 1;
+        G_debug(3, "Generated random seed (-s): %ld", seed_value);
     }
 
+    /* Set the global variable of the region setup approach */ 
+    region_approach = 1;
+
+    if (G_strncasecmp(region->answer, "union", 5) == 0)
+        region_approach = 2;
+
+    if (G_strncasecmp(region->answer, "intersect", 9) == 0)
+        region_approach = 3;
+
+    G_debug(1, "Region answer %s region approach %i", region->answer,
+                                                      region_approach);
+    
     if (describe->answer) {
         describe_maps(stdout, result);
         return EXIT_SUCCESS;
@@ -156,8 +182,8 @@ int main(int argc, char **argv)
     all_ok = 1;
 
     if (floating_point_exception_occurred) {
-	G_warning(_("Floating point error(s) occurred in the calculation"));
-	all_ok = 0;
+        G_warning(_("Floating point error(s) occurred in the calculation"));
+        all_ok = 0;
     }
 
     return all_ok ? EXIT_SUCCESS : EXIT_FAILURE;
