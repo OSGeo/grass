@@ -1021,25 +1021,25 @@ def compute_common_absolute_time_granularity_simple(gran_list):
 
 def gran_singular_unit(gran):
     """Return the absolute granularity unit in its singular term
-    
+
     :param gran: input granularity
     :return: granularity unit
-    
+
     .. code-block:: python
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
         >>> tgis.gran_singular_unit('1 month')
-        month
-        
+        'month'
+
         >>> tgis.gran_singular_unit('2 months')
-        month
-        
+        'month'
+
         >>> tgis.gran_singular_unit('6 seconds')
-        second
-        
+        'second'
+
         >>> tgis.gran_singular_unit('1 year')
-        year
+        'year'
     """
     if check_granularity_string(gran, 'absolute'):
         output, unit = gran.split(" ")
@@ -1057,31 +1057,31 @@ def gran_singular_unit(gran):
     else:
         print(_("Invalid absolute granularity"))
         return False
-        
+
 
 #######################################################################
 
 def gran_plural_unit(gran):
     """Return the absolute granularity unit in its singular term
-    
+
     :param gran: input granularity
     :return: granularity unit
-    
+
     .. code-block:: python
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
         >>> tgis.gran_singular_unit('1 month')
-        months
-        
+        'month'
+
         >>> tgis.gran_singular_unit('2 months')
-        months
-        
+        'month'
+
         >>> tgis.gran_singular_unit('6 seconds')
-        seconds
-        
+        'second'
+
         >>> tgis.gran_singular_unit('1 year')
-        years
+        'year'
     """
     if check_granularity_string(gran, 'absolute'):
         output, unit = gran.split(" ")
@@ -1106,7 +1106,7 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
        granularity based on the Gregorian calendar hierarchy that 1 year
        equals 12 months or 365.2425 days or 24 * 365.2425 hours or 86400 *
        365.2425 seconds.
-       
+
        :param from_gran: input granularity, this should be bigger than to_gran
        :param to_gran: output granularity
        :return: The output granularity
@@ -1117,25 +1117,25 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
            >>> tgis.init()
            >>> tgis.gran_to_gran('1 month', '1 day')
            '30.436875 days'
-            
+
            >>> tgis.gran_to_gran('1 month', '1 day', True)
            30.436875
-            
+
            >>> tgis.gran_to_gran('10 year', '1 hour')
            '87658.2 hours'
-            
+
            >>> tgis.gran_to_gran('10 year', '1 minute')
            '5259492.0 minutes'
-            
+
            >>> tgis.gran_to_gran('6 months', '1 day')
            '182.62125 days'
-            
+
            >>> tgis.gran_to_gran('1 months', '1 second')
            '2629746.0 seconds'
-            
+
            >>> tgis.gran_to_gran('1 month', '1 second', True)
            2629746.0
-           
+
            >>> tgis.gran_to_gran('30 month', '1 month', True)
            30
     """
@@ -1171,7 +1171,7 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
     else:
         print(_("Invalid absolute granularity"))
         return False
-        
+
 
 ###############################################################################
 # http://akiscode.com/articles/gcd_of_a_list.shtml
