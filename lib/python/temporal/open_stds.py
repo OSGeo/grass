@@ -49,7 +49,7 @@ def open_old_stds(name, type, dbif=None):
 
     # Check if the dataset name contains the mapset as well
     if name.find("@") < 0:
-        id = name + "@" + mapset
+        id = name.decode("utf-8") + "@" + mapset.decode("utf-8")
     else:
         id = name
 
