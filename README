@@ -50,3 +50,24 @@ To generate the documents in PDF format, run
 An online version is available at:
 http://grass.osgeo.org/programming7/
 
+## Docker
+
+Build using the downloaded source code (in the directory with the
+source code):
+
+    docker build -t grass .
+
+A test run (assuming you have existing GRASS GIS location)
+
+    docker run --rm -v /your/local/grassdata/:/data -it grass \
+        grass /data/nc_basic_spm/PERMANENT --exec g.region -p
+
+Note that the first `grass` is a name of the image while the second
+`grass` is the name of the executable.
+
+To run the tests (again assuming local location):
+
+    docker run --rm -v /your/test/grassdata/:/data -w /code/grass \
+        -it grass grass /data/nc_basic_spm/PERMANENT --exec \
+            python -m grass.gunittest.main \
+                --location nc_basic_spm --location-type nc
