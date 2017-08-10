@@ -483,7 +483,7 @@ def register_map_object_list(type,  map_list, output_stds,
         # In case of a empty map continue, do not register empty maps
 
         if delete_empty:
-            if type in ["raster", "raster_3d"]:
+            if type in ["raster", "raster_3d", "rast", "rast3d"]:
                 if map_layer.metadata.get_min() is None and \
                    map_layer.metadata.get_max() is None:
                     empty_maps.append(map_layer)

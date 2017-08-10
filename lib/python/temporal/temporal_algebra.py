@@ -778,6 +778,11 @@ class TemporalAlgebraParser(object):
         self.nprocs = nprocs
         self.use_granularity = False
 
+        # Topology lists
+        self.temporal_topology_list = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED", \
+                                       "DURING", "STARTS", "FINISHES", "CONTAINS", "STARTED", "FINISHED"]
+        self.spatial_topology_list = ["EQUIVALENT", "COVER", "OVERLAP", "IN", "CONTAIN", "MEET"]
+
     def __del__(self):
         if self.dbif.connected:
             self.dbif.close()
@@ -1039,6 +1044,7 @@ class TemporalAlgebraParser(object):
             :return: Map list with specified temporal extent.
         """
         resultdict = {}
+        temporal_topo_list, spatial_topo_list = self._check_topology(topolist=topolist)
 
         for map_i in maplist:
             # Loop over temporal related maps and create overlay modules.
@@ -1050,30 +1056,32 @@ class TemporalAlgebraParser(object):
             for topo in topolist:
                 if topo in tbrelations.keys():
                     for map_j in (tbrelations[topo]):
-                        if temporal == 'r':
-                            # Generate an intermediate map for the result map list.
-                            map_new = self.generate_new_map(base_map=map_i, bool_op='and',
-                                                            copy=True,  rename=True)
-                        # Create overlaid map extent.
-                        returncode = self.overlay_map_extent(map_new, map_j, 'and',
-                                                             temp_op=temporal)
-                        # Stop the loop if no temporal or spatial relationship exist.
-                        if returncode == 0:
-                            break
-                        # Append map to result map list.
-                        elif returncode == 1:
-                            # print(map_new.get_id() + " " + str(map_new.get_temporal_extent_as_tuple()))
-                            # print(map_new.condition_value)
-                            # print(map_new.cmd_list)
-                            # resultlist.append(map_new)
-                            resultdict[map_new.get_id()] = map_new
+                        if self._check_spatial_topology_relation(spatial_topo_list, map_i, map_j) is True:
+                            if temporal == 'r':
+                                # Generate an intermediate map for the result map list.
+                                map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                                copy=True,  rename=True)
+                            # Create overlaid map extent.
+                            returncode = self.overlay_map_extent(map_new, map_j, 'and',
+                                                                 temp_op=temporal)
+                            print(map_new.get_id(), map_j.get_id())
+                            # Stop the loop if no temporal or spatial relationship exist.
+                            if returncode == 0:
+                                break
+                            # Append map to result map list.
+                            elif returncode == 1:
+                                # print(map_new.get_id() + " " + str(map_new.get_temporal_extent_as_tuple()))
+                                # print(map_new.condition_value)
+                                # print(map_new.cmd_list)
+                                # resultlist.append(map_new)
+                                resultdict[map_new.get_id()] = map_new
 
-                        # Create r.mapcalc expression string for the operation.
-                        #cmdstring = self.build_command_string(s_expr_a = map_new,
-                        #                                                                s_expr_b = map_j,
-                        #                                                                operator = function)
-                        # Conditional append of module command.
-                        #map_new.cmd_list = cmdstring
+                            # Create r.mapcalc expression string for the operation.
+                            #cmdstring = self.build_command_string(s_expr_a = map_new,
+                            #                                                                s_expr_b = map_j,
+                            #                                                                operator = function)
+                            # Conditional append of module command.
+                            #map_new.cmd_list = cmdstring
                     if returncode == 0:
                         break
             # Append map to result map list.
@@ -1221,33 +1229,110 @@ class TemporalAlgebraParser(object):
 
         return(maplist)
 
-    def get_temporal_topo_list(self,
-                               maplistA,
-                               maplistB=None,
-                               topolist=["EQUAL"],
-                               assign_val=False,
-                               count_map=False,
-                               compare_bool=False,
-                               compop=None,
-                               aggregate=None):
-        """Build temporal topology for two space time data sets, copy map objects
+    def _check_spatial_topology_entries(self, spatial_topo_list, spatial_relations):
+        """Check the spatial topology entries in the spatial relation list
+
+        Return True if no spatial relation list is provided or if one spatial relation
+        was found
+
+        :param spatial_topo_list: The spatial relations that were defined in the expression
+        :param spatial_relations: The spatial relations of a single map object
+
+        :return: True if a spatial  topological relation was found, False if not
+        """
+
+        # Check spatial topology
+        spatial_topo_check = False
+        if len(spatial_topo_list) == 0:
+            spatial_topo_check = True
+        else:
+            for spatial_topology in spatial_topo_list:
+                if spatial_topology in spatial_relations.keys():
+                    spatial_topo_check = True
+
+        if self.debug is True:
+            print("Spatial topology list", spatial_topo_list, spatial_topo_check)
+
+        return spatial_topo_check
+
+    def _check_spatial_topology_relation(self, spatial_topo_list, map_a, map_b):
+        """Check if map_b has one of the spatial topological relations to map_a that is defined
+        in spatial_topo_list
+
+        :param spatial_topo_list:
+        :param map_a:
+        :param map_b:
+        :return:
+        """
+
+        # Check spatial topology
+        spatial_topo_check = False
+        if len(spatial_topo_list) == 0:
+            spatial_topo_check = True
+        else:
+            map_a_sr = map_a.get_spatial_relations()
+
+            for spatial_topology in spatial_topo_list:
+                if spatial_topology in map_a_sr.keys():
+                    if map_b in map_a_sr[spatial_topology]:
+                        spatial_topo_check = True
+
+        if self.debug is True:
+            print("Spatial topology list", spatial_topo_list, spatial_topo_check)
+
+        return spatial_topo_check
+
+    def _check_topology(self, topolist):
+        """Check the topology definitions of the expression
+
+        :param topolist: List of strings of temporal and spatial relations.
+
+        :return: A tuple of spatial and temporal topology lists (temporal_topo_list, spatial_topo_list)
+
+        :raises: This method will raise a syntax error in case the topology name is unknown
+        """
+        temporal_topo_list = []
+        spatial_topo_list= []
+        # Check if given temporal relation are valid.
+        for topo in topolist:
+            if topo.upper() not in self.temporal_topology_list and topo.upper() not in self.spatial_topology_list:
+                raise SyntaxError("Unpermitted topological relation name '" + topo + "'")
+
+            if topo.upper() in self.spatial_topology_list:
+                spatial_topo_list.append(topo.upper())
+
+            if topo.upper() in self.temporal_topology_list:
+                temporal_topo_list.append(topo.upper())
+
+        return temporal_topo_list, spatial_topo_list
+
+    def build_spatio_temporal_topology_list(self,
+                                            maplistA,
+                                            maplistB=None,
+                                            topolist=["EQUAL"],
+                                            assign_val=False,
+                                            count_map=False,
+                                            compare_bool=False,
+                                            compop=None,
+                                            aggregate=None):
+        """Build spatio-temporal topology for two space time data sets, copy map objects
           for given relation into map list.
 
           :param maplistA: List of maps.
           :param maplistB: List of maps.
-          :param topolist: List of strings of temporal relations.
+          :param topolist: List of strings of spatio-temporal relations.
           :param assign_val: Boolean for assigning a boolean map value based on
-                            the map_values from the compared map list by
-                            topological relationships.
+                             the map_values from the compared map list by
+                             topological relationships.
           :param count_map: Boolean if the number of topological related maps
-                           should be returned.
+                            should be returned.
           :param compare_bool: Boolean for comparing boolean map values based on
-                            related map list and compariosn operator.
+                               related map list and comparison operator.
           :param compop: Comparison operator, && or ||.
           :param aggregate: Aggregation operator for relation map list, & or |.
 
           :return: List of maps from maplistA that fulfil the topological relationships
-                  to maplistB specified in topolist.
+                   to maplistB specified in topolist.
 
           .. code-block:: python
 
@@ -1269,7 +1354,7 @@ class TemporalAlgebraParser(object):
               ...     check = mapB.set_relative_time(i, i + 1, "months")
               ...     mapsA.append(mapA)
               ...     mapsB.append(mapB)
-              >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB, ['EQUAL'])
+              >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB, ['EQUAL'])
               >>> for map in resultlist:
               ...     if map.get_equal():
               ...         relations = map.get_equal()
@@ -1285,7 +1370,7 @@ class TemporalAlgebraParser(object):
               Map a7 has equal relation to map b7
               Map a8 has equal relation to map b8
               Map a9 has equal relation to map b9
-              >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB, ['DURING'])
+              >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB, ['DURING'])
               >>> print(resultlist)
               []
               >>> # Create two list of maps with equal time stamps
@@ -1302,7 +1387,7 @@ class TemporalAlgebraParser(object):
               ...     check = mapB.set_relative_time(i, i + 2, "months")
               ...     mapsA.append(mapA)
               ...     mapsB.append(mapB)
-              >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB, ['starts','during'])
+              >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB, ['starts','during'])
               >>> for map in resultlist:
               ...     if map.get_starts():
               ...         relations = map.get_starts()
@@ -1366,7 +1451,7 @@ class TemporalAlgebraParser(object):
               ...             datetime(2000,1,i + 7))
               ...     mapsA.append(mapA)
               ...     mapsB.append(mapB)
-              >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB)
+              >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB)
               >>> for map in resultlist:
               ...     print(map.get_id())
               a5@B
@@ -1374,88 +1459,85 @@ class TemporalAlgebraParser(object):
               a7@B
               a8@B
               a9@B
-              >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB, ['during'])
+              >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB, ['during'])
               >>> for map in resultlist:
               ...     print(map.get_id())
 
         """
-        topologylist = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED", \
-                        "DURING", "STARTS", "FINISHES", "CONTAINS", "STARTED", \
-                        "FINISHED"]
-        complementdict = {"EQUAL": "EQUAL", "FOLLOWS" : "PRECEDES",
-                          "PRECEDES" : "FOLLOWS", "OVERLAPS" : "OVERLAPPED",
-                          "OVERLAPPED" : "OVERLAPS", "DURING" : "CONTAINS",
-                          "CONTAINS" : "DURING", "STARTS" : "STARTED",
-                          "STARTED" : "STARTS", "FINISHES" : "FINISHED",
-                          "FINISHED" : "FINISHES"}
-        resultdict = {}
-        # Check if given temporal relation are valid.
-        for topo in topolist:
-          if topo.upper() not in topologylist:
-              raise SyntaxError("Unpermitted temporal relation name '" + topo + "'")
+        # Check the topology definitions and return the list of temporal and spatial
+        # topological relations that must be fulfilled
+        temporal_topo_list, spatial_topo_list = self._check_topology(topolist=topolist)
 
-        # Create temporal topology for maplistA to maplistB.
+        resultdict = {}
+
+        # Create spatio-temporal topology for maplistA to maplistB.
         tb = SpatioTemporalTopologyBuilder()
-        # Dictionary with different spatial variables used for topology builder.
-        spatialdict = {'strds' : '2D', 'stvds' : '2D', 'str3ds' : '3D'}
-        # Build spatial temporal topology
-        if self.spatial:
-            tb.build(maplistA, maplistB, spatial = spatialdict[self.stdstype])
+        if len(spatial_topo_list) > 0:
+            # Dictionary with different spatial variables used for topology builder.
+            spatialdict = {'strds' : '2D', 'stvds' : '2D', 'str3ds' : '3D'}
+            tb.build(maplistA, maplistB, spatial=spatialdict[self.stdstype])
         else:
             tb.build(maplistA, maplistB)
         # Iterate through maps in maplistA and search for relationships given
         # in topolist.
         for map_i in maplistA:
-            tbrelations = map_i.get_temporal_relations()
             if assign_val:
-                self.assign_bool_value(map_i,  tbrelations,  topolist)
+                self.assign_bool_value(map_i, temporal_topo_list, spatial_topo_list)
             elif compare_bool:
-                self.compare_bool_value(map_i,  tbrelations, compop, aggregate, topolist)
-            for topo in topolist:
-                if topo.upper() in tbrelations.keys():
-                    if count_map:
-                        relationmaplist = tbrelations[topo.upper()]
-                        gvar = GlobalTemporalVar()
-                        gvar.td = len(relationmaplist)
-                        if "map_value" in dir(map_i):
-                            map_i.map_value.append(gvar)
-                        else:
-                            map_i.map_value = gvar
-                    # Use unique identifier, since map names may be equal
-                    resultdict[map_i.uid] = map_i
+                self.compare_bool_value(map_i, compop, aggregate, temporal_topo_list, spatial_topo_list)
+
+            temporal_relations = map_i.get_temporal_relations()
+            spatial_relations = map_i.get_spatial_relations()
+
+            for temporal_topology in temporal_topo_list:
+                if temporal_topology.upper() in temporal_relations.keys():
+                    if self._check_spatial_topology_entries(spatial_topo_list, spatial_relations) is True:
+                        if count_map:
+                            relationmaplist = temporal_relations[temporal_topology.upper()]
+                            gvar = GlobalTemporalVar()
+                            gvar.td = len(relationmaplist)
+                            if "map_value" in dir(map_i):
+                                map_i.map_value.append(gvar)
+                            else:
+                                map_i.map_value = gvar
+                        # Use unique identifier, since map names may be equal
+                        resultdict[map_i.uid] = map_i
         resultlist = resultdict.values()
 
         # Sort list of maps chronological.
-        resultlist = sorted(resultlist, key = AbstractDatasetComparisonKeyStartTime)
+        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
         return(resultlist)
 
     def assign_bool_value(self,
                           map_i,
-                          tbrelations,
-                          topolist=["EQUAL"]):
+                          temporal_topo_list=["EQUAL"],
+                          spatial_topo_list=[]):
         """ Function to assign boolean map value based on the map_values from the
         compared map list by topological relationships.
 
           :param map_i: Map object with temporal extent.
-          :param tbrelations: List of temporal relation to map_i.
-          :param topolist: List of strings for given temporal relations.
+          :param temporal_topo_list: List of strings for given temporal relations.
+          :param spatial_topo_list: List of strings for given spatial relations.
 
           :return: Map object with conditional value that has been assigned by
                         relation maps that fulfil the topological relationships to
-                        maplistB specified in topolist.
+                        maplistB specified in temporal_topo_list.
         """
+
+        temporal_relations = map_i.get_temporal_relations()
         condition_value_list = []
-        for topo in topolist:
-            if topo.upper() in tbrelations.keys():
-                #relationmaplist = tbrelations[complementdict[topo.upper()]]
-                relationmaplist = tbrelations[topo.upper()]
+        for topo in temporal_topo_list:
+            if topo.upper() in temporal_relations.keys():
+                relationmaplist = temporal_relations[topo.upper()]
                 for relationmap in relationmaplist:
-                    for boolean in relationmap.condition_value:
-                        if isinstance(boolean, bool):
-                            condition_value_list.append(boolean)
-                    if self.debug:
-                        print(str(relationmap.get_temporal_extent_as_tuple()) + str(boolean))
+                    if self._check_spatial_topology_relation(spatial_topo_list, map_i, relationmap) is True:
+                        for boolean in relationmap.condition_value:
+                            if isinstance(boolean, bool):
+                                condition_value_list.append(boolean)
+                        if self.debug:
+                            print("assign_bool_value", str(relationmap.get_temporal_extent_as_tuple())
+                                  + str(boolean))
         if all(condition_value_list):
             resultbool = True
         else:
@@ -1466,39 +1548,46 @@ class TemporalAlgebraParser(object):
 
     def compare_bool_value(self,
                            map_i,
-                           tbrelations,
                            compop,
                            aggregate,
-                           topolist=["EQUAL"]):
+                           temporal_topo_list=["EQUAL"],
+                           spatial_topo_list=[]):
         """ Function to evaluate two map lists with boolean values by boolean
             comparison operator.
 
           :param map_i: Map object with temporal extent.
-          :param tbrelations: List of temporal relation to map_i.
-          :param topolist: List of strings for given temporal relations.
           :param compop: Comparison operator, && or ||.
           :param aggregate: Aggregation operator for relation map list, & or |.
+          :param temporal_topo_list: List of strings for given temporal relations.
+          :param spatial_topo_list: List of strings for given spatial relations.
 
           :return: Map object with conditional value that has been evaluated by
                         comparison operators.
         """
+
+        temporal_relations = map_i.get_temporal_relations()
+
         # Build conditional list with elements from related maps and given relation operator.
         leftbool = map_i.condition_value[0]
         condition_value_list = [leftbool]
         count = 0
-        for topo in topolist:
-            if topo.upper() in tbrelations.keys():
-                relationmaplist = tbrelations[topo.upper()]
-                if count == 0:
-                    condition_value_list.append(compop[0])
-                    condition_value_list.append('(')
+        for topo in temporal_topo_list:
+            if topo.upper() in temporal_relations.keys():
+                relationmaplist = temporal_relations[topo.upper()]
                 for relationmap in relationmaplist:
-                    for boolean in relationmap.condition_value:
-                        if isinstance(boolean, bool):
-                            if count > 0:
-                                condition_value_list.append(aggregate)
-                            condition_value_list.append(boolean)
-                            count = count + 1
+                    if self._check_spatial_topology_relation(spatial_topo_list, map_i, relationmap) is True:
+                        if count == 0:
+                            condition_value_list.append(compop[0])
+                            condition_value_list.append('(')
+                        for boolean in relationmap.condition_value:
+                            if isinstance(boolean, bool):
+                                if count > 0:
+                                    condition_value_list.append(aggregate)
+                                condition_value_list.append(boolean)
+                                count = count + 1
+
+                        if self.debug:
+                            print("compare_bool_value", map_i.get_id(), relationmap.get_id())
         if count > 0:
             condition_value_list.append(')')
         # Convert conditional list to concatenated string and evaluate booleans.
@@ -1605,13 +1694,13 @@ class TemporalAlgebraParser(object):
 
         """
         if not inverse:
-            topolist = self.get_temporal_topo_list(maplistA, maplistB, topolist,
-                                                    assign_val = assign_val)
+            topolist = self.build_spatio_temporal_topology_list(maplistA, maplistB, topolist,
+                                                                assign_val = assign_val)
             resultlist = topolist
 
         else:
-            topolist = self.get_temporal_topo_list(maplistA, maplistB, topolist,
-                                                    assign_val = assign_val)
+            topolist = self.build_spatio_temporal_topology_list(maplistA, maplistB, topolist,
+                                                                assign_val = assign_val)
             resultlist = []
             for map_i in maplistA:
                 if map_i not in topolist:
@@ -1927,7 +2016,7 @@ class TemporalAlgebraParser(object):
         """ This function evaluates temporal variable expressions of a conditional
              expression in two steps.
              At first it combines stepwise the single conditions by their relations with LALR.
-             In this prossess sub condition map lists will be created which will include
+             In this process sub condition map lists will be created which will include
              information of the underlying single conditions. Important: The temporal
              relations between conditions are evaluated by implicit aggregation.
              In the second step the aggregated condition map list will be compared with the
@@ -1974,7 +2063,7 @@ class TemporalAlgebraParser(object):
                 operator = tvarexpr[iter +1]
                 relexpr = tvarexpr[iter +2]
                 if all([issubclass(type(ele), list) for ele in [expr,  relexpr]]):
-                    resultlist = self.get_temporal_topo_list(expr,  relexpr)
+                    resultlist = self.build_spatio_temporal_topology_list(expr, relexpr)
             # Loop through the list, search for map lists or global variables.
             for expr in tvarexpr:
                 if isinstance(expr, list):
@@ -2381,9 +2470,9 @@ class TemporalAlgebraParser(object):
         if self.run:
             maplistA   = self.check_stds(t[1])
             maplistB   = self.check_stds(t[3])
-            resultlist = self.get_temporal_topo_list(maplistA,
-                                                     maplistB,
-                                                     count_map=True)
+            resultlist = self.build_spatio_temporal_topology_list(maplistA,
+                                                                  maplistB,
+                                                                  count_map=True)
             t[0] = resultlist
 
     def p_t_hash2(self,t):
@@ -2398,10 +2487,10 @@ class TemporalAlgebraParser(object):
             maplistA   = self.check_stds(t[1])
             maplistB   = self.check_stds(t[3])
             topolist   = self.eval_toperator(t[2], optype='hash')[0]
-            resultlist = self.get_temporal_topo_list(maplistA,
-                                                     maplistB,
-                                                     topolist,
-                                                     count_map=True)
+            resultlist = self.build_spatio_temporal_topology_list(maplistA,
+                                                                  maplistB,
+                                                                  topolist,
+                                                                  count_map=True)
             t[0] = resultlist
 
     def p_t_hash_paren(self, t):
@@ -2588,9 +2677,9 @@ class TemporalAlgebraParser(object):
             function = t[2] + t[3]
             aggregate = t[2]
             # Build conditional values based on topological relationships.
-            complist = self.get_temporal_topo_list(tvarexprA, tvarexprB, topolist=relations,
-                                                   compare_bool=True, compop=function[0],
-                                                   aggregate=aggregate)
+            complist = self.build_spatio_temporal_topology_list(tvarexprA, tvarexprB, topolist=relations,
+                                                                compare_bool=True, compop=function[0],
+                                                                aggregate=aggregate)
             # Set temporal extent based on topological relationships.
             resultlist = self.set_temporal_extent_list(complist, topolist = relations,
                                                        temporal=temporal)
@@ -2610,8 +2699,8 @@ class TemporalAlgebraParser(object):
             # Evaluate temporal comparison operator.
             relations, temporal, function, aggregate = self.eval_toperator(t[2],  optype='boolean')
             # Build conditional values based on topological relationships.
-            complist = self.get_temporal_topo_list(tvarexprA, tvarexprB, topolist=relations,
-                               compare_bool=True, compop=function[0], aggregate=aggregate)
+            complist = self.build_spatio_temporal_topology_list(tvarexprA, tvarexprB, topolist=relations,
+                                                                compare_bool=True, compop=function[0], aggregate=aggregate)
             # Set temporal extent based on topological relationships.
             resultlist = self.set_temporal_extent_list(complist, topolist=relations,
                                                        temporal=temporal)

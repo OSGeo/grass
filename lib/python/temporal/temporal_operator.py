@@ -12,6 +12,12 @@ for details.
 .. code-block:: python
 
     >>> p = TemporalOperatorParser()
+    >>> expression =  "{equal|equivalent|cover|in|meet|contain|overlap}"
+    >>> p.parse(expression, optype = 'relation')
+    >>> print((p.relations, p.temporal, p.function))
+    (['equal', 'equivalent', 'cover', 'in', 'meet', 'contain', 'overlap'], None, None)
+
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{equal| during}"
     >>> p.parse(expression, optype = 'relation')
     >>> print((p.relations, p.temporal, p.function))
@@ -146,6 +152,7 @@ class TemporalOperatorLexer(object):
 
     # Functions that defines topological relations.
     relations = {
+        # temporal relations
         'equal'      : "EQUAL",
         'follows'    : "FOLLOWS",
         'precedes'   : "PRECEDES",
@@ -157,7 +164,14 @@ class TemporalOperatorLexer(object):
         'contains'   : "CONTAINS",
         'started'    : "STARTED",
         'finished'   : "FINISHED",
-        'over'       : "OVER"
+        'over'       : "OVER",
+        # spatial relations
+        'equivalent' : "EQUIVALENT",
+        'cover'      : "COVER",
+        'overlap'    : "OVERLAP",
+        'in'         : "IN",
+        'contain'    : "CONTAIN",
+        'meet'       : "MEET"
         }
 
     # This is the list of token names.
@@ -451,7 +465,7 @@ class TemporalOperatorParser(object):
         else:
             if len(t) == 4:
                 # Set three operator components.
-                self.relations = ['equal']
+                self.relations = ['equal', 'equivalent']
                 self.temporal  = "l"
                 self.function  = t[2]
             elif len(t) == 6:
@@ -579,7 +593,7 @@ class TemporalOperatorParser(object):
             t[0] = t[2]
 
     def p_relation(self, t):
-        # The list of relations.
+        # The list of relations. Temporal and spatial relations are supported
         """
         relation : EQUAL
                  | FOLLOWS
@@ -592,6 +606,12 @@ class TemporalOperatorParser(object):
                  | CONTAINS
                  | STARTED
                  | FINISHED
+                 | EQUIVALENT
+                 | COVER
+                 | OVERLAP
+                 | IN
+                 | CONTAIN
+                 | MEET
         """
         t[0] = t[1]
 
@@ -657,6 +677,7 @@ class TemporalOperatorParser(object):
                 | NOT
         """
         t[0] = t[1]
+
 ###############################################################################
 
 if __name__ == "__main__":
