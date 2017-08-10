@@ -177,7 +177,6 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-proj-share=$OSGEO4W_ROOT_MSYS/share/proj \
 		--with-gdal=$PWD/mswindows/osgeo4w/gdal-config \
 		--with-geos=$PWD/mswindows/osgeo4w/geos-config \
-	        --with-liblas=$PWD/mswindows/osgeo4w/liblas-config \
 		--with-sqlite \
 		--with-regex \
 		--with-nls \
@@ -189,6 +188,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
                 --with-bzlib
 # see #3047
 #	        --with-mysql 
+# see https://trac.osgeo.org/osgeo4w/ticket/539#ticket
+# --with-liblas=$PWD/mswindows/osgeo4w/liblas-config
 	touch mswindows/osgeo4w/configure-stamp
 fi
 
