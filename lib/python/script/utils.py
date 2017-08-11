@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Useful functions to be used in Python scripts.
 
@@ -23,6 +24,14 @@ import shutil
 import locale
 import shlex
 import re
+
+
+try:
+    from builtins import unicode
+except ImportError:
+    # python3
+    unicode = str
+
 
 def float_or_dms(s):
     """Convert DMS to float.
@@ -163,11 +172,23 @@ def decode(bytes_):
     No-op if parameter is not bytes (assumed unicode string).
 
     :param bytes bytes_: the bytes to decode
+
+    Example
+    -------
+
+    >>> decode(b'S\xc3\xbcdtirol')
+    u'Südtirol'
+    >>> decode(u'Südtirol')
+    u'Südtirol'
+    >>> decode(1234)
+    u'1234'
     """
+    if isinstance(bytes_, unicode):
+        return bytes_
     if isinstance(bytes_, bytes):
         enc = _get_encoding()
         return bytes_.decode(enc)
-    return bytes_
+    return unicode(bytes_)
 
 
 def encode(string):
@@ -177,11 +198,23 @@ def encode(string):
     This ensures garbage in, garbage out.
 
     :param str string: the string to encode
+
+    Example
+    -------
+
+    >>> encode(b'S\xc3\xbcdtirol')
+    b'S\xc3\xbcdtirol'
+    >>> decode(u'Südtirol')
+    b'S\xc3\xbcdtirol'
+    >>> decode(1234)
+    b'1234'
     """
     if isinstance(string, bytes):
         return string
-    enc = _get_encoding()
-    return string.encode(enc)
+    if isinstance(string, unicode):
+        enc = _get_encoding()
+        return string.encode(enc)
+    return bytes(string)
 
 
 def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
