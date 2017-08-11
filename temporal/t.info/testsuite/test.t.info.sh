@@ -29,6 +29,8 @@ t.create type=str3ds temporaltype=absolute output=precip_abs2 title="A test" des
 t.create type=stvds temporaltype=absolute output=lidar_abs_ds1 title="A test" descr="A test"
 t.create type=stvds temporaltype=absolute output=lidar_abs_ds2 title="A test" descr="A test"
 
+LC="fr_BE@UTF-8" t.create output=pluies_nc semantictype=sum title="précipitation_mois" description="Précipitation totale mensuelle NC"
+
 t.register type=raster -i input=precip_abs1 maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
 t.info type=strds input=precip_abs1
 t.info -g type=strds input=precip_abs1
@@ -68,10 +70,14 @@ t.info -g type=vector input=lidar_abs_1
 t.info type=vector input=lidar_abs_2
 t.info -g type=vector input=lidar_abs_2
 
+
+t.register type=raster -i input=pluies_nc maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
+t.info type=strds input=pluies_nc
+
 t.unregister type=vector maps=lidar_abs_1,lidar_abs_2
 t.remove type=stvds input=lidar_abs_ds1,lidar_abs_ds2
 
-t.unregister type=raster maps=prec_1,prec_2
+t.unregister type=raster maps=prec_1,prec_2,pluies_nc
 t.remove type=strds input=precip_abs1,precip_abs2
 
 t.unregister type=raster_3d maps=prec_1,prec_2
