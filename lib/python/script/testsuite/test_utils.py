@@ -43,6 +43,18 @@ class TestEncode(TestCase):
         """If the input is bytes we should not touch it for encoding"""
         self.assertEqual(b'Příšerný kůň', utils.encode(b'Příšerný kůň'))
 
+    def test_int(self):
+        """If the input is an integer return bytes"""
+        self.assertEqual(b'1234567890', utils.encode(1234567890))
+
+    def test_float(self):
+        """If the input is a float return bytes"""
+        self.assertEqual(b'12345.6789', utils.encode(12345.6789))
+
+    def test_none(self):
+        """If the input is a boolean return bytes"""
+        self.assertEqual(b'None', utils.encode(None))
+
 
 class TestDecode(TestCase):
     """Tests function `encode` that convert value to unicode."""
@@ -52,6 +64,18 @@ class TestDecode(TestCase):
 
     def test_unicode(self):
         self.assertEqual(u'text', utils.decode(u'text'))
+
+    def test_int(self):
+        """If the input is an integer return bytes"""
+        self.assertEqual(u'1234567890', utils.decode(1234567890))
+
+    def test_float(self):
+        """If the input is a float return bytes"""
+        self.assertEqual(u'12345.6789', utils.decode(12345.6789))
+
+    def test_none(self):
+        """If the input is a boolean return bytes"""
+        self.assertEqual(u'None', utils.decode(None))
 
 
 class TestEncodeLcAllC(TestEncode, LcAllC):
