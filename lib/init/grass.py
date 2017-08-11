@@ -1373,10 +1373,10 @@ def run_batch_job(batch_job):
     :param batch_job: executable and parameters in a list or a string
     """
     batch_job_string = batch_job
-    if not isinstance(batch_job, basestring):
+    if not isinstance(batch_job, string_types):
         batch_job_string = ' '.join(batch_job)
     message(_("Executing <%s> ...") % batch_job_string)
-    if isinstance(batch_job, basestring):
+    if isinstance(batch_job, string_types):
         proc = Popen(batch_job, shell=True)
     else:
         try:
