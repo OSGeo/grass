@@ -98,6 +98,27 @@ t.topology input=precip_abs7
 # Increment format error
 t.register -i  input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="months"
 
+# Check UnicodeDecodeError
+LANG=fr_BE \
+LANGUAGE=fr_BE \
+LC_CTYPE=fr_BE.UTF-8 \
+LC_NUMERIC=C \
+LC_TIME=fr_BE.UTF-8 \
+LC_COLLATE=fr_BE.UTF-8 \
+LC_MONETARY=fr_BE.UTF-8 \
+LC_MESSAGES=fr_BE.UTF-8 \
+LC_PAPER=fr_BE.UTF-8 \
+LC_NAME=fr_BE.UTF-8 \
+LC_ADDRESS=fr_BE.UTF-8 \
+LC_TELEPHONE=fr_BE.UTF-8 \
+LC_MEASUREMENT=fr_BE.UTF-8 \
+LC_IDENTIFICATION=fr_BE.UTF-8 \
+LC_ALL="" \
+t.create output=pluies_nc semantictype=sum title=precipitation_mois description="Précipitation totale mensuelle NC" --o
+t.register -i input=pluies_nc type=raster start=2000-01-01 increment="1 months" maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 --o
+t.info pluies_nc
+t.topology pluies_nc
+t.remove -f pluies_nc
 
 t.unregister type=raster maps=prec_1,prec_2,prec_3
 # Test the warning message
