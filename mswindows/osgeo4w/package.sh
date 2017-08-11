@@ -155,8 +155,12 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
 	if [ "$MINGW_POSTFIX" = "64" ]; then
 	    conf_host=x86_64-w64-mingw32
+            # see https://trac.osgeo.org/osgeo4w/ticket/539#ticket
+            # LAS support only enabled on 64bit
+            conf_opts="--with-liblas=$PWD/mswindows/osgeo4w/liblas-config"
 	else
 	    conf_host=i386-w64-mingw32
+            conf_opts=
 	fi
 	
 	log configure
@@ -185,11 +189,9 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	        --with-cairo \
                 --with-postgres \
 	        --with-opengl=windows \
-                --with-bzlib
+                --with-bzlib $conf_opts
 # see #3047
 #	        --with-mysql 
-# see https://trac.osgeo.org/osgeo4w/ticket/539#ticket
-# --with-liblas=$PWD/mswindows/osgeo4w/liblas-config
 	touch mswindows/osgeo4w/configure-stamp
 fi
 
