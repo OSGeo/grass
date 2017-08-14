@@ -218,7 +218,10 @@ Travis CI control files:
 Maintenance script:
 * https://svn.osgeo.org/grass/grass-addons/tools/grass-ci/grass-ci.sh
 
-Coverity Scan:
+== GRASS Coverity Scan ==
+
+Maintainer: Markus Neteler
+
 * https://scan.coverity.com/projects/grass?tab=overview
 
 == OLD: GRASS Quality Control ==
