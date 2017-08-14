@@ -207,6 +207,7 @@ Maintainer: Martin Landa
 
 * https://travis-ci.org/GRASS-GIS
 * https://github.com/GRASS-GIS/grass-ci
+* https://svn.osgeo.org/grass/grass-addons/tools/grass-ci/
 
 Travis CI control files:
  trunk/.travis/
@@ -214,6 +215,8 @@ Travis CI control files:
    linux.install.sh
    linux.script.sh
 
+Maintenance script:
+* https://svn.osgeo.org/grass/grass-addons/tools/grass-ci/grass-ci.sh
 
 Coverity Scan:
 * https://scan.coverity.com/projects/grass?tab=overview
