@@ -247,6 +247,20 @@ v.in.ogr input="PG:host=localhost dbname=postgis user=postgres" layer=polymap \
 output=polygons type=boundary,centroid
 </pre></div>
 
+If the table containing the polygons are in a specific schema, you can use:
+
+<div class="code"><pre>
+v.in.ogr input="PG:host=localhost dbname=postgis user=postgres" \
+layer=myschema.polymap \
+output=polygons type=boundary,centroid
+</pre></div>
+
+Generally, v.in.ogr just follows the 
+<a href="http://www.gdal.org/ogr_formats.html">format-specific</a>
+syntax defined by the OGR library.
+
+
+<!-- Commented out until we clarify usage of default connection - ML
 <h3>Default connection settings as datasource (PostgreSQL only)</h3>
 
 If datasource (<b>input</b>) is specified as 'PG:' and the default DB
@@ -282,6 +296,7 @@ db.login user=user1 password=pwd1
 v.in.ogr input=PG: layer=river output=river 
 db.select table=river
 </pre></div>
+--->
 
 <h3>Oracle Spatial</h3>
 
