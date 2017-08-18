@@ -67,6 +67,32 @@
 #% options: Byte,Int16,UInt16,Int32,UInt32,Float32,Float64,CInt16,CInt32,CFloat32,CFloat64
 #%end
 
+#%option
+#% key: createopt
+#% type: string
+#% label: Creation option(s) to pass to the output format driver
+#% description: In the form of "NAME=VALUE", separate multiple entries with a comma
+#% required: no
+#% multiple: yes
+#%end
+
+#%option
+#% key: metaopt
+#% type: string
+#% label: Metadata key(s) and value(s) to include
+#% description: In the form of "META-TAG=VALUE", separate multiple entries with a comma. Not supported by all output format drivers.
+#% required: no
+#% multiple: yes
+#%end
+
+#%option
+#% key: nodata
+#% type: double
+#% label: Assign a specified nodata value to output bands
+#% description: If given, the nodata value is always written to metadata even if there are no NULL cells in the input band (enhances output compatibility).
+#% required: no
+#%end
+
 #%option G_OPT_T_WHERE
 #%end
 
@@ -86,14 +112,22 @@ def main():
     where = options["where"]
     _format = options["format"]
     _type = options["type"]
+    kws = {key: options[key]
+           for key in ('createopt', 'metaopt', 'nodata') if options[key]}
 
     if _type and _format in ["pack", "AAIGrid"]:
-        grass.warning(_("Type options is not working with pack format, it will be skipped"))
+        grass.warning(_("Type options is not working with pack format, "
+                        "it will be skipped"))
+        if kws:
+            grass.warning(_("Createopt, metaopt and nodata options are not "
+                            "working with pack and AAIGrid formats, "
+                            "they will be skipped"))
     # Make sure the temporal database exists
     tgis.init()
     # Export the space time raster dataset
     tgis.export_stds(_input, output, compression, directory, where, _format,
-                     "strds", _type)
+                     "strds", _type, **kws)
+
 
 ############################################################################
 if __name__ == "__main__":
