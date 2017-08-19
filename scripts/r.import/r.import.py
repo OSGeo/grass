@@ -215,10 +215,13 @@ def main():
     additional_flags = 'l' if flags['l'] else ''
     if flags['o']:
         additional_flags += 'o'
+    region_flag = ''
+    if options['extent'] == 'region':
+        region_flag += 'r'
     if flags['o'] or grass.run_command('r.in.gdal', input=GDALdatasource, flags='j',
                                        errors='status', quiet=True) == 0:
         parameters = dict(input=GDALdatasource, output=output,
-                          memory=memory, flags='k' + additional_flags)
+                          memory=memory, flags='k' + additional_flags + region_flag)
         if bands:
             parameters['band'] = bands
         try:
