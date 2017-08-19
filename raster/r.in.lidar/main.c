@@ -188,7 +188,8 @@ int main(int argc, char *argv[])
     zrange_opt->type = TYPE_DOUBLE;
     zrange_opt->required = NO;
     zrange_opt->key_desc = "min,max";
-    zrange_opt->description = _("Filter range for Z data (min,max)");
+    zrange_opt->label = _("Filter range for Z data (min,max)");
+    zrange_opt->description = _("Applied after base_raster transformation step");
     zrange_opt->guisection = _("Selection");
 
     zscale_opt = G_define_option();
