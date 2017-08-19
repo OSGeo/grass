@@ -1107,6 +1107,7 @@ class DBConnection(object):
                         detect_types=self.dbmi.PARSE_DECLTYPES | self.dbmi.PARSE_COLNAMES)
                 self.connection.row_factory = self.dbmi.Row
                 self.connection.isolation_level = None
+                self.connection.text_factory = str
                 self.cursor = self.connection.cursor()
                 self.cursor.execute("PRAGMA synchronous = OFF")
                 self.cursor.execute("PRAGMA journal_mode = MEMORY")
