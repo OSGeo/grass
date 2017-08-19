@@ -5,6 +5,12 @@
  * \brief This is the interface for the simlib (SIMWE) library.
  */
 
+
+#define NUM_THREADS "1"
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 struct WaterParams
 {
     double xmin, ymin, xmax, ymax;
@@ -85,7 +91,7 @@ struct options
 	*observation, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
 	*density, *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
 	*tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval,
-	*infilval, *logfile, *seed;
+	*infilval, *logfile, *seed, *threads;
 };
 
 struct flags

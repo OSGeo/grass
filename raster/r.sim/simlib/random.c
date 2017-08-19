@@ -45,3 +45,17 @@ double gasdev(void)
     }
     return ret_val;
 }				/* gasdev */
+
+void gasdev_for_paralel(double *x, double *y)
+{
+    double r = 0., vv1, vv2, fac;
+
+    while (r >= 1. || r == 0.) {
+        vv1 = simwe_rand() * 2. - 1.;
+        vv2 = simwe_rand() * 2. - 1.;
+        r = vv1 * vv1 + vv2 * vv2;
+    }
+    fac = sqrt(log(r) * -2. / r);
+    (*y) = vv1 * fac;
+    (*x) = vv2 * fac;
+}

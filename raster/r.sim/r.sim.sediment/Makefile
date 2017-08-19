@@ -4,10 +4,10 @@ PGM=r.sim.sediment
 
 EXTRA_CLEAN_DIRS=doxygenhtml
 
-LIBES     = $(SIMLIB) $(GMATHLIB) $(GISLIB)
+LIBES     = $(SIMLIB) $(GMATHLIB) $(GISLIB) $(OMPLIB)
 DEPENDENCIES = $(SIMDEP) $(GMATHDEP) $(GISDEP)
 EXTRA_INC = $(VECT_INC)
-EXTRA_CFLAGS = -I ../simlib $(VECT_CFLAGS) 
+EXTRA_CFLAGS = -I ../simlib $(VECT_CFLAGS) $(OMPCFLAGS)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

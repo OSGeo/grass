@@ -268,7 +268,14 @@ void main_loop(void)
 	    nwalka = 0;
 	    nstack = 0;
 
-	    for (lw = 0; lw < nwalk; lw++) {
+#pragma omp parallel firstprivate(l,lw,k,decr,d1,hhc,velx,vely,eff,gaux,gauy)//nwalka
+{
+        int steps = (int)((((double)nwalk) / ((double) omp_get_num_threads())) + 0.5);
+        int tid = omp_get_thread_num();
+        int min_loop = tid * steps;
+        int max_loop = ((tid + 1) * steps) > nwalk ? nwalk : (tid + 1) * steps;
+
+	    for (lw = min_loop; lw < max_loop; lw++) {
 		if (w[lw][2] > EPS) {	/* check the walker weight */
 		    ++nwalka;
 		    l = (int)((w[lw][0] + stxm) / stepx) - mx - 1;
@@ -305,6 +312,7 @@ void main_loop(void)
 			gama[k][l] += (addac * w[lw][2]);	/* add walker weigh to water depth or conc. */
 
 			d1 = gama[k][l] * conn;
+			gasdev_for_paralel(&gaux, &gauy);
 			hhc = pow(d1, 3. / 5.);
 
 			if (hhc > hhmax && wdepth == NULL) {	/* increased diffusion if w.depth > hhmax */
@@ -328,9 +336,6 @@ void main_loop(void)
 				vely = -0.1 * v2[k][l];
 			    }
 			}
-
-			gaux = gasdev();
-			gauy = gasdev();
 
 			w[lw][0] += (velx + dif[k][l] * gaux);	/* move the walker */
 			w[lw][1] += (vely + dif[k][l] * gauy);
@@ -358,7 +363,7 @@ void main_loop(void)
 		    }
 		}
             } /* lw loop */
-            
+            }
             /* Changes made by Soeren 8. Mar 2011 to replace the site walker output implementation */
             /* Save all walkers located within the computational region and with valid 
                z coordinates */

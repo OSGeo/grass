@@ -61,6 +61,7 @@ extern void erod(double **);
 extern int output_et(void);
 extern double simwe_rand(void);
 extern double gasdev(void);
+extern void gasdev_for_paralel(double *, double *);
 extern double amax1(double, double);
 extern double amin1(double, double);
 extern int min(int, int);
