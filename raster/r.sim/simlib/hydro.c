@@ -25,7 +25,6 @@
 
 #include <grass/waterglobs.h>
 #include <grass/simlib.h>
-
 /*
  * Soeren 8. Mar 2011 TODO:
  * Put all these global variables into several meaningful structures and 
@@ -270,12 +269,16 @@ void main_loop(void)
 
 #pragma omp parallel firstprivate(l,lw,k,decr,d1,hhc,velx,vely,eff,gaux,gauy)//nwalka
 {
+#if defined(_OPENMP)
         int steps = (int)((((double)nwalk) / ((double) omp_get_num_threads())) + 0.5);
         int tid = omp_get_thread_num();
         int min_loop = tid * steps;
         int max_loop = ((tid + 1) * steps) > nwalk ? nwalk : (tid + 1) * steps;
 
 	    for (lw = min_loop; lw < max_loop; lw++) {
+#else
+        for (lw = 0; lw < nwalk; lw++) {
+#endif
 		if (w[lw][2] > EPS) {	/* check the walker weight */
 		    ++nwalka;
 		    l = (int)((w[lw][0] + stxm) / stepx) - mx - 1;
@@ -312,7 +315,12 @@ void main_loop(void)
 			gama[k][l] += (addac * w[lw][2]);	/* add walker weigh to water depth or conc. */
 
 			d1 = gama[k][l] * conn;
+#if defined(_OPENMP)
 			gasdev_for_paralel(&gaux, &gauy);
+#else
+			gaux = gasdev();
+			gauy = gasdev();
+#endif
 			hhc = pow(d1, 3. / 5.);
 
 			if (hhc > hhmax && wdepth == NULL) {	/* increased diffusion if w.depth > hhmax */
