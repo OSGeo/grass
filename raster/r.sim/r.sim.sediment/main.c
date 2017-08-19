@@ -100,6 +100,7 @@ char msg[1024];
 int main(int argc, char *argv[])
 {
     int ii;
+    int threads;
     int ret_val;
     struct Cell_head cellhd;
     struct WaterParams wp;
@@ -278,6 +279,15 @@ int main(int argc, char *argv[])
         _("Automatically generates random seed for random number"
           " generator (use when you don't want to provide the seed option)");
 
+    parm.threads = G_define_option();
+    parm.threads->key = "nprocs";
+    parm.threads->type = TYPE_INTEGER;
+    parm.threads->answer = NUM_THREADS;
+    parm.threads->required = NO;
+    parm.threads->description =
+    _("Number of threads which will be used for parallel compute");
+    parm.threads->guisection = _("Parameters");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -357,6 +367,16 @@ int main(int argc, char *argv[])
     wp.flux = parm.flux->answer;
     wp.erdep = parm.erdep->answer;
     wp.outwalk = parm.outwalk->answer; 
+
+    sscanf(parm.threads->answer, "%d", &threads);
+    if (threads < 1)
+    {
+      G_warning(_("<%d> is not valid number of threads. Number of threads will be set on <%d>"),
+      threads, abs(threads));
+      threads = abs(threads);
+    }
+    omp_set_num_threads(threads);
+    G_message(_("Number of threads: %d"), threads);
 
     /*      sscanf(parm.nwalk->answer, "%d", &wp.maxwa); */
     sscanf(parm.niter->answer, "%d", &wp.timesec);

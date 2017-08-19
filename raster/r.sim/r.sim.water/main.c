@@ -90,7 +90,6 @@
 
 #include <grass/simlib.h>
 
-
 /****************************************/
 /* MAIN                                 */
 
@@ -98,6 +97,7 @@
 int main(int argc, char *argv[])
 {
     int ii;
+    int threads;
     int ret_val;
     double x_orig, y_orig;
     struct GModule *module;
@@ -314,6 +314,15 @@ int main(int argc, char *argv[])
         _("Automatically generates random seed for random number"
           " generator (use when you don't want to provide the seed option)");
 
+     parm.threads = G_define_option();
+     parm.threads->key = "nprocs";
+     parm.threads->type = TYPE_INTEGER;
+     parm.threads->answer = NUM_THREADS;
+     parm.threads->required = NO;
+     parm.threads->description =
+     _("Number of threads which will be used for parallel compute");
+     parm.threads->guisection = _("Parameters");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -386,6 +395,16 @@ int main(int argc, char *argv[])
     sscanf(parm.hbeta->answer, "%lf", &wp.hbeta);
 
     G_debug(3, "Parsing rain parameters");
+
+    sscanf(parm.threads->answer, "%d", &threads);
+    if (threads < 1)
+    {
+      G_warning(_("<%d> is not valid number of threads. Number of threads will be set on <%d>"),
+      threads, abs(threads));
+      threads = abs(threads);
+    }
+    omp_set_num_threads(threads);
+    G_message(_("Number of threads: %d"), threads);
 
     /* if no rain map input, then: */
     if (parm.rain->answer == NULL) {
