@@ -149,12 +149,6 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
 
 		Rast3d_put_double(mapOut, x, y, z, value);
 	    }
-	if ((z % tileZ) == 0) {
-	    if (!Rast3d_flush_tiles_in_cube
-		(mapOut, 0, 0, MAX(0, z - tileZ), region.rows - 1,
-		 region.cols - 1, z))
-		Rast3d_fatal_error(_("modifyNull: error flushing tiles in cube"));
-	}
     }
 
     if (!Rast3d_flush_all_tiles(mapOut))

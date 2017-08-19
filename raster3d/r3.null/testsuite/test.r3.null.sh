@@ -46,14 +46,14 @@ r3.out.ascii dp=3 input=test_volume_double_null_1 output=test_volume_double_null
 r3.out.ascii dp=3 input=test_volume_double_null_2 output=test_volume_double_null_2.txt
 
 # Compare
-diff test_volume_float_1.ref test_volume_float_1.txt
-diff test_volume_float_2.ref test_volume_float_2.txt
-diff test_volume_float_null_1.ref test_volume_float_null_1.txt
-diff test_volume_float_null_2.ref test_volume_float_null_2.txt
-diff test_volume_double_1.ref test_volume_double_1.txt
-diff test_volume_double_2.ref test_volume_double_2.txt
-diff test_volume_double_null_1.ref test_volume_double_null_1.txt
-diff test_volume_double_null_2.ref test_volume_double_null_2.txt
+diff data/test_volume_float_1.ref test_volume_float_1.txt
+diff data/test_volume_float_2.ref test_volume_float_2.txt
+diff data/test_volume_float_null_1.ref test_volume_float_null_1.txt
+diff data/test_volume_float_null_2.ref test_volume_float_null_2.txt
+diff data/test_volume_double_1.ref test_volume_double_1.txt
+diff data/test_volume_double_2.ref test_volume_double_2.txt
+diff data/test_volume_double_null_1.ref test_volume_double_null_1.txt
+diff data/test_volume_double_null_2.ref test_volume_double_null_2.txt
 
 # Cleanup
 g.remove -f type=raster_3d name=test_volume_float_1
