@@ -16,6 +16,20 @@ as to which feature the attribute would belong. In some cases it may, for
 example, represent a road between two parcels of land. In this case it
 is entirely appropriate for the boundary to contain category information.
 
+<h2>EXAMPLES</h2>
+Create an area from a closed line using North Carolina sample dataset:
+<div class="code"><pre>
+v.type input=busroute11 output=busroute11_boundary from_type=line to_type=boundary
+v.centroids input=busroute11_boundary output=busroute11_area
+</pre></div>
+
+<div align="center" style="margin: 10px">
+<a href="v_centroids.png">
+<img src="v_centroids.png" width="600" alt="v.centroids example" border="0">
+</a><br>
+<i>Figure: Creating area from closed line</i>
+</div>
+
 <h2>SEE ALSO</h2>
 
 <em>
