@@ -329,6 +329,7 @@ int main(int argc, char *argv[])
     base_rast_res_flag->description =
         _("For getting values from base raster, use its actual"
           " resolution instead of computational region resolution");
+    base_rast_res_flag->guisection = _("Transform");
 
     only_valid_flag = G_define_flag();
     only_valid_flag->key = 'v';
