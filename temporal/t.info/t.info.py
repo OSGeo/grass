@@ -99,7 +99,7 @@ def main():
     if name.find("@") >= 0:
         id_ = name
     else:
-        id_ = name + "@" + grass.gisenv()["MAPSET"]
+        id_ = name + "@" + grass.encode(grass.gisenv()["MAPSET"])
 
     dataset = tgis.dataset_factory(type_, id_)
 

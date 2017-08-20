@@ -50,7 +50,7 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    mapset = grass.gisenv()["MAPSET"]
+    mapset = grass.encode(grass.gisenv()["MAPSET"])
 
     sp = tgis.open_old_stds(input, "strds")
 

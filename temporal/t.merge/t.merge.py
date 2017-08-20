@@ -52,7 +52,7 @@ def main():
     tgis.init()
 
     #Get the current mapset to create the id of the space time dataset
-    mapset = grass.gisenv()["MAPSET"]
+    mapset = grass.encode(grass.gisenv()["MAPSET"])
 
     inputs_split = inputs.split(",")
     input_ids = []
