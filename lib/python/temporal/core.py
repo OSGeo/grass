@@ -543,9 +543,9 @@ def init(raise_fatal_error=False):
     grassenv = gscript.gisenv()
 
     # Set the global variable for faster access
-    current_mapset = grassenv["MAPSET"]
-    current_location = grassenv["LOCATION_NAME"]
-    current_gisdbase = grassenv["GISDBASE"]
+    current_mapset = gscript.encode(grassenv["MAPSET"])
+    current_location = gscript.encode(grassenv["LOCATION_NAME"])
+    current_gisdbase = gscript.encode(grassenv["GISDBASE"])
 
     # Check environment variable GRASS_TGIS_RAISE_ON_ERROR
     if os.getenv("GRASS_TGIS_RAISE_ON_ERROR") == "True" or \
@@ -571,14 +571,14 @@ def init(raise_fatal_error=False):
 
     # Set the mapset check and the timestamp write
     if "TGIS_DISABLE_MAPSET_CHECK" in grassenv:
-        if grassenv["TGIS_DISABLE_MAPSET_CHECK"] == "True" or \
-           grassenv["TGIS_DISABLE_MAPSET_CHECK"] == "1":
+        if gscript.encode(grassenv["TGIS_DISABLE_MAPSET_CHECK"]) == "True" or \
+           gscript.encode(grassenv["TGIS_DISABLE_MAPSET_CHECK"]) == "1":
             enable_mapset_check = False
             msgr.warning("TGIS_DISABLE_MAPSET_CHECK is True")
 
     if "TGIS_DISABLE_TIMESTAMP_WRITE" in grassenv:
-        if grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"] == "True" or \
-           grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"] == "1":
+        if gscript.encode(grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"]) == "True" or \
+           gscript.encode(grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"]) == "1":
             enable_timestamp_write = False
             msgr.warning("TGIS_DISABLE_TIMESTAMP_WRITE is True")
 
@@ -1108,6 +1108,7 @@ class DBConnection(object):
                         detect_types=self.dbmi.PARSE_DECLTYPES | self.dbmi.PARSE_COLNAMES)
                 self.connection.row_factory = self.dbmi.Row
                 self.connection.isolation_level = None
+                self.connection.text_factory = str
                 self.cursor = self.connection.cursor()
                 self.cursor.execute("PRAGMA synchronous = OFF")
                 self.cursor.execute("PRAGMA journal_mode = MEMORY")

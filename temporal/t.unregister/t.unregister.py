@@ -67,7 +67,7 @@ def main():
     if not maps and not file:
         grass.fatal(_("%s= or %s= must be specified") % ("input", "file"))
 
-    mapset = grass.gisenv()["MAPSET"]
+    mapset = grass.encode(grass.gisenv()["MAPSET"])
 
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
