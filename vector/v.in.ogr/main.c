@@ -1205,20 +1205,22 @@ int main(int argc, char *argv[])
 		sprintf(buf, "insert into %s values ( %d", Fi->table, cat);
 		db_set_string(&sql, buf);
 		for (i = 0; i < ncols; i++) {
+		    const char *Ogr_fstring = NULL;
 
                     if (key_idx > -1 && key_idx == i)
                         continue; /* skip defined key (FID column) */
 
 		    Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, i);
 		    Ogr_ftype = OGR_Fld_GetType(Ogr_field);
-		    if (OGR_F_IsFieldSet(Ogr_feature, i)) {
+		    if (OGR_F_IsFieldSet(Ogr_feature, i))
+			Ogr_fstring = OGR_F_GetFieldAsString(Ogr_feature, i);
+		    if (Ogr_fstring && *Ogr_fstring) {
 			if (Ogr_ftype == OFTInteger ||
 #if GDAL_VERSION_NUM >= 2000000
                             Ogr_ftype == OFTInteger64 ||
 #endif
                             Ogr_ftype == OFTReal) {
-			    sprintf(buf, ", %s",
-				    OGR_F_GetFieldAsString(Ogr_feature, i));
+			    sprintf(buf, ", %s", Ogr_fstring);
 			}
 #if GDAL_VERSION_NUM >= 1320
 			    /* should we use OGR_F_GetFieldAsDateTime() here ? */
@@ -1226,9 +1228,7 @@ int main(int argc, char *argv[])
 				 || Ogr_ftype == OFTDateTime) {
 			    char *newbuf;
 
-			    db_set_string(&strval, (char *)
-					  OGR_F_GetFieldAsString(Ogr_feature,
-								 i));
+			    db_set_string(&strval, (char *)Ogr_fstring);
 			    db_double_quote_string(&strval);
 			    sprintf(buf, ", '%s'", db_get_string(&strval));
 			    newbuf = G_str_replace(buf, "/", "-");	/* fix 2001/10/21 to 2001-10-21 */
@@ -1242,9 +1242,7 @@ int main(int argc, char *argv[])
                                  || Ogr_ftype == OFTInteger64List
 #endif
                                  ) {
-			    db_set_string(&strval, (char *)
-					  OGR_F_GetFieldAsString(Ogr_feature,
-								 i));
+			    db_set_string(&strval, (char *)Ogr_fstring);
 			    db_double_quote_string(&strval);
 			    sprintf(buf, ", '%s'", db_get_string(&strval));
 			}
