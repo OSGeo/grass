@@ -38,6 +38,15 @@
 #%end
 
 #%option
+#% key: quantile
+#% type: double
+#% description: Quantile to calculate for method=quantile
+#% required: no
+#% multiple: no
+#% options: 0.0-1.0
+#%end
+
+#%option
 #% key: order
 #% type: string
 #% description: Sort the maps by category
@@ -78,6 +87,7 @@ def main():
     input = options["input"]
     output = options["output"]
     method = options["method"]
+    quantile = options["quantile"]
     order = options["order"]
     where = options["where"]
     add_time = flags["t"]
@@ -111,7 +121,7 @@ def main():
         try:
             grass.run_command("r.series", flags=flag, file=filename,
                               output=output, overwrite=grass.overwrite(),
-                              method=method)
+                              method=method, quantile=quantile)
         except CalledModuleError:
             grass.fatal(_("%s failed. Check above error messages.") % 'r.series')
 
