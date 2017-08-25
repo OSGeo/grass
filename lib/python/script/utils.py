@@ -26,10 +26,7 @@ import shlex
 import re
 
 
-try:
-    from builtins import unicode
-except ImportError:
-    # python3
+if sys.version_info.major == 3:
     unicode = str
 
 
