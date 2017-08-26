@@ -10,12 +10,6 @@ Reference is C99:
   * http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1124.pdf
 
 '''
-try:
-    from builtins import long
-except ImportError:
-    # python3
-    long = int
-
 __docformat__ = 'restructuredtext'
 
 import operator
@@ -29,6 +23,10 @@ from . import cdeclarations
 import ctypesgencore.expressions as expressions
 from . import preprocessor
 from . import yacc
+
+
+if sys.version_info.major == 3:
+    long = int
 
 
 tokens = (

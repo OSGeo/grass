@@ -20,6 +20,7 @@ for details.
 from __future__ import absolute_import
 
 import os
+import sys
 import string
 import time
 
@@ -28,11 +29,7 @@ from grass.exceptions import CalledModuleError
 from .utils import float_or_dms, parse_key_val
 
 
-try:
-    from builtins import unicode
-    bytes = str
-except ImportError:
-    # python3
+if sys.version_info.major == 3:
     unicode = str
 
 

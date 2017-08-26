@@ -30,15 +30,13 @@ for details.
 """
 #import traceback
 import os
+import sys
 import grass.script as gscript
 # i18N
 import gettext
 gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 
-try:
-    from builtins import long
-except ImportError:
-    # python3
+if sys.version_info.major == 3:
     long = int
 
 from .c_libraries_interface import *

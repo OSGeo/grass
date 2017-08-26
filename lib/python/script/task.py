@@ -18,14 +18,10 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
 import re
-import types
+import sys
 import string
 
-try:
-    from builtins import unicode
-    bytes = str
-except ImportError:
-    # python3
+if sys.version_info.major == 3:
     unicode = str
 
 try:

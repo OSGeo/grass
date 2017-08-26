@@ -10,14 +10,6 @@ Reference is C99:
 
 __docformat__ = 'restructuredtext'
 
-try:
-    from builtins import long
-    PY2 = True
-except ImportError:
-    # python3
-    PY2 = False
-    long = int
-
 import os
 import re
 import shlex
@@ -29,6 +21,13 @@ import ctypes
 from . import lex
 from . import yacc
 from .lex import TOKEN
+
+
+PY2 = True
+if sys.version_info.major == 3:
+    PY2 = False
+    long = int
+
 
 tokens = (
     'HEADER_NAME', 'IDENTIFIER', 'PP_NUMBER', 'CHARACTER_CONSTANT',

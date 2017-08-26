@@ -9,11 +9,9 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 
 import os
+import sys
 
-try:
-    from builtins import long, unicode
-except ImportError:
-    # python3
+if sys.version_info.major == 3:
     long = int
     unicode = str
 
