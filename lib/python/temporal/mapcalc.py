@@ -315,6 +315,9 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
         # Remove empty maps
         if len(empty_maps) > 0:
+            n_empty, n_tot = len(empty_maps), len(map_list)
+            msgr.warning(_("Removing {}/{} ({}%) maps because empty..."
+                           ).format(n_empty, n_tot, n_empty * 100. / n_tot))
             names = ""
             count = 0
             for map in empty_maps:
