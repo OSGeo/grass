@@ -1073,7 +1073,7 @@ class SearchModuleWidget(wx.Panel):
 
         if self._showTip:
             self._searchTip = StaticWrapText(parent=self, id=wx.ID_ANY,
-                                             size=(-1, 35))
+                                  label="Choose a module", size=(-1, 35))
 
         if self._showChoice:
             self._searchChoice = wx.Choice(parent=self, id=wx.ID_ANY)
@@ -1184,7 +1184,7 @@ class SearchModuleWidget(wx.Panel):
         """Reset widget"""
         self._search.SetValue('')
         if self._showTip:
-            self._searchTip.SetLabel('')
+            self._searchTip.SetLabel('Choose a module')
 
 
 class ManageSettingsWidget(wx.Panel):
