@@ -20,7 +20,9 @@ build_library_in_subdir(external/ccmath)
 build_library_in_subdir(external/shapelib NAME grass_shape
   HEADERS "shapefil.h")
 
-build_library_in_subdir(gmath DEPENDS FFTW grass_ccmath)
+build_library_in_subdir(gmath
+  DEPENDS grass_ccmath
+  OPTIONAL_DEPENDS FFTW )
 
 build_library_in_subdir(linkm)
 
@@ -114,17 +116,16 @@ build_library_in_subdir(stats)
 build_library_in_subdir(arraystats)
 
 if(WITH_OPENGL)
-  build_library_in_subdir(ogsf DEPENDS OPENGL GDAL TIFF)
-  build_library_in_subdir(nviz DEPENDS OPENGL GDAL TIFF)
-  if(OPENGL_X11 )
-    #add XCFLAGS
-  endif()
+ # set(ogsf_DEPENDS OPENGL GDAL TIFF)
+ # build_library_in_subdir(ogsf DEPENDS ${ogsf_DEPENDS})
+ build_library_in_subdir(ogsf DEPENDS OPENGL GDAL TIFF)
+ build_library_in_subdir(nviz DEPENDS OPENGL GDAL TIFF)
 endif()
 
 
 add_subdirectory(temporal)
 
-add_subdirectory(python)
+#add_subdirectory(python)
 
 build_library_in_subdir(iostream SRC_REGEX "*.cpp")
 

@@ -1,8 +1,4 @@
 find_path(FFTW_INCLUDE_DIR fftw3.h)
-
-  if(NOT FFTW_INCLUDE_DIR)
-    
-  endif()
   
 #fftw double lib
 find_library(FFTWD_LIB fftw3 )

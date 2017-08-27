@@ -91,7 +91,8 @@ build_program_in_subdir(
 
 build_program_in_subdir(
   i.fft
-  DEPENDS grass_imagery grass_raster grass_vector grass_gis)
+  DEPENDS grass_imagery grass_raster grass_vector grass_gis
+  OPTIONAL_DEPENDS FFTW)
 
 build_program_in_subdir(
   i.ifft

@@ -9,11 +9,18 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/find_scripts;${CMAKE_MODULE_PATH}")
 #TODO
 option(WITH_CAIRO "Build with cairo support ." ON)
 option(WITH_X11 "Build with X11 support ." ON)
-option(WITH_OPENGL "Build with opengl support ." OFF)
+option(WITH_OPENGL "Build with opengl support ." ON)
+option(WITH_SQLITE "enable sqlite support" ON)
+option(WITH_POSTGRES "enable postgres support" OFF)
+option(WITH_NLS "enable sqlite support" ON)
+option(WITH_BZLIB "enable sqlite support" ON)
+option(WITH_BLAS "enable sqlite support" ON)
+option(WITH_LAPACK "enable sqlite support" ON)
 
 set(GRASS_VERSION_MAJOR)
 set(GRASS_VERSION_MINOR)
 set(GRASS_VERSION_PATCH)
+
 
 
 #TODO
@@ -48,7 +55,7 @@ find_program(SVN_VERSION NAMES svnversion)
 if(SVN_VERSION)
   execute_process(
     COMMAND ${SVN_VERSION} -c
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../addons/grass7
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     OUTPUT_VARIABLE svnversion_OV
     ERROR_VARIABLE  svnversion_EV
     RESULT_VARIABLE svnversion_RV
@@ -98,7 +105,7 @@ function(update_per_group_target t_name)
 endfunction()
 
 function(build_module)
-  cmake_parse_arguments(G  "EXE" "NAME;SRCDIR;SRC_REGEX" "SOURCES;INCLUDES;DEPENDS;DEFS;HEADERS" ${ARGN} )
+  cmake_parse_arguments(G  "EXE" "NAME;SRCDIR;SRC_REGEX" "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;DEFS;HEADERS" ${ARGN} )
 
   if(NOT G_NAME)
     message(FATAL_ERROR "G_NAME empty")
@@ -142,92 +149,40 @@ function(build_module)
       )
   endif()
 
-  set(${G_NAME}_INCLUDE_DIRS)
-
-  list(APPEND ${G_NAME}_INCLUDE_DIRS "${G_SRCDIR}")
-  
-  if(G_INCLUDES)
-    foreach(G_INCLUDE ${G_INCLUDES})
- #     message( "xx=${G_INCLUDE} ${G_NAME}" )
-      target_include_directories(${G_NAME} PUBLIC ${G_INCLUDE} )
-    endforeach()
-  endif()
-  
- set(${G_NAME}_LINK_LIBS)  
-
-  foreach(G_DEPEND ${G_DEPENDS})
-    if(NOT TARGET ${G_DEPEND})
-      message(FATAL_ERROR "${G_DEPEND} not a target")
-      break()
+  foreach(G_OPTIONAL_DEPEND ${G_OPTIONAL_DEPENDS})
+    if(TARGET ${G_OPTIONAL_DEPEND})
+      add_dependencies(${G_NAME} ${G_OPTIONAL_DEPEND})
     endif()
-
-    #message( "${G_NAME} depends on \t ${G_DEPEND}")
-    ##go recurse on depends()
-    add_dependencies(${G_NAME} ${G_DEPEND})
-
-
-    
-
-
-    get_target_property(${G_DEPEND}_IDIRS ${G_DEPEND} INTERFACE_INCLUDE_DIRECTORIES)
-
-    foreach(${G_DEPEND}_IDIR ${${G_DEPEND}_IDIRS})
-	if(EXISTS "${${G_DEPEND}_IDIR}")
-	  list(APPEND ${G_NAME}_INCLUDE_DIRS "${${G_DEPEND}_IDIR}")
-	else()
-	  #message(FATAL_ERROR "${G_DEPEND} has incorrect value for INTERFACE_INCLUDE_DIRECTORIES property [${${G_DEPEND}_IDIRS}]")
-	endif()
-
-      endforeach()
-      
-
-      get_target_property(${G_DEPEND}_IMPORTED_LOCATIONS ${G_DEPEND} IMPORTED_LOCATION)
-      foreach( ${G_DEPEND}_IMPORTED_LOC ${${G_DEPEND}_IMPORTED_LOCATIONS})
-	if(NOT EXISTS "${${G_DEPEND}_IMPORTED_LOC}")
-	  list(APPEND ${G_NAME}_LINK_LIBS "${G_DEPEND}")
-	else()
-	  list(APPEND ${G_NAME}_LINK_LIBS "${${G_DEPEND}_IMPORTED_LOC}")
-	endif()
-      endforeach()
-
-    
-    #message("$<TARGET_PROPERTY:LIB_GDAL,INTERFACE_INCLUDE_DIRECTORIES> ")
-    #message("$<TARGET_PROPERTY:LIB_GDAL,IMPORTED_LOCATION> ")
-
   endforeach()
+ foreach(G_DEPEND ${G_DEPENDS})
+   if(NOT TARGET ${G_DEPEND})
+     message(FATAL_ERROR "${G_DEPEND} not a target")
+     break()
+   endif()
 
-#  if(G_EXE)
-#    target_link_libraries(${G_NAME} m)
-#  endif()
+   add_dependencies(${G_NAME} ${G_DEPEND})
 
-if(G_DEFS)
-    foreach(G_DEF ${G_DEFS})
-      target_compile_definitions(${G_NAME} PUBLIC "${G_DEF}")
-    endforeach()
-  endif()
+   set(${G_NAME}_INCLUDE_DIRS)
+   list(APPEND ${G_NAME}_INCLUDE_DIRS "${G_SRCDIR}")
+   foreach(G_INCLUDE ${G_INCLUDES})
+     list(APPEND ${G_NAME}_INCLUDE_DIRS "${G_INCLUDE}")
+   endforeach()
+   
+   if(${G_NAME}_INCLUDE_DIRS)
+     list(REMOVE_DUPLICATES ${G_NAME}_INCLUDE_DIRS )
+   endif()
+   
+   target_include_directories(${G_NAME} PUBLIC ${${G_NAME}_INCLUDE_DIRS})
 
-  if(${G_NAME}_LINK_LIBS)
-    list(REMOVE_DUPLICATES ${G_NAME}_LINK_LIBS )
-    #   message("${G_NAME}_LINK_LIBS=${${G_NAME}_LINK_LIBS}")
-    target_link_libraries(${G_NAME} ${${G_NAME}_LINK_LIBS})
-endif()
-
-  if(${G_NAME}_INCLUDE_DIRS)
-    list(REMOVE_DUPLICATES ${G_NAME}_INCLUDE_DIRS )
-
-#    message("${G_NAME}_INCLUDE_DIRS=${${G_NAME}_INCLUDE_DIRS}")
-    
+ endforeach()
  
-endif()
+ foreach(G_DEF ${G_DEFS})
+   target_compile_definitions(${G_NAME} PUBLIC "${G_DEF}")
+ endforeach()
 
-target_include_directories(${G_NAME} PUBLIC ${${G_NAME}_INCLUDE_DIRS})
 
-#foreach( ${G_NAME}_INCLUDE_DIR ${${G_NAME}_INCLUDE_DIRS})
-#  target_include_directories(${G_NAME} PUBLIC ${${G_NAME}_INCLUDE_DIR})
-#endforeach()
+ target_link_libraries(${G_NAME} ${G_DEPENDS} ${G_OPTIONAL_DEPENDS})
 
-  set_property( TARGET ${G_NAME} PROPERTY IMPORTED_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/lib${G_NAME}.a;${${G_NAME}_LINK_LIBS}" )
-  set_property( TARGET ${G_NAME} PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${${G_NAME}_INCLUDE_DIRS}" )
 
 endfunction()  
 

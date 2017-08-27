@@ -1,4 +1,4 @@
-set(py_files g.html2man/g.html2man.py g.html2man/html.py g.html2man/groff.py)
+set(py_files g.html2man/g.html2man.py g.html2man/ghtml.py g.html2man/ggroff.py)
 foreach(py_file ${py_files})
   get_filename_component(py_file_NAME ${py_file} NAME)
 
