@@ -1,13 +1,12 @@
-try:
-    from builtins import long
-except ImportError:
-    long = int
-
 import os
 import sys
 
 import ctypes
 from ctypes import *
+
+if sys.version_info.major == 3:
+    long = int
+
 
 _int_types = (c_int16, c_int32)
 if hasattr(ctypes, 'c_int64'):

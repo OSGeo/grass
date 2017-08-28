@@ -4,14 +4,9 @@ Created on Wed Jun 25 11:08:22 2014
 
 @author: pietro
 """
-try:
-    from builtins import long
-except ImportError:
-    # python3
-    long = int
-
 import os
 import sqlite3
+import sys
 import tempfile as tmp
 from string import ascii_letters, digits
 from random import choice
@@ -22,6 +17,9 @@ from grass.gunittest.main import test
 
 from grass.pygrass.vector.table import Table, get_path
 
+
+if sys.version_info.major == 3:
+    long = int
 
 # dictionary that generate random data
 COL2VALS = {'INT': lambda n:     np.random.randint(9, size=n),
