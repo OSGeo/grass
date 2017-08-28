@@ -24,6 +24,10 @@ import locale
 import shlex
 import re
 
+if sys.version_info.major == 3:
+    unicode = str
+
+
 def float_or_dms(s):
     """Convert DMS to float.
 
