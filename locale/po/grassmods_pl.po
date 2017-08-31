@@ -67,7 +67,7 @@ msgstr "Użyj maski 3D (jeżeli istnieje) dla mapy wejściowej"
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:4
 #: ../misc/m.nviz.script/main.c:72 ../misc/m.nviz.image/main.c:55
 msgid "raster3d"
-msgstr ""
+msgstr "raster 3D"
 
 #: ../raster3d/r3.out.netcdf/main.c:587 ../raster3d/r3.out.v5d/main.c:285
 #: ../raster3d/r3.out.ascii/main.c:303 ../raster3d/r3.out.bin/main.c:206
@@ -122,7 +122,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:5
 #: ../vector/v.to.rast3/main.c:50 ../vector/v.vol.rst/main.c:236
 msgid "voxel"
-msgstr ""
+msgstr "voxel"
 
 #: ../raster3d/r3.out.netcdf/main.c:590
 msgid "Export a 3D raster map as netCDF file."
@@ -877,7 +877,7 @@ msgstr ""
 #: ../raster/r.lake/main.c:151 ../raster/r.watershed/front/main.c:74
 #: ../raster/r.flow/main.c:422 ../raster/r.water.outlet/main.c:58
 msgid "hydrology"
-msgstr ""
+msgstr "hydrologia"
 
 #: ../raster3d/r3.gwflow/main.c:163
 msgid "Numerical calculation program for transient, confined groundwater flow in three dimensions."
@@ -1196,7 +1196,7 @@ msgstr ""
 
 #: ../raster3d/r3.support/main.c:121 ../raster/r.support/main.c:125
 msgid "Text file in which to save history"
-msgstr ""
+msgstr "Plik tekstowy w którym zapisać historię"
 
 #: ../raster3d/r3.support/main.c:125
 msgid "Update range"
@@ -1701,9 +1701,9 @@ msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:378 ../raster/r.in.lidar/main.c:401
 #: ../vector/v.in.lidar/main.c:352
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file <%s> as a LiDAR point cloud"
-msgstr "Nie można otworzyć pliku <%s> do zapisu"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:382 ../raster/r.in.lidar/main.c:405
 #: ../vector/v.in.lidar/main.c:356
@@ -2149,12 +2149,12 @@ msgstr "Nie można przydzielić uprawnień dla tabeli <%s>"
 
 #: ../raster3d/r3.flow/main.c:91
 msgid "Please provide three 3D raster maps"
-msgstr ""
+msgstr "Podaj 3 mapy rastrowe 3D"
 
 #: ../raster3d/r3.flow/main.c:98
 #, c-format
 msgid "Vector seed map <%s> not found"
-msgstr ""
+msgstr "Nie znaleziono mapy wektorowej <%s> z próbkami"
 
 #: ../raster3d/r3.flow/main.c:147
 msgid "init_flowaccum: error in Rast3d_put_float"
@@ -2202,7 +2202,7 @@ msgstr ""
 
 #: ../raster3d/r3.flow/main.c:241
 msgid "length in cells (voxels)"
-msgstr ""
+msgstr "długość - w komórkach (voxelach)"
 
 #: ../raster3d/r3.flow/main.c:243
 msgid "Unit of integration step"
@@ -2581,7 +2581,7 @@ msgstr ""
 
 #: ../raster3d/r3.neighbors/main.c:218
 msgid "Makes each voxel value a function of the values assigned to the voxels around it, and stores new voxel values in an output 3D raster map"
-msgstr ""
+msgstr "Czyni wartość każdej komórki voxela funkcją wartości przypisanych do voxeli dookoła niej, i przechowuje nowe wartości voxela w wyjściowej mapie rastrowej 3D"
 
 #: ../raster3d/r3.neighbors/main.c:287
 msgid "Unable to allocate buffer"
@@ -21816,7 +21816,7 @@ msgstr "Wymuś środek w punkcie zerowym"
 
 #: ../locale/scriptstrings/d.to.rast_to_translate.c:1
 msgid "Saves the contents of the active display monitor to a raster map."
-msgstr ""
+msgstr "Zapisuje zawartość aktywnego okna mapy do pliku mapy rastrowej."
 
 #: ../locale/scriptstrings/d.redraw_to_translate.c:1
 msgid "Redraws the content of currently selected monitor."
@@ -22341,7 +22341,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/d.out.file_to_translate.c:1
 msgid "Saves the contents of the active display monitor to a graphics file."
-msgstr ""
+msgstr "Zapisuje zawartość aktywnego okna mapy do pliku graficznego."
 
 #: ../locale/scriptstrings/d.out.file_to_translate.c:5
 #: ../misc/m.nviz.image/args.c:105
@@ -27977,7 +27977,7 @@ msgstr ""
 
 #: ../general/g.region/main.c:341
 msgid "Save current region settings in named region file"
-msgstr ""
+msgstr "Zapisz bieżące ustawienia regionu do nazwanego pliku regionu"
 
 #: ../general/g.region/main.c:410
 #, c-format
@@ -37348,7 +37348,7 @@ msgstr ""
 
 #: ../vector/v.external.out/args.c:58
 msgid "Name for output file where to save current settings"
-msgstr ""
+msgstr "Nazwa pliku wyjściowego do zapisu bieżących ustawień"
 
 #: ../vector/v.external.out/args.c:68
 msgid "Cease using OGR/PostGIS, revert to native output and exit"

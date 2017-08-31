@@ -1701,9 +1701,9 @@ msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:378 ../raster/r.in.lidar/main.c:401
 #: ../vector/v.in.lidar/main.c:352
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file <%s> as a LiDAR point cloud"
-msgstr "Αδυναμία ανοίγματος αρχείου <%s> για εγγραφή"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:382 ../raster/r.in.lidar/main.c:405
 #: ../vector/v.in.lidar/main.c:356

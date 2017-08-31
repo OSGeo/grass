@@ -7163,12 +7163,12 @@ msgstr "工事中"
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:69
 msgid "GRASS GIS Vector Digitizer"
-msgstr ""
+msgstr "GRASS GIS ベクトルデジタイザ"
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:85
 #, python-format
 msgid "Vector digitizer not available. %s"
-msgstr ""
+msgstr "ベクトルデジタイザは利用できません%s"
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:90
 #, python-format
@@ -7545,7 +7545,7 @@ msgstr "コンターのしきい値"
 
 #: ../gui/wxpython/vdigit/preferences.py:220
 msgid "screen pixels"
-msgstr "仮面解像度"
+msgstr "画面解像度"
 
 #: ../gui/wxpython/vdigit/preferences.py:220
 msgid "map units"
@@ -10239,7 +10239,7 @@ msgstr "不明なタグ %s"
 #: ../gui/wxpython/core/utils.py:60
 #, python-format
 msgid "Syntax error: %s"
-msgstr "Syntax error: %s"
+msgstr "構文エラー: %s"
 
 #: ../gui/wxpython/core/utils.py:351
 #, python-format
@@ -12015,11 +12015,11 @@ msgstr "ユーザー設定"
 
 #: ../gui/wxpython/gui_core/preferences.py:83
 msgid "Set to default"
-msgstr "デフォルトに設定"
+msgstr "デフォルトに戻す"
 
 #: ../gui/wxpython/gui_core/preferences.py:91
 msgid "Revert settings to default"
-msgstr ""
+msgstr "デフォルト設定に戻す"
 
 #: ../gui/wxpython/gui_core/preferences.py:94
 msgid "Apply changes for the current session only and close"
@@ -12177,7 +12177,7 @@ msgstr "冗長レベル："
 
 #: ../gui/wxpython/gui_core/preferences.py:1190
 msgid "Default raster settings"
-msgstr ""
+msgstr "デフォルトラスター設定"
 
 #: ../gui/wxpython/gui_core/preferences.py:1200
 msgid "Make null cells opaque"
@@ -12189,7 +12189,7 @@ msgstr "デフォルトカラーテーブル"
 
 #: ../gui/wxpython/gui_core/preferences.py:1261
 msgid "Default vector settings"
-msgstr ""
+msgstr "デフォルトベクトル設定"
 
 #: ../gui/wxpython/gui_core/preferences.py:1267
 msgid "Display:"
@@ -12294,11 +12294,11 @@ msgstr "デフォルトディスプレイフォントの選択"
 
 #: ../gui/wxpython/gui_core/preferences.py:1938
 msgid "Failed to set default display font. Try different font."
-msgstr ""
+msgstr "デフォルトのディスプレイフォントの設定に失敗しました。別のフォントを試してください。"
 
 #: ../gui/wxpython/gui_core/preferences.py:1957
 msgid "Select default output font"
-msgstr ""
+msgstr "デフォルトの出力フォントを選択"
 
 #: ../gui/wxpython/gui_core/preferences.py:2046
 msgid "Manage access to mapsets"
@@ -14819,7 +14819,7 @@ msgstr "ラスターマップレイヤーのカラーから検索 "
 
 #: ../gui/wxpython/menustrings.py:312 ../gui/wxpython/menustrings.py:1218
 msgid "Raster buffers and distance"
-msgstr ""
+msgstr "ラスターバッファと距離"
 
 #: ../gui/wxpython/menustrings.py:313 ../gui/wxpython/menustrings.py:1219
 msgid "Buffer rasters"
@@ -15423,11 +15423,11 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:467 ../gui/wxpython/menustrings.py:1373
 msgid "Recode"
-msgstr "記録"
+msgstr "再コード"
 
 #: ../gui/wxpython/menustrings.py:468 ../gui/wxpython/menustrings.py:1374
 msgid "Recodes categorical raster maps."
-msgstr "カテゴリーかされたラスターマップの記録"
+msgstr "カテゴリー分けされたラスターマップの再コード化"
 
 #: ../gui/wxpython/menustrings.py:469 ../gui/wxpython/menustrings.py:1375
 msgid "Rescale"

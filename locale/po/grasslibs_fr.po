@@ -8740,7 +8740,7 @@ msgstr "Impossible d'écrire l'en-tête du fichier plus"
 
 #: ../lib/vector/diglib/plus.c:284
 msgid "Unable to write nodes to plus file"
-msgstr "Impossible d'écrire le noeud dans le fichier plus"
+msgstr "Impossible d'écrire les nœuds dans le fichier plus"
 
 #: ../lib/vector/diglib/plus.c:289
 msgid "Unable to write lines to plus file"
@@ -9196,7 +9196,7 @@ msgstr "Masque de carte raster <%s> non trouvé"
 
 #: ../lib/rst/interp_float/input2d.c:81
 msgid "Bitmap mask created"
-msgstr "Masque bitmat créé"
+msgstr "Masque bitmap créé"
 
 #: ../lib/rst/interp_float/output2d.c:117
 #, c-format

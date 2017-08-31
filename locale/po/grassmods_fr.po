@@ -620,7 +620,7 @@ msgstr "Erreur à la lecture des données binaires"
 #: ../raster3d/r3.in.bin/main.c:154
 #, c-format
 msgid "Loading %s data with %i  bytes ...  (%dx%dx%d)"
-msgstr "Chargement des données %s avec %i octets ... (%dx%dx%dx)"
+msgstr "Chargement des données %d avec %i octets ... (%dx%dx%dx)"
 
 #: ../raster3d/r3.in.bin/main.c:202 ../raster3d/r3.neighbors/main.c:311
 msgid "Error flushing tiles"
@@ -1702,12 +1702,11 @@ msgstr ""
 msgid "Input file <%s> does not exist"
 msgstr ""
 
-# c-format
 #: ../raster3d/r3.in.lidar/main.c:378 ../raster/r.in.lidar/main.c:401
 #: ../vector/v.in.lidar/main.c:352
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file <%s> as a LiDAR point cloud"
-msgstr "Impossible d'ouvrir le fichier [%s] en lecture"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:382 ../raster/r.in.lidar/main.c:405
 #: ../vector/v.in.lidar/main.c:356
@@ -11768,7 +11767,7 @@ msgstr ""
 
 #: ../raster/r.stats.quantile/main.c:454
 msgid "Writing output maps"
-msgstr ""
+msgstr "Écriture des cartes de sortie"
 
 #: ../raster/r.stats.quantile/main.c:518
 msgid "Compute category quantiles using two passes."
@@ -14103,7 +14102,7 @@ msgstr ""
 
 #: ../raster/r.to.vect/main.c:80
 msgid "Converts a raster map into a vector map."
-msgstr ""
+msgstr "Convertit une carte matricielle en carte vectorielle."
 
 #: ../raster/r.to.vect/main.c:87
 #: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:7
@@ -14183,7 +14182,7 @@ msgstr ""
 
 #: ../raster/r.to.vect/main.c:312
 msgid "Updating attributes..."
-msgstr ""
+msgstr "Mise à jour des attributs..."
 
 #: ../raster/r.to.vect/main.c:335
 #, c-format
@@ -14192,11 +14191,11 @@ msgstr ""
 
 #: ../raster/r.to.vect/areas.c:122
 msgid "Extracting areas..."
-msgstr ""
+msgstr "Extraction des entités surfaciques..."
 
 #: ../raster/r.to.vect/lines.c:71
 msgid "Extracting lines..."
-msgstr ""
+msgstr "Extraction des lignes..."
 
 #: ../raster/r.to.vect/lines.c:504
 #, c-format
@@ -14240,7 +14239,7 @@ msgstr ""
 
 #: ../raster/r.to.vect/areas_io.c:287
 msgid "Writing areas..."
-msgstr ""
+msgstr "Écriture des lignes..."
 
 #: ../raster/r.quantile/main.c:66
 msgid "Computing histogram"
@@ -16753,7 +16752,7 @@ msgstr ""
 
 #: ../raster/r.in.poly/main.c:83
 msgid "Type doesn't exist"
-msgstr ""
+msgstr "Type n'existe pas"
 
 #: ../raster/r.out.ppm/main.c:56
 msgid "Converts a GRASS raster map to a PPM image file."
@@ -21177,7 +21176,7 @@ msgstr "landsat4_tm;Utiliser les règles de transformation pour Landsat 4 TM;lan
 
 #: ../locale/scriptstrings/d.frame_to_translate.c:1
 msgid "Manages display frames on the user's graphics monitor."
-msgstr ""
+msgstr "Gère des cadres d'affichages sur le moniteur d'affichage de l'utilisateur"
 
 #: ../locale/scriptstrings/d.frame_to_translate.c:4
 #: ../locale/scriptstrings/d.redraw_to_translate.c:4
@@ -21188,31 +21187,31 @@ msgstr "écrans"
 
 #: ../locale/scriptstrings/d.frame_to_translate.c:5
 msgid "frame"
-msgstr ""
+msgstr "cadre"
 
 #: ../locale/scriptstrings/d.frame_to_translate.c:6
 msgid "Create a new frame if doesn't exist and select"
-msgstr ""
+msgstr "Créer un nouveau cadre et le sélectionner"
 
 #: ../locale/scriptstrings/d.frame_to_translate.c:7
 msgid "Remove all frames, erase the screen and exit"
-msgstr ""
+msgstr "Effacer tous les cadres, effacer l'écran et sortir"
 
 #: ../locale/scriptstrings/d.frame_to_translate.c:8
 msgid "Print name of current frame and exit"
-msgstr ""
+msgstr "Afficher le nom du cadre actuel et sortir"
 
 #: ../locale/scriptstrings/d.frame_to_translate.c:9
 msgid "Print names of all frames including 'at' position and exit"
-msgstr ""
+msgstr "Afficher le nom de tous les cadres, y compris les positions 'at', et sortir"
 
 #: ../locale/scriptstrings/d.frame_to_translate.c:10
 msgid "Frame to be selected or created (if -c flag is given)"
-msgstr ""
+msgstr "Cadre à sélectionner ou à créer (si le drapeau -c est actif)"
 
 #: ../locale/scriptstrings/d.frame_to_translate.c:11
 msgid "Screen coordinates in percent where to place the frame (0,0 is lower-left)"
-msgstr ""
+msgstr "Coordonnées d'écran en pourcentage où placer le cadre (0,0 est en bas à gauche)"
 
 #: ../locale/scriptstrings/d.frame_to_translate.c:12
 msgid "Implies only when -c or --overwrite flag is given"

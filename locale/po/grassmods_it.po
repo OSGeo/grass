@@ -1708,9 +1708,9 @@ msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:378 ../raster/r.in.lidar/main.c:401
 #: ../vector/v.in.lidar/main.c:352
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file <%s> as a LiDAR point cloud"
-msgstr "Impossibile aprire il file per <%s> per la scrittura"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:382 ../raster/r.in.lidar/main.c:405
 #: ../vector/v.in.lidar/main.c:356
@@ -7127,7 +7127,7 @@ msgstr ""
 #: ../ps/ps.map/ps_outline.c:100 ../ps/ps.map/r_colortable.c:73
 #: ../ps/ps.map/r_colortable.c:89
 msgid "illegal width request"
-msgstr ""
+msgstr "Interrogazione larghezza non valida"
 
 #: ../ps/ps.map/ps_outline.c:107
 msgid "illegal outline sub-request"
@@ -7277,11 +7277,11 @@ msgstr ""
 
 #: ../ps/ps.map/r_instructions.c:80
 msgid "no file specified"
-msgstr ""
+msgstr "Nessun file specificato"
 
 #: ../ps/ps.map/r_instructions.c:84
 msgid "unable to open"
-msgstr ""
+msgstr "Impossibile aprire"
 
 #: ../ps/ps.map/r_instructions.c:115
 msgid "illegal maploc request"
@@ -7293,7 +7293,7 @@ msgstr ""
 
 #: ../ps/ps.map/r_instructions.c:144 ../ps/ps.map/r_instructions.c:340
 msgid "no raster map selected yet"
-msgstr ""
+msgstr "Mappa raster ancora non selezionata"
 
 #: ../ps/ps.map/r_instructions.c:160
 msgid "illegal value list"
@@ -7337,7 +7337,7 @@ msgstr ""
 
 #: ../ps/ps.map/r_instructions.c:369
 msgid "group not found"
-msgstr ""
+msgstr "gruppo non trovato"
 
 #: ../ps/ps.map/r_instructions.c:411
 msgid "illegal grid spacing"
@@ -7521,15 +7521,15 @@ msgstr ""
 
 #: ../ps/ps.map/r_colortable.c:81
 msgid "illegal height request"
-msgstr ""
+msgstr "Interrogazione altezza non valida"
 
 #: ../ps/ps.map/r_colortable.c:106
 msgid "illegal range request"
-msgstr ""
+msgstr "Interrogazione range non valida"
 
 #: ../ps/ps.map/r_colortable.c:122
 msgid "illegal columns request"
-msgstr ""
+msgstr "Interrogazione colonne non valida"
 
 #: ../ps/ps.map/r_colortable.c:141
 msgid "Unsupported color request (colortable)"

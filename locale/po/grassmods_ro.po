@@ -1698,9 +1698,9 @@ msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:378 ../raster/r.in.lidar/main.c:401
 #: ../vector/v.in.lidar/main.c:352
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file <%s> as a LiDAR point cloud"
-msgstr "Imposbil de deschis fișierul <%s> pentru scriere"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:382 ../raster/r.in.lidar/main.c:405
 #: ../vector/v.in.lidar/main.c:356
@@ -39715,6 +39715,7 @@ msgid "adjusted EW spline %d"
 msgid_plural "adjusted EW splines %d"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../vector/v.lidar.correction/main.c:276
 #, c-format
@@ -39722,6 +39723,7 @@ msgid "adjusted NS spline %d"
 msgid_plural "adjusted NS splines %d"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../vector/v.lidar.correction/main.c:324
 #, c-format

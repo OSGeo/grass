@@ -1704,9 +1704,9 @@ msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:378 ../raster/r.in.lidar/main.c:401
 #: ../vector/v.in.lidar/main.c:352
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file <%s> as a LiDAR point cloud"
-msgstr "ファイル <%s> を開けません"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:382 ../raster/r.in.lidar/main.c:405
 #: ../vector/v.in.lidar/main.c:356
@@ -20245,7 +20245,7 @@ msgstr "2つのラスターマップから直線回帰を計算する: y = a + b
 
 #: ../raster/r.recode/main.c:49
 msgid "recode categories"
-msgstr ""
+msgstr "カテゴリーの再コード化します"
 
 #: ../raster/r.recode/main.c:51
 msgid "Recodes categorical raster maps."
@@ -20253,7 +20253,7 @@ msgstr "カテゴリー分けされたラスターマップを記録します"
 
 #: ../raster/r.recode/main.c:54
 msgid "Name of raster map to be recoded"
-msgstr "ラスターマップ名が表示されています"
+msgstr "再コード化されるラスターマップ名"
 
 #: ../raster/r.recode/main.c:60
 msgid "File containing recode rules"
@@ -36036,13 +36036,13 @@ msgstr ""
 #: ../vector/v.lidar.edgedetection/main.c:94 ../vector/v.outlier/main.c:103
 #: ../vector/v.lidar.correction/main.c:101
 msgid "Length of each spline step in the east-west direction"
-msgstr "東西方向における各スプラインステップの長さ"
+msgstr ""
 
 #: ../vector/v.surf.bspline/main.c:158
 #: ../vector/v.lidar.edgedetection/main.c:103 ../vector/v.outlier/main.c:112
 #: ../vector/v.lidar.correction/main.c:110
 msgid "Length of each spline step in the north-south direction"
-msgstr "北南方向における各スプラインステップの長さ: "
+msgstr ""
 
 #: ../vector/v.surf.bspline/main.c:207
 msgid "Choose either vector or raster output, not both"

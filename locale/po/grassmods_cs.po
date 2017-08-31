@@ -1707,9 +1707,9 @@ msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:378 ../raster/r.in.lidar/main.c:401
 #: ../vector/v.in.lidar/main.c:352
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file <%s> as a LiDAR point cloud"
-msgstr "Nelze otevřít soubor <%s> pro psaní"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:382 ../raster/r.in.lidar/main.c:405
 #: ../vector/v.in.lidar/main.c:356
@@ -36256,13 +36256,13 @@ msgstr ""
 #: ../vector/v.lidar.edgedetection/main.c:94 ../vector/v.outlier/main.c:103
 #: ../vector/v.lidar.correction/main.c:101
 msgid "Length of each spline step in the east-west direction"
-msgstr "Hodnota kroku spline ve v-z směru"
+msgstr ""
 
 #: ../vector/v.surf.bspline/main.c:158
 #: ../vector/v.lidar.edgedetection/main.c:103 ../vector/v.outlier/main.c:112
 #: ../vector/v.lidar.correction/main.c:110
 msgid "Length of each spline step in the north-south direction"
-msgstr "Hodnota kroku spline ve s-j severním směru"
+msgstr ""
 
 #: ../vector/v.surf.bspline/main.c:207
 msgid "Choose either vector or raster output, not both"

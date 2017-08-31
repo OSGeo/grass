@@ -3098,19 +3098,19 @@ msgstr "Kopiuj %s <%s> do bieżącego mapsetu jako <%s>"
 #: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
 #, c-format
 msgid "Unable to copy <%s> to current mapset as <%s>"
-msgstr ""
+msgstr "Nie można skopiować <%s> do bieżącego mapsetu jako <%s>"
 
 #: ../lib/manage/do_copy.c:61 ../lib/manage/do_remove.c:89
 #: ../lib/manage/do_remove.c:109 ../lib/manage/do_rename.c:87
 #: ../lib/manage/do_rename.c:107
 #, c-format
 msgid "%s is missing"
-msgstr ""
+msgstr "%s brakuje"
 
 #: ../lib/manage/do_copy.c:72
 #, c-format
 msgid "%s copied"
-msgstr ""
+msgstr "%s skopiowane"
 
 #: ../lib/manage/do_remove.c:42
 #, c-format
@@ -3129,17 +3129,17 @@ msgstr ""
 #: ../lib/manage/do_remove.c:92 ../lib/manage/do_remove.c:112
 #, c-format
 msgid "%s removed"
-msgstr ""
+msgstr "%s usunięte"
 
 #: ../lib/manage/do_remove.c:105
 #, c-format
 msgid "Unable to remove %s"
-msgstr ""
+msgstr "Nie można usunąć %s"
 
 #: ../lib/manage/do_remove.c:121
 #, c-format
 msgid "<%s> nothing removed"
-msgstr ""
+msgstr "<%s> niczego nie usunięto"
 
 #: ../lib/manage/do_list.c:30
 #, c-format
@@ -3149,23 +3149,23 @@ msgstr ""
 #: ../lib/manage/option.c:47
 #, c-format
 msgid "%s to be %s"
-msgstr ""
+msgstr "%s na %s"
 
 #: ../lib/manage/option.c:51
 msgid "Raster"
-msgstr ""
+msgstr "Raster"
 
 #: ../lib/manage/option.c:53
 msgid "Vector"
-msgstr ""
+msgstr "Wektor"
 
 #: ../lib/manage/option.c:55
 msgid "Region"
-msgstr ""
+msgstr "Region"
 
 #: ../lib/manage/option.c:57
 msgid "Group"
-msgstr ""
+msgstr "Grupa"
 
 #: ../lib/manage/read_list.c:73
 #, c-format
@@ -3180,27 +3180,27 @@ msgstr ""
 #: ../lib/manage/do_rename.c:42
 #, c-format
 msgid "Rename %s <%s> to <%s>"
-msgstr ""
+msgstr "Zmień nazwę %s <%s> na <%s>"
 
 #: ../lib/manage/do_rename.c:62
 #, c-format
 msgid "Unable to rename vector map <%s> to <%s>"
-msgstr ""
+msgstr "Nie można zmienić nazwy mapy wektorowej <%s> na <%s>"
 
 #: ../lib/manage/do_rename.c:83 ../lib/manage/do_rename.c:103
 #, c-format
 msgid "Unable to rename %s"
-msgstr ""
+msgstr "Nie można zmienić nazwy %s"
 
 #: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
 #, c-format
 msgid "%s renamed"
-msgstr ""
+msgstr "%s zmieniono nazwę"
 
 #: ../lib/manage/do_rename.c:119
 #, c-format
 msgid "<%s> nothing renamed"
-msgstr ""
+msgstr "<%s>  nie zmieniono nazwy"
 
 #: ../lib/raster/color_write.c:81 ../lib/vector/Vlib/color_write.c:71
 #, c-format
@@ -4226,7 +4226,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:221
 msgid "Must refer to an integer column"
-msgstr ""
+msgstr "Musi odnosić się do kolumny z liczbami całkowitymi"
 
 #: ../lib/gis/parser_standard_options.c:233
 msgid "Name of input imagery group"
@@ -4250,15 +4250,15 @@ msgstr "Nazwa wyjściowej mapy rastrowej"
 
 #: ../lib/gis/parser_standard_options.c:277
 msgid "Name for output raster map(s)"
-msgstr ""
+msgstr "Nazwa wyjściowej map(y) rastrowej"
 
 #: ../lib/gis/parser_standard_options.c:285
 msgid "Name of raster map"
-msgstr ""
+msgstr "Nazwa mapy rastrowej"
 
 #: ../lib/gis/parser_standard_options.c:294
 msgid "Name of raster map(s)"
-msgstr ""
+msgstr "Nazwa map(y) rastrowej"
 
 #: ../lib/gis/parser_standard_options.c:302
 msgid "Name of base raster map"
@@ -4270,15 +4270,15 @@ msgstr "Nazwa rastrowej mapy pokrycia"
 
 #: ../lib/gis/parser_standard_options.c:318
 msgid "Name of input elevation raster map"
-msgstr ""
+msgstr "Nazwa wejściowej mapy rastrowej wysokości"
 
 #: ../lib/gis/parser_standard_options.c:327
 msgid "Name of input elevation raster map(s)"
-msgstr ""
+msgstr "Nazwy wejściowych map(y) rastrowych wysokości"
 
 #: ../lib/gis/parser_standard_options.c:334
 msgid "Type of raster map to be created"
-msgstr ""
+msgstr "Rodzaj mapy rastrowej do utworzenia"
 
 #: ../lib/gis/parser_standard_options.c:335
 msgid "Storage type for resultant raster map"
@@ -4286,15 +4286,15 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:339
 msgid "Integer"
-msgstr ""
+msgstr "Liczba całkowita"
 
 #: ../lib/gis/parser_standard_options.c:340
 msgid "Single precision floating point"
-msgstr ""
+msgstr "Zmiennoprzecinkowa pojedynczej precyzji"
 
 #: ../lib/gis/parser_standard_options.c:341
 msgid "Double precision floating point"
-msgstr ""
+msgstr "Zmiennoprzecinkowa podwójnej precyzji"
 
 #: ../lib/gis/parser_standard_options.c:347
 msgid "Sampling interpolation method"
@@ -4302,15 +4302,15 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:351
 msgid "Nearest-neighbor interpolation"
-msgstr ""
+msgstr "Interpolacja najbliższego sąsiada"
 
 #: ../lib/gis/parser_standard_options.c:352
 msgid "Bilinear interpolation"
-msgstr ""
+msgstr "Interpolacja dwuliniowa"
 
 #: ../lib/gis/parser_standard_options.c:353
 msgid "Bicubic interpolation"
-msgstr ""
+msgstr "Interpolacja dwusześcienna"
 
 #: ../lib/gis/parser_standard_options.c:362
 msgid "Name of input basename raster map(s)"
@@ -4507,7 +4507,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:734
 msgid "Name of saved region"
-msgstr ""
+msgstr "Nazwa zapisanego regionu"
 
 #: ../lib/gis/parser_standard_options.c:744
 msgid "Name of the input space time dataset"
@@ -5498,13 +5498,13 @@ msgstr ""
 #: ../lib/htmldriver/graph_set.c:98
 #, c-format
 msgid "html: image size %dx%d"
-msgstr ""
+msgstr "html: rozmiar obrazu %dx%d"
 
 #: ../lib/htmldriver/graph_set.c:111 ../lib/htmldriver/graph_set.c:115
 #: ../lib/htmldriver/graph_set.c:119
 #, c-format
 msgid "html: type '%s'"
-msgstr ""
+msgstr "html: rodzaj '%s'"
 
 #: ../lib/temporal/lib/default_name.c:69
 msgid "Programmer error - only SQLite driver is currently supported"
@@ -5857,18 +5857,18 @@ msgstr ""
 #: ../lib/init/grass.py:1205
 #, python-format
 msgid "Path '%s' doesn't exist"
-msgstr ""
+msgstr "Ścieżka '%s' nie istnieje"
 
 #: ../lib/init/grass.py:1207
 #, python-format
 msgid "Path '%s' not accessible."
-msgstr ""
+msgstr "Ścieżka '%s' jest niedostępna."
 
 #. GTC %s is mapset's folder path
 #: ../lib/init/grass.py:1212
 #, python-format
 msgid "You are not the owner of '%s'."
-msgstr ""
+msgstr "Nie jesteś właścicielem '%s'."
 
 #: ../lib/init/grass.py:1220
 #, python-format
@@ -9042,7 +9042,7 @@ msgstr "Odnajdowanie punktów do interpolacji trwa zbyt długo - ustaw region na
 #: ../lib/rst/interp_float/write2d.c:79 ../lib/rst/interp_float/write2d.c:88
 #: ../lib/rst/interp_float/write2d.c:96 ../lib/rst/interp_float/write2d.c:104
 msgid "Cannot write files"
-msgstr ""
+msgstr "Nie można zapisać plików"
 
 #: ../lib/rst/interp_float/input2d.c:58
 #, c-format
