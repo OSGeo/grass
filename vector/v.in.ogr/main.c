@@ -91,6 +91,7 @@ int main(int argc, char *argv[])
 
     /* OGR */
     OGRDataSourceH Ogr_ds;
+    const char *ogr_driver_name;
     OGRLayerH Ogr_layer;
     OGRFieldDefnH Ogr_field;
     char *Ogr_fieldname;
@@ -409,6 +410,14 @@ int main(int argc, char *argv[])
     if (Ogr_ds == NULL)
 	G_fatal_error(_("Unable to open data source <%s>"), dsn);
 
+    ogr_driver_name = OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds));
+    if (strcmp(ogr_driver_name, "OSM") == 0) {
+	OGR_DS_Destroy(Ogr_ds);
+	G_warning(_("OpenStreetMap import can result in missing features. "
+	            "Please use ogr2ogr first to convert to a different format."));
+	G_fatal_error(_("OSM import cancelled."));
+    }
+
     if (param.geom->answer) {
 #if GDAL_VERSION_NUM >= 1110000
         if (!OGR_DS_TestCapability(Ogr_ds, ODsCCreateGeomFieldAfterCreateLayer)) {
@@ -425,12 +434,9 @@ int main(int argc, char *argv[])
 
     /* check encoding for given driver */
     if (param.encoding->answer) {
-        const char *ogr_driver;
-
-        ogr_driver = OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds));
-        if (strcmp(ogr_driver, "ESRI Shapefile") != 0 &&
-            strcmp(ogr_driver, "DXF") != 0)
-            G_warning(_("Encoding value not supported by OGR driver <%s>"), ogr_driver);
+        if (strcmp(ogr_driver_name, "ESRI Shapefile") != 0 &&
+            strcmp(ogr_driver_name, "DXF") != 0)
+            G_warning(_("Encoding value not supported by OGR driver <%s>"), ogr_driver_name);
     }
 
     /* make a list of available layers */
@@ -1301,6 +1307,7 @@ int main(int argc, char *argv[])
 
 	if (!flag.notab->answer) {
 	    db_commit_transaction(driver);
+	    db_close_database_shutdown_driver(driver);
 	}
 
 	if (nogeom > 0)
@@ -1674,28 +1681,36 @@ int main(int argc, char *argv[])
     }
 
     delete_table = Vect_maptype(&Map) != GV_FORMAT_NATIVE;
-    if (0 != Vect_close(&Map))
-        G_fatal_error(_("Import failed"));
 
     /* create index - may fail on non-unique categories */
     if (!flag.notab->answer) {
-    	if (db_create_index2(driver, Fi->table, key_column) != DB_OK)
-        	G_warning(_("Unable to create index for table <%s>, key <%s>"),
-                	  Fi->table, key_column);
-    
-    
-	if (delete_table) {
-        	sprintf(buf, "drop table %s", Fi->table);
-	        db_set_string(&sql, buf);
-        	if (db_execute_immediate(driver, &sql) != DB_OK) {
-	            G_fatal_error(_("Unable to drop table: '%s'"),
-        	                  db_get_string(&sql));
-        	}
-    	}
+	for (layer = 0; layer < nlayers; layer++) {
+	    Fi = Vect_get_field(&Map, layer + 1);
+	    driver =
+		db_start_driver_open_database(Fi->driver,
+					      Vect_subst_var(Fi->database,
+							     &Map));
 
-	db_close_database_shutdown_driver(driver);
+	    if (!delete_table) {
+		if (db_create_index2(driver, Fi->table, key_column) != DB_OK)
+		    G_warning(_("Unable to create index for table <%s>, key <%s>"),
+			      Fi->table, key_column);
+	    }
+	    else {
+		sprintf(buf, "drop table %s", Fi->table);
+		db_set_string(&sql, buf);
+		if (db_execute_immediate(driver, &sql) != DB_OK) {
+		    G_fatal_error(_("Unable to drop table: '%s'"),
+				  db_get_string(&sql));
+		}
+	    }
+	    db_close_database_shutdown_driver(driver);
+	}
     }
     
+    if (0 != Vect_close(&Map))
+        G_fatal_error(_("Import failed"));
+
     /* -------------------------------------------------------------------- */
     /*      Extend current window based on dataset.                         */
     /* -------------------------------------------------------------------- */
