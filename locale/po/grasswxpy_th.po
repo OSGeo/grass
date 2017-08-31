@@ -18330,3 +18330,31 @@ msgstr "คำนวน univariate statistics จาก non-null 3d cells ขอ
 
 msgid "Digitize"
 msgstr "ดิจิไทซ์"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "ตำแหน่ง"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "จากเวคเตอร์เป็นแรสเตอร์"
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "ส่งออกแผนที่เวคเตอร์"
+
+#, fuzzy
+#~ msgid "GRASS locations in {}"
+#~ msgstr "กลุ่มภาพเป้าหมาย ตำแหน่ง และ ชุดแผนที่  ของ GRASS"
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "ซ้อนทับ แผนที่เชิงเส้น 2 แผนที่"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "ซ้อนทับ แผนที่เชิงเส้น 2 แผนที่"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "ซ้อนทับ แผนที่เชิงเส้น 2 แผนที่"

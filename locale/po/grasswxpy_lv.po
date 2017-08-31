@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the GRASS GIS package.
 # Copyright (C) 2012-2016, GRASS Development Team
 # Maris Nartiss <maris.gis@gmail.com>, 2012, 2014.
-# Maris Nartiss <maris.kde@gmail.com>, 2014, 2015, 2016.
+# Maris Nartiss <maris.kde@gmail.com>, 2014, 2015, 2016, 2017.
 # Māris Nartišs <mn@sungis.lv>, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_lv\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-08 22:00+0200\n"
-"PO-Revision-Date: 2016-11-15 10:40+0200\n"
+"PO-Revision-Date: 2017-04-01 17:11+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian <grass-translations@lists.osgeo.org>\n"
 "Language: lv_LV\n"
@@ -18325,3 +18325,77 @@ msgstr "Projekcijas kods:"
 #, fuzzy
 msgid "The copied layer needs to be reprojected:"
 msgstr "Noņemamais slānis"
+
+#, fuzzy
+#~ msgid "Render all map displays"
+#~ msgstr "Zīmē kartes slāņus"
+
+#, fuzzy
+#~ msgid "Re-render maps in all open map display windows"
+#~ msgstr "Aizvērt visus šobrīd atvērtos kartes skata logus"
+
+#, fuzzy
+#~ msgid "Close GUI and exit GRASS GIS shell."
+#~ msgstr "Iziet no wxGUI sesijas un GRASS čaulas."
+
+#~ msgid "Show current region"
+#~ msgstr "Parādīt pašreizējo reģionu"
+
+#, fuzzy
+#~ msgid "Shows the extent and resolution of the computational region."
+#~ msgstr "Tuvināt līdz aprēķinu reģionam"
+
+#, fuzzy
+#~ msgid "Performs flow computation for massive grids."
+#~ msgstr "Nosacījums: nav definēts"
+
+#, fuzzy
+#~ msgid "Registers raster, vector and raster3d maps in a space time dataset."
+#~ msgstr "Izveidot jaunu karšu kopu"
+
+#, fuzzy
+#~ msgid "Launches graphical attribute table manager."
+#~ msgstr "Atribūtu tabulas pārvaldnieks"
+
+#~ msgid "H&elp"
+#~ msgstr "&Palīdzība"
+
+#, fuzzy
+#~ msgid "Show manual for selected module from the tree"
+#~ msgstr "Pārsaukt izvēlēto karšu kopu"
+
+#, fuzzy
+#~ msgid "Adva&nced search..."
+#~ msgstr "Paplašināti"
+
+#, fuzzy
+#~ msgid "source X"
+#~ msgstr "avots"
+
+#, fuzzy
+#~ msgid "source Y"
+#~ msgstr "avots"
+
+#, fuzzy
+#~ msgid "target X"
+#~ msgstr "mērķis"
+
+#, fuzzy
+#~ msgid "target Y"
+#~ msgstr "mērķis"
+
+#, fuzzy
+#~ msgid "source X:"
+#~ msgstr "avots"
+
+#, fuzzy
+#~ msgid "target X:"
+#~ msgstr "mērķis"
+
+#, fuzzy
+#~ msgid "source Y:"
+#~ msgstr "avots"
+
+#, fuzzy
+#~ msgid "target Y:"
+#~ msgstr "mērķis"

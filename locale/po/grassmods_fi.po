@@ -40809,3 +40809,27 @@ msgstr ""
 #: ../imagery/i.rgb.his/main.c:78
 msgid "Name for output raster map (saturation)"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Error in writing IDs"
+#~ msgstr "Virhe valittaessa rivejä"
+
+#, fuzzy
+#~ msgid "Color <%s> cannot for option %s be parsed"
+#~ msgstr "Saraketta <%s> ei löytynyt taulusta <%s>"
+
+#, fuzzy
+#~ msgid "Unabale to get attribute data for cat %d"
+#~ msgstr "Ei voida luoda taulua."
+
+#, fuzzy
+#~ msgid "Unable to create 2D raster <%s>"
+#~ msgstr "Ei voida luoda taulua."
+
+#, fuzzy
+#~ msgid "Unable to create 3D raster <%s>"
+#~ msgstr "Ei voida luoda taulua."
+
+#, fuzzy
+#~ msgid "Unable to plot variogram"
+#~ msgstr "Kursoria ei voida avata"

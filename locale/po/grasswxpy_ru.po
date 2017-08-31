@@ -18611,3 +18611,35 @@ msgstr "Рассчитать одномерную статистику для н
 
 msgid "Digitize"
 msgstr "Оцифровать"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "Проекция:"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "Перекодированная растровый слой:"
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "Код проекции:"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Слой для удаления"
+
+#, fuzzy
+#~ msgid "GRASS locations in {}"
+#~ msgstr "Выбирите область проекта и набор"
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "Невозможно прочитать коды EPSG: %s"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "Невозможно прочитать коды EPSG: %s"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "Невозможно открыть файл"

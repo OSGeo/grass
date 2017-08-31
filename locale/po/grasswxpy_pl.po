@@ -776,7 +776,7 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/dialogs.py:607
 msgid "Save signature file"
-msgstr ""
+msgstr "Zapisz plik sygnatury"
 
 #: ../gui/wxpython/iclass/dialogs.py:668
 msgid "Enter name of signature file:"
@@ -822,7 +822,7 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/toolbars.py:46
 msgid "Save signature file for i.maxlik"
-msgstr ""
+msgstr "Zapisz plik sygnatury dla i.maxlik"
 
 #: ../gui/wxpython/iclass/toolbars.py:49
 msgid "Remove selected map layer"
@@ -6559,7 +6559,7 @@ msgstr ""
 #: ../gui/wxpython/vnet/vnet_data.py:870
 #, python-format
 msgid "Cost isolines %s"
-msgstr ""
+msgstr "Izolinie kosztu %s"
 
 #: ../gui/wxpython/vnet/vnet_data.py:960
 msgid "Overwrite map layer"
@@ -6997,7 +6997,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:1402
 msgid "Save computational region to named region"
-msgstr ""
+msgstr "Zapisz region obliczeniowy do nazwanego regionu"
 
 #: ../gui/wxpython/mapdisp/frame.py:1535
 msgid "Raster Digitizer Toolbar"
@@ -7720,7 +7720,7 @@ msgstr "Prosty &edytor"
 
 #: ../gui/wxpython/lmgr/pyshell.py:62 ../gui/wxpython/lmgr/toolbars.py:165
 msgid "Open a simple Python code editor"
-msgstr ""
+msgstr "Otwórz prosty edytor kodu Pythona"
 
 #: ../gui/wxpython/lmgr/pyshell.py:116
 #, python-format
@@ -7740,7 +7740,7 @@ msgstr "Mapa wektorowa <%s> została dodana"
 #: ../gui/wxpython/lmgr/frame.py:101
 #, python-format
 msgid "GRASS GIS %s Layer Manager"
-msgstr ""
+msgstr "Menadżer warstw %s GRASS GIS"
 
 #: ../gui/wxpython/lmgr/frame.py:151
 msgid "Workspace Toolbar"
@@ -8265,7 +8265,7 @@ msgstr "PostGIS eksport"
 
 #: ../gui/wxpython/lmgr/layertree.py:603 ../gui/wxpython/lmgr/layertree.py:743
 msgid "Create pack"
-msgstr ""
+msgstr "Utwórz paczkę"
 
 #: ../gui/wxpython/lmgr/layertree.py:619 ../gui/wxpython/lmgr/layertree.py:759
 msgid "Make a copy in the current mapset"
@@ -8308,7 +8308,7 @@ msgstr "Statystyki mapy rastrowej"
 
 #: ../gui/wxpython/lmgr/layertree.py:805
 msgid "Report raster statistics"
-msgstr ""
+msgstr "Statystyki rastra"
 
 #: ../gui/wxpython/lmgr/layertree.py:817
 msgid "Profile"
@@ -8334,7 +8334,7 @@ msgstr "Nieobsługiwany typ mapy <%s>"
 #: ../gui/wxpython/lmgr/layertree.py:1050
 #, python-format
 msgid "Enter name for the new %s in the current mapset:"
-msgstr ""
+msgstr "Wprowadź nazwę nowego %s w bieżącym mapsecie:"
 
 #: ../gui/wxpython/lmgr/layertree.py:1052
 #, python-format
@@ -8422,7 +8422,7 @@ msgstr "Dodaj warstwę tematyczną (thematic, chart...)"
 
 #: ../gui/wxpython/lmgr/toolbars.py:102
 msgid "Add web service layer (WMS, WMTS, NASA OnEarth)"
-msgstr ""
+msgstr "Dodaj warstwy usług sieciowych (WMS, WMTS, NASA OnEarth)"
 
 #: ../gui/wxpython/lmgr/toolbars.py:105
 msgid "Add group"
@@ -8475,7 +8475,7 @@ msgstr "Edytuj wybraną mapę wektorową"
 
 #: ../gui/wxpython/lmgr/toolbars.py:235
 msgid "Show attribute data for selected vector map"
-msgstr ""
+msgstr "Pokaż dane atrybutowe wybranej mapy wektorowej"
 
 #: ../gui/wxpython/lmgr/toolbars.py:267
 msgid "Generate command for m.nviz.image"
@@ -9246,7 +9246,7 @@ msgstr "Tworzy mapę rastrową z poligonowych/liniowych/punktowych plików ASCII
 
 #: ../gui/wxpython/menustrings.py:45 ../gui/wxpython/menustrings.py:1068
 msgid "Raw binary array import"
-msgstr ""
+msgstr "z pliku binarnego"
 
 #: ../gui/wxpython/menustrings.py:46 ../gui/wxpython/menustrings.py:1069
 msgid "Import a binary raster file into a GRASS raster map layer."
@@ -12575,7 +12575,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:846 ../gui/wxpython/menustrings.py:1789
 msgid "Develop 3D raster map"
-msgstr ""
+msgstr "Tworzenie mapy rastrowej 3D"
 
 #: ../gui/wxpython/menustrings.py:847 ../gui/wxpython/menustrings.py:1790
 msgid "Manage 3D NULL values"
@@ -12609,15 +12609,15 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:856 ../gui/wxpython/menustrings.py:1799
 msgid "Export 3D color table"
-msgstr ""
+msgstr "Eksportuj tabelę kolorów 3D"
 
 #: ../gui/wxpython/menustrings.py:857 ../gui/wxpython/menustrings.py:1800
 msgid "Exports the color table associated with a 3D raster map."
-msgstr ""
+msgstr "Eksportuje paletę kolorów związaną z warstwą mapy rastrowej 3D."
 
 #: ../gui/wxpython/menustrings.py:858 ../gui/wxpython/menustrings.py:1801
 msgid "3D mask"
-msgstr ""
+msgstr "Maska 3D"
 
 #: ../gui/wxpython/menustrings.py:859 ../gui/wxpython/menustrings.py:1802
 msgid "Establishes the current working 3D raster mask."
@@ -13859,7 +13859,7 @@ msgstr "Ustawienia językowe"
 
 #: ../gui/wxpython/gui_core/preferences.py:558
 msgid "Choose language (requires to save and GRASS restart):"
-msgstr ""
+msgstr "Wybierz język (wymaga zapisania zmian i restartu programu):"
 
 #: ../gui/wxpython/gui_core/preferences.py:591
 msgid "Appearance settings"
@@ -14366,7 +14366,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/forms.py:1114
 msgid "This option is required"
-msgstr ""
+msgstr "Ta opcja jest wymagana"
 
 #: ../gui/wxpython/gui_core/forms.py:1135
 msgid "[multiple]"
@@ -14403,7 +14403,7 @@ msgstr "&Wczytaj"
 
 #: ../gui/wxpython/gui_core/forms.py:1845
 msgid "Load and edit content of a file"
-msgstr ""
+msgstr "Wczytaj i edytuj zawartość pliku"
 
 #: ../gui/wxpython/gui_core/forms.py:1848
 msgid "&Save as"
@@ -14411,7 +14411,7 @@ msgstr "Zapisz jako"
 
 #: ../gui/wxpython/gui_core/forms.py:1850
 msgid "Save content to a file for further use"
-msgstr ""
+msgstr "Zapisz zawartość w pliku do dalszego użytku"
 
 #: ../gui/wxpython/gui_core/forms.py:1855
 msgid "or enter values directly:"
@@ -15025,7 +15025,7 @@ msgstr "Przeciągnij myszą by wyświetlić całą mapę"
 
 #: ../gui/wxpython/gui_core/toolbars.py:65
 msgid "Save display to file"
-msgstr ""
+msgstr "Zapisz okno do pliku"
 
 #: ../gui/wxpython/gui_core/toolbars.py:79
 msgid "Add map elements"
@@ -15069,7 +15069,7 @@ msgstr "Ustawienia wyjścia"
 
 #: ../gui/wxpython/gui_core/gselect.py:1397
 msgid "Source input"
-msgstr ""
+msgstr "Źródło wejścia"
 
 #: ../gui/wxpython/gui_core/gselect.py:1408
 msgid "Native"
@@ -15496,7 +15496,7 @@ msgstr "&Zapisz warstwę"
 
 #: ../gui/wxpython/web_services/dialogs.py:905
 msgid "Save web service layer as raster map"
-msgstr ""
+msgstr "Zapisz warstwę usługi sieciowej jako mapę rastrową"
 
 #: ../gui/wxpython/web_services/dialogs.py:1018
 msgid "Missing output raster."
@@ -15566,7 +15566,7 @@ msgstr "Wybierz plik do zapisania tabeli kolorów"
 
 #: ../gui/wxpython/modules/colorrules.py:451
 msgid "Type filename or click to choose file and save color table"
-msgstr ""
+msgstr "Wpisz nazwę pliku lub kliknij aby wybrać plik i zapisać tabelę kolorów"
 
 #: ../gui/wxpython/modules/colorrules.py:465
 msgid "&Set"
@@ -15676,7 +15676,7 @@ msgstr "Wczytaj szerokość z kolumny:"
 
 #: ../gui/wxpython/modules/colorrules.py:1120
 msgid "Save width to column:"
-msgstr ""
+msgstr "Zapisz szerokość do kolumny:"
 
 #: ../gui/wxpython/modules/colorrules.py:1125
 msgid "Use color column instead of color table:"
@@ -15741,7 +15741,7 @@ msgstr "Wprowadź wartości atrybutów %s:"
 
 #: ../gui/wxpython/modules/colorrules.py:1821
 msgid "Please select column to save values to."
-msgstr ""
+msgstr "Wybierz kolumnę do której zapisać wartości."
 
 #: ../gui/wxpython/modules/colorrules.py:1857
 msgid "No color column defined. Operation canceled."
@@ -16524,7 +16524,7 @@ msgstr "Nowa mapa wektorowa <%(map)s>: %(msg)s\n"
 #: ../gui/wxpython/core/utils.py:535
 #, python-brace-format
 msgid "failed to open '{0}'"
-msgstr ""
+msgstr "nie można otworzyć '{0}'"
 
 #: ../gui/wxpython/core/utils.py:841
 #, python-format
@@ -16542,6 +16542,8 @@ msgid ""
 "%s: line skipped - unable to parse '%s'\n"
 "Reason: %s\n"
 msgstr ""
+"%s: linii opuszczono - nie można parsować '%s'\n"
+"Powód: %s\n"
 
 #: ../gui/wxpython/core/utils.py:897
 #, python-format
@@ -18523,3 +18525,48 @@ msgstr "Przykrywa dwie mapy wektorowe."
 
 msgid "Print/add/remove a timestamp for a 3D raster map"
 msgstr "Odświerz/dodaj/usuń znacznik czasu dla mapy rastrowej 3D"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "Odwzorowanie"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "wybierz raster"
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "Metoda reprojekcji:"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Warstwa do usunięcia"
+
+#~ msgid "GRASS locations in {}"
+#~ msgstr "Lokacje GRASS-a w {}"
+
+#, fuzzy
+#~ msgid "Unicode error detected. Check your locale settings. Details: {}"
+#~ msgstr "Nie można ustawić bazy danych GRASS. Sprawdź ustawienia locale."
+
+#~ msgid ""
+#~ "Note that the wxGUI's vector digitizer is currently disabled (hopefully "
+#~ "this will be fixed soon). Please keep an eye out for updated versions of "
+#~ "GRASS. In the meantime you can use \"v.digit\" from the Develop Vector "
+#~ "menu."
+#~ msgstr ""
+#~ "Digitizer wxGUI jest obecnie wyłączony (miejmy nadzieję, że niedługo uda "
+#~ "nam się go naprawić). Śledź aktualizacje GRASS-a. Do tego czasu można "
+#~ "używać \"v.digit\" z menu Wektor > Tworzenie mapy wektorowej."
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "Nie można przeczytać kodów EPSG: %s"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "Nie można przeczytać kodów EPSG: %s"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "nie można otworzyć '%s'"

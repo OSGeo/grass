@@ -41600,3 +41600,447 @@ msgstr "必须指定'from_table'或'select'选项。"
 #, fuzzy
 msgid "One of -%c or options <%s>, <%s> or <%s> must be specified"
 msgstr "必须指定'from_table'或'select'选项。"
+
+#, fuzzy
+#~ msgid "Value to multiply the raster values with"
+#~ msgstr "报告栅格图层的统计数据"
+
+#, fuzzy
+#~ msgid "Value to add to the raster values"
+#~ msgstr "报告栅格图层的统计数据"
+
+#, fuzzy
+#~ msgid "Unknown raster type <%d>"
+#~ msgstr "未知的类型：%c"
+
+#, fuzzy
+#~ msgid "Invalid range <%s> for option %s"
+#~ msgstr "无效的区域：%s"
+
+#, fuzzy
+#~ msgid ""
+#~ "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
+#~ msgstr "以当前目录中的ASCII格式的(多边形/线形)数据文件来创建栅格地图。"
+
+#, fuzzy
+#~ msgid "Preparing the maps..."
+#~ msgstr "读取栅格文件 [%s] 时发生错误。"
+
+#, fuzzy
+#~ msgid "Computing proportional count map..."
+#~ msgstr "输入图层的名称"
+
+#, fuzzy
+#~ msgid "Computing proportional sum map..."
+#~ msgstr "拷贝表失败"
+
+#, fuzzy
+#~ msgid "Computing mean map..."
+#~ msgstr "拷贝表失败"
+
+#, fuzzy
+#~ msgid "Closing the maps..."
+#~ msgstr "读取栅格文件 [%s] 时发生错误。"
+
+#, fuzzy
+#~ msgid "%lu input points had intensity out of range"
+#~ msgstr "%d 个点超出范围"
+
+#, fuzzy
+#~ msgid "Region id %d is invalid"
+#~ msgstr "未找到3D视图文件<%s>"
+
+#, fuzzy
+#~ msgid "Estimated range bandwidth: %g"
+#~ msgstr "点间的最大距离： %f"
+
+#, fuzzy
+#~ msgid "Range bandwidth: %g"
+#~ msgstr "线宽"
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d segments..."
+#~ msgstr "写入 %s ... "
+
+#, fuzzy
+#~ msgid "Error in writing IDs"
+#~ msgstr "读取地图 %s 时发生错误"
+
+#, fuzzy
+#~ msgid "Error in writing goodness of fit"
+#~ msgstr "读取地图 %s 时发生错误"
+
+#, fuzzy
+#~ msgid "Error in writing new band values"
+#~ msgstr "读取地图 %s 时发生错误"
+
+#, fuzzy
+#~ msgid "Writing out shifted band values..."
+#~ msgstr "写入 %s ... "
+
+#, fuzzy
+#~ msgid "%d-band clustering with threshold %g"
+#~ msgstr "%d 个点超出范围"
+
+#, fuzzy
+#~ msgid "Found %d clumps"
+#~ msgstr "完成率："
+
+#, fuzzy
+#~ msgid "Spatial radius in number of cells"
+#~ msgstr "行数"
+
+#, fuzzy
+#~ msgid "Option '%s' must be >= 1"
+#~ msgstr "位置名称"
+
+#, fuzzy
+#~ msgid "Integer overflow: too many cells in current region"
+#~ msgstr "打印当前区域"
+
+#, fuzzy
+#~ msgid "Maximum number of iterations set to %d"
+#~ msgstr "插值点的数量"
+
+#, fuzzy
+#~ msgid "Invalid number of iterations, %d will be used"
+#~ msgstr "面：%d  岛的数量：%d\n"
+
+#~ msgid ""
+#~ "column '%s' : type int8 (bigint) is stored as integer (4 bytes) some data "
+#~ "may be damaged"
+#~ msgstr "列'%s'：int8(bigint)存储为整型(4 bytes)，可能会破坏一部分数据"
+
+#~ msgid ""
+#~ "column '%s' : type character varying is stored as varchar(250) some data "
+#~ "may be lost"
+#~ msgstr "列'%s'：可变字符存储为varchar(250)可能会丢失一部分数据"
+
+#, fuzzy
+#~ msgid "Can only do up to %d raster maps (%d given)"
+#~ msgstr "输出的 RASTER3D grid 文件名称"
+
+#, fuzzy
+#~ msgid "Minimum size must be larger than 1"
+#~ msgstr "nsteps 必须大于 0，使用 nsteps=255"
+
+#, fuzzy
+#~ msgid "Loading input ..."
+#~ msgstr "读取 %s ..."
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d clumps..."
+#~ msgstr "无法打开输入的dig_att文件。"
+
+#, fuzzy
+#~ msgid "Minimum clump size in cells"
+#~ msgstr "插值点的数量"
+
+#, fuzzy
+#~ msgid "%d initial clumps"
+#~ msgstr "拷贝表失败"
+
+#, fuzzy
+#~ msgid "%d-band clumping with threshold %g"
+#~ msgstr "%d 个点超出范围"
+
+#, fuzzy
+#~ msgid "Calculating %s"
+#~ msgstr "通过DEM计算阴影..."
+
+#, fuzzy
+#~ msgid ""
+#~ "\\eading the input map -%s- and -%s- and creating some temporary files..."
+#~ msgstr "创建一些临时文件 ..."
+
+#, fuzzy
+#~ msgid "Converting ... "
+#~ msgstr "绘制 ... "
+
+#, fuzzy
+#~ msgid "Registers raster, vector and raster3d maps in a space time datasets."
+#~ msgstr "列出输入区域内的栅格文件并退出"
+
+#, fuzzy
+#~ msgid "Path to files"
+#~ msgstr "结果矢量文件的名称"
+
+#, fuzzy
+#~ msgid "Width of the lines"
+#~ msgstr "等高线级数的列表"
+
+#, fuzzy
+#~ msgid "Symbol for point"
+#~ msgstr "行数"
+
+#, fuzzy
+#~ msgid "Point size"
+#~ msgstr "输入图层的名称"
+
+#, fuzzy
+#~ msgid "Width of point symbol lines"
+#~ msgstr "地图北向格网坐标"
+
+#, fuzzy
+#~ msgid "Cannot find/open symbol: '%s'"
+#~ msgstr "无法打开选择游标：'%s'"
+
+#, fuzzy
+#~ msgid "Color <%s> cannot for option %s be parsed"
+#~ msgstr "字段 <%s> 未找到"
+
+#, fuzzy
+#~ msgid "Print in shell script style, but in one line (flat)"
+#~ msgstr "以shell脚本的样式输出统计值"
+
+#, fuzzy
+#~ msgid "Unable to set font size"
+#~ msgstr "没有指定数据地图"
+
+#, fuzzy
+#~ msgid "Outputs vector map if network map is given, otherwise raster map"
+#~ msgstr "必须指定两个图层"
+
+#, fuzzy
+#~ msgid "Point classification"
+#~ msgstr "分类结果的文件名称"
+
+#, fuzzy
+#~ msgid "Mean calculation"
+#~ msgstr "通过DEM计算阴影..."
+
+#, fuzzy
+#~ msgid "Vector map profiling tool"
+#~ msgstr "矢量导入完成"
+
+#, fuzzy
+#~ msgid "Input filter"
+#~ msgstr "输入文件"
+
+#, fuzzy
+#~ msgid "Coordinates for profiling line nodes"
+#~ msgstr "一行一个坐标对。"
+
+#, fuzzy
+#~ msgid "Profiling line"
+#~ msgstr "绘制 ... "
+
+#, fuzzy
+#~ msgid "Buffer (tolerance) for points in map units"
+#~ msgstr "容限 (地图单位)：%g"
+
+#, fuzzy
+#~ msgid "Output formating"
+#~ msgstr "输出的格式"
+
+#, fuzzy
+#~ msgid "Number of significant digits"
+#~ msgstr "有意义数字的位数(只用于浮点型)"
+
+#, fuzzy
+#~ msgid "Use features only from specified layer"
+#~ msgstr "以shell脚本样式输出太阳位置"
+
+#, fuzzy
+#~ msgid "Name for profile line and buffer output map"
+#~ msgstr "输出栅格图的名称"
+
+#, fuzzy
+#~ msgid "Profile line and buffer around it will be written"
+#~ msgstr "栅格地图 %i 文件名成： %s 已经存在。它将被覆盖！\n"
+
+#, fuzzy
+#~ msgid "Do not print column names"
+#~ msgstr "y 字段的名称"
+
+#, fuzzy
+#~ msgid "Do not print 3D vector data (z values)"
+#~ msgstr "代表无数据像元值的字符串"
+
+#, fuzzy
+#~ msgid "Profiling line map"
+#~ msgstr "绘制 ... "
+
+#, fuzzy
+#~ msgid "Vector map containing profiling line"
+#~ msgstr "包含线的输入地图"
+
+#, fuzzy
+#~ msgid "Layer 0 not supported"
+#~ msgstr "列的类型不支持"
+
+#, fuzzy
+#~ msgid "<%s> is not a valid vector map name"
+#~ msgstr "%s - 补丁文件太多。只允许 %d"
+
+#, fuzzy
+#~ msgid "At least profile start and end coordinates are required!"
+#~ msgstr "要查询的坐标"
+
+#, fuzzy
+#~ msgid ""
+#~ "No database connection defined for map <%s> layer %d, but WHERE condition "
+#~ "is provided"
+#~ msgstr "图层 <%d> 的数据库连接未定义。请先使用 v.db.connect"
+
+#, fuzzy
+#~ msgid "No features match Your query"
+#~ msgstr "输入的 2D 矢量地图的名称"
+
+#, fuzzy
+#~ msgid "Error while initialising line list"
+#~ msgstr "读取栅格文件 [%s] 时发生错误。"
+
+#, fuzzy
+#~ msgid "Error while reading vector feature from profile line map"
+#~ msgstr "读取栅格文件 [%s] 时发生错误。"
+
+#, fuzzy
+#~ msgid "Unabale to get attribute data for cat %d"
+#~ msgstr "无法选择类别 = %d 的属性"
+
+#, fuzzy
+#~ msgid "Error while retreiving database record for cat %d"
+#~ msgstr "类别 %d 没有相关的记录"
+
+#, fuzzy
+#~ msgid "Unable to create 2D raster <%s>"
+#~ msgstr "无法创建栅格地图 %s"
+
+#, fuzzy
+#~ msgid "Unable to create 3D raster <%s>"
+#~ msgstr "无法创建栅格地图 %s"
+
+#, fuzzy
+#~ msgid "Error writing cell (%d,%d,%d) with value %f, nrows = %d"
+#~ msgstr "尝试读取dbmscap文件失败\n"
+
+#, fuzzy
+#~ msgid "Unable to initialize G-submatrix..."
+#~ msgstr "无法关闭地图"
+
+#, fuzzy
+#~ msgid "Name of input vector points map"
+#~ msgstr "输入的 2D 矢量地图的名称"
+
+#, fuzzy
+#~ msgid "Force 2D interpolation even if input is 3D"
+#~ msgstr "强制输出整型值"
+
+#, fuzzy
+#~ msgid "File to write the report"
+#~ msgstr "无法创建文件 [%s]"
+
+#, fuzzy
+#~ msgid "Name for output 2D/3D raster map"
+#~ msgstr ""
+#~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+#~ "输出栅格图的名称\n"
+#~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+#~ "输出栅格文件的名称"
+
+#, fuzzy
+#~ msgid "Vertical variogram function"
+#~ msgstr "垂直比例因子"
+
+#, fuzzy
+#~ msgid "Attribute column containing input values for interpolation"
+#~ msgstr "用于邻近分析的属性字段的名称 (如果图层数>0)"
+
+#, fuzzy
+#~ msgid "Number of horizontal lags"
+#~ msgstr "行数"
+
+#, fuzzy
+#~ msgid "Number of vertical lags (only for 3D variogram)"
+#~ msgstr "浮点数的小数位数"
+
+#, fuzzy
+#~ msgid "Report is being written to %s..."
+#~ msgstr "%d 个点写入矢量文件"
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of vertical pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "打印的份数"
+
+#, fuzzy
+#~ msgid "Please set up name of output layer..."
+#~ msgstr "输出图层的名称"
+
+#, fuzzy
+#~ msgid "Coordinates of point no. %d are zeros."
+#~ msgstr "地图东向和北向格网坐标的起点"
+
+#, fuzzy
+#~ msgid "Computing %s variogram properties..."
+#~ msgstr "通过DEM计算阴影..."
+
+#, fuzzy
+#~ msgid "Anisotropy ratio must be greater than zero..."
+#~ msgstr "nsteps 必须大于 0，使用 nsteps=255"
+
+#, fuzzy
+#~ msgid "Something went wrong opening tmp file..."
+#~ msgstr "修改空值：打开临时文件时发生错误"
+
+#, fuzzy
+#~ msgid "Error writing file"
+#~ msgstr "尝试读取dbmscap文件失败\n"
+
+#, fuzzy
+#~ msgid "Error closing file..."
+#~ msgstr "关闭 VTK-ASCII 文件时发生错误"
+
+#, fuzzy
+#~ msgid "Unable to plot variogram"
+#~ msgstr "无法打开选择游标：'%s'"
+
+#, fuzzy
+#~ msgid "Memory allocation failed..."
+#~ msgstr "使用的插值方法"
+
+#, fuzzy
+#~ msgid "Interpolating unknown values..."
+#~ msgstr "使用的插值方法"
+
+#, fuzzy
+#~ msgid "Error writing result into output layer..."
+#~ msgstr "输出地图的分辨率"
+
+#, fuzzy
+#~ msgid "Reading values from attribute column <%s>..."
+#~ msgstr "无法创建属性表"
+
+#, fuzzy
+#~ msgid "Reading coordinates..."
+#~ msgstr "读取 %s ..."
+
+#, fuzzy
+#~ msgid "Error reading input coordinates z..."
+#~ msgstr "读取 %s ..."
+
+#, fuzzy
+#~ msgid "%d features skipped, only points are accepted"
+#~ msgstr "导入的整数值"
+
+#, fuzzy
+#~ msgid "Unused points: %d (out of region)"
+#~ msgstr "使用当前的区域"
+
+#, fuzzy
+#~ msgid "Nothing to scan..."
+#~ msgstr "未找到任何记录。\n"
+
+#, fuzzy
+#~ msgid "Old auxiliar table could not be dropped"
+#~ msgstr "未发现矢量地图<%s>"
+
+#, fuzzy
+#~ msgid "Auxiliar table could not be dropped"
+#~ msgstr "未发现矢量地图<%s>"
+
+#, fuzzy
+#~ msgid "<%s> already compressed"
+#~ msgstr "[%s] 将要被压缩。是吗？"

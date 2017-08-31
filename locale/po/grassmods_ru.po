@@ -14478,8 +14478,6 @@ msgid "Adjusted EW spline %d"
 msgid_plural "Adjusted EW splines %d"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
 
 #: ../vector/v.lidar.correction/main.c:281
 #, c-format
@@ -14487,8 +14485,6 @@ msgid "Adjusted NS spline %d"
 msgid_plural "Adjusted NS splines %d"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
 
 #: ../vector/v.lidar.correction/main.c:376
 msgid "Performing mean calculation..."
@@ -42245,3 +42241,474 @@ msgstr "Размер кэша (MiB)"
 
 msgid "Unknown raster map type"
 msgstr " Неизвестный тип растрового слоя"
+
+#, fuzzy
+#~ msgid "Value to multiply the raster values with"
+#~ msgstr "Масштабировать полученные значения растра"
+
+#, fuzzy
+#~ msgid "Value to add to the raster values"
+#~ msgstr "Масштабировать полученные значения растра"
+
+#, fuzzy
+#~ msgid "Unknown raster type <%d>"
+#~ msgstr "Неизвестный тип: %d"
+
+#, fuzzy
+#~ msgid "Invalid range <%s> for option %s"
+#~ msgstr "неверное значение смещения на восток"
+
+#, fuzzy
+#~ msgid ""
+#~ "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
+#~ msgstr ""
+#~ "Создать растровый слой из набор координат используя одномерную статистику."
+
+#, fuzzy
+#~ msgid "%s will not be taken into account during scan"
+#~ msgstr "zrange при сканировании учитываться не будет"
+
+#, fuzzy
+#~ msgid "Preparing the maps..."
+#~ msgstr "Чтение растровых слоев..."
+
+#, fuzzy
+#~ msgid "Computing proportional count map..."
+#~ msgstr "Тип элементов"
+
+#, fuzzy
+#~ msgid "Computing proportional sum map..."
+#~ msgstr "Вычисление квантилей"
+
+#, fuzzy
+#~ msgid "Computing mean map..."
+#~ msgstr "Вычисление квантилей"
+
+#, fuzzy
+#~ msgid "Closing the maps..."
+#~ msgstr "Маскирование растровых слоев..."
+
+#, fuzzy
+#~ msgid "%lu input points had intensity out of range"
+#~ msgstr "%d точек вне порога"
+
+#, fuzzy
+#~ msgid "Region id %d is invalid"
+#~ msgstr "Неверный файл эталонов <%s>"
+
+#, fuzzy
+#~ msgid "Estimated range bandwidth: %g"
+#~ msgstr "Используемое максимальное расстояние между точками: %f"
+
+#, fuzzy
+#~ msgid "Range bandwidth: %g"
+#~ msgstr "Ширина изображения"
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d segments..."
+#~ msgstr "Создание точек..."
+
+#, fuzzy
+#~ msgid "Error in writing IDs"
+#~ msgstr "Ошибка записи данных"
+
+#, fuzzy
+#~ msgid "Error in writing goodness of fit"
+#~ msgstr "Ошибка записи данных"
+
+#, fuzzy
+#~ msgid "Error in writing new band values"
+#~ msgstr "Ошибка записи данных"
+
+#, fuzzy
+#~ msgid "Writing out shifted band values..."
+#~ msgstr "Запись слоя..."
+
+#, fuzzy
+#~ msgid "%d-band clustering with threshold %g"
+#~ msgstr "%d точек вне порога"
+
+#, fuzzy
+#~ msgid "Found %d clumps"
+#~ msgstr "завершено"
+
+#, fuzzy
+#~ msgid "Spatial radius in number of cells"
+#~ msgstr "Число фреймов"
+
+#, fuzzy
+#~ msgid "Option '%s' must be >= 1"
+#~ msgstr "Область <%s> создана"
+
+#, fuzzy
+#~ msgid "Integer overflow: too many cells in current region"
+#~ msgstr "Нет [%ld] не-NULL ячеек в текущем регионе"
+
+#, fuzzy
+#~ msgid "Maximum number of iterations set to %d"
+#~ msgstr " Максимальное число итераций: %d\n"
+
+#, fuzzy
+#~ msgid "Invalid number of iterations, %d will be used"
+#~ msgstr "Неправильное число шагов: %s"
+
+#~ msgid ""
+#~ "column '%s' : type int8 (bigint) is stored as integer (4 bytes) some data "
+#~ "may be damaged"
+#~ msgstr ""
+#~ "столбец '%s' : тип int8 (bigint) был сохранен как integer (4 bytes) часть "
+#~ "данных может быть утрачена"
+
+#~ msgid ""
+#~ "column '%s' : type character varying is stored as varchar(250) some data "
+#~ "may be lost"
+#~ msgstr ""
+#~ "столбец '%s' : тип character varying был сохранен как varchar(250) часть "
+#~ "данных может быть утрачена"
+
+#, fuzzy
+#~ msgid "Can only do up to %d raster maps (%d given)"
+#~ msgstr "%s: можно создать только %d растровых слоев\n"
+
+#, fuzzy
+#~ msgid "Minimum size must be larger than 1"
+#~ msgstr "%s = %s -- должно быть больше нуля"
+
+#, fuzzy
+#~ msgid "Loading input ..."
+#~ msgstr "Чтение ввода..."
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d clumps..."
+#~ msgstr "Поиск тренировочных классов..."
+
+#, fuzzy
+#~ msgid "Minimum clump size in cells"
+#~ msgstr "Минимальный размер каждой ячейки"
+
+#, fuzzy
+#~ msgid "%d initial clumps"
+#~ msgstr "Вычисление квантилей"
+
+#, fuzzy
+#~ msgid "%d-band clumping with threshold %g"
+#~ msgstr "%d точек вне порога"
+
+#, fuzzy
+#~ msgid "Calculating %s"
+#~ msgstr "Расчет слоев..."
+
+#, fuzzy
+#~ msgid ""
+#~ "\\eading the input map -%s- and -%s- and creating some temporary files..."
+#~ msgstr "Создание временных файлов... "
+
+#~ msgid "Converting ... "
+#~ msgstr "Преобразование..."
+
+#, fuzzy
+#~ msgid "Registers raster, vector and raster3d maps in a space time datasets."
+#~ msgstr "Вывести список векторных слоев исходной области и выйти"
+
+#, fuzzy
+#~ msgid "Path to files"
+#~ msgstr "Путь к файлу шрифтов"
+
+#, fuzzy
+#~ msgid "Path to the directory where the input files are located"
+#~ msgstr "Новая GISDBASE (полный путь к каталогу с новой областью)"
+
+#, fuzzy
+#~ msgid "Width of the lines"
+#~ msgstr "Список процентилей"
+
+#, fuzzy
+#~ msgid "Tic values for the Y axis"
+#~ msgstr "Неправильное значение для theta"
+
+#, fuzzy
+#~ msgid "Symbol for point"
+#~ msgstr "Количество строк"
+
+#, fuzzy
+#~ msgid "Point size"
+#~ msgstr "Размер иконки"
+
+#, fuzzy
+#~ msgid "Width of point symbol lines"
+#~ msgstr "Список координат точек"
+
+#, fuzzy
+#~ msgid "Cannot find/open symbol: '%s'"
+#~ msgstr "Невозможно открыть указатель выбора: '%s'"
+
+#, fuzzy
+#~ msgid "Color <%s> cannot for option %s be parsed"
+#~ msgstr "Столбец <%s> не найден в таблице <%s>"
+
+#, fuzzy
+#~ msgid "Number of widths (%d) is higher then the number of files (%d)"
+#~ msgstr ""
+#~ "Число заданных столбцов (%d) не соответствует числу столбцов в источнике "
+#~ "(%d)"
+
+#, fuzzy
+#~ msgid "Number of widths (%d) is lower then the number of files (%d)"
+#~ msgstr ""
+#~ "Число заданных столбцов (%d) не соответствует числу столбцов в источнике "
+#~ "(%d)"
+
+#, fuzzy
+#~ msgid "Print in shell script style, but in one line (flat)"
+#~ msgstr "Вывести статистику в стиле shell"
+
+#~ msgid "Unable to set font size"
+#~ msgstr "Невозможно задать размер шрифта"
+
+#, fuzzy
+#~ msgid "Outputs vector map if network map is given, otherwise raster map"
+#~ msgstr "Имя выходного векторного слоя <%s> неверно"
+
+#~ msgid "Point classification"
+#~ msgstr "Классификация точек"
+
+#~ msgid "Correction and creation of terrain vector"
+#~ msgstr "Изменение и создание вектора рельефа"
+
+#, fuzzy
+#~ msgid "Vector map profiling tool"
+#~ msgstr "Зона проекции векторного слоя"
+
+#, fuzzy
+#~ msgid "Input filter"
+#~ msgstr "Ввод прерван"
+
+#, fuzzy
+#~ msgid "Coordinates for profiling line nodes"
+#~ msgstr "Координаты заданы в единицах слоя"
+
+#, fuzzy
+#~ msgid "Profiling line"
+#~ msgstr "Обработка строк..."
+
+#, fuzzy
+#~ msgid "Buffer (tolerance) for points in map units"
+#~ msgstr "Порог дуг полилиний в единицах слоя"
+
+#, fuzzy
+#~ msgid "Output formating"
+#~ msgstr "Формат вывода"
+
+#, fuzzy
+#~ msgid "Number of significant digits"
+#~ msgstr "Количество значимых разрядов (только для чисел с плавающей точкой)"
+
+#, fuzzy
+#~ msgid "Use features only from specified layer"
+#~ msgstr "Список файлов из заданной (суб)группы (расширенный)"
+
+#, fuzzy
+#~ msgid "Name for profile line and buffer output map"
+#~ msgstr ""
+#~ "Базовое имя для слоев содержащих красный, зеленый и синий для смешивания"
+
+#, fuzzy
+#~ msgid "Profile line and buffer around it will be written"
+#~ msgstr "Файл '%s' уже существует и будет перезаписан."
+
+#, fuzzy
+#~ msgid "Do not print column names"
+#~ msgstr "Слишком много названий столбцов"
+
+#, fuzzy
+#~ msgid "Do not print 3D vector data (z values)"
+#~ msgstr "Строка, обозначающая отсутствующие данные в ячейке"
+
+#, fuzzy
+#~ msgid "Profiling line map"
+#~ msgstr "Обработка строк..."
+
+#, fuzzy
+#~ msgid "Vector map containing profiling line"
+#~ msgstr "Исходный векторный слой с линиями"
+
+#, fuzzy
+#~ msgid "Layer 0 not supported"
+#~ msgstr "Слой 0 не поддерживается"
+
+#, fuzzy
+#~ msgid "Failed to interpreter 'dp' parameter as an integer"
+#~ msgstr "Невозможно интерпретировать параметр 'dp' как целочисленный"
+
+#, fuzzy
+#~ msgid "<%s> is not a valid vector map name"
+#~ msgstr "Правило %s неверно"
+
+#, fuzzy
+#~ msgid "At least profile start and end coordinates are required!"
+#~ msgstr "Недостаточно точек, требуется %d"
+
+#, fuzzy
+#~ msgid ""
+#~ "No database connection defined for map <%s> layer %d, but WHERE condition "
+#~ "is provided"
+#~ msgstr ""
+#~ "Для слоя %d не определено соединение с базой данных. Сначала используйте "
+#~ "v.db.connect."
+
+#, fuzzy
+#~ msgid "No features match Your query"
+#~ msgstr "Имя конечного точечного векторного слоя"
+
+#, fuzzy
+#~ msgid "Error while initialising line list"
+#~ msgstr "Ошибка чтения файла истории"
+
+#, fuzzy
+#~ msgid "Error while reading vector feature from profile line map"
+#~ msgstr "Ошибка чтения файла эталонов."
+
+#, fuzzy
+#~ msgid "Unabale to get attribute data for cat %d"
+#~ msgstr "Невозможно получить атрибутивные данные для cat %d"
+
+#, fuzzy
+#~ msgid "Error while retreiving database record for cat %d"
+#~ msgstr "Ошибка получения записи из базы данных для cat %d"
+
+#, fuzzy
+#~ msgid "Unable to create 2D raster <%s>"
+#~ msgstr "Невозможно создать растровый слой <%s>"
+
+#, fuzzy
+#~ msgid "Unable to create 3D raster <%s>"
+#~ msgstr "Невозможно создать растровый слой <%s>"
+
+#, fuzzy
+#~ msgid "Error writing cell (%d,%d,%d) with value %f, nrows = %d"
+#~ msgstr "Ошибка записи файла cell_misc/%s/gdal"
+
+#, fuzzy
+#~ msgid "Unable to initialize G-submatrix..."
+#~ msgstr "Невозможно закрыть слой"
+
+#, fuzzy
+#~ msgid "Name of input vector points map"
+#~ msgstr "Имя исходного точечного векторного слоя"
+
+#, fuzzy
+#~ msgid "Force 2D interpolation even if input is 3D"
+#~ msgstr "Принуждение вывода целых значений"
+
+#, fuzzy
+#~ msgid "File to write the report"
+#~ msgstr "Ошибка записи в файл"
+
+#, fuzzy
+#~ msgid "Name for output 2D/3D raster map"
+#~ msgstr "Имя выходного растрового слоя"
+
+#, fuzzy
+#~ msgid "Vertical variogram function"
+#~ msgstr "Вертикальный масштаб"
+
+#, fuzzy
+#~ msgid "Attribute column containing input values for interpolation"
+#~ msgstr "Поле атрибутивной таблицы со значениями для интерполяции"
+
+#, fuzzy
+#~ msgid "Number of horizontal lags"
+#~ msgstr "Количество строк"
+
+#, fuzzy
+#~ msgid "Number of vertical lags (only for 3D variogram)"
+#~ msgstr "Количество десятичных разрядов в числе с плавающей точкой"
+
+#, fuzzy
+#~ msgid "Report is being written to %s..."
+#~ msgstr "%d объектов записано в '%s'."
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of vertical pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "Число классов должно быть < 256"
+
+#, fuzzy
+#~ msgid "Please set up name of output layer..."
+#~ msgstr "Имя выходного слоя"
+
+#, fuzzy
+#~ msgid "Coordinates of point no. %d are zeros."
+#~ msgstr "Координаты E и N начальной точки (точек)"
+
+#, fuzzy
+#~ msgid "Computing %s variogram properties..."
+#~ msgstr "Расчет матрицы ковариации..."
+
+#, fuzzy
+#~ msgid "Anisotropy ratio must be greater than zero..."
+#~ msgstr "%s = %s -- должно быть больше нуля"
+
+#, fuzzy
+#~ msgid "Something went wrong opening tmp file..."
+#~ msgstr "modifyNull: ошибка открытия временного файла"
+
+#, fuzzy
+#~ msgid "Error writing file"
+#~ msgstr "Ошибка записи файла PGM"
+
+#, fuzzy
+#~ msgid "Error closing file..."
+#~ msgstr "Ошибка закрытия файла ASCII"
+
+#, fuzzy
+#~ msgid "Unable to plot variogram"
+#~ msgstr "Ошибка выделения памяти"
+
+#, fuzzy
+#~ msgid "Memory allocation failed..."
+#~ msgstr "Метод интерполяции"
+
+#, fuzzy
+#~ msgid "Interpolating unknown values..."
+#~ msgstr "Метод интерполяции"
+
+#, fuzzy
+#~ msgid "Error writing result into output layer..."
+#~ msgstr "Ошибка записи в выходной файл UNITS <%s>"
+
+#, fuzzy
+#~ msgid "Reading values from attribute column <%s>..."
+#~ msgstr "Также копировать атрибутивную таблицу"
+
+#, fuzzy
+#~ msgid "Reading coordinates..."
+#~ msgstr "Чтение ввода..."
+
+#, fuzzy
+#~ msgid "Error reading input coordinates z..."
+#~ msgstr "Чтение ввода..."
+
+#, fuzzy
+#~ msgid "%d features skipped, only points are accepted"
+#~ msgstr "Импортированы целочисленные значения"
+
+#, fuzzy
+#~ msgid "Unused points: %d (out of region)"
+#~ msgstr "Использовать только точки текущей области"
+
+#, fuzzy
+#~ msgid "Nothing to scan..."
+#~ msgstr "Ничего не найдено.\n"
+
+#, fuzzy
+#~ msgid "Old auxiliar table could not be dropped"
+#~ msgstr "Дополнительная таблица не может быть удалена"
+
+#~ msgid "Auxiliar table could not be dropped"
+#~ msgstr "Дополнительная таблица не может быть удалена"
+
+#, fuzzy
+#~ msgid "<%s> already compressed"
+#~ msgstr "[%s] уже сжато"

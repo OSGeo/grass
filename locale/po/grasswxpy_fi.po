@@ -18151,3 +18151,15 @@ msgstr "Haluatko luoda uuden karttajoukon?"
 
 msgid "Repository"
 msgstr "Etäkirjasto"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "Projektio:"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "Nimeä uudelleen valittu karttajoukko"
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "Projektio:"

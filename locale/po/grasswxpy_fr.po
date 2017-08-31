@@ -19760,3 +19760,106 @@ msgstr "Les couches copiées  doivent être reprojetées :"
 #, fuzzy
 msgid "Reprojection is not implemented for 3D rasters"
 msgstr "La reprojection n'est pas implémentée pour les rasters 3D"
+
+#, fuzzy
+#~ msgid ""
+#~ "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to "
+#~ "be installed. {}"
+#~ msgstr ""
+#~ "L'outil temporel nécessite que le paquet \"matplotlib\" (python-"
+#~ "matplotlib) soit installé. {}"
+
+#, fuzzy
+#~ msgid ""
+#~ "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) "
+#~ "package to be installed. {}"
+#~ msgstr ""
+#~ "L'outil temporel nécessite que le paquet \"matplotlib\" (python-"
+#~ "matplotlib) soit installé."
+
+#, fuzzy
+#~ msgid ""
+#~ "Vector temporal dataset (strds)\n"
+#~ "Please press enter if you digit the name instead select with combobox"
+#~ msgstr ""
+#~ "Jeux de données vecteur temporel (strds)\n"
+#~ "Merci d'apuyer sur entrer pour saisir le nom, sinon sélectionner dans la "
+#~ "liste"
+
+#~ msgid "Category {ca} is not on vector map {ma} and it will be used"
+#~ msgstr ""
+#~ "La catégorie {ca} sera utilisée mais n'est pas sur la carte vecteur {ma}"
+
+#, fuzzy
+#~ msgid "GRASS locations in {}"
+#~ msgstr "Secteurs GRASS dans {}"
+
+#, fuzzy
+#~ msgid "Unicode error detected. Check your locale settings. Details: {}"
+#~ msgstr "Erreur d'unicode. Vérifiez vos paramètres de langue. Détails : {}"
+
+#, fuzzy
+#~ msgid ""
+#~ "Failed to run command '{command}'. Details:\n"
+#~ "{error}"
+#~ msgstr ""
+#~ "Echec de la commande '{command}'. Détails :\n"
+#~ "{error}"
+
+#~ msgid ""
+#~ "Note that the wxGUI's vector digitizer is currently disabled (hopefully "
+#~ "this will be fixed soon). Please keep an eye out for updated versions of "
+#~ "GRASS. In the meantime you can use \"v.digit\" from the Develop Vector "
+#~ "menu."
+#~ msgstr ""
+#~ "Notez que le module de digitalisation de wxGUI est actuellement "
+#~ "indisponible (en espérant que cela soit prochainement résolu). Merci de "
+#~ "garder un œil sur les mises à jour de GRASS. En attendant, vous pouvez "
+#~ "utiliser le module \"v.digit\", accessible depuis le menu Vecteur."
+
+#, fuzzy
+#~ msgid "Details: unsupported tag name '{}'."
+#~ msgstr "Détails : nom de tag '{}' non supporté."
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "Impossible de lire les codes EPSG : {}"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "Impossible de lire les codes IAU : {}"
+
+#, fuzzy
+#~ msgid "Wx debug level {}."
+#~ msgstr "Niveau de debug wx {}."
+
+#, fuzzy
+#~ msgid ""
+#~ "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {}\n"
+#~ msgstr ""
+#~ "ATTENTION : niveau de debug wx ignoré (doit être >= 0 et <= 5). {}\n"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "Échec à l'ouverture de '{}'"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to provide citation suggestion, see GRASS GIS website instead. The "
+#~ "error was: {}"
+#~ msgstr ""
+#~ "Impossible de fournir une suggestion de citation, voir sur le site web de "
+#~ "GRASS. L'erreur est : {}"
+
+#, fuzzy
+#~ msgid ""
+#~ "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package "
+#~ "to be installed. {}"
+#~ msgstr ""
+#~ "L'outil Scatterplot nécessite que le paquet \"matplotlib\" (python-"
+#~ "matplotlib) soit installé."
+
+#~ msgid "Registers raster, vector and raster3d maps in a space time datasets."
+#~ msgstr ""
+#~ "Enregistrer des cartes raster, vecteur et raster3D dans un jeu de données "
+#~ "temporel."

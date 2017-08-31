@@ -9441,3 +9441,7 @@ msgstr ""
 #, c-format
 msgid "%s: out of memory"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "Ei voida luoda taulua <%s>"

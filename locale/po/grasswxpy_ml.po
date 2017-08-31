@@ -18363,3 +18363,39 @@ msgstr "ലയറുകൾ ലയെർ മാനെജരിലെക്കു 
 #, fuzzy
 msgid "Add imported layers into layer tree ({mightNotWork})"
 msgstr "ലയറുകൾ ലയെർ മാനെജരിലെക്കു വരുത്തുക"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "അപഗ്രഥനത്തിൻമേലുള്ള വഴികൾ"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "തിരഞ്ഞെടുക്കപെട്ട raster ലയെറുകളെ ഇറക്കുമതി ചെയ്യുക"
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "മാപ്പ്സെറ്റിന്റ്റെ ഉറവിടം തിരഞെടുക്കുക"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "ലെയറിന്റെ പേർ"
+
+#, fuzzy
+#~ msgid "GRASS locations in {}"
+#~ msgstr "പ്രൊജക്റ്റിന്റെ ലൊക്കെഷനും മാപ്പ്സെറ്റും തിരഞ്ഞെടുക്കുക"
+
+#, fuzzy
+#~ msgid "Unicode error detected. Check your locale settings. Details: {}"
+#~ msgstr "ഗ്രാസ്സ് ഡേറ്റബേസ് നോക്കുന്നതിൽ പിശക്. നിങ്ങളുടെ സജ്ജീകരണം പരിശോഡിക്കുക."
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കാൻ പറ്റുനില്ല: %s"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കാൻ പറ്റുനില്ല: %s"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "വർക്സ്പേസ് ഫയൽ തുറക്കാൻ പറ്റുനില്ല <%s>"

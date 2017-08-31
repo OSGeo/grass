@@ -14291,12 +14291,14 @@ msgstr ""
 msgid "Adjusted EW spline %d"
 msgid_plural "Adjusted EW splines %d"
 msgstr[0] ""
+msgstr[1] ""
 
 #: ../vector/v.lidar.correction/main.c:281
 #, c-format
 msgid "Adjusted NS spline %d"
 msgid_plural "Adjusted NS splines %d"
 msgstr[0] ""
+msgstr[1] ""
 
 #: ../vector/v.lidar.correction/main.c:376
 msgid "Performing mean calculation..."
@@ -41871,3 +41873,468 @@ msgstr "ขนาด Cache (MiB)"
 
 msgid "Unknown raster map type"
 msgstr "ไม่ทราบชนิดของ แผนที่เชิงภาพ"
+
+#, fuzzy
+#~ msgid "Value to multiply the raster values with"
+#~ msgstr "สถิติ ที่จะใช้กับค่า แผนที่เชิงภาพ"
+
+#, fuzzy
+#~ msgid "Value to add to the raster values"
+#~ msgstr "สถิติ ที่จะใช้กับค่า แผนที่เชิงภาพ"
+
+#, fuzzy
+#~ msgid "Unknown raster type <%d>"
+#~ msgstr "ไม่ทราบชนิดที่ใช้: %d"
+
+#, fuzzy
+#~ msgid "Invalid range <%s> for option %s"
+#~ msgstr "ค่าพิกัด ตะวันออก ไม่ถูกต้อง"
+
+#, fuzzy
+#~ msgid ""
+#~ "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
+#~ msgstr ""
+#~ "สร้าง แผนที่เชิงภาพ จาก การรวบรวม ของ ค่าพิกัดจำนวนมาก โดยใช้ Univariate "
+#~ "Statistics"
+
+#, fuzzy
+#~ msgid "%s will not be taken into account during scan"
+#~ msgstr "zrange จะไม่ถูกใส่ใน account ระหว่างการอ่าน"
+
+#, fuzzy
+#~ msgid "Preparing the maps..."
+#~ msgstr "กำลังอานแผนที่เชิงภาพ..."
+
+#, fuzzy
+#~ msgid "Computing proportional count map..."
+#~ msgstr "ชื่อ ของชิ้นส่วน"
+
+#, fuzzy
+#~ msgid "Computing proportional sum map..."
+#~ msgstr "เตรียมคำนวน: quantization tolerances"
+
+#, fuzzy
+#~ msgid "Computing mean map..."
+#~ msgstr "เตรียมคำนวน: quantization tolerances"
+
+#, fuzzy
+#~ msgid "Closing the maps..."
+#~ msgstr "กำลัง Mask แผนที่เชิงภาพ..."
+
+#, fuzzy
+#~ msgid "%lu input points had intensity out of range"
+#~ msgstr "%d จุด อยู่นอก threshold"
+
+#, fuzzy
+#~ msgid "Region id %d is invalid"
+#~ msgstr "Signature ไฟล์ [%s] ไม่ถูกต้อง"
+
+#, fuzzy
+#~ msgid "Estimated range bandwidth: %g"
+#~ msgstr "ใช้ ระยะมากสุด ระหว่างจุด: %f"
+
+#, fuzzy
+#~ msgid "Range bandwidth: %g"
+#~ msgstr "ความกว้างของ ภาพ"
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d segments..."
+#~ msgstr "กำลังสร้าง จุด ..."
+
+#, fuzzy
+#~ msgid "Error in writing IDs"
+#~ msgstr "ผิดพลาด ขณะเขียน ข้อมูล"
+
+#, fuzzy
+#~ msgid "Error in writing goodness of fit"
+#~ msgstr "ผิดพลาด ขณะเขียน ข้อมูล"
+
+#, fuzzy
+#~ msgid "Error in writing new band values"
+#~ msgstr "ผิดพลาด ขณะเขียน ข้อมูล"
+
+#, fuzzy
+#~ msgid "Writing out shifted band values..."
+#~ msgstr "กำลังเขียน ใน แผนที่ ... "
+
+#, fuzzy
+#~ msgid "%d-band clustering with threshold %g"
+#~ msgstr "%d จุด อยู่นอก threshold"
+
+#, fuzzy
+#~ msgid "Found %d clumps"
+#~ msgstr "เปอร์เซ็นต์ ที่สำเร็จ"
+
+#, fuzzy
+#~ msgid "Spatial radius in number of cells"
+#~ msgstr "จำนวนฉาก"
+
+#, fuzzy
+#~ msgid "Option '%s' must be >= 1"
+#~ msgstr "Location %s ถูกสร้าง!"
+
+#, fuzzy
+#~ msgid "Integer overflow: too many cells in current region"
+#~ msgstr "ไม่มี [%ld]  non-zero cell ในขอบเขตปัจจุบัน"
+
+#, fuzzy
+#~ msgid "Maximum number of iterations set to %d"
+#~ msgstr "จำนวนรอบการวนซ้ำมากสุด: %d\n"
+
+#, fuzzy
+#~ msgid "Invalid number of iterations, %d will be used"
+#~ msgstr "จำนวนขั้นไม่ถูกต้อง: %s"
+
+#~ msgid ""
+#~ "column '%s' : type int8 (bigint) is stored as integer (4 bytes) some data "
+#~ "may be damaged"
+#~ msgstr ""
+#~ "column '%s' : type int8 (bigint) is stored as integer (4 bytes) "
+#~ "ข้อมูลบางส่วนอาจจะเสียหาย"
+
+#~ msgid ""
+#~ "column '%s' : type character varying is stored as varchar(250) some data "
+#~ "may be lost"
+#~ msgstr ""
+#~ "column '%s' : type character varying จัดเก็บแบบ varchar(250) "
+#~ "ข้อมูลบางส่วนอาจจะสูญหาย"
+
+#, fuzzy
+#~ msgid "Can only do up to %d raster maps (%d given)"
+#~ msgstr "%s: ทำได้โดยขึ้นอยู่กับ %d แผนที่เชิงภาพ, เสียใจ\n"
+
+#, fuzzy
+#~ msgid "Minimum size must be larger than 1"
+#~ msgstr "%s = %s -- ต้องมากกว่า 0"
+
+#, fuzzy
+#~ msgid "Loading input ..."
+#~ msgstr "กำลังอ่านข้อมูลเพื่อนำเข้า ..."
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d clumps..."
+#~ msgstr "กำลังหา training classes ..."
+
+#, fuzzy
+#~ msgid "Minimum clump size in cells"
+#~ msgstr "ขนาดเล็กสุดของแต่ละ cell"
+
+#, fuzzy
+#~ msgid "%d initial clumps"
+#~ msgstr "เตรียมคำนวน: quantization tolerances"
+
+#, fuzzy
+#~ msgid "%d-band clumping with threshold %g"
+#~ msgstr "%d จุด อยู่นอก threshold"
+
+#, fuzzy
+#~ msgid "Calculating %s"
+#~ msgstr "กำลังคำนวนแผนที่ ..."
+
+#, fuzzy
+#~ msgid ""
+#~ "\\eading the input map -%s- and -%s- and creating some temporary files..."
+#~ msgstr "สร้างไฟล์ชั่วคราว"
+
+#~ msgid "Converting ... "
+#~ msgstr "กำลังแปลง ... "
+
+#, fuzzy
+#~ msgid "Registers raster, vector and raster3d maps in a space time datasets."
+#~ msgstr "แสดงรายการแผนที่เชิงเส้น ใน ตำแหน่งที่จะนำเข้า และออก"
+
+#, fuzzy
+#~ msgid "Path to files"
+#~ msgstr "Path ถึงไฟล์ font"
+
+#, fuzzy
+#~ msgid "Path to the directory where the input files are located"
+#~ msgstr "New GISDBASE (path เต็ม ถึง directory ตรงตำแหน่ง new location)"
+
+#, fuzzy
+#~ msgid "Width of the lines"
+#~ msgstr "รายการ ค่าระดับ contour"
+
+#, fuzzy
+#~ msgid "Tic values for the Y axis"
+#~ msgstr "ค่า theta ไม่ถูกต้อง"
+
+#, fuzzy
+#~ msgid "Symbol for point"
+#~ msgstr "จำนวนของ row"
+
+#, fuzzy
+#~ msgid "Point size"
+#~ msgstr "ขนาดของสัญลักษณ์"
+
+#, fuzzy
+#~ msgid "Width of point symbol lines"
+#~ msgstr "รายการของ ค่าพิกัด จุด"
+
+#, fuzzy
+#~ msgid "Cannot find/open symbol: '%s'"
+#~ msgstr "ไม่สามารถเปิด cursor ที่เลือก: '%s'"
+
+#, fuzzy
+#~ msgid "Color <%s> cannot for option %s be parsed"
+#~ msgstr "Column <%s> ไม่พบในตาราง <%s>"
+
+#, fuzzy
+#~ msgid "Number of widths (%d) is higher then the number of files (%d)"
+#~ msgstr "จำนวนของ columns ที่กำหนด (%d) ไม่ตรงกับจำนวน columns (%d) ในตาราง"
+
+#, fuzzy
+#~ msgid "Number of widths (%d) is lower then the number of files (%d)"
+#~ msgstr "จำนวนของ columns ที่กำหนด (%d) ไม่ตรงกับจำนวน columns (%d) ในตาราง"
+
+#, fuzzy
+#~ msgid "Print in shell script style, but in one line (flat)"
+#~ msgstr "แสดงแบบ shell script"
+
+#~ msgid "Unable to set font size"
+#~ msgstr "ไม่สามารถกำหนดขนาด แบบตัวอักษร"
+
+#, fuzzy
+#~ msgid "Outputs vector map if network map is given, otherwise raster map"
+#~ msgstr "ไม่ได้ระบุ ชื่อแผนที่ผลลพธ์"
+
+#~ msgid "Point classification"
+#~ msgstr "การจำแนก จุด"
+
+#~ msgid "Correction and creation of terrain vector"
+#~ msgstr "Correction และ creation ของ terrain vector"
+
+#, fuzzy
+#~ msgid "Vector map profiling tool"
+#~ msgstr "Projection zone ของแผนที่เชิงเส้น"
+
+#, fuzzy
+#~ msgid "Input filter"
+#~ msgstr "นำเข้า ล้มเหลว"
+
+#, fuzzy
+#~ msgid "Coordinates for profiling line nodes"
+#~ msgstr "หน่วยของค่าพิกัด ใช้ตามแผนที่"
+
+#, fuzzy
+#~ msgid "Profiling line"
+#~ msgstr "กำลังทำงาน กับเส้น ... "
+
+#, fuzzy
+#~ msgid "Buffer (tolerance) for points in map units"
+#~ msgstr "Tolerance ในหน่วยแผนที่: %g"
+
+#, fuzzy
+#~ msgid "Output formating"
+#~ msgstr "รูปแบบผลลัพธ์"
+
+#, fuzzy
+#~ msgid "Number of significant digits"
+#~ msgstr "จำนวนจุดทศนิยม (เฉพาะ floating point เท่านั้น)"
+
+#, fuzzy
+#~ msgid "Use features only from specified layer"
+#~ msgstr "แสดงไฟล์จาก กลุ่มหรือกลุ่มย่อย ที่ระบุ (fancy)"
+
+#, fuzzy
+#~ msgid "Name for profile line and buffer output map"
+#~ msgstr "ชื่อฐาน ของ แดง, เขียว, & น้ำเงิน แผนที่ผลลัพธ์ ที่บิดสีแล้ว"
+
+#, fuzzy
+#~ msgid "Profile line and buffer around it will be written"
+#~ msgstr "ไฟล์  '%s' มีอยู่แล้ว และจะถูกเขียนทับ"
+
+#, fuzzy
+#~ msgid "Do not print column names"
+#~ msgstr "ชื่อ  column มากเกินไป"
+
+#, fuzzy
+#~ msgid "Do not print 3D vector data (z values)"
+#~ msgstr "ตัวอักษรที่ใช้แทน ข้อมูล cell ที่ไม่มีค่า"
+
+#, fuzzy
+#~ msgid "Profiling line map"
+#~ msgstr "กำลังทำงาน กับเส้น ... "
+
+#, fuzzy
+#~ msgid "Vector map containing profiling line"
+#~ msgstr "แผนที่เชิงเส้นนำเข้า ที่มีเส้น"
+
+#, fuzzy
+#~ msgid "Layer 0 not supported"
+#~ msgstr "ชั้นข้อมูล 0 ไม่รองรับ"
+
+#, fuzzy
+#~ msgid "Failed to interpreter 'dp' parameter as an integer"
+#~ msgstr "ล้มเหลวที่จะตีความ ตัวแปล  'dp' แบบ integer"
+
+#, fuzzy
+#~ msgid "<%s> is not a valid vector map name"
+#~ msgstr "%s ไม่ใช่ rule ที่ถูกต้อง"
+
+#, fuzzy
+#~ msgid "At least profile start and end coordinates are required!"
+#~ msgstr "ไม่พบรายละเอียด"
+
+#, fuzzy
+#~ msgid ""
+#~ "No database connection defined for map <%s> layer %d, but WHERE condition "
+#~ "is provided"
+#~ msgstr "การเชื่อมต่อฐานข้อมูล ไม่ได้ถูกกำหนดสำหรับชั้นข้อมูล %d. ให้ใช้ v.db.connect ก่อน."
+
+#, fuzzy
+#~ msgid "No features match Your query"
+#~ msgstr "ชื่อของ แผนที่เชิงเส้น จุด ที่จะนำเข้า"
+
+#, fuzzy
+#~ msgid "Error while initialising line list"
+#~ msgstr "ผิดพลาดขณะ อ่านไฟล์ประวัติ"
+
+#, fuzzy
+#~ msgid "Error while reading vector feature from profile line map"
+#~ msgstr "ข้อผิดพลาดขณะอ่าน  signature ไฟล์"
+
+#, fuzzy
+#~ msgid "Unabale to get attribute data for cat %d"
+#~ msgstr "ไม่สามารถเลือกรายละเอียด สำหรับ cat = %d"
+
+#, fuzzy
+#~ msgid "Error while retreiving database record for cat %d"
+#~ msgstr "ข้อผิดพลาดขณะ เอา แผนที่ old MASK cell ออก"
+
+#, fuzzy
+#~ msgid "Unable to create 2D raster <%s>"
+#~ msgstr "ไม่สามารถ สร้าง แผนที่เชิงภาพ <%s>"
+
+#, fuzzy
+#~ msgid "Unable to create 3D raster <%s>"
+#~ msgstr "ไม่สามารถ สร้าง แผนที่เชิงภาพ <%s>"
+
+#, fuzzy
+#~ msgid "Error writing cell (%d,%d,%d) with value %f, nrows = %d"
+#~ msgstr "ข้อผิดพลาด ขณะ เขียน ไฟล์แผนที่ ผลลัพธ์!"
+
+#, fuzzy
+#~ msgid "Unable to initialize G-submatrix..."
+#~ msgstr "ไม่สามารถปิดแผนที่"
+
+#, fuzzy
+#~ msgid "Name of input vector points map"
+#~ msgstr "ชื่อของ แผนที่เชิงเส้น จุด ที่จะนำเข้า"
+
+#, fuzzy
+#~ msgid "Force 2D interpolation even if input is 3D"
+#~ msgstr "บังคับออกผลลัพธ์ แบบ  integer"
+
+#, fuzzy
+#~ msgid "File to write the report"
+#~ msgstr "ไม่สามารถเขียนไปที่ไฟล์"
+
+#, fuzzy
+#~ msgid "Name for output 2D/3D raster map"
+#~ msgstr "ชื่อของแผนที่เชิงภาพผลลัพธ์"
+
+#, fuzzy
+#~ msgid "Vertical variogram function"
+#~ msgstr "Vertical exaggeration"
+
+#, fuzzy
+#~ msgid "Attribute column containing input values for interpolation"
+#~ msgstr "Column ตารางรายละเอียด  ด้วยค่าที่จะใช้  interpolate"
+
+#, fuzzy
+#~ msgid "Number of horizontal lags"
+#~ msgstr "จำนวนของ row"
+
+#, fuzzy
+#~ msgid "Number of vertical lags (only for 3D variogram)"
+#~ msgstr "จำนวน ทศนิยม สำหรับ  floats"
+
+#, fuzzy
+#~ msgid "Report is being written to %s..."
+#~ msgstr "%ld bytes ไดเขียนไปที่ '%s'"
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of vertical pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "จำนวน classes จะต้อง < 256!"
+
+#, fuzzy
+#~ msgid "Please set up name of output layer..."
+#~ msgstr "ชื่อของชั้นข้อมูลที่จะส่งออก"
+
+#, fuzzy
+#~ msgid "Coordinates of point no. %d are zeros."
+#~ msgstr "ค่าพิกัด E และ N ของจุดเริ่มต้น"
+
+#, fuzzy
+#~ msgid "Computing %s variogram properties..."
+#~ msgstr "กำลังคำนวน covariance matrix:"
+
+#, fuzzy
+#~ msgid "Anisotropy ratio must be greater than zero..."
+#~ msgstr "%s = %s -- ต้องมากกว่า 0"
+
+#, fuzzy
+#~ msgid "Something went wrong opening tmp file..."
+#~ msgstr "modifyNull: ผิดพลาดขณะเปิด ไฟล์ชั่วคราว"
+
+#, fuzzy
+#~ msgid "Error writing file"
+#~ msgstr "ข้อผิดพลาดขณะอ่านไฟล์ PGM"
+
+#, fuzzy
+#~ msgid "Error closing file..."
+#~ msgstr "ผิดพลาดขณะปิด  ascii  ไฟล์ "
+
+#, fuzzy
+#~ msgid "Unable to plot variogram"
+#~ msgstr "ไม่สามารถ กำหนดหน่วยความจำได้"
+
+#, fuzzy
+#~ msgid "Memory allocation failed..."
+#~ msgstr "วิธี Interpolation"
+
+#, fuzzy
+#~ msgid "Interpolating unknown values..."
+#~ msgstr "วิธี Interpolation"
+
+#, fuzzy
+#~ msgid "Error writing result into output layer..."
+#~ msgstr "ข้อผิดพลาดขณะเขียน ไฟล์ผลลัพธ์ UNITS: %s"
+
+#, fuzzy
+#~ msgid "Reading values from attribute column <%s>..."
+#~ msgstr "คัดลอก ตารางรายละเอียดด้วย"
+
+#, fuzzy
+#~ msgid "Reading coordinates..."
+#~ msgstr "กำลังอ่านข้อมูลเพื่อนำเข้า ..."
+
+#, fuzzy
+#~ msgid "Error reading input coordinates z..."
+#~ msgstr "กำลังอ่านข้อมูลเพื่อนำเข้า ..."
+
+#, fuzzy
+#~ msgid "%d features skipped, only points are accepted"
+#~ msgstr "ค่า Integer ถูกนำเข้า"
+
+#, fuzzy
+#~ msgid "Unused points: %d (out of region)"
+#~ msgstr "ใช้เฉพาะ จุด ที่อยู่ในขอบเขต ปัจจุบัน"
+
+#, fuzzy
+#~ msgid "Nothing to scan..."
+#~ msgstr "ไม่พบอะไรเลย\n"
+
+#, fuzzy
+#~ msgid "Old auxiliar table could not be dropped"
+#~ msgstr "ตาราง Auxiliar ไม่สามารถ dropped"
+
+#~ msgid "Auxiliar table could not be dropped"
+#~ msgstr "ตาราง Auxiliar ไม่สามารถ dropped"
+
+#, fuzzy
+#~ msgid "<%s> already compressed"
+#~ msgstr "[%s] บีบอัดแล้ว"

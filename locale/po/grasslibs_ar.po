@@ -9818,3 +9818,81 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%s: out of memory"
 msgstr "لم يمكن توفير ذاكرة"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy
+#~ msgid "Using <%s@%s>"
+#~ msgstr "[%s] لم يتم ايجاد"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr " %s لم يمكن فتح"
+
+#, fuzzy
+#~ msgid "Unable to restore feature/offset %lu in vector map <%s>"
+#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy
+#~ msgid "Out of memmory"
+#~ msgstr "لم يمكن توفير ذاكرة"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to check table. There is no temporal database connection defined "
+#~ "for mapset <%(mapset)s>"
+#~ msgstr "datum لم يمكن فتح ملف جدول : %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch one. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch all. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy
+#~ msgid "Unable to find a temporary null file <%s>"
+#~ msgstr "datum لم يمكن فتح ملف جدول : %s"
+
+#, fuzzy
+#~ msgid "Unable to open null file <%s>"
+#~ msgstr "datum لم يمكن فتح ملف جدول : %s"
+
+#, fuzzy
+#~ msgid "Invalid offset (%d)"
+#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy
+#~ msgid "Unable to open file '%s'"
+#~ msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy
+#~ msgid "Hit RETURN to continue"
+#~ msgstr "RETURN أضغط   لألغاء الأمر\n"
+
+#, fuzzy
+#~ msgid "Vector map <%s> is not opened on topology level"
+#~ msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy
+#~ msgid "Removing empty 3D raster maps"
+#~ msgstr "إسم الراستر المدخلة"
+
+#, fuzzy
+#~ msgid "Mode type: {0} not supported."
+#~ msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy
+#~ msgid "Invalid type {0}"
+#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy
+#~ msgid "Cannot fetch row"
+#~ msgstr "لم يمكن محو الخط"

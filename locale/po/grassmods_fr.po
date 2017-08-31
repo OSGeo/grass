@@ -21362,7 +21362,7 @@ msgstr "Erreur à la lecture des données binaires"
 #: ../raster3d/r3.in.bin/main.c:154
 #, c-format
 msgid "Loading %s data with %i  bytes ...  (%dx%dx%d)"
-msgstr "Chargement des données %s avec %i octets ... (%dx%dx%dx)"
+msgstr "Chargement des données %d avec %i octets ... (%dx%dx%dx)"
 
 #: ../raster3d/r3.in.bin/main.c:202 ../raster3d/r3.neighbors/main.c:311
 msgid "Error flushing tiles"
@@ -42754,3 +42754,495 @@ msgstr "Taille de l'étiquette (pixels)"
 #, fuzzy
 msgid "Unknown raster map type"
 msgstr "Écrire uniquement le type de couche"
+
+#, fuzzy
+#~ msgid "Value to multiply the raster values with"
+#~ msgstr "Statistique de couches raster."
+
+#, fuzzy
+#~ msgid "Value to add to the raster values"
+#~ msgstr "Statistique de couches raster."
+
+#, fuzzy
+#~ msgid "Unknown raster type <%d>"
+#~ msgstr "Type inconnu: %c"
+
+# c-format
+#, fuzzy
+#~ msgid "Invalid range <%s> for option %s"
+#~ msgstr "Etiquette date&heure invalide"
+
+#, fuzzy
+#~ msgid ""
+#~ "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
+#~ msgstr ""
+#~ "Créer des couches raster à partir de fichiers de données polygones/lignes "
+#~ "dans le répertoire courant."
+
+#, fuzzy
+#~ msgid "Preparing the maps..."
+#~ msgstr "Lecteur du fichier raster..."
+
+#, fuzzy
+#~ msgid "Computing proportional count map..."
+#~ msgstr "Nom d'un élément"
+
+#, fuzzy
+#~ msgid "Computing proportional sum map..."
+#~ msgstr "Recherche des classes d'apprentissage..."
+
+#, fuzzy
+#~ msgid "Computing mean map..."
+#~ msgstr "Recherche des classes d'apprentissage..."
+
+#, fuzzy
+#~ msgid "Closing the maps..."
+#~ msgstr "Masquer les couches rasters..."
+
+# c-format
+#, fuzzy
+#~ msgid "%lu input points had intensity out of range"
+#~ msgstr "%d points en dehors du seuillage"
+
+#, fuzzy
+#~ msgid "Region id %d is invalid"
+#~ msgstr "Fichier signature [%s] invalide"
+
+# c-format
+#, fuzzy
+#~ msgid "Estimated range bandwidth: %g"
+#~ msgstr "Distance maximum entre les points en unités carte :%f"
+
+#, fuzzy
+#~ msgid "Range bandwidth: %g"
+#~ msgstr "Epaisseur de ligne"
+
+# c-format
+#, fuzzy
+#~ msgid "Renumbering remaining %d segments..."
+#~ msgstr "Écriture %s..."
+
+#, fuzzy
+#~ msgid "Error in writing IDs"
+#~ msgstr "Erreur de lecture des cellules de données"
+
+#, fuzzy
+#~ msgid "Error in writing goodness of fit"
+#~ msgstr "Erreur de lecture des cellules de données"
+
+#, fuzzy
+#~ msgid "Error in writing new band values"
+#~ msgstr "Erreur de lecture des cellules de données"
+
+# c-format
+#, fuzzy
+#~ msgid "Writing out shifted band values..."
+#~ msgstr "Écriture %s..."
+
+# c-format
+#, fuzzy
+#~ msgid "%d-band clustering with threshold %g"
+#~ msgstr "%d points en dehors du seuillage"
+
+#, fuzzy
+#~ msgid "Found %d clumps"
+#~ msgstr "FFT terminée..."
+
+#, fuzzy
+#~ msgid "Spatial radius in number of cells"
+#~ msgstr "Nombre de cadres de l'animation"
+
+# c-format
+#, fuzzy
+#~ msgid "Option '%s' must be >= 1"
+#~ msgstr "Secteur %s créé!"
+
+#, fuzzy
+#~ msgid "Integer overflow: too many cells in current region"
+#~ msgstr "être utilisée pour chaque cellule de la région courante"
+
+# c-format
+#, fuzzy
+#~ msgid "Maximum number of iterations set to %d"
+#~ msgstr "  Nombre maximum d'itérations: %d\n"
+
+#, fuzzy
+#~ msgid "Invalid number of iterations, %d will be used"
+#~ msgstr "Nombre invalide d'étapes: %s"
+
+#~ msgid ""
+#~ "column '%s' : type int8 (bigint) is stored as integer (4 bytes) some data "
+#~ "may be damaged"
+#~ msgstr ""
+#~ "colonne '%s' : type int8 (entier large) enregistré comme entier (4 "
+#~ "octets) des données peuvent avoir été endommagées"
+
+#~ msgid ""
+#~ "column '%s' : type character varying is stored as varchar(250) some data "
+#~ "may be lost"
+#~ msgstr ""
+#~ "colonne '%s' : type character varying enregistré comme varchar(250) des "
+#~ "données peuvent être tronquées"
+
+#, fuzzy
+#~ msgid "Can only do up to %d raster maps (%d given)"
+#~ msgstr "Nom du fichier grille RASTER3D en sortie"
+
+#, fuzzy
+#~ msgid "Minimum size must be larger than 1"
+#~ msgstr "%s = %s -- doit être supérieur à zéro"
+
+# c-format
+#, fuzzy
+#~ msgid "Loading input ..."
+#~ msgstr "Lecture du fichier %s..."
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d clumps..."
+#~ msgstr "Recherche des classes d'apprentissage..."
+
+#, fuzzy
+#~ msgid "Minimum clump size in cells"
+#~ msgstr "Altitude minimale de l'iso-surface"
+
+#, fuzzy
+#~ msgid "%d initial clumps"
+#~ msgstr "Écriture du nouveau fichier...\n"
+
+# c-format
+#, fuzzy
+#~ msgid "%d-band clumping with threshold %g"
+#~ msgstr "%d points en dehors du seuillage"
+
+#, fuzzy
+#~ msgid "Calculating %s"
+#~ msgstr "Calcul des moyennes de classes..."
+
+#, fuzzy
+#~ msgid ""
+#~ "\\eading the input map -%s- and -%s- and creating some temporary files..."
+#~ msgstr "Création de fichiers temporaires..."
+
+#, fuzzy
+#~ msgid "Converting ... "
+#~ msgstr "Traçage ... "
+
+#, fuzzy
+#~ msgid "Registers raster, vector and raster3d maps in a space time datasets."
+#~ msgstr "Lister les couches raster de l'emplacement source et quitter"
+
+#, fuzzy
+#~ msgid "Path to files"
+#~ msgstr "Chemin du fichier VTK en sortie"
+
+#, fuzzy
+#~ msgid "Width of the lines"
+#~ msgstr "Liste des courbes de niveaux"
+
+#, fuzzy
+#~ msgid "Tic values for the Y axis"
+#~ msgstr "Valeur invalide de theta"
+
+#, fuzzy
+#~ msgid "Symbol for point"
+#~ msgstr "Nombre de lignes"
+
+#, fuzzy
+#~ msgid "Point size"
+#~ msgstr "Taille d'icone"
+
+#, fuzzy
+#~ msgid "Width of point symbol lines"
+#~ msgstr "Coordonnées du point germe"
+
+# c-format
+#, fuzzy
+#~ msgid "Cannot find/open symbol: '%s'"
+#~ msgstr "Impossible d'ouvrir le curseur sélectionné : '%s'"
+
+# c-format
+#, fuzzy
+#~ msgid "Color <%s> cannot for option %s be parsed"
+#~ msgstr "Colonne <%s> non trouvée"
+
+#, fuzzy
+#~ msgid "Number of widths (%d) is higher then the number of files (%d)"
+#~ msgstr ""
+#~ "Le nombre de colonne défini (%d) ne correspond pas au nombre de colonnes "
+#~ "(%d)de la source."
+
+#, fuzzy
+#~ msgid "Number of widths (%d) is lower then the number of files (%d)"
+#~ msgstr ""
+#~ "Le nombre de colonne défini (%d) ne correspond pas au nombre de colonnes "
+#~ "(%d)de la source."
+
+#, fuzzy
+#~ msgid "Print in shell script style, but in one line (flat)"
+#~ msgstr "Produit les statistiques à la façon d'un script shell"
+
+#, fuzzy
+#~ msgid "Unable to set font size"
+#~ msgstr "Impossible de paramétrer la taille"
+
+#, fuzzy
+#~ msgid "Outputs vector map if network map is given, otherwise raster map"
+#~ msgstr "2 couches doivent être spécifiées"
+
+#, fuzzy
+#~ msgid "Point classification"
+#~ msgstr "Nom de fichier de signatures à utiliser pour la classification"
+
+#, fuzzy
+#~ msgid "Mean calculation"
+#~ msgstr "Allocation métrique"
+
+#, fuzzy
+#~ msgid "Vector map profiling tool"
+#~ msgstr "Type de couche vecteur"
+
+#, fuzzy
+#~ msgid "Input filter"
+#~ msgstr "Fichier source"
+
+#, fuzzy
+#~ msgid "Coordinates for profiling line nodes"
+#~ msgstr "Les coordonnées sont données en unités de la carte"
+
+#, fuzzy
+#~ msgid "Profiling line"
+#~ msgstr "Traitement des lignes..."
+
+#, fuzzy
+#~ msgid "Buffer (tolerance) for points in map units"
+#~ msgstr "La tolérance en unités carte : %g"
+
+#, fuzzy
+#~ msgid "Output formating"
+#~ msgstr "Format de sortie"
+
+#, fuzzy
+#~ msgid "Number of significant digits"
+#~ msgstr "Nombre de chiffres significatifs (virgule flottante uniquement)"
+
+#, fuzzy
+#~ msgid "Use features only from specified layer"
+#~ msgstr "Liste les fichiers du (sous)-groupe spécifié"
+
+#, fuzzy
+#~ msgid "Name for profile line and buffer output map"
+#~ msgstr ""
+#~ "Nom de base pour les couches de sortie rouge, vert, bleu contenant le "
+#~ "mélange"
+
+#, fuzzy
+#~ msgid "Profile line and buffer around it will be written"
+#~ msgstr ""
+#~ "Couche raster %i le nom de fichier %s existe déjà. Ce fichier va être "
+#~ "écrasé!\n"
+
+#, fuzzy
+#~ msgid "Do not print column names"
+#~ msgstr "Nom de la colonne y"
+
+#, fuzzy
+#~ msgid "Do not print 3D vector data (z values)"
+#~ msgstr "Chaîne de caractère pour les cellules sans valeur"
+
+#, fuzzy
+#~ msgid "Profiling line map"
+#~ msgstr "Traitement des lignes..."
+
+#, fuzzy
+#~ msgid "Vector map containing profiling line"
+#~ msgstr "Couche en entrée contenant les lignes"
+
+#, fuzzy
+#~ msgid "Layer 0 not supported"
+#~ msgstr "Couche 0 non gérée"
+
+#, fuzzy
+#~ msgid "Failed to interpreter 'dp' parameter as an integer"
+#~ msgstr "Echec pour interpréter dp comme valeur entière (integer)"
+
+#, fuzzy
+#~ msgid "<%s> is not a valid vector map name"
+#~ msgstr "<%s> n'est pas un nom valide pour une couche GRASS"
+
+#, fuzzy
+#~ msgid "At least profile start and end coordinates are required!"
+#~ msgstr "Coordonnées pour la requête"
+
+# c-format
+#, fuzzy
+#~ msgid ""
+#~ "No database connection defined for map <%s> layer %d, but WHERE condition "
+#~ "is provided"
+#~ msgstr ""
+#~ "La connexion à la base de données n'a pas été définie pour la couche <"
+#~ "%d>. Utilisez d'abord v.db.connect."
+
+#, fuzzy
+#~ msgid "No features match Your query"
+#~ msgstr "Nom de la couche vecteur 2D source"
+
+#, fuzzy
+#~ msgid "Error while reading vector feature from profile line map"
+#~ msgstr "Erreur à la lecture du fichier de signatures."
+
+# c-format
+#, fuzzy
+#~ msgid "Unabale to get attribute data for cat %d"
+#~ msgstr "Impossible de sélectionner les attributs pour cat = %d"
+
+# c-format
+#, fuzzy
+#~ msgid "Error while retreiving database record for cat %d"
+#~ msgstr "Aucun enregistrement pour la catégorie (cat = %d)"
+
+# c-format
+#, fuzzy
+#~ msgid "Unable to create 2D raster <%s>"
+#~ msgstr "Impossible de créer la couche raster <%s>"
+
+# c-format
+#, fuzzy
+#~ msgid "Unable to create 3D raster <%s>"
+#~ msgstr "Impossible de créer la couche raster <%s>"
+
+#, fuzzy
+#~ msgid "Unable to initialize G-submatrix..."
+#~ msgstr "Impossible de fermer la couche : couche d'entrée introuvable"
+
+#, fuzzy
+#~ msgid "Name of input vector points map"
+#~ msgstr "Nom de la couche vecteur 2D source"
+
+#, fuzzy
+#~ msgid "Force 2D interpolation even if input is 3D"
+#~ msgstr "Forcer l'écriture de valeurs entières"
+
+#, fuzzy
+#~ msgid "File to write the report"
+#~ msgstr "Impossible d'écrire le fichier temporaire"
+
+#, fuzzy
+#~ msgid "Name for output 2D/3D raster map"
+#~ msgstr ""
+#~ "#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
+#~ "Nom de la couche raster cible\n"
+#~ "#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
+#~ "Nom de la couche raster de sortie"
+
+#, fuzzy
+#~ msgid "Vertical variogram function"
+#~ msgstr "Facteur d'échelle vertical"
+
+#, fuzzy
+#~ msgid "Attribute column containing input values for interpolation"
+#~ msgstr ""
+#~ "Colonne de la table attributaire avec les valeurs à interpoler (si la "
+#~ "couche>0)"
+
+#, fuzzy
+#~ msgid "Number of horizontal lags"
+#~ msgstr "Nombre de lignes"
+
+#, fuzzy
+#~ msgid "Number of vertical lags (only for 3D variogram)"
+#~ msgstr "Nombre de chiffres après la virgule"
+
+# c-format
+#, fuzzy
+#~ msgid "Report is being written to %s..."
+#~ msgstr "%d points  écrits dans la couche vecteur"
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of vertical pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "Le nombre de classes doit être < 256!"
+
+#, fuzzy
+#~ msgid "Please set up name of output layer..."
+#~ msgstr "Nom de la couche cible"
+
+#, fuzzy
+#~ msgid "Coordinates of point no. %d are zeros."
+#~ msgstr "Les coordonnées XY du/des foyer(s) initial(aux)"
+
+#, fuzzy
+#~ msgid "Computing %s variogram properties..."
+#~ msgstr "Calcul de la matrice de covariance de classe"
+
+#, fuzzy
+#~ msgid "Anisotropy ratio must be greater than zero..."
+#~ msgstr "%s = %s -- doit être supérieur à zéro"
+
+#, fuzzy
+#~ msgid "Something went wrong opening tmp file..."
+#~ msgstr "modifyNull : erreur d'ouverture du fichier temporaire"
+
+#, fuzzy
+#~ msgid "Error writing file"
+#~ msgstr "Erreur lors de la lecture du fichier dbmscap\n"
+
+#, fuzzy
+#~ msgid "Error closing file..."
+#~ msgstr "Erreur de fermeture du fichier VTK-ASCII"
+
+#, fuzzy
+#~ msgid "Unable to plot variogram"
+#~ msgstr "Impossible d'allouer de la mémoire"
+
+#, fuzzy
+#~ msgid "Memory allocation failed..."
+#~ msgstr "Méthode d'interpolation à utiliser"
+
+#, fuzzy
+#~ msgid "Interpolating unknown values..."
+#~ msgstr "Méthode d'interpolation à utiliser"
+
+#, fuzzy
+#~ msgid "Error writing result into output layer..."
+#~ msgstr "Couche résultat en sortie"
+
+#, fuzzy
+#~ msgid "Reading values from attribute column <%s>..."
+#~ msgstr "Ne pas créer de table attributaire"
+
+# c-format
+#, fuzzy
+#~ msgid "Reading coordinates..."
+#~ msgstr "Lecture du fichier %s..."
+
+# c-format
+#, fuzzy
+#~ msgid "Error reading input coordinates z..."
+#~ msgstr "Lecture du fichier %s..."
+
+#, fuzzy
+#~ msgid "%d features skipped, only points are accepted"
+#~ msgstr "données entières importées"
+
+#, fuzzy
+#~ msgid "Unused points: %d (out of region)"
+#~ msgstr "Utiliser la région courante"
+
+#, fuzzy
+#~ msgid "Nothing to scan..."
+#~ msgstr "Rien n'a été trouvé.\n"
+
+# c-format
+#, fuzzy
+#~ msgid "Old auxiliar table could not be dropped"
+#~ msgstr "couche vecteur <%s> introuvable"
+
+# c-format
+#, fuzzy
+#~ msgid "Auxiliar table could not be dropped"
+#~ msgstr "couche vecteur <%s> introuvable"
+
+#, fuzzy
+#~ msgid "<%s> already compressed"
+#~ msgstr "Surface presque terminée."

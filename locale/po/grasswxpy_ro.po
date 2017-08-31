@@ -19061,3 +19061,51 @@ msgstr ""
 
 msgid "Digitize"
 msgstr "Digitizează"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "Proiecție"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "selectează raster"
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "Codul proiecției:"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Strat pentru eliminare"
+
+#, fuzzy
+#~ msgid "GRASS locations in {}"
+#~ msgstr "Selectează locație și mapset"
+
+#, fuzzy
+#~ msgid "Unicode error detected. Check your locale settings. Details: {}"
+#~ msgstr ""
+#~ "Nu se poate stabili baza de date GRASS. Verificați setările de localizare."
+
+#~ msgid ""
+#~ "Note that the wxGUI's vector digitizer is currently disabled (hopefully "
+#~ "this will be fixed soon). Please keep an eye out for updated versions of "
+#~ "GRASS. In the meantime you can use \"v.digit\" from the Develop Vector "
+#~ "menu."
+#~ msgstr ""
+#~ "Notă asupra faptului că wxGUI's pentru vectorizare nu este disponibilă "
+#~ "(sperăm să rezolvăm acest lucru cât mai curând). Vă rugăm să fiți atenți "
+#~ "la actualizarea versiunilor de GRASS. Între timp puteți utiliza \"v.digit"
+#~ "\" din meniul Dezvoltă vector."
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "Nu s-a putut citi codurile EPGS: %s"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "Nu s-a putut citi codurile EPGS: %s"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "eșec în deschiderea '%s'"

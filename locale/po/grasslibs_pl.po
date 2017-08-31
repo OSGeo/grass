@@ -3339,13 +3339,13 @@ msgstr ""
 #: ../lib/htmldriver/graph_set.c:98
 #, c-format
 msgid "html: image size %dx%d"
-msgstr ""
+msgstr "html: rozmiar obrazu %dx%d"
 
 #: ../lib/htmldriver/graph_set.c:111 ../lib/htmldriver/graph_set.c:115
 #: ../lib/htmldriver/graph_set.c:119
 #, c-format
 msgid "html: type '%s'"
-msgstr ""
+msgstr "html: rodzaj '%s'"
 
 #: ../lib/temporal/lib/connect.c:110
 #, c-format
@@ -5536,68 +5536,68 @@ msgstr ""
 #: ../lib/manage/do_copy.c:61
 #, c-format
 msgid "%s is missing"
-msgstr ""
+msgstr "%s brakuje"
 
 #: ../lib/manage/do_remove.c:92 ../lib/manage/do_remove.c:112
 #, c-format
 msgid "%s removed"
-msgstr ""
+msgstr "%s usunięte"
 
 #: ../lib/manage/do_remove.c:105
 #, c-format
 msgid "Unable to remove %s"
-msgstr ""
+msgstr "Nie można usunąć %s"
 
 #: ../lib/manage/do_remove.c:121
 #, c-format
 msgid "<%s> nothing removed"
-msgstr ""
+msgstr "<%s> niczego nie usunięto"
 
 #: ../lib/manage/option.c:47
 #, c-format
 msgid "%s to be %s"
-msgstr ""
+msgstr "%s na %s"
 
 #: ../lib/manage/option.c:51
 msgid "Raster"
-msgstr ""
+msgstr "Raster"
 
 #: ../lib/manage/option.c:53
 msgid "Vector"
-msgstr ""
+msgstr "Wektor"
 
 #: ../lib/manage/option.c:55
 msgid "Region"
-msgstr ""
+msgstr "Region"
 
 #: ../lib/manage/option.c:57
 msgid "Group"
-msgstr ""
+msgstr "Grupa"
 
 #: ../lib/manage/do_rename.c:42
 #, c-format
 msgid "Rename %s <%s> to <%s>"
-msgstr ""
+msgstr "Zmień nazwę %s <%s> na <%s>"
 
 #: ../lib/manage/do_rename.c:62
 #, c-format
 msgid "Unable to rename vector map <%s> to <%s>"
-msgstr ""
+msgstr "Nie można zmienić nazwy mapy wektorowej <%s> na <%s>"
 
 #: ../lib/manage/do_rename.c:83 ../lib/manage/do_rename.c:103
 #, c-format
 msgid "Unable to rename %s"
-msgstr ""
+msgstr "Nie można zmienić nazwy %s"
 
 #: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
 #, c-format
 msgid "%s renamed"
-msgstr ""
+msgstr "%s zmieniono nazwę"
 
 #: ../lib/manage/do_rename.c:119
 #, c-format
 msgid "<%s> nothing renamed"
-msgstr ""
+msgstr "<%s>  nie zmieniono nazwy"
 
 #: ../lib/manage/do_copy.c:43
 #, c-format
@@ -5607,12 +5607,12 @@ msgstr "Kopiuj %s <%s> do bieżącego mapsetu jako <%s>"
 #: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
 #, c-format
 msgid "Unable to copy <%s> to current mapset as <%s>"
-msgstr ""
+msgstr "Nie można skopiować <%s> do bieżącego mapsetu jako <%s>"
 
 #: ../lib/manage/do_copy.c:72
 #, c-format
 msgid "%s copied"
-msgstr ""
+msgstr "%s skopiowane"
 
 #: ../lib/manage/read_list.c:73
 #, c-format
@@ -6437,7 +6437,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:221
 msgid "Must refer to an integer column"
-msgstr ""
+msgstr "Musi odnosić się do kolumny z liczbami całkowitymi"
 
 #: ../lib/gis/parser_standard_options.c:233
 msgid "Name of input imagery group"
@@ -6461,15 +6461,15 @@ msgstr "Nazwa wyjściowej mapy rastrowej"
 
 #: ../lib/gis/parser_standard_options.c:277
 msgid "Name for output raster map(s)"
-msgstr ""
+msgstr "Nazwa wyjściowej map(y) rastrowej"
 
 #: ../lib/gis/parser_standard_options.c:285
 msgid "Name of raster map"
-msgstr ""
+msgstr "Nazwa mapy rastrowej"
 
 #: ../lib/gis/parser_standard_options.c:294
 msgid "Name of raster map(s)"
-msgstr ""
+msgstr "Nazwa map(y) rastrowej"
 
 #: ../lib/gis/parser_standard_options.c:302
 msgid "Name of base raster map"
@@ -6481,15 +6481,15 @@ msgstr "Nazwa rastrowej mapy pokrycia"
 
 #: ../lib/gis/parser_standard_options.c:318
 msgid "Name of input elevation raster map"
-msgstr ""
+msgstr "Nazwa wejściowej mapy rastrowej wysokości"
 
 #: ../lib/gis/parser_standard_options.c:327
 msgid "Name of input elevation raster map(s)"
-msgstr ""
+msgstr "Nazwy wejściowych map(y) rastrowych wysokości"
 
 #: ../lib/gis/parser_standard_options.c:334
 msgid "Type of raster map to be created"
-msgstr ""
+msgstr "Rodzaj mapy rastrowej do utworzenia"
 
 #: ../lib/gis/parser_standard_options.c:335
 msgid "Storage type for resultant raster map"
@@ -6497,15 +6497,15 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:339
 msgid "Integer"
-msgstr ""
+msgstr "Liczba całkowita"
 
 #: ../lib/gis/parser_standard_options.c:340
 msgid "Single precision floating point"
-msgstr ""
+msgstr "Zmiennoprzecinkowa pojedynczej precyzji"
 
 #: ../lib/gis/parser_standard_options.c:341
 msgid "Double precision floating point"
-msgstr ""
+msgstr "Zmiennoprzecinkowa podwójnej precyzji"
 
 #: ../lib/gis/parser_standard_options.c:347
 msgid "Sampling interpolation method"
@@ -6513,15 +6513,15 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:351
 msgid "Nearest-neighbor interpolation"
-msgstr ""
+msgstr "Interpolacja najbliższego sąsiada"
 
 #: ../lib/gis/parser_standard_options.c:352
 msgid "Bilinear interpolation"
-msgstr ""
+msgstr "Interpolacja dwuliniowa"
 
 #: ../lib/gis/parser_standard_options.c:353
 msgid "Bicubic interpolation"
-msgstr ""
+msgstr "Interpolacja dwusześcienna"
 
 #: ../lib/gis/parser_standard_options.c:362
 msgid "Name of input basename raster map(s)"
@@ -6728,7 +6728,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:734
 msgid "Name of saved region"
-msgstr ""
+msgstr "Nazwa zapisanego regionu"
 
 #: ../lib/gis/parser_standard_options.c:744
 msgid "Name of the input space time dataset"
@@ -7415,7 +7415,7 @@ msgstr "Nie można umieścić %f,%f,%f a = %d"
 #: ../lib/rst/interp_float/write2d.c:79 ../lib/rst/interp_float/write2d.c:88
 #: ../lib/rst/interp_float/write2d.c:96 ../lib/rst/interp_float/write2d.c:104
 msgid "Cannot write files"
-msgstr ""
+msgstr "Nie można zapisać plików"
 
 #: ../lib/rst/interp_float/segmen2d.c:135
 msgid ""
@@ -9102,18 +9102,18 @@ msgstr ""
 #: ../lib/init/grass.py:1202
 #, python-format
 msgid "Path '%s' doesn't exist"
-msgstr ""
+msgstr "Ścieżka '%s' nie istnieje"
 
 #: ../lib/init/grass.py:1204
 #, python-format
 msgid "Path '%s' not accessible."
-msgstr ""
+msgstr "Ścieżka '%s' jest niedostępna."
 
 #. GTC %s is mapset's folder path
 #: ../lib/init/grass.py:1209
 #, python-format
 msgid "You are not the owner of '%s'."
-msgstr ""
+msgstr "Nie jesteś właścicielem '%s'."
 
 #: ../lib/init/grass.py:1217
 #, python-format
@@ -9657,3 +9657,36 @@ msgstr "Nie można pobrać wiersza"
 
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr "G_oldsite_new_struct: błedne # wymiary lub pola"
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "Przeprowadź wszystkie testy"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "Nie można odnaleźć mapy wektorowej <%s> w <%s>"
+
+#, fuzzy
+#~ msgid "syntax error in the color rule"
+#~ msgstr "Błąd składni w komórce nagłówka"
+
+#, fuzzy
+#~ msgid "syntax error in the color format"
+#~ msgstr "Błąd składni w komórce nagłówka"
+
+#~ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
+#~ msgstr "'%s/%s' został znaleziony w wielu mapsetach (także w <%s>)"
+
+#~ msgid "Using <%s@%s>"
+#~ msgstr "Użyto <%s@%s>"
+
+#, fuzzy
+#~ msgid "Example: income < 1000 and population >= 10000"
+#~ msgstr "Przykład: dochód < 1000 i inhab >= 10000"
+
+#~ msgid "Syntax error in cell header"
+#~ msgstr "Błąd składni w komórce nagłówka"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "Nie można ustawić środka"

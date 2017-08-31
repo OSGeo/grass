@@ -9901,3 +9901,89 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%s: out of memory"
 msgstr "ne morem dodeliti spomina"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "ne morem odpreti rastrskega sloja [%s v %s]"
+
+#, fuzzy
+#~ msgid "Using <%s@%s>"
+#~ msgstr "ne najdem [%s]"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "Ne morem odpreti %s"
+
+#, fuzzy
+#~ msgid "Unable to restore feature/offset %lu in vector map <%s>"
+#~ msgstr "ne morem spremeniti direktorija v %s"
+
+#, fuzzy
+#~ msgid "Out of memmory"
+#~ msgstr "ne morem dodeliti spomina"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to check table. There is no temporal database connection defined "
+#~ "for mapset <%(mapset)s>"
+#~ msgstr "Nezmožen odpreti datoteko s tabelo fundamentalne točke: %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch one. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch all. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
+
+#, fuzzy
+#~ msgid "Unable to find a temporary null file <%s>"
+#~ msgstr "Nezmožen odpreti datoteko s tabelo fundamentalne točke: %s"
+
+#, fuzzy
+#~ msgid "Unable to open null file <%s>"
+#~ msgstr "G_spawn: ne morem odpreti datoteke %s"
+
+#, fuzzy
+#~ msgid "ERROR: <%s> is not a valid GRASS location"
+#~ msgstr "Oprostite <%s> ni veljavna možnost\n"
+
+#, fuzzy
+#~ msgid "ERROR: option <%s>: <%s> exists.\n"
+#~ msgstr "Napaka: možnost <%s>: <%s> obstaja.\n"
+
+#, fuzzy
+#~ msgid "Invalid offset (%d)"
+#~ msgstr "ne morem spremeniti direktorija v %s"
+
+#, fuzzy
+#~ msgid "Unable to open file '%s'"
+#~ msgstr "Nezmožen odpreti datoteko %s v %s"
+
+#, fuzzy
+#~ msgid "Hit RETURN to continue"
+#~ msgstr "pritisnite RETURN za nadaljevanje -->"
+
+#, fuzzy
+#~ msgid "Vector map <%s> is not opened on topology level"
+#~ msgstr "Vneseni vektor '%s' ni bil najden"
+
+#, fuzzy
+#~ msgid "Removing empty 3D raster maps"
+#~ msgstr "Ime vhodnega rastrskega sloja"
+
+#, fuzzy
+#~ msgid "Mode type: {0} not supported."
+#~ msgstr "Vneseni vektor '%s' ni bil najden"
+
+#, fuzzy
+#~ msgid "Invalid type {0}"
+#~ msgstr "ne morem spremeniti direktorija v %s"
+
+#, fuzzy
+#~ msgid "Cannot fetch row"
+#~ msgstr "Ne morem zbrisati linije"

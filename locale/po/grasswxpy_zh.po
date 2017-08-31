@@ -18894,3 +18894,51 @@ msgstr "纹理特征"
 #, fuzzy
 msgid "Vector map <%s>: no attribute table found"
 msgstr "未发现矢量地图<%s>"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "投影"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "导出栅格地图"
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "使用的插值方法"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "将要导入的二进制栅格文件"
+
+#, fuzzy
+#~ msgid "GRASS locations in {}"
+#~ msgstr "在'%s'中没有发现GRASS地点。"
+
+#, fuzzy
+#~ msgid "Unicode error detected. Check your locale settings. Details: {}"
+#~ msgstr "无法设置GRASS数据库。请检查区域设置。"
+
+#~ msgid ""
+#~ "Note that the wxGUI's vector digitizer is currently disabled (hopefully "
+#~ "this will be fixed soon). Please keep an eye out for updated versions of "
+#~ "GRASS. In the meantime you can use \"v.digit\" from the Develop Vector "
+#~ "menu."
+#~ msgstr ""
+#~ "wxGUI适量数字化暂不可用(希望能尽快恢复)，请随时检查GRASS更新版本。目前您可"
+#~ "以从建立矢量地图菜单下使用\"v.digit\" 。"
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "无法读取EPSG代码：%s"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "无法读取EPSG代码：%s"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "无法打开'%s'"
+
+#~ msgid "Convert raster dataset to volume"
+#~ msgstr "将栅格数据集转换为三维栅格图层"

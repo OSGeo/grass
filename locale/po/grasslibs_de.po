@@ -9659,3 +9659,37 @@ msgstr "Kann die Zeile nicht holen."
 
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr "G_oldsite_new_struct: Ungültige # Dimensionen oder Felder"
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "Führe alle Unit-Tests aus"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "Kann die Vektorkarte <%s> in <%s> nicht finden."
+
+#, fuzzy
+#~ msgid "syntax error in the color rule"
+#~ msgstr "Eingabe-Formatfehler"
+
+#, fuzzy
+#~ msgid "syntax error in the color format"
+#~ msgstr "Eingabe-Formatfehler"
+
+#~ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
+#~ msgstr "'%s/%s' wurde in mehreren Mapsets gefunden (auch in <%s>)."
+
+#~ msgid "Using <%s@%s>"
+#~ msgstr "Verwende <%s@%s>"
+
+#, fuzzy
+#~ msgid "Example: income < 1000 and population >= 10000"
+#~ msgstr "Beispiel: Einkommen < 1000 AND Einwohner >= 10000"
+
+#, fuzzy
+#~ msgid "Syntax error in cell header"
+#~ msgstr "Eingabe-Formatfehler"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "Kann Focus nicht setzten."

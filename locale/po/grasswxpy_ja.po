@@ -1478,12 +1478,12 @@ msgstr "GCP管理情報をファイルに保存 '%s'."
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:69
 msgid "GRASS GIS Vector Digitizer"
-msgstr ""
+msgstr "GRASS GIS ベクトルデジタイザ"
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:85
 #, python-format
 msgid "Vector digitizer not available. %s"
-msgstr ""
+msgstr "ベクトルデジタイザは利用できません%s"
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:90
 #, python-format
@@ -1583,7 +1583,7 @@ msgstr "コンターのしきい値"
 
 #: ../gui/wxpython/vdigit/preferences.py:220
 msgid "screen pixels"
-msgstr "仮面解像度"
+msgstr "画面解像度"
 
 #: ../gui/wxpython/vdigit/preferences.py:220
 msgid "map units"
@@ -10325,7 +10325,7 @@ msgstr "ラスターマップレイヤーのカラーから検索 "
 
 #: ../gui/wxpython/menustrings.py:319 ../gui/wxpython/menustrings.py:1262
 msgid "Raster buffers and distance"
-msgstr ""
+msgstr "ラスターバッファと距離"
 
 #: ../gui/wxpython/menustrings.py:320 ../gui/wxpython/menustrings.py:1263
 msgid "Buffer rasters"
@@ -11030,11 +11030,11 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:474 ../gui/wxpython/menustrings.py:1417
 msgid "Recode"
-msgstr "記録"
+msgstr "再コード"
 
 #: ../gui/wxpython/menustrings.py:475 ../gui/wxpython/menustrings.py:1418
 msgid "Recodes categorical raster maps."
-msgstr "カテゴリーかされたラスターマップの記録"
+msgstr "カテゴリー分けされたラスターマップの再コード化"
 
 #: ../gui/wxpython/menustrings.py:476 ../gui/wxpython/menustrings.py:1419
 msgid "Rescale"
@@ -13731,11 +13731,11 @@ msgstr "ユーザー設定"
 
 #: ../gui/wxpython/gui_core/preferences.py:83
 msgid "Set to default"
-msgstr "デフォルトに設定"
+msgstr "デフォルトに戻す"
 
 #: ../gui/wxpython/gui_core/preferences.py:91
 msgid "Revert settings to default"
-msgstr ""
+msgstr "デフォルト設定に戻す"
 
 #: ../gui/wxpython/gui_core/preferences.py:94
 msgid "Apply changes for the current session only and close"
@@ -13920,7 +13920,7 @@ msgstr "冗長レベル："
 
 #: ../gui/wxpython/gui_core/preferences.py:1225
 msgid "Default raster settings"
-msgstr ""
+msgstr "デフォルトラスター設定"
 
 #: ../gui/wxpython/gui_core/preferences.py:1235
 msgid "Make null cells opaque"
@@ -13932,7 +13932,7 @@ msgstr "デフォルトカラーテーブル"
 
 #: ../gui/wxpython/gui_core/preferences.py:1296
 msgid "Default vector settings"
-msgstr ""
+msgstr "デフォルトベクトル設定"
 
 #: ../gui/wxpython/gui_core/preferences.py:1302
 msgid "Display:"
@@ -14066,10 +14066,12 @@ msgstr "デフォルトディスプレイフォントの選択"
 #: ../gui/wxpython/gui_core/preferences.py:1973
 msgid "Failed to set default display font. Try different font."
 msgstr ""
+"デフォルトのディスプレイフォントの設定に失敗しました。別のフォントを試してく"
+"ださい。"
 
 #: ../gui/wxpython/gui_core/preferences.py:1992
 msgid "Select default output font"
-msgstr ""
+msgstr "デフォルトの出力フォントを選択"
 
 #: ../gui/wxpython/gui_core/preferences.py:2081
 msgid "Manage access to mapsets"
@@ -16492,7 +16494,7 @@ msgstr "アドオン"
 #: ../gui/wxpython/core/utils.py:60
 #, python-format
 msgid "Syntax error: %s"
-msgstr "Syntax error: %s"
+msgstr "構文エラー: %s"
 
 #: ../gui/wxpython/core/utils.py:351
 #, python-format
@@ -18829,3 +18831,49 @@ msgstr "3Dラスターマップの非-NULLセルから単変量統計解析を�
 
 msgid "Digitize"
 msgstr "デジタイズ"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "投影法"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "ラスターマップの選択："
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "投影コード： "
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "消去するレイヤー"
+
+#, fuzzy
+#~ msgid "GRASS locations in {}"
+#~ msgstr "GRASSのロケーションとマップセットを選択"
+
+#, fuzzy
+#~ msgid "Unicode error detected. Check your locale settings. Details: {}"
+#~ msgstr "GRASSデータベースをセット出来ません 設定をチェックして下さい"
+
+#~ msgid ""
+#~ "Note that the wxGUI's vector digitizer is currently disabled (hopefully "
+#~ "this will be fixed soon). Please keep an eye out for updated versions of "
+#~ "GRASS. In the meantime you can use \"v.digit\" from the Develop Vector "
+#~ "menu."
+#~ msgstr ""
+#~ "wxGUIのベクトルデジタイザーは現在使用できません（近い将来に修正されるで"
+#~ "しょう）. GRASSのアップデートされたバージョンに注意してください. それまで"
+#~ "はベクトル作成メニューから\"v.digit\"を使用できます"
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr " EPGSコードが読めません: %s"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr " EPGSコードが読めません: %s"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "%s' がオープンできません"

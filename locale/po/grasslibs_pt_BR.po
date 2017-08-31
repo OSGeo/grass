@@ -1,26 +1,22 @@
-# translation of grasslibs_pt_br.po to Português Brasileiro
-# translation of grasslibs_pt_br.po to Brazilian Portuguese
-# This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2004 GRASS Development Team
-# Paulo Marcondes <paulomarcondes gmail.com>, Carlos Grohmann <carlos.grohmann gmail.com>, 2005.
-# Paulo Eduardo Pasquini Marcondes <paulomarcondes gmail.com>, 2005, 2006
-# Paulo E. P. Marcondes <paulomarcondes@gmail.com>, 2007.
+# Translation of grasslibs_pt_BR.po
+# Copyright (C) 2017 GRASS Development Team
+# This file is distributed under the same license as the GRASS GIS package.
+# transifex generated, 2017
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: grasslibs_pt_br\n"
+"Project-Id-Version: grasslibs_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-08 22:00+0200\n"
-"PO-Revision-Date: 2007-05-20 10:44-0300\n"
-"Last-Translator: Paulo E. P. Marcondes <paulomarcondes@gmail.com>\n"
-"Language-Team: Brazilian Portuguese <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2017-05-23 21:08+0200\n"
+"Last-Translator: Daniel Victoria <daniel.victoria@gmail.com>, 2017\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/grass-gis/"
+"teams/45198/pt_BR/)\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"com>\n"
-"X-Generator: KBabel 1.9.1\n"
-"Plural-Forms:  nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../lib/db/dbmi_driver/d_error.c:35
 #, c-format
@@ -9536,3 +9532,15 @@ msgstr "Registro no banco de dados para categoria %d não encontrado"
 #, fuzzy
 msgid "Cannot fetch row"
 msgstr "não consegui obter informações da camada"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "não foi possível abrir o mapa raster [%s em %s]"
+
+#, fuzzy
+#~ msgid "Using <%s@%s>"
+#~ msgstr "não consegui encontrar [%s]"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "não consegui abrir [%s]"

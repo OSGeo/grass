@@ -9502,3 +9502,15 @@ msgstr "Nume pentru harta vectorială de intrare"
 
 msgid "Category must be integer"
 msgstr "Categoria trebuie să fie de tip integer"
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "Rulează toate testele unității "
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "Traducere culori pentru rasterul <%s>..."
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "Nu s-a putut închide rasterul 3D <%s>"

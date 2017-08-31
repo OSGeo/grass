@@ -41213,3 +41213,344 @@ msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτ�
 
 msgid "Cache size (MiB)"
 msgstr "Cache size (MiB)"
+
+#, fuzzy
+#~ msgid "Value to multiply the raster values with"
+#~ msgstr "Αδυναμία διαβάσματος εύρους fp για τον ραστερ χάρτη <%s>"
+
+#, fuzzy
+#~ msgid "Value to add to the raster values"
+#~ msgstr "Αδυναμία διαβάσματος εύρους fp για τον ραστερ χάρτη <%s>"
+
+#, fuzzy
+#~ msgid "Unknown raster type <%d>"
+#~ msgstr "Άγνωστος τύπος"
+
+#, fuzzy
+#~ msgid "Invalid range <%s> for option %s"
+#~ msgstr "Λάθος συντεταγμένες"
+
+#, fuzzy
+#~ msgid ""
+#~ "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
+#~ msgstr "Όνομα εισαγώμενων ράστερ χαρτών"
+
+#, fuzzy
+#~ msgid "Preparing the maps..."
+#~ msgstr "Χάρτης επαναφόρτισης σε  m^3/s"
+
+#, fuzzy
+#~ msgid "Computing proportional count map..."
+#~ msgstr "Τύπος"
+
+#, fuzzy
+#~ msgid "Computing proportional sum map..."
+#~ msgstr "Εγγραφή %s από %s..."
+
+#, fuzzy
+#~ msgid "Computing mean map..."
+#~ msgstr "Εγγραφή %s από %s..."
+
+#, fuzzy
+#~ msgid "Closing the maps..."
+#~ msgstr "Σφάλμα κατά το κλείσιμο 3Δ ράστερ αρχείου"
+
+#, fuzzy
+#~ msgid "Range bandwidth: %g"
+#~ msgstr "Λάθος συντεταγμένες"
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d segments..."
+#~ msgstr "Σφάλμα ανοίγματος 3Δ ράστερ χάρτη <%s>"
+
+#, fuzzy
+#~ msgid "Error in writing IDs"
+#~ msgstr "Σφάλμα κατά την ανάγνωση του εύρους για [%s]"
+
+#, fuzzy
+#~ msgid "Error in writing goodness of fit"
+#~ msgstr "Σφάλμα κατά την ανάγνωση του εύρους για [%s]"
+
+#, fuzzy
+#~ msgid "Error in writing new band values"
+#~ msgstr "Σφάλμα κατά την ανάγνωση του εύρους για [%s]"
+
+#, fuzzy
+#~ msgid "Writing out shifted band values..."
+#~ msgstr "Αδυναμία κλεισίματος του εξαγόμενου χάρτη"
+
+#, fuzzy
+#~ msgid "%d-band clustering with threshold %g"
+#~ msgstr "δεν βρέθηκε"
+
+#, fuzzy
+#~ msgid "Found %d clumps"
+#~ msgstr "Τύπος"
+
+#, fuzzy
+#~ msgid "Spatial radius in number of cells"
+#~ msgstr "Νούμερο των υποπεριοχών για συλλογή στατιστικών από αυτά"
+
+#, fuzzy
+#~ msgid "Option '%s' must be >= 1"
+#~ msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
+
+#, fuzzy
+#~ msgid "Maximum number of iterations set to %d"
+#~ msgstr "ράστερ 3Δ, voxel"
+
+#, fuzzy
+#~ msgid "Invalid number of iterations, %d will be used"
+#~ msgstr "ράστερ 3Δ, voxel"
+
+#~ msgid ""
+#~ "column '%s' : type int8 (bigint) is stored as integer (4 bytes) some data "
+#~ "may be damaged"
+#~ msgstr ""
+#~ "στήλη '%s' : τύπος int8 (bigint) έχει αποθηκευτεί ως ακέραιος (4 bytes) "
+#~ "ορισμένα δεδομένα μπορεί να έχουν καταστραφεί"
+
+#~ msgid ""
+#~ "column '%s' : type character varying is stored as varchar(250) some data "
+#~ "may be lost"
+#~ msgstr ""
+#~ "στήλη '%s' : ο τύπος χαρακτήρα μεταβάλλεται έχει αποθηκευτεί ως "
+#~ "varchar(250) ορισμένα δεδομένα θα χαθούν"
+
+#, fuzzy
+#~ msgid "Can only do up to %d raster maps (%d given)"
+#~ msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
+
+#, fuzzy
+#~ msgid "Minimum size must be larger than 1"
+#~ msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
+
+#, fuzzy
+#~ msgid "Loading input ..."
+#~ msgstr "Φόρτωση δεδομένων... (%dx%dx%d)"
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d clumps..."
+#~ msgstr "Σφάλμα ανοίγματος 3Δ ράστερ χάρτη <%s>"
+
+#, fuzzy
+#~ msgid "Minimum clump size in cells"
+#~ msgstr "Ελάχιστο μέγεθος κάθε κελιού"
+
+#, fuzzy
+#~ msgid "%d initial clumps"
+#~ msgstr "Εγγραφή %s από %s..."
+
+#, fuzzy
+#~ msgid "%d-band clumping with threshold %g"
+#~ msgstr "δεν βρέθηκε"
+
+#, fuzzy
+#~ msgid "Calculating %s"
+#~ msgstr "Αδυναμία σκαναρίσματος χρόνου: "
+
+#, fuzzy
+#~ msgid "Registers raster, vector and raster3d maps in a space time datasets."
+#~ msgstr "Όνομα χάρτη "
+
+#, fuzzy
+#~ msgid "Path to files"
+#~ msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
+
+#, fuzzy
+#~ msgid "Symbol for point"
+#~ msgstr "Νούμερο επιπέδου"
+
+#, fuzzy
+#~ msgid "Point size"
+#~ msgstr "δεν βρέθηκε"
+
+#, fuzzy
+#~ msgid "Cannot find/open symbol: '%s'"
+#~ msgstr "Αδυναμία ανοίγματος βάσης δεδομενων <%s>"
+
+#, fuzzy
+#~ msgid "Print in shell script style, but in one line (flat)"
+#~ msgstr "Εκτυπώνει τις τρέχουσες παραμέτρους σύνδεσης και κλείνει"
+
+#, fuzzy
+#~ msgid "Input filter"
+#~ msgstr "Όνομα αρχείου εξαγωγής"
+
+#, fuzzy
+#~ msgid "Coordinates for profiling line nodes"
+#~ msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+
+#, fuzzy
+#~ msgid "Profiling line"
+#~ msgstr "Εγγραφή %s από %s..."
+
+#, fuzzy
+#~ msgid "Output formating"
+#~ msgstr "Αποτέλεσμα:"
+
+#, fuzzy
+#~ msgid "Number of significant digits"
+#~ msgstr "Νούμερο των υποπεριοχών για συλλογή στατιστικών από αυτά"
+
+#, fuzzy
+#~ msgid "Name for profile line and buffer output map"
+#~ msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
+
+#, fuzzy
+#~ msgid "Profile line and buffer around it will be written"
+#~ msgstr ""
+#~ "Ο διανυσματικός χάρτης <%s> υπάρχει ήδη και θα αντικατασταθεί "
+#~ "(overwritten)"
+
+#, fuzzy
+#~ msgid "Do not print column names"
+#~ msgstr "Μην συμπεριλάβεται τα ονόματα των στηλών στην έξοδο"
+
+#, fuzzy
+#~ msgid "Do not print 3D vector data (z values)"
+#~ msgstr "διαγραφή ενός πίνακα ιδιοτήτων."
+
+#, fuzzy
+#~ msgid "Vector map containing profiling line"
+#~ msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+
+#, fuzzy
+#~ msgid "Layer 0 not supported"
+#~ msgstr "Ο διανυσματικός χάρτης <%s> δεν βρέθηκε"
+
+#, fuzzy
+#~ msgid "<%s> is not a valid vector map name"
+#~ msgstr "<%s> είναι μη επιτρεπτό όνομα αρχείου"
+
+#, fuzzy
+#~ msgid "At least profile start and end coordinates are required!"
+#~ msgstr "Τύπωμα της δομή του πίνακα"
+
+#, fuzzy
+#~ msgid ""
+#~ "No database connection defined for map <%s> layer %d, but WHERE condition "
+#~ "is provided"
+#~ msgstr ""
+#~ "Δεν έχει καθοριστεί η σύνδεση με τη βάση δεδομένων για το επίπεδο (layer) "
+#~ "%d"
+
+#, fuzzy
+#~ msgid "No features match Your query"
+#~ msgstr "Όνομα εισαγώμενων ράστερ χαρτών"
+
+#, fuzzy
+#~ msgid "Error while initialising line list"
+#~ msgstr "Σφάλμα κατά την ανάγνωση του αρχείου ιστορικού"
+
+#, fuzzy
+#~ msgid "Error while reading vector feature from profile line map"
+#~ msgstr "Σφάλμα κατά την ανάγνωση του αρχείου ιστορικού"
+
+#, fuzzy
+#~ msgid "Unabale to get attribute data for cat %d"
+#~ msgstr "Αδυναμία υπολογισμού κέντρων πολυγώνου για την επιφάνεια %d"
+
+#, fuzzy
+#~ msgid "Unable to create 2D raster <%s>"
+#~ msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>."
+
+#, fuzzy
+#~ msgid "Unable to create 3D raster <%s>"
+#~ msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>."
+
+#, fuzzy
+#~ msgid "Unable to initialize G-submatrix..."
+#~ msgstr "Αδυναμία ανοίγματος προσωρινού αρχείου"
+
+#, fuzzy
+#~ msgid "Name of input vector points map"
+#~ msgstr "Όνομα εισαγώμενου διανυσματικού χάρτη "
+
+#, fuzzy
+#~ msgid "File to write the report"
+#~ msgstr "Αδυναμία ανοίγματος προσωρινού αρχείου"
+
+#, fuzzy
+#~ msgid "Name for output 2D/3D raster map"
+#~ msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
+
+#, fuzzy
+#~ msgid "Attribute column containing input values for interpolation"
+#~ msgstr "Όνομα αρχείου εξαγωγής"
+
+#, fuzzy
+#~ msgid "Number of horizontal lags"
+#~ msgstr "Νούμερο των υποπεριοχών για συλλογή στατιστικών από αυτά"
+
+#, fuzzy
+#~ msgid "Number of vertical lags (only for 3D variogram)"
+#~ msgstr "Αριθμός των δεδαδικών ψηφίων για τους αριθμούς υποδιαστολής"
+
+#, fuzzy
+#~ msgid "Report is being written to %s..."
+#~ msgstr "Αδυναμία ανάγνωσης διανυσματικού χάρτη"
+
+#, fuzzy
+#~ msgid "Please set up name of output layer..."
+#~ msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
+
+#, fuzzy
+#~ msgid "Coordinates of point no. %d are zeros."
+#~ msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+
+#, fuzzy
+#~ msgid "Anisotropy ratio must be greater than zero..."
+#~ msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
+
+#, fuzzy
+#~ msgid "Something went wrong opening tmp file..."
+#~ msgstr "modifyNull: σφάλμα κατά το άνοιγμα προσωρινού αρχείου"
+
+#, fuzzy
+#~ msgid "Error writing file"
+#~ msgstr "Σφάλμα κατά την ανάγνωση του εύρους για [%s]"
+
+#, fuzzy
+#~ msgid "Error closing file..."
+#~ msgstr "Σφάλμα κατά το κλείσομο ascii αρχείου"
+
+#, fuzzy
+#~ msgid "Unable to plot variogram"
+#~ msgstr "Δεν γίνεται η μετακίνηση του κέρσορα."
+
+#, fuzzy
+#~ msgid "Memory allocation failed..."
+#~ msgstr "ράστερ 3Δ, voxel"
+
+#, fuzzy
+#~ msgid "Interpolating unknown values..."
+#~ msgstr "ράστερ 3Δ, voxel"
+
+#, fuzzy
+#~ msgid "Error writing result into output layer..."
+#~ msgstr "Αδυναμία κλεισίματος του εξαγόμενου χάρτη"
+
+#, fuzzy
+#~ msgid "Reading values from attribute column <%s>..."
+#~ msgstr "διαγραφή ενός πίνακα ιδιοτήτων."
+
+#, fuzzy
+#~ msgid "Reading coordinates..."
+#~ msgstr "Χάρτης επαναφόρτισης σε  m^3/s"
+
+#, fuzzy
+#~ msgid "Error reading input coordinates z..."
+#~ msgstr "Χάρτης επαναφόρτισης σε  m^3/s"
+
+#, fuzzy
+#~ msgid "Unused points: %d (out of region)"
+#~ msgstr "Νούμερο των υποπεριοχών για συλλογή στατιστικών από αυτά"
+
+#, fuzzy
+#~ msgid "Nothing to scan..."
+#~ msgstr "δεν βρέθηκε"
+
+#, fuzzy
+#~ msgid "<%s> already compressed"
+#~ msgstr "Ο χάρτης raster  <%s> δεν βρέθηκε"

@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2005-2016, GRASS Development Team
 # Peteris Bruns <peteris.bruns@gmail.com>, 2005.
-# Maris Nartiss <maris.kde@gmail.com>, 2006, 2012, 2014, 2016.
+# Maris Nartiss <maris.kde@gmail.com>, 2006, 2012, 2014, 2016, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_lv\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-08 22:00+0200\n"
-"PO-Revision-Date: 2016-11-15 09:36+0200\n"
+"PO-Revision-Date: 2017-04-01 17:03+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian <grass-translations@lists.osgeo.org>\n"
 "Language: lv\n"
@@ -9457,3 +9457,207 @@ msgstr ""
 #, c-format
 msgid "%s: out of memory"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "neiespējami atvērt rastra karti [%s iekš %s]"
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "vienības"
+
+#, fuzzy
+#~ msgid "Unable to parse '%s'"
+#~ msgstr "Neiespējami atvērt failu %s iekš %s"
+
+#~ msgid "SQL SELECT statement"
+#~ msgstr "SQL SELECT izteikums"
+
+#, fuzzy
+#~ msgid "East (%.15g) is not larger than West (%.15g)"
+#~ msgstr "Austrumiem ir jābūt lielākiem nekā Rietumiem"
+
+#, fuzzy
+#~ msgid "Illegal latitude for North: %g"
+#~ msgstr "Neatļauta platuma vērtība Ziemeļiem"
+
+#, fuzzy
+#~ msgid "Illegal latitude for South: %g"
+#~ msgstr "Neatļauta platuma vērtība Dienvidiem"
+
+#, fuzzy
+#~ msgid "Illegal longitude for West: %g"
+#~ msgstr "Neatļauta platuma vērtība Ziemeļiem"
+
+#, fuzzy
+#~ msgid "Illegal longitude for East: %g"
+#~ msgstr "Neatļauta platuma vērtība Ziemeļiem"
+
+#~ msgid "Invalid NS resolution"
+#~ msgstr "Nederīga ZD izšķirtspēja"
+
+#~ msgid "Invalid EW resolution"
+#~ msgstr "Nederīga AR izšķirtspēja"
+
+#~ msgid "Invalid North"
+#~ msgstr "Nederīgi ziemeļi"
+
+#~ msgid "Invalid South"
+#~ msgstr "Nederīgi dienvidi"
+
+#~ msgid "Invalid West"
+#~ msgstr "Nederīgi rietumi"
+
+#~ msgid "Invalid East"
+#~ msgstr "Nederīgi austrumi"
+
+#~ msgid ""
+#~ "Path '%s' not accessible\n"
+#~ "and you are not the owner of it."
+#~ msgstr ""
+#~ "Ceļš '%s' nav pieejams\n"
+#~ "un jūs neesat tā īpašnieks."
+
+#, fuzzy
+#~ msgid "Out of memmory"
+#~ msgstr "Neiespējami piešķirt atmiņu\n"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to mogrify sql statement. There is no temporal database connection "
+#~ "defined for mapset <%(mapset)s>"
+#~ msgstr "neispējami atvērt datumu tabulas failu: %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to check table. There is no temporal database connection defined "
+#~ "for mapset <%(mapset)s>"
+#~ msgstr "neispējami atvērt datumu tabulas failu: %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to execute sql statement. There is no temporal database connection "
+#~ "defined for mapset <%(mapset)s>"
+#~ msgstr "neispējami atvērt datumu tabulas failu: %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch one. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "Nevar atvērt vēsturi vektoram '%s'"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch all. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "Nevar atvērt vēsturi vektoram '%s'"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to execute transaction. There is no temporal database connection "
+#~ "defined for mapset <%(mapset)s>"
+#~ msgstr "Nevar atvērt vēsturi vektoram '%s'"
+
+#, fuzzy
+#~ msgid "Error writing uncompressed FP data for row %d of <%s>"
+#~ msgstr "kļūda nolasot %smap [%s] karšu biblotēkā [%s], līnija %d"
+
+#, fuzzy
+#~ msgid "Error writing compressed FP data for row %d of <%s>"
+#~ msgstr "kļūda nolasot %smap [%s] karšu biblotēkā [%s], līnija %d"
+
+#, fuzzy
+#~ msgid "Unable to find a temporary null file <%s>"
+#~ msgstr "neispējami atrast pagaidu null failu: %s"
+
+#, fuzzy
+#~ msgid "Unable to open null file <%s>"
+#~ msgstr "G_spawn: neispējami atvērt failu %s"
+
+#, fuzzy
+#~ msgid "Unable to restore feature/offset %lu in vector map <%s>"
+#~ msgstr "Nevar atvērt vēsturi vektoram '%s'"
+
+#, fuzzy
+#~ msgid "Invalid offset (%d)"
+#~ msgstr "Nederīgs mezgla ID: %d"
+
+#, fuzzy
+#~ msgid "ERROR: <%s> is not a valid GRASS location"
+#~ msgstr "Atvainojiet, <%s> nav derīgs parametrs"
+
+#, fuzzy
+#~ msgid "ERROR: option <%s>: <%s> exists.\n"
+#~ msgstr "Kļūda: opcija/pazīme <%s>: <%s> jau eksistē.\n"
+
+#, fuzzy
+#~ msgid "Unable to allocate stream"
+#~ msgstr "Neiespējami piešķirt atmiņu\n"
+
+#, fuzzy
+#~ msgid "Video codec not found"
+#~ msgstr "Vektorkarte <%s> nav atrasta"
+
+#, fuzzy
+#~ msgid "Unable to open codec"
+#~ msgstr "Nevar atvērt mapi %s"
+
+#, fuzzy
+#~ msgid "Unable to allocate temporary picture"
+#~ msgstr "Neiespējami piešķirt atmiņu\n"
+
+#, fuzzy
+#~ msgid "Error while writing video frame"
+#~ msgstr "Kļūdu raskrīšana ārpus topo faila.\n"
+
+#, fuzzy
+#~ msgid "Unable to find suitable output format"
+#~ msgstr "Nevar atvērt vēsturi vektoram '%s'"
+
+#, fuzzy
+#~ msgid "Invalid output format parameters"
+#~ msgstr ""
+#~ "\n"
+#~ "Kļūda: Trūkst vērtība parametram <%s>\n"
+
+#, fuzzy
+#~ msgid "Unable to open <%s>"
+#~ msgstr "Neiespējami atvērt failu %s iekš %s"
+
+#, fuzzy
+#~ msgid "Unable to open file '%s'"
+#~ msgstr "Neiespējami atvērt failu %s iekš %s"
+
+#~ msgid "Hit RETURN to continue"
+#~ msgstr "Spied ENTER, lai turpinātu"
+
+#, fuzzy
+#~ msgid "Vector map <%s> is not opened on topology level"
+#~ msgstr "Vektoru karte <%s> nav atvērta"
+
+#, fuzzy
+#~ msgid "Removing empty 3D raster maps"
+#~ msgstr "Ievades rastra faila nosaukums"
+
+#, fuzzy
+#~ msgid "Mode type: {0} not supported."
+#~ msgstr "Ieejas vektors '%s' nav atrasts"
+
+#, fuzzy
+#~ msgid "Invalid type {0}"
+#~ msgstr "neispējami mainīt direktoriju uz %s"
+
+#~ msgid "Attributes for category %d not found"
+#~ msgstr "Kategorijai %d atribūti nav atrasti"
+
+#~ msgid "Category must be integer"
+#~ msgstr "Kategorijai ir jābūt veselam skaitlim"
+
+#~ msgid "Memory error in writing timestamp"
+#~ msgstr "Laika zīmoga rakstīšanas atmiņas kļūda"
+
+#~ msgid "Illegal TimeStamp string"
+#~ msgstr "Nederīgs laika zīmoga teksts"
+
+#~ msgid "Cannot fetch row"
+#~ msgstr "Nevar saņemt rindu"

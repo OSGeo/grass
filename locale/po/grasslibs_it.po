@@ -9854,3 +9854,62 @@ msgstr ""
 
 msgid "%s variable defined, %s ignored"
 msgstr "variabile %s definita, %s ignorata"
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "unità"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "Impossibile trovare il vettoriale <%s> in <%s>"
+
+#, fuzzy
+#~ msgid "An error occurred while running r3.mapcalc with expression: %s"
+#~ msgstr "Si è verificato un errore durante l'esecuzione di r3.mapcalc"
+
+#, fuzzy
+#~ msgid "An error occurred while running r.mapcalc with expression: %s"
+#~ msgstr "Si è verificato un errore durante l'esecuzione di r.mapcalc"
+
+#, fuzzy
+#~ msgid "syntax error in the color rule"
+#~ msgstr "errore di sintassi"
+
+#, fuzzy
+#~ msgid "syntax error in the color format"
+#~ msgstr "errore di sintassi"
+
+#~ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
+#~ msgstr "'%s/%s' presente in più mapsets (trovato anche in <%s>)"
+
+#~ msgid "Using <%s@%s>"
+#~ msgstr "Usando <%s@%s>"
+
+#, fuzzy
+#~ msgid "SQL SELECT statement"
+#~ msgstr "Condizione select di SQL"
+
+#, fuzzy
+#~ msgid "Example: income < 1000 and population >= 10000"
+#~ msgstr "Esempio: income < 1000 e inhab >= 10000"
+
+#, fuzzy
+#~ msgid "Syntax error in cell header"
+#~ msgstr "errore di sintassi"
+
+#~ msgid ""
+#~ "The python command does not work as expected!\n"
+#~ "Please check your GRASS_PYTHON environment variable.\n"
+#~ "Use the -help option for details.\n"
+#~ "Switching to text based interface mode.\n"
+#~ "\n"
+#~ "Hit RETURN to continue.\n"
+#~ msgstr ""
+#~ "Il comando python non funziona come previsto!\n"
+#~ "Controllare le variabili d'ambiente in GRASS_PYTHON\n"
+#~ "Usare l'opzione -help per i dettagli\n"
+#~ "Premere INVIO per continuare\n"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "Impossibile impostare il focus"
