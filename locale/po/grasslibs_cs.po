@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-08 22:00+0200\n"
-"PO-Revision-Date: 2017-02-09 15:16+0100\n"
+"PO-Revision-Date: 2015-03-15 18:32+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <cs@li.org>\n"
 "Language: cs_CS\n"
@@ -9607,3 +9607,37 @@ msgstr "Nesprávné jméno vektorové mapy <%s>"
 #, fuzzy
 msgid "Removing empty 3D raster maps"
 msgstr "Název vstupní rastrové mapy"
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "jednotky"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "Nelze najít vektorovou mapu <%s> v <%s>"
+
+#, fuzzy
+#~ msgid "syntax error in the color rule"
+#~ msgstr "syntaktická chyba"
+
+#, fuzzy
+#~ msgid "syntax error in the color format"
+#~ msgstr "syntaktická chyba"
+
+#~ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
+#~ msgstr "'%s/%s' byl nalezen ve více mapsetech (také v <%s>)"
+
+#~ msgid "Using <%s@%s>"
+#~ msgstr "Používám <%s@%s>"
+
+#, fuzzy
+#~ msgid "Example: income < 1000 and population >= 10000"
+#~ msgstr "Příklad: příjem < 1000 AND obyvatelé >= 10000"
+
+#, fuzzy
+#~ msgid "Syntax error in cell header"
+#~ msgstr "syntaktická chyba"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "Nelze nastavit zaostření"

@@ -18883,3 +18883,49 @@ msgid ""
 "raster3d map of a space time raster3d dataset."
 msgstr ""
 "Spočítá univariantní statistiku z ne-nullových 3D buněk 3D rastrové vrstvy."
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "Kartografické zobrazení"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "vybrat rastr"
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "Kód projekce:"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Vrstva k odstranění"
+
+#, fuzzy
+#~ msgid "GRASS locations in {}"
+#~ msgstr "Název lokace GRASSu:"
+
+#, fuzzy
+#~ msgid "Unicode error detected. Check your locale settings. Details: {}"
+#~ msgstr "Nelze nastavit GRASS databázi. Zkontrolujte nastavení."
+
+#~ msgid ""
+#~ "Note that the wxGUI's vector digitizer is currently disabled (hopefully "
+#~ "this will be fixed soon). Please keep an eye out for updated versions of "
+#~ "GRASS. In the meantime you can use \"v.digit\" from the Develop Vector "
+#~ "menu."
+#~ msgstr ""
+#~ "WxGui vektorová digitalizaceí není v současné době dostupná (Doufáme že "
+#~ "se to brzy změní). Prosím kontrolujte nové verze GRASS GIS. Zatím můžete "
+#~ "použít modul \"v.digit\" z nabídky vytvořit vektor."
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "Nelze načíst seznam kódů EPSG: %s"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "Nelze načíst seznam kódů IAU: %s"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "Nelze otevřít  '%s'"

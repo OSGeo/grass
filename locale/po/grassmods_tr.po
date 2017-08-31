@@ -41671,3 +41671,448 @@ msgstr "Önbellek boyutu (MiB)"
 
 msgid "Unknown raster map type"
 msgstr "Bilinmeyen raster harita tipi"
+
+#, fuzzy
+#~ msgid "Value to multiply the raster values with"
+#~ msgstr "Raster değerlerin kaynağı"
+
+#, fuzzy
+#~ msgid "Value to add to the raster values"
+#~ msgstr "Raster değerlerin kaynağı"
+
+#, fuzzy
+#~ msgid "Unknown raster type <%d>"
+#~ msgstr "Bilinmeyen kullanım tipi: %d"
+
+#, fuzzy
+#~ msgid "Invalid range <%s> for option %s"
+#~ msgstr "Geçersiz doğu"
+
+#, fuzzy
+#~ msgid ""
+#~ "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
+#~ msgstr ""
+#~ "ASCII poligon/çizgi/nokta veri dosyalarından raster harita oluşturur."
+
+#, fuzzy
+#~ msgid "Preparing the maps..."
+#~ msgstr "Raster harita okunuyor..."
+
+#, fuzzy
+#~ msgid "Computing proportional count map..."
+#~ msgstr "Eleman tipi"
+
+#, fuzzy
+#~ msgid "Computing proportional sum map..."
+#~ msgstr "sıklık derecesi hesaplanıyor"
+
+#, fuzzy
+#~ msgid "Computing mean map..."
+#~ msgstr "sıklık derecesi hesaplanıyor"
+
+#, fuzzy
+#~ msgid "Closing the maps..."
+#~ msgstr "Raster haritalar maskeleniyor..."
+
+#, fuzzy
+#~ msgid "%lu input points had intensity out of range"
+#~ msgstr "%d nokta eşik dışında"
+
+#, fuzzy
+#~ msgid "Region id %d is invalid"
+#~ msgstr "[%s] doku dosyası geçersiz."
+
+#, fuzzy
+#~ msgid "Estimated range bandwidth: %g"
+#~ msgstr "Noktalar arasındaki en büyük mesafe kullanılarak: %f"
+
+#, fuzzy
+#~ msgid "Range bandwidth: %g"
+#~ msgstr "Görüntü genişliği"
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d segments..."
+#~ msgstr "noktalar oluşturuluyor..."
+
+#, fuzzy
+#~ msgid "Error in writing IDs"
+#~ msgstr "Veri yazmada hata"
+
+#, fuzzy
+#~ msgid "Error in writing goodness of fit"
+#~ msgstr "Veri yazmada hata"
+
+#, fuzzy
+#~ msgid "Error in writing new band values"
+#~ msgstr "Veri yazmada hata"
+
+#, fuzzy
+#~ msgid "Writing out shifted band values..."
+#~ msgstr "Çıktı harita yazılıyor"
+
+#, fuzzy
+#~ msgid "%d-band clustering with threshold %g"
+#~ msgstr "%d nokta eşik dışında"
+
+#, fuzzy
+#~ msgid "Found %d clumps"
+#~ msgstr "Tamamlanmamış kural"
+
+#, fuzzy
+#~ msgid "Spatial radius in number of cells"
+#~ msgstr "Çerçeve sayısı"
+
+#, fuzzy
+#~ msgid "Option '%s' must be >= 1"
+#~ msgstr "< %s> Mevkisi oluşturuldu"
+
+#, fuzzy
+#~ msgid "Integer overflow: too many cells in current region"
+#~ msgstr "Geçerli bölgede [%ld] BOŞ olmayan hücre yok"
+
+#, fuzzy
+#~ msgid "Maximum number of iterations set to %d"
+#~ msgstr " Maksimum iterasyon sayısı: %d\n"
+
+#, fuzzy
+#~ msgid "Invalid number of iterations, %d will be used"
+#~ msgstr " Maksimum iterasyon sayısı: %d\n"
+
+#~ msgid ""
+#~ "column '%s' : type int8 (bigint) is stored as integer (4 bytes) some data "
+#~ "may be damaged"
+#~ msgstr ""
+#~ "'%s' sütunu: int8 (bigint) türü integer (4 bytes) olarak depolandı bazı "
+#~ "veriler zarar görmüş olabilir"
+
+#~ msgid ""
+#~ "column '%s' : type character varying is stored as varchar(250) some data "
+#~ "may be lost"
+#~ msgstr ""
+#~ "'%s' sütunu : character varying türü varchar(250) olarak depolandı bazı "
+#~ "veriler zarar görebilir"
+
+#, fuzzy
+#~ msgid "Can only do up to %d raster maps (%d given)"
+#~ msgstr "sadece %d raster haritaya kadar yapılabilir"
+
+#~ msgid "There aren't [%ld] cells in the current region"
+#~ msgstr "Geçerli bölgede [%ld] hücre yok"
+
+#~ msgid "There aren't [%ld] non-NULL cells in the current region"
+#~ msgstr "Geçerli bölgede [%ld] BOŞ olmayan hücre yok"
+
+#~ msgid "Only [%ld] random points created"
+#~ msgstr "Sadece [%ld] rasgele nokta oluşturuldu"
+
+#, fuzzy
+#~ msgid "Minimum size must be larger than 1"
+#~ msgstr "%s = %s -- sıfırdan büyük olmalıdır"
+
+#, fuzzy
+#~ msgid "Loading input ..."
+#~ msgstr "Girdiler okunuyor..."
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d clumps..."
+#~ msgstr "Eğitim sınıfları bulunuyor ..."
+
+#, fuzzy
+#~ msgid "Threshold to identify similar cells"
+#~ msgstr "Başlangıç dokularını içeren dosya"
+
+#, fuzzy
+#~ msgid "Minimum clump size in cells"
+#~ msgstr "Her hücrenin en küçük boyutu"
+
+#, fuzzy
+#~ msgid "%d initial clumps"
+#~ msgstr "sıklık derecesi hesaplanıyor"
+
+#, fuzzy
+#~ msgid "%d-band clumping with threshold %g"
+#~ msgstr "%d nokta eşik dışında"
+
+#, fuzzy
+#~ msgid "Calculating %s"
+#~ msgstr "Haritalar hesaplanıyor ..."
+
+#, fuzzy
+#~ msgid ""
+#~ "\\eading the input map -%s- and -%s- and creating some temporary files..."
+#~ msgstr "Bazı geçici dosyalar oluşturuluyor..."
+
+#~ msgid "Converting ... "
+#~ msgstr "Dönüştürülüyor..."
+
+#, fuzzy
+#~ msgid "Registers raster, vector and raster3d maps in a space time datasets."
+#~ msgstr "girdi mevkisindeki vektör haritaları listele ve çık"
+
+#, fuzzy
+#~ msgid "Path to files"
+#~ msgstr "yazıtipi dosyası yolu"
+
+#, fuzzy
+#~ msgid "Width of the lines"
+#~ msgstr "Yüzdelik listesi"
+
+#, fuzzy
+#~ msgid "Symbol for point"
+#~ msgstr "Satır sayısı"
+
+#, fuzzy
+#~ msgid "Point size"
+#~ msgstr "Simge boyutu"
+
+#, fuzzy
+#~ msgid "Width of point symbol lines"
+#~ msgstr "Nokta koordinatları listesi"
+
+#, fuzzy
+#~ msgid "Cannot find/open symbol: '%s'"
+#~ msgstr "Seçme imleci açılamıyor: '%s'"
+
+#, fuzzy
+#~ msgid "Color <%s> cannot for option %s be parsed"
+#~ msgstr "<%s> sütunu <%s> tablosunda bulunamıyor"
+
+#, fuzzy
+#~ msgid "Number of widths (%d) is higher then the number of files (%d)"
+#~ msgstr "Yükselti dosyaları sayısı ile renk dosyaları sayısı eşleşmiyor"
+
+#, fuzzy
+#~ msgid "Number of widths (%d) is lower then the number of files (%d)"
+#~ msgstr "Yükselti dosyaları sayısı ile renk dosyaları sayısı eşleşmiyor"
+
+#, fuzzy
+#~ msgid "Print in shell script style, but in one line (flat)"
+#~ msgstr "Kabuk betiği stilinde yazdır"
+
+#~ msgid "Unable to set font size"
+#~ msgstr "Yazıtipi boyutu ayarlanamıyor"
+
+#, fuzzy
+#~ msgid "Outputs vector map if network map is given, otherwise raster map"
+#~ msgstr "Çıktı vektör adı belirlenemedi"
+
+#, fuzzy
+#~ msgid "Allocating memory for bilinear interpolation"
+#~ msgstr "Hafıza ayrılıyor ve girdi harita okunuyor..."
+
+#~ msgid "Point classification"
+#~ msgstr "Nokta sınıflandırma"
+
+#, fuzzy
+#~ msgid "Mean calculation"
+#~ msgstr "Raster harita hesaplayıcı."
+
+#, fuzzy
+#~ msgid "Vector map profiling tool"
+#~ msgstr "Vektör harita projeksiyon zonu"
+
+#, fuzzy
+#~ msgid "Input filter"
+#~ msgstr "Girdi dosya"
+
+#, fuzzy
+#~ msgid "Coordinates for profiling line nodes"
+#~ msgstr "Harita birimlerinde verilen koordinatlar"
+
+#, fuzzy
+#~ msgid "Profiling line"
+#~ msgstr "Çizgiler işleniyor... "
+
+#, fuzzy
+#~ msgid "Buffer (tolerance) for points in map units"
+#~ msgstr "Harita birimlerinde verilen koordinatlar"
+
+#, fuzzy
+#~ msgid "Output formating"
+#~ msgstr "Çıktı biçimi"
+
+#, fuzzy
+#~ msgid "Number of significant digits"
+#~ msgstr "Satır sayısı"
+
+#, fuzzy
+#~ msgid "Use features only from specified layer"
+#~ msgstr "Belirtilen (alt)gruptaki dosyaları listele (süslü)"
+
+#, fuzzy
+#~ msgid "Name for profile line and buffer output map"
+#~ msgstr "Çıktı raster harita(lar) için ön ek"
+
+#, fuzzy
+#~ msgid "Profile line and buffer around it will be written"
+#~ msgstr "'%s' dosyası zaten mevcut ve üzerine yazılacak."
+
+#, fuzzy
+#~ msgid "Do not print column names"
+#~ msgstr "Çok fazla sütun adı"
+
+#, fuzzy
+#~ msgid "Do not print 3D vector data (z values)"
+#~ msgstr "Değer içermeyen hücreleri temsil eden değer"
+
+#, fuzzy
+#~ msgid "Profiling line map"
+#~ msgstr "Çizgiler işleniyor... "
+
+#, fuzzy
+#~ msgid "Vector map containing profiling line"
+#~ msgstr "Çizgileri içeren girdi vektör haritası"
+
+#, fuzzy
+#~ msgid "Layer 0 not supported"
+#~ msgstr "0 katmanı desteklenmiyor"
+
+#, fuzzy
+#~ msgid "<%s> is not a valid vector map name"
+#~ msgstr "%s yazıtipi dizini dosya değil"
+
+#, fuzzy
+#~ msgid "At least profile start and end coordinates are required!"
+#~ msgstr "En azından iki nokta gereklidir"
+
+#, fuzzy
+#~ msgid ""
+#~ "No database connection defined for map <%s> layer %d, but WHERE condition "
+#~ "is provided"
+#~ msgstr ""
+#~ "%d katmanı için veritabanı bağlantısı belirlenmemiş. Önce v.db.connect'i "
+#~ "kullanın."
+
+#, fuzzy
+#~ msgid "No features match Your query"
+#~ msgstr "Girdi vektör nokta haritasının adı"
+
+#, fuzzy
+#~ msgid "Error while initialising line list"
+#~ msgstr "Geçmiş dosyası okunurken hata"
+
+#, fuzzy
+#~ msgid "Error while reading vector feature from profile line map"
+#~ msgstr "Doku dosyası okunurken hata"
+
+#, fuzzy
+#~ msgid "Unabale to get attribute data for cat %d"
+#~ msgstr "%d kategorisi için öznitelik seçilemiyor"
+
+#, fuzzy
+#~ msgid "Unable to create 2D raster <%s>"
+#~ msgstr "<%s> raster haritası oluşturulamıyor"
+
+#, fuzzy
+#~ msgid "Unable to create 3D raster <%s>"
+#~ msgstr "<%s> raster haritası oluşturulamıyor"
+
+#, fuzzy
+#~ msgid "Error writing cell (%d,%d,%d) with value %f, nrows = %d"
+#~ msgstr "cell_misc/%s/gdal dosyasını yazmada hata"
+
+#, fuzzy
+#~ msgid "Unable to initialize G-submatrix..."
+#~ msgstr "Harita kapatılamıyor"
+
+#, fuzzy
+#~ msgid "Name of input vector points map"
+#~ msgstr "Girdi vektör nokta haritasının adı"
+
+#, fuzzy
+#~ msgid "File to write the report"
+#~ msgstr "Dosyaya yazılamıyor"
+
+#, fuzzy
+#~ msgid "Name for output 2D/3D raster map"
+#~ msgstr "Çıktı raster haritasının adı"
+
+#, fuzzy
+#~ msgid "Vertical variogram function"
+#~ msgstr "Düşey ölçekleme faktörü"
+
+#, fuzzy
+#~ msgid "Attribute column containing input values for interpolation"
+#~ msgstr "Etiket için kullanılacak öznitelik sütunu adı"
+
+#, fuzzy
+#~ msgid "Number of horizontal lags"
+#~ msgstr "Satır sayısı"
+
+#, fuzzy
+#~ msgid "Report is being written to %s..."
+#~ msgstr "%d obje '%s' vektörüne yazıldı."
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of vertical pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "Sınıf sayısı <256 olmalıdır!"
+
+#, fuzzy
+#~ msgid "Please set up name of output layer..."
+#~ msgstr "Çıktı katmanı adı"
+
+#, fuzzy
+#~ msgid "Coordinates of point no. %d are zeros."
+#~ msgstr "Başlangıç noktasının D ve K koordinatları"
+
+#, fuzzy
+#~ msgid "Computing %s variogram properties..."
+#~ msgstr "Haritalar hesaplanıyor ..."
+
+#, fuzzy
+#~ msgid "Anisotropy ratio must be greater than zero..."
+#~ msgstr "%s = %s -- sıfırdan büyük olmalıdır"
+
+#, fuzzy
+#~ msgid "Error writing file"
+#~ msgstr "PGM dosyasını yazmada hata"
+
+#, fuzzy
+#~ msgid "Error closing file..."
+#~ msgstr "ascii dosyayı kapamada hata"
+
+#, fuzzy
+#~ msgid "Unable to plot variogram"
+#~ msgstr "Hafıza ayrılamıyor"
+
+#, fuzzy
+#~ msgid "Memory allocation failed..."
+#~ msgstr "Enterpolasyon yöntemi"
+
+#, fuzzy
+#~ msgid "Interpolating unknown values..."
+#~ msgstr "Enterpolasyon yöntemi"
+
+#, fuzzy
+#~ msgid "Error writing result into output layer..."
+#~ msgstr "<%s> UNITS çıktı dosyasına yazmada hata:"
+
+#, fuzzy
+#~ msgid "Reading values from attribute column <%s>..."
+#~ msgstr "Öznitelik tablosu da kopyala"
+
+#, fuzzy
+#~ msgid "Reading coordinates..."
+#~ msgstr "Girdiler okunuyor..."
+
+#, fuzzy
+#~ msgid "Error reading input coordinates z..."
+#~ msgstr "Girdiler okunuyor..."
+
+#, fuzzy
+#~ msgid "%d features skipped, only points are accepted"
+#~ msgstr "Tamsayı değerler içeri aktarıldı"
+
+#, fuzzy
+#~ msgid "Unused points: %d (out of region)"
+#~ msgstr "Geçerli bölgedeki sadece noktaları kullan"
+
+#, fuzzy
+#~ msgid "Nothing to scan..."
+#~ msgstr "Hiçbirşey Bulunamadı.\n"
+
+#, fuzzy
+#~ msgid "<%s> already compressed"
+#~ msgstr "[%s] zaten sıkıştırıldı"

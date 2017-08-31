@@ -9530,3 +9530,35 @@ msgstr "Dev 笔记：改编站点库用于矢量点。（模块应更新为 GRAS
 #, fuzzy
 msgid "Cannot fetch row"
 msgstr "无法获取图层信息"
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "运行所有的单元测试"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "无法打开栅格图[%s在%s中]"
+
+#, fuzzy
+#~ msgid "syntax error in the color rule"
+#~ msgstr "格式错误"
+
+#, fuzzy
+#~ msgid "syntax error in the color format"
+#~ msgstr "格式错误"
+
+#, fuzzy
+#~ msgid "Using <%s@%s>"
+#~ msgstr "无法找到[%s]"
+
+#, fuzzy
+#~ msgid "Example: income < 1000 and population >= 10000"
+#~ msgstr "例如：income < 1000 and inhab >= 10000"
+
+#, fuzzy
+#~ msgid "Syntax error in cell header"
+#~ msgstr "格式错误"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "无法打开%s"

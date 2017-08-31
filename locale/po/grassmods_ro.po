@@ -16,7 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.5\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
 
 #: ../db/drivers/mysql/index.c:55 ../db/drivers/sqlite/index.c:77
 msgid "Unable to create index:"
@@ -41362,3 +41363,277 @@ msgstr "Memorie insuficientă pentru adxy"
 
 msgid "Converts a GRASS site_lists file into a vector map."
 msgstr "Convertește un fișier cu liste de situri GRASS în hartă vectorială."
+
+#, fuzzy
+#~ msgid "Value to add to the raster values"
+#~ msgstr "Imposibil de creat harta raster<%s>"
+
+#, fuzzy
+#~ msgid "Unknown raster type <%d>"
+#~ msgstr "Tip necunoscut: %d"
+
+#, fuzzy
+#~ msgid "Invalid range <%s> for option %s"
+#~ msgstr "Hartă nevalidă <%s>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
+#~ msgstr ""
+#~ "Crează hartă raster dintr-un ansamblu de coordonate folosind statistici "
+#~ "univariate."
+
+#, fuzzy
+#~ msgid "Preparing the maps..."
+#~ msgstr "Citirea hărții raster...."
+
+#, fuzzy
+#~ msgid "Computing proportional count map..."
+#~ msgstr ""
+#~ "Calculează componentele cele mai puternic și cele mai slab conectate din "
+#~ "rețea."
+
+#, fuzzy
+#~ msgid "Computing proportional sum map..."
+#~ msgstr "Încarca data..."
+
+#, fuzzy
+#~ msgid "Computing mean map..."
+#~ msgstr "Extragerea liniilor..."
+
+#, fuzzy
+#~ msgid "Closing the maps..."
+#~ msgstr "Scrierea hărții raster..."
+
+#, fuzzy
+#~ msgid "Range bandwidth: %g"
+#~ msgstr "Lățimea imaginii"
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d segments..."
+#~ msgstr "Generarea punctelor..."
+
+#, fuzzy
+#~ msgid "Error in writing IDs"
+#~ msgstr "Eroare în scrierea datelor"
+
+#, fuzzy
+#~ msgid "Error in writing goodness of fit"
+#~ msgstr "Eroare în scrierea fișierului PPM"
+
+#, fuzzy
+#~ msgid "Error in writing new band values"
+#~ msgstr "Eroare în scrierea fișierului PPM"
+
+#, fuzzy
+#~ msgid "Writing out shifted band values..."
+#~ msgstr "Scrierea hărții..."
+
+#, fuzzy
+#~ msgid "%d-band clustering with threshold %g"
+#~ msgstr "%s: datele punctuale nu au fost găsite"
+
+#, fuzzy
+#~ msgid "Found %d clumps"
+#~ msgstr "Tipul componentelor"
+
+#, fuzzy
+#~ msgid "Spatial radius in number of cells"
+#~ msgstr "Număr de coloane"
+
+#, fuzzy
+#~ msgid "Option '%s' must be >= 1"
+#~ msgstr "'%s' trebuie sa fie > 0 pentru '%s'"
+
+#, fuzzy
+#~ msgid "Integer overflow: too many cells in current region"
+#~ msgstr "Nu sunt [%ld] celule în regiunea curentă"
+
+#, fuzzy
+#~ msgid "Maximum number of iterations set to %d"
+#~ msgstr "Număr maxim de iterații"
+
+#, fuzzy
+#~ msgid "Invalid number of iterations, %d will be used"
+#~ msgstr "Număr maxim de iterații"
+
+#~ msgid "There aren't [%ld] cells in the current region"
+#~ msgstr "Nu sunt [%ld] celule în regiunea curentă"
+
+#~ msgid "There aren't [%ld] non-NULL cells in the current region"
+#~ msgstr "Nu sunt [%ld] celule NENULE în regiunea curentă"
+
+#~ msgid "Only [%ld] random points created"
+#~ msgstr "Doar [%ld] puncte aletoriu create"
+
+#, fuzzy
+#~ msgid "Minimum size must be larger than 1"
+#~ msgstr "'%s' trebuie sa fie > 0 pentru '%s'"
+
+#, fuzzy
+#~ msgid "Loading input ..."
+#~ msgstr "Încarca data..."
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d clumps..."
+#~ msgstr "Generarea punctelor..."
+
+#, fuzzy
+#~ msgid "Minimum clump size in cells"
+#~ msgstr "Număr de iterații"
+
+#, fuzzy
+#~ msgid "%d-band clumping with threshold %g"
+#~ msgstr "%s: datele punctuale nu au fost găsite"
+
+#, fuzzy
+#~ msgid ""
+#~ "\\eading the input map -%s- and -%s- and creating some temporary files..."
+#~ msgstr "Crează câteva fișiere temporare..."
+
+#~ msgid "Converting ... "
+#~ msgstr "Convertire ... "
+
+#, fuzzy
+#~ msgid "Tic values for the Y axis"
+#~ msgstr "Valoare nevalidă pentru theta"
+
+#, fuzzy
+#~ msgid "Point size"
+#~ msgstr "Puncte"
+
+#, fuzzy
+#~ msgid "Cannot find/open symbol: '%s'"
+#~ msgstr "%s Nu s-a putut deschide %s"
+
+#, fuzzy
+#~ msgid "Vector map profiling tool"
+#~ msgstr "puncte vectoriale"
+
+#, fuzzy
+#~ msgid "Input filter"
+#~ msgstr "Coordonate nevalide: [%s]"
+
+#, fuzzy
+#~ msgid "Profiling line"
+#~ msgstr "Procesarea liniilor..."
+
+#, fuzzy
+#~ msgid "Output formating"
+#~ msgstr "Setările de ieșire"
+
+#, fuzzy
+#~ msgid "Number of significant digits"
+#~ msgstr "Număr de coloane"
+
+#, fuzzy
+#~ msgid "Name for profile line and buffer output map"
+#~ msgstr "Nu s-a putut închide harta"
+
+#, fuzzy
+#~ msgid "Profile line and buffer around it will be written"
+#~ msgstr "Harta raster <%s> există deja și va fi suprascrisă"
+
+#, fuzzy
+#~ msgid "Profiling line map"
+#~ msgstr "Procesarea liniilor..."
+
+#, fuzzy
+#~ msgid "Vector map containing profiling line"
+#~ msgstr "Numele hărții raster care conține netezirea"
+
+#, fuzzy
+#~ msgid "Layer 0 not supported"
+#~ msgstr "Tip de coloană neacceptat"
+
+#, fuzzy
+#~ msgid ""
+#~ "No database connection defined for map <%s> layer %d, but WHERE condition "
+#~ "is provided"
+#~ msgstr ""
+#~ "Conexiunea bazei de date nu este definită pentru stratul %d. Utilizați "
+#~ "prima dată v.db.connect."
+
+#, fuzzy
+#~ msgid "Unabale to get attribute data for cat %d"
+#~ msgstr "Imposibil de obținut datele atribut pentru cat %d"
+
+#, fuzzy
+#~ msgid "Unable to create 2D raster <%s>"
+#~ msgstr "Imposibil de creat harta raster<%s>"
+
+#, fuzzy
+#~ msgid "Unable to create 3D raster <%s>"
+#~ msgstr "Imposibil de creat harta raster<%s>"
+
+#, fuzzy
+#~ msgid "Unable to initialize G-submatrix..."
+#~ msgstr "Nu s-a putut închide harta"
+
+#, fuzzy
+#~ msgid "Name of input vector points map"
+#~ msgstr "Numele hărții vectoriale de intrare (A)"
+
+#, fuzzy
+#~ msgid "File to write the report"
+#~ msgstr "Imposibil de deschis tempfile"
+
+#, fuzzy
+#~ msgid "Name for output 2D/3D raster map"
+#~ msgstr "Nume de ieșire pentru harta raster pantă "
+
+#, fuzzy
+#~ msgid "Vertical variogram function"
+#~ msgstr "Exagerarea verticală"
+
+#, fuzzy
+#~ msgid "Attribute column containing input values for interpolation"
+#~ msgstr "Numele coloanei de atribute folosită pentru înălțime"
+
+#, fuzzy
+#~ msgid "Number of horizontal lags"
+#~ msgstr "Număr de iterații"
+
+#, fuzzy
+#~ msgid "Report is being written to %s..."
+#~ msgstr "Scrierea hărții raster <%s> ..."
+
+#, fuzzy
+#~ msgid "Anisotropy ratio must be greater than zero..."
+#~ msgstr "'%s' trebuie sa fie > 0 pentru '%s'"
+
+#, fuzzy
+#~ msgid "Error writing file"
+#~ msgstr "Eroare în scrierea fișierului PPM"
+
+#, fuzzy
+#~ msgid "Error closing file..."
+#~ msgstr "Imposibil de deschis fișierul de ieșire <%s>"
+
+#, fuzzy
+#~ msgid "Unable to plot variogram"
+#~ msgstr "Imposibil de rulat r.stats"
+
+#, fuzzy
+#~ msgid "Error writing result into output layer..."
+#~ msgstr "Scrierea hărții raster..."
+
+#, fuzzy
+#~ msgid "Reading values from attribute column <%s>..."
+#~ msgstr "vector, raster, tabel de atribute"
+
+#, fuzzy
+#~ msgid "Reading coordinates..."
+#~ msgstr "Citirea arealelor..."
+
+#, fuzzy
+#~ msgid "Error reading input coordinates z..."
+#~ msgstr "Încarca data..."
+
+#, fuzzy
+#~ msgid "Nothing to scan..."
+#~ msgstr "%s: datele punctuale nu au fost găsite"
+
+#, fuzzy
+#~ msgid "<%s> already compressed"
+#~ msgstr "<%s> există deja"

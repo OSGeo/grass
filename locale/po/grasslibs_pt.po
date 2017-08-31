@@ -9637,3 +9637,37 @@ msgstr "Não foi possível obter linha"
 #, fuzzy
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr "G_oldsite_new_struct: # dims ou campos inválidos"
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "Executar todos os testes de unidade"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "não foi possível abrir o mapa raster [%s em %s]"
+
+#, fuzzy
+#~ msgid "syntax error in the color rule"
+#~ msgstr "erro de sintaxe"
+
+#, fuzzy
+#~ msgid "syntax error in the color format"
+#~ msgstr "erro de sintaxe"
+
+#~ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
+#~ msgstr "'%s/%s' foi encontrado em mais mapsets (encontrado também em <%s>)"
+
+#~ msgid "Using <%s@%s>"
+#~ msgstr "A usar <%s@%s>"
+
+#, fuzzy
+#~ msgid "Example: income < 1000 and population >= 10000"
+#~ msgstr "Exemplo: renda < 1000 e habitantes >= 10000"
+
+#, fuzzy
+#~ msgid "Syntax error in cell header"
+#~ msgstr "erro de sintaxe"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "não consegui abrir [%s]"

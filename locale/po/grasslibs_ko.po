@@ -16,6 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../lib/db/dbmi_driver/d_error.c:35
 #, c-format
@@ -9520,3 +9521,15 @@ msgstr "G_oldsite_new_struct: 잘못된 차원 또는 필드 개수입니다."
 msgid ""
 "G_oldsite_describe() must be called immediately after G_fopen_sites_old()."
 msgstr "G_fopen_sites_old() 다음 즉시 G_oldsite_describe()를 호출해야 합니다."
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid "Using <%s@%s>"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"

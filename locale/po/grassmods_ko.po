@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=0;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../db/drivers/mysql/index.c:55 ../db/drivers/sqlite/index.c:77
 msgid "Unable to create index:"
@@ -41040,7 +41040,6 @@ msgstr "출력할 격자지도"
 msgid "Interpolating raster map <%s>... %d row... "
 msgid_plural "Interpolating raster map <%s>... %d rows... "
 msgstr[0] "출력할 격자지도"
-msgstr[1] "출력할 격자지도"
 
 #, fuzzy
 msgid "Prefix for output raster map(s)"
@@ -41165,3 +41164,397 @@ msgstr "출력할 격자지도"
 #, fuzzy
 msgid "Unable to create vector map"
 msgstr "출력할 래스터맵"
+
+#, fuzzy
+#~ msgid "Print in shell script style, but in one line (flat)"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Registers raster, vector and raster3d maps in a space time datasets."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Value to multiply the raster values with"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Value to add to the raster values"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unknown raster type <%d>"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid ""
+#~ "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Preparing the maps..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Computing proportional count map..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Computing proportional sum map..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Computing mean map..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Closing the maps..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Invalid range <%s> for option %s"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Calculating %s"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "%d initial clumps"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "%d-band clumping with threshold %g"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Minimum clump size in cells"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Minimum size must be larger than 1"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Loading input ..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d clumps..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Can only do up to %d raster maps (%d given)"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Path to files"
+#~ msgstr "글꼴파일의 경로"
+
+#, fuzzy
+#~ msgid "Width of the lines"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Symbol for point"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Point size"
+#~ msgstr "글꼴크기"
+
+#, fuzzy
+#~ msgid "Cannot find/open symbol: '%s'"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Vector map profiling tool"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Input filter"
+#~ msgstr "입력파일"
+
+#, fuzzy
+#~ msgid "Coordinates for profiling line nodes"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Profiling line"
+#~ msgstr "선을 합치는 중..."
+
+#, fuzzy
+#~ msgid "Output formating"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Number of significant digits"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Name for profile line and buffer output map"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Profile line and buffer around it will be written"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Do not print column names"
+#~ msgstr "출력할 래스터맵"
+
+#, fuzzy
+#~ msgid "Do not print 3D vector data (z values)"
+#~ msgstr "값이 없는 자료는 보고하지 않습니다"
+
+#, fuzzy
+#~ msgid "Profiling line map"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Vector map containing profiling line"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Profiling line map layer"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Layer 0 not supported"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "<%s> is not a valid vector map name"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "At least profile start and end coordinates are required!"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid ""
+#~ "No database connection defined for map <%s> layer %d, but WHERE condition "
+#~ "is provided"
+#~ msgstr ""
+#~ "지도 <%s>를 위한 데이타베이스 연결이 DB 파일 안에 정의되지 않았습니다"
+
+#, fuzzy
+#~ msgid "No features match Your query"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unabale to get attribute data for cat %d"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Outputs vector map if network map is given, otherwise raster map"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unable to create 2D raster <%s>"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unable to create 3D raster <%s>"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Error writing cell (%d,%d,%d) with value %f, nrows = %d"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unable to initialize G-submatrix..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Name of input vector points map"
+#~ msgstr "입력 벡터점 지도의 이름"
+
+#, fuzzy
+#~ msgid "File to write the report"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Name for output 2D/3D raster map"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "File to write the results of cross validation"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Attribute column containing input values for interpolation"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid ""
+#~ "Attribute column containing z coordinates (only for 3D interpolation "
+#~ "based on 2D point layer)"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Number of horizontal lags"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Nugget effect of horizontal variogram"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Sill of horizontal variogram"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Sill of vertical variogram"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Range of horizontal variogram"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Range of vertical variogram"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Report is being written to %s..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of horizontal pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of vertical pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Please set up name of output layer..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Please set up nugget effect..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Please set up range..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Coordinates of point no. %d are zeros."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Computing %s variogram properties..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Anisotropy ratio must be greater than zero..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Error writing file"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Error closing file..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unable to plot variogram"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Memory allocation failed..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unable to compute experimental variogram..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Interpolating unknown values..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Error writing result into output layer..."
+#~ msgstr "UNITS 출력파일 <%s>로 쓰는데 오류"
+
+#, fuzzy
+#~ msgid "Reading values from attribute column <%s>..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Reading coordinates..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Error reading input coordinates z..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unused points: %d (out of region)"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Nothing to scan..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Region id %d is invalid"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "%d-band clustering with threshold %g"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Found %d clumps"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Spatial radius in number of cells"
+#~ msgstr "셀 개수"
+
+#, fuzzy
+#~ msgid "Option '%s' must be >= 1"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Maximum number of iterations set to %d"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Invalid number of iterations, %d will be used"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Error in writing IDs"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Error in writing goodness of fit"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Error in writing new band values"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Range bandwidth: %g"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d segments..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Writing out shifted band values..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "<%s> already compressed"
+#~ msgstr "<%s>가 이미 존재합니다"

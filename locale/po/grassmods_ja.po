@@ -14353,12 +14353,14 @@ msgstr ""
 msgid "Adjusted EW spline %d"
 msgid_plural "Adjusted EW splines %d"
 msgstr[0] ""
+msgstr[1] ""
 
 #: ../vector/v.lidar.correction/main.c:281
 #, c-format
 msgid "Adjusted NS spline %d"
 msgid_plural "Adjusted NS splines %d"
 msgstr[0] ""
+msgstr[1] ""
 
 #: ../vector/v.lidar.correction/main.c:376
 msgid "Performing mean calculation..."
@@ -28270,7 +28272,7 @@ msgstr ""
 
 #: ../raster/r.recode/main.c:49
 msgid "recode categories"
-msgstr ""
+msgstr "カテゴリーの再コード化します"
 
 #: ../raster/r.recode/main.c:51
 msgid "Recodes categorical raster maps."
@@ -28278,7 +28280,7 @@ msgstr "カテゴリー分けされたラスターマップを記録します"
 
 #: ../raster/r.recode/main.c:54
 msgid "Name of raster map to be recoded"
-msgstr "ラスターマップ名が表示されています"
+msgstr "再コード化されるラスターマップ名"
 
 #: ../raster/r.recode/main.c:60
 msgid "File containing recode rules"
@@ -42066,3 +42068,469 @@ msgstr "キャッシュサイズ (MiB)"
 
 msgid "Unknown raster map type"
 msgstr "不明なラスターマップのタイプ"
+
+#, fuzzy
+#~ msgid "Value to multiply the raster values with"
+#~ msgstr "縮尺標本ラスター値"
+
+#, fuzzy
+#~ msgid "Value to add to the raster values"
+#~ msgstr "縮尺標本ラスター値"
+
+#, fuzzy
+#~ msgid "Unknown raster type <%d>"
+#~ msgstr "不明なタイプ： %d  "
+
+#, fuzzy
+#~ msgid "Invalid range <%s> for option %s"
+#~ msgstr "不正なZ座標範囲"
+
+#, fuzzy
+#~ msgid ""
+#~ "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
+#~ msgstr "一変量の統計で，多くの座標の集合からラスタマップを作成"
+
+#, fuzzy
+#~ msgid "%s will not be taken into account during scan"
+#~ msgstr "スキャン中，zrange は評価に取り込まれません"
+
+#, fuzzy
+#~ msgid "Preparing the maps..."
+#~ msgstr "ラスターマップの読み込み中"
+
+#, fuzzy
+#~ msgid "Computing proportional count map..."
+#~ msgstr ""
+#~ "ネットワーク上の接続の弱いコンポーネントと強いコンポーネントを計算します"
+
+#, fuzzy
+#~ msgid "Computing proportional sum map..."
+#~ msgstr "分位数を計算しています"
+
+#, fuzzy
+#~ msgid "Computing mean map..."
+#~ msgstr "分位数を計算しています"
+
+#, fuzzy
+#~ msgid "Closing the maps..."
+#~ msgstr "ラスターマップのマスキング"
+
+#, fuzzy
+#~ msgid "%lu input points had intensity out of range"
+#~ msgstr "%d のポイントが閾値外"
+
+#, fuzzy
+#~ msgid "Region id %d is invalid"
+#~ msgstr "シグネチャファイル <%s> は無効です "
+
+#, fuzzy
+#~ msgid "Estimated range bandwidth: %g"
+#~ msgstr "ポイント密度と距離を見積もる"
+
+#, fuzzy
+#~ msgid "Range bandwidth: %g"
+#~ msgstr "画像幅  "
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d segments..."
+#~ msgstr "ポイントを作成しています "
+
+#, fuzzy
+#~ msgid "Error in writing IDs"
+#~ msgstr "データ書き込みエラー"
+
+#, fuzzy
+#~ msgid "Error in writing goodness of fit"
+#~ msgstr "データ書き込みエラー"
+
+#, fuzzy
+#~ msgid "Error in writing new band values"
+#~ msgstr "データ書き込みエラー"
+
+#, fuzzy
+#~ msgid "Writing out shifted band values..."
+#~ msgstr "入力するファイル"
+
+#, fuzzy
+#~ msgid "%d-band clustering with threshold %g"
+#~ msgstr "%d のポイントが閾値外"
+
+#, fuzzy
+#~ msgid "Found %d clumps"
+#~ msgstr "完了"
+
+#, fuzzy
+#~ msgid "Spatial radius in number of cells"
+#~ msgstr "行数"
+
+#, fuzzy
+#~ msgid "Option '%s' must be >= 1"
+#~ msgstr "ロケーション <%s> が作成されました"
+
+#, fuzzy
+#~ msgid "Integer overflow: too many cells in current region"
+#~ msgstr "現在の領域には [%ld] 非NULL値セルは存在しません"
+
+#, fuzzy
+#~ msgid "Maximum number of iterations set to %d"
+#~ msgstr " 最大反復数: %d\n"
+
+#, fuzzy
+#~ msgid "Invalid number of iterations, %d will be used"
+#~ msgstr "ステップの不正な数: %s"
+
+#~ msgid ""
+#~ "column '%s' : type int8 (bigint) is stored as integer (4 bytes) some data "
+#~ "may be damaged"
+#~ msgstr ""
+#~ "列 '%s' ： 型 int8 (bigint) は整数 (4 bytes) として保管されます．データが"
+#~ "破損する恐れがあります"
+
+#~ msgid ""
+#~ "column '%s' : type character varying is stored as varchar(250) some data "
+#~ "may be lost"
+#~ msgstr ""
+#~ "列 '%s' ： 型 character は varchar(250) として変換して保管されます．データ"
+#~ "を失う恐れがあります"
+
+#, fuzzy
+#~ msgid "Can only do up to %d raster maps (%d given)"
+#~ msgstr "出力するファイル"
+
+#, fuzzy
+#~ msgid "Minimum size must be larger than 1"
+#~ msgstr "高い方の値 (%d) は１以上である必要があります  "
+
+#, fuzzy
+#~ msgid "Loading input ..."
+#~ msgstr "読込中 ... "
+
+#, fuzzy
+#~ msgid "Renumbering remaining %d clumps..."
+#~ msgstr "トレーニングマップの検索中"
+
+#, fuzzy
+#~ msgid "Minimum clump size in cells"
+#~ msgstr "それぞれのセルの最小値"
+
+#, fuzzy
+#~ msgid "%d initial clumps"
+#~ msgstr "入力するファイル"
+
+#, fuzzy
+#~ msgid "%d-band clumping with threshold %g"
+#~ msgstr "%d のポイントが閾値外"
+
+#, fuzzy
+#~ msgid "Calculating %s"
+#~ msgstr "入力するファイル"
+
+#, fuzzy
+#~ msgid ""
+#~ "\\eading the input map -%s- and -%s- and creating some temporary files..."
+#~ msgstr "一時ファイルを作成中... "
+
+#~ msgid "Converting ... "
+#~ msgstr "変換中 ...   "
+
+#, fuzzy
+#~ msgid "Registers raster, vector and raster3d maps in a space time datasets."
+#~ msgstr "指定したロケーション中のベクトルマップをリストして終了"
+
+#, fuzzy
+#~ msgid "Path to files"
+#~ msgstr "フォントファイルへのパス"
+
+#, fuzzy
+#~ msgid "Path to the directory where the input files are located"
+#~ msgstr ""
+#~ "新しいGISDBASE (新しいロケーションのあるディレクトリーへのフルパス)  "
+
+#, fuzzy
+#~ msgid "Width of the lines"
+#~ msgstr "パーセンタイルの一覧表"
+
+#, fuzzy
+#~ msgid "Tic values for the Y axis"
+#~ msgstr "角度の不正な値"
+
+#, fuzzy
+#~ msgid "Symbol for point"
+#~ msgstr "行数"
+
+#, fuzzy
+#~ msgid "Point size"
+#~ msgstr "アイコンサイズ"
+
+#, fuzzy
+#~ msgid "Width of point symbol lines"
+#~ msgstr "ポイント座標のリスト"
+
+#, fuzzy
+#~ msgid "Cannot find/open symbol: '%s'"
+#~ msgstr "選択したカーソルを開けません： '%s'"
+
+#, fuzzy
+#~ msgid "Color <%s> cannot for option %s be parsed"
+#~ msgstr "列 <%s> は表 <%s>に見つかりませんでした"
+
+#, fuzzy
+#~ msgid "Number of widths (%d) is higher then the number of files (%d)"
+#~ msgstr "ウォーカーの数. デフォルト値はセル数の二倍"
+
+#, fuzzy
+#~ msgid "Number of widths (%d) is lower then the number of files (%d)"
+#~ msgstr "ウォーカーの数. デフォルト値はセル数の二倍"
+
+#, fuzzy
+#~ msgid "Print in shell script style, but in one line (flat)"
+#~ msgstr "シェルスクリプト形式で表示"
+
+#~ msgid "Unable to set font size"
+#~ msgstr "フォントサイズを設定できません"
+
+#, fuzzy
+#~ msgid "Outputs vector map if network map is given, otherwise raster map"
+#~ msgstr "出力するベクトルマップ名 <%s> は有効なマップ名ではありません"
+
+#~ msgid "Point classification"
+#~ msgstr "点分類"
+
+#~ msgid "Correction and creation of terrain vector"
+#~ msgstr "地域ベクトルの修正と作成"
+
+#, fuzzy
+#~ msgid "Vector map profiling tool"
+#~ msgstr "ベクトルマップの投影範囲"
+
+#, fuzzy
+#~ msgid "Input filter"
+#~ msgstr "入力するファイル"
+
+#, fuzzy
+#~ msgid "Coordinates for profiling line nodes"
+#~ msgstr "座標はマップユニットに与えられています"
+
+#, fuzzy
+#~ msgid "Profiling line"
+#~ msgstr "ラインを処理しています... "
+
+#, fuzzy
+#~ msgid "Buffer (tolerance) for points in map units"
+#~ msgstr "マップユニット内の円弧ポリラインの許容差"
+
+#, fuzzy
+#~ msgid "Output formating"
+#~ msgstr "出力フォーマット"
+
+#, fuzzy
+#~ msgid "Number of significant digits"
+#~ msgstr "小数点以下の有効桁数"
+
+#, fuzzy
+#~ msgid "Use features only from specified layer"
+#~ msgstr "特定の（サブ）グループからのリストファイル (飾り付)  "
+
+#, fuzzy
+#~ msgid "Name for profile line and buffer output map"
+#~ msgstr "混合を含む赤、緑、青出力ファイルのベース名"
+
+#, fuzzy
+#~ msgid "Profile line and buffer around it will be written"
+#~ msgstr "ファイル '%s' は既に存在し上書きされます"
+
+#, fuzzy
+#~ msgid "Do not print column names"
+#~ msgstr "列名が多すぎます "
+
+#, fuzzy
+#~ msgid "Do not print 3D vector data (z values)"
+#~ msgstr "データのないセルに代入する記号 "
+
+#, fuzzy
+#~ msgid "Profiling line map"
+#~ msgstr "ラインを処理しています... "
+
+#, fuzzy
+#~ msgid "Vector map containing profiling line"
+#~ msgstr "指定したベクトルマップはラインを含む"
+
+#, fuzzy
+#~ msgid "Layer 0 not supported"
+#~ msgstr "キーカラム"
+
+#, fuzzy
+#~ msgid "Failed to interpreter 'dp' parameter as an integer"
+#~ msgstr " 'dp'パラメーターを整数型として解釈できませんでした"
+
+#, fuzzy
+#~ msgid "<%s> is not a valid vector map name"
+#~ msgstr "<%s> は不正なファイル名です"
+
+#, fuzzy
+#~ msgid "At least profile start and end coordinates are required!"
+#~ msgstr "指定する位置座標"
+
+#, fuzzy
+#~ msgid ""
+#~ "No database connection defined for map <%s> layer %d, but WHERE condition "
+#~ "is provided"
+#~ msgstr ""
+#~ "レイヤー %d に定義されていないデータベース接続. 初めに v.db.接続を使用して"
+#~ "ください."
+
+#, fuzzy
+#~ msgid "No features match Your query"
+#~ msgstr "停止ベクトル点のマップ名"
+
+#, fuzzy
+#~ msgid "Error while initialising line list"
+#~ msgstr "履歴ファイル読み込みエラー"
+
+#, fuzzy
+#~ msgid "Error while reading vector feature from profile line map"
+#~ msgstr "シグネチャファイルの読み取り中にエラー"
+
+#, fuzzy
+#~ msgid "Unabale to get attribute data for cat %d"
+#~ msgstr "カテゴリー %d の属性データを取得できません"
+
+#, fuzzy
+#~ msgid "Error while retreiving database record for cat %d"
+#~ msgstr "カテゴリー %d のデータベース レコード取得中にエラー"
+
+#, fuzzy
+#~ msgid "Unable to create 2D raster <%s>"
+#~ msgstr "ラスターマップ <%s> が作成できません"
+
+#, fuzzy
+#~ msgid "Unable to create 3D raster <%s>"
+#~ msgstr "ラスターマップ <%s> が作成できません"
+
+#, fuzzy
+#~ msgid "Error writing cell (%d,%d,%d) with value %f, nrows = %d"
+#~ msgstr "cell_misc/%s/gdal ファイルの書き込みエラー"
+
+#, fuzzy
+#~ msgid "Unable to initialize G-submatrix..."
+#~ msgstr "マップを閉じれません"
+
+#, fuzzy
+#~ msgid "Name of input vector points map"
+#~ msgstr "���"
+
+#, fuzzy
+#~ msgid "Force 2D interpolation even if input is 3D"
+#~ msgstr "強制的に整数で出力 "
+
+#, fuzzy
+#~ msgid "File to write the report"
+#~ msgstr "ファイルに書き込めません"
+
+#, fuzzy
+#~ msgid "Name for output 2D/3D raster map"
+#~ msgstr "出力ラスターマップ名"
+
+#, fuzzy
+#~ msgid "Vertical variogram function"
+#~ msgstr "高さの強調 "
+
+#, fuzzy
+#~ msgid "Attribute column containing input values for interpolation"
+#~ msgstr "ラベルの属性"
+
+#, fuzzy
+#~ msgid "Number of horizontal lags"
+#~ msgstr "行数"
+
+#, fuzzy
+#~ msgid "Number of vertical lags (only for 3D variogram)"
+#~ msgstr "小数点以下の有効桁数"
+
+#, fuzzy
+#~ msgid "Report is being written to %s..."
+#~ msgstr "%d のフィーチャーが <%s> (%s) へ書き込まれました"
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of vertical pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "行数"
+
+#, fuzzy
+#~ msgid "Please set up name of output layer..."
+#~ msgstr "出力レイヤー名"
+
+#, fuzzy
+#~ msgid "Coordinates of point no. %d are zeros."
+#~ msgstr "始点（東、西）のマップ座標値"
+
+#, fuzzy
+#~ msgid "Computing %s variogram properties..."
+#~ msgstr "共分散マトリックスを計算中"
+
+#, fuzzy
+#~ msgid "Anisotropy ratio must be greater than zero..."
+#~ msgstr "%s = %s -- ゼロ以上である必要があります  "
+
+#, fuzzy
+#~ msgid "Something went wrong opening tmp file..."
+#~ msgstr "modifyNull: 一時ファイルオープンエラー"
+
+#, fuzzy
+#~ msgid "Error writing file"
+#~ msgstr "出力するファイル"
+
+#, fuzzy
+#~ msgid "Error closing file..."
+#~ msgstr "エラー:ASCIIファイルを閉じれません"
+
+#, fuzzy
+#~ msgid "Unable to plot variogram"
+#~ msgstr "マップのカテゴリー値について統計解析を行います"
+
+#, fuzzy
+#~ msgid "Memory allocation failed..."
+#~ msgstr "補間方法 "
+
+#, fuzzy
+#~ msgid "Interpolating unknown values..."
+#~ msgstr "補間方法 "
+
+#, fuzzy
+#~ msgid "Error writing result into output layer..."
+#~ msgstr "UNITS出力ファイル <%s> に書き込めません"
+
+#, fuzzy
+#~ msgid "Reading values from attribute column <%s>..."
+#~ msgstr "属性の表もコピー"
+
+#, fuzzy
+#~ msgid "Reading coordinates..."
+#~ msgstr "���%s ..."
+
+#, fuzzy
+#~ msgid "Error reading input coordinates z..."
+#~ msgstr "読込中 ... "
+
+#, fuzzy
+#~ msgid "%d features skipped, only points are accepted"
+#~ msgstr "整数データをインポート"
+
+#, fuzzy
+#~ msgid "Unused points: %d (out of region)"
+#~ msgstr "現在の領域中のポイントのみを使用"
+
+#, fuzzy
+#~ msgid "Nothing to scan..."
+#~ msgstr "見つかりません\n"
+
+#~ msgid "Old auxiliar table could not be dropped"
+#~ msgstr "古いAuxiliarテーブルを削除できませんでした"
+
+#~ msgid "Auxiliar table could not be dropped"
+#~ msgstr "Auxiliarテーブルはドロップできませんでした"
+
+#, fuzzy
+#~ msgid "<%s> already compressed"
+#~ msgstr "[%s] は圧縮済み "

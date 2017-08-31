@@ -1,24 +1,22 @@
-# translation of grasswxpy_es.po to Brazilian Portuguese
-# translation of grasswxpy_es.po to Português do Brazil
+# Translation of grasswxpy_pt_BR.po
+# Copyright (C) 2017 GRASS Development Team
+# This file is distributed under the same license as the GRASS GIS package.
+# transifex generated, 2017
 #
-# This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2009-2011 GRASS Development Team
-#
-# Antonio Rocha, 2009.
-# Fred Maranhão <fred.maranhao@gmail.com>, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: grasswxpy_pt_br\n"
+"Project-Id-Version: grasswxpy_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-08 22:00+0200\n"
-"PO-Revision-Date: 2011-08-12 16:32-0300\n"
-"Last-Translator: \n"
-"Language-Team: Português do Brasil <grass-translations@lists.osgeo.org>\n"
-"Language: pt_br\n"
+"PO-Revision-Date: 2017-05-23 21:08+0200\n"
+"Last-Translator: Daniel Victoria <daniel.victoria@gmail.com>, 2017\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/grass-gis/"
+"teams/45198/pt_BR/)\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../gui/wxpython/gis_set.py:120
 msgid "1. Select GRASS GIS database directory"
@@ -18666,3 +18664,35 @@ msgstr ""
 #, fuzzy
 msgid "Digitize"
 msgstr "Digitalizar"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "Projecção:"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "Seleccionar mapa raster:"
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "Código de projecção:"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Camada a apagar"
+
+#, fuzzy
+#~ msgid "GRASS locations in {}"
+#~ msgstr "uso: %s arquivo de elementos locação mapset."
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "Não é possível ler os códigos EPSG: %s"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "Não é possível ler os códigos EPSG: %s"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "Não é possível abirr o arquivo"

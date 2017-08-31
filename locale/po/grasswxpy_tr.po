@@ -18607,3 +18607,39 @@ msgstr ""
 
 msgid "Digitize"
 msgstr "Sayısallaştırma"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "Projeksiyon:"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "Raster haritayı seç:"
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "Projeksiyon kodu:"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Silinecek katman"
+
+#, fuzzy
+#~ msgid "GRASS locations in {}"
+#~ msgstr "Proje mevkisi ve harita takımını seç"
+
+#, fuzzy
+#~ msgid "Unicode error detected. Check your locale settings. Details: {}"
+#~ msgstr "GRASS veritabanı oluşturulamıyor. Yerel ayarlarını kontrol et."
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "EPSG Kodları okunamıyor: %s"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "EPSG Kodları okunamıyor: %s"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "Dosya açılamıyor"

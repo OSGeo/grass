@@ -18323,3 +18323,34 @@ msgstr "3D μάσκα"
 
 msgid "Volume"
 msgstr "Όγκος"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "Προβολή"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "%Εισαγωγή επιλεγμένων επιπέδων."
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "Κωδικός Προβολής:"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Επίπεδο προς αφαίρεση"
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "Αδυναμία ανάγνωσης των EPGS κωδικών: %s"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "Αδυναμία ανάγνωσης των EPGS κωδικών: %s"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "Αδύνατον να ανοιχτεί το αρχείο '%s'\n"
+
+#~ msgid "Set computational region from selected map(s) (ignore NULLs)"
+#~ msgstr " "

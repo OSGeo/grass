@@ -18543,3 +18543,35 @@ msgstr ""
 
 msgid "Digitize"
 msgstr "Digitalizar"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "Projecção:"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "Seleccionar mapa raster:"
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "Código de projecção:"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Camada a apagar"
+
+#, fuzzy
+#~ msgid "GRASS locations in {}"
+#~ msgstr "uso: %s arquivo de elementos locação mapset."
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "Não é possível ler os códigos EPSG: %s"
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "Não é possível ler os códigos EPSG: %s"
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "Não é possível abirr o ficheiro"

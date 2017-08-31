@@ -9495,3 +9495,14 @@ msgstr "തരം അക്കമായിരിക്കണം"
 
 msgid "Illegal TimeStamp string"
 msgstr "അസാധുവായ ടൈംസ്റ്റാമ്പ്"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
+
+#~ msgid "Using <%s@%s>"
+#~ msgstr "ഉപയോഗിക്കുന്നു <%s@%s>"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "വെക്റ്റർ അടയ്ക്കാൻ പറ്റുന്നില്ല <%s>"

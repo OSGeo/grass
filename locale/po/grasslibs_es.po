@@ -9562,6 +9562,8 @@ msgid ""
 "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset can "
 "be created by '-c' switch."
 msgstr ""
+"No elexiste el Directorio de mapas <{mapset}> en la Localización <{loc}>. Es "
+"posible crear un nuevo Direx¿ctorio de mapas usando '-c'"
 
 #: ../lib/init/grass.py:911
 #, python-format
@@ -9830,7 +9832,7 @@ msgid "Starting GRASS GIS..."
 msgstr "Iniciando GRASS GIS..."
 
 #: ../lib/init/grass.py:1891
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "<{0}> requested, but not available. Run GRASS in text mode (-text) or "
 "install missing package (usually 'grass-gui')."
@@ -10436,3 +10438,79 @@ msgstr "El nombre del mapa vectorial <%s> no es válido"
 #, fuzzy
 msgid "Removing empty raster maps"
 msgstr "Nombre del mapa raster de entrada."
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "unidades"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "Objeto <%s> no encontrado en la base de datos temporales"
+
+#, fuzzy
+#~ msgid "An error occurred while running r3.mapcalc with expression: %s"
+#~ msgstr "Ocurrió un error al correr r3.mapcalc"
+
+#~ msgid "Cannot find the executable {}"
+#~ msgstr "No se puede encontrar el ejecutable {}"
+
+#~ msgid "Debug level {}"
+#~ msgstr "Nivel de depuración {}"
+
+#~ msgid ""
+#~ "WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {}\n"
+#~ msgstr ""
+#~ "AVISO: ignorado nivel de depuración no soportado (debe ser >=0 y <=5)- "
+#~ "{}\n"
+
+#, fuzzy
+#~ msgid "An error occurred while running r.mapcalc with expression: %s"
+#~ msgstr "Ocurrió un error al correr r.mapcalc"
+
+#, fuzzy
+#~ msgid "syntax error in the color rule"
+#~ msgstr "Error de sintaxis en el encabezado de celda"
+
+#, fuzzy
+#~ msgid "syntax error in the color format"
+#~ msgstr "Error de sintaxis en el encabezado de celda"
+
+#~ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
+#~ msgstr ""
+#~ "'%s / %s' fue encontrado en más Directorios de mapas (también encontrado "
+#~ "en <%s>)"
+
+#~ msgid "Using <%s@%s>"
+#~ msgstr "Utilizando <%s@%s>"
+
+#~ msgid "Syntax error in cell header"
+#~ msgstr "Error de sintaxis en el encabezado de celda"
+
+#~ msgid ""
+#~ "The python command does not work as expected!\n"
+#~ "Please check your GRASS_PYTHON environment variable.\n"
+#~ "Use the -help option for details.\n"
+#~ "Switching to text based interface mode.\n"
+#~ "\n"
+#~ "Hit RETURN to continue.\n"
+#~ msgstr ""
+#~ "¡El comando de python no funciona como se esperaba!\n"
+#~ "Por favor revise la variable ambiental GRASS_PYTHON.\n"
+#~ "Use la opción -help para detalles.\n"
+#~ "Cambiando al modo de interfaz basada en texto.\n"
+#~ "\n"
+#~ "Presione RETURN para continuar.\n"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "No es posible establecer el foco."
+
+#~ msgid ""
+#~ "<{}> requested, but not available. Run GRASS in text mode (-text) or "
+#~ "install missing package (usually 'grass-gui')."
+#~ msgstr ""
+#~ "<{}> solicitado, pero no disponible. Correr GRASS en modo de texto (-"
+#~ "text) o instalar el paquete faltante (usualmente 'grass-gui')."
+
+#~ msgid "Boundary/centroid skipped (output feature type: %s)"
+#~ msgstr "Contorno/centroide omitido (tipo de elemento de salida: %s)"

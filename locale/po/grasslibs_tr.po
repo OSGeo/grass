@@ -9529,3 +9529,34 @@ msgstr "%d kategorisinin veritabanı kaydı bulunamıyor"
 #, fuzzy
 msgid "Cannot fetch row"
 msgstr "Katman bilgisi alınamıyor"
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "Tüm birim testlerini çalıştır"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "<%s> deki <%s> vektör haritası bulunamadı"
+
+#, fuzzy
+#~ msgid "syntax error in the color rule"
+#~ msgstr "Girdi yazım hatası"
+
+#, fuzzy
+#~ msgid "syntax error in the color format"
+#~ msgstr "Girdi yazım hatası"
+
+#~ msgid "Using <%s@%s>"
+#~ msgstr "<%s@%s> kullanılıyor"
+
+#, fuzzy
+#~ msgid "Example: income < 1000 and population >= 10000"
+#~ msgstr "Örnek:  income < 1000 and inhab >= 10000"
+
+#, fuzzy
+#~ msgid "Syntax error in cell header"
+#~ msgstr "Girdi yazım hatası"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "<%s> vektörü kapatılamıyor"

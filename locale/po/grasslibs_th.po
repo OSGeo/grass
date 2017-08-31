@@ -9530,3 +9530,35 @@ msgstr "ไม่พบ ข้อมูลสำหรับแสดง %d  จ
 #, fuzzy
 msgid "Cannot fetch row"
 msgstr "ไม่สามารถอ่านรายละเอียดของชั้นข้อมูลได้"
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "ทดสอบหน่วยทั้งหมด"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "ไม่สามารถคัดลอกแผนที่เชิงเส้น  <%s> ไปเป็น <%s>"
+
+#, fuzzy
+#~ msgid "syntax error in the color rule"
+#~ msgstr "คำสั่งผิดพลาด"
+
+#, fuzzy
+#~ msgid "syntax error in the color format"
+#~ msgstr "คำสั่งผิดพลาด"
+
+#, fuzzy
+#~ msgid "Using <%s@%s>"
+#~ msgstr "ไม่สามารถค้นหา  [%s]"
+
+#, fuzzy
+#~ msgid "Example: income < 1000 and population >= 10000"
+#~ msgstr "ตัวอย่าง: income < 1000 และ inhab >= 10000"
+
+#, fuzzy
+#~ msgid "Syntax error in cell header"
+#~ msgstr "คำสั่งผิดพลาด"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "ไม่สามารถเปิดได้ %s"

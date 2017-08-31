@@ -9580,3 +9580,37 @@ msgstr "行をフェッチできません"
 
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr "G_oldsite_new_struct: 不正な # ディメンションまたはフィールド"
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "すべてのユニットテストを実行"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "<%s> にベクトルマップ <%s> を見つけられません"
+
+#, fuzzy
+#~ msgid "syntax error in the color rule"
+#~ msgstr "構文エラー"
+
+#, fuzzy
+#~ msgid "syntax error in the color format"
+#~ msgstr "構文エラー"
+
+#~ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
+#~ msgstr "'%s/%s' はマップセットの中にあります (<%s>の中にもあります)"
+
+#~ msgid "Using <%s@%s>"
+#~ msgstr "使用 <%s@%s>"
+
+#, fuzzy
+#~ msgid "Example: income < 1000 and population >= 10000"
+#~ msgstr "例: 収入 < 1000 かつ 住人 >= 10000"
+
+#, fuzzy
+#~ msgid "Syntax error in cell header"
+#~ msgstr "構文エラー"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "フォーカスを設置できません"

@@ -2645,7 +2645,7 @@ msgid ""
 "Map <{map}> already exists in the current mapset. Do you want to overwrite "
 "it?"
 msgstr ""
-"El mapa <{map}> ya existe en el Directorio de mapas actual. ¿Desea "
+"El mapa <{mapa}> ya existe en el Directorio de mapas actual. ¿Desea "
 "sobreescribirlo?"
 
 #: ../gui/wxpython/datacatalog/tree.py:702
@@ -9324,9 +9324,9 @@ msgstr ""
 "permitido."
 
 #: ../gui/wxpython/tplot/frame.py:386
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Category {ca} is not on vector map {ma} and it will be not used"
-msgstr "La categoría {ca} no está en el mapa vectorial {ma} y no será usada"
+msgstr "La categoría {ca} no está en el mapa vectorial {m} y no será usada"
 
 #: ../gui/wxpython/tplot/frame.py:405
 msgid ""
@@ -9821,7 +9821,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:94 ../gui/wxpython/menustrings.py:1117
 msgid "Creates a 3D raster map from LAS LiDAR points"
-msgstr ""
+msgstr "Crea un mapa ráster 3D a partir de puntos LAS LiDAR"
 
 #: ../gui/wxpython/menustrings.py:95 ../gui/wxpython/menustrings.py:1118
 msgid "Raw binary array 3D import"
@@ -10011,13 +10011,15 @@ msgstr "Exporta mapa vectorial a formato de archivo DXF."
 
 #: ../gui/wxpython/menustrings.py:138 ../gui/wxpython/menustrings.py:1161
 msgid "LAS LiDAR points export"
-msgstr ""
+msgstr "Exportar puntos LAS LiDAR"
 
 #: ../gui/wxpython/menustrings.py:139 ../gui/wxpython/menustrings.py:1162
 msgid ""
 "Exports vector points as LAS point cloud Converts LAS LiDAR point clouds to "
 "a GRASS vector map with libLAS"
 msgstr ""
+"Exporta puntos vectoriales como una nube de puntos LAS. Convierte nubes de "
+"puntos LAS LiDAR a un mapa vectorial con libLAS"
 
 #: ../gui/wxpython/menustrings.py:140 ../gui/wxpython/menustrings.py:1163
 msgid "PostGIS export"
@@ -13349,7 +13351,7 @@ msgstr "Computar líneas de flujo 3D"
 
 #: ../gui/wxpython/menustrings.py:865 ../gui/wxpython/menustrings.py:1808
 msgid "Computes 3D flow lines and 3D flow accumulation."
-msgstr ""
+msgstr "Calculas líneas de flujo 3D y acumulación de flujo 3D"
 
 #: ../gui/wxpython/menustrings.py:867 ../gui/wxpython/menustrings.py:1810
 msgid ""
@@ -19620,3 +19622,86 @@ msgstr "no se pudo abrir '%s'"
 
 msgid "Unable to read EPGS codes: %s"
 msgstr "No se pueden leer los códigos EPSG: %s"
+
+#~ msgid ""
+#~ "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to "
+#~ "be installed. {}"
+#~ msgstr ""
+#~ "La herramienta de línea de tiempo necesita que el paquete \"matplotlib"
+#~ "\" (mathplotlib-python) esté instalado. {}"
+
+#~ msgid ""
+#~ "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) "
+#~ "package to be installed. {}"
+#~ msgstr ""
+#~ "La herramienta de gráfica temporal necesita que el paquete \"matplotlib"
+#~ "\" (mathplotlib-python) esté instalado. {}"
+
+#~ msgid "Category {ca} is not on vector map {ma} and it will be used"
+#~ msgstr "La categoría {ca} no está en el mapa vectorial {ma} y será usada"
+
+#, fuzzy
+#~ msgid "Reproject"
+#~ msgstr "Proyección"
+
+#, fuzzy
+#~ msgid "Reproject raster"
+#~ msgstr "seleccionar ráster"
+
+#, fuzzy
+#~ msgid "Reproject vector"
+#~ msgstr "Método de reproyección:"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Capa a eliminar"
+
+#, fuzzy
+#~ msgid "GRASS locations in {}"
+#~ msgstr "Seleccionar localización GRASS y directorio de mapas"
+
+#~ msgid "Unicode error detected. Check your locale settings. Details: {}"
+#~ msgstr ""
+#~ "Error de Unicode detectado. Revise su configuración local. Detalles: {}"
+
+#~ msgid ""
+#~ "Note that the wxGUI's vector digitizer is currently disabled (hopefully "
+#~ "this will be fixed soon). Please keep an eye out for updated versions of "
+#~ "GRASS. In the meantime you can use \"v.digit\" from the Develop Vector "
+#~ "menu."
+#~ msgstr ""
+#~ "Tenga en cuenta que el digitalizador vectorial wxGUI's se encuentra "
+#~ "actualmente deshabilitado (se espera que se solucione pronto). Por favor "
+#~ "esté alerta a versiones actualizadas de GRASS. De mientras puede utilizar "
+#~ "\"v.digit\" del menú Develop Vector"
+
+#, fuzzy
+#~ msgid "Unable to read EPGS codes: {}"
+#~ msgstr "No se pueden leer los códigos EPSG: %s ."
+
+#, fuzzy
+#~ msgid "Unable to read IAU codes: {}"
+#~ msgstr "No se pueden leer los códigos EPSG: %s ."
+
+#, fuzzy
+#~ msgid "failed to open '{}'"
+#~ msgstr "falló al abrir '%s'"
+
+#~ msgid ""
+#~ "Unable to provide citation suggestion, see GRASS GIS website instead. The "
+#~ "error was: {}"
+#~ msgstr ""
+#~ "No se puede proveer sugerencia de forma de citar, por favor vea el sitio "
+#~ "web de GRASS GIS. El error fue: {}"
+
+#~ msgid ""
+#~ "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package "
+#~ "to be installed. {}"
+#~ msgstr ""
+#~ "La herramienta de gráfica de dispersión necesita que el paquete "
+#~ "\"matplotlib\" (mathplotlib-python) esté instalado. {}"
+
+#~ msgid "Registers raster, vector and raster3d maps in a space time datasets."
+#~ msgstr ""
+#~ "Registra mapas ráster, vectoriales y ráster3d en un conjunto de datos "
+#~ "espacio temporales."

@@ -9611,3 +9611,37 @@ msgstr "Невозможно получить ряд"
 
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr "G_oldsite_new_struct: неправильное число размерностей или полей"
+
+#, fuzzy
+#~ msgid "unit test"
+#~ msgstr "Выполнить все тесты единиц"
+
+#, fuzzy
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "Невозможно найти векторный слой <%s> в <%s>"
+
+#, fuzzy
+#~ msgid "syntax error in the color rule"
+#~ msgstr "синтаксическая ошибка"
+
+#, fuzzy
+#~ msgid "syntax error in the color format"
+#~ msgstr "синтаксическая ошибка"
+
+#~ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
+#~ msgstr "'%s/%s' был найден в нескольких наборах (также найден в <%s>)"
+
+#~ msgid "Using <%s@%s>"
+#~ msgstr "Используется<%s@%s>"
+
+#, fuzzy
+#~ msgid "Example: income < 1000 and population >= 10000"
+#~ msgstr "Пример: income < 1000 and inhab >= 10000"
+
+#, fuzzy
+#~ msgid "Syntax error in cell header"
+#~ msgstr "синтаксическая ошибка"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "Невозможно установить фокус"

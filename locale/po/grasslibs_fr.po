@@ -9905,7 +9905,7 @@ msgid "Starting GRASS GIS..."
 msgstr "Démarrage du SIG GRASS ..."
 
 #: ../lib/init/grass.py:1891
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "<{0}> requested, but not available. Run GRASS in text mode (-text) or "
 "install missing package (usually 'grass-gui')."
@@ -10480,3 +10480,36 @@ msgstr "Par exemple: 'select * from rybniky where kapri = 'hodne'"
 #, fuzzy
 msgid "Example: income < 1000 and population >= 10000"
 msgstr "Exemple: revenu < 1000  et hab >= 10000"
+
+#~ msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
+#~ msgstr ""
+#~ "'%s/%s' trouvé dans plusieurs jeux de cartes (également trouvé dans <%s>)"
+
+#~ msgid "Using <%s@%s>"
+#~ msgstr "Utilisation de <%s@%s>"
+
+#, fuzzy
+#~ msgid "Syntax error in cell header"
+#~ msgstr "erreur de syntaxe"
+
+#~ msgid ""
+#~ "The python command does not work as expected!\n"
+#~ "Please check your GRASS_PYTHON environment variable.\n"
+#~ "Use the -help option for details.\n"
+#~ "Switching to text based interface mode.\n"
+#~ "\n"
+#~ "Hit RETURN to continue.\n"
+#~ msgstr ""
+#~ "La commande python ne fonctionne pas comme prévu !\n"
+#~ "Merci de vérifier votre variable d'environnement GRASS_PYTHON.\n"
+#~ "Utilisez l'option -help pour les détails.\n"
+#~ "Bascule vers l'interface en mode texte.\n"
+#~ "\n"
+#~ "Appuyez sur ENTRÉE pour continuer.\n"
+
+#, fuzzy
+#~ msgid "Unable to close GUI. {}"
+#~ msgstr "Impossible de fermer le curseur %s"
+
+#~ msgid "Boundary/centroid skipped (output feature type: %s)"
+#~ msgstr "Contour/centroïde sauté (type d'objet en sortie : %s)"
