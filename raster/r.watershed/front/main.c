@@ -73,6 +73,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
     G_add_keyword(_("watershed"));
+    G_add_keyword(_("accumulation"));
+    G_add_keyword(_("drainage"));
+    G_add_keyword(_("stream network"));
+    G_add_keyword(_("stream power index"));
+    G_add_keyword(_("topographic index"));
     module->description = _("Calculates hydrological parameters and RUSLE factors.");
 
     opt1 = G_define_standard_option(G_OPT_R_ELEV);
