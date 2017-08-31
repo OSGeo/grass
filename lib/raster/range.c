@@ -22,8 +22,6 @@
 #define DEFAULT_CELL_MIN 1
 #define DEFAULT_CELL_MAX 255
 
-static void init_rstats(struct R_stats *);
-
 /*!
    \brief Remove floating-point range
 
@@ -243,103 +241,6 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
 }
 
 /*!
- * \brief Read raster stats
- *
- * Read the stats file <i>stats</i>. This file is
- * written in binary using XDR format.
- *
- * An empty stats file indicates that all cells are NULL. This
- * is a valid case, and the result should be an initialized rstats
- * struct with no defined stats.  If the stats file is missing
- * this function will create a default stats with count = 0.
- *
- * \param name map name
- * \param mapset mapset name
- * \param rstats pointer to R_stats structure which holds raster stats
- *
- * \return 1 on success
- * \return 2 stats is empty
- * \return -1 on error or stats file does not exist
- */
-int Rast_read_rstats(const char *name, const char *mapset,
-		       struct R_stats *rstats)
-{
-    int fd;
-    char xdr_buf[2][XDR_DOUBLE_NBYTES];
-    DCELL dcell1, dcell2;
-    unsigned char cc[8];
-    char nbytes;
-    int i;
-    off_t count;
-
-    Rast_init();
-    init_rstats(rstats);
-
-    fd = -1;
-
-    if (!G_find_file2_misc("cell_misc", "stats", name, mapset)) {
-	G_debug(1, "Stats file does not exist");
-	return -1;
-    }
-
-    fd = G_open_old_misc("cell_misc", "stats", name, mapset);
-    if (fd < 0) {
-	G_warning(_("Unable to read stats file for <%s>"),
-		  G_fully_qualified_name(name, mapset));
-	return -1;
-    }
-
-    if (read(fd, xdr_buf, sizeof(xdr_buf)) != sizeof(xdr_buf)) {
-	/* if the stats file exists, but empty file, meaning Nulls */
-	close(fd);
-	G_debug(1, "Empty stats file meaning Nulls for <%s>",
-		  G_fully_qualified_name(name, mapset));
-	return 2;
-    }
-
-    G_xdr_get_double(&dcell1, xdr_buf[0]);
-    G_xdr_get_double(&dcell2, xdr_buf[1]);
-
-    rstats->sum = dcell1;
-    rstats->sumsq = dcell2;
-
-    /* count; see cell_values_int() in get_row.c */
-    nbytes = 1;
-    if (read(fd, &nbytes, 1) != 1) {
-	/* if the stats file exists, but empty file, meaning Nulls */
-	close(fd);
-	G_debug(1, "Unable to read byte count in stats file for <%s>",
-		  G_fully_qualified_name(name, mapset));
-	return -1;
-    }
-
-    if (nbytes < 1 || nbytes > sizeof(off_t)) {
-	close(fd);
-	G_debug(1, "Invalid byte count in stats file for <%s>",
-		  G_fully_qualified_name(name, mapset));
-	return -1;
-    }
-    if (read(fd, cc, nbytes) != nbytes) {
-	/* incorrect number of bytes for count */
-	close(fd);
-	G_debug(1, "Unable to read count in stats file for <%s>",
-		  G_fully_qualified_name(name, mapset));
-	return -1;
-    }
-
-    count = 0;
-    for (i = nbytes - 1; i >= 0; i--) {
-	count = (count << 8);
-	count = count + cc[i];
-    }
-    rstats->count = count;
-
-    close(fd);
-
-    return 1;
-}
-
-/*!
  * \brief Write raster range file
  *
  * This routine writes the range information for the raster map
@@ -357,8 +258,6 @@ int Rast_read_rstats(const char *name, const char *mapset,
 void Rast_write_range(const char *name, const struct Range *range)
 {
     FILE *fp;
-
-    Rast_write_rstats(name, &(range->rstats));
 
     if (Rast_map_type(name, G_mapset()) != CELL_TYPE) {
 	G_remove_misc("cell_misc", "range", name);	/* remove the old file with this name */
@@ -395,8 +294,6 @@ void Rast_write_fp_range(const char *name, const struct FPRange *range)
 
     Rast_init();
 
-    Rast_write_rstats(name, &(range->rstats));
-
     fd = G_open_new_misc("cell_misc", "f_range", name);
     if (fd < 0) {
 	G_remove_misc("cell_misc", "f_range", name);
@@ -415,72 +312,6 @@ void Rast_write_fp_range(const char *name, const struct FPRange *range)
     if (write(fd, xdr_buf, sizeof(xdr_buf)) != sizeof(xdr_buf)) {
 	G_remove_misc("cell_misc", "f_range", name);
 	G_fatal_error(_("Unable to write range file for <%s>"), name);
-    }
-
-    close(fd);
-}
-
-/*!
- * \brief Write raster stats file
- *
- * Write the stats file <tt>stats</tt>. This file is
- * written in binary using XDR format. If the count is < 1
- * in <em>rstats</em>, an empty <tt>stats</tt> file is created.
- *
- * \param name map name
- * \param rstats pointer to R_stats which holds stats info
- */
-void Rast_write_rstats(const char *name, const struct R_stats *rstats)
-{
-    int fd;
-    char xdr_buf[2][XDR_DOUBLE_NBYTES];
-    unsigned char cc[8];
-    char nbytes;
-    int i;
-    off_t count;
-
-    Rast_init();
-
-    fd = G_open_new_misc("cell_misc", "stats", name);
-    if (fd < 0) {
-	G_remove_misc("cell_misc", "stats", name);
-	G_fatal_error(_("Unable to write stats file for <%s>"), name);
-    }
-
-    /* if count is zero, write empty file meaning Nulls */
-    if (rstats->count < 1) {
-	close(fd);
-	return;
-    }
-
-    G_xdr_put_double(xdr_buf[0], &rstats->sum);
-    G_xdr_put_double(xdr_buf[1], &rstats->sumsq);
-
-    if (write(fd, xdr_buf, sizeof(xdr_buf)) != sizeof(xdr_buf)) {
-	G_remove_misc("cell_misc", "stats", name);
-	G_fatal_error(_("Unable to write stats file for <%s>"), name);
-    }
-
-    /* count; see convert_int() in put_row.c */
-    count = rstats->count;
-    nbytes = 0;
-    for (i = 0; i < sizeof(off_t); i++) {
-	cc[i] = count & 0xff;
-	count >>= 8;
-	if (cc[i])
-	    nbytes = i;
-    }
-    nbytes++;
-
-    /* number of bytes needed for count */
-    if (write(fd, &nbytes, 1) != 1) {
-	G_remove_misc("cell_misc", "stats", name);
-	G_fatal_error(_("Unable to write stats file for <%s>"), name);
-    }
-
-    if (write(fd, cc, nbytes) != nbytes) {
-	G_remove_misc("cell_misc", "stats", name);
-	G_fatal_error(_("Unable to write stats file for <%s>"), name);
     }
 
     close(fd);
@@ -581,21 +412,12 @@ void Rast__row_update_range(const CELL * cell, int n,
 	    range->first_time = 0;
 	    range->min = cat;
 	    range->max = cat;
-
-	    range->rstats.sum = cat;
-	    range->rstats.sumsq = (DCELL) cat * cat;
-	    range->rstats.count = 1;
-
 	    continue;
 	}
 	if (cat < range->min)
 	    range->min = cat;
 	if (cat > range->max)
 	    range->max = cat;
-
-	range->rstats.sum += cat;
-	range->rstats.sumsq += (DCELL) cat * cat;
-	range->rstats.count += 1;
     }
 }
 
@@ -639,20 +461,12 @@ void Rast_row_update_fp_range(const void *rast, int n,
 	    range->first_time = 0;
 	    range->min = val;
 	    range->max = val;
-
-	    range->rstats.sum = val;
-	    range->rstats.sumsq = val * val;
-	    range->rstats.count = 1;
 	}
 	else {
 	    if (val < range->min)
 		range->min = val;
 	    if (val > range->max)
 		range->max = val;
-
-	    range->rstats.sum += val;
-	    range->rstats.sumsq += val * val;
-	    range->rstats.count += 1;
 	}
 
 	rast = G_incr_void_ptr(rast, size);
@@ -675,9 +489,6 @@ void Rast_init_range(struct Range *range)
 {
     Rast_set_c_null_value(&(range->min), 1);
     Rast_set_c_null_value(&(range->max), 1);
-
-    init_rstats(&range->rstats);
-
     range->first_time = 1;
 }
 
@@ -727,9 +538,6 @@ void Rast_init_fp_range(struct FPRange *range)
 {
     Rast_set_d_null_value(&(range->min), 1);
     Rast_set_d_null_value(&(range->max), 1);
-
-    init_rstats(&range->rstats);
-
     range->first_time = 1;
 }
 
@@ -763,11 +571,4 @@ void Rast_get_fp_range_min_max(const struct FPRange *range,
 	else
 	    *max = range->max;
     }
-}
-
-static void init_rstats(struct R_stats *rstats)
-{
-    Rast_set_d_null_value(&(rstats->sum), 1);
-    Rast_set_d_null_value(&(rstats->sumsq), 1);
-    rstats->count = 0;
 }
