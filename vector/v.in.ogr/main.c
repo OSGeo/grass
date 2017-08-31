@@ -1692,9 +1692,9 @@ int main(int argc, char *argv[])
 							     &Map));
 
 	    if (!delete_table) {
-		if (db_create_index2(driver, Fi->table, key_column) != DB_OK)
+		if (db_create_index2(driver, Fi->table, Fi->key) != DB_OK)
 		    G_warning(_("Unable to create index for table <%s>, key <%s>"),
-			      Fi->table, key_column);
+			      Fi->table, Fi->key);
 	    }
 	    else {
 		sprintf(buf, "drop table %s", Fi->table);
