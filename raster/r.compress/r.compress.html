@@ -36,8 +36,8 @@ it was RLE compressed, the raster map became only 1249 bytes
 <p>
 Raster maps that are already compressed might be compressed again, 
 either by setting a different method with <tt>GRASS_COMPRESSOR</tt> 
-(RLE, ZLIB, LZ4, BZIP2) or, for the case of ZLIB compression, by 
-changing the compression level with the environment variable 
+(supported methods: RLE, ZLIB, LZ4, BZIP2) or, for the case of ZLIB
+compression, by changing the compression level with the environment variable 
 <tt>GRASS_ZLIB_LEVEL</tt>.
 
 <p>
@@ -237,12 +237,17 @@ unset GRASS_COMPRESSOR
 <a href="r.null.html">r.null</a>,
 <a href="r.support.html">r.support</a>
 </em>
+<p>
+Compression algorithms: 
+<a href="http://www.bzip.org/">bzip2</a>,
+<a href="http://www.lz4.org/">LZ4</a>, 
+<a href="http://zlib.net/">zlib</a>
+
 
 <h2>AUTHORS</h2>
 
-James Westervelt,<br>
-Michael Shapiro,<br> 
-U.S. Army Construction Engineering Research Laboratory<br>
+James Westervelt and Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
+<p>
 Markus Metz
 
 <p><i>Last changed: $Date$</i>
