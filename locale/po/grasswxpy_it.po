@@ -1549,11 +1549,11 @@ msgstr "Etichette vettoriali"
 
 #: ../gui/wxpython/psmap/dialogs.py:6915
 msgid "Vector label files created beforehand by v.label module"
-msgstr ""
+msgstr "Vector label files creato precedentemente dal modulo v.label"
 
 #: ../gui/wxpython/psmap/dialogs.py:6932
 msgid "You can select multiple label files."
-msgstr ""
+msgstr "È possibile selezionare diversi files per le label"
 
 #: ../gui/wxpython/psmap/utils.py:105
 msgid "inch"
@@ -1779,7 +1779,7 @@ msgstr "Anteprima non disponibile"
 
 #: ../gui/wxpython/psmap/frame.py:405
 msgid "Preview is not available probably because Ghostscript is not installed or not on PATH."
-msgstr ""
+msgstr "Anteprima non è disponibile probabilmente poichè Ghostscript non è installato o non è nel PATH."
 
 #: ../gui/wxpython/psmap/frame.py:408
 msgid "Please follow instructions on GRASS Trac Wiki."
@@ -2113,7 +2113,7 @@ msgstr "Le coordinate possono essere ottenute ad esempio cliccando col tasto des
 
 #: ../gui/wxpython/tplot/frame.py:214
 msgid "STRDS"
-msgstr ""
+msgstr "STRDS"
 
 #: ../gui/wxpython/tplot/frame.py:222
 msgid ""
@@ -2127,11 +2127,11 @@ msgstr "Seleziona la colonna dell'attributo"
 
 #: ../gui/wxpython/tplot/frame.py:250
 msgid "Select category of vector(s)"
-msgstr ""
+msgstr "Seleziona la categoria del vettoriale(i)"
 
 #: ../gui/wxpython/tplot/frame.py:268
 msgid "STVDS"
-msgstr ""
+msgstr "STVDS"
 
 #: ../gui/wxpython/tplot/frame.py:296 ../gui/wxpython/tplot/frame.py:716
 #: ../gui/wxpython/tplot/frame.py:720 ../gui/wxpython/tplot/frame.py:741
@@ -2154,17 +2154,17 @@ msgstr "Con un dataset temporale vettoriale occorre selezoonare una colonna dell
 
 #: ../gui/wxpython/tplot/frame.py:461
 msgid "Difference number of vector layers and maps in the vector temporal dataset"
-msgstr ""
+msgstr "Diverso numero di layers vettoriali e mappe nel dataset temporale vettoriale"
 
 #: ../gui/wxpython/tplot/frame.py:503
 #, python-brace-format
 msgid "No connection between vector map {vmap} and layer {la}"
-msgstr ""
+msgstr "Nessuna connessione tra la mappa vettoriale {vmap} e il layer {la}"
 
 #: ../gui/wxpython/tplot/frame.py:577 ../gui/wxpython/tplot/frame.py:619
 #: ../gui/wxpython/tplot/frame.py:662
 msgid "Problem getting data from raster temporal dataset. Empty list of values."
-msgstr ""
+msgstr "C'è stato un problema nei dati dal dataset temporale raster. Lista dei valori è vuota"
 
 #: ../gui/wxpython/tplot/frame.py:589 ../gui/wxpython/tplot/frame.py:636
 #: ../gui/wxpython/tplot/frame.py:674
@@ -2194,7 +2194,7 @@ msgstr "Dataset temporale in input non valido"
 
 #: ../gui/wxpython/tplot/frame.py:929
 msgid "Datasets have different number of values"
-msgstr ""
+msgstr "I dataset hanno un numero differente di valori"
 
 #: ../gui/wxpython/tplot/frame.py:959
 #, python-brace-format
@@ -2203,7 +2203,7 @@ msgstr "Il valore per {date} è {val}"
 
 #: ../gui/wxpython/tplot/frame.py:962
 msgid "Press Del to dismiss."
-msgstr ""
+msgstr "Premere Del per rimuovere"
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:106
 msgid "With stvds you have to set 'attr' option"
@@ -3147,7 +3147,7 @@ msgstr "Catalogo dei dati"
 #: ../gui/wxpython/datacatalog/dialogs.py:30
 #: ../gui/wxpython/modules/import_export.py:851
 msgid "Reprojection"
-msgstr ""
+msgstr "Riproiezione"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:64
 #: ../gui/wxpython/gui_core/forms.py:680
@@ -5617,7 +5617,7 @@ msgstr "Dimensione automatica"
 
 #: ../gui/wxpython/nviz/preferences.py:599
 msgid "Icon size is set automatically based on landscape dimensions."
-msgstr ""
+msgstr "La dimensione è impostata automaticamente basata sulla dimensione del progetto"
 
 #: ../gui/wxpython/nviz/preferences.py:607
 #: ../gui/wxpython/mapswipe/dialogs.py:350
@@ -9228,7 +9228,7 @@ msgstr "if-else"
 
 #: ../gui/wxpython/gmodeler/model.py:1863
 msgid "empty"
-msgstr ""
+msgstr "vuoto"
 
 #: ../gui/wxpython/gmodeler/model.py:1865
 msgid "Details: unsupported tag name '{}'."
@@ -9783,7 +9783,7 @@ msgstr "Vettoriale:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:316
 msgid "Table:"
-msgstr ""
+msgstr "Tabella:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:416
 msgid "Loop"
@@ -13726,7 +13726,7 @@ msgstr "Impostazioni delle sorgenti"
 
 #: ../gui/wxpython/modules/import_export.py:149
 msgid "Import settings"
-msgstr ""
+msgstr "Impostazione dell'import"
 
 #: ../gui/wxpython/modules/import_export.py:379
 #: ../gui/wxpython/modules/import_export.py:520
@@ -13756,7 +13756,7 @@ msgstr "Nessun layer selezionato. Operazione cancellata."
 
 #: ../gui/wxpython/modules/import_export.py:440
 msgid "Unable to determine number of raster bands"
-msgstr ""
+msgstr "Imposibbile determinare il numero di bande raster"
 
 #: ../gui/wxpython/modules/import_export.py:655
 msgid "Define output format for vector data"
@@ -13796,7 +13796,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/import_export.py:883
 msgid "Layers to be reprojected"
-msgstr ""
+msgstr "Layers da riproiettare"
 
 #: ../gui/wxpython/modules/import_export.py:897
 msgid "&Import && reproject"
@@ -13804,7 +13804,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/import_export.py:898
 msgid "Reproject selected layers"
-msgstr ""
+msgstr "Riproietta i layers selezionati"
 
 #: ../gui/wxpython/menustrings.py:4 ../gui/wxpython/menustrings.py:1934
 #: ../gui/wxpython/menustrings.py:1984
@@ -17975,3 +17975,18 @@ msgstr "questo potrebbe non funzionare per più bande"
 
 #~ msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
 #~ msgstr "Crea una visualizzazione 3D di dati GIS. Visualizza superfici (dati raster), dati vettoriali 2D/3D, e volumi (dati raster 3D) in 3D."
+
+#~ msgid "failed to open '{0}'"
+#~ msgstr "impossibile aprire '{0}'"
+
+#~ msgid "GRASS locations in {0}"
+#~ msgstr "Location di GRASS in {0}"
+
+#~ msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#~ msgstr "Lo strumento Timeline richeide l'installazione del pacchetto \"matplotlib\" (python-matplotlib). {0}"
+
+#~ msgid "Unicode error detected. Check your locale settings. Details: {0}"
+#~ msgstr "Errore di Unicode rilevato. Controllare le impostazioni locali. Dettagli: {0}"
+
+#~ msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#~ msgstr "Lo strumento Plot Temporale richiede l'installazione del pacchetto \"matplotlib\" (python-matplotlib). {0}"

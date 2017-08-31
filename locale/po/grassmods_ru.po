@@ -1697,9 +1697,9 @@ msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:378 ../raster/r.in.lidar/main.c:401
 #: ../vector/v.in.lidar/main.c:352
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file <%s> as a LiDAR point cloud"
-msgstr "Невозможно открыть файл <%s> для записи "
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:382 ../raster/r.in.lidar/main.c:405
 #: ../vector/v.in.lidar/main.c:356
@@ -36209,16 +36209,14 @@ msgstr ""
 #: ../vector/v.surf.bspline/main.c:149
 #: ../vector/v.lidar.edgedetection/main.c:94 ../vector/v.outlier/main.c:103
 #: ../vector/v.lidar.correction/main.c:101
-#, fuzzy
 msgid "Length of each spline step in the east-west direction"
-msgstr "Значение шага интерполяции сплайна в восточном направлении"
+msgstr ""
 
 #: ../vector/v.surf.bspline/main.c:158
 #: ../vector/v.lidar.edgedetection/main.c:103 ../vector/v.outlier/main.c:112
 #: ../vector/v.lidar.correction/main.c:110
-#, fuzzy
 msgid "Length of each spline step in the north-south direction"
-msgstr "Значение шага интерполяции сплайна в северном направлении"
+msgstr ""
 
 #: ../vector/v.surf.bspline/main.c:207
 msgid "Choose either vector or raster output, not both"

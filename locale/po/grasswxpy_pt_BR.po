@@ -1393,7 +1393,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:5781 ../gui/wxpython/nviz/tools.py:624
 msgid "Choose a directory:"
-msgstr ""
+msgstr "Selecione um diretório"
 
 #: ../gui/wxpython/psmap/dialogs.py:5782
 msgid "Choose a directory with images"
@@ -4863,11 +4863,11 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:615
 msgid "Save image sequence"
-msgstr ""
+msgstr "Salvar sequencia de imagens"
 
 #: ../gui/wxpython/nviz/tools.py:625
 msgid "Choose a directory for images"
-msgstr ""
+msgstr "Selecione um diretório para as imagens"
 
 #: ../gui/wxpython/nviz/tools.py:632 ../gui/wxpython/animation/dialogs.py:1187
 msgid "File prefix:"
@@ -4884,19 +4884,19 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:705 ../gui/wxpython/nviz/tools.py:2236
 #: ../gui/wxpython/nviz/preferences.py:398
 msgid "Surface"
-msgstr ""
+msgstr "Superfície"
 
 #: ../gui/wxpython/nviz/tools.py:713 ../gui/wxpython/nviz/tools.py:1345
 msgid "Constant surface"
-msgstr ""
+msgstr "Superfície constante"
 
 #: ../gui/wxpython/nviz/tools.py:720 ../gui/wxpython/nviz/preferences.py:546
 msgid "Vector"
-msgstr ""
+msgstr "Vetor"
 
 #: ../gui/wxpython/nviz/tools.py:728 ../gui/wxpython/gui_core/dialogs.py:1452
 msgid "3D raster"
-msgstr ""
+msgstr "Raster 3D"
 
 #: ../gui/wxpython/nviz/tools.py:766 ../gui/wxpython/nviz/preferences.py:287
 msgid "Lighting"
@@ -10496,7 +10496,7 @@ msgstr "Não foi possível obter lista de addons. g.extension falhou."
 
 #: ../gui/wxpython/core/toolboxes.py:565
 msgid "Addons"
-msgstr ""
+msgstr "Addons"
 
 #: ../gui/wxpython/web_services/dialogs.py:95
 msgid " Server settings "

@@ -431,7 +431,7 @@ msgstr "Seleccionar método de interpolación:"
 
 #: ../gui/wxpython/gcp/manager.py:2959
 msgid "clip to computational region in target location"
-msgstr "Recorta la visualización a la región de cálculo en la Localización de destino"
+msgstr "recorta la visualización a la región computacional en la Localización de destino"
 
 #: ../gui/wxpython/gcp/manager.py:3010
 msgid "RMS threshold factor must be > 0"
@@ -477,11 +477,11 @@ msgstr "Lista GCP"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:181
 msgid "Source Display"
-msgstr ""
+msgstr "Visualización de origen"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:185
 msgid "Target Display"
-msgstr ""
+msgstr "Visualización objetivo "
 
 #: ../gui/wxpython/gcp/mapdisplay.py:261
 #: ../gui/wxpython/rlisetup/sampling_frame.py:102
@@ -528,7 +528,7 @@ msgstr "Imprimir visualización"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:474
 msgid "Zoom to computational region (set with g.region)"
-msgstr "Acercamiento a la región de cálculo (definida mediante g.region)."
+msgstr "Acercamiento a la región computacional (definida mediante g.region)."
 
 #: ../gui/wxpython/gcp/mapdisplay.py:479 ../gui/wxpython/mapdisp/frame.py:1388
 msgid "Zoom to default region"
@@ -540,7 +540,7 @@ msgstr "Acercamiento a una región guardada"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:488
 msgid "Set computational region from display"
-msgstr "Establecer la región de cálculo desde la visualización"
+msgstr "Establecer la región computacional desde la visualización"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:493 ../gui/wxpython/mapdisp/frame.py:1400
 msgid "Save display geometry to named region"
@@ -1974,7 +1974,7 @@ msgstr "Ayuda"
 
 #: ../gui/wxpython/timeline/frame.py:139
 msgid "3D plot of spatio-temporal extents"
-msgstr "Extensión de gráfica espacio temporal 3D"
+msgstr "Gráfica 3D de extensión espacio temporal"
 
 #: ../gui/wxpython/timeline/frame.py:142
 msgid "3D plot of spatio-temporal extents (matplotlib >= 1.0.0)"
@@ -1988,7 +1988,7 @@ msgstr "Seleccionar conjunto de dato(s) espacio temporales:"
 #: ../gui/wxpython/tplot/frame.py:419
 #, python-format
 msgid "Dataset <%s> not found in temporal database"
-msgstr "Conjunto de datos <%s> no encontrado en base de datos temporal"
+msgstr "Conjunto de datos <%s> no encontrado en la base de datos temporal"
 
 #: ../gui/wxpython/timeline/frame.py:194 ../gui/wxpython/tplot/frame.py:326
 #: ../gui/wxpython/tplot/frame.py:438
@@ -2184,7 +2184,7 @@ msgstr "Formato de coordenadas incorrecto, debería ser: x,y"
 
 #: ../gui/wxpython/tplot/frame.py:725
 msgid "Seed point outside the current region"
-msgstr ""
+msgstr "Punto semilla fuera de la región actual"
 
 #: ../gui/wxpython/tplot/frame.py:737
 msgid "Invalid input raster dataset"
@@ -2244,11 +2244,11 @@ msgstr "Eliminar todo el texto de la consola de comandos UNIX"
 
 #: ../gui/wxpython/lmgr/pyshell.py:57
 msgid "Simple &editor"
-msgstr ""
+msgstr "&editor simple"
 
 #: ../gui/wxpython/lmgr/pyshell.py:60 ../gui/wxpython/lmgr/toolbars.py:165
 msgid "Open a simple Python code editor"
-msgstr ""
+msgstr "Abrir un editor simple para código Python"
 
 #: ../gui/wxpython/lmgr/pyshell.py:113
 #, python-format
@@ -2279,7 +2279,7 @@ msgstr "Enlazar datos ráster externos"
 
 #: ../gui/wxpython/lmgr/layertree.py:60
 msgid "Unpack GRASS raster map"
-msgstr ""
+msgstr "Desempaquetar mapa ráster GRASS"
 
 #: ../gui/wxpython/lmgr/layertree.py:62
 msgid "Set raster output format"
@@ -2299,7 +2299,7 @@ msgstr "Enlazar datos vectoriales externos"
 
 #: ../gui/wxpython/lmgr/layertree.py:68
 msgid "Unpack GRASS vector map"
-msgstr ""
+msgstr "Desempaquetar mapa vectorial GRASS"
 
 #: ../gui/wxpython/lmgr/layertree.py:70
 msgid "Set vector output format"
@@ -2349,7 +2349,7 @@ msgstr "Añadir capa de mapa vectorial"
 
 #: ../gui/wxpython/lmgr/layertree.py:92
 msgid "Add thematic (choropleth) vector map layer"
-msgstr ""
+msgstr "Agregar mapa vectorial temático (choropleth) "
 
 #: ../gui/wxpython/lmgr/layertree.py:94
 msgid "Add thematic chart layer"
@@ -2431,7 +2431,7 @@ msgstr "Acercamiento al mapa o mapas seleccionados"
 
 #: ../gui/wxpython/lmgr/layertree.py:521
 msgid "Set computational region from selected map(s)"
-msgstr "Establecer la región de cálculo a partir del (los) mapa(s) seleccionado(s)."
+msgstr "Establecer la región computacional a partir del mapa(s) seleccionado(s)"
 
 #: ../gui/wxpython/lmgr/layertree.py:541
 msgid "Export common formats"
@@ -2478,11 +2478,11 @@ msgstr "Reconstruir topología"
 #: ../gui/wxpython/lmgr/layertree.py:852
 #: ../gui/wxpython/gmodeler/preferences.py:668
 msgid "Metadata"
-msgstr "Metadatos."
+msgstr "Metadatos"
 
 #: ../gui/wxpython/lmgr/layertree.py:708
 msgid "Zoom to selected map(s) (ignore NULLs)"
-msgstr "Acercamiento al (los) mapa(s) seleccionado(s) (se ignoraran los valores nulos)"
+msgstr "Zoom al mapa(s) seleccionado (se ignorarán los valores nulos)"
 
 #: ../gui/wxpython/lmgr/layertree.py:720
 #: ../gui/wxpython/animation/dialogs.py:934 ../gui/wxpython/menustrings.py:946
@@ -2492,7 +2492,7 @@ msgstr "Exportar"
 
 #: ../gui/wxpython/lmgr/layertree.py:767
 msgid "Set color table interactively"
-msgstr ""
+msgstr "Establecer paleta de colores interactivamente"
 
 #: ../gui/wxpython/lmgr/layertree.py:776 ../gui/wxpython/menustrings.py:740
 #: ../gui/wxpython/menustrings.py:1646
@@ -2662,7 +2662,7 @@ msgstr "Capas"
 
 #: ../gui/wxpython/lmgr/frame.py:339
 msgid "Console"
-msgstr ""
+msgstr "Consola"
 
 #: ../gui/wxpython/lmgr/frame.py:364
 #: ../gui/wxpython/gui_core/preferences.py:330
@@ -2678,7 +2678,7 @@ msgstr "Datos"
 #: ../gui/wxpython/lmgr/frame.py:388
 #: ../gui/wxpython/gui_core/preferences.py:347
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 #: ../gui/wxpython/lmgr/frame.py:440 ../gui/wxpython/mapdisp/toolbars.py:104
 #: ../gui/wxpython/animation/data.py:46
@@ -2827,12 +2827,12 @@ msgid ""
 "Working directory changed to:\n"
 "\"%s\""
 msgstr ""
-"Entorno de trabajo cambiado a:\n"
+"Directorio de trabajo cambiado a:\n"
 "\"%s\""
 
 #: ../gui/wxpython/lmgr/frame.py:1125
 msgid "Changes current working directory for this GUI."
-msgstr "Cambiar entorno de trabajo actual para esta GUI."
+msgstr "Cambiar directorio de trabajo actual para esta GUI."
 
 #: ../gui/wxpython/lmgr/frame.py:1127
 msgid "Usage: cd [directory]"
@@ -2876,7 +2876,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1231
 msgid "Build platform"
-msgstr ""
+msgstr "Construir plataforma"
 
 #: ../gui/wxpython/lmgr/frame.py:1244
 msgid "Platform"
@@ -3151,12 +3151,12 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:33
 msgid "Data catalog"
-msgstr ""
+msgstr "Catálogo de datos"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:30
 #: ../gui/wxpython/modules/import_export.py:851
 msgid "Reprojection"
-msgstr ""
+msgstr "Reproyección"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:64
 #: ../gui/wxpython/gui_core/forms.py:680
@@ -3186,50 +3186,50 @@ msgstr "Capa a eliminar"
 
 #: ../gui/wxpython/datacatalog/frame.py:36
 msgid "GRASS GIS Data Catalog"
-msgstr ""
+msgstr "GRASS GIS Catálogo de datos"
 
 #: ../gui/wxpython/datacatalog/frame.py:66
 msgid "Close GRASS GIS Data Catalog"
-msgstr ""
+msgstr "Cerrar el Catálogo de datos de GRASS GIS"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:25
 msgid "Reload GRASS locations"
-msgstr ""
+msgstr "Recargar localizaciones de GRASS"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:28
 msgid "Reload current GRASS mapset only"
-msgstr ""
+msgstr "Recargar solamente el Directorio de mapas actual"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:31
 msgid "Click to restrict editing to current mapset only"
-msgstr ""
+msgstr "Click para restringir la edición al Directorio de mapas actual"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:34
 msgid "Click to allow editing other mapsets"
-msgstr ""
+msgstr "Click para permitir editar otros Directorios de mapas"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:54
 msgid "Search:"
-msgstr ""
+msgstr "Buscar:"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:56
 msgid "Type to search database by map type or name. Use prefix 'r:', 'v:' and 'r3:'to show only raster, vector or 3D raster data, respectively. Use Python regular expressions to refine your search."
-msgstr ""
+msgstr "Escriba aquí para buscar en la base de datos por tipo de mapa o nombre. Use los prefijos 'r:', 'v:' y 'r3:' para mostrar solo datos ráster, vectoriales o ráster 3D, respectivamente. Use expresiones regulares de Python para refinar su búsqueda."
 
 #: ../gui/wxpython/datacatalog/tree.py:121
 #, python-brace-format
 msgid "Failed to read mapsets from location <{l}>."
-msgstr ""
+msgstr "Error al leer los directorios de mapas de la localización <{l}>."
 
 #: ../gui/wxpython/datacatalog/tree.py:142
 #, python-brace-format
 msgid "Failed to read maps from location <{l}>."
-msgstr ""
+msgstr "Error al leer los mapas de la localización <{l}>."
 
 #: ../gui/wxpython/datacatalog/tree.py:214
 #, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
-msgstr ""
+msgstr "Mapa de tipo {elem} <{name}> ya existe en el directorio de mapas  <{mapset}>. Desea sobreescribirlo?"
 
 #: ../gui/wxpython/datacatalog/tree.py:301
 #, fuzzy
@@ -3239,57 +3239,57 @@ msgstr "Seleccionar localización GRASS y directorio de mapas"
 #: ../gui/wxpython/datacatalog/tree.py:569
 #, python-brace-format
 msgid "Map <{layer}> marked for copying. You can paste it to the current mapset <{mapset}>."
-msgstr ""
+msgstr "Mapa <{layer}> marcada para ser copiada. Se la puede pegar en el Directorio de mapas actual <{mapset}>."
 
 #: ../gui/wxpython/datacatalog/tree.py:583
 #: ../gui/wxpython/datacatalog/tree.py:643
 msgid "New name"
-msgstr ""
+msgstr "Nombre nuevo"
 
 #: ../gui/wxpython/datacatalog/tree.py:584
 msgid "Rename map"
-msgstr ""
+msgstr "Renombrar mapa"
 
 #: ../gui/wxpython/datacatalog/tree.py:596
 #, python-brace-format
 msgid "Editing {name}"
-msgstr ""
+msgstr "Editando {name}"
 
 #: ../gui/wxpython/datacatalog/tree.py:615
 #, python-brace-format
 msgid "Renaming map <{name}>..."
-msgstr ""
+msgstr "Renombrando mapa <{name}>..."
 
 #: ../gui/wxpython/datacatalog/tree.py:629
 #, python-brace-format
 msgid "{cmd} -- completed"
-msgstr ""
+msgstr "{cmd} -- ha finalizado"
 
 #: ../gui/wxpython/datacatalog/tree.py:637
 msgid "No map selected for copying."
-msgstr ""
+msgstr "Ningún mapa seleccionado para copiar"
 
 #: ../gui/wxpython/datacatalog/tree.py:644
 msgid "Copy map"
-msgstr ""
+msgstr "Copiar mapa"
 
 #: ../gui/wxpython/datacatalog/tree.py:655
 msgid "Failed to copy map: new map has the same name"
-msgstr ""
+msgstr "Error al copiar el mapa: el nuevo mapa tiene el mismo nombre"
 
 #: ../gui/wxpython/datacatalog/tree.py:675
 #, python-brace-format
 msgid "Map <{map}> already exists in the current mapset. Do you want to overwrite it?"
-msgstr ""
+msgstr "El mapa <{mapa}> ya existe en el Directorio de mapas actual. ¿Desea sobreescribirlo?"
 
 #: ../gui/wxpython/datacatalog/tree.py:689
 #, python-brace-format
 msgid "Copying <{name}>..."
-msgstr ""
+msgstr "Copiando <{name}>..."
 
 #: ../gui/wxpython/datacatalog/tree.py:710
 msgid "g.copy completed"
-msgstr ""
+msgstr "g.copy ha finalizado"
 
 #: ../gui/wxpython/datacatalog/tree.py:714
 msgid "Reprojection is not implemented for 3D rasters"
@@ -3298,52 +3298,52 @@ msgstr ""
 #: ../gui/wxpython/datacatalog/tree.py:751
 #, python-brace-format
 msgid "Do you really want to delete map <{m}> of type <{etype}> from mapset <{mapset}> in location <{loc}>?"
-msgstr ""
+msgstr "Realmente desea eliminar el mapa <{m}> de tipo <{etype}> del directorio de mapas <{mapset}> en la localizacion <{loc}>?"
 
 #: ../gui/wxpython/datacatalog/tree.py:756
 msgid "Delete map"
-msgstr ""
+msgstr "Eliminar mapa"
 
 #: ../gui/wxpython/datacatalog/tree.py:757
 #, python-brace-format
 msgid "Deleting {name}..."
-msgstr ""
+msgstr "Eliminando {name}..."
 
 #: ../gui/wxpython/datacatalog/tree.py:773
 msgid "g.remove completed"
-msgstr ""
+msgstr "g.remove ha finalizado"
 
 #: ../gui/wxpython/datacatalog/tree.py:783
 #, python-brace-format
 msgid "Displaying {name}..."
-msgstr ""
+msgstr "Mostrando {name}..."
 
 #: ../gui/wxpython/datacatalog/tree.py:786
 #: ../gui/wxpython/datacatalog/tree.py:795
 msgid " -- completed. Go to Layers tab for further operations."
-msgstr ""
+msgstr "-- finalizado. Diríjase a la pestaña Capas para subsiguientes operaciones."
 
 #: ../gui/wxpython/datacatalog/tree.py:800
 msgid "Failed to display layer: not in current mapset or invalid layer"
-msgstr ""
+msgstr "Error al mostrar la capa: no se encuentra en el Directorio de mapas actual o es inválida"
 
 #: ../gui/wxpython/datacatalog/tree.py:818
 msgid "Moving maps not implemented"
-msgstr ""
+msgstr "Movimiento de mapas no implementado"
 
 #: ../gui/wxpython/datacatalog/tree.py:826
 msgid "Maps can be copied only to current mapset"
-msgstr ""
+msgstr "Los mapas pueden ser copiados solamente al Directorio de mapas actual"
 
 #: ../gui/wxpython/datacatalog/tree.py:904
 msgid "&Copy"
-msgstr ""
+msgstr "&Copiar"
 
 #: ../gui/wxpython/datacatalog/tree.py:908
 #: ../gui/wxpython/datacatalog/tree.py:940
 #: ../gui/wxpython/datacatalog/tree.py:958
 msgid "&Paste"
-msgstr ""
+msgstr "&Pegar"
 
 #. GTC Delete mapset
 #: ../gui/wxpython/datacatalog/tree.py:914 ../gui/wxpython/gis_set.py:207
@@ -3358,11 +3358,11 @@ msgstr "&Renombrar"
 
 #: ../gui/wxpython/datacatalog/tree.py:927
 msgid "&Display layer"
-msgstr ""
+msgstr "&Mostrar capa"
 
 #: ../gui/wxpython/datacatalog/tree.py:946
 msgid "&Switch mapset"
-msgstr ""
+msgstr "&Cambiar Directorio de mapas"
 
 #: ../gui/wxpython/gis_set.py:120
 msgid "1. Select GRASS GIS database directory"
@@ -3873,7 +3873,7 @@ msgstr "Definir región muestral (región para analizar)"
 #: ../gui/wxpython/rlisetup/wizard.py:542
 #: ../gui/wxpython/rlisetup/wizard.py:877
 msgid "Whole map layer"
-msgstr ""
+msgstr "Capa de mapa completa"
 
 #: ../gui/wxpython/rlisetup/wizard.py:543
 msgid "Keyboard setting"
@@ -4616,81 +4616,81 @@ msgstr "Añadir mapa ráster"
 
 #: ../gui/wxpython/rdigit/controller.py:123
 msgid "Please select first the raster map"
-msgstr ""
+msgstr "Por favor, primero seleccione el mapa ráster"
 
 #: ../gui/wxpython/rdigit/controller.py:155
 msgid "Right click to finish area"
-msgstr ""
+msgstr "Click derecho para finalizar área"
 
 #: ../gui/wxpython/rdigit/controller.py:160
 msgid "Right click to finish line"
-msgstr ""
+msgstr "Click derecho para finalizar línea"
 
 #: ../gui/wxpython/rdigit/controller.py:303
 msgid "Do you want to save changes?"
-msgstr ""
+msgstr "¿Desea guardar los cambios?"
 
 #: ../gui/wxpython/rdigit/controller.py:304
 msgid "Save raster map changes"
-msgstr ""
+msgstr "Guardar cambios en el mapa ráster"
 
 #: ../gui/wxpython/rdigit/controller.py:378
 msgid "Failed to create backup copy of edited raster map."
-msgstr ""
+msgstr "Error al crear copia de respaldo del mapa ráster editado"
 
 #: ../gui/wxpython/rdigit/controller.py:397
 msgid "Failed to create new raster map."
-msgstr ""
+msgstr "Error al crear el nuevo mapa ráster"
 
 #: ../gui/wxpython/rdigit/controller.py:488
 #: ../gui/wxpython/rdigit/controller.py:516
 msgid "Rasterizing..."
-msgstr ""
+msgstr "Rasterizando..."
 
 #: ../gui/wxpython/rdigit/controller.py:556
 msgid "Failed to set default color table for edited raster map"
-msgstr ""
+msgstr "Error al definir la tabla de colores por defecto para el mapa ráster editado"
 
 #: ../gui/wxpython/rdigit/dialogs.py:34
 msgid "Create new raster map"
-msgstr ""
+msgstr "Crear nuevo mapa ráster"
 
 #: ../gui/wxpython/rdigit/dialogs.py:53
 msgid "Name for new raster map:"
-msgstr ""
+msgstr "Nombre para nuevo mapa ráster:"
 
 #: ../gui/wxpython/rdigit/dialogs.py:58
 msgid "Optionally select background raster map:"
-msgstr ""
+msgstr "Opcionalmente seleccionar mapa ráster de fondo:"
 
 #: ../gui/wxpython/rdigit/dialogs.py:62
 msgid "New raster map type:"
-msgstr ""
+msgstr "Tipo del nuevo mapa ráster:"
 
 #: ../gui/wxpython/rdigit/dialogs.py:92
 msgid "Please specify name for a new raster map"
-msgstr ""
+msgstr "Por favor, especifique un nombre para el nuevo mapa ráster"
 
 #: ../gui/wxpython/rdigit/dialogs.py:100
 #, python-format
 msgid "Raster map <%s> already exists in the current mapset. Do you want to overwrite it?"
-msgstr ""
+msgstr "El mapa ráster <%s> ya existe en el Directorio de mapas actual. ¿Desea sobreescribirlo?"
 
 #: ../gui/wxpython/rdigit/toolbars.py:27
 msgid "Digitize area"
-msgstr ""
+msgstr "Digitalizar área"
 
 #: ../gui/wxpython/rdigit/toolbars.py:29
 msgid "Digitize line"
-msgstr ""
+msgstr "Digitalizar línea"
 
 #: ../gui/wxpython/rdigit/toolbars.py:31
 msgid "Digitize point"
-msgstr ""
+msgstr "Digitalizar punto"
 
 #: ../gui/wxpython/rdigit/toolbars.py:32
 msgid "Save raster map"
-msgstr ""
+msgstr "Guardar mapa ráster"
 
 #: ../gui/wxpython/rdigit/toolbars.py:33 ../gui/wxpython/vdigit/toolbars.py:184
 msgid "Undo"
@@ -4698,27 +4698,27 @@ msgstr "Deshacer"
 
 #: ../gui/wxpython/rdigit/toolbars.py:34
 msgid "Quit raster digitizer"
-msgstr ""
+msgstr "Salir del digitalizador ráster"
 
 #: ../gui/wxpython/rdigit/toolbars.py:50
 msgid "Select raster map"
-msgstr ""
+msgstr "Seleccionar mapa ráster"
 
 #: ../gui/wxpython/rdigit/toolbars.py:65
 msgid "Set drawing color (not raster cell color)"
-msgstr ""
+msgstr "Establecer el color para dibujar (no el color de las celdas del mapa ráster)"
 
 #: ../gui/wxpython/rdigit/toolbars.py:86
 msgid "Cell value:"
-msgstr ""
+msgstr "Valor de la celda:"
 
 #: ../gui/wxpython/rdigit/toolbars.py:99
 msgid "Width of currently digitized line or diameter of a digitized point in map units."
-msgstr ""
+msgstr "Ancho de línea digitalizada o diámetro de un punto digitalizado en unidades de mapa."
 
 #: ../gui/wxpython/rdigit/toolbars.py:138
 msgid "New raster map"
-msgstr ""
+msgstr "Nuevo mapa ráster"
 
 #: ../gui/wxpython/nviz/mapwindow.py:244
 msgid "Opening 3D view was not successful. Please try to change the value of depth buffer in GUI Settings dialog > tab Map Display > Advanced and restart GUI."
@@ -5457,7 +5457,7 @@ msgstr "Nivel"
 
 #: ../gui/wxpython/nviz/tools.py:4285
 msgid "List of slices"
-msgstr ""
+msgstr "Lista de slices"
 
 #: ../gui/wxpython/nviz/tools.py:4483 ../gui/wxpython/nviz/tools.py:4485
 #, python-brace-format
@@ -5629,11 +5629,11 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/preferences.py:598
 msgid "Automatic size"
-msgstr ""
+msgstr "Tamaño automático"
 
 #: ../gui/wxpython/nviz/preferences.py:599
 msgid "Icon size is set automatically based on landscape dimensions."
-msgstr ""
+msgstr "El tamaño del ícono se establece automáticamente en función de las dimensiones del paisaje."
 
 #: ../gui/wxpython/nviz/preferences.py:607
 #: ../gui/wxpython/mapswipe/dialogs.py:350
@@ -6078,7 +6078,7 @@ msgstr "Constructor SQL"
 
 #: ../gui/wxpython/dbmgr/base.py:1391 ../gui/wxpython/core/settings.py:863
 msgid "Edit selected record"
-msgstr "Editar registro seleccionado"
+msgstr "Editar el registro seleccionado"
 
 #: ../gui/wxpython/dbmgr/base.py:1396 ../gui/wxpython/dbmgr/base.py:1585
 msgid "Insert new record"
@@ -6663,7 +6663,7 @@ msgstr "Guardar región computacional con nombre"
 
 #: ../gui/wxpython/mapdisp/frame.py:1535
 msgid "Raster Digitizer Toolbar"
-msgstr ""
+msgstr "Barra de herramientas del digitalizador ráster"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:29
 #: ../gui/wxpython/mapswipe/toolbars.py:36
@@ -6677,23 +6677,23 @@ msgstr "Consultar mapa(s) seleccionado(s) ráster/vectorial"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:32
 msgid "Select vector feature(s)"
-msgstr ""
+msgstr "Seleccionar elemento(s) vectoriales"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:33
 msgid "Select features interactively from vector map"
-msgstr ""
+msgstr "Seleccionar elementos de un mapa vectorial de modo interactivo"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:35
 msgid "Add scale bar"
-msgstr ""
+msgstr "Añadir barra de escala"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:37
 msgid "Add raster legend"
-msgstr ""
+msgstr "Agregar leyenda ráster "
 
 #: ../gui/wxpython/mapdisp/toolbars.py:39
 msgid "Add vector legend"
-msgstr ""
+msgstr "Agregar leyenda vectorial"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:41 ../gui/wxpython/menustrings.py:2017
 msgid "Add north arrow"
@@ -6777,7 +6777,7 @@ msgstr "Tenga en cuenta que el digitalizador vectorial wxGUI's se encuentra actu
 
 #: ../gui/wxpython/mapdisp/toolbars.py:133
 msgid "Raster digitizer"
-msgstr ""
+msgstr "Digitalizador ráster"
 
 #: ../gui/wxpython/mapdisp/main.py:187
 #, python-format
@@ -6797,7 +6797,7 @@ msgstr "Iniciar visualización de mapa <%s>..."
 #: ../gui/wxpython/mapdisp/main.py:610
 #, python-format
 msgid "Unable to create file <%s>"
-msgstr ""
+msgstr "Imposible crear archivo <%s>"
 
 #: ../gui/wxpython/mapdisp/main.py:626
 #, python-format
@@ -7022,7 +7022,7 @@ msgstr "Color de línea"
 #: ../gui/wxpython/wxplot/dialogs.py:1054
 #: ../gui/wxpython/vdigit/preferences.py:166
 msgid "Line width"
-msgstr "Anchura de línea"
+msgstr "Ancho de línea"
 
 #: ../gui/wxpython/wxplot/dialogs.py:1104
 msgid "Transect segment marker settings"
@@ -7062,7 +7062,7 @@ msgstr "Máximo personalizado"
 
 #: ../gui/wxpython/wxplot/dialogs.py:1335
 msgid "Log scale"
-msgstr ""
+msgstr "Escala logarítmica"
 
 #: ../gui/wxpython/wxplot/dialogs.py:1359
 msgid "Grid and Legend settings"
@@ -7087,7 +7087,7 @@ msgstr "Mostrar la leyenda"
 #: ../gui/wxpython/wxplot/dialogs.py:1597
 #, python-format
 msgid "Plot settings saved to file '%s'."
-msgstr ""
+msgstr "Las configuraciones del gráfico se guardaron en el archivo '%s'."
 
 #: ../gui/wxpython/wxplot/histogram.py:43
 msgid "GRASS GIS Histogramming Tool"
@@ -8545,23 +8545,23 @@ msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:197
 msgid "Remove text"
-msgstr ""
+msgstr "Remover texto"
 
 #: ../gui/wxpython/mapwin/decorations.py:220
 msgid "Remove scale bar"
-msgstr ""
+msgstr "Remover barra de escala"
 
 #: ../gui/wxpython/mapwin/decorations.py:232
 msgid "Remove north arrow"
-msgstr ""
+msgstr "Remover símbolo Norte"
 
 #: ../gui/wxpython/mapwin/decorations.py:244
 msgid "Remove vector legend"
-msgstr ""
+msgstr "Remover leyenda mapa vectorial"
 
 #: ../gui/wxpython/mapwin/decorations.py:256
 msgid "Remove legend"
-msgstr ""
+msgstr "Remover leyenda"
 
 #: ../gui/wxpython/mapwin/buffered.py:252
 msgid "Copy coordinates to clipboard"
@@ -8569,19 +8569,19 @@ msgstr "Copiar coordenadas al portapapeles"
 
 #: ../gui/wxpython/mapwin/buffered.py:260
 msgid "Hide toolbars"
-msgstr ""
+msgstr "Ocultar barra de herramientas"
 
 #: ../gui/wxpython/mapwin/buffered.py:262
 msgid "Show toolbars"
-msgstr ""
+msgstr "Mostrar barra de herramientas"
 
 #: ../gui/wxpython/mapwin/buffered.py:269
 msgid "Hide statusbar"
-msgstr ""
+msgstr "Ocultar barra de estado"
 
 #: ../gui/wxpython/mapwin/buffered.py:270
 msgid "Show statusbar"
-msgstr ""
+msgstr "Mostrar barra de estado"
 
 #: ../gui/wxpython/mapwin/buffered.py:287
 msgid "Resize legend"
@@ -9231,7 +9231,7 @@ msgstr "Mapas ráster 3D"
 #: ../gui/wxpython/gmodeler/model.py:1228 ../gui/wxpython/core/gconsole.py:663
 #: ../gui/wxpython/gui_core/ghelp.py:232
 msgid "unknown"
-msgstr "Desconocido"
+msgstr "desconocido"
 
 #: ../gui/wxpython/gmodeler/model.py:1501
 msgid "<not defined>"
@@ -9363,12 +9363,16 @@ msgid ""
 "Relation doesn't start with data item.\n"
 "Unable to add relation."
 msgstr ""
+"La relación no comienza con un ítem de datos. \n"
+"Imposible agregar la relación."
 
 #: ../gui/wxpython/gmodeler/dialogs.py:435
 msgid ""
 "Relation doesn't point to GRASS command.\n"
 "Unable to add relation."
 msgstr ""
+"La relación no apunta a un comando de GRASS.\n"
+"Imposible agregar la relación."
 
 #: ../gui/wxpython/gmodeler/dialogs.py:448
 msgid ""
@@ -10016,11 +10020,11 @@ msgstr "Crear un sistema de coordenadas cartesiano genérico (XY)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:280
 msgid "Simple methods:"
-msgstr ""
+msgstr "Métodos simples:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:292
 msgid "Advanced methods:"
-msgstr ""
+msgstr "Métodos avanzados:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:395
 msgid "Choose projection"
@@ -10147,7 +10151,7 @@ msgstr "No se pueden leer los códigos EPSG: %s ."
 
 #: ../gui/wxpython/location_wizard/wizard.py:1642
 msgid "Choose IAU Code"
-msgstr ""
+msgstr "Escoger código IAU"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1651
 msgid "Path to the IAU-codes file:"
@@ -10155,11 +10159,11 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1654
 msgid "IAU code:"
-msgstr ""
+msgstr "Código IAU:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1836
 msgid "Choose IAU codes file"
-msgstr ""
+msgstr "Escoger archivo de códigos IAU"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1871
 #, fuzzy
@@ -10250,7 +10254,7 @@ msgstr "Falta el código EPSG."
 
 #: ../gui/wxpython/location_wizard/wizard.py:2547
 msgid "IAU code missing."
-msgstr ""
+msgstr "Falta código IAU."
 
 #: ../gui/wxpython/location_wizard/wizard.py:2558
 #: ../gui/wxpython/location_wizard/wizard.py:2567
@@ -10282,7 +10286,7 @@ msgstr ""
 #: ../gui/wxpython/core/gconsole.py:526
 #, python-format
 msgid "Module <%s> not found."
-msgstr ""
+msgstr "Módulo <%s> no encontrado."
 
 #: ../gui/wxpython/core/gconsole.py:656
 #, python-format
@@ -10313,14 +10317,14 @@ msgid ""
 "\n"
 "Details: %(error)s"
 msgstr ""
-"No se ha podido escribir archivo '%(filePath)s'.\n"
+"No es posible escribir el archivo '%(filePath)s'.\n"
 "\n"
 "Detalles: %(error)s"
 
 #: ../gui/wxpython/core/menutree.py:143
 #, python-format
 msgid "Unknow tag %s"
-msgstr ""
+msgstr "Etiqueta desconocida %s"
 
 #: ../gui/wxpython/core/utils.py:60
 #, python-format
@@ -10345,7 +10349,7 @@ msgstr "ERROR: No ha sido posible determinar la versión de GRASS. Detalles %s "
 #: ../gui/wxpython/core/utils.py:882
 #, python-format
 msgid "Unable to open file '%s'\n"
-msgstr "No ha sido posible abrir archivo '%s'\n"
+msgstr "No ha sido posible abrir el archivo '%s'\n"
 
 #: ../gui/wxpython/core/utils.py:892
 #, python-format
@@ -10353,7 +10357,7 @@ msgid ""
 "%s: line skipped - unable to parse '%s'\n"
 "Reason: %s\n"
 msgstr ""
-"%s: línea saltada - no ha sido posible parsear '%s'\n"
+"%s: línea omitida - no ha sido posible parsear '%s'\n"
 "Razón: %s\n"
 
 #: ../gui/wxpython/core/utils.py:897
@@ -10364,7 +10368,7 @@ msgstr "Llave duplicada: %s\n"
 #: ../gui/wxpython/core/utils.py:913
 #, python-format
 msgid "Unable to create file '%s'\n"
-msgstr "No ha sido crear archivo '%s'\n"
+msgstr "No se ha creado el archivo '%s'\n"
 
 #: ../gui/wxpython/core/utils.py:996 ../gui/wxpython/gui_core/forms.py:1712
 msgid "Select Color"
@@ -10388,16 +10392,16 @@ msgstr "Detalles: %s\n"
 #: ../gui/wxpython/core/render.py:258
 #, python-format
 msgid "Unsupported map layer type '%s'"
-msgstr "Tipo de capa de mapa no soportada '%s'"
+msgstr "Tipo de mapa no soportado '%s'"
 
 #: ../gui/wxpython/core/render.py:623
 #, python-format
 msgid "Rendering failed: %s"
-msgstr ""
+msgstr "Falló el renderizado: %s"
 
 #: ../gui/wxpython/core/render.py:666
 msgid "Rendering aborted"
-msgstr ""
+msgstr "Renderizado abortado"
 
 #: ../gui/wxpython/core/render.py:697
 msgid "Downloading data "
@@ -10463,6 +10467,8 @@ msgid ""
 "Unable to load GDAL Python bindings.\n"
 "WMS layers can not be displayed without the bindings.\n"
 msgstr ""
+"imposible cargar bindings de GDAL Python.\n"
+"Las capas WMS no pueden mostrarse sin los bindings.\n"
 
 #: ../gui/wxpython/core/workspace.py:1608
 #, python-format
@@ -10480,7 +10486,7 @@ msgstr ""
 "Algunas líneas se han omitido cuando se leía la configuración desde el archivo <%(file)s>\n"
 "Véase la ventana 'Salida del comando' para más detalles.\n"
 "\n"
-"Cantida de línea(s) omitida(s): %(line) d"
+"Número de líneas omitidas: %(line)d"
 
 #: ../gui/wxpython/core/workspace.py:1850
 #, python-format
@@ -10493,7 +10499,7 @@ msgstr "Razón"
 
 #: ../gui/wxpython/core/gcmd.py:432
 msgid "Execution failed:"
-msgstr "La ejecución ha fallado:"
+msgstr "Ejecución fallida:"
 
 #: ../gui/wxpython/core/gcmd.py:437 ../gui/wxpython/core/gcmd.py:444
 msgid "Error: "
@@ -10531,11 +10537,11 @@ msgstr "Ocultar todos excepto el conjunto de mapas PERMANENT"
 
 #: ../gui/wxpython/core/settings.py:856
 msgid "Collapse all except current"
-msgstr "Ocultar todos excepto el conjunto de mapas actual"
+msgstr "Ocultar todos excepto el actual"
 
 #: ../gui/wxpython/core/settings.py:857
 msgid "Collapse all"
-msgstr "Ocultar todos los conjuntos de mapas"
+msgstr "Ocultar todo"
 
 #: ../gui/wxpython/core/settings.py:858
 msgid "Expand all"
@@ -10619,7 +10625,7 @@ msgstr "giroscópo"
 
 #: ../gui/wxpython/core/settings.py:930
 msgid "histogram"
-msgstr "Histograma"
+msgstr "histograma"
 
 #: ../gui/wxpython/core/settings.py:936
 msgid "cross"
@@ -10675,7 +10681,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/toolboxes.py:261
 msgid "Unable to create toolboxes directory."
-msgstr "No es posible crear directorio de cajas de herramientas."
+msgstr "No es posible crear el directorio de cajas de herramientas."
 
 #: ../gui/wxpython/core/toolboxes.py:485
 msgid "Custom toolboxes"
@@ -10683,7 +10689,7 @@ msgstr "Cajas de herramientas personalizadas"
 
 #: ../gui/wxpython/core/toolboxes.py:509
 msgid "List of addons cannot be obtained because g.extension failed."
-msgstr "No se ha podido obtener la lista de complementos por que falló g.extension."
+msgstr "No se ha podido obtener la lista de complementos porque falló g.extension."
 
 #: ../gui/wxpython/core/toolboxes.py:565
 msgid "Addons"
@@ -10732,7 +10738,7 @@ msgstr "Contraseña:"
 #: ../gui/wxpython/web_services/dialogs.py:301
 #: ../gui/wxpython/gui_core/gselect.py:1942
 msgid "No data source defined, settings are not saved."
-msgstr ""
+msgstr "Datos de origen no definidos, no se han guardado las configuraciones."
 
 #: ../gui/wxpython/web_services/dialogs.py:386
 #, python-format
@@ -10843,7 +10849,7 @@ msgstr "Descargando datos..."
 
 #: ../gui/wxpython/web_services/dialogs.py:1111
 msgid "Unable to fetch data.\n"
-msgstr ""
+msgstr "No se pueden recuperar los datos.\n"
 
 #: ../gui/wxpython/web_services/widgets.py:131
 msgid " Requested data settings "
@@ -10899,7 +10905,7 @@ msgstr "Número máximo de filas a solicitar al servidor cada vez:"
 
 #: ../gui/wxpython/web_services/widgets.py:300
 msgid "Do not request transparent data"
-msgstr ""
+msgstr "No solicitar datos transparentes"
 
 #: ../gui/wxpython/web_services/widgets.py:315
 msgid "Additional query parameters for server:"
@@ -10911,6 +10917,8 @@ msgid ""
 "Unable to download %s capabilities file\n"
 "from <%s>:\n"
 msgstr ""
+"No se puede descargar el archivo de capabilities  de %s\n"
+"desde <%s>:\n"
 
 #: ../gui/wxpython/web_services/widgets.py:545
 #, python-format
@@ -10918,6 +10926,8 @@ msgid ""
 "%s web service was not found in fetched capabilities file from <%s>:\n"
 "%s\n"
 msgstr ""
+"El servicio web %s no fue encontrado en el archivo de capabilities recuperado de <%s>:\n"
+"%s\n"
 
 #: ../gui/wxpython/web_services/widgets.py:831
 msgid "Source image format"
@@ -10933,7 +10943,7 @@ msgstr "Seleccionar formato de imagen de entrada.\n"
 
 #: ../gui/wxpython/web_services/widgets.py:877
 msgid "Select source projection.\n"
-msgstr ""
+msgstr "Seleccionar proyección fuente.\n"
 
 #: ../gui/wxpython/web_services/widgets.py:881
 msgid "Choose output layer name.\n"
@@ -10955,7 +10965,7 @@ msgstr "estilo"
 
 #: ../gui/wxpython/web_services/widgets.py:1155
 msgid "Add default"
-msgstr ""
+msgstr "Agregar predeterminado"
 
 #: ../gui/wxpython/web_services/widgets.py:1172
 #, python-format
@@ -11257,7 +11267,7 @@ msgstr "Codificación de caracteres:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2518
 msgid "Example"
-msgstr ""
+msgstr "Ejemplo"
 
 #: ../gui/wxpython/gui_core/forms.py:545
 msgid "Enter parameters for '"
@@ -11396,7 +11406,7 @@ msgstr "Id de capa"
 #: ../gui/wxpython/modules/import_export.py:76
 #: ../gui/wxpython/modules/import_export.py:78
 msgid "Projection match"
-msgstr ""
+msgstr "Coincidencia de proyecciones"
 
 #: ../gui/wxpython/gui_core/forms.py:2237
 msgid "Manual"
@@ -11447,15 +11457,15 @@ msgstr "Intente definir variables GRASS_ADDON_PATH o GRASS_ADDON_BASE."
 
 #: ../gui/wxpython/gui_core/vselect.py:48
 msgid "category"
-msgstr ""
+msgstr "categoría"
 
 #: ../gui/wxpython/gui_core/vselect.py:73
 msgid "Select features"
-msgstr ""
+msgstr "Seleccionar elementos"
 
 #: ../gui/wxpython/gui_core/vselect.py:136
 msgid "Create a new map"
-msgstr ""
+msgstr "Crear un nuevo mapa"
 
 #: ../gui/wxpython/gui_core/vselect.py:265
 #, python-format
@@ -11465,16 +11475,16 @@ msgstr ""
 #: ../gui/wxpython/gui_core/vselect.py:297
 #, python-format
 msgid "Failed to query vector map(s) <%s>."
-msgstr ""
+msgstr "Ha fallado la consulta a mapa(s) vectoriales <%s>. "
 
 #: ../gui/wxpython/gui_core/vselect.py:322
 msgid "No features selected"
-msgstr ""
+msgstr "No se seleccionaron elementos"
 
 #: ../gui/wxpython/gui_core/vselect.py:346
 #, python-format
 msgid "Vector map <%s> was created"
-msgstr ""
+msgstr "Mapa vectorial <%s> fue creado"
 
 #: ../gui/wxpython/gui_core/vselect.py:349
 #, python-format
@@ -11483,6 +11493,9 @@ msgid ""
 "\n"
 "Reason: %s"
 msgstr ""
+"No se puede crear un nuevo mapa vectorial.\n"
+"\n"
+"Razón: %s"
 
 #: ../gui/wxpython/gui_core/menu.py:149
 msgid "Double-click or Ctrl-Enter to run selected module"
@@ -11763,7 +11776,7 @@ msgstr "Acercar a la capa de mapa(s) seleccionada(s)"
 
 #: ../gui/wxpython/gui_core/toolbars.py:60
 msgid "Zoom to computational region extent"
-msgstr "Acercamiento a la región de cálculo"
+msgstr "Acercamiento a la región computacional"
 
 #: ../gui/wxpython/gui_core/toolbars.py:62
 msgid "Pan"
@@ -11933,16 +11946,16 @@ msgstr "Polígono"
 
 #: ../gui/wxpython/gui_core/gselect.py:2544
 msgid "No vector map selected in layer manager. Operation canceled."
-msgstr ""
+msgstr "No se ha seleccionado ningún mapa vectorial en el gestor de capas. Operación cancelada."
 
 #: ../gui/wxpython/gui_core/gselect.py:2557
 msgid "Input vector map is not selected"
-msgstr ""
+msgstr "Mapa vectorial de entrada no ha sido seleccionado."
 
 #: ../gui/wxpython/gui_core/gselect.py:2561
 #, python-format
 msgid "Input vector map <%s> and selected map <%s> in layer manager are different. Operation canceled."
-msgstr ""
+msgstr "Mapa vectorial de entrada <%s> y mapa seleccionado <%s> en el gestor de capas son diferentes. Operación cancelada."
 
 #: ../gui/wxpython/gui_core/query.py:31
 msgid "Query results"
@@ -12049,7 +12062,7 @@ msgstr "Cambiar opacidad de la capa"
 
 #: ../gui/wxpython/gui_core/pyedit.py:377
 msgid "Open file"
-msgstr ""
+msgstr "Abrir archivo"
 
 #: ../gui/wxpython/gui_core/pyedit.py:448
 msgid "Replace the content by the template?"
@@ -12057,19 +12070,19 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:450
 msgid "Replace the content by the example?"
-msgstr ""
+msgstr "¿Reemplazar el contenido por el ejemplo?"
 
 #: ../gui/wxpython/gui_core/pyedit.py:452
 msgid "Replace the current content by the file content?"
-msgstr ""
+msgstr "¿Reemplazar el contenido actual por el contenido del archivo?"
 
 #: ../gui/wxpython/gui_core/pyedit.py:458
 msgid "Replace content"
-msgstr ""
+msgstr "Reemplazar contenido"
 
 #: ../gui/wxpython/gui_core/pyedit.py:470
 msgid "Set parameters for the script"
-msgstr ""
+msgstr "Definir los parámetros para el script"
 
 #: ../gui/wxpython/gui_core/pyedit.py:471
 msgid "Specify command line parameters for the script separated by spaces:"
@@ -12077,27 +12090,27 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:521
 msgid "Open (Ctrl+O)"
-msgstr ""
+msgstr "Abrir (Ctrl+O)"
 
 #: ../gui/wxpython/gui_core/pyedit.py:523
 msgid "Save (Ctrl+S)"
-msgstr ""
+msgstr "Guardar (Ctrl+S)"
 
 #: ../gui/wxpython/gui_core/pyedit.py:525
 msgid "Run (Ctrl+R)"
-msgstr ""
+msgstr "Ejecutar (Ctrl+R)"
 
 #: ../gui/wxpython/gui_core/pyedit.py:528
 msgid "Activate overwrite"
-msgstr ""
+msgstr "Activar sobreescribir"
 
 #: ../gui/wxpython/gui_core/pyedit.py:530
 msgid "Deactive overwrite"
-msgstr ""
+msgstr "Desactivar sobreescribir"
 
 #: ../gui/wxpython/gui_core/pyedit.py:581
 msgid "GRASS GIS Simple Python Editor"
-msgstr ""
+msgstr "Editor Python Simple de GRASS GIS"
 
 #: ../gui/wxpython/gui_core/preferences.py:59
 msgid "User settings"
@@ -12151,7 +12164,7 @@ msgstr "Ocultar pestaña '%s'  (requiere reiniciar la GUI)"
 
 #: ../gui/wxpython/gui_core/preferences.py:366
 msgid "Automatically copy selected text to clipboard (in the Console tab)"
-msgstr ""
+msgstr "Copiar automaticamente el texto seleccionado al portapapeles (en la pestaña de Consola)"
 
 #: ../gui/wxpython/gui_core/preferences.py:394
 msgid "Workspace settings"
@@ -12445,7 +12458,7 @@ msgstr "%d módulos corresponden"
 
 #: ../gui/wxpython/gui_core/widgets.py:1215
 msgid "Profiles"
-msgstr ""
+msgstr "Perfiles"
 
 #: ../gui/wxpython/gui_core/widgets.py:1221
 msgid "Save current settings"
@@ -12457,7 +12470,7 @@ msgstr "Borrar configuraciones seleccionadas actualmente"
 
 #: ../gui/wxpython/gui_core/widgets.py:1248
 msgid "Load:"
-msgstr ""
+msgstr "Cargar:"
 
 #: ../gui/wxpython/gui_core/widgets.py:1266
 #, python-format
@@ -12516,7 +12529,7 @@ msgstr "Bandas seleccionadas deben ser diferentes."
 
 #: ../gui/wxpython/iscatt/dialogs.py:214
 msgid "Scatter plot with same bands combination (regardless x y order) has been already added into the list."
-msgstr ""
+msgstr "Un diagrama de dispersión con la misma combinación de bandas (independientemente del orden de x e y) ya ha sido agregado a la lista."
 
 #: ../gui/wxpython/iscatt/dialogs.py:323
 #, python-format
@@ -12736,7 +12749,7 @@ msgstr "Remover clase seleccionada"
 
 #: ../gui/wxpython/iscatt/controllers.py:204
 msgid "No data set."
-msgstr ""
+msgstr "No existe el conjunto de datos."
 
 #: ../gui/wxpython/iscatt/controllers.py:222
 #, python-format
@@ -13592,7 +13605,7 @@ msgstr "Buscar & instalar extensión de Complementos GRASS"
 
 #: ../gui/wxpython/modules/extensions.py:58
 msgid "Repository (leave empty to use the official one)"
-msgstr ""
+msgstr "Repositorio (dejar vacío si desea usar el repositorio oficial)"
 
 #: ../gui/wxpython/modules/extensions.py:61
 msgid "List of extensions - double-click to install"
@@ -13633,7 +13646,7 @@ msgstr "Obteniendo lista de módulos de complementos SVN de GRASS (sea paciente)
 #: ../gui/wxpython/modules/extensions.py:226
 #, python-format
 msgid "%d extensions loaded"
-msgstr ""
+msgstr "%d extensiones cargadas"
 
 #: ../gui/wxpython/modules/extensions.py:238
 msgid "Install"
@@ -13725,7 +13738,7 @@ msgstr "Nombre del mapa GRASS de salida (editable)"
 
 #: ../gui/wxpython/modules/import_export.py:85
 msgid "Override projection check (use current location's projection)"
-msgstr ""
+msgstr "No comprobar proyección (usar la proyección de la localización actual)"
 
 #: ../gui/wxpython/modules/import_export.py:116
 #: ../gui/wxpython/modules/import_export.py:393
@@ -13745,7 +13758,7 @@ msgstr "Configuración de fuente"
 
 #: ../gui/wxpython/modules/import_export.py:149
 msgid "Import settings"
-msgstr ""
+msgstr "Importar configuraciones"
 
 #: ../gui/wxpython/modules/import_export.py:379
 #: ../gui/wxpython/modules/import_export.py:520
@@ -13807,23 +13820,23 @@ msgstr "No hay capas seleccionadas."
 
 #: ../gui/wxpython/modules/import_export.py:863
 msgid "Name for output GRASS map"
-msgstr ""
+msgstr "Nombre para el mapa GRASS de salida"
 
 #: ../gui/wxpython/modules/import_export.py:881
 msgid "Projection of following layers do not match with projection of current location. "
-msgstr ""
+msgstr "La proyección de las siguientes capas no coincide con la proyección de la localización actual."
 
 #: ../gui/wxpython/modules/import_export.py:883
 msgid "Layers to be reprojected"
-msgstr ""
+msgstr "Capas a ser reproyectadas"
 
 #: ../gui/wxpython/modules/import_export.py:897
 msgid "&Import && reproject"
-msgstr ""
+msgstr "&Importar && reproyectar"
 
 #: ../gui/wxpython/modules/import_export.py:898
 msgid "Reproject selected layers"
-msgstr ""
+msgstr "Reproyectar capas seleccionadas"
 
 #: ../gui/wxpython/menustrings.py:4 ../gui/wxpython/menustrings.py:1934
 #: ../gui/wxpython/menustrings.py:1984
@@ -13892,11 +13905,11 @@ msgstr "Añadir diversas capas de mapa ráster o vectoriales a la vista actual"
 
 #: ../gui/wxpython/menustrings.py:25
 msgid "Add RGB raster layer"
-msgstr ""
+msgstr "Agregar capa ráster RGB"
 
 #: ../gui/wxpython/menustrings.py:26
 msgid "Add RGB raster map layer to current display"
-msgstr ""
+msgstr "Añadir capa de mapa ráster RGB al visualizador actual"
 
 #: ../gui/wxpython/menustrings.py:29
 msgid "New map display window"
@@ -14014,7 +14027,7 @@ msgstr "Georreferenciar, rectificar, e importar imaginería Terra-ASTER y MDT re
 #: ../gui/wxpython/menustrings.py:60 ../gui/wxpython/menustrings.py:84
 #: ../gui/wxpython/menustrings.py:1045 ../gui/wxpython/menustrings.py:1069
 msgid "LAS LiDAR points import"
-msgstr ""
+msgstr "Importar puntos LAS LiDAR"
 
 #: ../gui/wxpython/menustrings.py:61 ../gui/wxpython/menustrings.py:1046
 msgid "Unpack raster map"
@@ -14276,7 +14289,7 @@ msgstr "Empaquetar mapa ráster"
 
 #: ../gui/wxpython/menustrings.py:127 ../gui/wxpython/menustrings.py:1112
 msgid "Exports a raster map as GRASS GIS specific archive file"
-msgstr ""
+msgstr "Exporta un mapa ráster como archivo de almacenamiento específico de GRASS GIS"
 
 #: ../gui/wxpython/menustrings.py:128 ../gui/wxpython/menustrings.py:1113
 msgid "Export vector map"
@@ -14639,7 +14652,7 @@ msgstr "Cambiar Directorio de mapas actual."
 
 #: ../gui/wxpython/menustrings.py:227 ../gui/wxpython/menustrings.py:228
 msgid "Change working directory"
-msgstr "Cambiar Etorno de trabajo"
+msgstr "Cambiar Directorio de trabajo"
 
 #: ../gui/wxpython/menustrings.py:229
 msgid "Show settings"
@@ -15061,7 +15074,7 @@ msgstr "Superposición de cuantiles"
 
 #: ../gui/wxpython/menustrings.py:344 ../gui/wxpython/menustrings.py:1250
 msgid "Compute category quantiles using two passes."
-msgstr ""
+msgstr "Calcula categoría de cuantiles usando dos pasos."
 
 #: ../gui/wxpython/menustrings.py:345 ../gui/wxpython/menustrings.py:1251
 msgid "Solar radiance and shadows"
@@ -15261,7 +15274,7 @@ msgstr "Construye líneas de flujo. Calcula líneas de flujo, rutas de flujo, y 
 
 #: ../gui/wxpython/menustrings.py:397 ../gui/wxpython/menustrings.py:1303
 msgid "Watershed analysis"
-msgstr "Análisis de cuencas hidrográficas."
+msgstr "Análisis de cuencas hidrográficas"
 
 #: ../gui/wxpython/menustrings.py:398 ../gui/wxpython/menustrings.py:1304
 msgid "Calculates hydrological parameters and RUSLE factors."
@@ -15277,7 +15290,7 @@ msgstr "Genera un mapa ráster de subcuencas hidrográficas."
 
 #: ../gui/wxpython/menustrings.py:401 ../gui/wxpython/menustrings.py:1307
 msgid "Watershed basin creation"
-msgstr "Creación de cuencas hidrográficas."
+msgstr "Creación de cuencas hidrográficas"
 
 #: ../gui/wxpython/menustrings.py:402 ../gui/wxpython/menustrings.py:1308
 msgid "Creates watershed basins from a drainage direction map."
@@ -16356,7 +16369,7 @@ msgstr "Crea una triangulación de Delaunay a partir de un mapa vectorial de ent
 
 #: ../gui/wxpython/menustrings.py:691 ../gui/wxpython/menustrings.py:1597
 msgid "Voronoi diagram/Thiessen polygons"
-msgstr "Diagrama de Voronoi / polígonos de Thiessen."
+msgstr "Diagrama de Voronoi / polígonos de Thiessen"
 
 #: ../gui/wxpython/menustrings.py:692 ../gui/wxpython/menustrings.py:1598
 msgid "Creates a Voronoi diagram in current region from an input vector map containing points or centroids."
@@ -16838,7 +16851,7 @@ msgstr "Evapotranspiración Penman-Monteith"
 
 #: ../gui/wxpython/menustrings.py:815 ../gui/wxpython/menustrings.py:1721
 msgid "Computes potential evapotranspiration calculation with hourly Penman-Monteith."
-msgstr ""
+msgstr "Calcula potencial de evapotraspiración con Penman-Monteith para cada hora."
 
 #: ../gui/wxpython/menustrings.py:816 ../gui/wxpython/menustrings.py:1722
 msgid "Priestley-Taylor Evapotranspiration"
@@ -16886,7 +16899,7 @@ msgstr "Administrar marca de tiempo"
 
 #: ../gui/wxpython/menustrings.py:828 ../gui/wxpython/menustrings.py:1734
 msgid "Modifies a timestamp for a 3D raster map. Print/add/remove a timestamp for a 3D raster map."
-msgstr ""
+msgstr "Modifica una marca de tiempo para un mapa ráster 3D. Imprimir/añadir/eliminar una marca de tiempo para un mapa ráster 3D."
 
 #: ../gui/wxpython/menustrings.py:830 ../gui/wxpython/menustrings.py:1736
 msgid "3D rasters to raster series"
@@ -17188,11 +17201,11 @@ msgstr "Administrar conjunto de datos"
 
 #: ../gui/wxpython/menustrings.py:912 ../gui/wxpython/menustrings.py:1818
 msgid "Connect temporal database"
-msgstr ""
+msgstr "Conectar base de datos temporal"
 
 #: ../gui/wxpython/menustrings.py:913 ../gui/wxpython/menustrings.py:1819
 msgid "Prints/sets general temporal GIS database connection for current mapset."
-msgstr ""
+msgstr "Imprime/establece la conexión de la base de datos GIS temporal para el Directorio de mapas actual."
 
 #: ../gui/wxpython/menustrings.py:915 ../gui/wxpython/menustrings.py:1821
 msgid "Creates a space time dataset."
@@ -17224,19 +17237,19 @@ msgstr "Combina varios conjuntos de datos espacio temporales en un solo conjunto
 
 #: ../gui/wxpython/menustrings.py:924 ../gui/wxpython/menustrings.py:1830
 msgid "Temporally shift"
-msgstr ""
+msgstr "Desplazamiento temporal"
 
 #: ../gui/wxpython/menustrings.py:925 ../gui/wxpython/menustrings.py:1831
 msgid "Shifts temporally the maps of a space time dataset."
-msgstr ""
+msgstr "Desplaza temporalmente los mapas de un conjunto de datos espacio temporales."
 
 #: ../gui/wxpython/menustrings.py:926 ../gui/wxpython/menustrings.py:1832
 msgid "Snap maps of dataset"
-msgstr ""
+msgstr "Ensamblar mapas de un conjunto de datos"
 
 #: ../gui/wxpython/menustrings.py:927 ../gui/wxpython/menustrings.py:1833
 msgid "Snaps temporally the maps of a space time dataset."
-msgstr ""
+msgstr "Autoensambla temporalmente los mapas de un conjuto de datos espacio temporal."
 
 #: ../gui/wxpython/menustrings.py:929 ../gui/wxpython/menustrings.py:1835
 msgid "Lists space time datasets and maps registered in the temporal database."
@@ -17328,7 +17341,7 @@ msgstr "Importar un conjunto de datos vectoriales"
 
 #: ../gui/wxpython/menustrings.py:952 ../gui/wxpython/menustrings.py:1858
 msgid "Exports a space time vector dataset as GRASS GIS specific archive file."
-msgstr ""
+msgstr "Exporta un conjunto de datos vectoriales espacio temporales como un archivo de almacenamiento específico para GRASS GIS."
 
 #: ../gui/wxpython/menustrings.py:953 ../gui/wxpython/menustrings.py:1859
 msgid "Convert raster dataset to 3D raster"
@@ -17448,11 +17461,11 @@ msgstr "Muestreo"
 
 #: ../gui/wxpython/menustrings.py:982 ../gui/wxpython/menustrings.py:1888
 msgid "Sample a space time raster dataset at point coordinates"
-msgstr ""
+msgstr "Muestrear un conjunto de datos espacio temporales en un punto con coordenadas"
 
 #: ../gui/wxpython/menustrings.py:983 ../gui/wxpython/menustrings.py:1889
 msgid "Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts"
-msgstr ""
+msgstr "Muestrea un conjunto de datos ráster espacio-temporales con las coordenadas de un vector de puntos y escribe el resultado en pantalla utilizando diferentes diseños"
 
 #: ../gui/wxpython/menustrings.py:984 ../gui/wxpython/menustrings.py:1890
 msgid "Query raster dataset by vector points dataset"
@@ -17897,3 +17910,146 @@ msgstr "No se pueden leer los códigos EPSG: %s"
 
 #~ msgid "Exports a vector map layer to PostGIS feature table."
 #~ msgstr "Exporta una capa de mapa vectorial a tabla de elemetos PostGIS."
+
+#~ msgid "failed to open '{0}'"
+#~ msgstr "no ha sido posible abrir '{0}'"
+
+#~ msgid "GRASS locations in {0}"
+#~ msgstr "Localizaciones de GRASS en {0}"
+
+#~ msgid "Failed to copy map: action is allowed only within the same location."
+#~ msgstr "Error al copiar mapa: esta acción está solo permitida dentro de la misma localización."
+
+#~ msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#~ msgstr "La herramienta Línea de Tiempo necesita que el paquete \"matplotlib\" (python-matplotlib) esté instalado. {0}"
+
+#~ msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#~ msgstr "La herramienta de gráfica de dispersión necesita que el paquete \"matplotlib\" (mathplotlib-python) esté instalado. {0}"
+
+#~ msgid "New mapset:"
+#~ msgstr "Nuevo Directorio de mapas:"
+
+#~ msgid "Unicode error detected. Check your locale settings. Details: {0}"
+#~ msgstr "Error de Unicode detectado. Revise su configuración local. Detalles: {0}"
+
+#~ msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#~ msgstr "La herramienta de gráfica temporal necesita que el paquete \"matplotlib\" (mathplotlib-python) esté instalado. {0}"
+
+#~ msgid ""
+#~ "Vector temporal dataset (stvds)\n"
+#~ "Press ENTER if you type the name of the stvds instead of selecting with the combobox"
+#~ msgstr ""
+#~ "Conjunto de datos vectoriales espacio temporales (stvds)\n"
+#~ "Presione ENTER si escribe el nombre del stvds en lugar de seleccionarlo con la lista desplegable."
+
+#~ msgid "Category {ca} is not on vector map {ma} and it will be not used"
+#~ msgstr "La categoría {ca} no está en el mapa vectorial {m} y no será usada"
+
+#~ msgid "Details: unsupported tag name '{0}'."
+#~ msgstr "Detalles: nombre de etiqueta no soportado '{0}'."
+
+#~ msgid "Align computational region to selected map"
+#~ msgstr "Alinear la región computacional al mapa seleccionado"
+
+#~ msgid ""
+#~ "Failed to run command '%(command)s'. Details:\n"
+#~ "%(error)s"
+#~ msgstr ""
+#~ "No se pudo ejecutar el comando '%(command)s'. Detalles:\n"
+#~ "%(error)s"
+
+#~ msgid "Region settings"
+#~ msgstr "Configuración de la región"
+
+#~ msgid "Align region to resolution"
+#~ msgstr "Alinear la región a la resolución"
+
+#~ msgid "Unable to read EPGS codes: {0}"
+#~ msgstr "Imposible leer los códigos EPGS: {0}"
+
+#~ msgid "Unable to provide citation suggestion, see GRASS GIS website instead. The error was: {0}"
+#~ msgstr "No se puede proveer una sugerencia sobre la forma de citar, por favor vea el sitio web de GRASS GIS. El error fue: {0}"
+
+#~ msgid "This option allows setting default computation region immediately after new location is created. Default computation region can be defined later using g.region based on imported data."
+#~ msgstr "Esta opción permite definir la región computacional predeterminada inmediatamente después de que se crea una nueva Localización. La región computacional predeterminada puede ser definida más tarde usando g.region en los datos importados."
+
+#~ msgid "Create user mapset"
+#~ msgstr "Crear Directorio de mapas de usuario"
+
+#~ msgid "This option allows creating user mapset immediately after new location is created. Note that GRASS always creates PERMANENT mapset."
+#~ msgstr "Esta opción permite crear un Directorio de mapas del usuario luego de que se crea una nueva Localización. Note que GRASS siempre crea el Directorio de mapas PERMANENT."
+
+#~ msgid "Unable to read IAU codes: {0}"
+#~ msgstr "No ha sido posible leer códigos IAU: {0}"
+
+#~ msgid "Creates a 3D raster map from LAS LiDAR points"
+#~ msgstr "Crea un mapa ráster 3D a partir de puntos LAS LiDAR"
+
+#~ msgid "LAS LiDAR points export"
+#~ msgstr "Exportar puntos LAS LiDAR"
+
+#~ msgid "Exports vector points as LAS point cloud Converts LAS LiDAR point clouds to a GRASS vector map with libLAS"
+#~ msgstr "Exporta puntos vectoriales como una nube de puntos LAS. Convierte nubes de puntos LAS LiDAR a un mapa vectorial con libLAS"
+
+#~ msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
+#~ msgstr "Redirecciona el ráster de salida a un archivo utilizando la librería GDAL en lugar de almacenarlo como formato ráster de GRASS."
+
+#~ msgid "Point analysis"
+#~ msgstr "Análisis de puntos"
+
+#~ msgid "Identify point clusters"
+#~ msgstr "Identificar grupos de puntos"
+
+#~ msgid "Performs cluster identification."
+#~ msgstr "Realiza identificación de grupos."
+
+#~ msgid "Tests for normality for vector points"
+#~ msgstr "Prueba de normalidad para vector de puntos"
+
+#~ msgid "Decimates a point cloud"
+#~ msgstr "Decimar nube de puntos"
+
+#~ msgid "Compute 3D flow lines"
+#~ msgstr "Computar líneas de flujo 3D"
+
+#~ msgid "Computes 3D flow lines and 3D flow accumulation."
+#~ msgstr "Calculas líneas de flujo 3D y acumulación de flujo 3D"
+
+#~ msgid "Compute gradient"
+#~ msgstr "Computar gradiente"
+
+#~ msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+#~ msgstr "Asigna estampa temporal y registra mapas ráster, vectoriales y raster 3D en un conjunto de datos espacio temporal."
+
+#~ msgid "Convert raster dataset to vector dataset "
+#~ msgstr "Convertir conjuntos de datos ráster a vector"
+
+#~ msgid "Converts a space time raster dataset into a space time vector dataset"
+#~ msgstr "Convierte un conjunto de datos ráster espacio temporales en un conjunto de datos vectoriales espacio temporales."
+
+#~ msgid "Contours from a space time raster dataset"
+#~ msgstr "Contornos a partir de un conjunto de datos ráster espacio temporales"
+
+#~ msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+#~ msgstr "Produce un conjunto de datos vectoriales espacio temporales con los contornos especificados a partir de un conjunto de datos ráster espacio temporales."
+
+#~ msgid "Temporal algebra"
+#~ msgstr "Algebra temporal"
+
+#~ msgid "Temporal raster algebra"
+#~ msgstr "Álgebra temporal de rásters"
+
+#~ msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
+#~ msgstr "Aplicar operaciones temporales y espaciales sobre un conjunto de datos ráster espacio temporales usando álgebra temporal."
+
+#~ msgid "Temporal 3D raster algebra"
+#~ msgstr "Álgebra temporal de rásters 3D"
+
+#~ msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
+#~ msgstr "Aplicar operaciones temporales y espaciales sobre un conjunto de datos ráster 3D espacio temporales usando álgebra temporal."
+
+#~ msgid "Temporal vector algebra"
+#~ msgstr "Álgebra temporal de vectores"
+
+#~ msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
+#~ msgstr "Aplicar operaciones temporales y espaciales sobre un conjunto de datos vectoriales espacio temporales usando álgebra temporal."
