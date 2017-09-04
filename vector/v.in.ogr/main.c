@@ -29,6 +29,7 @@
 #include <grass/glocale.h>
 #include <gdal_version.h>	/* needed for OFTDate */
 #include "ogr_api.h"
+#include "cpl_conv.h"
 #include "global.h"
 
 #ifndef MAX
@@ -47,6 +48,25 @@ int centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index * Sindex,
 int poly_count(OGRGeometryH hGeom, int line2boundary);
 
 char *get_datasource_name(const char *, int);
+
+struct OGR_iterator
+{
+    OGRDataSourceH *Ogr_ds;
+    char *dsn;
+    int nlayers;
+    int has_nonempty_layers;
+    int ogr_interleaved_reading;
+    OGRLayerH Ogr_layer;
+    OGRFeatureDefnH Ogr_featuredefn;
+    int requested_layer;
+    int curr_layer;
+};
+
+void OGR_iterator_init(struct OGR_iterator *OGR_iter, OGRDataSourceH *Ogr_ds,
+                       char *dsn, int nlayers,
+		       int ogr_interleaved_reading);
+void OGR_iterator_reset(struct OGR_iterator *OGR_iter);
+OGRFeatureH ogr_getnextfeature(struct OGR_iterator *, int);
 
 int main(int argc, char *argv[])
 {
@@ -92,6 +112,7 @@ int main(int argc, char *argv[])
     /* OGR */
     OGRDataSourceH Ogr_ds;
     const char *ogr_driver_name;
+    int osm_interleaved_reading;
     OGRLayerH Ogr_layer;
     OGRFieldDefnH Ogr_field;
     char *Ogr_fieldname;
@@ -102,6 +123,7 @@ int main(int argc, char *argv[])
     OGRSpatialReferenceH Ogr_projection;
     OGREnvelope oExt;
     int have_ogr_extent = 0;
+    struct OGR_iterator OGR_iter;
 
     int OFTIntegerListlength;
 
@@ -115,7 +137,8 @@ int main(int argc, char *argv[])
     char **available_layer_names;	/* names of layers to be imported */
     int navailable_layers;
     int layer_id;
-    unsigned int n_features, feature_count;
+    unsigned int feature_count;
+    GIntBig *n_features, n_import_features;
     int overwrite;
     double area_size;
     int use_tmp_vect;
@@ -408,13 +431,26 @@ int main(int argc, char *argv[])
     if (Ogr_ds == NULL)
 	G_fatal_error(_("Unable to open data source <%s>"), dsn);
 
+    /* driver name */
     ogr_driver_name = OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds));
+    G_verbose_message(_("Using OGR driver '%s'"), ogr_driver_name);
+
+    /* OSM interleaved reading */
+    osm_interleaved_reading = 0;
     if (strcmp(ogr_driver_name, "OSM") == 0) {
+
+	CPLSetConfigOption("OGR_INTERLEAVED_READING", "YES");
+	/* re-open OGR DSN */
 	OGR_DS_Destroy(Ogr_ds);
-	G_warning(_("OpenStreetMap import can result in missing features. "
-	            "Please use ogr2ogr first to convert to a different format."));
-	G_fatal_error(_("OSM import cancelled."));
+	Ogr_ds = OGROpen(dsn, FALSE, NULL);
+	osm_interleaved_reading = 1;
     }
+    if (osm_interleaved_reading)
+	G_verbose_message(_("Using OSM interleaved reading"));
+
+    navailable_layers = OGR_DS_GetLayerCount(Ogr_ds);
+    OGR_iterator_init(&OGR_iter, &Ogr_ds, dsn, navailable_layers,
+		      osm_interleaved_reading);
 
     if (param.geom->answer) {
 #if GDAL_VERSION_NUM >= 1110000
@@ -491,6 +527,10 @@ int main(int argc, char *argv[])
 	layers = (int *)G_malloc(nlayers * sizeof(int));
 	for (i = 0; i < nlayers; i++)
 	    layers[i] = i;
+    }
+    n_features = (GIntBig *)G_malloc(nlayers * sizeof(GIntBig));
+    for (i = 0; i < nlayers; i++) {
+	n_features[i] = 0;
     }
 
     if (param.out->answer) {
@@ -850,7 +890,10 @@ int main(int argc, char *argv[])
 
     /* check if input id 3D and if we need a tmp vector */
     /* estimate distance for boundary splitting --> */
+    OGR_iterator_reset(&OGR_iter);
     for (layer = 0; layer < nlayers; layer++) {
+	GIntBig ogr_feature_count;
+
 	layer_id = layers[layer];
 
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
@@ -864,19 +907,30 @@ int main(int argc, char *argv[])
                               param.geom->answer, OGR_L_GetName(Ogr_layer));
         }
 #endif
-	n_features = feature_count = 0;
+	feature_count = 0;
 
-	n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
-	OGR_L_ResetReading(Ogr_layer);
+	ogr_feature_count = 0;
+	if (n_features[layer_id] == 0)
+	    ogr_feature_count = OGR_L_GetFeatureCount(Ogr_layer, 1);
+	if (ogr_feature_count > 0)
+	    n_features[layer_id] = ogr_feature_count;
 
 	/* count polygons and isles */
+	if (!osm_interleaved_reading) {
+	    OGR_L_ResetReading(Ogr_layer);
+	}
 	G_message(_("Check if OGR layer <%s> contains polygons..."),
 		  layer_names[layer]);
-	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
-	    G_percent(feature_count++, n_features, 1);	/* show something happens */
+	while ((Ogr_feature = ogr_getnextfeature(&OGR_iter, layer_id)) != NULL) {
+	    if (ogr_feature_count > 0)
+		G_percent(feature_count++, n_features[layer], 1);	/* show something happens */
+
+	    if (ogr_feature_count <= 0)
+		n_features[layer]++;
 
             /* Geometry */
 #if GDAL_VERSION_NUM >= 1110000
+            Ogr_featuredefn = OGR_iter.Ogr_featuredefn;
             for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
                 if (igeom > -1 && i != igeom)
                     continue; /* use only geometry defined via param.geom */
@@ -898,6 +952,11 @@ int main(int argc, char *argv[])
 	}
 	G_percent(1, 1, 1);
     }
+
+    n_import_features = 0;
+    for (i = 0; i < nlayers; i++)
+	n_import_features += n_features[i];
+    G_message("Importing %lld features", n_import_features);
 
     G_debug(1, "n polygon boundaries: %d", n_polygon_boundaries);
     if (n_polygon_boundaries > 50) {
@@ -946,10 +1005,11 @@ int main(int argc, char *argv[])
     ncentr = n_overlaps = n_polygons = 0;
 
     /* Points and lines are written immediately with categories. Boundaries of polygons are
-     * written to the vector then cleaned and centroids are calculated for all areas in cleaan vector.
+     * written to the vector then cleaned and centroids are calculated for all areas in clean vector.
      * Then second pass through finds all centroids in each polygon feature and adds its category
      * to the centroid. The result is that one centroids may have 0, 1 ore more categories
      * of one ore more (more input layers) fields. */
+    OGR_iterator_reset(&OGR_iter);
     for (layer = 0; layer < nlayers; layer++) {
 	layer_id = layers[layer];
 
@@ -1171,16 +1231,15 @@ int main(int argc, char *argv[])
 	nogeom = 0;
 	feature_count = 0;
 
-	n_features = OGR_L_GetFeatureCount(Ogr_layer, TRUE);
-	G_important_message(_("Importing %d features (OGR layer <%s>)..."),
-			    n_features, layer_names[layer]);
-        
-        OGR_L_ResetReading(Ogr_layer);
-	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
-	    G_percent(feature_count++, n_features, 1);	/* show something happens */
+	G_important_message(_("Importing %lld features (OGR layer <%s>)..."),
+			    n_features[layer], layer_names[layer]);
+
+	while ((Ogr_feature = ogr_getnextfeature(&OGR_iter, layer_id)) != NULL) {
+	    G_percent(feature_count++, n_features[layer], 1);	/* show something happens */
 
             /* Geometry */
 #if GDAL_VERSION_NUM >= 1110000
+            Ogr_featuredefn = OGR_iter.Ogr_featuredefn;
             for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
                 if (igeom > -1 && i != igeom)
                     continue; /* use only geometry defined via param.geom */
@@ -1313,7 +1372,6 @@ int main(int argc, char *argv[])
 		      nogeom == 1 ? "feature" : "features");
     }
 
-
     separator = "-----------------------------------------------------";
     G_message("%s", separator);
 
@@ -1444,6 +1502,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* Go through all layers and find centroids for each polygon */
+	OGR_iterator_reset(&OGR_iter);
 	for (layer = 0; layer < nlayers; layer++) {
 	    G_message("%s", separator);
 	    G_message(_("Finding centroids for OGR layer <%s>..."), layer_names[layer]);
@@ -1456,13 +1515,12 @@ int main(int argc, char *argv[])
             if (param.geom->answer)
                 igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
 #endif
-            
-	    n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
+
 	    OGR_L_ResetReading(Ogr_layer);
 
 	    cat = 0;		/* field = layer + 1 */
-	    while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
-		G_percent(cat, n_features, 2);
+	    while ((Ogr_feature = ogr_getnextfeature(&OGR_iter, layer_id)) != NULL) {
+		G_percent(cat, n_features[layer], 2);
 
                 /* Category */
                 if (key_idx > -1)
@@ -1472,6 +1530,7 @@ int main(int argc, char *argv[])
 
 		/* Geometry */
 #if GDAL_VERSION_NUM >= 1110000
+		Ogr_featuredefn = OGR_iter.Ogr_featuredefn;
                 for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
                     if (igeom > -1 && i != igeom)
                         continue; /* use only geometry defined via param.geom */
@@ -1746,4 +1805,118 @@ int main(int argc, char *argv[])
 		   "disable -2 flag to import 3D vector."));
 
     exit(EXIT_SUCCESS);
+}
+
+void OGR_iterator_init(struct OGR_iterator *OGR_iter, OGRDataSourceH *Ogr_ds,
+                       char *dsn, int nlayers,
+		       int ogr_interleaved_reading)
+{
+    OGR_iter->Ogr_ds = Ogr_ds;
+    OGR_iter->dsn = dsn;
+    OGR_iter->nlayers = nlayers;
+    OGR_iter->ogr_interleaved_reading = ogr_interleaved_reading;
+    OGR_iter->requested_layer = -1;
+    OGR_iter->curr_layer = -1;
+    OGR_iter->Ogr_layer = NULL;
+    OGR_iter->has_nonempty_layers = 0;
+}
+
+void OGR_iterator_reset(struct OGR_iterator *OGR_iter)
+{
+    OGR_iter->requested_layer = -1;
+    OGR_iter->curr_layer = -1;
+    OGR_iter->Ogr_layer = NULL;
+    OGR_iter->has_nonempty_layers = 0;
+}
+
+OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer)
+{
+    if (OGR_iter->requested_layer != layer) {
+	/* reset OGR reading */
+	if (!OGR_iter->ogr_interleaved_reading) {
+	    OGR_iter->curr_layer = layer;
+	    OGR_iter->Ogr_layer = OGR_DS_GetLayer(*(OGR_iter->Ogr_ds), OGR_iter->curr_layer);
+	    OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
+	    OGR_L_ResetReading(OGR_iter->Ogr_layer);
+	}
+	else {
+	    /* need to re-open OGR DSN in order to start reading from the beginning
+	     * NOTE: any constraints are lost */
+	    OGR_DS_Destroy(*(OGR_iter->Ogr_ds));
+	    *(OGR_iter->Ogr_ds) = OGROpen(OGR_iter->dsn, FALSE, NULL);
+	    if (*(OGR_iter->Ogr_ds) == NULL)
+		G_fatal_error(_("Unable to re-open data source <%s>"), OGR_iter->dsn);
+	    OGR_iter->curr_layer = 0;
+	    OGR_iter->Ogr_layer = OGR_DS_GetLayer(*(OGR_iter->Ogr_ds), OGR_iter->curr_layer);
+	    OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
+	    OGR_iter->has_nonempty_layers = 0;
+	}
+	OGR_iter->requested_layer = layer;
+    }
+
+    if (OGR_iter->Ogr_layer == NULL)
+	return NULL;
+
+    if (!OGR_iter->ogr_interleaved_reading) {
+	OGRFeatureH Ogr_feature;
+
+	Ogr_feature = OGR_L_GetNextFeature(OGR_iter->Ogr_layer);
+	if (Ogr_feature == NULL)
+	    OGR_iter->Ogr_layer = NULL;
+
+	return Ogr_feature;
+    }
+    else {
+	OGRFeatureH Ogr_feature;
+
+	/* fetch next feature */
+	while (1) {
+	    while (OGR_iter->curr_layer != layer) {
+		while ((Ogr_feature = OGR_L_GetNextFeature(OGR_iter->Ogr_layer)) != NULL) {
+		    OGR_iter->has_nonempty_layers = 1;
+		    OGR_F_Destroy(Ogr_feature);
+		}
+		OGR_iter->curr_layer++;
+		if (OGR_iter->curr_layer == OGR_iter->nlayers) {
+		    if (!OGR_iter->has_nonempty_layers) {
+			OGR_iter->Ogr_layer = NULL;
+
+			return NULL;
+		    }
+		    else {
+			OGR_iter->curr_layer = 0;
+			OGR_iter->has_nonempty_layers = 0;
+		    }
+		}
+		G_debug(3, "advancing to layer %d ...", OGR_iter->curr_layer);
+		OGR_iter->Ogr_layer = OGR_DS_GetLayer(*(OGR_iter->Ogr_ds), OGR_iter->curr_layer);
+		OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
+	    }
+	    Ogr_feature = OGR_L_GetNextFeature(OGR_iter->Ogr_layer);
+	    if (Ogr_feature != NULL) {
+		OGR_iter->has_nonempty_layers = 1;
+
+		return Ogr_feature;
+	    }
+	    else {
+		OGR_iter->curr_layer++;
+		if (OGR_iter->curr_layer == OGR_iter->nlayers) {
+		    if (!OGR_iter->has_nonempty_layers) {
+			OGR_iter->Ogr_layer = NULL;
+
+			return NULL;
+		    }
+		    else {
+			OGR_iter->curr_layer = 0;
+			OGR_iter->has_nonempty_layers = 0;
+		    }
+		}
+		G_debug(3, "advancing to layer %d ...", OGR_iter->curr_layer);
+		OGR_iter->Ogr_layer = OGR_DS_GetLayer(*(OGR_iter->Ogr_ds), OGR_iter->curr_layer);
+		OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
+	    }
+	}
+    }
+
+    return NULL;
 }
