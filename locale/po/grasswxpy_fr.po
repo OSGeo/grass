@@ -10311,7 +10311,7 @@ msgstr "Lancer un fichier de script."
 
 #: ../gui/wxpython/menustrings.py:213 ../gui/wxpython/gui_core/dialogs.py:2348
 msgid "Close GUI"
-msgstr "Fermer"
+msgstr "Fermer l'interface graphique"
 
 #: ../gui/wxpython/menustrings.py:214
 msgid "Quit wxGUI session."
@@ -10320,7 +10320,7 @@ msgstr "Quitter la session wxGUI."
 #: ../gui/wxpython/menustrings.py:215 ../gui/wxpython/gui_core/dialogs.py:2326
 #: ../gui/wxpython/gui_core/dialogs.py:2351
 msgid "Quit GRASS GIS"
-msgstr "Quitter l'interface graphique GRASS"
+msgstr "Quitter GRASS GIS"
 
 #: ../gui/wxpython/menustrings.py:216
 msgid "Quit wxGUI session and exit GRASS shell."
