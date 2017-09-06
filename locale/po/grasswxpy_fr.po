@@ -11263,7 +11263,7 @@ msgstr "Nom du symbole :"
 #: ../gui/wxpython/gui_core/dialogs.py:2326
 #: ../gui/wxpython/gui_core/dialogs.py:2351 ../gui/wxpython/menustrings.py:208
 msgid "Quit GRASS GIS"
-msgstr "Quitter l'interface graphique GRASS"
+msgstr "Quitter GRASS GIS"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2344
 msgid "Do you want to quit GRASS including shell prompt or just close the GUI?"
@@ -11271,7 +11271,7 @@ msgstr "Voulez-vous quitter GRASS y compris le terminal ou juste fermer l'interf
 
 #: ../gui/wxpython/gui_core/dialogs.py:2348 ../gui/wxpython/menustrings.py:206
 msgid "Close GUI"
-msgstr "Fermer"
+msgstr "Fermer l'interface graphique"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2422
 msgid "Select font:"
