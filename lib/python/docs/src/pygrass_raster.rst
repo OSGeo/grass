@@ -76,14 +76,26 @@ added to the file as the last row. ::
 
     >>> raster = reload(raster)
     >>> elev = raster.RasterRow('elevation')
-    >>> # the cols attribute is set from the current region only when the map is open
+    >>> # the private _cols attribute is set from the current region only when the map is open
+    >>> # the .info.cols attribute is set to total number of map cols only when the map is open
+    >>> # cols in .info.cols equals the number reported by r.info module
+    >>> elev._cols
     >>> elev.info.cols
     0
     >>> elev.open()
     >>> elev.is_open()
     True
+    >>> elev._cols
+    200
     >>> elev.info.cols
     1500
+    >>> elev._rows
+    300
+    >>> # number of available rows/cols also can be determined by len()
+    >>> len(elev)
+    300
+    >>> len(elev[0])
+    200
     >>> # we can read the elevation map, row by row
     >>> for row in elev[:5]: print(row[:3])
     [ 141.99613953  141.27848816  141.37904358]
