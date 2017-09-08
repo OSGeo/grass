@@ -477,9 +477,53 @@ class GifWriter:
         return frames
 
 
-def writeGif(filename, images, duration=0.1, repeat=True, dither=False,
-             nq=0, subRectangles=True, dispose=None):
+def writeGif(filename, images, duration=0.1, repeat=True, **kwargs):
     """Write an animated gif from the specified images.
+    Depending on which PIL library is used, either writeGifVisvis or writeGifPillow
+    is used here.
+
+    :param str filename: the name of the file to write the image to.
+    :param list images: should be a list consisting of PIL images or numpy
+                        arrays. The latter should be between 0 and 255 for
+                        integer types, and between 0 and 1 for float types.
+    :param duration: scalar or list of scalars The duration for all frames, or
+                     (if a list) for each frame.
+    :param repeat: bool or integer The amount of loops. If True, loops infinitetel
+    :param kwargs: additional parameters for writeGifVisvis
+
+    """
+    if pillow:
+        # Pillow >= 3.4.0 has animated GIF writing
+        version = [int(i) for i in PILLOW_VERSION.split('.')]
+        if version[0] > 3 or (version[0] == 3 and version[1] >= 4):
+            writeGifPillow(filename, images, duration, repeat)
+            return
+    # otherwise use the old one
+    writeGifVisvis(filename, images, duration, repeat, **kwargs)
+
+
+def writeGifPillow(filename, images, duration=0.1, repeat=True):
+    """Write an animated gif from the specified images.
+    Uses native Pillow implementation, which is available since Pillow 3.4.0.
+
+    :param str filename: the name of the file to write the image to.
+    :param list images: should be a list consisting of PIL images or numpy
+                        arrays. The latter should be between 0 and 255 for
+                        integer types, and between 0 and 1 for float types.
+    :param duration: scalar or list of scalars The duration for all frames, or
+                     (if a list) for each frame.
+    :param repeat: bool or integer The amount of loops. If True, loops infinitetel
+
+    """
+    loop = 0 if repeat else 1
+    images[0].save(filename, save_all=True, append_images=images[1:], loop=loop, duration=duration * 1000)
+
+
+def writeGifVisvis(filename, images, duration=0.1, repeat=True, dither=False,
+                   nq=0, subRectangles=True, dispose=None):
+    """Write an animated gif from the specified images.
+    Uses VisVis implementation. Unfortunately it produces corrupted GIF
+    with Pillow >= 3.4.0.
 
     :param str filename: the name of the file to write the image to.
     :param list images: should be a list consisting of PIL images or numpy
