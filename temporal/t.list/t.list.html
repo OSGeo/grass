@@ -23,7 +23,7 @@ are in the user's current mapset search path (managed with
 
 <h2>EXAMPLES</h2>
 
-Obtain the list of raster space time dataset(s):
+Obtain the list of space time raster dataset(s):
 
 <div class="code"><pre>
 t.list strds
@@ -32,9 +32,27 @@ Space time raster datasets with absolute time available in mapset &#60;climate_2
 tempmean_monthly@climate_2000_2012
 </pre></div>
 
-The user can obtain also the list of raster maps contained in a temporal
-datasets (this may be the content of several space time datasets if enabled
-through <a href="g.mapsets.html">g.mapsets</a>):
+Obtain the list of space time raster datasets in a specific mapset (Note 
+that the target mapset must be in the user's search path):
+
+<div class="code"><pre>
+# strds in PERMANENT
+t.list strds where="mapset = 'PERMANENT'"
+----------------------------------------------
+
+# strds in climate_2000_2012
+t.list strds where="mapset = 'climate_2000_2012'"
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset &#60;climate_2000_2012&#62;:
+precip_abs@climate_2000_2012
+precipitation@climate_2000_2012
+tempmean@climate_2000_2012
+</pre></div>
+
+The user can also obtain the list of time stamped raster maps. These maps 
+might be registered in strds or not. The output of the following command 
+can vary according to the accessible mapsets specified through 
+<a href="g.mapsets.html">g.mapsets</a>.
 
 <div class="code"><pre>
 t.list raster
