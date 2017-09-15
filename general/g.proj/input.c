@@ -36,7 +36,6 @@ static void set_default_region(void);
 
 #ifdef HAVE_OGR
 static void set_gdal_region(GDALDatasetH);
-static void set_ogr_region(OGRLayerH);
 #endif
 
 /**
@@ -229,7 +228,7 @@ int input_georef(char *geofile)
 	ogr_layer = OGR_DS_GetLayer(ogr_ds, 0);
 	ogr_srs = OGR_L_GetSpatialRef(ogr_layer);
 	ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, ogr_srs, 0);
-	set_ogr_region(ogr_layer);
+	set_default_region();
 
 	OGR_DS_Destroy(ogr_ds);
     }
@@ -345,37 +344,4 @@ static void set_gdal_region(GDALDatasetH hDS)
     return;
 }
 
-/**
- * \brief Populates global cellhd with region settings based on 
- *        georeferencing information in an OGR layer
- * 
- * \param Ogr_layer OGR layer to retrieve georeferencing information from
- **/
-
-static void set_ogr_region(OGRLayerH Ogr_layer)
-{
-    OGREnvelope oExt;
-
-    /* Populate with initial values in case we can't set everything */
-    set_default_region();
-
-    /* Code below originally from v.in.ogr */
-    if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
-	cellhd.north = oExt.MaxY;
-	cellhd.south = oExt.MinY;
-	cellhd.west = oExt.MinX;
-	cellhd.east = oExt.MaxX;
-	cellhd.rows = 20;	/* TODO - calculate useful values */
-	cellhd.cols = 20;
-	cellhd.ns_res = (cellhd.north - cellhd.south) / cellhd.rows;
-	cellhd.ew_res = (cellhd.east - cellhd.west) / cellhd.cols;
-
-	cellhd.rows3 = cellhd.rows;
-	cellhd.cols3 = cellhd.cols;
-	cellhd.ns_res3 = cellhd.ns_res;
-	cellhd.ew_res3 = cellhd.ew_res;
-    }
-
-    return;
-}
 #endif /* HAVE_OGR */
