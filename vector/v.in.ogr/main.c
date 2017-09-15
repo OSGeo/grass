@@ -550,7 +550,7 @@ int main(int argc, char *argv[])
 			  output);
     }
 
-    /* Get first imported layer to use for extents and projection check */
+    /* Get first imported layer to use for projection check */
     Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layers[0]);
     
     /* projection check must come before extents check */
@@ -577,40 +577,45 @@ int main(int argc, char *argv[])
 #endif
 
     /* fetch boundaries */
-    G_get_window(&cellhd);
-    if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
-	cellhd.north = ymax = oExt.MaxY;
-	cellhd.south = ymin = oExt.MinY;
-	cellhd.west = xmin = oExt.MinX;
-	cellhd.east = xmax = oExt.MaxX;
-	cellhd.rows = 20;	/* TODO - calculate useful values */
-	cellhd.cols = 20;
-	cellhd.ns_res = (cellhd.north - cellhd.south) / cellhd.rows;
-	cellhd.ew_res = (cellhd.east - cellhd.west) / cellhd.cols;
+    for (layer = 0; layer < nlayers; layer++) {
+	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layers[layer]);
+	if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
+	    if (!have_ogr_extent) {
+		ymax = oExt.MaxY;
+		ymin = oExt.MinY;
+		xmin = oExt.MinX;
+		xmax = oExt.MaxX;
+	    }
+	    else {
+		ymax = MAX(ymax, oExt.MaxY);
+		ymin = MIN(ymin, oExt.MinY);
+		xmin = MIN(xmin, oExt.MinX);
+		xmax = MAX(xmax, oExt.MaxX);
+	    }
 
-	/* use OGR extents if possible, needed to skip corrupted data
-	 * in OGR dsn/layer */
-	have_ogr_extent = 1;
+	    /* use OGR extents if possible, needed to skip corrupted data
+	     * in OGR dsn/layer */
+	    have_ogr_extent = 1;
+	}
     }
     
-    if (!have_ogr_extent) {
-	cellhd.north = 1.;
-	cellhd.south = 0.;
-	cellhd.west = 0.;
-	cellhd.east = 1.;
-	cellhd.top = 1.;
-	cellhd.bottom = 1.;
-	cellhd.rows = 1;
-	cellhd.rows3 = 1;
-	cellhd.cols = 1;
-	cellhd.cols3 = 1;
-	cellhd.depths = 1;
-	cellhd.ns_res = 1.;
-	cellhd.ns_res3 = 1.;
-	cellhd.ew_res = 1.;
-	cellhd.ew_res3 = 1.;
-	cellhd.tb_res = 1.;
-    }
+    G_get_window(&cellhd);
+    cellhd.north = 1.;
+    cellhd.south = 0.;
+    cellhd.west = 0.;
+    cellhd.east = 1.;
+    cellhd.top = 1.;
+    cellhd.bottom = 0.;
+    cellhd.rows = 1;
+    cellhd.rows3 = 1;
+    cellhd.cols = 1;
+    cellhd.cols3 = 1;
+    cellhd.depths = 1;
+    cellhd.ns_res = 1.;
+    cellhd.ns_res3 = 1.;
+    cellhd.ew_res = 1.;
+    cellhd.ew_res3 = 1.;
+    cellhd.tb_res = 1.;
 
     /* Do we need to create a new location? */
     if (param.outloc->answer != NULL) {
@@ -748,28 +753,22 @@ int main(int argc, char *argv[])
 	}
 	else {
 	    if (flag.proj->answer)
-                    msg_fn = G_message;
-                else
-                    msg_fn = G_verbose_message;            
-                msg_fn(_("Projection of input dataset and current location "
-                         "appear to match"));
-                if (flag.proj->answer)
-                    exit(EXIT_SUCCESS);
+		msg_fn = G_message;
+	    else
+		msg_fn = G_verbose_message;            
+	    msg_fn(_("Projection of input dataset and current location "
+		     "appear to match"));
+	    if (flag.proj->answer)
+		exit(EXIT_SUCCESS);
 	}
     }
 
     G_begin_polygon_area_calculations();	/* Used in geom() and centroid() */
 
     /* set spatial filter */
-    if (flag.region->answer) {
-	if (param.spat->answer)
-	    G_fatal_error(_("Select either the current region flag or the spatial option, not both"));
-	if (nlayers > 1)
-	    G_warning(_("The region flag is applied only to the first OGR layer"));
-
-	/* TODO: does not make sense if a new location has been created:
-	 * the current window has been set from the extents of the first
-	 * OGR layer */
+    if (flag.region->answer && param.spat->answer)
+	G_fatal_error(_("Select either the current region flag or the spatial option, not both"));
+    if (!param.outloc->answer && flag.region->answer) {
 	G_get_window(&cur_wind);
 	if (have_ogr_extent) {
 	    /* check for any overlap */
@@ -801,9 +800,6 @@ int main(int argc, char *argv[])
 	       spatymin = ymin,
 	       spatymax = ymax;
 
-	if (nlayers > 1)
-	    G_warning(_("The 'spatial' option is applied only to the first OGR layer"));
-
 	/* See as reference: gdal/ogr/ogr_capi_test.c */
 
 	/* cut out a piece of the map */
@@ -822,14 +818,12 @@ int main(int argc, char *argv[])
 	}
 	if (i != 4)
 	    G_fatal_error(_("4 parameters required for 'spatial' parameter"));
+	if (xmin > xmax)
+	    G_fatal_error(_("xmin is larger than xmax in 'spatial' parameters"));
+	if (ymin > ymax)
+	    G_fatal_error(_("ymin is larger than ymax in 'spatial' parameters"));
 
-	if (!have_ogr_extent) {
-	    xmin = spatxmin;
-	    ymin = spatymin;
-	    xmax = spatxmax;
-	    ymax = spatymax;
-	}
-	else {
+	if (have_ogr_extent) {
 	    /* check for any overlap */
 	    if (spatxmin > xmax || spatxmax < xmin ||
 	        spatymin > ymax || spatymax < ymin) {
@@ -846,8 +840,15 @@ int main(int argc, char *argv[])
 	    if (ymax > spatymax)
 		ymax = spatymax;
 	}
+	else {
+	    xmin = spatxmin;
+	    ymin = spatymin;
+	    xmax = spatxmax;
+	    ymax = spatymax;
+	}
     }
-    if (param.spat->answer || flag.region->answer || have_ogr_extent) {
+    if ((!param.outloc->answer && flag.region->answer) ||
+	param.spat->answer || have_ogr_extent) {
 	G_debug(2, "cut out with boundaries: xmin:%f ymin:%f xmax:%f ymax:%f",
 		xmin, ymin, xmax, ymax);
 
@@ -861,25 +862,27 @@ int main(int argc, char *argv[])
 	OGR_G_AddPoint(Ogr_oRing, xmin, ymin, 0.0);
 	OGR_G_AddGeometryDirectly(poSpatialFilter, Ogr_oRing);
 
-	OGR_L_SetSpatialFilter(Ogr_layer, poSpatialFilter);
+	for (layer = 0; layer < nlayers; layer++) {
+	    Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layers[layer]);
+	    OGR_L_SetSpatialFilter(Ogr_layer, poSpatialFilter);
+	}
     }
 
     if (param.where->answer) {
 	/* select by attribute */
-	if (nlayers > 1)
-	    G_warning(_("The 'where' option is applied only to the first OGR layer"));
-
-	OGR_L_SetAttributeFilter(Ogr_layer, param.where->answer);
+	for (layer = 0; layer < nlayers; layer++) {
+	    Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layers[layer]);
+	    OGR_L_SetAttributeFilter(Ogr_layer, param.where->answer);
+	}
     }
 
     /* suppress boundary splitting ? */
-    if (flag.no_clean->answer) {
+    if (flag.no_clean->answer || !have_ogr_extent) {
 	split_distance = -1.;
     }
     else {
 	split_distance = 0.;
-	area_size =
-	    sqrt((cellhd.east - cellhd.west) * (cellhd.north - cellhd.south));
+	area_size = sqrt((xmax - xmin) * (ymax - ymin));
     }
 
     db_init_string(&sql);
@@ -959,7 +962,7 @@ int main(int argc, char *argv[])
     G_message("Importing %lld features", n_import_features);
 
     G_debug(1, "n polygon boundaries: %d", n_polygon_boundaries);
-    if (n_polygon_boundaries > 50) {
+    if (have_ogr_extent && n_polygon_boundaries > 50) {
 	split_distance =
 	    area_size / log(n_polygon_boundaries);
 	/* divisor is the handle: increase divisor to decrease split_distance */
@@ -1764,7 +1767,8 @@ int main(int argc, char *argv[])
 	    db_close_database_shutdown_driver(driver);
 	}
     }
-    
+
+    Vect_get_map_box(&Map, &box);
     if (0 != Vect_close(&Map))
         G_fatal_error(_("Import failed"));
 
@@ -1779,10 +1783,10 @@ int main(int argc, char *argv[])
 	else
 	    G_get_window(&cur_wind);
 
-	cur_wind.north = MAX(cur_wind.north, cellhd.north);
-	cur_wind.south = MIN(cur_wind.south, cellhd.south);
-	cur_wind.west = MIN(cur_wind.west, cellhd.west);
-	cur_wind.east = MAX(cur_wind.east, cellhd.east);
+	cur_wind.north = MAX(cur_wind.north, box.N);
+	cur_wind.south = MIN(cur_wind.south, box.S);
+	cur_wind.west = MIN(cur_wind.west, box.W);
+	cur_wind.east = MAX(cur_wind.east, box.E);
 
 	cur_wind.rows = (int)ceil((cur_wind.north - cur_wind.south)
 				  / cur_wind.ns_res);
