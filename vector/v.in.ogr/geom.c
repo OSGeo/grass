@@ -455,7 +455,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
     }
 
     else {
-	G_fatal_error(_("Unknown geometry type"));
+	G_warning(_("Skipping unsupported geometry type '%s'"), OGR_G_GetGeometryName(hGeom));
     }
 
     return 0;
