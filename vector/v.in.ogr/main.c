@@ -943,6 +943,11 @@ int main(int argc, char *argv[])
                 Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
 #endif
                 if (Ogr_geometry != NULL) {
+#if GDAL_VERSION_NUM >= 2000000
+		    Ogr_geometry = OGR_G_GetLinearGeometry(Ogr_geometry, 0, NULL);
+		}
+                if (Ogr_geometry != NULL) {
+#endif
                     if (!flag.no_clean->answer)
                         poly_count(Ogr_geometry, (type & GV_BOUNDARY));
                     if (OGR_G_GetCoordinateDimension(Ogr_geometry) > 2)
@@ -959,7 +964,8 @@ int main(int argc, char *argv[])
     n_import_features = 0;
     for (i = 0; i < nlayers; i++)
 	n_import_features += n_features[i];
-    G_message("Importing %lld features", n_import_features);
+    if (nlayers > 1)
+	G_message("Importing %lld features", n_import_features);
 
     G_debug(1, "n polygon boundaries: %d", n_polygon_boundaries);
     if (have_ogr_extent && n_polygon_boundaries > 50) {
@@ -1251,6 +1257,15 @@ int main(int argc, char *argv[])
 #else
                 Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
 #endif                
+#if GDAL_VERSION_NUM >= 2000000
+                if (Ogr_geometry != NULL) {
+		    if (OGR_G_HasCurveGeometry(Ogr_geometry, 1)) {
+			G_debug(1, "Approximating curves in a '%s'",
+			        OGR_G_GetGeometryName(Ogr_geometry));
+		    }
+		    Ogr_geometry = OGR_G_GetLinearGeometry(Ogr_geometry, 0, NULL);
+		}
+#endif
                 if (Ogr_geometry == NULL) {
                     nogeom++;
                 }
@@ -1259,7 +1274,7 @@ int main(int argc, char *argv[])
                         cat = OGR_F_GetFieldAsInteger(Ogr_feature, key_idx);
                     else if (key_idx == -1)
                         cat = OGR_F_GetFID(Ogr_feature);
-                    
+
                     geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
                          flag.no_clean->answer);
                 }
@@ -1543,6 +1558,11 @@ int main(int argc, char *argv[])
                     Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
 #endif
                     if (Ogr_geometry != NULL) {
+#if GDAL_VERSION_NUM >= 2000000
+			Ogr_geometry = OGR_G_GetLinearGeometry(Ogr_geometry, 0, NULL);
+                    }
+                    if (Ogr_geometry != NULL) {
+#endif
                         centroid(Ogr_geometry, Centr, &si, layer + 1, cat,
                                  min_area, type);
                     }
