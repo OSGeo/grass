@@ -952,6 +952,9 @@ int main(int argc, char *argv[])
                         poly_count(Ogr_geometry, (type & GV_BOUNDARY));
                     if (OGR_G_GetCoordinateDimension(Ogr_geometry) > 2)
                         input3d = 1;
+#if GDAL_VERSION_NUM >= 2000000
+		    OGR_G_DestroyGeometry(Ogr_geometry);
+#endif
                 }
 #if GDAL_VERSION_NUM >= 1110000                
             }
@@ -1277,6 +1280,9 @@ int main(int argc, char *argv[])
 
                     geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
                          flag.no_clean->answer);
+#if GDAL_VERSION_NUM >= 2000000
+		    OGR_G_DestroyGeometry(Ogr_geometry);
+#endif
                 }
 #if GDAL_VERSION_NUM >= 1110000              
             }
@@ -1565,6 +1571,9 @@ int main(int argc, char *argv[])
 #endif
                         centroid(Ogr_geometry, Centr, &si, layer + 1, cat,
                                  min_area, type);
+#if GDAL_VERSION_NUM >= 2000000
+			OGR_G_DestroyGeometry(Ogr_geometry);
+#endif
                     }
 #if GDAL_VERSION_NUM >= 1110000
                 }
