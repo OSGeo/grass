@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 			    "an input vector map containing points or centroids.");
 
     opt.in = G_define_standard_option(G_OPT_V_INPUT);
-    opt.in->label = _("Name of input vector point map");
+    opt.in->label = _("Name of input vector map");
     
     opt.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
     
