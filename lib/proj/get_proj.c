@@ -64,7 +64,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     double a, es, rf;
     int returnval = 1;
     char buffa[300], factbuff[50];
-    char proj_in[50], *datum, *params;
+    char proj_in[250], *datum, *params;
     projPJ *pj;
 
     proj_in[0] = '\0';

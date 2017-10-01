@@ -388,6 +388,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     const char *pszProjCS = NULL;
     char *datum = NULL;
     struct gpj_datum dstruct;
+    const char *ograttr;
 
     if (hSRS == NULL)
 	goto default_to_xy;
@@ -398,6 +399,66 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     /* Hopefully this doesn't do any harm if it wasn't in ESRI format
      * to start with... */
     OSRMorphFromESRI(hSRS);
+
+    *projinfo = G_create_key_value();
+
+    /* use proj4 definition from EXTENSION attribute if existing */
+    ograttr = OSRGetAttrValue(hSRS, "EXTENSION", 0);
+    if (ograttr && *ograttr && strcmp(ograttr, "PROJ4") == 0) {
+	ograttr = OSRGetAttrValue(hSRS, "EXTENSION", 1);
+	G_debug(3, "proj4 extension:");
+	G_debug(3, "%s", ograttr);
+	
+	if (ograttr && *ograttr) {
+	    char *proj4ext;
+	    OGRSpatialReferenceH hSRS2;
+
+	    proj4ext = G_store(ograttr);
+	    hSRS2 = OSRNewSpatialReference(NULL);
+	    /* test */
+	    if (OSRImportFromProj4(hSRS2, proj4ext) != OGRERR_NONE) {
+		G_warning(_("Updating spatial reference with embedded proj4 definition failed. "
+		            "Proj4 definition: <%s>"), proj4ext);
+	    }
+	    else {
+		OSRDestroySpatialReference(hSRS2);
+		/* update OGR spatial reference with proj4 string */
+		/* TODO: replace warning with important_message once confirmed working */
+		G_warning(_("Updating spatial reference with embedded proj4 definition"));
+
+		/* -------------------------------------------------------------------- */
+		/*      Derive the user name for the coordinate system.                 */
+		/* -------------------------------------------------------------------- */
+		pszProjCS = OSRGetAttrValue(hSRS, "PROJCS", 0);
+		if (!pszProjCS)
+		    pszProjCS = OSRGetAttrValue(hSRS, "GEOGCS", 0);
+
+		if (pszProjCS) {
+		    G_set_key_value("name", pszProjCS, *projinfo);
+		}
+		else if (pszProj) {
+		    char path[4095];
+		    char name[80];
+		    
+		    /* use name of the projection as name for the coordinate system */
+
+		    sprintf(path, "%s/etc/proj/projections", G_gisbase());
+		    if (G_lookup_key_value_from_file(path, pszProj, name, sizeof(name)) >
+			0)
+			G_set_key_value("name", name, *projinfo);
+		    else
+			G_set_key_value("name", pszProj, *projinfo);
+		}
+
+		OSRDestroySpatialReference(hSRS);
+		hSRS = OSRNewSpatialReference(NULL);
+		if (OSRImportFromProj4(hSRS, proj4ext) != OGRERR_NONE) {
+		    G_fatal_error(_("Can't parse PROJ.4-style parameter string"));
+		}
+	    }
+	    G_free(proj4ext);
+	}
+    }
 
     /* -------------------------------------------------------------------- */
     /*      Set cellhd for well known coordinate systems.                   */
@@ -474,6 +535,11 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	    pszProj = pszValue;
 	}
 
+	/* discard @null nadgrids */
+	if (G_strcasecmp(pszToken, "nadgrids") == 0 &&
+	    G_strcasecmp(pszValue, "@null") == 0)
+	    continue;
+
 	/* Ellipsoid and datum handled separately below */
 	if (G_strcasecmp(pszToken, "ellps") == 0
 	    || G_strcasecmp(pszToken, "a") == 0
@@ -493,32 +559,31 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     if (!pszProj)
 	G_warning(_("No projection name! Projection parameters likely to be meaningless."));
 
-    *projinfo = G_create_key_value();
-
     /* -------------------------------------------------------------------- */
     /*      Derive the user name for the coordinate system.                 */
     /* -------------------------------------------------------------------- */
-    pszProjCS = OSRGetAttrValue(hSRS, "PROJCS", 0);
-    if (!pszProjCS)
-	pszProjCS = OSRGetAttrValue(hSRS, "GEOGCS", 0);
+    if (!G_find_key_value("name", *projinfo)) {
+	pszProjCS = OSRGetAttrValue(hSRS, "PROJCS", 0);
+	if (!pszProjCS)
+	    pszProjCS = OSRGetAttrValue(hSRS, "GEOGCS", 0);
 
-    if (pszProjCS) {
-	G_set_key_value("name", pszProjCS, *projinfo);
+	if (pszProjCS) {
+	    G_set_key_value("name", pszProjCS, *projinfo);
+	}
+	else if (pszProj) {
+	    char path[4095];
+	    char name[80];
+	    
+	    /* use name of the projection as name for the coordinate system */
+
+	    sprintf(path, "%s/etc/proj/projections", G_gisbase());
+	    if (G_lookup_key_value_from_file(path, pszProj, name, sizeof(name)) >
+		0)
+		G_set_key_value("name", name, *projinfo);
+	    else
+		G_set_key_value("name", pszProj, *projinfo);
+	}
     }
-    else if (pszProj) {
-	char path[4095];
-	char name[80];
-	
-	/* use name of the projection as name for the coordinate system */
-
-	sprintf(path, "%s/etc/proj/projections", G_gisbase());
-	if (G_lookup_key_value_from_file(path, pszProj, name, sizeof(name)) >
-	    0)
-	    G_set_key_value("name", name, *projinfo);
-	else
-	    G_set_key_value("name", pszProj, *projinfo);
-    }
-
 
     /* -------------------------------------------------------------------- */
     /*      Find the GRASS datum name and choose parameters either          */
@@ -581,18 +646,18 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 		    }
 
 		    if (paramsets > 0) {
-			struct gpj_datum_transform_list *list, *old;
+			struct gpj_datum_transform_list *tlist, *old;
 
-			list = GPJ_get_datum_transform_by_name(datum);
+			tlist = GPJ_get_datum_transform_by_name(datum);
 
-			if (list != NULL) {
+			if (tlist != NULL) {
 			    do {
-				if (list->count == datumtrans)
-				    chosenparams = G_store(list->params);
-				old = list;
-				list = list->next;
+				if (tlist->count == datumtrans)
+				    chosenparams = G_store(tlist->params);
+				old = tlist;
+				tlist = tlist->next;
 				GPJ_free_datum_transform(old);
-			    } while (list != NULL);
+			    } while (tlist != NULL);
 			}
 		    }
 
@@ -653,8 +718,10 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 		 * accept first one that matches. These numbers were found
 		 * by trial and error and could be fine-tuned, or possibly
 		 * a direct comparison of IEEE floating point values used. */
-		if ((a == list->a || fabs(a - list->a) < 0.1 || fabs(1 - a / list->a) < 0.0000001) && ((es == 0 && list->es == 0) ||	/* Special case for sphere */
-												       (invflat == list->rf || fabs(invflat - list->rf) < 0.0000001))) {
+		if ((a == list->a || fabs(a - list->a) < 0.1 || fabs(1 - a / list->a) < 0.0000001) &&
+		    ((es == 0 && list->es == 0) ||
+		    /* Special case for sphere */
+		    (invflat == list->rf || fabs(invflat - list->rf) < 0.0000001))) {
 		    ellps = G_store(list->name);
 		    break;
 		}
