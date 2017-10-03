@@ -28,6 +28,7 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include <gdal_version.h>	/* needed for OFTDate */
+#include "gdal.h"
 #include "ogr_api.h"
 #include "cpl_conv.h"
 #include "global.h"
@@ -357,6 +358,27 @@ int main(int argc, char *argv[])
 
 	G_message(_("Supported formats:"));
 
+#if GDAL_VERSION_NUM >= 2000000
+	for (iDriver = 0; iDriver < GDALGetDriverCount(); iDriver++) {
+	    GDALDriverH hDriver = GDALGetDriver(iDriver);
+	    const char *pszRWFlag;
+
+            if (!GDALGetMetadataItem(hDriver, GDAL_DCAP_VECTOR, NULL))
+		continue;
+
+	    if (GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATE, NULL))
+		pszRWFlag = "rw+";
+	    else if (GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATECOPY, NULL))
+		pszRWFlag = "rw";
+	    else
+		pszRWFlag = "ro";
+
+	    fprintf(stdout, " %s (%s): %s\n",
+		    GDALGetDriverShortName(hDriver),
+		    pszRWFlag, GDALGetDriverLongName(hDriver));
+	}
+
+#else
 	for (iDriver = 0; iDriver < OGRGetDriverCount(); iDriver++) {
 	    OGRSFDriverH poDriver = OGRGetDriver(iDriver);
 	    const char *pszRWFlag;
@@ -370,6 +392,7 @@ int main(int argc, char *argv[])
 		    OGR_Dr_GetName(poDriver),
 		    pszRWFlag, OGR_Dr_GetName(poDriver));
 	}
+#endif
 	exit(EXIT_SUCCESS);
     }
 
