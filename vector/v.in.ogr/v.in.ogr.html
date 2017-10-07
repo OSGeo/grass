@@ -21,15 +21,17 @@ region settings as the spatial bounds
 
 <h3>Supported Vector Formats</h3>
 
-<em>v.in.ogr</em> uses the OGR library which supports various vector data
-formats including <a href="http://www.gdal.org/drv_shapefile.html">ESRI
-Shapefile</a>, <a href="http://www.gdal.org/drv_mitab.html">Mapinfo
-File</a>, UK .NTF, SDTS, TIGER, IHO S-57 (ENC), DGN, GML, GPX, AVCBin, REC,
-Memory, OGDI, and PostgreSQL, depending on the local OGR installation.
-For details see the <a href="http://www.gdal.org/ogr_formats.html">OGR web
-site</a>. The OGR (Simple Features Library) is part of the
-<a href="http://www.gdal.org">GDAL</a> library, hence GDAL needs to be
-installed to use <em>v.in.ogr</em>.
+<em>v.in.ogr</em> uses the OGR library which supports various vector 
+data formats including <a 
+href="http://www.gdal.org/drv_shapefile.html">ESRI Shapefile</a>, <a 
+href="http://www.gdal.org/drv_mitab.html">Mapinfo File</a>, UK .NTF, 
+SDTS, TIGER, IHO S-57 (ENC), DGN, GML, GPX, AVCBin, REC, Memory, OGDI, 
+and PostgreSQL, depending on the local OGR installation. For details 
+see the <a href="http://www.gdal.org/ogr_formats.html">OGR web 
+site</a>. The <b>-f</b> prints a list of the vector formats supported 
+by the system's OGR (Simple Features Library). The OGR (Simple Features 
+Library) is part of the <a href="http://www.gdal.org">GDAL</a> library, 
+hence GDAL needs to be installed to use <em>v.in.ogr</em>.
 
 <p>
 The list of actually supported formats can be printed by <b>-f</b> flag.
@@ -297,6 +299,41 @@ v.in.ogr input=PG: layer=river output=river
 db.select table=river
 </pre></div>
 --->
+
+<h3>OpenStreetMap (OSM)</h3>
+
+<a href="http://gdal.org/drv_osm.html">OSM data</a> are available in 
+.osm (XML based) and .pbf (optimized binary) formats. The .pbf format 
+is recommended because file sizes are smaller. The OSM driver will 
+categorize features into 5 layers :
+<ul>
+    <li><b>points</b>: "node" features that have significant tags attached. 
+    <li><b>lines</b>: "way" features that are recognized as non-area. 
+    <li><b>multilinestrings</b>: "relation" features that form a 
+multilinestring(type = 'multilinestring' or type = 'route'). 
+    <li><b>multipolygons</b>: "relation" features that form a multipolygon (type 
+= 'multipolygon' or type = 'boundary'), and "way" features that are 
+recognized as area.
+    <li><b>other_relations</b>: "relation" features that do 
+not belong to any of the above layers.
+</ul>
+
+It is recommended to import one layer at a time.
+
+<p>
+Import of OSM data requires a configuration file, defined with the 
+OSM_CONFIG_FILE configuration option. In the data folder of the GDAL 
+distribution, you can find a osmconf.ini file that can be customized to 
+fit your needs. See 
+<a href="http://wiki.openstreetmap.org/wiki/Map_Features">OSM map features</a> 
+for keys and their values. You should set &quot;other_tags=no&quot; to 
+avoid problems with import or querying the imported vector. Once a 
+OSM_CONFIG_FILE has been created, OSM data can be imported with e.g.
+
+<div class="code"><pre>
+export OSM_CONFIG_FILE=/path/to/osmconf.ini
+v.in.ogr input=name.pbf layer=lines output=osm_data
+</pre></div>
 
 <h3>Oracle Spatial</h3>
 
