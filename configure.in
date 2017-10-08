@@ -1002,7 +1002,7 @@ else
   fi
   
   if test "$GEOS_CONFIG" != "" ; then
-    GEOS_LIBS=`"$GEOS_CONFIG" --libs`
+    GEOS_LIBS=`"$GEOS_CONFIG" --clibs`
     GEOS_CFLAGS=`"$GEOS_CONFIG" --cflags`
     USE_GEOS=1
   fi
