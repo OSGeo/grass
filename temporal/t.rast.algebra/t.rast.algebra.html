@@ -130,9 +130,11 @@ the temporal topology selection operator can be used. The operator consists of
 the temporal selection operator, the topological relations, that must be separated 
 by the logical OR operator <b>|</b> and the temporal extent operator. 
 All three parts are separated by comma and surrounded by curly braces:
-{"temporal selection operator", "topological relations", "temporal operator"}  <p>
+{"temporal selection operator", "topological relations", "temporal operator"}
+<p>
 
-Examples:
+<b>Examples:</b>
+
 <div class="code"><pre>
 C = A {:, equals} B
 C = A {!:, equals} B
@@ -259,7 +261,9 @@ Comparison operator -> aggregation operator:
 <div class="code"><pre>
 || -> | and && -> & 
 </pre></div>
-Examples:
+
+
+<b>Examples:</b>
 <div class="code"><pre>
 Condition 1 {||, equal, r} Condition 2
 Condition 1 {&&, equal|during, l} Condition 2
@@ -407,10 +411,11 @@ strds[-2,0,1]
 Refers to the cell one column to the right of the current cell in the
 second predecessor map.
 
-<h3>Examples: </h3>
+<h2>EXAMPLES</h2>
+
 Sum maps from space time dataset A with maps from space time dataset
 B which have equal time stamps and are temporary before Jan. 1. 2005 and
-store them in space time dataset D.
+store them in space time dataset D:
 <div class="code"><pre>
 D = if(start_date(A) < "2005-01-01", A + B)
 </pre></div>
@@ -420,17 +425,20 @@ and store the new maps in STRDS C:
 <div class="code"><pre>
 C = A + B
 </pre></div>
+
 Same expression with explicit definition of the temporal topology relation
 and temporal operators:
 <div class="code"><pre>
 C = A {+,equal,l} B
 </pre></div>
+
 Select all cells from STRDS B with equal temporal relations to STRDS A, if the 
 cells of A are in the range of [100.0, 1600] of time intervals that have more 
 then 30 days (Jan, Mar, Mai, Jul, Aug, Oct, Dec):
 <div class="code"><pre>
 C = if(A > 100 && A < 1600 && td(A) > 30, B)
 </pre></div>
+
 Same expression with explicit definition of the temporal topology relation
 and temporal operators:
 <div class="code"><pre>
@@ -444,17 +452,20 @@ computed using the td() function that has as argument the STRDS "Prec":
 <div class="code"><pre>
 C = if(Temp > 10.0, Prec / 3600.0 /24.0 / td(Prec))
 </pre></div>
+
 Same expression with explicit definition of the temporal topology relation
 and temporal operators:
 <div class="code"><pre>
 C = if({equal}, Temp > 10.0, Prec / 3600.0 / 24.0 {/,equal,l} td(Prec))
 </pre></div>
+
 Compute the mean value of all maps from STRDS A that are located during time
 intervals of STRDS B if more than one map of A is contained in an interval
 of B, use A otherwise, the resulting time intervals are either from B or A:
 <div class="code"><pre>
 C = if(B {#,contain} A > 1, (B {+,contain,l} A - B) / (B {#,contain} A), A)
 </pre></div>
+
 Same expression with explicit definition of the temporal topology relation
 and temporal operators:
 <div class="code"><pre>
@@ -465,11 +476,11 @@ C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.mapcalc.html">r.mapcalc</a>
-<a href="t.vect.algebra.html">t.vect.algebra</a>
-<a href="t.rast3d.algebra.html">t.rast3d.algebra</a>
-<a href="t.select.html">t.select</a>
-<a href="t.rast3d.mapcalc.html">t.rast3d.mapcalc</a>
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="t.vect.algebra.html">t.vect.algebra</a>,
+<a href="t.rast3d.algebra.html">t.rast3d.algebra</a>,
+<a href="t.select.html">t.select</a>,
+<a href="t.rast3d.mapcalc.html">t.rast3d.mapcalc</a>,
 <a href="t.rast.mapcalc.html">t.rast.mapcalc</a>
 </em>
 <p>
