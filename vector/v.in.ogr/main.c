@@ -6,8 +6,9 @@
  * AUTHOR(S):    Radim Blazek
  *               Markus Neteler (spatial parm, projection support)
  *               Paul Kelly (projection support)
+ * 		 Markus Metz
  *
- * PURPOSE:      Import OGR vectors
+ * PURPOSE:      Import vector data with OGR
  *
  * COPYRIGHT:    (C) 2003-2016 by the GRASS Development Team
  *
@@ -38,6 +39,19 @@
 #  define MAX(a,b)      ((a>b) ? a : b)
 #endif
 
+/* define type of input datasource
+ * as of GDAL 2.2, all functions having as argument a GDAL/OGR dataset 
+ * must use the GDAL version, not the OGR version */
+#if GDAL_VERSION_NUM >= 2020000
+typedef GDALDatasetH ds_t;
+#define ds_getlayerbyindex(ds, i)	GDALDatasetGetLayer((ds), (i))
+#define ds_close(ds)			GDALClose(ds)
+#else
+typedef OGRDataSourceH ds_t;
+#define ds_getlayerbyindex(ds, i)	OGR_DS_GetLayer((ds), (i))
+#define ds_close(ds)			OGR_DS_Destroy(ds)
+#endif
+
 int n_polygons;
 int n_polygon_boundaries;
 double split_distance;
@@ -50,13 +64,19 @@ int poly_count(OGRGeometryH hGeom, int line2boundary);
 
 char *get_datasource_name(const char *, int);
 
+int cmp_layer_srs(ds_t, int, int *, char **, char *);
+int get_layer_proj(OGRLayerH, struct Cell_head *,
+		   struct Key_Value **, struct Key_Value **,
+		   char *, int);
+int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *,
+                          int , int *, char **,
+                          double *, double *,
+			  double *, double *,
+			  int , struct Option *);
+
 struct OGR_iterator
 {
-#if GDAL_VERSION_NUM >= 2020000
-    GDALDatasetH *Ogr_ds;
-#else
-    OGRDataSourceH *Ogr_ds;
-#endif
+    ds_t *Ogr_ds;
     char *dsn;
     int nlayers;
     int has_nonempty_layers;
@@ -69,12 +89,7 @@ struct OGR_iterator
 };
 
 void OGR_iterator_init(struct OGR_iterator *OGR_iter,
-#if GDAL_VERSION_NUM >= 2020000
-                       GDALDatasetH *Ogr_ds,
-#else
-                       OGRDataSourceH *Ogr_ds,
-#endif
-                       char *dsn, int nlayers,
+                       ds_t *Ogr_ds, char *dsn, int nlayers,
 		       int ogr_interleaved_reading);
 
 void OGR_iterator_reset(struct OGR_iterator *OGR_iter);
@@ -119,15 +134,11 @@ int main(int argc, char *argv[])
     dbDriver *driver = NULL;
     dbString sql, strval;
     int with_z, input3d;
-    const char *key_column;
-    int key_idx = -2; /* -1 for fid column */
+    const char **key_column;
+    int *key_idx;
 
     /* OGR */
-#if GDAL_VERSION_NUM >= 2020000
-    GDALDatasetH Ogr_ds;
-#else
-    OGRDataSourceH Ogr_ds;
-#endif
+    ds_t Ogr_ds;
     const char *ogr_driver_name;
     int ogr_interleaved_reading;
     OGRLayerH Ogr_layer;
@@ -136,13 +147,10 @@ int main(int argc, char *argv[])
     OGRFieldType Ogr_ftype;
     OGRFeatureH Ogr_feature;
     OGRFeatureDefnH Ogr_featuredefn;
-    OGRGeometryH Ogr_geometry, Ogr_oRing, *poSpatialFilter;
-    OGRSpatialReferenceH Ogr_projection;
-    OGREnvelope oExt;
-    double *xminl, *yminl, *xmaxl, *ymaxl;
-    int *have_ogr_extent;
+    OGRGeometryH Ogr_geometry, *poSpatialFilter;
     const char *attr_filter;
     struct OGR_iterator OGR_iter;
+    int proj_trouble;
 
     int OFTIntegerListlength;
 
@@ -168,11 +176,10 @@ int main(int argc, char *argv[])
     xmax = ymax = 0.0;
     loc_proj_info = loc_proj_units = NULL;
     Ogr_ds = NULL;
-    Ogr_oRing = poSpatialFilter = NULL;
+    poSpatialFilter = NULL;
     OFTIntegerListlength = 255;	/* hack due to limitation in OGR */
     area_size = 0.0;
     use_tmp_vect = FALSE;
-    key_column = GV_KEY_COLUMN;
 
     G_gisinit(argv[0]);
 
@@ -488,14 +495,14 @@ int main(int argc, char *argv[])
     /* driver name */
 #if GDAL_VERSION_NUM >= 2020000
     ogr_driver_name = GDALGetDriverShortName(GDALGetDatasetDriver(Ogr_ds));
-    G_verbose_message(_("Using OGR driver '%s': %s"), ogr_driver_name,
+    G_verbose_message(_("Using OGR driver '%s/%s'"), ogr_driver_name,
                       GDALGetDriverLongName(GDALGetDatasetDriver(Ogr_ds)));
 #else
     ogr_driver_name = OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds));
     G_verbose_message(_("Using OGR driver '%s'"), ogr_driver_name);
 #endif
 
-    /* OSM interleaved reading */
+    /* OGR interleaved reading */
     ogr_interleaved_reading = 0;
     if (strcmp(ogr_driver_name, "OSM") == 0) {
 
@@ -511,14 +518,6 @@ int main(int argc, char *argv[])
 	ogr_interleaved_reading = 1;
     if (ogr_interleaved_reading)
 	G_verbose_message(_("Using interleaved reading mode"));
-
-#if GDAL_VERSION_NUM >= 2020000
-    navailable_layers = GDALDatasetGetLayerCount(Ogr_ds);
-#else
-    navailable_layers = OGR_DS_GetLayerCount(Ogr_ds);
-#endif
-    OGR_iterator_init(&OGR_iter, &Ogr_ds, dsn, navailable_layers,
-		      ogr_interleaved_reading);
 
     if (param.geom->answer) {
 #if GDAL_VERSION_NUM >= 1110000
@@ -547,6 +546,15 @@ int main(int argc, char *argv[])
             G_warning(_("Encoding value not supported by OGR driver <%s>"), ogr_driver_name);
     }
 
+#if GDAL_VERSION_NUM >= 2020000
+    navailable_layers = GDALDatasetGetLayerCount(Ogr_ds);
+#else
+    navailable_layers = OGR_DS_GetLayerCount(Ogr_ds);
+#endif
+
+    if (navailable_layers < 1)
+	G_fatal_error(_("No OGR layers available"));
+
     /* make a list of available layers */
     available_layer_names =
 	(char **)G_malloc(navailable_layers * sizeof(char *));
@@ -556,11 +564,7 @@ int main(int argc, char *argv[])
 		  dsn, ogr_driver_name, navailable_layers);
     }
     for (i = 0; i < navailable_layers; i++) {
-#if GDAL_VERSION_NUM >= 2020000
-	Ogr_layer = GDALDatasetGetLayer(Ogr_ds, i);
-#else
-	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
-#endif
+	Ogr_layer = ds_getlayerbyindex(Ogr_ds, i);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
         
 	available_layer_names[i] =
@@ -571,11 +575,7 @@ int main(int argc, char *argv[])
     }
     if (flag.list->answer) {
 	fflush(stdout);
-#if GDAL_VERSION_NUM >= 2020000
-	GDALClose(Ogr_ds);
-#else
-	OGR_DS_Destroy(Ogr_ds);
-#endif
+	ds_close(Ogr_ds);
 	exit(EXIT_SUCCESS);
     }
     
@@ -609,93 +609,25 @@ int main(int argc, char *argv[])
 	for (i = 0; i < nlayers; i++)
 	    layers[i] = i;
     }
-    n_features = (GIntBig *)G_malloc(nlayers * sizeof(GIntBig));
-    for (i = 0; i < nlayers; i++) {
-	n_features[i] = 0;
-    }
 
-    if (param.out->answer) {
-	output = G_store(param.out->answer);
-    }
-    else {
-	if (nlayers < 1)
-	    G_fatal_error(_("No OGR layers available"));
-	output = G_store(layer_names[0]);
-	if (param.layer->answer == NULL)
-	    G_warning(_("All available OGR layers will be imported into vector map <%s>"), output);
-    }
-    
-    if (!param.outloc->answer && !flag.proj->answer) {	/* Check if the map exists */
-	if (G_find_vector2(output, G_mapset()) && !overwrite)
-	    G_fatal_error(_("Vector map <%s> already exists"),
-			  output);
+    /* compare SRS of the different layers to be imported */
+    if (cmp_layer_srs(Ogr_ds, nlayers, layers, layer_names, param.geom->answer)) {
+	ds_close(Ogr_ds);
+	G_fatal_error(_("Detected different projections of input layers. "
+	                "Input layers must be imported separately."));
     }
 
     /* Get first imported layer to use for projection check */
-#if GDAL_VERSION_NUM >= 2020000
-    Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[0]);
-#else
-    Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layers[0]);
-#endif
-    
-    /* projection check must come before extents check */
-    /* Fetch input map projection in GRASS form. */
+    Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[0]);
+
+    /* Fetch input projection in GRASS form. */
     proj_info = NULL;
     proj_units = NULL;
-#if GDAL_VERSION_NUM >= 1110000
-    if (param.geom->answer) {
-        OGRGeomFieldDefnH Ogr_geomdefn;
-        
-        Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-        igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
-        if (igeom < 0)
-            G_fatal_error(_("Geometry column <%s> not found in OGR layer <%s>"),
-                          param.geom->answer, OGR_L_GetName(Ogr_layer));
-        Ogr_geomdefn = OGR_FD_GetGeomFieldDefn(Ogr_featuredefn, igeom);
-        Ogr_projection = OGR_GFld_GetSpatialRef(Ogr_geomdefn);
-    }
-    else {
-        Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
-    }
-#else
-    Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);	/* should not be freed later */
-#endif
-
-    /* fetch boundaries */
-    have_ogr_extent = (int *)G_malloc(nlayers * sizeof(int));
-    xminl = (double *)G_malloc(nlayers * sizeof(double));
-    xmaxl = (double *)G_malloc(nlayers * sizeof(double));
-    yminl = (double *)G_malloc(nlayers * sizeof(double));
-    ymaxl = (double *)G_malloc(nlayers * sizeof(double));
-    for (layer = 0; layer < nlayers; layer++) {
-
-#if GDAL_VERSION_NUM >= 2020000
-	Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
-#else
-	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layers[layer]);
-#endif
-	have_ogr_extent[layer] = 0;
-	if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
-	    xminl[layer] = oExt.MinX;
-	    xmaxl[layer] = oExt.MaxX;
-	    yminl[layer] = oExt.MinY;
-	    ymaxl[layer] = oExt.MaxY;
-
-	    /* use OGR extents if possible, needed to skip corrupted data
-	     * in OGR dsn/layer */
-	    have_ogr_extent[layer] = 1;
-	}
-	/* OGR_L_GetExtent(): 
-	 * Note that some implementations of this method may alter 
-	 * the read cursor of the layer. */
-#if GDAL_VERSION_NUM >= 2020000
-	GDALDatasetResetReading(Ogr_ds);
-#else
-	OGR_L_ResetReading(Ogr_layer);
-#endif
-    }
-
     G_get_window(&cellhd);
+
+    proj_trouble = get_layer_proj(Ogr_layer, &cellhd, &proj_info, &proj_units,
+		   param.geom->answer, 1);
+
     cellhd.north = 1.;
     cellhd.south = 0.;
     cellhd.west = 0.;
@@ -717,8 +649,10 @@ int main(int argc, char *argv[])
     if (param.outloc->answer != NULL) {
 	/* Convert projection information non-interactively as we can't
 	 * assume the user has a terminal open */
-	if (GPJ_osr_to_grass(&cellhd, &proj_info,
-			     &proj_units, Ogr_projection, 0) < 0) {
+
+	/* do not create a xy location because this can mean that the
+	 * real SRS has not been recognized */ 
+	if (proj_trouble) {
 	    G_fatal_error(_("Unable to convert input map projection to GRASS "
 			    "format; cannot create new location."));
 	}
@@ -736,11 +670,7 @@ int main(int argc, char *argv[])
 
         /* If the i flag is set, clean up and exit here */
         if (flag.no_import->answer) {
-#if GDAL_VERSION_NUM >= 2020000
-	    GDALClose(Ogr_ds);
-#else
-	    OGR_DS_Destroy(Ogr_ds);
-#endif
+	    ds_close(Ogr_ds);
             exit(EXIT_SUCCESS);
         }
     }
@@ -749,10 +679,21 @@ int main(int argc, char *argv[])
         void (*msg_fn)(const char *, ...);
             
 	/* Projection only required for checking so convert non-interactively */
-	if (GPJ_osr_to_grass(&cellhd, &proj_info,
-			     &proj_units, Ogr_projection, 0) < 0)
-	    G_warning(_("Unable to convert input map projection information to "
-		       "GRASS format for checking"));
+	if (proj_trouble) {
+	    strcpy(error_msg, _("Unable to convert input map projection information "
+		                "to GRASS format."));
+            if (flag.over->answer) {
+                msg_fn = G_warning;
+	    }
+            else {
+                msg_fn = G_fatal_error;
+		ds_close(Ogr_ds);
+	    }
+            msg_fn(error_msg);
+            if (!flag.over->answer) {
+                exit(EXIT_FAILURE);
+	    }
+	}
 
 	/* Does the projection of the current location match the dataset? */
 	/* G_get_window seems to be unreliable if the location has been changed */
@@ -773,7 +714,7 @@ int main(int argc, char *argv[])
 		     G_compare_projections(loc_proj_info, loc_proj_units,
 					   proj_info, proj_units)) != TRUE) {
 	    int i_value;
-            
+
 	    strcpy(error_msg,
 		   _("Projection of dataset does not"
 		     " appear to match current location.\n\n"));
@@ -845,8 +786,10 @@ int main(int argc, char *argv[])
 		    " from input data set.\n"));
             if (flag.proj->answer)
                 msg_fn = G_message;
-            else
+            else {
                 msg_fn = G_fatal_error;
+		ds_close(Ogr_ds);
+	    }
             msg_fn(error_msg);
             if (flag.proj->answer)
                 exit(EXIT_FAILURE);
@@ -858,143 +801,76 @@ int main(int argc, char *argv[])
 		msg_fn = G_verbose_message;            
 	    msg_fn(_("Projection of input dataset and current location "
 		     "appear to match"));
-	    if (flag.proj->answer)
+	    if (flag.proj->answer) {
+		ds_close(Ogr_ds);
 		exit(EXIT_SUCCESS);
+	    }
 	}
     }
 
-    G_begin_polygon_area_calculations();	/* Used in geom() and centroid() */
+    /* get output name */
+    if (param.out->answer) {
+	output = G_store(param.out->answer);
+    }
+    else {
+	output = G_store(layer_names[0]);
+    }
 
-    /* set spatial filter */
+    /* check output name */
+    if (Vect_legal_filename(output) != 1) {
+	ds_close(Ogr_ds);
+	G_fatal_error(_("Illegal output name <%s>"), output);
+    }
+
+    /* Check if the output map exists */
+    if (G_find_vector2(output, G_mapset()) && !overwrite) {
+	ds_close(Ogr_ds);
+	G_fatal_error(_("Vector map <%s> already exists"),
+		      output);
+    }
+
+    /* report back if several layers will be imported because 
+     * none has been selected */
+    if (nlayers > 1 && param.layer->answer == NULL) {
+	void (*msg_fn)(const char *, ...);
+
+	/* make it a warning if output name has not been specified */
+	if (param.out->answer)
+	    msg_fn = G_important_message;
+	else
+	    msg_fn = G_warning;
+
+	msg_fn(_("All available OGR layers will be imported into vector map <%s>"),
+		  output);
+    }
+
+    /* attribute filter */
+    attr_filter = param.where->answer;
+
+    /* create spatial filters */
+    if (param.outloc->answer && flag.region->answer) {
+	G_warning(_("When creating a new location, the current region "
+	          "can not be used as spatial filter, disabling"));
+	flag.region->answer = 0;
+    }
     if (flag.region->answer && param.spat->answer)
 	G_fatal_error(_("Select either the current region flag or the spatial option, not both"));
-    if (!param.outloc->answer && flag.region->answer) {
-	G_get_window(&cur_wind);
-	xmin = cur_wind.west;
-	xmax = cur_wind.east;
-	ymin = cur_wind.south;
-	ymax = cur_wind.north;
-    }
-    if (param.spat->answer) {
-	/* See as reference: gdal/ogr/ogr_capi_test.c */
 
-	/* cut out a piece of the map */
-	/* order: xmin,ymin,xmax,ymax */
-	i = 0;
-	while (param.spat->answers[i]) {
-	    if (i == 0)
-		xmin = atof(param.spat->answers[i]);
-	    if (i == 1)
-		ymin = atof(param.spat->answers[i]);
-	    if (i == 2)
-		xmax = atof(param.spat->answers[i]);
-	    if (i == 3)
-		ymax = atof(param.spat->answers[i]);
-	    i++;
-	}
-	if (i != 4)
-	    G_fatal_error(_("4 parameters required for 'spatial' parameter"));
-	if (xmin > xmax)
-	    G_fatal_error(_("xmin is larger than xmax in 'spatial' parameters"));
-	if (ymin > ymax)
-	    G_fatal_error(_("ymin is larger than ymax in 'spatial' parameters"));
-    }
-    if ((!param.outloc->answer && flag.region->answer) ||
-	param.spat->answer) {
-	G_debug(2, "cut out with boundaries: xmin:%f ymin:%f xmax:%f ymax:%f",
-		xmin, ymin, xmax, ymax);
-    }
-
-    /* spatial filter, set by ogr_getnextfeature */
     poSpatialFilter = G_malloc(nlayers * sizeof(OGRGeometryH));
-    for (layer = 0; layer < nlayers; layer++) {
-	int have_filter = 0;
+    if (create_spatial_filter(Ogr_ds, poSpatialFilter,
+                              nlayers, layers, layer_names,
+			      &xmin, &ymin, &xmax, &ymax,
+			      flag.region->answer, param.spat)
+	|| attr_filter) {
 
-#if GDAL_VERSION_NUM >= 2020000
-	Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
-#else
-	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layers[layer]);
-#endif
-
-	if (have_ogr_extent[layer]) {
-	    if (xmin <= xmax && ymin <= ymax) {
-		/* check for any overlap */
-		if (xminl[layer] > xmax || xmaxl[layer] < xmin ||
-		    yminl[layer] > ymax || ymaxl[layer] < ymin) {
-		    G_warning(_("The spatial filter does not overlap with OGR layer <%s>. Nothing to import."),
-			      layer_names[layer]);
-
-		    xminl[layer] = xmin;
-		    xmaxl[layer] = xmax;
-		    yminl[layer] = ymin;
-		    ymaxl[layer] = ymax;
-		}
-		else {
-		    /* shrink with user options */
-		    xminl[layer] = MAX(xminl[layer], xmin);
-		    xmaxl[layer] = MIN(xmaxl[layer], xmax);
-		    yminl[layer] = MAX(yminl[layer], ymin);
-		    ymaxl[layer] = MIN(ymaxl[layer], ymax);
-		}
-	    }
-	    have_filter = 1;
-	}
-	else if (xmin <= xmax && ymin <= ymax) {
-	    xminl[layer] = xmin;
-	    xmaxl[layer] = xmax;
-	    yminl[layer] = ymin;
-	    ymaxl[layer] = ymax;
-
-	    have_filter = 1;
-	}
-
-	if (have_filter) {
-	    /* some invalid features can be filtered out by using
-	     * the layer's extents as spatial filter
-	     * hopefully these filtered features are all invalid */
-	    /* TODO/BUG:
-	     * for OSM, a spatial filter applied on the 'points' layer 
-	     * will also affect other layers */
-
-	    /* in theory this could be an irregular polygon */
-	    G_debug(2, "spatial filter for layer <%s>: xmin:%f ymin:%f xmax:%f ymax:%f",
-		    layer_names[layer],
-		    xminl[layer], yminl[layer],
-		    xmaxl[layer], ymaxl[layer]);
-
-	    poSpatialFilter[layer] = OGR_G_CreateGeometry(wkbPolygon);
-	    Ogr_oRing = OGR_G_CreateGeometry(wkbLinearRing);
-	    OGR_G_AddPoint_2D(Ogr_oRing, xminl[layer], yminl[layer]);
-	    OGR_G_AddPoint_2D(Ogr_oRing, xminl[layer], ymaxl[layer]);
-	    OGR_G_AddPoint_2D(Ogr_oRing, xmaxl[layer], ymaxl[layer]);
-	    OGR_G_AddPoint_2D(Ogr_oRing, xmaxl[layer], yminl[layer]);
-	    OGR_G_AddPoint_2D(Ogr_oRing, xminl[layer], yminl[layer]);
-	    OGR_G_AddGeometryDirectly(poSpatialFilter[layer], Ogr_oRing);
-	}
-	else
-	    poSpatialFilter[layer] = NULL;
-    }
-    /* update xmin, xmax, ymin, ymax if possible */
-    for (layer = 0; layer < nlayers; layer++) {
-	if (have_ogr_extent[layer]) {
-	    if (xmin > xmax) {
-		xmin = xminl[layer];
-		xmax = xmaxl[layer];
-		ymin = yminl[layer];
-		ymax = ymaxl[layer];
-	    }
-	    else {
-		/* expand */
-		xmin = MIN(xminl[layer], xmin);
-		xmax = MAX(xmaxl[layer], xmax);
-		ymin = MIN(yminl[layer], ymin);
-		ymax = MAX(ymaxl[layer], ymax);
-	    }
+	for (layer = 0; layer < nlayers; layer++) {
+	    Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+	    OGR_L_SetSpatialFilter(Ogr_layer, poSpatialFilter[layer]);
+	    if (OGR_L_SetAttributeFilter(Ogr_layer, attr_filter) != OGRERR_NONE)
+		G_fatal_error(_("Error setting attribute filter '%s'"),
+			      attr_filter);
 	}
     }
-
-    /* attribute filter, set by ogr_getnextfeature */
-    attr_filter = param.where->answer;
 
     /* suppress boundary splitting ? */
     if (flag.no_clean->answer || xmin >= xmax || ymin >= ymax) {
@@ -1009,22 +885,22 @@ int main(int argc, char *argv[])
     db_init_string(&sql);
     db_init_string(&strval);
 
-    n_polygon_boundaries = 0;
-    input3d = 0;
+    n_features = (GIntBig *)G_malloc(nlayers * sizeof(GIntBig));
+
+    OGR_iterator_init(&OGR_iter, &Ogr_ds, dsn, navailable_layers,
+		      ogr_interleaved_reading);
 
     /* check if input id 3D and if we need a tmp vector */
     /* estimate distance for boundary splitting --> */
-    OGR_iterator_reset(&OGR_iter);
+    n_polygon_boundaries = 0;
+    input3d = 0;
+
     for (layer = 0; layer < nlayers; layer++) {
 	GIntBig ogr_feature_count;
 
+	n_features[layer] = 0;
 	layer_id = layers[layer];
-
-#if GDAL_VERSION_NUM >= 2020000
-	Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
-#else
-	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
-#endif
+	Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
         igeom = -1;
 #if GDAL_VERSION_NUM >= 1110000
@@ -1141,58 +1017,63 @@ int main(int argc, char *argv[])
 
     ncentr = n_overlaps = n_polygons = 0;
 
+    G_begin_polygon_area_calculations();	/* Used in geom() and centroid() */
+
     /* Points and lines are written immediately with categories. Boundaries of polygons are
      * written to the vector then cleaned and centroids are calculated for all areas in clean vector.
      * Then second pass through finds all centroids in each polygon feature and adds its category
-     * to the centroid. The result is that one centroids may have 0, 1 ore more categories
+     * to the centroid. The result is that one centroid may have 0, 1 ore more categories
      * of one ore more (more input layers) fields. */
-    OGR_iterator_reset(&OGR_iter);
-    for (layer = 0; layer < nlayers; layer++) {
-	layer_id = layers[layer];
 
-#if GDAL_VERSION_NUM >= 2020000
-	Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
-#else
-	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
-#endif
+    /* get input column to use for categoy values, create tables */
+    OGR_iterator_reset(&OGR_iter);
+    key_column = G_malloc(nlayers * sizeof(char *));
+    key_idx = G_malloc(nlayers * sizeof(int));
+    for (layer = 0; layer < nlayers; layer++) {
+
+	key_column[layer] = GV_KEY_COLUMN;
+	key_idx[layer] = -2; /* -1 for fid column */
+	layer_id = layers[layer];
+	Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
-        igeom = -1;
-#if GDAL_VERSION_NUM >= 1110000
-        if (param.geom->answer)
-            igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
-#endif
-        
         if (param.key->answer) {
+	    /* use existing column for category values */
             const char *fid_column;
+
             fid_column = OGR_L_GetFIDColumn(Ogr_layer);
             if (fid_column) {
-                key_column = G_store(fid_column);
-                key_idx = -1;
+                key_column[layer] = G_store(fid_column);
+                key_idx[layer] = -1;
             }
             if (!fid_column || strcmp(fid_column, param.key->answer) != 0) {
-                key_idx = OGR_FD_GetFieldIndex(Ogr_featuredefn, param.key->answer);
-                if (key_idx == -1)
-                    G_fatal_error(_("Key column '%s' not found"), param.key->answer);
+                key_idx[layer] = OGR_FD_GetFieldIndex(Ogr_featuredefn, param.key->answer);
+                if (key_idx[layer] == -1)
+                    G_fatal_error(_("Key column '%s' not found in input layer <%s>"),
+		                  param.key->answer, layer_names[layer]);
             }
 
-            if (key_idx > -1) {
+            if (key_idx[layer] > -1) {
                 /* check if the field is integer */
-                Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, key_idx);
+                Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, key_idx[layer]);
                 Ogr_ftype = OGR_Fld_GetType(Ogr_field);
                 if (!(Ogr_ftype == OFTInteger
 #if GDAL_VERSION_NUM >= 2000000
                       || Ogr_ftype == OFTInteger64
 #endif
 		      )) {
-                    G_fatal_error(_("Key column '%s' is not integer"), param.key->answer);
+                    G_fatal_error(_("Key column '%s' in input layer <%s> is not integer"),
+		                  param.key->answer, layer_names[layer]);
                 }
-                key_column = G_store(OGR_Fld_GetNameRef(Ogr_field));
+                key_column[layer] = G_store(OGR_Fld_GetNameRef(Ogr_field));
             }
         }
 
-	/* Add DB link */
+	/* Add DB link and create table */
 	if (!flag.notab->answer) {
+	    G_important_message(_("Creating attribute table for layer <%s>..."),
+				  layer_names[layer]);
+
 	    if (nlayers == 1) {	/* one layer only */
 		Fi = Vect_default_field_info(&Map, layer + 1, NULL,
 					     GV_1TABLE);
@@ -1203,21 +1084,21 @@ int main(int argc, char *argv[])
 	    }
 
 	    if (ncnames > 0) {
-		key_column = param.cnames->answers[0];
+		key_column[layer] = param.cnames->answers[0];
 	    }
 	    Vect_map_add_dblink(&Map, layer + 1, layer_names[layer], Fi->table,
-				key_column, Fi->database, Fi->driver);
+				key_column[layer], Fi->database, Fi->driver);
 
 	    ncols = OGR_FD_GetFieldCount(Ogr_featuredefn);
 	    G_debug(2, "%d columns", ncols);
 
 	    /* Create table */
 	    sprintf(buf, "create table %s (%s integer", Fi->table,
-		    key_column);
+		    key_column[layer]);
 	    db_set_string(&sql, buf);
 	    for (i = 0; i < ncols; i++) {
 
-                if (key_idx > -1 && key_idx == i)
+                if (key_idx[layer] > -1 && key_idx[layer] == i)
                     continue; /* skip defined key (FID column) */
                 
 		Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, i);
@@ -1364,9 +1245,14 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Unable to grant privileges on table <%s>"),
 			      Fi->table);
 
-	    db_begin_transaction(driver);
+	    db_close_database_shutdown_driver(driver);
 	}
+    }
 
+    /* import features */
+    OGR_iterator_reset(&OGR_iter);
+    for (layer = 0; layer < nlayers; layer++) {
+	layer_id = layers[layer];
 	/* Import features */
 	cat = 1;
 	nogeom = 0;
@@ -1375,6 +1261,32 @@ int main(int argc, char *argv[])
 	G_important_message(_("Importing %lld features (OGR layer <%s>)..."),
 			    n_features[layer], layer_names[layer]);
 
+	driver = NULL;
+	if (!flag.notab->answer) {
+	    /* one transaction per layer/table
+	     * or better one transaction for all layers/tables together ?
+	     */
+	    Fi = Vect_get_field(&Map, layer + 1);
+	    driver =
+		db_start_driver_open_database(Fi->driver,
+					      Vect_subst_var(Fi->database,
+							     &Map));
+	    if (driver == NULL) {
+		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			      Vect_subst_var(Fi->database, &Map), Fi->driver);
+	    }
+	    db_begin_transaction(driver);
+	}
+
+	Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
+	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+
+        igeom = -1;
+#if GDAL_VERSION_NUM >= 1110000
+        if (param.geom->answer)
+            igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
+#endif
+
 	while ((Ogr_feature = ogr_getnextfeature(&OGR_iter, layer_id,
 	                                         layer_names[layer],
 						 poSpatialFilter[layer],
@@ -1382,8 +1294,8 @@ int main(int argc, char *argv[])
 	    G_percent(feature_count++, n_features[layer], 1);	/* show something happens */
 
             /* Geometry */
-#if GDAL_VERSION_NUM >= 1110000
             Ogr_featuredefn = OGR_iter.Ogr_featuredefn;
+#if GDAL_VERSION_NUM >= 1110000
             for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
                 if (igeom > -1 && i != igeom)
                     continue; /* use only geometry defined via param.geom */
@@ -1395,7 +1307,7 @@ int main(int argc, char *argv[])
 #if GDAL_VERSION_NUM >= 2000000
                 if (Ogr_geometry != NULL) {
 		    if (OGR_G_HasCurveGeometry(Ogr_geometry, 1)) {
-			G_debug(1, "Approximating curves in a '%s'",
+			G_debug(2, "Approximating curves in a '%s'",
 			        OGR_G_GetGeometryName(Ogr_geometry));
 		    }
 		    Ogr_geometry = OGR_G_GetLinearGeometry(Ogr_geometry, 0, NULL);
@@ -1405,9 +1317,9 @@ int main(int argc, char *argv[])
                     nogeom++;
                 }
                 else {
-                    if (key_idx > -1)
-                        cat = OGR_F_GetFieldAsInteger(Ogr_feature, key_idx);
-                    else if (key_idx == -1)
+                    if (key_idx[layer] > -1)
+                        cat = OGR_F_GetFieldAsInteger(Ogr_feature, key_idx[layer]);
+                    else if (key_idx[layer] == -1)
                         cat = OGR_F_GetFID(Ogr_feature);
 
                     geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
@@ -1420,13 +1332,14 @@ int main(int argc, char *argv[])
             }
 #endif
 	    /* Attributes */
+	    ncols = OGR_FD_GetFieldCount(Ogr_featuredefn);
 	    if (!flag.notab->answer) {
 		sprintf(buf, "insert into %s values ( %d", Fi->table, cat);
 		db_set_string(&sql, buf);
 		for (i = 0; i < ncols; i++) {
 		    const char *Ogr_fstring = NULL;
 
-                    if (key_idx > -1 && key_idx == i)
+                    if (key_idx[layer] > -1 && key_idx[layer] == i)
                         continue; /* skip defined key (FID column) */
 
 		    Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, i);
@@ -1508,8 +1421,8 @@ int main(int argc, char *argv[])
 		if (db_execute_immediate(driver, &sql) != DB_OK) {
 		    db_close_database(driver);
 		    db_shutdown_driver(driver);
-		    G_fatal_error(_("Cannot insert new row: %s"),
-				  db_get_string(&sql));
+		    G_fatal_error(_("Cannot insert new row for input layer <%s>: %s"),
+				  layer_names[layer], db_get_string(&sql));
 		}
 	    }
 
@@ -1524,9 +1437,39 @@ int main(int argc, char *argv[])
 	}
 
 	if (nogeom > 0)
-	    G_warning(_("%d %s without geometry skipped"), nogeom,
-		      nogeom == 1 ? "feature" : "features");
+	    G_warning(_("%d %s without geometry in input layer <%s> skipped"),
+	              nogeom, nogeom == 1 ? _("feature") : _("features"),
+		      layer_names[layer]);
     }
+
+    delete_table = Vect_maptype(&Map) != GV_FORMAT_NATIVE;
+
+    /* create index - must fail on non-unique categories */
+    if (!flag.notab->answer) {
+	for (layer = 0; layer < nlayers; layer++) {
+	    Fi = Vect_get_field(&Map, layer + 1);
+	    driver =
+		db_start_driver_open_database(Fi->driver,
+					      Vect_subst_var(Fi->database,
+							     &Map));
+
+	    if (!delete_table) {
+		if (db_create_index2(driver, Fi->table, Fi->key) != DB_OK)
+		    G_fatal_error(_("Unable to create index for table <%s>, key <%s>"),
+			      Fi->table, Fi->key);
+	    }
+	    else {
+		sprintf(buf, "drop table %s", Fi->table);
+		db_set_string(&sql, buf);
+		if (db_execute_immediate(driver, &sql) != DB_OK) {
+		    G_fatal_error(_("Unable to drop table: '%s'"),
+				  db_get_string(&sql));
+		}
+	    }
+	    db_close_database_shutdown_driver(driver);
+	}
+    }
+    /* attribute tables are now done */
 
     separator = "-----------------------------------------------------";
     G_message("%s", separator);
@@ -1537,6 +1480,8 @@ int main(int argc, char *argv[])
 	Vect_build_partial(&Tmp, GV_BUILD_BASE);
     }
 
+    /* make this a separate function ?
+     * no, too many arguments */
     if (use_tmp_vect && !flag.no_clean->answer &&
 	Vect_get_num_primitives(Out, GV_BOUNDARY) > 0) {
 	int ret, centr, otype, n_nocat;
@@ -1550,6 +1495,8 @@ int main(int argc, char *argv[])
 
 	G_message("%s", separator);
 
+	/* the principal purpose is to convert non-topological polygons to 
+	 * topological areas */
 	G_message(_("Cleaning polygons"));
 
 	if (snap >= 0) {
@@ -1560,7 +1507,9 @@ int main(int argc, char *argv[])
 
 	/* It is not to clean to snap centroids, but I have seen data with 2 duplicate polygons
 	 * (as far as decimal places were printed) and centroids were not identical */
-	/* Disabled, because overlapping polygons result in many duplicate centroids anyway */
+	/* Disabled, because the mechanism has changed:
+	 * at this stage, there are no centroids yet, centroids are caluclated 
+	 * later for output areas, not fo input polygons */
 	/*
 	   fprintf ( stderr, separator );
 	   fprintf ( stderr, "Snap centroids (threshold 0.000001):\n" );
@@ -1663,61 +1612,57 @@ int main(int argc, char *argv[])
 	    G_message("%s", separator);
 	    G_message(_("Finding centroids for OGR layer <%s>..."), layer_names[layer]);
 	    layer_id = layers[layer];
-#if GDAL_VERSION_NUM >= 2020000
-	    Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
-#else
-	    Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
-#endif
-            Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+	    Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
+	    Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
-            igeom = -1;
+	    igeom = -1;
 #if GDAL_VERSION_NUM >= 1110000
-            if (param.geom->answer)
-                igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
+	    if (param.geom->answer)
+		igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
 #endif
 
 	    cat = 0;		/* field = layer + 1 */
 	    while ((Ogr_feature = ogr_getnextfeature(&OGR_iter, layer_id,
-	                                             layer_names[layer],
+						     layer_names[layer],
 						     poSpatialFilter[layer],
 						     attr_filter)) != NULL) {
 		G_percent(cat, n_features[layer], 2);
 
-                /* Category */
-                if (key_idx > -1)
-                    cat = OGR_F_GetFieldAsInteger(Ogr_feature, key_idx);
-                else
-                    cat++;
+		/* Category */
+		if (key_idx[layer] > -1)
+		    cat = OGR_F_GetFieldAsInteger(Ogr_feature, key_idx[layer]);
+		else
+		    cat++;
 
 		/* Geometry */
 #if GDAL_VERSION_NUM >= 1110000
 		Ogr_featuredefn = OGR_iter.Ogr_featuredefn;
-                for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
-                    if (igeom > -1 && i != igeom)
-                        continue; /* use only geometry defined via param.geom */
-            
-                    Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
+		for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
+		    if (igeom > -1 && i != igeom)
+			continue; /* use only geometry defined via param.geom */
+	    
+		    Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
 #else
-                    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+		    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
 #endif
-                    if (Ogr_geometry != NULL) {
+		    if (Ogr_geometry != NULL) {
 #if GDAL_VERSION_NUM >= 2000000
 			Ogr_geometry = OGR_G_GetLinearGeometry(Ogr_geometry, 0, NULL);
-                    }
-                    if (Ogr_geometry != NULL) {
+		    }
+		    if (Ogr_geometry != NULL) {
 #endif
-                        centroid(Ogr_geometry, Centr, &si, layer + 1, cat,
-                                 min_area, type);
+			centroid(Ogr_geometry, Centr, &si, layer + 1, cat,
+				 min_area, type);
 #if GDAL_VERSION_NUM >= 2000000
 			OGR_G_DestroyGeometry(Ogr_geometry);
 #endif
-                    }
+		    }
 #if GDAL_VERSION_NUM >= 1110000
-                }
+		}
 #endif
 		OGR_F_Destroy(Ogr_feature);
 	    }
-            G_percent(1, 1, 1);
+	    G_percent(1, 1, 1);
 	}
 
 	/* Write centroids */
@@ -1801,11 +1746,7 @@ int main(int argc, char *argv[])
 	G_message("%s", separator);
     }
 
-#if GDAL_VERSION_NUM >= 2020000
-    GDALClose(Ogr_ds);
-#else
-    OGR_DS_Destroy(Ogr_ds);
-#endif
+    ds_close(Ogr_ds);
 
     if (use_tmp_vect) {
 	/* Copy temporary vector to output vector */
@@ -1816,8 +1757,11 @@ int main(int argc, char *argv[])
     }
 
     Vect_build(&Map);
-    if (0 && flag.no_clean->answer)
+#if 0
+    /* disabled, Vect_topo_check() is quite slow */
+    if (flag.no_clean->answer)
 	Vect_topo_check(&Map, NULL);
+#endif
 
     if (n_polygons && nlayers == 1) {
 	/* test for topological errors */
@@ -1910,34 +1854,6 @@ int main(int argc, char *argv[])
 	}
     }
 
-    delete_table = Vect_maptype(&Map) != GV_FORMAT_NATIVE;
-
-    /* create index - may fail on non-unique categories */
-    if (!flag.notab->answer) {
-	for (layer = 0; layer < nlayers; layer++) {
-	    Fi = Vect_get_field(&Map, layer + 1);
-	    driver =
-		db_start_driver_open_database(Fi->driver,
-					      Vect_subst_var(Fi->database,
-							     &Map));
-
-	    if (!delete_table) {
-		if (db_create_index2(driver, Fi->table, Fi->key) != DB_OK)
-		    G_warning(_("Unable to create index for table <%s>, key <%s>"),
-			      Fi->table, Fi->key);
-	    }
-	    else {
-		sprintf(buf, "drop table %s", Fi->table);
-		db_set_string(&sql, buf);
-		if (db_execute_immediate(driver, &sql) != DB_OK) {
-		    G_fatal_error(_("Unable to drop table: '%s'"),
-				  db_get_string(&sql));
-		}
-	    }
-	    db_close_database_shutdown_driver(driver);
-	}
-    }
-
     Vect_get_map_box(&Map, &box);
     if (0 != Vect_close(&Map))
         G_fatal_error(_("Import failed"));
@@ -1981,12 +1897,7 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-void OGR_iterator_init(struct OGR_iterator *OGR_iter,
-#if GDAL_VERSION_NUM >= 2020000
-                       GDALDatasetH *Ogr_ds,
-#else
-                       OGRDataSourceH *Ogr_ds,
-#endif
+void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t *Ogr_ds,
                        char *dsn, int nlayers,
 		       int ogr_interleaved_reading)
 {
@@ -2029,40 +1940,26 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter,
 			       const char *attr_filter)
 {
     if (OGR_iter->requested_layer != layer) {
-	int i;
-
-	/* clear filters */
-	for (i = 0; i < OGR_iter->nlayers; i++) {
-#if GDAL_VERSION_NUM >= 2020000
-	    OGR_iter->Ogr_layer = GDALDatasetGetLayer(*(OGR_iter->Ogr_ds), i);
-#else
-	    OGR_iter->Ogr_layer = OGR_DS_GetLayer(*(OGR_iter->Ogr_ds), i);
-#endif
-	    OGR_L_SetSpatialFilter(OGR_iter->Ogr_layer, NULL);
-	    OGR_L_SetAttributeFilter(OGR_iter->Ogr_layer, NULL);
-	}
 
 	/* reset OGR reading */
 	if (!OGR_iter->ogr_interleaved_reading) {
 	    OGR_iter->curr_layer = layer;
-#if GDAL_VERSION_NUM >= 2020000
-	    OGR_iter->Ogr_layer = GDALDatasetGetLayer(*(OGR_iter->Ogr_ds), OGR_iter->curr_layer);
-#else
-	    OGR_iter->Ogr_layer = OGR_DS_GetLayer(*(OGR_iter->Ogr_ds), OGR_iter->curr_layer);
-#endif
+	    OGR_iter->Ogr_layer = ds_getlayerbyindex(*(OGR_iter->Ogr_ds), OGR_iter->curr_layer);
 	    OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
 	    OGR_L_ResetReading(OGR_iter->Ogr_layer);
-	    OGR_L_SetSpatialFilter(OGR_iter->Ogr_layer, poSpatialFilter);
-	    OGR_L_SetAttributeFilter(OGR_iter->Ogr_layer, attr_filter);
 	}
 	else {
+	    int i;
+
+	    /* clear filters */
+	    for (i = 0; i < OGR_iter->nlayers; i++) {
+		OGR_iter->Ogr_layer = ds_getlayerbyindex(*(OGR_iter->Ogr_ds), i);
+		OGR_L_SetSpatialFilter(OGR_iter->Ogr_layer, NULL);
+		OGR_L_SetAttributeFilter(OGR_iter->Ogr_layer, NULL);
+	    }
+
 #if GDAL_VERSION_NUM >= 2020000
 	    GDALDatasetResetReading(*(OGR_iter->Ogr_ds));
-	    OGR_iter->curr_layer = 0;
-	    OGR_iter->Ogr_layer = GDALDatasetGetLayer(*(OGR_iter->Ogr_ds), layer);
-	    OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
-	    OGR_L_SetSpatialFilter(OGR_iter->Ogr_layer, poSpatialFilter);
-	    OGR_L_SetAttributeFilter(OGR_iter->Ogr_layer, attr_filter);
 #else
 	    /* need to re-open OGR DSN in order to start reading from the beginning
 	     * NOTE: any constraints are lost */
@@ -2071,12 +1968,17 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter,
 	    if (*(OGR_iter->Ogr_ds) == NULL)
 		G_fatal_error(_("Unable to re-open data source <%s>"), OGR_iter->dsn);
 	    OGR_iter->Ogr_layer = OGR_DS_GetLayer(*(OGR_iter->Ogr_ds), layer);
-	    OGR_L_SetSpatialFilter(OGR_iter->Ogr_layer, poSpatialFilter);
-	    OGR_L_SetAttributeFilter(OGR_iter->Ogr_layer, attr_filter);
 	    OGR_iter->curr_layer = 0;
-	    OGR_iter->Ogr_layer = OGR_DS_GetLayer(*(OGR_iter->Ogr_ds), OGR_iter->curr_layer);
-	    OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
 	    OGR_iter->has_nonempty_layers = 0;
+#endif
+	    OGR_iter->Ogr_layer = ds_getlayerbyindex(*(OGR_iter->Ogr_ds), layer);
+	    OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
+	    OGR_L_SetSpatialFilter(OGR_iter->Ogr_layer, poSpatialFilter);
+	    if (OGR_L_SetAttributeFilter(OGR_iter->Ogr_layer, attr_filter) != OGRERR_NONE)
+		G_fatal_error(_("Error setting attribute filter '%s'"),
+		              attr_filter);
+#if GDAL_VERSION_NUM < 2020000
+	    OGR_iter->Ogr_layer = OGR_DS_GetLayer(*(OGR_iter->Ogr_ds), OGR_iter->curr_layer);
 #endif
 	}
 	OGR_iter->requested_layer = layer;
@@ -2158,4 +2060,387 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter,
     }
 
     return NULL;
+}
+
+/* get projection info of OGR layer in GRASS format
+ * return 0 on success (some non-xy SRS)
+ * return 1 if no SRS available
+ * return 2 if SRS available but unreadable */
+int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
+		   struct Key_Value **proj_info, struct Key_Value **proj_units,
+		   char *geom_col, int verbose)
+{
+    OGRSpatialReferenceH Ogr_projection;
+
+    Ogr_projection = NULL;
+    *proj_info = NULL;
+    *proj_units = NULL;
+    G_get_window(cellhd);
+
+    /* Fetch input layer projection in GRASS form. */
+#if GDAL_VERSION_NUM >= 1110000
+    if (geom_col) {
+	int igeom;
+        OGRGeomFieldDefnH Ogr_geomdefn;
+	OGRFeatureDefnH Ogr_featuredefn;
+        
+        Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+        igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, geom_col);
+        if (igeom < 0)
+            G_fatal_error(_("Geometry column <%s> not found in input layer <%s>"),
+                          geom_col, OGR_L_GetName(Ogr_layer));
+        Ogr_geomdefn = OGR_FD_GetGeomFieldDefn(Ogr_featuredefn, igeom);
+        Ogr_projection = OGR_GFld_GetSpatialRef(Ogr_geomdefn);
+    }
+    else {
+        Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
+    }
+#else
+    Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);	/* should not be freed later */
+#endif
+
+    /* verbose is used only when comparing input SRS to GRASS projection,
+     * not when comparing SRS's of several input layers */
+    if (GPJ_osr_to_grass(cellhd, proj_info,
+			 proj_units, Ogr_projection, 0) < 0) {
+	/* TODO: GPJ_osr_to_grass() does not return anything < 0
+	 * check with GRASS 6 and GRASS 5 */
+	G_warning(_("Unable to convert input layer projection information to "
+		   "GRASS format for checking"));
+	if (verbose && Ogr_projection != NULL) {
+	    char *wkt = NULL;
+
+	    if (OSRExportToPrettyWkt(Ogr_projection, &wkt, FALSE) != OGRERR_NONE) {
+		G_warning(_("Can't get WKT-style parameter string"));
+	    }
+	    else if (wkt) {
+		G_important_message(_("WKT-style definition:\n%s"), wkt);
+	    }
+	}
+
+	return 2;
+    }
+    /* custom checks because if in doubt GPJ_osr_to_grass() returns a 
+     * xy CRS */
+    if (Ogr_projection == NULL) {
+	if (verbose) {
+	    G_important_message(_("No OGR projection available for layer <%s>"),
+				OGR_L_GetName(Ogr_layer));
+	}
+
+	return 1;
+    }
+
+    if (!OSRIsProjected(Ogr_projection) && !OSRIsGeographic(Ogr_projection)) {
+	G_important_message(_("OGR projection for layer <%s> does not contain a valid SRS"),
+			    OGR_L_GetName(Ogr_layer));
+
+	if (verbose) {
+	    char *wkt = NULL;
+
+	    if (OSRExportToPrettyWkt(Ogr_projection, &wkt, FALSE) != OGRERR_NONE) {
+		G_important_message(_("Can't get WKT-style parameter string"));
+	    }
+	    else if (wkt) {
+		G_important_message(_("WKT-style definition:\n%s"), wkt);
+	    }
+	}
+
+	return 2;
+    }
+
+    char *pszProj4 = NULL;
+
+    if (OSRExportToProj4(Ogr_projection, &pszProj4) != OGRERR_NONE) {
+	G_important_message(_("OGR projection for layer <%s> can not be converted to proj4"),
+			    OGR_L_GetName(Ogr_layer));
+
+	if (verbose) {
+	    char *wkt = NULL;
+
+	    if (OSRExportToPrettyWkt(Ogr_projection, &wkt, FALSE) != OGRERR_NONE) {
+		G_important_message(_("Can't get WKT-style parameter string"));
+	    }
+	    else if (wkt) {
+		G_important_message(_("WKT-style definition:\n%s"), wkt);
+	    }
+	}
+
+	return 2;
+    }
+
+    return 0;
+}
+
+/* compare projections of all OGR layers
+ * return 0 if all layers have the same projection
+ * return 1 if layer projections differ */
+int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers,
+		  char **layer_names, char *geom_col)
+{
+    int layer;
+    struct Key_Value *proj_info1, *proj_units1;
+    struct Key_Value *proj_info2, *proj_units2;
+    struct Cell_head cellhd1, cellhd2;
+    OGRLayerH Ogr_layer;
+
+    if (nlayers == 1)
+	return 0;
+
+    proj_info1 = proj_units1 = NULL;
+    proj_info2 = proj_units2 = NULL;
+
+    layer = 0;
+    do {
+	/* Get first SRS */
+	Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+
+	if (get_layer_proj(Ogr_layer, &cellhd1, &proj_info1, &proj_units1,
+			   geom_col, 0) == 0) {
+	    break;
+	}
+	layer++;
+    } while (layer < nlayers);
+
+    if (layer == nlayers) {
+	/* could not get layer proj in GRASS format for any of the layers
+	 * -> projections of all layers are the same, i.e. unreadable by GRASS */
+	G_warning(_("Layer projections are unreadable"));
+	if (proj_info1)
+	    G_free_key_value(proj_info1);
+	if (proj_units1)
+	    G_free_key_value(proj_units1);
+
+	return 0;
+    }
+    if (layer > 0) {
+	/* could not get layer proj in GRASS format for at least one of the layers
+	 * -> mix of unreadable and readable projections  */
+	G_warning(_("Projection for layer <%s> is unreadable"),
+	          layer_names[layer]);
+	if (proj_info1)
+	    G_free_key_value(proj_info1);
+	if (proj_units1)
+	    G_free_key_value(proj_units1);
+
+	return 1;
+    }
+
+    for (layer = 1; layer < nlayers; layer++) {
+	/* Get SRS of other layer(s) */
+	Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+	if (get_layer_proj(Ogr_layer, &cellhd2, &proj_info2, &proj_units2,
+			   geom_col, 0) != 0) {
+	    G_free_key_value(proj_info1);
+	    G_free_key_value(proj_units1);
+
+	    return 1;
+	}
+
+	if (cellhd1.proj != cellhd2.proj
+	    || G_compare_projections(proj_info1, proj_units1,
+				     proj_info2, proj_units2) != TRUE) {
+	    if (proj_info1)
+		G_free_key_value(proj_info1);
+	    if (proj_units1)
+		G_free_key_value(proj_units1);
+	    if (proj_info2)
+		G_free_key_value(proj_info2);
+	    if (proj_units2)
+		G_free_key_value(proj_units2);
+	    
+	    G_warning(_("Projection of layer <%s> is different from "
+			"projection of layer <%s>"),
+			layer_names[layer], layer_names[layer - 1]);
+
+	    return 1;
+	 }
+	if (proj_info2)
+	    G_free_key_value(proj_info2);
+	if (proj_units2)
+	    G_free_key_value(proj_units2);
+    }
+    if (proj_info1)
+	G_free_key_value(proj_info1);
+    if (proj_units1)
+	G_free_key_value(proj_units1);
+
+    return 0;
+}
+
+int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *poSpatialFilter,
+                          int nlayers, int *layers, char **layer_names,
+                          double *xmin, double *ymin,
+			  double *xmax, double *ymax,
+			  int use_region, struct Option *spat)
+{
+    int layer;
+    int have_spatial_filter;
+    int *have_ogr_extent;
+    double *xminl, *yminl, *xmaxl, *ymaxl;
+    OGRLayerH Ogr_layer;
+    OGREnvelope oExt;
+    OGRGeometryH Ogr_oRing;
+    struct Cell_head cur_wind;
+
+    /* fetch extents */
+    have_ogr_extent = (int *)G_malloc(nlayers * sizeof(int));
+    xminl = (double *)G_malloc(nlayers * sizeof(double));
+    xmaxl = (double *)G_malloc(nlayers * sizeof(double));
+    yminl = (double *)G_malloc(nlayers * sizeof(double));
+    ymaxl = (double *)G_malloc(nlayers * sizeof(double));
+
+    for (layer = 0; layer < nlayers; layer++) {
+	Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+	have_ogr_extent[layer] = 0;
+	if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
+	    xminl[layer] = oExt.MinX;
+	    xmaxl[layer] = oExt.MaxX;
+	    yminl[layer] = oExt.MinY;
+	    ymaxl[layer] = oExt.MaxY;
+
+	    /* use OGR extents if possible, needed to skip corrupted data
+	     * in OGR dsn/layer */
+	    have_ogr_extent[layer] = 1;
+	}
+	/* OGR_L_GetExtent(): 
+	 * Note that some implementations of this method may alter 
+	 * the read cursor of the layer. */
+#if GDAL_VERSION_NUM >= 2020000
+	GDALDatasetResetReading(Ogr_ds);
+#else
+	OGR_L_ResetReading(Ogr_layer);
+#endif
+    }
+
+    /* set spatial filter */
+    if (use_region && spat->answer)
+	G_fatal_error(_("Select either the current region flag or the spatial option, not both"));
+    if (use_region) {
+	G_get_window(&cur_wind);
+	*xmin = cur_wind.west;
+	*xmax = cur_wind.east;
+	*ymin = cur_wind.south;
+	*ymax = cur_wind.north;
+    }
+    if (spat->answer) {
+	int i;
+	/* See as reference: gdal/ogr/ogr_capi_test.c */
+
+	/* cut out a piece of the map */
+	/* order: xmin,ymin,xmax,ymax */
+	i = 0;
+	while (spat->answers[i]) {
+	    if (i == 0)
+		*xmin = atof(spat->answers[i]);
+	    if (i == 1)
+		*ymin = atof(spat->answers[i]);
+	    if (i == 2)
+		*xmax = atof(spat->answers[i]);
+	    if (i == 3)
+		*ymax = atof(spat->answers[i]);
+	    i++;
+	}
+	if (i != 4)
+	    G_fatal_error(_("4 parameters required for 'spatial' parameter"));
+	if (*xmin > *xmax)
+	    G_fatal_error(_("xmin is larger than xmax in 'spatial' parameters"));
+	if (*ymin > *ymax)
+	    G_fatal_error(_("ymin is larger than ymax in 'spatial' parameters"));
+    }
+    if (use_region || spat->answer) {
+	G_debug(2, "cut out with boundaries: xmin:%f ymin:%f xmax:%f ymax:%f",
+		*xmin, *ymin, *xmax, *ymax);
+    }
+
+    /* create spatial filter for each layer */
+    have_spatial_filter = 0;
+    for (layer = 0; layer < nlayers; layer++) {
+	int have_filter = 0;
+
+	if (have_ogr_extent[layer]) {
+	    if (*xmin <= *xmax && *ymin <= *ymax) {
+		/* check for any overlap */
+		if (xminl[layer] > *xmax || xmaxl[layer] < *xmin ||
+		    yminl[layer] > *ymax || ymaxl[layer] < *ymin) {
+		    G_warning(_("The spatial filter does not overlap with OGR layer <%s>. Nothing to import."),
+			      layer_names[layer]);
+
+		    xminl[layer] = *xmin;
+		    xmaxl[layer] = *xmax;
+		    yminl[layer] = *ymin;
+		    ymaxl[layer] = *ymax;
+		}
+		else {
+		    /* shrink with user options */
+		    xminl[layer] = MAX(xminl[layer], *xmin);
+		    xmaxl[layer] = MIN(xmaxl[layer], *xmax);
+		    yminl[layer] = MAX(yminl[layer], *ymin);
+		    ymaxl[layer] = MIN(ymaxl[layer], *ymax);
+		}
+	    }
+	    have_filter = 1;
+	}
+	else if (*xmin <= *xmax && *ymin <= *ymax) {
+	    xminl[layer] = *xmin;
+	    xmaxl[layer] = *xmax;
+	    yminl[layer] = *ymin;
+	    ymaxl[layer] = *ymax;
+
+	    have_filter = 1;
+	}
+
+	if (have_filter) {
+	    /* some invalid features can be filtered out by using
+	     * the layer's extents as spatial filter
+	     * hopefully these filtered features are all invalid */
+	    /* TODO/BUG:
+	     * for OSM, a spatial filter applied on the 'points' layer 
+	     * will also affect other layers */
+
+	    /* in theory this could be an irregular polygon */
+	    G_debug(2, "spatial filter for layer <%s>: xmin:%f ymin:%f xmax:%f ymax:%f",
+		    layer_names[layer],
+		    xminl[layer], yminl[layer],
+		    xmaxl[layer], ymaxl[layer]);
+
+	    poSpatialFilter[layer] = OGR_G_CreateGeometry(wkbPolygon);
+	    Ogr_oRing = OGR_G_CreateGeometry(wkbLinearRing);
+	    OGR_G_AddPoint_2D(Ogr_oRing, xminl[layer], yminl[layer]);
+	    OGR_G_AddPoint_2D(Ogr_oRing, xminl[layer], ymaxl[layer]);
+	    OGR_G_AddPoint_2D(Ogr_oRing, xmaxl[layer], ymaxl[layer]);
+	    OGR_G_AddPoint_2D(Ogr_oRing, xmaxl[layer], yminl[layer]);
+	    OGR_G_AddPoint_2D(Ogr_oRing, xminl[layer], yminl[layer]);
+	    OGR_G_AddGeometryDirectly(poSpatialFilter[layer], Ogr_oRing);
+
+	    have_spatial_filter = 1;
+	}
+	else
+	    poSpatialFilter[layer] = NULL;
+    }
+    /* update xmin, xmax, ymin, ymax if possible */
+    for (layer = 0; layer < nlayers; layer++) {
+	if (have_ogr_extent[layer]) {
+	    if (xmin > xmax) {
+		*xmin = xminl[layer];
+		*xmax = xmaxl[layer];
+		*ymin = yminl[layer];
+		*ymax = ymaxl[layer];
+	    }
+	    else {
+		/* expand */
+		*xmin = MIN(xminl[layer], *xmin);
+		*xmax = MAX(xmaxl[layer], *xmax);
+		*ymin = MIN(yminl[layer], *ymin);
+		*ymax = MAX(ymaxl[layer], *ymax);
+	    }
+	}
+    }
+    G_free(have_ogr_extent);
+    G_free(xminl);
+    G_free(xmaxl);
+    G_free(yminl);
+    G_free(ymaxl);
+
+    return have_spatial_filter;
 }
