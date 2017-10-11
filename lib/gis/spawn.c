@@ -663,7 +663,7 @@ static int do_spawn(struct spawn *sp, const char *command)
 
     pid = fork();
     if (pid < 0) {
-	G_warning(_("Unable to create a new process"));
+	G_warning(_("Unable to create a new process: %s"), strerror(errno));
 	undo_signals(sp->signals, sp->num_signals, SST_PRE);
 
 	return status;
