@@ -390,6 +390,9 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     struct gpj_datum dstruct;
     const char *ograttr;
 
+    *projinfo = NULL;
+    *projunits = NULL;
+
     if (hSRS == NULL)
 	goto default_to_xy;
 
@@ -837,6 +840,8 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	cellhd->proj = PROJECTION_XY;
 	cellhd->zone = 0;
     }
+    if (*projinfo)
+	G_free_key_value(*projinfo);
 
     *projinfo = NULL;
     *projunits = NULL;
