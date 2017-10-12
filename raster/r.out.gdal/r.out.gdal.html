@@ -26,9 +26,10 @@ map's before export.
 
 <h2>SUPPORTED RASTER FORMATS</h2>
 
-The set of <a href="http://www.gdal.org/formats_list.html">supported
-raster formats</a> written by <em>r.out.gdal</em> depends on the
-local GDAL installation. Available may be (incomplete list):<p>
+The set of <a href="http://www.gdal.org/formats_list.html">supported 
+raster formats</a> written by <em>r.out.gdal</em> depends on the local 
+GDAL installation, printed with the <em>-l</em> flag. Available may be 
+(incomplete list):<p>
 <div class="code"><pre>
   AAIGrid: Arc/Info ASCII Grid
   BMP: MS Windows Device Independent Bitmap
@@ -117,7 +118,7 @@ if the GDAL data type was set to Byte and the GeoTIFF contains either
 one or three bands. All other data types and numbers of bands can be
 properly read with GIS software only. Although GeoTIFF files usually
 have a .tif extension, these files are not necessarily images but
-first of all spatial raster datasets, e.g. SRTM DEM version 4.
+first of all spatial raster datasets, e.g. land cover or elevation.
 <p>When writing out multi-band GeoTIFF images for users of ESRI software or
 ImageMagick, the interleaving mode should be set to "pixel" using
 <em>createopt="INTERLEAVE=PIXEL"</em>. BAND interleaving is slightly more
@@ -133,7 +134,9 @@ as possible. You will have to experiment with which options your
 software is compatible with, as this varies widely between vendors and
 versions. Long term, the less metadata you have to remove the more
 self-documenting (and useful) the dataset will be.
-<p>Here are some things to try:
+
+<p>
+Here are some things to try:
 
 <ul>
 <li>Create a World file with <tt>createopt="TFW=YES"</tt>.
@@ -159,6 +162,10 @@ Note that other software might create their own overviews, ignoring existing
 overviews.
 </ul>
 
+<p>
+Cloud Optimized GeoTIFFs (COG) can be created with the creation options 
+<em>createopt=TILED=YES,COMPRESS=DEFLATE</em>, followed by 
+<em>gdaladdo</em> to build overviews.
 
 <h2>EXAMPLES</h2>
 
