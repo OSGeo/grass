@@ -90,7 +90,12 @@ int main(int argc, char *argv[])
     
     /* parse & read options */
     parse_args(argc, argv, &options, &flags);
-    
+
+    if (flags.list->answer) {
+	list_formats();
+	exit(EXIT_SUCCESS);
+    }
+
     /* check for weird options */
     if (G_strncasecmp(options.dsn->answer, "PG:", 3) == 0 &&
         strcmp(options.format->answer, "PostgreSQL") != 0)
