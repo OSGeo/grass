@@ -107,6 +107,8 @@ int G_make_location(const char *location_name,
  *  \return -6 if UTM hemisphere differs,
  *  \return -7 if false easting differs
  *  \return -8 if false northing differs,
+ *  \return -9 if reference longitude differs,
+ *  \return -10 if one of the reference latitudes differs,
  *  \return 1  if projections match.
  */
 int G_compare_projections(const struct Key_Value *proj_info1,
@@ -213,6 +215,51 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 
 	if (y_0_1 && y_0_2 && (fabs(atof(y_0_1) - atof(y_0_2)) > 0.000001))
 	    return -8;
+    }
+
+    /* -------------------------------------------------------------------- */
+    /*      Do they have the same reference longitude?                      */
+    /* -------------------------------------------------------------------- */
+
+    {
+	const char *l_0_1 = NULL, *l_0_2 = NULL;
+
+	l_0_1 = G_find_key_value("lon_0", proj_info1);
+	l_0_2 = G_find_key_value("lon_0", proj_info2);
+
+	if (l_0_1 && l_0_2 && (fabs(atof(l_0_1) - atof(l_0_2)) > 0.000001))
+	    return -9;
+    }
+
+    /* -------------------------------------------------------------------- */
+    /*      Do they have the same reference latitudes?                      */
+    /* -------------------------------------------------------------------- */
+
+    {
+	const char *l_1 = NULL, *l_2 = NULL;
+
+	/* center latitude */
+	l_1 = G_find_key_value("lat_0", proj_info1);
+	l_2 = G_find_key_value("lat_0", proj_info2);
+
+	if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001))
+	    return -10;
+
+	/* standard pallel 1 */
+	l_1 = l_2 = NULL;
+	l_1 = G_find_key_value("lat_1", proj_info1);
+	l_2 = G_find_key_value("lat_1", proj_info2);
+
+	if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001))
+	    return -10;
+
+	/* standard pallel 2 */
+	l_1 = l_2 = NULL;
+	l_1 = G_find_key_value("lat_2", proj_info1);
+	l_2 = G_find_key_value("lat_2", proj_info2);
+
+	if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001))
+	    return -10;
     }
 
     /* -------------------------------------------------------------------- */
