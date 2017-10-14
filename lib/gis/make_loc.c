@@ -102,13 +102,15 @@ int G_make_location(const char *location_name,
 
  *  \return -1 if not the same projection
  *  \return -2 if linear unit translation to meters fails
+ *  \return -3 if not the same datum,
  *  \return -4 if not the same ellipsoid,
  *  \return -5 if UTM zone differs
  *  \return -6 if UTM hemisphere differs,
  *  \return -7 if false easting differs
  *  \return -8 if false northing differs,
- *  \return -9 if reference longitude differs,
- *  \return -10 if one of the reference latitudes differs,
+ *  \return -9 if center longitude differs,
+ *  \return -10 if center latitude differs,
+ *  \return -11 if standard parallels differ,
  *  \return 1  if projections match.
  */
 int G_compare_projections(const struct Key_Value *proj_info1,
@@ -155,22 +157,84 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	if (a1 && a2 && (fabs(a2 - a1) > 0.000001))
 	    return -2;
     }
+    {
+	const char *u_1 = NULL, *u_2 = NULL;
+
+	u_1 = G_find_key_value("unit", proj_units1);
+	u_2 = G_find_key_value("unit", proj_units2);
+
+	if ((u_1 && !u_2) || (!u_1 && u_2))
+	    return -2;
+
+	if (u_1 && u_2 && strcmp(u_1, u_2))
+	    return -2;
+    }
+
+    /* -------------------------------------------------------------------- */
+    /*      Do they both have the same datum?                               */
+    /* -------------------------------------------------------------------- */
+    {
+	const char *d_1 = NULL, *d_2 = NULL;
+
+	d_1 = G_find_key_value("datum", proj_info1);
+	d_2 = G_find_key_value("datum", proj_info2);
+
+	if ((d_1 && !d_2) || (!d_1 && d_2))
+	    return -3;
+
+	if (d_1 && d_2 && strcmp(d_1, d_2))
+	    return -3;
+    }
 
     /* -------------------------------------------------------------------- */
     /*      Do they both have the same ellipsoid?                           */
-    /*      Lets just check the semi-major axis for now to keep it simple   */
     /* -------------------------------------------------------------------- */
-
     {
-	double a1 = 0, a2 = 0;
+	const char *e_1 = NULL, *e_2 = NULL;
 
-	if (G_find_key_value("a", proj_info1) != NULL)
-	    a1 = atof(G_find_key_value("a", proj_info1));
-	if (G_find_key_value("a", proj_info2) != NULL)
-	    a2 = atof(G_find_key_value("a", proj_info2));
+	e_1 = G_find_key_value("ellps", proj_info1);
+	e_2 = G_find_key_value("ellps", proj_info2);
 
-	if (a1 && a2 && (fabs(a2 - a1) > 0.000001))
+	if (e_1 && e_2 && strcmp(e_1, e_2))
 	    return -4;
+
+	if (e_1 == NULL || e_2 == NULL) {
+	    double a1 = 0, a2 = 0;
+	    double es1 = 0, es2 = 0;
+
+	    /* it may happen that one proj_info has ellps,
+	     * while the other has a, es: translate ellps to a, es */
+	    if (e_1)
+		G_get_ellipsoid_by_name(e_1, &a1, &es1);
+	    else {
+		if (G_find_key_value("a", proj_info1) != NULL)
+		    a1 = atof(G_find_key_value("a", proj_info1));
+		if (G_find_key_value("es", proj_info1) != NULL)
+		    es1 = atof(G_find_key_value("es", proj_info1));
+	    }
+
+	    if (e_2)
+		G_get_ellipsoid_by_name(e_2, &a2, &es2);
+	    else {
+		if (G_find_key_value("a", proj_info2) != NULL)
+		    a2 = atof(G_find_key_value("a", proj_info2));
+		if (G_find_key_value("es", proj_info2) != NULL)
+		    es2 = atof(G_find_key_value("es", proj_info2));
+	    }
+
+	    /* it should be an error if a = 0 */
+	    if ((a1 == 0 && a2 != 0) || (a1 != 0 && a2 == 0))
+		return -4;
+
+	    if (a1 && a2 && (fabs(a2 - a1) > 0.000001))
+		return -4;
+
+	    if ((es1 == 0 && es2 != 0) || (es1 != 0 && es2 == 0))
+		return -4;
+
+	    if (es1 && es2 && (fabs(es2 - es1) > 0.000001))
+		return -4;
+	}
     }
 
     /* -------------------------------------------------------------------- */
@@ -199,6 +263,9 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	x_0_1 = G_find_key_value("x_0", proj_info1);
 	x_0_2 = G_find_key_value("x_0", proj_info2);
 
+	if ((x_0_1 && !x_0_2) || (!x_0_1 && x_0_2))
+	    return -7;
+
 	if (x_0_1 && x_0_2 && (fabs(atof(x_0_1) - atof(x_0_2)) > 0.000001))
 	    return -7;
     }
@@ -213,54 +280,69 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	y_0_1 = G_find_key_value("y_0", proj_info1);
 	y_0_2 = G_find_key_value("y_0", proj_info2);
 
+	if ((y_0_1 && !y_0_2) || (!y_0_1 && y_0_2))
+	    return -8;
+
 	if (y_0_1 && y_0_2 && (fabs(atof(y_0_1) - atof(y_0_2)) > 0.000001))
 	    return -8;
     }
 
     /* -------------------------------------------------------------------- */
-    /*      Do they have the same reference longitude?                      */
-    /* -------------------------------------------------------------------- */
-
-    {
-	const char *l_0_1 = NULL, *l_0_2 = NULL;
-
-	l_0_1 = G_find_key_value("lon_0", proj_info1);
-	l_0_2 = G_find_key_value("lon_0", proj_info2);
-
-	if (l_0_1 && l_0_2 && (fabs(atof(l_0_1) - atof(l_0_2)) > 0.000001))
-	    return -9;
-    }
-
-    /* -------------------------------------------------------------------- */
-    /*      Do they have the same reference latitudes?                      */
+    /*      Do they have the same center longitude?                         */
     /* -------------------------------------------------------------------- */
 
     {
 	const char *l_1 = NULL, *l_2 = NULL;
 
-	/* center latitude */
+	l_1 = G_find_key_value("lon_0", proj_info1);
+	l_2 = G_find_key_value("lon_0", proj_info2);
+
+	if ((l_1 && !l_2) || (!l_1 && l_2))
+	    return -9;
+
+	if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001))
+	    return -9;
+
+    /* -------------------------------------------------------------------- */
+    /*      Do they have the same center latitude?                          */
+    /* -------------------------------------------------------------------- */
+
+	l_1 = l_2 = NULL;
 	l_1 = G_find_key_value("lat_0", proj_info1);
 	l_2 = G_find_key_value("lat_0", proj_info2);
+
+	if ((l_1 && !l_2) || (!l_1 && l_2))
+	    return -10;
 
 	if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001))
 	    return -10;
 
-	/* standard pallel 1 */
+    /* -------------------------------------------------------------------- */
+    /*      Do they have the same standard parallels?                    */
+    /* -------------------------------------------------------------------- */
+
 	l_1 = l_2 = NULL;
 	l_1 = G_find_key_value("lat_1", proj_info1);
 	l_2 = G_find_key_value("lat_1", proj_info2);
 
-	if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001))
-	    return -10;
+	if ((l_1 && !l_2) || (!l_1 && l_2))
+	    return -11;
 
-	/* standard pallel 2 */
+	if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001))
+	    return -11;
+
 	l_1 = l_2 = NULL;
 	l_1 = G_find_key_value("lat_2", proj_info1);
 	l_2 = G_find_key_value("lat_2", proj_info2);
 
+	if ((l_1 && !l_2) || (!l_1 && l_2))
+	    return -11;
+
 	if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001))
-	    return -10;
+	    return -11;
     }
+
+    /* towgs84 ? */
 
     /* -------------------------------------------------------------------- */
     /*      Add more details in later.                                      */
