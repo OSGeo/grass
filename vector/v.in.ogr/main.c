@@ -29,27 +29,12 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include <gdal_version.h>	/* needed for OFTDate */
-#include "gdal.h"
-#include "ogr_api.h"
-#include "cpl_conv.h"
+#include <cpl_conv.h>
 #include "global.h"
 
 #ifndef MAX
 #  define MIN(a,b)      ((a<b) ? a : b)
 #  define MAX(a,b)      ((a>b) ? a : b)
-#endif
-
-/* define type of input datasource
- * as of GDAL 2.2, all functions having as argument a GDAL/OGR dataset 
- * must use the GDAL version, not the OGR version */
-#if GDAL_VERSION_NUM >= 2020000
-typedef GDALDatasetH ds_t;
-#define ds_getlayerbyindex(ds, i)	GDALDatasetGetLayer((ds), (i))
-#define ds_close(ds)			GDALClose(ds)
-#else
-typedef OGRDataSourceH ds_t;
-#define ds_getlayerbyindex(ds, i)	OGR_DS_GetLayer((ds), (i))
-#define ds_close(ds)			OGR_DS_Destroy(ds)
 #endif
 
 int n_polygons;
@@ -65,9 +50,10 @@ int poly_count(OGRGeometryH hGeom, int line2boundary);
 char *get_datasource_name(const char *, int);
 
 int cmp_layer_srs(ds_t, int, int *, char **, char *);
-int get_layer_proj(OGRLayerH, struct Cell_head *,
-		   struct Key_Value **, struct Key_Value **,
-		   char *, int);
+void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_col,
+                      char *outloc, int create_only, int override,
+		      int check_only);
+
 int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *,
                           int , int *, char **,
                           double *, double *,
@@ -118,11 +104,8 @@ int main(int argc, char *argv[])
     double min_area, snap;
     char buf[DB_SQL_MAX], namebuf[1024];
     char *separator;
-    
-    struct Key_Value *loc_proj_info, *loc_proj_units;
-    struct Key_Value *proj_info, *proj_units;
-    struct Cell_head cellhd, loc_wind, cur_wind;
-    char error_msg[8192];
+
+    struct Cell_head cellhd, cur_wind;
 
     /* Vector */
     struct Map_info Map, Tmp, *Out;
@@ -150,7 +133,6 @@ int main(int argc, char *argv[])
     OGRGeometryH Ogr_geometry, *poSpatialFilter;
     const char *attr_filter;
     struct OGR_iterator OGR_iter;
-    int proj_trouble;
 
     int OFTIntegerListlength;
 
@@ -174,7 +156,6 @@ int main(int argc, char *argv[])
 
     xmin = ymin = 1.0;
     xmax = ymax = 0.0;
-    loc_proj_info = loc_proj_units = NULL;
     Ogr_ds = NULL;
     poSpatialFilter = NULL;
     OFTIntegerListlength = 255;	/* hack due to limitation in OGR */
@@ -617,16 +598,7 @@ int main(int argc, char *argv[])
 	                "Input layers must be imported separately."));
     }
 
-    /* Get first imported layer to use for projection check */
-    Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[0]);
-
-    /* Fetch input projection in GRASS form. */
-    proj_info = NULL;
-    proj_units = NULL;
     G_get_window(&cellhd);
-
-    proj_trouble = get_layer_proj(Ogr_layer, &cellhd, &proj_info, &proj_units,
-		   param.geom->answer, 1);
 
     cellhd.north = 1.;
     cellhd.south = 0.;
@@ -645,168 +617,10 @@ int main(int argc, char *argv[])
     cellhd.ew_res3 = 1.;
     cellhd.tb_res = 1.;
 
-    /* Do we need to create a new location? */
-    if (param.outloc->answer != NULL) {
-	/* Convert projection information non-interactively as we can't
-	 * assume the user has a terminal open */
-
-	/* do not create a xy location because this can mean that the
-	 * real SRS has not been recognized */ 
-	if (proj_trouble) {
-	    G_fatal_error(_("Unable to convert input map projection to GRASS "
-			    "format; cannot create new location."));
-	}
-	else {
-            if (0 != G_make_location(param.outloc->answer, &cellhd,
-                                     proj_info, proj_units)) {
-                G_fatal_error(_("Unable to create new location <%s>"),
-                              param.outloc->answer);
-            }
-	    G_message(_("Location <%s> created"), param.outloc->answer);
-
-	    G_unset_window();	/* new location, projection, and window */
-	    G_get_window(&cellhd);
-	}
-
-        /* If the i flag is set, clean up and exit here */
-        if (flag.no_import->answer) {
-	    ds_close(Ogr_ds);
-            exit(EXIT_SUCCESS);
-        }
-    }
-    else {
-	int err = 0;
-        void (*msg_fn)(const char *, ...);
-            
-	/* Projection only required for checking so convert non-interactively */
-	if (proj_trouble) {
-	    strcpy(error_msg, _("Unable to convert input map projection information "
-		                "to GRASS format."));
-            if (flag.over->answer) {
-                msg_fn = G_warning;
-	    }
-            else {
-                msg_fn = G_fatal_error;
-		ds_close(Ogr_ds);
-	    }
-            msg_fn(error_msg);
-            if (!flag.over->answer) {
-                exit(EXIT_FAILURE);
-	    }
-	}
-
-	/* Does the projection of the current location match the dataset? */
-	/* G_get_window seems to be unreliable if the location has been changed */
-	G_get_default_window(&loc_wind);
-	/* fetch LOCATION PROJ info */
-	if (loc_wind.proj != PROJECTION_XY) {
-	    loc_proj_info = G_get_projinfo();
-	    loc_proj_units = G_get_projunits();
-	}
-
-	if (flag.over->answer) {
-	    cellhd.proj = loc_wind.proj;
-	    cellhd.zone = loc_wind.zone;
-	    G_message(_("Over-riding projection check"));
-	}
-	else if (loc_wind.proj != cellhd.proj
-		 || (err =
-		     G_compare_projections(loc_proj_info, loc_proj_units,
-					   proj_info, proj_units)) != TRUE) {
-	    int i_value;
-
-	    strcpy(error_msg,
-		   _("Projection of dataset does not"
-		     " appear to match current location.\n\n"));
-
-	    /* TODO: output this info sorted by key: */
-	    if (loc_wind.proj != cellhd.proj || err != -2) {
-		if (loc_proj_info != NULL) {
-		    strcat(error_msg, _("GRASS LOCATION PROJ_INFO is:\n"));
-		    for (i_value = 0; i_value < loc_proj_info->nitems;
-			 i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				loc_proj_info->key[i_value],
-				loc_proj_info->value[i_value]);
-		    strcat(error_msg, "\n");
-		}
-
-		if (proj_info != NULL) {
-		    strcat(error_msg, _("Import dataset PROJ_INFO is:\n"));
-		    for (i_value = 0; i_value < proj_info->nitems; i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				proj_info->key[i_value],
-				proj_info->value[i_value]);
-		}
-		else {
-		    strcat(error_msg, _("Import dataset PROJ_INFO is:\n"));
-		    if (cellhd.proj == PROJECTION_XY)
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (unreferenced/unknown)\n",
-				cellhd.proj);
-		    else if (cellhd.proj == PROJECTION_LL)
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (lat/long)\n",
-				cellhd.proj);
-		    else if (cellhd.proj == PROJECTION_UTM)
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (UTM), zone = %d\n",
-				cellhd.proj, cellhd.zone);
-		    else
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (unknown), zone = %d\n",
-				cellhd.proj, cellhd.zone);
-		}
-	    }
-	    else {
-		if (loc_proj_units != NULL) {
-		    strcat(error_msg, "GRASS LOCATION PROJ_UNITS is:\n");
-		    for (i_value = 0; i_value < loc_proj_units->nitems;
-			 i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				loc_proj_units->key[i_value],
-				loc_proj_units->value[i_value]);
-		    strcat(error_msg, "\n");
-		}
-
-		if (proj_units != NULL) {
-		    strcat(error_msg, "Import dataset PROJ_UNITS is:\n");
-		    for (i_value = 0; i_value < proj_units->nitems; i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				proj_units->key[i_value],
-				proj_units->value[i_value]);
-		}
-	    }
-	    sprintf(error_msg + strlen(error_msg),
-		    _("\nIn case of no significant differences in the projection definitions,"
-		      " use the -o flag to ignore them and use"
-		      " current location definition.\n"));
-	    strcat(error_msg,
-		   _("Consider generating a new location with 'location' parameter"
-		    " from input data set.\n"));
-            if (flag.proj->answer)
-                msg_fn = G_message;
-            else {
-                msg_fn = G_fatal_error;
-		ds_close(Ogr_ds);
-	    }
-            msg_fn(error_msg);
-            if (flag.proj->answer)
-                exit(EXIT_FAILURE);
-	}
-	else {
-	    if (flag.proj->answer)
-		msg_fn = G_message;
-	    else
-		msg_fn = G_verbose_message;            
-	    msg_fn(_("Projection of input dataset and current location "
-		     "appear to match"));
-	    if (flag.proj->answer) {
-		ds_close(Ogr_ds);
-		exit(EXIT_SUCCESS);
-	    }
-	}
-    }
+    check_projection(&cellhd, Ogr_ds, layers[0], param.geom->answer,
+		     param.outloc->answer,
+                     flag.no_import->answer, flag.over->answer,
+		     flag.proj->answer);
 
     /* get output name */
     if (param.out->answer) {
@@ -2060,212 +1874,6 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter,
     }
 
     return NULL;
-}
-
-/* get projection info of OGR layer in GRASS format
- * return 0 on success (some non-xy SRS)
- * return 1 if no SRS available
- * return 2 if SRS available but unreadable */
-int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
-		   struct Key_Value **proj_info, struct Key_Value **proj_units,
-		   char *geom_col, int verbose)
-{
-    OGRSpatialReferenceH Ogr_projection;
-
-    Ogr_projection = NULL;
-    *proj_info = NULL;
-    *proj_units = NULL;
-    G_get_window(cellhd);
-
-    /* Fetch input layer projection in GRASS form. */
-#if GDAL_VERSION_NUM >= 1110000
-    if (geom_col) {
-	int igeom;
-        OGRGeomFieldDefnH Ogr_geomdefn;
-	OGRFeatureDefnH Ogr_featuredefn;
-        
-        Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-        igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, geom_col);
-        if (igeom < 0)
-            G_fatal_error(_("Geometry column <%s> not found in input layer <%s>"),
-                          geom_col, OGR_L_GetName(Ogr_layer));
-        Ogr_geomdefn = OGR_FD_GetGeomFieldDefn(Ogr_featuredefn, igeom);
-        Ogr_projection = OGR_GFld_GetSpatialRef(Ogr_geomdefn);
-    }
-    else {
-        Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
-    }
-#else
-    Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);	/* should not be freed later */
-#endif
-
-    /* verbose is used only when comparing input SRS to GRASS projection,
-     * not when comparing SRS's of several input layers */
-    if (GPJ_osr_to_grass(cellhd, proj_info,
-			 proj_units, Ogr_projection, 0) < 0) {
-	/* TODO: GPJ_osr_to_grass() does not return anything < 0
-	 * check with GRASS 6 and GRASS 5 */
-	G_warning(_("Unable to convert input layer projection information to "
-		   "GRASS format for checking"));
-	if (verbose && Ogr_projection != NULL) {
-	    char *wkt = NULL;
-
-	    if (OSRExportToPrettyWkt(Ogr_projection, &wkt, FALSE) != OGRERR_NONE) {
-		G_warning(_("Can't get WKT-style parameter string"));
-	    }
-	    else if (wkt) {
-		G_important_message(_("WKT-style definition:\n%s"), wkt);
-	    }
-	}
-
-	return 2;
-    }
-    /* custom checks because if in doubt GPJ_osr_to_grass() returns a 
-     * xy CRS */
-    if (Ogr_projection == NULL) {
-	if (verbose) {
-	    G_important_message(_("No OGR projection available for layer <%s>"),
-				OGR_L_GetName(Ogr_layer));
-	}
-
-	return 1;
-    }
-
-    if (!OSRIsProjected(Ogr_projection) && !OSRIsGeographic(Ogr_projection)) {
-	G_important_message(_("OGR projection for layer <%s> does not contain a valid SRS"),
-			    OGR_L_GetName(Ogr_layer));
-
-	if (verbose) {
-	    char *wkt = NULL;
-
-	    if (OSRExportToPrettyWkt(Ogr_projection, &wkt, FALSE) != OGRERR_NONE) {
-		G_important_message(_("Can't get WKT-style parameter string"));
-	    }
-	    else if (wkt) {
-		G_important_message(_("WKT-style definition:\n%s"), wkt);
-	    }
-	}
-
-	return 2;
-    }
-
-    char *pszProj4 = NULL;
-
-    if (OSRExportToProj4(Ogr_projection, &pszProj4) != OGRERR_NONE) {
-	G_important_message(_("OGR projection for layer <%s> can not be converted to proj4"),
-			    OGR_L_GetName(Ogr_layer));
-
-	if (verbose) {
-	    char *wkt = NULL;
-
-	    if (OSRExportToPrettyWkt(Ogr_projection, &wkt, FALSE) != OGRERR_NONE) {
-		G_important_message(_("Can't get WKT-style parameter string"));
-	    }
-	    else if (wkt) {
-		G_important_message(_("WKT-style definition:\n%s"), wkt);
-	    }
-	}
-
-	return 2;
-    }
-
-    return 0;
-}
-
-/* compare projections of all OGR layers
- * return 0 if all layers have the same projection
- * return 1 if layer projections differ */
-int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers,
-		  char **layer_names, char *geom_col)
-{
-    int layer;
-    struct Key_Value *proj_info1, *proj_units1;
-    struct Key_Value *proj_info2, *proj_units2;
-    struct Cell_head cellhd1, cellhd2;
-    OGRLayerH Ogr_layer;
-
-    if (nlayers == 1)
-	return 0;
-
-    proj_info1 = proj_units1 = NULL;
-    proj_info2 = proj_units2 = NULL;
-
-    layer = 0;
-    do {
-	/* Get first SRS */
-	Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
-
-	if (get_layer_proj(Ogr_layer, &cellhd1, &proj_info1, &proj_units1,
-			   geom_col, 0) == 0) {
-	    break;
-	}
-	layer++;
-    } while (layer < nlayers);
-
-    if (layer == nlayers) {
-	/* could not get layer proj in GRASS format for any of the layers
-	 * -> projections of all layers are the same, i.e. unreadable by GRASS */
-	G_warning(_("Layer projections are unreadable"));
-	if (proj_info1)
-	    G_free_key_value(proj_info1);
-	if (proj_units1)
-	    G_free_key_value(proj_units1);
-
-	return 0;
-    }
-    if (layer > 0) {
-	/* could not get layer proj in GRASS format for at least one of the layers
-	 * -> mix of unreadable and readable projections  */
-	G_warning(_("Projection for layer <%s> is unreadable"),
-	          layer_names[layer]);
-	if (proj_info1)
-	    G_free_key_value(proj_info1);
-	if (proj_units1)
-	    G_free_key_value(proj_units1);
-
-	return 1;
-    }
-
-    for (layer = 1; layer < nlayers; layer++) {
-	/* Get SRS of other layer(s) */
-	Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
-	if (get_layer_proj(Ogr_layer, &cellhd2, &proj_info2, &proj_units2,
-			   geom_col, 0) != 0) {
-	    G_free_key_value(proj_info1);
-	    G_free_key_value(proj_units1);
-
-	    return 1;
-	}
-
-	if (cellhd1.proj != cellhd2.proj
-	    || G_compare_projections(proj_info1, proj_units1,
-				     proj_info2, proj_units2) != TRUE) {
-	    if (proj_info1)
-		G_free_key_value(proj_info1);
-	    if (proj_units1)
-		G_free_key_value(proj_units1);
-	    if (proj_info2)
-		G_free_key_value(proj_info2);
-	    if (proj_units2)
-		G_free_key_value(proj_units2);
-	    
-	    G_warning(_("Projection of layer <%s> is different from "
-			"projection of layer <%s>"),
-			layer_names[layer], layer_names[layer - 1]);
-
-	    return 1;
-	 }
-	if (proj_info2)
-	    G_free_key_value(proj_info2);
-	if (proj_units2)
-	    G_free_key_value(proj_units2);
-    }
-    if (proj_info1)
-	G_free_key_value(proj_info1);
-    if (proj_units1)
-	G_free_key_value(proj_units1);
-
-    return 0;
 }
 
 int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *poSpatialFilter,

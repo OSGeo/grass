@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     int ilayer, use_ogr;
     char buf[GPATH_MAX], *dsn, *layer;
     const char *output;
+    struct Cell_head cellhd;
     
     G_gisinit(argv[0]);
     
@@ -62,7 +63,7 @@ int main(int argc, char *argv[])
     use_ogr = TRUE;
     G_debug(1, "GRASS_VECTOR_OGR defined? %s",
             getenv("GRASS_VECTOR_OGR") ? "yes" : "no");
-    if(options.dsn->answer &&
+    if (options.dsn->answer &&
        G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
         /* -> PostgreSQL */
 #if defined HAVE_OGR && defined HAVE_POSTGRES
@@ -137,21 +138,9 @@ int main(int argc, char *argv[])
     }
 
     /* check projection match */
-    if (!flags.override->answer) {
-        /* here must be used original dsn since check_projection() is
-         * using GDAL library */
-        char dsn_ogr[DB_SQL_MAX];
-
-        if (!use_ogr && G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
-            /* make dsn OGR-compatible */
-            strcpy(dsn_ogr, "PG:");
-            strcat(dsn_ogr, dsn);
-        }
-        else {
-            sprintf(dsn_ogr, "%s", dsn);
-        }
-        check_projection(dsn_ogr, ilayer);
-    }
+    G_get_window(&cellhd);
+    check_projection(&cellhd, options.dsn->answer, ilayer, NULL, NULL, 0,
+                     flags.override->answer, flags.proj->answer);
     
     /* create new vector map */
     putenv("GRASS_VECTOR_EXTERNAL_IGNORE=1");

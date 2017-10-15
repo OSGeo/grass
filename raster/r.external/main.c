@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	struct Option *input, *source, *output, *band, *title;
     } parm;
     struct {
-	struct Flag *o, *f, *e, *h, *v, *t, *a;
+	struct Flag *o, *j, *f, *e, *h, *v, *t, *a;
     } flag;
     int min_band, max_band, band;
     struct band_info info;
@@ -102,6 +102,12 @@ int main(int argc, char *argv[])
 	_("Override projection check (use current location's projection)");
     flag.o->description =
 	_("Assume that the dataset has same projection as the current location");
+
+    flag.j = G_define_flag();
+    flag.j->key = 'j';
+    flag.j->description =
+	_("Perform projection check only and exit");
+    flag.j->suppress_required = YES;
 
     flag.e = G_define_flag();
     flag.e->key = 'e';
@@ -191,7 +197,7 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    check_projection(&cellhd, hDS, flag.o->answer);
+    check_projection(&cellhd, hDS, NULL, 0, flag.o->answer, flag.j->answer);
 
     if (flag.a->answer && cellhd.proj == PROJECTION_LL) {
 	G_adjust_Cell_head(&cellhd, 1, 1);
