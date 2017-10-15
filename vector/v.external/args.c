@@ -46,6 +46,11 @@ void parse_args(int argc, char **argv,
     flags->override->description =
 	_("Assume that the dataset has the same projection as the current location");
 
+    flags->proj = G_define_flag();
+    flags->proj->key = 'j';
+    flags->proj->description =
+	_("Perform projection check only and exit");
+
     flags->format = G_define_flag();
     flags->format->key = 'f';
     flags->format->description = _("List supported formats and exit");

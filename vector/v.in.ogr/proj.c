@@ -2,22 +2,8 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-#include <gdal.h>
-#include <gdal_version.h>
-#include "ogr_api.h"
-
-/* define type of input datasource
- * as of GDAL 2.2, all functions having as argument a GDAL/OGR dataset 
- * must use the GDAL version, not the OGR version */
-#if GDAL_VERSION_NUM >= 2020000
-typedef GDALDatasetH ds_t;
-#define ds_getlayerbyindex(ds, i)	GDALDatasetGetLayer((ds), (i))
-#define ds_close(ds)			GDALClose(ds)
-#else
-typedef OGRDataSourceH ds_t;
-#define ds_getlayerbyindex(ds, i)	OGR_DS_GetLayer((ds), (i))
-#define ds_close(ds)			OGR_DS_Destroy(ds)
-#endif
+#include <ogr_srs_api.h>
+#include "global.h"
 
 /* get projection info of OGR layer in GRASS format
  * return 0 on success (some non-xy SRS)
@@ -128,8 +114,105 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
     return 0;
 }
 
-/* keep in sync with r.in.gdal, r.external, v.in.ogr */
-void check_projection(struct Cell_head *cellhd, char *dsn, int layer, char *geom_col,
+
+/* compare projections of all OGR layers
+ * return 0 if all layers have the same projection
+ * return 1 if layer projections differ */
+int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers,
+		  char **layer_names, char *geom_col)
+{
+    int layer;
+    struct Key_Value *proj_info1, *proj_units1;
+    struct Key_Value *proj_info2, *proj_units2;
+    struct Cell_head cellhd1, cellhd2;
+    OGRLayerH Ogr_layer;
+
+    if (nlayers == 1)
+	return 0;
+
+    proj_info1 = proj_units1 = NULL;
+    proj_info2 = proj_units2 = NULL;
+
+    layer = 0;
+    do {
+	/* Get first SRS */
+	Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+
+	if (get_layer_proj(Ogr_layer, &cellhd1, &proj_info1, &proj_units1,
+			   geom_col, 0) == 0) {
+	    break;
+	}
+	layer++;
+    } while (layer < nlayers);
+
+    if (layer == nlayers) {
+	/* could not get layer proj in GRASS format for any of the layers
+	 * -> projections of all layers are the same, i.e. unreadable by GRASS */
+	G_warning(_("Layer projections are unreadable"));
+	if (proj_info1)
+	    G_free_key_value(proj_info1);
+	if (proj_units1)
+	    G_free_key_value(proj_units1);
+
+	return 0;
+    }
+    if (layer > 0) {
+	/* could not get layer proj in GRASS format for at least one of the layers
+	 * -> mix of unreadable and readable projections  */
+	G_warning(_("Projection for layer <%s> is unreadable"),
+	          layer_names[layer]);
+	if (proj_info1)
+	    G_free_key_value(proj_info1);
+	if (proj_units1)
+	    G_free_key_value(proj_units1);
+
+	return 1;
+    }
+
+    for (layer = 1; layer < nlayers; layer++) {
+	/* Get SRS of other layer(s) */
+	Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+	if (get_layer_proj(Ogr_layer, &cellhd2, &proj_info2, &proj_units2,
+			   geom_col, 0) != 0) {
+	    G_free_key_value(proj_info1);
+	    G_free_key_value(proj_units1);
+
+	    return 1;
+	}
+
+	if (cellhd1.proj != cellhd2.proj
+	    || G_compare_projections(proj_info1, proj_units1,
+				     proj_info2, proj_units2) < 0) {
+	    if (proj_info1)
+		G_free_key_value(proj_info1);
+	    if (proj_units1)
+		G_free_key_value(proj_units1);
+	    if (proj_info2)
+		G_free_key_value(proj_info2);
+	    if (proj_units2)
+		G_free_key_value(proj_units2);
+	    
+	    G_warning(_("Projection of layer <%s> is different from "
+			"projection of layer <%s>"),
+			layer_names[layer], layer_names[layer - 1]);
+
+	    return 1;
+	 }
+	if (proj_info2)
+	    G_free_key_value(proj_info2);
+	if (proj_units2)
+	    G_free_key_value(proj_units2);
+    }
+    if (proj_info1)
+	G_free_key_value(proj_info1);
+    if (proj_units1)
+	G_free_key_value(proj_units1);
+
+    return 0;
+}
+
+/* keep in sync with r.in.gdal, r.external, v.external */
+void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_col,
                       char *outloc, int create_only, int override,
 		      int check_only)
 {
@@ -138,20 +221,7 @@ void check_projection(struct Cell_head *cellhd, char *dsn, int layer, char *geom
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
     char error_msg[8096];
     int proj_trouble;
-    ds_t hDS;
     OGRLayerH Ogr_layer;
-
-    /* open OGR DSN (v.external does not open the datasource itself */
-    hDS = NULL;
-    if (strlen(dsn) > 0) {
-#if GDAL_VERSION_NUM >= 2020000
-	hDS = GDALOpenEx(dsn, GDAL_OF_VECTOR, NULL, NULL, NULL);
-#else
-	hDS = OGROpen(dsn, FALSE, NULL);
-#endif
-    }
-    if (hDS == NULL)
-	G_fatal_error(_("Unable to open data source <%s>"), dsn);
 
     /* Get first layer to be imported to use for projection check */
     Ogr_layer = ds_getlayerbyindex(hDS, layer);
@@ -377,5 +447,4 @@ void check_projection(struct Cell_head *cellhd, char *dsn, int layer, char *geom
 	    }
 	}
     }
-    ds_close(hDS);
 }

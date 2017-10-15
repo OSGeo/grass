@@ -6,7 +6,7 @@ struct _options {
 };
 
 struct _flags {
-    struct Flag *format, *layer, *tlist, *topo, *list, *override;
+    struct Flag *format, *layer, *tlist, *topo, *list, *override, *proj;
 };
 
 /* args.c */
@@ -22,5 +22,6 @@ int list_layers(FILE *, const char *, char **, int, int);
 void get_table_name(const char *, char **, char **);
 
 /* proj.c */
-void check_projection(const char *, int);
+void check_projection(struct Cell_head *, const char *, int, char *,
+                      char *, int, int, int);
 #endif
