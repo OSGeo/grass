@@ -2,22 +2,8 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-#include <gdal.h>
-#include <gdal_version.h>
-#include "ogr_api.h"
-
-/* define type of input datasource
- * as of GDAL 2.2, all functions having as argument a GDAL/OGR dataset 
- * must use the GDAL version, not the OGR version */
-#if GDAL_VERSION_NUM >= 2020000
-typedef GDALDatasetH ds_t;
-#define ds_getlayerbyindex(ds, i)	GDALDatasetGetLayer((ds), (i))
-#define ds_close(ds)			GDALClose(ds)
-#else
-typedef OGRDataSourceH ds_t;
-#define ds_getlayerbyindex(ds, i)	OGR_DS_GetLayer((ds), (i))
-#define ds_close(ds)			OGR_DS_Destroy(ds)
-#endif
+#include <ogr_srs_api.h>
+#include "local_proto.h"
 
 /* get projection info of OGR layer in GRASS format
  * return 0 on success (some non-xy SRS)
@@ -129,7 +115,7 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
 }
 
 /* keep in sync with r.in.gdal, r.external, v.in.ogr */
-void check_projection(struct Cell_head *cellhd, char *dsn, int layer, char *geom_col,
+void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_col,
                       char *outloc, int create_only, int override,
 		      int check_only)
 {
@@ -138,20 +124,7 @@ void check_projection(struct Cell_head *cellhd, char *dsn, int layer, char *geom
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
     char error_msg[8096];
     int proj_trouble;
-    ds_t hDS;
     OGRLayerH Ogr_layer;
-
-    /* open OGR DSN (v.external does not open the datasource itself */
-    hDS = NULL;
-    if (strlen(dsn) > 0) {
-#if GDAL_VERSION_NUM >= 2020000
-	hDS = GDALOpenEx(dsn, GDAL_OF_VECTOR, NULL, NULL, NULL);
-#else
-	hDS = OGROpen(dsn, FALSE, NULL);
-#endif
-    }
-    if (hDS == NULL)
-	G_fatal_error(_("Unable to open data source <%s>"), dsn);
 
     /* Get first layer to be imported to use for projection check */
     Ogr_layer = ds_getlayerbyindex(hDS, layer);
@@ -377,5 +350,4 @@ void check_projection(struct Cell_head *cellhd, char *dsn, int layer, char *geom
 	    }
 	}
     }
-    ds_close(hDS);
 }
