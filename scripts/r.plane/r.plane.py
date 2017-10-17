@@ -3,7 +3,8 @@
 ############################################################################
 #
 # MODULE:	r.plane for GRASS 5.7; based on r.plane for GRASS 5
-# AUTHOR(S):	CERL?; updated to GRASS 5.7 by Michael Barton
+# AUTHOR(S):	1994, Stefan Jäger, University of Heidelberg/USGS
+#               updated to GRASS 5.7 by Michael Barton
 #               Dec 2004: Alessandro Frigeri & Ivan Marchesini
 #               Modified to produce floating and double values maps
 #               Converted to Python by Glynn Clements
