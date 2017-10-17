@@ -166,7 +166,7 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	if ((u_1 && !u_2) || (!u_1 && u_2))
 	    return -2;
 
-	if (u_1 && u_2 && strcmp(u_1, u_2))
+	if (u_1 && u_2 && G_strcasecmp(u_1, u_2))
 	    return -2;
     }
 
