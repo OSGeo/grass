@@ -240,6 +240,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 		msg_fn = G_fatal_error;
 	    msg_fn(error_msg);
 	    if (check_only) {
+		GDALClose(hDS);
 		exit(EXIT_FAILURE);
 	    }
 	}
