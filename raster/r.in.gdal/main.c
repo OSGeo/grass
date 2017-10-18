@@ -371,6 +371,20 @@ int main(int argc, char *argv[])
 		    "(%s or %s)."), "i.rectify -t", "gdalwarp -tps");
     }
 
+    /* does the driver support subdatasets? */
+    /* test for capability GDAL_DMD_SUBDATASETS */
+    
+    /* does the dataset include subdatasets? */
+    {
+	char **sds = GDALGetMetadata(hDS, "SUBDATASETS");
+
+	if (sds && *sds) {
+	    G_warning(_("Input contains subdatasets which may need to "
+	                "be imported separately"));
+	    /* list subdatasets? */
+	}
+    }
+
     if (flag_p->answer) {
         /* print number of bands */
         fprintf(stdout, "%d\n", GDALGetRasterCount(hDS));
