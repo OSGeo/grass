@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#
+# -*- coding: utf-8 -*-
 ############################################################################
 #
 # MODULE:	r.plane for GRASS 5.7; based on r.plane for GRASS 5
