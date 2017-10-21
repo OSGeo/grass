@@ -49,6 +49,19 @@ precipitation@climate_2000_2012
 tempmean@climate_2000_2012
 </pre></div>
 
+The <em>where</em> option can also be used to list the stds with a 
+certain pattern in their name, i.e. as the pattern option in <a 
+href="g.list.html">g.list</a>.
+
+<div class="code"><pre>
+# strds whose name start with "precip"
+t.list type=strds where="name LIKE 'precip%'"
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset &#60;climate_1970_2012&#62;:
+precip_abs@climate_1970_2012
+precipitation@climate_1970_2012
+</pre></div>
+
 The user can also obtain the list of time stamped raster maps. These maps 
 might be registered in strds or not. The output of the following command 
 can vary according to the accessible mapsets specified through 
