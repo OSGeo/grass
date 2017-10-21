@@ -463,7 +463,7 @@ from .factory import dataset_factory
 from .open_stds import open_new_stds, open_old_stds
 from .temporal_operator import TemporalOperatorParser
 from spatio_temporal_relationships import SpatioTemporalTopologyBuilder
-from .datetime_math import time_delta_to_relative_time
+from .datetime_math import time_delta_to_relative_time, string_to_datetime
 from abstract_space_time_dataset import AbstractSpaceTimeDataset
 
 ##############################################################################
@@ -1965,17 +1965,10 @@ class TemporalAlgebraParser(object):
             # Get value for function name from dictionary.
             tfuncval = tfuncdict[tfunc]
             # Check if value has to be transferred to datetime object for comparison.
-            if tfunc in ["START_DATE", "END_DATE"]:
-                timeobj = datetime.strptime(value.replace("\"",""), '%Y-%m-%d')
+            if tfunc in ["START_DATE", "END_DATE", "START_TIME", "END_TIME",
+                         "START_DATETIME", "END_DATETIME"]:
+                timeobj = string_to_datetime(value.replace("\"",""))
                 value = timeobj.date()
-                boolname = self.eval_datetime_str(tfuncval, comp_op, value)
-            elif tfunc in ["START_TIME", "END_TIME"]:
-                timeobj = datetime.strptime(value.replace("\"",""), '%H:%M:%S')
-                value = timeobj.time()
-                boolname = self.eval_datetime_str(tfuncval, comp_op, value)
-            elif tfunc in ["START_DATETIME", "END_DATETIME"]:
-                timeobj = datetime.strptime(value.replace("\"",""), '%Y-%m-%d %H:%M:%S')
-                value = timeobj
                 boolname = self.eval_datetime_str(tfuncval, comp_op, value)
             else:
                 boolname = eval(str(tfuncval) + comp_op + str(value))

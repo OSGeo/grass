@@ -119,7 +119,7 @@ class RasterDataset(AbstractMapDataset):
             >>> rmap.get_temporal_extent_as_tuple()
             (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
             >>> rmap.get_name()
-            u'strds_map_test_case'
+            'strds_map_test_case'
             >>> rmap.get_mapset() == mapset
             True
             >>> rmap.get_temporal_type()
@@ -452,7 +452,7 @@ class Raster3DDataset(AbstractMapDataset):
             >>> r3map.get_temporal_extent_as_tuple()
             (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
             >>> r3map.get_name()
-            u'str3ds_map_test_case'
+            'str3ds_map_test_case'
             >>> r3map.get_mapset() == mapset
             True
             >>> r3map.get_temporal_type()
@@ -797,7 +797,7 @@ class VectorDataset(AbstractMapDataset):
             >>> vmap.get_temporal_extent_as_tuple()
             (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
             >>> vmap.get_name()
-            u'stvds_map_test_case'
+            'stvds_map_test_case'
             >>> vmap.get_mapset() == mapset
             True
             >>> vmap.get_temporal_type()

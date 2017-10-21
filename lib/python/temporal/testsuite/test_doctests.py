@@ -24,11 +24,10 @@ def load_tests(loader, tests, ignore):
     tests.addTests(doctest.DocTestSuite(grass.temporal.abstract_map_dataset))
     tests.addTests(doctest.DocTestSuite(grass.temporal.abstract_space_time_dataset))
     tests.addTests(doctest.DocTestSuite(grass.temporal.base))
-    # Unexpected error here
     tests.addTests(doctest.DocTestSuite(grass.temporal.core))
     tests.addTests(doctest.DocTestSuite(grass.temporal.datetime_math))
     # Unexpected error here
-    ##tests.addTests(doctest.DocTestSuite(grass.temporal.list_stds))
+    #tests.addTests(doctest.DocTestSuite(grass.temporal.list_stds))
     tests.addTests(doctest.DocTestSuite(grass.temporal.metadata))
     tests.addTests(doctest.DocTestSuite(grass.temporal.register))
     tests.addTests(doctest.DocTestSuite(grass.temporal.space_time_datasets))
