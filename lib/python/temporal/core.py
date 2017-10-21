@@ -55,6 +55,7 @@ except:
     pass
 
 import atexit
+from datetime import datetime
 
 ###############################################################################
 
@@ -1207,12 +1208,15 @@ class DBConnection(object):
                     elif isinstance(args[count], float):
                         statement = "%s%f%s" % (statement[0:pos], args[count],
                                                 statement[pos + 1:])
+                    elif isinstance(args[count], datetime):
+                        statement = "%s\'%s\'%s" % (statement[0:pos], str(args[count]),
+                                                statement[pos + 1:])
                     else:
                         # Default is a string, this works for datetime
                         # objects too
                         statement = "%s\'%s\'%s" % (statement[0:pos],
                                                     str(args[count]),
-                                                    statement[pos + 1:])
+                                                    str(statement[pos + 1:]))
                     count += 1
 
                 return statement

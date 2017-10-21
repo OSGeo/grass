@@ -26,7 +26,7 @@ from .temporal_granularity import check_granularity_string, compute_absolute_tim
 from .spatio_temporal_relationships import count_temporal_topology_relationships, \
     print_spatio_temporal_topology_relationships, SpatioTemporalTopologyBuilder, \
     create_temporal_relation_sql_where_statement
-from .datetime_math import increment_datetime_by_string
+from .datetime_math import increment_datetime_by_string, string_to_datetime
 
 ###############################################################################
 
@@ -2377,13 +2377,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     tstring = row[0]
                     # Convert the unicode string into the datetime format
                     if self.is_time_absolute():
-                        if tstring.find(":") > 0:
-                            time_format = "%Y-%m-%d %H:%M:%S"
-                        else:
-                            time_format = "%Y-%m-%d"
-
-                        max_start_time = datetime.strptime(
-                            tstring, time_format)
+                        max_start_time = string_to_datetime(tstring)
+                        if max_start_time is None:
+                            max_start_time = end_time
                     else:
                         max_start_time = row[0]
                 else:

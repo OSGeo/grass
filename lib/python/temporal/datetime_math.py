@@ -704,23 +704,65 @@ def compute_datetime_delta(start, end):
 ###############################################################################
 
 
-def check_datetime_string(time_string):
-    """Check if  a string can be converted into a datetime object
+def check_datetime_string(time_string, use_dateutil=True):
+    """Check if  a string can be converted into a datetime object and return the object
 
-        Supported ISO string formats are:
+        In case datutil is not installed the supported ISO string formats are:
 
         - YYYY-mm-dd
         - YYYY-mm-dd HH:MM:SS
+        - YYYY-mm-ddTHH:MM:SS
+        - YYYY-mm-dd HH:MM:SS.s
+        - YYYY-mm-ddTHH:MM:SS.s
 
         Time zones are not supported
 
+        If dateutil is installed, all string formats of the dateutil module
+        are supported, as well as time zones
+        Time zones are not supported
+
         :param time_string: The time string to be checked for conversion
+        :param use_dateutil: Use dateutil if available for datetime string parsing
         :return: datetime: object or an error message string in case of an error
+
+        >>> s = "2000-01-01"
+        >>> check_datetime_string(s)
+        datetime.datetime(2000, 1, 1, 0, 0)
+        >>> s = "2000-01-01T10:00:00"
+        >>> check_datetime_string(s)
+        datetime.datetime(2000, 1, 1, 10, 0)
+        >>> s = "2000-01-01 10:00:00"
+        >>> check_datetime_string(s)
+        datetime.datetime(2000, 1, 1, 10, 0)
+        >>> s = "2000-01-01T10:00:00.000001"
+        >>> check_datetime_string(s)
+        datetime.datetime(2000, 1, 1, 10, 0, 0, 1)
+        >>> s = "2000-01-01 10:00:00.000001"
+        >>> check_datetime_string(s)
+        datetime.datetime(2000, 1, 1, 10, 0, 0, 1)
+
+        # using native implementation, ignoring dateutil
+        >>> s = "2000-01-01"
+        >>> check_datetime_string(s, False)
+        datetime.datetime(2000, 1, 1, 0, 0)
+        >>> s = "2000-01-01T10:00:00"
+        >>> check_datetime_string(s, False)
+        datetime.datetime(2000, 1, 1, 10, 0)
+        >>> s = "2000-01-01 10:00:00"
+        >>> check_datetime_string(s, False)
+        datetime.datetime(2000, 1, 1, 10, 0)
+        >>> s = "2000-01-01T10:00:00.000001"
+        >>> check_datetime_string(s, False)
+        datetime.datetime(2000, 1, 1, 10, 0, 0, 1)
+        >>> s = "2000-01-01 10:00:00.000001"
+        >>> check_datetime_string(s, False)
+        datetime.datetime(2000, 1, 1, 10, 0, 0, 1)
+
     """
 
     global has_dateutil
 
-    if has_dateutil:
+    if has_dateutil and use_dateutil is True:
         # First check if there is only a single number, which specifies
         # relative time. dateutil will interprete a single number as a valid
         # time string, so we have to catch this case beforehand
@@ -737,15 +779,25 @@ def check_datetime_string(time_string):
         return time_object
 
     # BC is not supported
-    if time_string.find("bc") > 0:
+    if "bc" in time_string > 0:
         return _("Dates Before Christ (BC) are not supported")
 
     # BC is not supported
-    if time_string.find("+") > 0:
+    if "+" in time_string:
         return _("Time zones are not supported")
 
-    if time_string.find(":") > 0:
-        time_format = "%Y-%m-%d %H:%M:%S"
+    if ":" in time_string or "T" in time_string:
+        # Check for microseconds
+        if "." in time_string:
+            if "T" in time_string:
+                time_format = "%Y-%m-%dT%H:%M:%S.%f"
+            else:
+                time_format = "%Y-%m-%d %H:%M:%S.%f"
+        else:
+            if "T" in time_string:
+                time_format = "%Y-%m-%dT%H:%M:%S"
+            else:
+                time_format = "%Y-%m-%d %H:%M:%S"
     else:
         time_format = "%Y-%m-%d"
 
@@ -764,7 +816,11 @@ def string_to_datetime(time_string):
 
         - YYYY-mm-dd
         - YYYY-mm-dd HH:MM:SS
-        - Time zones are not supported
+        - YYYY-mm-ddTHH:MM:SS
+        - YYYY-mm-dd HH:MM:SS.s
+        - YYYY-mm-ddTHH:MM:SS.s
+
+        Time zones are not supported
 
         If dateutil is installed, all string formats of the dateutil module
         are supported, as well as time zones
