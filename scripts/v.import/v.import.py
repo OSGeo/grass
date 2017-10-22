@@ -63,8 +63,8 @@
 #% key: snap
 #% type: double
 #% label: Snapping threshold for boundaries (map units)
-#% description: '-1' for no snap
-#% answer: 1e-13
+#% description: A suitable threshold is estimated during import
+#% answer: -1
 #% guisection: Output
 #%end
 #%option
