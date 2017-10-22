@@ -609,6 +609,12 @@ def init(raise_fatal_error=False):
         driver_string = ciface.get_driver_name()
         database_string = ciface.get_database_name()
         tgis_backend = driver_string
+        try:
+            import sqlite3
+        except ImportError:
+            msgr.error("Unable to locate the sqlite SQL Python interface"
+                       " module sqlite3.")
+            raise
         dbmi = sqlite3
 
     tgis_database_string = database_string
