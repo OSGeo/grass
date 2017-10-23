@@ -201,6 +201,9 @@ Procedure of granting write access to Addons DVN repo:
 * Adding contributor: https://trac.osgeo.org/grass/browser/grass-addons/contributors.csv (via SVN commit)
 * Confirm request in grass-psc and give instructions concerning code style etc (see archive for examples)
 
+XML file for g.extension: http://grass.osgeo.org/addons/grass7/modules.xml
+- generated in grass-addons/tools/addons/grass-addons-publish.sh
+
 == GRASS Travis CI ==
 
 Maintainer: Martin Landa
@@ -217,6 +220,8 @@ Travis CI control files:
 
 Maintenance script:
 * https://svn.osgeo.org/grass/grass-addons/tools/grass-ci/grass-ci.sh
+
+The github update is run as a cronjob on server "geo102" (CTU, CZ).
 
 == GRASS Coverity Scan ==
 
