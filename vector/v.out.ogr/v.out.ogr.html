@@ -2,7 +2,7 @@
 
 <em>v.out.ogr</em> converts GRASS vector map layer to any of the
 supported <a href="http://www.gdal.org/">OGR</a> vector formats
-(like a Esri Shapefile, SpatiaLite or GML).
+(including OGC GeoPackage, ESRI Shapefile, SpatiaLite or GML).
 
 <p>
 OGR (Simple Features Library) is part of the
@@ -13,6 +13,7 @@ install this library to use <em>v.out.ogr</em>.
 The OGR library supports many various formats including:
 
 <ul>
+  <li><a href="http://www.gdal.org/drv_geopackage.html">OGC GeoPackage</a></li>
   <li><a href="http://www.gdal.org/drv_shapefile.html">ESRI Shapefile</a></li>
   <li><a href="http://www.gdal.org/drv_pg.html">PostGIS</a></li>
   <li><a href="http://www.gdal.org/drv_sqlite.html">SpatiaLite</a></li>
@@ -62,12 +63,35 @@ column names may not be longer than 10 characters.
 
 <h2>EXAMPLES</h2>
 
+<h3>Export to OGC GeoPackage</h3>
+
+Export lines from a GRASS vector map to OGC GeoPackage format:
+
+<div class="code"><pre>
+v.out.ogr input=roadsmajor type=line output=roadsmajor.gpkg
+</pre></div>
+
+<p>
+Export areas from GRASS vector map to OGC GeoPackage format, converting
+islands (holes) to filled polygons:
+
+<div class="code"><pre>
+v.out.ogr -c input=areas_islands type=area output=areas_islands.gpkg
+</pre></div>
+
+<p>
+Export mixed geometry type GRASS vector map to OGC GeoPackage format:
+
+<div class="code"><pre>
+v.out.ogr input=generic_vector output=mixed_geometry.gpkg
+</pre></div>
+
 <h3>Export to ESRI Shapefile</h3>
 
 Export lines from GRASS vector map to Shapefile format:
 
 <div class="code"><pre>
-v.out.ogr input=lines type=line output=lines.shp
+v.out.ogr input=roadsmajor type=line format=ESRI_Shapefile output=lines.shp
 </pre></div>
 
 <p>
@@ -75,34 +99,34 @@ Export areas from GRASS vector map to Shapefile format, converting
 islands (holes) to filled polygons:
 
 <div class="code"><pre>
-v.out.ogr -c input=areas_islands type=area output=areas_islands.shp
+v.out.ogr -c input=areas_islands type=area format=ESRI_Shapefile output=areas_islands.shp
 </pre></div>
 
 <p>
 Export 3D lines from GRASS vector map to Shapefile format:
 
 <div class="code"><pre>
-v.out.ogr input=lines_3d type=line output=lines_3d.shp lco="SHPT=ARCZ"
+v.out.ogr input=lines_3d type=line format=ESRI_Shapefile output=lines_3d.shp lco="SHPT=ARCZ"
 </pre></div>
 
 <p>
 Export 3D points (e.g., Lidar points) from GRASS vector map to Shapefile format
 
 <div class="code"><pre>
-v.out.ogr points_3d type=point output=points_3d.shp lco="SHPT=POINTZ"
+v.out.ogr points_3d type=point format=ESRI_Shapefile output=points_3d.shp lco="SHPT=POINTZ"
 </pre></div>
 
 <p>
 Export 3D faces from GRASS vector map to Shapefile format:
 <div class="code"><pre>
-v.out.ogr input=objects_3d type=face output=faces_3d.shp lco="SHPT=POLYGONZ"
+v.out.ogr input=objects_3d type=face format=ESRI_Shapefile output=faces_3d.shp lco="SHPT=POLYGONZ"
 </pre></div>
 
 <p>
 Export 3D faces from GRASS vector map to Shapefile format, automatic 3D setting:
 
 <div class="code"><pre>
-v.out.ogr input=objects_3d type=face output=faces_3d.shp"
+v.out.ogr input=objects_3d type=face format=ESRI_Shapefile output=faces_3d.shp"
 </pre></div>
 
 <h3>Export to GML</h3>

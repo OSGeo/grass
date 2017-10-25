@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 
     module->label =
 	_("Exports a vector map layer to any of the supported OGR vector formats.");
-    module->description = _("By default a vector map layer is exported to Esri Shapefile format.");
+    module->description = _("By default a vector map layer is exported to OGC GeoPackage format.");
     module->overwrite = TRUE;
     
     /* parse & read options */
