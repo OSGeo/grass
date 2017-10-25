@@ -19,7 +19,6 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
     Ogr_projection = NULL;
     *proj_info = NULL;
     *proj_units = NULL;
-    G_get_window(cellhd);
 
     /* Fetch input layer projection in GRASS form. */
 #if GDAL_VERSION_NUM >= 1110000
@@ -243,6 +242,30 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_
 			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
 				proj_info->key[i_value],
 				proj_info->value[i_value]);
+		}
+		else {
+		    strcat(error_msg, _("Dataset PROJ_INFO is:\n"));
+		    if (cellhd->proj == PROJECTION_XY)
+			sprintf(error_msg + strlen(error_msg),
+				"Dataset proj = %d (unreferenced/unknown)\n",
+				cellhd->proj);
+		    else if (cellhd->proj == PROJECTION_LL)
+			sprintf(error_msg + strlen(error_msg),
+				"Dataset proj = %d (lat/long)\n",
+				cellhd->proj);
+		    else if (cellhd->proj == PROJECTION_UTM)
+			sprintf(error_msg + strlen(error_msg),
+				"Dataset proj = %d (UTM), zone = %d\n",
+				cellhd->proj, cellhd->zone);
+		    else
+			sprintf(error_msg + strlen(error_msg),
+				"Dataset proj = %d (unknown), zone = %d\n",
+				cellhd->proj, cellhd->zone);
+		}
+		if (loc_wind.proj != cellhd->proj) {
+		    strcat(error_msg, "\nERROR: proj\n");
+		}
+		else {
 		    strcat(error_msg, "\nERROR: ");
 		    switch (err) {
 		    case -1:
@@ -280,25 +303,6 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_
 			break;
 		    }
 		}
-		else {
-		    strcat(error_msg, _("Dataset PROJ_INFO is:\n"));
-		    if (cellhd->proj == PROJECTION_XY)
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (unreferenced/unknown)\n",
-				cellhd->proj);
-		    else if (cellhd->proj == PROJECTION_LL)
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (lat/long)\n",
-				cellhd->proj);
-		    else if (cellhd->proj == PROJECTION_UTM)
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (UTM), zone = %d\n",
-				cellhd->proj, cellhd->zone);
-		    else
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (unknown), zone = %d\n",
-				cellhd->proj, cellhd->zone);
-		}
 	    }
 	    else {
 		/* error in proj_units */
@@ -329,11 +333,12 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_
 		    "the 'location' parameter.\n"));
 
 	    if (check_only)
-		msg_fn = G_message;
+		msg_fn = G_warning;
 	    else
 		msg_fn = G_fatal_error;
 	    msg_fn(error_msg);
 	    if (check_only) {
+		ds_close(hDS);
 		exit(EXIT_FAILURE);
 	    }
 	}
