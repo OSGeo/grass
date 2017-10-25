@@ -35,6 +35,7 @@ char *get_datasource_name(const char *, int);
 /* list.c */
 char *OGR_list_write_drivers();
 void list_formats(void);
+char *default_driver(void);
 
 /* create.c */
 void create_ogr_layer(const char *, const char *, const char *,
