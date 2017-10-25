@@ -152,6 +152,7 @@ int main(int argc, char *argv[])
     double area_size;
     int use_tmp_vect;
     int ncentr, n_overlaps;
+    int failed_centr, err_boundaries, err_centr_out, err_centr_dupl;
     struct bound_box box;
 
     xmin = ymin = 1.0;
@@ -617,6 +618,7 @@ int main(int argc, char *argv[])
     cellhd.ew_res3 = 1.;
     cellhd.tb_res = 1.;
 
+    /* check projection match */
     check_projection(&cellhd, Ogr_ds, layers[0], param.geom->answer,
 		     param.outloc->answer,
                      flag.no_import->answer, flag.over->answer,
@@ -830,6 +832,7 @@ int main(int argc, char *argv[])
     Vect_hist_command(&Map);
 
     ncentr = n_overlaps = n_polygons = 0;
+    failed_centr = 0;
 
     G_begin_polygon_area_calculations();	/* Used in geom() and centroid() */
 
@@ -1407,6 +1410,7 @@ int main(int argc, char *argv[])
 	    Centr[centr].cats = Vect_new_cats_struct();
 	    ret = Vect_get_point_in_area(&Tmp, centr, &x, &y);
 	    if (ret < 0) {
+		failed_centr++;
 		G_warning(_("Unable to calculate area centroid"));
 		continue;
 	    }
@@ -1577,94 +1581,175 @@ int main(int argc, char *argv[])
 	Vect_topo_check(&Map, NULL);
 #endif
 
-    if (n_polygons && nlayers == 1) {
-	/* test for topological errors */
-	/* this test is not perfect:
-	 * small gaps (areas without centroid) are not detected
-	 * small gaps may also be true gaps */
-	ncentr = Vect_get_num_primitives(&Map, GV_CENTROID);
-	if (ncentr != n_polygons || n_overlaps) {
-	    double min_snap, max_snap;
-	    int exp;
+    /* fast topology check */
+    err_boundaries = err_centr_out = err_centr_dupl = 0;
+    if (Vect_get_num_primitives(&Map, GV_BOUNDARY) > 0) {
+	int line, nlines, ltype;
 
-	    Vect_get_map_box(&Map, &box);
+	nlines = Vect_get_num_lines(&Map);
+	for (line = 1; line <= nlines; line++) {
+	    if (!Vect_line_alive(&Map, line))
+		continue;
 	    
-	    if (abs(box.E) > abs(box.W))
-		xmax = abs(box.E);
-	    else
-		xmax = abs(box.W);
-	    if (abs(box.N) > abs(box.S))
-		ymax = abs(box.N);
-	    else
-		ymax = abs(box.S);
+	    ltype = Vect_get_line_type(&Map, line);
+	    if (ltype == GV_BOUNDARY) {
+		int left, right;
 
-	    if (xmax < ymax)
-		xmax = ymax;
+		left = right = 0;
+		Vect_get_line_areas(&Map, line, &left, &right);
 
-	    /* double precision ULP */
-	    min_snap = frexp(xmax, &exp);
-	    exp -= 52;
-	    min_snap = ldexp(min_snap, exp);
-	    /* human readable */
-	    min_snap = log10(min_snap);
-	    if (min_snap < 0)
-		min_snap = (int)min_snap;
+		if (left == 0 || right == 0) {
+		    err_boundaries++;
+		}
+	    }
+	    else if (ltype == GV_CENTROID) {
+		int area;
+		
+		area = 0;
+		
+		area = Vect_get_centroid_area(&Map, line);
+
+		if (area == 0)
+		    err_centr_out++;
+		else if (area < 0)
+		    err_centr_dupl++;
+	    }
+	}
+    }
+
+    /* test for topological errors */
+    /* this test is not perfect:
+     * small gaps (areas without centroid) are not detected
+     * small gaps may also be true gaps */
+    ncentr = Vect_get_num_primitives(&Map, GV_CENTROID);
+    if (failed_centr || err_boundaries || err_centr_out || err_centr_dupl
+        || ncentr != n_polygons || n_overlaps) {
+
+	double min_snap, max_snap;
+	int exp;
+
+	Vect_get_map_box(&Map, &box);
+	
+	if (abs(box.E) > abs(box.W))
+	    xmax = abs(box.E);
+	else
+	    xmax = abs(box.W);
+	if (abs(box.N) > abs(box.S))
+	    ymax = abs(box.N);
+	else
+	    ymax = abs(box.S);
+
+	if (xmax < ymax)
+	    xmax = ymax;
+
+	/* double precision ULP */
+	min_snap = frexp(xmax, &exp);
+	exp -= 52;
+	min_snap = ldexp(min_snap, exp);
+	/* human readable */
+	min_snap = log10(min_snap);
+	if (min_snap < 0)
+	    min_snap = (int)min_snap;
+	else
+	    min_snap = (int)min_snap + 1;
+	min_snap = pow(10, min_snap);
+
+	/* single precision ULP */
+	max_snap = frexp(xmax, &exp);
+	exp -= 23;
+	max_snap = ldexp(max_snap, exp);
+	/* human readable */
+	max_snap = log10(max_snap);
+	if (max_snap < 0)
+	    max_snap = (int)max_snap;
+	else
+	    max_snap = (int)max_snap + 1;
+	max_snap = pow(10, max_snap);
+
+	/* topological errors are
+	 * - areas too small / too thin to calculate a centroid
+	 * - incorrect boundaries
+	 * - duplicate area centroids
+	 * - centroids outside any area
+	 * 
+	 * overlapping polygons are topological problems only
+	 * if input polygons are not supposed to overlap
+	 */
+
+	G_important_message("%s", separator);
+	/* topological errors */
+	if (failed_centr || err_boundaries || err_centr_out || err_centr_dupl) {
+	    G_warning(_("The output contains topological errors:"));
+	    if (failed_centr)
+		G_warning(_("Unable to calculate a centroid for %d areas"), failed_centr);
+	    if (err_boundaries)
+		G_warning(_("Number of incorrect boundaries: %d"),
+			  err_boundaries);
+	    if (err_centr_out)
+		G_warning(_("Number of centroids outside area: %d"),
+			  err_centr_out);
+	    if (err_centr_dupl)
+		G_warning(_("Number of duplicate centroids: %d"),
+			  err_centr_dupl);
+	    
+	    G_important_message(_("The input could be cleaned by snapping vertices to each other."));
+
+	    if (snap < max_snap) {
+		G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
+	    }
+
+	    if (snap < min_snap) {
+		G_important_message(_("Try to import again, snapping with at least %g: 'snap=%g'"), min_snap, min_snap);
+	    }
+	    else if (snap < max_snap) {
+		min_snap = snap * 10;
+		G_important_message(_("Try to import again, snapping with %g: 'snap=%g'"), min_snap, min_snap);
+	    }
 	    else
-		min_snap = (int)min_snap + 1;
-	    min_snap = pow(10, min_snap);
-
-	    /* single precision ULP */
-	    max_snap = frexp(xmax, &exp);
-	    exp -= 23;
-	    max_snap = ldexp(max_snap, exp);
-	    /* human readable */
-	    max_snap = log10(max_snap);
-	    if (max_snap < 0)
-		max_snap = (int)max_snap;
-	    else
-		max_snap = (int)max_snap + 1;
-	    max_snap = pow(10, max_snap);
-
-	    G_important_message("%s", separator);
+		/* assume manual cleaning is required */
+		G_important_message(_("Manual cleaning may be needed."));
+	}
+	/* overlapping polygons */
+	else if (n_overlaps) {
 	    if (n_overlaps) {
 		G_important_message(_("Some input polygons are overlapping each other."));
 		G_important_message(_("If overlapping is not desired, the data need to be cleaned."));
+		G_important_message(_("The input could be cleaned by snapping vertices to each other."));
+	    }
 
-		if (snap < max_snap) {
-		    G_important_message(_("The input could be cleaned by snapping vertices to each other."));
-		    G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
-		}
+	    if (snap < max_snap) {
+		G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
+	    }
 
-		if (snap < min_snap) {
-		    G_important_message(_("Try to import again, snapping with at least %g: 'snap=%g'"), min_snap, min_snap);
-		}
-		else if (snap < max_snap) {
-		    min_snap = snap * 10;
-		    G_important_message(_("Try to import again, snapping with %g: 'snap=%g'"), min_snap, min_snap);
-		}
-		else
-		    /* assume manual cleaning is required */
-		    G_important_message(_("Manual cleaning may be needed."));
+	    if (snap < min_snap) {
+		G_important_message(_("Try to import again, snapping with at least %g: 'snap=%g'"), min_snap, min_snap);
+	    }
+	    else if (snap < max_snap) {
+		min_snap = snap * 10;
+		G_important_message(_("Try to import again, snapping with %g: 'snap=%g'"), min_snap, min_snap);
+	    }
+	    else
+		/* assume manual cleaning is required */
+		G_important_message(_("Manual cleaning may be needed."));
+	}
+	/* number of centroids does not match number of input polygons */
+	else if (ncentr != n_polygons) {
+	    if (ncentr < n_polygons) {
+		G_important_message(_("%d input polygons got lost during import."), n_polygons - ncentr);
+	    }
+	    if (ncentr > n_polygons) {
+		G_important_message(_("%d additional areas where created during import."), ncentr - n_polygons);
+	    }
+	    if (snap > 0) {
+		G_important_message(_("The snapping threshold %g might be too large."), snap);
+		G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
+		/* assume manual cleaning is required */
+		G_important_message(_("Try to reduce the snapping threshold or clean the output manually."));
 	    }
 	    else {
-		if (ncentr < n_polygons) {
-		    G_important_message(_("%d input polygons got lost during import."), n_polygons - ncentr);
-		}
-		if (ncentr > n_polygons) {
-		    G_important_message(_("%d additional areas where created during import."), ncentr - n_polygons);
-		}
-		if (snap > 0) {
-		    G_important_message(_("The snapping threshold %g might be too large."), snap);
-		    G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
-		    /* assume manual cleaning is required */
-		    G_important_message(_("Manual cleaning may be needed."));
-		}
-		else {
-		    G_important_message(_("The input could be cleaned by snapping vertices to each other."));
-		    G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
-		}
+		G_important_message(_("The input could be cleaned by snapping vertices to each other."));
+		G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
 	    }
-
 	}
     }
 
