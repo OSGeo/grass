@@ -358,6 +358,21 @@ additionally the related <a href="http://www.ngdc.noaa.gov/mgg/topo/elev/esri/hd
 Finally, e.g. the 'terrain' color table can be assigned to the imported map with <em>r.colors</em>.
 See also their <a href="http://www.ngdc.noaa.gov/mgg/dem/demportal.html">DEM portal</a>.
 
+<h3>Raster file import over network</h3>
+
+Since GDAL 2.x it is possible to import raster data over network
+(see <a href="http://gdal.org/gdal_virtual_file_systems.html">GDAL Virtual File Systems</a>)
+including <a href="http://www.cogeo.org/">Cloud Optimized GeoTIFF</a>,
+i.e. access uncompressed and compressed raster data via a http(s) or ftp connection.
+As an example the import of the global SRTMGL1 V003 tiles at 1 arc second (about 30 meters)
+resolution, void-filled:
+
+<div class="code"><pre>
+r.in.gdal /vsicurl/https://www.datenatlas.de/geodata/public/srtmgl1/srtmgl1.003.tif output=srtmgl1_v003_30m memory=2000
+g.region raster=srtmgl1_v003_30m -p
+r.colors srtmgl1_v003_30m color=srtm_plus
+</pre></div>
+
 <h3>Worldclim.org data</h3>
 
 To import the BIL data from <a href="http://www.worldclim.org">Worldclim</a>, the following
