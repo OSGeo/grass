@@ -161,26 +161,6 @@ def main():
         return grass.run_command('g.proj', epsg=options['epsg'],
                                  datum_trans=options['datum_trans'])
 
-    grassenv = grass.gisenv()
-    tgtloc = grassenv['LOCATION_NAME']
-    tgtmapset = grassenv['MAPSET']
-    GISDBASE = grassenv['GISDBASE']
-    tgtgisrc = os.environ['GISRC']
-    SRCGISRC = grass.tempfile()
-
-    TMPLOC = 'temp_import_location_' + str(os.getpid())
-
-    f = open(SRCGISRC, 'w')
-    f.write('MAPSET: PERMANENT\n')
-    f.write('GISDBASE: %s\n' % GISDBASE)
-    f.write('LOCATION_NAME: %s\n' % TMPLOC)
-    f.write('GUI: text\n')
-    f.close()
-
-    tgtsrs = grass.read_command('g.proj', flags='j', quiet=True)
-
-    # create temp location from input without import
-    grass.verbose(_("Creating temporary location for <%s>...") % OGRdatasource)
     if layers:
         vopts['layer'] = layers
     if output:
@@ -201,6 +181,33 @@ def main():
         except CalledModuleError:
             grass.fatal(_("Unable to import <%s>") % OGRdatasource)
 
+    grassenv = grass.gisenv()
+    tgtloc = grassenv['LOCATION_NAME']
+
+    # make sure target is not xy
+    if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
+        grass.fatal(
+            _("Coordinate reference system not available for current location <%s>") %
+            tgtloc)
+
+    tgtmapset = grassenv['MAPSET']
+    GISDBASE = grassenv['GISDBASE']
+    tgtgisrc = os.environ['GISRC']
+    SRCGISRC = grass.tempfile()
+
+    TMPLOC = 'temp_import_location_' + str(os.getpid())
+
+    f = open(SRCGISRC, 'w')
+    f.write('MAPSET: PERMANENT\n')
+    f.write('GISDBASE: %s\n' % GISDBASE)
+    f.write('LOCATION_NAME: %s\n' % TMPLOC)
+    f.write('GUI: text\n')
+    f.close()
+
+    tgtsrs = grass.read_command('g.proj', flags='j', quiet=True)
+
+    # create temp location from input without import
+    grass.verbose(_("Creating temporary location for <%s>...") % OGRdatasource)
     try:
         grass.run_command('v.in.ogr', input=OGRdatasource,
                           location=TMPLOC, flags='i', quiet=True, overwrite=overwrite, **vopts)
@@ -215,18 +222,6 @@ def main():
         if options['datum_trans']:
             kwargs['datum_trans'] = options['datum_trans']
         grass.run_command('g.proj', flags='c', epsg=options['epsg'], **kwargs)
-
-    # switch to target location
-    os.environ['GISRC'] = str(tgtgisrc)
-
-    # make sure target is not xy
-    if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
-        grass.fatal(
-            _("Coordinate reference system not available for current location <%s>") %
-            tgtloc)
-
-    # switch to temp location
-    os.environ['GISRC'] = str(SRCGISRC)
 
     # print projection at verbose level
     grass.verbose(grass.read_command('g.proj', flags='p').rstrip(os.linesep))

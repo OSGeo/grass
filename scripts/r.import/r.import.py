@@ -175,8 +175,37 @@ def main():
         grass.fatal(
             _("Please provide the resolution for the imported dataset or change to 'estimated' resolution"))
 
+    # try r.in.gdal directly first
+    additional_flags = 'l' if flags['l'] else ''
+    if flags['o']:
+        additional_flags += 'o'
+    region_flag = ''
+    if options['extent'] == 'region':
+        region_flag += 'r'
+    if flags['o'] or grass.run_command('r.in.gdal', input=GDALdatasource, flags='j',
+                                       errors='status', quiet=True) == 0:
+        parameters = dict(input=GDALdatasource, output=output,
+                          memory=memory, flags='k' + additional_flags + region_flag)
+        if bands:
+            parameters['band'] = bands
+        try:
+            grass.run_command('r.in.gdal', **parameters)
+            grass.verbose(
+                _("Input <%s> successfully imported without reprojection") %
+                GDALdatasource)
+            return 0
+        except CalledModuleError as e:
+            grass.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
+
     grassenv = grass.gisenv()
     tgtloc = grassenv['LOCATION_NAME']
+
+    # make sure target is not xy
+    if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
+        grass.fatal(
+            _("Coordinate reference system not available for current location <%s>") %
+            tgtloc)
+
     tgtmapset = grassenv['MAPSET']
     GISDBASE = grassenv['GISDBASE']
     tgtgisrc = os.environ['GISRC']
@@ -208,39 +237,8 @@ def main():
     # switch to temp location
     os.environ['GISRC'] = str(SRCGISRC)
 
-    # switch to target location
-    os.environ['GISRC'] = str(tgtgisrc)
-
-    # try r.in.gdal directly first
-    additional_flags = 'l' if flags['l'] else ''
-    if flags['o']:
-        additional_flags += 'o'
-    region_flag = ''
-    if options['extent'] == 'region':
-        region_flag += 'r'
-    if flags['o'] or grass.run_command('r.in.gdal', input=GDALdatasource, flags='j',
-                                       errors='status', quiet=True) == 0:
-        parameters = dict(input=GDALdatasource, output=output,
-                          memory=memory, flags='k' + additional_flags + region_flag)
-        if bands:
-            parameters['band'] = bands
-        try:
-            grass.run_command('r.in.gdal', **parameters)
-            grass.verbose(
-                _("Input <%s> successfully imported without reprojection") %
-                GDALdatasource)
-            return 0
-        except CalledModuleError as e:
-            grass.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
-
-    # make sure target is not xy
-    if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
-        grass.fatal(
-            _("Coordinate reference system not available for current location <%s>") %
-            tgtloc)
-
-    # switch to temp location
-    os.environ['GISRC'] = str(SRCGISRC)
+    # print projection at verbose level
+    grass.verbose(grass.read_command('g.proj', flags='p').rstrip(os.linesep))
 
     # make sure input is not xy
     if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
