@@ -30,6 +30,7 @@ int close_streamvect(char *stream_vect)
     struct Cell_head window;
     double north_offset, west_offset, ns_res, ew_res;
     int next_cat;
+    int *network_id;
 
     G_message(_("Writing vector map <%s>..."), stream_vect);
 
@@ -37,6 +38,9 @@ int close_streamvect(char *stream_vect)
 	G_fatal_error(_("Unable to create vector map <%s>"), stream_vect);
     
     nodestack = (struct sstack *)G_malloc(stack_step * sizeof(struct sstack));
+    network_id = G_malloc((n_stream_nodes + 1) * sizeof(int));
+    for (i = 0; i <= n_stream_nodes; i++)
+	network_id[i] = 0;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -58,6 +62,7 @@ int close_streamvect(char *stream_vect)
 	if (!stream_id)
 	    continue;
 
+	network_id[stream_id] = i + 1;
 	Vect_reset_line(Points);
 	Vect_reset_cats(Cats);
 
@@ -106,6 +111,7 @@ int close_streamvect(char *stream_vect)
 	    if (done) {
 		G_debug(3, "write stream segment");
 
+		network_id[stream_id] = i + 1;
 		Vect_reset_line(Points);
 		Vect_reset_cats(Cats);
 
@@ -178,7 +184,7 @@ int close_streamvect(char *stream_vect)
     G_debug(1, "database: %s", Fi->database);
 
     sprintf(buf,
-	    "create table %s (%s integer, stream_type varchar(20), type_code integer)",
+	    "create table %s (%s integer, stream_type varchar(20), type_code integer, network integer)",
 	    Fi->table, cat_col_name);
     db_set_string(&dbsql, buf);
 
@@ -200,10 +206,10 @@ int close_streamvect(char *stream_vect)
     /* stream nodes */
     for (i = 1; i <= n_stream_nodes; i++) {
 
-	sprintf(buf, "insert into %s values ( %lld, \'%s\', %d )",
+	sprintf(buf, "insert into %s values ( %lld, \'%s\', %d, %d )",
 		Fi->table, i,
 		(stream_node[i].n_trib > 0 ? "intermediate" : "start"),
-		(stream_node[i].n_trib > 0));
+		(stream_node[i].n_trib > 0), network_id[i]);
 
 	db_set_string(&dbsql, buf);
 
@@ -228,6 +234,7 @@ int close_streamvect(char *stream_vect)
     Vect_close(&Out);
 
     G_free(nodestack);
+    G_free(network_id);
 
     return 1;
 }
