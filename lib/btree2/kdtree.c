@@ -492,7 +492,7 @@ void kdtree_optimize(struct kdtree *t, int level)
 	}
     }
 
-    G_debug(0, "k-d tree optimization: %d times balanced, new depth %d",
+    G_debug(1, "k-d tree optimization: %d times balanced, new depth %d",
             nbal, t->root->depth);
 
     return;
