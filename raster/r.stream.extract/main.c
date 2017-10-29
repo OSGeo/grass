@@ -110,7 +110,6 @@ int main(int argc, char *argv[])
 	_("If accumulation is larger than d8cut, SFD is used instead of MFD."
 	  " Applies only if no accumulation map is given.");
     input.d8cut->required = NO;
-    input.d8cut->answer = "infinity";
     input.d8cut->type = TYPE_DOUBLE;
 
     input.mont_exp = G_define_option();
@@ -192,7 +191,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Threshold must be > 0 but is %f"), threshold);
 
     /* d8cut */
-    if (strcmp(input.d8cut->answer, "infinity") == 0) {
+    if (!input.d8cut->answer) {
 	d8cut = DBL_MAX;
     }
     else {
