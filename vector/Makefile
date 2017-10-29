@@ -71,6 +71,7 @@ SUBDIRS = \
 	v.perturb \
 	v.split \
 	v.qcount \
+	v.profile \
 	v.random \
 	v.reclass \
 	v.rectify \
