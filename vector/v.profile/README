@@ -1,0 +1,13 @@
+Vector point/line profiling tool. See v.profile.html file for full description.
+
+v.profile requires GRASS 7
+
+To install v.profile, one needs to provide MODULE_TOPDIR variable for make command (MODULE_TOPDIR=/path/to/GRASS) or change MODULE_TOPDIR in supplied MAKE file to point to GRASS source base. If GRASS source is located in /home/user/soft/grass-7.0, then set MODULE_TOPDIR to /home/user/soft/grass-7.0. Before compiling this module, it's required to configure GRASS (it must have include/Make/Module.make file).
+
+Short version:
+svn co https://svn.osgeo.org/grass/grass-addons/grass7/vector/v.profile v.profile
+cd v.profile
+#nano Makefile # alternative - edit MODULE_TOPDIR setting
+MODULE_TOPDIR='/path/to/grass-source' make
+make install
+
