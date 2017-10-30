@@ -379,7 +379,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr2(const struct Key_Value * proj_info,
  *                    been defined
  */
 int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
-		     struct Key_Value **projunits, OGRSpatialReferenceH hSRS,
+		     struct Key_Value **projunits, OGRSpatialReferenceH hSRS1,
 		     int datumtrans)
 {
     struct Key_Value *temp_projinfo;
@@ -389,9 +389,12 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     char *datum = NULL;
     struct gpj_datum dstruct;
     const char *ograttr;
+    OGRSpatialReferenceH hSRS;
 
     *projinfo = NULL;
     *projunits = NULL;
+
+    hSRS = hSRS1;
 
     if (hSRS == NULL)
 	goto default_to_xy;
@@ -453,7 +456,6 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 			G_set_key_value("name", pszProj, *projinfo);
 		}
 
-		OSRDestroySpatialReference(hSRS);
 		hSRS = OSRNewSpatialReference(NULL);
 		if (OSRImportFromProj4(hSRS, proj4ext) != OGRERR_NONE) {
 		    G_fatal_error(_("Can't parse PROJ.4-style parameter string"));
@@ -830,6 +832,9 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
     }
 
+    if (hSRS != hSRS1)
+	OSRDestroySpatialReference(hSRS);
+
     return 2;
 
     /* -------------------------------------------------------------------- */
@@ -845,6 +850,9 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
     *projinfo = NULL;
     *projunits = NULL;
+
+    if (hSRS != hSRS1)
+	OSRDestroySpatialReference(hSRS);
 
     return 1;
 }
