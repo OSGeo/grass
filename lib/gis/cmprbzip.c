@@ -104,7 +104,7 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
                                    (char *)src, src_sz,  /* source */
 				   9,			 /* blockSize100k */ 
 				   0,                    /* verbosity */
-				   0);                   /* workFactor */
+				   100);                 /* workFactor */
     if (err != BZ_OK) {
 	G_free(buf);
 	return -1;
