@@ -6,8 +6,6 @@
 #include "flag.h"
 #include "seg.h"
 
-#define GW_LARGE_INT off_t
-
 #define INDEX(r, c) ((r) * ncols + (c))
 #define MAXDEPTH 1000     /* maximum supported tree depth of stream network */
 
