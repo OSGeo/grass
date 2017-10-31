@@ -161,5 +161,5 @@ int load_maps(int ele_fd, int acc_fd)
     
     G_debug(1, "%lld non-NULL cells", n_points);
 
-    return n_points;
+    return (n_points > 0);
 }
