@@ -419,16 +419,17 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	    char *proj4ext;
 	    OGRSpatialReferenceH hSRS2;
 
-	    proj4ext = G_store(ograttr);
 	    hSRS2 = OSRNewSpatialReference(NULL);
+	    proj4ext = G_store(ograttr);
+
 	    /* test */
 	    if (OSRImportFromProj4(hSRS2, proj4ext) != OGRERR_NONE) {
 		G_warning(_("Updating spatial reference with embedded proj4 definition failed. "
 		            "Proj4 definition: <%s>"), proj4ext);
+		OSRDestroySpatialReference(hSRS2);
 	    }
 	    else {
-		OSRDestroySpatialReference(hSRS2);
-		/* update OGR spatial reference with proj4 string */
+		/* use new OGR spatial reference defined with embedded proj4 string */
 		/* TODO: replace warning with important_message once confirmed working */
 		G_warning(_("Updating spatial reference with embedded proj4 definition"));
 
@@ -456,10 +457,8 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 			G_set_key_value("name", pszProj, *projinfo);
 		}
 
-		hSRS = OSRNewSpatialReference(NULL);
-		if (OSRImportFromProj4(hSRS, proj4ext) != OGRERR_NONE) {
-		    G_fatal_error(_("Can't parse PROJ.4-style parameter string"));
-		}
+		/* the original hSRS1 is left as is, ok? */
+		hSRS = hSRS2;
 	    }
 	    G_free(proj4ext);
 	}
