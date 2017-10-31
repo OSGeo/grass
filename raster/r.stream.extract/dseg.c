@@ -73,7 +73,7 @@ int dseg_close(DSEG *dseg)
     return 0;
 }
 
-int dseg_put(DSEG *dseg, DCELL *value, int row, int col)
+int dseg_put(DSEG *dseg, DCELL *value, GW_LARGE_INT row, GW_LARGE_INT col)
 {
     if (Segment_put(&(dseg->seg), (DCELL *) value, row, col) < 0) {
 	G_warning(_("Unable to write segment file"));
@@ -82,7 +82,7 @@ int dseg_put(DSEG *dseg, DCELL *value, int row, int col)
     return 0;
 }
 
-int dseg_put_row(DSEG *dseg, DCELL *value, int row)
+int dseg_put_row(DSEG *dseg, DCELL *value, GW_LARGE_INT row)
 {
     if (Segment_put_row(&(dseg->seg), (DCELL *) value, row) < 0) {
 	G_warning(_("Unable to write segment file"));
@@ -91,7 +91,7 @@ int dseg_put_row(DSEG *dseg, DCELL *value, int row)
     return 0;
 }
 
-int dseg_get(DSEG *dseg, DCELL *value, int row, int col)
+int dseg_get(DSEG *dseg, DCELL *value, GW_LARGE_INT row, GW_LARGE_INT col)
 {
     if (Segment_get(&(dseg->seg), (DCELL *) value, row, col) < 0) {
 	G_warning(_("Unable to read segment file"));
