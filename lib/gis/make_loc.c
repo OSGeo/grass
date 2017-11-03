@@ -157,7 +157,9 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	if (a1 && a2 && (fabs(a2 - a1) > 0.000001))
 	    return -2;
     }
-    {
+    /* compare unit name only if there is no to meter conversion factor */
+    if (G_find_key_value("meters", proj_units1) == NULL ||
+        G_find_key_value("meters", proj_units2) == NULL) {
 	const char *u_1 = NULL, *u_2 = NULL;
 
 	u_1 = G_find_key_value("unit", proj_units1);
@@ -166,6 +168,12 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	if ((u_1 && !u_2) || (!u_1 && u_2))
 	    return -2;
 
+	/* the unit name can be arbitrary: the following can be the same
+	 * us-ft			(proj.4 keyword)
+	 * U.S. Surveyor's Foot	(proj.4 name)
+	 * US survey foot		(WKT)
+	 * Foot_US			(WKT)
+	 */
 	if (u_1 && u_2 && G_strcasecmp(u_1, u_2))
 	    return -2;
     }
