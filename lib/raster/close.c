@@ -174,7 +174,8 @@ static int close_old(int fd)
     if (fcb->map_type != CELL_TYPE) {
 	Rast_quant_free(&fcb->quant);
     }
-    close(fcb->data_fd);
+    if (fcb->data_fd >= 0)
+	close(fcb->data_fd);
 
     return 1;
 }
