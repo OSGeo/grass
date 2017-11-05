@@ -120,7 +120,7 @@ def main():
     from core.settings import UserSettings
     from core.globalvar import CheckWxVersion
     from core.giface import StandaloneGrassInterface
-    from iimage2target.ii2t_manager import GCPWizard
+    from image2target.ii2t_manager import GCPWizard
 
     driver = UserSettings.Get(group='display', key='driver', subkey='type')
     if driver == 'png':
