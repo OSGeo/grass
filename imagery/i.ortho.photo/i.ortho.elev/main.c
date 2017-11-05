@@ -196,9 +196,13 @@ int main(int argc, char *argv[])
 	    select_current_env();
 	    G_fatal_error(_("Raster map <%s> not found"), elev_opt->answer);
 	}
+	
+	/* return to current Location/mapset to write in the group file */
+	select_current_env();
+	
 	/* load information from the ELEVATION file in the GROUP */
 	I_get_group_elev(group, elev_layer, mapset_elev, location_elev, math_exp, units, nd);
-	/*Modify ELEVATION file in source GROUP */
+	/* Modify ELEVATION file in source GROUP */
 	I_put_group_elev(group,elev_opt->answer,mapset_opt->answer,loc_opt->answer, 
 			math_opt->answer, unit_opt->answer, nd_opt->answer);
 	/* select current location */
