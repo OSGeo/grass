@@ -386,7 +386,7 @@ int main(int argc, char *argv[])
     /* the search heap will not hold more than 5% of all points at any given time ? */
     /* chances are good that the heap will fit into one large segment */
     seg_open(&search_heap, 1, n_points + 1, 1, seg_cols,
-	     num_open_array_segs, sizeof(HEAP_PNT), 0);
+	     num_open_array_segs, sizeof(HEAP_PNT), 1);
 
     /********************/
     /*    processing    */
