@@ -26,6 +26,7 @@ static int seg_format(int, off_t, off_t, int, int, int, int);
 static int write_int(int, int);
 static int write_off_t(int, off_t);
 static int zero_fill(int, off_t);
+static int seek_only(int, off_t);
 
 /* fd must be open for write */
 
@@ -158,12 +159,16 @@ static int seg_format(int fd,
 	|| !write_int(fd, len))
 	return -1;
 
-    if (!fill)
-	return 1;
-
     /* calculate total number of segments */
     nbytes = spr * ((nrows + srows - 1) / srows);
     nbytes *= size;
+
+    if (!fill) {
+	/* only seek and write a zero byte to the end */ 
+	if (seek_only(fd, nbytes) < 0)
+	    return -1;
+	return 1;
+    }
 
     /* fill segment file with zeros */
     /* NOTE: this could be done faster using lseek() by seeking
@@ -239,10 +244,16 @@ static int zero_fill(int fd, off_t nbytes)
     }
     return 1;
 #else
+    return seek_only(fd, nbytes);
+#endif
+}
+
+static int seek_only(int fd, off_t nbytes)
+{
     /* Using lseek (faster upon initialization).
        NOTE: This version doesn't allocate disk storage for the file; storage will
        be allocated dynamically as blocks are actually written. This could 
-       result in zero_fill() succeeding but a subsequent call to write() failing
+       result in seek_only() succeeding but a subsequent call to write() failing
        with ENOSPC ("No space left on device").
      */
 
@@ -268,5 +279,4 @@ static int zero_fill(int fd, off_t nbytes)
     }
 
     return 1;
-#endif
 }

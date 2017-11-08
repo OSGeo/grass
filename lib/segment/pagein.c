@@ -93,14 +93,20 @@ int seg_pagein(SEGMENT * SEG, int n)
     SEG->seek(SEG, SEG->scb[cur].n, 0);
 
     read_result = read(SEG->fd, SEG->scb[cur].buf, SEG->size);
-    if (read_result != SEG->size) {
+
+    if (read_result == 0) {
+	/* this can happen if the file was not zero-filled,
+	 * i.e. formatted with Segment_format_nofill() or 
+	 * Segment_format() used lseek for file initialization */
+	G_debug(1, "Segment pagein: zero read");
+	memset(SEG->scb[cur].buf, 0, SEG->size);
+    }
+    else if (read_result != SEG->size) {
 	G_debug(2, "Segment pagein: read_result=%d  SEG->size=%d",
 		read_result, SEG->size);
 
 	if (read_result < 0)
 	    G_warning("Segment pagein: %s", strerror(errno));
-	else if (read_result == 0)
-	    G_warning("Segment pagein: read EOF");
 	else
 	    G_warning
 		("Segment pagein: short count during read(), got %d, expected %d",
