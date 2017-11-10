@@ -326,7 +326,7 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	    return -10;
 
     /* -------------------------------------------------------------------- */
-    /*      Do they have the same standard parallels?                    */
+    /*      Do they have the same standard parallels?                       */
     /* -------------------------------------------------------------------- */
 
 	l_1 = l_2 = NULL;
@@ -336,8 +336,17 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	if ((l_1 && !l_2) || (!l_1 && l_2))
 	    return -11;
 
-	if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001))
-	    return -11;
+	if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001)) {
+	    /* lat_1 differ */
+	    /* check for swapped lat_1, lat_2 */
+	    l_2 = G_find_key_value("lat_2", proj_info2);
+	    
+	    if (!l_2)
+		return -11;
+	    if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001)) {
+		return -11;
+	    }
+	}
 
 	l_1 = l_2 = NULL;
 	l_1 = G_find_key_value("lat_2", proj_info1);
@@ -346,8 +355,17 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	if ((l_1 && !l_2) || (!l_1 && l_2))
 	    return -11;
 
-	if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001))
-	    return -11;
+	if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001)) {
+	    /* lat_2 differ */
+	    /* check for swapped lat_1, lat_2 */
+	    l_2 = G_find_key_value("lat_1", proj_info2);
+	    
+	    if (!l_2)
+		return -11;
+	    if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001)) {
+		return -11;
+	    }
+	}
     }
 
     /* towgs84 ? */
