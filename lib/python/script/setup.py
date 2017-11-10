@@ -172,6 +172,7 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     os.environ['GRASS_ADDON_BASE'] = addon_base
     if not mswin:
         os.environ['PATH'] += os.pathsep + os.path.join(addon_base, 'scripts')
+    os.environ['PATH'] += os.pathsep + os.path.join(addon_base, 'bin')
 
     # define LD_LIBRARY_PATH
     if '@LD_LIBRARY_PATH_VAR@' not in os.environ:
