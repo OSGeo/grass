@@ -190,8 +190,11 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	if ((d_1 && !d_2) || (!d_1 && d_2))
 	    return -3;
 
-	if (d_1 && d_2 && strcmp(d_1, d_2))
-	    return -3;
+	if (d_1 && d_2 && strcmp(d_1, d_2)) {
+	    /* different datum short names can mean the same datum,
+	     * see lib/gis/datum.table */
+	    G_debug(1, "Different datum names");
+	}
     }
 
     /* -------------------------------------------------------------------- */
