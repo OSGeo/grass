@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
 
     /* default GDAL memory cache size appears to be only 40 MiB, slowing down r.in.gdal */
     if (parm.memory->answer && *parm.memory->answer) {
-#if GDAL_VERSION_NUM >= 1800
+#if GDAL_VERSION_NUM >= 1800 && !defined _WIN32
            GDALSetCacheMax64((GIntBig)atol(parm.memory->answer) * 1024 * 1024);
            G_verbose_message(_("Using memory cache size: %.1f MiB"), GDALGetCacheMax64()/1024.0/1024.0);
 #else
