@@ -122,7 +122,7 @@ static int init(void)
     }
 
     nulls = getenv("GRASS_COMPRESS_NULLS");
-    R__.compress_nulls = (nulls && atoi(nulls)) ? 1 : 0;
+    R__.compress_nulls = (nulls && atoi(nulls) == 0) ? 0 : 1;
 
     G_add_error_handler(Rast__error_handler, NULL);
 
