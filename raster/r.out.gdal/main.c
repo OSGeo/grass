@@ -30,7 +30,9 @@
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 
-#include "cpl_string.h"
+#include <cpl_string.h>
+#include <cpl_port.h>
+
 #include "local_proto.h"
 
 int range_check(double, double, GDALDataType);
@@ -732,7 +734,8 @@ int range_check(double min, double max, GDALDataType datatype)
 
     case GDT_Float32:
     case GDT_CFloat32:
-	if (max < TYPE_FLOAT32_MIN || min > TYPE_FLOAT32_MAX) {
+	if ((!CPLIsInf(max) && max < TYPE_FLOAT32_MIN) ||
+	    (!CPLIsInf(min) && min > TYPE_FLOAT32_MAX)) {
 	    G_warning(_("Selected GDAL datatype does not cover data range."));
 	    G_warning(_("GDAL datatype: %s, range: %g - %g"),
 		      GDALGetDataTypeName(datatype), TYPE_FLOAT32_MIN,
@@ -829,7 +832,7 @@ int nodataval_check(double nodataval, GDALDataType datatype)
 
     case GDT_Float32:
     case GDT_CFloat32:
-	if (nodataval != (double)(float) nodataval) {
+	if (!CPLIsNan(nodataval) && nodataval != (double)(float) nodataval) {
 	    G_warning(_("Mismatch between metadata nodata value and actual nodata value in exported raster: "
 		       "specified nodata value %g gets converted to %g by selected GDAL datatype."),
 		      nodataval, (float) nodataval);
