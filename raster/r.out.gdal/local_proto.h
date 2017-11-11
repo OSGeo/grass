@@ -1,7 +1,7 @@
 #ifndef __LOCAL_PROTO_H__
 #define __LOCAL_PROTO_H__
 
-#include "gdal.h"
+#include <gdal.h>
 
 /* range limits */
 /*
