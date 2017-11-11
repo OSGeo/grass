@@ -506,7 +506,7 @@ class GroupPage(TitledPage):
             wx.StaticText(
                 parent=self,
                 id=wx.ID_ANY,
-                label=_('Select group:')),
+                label=_('Select/create group:')),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
             pos=(
@@ -514,7 +514,7 @@ class GroupPage(TitledPage):
                 1))
         self.cb_group = wx.ComboBox(parent=self, id=wx.ID_ANY,
                                     choices=self.groupList, size=(350, -1),
-                                    style=wx.CB_DROPDOWN | wx.CB_READONLY)
+                                    style=wx.CB_DROPDOWN)
         self.sizer.Add(self.cb_group, flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5, pos=(1, 2))
 
@@ -588,6 +588,8 @@ class GroupPage(TitledPage):
 
     def OnMkGroup(self, event):
         """Create new group in source location/mapset"""
+	if self.xygroup == '':
+	    self.xygroup = self.cb_group.GetValue()
         dlg = GroupDialog(parent=self, defaultGroup=self.xygroup)
         dlg.DisableSubgroupEdit()
         dlg.ShowModal()
@@ -603,6 +605,10 @@ class GroupPage(TitledPage):
 
     def OnVGroup(self, event):
         """Add vector maps to group"""
+	
+	if self.xygroup == '':
+	    self.xygroup = self.cb_group.GetValue()
+
         dlg = VectGroup(parent=self,
                         id=wx.ID_ANY,
                         grassdb=self.grassdatabase,
@@ -2459,6 +2465,11 @@ class VectGroup(wx.Dialog):
                 self.listMap.GetString(item) +
                 '@' +
                 self.xymapset)
+
+	dirname = os.path.dirname(self.vgrpfile)
+	
+	if not os.path.exists(dirname):
+	    os.makedirs(dirname)
 
         f = open(self.vgrpfile, mode='w')
         try:
