@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Flag *flag_l, *flag_c, *flag_m, *flag_f, *flag_t;
     struct Option *input, *format, *type, *output, *createopt, *metaopt,
-	*nodataopt;
+	          *nodataopt, *overviewopt;
 
     struct Cell_head cellhead;
     struct Ref ref;
@@ -129,6 +129,7 @@ int main(int argc, char *argv[])
     double dfCellMax, export_max;
     struct FPRange sRange;
     int retval = 0;
+    int n_overviews = 0;
 
     G_gisinit(argv[0]);
 
@@ -238,6 +239,17 @@ int main(int argc, char *argv[])
     nodataopt->required = NO;
     nodataopt->guisection = _("Creation");
     
+    overviewopt = G_define_option();
+    overviewopt->key = "overviews";
+    overviewopt->type = TYPE_INTEGER;
+    overviewopt->options = "0-5";
+    overviewopt->answer = "0";
+    overviewopt->label =
+	_("Number of overviews to create for the output dataset");
+    overviewopt->multiple = NO;
+    overviewopt->required = NO;
+    overviewopt->guisection = _("Creation");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -639,6 +651,31 @@ int main(int argc, char *argv[])
 	else if (flag_t->answer) {
 	    retval = export_attr(hCurrDS, band + 1, ref.file[band].name,
 	                         ref.file[band].mapset, maptype);
+	}
+    }
+
+    /* overviews */
+    if (overviewopt->answer) {
+	n_overviews = atoi(overviewopt->answer);
+	if (n_overviews < 0 || n_overviews > 5) {
+	    G_warning(_("Number of overviews must be between 0 and 5"));
+	    n_overviews = 0;
+	}
+    }
+    if (n_overviews) {
+	int i, oi, *ol;
+
+	G_message(_("Building overviews ..."));
+	
+	ol = G_malloc(n_overviews * sizeof(int));
+	oi = 2;
+	for (i = 0; i < n_overviews; i++) {
+	    ol[i] = oi;
+	    oi *= 2;
+	}
+	if (GDALBuildOverviews(hDstDS, "NEAREST", n_overviews, ol,
+	                       0, NULL, NULL, NULL) != CE_None) {
+	    G_warning(_("Unable to build overviews"));
 	}
     }
 
