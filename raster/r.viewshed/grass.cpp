@@ -782,7 +782,6 @@ save_vis_elev_to_GRASS(Grid * visgrid, char *elevfname, char *visfname,
 /* helper function to deal with GRASS writing to a row buffer */
 void writeValue(void *bufrast, int j, double x, RASTER_MAP_TYPE data_type)
 {
-
     switch (data_type) {
     case CELL_TYPE:
 	((CELL *) bufrast)[j] = (CELL) x;
@@ -824,7 +823,8 @@ void writeNodataValue(void *bufrast, int j, RASTER_MAP_TYPE data_type)
 void
 save_io_visibilitygrid_to_GRASS(IOVisibilityGrid * visgrid,
 				char *fname, RASTER_MAP_TYPE type,
-				float (*fun) (float))
+				float (*fun) (float),
+				OutputMode mode)
 {
 
     G_message(_("Saving grid to <%s>"), fname);
@@ -878,7 +878,10 @@ save_io_visibilitygrid_to_GRASS(IOVisibilityGrid * visgrid,
 	    }
 	    else {
 		/*  this cell is not in stream, so it is invisible */
-		writeNodataValue(visrast, j, type);
+		if (mode == OUTPUT_BOOL)
+		    writeValue(visrast, j, BOOL_INVISIBLE, type);
+		else if (mode == OUTPUT_ANGLE)
+		    writeNodataValue(visrast, j, type);
 	    }
 	}			/* for j */
 
