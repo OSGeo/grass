@@ -14,7 +14,7 @@ These classes are used to manage the infrastructure of GRASS database:
 GIS data directory, Location and Mapset. Details about the GRASS GIS
 database management (locations and mapsets) can be found in the `GRASS
 GIS 7 User's Manual: GRASS GIS Quickstart
-<http://grass.osgeo.org/grass73/manuals/helptext.html>`_.
+<http://grass.osgeo.org/grass74/manuals/helptext.html>`_.
 
 .. _Region-label:
 
