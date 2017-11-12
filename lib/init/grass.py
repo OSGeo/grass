@@ -343,7 +343,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
     gui=_("use $DEFAULT_GUI graphical user interface"),
     gui_detail=_("and set as default"),
     config=_("print GRASS configuration parameters"),
-    config_detail=_("options: arch,build,compiler,path,revision"),
+    config_detail=_("options: arch,build,compiler,path,revision,version"),
     params=_("Parameters"),
     gisdbase=_("initial GRASS GIS database directory"),
     gisdbase_detail=_("directory containing Locations"),
@@ -1626,7 +1626,7 @@ def print_params():
 
     params = sys.argv[2:]
     if not params:
-        params = ['arch', 'build', 'compiler', 'path', 'revision']
+        params = ['arch', 'build', 'compiler', 'path', 'revision', 'version']
 
     for arg in params:
         if arg == 'path':
@@ -1650,6 +1650,8 @@ def print_params():
             val = grep('#define GIS_H_VERSION', linesrev)
             filerev.close()
             sys.stdout.write("%s\n" % val[0].split(':')[1].rstrip('$"\n').strip())
+        elif arg == 'version':
+			sys.stdout.write("%s\n" % grass_version)
         else:
             message(_("Parameter <%s> not supported") % arg)
 
