@@ -288,9 +288,8 @@ int main(int argc, char *argv[])
     tol_opt->key = "tolerance";
     tol_opt->type = TYPE_DOUBLE;
     tol_opt->required = NO;
-    tol_opt->answer = "0.01";
     tol_opt->description =
-	_("Maximum distance between theoretical arc and polygon segments as multiple of buffer");
+	_("Maximum distance between theoretical arc and polygon segments as multiple of buffer (default 0.01)");
     tol_opt->guisection = _("Distance");
 
     straight_flag = G_define_flag();
@@ -358,9 +357,12 @@ int main(int argc, char *argv[])
     if (bufcol_opt->answer && field == -1)
 	G_fatal_error(_("The bufcol option requires a valid layer."));
 
-    tolerance = atof(tol_opt->answer);
-    if (tolerance <= 0)
-	G_fatal_error(_("The tolerance must be > 0."));
+    tolerance = 0.01;
+    if (tol_opt->answer) {
+	tolerance = atof(tol_opt->answer);
+	if (tolerance <= 0)
+	    G_fatal_error(_("The tolerance must be > 0."));
+    }
 
     if (adjust_tolerance(&tolerance))
 	G_warning(_("The tolerance was reset to %g"), tolerance);
@@ -385,6 +387,18 @@ int main(int argc, char *argv[])
 
 	unit_tolerance = fabs(tolerance * MIN(da, db));
 	G_verbose_message(_("The tolerance in map units = %g"), unit_tolerance);
+
+	if (use_geos) {
+	    if (distb_opt->answer)
+		G_warning(_("Option '%s' is not available with GEOS buffering"),
+			  distb_opt->key);
+	    if (dalpha != 0)
+		G_warning(_("Option '%s' is not available with GEOS buffering"),
+			  angle_opt->key);
+	    if (tol_opt->answer)
+		G_warning(_("Option '%s' is not available with GEOS buffering"),
+			  tol_opt->key);
+	}
     }
 
     if (Vect_open_new(&Out, out_opt->answer, WITHOUT_Z) < 0)
