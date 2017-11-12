@@ -232,6 +232,8 @@ Contents
 
 2. Tell others about it:
 
+ * Notify all packagers (MN has email list)
+
  * If release candidate:
     - <grass-announce@lists.osgeo.org>
     - <grass-dev@lists.osgeo.org>
