@@ -89,7 +89,7 @@ Example Bash script to run be used as a cron job
     REPORTS=".../testreports"
     GRASSSRC=".../grass-src"
     # here we suppose default compilation settings of GRASS and no make install
-    GRASSBIN="$GRASSSRC/bin.../grass73"
+    GRASSBIN="$GRASSSRC/bin.../grass74"
     GRASSDIST="$GRASSSRC/dist..."
     
     # necessary hardcoded GRASS paths

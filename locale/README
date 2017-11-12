@@ -123,11 +123,11 @@ GENERAL TRANSLATION PROCEDURE (no programming required)
  see also: https://grasswiki.osgeo.org/wiki/GRASS_messages_translation#Get_the_translated_po_files
 
 [1] .pot files are auto-generated on grass.osgeo.org and
-    stored in https://grass.osgeo.org/grass72/binary/linux/snapshot/transifex/
-     --> cronjob: /home/neteler/cronjobs/cron_grass72_releasebranch_72_build_bins.sh
+    stored in https://grass.osgeo.org/grass74/binary/linux/snapshot/transifex/
+     --> cronjob: /home/neteler/cronjobs/cron_grass74_releasebranch_72_build_bins.sh
 
 [2] Transifex job copies daily from [1] to here: 
-	https://www.transifex.com/grass-gis/grass72/
+	https://www.transifex.com/grass-gis/grass74/
 
 [3] Translators work in Transifex,
 
