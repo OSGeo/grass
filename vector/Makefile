@@ -33,6 +33,7 @@ SUBDIRS = \
 	v.kcv \
 	v.kernel \
 	v.label \
+	v.label.sa \
 	v.lidar.correction \
 	v.lidar.edgedetection \
 	v.lidar.growing \
