@@ -215,17 +215,17 @@ Compare them and proceed if the weighed accumulation map makes sense.
 # extract streams using the original accumulation map
 r.stream.extract elevation=elev_ned_30m@PERMANENT \
                  accumulation=elev_ned_30m.acc \
-		 threshold=1000 \
-		 stream_rast=elev_ned_30m.streams.noweight
+                 threshold=1000 \
+                 stream_rast=elev_ned_30m.streams.noweight
 
 # extract streams from weighed map
 # requires a priori no-data filtering
-r.mapcalc "MASK = if(isnull(elev_ned_30m_acc_weighed), null(), 1)"
+r.mapcalc "MASK = if(isnull(elev_ned_30m.acc.weighed), null(), 1)"
 
 r.stream.extract elevation=elev_ned_30m@PERMANENT \
                  accumulation=elev_ned_30m.acc.weighed \
-		 threshold=1000 \
-		 stream_rast=elev_ned_30m.streams
+                 threshold=1000 \
+                 stream_rast=elev_ned_30m.streams
 r.mask -r
 </pre></div>
 
