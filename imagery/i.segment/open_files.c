@@ -31,20 +31,6 @@ int open_files(struct globals *globals)
     flag_clear_all(globals->null_flag);
     flag_clear_all(globals->candidate_flag);
 
-    G_debug(1, "Checking image group...");
-
-    /* ****** open the input rasters ******* */
-
-    if (!I_get_group_ref(globals->image_group, &globals->Ref))
-	G_fatal_error(_("Group <%s> not found in the current mapset"),
-		      globals->image_group);
-
-    if (globals->Ref.nfiles <= 0)
-	G_fatal_error(_("Group <%s> contains no raster maps"),
-		      globals->image_group);
-
-    /* Read Imagery Group */
-
     in_fd = G_malloc(globals->Ref.nfiles * sizeof(int));
     inbuf = (DCELL **) G_malloc(globals->Ref.nfiles * sizeof(DCELL *));
     fp_range = G_malloc(globals->Ref.nfiles * sizeof(struct FPRange));

@@ -18,9 +18,12 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 		   *mem;
     struct Flag *diagonal, *weighted, *ms_a, *ms_p;
     struct Option *gof, *endt;
+    int bands;
 
     /* required parameters */
-    group = G_define_standard_option(G_OPT_I_GROUP);
+    group = G_define_standard_option(G_OPT_R_INPUTS);
+    group->key = "group";
+    group->description = _("Name of input imagery group or raster maps");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -180,7 +183,39 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 
     /* Check and save parameters */
 
-    globals->image_group = group->answer;
+    for (bands = 0; group->answers[bands] != NULL; bands++) ;
+
+    I_init_group_ref(&globals->Ref);
+    if (bands > 1 || !I_find_group(group->answers[0])) {
+	/* create group from input is raster map(s) */
+	char name[GNAME_MAX];
+	const char *mapset;
+
+	for (bands = 0; group->answers[bands] != NULL; bands++) {
+	    /* strip @mapset, do not modify opt_in->answers */
+	    strcpy(name, group->answers[bands]);
+	    mapset = G_find_raster(name, "");
+	    if (!mapset)
+		G_fatal_error(_("Raster map <%s> not found"),
+			      group->answers[bands]);
+	    /* Add input to group. */
+	    I_add_file_to_group_ref(name, mapset, &globals->Ref);
+	}
+
+	globals->image_group = NULL;
+    }
+    else {
+	/* input is group. Try to read group file */
+	if (!I_get_group_ref(group->answers[0], &globals->Ref))
+	    G_fatal_error(_("Group <%s> not found in the current mapset"),
+			  group->answers[0]);
+
+	if (globals->Ref.nfiles <= 0)
+	    G_fatal_error(_("Group <%s> contains no raster maps"),
+			  globals->image_group);
+
+	globals->image_group = group->answers[0];
+    }
 
     if (G_legal_filename(output->answer) == TRUE)
 	globals->out_name = output->answer;
