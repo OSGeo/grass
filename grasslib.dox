@@ -51,7 +51,7 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
  - gis: \ref gislib
  - raster: \ref rasterlib
  - vector: \ref vectorlib
- - Temporal GIS API: See http://grass.osgeo.org/grass73/manuals/libpython/temporal_framework.html
+ - Temporal GIS API: See http://grass.osgeo.org/grass75/manuals/libpython/temporal_framework.html
 
 \section libs Further libraries
 
@@ -112,7 +112,7 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 
 \subsection pythonlibs Python API
 
- - python:	See GRASS GIS Python library (http://grass.osgeo.org/grass73/manuals/libpython/)
+ - python:	See GRASS GIS Python library (http://grass.osgeo.org/grass75/manuals/libpython/)
 
 \subsection projlibs Projection Libraries
 
