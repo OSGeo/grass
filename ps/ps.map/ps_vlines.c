@@ -150,7 +150,10 @@ int PS_vlines_plot(struct Map_info *P_map, int vec, int type)
 		d = vector.layer[vec].offset / PS.ew_to_x;
 
 	    adjust_line(Points);	/* LL projection */
-	    Vect_line_parallel(Points, d, tol, 1, nPoints);
+	    if (d > 0)
+		Vect_line_parallel2(Points, d, d, 90, 1, 0, tol, nPoints);
+	    else
+		Vect_line_parallel2(Points, -d, -d, 90, 0, 0, tol, nPoints);
 	    pPoints = nPoints;
 	}
 
@@ -186,7 +189,10 @@ int PS_vlines_plot(struct Map_info *P_map, int vec, int type)
 	    if (vector.layer[vec].ref == LINE_REF_RIGHT)
 		d = -d;
 	    adjust_line(Points);	/* LL projection */
-	    Vect_line_parallel(Points, d, tol, 1, nPoints);
+	    if (d > 0)
+		Vect_line_parallel2(Points, d, d, 90, 1, 0, tol, nPoints);
+	    else
+		Vect_line_parallel2(Points, -d, -d, 90, 0, 0, tol, nPoints);
 	    Vect_line_reverse(nPoints);
 
 	    fprintf(PS.fp, "NP\n");
