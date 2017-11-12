@@ -319,8 +319,9 @@ int main(int argc, char **argv)
 	    Vect_cat_set(SCats, 1, id);
 
 	    if (fabs(side_offset) > 0.0) {
-		Vect_line_parallel(SPoints, side_offset, side_offset / 10.,
-				   TRUE, PlPoints);
+	        Vect_line_parallel2(SPoints, side_offset, side_offset,
+		   		   0.0, 1, FALSE, side_offset / 10.,
+		   	           PlPoints);
 		Vect_write_line(&Out, GV_LINE, PlPoints, SCats);
 		G_debug(3, "  segment n_points = %d", PlPoints->n_points);
 	    }
