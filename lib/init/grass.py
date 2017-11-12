@@ -875,7 +875,7 @@ def set_mapset(gisrc, arg, geofile=None, create_new=False):
     l = None
 
     if arg == '-':
-        # TODO: repair or remove behavior env vars + `grass73 -` (see doc)
+        # TODO: repair or remove behavior env vars + `grass75 -` (see doc)
         # this is broken for some time (before refactoring, e.g. r65235)
         # is some code is added, it should be a separate function, probably
         # called here

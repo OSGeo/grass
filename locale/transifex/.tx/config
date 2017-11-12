@@ -1,17 +1,17 @@
 [main]
 host = https://www.transifex.com
 
-[grass72.grasslibspot]
+[grass75.grasslibspot]
 type = PO
 source_lang = en
 source_file = ../templates/grasslibs.pot
 
-[grass72.grassmodspot]
+[grass75.grassmodspot]
 type = PO
 source_lang = en
 source_file = ../templates/grassmods.pot
 
-[grass72.grasswxpypot]
+[grass75.grasswxpypot]
 type = PO
 source_lang = en
 source_file = ../templates/grasswxpy.pot
