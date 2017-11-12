@@ -169,7 +169,7 @@ map produced with <em><a href="r.watershed.html">r.watershed</a></em>.
 g.region -p raster=elev_ned_30m@PERMANENT
 
 # calculate flow accumulation
-r.watershed ele=elev_ned_30m@PERMANENT acc=elevation.10m.acc
+r.watershed ele=elev_ned_30m@PERMANENT acc=elev_ned_30m.acc
 
 # curvature to get narrow valleys
 r.param.scale input=elev_ned_30m@PERMANENT output=tangential_curv_5 size=5 method=crosc
@@ -183,7 +183,7 @@ r.param.scale input=elev_ned_30m@PERMANENT output=tangential_curv_11 size=11 met
 # create weight map
 r.mapcalc "weight = if(tangential_curv_5 &lt; 0, -100 * tangential_curv_5, \
                     if(tangential_curv_7 &lt; 0, -100 * tangential_curv_7, \
-		    if(tangential_curv_11 &lt; 0, -100 * tangential_curv_11, 0.000001)))"
+                    if(tangential_curv_11 &lt; 0, -100 * tangential_curv_11, 0.000001)))"
 
 # weigh accumulation map
 r.mapcalc expr="elev_ned_30m.acc.weighed = elev_ned_30m.acc * weight"
@@ -219,10 +219,14 @@ r.stream.extract elevation=elev_ned_30m@PERMANENT \
 		 stream_rast=elev_ned_30m.streams.noweight
 
 # extract streams from weighed map
+# requires a priori no-data filtering
+r.mapcalc "MASK = if(isnull(elev_ned_30m_acc_weighed), null(), 1)"
+
 r.stream.extract elevation=elev_ned_30m@PERMANENT \
                  accumulation=elev_ned_30m.acc.weighed \
 		 threshold=1000 \
 		 stream_rast=elev_ned_30m.streams
+r.mask -r
 </pre></div>
 
 <p>
