@@ -136,7 +136,8 @@ save_vis_elev_to_GRASS(Grid * visgrid, char *elevfname, char *visfname,
 void
 save_io_visibilitygrid_to_GRASS(IOVisibilityGrid * visgrid,
 				char *outfname, RASTER_MAP_TYPE type,
-				float (*fun) (float));
+				float (*fun) (float),
+				OutputMode mode);
 
 
 
