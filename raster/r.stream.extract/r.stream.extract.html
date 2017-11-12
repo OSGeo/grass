@@ -220,14 +220,12 @@ r.stream.extract elevation=elev_ned_30m@PERMANENT \
                  stream_rast=elev_ned_30m.streams.noweight
 
 # extract streams from weighed map
-# requires a priori no-data filtering
-r.mapcalc "MASK = if(isnull(elev_ned_30m.acc.weighed), null(), 1)"
+# note that the weighed map is a bit smaller than the original map
 
 r.stream.extract elevation=elev_ned_30m@PERMANENT \
                  accumulation=elev_ned_30m.acc.weighed \
                  threshold=1000 \
                  stream_rast=elev_ned_30m.streams
-r.mask -r
 </pre></div>
 
 <p>

@@ -96,7 +96,20 @@ int load_maps(int ele_fd, int acc_fd)
 		}
 		Rast_set_d_null_value(&acc_value, 1);
 	    }
+	    else if (acc_fd >= 0 && Rast_is_null_value(acc_ptr, acc_map_type)) {
+		/* elevation is not NULL, but provided accumulation is NULL
+		 * this is ok after weighing or 
+		 * when analysing a selected upstream catchment area */
+		FLAG_SET(afbuf[c].flag, NULLFLAG);
+		FLAG_SET(afbuf[c].flag, INLISTFLAG);
+		FLAG_SET(afbuf[c].flag, WORKEDFLAG);
+		FLAG_SET(afbuf[c].flag, WORKED2FLAG);
+		Rast_set_c_null_value(&ele_value, 1);
+		Rast_set_d_null_value(&acc_value, 1);
+	    }
 	    else {
+		/* elevation is not NULL, and 
+		 * if accumulation is provided it is also not NULL */
 		switch (ele_map_type) {
 		case CELL_TYPE:
 		    ele_value = *((CELL *) ptr);
@@ -115,11 +128,6 @@ int load_maps(int ele_fd, int acc_fd)
 		if (acc_fd < 0)
 		    acc_value = 1;
 		else {
-		    if (Rast_is_null_value(acc_ptr, acc_map_type)) {
-			/* can this be ok after weighing ? */
-			G_fatal_error(_("Accumulation raster map is NULL but elevation map is not NULL"));
-		    }
-
 		    switch (acc_map_type) {
 		    case CELL_TYPE:
 			acc_value = *((CELL *) acc_ptr);
