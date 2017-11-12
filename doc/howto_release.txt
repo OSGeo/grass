@@ -157,16 +157,16 @@ Contents
 
  o update web site to new version: CMS
     - News section
-    - http://grass.osgeo.org/download/software/
-    - http://grass.osgeo.org/download/software/sources/
-    - http://grass.osgeo.org/download/software/linux/
-    - http://grass.osgeo.org/home/history/releases/
-    - http://grass.osgeo.org/development/svn/svn-tags/ (add tag): echo $RELEASETAG
+    - https://grass.osgeo.org/download/software/
+    - https://grass.osgeo.org/download/software/sources/
+    - https://grass.osgeo.org/download/software/linux/
+    - https://grass.osgeo.org/home/history/releases/
+    - https://grass.osgeo.org/development/svn/svn-tags/ (add tag): echo $RELEASETAG
 
      write announcement
       - store in trac:
            http://trac.osgeo.org/grass/wiki/Release/7.XX.YY-News
-           https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures72  <- major releases only
+           https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures72  <- major changes only
       - update version in https://grasswiki.osgeo.org/wiki/GRASS-Wiki
       - store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html <- how? with protected PHP upload page?
 
@@ -191,7 +191,7 @@ Contents
       - Add new release to https://trac.osgeo.org/grass/admin/ticket/versions
       - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.2.x --> Edit Milestone
       - Batch modify tickets, set to next milestone (update this query accordingly: two entries to change)
-        https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.2.0&milestone=7.2.1&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority
+        https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.2.0&milestone=7.2.1&milestone=7.2.2&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority
         - Set max items to 1000, then select all shown tickets via Status: assigned/new/reopened sections
         - Scroll down to "Batch modify": under the "Comment" section, add Field "Milestone" and set to next version
         - then use "Change ticket" button, done.
@@ -231,6 +231,8 @@ Contents
 
 
 2. Tell others about it:
+
+ * Notify all packagers (MN has email list)
 
  * If release candidate:
     - <grass-announce@lists.osgeo.org>
@@ -278,7 +280,7 @@ Contents
             -> Share your news with the EO community
    https://www.heise.de/download/product/grass-gis-7105 (update, MN)
 
-   See also: http://grass.osgeo.org/wiki/Contact_Databases
+   See also: https://grass.osgeo.org/wiki/Contact_Databases
    ... anywhere else? Please add here.
 
 ###########################################
@@ -292,7 +294,7 @@ Contents
           URL=https://svn.osgeo.org/grass
           svn copy $URL/grass/trunk \
                    $URL/grass/branches/$BRANCH \
-                   -m "Development branch for GRASS 7.2.x"
+                   -m "Release branch for GRASS 7.2.x"
 
 
    Switching current local copy to above development branch:
@@ -305,5 +307,5 @@ Example: GRASS GIS 7.2 release branch creation
 
 svn copy https://svn.osgeo.org/grass/grass/trunk/ \
     https://svn.osgeo.org/grass/grass/branches/releasebranch_7_2 \
-    -m "Creating the GRASS GIS 7.2 release branch (branch started in 05/2016, r68500)"
+    -m "Release branch for GRASS GIS 7.2.x"
 
