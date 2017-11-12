@@ -11,7 +11,7 @@
 #include <grass/glocale.h>
 #include <grass/raster.h>
 #include <grass/segment.h>	/* segmentation library */
-#include <grass/rbtree.h>	/* Red Black Tree library functions */
+#include "pavl.h"
 #include "iseg.h"
 
 #define EPSILON 1.0e-8
@@ -113,6 +113,11 @@ void free_free_ids(void)
 static int compare_rc(const void *first, const void *second)
 {
     struct rc *a = (struct rc *)first, *b = (struct rc *)second;
+
+    if (a->row == b->row)
+	return (a->col - b->col);
+    return (a->row - b->row);
+
 
     if (a->row < b->row)
 	return -1;
@@ -584,7 +589,7 @@ int region_growing(struct globals *globals)
 	    G_percent(row - globals->row_min,
 	              globals->row_max - globals->row_min, 4);
 	    for (col = globals->col_min; col < globals->col_max; col++) {
-		int do_merge = 1;
+		do_merge = 1;
 		
 		if (!(FLAG_GET(globals->candidate_flag, row, col)))
 		    continue;
@@ -672,6 +677,10 @@ int region_growing(struct globals *globals)
     return TRUE;
 }
 
+static void free_item(void *p)
+{
+    G_free(p);
+}
 
 static int find_best_neighbor(struct ngbr_stats *Ri,
 			      struct reg_stats *Ri_rs,
@@ -682,11 +691,11 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
 			      struct globals *globals)
 {
     int n, n_ngbrs, no_check, cmp;
-    struct rc ngbr_rc, next;
+    struct rc ngbr_rc, next, *pngbr_rc;
     struct rclist rilist;
     double tempsim;
     int neighbors[8][2];
-    struct RB_TREE *no_check_tree;	/* cells already checked */
+    struct pavl_table *no_check_tree;	/* cells already checked */
     struct reg_stats *rs_found;
     int candk, candtmp;
 
@@ -703,10 +712,13 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
 
     /* *** initialize data *** */
 
-    no_check_tree = rbtree_create(compare_rc, sizeof(struct rc));
     ngbr_rc.row = Ri->row;
     ngbr_rc.col = Ri->col;
-    rbtree_insert(no_check_tree, &ngbr_rc);
+    no_check_tree = pavl_create(compare_rc, NULL);
+    pngbr_rc = G_malloc(sizeof(struct rc));
+    *pngbr_rc = ngbr_rc;
+    pavl_insert(no_check_tree, pngbr_rc);
+    pngbr_rc = NULL;
 
     nbtree_clear(Ri_ngbrs);
     n_ngbrs = 0;
@@ -752,10 +764,12 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
 
 		if (!no_check) {
 
-		    if (!rbtree_find(no_check_tree, &ngbr_rc)) {
+		    if (pngbr_rc == NULL)
+			pngbr_rc = G_malloc(sizeof(struct rc));
+		    *pngbr_rc = ngbr_rc;
 
-			/* not yet checked, don't check it again */
-			rbtree_insert(no_check_tree, &ngbr_rc);
+		    if (pavl_insert(no_check_tree, pngbr_rc) == NULL) {
+			pngbr_rc = NULL;
 
 			/* get neighbor ID */
 			Segment_get(&globals->rid_seg,
@@ -822,7 +836,9 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
     } while (rclist_drop(&rilist, &next));   /* while there are cells to check */
 
     /* clean up */
-    rbtree_destroy(no_check_tree);
+    if (pngbr_rc)
+	G_free(pngbr_rc);
+    pavl_destroy(no_check_tree, free_item);
     rclist_destroy(&rilist);
 
     return n_ngbrs;
@@ -1031,17 +1047,21 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
 	    G_fatal_error(_("Region size is larger than 2: %d"), count);
     }
     else if (rs->count > 2) {
-	struct RB_TREE *rc_check_tree;	/* cells already checked */
+	struct pavl_table *rc_check_tree;	/* cells already checked */
 	struct rclist rlist;
+	struct rc *pngbr_rc;
 	int no_check;
 
 	/* go through region, spreading outwards from head */
 	rclist_init(&rlist);
 
-	rc_check_tree = rbtree_create(compare_rc, sizeof(struct rc));
 	ngbr_rc.row = row;
 	ngbr_rc.col = col;
-	rbtree_insert(rc_check_tree, &ngbr_rc);
+	pngbr_rc = G_malloc(sizeof(struct rc));
+	*pngbr_rc = ngbr_rc;
+	rc_check_tree = pavl_create(compare_rc, NULL);
+	pavl_insert(rc_check_tree, pngbr_rc);
+	pngbr_rc = NULL;
 
 	next.row = row;
 	next.col = col;
@@ -1062,12 +1082,14 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
 
 		if (!no_check) {
 		    if ((FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col)) == 0) {
-		    
-			/* already checked ? */
-			if (!rbtree_find(rc_check_tree, &ngbr_rc)) {
 
-			    /* not yet checked, don't check it again */
-			    rbtree_insert(rc_check_tree, &ngbr_rc);
+			if (pngbr_rc == NULL)
+			    pngbr_rc = G_malloc(sizeof(struct rc));
+			*pngbr_rc = ngbr_rc;
+
+			/* already checked ? */
+			if (pavl_insert(rc_check_tree, pngbr_rc) == NULL) {
+			    pngbr_rc = NULL;
 
 			    Segment_get(&globals->rid_seg, (void *) &rid,
 					ngbr_rc.row, ngbr_rc.col);
@@ -1090,7 +1112,9 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
 	} while (rclist_drop(&rlist, &next));
 
 	/* clean up */
-	rbtree_destroy(rc_check_tree);
+	if (pngbr_rc)
+	    G_free(pngbr_rc);
+	pavl_destroy(rc_check_tree, free_item);
 	rclist_destroy(&rlist);
     }
     
@@ -1488,9 +1512,9 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
     }
     else if (globals->min_reg_size > 3) {
 	/* rs->id must be set */
-	struct RB_TREE *rc_check_tree;	/* cells already checked */
+	struct pavl_table *rc_check_tree;	/* cells already checked */
 	int n, rid;
-	struct rc ngbr_rc, next;
+	struct rc ngbr_rc, *pngbr_rc, next;
 	struct rclist rilist;
 	int neighbors[8][2];
 	int no_check;
@@ -1498,10 +1522,13 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
 	/* go through region, spreading outwards from head */
 	rclist_init(&rilist);
 
-	rc_check_tree = rbtree_create(compare_rc, sizeof(struct rc));
 	ngbr_rc.row = row;
 	ngbr_rc.col = col;
-	rbtree_insert(rc_check_tree, &ngbr_rc);
+	pngbr_rc = G_malloc(sizeof(struct rc));
+	*pngbr_rc = ngbr_rc;
+	rc_check_tree = pavl_create(compare_rc, NULL);
+	pavl_insert(rc_check_tree, pngbr_rc);
+	pngbr_rc = NULL;
 
 	next.row = row;
 	next.col = col;
@@ -1525,11 +1552,13 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
 		if (!no_check) {
 		    if ((FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col)) == 0) {
 		    
-			/* already checked ? */
-			if (!rbtree_find(rc_check_tree, &ngbr_rc)) {
+			if (pngbr_rc == NULL)
+			    pngbr_rc = G_malloc(sizeof(struct rc));
+			*pngbr_rc = ngbr_rc;
 
-			    /* not yet checked, don't check it again */
-			    rbtree_insert(rc_check_tree, &ngbr_rc);
+			/* already checked ? */
+			if (pavl_insert(rc_check_tree, pngbr_rc) == NULL) {
+			    pngbr_rc = NULL;
 
 			    Segment_get(&globals->rid_seg, (void *) &rid,
 					ngbr_rc.row, ngbr_rc.col);
@@ -1549,7 +1578,9 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
 	} while (rclist_drop(&rilist, &next));
 
 	/* clean up */
-	rbtree_destroy(rc_check_tree);
+	if (pngbr_rc)
+	    G_free(pngbr_rc);
+	pavl_destroy(rc_check_tree, free_item);
 	rclist_destroy(&rilist);
 
 	ret = 3;
