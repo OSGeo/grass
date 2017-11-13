@@ -190,15 +190,6 @@ class PreferencesBaseDialog(wx.Dialog):
                     subkey='lc_all',
                     value=None)
                 lang = None
-            if lang == 'en':
-                # GRASS doesn't ship EN translation, default texts have to be
-                # used instead
-                self.settings.Set(
-                    group='language',
-                    key='locale',
-                    subkey='lc_all',
-                    value='C')
-                lang = 'C'
             self.settings.SaveToFile()
             Debug.msg(
                 1, "Settings saved to file '%s'" %
@@ -570,6 +561,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                                 choices=locales, name="GetStringSelection")
         if loc in locales:
             elementList.SetStringSelection(loc)
+        # Keep this check, as in older wx files C value instead of en might be present
         if loc == 'C':
             elementList.SetStringSelection('en')
         if not loc:
