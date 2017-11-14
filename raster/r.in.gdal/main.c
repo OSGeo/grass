@@ -26,10 +26,22 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/imagery.h>
+
+/* for GDAL's GIntBig on WIN32 */
+/* must be before including gprojects.h
+ * this will be solved in GDAl 2.3 */
+#include "cpl_config.h"
+/* HAVE_LONG_LONG_INT comes from GRASS
+ * HAVE_LONG_LONG comes from GDAL */
+#if defined HAVE_LONG_LONG_INT && !defined HAVE_LONG_LONG
+#define HAVE_LONG_LONG
+#endif
+
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
 #include <gdal.h>
+#include "cpl_conv.h"
 
 #undef MIN
 #undef MAX
@@ -341,13 +353,8 @@ int main(int argc, char *argv[])
 
     /* default GDAL memory cache size appears to be only 40 MiB, slowing down r.in.gdal */
     if (parm.memory->answer && *parm.memory->answer) {
-#if GDAL_VERSION_NUM >= 1800 && !defined _WIN32
-           GDALSetCacheMax64((GIntBig)atol(parm.memory->answer) * 1024 * 1024);
-           G_verbose_message(_("Using memory cache size: %.1f MiB"), GDALGetCacheMax64()/1024.0/1024.0);
-#else
-           GDALSetCacheMax(atol(parm.memory->answer) * 1024 * 1024);
-           G_verbose_message(_("Using memory cache size: %.1f MiB"), GDALGetCacheMax()/1024.0/1024.0);
-#endif
+	G_verbose_message(_("Using memory cache size: %s MiB"), parm.memory->answer);
+	CPLSetConfigOption("GDAL_CACHEMAX", parm.memory->answer);
     }
 
     /* -------------------------------------------------------------------- */
