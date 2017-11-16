@@ -18,6 +18,22 @@ two formats, because <b>some modules</b> working correctly with GRASS native
 data, <b>can produce wrong results</b> with input vector maps created
 by <em>v.external</em>.
 
+<p>
+<b>Limitations:</b>
+<p>
+Due to these data model differences <em>v.external</em> does not work
+with all data formats. In general, for all formats that do not have a
+key column (e.g. SHAPE file), attributes are not accessible, and attributes
+would get lost when modifying the geometries. Therefore it is generally
+not safe to link vector data with <em>v.external</em>. In many cases it
+does not make sense to use <em>v.external</em> linked data with simple
+features, instead vector data should be imported with <em>v.import</em>
+or <em>v.in.ogr</em> to get true topology support. Importantly, point
+cloud data which do not have topology, can be linked with <em>v.external</em>
+as long as there are no attributes attached to these point cloud data, or
+if the format of the point cloud data has a key column that allows to link
+vector geometries to attributes.
+
 <p>See <em><a href="v.db.connect.html">v.db.connect</a></em> for an
 example of maintaining attributes in external DBMS in also writable
 mode.
