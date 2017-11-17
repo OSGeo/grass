@@ -181,7 +181,7 @@ static void make_h_weights(void)
 	/*
 	double x0 = Rast_easting_to_col(dx - f_x_radius, &src_w);
 	double x1 = Rast_easting_to_col(dx + f_x_radius, &src_w);
-	 */
+	*/
 	double x0 = (dx - f_x_radius - src_w.west) / src_w.ew_res;
 	double x1 = (dx + f_x_radius - src_w.west) / src_w.ew_res;
 	int col0 = (int)floor(x0);
@@ -353,7 +353,12 @@ static void filter(void)
 
 	for (i = num_rows; i < rows; i++) {
 	    G_debug(5, "read: %p = %d", bufs[i], row0 + i);
-	    Rast_get_d_row(infile, inbuf, row0 + i);
+	    /* enlarging the source window to the North and South is 
+	     * not possible for global maps in ll */
+	    if (row0 + i >= 0 && row0 + i < src_w.rows)
+		Rast_get_d_row(infile, inbuf, row0 + i);
+	    else
+		Rast_set_d_null_value(inbuf, src_w.cols);
 	    h_filter(bufs[i], inbuf);
 	}
 
@@ -521,6 +526,15 @@ int main(int argc, char *argv[])
 	*/
 	int c0 = (int)floor((x0 - f_x_radius - src_w.west) / src_w.ew_res - 0.1);
 	int c1 = (int)ceil((x1 + f_x_radius - src_w.west) / src_w.ew_res + 0.1);
+
+	if (G_projection() == PROJECTION_LL) {
+	    while (src_w.north + src_w.ns_res * (-r0) > 90 + src_w.ns_res / 2.0) {
+		r0++;
+	    }
+	    while (src_w.south - src_w.ns_res * (r1 - src_w.rows) < -90 - src_w.ns_res / 2.0) {
+		r1--;
+	    }
+	}
 
 	src_w.south -= src_w.ns_res * (r1 - src_w.rows);
 	src_w.north += src_w.ns_res * (-r0);
