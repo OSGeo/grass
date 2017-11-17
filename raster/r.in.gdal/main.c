@@ -26,26 +26,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/imagery.h>
-
-/* GDAL < 2.3 does not define HAVE_LONG_LONG when compiled with 
- * Visual Studio as for OSGeo4W, even though long long is available,
- * and GIntBig falls back to long which is on Windows always 4 bytes.
- * This patch ensures that GIntBig is defined as long long (8 bytes)
- * if GDAL is compiled with Visual Studio and GRASS is compiled with 
- * MinGW. This patch must be applied before other GDAL/OGR headers are
- * included, as done by gprojects.h and vector.h */
-#if defined(__MINGW32__)
-#  include <gdal_version.h>
-#  if GDAL_VERSION_NUM < 2030000
-#    include <cpl_config.h>
-     /* HAVE_LONG_LONG_INT comes from GRASS
-      * HAVE_LONG_LONG comes from GDAL */
-#    if defined HAVE_LONG_LONG_INT && !defined HAVE_LONG_LONG
-#      define HAVE_LONG_LONG 1
-#    endif
-#  endif
-#endif
-
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
