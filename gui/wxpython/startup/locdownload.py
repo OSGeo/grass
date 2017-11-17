@@ -22,6 +22,7 @@ import os
 import sys
 import tempfile
 import shutil
+import time
 
 try:
     from urllib2 import HTTPError, URLError
@@ -83,6 +84,16 @@ class DownloadError(Exception):
     """Error happened during download or when processing the file"""
     pass
 
+class RedirectText(object):
+    def __init__(self, window):
+        self.out = window
+ 
+    def write(self, string):
+        try:
+            wx.CallAfter(self.out.SetLabel, string)
+        except:
+            # window closed -> PyDeadObjectError
+            pass
 
 # copy from g.extension, potentially move to library
 def move_extracted_files(extract_dir, target_dir, files):
@@ -155,7 +166,19 @@ def extract_tar(name, directory, tmpdir):
 
 extract_tar.supported_formats = ['tar.gz', 'gz', 'bz2', 'tar', 'gzip', 'targz']
 
-
+# based on https://blog.shichao.io/2012/10/04/progress_speed_indicator_for_urlretrieve_in_python.html
+def reporthook(count, block_size, total_size):
+    global start_time
+    if count == 0:
+        start_time = time.time()
+        return
+    duration = time.time() - start_time
+    progress_size = int(count * block_size)
+    speed = int(progress_size / (1024 * duration))
+    percent = int(count * block_size * 100 / total_size)
+    sys.stdout.write("Download in progress ...\n%d%%, %d MB, %d KB/s, %d seconds passed" %
+                    (percent, progress_size / (1024 * 1024), speed, duration))
+    
 # based on g.extension, potentially move to library
 def download_end_extract(source):
     """Download a file (archive) from URL and uncompress it"""
@@ -163,7 +186,7 @@ def download_end_extract(source):
     directory = os.path.join(tmpdir, 'location')
     if source.endswith('.zip'):
         archive_name = os.path.join(tmpdir, 'location.zip')
-        filename, headers = urlretrieve(source, archive_name)
+        filename, headers = urlretrieve(source, archive_name, reporthook)
         if headers.get('content-type', '') != 'application/zip':
             raise DownloadError(
                 _("Download of <{url}> failed"
@@ -177,7 +200,7 @@ def download_end_extract(source):
         else:
             ext = source.rsplit('.', 1)[1]
         archive_name = os.path.join(tmpdir, 'extension.' + ext)
-        urlretrieve(source, archive_name)
+        urlretrieve(source, archive_name, reporthook)
         # TODO: error handling for urlretrieve
         extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
     else:
@@ -258,7 +281,7 @@ class LocationDownloadPanel(wx.Panel):
 
         self.label = wx.StaticText(
             parent=self,
-            label=_("Select from sample location at grass.osgeo.org"))
+            label=_("Select sample location to download:"))
 
         choices = []
         for item in self.locations:
@@ -276,7 +299,8 @@ class LocationDownloadPanel(wx.Panel):
 
         # TODO: messages copied from gis_set.py, need this as API?
         self.message = wx.StaticText(parent=self, size=(-1, 50))
-
+        sys.stdout = RedirectText(self.message)
+        
         # It is not clear if all wx versions supports color, so try-except.
         # The color itself may not be correct for all platforms/system settings
         # but in http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
@@ -300,16 +324,16 @@ class LocationDownloadPanel(wx.Panel):
         self.sizer = vertical
 
         vertical.Add(self.label, proportion=0,
-                     flag=wx.EXPAND | wx.ALL, border=10)
+                     flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=10)
         vertical.Add(self.choice, proportion=0,
-                     flag=wx.EXPAND | wx.ALL, border=10)
+                     flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=10)
 
         button_sizer = wx.BoxSizer(wx.HORIZONTAL)
         button_sizer.AddStretchSpacer()
         button_sizer.Add(self.download_button, proportion=0)
 
         vertical.Add(button_sizer, proportion=0,
-                     flag=wx.EXPAND | wx.ALL, border=10)
+                     flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT | wx.ALIGN_RIGHT, border=10)
         vertical.AddStretchSpacer()
         vertical.Add(self.message, proportion=0,
                      flag=wx.ALIGN_CENTER_VERTICAL |
@@ -350,7 +374,7 @@ class LocationDownloadPanel(wx.Panel):
                 self._warning(_("Download completed"))
 
         self._download_in_progress = True
-        self._warning(_("Download in progress"))
+        self._warning(_("Download in progress..."))
         self.thread.Run(callable=download_location,
                         url=url, name=dirname, database=self.database,
                         ondone=download_complete_callback)
@@ -427,16 +451,18 @@ class LocationDownloadDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent=parent, title=title)
         self.panel = LocationDownloadPanel(parent=self, database=database)
         close_button = Button(self, id=wx.ID_CLOSE)
+        # TODO: terminate download process
         close_button.Bind(wx.EVT_BUTTON, lambda event: self.Close())
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.panel)
+        sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
 
         button_sizer = wx.StdDialogButtonSizer()
-        button_sizer.Add(close_button, flag=wx.EXPAND)
+        button_sizer.Add(close_button)
         button_sizer.Realize()
 
-        sizer.Add(button_sizer, flag=wx.EXPAND | wx.ALL, border=10)
+        sizer.Add(button_sizer, proportion=0,
+                  flag=wx.ALIGN_RIGHT | wx.BOTTOM, border=10)
         self.SetSizer(sizer)
         sizer.Fit(self)
 
