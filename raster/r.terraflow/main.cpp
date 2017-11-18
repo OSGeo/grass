@@ -125,7 +125,7 @@ parse_args(int argc, char *argv[]) {
   d8cut->label = _("Routing using SFD (D8) direction");
   d8cut->description = 
     _("If flow accumulation is larger than this value it is routed using "
-      "SFD (D8) direction (meaningfull only for MFD flow). "
+      "SFD (D8) direction (meaningful only for MFD flow). "
       "If no answer is given it defaults to infinity.");
 
   /* main memory */

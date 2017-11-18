@@ -205,7 +205,7 @@ G_math_les *G_math_alloc_les_param(int rows, int cols, int type, int parts)
 	les->rows = rows;
 	les->cols = cols;
 	les->symm = 0;
-	les->bandwith = cols;
+	les->bandwidth = cols;
 	if (rows == cols)
 		les->quad = 1;
 	else
@@ -268,7 +268,7 @@ G_math_f_les *G_math_alloc_f_les_param(int rows, int cols, int type, int parts)
 	les->rows = rows;
 	les->cols = cols;
 	les->symm = 0;
-	les->bandwith = cols;
+	les->bandwidth = cols;
 	if (rows == cols)
 		les->quad = 1;
 	else

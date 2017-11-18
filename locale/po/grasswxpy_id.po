@@ -9908,7 +9908,7 @@ msgstr "Lebar garis"
 
 #: ../gui/wxpython/vnet/dialogs.py:1282 ../gui/wxpython/iscatt/dialogs.py:372
 #, fuzzy
-msgid "Snapping treshold in pixels:"
+msgid "Snapping threshold in pixels:"
 msgstr "Batas snapping"
 
 #: ../gui/wxpython/vnet/dialogs.py:1283
