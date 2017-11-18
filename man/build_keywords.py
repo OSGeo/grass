@@ -91,16 +91,16 @@ for key in sortedKeys:
 keywordsfile.write("</dl>\n")
 # create toc
 toc = '<div class="toc">\n<h4 class="toc">Table of contents</h4><p class="toc">'
-test_lenght = 0
+test_length = 0
 all_keys = len(char_list.keys())
 for k in sorted(char_list.keys()):
-    test_lenght += 1
+    test_length += 1
 #    toc += '<li><a href="#%s" class="toc">%s</a></li>' % (char_list[k], k)
-    if test_lenght % 4 == 0 and not test_lenght == all_keys:
+    if test_length % 4 == 0 and not test_length == all_keys:
         toc += '\n<a href="#%s" class="toc">%s</a>, ' % (char_list[k], k)
-    elif test_lenght % 4 == 0 and test_lenght == all_keys:
+    elif test_length % 4 == 0 and test_length == all_keys:
         toc += '\n<a href="#%s" class="toc">%s</a>' % (char_list[k], k)
-    elif test_lenght == all_keys:
+    elif test_length == all_keys:
         toc += '<a href="#%s" class="toc">%s</a>' % (char_list[k], k)
     else:
         toc += '<a href="#%s" class="toc">%s</a>, ' % (char_list[k], k)

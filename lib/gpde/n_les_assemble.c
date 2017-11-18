@@ -761,7 +761,7 @@ N_les *N_assemble_les_2d_param(int les_type, N_geom_data * geom,
  * \brief Integrate Dirichlet or Transmission boundary conditions into the les (2s)
  *
  * Dirichlet and Transmission boundary conditions will be integrated into
- * the provided linear equation system. This is meaningfull if
+ * the provided linear equation system. This is meaningful if
  * the les was created with #N_assemble_les_2d_dirichlet, because in
  * this case Dirichlet boundary conditions are not automatically included.
  *
@@ -1214,7 +1214,7 @@ N_les *N_assemble_les_3d_param(int les_type, N_geom_data * geom,
  * \brief Integrate Dirichlet or Transmission boundary conditions into the les (3d)
  *
  * Dirichlet and Transmission boundary conditions will be integrated into
- * the provided linear equation system. This is meaningfull if
+ * the provided linear equation system. This is meaningful if
  * the les was created with #N_assemble_les_2d_dirichlet, because in
  * this case Dirichlet boundary conditions are not automatically included.
  *
