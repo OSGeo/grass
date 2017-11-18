@@ -765,7 +765,7 @@ class PolygonDrawer:
         self.line.set_visible(vis)  # don't use the pol visibility state
 
     def get_ind_under_point(self, event):
-        'get the index of the vertex under point if within treshold'
+        'get the index of the vertex under point if within threshold'
 
         # display coords
         xy = np.asarray(self.pol.xy)
