@@ -225,7 +225,7 @@ private:
   
   //the buffers can be depleted to fill the internal pq;
   //keep an array which counts, for each stream, how many elements 
-  //have been deleted (implicitely from the begining of stream)
+  //have been deleted (implicitely from the beginning of stream)
   long* deleted;
 
   //nb of items in each substream; this can be found out by calling
@@ -376,7 +376,7 @@ public:
   // several buffers pointing to the same stream.
 
   // stream is assumed sorted; bos = how many elements are deleted
-  // from the begining of stream;
+  // from the beginning of stream;
      
   // return the number of items actually inserted 
   long insert(AMI_STREAM<T>* str, 
@@ -1132,7 +1132,7 @@ long em_buffer<T,Key>::insert(T* a, long n) {
    stream.
    
    stream is assume stream is sorted; bos = how many elements must be
-   skipped (were deleted) from the begining fo stream;
+   skipped (were deleted) from the beginning fo stream;
    
    return the number of items actually inserted */
 template<class T, class Key>

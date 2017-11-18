@@ -71,7 +71,7 @@ char *multialloc(size_t s,	/* individual array element size */
 	    *s1 = (t += sizeof(char **) * *(q + 1));
 	    s1++;
 	}
-	r = (char **)r[0];	/* step through to begining of next
+	r = (char **)r[0];	/* step through to beginning of next
 				 * dimension array */
     }
     max *= (*q);		/* max is total number of elements in the

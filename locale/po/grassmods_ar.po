@@ -5995,7 +5995,7 @@ msgstr "الخريطة الراسترية لنقاط البدء"
 #: ../vector/v.net.steiner/main.c:598
 #, c-format
 msgid ""
-"Spanning tree costs on complet graph = %f\n"
+"Spanning tree costs on complete graph = %f\n"
 "(may be higher than resulting Steiner tree costs!!!)"
 msgstr ""
 

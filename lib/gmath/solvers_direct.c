@@ -120,17 +120,17 @@ int G_math_solver_lu(double **A, double *x, double *b, int rows)
  * \param A double **
  * \param x double *
  * \param b double *
- * \param bandwith int -- the bandwith of the band matrix, if unsure set to rows
+ * \param bandwidth int -- the bandwidth of the band matrix, if unsure set to rows
  * \param rows int
  * \return int -- 1 success
  * */
-int G_math_solver_cholesky(double **A, double *x, double *b, int bandwith,
+int G_math_solver_cholesky(double **A, double *x, double *b, int bandwidth,
 			   int rows)
 {
 
     G_message(_("Starting cholesky decomposition solver"));
 
-    if (G_math_cholesky_decomposition(A, rows, bandwith) != 1) {
+    if (G_math_cholesky_decomposition(A, rows, bandwidth) != 1) {
 	G_warning(_("Unable to solve the linear equation system"));
 	return -2;
     }
@@ -206,18 +206,18 @@ void G_math_lu_decomposition(double **A, double *b, int rows)
 
 /*!
  * \brief cholesky decomposition for symmetric, positiv definite matrices
- *        with bandwith optimization
+ *        with bandwidth optimization
  *
  * The provided matrix will be overwritten with the lower and 
  * upper triangle matrix A = LL^T 
  *
  * \param A double **
  * \param rows int
- * \param bandwith int -- the bandwith of the matrix (0 > bandwith <= cols)
+ * \param bandwidth int -- the bandwidth of the matrix (0 > bandwidth <= cols)
  * \return void
  *
  * */
-int G_math_cholesky_decomposition(double **A, int rows, int bandwith)
+int G_math_cholesky_decomposition(double **A, int rows, int bandwidth)
 {
 
     int i = 0, j = 0, k = 0;
@@ -228,10 +228,10 @@ int G_math_cholesky_decomposition(double **A, int rows, int bandwith)
 
     int colsize;
 
-    if (bandwith <= 0)
-	bandwith = rows;
+    if (bandwidth <= 0)
+	bandwidth = rows;
 
-    colsize = bandwith;
+    colsize = bandwidth;
 
     for (k = 0; k < rows; k++) {
 #pragma omp parallel for schedule (static) private(i, j, sum_2) shared(A, k) reduction(+:sum_1)
@@ -246,11 +246,11 @@ int G_math_cholesky_decomposition(double **A, int rows, int bandwith)
 	A[k][k] = sqrt(A[k][k] - sum_1);
 	sum_1 = 0.0;
 
-	if ((k + bandwith) > rows) {
+	if ((k + bandwidth) > rows) {
 	    colsize = rows;
 	}
 	else {
-	    colsize = k + bandwith;
+	    colsize = k + bandwidth;
 	}
 
 #pragma omp parallel for schedule (static) private(i, j, sum_2) shared(A, k, sum_1, colsize)
