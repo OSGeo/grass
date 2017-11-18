@@ -999,8 +999,8 @@ static void buffer_lines(struct line_pnts *area_outer, struct line_pnts **area_i
    \param caps add caps at line ends (0 - butt, not 0 - caps)
    \param tol maximum distance between theoretical arc and output segments
    \param[out] oPoints output polygon outer border (ccw order)
-   \param[out] inner_count number of holes
    \param[out] iPoints array of output polygon's holes (cw order)
+   \param[out] inner_count number of holes
  */
 void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
 		       double dalpha, int round, int caps, double tol,
