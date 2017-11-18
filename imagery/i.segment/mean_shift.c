@@ -193,7 +193,7 @@ int mean_shift(struct globals *globals)
     }
     if (do_adaptive) {
 	/* bandwidth is now standard deviation for adaptive bandwidth 
-	 * using a gaussian function with range bandwith used as 
+	 * using a gaussian function with range bandwidth used as 
 	 * bandwidth for the gaussian function
 	 * the aim is to produce similar but improved results with 
 	 * adaptive bandwidth
@@ -289,7 +289,7 @@ int mean_shift(struct globals *globals)
 		hspecad2 = hspec2;
 		
 		if (do_adaptive) {
-		    /* adapt initial range bandwith */
+		    /* adapt initial range bandwidth */
 		    
 		    ka2 = hspec2; 	/* OTB: conductance parameter */
 		    

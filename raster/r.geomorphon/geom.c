@@ -184,7 +184,7 @@ int radial2cartesian(PATTERN * pattern)
 {
     /* this function converts radial coordinates of geomorphon
      * (assuming center as 0,0) to cartezian coordinates
-     * with the begining in the central cell of geomorphon */
+     * with the beginning in the central cell of geomorphon */
     int i;
 
     for (i = 0; i < 8; ++i)

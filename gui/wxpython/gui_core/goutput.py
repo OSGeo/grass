@@ -572,7 +572,7 @@ class GStc(stc.StyledTextCtrl):
         self.SetUndoCollection(True)
         self.SetReadOnly(True)
 
-        # remember position of line begining (used for '\r')
+        # remember position of line beginning (used for '\r')
         self.linePos = -1
 
         #

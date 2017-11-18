@@ -8845,7 +8845,7 @@ msgid "Point width:"
 msgstr "Szerokość punktu:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1282 ../gui/wxpython/iscatt/dialogs.py:372
-msgid "Snapping treshold in pixels:"
+msgid "Snapping threshold in pixels:"
 msgstr "Próg przyciągania w pikselach:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1283

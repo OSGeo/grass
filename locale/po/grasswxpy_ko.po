@@ -9165,7 +9165,7 @@ msgid "Selected area color:"
 msgstr ""
 
 #: ../gui/wxpython/iscatt/dialogs.py:372 ../gui/wxpython/vnet/dialogs.py:1282
-msgid "Snapping treshold in pixels:"
+msgid "Snapping threshold in pixels:"
 msgstr ""
 
 #: ../gui/wxpython/iscatt/dialogs.py:373
