@@ -88,7 +88,7 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col)
 	/* original paper version */
 	/*      zenith_angle=PI2-zenith_angle;
 	   nadir_angle=PI2+nadir_angle;
-	   if(fabs(zenith_angle-nadir_angle) > flat_treshold) {
+	   if(fabs(zenith_angle-nadir_angle) > flat_threshold) {
 	   if((nadir_angle-zenith_angle) > 0) {
 	   patterns->pattern[i]=1;
 	   patterns->elevation[i]=nadir_height;

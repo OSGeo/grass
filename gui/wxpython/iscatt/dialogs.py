@@ -369,7 +369,7 @@ class SettingsDialog(wx.Dialog):
                     col[0], col[1], col[2], 255))
 
         self.sizeSetts = {
-            "snap_tresh": ["selection", _("Snapping treshold in pixels:")],
+            "snap_tresh": ["selection", _("Snapping threshold in pixels:")],
             "sel_area_opacty": ["selection", _("Selected area opacity:")]
         }
 

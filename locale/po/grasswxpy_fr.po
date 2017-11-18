@@ -8949,7 +8949,7 @@ msgid "Point width:"
 msgstr "Épaisseur du point :"
 
 #: ../gui/wxpython/vnet/dialogs.py:1282 ../gui/wxpython/iscatt/dialogs.py:372
-msgid "Snapping treshold in pixels:"
+msgid "Snapping threshold in pixels:"
 msgstr "Seuil de magnétisme en pixels :"
 
 #: ../gui/wxpython/vnet/dialogs.py:1283
@@ -18044,7 +18044,7 @@ msgstr "Version SVN :"
 msgid "Build Platform"
 msgstr "Plateforme"
 
-msgid "Row lenght of sampling frame"
+msgid "Row length of sampling frame"
 msgstr "Nombre de lignes du cadre d'échantillonage"
 
 #~ msgid "Creates a raster map from LAS LiDAR points using univariate statistics."

@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 	*opt_output[io_size],
 	*par_search_radius,
 	*par_skip_radius,
-	*par_flat_treshold,
+	*par_flat_threshold,
 	*par_flat_distance,
 	*par_multi_prefix, *par_multi_step, *par_multi_start;
     struct Flag *flag_units, *flag_extended;
@@ -133,12 +133,12 @@ int main(int argc, char **argv)
 	par_skip_radius->required = YES;
 	par_skip_radius->description = _("Inner search radius");
 
-	par_flat_treshold = G_define_option();
-	par_flat_treshold->key = "flat";
-	par_flat_treshold->type = TYPE_DOUBLE;
-	par_flat_treshold->answer = "1";
-	par_flat_treshold->required = YES;
-	par_flat_treshold->description = _("Flatenss treshold (degrees)");
+	par_flat_threshold = G_define_option();
+	par_flat_threshold->key = "flat";
+	par_flat_threshold->type = TYPE_DOUBLE;
+	par_flat_threshold->answer = "1";
+	par_flat_threshold->required = YES;
+	par_flat_threshold->description = _("Flatenss threshold (degrees)");
 
 	par_flat_distance = G_define_option();
 	par_flat_distance->key = "dist";
@@ -239,9 +239,9 @@ int main(int argc, char **argv)
 	skip_distance = (meters) ? skip_radius : ns_resolution * skip_cells;
 
 	/* flatness parameters */
-	flat_threshold = atof(par_flat_treshold->answer);
+	flat_threshold = atof(par_flat_threshold->answer);
 	if (flat_threshold <= 0.)
-	    G_fatal_error(_("Flatenss treshold must be grater than 0"));
+	    G_fatal_error(_("Flatenss threshold must be grater than 0"));
 	flat_threshold = DEGREE2RAD(flat_threshold);
 
 	flat_distance = atof(par_flat_distance->answer);

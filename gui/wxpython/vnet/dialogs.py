@@ -1279,7 +1279,7 @@ class SettingsDialog(wx.Dialog):
             "line_width": ["res_style", _("Line width:")],
             "point_size": ["point_symbol", _("Point size:")],
             "point_width": ["point_symbol", _("Point width:")],
-            "snap_tresh": ["other", _("Snapping treshold in pixels:")],
+            "snap_tresh": ["other", _("Snapping threshold in pixels:")],
             "max_hist_steps": ["other", _("Maximum number of results in history:")]
         }
 

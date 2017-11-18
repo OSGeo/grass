@@ -150,7 +150,7 @@ CELL cluster_bands(struct globals *globals)
 	    hspec2ad = hspec2;
 
 	    if (globals->ms_adaptive) {
-		/* adapt initial range bandwith */
+		/* adapt initial range bandwidth */
 
 		mwrow1 = row - radiusc;
 		mwrow2 = mwrow1 + mwnrows;

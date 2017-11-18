@@ -1397,7 +1397,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             dlg.Destroy()
 
     def OnBeginDragLeft(self, x, y, keys=0, attachment=0):
-        """Drag shape (begining)"""
+        """Drag shape (beginning)"""
         self.frame.ModelChanged()
         if self._previousHandler:
             self._previousHandler.OnBeginDragLeft(x, y, keys, attachment)
