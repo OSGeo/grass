@@ -44,8 +44,7 @@
 #include "empq_impl.h"
 
 
-
-#define EMPQAD_DEBUG if(1)
+#define EMPQAD_DEBUG if(G_verbose() > G_verbose_std())
 
 
 enum regim_type {
