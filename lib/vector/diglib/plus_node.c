@@ -45,7 +45,7 @@ int
 dig_node_add_line(struct Plus_head *plus, int nodeid, int lineid,
 		  const struct line_pnts *points, int type)
 {
-    register int i, j, nlines;
+    register int i;
     float angle;
     int ret;
     struct P_node *node;
@@ -53,7 +53,6 @@ dig_node_add_line(struct Plus_head *plus, int nodeid, int lineid,
     G_debug(3, "dig_node_add_line(): node = %d line = %d", nodeid, lineid);
 
     node = plus->Node[nodeid];
-    nlines = node->n_lines;
 
     /* reallocate memory */
     ret = dig_node_alloc_line(node, 1);
@@ -69,7 +68,7 @@ dig_node_add_line(struct Plus_head *plus, int nodeid, int lineid,
     }
     G_debug(3, "    angle = %f", angle);
 
-    i = nlines;
+    i = node->n_lines;
     while (i > 0) {
 	if (angle >= node->angles[i - 1])
 	    break;
