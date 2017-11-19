@@ -17,6 +17,7 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <grass/vector.h>
+#include <grass/glocale.h>
 
 static int add_line(struct Plus_head *plus, int lineid, int type, const struct line_pnts *Points,
 		    const struct bound_box *box, off_t offset)
@@ -217,7 +218,7 @@ dig_restore_line(struct Plus_head *plus, int lineid,
  */
 int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
 {
-    int i, mv;
+    int i;
     plus_t N1 = 0, N2 = 0;
     struct P_line *Line;
     struct P_node *Node;
@@ -253,16 +254,20 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
 
     Node = plus->Node[N1];
 
-    mv = 0;
-    for (i = 0; i < Node->n_lines; i++) {
-	if (mv) {
-	    Node->lines[i - 1] = Node->lines[i];
-	    Node->angles[i - 1] = Node->angles[i];
-	}
-	else {
-	    if (Node->lines[i] == line)
-		mv = 1;
-	}
+    i = 0;
+    while (i < Node->n_lines && Node->lines[i] != line)
+	i++;
+
+    if (i == Node->n_lines) {
+	G_fatal_error(_("Attempt to delete not registered line %d from node %d"),
+		      line, N1);
+    }
+
+    i++;
+    while (i < Node->n_lines) {
+	Node->lines[i - 1] = Node->lines[i];
+	Node->angles[i - 1] = Node->angles[i];
+	i++;
     }
     Node->n_lines--;
 
@@ -289,16 +294,20 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
     }
 
     Node = plus->Node[N2];
-    mv = 0;
-    for (i = 0; i < Node->n_lines; i++) {
-	if (mv) {
-	    Node->lines[i - 1] = Node->lines[i];
-	    Node->angles[i - 1] = Node->angles[i];
-	}
-	else {
-	    if (Node->lines[i] == -line)
-		mv = 1;
-	}
+    i = 0;
+    while (i < Node->n_lines && Node->lines[i] != -line)
+	i++;
+
+    if (i == Node->n_lines) {
+	G_fatal_error(_("Attempt to delete not registered line %d from node %d"),
+		      -line, N2);
+    }
+
+    i++;
+    while (i < Node->n_lines) {
+	Node->lines[i - 1] = Node->lines[i];
+	Node->angles[i - 1] = Node->angles[i];
+	i++;
     }
     Node->n_lines--;
 
