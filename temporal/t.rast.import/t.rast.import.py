@@ -20,6 +20,7 @@
 #% keyword: import
 #% keyword: raster
 #% keyword: time
+#% keyword: create location
 #%end
 
 #%option G_OPT_F_INPUT
