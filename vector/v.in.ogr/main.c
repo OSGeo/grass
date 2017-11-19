@@ -169,6 +169,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("import"));
     G_add_keyword("OGR");
+    G_add_keyword(_("topology"));
+    G_add_keyword(_("geometry"));
+    G_add_keyword(_("snapping"));
+    G_add_keyword(_("create location"));
     module->description = _("Imports vector data into a GRASS vector map using OGR library.");
 
     param.dsn = G_define_option();
