@@ -91,6 +91,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
+    G_add_keyword(_("create location"));
     module->description =
 	_("Imports raster data into a GRASS raster map using GDAL library.");
 
