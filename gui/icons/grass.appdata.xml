@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2014 Richard Hughes <richard@hughsie.com> -->
 <component type="desktop">
-  <id>grass.desktop</id>
+  <id>org.osgeo.grass</id>
+  <name>GRASS GIS</name>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
+  <translation type="gettext">grass</translation>
   <summary>GRASS GIS, the Open Source Geographic Information System</summary>
   <description>
     <p>
-    The Geographic Resources Analysis Support System 
-    (http://grass.osgeo.org/), commonly referred to as GRASS GIS, is 
-    an Open Source Geographic Information System providing powerful 
+    The Geographic Resources Analysis Support System, commonly
+    referred to as GRASS GIS, is an Open Source
+    Geographic Information System providing powerful 
     raster, vector and geospatial processing capabilities in a single 
     integrated software suite.
     </p>
@@ -47,7 +49,7 @@
       <caption/>
     </screenshot>
   </screenshots>
-  <url type="homepage">http://grass.osgeo.org/</url>
+  <url type="homepage">https://grass.osgeo.org/</url>
   <url type="translate">https://grass.osgeo.org/development/translations/</url>
   <url type="donation">https://grass.osgeo.org/donations/</url>
   <url type="bugtracker">https://grass.osgeo.org/development/bug-tracking/</url>
