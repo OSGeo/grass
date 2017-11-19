@@ -171,7 +171,7 @@ dig_build_area_with_line(struct Plus_head *plus, plus_t first_line, int side,
  *
  * Then for each line in area, update line (right,left) info.
  *
- * Neither islands nor centroids area filled.
+ * Neither islands nor centroids are filled.
  *
  * \param[in] plus pointer to Plus_head structure
  * \param[in] n_lines number of lines
@@ -340,7 +340,7 @@ int dig_area_del_isle(struct Plus_head *plus, int area, int isle)
  * \brief Delete area from Plus_head structure
  *
  *  This function deletes area from the topo structure and resets references
- *  to this area in lines, isles (within) to 0. 
+ *  to this area in boundaries, isles (within), and the centroid (if any) to 0.
  *  Possible new area is not created by this function, so that
  *  old boundaries participating in this area are left without area information
  *  even if form new area.
@@ -447,7 +447,7 @@ int dig_del_area(struct Plus_head *plus, int area)
 
 
 /*!
- * \brief Find number line of next angle to follow an line
+ * \brief Find line number of next angle to follow a line
  *
  * Assume that lines are sorted in increasing angle order and angles
  * of points and degenerated lines are set to -9 (ignored).
@@ -458,8 +458,8 @@ int dig_del_area(struct Plus_head *plus, int area)
  * \param[in] type line type (GV_LINE, GV_BOUNDARY or both)
  * \param[in] angle
  *
- * \return line number of next angle to follow an line (negative if connected by end node)
- *               (number of current line may be return if dangle - this is used in build)
+ * \return line number of next angle to follow a line (negative if connected by end node)
+ *               (number of current line may be returned if dangle - this is used in build)
  * \return 0 on error or not found
  */
 int
@@ -591,7 +591,7 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
 }
 
 /*!
- * \brief Checks if angles of adjacent lines differ.
+ * \brief Check if angles of adjacent lines differ.
  *
  * Negative line number for end point. Assume that lines are sorted
  * in increasing angle order and angles of points and degenerated
@@ -669,7 +669,7 @@ int dig_node_angle_check(struct Plus_head *plus, plus_t line, int type)
  * The order of input lines is expected to be counter clockwise.
  * Then for each line in isle, update line (right,left) info.
  *
- *  Area number the island is within is not filled.
+ * Area number the island is within is not filled.
  *
  * \param[in] plus pointer to Plus_head structure
  * \param[in] n_lines number of lines
