@@ -37,6 +37,78 @@
 
 #include "local_proto.h"
 
+#if HAVE_GEOS
+#include <float.h>
+
+/* A copy of ring2pts from v.buffer geos.c 
+ * It is a terrible approach to copy/pasta functions around,
+ * but all this GEOS stuff is just a temporary solution before native
+ * buffers are fixed. (Will happen at some point after next ten years
+ * or so as there's nothing more permanent than a temporary solution.)
+ * 2017-11-19
+ */
+static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
+{
+    int i, ncoords;
+    double x, y, z;
+    const GEOSCoordSequence *seq = NULL;
+
+    G_debug(3, "ring2pts()");
+
+    Vect_reset_line(Points);
+    if (!geom) {
+	G_warning(_("Invalid GEOS geometry!"));
+	return 0;
+    }
+    z = 0.0;
+    ncoords = GEOSGetNumCoordinates(geom);
+    if (!ncoords) {
+	G_warning(_("No coordinates in GEOS geometry (can be ok for negative distance)!"));
+	return 0;
+    }
+    seq = GEOSGeom_getCoordSeq(geom);
+    for (i = 0; i < ncoords; i++) {
+	GEOSCoordSeq_getX(seq, i, &x);
+	GEOSCoordSeq_getY(seq, i, &y);
+	if (x != x || x > DBL_MAX || x < -DBL_MAX)
+	    G_fatal_error(_("Invalid x coordinate %f"), x);
+	if (y != y || y > DBL_MAX || y < -DBL_MAX)
+	    G_fatal_error(_("Invalid y coordinate %f"), y);
+	Vect_append_point(Points, x, y, z);
+    }
+
+    return 1;
+}
+
+/* Helper for converting multipoligons to GRASS poligons */
+static int add_poly(const GEOSGeometry *OGeom, struct line_pnts *Buffer) {
+    const GEOSGeometry *geom2;
+    static struct line_pnts *gPoints;
+    int i, nrings;
+    
+    gPoints = Vect_new_line_struct();
+    
+    geom2 = GEOSGetExteriorRing(OGeom);
+    if (!ring2pts(geom2, gPoints)) {
+        G_fatal_error(_("Corrupt GEOS geometry"));
+    }
+    
+    Vect_append_points(Buffer, gPoints, GV_FORWARD);
+    Vect_reset_line(gPoints);
+    
+    nrings = GEOSGetNumInteriorRings(OGeom);
+    
+    for (i = 0; i < nrings; i++) {
+        geom2 = GEOSGetInteriorRingN(OGeom, i);
+        if (!ring2pts(geom2, gPoints)) {
+            G_fatal_error(_("Corrupt GEOS geometry"));
+        }
+        Vect_append_points(Buffer, gPoints, GV_FORWARD);
+        Vect_reset_line(gPoints);
+    }
+}
+#endif
+
 static int compdist(const void *, const void *);
 
 Result *resultset;
@@ -197,6 +269,16 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+    
+#if HAVE_GEOS
+#if (GEOS_VERSION_MAJOR < 3 || (GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR < 3))
+    G_fatal_error("This module requires GEOS >= 3.3");
+#endif
+    initGEOS(G_message, G_fatal_error);
+#else
+    G_fatal_error("GRASS native buffering functions are known to return incorrect results.\n"
+        "Till those errors are fixed, this module requires GRASS to be compiled with GEOS support.");
+#endif
 
     /* Start with simple input validation and then move to more complex ones */
     otype = Vect_option_to_types(type_opt);
@@ -404,8 +486,47 @@ int main(int argc, char *argv[])
 
     /* Create a buffer around profile line for point sampling 
        Tolerance is calculated in such way that buffer will have flat end and no cap. */
+    /* Native buffering is known to fail.
     Vect_line_buffer(Profil, bufsize, 1 - (bufsize * cos((2 * M_PI) / 2)),
                      Buffer);
+    */
+#ifdef HAVE_GEOS
+    /* Code lifted from v.buffer geos.c (with modifications) */
+    GEOSGeometry *IGeom;
+    GEOSGeometry *OGeom = NULL;
+    const GEOSGeometry *geom2 = NULL;
+    
+    IGeom = Vect_line_to_geos(Profil, GV_LINE, 0);
+    if (!IGeom) {
+        G_fatal_error(_("Failed to convert GRASS line to GEOS line"));
+    }
+    
+    GEOSBufferParams* geos_params = GEOSBufferParams_create();
+    GEOSBufferParams_setEndCapStyle(geos_params, GEOSBUF_CAP_FLAT);
+    OGeom = GEOSBufferWithParams(IGeom, geos_params, bufsize);
+    GEOSBufferParams_destroy(geos_params);
+    if (!OGeom) {
+        G_fatal_error(_("Buffering failed"));
+    }
+    
+    if (GEOSGeomTypeId(OGeom) == GEOS_MULTIPOLYGON) {
+        int ngeoms = GEOSGetNumGeometries(OGeom);
+        for (i = 0; i < ngeoms; i++) {
+            geom2 = GEOSGetGeometryN(OGeom, i);
+            add_poly(geom2, Buffer);
+        }
+    }
+    else {
+        add_poly(OGeom, Buffer);
+    }
+    
+    if (IGeom)
+        GEOSGeom_destroy(IGeom);
+    if (OGeom)
+        GEOSGeom_destroy(OGeom);
+    finishGEOS();
+#endif
+    
     Vect_cat_set(Cats, 1, 1);
 
     /* Should we store used buffer for later examination? */

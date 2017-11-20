@@ -36,13 +36,40 @@ output_coords = """Number|Distance|cat|feature_id|featurenam|class|st_alpha|st_n
 2|24.34|1029|999647|"Greshams Lake Dam"|"Dam"|"NC"|37|"Wake"|183|"078:34:31W"|"35:52:43N"|35.878484|-78.57528|""|""|""|""|77|"Wake Forest"
 """
 
+buf_points = """\
+626382.68026139|228917.44816672|1
+626643.91393428|228738.2879083|2
+626907.14939778|228529.10079092|3
+"""
+buf_output = """\
+Number,Distance,cat,dbl_1,dbl_2,int_1
+1,2102.114,3,626907.14939778,228529.10079092,3
+2,2854.300,2,626643.91393428,228738.2879083,2
+3,2960.822,1,626382.68026139,228917.44816672,1
+"""
 
 class TestProfiling(TestCase):
+    to_remove = []
+    points = 'test_v_profile_points'
     in_points = 'points_of_interest'
     in_map = 'roadsmajor'
     where = "cat='354'"
     prof_ponts = (647952, 236176, 647950, 236217)
     outfile = 'test_out.csv'
+    
+    @classmethod
+    def setUpClass(cls):
+        """Create vector map with points for sampling"""
+        cls.runModule('v.in.ascii', input='-', output=cls.points,
+                      stdin=buf_points)
+        cls.to_remove.append(cls.points)
+    
+    @classmethod
+    def tearDownClass(cls):
+        """Remove vector maps"""
+        if cls.to_remove:
+            cls.runModule('g.remove', flags='f', type='vector',
+                          name=','.join(cls.to_remove), verbose=True)
 
     def testParsing(self):
         """Test input parameter parsing"""
@@ -99,6 +126,13 @@ class TestProfiling(TestCase):
         vpro = SimpleModule('v.profile', input=self.in_points, coordinates=self.prof_ponts, buffer=200)
         vpro.run()
         self.assertLooksLike(reference=output_coords, actual=vpro.outputs.stdout)
+    
+    def testBuffering(self):
+        """Test against errors in buffering implementation"""
+        vpro = SimpleModule('v.profile', input=self.points, separator='comma', dp=3,
+            buffer=500, profile_map='roadsmajor@PERMANENT', profile_where='cat=193')
+        vpro.run()
+        
 
 
 if __name__ == '__main__':

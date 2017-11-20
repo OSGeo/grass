@@ -18,10 +18,18 @@ from a profile input map if it contains multiple vector features.
 
 <h2>NOTES</h2>
 
+<p>
 Currently the module can profile only points and lines (including 3D ones).
 Areas and other complex features are not supported. If in future users can
 provide reasonable examples how area sampling should work and why it is
 important, area (or any other feature type) sampling can be added.
+</p>
+<p>
+Due to bugs in GRASS native buffering algorithms, this module for now
+depends on GEOS and will not function if GRASS is compiled without GEOS.
+This restriction will be removed as soon as GRASS native buffer generation
+is fixed.
+</p>
 
 <h2>EXAMPLES</h2>
 
