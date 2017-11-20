@@ -18044,9 +18044,6 @@ msgstr "Version SVN :"
 msgid "Build Platform"
 msgstr "Plateforme"
 
-msgid "Row length of sampling frame"
-msgstr "Nombre de lignes du cadre d'échantillonage"
-
 #~ msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
 #~ msgstr "Créer une carte raster à partir de statistiques univariées sur des points LIDAR LAS."
 
