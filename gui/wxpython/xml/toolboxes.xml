@@ -791,6 +791,9 @@
       <module-item name="r.slope.aspect">
         <label>Slope and aspect</label>
       </module-item>
+      <module-item name="r.geomorphon">
+        <label>Landforms</label>
+      </module-item>
       <module-item name="r.param.scale">
         <label>Terrain parameters</label>
       </module-item>
@@ -1344,6 +1347,9 @@
   <toolbox name="OverlayVectorMaps">
     <label>Overlay vector maps</label>
     <items>
+      <module-item name="v.clip">
+        <label>Clip vector maps</label>
+      </module-item>
       <module-item name="v.overlay">
         <label>Overlay vector maps</label>
       </module-item>
@@ -1444,6 +1450,10 @@
       </module-item>
       <module-item name="v.db.univar">
         <label>Univariate statistics for attribute columns</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.profile">
+        <label>Sample transects</label>
       </module-item>
       <separator/>
       <module-item name="v.qcount">
