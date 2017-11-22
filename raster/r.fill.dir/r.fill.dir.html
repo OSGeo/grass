@@ -99,10 +99,10 @@ r.mapcalc "elev_lid792_1m_fill_area = if(elev_lid792_1m_diff > 0.0, 1, null() )"
 r.to.vect input=elev_lid792_1m_fill_area output=elev_lid792_1m_fill_area type=area
 
 # generate shaded terrain for better visibility of results
-r.relief input=elev_lid792_1m output=elev_lid792_1m_shade
+r.relief input=elev_lid792_1m_filled output=elev_lid792_1m_filled_shade
 
 d.mon wx0
-d.shade shade=elev_lid792_1m_shade color=elev_lid792_1m_filled
+d.shade shade=elev_lid792_1m_filled_shade color=elev_lid792_1m_filled
 d.vect elev_lid792_1m_fill_area type=boundary color=red
 </pre></div>
 
