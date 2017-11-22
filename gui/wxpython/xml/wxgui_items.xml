@@ -394,4 +394,16 @@
     <description>Generates spectral signatures by allowing the user to outline training areas.</description>
     <keywords>general,gui,imagery,classification,signatures</keywords>
   </wxgui-item>
+  <wxgui-item name="ManagingGCPsfor3DCorrection">
+    <label>Managing GCPs for 3D correction</label>
+    <command>g.gui.image2target</command>
+    <description>Georectifies a map and allows managing GCP for 3D correction.</description>
+    <keywords>general,gui,imagery,GCP,georectification,orthophoto</keywords>
+  </wxgui-item>
+  <wxgui-item name="CorrectsScanningDistortions">
+    <label>Corrects scanning distortions</label>
+    <command>g.gui.photo2image</command>
+    <description>Corrects scanning distortions of a scanned aerial photo.</description>
+    <keywords>general,gui,imagery,georectification,orthophoto</keywords>
+  </wxgui-item>
 </wxgui-items>
