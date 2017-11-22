@@ -150,10 +150,22 @@
       <subtoolbox name="TransformImage"/>
       <separator/>
       <subtoolbox name="SatelliteImagesTools"/>
+      <subtoolbox name="ImageryGuiTools"/>
       <subtoolbox name="SatelliteImagesProducts"/>
       <subtoolbox name="EvapotranspirationCalculation"/>
       <separator/>
       <subtoolbox name="ImageryReportsAndStatistics"/>
+    </items>
+  </toolbox>
+  <toolbox name="ImageryGuiTools">
+    <label>Orthophoto tools</label>
+    <items>
+      <wxgui-item name="ManagingGCPsfor3DCorrection">
+        <label>Manage GCPs for 3D correction</label>
+      </wxgui-item>
+      <wxgui-item name="CorrectsScanningDistortions">
+        <label>Corrects scanning distortions</label>
+      </wxgui-item>
     </items>
   </toolbox>
   <toolbox name="Volumes">
