@@ -198,7 +198,8 @@ int main(int argc, char **argv)
 		num_outputs++;
 	    }
 	if (!num_outputs && !multires)
-	    G_fatal_error(_("At least one output is required"));
+	    G_fatal_error(_("At least one output is required, e.g. %s"),
+		      opt_output[o_forms]->key);
 
 	meters = (flag_units->answer != 0);
 	extended = (flag_extended->answer != 0);
