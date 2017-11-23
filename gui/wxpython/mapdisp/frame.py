@@ -1503,7 +1503,7 @@ class MapFrame(SingleMapFrame):
         self.rdigit = RDigitController(self._giface,
                                        mapWindow=self.GetMapWindow())
         self.toolbars['rdigit'] = RDigitToolbar(
-            parent=self, controller=self.rdigit,
+            parent=self, giface=self._giface, controller=self.rdigit,
             toolSwitcher=self._toolSwitcher)
         # connect signals
         self.rdigit.newRasterCreated.connect(
