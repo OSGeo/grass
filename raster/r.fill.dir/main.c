@@ -303,8 +303,10 @@ static int dir_type(int type, int dir)
 	    return (7);
 	else if (dir == 64)
 	    return (8);
-	else
+	else {
+	    Rast_set_c_null_value(&dir, 1);
 	    return (dir);
+	}
     }
 
     else if (type == 2) {	/* ANSWERS aspect format */
@@ -324,8 +326,10 @@ static int dir_type(int type, int dir)
 	    return (180);
 	else if (dir == 64)
 	    return (135);
-	else
+	else {
+	    Rast_set_c_null_value(&dir, 1);
 	    return (dir);
+	}
     }
 
     else {			/* [new] GRASS aspect format */
@@ -345,8 +349,10 @@ static int dir_type(int type, int dir)
 	    return (180);
 	else if (dir == 64)
 	    return (135);
-	else
+	else {
+	    Rast_set_c_null_value(&dir, 1);
 	    return (dir);
+	}
     }
 
 }
