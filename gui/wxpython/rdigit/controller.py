@@ -304,6 +304,8 @@ class RDigitController(wx.EvtHandler):
             _("Save raster map changes"),
             wx.YES_NO)
         if dlg.ShowModal() == wx.ID_YES:
+            if self._drawing:
+                self._finish()
             self._thread.Run(callable=self._exportRaster,
                              ondone=lambda event: self._updateAndQuit())
         else:
@@ -311,6 +313,9 @@ class RDigitController(wx.EvtHandler):
 
     def Save(self):
         """Saves current edits to a raster map"""
+        if self._drawing:
+            self._finish()
+
         self._thread.Run(callable=self._exportRaster,
                          ondone=lambda event: self._update())
 
@@ -467,9 +472,6 @@ class RDigitController(wx.EvtHandler):
         if not self._editedRaster or self._running:
             return
         self._running = True
-
-        if self._drawing:
-            self._finish()
 
         if len(self._all) < 1:
             new = self._editedRaster
