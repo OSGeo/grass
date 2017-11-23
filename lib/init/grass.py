@@ -1160,6 +1160,18 @@ def set_language(grass_config_dir):
                 locale.setlocale(locale.LC_ALL, normalized)
             except locale.Error as e:
                 if language == 'en':
+                    # A workaround for Python Issue30755
+                    # https://bugs.python.org/issue30755
+                    if locale.normalize('C.UTF-8') == 'en_US.UTF-8':
+                        locale.setlocale(locale.LC_ALL, 'C')
+                        os.environ['LANGUAGE'] = 'C'
+                        os.environ['LANG'] = 'C'
+                        os.environ['LC_MESSAGES'] = 'C'
+                        os.environ['LC_NUMERIC'] = 'C'
+                        os.environ['LC_TIME'] = 'C'
+                        sys.stderr.write("To avoid Unicode errors in GUI, install en_US.UTF-8 locale and restart GRASS.\n"
+                        "Also consider upgrading your Python version to one containg fix for Python Issue 30755.\n")
+                        return
                     # en_US locale might be missing, still all messages in
                     # GRASS are already in en_US language.
                     # Using plain C as locale forces encodings to ascii
