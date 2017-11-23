@@ -31,6 +31,7 @@ rdigitIcons = {'area': MetaIcon(img='polygon-create',
                                  label=_('Digitize point')),
                'save': MetaIcon(img='save', label=_("Save raster map")),
                'undo': MetaIcon(img='undo', label=_("Undo")),
+               'help': MetaIcon(img='help', label=_("Raster Digitizer manual")),
                'quit': MetaIcon(img='quit', label=_("Quit raster digitizer"))}
 
 
@@ -38,11 +39,12 @@ class RDigitToolbar(BaseToolbar):
     """RDigit toolbar
     """
 
-    def __init__(self, parent, controller, toolSwitcher):
+    def __init__(self, parent, giface, controller, toolSwitcher):
         """RDigit toolbar constructor
         """
         BaseToolbar.__init__(self, parent, toolSwitcher)
         self._controller = controller
+        self._giface = giface
         self.InitToolbar(self._toolbarData())
 
         self._mapSelectionComboId = wx.NewId()
@@ -126,6 +128,8 @@ class RDigitToolbar(BaseToolbar):
               lambda event: self._controller.Undo()),
              ('save', rdigitIcons['save'],
               lambda event: self._controller.Save()),
+             ('help', rdigitIcons['help'],
+              lambda event: self._giface.Help('wxGUI.rdigit')),
              ('quit', rdigitIcons['quit'],
               lambda event: self._controller.Stop())))
 
