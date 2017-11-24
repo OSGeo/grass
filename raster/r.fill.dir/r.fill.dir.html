@@ -77,21 +77,31 @@ sensitive to any raster <em>MASK</em> in effect.
 
 <h2>NOTES</h2>
 
-<p>
+<ul>
+
+<li>
 The <em>r.fill.dir</em> module can be used not only to fill depression,
 but also to detect water bodies or potential water bodies based on
 the nature of the terrain and the digital elevation model used.
 
-<p>
+<li>
 Not all depressions are errors in digital elevation models. In fact,
 many are wetlands and as Jenkins and McCauley (2006) note careless use
 of depression filling may lead to unintended consequences such
 as loss of wetlands.
 
-<p>
+<li>
+Although many hydrological algorithms require depression filling,
+advanced algorithms such as those implemented in
+<em><a href="r.watershed.html">r.watershed</a></em> and
+<em><a href="r.sim.water.html">r.sim.water</a></em> do not require
+depressionless digital elevation model to work.
+
+<li>
 The flow direction map can be visualized with
 <em><a href="d.rast.arrow.html">d.rast.arrow</a></em>.
 
+</ul>
 
 
 <h2>EXAMPLES</h2>
