@@ -75,12 +75,9 @@ def make_gradient(path):
             maxval = float(records[-1][0])
             maxval = min(maxval, 2500000)
         grad = tmp_grad_abs
-        # alternatively, only simpler expression would suffice if frames
-        # are used to render raster and then the borders
-        grass.mapcalc("$grad = if(col() > 2 && col() < ncols() - 1,"
-                      " float($min) + (col() - 3) * "
-                      "  (float($max) - float($min)) / (ncols() - 2),"
-                      " null())",
+        grass.mapcalc("$grad = "
+                      " float($min) + (col() - 1) * "
+                      "  (float($max) - float($min)) / ncols()",
                       grad=tmp_grad_abs, min=minval, max=maxval, quiet=True)
     else:
         grad = tmp_grad_rel
@@ -93,8 +90,10 @@ def make_image(output_dir, table, grad, height, width):
     os.environ['GRASS_RENDER_FILE'] = outfile
 
     grass.run_command("r.colors", map=grad, color=table, quiet=True)
+    os.environ['GRASS_RENDER_FRAME'] = '%f,%f,%f,%f' % (0, height, 2, width - 2)
     grass.run_command("d.rast", map=grad, quiet=True)
     if 1:
+        os.environ['GRASS_RENDER_FRAME'] = '%f,%f,%f,%f' % (0, height, 0, width)
         grass.write_command("d.graph", quiet=True, flags='m', stdin="""
         width 1
         color {outcolor}
@@ -136,7 +135,6 @@ def main():
 
     os.environ['GRASS_RENDER_WIDTH'] = '%d' % width
     os.environ['GRASS_RENDER_HEIGHT'] = '%d' % height
-    os.environ['GRASS_RENDER_FRAME'] = '%f,%f,%f,%f' % (0, height, 0, width)
     os.environ['GRASS_RENDER_TRUECOLOR'] = 'TRUE'
     # for multiple d commands (requires to delete/move image each time)
     os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
@@ -155,8 +153,7 @@ def main():
     grass.run_command('g.region', s=0, w=0, n=height, e=width,
                       rows=height, cols=width, res=1, flags='a')
 
-    grass.mapcalc("$grad = if(col() > 2 && col() < ncols() - 1,"
-                  " float(col()), null())", grad=tmp_grad_rel, quiet=True)
+    grass.mapcalc("$grad = float(col())", grad=tmp_grad_rel, quiet=True)
 
     for table in os.listdir(color_dir):
         path = os.path.join(color_dir, table)
@@ -164,8 +161,7 @@ def main():
         make_image(output_dir, table, grad,
                    height=height, width=width)
 
-    grass.mapcalc("$grad = if(col() > 2 && col() < ncols() - 1,"
-                  " col(), null())", grad=tmp_grad_abs, quiet=True)
+    grass.mapcalc("$grad = col()", grad=tmp_grad_abs, quiet=True)
     for table in ['grey.eq', 'grey.log', 'random']:
         make_image(output_dir, table, tmp_grad_abs,
                    height=height, width=width)
