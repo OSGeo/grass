@@ -117,8 +117,10 @@ int main(int argc, char **argv)
     
     opt3 = G_define_standard_option(G_OPT_R_INPUT);
     opt3->key = "direction";
-    opt3->description =
+    opt3->label =
 	_("Name of input movement direction map associated with the cost surface");
+    opt3->description =
+	_("Direction in degrees CCW from east");
     opt3->required = NO;
     opt3->guisection = _("Cost surface");
 
@@ -146,6 +148,7 @@ int main(int argc, char **argv)
     flag1 = G_define_flag();
     flag1->key = 'c';
     flag1->description = _("Copy input cell values on output");
+    flag1->guisection = _("Path settings");
 
     flag2 = G_define_flag();
     flag2->key = 'a';
