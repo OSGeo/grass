@@ -8,7 +8,9 @@ the given directions. Such a movement direction map can be generated with
 <em><a href="r.walk.html">r.walk</a></em>, 
 <em><a href="r.cost.html">r.cost</a></em>, 
 <em><a href="r.slope.aspect.html">r.slope.aspect</a></em> or 
-<em><a href="r.watershed.html">r.watershed</a></em>.
+<em><a href="r.watershed.html">r.watershed</a></em>
+provided that the direction is in degrees, measured counterclockwise
+from east.
 
 <p>
 The <b>output</b> raster map will show one or more least-cost paths
@@ -48,28 +50,7 @@ additional starting points.
 Up to 1024 starting points can be input from a combination of the
 <b>start_coordinates</b> and <b>start_points</b> parameters.
 
-<h2>NOTES</h2>
-
-If no direction input map is given, <em>r.drain</em> currently finds
-only the lowest point (the cell having the smallest category value) in
-the input file that can be reached through directly adjacent cells
-that are less than or equal in value to the cell reached immediately
-prior to it; therefore, it will not necessarily reach the lowest point
-in the input file. It currently finds <em>pits</em> in the data,
-rather than the lowest point in the entire input
-map. The <em><a href="r.fill.dir.html">r.fill.dir</a></em>,
-<em><a href="r.terraflow.html">r.terraflow</a></em>,
-and <em><a href="r.basins.fill.html">r.basins.fill</a></em> modules
-can be used to fill in subbasins prior to processing
-with <em>r.drain</em>.
-
-<p>
-<em>r.drain</em> will not give sane results at the region boundary. On outer rows
-and columns bordering the edge of the region, the flow direction is always directly out 
-of the map. In this case, the user could try adjusting the region extents slightly with 
-<em>g.region</em> to allow additional outlet paths for <em>r.drain</em>.
-
-<h2>EXAMPLES</h2>
+<h3>Explanation of output values</h3>
 
 Consider the following example: 
 
@@ -182,7 +163,118 @@ The directions are recorded as degrees CCW from East:
        247.5     292.5
 </pre></div>
 
+<h2>NOTES</h2>
+
+If no direction input map is given, <em>r.drain</em> currently finds
+only the lowest point (the cell having the smallest category value) in
+the input file that can be reached through directly adjacent cells
+that are less than or equal in value to the cell reached immediately
+prior to it; therefore, it will not necessarily reach the lowest point
+in the input file. It currently finds <em>pits</em> in the data,
+rather than the lowest point in the entire input
+map. The <em><a href="r.fill.dir.html">r.fill.dir</a></em>,
+<em><a href="r.terraflow.html">r.terraflow</a></em>,
+and <em><a href="r.basins.fill.html">r.basins.fill</a></em> modules
+can be used to fill in subbasins prior to processing
+with <em>r.drain</em>.
+
 <p>
+<em>r.drain</em> will not give sane results at the region boundary. On outer rows
+and columns bordering the edge of the region, the flow direction is always directly out 
+of the map. In this case, the user could try adjusting the region extents slightly with 
+<em>g.region</em> to allow additional outlet paths for <em>r.drain</em>.
+
+<h2>EXAMPLES</h2>
+
+<h3>Path to the lowest point</h3>
+
+In this example we compute drainage paths from two given points
+following decreasing elevation values to the lowest point.
+We are using the full North Carolina sample dataset.
+First we create the two points from a text file using
+<em><a href="v.in.ascii.html">v.in.ascii</a></em> module
+(here the text file is CSV and we are using unix here-file syntax
+with EOF, in GUI just enter the values directly for the parameter input):
+
+<div class="code"><pre>
+v.in.ascii input=- output=start format=point separator=comma &lt;&lt;EOF
+638667.15686275,220610.29411765
+638610.78431373,220223.03921569
+EOF
+</pre></div>
+
+Now we compute the drainage path:
+
+<div class="code"><pre>
+r.drain input=elev_lid792_1m output=drain_path drain=drain start_points=start
+</pre></div>
+
+Before we visualize the result, we set a color table for the elevation
+we are using and we create a shaded relief map:
+
+<div class="code"><pre>
+r.colors map=elev_lid792_1m color=elevation
+r.relief input=elev_lid792_1m output=relief
+</pre></div>
+
+Finally we visualize all the input and output data:
+
+<div class="code"><pre>
+d.shade shade=relief color=elev_lid792_1m
+d.vect map=drain_path color=0:0:61 width=4 legend_label="drainage paths"
+d.vect map=start color=none fill_color=224:0:0 icon=basic/circle size=15 legend_label=origins
+d.legend.vect -b
+</pre></div>
+
+<div align="center">
+<a href="r_drain.png"><img src="r_drain.png" alt="drainage using r.watershed" width="300" height="280"></a>
+<br>
+<i>Figure: Drainage paths from two points flowing into the points with
+lowest values</i>
+</div>
+
+<h3>Path following directions</h3>
+
+To continue flow even after it hits a depression, we need to supply a
+direction raster map which will tell the <em>r.drain</em> module how to
+continue from the depression. To get these directions, we use the
+<em><a href="r.watershed.html">r.watershed</a></em> module:
+
+<div class="code"><pre>
+r.watershed elevation=elev_lid792_1m accumulation=accum drainage=drain_dir
+</pre></div>
+
+The directions are categorical and we convert them to degrees using
+raster algebra:
+
+<div class="code"><pre>
+r.mapcalc "drain_deg = if(drain_dir != 0, 45. * abs(drain_dir), null())"
+</pre></div>
+
+Together with directions, we need to provide the <em>r.drain</em> module
+with cost values. We don't have any cost to assign to specific cells,
+so we create a constant surface:
+
+<div class="code"><pre>
+r.mapcalc "const1 = 1"
+</pre></div>
+
+Now we are ready to compute the drainage paths.
+We are using the two points from the previous example.
+
+<div class="code"><pre>
+r.drain -d input=const1 direction=drain_deg output=drain_path_2 drain=drain_2 start_points=start
+</pre></div>
+
+We visualize the result in the same way as in the previous example.
+
+<div align="center">
+<a href="r_drain_with_r_watershed_direction.png"><img src="r_drain_with_r_watershed_direction.png" alt="drainage using r.watershed" width="300" height="280"></a>
+<br>
+<i>Figure: Drainage paths from two points where directions from
+r.watershed were used</i>
+</div>
+
 <h2>KNOWN ISSUES</h2>
 
 <p>Sometimes, when the differences among integer cell category values in the
@@ -207,6 +299,7 @@ This problem doesn't arise with floating point maps.
 <a href="r.cost.html">r.cost</a>,
 <a href="r.fill.dir.html">r.fill.dir</a>,
 <a href="r.basins.fill.html">r.basins.fill</a>,
+<a href="r.watershed.html">r.watershed</a>,
 <a href="r.terraflow.html">r.terraflow</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.walk.html">r.walk</a>
