@@ -154,7 +154,8 @@ int main(int argc, char *argv[])
 
     opt9 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt9->key = "drainage";
-    opt9->description = _("Name for output drainage direction raster map");
+    opt9->label = _("Name for output drainage direction raster map");
+    opt9->description = _("Directions numbered from 1 to 8");
     opt9->required = NO;
     opt9->guisection = _("Outputs");
 
