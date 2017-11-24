@@ -356,12 +356,13 @@ identified through their ultimate outlet points. These points are all
 cells in the stream segments output with negative drainage direction.
 These points can be used as start points
 for <em><a href="r.water.outlet.html">r.water.outlet</a></em> or
-<em><a href="v.net.iso.html">v.net.iso<a/></em>.
+<em><a href="v.net.iso.html">v.net.iso</a></em>.
 
 <p>
 To create <i>river mile</i> segmentation from a vectorized streams
 map, try
-the <em><a href="v.net.iso.html">v.net.iso<a/></em> or <em><a href="v.lrs.segment.html">v.lrs.segment</a></em>
+the <em><a href="v.net.iso.html">v.net.iso</a></em>
+or <em><a href="v.lrs.segment.html">v.lrs.segment</a></em>
 modules.
 
 <p>
@@ -376,6 +377,28 @@ segments output serves as a guide where to place the outlet point used
 as input to <em><a href="r.water.outlet.html">r.water.outlet</a></em>.
 The basin threshold must have been sufficiently small to isolate a
 stream network and subbasins within the larger basin.
+
+<p>
+Given that the <b>drainage</b> is 8 directions numbered
+counter-clockwise starting from 1 in north-east direction,
+multiplying the output
+by 45 (by <tt>45.</tt> to get a double precision floating point raster
+map in <em><a href="r.mapcalc.html">r.mapcalc</a></em>) gives
+the directions in degrees. For most applications, zeros
+which indicate depressions specified by <b>depression</b>
+and negative values which indicate runoff leaving the region
+should be replaced by NULL (<tt>null()</tt> in
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>).
+The following command performs these replacements:
+
+<div class="code"><pre>
+r.mapcalc "drainage_degrees = if(drainage > 0, 45. * drainage, null())"
+</pre></div>
+
+Alternatively, the user can use the <b>-a</b> flag or later the
+<tt>abs()</tt> function in
+<em><a href="r.mapcalc.html">r.mapcalc</a></em> if the runoff is leaving
+the region.
 
 <h2>EXAMPLES</h2>
 
