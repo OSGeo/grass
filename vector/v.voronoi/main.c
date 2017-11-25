@@ -54,7 +54,7 @@ typedef struct
 
 
 
-int cmp(void *a, void *b)
+int cmp(const void *a, const void *b)
 {
     COOR *ca = (COOR *) a;
     COOR *cb = (COOR *) b;
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("geometry"));
     G_add_keyword(_("triangulation"));
     G_add_keyword(_("skeleton"));
-    module->description = _("Creates a Voronoi diagram in current region from "
+    module->description = _("Creates a Voronoi diagram constrained to the extents of the current region from "
 			    "an input vector map containing points or centroids.");
 
     opt.in = G_define_standard_option(G_OPT_V_INPUT);
@@ -279,7 +279,7 @@ int main(int argc, char **argv)
 	ncoor++;
 
 	/* Sort */
-	qsort(coor, ncoor, sizeof(COOR), (void *)cmp);
+	qsort(coor, ncoor, sizeof(COOR), cmp);
 
 	/* add last (first corner) */
 	coor[ncoor].x = Box.W;
