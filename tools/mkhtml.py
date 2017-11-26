@@ -21,6 +21,7 @@ import os
 import string
 import re
 from datetime import datetime
+import locale
 
 try:
     # Python 2 import
@@ -32,6 +33,38 @@ try:
     import urlparse
 except:
     import urllib.parse as urlparse
+
+
+if sys.version_info.major == 2:
+    PY2 = True
+else:
+    PY2 = False
+
+
+if not PY2:
+    unicode = str
+
+
+def _get_encoding():
+    encoding = locale.getdefaultlocale()[1]
+    if not encoding:
+        encoding = 'UTF-8'
+    return encoding
+
+
+def decode(bytes_):
+    """Decode bytes with default locale and return (unicode) string
+
+    No-op if parameter is not bytes (assumed unicode string).
+
+    :param bytes bytes_: the bytes to decode
+    """
+    if isinstance(bytes_, unicode):
+        return bytes_
+    if isinstance(bytes_, bytes):
+        enc = _get_encoding()
+        return bytes_.decode(enc)
+    return unicode(bytes_)
 
 
 pgm = sys.argv[1]
@@ -119,7 +152,10 @@ def read_file(name):
         f = open(name, 'rb')
         s = f.read()
         f.close()
-        return s
+        if PY2:
+            return s
+        else:
+            return decode(s)
     except IOError:
         return ""
 
@@ -127,6 +163,7 @@ def read_file(name):
 def create_toc(src_data):
     class MyHTMLParser(HTMLParser):
         def __init__(self):
+            HTMLParser.__init__(self)
             self.reset()
             self.idx = 1
             self.tag_curr = ''
@@ -291,7 +328,7 @@ def to_title(name):
 
 
 index_titles = {}
-for key, name in index_names.iteritems():
+for key, name in index_names.items():
     index_titles[key] = to_title(name)
 
 # process footer
