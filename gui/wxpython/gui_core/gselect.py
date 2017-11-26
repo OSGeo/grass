@@ -40,6 +40,8 @@ This program is free software under the GNU General Public License
 @author Matej Krejci <matejkrejci gmail.com> (VectorCategorySelect)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import glob
@@ -66,8 +68,9 @@ from grass.exceptions import CalledModuleError
 try:
     from grass.pygrass import messages
 except ImportError as e:
-    print >> sys.stderr, _("Unable to import pyGRASS: %s\n"
-                           "Some functionality will be not accessible") % e
+    print(_("Unable to import pyGRASS: %s\n"
+            "Some functionality will be not accessible") % e,
+          file=sys.stderr)
 
 from gui_core.widgets import ManageSettingsWidget, CoordinatesValidator
 

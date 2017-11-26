@@ -31,6 +31,8 @@ This program is free software under the GNU General Public License
 #TODO: i.ortho.transform looks for REF_POINTS/CONTROL_POINTS and not POINTS 
 #TODO: CHECK CONTROL_POINTS format and create it for i.ortho.transform to use.
 
+from __future__ import print_function
+
 import os
 import sys
 import shutil
@@ -837,7 +839,7 @@ class DispMapPage(TitledPage):
                 p = RunCommand('g.region', 'vector=src_map')
 
             if p.returncode == 0:
-                print 'returncode = ', str(p.returncode)
+                print('returncode = ', str(p.returncode))
                 self.parent.Map.region = self.parent.Map.GetRegion()
         except:
             pass
@@ -1676,7 +1678,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
             # provide feedback on failure
             if ret != 0:
-                print >> sys.stderr, msg
+                print(msg, file=sys.stderr)
 
         elif maptype == 'vector':
             # loop through all vectors in VREF
@@ -1720,7 +1722,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
                 # provide feedback on failure
                 if ret != 0:
-                    print >> sys.stderr, msg
+                    print(msg, file=sys.stderr)
 
         self.grwiz.SwitchEnv('target')
 
@@ -1734,7 +1736,8 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         if returncode == 0:
             self.VectGRList.append(self.outname)
-            print '*****vector list = ' + str(self.VectGRList)
+            print('*****vector list = ' + str(self.VectGRList),
+                  file=sys.stderr)
         else:
             self._giface.WriteError(
                 _('Georectification of vector map <%s> failed') %

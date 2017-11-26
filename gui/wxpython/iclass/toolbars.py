@@ -18,6 +18,8 @@ for details.
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+from __future__ import print_function
+
 import wx
 
 from core.utils import _
@@ -193,7 +195,7 @@ class IClassToolbar(BaseToolbar):
                                      ))
 
     def OnMotion(self, event):
-        print self.choice.GetStringSelection()
+        print(self.choice.GetStringSelection())
 
     def OnSelectCategory(self, event):
         idx = self.choice.GetSelection()

@@ -14,6 +14,8 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 try:
     import xml.etree.ElementTree as etree
@@ -330,10 +332,10 @@ def test():
     # cmd = nviz.GetCommand()
     cmds = nviz.GetCommandSeries(['aspect', 'elevation'], 'color_map')
     for cmd in cmds:
-        print cmd
+        print(cmd)
         returncode, message = RunCommand(
             getErrorMsg=True, prog=cmd[0], **cmd[1])
-        print returncode, message
+        print(returncode, message)
 
 
 if __name__ == '__main__':

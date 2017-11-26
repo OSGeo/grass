@@ -19,6 +19,8 @@ Usage: python support/update_menudata.py [-d]
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import tempfile
@@ -120,7 +122,9 @@ def writeData(data, file=None):
     try:
         data.tree.write(file)
     except IOError:
-        print >> sys.stderr, "'%s' not found. Please run the script from 'gui/wxpython'." % file
+        print("'%s' not found."
+              " Please run the script from 'gui/wxpython'." % file,
+              file=sys.stderr)
         return
 
     try:
@@ -130,7 +134,8 @@ def writeData(data, file=None):
         finally:
             f.close()
     except IOError:
-        print >> sys.stderr, "ERROR: Unable to write to menudata file."
+        print("ERROR: Unable to write to menudata file.",
+              file=sys.stderr)
 
 
 def main(argv=None):
@@ -143,7 +148,7 @@ def main(argv=None):
         printDiff = False
 
     if len(argv) > 1 and argv[1] == '-h':
-        print >> sys.stderr, __doc__
+        print(sys.stderr, __doc__, file=sys.stderr)
         return 1
 
     nuldev = file(os.devnull, 'w+')

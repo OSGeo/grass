@@ -17,6 +17,8 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 import datetime
 
@@ -373,14 +375,14 @@ def test():
 
     try:
         warn = temp.EvaluateInputData()
-        print warn
+        print(warn)
     except GException as e:
-        print e
+        print(e)
         return
 
-    print '///////////////////////////'
+    print('///////////////////////////')
     gran = temp.GetGranularity()
-    print "granularity: " + str(gran)
+    print("granularity: " + str(gran))
     pprint(temp.GetLabelsAndMaps())
 
 

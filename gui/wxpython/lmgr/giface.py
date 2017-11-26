@@ -15,6 +15,8 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 
 from grass.pydispatch.signal import Signal
@@ -139,8 +141,8 @@ class LayerList(object):
         Avoid using this method, it might be removed in the future.
         """
         if key == 'name':
-            print "giface.GetLayerByData(): Do not with use key='name',"
-            " use GetLayersByName instead."
+            print("giface.GetLayerByData(): Do not with use key='name',"
+                  " use GetLayersByName instead.")
         item = self._tree.FindItemByData(key=key, value=value)
         if item is None:
             return None

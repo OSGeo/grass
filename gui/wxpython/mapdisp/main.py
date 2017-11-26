@@ -26,6 +26,8 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (MapFrameBase)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import time
@@ -480,11 +482,11 @@ class DMonFrame(MapFrame):
         width, height = self.MapWindow.GetClientSize()
         for line in fileinput.input(monFile['env'], inplace=True):
             if 'GRASS_RENDER_WIDTH' in line:
-                print 'GRASS_RENDER_WIDTH={0}'.format(width)
+                print('GRASS_RENDER_WIDTH={0}'.format(width))
             elif 'GRASS_RENDER_HEIGHT' in line:
-                print 'GRASS_RENDER_HEIGHT={0}'.format(height)
+                print('GRASS_RENDER_HEIGHT={0}'.format(height))
             else:
-                print line.rstrip('\n')
+                print(line.rstrip('\n'))
 
 
 class MapApp(wx.App):
@@ -587,7 +589,7 @@ class MapApp(wx.App):
 
 if __name__ == "__main__":
     if len(sys.argv) != 6:
-        print __doc__
+        print(__doc__)
         sys.exit(0)
 
     # set command variable

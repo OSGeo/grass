@@ -24,6 +24,8 @@ This program is free software under the GNU General Public License
 @author Yann modified: graphical replacement of i.photo.2image (was in v6 using Vask lib)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import shutil
@@ -162,7 +164,7 @@ class GCPWizard(object):
             p = RunCommand('g.region', 'raster='+self.src_map)
 
             if p.returncode == 0:
-                print 'returncode = ', str(p.returncode)
+                print('returncode = ', str(p.returncode))
                 self.Map.region = self.Map.GetRegion()
         except:
             pass
@@ -1035,9 +1037,9 @@ class GCP(MapFrame, ColumnSorterMixin):
 
             # provide feedback on failure
             if ret != 0:
-                print >> sys.stderr, 'ip2i: Error in i.rectify'
-                print >> sys.stderr, self.grwiz.src_map
-                print >> sys.stderr, msg
+                print('ip2i: Error in i.rectify', file=sys.stderr)
+                print(self.grwiz.src_map, file=sys.stderr)
+                print(msg, file=sys.stderr)
 
             busy = wx.BusyInfo(message=_("Writing output image to group, please wait..."),
                                parent=self)
@@ -1053,10 +1055,10 @@ class GCP(MapFrame, ColumnSorterMixin):
             busy.Destroy()
 
             if ret1 != 0:
-                print >> sys.stderr, 'ip2i: Error in i.group'
-                print >> sys.stderr, self.grwiz.src_map.split('@')[0]
-                print >> sys.stderr, self.extension
-                print >> sys.stderr, msg1
+                print('ip2i: Error in i.group', file=sys.stderr)
+                print(self.grwiz.src_map.split('@')[0], file=sys.stderr)
+                print(self.extension, file=sys.stderr)
+                print(msg1, file=sys.stderr)
 
         self.grwiz.SwitchEnv('target')
 

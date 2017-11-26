@@ -17,6 +17,8 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import getopt
@@ -108,10 +110,10 @@ class GMApp(wx.App):
 
 def printHelp():
     """ Print program help"""
-    print >> sys.stderr, "Usage:"
-    print >> sys.stderr, " python wxgui.py [options]"
-    print >> sys.stderr, "%sOptions:" % os.linesep
-    print >> sys.stderr, " -w\t--workspace file\tWorkspace file to load"
+    print("Usage:", file=sys.stderr)
+    print(" python wxgui.py [options]", file=sys.stderr)
+    print("%sOptions:" % os.linesep, file=sys.stderr)
+    print(" -w\t--workspace file\tWorkspace file to load", file=sys.stderr)
     sys.exit(1)
 
 
@@ -146,8 +148,8 @@ def main(argv=None):
         except getopt.error as msg:
             raise Usage(msg)
     except Usage as err:
-        print >> sys.stderr, err.msg
-        print >> sys.stderr, "for help use --help"
+        print(err.msg, file=sys.stderr)
+        print(sys.stderr, "for help use --help", file=sys.stderr)
         printHelp()
 
     workspaceFile = process_opt(opts, args)

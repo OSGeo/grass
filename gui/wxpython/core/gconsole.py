@@ -20,6 +20,8 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (refactoring)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import re
@@ -540,7 +542,7 @@ class GConsole(wx.EvtHandler):
                             GUI(parent=self._guiparent,
                                 giface=self._giface).ParseCommand(command)
                         except GException as e:
-                            print >> sys.stderr, e
+                            print(e, file=sys.stderr)
 
                         return
 
@@ -694,7 +696,7 @@ class GConsole(wx.EvtHandler):
         try:
             task = GUI(show=None).ParseCommand(event.cmd)
         except GException as e:
-            print >> sys.stderr, e
+            print(e, file=sys.stderr)
             task = None
             return
 

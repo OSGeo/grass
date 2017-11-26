@@ -22,6 +22,8 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
+from __future__ import print_function
+
 import sys
 import locale
 import struct
@@ -35,7 +37,7 @@ except ImportError:
         "standard Python distribution). See the Numeric Python site "
         "(http://numpy.scipy.org) for information on downloading source or "
         "binaries.")
-    print >> sys.stderr, "wxnviz.py: " + msg
+    print("wxnviz.py: " + msg, file=sys.stderr)
 
 import wx
 
@@ -65,7 +67,7 @@ def print_error(msg, type):
     if log:
         log.write(msg)
     else:
-        print msg
+        print(msg)
 
     return 0
 
@@ -78,7 +80,7 @@ def print_progress(value):
             progress.SetRange(100)
         progress.SetValue(value)
     else:
-        print value
+        print(value)
 
     return 0
 

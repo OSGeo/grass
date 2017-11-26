@@ -19,6 +19,8 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi <lucadeluge gmail.com> (language choice)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import copy
@@ -46,7 +48,7 @@ class Settings:
         try:
             self.ReadSettingsFile()
         except GException as e:
-            print >> sys.stderr, e.value
+            print(e.value, file=sys.stderr)
 
         # define internal settings
         self._internalSettings()  # -> self.internalSettings
@@ -997,11 +999,12 @@ class Settings:
                     self.Append(settings, group, key, subkey, value)
                     idx += 2
         except ValueError as e:
-            print >>sys.stderr, _(
+            print(_(
                 "Error: Reading settings from file <%(file)s> failed.\n"
                 "\t\tDetails: %(detail)s\n"
                 "\t\tLine: '%(line)s'\n") % {
-                'file': filename, 'detail': e, 'line': line}
+                'file': filename, 'detail': e, 'line': line},
+                file=sys.stderr)
             fd.close()
 
         fd.close()
@@ -1134,8 +1137,8 @@ class Settings:
                     return settings[group][key][subkey]
 
         except KeyError:
-            print >> sys.stderr, "Settings: unable to get value '%s:%s:%s'\n" % (
-                group, key, subkey)
+            print("Settings: unable to get value '%s:%s:%s'\n" % (
+                group, key, subkey), file=sys.stderr)
 
     def Set(self, group, value, key=None, subkey=None, settings_type='user'):
         """Set value of key/subkey
@@ -1206,8 +1209,9 @@ class Settings:
                 if overwrite or (not overwrite and not hasValue):
                     dict[group][key][subkey[0]][subkey[1]] = value
             except TypeError:
-                print >> sys.stderr, _("Unable to parse settings '%s'") % value + \
-                    ' (' + group + ':' + key + ':' + subkey[0] + ':' + subkey[1] + ')'
+                print(_("Unable to parse settings '%s'") % value +
+                      ' (' + group + ':' + key + ':' + subkey[0] +
+                      ':' + subkey[1] + ')', file=sys.stderr)
         else:
             if subkey not in dict[group][key]:
                 hasValue = False
@@ -1216,8 +1220,9 @@ class Settings:
                 if overwrite or (not overwrite and not hasValue):
                     dict[group][key][subkey] = value
             except TypeError:
-                print >> sys.stderr, _("Unable to parse settings '%s'") % value + \
-                    ' (' + group + ':' + key + ':' + subkey + ')'
+                print(_("Unable to parse settings '%s'") % value +
+                      ' (' + group + ':' + key + ':' + subkey + ')',
+                      file=sys.stderr)
 
     def GetDefaultSettings(self):
         """Get default user settings"""
