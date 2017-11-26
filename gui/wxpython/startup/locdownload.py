@@ -175,13 +175,17 @@ def reporthook(count, block_size, total_size):
     global start_time
     if count == 0:
         start_time = time.time()
+        sys.stdout.write("Download in progress ...\n0%")
+        return
+    if count % 100 != 0: # be less verbose
         return
     duration = time.time() - start_time
     progress_size = int(count * block_size)
     speed = int(progress_size / (1024 * duration))
     percent = int(count * block_size * 100 / total_size)
-    sys.stdout.write("Download in progress ...\n%d%%, %d MB, %d KB/s, %d seconds passed" %
-                    (percent, progress_size / (1024 * 1024), speed, duration))
+    sys.stdout.write("Download in progress ...\n{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed".format(
+        percent, progress_size / (1024 * 1024), speed, duration
+    ))
     
 # based on g.extension, potentially move to library
 def download_end_extract(source):
