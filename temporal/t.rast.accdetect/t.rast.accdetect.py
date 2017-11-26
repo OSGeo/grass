@@ -302,7 +302,7 @@ def main():
         input_maps = input_strds.get_registered_maps_as_objects(where=where,
                                                                 dbif=dbif)
 
-        print len(input_maps)
+        grass.debug(len(input_maps))
 
         input_topo = tgis.SpatioTemporalTopologyBuilder()
         input_topo.build(input_maps, input_maps)
@@ -402,7 +402,7 @@ def main():
                 expression = "%s = if(isnull(%s), %s, %s)"%(indicator_map_name,
                                                             prev_map, subexpr1,
                                                             subexpr3)
-                print expression
+                grass.debug(expression)
                 grass.mapcalc(expression, overwrite=True)
 
                 map_start, map_end = map.get_temporal_extent_as_tuple()
@@ -566,7 +566,7 @@ def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
                                                                 map.get_name(),
                                                                 min, map.get_name(),
                                                                 max, days)
-        print expression
+        grass.debug(expression)
         grass.mapcalc(expression, overwrite=True)
 
         map_start, map_end = map.get_temporal_extent_as_tuple()
