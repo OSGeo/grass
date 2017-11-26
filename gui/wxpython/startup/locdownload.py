@@ -77,6 +77,10 @@ LOCATIONS = [
         "label": "Fire simulation sample data",
         "url": "https://grass.osgeo.org/sampledata/fire_grass6data.tar.gz",
     },
+    {
+        "label": "GISMentors location, Czech Republic",
+        "url": "http://training.gismentors.eu/geodata/grass/gismentors.zip",
+    },
 ]
 
 
