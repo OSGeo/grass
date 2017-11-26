@@ -46,6 +46,8 @@ COPYING coming with GRASS for details.
 @author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
 """
 
+from __future__ import print_function
+
 import sys
 import string
 import textwrap
@@ -835,10 +837,10 @@ class TaskFrame(wx.Frame):
 
                 ret = self._gconsole.RunCmd(cmd, onDone=self.OnDone)
             except AttributeError as e:
-                print >> sys.stderr, "%s: Probably not running in wxgui.py session?" % (
-                    e)
-                print >>sys.stderr, "parent window is: %s" % (
-                    str(self.parent))
+                print("%s: Probably not running in wxgui.py session?" % (
+                      e), file=sys.stderr)
+                print("parent window is: %s" % (
+                      str(self.parent)), file=sys.stderr)
         else:
             gcmd.Command(cmd)
 
@@ -3006,10 +3008,10 @@ if __name__ == "__main__":
             # the default parameter display is added automatically
             assert ' '.join(
                 task.get_cmd()) == "d.vect -i map=map_name layer=1 display=shape label_bcolor=red"
-            print "Creation of task successful"
+            print("Creation of task successful")
         # Test interface building with handmade grassTask,
         # possibly outside of a GRASS session.
-        print "Now creating a module dialog (task frame)"
+        print("Now creating a module dialog (task frame)")
         task = gtask.grassTask()
         task.name = "TestTask"
         task.description = "This is an artificial grassTask() object intended for testing purposes."
