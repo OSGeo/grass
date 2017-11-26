@@ -27,7 +27,7 @@
 
 #include "local_proto.h"
 
-#include "ogr_srs_api.h"
+#include <ogr_srs_api.h>
 
 int main(int argc, char *argv[])
 {
@@ -64,8 +64,8 @@ int main(int argc, char *argv[])
     /* OGR */
     int drn;
     OGRFieldType ogr_ftype = OFTInteger;
-    OGRDataSourceH Ogr_ds;
-    OGRSFDriverH Ogr_driver;
+    ds_t hDS;
+    dr_t hDriver;
     OGRLayerH Ogr_layer;
     OGRFieldDefnH Ogr_field;
     OGRFeatureDefnH Ogr_featuredefn;
@@ -451,55 +451,95 @@ int main(int argc, char *argv[])
     G_debug(1, "Requested to export %d features", num_to_export);
 
     /* Open OGR DSN */
-    G_debug(2, "driver count = %d", OGRGetDriverCount());
+#if GDAL_VERSION_NUM >= 2020000
+    G_debug(2, "driver count = %d", GDALGetDriverCount());
     drn = -1;
-    for (i = 0; i < OGRGetDriverCount(); i++) {
-	Ogr_driver = OGRGetDriver(i);
-	G_debug(2, "driver %d : %s", i, OGR_Dr_GetName(Ogr_driver));
+    for (i = 0; i < GDALGetDriverCount(); i++) {
+	hDriver = GDALGetDriver(i);
+	G_debug(2, "driver %d : %s", i, GDALGetDriverShortName(hDriver));
 	/* chg white space to underscore in OGR driver names */
-	sprintf(buf, "%s", OGR_Dr_GetName(Ogr_driver));
+	sprintf(buf, "%s", GDALGetDriverShortName(hDriver));
 	G_strchg(buf, ' ', '_');
 	if (strcmp(buf, options.format->answer) == 0) {
 	    drn = i;
 	    G_debug(2, " -> driver = %d", drn);
 	}
     }
-    if (drn == -1)
-	G_fatal_error(_("OGR driver <%s> not found"), options.format->answer);
-    Ogr_driver = OGRGetDriver(drn);
-    
-    if (flags.append->answer) {
-	G_debug(1, "Append to OGR layer");
-	Ogr_ds = OGR_Dr_Open(Ogr_driver, dsn, TRUE);
-	
-	if (Ogr_ds == NULL) {
-	    G_debug(1, "Create OGR data source");
-	    Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, dsn,
-					     papszDSCO);
+#else
+    G_debug(2, "driver count = %d", OGRGetDriverCount());
+    drn = -1;
+    for (i = 0; i < OGRGetDriverCount(); i++) {
+	hDriver = OGRGetDriver(i);
+	G_debug(2, "driver %d : %s", i, OGR_Dr_GetName(Ogr_driver));
+	/* chg white space to underscore in OGR driver names */
+	sprintf(buf, "%s", OGR_Dr_GetName(hDriver));
+	G_strchg(buf, ' ', '_');
+	if (strcmp(buf, options.format->answer) == 0) {
+	    drn = i;
+	    G_debug(2, " -> driver = %d", drn);
 	}
     }
+#endif
+    if (drn == -1)
+	G_fatal_error(_("OGR driver <%s> not found"), options.format->answer);
+    hDriver = get_driver(drn);
+
+    if (flags.append->answer) {
+	G_debug(1, "Append to OGR layer");
+#if GDAL_VERSION_NUM >= 2020000
+	hDS = GDALOpenEx(dsn, GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, NULL, NULL);
+
+	if (hDS == NULL) {
+	    G_debug(1, "Create OGR data source");
+	    hDS = GDALCreate(hDriver, dsn, 0, 0, 0, GDT_Unknown, papszDSCO);
+	}
+#else
+	hDS = OGR_Dr_Open(hDriver, dsn, TRUE);
+
+	if (hDS == NULL) {
+	    G_debug(1, "Create OGR data source");
+	    hDS = OGR_Dr_CreateDataSource(hDriver, dsn, papszDSCO);
+	}
+#endif	
+    }
     else {
+#if GDAL_VERSION_NUM >= 2020000
 	if (flags.update->answer) {
 	    G_debug(1, "Update OGR data source");
-	    Ogr_ds = OGR_Dr_Open(Ogr_driver, dsn, TRUE);
+	    hDS = GDALOpenEx(dsn, GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, NULL, NULL);
 	}
 	else {
 	    G_debug(1, "Create OGR data source");
-	    Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, dsn,
-					     papszDSCO);
+	    hDS = GDALCreate(hDriver, dsn, 0, 0, 0, GDT_Unknown, papszDSCO);
 	}
+#else
+	if (flags.update->answer) {
+	    G_debug(1, "Update OGR data source");
+	    hDS = OGR_Dr_Open(hDriver, dsn, TRUE);
+	}
+	else {
+	    G_debug(1, "Create OGR data source");
+	    hDS = OGR_Dr_CreateDataSource(hDriver, dsn, papszDSCO);
+	}
+#endif
     }
 	
     CSLDestroy(papszDSCO);
-    if (Ogr_ds == NULL)
+    if (hDS == NULL)
 	G_fatal_error(_("Unable to open OGR data source '%s'"),
 		      options.dsn->answer);
     
     /* check if OGR layer exists */
     overwrite = G_check_overwrite(argc, argv);
     found = FALSE;
-    for (i = 0; i < OGR_DS_GetLayerCount(Ogr_ds); i++) {
-	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
+#if GDAL_VERSION_NUM >= 2020000
+    for (i = 0; i < GDALDatasetGetLayerCount(hDS); i++) {
+	Ogr_layer = GDALDatasetGetLayer(hDS, i);
+#else
+    for (i = 0; i < OGR_DS_GetLayerCount(hDS); i++) {
+	Ogr_layer = OGR_DS_GetLayer(hDS, i);
+
+#endif
 	Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
 	if (G_strcasecmp(OGR_FD_GetName(Ogr_field), options.layer->answer))
 	    continue;
@@ -512,10 +552,15 @@ int main(int argc, char *argv[])
 	else if (overwrite) {
 	    G_warning(_("OGR layer <%s> already exists and will be overwritten"),
 		      options.layer->answer);
-	    OGR_DS_DeleteLayer(Ogr_ds, i);
+#if GDAL_VERSION_NUM >= 2020000
+	    GDALDatasetDeleteLayer(hDS, i);
+#else
+	    OGR_DS_DeleteLayer(hDS, i);
+#endif
 	    break;
 	}
     }
+
     if (flags.append->answer && !found) {
 	G_warning(_("OGR layer <%s> doesn't exists, "
 		    "creating new OGR layer instead"),
@@ -587,11 +632,21 @@ int main(int argc, char *argv[])
     }
 
     G_debug(1, "Create OGR layer");
+#if GDAL_VERSION_NUM >= 2020000
     if (flags.append->answer)
-	Ogr_layer = OGR_DS_GetLayerByName(Ogr_ds, options.layer->answer);
+	Ogr_layer = GDALDatasetGetLayerByName(hDS, options.layer->answer);
     else 
-	Ogr_layer = OGR_DS_CreateLayer(Ogr_ds, options.layer->answer, Ogr_projection, wkbtype,
+	Ogr_layer = GDALDatasetCreateLayer(hDS, options.layer->answer,
+	                                   Ogr_projection, wkbtype,
+					   papszLCO);
+#else
+    if (flags.append->answer)
+	Ogr_layer = OGR_DS_GetLayerByName(hDS, options.layer->answer);
+    else 
+	Ogr_layer = OGR_DS_CreateLayer(hDS, options.layer->answer,
+	                               Ogr_projection, wkbtype,
 				       papszLCO);
+#endif
     
     CSLDestroy(papszLCO);
     if (Ogr_layer == NULL) {
@@ -764,7 +819,7 @@ int main(int argc, char *argv[])
     if (OGR_L_TestCapability(Ogr_layer, OLCTransactions))
 	OGR_L_CommitTransaction(Ogr_layer);
 
-    OGR_DS_Destroy(Ogr_ds);
+    ds_close(hDS);
 
     Vect_close(&In);
 
