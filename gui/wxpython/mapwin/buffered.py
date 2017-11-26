@@ -21,6 +21,8 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (refactoring)
 """
 
+from __future__ import print_function
+
 import os
 import time
 import math
@@ -589,7 +591,7 @@ class BufferedMapWindow(MapWindowBase, Window):
                     gcdc = wx.GCDC(dc)
                     self.pdcVector.DrawToDCClipped(gcdc, rgn)
                 except NotImplementedError as e:
-                    print >> sys.stderr, e
+                    print(e, file=sys.stderr)
                     self.pdcVector.DrawToDCClipped(dc, rgn)
 
             self.bufferLast = None
@@ -604,7 +606,7 @@ class BufferedMapWindow(MapWindowBase, Window):
                         gcdc = wx.GCDC(dc)
                         self.pdcVector.DrawToDC(gcdc)
                     except NotImplementedError as e:
-                        print >> sys.stderr, e
+                        print(e, file=sys.stderr)
                         self.pdcVector.DrawToDC(dc)
 
                 # store buffered image
@@ -621,7 +623,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             gcdc = wx.GCDC(dc)
             self.pdcTransparent.DrawToDC(gcdc)
         except NotImplementedError as e:
-            print >> sys.stderr, e
+            print(e, file=sys.stderr)
             self.pdcTransparent.DrawToDC(dc)
 
         # draw temporary object on the foreground

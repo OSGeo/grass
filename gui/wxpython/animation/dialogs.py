@@ -19,6 +19,9 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
+from __future__ import print_function
+
 import os
 import wx
 import copy
@@ -2098,8 +2101,8 @@ def testExport():
     dlg = ExportDialog(parent=None, temporal=TemporalMode.TEMPORAL,
                        timeTick=200)
     if dlg.ShowModal() == wx.ID_OK:
-        print dlg.GetDecorations()
-        print dlg.GetExportInformation()
+        print(dlg.GetDecorations())
+        print(dlg.GetExportInformation())
         dlg.Destroy()
     else:
         dlg.Destroy()
@@ -2112,7 +2115,7 @@ def testTemporalLayer():
     dlg = AddTemporalLayerDialog(parent=frame, layer=layer)
     if dlg.ShowModal() == wx.ID_OK:
         layer = dlg.GetLayer()
-        print layer.name, layer.cmd, layer.mapType
+        print(layer.name, layer.cmd, layer.mapType)
         dlg.Destroy()
     else:
         dlg.Destroy()

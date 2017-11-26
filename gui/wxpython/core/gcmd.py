@@ -25,6 +25,8 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import time
@@ -603,7 +605,7 @@ class CommandThread(Thread):
 
         except OSError as e:
             self.error = str(e)
-            print >> sys.stderr, e
+            print(e, file=sys.stderr)
             return 1
 
         if self.stdin:  # read stdin if requested ...

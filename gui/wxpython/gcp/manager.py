@@ -26,6 +26,8 @@ This program is free software under the GNU General Public License
 @author Support for GraphicsSet added by Stepan Turek <stepan.turek seznam.cz> (2012)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import shutil
@@ -588,8 +590,8 @@ class GroupPage(TitledPage):
 
     def OnMkGroup(self, event):
         """Create new group in source location/mapset"""
-	if self.xygroup == '':
-	    self.xygroup = self.cb_group.GetValue()
+        if self.xygroup == '':
+            self.xygroup = self.cb_group.GetValue()
         dlg = GroupDialog(parent=self, defaultGroup=self.xygroup)
         dlg.DisableSubgroupEdit()
         dlg.ShowModal()
@@ -605,9 +607,9 @@ class GroupPage(TitledPage):
 
     def OnVGroup(self, event):
         """Add vector maps to group"""
-	
-	if self.xygroup == '':
-	    self.xygroup = self.cb_group.GetValue()
+
+        if self.xygroup == '':
+            self.xygroup = self.cb_group.GetValue()
 
         dlg = VectGroup(parent=self,
                         id=wx.ID_ANY,
@@ -814,7 +816,7 @@ class DispMapPage(TitledPage):
                 p = RunCommand('g.region', 'vector=src_map')
 
             if p.returncode == 0:
-                print 'returncode = ', str(p.returncode)
+                print('returncode = ', str(p.returncode))
                 self.parent.Map.region = self.parent.Map.GetRegion()
         except:
             pass
@@ -1610,7 +1612,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
             # provide feedback on failure
             if ret != 0:
-                print >> sys.stderr, msg
+                print(msg, file=sys.stderr)
 
         elif maptype == 'vector':
             # loop through all vectors in VREF
@@ -1654,7 +1656,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
                 # provide feedback on failure
                 if ret != 0:
-                    print >> sys.stderr, msg
+                    print(msg, file=sys.stderr)
 
         self.grwiz.SwitchEnv('target')
 
@@ -1668,7 +1670,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         if returncode == 0:
             self.VectGRList.append(self.outname)
-            print '*****vector list = ' + str(self.VectGRList)
+            print('*****vector list = ' + str(self.VectGRList))
         else:
             self._giface.WriteError(
                 _('Georectification of vector map <%s> failed') %
@@ -2466,10 +2468,10 @@ class VectGroup(wx.Dialog):
                 '@' +
                 self.xymapset)
 
-	dirname = os.path.dirname(self.vgrpfile)
-	
-	if not os.path.exists(dirname):
-	    os.makedirs(dirname)
+        dirname = os.path.dirname(self.vgrpfile)
+
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
 
         f = open(self.vgrpfile, mode='w')
         try:

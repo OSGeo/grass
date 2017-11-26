@@ -14,6 +14,8 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 
 import wx
@@ -261,11 +263,11 @@ class TreeFrame(wx.Frame):
         szr.SetSizeHints(self)
 
     def OnSelChanged(self):
-        print 'selected items: ' + \
-              str([node.label for node in self.tree.GetSelected()])
+        print('selected items: ' + \
+              str([node.label for node in self.tree.GetSelected()]))
 
     def OnItemActivated(self, node):
-        print 'activated: ' + node.label
+        print('activated: ' + node.label)
 
 
 def main():

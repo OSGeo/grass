@@ -17,6 +17,9 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
+from __future__ import print_function
+
 import os
 import sys
 
@@ -333,8 +336,8 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
     def OnClose(self, event):
         """Close dialog"""
-        # TODO
-        print "closed"
+        # TODO: why todo here, why print? just delete?
+        print("closed")
         self.scatt_mgr.CleanUp()
         self.Destroy()
 

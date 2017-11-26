@@ -12,6 +12,8 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import copy
@@ -865,10 +867,10 @@ def module_test():
             sys.stdout.write(line)
             someDiff = True
     if someDiff:
-        print "Difference between files."
+        print("Difference between files.")
         return 1
     else:
-        print "OK"
+        print("OK")
         return 0
 
 
@@ -876,8 +878,8 @@ def validate_file(filename):
     try:
         etree.parse(filename)
     except ETREE_EXCEPTIONS as error:
-        print "XML file <{name}> is not well formed: {error}".format(
-            name=filename, error=error)
+        print("XML file <{name}> is not well formed: {error}".format(
+            name=filename, error=error))
         return 1
     return 0
 

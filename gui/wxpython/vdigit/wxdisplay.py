@@ -17,6 +17,8 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import print_function
+
 import locale
 
 import wx
@@ -43,7 +45,7 @@ def print_error(msg, type):
     if log:
         log.write(msg + os.linesep)
     else:
-        print msg
+        print(msg)
     global last_error
     last_error += ' ' + msg
 

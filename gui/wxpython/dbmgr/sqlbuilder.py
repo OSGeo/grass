@@ -24,6 +24,8 @@ This program is free software under the GNU General Public License
 @author Refactoring, SQLBUilderUpdate by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 """
 
+from __future__ import print_function
+
 import os
 import sys
 
@@ -837,7 +839,7 @@ class SQLBuilderUpdate(SQLBuilder):
 
 if __name__ == "__main__":
     if len(sys.argv) not in [3, 4]:
-        print >>sys.stderr, __doc__
+        print(__doc__, file=sys.stderr)
         sys.exit()
 
     if len(sys.argv) == 3:
@@ -850,7 +852,7 @@ if __name__ == "__main__":
     elif sys.argv[1] == 'update':
         sqlBuilder = SQLBuilderUpdate
     else:
-        print >>sys.stderr, __doc__
+        print(__doc__, file=sys.stderr)
         sys.exit()
 
     app = wx.App(0)
