@@ -22,6 +22,7 @@ SUBDIRS = \
 	r.external \
 	r.external.out \
 	r.fill.dir \
+	r.fill.stats \
 	r.flow \
 	r.geomorphon \
 	r.grow.distance \
