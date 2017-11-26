@@ -14,6 +14,8 @@
 #
 #############################################################################
 
+from __future__ import print_function
+
 import os, sys
 import subprocess
 import json
@@ -33,7 +35,7 @@ def read_po_files(inputdirpath):
         lang = lang[0].split('.')[0]
 
         # if keys is not in languages add it and the file's name
-        if not languages.has_key(lang):
+        if lang not in languages:
             languages[lang] = [pofile,]
         # add only files name
         else:
@@ -112,7 +114,7 @@ def get_stats(languages, directory):
             # check if some errors occurs
             if msg.find('error') != -1:
                 # TODO CHECK IF grass.warning()
-                print "WARNING: file <%s> has some problems: <%s>" % (flang, msg)
+                print("WARNING: file <%s> has some problems: <%s>" % (flang, msg))
                 continue
             output['langs'][lang][fpref], lgood, lfuzzy, lbad = \
             read_msgfmt_statistics(msg, lgood, lfuzzy, lbad)
@@ -137,7 +139,7 @@ def writejson(stats, outfile):
     try:
         os.remove("messages.mo")
     except:
-	pass
+        pass
 
 def main(in_dirpath, out_josonpath):
     languages = read_po_files(in_dirpath)
