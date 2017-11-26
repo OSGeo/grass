@@ -11,6 +11,8 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import print_function
+
 import os
 import sys
 import locale
@@ -100,16 +102,17 @@ def CheckForWx(forceVersion=os.getenv('GRASS_WXVERSION', None)):
                 tuple(version.split('.')))
 
     except ImportError as e:
-        print >> sys.stderr, 'ERROR: wxGUI requires wxPython. %s' % str(e)
-        print >> sys.stderr, ('You can still use GRASS GIS modules in'
-                              ' the command line or in Python.')
+        print('ERROR: wxGUI requires wxPython. %s' % str(e),
+              file=sys.stderr)
+        print('You can still use GRASS GIS modules in'
+              ' the command line or in Python.', file=sys.stderr)
         sys.exit(1)
     except (ValueError, wxversion.VersionError) as e:
-        print >> sys.stderr, 'ERROR: wxGUI requires wxPython >= %d.%d.%d.%d. ' % tuple(
-            minVersion) + '%s.' % (str(e))
+        print('ERROR: wxGUI requires wxPython >= %d.%d.%d.%d. ' % tuple(
+              minVersion) + '%s.' % (str(e)), file=sys.stderr)
         sys.exit(1)
     except locale.Error as e:
-        print >> sys.stderr, "Unable to set locale:", e
+        print("Unable to set locale:", e, file=sys.stderr)
         os.environ['LC_ALL'] = ''
 
 if not os.getenv("GRASS_WXBUNDLED"):
