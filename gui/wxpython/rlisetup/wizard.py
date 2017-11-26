@@ -1598,7 +1598,7 @@ class DrawSampleUnitsPage(TitledPage):
 
     def OnExitPage(self, event=None):
         #!Function during exiting
-        print event.GetDirection()
+        pass
 
         # if event.GetDirection():
         #    self.SetNext(self.parent.samplingareapage)
@@ -1693,7 +1693,6 @@ class VectorAreasPage(TitledPage):
     def OnEnterPage(self, event):
         """Function during entering: draw the raster map and the first vector
         feature"""
-        print self.parent.samplingareapage.overwriteTemp
         if self.mapPanel is None:
             self.mapPanel = RLiSetupMapPanel(
                 self, samplingType=self.parent.samplingareapage.samplingtype)
