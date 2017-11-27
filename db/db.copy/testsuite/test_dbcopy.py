@@ -9,6 +9,10 @@ class TestDbCopy(TestCase):
     outable = 'my_' + invect
 
     @classmethod
+    def setUpClass(cls):
+        cls.runModule('db.connect', flags='c')
+
+    @classmethod
     def tearDownClass(cls):
         cls.runModule('db.droptable', table=cls.outable, flags='f',
                       database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db')
