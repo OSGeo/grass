@@ -19,7 +19,11 @@ SHAPE_Area
 class TestDbColumns(TestCase):
     invect = 'zipcodes'
     mapset = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-    
+
+    @classmethod
+    def setUpClass(cls):
+        cls.runModule('db.connect', flags='c')
+
     def test_dbcols(self):
         cols = read_command('db.columns', table=self.invect,
                             database=self.mapset)
