@@ -470,7 +470,7 @@ int main(int argc, char *argv[])
     drn = -1;
     for (i = 0; i < OGRGetDriverCount(); i++) {
 	hDriver = OGRGetDriver(i);
-	G_debug(2, "driver %d : %s", i, OGR_Dr_GetName(Ogr_driver));
+	G_debug(2, "driver %d : %s", i, OGR_Dr_GetName(hDriver));
 	/* chg white space to underscore in OGR driver names */
 	sprintf(buf, "%s", OGR_Dr_GetName(hDriver));
 	G_strchg(buf, ' ', '_');
