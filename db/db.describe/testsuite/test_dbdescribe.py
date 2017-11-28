@@ -170,12 +170,16 @@ Column 12: SHAPE_Area:DOUBLE PRECISION:20
 class TestDbCopy(TestCase):
     invect = 'zipcodes'
     mapset = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-    
+
+    @classmethod
+    def setUpClass(cls):
+        cls.runModule('db.connect', flags='c')
+
     def test_describe(self):
         cols = read_command('db.describe', table=self.invect,
                             database=self.mapset)
         self.assertEqual(first=cols, second=output)
-        
+
     def test_columns(self):
         cols = read_command('db.describe', table=self.invect, flags='c',
                             database=self.mapset)
