@@ -419,7 +419,7 @@ def _expandToolboxes(node, toolboxes):
     ...   </toolbox>
     ... </toolboxes>''')
     >>> _expandToolboxes(menu, toolboxes)
-    >>> print etree.tostring(menu)
+    >>> print(etree.tostring(menu))
     <toolbox name="Raster">
       <label>&amp;Raster</label>
       <items>
