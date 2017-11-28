@@ -18,8 +18,6 @@ from grass.gunittest.gmodules import SimpleModule
 
 import termcolor
 
-import os
-
 
 class TestSearchModule(TestCase):
 
@@ -28,7 +26,7 @@ class TestSearchModule(TestCase):
         module = SimpleModule('g.search.modules', keyword="water")
         self.assertModule(module)
         stdout = module.outputs.stdout
-        self.assertEqual(stdout.split()[0], 'r.watershed')
+        self.assertEqual(stdout.split()[0], 'r.basins.fill')
 
     def test_json_output(self):
         import json
@@ -36,7 +34,7 @@ class TestSearchModule(TestCase):
         self.assertModule(module)
         stdout = json.loads(module.outputs.stdout)
         self.assertEqual(len(stdout), 6, 'Six modules found')
-        self.assertEqual(stdout[3]['name'], 'r.basins.fill', 'r.basins.fill')
+        self.assertEqual(stdout[3]['name'], 'r.water.outlet', 'r.water.outlet')
         self.assertTrue('keywords' in stdout[3]['attributes'])
 
     def test_shell_outout(self):
@@ -44,14 +42,14 @@ class TestSearchModule(TestCase):
         self.assertModule(module)
         stdout = module.outputs.stdout.split()
         self.assertEqual(len(stdout), 6)
-        self.assertEqual(stdout[3], 'r.basins.fill')
+        self.assertEqual(stdout[3], 'r.water.outlet')
 
     def test_colored_terminal(self):
         module = SimpleModule('g.search.modules', keyword="water", flags="c")
         self.assertModule(module)
         stdout = module.outputs.stdout.split()
         self.assertEqual(stdout[0],
-                         termcolor.colored('r.watershed',
+                         termcolor.colored('r.basins.fill',
                                            attrs=['bold']))
 
     def test_manual_pages(self):
