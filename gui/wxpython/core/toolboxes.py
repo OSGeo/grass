@@ -624,13 +624,13 @@ def _expandRuntimeModules(node, loadMetadata=True):
     ...                         '</items>')
     >>> _expandRuntimeModules(tree)
     >>> etree.tostring(tree)
-    '<items><module-item name="g.region"><module>g.region</module><description>Manages the boundary definitions for the geographic region.</description><keywords>general,settings</keywords></module-item></items>'
+    '<items><module-item name="g.region"><module>g.region</module><description>Manages the boundary definitions for the geographic region.</description><keywords>general,settings,computational region,extent,resolution,level1</keywords></module-item></items>'
     >>> tree = etree.fromstring('<items>'
     ...                         '<module-item name="m.proj"></module-item>'
     ...                         '</items>')
     >>> _expandRuntimeModules(tree)
     >>> etree.tostring(tree)
-    '<items><module-item name="m.proj"><module>m.proj</module><description>Converts coordinates from one projection to another (cs2cs frontend).</description><keywords>miscellaneous,projection</keywords></module-item></items>'
+    '<items><module-item name="m.proj"><module>m.proj</module><description>Converts coordinates from one projection to another (cs2cs frontend).</description><keywords>miscellaneous,projection,transformation</keywords></module-item></items>'
     """
     hasErrors = False
     modules = node.findall('.//module-item')

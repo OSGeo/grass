@@ -3,20 +3,33 @@
 <menudata>
   <menubar>
     <menu>
-      <label>Region</label>
+      <label>Computational region</label>
       <items>
         <menuitem>
-          <label>Display region</label>
+          <label>Show current region</label>
           <command>g.region -p</command>
-          <help>Manages the boundary definitions for the geographic region.</help>
+          <help>Shows the extent and resolution of the computational region.</help>
           <keywords>general,settings</keywords>
           <handler>RunMenuCmd</handler>
+        </menuitem>
+        <menuitem>
+          <label>Show region using latitude and longitude</label>
+          <command>g.region -pl</command>
+          <help>Shows the extent and resolution of the computational region.</help>
+          <keywords>general,settings</keywords>
+          <handler>RunMenuCmd</handler>
+        </menuitem>
+        <menuitem>
+          <label>Show current region extent in Map Display</label>
+          <handler>OnShowRegionExtent</handler>
+          <help>Shows the extent of the computational region in Map Display.</help>
+          <keywords>general,settings</keywords>
         </menuitem>
         <menuitem>
           <label>Set region</label>
           <command>g.region</command>
           <help>Manages the boundary definitions for the geographic region.</help>
-          <keywords>general,settings</keywords>
+          <keywords>general,settings,computational region,extent,resolution,level1</keywords>
           <handler>OnMenuCmd</handler>
         </menuitem>
       </items>
@@ -28,7 +41,7 @@
           <label>Set region</label>
           <command>g.region</command>
           <help>Manages the boundary definitions for the geographic region.</help>
-          <keywords>general,settings</keywords>
+          <keywords>general,settings,computational region,extent,resolution,level1</keywords>
           <handler>OnMenuCmd</handler>
         </menuitem>
         <separator />
@@ -64,7 +77,7 @@
           <label>Convert coordinates</label>
           <command>m.proj</command>
           <help>Converts coordinates from one projection to another (cs2cs frontend).</help>
-          <keywords>miscellaneous,projection</keywords>
+          <keywords>miscellaneous,projection,transformation</keywords>
           <handler>OnMenuCmd</handler>
         </menuitem>
       </items>
@@ -76,7 +89,7 @@
           <label>Set region</label>
           <command>g.region</command>
           <help>Manages the boundary definitions for the geographic region.</help>
-          <keywords>general,settings</keywords>
+          <keywords>general,settings,computational region,extent,resolution,level1</keywords>
           <handler>OnMenuCmd</handler>
         </menuitem>
       </items>
