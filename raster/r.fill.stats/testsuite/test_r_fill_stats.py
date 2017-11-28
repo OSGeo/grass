@@ -30,13 +30,13 @@ class TestRFillStats(TestCase):
 
     def test_stats(self):
         """Test if results match verified rasters"""
-        self.assertModule('r.fill.gaps', input=self.ascii, output=self.stats, distance=1, mode='wmean', power=2, cells=2, overwrite=True)
+        self.assertModule('r.fill.stats', input=self.ascii, output=self.stats, distance=1, mode='wmean', power=2, cells=2, overwrite=True)
         self.assertRastersNoDifference(self.stats, self.wmean, precision=1e-6)
-        self.assertModule('r.fill.gaps', input=self.ascii, output=self.stats, distance=1, mode='mean', power=2, cells=2, overwrite=True)
+        self.assertModule('r.fill.stats', input=self.ascii, output=self.stats, distance=1, mode='mean', power=2, cells=2, overwrite=True)
         self.assertRastersNoDifference(self.stats, self.mean, precision=1e-6)
-        self.assertModule('r.fill.gaps', input=self.ascii, output=self.stats, distance=1, mode='median', power=2, cells=2, overwrite=True)
+        self.assertModule('r.fill.stats', input=self.ascii, output=self.stats, distance=1, mode='median', power=2, cells=2, overwrite=True)
         self.assertRastersNoDifference(self.stats, self.median, precision=1e-6)
-        self.assertModule('r.fill.gaps', input=self.ascii, output=self.stats, distance=1, mode='mode', power=2, cells=2, overwrite=True)
+        self.assertModule('r.fill.stats', input=self.ascii, output=self.stats, distance=1, mode='mode', power=2, cells=2, overwrite=True)
         self.assertRastersNoDifference(self.stats, self.mode, precision=1e-6)
 
 if __name__ == '__main__':
