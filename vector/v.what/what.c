@@ -267,6 +267,8 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 
 	Vect_reset_cats(Cats);
 	Vect_reset_line(Points);
+	Vect_reset_list(lineList);
+	Vect_reset_list(areaList);
 
 	if (multiple) {
 	    int type;
