@@ -15,6 +15,8 @@
 *
 *****************************************************************************/
 
+#include <math.h>
+#include <sys/types.h>
 #include <grass/config.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,7 +32,6 @@
     for (i = 0; i < 76; i++)\
         fprintf(out,"-");\
     fprintf (out,"%c\n",x)
-
 
 /* local prototypes */
 static void format_double(const double, char *);
@@ -50,6 +51,7 @@ int main(int argc, char **argv)
     FILE *out;
     struct Range crange;
     struct FPRange range;
+    struct R_stats rstats;
     struct Cell_head cellhd;
     struct Categories cats;
     struct History hist;
@@ -61,7 +63,7 @@ int main(int argc, char **argv)
     struct Reclass reclass;
     struct GModule *module;
     struct Option *opt1;
-    struct Flag *gflag, *rflag, *eflag, *hflag;
+    struct Flag *gflag, *rflag, *eflag, *hflag, *sflag;
 
     /* Initialize GIS Engine */
     G_gisinit(argv[0]);
@@ -84,6 +86,10 @@ int main(int argc, char **argv)
     rflag->key = 'r';
     rflag->description = _("Print range in shell script style");
 
+    sflag = G_define_flag();
+    sflag->key = 's';
+    sflag->description = _("Print stats in shell script style");
+
     eflag = G_define_flag();
     eflag->key = 'e';
     eflag->description = _("Print extended metadata information in shell script style");
@@ -95,7 +101,7 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (hflag->answer && (gflag->answer || rflag->answer || eflag->answer))
+    if (hflag->answer && (gflag->answer || rflag->answer || sflag->answer || eflag->answer))
         G_fatal_error(_("Flags -%c and -%c/%c/%c are mutually exclusive"),
                       hflag->key, gflag->key, rflag->key, eflag->key);
 
@@ -105,6 +111,7 @@ int main(int argc, char **argv)
 
     Rast_get_cellhd(name, "", &cellhd);
     cats_ok = Rast_read_cats(name, "", &cats) >= 0;
+    title = Rast_get_cats_title(&cats);
     hist_ok = Rast_read_history(name, "", &hist) >= 0;
     is_reclass = Rast_get_reclass(name, "", &reclass);
     data_type = Rast_map_type(name, "");
@@ -129,7 +136,7 @@ int main(int argc, char **argv)
 
     out = stdout;
 
-    if (eflag->answer || (!gflag->answer && !rflag->answer && !hflag->answer)) {
+    if (eflag->answer || (!gflag->answer && !rflag->answer && !sflag->answer && !hflag->answer)) {
 	title = "";
 	/* empty title by default */
 	/* use title from category file as the primary (and only) title */
@@ -144,7 +151,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (!gflag->answer && !rflag->answer &&
+    if (!gflag->answer && !rflag->answer && !sflag->answer &&
 	!eflag->answer && !hflag->answer) {
 	divider('+');
 
@@ -232,13 +239,21 @@ int main(int argc, char **argv)
 				 "  Range of data:    min = %i  max = %i",
 				 (CELL) zmin, (CELL) zmax);
 	    }
-	    else if (data_type == FCELL_TYPE) {
-		compose_line(out, "  Range of data:    min = %.7g  max = %.7g",
-			     zmin, zmax);
-	    }
 	    else {
-		compose_line(out, "  Range of data:    min = %.15g  max = %.15g",
-			     zmin, zmax);
+		if (Rast_is_d_null_value(&zmin)) {
+		    compose_line(out,
+				 "  Range of data:    min = NULL  max = NULL");
+		}
+		else {
+		    if (data_type == FCELL_TYPE) {
+			compose_line(out, "  Range of data:    min = %.7g  max = %.7g",
+				     zmin, zmax);
+		    }
+		    else {
+			compose_line(out, "  Range of data:    min = %.15g  max = %.15g",
+				     zmin, zmax);
+		    }
+		}
 	    }
 	}
 
@@ -316,7 +331,7 @@ int main(int argc, char **argv)
 
 	fprintf(out, "\n");
     }
-    else {	/* g,r,e, or h flags */
+    else {	/* g,r,s, e, or h flags */
 
 	if (gflag->answer) {
 	    G_format_northing(cellhd.north, tmp1, -1);
@@ -362,13 +377,94 @@ int main(int argc, char **argv)
 		    fprintf(out, "max=%i\n", (CELL) zmax);
 		}
 	    }
-	    else if (data_type == FCELL_TYPE) {
-		fprintf(out, "min=%.7g\n", zmin);
-		fprintf(out, "max=%.7g\n", zmax);
+	    else {
+		if (Rast_is_d_null_value(&zmin)) {
+		    fprintf(out, "min=NULL\n");
+		    fprintf(out, "max=NULL\n");
+		}
+		else {
+		    if (data_type == FCELL_TYPE) {
+			fprintf(out, "min=%.7g\n", zmin);
+			fprintf(out, "max=%.7g\n", zmax);
+		    }
+		    else {
+			fprintf(out, "min=%.15g\n", zmin);
+			fprintf(out, "max=%.15g\n", zmax);
+		    }
+		}
+	    }
+	}
+
+	if (sflag->answer) {
+
+	    if (Rast_read_rstats(name, mapset, &rstats) < 0) {
+		DCELL *dbuf, val;
+		int fd, r, c;
+		int first = 1;
+
+		Rast_set_input_window(&cellhd);
+		dbuf = Rast_allocate_d_input_buf();
+		fd = Rast_open_old(name, mapset);
+
+		for (r = 0; r < cellhd.rows; r++) {
+		    Rast_get_d_row(fd, dbuf, r);
+		    for (c = 0; c < cellhd.cols; c++) {
+			val = dbuf[c];
+			if (Rast_is_d_null_value(&val))
+			    continue;
+			if (first) {
+			    rstats.sum = val;
+			    rstats.sumsq = (DCELL) val * val;
+			    rstats.count = 1;
+
+			    first = 0;
+			}
+			else {
+			    rstats.sum += val;
+			    rstats.sumsq += (DCELL) val * val;
+			    rstats.count += 1;
+			}
+		    }
+		}
+		Rast_close(fd);
+		G_free(dbuf);
+	    }
+
+	    if (rstats.count > 0) {
+		double mean, sd;
+		
+		mean = (double)(rstats.sum / rstats.count);
+		sd = sqrt(rstats.sumsq / rstats.count - (mean * mean));
+
+#ifdef HAVE_LONG_LONG_INT
+		fprintf(out, "n=%lld\n", (long long int)rstats.count);
+#else
+		fprintf(out, "n=%.0f\n", (double)rstats.count);
+#endif
+
+		if (!rflag->answer) {
+		    fprintf(out, "min=%.15g\n", zmin);
+		    fprintf(out, "max=%.15g\n", zmax);
+		}
+		if (zmin == zmax) {
+		    fprintf(out, "mean=%.15g\n", zmin);
+		    fprintf(out, "stddev=0\n");
+		}
+		else {
+		    fprintf(out, "mean=%.15g\n", mean);
+		    fprintf(out, "stddev=%.15g\n", sd);
+		}
+		fprintf(out, "sum=%.15g\n", rstats.sum);
 	    }
 	    else {
-		fprintf(out, "min=%.15g\n", zmin);
-		fprintf(out, "max=%.15g\n", zmax);
+		fprintf(out, "n=0\n");
+		if (!rflag->answer) {
+		    fprintf(out, "min=NULL\n");
+		    fprintf(out, "max=NULL\n");
+		}
+		fprintf(out, "mean=NULL\n");
+		fprintf(out, "stddev=NULL\n");
+		fprintf(out, "sum=NULL\n");
 	    }
 	}
 
