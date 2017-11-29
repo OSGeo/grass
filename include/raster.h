@@ -215,11 +215,19 @@ struct Histogram
     } *list;
 };
 
+struct R_stats
+{
+    DCELL sum;
+    DCELL sumsq;
+    off_t count;
+};
+
 struct Range
 {
     CELL min;
     CELL max;
     int first_time;		/* whether or not range was updated */
+    struct R_stats rstats;
 };
 
 struct FPRange
@@ -227,6 +235,7 @@ struct FPRange
     DCELL min;
     DCELL max;
     int first_time;		/* whether or not range was updated */
+    struct R_stats rstats;
 };
 
 struct FP_stats {

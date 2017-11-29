@@ -528,6 +528,9 @@ void Rast_get_range_min_max(const struct Range *, CELL *, CELL *);
 void Rast_init_fp_range(struct FPRange *);
 void Rast_get_fp_range_min_max(const struct FPRange *, DCELL *, DCELL *);
 
+int Rast_read_rstats(const char *, const char *, struct R_stats *);
+void Rast_write_rstats(const char *, const struct R_stats *);
+
 /* raster.c */
 int Rast_raster_cmp(const void *, const void *, RASTER_MAP_TYPE);
 void Rast_raster_cpy(void *, const void *, int, RASTER_MAP_TYPE);
