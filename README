@@ -71,3 +71,10 @@ To run the tests (again assuming local location):
         -it grass grass /data/nc_basic_spm/PERMANENT --exec \
             python -m grass.gunittest.main \
                 --location nc_basic_spm --location-type nc
+
+If you compiled locally before building the Docker image, you may
+encounter problems as the local configuration and locally compiled file
+are copied to and used in the Docker image. To make sure you don't have
+this issue, clean all the compiled files from the source code:
+
+    make distclean
