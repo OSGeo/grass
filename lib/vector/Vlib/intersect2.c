@@ -107,6 +107,27 @@ static int *use_cross = NULL;
 
 static double rethresh = 0.000001;	/* TODO */
 
+static double d_ulp(double a, double b)
+{
+    double fa = fabs(a);
+    double fb = fabs(b);
+    double dmax, result;
+    int exp;
+    
+    dmax = fa;
+    if (dmax < fb)
+	dmax = fb;
+
+    /* unit in the last place (ULP):
+     * smallest representable difference
+     * shift of the exponent
+     * float: 23, double: 52, middle: 37 */
+    result = frexp(dmax, &exp);
+    exp -= 23;
+    result = ldexp(result, exp);
+
+    return result;
+}
 
 static void add_cross(int asegment, double adistance, int bsegment,
 		      double bdistance, double x, double y)
@@ -495,12 +516,12 @@ static int boq_load(struct boq *q, struct line_pnts *Pnts,
 	    box.T = z1;
 	    box.B = z2;
 	}
-	box.W -= rethresh;
-	box.S -= rethresh;
-	box.B -= rethresh;
-	box.E += rethresh;
-	box.N += rethresh;
-	box.T += rethresh;
+	box.W -= d_ulp(box.W, box.W);
+	box.S -= d_ulp(box.S, box.S);
+	box.B -= d_ulp(box.B, box.B);
+	box.E += d_ulp(box.E, box.E);
+	box.N += d_ulp(box.N, box.N);
+	box.T += d_ulp(box.T, box.T);
 
 	if (!Vect_box_overlap(abbox, &box))
 	    continue;
@@ -633,7 +654,7 @@ Vect_line_intersection2(struct line_pnts *APoints,
      *  for example: equator length is 40.075,695 km (8 digits), units are m (+3) 
      *  and we want precision in mm (+ 3) = 14 -> minimum rethresh may be around 0.001
      *  ?Maybe all nonsense? 
-     *  Use rounding error of the unit in the least place ? 
+     *  Use rounding error of the unit in the last place ? 
      *  max of fabs(x), fabs(y)
      *  rethresh = pow(2, log2(max) - 53) */
 
@@ -702,12 +723,12 @@ Vect_line_intersection2(struct line_pnts *APoints,
 	    abbox.B = BBox->B;
     }
 
-    abbox.N += rethresh;
-    abbox.S -= rethresh;
-    abbox.E += rethresh;
-    abbox.W -= rethresh;
-    abbox.T += rethresh;
-    abbox.B -= rethresh;
+    abbox.N += d_ulp(abbox.N, abbox.N);
+    abbox.S -= d_ulp(abbox.S, abbox.S);
+    abbox.E += d_ulp(abbox.E, abbox.E);
+    abbox.W -= d_ulp(abbox.W, abbox.W);
+    abbox.T += d_ulp(abbox.T, abbox.T);
+    abbox.B -= d_ulp(abbox.B, abbox.B);
 
     if (APnts->n_points < 2 || BPnts->n_points < 2) {
 	G_fatal_error("Intersection with points is not yet supported");
@@ -831,7 +852,15 @@ Vect_line_intersection2(struct line_pnts *APoints,
 	    x = BPnts->x[seg + 1];
 	    y = BPnts->y[seg + 1];
 	}
-	if (curdist < rethresh * rethresh) {
+
+	/* the threshold should not be too small, otherwise we get 
+	 * too many tiny new segments
+	 * the threshold should not be too large, otherwise we might 
+	 * introduce new crossings 
+	 * the smallest difference representable with 
+	 * single precision floating point works well with pathological input
+	 * regular input is not affected */
+	if (curdist < d_ulp(x, y)) {	/* was rethresh * rethresh */
 	    cross[i].x = x;
 	    cross[i].y = y;
 
@@ -1285,7 +1314,7 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 			   APoints->z[0], with_z, NULL, NULL, NULL, &dist,
 			   NULL, NULL);
 
-	if (dist <= rethresh) {
+	if (dist <= d_ulp(APoints->x[0], APoints->y[0])) {
 	    if (0 >
 		Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0], &APoints->y[0],
 				      &APoints->z[0], 1))
@@ -1302,7 +1331,7 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 			   BPoints->z[0], with_z, NULL, NULL, NULL, &dist,
 			   NULL, NULL);
 
-	if (dist <= rethresh) {
+	if (dist <= d_ulp(BPoints->x[0], BPoints->y[0])) {
 	    if (0 >
 		Vect_copy_xyz_to_pnts(IPnts, &BPoints->x[0], &BPoints->y[0],
 				      &BPoints->z[0], 1))
@@ -1337,12 +1366,12 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
     if (abbox.B < ABox.B)
 	abbox.B = ABox.B;
 
-    abbox.N += rethresh;
-    abbox.S -= rethresh;
-    abbox.E += rethresh;
-    abbox.W -= rethresh;
-    abbox.T += rethresh;
-    abbox.B -= rethresh;
+    abbox.N += d_ulp(abbox.N, abbox.N);
+    abbox.S -= d_ulp(abbox.S, abbox.S);
+    abbox.E += d_ulp(abbox.E, abbox.E);
+    abbox.W -= d_ulp(abbox.W, abbox.W);
+    abbox.T += d_ulp(abbox.T, abbox.T);
+    abbox.B -= d_ulp(abbox.B, abbox.B);
 
     /* initialize queue */
     bo_queue.count = 0;
