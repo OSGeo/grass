@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 # Author: Ivan Mincik, ivan.mincik@gmail.com
 
+set -e
+
 ./configure --host=x86_64-linux-gnu \
             --build=x86_64-linux-gnu \
             --prefix=/usr/lib \
