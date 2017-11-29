@@ -73,4 +73,4 @@ int export_areas(struct Map_info *, int, int, int,
                  OGRFeatureDefnH, OGRLayerH,
                  struct field_info *, dbDriver *, int, int *, 
                  const char **, int, int,
-                 int *, int *);
+                 int *, int *, int);

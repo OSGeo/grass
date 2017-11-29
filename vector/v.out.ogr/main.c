@@ -74,6 +74,7 @@ int main(int argc, char *argv[])
     char **papszDSCO = NULL, **papszLCO = NULL;
     int num_types;
     char *dsn;
+    int outer_ring_ccw;
     
     G_gisinit(argv[0]);
 
@@ -262,7 +263,6 @@ int main(int argc, char *argv[])
     if (cellhd.proj != PROJECTION_XY) {
         const char *epsg;
 
-        Ogr_projection = NULL;
         /* try EPSG code first */
         epsg = G_database_epsg_code();
         if (!epsg) {
@@ -772,6 +772,19 @@ int main(int argc, char *argv[])
 
     if (OGR_L_TestCapability(Ogr_layer, OLCTransactions))
 	OGR_L_StartTransaction(Ogr_layer);
+
+    /* export polygons oriented according to OGC simple features standard 1.2.1
+     * outer rings are oriented counter-clockwise (CCW)
+     * inner rings are oriented clockwise (CW) */
+    outer_ring_ccw = 1;
+    /* some formats expect outer rings to be CW and inner rings to be CCW:
+     * ESRI Shapefile, PGeo, FileGDB, OpenFileGDB (all ESRI) */
+    if (strcmp(options.format->answer, "ESRI Shapefile") == 0 ||
+        strcmp(options.format->answer, "PGeo") == 0 ||
+        strcmp(options.format->answer, "FileGDB") == 0 ||
+        strcmp(options.format->answer, "OpenFileGDB") == 0) {
+	outer_ring_ccw = 0;
+    }
     
     /* Lines (run always to count features of different type) */
     if (otype & (GV_POINTS | GV_LINES | GV_KERNEL | GV_FACE)) {
@@ -799,7 +812,7 @@ int main(int argc, char *argv[])
                                Ogr_featuredefn, Ogr_layer,
                                Fi, Driver, ncol, colctype, 
                                colname, doatt, flags.nocat->answer ? TRUE : FALSE,
-                               &n_noatt, &n_nocat);
+                               &n_noatt, &n_nocat, outer_ring_ccw);
     }
 
     /*
