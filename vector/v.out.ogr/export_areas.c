@@ -6,20 +6,43 @@ static int export_areas_single(struct Map_info *, int, int,
                                OGRFeatureDefnH, OGRLayerH,
                                struct field_info *, dbDriver *, int, int *, 
                                const char **, int, int,
-                               int *, int *);
+                               int *, int *, int);
 static int export_areas_multi(struct Map_info *, int, int, 
                               OGRFeatureDefnH, OGRLayerH,
                               struct field_info *, dbDriver *, int, int *, 
                               const char **, int, int,
-                              int *, int *);
-static OGRGeometryH create_polygon(struct Map_info *, int, struct line_pnts *);
+                              int *, int *, int);
+static OGRGeometryH create_polygon(struct Map_info *, int, struct line_pnts *, int);
+
+/* maybe useful */
+void reverse_points(struct line_pnts *Points)
+{
+    int i, j, nhalf;
+    double tmp;
+    
+    nhalf = Points->n_points / 2;
+    
+    for (i = 0, j = Points->n_points - 1; i < nhalf; i++, j--) {
+	tmp = Points->x[i];
+	Points->x[i] = Points->x[j];
+	Points->x[j] = tmp;
+
+	tmp = Points->y[i];
+	Points->y[i] = Points->y[j];
+	Points->y[j] = tmp;
+
+	tmp = Points->z[i];
+	Points->z[i] = Points->z[j];
+	Points->z[j] = tmp;
+    }
+}
 
 /* export areas as single/multi-polygons */
 int export_areas(struct Map_info *In, int field, int multi, int donocat,
                  OGRFeatureDefnH Ogr_featuredefn,OGRLayerH Ogr_layer,
                  struct field_info *Fi, dbDriver *driver, int ncol, int *colctype,
                  const char **colname, int doatt, int nocat,
-                 int *noatt, int *fout)
+                 int *noatt, int *fout, int outer_ring_ccw)
 {
     if (multi)
         /* export as multi-polygons */
@@ -27,21 +50,21 @@ int export_areas(struct Map_info *In, int field, int multi, int donocat,
                                   Ogr_featuredefn, Ogr_layer,
                                   Fi, driver, ncol, colctype, 
                                   colname, doatt, nocat,
-                                  noatt, fout);
+                                  noatt, fout, outer_ring_ccw);
     
     /* export as polygons */
     return export_areas_single(In, field, donocat,
                                Ogr_featuredefn, Ogr_layer,
                                Fi, driver, ncol, colctype, 
                                colname, doatt, nocat,
-                               noatt, fout);
+                               noatt, fout, outer_ring_ccw);
 }
 
 int export_areas_single(struct Map_info *In, int field, int donocat,
                         OGRFeatureDefnH Ogr_featuredefn,OGRLayerH Ogr_layer,
                         struct field_info *Fi, dbDriver *driver, int ncol, int *colctype,
                         const char **colname, int doatt, int nocat,
-                        int *n_noatt, int *n_nocat)
+                        int *n_noatt, int *n_nocat, int outer_ring_ccw)
 {
     int i;
     int cat, area, n_areas;
@@ -76,7 +99,7 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
         }
 
         /* create polygon from area */
-        Ogr_geometry = create_polygon(In, area, Points);
+        Ogr_geometry = create_polygon(In, area, Points, outer_ring_ccw);
 
         /* add feature */
         Ogr_feature = OGR_F_Create(Ogr_featuredefn);
@@ -116,7 +139,7 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
                        OGRFeatureDefnH Ogr_featuredefn,OGRLayerH Ogr_layer,
                        struct field_info *Fi, dbDriver *driver, int ncol, int *colctype,
                        const char **colname, int doatt, int nocat,
-                       int *n_noatt, int *n_nocat)
+                       int *n_noatt, int *n_nocat, int outer_ring_ccw)
 {
     int i, n_exported, area;
     int cat, ncats_field, line, type, findex, ipart;
@@ -183,7 +206,7 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
                 continue;
                 
             /* create polygon from area */
-            Ogr_geometry_part = create_polygon(In, area, Points);
+            Ogr_geometry_part = create_polygon(In, area, Points, outer_ring_ccw);
 
             /* add part */
             OGR_G_AddGeometryDirectly(Ogr_geometry, Ogr_geometry_part);
@@ -230,7 +253,7 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
         }
 
         /* create polygon from area */
-        Ogr_geometry_part = create_polygon(In, area, Points);
+        Ogr_geometry_part = create_polygon(In, area, Points, outer_ring_ccw);
         
         /* add part */
         OGR_G_AddGeometryDirectly(Ogr_geometry, Ogr_geometry_part);
@@ -268,7 +291,7 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
 }
 
 OGRGeometryH create_polygon(struct Map_info *In, int area,
-                            struct line_pnts *Points)
+                            struct line_pnts *Points, int outer_ring_ccw)
 {
     int j, k;
     OGRGeometryH Ogr_geometry, ring;
@@ -279,29 +302,58 @@ OGRGeometryH create_polygon(struct Map_info *In, int area,
     ring = OGR_G_CreateGeometry(wkbLinearRing);
     
     /* Area */
-    for (j = 0; j < Points->n_points; j++) {
-        if (Vect_is_3d(In))
-            OGR_G_AddPoint(ring, Points->x[j], Points->y[j],
-                           Points->z[j]);
-	else
-            OGR_G_AddPoint_2D(ring, Points->x[j], Points->y[j]);
+    if (Vect_is_3d(In)) {
+	if (outer_ring_ccw) {
+	    for (j = Points->n_points - 1; j >= 0 ; j--)
+                OGR_G_AddPoint(ring, Points->x[j], Points->y[j],
+                               Points->z[j]);
+	}
+	else {
+	    for (j = 0; j < Points->n_points; j++)
+                OGR_G_AddPoint(ring, Points->x[j], Points->y[j],
+                               Points->z[j]);
+	}
     }
-    
+    else {
+	if (outer_ring_ccw) {
+	    for (j = Points->n_points - 1; j >= 0 ; j--)
+		OGR_G_AddPoint_2D(ring, Points->x[j], Points->y[j]);
+	}
+	else {
+	    for (j = 0; j < Points->n_points; j++)
+		OGR_G_AddPoint_2D(ring, Points->x[j], Points->y[j]);
+	}
+    }
+
     OGR_G_AddGeometryDirectly(Ogr_geometry, ring);
     
     /* Isles */
     for (k = 0; k < Vect_get_area_num_isles(In, area); k++) {
         Vect_get_isle_points(In, Vect_get_area_isle(In, area, k),
                              Points);
-        
         ring = OGR_G_CreateGeometry(wkbLinearRing);
-        for (j = 0; j < Points->n_points; j++) {
-	    if(Vect_is_3d(In))
-                OGR_G_AddPoint(ring, Points->x[j], Points->y[j],
-                               Points->z[j]);
-	    else
-                OGR_G_AddPoint_2D(ring, Points->x[j], Points->y[j]);
-        }
+	if (Vect_is_3d(In)) {
+	    if (outer_ring_ccw) {
+		for (j = Points->n_points - 1; j >= 0 ; j--)
+		    OGR_G_AddPoint(ring, Points->x[j], Points->y[j],
+				   Points->z[j]);
+	    }
+	    else {
+		for (j = 0; j < Points->n_points; j++)
+		    OGR_G_AddPoint(ring, Points->x[j], Points->y[j],
+				   Points->z[j]);
+	    }
+	}
+	else {
+	    if (outer_ring_ccw) {
+		for (j = Points->n_points - 1; j >= 0 ; j--)
+		    OGR_G_AddPoint_2D(ring, Points->x[j], Points->y[j]);
+	    }
+	    else {
+		for (j = 0; j < Points->n_points; j++)
+		    OGR_G_AddPoint_2D(ring, Points->x[j], Points->y[j]);
+	    }
+	}
         OGR_G_AddGeometryDirectly(Ogr_geometry, ring);
     }
 
