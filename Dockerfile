@@ -5,6 +5,9 @@ MAINTAINER Vaclav Petras <wenzeslaus@gmail.com>
 # system environment
 ENV DEBIAN_FRONTEND noninteractive
 
+# data directory - not using the base images volume because then the permissions cannot be adapted
+ENV DATA_DIR /data
+
 # GRASS GIS compile dependencies
 RUN apt-get update \
     && apt-get install -y --install-recommends \
@@ -45,7 +48,8 @@ RUN apt-get update \
         unixodbc-dev \
         zlib1g-dev \
     && apt-get autoremove \
-    && apt-get clean
+    && apt-get clean && \
+    mkdir -p $DATA_DIR
 
 RUN mkdir /code
 RUN mkdir /code/grass
@@ -70,17 +74,22 @@ RUN ./configure \
     --with-freetype=yes --with-freetype-includes="/usr/include/freetype2/" \
     --with-sqlite=yes \
     --with-liblas=yes --with-liblas-config=/usr/bin/liblas-config \
-    && make && make install && ldconfig
+    && make -j2 && make install && ldconfig
 
 # enable simple grass command regardless of version number
 RUN ln -s /usr/local/bin/grass* /usr/local/bin/grass
 
+# Fix permissions
+RUN chmod -R a+rwx $DATA_DIR
+
 # create a user
 RUN useradd -m -U grass
 
-VOLUME ["/data"]
+# declare volume late so permissions apply
+VOLUME $DATA_DIR
+WORKDIR $DATA_DIR
 
 # switch the user
 USER grass
 
-WORKDIR /data
+CMD ["/usr/local/bin/grass", "--version"]
