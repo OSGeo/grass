@@ -55,19 +55,32 @@ http://grass.osgeo.org/programming7/
 Build using the downloaded source code (in the directory with the
 source code):
 
-    docker build -t grass .
+    docker build -t grassgis74 .
 
-A test run (assuming you have existing GRASS GIS location)
+A test run (assuming you have existing GRASS GIS location; it can be downloaded from
+https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip)
 
-    docker run --rm -v /your/local/grassdata/:/data -it grass \
+    # case 1: launching in the grassdata directory in which the location is stored:
+    docker run -it --rm --user=$(id -u):$(id -g) --volume $(pwd):/data --env HOME=/data/ grassgis74 \
+        grass --text nc_basic_spm/PERMANENT --exec g.region -p
+
+    # case 2: launching anywhere
+    docker run -it --rm --user=$(id -u):$(id -g) --volume /your/test/grassdata/:/data --env HOME=/data/ grassgis74 \
         grass /data/nc_basic_spm/PERMANENT --exec g.region -p
 
-Note that the first `grass` is a name of the image while the second
+Note that the first `grassgis74` is the name of the image while the second
 `grass` is the name of the executable.
 
 To run the tests (again assuming local location):
 
-    docker run --rm -v /your/test/grassdata/:/data -w /code/grass \
-        -it grass grass /data/nc_basic_spm/PERMANENT --exec \
+    docker run -it --rm --user=$(id -u):$(id -g) --volume /your/test/grassdata/:/data --env HOME=/data/ -w /code/grass \
+        grassgis74 grass /data/nc_basic_spm/PERMANENT --exec \
             python -m grass.gunittest.main \
                 --location nc_basic_spm --location-type nc
+
+Note: If you compiled locally before building the Docker image, you may
+encounter problems as the local configuration and locally compiled file
+are copied to and used in the Docker image. To make sure you don't have
+this issue, clean all the compiled files from the source code:
+
+    make distclean
