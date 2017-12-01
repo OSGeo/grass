@@ -131,6 +131,7 @@ int main(int argc, char **argv)
     out_opt->key = "output";
     out_opt->required = NO;
     out_opt->label = _("Name for output raster map");
+    out_opt->description = NULL;
     out_opt->guisection = _("Basic");
 
     net_out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
