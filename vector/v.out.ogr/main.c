@@ -779,13 +779,15 @@ int main(int argc, char *argv[])
     outer_ring_ccw = 1;
     /* some formats expect outer rings to be CW and inner rings to be CCW:
      * ESRI Shapefile, PGeo, FileGDB, OpenFileGDB (all ESRI) */
-    if (strcmp(options.format->answer, "ESRI Shapefile") == 0 ||
+    if (strcmp(options.format->answer, "ESRI_Shapefile") == 0 ||
         strcmp(options.format->answer, "PGeo") == 0 ||
         strcmp(options.format->answer, "FileGDB") == 0 ||
         strcmp(options.format->answer, "OpenFileGDB") == 0) {
 	outer_ring_ccw = 0;
     }
-    
+    G_debug(1, "Format \"%s\", outer ring %s",
+            options.format->answer, (outer_ring_ccw ? "CCW" : "CW"));
+
     /* Lines (run always to count features of different type) */
     if (otype & (GV_POINTS | GV_LINES | GV_KERNEL | GV_FACE)) {
         G_message(n_("Exporting %d feature...",
