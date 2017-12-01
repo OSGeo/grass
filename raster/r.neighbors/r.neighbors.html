@@ -338,9 +338,8 @@ two factors affecting the output type:
 These combine to create four possibilities:
 <p>
 <table border="1">
- <tr><th>input type</th><th>integer</th><th>integer</th><th>float</th><th>float</th></tr>
- <tr><td>weighted</td><td>no</td><td>yes</td><td>no</td><td>yes</td></tr>
- <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <tr><th rowspan="2">input type/weight</th><th colspan="2">integer</th><th colspan="2">float</th></tr>
+ <tr><th>no</th><th>yes</th><th>no</th><th>yes</th></tr>
  <tr><td>average</td><td>float</td><td>float</td><td>float</td><td>float</td></tr>
  <tr><td>median</td><td>[1]</td><td>[1]</td><td>float</td><td>float</td></tr>
  <tr><td>mode</td><td>integer</td><td>integer</td><td>[2]</td><td>[2]</td></tr>
