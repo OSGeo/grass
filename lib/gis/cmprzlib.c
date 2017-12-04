@@ -74,24 +74,25 @@
 
 #include "G.h"
 
-static void _init_zstruct(z_stream * z)
-{
-    /* The types are defined in zlib.h, we set to NULL so zlib uses
-     * its default functions.
-     */
-    z->zalloc = (alloc_func) 0;
-    z->zfree = (free_func) 0;
-    z->opaque = (voidpf) 0;
-}
 
+int
+G_zlib_compress_bound(int src_sz)
+{
+    /* from zlib.h:
+     * "when using compress or compress2, 
+     * destLen must be at least the value returned by
+     * compressBound(sourceLen)"
+     * no explanation for the "must be"
+     */
+    return compressBound(src_sz);
+}
 
 int
 G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
 		int dst_sz)
 {
-    int err, nbytes, buf_sz;
+    uLong err, nbytes, buf_sz;
     unsigned char *buf;
-    z_stream c_stream;
 
     /* Catch errors early */
     if (src == NULL || dst == NULL)
@@ -103,65 +104,50 @@ G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
 
     /* Output buffer has to be 1% + 12 bytes bigger for single pass deflate */
     /* buf_sz = (int)((double)dst_sz * 1.01 + (double)12); */
-    buf_sz = compressBound(src_sz);
-    if (NULL == (buf = (unsigned char *)
-		 G_calloc(buf_sz, sizeof(unsigned char))))
-	return -1;
 
-    /* Set-up for default zlib memory handling */
-    _init_zstruct(&c_stream);
+    /* Output buffer should be large enough for single pass compression */
+    buf = dst;
+    buf_sz = G_zlib_compress_bound(src_sz);
+    if (buf_sz > dst_sz) {
+	G_warning("G_zlib_compress(): programmer error, destination is too small");
+	if (NULL == (buf = (unsigned char *)
+		     G_calloc(buf_sz, sizeof(unsigned char))))
+	    return -1;
+    }
+    else
+	buf_sz = dst_sz;
 
-    /* Set-up the stream */
-    c_stream.avail_in = src_sz;
-    c_stream.next_in = (unsigned char *) src;
-    c_stream.avail_out = buf_sz;
-    c_stream.next_out = buf;
-
-    /* Initialize */
     /* Valid zlib compression levels -1 - 9 */
     /* zlib default: Z_DEFAULT_COMPRESSION = -1, equivalent to 6 
      * as used here, 1 gives the best compromise between speed and compression */
-    err = deflateInit(&c_stream, G__.compression_level);
 
-    /* If there was an error initializing, return -1 */
+    /* Do single pass compression */
+    nbytes = buf_sz;
+    err = compress2((Bytef *)buf, &nbytes, 	 /* destination */
+		    (const Bytef *)src, src_sz,  /* source */
+		    G__.compression_level); 	 /* level */
+
     if (err != Z_OK) {
-	G_free(buf);
+	if (buf != dst)
+	    G_free(buf);
 	return -1;
     }
 
-    /* Do single pass compression */
-    err = deflate(&c_stream, Z_FINISH);
-    if (err != Z_STREAM_END) {
-	switch (err) {
-	case Z_OK:		/* Destination too small */
-	    G_free(buf);
-	    deflateEnd(&c_stream);
-	    return -2;
-	    break;
-	default:		/* Give other error */
-	    G_free(buf);
-	    deflateEnd(&c_stream);
-	    return -1;
-	    break;
-	}
-    }
-
-    /* avail_out is updated to bytes remaining in buf, so bytes of compressed
-     * data is the original size minus that
-     */
-    nbytes = buf_sz - c_stream.avail_out;
+    /* updated buf_sz is bytes of compressed data */
     if (nbytes >= src_sz) {
 	/* compression not possible */
-	G_free(buf);
-	deflateEnd(&c_stream);
+	if (buf != dst)
+	    G_free(buf);
 	return -2;
     }
-    /* Copy the data from buf to dst */
-    for (err = 0; err < nbytes; err++)
-	dst[err] = buf[err];
 
-    G_free(buf);
-    deflateEnd(&c_stream);
+    if (buf != dst) {
+	/* Copy the data from buf to dst */
+	for (err = 0; err < nbytes; err++)
+	    dst[err] = buf[err];
+
+	G_free(buf);
+    }
 
     return nbytes;
 }				/* G_zlib_compress() */
@@ -171,8 +157,8 @@ int
 G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
 	      int dst_sz)
 {
-    int err, nbytes;
-    z_stream c_stream;
+    int err;
+    uLong ss, nbytes;
 
     /* Catch error condition */
     if (src == NULL || dst == NULL)
@@ -182,44 +168,24 @@ G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
     if (src_sz <= 0 || dst_sz <= 0)
 	return 0;
 
-    /* Set-up default zlib memory handling */
-    _init_zstruct(&c_stream);
+    ss = src_sz;
 
-    /* Set-up I/O streams */
-    c_stream.avail_in = src_sz;
-    c_stream.next_in = (unsigned char *)src;
-    c_stream.avail_out = dst_sz;
-    c_stream.next_out = dst;
-
-    /* Call zlib initialization function */
-    err = inflateInit(&c_stream);
+    /* Do single pass decompression */
+    nbytes = dst_sz;
+    err = uncompress((Bytef *)dst, &nbytes,  /* destination */
+		     (const Bytef *)src, ss);   /* source */
 
     /* If not Z_OK return error -1 */
     if (err != Z_OK)
 	return -1;
 
-    /* Do single pass inflate */
-    err = inflate(&c_stream, Z_FINISH);
-
     /* Number of bytes inflated to output stream is
-     * original bytes available minus what avail_out now says
+     * updated buffer size
      */
-    nbytes = dst_sz - c_stream.avail_out;
 
-    /* Z_STREAM_END means all input was consumed, 
-     * Z_OK means only some was processed (not enough room in dst)
-     */
-    if (!(err == Z_STREAM_END || err == Z_OK)) {
-	if (!(err == Z_BUF_ERROR && nbytes == dst_sz)) {
-	    inflateEnd(&c_stream);
-	    return -1;
-	}
-	/* Else, there was extra input, but requested output size was
-	 * decompressed successfully.
-	 */
+    if (nbytes != dst_sz) {
+	return -1;
     }
-
-    inflateEnd(&c_stream);
 
     return nbytes;
 }				/* G_zlib_expand() */

@@ -3,14 +3,15 @@
  *                     -- GRASS Development Team --
  *
  * MODULE:      GRASS gis library
- * FILENAME:    cmprbzip.c
- * AUTHOR(S):   Markus Metz
- * PURPOSE:     To provide an interface to libbzip2 for compressing and 
- *              decompressing data.  Its primary use is in
- *              the storage and reading of GRASS rasters.
+ * FILENAME:    cmprlz4.c
+ * AUTHOR(S):   Eric G. Miller <egm2@jps.net>
+ *              Markus Metz
+ * PURPOSE:     To provide an interface to lz4 for compressing and 
+ *              decompressing data using LZ$.  It's primary use is in
+ *              the storage and reading of GRASS floating point rasters.
  *
- * ALGORITHM:   http://www.bzip.org
- * DATE CREATED: Nov 19 2015
+ * ALGORITHM:   https://code.google.com/p/lz4/
+ * DATE CREATED: Dec 18 2015
  * COPYRIGHT:   (C) 2015 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
@@ -21,17 +22,17 @@
 
 /********************************************************************
  * int                                                              *
- * G_bz2_compress (src, srz_sz, dst, dst_sz)                        *
+ * G_zstd_compress (src, srz_sz, dst, dst_sz)                       *
  *     int src_sz, dst_sz;                                          *
  *     unsigned char *src, *dst;                                    *
  * ---------------------------------------------------------------- *
- * This function is a wrapper around the bzip2 compression          *
- * function. It uses an all or nothing call.                        *
+ * This function is a wrapper around the Zstd compression function. *
+ * It uses an all or nothing call.                                  *
  * If you need a continuous compression scheme, you'll have to code *
  * your own.                                                        *
  * In order to do a single pass compression, the input src must be  *
- * copied to a buffer 1% + 600 bytes larger than the data.  This    *
- * may cause performance degradation.                               *
+ * copied to a buffer larger than the data.  This may cause         *
+ * performance degradation.                                         *
  *                                                                  *
  * The function either returns the number of bytes of compressed    *
  * data in dst, or an error code.                                   *
@@ -42,14 +43,13 @@
  *                                                                  *
  * ================================================================ *
  * int                                                              *
- * G_bz2_expand (src, src_sz, dst, dst_sz)                          *
+ * G_zstd_expand (src, src_sz, dst, dst_sz)                         *
  *     int src_sz, dst_sz;                                          *
  *     unsigned char *src, *dst;                                    *
  * ---------------------------------------------------------------- *
- * This function is a wrapper around the bzip2 decompression        *
- * function. It uses a single pass call to inflate().               *
- * If you need a continuous expansion scheme, you'll have to code   *
- * your own.                                                        *
+ * This function is a wrapper around the zstd decompression          *
+ * function.  It uses a single pass call.  If you need a continuous *
+ * expansion scheme, you'll have to code your own.                  *
  *                                                                  *
  * The function returns the number of bytes expanded into 'dst' or  *
  * and error code.                                                  *
@@ -62,8 +62,8 @@
 
 #include <grass/config.h>
 
-#ifdef HAVE_BZLIB_H
-#include <bzlib.h>
+#ifdef HAVE_ZSTD_H
+#include <zstd.h>
 #endif
 
 #include <grass/gis.h>
@@ -71,30 +71,28 @@
 
 
 int
-G_bz2_compress_bound(int src_sz)
+G_zstd_compress_bound(int src_sz)
 {
-    /* from the documentation:
-     * To guarantee that the compressed data will fit in its buffer, 
-     * allocate an output buffer of size 1% larger than the uncompressed data, 
-     * plus six hundred extra bytes.
-     * bzip2 does not provide a compressbound fn
-     * and apparently does not have a fast version if destLen is
-     * large enough to hold a worst case result
+    /* ZSTD has a fast version if destLen is large enough 
+     * to hold a worst case result
      */
-    return src_sz;
+#ifndef HAVE_ZSTD_H
+    G_fatal_error(_("GRASS needs to be compiled with ZSTD for ZSTD compression"));
+    return -1;
+#else
+    return ZSTD_compressBound(src_sz);
+#endif
 }
 
 int
-G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
+G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
 		int dst_sz)
 {
-    int err;
-    int i, buf_sz;
-    unsigned int nbytes;
+    int err, nbytes, buf_sz;
     unsigned char *buf;
 
-#ifndef HAVE_BZLIB_H
-    G_fatal_error(_("GRASS needs to be compiled with BZIP2 for BZIP2 compression"));
+#ifndef HAVE_ZSTD_H
+    G_fatal_error(_("GRASS needs to be compiled with ZSTD for ZSTD compression"));
     return -1;
 #else
 
@@ -102,15 +100,15 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
     if (src == NULL || dst == NULL)
 	return -1;
 
-    /* Don't do anything if src is empty */
-    if (src_sz <= 0)
+    /* Don't do anything if either of these are true */
+    if (src_sz <= 0 || dst_sz <= 0)
 	return 0;
 
-    /* Output buffer has to be 1% + 600 bytes bigger for single pass compression */
+    /* Output buffer has to be larger for single pass compression */
     buf = dst;
-    buf_sz = G_bz2_compress_bound(src_sz);
+    buf_sz = G_zstd_compress_bound(src_sz);
     if (buf_sz > dst_sz) {
-	G_warning("G_bz2_compress(): programmer error, destination is too small");
+	G_warning("G_zstd_compress(): programmer error, destination is too small");
 	if (NULL == (buf = (unsigned char *)
 		     G_calloc(buf_sz, sizeof(unsigned char))))
 	    return -1;
@@ -119,49 +117,44 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
 	buf_sz = dst_sz;
 
     /* Do single pass compression */
-    nbytes = buf_sz;
-    err = BZ2_bzBuffToBuffCompress((char *)buf, &nbytes, /* destination */
-                                   (char *)src, src_sz,  /* source */
-				   9,			 /* blockSize100k */ 
-				   0,                    /* verbosity */
-				   100);                 /* workFactor */
+    err = ZSTD_compress((char *)buf, buf_sz, (char *)src, src_sz, 3);
 
-    if (err != BZ_OK) {
+    if (err <= 0 || ZSTD_isError(err)) {
 	if (buf != dst)
 	    G_free(buf);
 	return -1;
     }
-
-    /* updated buf_sz is bytes of compressed data */
-    if (nbytes >= (unsigned int)src_sz) {
+    if (err >= src_sz) {
 	/* compression not possible */
 	if (buf != dst)
 	    G_free(buf);
 	return -2;
     }
+    
+    /* bytes of compressed data is return value */
+    nbytes = err;
 
     if (buf != dst) {
 	/* Copy the data from buf to dst */
-	for (i = 0; i < nbytes; i++)
-	    dst[i] = buf[i];
+	for (err = 0; err < nbytes; err++)
+	    dst[err] = buf[err];
 
 	G_free(buf);
     }
 
     return nbytes;
 #endif
-}				/* G_bz2_compress() */
+}
 
 int
-G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst,
+G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst,
 	      int dst_sz)
 {
-    int err;
-    unsigned int nbytes;
+    int err, nbytes;
 
-#ifndef HAVE_BZLIB_H
-    G_fatal_error(_("GRASS needs to be compiled with BZIP2 for BZIP2 compression"));
-    return -2;
+#ifndef HAVE_ZSTD_H
+    G_fatal_error(_("GRASS needs to be compiled with ZSTD for ZSTD compression"));
+    return -1;
 #else
 
     /* Catch error condition */
@@ -172,21 +165,12 @@ G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst,
     if (src_sz <= 0 || dst_sz <= 0)
 	return 0;
 
+    /* Do single pass decompress */
+    err = ZSTD_decompress((char *)dst, dst_sz, (char *)src, src_sz);
+    /* err = LZ4_decompress_fast(src, dst, src_sz); */
 
-    /* Do single pass decompression */
-    nbytes = dst_sz;
-    err = BZ2_bzBuffToBuffDecompress((char *)dst, &nbytes,  /* destination */
-                                     (char *)src, src_sz,   /* source */
-				     0,                     /* small */
-				     0);                    /* verbosity */
-
-    if (err != BZ_OK) {
-	return -1;
-    }
-
-    /* Number of bytes inflated to output stream is
-     * updated buffer size
-     */
+    /* Number of bytes inflated to output stream is return value */
+    nbytes = err;
 
     if (nbytes != dst_sz) {
 	return -1;

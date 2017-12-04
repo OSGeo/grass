@@ -24,6 +24,7 @@
  * 2 : ZLIB's DEFLATE (good speed and compression)                  *
  * 3 : LZ4 (fastest, low compression)                               *
  * 4 : BZIP2 (slowest, high compression)                            *
+ * 5 : ZSTD (faster than ZLIB, higher compression than ZLIB)        *
  *                                                                  *
  * int                                                              *
  * G_read_compressed (fd, rbytes, dst, nbytes, compression_type)    *
@@ -121,6 +122,16 @@ char *G_compressor_name(int number)
     return compressor[number].name;
 }
 
+int G_default_compressor(void)
+{
+#ifdef HAVE_ZSTD_H
+    /* ZSTD */
+    return 5;
+#endif
+    /* ZLIB */
+    return 2;
+}
+
 /* check compressor number
  * return -1 on error
  * return 0 known but not available
@@ -133,6 +144,11 @@ int G_check_compressor(int number)
     }
 
     return compressor[number].available;
+}
+
+int G_no_compress_bound(int src_sz)
+{
+    return src_sz;
 }
 
 int
@@ -179,6 +195,22 @@ G_no_expand(unsigned char *src, int src_sz, unsigned char *dst,
     return src_sz;
 }
 
+/* G_*_compress_bound() returns an upper bound on the compressed size
+ * which can be larger than the input size
+ * some compressors are a bit faster if the size of the destination
+ * is at least the upper bound (no need to test for buffer overlflow)
+ * read comments on the specific compressor interfaces 
+ */
+int G_compress_bound(int src_sz, int number)
+{
+    if (number < 0 || number >= n_compressors) {
+	G_fatal_error(_("Request for unsupported compressor"));
+	return -1;
+    }
+
+    return compressor[number].bound(src_sz);
+}
+
 /* G_*_compress() returns
  * > 0: number of bytes in dst
  * 0: nothing done
@@ -214,7 +246,7 @@ G_expand(unsigned char *src, int src_sz, unsigned char *dst,
 }
 
 int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
-                      int compressor)
+                      int number)
 {
     int bsize, nread, err;
     unsigned char *b;
@@ -262,7 +294,7 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
     /* Just call G_expand() with the buffer we read,
      * Account for first byte being a flag
      */
-    err = G_expand(b + 1, bsize - 1, dst, nbytes, compressor);
+    err = G_expand(b + 1, bsize - 1, dst, nbytes, number);
 
     /* We're done with b */
     G_free(b);
@@ -273,7 +305,7 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
 }				/* G_read_compressed() */
 
 int G_write_compressed(int fd, unsigned char *src, int nbytes,
-                       int compressor)
+                       int number)
 {
     int dst_sz, nwritten, err;
     unsigned char *dst, compressed;
@@ -282,19 +314,20 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes,
     if (src == NULL || nbytes < 0)
 	return -1;
 
-    dst_sz = nbytes;
+    /* get upper bound of compressed size */
+    dst_sz = G_compress_bound(nbytes, number);
     if (NULL == (dst = (unsigned char *)
 		 G_calloc(dst_sz, sizeof(unsigned char))))
 	return -1;
 
     /* Now just call G_compress() */
-    err = G_compress(src, nbytes, dst, dst_sz, compressor);
+    err = G_compress(src, nbytes, dst, dst_sz, number);
 
     /* If compression succeeded write compressed row,
      * otherwise write uncompressed row. Compression will fail
      * if dst is too small (i.e. compressed data is larger)
      */
-    if (err > 0 && err <= dst_sz) {
+    if (err > 0 && err < nbytes) {
 	dst_sz = err;
 	/* Write the compression flag */
 	compressed = G_COMPRESSED_YES;

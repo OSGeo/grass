@@ -63,6 +63,12 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+/* no fast mode if destination is large enough to hold 
+ * worst case compression */ 
+int G_rle_compress_bound(int src_sz)
+{
+    return ((src_sz >> 1) * 3 + (src_sz & 1));
+}
 
 int
 G_rle_compress(unsigned char *src, int src_sz, unsigned char *dst,
@@ -187,6 +193,5 @@ G_rle_expand(unsigned char *src, int src_sz, unsigned char *dst,
 
     return nbytes;
 }
-
 
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */
