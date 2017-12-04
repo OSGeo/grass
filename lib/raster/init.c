@@ -93,32 +93,37 @@ static int init(void)
 
     R__.nbytes = sizeof(CELL);
 
-    zlib = getenv("GRASS_INT_ZLIB");
-    R__.compression_type = (!zlib || atoi(zlib)) ? 2 : 1;
+    R__.compression_type = G_default_compressor();
 
     cname = getenv("GRASS_COMPRESSOR");
     /* 1: RLE
      * 2: ZLIB (DEFLATE)
      * 3: LZ4
-     * 4: BZIP2 */
-    if (cname) {
+     * 4: BZIP2
+     * 5: ZSTD */
+    if (cname && *cname) {
 	/* ask gislib */
 	R__.compression_type = G_compressor_number(cname);
 	if (R__.compression_type < 1) {
 	    if (R__.compression_type < 0) {
-		G_warning(_("Unknown compression method <%s>, using default ZLIB"),
-		    cname);
+		G_warning(_("Unknown compression method <%s>, using default %s"),
+		    cname, G_compressor_name(G_default_compressor()));
 	    }
 	    if (R__.compression_type == 0) {
-		G_warning(_("No compression is not supported for GRASS raster maps, using default ZLIB"));
+		G_warning(_("No compression is not supported for GRASS raster maps, using default %s"),
+		          G_compressor_name(G_default_compressor()));
 	    }
-	    R__.compression_type = 2; /* default to ZLIB */
+	    /* use default */
+	    R__.compression_type = G_default_compressor();
 	}
 	if (G_check_compressor(R__.compression_type) != 1) {
-	    G_warning(_("This GRASS version does not support %s compression, using default ZLIB"),
-		cname);
-	    R__.compression_type = 2; /* default to ZLIB */
+	    G_warning(_("This GRASS version does not support %s compression, using default %s"),
+		cname, G_compressor_name(G_default_compressor()));
+	    /* use default */
+	    R__.compression_type = G_default_compressor();
 	}
+	G_debug(1, "Using %s compression",
+	           G_compressor_name(R__.compression_type));
     }
 
     nulls = getenv("GRASS_COMPRESS_NULLS");
