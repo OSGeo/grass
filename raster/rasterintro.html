@@ -282,19 +282,19 @@ The GRASS GIS raster format is architecture independent and portable between
 All GRASS GIS raster map types are by default ZLIB compressed, i.e. using
 ZLIB's deflate algorithm. Through the environment variable
 <tt>GRASS_COMPRESSOR</tt> the compression method can be set to RLE, ZLIB,
-LZ4, or BZIP2.
+LZ4, BZIP2, or ZSTD.
 <p>
-Important: the NULL file compression must be explicitly turned on with 
-<tt>export GRASS_COMPRESS_NULLS=1</tt> - such raster maps can then only 
-be opened with GRASS GIS 7.2.0 or later. NULL file compression can be 
-managed with <b>r.null -z</b>.
+Important: the NULL file compression can be turned off with 
+<tt>export GRASS_COMPRESS_NULLS=0</tt>. Raster maps with NULL file 
+compression can only be opened with GRASS GIS 7.2.0 or later. NULL file 
+compression for a particular raster map can be managed with <b>r.null -z</b>.
 <p>
 Integer (CELL type) raster maps can be compressed with RLE if
-the environment variable <tt>GRASS_INT_ZLIB</tt> exists and is set to value 
-0. However, this is not recommended.
+the environment variable <tt>GRASS_COMPRESSOR</tt> exists and is set to 
+RLE. However, this is not recommended.
 <p>
 Floating point (FCELL, DCELL) raster maps never use RLE compression;
-they are either compressed with ZLIB, LZ4, BZIP2 or are uncompressed.
+they are either compressed with ZLIB, LZ4, BZIP2, ZSTD or are uncompressed.
 
 <dl>
 <dt><strong>RLE</strong></dt>
@@ -324,11 +324,16 @@ and decompression method. However, if reading from / writing to a
 storage device is the limiting factor, BZIP2 compression can speed up 
 raster map processing. Be aware that for smaller raster maps, BZIP2 
 compression ratio can be worse than other compression methods.</dd> 
+<dt><strong>ZSTD</strong></dt>
+<dd>ZSTD (Zstandard) provides compression ratios higher than ZLIB but 
+lower than BZIP2 (for large data). ZSTD compresses up to 4x faster than 
+ZLIB, and usually decompresses 6x faster than ZLIB. ZSTD is the 
+recommended default compression method.</dd> 
 </dl>
 
 <p>
 In the internal cellhd file, the value for "compressed" is 1 for RLE, 2 
-for ZLIB, 3 for LZ4, and 4 for BZIP2.
+for ZLIB, 3 for LZ4,4 for BZIP2, and 5 for ZSTD.
 <p>
 Obviously, decompression is controlled by the raster map's compression,
 not the environment variable.
