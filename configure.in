@@ -268,6 +268,7 @@ LOC_ARG_WITH(pthread, POSIX threads, no)
 LOC_ARG_WITH(openmp, OpenMP, no)
 LOC_ARG_WITH(opencl, OpenCL, no)
 LOC_ARG_WITH(bzlib, BZIP2, no)
+LOC_ARG_WITH(zstd, Zstandard, no)
 
 AC_ARG_WITH(gdal,
 [  --with-gdal[=path/gdal-config]
@@ -317,6 +318,9 @@ LOC_ARG_WITH_LIB(zlib, zlib)
 
 LOC_ARG_WITH_INC(bzlib, BZIP2)
 LOC_ARG_WITH_LIB(bzlib, BZIP2)
+
+LOC_ARG_WITH_INC(zstd, ZSTD)
+LOC_ARG_WITH_LIB(zstd, ZSTD)
 
 LOC_ARG_WITH_INC(readline, Readline)
 LOC_ARG_WITH_LIB(readline, Readline)
@@ -600,35 +604,66 @@ AC_SUBST(ZLIB)
 
 # bzip2 support
 
+BZIP2LIBPATH=
+BZIP2INCPATH=
+BZIP2LIB=
+
 LOC_CHECK_USE(bzlib,bzlib,USE_BZIP2)
 
 if test -n "$USE_BZIP2"; then
 
-BZLIBLIBPATH=
-BZLIBINCPATH=
-BZLIB=
-
 # With bzip2 includes directory
 
-LOC_CHECK_INC_PATH(bzlib,bzlib,BZLIBINCPATH)
+LOC_CHECK_INC_PATH(bzlib,bzlib,BZIP2INCPATH)
 
-LOC_CHECK_INCLUDES(bzlib.h,bzlib,$BZLIBINCPATH)
+LOC_CHECK_INCLUDES(bzlib.h,bzlib,$BZIP2INCPATH)
 
 # With bzip2 library directory
 
-LOC_CHECK_LIB_PATH(bzlib,bzlib,BZLIBLIBPATH)
+LOC_CHECK_LIB_PATH(bzlib,bzlib,BZIP2LIBPATH)
 
-LOC_CHECK_LIBS(bz2,BZ2_bzBuffToBuffCompress,bzlib,$BZLIBLIBPATH,BZLIB,,,)
+LOC_CHECK_LIBS(bz2,BZ2_bzBuffToBuffCompress,bzlib,$BZIP2LIBPATH,BZIP2LIB,,,)
 
 #
 
 fi # $USE_BZIP2
 
-AC_SUBST(BZLIBINCPATH)
-AC_SUBST(BZLIBLIBPATH)
-AC_SUBST(BZLIB)
+AC_SUBST(BZIP2INCPATH)
+AC_SUBST(BZIP2LIBPATH)
+AC_SUBST(BZIP2LIB)
 
 # Done checking bzip2
+
+# zstd support
+
+ZSTDLIBPATH=
+ZSTDINCPATH=
+ZSTDLIB=
+
+LOC_CHECK_USE(zstd,zstd,USE_ZSTD)
+
+if test -n "$USE_ZSTD"; then
+
+# With zstd includes directory
+
+LOC_CHECK_INC_PATH(zstd,zstd,ZSTDINCPATH)
+LOC_CHECK_INCLUDES(zstd.h,zstd,$ZSTDINCPATH)
+
+# With zstd library directory
+
+LOC_CHECK_LIB_PATH(zstd,zstd,ZSTDLIBPATH)
+
+LOC_CHECK_LIBS(zstd,ZSTD_compress,zstd,$ZSTDLIBPATH,ZSTDLIB,,,)
+
+#
+
+fi # $USE_ZSTD
+
+AC_SUBST(ZSTDINCPATH)
+AC_SUBST(ZSTDLIBPATH)
+AC_SUBST(ZSTDLIB)
+
+# Done checking zstd
 
 # Mandatory PROJ dependency
 
@@ -1937,4 +1972,5 @@ LOC_MSG_USE(Regex support,USE_REGEX)
 LOC_MSG_USE(SQLite support,USE_SQLITE)
 LOC_MSG_USE(TIFF support,USE_TIFF)
 LOC_MSG_USE(X11 support,USE_X11)
+LOC_MSG_USE(Zstandard support,USE_ZSTD)
 LOC_MSG()

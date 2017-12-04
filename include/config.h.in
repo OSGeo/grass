@@ -41,6 +41,9 @@
 /* define if bzlib.h exists */
 #undef HAVE_BZLIB_H
 
+/* define if zstd.h exists */
+#undef HAVE_ZSTD_H
+
 /* define if sys/ioctl.h exists */
 #undef HAVE_SYS_IOCTL_H
 
