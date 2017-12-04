@@ -191,10 +191,12 @@ void G_remove_commas(char *);
 /* compress.c */
 int G_compressor_number(char *);
 char *G_compressor_name(int);
+int G_default_compressor(void);
 int G_check_compressor(int);
 int G_write_compressed(int, unsigned char *, int, int);
 int G_write_unompressed(int, unsigned char *, int);
 int G_read_compressed(int, int, unsigned char *, int, int);
+int G_compress_bound(int, int);
 int G_compress(unsigned char *, int, unsigned char *, int, int);
 int G_expand(unsigned char *, int, unsigned char *, int, int);
 
@@ -236,6 +238,14 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
 		int dst_sz);
 int
 G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst,
+	      int dst_sz);
+
+/* cmprzstd.c : ZSTD, compression similar to ZLIB's DEFLATE but faster */
+int
+G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
+		int dst_sz);
+int
+G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst,
 	      int dst_sz);
 
 /* add more compression methods here */

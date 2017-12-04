@@ -26,7 +26,7 @@
  *     int src_sz, dst_sz;                                          *
  *     unsigned char *src, *dst;                                    *
  * ---------------------------------------------------------------- *
- * This function is a wrapper around the LZ4 cimpression function.  *
+ * This function is a wrapper around the LZ4 compression function.  *
  * It uses an all or nothing call.                                  *
  * If you need a continuous compression scheme, you'll have to code *
  * your own.                                                        *
@@ -67,6 +67,14 @@
 
 #include "lz4.h"
 
+int
+G_lz4_compress_bound(int src_sz)
+{
+    /* LZ4 has a fast version if destLen is large enough 
+     * to hold a worst case result
+     */
+    return LZ4_compressBound(src_sz);
+}
 
 int
 G_lz4_compress(unsigned char *src, int src_sz, unsigned char *dst,
@@ -83,32 +91,43 @@ G_lz4_compress(unsigned char *src, int src_sz, unsigned char *dst,
     if (src_sz <= 0 || dst_sz <= 0)
 	return 0;
 
-    /* Output buffer has to be larger for single pass compression */
-    buf_sz = LZ4_compressBound(src_sz);
-    if (NULL == (buf = (unsigned char *)
-		 G_calloc(buf_sz, sizeof(unsigned char))))
-	return -1;
+    /* Output buffer should be large enough for single pass compression */
+    buf = dst;
+    buf_sz = G_lz4_compress_bound(src_sz);
+    if (buf_sz > dst_sz) {
+	G_warning("G_lz4_compress(): programmer error, destination is too small");
+	if (NULL == (buf = (unsigned char *)
+		     G_calloc(buf_sz, sizeof(unsigned char))))
+	    return -1;
+    }
+    else
+	buf_sz = dst_sz;
 
     /* Do single pass compression */
     err = LZ4_compress_default((char *)src, (char *)buf, src_sz, buf_sz);
+
     if (err <= 0) {
-	G_free(buf);
+	if (buf != dst)
+	    G_free(buf);
 	return -1;
     }
     if (err >= src_sz) {
 	/* compression not possible */
-	G_free(buf);
+	if (buf != dst)
+	    G_free(buf);
 	return -2;
     }
     
     /* bytes of compressed data is return value */
     nbytes = err;
 
-    /* Copy the data from buf to dst */
-    for (err = 0; err < nbytes; err++)
-	dst[err] = buf[err];
+    if (buf != dst) {
+	/* Copy the data from buf to dst */
+	for (err = 0; err < nbytes; err++)
+	    dst[err] = buf[err];
 
-    G_free(buf);
+	G_free(buf);
+    }
 
     return nbytes;
 }
