@@ -8,12 +8,17 @@
 # PURPOSE:      Sample a space time raster dataset at specific vector point
 #               coordinates and write the output to stdout using different
 #               layouts
+# COPYRIGHT:    (C) 2015-2017 by the GRASS Development Team
 #
-# COPYRIGHT:    (C) 2015 by the GRASS Development Team
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
 #
-#               This program is free software under the GNU General Public
-#               License (version 2). Read the file COPYING that comes with GRASS
-#               for details.
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
 #
 #############################################################################
 
