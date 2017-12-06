@@ -6,11 +6,17 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:  Creates/modifies the color table associated with each raster map of the space time raster dataset.
-# COPYRIGHT:	(C) 2011-2014 by the GRASS Development Team
+# COPYRIGHT:	(C) 2011-2017 by the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (version 2). Read the file COPYING that comes with GRASS
-#		for details.
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
 #
 #############################################################################
 
