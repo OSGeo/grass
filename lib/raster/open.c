@@ -12,8 +12,6 @@
  * \author USACERL and many others
  */
 
-#include <rpc/types.h>
-#include <rpc/xdr.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/types.h>

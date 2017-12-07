@@ -15,8 +15,6 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-#include <rpc/types.h>		/* need this for sgi */
-
 #include <grass/config.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
