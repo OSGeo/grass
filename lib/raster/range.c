@@ -12,7 +12,6 @@
  */
 
 #include <unistd.h>
-#include <rpc/types.h>		/* need this for sgi */
 
 #include <grass/raster.h>
 #include <grass/glocale.h>
