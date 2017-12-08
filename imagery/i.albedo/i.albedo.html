@@ -12,6 +12,29 @@ It uses for Landsat 8 the weighted average reflectance (temporary until algorith
 <p>
 It assumes MODIS product surface reflectance in [0;10000].
 
+<h2>EXAMPLE</h2>
+Code creates the raster map "albedo_lsat7_1987" from the 
+LANDSAT-TM5 bands in the North Carolina dataset.
+<div class="code"><pre>
+i.albedo -l input=lsat5_1987_10,lsat5_1987_20,lsat5_1987_30,lsat5_1987_40,lsat5_1987_50,lsat5_1987_70 output=albedo_lsat7_1987
+</pre></div>
+<p>
+<center>
+<img src="albedo_landsat5.png" alt="i.albedo LANDSAT-TM5 1987 example"><br>
+<i>Figure: Resulting albedo map from LANDSAT 5</i>
+</center>
+<p>
+Code creates the raster map "albedo_lsat7_2000" from the 
+LANDSAT-TM7 bands in the North Carolina dataset.
+<div class="code"><pre>
+i.albedo -l input=lsat7_2000_10,lsat7_2000_20,lsat7_2000_30,lsat7_2000_40,lsat7_2000_50,lsat7_2000_70 output=albedo_lsat7_2000
+</pre></div>
+<p>
+<center>
+<img src="albedo_landsat7.png" alt="i.albedo LANDSAT-TM7 2000 example"><br>
+<i>Figure: Resulting albedo map from LANDSAT 7</i>
+</center>
+
 <h2>TODO</h2>
 
 Maybe change input requirement of MODIS to [0.0-1.0]?
