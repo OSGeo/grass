@@ -186,6 +186,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-regex \
 		--with-nls \
 		--with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
+		--with-zstd \
 		--with-odbc \
 	        --with-cairo \
                 --with-postgres \
