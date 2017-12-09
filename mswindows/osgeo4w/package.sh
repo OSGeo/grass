@@ -128,6 +128,7 @@ dll_to_a $OSGEO4W_ROOT_MSYS/bin/sqlite3.dll     mswindows/osgeo4w/lib/libsqlite3
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/cairo.dll       mswindows/osgeo4w/lib/libcairo
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/libfftw3-3.dll  mswindows/osgeo4w/lib/libfftw3
 dll_to_a $OSGEO4W_ROOT_MSYS/bin/pdcurses.dll  mswindows/osgeo4w/lib/libpdcurses
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/zstd.dll  mswindows/osgeo4w/lib/libzstd
 if [ "$MINGW_POSTFIX" = "64" ]; then
     dll_to_a $OSGEO4W_ROOT_MSYS/bin/zlib1.dll       mswindows/osgeo4w/lib/libz
     dll_to_a $OSGEO4W_ROOT_MSYS/bin/libpng16.dll    mswindows/osgeo4w/lib/libpng
