@@ -155,11 +155,13 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
 	if [ "$MINGW_POSTFIX" = "64" ]; then
 	    conf_host=x86_64-w64-mingw32
-            # see https://trac.osgeo.org/osgeo4w/ticket/539#ticket
-            # LAS support only enabled on 64bit
-            conf_opts="--with-liblas=$PWD/mswindows/osgeo4w/liblas-config"
+            # https://trac.osgeo.org/osgeo4w/ticket/550
+            # LAS support hopefully only temporarily disabled on 64bit
+            conf_opts=
 	else
 	    conf_host=i386-w64-mingw32
+            # https://trac.osgeo.org/osgeo4w/ticket/539
+            #  LAS support hopefully only temporarily disabled on 32bit
             conf_opts=
 	fi
 	
