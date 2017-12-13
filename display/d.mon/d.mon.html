@@ -60,7 +60,7 @@ is needed (e.g., in a script) set <tt>GRASS_RENDER_IMMEDIATE=png</tt>
 
 <h3>wx0 monitor</h3>
 
-To start interactive <em><a href="wxGUI.html#map-display-window">wxGUI map
+To start the interactive <em><a href="wxGUI.html#map-display-window">wxGUI map
 display</a></em>, run
 
 <div class="code"><pre>
@@ -70,36 +70,36 @@ d.mon start=wx0
 <div style="margin: 10px" align="center">
 <img src="d_mon_wx0.png" alt="Blank wx0 display" border="0">
 <br>
-<i>Figure: The initialization of display wx0</i>
+<i>Figure: The initialization of display monitor wx0</i>
 </div>
 
-All data will be rendered on <tt>wx0</tt> display.
+All subsequently displayed data will be rendered on monitor <tt>wx0</tt>.
 
 <div class="code"><pre>
-g.region raster=elevation
+g.region raster=elevation -p
 d.rast map=elevation
 </pre></div>
 
 <div style="margin: 10px" align="center">
 <img src="d_mon_wx0_raster.png" alt="Display wx0 with raster map" border="0">
 <br>
-<i>Figure: The display wx0 show the elevation raster map</i>
+<i>Figure: The display wx0 showing an elevation raster map</i>
 </div>
 
 <h3>CAIRO file renderer monitor</h3>
 
-A new CAIRO monitor can be started (and selected) by
+A CAIRO monitor can be started (and selected) by
 
 <div class="code"><pre>
 d.mon start=cairo output=out.pdf
 </pre></div>
 
-From this moment all data will be rendered into
+From this moment on all displayed data will be rendered into
 file <tt>output.pdf</tt>. 
 
 <h3>List running monitors</h3>
 
-To list running monitors, use
+To list the currently running monitors, use
 
 <div class="code"><pre>
 d.mon -l
@@ -111,7 +111,7 @@ cairo
 
 <h3>Show currently selected monitor</h3>
 
-To determine currently selected monitor
+To identify the currently selected monitor, use
 
 <div class="code"><pre>
 d.mon -p
@@ -121,8 +121,8 @@ cairo
 
 <h3>Switching between monitors</h3>
 
-To switch back to interactive, earlier started and still running wxGUI
-monitor
+To switch back to interactive display mode, here to an earlier started and
+still running wxGUI monitor, use
 
 <div class="code"><pre>
 d.mon select=wx0
@@ -130,7 +130,7 @@ d.mon select=wx0
 
 <h3>Stopping a monitor</h3> 
 
-To close the wxGUI monitor
+To close the wxGUI monitor, run
 
 <div class="code"><pre>
 d.mon stop=wx0
