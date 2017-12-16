@@ -1613,9 +1613,10 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
                                     _("Raster MASK present"),
                                     _("3D raster MASK present")))
 
-    # read environmental variables
+    # read other settings (aliases, ...) since environmental variables
+    # have been already set by load_env(), see #3462
     for env_file in [os.path.join(userhome, ".grass.bashrc"),
-                      grass_env_file]:
+                     grass_env_file]:
         if not os.access(env_file, os.R_OK):
             continue
         for line in readfile(env_file).splitlines():
