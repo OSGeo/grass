@@ -24,13 +24,12 @@ struct start_pt
 {
     int row;
     int col;
+    int value;
     struct start_pt *next;
 };
 
-extern struct start_pt *head_start_pt;
-extern struct start_pt *head_end_pt;
-
-int process_answers(char **, struct start_pt **, struct start_pt **);
+int process_start_coords(char **, struct start_pt **, struct start_pt **);
+int process_stop_coords(char **answers);
 int time_to_stop(int, int);
 
 #endif /* __STASH_H__ */
