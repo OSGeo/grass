@@ -27,7 +27,7 @@
  *                 Glynn Clements <glynn gclements.plus.com>, Soeren Gebbert <soeren.gebbert gmx.de>
  *               Updated for calculation errors and directional surface generation
  *                 Colin Nielsen <colin.nielsen gmail com>
- *               Updated for GRASS 7
+ *               Use min heap instead of btree (faster, less memory)
  *                 Markus Metz
  * PURPOSE:      anisotropic movements on cost surfaces
  * COPYRIGHT:    (C) 1999-2015 by the GRASS Development Team
@@ -114,7 +114,26 @@
 struct Cell_head window;
 
 struct start_pt *head_start_pt = NULL;
-struct start_pt *head_end_pt = NULL;
+
+struct rc
+{
+    int r;
+    int c;
+};
+
+static struct rc *stop_pnts = NULL;
+static int n_stop_pnts = 0;
+static int stop_pnts_alloc = 0;
+
+int cmp_rc(struct rc *a, struct rc *b)
+{
+    if (a->r == b->r)
+	return (a->c - b->c);
+
+    return (a->r - b->r);
+}
+
+void add_stop_pnt(int r, int c);
 
 int main(int argc, char *argv[])
 {
@@ -131,13 +150,13 @@ int main(int argc, char *argv[])
     double min_cost, old_min_cost;
     FCELL cur_dir;
     double zero = 0.0;
-    int col = 0, row = 0, nrows = 0, ncols = 0;
+    int col, row, nrows, ncols;
     int maxcost, par_number;
     int nseg;
     int maxmem;
     int segments_in_memory;
     int cost_fd, cum_fd, dtm_fd, dir_fd;
-    int have_stop_points = 0, dir = 0;
+    int dir = 0;
     double my_dtm, my_cost, check_dtm;
     double null_cost, dnullval;
     double a, b, c, d, lambda, slope_factor;
@@ -154,7 +173,6 @@ int main(int argc, char *argv[])
     struct Option *opt9, *opt10, *opt11, *opt12, *opt13, *opt14, *opt15;
     struct cost *pres_cell;
     struct start_pt *pres_start_pt = NULL;
-    struct start_pt *pres_stop_pt = NULL;
     struct cc {
 	double dtm;		/* elevation model */
 	double cost_in;		/* friction costs */
@@ -357,13 +375,15 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Must specify exactly one of start_points, start_rast or coordinate"));
     }
 
-    if (opt3->answers)
-	if (!process_answers(opt3->answers, &head_start_pt, &pres_start_pt))
+    if (opt3->answers) {
+	if (!process_start_coords(opt3->answers, &head_start_pt, &pres_start_pt))
 	    G_fatal_error(_("No start points"));
+    }
 
-    if (opt4->answers)
-	have_stop_points =
-	    process_answers(opt4->answers, &head_end_pt, &pres_stop_pt);
+    if (opt4->answers) {
+	if (!process_stop_coords(opt4->answers))
+	    G_fatal_error(_("No stop points"));
+    }
 
     if (sscanf(opt5->answer, "%d", &maxcost) != 1 || maxcost < 0)
 	G_fatal_error(_("Inappropriate maximum cost: %d"), maxcost);
@@ -420,10 +440,10 @@ int main(int argc, char *argv[])
 	keep_nulls = 0;		/* handled automagically... */
     }
 
-    dtm_layer = opt12->answer;
-    cost_layer = opt2->answer;
     cum_cost_layer = opt1->answer;
+    cost_layer = opt2->answer;
     move_dir_layer = opt11->answer;
+    dtm_layer = opt12->answer;
 
     /* Find number of rows and columns in window */
     nrows = Rast_window_rows();
@@ -662,7 +682,7 @@ int main(int argc, char *argv[])
 	struct line_cats *Cats;
 	struct bound_box box;
 	struct start_pt *new_start_pt;
-	int type, got_one = 0;
+	int cat, type, npoints = 0;
 
 	Points = Vect_new_line_struct();
 	Cats = Vect_new_cats_struct();
@@ -693,7 +713,7 @@ int main(int argc, char *argv[])
 	    }
 	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
 		continue;
-	    got_one = 1;
+            npoints++;
 
 	    col = (int)Rast_easting_to_col(Points->x[0], &window);
 	    row = (int)Rast_northing_to_row(Points->y[0], &window);
@@ -703,6 +723,8 @@ int main(int argc, char *argv[])
 
 	    new_start_pt->row = row;
 	    new_start_pt->col = col;
+	    Vect_cat_get(Cats, 1, &cat);
+	    new_start_pt->value = cat;
 	    new_start_pt->next = NULL;
 
 	    if (head_start_pt == NULL) {
@@ -716,10 +738,12 @@ int main(int argc, char *argv[])
 	    }
 	}
 
+	if (npoints < 1)
+	    G_fatal_error(_("No start points found in vector map <%s>"), Vect_get_full_name(&In));
+        else
+            G_verbose_message(n_("%d point found", "%d points found", npoints), npoints);
+        
 	Vect_close(&In);
-
-	if (!got_one)
-	    G_fatal_error(_("No start points found in vector <%s>"), opt7->answer);
     }
 
     /* read vector with stop points */
@@ -728,7 +752,6 @@ int main(int argc, char *argv[])
 	struct line_pnts *Points;
 	struct line_cats *Cats;
 	struct bound_box box;
-	struct start_pt *new_start_pt;
 	int type;
 
 	G_message(_("Reading vector map <%s> with stop points..."), opt8->answer);
@@ -759,32 +782,16 @@ int main(int argc, char *argv[])
 	    }
 	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
 		continue;
-	    have_stop_points = 1;
 
 	    col = (int)Rast_easting_to_col(Points->x[0], &window);
 	    row = (int)Rast_northing_to_row(Points->y[0], &window);
 
-	    new_start_pt =
-		(struct start_pt *)(G_malloc(sizeof(struct start_pt)));
-
-	    new_start_pt->row = row;
-	    new_start_pt->col = col;
-	    new_start_pt->next = NULL;
-
-	    if (head_end_pt == NULL) {
-		head_end_pt = new_start_pt;
-		pres_stop_pt = new_start_pt;
-		new_start_pt->next = NULL;
-	    }
-	    else {
-		pres_stop_pt->next = new_start_pt;
-		pres_stop_pt = new_start_pt;
-	    }
+	    add_stop_pnt(row, col);
 	}
 
 	Vect_close(&In);
 
-	if (!have_stop_points)
+	if (!stop_pnts)
 	    G_fatal_error(_("No stop points found in vector <%s>"), opt8->answer);
     }
 
@@ -800,7 +807,7 @@ int main(int argc, char *argv[])
 	if (search_mapset == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), opt9->answer);
 
-	fd = Rast_open_old(opt9->answer, "");
+	fd = Rast_open_old(opt9->answer, search_mapset);
 	data_type2 = Rast_get_map_type(fd);
 	dsize2 = Rast_cell_size(data_type2);
 	cell2 = Rast_allocate_buf(data_type2);
@@ -845,8 +852,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("No start points"));
     }
 
-    /*  If the starting points are given on the command line start a linked
-     *  list of cells ordered by increasing costs
+    /*  Insert start points into min heap
      */
     if (head_start_pt) {
 	struct start_pt *top_start_pt = NULL;
@@ -864,6 +870,25 @@ int main(int argc, char *argv[])
 	    Segment_put(&cost_seg, &costs, top_start_pt->row,
 			top_start_pt->col);
 	    top_start_pt = top_start_pt->next;
+	}
+    }
+
+    if (n_stop_pnts > 1) {
+	int i, j;
+	
+	/* prune stop points */
+	j = 1;
+	for (i = 1; i < n_stop_pnts; i++) {
+	    if (stop_pnts[i].r != stop_pnts[j - 1].r ||
+	        stop_pnts[i].c != stop_pnts[j - 1].c) {
+		stop_pnts[j].r = stop_pnts[i].r;
+		stop_pnts[j].c = stop_pnts[i].c;
+		j++;
+	    }
+	}
+	if (n_stop_pnts > j) {
+	    G_message(_("Number of duplicate stop points: %d"), n_stop_pnts - j);
+	    n_stop_pnts = j;
 	}
     }
 
@@ -1320,6 +1345,7 @@ int main(int argc, char *argv[])
 		break;
 	    }
 
+	    /* skip if costs could not be calculated */
 	    if (Rast_is_d_null_value(&min_cost))
 		continue;
 
@@ -1346,12 +1372,13 @@ int main(int argc, char *argv[])
 	    }
 	}
 
-	if (have_stop_points && time_to_stop(pres_cell->row, pres_cell->col))
+	if (stop_pnts && time_to_stop(pres_cell->row, pres_cell->col))
 	    break;
 
 	ct = pres_cell;
 	delete(pres_cell);
 	pres_cell = get_lowest();
+
 	if (ct == pres_cell)
 	    G_warning(_("Error, ct == pres_cell"));
     }
@@ -1480,13 +1507,13 @@ int main(int argc, char *argv[])
 }
 
 int
-process_answers(char **answers, struct start_pt **points,
+process_start_coords(char **answers, struct start_pt **points,
 		struct start_pt **top_start_pt)
 {
     int col, row;
     double east, north;
     struct start_pt *new_start_pt;
-    int got_one = 0;
+    int point_no = 0;
 
     *points = NULL;
 
@@ -1505,8 +1532,6 @@ process_answers(char **answers, struct start_pt **points,
 		      east, north);
 	    continue;
 	}
-	else
-	    got_one = 1;
 
 	row = (window.north - north) / window.ns_res;
 	col = (east - window.west) / window.ew_res;
@@ -1515,6 +1540,7 @@ process_answers(char **answers, struct start_pt **points,
 
 	new_start_pt->row = row;
 	new_start_pt->col = col;
+	new_start_pt->value = ++point_no;
 	new_start_pt->next = NULL;
 
 	if (*points == NULL) {
@@ -1527,27 +1553,85 @@ process_answers(char **answers, struct start_pt **points,
 	    *top_start_pt = new_start_pt;
 	}
     }
-    return (got_one);
+    return (point_no > 0);
+}
+
+int process_stop_coords(char **answers)
+{
+    int col, row;
+    double east, north;
+
+    if (!answers)
+	return 0;
+
+    for (; *answers != NULL; answers += 2) {
+	if (!G_scan_easting(*answers, &east, G_projection()))
+	    G_fatal_error(_("Illegal x coordinate <%s>"), *answers);
+	if (!G_scan_northing(*(answers + 1), &north, G_projection()))
+	    G_fatal_error(_("Illegal y coordinate <%s>"), *(answers + 1));
+
+	if (east < window.west || east > window.east ||
+	    north < window.south || north > window.north) {
+	    G_warning(_("Warning, ignoring point outside window: %g, %g"),
+		      east, north);
+	    continue;
+	}
+
+	row = (window.north - north) / window.ns_res;
+	col = (east - window.west) / window.ew_res;
+
+	add_stop_pnt(row, col);
+    }
+
+    return (stop_pnts != NULL);
+}
+
+void add_stop_pnt(int r, int c)
+{
+    int i;
+    struct rc sp;
+
+    if (n_stop_pnts == stop_pnts_alloc) {
+	stop_pnts_alloc += 100;
+	stop_pnts = (struct rc *)G_realloc(stop_pnts, stop_pnts_alloc * sizeof(struct rc));
+    }
+
+    sp.r = r;
+    sp.c = c;
+    i = n_stop_pnts;
+    while (i > 0 && cmp_rc(stop_pnts + i - 1, &sp) > 0) {
+	stop_pnts[i] = stop_pnts[i - 1];
+	i--;
+    }
+    stop_pnts[i] = sp;
+
+    n_stop_pnts++;
 }
 
 int time_to_stop(int row, int col)
 {
-    static int total = 0;
+    int lo, mid, hi;
+    struct rc sp;
     static int hits = 0;
-    struct start_pt *points;
 
-    if (total == 0) {
-	for (points = head_end_pt;
-	     points != NULL; points = points->next, total++) ;
+    sp.r = row;
+    sp.c = col;
+
+    lo = 0;
+    hi = n_stop_pnts - 1;
+
+    /* bsearch with deferred test for equality
+     * slightly more efficient for worst case: no match */
+    while (lo < hi) {
+	mid = lo + ((hi - lo) >> 1);
+	if (cmp_rc(stop_pnts + mid, &sp) < 0)
+	    lo = mid + 1;
+	else
+	    hi = mid;
+    }
+    if (cmp_rc(stop_pnts + lo, &sp) == 0) {
+	return (++hits == n_stop_pnts);
     }
 
-    for (points = head_end_pt; points != NULL; points = points->next)
-
-	if (points->row == row && points->col == col) {
-	    hits++;
-	    if (hits == total)
-		return (1);
-	}
-
-    return (0);
+    return 0;
 }
