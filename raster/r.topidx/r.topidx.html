@@ -16,6 +16,21 @@ r.mapcalc "belev = if(isnull(basin), basin, elev)"
 <p>
 <em>r.stats -Anc</em> prints out averaged statistics for topographic index.
 
+<h2>EXAMPLE</h2>
+
+Running the command below will generate the topographic index map shown in the figure:
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.topidx input=elevation output=topidx_elevation
+</pre></div>
+
+<div align="center" style="margin: 10px">
+<img src="r_topidx.png" alt="r.topidx example" border="0">
+<br>
+<i>Figure: topographic index map derived from elevation map</i>
+</div>
+
 <h2>SEE ALSO</h2>
 <em>
 <a href="r.topmodel.html">r.topmodel</a>,
