@@ -62,6 +62,7 @@ SUBDIRS = \
 	r.out.vtk \
 	r.param.scale \
 	r.patch \
+	r.path \
 	r.profile \
 	r.proj \
 	r.quant \
