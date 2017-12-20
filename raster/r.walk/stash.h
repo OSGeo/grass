@@ -28,7 +28,7 @@ struct start_pt
     struct start_pt *next;
 };
 
-int process_start_coords(char **, struct start_pt **, struct start_pt **);
+struct start_pt *process_start_coords(char **, struct start_pt *);
 int process_stop_coords(char **answers);
 int time_to_stop(int, int);
 

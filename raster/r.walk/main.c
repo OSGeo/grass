@@ -36,7 +36,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
- *****************************************************************************/
+ ***************************************************************************/
 
 /*********************************************************************
  *
@@ -113,8 +113,6 @@
 
 struct Cell_head window;
 
-struct start_pt *head_start_pt = NULL;
-
 struct rc
 {
     int r;
@@ -168,11 +166,12 @@ int main(int argc, char *argv[])
     long n_processed = 0;
     long total_cells;
     struct GModule *module;
-    struct Flag *flag2, *flag3, *flag4, *flag5;
+    struct Flag *flag2, *flag3, *flag4, *flag5, *flag6;
     struct Option *opt1, *opt2, *opt3, *opt4, *opt5, *opt6, *opt7, *opt8;
     struct Option *opt9, *opt10, *opt11, *opt12, *opt13, *opt14, *opt15;
     struct cost *pres_cell;
-    struct start_pt *pres_start_pt = NULL;
+    struct start_pt *head_start_pt = NULL;
+    struct start_pt *next_start_pt;
     struct cc {
 	double dtm;		/* elevation model */
 	double cost_in;		/* friction costs */
@@ -186,6 +185,7 @@ int main(int argc, char *argv[])
     double peak = 0.0;
     int dtm_dsize, cost_dsize;
     double disk_mb, mem_mb, pq_mb;
+    int dir_bin;
 
     /* Definition for dimension and region check */
     struct Cell_head dtm_cellhd, cost_cellhd;
@@ -330,6 +330,11 @@ int main(int argc, char *argv[])
     flag5->key = 'i';
     flag5->description = _("Print info about disk space and memory requirements and exit");
 
+    flag6 = G_define_flag();
+    flag6->key = 'b';
+    flag6->description = _("Create bitmask encoded directions");
+    flag6->guisection = _("Optional outputs");
+
     /* Parse options */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -361,6 +366,8 @@ int main(int argc, char *argv[])
 
     start_with_raster_vals = flag4->answer;
 
+    dir_bin = flag6->answer;
+
     {
 	int count = 0;
 
@@ -376,7 +383,8 @@ int main(int argc, char *argv[])
     }
 
     if (opt3->answers) {
-	if (!process_start_coords(opt3->answers, &head_start_pt, &pres_start_pt))
+	head_start_pt = process_start_coords(opt3->answers, head_start_pt);
+	if (!head_start_pt)
 	    G_fatal_error(_("No start points"));
     }
 
@@ -660,17 +668,19 @@ int main(int argc, char *argv[])
     }
 
     if (dir == 1) {
+	FCELL fnullval;
+
 	G_message(_("Initializing directional output..."));
+	Rast_set_f_null_value(&fnullval, 1);
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    for (col = 0; col < ncols; col++) {
-		Segment_put(&dir_seg, &dnullval, row, col);
+		Segment_put(&dir_seg, &fnullval, row, col);
 	    }
 	}
 	G_percent(1, 1, 1);
     }
-
-    /*   Scan the existing cum_cost_layer searching for starting points.
+    /*   Scan the start_points layer searching for starting points.
      *   Create a heap of starting points ordered by increasing costs.
      */
     init_heap();
@@ -681,7 +691,6 @@ int main(int argc, char *argv[])
 	struct line_pnts *Points;
 	struct line_cats *Cats;
 	struct bound_box box;
-	struct start_pt *new_start_pt;
 	int cat, type, npoints = 0;
 
 	Points = Vect_new_line_struct();
@@ -718,24 +727,15 @@ int main(int argc, char *argv[])
 	    col = (int)Rast_easting_to_col(Points->x[0], &window);
 	    row = (int)Rast_northing_to_row(Points->y[0], &window);
 
-	    new_start_pt =
+	    next_start_pt =
 		(struct start_pt *)(G_malloc(sizeof(struct start_pt)));
 
-	    new_start_pt->row = row;
-	    new_start_pt->col = col;
+	    next_start_pt->row = row;
+	    next_start_pt->col = col;
 	    Vect_cat_get(Cats, 1, &cat);
-	    new_start_pt->value = cat;
-	    new_start_pt->next = NULL;
-
-	    if (head_start_pt == NULL) {
-		head_start_pt = new_start_pt;
-		pres_start_pt = new_start_pt;
-		new_start_pt->next = NULL;
-	    }
-	    else {
-		pres_start_pt->next = new_start_pt;
-		pres_start_pt = new_start_pt;
-	    }
+	    next_start_pt->value = cat;
+	    next_start_pt->next = head_start_pt;
+	    head_start_pt = next_start_pt;
 	}
 
 	if (npoints < 1)
@@ -826,9 +826,9 @@ int main(int argc, char *argv[])
 
 		    Segment_get(&cost_seg, &costs, row, col);
 
+		    cellval = Rast_get_d_value(ptr2, data_type2);
 		    if (start_with_raster_vals == 1) {
-			cellval = Rast_get_d_value(ptr2, data_type2);
-			insert(cellval, row, col);
+                        insert(cellval, row, col);
 			costs.cost_out = cellval;
 			Segment_put(&cost_seg, &costs, row, col);
 		    }
@@ -852,24 +852,22 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("No start points"));
     }
 
-    /*  Insert start points into min heap
-     */
+    /*  Insert start points into min heap */
     if (head_start_pt) {
-	struct start_pt *top_start_pt = NULL;
 
-	top_start_pt = head_start_pt;
-	while (top_start_pt != NULL) {
+	next_start_pt = head_start_pt;
+	while (next_start_pt != NULL) {
 	    value = &zero;
-	    if (top_start_pt->row < 0 || top_start_pt->row >= nrows
-		|| top_start_pt->col < 0 || top_start_pt->col >= ncols)
+	    if (next_start_pt->row < 0 || next_start_pt->row >= nrows
+		|| next_start_pt->col < 0 || next_start_pt->col >= ncols)
 		G_fatal_error(_("Specified starting location outside database window"));
-	    insert(zero, top_start_pt->row, top_start_pt->col);
-	    Segment_get(&cost_seg, &costs, top_start_pt->row,
-			top_start_pt->col);
+	    insert(zero, next_start_pt->row, next_start_pt->col);
+	    Segment_get(&cost_seg, &costs, next_start_pt->row,
+			next_start_pt->col);
 	    costs.cost_out = *value;
-	    Segment_put(&cost_seg, &costs, top_start_pt->row,
-			top_start_pt->col);
-	    top_start_pt = top_start_pt->next;
+	    Segment_put(&cost_seg, &costs, next_start_pt->row,
+			next_start_pt->col);
+	    next_start_pt = next_start_pt->next;
 	}
     }
 
@@ -973,7 +971,7 @@ int main(int argc, char *argv[])
 	 * 202.5 225   270  315   337.5
 	 *       247.5      292.5
 	 * 
-	 * X = present cell, directions for neighbors:
+	 * X = current cell:
 	 * 
 	 *       292.5      247.5 
 	 * 337.5 315   270  225    202.5
@@ -982,75 +980,134 @@ int main(int argc, char *argv[])
 	 *        67.5      112.5
 	 */
 
+	/* drainage directions bitmask encoded CW from North
+	 * drainage directions are set for each neighbor and must be 
+	 * read as from neighbor to current cell
+	 * 
+	 * bit positions, zero-based, from neighbor to current cell
+	 * 
+	 *     X = neighbor                X = current cell
+	 * 
+	 *      15       8                   11      12 
+	 *    14 6   7   0  9              10 2   3   4 13
+	 *       5   X   1                    1   X   5
+	 *    13 4   3   2 10               9 0   7   6 14
+	 *      12      11                    8      15
+	 */
+
 	for (neighbor = 1; neighbor <= total_reviewed; neighbor++) {
 	    switch (neighbor) {
 	    case 1:
+		row = pres_cell->row;
 		col = pres_cell->col - 1;
 		cur_dir = 360.0;
+		if (dir_bin)
+		    cur_dir = 1;
 		break;
 	    case 2:
+		row = pres_cell->row;
 		col = pres_cell->col + 1;
 		cur_dir = 180.0;
+		if (dir_bin)
+		    cur_dir = 5;
 		break;
 	    case 3:
 		row = pres_cell->row - 1;
 		col = pres_cell->col;
 		cur_dir = 270.0;
+		if (dir_bin)
+		    cur_dir = 3;
 		break;
 	    case 4:
 		row = pres_cell->row + 1;
+		col = pres_cell->col;
 		cur_dir = 90.0;
+		if (dir_bin)
+		    cur_dir = 7;
 		break;
 	    case 5:
 		row = pres_cell->row - 1;
 		col = pres_cell->col - 1;
 		cur_dir = 315.0;
+		if (dir_bin)
+		    cur_dir = 2;
 		break;
 	    case 6:
+		row = pres_cell->row - 1;
 		col = pres_cell->col + 1;
 		cur_dir = 225.0;
+		if (dir_bin)
+		    cur_dir = 4;
 		break;
 	    case 7:
 		row = pres_cell->row + 1;
+		col = pres_cell->col + 1;
 		cur_dir = 135.0;
+		if (dir_bin)
+		    cur_dir = 6;
 		break;
 	    case 8:
+		row = pres_cell->row + 1;
 		col = pres_cell->col - 1;
 		cur_dir = 45.0;
+		if (dir_bin)
+		    cur_dir = 0;
 		break;
 	    case 9:
 		row = pres_cell->row - 2;
 		col = pres_cell->col - 1;
 		cur_dir = 292.5;
+		if (dir_bin)
+		    cur_dir = 11;
 		break;
 	    case 10:
+		row = pres_cell->row - 2;
 		col = pres_cell->col + 1;
 		cur_dir = 247.5;
+		if (dir_bin)
+		    cur_dir = 12;
 		break;
 	    case 11:
 		row = pres_cell->row + 2;
+		col = pres_cell->col + 1;
 		cur_dir = 112.5;
+		if (dir_bin)
+		    cur_dir = 15;
 		break;
 	    case 12:
+		row = pres_cell->row + 2;
 		col = pres_cell->col - 1;
 		cur_dir = 67.5;
+		if (dir_bin)
+		    cur_dir = 8;
 		break;
 	    case 13:
 		row = pres_cell->row - 1;
 		col = pres_cell->col - 2;
 		cur_dir = 337.5;
+		if (dir_bin)
+		    cur_dir = 10;
 		break;
 	    case 14:
+		row = pres_cell->row - 1;
 		col = pres_cell->col + 2;
 		cur_dir = 202.5;
+		if (dir_bin)
+		    cur_dir = 13;
 		break;
 	    case 15:
 		row = pres_cell->row + 1;
+		col = pres_cell->col + 2;
 		cur_dir = 157.5;
+		if (dir_bin)
+		    cur_dir = 14;
 		break;
 	    case 16:
+		row = pres_cell->row + 1;
 		col = pres_cell->col - 2;
 		cur_dir = 22.5;
+		if (dir_bin)
+		    cur_dir = 9;
 		break;
 	    }
 
@@ -1358,6 +1415,8 @@ int main(int argc, char *argv[])
 		Segment_put(&cost_seg, &costs, row, col);
 		insert(min_cost, row, col);
 		if (dir == 1) {
+		    if (dir_bin)
+			cur_dir = (1 << (int)cur_dir);
 		    Segment_put(&dir_seg, &cur_dir, row, col);
 		}
 	    }
@@ -1367,6 +1426,25 @@ int main(int argc, char *argv[])
 		Segment_put(&cost_seg, &costs, row, col);
 		insert(min_cost, row, col);
 		if (dir == 1) {
+		    if (dir_bin)
+			cur_dir = (1 << (int)cur_dir);
+		    Segment_put(&dir_seg, &cur_dir, row, col);
+		}
+	    }
+	    else if (dir && dir_bin && old_min_cost == min_cost) {
+		FCELL old_dir;
+		int dir_inv[16] = { 4, 5, 6, 7, 0, 1, 2, 3,
+		                   12, 13, 14, 15, 8, 9, 10, 11 };
+		int dir_fwd;
+
+		/* this can create circular paths:
+		 * set only if current cell does not point to neighbor
+                 * does not avoid longer circular paths */
+		Segment_get(&dir_seg, &old_dir, pres_cell->row, pres_cell->col);
+		dir_fwd = (1 << dir_inv[(int)cur_dir]);
+		if (!((int)old_dir & dir_fwd)) {
+		    Segment_get(&dir_seg, &old_dir, row, col);
+		    cur_dir = ((1 << (int)cur_dir) | (int)old_dir);
 		    Segment_put(&dir_seg, &cur_dir, row, col);
 		}
 	    }
@@ -1506,16 +1584,13 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-int
-process_start_coords(char **answers, struct start_pt **points,
-		struct start_pt **top_start_pt)
+struct start_pt *
+process_start_coords(char **answers, struct start_pt *top_start_pt)
 {
     int col, row;
     double east, north;
     struct start_pt *new_start_pt;
     int point_no = 0;
-
-    *points = NULL;
 
     if (!answers)
 	return (0);
@@ -1541,19 +1616,11 @@ process_start_coords(char **answers, struct start_pt **points,
 	new_start_pt->row = row;
 	new_start_pt->col = col;
 	new_start_pt->value = ++point_no;
-	new_start_pt->next = NULL;
-
-	if (*points == NULL) {
-	    *points = new_start_pt;
-	    *top_start_pt = new_start_pt;
-	    new_start_pt->next = NULL;
-	}
-	else {
-	    (*top_start_pt)->next = new_start_pt;
-	    *top_start_pt = new_start_pt;
-	}
+	new_start_pt->next = top_start_pt;
+	top_start_pt = new_start_pt;
     }
-    return (point_no > 0);
+
+    return top_start_pt;
 }
 
 int process_stop_coords(char **answers)
