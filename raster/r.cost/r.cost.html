@@ -102,20 +102,9 @@ output map by using the <b>-n</b> flag.
 
 <h2>NOTES</h2>
 
-Sometimes, when the differences among integer cell category values in the
-<em>r.cost</em> cumulative cost surface output are small, this
-cumulative cost output cannot accurately be used as input to <em><a href="r.drain.html">r.drain</a></em>
-(<em><a href="r.drain.html">r.drain</a></em> will output bad
-results). This problem can be circumvented by making the differences
-between cell category values in the cumulative cost output bigger. It
-is recommended that, if the output from <em>r.cost</em> is to be used
-as input to <em><a href="r.drain.html">r.drain</a></em>, the user
-multiply the input cost surface map to <em>r.cost</em> by the value
-of the map's cell resolution, before running <em>r.cost</em>. This
-can be done using <em><a href="r.mapcalc.html">r.mapcalc</a></em>. The map 
-resolution can be found using <em><a href="g.region.html">g.region</a></em>.
-This problem doesn't arise with floating point maps.
-
+Paths from any point to the nearest starting point of <em>r.cost</em> 
+can be extracted with <em><a href="r.path.html">r.path</a></em> by 
+using the direction output map of <em>r.cost</em>.
 
 <h3>Algorithm notes</h3>
 
@@ -202,9 +191,9 @@ Knight's move (<b>-k</b>) option.
 <h3>Output analysis</h3>
 
 The output map can be viewed, for example, as an elevation model in which
-the starting location(s) is/are the lowest point(s). Outputs from  <em>r.cost</em>
-can be used as inputs to <em><a href="r.drain.html">r.drain</a></em> with
-the direction flag <b>-d</b>, in order to trace the least-cost path given by this 
+the starting location(s) is/are the lowest point(s). Outputs from <em>r.cost</em>
+can be used as inputs to <em><a href="r.path.html">r.path</a></em> , 
+in order to trace the least-cost path given by this 
 model between any given cell and the <em>r.cost</em> starting location(s). The 
 two programs, when used together, generate least-cost paths or corridors between any 
 two map locations (cells).
@@ -231,10 +220,11 @@ used. The calculation is done with <em>r.cost</em> as follows
 <a name="move"></a>
 <h2>Movement Direction</h2>
 The movement direction surface is created to record the sequence of
-movements that created the cost accumulation surface. Without it 
-<em><a href="r.drain.html">r.drain</a></em> would not correctly create a path from an end point 
-back to the start point. The direction of each cell points towards 
-the next cell. The directions are recorded as degrees CCW from East:
+movements that created the cost accumulation surface. This movement 
+direction surface can be used by <em><a href="r.path.html">r.path</a></em> 
+to recover a path from an end point back to the start point. 
+The direction of each cell points towards the next cell. 
+The directions are recorded as degrees CCW from East:
 
 <div class="code"><pre>
        112.5      67.5         i.e. a cell with the value 135 
@@ -256,26 +246,26 @@ r.cost input=costs start_raster=sources output=costsurf nearest=costalloc
 
 
 <h3>Find the minimum cost path</h3>
-Once <em>r.cost</em> computes the cumulative cost map, <em><a href="r.drain.html">r.drain</a></em>
-can be used to find the minimum cost path. Make sure to use the <b>-d</b> flag
-and the movement direction raster map when running r.drain to ensure
-the path is computed according to the proper movement directions.
+Once <em>r.cost</em> computes the cumulative cost map and an associated 
+movement direction map, <em><a href="r.path.html">r.path</a></em>
+can be used to find the minimum cost path.
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.drain.html">r.drain</a>,
 <a href="r.walk.html">r.walk</a>,
+<a href="r.path.html">r.path</a>,
 <a href="r.in.ascii.html">r.in.ascii</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.out.ascii.html">r.out.ascii</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Antony Awaida, Intelligent Engineering Systems Laboratory, M.I.T.<br>
 James Westervelt, U.S.Army Construction Engineering Research Laboratory<br>
 Updated for Grass 5 by Pierre de Mouveaux (pmx@audiovu.com) 
+Markus Metz
 
 <p>
 <i>Last changed: $Date$</i>
