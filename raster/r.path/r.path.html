@@ -130,7 +130,7 @@ d.legend.vect -b
 </pre></div>
 
 <div align="center">
-<a href="r_drain_with_r_watershed_direction.png"><img src="r_drain_with_r_watershed_direction.png" alt="drainage using r.watershed" width="300" height="280"></a>
+<a href="r_path_with_r_watershed_direction.png"><img src="r_path_with_r_watershed_direction.png" alt="drainage using r.watershed" width="300" height="280"></a>
 <br>
 <i>Figure: Drainage paths from two points where directions from
 r.watershed were used</i>
@@ -143,7 +143,7 @@ We compute bitmask encoded movement directions using <em>r.walk:</em>
 g.region swwake_30m -p
 
 # create friction map based on land cover
-r.recode landclass96 out=friction &lt;&lt; EOF
+r.recode input=landclass96 output=friction rules=- &lt;&lt; EOF
 1:3:0.1:0.1
 4:5:10.:10.
 6:6:1000.0:1000.0
@@ -163,13 +163,35 @@ r.walk -b -k elevation=elev_ned_30m friction=friction output=walkcost_k \
 
 r.path -b input=walkdir_k start_coordinates=640206,222795 \
     raster_path=walkpath_k vector_path=walkpath_k
+
+# without Knight's move and without bitmask encoding (single direction)
+r.walk elevation=elev_ned_30m friction=friction output=walkcost_s \
+    outdir=walkdir_s start_coordinates=635576,216485
+
+r.path input=walkdir_s start_coordinates=640206,222795 \
+    raster_path=walkpath_s vector_path=walkpath_s
 </pre></div>
+
+<!--
+d.vect map=walkpath_s color=243:66:53 width=10 legend_label="Single direction"
+d.vect map=walkpath color=254:192:6 width=4 legend_label=Bitmask
+d.vect map=walkpath_k color=62:80:180 width=2 legend_label="Bitmask + knight's"
+-->
 
 The extracted least-cost path splits and merges on the way from 
 the start point to the stop point (start point for r.walk). Note the 
 gaps in the raster path when using the Knight's move.
 <div class="code"><pre>
 </pre></div>
+
+<div align="center">
+<a href="r_path_with_bitmask.png">
+    <img src="r_path_with_bitmask.png" alt="least cost path using bitmask" width="129" height="300">
+</a>
+<br>
+<i>Figure: Comparison of shortest path computed using single directional
+angles and bitmask direction encoding with and without Knight's move</i>
+</div>
 
 <h2>SEE ALSO</h2>
 
