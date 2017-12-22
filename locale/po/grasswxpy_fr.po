@@ -19738,9 +19738,6 @@ msgstr "Version SVN :"
 msgid "Build Platform"
 msgstr "Plateforme"
 
-msgid "Row length of sampling frame"
-msgstr "Nombre de lignes du cadre d'échantillonage"
-
 #, fuzzy
 msgid "Reproject"
 msgstr "Reprojeter"
