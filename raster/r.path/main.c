@@ -106,14 +106,17 @@ int main(int argc, char **argv)
     int i, j, have_points = 0;
     int nrows, ncols;
     int npoints;
-    int out_id, dir_id;
+    int out_id, dir_id, dir_format;
+    struct FPRange drange;
+    DCELL dmin, dmax;
     char map_name[GNAME_MAX], out_name[GNAME_MAX], dir_name[GNAME_MAX];
     char *tempfile1, *tempfile2;
     struct History history;
 
     struct Cell_head window;
-    struct Option *opt1, *opt2, *coordopt, *vpointopt, *opt3, *opt4;
-    struct Flag *flag1, *flag2, *flag3, *flag4;
+    struct Option *opt1, *dfopt, *opt2, *coordopt, *vpointopt,
+                  *opt3, *opt4;
+    struct Flag *flag1, *flag2, *flag3;
     struct GModule *module;
     void *dir_buf;
 
@@ -126,6 +129,7 @@ int main(int argc, char **argv)
     struct line_pnts *Points;
     struct line_cats *Cats;
     struct Map_info vout, *pvout;
+    char *desc = NULL;
 
     G_gisinit(argv[0]);
 
@@ -137,10 +141,24 @@ int main(int argc, char **argv)
 	_("Traces paths from starting points following input directions.");
 
     opt1 = G_define_standard_option(G_OPT_R_INPUT);
-    opt1->description = _("Name of input direction");
+    opt1->label = _("Name of input direction");
     opt1->description =
 	_("Direction in degrees CCW from east, or bitmask encoded (-b flag)");
-    
+
+    dfopt = G_define_option();
+    dfopt->type = TYPE_STRING;
+    dfopt->key = "format";
+    dfopt->label = _("Format of the input direction map");
+    dfopt->required = YES;
+    dfopt->answer = "auto";
+    G_asprintf(&desc,
+           "auto;%s;degree;%s;45degree;%s;bitmask;%s",
+           _("auto-detect direction format"),
+           _("degrees CCW from East"),
+           _("degrees CCW from East divided by 45 (e.g. r.watershed directions)"),
+           _("bitmask encoded directions (e.g. r.cost -b)"));
+    dfopt->descriptions = desc;
+
     opt2 = G_define_standard_option(G_OPT_R_INPUT);
     opt2->key = "values";
     opt2->label =
@@ -166,7 +184,6 @@ int main(int argc, char **argv)
     vpointopt->key = "start_points";
     vpointopt->required = NO;
     vpointopt->label = _("Name of starting vector points map(s)");
-    vpointopt->description = NULL;
     vpointopt->guisection = _("Start");
 
     flag1 = G_define_flag();
@@ -183,11 +200,6 @@ int main(int argc, char **argv)
     flag3->key = 'n';
     flag3->description = _("Count cell numbers along the path");
     flag3->guisection = _("Path settings");
-
-    flag4 = G_define_flag();
-    flag4->key = 'b';
-    flag4->description =
-	_("The input direction map is bitmask encoded");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -360,11 +372,56 @@ int main(int argc, char **argv)
 	G_free(map_buf);
     }
 
+    if (Rast_read_fp_range(dir_name, "", &drange) < 0)
+	G_fatal_error(_("Unable to read range file"));
+    Rast_get_fp_range_min_max(&drange, &dmin, &dmax);
+    if (dmax <= 0)
+	G_fatal_error(_("Invalid directions map <%s>"), dir_name);
+
+    dir_format = -1;
+    if (strcmp(dfopt->answer, "degree") == 0) {
+	if (dmax > 360)
+	    G_fatal_error(_("Directional degrees can not be > 360"));
+	dir_format = DIR_DEG;
+    }
+    else if (strcmp(dfopt->answer, "45degree") == 0) {
+	if (dmax > 8)
+	    G_fatal_error(_("Directional degrees divided by 45 can not be > 8"));
+	dir_format = DIR_DEG45;
+    }
+    else if (strcmp(dfopt->answer, "bitmask") == 0) {
+	if (dmax > (1 << 16) - 1)
+	    G_fatal_error(_("Bitmask encoded directions can not be > %d"), (1 << 16) - 1);
+	dir_format = DIR_BIT;
+    }
+    else if (strcmp(dfopt->answer, "auto") == 0) {
+	if (dmax <= 8) {
+	    dir_format = DIR_DEG45;
+	    G_important_message(_("Input direction format assumed to be degrees CCW from East divided by 45"));
+	}
+	else if (dmax <= (1 << 8) - 1) {
+	    dir_format = DIR_BIT;
+	    G_important_message(_("Input direction format assumed to be bitmask encoded without Knight's move"));
+	}
+	else if (dmax <= 360) {
+	    dir_format = DIR_DEG;
+	    G_important_message(_("Input direction format assumed to be degrees CCW from East"));
+	}
+	else if (dmax <= (1 << 16) - 1) {
+	    dir_format = DIR_BIT;
+	    G_important_message(_("Input direction format assumed to be bitmask encoded with Knight's move"));
+	}
+	else
+	    G_fatal_error(_("Unable to detect format of input direction map <%s>"), dir_name);
+    }
+    if (dir_format <= 0)
+	G_fatal_error(_("Invalid directions format '%s'"), dfopt->answer);
+
     dir_id = Rast_open_old(dir_name, "");
     tempfile2 = G_tempfile();
     dir_fd = open(tempfile2, O_RDWR | O_CREAT, 0666);
 
-    if (flag4->answer) {
+    if (dir_format == DIR_BIT) {
 	dir_buf = Rast_allocate_c_buf();
 	for (i = 0; i < nrows; i++) {
 	    Rast_get_c_row(dir_id, dir_buf, i);
@@ -378,6 +435,13 @@ int main(int argc, char **argv)
 	dir_buf = Rast_allocate_d_buf();
 	for (i = 0; i < nrows; i++) {
 	    Rast_get_d_row(dir_id, dir_buf, i);
+	    if (dir_format == DIR_DEG45) {
+		DCELL *dp;
+
+		dp = (DCELL *)dir_buf;
+		for (j = 0; j < ncols; j++, dp++)
+		    *dp *= 45;
+	    }
 	    if (write(dir_fd, dir_buf, ncols * sizeof(DCELL)) !=
 	        ncols * sizeof(DCELL)) {
 		G_fatal_error(_("Unable to write to tempfile"));
@@ -404,7 +468,7 @@ int main(int argc, char **argv)
     while (next_start_pt) {
 	/* follow directions from start points to determine paths */
 	/* path tracing algorithm selection */
-	if (flag4->answer) {
+	if (dir_format == DIR_BIT) {
 	    struct Map_info Tmp;
 
 	    if (pvout) {

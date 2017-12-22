@@ -4,7 +4,6 @@
 #define OUT_CPY 3
 #define OUT_ACC 4
 
-struct metrics
-{
-    double ew_res, ns_res, diag_res;
-};
+#define DIR_DEG 1
+#define DIR_DEG45 2
+#define DIR_BIT 3

@@ -16,8 +16,7 @@ bit position corresponds to a specific neighbour. A path will continue
 to all neighbours with their bit set. This means a path can split and 
 merge. Such bitmasked directions can be created with the <b>-b</b> 
 flag of <em><a href="r.cost.html">r.cost</a></em> and 
-<em><a href="r.walk.html">r.walk</a></em>. The corresponding <b>-b</b> 
-flag must then be set for <em>r.path</em>.
+<em><a href="r.walk.html">r.walk</a></em>.
 
 <div class="code"><pre>
 Direction encoding for neighbors of x
@@ -154,14 +153,14 @@ EOF
 r.walk -b elevation=elev_ned_30m friction=friction output=walkcost \
     outdir=walkdir start_coordinates=635576,216485
 
-r.path -b input=walkdir start_coordinates=640206,222795 \
+r.path input=walkdir start_coordinates=640206,222795 \
     raster_path=walkpath vector_path=walkpath
 
 # with Knight's move
 r.walk -b -k elevation=elev_ned_30m friction=friction output=walkcost_k \
     outdir=walkdir_k start_coordinates=635576,216485
 
-r.path -b input=walkdir_k start_coordinates=640206,222795 \
+r.path input=walkdir_k start_coordinates=640206,222795 \
     raster_path=walkpath_k vector_path=walkpath_k
 
 # without Knight's move and without bitmask encoding (single direction)
@@ -186,11 +185,11 @@ gaps in the raster path when using the Knight's move.
 
 <div align="center">
 <a href="r_path_with_bitmask.png">
-    <img src="r_path_with_bitmask.png" alt="least cost path using bitmask" width="129" height="300">
+    <img src="r_path_with_bitmask.png" alt="least cost path using bitmask" height="300">
 </a>
 <br>
-<i>Figure: Comparison of shortest path computed using single directional
-angles and bitmask direction encoding with and without Knight's move</i>
+<i>Figure: Comparison of shortest paths using single directions and 
+multiple bitmask encoded directions without and with Knight's move</i>
 </div>
 
 <h2>SEE ALSO</h2>
