@@ -188,7 +188,7 @@ def reporthook(count, block_size, total_size):
     ))
     
 # based on g.extension, potentially move to library
-def download_end_extract(source):
+def download_and_extract(source):
     """Download a file (archive) from URL and uncompress it"""
     tmpdir = tempfile.mkdtemp()
     Debug.msg(1, 'Tmpdir: {}'.format(tmpdir))
@@ -208,7 +208,7 @@ def download_end_extract(source):
             ext = "tar.gz"
         else:
             ext = source.rsplit('.', 1)[1]
-        archive_name = os.path.join(tmpdir, 'extension.' + ext)
+        archive_name = os.path.join(tmpdir, 'location.' + ext)
         urlretrieve(source, archive_name, reporthook)
         # TODO: error handling for urlretrieve
         extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
@@ -227,7 +227,7 @@ def download_location(url, name, database):
     try:
         # TODO: the unpacking could go right to the path (but less
         # robust) or replace copytree here with move
-        directory = download_end_extract(source=url)
+        directory = download_and_extract(source=url)
         destination = os.path.join(database, name)
         if not is_location_valid(directory):
             return _("Downloaded location is not valid")
