@@ -175,7 +175,7 @@ def reporthook(count, block_size, total_size):
     global start_time
     if count == 0:
         start_time = time.time()
-        sys.stdout.write("Download in progress ...\n0%")
+        sys.stdout.write("Download in progress, wait until it is finished\n0%")
         return
     if count % 100 != 0: # be less verbose
         return
@@ -183,7 +183,7 @@ def reporthook(count, block_size, total_size):
     progress_size = int(count * block_size)
     speed = int(progress_size / (1024 * duration))
     percent = int(count * block_size * 100 / total_size)
-    sys.stdout.write("Download in progress ...\n{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed".format(
+    sys.stdout.write("Download in progress, wait until it is finished\n{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed".format(
         percent, progress_size / (1024 * 1024), speed, duration
     ))
     
@@ -191,6 +191,7 @@ def reporthook(count, block_size, total_size):
 def download_end_extract(source):
     """Download a file (archive) from URL and uncompress it"""
     tmpdir = tempfile.mkdtemp()
+    Debug.msg(1, 'Tmpdir: {}'.format(tmpdir))
     directory = os.path.join(tmpdir, 'location')
     if source.endswith('.zip'):
         archive_name = os.path.join(tmpdir, 'location.zip')
@@ -308,7 +309,7 @@ class LocationDownloadPanel(wx.Panel):
         # TODO: messages copied from gis_set.py, need this as API?
         self.message = wx.StaticText(parent=self, size=(-1, 50))
         sys.stdout = RedirectText(self.message)
-        
+
         # It is not clear if all wx versions supports color, so try-except.
         # The color itself may not be correct for all platforms/system settings
         # but in http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
@@ -382,7 +383,7 @@ class LocationDownloadPanel(wx.Panel):
                 self._warning(_("Download completed"))
 
         self._download_in_progress = True
-        self._warning(_("Download in progress..."))
+        self._warning(_("Download in progress, wait until it is finished"))
         self.thread.Run(callable=download_location,
                         url=url, name=dirname, database=self.database,
                         ondone=download_complete_callback)
