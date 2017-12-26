@@ -483,7 +483,7 @@ class LocationDownloadDialog(wx.Dialog):
         return self.panel.GetLocation()
 
     def OnClose(self, event):
-        if self.panel.thread.GetId() > 1:
+        if self.panel._download_in_progress:
             # running thread
             dlg = wx.MessageDialog(parent=self,
                                    message=_("Do you want to cancel location download?"),
