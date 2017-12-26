@@ -360,6 +360,7 @@ class LocationDownloadPanel(wx.Panel):
             self._warning(_("Download in progress, wait until it is finished"))
         index = self.choice.GetSelection()
         self.DownloadItem(self.locations[index])
+        self.download_button.Enable(False)
 
     def DownloadItem(self, item):
         """Download the selected item"""
@@ -461,7 +462,7 @@ class LocationDownloadDialog(wx.Dialog):
         self.panel = LocationDownloadPanel(parent=self, database=database)
         close_button = Button(self, id=wx.ID_CLOSE)
         # TODO: terminate download process
-        close_button.Bind(wx.EVT_BUTTON, lambda event: self.Close())
+        close_button.Bind(wx.EVT_BUTTON, self.OnClose)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
@@ -481,6 +482,22 @@ class LocationDownloadDialog(wx.Dialog):
         """Get the name of the last location downloaded by the user"""
         return self.panel.GetLocation()
 
+    def OnClose(self, event):
+        if self.panel.thread.GetId() > 1:
+            # running thread
+            dlg = wx.MessageDialog(parent=self,
+                                   message=_("Do you want to cancel location download?"),
+                                   caption=_("Abort download"),
+                                   style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE
+            )
+            
+            ret = dlg.ShowModal()
+            dlg.Destroy()
+
+            if ret == wx.ID_NO:
+                return
+    
+        self.Close()
 
 def main():
     """Tests the download dialog"""
