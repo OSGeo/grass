@@ -494,6 +494,7 @@ class LocationDownloadDialog(wx.Dialog):
             ret = dlg.ShowModal()
             dlg.Destroy()
 
+            # TODO: terminate download process on wx.ID_YES
             if ret == wx.ID_NO:
                 return
     
