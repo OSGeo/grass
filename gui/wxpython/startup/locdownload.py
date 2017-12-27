@@ -381,7 +381,9 @@ class LocationDownloadPanel(wx.Panel):
                 self._error(_("Download failed: %s") % errors)
             else:
                 self._last_downloaded_location_name = dirname
-                self._warning(_("Download completed"))
+                self._warning(_("Download completed. The downloaded sample data is listed "
+                                "in the location/mapset tabs upon closing of this window")
+                )
 
         self._download_in_progress = True
         self._warning(_("Download in progress, wait until it is finished"))
