@@ -18,7 +18,7 @@ equivalent of running a low-pass smoothing filter on the interpolated
 data and is often desirable, owing to noisy nature of high-resolution
 sensor data. With dense data and small gaps, this should result in only slight
 deviations from the original data and produce smooth output. Alternatively,
-setting the <b>-p</b> flag will disable the low-pass filter and preserve
+setting the <b>-k</b> flag will disable the low-pass filter and preserve
 the original cell values.
 
 <p>
@@ -156,7 +156,7 @@ interpolation.
 
 <p>
 
-Unless the <b>-p</b> (preserve) flag is given, data cells of the input
+Unless the <b>-k</b> (keep) flag is given, data cells of the input
 map will be replaced with interpolated values instead of preserving
 them in the output. In modes "wmean" and "mean", this results in a
 smoothing effect that includes the original data (see below)!
@@ -190,7 +190,7 @@ will result in a stronger smoothing. In practice, some experimentation
 with different settings for <b>distance</b> and <b>power</b> might be required
 to achieve good results. In some cases (e.g. when dealing with low-noise or
 classified data), it might be desirable to turn off data smoothing by
-setting the <b>-p</b> (preserve) flag. This will ensure that the original
+setting the <b>-k</b> (keep) flag. This will ensure that the original
 cell data is copied through to the result map without alteration. 
 
 <center>
@@ -201,7 +201,7 @@ cell data is copied through to the result map without alteration.
 Effect of smoothing the original data: The top row shows a gap-filled surface computed from a rasterized Lidar point  
 cloud (using <tt>mode=wmean</tt> and <tt>power=2</tt>), and the derived slope, aspect,
 and profile curvature maps. The smoothing effect is clearly visible.
-The bottom row shows the effect of setting the <b>-p</b> flag: Preserving the original
+The bottom row shows the effect of setting the <b>-k</b> flag: Preserving the original
 cell values in the interpolated output produces and unsmoothed, noisy surface, and likewise
 noisy derivative maps.
 </em></p>
@@ -213,7 +213,7 @@ Slope, aspect, and profile curvature are computed using the
 uses a window (kernel) for computations that considers only the
 immediate neighborhood of each cell. When performed on noisy data,
 such local operations result in equally noisy derivatives if the
-original data is preserved (by setting the <b>-p</b> flag) and no smoothing
+original data is preserved (by setting the <b>-k</b> flag) and no smoothing
 is performed.  
 
 <p>
@@ -231,12 +231,12 @@ g.region n=220220 s=218690 e=637800 w=636270 res=1
 r.in.lidar input=points.las output=ground method=mean class_filter=2
 
 r.fill.stats input=ground output=ground_filled mode=wmean power=2.0 cells=8
-r.fill.stats -p input=ground output=ground_filled2 mode=wmean power=2.0 cells=8
+r.fill.stats -k input=ground output=ground_filled2 mode=wmean power=2.0 cells=8
 
 r.slope.aspect elevation=ground_filled slope=slope aspect=aspect pcurvature=pcur tcurvature=tcur
 r.slope.aspect elevation=ground_filled2 slope=slope2 aspect=aspect2 pcurvature=pcur2 tcurvature=tcur2
 
-g.region n=219537 s=219172 w=636852 e=637218 -p
+g.region n=219537 s=219172 w=636852 e=637218 -k
 
 d.mon cairo output=r_fill_gaps_smoothing.png width=1464 height=730
 export GRASS_FONT=LiberationSans-Regular
@@ -385,7 +385,7 @@ r.fill.stats input=measurements output=result dist=10 mode=mean
 Fill data gaps in a categorized raster map; preserve existing data:
 
 <div class="code"><pre>
-r.fill.stats input=categories output=result dist=100 -m mode=mode -p
+r.fill.stats input=categories output=result dist=100 -m mode=mode -k
 </pre></div>
 
 <h3>Lidar point cloud example</h3>

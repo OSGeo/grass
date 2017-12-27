@@ -861,8 +861,8 @@ int main(int argc, char *argv[])
         _("Interpret distance as map units, not number of cells");
 
     parm.preserve = G_define_flag();
-    parm.preserve->key = 'p';
-    parm.preserve->label = _("Preserve original cell values");
+    parm.preserve->key = 'k';
+    parm.preserve->label = _("Keep (preserve) original cell values");
     parm.preserve->description =
         _("By default original values are smoothed");
 
