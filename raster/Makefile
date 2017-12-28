@@ -18,7 +18,6 @@ SUBDIRS = \
 	r.cross \
 	r.describe \
 	r.distance \
-	r.drain \
 	r.external \
 	r.external.out \
 	r.fill.dir \

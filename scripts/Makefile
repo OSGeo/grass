@@ -33,9 +33,10 @@ SUBDIRS = \
 	r.blend \
 	r.buffer.lowmem \
 	r.colors.stddev \
+	r.drain \
 	r.fillnulls \
 	r.grow \
-    r.import \
+	r.import \
 	r.in.aster \
 	r.in.srtm \
 	r.in.wms \

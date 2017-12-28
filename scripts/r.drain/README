@@ -1,0 +1,42 @@
+Date: Sun, 15 Jul 2001 18:26:51 -0600
+From: "Roger S. Miller" <rgrmill@rt66.com> 
+X-Mailer: Mozilla 4.76 [en] (X11; U; Linux 2.0.27 i586)
+X-Accept-Language: en
+To: Markus Neteler <neteler@geog.uni-hannover.de>
+Subject: r.drain -- new version 
+
+Markus,
+
+I worked on the original r.drain for a while and wasn't really able to
+understand what it was doing, much less where the problem was.  I
+figured that I might be able to spend the rest of the weekend figuring
+it out and in the end I would still have a program with unusual behavior
+in flat spots.  I decided instead to finish the version that I started
+based on r.fill.dir.
+
+My version of r.drain (which I called r.d2) is in the attached zip file.
+
+r.d2 reproduces most of the behavior of r.drain.  It does not use the
+"null_value" option and it won't read input from a sites file.  It uses
+all of the flags defined for r.drain.  My first draft of the model
+didn't correctly handle the ew,ns and diagonal resolutions (as
+r.fill.dir does not).  I believe that I fixed that problem.  There are
+also some other minor behaviors that differ a little from r.drain.
+
+r.d2 runs pretty quickly on a small, clean dem, but it can take quite a
+while  to run on a large cell map - particularly one with very many
+areas where the flow directions are ambiguous.  I didn't write anything
+into the program to warn the user about the execution time.
+
+I tested it on the fcell map that you sent me when this issue first came
+up and on a lat-long cell map.  It worked well in both cases.  The
+version of r.fill.dir that I started with was the version I had archived
+here, which was not updated for all the changes needed to make
+r.fill.dir run on all of our platforms.  I built in the changes that I
+could remember, but there may be a few more that come up when you try to
+compile it on the Cray.
+
+I hope this meets your needs.
+
+
+Roger
