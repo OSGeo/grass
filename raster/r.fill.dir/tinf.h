@@ -13,9 +13,9 @@ int is_null_c(void *);
 int is_null_f(void *);
 int is_null_d(void *);
 
-int bpe_c();
-int bpe_f();
-int bpe_d();
+size_t bpe_c();
+size_t bpe_f();
+size_t bpe_d();
 
 void *get_min_c(void *, void *);
 void *get_min_f(void *, void *);
@@ -33,9 +33,9 @@ void put_row_c(int, void *);
 void put_row_f(int, void *);
 void put_row_d(int, void *);
 
-void *get_buf_c();
-void *get_buf_f();
-void *get_buf_d();
+void *get_buf_c(void);
+void *get_buf_f(void);
+void *get_buf_d(void);
 
 void set_min_c(void *);
 void set_min_f(void *);
@@ -66,7 +66,7 @@ void prod_d(void *, void *);
  * its argument list to the list below */
 
 extern int (*is_null) (void *);
-extern int (*bpe) ();
+extern size_t (*bpe) ();
 extern void *(*get_max) (void *, void *);
 extern void *(*get_min) (void *, void *);
 extern void (*get_row) (int, void *, int);
@@ -89,7 +89,7 @@ double slope_d(void *, void *, double);
 struct band3
 {
     int ns;			/* samples per line */
-    int sz;			/* bytes per line */
+    size_t sz;			/* bytes per line */
     char *b[3];			/* pointers to start of each line */
 };
 

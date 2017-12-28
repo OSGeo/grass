@@ -68,12 +68,14 @@ int main(int argc, char **argv)
     const char *tempfile1, *tempfile2, *tempfile3;
     char dir_name[GNAME_MAX];
     char bas_name[GNAME_MAX];
+    struct History history;
 
     struct Cell_head window;
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3, *opt4, *opt5;
     struct Flag *flag1;
-    int in_type, bufsz;
+    int in_type;
+    size_t bufsz;
     void *in_buf;
     CELL *out_buf;
     struct band3 bnd, bndC;
@@ -247,8 +249,12 @@ int main(int argc, char **argv)
 	}
 
 	Rast_close(bas_id);
-	close(fm);
+
+	Rast_short_history(bas_name, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(bas_name, &history);
     }
+    close(fm);
 
     G_important_message(_("Writing output raster maps..."));
     for (i = 0; i < nrows; i++) {
@@ -269,9 +275,15 @@ int main(int argc, char **argv)
     Rast_write_colors(new_map_name, G_mapset(), &colors);
 
     Rast_close(new_id);
+    Rast_short_history(new_map_name, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(new_map_name, &history);
     close(fe);
     
     Rast_close(dir_id);
+    Rast_short_history(dir_name, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(dir_name, &history);
     close(fd);
 
     unlink(tempfile1);
