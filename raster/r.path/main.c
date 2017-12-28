@@ -143,13 +143,14 @@ int main(int argc, char **argv)
     opt1 = G_define_standard_option(G_OPT_R_INPUT);
     opt1->label = _("Name of input direction");
     opt1->description =
-	_("Direction in degrees CCW from east, or bitmask encoded (-b flag)");
+	_("Direction in degrees CCW from east, or bitmask encoded");
 
     dfopt = G_define_option();
     dfopt->type = TYPE_STRING;
     dfopt->key = "format";
     dfopt->label = _("Format of the input direction map");
     dfopt->required = YES;
+    dfopt->options = "auto,degree,45degree,bitmask";
     dfopt->answer = "auto";
     G_asprintf(&desc,
            "auto;%s;degree;%s;45degree;%s;bitmask;%s",
