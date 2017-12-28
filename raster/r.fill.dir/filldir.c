@@ -78,9 +78,10 @@ int fill_row(int nl, int ns, struct band3 *bnd)
 /* determine the flow direction at each cell on one row */
 void build_one_row(int i, int nl, int ns, struct band3 *bnd, CELL * dir)
 {
-    int j, offset, inc;
+    int j, inc;
+    size_t offset;
     CELL sdir;
-    double slope;
+    double curslope;
     char *center;
     char *edge;
 
@@ -95,7 +96,7 @@ void build_one_row(int i, int nl, int ns, struct band3 *bnd, CELL * dir)
 	}
 
 	sdir = 0;
-	slope = HUGE_VAL;
+	curslope = HUGE_VAL;
 	if (i == 0) {
 	    sdir = 128;
 	}
@@ -109,28 +110,28 @@ void build_one_row(int i, int nl, int ns, struct band3 *bnd, CELL * dir)
 	    sdir = 2;
 	}
 	else {
-	    slope = -HUGE_VAL;
+	    curslope = -HUGE_VAL;
 
 	    /* check one row back */
 	    edge = bnd->b[0] + offset;
-	    check(64, &sdir, center, edge - inc, 1.4142136, &slope);
-	    check(128, &sdir, center, edge, 1., &slope);
-	    check(1, &sdir, center, edge + inc, 1.4142136, &slope);
+	    check(64, &sdir, center, edge - inc, 1.4142136, &curslope);
+	    check(128, &sdir, center, edge, 1., &curslope);
+	    check(1, &sdir, center, edge + inc, 1.4142136, &curslope);
 
 	    /* check this row */
-	    check(32, &sdir, center, center - inc, 1., &slope);
-	    check(2, &sdir, center, center + inc, 1., &slope);
+	    check(32, &sdir, center, center - inc, 1., &curslope);
+	    check(2, &sdir, center, center + inc, 1., &curslope);
 
 	    /* check one row forward */
 	    edge = bnd->b[2] + offset;
-	    check(16, &sdir, center, edge - inc, 1.4142136, &slope);
-	    check(8, &sdir, center, edge, 1., &slope);
-	    check(4, &sdir, center, edge + inc, 1.4142136, &slope);
+	    check(16, &sdir, center, edge - inc, 1.4142136, &curslope);
+	    check(8, &sdir, center, edge, 1., &curslope);
+	    check(4, &sdir, center, edge + inc, 1.4142136, &curslope);
 	}
 
-	if (slope == 0.)
+	if (curslope == 0.)
 	    sdir = -sdir;
-	else if (slope < 0.)
+	else if (curslope < 0.)
 	    sdir = -256;
 	dir[j] = sdir;
     }
@@ -139,7 +140,8 @@ void build_one_row(int i, int nl, int ns, struct band3 *bnd, CELL * dir)
 
 void filldir(int fe, int fd, int nl, struct band3 *bnd)
 {
-    int i, bufsz;
+    int i;
+    size_t bufsz;
     CELL *dir;
 
     /* fill single-cell depressions, except on outer rows and columns */
@@ -154,12 +156,14 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd)
 	    write(fe, bnd->b[1], bnd->sz);
 	}
     }
+    /* why on the last row? it's an outer row */
+#if 0
     advance_band3(0, bnd);
     if (fill_row(nl, bnd->ns, bnd)) {
 	lseek(fe, (off_t) i * bnd->sz, SEEK_SET);
 	write(fe, bnd->b[1], bnd->sz);
     }
-
+#endif
     /* determine the flow direction in each cell.  On outer rows and columns
      * the flow direction is always directly out of the map */
 
@@ -174,9 +178,12 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd)
 	build_one_row(i, nl, bnd->ns, bnd, dir);
 	write(fd, dir, bufsz);
     }
+    /* why this extra row ? */
+#if 0
     advance_band3(fe, bnd);
     build_one_row(i, nl, bnd->ns, bnd, dir);
     write(fd, dir, bufsz);
+#endif
 
     G_free(dir);
 
