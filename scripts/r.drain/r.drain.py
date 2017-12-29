@@ -21,7 +21,9 @@
 
 #%module
 #% description: Traces a flow through an elevation model or cost surface on a raster map.
-#% keyword: raster, hydrology, cost surface
+#% keyword: raster
+#% keyword: hydrology
+#% keyword: cost surface
 #%end
 #%option
 #% key: input
