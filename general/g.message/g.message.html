@@ -7,7 +7,7 @@ functionality is influenced by the <tt>GRASS_VERBOSE</tt> and
 <tt>GRASS_MESSAGE_FORMAT</tt> environment variables.
 
 <p>
-The program can be used for standard informative messages as well as warnings 
+The program can be used for standard informative messages as well as warnings
 (<b>-w</b> flag) and fatal errors (<b>-e</b> flag). For debugging
 purposes, the <b>-d</b> flag will cause <em>g.message</em> to print a debugging
 message at the given level.
@@ -82,9 +82,9 @@ g.message -w message="This is a warning"
 Controlled by the "<tt>GRASS_VERBOSE</tt>" environment variable. Typically this
 is set using the <b>--quiet</b> or <b>--verbose</b> command line options.
 <ul>
-<li>0 - only errors and warnings are printed 
-<li>1 - progress messages are printed 
-<li>2 - all module messages are printed 
+<li>0 - only errors and warnings are printed
+<li>1 - progress messages are printed
+<li>2 - all module messages are printed
 <li>3 - additional verbose messages are printed
 </ul>
 
@@ -96,8 +96,46 @@ Recommended levels:
 <ul>
 <li>1 - message is printed once or few times per module
 <li>3 - each row (raster) or line (vector)
-<li>5 - each cell (raster) or point (vector) 
+<li>5 - each cell (raster) or point (vector)
 </ul>
+
+<h2>EXAMPLES</h2>
+
+This basic example prints the message "hello" in the console:
+
+<div class="code"><pre>
+g.message message="hello"
+</pre></div>
+
+<p>
+To print a message as an error message use the <b>-e</b> flag:
+
+<div class="code"><pre>
+g.message -e message="my error"
+</pre></div>
+
+<p>
+To print a message highlighted as a debug message ("D0/0: debug") in the
+console, use the <b>-d</b> flag. Optionally the debug level can be defined (see
+also <a href="g.gisenv.html">g.gisenv</a> for details):
+
+<div class="code"><pre>
+# Levels: (recommended levels)
+#   0 - silence
+#   1 - message is printed once or few times per module
+#   3 - each row (raster) or line (vector)
+#   5 - each cell (raster) or point (vector) 
+g.message -d message="debug" debug=0
+</pre></div>
+
+<p>
+To print a message highlighted as a warning message ("WARNING: my warning")
+in the console, use the <b>-w</b> flag:
+
+<div class="code"><pre>
+g.message -w message="my warning"
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 <em>
