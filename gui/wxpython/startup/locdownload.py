@@ -188,7 +188,7 @@ def reporthook(count, block_size, total_size):
     ))
     
 # based on g.extension, potentially move to library
-def download_end_extract(source):
+def download_and_extract(source):
     """Download a file (archive) from URL and uncompress it"""
     tmpdir = tempfile.mkdtemp()
     Debug.msg(1, 'Tmpdir: {}'.format(tmpdir))
@@ -208,7 +208,7 @@ def download_end_extract(source):
             ext = "tar.gz"
         else:
             ext = source.rsplit('.', 1)[1]
-        archive_name = os.path.join(tmpdir, 'extension.' + ext)
+        archive_name = os.path.join(tmpdir, 'location.' + ext)
         urlretrieve(source, archive_name, reporthook)
         # TODO: error handling for urlretrieve
         extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
@@ -227,7 +227,7 @@ def download_location(url, name, database):
     try:
         # TODO: the unpacking could go right to the path (but less
         # robust) or replace copytree here with move
-        directory = download_end_extract(source=url)
+        directory = download_and_extract(source=url)
         destination = os.path.join(database, name)
         if not is_location_valid(directory):
             return _("Downloaded location is not valid")
@@ -360,6 +360,7 @@ class LocationDownloadPanel(wx.Panel):
             self._warning(_("Download in progress, wait until it is finished"))
         index = self.choice.GetSelection()
         self.DownloadItem(self.locations[index])
+        self.download_button.Enable(False)
 
     def DownloadItem(self, item):
         """Download the selected item"""
@@ -380,7 +381,9 @@ class LocationDownloadPanel(wx.Panel):
                 self._error(_("Download failed: %s") % errors)
             else:
                 self._last_downloaded_location_name = dirname
-                self._warning(_("Download completed"))
+                self._warning(_("Download completed. The downloaded sample data is listed "
+                                "in the location/mapset tabs upon closing of this window")
+                )
 
         self._download_in_progress = True
         self._warning(_("Download in progress, wait until it is finished"))
@@ -461,7 +464,7 @@ class LocationDownloadDialog(wx.Dialog):
         self.panel = LocationDownloadPanel(parent=self, database=database)
         close_button = Button(self, id=wx.ID_CLOSE)
         # TODO: terminate download process
-        close_button.Bind(wx.EVT_BUTTON, lambda event: self.Close())
+        close_button.Bind(wx.EVT_BUTTON, self.OnClose)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
@@ -481,6 +484,23 @@ class LocationDownloadDialog(wx.Dialog):
         """Get the name of the last location downloaded by the user"""
         return self.panel.GetLocation()
 
+    def OnClose(self, event):
+        if self.panel._download_in_progress:
+            # running thread
+            dlg = wx.MessageDialog(parent=self,
+                                   message=_("Do you want to cancel location download?"),
+                                   caption=_("Abort download"),
+                                   style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE
+            )
+            
+            ret = dlg.ShowModal()
+            dlg.Destroy()
+
+            # TODO: terminate download process on wx.ID_YES
+            if ret == wx.ID_NO:
+                return
+    
+        self.Close()
 
 def main():
     """Tests the download dialog"""
