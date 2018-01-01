@@ -1,7 +1,7 @@
 /*! \mainpage GRASS GIS 7 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
-     * updated 8/2005, 2006-2008, 2010-2011
+     * updated 8/2005, 2006-2008, 2010-2011, 2017
   -->
 
 <a href="http://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
@@ -23,7 +23,7 @@ Team</a>, an international team of programmers, GRASS module authors
 are cited within their module's source code and the contributed manual
 pages.
 
-&copy; 2000-2017 by the GRASS Development Team
+&copy; 2000-2018 by the GRASS Development Team
 
 This manual is published under <a
 href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation
@@ -33,7 +33,7 @@ the <a href="http://www.osgeo.org">Open Source Geospatial
 Foundation</a>, who provides the GRASS main infrastructure.
 
 Main web site: <a
-href="http://grass.osgeo.org">http://grass.osgeo.org</a>
+href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 <i>Note: Missing entries below still need to be documented in Doxygen format.</i>
 
