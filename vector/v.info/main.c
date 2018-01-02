@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     }
     
     if (shell_flag & SHELL_BASIC) {
-	print_shell(&Map);
+	print_shell(&Map, field_opt);
     }
     if (shell_flag & SHELL_REGION) {
 	print_region(&Map);
