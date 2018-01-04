@@ -340,8 +340,11 @@ def main():
 
             # Avoid v.surf.rst warnings
             if pointsnumber < segmax:
-                npmin = pointsnumber + 1
-                segmax = pointsnumber
+                use_npmin = pointsnumber
+                use_segmax = pointsnumber * 2
+            else:
+                use_npmin = npmin
+                use_segmax = segmax
 
             # launch v.surf.rst
             tmp_rmaps.append(holename + '_dem')
@@ -349,7 +352,7 @@ def main():
                 grass.run_command('v.surf.rst', quiet=quiet,
                                   input=holename, elev=holename + '_dem',
                                   tension=tension, smooth=smooth,
-                                  segmax=segmax, npmin=npmin)
+                                  segmax=use_segmax, npmin=use_npmin)
             except CalledModuleError:
                 # GTC Hole is NULL area in a raster map
                 grass.fatal(_("Failed to fill hole %s") % cat)
