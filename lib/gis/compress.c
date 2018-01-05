@@ -84,6 +84,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <unistd.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -217,9 +218,8 @@ int G_compress_bound(int src_sz, int number)
  * -1: error
  * -2: dst too small
  */
-int
-G_compress(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz, int number)
+int G_compress(unsigned char *src, int src_sz, unsigned char *dst,
+	       int dst_sz, int number)
 {
     if (number < 0 || number >= n_compressors) {
 	G_fatal_error(_("Request for unsupported compressor"));
@@ -233,9 +233,8 @@ G_compress(unsigned char *src, int src_sz, unsigned char *dst,
  * > 0: number of bytes in dst
  * -1: error
  */
-int
-G_expand(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz, int number)
+int G_expand(unsigned char *src, int src_sz, unsigned char *dst,
+	     int dst_sz, int number)
 {
     if (number < 0 || number >= n_compressors) {
 	G_fatal_error(_("Request for unsupported compressor"));
@@ -251,8 +250,18 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
     int bsize, nread, err;
     unsigned char *b;
 
-    if (dst == NULL || nbytes < 0)
+    if (dst == NULL || nbytes <= 0) {
+	if (dst == NULL)
+	    G_warning(_("No destination buffer allocated"));
+	if (nbytes <= 0)
+	    G_warning(_("Invalid destination buffer size %d"), nbytes);
 	return -2;
+    }
+
+    if (rbytes <= 0) {
+	G_warning(_("Invalid read size %d"), nbytes);
+	return -2;
+    }
 
     bsize = rbytes;
 
@@ -269,9 +278,18 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
 	    nread += err;
     } while (err > 0 && nread < bsize);
 
+    if (err <= 0) {
+	if (err == 0)
+	    G_warning(_("Unable to read %d bytes: end of file"), rbytes);
+	else
+	    G_warning(_("Unable to read %d bytes: %s"), rbytes, strerror(errno));
+	return -1;
+    }
+
     /* If the bsize if less than rbytes and we didn't get an error.. */
-    if (nread < rbytes && err > 0) {
+    if (nread < rbytes) {
 	G_free(b);
+	G_warning("Unable to read %d bytes, got %d bytes", rbytes, nread);
 	return -1;
     }
 
@@ -287,6 +305,7 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
     else if (b[0] != G_COMPRESSED_YES) {
 	/* We're not at the start of a row */
 	G_free(b);
+	G_warning("Read error: We're not at the start of a row");
 	return -1;
     }
     /* Okay it's a compressed row */
