@@ -3,16 +3,16 @@
  *                     -- GRASS Development Team --
  *
  * MODULE:      GRASS gis library
- * FILENAME:    cmprlz4.c
+ * FILENAME:    cmprzstd.c
  * AUTHOR(S):   Eric G. Miller <egm2@jps.net>
  *              Markus Metz
- * PURPOSE:     To provide an interface to lz4 for compressing and 
- *              decompressing data using LZ$.  It's primary use is in
+ * PURPOSE:     To provide an interface to ZSTD for compressing and 
+ *              decompressing data using ZSTD.  It's primary use is in
  *              the storage and reading of GRASS floating point rasters.
  *
- * ALGORITHM:   https://code.google.com/p/lz4/
- * DATE CREATED: Dec 18 2015
- * COPYRIGHT:   (C) 2015 by the GRASS Development Team
+ * ALGORITHM:   http://www.zstd.net
+ * DATE CREATED: Dec 18 2017
+ * COPYRIGHT:   (C) 2017 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (version 2 or greater). Read the file COPYING that 
@@ -97,12 +97,23 @@ G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
 #else
 
     /* Catch errors early */
-    if (src == NULL || dst == NULL)
+    if (src == NULL || dst == NULL) {
+	if (src == NULL)
+	    G_warning(_("No source buffer"));
+	
+	if (dst == NULL)
+	    G_warning(_("No destination buffer"));
 	return -1;
+    }
 
     /* Don't do anything if either of these are true */
-    if (src_sz <= 0 || dst_sz <= 0)
+    if (src_sz <= 0 || dst_sz <= 0) {
+	if (src_sz <= 0)
+	    G_warning(_("Invalid source buffer size %d"), src_sz);
+	if (dst_sz <= 0)
+	    G_warning(_("Invalid destination buffer size %d"), dst_sz);
 	return 0;
+    }
 
     /* Output buffer has to be larger for single pass compression */
     buf = dst;
@@ -120,6 +131,8 @@ G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
     err = ZSTD_compress((char *)buf, buf_sz, (char *)src, src_sz, 3);
 
     if (err <= 0 || ZSTD_isError(err)) {
+	G_warning(_("ZSTD compression error %d: %s"),
+	          err, ZSTD_getErrorName(err));
 	if (buf != dst)
 	    G_free(buf);
 	return -1;
@@ -158,21 +171,39 @@ G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst,
 #else
 
     /* Catch error condition */
-    if (src == NULL || dst == NULL)
+    if (src == NULL || dst == NULL) {
+	if (src == NULL)
+	    G_warning(_("No source buffer"));
+	
+	if (dst == NULL)
+	    G_warning(_("No destination buffer"));
 	return -2;
+    }
 
     /* Don't do anything if either of these are true */
-    if (src_sz <= 0 || dst_sz <= 0)
+    if (src_sz <= 0 || dst_sz <= 0) {
+	if (src_sz <= 0)
+	    G_warning(_("Invalid source buffer size %d"), src_sz);
+	if (dst_sz <= 0)
+	    G_warning(_("Invalid destination buffer size %d"), dst_sz);
 	return 0;
+    }
 
     /* Do single pass decompress */
     err = ZSTD_decompress((char *)dst, dst_sz, (char *)src, src_sz);
-    /* err = LZ4_decompress_fast(src, dst, src_sz); */
+
+    if (err <= 0 || ZSTD_isError(err)) {
+	G_warning(_("ZSTD compression error %d: %s"),
+	          err, ZSTD_getErrorName(err));
+    	return -1;
+    }
 
     /* Number of bytes inflated to output stream is return value */
     nbytes = err;
 
     if (nbytes != dst_sz) {
+	/* TODO: it is not an error if destination is larger than needed */
+	G_warning(_("Got uncompressed size %d, expected %d"), (int)nbytes, dst_sz);
 	return -1;
     }
 
