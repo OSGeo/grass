@@ -385,18 +385,16 @@ msgid "Basename for resultant raster slice maps"
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:116
-#, fuzzy
 msgid "Value to multiply the raster values with"
-msgstr "Raster değerlerin kaynağı"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:117
 msgid "Coefficient a in the equation y = ax + b"
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:123
-#, fuzzy
 msgid "Value to add to the raster values"
-msgstr "Raster değerlerin kaynağı"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:124
 msgid "Coefficient b in the equation y = ax + b"
@@ -407,9 +405,9 @@ msgid "Use the same resolution as the input 3D raster map for the 2D output maps
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:174
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown raster type <%d>"
-msgstr "Bilinmeyen kullanım tipi: %d"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:260 ../raster3d/r3.out.ascii/main.c:305
 #: ../raster3d/r3.in.ascii/main.c:357 ../raster3d/r3.in.lidar/main.c:166
@@ -1295,9 +1293,9 @@ msgid "Cannot open file %s for reading"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/filters.c:27
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid range <%s> for option %s"
-msgstr "Geçersiz doğu"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/filters.c:54 ../vector/v.in.pdal/filters.c:95
 #: ../vector/v.in.lidar/filters.c:36
@@ -1335,9 +1333,8 @@ msgid "binning"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:170
-#, fuzzy
 msgid "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
-msgstr "ASCII poligon/çizgi/nokta veri dosyalarından raster harita oluşturur."
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:174 ../raster/r.in.lidar/main.c:120
 #: ../vector/v.in.lidar/main.c:142
@@ -1717,33 +1714,28 @@ msgid "First file's projection checked, checking projection of the other files..
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:540
-#, fuzzy
 msgid "Preparing the maps..."
-msgstr "Raster harita okunuyor..."
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:574 ../vector/v.sample/main.c:200
 msgid "Reading points..."
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:656
-#, fuzzy
 msgid "Computing proportional count map..."
-msgstr "Eleman tipi"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:661
-#, fuzzy
 msgid "Computing proportional sum map..."
-msgstr "sıklık derecesi hesaplanıyor"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:666
-#, fuzzy
 msgid "Computing mean map..."
-msgstr "sıklık derecesi hesaplanıyor"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:671
-#, fuzzy
 msgid "Closing the maps..."
-msgstr "Raster haritalar maskeleniyor..."
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:707 ../vector/v.in.lidar/main.c:783
 #, c-format
@@ -1761,9 +1753,9 @@ msgid "%lu input points were filtered out by class number"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:714
-#, fuzzy, c-format
+#, c-format
 msgid "%lu input points had intensity out of range"
-msgstr "%d nokta eşik dışında"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:716 ../vector/v.in.lidar/main.c:811
 #, c-format
@@ -4547,9 +4539,9 @@ msgid "Region ids are different"
 msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:983
-#, fuzzy, c-format
+#, c-format
 msgid "Region id %d is invalid"
-msgstr "[%s] doku dosyası geçersiz."
+msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:987
 msgid "Region consists of only one cell, nothing to update"
@@ -4669,9 +4661,9 @@ msgid "Initial range bandwidth: %g"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:188 ../imagery/i.segment/mean_shift.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Estimated range bandwidth: %g"
-msgstr "Noktalar arasındaki en büyük mesafe kullanılarak: %f"
+msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:208 ../imagery/i.segment/mean_shift.c:245
 #, c-format
@@ -4679,9 +4671,9 @@ msgid "Spatial bandwidth: %g"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:209 ../imagery/i.segment/mean_shift.c:246
-#, fuzzy, c-format
+#, c-format
 msgid "Range bandwidth: %g"
-msgstr "Görüntü genişliği"
+msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:395
 #, c-format
@@ -4699,9 +4691,9 @@ msgid "Mean shift converged after %d iterations"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:748
-#, fuzzy, c-format
+#, c-format
 msgid "Renumbering remaining %d segments..."
-msgstr "noktalar oluşturuluyor..."
+msgstr ""
 
 #: ../imagery/i.segment/main.c:39
 msgid "object recognition"
@@ -4720,19 +4712,16 @@ msgid "Error in creating segments"
 msgstr ""
 
 #: ../imagery/i.segment/main.c:55
-#, fuzzy
 msgid "Error in writing IDs"
-msgstr "Veri yazmada hata"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:59
-#, fuzzy
 msgid "Error in writing goodness of fit"
-msgstr "Veri yazmada hata"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:64
-#, fuzzy
 msgid "Error in writing new band values"
-msgstr "Veri yazmada hata"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:70
 #, c-format
@@ -4748,14 +4737,13 @@ msgid "Writing out goodness of fit"
 msgstr ""
 
 #: ../imagery/i.segment/write_output.c:236
-#, fuzzy
 msgid "Writing out shifted band values..."
-msgstr "Çıktı harita yazılıyor"
+msgstr ""
 
 #: ../imagery/i.segment/cluster.c:66
-#, fuzzy, c-format
+#, c-format
 msgid "%d-band clustering with threshold %g"
-msgstr "%d nokta eşik dışında"
+msgstr ""
 
 #: ../imagery/i.segment/cluster.c:121 ../raster/r.clump/minsize.c:373
 #: ../raster/r.clump/clump.c:211 ../raster/r.clump/clump.c:475
@@ -4793,9 +4781,9 @@ msgid "Unable to read from temp file"
 msgstr ""
 
 #: ../imagery/i.segment/cluster.c:455
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d clumps"
-msgstr "Tamamlanmamış kural"
+msgstr ""
 
 #: ../imagery/i.segment/flag.c:21 ../imagery/i.segment/flag.c:28
 #: ../vector/v.distance/main.c:748 ../vector/v.distance/main.c:825
@@ -4820,9 +4808,8 @@ msgid "Threshold = 0 merges only identical segments; threshold = 1 merges all"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:46
-#, fuzzy
 msgid "Spatial radius in number of cells"
-msgstr "Çerçeve sayısı"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:47
 msgid "Must be >= 1, only cells within spatial bandwidth are considered for mean shift"
@@ -4913,9 +4900,9 @@ msgid "Threshold should be > 0 and < 1"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Option '%s' must be >= 1"
-msgstr "< %s> Mevkisi oluşturuldu"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:208
 #, c-format
@@ -4967,23 +4954,22 @@ msgid "Segmentation constraint raster map must be CELL type (integers)"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:321
-#, fuzzy
 msgid "Integer overflow: too many cells in current region"
-msgstr "Geçerli bölgede [%ld] BOŞ olmayan hücre yok"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:334
 msgid "Invalid output raster name for goodness of fit"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:341
-#, fuzzy, c-format
+#, c-format
 msgid "Maximum number of iterations set to %d"
-msgstr " Maksimum iterasyon sayısı: %d\n"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:351
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid number of iterations, %d will be used"
-msgstr " Maksimum iterasyon sayısı: %d\n"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:360
 msgid "Invalid number of MB, 300 will be used"
@@ -16985,14 +16971,12 @@ msgid "Writing output map"
 msgstr "Çıktı harita yazılıyor"
 
 #: ../raster/r.clump/minsize.c:357
-#, fuzzy
 msgid "Minimum size must be larger than 1"
-msgstr "%s = %s -- sıfırdan büyük olmalıdır"
+msgstr ""
 
 #: ../raster/r.clump/minsize.c:368
-#, fuzzy
 msgid "Loading input ..."
-msgstr "Girdiler okunuyor..."
+msgstr ""
 
 #: ../raster/r.clump/minsize.c:418
 #, c-format
@@ -17000,9 +16984,9 @@ msgid "Merging clumps smaller than %d cells..."
 msgstr ""
 
 #: ../raster/r.clump/minsize.c:509
-#, fuzzy, c-format
+#, c-format
 msgid "Renumbering remaining %d clumps..."
-msgstr "Eğitim sınıfları bulunuyor ..."
+msgstr ""
 
 #: ../raster/r.clump/main.c:60
 msgid "reclass"
@@ -17017,18 +17001,16 @@ msgid "Recategorizes data in a raster map by grouping cells that form physically
 msgstr ""
 
 #: ../raster/r.clump/main.c:82
-#, fuzzy
 msgid "Threshold to identify similar cells"
-msgstr "Başlangıç dokularını içeren dosya"
+msgstr ""
 
 #: ../raster/r.clump/main.c:83
 msgid "Valid range: 0 = identical to < 1 = maximal difference"
 msgstr ""
 
 #: ../raster/r.clump/main.c:90
-#, fuzzy
 msgid "Minimum clump size in cells"
-msgstr "Her hücrenin en küçük boyutu"
+msgstr ""
 
 #: ../raster/r.clump/main.c:91
 msgid "Clumps smaller than minsize will be merged to form larger clumps"
@@ -17063,18 +17045,18 @@ msgid "Pass 2 of 2..."
 msgstr ""
 
 #: ../raster/r.clump/clump.c:122
-#, fuzzy, c-format
+#, c-format
 msgid "%d initial clumps"
-msgstr "sıklık derecesi hesaplanıyor"
+msgstr ""
 
 #: ../raster/r.clump/clump.c:233 ../raster/r.clump/clump.c:490
 msgid "Pass 1 of 2..."
 msgstr ""
 
 #: ../raster/r.clump/clump.c:425
-#, fuzzy, c-format
+#, c-format
 msgid "%d-band clumping with threshold %g"
-msgstr "%d nokta eşik dışında"
+msgstr ""
 
 #: ../raster/r.composite/main.c:73
 #: ../locale/scriptstrings/r.blend_to_translate.c:3
@@ -24526,9 +24508,8 @@ msgid "Name of data file(s) for Y axis of graph"
 msgstr "Grafiğin Y ekseni için veri dosya(lar) adı"
 
 #: ../display/d.linegraph/main.c:249
-#, fuzzy
 msgid "Path to files"
-msgstr "yazıtipi dosyası yolu"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:251
 msgid "Path to the directory where the input files are located"
@@ -24539,9 +24520,8 @@ msgid "Color for Y data"
 msgstr "Y verisinin rengi"
 
 #: ../display/d.linegraph/main.c:272
-#, fuzzy
 msgid "Width of the lines"
-msgstr "Yüzdelik listesi"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:279
 msgid "Color for axis, tics, numbers, and title"
@@ -24568,37 +24548,34 @@ msgid "Tic values for the Y axis"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:329
-#, fuzzy
 msgid "Symbol for point"
-msgstr "Satır sayısı"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:338
-#, fuzzy
 msgid "Point size"
-msgstr "Simge boyutu"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:347
 msgid "Color for point symbol edge color"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:353
-#, fuzzy
 msgid "Width of point symbol lines"
-msgstr "Nokta koordinatları listesi"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:412
 msgid "Maximum of 10 Y data files exceeded"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:445
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr "Seçme imleci açılamıyor: '%s'"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:458
-#, fuzzy, c-format
+#, c-format
 msgid "Color <%s> cannot for option %s be parsed"
-msgstr "<%s> sütunu <%s> tablosunda bulunamıyor"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:495
 #, c-format
@@ -24606,14 +24583,14 @@ msgid "Only <%d> colors given for <%d> lines"
 msgstr "<%d> satır için sadece <%d> renk verilebilir"
 
 #: ../display/d.linegraph/main.c:538
-#, fuzzy, c-format
+#, c-format
 msgid "Number of widths (%d) is higher then the number of files (%d)"
-msgstr "Yükselti dosyaları sayısı ile renk dosyaları sayısı eşleşmiyor"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:550
-#, fuzzy, c-format
+#, c-format
 msgid "Number of widths (%d) is lower then the number of files (%d)"
-msgstr "Yükselti dosyaları sayısı ile renk dosyaları sayısı eşleşmiyor"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:601
 #, c-format
@@ -27840,9 +27817,8 @@ msgid "Print the maximum bounding box in lat/long on WGS84"
 msgstr ""
 
 #: ../general/g.region/main.c:148
-#, fuzzy
 msgid "Print in shell script style, but in one line (flat)"
-msgstr "Kabuk betiği stilinde yazdır"
+msgstr ""
 
 #: ../general/g.region/main.c:154
 msgid "Align region to resolution (default = align to bounds, works only for 2D resolution)"
@@ -29201,9 +29177,9 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../vector/v.label.sa/labels.c:68
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot allocate %lu bytes of memory"
-msgstr "Daha fazla hafıza ayrılamıyor"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:87
 msgid "Unable to initialise FreeType"
@@ -29212,7 +29188,7 @@ msgstr ""
 #: ../vector/v.label.sa/labels.c:90
 #, c-format
 msgid "Unable to find font '%s'\n"
-msgstr "'%s' yazıtipi bulunamıyor\n"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:92
 #, c-format
@@ -29225,15 +29201,15 @@ msgstr ""
 
 #: ../vector/v.label.sa/labels.c:98
 msgid "Font file can not be loaded"
-msgstr "Yazıtipi dosyası yüklenemedi"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:107
 msgid "Unable to set font size"
-msgstr "Yazıtipi boyutu ayarlanamıyor"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:128
 msgid "Cannot allocate more memory"
-msgstr "Daha fazla hafıza ayrılamıyor"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:162 ../vector/v.overlay/main.c:423
 #: ../vector/v.label/main.c:319
@@ -29275,7 +29251,7 @@ msgstr "Etiket boyutu (harita birimlerinde)"
 
 #: ../vector/v.label.sa/main.c:84
 msgid "Icon size of point features (in map-units)"
-msgstr "Nokta objelerin sembol boyutu (harita birimlerinde)"
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:107 ../vector/v.lrs/v.lrs.label/main.c:205
 #: ../vector/v.label/main.c:174
@@ -29292,7 +29268,7 @@ msgstr ""
 
 #: ../vector/v.label.sa/main.c:154
 msgid "Border width (only for ps.map output)"
-msgstr "Sınır genişliği (sadece ps.map çıktısı için)"
+msgstr ""
 
 #: ../vector/v.info/parse.c:24
 msgid "Print history instead of info and exit"
@@ -39709,93 +39685,73 @@ msgstr ""
 msgid "%s is empty"
 msgstr ""
 
-#, fuzzy
 msgid "Vector map profiling tool"
-msgstr "Vektör harita projeksiyon zonu"
+msgstr ""
 
 #, fuzzy
 msgid "Input filter"
 msgstr "Girdi dosya"
 
-#, fuzzy
 msgid "Coordinates for profiling line nodes"
-msgstr "Harita birimlerinde verilen koordinatlar"
+msgstr ""
 
-#, fuzzy
 msgid "Profiling line"
-msgstr "Çizgiler işleniyor... "
+msgstr ""
 
-#, fuzzy
 msgid "Buffer (tolerance) for points in map units"
-msgstr "Harita birimlerinde verilen koordinatlar"
+msgstr ""
 
 #, fuzzy
 msgid "Output formating"
 msgstr "Çıktı biçimi"
 
-#, fuzzy
 msgid "Number of significant digits"
-msgstr "Satır sayısı"
+msgstr ""
 
-#, fuzzy
 msgid "Use features only from specified layer"
-msgstr "Belirtilen (alt)gruptaki dosyaları listele (süslü)"
+msgstr ""
 
-#, fuzzy
 msgid "Name for profile line and buffer output map"
-msgstr "Çıktı raster harita(lar) için ön ek"
+msgstr ""
 
-#, fuzzy
 msgid "Profile line and buffer around it will be written"
-msgstr "'%s' dosyası zaten mevcut ve üzerine yazılacak."
+msgstr ""
 
-#, fuzzy
 msgid "Do not print column names"
-msgstr "Çok fazla sütun adı"
+msgstr ""
 
-#, fuzzy
 msgid "Do not print 3D vector data (z values)"
-msgstr "Değer içermeyen hücreleri temsil eden değer"
+msgstr ""
 
-#, fuzzy
 msgid "Profiling line map"
-msgstr "Çizgiler işleniyor... "
+msgstr ""
 
-#, fuzzy
 msgid "Vector map containing profiling line"
-msgstr "Çizgileri içeren girdi vektör haritası"
+msgstr ""
 
-#, fuzzy
 msgid "Layer 0 not supported"
-msgstr "0 katmanı desteklenmiyor"
+msgstr ""
 
-#, fuzzy
 msgid "<%s> is not a valid vector map name"
-msgstr "%s yazıtipi dizini dosya değil"
+msgstr ""
 
-#, fuzzy
 msgid "At least profile start and end coordinates are required!"
-msgstr "En azından iki nokta gereklidir"
+msgstr ""
 
-#, fuzzy
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
-msgstr "%d katmanı için veritabanı bağlantısı belirlenmemiş. Önce v.db.connect'i kullanın."
+msgstr ""
 
-#, fuzzy
 msgid "No features match Your query"
-msgstr "Girdi vektör nokta haritasının adı"
+msgstr ""
 
-#, fuzzy
 msgid "Error while initialising line list"
-msgstr "Geçmiş dosyası okunurken hata"
+msgstr ""
 
-#, fuzzy
 msgid "Error while reading vector feature from profile line map"
-msgstr "Doku dosyası okunurken hata"
+msgstr ""
 
-#, fuzzy
 msgid "Unabale to get attribute data for cat %d"
-msgstr "%d kategorisi için öznitelik seçilemiyor"
+msgstr ""
 
 #, fuzzy
 msgid "Unable to create 2D raster <%s>"
@@ -40097,7 +40053,7 @@ msgid "[%s] not found"
 msgstr "[%s] bulunamadı"
 
 msgid "option <%s>: <%s> exists."
-msgstr "seçenek <%s>: <%s>mevcut."
+msgstr ""
 
 msgid "Override dataset projection (use location's projection)"
 msgstr "Veri takımı projeksiyonu üzerine yaz (mevkinin projeksiyonunu kullan)"
@@ -40634,5 +40590,5 @@ msgstr "Önbellek boyutu (MiB)"
 msgid "Unknown raster map type"
 msgstr "Bilinmeyen raster harita tipi"
 
-#~ msgid "Path to file location"
-#~ msgstr "Dosya yeri yolu"
+msgid "Path to file location"
+msgstr "Dosya yeri yolu"

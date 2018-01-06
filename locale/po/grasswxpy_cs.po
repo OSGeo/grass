@@ -3116,19 +3116,16 @@ msgid "Close dialog on finish"
 msgstr "Zavřít dialog při ukončení"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:76
-#, fuzzy
 msgid "Reproject"
-msgstr "Kartografické zobrazení"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:78
-#, fuzzy
 msgid "Reproject raster"
-msgstr "vybrat rastr"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:80
-#, fuzzy
 msgid "Reproject vector"
-msgstr "Kód projekce:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:90
 #, fuzzy
@@ -8833,7 +8830,7 @@ msgstr "Šířka bodu:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1282 ../gui/wxpython/iscatt/dialogs.py:372
 msgid "Snapping threshold in pixels:"
-msgstr "Práh pro přichycení v pixelech:"
+msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:1283
 msgid "Maximum number of results in history:"
@@ -15441,7 +15438,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:486 ../gui/wxpython/menustrings.py:1392
 msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
-msgstr "Vytvoří rastrovou mapu plochy při zadání ponoru (sklonu), expozice (azimut) a jednoho bodu."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:487 ../gui/wxpython/menustrings.py:1393
 msgid "Random deviates surface"

@@ -390,18 +390,16 @@ msgid "Basename for resultant raster slice maps"
 msgstr "Základ názvu výsledného výřezu rastrové mapy"
 
 #: ../raster3d/r3.to.rast/main.c:116
-#, fuzzy
 msgid "Value to multiply the raster values with"
-msgstr "Měřítko vzorových rastrových hodnot"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:117
 msgid "Coefficient a in the equation y = ax + b"
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:123
-#, fuzzy
 msgid "Value to add to the raster values"
-msgstr "Měřítko vzorových rastrových hodnot"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:124
 msgid "Coefficient b in the equation y = ax + b"
@@ -412,9 +410,9 @@ msgid "Use the same resolution as the input 3D raster map for the 2D output maps
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:174
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown raster type <%d>"
-msgstr "Neznámý typ: %d"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:260 ../raster3d/r3.out.ascii/main.c:305
 #: ../raster3d/r3.in.ascii/main.c:357 ../raster3d/r3.in.lidar/main.c:166
@@ -1300,9 +1298,9 @@ msgid "Cannot open file %s for reading"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/filters.c:27
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid range <%s> for option %s"
-msgstr "Neplatné zrange"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/filters.c:54 ../vector/v.in.pdal/filters.c:95
 #: ../vector/v.in.lidar/filters.c:36
@@ -1340,9 +1338,8 @@ msgid "binning"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:170
-#, fuzzy
 msgid "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
-msgstr "Vytvoří rastrovou mapu smontováním více souřadnic za pomoci univariantní statistiky"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:174 ../raster/r.in.lidar/main.c:120
 #: ../vector/v.in.lidar/main.c:142
@@ -1690,9 +1687,9 @@ msgid "In scan mode, print using shell script style"
 msgstr "Ve scan módu tiskni ve stylu pro shell skript"
 
 #: ../raster3d/r3.in.lidar/main.c:329
-#, fuzzy, c-format
+#, c-format
 msgid "%s will not be taken into account during scan"
-msgstr "na rozsah z nebude během hledání brán zřetel"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:340 ../raster/r.in.lidar/main.c:367
 #, c-format
@@ -1722,33 +1719,28 @@ msgid "First file's projection checked, checking projection of the other files..
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:540
-#, fuzzy
 msgid "Preparing the maps..."
-msgstr "Načítám rastrovou mapu..."
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:574 ../vector/v.sample/main.c:200
 msgid "Reading points..."
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:656
-#, fuzzy
 msgid "Computing proportional count map..."
-msgstr "Silně souvislé komponenty"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:661
-#, fuzzy
 msgid "Computing proportional sum map..."
-msgstr "Počítám kvantily"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:666
-#, fuzzy
 msgid "Computing mean map..."
-msgstr "Počítám kvantily"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:671
-#, fuzzy
 msgid "Closing the maps..."
-msgstr "Vytvářím masku pro rastrové mapy...."
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:707 ../vector/v.in.lidar/main.c:783
 #, c-format
@@ -1766,9 +1758,9 @@ msgid "%lu input points were filtered out by class number"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:714
-#, fuzzy, c-format
+#, c-format
 msgid "%lu input points had intensity out of range"
-msgstr "%d bodů mimo práhovou hodnotu"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:716 ../vector/v.in.lidar/main.c:811
 #, c-format
@@ -4554,9 +4546,9 @@ msgid "Region ids are different"
 msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:983
-#, fuzzy, c-format
+#, c-format
 msgid "Region id %d is invalid"
-msgstr "Soubor s příznaky <%s> je neplatný."
+msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:987
 msgid "Region consists of only one cell, nothing to update"
@@ -4676,9 +4668,9 @@ msgid "Initial range bandwidth: %g"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:188 ../imagery/i.segment/mean_shift.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Estimated range bandwidth: %g"
-msgstr "Odhad hustoty bodů a vzdálenosti"
+msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:208 ../imagery/i.segment/mean_shift.c:245
 #, c-format
@@ -4686,9 +4678,9 @@ msgid "Spatial bandwidth: %g"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:209 ../imagery/i.segment/mean_shift.c:246
-#, fuzzy, c-format
+#, c-format
 msgid "Range bandwidth: %g"
-msgstr "Neplatná šířka stránky"
+msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:395
 #, c-format
@@ -4706,9 +4698,9 @@ msgid "Mean shift converged after %d iterations"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:748
-#, fuzzy, c-format
+#, c-format
 msgid "Renumbering remaining %d segments..."
-msgstr "Vytvářím body..."
+msgstr ""
 
 #: ../imagery/i.segment/main.c:39
 msgid "object recognition"
@@ -4727,19 +4719,16 @@ msgid "Error in creating segments"
 msgstr ""
 
 #: ../imagery/i.segment/main.c:55
-#, fuzzy
 msgid "Error in writing IDs"
-msgstr "Chuba při zápisu dat"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:59
-#, fuzzy
 msgid "Error in writing goodness of fit"
-msgstr "Chuba při zápisu dat"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:64
-#, fuzzy
 msgid "Error in writing new band values"
-msgstr "Chuba při zápisu dat"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:70
 #, c-format
@@ -4755,14 +4744,13 @@ msgid "Writing out goodness of fit"
 msgstr ""
 
 #: ../imagery/i.segment/write_output.c:236
-#, fuzzy
 msgid "Writing out shifted band values..."
-msgstr "Zapisuji výstupní mapu..."
+msgstr ""
 
 #: ../imagery/i.segment/cluster.c:66
-#, fuzzy, c-format
+#, c-format
 msgid "%d-band clustering with threshold %g"
-msgstr "%d bodů mimo práhovou hodnotu"
+msgstr ""
 
 #: ../imagery/i.segment/cluster.c:121 ../raster/r.clump/minsize.c:373
 #: ../raster/r.clump/clump.c:211 ../raster/r.clump/clump.c:475
@@ -4800,9 +4788,9 @@ msgid "Unable to read from temp file"
 msgstr ""
 
 #: ../imagery/i.segment/cluster.c:455
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d clumps"
-msgstr "komponenty"
+msgstr ""
 
 #: ../imagery/i.segment/flag.c:21 ../imagery/i.segment/flag.c:28
 #: ../vector/v.distance/main.c:748 ../vector/v.distance/main.c:825
@@ -4827,9 +4815,8 @@ msgid "Threshold = 0 merges only identical segments; threshold = 1 merges all"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:46
-#, fuzzy
 msgid "Spatial radius in number of cells"
-msgstr "Počet snímků"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:47
 msgid "Must be >= 1, only cells within spatial bandwidth are considered for mean shift"
@@ -4920,9 +4907,9 @@ msgid "Threshold should be > 0 and < 1"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Option '%s' must be >= 1"
-msgstr "Location <%s> vytvořena"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:208
 #, c-format
@@ -4974,23 +4961,22 @@ msgid "Segmentation constraint raster map must be CELL type (integers)"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:321
-#, fuzzy
 msgid "Integer overflow: too many cells in current region"
-msgstr "Není [%ld] nenullových buňek v současném regionu"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:334
 msgid "Invalid output raster name for goodness of fit"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:341
-#, fuzzy, c-format
+#, c-format
 msgid "Maximum number of iterations set to %d"
-msgstr "Minimální počet iterací: %d\n"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:351
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid number of iterations, %d will be used"
-msgstr "Počáteční počet tříd"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:360
 msgid "Invalid number of MB, 300 will be used"
@@ -17023,14 +17009,12 @@ msgid "Writing output map"
 msgstr ""
 
 #: ../raster/r.clump/minsize.c:357
-#, fuzzy
 msgid "Minimum size must be larger than 1"
-msgstr "%s = %s -- musí být větší než nula"
+msgstr ""
 
 #: ../raster/r.clump/minsize.c:368
-#, fuzzy
 msgid "Loading input ..."
-msgstr "Načítám vstupy..."
+msgstr ""
 
 #: ../raster/r.clump/minsize.c:418
 #, c-format
@@ -17038,9 +17022,9 @@ msgid "Merging clumps smaller than %d cells..."
 msgstr ""
 
 #: ../raster/r.clump/minsize.c:509
-#, fuzzy, c-format
+#, c-format
 msgid "Renumbering remaining %d clumps..."
-msgstr "Hledání trénovacích tříd..."
+msgstr ""
 
 #: ../raster/r.clump/main.c:60
 msgid "reclass"
@@ -17063,9 +17047,8 @@ msgid "Valid range: 0 = identical to < 1 = maximal difference"
 msgstr ""
 
 #: ../raster/r.clump/main.c:90
-#, fuzzy
 msgid "Minimum clump size in cells"
-msgstr "Minimální íşroveň isopovrchu"
+msgstr ""
 
 #: ../raster/r.clump/main.c:91
 msgid "Clumps smaller than minsize will be merged to form larger clumps"
@@ -17101,18 +17084,18 @@ msgid "Pass 2 of 2..."
 msgstr ""
 
 #: ../raster/r.clump/clump.c:122
-#, fuzzy, c-format
+#, c-format
 msgid "%d initial clumps"
-msgstr "Počítám kvantily"
+msgstr ""
 
 #: ../raster/r.clump/clump.c:233 ../raster/r.clump/clump.c:490
 msgid "Pass 1 of 2..."
 msgstr ""
 
 #: ../raster/r.clump/clump.c:425
-#, fuzzy, c-format
+#, c-format
 msgid "%d-band clumping with threshold %g"
-msgstr "%d bodů mimo práhovou hodnotu"
+msgstr ""
 
 #: ../raster/r.composite/main.c:73
 #: ../locale/scriptstrings/r.blend_to_translate.c:3
@@ -24617,23 +24600,20 @@ msgid "Name of data file(s) for Y axis of graph"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:249
-#, fuzzy
 msgid "Path to files"
-msgstr "Cesta k výslednému souboru VTK"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:251
-#, fuzzy
 msgid "Path to the directory where the input files are located"
-msgstr "nová GISDBASE (celá cesta k adrešáři, kde je uložena nová location)"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:259
 msgid "Color for Y data"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:272
-#, fuzzy
 msgid "Width of the lines"
-msgstr "Seznam percentilů"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:279
 msgid "Color for axis, tics, numbers, and title"
@@ -24656,42 +24636,38 @@ msgid "Minimum and maximun value for Y axis (min,max)"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:315
-#, fuzzy
 msgid "Tic values for the Y axis"
-msgstr "Špatná hodnota pro theta"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:329
-#, fuzzy
 msgid "Symbol for point"
-msgstr "Počet řádků"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:338
-#, fuzzy
 msgid "Point size"
-msgstr "Název písma"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:347
 msgid "Color for point symbol edge color"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:353
-#, fuzzy
 msgid "Width of point symbol lines"
-msgstr "Seznam souřadnic bodů"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:412
 msgid "Maximum of 10 Y data files exceeded"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:445
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr "Nelze otevřít kurzor pro výběr: '%s'"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:458
-#, fuzzy, c-format
+#, c-format
 msgid "Color <%s> cannot for option %s be parsed"
-msgstr "Sloupec <%s> nebyl nalezen v tabulce <%s>"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:495
 #, c-format
@@ -24699,14 +24675,14 @@ msgid "Only <%d> colors given for <%d> lines"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:538
-#, fuzzy, c-format
+#, c-format
 msgid "Number of widths (%d) is higher then the number of files (%d)"
-msgstr "Číslo sloupce definovaného (%d) nesouhlasí s počtem sloupců (%d) na vstupu."
+msgstr ""
 
 #: ../display/d.linegraph/main.c:550
-#, fuzzy, c-format
+#, c-format
 msgid "Number of widths (%d) is lower then the number of files (%d)"
-msgstr "Číslo sloupce definovaného (%d) nesouhlasí s počtem sloupců (%d) na vstupu."
+msgstr ""
 
 #: ../display/d.linegraph/main.c:601
 #, c-format
@@ -27932,9 +27908,8 @@ msgid "Print the maximum bounding box in lat/long on WGS84"
 msgstr ""
 
 #: ../general/g.region/main.c:148
-#, fuzzy
 msgid "Print in shell script style, but in one line (flat)"
-msgstr "Vypiš výsledek ve stylu pro shell skript"
+msgstr ""
 
 #: ../general/g.region/main.c:154
 msgid "Align region to resolution (default = align to bounds, works only for 2D resolution)"
@@ -29302,39 +29277,39 @@ msgstr[1] "%d záznamy aktualizovány."
 msgstr[2] "%d záznamů aktualizováno."
 
 #: ../vector/v.label.sa/labels.c:68
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot allocate %lu bytes of memory"
-msgstr "Nelze přiřadit %d bytů paměti"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:87
 msgid "Unable to initialise FreeType"
-msgstr "Nelze inicializovat FreeType"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:90
 #, c-format
 msgid "Unable to find font '%s'\n"
-msgstr "Nelze nalézt soubor s písmem '%s'\n"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:92
 #, c-format
 msgid "Font '%s' is not a FreeType font\n"
-msgstr "Font '%s' není font typu FreeType \n"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:96
 msgid "Font file format is not supported by FreeType"
-msgstr "Formát souboru s fontem není odporován Freetype"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:98
 msgid "Font file can not be loaded"
-msgstr "Soubor s fontem nemohl být otevřen"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:107
 msgid "Unable to set font size"
-msgstr "Nelze nastavit velikost písma"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:128
 msgid "Cannot allocate more memory"
-msgstr "Nelze přiřadit více paměti"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:162 ../vector/v.overlay/main.c:423
 #: ../vector/v.label/main.c:319
@@ -29344,11 +29319,11 @@ msgstr "Nelze vybrat artibuty"
 #: ../vector/v.label.sa/labels.c:244
 #, c-format
 msgid "Cannot load glyph for '%c'"
-msgstr "Nelze načíst dráhu pro '%c'"
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:41
 msgid "Create optimally placed labels for vector map(s)"
-msgstr "Vytvořit optimálně umístěné popisky pro vektorovou mapu(y)"
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:57 ../vector/v.label/main.c:78
 msgid "Name of attribute column to be used for labels"
@@ -29360,7 +29335,7 @@ msgstr "Název nového souboru se štítky"
 
 #: ../vector/v.label.sa/main.c:71
 msgid "Name of TrueType font (as listed in the fontcap)"
-msgstr "Jméno TrueType fontu (jak je napsáno v fontcap)"
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:72 ../vector/v.label.sa/main.c:80
 #: ../vector/v.lrs/v.lrs.label/main.c:181 ../vector/v.label/main.c:125
@@ -29376,7 +29351,7 @@ msgstr "Velikost štítků (v mapových jednotkách)"
 
 #: ../vector/v.label.sa/main.c:84
 msgid "Icon size of point features (in map-units)"
-msgstr "Velikost ikony bodových prvků (v mapových jednotkách)"
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:107 ../vector/v.lrs/v.lrs.label/main.c:205
 #: ../vector/v.label/main.c:174
@@ -29393,7 +29368,7 @@ msgstr "Neprůhlednost (relevantní pouze pokud je zvolena barva pozadí)"
 
 #: ../vector/v.label.sa/main.c:154
 msgid "Border width (only for ps.map output)"
-msgstr "Šířka rámečku (pouze pro výstup ps.map)"
+msgstr ""
 
 #: ../vector/v.info/parse.c:24
 msgid "Print history instead of info and exit"
@@ -39924,101 +39899,79 @@ msgstr "Nebyly vybrány prvky pro %s. Zkontrolujte možnosti '%s', '%s'."
 msgid "%s is empty"
 msgstr ""
 
-#, fuzzy
 msgid "Vector map profiling tool"
-msgstr "Zóna projekce vektorové mapy"
+msgstr ""
 
 #, fuzzy
 msgid "Input filter"
 msgstr "Vstup selhal"
 
-#, fuzzy
 msgid "Coordinates for profiling line nodes"
-msgstr "Tolerance rovnoběžek v oblouku v mapových jednotkách"
+msgstr ""
 
-#, fuzzy
 msgid "Profiling line"
-msgstr "Zpracovávám řádky..."
+msgstr ""
 
-#, fuzzy
 msgid "Buffer (tolerance) for points in map units"
-msgstr "Tolerance rovnoběžek v oblouku v mapových jednotkách"
+msgstr ""
 
 #, fuzzy
 msgid "Output formating"
 msgstr "Výstupní formát"
 
-#, fuzzy
 msgid "Number of significant digits"
-msgstr "Počet míst za desetinnou čárkou (pouze pro mapy s plovoucí desetinnou čárkou)"
+msgstr ""
 
-#, fuzzy
 msgid "Use features only from specified layer"
-msgstr "Vypsat soubory z dané (pod)skupiny (hezky)"
+msgstr ""
 
-#, fuzzy
 msgid "Name for profile line and buffer output map"
-msgstr "Předpona výstupních rastrových map"
+msgstr ""
 
-#, fuzzy
 msgid "Profile line and buffer around it will be written"
-msgstr "Soubor '%s' již existuje a bude přepsán."
+msgstr ""
 
-#, fuzzy
 msgid "Do not print column names"
-msgstr "Příliš mnoho názvů sloupců"
+msgstr ""
 
-#, fuzzy
 msgid "Do not print 3D vector data (z values)"
-msgstr "Textový řetězec reprezentující buňky s hodnotou \"no data\""
+msgstr ""
 
-#, fuzzy
 msgid "Profiling line map"
-msgstr "Zpracovávám řádky..."
+msgstr ""
 
-#, fuzzy
 msgid "Vector map containing profiling line"
-msgstr "Vstupní mapa obsahující linie"
+msgstr ""
 
-#, fuzzy
 msgid "Layer 0 not supported"
-msgstr "Vrstva 0 není podporována"
+msgstr ""
 
-#, fuzzy
 msgid "Failed to interpreter 'dp' parameter as an integer"
-msgstr "Selhal převod 'dp' na celé číslo"
+msgstr ""
 
-#, fuzzy
 msgid "<%s> is not a valid vector map name"
-msgstr "'%s' není platné pravidlo"
+msgstr ""
 
-#, fuzzy
 msgid "At least profile start and end coordinates are required!"
-msgstr "Nedostatek bodů, je požadováno %d"
+msgstr ""
 
-#, fuzzy
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
-msgstr "Spojení s databází nebylo pro vrstvu <%d> definováno. Nejprve použijte v.db.connect."
+msgstr ""
 
-#, fuzzy
 msgid "No features match Your query"
-msgstr "Jméno vektorové mapy s koncovými body"
+msgstr ""
 
-#, fuzzy
 msgid "Error while initialising line list"
-msgstr "Chyba při čtení souboru s historií"
+msgstr ""
 
-#, fuzzy
 msgid "Error while reading vector feature from profile line map"
-msgstr "Chyba při čtení souboru s příznaky."
+msgstr ""
 
-#, fuzzy
 msgid "Unabale to get attribute data for cat %d"
-msgstr "Nelze získat atributová data pro cat= %d"
+msgstr ""
 
-#, fuzzy
 msgid "Error while retreiving database record for cat %d"
-msgstr "Chyba během získání záznamu databáze pro kategorii %d"
+msgstr ""
 
 #, fuzzy
 msgid "Unable to create 2D raster <%s>"
@@ -40374,7 +40327,7 @@ msgid "[%s] not found"
 msgstr "[%s] nenalezen"
 
 msgid "option <%s>: <%s> exists."
-msgstr "volba <%s>: <%s> již existuje"
+msgstr ""
 
 msgid "Page length (default: %d lines)"
 msgstr "Délka stránky (výchozí: %d řádků)"
@@ -40575,9 +40528,8 @@ msgstr "-s a -n se navzájem vylučují"
 msgid "Options <%s>, <%s>, and <%s> are mutually exclusive"
 msgstr "-s a -n se navzájem vylučují"
 
-#, fuzzy
 msgid "Flags -%c and -%c are mutually exclusive"
-msgstr "-s a -n se navzájem vylučují"
+msgstr ""
 
 #, fuzzy
 msgid "Options <%s/%s> and <%s> are mutually exclusive"

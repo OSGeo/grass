@@ -479,9 +479,8 @@ msgid "raster3d"
 msgstr ""
 
 #: ../lib/raster3d/test/test_main.c:97
-#, fuzzy
 msgid "unit test"
-msgstr "すべてのユニットテストを実行"
+msgstr ""
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -1988,9 +1987,8 @@ msgid "Unable to export raster map <%s> with r3.pack"
 msgstr ""
 
 #: ../lib/python/temporal/base.py:380
-#, fuzzy
 msgid "Object not found in the temporal database"
-msgstr "<%s> にベクトルマップ <%s> を見つけられません"
+msgstr ""
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
@@ -3692,14 +3690,12 @@ msgid "can't write category information for [%s] in [%s]"
 msgstr " [%s]内の [%s] カテゴリー情報に書き込めません"
 
 #: ../lib/raster/color_rules.c:120
-#, fuzzy
 msgid "syntax error in the color rule"
-msgstr "構文エラー"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:122
-#, fuzzy
 msgid "syntax error in the color format"
-msgstr "構文エラー"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:130
 msgid "percentage not in range 0-100"
@@ -4166,9 +4162,8 @@ msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr "where'句なしの SQL文のWHEREコンディション"
 
 #: ../lib/gis/parser_standard_options.c:157
-#, fuzzy
 msgid "Example: income < 1000 and population >= 10000"
-msgstr "例: 収入 < 1000 かつ 住人 >= 10000"
+msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:165
 msgid "Name of attribute table"
@@ -9184,23 +9179,23 @@ msgstr "行をフェッチできません"
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr "G_oldsite_new_struct: 不正な # ディメンションまたはフィールド"
 
-#~ msgid "syntax error"
-#~ msgstr "構文エラー"
+msgid "syntax error"
+msgstr "構文エラー"
 
-#~ msgid "R/G/B not in range 0-255"
-#~ msgstr "R/G/B 範囲外です 0-255"
+msgid "R/G/B not in range 0-255"
+msgstr "R/G/B 範囲外です 0-255"
 
-#~ msgid "invalid color name"
-#~ msgstr "無効なカラー名"
+msgid "invalid color name"
+msgstr "無効なカラー名"
 
-#~ msgid "test"
-#~ msgstr "テストモード"
+msgid "test"
+msgstr "テストモード"
 
-#~ msgid "SQL select statement"
-#~ msgstr "SQL選択文"
+msgid "SQL select statement"
+msgstr "SQL選択文"
 
-#~ msgid "For example: 'select * from rybniky where kapri = 'hodne'"
-#~ msgstr "例: 'select * kapriのrybnikyから = 'hodne'  "
+msgid "For example: 'select * from rybniky where kapri = 'hodne'"
+msgstr "例: 'select * kapriのrybnikyから = 'hodne'  "
 
-#~ msgid "Example: income < 1000 and inhab >= 10000"
-#~ msgstr "例: 収入 < 1000 かつ 住人 >= 10000"
+msgid "Example: income < 1000 and inhab >= 10000"
+msgstr "例: 収入 < 1000 かつ 住人 >= 10000"

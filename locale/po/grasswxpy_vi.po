@@ -3090,19 +3090,16 @@ msgid "Close dialog on finish"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:76
-#, fuzzy
 msgid "Reproject"
-msgstr "Phép chiếu:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:78
-#, fuzzy
 msgid "Reproject raster"
-msgstr "Chọn bản đồ raster:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:80
-#, fuzzy
 msgid "Reproject vector"
-msgstr "Mã phép chiếu:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:90
 #, fuzzy

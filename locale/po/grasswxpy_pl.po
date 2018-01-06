@@ -3123,19 +3123,16 @@ msgid "Close dialog on finish"
 msgstr "Zamknij okno po zakończeniu"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:76
-#, fuzzy
 msgid "Reproject"
-msgstr "Odwzorowanie"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:78
-#, fuzzy
 msgid "Reproject raster"
-msgstr "wybierz raster"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:80
-#, fuzzy
 msgid "Reproject vector"
-msgstr "Metoda reprojekcji:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:90
 #, fuzzy
@@ -8846,7 +8843,7 @@ msgstr "Szerokość punktu:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1282 ../gui/wxpython/iscatt/dialogs.py:372
 msgid "Snapping threshold in pixels:"
-msgstr "Próg przyciągania w pikselach:"
+msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:1283
 msgid "Maximum number of results in history:"
@@ -17668,14 +17665,8 @@ msgstr "Przykrywa dwie mapy wektorowe."
 msgid "Print/add/remove a timestamp for a 3D raster map"
 msgstr "Odświerz/dodaj/usuń znacznik czasu dla mapy rastrowej 3D"
 
-#~ msgid "Failed to copy map: action is allowed only within the same location."
-#~ msgstr "NIe można skopiować mapy: akcja jest możliwa tylko w tej samej lokacji."
-
-#~ msgid "failed to open '{0}'"
-#~ msgstr "nie można otworzyć '{0}'"
+msgid "Failed to copy map: action is allowed only within the same location."
+msgstr "NIe można skopiować mapy: akcja jest możliwa tylko w tej samej lokacji."
 
 #~ msgid "New mapset:"
 #~ msgstr "Nowy mapset:"
-
-#~ msgid "Region settings"
-#~ msgstr "Ustawienia regionu"
