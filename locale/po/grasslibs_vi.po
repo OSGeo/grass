@@ -475,9 +475,8 @@ msgid "raster3d"
 msgstr ""
 
 #: ../lib/raster3d/test/test_main.c:97
-#, fuzzy
 msgid "unit test"
-msgstr "Chạy tất cả các phép thử đơn vị"
+msgstr ""
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -1984,9 +1983,8 @@ msgid "Unable to export raster map <%s> with r3.pack"
 msgstr ""
 
 #: ../lib/python/temporal/base.py:380
-#, fuzzy
 msgid "Object not found in the temporal database"
-msgstr "Không thể tìm thấy bản đồ vec-tơ <%s> trongg <%s>"
+msgstr ""
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
@@ -2968,7 +2966,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:2009
 #, c-format
 msgid "Unable to fetch data from table <%s>"
-msgstr ""
+msgstr "Không thể cấp phát dữ liệu từ bảng <%s>"
 
 #: ../lib/db/dbmi_client/copy_tab.c:394
 #, c-format
@@ -3682,14 +3680,12 @@ msgid "can't write category information for [%s] in [%s]"
 msgstr ""
 
 #: ../lib/raster/color_rules.c:120
-#, fuzzy
 msgid "syntax error in the color rule"
-msgstr "lỗi cú pháp"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:122
-#, fuzzy
 msgid "syntax error in the color format"
-msgstr "lỗi cú pháp"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:130
 msgid "percentage not in range 0-100"
@@ -4156,9 +4152,8 @@ msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:157
-#, fuzzy
 msgid "Example: income < 1000 and population >= 10000"
-msgstr "Ví dụ : income < 1000 and inhab >= 10000"
+msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:165
 msgid "Name of attribute table"
@@ -6221,7 +6216,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_ogr.c:304 ../lib/vector/Vlib/write_pg.c:1104
 #, c-format
 msgid "Unsupported geometry type (%d)"
-msgstr ""
+msgstr "Kiểu hình học không được hỗ trợ (%d)"
 
 #: ../lib/vector/Vlib/write_ogr.c:326
 #, c-format
@@ -6231,23 +6226,23 @@ msgstr ""
 #: ../lib/vector/Vlib/write_ogr.c:338 ../lib/vector/Vlib/write_pg.c:1117
 #, c-format
 msgid "More layers defined, using driver <%s> and database <%s>"
-msgstr ""
+msgstr "Thêm các lớp được định nghĩa, dùng trình điều khiển <%s> và csdl <%s>"
 
 #: ../lib/vector/Vlib/write_ogr.c:344 ../lib/vector/Vlib/write_pg.c:1122
 msgid "Database connection not defined. Unable to write attributes."
-msgstr ""
+msgstr "Kết nối csdl không được định nghĩa. Không thể ghi các thuộc tính."
 
 #: ../lib/vector/Vlib/write_ogr.c:408 ../lib/vector/Vlib/write_pg.c:1237
 #: ../lib/vector/Vlib/write_pg.c:1396
 #, c-format
 msgid "No category defined for layer %d"
-msgstr ""
+msgstr "Không có phạm trù định nghĩa cho lớp %d"
 
 #: ../lib/vector/Vlib/write_ogr.c:410 ../lib/vector/Vlib/write_pg.c:1239
 #: ../lib/vector/Vlib/write_pg.c:1398
 #, c-format
 msgid "Feature has more categories, using category %d (from layer %d)"
-msgstr ""
+msgstr "Đối tượng có nhiều phạm trù, dùng phạm trù %d (từ lớp %d)"
 
 #: ../lib/vector/Vlib/write_ogr.c:424
 msgid "Feature is not a point. Skipping."
@@ -6286,12 +6281,12 @@ msgstr ""
 #: ../lib/vector/Vlib/write_ogr.c:579 ../lib/vector/Vlib/write_pg.c:2005
 #, c-format
 msgid "Unable to select attributes for category %d"
-msgstr ""
+msgstr "Không thể chọn các thuộc tính cho phạm trù %d"
 
 #: ../lib/vector/Vlib/write_ogr.c:591 ../lib/vector/Vlib/write_pg.c:2014
 #, c-format
 msgid "No database record for category %d, no attributes will be written"
-msgstr ""
+msgstr "Không có bản ghi dùng cho phạm trù %d, thuộc tính sẽ không được ghi"
 
 #: ../lib/vector/Vlib/write_ogr.c:624
 #, c-format
@@ -6827,22 +6822,22 @@ msgstr "Không thể mở tập tin PG"
 #: ../lib/vector/Vlib/write_pg.c:773
 #, c-format
 msgid "Building spatial index on <%s>..."
-msgstr ""
+msgstr "Đang xây dựng chỉ mục không gian trên <%s>..."
 
 #: ../lib/vector/Vlib/write_pg.c:841
 #, c-format
 msgid "Schema <%s> doesn't exist, created"
-msgstr ""
+msgstr "Lược đồ <%s> không tồn tại, đã tạo"
 
 #: ../lib/vector/Vlib/write_pg.c:920
 #, c-format
 msgid "Creating topology schema <%s>..."
-msgstr ""
+msgstr "Đang tạo lược đồ tô-pô <%s>..."
 
 #: ../lib/vector/Vlib/write_pg.c:934
 #, c-format
 msgid "Adding new topology column <%s>..."
-msgstr ""
+msgstr "Đang thêm cột tô-pô mới <%s>..."
 
 #: ../lib/vector/Vlib/write_pg.c:1072 ../lib/vector/Vlib/open_pg.c:85
 #: ../lib/vector/Vlib/open_pg.c:232
@@ -6857,21 +6852,21 @@ msgstr "Bảng đối tượng PostGIS không được định nghĩa"
 
 #: ../lib/vector/Vlib/write_pg.c:1129
 msgid "Unable to create new PostGIS feature table"
-msgstr ""
+msgstr "Không thể tạo bảng thuộc tính PostGIS mới"
 
 #: ../lib/vector/Vlib/write_pg.c:1143
 msgid "Unable to create new PostGIS topology schema"
-msgstr ""
+msgstr "Không thể tạo lược đồ tô-pô PostGIS mới"
 
 #: ../lib/vector/Vlib/write_pg.c:1250
 #, c-format
 msgid "Point skipped (output feature type: %s)"
-msgstr ""
+msgstr "Bỏ qua điểm (kiểu đối tượng đầu ra: %s)"
 
 #: ../lib/vector/Vlib/write_pg.c:1257
 #, c-format
 msgid "Line skipped (output feature type: %s)"
-msgstr ""
+msgstr "Dòng bị bỏ qua (kiểu đối tượng đầu ra: %s)"
 
 #: ../lib/vector/Vlib/write_pg.c:1264
 #, c-format
@@ -6881,28 +6876,28 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:1272
 #, c-format
 msgid "Face skipped (output feature type: %s)"
-msgstr ""
+msgstr "Bề mặt bị bỏ qua (kiểu đối tượng đầu ra: %s)"
 
 #: ../lib/vector/Vlib/write_pg.c:1358
 #, c-format
 msgid "Invalid feature type (%d) for nodes"
-msgstr ""
+msgstr "Kiểu đối tượng không hợp lệ ( %d) dùng cho nốt"
 
 #: ../lib/vector/Vlib/write_pg.c:1372
 msgid "PostGIS topology schema not defined"
-msgstr ""
+msgstr "Lược đồ tô-pô PostGIS không được định nghĩa"
 
 #: ../lib/vector/Vlib/write_pg.c:1872
 msgid "Trying to insert 3D data into feature table which store 2D data only"
-msgstr ""
+msgstr "Cố chèn dữ liệu 3D vào bảng thuộc tính chỉ chứa dữ liệu 2D"
 
 #: ../lib/vector/Vlib/write_pg.c:1877
 msgid "Trying to insert 2D data into feature table which store 3D data only"
-msgstr ""
+msgstr "Cố chèn dữ liệu 2D vào bảng thuộc tính chỉ chứa dữ liệu 3D"
 
 #: ../lib/vector/Vlib/write_pg.c:1902
 msgid "Unable to insert topological element into PostGIS Topology schema"
-msgstr ""
+msgstr "Không thể chèn thành phần tô-pô vào lược đồ tô-pô PostGIS"
 
 #: ../lib/vector/Vlib/write_pg.c:2040
 #, c-format

@@ -381,18 +381,16 @@ msgid "Basename for resultant raster slice maps"
 msgstr "Basename para mapas slice raster resultantes"
 
 #: ../raster3d/r3.to.rast/main.c:116
-#, fuzzy
 msgid "Value to multiply the raster values with"
-msgstr "Relatório de estatísticas para mapas raster."
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:117
 msgid "Coefficient a in the equation y = ax + b"
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:123
-#, fuzzy
 msgid "Value to add to the raster values"
-msgstr "Relatório de estatísticas para mapas raster."
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:124
 msgid "Coefficient b in the equation y = ax + b"
@@ -403,9 +401,9 @@ msgid "Use the same resolution as the input 3D raster map for the 2D output maps
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:174
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown raster type <%d>"
-msgstr "Tipo desconhecido: %d"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:260 ../raster3d/r3.out.ascii/main.c:305
 #: ../raster3d/r3.in.ascii/main.c:357 ../raster3d/r3.in.lidar/main.c:166
@@ -1291,9 +1289,9 @@ msgid "Cannot open file %s for reading"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/filters.c:27
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid range <%s> for option %s"
-msgstr "Fonte inválida: %s"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/filters.c:54 ../vector/v.in.pdal/filters.c:95
 #: ../vector/v.in.lidar/filters.c:36
@@ -1331,9 +1329,8 @@ msgid "binning"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:170
-#, fuzzy
 msgid "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
-msgstr "Cria mapas raster a partir de arquivos de dados de polígono/linha/ponto."
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:174 ../raster/r.in.lidar/main.c:120
 #: ../vector/v.in.lidar/main.c:142
@@ -1713,33 +1710,28 @@ msgid "First file's projection checked, checking projection of the other files..
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:540
-#, fuzzy
 msgid "Preparing the maps..."
-msgstr "Lendo arquivo dig_att...\n"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:574 ../vector/v.sample/main.c:200
 msgid "Reading points..."
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:656
-#, fuzzy
 msgid "Computing proportional count map..."
-msgstr "Nome do mapset de destino"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:661
-#, fuzzy
 msgid "Computing proportional sum map..."
-msgstr "Cópia da tabela falhou"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:666
-#, fuzzy
 msgid "Computing mean map..."
-msgstr "Cópia da tabela falhou"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:671
-#, fuzzy
 msgid "Closing the maps..."
-msgstr "Mascarando mapa raster..."
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:707 ../vector/v.in.lidar/main.c:783
 #, c-format
@@ -1757,9 +1749,9 @@ msgid "%lu input points were filtered out by class number"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:714
-#, fuzzy, c-format
+#, c-format
 msgid "%lu input points had intensity out of range"
-msgstr "%d pontos além do limite"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:716 ../vector/v.in.lidar/main.c:811
 #, c-format
@@ -4545,9 +4537,9 @@ msgid "Region ids are different"
 msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:983
-#, fuzzy, c-format
+#, c-format
 msgid "Region id %d is invalid"
-msgstr "Arquivo de assinatura [%s] inválido."
+msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:987
 msgid "Region consists of only one cell, nothing to update"
@@ -4667,9 +4659,9 @@ msgid "Initial range bandwidth: %g"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:188 ../imagery/i.segment/mean_shift.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Estimated range bandwidth: %g"
-msgstr "Usando máxima distância entre pontos: %f"
+msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:208 ../imagery/i.segment/mean_shift.c:245
 #, c-format
@@ -4677,9 +4669,9 @@ msgid "Spatial bandwidth: %g"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:209 ../imagery/i.segment/mean_shift.c:246
-#, fuzzy, c-format
+#, c-format
 msgid "Range bandwidth: %g"
-msgstr "Largura da linha"
+msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:395
 #, c-format
@@ -4697,9 +4689,9 @@ msgid "Mean shift converged after %d iterations"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:748
-#, fuzzy, c-format
+#, c-format
 msgid "Renumbering remaining %d segments..."
-msgstr "Escrevendo [%s]..."
+msgstr ""
 
 #: ../imagery/i.segment/main.c:39
 msgid "object recognition"
@@ -4718,19 +4710,16 @@ msgid "Error in creating segments"
 msgstr ""
 
 #: ../imagery/i.segment/main.c:55
-#, fuzzy
 msgid "Error in writing IDs"
-msgstr "Erro escrevendo dados"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:59
-#, fuzzy
 msgid "Error in writing goodness of fit"
-msgstr "Erro escrevendo dados"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:64
-#, fuzzy
 msgid "Error in writing new band values"
-msgstr "Erro escrevendo dados"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:70
 #, c-format
@@ -4746,14 +4735,13 @@ msgid "Writing out goodness of fit"
 msgstr ""
 
 #: ../imagery/i.segment/write_output.c:236
-#, fuzzy
 msgid "Writing out shifted band values..."
-msgstr "Escrevendo [%s]..."
+msgstr ""
 
 #: ../imagery/i.segment/cluster.c:66
-#, fuzzy, c-format
+#, c-format
 msgid "%d-band clustering with threshold %g"
-msgstr "%d pontos além do limite"
+msgstr ""
 
 #: ../imagery/i.segment/cluster.c:121 ../raster/r.clump/minsize.c:373
 #: ../raster/r.clump/clump.c:211 ../raster/r.clump/clump.c:475
@@ -4791,9 +4779,9 @@ msgid "Unable to read from temp file"
 msgstr ""
 
 #: ../imagery/i.segment/cluster.c:455
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d clumps"
-msgstr "Porcentagem completada: "
+msgstr ""
 
 #: ../imagery/i.segment/flag.c:21 ../imagery/i.segment/flag.c:28
 #: ../vector/v.distance/main.c:748 ../vector/v.distance/main.c:825
@@ -4818,9 +4806,8 @@ msgid "Threshold = 0 merges only identical segments; threshold = 1 merges all"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:46
-#, fuzzy
 msgid "Spatial radius in number of cells"
-msgstr "Número de quadros"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:47
 msgid "Must be >= 1, only cells within spatial bandwidth are considered for mean shift"
@@ -4911,9 +4898,9 @@ msgid "Threshold should be > 0 and < 1"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Option '%s' must be >= 1"
-msgstr "Locação: %s\n"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:208
 #, c-format
@@ -4965,23 +4952,22 @@ msgid "Segmentation constraint raster map must be CELL type (integers)"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:321
-#, fuzzy
 msgid "Integer overflow: too many cells in current region"
-msgstr "Mostra a região atual"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:334
 msgid "Invalid output raster name for goodness of fit"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:341
-#, fuzzy, c-format
+#, c-format
 msgid "Maximum number of iterations set to %d"
-msgstr "Número máximo de iterações: %d\n"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:351
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid number of iterations, %d will be used"
-msgstr "Número inválido de passos: %s"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:360
 msgid "Invalid number of MB, 300 will be used"
@@ -16984,14 +16970,12 @@ msgid "Writing output map"
 msgstr ""
 
 #: ../raster/r.clump/minsize.c:357
-#, fuzzy
 msgid "Minimum size must be larger than 1"
-msgstr "'%s' deve ser maior que zero; usando %s=255"
+msgstr ""
 
 #: ../raster/r.clump/minsize.c:368
-#, fuzzy
 msgid "Loading input ..."
-msgstr "\rLendo arquivo [%s] ..."
+msgstr ""
 
 #: ../raster/r.clump/minsize.c:418
 #, c-format
@@ -16999,9 +16983,9 @@ msgid "Merging clumps smaller than %d cells..."
 msgstr ""
 
 #: ../raster/r.clump/minsize.c:509
-#, fuzzy, c-format
+#, c-format
 msgid "Renumbering remaining %d clumps..."
-msgstr "Encontrando classes de treinamento..."
+msgstr ""
 
 #: ../raster/r.clump/main.c:60
 msgid "reclass"
@@ -17024,9 +17008,8 @@ msgid "Valid range: 0 = identical to < 1 = maximal difference"
 msgstr ""
 
 #: ../raster/r.clump/main.c:90
-#, fuzzy
 msgid "Minimum clump size in cells"
-msgstr "Isosuperfície mínima"
+msgstr ""
 
 #: ../raster/r.clump/main.c:91
 msgid "Clumps smaller than minsize will be merged to form larger clumps"
@@ -17061,18 +17044,18 @@ msgid "Pass 2 of 2..."
 msgstr ""
 
 #: ../raster/r.clump/clump.c:122
-#, fuzzy, c-format
+#, c-format
 msgid "%d initial clumps"
-msgstr "Cópia da tabela falhou"
+msgstr ""
 
 #: ../raster/r.clump/clump.c:233 ../raster/r.clump/clump.c:490
 msgid "Pass 1 of 2..."
 msgstr ""
 
 #: ../raster/r.clump/clump.c:425
-#, fuzzy, c-format
+#, c-format
 msgid "%d-band clumping with threshold %g"
-msgstr "%d pontos além do limite"
+msgstr ""
 
 #: ../raster/r.composite/main.c:73
 #: ../locale/scriptstrings/r.blend_to_translate.c:3
@@ -24526,9 +24509,8 @@ msgid "Name of data file(s) for Y axis of graph"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:249
-#, fuzzy
 msgid "Path to files"
-msgstr "Nome do arquivo vetor resultante"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:251
 msgid "Path to the directory where the input files are located"
@@ -24539,9 +24521,8 @@ msgid "Color for Y data"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:272
-#, fuzzy
 msgid "Width of the lines"
-msgstr "Lista de curvas de nível"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:279
 msgid "Color for axis, tics, numbers, and title"
@@ -24564,42 +24545,38 @@ msgid "Minimum and maximun value for Y axis (min,max)"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:315
-#, fuzzy
 msgid "Tic values for the Y axis"
-msgstr "Valor inválido para null (apenas inteiros)"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:329
-#, fuzzy
 msgid "Symbol for point"
-msgstr "Número de linhas"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:338
-#, fuzzy
 msgid "Point size"
-msgstr "Tamanho do ícone"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:347
 msgid "Color for point symbol edge color"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:353
-#, fuzzy
 msgid "Width of point symbol lines"
-msgstr "Coordenadas do mapa"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:412
 msgid "Maximum of 10 Y data files exceeded"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:445
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr "Não consegui abrir cursor de seleção: '%s'"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:458
-#, fuzzy, c-format
+#, c-format
 msgid "Color <%s> cannot for option %s be parsed"
-msgstr "Coluna <%s> não encontrada"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:495
 #, c-format
@@ -24607,14 +24584,14 @@ msgid "Only <%d> colors given for <%d> lines"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:538
-#, fuzzy, c-format
+#, c-format
 msgid "Number of widths (%d) is higher then the number of files (%d)"
-msgstr "Número de colunas definidas (%d) não coincide com o número de colunas (%d) da entrada."
+msgstr ""
 
 #: ../display/d.linegraph/main.c:550
-#, fuzzy, c-format
+#, c-format
 msgid "Number of widths (%d) is lower then the number of files (%d)"
-msgstr "Número de colunas definidas (%d) não coincide com o número de colunas (%d) da entrada."
+msgstr ""
 
 #: ../display/d.linegraph/main.c:601
 #, c-format
@@ -27844,9 +27821,8 @@ msgid "Print the maximum bounding box in lat/long on WGS84"
 msgstr ""
 
 #: ../general/g.region/main.c:148
-#, fuzzy
 msgid "Print in shell script style, but in one line (flat)"
-msgstr "Mostra as estatísticas em estilo shell script"
+msgstr ""
 
 #: ../general/g.region/main.c:154
 msgid "Align region to resolution (default = align to bounds, works only for 2D resolution)"
@@ -29205,18 +29181,18 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../vector/v.label.sa/labels.c:68
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot allocate %lu bytes of memory"
-msgstr "Não consegui abrir cursor de seleção"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:87
 msgid "Unable to initialise FreeType"
-msgstr "Não consegui inicializar FreeType"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:90
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find font '%s'\n"
-msgstr "Não encontrei %s"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:92
 #, c-format
@@ -29228,19 +29204,16 @@ msgid "Font file format is not supported by FreeType"
 msgstr ""
 
 #: ../vector/v.label.sa/labels.c:98
-#, fuzzy
 msgid "Font file can not be loaded"
-msgstr "mapa vetorial <%s> não encontrado"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:107
-#, fuzzy
 msgid "Unable to set font size"
-msgstr "Não consegui definir tamanho"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:128
-#, fuzzy
 msgid "Cannot allocate more memory"
-msgstr "Não consegui abrir cursor de seleção"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:162 ../vector/v.overlay/main.c:423
 #: ../vector/v.label/main.c:319
@@ -29248,9 +29221,9 @@ msgid "Unable to select attributes"
 msgstr ""
 
 #: ../vector/v.label.sa/labels.c:244
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load glyph for '%c'"
-msgstr "Impossível ler o arquivo de cabeçalho de [%s]"
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:41
 msgid "Create optimally placed labels for vector map(s)"
@@ -29265,9 +29238,8 @@ msgid "Name for new paint-label file"
 msgstr "Nome para novo arquivo de rótulos de pintura"
 
 #: ../vector/v.label.sa/main.c:71
-#, fuzzy
 msgid "Name of TrueType font (as listed in the fontcap)"
-msgstr "Caminho para a fonte TrueType (incluindo nome do arquivo)"
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:72 ../vector/v.label.sa/main.c:80
 #: ../vector/v.lrs/v.lrs.label/main.c:181 ../vector/v.label/main.c:125
@@ -29300,7 +29272,7 @@ msgstr "Opaco ao vetor (só é relevante se a cor de fundo estiver selecionada)"
 
 #: ../vector/v.label.sa/main.c:154
 msgid "Border width (only for ps.map output)"
-msgstr "Largura da borda (apenas para saída com ps.map)"
+msgstr ""
 
 #: ../vector/v.info/parse.c:24
 msgid "Print history instead of info and exit"
@@ -39709,101 +39681,79 @@ msgstr ""
 msgid "%s is empty"
 msgstr ""
 
-#, fuzzy
 msgid "Vector map profiling tool"
-msgstr "Inportação de vetor incompleta"
+msgstr ""
 
 #, fuzzy
 msgid "Input filter"
 msgstr "Arquivo de entrada"
 
-#, fuzzy
 msgid "Coordinates for profiling line nodes"
-msgstr "desvio padrão em unidades de mapa"
+msgstr ""
 
-#, fuzzy
 msgid "Profiling line"
-msgstr "processando."
+msgstr ""
 
-#, fuzzy
 msgid "Buffer (tolerance) for points in map units"
-msgstr "Tolerância em unidades de mapa: %g"
+msgstr ""
 
 #, fuzzy
 msgid "Output formating"
 msgstr "Formato de saída"
 
-#, fuzzy
 msgid "Number of significant digits"
-msgstr "Número de dígitos significativos (apenas ponto flutuante)"
+msgstr ""
 
-#, fuzzy
 msgid "Use features only from specified layer"
-msgstr "Lista arquivos de um (sub)grupo especificado"
+msgstr ""
 
-#, fuzzy
 msgid "Name for profile line and buffer output map"
-msgstr "Nome do mapa raster de saída"
+msgstr ""
 
-#, fuzzy
 msgid "Profile line and buffer around it will be written"
-msgstr "O vetor '%s' já existe."
+msgstr ""
 
-#, fuzzy
 msgid "Do not print column names"
-msgstr "Nome da coluna y"
+msgstr ""
 
-#, fuzzy
 msgid "Do not print 3D vector data (z values)"
-msgstr "Texto representando células sem valores de dados"
+msgstr ""
 
-#, fuzzy
 msgid "Profiling line map"
-msgstr "processando."
+msgstr ""
 
-#, fuzzy
 msgid "Vector map containing profiling line"
-msgstr "Mapa de entrada contendo linhas"
+msgstr ""
 
-#, fuzzy
 msgid "Layer 0 not supported"
-msgstr "Camada 0 não suportada"
+msgstr ""
 
-#, fuzzy
 msgid "Failed to interpreter 'dp' parameter as an integer"
-msgstr "falha interpretando dp como inteiro"
+msgstr ""
 
-#, fuzzy
 msgid "<%s> is not a valid vector map name"
-msgstr "é não mapear"
+msgstr ""
 
-#, fuzzy
 msgid "At least profile start and end coordinates are required!"
-msgstr "Coordenadas para pesquisa"
+msgstr ""
 
-#, fuzzy
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
-msgstr "Conexão com banco de dados não definida para a camada <%d>. Execute v.db.connect."
+msgstr ""
 
-#, fuzzy
 msgid "No features match Your query"
-msgstr "Nome do mapa vetorial (2d) de entrada"
+msgstr ""
 
-#, fuzzy
 msgid "Error while initialising line list"
-msgstr "Erro na leitura do arquivo de histórico"
+msgstr ""
 
-#, fuzzy
 msgid "Error while reading vector feature from profile line map"
-msgstr "Erro na leitura do arquivo de assinaturas."
+msgstr ""
 
-#, fuzzy
 msgid "Unabale to get attribute data for cat %d"
-msgstr "Não consegui selecionar atributo para cat=%d"
+msgstr ""
 
-#, fuzzy
 msgid "Error while retreiving database record for cat %d"
-msgstr "Sem registro no banco para categoria %d"
+msgstr ""
 
 #, fuzzy
 msgid "Unable to create 2D raster <%s>"
@@ -40140,9 +40090,8 @@ msgstr "Saída de mapa"
 msgid "[%s] not found"
 msgstr "[%s] não encontrado."
 
-#, fuzzy
 msgid "option <%s>: <%s> exists."
-msgstr "região <%s> não encontrada"
+msgstr ""
 
 #, fuzzy
 msgid "Override dataset projection (use location's projection)"

@@ -481,9 +481,8 @@ msgid "raster3d"
 msgstr ""
 
 #: ../lib/raster3d/test/test_main.c:97
-#, fuzzy
 msgid "unit test"
-msgstr "jednotky"
+msgstr ""
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -1990,9 +1989,8 @@ msgid "Unable to export raster map <%s> with r3.pack"
 msgstr ""
 
 #: ../lib/python/temporal/base.py:380
-#, fuzzy
 msgid "Object not found in the temporal database"
-msgstr "Nelze najít vektorovou mapu <%s> v <%s>"
+msgstr ""
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
@@ -3694,14 +3692,12 @@ msgid "can't write category information for [%s] in [%s]"
 msgstr "nelze zapsat kategorie pro [%s] v [%s]"
 
 #: ../lib/raster/color_rules.c:120
-#, fuzzy
 msgid "syntax error in the color rule"
-msgstr "syntaktická chyba"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:122
-#, fuzzy
 msgid "syntax error in the color format"
-msgstr "syntaktická chyba"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:130
 msgid "percentage not in range 0-100"
@@ -4168,9 +4164,8 @@ msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr "Podmínka WHERE příkazu SQL bez klíčového slova 'where'"
 
 #: ../lib/gis/parser_standard_options.c:157
-#, fuzzy
 msgid "Example: income < 1000 and population >= 10000"
-msgstr "Příklad: příjem < 1000 AND obyvatelé >= 10000"
+msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:165
 msgid "Name of attribute table"

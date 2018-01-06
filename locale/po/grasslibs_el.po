@@ -474,9 +474,8 @@ msgid "raster3d"
 msgstr ""
 
 #: ../lib/raster3d/test/test_main.c:97
-#, fuzzy
 msgid "unit test"
-msgstr "Εκτέλεση όλων των δοκιμών μονάδας"
+msgstr ""
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -1983,9 +1982,8 @@ msgid "Unable to export raster map <%s> with r3.pack"
 msgstr ""
 
 #: ../lib/python/temporal/base.py:380
-#, fuzzy
 msgid "Object not found in the temporal database"
-msgstr "Αδυναμία αντιγραφής διανυσματικού χάρτη <%s> σε <%s>"
+msgstr ""
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
@@ -3687,14 +3685,12 @@ msgid "can't write category information for [%s] in [%s]"
 msgstr "Δεν είναι δυνατή η εγγραδή πληροφοριών κατηγορίαςγια [%s] στο [%s]"
 
 #: ../lib/raster/color_rules.c:120
-#, fuzzy
 msgid "syntax error in the color rule"
-msgstr "Συντακτικό λάθος"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:122
-#, fuzzy
 msgid "syntax error in the color format"
-msgstr "Συντακτικό λάθος"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:130
 msgid "percentage not in range 0-100"
@@ -4161,9 +4157,8 @@ msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr "WHERE συνθήκες της SQL δήλωση χωρίς 'where' λέξη-κλειδί"
 
 #: ../lib/gis/parser_standard_options.c:157
-#, fuzzy
 msgid "Example: income < 1000 and population >= 10000"
-msgstr "Παράδειγμα: income < 1000 and inhab >= 10000"
+msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:165
 msgid "Name of attribute table"

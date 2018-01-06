@@ -2206,7 +2206,7 @@ msgstr ""
 #: ../locale/scriptstrings/d.out.file_to_translate.c:4
 #: ../raster/r.topmodel/main.c:72
 msgid "Name for output file"
-msgstr "출력파일 이름"
+msgstr "출력파일의 이름"
 
 #: ../general/g.list/main.c:115 ../vector/v.out.ascii/args.c:33
 msgid "If not given or '-' then standard output"
@@ -2819,9 +2819,8 @@ msgid "Print in shell script style"
 msgstr ""
 
 #: ../general/g.region/main.c:148
-#, fuzzy
 msgid "Print in shell script style, but in one line (flat)"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../general/g.region/main.c:154
 msgid "Align region to resolution (default = align to bounds, works only for 2D resolution)"
@@ -6784,7 +6783,7 @@ msgstr ""
 #: ../raster/r.stats/main.c:119 ../vector/v.db.select/main.c:95
 #: ../db/db.select/main.c:241
 msgid "Name for output file (if omitted or \"-\" output to stdout)"
-msgstr ""
+msgstr "출력파일의 이름 (생략하거나 \"-\"이면 표준출력)"
 
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:1
 msgid "Lists registered maps of a space time vector dataset."
@@ -7855,7 +7854,7 @@ msgstr ""
 
 #: ../raster3d/r3.gradient/main.c:63
 msgid "Size of blocks"
-msgstr ""
+msgstr "블럭의 크기"
 
 #: ../raster3d/r3.gradient/main.c:130
 msgid "Failed to allocate memory for blocks"
@@ -7923,7 +7922,7 @@ msgstr ""
 
 #: ../raster3d/r3.in.bin/main.c:268 ../raster3d/r3.out.bin/main.c:228
 msgid "Number of bytes per cell in binary file"
-msgstr ""
+msgstr "바이너리 파일 내의 셀 당 바이트 개수"
 
 #: ../raster3d/r3.in.bin/main.c:275
 msgid "Byte order in binary file"
@@ -8046,7 +8045,7 @@ msgstr ""
 #: ../raster/r.mapcalc/map3.c:128 ../raster/r.mapcalc/map3.c:142
 #: ../raster/r.mapcalc/map3.c:156
 msgid "Error writing data"
-msgstr ""
+msgstr "자료를 쓰면서 오류가 발생했습니다"
 
 #: ../raster3d/r3.out.bin/main.c:208
 msgid "Exports a GRASS 3D raster map to a binary array."
@@ -8054,7 +8053,7 @@ msgstr ""
 
 #: ../raster3d/r3.out.bin/main.c:221 ../raster/r.out.bin/main.c:304
 msgid "Value to write out for null"
-msgstr ""
+msgstr "널 값으로 사용할 값"
 
 #: ../raster3d/r3.out.bin/main.c:235 ../raster/r.in.bin/main.c:330
 #: ../raster/r.out.bin/main.c:318
@@ -8063,7 +8062,7 @@ msgstr ""
 
 #: ../raster3d/r3.out.bin/main.c:250
 msgid "Write data as integer"
-msgstr ""
+msgstr "정보를 정수 형식으로 씁니다"
 
 #: ../raster3d/r3.out.bin/main.c:256 ../raster/r.out.bin/main.c:347
 msgid "Invalid value for null (integers only)"
@@ -8212,19 +8211,19 @@ msgstr ""
 
 #: ../raster3d/r3.info/main.c:80
 msgid "Outputs basic information about a user-specified 3D raster map layer."
-msgstr ""
+msgstr "사용자가 지정한 3차원 래스터 지도에 대한 기본적인 정보를 출력합니다"
 
 #: ../raster3d/r3.info/main.c:86
 msgid "Print raster3d information in shell style"
-msgstr ""
+msgstr "3차원 래스터 정보를 셸스크립트 형식으로 출력합니다"
 
 #: ../raster3d/r3.info/main.c:90
 msgid "Print range in shell style only"
-msgstr ""
+msgstr "범위를 셸스크립트 형식으로만 출력합니다"
 
 #: ../raster3d/r3.info/main.c:94 ../raster/r.info/main.c:93
 msgid "Print raster history instead of info"
-msgstr ""
+msgstr "정보 대신 래스터의 히스토리를 출력합니다"
 
 #: ../raster3d/r3.info/main.c:103
 #, c-format
@@ -8713,7 +8712,7 @@ msgstr ""
 
 #: ../raster3d/r3.support/main.c:125
 msgid "Update range"
-msgstr ""
+msgstr "범위 갱신"
 
 #: ../raster3d/r3.support/main.c:248 ../raster/r.statistics/main.c:110
 #: ../raster/r.support/main.c:245 ../display/d.title/main.c:110
@@ -8772,18 +8771,16 @@ msgid "Basename for resultant raster slice maps"
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:116
-#, fuzzy
 msgid "Value to multiply the raster values with"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:117
 msgid "Coefficient a in the equation y = ax + b"
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:123
-#, fuzzy
 msgid "Value to add to the raster values"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:124
 msgid "Coefficient b in the equation y = ax + b"
@@ -8794,9 +8791,9 @@ msgid "Use the same resolution as the input 3D raster map for the 2D output maps
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:174
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown raster type <%d>"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:263
 msgid "Converts 3D raster maps to 2D raster maps"
@@ -8863,7 +8860,7 @@ msgstr "타임스탬프"
 
 #: ../raster3d/r3.timestamp/main.c:48
 msgid "Modifies a timestamp for a 3D raster map."
-msgstr ""
+msgstr "3차원 래스터 지도의 타임스탬프를 변경합니다"
 
 #: ../raster3d/r3.timestamp/main.c:49
 msgid "Print/add/remove a timestamp for a 3D raster map."
@@ -8898,9 +8895,8 @@ msgid "Error closing 3D raster map"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:170
-#, fuzzy
 msgid "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:174 ../raster/r.in.lidar/main.c:120
 #: ../vector/v.in.lidar/main.c:142
@@ -9050,33 +9046,28 @@ msgid "First file's projection checked, checking projection of the other files..
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:540
-#, fuzzy
 msgid "Preparing the maps..."
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:574 ../vector/v.sample/main.c:200
 msgid "Reading points..."
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:656
-#, fuzzy
 msgid "Computing proportional count map..."
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:661
-#, fuzzy
 msgid "Computing proportional sum map..."
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:666
-#, fuzzy
 msgid "Computing mean map..."
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:671
-#, fuzzy
 msgid "Closing the maps..."
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:707 ../vector/v.in.lidar/main.c:783
 #, c-format
@@ -9115,9 +9106,9 @@ msgid "Cannot open file %s for reading"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/filters.c:27
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid range <%s> for option %s"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/filters.c:54 ../vector/v.in.pdal/filters.c:95
 #: ../vector/v.in.lidar/filters.c:36
@@ -10581,9 +10572,9 @@ msgid "Unable to write to temp file"
 msgstr ""
 
 #: ../raster/r.clump/clump.c:122
-#, fuzzy, c-format
+#, c-format
 msgid "%d initial clumps"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster/r.clump/clump.c:211 ../raster/r.clump/clump.c:475
 #: ../raster/r.clump/minsize.c:373 ../imagery/i.segment/cluster.c:121
@@ -10595,9 +10586,9 @@ msgid "Pass 1 of 2..."
 msgstr ""
 
 #: ../raster/r.clump/clump.c:425
-#, fuzzy, c-format
+#, c-format
 msgid "%d-band clumping with threshold %g"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster/r.clump/clump.c:449 ../imagery/i.segment/open_files.c:71
 #: ../imagery/i.segment/open_files.c:238 ../imagery/i.segment/open_files.c:246
@@ -10627,9 +10618,8 @@ msgid "Valid range: 0 = identical to < 1 = maximal difference"
 msgstr ""
 
 #: ../raster/r.clump/main.c:90
-#, fuzzy
 msgid "Minimum clump size in cells"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster/r.clump/main.c:91
 msgid "Clumps smaller than minsize will be merged to form larger clumps"
@@ -10659,14 +10649,12 @@ msgid_plural "%d clumps."
 msgstr[0] ""
 
 #: ../raster/r.clump/minsize.c:357
-#, fuzzy
 msgid "Minimum size must be larger than 1"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster/r.clump/minsize.c:368
-#, fuzzy
 msgid "Loading input ..."
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster/r.clump/minsize.c:418
 #, c-format
@@ -10674,9 +10662,9 @@ msgid "Merging clumps smaller than %d cells..."
 msgstr ""
 
 #: ../raster/r.clump/minsize.c:509
-#, fuzzy, c-format
+#, c-format
 msgid "Renumbering remaining %d clumps..."
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../raster/r.clump/rclist.c:17 ../imagery/i.segment/rclist.c:17
 msgid "rclist out of memory"
@@ -12979,7 +12967,7 @@ msgstr ""
 
 #: ../raster/r.volume/main.c:77
 msgid "volume"
-msgstr ""
+msgstr "부피"
 
 #: ../raster/r.volume/main.c:80
 msgid "Calculates the volume of data \"clumps\"."
@@ -23262,9 +23250,8 @@ msgid "Name of data file(s) for Y axis of graph"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:249
-#, fuzzy
 msgid "Path to files"
-msgstr "글꼴파일의 경로"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:251
 msgid "Path to the directory where the input files are located"
@@ -23275,9 +23262,8 @@ msgid "Color for Y data"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:272
-#, fuzzy
 msgid "Width of the lines"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:279
 msgid "Color for axis, tics, numbers, and title"
@@ -23304,14 +23290,12 @@ msgid "Tic values for the Y axis"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:329
-#, fuzzy
 msgid "Symbol for point"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:338
-#, fuzzy
 msgid "Point size"
-msgstr "글꼴크기"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:347
 msgid "Color for point symbol edge color"
@@ -23326,9 +23310,9 @@ msgid "Maximum of 10 Y data files exceeded"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:445
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:458
 #, c-format
@@ -25417,9 +25401,8 @@ msgid "Generating points..."
 msgstr ""
 
 #: ../vector/v.profile/main.c:101
-#, fuzzy
 msgid "Vector map profiling tool"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:109 ../vector/v.profile/main.c:143
 #: ../vector/v.profile/main.c:148
@@ -25428,15 +25411,13 @@ msgid "Input filter"
 msgstr "입력파일"
 
 #: ../vector/v.profile/main.c:113
-#, fuzzy
 msgid "Coordinates for profiling line nodes"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:114 ../vector/v.profile/main.c:183
 #: ../vector/v.profile/main.c:194 ../vector/v.profile/main.c:202
-#, fuzzy
 msgid "Profiling line"
-msgstr "선을 합치는 중..."
+msgstr ""
 
 #: ../vector/v.profile/main.c:121
 msgid "Buffer (tolerance) for points in map units"
@@ -25454,47 +25435,40 @@ msgid "Output formating"
 msgstr "출력할 격자지도"
 
 #: ../vector/v.profile/main.c:139
-#, fuzzy
 msgid "Number of significant digits"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:147
 msgid "Use features only from specified layer"
 msgstr ""
 
 #: ../vector/v.profile/main.c:157
-#, fuzzy
 msgid "Name for profile line and buffer output map"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:159
-#, fuzzy
 msgid "Profile line and buffer around it will be written"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:164
-#, fuzzy
 msgid "Do not print column names"
-msgstr "출력할 래스터맵"
+msgstr ""
 
 #: ../vector/v.profile/main.c:169
-#, fuzzy
 msgid "Do not print 3D vector data (z values)"
-msgstr "값이 없는 자료는 보고하지 않습니다"
+msgstr ""
 
 #: ../vector/v.profile/main.c:170
 msgid "Only affects 3D vectors"
 msgstr ""
 
 #: ../vector/v.profile/main.c:181
-#, fuzzy
 msgid "Profiling line map"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:182
-#, fuzzy
 msgid "Vector map containing profiling line"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:191
 msgid "WHERE conditions for input profile line map"
@@ -25505,14 +25479,12 @@ msgid "Use to select only one line from profiling line map"
 msgstr ""
 
 #: ../vector/v.profile/main.c:201
-#, fuzzy
 msgid "Profiling line map layer"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:212
-#, fuzzy
 msgid "Layer 0 not supported"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:217
 msgid "Failed to interpreter 'dp' parameter as an integer"
@@ -25523,9 +25495,9 @@ msgid "Tolerance value can not be less than 0"
 msgstr ""
 
 #: ../vector/v.profile/main.c:228
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is not a valid vector map name"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:233
 msgid "No input profile map name provided, but WHERE conditions for it have been set"
@@ -25540,9 +25512,8 @@ msgid "No profile input coordinates nor vector map are provided. Please provide 
 msgstr ""
 
 #: ../vector/v.profile/main.c:278
-#, fuzzy
 msgid "At least profile start and end coordinates are required!"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:290 ../vector/v.cluster/main.c:144
 #: ../doc/vector/v.example/main.c:81
@@ -25550,14 +25521,13 @@ msgid "Unable to set predetermined vector open level"
 msgstr ""
 
 #: ../vector/v.profile/main.c:315 ../vector/v.profile/main.c:330
-#, fuzzy, c-format
+#, c-format
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
-msgstr "지도 <%s>를 위한 데이타베이스 연결이 DB 파일 안에 정의되지 않았습니다"
+msgstr ""
 
 #: ../vector/v.profile/main.c:373 ../vector/v.profile/main.c:478
-#, fuzzy
 msgid "No features match Your query"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:378 ../vector/v.profile/main.c:391
 msgid "Your query matches more than one record in input profiling map. Currently it's not supported. Enhance WHERE conditions to get only one line."
@@ -25576,9 +25546,9 @@ msgid "Your input profile map contains more than one line. Currently it's not su
 msgstr ""
 
 #: ../vector/v.profile/main.c:557
-#, fuzzy, c-format
+#, c-format
 msgid "Unabale to get attribute data for cat %d"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.profile/main.c:566
 #, c-format
@@ -26902,9 +26872,9 @@ msgid "Unable to initialise FreeType"
 msgstr ""
 
 #: ../vector/v.label.sa/labels.c:90
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find font '%s'\n"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:92
 #, c-format
@@ -29608,7 +29578,7 @@ msgstr ""
 
 #: ../vector/v.build/main.c:44
 msgid "Name of vector map"
-msgstr "벡터 지도 이름"
+msgstr "벡터 지도의 이름"
 
 #: ../vector/v.build/main.c:49
 msgid "Name for output vector map where erroneous vector features are written to"
@@ -35094,9 +35064,9 @@ msgid "Region ids are different"
 msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:983
-#, fuzzy, c-format
+#, c-format
 msgid "Region id %d is invalid"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:987
 msgid "Region consists of only one cell, nothing to update"
@@ -35195,9 +35165,9 @@ msgid "Number of segments in memory: %d of %d total"
 msgstr ""
 
 #: ../imagery/i.segment/cluster.c:66
-#, fuzzy, c-format
+#, c-format
 msgid "%d-band clustering with threshold %g"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../imagery/i.segment/cluster.c:135
 msgid "Assigning initial region IDs..."
@@ -35208,9 +35178,9 @@ msgid "Assigning final region IDs..."
 msgstr ""
 
 #: ../imagery/i.segment/cluster.c:455
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d clumps"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:30
 msgid "Suffix for output bands with modified band values"
@@ -35225,9 +35195,8 @@ msgid "Threshold = 0 merges only identical segments; threshold = 1 merges all"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:46
-#, fuzzy
 msgid "Spatial radius in number of cells"
-msgstr "셀 개수"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:47
 msgid "Must be >= 1, only cells within spatial bandwidth are considered for mean shift"
@@ -35318,9 +35287,9 @@ msgid "Threshold should be > 0 and < 1"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Option '%s' must be >= 1"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:208
 #, c-format
@@ -35380,14 +35349,14 @@ msgid "Invalid output raster name for goodness of fit"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:341
-#, fuzzy, c-format
+#, c-format
 msgid "Maximum number of iterations set to %d"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:351
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid number of iterations, %d will be used"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:360
 msgid "Invalid number of MB, 300 will be used"
@@ -35414,19 +35383,16 @@ msgid "Error in creating segments"
 msgstr ""
 
 #: ../imagery/i.segment/main.c:55
-#, fuzzy
 msgid "Error in writing IDs"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:59
-#, fuzzy
 msgid "Error in writing goodness of fit"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:64
-#, fuzzy
 msgid "Error in writing new band values"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:70
 #, c-format
@@ -35458,9 +35424,9 @@ msgid "Spatial bandwidth: %g"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:209 ../imagery/i.segment/mean_shift.c:246
-#, fuzzy, c-format
+#, c-format
 msgid "Range bandwidth: %g"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:395
 #, c-format
@@ -35478,9 +35444,9 @@ msgid "Mean shift converged after %d iterations"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:748
-#, fuzzy, c-format
+#, c-format
 msgid "Renumbering remaining %d segments..."
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../imagery/i.segment/watershed.c:19
 msgid "Watershed is not yet implemented"
@@ -35495,9 +35461,8 @@ msgid "Writing out goodness of fit"
 msgstr ""
 
 #: ../imagery/i.segment/write_output.c:236
-#, fuzzy
 msgid "Writing out shifted band values..."
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../imagery/i.biomass/main.c:51
 msgid "biomass"
@@ -40318,7 +40283,7 @@ msgid "Input options"
 msgstr "출력할 격자지도"
 
 msgid "option <%s>: <%s> exists."
-msgstr "옵션 <%s>: <%s>가 존재합니다."
+msgstr ""
 
 msgid "-%c/-%c and %s= are mutually exclusive"
 msgstr "-%c/-%c와 %s=를 같이 지정할 수 없습니다"
@@ -40593,11 +40558,11 @@ msgstr "출력할 격자지도"
 msgid "Unable to create vector map"
 msgstr "출력할 래스터맵"
 
+msgid "resolution"
+msgstr "해상도"
+
 #~ msgid "NDVI"
 #~ msgstr "NDVI"
 
 #~ msgid "SPOT"
 #~ msgstr "SPOT"
-
-#~ msgid "resolution"
-#~ msgstr "해상도"

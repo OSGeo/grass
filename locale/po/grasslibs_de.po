@@ -479,9 +479,8 @@ msgid "raster3d"
 msgstr ""
 
 #: ../lib/raster3d/test/test_main.c:97
-#, fuzzy
 msgid "unit test"
-msgstr "Führe alle Unit-Tests aus"
+msgstr ""
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -1988,9 +1987,8 @@ msgid "Unable to export raster map <%s> with r3.pack"
 msgstr ""
 
 #: ../lib/python/temporal/base.py:380
-#, fuzzy
 msgid "Object not found in the temporal database"
-msgstr "Kann die Vektorkarte <%s> in <%s> nicht finden."
+msgstr ""
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
@@ -3692,14 +3690,12 @@ msgid "can't write category information for [%s] in [%s]"
 msgstr "Kann Kategorie-Informationen für [%s] in [%s] nicht schreiben."
 
 #: ../lib/raster/color_rules.c:120
-#, fuzzy
 msgid "syntax error in the color rule"
-msgstr "Eingabe-Formatfehler"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:122
-#, fuzzy
 msgid "syntax error in the color format"
-msgstr "Eingabe-Formatfehler"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:130
 msgid "percentage not in range 0-100"
@@ -4166,9 +4162,8 @@ msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr "WHERE Bedingungen des SQL-Ausdrucks ohne das Schlüsselwort 'where'."
 
 #: ../lib/gis/parser_standard_options.c:157
-#, fuzzy
 msgid "Example: income < 1000 and population >= 10000"
-msgstr "Beispiel: Einkommen < 1000 AND Einwohner >= 10000"
+msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:165
 msgid "Name of attribute table"
@@ -8934,7 +8929,7 @@ msgstr "Lese Objekte der Vektorkarte..."
 #: ../lib/rst/interp_float/vinput2d.c:174
 #, c-format
 msgid "Database record for cat %d not found"
-msgstr "Datenbank-Eintrag für die Kategorie (cat) %d  nicht gefunden."
+msgstr "Datenbank-Eintrag für die Kategorie (cat) %d nicht gefunden."
 
 #: ../lib/rst/interp_float/vinput2d.c:192
 msgid "Negative value of smoothing detected: sm must be >= 0"

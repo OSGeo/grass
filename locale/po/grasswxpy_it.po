@@ -1494,6 +1494,8 @@ msgid ""
 "Note: Selected symbol is not displayed\n"
 "in draft mode (only in preview mode)"
 msgstr ""
+"Nota: il simbolo selezionato non visualizzato\n"
+"in modalità bozza (solo in modalità anteprima)"
 
 #: ../gui/wxpython/psmap/dialogs.py:6365 ../gui/wxpython/psmap/dialogs.py:6725
 #: ../gui/wxpython/iclass/dialogs.py:396 ../gui/wxpython/nviz/tools.py:976
@@ -1812,31 +1814,31 @@ msgstr "Compositore Cartografico wxGUI"
 
 #: ../gui/wxpython/psmap/frame.py:1240
 msgid "MAP FRAME"
-msgstr ""
+msgstr "MAP FRAME"
 
 #: ../gui/wxpython/psmap/frame.py:1241
 msgid "RASTER LEGEND"
-msgstr ""
+msgstr "LEGENDA DEI RASTER"
 
 #: ../gui/wxpython/psmap/frame.py:1242
 msgid "VECTOR LEGEND"
-msgstr ""
+msgstr "LEGENDA DEI VETTORIALI"
 
 #: ../gui/wxpython/psmap/frame.py:1243
 msgid "MAP INFO"
-msgstr ""
+msgstr "INFORMAZIONI SULLA MAPPA"
 
 #: ../gui/wxpython/psmap/frame.py:1244
 msgid "SCALE BAR"
-msgstr ""
+msgstr "BARRA DELLA SCALA"
 
 #: ../gui/wxpython/psmap/frame.py:1245
 msgid "IMAGE"
-msgstr ""
+msgstr "IMMAGINE"
 
 #: ../gui/wxpython/psmap/frame.py:1246
 msgid "NORTH ARROW"
-msgstr ""
+msgstr "FRECCIA DEL NORD"
 
 #: ../gui/wxpython/psmap/frame.py:1522
 msgid "Click and drag to resize object"
@@ -1919,7 +1921,7 @@ msgstr "Rettangolo"
 
 #: ../gui/wxpython/psmap/toolbars.py:109
 msgid "Add overlays"
-msgstr ""
+msgstr "Aggiungi sovrapposizioni"
 
 #: ../gui/wxpython/psmap/toolbars.py:111 ../gui/wxpython/lmgr/layertree.py:102
 msgid "Add labels"
@@ -1927,15 +1929,15 @@ msgstr "Aggiungi etichette"
 
 #: ../gui/wxpython/psmap/toolbars.py:203
 msgid "Add simple graphics: points"
-msgstr ""
+msgstr "Aggiunge semplici immagini: punti"
 
 #: ../gui/wxpython/psmap/toolbars.py:219
 msgid "Add simple graphics: lines"
-msgstr ""
+msgstr "Aggiunge semplici immagini: linee"
 
 #: ../gui/wxpython/psmap/toolbars.py:235
 msgid "Add simple graphics: rectangles"
-msgstr ""
+msgstr "Aggiunge semplici immagini: rettangoli"
 
 #: ../gui/wxpython/icons/icon.py:38
 #, python-format
@@ -2207,15 +2209,15 @@ msgstr "Premere Del per rimuovere"
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:106
 msgid "With stvds you have to set 'attr' option"
-msgstr ""
+msgstr "Con stvds bisogna impostare l'opzione 'attr'"
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:110
 msgid "With stvds it is not possible to use 'coordinates' and 'cats' options together"
-msgstr ""
+msgstr "Con stvds non è possibile usare le opzioni 'coordinate' e 'cats' insieme"
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:113
 msgid "With stvds you have to use 'coordinates' or 'cats' option"
-msgstr ""
+msgstr "Con stvds bisogna usare l'opzione 'coordinate' o 'cats'"
 
 #: ../gui/wxpython/lmgr/pyshell.py:42
 #, python-format
@@ -2238,11 +2240,11 @@ msgstr "Elimina tutto il testo dalla shell"
 
 #: ../gui/wxpython/lmgr/pyshell.py:57
 msgid "Simple &editor"
-msgstr ""
+msgstr "&Editor semplice"
 
 #: ../gui/wxpython/lmgr/pyshell.py:60 ../gui/wxpython/lmgr/toolbars.py:165
 msgid "Open a simple Python code editor"
-msgstr ""
+msgstr "Apri un semplice editor di codice Python"
 
 #: ../gui/wxpython/lmgr/pyshell.py:113
 #, python-format
@@ -2273,7 +2275,7 @@ msgstr "Collega a un raster esterno"
 
 #: ../gui/wxpython/lmgr/layertree.py:60
 msgid "Unpack GRASS raster map"
-msgstr ""
+msgstr "Estrai mappa raster di GRASS"
 
 #: ../gui/wxpython/lmgr/layertree.py:62
 msgid "Set raster output format"
@@ -2293,7 +2295,7 @@ msgstr "Collega a un vettoriale esterno"
 
 #: ../gui/wxpython/lmgr/layertree.py:68
 msgid "Unpack GRASS vector map"
-msgstr ""
+msgstr "Estrai mappa vettoriale di GRASS"
 
 #: ../gui/wxpython/lmgr/layertree.py:70
 msgid "Set vector output format"
@@ -2386,7 +2388,7 @@ msgstr "Modalità di editing"
 
 #: ../gui/wxpython/lmgr/layertree.py:113
 msgid "Background vector map"
-msgstr ""
+msgstr "Mappa vettoriale di sfondo"
 
 #: ../gui/wxpython/lmgr/layertree.py:209
 msgid "Map Layers"
@@ -2486,7 +2488,7 @@ msgstr "Esporta"
 
 #: ../gui/wxpython/lmgr/layertree.py:767
 msgid "Set color table interactively"
-msgstr ""
+msgstr "Imposta la tabella dei colori interattivamente"
 
 #: ../gui/wxpython/lmgr/layertree.py:776 ../gui/wxpython/menustrings.py:740
 #: ../gui/wxpython/menustrings.py:1646
@@ -2508,7 +2510,7 @@ msgstr "Profilo"
 
 #: ../gui/wxpython/lmgr/layertree.py:865
 msgid "Save web service layer"
-msgstr ""
+msgstr "Salva layer da servizi web"
 
 #: ../gui/wxpython/lmgr/layertree.py:972
 msgid "Unable to create profile of raster map."
@@ -2656,7 +2658,7 @@ msgstr "Layer"
 
 #: ../gui/wxpython/lmgr/frame.py:339
 msgid "Console"
-msgstr ""
+msgstr "Console"
 
 #: ../gui/wxpython/lmgr/frame.py:364
 #: ../gui/wxpython/gui_core/preferences.py:330
@@ -2672,7 +2674,7 @@ msgstr "Dati"
 #: ../gui/wxpython/lmgr/frame.py:388
 #: ../gui/wxpython/gui_core/preferences.py:347
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 #: ../gui/wxpython/lmgr/frame.py:440 ../gui/wxpython/mapdisp/toolbars.py:104
 #: ../gui/wxpython/animation/data.py:46
@@ -2842,7 +2844,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1146
 msgid "More than one parameter provided."
-msgstr ""
+msgstr "Più di un parametro fornito."
 
 #: ../gui/wxpython/lmgr/frame.py:1166
 msgid "Choose a working directory"
@@ -2862,15 +2864,15 @@ msgstr "Versione sconosciuta"
 
 #: ../gui/wxpython/lmgr/frame.py:1227
 msgid "GRASS SVN revision"
-msgstr ""
+msgstr "Revisione GRASS SVN"
 
 #: ../gui/wxpython/lmgr/frame.py:1229
 msgid "Build date"
-msgstr ""
+msgstr "Data di compilazione"
 
 #: ../gui/wxpython/lmgr/frame.py:1231
 msgid "Build platform"
-msgstr ""
+msgstr "Piattaforma di compilazione"
 
 #: ../gui/wxpython/lmgr/frame.py:1244
 msgid "Platform"
@@ -2962,7 +2964,7 @@ msgstr "Impossibile avviare lo strumento Timeline."
 
 #: ../gui/wxpython/lmgr/frame.py:1837
 msgid "Unable to start Temporal Plot Tool."
-msgstr ""
+msgstr "Impossibile avviare lo Strumento Grafico Temporale"
 
 #: ../gui/wxpython/lmgr/frame.py:2079
 msgid "Add selected map layers into layer tree"
@@ -2999,7 +3001,7 @@ msgstr "Esci dalla GUI di GRASS"
 
 #: ../gui/wxpython/lmgr/frame.py:2484
 msgid "Unable to exit GRASS shell: unknown PID"
-msgstr ""
+msgstr "Impossibile uscire dalla shell di GRASS: PID sconosciuto"
 
 #: ../gui/wxpython/lmgr/frame.py:2494 ../gui/wxpython/mapdisp/frame.py:599
 #: ../gui/wxpython/gui_core/vselect.py:277
@@ -3065,7 +3067,7 @@ msgstr "Aggiungi un gruppo"
 
 #: ../gui/wxpython/lmgr/toolbars.py:108
 msgid "Add various overlays"
-msgstr ""
+msgstr "Aggiungi diverse sovrapposizioni"
 
 #: ../gui/wxpython/lmgr/toolbars.py:111
 msgid "Remove selected map layer(s) from layer tree"
@@ -3156,19 +3158,16 @@ msgid "Close dialog on finish"
 msgstr "Chiudi dialogo alla fine"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:76
-#, fuzzy
 msgid "Reproject"
-msgstr "Proiezione"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:78
-#, fuzzy
 msgid "Reproject raster"
-msgstr "seleziona raster"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:80
-#, fuzzy
 msgid "Reproject vector"
-msgstr "Metodo della proiezione:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:90
 #, fuzzy
@@ -4608,7 +4607,7 @@ msgstr "Tasto destro per finire l'area"
 
 #: ../gui/wxpython/rdigit/controller.py:160
 msgid "Right click to finish line"
-msgstr ""
+msgstr "Click col tasto destro per finire la linea"
 
 #: ../gui/wxpython/rdigit/controller.py:303
 msgid "Do you want to save changes?"
@@ -5677,11 +5676,11 @@ msgstr "Chiude Gestore Tabella degli Attributi"
 
 #: ../gui/wxpython/dbmgr/manager.py:136
 msgid "Reload currently selected attribute data"
-msgstr ""
+msgstr "Ricarica gli attributi attualmente selezionati"
 
 #: ../gui/wxpython/dbmgr/manager.py:139
 msgid "Reload all attribute data (drop current selection)"
-msgstr ""
+msgstr "Ricarica tutti gli attributi (elimina la selezione corrente)"
 
 #: ../gui/wxpython/dbmgr/manager.py:215 ../gui/wxpython/dbmgr/base.py:302
 #: ../gui/wxpython/dbmgr/base.py:904 ../gui/wxpython/dbmgr/base.py:1074
@@ -5836,12 +5835,12 @@ msgstr "GRASS SQL Builder (%(type)s) - <%(map)s>"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:474
 msgid "Column to show (SELECT clause)"
-msgstr ""
+msgstr "Colonna da mostrare (clausola SELECT)"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:475
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:620
 msgid "Constraint for query (WHERE clause)"
-msgstr ""
+msgstr "Vincolo per l'interrogazione (clausola WHERE)"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:487 ../gui/wxpython/dbmgr/base.py:1198
 #: ../gui/wxpython/dbmgr/base.py:1224
@@ -5882,7 +5881,7 @@ msgstr "Istruzione SQL valida"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:619
 msgid "Column to set (SET clause)"
-msgstr ""
+msgstr "Colonna da impostare (clausola SET)"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:621
 msgid "Calculate column value to set"
@@ -5964,7 +5963,7 @@ msgstr "Calcola (solo colonne numeriche)"
 
 #: ../gui/wxpython/dbmgr/base.py:445
 msgid "Field calculator"
-msgstr ""
+msgstr "Calcolatore del campo"
 
 #: ../gui/wxpython/dbmgr/base.py:447 ../gui/wxpython/wxplot/dialogs.py:290
 msgid "Statistics"
@@ -6053,7 +6052,7 @@ msgstr "Applica l'istruzione SELECT e ricarica i record dei dati"
 
 #: ../gui/wxpython/dbmgr/base.py:1209
 msgid "Builder"
-msgstr ""
+msgstr "Generatore"
 
 #: ../gui/wxpython/dbmgr/base.py:1214
 msgid "SQL Builder"
@@ -8697,7 +8696,7 @@ msgstr ""
 
 #: ../gui/wxpython/vnet/vnet_core.py:116
 msgid "Unable to perform analysis."
-msgstr ""
+msgstr "Impossibile eseguire l'analisis."
 
 #: ../gui/wxpython/vnet/vnet_core.py:226
 #, python-format
@@ -8708,7 +8707,7 @@ msgstr ""
 
 #: ../gui/wxpython/vnet/vnet_core.py:231
 msgid "Result changed outside"
-msgstr ""
+msgstr "Risultato cambiato da fuori"
 
 #: ../gui/wxpython/vnet/vnet_core.py:268
 msgid "Map can be created only in current mapset"
@@ -8729,11 +8728,11 @@ msgstr "Creazione della tabella delle svolte fallita."
 
 #: ../gui/wxpython/vnet/vnet_core.py:324
 msgid "Vector map with analysis result does not exist."
-msgstr ""
+msgstr "La mappa vettoriale con i risultati dell'analisi non esiste."
 
 #: ../gui/wxpython/vnet/vnet_core.py:345
 msgid "Map can be saved only to currently set mapset"
-msgstr ""
+msgstr "Le mappe possono essere salvate solo nel mapset corrente"
 
 #: ../gui/wxpython/vnet/vnet_core.py:427 ../gui/wxpython/vnet/vnet_core.py:632
 #, python-format
@@ -8753,7 +8752,7 @@ msgstr ""
 
 #: ../gui/wxpython/vnet/vnet_core.py:937
 msgid "Input changed outside"
-msgstr ""
+msgstr "Input cambiato da fuori"
 
 #: ../gui/wxpython/vnet/vnet_core.py:1011
 #, python-format
@@ -8771,7 +8770,7 @@ msgstr "Impossibile usare ctypes. \n"
 #: ../gui/wxpython/vnet/vnet_core.py:1039
 #: ../gui/wxpython/vnet/vnet_core.py:1062
 msgid "Snapping mode can not be activated."
-msgstr ""
+msgstr "Modalità di snap non può essere attivata."
 
 #: ../gui/wxpython/vnet/vnet_core.py:1069
 msgid "Do you really want to activate snapping and overwrite it?"
@@ -8790,23 +8789,23 @@ msgstr "Sovrascrivi mappa"
 
 #: ../gui/wxpython/vnet/dialogs.py:70
 msgid "GRASS GIS Vector Network Analysis Tool"
-msgstr ""
+msgstr "GRASS GIS Strumento Analisi di Reti Vettoriali"
 
 #: ../gui/wxpython/vnet/dialogs.py:187
 msgid "Point list toolbar"
-msgstr ""
+msgstr "Barra degli strumenti della lista dei punti"
 
 #: ../gui/wxpython/vnet/dialogs.py:194
 msgid "Analysis toolbar"
-msgstr ""
+msgstr "Barra degli strumenti per l'analisi"
 
 #: ../gui/wxpython/vnet/dialogs.py:228
 msgid "Points for analysis:"
-msgstr ""
+msgstr "Punti per l'analisi"
 
 #: ../gui/wxpython/vnet/dialogs.py:231
 msgid "Analysis settings:"
-msgstr ""
+msgstr "Impostazioni dell'analisi:"
 
 #: ../gui/wxpython/vnet/dialogs.py:235
 msgid "Points"
@@ -8818,7 +8817,7 @@ msgstr "Distanza massima dei punti dalla rete:"
 
 #: ../gui/wxpython/vnet/dialogs.py:265
 msgid "Iso lines:"
-msgstr ""
+msgstr "Isolinee:"
 
 #: ../gui/wxpython/vnet/dialogs.py:345
 #: ../gui/wxpython/modules/mcalc_builder.py:134
@@ -8874,7 +8873,7 @@ msgstr "Stile del punto:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1216
 msgid "Analysis result style:"
-msgstr ""
+msgstr "Stile del risultato dell'analisi:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1228
 #, python-format
@@ -8896,11 +8895,11 @@ msgstr "Colore per i punti non utilizzati:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1262
 msgid "Color for Start/From/Source/Used point:"
-msgstr ""
+msgstr "Coloro per il punto Iniziale/Da/Sorgente/Usato:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1265
 msgid "Color for End/To/Sink point:"
-msgstr ""
+msgstr "Colore per il punto Finale/A:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1268
 msgid "Color for selected point:"
@@ -8916,7 +8915,7 @@ msgstr "Grandezza del punto:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1282 ../gui/wxpython/iscatt/dialogs.py:372
 msgid "Snapping threshold in pixels:"
-msgstr "Soglia di snap in pixels:"
+msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:1283
 msgid "Maximum number of results in history:"
@@ -8932,11 +8931,11 @@ msgstr "Salva il risultato dell'analisi"
 
 #: ../gui/wxpython/vnet/dialogs.py:1743
 msgid "Edit intersection turns costs"
-msgstr ""
+msgstr "Modifica i costi delle intersezioni di svolta "
 
 #: ../gui/wxpython/vnet/dialogs.py:1786
 msgid "Define Global Turn Costs"
-msgstr ""
+msgstr "Definire i costi di svolta globali"
 
 #: ../gui/wxpython/vnet/toolbars.py:52
 msgid "Insert points from Map Display"
@@ -8948,11 +8947,11 @@ msgstr "Attivare lo snap ai nodi"
 
 #: ../gui/wxpython/vnet/toolbars.py:58
 msgid "Activate mode for turns editing"
-msgstr ""
+msgstr "Attivare la modalità di modifica delle svolte"
 
 #: ../gui/wxpython/vnet/toolbars.py:61
 msgid "Activate mode for global turns editing"
-msgstr ""
+msgstr "Attivare la modalità di modifica delle svolte globali"
 
 #: ../gui/wxpython/vnet/toolbars.py:64
 msgid "Add new point"
@@ -8998,7 +8997,7 @@ msgstr "Analisi disponibili"
 #: ../gui/wxpython/vnet/vnet_data.py:162
 #, python-format
 msgid "Module <%s> does not support turns costs."
-msgstr ""
+msgstr "Il modulo <%s> non supporta i costi di svolta"
 
 #: ../gui/wxpython/vnet/vnet_data.py:169
 #, python-format
@@ -9675,7 +9674,7 @@ msgstr "Lista degli elementi - click-destro per eliminare"
 
 #: ../gui/wxpython/gmodeler/frame.py:1791
 msgid "In loop"
-msgstr ""
+msgstr "In ciclo"
 
 #: ../gui/wxpython/gmodeler/frame.py:1792
 msgid "Parameterized"
@@ -10744,7 +10743,7 @@ msgstr "Aggiunge il layer selezionato del servizio web con layer nell'albero dei
 
 #: ../gui/wxpython/web_services/dialogs.py:636
 msgid "Web service layer properties"
-msgstr ""
+msgstr "Proprietà del layer da servizio Web"
 
 #: ../gui/wxpython/web_services/dialogs.py:683
 msgid "&Apply"
@@ -10773,7 +10772,7 @@ msgstr ""
 
 #: ../gui/wxpython/web_services/dialogs.py:877
 msgid "Extent and resolution are based on Map Display geometry."
-msgstr ""
+msgstr "Estensione e risoluzione sono basate sulla geometri del Map Display"
 
 #: ../gui/wxpython/web_services/dialogs.py:879
 msgid "Extent and resolution are based on computational region."
@@ -10867,19 +10866,19 @@ msgstr "interpolazione cubica"
 
 #: ../gui/wxpython/web_services/widgets.py:273
 msgid "Cubic spline interpolation"
-msgstr ""
+msgstr "Interpolazione spline cubica"
 
 #: ../gui/wxpython/web_services/widgets.py:277
 msgid "Maximum columns to request from server at time:"
-msgstr ""
+msgstr "Numero massimo di colonne da richiedere al server ogni volta:"
 
 #: ../gui/wxpython/web_services/widgets.py:283
 msgid "Maximum rows to request from server at time:"
-msgstr ""
+msgstr "Numero massimo di righe da richiedere al server ogni volta:"
 
 #: ../gui/wxpython/web_services/widgets.py:300
 msgid "Do not request transparent data"
-msgstr ""
+msgstr "Non richiedere dati trasparenti"
 
 #: ../gui/wxpython/web_services/widgets.py:315
 msgid "Additional query parameters for server:"
@@ -10919,7 +10918,7 @@ msgstr "Seleziona la proiezione della sorgente.\n"
 
 #: ../gui/wxpython/web_services/widgets.py:881
 msgid "Choose output layer name.\n"
-msgstr ""
+msgstr "Scegliere il nome del layer di output:\n"
 
 #: ../gui/wxpython/web_services/widgets.py:925
 #: ../gui/wxpython/gui_core/forms.py:2006
@@ -13344,7 +13343,7 @@ msgstr "Ricarica la tabella di default"
 
 #: ../gui/wxpython/modules/colorrules.py:587
 msgid "Show preview of map (current Map Display extent is used)."
-msgstr ""
+msgstr "Mostra l'anteprima della mappa (è utilizzato l'attuale estensione del Map Display)"
 
 #: ../gui/wxpython/modules/colorrules.py:619
 #: ../gui/wxpython/modules/colorrules.py:1889
@@ -13354,7 +13353,7 @@ msgstr ""
 #: ../gui/wxpython/modules/colorrules.py:676
 #, python-format
 msgid "File <%s> already already exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "Il file <%s> esiste già. Si vuole sovrascriverlo?"
 
 #: ../gui/wxpython/modules/colorrules.py:723
 msgid "Invalid color table format"
@@ -13457,7 +13456,7 @@ msgstr "Nessuna connessione al database definita"
 #: ../gui/wxpython/modules/colorrules.py:1347
 #, python-format
 msgid "Selected map <%(map)s> is not in current mapset <%(mapset)s>. Attribute table cannot be edited."
-msgstr ""
+msgstr "La mappa selezionata <%(map)s> non è nel mapset <%(mapset)s> La tabella degli attributi non può essere modificata."
 
 #: ../gui/wxpython/modules/colorrules.py:1518
 #, python-format
@@ -13497,7 +13496,7 @@ msgstr "Nessuna colonna dei colori definita. Operazione cancellata"
 
 #: ../gui/wxpython/modules/colorrules.py:1874
 msgid "Thematic mapping for vector map in 3D view"
-msgstr ""
+msgstr "Mappatura tematica per mappa vettoriale in visualizzazione 3D"
 
 #: ../gui/wxpython/modules/vkrige.py:33
 msgid "No GRASS-python library found."
@@ -13573,7 +13572,7 @@ msgstr "Trova e installa estensione dai GRASS Addons"
 
 #: ../gui/wxpython/modules/extensions.py:58
 msgid "Repository (leave empty to use the official one)"
-msgstr ""
+msgstr "Repository (lasciare vuoto per utilizzare quello ufficiale)"
 
 #: ../gui/wxpython/modules/extensions.py:61
 msgid "List of extensions - double-click to install"
@@ -13614,7 +13613,7 @@ msgstr "Controllando la lista dei moduli dal SVN GRASS-Addons (attendere)..."
 #: ../gui/wxpython/modules/extensions.py:226
 #, python-format
 msgid "%d extensions loaded"
-msgstr ""
+msgstr "%d estensioni caricate"
 
 #: ../gui/wxpython/modules/extensions.py:238
 msgid "Install"
@@ -13706,7 +13705,7 @@ msgstr "Nome per la mappa GRASS di output (editabile)"
 
 #: ../gui/wxpython/modules/import_export.py:85
 msgid "Override projection check (use current location's projection)"
-msgstr ""
+msgstr "Sovrascrive la proiezione (usa la proiezione della location)"
 
 #: ../gui/wxpython/modules/import_export.py:116
 #: ../gui/wxpython/modules/import_export.py:393
@@ -13731,7 +13730,7 @@ msgstr "Impostazione dell'import"
 #: ../gui/wxpython/modules/import_export.py:379
 #: ../gui/wxpython/modules/import_export.py:520
 msgid "Add linked layers into layer tree"
-msgstr ""
+msgstr "Aggiungi i layer collegati nel layer tree"
 
 #: ../gui/wxpython/modules/import_export.py:381
 #: ../gui/wxpython/modules/import_export.py:522
@@ -13788,11 +13787,11 @@ msgstr "Nessuno layer selezionato."
 
 #: ../gui/wxpython/modules/import_export.py:863
 msgid "Name for output GRASS map"
-msgstr ""
+msgstr "Nome per la mappa GRASS di output"
 
 #: ../gui/wxpython/modules/import_export.py:881
 msgid "Projection of following layers do not match with projection of current location. "
-msgstr ""
+msgstr "La proiezione dei seguenti layers sembra non corrispondere a quella della location corrente."
 
 #: ../gui/wxpython/modules/import_export.py:883
 msgid "Layers to be reprojected"
@@ -13800,7 +13799,7 @@ msgstr "Layers da riproiettare"
 
 #: ../gui/wxpython/modules/import_export.py:897
 msgid "&Import && reproject"
-msgstr ""
+msgstr "&Importa && riproietta"
 
 #: ../gui/wxpython/modules/import_export.py:898
 msgid "Reproject selected layers"
@@ -15598,7 +15597,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:486 ../gui/wxpython/menustrings.py:1392
 msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
-msgstr "Genera una mappa raster con un piano partendo da: inclinazione (dip), esposizione (azimuth) e un punto."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:487 ../gui/wxpython/menustrings.py:1393
 msgid "Random deviates surface"
@@ -15650,7 +15649,7 @@ msgstr "Raster contorni"
 
 #: ../gui/wxpython/menustrings.py:499 ../gui/wxpython/menustrings.py:1405
 msgid "Generates surface raster map from rasterized contours."
-msgstr ""
+msgstr "Genera raster della superficie da isolinee rasterizzate"
 
 #: ../gui/wxpython/menustrings.py:500 ../gui/wxpython/menustrings.py:1406
 msgid "Regularized spline tension"
@@ -16533,11 +16532,11 @@ msgstr "Visualizza la risposta spettrale in punti specificati dall'utente per un
 
 #: ../gui/wxpython/menustrings.py:744 ../gui/wxpython/menustrings.py:1650
 msgid "Pan sharpening"
-msgstr ""
+msgstr "Pan sharpening"
 
 #: ../gui/wxpython/menustrings.py:745 ../gui/wxpython/menustrings.py:1651
 msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
-msgstr ""
+msgstr "Algoritmo di fusione di immagini per intensificare i pixel multispettrali con canali pancromatici ad alta risoluzione"
 
 #: ../gui/wxpython/menustrings.py:746 ../gui/wxpython/menustrings.py:1652
 msgid "Classify image"
@@ -16671,7 +16670,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:778 ../gui/wxpython/menustrings.py:1684
 msgid "Landsat DN to radiance/reflectance"
-msgstr ""
+msgstr "DN Landsat a radianza/riflettanza"
 
 #: ../gui/wxpython/menustrings.py:779 ../gui/wxpython/menustrings.py:1685
 msgid "Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+/OLI"
@@ -16679,11 +16678,11 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:780 ../gui/wxpython/menustrings.py:1686
 msgid "Landsat cloud cover assessment"
-msgstr ""
+msgstr "Valutazione della copertura nuvolosa per Landsat"
 
 #: ../gui/wxpython/menustrings.py:781 ../gui/wxpython/menustrings.py:1687
 msgid "Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA)."
-msgstr ""
+msgstr "Esegue la valutazione automatica della copertura nuvolosa (ACCA) per Landsat TM/ETM+"
 
 #: ../gui/wxpython/menustrings.py:782 ../gui/wxpython/menustrings.py:1688
 msgid "Modis quality control"
@@ -16743,7 +16742,7 @@ msgstr "Emissività"
 
 #: ../gui/wxpython/menustrings.py:796 ../gui/wxpython/menustrings.py:1702
 msgid "Computes emissivity from NDVI, generic method for sparse land."
-msgstr ""
+msgstr "Calcola l'emissività da NDVI, metodo genereico per terreni radi."
 
 #: ../gui/wxpython/menustrings.py:797 ../gui/wxpython/menustrings.py:1703
 msgid "Biomass growth"
@@ -17169,11 +17168,11 @@ msgstr "Gestiosce dataset"
 
 #: ../gui/wxpython/menustrings.py:912 ../gui/wxpython/menustrings.py:1818
 msgid "Connect temporal database"
-msgstr ""
+msgstr "Connette un database temporale"
 
 #: ../gui/wxpython/menustrings.py:913 ../gui/wxpython/menustrings.py:1819
 msgid "Prints/sets general temporal GIS database connection for current mapset."
-msgstr ""
+msgstr "Stampa/imposta la connessione generale al database GIS temporale per il mapset attuale."
 
 #: ../gui/wxpython/menustrings.py:915 ../gui/wxpython/menustrings.py:1821
 msgid "Creates a space time dataset."
@@ -17197,7 +17196,7 @@ msgstr "Modifica i metadati di un dataset spazio temporale."
 
 #: ../gui/wxpython/menustrings.py:922 ../gui/wxpython/menustrings.py:1828
 msgid "Merge"
-msgstr ""
+msgstr "Unisce"
 
 #: ../gui/wxpython/menustrings.py:923 ../gui/wxpython/menustrings.py:1829
 msgid "Merges several space time datasets into a single space time dataset."
@@ -17241,7 +17240,7 @@ msgstr "Rimuove mappe da un dataset"
 
 #: ../gui/wxpython/menustrings.py:934 ../gui/wxpython/menustrings.py:1840
 msgid "Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset."
-msgstr ""
+msgstr "Rimuove mappe raster, vettoriali e raster3d dal database temporale o da un dataset spazio temporale specifico"
 
 #: ../gui/wxpython/menustrings.py:935 ../gui/wxpython/menustrings.py:1841
 msgid "List raster dataset maps"
@@ -17261,7 +17260,7 @@ msgstr "Mostra le mappe registrate di un dataset spazio temporale vettoriale."
 
 #: ../gui/wxpython/menustrings.py:939 ../gui/wxpython/menustrings.py:1845
 msgid "List 3D raster dataset maps"
-msgstr ""
+msgstr "Mostra le mappe raster 3D del dataset"
 
 #: ../gui/wxpython/menustrings.py:940 ../gui/wxpython/menustrings.py:1846
 msgid "Lists registered maps of a space time raster3d dataset."
@@ -17297,7 +17296,7 @@ msgstr "Esporta dataset spazio temporale raster."
 
 #: ../gui/wxpython/menustrings.py:949 ../gui/wxpython/menustrings.py:1855
 msgid "Export raster dataset as VTK time series"
-msgstr ""
+msgstr "Esporta dataset raster come una serie temporale VTK"
 
 #: ../gui/wxpython/menustrings.py:950 ../gui/wxpython/menustrings.py:1856
 msgid "Exports space time raster dataset as VTK time series."
@@ -17341,7 +17340,7 @@ msgstr "Estrae un sottoinsieme di un dataset spazio temporale vettoriale."
 
 #: ../gui/wxpython/menustrings.py:960 ../gui/wxpython/menustrings.py:1866
 msgid "Extract subset of 3D raster dataset"
-msgstr ""
+msgstr "Estrae un sottoinsieme del dataset raster 3D"
 
 #: ../gui/wxpython/menustrings.py:961 ../gui/wxpython/menustrings.py:1867
 msgid "Extracts a subset of a space time 3D raster dataset."
@@ -17373,7 +17372,7 @@ msgstr "Esegue espressioni mapcalc spazio temporali sulle mappe del dataset spaz
 
 #: ../gui/wxpython/menustrings.py:968 ../gui/wxpython/menustrings.py:1874
 msgid "3D raster calculations"
-msgstr ""
+msgstr "Analisi raster 3D"
 
 #: ../gui/wxpython/menustrings.py:969 ../gui/wxpython/menustrings.py:1875
 msgid "Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets."
@@ -17393,11 +17392,11 @@ msgstr "Aggregazione"
 
 #: ../gui/wxpython/menustrings.py:973 ../gui/wxpython/menustrings.py:1879
 msgid "Neighborhood analysis in raster dataset"
-msgstr ""
+msgstr "Analisi vicinanze in un dataset raster"
 
 #: ../gui/wxpython/menustrings.py:974 ../gui/wxpython/menustrings.py:1880
 msgid "Performs a neighborhood analysis for each map in a space time raster dataset."
-msgstr ""
+msgstr "Esegue analisi delle vicinanze per ogni mappa in un dataset spazio temporale raster."
 
 #: ../gui/wxpython/menustrings.py:975 ../gui/wxpython/menustrings.py:1881
 msgid "Aggregation in raster datasets"
@@ -17405,7 +17404,7 @@ msgstr "Aggregazione di dataset raster"
 
 #: ../gui/wxpython/menustrings.py:976 ../gui/wxpython/menustrings.py:1882
 msgid "Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset."
-msgstr ""
+msgstr "Esegue diversi algoritmi di aggregazione da r.series su tutte o un sottoinsieme delle mappe in un dataset spazio temporale raster."
 
 #: ../gui/wxpython/menustrings.py:977 ../gui/wxpython/menustrings.py:1883
 msgid "Temporal aggregation"
@@ -17421,7 +17420,7 @@ msgstr "Aggregazione temporale tramite dataset"
 
 #: ../gui/wxpython/menustrings.py:980 ../gui/wxpython/menustrings.py:1886
 msgid "Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset."
-msgstr ""
+msgstr "Aggrega dati di un dataset spazio temporale raster esistente usando l'intervallo temporale di un secondo dataset spazio temporale."
 
 #: ../gui/wxpython/menustrings.py:981 ../gui/wxpython/menustrings.py:1887
 msgid "Sampling"
@@ -17429,11 +17428,11 @@ msgstr "campionamento"
 
 #: ../gui/wxpython/menustrings.py:982 ../gui/wxpython/menustrings.py:1888
 msgid "Sample a space time raster dataset at point coordinates"
-msgstr ""
+msgstr "Campiona un dataset spazio temporale raster alle coordinate del punto "
 
 #: ../gui/wxpython/menustrings.py:983 ../gui/wxpython/menustrings.py:1889
 msgid "Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts"
-msgstr ""
+msgstr "Campiona uno dataset spazio temporale raster alle coordinate specifiche di un punto vettoriale e scrive l'output allo stdout usando differente layout."
 
 #: ../gui/wxpython/menustrings.py:984 ../gui/wxpython/menustrings.py:1890
 msgid "Query raster dataset by vector points dataset"
@@ -17441,15 +17440,15 @@ msgstr "Interroga dataset raster con un dataset di punti vettoriali"
 
 #: ../gui/wxpython/menustrings.py:985 ../gui/wxpython/menustrings.py:1891
 msgid "Stores raster map values at spatial and temporal positions of vector points as vector attributes."
-msgstr ""
+msgstr "Carica i valori della mappa raster alle posizioni spaziali e temporali di un punto vettoriale come attributi."
 
 #: ../gui/wxpython/menustrings.py:986 ../gui/wxpython/menustrings.py:1892
 msgid "Observe specific locations in raster dataset"
-msgstr ""
+msgstr "Esamina posizioni specifiche in un dataset raster"
 
 #: ../gui/wxpython/menustrings.py:987 ../gui/wxpython/menustrings.py:1893
 msgid "Observes specific locations in a space time raster dataset over a period of time using vector points."
-msgstr ""
+msgstr "Esamina posizioni specifiche in un dataset spazio temporale raster lungo un periodo di tempo usando punti vettoriali. "
 
 #: ../gui/wxpython/menustrings.py:988 ../gui/wxpython/menustrings.py:1894
 msgid "Temporal sampling"
@@ -17457,7 +17456,7 @@ msgstr "Campionamento temporale"
 
 #: ../gui/wxpython/menustrings.py:989 ../gui/wxpython/menustrings.py:1895
 msgid "Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout."
-msgstr ""
+msgstr "Campiona i/il dataset spazio temporali di input con un dataset spazio temporale campione e stampa il risultato allo stdout."
 
 #: ../gui/wxpython/menustrings.py:991 ../gui/wxpython/menustrings.py:1897
 msgid "Space time datasets metadata"
@@ -17485,7 +17484,7 @@ msgstr "Calcola le statistiche univariate degli attributi per ogni mappa registr
 
 #: ../gui/wxpython/menustrings.py:997 ../gui/wxpython/menustrings.py:1903
 msgid "Univariate 3D raster dataset statistics"
-msgstr ""
+msgstr "Statistiche univariate dataset raster 3D"
 
 #: ../gui/wxpython/menustrings.py:998 ../gui/wxpython/menustrings.py:1904
 msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
@@ -17507,7 +17506,7 @@ msgstr "Strumenti grafici"
 #: ../gui/wxpython/menustrings.py:1004 ../gui/wxpython/menustrings.py:1910
 #: ../gui/wxpython/menustrings.py:1930
 msgid "Timeline tool"
-msgstr ""
+msgstr "Strumento Timelina"
 
 #: ../gui/wxpython/menustrings.py:1005 ../gui/wxpython/menustrings.py:1911
 #: ../gui/wxpython/menustrings.py:1931
@@ -17517,12 +17516,12 @@ msgstr "Disegna l'estensione temporale."
 #: ../gui/wxpython/menustrings.py:1006 ../gui/wxpython/menustrings.py:1912
 #: ../gui/wxpython/menustrings.py:1928
 msgid "Temporal plot tool"
-msgstr ""
+msgstr "Strumento rappresentazioni temporali"
 
 #: ../gui/wxpython/menustrings.py:1007 ../gui/wxpython/menustrings.py:1913
 #: ../gui/wxpython/menustrings.py:1929
 msgid "Plot temporal values."
-msgstr ""
+msgstr "Rappresenta i valori temporali."
 
 #: ../gui/wxpython/menustrings.py:1008 ../gui/wxpython/menustrings.py:1977
 #: ../gui/wxpython/menustrings.py:2020
@@ -17955,6 +17954,21 @@ msgstr "Revisione SVN GRASS"
 msgid "this might not work for multiple bands"
 msgstr "questo potrebbe non funzionare per più bande"
 
+msgid "failed to open '{0}'"
+msgstr "impossibile aprire '{0}'"
+
+msgid "GRASS locations in {0}"
+msgstr "Location di GRASS in {0}"
+
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgstr "Lo strumento Timeline richeide l'installazione del pacchetto \"matplotlib\" (python-matplotlib). {0}"
+
+msgid "Unicode error detected. Check your locale settings. Details: {0}"
+msgstr "Errore di Unicode rilevato. Controllare le impostazioni locali. Dettagli: {0}"
+
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgstr "Lo strumento Plot Temporale richiede l'installazione del pacchetto \"matplotlib\" (python-matplotlib). {0}"
+
 #~ msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
 #~ msgstr "Crea un raster da punti LAS LiDAR usando statistiche univariate"
 
@@ -17976,17 +17990,5 @@ msgstr "questo potrebbe non funzionare per più bande"
 #~ msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
 #~ msgstr "Crea una visualizzazione 3D di dati GIS. Visualizza superfici (dati raster), dati vettoriali 2D/3D, e volumi (dati raster 3D) in 3D."
 
-#~ msgid "failed to open '{0}'"
-#~ msgstr "impossibile aprire '{0}'"
-
-#~ msgid "GRASS locations in {0}"
-#~ msgstr "Location di GRASS in {0}"
-
-#~ msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-#~ msgstr "Lo strumento Timeline richeide l'installazione del pacchetto \"matplotlib\" (python-matplotlib). {0}"
-
-#~ msgid "Unicode error detected. Check your locale settings. Details: {0}"
-#~ msgstr "Errore di Unicode rilevato. Controllare le impostazioni locali. Dettagli: {0}"
-
-#~ msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-#~ msgstr "Lo strumento Plot Temporale richiede l'installazione del pacchetto \"matplotlib\" (python-matplotlib). {0}"
+#~ msgid "Point analysis"
+#~ msgstr "Analisi dei punti"

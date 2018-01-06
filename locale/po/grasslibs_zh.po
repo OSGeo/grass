@@ -77,7 +77,7 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:971 ../lib/rst/interp_float/vinput2d.c:100
 #, c-format
 msgid "Database connection not defined for layer %d"
-msgstr ""
+msgstr "图层%d数据库连接未定义"
 
 #: ../lib/ogsf/gv3.c:350 ../lib/ogsf/gp3.c:208 ../lib/db/dbmi_client/db.c:46
 #: ../lib/db/dbmi_client/copy_tab.c:112 ../lib/db/dbmi_client/copy_tab.c:133
@@ -91,7 +91,7 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:109
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
-msgstr ""
+msgstr "无法由驱动<%s>打开数据库 <%s>"
 
 #: ../lib/ogsf/gv3.c:353
 #, c-format
@@ -137,7 +137,7 @@ msgstr ""
 #: ../lib/rst/interp_float/output2d.c:491
 #, c-format
 msgid "Raster map <%s> not found"
-msgstr ""
+msgstr "栅格地图<%s>未找到"
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, c-format
@@ -304,7 +304,7 @@ msgstr ""
 #: ../lib/gpde/n_arrays_io.c:273
 #, c-format
 msgid "3D raster map <%s> not found"
-msgstr ""
+msgstr "3D栅格地图<%s>未找到"
 
 #: ../lib/ogsf/gsd_label.c:58
 msgid "Max. number of labels reached!"
@@ -327,7 +327,7 @@ msgstr "超出数据文件的最大值"
 #: ../lib/gpde/n_arrays_io.c:281
 #, c-format, python-format
 msgid "Unable to open 3D raster map <%s>"
-msgstr ""
+msgstr "无法打开3D栅格地图<%s>"
 
 #: ../lib/ogsf/gvl_file.c:442
 #, c-format
@@ -475,9 +475,8 @@ msgid "raster3d"
 msgstr ""
 
 #: ../lib/raster3d/test/test_main.c:97
-#, fuzzy
 msgid "unit test"
-msgstr "运行所有的单元测试"
+msgstr ""
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -838,12 +837,12 @@ msgstr ""
 #: ../lib/cairodriver/read_xid.c:14
 #, c-format
 msgid "Unable to open input file <%s>"
-msgstr ""
+msgstr "无法打开输入文件<%s>"
 
 #: ../lib/cairodriver/read_xid.c:17
 #, c-format
 msgid "Unable to read input file <%s>"
-msgstr ""
+msgstr "无法读取输入文件<%s>"
 
 #: ../lib/cairodriver/read_xid.c:20
 #, c-format
@@ -1984,9 +1983,8 @@ msgid "Unable to export raster map <%s> with r3.pack"
 msgstr ""
 
 #: ../lib/python/temporal/base.py:380
-#, fuzzy
 msgid "Object not found in the temporal database"
-msgstr "无法打开栅格图[%s在%s中]"
+msgstr ""
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
@@ -3103,17 +3101,17 @@ msgstr ""
 #: ../lib/manage/do_remove.c:92 ../lib/manage/do_remove.c:112
 #, c-format
 msgid "%s removed"
-msgstr ""
+msgstr "%s已移除"
 
 #: ../lib/manage/do_remove.c:105
 #, c-format
 msgid "Unable to remove %s"
-msgstr ""
+msgstr "无法移除%s"
 
 #: ../lib/manage/do_remove.c:121
 #, c-format
 msgid "<%s> nothing removed"
-msgstr ""
+msgstr "<%s>无任何移除"
 
 #: ../lib/manage/do_list.c:30
 #, c-format
@@ -3127,15 +3125,15 @@ msgstr ""
 
 #: ../lib/manage/option.c:51
 msgid "Raster"
-msgstr ""
+msgstr "栅格"
 
 #: ../lib/manage/option.c:53
 msgid "Vector"
-msgstr ""
+msgstr "矢量"
 
 #: ../lib/manage/option.c:55
 msgid "Region"
-msgstr ""
+msgstr "区域"
 
 #: ../lib/manage/option.c:57
 msgid "Group"
@@ -3144,7 +3142,7 @@ msgstr ""
 #: ../lib/manage/read_list.c:73
 #, c-format
 msgid "Unable to open data base element list '%s'"
-msgstr ""
+msgstr "无法打开数据库元素列表 <%s>"
 
 #: ../lib/manage/read_list.c:134
 #, c-format
@@ -3169,7 +3167,7 @@ msgstr ""
 #: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
 #, c-format
 msgid "%s renamed"
-msgstr ""
+msgstr "%s已重命名"
 
 #: ../lib/manage/do_rename.c:119
 #, c-format
@@ -3688,14 +3686,12 @@ msgid "can't write category information for [%s] in [%s]"
 msgstr "无法写入[%s]在[%s]中的类别信息"
 
 #: ../lib/raster/color_rules.c:120
-#, fuzzy
 msgid "syntax error in the color rule"
-msgstr "格式错误"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:122
-#, fuzzy
 msgid "syntax error in the color format"
-msgstr "格式错误"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:130
 msgid "percentage not in range 0-100"
@@ -4162,9 +4158,8 @@ msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:157
-#, fuzzy
 msgid "Example: income < 1000 and population >= 10000"
-msgstr "例如：income < 1000 and inhab >= 10000"
+msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:165
 msgid "Name of attribute table"
@@ -5525,7 +5520,7 @@ msgstr "[%s]: 没有此颜色"
 #: ../lib/display/r_raster.c:98
 #, c-format
 msgid "Both %s and %s are defined. %s will be ignored."
-msgstr ""
+msgstr "%s及%s已被定义。%s 将被忽略。"
 
 #: ../lib/display/r_raster.c:131
 #, c-format
@@ -8527,7 +8522,7 @@ msgstr ""
 
 #: ../lib/vector/diglib/plus.c:242
 msgid "Unable to read topo for areas"
-msgstr ""
+msgstr "无法为区域读取拓扑"
 
 #: ../lib/vector/diglib/plus.c:247
 #, c-format
@@ -8884,12 +8879,12 @@ msgstr ""
 #: ../lib/rst/interp_float/resout2d.c:103
 #, c-format
 msgid "First change your rows number(%d) to %d"
-msgstr ""
+msgstr "首先将行数从(%d)更改至%d"
 
 #: ../lib/rst/interp_float/resout2d.c:110
 #, c-format
 msgid "First change your columns number(%d) to %d"
-msgstr ""
+msgstr "先将你的列数由(%d)更改至%d"
 
 #: ../lib/rst/interp_float/resout2d.c:264
 msgid "No color table for input raster map -- will not create color table"
@@ -8902,7 +8897,7 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:94
 #, c-format
 msgid "Vector map <%s> is not 3D"
-msgstr ""
+msgstr "矢量地图<%s>非3D(三维地图)"
 
 #: ../lib/rst/interp_float/vinput2d.c:97
 msgid "Loading data from attribute table ..."
@@ -8912,7 +8907,7 @@ msgstr "从属性表中载入数据..."
 #: ../lib/rst/interp_float/vinput2d.c:131
 #, c-format
 msgid "Data type of column <%s> must be numeric"
-msgstr ""
+msgstr "列<%s>的数据类型必须为数值型"
 
 #: ../lib/rst/interp_float/vinput2d.c:142
 msgid "Reading features from vector map ..."
@@ -8963,7 +8958,7 @@ msgstr "用于内插的点少于 %d 个。如果不需要分段，为了让程�
 #: ../lib/rst/interp_float/vinput2d.c:297
 #, c-format
 msgid "Number of points from vector map %d"
-msgstr ""
+msgstr "来自矢量地图%d的点的数量"
 
 #: ../lib/rst/interp_float/vinput2d.c:298
 #, c-format
@@ -8996,12 +8991,12 @@ msgstr ""
 #: ../lib/rst/interp_float/write2d.c:79 ../lib/rst/interp_float/write2d.c:88
 #: ../lib/rst/interp_float/write2d.c:96 ../lib/rst/interp_float/write2d.c:104
 msgid "Cannot write files"
-msgstr ""
+msgstr "无法写入文件"
 
 #: ../lib/rst/interp_float/input2d.c:58
 #, c-format
 msgid "Mask raster map <%s> not found"
-msgstr ""
+msgstr "栅格地图掩膜<%s>未找到"
 
 #: ../lib/rst/interp_float/input2d.c:81
 msgid "Bitmap mask created"

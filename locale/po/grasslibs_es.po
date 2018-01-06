@@ -56,7 +56,7 @@ msgstr "Color de símbolo incorrecto: '%s', utilizando el predeterminado."
 #: ../lib/vector/Vlib/open.c:235
 #, c-format
 msgid "Vector map <%s> not found"
-msgstr "El mapa vectorial <%s> no ha sido encontrado."
+msgstr "El mapa vectorial <%s> no se ha encontrado"
 
 #: ../lib/ogsf/gv3.c:66 ../lib/ogsf/gv3.c:338 ../lib/ogsf/gp3.c:62
 #: ../lib/ogsf/gp3.c:196 ../lib/python/temporal/c_libraries_interface.py:747
@@ -313,7 +313,7 @@ msgstr "Cargando el mapa ráster 3d <%s>..."
 #: ../lib/gpde/n_arrays_io.c:273
 #, c-format
 msgid "3D raster map <%s> not found"
-msgstr "No se ha encontrado el mapa raster 3D <%s>."
+msgstr "El mapa ráster 3D <%s> no se ha encontrado"
 
 #: ../lib/ogsf/gsd_label.c:58
 msgid "Max. number of labels reached!"
@@ -484,9 +484,8 @@ msgid "raster3d"
 msgstr "ráster3d"
 
 #: ../lib/raster3d/test/test_main.c:97
-#, fuzzy
 msgid "unit test"
-msgstr "unidades"
+msgstr ""
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -518,7 +517,7 @@ msgstr "Añadiendo regla: %lf - %lf"
 #: ../lib/raster3d/maskfn.c:95
 #, c-format
 msgid "%s: illegal value spec"
-msgstr ""
+msgstr "%s: especificación de valor no admitida"
 
 #: ../lib/imagery/iscatt_core.c:81
 #, c-format
@@ -837,7 +836,7 @@ msgstr "Cairo: no ha sido posible abrir el archivo máscara de entrada <%s>"
 #: ../lib/cairodriver/read_ppm.c:50
 #, c-format
 msgid "Cairo: invalid input mask file <%s>"
-msgstr "Cairo: archivo de máscara no válido <%s>"
+msgstr "Cairo: archivo de máscara <%s> no válido"
 
 #: ../lib/cairodriver/read_ppm.c:56
 #, c-format
@@ -889,7 +888,7 @@ msgstr ""
 #: ../lib/cairodriver/graph.c:160
 #, c-format
 msgid "Unknown file extension: %s"
-msgstr "Extensión de archivo no conocida: %s"
+msgstr "Extensión de archivo desconocida: %s"
 
 #: ../lib/cairodriver/graph.c:190
 #, c-format
@@ -899,7 +898,7 @@ msgstr "cairo: colectando a archivo '%s'"
 #: ../lib/cairodriver/graph.c:192
 #, c-format
 msgid "cairo: image size %dx%d"
-msgstr "cairo: tamaño de image %dx%d"
+msgstr "cairo: tamaño de imagen %dx%d"
 
 #: ../lib/cairodriver/graph.c:371
 msgid "Unknown Cairo surface type"
@@ -2018,9 +2017,8 @@ msgid "Unable to export raster map <%s> with r3.pack"
 msgstr "No ha sido posible exportar mapa ráster <%s> con r3.pack"
 
 #: ../lib/python/temporal/base.py:380
-#, fuzzy
 msgid "Object not found in the temporal database"
-msgstr "Objeto <%s> no encontrado en la base de datos temporales"
+msgstr ""
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
@@ -2128,9 +2126,9 @@ msgid "Unable to load range of 3D raster map <%s>"
 msgstr "No ha sido posible cargar rango de mapa ráster 3D <%s>"
 
 #: ../lib/python/script/raster3d.py:92
-#, fuzzy, python-format
+#, python-format
 msgid "An error occurred while running r3.mapcalc with expression: %s"
-msgstr "Ocurrió un error al correr r3.mapcalc"
+msgstr ""
 
 #: ../lib/python/script/core.py:67
 msgid "Cannot find the executable {}"
@@ -2221,9 +2219,9 @@ msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in 
 msgstr "No ha sido posible escribir historia para <%(map)s>. Mapa ráster >%(map)s> no encontrado en el Directorio de mapas actual."
 
 #: ../lib/python/script/raster.py:113
-#, fuzzy, python-format
+#, python-format
 msgid "An error occurred while running r.mapcalc with expression: %s"
-msgstr "Ocurrió un error al correr r.mapcalc"
+msgstr ""
 
 #: ../lib/python/script/raster.py:192
 msgid "No data"
@@ -3202,7 +3200,7 @@ msgstr "Grupo"
 #: ../lib/manage/read_list.c:73
 #, c-format
 msgid "Unable to open data base element list '%s'"
-msgstr "No se puede abrir la lista de elementos de la base de datos'%s'."
+msgstr "No se puede abrir la lista de elementos de la base de datos '%s'"
 
 #: ../lib/manage/read_list.c:134
 #, c-format
@@ -3232,7 +3230,7 @@ msgstr "%s renombrado"
 #: ../lib/manage/do_rename.c:119
 #, c-format
 msgid "<%s> nothing renamed"
-msgstr "<%s> nada ha sido renombrado"
+msgstr "<%s> nada renombrado"
 
 #: ../lib/raster/color_write.c:81 ../lib/vector/Vlib/color_write.c:71
 #, c-format
@@ -3712,7 +3710,7 @@ msgstr "Fallo en la lectura inicial del archivo comprimido [%s en %s]."
 #: ../lib/raster/format.c:176
 #, c-format
 msgid "Fail of initial read of compressed null file [%s in %s]"
-msgstr ""
+msgstr "Fallo en la lectura inicial del archivo de nulos comprimido [%s en %s]"
 
 #: ../lib/raster/sample.c:70
 msgid "Unknown interpolation type"
@@ -3746,14 +3744,12 @@ msgid "can't write category information for [%s] in [%s]"
 msgstr "No se puede escribir la información de categoría para [%s] en [%s]."
 
 #: ../lib/raster/color_rules.c:120
-#, fuzzy
 msgid "syntax error in the color rule"
-msgstr "Error de sintaxis en el encabezado de celda"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:122
-#, fuzzy
 msgid "syntax error in the color format"
-msgstr "Error de sintaxis en el encabezado de celda"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:130
 msgid "percentage not in range 0-100"
@@ -4220,9 +4216,8 @@ msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr "Condiciones \"WHERE\", de la instrucción SQL sin la palabra clave \"where\"."
 
 #: ../lib/gis/parser_standard_options.c:157
-#, fuzzy
 msgid "Example: income < 1000 and population >= 10000"
-msgstr "Ejemplo: salario < 1000 y habitantes >=10000."
+msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:165
 msgid "Name of attribute table"
@@ -5540,7 +5535,7 @@ msgstr "html: recolectando al archivo '% s'"
 #: ../lib/htmldriver/graph_set.c:98
 #, c-format
 msgid "html: image size %dx%d"
-msgstr "html: tamaño de imagen %d x %d"
+msgstr "html: tamaño de imagen %dx%d"
 
 #: ../lib/htmldriver/graph_set.c:111 ../lib/htmldriver/graph_set.c:115
 #: ../lib/htmldriver/graph_set.c:119
@@ -5587,7 +5582,7 @@ msgstr "Ícono no soportado %d"
 #: ../lib/display/tran_colr.c:107 ../lib/display/tran_colr.c:109
 #, c-format
 msgid "[%s]: No such color"
-msgstr "[%s]: no existe tal color"
+msgstr "[%s]: No existe tal color"
 
 #: ../lib/display/r_raster.c:98
 #, c-format
@@ -5930,11 +5925,13 @@ msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed.\n"
 "You can force launching GRASS using -f flag (note that you need permission for this operation). Have another look in the processor manager just to be sure..."
 msgstr ""
+"%(user)s está usando GRASS en el Directorio de mapas seleccionado (archivo %(file)s encontrado). El uso simultáneo no está permitido.\n"
+"El inicio de GRASS se puede forzar usando -f (note que necesita permiso para esta operación). Revise el administrador de procesos nuevamente para asegurarse..."
 
 #: ../lib/init/grass.py:1227
 #, python-format
 msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Forcing to launch GRASS..."
-msgstr ""
+msgstr "%(user)s está usando GRASS en el Directorio de mapas seleccionado (archivo %(file)s encontrado). Forzando el inicio de GRASS..."
 
 #: ../lib/init/grass.py:1231
 #, python-format
@@ -5942,6 +5939,8 @@ msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personnel."
 msgstr ""
+"No ha sido posible acceder '%s' de manera correcta.\n"
+"Por favor notifique al personal de sistemas."
 
 #: ../lib/init/grass.py:1252
 msgid "Building user fontcap..."
@@ -8986,20 +8985,20 @@ msgstr "Cambiando temporalmente la región a la resolución deseada..."
 #: ../lib/rst/interp_float/resout2d.c:103
 #, c-format
 msgid "First change your rows number(%d) to %d"
-msgstr "Primero cambie la cantidad (%d) de filas a %d"
+msgstr "Primero cambie la cantidad de filas (%d) a %d"
 
 #: ../lib/rst/interp_float/resout2d.c:110
 #, c-format
 msgid "First change your columns number(%d) to %d"
-msgstr "Primero cambie la cantidad (%d) de columnas a %d"
+msgstr "Primero cambie la cantidad de columnas (%d) a %d"
 
 #: ../lib/rst/interp_float/resout2d.c:264
 msgid "No color table for input raster map -- will not create color table"
-msgstr "No hay tabla de colores para mapa ráster de entrada -- no se creará tabla de colores"
+msgstr "No hay tabla de colores para el mapa ráster de entrada -- no se creará la tabla de colores"
 
 #: ../lib/rst/interp_float/resout2d.c:458
 msgid "Changing the region back to initial..."
-msgstr "Cambiando la región de vuelta a la inicial..."
+msgstr "Cambiando la región de vuelta a la región inicial..."
 
 #: ../lib/rst/interp_float/vinput2d.c:94
 #, c-format
@@ -9014,7 +9013,7 @@ msgstr "Cargando datos de la tabla de atributos..."
 #: ../lib/rst/interp_float/vinput2d.c:131
 #, c-format
 msgid "Data type of column <%s> must be numeric"
-msgstr "El tipo de datos para la columna <%s> tiene que ser numérico."
+msgstr "El tipo de datos para la columna <%s> debe ser numérico"
 
 #: ../lib/rst/interp_float/vinput2d.c:142
 msgid "Reading features from vector map ..."
@@ -9065,7 +9064,7 @@ msgstr "Hay menos de %d puntos para la interpolación. No es necesaria la segmen
 #: ../lib/rst/interp_float/vinput2d.c:297
 #, c-format
 msgid "Number of points from vector map %d"
-msgstr "Cantidad de puntos del mapa vectorial %d."
+msgstr "Cantidad de puntos del mapa vectorial %d"
 
 #: ../lib/rst/interp_float/vinput2d.c:298
 #, c-format
@@ -9107,7 +9106,7 @@ msgstr "No se ha encontrado la máscara del mapa ráster <%s>"
 
 #: ../lib/rst/interp_float/input2d.c:81
 msgid "Bitmap mask created"
-msgstr "Se ha creado la máscara del mapa de bits."
+msgstr "Máscara del mapa de bits creada"
 
 #: ../lib/rst/interp_float/output2d.c:117
 #, c-format
@@ -9440,6 +9439,95 @@ msgstr "El nombre del mapa vectorial <%s> no es válido"
 msgid "Removing empty raster maps"
 msgstr "Nombre del mapa raster de entrada."
 
+msgid "Centroid skipped (output feature type: %s)"
+msgstr "Centroide omitido (tipo de elemento de salida: %s)"
+
+msgid "Boundary skipped (output feature type: %s)"
+msgstr "Límite omitido (tipo de elemento de salida: %s)"
+
+msgid "GRASS GUI not found. Please check your installation."
+msgstr "GRASS GUI no hallada. Por favor corrobore su instalación. "
+
+msgid ""
+"{}\n"
+"Switching to text based interface mode.\n"
+"\n"
+"Hit RETURN to continue.\n"
+msgstr ""
+"{}\n"
+"Cambiando a interfaz modo texto.\n"
+"\n"
+"Presione RETURN para continuar.\n"
+
+msgid "Unable to close GUI. {0}"
+msgstr "Imposible cerrar la GUI. {0}"
+
+msgid "<{0}> requested, but not available. Run GRASS in text mode (-text) or install missing package (usually 'grass-gui')."
+msgstr "<[0]> requerido, pero no disponible. Corra GRASS en modo texto (-text) o instale el paquete faltante (usualmente 'grass-gui')"
+
+msgid "Cannot find the executable {0}"
+msgstr "No se puede encontrar el ejecutable {0}"
+
+msgid "Syntax error in cell header, line %d: %s"
+msgstr "Error de sintaxis en el encabezado de celda, línea %d: %s"
+
+msgid "Invalid projection field: %s"
+msgstr "Campo de proyección no válido: %s"
+
+msgid "Invalid zone field: %s"
+msgstr "Campo zona no válido: %s"
+
+msgid "Invalid north field: %s"
+msgstr "Campo norte no válido: %s"
+
+msgid "Invalid south field: %s"
+msgstr "Campo sur no válido: %s"
+
+msgid "Invalid east field: %s"
+msgstr "Campo este no válido: %s"
+
+msgid "Invalid west field: %s"
+msgstr "Campo oeste no válido: %s"
+
+msgid "Invalid bottom field: %s"
+msgstr "Campo de fondo no válido: %s"
+
+msgid "Invalid e-w resolution field: %s"
+msgstr "Campo de resolución e-o no válido: %s"
+
+msgid "Invalid 3D e-w resolution field: %s"
+msgstr "Campo de resolución 3D e-o no válido: %s"
+
+msgid "Invalid n-s resolution field: %s"
+msgstr "Campo de resolución n-s no válido: %s"
+
+msgid "Invalid 3D n-s resolution field: %s"
+msgstr "Campo de resolución 3D n-s no válido: %s"
+
+msgid "Invalid t-b resolution field: %s"
+msgstr "Campo de resolución cima-fondo no válido: %s"
+
+msgid "Invalid rows field: %s"
+msgstr "Campo de filas no válido: %s"
+
+msgid "Invalid 3D rows field: %s"
+msgstr "Campo de filas 3D no válido: %s"
+
+msgid "Invalid cols field: %s"
+msgstr "Campo de columnas no válido: %s"
+
+msgid "Invalid 3D cols field: %s"
+msgstr "Campo de columnas 3D no válido: %s"
+
+msgid "Invalid depths field: %s"
+msgstr "Campo de profundidades no válido: %s"
+
+msgid "Invalid format field: %s"
+msgstr "Campo de formato no válido: %s"
+
+msgid "Invalid compressed field: %s"
+msgstr "Campo de compresión no válido: %s"
+
 #~ msgid "test"
 #~ msgstr "prueba"
 
@@ -9470,97 +9558,8 @@ msgstr "Nombre del mapa raster de entrada."
 #~ msgid "Object <%s> not found in the temporal database"
 #~ msgstr "Objeto <%s> no encontrado en la base de datos temporales"
 
-#~ msgid "Centroid skipped (output feature type: %s)"
-#~ msgstr "Centroide omitido (tipo de elemento de salida: %s)"
-
-#~ msgid "Boundary skipped (output feature type: %s)"
-#~ msgstr "Límite omitido (tipo de elemento de salida: %s)"
-
-#~ msgid "GRASS GUI not found. Please check your installation."
-#~ msgstr "GRASS GUI no hallada. Por favor corrobore su instalación. "
-
-#~ msgid ""
-#~ "{}\n"
-#~ "Switching to text based interface mode.\n"
-#~ "\n"
-#~ "Hit RETURN to continue.\n"
-#~ msgstr ""
-#~ "{}\n"
-#~ "Cambiando a interfaz modo texto.\n"
-#~ "\n"
-#~ "Presione RETURN para continuar.\n"
-
-#~ msgid "Unable to close GUI. {0}"
-#~ msgstr "Imposible cerrar la GUI. {0}"
-
-#~ msgid "<{0}> requested, but not available. Run GRASS in text mode (-text) or install missing package (usually 'grass-gui')."
-#~ msgstr "<[0]> requerido, pero no disponible. Corra GRASS en modo texto (-text) o instale el paquete faltante (usualmente 'grass-gui')"
-
-#~ msgid "Cannot find the executable {0}"
-#~ msgstr "No se puede encontrar el ejecutable {0}"
-
 #~ msgid "Data element '%s/%s' was found in more mapsets (also found in <%s>)"
 #~ msgstr "Elemento de datos '%s/%s' encontrado en otros directorios de mapas (también encontrado en <%s>)"
 
 #~ msgid "Using <%s@%s>..."
 #~ msgstr "Usando <%s@%s>..."
-
-#~ msgid "Syntax error in cell header, line %d: %s"
-#~ msgstr "Error de sintaxis en el encabezado de celda, línea %d: %s"
-
-#~ msgid "Invalid projection field: %s"
-#~ msgstr "Campo de proyección no válido: %s"
-
-#~ msgid "Invalid zone field: %s"
-#~ msgstr "Campo zona no válido: %s"
-
-#~ msgid "Invalid north field: %s"
-#~ msgstr "Campo norte no válido: %s"
-
-#~ msgid "Invalid south field: %s"
-#~ msgstr "Campo sur no válido: %s"
-
-#~ msgid "Invalid east field: %s"
-#~ msgstr "Campo este no válido: %s"
-
-#~ msgid "Invalid west field: %s"
-#~ msgstr "Campo oeste no válido: %s"
-
-#~ msgid "Invalid bottom field: %s"
-#~ msgstr "Campo de fondo no válido: %s"
-
-#~ msgid "Invalid e-w resolution field: %s"
-#~ msgstr "Campo de resolución e-o no válido: %s"
-
-#~ msgid "Invalid 3D e-w resolution field: %s"
-#~ msgstr "Campo de resolución 3D e-o no válido: %s"
-
-#~ msgid "Invalid n-s resolution field: %s"
-#~ msgstr "Campo de resolución n-s no válido: %s"
-
-#~ msgid "Invalid 3D n-s resolution field: %s"
-#~ msgstr "Campo de resolución 3D n-s no válido: %s"
-
-#~ msgid "Invalid t-b resolution field: %s"
-#~ msgstr "Campo de resolución cima-fondo no válido: %s"
-
-#~ msgid "Invalid rows field: %s"
-#~ msgstr "Campo de filas no válido: %s"
-
-#~ msgid "Invalid 3D rows field: %s"
-#~ msgstr "Campo de filas 3D no válido: %s"
-
-#~ msgid "Invalid cols field: %s"
-#~ msgstr "Campo de columnas no válido: %s"
-
-#~ msgid "Invalid 3D cols field: %s"
-#~ msgstr "Campo de columnas 3D no válido: %s"
-
-#~ msgid "Invalid depths field: %s"
-#~ msgstr "Campo de profundidades no válido: %s"
-
-#~ msgid "Invalid format field: %s"
-#~ msgstr "Campo de formato no válido: %s"
-
-#~ msgid "Invalid compressed field: %s"
-#~ msgstr "Campo de compresión no válido: %s"
