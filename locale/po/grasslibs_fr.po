@@ -2011,9 +2011,8 @@ msgid "Unable to export raster map <%s> with r3.pack"
 msgstr "Impossible d'exporter la carte raster <%s> avec r3.pack"
 
 #: ../lib/python/temporal/base.py:380
-#, fuzzy
 msgid "Object not found in the temporal database"
-msgstr "Impossible de copier la couche vectorielle <%s> vers <%s>"
+msgstr "Objet non trouvé dans la base de données temporelle"
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
@@ -2121,9 +2120,9 @@ msgid "Unable to load range of 3D raster map <%s>"
 msgstr "Impossible de lire le fichier de plage du raster 3D <%s>"
 
 #: ../lib/python/script/raster3d.py:92
-#, fuzzy, python-format
+#, python-format
 msgid "An error occurred while running r3.mapcalc with expression: %s"
-msgstr "Une erreur s'est produite pendant l'exécution de r3.mapcalc"
+msgstr "Une erreur s'est produite lors du lancement de r3.mapcalc avec l'expression : %s"
 
 #: ../lib/python/script/core.py:67
 msgid "Cannot find the executable {}"
@@ -2214,9 +2213,9 @@ msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in 
 msgstr "Impossible d'écrire l'historique pour <%(map)s>. Carte raster <%(map)s> non trouvée dans le jeu de cartes courant."
 
 #: ../lib/python/script/raster.py:113
-#, fuzzy, python-format
+#, python-format
 msgid "An error occurred while running r.mapcalc with expression: %s"
-msgstr "Une erreur s'est produite pendant l'exécution de r.mapcalc"
+msgstr "Une erreur s'est produite lors du lancement de r.mapcalc avec l'expression : %s"
 
 #: ../lib/python/script/raster.py:192
 msgid "No data"
@@ -2254,7 +2253,7 @@ msgstr "La récupération des données a échouée"
 #: ../lib/python/script/array.py:356 ../lib/python/script/array.py:398
 #, python-format
 msgid "Invalid kind <%s>"
-msgstr ""
+msgstr "Type <%s> invalide"
 
 #: ../lib/python/script/array.py:160 ../lib/python/script/array.py:210
 #: ../lib/python/script/array.py:308 ../lib/python/script/array.py:359
@@ -3778,14 +3777,12 @@ msgid "can't write category information for [%s] in [%s]"
 msgstr "impossible d'écrire les informations de la catégorie pour [%s] dans [%s]"
 
 #: ../lib/raster/color_rules.c:120
-#, fuzzy
 msgid "syntax error in the color rule"
-msgstr "erreur de syntaxe"
+msgstr "erreur de syntaxe dans la règle de couleur"
 
 #: ../lib/raster/color_rules.c:122
-#, fuzzy
 msgid "syntax error in the color format"
-msgstr "erreur de syntaxe"
+msgstr "erreur de syntaxe dansnle format de la couleur"
 
 #: ../lib/raster/color_rules.c:130
 msgid "percentage not in range 0-100"
@@ -4241,21 +4238,19 @@ msgstr "G_open(write) : impossible d'ouvrir '%s' : %s"
 
 #: ../lib/gis/parser_standard_options.c:147
 msgid "SQL SELECT statement"
-msgstr ""
+msgstr "Clause SQL SELECT"
 
 #: ../lib/gis/parser_standard_options.c:149
-#, fuzzy
 msgid "Example: select * from towns where population > 10000"
-msgstr "Par exemple: 'select * from rybniky where kapri = 'hodne'"
+msgstr "Exemple : select * from villes where population > 10000"
 
 #: ../lib/gis/parser_standard_options.c:156
 msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr "WHERE conditions d'une clause SQL sans le mot-clef 'where'"
 
 #: ../lib/gis/parser_standard_options.c:157
-#, fuzzy
 msgid "Example: income < 1000 and population >= 10000"
-msgstr "Exemple: revenu < 1000  et hab >= 10000"
+msgstr "Exemple : revenus < 1000 and population >= 10000"
 
 #: ../lib/gis/parser_standard_options.c:165
 msgid "Name of attribute table"
@@ -5043,7 +5038,7 @@ msgstr "Impossible de créer le fichier %s <%s>"
 
 #: ../lib/gis/worker.c:84
 msgid "Task already has a worker"
-msgstr ""
+msgstr "La tâche a déjà un processus"
 
 #: ../lib/gis/adj_cellhd.c:42
 #, c-format
@@ -5879,12 +5874,12 @@ msgstr "Le jeu de cartes <{mapset}> n'existe pas dans le secteur GRASS <{loc}>. 
 #: ../lib/init/grass.py:858
 #, python-format
 msgid "<%s> is not a GRASS Mapset because it is not a directory"
-msgstr ""
+msgstr "<%s> n'est pas un jeu de cartes GRASS car ce n'est pas un dossier"
 
 #: ../lib/init/grass.py:861
 #, python-brace-format
 msgid "Mapset <{mapset}> is invalid for an unknown reason"
-msgstr ""
+msgstr "Le jeu de cartes <{mapset}> est invalide pour une raison inconnue"
 
 #: ../lib/init/grass.py:923
 #, python-format
@@ -8976,7 +8971,7 @@ msgstr "OGR ne peut pas obtenir les paramètres WKT (code d'erreur OGR %d)"
 
 #: ../lib/proj/convert.c:394
 msgid "No projection name! Projection parameters likely to be meaningless."
-msgstr "Aucun nom de projection ! Projection de paramètres susceptibles d'être vide de sens."
+msgstr "Aucun nom de projection ! Paramètres de projection susceptibles d'être vides de sens."
 
 #: ../lib/proj/convert.c:457
 #, c-format
@@ -9506,19 +9501,19 @@ msgstr "Impossible de supprimer le répertoire '%s'"
 #~ msgstr "Centroïde ignoré (type d'entité en sortie : %s)"
 
 #~ msgid "Boundary skipped (output feature type: %s)"
-#~ msgstr "Contour ignoré (type d'entité en sortie : %s)"
+#~ msgstr "Contours ignorés (type d'entité en sortie : %s)"
 
 #~ msgid ""
 #~ "The python command does not work as expected!\n"
 #~ "Please check your GRASS_PYTHON environment variable.\n"
 #~ "Use the -help option for details.\n"
 #~ msgstr ""
-#~ "La commande python ne fonctionne pas commenattendu !\n"
+#~ "La commande python ne fonctionne pas comme prévu !\n"
 #~ "Merci de vérifier votre variable d'environnement GRASS_PYTHON.\n"
 #~ "Utilisez l'option -help pour plus de détails.\n"
 
 #~ msgid "GRASS GUI not found. Please check your installation."
-#~ msgstr "GRASS GUI non trouvé. Merci de vérifier votre installation."
+#~ msgstr "GRASS GUI non trouvée. Merci de vérifier votre installation."
 
 #~ msgid ""
 #~ "{}\n"
@@ -9529,13 +9524,13 @@ msgstr "Impossible de supprimer le répertoire '%s'"
 #~ "{}\n"
 #~ "Bascule vers l'interface en mode texte.\n"
 #~ "\n"
-#~ "Appuyez sur ENTRER pour continuer.\n"
+#~ "Appuyez sur ENTRÉE pour continuer.\n"
 
 #~ msgid "Unable to close GUI. {0}"
-#~ msgstr "Impossible de fermer la GUI. {0}"
+#~ msgstr "Impossible de fermer l'interface graphique. {0}"
 
 #~ msgid "<{0}> requested, but not available. Run GRASS in text mode (-text) or install missing package (usually 'grass-gui')."
-#~ msgstr "<{0}> requis, mais pas disponible. Lancez GRASS en mode text {-text} ou installez le paquet manquant (en général 'grass-gui')."
+#~ msgstr "<{0}> demandé, mais non disponible. Lancez GRASS en mode texte (-text) ou installez le paquet manquant (habituellement 'grass-gui')."
 
 #~ msgid "An error occurred while running r3.mapcalc"
 #~ msgstr "Un erreur s'est produite à l'exécution de r3.mapcalc"
@@ -9544,10 +9539,10 @@ msgstr "Impossible de supprimer le répertoire '%s'"
 #~ msgstr "Exécutable {0} introuvable"
 
 #~ msgid "Debug level {0}"
-#~ msgstr "Niveau de debug {0}"
+#~ msgstr "Niveau de débug {0}"
 
 #~ msgid "WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {0}\n"
-#~ msgstr "ATTENTION : niveau de debug non supporté ignoré (doit êre >=0 et <= 5). {0}\n"
+#~ msgstr "ALERTE : niveau de debug non supporté (doit être >=0 et <=5). {0}\n"
 
 #~ msgid "An error occurred while running r.mapcalc"
 #~ msgstr "Une erreur s'est produite à l'exécution de r.mapcalc"
@@ -9580,25 +9575,202 @@ msgstr "Impossible de supprimer le répertoire '%s'"
 #~ msgstr "Champ de zone invalide : %s"
 
 #~ msgid "Invalid north field: %s"
-#~ msgstr "Champ nord invalide : %s"
+#~ msgstr "Champ de nord invalide : %s"
 
 #~ msgid "Invalid south field: %s"
-#~ msgstr "Champ sud invalide : %s"
+#~ msgstr "Champ de sud invalide : %s"
 
 #~ msgid "Invalid east field: %s"
-#~ msgstr "Champ est invalide : %s"
+#~ msgstr "Champ d'est invalide : %s"
 
 #~ msgid "Invalid west field: %s"
-#~ msgstr "Champ ouest invalide : %s"
+#~ msgstr "Champ d'ouest invalide : %s"
 
 #~ msgid "Invalid top field: %s"
-#~ msgstr "Champ haut invalide : %s"
+#~ msgstr "Champ de haut invalide : %s"
 
 #~ msgid "Invalid bottom field: %s"
-#~ msgstr "Champ bas invalide : %s"
+#~ msgstr "Champ de bas invalide : %s"
 
 #~ msgid "Invalid e-w resolution field: %s"
 #~ msgstr "Champ de résolution e-o invalide : %s"
 
 #~ msgid "G_spawn: unable to execute command"
 #~ msgstr "G_spawn : impossible d'exécuter la commande"
+
+#~ msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
+#~ msgstr "La mise à jour de la référence spatiale avec la définition proj4 embarquée a échoué. définition proj4 : <%s>"
+
+#~ msgid "Updating spatial reference with embedded proj4 definition"
+#~ msgstr "Mise à jour de la référence spatiale avec la définition proj4 embarquée"
+
+#~ msgid "Starting parallel work"
+#~ msgstr "Lancement du travail en parallèle"
+
+#~ msgid "Output granularity seems not to be valid. Please use one of the following values : {gr}"
+#~ msgstr "La granulosité de sortie semble ne pas être valide. Merci d'utiliser une des valeurs suivantes : {gr}"
+
+#~ msgid "Invalid absolute granularity"
+#~ msgstr "Granulosité absolue invalide"
+
+#~ msgid "Probably you need to invert 'from_gran' and 'to_gran'"
+#~ msgstr "Vous devez sans doute inverser 'from_gran' et 'to_gran'"
+
+#~ msgid "Removing {}/{} ({}%) maps because empty..."
+#~ msgstr "Suppression de la carte vide {}/{} ({}%) ..."
+
+#~ msgid "options: arch,build,compiler,path,revision,version"
+#~ msgstr "options : arch,build,compiler,path,revision,version"
+
+#~ msgid "Unknown error reading color rule"
+#~ msgstr "Erreur inconnue à la lecture de la règle de couleur"
+
+#~ msgid "Unable to parse '%s'"
+#~ msgstr "Impossible d'analyser '%s'"
+
+#~ msgid "Topology not available for vector map <%s>. Registering primitives..."
+#~ msgstr "Topologie non disponible pour la carte vecteur <%s>. Référencement des primitives ..."
+
+#~ msgid "Invalid 3D e-w resolution field: %s"
+#~ msgstr "Champ de résolution e-o 3D invalide : %s"
+
+#~ msgid "Invalid n-s resolution field: %s"
+#~ msgstr "Champ de résolution n-s invalide : %s"
+
+#~ msgid "Invalid 3D n-s resolution field: %s"
+#~ msgstr "Champ de résolution n-s 3D invalide : %s"
+
+#~ msgid "Invalid t-b resolution field: %s"
+#~ msgstr "Champ de résolution h-b invalide : %s"
+
+#~ msgid "Invalid rows field: %s"
+#~ msgstr "Champ de lignes invalide : %s"
+
+#~ msgid "Invalid 3D rows field: %s"
+#~ msgstr "Champ de lignes 3D invalide : %s"
+
+#~ msgid "Invalid cols field: %s"
+#~ msgstr "Champ de colonnes invalide : %s"
+
+#~ msgid "Invalid 3D cols field: %s"
+#~ msgstr "Champ de colonnes 3D invalide : %s"
+
+#~ msgid "Invalid depths field: %s"
+#~ msgstr "Champ de profondeur invalide : %s"
+
+#~ msgid "Invalid format field: %s"
+#~ msgstr "Champ de format invalide : %s"
+
+#~ msgid "Invalid compressed field: %s"
+#~ msgstr "Champ compressé invalide : %s"
+
+#~ msgid "Unable to create a new process: %s"
+#~ msgstr "Impossible de créer un nouveau processus : %s"
+
+#~ msgid "NS resolution has been changed"
+#~ msgstr "La résolution NS a été modifiée"
+
+#~ msgid "EW resolution has been changed"
+#~ msgstr "La résolution EO a été modifiée"
+
+#~ msgid "NS and EW resolutions are different"
+#~ msgstr "Les résolutions NS et EO sont différentes"
+
+#~ msgid "East (%.15g) is not larger than West (%.15g)"
+#~ msgstr "Est (%.15g) n'est pas plus grand que Ouest (%.15g)"
+
+#~ msgid "Illegal latitude for North: %g"
+#~ msgstr "Lattitude Nord illégale : %g"
+
+#~ msgid "Illegal latitude for South: %g"
+#~ msgstr "Lattitude Sud illégale : %g"
+
+#~ msgid "Illegal longitude for West: %g"
+#~ msgstr "Longitude Ouest illégale : %g"
+
+#~ msgid "Illegal longitude for East: %g"
+#~ msgstr "Longitude Est illégale : %g"
+
+#~ msgid "NS extent does not match NS resolution: %g cells difference"
+#~ msgstr "L'emprise NS ne correspond pas à la résolution NS : %g cellules de différence"
+
+#~ msgid "%g cells missing to reach 90 degree north"
+#~ msgstr "%g celules sont manquantes pour atteindre 90 degrés nord"
+
+#~ msgid "Subtle input data rounding error of north boundary (%g)"
+#~ msgstr "Erreur subtile d'arrondi des données d'entrée pour la limite nord (%g)"
+
+#~ msgid "90 degree north is exceeded by %g cells"
+#~ msgstr "90 degrés nord est dépassé de %g cellules"
+
+#~ msgid "%g cells missing to reach 90 degree south"
+#~ msgstr "%g cellules manquantes pour atteindre 90 degrés sud"
+
+#~ msgid "Subtle input data rounding error of south boundary (%g)"
+#~ msgstr "Erreur subtile d'arrondi des données d'entrée pour la limite sud (%g)"
+
+#~ msgid "90 degree south is exceeded by %g cells"
+#~ msgstr "90 degrés sud est dépassé de %g cellules"
+
+#~ msgid "EW extent does not match EW resolution: %g cells difference"
+#~ msgstr "L'emprise EO nd correspond pas à la résolution EO : %g celules de différence"
+
+#~ msgid "360 degree EW extent is exceeded by %g cells"
+#~ msgstr "L'emprise EO de 360 degrés est dépassée de %g cellules"
+
+#~ msgid "%g cells missing to cover 360 degree EW extent"
+#~ msgstr "%g cellules sont manquantes pour couvrir l'emprise EO de 360 degrés"
+
+#~ msgid "Invalid NS resolution"
+#~ msgstr "Résolution NS invalide"
+
+#~ msgid "Invalid EW resolution"
+#~ msgstr "Résolution EO invalide"
+
+#~ msgid "Invalid North"
+#~ msgstr "Nord Invalide"
+
+#~ msgid "Invalid South"
+#~ msgstr "Sud invalide"
+
+#~ msgid "Invalid West"
+#~ msgstr "Ouest invalide"
+
+#~ msgid "Invalid East"
+#~ msgstr "Est invalide"
+
+#~ msgid "NS resolution rounded from %s to %s"
+#~ msgstr "Résolution NS arrondie de %s à %s"
+
+#~ msgid "North rounded from %s to %s"
+#~ msgstr "Nord arrondi de %s à %s"
+
+#~ msgid "South adjusted from %s to %s"
+#~ msgstr "Sud ajusté de %s à %s"
+
+#~ msgid "South rounded from %s to %s"
+#~ msgstr "Sud arrondi de %s à %s"
+
+#~ msgid "North adjusted from %s to %s"
+#~ msgstr "Nord ajusté de %s à %s"
+
+#~ msgid "EW resolution rounded from %s to %s"
+#~ msgstr "Résolution EO arrondie de %s à %s"
+
+#~ msgid "West rounded from %s to %s"
+#~ msgstr "Ouest arrondi de %s à %s"
+
+#~ msgid "East adjusted from %s to %s"
+#~ msgstr "Est ajusté de %s à %s"
+
+#~ msgid "East rounded from %s to %s"
+#~ msgstr "Est arrondi de %s à %s"
+
+#~ msgid "West adjusted from %s to %s"
+#~ msgstr "Ouest ajusté de %s à %s"
+
+#~ msgid "Option <%s> requires at least one of %s"
+#~ msgstr "L'option <%s> nécessite au moins un de %s"
+
+#~ msgid "Option <%s> requires <%s>"
+#~ msgstr "L'option <%s> nécessite <%s>"

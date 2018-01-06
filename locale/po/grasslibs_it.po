@@ -481,9 +481,8 @@ msgid "raster3d"
 msgstr "raster3d"
 
 #: ../lib/raster3d/test/test_main.c:97
-#, fuzzy
 msgid "unit test"
-msgstr "unità"
+msgstr ""
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -854,7 +853,7 @@ msgstr ""
 #: ../lib/cairodriver/read_xid.c:20
 #, c-format
 msgid "Unable to parse input file <%s>"
-msgstr ""
+msgstr "Impossibile elaborare il file di input <%s>"
 
 #: ../lib/cairodriver/raster.c:109
 msgid "Failed to create cairo surface"
@@ -877,7 +876,7 @@ msgstr "Cairo: Intestazione BMP non valida per <%s>"
 
 #: ../lib/cairodriver/graph.c:67
 msgid "Unable to open display"
-msgstr ""
+msgstr "Impossibile aprire il display"
 
 #: ../lib/cairodriver/graph.c:85
 msgid "Unable to obtain visual"
@@ -1995,9 +1994,8 @@ msgid "Unable to export raster map <%s> with r3.pack"
 msgstr ""
 
 #: ../lib/python/temporal/base.py:380
-#, fuzzy
 msgid "Object not found in the temporal database"
-msgstr "Impossibile trovare il vettoriale <%s> in <%s>"
+msgstr ""
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
@@ -2105,9 +2103,9 @@ msgid "Unable to load range of 3D raster map <%s>"
 msgstr ""
 
 #: ../lib/python/script/raster3d.py:92
-#, fuzzy, python-format
+#, python-format
 msgid "An error occurred while running r3.mapcalc with expression: %s"
-msgstr "Si è verificato un errore durante l'esecuzione di r3.mapcalc"
+msgstr ""
 
 #: ../lib/python/script/core.py:67
 msgid "Cannot find the executable {}"
@@ -2198,9 +2196,9 @@ msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in 
 msgstr ""
 
 #: ../lib/python/script/raster.py:113
-#, fuzzy, python-format
+#, python-format
 msgid "An error occurred while running r.mapcalc with expression: %s"
-msgstr "Si è verificato un errore durante l'esecuzione di r.mapcalc"
+msgstr ""
 
 #: ../lib/python/script/raster.py:192
 msgid "No data"
@@ -2827,7 +2825,7 @@ msgstr "Errore del programmatore"
 #: ../lib/db/dbmi_base/login.c:115
 #, c-format
 msgid "Unable to read file '%s'"
-msgstr "Non riesco a leggere il file '%s'"
+msgstr "Impossibile leggere il file '%s'"
 
 #: ../lib/db/dbmi_base/login.c:126
 #, c-format
@@ -3059,7 +3057,7 @@ msgstr "Connessione al server non valida"
 
 #: ../lib/nviz/render.c:112
 msgid "Unable to get visual info"
-msgstr "Non riesco ad ottenere le informazioni visuali"
+msgstr "Impossibile ottenere le informazioni visuali"
 
 #: ../lib/nviz/render.c:119
 msgid "Unable to create rendering context"
@@ -3103,7 +3101,7 @@ msgstr ""
 #: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
 #, c-format
 msgid "Unable to copy <%s> to current mapset as <%s>"
-msgstr ""
+msgstr "Impossibile copiare <%s> nel mapset corrente come  <%s>"
 
 #: ../lib/manage/do_copy.c:61 ../lib/manage/do_remove.c:89
 #: ../lib/manage/do_remove.c:109 ../lib/manage/do_rename.c:87
@@ -3124,12 +3122,12 @@ msgstr ""
 
 #: ../lib/manage/do_remove.c:65
 msgid "Unable to delete vector map"
-msgstr ""
+msgstr "Impossibile eliminare il vettoriale"
 
 #: ../lib/manage/do_remove.c:85
 #, c-format
 msgid "Unable to remove %s element"
-msgstr ""
+msgstr "Impossibile rimuovere l'elemento %s"
 
 #: ../lib/manage/do_remove.c:92 ../lib/manage/do_remove.c:112
 #, c-format
@@ -3139,7 +3137,7 @@ msgstr "%s rimosso"
 #: ../lib/manage/do_remove.c:105
 #, c-format
 msgid "Unable to remove %s"
-msgstr ""
+msgstr "Impossibile rimuovere  %s"
 
 #: ../lib/manage/do_remove.c:121
 #, c-format
@@ -3175,7 +3173,7 @@ msgstr "Gruppo"
 #: ../lib/manage/read_list.c:73
 #, c-format
 msgid "Unable to open data base element list '%s'"
-msgstr ""
+msgstr "Impossibile aprire la lista degli elementi del database '%s'"
 
 #: ../lib/manage/read_list.c:134
 #, c-format
@@ -3185,17 +3183,17 @@ msgstr "Errore di formato: file ('%s') linea (%d) - %s"
 #: ../lib/manage/do_rename.c:42
 #, c-format
 msgid "Rename %s <%s> to <%s>"
-msgstr ""
+msgstr "Rinomina %s <%s> a <%s>"
 
 #: ../lib/manage/do_rename.c:62
 #, c-format
 msgid "Unable to rename vector map <%s> to <%s>"
-msgstr ""
+msgstr "Impossibile rinominare il vettoriale <%s> in <%s>"
 
 #: ../lib/manage/do_rename.c:83 ../lib/manage/do_rename.c:103
 #, c-format
 msgid "Unable to rename %s"
-msgstr ""
+msgstr "Impossibile rinominare  %s"
 
 #: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
 #, c-format
@@ -3215,7 +3213,7 @@ msgstr "Il nome qualificato <%s> non corrisponde al mapset <%s>"
 #: ../lib/raster/color_write.c:96 ../lib/vector/Vlib/color_write.c:91
 #, c-format
 msgid "Unable to create <%s> file for map <%s>"
-msgstr "Non riesco a cambiare il file <%s> per la mappa <%s>"
+msgstr "Impossibile creare il file <%s> per la mappa <%s>"
 
 #: ../lib/raster/mask_info.c:43
 #, c-format
@@ -3279,28 +3277,28 @@ msgstr ""
 #: ../lib/raster/range.c:102
 #, c-format
 msgid "Unable to read fp range file for <%s>"
-msgstr "Non riesco a leggere il file dell'intervallo fp per <%s>"
+msgstr "Impossibile leggere il file dell'intervallo fp per <%s>"
 
 #: ../lib/raster/range.c:169
 #, c-format
 msgid "Unable to read quant rules for raster map <%s>"
-msgstr "Non riesco a leggere le regole quant per la mappa raster <%s>"
+msgstr "Impossibile leggere le regole quant per la mappa raster <%s>"
 
 #: ../lib/raster/range.c:206 ../lib/raster/range.c:226
 #, c-format
 msgid "Unable to read range file for <%s>"
-msgstr "Non riesco a leggere il file dell'intervallo per '%s'"
+msgstr "Impossibile leggere il file dell'intervallo per '%s'"
 
 #: ../lib/raster/range.c:264 ../lib/raster/range.c:270
 #: ../lib/raster/range.c:300 ../lib/raster/range.c:314
 #, c-format
 msgid "Unable to write range file for <%s>"
-msgstr "Non riesco a scrivere il file di intervallo per <%s>"
+msgstr "Impossibile scrivere il file di intervallo per <%s>"
 
 #: ../lib/raster/raster_metadata.c:109
 #, c-format
 msgid "Unable to read <%s> for raster map <%s@%s>"
-msgstr "Non riesco a leggere <%s> per la mappa raster <%s@%s>"
+msgstr "Impossibile leggere <%s> per la mappa raster <%s@%s>"
 
 #: ../lib/raster/raster_metadata.c:119 ../lib/raster/raster_metadata.c:148
 #, c-format
@@ -3310,7 +3308,7 @@ msgstr "Errore nella chiusura del file dei metadati <%s> per la mappa raster <%s
 #: ../lib/raster/raster_metadata.c:142
 #, c-format
 msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
-msgstr "Non riesco a creare il file dei metadati <%s> per la mappa raster <%s@%s>"
+msgstr "Impossibile creare il file dei metadati <%s> per la mappa raster <%s@%s>"
 
 #: ../lib/raster/put_row.c:121
 #, c-format
@@ -3368,7 +3366,7 @@ msgstr "put_raster_row: descrittore di file non aperto - richiesta ignorata"
 #: ../lib/raster/get_cellhd.c:66
 #, c-format
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
-msgstr "Non riesco a leggere il file dell'intestazione per la mappa raster <%s@%s>. E' una riclassificazione della mappa raster <%s@%s> %s"
+msgstr "Impossibile leggere il file dell'intestazione per la mappa raster <%s@%s>. È una riclassificazione della mappa raster <%s@%s> %s"
 
 #: ../lib/raster/get_cellhd.c:70
 msgid "which is missing."
@@ -3381,7 +3379,7 @@ msgstr "il cui header file non può essere aperto."
 #: ../lib/raster/get_cellhd.c:76
 #, c-format
 msgid "Unable to open header file for raster map <%s@%s>"
-msgstr "Non riesco ad aprire il file di intestazione per il raster <%s@%s>"
+msgstr "Impossibile aprire il file di intestazione per il raster <%s@%s>"
 
 #: ../lib/raster/quant_io.c:43
 #, c-format
@@ -3481,7 +3479,7 @@ msgstr "La mappa raster <%s@%s> è un collegamento GDAL ma GRASS è stato compil
 #: ../lib/raster/open.c:285
 #, c-format
 msgid "Unable to open %s file for raster map <%s@%s>"
-msgstr "Non riesco ad aprire il file %s per la mappa raster <%s@%s>"
+msgstr "Impossibile aprire il file %s per la mappa raster <%s@%s>"
 
 #: ../lib/raster/open.c:322
 #, c-format
@@ -3490,7 +3488,7 @@ msgstr "Errore nella lettura del formato per <%s@%s>"
 
 #: ../lib/raster/open.c:527
 msgid "Unable to create GDAL link"
-msgstr "Non riesco a creare il collegamento a GDAL"
+msgstr "Impossibile creare il collegamento a GDAL"
 
 #: ../lib/raster/open.c:599 ../lib/raster/gdal.c:476
 #, c-format
@@ -3558,7 +3556,7 @@ msgstr "Rast_make_random_colors: min (%d) > max (%d)"
 #: ../lib/raster/quant_rw.c:88
 #, c-format
 msgid "Unable to read fp range for raster map <%s>"
-msgstr "Non riesco a leggere l'intervallo fp per la mappa raster <%s>"
+msgstr "Impossibile leggere l'intervallo fp per la mappa raster <%s>"
 
 #: ../lib/raster/quant_rw.c:92
 #, c-format
@@ -3568,12 +3566,12 @@ msgstr " La mappa raster <%s> è vuota"
 #: ../lib/raster/quant_rw.c:157
 #, c-format
 msgid "Unable to write quant rules: raster map <%s> is integer"
-msgstr "Non riesco a scrivere le regole quant: la mappa <%s> è di tipo integer"
+msgstr "Impossibile scrivere le regole quant: la mappa <%s> è di tipo integer"
 
 #: ../lib/raster/quant_rw.c:166
 #, c-format
 msgid "Unable to write quant rules for raster map <%s>"
-msgstr "Non riesco a scrivere le regole quant per la mappa <%s>"
+msgstr "Impossibile scrivere le regole quant per la mappa <%s>"
 
 #: ../lib/raster/close.c:77 ../lib/raster/close.c:110
 #, c-format
@@ -3583,12 +3581,12 @@ msgstr "Descrittore non valido: %d"
 #: ../lib/raster/close.c:391 ../lib/raster/close.c:519
 #, c-format
 msgid "Unable to rename null file '%s' to '%s': %s"
-msgstr "Non riesco a rinominare il file null '%s' in '%s': %s"
+msgstr "Impossibile rinominare il file null '%s' in '%s': %s"
 
 #: ../lib/raster/close.c:461
 #, c-format
 msgid "Unable to rename cell file '%s' to '%s': %s"
-msgstr "Non riesco a rinominare il file cella '%s' in '%s': %s"
+msgstr "Impossibile rinominare il file cella '%s' in '%s': %s"
 
 #: ../lib/raster/close.c:541
 msgid "unable to write f_format file for CELL maps"
@@ -3623,17 +3621,17 @@ msgstr "Impossibile caricare le librerie GDAL"
 
 #: ../lib/raster/gdal.c:372
 msgid "Unable to open GDAL file"
-msgstr "Non riesco ad aprire il file GDAL"
+msgstr "Impossibile aprire il file GDAL"
 
 #: ../lib/raster/gdal.c:482
 #, c-format
 msgid "Unable to get <%s> driver"
-msgstr "Non riesco ad ottenere il driver <%s>"
+msgstr "Impossibile ottenere il driver <%s>"
 
 #: ../lib/raster/gdal.c:491
 #, c-format
 msgid "Unable to create <%s> dataset using <%s> driver"
-msgstr "Non riesco a creare il dataset <%s> utilizzando il driver <%s>"
+msgstr "Impossibile creare il dataset <%s> utilizzando il driver <%s>"
 
 #: ../lib/raster/gdal.c:499
 #, c-format
@@ -3647,7 +3645,7 @@ msgstr ""
 #: ../lib/raster/gdal.c:512
 #, c-format
 msgid "Unable to create <%s> dataset using memory driver"
-msgstr "Non riesco a creare il dataset <%s> utilizzando il driver di memoria"
+msgstr "Impossibile creare il dataset <%s> utilizzando il driver di memoria"
 
 #: ../lib/raster/gdal.c:516
 #, c-format
@@ -3660,12 +3658,12 @@ msgstr ""
 
 #: ../lib/raster/gdal.c:536
 msgid "Unable to set projection"
-msgstr "Non riesco a definire la proiezione"
+msgstr "Impossibile definire la proiezione"
 
 #: ../lib/raster/gdal.c:540
 #, c-format
 msgid "Unable to create cell_misc/%s/gdal file"
-msgstr "Non riesco a creare il file cell_misc/%s/gdal"
+msgstr "Impossibile creare il file cell_misc/%s/gdal"
 
 #: ../lib/raster/gdal.c:556
 #, c-format
@@ -3675,7 +3673,7 @@ msgstr "Errore nella scrittura del file cell_misc/%s/gdal"
 #: ../lib/raster/gdal.c:604
 #, c-format
 msgid "Unable to create output file <%s> using driver <%s>"
-msgstr "Non riesco a crear eil file di output <%s> utilizzando il driver <%s>"
+msgstr "Impossibile crear eil file di output <%s> utilizzando il driver <%s>"
 
 #: ../lib/raster/format.c:162
 #, c-format
@@ -3719,14 +3717,12 @@ msgid "can't write category information for [%s] in [%s]"
 msgstr "non riesco a scrivere le informazioni sulla categoria per [%s] in [%s]"
 
 #: ../lib/raster/color_rules.c:120
-#, fuzzy
 msgid "syntax error in the color rule"
-msgstr "errore di sintassi"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:122
-#, fuzzy
 msgid "syntax error in the color format"
-msgstr "errore di sintassi"
+msgstr ""
 
 #: ../lib/raster/color_rules.c:130
 msgid "percentage not in range 0-100"
@@ -3753,12 +3749,12 @@ msgstr "Impossibile caricare le regole dei colori <%s>"
 #: ../lib/raster/history.c:115 ../lib/raster/history.c:123
 #, c-format
 msgid "Unable to get history information for <%s@%s>"
-msgstr "Non riesco ad ottenere le informazioni dello storico per <%s@%s>"
+msgstr "Impossibile ottenere le informazioni dello storico per <%s@%s>"
 
 #: ../lib/raster/history.c:162
 #, c-format
 msgid "Unable to write history information for <%s>"
-msgstr "Non riesco a scrivere le informazioni dello storico per <%s>"
+msgstr "Impossibile scrivere le informazioni dello storico per <%s>"
 
 #: ../lib/raster/history.c:235
 #, c-format
@@ -3788,7 +3784,7 @@ msgstr "Supporto della categoria per il file vettoriale <%s@%s> non valido"
 #: ../lib/raster/cats.c:968
 #, c-format
 msgid "Unable to open %s file for map <%s>"
-msgstr "Non riesco ad aprire il file %s per la mappa <%s>"
+msgstr "Impossibile aprire il file %s per la mappa <%s>"
 
 #: ../lib/raster/get_row.c:36 ../lib/raster/get_row.c:898
 #, c-format
@@ -4181,9 +4177,8 @@ msgid "G__open(write): Unable to open '%s': %s"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:147
-#, fuzzy
 msgid "SQL SELECT statement"
-msgstr "Condizione select di SQL"
+msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:149
 msgid "Example: select * from towns where population > 10000"
@@ -4194,9 +4189,8 @@ msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr "La clausola WHERE del comando SQL manca della parola chiave 'where'"
 
 #: ../lib/gis/parser_standard_options.c:157
-#, fuzzy
 msgid "Example: income < 1000 and population >= 10000"
-msgstr "Esempio: income < 1000 e inhab >= 10000"
+msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:165
 msgid "Name of attribute table"
@@ -6867,7 +6861,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:612 ../lib/vector/Vlib/write_pg.c:880
 #: ../lib/vector/Vlib/open.c:1355 ../lib/vector/Vlib/build_pg.c:411
 msgid "Unable to open PG file"
-msgstr ""
+msgstr "Impossibile aprire il file PG"
 
 #: ../lib/vector/Vlib/write_pg.c:773
 #, c-format
@@ -8350,7 +8344,7 @@ msgstr "Numero di isole: -"
 #: ../lib/vector/Vlib/build.c:1013
 #, c-format
 msgid "Unable to create topo file for vector map <%s>"
-msgstr "Non riesco a creare il file della topologia pe rla mappa vettoriale <%s>"
+msgstr "Impossibile creare il file della topologia per la mappa vettoriale <%s>"
 
 #: ../lib/vector/Vlib/build.c:1021
 msgid "Error writing out topo file"
@@ -8358,7 +8352,7 @@ msgstr "Errore nella scrittura del file di topologia"
 
 #: ../lib/vector/Vlib/build.c:1210
 msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
-msgstr "Non riesco a creare l'indice spaziale dalla topologia, la mappa vettoriale '%s' non è aperta al livello topologico 2"
+msgstr "Impossibile creare l'indice spaziale dalla topologia, la mappa vettoriale non è aperta al livello topologico 2"
 
 #: ../lib/vector/Vlib/build.c:1233
 #, c-format
@@ -8372,7 +8366,7 @@ msgstr ""
 #: ../lib/vector/Vlib/build.c:1268
 #, c-format
 msgid "Unable to create spatial index file for vector map <%s>"
-msgstr "Non riesco a creare il file dell'indice spaziale per la mappa vettoriale '%s'"
+msgstr "Impossibile creare il file dell'indice spaziale per la mappa vettoriale '%s'"
 
 #: ../lib/vector/Vlib/build.c:1277
 msgid "Error writing out spatial index file"
@@ -8415,7 +8409,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open_pg.c:276
 #, c-format
 msgid "Unable to delete PostGIS layer <%s>"
-msgstr ""
+msgstr "Impossibile eliminare il layer PostGIS <%s>"
 
 #: ../lib/vector/Vlib/open_pg.c:282
 #, c-format
@@ -8442,7 +8436,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open_pg.c:566
 msgid "Unable to get database name"
-msgstr ""
+msgstr "Impossibile ottenere il nome del database"
 
 #: ../lib/vector/Vlib/open_pg.c:571
 #, c-format
@@ -8461,7 +8455,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open_pg.c:768
 #, c-format
 msgid "Inconsistency in topology: unable to read node %d"
-msgstr ""
+msgstr "Inconsistenza nella topologia: impossibile leggere il nodo %d"
 
 #: ../lib/vector/Vlib/open_pg.c:834
 #, c-format
@@ -8706,7 +8700,7 @@ msgstr ""
 #: ../lib/vector/diglib/port_init.c:158
 #, c-format
 msgid "Unable to find '%x' in %s"
-msgstr ""
+msgstr "Impossibile trovare  '%x' in %s"
 
 #: ../lib/vector/diglib/spindex.c:450
 #, c-format
@@ -8734,7 +8728,7 @@ msgstr "Impossibile eliminare l'isola %d dall'indice spaziale"
 
 #: ../lib/vector/diglib/test.c:58
 msgid "Unable to open test.tmp file"
-msgstr ""
+msgstr "Impossibile aprire il file test.tmp"
 
 #: ../lib/vector/diglib/test.c:75
 #, c-format

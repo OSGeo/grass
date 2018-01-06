@@ -3166,17 +3166,14 @@ msgid "Close dialog on finish"
 msgstr "Fermer la boîte de dialogue après exécution"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:76
-#, fuzzy
 msgid "Reproject"
 msgstr "Reprojeter"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:78
-#, fuzzy
 msgid "Reproject raster"
 msgstr "Reprojeter le raster"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:80
-#, fuzzy
 msgid "Reproject vector"
 msgstr "Reprojeter le vecteur"
 
@@ -3293,9 +3290,8 @@ msgid "g.copy completed"
 msgstr "g.copy terminé"
 
 #: ../gui/wxpython/datacatalog/tree.py:714
-#, fuzzy
 msgid "Reprojection is not implemented for 3D rasters"
-msgstr "La reprojection n'est pas implémentée pour les rasters 3D"
+msgstr "La reprojection n'est pas implémentée pour les cartes raster 3D"
 
 #: ../gui/wxpython/datacatalog/tree.py:751
 #, python-brace-format
@@ -8950,7 +8946,7 @@ msgstr "Épaisseur du point :"
 
 #: ../gui/wxpython/vnet/dialogs.py:1282 ../gui/wxpython/iscatt/dialogs.py:372
 msgid "Snapping threshold in pixels:"
-msgstr "Seuil de magnétisme en pixels :"
+msgstr "Seuil d'accroche en pixels :"
 
 #: ../gui/wxpython/vnet/dialogs.py:1283
 msgid "Maximum number of results in history:"
@@ -17285,7 +17281,7 @@ msgstr "Enregistrer des cartes dans les jeux de données"
 
 #: ../gui/wxpython/menustrings.py:932 ../gui/wxpython/menustrings.py:1838
 msgid "Registers raster, vector and raster3d maps in a space time datasets."
-msgstr "Enregistrer des cartes raster, vecteur et raster3D dans un jeu de données temporel."
+msgstr "Révérencer des cartes raster, vecteur et raster3d dans des jeux de données spatio-temporels."
 
 #: ../gui/wxpython/menustrings.py:933 ../gui/wxpython/menustrings.py:1839
 msgid "Unregister maps from datasets"
@@ -18044,6 +18040,9 @@ msgstr "Version SVN :"
 msgid "Build Platform"
 msgstr "Plateforme"
 
+msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgstr "Assigner des horodatages et enregistrer des cartes raster, vecteur et raster3d dans un jeu de données temporel."
+
 #~ msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
 #~ msgstr "Créer une carte raster à partir de statistiques univariées sur des points LIDAR LAS."
 
@@ -18060,13 +18059,13 @@ msgstr "Plateforme"
 #~ msgstr "Exporter une carte vecteur vers une table PostGIS."
 
 #~ msgid "failed to open '{0}'"
-#~ msgstr "Échec à l'ouverture '{0}'"
+#~ msgstr "échec à l'ouverture de '{0}'"
 
 #~ msgid "Wx debug level {0}."
-#~ msgstr "Niveau de debug Wx {0}."
+#~ msgstr "Niveau de debug wx {0}."
 
 #~ msgid "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n"
-#~ msgstr "ATTENTION : niveau de debug wx non supporté ignoré (doit être >=0 et <=5). {0}\n"
+#~ msgstr "ALERTE : niveau de debug wx non supporté (doit être >=0 et <=5). {0}\n"
 
 #~ msgid "GRASS locations in {0}"
 #~ msgstr "Secteurs GRASS dans {0}"
@@ -18075,7 +18074,7 @@ msgstr "Plateforme"
 #~ msgstr "L'outil temporel nécessite que le paquet 'matplotlib' (python-matplotlib) soit installé. {0}"
 
 #~ msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-#~ msgstr "L'outil Scatterplot nécessite que le paquet 'matplotlib' (python-matplotlib) soit installé. {0}"
+#~ msgstr "L'outil Scatterplot nécessite que le paquet \"matplotlib\" (python-matplotlib) soit installé. {0}"
 
 #~ msgid "New mapset:"
 #~ msgstr "Nouveau jeu de cartes :"
@@ -18084,7 +18083,7 @@ msgstr "Plateforme"
 #~ msgstr "Erreur d'unicode détectée. Vérifiez vos paramètres de langue. Détails : {0}"
 
 #~ msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-#~ msgstr "L'outil temporel nécessite que le paquet 'matplotlib' (python-matplotlib) soit installé. {0}"
+#~ msgstr "L'outil de graphiques temporels nécessite que le paquet 'matplotlib' (python-matplotlib) soit installé. {0}"
 
 #~ msgid ""
 #~ "Vector temporal dataset (stvds)\n"
@@ -18094,16 +18093,16 @@ msgstr "Plateforme"
 #~ "Appuyer sur ENTRER si vous saisissez le nom du stvds au lieu de le sélectionner dans la liste"
 
 #~ msgid "Details: unsupported tag name '{0}'."
-#~ msgstr "Détails : nom de mot-clef '{0}' non supporté."
+#~ msgstr "Détail : nom d'option non supportée '{0}'"
 
 #~ msgid "Align computational region to selected map"
-#~ msgstr "Aligner la zone de calculs sur la carte sélectionnée"
+#~ msgstr "Aligner la région de calcul sur la carte sélectionnée"
 
 #~ msgid ""
 #~ "Failed to run command '%(command)s'. Details:\n"
 #~ "%(error)s"
 #~ msgstr ""
-#~ "Échec de l'exécution de la commande '%(command)s'. Détails :\n"
+#~ "Échec au lanceément de la commande '%(command)s'. Détails :\n"
 #~ "%(error)s"
 
 #~ msgid "Region settings"
@@ -18116,7 +18115,7 @@ msgstr "Plateforme"
 #~ msgstr "Impossible de lire les codes EPSG : {0}"
 
 #~ msgid "Unable to provide citation suggestion, see GRASS GIS website instead. The error was: {0}"
-#~ msgstr "Impossible de fournir une sugestion de citation, voir le site web du SIG GRASS. L'erreur est : {0}"
+#~ msgstr "Impossible de fournir une sugestion de citation, merci de consulter le site internet de GRASS. L'erreur est : {0}"
 
 #~ msgid "This option allows setting default computation region immediately after new location is created. Default computation region can be defined later using g.region based on imported data."
 #~ msgstr "Cette option permet de définir la régiàn de calculs par défaut immédiatemment après que le nouveau secteur sout créé. La région de calcul par défaut peut être définie par la suite en utilisant g.region sur les données importées."
@@ -18140,7 +18139,7 @@ msgstr "Plateforme"
 #~ msgstr "Exporte un vecteur de points en un nuage de points LAS. Convertit des nuages de points LIDAR LAS vers une carte vecteur GRASS avec libLAS."
 
 #~ msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
-#~ msgstr "Rediriger la sortie raster vers un fichier en utilisant la librairie GDAL au lieu de l'enregistrer au format raster GRASS."
+#~ msgstr "Rediriger la sortie raster vers un fichier utilisant la librairie GDAL plutôt que de le stocker au format raster GRASS."
 
 #~ msgid "Point analysis"
 #~ msgstr "Analyse de points"
@@ -18175,9 +18174,6 @@ msgstr "Plateforme"
 #~ msgid "Computes gradient of a 3D raster map and outputs gradient components as three 3D raster maps."
 #~ msgstr "Calcule le gradient d'une carte raster 3D et sort les composantes du gradient dans trois cartes raster 3D."
 
-#~ msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
-#~ msgstr "Assigner des horodatages et enregistrer des cartes raster, vecteur et raster3d dans un jeu de données temporel."
-
 #~ msgid "Convert raster dataset to vector dataset "
 #~ msgstr "Convertir un jeu de données raster vers un jeu de données vecteur"
 
@@ -18210,3 +18206,299 @@ msgstr "Plateforme"
 
 #~ msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
 #~ msgstr "Applique des opérations spatiales et temporelles sur des jeux de données vecteur temporel à l'aide de l'algèbre temporelle vecteur."
+
+#~ msgid "Select/create group:"
+#~ msgstr "Séletionner/créer un groupe :"
+
+#~ msgid "Note that the wxGUI's vector digitizer is disabled in this installation. Please keep an eye out for updated versions of GRASS. In the meantime you can use \"v.edit\" for non-interactive editing from the Develop vector map menu."
+#~ msgstr "Notez que l'outil de numérisation vecteur wxGUI est désactivé dans cette installation.Merci de gader un oeil sur les mises à jour de GRASS. Vous pouvez toujours utiliser \"v.edit\" depuis le menu Vecteur pour des modifications non interactives."
+
+#~ msgid "GRASS GIS Map Display: %(name)s - %(loc)s/%(mapset)s"
+#~ msgstr "GRASS GIS - Affichage de cartes : %(name)s - %(loc)s/%(mapset)s"
+
+#~ msgid "List of addons cannot be obtained because g.extension failed. Details: %s"
+#~ msgstr "Liste ds extentions qui n'ont pas put être obtenues à cause d'une ereur de g.extension. Détails : %s"
+
+#~ msgid "H&elp"
+#~ msgstr "Aid&e"
+
+#~ msgid "Show manual for selected module from the tree"
+#~ msgstr "Afficher le manuel pour sélectionner des modules depuis le menu"
+
+#~ msgid "Adva&nced search..."
+#~ msgstr "Recherche ava&ncée ..."
+
+#~ msgid "Do advanced search using %s module"
+#~ msgstr "Effectuer la recherche avancée avec le module %s"
+
+#~ msgid "Documentation for %s is now open in the web browser"
+#~ msgstr "La documentation pour %s est maintenant disponible dans le navigateur web"
+
+#~ msgid "Unable to create new GRASS Database"
+#~ msgstr "Impossible de créer la nouvelle base de données GRASS"
+
+#~ msgid "Raster Digitizer manual"
+#~ msgstr "Manuel de numérisation raster"
+
+#~ msgid "Map <{layer}> marked for moving."
+#~ msgstr "Carte <{layer}> marquée pour suppression."
+
+#~ msgid "Map <{layer}> marked for copying."
+#~ msgstr "Carte <{layer}> marquée pour copie."
+
+#~ msgid "No map selected for moving."
+#~ msgstr "Pas de carte sélectionnée pour le déplacement."
+
+#~ msgid "Select new name"
+#~ msgstr "Sélectionner un nouveau nom"
+
+#~ msgid "Moving <{name}>..."
+#~ msgstr "Déplacement de <{name}> ..."
+
+#~ msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
+#~ msgstr "Pour déplacer ou copier des cartes depuis d'autres jeux de cartes, débloquez l'édition d'autres jeux de cartes"
+
+#~ msgid "&Cut"
+#~ msgstr "&Couper"
+
+#~ msgid "Copy &name"
+#~ msgstr "Copier le &nom"
+
+#~ msgid "Show &metadata"
+#~ msgstr "Montrer les &métadonnées"
+
+#~ msgid ""
+#~ "Map layer <{ml}> needs to be reprojected.\n"
+#~ "Please review and modify reprojection parameters:"
+#~ msgstr ""
+#~ "La couche <{ml}> doit êre reprojetée.\n"
+#~ "Merci de vérifier et modifier les paramètres de projection :"
+
+#~ msgid "Estimated resolution:"
+#~ msgstr "Résolution estimée :"
+
+#~ msgid "Resampling method:"
+#~ msgstr "Méthode de ré-échantillonnage : "
+
+#~ msgid "Maximum segment length:"
+#~ msgstr "Longueur maximale d'un segment :"
+
+#~ msgid "There were some issues when loading menu or Modules tab:"
+#~ msgstr "Il y a eu des problèmes au chargement du menu ou de l'onglet des Modules :"
+
+#~ msgid "Do&wnload"
+#~ msgstr "Télécharger"
+
+#~ msgid "Download sample location"
+#~ msgstr "Télécharger le Secteur d'exemple"
+
+#~ msgid "Documents"
+#~ msgstr "Documents"
+
+#~ msgid "My Documents"
+#~ msgstr "Mes Documents"
+
+#~ msgid ""
+#~ "Raster temporal dataset (strds)\n"
+#~ "Press ENTER after typing the name or select with the combobox"
+#~ msgstr ""
+#~ "Jeu de données raster temporel (strds)\n"
+#~ "Appuyez sur ENTRÉE après avoir tapé le nom ou sélectionnez dans la boite de dialogue"
+
+#~ msgid ""
+#~ "Vector temporal dataset (stvds)\n"
+#~ "Press ENTER after typing the name or select with the combobox"
+#~ msgstr ""
+#~ "Jeu de données vecteur temporel (stvds)\n"
+#~ "Appuyez sur ENTRÉE après avoir tapé le nom ou sélectionnez depuis la boite de dialogue"
+
+#~ msgid "Category {ca} is not on vector map {ma} and it will be not used"
+#~ msgstr "La catégorie {ca} n'est pas dans la carte vecteur {ma} et ne sera pas utilisée"
+
+#~ msgid "A POINTS file exists, renaming it to POINTS_BAK"
+#~ msgstr "Un fichier POINTS existe, renommage en POINTS_BAK"
+
+#~ msgid "Opening CAMERA file failed"
+#~ msgstr "L'ouverture du fichier CAMERA a échoué"
+
+#~ msgid "Writing output image to group, please wait..."
+#~ msgstr "Écriture de l'image de sortie vers la groupe, merci de patienter ..."
+
+#~ msgid "source X"
+#~ msgstr "X source"
+
+#~ msgid "source Y"
+#~ msgstr "Y source"
+
+#~ msgid "target X"
+#~ msgstr "X cible"
+
+#~ msgid "target Y"
+#~ msgstr "Y cible"
+
+#~ msgid "source X:"
+#~ msgstr "X source : "
+
+#~ msgid "target X:"
+#~ msgstr "X cible : "
+
+#~ msgid "source Y:"
+#~ msgstr "Y source : "
+
+#~ msgid "target Y:"
+#~ msgstr "Y cible : "
+
+#~ msgid "Please provide a group name to process"
+#~ msgstr "Merci de fournir un nom de groupe au processus"
+
+#~ msgid "Please provide a raster map name to process"
+#~ msgstr "Merci de fournir un nom de carte raster au processus"
+
+#~ msgid "Please provide a camera name (generated by i.ortho.camera)"
+#~ msgstr "Merci de fournir un nom de caméra (généré par i.ortho.camera)"
+
+#~ msgid "Please provive an output files extension (used by i.rectify)"
+#~ msgstr "Merci de fournir une extention des fichiers de sortie (utilisé par i.rectify)"
+
+#~ msgid "ZIP file is unreadable: {0}"
+#~ msgstr "Le fichier ZIP n'est pas lisible : {0}"
+
+#~ msgid "Archive file is unreadable: {0}"
+#~ msgstr "Le fichier archive n'est pas lisible : {0}"
+
+#~ msgid "Download of <{url}> failed or file <{name}> is not a ZIP file"
+#~ msgstr "Le téléchargement de <{url}> a échoué ou le fichier <{name}> n'est pas un fichier ZIP"
+
+#~ msgid "Unknown format '{0}'."
+#~ msgstr "Format '{0}' inconnu."
+
+#~ msgid "Downloaded location is not valid"
+#~ msgstr "Le Secteur téléchargé n'est pas valide"
+
+#~ msgid "Download selected location"
+#~ msgstr "Télécharger le Secteur sélectionné"
+
+#~ msgid "Download in progress, wait until it is finished"
+#~ msgstr "Téléchargement en cours, attendez qu'il soit terminé"
+
+#~ msgid "Location named <%s> already exists, download canceled"
+#~ msgstr "Le Secteur <%s> existe déjà, téléchargement annulé"
+
+#~ msgid "Download failed: %s"
+#~ msgstr "Le téléchargement à échoué : %s"
+
+#~ msgid "Location named <%s> already exists, rename it first"
+#~ msgstr "Le Secteur <%s> existe déjà, commencez par le renommer"
+
+#~ msgid "GRASS GIS Location Download"
+#~ msgstr "SIG GRASS - Téléchargement de Secteur"
+
+#~ msgid "Writing CONTROL_POINTS file failed"
+#~ msgstr "L'écriture du fichier CONTROL_POINTS a échoué"
+
+#~ msgid "CONTROL_POINTS file saved for group <%s>"
+#~ msgstr "Fichier CONTROL_POINTS enregistré pour le groupe <%s>"
+
+#~ msgid "Reading CONTROL_POINTS file failed"
+#~ msgstr "La lecture du fichier CONTROL_POINTS a échoué"
+
+#~ msgid ""
+#~ "Could not calculate RMS Error.\n"
+#~ "Possible error with i.ortho.transform."
+#~ msgstr ""
+#~ "Impossible de calculer l'erreur RMS.\n"
+#~ "Potentiellement une erreur avec i.ortho.transform."
+
+#~ msgid ""
+#~ "Could not calculate new extends.\n"
+#~ "Possible error with i.ortho.transform."
+#~ msgstr ""
+#~ "Impossible de calculer la nouvelle emprise.\n"
+#~ "Potentiellement une erreur avec i.ortho.transform."
+
+#~ msgid "source Z"
+#~ msgstr "Z source"
+
+#~ msgid "target Z"
+#~ msgstr "Z cible"
+
+#~ msgid "source Z:"
+#~ msgstr "Z source : "
+
+#~ msgid "target Z:"
+#~ msgstr "Z cible : "
+
+#~ msgid "Render all map displays"
+#~ msgstr "Calculer le rendu de tous les affichages de cartes"
+
+#~ msgid "Re-render maps in all open map display windows"
+#~ msgstr "Recalculer le rendu des cartes dans toutes les fenêtres d'affichage de cartes ouvertes"
+
+#~ msgid "Close graphical user interface."
+#~ msgstr "Fermer l'interface graphique."
+
+#~ msgid "Close GUI and exit GRASS GIS shell."
+#~ msgstr "Fermer l'interface graphique et sortir du terminal GRASS."
+
+#~ msgid "Show current region"
+#~ msgstr "Afficher la région courante"
+
+#~ msgid "Shows the extent and resolution of the computational region."
+#~ msgstr "Afficher l'emprise et la résolution de la région de calculs."
+
+#~ msgid "Show region using latitude and longitude"
+#~ msgstr "Afficher la région en latitude et longitude"
+
+#~ msgid "Performs flow computation for massive grids."
+#~ msgstr "Effectuer un calcul de flux sur une grille massive."
+
+#~ msgid "Simplified raster import with reprojection"
+#~ msgstr "Import raster simplifié avec reprojection"
+
+#~ msgid "Import of common raster formats"
+#~ msgstr "Import de raster de formats communs"
+
+#~ msgid "Simplified vector import with reprojection"
+#~ msgstr "Import vecteur simplifié avec reprojection"
+
+#~ msgid "Import of common vector formats"
+#~ msgstr "Import de vecteur de formats communs"
+
+#~ msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
+#~ msgstr "Exporter une carte vecteur vers un des formats vecteurs supportés par OGR. Par défaut une carte vecteur est exportée vers le format OGC GeoPackage."
+
+#~ msgid "Simple Python Editor"
+#~ msgstr "Éditeur Python simple"
+
+#~ msgid "Launches Simple Python Editor."
+#~ msgstr "Lancer l'éditeur Python simple."
+
+#~ msgid "Show current region extent in Map Display"
+#~ msgstr "Afficher l'emprise de la région courante dans l'affichage de cartes"
+
+#~ msgid "Shows the extent of the computational region in Map Display."
+#~ msgstr "Afficher l'emprise de la région de calcul dans l'affichage de cartes"
+
+#~ msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+#~ msgstr "Allouer les sous-réseaux pour le centre le plus proche. Le noeud centrql doit être ouvert (coûts >=0). Les coûts du noeud central sont utilisés dans les calculs."
+
+#~ msgid "Splits subnets for nearest centers by cost isolines. Splits net to bands between cost isolines (direction from center). Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+#~ msgstr "Découper les sous-réseaux pour les centres les plus proches par coûts d'isolignes. Coupe le réseau en bandes entre les isolignes de coût (direction depuis le centre). Le noeud central doît être ouvert (coûts >=0). Les coûts du noeud central sont utilisés dans les calculs."
+
+#~ msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
+#~ msgstr "Créer un diagramme de Voronoi contraint dans l'emprise de la région courante depuis une carte vecteur d'entrée contenant des points ou centroïdes."
+
+#~ msgid "Orthophoto tools"
+#~ msgstr "Outils d'orthophoto"
+
+#~ msgid "Manage GCPs for 3D correction"
+#~ msgstr "Gérer les points de correction 3D"
+
+#~ msgid "Georectifies a map and allows managing GCP for 3D correction."
+#~ msgstr "Géorectifie une carte et permet de gérdr les points de correction 3D."
+
+#~ msgid "Corrects scanning distortions"
+#~ msgstr "Corrige les distorsions de scan"
+
+#~ msgid "Corrects scanning distortions of a scanned aerial photo."
+#~ msgstr "Corrige les distortions de scan d'une photo aérienne scannée."

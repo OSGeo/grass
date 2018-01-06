@@ -65,7 +65,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:4
 #: ../misc/m.nviz.script/main.c:72 ../misc/m.nviz.image/main.c:55
 msgid "raster3d"
-msgstr ""
+msgstr "栅格3维"
 
 #: ../raster3d/r3.out.netcdf/main.c:587 ../raster3d/r3.out.v5d/main.c:285
 #: ../raster3d/r3.out.ascii/main.c:303 ../raster3d/r3.out.bin/main.c:206
@@ -157,7 +157,7 @@ msgstr "未找到3D栅格图<%s>"
 #: ../raster/r.univar/r3.univar_main.c:189
 #, c-format
 msgid "Unable to open 3D raster map <%s>"
-msgstr ""
+msgstr "无法打开3D栅格地图<%s>"
 
 #: ../raster3d/r3.out.netcdf/main.c:649 ../raster3d/r3.out.v5d/main.c:55
 #: ../raster3d/r3.out.v5d/main.c:326 ../raster3d/r3.to.rast/main.c:75
@@ -347,11 +347,11 @@ msgstr ""
 #: ../vector/v.kcv/main.c:56 ../vector/v.qcount/main.c:61
 #: ../vector/v.univar/main.c:93 ../vector/v.outlier/main.c:70
 msgid "statistics"
-msgstr ""
+msgstr "统计"
 
 #: ../raster3d/r3.stats/main.c:51
 msgid "Generates volume statistics for 3D raster maps."
-msgstr ""
+msgstr "生成3d栅格地图列统计"
 
 #: ../raster3d/r3.stats/main.c:62
 msgid "Number of subranges to collect stats from"
@@ -363,7 +363,7 @@ msgstr ""
 
 #: ../raster3d/r3.stats/main.c:71
 msgid "Only print cell counts"
-msgstr ""
+msgstr "仅打印像元数"
 
 #: ../raster3d/r3.stats/main.c:91
 msgid "The number of subranges has to be equal or greater than 1"
@@ -382,18 +382,16 @@ msgid "Basename for resultant raster slice maps"
 msgstr "生成的栅格分块地图的基础名称"
 
 #: ../raster3d/r3.to.rast/main.c:116
-#, fuzzy
 msgid "Value to multiply the raster values with"
-msgstr "报告栅格图层的统计数据"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:117
 msgid "Coefficient a in the equation y = ax + b"
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:123
-#, fuzzy
 msgid "Value to add to the raster values"
-msgstr "报告栅格图层的统计数据"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:124
 msgid "Coefficient b in the equation y = ax + b"
@@ -404,9 +402,9 @@ msgid "Use the same resolution as the input 3D raster map for the 2D output maps
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:174
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown raster type <%d>"
-msgstr "未知的类型：%c"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:260 ../raster3d/r3.out.ascii/main.c:305
 #: ../raster3d/r3.in.ascii/main.c:357 ../raster3d/r3.in.lidar/main.c:166
@@ -875,7 +873,7 @@ msgstr ""
 #: ../raster/r.lake/main.c:151 ../raster/r.watershed/front/main.c:74
 #: ../raster/r.flow/main.c:422 ../raster/r.water.outlet/main.c:58
 msgid "hydrology"
-msgstr ""
+msgstr "水文学"
 
 #: ../raster3d/r3.gwflow/main.c:163
 msgid "Numerical calculation program for transient, confined groundwater flow in three dimensions."
@@ -1207,7 +1205,7 @@ msgstr ""
 #: ../general/g.cairocomp/main.c:66 ../vector/v.colors.out/main.c:103
 #, c-format
 msgid "Unable to open output file <%s>"
-msgstr ""
+msgstr "无法打开输出文件 <%s>"
 
 #: ../raster3d/r3.support/main.c:167 ../raster/r.support/main.c:176
 #: ../raster/r.in.mat/main.c:125 ../raster/r.series.accumulate/main.c:221
@@ -1222,13 +1220,13 @@ msgstr ""
 #: ../vector/v.segment/main.c:98 ../vector/v.net.path/path.c:49
 #, c-format
 msgid "Unable to open input file <%s>"
-msgstr ""
+msgstr "无法打开输入文件<%s>"
 
 #: ../raster3d/r3.support/main.c:248 ../raster/r.support/main.c:245
 #: ../raster/r.statistics/main.c:110 ../display/d.title/main.c:110
 #, c-format
 msgid "Unable to read category file of raster map <%s>"
-msgstr ""
+msgstr "无法读取栅格地图<%s>类别文件"
 
 #: ../raster3d/r3.support/main.c:252 ../raster/r.support/main.c:249
 #, c-format
@@ -1292,9 +1290,9 @@ msgid "Cannot open file %s for reading"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/filters.c:27
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid range <%s> for option %s"
-msgstr "无效的区域：%s"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/filters.c:54 ../vector/v.in.pdal/filters.c:95
 #: ../vector/v.in.lidar/filters.c:36
@@ -1332,9 +1330,8 @@ msgid "binning"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:170
-#, fuzzy
 msgid "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
-msgstr "以当前目录中的ASCII格式的(多边形/线形)数据文件来创建栅格地图。"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:174 ../raster/r.in.lidar/main.c:120
 #: ../vector/v.in.lidar/main.c:142
@@ -1400,7 +1397,7 @@ msgstr ""
 #: ../vector/v.edit/args.c:90 ../vector/v.edit/args.c:209
 #: ../vector/v.in.ogr/main.c:160
 msgid "Input"
-msgstr ""
+msgstr "输入"
 
 #: ../raster3d/r3.in.lidar/main.c:181 ../raster/r.in.lidar/main.c:130
 msgid "File containing names of LAS input files"
@@ -1472,7 +1469,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:318 ../vector/v.out.ascii/args.c:35
 #: ../vector/v.out.ascii/args.c:81
 msgid "Output"
-msgstr ""
+msgstr "输出"
 
 #: ../raster3d/r3.in.lidar/main.c:195
 msgid "Sum of values of point intensities per cell"
@@ -1714,33 +1711,28 @@ msgid "First file's projection checked, checking projection of the other files..
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:540
-#, fuzzy
 msgid "Preparing the maps..."
-msgstr "读取栅格文件 [%s] 时发生错误。"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:574 ../vector/v.sample/main.c:200
 msgid "Reading points..."
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:656
-#, fuzzy
 msgid "Computing proportional count map..."
-msgstr "输入图层的名称"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:661
-#, fuzzy
 msgid "Computing proportional sum map..."
-msgstr "拷贝表失败"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:666
-#, fuzzy
 msgid "Computing mean map..."
-msgstr "拷贝表失败"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:671
-#, fuzzy
 msgid "Closing the maps..."
-msgstr "读取栅格文件 [%s] 时发生错误。"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:707 ../vector/v.in.lidar/main.c:783
 #, c-format
@@ -1758,9 +1750,9 @@ msgid "%lu input points were filtered out by class number"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:714
-#, fuzzy, c-format
+#, c-format
 msgid "%lu input points had intensity out of range"
-msgstr "%d 个点超出范围"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:716 ../vector/v.in.lidar/main.c:811
 #, c-format
@@ -1900,7 +1892,7 @@ msgstr ""
 
 #: ../raster3d/r3.gradient/main.c:56
 msgid "Name for output 3D raster map(s)"
-msgstr ""
+msgstr "输出的3d栅格地图名称"
 
 #: ../raster3d/r3.gradient/main.c:63
 msgid "Size of blocks"
@@ -2054,7 +2046,7 @@ msgstr ""
 #: ../vector/v.to.points/write.c:52
 #, c-format
 msgid "Unable to insert new record: '%s'"
-msgstr ""
+msgstr "无法插入新记录：'%s'"
 
 #: ../raster3d/r3.flow/test_main.c:44
 msgid "unit test"
@@ -2062,7 +2054,7 @@ msgstr ""
 
 #: ../raster3d/r3.flow/test_main.c:45
 msgid "Testing flow lines."
-msgstr ""
+msgstr "测试流向"
 
 #: ../raster3d/r3.flow/main.c:46 ../ps/ps.map/catval.c:53
 #: ../ps/ps.map/catval.c:115 ../ps/ps.map/catval.c:181
@@ -2110,7 +2102,7 @@ msgstr ""
 #: ../vector/v.vol.rst/main.c:600
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
-msgstr ""
+msgstr "无法由驱动<%s>打开数据库 <%s>"
 
 #: ../raster3d/r3.flow/main.c:64 ../raster/r.to.vect/main.c:229
 #: ../raster/r.volume/main.c:260 ../vector/v.lrs/v.lrs.create/main.c:338
@@ -2119,7 +2111,7 @@ msgstr ""
 #: ../vector/v.in.ascii/main.c:413
 #, c-format
 msgid "Unable to create table: %s"
-msgstr ""
+msgstr "无法创建表 %s"
 
 #: ../raster3d/r3.flow/main.c:67 ../raster/r.contour/main.c:188
 #: ../vector/v.reclass/main.c:322 ../vector/v.in.lidar/attributes.c:139
@@ -2128,7 +2120,7 @@ msgstr ""
 #: ../vector/v.in.ascii/main.c:521
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
-msgstr ""
+msgstr "无法为表 <%s>创建索引<%s>"
 
 #: ../raster3d/r3.flow/main.c:72 ../raster/r.stream.extract/close.c:196
 #: ../raster/r.to.vect/main.c:238 ../raster/r.random/random.c:257
@@ -2143,11 +2135,11 @@ msgstr ""
 #: ../vector/v.in.ascii/main.c:421
 #, c-format
 msgid "Unable to grant privileges on table <%s>"
-msgstr ""
+msgstr "无法在表%s上授予权限"
 
 #: ../raster3d/r3.flow/main.c:91
 msgid "Please provide three 3D raster maps"
-msgstr ""
+msgstr "请提供3个三维栅格地图"
 
 #: ../raster3d/r3.flow/main.c:98
 #, c-format
@@ -2377,7 +2369,7 @@ msgstr ""
 #: ../vector/v.to.rast/vect2rast.c:48
 #, c-format
 msgid "Vector map <%s> is not 3D"
-msgstr ""
+msgstr "矢量地图<%s>非3D"
 
 #: ../raster3d/r3.flow/main.c:441
 msgid "Error during reading seed vector map"
@@ -4544,9 +4536,9 @@ msgid "Region ids are different"
 msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:983
-#, fuzzy, c-format
+#, c-format
 msgid "Region id %d is invalid"
-msgstr "未找到3D视图文件<%s>"
+msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:987
 msgid "Region consists of only one cell, nothing to update"
@@ -4666,9 +4658,9 @@ msgid "Initial range bandwidth: %g"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:188 ../imagery/i.segment/mean_shift.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Estimated range bandwidth: %g"
-msgstr "点间的最大距离： %f"
+msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:208 ../imagery/i.segment/mean_shift.c:245
 #, c-format
@@ -4676,9 +4668,9 @@ msgid "Spatial bandwidth: %g"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:209 ../imagery/i.segment/mean_shift.c:246
-#, fuzzy, c-format
+#, c-format
 msgid "Range bandwidth: %g"
-msgstr "线宽"
+msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:395
 #, c-format
@@ -4696,9 +4688,9 @@ msgid "Mean shift converged after %d iterations"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:748
-#, fuzzy, c-format
+#, c-format
 msgid "Renumbering remaining %d segments..."
-msgstr "写入 %s ... "
+msgstr ""
 
 #: ../imagery/i.segment/main.c:39
 msgid "object recognition"
@@ -4717,19 +4709,16 @@ msgid "Error in creating segments"
 msgstr ""
 
 #: ../imagery/i.segment/main.c:55
-#, fuzzy
 msgid "Error in writing IDs"
-msgstr "读取地图 %s 时发生错误"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:59
-#, fuzzy
 msgid "Error in writing goodness of fit"
-msgstr "读取地图 %s 时发生错误"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:64
-#, fuzzy
 msgid "Error in writing new band values"
-msgstr "读取地图 %s 时发生错误"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:70
 #, c-format
@@ -4745,14 +4734,13 @@ msgid "Writing out goodness of fit"
 msgstr ""
 
 #: ../imagery/i.segment/write_output.c:236
-#, fuzzy
 msgid "Writing out shifted band values..."
-msgstr "写入 %s ... "
+msgstr ""
 
 #: ../imagery/i.segment/cluster.c:66
-#, fuzzy, c-format
+#, c-format
 msgid "%d-band clustering with threshold %g"
-msgstr "%d 个点超出范围"
+msgstr ""
 
 #: ../imagery/i.segment/cluster.c:121 ../raster/r.clump/minsize.c:373
 #: ../raster/r.clump/clump.c:211 ../raster/r.clump/clump.c:475
@@ -4790,9 +4778,9 @@ msgid "Unable to read from temp file"
 msgstr ""
 
 #: ../imagery/i.segment/cluster.c:455
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d clumps"
-msgstr "完成率："
+msgstr ""
 
 #: ../imagery/i.segment/flag.c:21 ../imagery/i.segment/flag.c:28
 #: ../vector/v.distance/main.c:748 ../vector/v.distance/main.c:825
@@ -4817,9 +4805,8 @@ msgid "Threshold = 0 merges only identical segments; threshold = 1 merges all"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:46
-#, fuzzy
 msgid "Spatial radius in number of cells"
-msgstr "行数"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:47
 msgid "Must be >= 1, only cells within spatial bandwidth are considered for mean shift"
@@ -4910,9 +4897,9 @@ msgid "Threshold should be > 0 and < 1"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Option '%s' must be >= 1"
-msgstr "位置名称"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:208
 #, c-format
@@ -4964,23 +4951,22 @@ msgid "Segmentation constraint raster map must be CELL type (integers)"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:321
-#, fuzzy
 msgid "Integer overflow: too many cells in current region"
-msgstr "打印当前区域"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:334
 msgid "Invalid output raster name for goodness of fit"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:341
-#, fuzzy, c-format
+#, c-format
 msgid "Maximum number of iterations set to %d"
-msgstr "插值点的数量"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:351
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid number of iterations, %d will be used"
-msgstr "面：%d  岛的数量：%d\n"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:360
 msgid "Invalid number of MB, 300 will be used"
@@ -16969,14 +16955,12 @@ msgid "Writing output map"
 msgstr ""
 
 #: ../raster/r.clump/minsize.c:357
-#, fuzzy
 msgid "Minimum size must be larger than 1"
-msgstr "nsteps 必须大于 0，使用 nsteps=255"
+msgstr ""
 
 #: ../raster/r.clump/minsize.c:368
-#, fuzzy
 msgid "Loading input ..."
-msgstr "读取 %s ..."
+msgstr ""
 
 #: ../raster/r.clump/minsize.c:418
 #, c-format
@@ -16984,9 +16968,9 @@ msgid "Merging clumps smaller than %d cells..."
 msgstr ""
 
 #: ../raster/r.clump/minsize.c:509
-#, fuzzy, c-format
+#, c-format
 msgid "Renumbering remaining %d clumps..."
-msgstr "无法打开输入的dig_att文件。"
+msgstr ""
 
 #: ../raster/r.clump/main.c:60
 msgid "reclass"
@@ -17009,9 +16993,8 @@ msgid "Valid range: 0 = identical to < 1 = maximal difference"
 msgstr ""
 
 #: ../raster/r.clump/main.c:90
-#, fuzzy
 msgid "Minimum clump size in cells"
-msgstr "插值点的数量"
+msgstr ""
 
 #: ../raster/r.clump/main.c:91
 msgid "Clumps smaller than minsize will be merged to form larger clumps"
@@ -17045,18 +17028,18 @@ msgid "Pass 2 of 2..."
 msgstr ""
 
 #: ../raster/r.clump/clump.c:122
-#, fuzzy, c-format
+#, c-format
 msgid "%d initial clumps"
-msgstr "拷贝表失败"
+msgstr ""
 
 #: ../raster/r.clump/clump.c:233 ../raster/r.clump/clump.c:490
 msgid "Pass 1 of 2..."
 msgstr ""
 
 #: ../raster/r.clump/clump.c:425
-#, fuzzy, c-format
+#, c-format
 msgid "%d-band clumping with threshold %g"
-msgstr "%d 个点超出范围"
+msgstr ""
 
 #: ../raster/r.composite/main.c:73
 #: ../locale/scriptstrings/r.blend_to_translate.c:3
@@ -19241,7 +19224,7 @@ msgstr ""
 
 #: ../raster/r.volume/main.c:77
 msgid "volume"
-msgstr ""
+msgstr "列"
 
 #: ../raster/r.volume/main.c:80
 msgid "Calculates the volume of data \"clumps\"."
@@ -24491,9 +24474,8 @@ msgid "Name of data file(s) for Y axis of graph"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:249
-#, fuzzy
 msgid "Path to files"
-msgstr "结果矢量文件的名称"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:251
 msgid "Path to the directory where the input files are located"
@@ -24504,9 +24486,8 @@ msgid "Color for Y data"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:272
-#, fuzzy
 msgid "Width of the lines"
-msgstr "等高线级数的列表"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:279
 msgid "Color for axis, tics, numbers, and title"
@@ -24533,37 +24514,34 @@ msgid "Tic values for the Y axis"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:329
-#, fuzzy
 msgid "Symbol for point"
-msgstr "行数"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:338
-#, fuzzy
 msgid "Point size"
-msgstr "输入图层的名称"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:347
 msgid "Color for point symbol edge color"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:353
-#, fuzzy
 msgid "Width of point symbol lines"
-msgstr "地图北向格网坐标"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:412
 msgid "Maximum of 10 Y data files exceeded"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:445
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr "无法打开选择游标：'%s'"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:458
-#, fuzzy, c-format
+#, c-format
 msgid "Color <%s> cannot for option %s be parsed"
-msgstr "字段 <%s> 未找到"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:495
 #, c-format
@@ -27796,9 +27774,8 @@ msgid "Print the maximum bounding box in lat/long on WGS84"
 msgstr ""
 
 #: ../general/g.region/main.c:148
-#, fuzzy
 msgid "Print in shell script style, but in one line (flat)"
-msgstr "以shell脚本的样式输出统计值"
+msgstr ""
 
 #: ../general/g.region/main.c:154
 msgid "Align region to resolution (default = align to bounds, works only for 2D resolution)"
@@ -29148,18 +29125,18 @@ msgid_plural "%d records updated."
 msgstr[0] ""
 
 #: ../vector/v.label.sa/labels.c:68
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot allocate %lu bytes of memory"
-msgstr "无法打开选择游标"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:87
 msgid "Unable to initialise FreeType"
 msgstr ""
 
 #: ../vector/v.label.sa/labels.c:90
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find font '%s'\n"
-msgstr "无法找到 %s"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:92
 #, c-format
@@ -29171,19 +29148,16 @@ msgid "Font file format is not supported by FreeType"
 msgstr ""
 
 #: ../vector/v.label.sa/labels.c:98
-#, fuzzy
 msgid "Font file can not be loaded"
-msgstr "未发现矢量地图<%s>"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:107
-#, fuzzy
 msgid "Unable to set font size"
-msgstr "没有指定数据地图"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:128
-#, fuzzy
 msgid "Cannot allocate more memory"
-msgstr "无法打开选择游标"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:162 ../vector/v.overlay/main.c:423
 #: ../vector/v.label/main.c:319
@@ -29191,9 +29165,9 @@ msgid "Unable to select attributes"
 msgstr ""
 
 #: ../vector/v.label.sa/labels.c:244
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load glyph for '%c'"
-msgstr "无法读取 [%s] 的文件头"
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:41
 msgid "Create optimally placed labels for vector map(s)"
@@ -29208,9 +29182,8 @@ msgid "Name for new paint-label file"
 msgstr "新的标签文件的名称"
 
 #: ../vector/v.label.sa/main.c:71
-#, fuzzy
 msgid "Name of TrueType font (as listed in the fontcap)"
-msgstr "TrueType字体的路径(包括文件名)"
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:72 ../vector/v.label.sa/main.c:80
 #: ../vector/v.lrs/v.lrs.label/main.c:181 ../vector/v.label/main.c:125
@@ -29243,7 +29216,7 @@ msgstr "矢量的不透明度 (仅当选择了背景颜色才有效)"
 
 #: ../vector/v.label.sa/main.c:154
 msgid "Border width (only for ps.map output)"
-msgstr "边框宽度 (仅用于 ps.map 输出)"
+msgstr ""
 
 #: ../vector/v.info/parse.c:24
 msgid "Print history instead of info and exit"
@@ -39583,97 +39556,76 @@ msgstr ""
 msgid "%s is empty"
 msgstr ""
 
-#, fuzzy
 msgid "Vector map profiling tool"
-msgstr "矢量导入完成"
+msgstr ""
 
 #, fuzzy
 msgid "Input filter"
 msgstr "输入文件"
 
-#, fuzzy
 msgid "Coordinates for profiling line nodes"
-msgstr "一行一个坐标对。"
+msgstr ""
 
-#, fuzzy
 msgid "Profiling line"
-msgstr "绘制 ... "
+msgstr ""
 
-#, fuzzy
 msgid "Buffer (tolerance) for points in map units"
-msgstr "容限 (地图单位)：%g"
+msgstr ""
 
 #, fuzzy
 msgid "Output formating"
 msgstr "输出的格式"
 
-#, fuzzy
 msgid "Number of significant digits"
-msgstr "有意义数字的位数(只用于浮点型)"
+msgstr ""
 
-#, fuzzy
 msgid "Use features only from specified layer"
-msgstr "以shell脚本样式输出太阳位置"
+msgstr ""
 
-#, fuzzy
 msgid "Name for profile line and buffer output map"
-msgstr "输出栅格图的名称"
+msgstr ""
 
-#, fuzzy
 msgid "Profile line and buffer around it will be written"
-msgstr "栅格地图 %i 文件名成： %s 已经存在。它将被覆盖！\n"
+msgstr ""
 
-#, fuzzy
 msgid "Do not print column names"
-msgstr "y 字段的名称"
+msgstr ""
 
-#, fuzzy
 msgid "Do not print 3D vector data (z values)"
-msgstr "代表无数据像元值的字符串"
+msgstr ""
 
-#, fuzzy
 msgid "Profiling line map"
-msgstr "绘制 ... "
+msgstr ""
 
-#, fuzzy
 msgid "Vector map containing profiling line"
-msgstr "包含线的输入地图"
+msgstr ""
 
-#, fuzzy
 msgid "Layer 0 not supported"
-msgstr "列的类型不支持"
+msgstr ""
 
-#, fuzzy
 msgid "<%s> is not a valid vector map name"
-msgstr "%s - 补丁文件太多。只允许 %d"
+msgstr ""
 
-#, fuzzy
 msgid "At least profile start and end coordinates are required!"
-msgstr "要查询的坐标"
+msgstr ""
 
-#, fuzzy
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
-msgstr "图层 <%d> 的数据库连接未定义。请先使用 v.db.connect"
+msgstr ""
 
-#, fuzzy
 msgid "No features match Your query"
-msgstr "输入的 2D 矢量地图的名称"
+msgstr ""
 
-#, fuzzy
 msgid "Error while initialising line list"
-msgstr "读取栅格文件 [%s] 时发生错误。"
+msgstr ""
 
-#, fuzzy
 msgid "Error while reading vector feature from profile line map"
-msgstr "读取栅格文件 [%s] 时发生错误。"
+msgstr ""
 
-#, fuzzy
 msgid "Unabale to get attribute data for cat %d"
-msgstr "无法选择类别 = %d 的属性"
+msgstr ""
 
-#, fuzzy
 msgid "Error while retreiving database record for cat %d"
-msgstr "类别 %d 没有相关的记录"
+msgstr ""
 
 #, fuzzy
 msgid "Unable to create 2D raster <%s>"
@@ -39980,9 +39932,8 @@ msgstr "字段类型不支持"
 msgid "Output options"
 msgstr "输出图"
 
-#, fuzzy
 msgid "option <%s>: <%s> exists."
-msgstr "未发现区域<%s>"
+msgstr ""
 
 #, fuzzy
 msgid "Override dataset projection (use location's projection)"
