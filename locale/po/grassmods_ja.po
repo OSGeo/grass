@@ -387,18 +387,16 @@ msgid "Basename for resultant raster slice maps"
 msgstr "結果ラスタースライスマップのベース名"
 
 #: ../raster3d/r3.to.rast/main.c:116
-#, fuzzy
 msgid "Value to multiply the raster values with"
-msgstr "縮尺標本ラスター値"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:117
 msgid "Coefficient a in the equation y = ax + b"
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:123
-#, fuzzy
 msgid "Value to add to the raster values"
-msgstr "縮尺標本ラスター値"
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:124
 msgid "Coefficient b in the equation y = ax + b"
@@ -409,9 +407,9 @@ msgid "Use the same resolution as the input 3D raster map for the 2D output maps
 msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:174
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown raster type <%d>"
-msgstr "不明なタイプ： %d  "
+msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:260 ../raster3d/r3.out.ascii/main.c:305
 #: ../raster3d/r3.in.ascii/main.c:357 ../raster3d/r3.in.lidar/main.c:166
@@ -1297,9 +1295,9 @@ msgid "Cannot open file %s for reading"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/filters.c:27
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid range <%s> for option %s"
-msgstr "不正なZ座標範囲"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/filters.c:54 ../vector/v.in.pdal/filters.c:95
 #: ../vector/v.in.lidar/filters.c:36
@@ -1337,9 +1335,8 @@ msgid "binning"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:170
-#, fuzzy
 msgid "Creates a 3D raster map from LAS LiDAR points using univariate statistics."
-msgstr "一変量の統計で，多くの座標の集合からラスタマップを作成"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:174 ../raster/r.in.lidar/main.c:120
 #: ../vector/v.in.lidar/main.c:142
@@ -1687,9 +1684,9 @@ msgid "In scan mode, print using shell script style"
 msgstr "スキャンモードで，シェルスクリプト形式で出力"
 
 #: ../raster3d/r3.in.lidar/main.c:329
-#, fuzzy, c-format
+#, c-format
 msgid "%s will not be taken into account during scan"
-msgstr "スキャン中，zrange は評価に取り込まれません"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:340 ../raster/r.in.lidar/main.c:367
 #, c-format
@@ -1719,33 +1716,28 @@ msgid "First file's projection checked, checking projection of the other files..
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:540
-#, fuzzy
 msgid "Preparing the maps..."
-msgstr "ラスターマップの読み込み中"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:574 ../vector/v.sample/main.c:200
 msgid "Reading points..."
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:656
-#, fuzzy
 msgid "Computing proportional count map..."
-msgstr "ネットワーク上の接続の弱いコンポーネントと強いコンポーネントを計算します"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:661
-#, fuzzy
 msgid "Computing proportional sum map..."
-msgstr "分位数を計算しています"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:666
-#, fuzzy
 msgid "Computing mean map..."
-msgstr "分位数を計算しています"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:671
-#, fuzzy
 msgid "Closing the maps..."
-msgstr "ラスターマップのマスキング"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:707 ../vector/v.in.lidar/main.c:783
 #, c-format
@@ -1763,9 +1755,9 @@ msgid "%lu input points were filtered out by class number"
 msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:714
-#, fuzzy, c-format
+#, c-format
 msgid "%lu input points had intensity out of range"
-msgstr "%d のポイントが閾値外"
+msgstr ""
 
 #: ../raster3d/r3.in.lidar/main.c:716 ../vector/v.in.lidar/main.c:811
 #, c-format
@@ -4549,9 +4541,9 @@ msgid "Region ids are different"
 msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:983
-#, fuzzy, c-format
+#, c-format
 msgid "Region id %d is invalid"
-msgstr "シグネチャファイル <%s> は無効です "
+msgstr ""
 
 #: ../imagery/i.segment/region_growing.c:987
 msgid "Region consists of only one cell, nothing to update"
@@ -4671,9 +4663,9 @@ msgid "Initial range bandwidth: %g"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:188 ../imagery/i.segment/mean_shift.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Estimated range bandwidth: %g"
-msgstr "ポイント密度と距離を見積もる"
+msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:208 ../imagery/i.segment/mean_shift.c:245
 #, c-format
@@ -4681,9 +4673,9 @@ msgid "Spatial bandwidth: %g"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:209 ../imagery/i.segment/mean_shift.c:246
-#, fuzzy, c-format
+#, c-format
 msgid "Range bandwidth: %g"
-msgstr "画像幅  "
+msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:395
 #, c-format
@@ -4701,9 +4693,9 @@ msgid "Mean shift converged after %d iterations"
 msgstr ""
 
 #: ../imagery/i.segment/mean_shift.c:748
-#, fuzzy, c-format
+#, c-format
 msgid "Renumbering remaining %d segments..."
-msgstr "ポイントを作成しています "
+msgstr ""
 
 #: ../imagery/i.segment/main.c:39
 msgid "object recognition"
@@ -4722,19 +4714,16 @@ msgid "Error in creating segments"
 msgstr ""
 
 #: ../imagery/i.segment/main.c:55
-#, fuzzy
 msgid "Error in writing IDs"
-msgstr "データ書き込みエラー"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:59
-#, fuzzy
 msgid "Error in writing goodness of fit"
-msgstr "データ書き込みエラー"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:64
-#, fuzzy
 msgid "Error in writing new band values"
-msgstr "データ書き込みエラー"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:70
 #, c-format
@@ -4750,14 +4739,13 @@ msgid "Writing out goodness of fit"
 msgstr ""
 
 #: ../imagery/i.segment/write_output.c:236
-#, fuzzy
 msgid "Writing out shifted band values..."
-msgstr "入力するファイル"
+msgstr ""
 
 #: ../imagery/i.segment/cluster.c:66
-#, fuzzy, c-format
+#, c-format
 msgid "%d-band clustering with threshold %g"
-msgstr "%d のポイントが閾値外"
+msgstr ""
 
 #: ../imagery/i.segment/cluster.c:121 ../raster/r.clump/minsize.c:373
 #: ../raster/r.clump/clump.c:211 ../raster/r.clump/clump.c:475
@@ -4795,9 +4783,9 @@ msgid "Unable to read from temp file"
 msgstr ""
 
 #: ../imagery/i.segment/cluster.c:455
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d clumps"
-msgstr "完了"
+msgstr ""
 
 #: ../imagery/i.segment/flag.c:21 ../imagery/i.segment/flag.c:28
 #: ../vector/v.distance/main.c:748 ../vector/v.distance/main.c:825
@@ -4822,9 +4810,8 @@ msgid "Threshold = 0 merges only identical segments; threshold = 1 merges all"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:46
-#, fuzzy
 msgid "Spatial radius in number of cells"
-msgstr "行数"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:47
 msgid "Must be >= 1, only cells within spatial bandwidth are considered for mean shift"
@@ -4915,9 +4902,9 @@ msgid "Threshold should be > 0 and < 1"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Option '%s' must be >= 1"
-msgstr "ロケーション <%s> が作成されました"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:208
 #, c-format
@@ -4969,23 +4956,22 @@ msgid "Segmentation constraint raster map must be CELL type (integers)"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:321
-#, fuzzy
 msgid "Integer overflow: too many cells in current region"
-msgstr "現在の領域には [%ld] 非NULL値セルは存在しません"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:334
 msgid "Invalid output raster name for goodness of fit"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:341
-#, fuzzy, c-format
+#, c-format
 msgid "Maximum number of iterations set to %d"
-msgstr " 最大反復数: %d\n"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:351
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid number of iterations, %d will be used"
-msgstr "ステップの不正な数: %s"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:360
 msgid "Invalid number of MB, 300 will be used"
@@ -16984,14 +16970,12 @@ msgid "Writing output map"
 msgstr ""
 
 #: ../raster/r.clump/minsize.c:357
-#, fuzzy
 msgid "Minimum size must be larger than 1"
-msgstr "高い方の値 (%d) は１以上である必要があります  "
+msgstr ""
 
 #: ../raster/r.clump/minsize.c:368
-#, fuzzy
 msgid "Loading input ..."
-msgstr "読込中 ... "
+msgstr ""
 
 #: ../raster/r.clump/minsize.c:418
 #, c-format
@@ -16999,9 +16983,9 @@ msgid "Merging clumps smaller than %d cells..."
 msgstr ""
 
 #: ../raster/r.clump/minsize.c:509
-#, fuzzy, c-format
+#, c-format
 msgid "Renumbering remaining %d clumps..."
-msgstr "トレーニングマップの検索中"
+msgstr ""
 
 #: ../raster/r.clump/main.c:60
 msgid "reclass"
@@ -17024,9 +17008,8 @@ msgid "Valid range: 0 = identical to < 1 = maximal difference"
 msgstr ""
 
 #: ../raster/r.clump/main.c:90
-#, fuzzy
 msgid "Minimum clump size in cells"
-msgstr "それぞれのセルの最小値"
+msgstr ""
 
 #: ../raster/r.clump/main.c:91
 msgid "Clumps smaller than minsize will be merged to form larger clumps"
@@ -17060,18 +17043,18 @@ msgid "Pass 2 of 2..."
 msgstr ""
 
 #: ../raster/r.clump/clump.c:122
-#, fuzzy, c-format
+#, c-format
 msgid "%d initial clumps"
-msgstr "入力するファイル"
+msgstr ""
 
 #: ../raster/r.clump/clump.c:233 ../raster/r.clump/clump.c:490
 msgid "Pass 1 of 2..."
 msgstr ""
 
 #: ../raster/r.clump/clump.c:425
-#, fuzzy, c-format
+#, c-format
 msgid "%d-band clumping with threshold %g"
-msgstr "%d のポイントが閾値外"
+msgstr ""
 
 #: ../raster/r.composite/main.c:73
 #: ../locale/scriptstrings/r.blend_to_translate.c:3
@@ -22783,15 +22766,15 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.plane_to_translate.c:6
 msgid "Easting coordinate of a point on the plane"
-msgstr "平面上のポイントの東座標"
+msgstr ""
 
 #: ../locale/scriptstrings/r.plane_to_translate.c:7
 msgid "Northing coordinate of a point on the plane"
-msgstr "平面上のポイントの北座標"
+msgstr ""
 
 #: ../locale/scriptstrings/r.plane_to_translate.c:8
 msgid "Elevation coordinate of a point on the plane"
-msgstr "平面上のポイントの標高座標"
+msgstr ""
 
 #: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:1
 msgid "Converts a space time raster dataset into a space time vector dataset"
@@ -24562,23 +24545,20 @@ msgid "Name of data file(s) for Y axis of graph"
 msgstr "グラフの Y 軸のデータファイル名"
 
 #: ../display/d.linegraph/main.c:249
-#, fuzzy
 msgid "Path to files"
-msgstr "フォントファイルへのパス"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:251
-#, fuzzy
 msgid "Path to the directory where the input files are located"
-msgstr "新しいGISDBASE (新しいロケーションのあるディレクトリーへのフルパス)  "
+msgstr ""
 
 #: ../display/d.linegraph/main.c:259
 msgid "Color for Y data"
 msgstr "Y データのカラー"
 
 #: ../display/d.linegraph/main.c:272
-#, fuzzy
 msgid "Width of the lines"
-msgstr "パーセンタイルの一覧表"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:279
 msgid "Color for axis, tics, numbers, and title"
@@ -24601,42 +24581,38 @@ msgid "Minimum and maximun value for Y axis (min,max)"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:315
-#, fuzzy
 msgid "Tic values for the Y axis"
-msgstr "角度の不正な値"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:329
-#, fuzzy
 msgid "Symbol for point"
-msgstr "行数"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:338
-#, fuzzy
 msgid "Point size"
-msgstr "アイコンサイズ"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:347
 msgid "Color for point symbol edge color"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:353
-#, fuzzy
 msgid "Width of point symbol lines"
-msgstr "ポイント座標のリスト"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:412
 msgid "Maximum of 10 Y data files exceeded"
 msgstr "10 Y データファイルの最大限度を超えました"
 
 #: ../display/d.linegraph/main.c:445
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr "選択したカーソルを開けません： '%s'"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:458
-#, fuzzy, c-format
+#, c-format
 msgid "Color <%s> cannot for option %s be parsed"
-msgstr "列 <%s> は表 <%s>に見つかりませんでした"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:495
 #, c-format
@@ -24644,14 +24620,14 @@ msgid "Only <%d> colors given for <%d> lines"
 msgstr "<%d> カラーのみ <%d> ラインに与えられています  "
 
 #: ../display/d.linegraph/main.c:538
-#, fuzzy, c-format
+#, c-format
 msgid "Number of widths (%d) is higher then the number of files (%d)"
-msgstr "ウォーカーの数. デフォルト値はセル数の二倍"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:550
-#, fuzzy, c-format
+#, c-format
 msgid "Number of widths (%d) is lower then the number of files (%d)"
-msgstr "ウォーカーの数. デフォルト値はセル数の二倍"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:601
 #, c-format
@@ -27884,9 +27860,8 @@ msgid "Print the maximum bounding box in lat/long on WGS84"
 msgstr "WGS84の緯度経度で最大境界ボックスを表示"
 
 #: ../general/g.region/main.c:148
-#, fuzzy
 msgid "Print in shell script style, but in one line (flat)"
-msgstr "シェルスクリプト形式で表示"
+msgstr ""
 
 #: ../general/g.region/main.c:154
 msgid "Align region to resolution (default = align to bounds, works only for 2D resolution)"
@@ -29236,39 +29211,39 @@ msgid_plural "%d records updated."
 msgstr[0] ""
 
 #: ../vector/v.label.sa/labels.c:68
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot allocate %lu bytes of memory"
-msgstr "メモリーの %d バイトを割り当てられません"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:87
 msgid "Unable to initialise FreeType"
-msgstr "FreeTypeを初期化できません"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:90
 #, c-format
 msgid "Unable to find font '%s'\n"
-msgstr "フォント '%s'が見つかりません\n"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:92
 #, c-format
 msgid "Font '%s' is not a FreeType font\n"
-msgstr "フォント '%s' はFreeType フォントではありません\n"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:96
 msgid "Font file format is not supported by FreeType"
-msgstr "フォントファイルフォーマットはFreeTypeにサポートされていません"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:98
 msgid "Font file can not be loaded"
-msgstr "フォント ファイル はロードできません"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:107
 msgid "Unable to set font size"
-msgstr "フォントサイズを設定できません"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:128
 msgid "Cannot allocate more memory"
-msgstr "これ以上メモリーを割り当てられません"
+msgstr ""
 
 #: ../vector/v.label.sa/labels.c:162 ../vector/v.overlay/main.c:423
 #: ../vector/v.label/main.c:319
@@ -29278,11 +29253,11 @@ msgstr ""
 #: ../vector/v.label.sa/labels.c:244
 #, c-format
 msgid "Cannot load glyph for '%c'"
-msgstr " '%c'のグリフをロードできません"
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:41
 msgid "Create optimally placed labels for vector map(s)"
-msgstr "最適に配置されたベクトルマップのラベルを作成して下さい "
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:57 ../vector/v.label/main.c:78
 msgid "Name of attribute column to be used for labels"
@@ -29294,7 +29269,7 @@ msgstr ""
 
 #: ../vector/v.label.sa/main.c:71
 msgid "Name of TrueType font (as listed in the fontcap)"
-msgstr "TrueTypeフォントへのパス(ファイル名含む）"
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:72 ../vector/v.label.sa/main.c:80
 #: ../vector/v.lrs/v.lrs.label/main.c:181 ../vector/v.label/main.c:125
@@ -29310,7 +29285,7 @@ msgstr "ラベルサイズ (map-unitsにおける)  "
 
 #: ../vector/v.label.sa/main.c:84
 msgid "Icon size of point features (in map-units)"
-msgstr "ポイントフィーチャーのアイコンサイズ (map-unitsにおける)  "
+msgstr ""
 
 #: ../vector/v.label.sa/main.c:107 ../vector/v.lrs/v.lrs.label/main.c:205
 #: ../vector/v.label/main.c:174
@@ -29327,7 +29302,7 @@ msgstr ""
 
 #: ../vector/v.label.sa/main.c:154
 msgid "Border width (only for ps.map output)"
-msgstr "境界幅 (ps.マップ出力のためのみ)  "
+msgstr ""
 
 #: ../vector/v.info/parse.c:24
 msgid "Print history instead of info and exit"
@@ -32809,6 +32784,7 @@ msgstr "表をコピーできません"
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed"
 msgstr[0] ""
+msgstr[1] ""
 
 #: ../vector/v.voronoi/sw_main.c:410 ../vector/v.voronoi/sw_main.c:436
 msgid "All boundaries in the list should be valid"
@@ -39692,101 +39668,79 @@ msgstr ""
 msgid "%s is empty"
 msgstr ""
 
-#, fuzzy
 msgid "Vector map profiling tool"
-msgstr "ベクトルマップの投影範囲"
+msgstr ""
 
 #, fuzzy
 msgid "Input filter"
 msgstr "入力するファイル"
 
-#, fuzzy
 msgid "Coordinates for profiling line nodes"
-msgstr "座標はマップユニットに与えられています"
+msgstr ""
 
-#, fuzzy
 msgid "Profiling line"
-msgstr "ラインを処理しています... "
+msgstr ""
 
-#, fuzzy
 msgid "Buffer (tolerance) for points in map units"
-msgstr "マップユニット内の円弧ポリラインの許容差"
+msgstr ""
 
 #, fuzzy
 msgid "Output formating"
 msgstr "出力フォーマット"
 
-#, fuzzy
 msgid "Number of significant digits"
-msgstr "小数点以下の有効桁数"
+msgstr ""
 
-#, fuzzy
 msgid "Use features only from specified layer"
-msgstr "特定の（サブ）グループからのリストファイル (飾り付)  "
+msgstr ""
 
-#, fuzzy
 msgid "Name for profile line and buffer output map"
-msgstr "混合を含む赤、緑、青出力ファイルのベース名"
+msgstr ""
 
-#, fuzzy
 msgid "Profile line and buffer around it will be written"
-msgstr "ファイル '%s' は既に存在し上書きされます"
+msgstr ""
 
-#, fuzzy
 msgid "Do not print column names"
-msgstr "列名が多すぎます "
+msgstr ""
 
-#, fuzzy
 msgid "Do not print 3D vector data (z values)"
-msgstr "データのないセルに代入する記号 "
+msgstr ""
 
-#, fuzzy
 msgid "Profiling line map"
-msgstr "ラインを処理しています... "
+msgstr ""
 
-#, fuzzy
 msgid "Vector map containing profiling line"
-msgstr "指定したベクトルマップはラインを含む"
+msgstr ""
 
-#, fuzzy
 msgid "Layer 0 not supported"
-msgstr "キーカラム"
+msgstr ""
 
-#, fuzzy
 msgid "Failed to interpreter 'dp' parameter as an integer"
-msgstr " 'dp'パラメーターを整数型として解釈できませんでした"
+msgstr ""
 
-#, fuzzy
 msgid "<%s> is not a valid vector map name"
-msgstr "<%s> は不正なファイル名です"
+msgstr ""
 
-#, fuzzy
 msgid "At least profile start and end coordinates are required!"
-msgstr "指定する位置座標"
+msgstr ""
 
-#, fuzzy
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
-msgstr "レイヤー %d に定義されていないデータベース接続. 初めに v.db.接続を使用してください."
+msgstr ""
 
-#, fuzzy
 msgid "No features match Your query"
-msgstr "停止ベクトル点のマップ名"
+msgstr ""
 
-#, fuzzy
 msgid "Error while initialising line list"
-msgstr "履歴ファイル読み込みエラー"
+msgstr ""
 
-#, fuzzy
 msgid "Error while reading vector feature from profile line map"
-msgstr "シグネチャファイルの読み取り中にエラー"
+msgstr ""
 
-#, fuzzy
 msgid "Unabale to get attribute data for cat %d"
-msgstr "カテゴリー %d の属性データを取得できません"
+msgstr ""
 
-#, fuzzy
 msgid "Error while retreiving database record for cat %d"
-msgstr "カテゴリー %d のデータベース レコード取得中にエラー"
+msgstr ""
 
 #, fuzzy
 msgid "Unable to create 2D raster <%s>"
@@ -40129,7 +40083,7 @@ msgid "[%s] not found"
 msgstr "[%s]が見つかりません "
 
 msgid "option <%s>: <%s> exists."
-msgstr "オプション <%s>: <%s> が存在します"
+msgstr ""
 
 msgid "Override dataset projection (use location's projection)"
 msgstr "データセット投影を再定義します (現在のロケーションの投影法を使用)"
@@ -40927,11 +40881,8 @@ msgstr "キャッシュサイズ (MiB)"
 msgid "Unknown raster map type"
 msgstr "不明なラスターマップのタイプ"
 
-#~ msgid "3D raster"
-#~ msgstr "3Dラスター "
+msgid "3D raster"
+msgstr "3Dラスター "
 
-#~ msgid "Path to file location"
-#~ msgstr "ファイルロケーションへのパス"
-
-#~ msgid "resolution"
-#~ msgstr "解像度"
+msgid "Path to file location"
+msgstr "ファイルロケーションへのパス"

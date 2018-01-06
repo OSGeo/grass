@@ -1981,9 +1981,8 @@ msgid "Unable to export raster map <%s> with r3.pack"
 msgstr ""
 
 #: ../lib/python/temporal/base.py:380
-#, fuzzy
 msgid "Object not found in the temporal database"
-msgstr "não foi possível abrir o mapa raster [%s em %s]"
+msgstr ""
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
@@ -9148,5 +9147,5 @@ msgstr "Registro no banco de dados para categoria %d não encontrado"
 msgid "Cannot fetch row"
 msgstr "não consegui obter informações da camada"
 
-#~ msgid "invalid color name"
-#~ msgstr "nome de cor inválido"
+msgid "invalid color name"
+msgstr "nome de cor inválido"

@@ -3103,19 +3103,16 @@ msgid "Close dialog on finish"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:76
-#, fuzzy
 msgid "Reproject"
-msgstr "Projecção:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:78
-#, fuzzy
 msgid "Reproject raster"
-msgstr "Seleccionar mapa raster:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:80
-#, fuzzy
 msgid "Reproject vector"
-msgstr "Código de projecção:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:90
 #, fuzzy
@@ -17868,20 +17865,5 @@ msgstr "Calcula estadísticas univariantes a partir de celdas no nulas de un map
 msgid "Digitize"
 msgstr "Digitalizar"
 
-#~ msgid "Failed to copy map: action is allowed only within the same location."
-#~ msgstr "Falha ao copiar o mapa: ação só é possível dentro da mesma location."
-
-#~ msgid "failed to open '{0}'"
-#~ msgstr "Não foi possível abrir '{0}'"
-
-#~ msgid "Wx debug level {0}."
-#~ msgstr "Nível de depuração do Wx {0}."
-
-#~ msgid "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n"
-#~ msgstr "Aviso: Ignorando nivel de depuração inválido para o wx (deve estar entre >=0 e <=5). {0}\n"
-
-#~ msgid "GRASS locations in {0}"
-#~ msgstr "Locations do GRASS em {0}"
-
-#~ msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-#~ msgstr "A ferramenta Timeline necessita do pacote \"matplotlib\"(python-matplotlib) instalado. {0}"
+msgid "Failed to copy map: action is allowed only within the same location."
+msgstr "Falha ao copiar o mapa: ação só é possível dentro da mesma location."

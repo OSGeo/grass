@@ -589,9 +589,8 @@ msgid "Unable to export raster map <%s> with r3.pack"
 msgstr ""
 
 #: ../lib/python/temporal/base.py:380
-#, fuzzy
 msgid "Object not found in the temporal database"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr ""
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
@@ -6940,7 +6939,7 @@ msgstr ""
 
 #: ../lib/gis/parser_html.c:239 ../lib/gis/parser_rest.c:230
 msgid "Default"
-msgstr ""
+msgstr "기본값"
 
 #: ../lib/gis/spawn.c:386
 #, c-format
@@ -7490,7 +7489,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:607
 msgid "Field separator"
-msgstr ""
+msgstr "필드 구분자"
 
 #: ../lib/gis/parser_standard_options.c:608
 msgid "Special characters: pipe, comma, space, tab, newline"
@@ -7555,7 +7554,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:725
 msgid "String representing NULL value"
-msgstr ""
+msgstr "NULL 값을 대표하는 문자열"
 
 #: ../lib/gis/parser_standard_options.c:734
 msgid "Name of saved region"

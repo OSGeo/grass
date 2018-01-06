@@ -4709,9 +4709,8 @@ msgid "Error in creating segments"
 msgstr ""
 
 #: ../imagery/i.segment/main.c:55
-#, fuzzy
 msgid "Error in writing IDs"
-msgstr "Virhe valittaessa rivejä"
+msgstr ""
 
 #: ../imagery/i.segment/main.c:59
 msgid "Error in writing goodness of fit"
@@ -24555,9 +24554,9 @@ msgid "Cannot find/open symbol: '%s'"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:458
-#, fuzzy, c-format
+#, c-format
 msgid "Color <%s> cannot for option %s be parsed"
-msgstr "Saraketta <%s> ei löytynyt taulusta <%s>"
+msgstr ""
 
 #: ../display/d.linegraph/main.c:495
 #, c-format
@@ -39643,9 +39642,8 @@ msgstr ""
 msgid "%s is empty"
 msgstr ""
 
-#, fuzzy
 msgid "Unabale to get attribute data for cat %d"
-msgstr "Ei voida luoda taulua."
+msgstr ""
 
 #, fuzzy
 msgid "Unable to create 2D raster <%s>"
