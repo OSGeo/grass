@@ -2,9 +2,9 @@
 
 <em>v.perturb</em>
 reads a vector map of points and writes the same points but
-<em>perturbs</em> the eastings and northings by
-adding either a uniform or normal delta value. Perturbation means that
-a variating spatial deviation is added to the coordinates.
+<em>perturbs</em> the eastings and northings by adding either a uniform
+or normal delta value. Perturbation means that a variating spatial
+deviation is added to the coordinates.
 
 <h2>NOTES</h2>
 
@@ -24,11 +24,58 @@ naturally constrained to be positive.
 Output vector points are not guaranteed to be contained within the
 current geographic region.
 
+<h2>EXAMPLES</h2>
+
+<h3>Random, uniformly distributed selection</h3>
+
+To create a random, uniformly distributed selection of possible new points
+with a radius of 100,000 map units, use the following command:
+
+<div class="code"><pre>
+v.perturb input=comm_colleges output=uniform_perturb parameters=100000
+</pre></div>
+
+Your map should look similar to this figure:
+
+<div align="center" style="margin: 10px">
+<img src="v_perturb_uniform.png" alt="v.perturb uniform distribution example" border="0">
+<br>
+<i>Figure: Map showing the actual community college points and uniformly
+   random chosen points.</i>
+</div>
+
+<h3>Normal distributed selection</h3>
+
+For a normal distribution with a mean of 5000 and standard deviation of
+2000, use the following command:
+
+<div class="code"><pre>
+v.perturb input=comm_colleges output=normal_perturb distribution=normal parameters=5000,2000
+</pre></div>
+
+<div align="center" style="margin: 10px">
+<img src="v_perturb_normal.png" alt="v.perturb normal distribution example" border="0">
+<br>
+<i>Figure: Map showing the actual community college points and normally
+   random chosen and colored points. Notice that each point is closer
+   to the original point.</i>
+</div>
+
+<h3>Normal distributed selection with a minimum value</h3>
+
+In order to include a minimum value of 500, use the following command:
+
+<div class="code"><pre>
+v.perturb input=comm_colleges output=min_perturb distribution=normal parameters=100000,1000 minimum=500
+</pre></div>
+
+
 <h2>SEE ALSO</h2>
 
-<em><a href="v.random.html">v.random</a></em><br>
-<em><a href="v.univar.html">v.univar</a></em><br>
-
+<em>
+<a href="v.random.html">v.random</a>,
+<a href="v.univar.html">v.univar</a>
+</em>
 
 <h2>AUTHOR</h2>
 
