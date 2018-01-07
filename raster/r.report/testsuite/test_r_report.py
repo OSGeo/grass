@@ -21,6 +21,7 @@ class TestRasterreport(TestCase):
     def setUpClass(cls):
         """Use temporary region settings"""
         cls.use_temp_region()
+        cls.runModule('g.region', raster='elevation') 
 
 
     @classmethod
@@ -38,8 +39,8 @@ class TestRasterreport(TestCase):
 
 
     def test_flagc(self):
-        """Testing flag 'c' with map aspect"""
-        self.assertModule('r.report', map='aspect', flags='c')
+        """Testing flag 'c' with map elevation"""
+        self.assertModule('r.report', map='elevation', flags='c')
 
 
     def test_flagf(self):
@@ -48,18 +49,18 @@ class TestRasterreport(TestCase):
 
 
     def test_flagh(self):
-        """Testing flag 'h' with map slope"""
-        self.assertModule('r.report', map='slope', flags='h')
+        """Testing flag 'h' with map lakes"""
+        self.assertModule('r.report', map='lakes', flags='h')
 
 
     def test_flagn(self):
-        """Testing flag 'n' with map urban"""
-        self.assertModule('r.report', map='urban', flags='n')
+        """Testing flag 'n' with map elevation"""
+        self.assertModule('r.report', map='elevation', flags='n')
 
 
     def test_flaga(self):
-        """Testing flag 'a' with map zipcodes"""
-        self.assertModule('r.report', map='zipcodes', flags='a')
+        """Testing flag 'a' with map lakes"""
+        self.assertModule('r.report', map='lakes', flags='a')
 
 
     def test_output(self):
