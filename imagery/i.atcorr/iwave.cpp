@@ -7872,8 +7872,25 @@ void IWave::parse()
 	else G_warning(_("Unsupported iwave value: %d"), iwave);
     }
 
+    /* set wlinf, wlsup */
+    ffu.wlinf = 0.25;
+    iinf = 0;
+    while (ffu.s[iinf] == 0) {
+	ffu.wlinf += 0.0025;
+	iinf++;
+    }
+
+    ffu.wlsup = 4.0;
+    isup = 1500;
+    while (ffu.s[isup] == 0) {
+	ffu.wlsup -= 0.0025;
+	isup--;
+    }
+
+#if 0
     iinf = (int)((ffu.wlinf - 0.25f) / 0.0025f + 1.5f) - 1;	/* remember indexing */
     isup = (int)((ffu.wlsup - 0.25f) / 0.0025f + 1.5f) - 1;	/*		   "         */
+#endif
 
     if(iwave == 1)	/* moved here to avoid unnecessary gotos */
     {
