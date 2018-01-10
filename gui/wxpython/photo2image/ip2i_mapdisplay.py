@@ -1,5 +1,5 @@
 """
-@package iphoto2image.ip2i_mapdisplay
+@package photo2image.ip2i_mapdisplay
 
 @brief Display to manage ground control points with two toolbars, one
 for various display management functions, one for manipulating GCPs.
