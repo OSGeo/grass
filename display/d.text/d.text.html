@@ -70,6 +70,7 @@ color yellow, in bold, and using 4/100'ths (4%) of the
 active frame's vertical space per line:
 <p>
 
+<!--
 <div class="code"><pre>
 <b>d.text</b> &lt;&lt; EOF
 .C yellow
@@ -79,10 +80,19 @@ active frame's vertical space per line:
 This is a test of d.text
 EOF
 </pre></div>
-
-
 The user presses <em>control-d</em> 
 (the "Ctrl" and "d" keys) to end input to <em>d.text</em> (equal to EOF).
+-->
+
+<div class="code"><pre>
+d.text text="This is a test of d.text" color=yellow bgcolor=gray size=4
+</pre></div>
+
+<div align="center" style="margin: 10px">
+<img src='d_text.png' width="600" border="1">
+<br>
+<i>Displayed Text</i>
+</div>
 
 <h2>NOTES</h2>
 
