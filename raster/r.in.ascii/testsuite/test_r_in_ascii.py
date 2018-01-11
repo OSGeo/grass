@@ -95,7 +95,7 @@ class SimpleCsvTestCase(TestCase):
 
     def test_text_delimeter(self):
         """Testing with external file"""
-        self.assertModule('r.in.ascii', input='input_ascii.txt', output=self.ascii_test,
+        self.assertModule('r.in.ascii', input='data/input_ascii.txt', output=self.ascii_test,
                           type='CELL')
         self.assertRasterMinMax(map=self.ascii_test, refmin=1, refmax=5,
 	                        msg="ascii_test in degrees must be between 1 and 5")
