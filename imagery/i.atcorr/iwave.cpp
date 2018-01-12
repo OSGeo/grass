@@ -7870,31 +7870,47 @@ void IWave::parse()
 	else if(iwave <= 165)   worldview3(iwave - 148);
 	else if(iwave <= 178)   sentinel2a(iwave - 165);
 	else G_warning(_("Unsupported iwave value: %d"), iwave);
+
+	if (iwave > 1) {
+	    int imax;
+	    float smax, sthreshold;
+
+	    imax = -1;
+	    smax = 0;
+	    sthreshold = 0.005; /* low threshold for filter functions */
+
+	    /* find maximum response */
+	    for(i = 0; i <= 1500; i++) {
+		if (smax < ffu.s[i]) {
+		    smax = ffu.s[i];
+		    imax = i;
+		}
+	    }
+	    if (smax < sthreshold)
+		G_fatal_error("Invalid filter function");
+	    
+	    /* set wlinf, wlsup */
+	    iinf = imax;
+	    ffu.wlinf = imax * 0.0025 + 0.25;
+	    while (iinf > 0 && ffu.s[iinf - 1] > sthreshold) {
+		iinf--;
+		ffu.wlinf -= 0.0025;
+	    }
+	    isup = imax;
+	    ffu.wlsup = imax * 0.0025 + 0.25;
+	    while (isup < 1500 && ffu.s[isup + 1] > sthreshold) {
+		isup++;
+		ffu.wlsup += 0.0025;
+	    }
+	}
     }
 
-    /* set wlinf, wlsup */
-    ffu.wlinf = 0.25;
-    iinf = 0;
-    while (ffu.s[iinf] == 0) {
-	ffu.wlinf += 0.0025;
-	iinf++;
-    }
-
-    ffu.wlsup = 4.0;
-    isup = 1500;
-    while (ffu.s[isup] == 0) {
-	ffu.wlsup -= 0.0025;
-	isup--;
-    }
-
-#if 0
     iinf = (int)((ffu.wlinf - 0.25f) / 0.0025f + 1.5f) - 1;	/* remember indexing */
     isup = (int)((ffu.wlsup - 0.25f) / 0.0025f + 1.5f) - 1;	/*		   "         */
-#endif
 
     if(iwave == 1)	/* moved here to avoid unnecessary gotos */
     {
-	for(int i = iinf; i <= isup; i++) cin >> ffu.s[i];
+	for(i = iinf; i <= isup; i++) cin >> ffu.s[i];
 	cin.ignore(numeric_limits<int>::max(),'\n');
     }
 }
