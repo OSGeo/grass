@@ -208,6 +208,8 @@ int main(int argc, char *argv[])
 	/* select current location */
 	select_current_env();
 
+        G_message(_("Group [%s] in location [%s] mapset [%s] now uses elevation map [%s]"),
+	          group, location, mapset, elev_opt->answer);
     }else{
 	G_fatal_error(_("Mapset [%s] in target location [%s] - %s "),
                   mapset, location,
