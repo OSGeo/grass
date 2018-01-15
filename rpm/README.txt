@@ -14,3 +14,6 @@ Mandriva:
 
 Opensuse:
  http://download.opensuse.org/repositories/Application:/Geo/
+
+
+example SPEC file in this folder: grass.spec
