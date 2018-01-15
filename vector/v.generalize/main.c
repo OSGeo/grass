@@ -79,6 +79,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("smoothing"));
     G_add_keyword(_("displacement"));
     G_add_keyword(_("network generalization"));
+    G_add_keyword(_("topology"));
+    G_add_keyword(_("geometry"));
     module->description = _("Performs vector based generalization.");
 
     /* Define the different options as defined in gis.h */
