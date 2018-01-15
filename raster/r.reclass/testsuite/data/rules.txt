@@ -1,0 +1,5 @@
+     1 thru 19	 = 1    poor quality
+    51 thru 100	 = 1
+    20 thru 24	 = 2
+    26 thru 50	 = 2    medium quality
+    25		 = 3    good quality
