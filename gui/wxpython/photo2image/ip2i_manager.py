@@ -1,5 +1,5 @@
 """
-@package iphoto2image.ip2i_manager
+@package photo2image.ip2i_manager
 
 @brief Scanning distortion correction of a photo for GRASS GIS. 
 Includes ground control point management and interactive point 
@@ -49,7 +49,7 @@ from gui_core.gselect import Select, LocationSelect, MapsetSelect
 from gui_core.dialogs import GroupDialog
 from core.gcmd import RunCommand, GMessage, GError, GWarning, EncodeString
 from core.settings import UserSettings
-from iphoto2image.ip2i_mapdisplay import MapFrame
+from photo2image.ip2i_mapdisplay import MapFrame
 from core.giface import Notification
 from gui_core.wrap import SpinCtrl
 
