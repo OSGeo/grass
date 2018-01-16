@@ -88,31 +88,35 @@ time intervals equal (see example).
 <em>r.series</em> can calculate arbitrary quantiles.
 
 <h3>Memory consumption</h3>
-
 Memory usage is not an issue, as <em>r.series</em> only needs to hold
 one row from each map at a time.
 
 <h3>Management of open file limits</h3>
-Number of raster maps to be processed is given by the limit of the
-operating system. For example, both the hard and soft limits are
-typically 1024. The soft limit can be changed with e.g. <tt>ulimit -n 1500</tt>
-(UNIX-based operating systems) but not higher than the hard
-limit. If it is too low, you can as superuser add an entry in
+The maximum number of raster maps that can be processed is given by the 
+user-specific limit of the operating system. For example, the soft limits 
+for users are typically 1024 files. The soft limit can be changed with e.g. 
+<tt>ulimit -n 4096</tt> (UNIX-based operating systems) but it cannot be 
+higher than the hard limit. If the latter is too low, you can as superuser
+add an entry in:
 
 <div class="code"><pre>
 /etc/security/limits.conf
 # &lt;domain&gt;      &lt;type&gt;  &lt;item&gt;         &lt;value&gt;
-your_username  hard    nofile          1500
+your_username  hard    nofile          4096
 </pre></div>
 
-This would raise the hard limit to 1500 file. Be warned that more
-files open need more RAM. See also the Wiki page
-<a href="http://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>.
+This will raise the hard limit to 4096 files. Also have a look at the 
+overall limit of the operating system
+<div class="code"><pre>
+cat /proc/sys/fs/file-max
+</pre></div>
+which on modern Linux systems is several 100,000 files.
+
 <p>
 For each map a weighting factor can be specified using the 
 <em>weights</em> option. Using weights can be meaningful when computing 
-sum or average of maps with different temporal extent. The default 
-weight is 1.0. The number of weights must be identical with the number 
+the sum or average of maps with different temporal extent. The default 
+weight is 1.0. The number of weights must be identical to the number 
 of input maps and must have the same order. Weights can also be 
 specified in the input file.
 
@@ -120,16 +124,15 @@ specified in the input file.
 Use the <b>-z</b> flag to analyze large amounts of raster maps without
 hitting open files limit and the <em>file</em> option to avoid hitting
 the size limit of command line arguments.
-
-<p>
-Note that the computation with the <em>file</em> option is slower
-than with the <em>input</em> option method.
+Note that the computation using the <em>file</em> option is slower
+than with the <em>input</em> option.
 For every single row in the output map(s) all input maps are 
-opened and closed. The amount of RAM will rise linear with the number 
-of specified input maps. The input and file options are mutually 
-exclusive. Input is a text file with a new line separated list of 
-raster map names and optional weights. As separator between the map 
-name and the weight the character "|" must be used.
+opened and closed. The amount of RAM will rise linearly with the number 
+of specified input maps. The <em>input</em> and <em>file</em> options are
+mutually exclusive: the former is a comma separated list of raster map
+names and the latter is a text file with a new line separated list of
+raster map names and optional weights. As separator between the map name
+and the weight the character "|" must be used.
 
 <h2>EXAMPLES</h2>
 
