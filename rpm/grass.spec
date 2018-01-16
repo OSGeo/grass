@@ -159,8 +159,11 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 %if (0%{?rhel} > 6 || 0%{?fedora})
 	--with-netcdf=%{_bindir}/nc-config \
 %endif
+%if 0%{?fedora}
+	--with-liblas=%{_bindir}/liblas-config \
+%endif
 	--with-mysql-includes=%{_includedir}/mysql \
-%if (0%{?fedora} > 28)
+%if (0%{?fedora} > 27)
 	--with-mysql-libs=%{_libdir} \
 %else
 	--with-mysql-libs=%{_libdir}/mysql \
@@ -173,10 +176,8 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 %endif
 	--with-cairo-ldflags=-lfontconfig \
 	--with-freetype-includes=%{_includedir}/freetype2 \
-	--with-proj-share=%{_datadir}/proj \
-%if 0%{?fedora}
-	--with-liblas=%{_bindir}/liblas-config
-%endif
+	--with-zstd \
+	--with-proj-share=%{_datadir}/proj
 
 %if (0%{?rhel} > 6 || 0%{?fedora})
 make %{?_smp_mflags}
