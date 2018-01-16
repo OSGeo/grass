@@ -1,5 +1,5 @@
 """
-@package iphoto2image.ip2i_toolbars
+@package photo2image.ip2i_toolbars
 
 @brief Georectification module - toolbars
 

@@ -1,5 +1,5 @@
 """
-@package iphoto2image.ip2i_statusbar
+@package photo2image.ip2i_statusbar
 
 @brief Classes for statusbar management in GCP Manager
 
