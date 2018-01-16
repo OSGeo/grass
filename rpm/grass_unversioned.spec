@@ -1,8 +1,8 @@
-%global shortver 74
+%global shortver 75
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	7.4.0
+Version:	7.5.0
 Release:	1%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
@@ -70,6 +70,8 @@ BuildRequires:	subversion
 BuildRequires:	unixODBC-devel
 BuildRequires:	wxGTK-devel
 BuildRequires:	zlib-devel
+BuildRequires:	libzstd-devel
+Requires:	libzstd
 
 Requires:	geos
 Requires:	numpy
@@ -158,7 +160,11 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 	--with-netcdf=%{_bindir}/nc-config \
 %endif
 	--with-mysql-includes=%{_includedir}/mysql \
+%if (0%{?fedora} > 28)
 	--with-mysql-libs=%{_libdir} \
+%else
+	--with-mysql-libs=%{_libdir}/mysql \
+%endif
 %if (0%{?rhel} > 6 || 0%{?fedora})
         --with-postgres-includes=%{_includedir}/pgsql \
 %else
@@ -236,6 +242,10 @@ do
 	iconv -f iso8859-1 -t utf8 $man > %{buildroot}%{_mandir}/man1/$(basename $man)"%{name}"
 done
 
+# symlink docs from GISBASE to standard system location
+mkdir -p %{buildroot}%{_docdir}
+ln -s %{_libdir}/%{name}/docs %{buildroot}%{_docdir}/%{name}
+
 for file in infrastructure.txt ; do
   iconv -f ISO-8859-1 -t UTF-8 $file > ${file}.tmp && mv -f ${file}.tmp $file
 done
@@ -245,10 +255,6 @@ mv %{buildroot}%{_libdir}/%{name}/share/* %{buildroot}%{_datadir}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/*.desktop
 # EPEL7 fails on url tag, so we ignore failure:
 appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/appdata/*.appdata.xml || echo "Ignoring appstream-util failure"
-
-# symlink docs from GISBASE to standard system location
-mkdir -p %{buildroot}%{_docdir}
-ln -s %{_libdir}/%{name}/docs %{buildroot}%{_docdir}/%{name}
 
 # Cleanup: nothing to do
 #rm -rf %%{buildroot}%%{_libdir}/%%{name}
