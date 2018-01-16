@@ -70,6 +70,8 @@ BuildRequires:	subversion
 BuildRequires:	unixODBC-devel
 BuildRequires:	wxGTK-devel
 BuildRequires:	zlib-devel
+BuildRequires:	libzstd-devel
+Requires:	libzstd
 
 Requires:	geos
 Requires:	numpy
@@ -158,7 +160,11 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 	--with-netcdf=%{_bindir}/nc-config \
 %endif
 	--with-mysql-includes=%{_includedir}/mysql \
+%if (0%{?fedora} > 28)
 	--with-mysql-libs=%{_libdir} \
+%else
+	--with-mysql-libs=%{_libdir}/mysql \
+%endif
 %if (0%{?rhel} > 6 || 0%{?fedora})
         --with-postgres-includes=%{_includedir}/pgsql \
 %else
@@ -186,14 +192,15 @@ make %{?_smp_mflags} || echo "EPEL6: ignoring failed manual pages"
 	prefix=%{buildroot}%{_libdir} \
 	UNIX_BIN=%{buildroot}%{_bindir}
 
+# libraries and headers are in GISBASE = %%{_libdir}/%%{name}
+# keep them in GISBASE
+
+# fix paths:
+
 # Change GISBASE in startup script
 sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}-%{version}|g' \
 	%{buildroot}%{_bindir}/%{name}%{shortver}
-
-# libraries and headers are in GISBASE = %%{_libdir}/%%{name}-%%{version}
-# keep them in GISBASE
-
-# fix GRASS_HOME in Platform.make
+# fix GRASS_HOME and RUN_GISBASE in Platform.make
 sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}-%{version}|g' \
 	%{buildroot}%{_libdir}/%{name}-%{version}/include/Make/Platform.make
 # fix ARCH_DISTDIR in Grass.make
@@ -205,8 +212,13 @@ sed -i -e 's|%{buildroot}%{_bindir}|%{_bindir}|g' \
 # fix GISDBASE in demolocation
 sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}-%{version}|g' \
 	%{buildroot}%{_libdir}/%{name}-%{version}/demolocation/.grassrc%{shortver}
+# Correct font path
+sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}-%{version}|' \
+	%{buildroot}%{_libdir}/%{name}-%{version}/etc/fontcap
+# fix paths in grass.pc
+sed -i -e 's|%{_prefix}/%{name}-%{version}|%{_libdir}/%{name-%{version}}|g' \
+	%{name}.pc
 
-# TODO: fix paths in grass.pc
 mkdir -p %{buildroot}%{_libdir}/pkgconfig
 install -p -m 644 %{name}.pc %{buildroot}%{_libdir}/pkgconfig
 
@@ -222,6 +234,11 @@ do
 	iconv -f iso8859-1 -t utf8 $man > %{buildroot}%{_mandir}/man1/$(basename $man)"%{name}"
 done
 
+# symlink docs from GISBASE to standard system location
+mkdir -p %{buildroot}%{_docdir}
+# append shortver to destination ? man pages are unversioned
+ln -s %{_libdir}/%{name}-%{version}/docs %{buildroot}%{_docdir}/%{name}%{shortver}
+
 for file in infrastructure.txt ; do
   iconv -f ISO-8859-1 -t UTF-8 $file > ${file}.tmp && mv -f ${file}.tmp $file
 done
@@ -231,13 +248,6 @@ mv %{buildroot}%{_libdir}/%{name}-%{version}/share/* %{buildroot}%{_datadir}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/*.desktop
 # EPEL7 fails on url tag, so we ignore failure:
 appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/appdata/*.appdata.xml || echo "Ignoring appstream-util failure"
-# Correct font path
-sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}-%{version}|' \
-	%{buildroot}%{_libdir}/%{name}-%{version}/etc/fontcap
-
-# symlink docs from GISBASE to standard system location
-mkdir -p %{buildroot}%{_docdir}
-ln -s %{_libdir}/%{name}-%{version}/docs %{buildroot}%{_docdir}/%{name}%{shortver}
 
 # Cleanup: nothing to do
 #rm -rf %%{buildroot}%%{_prefix}/%%{name}-%%{version}
