@@ -1620,7 +1620,9 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
         if not os.access(env_file, os.R_OK):
             continue
         for line in readfile(env_file).splitlines():
-            if not line.startswith('export'):
+            # Bug related to OS X "SIP", see
+            # https://trac.osgeo.org/grass/ticket/3462#comment:13
+            if macosx or not line.startswith('export'):
                 f.write(line + '\n')
 
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
