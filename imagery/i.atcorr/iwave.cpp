@@ -7877,7 +7877,7 @@ void IWave::parse()
 
 	    imax = -1;
 	    smax = 0;
-	    sthreshold = 0.005; /* low threshold for filter functions */
+	    sthreshold = 0.01; /* low threshold for filter functions */
 
 	    /* find maximum response */
 	    for(i = 0; i <= 1500; i++) {
