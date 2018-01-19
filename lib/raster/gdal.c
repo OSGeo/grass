@@ -18,6 +18,7 @@
 #include <grass/config.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/gprojects.h>
 #include <grass/glocale.h>
 
 #include "R.h"
@@ -431,12 +432,8 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
 	read_gdal_options();
 	st->projinfo = G_get_projinfo();
 	st->projunits = G_get_projunits();
-#if 0
-	/* We cannot use GPJ_grass_to_wkt() here because that would create a
-	   circular dependency between libgis and libgproj */
 	if (st->projinfo && st->projunits)
-	    st->srswkt = GPJ_grass_to_wkt(st->projinfo, st->projunits);
-#endif
+	    st->srswkt = GPJ_grass_to_wkt(st->projinfo, st->projunits, 0, 0);
 	G_initialize_done(&st->initialized);
     }
 
