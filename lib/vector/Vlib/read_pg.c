@@ -386,7 +386,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
 
         Vect_reset_cats(line_c);
         if (!pg_info->toposchema_name) { /* simple features access */
-            cat = (int) Line->offset;
+            cat = fid;
         }
         else {                           /* PostGIS Topology (cats are cached) */
             cat = pg_info->cache.lines_cats[cache_idx];
