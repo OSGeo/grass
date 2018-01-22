@@ -10,15 +10,18 @@
  * return 1 if no SRS available
  * return 2 if SRS available but unreadable */
 int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
-		   struct Key_Value **proj_info, struct Key_Value **proj_units,
+		   struct Key_Value **proj_info,
+		   struct Key_Value **proj_units,
+		   struct Key_Value **proj_epsg,
 		   char *geom_col, int verbose)
 {
-    OGRSpatialReferenceH Ogr_projection;
+    OGRSpatialReferenceH hSRS;
     char *pszProj4 = NULL;
 
-    Ogr_projection = NULL;
+    hSRS = NULL;
     *proj_info = NULL;
     *proj_units = NULL;
+    *proj_epsg = NULL;
 
     /* Fetch input layer projection in GRASS form. */
 #if GDAL_VERSION_NUM >= 1110000
@@ -33,27 +36,27 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
             G_fatal_error(_("Geometry column <%s> not found in input layer <%s>"),
                           geom_col, OGR_L_GetName(Ogr_layer));
         Ogr_geomdefn = OGR_FD_GetGeomFieldDefn(Ogr_featuredefn, igeom);
-        Ogr_projection = OGR_GFld_GetSpatialRef(Ogr_geomdefn);
+        hSRS = OGR_GFld_GetSpatialRef(Ogr_geomdefn);
     }
     else {
-        Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
+        hSRS = OGR_L_GetSpatialRef(Ogr_layer);
     }
 #else
-    Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);	/* should not be freed later */
+    hSRS = OGR_L_GetSpatialRef(Ogr_layer);	/* should not be freed later */
 #endif
 
     /* verbose is used only when comparing input SRS to GRASS projection,
      * not when comparing SRS's of several input layers */
     if (GPJ_osr_to_grass(cellhd, proj_info,
-			 proj_units, Ogr_projection, 0) < 0) {
+			 proj_units, hSRS, 0) < 0) {
 	/* TODO: GPJ_osr_to_grass() does not return anything < 0
 	 * check with GRASS 6 and GRASS 5 */
 	G_warning(_("Unable to convert input layer projection information to "
 		   "GRASS format for checking"));
-	if (verbose && Ogr_projection != NULL) {
+	if (verbose && hSRS != NULL) {
 	    char *wkt = NULL;
 
-	    if (OSRExportToPrettyWkt(Ogr_projection, &wkt, FALSE) != OGRERR_NONE) {
+	    if (OSRExportToPrettyWkt(hSRS, &wkt, FALSE) != OGRERR_NONE) {
 		G_warning(_("Can't get WKT parameter string"));
 	    }
 	    else if (wkt) {
@@ -65,23 +68,23 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
     }
     /* custom checks because if in doubt GPJ_osr_to_grass() returns a 
      * xy CRS */
-    if (Ogr_projection == NULL) {
+    if (hSRS == NULL) {
 	if (verbose) {
-	    G_important_message(_("No OGR projection available for layer <%s>"),
+	    G_important_message(_("No projection information available for layer <%s>"),
 				OGR_L_GetName(Ogr_layer));
 	}
 
 	return 1;
     }
 
-    if (!OSRIsProjected(Ogr_projection) && !OSRIsGeographic(Ogr_projection)) {
-	G_important_message(_("OGR projection for layer <%s> does not contain a valid SRS"),
+    if (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS)) {
+	G_important_message(_("Projection for layer <%s> does not contain a valid SRS"),
 			    OGR_L_GetName(Ogr_layer));
 
 	if (verbose) {
 	    char *wkt = NULL;
 
-	    if (OSRExportToPrettyWkt(Ogr_projection, &wkt, FALSE) != OGRERR_NONE) {
+	    if (OSRExportToPrettyWkt(hSRS, &wkt, FALSE) != OGRERR_NONE) {
 		G_important_message(_("Can't get WKT parameter string"));
 	    }
 	    else if (wkt) {
@@ -91,15 +94,32 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
 
 	return 2;
     }
+    else{
+	const char *authkey, *authname, *authcode;
 
-    if (OSRExportToProj4(Ogr_projection, &pszProj4) != OGRERR_NONE) {
-	G_important_message(_("OGR projection for layer <%s> can not be converted to proj4"),
+	if (OSRIsProjected(hSRS))
+	    authkey = "PROJCS";
+	else /* is geographic */
+	    authkey = "GEOGCS";
+
+	authname = OSRGetAuthorityName(hSRS, authkey);
+	if (authname && *authname && strcmp(authname, "EPSG") == 0) {
+	    authcode = OSRGetAuthorityCode(hSRS, authkey);
+	    if (authcode && *authcode) {
+		*proj_epsg = G_create_key_value();
+		G_set_key_value("epsg", authcode, *proj_epsg);
+	    }
+	}
+    }
+
+    if (OSRExportToProj4(hSRS, &pszProj4) != OGRERR_NONE) {
+	G_important_message(_("Projection for layer <%s> can not be converted to proj4"),
 			    OGR_L_GetName(Ogr_layer));
 
 	if (verbose) {
 	    char *wkt = NULL;
 
-	    if (OSRExportToPrettyWkt(Ogr_projection, &wkt, FALSE) != OGRERR_NONE) {
+	    if (OSRExportToPrettyWkt(hSRS, &wkt, FALSE) != OGRERR_NONE) {
 		G_important_message(_("Can't get WKT-style parameter string"));
 	    }
 	    else if (wkt) {
@@ -121,16 +141,16 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers,
 		  char **layer_names, char *geom_col)
 {
     int layer;
-    struct Key_Value *proj_info1, *proj_units1;
-    struct Key_Value *proj_info2, *proj_units2;
+    struct Key_Value *proj_info1, *proj_units1, *proj_epsg1;
+    struct Key_Value *proj_info2, *proj_units2, *proj_epsg2;
     struct Cell_head cellhd1, cellhd2;
     OGRLayerH Ogr_layer;
 
     if (nlayers == 1)
 	return 0;
 
-    proj_info1 = proj_units1 = NULL;
-    proj_info2 = proj_units2 = NULL;
+    proj_info1 = proj_units1 = proj_epsg1 = NULL;
+    proj_info2 = proj_units2 = proj_epsg2 = NULL;
 
     G_get_window(&cellhd1);
     layer = 0;
@@ -139,7 +159,7 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers,
 	Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
 
 	if (get_layer_proj(Ogr_layer, &cellhd1, &proj_info1, &proj_units1,
-			   geom_col, 0) == 0) {
+			   &proj_epsg1, geom_col, 0) == 0) {
 	    break;
 	}
 	layer++;
@@ -153,6 +173,8 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers,
 	    G_free_key_value(proj_info1);
 	if (proj_units1)
 	    G_free_key_value(proj_units1);
+	if (proj_epsg1)
+	    G_free_key_value(proj_epsg1);
 
 	return 0;
     }
@@ -165,6 +187,8 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers,
 	    G_free_key_value(proj_info1);
 	if (proj_units1)
 	    G_free_key_value(proj_units1);
+	if (proj_epsg1)
+	    G_free_key_value(proj_epsg1);
 
 	return 1;
     }
@@ -174,9 +198,13 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers,
 	Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
 	G_get_window(&cellhd2);
 	if (get_layer_proj(Ogr_layer, &cellhd2, &proj_info2, &proj_units2,
-			   geom_col, 0) != 0) {
-	    G_free_key_value(proj_info1);
-	    G_free_key_value(proj_units1);
+			   &proj_epsg2, geom_col, 0) != 0) {
+	    if (proj_info1)
+		G_free_key_value(proj_info1);
+	    if (proj_units1)
+		G_free_key_value(proj_units1);
+	    if (proj_epsg1)
+		G_free_key_value(proj_epsg1);
 
 	    return 1;
 	}
@@ -188,10 +216,14 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers,
 		G_free_key_value(proj_info1);
 	    if (proj_units1)
 		G_free_key_value(proj_units1);
+	    if (proj_epsg1)
+		G_free_key_value(proj_epsg1);
 	    if (proj_info2)
 		G_free_key_value(proj_info2);
 	    if (proj_units2)
 		G_free_key_value(proj_units2);
+	    if (proj_epsg2)
+		G_free_key_value(proj_epsg2);
 	    
 	    G_warning(_("Projection of layer <%s> is different from "
 			"projection of layer <%s>"),
@@ -203,11 +235,15 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers,
 	    G_free_key_value(proj_info2);
 	if (proj_units2)
 	    G_free_key_value(proj_units2);
+	if (proj_epsg2)
+	    G_free_key_value(proj_epsg2);
     }
     if (proj_info1)
 	G_free_key_value(proj_info1);
     if (proj_units1)
 	G_free_key_value(proj_units1);
+    if (proj_epsg1)
+	G_free_key_value(proj_epsg1);
 
     return 0;
 }
@@ -218,8 +254,8 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_
 		      int check_only)
 {
     struct Cell_head loc_wind;
-    struct Key_Value *proj_info = NULL, *proj_units = NULL;
-    struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
+    struct Key_Value *proj_info, *proj_units, *proj_epsg;
+    struct Key_Value *loc_proj_info, *loc_proj_units;
     char error_msg[8096];
     int proj_trouble;
     OGRLayerH Ogr_layer;
@@ -232,6 +268,9 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_
     /* -------------------------------------------------------------------- */
     proj_info = NULL;
     proj_units = NULL;
+    proj_epsg = NULL;
+    loc_proj_info = NULL;
+    loc_proj_units = NULL;
 
     /* proj_trouble:
      * 0: valid srs
@@ -241,7 +280,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_
 
     /* Projection only required for checking so convert non-interactively */
     proj_trouble = get_layer_proj(Ogr_layer, cellhd, &proj_info, &proj_units,
-		   geom_col, 1);
+		                  &proj_epsg, geom_col, 1);
 
     /* -------------------------------------------------------------------- */
     /*      Do we need to create a new location?                            */
@@ -254,8 +293,8 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_
 			    "format; cannot create new location."));
 	}
 	else {
-            if (0 != G_make_location(outloc, cellhd,
-                                     proj_info, proj_units)) {
+            if (0 != G_make_location_epsg(outloc, cellhd, proj_info,
+	                                  proj_units, proj_epsg)) {
                 G_fatal_error(_("Unable to create new location <%s>"),
                               outloc);
             }

@@ -1531,13 +1531,6 @@ int main(int argc, char *argv[])
 	    
 	Vect_spatial_index_destroy(&si);
 
-	if (n_overlaps > 0) {
-	    G_warning(_("%d areas represent more (overlapping) features, because polygons overlap "
-		       "in input layer(s). Such areas are linked to more than 1 row in attribute table. "
-		       "The number of features for those areas is stored as category in layer %d"),
-		      n_overlaps, nlayers + 1);
-	}
-
 	G_message("%s", separator);
 
 	Vect_hist_write(&Map, separator);
@@ -1683,18 +1676,34 @@ int main(int argc, char *argv[])
 	G_important_message("%s", separator);
 	/* topological errors */
 	if (failed_centr || err_boundaries || err_centr_out || err_centr_dupl) {
-	    G_warning(_("The output contains topological errors:"));
-	    if (failed_centr)
-		G_warning(_("Unable to calculate a centroid for %d areas"), failed_centr);
-	    if (err_boundaries)
-		G_warning(_("Number of incorrect boundaries: %d"),
-			  err_boundaries);
-	    if (err_centr_out)
-		G_warning(_("Number of centroids outside area: %d"),
-			  err_centr_out);
-	    if (err_centr_dupl)
-		G_warning(_("Number of duplicate centroids: %d"),
-			  err_centr_dupl);
+	    char error_msg[8096];
+
+	    strcpy(error_msg, _("The output contains topological errors:"));
+	    if (failed_centr) {
+		strcat(error_msg, "\n");
+		sprintf(error_msg + strlen(error_msg),
+		       _("Unable to calculate a centroid for %d areas"),
+		       failed_centr);
+	    }
+	    if (err_boundaries) {
+		strcat(error_msg, "\n");
+		sprintf(error_msg + strlen(error_msg),
+		        _("Number of incorrect boundaries: %d"),
+			err_boundaries);
+	    }
+	    if (err_centr_out) {
+		strcat(error_msg, "\n");
+		sprintf(error_msg + strlen(error_msg),
+		        _("Number of centroids outside area: %d"),
+			err_centr_out);
+	    }
+	    if (err_centr_dupl) {
+		strcat(error_msg, "\n");
+		sprintf(error_msg + strlen(error_msg),
+		        _("Number of duplicate centroids: %d"),
+			err_centr_dupl);
+	    }
+	    G_warning(error_msg);
 	    
 	    G_important_message(_("The input could be cleaned by snapping vertices to each other."));
 
@@ -1702,10 +1711,20 @@ int main(int argc, char *argv[])
 		G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
 	    }
 
-	    if (snap < min_snap) {
+	    if (snap < 0) {
+		double e1, e2;
+
+		/* human readable */
+		e1 = log10(min_snap);
+		e2 = log10(max_snap);
+		e1 = (int)((e1 + e2) / 2. - 0.5);
+		snap = pow(10, e1);
+		G_important_message(_("Try to import again, snapping with %g: 'snap=%g'"), snap, snap);
+	    }
+	    else if (snap < min_snap) {
 		G_important_message(_("Try to import again, snapping with at least %g: 'snap=%g'"), min_snap, min_snap);
 	    }
-	    else if (snap < max_snap) {
+	    else if (snap * 10 < max_snap) {
 		min_snap = snap * 10;
 		G_important_message(_("Try to import again, snapping with %g: 'snap=%g'"), min_snap, min_snap);
 	    }
@@ -1715,26 +1734,30 @@ int main(int argc, char *argv[])
 	}
 	/* overlapping polygons */
 	else if (n_overlaps) {
-	    if (n_overlaps) {
-		G_important_message(_("Some input polygons are overlapping each other."));
-		G_important_message(_("If overlapping is not desired, the data need to be cleaned."));
-		G_important_message(_("The input could be cleaned by snapping vertices to each other."));
-	    }
+	    G_important_message(_("%d areas represent multiple (overlapping) features, because polygons overlap "
+		       "in input layer(s). Such areas are linked to more than 1 row in attribute table. "
+		       "The number of features for those areas is stored as category in layer %d"),
+		       n_overlaps, nlayers + 1);
+	    G_important_message("%s", separator);
+	    G_important_message(_("If overlapping is not desired, the input data can be "
+				  "cleaned by snapping vertices to each other."));
 
 	    if (snap < max_snap) {
 		G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
 	    }
 
-	    if (snap < min_snap) {
-		G_important_message(_("Try to import again, snapping with at least %g: 'snap=%g'"), min_snap, min_snap);
+	    if (snap > 0) {
+		if (snap < min_snap) {
+		    G_important_message(_("Try to import again, snapping with at least %g: 'snap=%g'"), min_snap, min_snap);
+		}
+		else if (snap * 10 <= max_snap) {
+		    min_snap = snap * 10;
+		    G_important_message(_("Try to import again, snapping with %g: 'snap=%g'"), min_snap, min_snap);
+		}
+		else
+		    /* assume manual cleaning is required */
+		    G_important_message(_("Manual cleaning may be needed."));
 	    }
-	    else if (snap < max_snap) {
-		min_snap = snap * 10;
-		G_important_message(_("Try to import again, snapping with %g: 'snap=%g'"), min_snap, min_snap);
-	    }
-	    else
-		/* assume manual cleaning is required */
-		G_important_message(_("Manual cleaning may be needed."));
 	}
 	/* number of centroids does not match number of input polygons */
 	else if (ncentr != n_polygons) {

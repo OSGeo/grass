@@ -11,8 +11,8 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 		      int check_only)
 {
     struct Cell_head loc_wind;
-    struct Key_Value *proj_info = NULL, *proj_units = NULL;
-    struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
+    struct Key_Value *proj_info, *proj_units, *proj_epsg;
+    struct Key_Value *loc_proj_info, *loc_proj_units;
     const char *wkt;
     char error_msg[8096];
     int proj_trouble;
@@ -22,6 +22,10 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
     /* -------------------------------------------------------------------- */
     proj_info = NULL;
     proj_units = NULL;
+    proj_epsg = NULL;
+    loc_proj_info = NULL;
+    loc_proj_units = NULL;
+
     wkt = GDALGetProjectionRef(hDS);
     /* proj_trouble:
      * 0: valid srs
@@ -43,6 +47,24 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 
 	    proj_trouble = 2;
 	}
+	else{
+	    const char *authkey, *authname, *authcode;
+
+	    if (OSRIsProjected(hSRS))
+		authkey = "PROJCS";
+	    else /* is geographic */
+		authkey = "GEOGCS";
+
+	    authname = OSRGetAuthorityName(hSRS, authkey);
+	    if (authname && *authname && strcmp(authname, "EPSG") == 0) {
+		authcode = OSRGetAuthorityCode(hSRS, authkey);
+		if (authcode && *authcode) {
+		    G_debug(0, "found EPSG:%s", authcode);
+		    proj_epsg = G_create_key_value();
+		    G_set_key_value("epsg", authcode, proj_epsg);
+		}
+	    }
+	}
 	if (hSRS)
 	    OSRDestroySpatialReference(hSRS);
     }
@@ -63,8 +85,8 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 			    "format; cannot create new location."));
 	}
 	else {
-            if (0 != G_make_location(outloc, cellhd,
-                                     proj_info, proj_units)) {
+            if (0 != G_make_location_epsg(outloc, cellhd, proj_info,
+	                                  proj_units, proj_epsg)) {
                 G_fatal_error(_("Unable to create new location <%s>"),
                               outloc);
             }
