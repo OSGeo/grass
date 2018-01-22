@@ -233,6 +233,7 @@ int main(int argc, char *argv[])
     }
 
     epsg = inepsg->answer;
+    projinfo = projunits = projepsg = NULL;
 
     /* Input */
     /* We can only have one input source, hence if..else construct */
@@ -292,7 +293,7 @@ int main(int argc, char *argv[])
 		      create->key);
 
     if (printinfo->answer || shellinfo->answer)
-        print_projinfo(shellinfo->answer, epsg);
+        print_projinfo(shellinfo->answer);
     else if (datuminfo->answer)
 	print_datuminfo();
     else if (printproj4->answer)
@@ -302,7 +303,7 @@ int main(int argc, char *argv[])
 	print_wkt(esristyle->answer, dontprettify->answer);
 #endif
     else if (location->answer)
-	create_location(location->answer, epsg);
+	create_location(location->answer);
     else if (create->answer)
 	modify_projinfo();
     else
@@ -316,21 +317,13 @@ int main(int argc, char *argv[])
 		      printinfo->key, shellinfo->key, printproj4->key);
 #endif
 
-#ifdef HAVE_OGR
-    if (create->answer && epsg) {
-#else
-    if (create->answer){ 
-#endif
-	/* preserve epsg code for user records only (not used by grass's pj routines) */
-        create_epsg(location->answer, epsg);
-    }
-
-
     /* Tidy Up */
     if (projinfo != NULL)
 	G_free_key_value(projinfo);
     if (projunits != NULL)
 	G_free_key_value(projunits);
+    if (projepsg != NULL)
+	G_free_key_value(projepsg);
 
     exit(EXIT_SUCCESS);
 
