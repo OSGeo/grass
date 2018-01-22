@@ -504,6 +504,8 @@ void G_free_ls_filter(void *);
 /* make_loc.c */
 int G_make_location(const char *, struct Cell_head *, const struct Key_Value *,
 		    const struct Key_Value *);
+int G_make_location_epsg(const char *, struct Cell_head *, const struct Key_Value *,
+			 const struct Key_Value *, const struct Key_Value *);
 int G_compare_projections(const struct Key_Value *, const struct Key_Value *,
 			  const struct Key_Value *, const struct Key_Value *);
 

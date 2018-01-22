@@ -93,6 +93,59 @@ int G_make_location(const char *location_name,
 }
 
 /*!
+ * \brief Create a new location
+ * 
+ * This function creates a new location in the current database,
+ * initializes the projection, default window and current window,
+ * and sets the EPSG code if present
+ *
+ * \param location_name Name of the new location. Should not include
+ *                      the full path, the location will be created within
+ *                      the current database.
+ * \param wind          default window setting for the new location.
+ *                      All fields should be set in this
+ *                      structure, and care should be taken to ensure that
+ *                      the proj/zone fields match the definition in the
+ *                      proj_info parameter(see G_set_cellhd_from_projinfo()).
+ *
+ * \param proj_info     projection definition suitable to write to the
+ *                      PROJ_INFO file, or NULL for PROJECTION_XY.
+ *
+ * \param proj_units    projection units suitable to write to the PROJ_UNITS
+ *                      file, or NULL.
+ * 
+ * \param proj_epsg     EPSG code suitable to write to the PROJ_EPSG
+ *                      file, or NULL.
+ *
+ * \return 0 on success
+ * \return -1 to indicate a system error (check errno).
+ * \return -2 failed to create projection file (currently not used)
+ * \return -3 illegal name 
+ */
+int G_make_location_epsg(const char *location_name,
+			 struct Cell_head *wind,
+			 const struct Key_Value *proj_info,
+			 const struct Key_Value *proj_units,
+			 const struct Key_Value *proj_epsg)
+{
+    int ret;
+    char path[GPATH_MAX];
+
+    ret = G_make_location(location_name, wind, proj_info, proj_units);
+
+    if (ret != 0)
+	return ret;
+
+    /* Write out the PROJ_EPSG if available. */
+    if (proj_epsg != NULL) {
+	G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
+	G_write_key_value_file(path, proj_epsg);
+    }
+
+    return 0;
+}
+
+/*!
  * \brief Compare projections including units
  *
  *  \param proj_info1   projection info to compare
