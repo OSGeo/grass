@@ -259,7 +259,7 @@ North Carolina example (considering also cast shadows):
 g.region raster=elevation -p
 
 # calculate horizon angles (to speed up the subsequent r.sun calculation)
-r.horizon elevation=elevation step=30 bufferzone=200 basename=horangle \
+r.horizon elevation=elevation step=30 bufferzone=200 output=horangle \
     maxdistance=5000
 
 # slope + aspect
