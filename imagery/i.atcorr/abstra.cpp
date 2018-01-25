@@ -10418,7 +10418,6 @@ void abstra (const AtmosModel& atms, const Altitude& alt,
 	}
 	else
 	{
-            int k;
 	    for(k = 0; k < 33; k++)
 	    {
 		roair = air * 273.16f * alt.plane_sim.ppl[k] / (1013.25f * alt.plane_sim.tpl[k]);

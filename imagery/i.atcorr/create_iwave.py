@@ -218,7 +218,7 @@ def write_cpp(bands, values, sensor, folder):
  	while c < len(fi) - 1 and fi[c + 1] > rthresh:
 	    c = c + 1
  	max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
- 	print "   %s (%i nm - %i nm)" % (bands[b], min_wavelength, max_wavelength)
+ 	print "   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength)
 
     else:
         filter_f = []
@@ -240,7 +240,7 @@ def write_cpp(bands, values, sensor, folder):
 	    while c < len(fi) - 1 and fi[c + 1] > rthresh:
 		c = c + 1
 	    max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
-	    print "   %s (%i nm - %i nm)" % (bands[b], min_wavelength, max_wavelength)
+	    print "   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength)
     
     # writing...
     outfile = open(os.path.join(folder, sensor+"_cpp_template.txt"), 'w')
@@ -346,7 +346,7 @@ def main():
 	    hiwl = values[i,0]
 	    i += 1
 	
-	print "   %s (%i nm - %i nm)" % (bands[b - 1], lowl, hiwl)
+	print "   %s (%inm - %inm)" % (bands[b - 1], lowl, hiwl)
 
     # writing file in same folder of input file
     write_cpp(bands, values, sensor, os.path.dirname(inputfile))

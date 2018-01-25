@@ -224,12 +224,12 @@ void printOutput()
     {
 	Output::WriteLn(15," gaseous content at target level: ");
 
-	ostringstream s;
-	s.setf(ios::fixed, ios::floatfield);
-	s << setprecision(3);
-	s << " uh2o=" << setw(9) << atms.uw << " g/cm2      "
-	  << "  uo3=" << setw(9) << atms.uo3 << " cm-atm" << ends;
-	Output::WriteLn(15,s.str());
+	ostringstream s3;
+	s3.setf(ios::fixed, ios::floatfield);
+	s3 << setprecision(3);
+	s3 << " uh2o=" << setw(9) << atms.uw << " g/cm2      "
+	   << "  uo3=" << setw(9) << atms.uo3 << " cm-atm" << ends;
+	Output::WriteLn(15,s3.str());
     }
 
     alt.print();
@@ -578,8 +578,10 @@ TransformInput compute()
     sroaer = sroaer / seb;
     srotot = srotot / seb;
     alumet = alumet / sb;
+    /*
     float pizera = 0.0f;
     if(aero.iaer != 0) pizera = ssdaer / sodaer;
+    */
     sodray = sodray / seb;
     sodaer = sodaer / seb;
     sodtot = sodtot / seb;

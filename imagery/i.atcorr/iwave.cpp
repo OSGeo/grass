@@ -1461,7 +1461,7 @@ void IWave::etmplus(int iwa)
     }
 }
 
-float IWave::solirr(const float wl) const
+float IWave::solirr(const float fwl) const
 {
 /*    si (in w/m2/micron) contains the values of the solar
       irradiance between 0.25 and 4.0 microns, by step of 0.0025 m.
@@ -1687,7 +1687,7 @@ float IWave::solirr(const float wl) const
     };
 
     float pas = 0.0025;
-    int   iwl = (int)((wl - 0.250) / pas + 1.5);
+    int   iwl = (int)((fwl - 0.250) / pas + 1.5);
 	  
     if(iwl >= 0) return si[iwl-1];
 
@@ -7796,11 +7796,11 @@ float IWave::equivwl() const
     {
 	float sbor = ffu.s[i];
 	if(i == iinf || i == isup) sbor *= 0.5;
-	float wl = (float)(0.25 + i * step);
-	float swl = solirr(wl);
+	float fwl = (float)(0.25 + i * step);
+	float swl = solirr(fwl);
 	float coef = sbor * step * swl;
 	seb += coef;
-	wlwave += wl * coef;
+	wlwave += fwl * coef;
     }
 
     return wlwave/seb;
@@ -7891,20 +7891,20 @@ void IWave::parse()
 	    
 	    /* set wlinf, wlsup */
 	    iinf = imax;
-	    ffu.wlinf = imax * 0.0025 + 0.25;
 	    while (iinf > 0 && ffu.s[iinf - 1] > sthreshold) {
 		iinf--;
-		ffu.wlinf -= 0.0025;
 	    }
+	    ffu.wlinf = iinf * 0.0025 + 0.25;
+
 	    isup = imax;
-	    ffu.wlsup = imax * 0.0025 + 0.25;
 	    while (isup < 1500 && ffu.s[isup + 1] > sthreshold) {
 		isup++;
-		ffu.wlsup += 0.0025;
 	    }
+	    ffu.wlsup = isup * 0.0025 + 0.25;
 	}
     }
 
+    /* assuming that wlinf and wlsup are exact multiples of 2.5 nm */
     iinf = (int)((ffu.wlinf - 0.25f) / 0.0025f + 1.5f) - 1;	/* remember indexing */
     isup = (int)((ffu.wlsup - 0.25f) / 0.0025f + 1.5f) - 1;	/*		   "         */
 
