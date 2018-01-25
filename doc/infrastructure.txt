@@ -165,6 +165,21 @@ Current bugtracker (Jan 2008 - today):
   * https://trac.osgeo.org/grass/report
   * Trac
   * posts new bugs and comments to grass-dev list
+  * Settings:
+
+tracsvn (OSGeo server)
+/var/www/trac/env/grass/conf/trac.ini
+  downloadable_paths = /grass-addons/grass7/*/*,/sandbox/*/*
+  path = /var/www/grass/htdocs
+  link = https://grass.osgeo.org/
+  src = site/grasslogo_vector_small.png
+  smtp_always_cc = grass-dev@lists.osgeo.org
+  smtp_replyto = grass-dev@lists.osgeo.org
+  url = https://grass.osgeo.org
+  .dir = /var/www/svn/repos/grass
+  base_url = https://trac.osgeo.org/grass/
+  database = postgres://postgres@/trac_grass
+
 
 Old bugtracker (Jan 2007 - Dec 2008):
   * http://wald.intevation.org/tracker/?group_id=21
