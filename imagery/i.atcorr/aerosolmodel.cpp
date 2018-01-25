@@ -616,7 +616,7 @@ void AerosolModel::aeroso(const float xmud)
 	sixs_aer.gasym[i] = 0.f;
 	sixs_aer.phase[i] = 0.f;
  
-	for (int k = 1; k <= 83; ++k) sixs_sos.phasel[i][k] = 0.f;
+	for (int k = 0; k < 83; ++k) sixs_sos.phasel[i][k] = 0.f;
     }
 	
     /* return if iear = 0 */
