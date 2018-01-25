@@ -196,7 +196,11 @@ class RenderWMSMgr(wx.EvtHandler):
             if len(r) < 2:
                 continue
             try:
-                if r[0] in ['cols', 'rows']:
+                if r[0] in ['e-w resol3', 'n-s resol3', 'rows3', 'cols3',
+                            'depths']:
+                    # ignore 3D region values (causing problems in latlong locations)
+                    continue
+                if r[0] in ['cols', 'rows', 'zone', 'proj']:
                     region[r[0]] = int(r[1])
                 else:
                     region[r[0]] = float(r[1])
