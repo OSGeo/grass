@@ -568,7 +568,7 @@ class DataCatalogTree(LocationMapTree):
         self.copy_type = self.selected_type
         self.copy_mapset = self.selected_mapset
         self.copy_location = self.selected_location
-        label = _("Map <{layer}> marked for moving.").format(layer=self.copy_layer)
+        label = _("Map <{layer}> marked for moving.").format(layer=self.copy_layer.label)
         self.showNotification.emit(message=label)
 
     def OnCopyMap(self, event):
@@ -578,7 +578,7 @@ class DataCatalogTree(LocationMapTree):
         self.copy_type = self.selected_type
         self.copy_mapset = self.selected_mapset
         self.copy_location = self.selected_location
-        label = _("Map <{layer}> marked for copying.").format(layer=self.copy_layer)
+        label = _("Map <{layer}> marked for copying.").format(layer=self.copy_layer.label)
         self.showNotification.emit(message=label)
 
     def OnRenameMap(self, event):
