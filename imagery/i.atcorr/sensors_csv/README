@@ -1,6 +1,6 @@
 AVNIR
 =====
-  see ?
+  see https://doi.org/10.1109/IGARSS.2007.4423393
   files
     AVNIR.csv
 
@@ -19,13 +19,13 @@ geoeye
 
 ikonos
 ======
-  see ?
+  see https://web.archive.org/web/20150331094259/https://www.digitalglobe.com/sites/default/files/DigitalGlobe_Spectral_Response_1.pdf
   files
     ikonos.csv
 
 pleiades
 ========
-  see ?
+  see https://trac.osgeo.org/grass/ticket/3054
   files
     pleiades1a.csv
     pleiades1b.csv
@@ -60,7 +60,7 @@ sentinel
 
 spot
 ====
-  see ?
+  see https://trac.osgeo.org/grass/ticket/3054
   files
     spot6.csv
     spot7.csv
