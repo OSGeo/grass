@@ -469,7 +469,7 @@ static struct Options define_options(void)
     opts.iscl->type = TYPE_INTEGER;
     opts.iscl->key_desc = "min,max";
     opts.iscl->required = NO;
-    opts.iscl->answer = "0,255";
+    opts.iscl->answer = G_store("0,255");
     opts.iscl->description = _("Input range");
     opts.iscl->guisection = _("Input");
 
@@ -495,7 +495,7 @@ static struct Options define_options(void)
     opts.oscl->key = "rescale";
     opts.oscl->type = TYPE_INTEGER;
     opts.oscl->key_desc = "min,max";
-    opts.oscl->answer = "0,255";
+    opts.oscl->answer = G_store("0,255");
     opts.oscl->required = NO;
     opts.oscl->description = _("Rescale output raster map");
     opts.oscl->guisection = _("Output");
