@@ -358,7 +358,7 @@ static struct state
 {
     int initialized;
     struct GDAL_Options opts;
-    struct Key_Value *projinfo, *projunits;
+    struct Key_Value *projinfo, *projunits, *projepsg;
     char *srswkt;
 } state;
 
@@ -432,8 +432,10 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
 	read_gdal_options();
 	st->projinfo = G_get_projinfo();
 	st->projunits = G_get_projunits();
+	st->projepsg = G_get_projepsg();
 	if (st->projinfo && st->projunits)
-	    st->srswkt = GPJ_grass_to_wkt(st->projinfo, st->projunits, 0, 0);
+	    st->srswkt = GPJ_grass_to_wkt2(st->projinfo, st->projunits,
+	                                   st->projepsg, 0, 0);
 	G_initialize_done(&st->initialized);
     }
 
