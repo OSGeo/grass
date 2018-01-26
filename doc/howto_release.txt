@@ -14,148 +14,161 @@ Contents
 ###########################################
 (A) HOWTO create a release
 
-1. Local work (done by release coordinator)
+0. Preparations
 
-   - svn up
-   - svn status --no-ignore
-   - check if
-        ( cd doc/raster/r.example/ ; make clean ; make )
-        ( cd doc/vector/v.example/ ; make clean ; make )
-      still compile; fix otherwise
+#check if still compile; fix otherwise
+( cd doc/raster/r.example/ ; make clean ; make )
+( cd doc/vector/v.example/ ; make clean ; make )
 
-   - fix typos with tools/fix_typos.sh
- 
-   - Check that autoconf scripts are up-to-date (to do only in RC cycle!):
+# fix typos in source code with 
+tools/fix_typos.sh
 
-      rm -f config.guess config.sub
-      wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
-      wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
-      svn diff config.guess config.sub
-      autoconf-2.13
-      # check and submit to SVN:
-      svn ci -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/" config.guess config.sub configure
-      # test by running ./configure 
 
-   - make distclean
+1. Local work
 
-   - cleanup rubbish:
-       rm -f locale/templates/*.pot
-       rm -f locale/po/messages.mo
-       rm -f demolocation/PERMANENT/.bash*
-       find . -name '*~'     | xargs rm
-       find . -name '*.bak'  | xargs rm
-       find . -name '.#*'    | xargs rm
-       find . -name '*.orig' | xargs rm
-       find . -name '*.rej'  | xargs rm
-       find . -name '*.o'    | xargs rm
-       find . -name '*.pyc'  | xargs rm
-       find . -name 'OBJ.*'  | xargs rm -r
-       rm -f gui/wxpython/menustrings.py gui/wxpython/build_ext.pyc gui/wxpython/xml/menudata.xml gui/wxpython/xml/module_tree_menudata.xml
-       chmod -R a+r *
+# done by release manager
 
-       svn status
+# Only allowed RC cycle, not final!:
+# Check that autoconf scripts are up-to-date:
 
-   - Create release branch (only if not yet existing)
+rm -f config.guess config.sub
+wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
+wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
+svn diff config.guess config.sub
+autoconf-2.13
+# check and submit to SVN:
+svn ci -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/" config.guess config.sub configure
+# test by running ./configure 
 
-   - Update VERSION file to release version:
-      vim include/VERSION
+# update from SVN
+svn up
+
+# cleanup rubbish:
+rm -f locale/templates/*.pot
+rm -f locale/po/messages.mo
+rm -f demolocation/PERMANENT/.bash*
+find . -name '*~'     | xargs rm
+find . -name '*.bak'  | xargs rm
+find . -name '.#*'    | xargs rm
+find . -name '*.orig' | xargs rm
+find . -name '*.rej'  | xargs rm
+find . -name '*.o'    | xargs rm
+find . -name '*.pyc'  | xargs rm
+find . -name 'OBJ.*'  | xargs rm -r
+rm -f gui/wxpython/menustrings.py gui/wxpython/build_ext.pyc gui/wxpython/xml/menudata.xml gui/wxpython/xml/module_tree_menudata.xml
+chmod -R a+r *
+
+# double check
+svn status --no-ignore
+svn status
+
+# Create release branch (only if not yet existing)
+# ... see below
+
+# Update VERSION file to release version:
+vim include/VERSION
 
 #example:
 7
 4
-0RC1
-2017
-      rm -f include/VERSION~
+1RC1
+2018
 
-    - Update OSGeo4W setup.hint file
-       - for RC candidates use 'test' keyword
-       - for final version use 'curr' keyword
+# cleanup
+rm -f include/VERSION~
 
-      vim mswindows/osgeo4w/setup.hint.tmpl
+# Update OSGeo4W setup.hint file
+### no longer needed
+#vim mswindows/osgeo4w/setup_x86.hint.tmpl
+#vim mswindows/osgeo4w/setup_x86_64.hint.tmpl
 
-     #version:
-     MAJOR=`cat include/VERSION | head -1 | tail -1`
-     MINOR=`cat include/VERSION | head -2 | tail -1`
-     RELEASE=`cat include/VERSION | head -3 | tail -1`
-     VERSION=${MAJOR}.${MINOR}.${RELEASE}
-     echo $VERSION
+#### Changelog and tagging etc
 
-     svn ci -m"GRASS GIS $VERSION" include/VERSION mswindows/osgeo4w/setup.hint.tmpl
-     svn up
+# create version env var for convenience:
+MAJOR=`cat include/VERSION | head -1 | tail -1`
+MINOR=`cat include/VERSION | head -2 | tail -1`
+RELEASE=`cat include/VERSION | head -3 | tail -1`
+VERSION=${MAJOR}.${MINOR}.${RELEASE}
+echo $VERSION
 
- o Create Changelog file on release branch:
-     # http://ch.tudelft.nl/~arthur/svn2cl/
-     svn2cl
-     mv ChangeLog ChangeLog_$VERSION
-     head ChangeLog_$VERSION
-     gzip ChangeLog_$VERSION
+svn ci -m"GRASS GIS $VERSION" include/VERSION
+svn up
 
- o   Tag release (http://trac.osgeo.org/grass/browser/grass/tags):
-     http://svnbook.red-bean.com/en/1.4/svn.branchmerge.tags.html
+# Create Changelog file on release branch:
+# http://ch.tudelft.nl/~arthur/svn2cl/
+svn2cl
+mv ChangeLog ChangeLog_$VERSION
+head ChangeLog_$VERSION
+gzip ChangeLog_$VERSION
 
-          TODAY=`date +"%Y%m%d"`
-          RELEASETAG=release_${TODAY}_grass_${MAJOR}_${MINOR}_${RELEASE}
-          echo $RELEASETAG
+# Tag release (http://trac.osgeo.org/grass/browser/grass/tags):
+# see http://svnbook.red-bean.com/en/1.4/svn.branchmerge.tags.html
 
-          URL=https://svn.osgeo.org/grass
-          svn copy $URL/grass/branches/releasebranch_7_4 \
-	       $URL/grass/tags/$RELEASETAG \
-	       -m "Tagging release grass_${MAJOR}_${MINOR}_${RELEASE}"
+TODAY=`date +"%Y%m%d"`
+RELEASETAG=release_${TODAY}_grass_${MAJOR}_${MINOR}_${RELEASE}
+echo $RELEASETAG
+
+URL=https://svn.osgeo.org/grass
+svn copy $URL/grass/branches/releasebranch_7_4 \
+	$URL/grass/tags/$RELEASETAG \
+	-m "Tagging release grass_${MAJOR}_${MINOR}_${RELEASE}"
       
       
- o create source package (in the source directory):
-     echo grass-${VERSION}
+# create source package (in the source directory):
+echo grass-${VERSION}
 
-     mkdir grass-${VERSION}
-     mv * grass-${VERSION}/
-     # do not include the debian control files:
-     mv grass-${VERSION}/debian .
-     # create the package:
-     tar cvfzh grass-${VERSION}.tar.gz grass-${VERSION}/* --exclude=.svn
-     # restore src code location:
-     mv ./grass-${VERSION}/* .
-     rmdir ./grass-${VERSION}
-     # Calculating MD5 sum:
-     md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
+mkdir grass-${VERSION}
+mv * grass-${VERSION}/
+# do not include the debian control files:
+mv grass-${VERSION}/debian .
+# create the package:
+tar cvfzh grass-${VERSION}.tar.gz grass-${VERSION}/* --exclude=.svn
+# restore src code location:
+mv ./grass-${VERSION}/* .
+rmdir ./grass-${VERSION}
+# Calculating MD5 sum:
+md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 
- o reset include/VERSION file to SVN version:
-    vim include/VERSION
+# reset include/VERSION file to SVN version:
+vim include/VERSION
 
 #example
 7
 4
-0svn
-2017
+1svn
+2018
 
-    rm -f include/VERSION~
-    svn ci -m"back to SVN" include/VERSION
+rm -f include/VERSION~
+svn ci -m"back to SVN" include/VERSION
 
 
- o Store the source tarball (twice) in (use scp -p FILES grass:):
-    SERVER1=grass.osgeo.org
-    SERVER1DIR=/var/www/grass/grass-cms/grass$MAJOR$MINOR/source/
-    SERVER2=upload.osgeo.org
-    SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
-    echo $SERVER1:$SERVER1DIR
-    echo $SERVER2:$SERVER2DIR
+# Store the source tarball (twice) in (use scp -p FILES grass:):
+SERVER1=grass.osgeo.org
+SERVER1DIR=/var/www/grass/grass-cms/grass$MAJOR$MINOR/source/
+SERVER2=upload.osgeo.org
+SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
+echo $SERVER1:$SERVER1DIR
+echo $SERVER2:$SERVER2DIR
 
-   # copy along with associated files:
-     scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-         INSTALL REQUIREMENTS.html SUBMITTING neteler@$SERVER1:$SERVER1DIR
-     scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-         INSTALL REQUIREMENTS.html SUBMITTING neteler@$SERVER2:$SERVER2DIR
+# upload along with associated files:
+scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
+  INSTALL REQUIREMENTS.html SUBMITTING neteler@$SERVER1:$SERVER1DIR
 
-   # Only full release: generate link to "latest" source code
-     ssh neteler@$SERVER1 rm -f $SERVER1DIR/grass-$MAJOR.$MINOR-latest.tar.gz
-     ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz $SERVER1DIR/grass-$MAJOR.$MINOR-latest.tar.gz"
+scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
+  INSTALL REQUIREMENTS.html SUBMITTING neteler@$SERVER2:$SERVER2DIR
 
- o update winGRASS related files
-    - Update the winGRASS version
-      grass-addons/tools/wingrass-packager/grass_packager_release.bat
-      grass-addons/tools/wingrass-packager/grass_addons.sh
-      grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
+# Only full release!
+# generate link to "latest" source code
+ssh neteler@$SERVER1 rm -f $SERVER1DIR/grass-$MAJOR.$MINOR-latest.tar.gz
+ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz $SERVER1DIR/grass-$MAJOR.$MINOR-latest.tar.gz"
 
- o update web site to new version: CMS
+# update winGRASS related files: Update the winGRASS version
+vim grass-addons/tools/wingrass-packager/grass_packager_release.bat
+vim grass-addons/tools/wingrass-packager/grass_addons.sh
+vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
+
+###################
+# update web site to new version: CMS
     - News section
     - https://grass.osgeo.org/download/software/
     - https://grass.osgeo.org/download/software/sources/
@@ -165,39 +178,39 @@ Contents
 
      write announcement
       - store in trac:
-           http://trac.osgeo.org/grass/wiki/Release/7.XX.YY-News
-           https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures74  <- major changes only
+    http://trac.osgeo.org/grass/wiki/Release/7.XX.YY-News
+    https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures74  <- major changes only
       - update version in https://grasswiki.osgeo.org/wiki/GRASS-Wiki
       - store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html <- how? with protected PHP upload page?
 
      full release:
       - update trac 
-         - milesstone/add next: https://trac.osgeo.org/grass/admin/ticket/milestones
-         - add released version: https://trac.osgeo.org/grass/admin/ticket/versions
+  - milesstone/add next: https://trac.osgeo.org/grass/admin/ticket/milestones
+  - add released version: https://trac.osgeo.org/grass/admin/ticket/versions
       
 
  o upload user HTML manual in case of *final release* from compiled English
    version at (warning: needs stuff to be compiled).
       - download new source code package, compile with most settings
       -  cd dist.$ARCH/docs/html
-         echo www/grass$MAJOR$MINOR/manuals/
-         scp -r * neteler@grass.osgeo.org:/osgeo/grass/grass-cms/grass$MAJOR$MINOR/manuals/
-         scp -r * neteler@upload.osgeo.org:/osgeo/download/grass/grass$MAJOR$MINOR/manuals/
+  echo www/grass$MAJOR$MINOR/manuals/
+  scp -r * neteler@grass.osgeo.org:/osgeo/grass/grass-cms/grass$MAJOR$MINOR/manuals/
+  scp -r * neteler@upload.osgeo.org:/osgeo/download/grass/grass$MAJOR$MINOR/manuals/
 
  o stable release: update cronjob 'cron_grass_HEAD_src_snapshot.sh' on grass.osgeo.org to next but one
-                   release tag for the differences
+     release tag for the differences
 
  o Trac updates:
       - Add new release to https://trac.osgeo.org/grass/admin/ticket/versions
       - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.4.x --> Edit Milestone
       - Batch modify tickets, set to next milestone (update this query accordingly: two entries to change)
-        https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.4.0&milestone=7.4.1&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority
-        - Set max items to 1000, then select all shown tickets via Status: assigned/new/reopened sections
-        - Scroll down to "Batch modify": under the "Comment" section, add Field "Milestone" and set to next version
-        - then use "Change ticket" button, done.
+ https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.4.0&milestone=7.4.1&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority
+ - Set max items to 1000, then select all shown tickets via Status: assigned/new/reopened sections
+ - Scroll down to "Batch modify": under the "Comment" section, add Field "Milestone" and set to next version
+ - then use "Change ticket" button, done.
       - Only in case of new release branch being created:
-         Add Wiki Macro definitions for manual pages G7X:modulename
-         - Edit: https://trac.osgeo.org/grass/wiki/InterMapTxt
+  Add Wiki Macro definitions for manual pages G7X:modulename
+  - Edit: https://trac.osgeo.org/grass/wiki/InterMapTxt
 
 
  o WinGRASS notes:
@@ -242,20 +255,20 @@ Contents
    - publish related announcement press release at:
    
    Our GRASS web site: /announces/
-                       Note: DON'T use relative links there
+  Note: DON'T use relative links there
 
    Our main mailing lists:
-                       http://lists.osgeo.org/mailman/listinfo/grass-announce
-                         <grass-announce@lists.osgeo.org>
-                       http://lists.osgeo.org/mailman/listinfo/grass-dev
-                         <grass-dev@lists.osgeo.org>
-                       http://lists.osgeo.org/mailman/listinfo/grassuser
-                         <grass-user@lists.osgeo.org>
+  http://lists.osgeo.org/mailman/listinfo/grass-announce
+    <grass-announce@lists.osgeo.org>
+  http://lists.osgeo.org/mailman/listinfo/grass-dev
+    <grass-dev@lists.osgeo.org>
+  http://lists.osgeo.org/mailman/listinfo/grassuser
+    <grass-user@lists.osgeo.org>
 
-   DebianGIS:          <debian-gis@lists.debian.org>
-   FreeGIS:            <freegis-list@intevation.de>
-   Geowanking:         <geowanking@geowanking.org>
-   OSGeo.org:          <news_item@osgeo.org>
+   DebianGIS:   <debian-gis@lists.debian.org>
+   FreeGIS:     <freegis-list@intevation.de>
+   Geowanking:  <geowanking@geowanking.org>
+   OSGeo.org:   <news_item@osgeo.org>
 
  Email:
    info@osgeo.org
@@ -277,7 +290,7 @@ Contents
    http://directory.fsf.org/wiki/GRASS_%28Geographic_Resources_Analysis_Support_System%29
    https://www.linux-apps.com/p/1128004/edit/ (MN)
    https://news.eoportal.org/web/eoportal/share-your-news (MN)
-            -> Share your news with the EO community
+     -> Share your news with the EO community
    https://www.heise.de/download/product/grass-gis-7105 (update, MN)
 
    See also: https://grass.osgeo.org/wiki/Contact_Databases
@@ -290,17 +303,17 @@ Contents
    http://svnbook.red-bean.com/en/1.1/ch04s07.html
 
    GRASS 7.4 release branch:
-          BRANCH=releasebranch_7_4
-          URL=https://svn.osgeo.org/grass
-          svn copy $URL/grass/trunk \
-                   $URL/grass/branches/$BRANCH \
-                   -m "Release branch for GRASS 7.4.x"
+   BRANCH=releasebranch_7_4
+   URL=https://svn.osgeo.org/grass
+   svn copy $URL/grass/trunk \
+     $URL/grass/branches/$BRANCH \
+     -m "Release branch for GRASS 7.4.x"
 
 
    Switching current local copy to above development branch:
    (http://svnbook.red-bean.com/en/1.1/ch04s05.html)
-           cd /path/to/your/local/copy/trunk
-           svn switch https://svn.osgeo.org/grass/grass/branches/releasebranch_7_4 .
+    cd /path/to/your/local/copy/trunk
+    svn switch https://svn.osgeo.org/grass/grass/branches/releasebranch_7_4 .
 
 ----------
 Example: GRASS GIS 7.4 release branch creation
