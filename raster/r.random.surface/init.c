@@ -24,9 +24,9 @@ void Init(void)
 
     Rs = Rast_window_rows();
     Cs = Rast_window_cols();
-    Surface = (double **)G_malloc(Rs * sizeof(double *));
+    RSurface = (double **)G_malloc(Rs * sizeof(double *));
     for (row = 0; row < Rs; row++)
-	Surface[row] = (double *)G_malloc(Cs * sizeof(double));
+	RSurface[row] = (double *)G_malloc(Cs * sizeof(double));
 
     G_get_set_window(&Region);
     EW = Region.ew_res;

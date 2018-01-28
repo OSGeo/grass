@@ -31,7 +31,7 @@
 #include "local_proto.h"
 
 BIGF BigF;
-double **Surface, NS, EW, FilterSD, AllMaxDist, *Norm;
+double **RSurface, NS, EW, FilterSD, AllMaxDist, *Norm;
 int MapCount, FDM, Rs, Cs, Theory;
 CELL *CellBuffer;
 FILTER *AllFilters, Filter;
