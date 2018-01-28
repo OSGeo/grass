@@ -4,16 +4,18 @@
 
 build_library_in_subdir(datetime)
 
-set(DL_LIBRARY)
 add_subdirectory(gis)
-if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-  find_library(DL_LIBRARY dl)
-endif()
 
 build_library_in_subdir(raster
   DEFS "-DGDAL_DYNAMIC=1;-DGDAL_LINK=1"
-  DEPENDS GDAL PROJ4 ${DL_LIBRARY}
+  DEPENDS GDAL PROJ4
   )
+
+
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+  find_library(DL_LIBRARY dl)
+   target_link_libraries(grass_raster ${DL_LIBRARY})
+endif()
 
 configure_file(external/ccmath/ccmath.h
   ${CMAKE_BINARY_DIR}/include/grass/ccmath_grass.h
