@@ -182,7 +182,12 @@ function(build_module)
 
 
  target_link_libraries(${G_NAME} ${G_DEPENDS} ${G_OPTIONAL_DEPENDS})
- install(TARGETS ${G_NAME} DESTINATION lib)
+ if(G_EXE)
+    install(TARGETS ${G_NAME} DESTINATION bin)
+ else()
+    install(TARGETS ${G_NAME} DESTINATION lib)
+ endif()
+
 
 
 endfunction()  
