@@ -92,16 +92,20 @@ int main(int argc, char *argv[])
     else
 	open3d = WITHOUT_Z;
 
+    /* Set error handler for input vector map */
+    Vect_set_error_handler_io(&In, NULL);
+    
     /* Open new vector for reading/writing */
     if (0 > Vect_open_new(&Out, new->answer, open3d)) {
-	Vect_close(&In);
 	G_fatal_error(_("Unable to create vector map <%s>"), new->answer);
     }
+
+    /* Set error handler for output vector map */
+    Vect_set_error_handler_io(NULL, &Out);
 
     /* Let's get vector layers db connections information */
     Fi = Vect_get_field(&In, 1);
     if (!Fi) {
-	Vect_close(&In);
 	G_fatal_error(_("Database connection not defined for layer %d"), 1);
     }
 
@@ -122,18 +126,19 @@ int main(int argc, char *argv[])
     /* Prepare database for use */
     driver = db_start_driver(Fi->driver);
     if (driver == NULL) {
-	Vect_close(&In);
 	G_fatal_error(_("Unable to start driver <%s>"), Fi->driver);
     }
+
+    /* Set error handler for DB driver */
+    db_set_error_handler_driver(driver);
+      
     db_set_handle(&handle, Fi->database, NULL);
     if (db_open_database(driver, &handle) != DB_OK) {
-	Vect_close(&In);
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
     }
     db_set_string(&table_name, Fi->table);
     if (db_describe_table(driver, &table_name, &table) != DB_OK) {
-	Vect_close(&In);
 	G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
     }
     ncols = db_get_table_number_of_columns(table);
