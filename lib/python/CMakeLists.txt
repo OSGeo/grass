@@ -184,3 +184,5 @@ add_subdirectory(ctypes)
   case.py gmodules.py loader.py
   runner.py checkers.py gutils.py
   invoker.py main.py reporters.py utils.py)
+
+install(FILES __init__.py DESTINATION etc/python/grass)
