@@ -17,13 +17,26 @@ option(WITH_BZLIB "enable sqlite support" ON)
 option(WITH_BLAS "enable sqlite support" ON)
 option(WITH_LAPACK "enable sqlite support" ON)
 
+if(APPLE)
+  if(POLICY CMP0042)
+    cmake_policy(SET CMP0042 NEW)
+  endif()
+  set(CMAKE_MACOSX_RPATH TRUE)
+endif()
+
+set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+if("${isSystemDir}" STREQUAL "-1")
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif("${isSystemDir}" STREQUAL "-1")
+
 set(GRASS_VERSION_MAJOR)
 set(GRASS_VERSION_MINOR)
 set(GRASS_VERSION_PATCH)
 
-
-
-#TODO
 set(GRASS_VERSION_UPDATE_PKG "0.2")
 set(BUILD_ARCH "x86_64")
 
