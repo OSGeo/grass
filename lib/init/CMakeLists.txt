@@ -69,18 +69,25 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT_STARTUP_FILE} DESTINATION 
 
 
 add_executable(echo echo.c)
+# add_dependencies(echo grass_gis)
+# target_link_libraries(lock grass_gis)
 install(TARGETS echo DESTINATION etc)
 
 add_executable(run run.c)
+# add_dependencies(lock grass_gis)
+# target_link_libraries(lock grass_gis)
 install(TARGETS run DESTINATION etc)
     
-# add_executable(clean_temp clean_temp.c)
-# install(TARGETS clean_temp DESTINATION etc)
+add_executable(clean_temp clean_temp.c)
+add_dependencies(clean_temp grass_gis)
+target_link_libraries(clean_temp grass_gis)
+install(TARGETS clean_temp DESTINATION etc)
 
 #TODO
-# add_executable(lock lock.c)
-# add_dependencies(lock grass_gis)
-# install(TARGETS lock DESTINATION etc)
+add_executable(lock lock.c)
+add_dependencies(lock grass_gis grass_datetime)
+target_link_libraries(lock grass_gis grass_datetime)
+install(TARGETS lock DESTINATION etc)
 
 if(MINGW)
   add_executable(winlocale winlocale.c)
