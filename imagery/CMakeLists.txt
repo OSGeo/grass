@@ -89,18 +89,15 @@ build_program_in_subdir(
   i.vi
   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 
-build_program_in_subdir(
-  i.fft
-  DEPENDS grass_imagery grass_raster grass_vector grass_gis
-  OPTIONAL_DEPENDS FFTW)
+# build_program_in_subdir(
+#   i.fft
+#   DEPENDS grass_imagery grass_raster grass_vector grass_gis
+#   OPTIONAL_DEPENDS FFTW)
 
-build_program_in_subdir(
-  i.ifft
-  DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 
-build_program_in_subdir(
-  i.zc
-  DEPENDS grass_imagery grass_raster grass_vector grass_gis)
+# build_program_in_subdir(
+#   i.zc
+#   DEPENDS grass_imagery grass_raster grass_vector grass_gis)
 
 
 build_program_in_subdir(i.atcorr DEPENDS grass_imagery grass_raster grass_vector grass_gis SRC_REGEX "*.cpp")
