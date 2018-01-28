@@ -36,7 +36,11 @@ BuildRequires:	libtiff-devel
 BuildRequires:	libXmu-devel
 BuildRequires:	mesa-libGL-devel
 BuildRequires:	mesa-libGLU-devel
+%if (0%{?fedora} >= 27)
 BuildRequires:	mariadb-connector-c-devel openssl-devel
+%else
+BuildRequires:	mysql-devel
+%endif
 %if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	netcdf-devel
 %endif
