@@ -28,11 +28,13 @@ if(TARGET FREETYPE)
   set(HAVE_FT2BUILD_H 1)
 endif()  
 
+set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}")
 check_include_file(pthread.h HAVE_PTHREAD_H)
 check_include_file(regex.h HAVE_REGEX_H)
 check_include_file(iconv.h HAVE_ICONV_H)
 check_include_file(libintl.h HAVE_LIBINTL_H)
 check_include_file(dbm.h HAVE_DBM_H)
+
 check_include_file(dfftw.h HAVE_DFFTW_H)
 check_include_file(fftw3.h HAVE_FFTW3_H)
 if(NOT HAVE_FFTW3_H)
