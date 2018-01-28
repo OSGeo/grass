@@ -36,7 +36,7 @@ BuildRequires:	libtiff-devel
 BuildRequires:	libXmu-devel
 BuildRequires:	mesa-libGL-devel
 BuildRequires:	mesa-libGLU-devel
-BuildRequires:	mysql-devel
+BuildRequires:	mariadb-connector-c-devel openssl-devel
 %if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	netcdf-devel
 %endif
@@ -161,7 +161,7 @@ CXXFLAGS="-std=c++98 ${CFLAGS}"
 	--with-liblas=%{_bindir}/liblas-config \
 %endif
 	--with-mysql-includes=%{_includedir}/mysql \
-%if (0%{?fedora} > 27)
+%if (0%{?fedora} >= 27)
 	--with-mysql-libs=%{_libdir} \
 %else
 	--with-mysql-libs=%{_libdir}/mysql \
@@ -253,7 +253,6 @@ appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/appdata/*.appdata
 # rpm macro for version checking
 mkdir -p ${RPM_BUILD_ROOT}%{macrosdir}
 cat > ${RPM_BUILD_ROOT}%{macrosdir}/macros.%{name} <<EOF
-# %name version is
 %%%{name}_version %{version}
 EOF
 
