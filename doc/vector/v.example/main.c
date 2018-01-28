@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
     if (db_open_database(driver, &handle) != DB_OK) {
 	Vect_close(&In);
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-		      Fi->database, driver);
+		      Fi->database, Fi->driver);
     }
     db_set_string(&table_name, Fi->table);
     if (db_describe_table(driver, &table_name, &table) != DB_OK) {
