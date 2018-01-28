@@ -30,7 +30,7 @@ build_library_in_subdir(gmath
 
 build_library_in_subdir(linkm)
 
-build_library_in_subdir(driver DEPENDS FREETYPE)
+build_library_in_subdir(driver DEPENDS FREETYPE ICONV)
 
 build_library_in_subdir(pngdriver
   DEPENDS grass_driver LIBPNG ZLIB
