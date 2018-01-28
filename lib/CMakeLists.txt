@@ -4,11 +4,15 @@
 
 build_library_in_subdir(datetime)
 
+set(DL_LIBRARY)
 add_subdirectory(gis)
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+  find_library(DL_LIBRARY dl)
+endif()
 
 build_library_in_subdir(raster
   DEFS "-DGDAL_DYNAMIC=1;-DGDAL_LINK=1"
-  DEPENDS GDAL PROJ4
+  DEPENDS GDAL PROJ4 ${DL_LIBRARY}
   )
 
 configure_file(external/ccmath/ccmath.h
@@ -96,7 +100,7 @@ build_library_in_subdir(raster3d DEPENDS grass_raster)
 
 build_program_in_subdir(raster3d/test
   NAME test.raster3d.lib
-  DEPENDS grass_gis grass_raster3d
+  DEPENDS grass_gis grass_raster3d 
   )
 
 build_library_in_subdir(gpde HEADERS "N_*.h"
