@@ -12,7 +12,7 @@ foreach(py_file ${py_files})
   add_custom_command(
     OUTPUT ${py_file}.stamp
     DEPENDS g.parser
-    COMMAND ${PYTHON_EXECUTABLE} -t -3 -m py_compile ${py_file}
+    COMMAND ${PYTHON_EXECUTABLE} -t -m py_compile ${py_file}
     COMMAND ${CMAKE_COMMAND} -E touch  ${py_file}.stamp
     COMMENT "Generating ${py_file}c"
     VERBATIM

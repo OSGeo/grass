@@ -25,7 +25,7 @@ function(build_pyfiles_in_sudir gpy_dir_name)
 
     add_custom_command(
       OUTPUT ${gpy_file}.stamp
-      COMMAND ${PYTHON_EXECUTABLE} -t -3 -m py_compile ${gpy_file}
+      COMMAND ${PYTHON_EXECUTABLE} -t -m py_compile ${gpy_file}
       COMMAND ${CMAKE_COMMAND} -E touch  ${gpy_file}.stamp
       COMMENT "Generating ${gpy_file}c"
       VERBATIM
