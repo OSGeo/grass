@@ -6,9 +6,16 @@ function(build_pyfiles_in_sudir gpy_dir_name)
   endif()
   
   get_filename_component(gpy_name ${gpy_dir_name} NAME)
-  
-  foreach(gpy_file ${gpy_files})
-    
+  string(REPLACE "/" ";" input_list "${gpy_dir_name}")
+
+  list(LENGTH input_list input_list_LEN)  
+  if(input_list_LEN EQUAL 1)
+    set(dest_dir ${gpy_dir_name})
+  else()
+    list(GET input_list 0 dest_dir)
+  endif()
+
+  foreach(gpy_file ${gpy_files})    
     if(NOT IS_ABSOLUTE ${gpy_file})
       #message("gpy_file=${gpy_dir_name}/${gpy_file}")
       get_filename_component(gpy_file ${gpy_dir_name}/${gpy_file} REALPATH)
@@ -43,7 +50,7 @@ function(build_pyfiles_in_sudir gpy_dir_name)
     #set_source_files_properties("${gpy_file}c" GENERATED)
 
     #message(" ${gpy_dir_name} | DESTINATION  etc/python/${gpy_dir_name} ")
-    install(FILES ${gpy_file} DESTINATION  etc/python/${gpy_name} )
+    install(FILES ${gpy_file} DESTINATION  etc/python/grass/${dest_dir} )
     
   endforeach()
 endfunction()
@@ -56,7 +63,7 @@ configure_file(  script/setup.py
   ${CMAKE_BINARY_DIR}/lib/python/script/setup.py
   COPYONLY)
 
-build_pyfiles_in_sudir(script  
+build_pyfiles_in_sudir(script
   core.py  
   db.py
   raster.py
@@ -80,10 +87,10 @@ build_pyfiles_in_sudir(script
 #   ctypes_preamble.py ctypes_loader.py
 #  )
 
- add_subdirectory(ctypes)
+add_subdirectory(ctypes)
 
 
- build_pyfiles_in_sudir(temporal
+ build_pyfiles_in_sudir(temporal 
    base.py
    core.py
    abstract_dataset.py

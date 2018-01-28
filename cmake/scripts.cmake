@@ -77,7 +77,9 @@ foreach(pyfile ${SRC_FILES})
     add_dependencies(${G_DEPEND})
   endforeach()
   
-  install(FILES ${pyfile} DESTINATION etc)
+  install(FILES ${pyfile}
+    RENAME ${pyfile_NAME}
+    DESTINATION scripts)
 endforeach()
 
 endfunction()
