@@ -89,7 +89,7 @@ Available lists:
    grass-announce 	GRASS announcements
    grass-commit 	Mailing list to distribute GRASS-CVS commits
    grass-dev 		GRASS GIS Development mailing list
-   grass-es 		La lista de correo de GRASS GIS en español
+   grass-es 		La lista de correo de GRASS GIS en espaÃ±ol
    grass-psc 		GRASS-PSC: GRASS Project Steering Committee
    grass-stats 		GRASS and statistical software
    grass-translations 	Translation of GRASS (i18N)
