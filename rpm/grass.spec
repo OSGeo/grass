@@ -3,15 +3,17 @@
 
 Name:		grass
 Version:	7.4.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
+%if 0%{?rhel}
 Group:		Applications/Engineering
+%endif
 License:	GPLv2+
 URL:		https://grass.osgeo.org
 Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.tar.gz
 Source2:	%{name}-config.h
-# Patch0:		grass72_ctypes_gcc7.diff
+# Patch0:	grass-r-random-surface.diff
 
 BuildRequires:	bison
 BuildRequires:	blas-devel
@@ -87,7 +89,7 @@ Requires:	wxPython
 %global cpuarch 64
 %endif
 
-Requires:	%{name}%{?isa}-libs = %{version}-%{release}
+Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 
 %description
 GRASS (Geographic Resources Analysis Support System) is a Geographic
@@ -107,7 +109,6 @@ GRASS GIS runtime libraries
 %package gui
 Summary:	GRASS GIS GUI
 Group:		Applications/Engineering
-Requires:	%{name}%{?isa}-libs = %{version}-%{release}
 Requires:	%{name}%{?isa} = %{version}-%{release}
 
 %description gui
@@ -116,14 +117,14 @@ GRASS GIS GUI
 %package devel
 Summary:	GRASS GIS development headers
 Group:		Applications/Engineering
-Requires:	%{name}%{?isa}-libs = %{version}-%{release}
+Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 
 %description devel
 GRASS GIS development headers
 
 %prep
 %setup -q
-# %patch0 -p1
+# %patch0 -p0
 
 # Correct mysql_config query
 sed -i -e 's/--libmysqld-libs/--libs/g' configure
@@ -241,36 +242,40 @@ mkdir -p %{buildroot}%{_docdir}
 # append shortver to destination ? man pages are unversioned
 ln -s %{_libdir}/%{name}-%{version}/docs %{buildroot}%{_docdir}/%{name}%{shortver}
 
-for file in infrastructure.txt ; do
-  iconv -f ISO-8859-1 -t UTF-8 $file > ${file}.tmp && mv -f ${file}.tmp $file
-done
-
 # Make desktop, appdata and icon files available on the system
 mv %{buildroot}%{_libdir}/%{name}-%{version}/share/* %{buildroot}%{_datadir}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/*.desktop
-# EPEL7 fails on url tag, so we ignore failure:
-appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/appdata/*.appdata.xml || echo "Ignoring appstream-util failure"
+appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/appdata/%{name}*.appdata.xml
+# as per https://fedoraproject.org/wiki/Packaging:AppData
+mkdir -p %{buildroot}%{_datadir}/metainfo/
+cp %{buildroot}/%{_datadir}/appdata/%{name}*.appdata.xml %{buildroot}%{_datadir}/metainfo/
 
 # Cleanup: nothing to do
 #rm -rf %%{buildroot}%%{_prefix}/%%{name}-%%{version}
 
-# rpm macro for version checking
+# rpm macro for version checking (not from buildroot!)
 mkdir -p ${RPM_BUILD_ROOT}%{macrosdir}
 cat > ${RPM_BUILD_ROOT}%{macrosdir}/macros.%{name} <<EOF
 %%%{name}_version %{version}
 EOF
 
 %post
+%if 0%{?rhel}
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+%endif
 
 %postun
+%if 0%{?rhel}
 if [ $1 -eq 0 ] ; then
 	/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 	/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
+%endif
 
 %posttrans
+%if 0%{?rhel}
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+%endif
 
 %post libs -p /sbin/ldconfig
 
@@ -286,6 +291,7 @@ fi
 %{_datadir}/appdata/*
 %{_datadir}/applications/*
 %{_datadir}/icons/hicolor/*/apps/*
+%{_datadir}/metainfo/
 %{_mandir}/man1/*
 %{_docdir}/%{name}%{shortver}
 
@@ -309,6 +315,9 @@ fi
 %{_libdir}/%{name}-%{version}/include
 
 %changelog
+* Sun Jan 28 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-2
+- SPEC cleanup as per review in https://bugzilla.redhat.com/show_bug.cgi?id=1539116
+
 * Mon Jan 15 2018 Markus Metz <metz@mundialis.de> - 7.4.0-1
 - New upstream version 7.4.0
 - Fix grass-devel which needs include/grass and include/Make dirs
