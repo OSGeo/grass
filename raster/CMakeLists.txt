@@ -204,7 +204,7 @@ build_program_in_subdir(
 
 build_program_in_subdir(
   r.out.png
-  DEPENDS grass_gis grass_raster)
+  DEPENDS grass_gis grass_raster LIBPNG)
 
 build_program_in_subdir(
   r.out.pov
