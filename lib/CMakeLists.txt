@@ -129,7 +129,7 @@ endif()
 
 add_subdirectory(temporal)
 
-#add_subdirectory(python)
+add_subdirectory(python)
 
 build_library_in_subdir(iostream SRC_REGEX "*.cpp")
 
