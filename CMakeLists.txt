@@ -182,6 +182,7 @@ function(build_module)
 
 
  target_link_libraries(${G_NAME} ${G_DEPENDS} ${G_OPTIONAL_DEPENDS})
+ install(TARGETS ${G_NAME} DESTINATION lib)
 
 
 endfunction()  
