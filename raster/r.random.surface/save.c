@@ -26,7 +26,7 @@ void SaveMap(int NumMap, int MapSeed)
     if (FDM == -1) {
 	for (Row = 0; Row < Rs; Row++) {
 	    for (Col = 0; Col < Cs; Col++) {
-		Value = Surface[Row][Col];
+		Value = RSurface[Row][Col];
 		MeanMod += Value;
 	    }
 	}
@@ -37,13 +37,13 @@ void SaveMap(int NumMap, int MapSeed)
 	DownInterval = UpInterval = Value;
 	for (Row = 0; Row < Rs; Row++) {
 	    for (Col = 0; Col < Cs; Col++) {
-		Value = Surface[Row][Col];
+		Value = RSurface[Row][Col];
 		/*
 		   Value = (Value - MeanMod) / FilterSD
 		   + MeanMod / FilterSD;
 		 */
 		Value /= FilterSD;
-		Surface[Row][Col] = Value;
+		RSurface[Row][Col] = Value;
 
 		if (UpInterval < Value)
 		    UpInterval = Value;
@@ -58,7 +58,7 @@ void SaveMap(int NumMap, int MapSeed)
 	    Rast_get_c_row_nomask(FDM, CellBuffer, Row);
 	    for (Col = 0; Col < Cs; Col++) {
 		if (CellBuffer[Col] != 0) {
-		    Value = Surface[Row][Col];
+		    Value = RSurface[Row][Col];
 		    MeanMod += Value;
 		}
 	    }
@@ -77,13 +77,13 @@ void SaveMap(int NumMap, int MapSeed)
 	    Rast_get_c_row_nomask(FDM, CellBuffer, Row);
 	    for (Col = 0; Col < Cs; Col++) {
 		if (CellBuffer[Col] != 0) {
-		    Value = Surface[Row][Col];
+		    Value = RSurface[Row][Col];
 		    /*
 		       Value = (Value - MeanMod) / FilterSD
 		       + MeanMod / FilterSD;
 		     */
 		    Value /= FilterSD;
-		    Surface[Row][Col] = Value;
+		    RSurface[Row][Col] = Value;
 
 		    if (UpInterval < Value)
 			UpInterval = Value;
@@ -111,7 +111,7 @@ void SaveMap(int NumMap, int MapSeed)
 	/* normal distribution */
 	for (Row = 0; Row < Rs; Row++) {
 	    for (Col = 0; Col < Cs; Col++) {
-		Value = Surface[Row][Col];
+		Value = RSurface[Row][Col];
 		if (Value > UpInterval) {
 		    Value = UpInterval;
 		}
@@ -132,7 +132,7 @@ void SaveMap(int NumMap, int MapSeed)
 		if (Value < CatInfo.Min[Index])
 		    CatInfo.Min[Index] = Value;
 
-		Surface[Row][Col] = 1 + Index;
+		RSurface[Row][Col] = 1 + Index;
 	    }
 	}
     }
@@ -140,7 +140,7 @@ void SaveMap(int NumMap, int MapSeed)
 	/* mapping to cumulative normal distribution function */
 	for (Row = 0; Row < Rs; Row++) {
 	    for (Col = 0; Col < Cs; Col++) {
-		Value = Surface[Row][Col];
+		Value = RSurface[Row][Col];
 		Ratio = (double)(Value - MIN_INTERVAL) /
 		    (MAX_INTERVAL - MIN_INTERVAL);
 		Index = (int)(Ratio * (SIZE_OF_DISTRIBUTION - 1));
@@ -157,7 +157,7 @@ void SaveMap(int NumMap, int MapSeed)
 		    CatInfo.Min[NormIndex] = Value;
 
 		/* NormIndex in range of [0 .. (CatInfo.NumCat-1)] */
-		Surface[Row][Col] = 1 + NormIndex;
+		RSurface[Row][Col] = 1 + NormIndex;
 	    }
 	}
     }
@@ -165,7 +165,7 @@ void SaveMap(int NumMap, int MapSeed)
     for (Row = 0; Row < Rs; Row++) {
 	G_percent(Row, Rs, 2);
 	for (Col = 0; Col < Cs; Col++) {
-	    CellBuffer[Col] = (CELL) Surface[Row][Col];
+	    CellBuffer[Col] = (CELL) RSurface[Row][Col];
 	}
 	Rast_put_row(OutFD, CellBuffer, CELL_TYPE);
     }
