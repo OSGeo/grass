@@ -6,14 +6,6 @@ function(build_pyfiles_in_sudir gpy_dir_name)
   endif()
   
   get_filename_component(gpy_name ${gpy_dir_name} NAME)
-  string(REPLACE "/" ";" input_list "${gpy_dir_name}")
-
-  list(LENGTH input_list input_list_LEN)  
-  if(input_list_LEN EQUAL 1)
-    set(dest_dir ${gpy_dir_name})
-  else()
-    list(GET input_list 0 dest_dir)
-  endif()
 
   foreach(gpy_file ${gpy_files})    
     if(NOT IS_ABSOLUTE ${gpy_file})
@@ -49,8 +41,8 @@ function(build_pyfiles_in_sudir gpy_dir_name)
     
     #set_source_files_properties("${gpy_file}c" GENERATED)
 
-    #message(" ${gpy_dir_name} | DESTINATION  etc/python/${gpy_dir_name} ")
-    install(FILES ${gpy_file} DESTINATION  etc/python/grass/${dest_dir} )
+
+    install(FILES ${gpy_file} DESTINATION  etc/python/grass/${gpy_dir_name} )
     
   endforeach()
 endfunction()
