@@ -50,9 +50,6 @@ configure_file(grass.py ${CMAKE_BINARY_DIR}/${START_UP}.py @ONLY)
 install(PROGRAMS ${CMAKE_BINARY_DIR}/${START_UP}.py
   DESTINATION bin)
 
-#rest here
-
-set(GISBASE "" ) #${RUN_GISBASE}")
 if(UNIX OR MINGW)
   if( DEFINED ENV{LD_LIBRARY_PATH})
     set(LD_LIBRARY_PATH_VAR "$ENV{LD_LIBRARY_PATH}:${CMAKE_INSTALL_PREFIX}/lib")
