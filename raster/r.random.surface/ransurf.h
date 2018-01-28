@@ -38,7 +38,7 @@ CATINFO {
 };
 
 extern BIGF BigF;
-extern double **Surface, NS, EW, FilterSD, AllMaxDist, *Norm;
+extern double **RSurface, NS, EW, FilterSD, AllMaxDist, *Norm;
 extern int MapCount, FDM, Rs, Cs, Theory;
 extern CELL *CellBuffer;
 extern FILTER *AllFilters, Filter;
