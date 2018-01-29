@@ -205,6 +205,9 @@ Details:
 Installed with g.extension
 Manuals: https://grass.osgeo.org/grass7/manuals/addons/
 
+The redirect to the latest directory is defined on grass.osgeo.org:
+  /etc/apache2/includes/grass.osgeo.org.inc
+
 Procedure building of binaries (Windows):
   Addons module are compiled on build server, currently at the CTU in Prague)
   and publishing their manual pages on publishing server, i.e. grass.osgeo.org.
