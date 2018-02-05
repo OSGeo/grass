@@ -82,6 +82,31 @@ void OGR_iterator_reset(struct OGR_iterator *OGR_iter);
 OGRFeatureH ogr_getnextfeature(struct OGR_iterator *, int, char *,
 			       OGRGeometryH , const char *);
 
+struct grass_col_info
+{
+    int idx;	/* index for create table */
+    const char *name;
+    const char *type;
+};
+
+/* for qsort: compare columns by name */
+int cmp_col_name(const void *a, const void *b)
+{
+    struct grass_col_info *ca = (struct grass_col_info *)a;
+    struct grass_col_info *cb = (struct grass_col_info *)b;
+
+    return strcmp(ca->name, cb->name);
+}
+
+/* for qsort: compare columns by index */
+int cmp_col_idx(const void *a, const void *b)
+{
+    struct grass_col_info *ca = (struct grass_col_info *)a;
+    struct grass_col_info *cb = (struct grass_col_info *)b;
+
+    return (ca->idx - cb->idx);
+}
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
@@ -892,6 +917,9 @@ int main(int argc, char *argv[])
 
 	/* Add DB link and create table */
 	if (!flag.notab->answer) {
+	    int i_out, ncols_out, done;
+	    struct grass_col_info *col_info;
+
 	    G_important_message(_("Creating attribute table for layer <%s>..."),
 				  layer_names[layer]);
 
@@ -913,14 +941,24 @@ int main(int argc, char *argv[])
 	    ncols = OGR_FD_GetFieldCount(Ogr_featuredefn);
 	    G_debug(2, "%d columns", ncols);
 
+	    ncols_out = ncols;
+	    if (key_idx[layer] < 0)
+		ncols_out++;
+	    
+	    col_info = G_malloc(ncols_out * sizeof(struct grass_col_info));
+
 	    /* Create table */
-	    sprintf(buf, "create table %s (%s integer", Fi->table,
-		    key_column[layer]);
-	    db_set_string(&sql, buf);
+	    i_out = 0;
+	    col_info[i_out].idx = i_out;
+	    col_info[i_out].name = key_column[layer];
+	    col_info[i_out].type = "integer";
+
 	    for (i = 0; i < ncols; i++) {
 
                 if (key_idx[layer] > -1 && key_idx[layer] == i)
                     continue; /* skip defined key (FID column) */
+
+		i_out++;
                 
 		Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, i);
 		Ogr_ftype = OGR_Fld_GetType(Ogr_field);
@@ -941,8 +979,8 @@ int main(int argc, char *argv[])
 
 		}
 
-		/* avoid that we get the 'cat' column twice */
-		if (strcmp(Ogr_fieldname, GV_KEY_COLUMN) == 0) {
+		/* avoid that we get the key column twice */
+		if (strcmp(Ogr_fieldname, key_column[layer]) == 0) {
 		    sprintf(namebuf, "%s_", Ogr_fieldname);
 		    Ogr_fieldname = G_store(namebuf);
 		}
@@ -955,6 +993,8 @@ int main(int argc, char *argv[])
 		    G_important_message(_("Column name <%s> renamed to <%s>"),
 			      OGR_Fld_GetNameRef(Ogr_field), Ogr_fieldname);
 		}
+		col_info[i_out].idx = i_out;
+		col_info[i_out].name = G_store(Ogr_fieldname);
 
 		/** Simple 32bit integer                     OFTInteger = 0        **/
 		/** List of 32bit integers                   OFTIntegerList = 1    **/
@@ -973,14 +1013,14 @@ int main(int argc, char *argv[])
                 /** List of 64bit integers                   OFTInteger64List = 13 **/
 
 		if (Ogr_ftype == OFTInteger) {
-		    sprintf(buf, ", %s integer", Ogr_fieldname);
+		    col_info[i_out].type = "integer";
 		}
 #if GDAL_VERSION_NUM >= 2000000
 		else if (Ogr_ftype == OFTInteger64) {
                     if (strcmp(Fi->driver, "pg") == 0) 
-                        sprintf(buf, ", %s bigint", Ogr_fieldname);
+			col_info[i_out].type = "bigint";
                     else {
-                        sprintf(buf, ", %s integer", Ogr_fieldname);
+			col_info[i_out].type = "integer";
                         if (strcmp(Fi->driver, "sqlite") != 0) 
                             G_warning(_("Writing column <%s> with integer 64 as integer 32"),
                                       Ogr_fieldname);
@@ -993,23 +1033,24 @@ int main(int argc, char *argv[])
 #endif
                          ) {
 		    /* hack: treat as string */
-		    sprintf(buf, ", %s varchar ( %d )", Ogr_fieldname,
-			    OFTIntegerListlength);
+		    sprintf(buf, "varchar ( %d )", OFTIntegerListlength);
+		    col_info[i_out].type = G_store(buf);
 		    G_warning(_("Writing column <%s> with fixed length %d chars (may be truncated)"),
 			      Ogr_fieldname, OFTIntegerListlength);
 		}
 		else if (Ogr_ftype == OFTReal) {
-		    sprintf(buf, ", %s double precision", Ogr_fieldname);
+		    col_info[i_out].type = "double precision";
 #if GDAL_VERSION_NUM >= 1320
 		}
 		else if (Ogr_ftype == OFTDate) {
-		    sprintf(buf, ", %s date", Ogr_fieldname);
+		    col_info[i_out].type = "date";
 		}
 		else if (Ogr_ftype == OFTTime) {
-		    sprintf(buf, ", %s time", Ogr_fieldname);
+		    col_info[i_out].type = "time";
 		}
 		else if (Ogr_ftype == OFTDateTime) {
-		    sprintf(buf, ", %s %s", Ogr_fieldname, datetime_type);
+		    sprintf(buf, "%s", datetime_type);
+		    col_info[i_out].type = G_store(buf);
 #endif
 		}
 		else if (Ogr_ftype == OFTString) {
@@ -1023,13 +1064,13 @@ int main(int argc, char *argv[])
 				  Ogr_fieldname);
 			fwidth = 255;
 		    }
-		    sprintf(buf, ", %s varchar ( %d )", Ogr_fieldname,
-			    fwidth);
+		    sprintf(buf, "varchar ( %d )", fwidth);
+		    col_info[i_out].type = G_store(buf);
 		}
 		else if (Ogr_ftype == OFTStringList) {
 		    /* hack: treat as string */
-		    sprintf(buf, ", %s varchar ( %d )", Ogr_fieldname,
-			    OFTIntegerListlength);
+		    sprintf(buf, "varchar ( %d )", OFTIntegerListlength);
+		    col_info[i_out].type = G_store(buf);
 		    G_warning(_("Writing column %s with fixed length %d chars (may be truncated)"),
 			      Ogr_fieldname, OFTIntegerListlength);
 		}
@@ -1037,10 +1078,48 @@ int main(int argc, char *argv[])
 		    G_warning(_("Column type (Ogr_ftype: %d) not supported (Ogr_fieldname: %s)"),
 			      Ogr_ftype, Ogr_fieldname);
 		    buf[0] = 0;
+		    col_info[i_out].type = G_store(buf);
 		}
-		db_append_string(&sql, buf);
 		G_free(Ogr_fieldname);
 	    }
+
+	    /* fix duplicate column names */
+	    done = 0;
+
+	    while (!done) {
+		done = 1;
+		qsort(col_info, ncols_out, sizeof(struct grass_col_info),
+		      cmp_col_name);
+		for (i = 0; i < ncols_out - 1; i++) {
+		    int i_a;
+
+		    i_a = 1;
+		    while (i + i_a < ncols_out &&
+			   strcmp(col_info[i].name, col_info[i + i_a].name) == 0) {
+			G_important_message(_("Column name <%s> renamed to <%s_%d>"),
+					    col_info[i + i_a].name, 
+					    col_info[i + i_a].name, i_a);
+			sprintf(buf, "%s_%d", col_info[i + i_a].name, i_a);
+			col_info[i + i_a].name = G_store(buf);
+			i_a++;
+			done = 0;
+		    }
+		}
+	    }
+	    qsort(col_info, ncols_out, sizeof(struct grass_col_info),
+		  cmp_col_idx);
+
+	    /* construct sql from column names and types */
+	    i = 0;
+	    sprintf(buf, "create table %s (%s %s", Fi->table,
+		    col_info[i].name, col_info[i].type);
+	    db_set_string(&sql, buf);
+
+	    for (i = 1; i < ncols_out; i++) {
+		sprintf(buf, ", %s %s", col_info[i].name, col_info[i].type);
+		db_append_string(&sql, buf);
+	    }
+
 	    db_append_string(&sql, ")");
 	    G_debug(3, "%s", db_get_string(&sql));
 
@@ -1067,6 +1146,8 @@ int main(int argc, char *argv[])
 			      Fi->table);
 
 	    db_close_database_shutdown_driver(driver);
+	    
+	    G_free(col_info);
 	}
     }
 
