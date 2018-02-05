@@ -1784,7 +1784,7 @@ int main(int argc, char *argv[])
 		        _("Number of duplicate centroids: %d"),
 			err_centr_dupl);
 	    }
-	    G_warning(error_msg);
+	    G_warning("%s", error_msg);
 	    
 	    G_important_message(_("The input could be cleaned by snapping vertices to each other."));
 
