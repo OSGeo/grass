@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
 
 	    subregion++;
 	    if (nsubregions > 1)
-		G_message(_("subregion %d of %d"), subregion, nsubregions);
+		G_message(_("Subregion %d of %d"), subregion, nsubregions);
 
 	    elaboration_reg.west = elaboration_reg.east;
 	    if (elaboration_reg.west < original_reg.west)	/* First column */
