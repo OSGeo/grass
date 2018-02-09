@@ -225,7 +225,7 @@ class ToolBar(wx.ToolBar):
                      shortHelpString='', longHelpString='', clientData=None):
         if wxPythonPhoenix:
             return wx.ToolBar.AddTool(self, toolId=toolId, label=label, bitmap=bitmap, bmpDisabled=bmpDisabled,
-                                      kind=kind, shortHelpString=shortHelpString, longHelpString=longHelpString,
+                                      kind=kind, shortHelp=shortHelpString, longHelp=longHelpString,
                                       clientData=clientData)
         else:
             return wx.ToolBar.AddLabelTool(self, toolId, label, bitmap, bmpDisabled, kind,
