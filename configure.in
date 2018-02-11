@@ -489,6 +489,14 @@ AC_DEFINE(HAVE_LONG_LONG_INT)
 AC_MSG_RESULT(no)
 ])
 
+AC_MSG_CHECKING(for int64_t)
+AC_TRY_COMPILE([#include <sys/types.h>],[int64_t x;],[
+AC_MSG_RESULT(yes)
+AC_DEFINE(HAVE_INT64_T)
+],[
+AC_MSG_RESULT(no)
+])
+
 AC_MSG_CHECKING(for W11)
 case "$enable_w11" in
 	yes|no)	AC_MSG_RESULT("$enable_w11")	;;
