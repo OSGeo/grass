@@ -533,8 +533,8 @@ class RasterAbstractBase(object):
     @must_be_open
     def get_cats(self):
         """Return a category object"""
-        cat = Category()
-        cat.read(self)
+        cat = Category(name=self.name, mapset=self.mapset)
+        cat.read()
         return cat
 
     @must_be_open
