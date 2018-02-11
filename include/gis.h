@@ -581,6 +581,23 @@ typedef int CELL;
 typedef double DCELL;
 typedef float FCELL;
 
+/* 64 bit signed integer */
+#ifdef __MINGW32__
+typedef __int64 grass_int64;
+#elif HAVE_INT64_T
+#include <sys/types.h>
+typedef int64_t grass_int64;
+#elif HAVE_LONG_LONG_INT
+typedef long long int grass_int64;
+#elif HAVE_LARGEFILES
+typedef off_t grass_int64;
+#else
+#error "no 64 bit integer available"
+#endif
+
+/* LCELL = large CELL, proposed new raster data type */
+typedef grass_int64 LCELL;
+
 struct _Color_Value_
 {
     DCELL value;
