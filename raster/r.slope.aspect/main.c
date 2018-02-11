@@ -57,6 +57,22 @@
  *  the sign bug for the second order derivatives (jh) */
 
 
+/* convert aspect from CCW from East to CW from North
+ * aspect for flat areas is set to -9999 */
+static double aspect_cw_n(double aspect)
+{
+    /* aspect == 0: flat */
+    if (aspect == 0)
+	return -9999;
+
+    /* no modulus because of fp values */
+    aspect = (450 - aspect);
+    if (aspect >= 360)
+	aspect -= 360;
+
+    return aspect;
+}
+
 int main(int argc, char *argv[])
 {
     struct Categories cats;
@@ -142,7 +158,7 @@ int main(int argc, char *argv[])
     } parm;
     struct
     {
-	struct Flag *a;
+	struct Flag *a, *n;
     } flag;
 
     G_gisinit(argv[0]);
@@ -261,6 +277,13 @@ int main(int argc, char *argv[])
 	_("Do not align the current region to the raster elevation map");
     flag.a->guisection = _("Settings");
 
+    flag.n = G_define_flag();
+    flag.n->key = 'n';
+    flag.n->label =
+	_("Create aspect as degrees clockwise from North (azimuth), with flat = -9999");
+    flag.n->description =
+	_("Default: degrees counter-clockwise from East, with flat = 0");
+    flag.n->guisection = _("Settings");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -395,7 +418,7 @@ int main(int argc, char *argv[])
     west = Rast_col_to_easting(0.5, &window);
     V = G_distance(east, north, east, south) * 4 / (factor * zfactor);
     H = G_distance(east, ns_med, west, ns_med) * 4 / (factor * zfactor);
-    /*    ____________________________
+    /* ____________________________
        |c1      |c2      |c3      |
        |        |        |        |
        |        |  north |        |        
@@ -792,7 +815,9 @@ int main(int argc, char *argv[])
 	    }			/* computing slope */
 
 	    if (aspect_fd > 0) {
-		if (key == 0.)
+		double aspect_flat = 0.;
+
+		if (slp_in_perc == 0.)
 		    aspect = 0.;
 		else if (dx == 0) {
 		    if (dy > 0)
@@ -802,28 +827,28 @@ int main(int argc, char *argv[])
 		}
 		else {
 		    aspect = (atan2(dy, dx) / degrees_to_radians);
-		    if ((aspect <= 0.5) && (aspect > 0) &&
-			out_type == CELL_TYPE)
-			aspect = 360.;
 		    if (aspect <= 0.)
 			aspect = 360. + aspect;
 		}
 
-		/* if it's not the case that the slope for this cell 
-		   is below specified minimum */
-		if (!((slope_fd > 0) && (slp_in_perc < min_slope))) {
-		    if (out_type == CELL_TYPE)
-			*((CELL *) asp_ptr) = (CELL) (aspect + .5);
-		    else
-			Rast_set_d_value(asp_ptr,
-					     (DCELL) aspect, data_type);
+		if (flag.n->answer) {
+		    aspect_flat = -9999;
+		    aspect = aspect_cw_n(aspect);
+		}
+
+		if (out_type == CELL_TYPE) {
+		    if (aspect > 0 && aspect < 0.5)
+			aspect = 360;
+		    *((CELL *) asp_ptr) = (CELL) (aspect + .5);
 		}
 		else
-		    Rast_set_null_value(asp_ptr, 1, data_type);
+		    Rast_set_d_value(asp_ptr,
+					 (DCELL) aspect, data_type);
+
 		asp_ptr = G_incr_void_ptr(asp_ptr, Rast_cell_size(data_type));
 
 		/* now update min and max */
-		if (min_asp > aspect)
+		if (aspect > aspect_flat && min_asp > aspect)
 		    min_asp = aspect;
 		if (max_asp < aspect)
 		    max_asp = aspect;
@@ -990,44 +1015,81 @@ int main(int argc, char *argv[])
 	   we are using reverse order so that the label looked up
 	   for i-.5 is not the one defined for i-.5, i+.5 interval, but
 	   the one defile for i-1.5, i-.5 interval which is added later */
-	for (i = ceil(max_asp); i >= 1; i--) {
-	    if (i == 360)
-		sprintf(buf, "east");
-	    else if (i == 360)
-		sprintf(buf, "east");
-	    else if (i == 45)
-		sprintf(buf, "north ccw of east");
-	    else if (i == 90)
-		sprintf(buf, "north");
-	    else if (i == 135)
-		sprintf(buf, "north ccw of west");
-	    else if (i == 180)
-		sprintf(buf, "west");
-	    else if (i == 225)
-		sprintf(buf, "south ccw of west");
-	    else if (i == 270)
-		sprintf(buf, "south");
-	    else if (i == 315)
-		sprintf(buf, "south ccw of east");
-	    else
-		sprintf(buf, "%d degree%s ccw from east", i,
-			i == 1 ? "" : "s");
-	    if (data_type == CELL_TYPE) {
-	      Rast_set_c_cat((CELL *) &i, (CELL *) &i, buf, &cats);
-		continue;
+	if (!flag.n->answer) {
+	    for (i = ceil(max_asp); i >= 1; i--) {
+		if (i == 360)
+		    sprintf(buf, "east");
+		else if (i == 45)
+		    sprintf(buf, "north ccw of east");
+		else if (i == 90)
+		    sprintf(buf, "north");
+		else if (i == 135)
+		    sprintf(buf, "north ccw of west");
+		else if (i == 180)
+		    sprintf(buf, "west");
+		else if (i == 225)
+		    sprintf(buf, "south ccw of west");
+		else if (i == 270)
+		    sprintf(buf, "south");
+		else if (i == 315)
+		    sprintf(buf, "south ccw of east");
+		else
+		    sprintf(buf, "%d degree%s ccw from east", i,
+			    i == 1 ? "" : "s");
+		if (data_type == CELL_TYPE) {
+		    Rast_set_c_cat((CELL *) &i, (CELL *) &i, buf, &cats);
+		    continue;
+		}
+		tmp1 = (double)i - .5;
+		tmp2 = (double)i + .5;
+		Rast_set_d_cat(&tmp1, &tmp2, buf, &cats);
 	    }
-	    tmp1 = (double)i - .5;
-	    tmp2 = (double)i + .5;
-	    Rast_set_d_cat(&tmp1, &tmp2, buf, &cats);
-	}
-	if (data_type == CELL_TYPE) {
-	    cat = 0;
-	    Rast_set_c_cat(&cat, &cat, "no aspect", &cats);
+	    if (data_type == CELL_TYPE) {
+		cat = 0;
+		Rast_set_c_cat(&cat, &cat, "no aspect", &cats);
+	    }
+	    else {
+		tmp1 = 0;
+		Rast_set_d_cat(&tmp1, &tmp1, "no aspect", &cats);
+	    }
 	}
 	else {
-	    tmp1 = 0.;
-	    tmp2 = .5;
-	    Rast_set_d_cat(&tmp1, &tmp2, "no aspect", &cats);
+	    for (i = ceil(max_asp); i >= 1; i--) {
+		if (i == 0 && i == 360)
+		    sprintf(buf, "north");
+		else if (i == 45)
+		    sprintf(buf, "north-east");
+		else if (i == 90)
+		    sprintf(buf, "east");
+		else if (i == 135)
+		    sprintf(buf, "south-east");
+		else if (i == 180)
+		    sprintf(buf, "south");
+		else if (i == 225)
+		    sprintf(buf, "south-west");
+		else if (i == 270)
+		    sprintf(buf, "west");
+		else if (i == 315)
+		    sprintf(buf, "north-west");
+		else
+		    sprintf(buf, "%d degree%s cw from north", i,
+			    i == 1 ? "" : "s");
+		if (data_type == CELL_TYPE) {
+		  Rast_set_c_cat((CELL *) &i, (CELL *) &i, buf, &cats);
+		    continue;
+		}
+		tmp1 = (double)i - .5;
+		tmp2 = (double)i + .5;
+		Rast_set_d_cat(&tmp1, &tmp2, buf, &cats);
+	    }
+	    if (data_type == CELL_TYPE) {
+		cat = -9999;
+		Rast_set_c_cat(&cat, &cat, "no aspect", &cats);
+	    }
+	    else {
+		tmp1 = -9999;
+		Rast_set_d_cat(&tmp1, &tmp1, "no aspect", &cats);
+	    }
 	}
 	Rast_write_cats(aspect_name, &cats);
 	Rast_free_cats(&cats);
