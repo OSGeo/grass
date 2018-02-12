@@ -68,7 +68,7 @@
 #% key: start_coordinates
 #% type: double
 #% required: no
-#% multiple: no
+#% multiple: yes
 #% key_desc: east,north
 #% description: Coordinates of starting point(s) (E,N)
 #% gisprompt: old,coords,coords

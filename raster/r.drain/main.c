@@ -135,6 +135,7 @@ int main(int argc, char **argv)
     
     coordopt = G_define_standard_option(G_OPT_M_COORDS);
     coordopt->key = "start_coordinates";
+    coordopt->multiple = YES;
     coordopt->description = _("Coordinates of starting point(s) (E,N)");
     coordopt->guisection = _("Start");
 
