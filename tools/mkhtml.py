@@ -35,7 +35,7 @@ except:
     import urllib.parse as urlparse
 
 
-if sys.version_info.major == 2:
+if sys.version_info[0] == 2:
     PY2 = True
 else:
     PY2 = False
