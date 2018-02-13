@@ -3,7 +3,7 @@
 
 htmldesc = $(call run_grass,$(1) --html-description < /dev/null | grep -v '</body>\|</html>' > $(2))
 
-IMGSRC := $(wildcard *.png) $(wildcard *.jpg)
+IMGSRC := $(wildcard *.png) $(wildcard *.jpg) $(wildcard *.gif)
 IMGDST := $(patsubst %,$(HTMLDIR)/%,$(IMGSRC))
 
 ifneq ($(strip $(IMGDST)),)
@@ -14,4 +14,7 @@ $(HTMLDIR)/%.png: %.png | $(HTMLDIR)
 	$(INSTALL_DATA) $< $@
 
 $(HTMLDIR)/%.jpg: %.jpg | $(HTMLDIR)
+	$(INSTALL_DATA) $< $@
+
+$(HTMLDIR)/%.gif: %.gif | $(HTMLDIR)
 	$(INSTALL_DATA) $< $@

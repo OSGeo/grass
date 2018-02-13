@@ -33,7 +33,7 @@ scriptstrings: $(STRINGDIR)/$(PGM)_to_translate.c
 install:
 	$(INSTALL) $(SCRIPT) $(INST_DIR)/scripts/
 	$(INSTALL_DATA) $(HTMLDIR)/$(PGM).html $(INST_DIR)/docs/html/
-	$(eval IMG := $(wildcard $(HTMLDIR)/*.png) $(wildcard $(HTMLDIR)/*.jpg))
+	$(eval IMG := $(wildcard $(HTMLDIR)/*.png) $(wildcard $(HTMLDIR)/*.jpg) $(wildcard $(HTMLDIR)/*.gif))
 	if [ -n "$(IMG)" ] ; then \
 		$(INSTALL_DATA) $(IMG)  $(INST_DIR)/docs/html/ ; \
 	fi
