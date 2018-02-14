@@ -48,12 +48,7 @@ r.in.wms -c url="http://wms.cuzk.cz/wms.asp"
 <div class="code"><pre>
 # OSM
 g.region n=90 s=-90 w=-180 e=180 res=0:10:00 -p
-r.in.wms url=http://watzmann-geog.urz.uni-heidelberg.de/cached/osm layers=osm_auto:all output=osm format=png
-</pre></div>
-
-<div class="code"><pre>
-# OSM
-r.in.wms url=http://irs.gis-lab.info layers=osm output=osm format=png
+r.in.wms url="http://watzmann-geog.urz.uni-heidelberg.de/cached/osm" layers=osm_auto:all output=osm format=png
 </pre></div>
 
 <div class="code"><pre>
@@ -71,35 +66,36 @@ More OSM WMS servers can be found online, e.g. on the OSM wiki in a
 <a href="http://wiki.openstreetmap.org/wiki/WMS#Public_WMS_Servers">OSM WMS Servers list</a>
 and on the <a href="http://wiki.openstreetmap.org/wiki/OSM-WMS-EUROPE">OSM-WMS-EUROPE</a> page.
 
-<h4>Image data</h4>
-
-<div class="code"><pre>
-# Landsat
-r.in.wms url=http://irs.gis-lab.info layers=landsat output=landsat format=png
-</pre></div>
-
 <h4>Countries and coastlines</h4>
 
 <div class="code"><pre>
-r.in.wms url=http://www2.demis.nl/WMS/wms.asp layers=Countries,Borders,Coastline output=countries srs=4326 format=png 
+r.in.wms url="http://www2.demis.nl/WMS/wms.asp" layers=Countries,Borders,Coastline output=countries srs=4326 format=png 
+</pre></div>
+
+<h4>Sentinel-2 satellite cloud free global coverage</h4>
+
+<div class="code"><pre>
+# North Carolina sample data
+g.region raster=elevation -p
+r.in.wms url="https://tiles.maps.eox.at/wms?" layers=s2cloudless output=sentinel2 format=png
 </pre></div>
 
 <h4>OGC WMTS Example</h4>
 
 <div class="code"><pre>
-r.in.wms url=http://gpp3-wxs.ign.fr/yourAPIkey/geoportail/wmts layers=ORTHOIMAGERY.ORTHOPHOTOS output=orthophoto srs=3857 format=jpeg driver=WMTS_GRASS style=normal password=* username=*
+r.in.wms url="http://gpp3-wxs.ign.fr/yourAPIkey/geoportail/wmts" layers=ORTHOIMAGERY.ORTHOPHOTOS output=orthophoto srs=3857 format=jpeg driver=WMTS_GRASS style=normal password="*" username="*"
 </pre></div>
 
-Note: username, password and API key can be get from <a href="http://api.ign.fr/">IGN API</a> website
+Note: username, password and API key can be obtained from <a href="http://api.ign.fr/">IGN API</a> website
 
 <h4>Data covering the Czech Republic</h4>
 
 <div class="code"><pre>
-r.in.wms output=kn url=http://wms.cuzk.cz/wms.asp layers=prehledka_kraju-linie srs=4326 format=png
+r.in.wms url="http://wms.cuzk.cz/wms.asp" layers=prehledka_kraju-linie srs=4326 output=kn format=png
 </pre></div>
 
 <div class="code"><pre>
-r.in.wms url=http://geoportal.cuzk.cz/WMTS_ORTOFOTO/WMTService.aspx layers=orto output=ortofoto srs=3857 format=jpeg driver=WMTS_GRASS style=default
+r.in.wms url="http://geoportal.cuzk.cz/WMTS_ORTOFOTO/WMTService.aspx" layers=orto output=ortofoto srs=3857 format=jpeg driver=WMTS_GRASS style=default
 </pre></div>
 
 Note: data are provided by <a href="http://cuzk.cz/Dokument.aspx?PRARESKOD=998&MENUID=10384&AKCE=DOC:10-ENGLISH">Czech office for surveying, mapping and cadastre</a>.
@@ -107,8 +103,8 @@ Note: data are provided by <a href="http://cuzk.cz/Dokument.aspx?PRARESKOD=998&M
 <h2>REQUIREMENTS</h2>
 
 <em>r.in.wms</em>
-requires <a href="http://www.gdal.org/gdalwarp.html">gdalwarp</a>
-utility from GDAL/OGR library.
+requires the <a href="http://www.gdal.org/gdalwarp.html">gdalwarp</a>
+utility from the GDAL/OGR library.
 
 <h2>REFERENCES</h2>
 
@@ -128,9 +124,8 @@ utility from GDAL/OGR library.
 </em>
 
 <p>
-See
-also <a href="http://grasswiki.osgeo.org/wiki/WxGUI/Video_tutorials#Add_web_service_layer">WMS
-support in wxGUI</a>.
+See also
+<a href="https://grasswiki.osgeo.org/wiki/WxGUI/Video_tutorials#Add_web_service_layer">WMS support in wxGUI</a>.
 
 <h2>AUTHOR</h2>
 
