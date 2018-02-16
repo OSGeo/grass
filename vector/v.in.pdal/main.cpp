@@ -6,7 +6,7 @@
  *               
  * PURPOSE:      Import LiDAR LAS points using PDAL
  *               
- * COPYRIGHT:    (C) 2015-2016 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2015-2018 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -17,10 +17,10 @@
 #include <pdal/PointTable.hpp>
 #include <pdal/PointView.hpp>
 #include <pdal/StageFactory.hpp>
-#include <pdal/LasReader.hpp>
-#include <pdal/LasHeader.hpp>
+#include <pdal/io/LasReader.hpp>
+#include <pdal/io/LasHeader.hpp>
 #include <pdal/Options.hpp>
-#include <pdal/ReprojectionFilter.hpp>
+#include <pdal/filters/ReprojectionFilter.hpp>
 
 extern "C"
 {
@@ -75,14 +75,14 @@ void pdal_point_to_grass(struct Map_info *output_vector,
                          struct line_pnts *points, struct line_cats *cats,
                          pdal::PointViewPtr point_view, pdal::PointId idx,
                          struct GLidarLayers *layers, int cat,
-                         pdal::Dimension::Id::Enum dim_to_use_as_z)
+                         pdal::Dimension::Id dim_to_use_as_z)
 {
     Vect_reset_line(points);
     Vect_reset_cats(cats);
 
-    using namespace pdal::Dimension::Id;
-    double x = point_view->getFieldAs<double>(X, idx);
-    double y = point_view->getFieldAs<double>(Y, idx);
+    using namespace pdal::Dimension;
+    double x = point_view->getFieldAs<double>(Id::X, idx);
+    double y = point_view->getFieldAs<double>(Id::Y, idx);
     double z = point_view->getFieldAs<double>(dim_to_use_as_z, idx);
 
     /* TODO: optimize for case with no layers, by adding
@@ -91,19 +91,19 @@ void pdal_point_to_grass(struct Map_info *output_vector,
         Vect_cat_set(cats, layers->id_layer, cat);
     }
     if (layers->return_layer) {
-        int return_n = point_view->getFieldAs<int>(ReturnNumber, idx);
-        int n_returns = point_view->getFieldAs<int>(NumberOfReturns, idx);
+        int return_n = point_view->getFieldAs<int>(Id::ReturnNumber, idx);
+        int n_returns = point_view->getFieldAs<int>(Id::NumberOfReturns, idx);
         int return_c = return_to_cat(return_n, n_returns);
         Vect_cat_set(cats, layers->return_layer, return_c);
     }
     if (layers->class_layer) {
         Vect_cat_set(cats, layers->class_layer,
-                     point_view->getFieldAs<int>(Classification, idx));
+                     point_view->getFieldAs<int>(Id::Classification, idx));
     }
     if (layers->rgb_layer) {
-        int red = point_view->getFieldAs<int>(Red, idx);
-        int green = point_view->getFieldAs<int>(Green, idx);
-        int blue = point_view->getFieldAs<int>(Blue, idx);
+        int red = point_view->getFieldAs<int>(Id::Red, idx);
+        int green = point_view->getFieldAs<int>(Id::Green, idx);
+        int blue = point_view->getFieldAs<int>(Id::Blue, idx);
         int rgb = red;
         rgb = (rgb << 8) + green;
         rgb = (rgb << 8) + blue;
@@ -339,7 +339,7 @@ int main(int argc, char *argv[])
     }
 
     // we use full qualification because the dim ns contains too general names
-    pdal::Dimension::Id::Enum dim_to_use_as_z = pdal::Dimension::Id::Z;
+    pdal::Dimension::Id dim_to_use_as_z = pdal::Dimension::Id::Z;
 
     struct GLidarLayers layers;
     GLidarLayers_set_no_layers(&layers);
@@ -492,7 +492,7 @@ int main(int argc, char *argv[])
             G_fatal_error(_("The input dataset has undefined projection"));
         std::string dataset_wkt =
             spatial_reference.
-            getWKT(pdal::SpatialReference::eHorizontalOnly);
+            getWKT();
         bool proj_match = is_wkt_projection_same_as_loc(dataset_wkt.c_str());
         if (!proj_match)
             wkt_projection_mismatch_report(dataset_wkt.c_str());
