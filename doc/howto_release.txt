@@ -186,6 +186,10 @@ vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
 # only when new major release
 # update cronjob 'cron_grass_HEAD_src_snapshot.sh' on grass.osgeo.org to next but one release tag for the differences
 
+# wiki updates, only when new major release:
+  - {{cmd|xxxx}} macro: https://grasswiki.osgeo.org/wiki/Template:Cmd
+  - update last version on main page
+
 # trac updates, only when new major release:
   - Add new release to https://trac.osgeo.org/grass/admin/ticket/versions
   - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.4.x --> Edit Milestone
@@ -264,7 +268,6 @@ vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
    redazione@geoforus.it
    mfeilner@linuxnewmedia.de
    info@harzer.de
-   pr@geocomm.com
    editor-geo@geoconnexion.com
 
  Web:
