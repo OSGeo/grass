@@ -1,3 +1,19 @@
+/****************************************************************
+ *
+ * MODULE:       v.in.pdal
+ * 
+ * AUTHOR(S):    Vaclav Petras
+ *               
+ * PURPOSE:      Import LiDAR LAS points using PDAL
+ *               
+ * COPYRIGHT:    (C) 2015-2016 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
+ *
+ **************************************************************/
+
 #include <pdal/PointTable.hpp>
 #include <pdal/PointView.hpp>
 #include <pdal/StageFactory.hpp>
