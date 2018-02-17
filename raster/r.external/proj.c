@@ -35,9 +35,10 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 	OGRSpatialReferenceH hSRS;
 
 	hSRS = OSRNewSpatialReference(wkt);
-	GPJ_osr_to_grass(cellhd, &proj_info, &proj_units, hSRS, 0);
+	if (hSRS != NULL)
+	    GPJ_osr_to_grass(cellhd, &proj_info, &proj_units, hSRS, 0);
 
-	if (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS)) {
+	if (!hSRS || (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS))) {
 	    G_important_message(_("Input contains an invalid SRS. " 
 	                          "WKT definition:\n%s"), wkt);
 

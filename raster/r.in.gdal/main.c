@@ -476,11 +476,6 @@ int main(int argc, char *argv[])
     check_projection(&cellhd, hDS, parm.outloc->answer, flag_c->answer,
                      flag_o->answer, flag_j->answer);
 
-    if (GDALGetRasterCount(hDS) > 1) {
-	G_message(_("Importing %d raster bands..."),
-		  GDALGetRasterCount(hDS));
-    }
-
     /* -------------------------------------------------------------------- */
     /*      Set the active window to match the available data.              */
     /* -------------------------------------------------------------------- */
@@ -578,6 +573,11 @@ int main(int argc, char *argv[])
     if (parm.band->answer != NULL) {
 	while (parm.band->answers[n_bands])
 	    n_bands++;
+    }
+
+    if (GDALGetRasterCount(hDS) > 1 && n_bands != 1) {
+	G_message(_("Importing %d raster bands..."),
+		  (n_bands > 1 ? n_bands : GDALGetRasterCount(hDS)));
     }
 
     if ((GDALGetRasterCount(hDS) > 1 && n_bands != 1)
