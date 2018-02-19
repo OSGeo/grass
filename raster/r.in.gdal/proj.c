@@ -254,14 +254,16 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 				proj_units->value[i_value]);
 		}
 	    }
-	    strcat(error_msg,
-		   _("\nIn case of no significant differences in the projection definitions,"
-		     " use the -o flag to ignore them and use"
-		     " current location definition.\n"));
-	    strcat(error_msg,
-		   _("Consider generating a new location from the input dataset using "
-		    "the 'location' parameter.\n"));
-
+            if (!check_only) {
+                strcat(error_msg,
+                       _("\nIn case of no significant differences in the projection definitions,"
+                         " use the -o flag to ignore them and use"
+                         " current location definition.\n"));
+                strcat(error_msg,
+                       _("Consider generating a new location from the input dataset using "
+                         "the 'location' parameter.\n"));
+            }
+            
 	    if (check_only)
 		msg_fn = G_warning;
 	    else
