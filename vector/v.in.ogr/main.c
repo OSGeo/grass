@@ -26,7 +26,6 @@
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
-#include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include <gdal_version.h>	/* needed for OFTDate */
 #include <cpl_conv.h>
@@ -48,6 +47,8 @@ int centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index * Sindex,
 int poly_count(OGRGeometryH hGeom, int line2boundary);
 
 char *get_datasource_name(const char *, int);
+
+void convert_osm_lines(struct Map_info *Map, double snap);
 
 int cmp_layer_srs(ds_t, int, int *, char **, char *);
 void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer, char *geom_col,
@@ -828,7 +829,7 @@ int main(int argc, char *argv[])
     }
     /* <-- estimate distance for boundary splitting */
 
-    use_tmp_vect = n_polygon_boundaries > 0;
+    use_tmp_vect = (n_polygon_boundaries > 0) || (strcmp(ogr_driver_name, "OSM") == 0);
 
     G_debug(1, "Input is 3D ? %s", (input3d == 0 ? "yes" : "no"));
     with_z = input3d;
@@ -947,7 +948,7 @@ int main(int argc, char *argv[])
 	    
 	    col_info = G_malloc(ncols_out * sizeof(struct grass_col_info));
 
-	    /* Create table */
+	    /* Collect column names and types */
 	    i_out = 0;
 	    col_info[i_out].idx = i_out;
 	    col_info[i_out].name = key_column[layer];
@@ -1109,7 +1110,7 @@ int main(int argc, char *argv[])
 	    qsort(col_info, ncols_out, sizeof(struct grass_col_info),
 		  cmp_col_idx);
 
-	    /* construct sql from column names and types */
+	    /* Create table */
 	    i = 0;
 	    sprintf(buf, "create table %s (%s %s", Fi->table,
 		    col_info[i].name, col_info[i].type);
@@ -1380,6 +1381,12 @@ int main(int argc, char *argv[])
 	/* TODO: is it necessary to build here? probably not, consumes time */
 	/* GV_BUILD_BASE is sufficient to toggle boundary cleaning */
 	Vect_build_partial(&Tmp, GV_BUILD_BASE);
+    }
+
+    if (use_tmp_vect && !flag.no_clean->answer &&
+        strcmp(ogr_driver_name, "OSM") == 0 &&
+	Vect_get_num_primitives(Out, GV_LINE) > 0) {
+	convert_osm_lines(Out, snap);
     }
 
     /* make this a separate function ?
@@ -1920,11 +1927,11 @@ void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t *Ogr_ds,
 
     if (OGR_iter->ogr_interleaved_reading) {
 #if GDAL_VERSION_NUM >= 2020000
-	G_verbose_message(_("Using GDAL 2.2+ style interleaved reading for GDAL version %d"),
-			  GDAL_VERSION_NUM); 
+	G_verbose_message(_("Using GDAL 2.2+ style interleaved reading for GDAL version %d.%d.%d"),
+			  GDAL_VERSION_MAJOR, GDAL_VERSION_MINOR, GDAL_VERSION_REV); 
 #else
-	G_verbose_message(_("Using GDAL 1.x style interleaved reading for GDAL version %d"),
-			  GDAL_VERSION_NUM); 
+	G_verbose_message(_("Using GDAL 1.x style interleaved reading for GDAL version %d.%d.%d"),
+			  GDAL_VERSION_MAJOR, GDAL_VERSION_MINOR, GDAL_VERSION_REV); 
 #endif
     }
 }
