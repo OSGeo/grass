@@ -197,14 +197,8 @@ int main(int argc, char **argv)
 	{
 	    compose_line(out, "  Rows:         %d", cellhd.rows);
 	    compose_line(out, "  Columns:      %d", cellhd.cols);
-#ifdef HAVE_LONG_LONG_INT
-	    compose_line(out, "  Total Cells:  %llu",
-			 (unsigned long long)cellhd.rows * cellhd.cols);
-#else
-	    compose_line(out,
-			 "  Total Cells:  %lu (accuracy - see r.info manual)",
-			 (unsigned long)cellhd.rows * cellhd.cols);
-#endif
+	    compose_line(out, "  Total Cells:  %ju",
+			 (grass_int64)cellhd.rows * cellhd.cols);
 
 	    /* This is printed as a guide to what the following eastings and
 	     * northings are printed in. This data is NOT from the values
@@ -353,8 +347,8 @@ int main(int argc, char **argv)
             fprintf(out, "rows=%d\n", cellhd.rows);
             fprintf(out, "cols=%d\n", cellhd.cols);
             
-            fprintf(out, "cells=%lld\n",
-                    (long long)cellhd.rows * cellhd.cols);
+            fprintf(out, "cells=%jd\n",
+                    (grass_int64)cellhd.rows * cellhd.cols);
             
 	    fprintf(out, "datatype=%s\n",
 		    (data_type == CELL_TYPE ? "CELL" :
@@ -436,11 +430,7 @@ int main(int argc, char **argv)
 		mean = (double)(rstats.sum / rstats.count);
 		sd = sqrt(rstats.sumsq / rstats.count - (mean * mean));
 
-#ifdef HAVE_LONG_LONG_INT
-		fprintf(out, "n=%lld\n", (long long int)rstats.count);
-#else
-		fprintf(out, "n=%.0f\n", (double)rstats.count);
-#endif
+		fprintf(out, "n=%jd\n", rstats.count);
 
 		if (!rflag->answer) {
 		    fprintf(out, "min=%.15g\n", zmin);
