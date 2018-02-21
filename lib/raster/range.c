@@ -269,7 +269,7 @@ int Rast_read_rstats(const char *name, const char *mapset,
     unsigned char cc[8];
     char nbytes;
     int i;
-    off_t count;
+    grass_int64 count;
 
     Rast_init();
     init_rstats(rstats);
@@ -312,7 +312,11 @@ int Rast_read_rstats(const char *name, const char *mapset,
 	return -1;
     }
 
-    if (nbytes < 1 || nbytes > sizeof(off_t)) {
+    count = 0;
+    if (nbytes == 0)
+	return 1;
+
+    if (nbytes < 1 || nbytes > sizeof(grass_int64)) {
 	close(fd);
 	G_debug(1, "Invalid byte count in stats file for <%s>",
 		  G_fully_qualified_name(name, mapset));
@@ -326,7 +330,6 @@ int Rast_read_rstats(const char *name, const char *mapset,
 	return -1;
     }
 
-    count = 0;
     /* copy byte by byte */
     for (i = nbytes - 1; i >= 0; i--) {
 	count = (count << 8);
@@ -437,7 +440,7 @@ void Rast_write_rstats(const char *name, const struct R_stats *rstats)
     unsigned char cc[8];
     char nbytes;
     int i;
-    off_t count;
+    grass_int64 count;
 
     Rast_init();
 
@@ -465,7 +468,7 @@ void Rast_write_rstats(const char *name, const struct R_stats *rstats)
     count = rstats->count;
     nbytes = 0;
     /* copy byte by byte */
-    for (i = 0; i < sizeof(off_t); i++) {
+    for (i = 0; i < sizeof(grass_int64); i++) {
 	cc[i] = count & 0xff;
 	count >>= 8;
 	if (cc[i])
@@ -479,7 +482,7 @@ void Rast_write_rstats(const char *name, const struct R_stats *rstats)
 	G_fatal_error(_("Unable to write stats file for <%s>"), name);
     }
 
-    if (write(fd, cc, nbytes) != nbytes) {
+    if (nbytes > 0 && write(fd, cc, nbytes) != nbytes) {
 	G_remove_misc("cell_misc", "stats", name);
 	G_fatal_error(_("Unable to write stats file for <%s>"), name);
     }

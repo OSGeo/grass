@@ -219,7 +219,7 @@ struct R_stats
 {
     DCELL sum;
     DCELL sumsq;
-    off_t count;
+    grass_int64 count;
 };
 
 struct Range
