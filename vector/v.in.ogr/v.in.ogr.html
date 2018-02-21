@@ -318,7 +318,28 @@ recognized as area.
 not belong to any of the above layers.
 </ul>
 
-It is recommended to import one layer at a time.
+It is recommended to import one layer at a time, and to select features 
+with the <b>where</b> option, e.g. to import roads, use 
+
+<div class="code"><pre>
+v.in.ogr where="highway <> ''"
+</pre></div>
+i.e. the OSM tag <em>highway</em> must be set.
+
+<p>
+When importing administrative boundaries from OSM, it is important to 
+not only select administrative boundaries, but also the admin level to 
+be imported (valid range is 1 - 11), e.g. with
+
+<div class="code"><pre>
+v.in.ogr where="boundary = 'administrative' and admin_level = '1'"
+</pre></div>
+
+<p>
+The OSM topological model differs from the GRASS topological model. OSM 
+topologically correct connections of lines can be on all vertices of a 
+line. During import, lines are automatically split at those vertices 
+where an OSM connection to another line exists.
 
 <p>
 Import of OSM data requires a configuration file, defined with the 
