@@ -469,6 +469,19 @@ second predecessor map.
 
 <h2>EXAMPLES</h2>
 
+<h3>Computation of NDVI</h3>
+
+<div class="code"><pre>
+# Sentinel-2 bands are stored separately in two STDRS "S2_b4" and "S2_b8"
+g.region raster=sentinel2_B04_10m -p
+t.rast.list S2_b4
+t.rast.list S2_b8
+t.rast.algebra basename=ndvi expression="ndvi = float(S2_b8 - S2_b4) / ( S2_b8 + S2_b4 )" 
+t.rast.colors input=ndvi color=ndvi
+</pre></div>
+
+<h3>Sum of space-time raster datasets</h3>
+
 Sum maps from STRDS A with maps from STRDS B which have equal time stamps
 and are temporally before Jan. 1. 2005 and store them in STRDS D:
 <div class="code"><pre>
@@ -481,11 +494,15 @@ and store the new maps in STRDS C:
 C = A + B
 </pre></div>
 
+<h3>Sum of space-time raster datasets with temporal topology relation</h3>
+
 Same expression with explicit definition of the temporal topology relation
 and temporal operators:
 <div class="code"><pre>
 C = A {+,equal,l} B
 </pre></div>
+
+<h3>Selection of raster cells</h3>
 
 Select all cells from STRDS B with equal temporal relations to STRDS A, if
 the cells of A are in the range [100.0, 1600] of time intervals that have
@@ -494,11 +511,15 @@ more than 30 days (Jan, Mar, May, Jul, Aug, Oct, Dec):
 C = if(A > 100 && A < 1600 && td(A) > 30, B)
 </pre></div>
 
+<h3>Selection of raster cells with temporal topology relation</h3>
+
 Same expression with explicit definition of the temporal topology relation
 and temporal operators:
 <div class="code"><pre>
 C = if({equal}, A > 100 && A < 1600 {&&,equal} td(A) > 30, B)
 </pre></div>
+
+<h3>Conditional computation</h3>
 
 Compute the recharge in meters per second for all cells of precipitation
 STRDS "Prec" if the mean temperature specified in STRDS "Temp" is higher
@@ -509,12 +530,15 @@ computed using the td() function that has as argument the STRDS "Prec":
 C = if(Temp > 10.0, Prec / 3600.0 / 24.0 / td(Prec))
 </pre></div>
 
+<h3>Conditional computation with temporal topology relation</h3>
+
 Same expression with explicit definition of the temporal topology relation
 and temporal operators:
 <div class="code"><pre>
 C = if({equal}, Temp > 10.0, Prec / 3600.0 / 24.0 {/,equal,l} td(Prec))
 </pre></div>
 
+<h3>Computation with time intervals</h3>
 Compute the mean value of all maps from STRDS A that are located during time
 intervals of STRDS B if more than one map of A is contained in an interval
 of B, use A otherwise. The resulting time intervals are either from B or A:
@@ -522,11 +546,14 @@ of B, use A otherwise. The resulting time intervals are either from B or A:
 C = if(B {#,contain} A > 1, (B {+,contain,l} A - B) / (B {#,contain} A), A)
 </pre></div>
 
+<h3>Computation with time intervals with temporal topology relation</h3>
+
 Same expression with explicit definition of the temporal topology relation
 and temporal operators:
 <div class="code"><pre>
 C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/} (B {#,contain} A), A)
 </pre></div>
+
 
 <h2>SEE ALSO</h2>
 
