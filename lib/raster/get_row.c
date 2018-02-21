@@ -827,12 +827,12 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags,
     unsigned char *compressed_buf;
 
     if (lseek(null_fd, t1, SEEK_SET) < 0)
-	G_fatal_error(_("Error reading null data for row %d of <%s>"),
+	G_fatal_error(_("Error seeking compressed null data for row %d of <%s>"),
 		      row, fcb->name);
 
     if (readamount == size) {
 	if (read(null_fd, flags, size) != size) {
-	    G_fatal_error(_("Error reading null data for row %d of <%s>"),
+	    G_fatal_error(_("Error reading compressed null data for row %d of <%s>"),
 			  row, fcb->name);
 	}
 	return 1;
@@ -842,7 +842,7 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags,
 
     if (read(null_fd, compressed_buf, readamount) != readamount) {
 	G_free(compressed_buf);
-	G_fatal_error(_("Error reading null data for row %d of <%s>"),
+	G_fatal_error(_("Error reading compressed null data for row %d of <%s>"),
 		      row, fcb->name);
     }
 
@@ -882,7 +882,7 @@ int Rast__read_null_bits(int fd, int row, unsigned char *flags)
     offset = (off_t) size * R;
 
     if (lseek(null_fd, offset, SEEK_SET) < 0)
-	G_fatal_error(_("Error reading null row %d for <%s>"), R, fcb->name);
+	G_fatal_error(_("Error seeking null row %d for <%s>"), R, fcb->name);
 
     if (read(null_fd, flags, size) != size)
 	G_fatal_error(_("Error reading null row %d for <%s>"), R, fcb->name);
