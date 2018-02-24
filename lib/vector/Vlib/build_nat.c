@@ -61,7 +61,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
     Cats = Vect_new_cats_struct();
     
     if (plus->built < GV_BUILD_BASE) {
-        int npoints, c;
+        int c;
+        grass_int64 npoints;
         
 	/* 
 	 *  We shall go through all primitives in coor file and add
@@ -114,8 +115,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
 	}
 	G_progress(1, 1);
 
-	G_message(n_("One primitive registered", "%d primitives registered", plus->n_lines), plus->n_lines);
-	G_message(n_("One vertex registered", "%d vertices registered", npoints), npoints);
+	G_verbose_message(n_("One primitive registered", "%d primitives registered", plus->n_lines), plus->n_lines);
+	G_verbose_message(n_("One vertex registered", "%jd vertices registered", npoints), npoints);
 
 	plus->built = GV_BUILD_BASE;
     }
@@ -150,8 +151,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
 		Vect_build_line_area(Map, line, side);
 	    }
 	}
-	G_message(n_("One area built", "%d areas built", plus->n_areas), plus->n_areas);
-	G_message(n_("One isle built", "%d isles built", plus->n_isles), plus->n_isles);
+	G_verbose_message(n_("One area built", "%d areas built", plus->n_areas), plus->n_areas);
+	G_verbose_message(n_("One isle built", "%d isles built", plus->n_isles), plus->n_isles);
 	plus->built = GV_BUILD_AREAS;
     }
 
