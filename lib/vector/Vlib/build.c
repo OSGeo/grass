@@ -103,6 +103,7 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
     n_lines = dig_build_area_with_line(plus, iline, side, &lines);
     G_debug(3, "  n_lines = %d", n_lines);
     if (n_lines < 1) {
+	G_debug(3, "  unable to build area with line %d", iline);
 	return 0;
     }				/* area was not built */
 
@@ -897,18 +898,18 @@ int Vect_build_partial(struct Map_info *Map, int build)
     }
 
     if (build > GV_BUILD_NONE) {
-	G_message(_("Number of nodes: %d"), plus->n_nodes);
-	G_message(_("Number of primitives: %d"), plus->n_lines);
-	G_message(_("Number of points: %d"), plus->n_plines);
-	G_message(_("Number of lines: %d"), plus->n_llines);
-	G_message(_("Number of boundaries: %d"), plus->n_blines);
-	G_message(_("Number of centroids: %d"), plus->n_clines);
+	G_verbose_message(_("Number of nodes: %d"), plus->n_nodes);
+	G_verbose_message(_("Number of primitives: %d"), plus->n_lines);
+	G_verbose_message(_("Number of points: %d"), plus->n_plines);
+	G_verbose_message(_("Number of lines: %d"), plus->n_llines);
+	G_verbose_message(_("Number of boundaries: %d"), plus->n_blines);
+	G_verbose_message(_("Number of centroids: %d"), plus->n_clines);
 
 	if (plus->n_flines > 0)
-	    G_message(_("Number of faces: %d"), plus->n_flines);
+	    G_verbose_message(_("Number of faces: %d"), plus->n_flines);
 
 	if (plus->n_klines > 0)
-	    G_message(_("Number of kernels: %d"), plus->n_klines);
+	    G_verbose_message(_("Number of kernels: %d"), plus->n_klines);
     }
 
     if (plus->built >= GV_BUILD_AREAS) {
@@ -954,8 +955,8 @@ int Vect_build_partial(struct Map_info *Map, int build)
 		err_nocentr++;
 	}
 
-	G_message(_("Number of areas: %d"), plus->n_areas);
-	G_message(_("Number of isles: %d"), plus->n_isles);
+	G_verbose_message(_("Number of areas: %d"), plus->n_areas);
+	G_verbose_message(_("Number of isles: %d"), plus->n_isles);
 
 #if 0
 	/* not an error, message disabled to avoid confusion */
@@ -981,8 +982,8 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
     }
     else if (build > GV_BUILD_NONE) {
-	G_message(_("Number of areas: -"));
-	G_message(_("Number of isles: -"));
+	G_verbose_message(_("Number of areas: -"));
+	G_verbose_message(_("Number of isles: -"));
     }
     return 1;
 }
