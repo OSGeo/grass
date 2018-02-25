@@ -946,12 +946,14 @@ def set_mapset(gisrc, arg, geofile=None, create_new=False):
                 else:
                     # 'location_name' is a valid GRASS location,
                     # create new mapset
-                    os.mkdir(location)
+                    if os.path.exists(location):
+                        warning(_("Missing WIND file"))
+                    else:
+                        os.mkdir(location)
                     # copy PERMANENT/DEFAULT_WIND to <mapset>/WIND
                     s = readfile(os.path.join(gisdbase, location_name,
                                               "PERMANENT", "DEFAULT_WIND"))
                     writefile(os.path.join(location, "WIND"), s)
-                    message(_("Missing WIND file fixed"))
 
         if os.access(gisrc, os.R_OK):
             kv = read_gisrc(gisrc)
