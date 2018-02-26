@@ -108,5 +108,5 @@ CELL cross(int fd[], int non_zero, int primary, int outfd)
     btree_free(&btree);
     for (i = 0; i < nfiles; i++)
 	G_free(cell[i]);
-    return result - 1;
+    return result;
 }
