@@ -14,17 +14,17 @@ the names of between 2-10 raster map layers be used as <em>input</em>,
 and the name of a raster map layer to hold program <em>output</em>.
 
 <p>
-With the <b>-z</b> flag zero data values are not crossed. 
-This means that if a zero category value occurs in any input data layer, 
-the combination is assigned to category zero in the resulting map layer, 
-even if other data layers contain non-zero data. 
-In the example given above, use of the <b>-z</b> option 
+With the <b>-z</b> flag NULL values are not crossed. 
+This means that if a NULL value occurs in any input data layer, 
+this combination is ignored, 
+even if other data layers contain non-NULL data. 
+In the example given below, use of the <b>-z</b> option 
 would cause 3 categories to be generated instead of 5. 
 
 <p>
 If the <b>-z</b> flag is not specified, then map layer combinations 
-in which not all category values are zero will be assigned 
-a unique category value in the resulting map layer. 
+in which some values are NULL will be assigned 
+a unique category value in the resulting output map. 
 
 <p>
 Category values in the new <em>output</em> map layer will be the
@@ -39,8 +39,8 @@ the following combinations occur:
 <div class="code"><pre>
           map1   map2
           ___________
-           0      1
-           0      2
+          NULL    1
+          NULL    2
            1      1
            1      2
            2      4
@@ -52,11 +52,11 @@ the following combinations occur:
 <div class="code"><pre>
           map1   map2   output
           ____________________
-           0      1       1
-           0      2       2
-           1      1       3
-           1      2       4
-           2      4       5
+          NULL    1       0
+          NULL    2       1
+           1      1       2
+           1      2       3
+           2      4       4
 </pre></div>
 
 Note: The actual category value assigned to a particular combination 
@@ -77,11 +77,11 @@ In the above example, the category labels would be:
           category   category
           value      label
           ______________________________
-             1       layer1(0) layer2(1)
-             2       layer1(0) layer2(2)
-             3       layer1(1) layer2(1)
-             4       layer1(1) layer2(2)
-             5       layer1(2) layer2(4)
+             0       layer1(0) layer2(1)
+             1       layer1(0) layer2(2)
+             2       layer1(1) layer2(1)
+             3       layer1(1) layer2(2)
+             4       layer1(2) layer2(4)
 </pre></div>
 
 A random color table is also generated for the <em>output</em> map layer. 

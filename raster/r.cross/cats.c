@@ -49,13 +49,19 @@ int set_cat(CELL result, CELL * cat, struct Categories *pcats)
     return 0;
 }
 
-static char *get_label(CELL cat, struct Categories *labels)
+static char *get_label(CELL cat, struct Categories *lbls)
 {
     char *lbl;
     static char temp[256];
 
-    lbl = Rast_get_c_cat(&cat, labels);
-    if (*lbl == 0)
-	sprintf(lbl = temp, "category %ld", (long)cat);
+    if (Rast_is_c_null_value(&cat)) {
+	sprintf(lbl = temp, "NULL");
+    }
+    else {
+	lbl = Rast_get_c_cat(&cat, lbls);
+	if (*lbl == 0)
+	    sprintf(lbl = temp, "category %d", cat);
+    }
+
     return lbl;
 }
