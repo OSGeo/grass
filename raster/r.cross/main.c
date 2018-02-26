@@ -143,16 +143,15 @@ int main(int argc, char *argv[])
     if (result <= 0)
 	exit(0);
 
-
     /* build the renumbering/reclass and the new cats file */
-    qsort(reclass, result + 1, sizeof(RECLASS), cmp);
-    table = (CELL *) G_calloc(result + 1, sizeof(CELL));
+    qsort(reclass, result, sizeof(RECLASS), cmp);
+    table = (CELL *) G_calloc(result, sizeof(CELL));
     for (i = 0; i < nfiles; i++) {
 	mapset = G_find_raster2(names[i], "");
 	Rast_read_cats(names[i], mapset, &labels[i]);
     }
 
-    for (ncats = 0; ncats <= result; ncats++) {
+    for (ncats = 0; ncats < result; ncats++) {
 	table[reclass[ncats].result] = ncats;
 	set_cat(ncats, reclass[ncats].cat, &pcats);
     }
@@ -176,7 +175,7 @@ int main(int argc, char *argv[])
 	Rast_write_colors(output, G_mapset(), &pcolr);
     }
 
-    G_message(_("%ld categories"), (long)result);
+    G_message(_("%d categories"), result);
     exit(EXIT_SUCCESS);
 }
 
