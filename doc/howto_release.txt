@@ -61,8 +61,8 @@ Contents
 #example:
 7
 0
-6RC1
-2017
+7RC1
+2018
       rm -f include/VERSION~
 
     - Update OSGeo4W setup.hint file
@@ -122,8 +122,8 @@ Contents
 #example
 7
 0
-6svn
-2017
+7svn
+2018
 
     rm -f include/VERSION~
     svn ci -m"back to SVN" include/VERSION
@@ -137,7 +137,7 @@ Contents
     echo $SERVER1:$SERVER1DIR
     echo $SERVER2:$SERVER2DIR
 
-   # copy along with associated files:
+   # upload along with associated files:
      scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
          INSTALL REQUIREMENTS.html SUBMITTING neteler@$SERVER1:$SERVER1DIR
      scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
@@ -155,11 +155,11 @@ Contents
 
  o update web site to new version: CMS
     - News section
-    - http://grass.osgeo.org/download/software/
-    - http://grass.osgeo.org/download/software/sources/
-    - http://grass.osgeo.org/download/software/linux/
-    - http://grass.osgeo.org/home/history/releases/
-    - http://grass.osgeo.org/development/svn/svn-tags/ (add tag): echo $RELEASETAG
+    - https://grass.osgeo.org/download/software/
+    - https://grass.osgeo.org/download/software/sources/
+    - https://grass.osgeo.org/download/software/linux/
+    - https://grass.osgeo.org/home/history/releases/
+    - https://grass.osgeo.org/development/svn/svn-tags/ (add tag): echo $RELEASETAG
 
      write announcement
       - store in trac: http://trac.osgeo.org/grass/wiki/Release/7.XX.YY-News
@@ -228,6 +228,8 @@ Contents
 
 2. Tell others about it:
 
+ * Notify all packagers (MN has email list)
+
  * If release candidate:
     - <grass-announce@lists.osgeo.org>
     - <grass-dev@lists.osgeo.org>
@@ -258,7 +260,6 @@ Contents
    redazione@geoforus.it
    mfeilner@linuxnewmedia.de
    info@harzer.de
-   pr@geocomm.com
    editor-geo@geoconnexion.com
 
  Web:
@@ -274,7 +275,7 @@ Contents
             -> Share your news with the EO community
    https://www.heise.de/download/product/grass-gis-7105 (update, MN)
 
-   See also: http://grass.osgeo.org/wiki/Contact_Databases
+   See also: https://grass.osgeo.org/wiki/Contact_Databases
    ... anywhere else? Please add here.
 
 ###########################################
