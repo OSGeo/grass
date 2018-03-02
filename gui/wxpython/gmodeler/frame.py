@@ -387,6 +387,22 @@ class ModelFrame(wx.Frame):
 
         dlg.Destroy()
 
+    def _deleteIntermediateData(self):
+        """Delete intermediate data"""
+        rast, vect, rast3d, msg = self.model.GetIntermediateData()
+        if rast:
+            self._gconsole.RunCmd(['g.remove', '-f', 'type=raster',
+                                   'name=%s' % ','.join(rast)])
+        if rast3d:
+            self._gconsole.RunCmd(['g.remove', '-f', 'type=raster_3d',
+                                   'name=%s' % ','.join(rast3d)])
+        if vect:
+            self._gconsole.RunCmd(['g.remove', '-f', 'type=vector',
+                                   'name=%s' % ','.join(vect)])
+                
+        self.SetStatusText(_("%d intermediate maps deleted from current mapset") %
+                           int(len(rast) + len(rast3d) + len(vect)))
+
     def OnDeleteData(self, event):
         """Delete intermediate data"""
         rast, vect, rast3d, msg = self.model.GetIntermediateData()
@@ -405,24 +421,9 @@ class ModelFrame(wx.Frame):
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
 
         ret = dlg.ShowModal()
-        if ret == wx.ID_YES:
-            dlg.Destroy()
-
-            if rast:
-                self._gconsole.RunCmd(['g.remove', '-f', 'type=raster',
-                                       'name=%s' % ','.join(rast)])
-            if rast3d:
-                self._gconsole.RunCmd(['g.remove', '-f', 'type=raster_3d',
-                                       'name=%s' % ','.join(rast3d)])
-            if vect:
-                self._gconsole.RunCmd(['g.remove', '-f', 'type=vector',
-                                       'name=%s' % ','.join(vect)])
-
-            self.SetStatusText(_("%d maps deleted from current mapset") %
-                               int(len(rast) + len(rast3d) + len(vect)))
-            return
-
         dlg.Destroy()
+        if ret == wx.ID_YES:
+            self._deleteIntermediateData()
 
     def OnModelNew(self, event):
         """Create new model"""
@@ -617,6 +618,7 @@ class ModelFrame(wx.Frame):
         """Computation finished
         """
         self.SetStatusText('', 0)
+        
         # restore original files
         if hasattr(self.model, "fileInput"):
             for finput in self.model.fileInput:
@@ -630,6 +632,9 @@ class ModelFrame(wx.Frame):
                 finally:
                     fd.close()
             del self.model.fileInput
+
+        # delete intermediate data
+        self._deleteIntermediateData()
 
     def OnValidateModel(self, event, showMsg=True):
         """Validate entire model"""
