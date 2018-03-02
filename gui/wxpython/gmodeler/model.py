@@ -354,6 +354,7 @@ class Model(object):
                                  prompt=data['prompt'],
                                  value=data['value'])
             dataItem.SetIntermediate(data['intermediate'])
+            dataItem.SetHasDisplay(data['display'])
 
             for rel in data['rels']:
                 actionItem = self.FindAction(rel['id'])
@@ -2041,11 +2042,10 @@ class ProcessModelFile:
                 prompt = param.get('prompt', None)
                 value = self._filterValue(self._getNodeText(param, 'value'))
 
-            if data.find('intermediate') is None:
-                intermediate = False
-            else:
-                intermediate = True
+            intermediate = False if data.find('intermediate') is None else True
 
+            display = False if data.find('display') is None else True
+            
             rels = list()
             for rel in data.findall('relation'):
                 defrel = {'id': int(rel.get('id', -1)),
@@ -2064,6 +2064,7 @@ class ProcessModelFile:
                               'prompt': prompt,
                               'value': value,
                               'intermediate': intermediate,
+                              'display': display,
                               'rels': rels})
 
     def _processTask(self, node):
@@ -2404,6 +2405,8 @@ class WriteModelFile:
 
             if data.IsIntermediate():
                 self.fd.write('%s<intermediate />\n' % (' ' * self.indent))
+            if data.HasDisplay():
+                self.fd.write('%s<display />\n' % (' ' * self.indent))
 
             # relations
             for ft in ('from', 'to'):
