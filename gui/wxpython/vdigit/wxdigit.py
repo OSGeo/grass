@@ -26,6 +26,8 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import print_function
+
 import grass.script.core as grass
 
 from grass.pydispatch.signal import Signal
@@ -41,9 +43,8 @@ try:
     from grass.lib.vector import *
     from grass.lib.vedit import *
     from grass.lib.dbmi import *
-except ImportError:
-    pass
-
+except (ImportError, WindowsError) as e:
+    print("wxdigit.py: {}".format(e), file=sys.stderr)
 
 class VDigitError:
 

@@ -43,12 +43,15 @@ import wx
 
 from ctypes import *
 
-from grass.lib.gis import *
-from grass.lib.raster3d import *
-from grass.lib.vector import *
-from grass.lib.ogsf import *
-from grass.lib.nviz import *
-from grass.lib.raster import *
+try:
+    from grass.lib.gis import *
+    from grass.lib.raster3d import *
+    from grass.lib.vector import *
+    from grass.lib.ogsf import *
+    from grass.lib.nviz import *
+    from grass.lib.raster import *
+except (ImportError, WindowsError) as e:
+    print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 from core.debug import Debug
 from core.utils import _, autoCropImageFromFile
