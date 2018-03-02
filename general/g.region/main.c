@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 	    *north, *south, *east, *west, *top, *bottom,
 	    *res, *nsres, *ewres, *res3, *tbres, *rows, *cols,
 	    *save, *region, *raster, *raster3d, *align,
-	    *zoom, *vect, *pixels;
+	    *zoom, *vect, *grow;
     } parm;
 
     G_gisinit(argv[0]);
@@ -336,15 +336,17 @@ int main(int argc, char *argv[])
     parm.align->gisprompt = "old,cell,raster";
     parm.align->guisection = _("Bounds");
 
-    parm.pixels = G_define_option();
-    parm.pixels->key = "pixels";
-    parm.pixels->key_desc = "value";
-    parm.pixels->required = NO;
-    parm.pixels->multiple = NO;
-    parm.pixels->type = TYPE_INTEGER;
-    parm.pixels->description =	
-    _("Number of pixels to increase the bounding box");
-    parm.pixels->guisection = _("Bounds");
+    parm.grow = G_define_option();
+    parm.grow->key = "grow";
+    parm.grow->key_desc = "value";
+    parm.grow->required = NO;
+    parm.grow->multiple = NO;
+    parm.grow->type = TYPE_INTEGER;
+    parm.grow->label =
+	_("Number of cells to add to each side of the current region extent");
+    parm.grow->description =
+	_("A negative number shrinks the current region extent");
+    parm.grow->guisection = _("Bounds");
 
     parm.save = G_define_option();
     parm.save->key = "save";
@@ -364,7 +366,7 @@ int main(int argc, char *argv[])
                       parm.raster3d, parm.vect, parm.north, parm.south, parm.east,
                       parm.west, parm.top, parm.bottom, parm.rows, parm.cols,
                       parm.res, parm.res3, parm.nsres, parm.ewres, parm.tbres,
-                      parm.zoom, parm.align, parm.save, parm.pixels, NULL);
+                      parm.zoom, parm.align, parm.save, parm.grow, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -787,8 +789,8 @@ int main(int argc, char *argv[])
 	Rast_align_window(&window, &temp_window);
     }
     
-    /* pixels */
-    if ((value = parm.pixels->answer)){
+    /* grow by number of cells */
+    if ((value = parm.grow->answer)){
 		if (sscanf(value, "%i", &pix)){
 		    xs = window.ns_res * pix;
 		    window.north += xs;
