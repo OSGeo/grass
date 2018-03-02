@@ -18,7 +18,7 @@ Classes:
  - model::WritePythonFile
  - model::ModelParamDialog
 
-(C) 2010-2016 by the GRASS Development Team
+(C) 2010-2018 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1346,6 +1346,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         self.value = value
         self.prompt = prompt
         self.intermediate = False
+        self.display = False
         self.propWin = None
         if not width:
             width = UserSettings.Get(
@@ -1373,6 +1374,14 @@ class ModelData(ModelObject, ogl.EllipseShape):
     def SetIntermediate(self, im):
         """Set intermediate flag"""
         self.intermediate = im
+
+    def HasDisplay(self):
+        """Checks if data item is marked to be displayed"""
+        return self.display
+
+    def SetHasDisplay(self, tbd):
+        """Set to-be-displayed flag"""
+        self.display = tbd
 
     def OnDraw(self, dc):
         self._setPen()
@@ -1506,6 +1515,20 @@ class ModelData(ModelObject, ogl.EllipseShape):
         self._setPen()
         self.SetLabel()
 
+    def GetDisplayCmd(self):
+        """Get display command as list"""
+        cmd = []
+        if self.prompt == 'raster':
+            cmd.append('d.rast')
+        elif self.prompt == 'vector':
+            cmd.append('d.vect')
+        else:
+            raise GException("Unsupported display prompt: {}".format(
+                self.prompt))
+
+        cmd.append('map=' + self.value)
+
+        return cmd
 
 class ModelRelation(ogl.LineShape):
     """Data - action relation"""
