@@ -289,6 +289,22 @@ class ModelFrame(wx.Frame):
     def OnCmdDone(self, event):
         """Command done (or aborted)"""
         self.goutput.GetProgressBar().SetValue(0)
+
+        try:
+            ctime = time.time() - event.time
+            if ctime < 60:
+                stime = _("%d sec") % int(ctime)
+            else:
+                mtime = int(ctime / 60)
+                stime = _("%(min)d min %(sec)d sec") % {
+                    'min': mtime, 'sec': int(ctime - (mtime * 60))}
+        except KeyError:
+            # stopped deamon
+            stime = _("unknown")
+
+        self.goutput.WriteCmdLog('({}) {} ({})'.format(str(time.ctime()), _("Command finished"), stime),
+                                 notification=event.notification)
+
         try:
             action = self.GetModel().GetItems()[event.pid]
             if hasattr(action, "task"):
