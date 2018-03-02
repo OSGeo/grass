@@ -835,34 +835,50 @@ def is_location_valid(gisdbase, location):
 def get_mapset_invalid_reason(gisdbase, location, mapset):
     """Returns a message describing what is wrong with the Mapset
 
+    The goal is to provide the most suitable error message
+    (rather than to do a quick check).
+
     :param gisdbase: Path to GRASS GIS database directory
     :param location: name of a Location
     :param mapset: name of a Mapset
     :returns: translated message
     """
     full_location = os.path.join(gisdbase, location)
+    full_permanent = os.path.join(full_location, 'PERMANENT')
+    full_mapset = os.path.join(full_location, mapset)
+    # first checking the location validity
     if not os.path.exists(full_location):
         return _("Location <%s> doesn't exist") % full_location
     elif 'PERMANENT' not in os.listdir(full_location):
         return _("<%s> is not a valid GRASS Location"
                  " because PERMANENT Mapset is missing") % full_location
-    elif not os.path.isdir(os.path.join(full_location, 'PERMANENT')):
+    elif not os.path.isdir(full_permanent):
         return _("<%s> is not a valid GRASS Location"
                  " because PERMANENT is not a directory") % full_location
-    elif not os.path.isfile((os.path.join(full_location,
-                                          'PERMANENT', 'DEFAULT_WIND'))):
+    # partially based on the is_location_valid() function
+    elif not os.path.isfile(os.path.join(full_permanent,
+                                         'DEFAULT_WIND')):
         return _("<%s> is not a valid GRASS Location"
                  " because PERMANENT Mapset does not have a DEFAULT_WIND file"
                  " (default computational region)") % full_location
+    # if location is valid, check mapset
     elif mapset not in os.listdir(full_location):
         return _("Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. "
                  "A new mapset can be created by '-c' switch.").format(
                      mapset=mapset, loc=location)
-    elif not os.path.isdir(os.path.join(full_location, mapset)):
+    elif not os.path.isdir(full_mapset):
         return _("<%s> is not a GRASS Mapset"
                  " because it is not a directory") % mapset
+    elif not os.path.isfile(os.path.join(full_mapset, 'WIND')):
+        return _("<%s> is not a valid GRASS Mapset"
+                 " because it does not have a WIND file") % mapset
+    # based on the is_mapset_valid() function
+    elif not os.access(os.path.join(full_mapset, "WIND"), os.R_OK):
+        return _("<%s> is not a valid GRASS Mapset"
+                 " because its WIND file is not readable") % mapset
     else:
-        return _("Mapset <{mapset}> is invalid for an unknown reason").format(
+        return _("Mapset <{mapset}> or Location <{location}> is"
+                 " invalid for an unknown reason").format(
                      mapset=mapset, loc=location)
 
 
