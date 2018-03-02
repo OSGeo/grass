@@ -38,7 +38,8 @@ if globalvar.wxPythonPhoenix:
         import wx.lib.agw.flatnotebook as FN
 else:
     import wx.lib.flatnotebook as FN
-
+from wx.lib.newevent import NewEvent
+    
 from core.utils import _
 from gui_core.widgets import GNotebook
 from core.gconsole        import GConsole, \
@@ -60,6 +61,8 @@ from gui_core.pystc import PyStc
 from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model import *
 from gmodeler.dialogs import *
+
+wxModelDone, EVT_MODEL_DONE = NewEvent()
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
@@ -148,7 +151,8 @@ class ModelFrame(wx.Frame):
         # rewrite default method to avoid hiding progress bar
         self._gconsole.Bind(EVT_CMD_DONE, self.OnCmdDone)
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
-
+        self.Bind(EVT_MODEL_DONE, self.OnDone)
+        
         self.notebook.AddPage(page=self.canvas, text=_('Model'), name='model')
         self.notebook.AddPage(
             page=self.itemPanel,
@@ -288,27 +292,37 @@ class ModelFrame(wx.Frame):
 
     def OnCmdDone(self, event):
         """Command done (or aborted)"""
-        self.goutput.GetProgressBar().SetValue(0)
+        def time_elapsed(etime):
+            try:
+                ctime = time.time() - etime
+                if ctime < 60:
+                    stime = _("%d sec") % int(ctime)
+                else:
+                    mtime = int(ctime / 60)
+                    stime = _("%(min)d min %(sec)d sec") % {
+                        'min': mtime, 'sec': int(ctime - (mtime * 60))}
+            except KeyError:
+                # stopped deamon
+                stime = _("unknown")
 
-        try:
-            ctime = time.time() - event.time
-            if ctime < 60:
-                stime = _("%d sec") % int(ctime)
-            else:
-                mtime = int(ctime / 60)
-                stime = _("%(min)d min %(sec)d sec") % {
-                    'min': mtime, 'sec': int(ctime - (mtime * 60))}
-        except KeyError:
-            # stopped deamon
-            stime = _("unknown")
-
-        self.goutput.WriteCmdLog('({}) {} ({})'.format(str(time.ctime()), _("Command finished"), stime),
-                                 notification=event.notification)
+            return stime
+        
+        self.goutput.GetProgressBar().SetValue(0)            
+        self.goutput.WriteCmdLog('({}) {} ({})'.format(
+            str(time.ctime()), _("Command finished"), time_elapsed(event.time)),
+            notification=event.notification)
 
         try:
             action = self.GetModel().GetItems()[event.pid]
             if hasattr(action, "task"):
                 action.Update(running=True)
+            if event.pid == self._gconsole.cmdThread.GetId() - 1:
+                self.goutput.WriteCmdLog('({}) {} ({})'.format(
+                    str(time.ctime()), _("Model computation finished"), time_elapsed(self.start_time)),
+                                         notification=event.notification)
+                event = wxModelDone()
+                wx.PostEvent(self, event)
+                
         except IndexError:
             pass
 
@@ -596,13 +610,11 @@ class ModelFrame(wx.Frame):
 
     def OnRunModel(self, event):
         """Run entire model"""
+        self.start_time = time.time()
         self.model.Run(self._gconsole, self.OnDone, parent=self)
 
     def OnDone(self, event):
         """Computation finished
-
-        .. todo::
-            not called -- must be fixed
         """
         self.SetStatusText('', 0)
         # restore original files
