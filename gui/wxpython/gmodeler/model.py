@@ -569,7 +569,7 @@ class Model(object):
     def OnPrepare(self, item, params):
         self._substituteFile(item, params, checkOnly=False)
 
-    def RunAction(self, item, params, log, onDone,
+    def RunAction(self, item, params, log, onDone=None,
                   onPrepare=None, statusbar=None):
         """Run given action
 
@@ -683,7 +683,7 @@ class Model(object):
             if isinstance(item, ModelAction):
                 if item.GetBlockId():
                     continue
-                self.RunAction(item, params, log, onDone)
+                self.RunAction(item, params, log)
             elif isinstance(item, ModelLoop):
                 cond = item.GetLabel()
 
@@ -743,7 +743,7 @@ class Model(object):
                         varDict['value'] = var
 
                         self.RunAction(item=action, params=params,
-                                       log=log, onDone=onDone)
+                                       log=log)
                 params['variables']['params'].remove(varDict)
 
         if delInterData:
