@@ -230,7 +230,7 @@ def main():
 
     for short_family, module_family in families:
         generate_page_for_category(short_family, module_family, imgs,
-                                   year=year, skip_no_image=True)
+                                   year=year, skip_no_image=False)
 
 
 if __name__ == '__main__':
