@@ -11,7 +11,7 @@ Classes:
  - frame::ItemPanel
  - frame::PythonPanel
 
-(C) 2010-2014 by the GRASS Development Team
+(C) 2010-2018 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1467,7 +1467,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         if not hasattr(self, "popupID"):
             self.popupID = dict()
             for key in ('remove', 'enable', 'addPoint',
-                        'delPoint', 'intermediate', 'props', 'id',
+                        'delPoint', 'intermediate', 'display', 'props', 'id',
                         'label', 'comment'):
                 self.popupID[key] = wx.NewId()
 
@@ -1529,19 +1529,37 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             if len(shape.GetLineControlPoints()) == 2:
                 popupMenu.Enable(self.popupID['delPoint'], False)
 
-        if isinstance(shape, ModelData) and '@' not in shape.GetValue():
+        if isinstance(shape, ModelData):
             popupMenu.AppendSeparator()
-            popupMenu.Append(
-                self.popupID['intermediate'],
-                text=_('Intermediate'),
-                kind=wx.ITEM_CHECK)
-            if self.GetShape().IsIntermediate():
-                popupMenu.Check(self.popupID['intermediate'], True)
+            if '@' not in shape.GetValue() and \
+               len(self.GetShape().GetRelations('from')) > 0:
+                popupMenu.Append(
+                    self.popupID['intermediate'],
+                    text=_('Intermediate'),
+                    kind=wx.ITEM_CHECK)
+                if self.GetShape().IsIntermediate():
+                    popupMenu.Check(self.popupID['intermediate'], True)
 
-            self.frame.Bind(
-                wx.EVT_MENU,
-                self.OnIntermediate,
-                id=self.popupID['intermediate'])
+                self.frame.Bind(
+                    wx.EVT_MENU,
+                    self.OnIntermediate,
+                    id=self.popupID['intermediate'])
+
+            if self.frame._giface.GetMapDisplay():
+                popupMenu.Append(
+                    self.popupID['display'],
+                    text=_('Display'),
+                    kind=wx.ITEM_CHECK)
+                if self.GetShape().HasDisplay():
+                    popupMenu.Check(self.popupID['display'], True)
+
+                self.frame.Bind(
+                    wx.EVT_MENU,
+                    self.OnHasDisplay,
+                    id=self.popupID['display'])
+
+                if self.GetShape().IsIntermediate():
+                    popupMenu.Enable(self.popupID['display'], False)
 
         if isinstance(shape, ModelData) or \
                 isinstance(shape, ModelAction) or \
@@ -1646,6 +1664,28 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape = self.GetShape()
         shape.SetIntermediate(event.IsChecked())
         self.frame.canvas.Refresh()
+
+    def OnHasDisplay(self, event):
+        """Mark data to be displayed"""
+        self.frame.ModelChanged()
+        shape = self.GetShape()
+        shape.SetHasDisplay(event.IsChecked())
+        self.frame.canvas.Refresh()
+
+        try:
+            if event.IsChecked():
+                # add map layer to display
+                self.frame._giface.GetLayerList().AddLayer(
+                    ltype=shape.GetPrompt(), name=shape.GetValue(), checked=True,
+                    cmd=shape.GetDisplayCmd())
+            else:
+                # remove map layer(s) from display
+                layers = self.frame._giface.GetLayerList().GetLayersByName(shape.GetValue())
+                for layer in layers:
+                    self.frame._giface.GetLayerList().DeleteLayer(layer)
+        except GException as e:
+            GError(parent=self,
+                   message='{}'.format(e))
 
     def OnRemove(self, event):
         """Remove shape
