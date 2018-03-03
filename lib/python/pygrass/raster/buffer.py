@@ -30,7 +30,6 @@ class Buffer(np.ndarray):
 
     def __new__(cls, shape, mtype='FCELL', buffer=None, offset=0,
                 strides=None, order=None):
-        #import pdb; pdb.set_trace()
         obj = np.ndarray.__new__(cls, shape, RTYPE[mtype]['numpy'],
                                  buffer, offset, strides, order)
         obj.pointer_type = ctypes.POINTER(RTYPE[mtype]['ctypes'])

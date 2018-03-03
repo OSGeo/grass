@@ -1,11 +1,11 @@
 # -*- coding: utf-8
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from unittest import skip
 
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.raster import raster2numpy
 from grass.pygrass.gis.region import Region
+
 
 class RasterRowRegionTestCase(TestCase):
 
@@ -16,13 +16,13 @@ class RasterRowRegionTestCase(TestCase):
         """Create test raster map and region"""
         cls.use_temp_region()
         cls.runModule("g.region", n=40, s=0, e=40, w=0, res=10)
-        cls.runModule("r.mapcalc", expression="%s = row() + (10.0 * col())"%(cls.name),
-                                   overwrite=True)
+        cls.runModule("r.mapcalc", expression="%s = row() + (10.0 * col())" % (cls.name),
+            overwrite=True)
 
     @classmethod
     def tearDownClass(cls):
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='raster', 
+        cls.runModule("g.remove", flags='f', type='raster',
                       name=cls.name)
         cls.del_temp_region()
 
@@ -42,8 +42,8 @@ class RasterRowRegionTestCase(TestCase):
         rast.set_region(region)
         rast.open(mode='r')
         
-        self.assertItemsEqual(rast[0].tolist(), [22,22,22,22,22,32,32,32,32,32])        
-        self.assertItemsEqual(rast[5].tolist(), [23,23,23,23,23,33,33,33,33,33])
+        self.assertItemsEqual(rast[0].tolist(), [22, 22, 22, 22, 22, 32, 32, 32, 32, 32])
+        self.assertItemsEqual(rast[5].tolist(), [23, 23, 23, 23, 23, 33, 33, 33, 33, 33])
         
         rast.close()
 
@@ -74,8 +74,8 @@ class RasterRowRegionTestCase(TestCase):
         [nan, nan, nan, nan, nan, nan, nan, nan]
         """
 
-        self.assertItemsEqual(rast[2].tolist()[2:6], [11.,21.,31.,41.])        
-        self.assertItemsEqual(rast[5].tolist()[2:6], [14.,24.,34.,44.])
+        self.assertItemsEqual(rast[2].tolist()[2:6], [11., 21., 31., 41.])
+        self.assertItemsEqual(rast[5].tolist()[2:6], [14., 24., 34., 44.])
         
         rast.close()
 

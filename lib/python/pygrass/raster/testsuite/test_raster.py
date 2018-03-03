@@ -2,7 +2,6 @@
 from grass.exceptions import OpenError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from unittest import skip
 
 from grass.pygrass.raster import RasterRow
 
@@ -17,7 +16,7 @@ class RasterRowTestCase(TestCase):
         cls.use_temp_region()
         cls.runModule("g.region", n=40, s=0, e=40, w=0, res=10)
         cls.runModule("r.mapcalc", expression="%s = row() + (10.0 * col())" % (cls.name),
-                                   overwrite=True)
+            overwrite=True)
 
     @classmethod
     def tearDownClass(cls):

@@ -11,7 +11,7 @@ import ctypes
 #
 # import GRASS modules
 #
-from grass.script import fatal, error, gisenv
+from grass.script import fatal, gisenv
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 
@@ -31,9 +31,9 @@ from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.category import Category
 from grass.pygrass.raster.history import History
 
-test_raster_name="abstract_test_map"
+test_raster_name = "abstract_test_map"
 
-## Define global variables to not exceed the 80 columns
+# Define global variables to not exceed the 80 columns
 INDXOUTRANGE = "The index (%d) is out of range, have you open the map?."
 INFO = """{name}@{mapset}
 rows: {rows}
@@ -225,17 +225,17 @@ class RasterAbstractBase(object):
         """
         self.mapset = mapset
         self._name = name
-        ## Private attribute `_fd` that return the file descriptor of the map
+        # Private attribute `_fd` that return the file descriptor of the map
         self._fd = None
-        ## Private attribute `_rows` that return the number of rows
+        # Private attribute `_rows` that return the number of rows
         # in active window, When the class is instanced is empty and it is set
         # when you open the file, using Rast_window_rows()
         self._rows = None
-        ## Private attribute `_cols` that return the number of rows
+        # Private attribute `_cols` that return the number of rows
         # in active window, When the class is instanced is empty and it is set
         # when you open the file, using Rast_window_cols()
         self._cols = None
-        #self.region = Region()
+        # self.region = Region()
         self.hist = History(self.name, self.mapset)
         self.cats = Category(self.name, self.mapset)
         self.info = Info(self.name, self.mapset)
@@ -259,7 +259,6 @@ class RasterAbstractBase(object):
     def _set_mtype(self, mtype):
         """Private method to change the Raster type"""
         if mtype.upper() not in ('CELL', 'FCELL', 'DCELL'):
-            #fatal(_("Raser type: {0} not supported".format(mtype) ) )
             str_err = "Raster type: {0} not supported ('CELL','FCELL','DCELL')"
             raise ValueError(_(str_err).format(mtype))
         self._mtype = mtype
@@ -327,8 +326,7 @@ class RasterAbstractBase(object):
     def __getitem__(self, key):
         """Return the row of Raster object, slice allowed."""
         if isinstance(key, slice):
-            #import pdb; pdb.set_trace()
-            #Get the start, stop, and step from the slice
+            # Get the start, stop, and step from the slice
             return (self.get_row(ii) for ii in range(*key.indices(len(self))))
         elif isinstance(key, tuple):
             x, y = key
@@ -556,11 +554,10 @@ class RasterAbstractBase(object):
 if __name__ == "__main__":
 
     import doctest
-    from grass.pygrass import utils
     from grass.pygrass.modules import Module
     Module("g.region", n=40, s=0, e=40, w=0, res=10)
-    Module("r.mapcalc", expression="%s = row() + (10 * col())"%(test_raster_name),
-                             overwrite=True)
+    Module("r.mapcalc", expression="%s = row() + (10 * col())" % (test_raster_name),
+        overwrite=True)
 
     doctest.testmod()
 

@@ -47,7 +47,6 @@ class Segment(object):
         self.val = RTYPE[mapobj.mtype]['grass def']()
         size = ctypes.sizeof(RTYPE[mapobj.mtype]['ctypes'])
         file_name = libgis.G_tempfile()
-        #import pdb; pdb.set_trace()
         libseg.Segment_open(self.c_seg, file_name,
                             self.rows(), self.cols(),
                             self.srows, self.scols,
