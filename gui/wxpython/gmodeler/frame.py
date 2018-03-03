@@ -151,7 +151,7 @@ class ModelFrame(wx.Frame):
         # rewrite default method to avoid hiding progress bar
         self._gconsole.Bind(EVT_CMD_DONE, self.OnCmdDone)
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
-        self.Bind(EVT_MODEL_DONE, self.OnDone)
+        self.Bind(EVT_MODEL_DONE, self.OnModelDone)
         
         self.notebook.AddPage(page=self.canvas, text=_('Model'), name='model')
         self.notebook.AddPage(
@@ -612,9 +612,9 @@ class ModelFrame(wx.Frame):
     def OnRunModel(self, event):
         """Run entire model"""
         self.start_time = time.time()
-        self.model.Run(self._gconsole, self.OnDone, parent=self)
+        self.model.Run(self._gconsole, self.OnModelDone, parent=self)
 
-    def OnDone(self, event):
+    def OnModelDone(self, event):
         """Computation finished
         """
         self.SetStatusText('', 0)
@@ -635,6 +635,22 @@ class ModelFrame(wx.Frame):
 
         # delete intermediate data
         self._deleteIntermediateData()
+
+        # display data if required
+        for data in self.model.GetData():
+            if not data.HasDisplay():
+                continue
+
+            # remove existing map layers first
+            layers =  self._giface.GetLayerList().GetLayersByName(data.GetValue())
+            if layers:
+                for layer in layers:
+                    self._giface.GetLayerList().DeleteLayer(layer)
+                
+            # add new map layer
+            self._giface.GetLayerList().AddLayer(
+                ltype=data.GetPrompt(), name=data.GetValue(), checked=True,
+                cmd=data.GetDisplayCmd())
 
     def OnValidateModel(self, event, showMsg=True):
         """Validate entire model"""
@@ -1683,6 +1699,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 layers = self.frame._giface.GetLayerList().GetLayersByName(shape.GetValue())
                 for layer in layers:
                     self.frame._giface.GetLayerList().DeleteLayer(layer)
+                    
         except GException as e:
             GError(parent=self,
                    message='{}'.format(e))
