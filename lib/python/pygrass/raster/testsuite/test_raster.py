@@ -16,20 +16,20 @@ class RasterRowTestCase(TestCase):
         """Create test raster map and region"""
         cls.use_temp_region()
         cls.runModule("g.region", n=40, s=0, e=40, w=0, res=10)
-        cls.runModule("r.mapcalc", expression="%s = row() + (10.0 * col())"%(cls.name),
+        cls.runModule("r.mapcalc", expression="%s = row() + (10.0 * col())" % (cls.name),
                                    overwrite=True)
 
     @classmethod
     def tearDownClass(cls):
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='raster', 
+        cls.runModule("g.remove", flags='f', type='raster',
                       name=cls.name)
         cls.del_temp_region()
 
     def test_type(self):
         r = RasterRow(self.name)
         r.open(mode='r')
-        self.assertTrue(r.mtype,'DCELL')
+        self.assertTrue(r.mtype, 'DCELL')
         r.close()
 
     def test_isopen(self):
@@ -76,6 +76,17 @@ class RasterRowTestCase(TestCase):
         # open in write mode and overwrite
         r.open(mode='w', mtype='DCELL', overwrite=True)
         self.assertTrue(r.mtype, 'DCELL')
+        r.close()
+    
+    def test_row_range(self):
+        r = RasterRow(self.name)
+        with self.assertRaises(IndexError):
+            # Map is not open yet
+            r[1]
+        with self.assertRaises(IndexError):
+            # Index is out of range
+            r.open()
+            r[9999]
         r.close()
 
 
