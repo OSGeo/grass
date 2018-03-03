@@ -11,7 +11,7 @@ import ctypes
 #
 # import GRASS modules
 #
-from grass.script import fatal, gisenv
+from grass.script import fatal, error, gisenv
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 
@@ -334,11 +334,12 @@ class RasterAbstractBase(object):
             x, y = key
             return self.get(x, y)
         elif isinstance(key, int):
+            if not self.is_open():
+                raise IndexError("Can not operate on a closed map. Call open() first.")
             if key < 0:  # Handle negative indices
                 key += self._rows
             if key >= self._rows:
-                fatal(INDXOUTRANGE.format(key))
-                raise IndexError
+                raise IndexError("The row index {0} is out of range [0, {1}).".format(key, self._rows))
             return self.get_row(key)
         else:
             fatal("Invalid argument type.")

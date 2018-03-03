@@ -53,6 +53,7 @@ class RasterRow(RasterAbstractBase):
         * No mathematical operation like __add__ and stuff for the Raster
           object (only for rows), since r.mapcalc is more sophisticated and
           faster
+        * Rises IndexError if [row] is out of range
 
         Examples:
 
