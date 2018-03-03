@@ -40,7 +40,7 @@ class History(object):
         
     def __eq__(self, hist):
         for attr in self.attrs:
-           if getattr(self, attr) != getattr(hist, attr):
+            if getattr(self, attr) != getattr(hist, attr):
                 return False
         return True
 
@@ -50,8 +50,8 @@ class History(object):
     def __iter__(self):
         return ((attr, getattr(self, attr)) for attr in self.attrs)
 
-    #----------------------------------------------------------------------
-    #libraster.HIST_CREATOR
+    # ----------------------------------------------------------------------
+    # libraster.HIST_CREATOR
     def _get_creator(self):
         return libraster.Rast_get_history(self.c_hist,
                                           libraster.HIST_CREATOR)
@@ -64,8 +64,8 @@ class History(object):
     creator = property(fget=_get_creator, fset=_set_creator,
                        doc="Set or obtain the creator of map")
 
-    #----------------------------------------------------------------------
-    #libraster.HIST_DATSRC_1
+    # ----------------------------------------------------------------------
+    # libraster.HIST_DATSRC_1
     def _get_src1(self):
         return libraster.Rast_get_history(self.c_hist,
                                           libraster.HIST_DATSRC_1)
@@ -78,8 +78,8 @@ class History(object):
     src1 = property(fget=_get_src1, fset=_set_src1,
                     doc="Set or obtain the first source of map")
 
-    #----------------------------------------------------------------------
-    #libraster.HIST_DATSRC_2
+    # ----------------------------------------------------------------------
+    # libraster.HIST_DATSRC_2
     def _get_src2(self):
         return libraster.Rast_get_history(self.c_hist,
                                           libraster.HIST_DATSRC_2)
@@ -92,8 +92,8 @@ class History(object):
     src2 = property(fget=_get_src2, fset=_set_src2,
                     doc="Set or obtain the second source of map")
 
-    #----------------------------------------------------------------------
-    #libraster.HIST_KEYWORD
+    # ----------------------------------------------------------------------
+    # libraster.HIST_KEYWORD
     def _get_keyword(self):
         return libraster.Rast_get_history(self.c_hist,
                                           libraster.HIST_KEYWRD)
@@ -106,8 +106,8 @@ class History(object):
     keyword = property(fget=_get_keyword, fset=_set_keyword,
                        doc="Set or obtain the keywords of map")
 
-    #----------------------------------------------------------------------
-    #libraster.HIST_MAPID
+    # ----------------------------------------------------------------------
+    # libraster.HIST_MAPID
     def _get_date(self):
         date_str = libraster.Rast_get_history(self.c_hist,
                                               libraster.HIST_MAPID)
@@ -127,8 +127,8 @@ class History(object):
     date = property(fget=_get_date, fset=_set_date,
                     doc="Set or obtain the date of map")
 
-    #----------------------------------------------------------------------
-    #libraster.HIST_MAPSET
+    # ----------------------------------------------------------------------
+    # libraster.HIST_MAPSET
     def _get_mapset(self):
         return libraster.Rast_get_history(self.c_hist,
                                           libraster.HIST_MAPSET)
@@ -141,8 +141,8 @@ class History(object):
     mapset = property(fget=_get_mapset, fset=_set_mapset,
                       doc="Set or obtain the mapset of map")
 
-    #----------------------------------------------------------------------
-    #libraster.HIST_MAPTYPE
+    # ----------------------------------------------------------------------
+    # libraster.HIST_MAPTYPE
     def _get_maptype(self):
         return libraster.Rast_get_history(self.c_hist,
                                           libraster.HIST_MAPTYPE)
@@ -155,8 +155,8 @@ class History(object):
     maptype = property(fget=_get_maptype, fset=_set_maptype,
                        doc="Set or obtain the type of map")
 
-    #----------------------------------------------------------------------
-    #libraster.HIST_NUM_FIELDS
+    # ----------------------------------------------------------------------
+    # libraster.HIST_NUM_FIELDS
     #
     # Never used in any raster modules
     #
@@ -170,8 +170,8 @@ class History(object):
     #                                          ctypes.c_char_p(num_fields))
     #
     #    num_fields = property(fget = _get_num_fields, fset = _set_num_fields)
-    #----------------------------------------------------------------------
-    #libraster.HIST_TITLE
+    # ----------------------------------------------------------------------
+    # libraster.HIST_TITLE
     def _get_title(self):
         return libraster.Rast_get_history(self.c_hist,
                                           libraster.HIST_TITLE)

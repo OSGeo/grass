@@ -8,6 +8,7 @@ import ctypes
 from operator import itemgetter
 
 import grass.lib.raster as libraster
+from grass.exceptions import ImplementationError
 
 from grass.pygrass.errors import GrassError
 
@@ -65,7 +66,6 @@ class Category(list):
 
     def _set_mtype(self, mtype):
         if mtype.upper() not in ('CELL', 'FCELL', 'DCELL'):
-            #fatal(_("Raser type: {0} not supported".format(mtype) ) )
             raise ValueError(_("Raster type: {0} not supported".format(mtype)))
         self._mtype = mtype
         self._gtype = RTYPE[self.mtype]['grass type']
@@ -270,8 +270,8 @@ class Category(list):
         """Not implemented yet.
         void Rast_set_cats_fmt()
         """
-        #TODO: add
-        pass
+        # TODO: add
+        raise ImplementationError("set_cats_fmt() is not implemented yet.")
 
     def read_rules(self, filename, sep=':'):
         """Copy categories from a rules file, default separetor is ':', the
@@ -300,7 +300,6 @@ class Category(list):
                     label, min_cat, max_cat = cat
                 else:
                     raise TypeError("Row length is greater than 3")
-                #import pdb; pdb.set_trace()
                 self.append((label, min_cat, max_cat))
 
     def write_rules(self, filename, sep=':'):

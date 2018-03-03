@@ -14,7 +14,8 @@ def must_be_open(method):
         if self.is_open():
             return method(self, *args, **kargs)
         else:
-            get_msgr().warning(_("The map is close!"))
+            msgr = get_msgr()
+            msgr.warning(_("The map is close!"))
     return wrapper
 
 
