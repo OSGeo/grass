@@ -316,7 +316,9 @@ fi
 
 %changelog
 * Sun Jan 28 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-2
-- SPEC cleanup as per review in https://bugzilla.redhat.com/show_bug.cgi?id=1539116
+- SPEC cleanup with fix of dependencies between packages (review #1539116)
+- appdata.xml file also go into '/usr/share/metainfo'
+- use icon cache scriplets only on EPEL
 
 * Mon Jan 15 2018 Markus Metz <metz@mundialis.de> - 7.4.0-1
 - New upstream version 7.4.0
