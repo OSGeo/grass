@@ -27,7 +27,7 @@
 
 #include "local_proto.h"
 
-#include "ogr_srs_api.h"
+#include <ogr_srs_api.h>
 
 int main(int argc, char *argv[])
 {
@@ -260,23 +260,16 @@ int main(int argc, char *argv[])
     G_get_default_window(&cellhd);
     Ogr_projection = NULL;
     if (cellhd.proj != PROJECTION_XY) {
-        const char *epsg;
+	struct Key_Value *projinfo, *projunits, *projepsg;
 
-        Ogr_projection = NULL;
-        /* try EPSG code first */
-        epsg = G_database_epsg_code();
-        if (!epsg) {
-            struct Key_Value *projinfo, *projunits;
-            
-            projinfo = G_get_projinfo();
-            projunits = G_get_projunits();
-            Ogr_projection = GPJ_grass_to_osr(projinfo, projunits);
-        }
-        else {
-            Ogr_projection = OSRNewSpatialReference(NULL);
-            if (OSRImportFromEPSG(Ogr_projection, atoi(epsg)) != OGRERR_NONE)
-                G_fatal_error(_("Unknown EPSG code %s"), epsg);
-        }
+	projinfo = G_get_projinfo();
+	projunits = G_get_projunits();
+	projepsg = G_get_projepsg();
+	Ogr_projection = GPJ_grass_to_osr2(projinfo, projunits, projepsg);
+
+	if (Ogr_projection ==  NULL)
+	    G_fatal_error(_("Unable to create OGR spatial reference"));
+
 	if (flags.esristyle->answer &&
 	    (strcmp(options.format->answer, "ESRI_Shapefile") == 0))
 	    OSRMorphToESRI(Ogr_projection);
