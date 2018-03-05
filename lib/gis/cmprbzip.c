@@ -75,7 +75,8 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
 		int dst_sz)
 {
     int err;
-    unsigned int i, nbytes, buf_sz;
+    int i, buf_sz;
+    unsigned int nbytes;
     unsigned char *buf;
 
 #ifndef HAVE_BZLIB_H
@@ -84,12 +85,23 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
 #else
 
     /* Catch errors early */
-    if (src == NULL || dst == NULL)
+    if (src == NULL || dst == NULL) {
+	if (src == NULL)
+	    G_warning(_("No source buffer"));
+	
+	if (dst == NULL)
+	    G_warning(_("No destination buffer"));
 	return -1;
+    }
 
-    /* Don't do anything if src is empty */
-    if (src_sz <= 0)
+    /* Don't do anything if either of these are true */
+    if (src_sz <= 0 || dst_sz <= 0) {
+	if (src_sz <= 0)
+	    G_warning(_("Invalid source buffer size %d"), src_sz);
+	if (dst_sz <= 0)
+	    G_warning(_("Invalid destination buffer size %d"), dst_sz);
 	return 0;
+    }
 
     /* Output buffer has to be 1% + 600 bytes bigger for single pass compression */
     buf_sz = (unsigned int)((double)dst_sz * 1.01 + (double)600);
@@ -105,8 +117,11 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
 				   9,			 /* blockSize100k */ 
 				   0,                    /* verbosity */
 				   100);                 /* workFactor */
+
     if (err != BZ_OK) {
-	G_free(buf);
+	G_warning(_("BZIP2 version %s compression error %d"),
+	          BZ2_bzlibVersion(), err);
+        G_free(buf);
 	return -1;
     }
 
@@ -144,12 +159,23 @@ G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst,
 #else
 
     /* Catch error condition */
-    if (src == NULL || dst == NULL)
+    if (src == NULL || dst == NULL) {
+	if (src == NULL)
+	    G_warning(_("No source buffer"));
+	
+	if (dst == NULL)
+	    G_warning(_("No destination buffer"));
 	return -2;
+    }
 
     /* Don't do anything if either of these are true */
-    if (src_sz <= 0 || dst_sz <= 0)
+    if (src_sz <= 0 || dst_sz <= 0) {
+	if (src_sz <= 0)
+	    G_warning(_("Invalid source buffer size %d"), src_sz);
+	if (dst_sz <= 0)
+	    G_warning(_("Invalid destination buffer size %d"), dst_sz);
 	return 0;
+    }
 
 
     /* Do single pass decompression */
@@ -159,11 +185,19 @@ G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst,
 				     0,                     /* small */
 				     0);                    /* verbosity */
 
+    if (err != BZ_OK) {
+	G_warning(_("BZIP2 version %s decompression error %d"),
+	          BZ2_bzlibVersion(), err);
+	return -1;
+    }
+
     /* Number of bytes inflated to output stream is
      * updated buffer size
      */
 
-    if (!(err == BZ_OK)) {
+    if (nbytes != dst_sz) {
+	/* TODO: it is not an error if destination is larger than needed */
+	G_warning(_("Got uncompressed size %d, expected %d"), (int)nbytes, dst_sz);
 	return -1;
     }
 

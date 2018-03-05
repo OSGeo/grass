@@ -188,5 +188,4 @@ G_rle_expand(unsigned char *src, int src_sz, unsigned char *dst,
     return nbytes;
 }
 
-
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */

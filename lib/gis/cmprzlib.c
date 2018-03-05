@@ -94,12 +94,23 @@ G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
     z_stream c_stream;
 
     /* Catch errors early */
-    if (src == NULL || dst == NULL)
+    if (src == NULL || dst == NULL) {
+	if (src == NULL)
+	    G_warning(_("No source buffer"));
+	
+	if (dst == NULL)
+	    G_warning(_("No destination buffer"));
 	return -1;
+    }
 
     /* Don't do anything if either of these are true */
-    if (src_sz <= 0 || dst_sz <= 0)
+    if (src_sz <= 0 || dst_sz <= 0) {
+	if (src_sz <= 0)
+	    G_warning(_("Invalid source buffer size %d"), src_sz);
+	if (dst_sz <= 0)
+	    G_warning(_("Invalid destination buffer size %d"), dst_sz);
 	return 0;
+    }
 
     /* Output buffer has to be 1% + 12 bytes bigger for single pass deflate */
     /* buf_sz = (int)((double)dst_sz * 1.01 + (double)12); */
@@ -125,6 +136,8 @@ G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
 
     /* If there was an error initializing, return -1 */
     if (err != Z_OK) {
+	G_warning(_("ZLIB compression error %d: %s"),
+	          (int)err, zError(err));
 	G_free(buf);
 	return -1;
     }
@@ -141,6 +154,8 @@ G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
 	default:		/* Give other error */
 	    G_free(buf);
 	    deflateEnd(&c_stream);
+	    G_warning(_("ZLIB compression error %d: %s"),
+		      (int)err, zError(err));
 	    return -1;
 	    break;
 	}
@@ -175,12 +190,23 @@ G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
     z_stream c_stream;
 
     /* Catch error condition */
-    if (src == NULL || dst == NULL)
+    if (src == NULL || dst == NULL) {
+	if (src == NULL)
+	    G_warning(_("No source buffer"));
+	
+	if (dst == NULL)
+	    G_warning(_("No destination buffer"));
 	return -2;
+    }
 
     /* Don't do anything if either of these are true */
-    if (src_sz <= 0 || dst_sz <= 0)
+    if (src_sz <= 0 || dst_sz <= 0) {
+	if (src_sz <= 0)
+	    G_warning(_("Invalid source buffer size %d"), src_sz);
+	if (dst_sz <= 0)
+	    G_warning(_("Invalid destination buffer size %d"), dst_sz);
 	return 0;
+    }
 
     /* Set-up default zlib memory handling */
     _init_zstruct(&c_stream);
@@ -195,8 +221,11 @@ G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
     err = inflateInit(&c_stream);
 
     /* If not Z_OK return error -1 */
-    if (err != Z_OK)
+    if (err != Z_OK) {
+	G_warning(_("ZLIB decompression error %d: %s"),
+	          err, zError(err));
 	return -1;
+    }
 
     /* Do single pass inflate */
     err = inflate(&c_stream, Z_FINISH);
@@ -210,6 +239,8 @@ G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
      * Z_OK means only some was processed (not enough room in dst)
      */
     if (!(err == Z_STREAM_END || err == Z_OK)) {
+	G_warning(_("ZLIB decompression error %d: %s"),
+	          err, zError(err));
 	if (!(err == Z_BUF_ERROR && nbytes == dst_sz)) {
 	    inflateEnd(&c_stream);
 	    return -1;

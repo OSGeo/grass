@@ -83,6 +83,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <unistd.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -185,9 +186,8 @@ G_no_expand(unsigned char *src, int src_sz, unsigned char *dst,
  * -1: error
  * -2: dst too small
  */
-int
-G_compress(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz, int number)
+int G_compress(unsigned char *src, int src_sz, unsigned char *dst,
+	       int dst_sz, int number)
 {
     if (number < 0 || number >= n_compressors) {
 	G_fatal_error(_("Request for unsupported compressor"));
@@ -201,9 +201,8 @@ G_compress(unsigned char *src, int src_sz, unsigned char *dst,
  * > 0: number of bytes in dst
  * -1: error
  */
-int
-G_expand(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz, int number)
+int G_expand(unsigned char *src, int src_sz, unsigned char *dst,
+	     int dst_sz, int number)
 {
     if (number < 0 || number >= n_compressors) {
 	G_fatal_error(_("Request for unsupported compressor"));
@@ -214,13 +213,23 @@ G_expand(unsigned char *src, int src_sz, unsigned char *dst,
 }
 
 int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
-                      int compressor)
+                      int number)
 {
     int bsize, nread, err;
     unsigned char *b;
 
-    if (dst == NULL || nbytes < 0)
+    if (dst == NULL || nbytes <= 0) {
+	if (dst == NULL)
+	    G_warning(_("No destination buffer allocated"));
+	if (nbytes <= 0)
+	    G_warning(_("Invalid destination buffer size %d"), nbytes);
 	return -2;
+    }
+
+    if (rbytes <= 0) {
+	G_warning(_("Invalid read size %d"), nbytes);
+	return -2;
+    }
 
     bsize = rbytes;
 
@@ -237,9 +246,18 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
 	    nread += err;
     } while (err > 0 && nread < bsize);
 
+    if (err <= 0) {
+	if (err == 0)
+	    G_warning(_("Unable to read %d bytes: end of file"), rbytes);
+	else
+	    G_warning(_("Unable to read %d bytes: %s"), rbytes, strerror(errno));
+	return -1;
+    }
+
     /* If the bsize if less than rbytes and we didn't get an error.. */
-    if (nread < rbytes && err > 0) {
+    if (nread < rbytes) {
 	G_free(b);
+	G_warning("Unable to read %d bytes, got %d bytes", rbytes, nread);
 	return -1;
     }
 
@@ -255,6 +273,7 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
     else if (b[0] != G_COMPRESSED_YES) {
 	/* We're not at the start of a row */
 	G_free(b);
+	G_warning("Read error: We're not at the start of a row");
 	return -1;
     }
     /* Okay it's a compressed row */
@@ -262,7 +281,7 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
     /* Just call G_expand() with the buffer we read,
      * Account for first byte being a flag
      */
-    err = G_expand(b + 1, bsize - 1, dst, nbytes, compressor);
+    err = G_expand(b + 1, bsize - 1, dst, nbytes, number);
 
     /* We're done with b */
     G_free(b);
@@ -273,14 +292,19 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
 }				/* G_read_compressed() */
 
 int G_write_compressed(int fd, unsigned char *src, int nbytes,
-                       int compressor)
+                       int number)
 {
     int dst_sz, nwritten, err;
     unsigned char *dst, compressed;
 
     /* Catch errors */
-    if (src == NULL || nbytes < 0)
+    if (src == NULL || nbytes < 0) {
+	if (src == NULL)
+	    G_warning(_("No source buffer"));
+	if (nbytes <= 0)
+	    G_warning(_("Invalid source buffer size %d"), nbytes);
 	return -1;
+    }
 
     dst_sz = nbytes;
     if (NULL == (dst = (unsigned char *)
@@ -288,18 +312,19 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes,
 	return -1;
 
     /* Now just call G_compress() */
-    err = G_compress(src, nbytes, dst, dst_sz, compressor);
+    err = G_compress(src, nbytes, dst, dst_sz, number);
 
     /* If compression succeeded write compressed row,
      * otherwise write uncompressed row. Compression will fail
      * if dst is too small (i.e. compressed data is larger)
      */
-    if (err > 0 && err <= dst_sz) {
+    if (err > 0 && err < nbytes) {
 	dst_sz = err;
 	/* Write the compression flag */
 	compressed = G_COMPRESSED_YES;
 	if (write(fd, &compressed, 1) != 1) {
 	    G_free(dst);
+	    G_warning(_("Unable to write compression flag"));
 	    return -1;
 	}
 	nwritten = 0;
@@ -308,6 +333,12 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes,
 	    if (err >= 0)
 		nwritten += err;
 	} while (err > 0 && nwritten < dst_sz);
+	if (err <= 0) {
+	    if (err == 0)
+		G_warning(_("Unable to write %d bytes: nothing written"), dst_sz);
+	    else
+		G_warning(_("Unable to write %d bytes: %s"), dst_sz, strerror(errno));
+	}
 	/* Account for extra byte */
 	nwritten++;
     }
@@ -316,6 +347,7 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes,
 	compressed = G_COMPRESSED_NO;
 	if (write(fd, &compressed, 1) != 1) {
 	    G_free(dst);
+	    G_warning(_("Unable to write compression flag"));
 	    return -1;
 	}
 	nwritten = 0;
@@ -324,6 +356,12 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes,
 	    if (err >= 0)
 		nwritten += err;
 	} while (err > 0 && nwritten < nbytes);
+	if (err <= 0) {
+	    if (err == 0)
+		G_warning(_("Unable to write %d bytes: nothing written"), nbytes);
+	    else
+		G_warning(_("Unable to write %d bytes: %s"), nbytes, strerror(errno));
+	}
 	/* Account for extra byte */
 	nwritten++;
     }				/* if (err > 0) */
@@ -349,8 +387,10 @@ int G_write_uncompressed(int fd, const unsigned char *src, int nbytes)
 
     /* Write the compression flag */
     compressed = G_COMPRESSED_NO;
-    if (write(fd, &compressed, 1) != 1)
+    if (write(fd, &compressed, 1) != 1) {
+	G_warning(_("Unable to write compression flag"));
 	return -1;
+    }
 
     /* Now write the data */
     nwritten = 0;
@@ -359,6 +399,12 @@ int G_write_uncompressed(int fd, const unsigned char *src, int nbytes)
 	if (err > 0)
 	    nwritten += err;
     } while (err > 0 && nwritten < nbytes);
+    if (err <= 0) {
+	if (err == 0)
+	    G_warning(_("Unable to write %d bytes: nothing written"), nbytes);
+	else
+	    G_warning(_("Unable to write %d bytes: %s"), nbytes, strerror(errno));
+    }
 
     if (err < 0 || nwritten != nbytes)
 	return -1;
