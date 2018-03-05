@@ -136,9 +136,10 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
     }
     
     if (OGR_L_DeleteFeature(ogr_info->layer,
-			    ogr_info->offset.array[offset]) != OGRERR_NONE)
+			    ogr_info->offset.array[offset]) != OGRERR_NONE) {
 	G_warning(_("Unable to delete feature"));
 	return -1;
+    }
     
     return 0;
 #else
