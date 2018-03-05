@@ -284,7 +284,8 @@ int main(int argc, char *argv[])
     /* Read project and region data */
     struct Key_Value *projinfo = G_get_projinfo();
     struct Key_Value *projunits = G_get_projunits();
-    char *srswkt = GPJ_grass_to_wkt(projinfo, projunits, 0, 0);
+    struct Key_Value *projepsg = G_get_projepsg();
+    char *srswkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, 0, 0);
 
     G_get_window(&cellhead);
 
