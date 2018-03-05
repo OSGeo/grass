@@ -14,6 +14,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <errno.h>
 
 #include <grass/config.h>
 #include <grass/raster.h>
@@ -88,17 +89,19 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
     off_t t2 = fcb->row_ptr[row + 1];
     size_t readamount = t2 - t1;
     size_t bufsize = fcb->cellhd.cols * fcb->nbytes;
+    int ret;
 
     if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
-	G_fatal_error(_("Error reading raster data for row %d of <%s>"),
-		      row, fcb->name);
+	G_fatal_error(_("Error seeking fp raster data file for row %d of <%s>: %s"),
+		      row, fcb->name, strerror(errno));
 
     *nbytes = fcb->nbytes;
 
-    if ((size_t) G_read_compressed(fcb->data_fd, readamount, data_buf,
-                                   bufsize, fcb->cellhd.compressed) != bufsize)
-	G_fatal_error(_("Error uncompressing raster data for row %d of <%s>"),
-		      row, fcb->name);
+    ret = G_read_compressed(fcb->data_fd, readamount, data_buf,
+			    bufsize, fcb->cellhd.compressed);
+    if (ret <= 0)
+	G_fatal_error(_("Error uncompressing fp raster data for row %d of <%s>: error code %d"),
+		      row, fcb->name, ret);
 }
 
 static void rle_decompress(unsigned char *dst, const unsigned char *src,
@@ -132,15 +135,15 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
     int n;
 
     if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
-	G_fatal_error(_("Error reading raster data for row %d of <%s>"),
-		      row, fcb->name);
+	G_fatal_error(_("Error seeking raster data file for row %d of <%s>: %s"),
+		      row, fcb->name, strerror(errno));
 
     cmp = G_malloc(readamount);
 
     if (read(fcb->data_fd, cmp, readamount) != readamount) {
 	G_free(cmp);
-	G_fatal_error(_("Error reading raster data for row %d of <%s>"),
-		      row, fcb->name);
+	G_fatal_error(_("Error reading raster data for row %d of <%s>: %s"),
+		      row, fcb->name, strerror(errno));
     }
 
     /* save cmp for free below */
@@ -824,12 +827,12 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags,
     unsigned char *compressed_buf;
 
     if (lseek(null_fd, t1, SEEK_SET) < 0)
-	G_fatal_error(_("Error reading null data for row %d of <%s>"),
+	G_fatal_error(_("Error seeking compressed null data for row %d of <%s>"),
 		      row, fcb->name);
 
     if (readamount == size) {
 	if (read(null_fd, flags, size) != size) {
-	    G_fatal_error(_("Error reading null data for row %d of <%s>"),
+	    G_fatal_error(_("Error reading compressed null data for row %d of <%s>"),
 			  row, fcb->name);
 	}
 	return 1;
@@ -839,7 +842,7 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags,
 
     if (read(null_fd, compressed_buf, readamount) != readamount) {
 	G_free(compressed_buf);
-	G_fatal_error(_("Error reading null data for row %d of <%s>"),
+	G_fatal_error(_("Error reading compressed null data for row %d of <%s>"),
 		      row, fcb->name);
     }
 
@@ -879,7 +882,7 @@ int Rast__read_null_bits(int fd, int row, unsigned char *flags)
     offset = (off_t) size * R;
 
     if (lseek(null_fd, offset, SEEK_SET) < 0)
-	G_fatal_error(_("Error reading null row %d for <%s>"), R, fcb->name);
+	G_fatal_error(_("Error seeking null row %d for <%s>"), R, fcb->name);
 
     if (read(null_fd, flags, size) != size)
 	G_fatal_error(_("Error reading null row %d for <%s>"), R, fcb->name);
