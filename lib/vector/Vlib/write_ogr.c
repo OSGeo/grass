@@ -136,9 +136,10 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
     }
     
     if (OGR_L_DeleteFeature(ogr_info->layer,
-			    ogr_info->offset.array[offset]) != OGRERR_NONE)
+			    ogr_info->offset.array[offset]) != OGRERR_NONE) {
 	G_warning(_("Unable to delete feature"));
 	return -1;
+    }
     
     return 0;
 #else
@@ -269,7 +270,7 @@ int create_ogr_layer(struct Map_info *Map, int type)
     OGRSpatialReferenceH Ogr_spatial_ref;
     
     struct field_info *Fi;
-    struct Key_Value *projinfo, *projunits;
+    struct Key_Value *projinfo, *projunits, *projepsg;
     struct Format_info_ogr *ogr_info;
     
     OGRwkbGeometryType Ogr_geom_type;
@@ -285,7 +286,8 @@ int create_ogr_layer(struct Map_info *Map, int type)
     /* get spatial reference */
     projinfo  = G_get_projinfo();
     projunits = G_get_projunits();
-    Ogr_spatial_ref = GPJ_grass_to_osr(projinfo, projunits);
+    projepsg = G_get_projepsg();
+    Ogr_spatial_ref = GPJ_grass_to_osr2(projinfo, projunits, projepsg);
     G_free_key_value(projinfo);
     G_free_key_value(projunits);
     
