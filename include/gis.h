@@ -582,11 +582,11 @@ typedef double DCELL;
 typedef float FCELL;
 
 /* 64 bit signed integer */
-#ifdef __MINGW32__
-typedef __int64 grass_int64;
-#elif HAVE_INT64_T
+#if HAVE_INT64_T
 #include <sys/types.h>
 typedef int64_t grass_int64;
+#elif defined(__MINGW32__)
+typedef __int64 grass_int64;
 #elif HAVE_LONG_LONG_INT
 typedef long long int grass_int64;
 #elif HAVE_LARGEFILES
