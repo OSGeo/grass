@@ -362,6 +362,11 @@ int main(int argc, char *argv[])
         set_region_flag->answer = '\0';
     }
 
+    /* Trim option is used only for trimmean method */
+    if (trim_opt->answer != NULL && strcmp(method_opt->answer, "trimmean") != 0) {
+        G_fatal_error(_("Trim option can be used only with trimmean method"));
+    }
+
     struct StringList infiles;
 
     if (file_list_opt->answer) {
