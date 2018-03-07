@@ -60,7 +60,7 @@ from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc
 from core.debug import Debug
 from dbmgr.dialogs import ModifyTableRecord, AddColumnDialog
 from core.settings import UserSettings
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, TextCtrl, ListCtrl, CheckBox
 
 
 class Log:
@@ -1182,11 +1182,11 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         sqlNtb.AddPage(page=simpleSqlPanel,
                        text=_('Simple'))
 
-        btnApply = wx.Button(
+        btnApply = Button(
             parent=simpleSqlPanel,
             id=wx.ID_APPLY,
             name='btnApply')
-        btnApply.SetToolTipString(
+        btnApply.SetToolTip(
             _("Apply SELECT statement and reload data records"))
         btnApply.Bind(wx.EVT_BUTTON, self.OnApplySqlStatement)
 
@@ -1204,12 +1204,12 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                                  size=(55, -1),
                                  choices=['=', '!=', '<', '<=', '>', '>='])
         sqlWhereCond.SetSelection(0)
-        sqlWhereValue = wx.TextCtrl(
+        sqlWhereValue = TextCtrl(
             parent=whereSimpleSqlPanel,
             id=wx.ID_ANY,
             value="",
             style=wx.TE_PROCESS_ENTER)
-        sqlWhereValue.SetToolTipString(
+        sqlWhereValue.SetToolTip(
             _("Example: %s") %
             "MULTILANE = 'no' AND OBJECTID < 10")
 
@@ -1229,13 +1229,13 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             label=_("SQL Builder"))
         btnSqlBuilder.Bind(wx.EVT_BUTTON, self.OnBuilder)
 
-        sqlStatement = wx.TextCtrl(
+        sqlStatement = TextCtrl(
             parent=advancedSqlPanel,
             id=wx.ID_ANY,
             value="SELECT * FROM %s" %
             self.dbMgrData['mapDBInfo'].layers[layer]['table'],
             style=wx.TE_PROCESS_ENTER)
-        sqlStatement.SetToolTipString(
+        sqlStatement.SetToolTip(
             _("Example: %s") %
             "SELECT * FROM roadsmajor WHERE MULTILANE = 'no' AND OBJECTID < 10")
         sqlWhereValue.Bind(wx.EVT_TEXT_ENTER, self.OnApplySqlStatement)
@@ -2865,7 +2865,7 @@ class DbMgrLayersPage(wx.Panel):
         pass
 
 
-class TableListCtrl(wx.ListCtrl,
+class TableListCtrl(ListCtrl,
                     listmix.ListCtrlAutoWidthMixin):
     #                    listmix.TextEditMixin):
     """Table description list"""
@@ -2876,9 +2876,9 @@ class TableListCtrl(wx.ListCtrl,
         self.parent = parent
         self.table = table
         self.columns = columns
-        wx.ListCtrl.__init__(self, parent, id, pos, size,
-                             style=wx.LC_REPORT | wx.LC_HRULES | wx.LC_VRULES |
-                             wx.BORDER_NONE)
+        ListCtrl.__init__(self, parent, id, pos, size,
+                          style=wx.LC_REPORT | wx.LC_HRULES | wx.LC_VRULES |
+                          wx.BORDER_NONE)
 
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         # listmix.TextEditMixin.__init__(self)
@@ -2920,7 +2920,7 @@ class TableListCtrl(wx.ListCtrl,
         return itemData
 
 
-class LayerListCtrl(wx.ListCtrl,
+class LayerListCtrl(ListCtrl,
                     listmix.ListCtrlAutoWidthMixin):
                     # listmix.ColumnSorterMixin):
                     # listmix.TextEditMixin):
@@ -2932,9 +2932,9 @@ class LayerListCtrl(wx.ListCtrl,
 
         self.parent = parent
         self.layers = layers
-        wx.ListCtrl.__init__(self, parent, id, pos, size,
-                             style=wx.LC_REPORT | wx.LC_HRULES | wx.LC_VRULES |
-                             wx.BORDER_NONE)
+        ListCtrl.__init__(self, parent, id, pos, size,
+                          style=wx.LC_REPORT | wx.LC_HRULES | wx.LC_VRULES |
+                          wx.BORDER_NONE)
 
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         # listmix.TextEditMixin.__init__(self)
@@ -3096,8 +3096,8 @@ class LayerBook(wx.Notebook):
                                      wx.Choice(parent=self.addPanel, id=wx.ID_ANY, size=(200, -1),
                                                choices=self.defaultColumns)),
                                 'addCat':
-                                    (wx.CheckBox(parent=self.addPanel, id=wx.ID_ANY,
-                                                 label=_("Insert record for each category into table")),
+                                    (CheckBox(parent=self.addPanel, id=wx.ID_ANY,
+                                              label=_("Insert record for each category into table")),
                                      None),
                                 }
 
@@ -3118,7 +3118,7 @@ class LayerBook(wx.Notebook):
             wx.EVT_CHOICE, self.OnTableChanged)
 
         # tooltips
-        self.addLayerWidgets['addCat'][0].SetToolTipString(
+        self.addLayerWidgets['addCat'][0].SetToolTip(
             _("You need to add categories " "by v.category module."))
 
         # table description
@@ -3275,7 +3275,7 @@ class LayerBook(wx.Notebook):
         except ValueError:
             tableName = ''
 
-        self.deleteTable = wx.CheckBox(
+        self.deleteTable = CheckBox(
             parent=self.deletePanel,
             id=wx.ID_ANY,
             label=_('Drop also linked attribute table (%s)') %
@@ -3787,8 +3787,8 @@ class FieldStatistics(wx.Frame):
         self.text.SetBackgroundColour("white")
 
         # buttons
-        self.btnClipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
-        self.btnClipboard.SetToolTipString(
+        self.btnClipboard = Button(parent=self.panel, id=wx.ID_COPY)
+        self.btnClipboard.SetToolTip(
             _("Copy statistics the clipboard (Ctrl+C)"))
         self.btnCancel = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btnCancel.SetDefault()

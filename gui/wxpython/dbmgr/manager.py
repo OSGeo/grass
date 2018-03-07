@@ -43,6 +43,7 @@ from core.debug import Debug
 from core.utils import _
 from dbmgr.base import DbMgrBase
 from gui_core.widgets import GNotebook
+from gui_core.wrap import Button
 
 
 class AttributeManager(wx.Frame, DbMgrBase):
@@ -136,13 +137,13 @@ class AttributeManager(wx.Frame, DbMgrBase):
             wx.CallAfter(self.notebook.SetSelection, 0)  # select browse tab
 
         # buttons
-        self.btnClose = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btnClose.SetToolTipString(_("Close Attribute Table Manager"))
-        self.btnReload = wx.Button(parent=self.panel, id=wx.ID_REFRESH)
-        self.btnReload.SetToolTipString(
+        self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btnClose.SetToolTip(_("Close Attribute Table Manager"))
+        self.btnReload = Button(parent=self.panel, id=wx.ID_REFRESH)
+        self.btnReload.SetToolTip(
             _("Reload currently selected attribute data"))
-        self.btnReset = wx.Button(parent=self.panel, id=wx.ID_CLEAR)
-        self.btnReset.SetToolTipString(
+        self.btnReset = Button(parent=self.panel, id=wx.ID_CLEAR)
+        self.btnReset.SetToolTip(
             _("Reload all attribute data (drop current selection)"))
 
         # events
