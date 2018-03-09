@@ -11,7 +11,7 @@ Classes:
  - frame::ItemPanel
  - frame::PythonPanel
 
-(C) 2010-2014 by the GRASS Development Team
+(C) 2010-2018 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -38,7 +38,8 @@ if globalvar.wxPythonPhoenix:
         import wx.lib.agw.flatnotebook as FN
 else:
     import wx.lib.flatnotebook as FN
-
+from wx.lib.newevent import NewEvent
+    
 from core.utils import _
 from gui_core.widgets import GNotebook
 from core.gconsole        import GConsole, \
@@ -60,6 +61,8 @@ from gui_core.pystc import PyStc
 from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model import *
 from gmodeler.dialogs import *
+
+wxModelDone, EVT_MODEL_DONE = NewEvent()
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
@@ -148,7 +151,8 @@ class ModelFrame(wx.Frame):
         # rewrite default method to avoid hiding progress bar
         self._gconsole.Bind(EVT_CMD_DONE, self.OnCmdDone)
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
-
+        self.Bind(EVT_MODEL_DONE, self.OnModelDone)
+        
         self.notebook.AddPage(page=self.canvas, text=_('Model'), name='model')
         self.notebook.AddPage(
             page=self.itemPanel,
@@ -288,11 +292,37 @@ class ModelFrame(wx.Frame):
 
     def OnCmdDone(self, event):
         """Command done (or aborted)"""
-        self.goutput.GetProgressBar().SetValue(0)
+        def time_elapsed(etime):
+            try:
+                ctime = time.time() - etime
+                if ctime < 60:
+                    stime = _("%d sec") % int(ctime)
+                else:
+                    mtime = int(ctime / 60)
+                    stime = _("%(min)d min %(sec)d sec") % {
+                        'min': mtime, 'sec': int(ctime - (mtime * 60))}
+            except KeyError:
+                # stopped deamon
+                stime = _("unknown")
+
+            return stime
+        
+        self.goutput.GetProgressBar().SetValue(0)            
+        self.goutput.WriteCmdLog('({}) {} ({})'.format(
+            str(time.ctime()), _("Command finished"), time_elapsed(event.time)),
+            notification=event.notification)
+
         try:
             action = self.GetModel().GetItems()[event.pid]
             if hasattr(action, "task"):
                 action.Update(running=True)
+            if event.pid == self._gconsole.cmdThread.GetId() - 1:
+                self.goutput.WriteCmdLog('({}) {} ({})'.format(
+                    str(time.ctime()), _("Model computation finished"), time_elapsed(self.start_time)),
+                                         notification=event.notification)
+                event = wxModelDone()
+                wx.PostEvent(self, event)
+                
         except IndexError:
             pass
 
@@ -357,6 +387,22 @@ class ModelFrame(wx.Frame):
 
         dlg.Destroy()
 
+    def _deleteIntermediateData(self):
+        """Delete intermediate data"""
+        rast, vect, rast3d, msg = self.model.GetIntermediateData()
+        if rast:
+            self._gconsole.RunCmd(['g.remove', '-f', 'type=raster',
+                                   'name=%s' % ','.join(rast)])
+        if rast3d:
+            self._gconsole.RunCmd(['g.remove', '-f', 'type=raster_3d',
+                                   'name=%s' % ','.join(rast3d)])
+        if vect:
+            self._gconsole.RunCmd(['g.remove', '-f', 'type=vector',
+                                   'name=%s' % ','.join(vect)])
+                
+        self.SetStatusText(_("%d intermediate maps deleted from current mapset") %
+                           int(len(rast) + len(rast3d) + len(vect)))
+
     def OnDeleteData(self, event):
         """Delete intermediate data"""
         rast, vect, rast3d, msg = self.model.GetIntermediateData()
@@ -375,24 +421,9 @@ class ModelFrame(wx.Frame):
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
 
         ret = dlg.ShowModal()
-        if ret == wx.ID_YES:
-            dlg.Destroy()
-
-            if rast:
-                self._gconsole.RunCmd(['g.remove', '-f', 'type=raster',
-                                       'name=%s' % ','.join(rast)])
-            if rast3d:
-                self._gconsole.RunCmd(['g.remove', '-f', 'type=raster_3d',
-                                       'name=%s' % ','.join(rast3d)])
-            if vect:
-                self._gconsole.RunCmd(['g.remove', '-f', 'type=vector',
-                                       'name=%s' % ','.join(vect)])
-
-            self.SetStatusText(_("%d maps deleted from current mapset") %
-                               int(len(rast) + len(rast3d) + len(vect)))
-            return
-
         dlg.Destroy()
+        if ret == wx.ID_YES:
+            self._deleteIntermediateData()
 
     def OnModelNew(self, event):
         """Create new model"""
@@ -580,15 +611,14 @@ class ModelFrame(wx.Frame):
 
     def OnRunModel(self, event):
         """Run entire model"""
-        self.model.Run(self._gconsole, self.OnDone, parent=self)
+        self.start_time = time.time()
+        self.model.Run(self._gconsole, self.OnModelDone, parent=self)
 
-    def OnDone(self, event):
+    def OnModelDone(self, event):
         """Computation finished
-
-        .. todo::
-            not called -- must be fixed
         """
         self.SetStatusText('', 0)
+        
         # restore original files
         if hasattr(self.model, "fileInput"):
             for finput in self.model.fileInput:
@@ -602,6 +632,25 @@ class ModelFrame(wx.Frame):
                 finally:
                     fd.close()
             del self.model.fileInput
+
+        # delete intermediate data
+        self._deleteIntermediateData()
+
+        # display data if required
+        for data in self.model.GetData():
+            if not data.HasDisplay():
+                continue
+
+            # remove existing map layers first
+            layers =  self._giface.GetLayerList().GetLayersByName(data.GetValue())
+            if layers:
+                for layer in layers:
+                    self._giface.GetLayerList().DeleteLayer(layer)
+                
+            # add new map layer
+            self._giface.GetLayerList().AddLayer(
+                ltype=data.GetPrompt(), name=data.GetValue(), checked=True,
+                cmd=data.GetDisplayCmd())
 
     def OnValidateModel(self, event, showMsg=True):
         """Validate entire model"""
@@ -1434,7 +1483,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         if not hasattr(self, "popupID"):
             self.popupID = dict()
             for key in ('remove', 'enable', 'addPoint',
-                        'delPoint', 'intermediate', 'props', 'id',
+                        'delPoint', 'intermediate', 'display', 'props', 'id',
                         'label', 'comment'):
                 self.popupID[key] = wx.NewId()
 
@@ -1496,19 +1545,37 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             if len(shape.GetLineControlPoints()) == 2:
                 popupMenu.Enable(self.popupID['delPoint'], False)
 
-        if isinstance(shape, ModelData) and '@' not in shape.GetValue():
+        if isinstance(shape, ModelData):
             popupMenu.AppendSeparator()
-            popupMenu.Append(
-                self.popupID['intermediate'],
-                text=_('Intermediate'),
-                kind=wx.ITEM_CHECK)
-            if self.GetShape().IsIntermediate():
-                popupMenu.Check(self.popupID['intermediate'], True)
+            if '@' not in shape.GetValue() and \
+               len(self.GetShape().GetRelations('from')) > 0:
+                popupMenu.Append(
+                    self.popupID['intermediate'],
+                    text=_('Intermediate'),
+                    kind=wx.ITEM_CHECK)
+                if self.GetShape().IsIntermediate():
+                    popupMenu.Check(self.popupID['intermediate'], True)
 
-            self.frame.Bind(
-                wx.EVT_MENU,
-                self.OnIntermediate,
-                id=self.popupID['intermediate'])
+                self.frame.Bind(
+                    wx.EVT_MENU,
+                    self.OnIntermediate,
+                    id=self.popupID['intermediate'])
+
+            if self.frame._giface.GetMapDisplay():
+                popupMenu.Append(
+                    self.popupID['display'],
+                    text=_('Display'),
+                    kind=wx.ITEM_CHECK)
+                if self.GetShape().HasDisplay():
+                    popupMenu.Check(self.popupID['display'], True)
+
+                self.frame.Bind(
+                    wx.EVT_MENU,
+                    self.OnHasDisplay,
+                    id=self.popupID['display'])
+
+                if self.GetShape().IsIntermediate():
+                    popupMenu.Enable(self.popupID['display'], False)
 
         if isinstance(shape, ModelData) or \
                 isinstance(shape, ModelAction) or \
@@ -1613,6 +1680,29 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape = self.GetShape()
         shape.SetIntermediate(event.IsChecked())
         self.frame.canvas.Refresh()
+
+    def OnHasDisplay(self, event):
+        """Mark data to be displayed"""
+        self.frame.ModelChanged()
+        shape = self.GetShape()
+        shape.SetHasDisplay(event.IsChecked())
+        self.frame.canvas.Refresh()
+
+        try:
+            if event.IsChecked():
+                # add map layer to display
+                self.frame._giface.GetLayerList().AddLayer(
+                    ltype=shape.GetPrompt(), name=shape.GetValue(), checked=True,
+                    cmd=shape.GetDisplayCmd())
+            else:
+                # remove map layer(s) from display
+                layers = self.frame._giface.GetLayerList().GetLayersByName(shape.GetValue())
+                for layer in layers:
+                    self.frame._giface.GetLayerList().DeleteLayer(layer)
+                    
+        except GException as e:
+            GError(parent=self,
+                   message='{}'.format(e))
 
     def OnRemove(self, event):
         """Remove shape

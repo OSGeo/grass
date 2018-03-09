@@ -18,7 +18,7 @@ Classes:
  - model::WritePythonFile
  - model::ModelParamDialog
 
-(C) 2010-2016 by the GRASS Development Team
+(C) 2010-2018 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -354,6 +354,7 @@ class Model(object):
                                  prompt=data['prompt'],
                                  value=data['value'])
             dataItem.SetIntermediate(data['intermediate'])
+            dataItem.SetHasDisplay(data['display'])
 
             for rel in data['rels']:
                 actionItem = self.FindAction(rel['id'])
@@ -569,7 +570,7 @@ class Model(object):
     def OnPrepare(self, item, params):
         self._substituteFile(item, params, checkOnly=False)
 
-    def RunAction(self, item, params, log, onDone,
+    def RunAction(self, item, params, log, onDone=None,
                   onPrepare=None, statusbar=None):
         """Run given action
 
@@ -683,7 +684,7 @@ class Model(object):
             if isinstance(item, ModelAction):
                 if item.GetBlockId():
                     continue
-                self.RunAction(item, params, log, onDone)
+                self.RunAction(item, params, log)
             elif isinstance(item, ModelLoop):
                 cond = item.GetLabel()
 
@@ -743,7 +744,7 @@ class Model(object):
                         varDict['value'] = var
 
                         self.RunAction(item=action, params=params,
-                                       log=log, onDone=onDone)
+                                       log=log)
                 params['variables']['params'].remove(varDict)
 
         if delInterData:
@@ -1346,6 +1347,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         self.value = value
         self.prompt = prompt
         self.intermediate = False
+        self.display = False
         self.propWin = None
         if not width:
             width = UserSettings.Get(
@@ -1373,6 +1375,14 @@ class ModelData(ModelObject, ogl.EllipseShape):
     def SetIntermediate(self, im):
         """Set intermediate flag"""
         self.intermediate = im
+
+    def HasDisplay(self):
+        """Checks if data item is marked to be displayed"""
+        return self.display
+
+    def SetHasDisplay(self, tbd):
+        """Set to-be-displayed flag"""
+        self.display = tbd
 
     def OnDraw(self, dc):
         self._setPen()
@@ -1506,6 +1516,20 @@ class ModelData(ModelObject, ogl.EllipseShape):
         self._setPen()
         self.SetLabel()
 
+    def GetDisplayCmd(self):
+        """Get display command as list"""
+        cmd = []
+        if self.prompt == 'raster':
+            cmd.append('d.rast')
+        elif self.prompt == 'vector':
+            cmd.append('d.vect')
+        else:
+            raise GException("Unsupported display prompt: {}".format(
+                self.prompt))
+
+        cmd.append('map=' + self.value)
+
+        return cmd
 
 class ModelRelation(ogl.LineShape):
     """Data - action relation"""
@@ -2018,11 +2042,10 @@ class ProcessModelFile:
                 prompt = param.get('prompt', None)
                 value = self._filterValue(self._getNodeText(param, 'value'))
 
-            if data.find('intermediate') is None:
-                intermediate = False
-            else:
-                intermediate = True
+            intermediate = False if data.find('intermediate') is None else True
 
+            display = False if data.find('display') is None else True
+            
             rels = list()
             for rel in data.findall('relation'):
                 defrel = {'id': int(rel.get('id', -1)),
@@ -2041,6 +2064,7 @@ class ProcessModelFile:
                               'prompt': prompt,
                               'value': value,
                               'intermediate': intermediate,
+                              'display': display,
                               'rels': rels})
 
     def _processTask(self, node):
@@ -2381,6 +2405,8 @@ class WriteModelFile:
 
             if data.IsIntermediate():
                 self.fd.write('%s<intermediate />\n' % (' ' * self.indent))
+            if data.HasDisplay():
+                self.fd.write('%s<display />\n' % (' ' * self.indent))
 
             # relations
             for ft in ('from', 'to'):
