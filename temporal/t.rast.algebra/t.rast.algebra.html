@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-t.rast.algebra performs temporal and spatial map algebra operations on
+<em>t.rast.algebra</em> performs temporal and spatial map algebra operations on
 space time raster datasets (STRDS) using the temporal raster algebra.
 
 <h3>PROGRAM USE</h3>
@@ -97,9 +97,10 @@ overlapped        A   ------
 overlaps          A ------
                   B   ------
 
-over              booth overlaps and overlapped
+over              both overlaps and overlapped
 </pre></div>
 
+<!- TODO: fix formatting of next sentence to become readable! ->
 The relations must be read as: A is related to B, like - A equals B - A
 is during B - A contains B.
 <p>
@@ -382,8 +383,8 @@ int(x)                  convert x to integer [ truncates ]
 log(x)                  natural log of x
 sqrt(x)                 square root of x
 tan(x)                  tangent of x (x is in degrees)
-round(x)		round x to nearest integer
-sin(x)			sine of x (x is in degrees)
+round(x)                round x to nearest integer
+sin(x)                  sine of x (x is in degrees)
 isnull(x)               check if x = NULL
 isntnull(x)             check if x is not NULL
 null                    set null value
@@ -450,21 +451,27 @@ offset.
 <pre class="code">
 strds[2] 
 </pre>
-Refers to the second successor of the current map
+refers to the second successor of the current map.
+<p>
+
 <pre class="code">
 strds[1,2]
 </pre>
-Refers to the cell one row below and two columns to the right of the current
-cell in the current map
+refers to the cell one row below and two columns to the right of the current
+cell in the current map.
+<p>
+
 <pre class="code">
 strds[1,-2,-1] 
 </pre>
-Refers to the cell two rows above and one column to the left of the current
-cell of the first successor map
+refers to the cell two rows above and one column to the left of the current
+cell of the first successor map.
+<p>
+
 <pre class="code">
 strds[-2,0,1]
 </pre>
-Refers to the cell one column to the right of the current cell in the
+refers to the cell one column to the right of the current cell in the
 second predecessor map.
 
 <h2>EXAMPLES</h2>
@@ -555,6 +562,14 @@ sudo apt-get install python-ply
 sudo dnf install python-ply
 </pre></div>
 
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.overlay.html">v.overlay</a>,
+<a href="v.buffer.html">v.buffer</a>,
+<a href="v.patch.html">v.patch</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>
+</em>
 
 <h2>AUTHORS</h2>
 
