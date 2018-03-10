@@ -3632,7 +3632,7 @@ msgstr ""
 
 #: ../lib/imagery/iclass_perimeter.c:116
 msgid "Perimeter computation failed"
-msgstr ""
+msgstr "Komputasi perimeter gagal"
 
 #: ../lib/imagery/iclass_perimeter.c:208
 msgid "Absurd polygon."
@@ -3776,7 +3776,7 @@ msgstr ""
 #: ../lib/imagery/iscatt_core.c:755
 #, c-format
 msgid "Unbale to open raster <%s>"
-msgstr ""
+msgstr "Tidak dapat membuka raster <%s>"
 
 #: ../lib/imagery/iscatt_core.c:761
 #, c-format
@@ -5664,20 +5664,20 @@ msgstr ""
 #: ../lib/raster3d/close.c:47
 #, c-format
 msgid "Unable to write history for 3D raster map <%s>"
-msgstr ""
+msgstr "Tidak dapat menyimpan rekap untuk peta raster 3D <%s>"
 
 #: ../lib/raster3d/close.c:62
 #, c-format
 msgid "Unable to move temp raster map <%s> to 3D raster map <%s>"
-msgstr ""
+msgstr "Tidak dapat memindahkan peta raster sementara <%s>  ke peta raster 3D <%s>"
 
 #: ../lib/raster3d/close.c:79
 msgid "Unable to flush all tiles"
-msgstr ""
+msgstr "Tidak dapat membersihkan semua tile"
 
 #: ../lib/raster3d/close.c:84
 msgid "Unable to flush index"
-msgstr ""
+msgstr "Tidak dapat membersihkan indeks"
 
 #: ../lib/raster3d/close.c:94
 msgid "Unable to position file"
@@ -5701,7 +5701,7 @@ msgstr ""
 #: ../lib/raster3d/color.c:354
 #, c-format
 msgid "mapset <%s> is not the current mapset"
-msgstr ""
+msgstr "mapset <%s> bukan mapset terkini"
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -9167,3 +9167,6 @@ msgstr ""
 #, c-format
 msgid "%s: No font definition file"
 msgstr ""
+
+#~ msgid "unit test"
+#~ msgstr "tes unit"
