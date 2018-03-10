@@ -9181,17 +9181,17 @@ msgstr "Kann die Zeile nicht holen."
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr "G_oldsite_new_struct: Ungültige # Dimensionen oder Felder"
 
-#~ msgid "syntax error"
-#~ msgstr "Syntaxfehler"
+msgid "syntax error"
+msgstr "Syntaxfehler"
 
-#~ msgid "R/G/B not in range 0-255"
-#~ msgstr "R/G/B nicht im Wertebereich 0-255."
+msgid "R/G/B not in range 0-255"
+msgstr "R/G/B nicht im Wertebereich 0-255."
 
-#~ msgid "invalid color name"
-#~ msgstr "ungültiger Farbname"
+msgid "invalid color name"
+msgstr "ungültiger Farbname"
 
-#~ msgid "Example: income < 1000 and inhab >= 10000"
-#~ msgstr "Beispiel: Einkommen < 1000 AND Einwohner >= 10000"
+msgid "Example: income < 1000 and inhab >= 10000"
+msgstr "Beispiel: Einkommen < 1000 AND Einwohner >= 10000"
 
 #~ msgid "Using <%s@%s>..."
 #~ msgstr "Verwende <%s@%s>..."

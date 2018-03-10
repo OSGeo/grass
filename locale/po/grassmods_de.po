@@ -41060,8 +41060,8 @@ msgstr "Cache Größe (MiB)"
 msgid "Unknown raster map type"
 msgstr "Unbekannter Rasterkartentyp."
 
-#~ msgid "Path to file location"
-#~ msgstr "Pfad zum Verzeichnis der Datei."
+msgid "Path to file location"
+msgstr "Pfad zum Verzeichnis der Datei."
 
-#~ msgid "Invalid value detected"
-#~ msgstr "Ungültiger Wert entdeckt"
+msgid "Invalid value detected"
+msgstr "Ungültiger Wert entdeckt"

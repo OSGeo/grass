@@ -9440,13 +9440,13 @@ msgid "Removing empty raster maps"
 msgstr "Nombre del mapa raster de entrada."
 
 msgid "Centroid skipped (output feature type: %s)"
-msgstr "Centroide omitido (tipo de elemento de salida: %s)"
+msgstr ""
 
 msgid "Boundary skipped (output feature type: %s)"
-msgstr "Límite omitido (tipo de elemento de salida: %s)"
+msgstr ""
 
 msgid "GRASS GUI not found. Please check your installation."
-msgstr "GRASS GUI no hallada. Por favor corrobore su instalación. "
+msgstr ""
 
 msgid ""
 "{}\n"
@@ -9454,109 +9454,105 @@ msgid ""
 "\n"
 "Hit RETURN to continue.\n"
 msgstr ""
-"{}\n"
-"Cambiando a interfaz modo texto.\n"
-"\n"
-"Presione RETURN para continuar.\n"
 
 msgid "Unable to close GUI. {0}"
-msgstr "Imposible cerrar la GUI. {0}"
+msgstr ""
 
 msgid "<{0}> requested, but not available. Run GRASS in text mode (-text) or install missing package (usually 'grass-gui')."
-msgstr "<[0]> requerido, pero no disponible. Corra GRASS en modo texto (-text) o instale el paquete faltante (usualmente 'grass-gui')"
+msgstr ""
 
 msgid "Cannot find the executable {0}"
-msgstr "No se puede encontrar el ejecutable {0}"
+msgstr ""
 
 msgid "Syntax error in cell header, line %d: %s"
-msgstr "Error de sintaxis en el encabezado de celda, línea %d: %s"
+msgstr ""
 
 msgid "Invalid projection field: %s"
-msgstr "Campo de proyección no válido: %s"
+msgstr ""
 
 msgid "Invalid zone field: %s"
-msgstr "Campo zona no válido: %s"
+msgstr ""
 
 msgid "Invalid north field: %s"
-msgstr "Campo norte no válido: %s"
+msgstr ""
 
 msgid "Invalid south field: %s"
-msgstr "Campo sur no válido: %s"
+msgstr ""
 
 msgid "Invalid east field: %s"
-msgstr "Campo este no válido: %s"
+msgstr ""
 
 msgid "Invalid west field: %s"
-msgstr "Campo oeste no válido: %s"
+msgstr ""
 
 msgid "Invalid bottom field: %s"
-msgstr "Campo de fondo no válido: %s"
+msgstr ""
 
 msgid "Invalid e-w resolution field: %s"
-msgstr "Campo de resolución e-o no válido: %s"
+msgstr ""
 
 msgid "Invalid 3D e-w resolution field: %s"
-msgstr "Campo de resolución 3D e-o no válido: %s"
+msgstr ""
 
 msgid "Invalid n-s resolution field: %s"
-msgstr "Campo de resolución n-s no válido: %s"
+msgstr ""
 
 msgid "Invalid 3D n-s resolution field: %s"
-msgstr "Campo de resolución 3D n-s no válido: %s"
+msgstr ""
 
 msgid "Invalid t-b resolution field: %s"
-msgstr "Campo de resolución cima-fondo no válido: %s"
+msgstr ""
 
 msgid "Invalid rows field: %s"
-msgstr "Campo de filas no válido: %s"
+msgstr ""
 
 msgid "Invalid 3D rows field: %s"
-msgstr "Campo de filas 3D no válido: %s"
+msgstr ""
 
 msgid "Invalid cols field: %s"
-msgstr "Campo de columnas no válido: %s"
+msgstr ""
 
 msgid "Invalid 3D cols field: %s"
-msgstr "Campo de columnas 3D no válido: %s"
+msgstr ""
 
 msgid "Invalid depths field: %s"
-msgstr "Campo de profundidades no válido: %s"
+msgstr ""
 
 msgid "Invalid format field: %s"
-msgstr "Campo de formato no válido: %s"
+msgstr ""
 
 msgid "Invalid compressed field: %s"
-msgstr "Campo de compresión no válido: %s"
+msgstr ""
 
-#~ msgid "test"
-#~ msgstr "prueba"
+msgid "test"
+msgstr "prueba"
 
-#~ msgid "syntax error"
-#~ msgstr "error de sintaxis"
+msgid "syntax error"
+msgstr "error de sintaxis"
 
-#~ msgid "R/G/B not in range 0-255"
-#~ msgstr "El valor R / G / B no se encuentra en el rango 0-255."
+msgid "R/G/B not in range 0-255"
+msgstr "El valor R / G / B no se encuentra en el rango 0-255."
 
-#~ msgid "invalid color name"
-#~ msgstr "Nombre de color incorrecto."
+msgid "invalid color name"
+msgstr "Nombre de color incorrecto."
 
-#~ msgid "SQL select statement"
-#~ msgstr "Sentencia select SQL"
+msgid "SQL select statement"
+msgstr "Sentencia select SQL"
 
-#~ msgid "For example: 'select * from rybniky where kapri = 'hodne'"
-#~ msgstr "Por ejemplo:  'select * from rybniky where kapri = 'hodne'"
+msgid "For example: 'select * from rybniky where kapri = 'hodne'"
+msgstr "Por ejemplo:  'select * from rybniky where kapri = 'hodne'"
 
-#~ msgid "Example: income < 1000 and inhab >= 10000"
-#~ msgstr "Ejemplo: salario < 1000 y habitantes >=10000."
+msgid "Example: income < 1000 and inhab >= 10000"
+msgstr "Ejemplo: salario < 1000 y habitantes >=10000."
 
-#~ msgid "An error occurred while running r3.mapcalc"
-#~ msgstr "Ocurrió un error al correr r3.mapcalc"
+msgid "An error occurred while running r3.mapcalc"
+msgstr "Ocurrió un error al correr r3.mapcalc"
 
-#~ msgid "An error occurred while running r.mapcalc"
-#~ msgstr "Ocurrió un error al correr r.mapcalc"
+msgid "An error occurred while running r.mapcalc"
+msgstr "Ocurrió un error al correr r.mapcalc"
 
-#~ msgid "Object <%s> not found in the temporal database"
-#~ msgstr "Objeto <%s> no encontrado en la base de datos temporales"
+msgid "Object <%s> not found in the temporal database"
+msgstr "Objeto <%s> no encontrado en la base de datos temporales"
 
 #~ msgid "Data element '%s/%s' was found in more mapsets (also found in <%s>)"
 #~ msgstr "Elemento de datos '%s/%s' encontrado en otros directorios de mapas (también encontrado en <%s>)"

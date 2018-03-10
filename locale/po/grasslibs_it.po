@@ -9249,26 +9249,26 @@ msgstr "%(user)s sta eseguendo GRASS nel mapset selezionato (file %(file)s trova
 msgid "%s variable defined, %s ignored"
 msgstr "variabile %s definita, %s ignorata"
 
-#~ msgid "test"
-#~ msgstr "test"
+msgid "test"
+msgstr "test"
 
-#~ msgid "syntax error"
-#~ msgstr "errore di sintassi"
+msgid "syntax error"
+msgstr "errore di sintassi"
 
-#~ msgid "R/G/B not in range 0-255"
-#~ msgstr "R/G/B non in raggio 0-255"
+msgid "R/G/B not in range 0-255"
+msgstr "R/G/B non in raggio 0-255"
 
-#~ msgid "invalid color name"
-#~ msgstr "Nome del colore non valido"
+msgid "invalid color name"
+msgstr "Nome del colore non valido"
 
-#~ msgid "An error occurred while running r3.mapcalc"
-#~ msgstr "Si è verificato un errore durante l'esecuzione di r3.mapcalc"
+msgid "An error occurred while running r3.mapcalc"
+msgstr "Si è verificato un errore durante l'esecuzione di r3.mapcalc"
 
-#~ msgid "An error occurred while running r.mapcalc"
-#~ msgstr "Si è verificato un errore durante l'esecuzione di r.mapcalc"
+msgid "An error occurred while running r.mapcalc"
+msgstr "Si è verificato un errore durante l'esecuzione di r.mapcalc"
 
-#~ msgid "SQL select statement"
-#~ msgstr "Condizione select di SQL"
+msgid "SQL select statement"
+msgstr "Condizione select di SQL"
 
-#~ msgid "Example: income < 1000 and inhab >= 10000"
-#~ msgstr "Esempio: income < 1000 e inhab >= 10000"
+msgid "Example: income < 1000 and inhab >= 10000"
+msgstr "Esempio: income < 1000 e inhab >= 10000"

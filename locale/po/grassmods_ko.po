@@ -40559,7 +40559,7 @@ msgid "Unable to create vector map"
 msgstr "출력할 래스터맵"
 
 msgid "resolution"
-msgstr "해상도"
+msgstr ""
 
 #~ msgid "NDVI"
 #~ msgstr "NDVI"

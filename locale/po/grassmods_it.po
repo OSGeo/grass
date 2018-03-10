@@ -40650,8 +40650,8 @@ msgstr "Dev'essere specificato \"-i\" o \"-r\", o le opzioni \"color\", \"rast\"
 msgid "One of -%c or options <%s>, <%s> or <%s> must be specified"
 msgstr "Dev'essere specificato \"-i\" o \"-r\", o le opzioni \"color\", \"rast\" o \"rules\"!"
 
-#~ msgid "Path to file location"
-#~ msgstr "Percorso per la location del file"
+msgid "Path to file location"
+msgstr "Percorso per la location del file"
 
 #~ msgid "NDVI"
 #~ msgstr "NDVI"

@@ -9208,14 +9208,14 @@ msgstr "Nie można pobrać wiersza"
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr "G_oldsite_new_struct: błedne # wymiary lub pola"
 
-#~ msgid "syntax error"
-#~ msgstr "błąd składni"
+msgid "syntax error"
+msgstr "błąd składni"
 
-#~ msgid "R/G/B not in range 0-255"
-#~ msgstr "R/G/B poza zakresem 0-255"
+msgid "R/G/B not in range 0-255"
+msgstr "R/G/B poza zakresem 0-255"
 
-#~ msgid "invalid color name"
-#~ msgstr "nieprawidłowa nazwa koloru"
+msgid "invalid color name"
+msgstr "nieprawidłowa nazwa koloru"
 
-#~ msgid "Example: income < 1000 and inhab >= 10000"
-#~ msgstr "Przykład: dochód < 1000 i inhab >= 10000"
+msgid "Example: income < 1000 and inhab >= 10000"
+msgstr "Przykład: dochód < 1000 i inhab >= 10000"

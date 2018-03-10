@@ -9153,11 +9153,11 @@ msgstr "%d kategorisinin veritabanı kaydı bulunamıyor"
 msgid "Cannot fetch row"
 msgstr "Katman bilgisi alınamıyor"
 
-#~ msgid "syntax error"
-#~ msgstr "Girdi yazım hatası"
+msgid "syntax error"
+msgstr "Girdi yazım hatası"
 
-#~ msgid "invalid color name"
-#~ msgstr "Geçersiz renk adı"
+msgid "invalid color name"
+msgstr "Geçersiz renk adı"
 
-#~ msgid "Example: income < 1000 and inhab >= 10000"
-#~ msgstr "Örnek:  income < 1000 and inhab >= 10000"
+msgid "Example: income < 1000 and inhab >= 10000"
+msgstr "Örnek:  income < 1000 and inhab >= 10000"

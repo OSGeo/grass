@@ -18041,7 +18041,77 @@ msgid "Build Platform"
 msgstr "Plateforme"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
-msgstr "Assigner des horodatages et enregistrer des cartes raster, vecteur et raster3d dans un jeu de données temporel."
+msgstr ""
+
+msgid "Failed to copy map: action is allowed only within the same location."
+msgstr "Échec de copie de la carte : l'action n'est autorisée qu'au sein du même secteur."
+
+msgid ""
+"Vector temporal dataset (stvds)\n"
+"Press ENTER if you type the name of the stvds instead of selecting with the combobox"
+msgstr ""
+"Jeu de données vecteur temporel (stvds)\n"
+"Appuyer sur ENTRER si vous saisissez le nom du stvds au lieu de le sélectionner dans la liste"
+
+msgid "Creates a 3D raster map from LAS LiDAR points"
+msgstr "Créer une carte raster 3D depuis des points LIDAR LAS"
+
+msgid "LAS LiDAR points export"
+msgstr "Export de points LIDAR LAS"
+
+msgid "Exports vector points as LAS point cloud Converts LAS LiDAR point clouds to a GRASS vector map with libLAS"
+msgstr "Exporte un vecteur de points en un nuage de points LAS. Convertit des nuages de points LIDAR LAS vers une carte vecteur GRASS avec libLAS."
+
+msgid "Decimates a point cloud"
+msgstr "Décimer un nuage de points"
+
+msgid "Decimates a point cloud Copies points from one vector to another while applying different decimations"
+msgstr "Décimer un nuage de points. Copie des points d'un vecteur vers un autre en appliquant différents algorithmes de décimation."
+
+msgid "Compute 3D flow lines"
+msgstr "Calcule les lignes de flux 3D"
+
+msgid "Computes 3D flow lines and 3D flow accumulation."
+msgstr "Calcule les lignes de flux 3D et les accumulation de flux."
+
+msgid "Compute gradient"
+msgstr "Calcul du gradient"
+
+msgid "Computes gradient of a 3D raster map and outputs gradient components as three 3D raster maps."
+msgstr "Calcule le gradient d'une carte raster 3D et sort les composantes du gradient dans trois cartes raster 3D."
+
+msgid "Convert raster dataset to vector dataset "
+msgstr "Convertir un jeu de données raster vers un jeu de données vecteur"
+
+msgid "Converts a space time raster dataset into a space time vector dataset"
+msgstr "Converti un jeunde données raster temporel vers un jeu de données vecteur temporel"
+
+msgid "Contours from a space time raster dataset"
+msgstr "Contours depuis un jeu de données raster temporel"
+
+msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgstr "Produit un jeu de données vecteur temporel des contours spécifiés à partir d'un jeu de données raster temporel."
+
+msgid "Temporal algebra"
+msgstr "Algèbre temporelle"
+
+msgid "Temporal raster algebra"
+msgstr "Algèbre temporelle raster"
+
+msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
+msgstr "Applique des opérations spatiales et temporelles sur des jeux de données raster temporel à l'aide de l'algèbre temporelle raster."
+
+msgid "Temporal 3D raster algebra"
+msgstr "Algèbre temporelle raster 3D"
+
+msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
+msgstr "Applique des opérations spatiales et temporelles sur des jeux de données raster 3D temporel à l'aide de l'algèbre temporelle raster 3D."
+
+msgid "Temporal vector algebra"
+msgstr "Algèbre temporelle vecteur"
+
+msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
+msgstr "Applique des opérations spatiales et temporelles sur des jeux de données vecteur temporel à l'aide de l'algèbre temporelle vecteur."
 
 #~ msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
 #~ msgstr "Créer une carte raster à partir de statistiques univariées sur des points LIDAR LAS."
@@ -18051,9 +18121,6 @@ msgstr "Assigner des horodatages et enregistrer des cartes raster, vecteur et ra
 
 #~ msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
 #~ msgstr "Crée un rendu 3D de données SIG. Rends les surfaces (données raster), les données vecteurs 2D/3D, et les volumes (données raster 3D), en 3D."
-
-#~ msgid "Failed to copy map: action is allowed only within the same location."
-#~ msgstr "Échec de copie de la carte : l'action n'est autorisée qu'au sein du même secteur."
 
 #~ msgid "Exports a vector map layer to PostGIS feature table."
 #~ msgstr "Exporter une carte vecteur vers une table PostGIS."
@@ -18084,13 +18151,6 @@ msgstr "Assigner des horodatages et enregistrer des cartes raster, vecteur et ra
 
 #~ msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
 #~ msgstr "L'outil de graphiques temporels nécessite que le paquet 'matplotlib' (python-matplotlib) soit installé. {0}"
-
-#~ msgid ""
-#~ "Vector temporal dataset (stvds)\n"
-#~ "Press ENTER if you type the name of the stvds instead of selecting with the combobox"
-#~ msgstr ""
-#~ "Jeu de données vecteur temporel (stvds)\n"
-#~ "Appuyer sur ENTRER si vous saisissez le nom du stvds au lieu de le sélectionner dans la liste"
 
 #~ msgid "Details: unsupported tag name '{0}'."
 #~ msgstr "Détail : nom d'option non supportée '{0}'"
@@ -18129,15 +18189,6 @@ msgstr "Assigner des horodatages et enregistrer des cartes raster, vecteur et ra
 #~ msgid "Unable to read IAU codes: {0}"
 #~ msgstr "Impossible de lire les codes IAU : {0}"
 
-#~ msgid "Creates a 3D raster map from LAS LiDAR points"
-#~ msgstr "Créer une carte raster 3D depuis des points LIDAR LAS"
-
-#~ msgid "LAS LiDAR points export"
-#~ msgstr "Export de points LIDAR LAS"
-
-#~ msgid "Exports vector points as LAS point cloud Converts LAS LiDAR point clouds to a GRASS vector map with libLAS"
-#~ msgstr "Exporte un vecteur de points en un nuage de points LAS. Convertit des nuages de points LIDAR LAS vers une carte vecteur GRASS avec libLAS."
-
 #~ msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
 #~ msgstr "Rediriger la sortie raster vers un fichier utilisant la librairie GDAL plutôt que de le stocker au format raster GRASS."
 
@@ -18155,57 +18206,6 @@ msgstr "Assigner des horodatages et enregistrer des cartes raster, vecteur et ra
 
 #~ msgid "Tests for normality for vector points"
 #~ msgstr "Tests de normalité des points fecteurs"
-
-#~ msgid "Decimates a point cloud"
-#~ msgstr "Décimer un nuage de points"
-
-#~ msgid "Decimates a point cloud Copies points from one vector to another while applying different decimations"
-#~ msgstr "Décimer un nuage de points. Copie des points d'un vecteur vers un autre en appliquant différents algorithmes de décimation."
-
-#~ msgid "Compute 3D flow lines"
-#~ msgstr "Calcule les lignes de flux 3D"
-
-#~ msgid "Computes 3D flow lines and 3D flow accumulation."
-#~ msgstr "Calcule les lignes de flux 3D et les accumulation de flux."
-
-#~ msgid "Compute gradient"
-#~ msgstr "Calcul du gradient"
-
-#~ msgid "Computes gradient of a 3D raster map and outputs gradient components as three 3D raster maps."
-#~ msgstr "Calcule le gradient d'une carte raster 3D et sort les composantes du gradient dans trois cartes raster 3D."
-
-#~ msgid "Convert raster dataset to vector dataset "
-#~ msgstr "Convertir un jeu de données raster vers un jeu de données vecteur"
-
-#~ msgid "Converts a space time raster dataset into a space time vector dataset"
-#~ msgstr "Converti un jeunde données raster temporel vers un jeu de données vecteur temporel"
-
-#~ msgid "Contours from a space time raster dataset"
-#~ msgstr "Contours depuis un jeu de données raster temporel"
-
-#~ msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
-#~ msgstr "Produit un jeu de données vecteur temporel des contours spécifiés à partir d'un jeu de données raster temporel."
-
-#~ msgid "Temporal algebra"
-#~ msgstr "Algèbre temporelle"
-
-#~ msgid "Temporal raster algebra"
-#~ msgstr "Algèbre temporelle raster"
-
-#~ msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
-#~ msgstr "Applique des opérations spatiales et temporelles sur des jeux de données raster temporel à l'aide de l'algèbre temporelle raster."
-
-#~ msgid "Temporal 3D raster algebra"
-#~ msgstr "Algèbre temporelle raster 3D"
-
-#~ msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
-#~ msgstr "Applique des opérations spatiales et temporelles sur des jeux de données raster 3D temporel à l'aide de l'algèbre temporelle raster 3D."
-
-#~ msgid "Temporal vector algebra"
-#~ msgstr "Algèbre temporelle vecteur"
-
-#~ msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
-#~ msgstr "Applique des opérations spatiales et temporelles sur des jeux de données vecteur temporel à l'aide de l'algèbre temporelle vecteur."
 
 #~ msgid "Select/create group:"
 #~ msgstr "Séletionner/créer un groupe :"
