@@ -5513,7 +5513,7 @@ msgstr "Seulement %d%% de la fenêtre sauvegardée dans \"%s\" chevauche(nt) la 
 #: ../lib/gpde/n_gwflow.c:436 ../lib/gpde/n_gwflow.c:715
 #, c-format
 msgid "The total sum of the water budget: %g\n"
-msgstr "La somme totale du \"water budget\" : %g\n"
+msgstr ""
 
 #: ../lib/gpde/n_gwflow.c:438 ../lib/gpde/n_gwflow.c:717
 #, c-format

@@ -2111,7 +2111,7 @@ msgstr "无法由驱动<%s>打开数据库 <%s>"
 #: ../vector/v.in.ascii/main.c:413
 #, c-format
 msgid "Unable to create table: %s"
-msgstr "无法创建表 %s"
+msgstr "无法创建表 <%s>"
 
 #: ../raster3d/r3.flow/main.c:67 ../raster/r.contour/main.c:188
 #: ../vector/v.reclass/main.c:322 ../vector/v.in.lidar/attributes.c:139
@@ -2120,7 +2120,7 @@ msgstr "无法创建表 %s"
 #: ../vector/v.in.ascii/main.c:521
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
-msgstr "无法为表 <%s>创建索引<%s>"
+msgstr "无法为表 <%s>创建索引 <%s>"
 
 #: ../raster3d/r3.flow/main.c:72 ../raster/r.stream.extract/close.c:196
 #: ../raster/r.to.vect/main.c:238 ../raster/r.random/random.c:257
