@@ -9188,14 +9188,14 @@ msgstr "Невозможно получить ряд"
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr "G_oldsite_new_struct: неправильное число размерностей или полей"
 
-#~ msgid "syntax error"
-#~ msgstr "синтаксическая ошибка"
+msgid "syntax error"
+msgstr "синтаксическая ошибка"
 
-#~ msgid "R/G/B not in range 0-255"
-#~ msgstr "R/G/B вне диапазона 0-255"
+msgid "R/G/B not in range 0-255"
+msgstr "R/G/B вне диапазона 0-255"
 
-#~ msgid "invalid color name"
-#~ msgstr "неверное имя цвета"
+msgid "invalid color name"
+msgstr "неверное имя цвета"
 
-#~ msgid "Example: income < 1000 and inhab >= 10000"
-#~ msgstr "Пример: income < 1000 and inhab >= 10000"
+msgid "Example: income < 1000 and inhab >= 10000"
+msgstr "Пример: income < 1000 and inhab >= 10000"

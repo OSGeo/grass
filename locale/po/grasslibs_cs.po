@@ -9193,14 +9193,14 @@ msgstr "Nesprávné jméno vektorové mapy <%s>"
 msgid "Removing empty 3D raster maps"
 msgstr "Název vstupní rastrové mapy"
 
-#~ msgid "syntax error"
-#~ msgstr "syntaktická chyba"
+msgid "syntax error"
+msgstr "syntaktická chyba"
 
-#~ msgid "R/G/B not in range 0-255"
-#~ msgstr "R/G/B není v rozsahu 0-255"
+msgid "R/G/B not in range 0-255"
+msgstr "R/G/B není v rozsahu 0-255"
 
-#~ msgid "invalid color name"
-#~ msgstr "neplatný název barvy"
+msgid "invalid color name"
+msgstr "neplatný název barvy"
 
-#~ msgid "Example: income < 1000 and inhab >= 10000"
-#~ msgstr "Příklad: příjem < 1000 AND obyvatelé >= 10000"
+msgid "Example: income < 1000 and inhab >= 10000"
+msgstr "Příklad: příjem < 1000 AND obyvatelé >= 10000"

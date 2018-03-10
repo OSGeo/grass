@@ -41462,76 +41462,82 @@ msgid "Input file <%s> is not a LAS LiDAR point cloud"
 msgstr "Archivo de entrada <%s> no es nube de puntos LAS LiDAR"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
-msgstr "Asigna estampa temporal y registra mapas ráster, vectoriales y ráster 3D en un conjunto de datos espacio temporal."
+msgstr ""
 
 msgid "Format for absolute time: \"yyyy-mm-dd HH:MM:SS +HHMM\", relative time is of type integer."
-msgstr "El formato para tiempo absoluto es \"yyyy-mm-dd HH:MM:SS +HHMM\", el tiempo relativo es de tipo entero."
+msgstr ""
 
 msgid "Unit must be set in case of relative timestamps"
-msgstr "La unidad debe ser definida en caso de marcas temporales relativas"
+msgstr ""
 
 msgid "computational region"
-msgstr "región computacional"
+msgstr ""
 
 msgid "resolution"
-msgstr "resolución"
+msgstr ""
 
 msgid "level1"
-msgstr "nivel1"
+msgstr ""
 
 msgid "Estimate point density and distance and quit"
-msgstr "Estimar densidad de puntos y distancia y salir"
+msgstr ""
 
 msgid "Estimated point density: %.4g\n"
-msgstr "Densidad de puntos estimada: %.4g\n"
+msgstr ""
 
 msgid "Subregion %d of %d"
-msgstr "Subregión %d de %d"
+msgstr ""
 
 msgid "Performing mean calculation..."
-msgstr "Realizando el cálculo del promedio..."
+msgstr ""
 
 msgid "Feature type '%s' not supported"
-msgstr "Tipo de elemento '%s' no soportado"
+msgstr ""
 
 msgid "Performing bilinear interpolation..."
-msgstr "Realizando interpolación bilineal..."
+msgstr ""
 
 msgid "Performing bicubic interpolation..."
-msgstr "Realizando interpolación bicúbica..."
+msgstr ""
 
 msgid "Point classification..."
-msgstr "Clasificación de puntos..."
+msgstr ""
 
 msgid "Name for output vector density map"
-msgstr "Nombre para mapa vectorial de densidad de salida"
+msgstr ""
 
 msgid "Bands"
-msgstr "Bandas"
+msgstr ""
 
 msgid "Pass #%d (of %d)..."
-msgstr "Paso #%d (de %d)..."
+msgstr ""
 
 msgid "%lu points found in input file(s)"
-msgstr "%lu puntos encontrados en archivo(s) de entrada"
+msgstr ""
 
-#~ msgid "Path to file location"
-#~ msgstr "Ruta a la localización del archivo"
+msgid "Path to file location"
+msgstr "Ruta a la localización del archivo"
 
-#~ msgid "Non-NULL cells: %ld"
-#~ msgstr "Celdas no nulas: %ld"
+msgid "Non-NULL cells: %ld"
+msgstr "Celdas no nulas: %ld"
 
-#~ msgid "Invalid value detected"
-#~ msgstr "Valor detectado no válido"
+msgid "Invalid value detected"
+msgstr "Valor detectado no válido"
+
+msgid "3D raster"
+msgstr "Ráster 3D"
+
+msgid "Creates a 3D raster map from LAS LiDAR points"
+msgstr "Crea un mapa ráster 3D a partir de puntos LAS LiDAR"
+
+msgid "Error in writing data"
+msgstr "Error al escribir datos"
+
+msgid "Invalid number of iterations, 100 will be used"
+msgstr "La cantidad de iteraciones no es válida, se usarán 100"
 
 #~ msgid "eading the input map -%s- and -%s- and creating some temporary files..."
 #~ msgstr "leyendo mapa de entrada -%s y -%s- y creando algunos archivos temporales..."
-
-#~ msgid "3D raster"
-#~ msgstr "Ráster 3D"
-
-#~ msgid "Creates a 3D raster map from LAS LiDAR points"
-#~ msgstr "Crea un mapa ráster 3D a partir de puntos LAS LiDAR"
 
 #~ msgid "NDVI"
 #~ msgstr "NDVI"
@@ -41547,12 +41553,6 @@ msgstr "%lu puntos encontrados en archivo(s) de entrada"
 
 #~ msgid "FFT is now complete"
 #~ msgstr "FFT ha finalizado"
-
-#~ msgid "Error in writing data"
-#~ msgstr "Error al escribir datos"
-
-#~ msgid "Invalid number of iterations, 100 will be used"
-#~ msgstr "La cantidad de iteraciones no es válida, se usarán 100"
 
 #~ msgid "The distance must be smaller than the size of the moving window"
 #~ msgstr "La distancia debe ser menor que el tamaño de la ventana móvil"

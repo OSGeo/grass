@@ -17866,19 +17866,19 @@ msgid "Digitize"
 msgstr "Digitalizar"
 
 msgid "failed to open '{0}'"
-msgstr "Não foi possível abrir '{0}'"
+msgstr ""
 
 msgid "Wx debug level {0}."
-msgstr "Nível de depuração do Wx {0}."
+msgstr ""
 
 msgid "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n"
-msgstr "Aviso: Ignorando nivel de depuração inválido para o wx (deve estar entre >=0 e <=5). {0}\n"
+msgstr ""
 
 msgid "GRASS locations in {0}"
-msgstr "Locations do GRASS em {0}"
+msgstr ""
 
 msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "A ferramenta Timeline necessita do pacote \"matplotlib\"(python-matplotlib) instalado. {0}"
+msgstr ""
 
-#~ msgid "Failed to copy map: action is allowed only within the same location."
-#~ msgstr "Falha ao copiar o mapa: ação só é possível dentro da mesma location."
+msgid "Failed to copy map: action is allowed only within the same location."
+msgstr "Falha ao copiar o mapa: ação só é possível dentro da mesma location."

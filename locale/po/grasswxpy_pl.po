@@ -17666,13 +17666,13 @@ msgid "Print/add/remove a timestamp for a 3D raster map"
 msgstr "Odświerz/dodaj/usuń znacznik czasu dla mapy rastrowej 3D"
 
 msgid "failed to open '{0}'"
-msgstr "nie można otworzyć '{0}'"
+msgstr ""
 
 msgid "Region settings"
-msgstr "Ustawienia regionu"
+msgstr ""
 
-#~ msgid "Failed to copy map: action is allowed only within the same location."
-#~ msgstr "NIe można skopiować mapy: akcja jest możliwa tylko w tej samej lokacji."
+msgid "Failed to copy map: action is allowed only within the same location."
+msgstr "NIe można skopiować mapy: akcja jest możliwa tylko w tej samej lokacji."
 
 #~ msgid "New mapset:"
 #~ msgstr "Nowy mapset:"

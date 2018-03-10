@@ -17899,59 +17899,121 @@ msgid "Unable to read EPGS codes: %s"
 msgstr "No se pueden leer los códigos EPSG: %s"
 
 msgid "failed to open '{0}'"
-msgstr "no ha sido posible abrir '{0}'"
+msgstr ""
 
 msgid "GRASS locations in {0}"
-msgstr "Localizaciones de GRASS en {0}"
+msgstr ""
 
 msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "La herramienta Línea de Tiempo necesita que el paquete \"matplotlib\" (python-matplotlib) esté instalado. {0}"
+msgstr ""
 
 msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "La herramienta de gráfica de dispersión necesita que el paquete \"matplotlib\" (mathplotlib-python) esté instalado. {0}"
+msgstr ""
 
 msgid "Unicode error detected. Check your locale settings. Details: {0}"
-msgstr "Error de Unicode detectado. Revise su configuración local. Detalles: {0}"
+msgstr ""
 
 msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "La herramienta de gráfica temporal necesita que el paquete \"matplotlib\" (mathplotlib-python) esté instalado. {0}"
+msgstr ""
 
 msgid "Category {ca} is not on vector map {ma} and it will be not used"
-msgstr "La categoría {ca} no está en el mapa vectorial {m} y no será usada"
+msgstr ""
 
 msgid "Details: unsupported tag name '{0}'."
-msgstr "Detalles: nombre de etiqueta no soportado '{0}'."
+msgstr ""
 
 msgid "Align computational region to selected map"
-msgstr "Alinear la región computacional al mapa seleccionado"
+msgstr ""
 
 msgid ""
 "Failed to run command '%(command)s'. Details:\n"
 "%(error)s"
 msgstr ""
-"No se pudo ejecutar el comando '%(command)s'. Detalles:\n"
-"%(error)s"
 
 msgid "Region settings"
-msgstr "Configuración de la región"
+msgstr ""
 
 msgid "Align region to resolution"
-msgstr "Alinear la región a la resolución"
+msgstr ""
 
 msgid "Unable to read EPGS codes: {0}"
-msgstr "Imposible leer los códigos EPGS: {0}"
+msgstr ""
 
 msgid "Unable to provide citation suggestion, see GRASS GIS website instead. The error was: {0}"
-msgstr "No se puede proveer una sugerencia sobre la forma de citar, por favor vea el sitio web de GRASS GIS. El error fue: {0}"
+msgstr ""
 
 msgid "Unable to read IAU codes: {0}"
-msgstr "No ha sido posible leer códigos IAU: {0}"
+msgstr ""
 
 msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
-msgstr "Redirecciona el ráster de salida a un archivo utilizando la librería GDAL en lugar de almacenarlo como formato ráster de GRASS."
+msgstr ""
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
-msgstr "Asigna estampa temporal y registra mapas ráster, vectoriales y raster 3D en un conjunto de datos espacio temporal."
+msgstr ""
+
+msgid "Failed to copy map: action is allowed only within the same location."
+msgstr "Error al copiar mapa: esta acción está solo permitida dentro de la misma localización."
+
+msgid ""
+"Vector temporal dataset (stvds)\n"
+"Press ENTER if you type the name of the stvds instead of selecting with the combobox"
+msgstr ""
+"Conjunto de datos vectoriales espacio temporales (stvds)\n"
+"Presione ENTER si escribe el nombre del stvds en lugar de seleccionarlo con la lista desplegable."
+
+msgid "Creates a 3D raster map from LAS LiDAR points"
+msgstr "Crea un mapa ráster 3D a partir de puntos LAS LiDAR"
+
+msgid "LAS LiDAR points export"
+msgstr "Exportar puntos LAS LiDAR"
+
+msgid "Exports vector points as LAS point cloud Converts LAS LiDAR point clouds to a GRASS vector map with libLAS"
+msgstr "Exporta puntos vectoriales como una nube de puntos LAS. Convierte nubes de puntos LAS LiDAR a un mapa vectorial con libLAS"
+
+msgid "Decimates a point cloud"
+msgstr "Decimar nube de puntos"
+
+msgid "Compute 3D flow lines"
+msgstr "Computar líneas de flujo 3D"
+
+msgid "Computes 3D flow lines and 3D flow accumulation."
+msgstr "Calculas líneas de flujo 3D y acumulación de flujo 3D"
+
+msgid "Compute gradient"
+msgstr "Computar gradiente"
+
+msgid "Convert raster dataset to vector dataset "
+msgstr "Convertir conjuntos de datos ráster a vector"
+
+msgid "Converts a space time raster dataset into a space time vector dataset"
+msgstr "Convierte un conjunto de datos ráster espacio temporales en un conjunto de datos vectoriales espacio temporales."
+
+msgid "Contours from a space time raster dataset"
+msgstr "Contornos a partir de un conjunto de datos ráster espacio temporales"
+
+msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgstr "Produce un conjunto de datos vectoriales espacio temporales con los contornos especificados a partir de un conjunto de datos ráster espacio temporales."
+
+msgid "Temporal algebra"
+msgstr "Algebra temporal"
+
+msgid "Temporal raster algebra"
+msgstr "Álgebra temporal de rásters"
+
+msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
+msgstr "Aplicar operaciones temporales y espaciales sobre un conjunto de datos ráster espacio temporales usando álgebra temporal."
+
+msgid "Temporal 3D raster algebra"
+msgstr "Álgebra temporal de rásters 3D"
+
+msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
+msgstr "Aplicar operaciones temporales y espaciales sobre un conjunto de datos ráster 3D espacio temporales usando álgebra temporal."
+
+msgid "Temporal vector algebra"
+msgstr "Álgebra temporal de vectores"
+
+msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
+msgstr "Aplicar operaciones temporales y espaciales sobre un conjunto de datos vectoriales espacio temporales usando álgebra temporal."
 
 #~ msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
 #~ msgstr "Crea un mapa ráster a partir de puntos LAS LiDAR usando estadísticas univariadas."
@@ -17965,18 +18027,8 @@ msgstr "Asigna estampa temporal y registra mapas ráster, vectoriales y raster 3
 #~ msgid "Exports a vector map layer to PostGIS feature table."
 #~ msgstr "Exporta una capa de mapa vectorial a tabla de elemetos PostGIS."
 
-#~ msgid "Failed to copy map: action is allowed only within the same location."
-#~ msgstr "Error al copiar mapa: esta acción está solo permitida dentro de la misma localización."
-
 #~ msgid "New mapset:"
 #~ msgstr "Nuevo Directorio de mapas:"
-
-#~ msgid ""
-#~ "Vector temporal dataset (stvds)\n"
-#~ "Press ENTER if you type the name of the stvds instead of selecting with the combobox"
-#~ msgstr ""
-#~ "Conjunto de datos vectoriales espacio temporales (stvds)\n"
-#~ "Presione ENTER si escribe el nombre del stvds en lugar de seleccionarlo con la lista desplegable."
 
 #~ msgid "This option allows setting default computation region immediately after new location is created. Default computation region can be defined later using g.region based on imported data."
 #~ msgstr "Esta opción permite definir la región computacional predeterminada inmediatamente después de que se crea una nueva Localización. La región computacional predeterminada puede ser definida más tarde usando g.region en los datos importados."
@@ -17986,15 +18038,6 @@ msgstr "Asigna estampa temporal y registra mapas ráster, vectoriales y raster 3
 
 #~ msgid "This option allows creating user mapset immediately after new location is created. Note that GRASS always creates PERMANENT mapset."
 #~ msgstr "Esta opción permite crear un Directorio de mapas del usuario luego de que se crea una nueva Localización. Note que GRASS siempre crea el Directorio de mapas PERMANENT."
-
-#~ msgid "Creates a 3D raster map from LAS LiDAR points"
-#~ msgstr "Crea un mapa ráster 3D a partir de puntos LAS LiDAR"
-
-#~ msgid "LAS LiDAR points export"
-#~ msgstr "Exportar puntos LAS LiDAR"
-
-#~ msgid "Exports vector points as LAS point cloud Converts LAS LiDAR point clouds to a GRASS vector map with libLAS"
-#~ msgstr "Exporta puntos vectoriales como una nube de puntos LAS. Convierte nubes de puntos LAS LiDAR a un mapa vectorial con libLAS"
 
 #~ msgid "Point analysis"
 #~ msgstr "Análisis de puntos"
@@ -18007,48 +18050,3 @@ msgstr "Asigna estampa temporal y registra mapas ráster, vectoriales y raster 3
 
 #~ msgid "Tests for normality for vector points"
 #~ msgstr "Prueba de normalidad para vector de puntos"
-
-#~ msgid "Decimates a point cloud"
-#~ msgstr "Decimar nube de puntos"
-
-#~ msgid "Compute 3D flow lines"
-#~ msgstr "Computar líneas de flujo 3D"
-
-#~ msgid "Computes 3D flow lines and 3D flow accumulation."
-#~ msgstr "Calculas líneas de flujo 3D y acumulación de flujo 3D"
-
-#~ msgid "Compute gradient"
-#~ msgstr "Computar gradiente"
-
-#~ msgid "Convert raster dataset to vector dataset "
-#~ msgstr "Convertir conjuntos de datos ráster a vector"
-
-#~ msgid "Converts a space time raster dataset into a space time vector dataset"
-#~ msgstr "Convierte un conjunto de datos ráster espacio temporales en un conjunto de datos vectoriales espacio temporales."
-
-#~ msgid "Contours from a space time raster dataset"
-#~ msgstr "Contornos a partir de un conjunto de datos ráster espacio temporales"
-
-#~ msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
-#~ msgstr "Produce un conjunto de datos vectoriales espacio temporales con los contornos especificados a partir de un conjunto de datos ráster espacio temporales."
-
-#~ msgid "Temporal algebra"
-#~ msgstr "Algebra temporal"
-
-#~ msgid "Temporal raster algebra"
-#~ msgstr "Álgebra temporal de rásters"
-
-#~ msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
-#~ msgstr "Aplicar operaciones temporales y espaciales sobre un conjunto de datos ráster espacio temporales usando álgebra temporal."
-
-#~ msgid "Temporal 3D raster algebra"
-#~ msgstr "Álgebra temporal de rásters 3D"
-
-#~ msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
-#~ msgstr "Aplicar operaciones temporales y espaciales sobre un conjunto de datos ráster 3D espacio temporales usando álgebra temporal."
-
-#~ msgid "Temporal vector algebra"
-#~ msgstr "Álgebra temporal de vectores"
-
-#~ msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
-#~ msgstr "Aplicar operaciones temporales y espaciales sobre un conjunto de datos vectoriales espacio temporales usando álgebra temporal."

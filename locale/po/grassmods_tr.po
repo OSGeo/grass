@@ -40590,5 +40590,5 @@ msgstr "Önbellek boyutu (MiB)"
 msgid "Unknown raster map type"
 msgstr "Bilinmeyen raster harita tipi"
 
-#~ msgid "Path to file location"
-#~ msgstr "Dosya yeri yolu"
+msgid "Path to file location"
+msgstr "Dosya yeri yolu"

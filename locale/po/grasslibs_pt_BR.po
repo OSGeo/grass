@@ -9147,5 +9147,5 @@ msgstr "Registro no banco de dados para categoria %d não encontrado"
 msgid "Cannot fetch row"
 msgstr "não consegui obter informações da camada"
 
-#~ msgid "invalid color name"
-#~ msgstr "nome de cor inválido"
+msgid "invalid color name"
+msgstr "nome de cor inválido"

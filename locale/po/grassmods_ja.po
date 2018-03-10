@@ -40882,10 +40882,10 @@ msgid "Unknown raster map type"
 msgstr "不明なラスターマップのタイプ"
 
 msgid "resolution"
-msgstr "解像度"
+msgstr ""
 
-#~ msgid "3D raster"
-#~ msgstr "3Dラスター "
+msgid "3D raster"
+msgstr "3Dラスター "
 
-#~ msgid "Path to file location"
-#~ msgstr "ファイルロケーションへのパス"
+msgid "Path to file location"
+msgstr "ファイルロケーションへのパス"

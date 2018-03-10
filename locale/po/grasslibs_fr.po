@@ -5513,7 +5513,7 @@ msgstr "Seulement %d%% de la fenêtre sauvegardée dans \"%s\" chevauche(nt) la 
 #: ../lib/gpde/n_gwflow.c:436 ../lib/gpde/n_gwflow.c:715
 #, c-format
 msgid "The total sum of the water budget: %g\n"
-msgstr "La somme totale du \"water budget\" : %g\n"
+msgstr ""
 
 #: ../lib/gpde/n_gwflow.c:438 ../lib/gpde/n_gwflow.c:717
 #, c-format
@@ -9485,17 +9485,35 @@ msgstr ""
 msgid "Unable to remove directory '%s'"
 msgstr "Impossible de supprimer le répertoire '%s'"
 
-#~ msgid "test"
-#~ msgstr "test"
+msgid "test"
+msgstr "test"
 
-#~ msgid "syntax error"
-#~ msgstr "erreur de syntaxe"
+msgid "syntax error"
+msgstr "erreur de syntaxe"
 
-#~ msgid "R/G/B not in range 0-255"
-#~ msgstr "R/G/B pas dans la plage 0-255"
+msgid "R/G/B not in range 0-255"
+msgstr "R/G/B pas dans la plage 0-255"
 
-#~ msgid "invalid color name"
-#~ msgstr "nom de couleur invalide"
+msgid "invalid color name"
+msgstr "nom de couleur invalide"
+
+msgid "An error occurred while running r3.mapcalc"
+msgstr "Un erreur s'est produite à l'exécution de r3.mapcalc"
+
+msgid "An error occurred while running r.mapcalc"
+msgstr "Une erreur s'est produite à l'exécution de r.mapcalc"
+
+msgid "Object <%s> not found in the temporal database"
+msgstr "Objet <%s> non trouvé dans la base temporelle"
+
+msgid "SQL select statement"
+msgstr "Clause SQL select"
+
+msgid "For example: 'select * from rybniky where kapri = 'hodne'"
+msgstr "Par exemple : 'select * from rybniky where kapri = 'hodne'"
+
+msgid "Example: income < 1000 and inhab >= 10000"
+msgstr "Exemple : revenu < 1000 et habitants >= 10000"
 
 #~ msgid "Centroid skipped (output feature type: %s)"
 #~ msgstr "Centroïde ignoré (type d'entité en sortie : %s)"
@@ -9532,9 +9550,6 @@ msgstr "Impossible de supprimer le répertoire '%s'"
 #~ msgid "<{0}> requested, but not available. Run GRASS in text mode (-text) or install missing package (usually 'grass-gui')."
 #~ msgstr "<{0}> demandé, mais non disponible. Lancez GRASS en mode texte (-text) ou installez le paquet manquant (habituellement 'grass-gui')."
 
-#~ msgid "An error occurred while running r3.mapcalc"
-#~ msgstr "Un erreur s'est produite à l'exécution de r3.mapcalc"
-
 #~ msgid "Cannot find the executable {0}"
 #~ msgstr "Exécutable {0} introuvable"
 
@@ -9543,21 +9558,6 @@ msgstr "Impossible de supprimer le répertoire '%s'"
 
 #~ msgid "WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {0}\n"
 #~ msgstr "ALERTE : niveau de debug non supporté (doit être >=0 et <=5). {0}\n"
-
-#~ msgid "An error occurred while running r.mapcalc"
-#~ msgstr "Une erreur s'est produite à l'exécution de r.mapcalc"
-
-#~ msgid "Object <%s> not found in the temporal database"
-#~ msgstr "Objet <%s> non trouvé dans la base temporelle"
-
-#~ msgid "SQL select statement"
-#~ msgstr "Clause SQL select"
-
-#~ msgid "For example: 'select * from rybniky where kapri = 'hodne'"
-#~ msgstr "Par exemple : 'select * from rybniky where kapri = 'hodne'"
-
-#~ msgid "Example: income < 1000 and inhab >= 10000"
-#~ msgstr "Exemple : revenu < 1000 et habitants >= 10000"
 
 #~ msgid "Data element '%s/%s' was found in more mapsets (also found in <%s>)"
 #~ msgstr "L'élément date '%s/%s' a été trouvé dans plusieurs jeux de cartes (également dans <%s>)"

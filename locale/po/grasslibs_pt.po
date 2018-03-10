@@ -9181,14 +9181,14 @@ msgstr "Não foi possível obter linha"
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr "G_oldsite_new_struct: # dims ou campos inválidos"
 
-#~ msgid "syntax error"
-#~ msgstr "erro de sintaxe"
+msgid "syntax error"
+msgstr "erro de sintaxe"
 
-#~ msgid "R/G/B not in range 0-255"
-#~ msgstr "R/G/B fora do intervalo 0-255"
+msgid "R/G/B not in range 0-255"
+msgstr "R/G/B fora do intervalo 0-255"
 
-#~ msgid "invalid color name"
-#~ msgstr "nome de cor inválido"
+msgid "invalid color name"
+msgstr "nome de cor inválido"
 
-#~ msgid "Example: income < 1000 and inhab >= 10000"
-#~ msgstr "Exemplo: renda < 1000 e habitantes >= 10000"
+msgid "Example: income < 1000 and inhab >= 10000"
+msgstr "Exemplo: renda < 1000 e habitantes >= 10000"

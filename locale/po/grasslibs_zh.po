@@ -9161,11 +9161,11 @@ msgstr "Dev 笔记：改编站点库用于矢量点。（模块应更新为 GRAS
 msgid "Cannot fetch row"
 msgstr "无法获取图层信息"
 
-#~ msgid "syntax error"
-#~ msgstr "格式错误"
+msgid "syntax error"
+msgstr "格式错误"
 
-#~ msgid "R/G/B not in range 0-255"
-#~ msgstr "R/G/B不在0-255之间"
+msgid "R/G/B not in range 0-255"
+msgstr "R/G/B不在0-255之间"
 
-#~ msgid "Example: income < 1000 and inhab >= 10000"
-#~ msgstr "例如：income < 1000 and inhab >= 10000"
+msgid "Example: income < 1000 and inhab >= 10000"
+msgstr "例如：income < 1000 and inhab >= 10000"

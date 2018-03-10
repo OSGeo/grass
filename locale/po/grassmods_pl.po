@@ -40877,5 +40877,5 @@ msgstr "Wielkość etykiety (w pikselach)"
 msgid "Unknown raster map type"
 msgstr "Nieznany rodzaj mapy rastrowej"
 
-#~ msgid "Path to file location"
-#~ msgstr "Ścieżka do pliku"
+msgid "Path to file location"
+msgstr "Ścieżka do pliku"

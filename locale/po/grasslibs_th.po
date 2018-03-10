@@ -9157,14 +9157,14 @@ msgstr "ไม่พบ ข้อมูลสำหรับแสดง %d  จ
 msgid "Cannot fetch row"
 msgstr "ไม่สามารถอ่านรายละเอียดของชั้นข้อมูลได้"
 
-#~ msgid "syntax error"
-#~ msgstr "คำสั่งผิดพลาด"
+msgid "syntax error"
+msgstr "คำสั่งผิดพลาด"
 
-#~ msgid "R/G/B not in range 0-255"
-#~ msgstr "ค่า R/G/B ไม่อยู่ในช่วง  0-255"
+msgid "R/G/B not in range 0-255"
+msgstr "ค่า R/G/B ไม่อยู่ในช่วง  0-255"
 
-#~ msgid "invalid color name"
-#~ msgstr "ชื่อสีผิด"
+msgid "invalid color name"
+msgstr "ชื่อสีผิด"
 
-#~ msgid "Example: income < 1000 and inhab >= 10000"
-#~ msgstr "ตัวอย่าง: income < 1000 และ inhab >= 10000"
+msgid "Example: income < 1000 and inhab >= 10000"
+msgstr "ตัวอย่าง: income < 1000 และ inhab >= 10000"

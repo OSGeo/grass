@@ -17987,19 +17987,19 @@ msgid "Digitize"
 msgstr "デジタイズ"
 
 msgid "failed to open '{0}'"
-msgstr "'{0}'がオープンできません"
+msgstr ""
 
 msgid "Wx debug level {0}."
-msgstr "Wx デバッグレベル{0}."
+msgstr ""
 
 msgid "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n"
-msgstr "警告:  wx デバッグレベルがサポートしていない値です (設定できる値は0以上5以下). {0}\n"
+msgstr ""
 
 msgid "GRASS locations in {0}"
-msgstr "{0} の中のGRASS ロケーション"
+msgstr ""
 
 msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "タイムラインツールを使用するには \"matplotlib\" (python-matplotlib) パッケージをインストールする必要があります. {0}"
+msgstr ""
 
-#~ msgid "Failed to copy map: action is allowed only within the same location."
-#~ msgstr "マップをコピー出来ません: 同じロケーション内にのみコピー出来ます."
+msgid "Failed to copy map: action is allowed only within the same location."
+msgstr "マップをコピー出来ません: 同じロケーション内にのみコピー出来ます."

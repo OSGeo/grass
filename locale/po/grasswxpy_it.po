@@ -17955,28 +17955,28 @@ msgid "this might not work for multiple bands"
 msgstr "questo potrebbe non funzionare per più bande"
 
 msgid "failed to open '{0}'"
-msgstr "impossibile aprire '{0}'"
+msgstr ""
 
 msgid "GRASS locations in {0}"
-msgstr "Location di GRASS in {0}"
+msgstr ""
 
 msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "Lo strumento Timeline richeide l'installazione del pacchetto \"matplotlib\" (python-matplotlib). {0}"
+msgstr ""
 
 msgid "Unicode error detected. Check your locale settings. Details: {0}"
-msgstr "Errore di Unicode rilevato. Controllare le impostazioni locali. Dettagli: {0}"
+msgstr ""
 
 msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "Lo strumento Plot Temporale richiede l'installazione del pacchetto \"matplotlib\" (python-matplotlib). {0}"
+msgstr ""
+
+msgid "Failed to copy map: action is allowed only within the same location."
+msgstr "Impossibile copiare la mappa: l'azione è permessa solo all'interno della stessa location."
 
 #~ msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
 #~ msgstr "Crea un raster da punti LAS LiDAR usando statistiche univariate"
 
 #~ msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
 #~ msgstr "Converte nuvole di punti LAS LiDAR in un vettoriale GRASS usando libLAS."
-
-#~ msgid "Failed to copy map: action is allowed only within the same location."
-#~ msgstr "Impossibile copiare la mappa: l'azione è permessa solo all'interno della stessa location."
 
 #~ msgid "Exports a vector map layer to PostGIS feature table."
 #~ msgstr "Esporta una mappa vettoriale in una tabella di PostGIS."
