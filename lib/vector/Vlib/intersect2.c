@@ -252,6 +252,8 @@ static int cross_seg(int i, int j, int b)
 	if (ret == 1) {		/* one intersection on segment A */
 	    G_debug(3, "    in %f, %f ", x1, y1);
 	    add_cross(i, 0.0, j, 0.0, x1, y1);
+	    if (APnts == BPnts)
+		add_cross(j, 0.0, i, 0.0, x1, y1);
 	}
 	else if (ret == 2 || ret == 3 || ret == 4 || ret == 5) {
 	    /*  partial overlap; a broken in one, b broken in one
@@ -261,6 +263,10 @@ static int cross_seg(int i, int j, int b)
 	    G_debug(3, "    in %f, %f; %f, %f", x1, y1, x2, y2);
 	    add_cross(i, 0.0, j, 0.0, x1, y1);
 	    add_cross(i, 0.0, j, 0.0, x2, y2);
+	    if (APnts == BPnts) {
+		add_cross(j, 0.0, i, 0.0, x1, y1);
+		add_cross(j, 0.0, i, 0.0, x2, y2);
+	    }
 	}
     }
     return 1;			/* keep going */
