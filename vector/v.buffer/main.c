@@ -669,9 +669,18 @@ int main(int argc, char *argv[])
 	    
 	    Vect_line_prune(Points);
 	    if (ltype & GV_POINTS || Points->n_points == 1) {
-		Vect_point_buffer2(Points->x[0], Points->y[0], da, db, dalpha,
-				   !(straight_flag->answer), unit_tolerance,
-				   &(arr_bc_pts.oPoints));
+		if (straight_flag->answer) {
+			arr_bc_pts.oPoints = Vect_new_line_struct();
+		        Vect_append_point(arr_bc_pts.oPoints, Points->x[0] + da, Points->y[0] + da, 0);
+		        Vect_append_point(arr_bc_pts.oPoints, Points->x[0] + da, Points->y[0] - da, 0);
+		        Vect_append_point(arr_bc_pts.oPoints, Points->x[0] - da, Points->y[0] - da, 0);
+		        Vect_append_point(arr_bc_pts.oPoints, Points->x[0] - da, Points->y[0] + da, 0);
+  		        Vect_append_point(arr_bc_pts.oPoints, arr_bc_pts.oPoints->x[0], arr_bc_pts.oPoints->y[0], arr_bc_pts.oPoints->z[0]);
+		} else {
+			Vect_point_buffer2(Points->x[0], Points->y[0], da, db, dalpha,
+					   !(straight_flag->answer), unit_tolerance,
+					   &(arr_bc_pts.oPoints));
+		}
 
 		Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
 		line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, CCats);
