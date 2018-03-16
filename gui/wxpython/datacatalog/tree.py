@@ -802,6 +802,13 @@ class DataCatalogTree(LocationMapTree):
                 self.showNotification.emit(
                     message=_("g.remove completed").format(cmd=cmd))
 
+                # remove map layer from layer tree if exists
+                if not isinstance(self._giface, StandaloneGrassInterface):
+                    name = self.selected_layer.label + '@' + self.selected_mapset.label
+                    layers = self._giface.GetLayerList().GetLayersByName(name)
+                    for layer in layers:
+                        self._giface.GetLayerList().DeleteLayer(layer)
+
         gscript.try_remove(gisrc)
 
     def OnDisplayLayer(self, event):
