@@ -146,7 +146,8 @@ def get_mapset(gisrc_src, gisrc_dst):
     src = Mapset(msrc, lsrc, gsrc)
     dst = Mapset(mdst, ldst, gdst)
     visible = [m for m in src.visible]
-    visible.append(src.name)
+    if src.name not in visible:
+        visible.append(src.name)
     dst.visible.extend(visible)
     return src, dst
 
