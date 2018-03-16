@@ -476,11 +476,12 @@ class LocationMapTree(TreeView):
         Display selected layer if node is a map layer otherwise
         expand/collapse node.
         """
-        self.DefineItems(node)
-        if self.selected_layer:
-            # display selected layer and return
-            self.DisplayLayer()
-            return
+        if not isinstance(self._giface, StandaloneGrassInterface):
+            self.DefineItems(node)
+            if self.selected_layer:
+                # display selected layer and return
+                self.DisplayLayer()
+                return
 
         # expand/collapse location/mapset...
         if self.IsNodeExpanded(node):
