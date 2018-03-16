@@ -792,15 +792,9 @@ class DataCatalogTree(LocationMapTree):
                 title=_('Delete map')) == wx.ID_YES:
             label = _("Deleting {name}...").format(name=name)
             self.showNotification.emit(message=label)
-            if self.selected_type.label == 'vector':
-                removed, cmd = self._runCommand(
-                    'g.remove', flags='f', type='vector', name=name, env=env)
-            elif self.selected_type.label == 'raster':
-                removed, cmd = self._runCommand(
-                    'g.remove', flags='f', type='raster', name=name, env=env)
-            else:
-                removed, cmd = self._runCommand(
-                    'g.remove', flags='f', type='raster_3d', name=name, env=env)
+
+            removed, cmd = self._runCommand(
+                'g.remove', flags='f', type=self.selected_type.label, name=name, env=env)
             if removed == 0:
                 self._model.RemoveNode(self.selected_layer)
                 self.RefreshNode(self.selected_type, recursive=True)
