@@ -6,7 +6,7 @@
 Classes:
  - datacatalog::DataCatalog
 
-(C) 2014 by Tereza Fiedlerova, and the GRASS Development Team
+(C) 2014-2018 by Tereza Fiedlerova, and the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
