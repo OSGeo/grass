@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
         seed = atoi(parm.seed->answer);
 
     if (n <= 0) {
-	G_fatal_error(_("Number of points must be > 0 (%d given)"), n);
+	G_fatal_error(_("Number of points must be > 0 (%ld given)"), n);
     }
 
     nareas = 0;
@@ -457,7 +457,7 @@ int main(int argc, char *argv[])
 		    Vect_append_point(Points, x, y, 0.0);
 
 		if (parm.zcol->answer) {
-		    sprintf(buf, "insert into %s values ( %d, ", Fi->table, i + 1);
+		    sprintf(buf, "insert into %s values ( %ld, ", Fi->table, i + 1);
 		    db_set_string(&sql, buf);
 		    /* Round random value if column is integer type */
 		    if (usefloat)
@@ -577,7 +577,7 @@ int main(int argc, char *argv[])
 		Vect_append_point(Points, x, y, 0.0);
 
 	    if (parm.zcol->answer) {
-		sprintf(buf, "insert into %s values ( %d, ", Fi->table, i + 1);
+		sprintf(buf, "insert into %s values ( %ld, ", Fi->table, i + 1);
 		db_set_string(&sql, buf);
 		/* Round random value if column is integer type */
 		if (usefloat)
