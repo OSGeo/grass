@@ -7,7 +7,7 @@ Classes:
  - datacatalog::LocationMapTree
  - datacatalog::DataCatalogTree
 
-(C) 2014-2015 by Tereza Fiedlerova, and the GRASS Development Team
+(C) 2014-2018 by Tereza Fiedlerova, and the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -471,7 +471,18 @@ class LocationMapTree(TreeView):
             self._popupMenuElement()
 
     def OnDoubleClick(self, node):
-        """Expand/Collapse node."""
+        """Double click on item/node.
+
+        Display selected layer if node is a map layer otherwise
+        expand/collapse node.
+        """
+        self.DefineItems(node)
+        if self.selected_layer:
+            # display selected layer and return
+            self.DisplayLayer()
+            return
+
+        # expand/collapse location/mapset...
         if self.IsNodeExpanded(node):
             self.CollapseNode(node, recursive=False)
         else:
@@ -796,10 +807,15 @@ class DataCatalogTree(LocationMapTree):
                 Debug.msg(1, "LAYER " + name + " DELETED")
                 self.showNotification.emit(
                     message=_("g.remove completed").format(cmd=cmd))
+
         gscript.try_remove(gisrc)
 
     def OnDisplayLayer(self, event):
         """Display layer in current graphics view"""
+        self.DisplayLayer()
+        
+    def DisplayLayer(self):
+        """Display selected layer in current graphics view"""
         layerName = []
         if self.selected_location.label == gisenv(
         )['LOCATION_NAME'] and self.selected_mapset:
