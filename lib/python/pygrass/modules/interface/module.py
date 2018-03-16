@@ -625,6 +625,7 @@ class Module(object):
         for param, arg in zip(self.params_list, args):
             param.value = arg
         for key, val in kargs.items():
+            key = key.strip('_')
             if key in self.inputs:
                 self.inputs[key].value = val
             elif key in self.outputs:
