@@ -815,9 +815,6 @@ class DataCatalogTree(LocationMapTree):
                 self._giface.lmgr.AddMaps(layerName, 'raster', True)
             else:
                 self._giface.lmgr.AddMaps(layerName, 'raster_3d', True)
-                # generate this message (command) automatically?
-                label = "d.rast --q map=" + string + _(
-                    " -- completed. Go to Layers tab for further operations.")
             self.showNotification.emit(message=label)
             Debug.msg(1, "LAYER " + self.selected_layer.label + " DISPLAYED")
         else:
