@@ -1416,6 +1416,21 @@ class PreferencesDialog(PreferencesBaseDialog):
             hlWidth, pos=(row, col + 1),
             span=(1, 2),
             flag=wx.ALIGN_RIGHT)
+        
+        # random colors
+        row +=1
+        randomColors = wx.CheckBox(parent=panel, id=wx.ID_ANY, label=_(
+            "Random colors according to category number "))
+        randomColors.SetValue(
+            self.settings.Get(
+                group='vectorLayer',
+                key='randomColors',
+                subkey='enabled'))
+        self.winId['vectorLayer:randomColors:enabled'] = randomColors.GetId()
+        gridSizer.Add(
+            randomColors, pos=(row, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_LEFT)
 
         # symbol
         row = 0
