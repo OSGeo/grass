@@ -825,14 +825,15 @@ class DataCatalogTree(LocationMapTree):
             layerName.append(string)
             label = _("Displaying {name}...").format(name=string)
             self.showNotification.emit(message=label)
+            self._giface.lmgr.AddMaps(
+                layerName, self.selected_type.label, True)
+
+            if len(self._giface.GetLayerList()) == 1:
+                # zoom to map if there is only one map layer
+                self._giface.GetMapWindow().ZoomToMap()
+
             label = "d." + self.selected_type.label[:4] + " --q map=" + string + \
                     _(" -- completed. Go to Layers tab for further operations.")
-            if self.selected_type.label == 'vector':
-                self._giface.lmgr.AddMaps(layerName, 'vector', True)
-            elif self.selected_type.label == 'raster':
-                self._giface.lmgr.AddMaps(layerName, 'raster', True)
-            else:
-                self._giface.lmgr.AddMaps(layerName, 'raster_3d', True)
             self.showNotification.emit(message=label)
             Debug.msg(1, "LAYER " + self.selected_layer.label + " DISPLAYED")
         else:
