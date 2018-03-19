@@ -146,6 +146,9 @@
 /* define if SQLite is to be used */
 #undef HAVE_SQLITE
 
+/* define if proj.h exists */
+#undef HAVE_PROJ_H
+
 /* define if GDAL is to be used */
 #undef HAVE_GDAL
 

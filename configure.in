@@ -678,36 +678,49 @@ AC_SUBST(ZSTDLIB)
 PROJINC=
 PROJLIB=
 PROJSHARE=
+PROJ4API=0
 
 # With PROJ includes directory
 
-LOC_CHECK_INC_PATH(proj,External PROJ.4,PROJINC)
+LOC_CHECK_INC_PATH(proj,External PROJ,PROJINC)
 
-LOC_CHECK_INCLUDES(proj_api.h,External PROJ.4,$PROJINC)
+# PROJ version check: if proj.h exists, it must be proj 5+
+LOC_CHECK_INCLUDES(proj.h,External PROJ,$PROJINC,PROJ4API=1)
 
-# PROJ version check
+if test $PROJ4API = 0 ; then
+    AC_MSG_RESULT([using new PROJ version 5+ API])
 
-if test "$cross_compiling" = yes; then
-    AC_MSG_WARN([*** Cannot check PROJ.4 version (cross-compiling).])
+    # With PROJ library directory
+
+    LOC_CHECK_LIB_PATH(proj,External PROJ,PROJLIB)
+    LOC_CHECK_LIBS(proj,proj_pj_info,External PROJ,$PROJLIB,PROJLIB,,,)
 else
-    LOC_CHECK_VERSION_INT(proj_api.h,PJ_VERSION,External PROJ.4,proj_ver,$PROJINC,0)
+    AC_MSG_RESULT([using old PROJ version 4 API])
 
-    if test `expr "$proj_ver" \< 446` = 1 ; then
-        AC_MSG_ERROR([*** PROJ.4.4.6 or later is required.])
+    LOC_CHECK_INCLUDES(proj_api.h,External PROJ,$PROJINC)
+    # PROJ version check for v4.x
+
+    if test "$cross_compiling" = yes; then
+	AC_MSG_WARN([*** Cannot check PROJ.4 version (cross-compiling).])
+    else
+	LOC_CHECK_VERSION_INT(proj_api.h,PJ_VERSION,External PROJ.4,proj_ver,$PROJINC,0)
+
+	if test `expr "$proj_ver" \< 446` = 1 ; then
+	    AC_MSG_ERROR([*** PROJ.4.4.6 or later is required.])
+	fi
     fi
+
+    # With PROJ library directory
+
+    LOC_CHECK_LIB_PATH(proj,External PROJ.4,PROJLIB)
+    LOC_CHECK_LIBS(proj,pj_get_def,External PROJ.4,$PROJLIB,PROJLIB,,,)
 fi
-
-# With PROJ library directory
-
-LOC_CHECK_LIB_PATH(proj,External PROJ.4,PROJLIB)
-
-LOC_CHECK_LIBS(proj,pj_get_def,External PROJ.4,$PROJLIB,PROJLIB,,,)
 
 # With PROJ share directory
 
-LOC_CHECK_SHARE_PATH(proj,External PROJ.4,PROJSHARE)
+LOC_CHECK_SHARE_PATH(proj,External PROJ,PROJSHARE)
 if test -z "$PROJSHARE" ; then
-    AC_MSG_WARN([*** External PROJ.4 directory not specified; default will be used])
+    AC_MSG_WARN([*** External PROJ directory not specified; default will be used])
     PROJSHARE=/usr/share/proj
 fi
 
@@ -716,7 +729,7 @@ if test "$cross_compiling" = "yes" ; then
     AC_MSG_CHECKING([for epsg])
     AC_MSG_RESULT([unknown (cross-compiling)])
 else
-    LOC_CHECK_SHARE(epsg,External PROJ.4,$PROJSHARE,[
+    LOC_CHECK_SHARE(epsg,External PROJ,$PROJSHARE,[
     AC_MSG_WARN([*** Unable to locate PROJ data files.])
     ])
 fi
