@@ -59,6 +59,7 @@ class LMWorkspaceToolbar(BaseToolbar):
         }
         return self._getToolbarData((('newdisplay', icons["newdisplay"],
                                       self.parent.OnNewDisplay),
+                                     (None, ),
                                      ('workspaceNew', icons["workspaceNew"],
                                       self.parent.OnWorkspaceNew),
                                      ('workspaceOpen', icons["workspaceOpen"],
