@@ -5,7 +5,7 @@ map by features from another one.
 
 <p>Supported operators (without GEOS; using GRASS' own algorithm):
 <ul>
-  <li><b>overlap</b> - features partially or completely overlap
+  <li><b>overlap</b> - features partially or completely overlap (GEOS equivalent: intersects)
 </ul>
 
 Supported operators (internally using
@@ -13,7 +13,7 @@ Supported operators (internally using
 <ul>
   <li><b>equals</b> - features are spatially equals</li>
   <li><b>disjoint</b> - features do not spatially intersect</li>
-  <li><b>intersects</b> - features spatially intersect</li>
+  <li><b>intersects</b> - features spatially intersect (equivalent to native 'overlap')</li>
   <li><b>touches</b> - features spatially touches</li>
   <li><b>crosses</b> - features spatially crosses</li>
   <li><b>within</b> - feature A is completely inside feature B</li>
