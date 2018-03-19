@@ -791,18 +791,36 @@ int main(int argc, char *argv[])
     
     /* grow by number of cells */
     if ((value = parm.grow->answer)){
-		if (sscanf(value, "%i", &pix)){
-		    xs = window.ns_res * pix;
-		    window.north += xs;
-		    window.south -= xs;
-		    ys = window.ew_res * pix;
-		    window.west -= ys;
-		    window.east += ys;
-		    zs = window.tb_res * pix;
-		    window.top += zs;
-		    window.bottom -= zs;
-		}
-	}
+        if (sscanf(value, "%i", &pix)){
+            xs = window.ns_res * pix;
+            if (window.north + xs > window.south - xs){
+                if (G_projection() == PROJECTION_LL && (
+                    window.north + xs <= 90.0 + 0.5 * window.ns_res ||
+                    window.south - xs >= -90.0 - 0.5 * window.ns_res)) {
+                    G_warning(_("Box option not used with <%s> because a coordinate would become invalid"), "latitude");
+                } else {
+                    window.north += xs;
+                    window.south -= xs;
+                }
+            } else {
+                G_warning(_("Box option not used with <%s> because <%s> would become minor than <%s>"), "latitude", "north", "south");
+            }
+            ys = window.ew_res * pix;
+            if (window.east + ys > window.west - ys){
+                window.west -= ys;
+                window.east += ys;
+            } else {
+                G_warning(_("Box option not used with <%s> because <%s> would become minor than <%s>"), "longitude", "east", "west");
+            }
+            zs = window.tb_res * pix;
+            if (window.top + zs > window.bottom - zs){
+                window.top += zs;
+                window.bottom -= zs;
+            } else {
+                G_warning(_("Box option not used with <%s> because <%s> would become minor than <%s>"), "3D", "top", "bottom");
+            }
+        }
+    }
 	
     /* save= */
     if ((name = parm.save->answer)) {
