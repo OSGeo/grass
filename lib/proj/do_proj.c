@@ -99,10 +99,10 @@ int pj_do_proj(double *x, double *y,
 
     if (strncmp(info_in->proj, "ll", 2) == 0) {
 	/* convert to radians */
-	c.lp.lam = (*x) / RAD_TO_DEG;
-	c.lp.phi = (*y) / RAD_TO_DEG;
-	c.lp.z = 0;
-	c.lp.t = 0;
+	c.lpzt.lam = (*x) / RAD_TO_DEG;
+	c.lpzt.phi = (*y) / RAD_TO_DEG;
+	c.lpzt.z = 0;
+	c.lpzt.t = 0;
 	c = proj_trans(P, PJ_FWD, c);
 	ok = proj_errno(P);
 
@@ -119,10 +119,10 @@ int pj_do_proj(double *x, double *y,
     }
     else {
 	/* convert to meters */
-	c.xy.x = *x * METERS_in;
-	c.xy.y = *y * METERS_in;
-	c.xy.z = 0;
-	c.xy.t = 0;
+	c.xyzt.x = *x * METERS_in;
+	c.xyzt.y = *y * METERS_in;
+	c.xyzt.z = 0;
+	c.xyzt.t = 0;
 	c = proj_trans(P, PJ_FWD, c);
 	ok = proj_errno(P);
 
@@ -245,13 +245,13 @@ int pj_do_transform(int count, double *x, double *y, double *h,
     }
     ok = 0;
     if (strncmp(info_in->proj, "ll", 2) == 0) {
-	c.lp.t = 0;
+	c.lpzt.t = 0;
 	if (strncmp(info_out->proj, "ll", 2) == 0) {
 	    for (i = 0; i < count; i++) {
 		/* convert to radians */
-		c.lp.lam = x[i] / RAD_TO_DEG;
-		c.lp.phi = y[i] / RAD_TO_DEG;
-		c.lp.z = h[i];
+		c.lpzt.lam = x[i] / RAD_TO_DEG;
+		c.lpzt.phi = y[i] / RAD_TO_DEG;
+		c.lpzt.z = h[i];
 		c = proj_trans(P, PJ_FWD, c);
 		if ((ok = proj_errno(P)) < 0)
 		    break;
@@ -263,9 +263,9 @@ int pj_do_transform(int count, double *x, double *y, double *h,
 	else {
 	    for (i = 0; i < count; i++) {
 		/* convert to radians */
-		c.lp.lam = x[i] / RAD_TO_DEG;
-		c.lp.phi = y[i] / RAD_TO_DEG;
-		c.lp.z = h[i];
+		c.lpzt.lam = x[i] / RAD_TO_DEG;
+		c.lpzt.phi = y[i] / RAD_TO_DEG;
+		c.lpzt.z = h[i];
 		c = proj_trans(P, PJ_FWD, c);
 		if ((ok = proj_errno(P)) < 0)
 		    break;
@@ -276,13 +276,13 @@ int pj_do_transform(int count, double *x, double *y, double *h,
 	}
     }
     else {
-	c.xy.t = 0;
+	c.xyzt.t = 0;
 	if (strncmp(info_out->proj, "ll", 2) == 0) {
 	    for (i = 0; i < count; i++) {
 		/* convert to meters */
-		c.xy.x = x[i] * METERS_in;
-		c.xy.y = y[i] * METERS_in;
-		c.xy.z = h[i];
+		c.xyzt.x = x[i] * METERS_in;
+		c.xyzt.y = y[i] * METERS_in;
+		c.xyzt.z = h[i];
 		c = proj_trans(P, PJ_FWD, c);
 		if ((ok = proj_errno(P)) < 0)
 		    break;
@@ -294,9 +294,9 @@ int pj_do_transform(int count, double *x, double *y, double *h,
 	else {
 	    for (i = 0; i < count; i++) {
 		/* convert to meters */
-		c.xy.x = x[i] * METERS_in;
-		c.xy.y = y[i] * METERS_in;
-		c.xy.z = h[i];
+		c.xyzt.x = x[i] * METERS_in;
+		c.xyzt.y = y[i] * METERS_in;
+		c.xyzt.z = h[i];
 		c = proj_trans(P, PJ_FWD, c);
 		if ((ok = proj_errno(P)) < 0)
 		    break;
