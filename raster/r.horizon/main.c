@@ -540,12 +540,14 @@ int main(int argc, char *argv[])
     G_free_key_value(in_proj_info);
     G_free_key_value(in_unit_info);
 
+#ifndef HAVE_PROJ_H
     /* Set output projection to latlong w/ same ellipsoid */
     oproj.zone = 0;
     oproj.meters = 1.;
     sprintf(oproj.proj, "ll");
     if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
 	G_fatal_error(_("Unable to set up lat/long projection parameters"));
+#endif
 
 
 /**********end of parser - ******************************/
@@ -842,7 +844,11 @@ void calculate_shadow()
 	    longitude = xp;
 	    latitude = yp;
 
+#ifdef HAVE_PROJ_H
+	    if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0) {
+#else
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0) {
+#endif
 		G_fatal_error(_("Error in pj_do_proj"));
 	    }
 	}
@@ -860,7 +866,11 @@ void calculate_shadow()
 	latitude = (latitude + delt_lat) * rad2deg;
 	longitude = (longitude + delt_lon) * rad2deg;
 
+#ifdef HAVE_PROJ_H
+	if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_FWD) < 0) {
+#else
 	if (pj_do_proj(&longitude, &latitude, &oproj, &iproj) < 0) {
+#endif
 	    G_fatal_error(_("Error in pj_do_proj"));
 	}
 
@@ -1198,7 +1208,11 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 
 
 		    if ((G_projection() != PROJECTION_LL)) {
-			if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) <	0)
+#ifdef HAVE_PROJ_H
+			if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0)
+#else
+			if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+#endif
 			    G_fatal_error("Error in pj_do_proj");
 		    }
 
@@ -1218,7 +1232,11 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 		    longitude = (longitude + delt_lon) * rad2deg;
 
 		    if ((G_projection() != PROJECTION_LL)) {
+#ifdef HAVE_PROJ_H
+			if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_FWD) < 0)
+#else
 			if (pj_do_proj(&longitude, &latitude, &oproj, &iproj) < 0)
+#endif
 			    G_fatal_error("Error in pj_do_proj");
 		    }
 
