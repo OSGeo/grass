@@ -56,7 +56,7 @@ if ENCODING is None:
     ENCODING = 'UTF-8'
     print("Default locale not found, using UTF-8")  # intentionally not translatable
 
-
+# currently not used, see https://trac.osgeo.org/grass/ticket/3508
 def to_text_string(obj, encoding=ENCODING):
     """Convert `obj` to (unicode) text string"""
     if PY2:
@@ -613,11 +613,15 @@ def set_paths(grass_config_dir):
             pass
 
         if sys_man_path:
-            os.environ['MANPATH'] = to_text_string(sys_man_path)
+            # to_text_string disabled, see https://trac.osgeo.org/grass/ticket/3508
+            # os.environ['MANPATH'] = to_text_string(sys_man_path)
+            os.environ['MANPATH'] = sys_man_path
             path_prepend(addons_man_path, 'MANPATH')
             path_prepend(grass_man_path, 'MANPATH')
         else:
-            os.environ['MANPATH'] = to_text_string(addons_man_path)
+            # to_text_string disabled, see https://trac.osgeo.org/grass/ticket/3508
+            # os.environ['MANPATH'] = to_text_string(addons_man_path)
+            os.environ['MANPATH'] = addons_man_path
             path_prepend(grass_man_path, 'MANPATH')
 
     # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
