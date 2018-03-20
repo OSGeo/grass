@@ -318,6 +318,9 @@ class Settings:
                         'enabled': True
                     },
                 },
+                'randomColors': {
+                    'enabled': False,
+                },
             },
             #
             # vdigit
@@ -1288,5 +1291,9 @@ def GetDisplayVectSettings():
                             key='showType', subkey=[ftype, 'enabled']):
             types.append(ftype)
     settings.append('type=%s' % ','.join(types))
+
+    if UserSettings.Get(group='vectorLayer',
+                        key='randomColors', subkey='enabled'):
+        settings.append('-c')
 
     return settings
