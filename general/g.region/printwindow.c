@@ -539,10 +539,10 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 #ifdef HAVE_PROJ_H
-	    c.lp.lam = DEG2RAD(longitude);
-	    c.lp.phi = DEG2RAD(latitude);
-	    c.lp.z = 0;
-	    c.lp.t = 0;
+	    c.lpzt.lam = DEG2RAD(longitude);
+	    c.lpzt.phi = DEG2RAD(latitude);
+	    c.lpzt.z = 0;
+	    c.lpzt.t = 0;
 	    fact = proj_factors(iproj.pj, c);
 	    convergence = RAD2DEG(fact.meridian_convergence);
 #else
