@@ -188,6 +188,9 @@ class Settings:
                 'autoZooming': {
                     'enabled': False
                 },
+                'showCompExtent': {
+                    'enabled': False
+                },
                 'statusbarMode': {
                     'selection': 0
                 },
