@@ -634,9 +634,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 num = len(t[3])
                 count = 0
                 register_list = []
+                leadzero = len(str(num))
                 for i in range(num):
                     # Check if resultmap names exist in GRASS database.
-                    map_name = self.basename + "_" + str(i) + "@" + self.mapset
+                    map_name = self.basename + "_" + str(i).zfill(leadzero) + "@" + self.mapset
                     if self.stdstype == "strds":
                         new_map = RasterDataset(map_name)
                     else:
@@ -646,7 +647,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                                         "Use --o flag to overwrite existing file"%map_name)
                 map_test_list = []
                 for map_i in t[3]:
-                    newident = self.basename + "_" + str(count)
+                    newident = self.basename + "_" + str(count).zfill(leadzero)
                     if "cmd_list" in dir(map_i):
                         # Build r.mapcalc module and execute expression.
                         # Change map name to given basename.

@@ -378,9 +378,10 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                 count = 0
                 returncode = 0
                 register_list = []
+                leadzero = len(str(num))
                 for i in range(num):
                     # Check if resultmap names exist in GRASS database.
-                    vectorname = self.basename + "_" + str(i)
+                    vectorname = self.basename + "_" + str(i).zfill(leadzero)
                     vectormap = VectorDataset(vectorname + "@" + get_current_mapset())
                     if vectormap.map_exists() and self.overwrite == False:
                         self.msgr.fatal(_("Error vector maps with basename %s exist. "
@@ -433,7 +434,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                 self.removable_maps.pop(map_i.get_name())
                             mapset = map_i.get_mapset()
                             # Change map name to given basename.
-                            newident = self.basename + "_" + str(count)
+                            newident = self.basename + "_" + str(count).zfill(leadzero)
                             m = copy.deepcopy(self.m_rename)
                             m.inputs["vector"].value = (map_i.get_name(),newident)
                             m.flags["overwrite"].value = self.overwrite
@@ -450,7 +451,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                         map_test_extent = map_test.get_temporal_extent_as_tuple()
                         if map_test_extent != map_i_extent:
                             # Create new map with basename
-                            newident = self.basename + "_" + str(count)
+                            newident = self.basename + "_" + str(count).zfill(leadzero)
                             map_result = map_i.get_new_instance(newident + "@" + self.mapset)
 
                             if map_test.map_exists() and self.overwrite is False:
