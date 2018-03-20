@@ -25,6 +25,8 @@
 #define DEG_TO_RAD   .017453292519943296
 #else
 #include <proj_api.h>
+#define PJ_FWD 	 1
+#define PJ_INV 	-1
 #endif
 #ifdef HAVE_OGR
 #    include <ogr_srs_api.h>
