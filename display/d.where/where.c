@@ -7,7 +7,8 @@
 
 extern struct pj_info iproj, oproj;
 
-int where_am_i(char **coords, FILE *fp, int have_spheroid, int decimal, int dcoord)
+int where_am_i(char **coords, FILE *fp, int have_spheroid, int decimal,
+               int dcoord, int wgs84)
 {
     char buf1[50], buf2[50];
     int screen_x, screen_y;
@@ -57,8 +58,19 @@ int where_am_i(char **coords, FILE *fp, int have_spheroid, int decimal, int dcoo
 	    double lat = north;
 	    double lon = east;
 
-	    if (pj_do_proj(&lon, &lat, &iproj, &oproj) < 0)
-		G_fatal_error("Error in pj_do_proj()");
+#ifdef HAVE_PROJ_H
+	    if (!wgs84) {
+		if (GPJ_do_proj_ll(&lon, &lat, &iproj, PJ_INV) < 0)
+		    G_fatal_error(_("Error in pj_do_proj"));
+	    }
+	    else {
+		if (pj_do_proj(&lon, &lat, &iproj, &oproj) < 0)
+		    G_fatal_error(_("Error in pj_do_proj"));
+	    }
+#else
+            if (pj_do_proj(&lon, &lat, &iproj, &oproj) < 0)
+                G_fatal_error(_("Error in pj_do_proj"));
+#endif
 
 	    if (decimal) {
 		G_format_easting(lon, buf1, 0);

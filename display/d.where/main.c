@@ -112,7 +112,9 @@ int main(int argc, char **argv)
 	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
 	    G_fatal_error(_("Can't get projection key values of current location"));
 
-
+#ifdef HAVE_PROJ_H
+	if (wgs84->answer) {
+#else
 	if (!wgs84->answer) {
 	    /* Set output to same ellipsoid as input if we're not looking
 	     * for the WGS84 values */
@@ -121,6 +123,7 @@ int main(int argc, char **argv)
 
 	}
 	else {
+#endif
 	    struct Key_Value *out_proj_info, *out_unit_info;
 
 	    out_proj_info = G_create_key_value();
@@ -170,7 +173,8 @@ int main(int argc, char **argv)
 
     D_setup(0);
 
-    where_am_i(coords->answers, fp, have_spheroid, decimal->answer, dcoord->answer);
+    where_am_i(coords->answers, fp, have_spheroid, decimal->answer,
+               dcoord->answer, wgs84->answer);
     
     D_close_driver();
 
