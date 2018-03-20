@@ -117,7 +117,8 @@ int main(int argc, char *argv[])
     parm.input->required = NO;
     parm.input->description = _("Restrict points to areas in input vector");
     parm.input->guisection = _("Selection");
-
+    parm.input->guisection = _("Restrict");
+ 
     parm.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
     parm.field->guisection = _("Selection");
 
@@ -175,10 +176,13 @@ int main(int argc, char *argv[])
 
     flag.a = G_define_flag();
     flag.a->key = 'a';
-    flag.a->description = _("Generate n points for each individual area");
-
+    flag.a->description = _("Generate n points for each individual area (requires restrict parameter)");
+    flag.a->guisection = _("Restrict");
+    
     flag.notopo = G_define_standard_flag(G_FLG_V_TOPO);
 
+    G_option_requires(flag.a, parm.input, NULL);
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -217,11 +221,6 @@ int main(int argc, char *argv[])
 	    Vect_close(&In);
 	    G_fatal_error(_("No areas in vector map <%s>"), parm.input->answer);
 	}
-    }
-    else {
-	if (flag.a->answer)
-	    G_fatal_error(_("The <-%c> flag requires an input vector with areas"),
-	                  flag.a->key);
     }
 
     /* create new vector map */
