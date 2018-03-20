@@ -23,7 +23,11 @@
 
 #include "local_proto.h"
 
+#ifdef HAVE_PROJ_H
+#include <proj.h>
+#else
 #include <proj_api.h>
+#endif
 
 #ifdef HAVE_GDAL
 #include <gdal_version.h>
@@ -187,7 +191,13 @@ int main(int argc, char *argv[])
 
     if (extended->answer) {
         char *proj = NULL;
+#ifdef HAVE_PROJ_H
+        G_asprintf(&proj, "%d%d%d", PROJ_VERSION_MAJOR,
+	                            PROJ_VERSION_MINOR,
+				    PROJ_VERSION_PATCH);
+#else
         G_asprintf(&proj, "%d", PJ_VERSION);
+#endif
         if (strlen(proj) == 3) {
             if (shell->answer)
                 fprintf(stdout, "proj4=%c.%c.%c\n", proj[0], proj[1], proj[2]); 
