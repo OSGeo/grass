@@ -110,7 +110,9 @@ char *str_step;
 
 struct Cell_head cellhd;
 struct pj_info iproj;
+#ifndef HAVE_PROJ_H
 struct pj_info oproj;
+#endif
 struct History hist;
 
 
@@ -789,13 +791,14 @@ int main(int argc, char *argv[])
 
 	G_free_key_value(in_proj_info);
 	G_free_key_value(in_unit_info);
-
+#ifndef HAVE_PROJ_H
 	/* Set output projection to latlong w/ same ellipsoid */
 	oproj.zone = 0;
 	oproj.meters = 1.;
 	sprintf(oproj.proj, "ll");
 	if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
 	    G_fatal_error(_("Unable to set up lat/long projection parameters"));
+#endif
     }
 
     if ((latin != NULL || longin != NULL) && (G_projection() == PROJECTION_LL))
@@ -1693,7 +1696,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     double dayRad;
     double latid_l, cos_u, cos_v, sin_u, sin_v;
     double sin_phi_l, tan_lam_l;
-    double zmax;
+    double zmax = 0;
     double longitTime = 0.;
     double locTimeOffset;
     double latitude, longitude;
@@ -1891,7 +1894,11 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 			longitude = gridGeom.xp;
 			latitude = gridGeom.yp;
 
+#ifdef HAVE_PROJ_H
+			if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0) {
+#else
 			if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0) {
+#endif
 			    G_fatal_error("Error in pj_do_proj");
 			}
 
