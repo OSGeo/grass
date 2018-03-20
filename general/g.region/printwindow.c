@@ -244,7 +244,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    /* projection information of input map */
 	    struct Key_Value *in_proj_info, *in_unit_info;
 	    struct pj_info iproj;	/* input map proj parameters  */
+#ifndef HAVE_PROJ_H
 	    struct pj_info oproj;	/* output map proj parameters  */
+#endif
 
 	    /* read current projection info */
 	    if ((in_proj_info = G_get_projinfo()) == NULL)
@@ -259,12 +261,14 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    G_free_key_value(in_proj_info);
 	    G_free_key_value(in_unit_info);
 
+#ifndef HAVE_PROJ_H
 	    /*  output projection to lat/long w/ same ellipsoid as input */
 	    oproj.zone = 0;
 	    oproj.meters = 1.;
 	    sprintf(oproj.proj, "ll");
 	    if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
 		G_fatal_error(_("Unable to update lat/long projection parameters"));
+#endif
 
 	    /* for DEBUG
 	       pj_print_proj_params(&iproj,&oproj);
@@ -281,7 +285,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
 	    latitude = window->north;
 	    longitude = window->west;
+#ifdef HAVE_PROJ_H
+	    if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0)
+#else
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+#endif
 		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    lo1 = longitude;
@@ -289,7 +297,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
 	    latitude = window->north;
 	    longitude = window->east;
+#ifdef HAVE_PROJ_H
+	    if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0)
+#else
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+#endif
 		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    lo2 = longitude;
@@ -297,7 +309,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
 	    latitude = window->south;
 	    longitude = window->east;
+#ifdef HAVE_PROJ_H
+	    if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0)
+#else
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+#endif
 		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    lo3 = longitude;
@@ -305,7 +321,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
 	    latitude = window->south;
 	    longitude = window->west;
+#ifdef HAVE_PROJ_H
+	    if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0)
+#else
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+#endif
 		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    lo4 = longitude;
@@ -315,7 +335,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	     * not average of the projected corner coordinates */
 	    latitude = (window->north + window->south) / 2.;
 	    longitude = (window->west + window->east) / 2.;
+#ifdef HAVE_PROJ_H
+	    if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0)
+#else
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+#endif
 		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    loc = longitude;
@@ -464,11 +488,18 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    convergence = 0.0;
 	else {
 	    struct Key_Value *in_proj_info, *in_unit_info;
-	    struct pj_info iproj, oproj;	/* proj parameters  */
+	    /* proj parameters  */
+	    struct pj_info iproj;
+#ifdef HAVE_PROJ_H
+	    PJ_COORD c;
+	    PJ_FACTORS fact;
+#else
+	    struct pj_info oproj;
 	    struct FACTORS fact;
 	    LP lp;
 
 	    G_zero(&fact, sizeof(struct FACTORS));
+#endif
 
 	    /* read current projection info */
 	    if ((in_proj_info = G_get_projinfo()) == NULL)
@@ -480,13 +511,14 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
 		G_fatal_error(_("Can't get projection key values of current location"));
 
+#ifndef HAVE_PROJ_H
 	    /*  output projection to lat/long w/ same ellipsoid as input */
 	    oproj.zone = 0;
 	    oproj.meters = 1.;
 	    sprintf(oproj.proj, "ll");
 	    if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
 		G_fatal_error(_("Unable to update lat/long projection parameters"));
-
+#endif
 	    /* for DEBUG
 	       pj_print_proj_params(&iproj, &oproj);
 	     */
@@ -499,13 +531,26 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	     * not average of the projected corner coordinates */
 	    latitude = (window->north + window->south) / 2.;
 	    longitude = (window->west + window->east) / 2.;
+#ifdef HAVE_PROJ_H
+	    if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0)
+#else
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
+#endif
 		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
+#ifdef HAVE_PROJ_H
+	    c.lp.lam = DEG2RAD(longitude);
+	    c.lp.phi = DEG2RAD(latitude);
+	    c.lp.z = 0;
+	    c.lp.t = 0;
+	    fact = proj_factors(iproj.pj, c);
+	    convergence = RAD2DEG(fact.meridian_convergence);
+#else
 	    lp.u = DEG2RAD(longitude);
 	    lp.v = DEG2RAD(latitude);
 	    pj_factors(lp, iproj.pj, 0.0, &fact);
 	    convergence = RAD2DEG(fact.conv);
+#endif
 
 	    G_free_key_value(in_proj_info);
 	    G_free_key_value(in_unit_info);
@@ -549,7 +594,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
 		G_fatal_error(_("Can't get projection key values of current location"));
 
-	    /*  output projection to lat/long  and wgs84 ellipsoid */
+	    /*  output projection to lat/long and wgs84 ellipsoid */
 	    out_proj_info = G_create_key_value();
 	    out_unit_info = G_create_key_value();
 
