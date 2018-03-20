@@ -289,7 +289,8 @@ int main(int argc, char **argv)
             /* initialzie proj stuff */
             init_proj(&info_in, &info_out, wgs84->answer);
             plot_geogrid(gsize, info_in, info_out, do_text, colorg, colort,
-                         colorbg, fontsize, mark_type, line_width, dirn);
+                         colorbg, fontsize, mark_type, line_width, dirn,
+			 wgs84->answer);
         }
         else {
             /* Do the grid plotting */

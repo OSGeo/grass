@@ -8,7 +8,7 @@
 int plot_grid(double, double, double, int, int, int, int, int, int, double,
               int);
 int plot_geogrid(double, struct pj_info, struct pj_info, int, int, int, int,
-                 int, int, double, int);
+                 int, int, double, int, int);
 void init_proj(struct pj_info *, struct pj_info *, int);
 void get_ll_bounds(double *, double *, double *, double *, struct Cell_head,
                    struct pj_info, struct pj_info);
