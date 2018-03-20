@@ -43,6 +43,20 @@ do {\
 
 static double METERS_in = 1.0, METERS_out = 1.0;
 
+#ifdef HAVE_PROJ_H
+static char *gpj_get_def(PJ *P)
+{
+    char *pjdef;
+    PJ_PROJ_INFO pj_proj_info = proj_pj_info(P);
+
+    pjdef = G_store(pj_proj_info.definition);
+
+    return pjdef;
+}
+#endif
+
+/* TODO: rename pj_ to GPJ_ to avoid symbol clash with PROJ lib */
+
 /** 
  * \brief Re-project a point between two co-ordinate systems
  * 
@@ -57,13 +71,78 @@ static double METERS_in = 1.0, METERS_out = 1.0;
  * \param info_in pointer to pj_info struct for input co-ordinate system
  * \param info_out pointer to pj_info struct for output co-ordinate system
  * 
- * \return Return value from PROJ pj_transform() function
+ * \return Return value from PROJ proj_trans() function
  **/
 
 int pj_do_proj(double *x, double *y,
 	       const struct pj_info *info_in, const struct pj_info *info_out)
 {
     int ok;
+#ifdef HAVE_PROJ_H
+    PJ *P;
+    char *projdef, *projdefin, *projdefout;
+    PJ_COORD c;
+
+    projdefin = gpj_get_def(info_in->pj);
+    projdefout = gpj_get_def(info_out->pj);
+    projdef = NULL;
+    G_asprintf(&projdef, "+proj=pipeline +step %s +inv +step %s", projdefin, projdefout);
+    P = proj_create(PJ_DEFAULT_CTX, projdef);
+    if (P == NULL)
+	G_fatal_error(_("proj_create() failed"));
+    G_free(projdefin);
+    G_free(projdefout);
+    G_free(projdef);
+
+    METERS_in = info_in->meters;
+    METERS_out = info_out->meters;
+
+    if (strncmp(info_in->proj, "ll", 2) == 0) {
+	/* convert to radians */
+	c.lp.lam = (*x) / RAD_TO_DEG;
+	c.lp.phi = (*y) / RAD_TO_DEG;
+	c.lp.z = 0;
+	c.lp.t = 0;
+	c = proj_trans(P, PJ_FWD, c);
+	ok = proj_errno(P);
+
+	if (strncmp(info_out->proj, "ll", 2) == 0) {
+	    /* convert to degrees */
+	    *x = c.lp.lam * RAD_TO_DEG;
+	    *y = c.lp.phi * RAD_TO_DEG;
+	}
+	else {
+	    /* convert to map units */
+	    *x = c.xy.x / METERS_out;
+	    *y = c.xy.y / METERS_out;
+	}
+    }
+    else {
+	/* convert to meters */
+	c.xy.x = *x * METERS_in;
+	c.xy.y = *y * METERS_in;
+	c.xy.z = 0;
+	c.xy.t = 0;
+	c = proj_trans(P, PJ_FWD, c);
+	ok = proj_errno(P);
+
+	if (strncmp(info_out->proj, "ll", 2) == 0) {
+	    /* convert to degrees */
+	    *x = c.lp.lam * RAD_TO_DEG;
+	    *y = c.lp.phi * RAD_TO_DEG;
+	}
+	else {
+	    /* convert to map units */
+	    *x = c.xy.x / METERS_out;
+	    *y = c.xy.y / METERS_out;
+	}
+    }
+    proj_destroy(P);
+
+    if (ok < 0) {
+	G_warning(_("proj_trans() failed: %d"), ok);
+    }
+#else
     double u, v;
     double h = 0.0;
 
@@ -105,6 +184,7 @@ int pj_do_proj(double *x, double *y,
     if (ok < 0) {
 	G_warning(_("pj_transform() failed: %s"), pj_strerrno(ok));
     }
+#endif
     return ok;
 }
 
@@ -128,7 +208,7 @@ int pj_do_proj(double *x, double *y,
  * \param info_in pointer to pj_info struct for input co-ordinate system
  * \param info_out pointer to pj_info struct for output co-ordinate system
  * 
- * \return Return value from PROJ pj_transform() function
+ * \return Return value from PROJ proj_trans() function
  **/
 
 int pj_do_transform(int count, double *x, double *y, double *h,
@@ -136,7 +216,103 @@ int pj_do_transform(int count, double *x, double *y, double *h,
 {
     int ok;
     int has_h = 1;
+#ifdef HAVE_PROJ_H
+    int i;
+    PJ *P;
+    char *projdef, *projdefin, *projdefout;
+    PJ_COORD c;
 
+    projdefin = gpj_get_def(info_in->pj);
+    projdefout = gpj_get_def(info_out->pj);
+    projdef = NULL;
+    G_asprintf(&projdef, "+proj=pipeline +step %s +inv +step %s", projdefin, projdefout);
+    P = proj_create(PJ_DEFAULT_CTX, projdef);
+    if (P == NULL)
+	G_fatal_error(_("proj_create() failed"));
+    G_free(projdefin);
+    G_free(projdefout);
+    G_free(projdef);
+
+    METERS_in = info_in->meters;
+    METERS_out = info_out->meters;
+
+    if (h == NULL) {
+	h = G_malloc(sizeof *h * count);
+	/* they say memset is only guaranteed for chars ;-( */
+	for (i = 0; i < count; ++i)
+	    h[i] = 0.0;
+	has_h = 0;
+    }
+    ok = 0;
+    if (strncmp(info_in->proj, "ll", 2) == 0) {
+	c.lp.t = 0;
+	if (strncmp(info_out->proj, "ll", 2) == 0) {
+	    for (i = 0; i < count; i++) {
+		/* convert to radians */
+		c.lp.lam = x[i] / RAD_TO_DEG;
+		c.lp.phi = y[i] / RAD_TO_DEG;
+		c.lp.z = h[i];
+		c = proj_trans(P, PJ_FWD, c);
+		if ((ok = proj_errno(P)) < 0)
+		    break;
+		/* convert to degrees */
+		x[i] = c.lp.lam * RAD_TO_DEG;
+		y[i] = c.lp.phi * RAD_TO_DEG;
+	    }
+	}
+	else {
+	    for (i = 0; i < count; i++) {
+		/* convert to radians */
+		c.lp.lam = x[i] / RAD_TO_DEG;
+		c.lp.phi = y[i] / RAD_TO_DEG;
+		c.lp.z = h[i];
+		c = proj_trans(P, PJ_FWD, c);
+		if ((ok = proj_errno(P)) < 0)
+		    break;
+		/* convert to map units */
+		x[i] = c.xy.x / METERS_out;
+		y[i] = c.xy.y / METERS_out;
+	    }
+	}
+    }
+    else {
+	c.xy.t = 0;
+	if (strncmp(info_out->proj, "ll", 2) == 0) {
+	    for (i = 0; i < count; i++) {
+		/* convert to meters */
+		c.xy.x = x[i] * METERS_in;
+		c.xy.y = y[i] * METERS_in;
+		c.xy.z = h[i];
+		c = proj_trans(P, PJ_FWD, c);
+		if ((ok = proj_errno(P)) < 0)
+		    break;
+		/* convert to degrees */
+		x[i] = c.lp.lam * RAD_TO_DEG;
+		y[i] = c.lp.phi * RAD_TO_DEG;
+	    }
+	}
+	else {
+	    for (i = 0; i < count; i++) {
+		/* convert to meters */
+		c.xy.x = x[i] * METERS_in;
+		c.xy.y = y[i] * METERS_in;
+		c.xy.z = h[i];
+		c = proj_trans(P, PJ_FWD, c);
+		if ((ok = proj_errno(P)) < 0)
+		    break;
+		/* convert to map units */
+		x[i] = c.xy.x / METERS_out;
+		y[i] = c.xy.y / METERS_out;
+	    }
+	}
+    }
+    if (!has_h)
+	G_free(h);
+    proj_destroy(P);
+
+    if (ok < 0) {
+	G_warning(_("proj_trans() failed: %d"), ok);
+#else
     METERS_in = info_in->meters;
     METERS_out = info_out->meters;
 
@@ -178,6 +354,7 @@ int pj_do_transform(int count, double *x, double *y, double *h,
 
     if (ok < 0) {
 	G_warning(_("pj_transform() failed: %s"), pj_strerrno(ok));
+#endif
     }
     return ok;
 }

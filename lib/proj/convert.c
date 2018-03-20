@@ -33,6 +33,58 @@
 static void DatumNameMassage(char **);
 #endif
 
+#ifdef HAVE_PROJ_H
+char *gpj_get_def(PJ *P)
+{
+    char *pjdef;
+    PJ_PROJ_INFO pjinfo;
+
+    if (P == NULL)
+	G_fatal_error("Invalid PJ pointer");
+
+    pjinfo = proj_pj_info(P);
+
+    pjdef = G_store(pjinfo.definition);
+
+    return pjdef;
+}
+#endif
+
+
+/* from proj-5.0.0/src/pj_units.c */
+struct gpj_units {
+    char    *id;        /* units keyword */
+    char    *to_meter;  /* multiply by value to get meters */
+    char    *name;      /* comments */
+    double   factor;       /* to_meter factor in actual numbers */
+};
+
+struct gpj_units
+gpj_units[] = {
+    {"km",      "1000.",                "Kilometer",                    1000.0},
+    {"m",       "1.",                   "Meter",                        1.0},
+    {"dm",      "1/10",                 "Decimeter",                    0.1},
+    {"cm",      "1/100",                "Centimeter",                   0.01},
+    {"mm",      "1/1000",               "Millimeter",                   0.001},
+    {"kmi",     "1852.0",               "International Nautical Mile",  1852.0},
+    {"in",      "0.0254",               "International Inch",           0.0254},
+    {"ft",      "0.3048",               "International Foot",           0.3048},
+    {"yd",      "0.9144",               "International Yard",           0.9144},
+    {"mi",      "1609.344",             "International Statute Mile",   1609.344},
+    {"fath",    "1.8288",               "International Fathom",         1.8288},
+    {"ch",      "20.1168",              "International Chain",          20.1168},
+    {"link",    "0.201168",             "International Link",           0.201168},
+    {"us-in",   "1./39.37",             "U.S. Surveyor's Inch",         0.0254},
+    {"us-ft",   "0.304800609601219",    "U.S. Surveyor's Foot",         0.304800609601219},
+    {"us-yd",   "0.914401828803658",    "U.S. Surveyor's Yard",         0.914401828803658},
+    {"us-ch",   "20.11684023368047",    "U.S. Surveyor's Chain",        20.11684023368047},
+    {"us-mi",   "1609.347218694437",    "U.S. Surveyor's Statute Mile", 1609.347218694437},
+    {"ind-yd",  "0.91439523",           "Indian Yard",                  0.91439523},
+    {"ind-ft",  "0.30479841",           "Indian Foot",                  0.30479841},
+    {"ind-ch",  "20.11669506",          "Indian Chain",                 20.11669506},
+    {NULL,      NULL,                   NULL,                           0.0}
+};
+
 static char *grass_to_wkt(const struct Key_Value *proj_info,
                           const struct Key_Value *proj_units,
                           const struct Key_Value *proj_epsg,
@@ -160,11 +212,19 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
 	return NULL;
     }
 
+#ifdef HAVE_PROJ_H
+    if ((proj4 = gpj_get_def(pjinfo.pj)) == NULL) {
+	G_warning(_("Unable get PROJ.4-style parameter string"));
+	return NULL;
+    }
+    proj_destroy(pjinfo.pj);
+#else
     if ((proj4 = pj_get_def(pjinfo.pj, 0)) == NULL) {
 	G_warning(_("Unable get PROJ.4-style parameter string"));
 	return NULL;
     }
     pj_free(pjinfo.pj);
+#endif
 
     unit = G_find_key_value("unit", proj_units);
     unfact = G_find_key_value("meters", proj_units);
@@ -172,8 +232,11 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
 	G_asprintf(&proj4mod, "%s +to_meter=%s", proj4, unfact);
     else
 	proj4mod = G_store(proj4);
+#ifdef HAVE_PROJ_H
+    G_free(proj4);
+#else
     pj_dalloc(proj4);
-
+#endif
     if ((errcode = OSRImportFromProj4(hSRS, proj4mod)) != OGRERR_NONE) {
 	G_warning(_("OGR can't parse PROJ.4-style parameter string: "
 		    "%s (OGR Error code was %d)"), proj4mod, errcode);
@@ -337,7 +400,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr2(const struct Key_Value * proj_info,
 
         OSRImportFromEPSG(hSRS, epsgcode);
 
-        /* take +towgs84 from projinfo file if defined) */
+        /* take +towgs84 from projinfo file if defined */
         towgs84 = G_find_key_value("towgs84", proj_info);
         if (towgs84) {
             char **tokens;
@@ -387,6 +450,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     char *pszProj = NULL;
     const char *pszProjCS = NULL;
     char *datum = NULL;
+    char *proj4_unit = NULL;
     struct gpj_datum dstruct;
     const char *ograttr;
     OGRSpatialReferenceH hSRS;
@@ -554,9 +618,13 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	    continue;
 
 	/* We will handle units separately */
-	if (G_strcasecmp(pszToken, "to_meter") == 0
-	    || G_strcasecmp(pszToken, "units") == 0)
+	if (G_strcasecmp(pszToken, "to_meter") == 0)
 	    continue;
+
+	if (G_strcasecmp(pszToken, "units") == 0) {
+	    proj4_unit = G_store(pszValue);
+	    continue;
+	}
 
 	G_set_key_value(pszToken, pszValue, temp_projinfo);
     }
@@ -789,6 +857,13 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
 	dfToMeters = OSRGetLinearUnits(hSRS, &pszUnitsName);
 
+	/* the unit name can be arbitrary: the following can be the same
+	 * us-ft			(proj.4 keyword)
+	 * U.S. Surveyor's Foot		(proj.4 name)
+	 * US survey foot		(WKT)
+	 * Foot_US			(WKT)
+	 */
+
 	/* Workaround for the most obvious case when unit name is unknown */
 	if ((G_strcasecmp(pszUnitsName, "unknown") == 0) &&
 	    (dfToMeters == 1.))
@@ -798,6 +873,21 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	    G_asprintf(&pszUnitsName, "meter");
 	if ((G_strcasecmp(pszUnitsName, "kilometre") == 0))
 	    G_asprintf(&pszUnitsName, "kilometer");
+	
+	if (dfToMeters != 1. && proj4_unit) {
+	    int i;
+	    
+	    i = 0;
+	    while (gpj_units[i].id != NULL) {
+		if (strcmp(proj4_unit, gpj_units[i].id) == 0) {
+		    if (pszUnitsName)
+			G_free(pszUnitsName);
+		    G_asprintf(&pszUnitsName, gpj_units[i].name);
+		    break;
+		}
+		i++;
+	    }
+	}
 
 	G_set_key_value("unit", pszUnitsName, *projunits);
 
