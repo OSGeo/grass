@@ -234,7 +234,7 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 
 int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
                  int do_text, int gcolor, int tcolor, int bgcolor, int fontsize,
-                 int mark_type, double line_width, int direction)
+                 int mark_type, double line_width, int direction, int wgs84)
 {
     double g;
     double e1, e2, n1, n2;
@@ -289,9 +289,19 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
             check_coords(e1, n1, &lon, &lat, 1, window, info_in, info_out);
             e1 = lon;
             n1 = lat;
+#ifdef HAVE_PROJ_H
+	    if (!wgs84) {
+		if (GPJ_do_proj_ll(&e2, &n2, &info_in, PJ_INV) < 0)
+		    G_fatal_error(_("Error in pj_do_proj"));
+	    }
+	    else {
+		if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
+		    G_fatal_error(_("Error in pj_do_proj"));
+	    }
+#else
             if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
                 G_fatal_error(_("Error in pj_do_proj"));
-
+#endif
             check_coords(e2, n2, &lon, &lat, 1, window, info_in, info_out);
             e2 = lon;
             n2 = lat;
@@ -330,14 +340,36 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
                n1 = south + (ll *((north - south)/SEGS));
                n2 = n1 + ((north - south)/SEGS);
              */
+#ifdef HAVE_PROJ_H
+	    if (!wgs84) {
+		if (GPJ_do_proj_ll(&e1, &n1, &info_in, PJ_INV) < 0)
+		    G_fatal_error(_("Error in pj_do_proj"));
+	    }
+	    else {
+		if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
+		    G_fatal_error(_("Error in pj_do_proj"));
+	    }
+#else
             if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
                 G_fatal_error(_("Error in pj_do_proj"));
+#endif
 
             check_coords(e1, n1, &lon, &lat, 2, window, info_in, info_out);
             e1 = lon;
             n1 = lat;
+#ifdef HAVE_PROJ_H
+	    if (!wgs84) {
+		if (GPJ_do_proj_ll(&e2, &n2, &info_in, PJ_INV) < 0)
+		    G_fatal_error(_("Error in pj_do_proj"));
+	    }
+	    else {
+		if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
+		    G_fatal_error(_("Error in pj_do_proj"));
+	    }
+#else
             if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
                 G_fatal_error(_("Error in pj_do_proj"));
+#endif
 
             check_coords(e2, n2, &lon, &lat, 2, window, info_in, info_out);
             e2 = lon;
@@ -423,14 +455,36 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
                 n1 = n2 = g;
                 e1 = west + (ll * ((east - west) / SEGS));
                 e2 = e1 + ((east - west) / SEGS);
-                if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-                    G_fatal_error(_("Error in pj_do_proj"));
+#ifdef HAVE_PROJ_H
+		if (!wgs84) {
+		    if (GPJ_do_proj_ll(&e1, &n1, &info_in, PJ_INV) < 0)
+			G_fatal_error(_("Error in pj_do_proj"));
+		}
+		else {
+		    if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
+			G_fatal_error(_("Error in pj_do_proj"));
+		}
+#else
+		if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
+		    G_fatal_error(_("Error in pj_do_proj"));
+#endif
 
                 check_coords(e1, n1, &lon, &lat, 1, window, info_in, info_out);
                 e1 = lon;
                 n1 = lat;
-                if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
-                    G_fatal_error(_("Error in pj_do_proj"));
+#ifdef HAVE_PROJ_H
+		if (!wgs84) {
+		    if (GPJ_do_proj_ll(&e2, &n2, &info_in, PJ_INV) < 0)
+			G_fatal_error(_("Error in pj_do_proj"));
+		}
+		else {
+		    if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
+			G_fatal_error(_("Error in pj_do_proj"));
+		}
+#else
+		if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
+		    G_fatal_error(_("Error in pj_do_proj"));
+#endif
 
                 check_coords(e2, n2, &lon, &lat, 1, window, info_in, info_out);
                 e2 = lon;
@@ -481,14 +535,36 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
                 n1 = north - (ll * ((north - south) / SEGS));
                 n2 = n1 - ((north - south) / SEGS);
 
-                if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-                    G_fatal_error(_("Error in pj_do_proj"));
+#ifdef HAVE_PROJ_H
+		if (!wgs84) {
+		    if (GPJ_do_proj_ll(&e1, &n1, &info_in, PJ_INV) < 0)
+			G_fatal_error(_("Error in pj_do_proj"));
+		}
+		else {
+		    if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
+			G_fatal_error(_("Error in pj_do_proj"));
+		}
+#else
+		if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
+		    G_fatal_error(_("Error in pj_do_proj"));
+#endif
 
                 check_coords(e1, n1, &lon, &lat, 2, window, info_in, info_out);
                 e1 = lon;
                 n1 = lat;
-                if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
-                    G_fatal_error(_("Error in pj_do_proj"));
+#ifdef HAVE_PROJ_H
+		if (!wgs84) {
+		    if (GPJ_do_proj_ll(&e2, &n2, &info_in, PJ_INV) < 0)
+			G_fatal_error(_("Error in pj_do_proj"));
+		}
+		else {
+		    if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
+			G_fatal_error(_("Error in pj_do_proj"));
+		}
+#else
+		if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
+		    G_fatal_error(_("Error in pj_do_proj"));
+#endif
 
                 check_coords(e2, n2, &lon, &lat, 2, window, info_in, info_out);
                 e2 = lon;
@@ -554,6 +630,9 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out, int wgs84)
         G_fatal_error(_("Can't get projection key values of current location"));
 
     /* In Info */
+#ifdef HAVE_PROJ_H
+    if (wgs84) {
+#else
     if (!wgs84) {
         /* Set lat/long to same ellipsoid as location if we're not looking
          * for the WGS84 values */
@@ -562,6 +641,7 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out, int wgs84)
 
     }
     else {
+#endif
         struct Key_Value *in_proj_info, *in_unit_info;
         char buff[256], dum[256];
 
