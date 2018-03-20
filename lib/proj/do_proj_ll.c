@@ -24,17 +24,6 @@
 
 static double METERS_in = 1.0;
 
-#ifdef HAVE_PROJ_H
-static char *gpj_get_def(PJ *P)
-{
-    char *pjdef;
-    PJ_PROJ_INFO pj_proj_info = proj_pj_info(P);
-
-    pjdef = G_store(pj_proj_info.definition);
-
-    return pjdef;
-}
-
 /** 
  * \brief Re-project a point between a co-ordinate system and its 
  *        latitude / longitude equivalent, using the same datum, 
@@ -43,8 +32,8 @@ static char *gpj_get_def(PJ *P)
  * This function takes a pointer to a pj_info structure as argument, 
  * and projects a point between the co-ordinate system and its 
  * latitude / longitude equivalent. With forward projection, the point 
- * is projected from the co-ordinate system to its latitude / longitude 
- * equivalent, while backward projection does the reverse.
+ * is projected from the equivalent latitude / longitude system to the 
+ * projected co-ordinate system, while backward projection does the reverse.
  * The easting and northing of the point are contained in two pointers 
  * passed to the function; these will be overwritten by the co-ordinates
  * of the re-projected point.
@@ -58,11 +47,11 @@ static char *gpj_get_def(PJ *P)
  **/
 
 int GPJ_do_proj_ll(double *x, double *y,
-	          const struct pj_info *info_in, int direction)
+	           const struct pj_info *info_in, int direction)
 {
     int ok;
-    PJ *P;
-    char *projdef;
+
+#ifdef HAVE_PROJ_H
     PJ_COORD c;
 
     ok = 0;
@@ -70,12 +59,6 @@ int GPJ_do_proj_ll(double *x, double *y,
 	/* nothing to do */
 	return ok;
     }
-
-    projdef = gpj_get_def(info_in->pj);
-    P = proj_create(PJ_DEFAULT_CTX, projdef);
-    if (P == NULL)
-	G_fatal_error(_("proj_create() failed"));
-    G_free(projdef);
 
     METERS_in = info_in->meters;
 
@@ -88,8 +71,8 @@ int GPJ_do_proj_ll(double *x, double *y,
 	c.lpzt.z = 0;
 	c.lpzt.t = 0;
 
-	c = proj_trans(P, PJ_FWD, c);
-	ok = proj_errno(P);
+	c = proj_trans(info_in->pj, PJ_FWD, c);
+	ok = proj_errno(info_in->pj);
 
 	/* convert to map units */
 	*x = c.xy.x / METERS_in;
@@ -104,18 +87,34 @@ int GPJ_do_proj_ll(double *x, double *y,
 	c.xyzt.z = 0;
 	c.xyzt.t = 0;
 
-	c = proj_trans(P, PJ_INV, c);
-	ok = proj_errno(P);
+	c = proj_trans(info_in->pj, PJ_INV, c);
+	ok = proj_errno(info_in->pj);
 
 	/* convert to degrees */
 	*x = c.lp.lam * RAD_TO_DEG;
 	*y = c.lp.phi * RAD_TO_DEG;
     }
-    proj_destroy(P);
 
     if (ok < 0) {
 	G_warning(_("proj_trans() failed: %d"), ok);
     }
+#else
+    struct pj_info info_out;
+
+    if ((ok = GPJ_get_equivalent_latlong(&info_out, info_in)) != 1)
+	return ok;
+
+    if (direction == PJ_FWD) {
+	/* from ll to projected */
+	ok = pj_do_proj(x, y, &info_out, info_in);
+    }
+    else {
+	/* from projected to ll */
+	ok = pj_do_proj(x, y, info_in, &info_out);
+    }
+    pj_free(info_out.pj);
+#endif
+
     return ok;
 }
 
@@ -127,8 +126,8 @@ int GPJ_do_proj_ll(double *x, double *y,
  * This function takes a pointer to a pj_info structure as argument, 
  * and projects an array of points between the co-ordinate system and its 
  * latitude / longitude equivalent. With forward projection, the points 
- * are projected from the co-ordinate system to its latitude / longitude 
- * equivalent, while backward projection does the reverse.
+ * are projected from the equivalent latitude / longitude system to the 
+ * projected co-ordinate system, while backward projection does the reverse.
  * The easting and northing of the points are contained in two pointers passed 
  * to the function; these will be overwritten by the co-ordinates of the 
  * re-projected point.
@@ -149,10 +148,10 @@ int GPJ_do_transform_ll(int count, double *x, double *y, double *h,
 		       const struct pj_info *info_in, int direction)
 {
     int ok;
+
+#ifdef HAVE_PROJ_H
     int has_h = 1;
     int i;
-    PJ *P;
-    char *projdef;
     PJ_COORD c;
 
     ok = 0;
@@ -160,12 +159,6 @@ int GPJ_do_transform_ll(int count, double *x, double *y, double *h,
 	/* nothing to do */
 	return ok;
     }
-
-    projdef = gpj_get_def(info_in->pj);
-    P = proj_create(PJ_DEFAULT_CTX, projdef);
-    if (P == NULL)
-	G_fatal_error(_("proj_create() failed"));
-    G_free(projdef);
 
     METERS_in = info_in->meters;
 
@@ -187,8 +180,8 @@ int GPJ_do_transform_ll(int count, double *x, double *y, double *h,
 	    c.lpzt.z = h[i];
 	    c.lpzt.t = 0;
 
-	    c = proj_trans(P, PJ_FWD, c);
-	    if ((ok = proj_errno(P)) < 0)
+	    c = proj_trans(info_in->pj, PJ_FWD, c);
+	    if ((ok = proj_errno(info_in->pj)) < 0)
 		break;
 
 	    /* convert to map units */
@@ -206,8 +199,8 @@ int GPJ_do_transform_ll(int count, double *x, double *y, double *h,
 	    c.xyzt.z = h[i];
 	    c.xyzt.t = 0;
 
-	    c = proj_trans(P, PJ_INV, c);
-	    if ((ok = proj_errno(P)) < 0)
+	    c = proj_trans(info_in->pj, PJ_INV, c);
+	    if ((ok = proj_errno(info_in->pj)) < 0)
 		break;
 
 	    /* convert to degrees */
@@ -217,13 +210,27 @@ int GPJ_do_transform_ll(int count, double *x, double *y, double *h,
     }
     if (!has_h)
 	G_free(h);
-    proj_destroy(P);
 
     if (ok < 0) {
 	G_warning(_("proj_trans() failed: %d"), ok);
     }
+#else
+    struct pj_info info_out;
+
+    if ((ok = GPJ_get_equivalent_latlong(&info_out, info_in)) != 1)
+	return ok;
+
+    if (direction == PJ_FWD) {
+	/* from ll to projected */
+	ok = pj_do_transform(count, x, y, h, &info_out, info_in);
+    }
+    else {
+	/* from projected to ll */
+	ok = pj_do_transform(count, x, y, h, info_in, &info_out);
+    }
+    pj_free(info_out.pj);
+#endif
     return ok;
 }
 
-#endif /* HAVE_PROJ_H */
 
