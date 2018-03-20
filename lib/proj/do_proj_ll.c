@@ -83,8 +83,10 @@ int GPJ_do_proj_ll(double *x, double *y,
 	/* from ll to projected */
 
 	/* convert to radians */
-	c.lp.lam = (*x) / RAD_TO_DEG;
-	c.lp.phi = (*y) / RAD_TO_DEG;
+	c.lpzt.lam = (*x) / RAD_TO_DEG;
+	c.lpzt.phi = (*y) / RAD_TO_DEG;
+	c.lpzt.z = 0;
+	c.lpzt.t = 0;
 
 	c = proj_trans(P, PJ_FWD, c);
 	ok = proj_errno(P);
@@ -97,8 +99,10 @@ int GPJ_do_proj_ll(double *x, double *y,
 	/* from projected to ll */
 
 	/* convert to meters */
-	c.xy.x = *x * METERS_in;
-	c.xy.y = *y * METERS_in;
+	c.xyzt.x = *x * METERS_in;
+	c.xyzt.y = *y * METERS_in;
+	c.xyzt.z = 0;
+	c.xyzt.t = 0;
 
 	c = proj_trans(P, PJ_INV, c);
 	ok = proj_errno(P);
@@ -178,8 +182,10 @@ int GPJ_do_transform_ll(int count, double *x, double *y, double *h,
 
 	for (i = 0; i < count; i++) {
 	    /* convert to radians */
-	    c.lp.lam = x[i] / RAD_TO_DEG;
-	    c.lp.phi = y[i] / RAD_TO_DEG;
+	    c.lpzt.lam = x[i] / RAD_TO_DEG;
+	    c.lpzt.phi = y[i] / RAD_TO_DEG;
+	    c.lpzt.z = h[i];
+	    c.lpzt.t = 0;
 
 	    c = proj_trans(P, PJ_FWD, c);
 	    if ((ok = proj_errno(P)) < 0)
@@ -195,8 +201,10 @@ int GPJ_do_transform_ll(int count, double *x, double *y, double *h,
 
 	for (i = 0; i < count; i++) {
 	    /* convert to meters */
-	    c.xy.x = x[i] * METERS_in;
-	    c.xy.y = y[i] * METERS_in;
+	    c.xyzt.x = x[i] * METERS_in;
+	    c.xyzt.y = y[i] * METERS_in;
+	    c.xyzt.z = h[i];
+	    c.xyzt.t = 0;
 
 	    c = proj_trans(P, PJ_INV, c);
 	    if ((ok = proj_errno(P)) < 0)
