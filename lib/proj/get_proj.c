@@ -31,7 +31,26 @@
 static void alloc_options(char *);
 
 static char *opt_in[MAX_PARGS];
-static int nopt1;
+static int nopt;
+
+#ifdef HAVE_PROJ_H
+static char *gpj_get_def(PJ *P)
+{
+    char *pjdef;
+    PJ_PROJ_INFO pjinfo;
+
+    if (P == NULL)
+	G_fatal_error("Invalid PJ pointer");
+
+    pjinfo = proj_pj_info(P);
+
+    pjdef = G_store(pjinfo.definition);
+
+    return pjdef;
+}
+#endif
+
+/* TODO: rename pj_ to GPJ_ to avoid symbol clash with PROJ lib */
 
 /**
  * \brief Create a pj_info struct Co-ordinate System definition from a set of
@@ -65,7 +84,12 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     int returnval = 1;
     char buffa[300], factbuff[50];
     char proj_in[250], *datum, *params;
+#ifdef HAVE_PROJ_H
+    PJ *pj;
+    PJ_CONTEXT *pjc;
+#else
     projPJ *pj;
+#endif
 
     proj_in[0] = '\0';
     info->zone = 0;
@@ -89,7 +113,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     if (strlen(info->proj) <= 0)
 	sprintf(info->proj, "ll");
 
-    nopt1 = 0;
+    nopt = 0;
     for (i = 0; i < in_proj_keys->nitems; i++) {
 	/* the name parameter is just for grasses use */
 	if (strcmp(in_proj_keys->key[i], "name") == 0) {
@@ -220,23 +244,41 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     }
     G_free(datum);
 
+#ifdef HAVE_PROJ_H
+    pjc = proj_context_create();
+    if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
+#else
     /* Set finder function for locating datum conversion tables PK */
     pj_set_finder(FINDERFUNC);
 
-    if (!(pj = pj_init(nopt1, opt_in))) {
+    if (!(pj = pj_init(nopt, opt_in))) {
+#endif
 	strcpy(buffa,
-	       _("Unable to initialise PROJ.4 with the following parameter list:"));
-	for (i = 0; i < nopt1; i++) {
+	       _("Unable to initialise PROJ with the following parameter list:"));
+	for (i = 0; i < nopt; i++) {
 	    char err[50];
 
 	    sprintf(err, " +%s", opt_in[i]);
 	    strcat(buffa, err);
 	}
 	G_warning("%s", buffa);
-	G_warning(_("The error message: %s"), pj_strerrno(pj_errno));
+#ifndef HAVE_PROJ_H
+	G_warning(_("The PROJ error message: %s"), pj_strerrno(pj_errno));
+#endif
 	return -1;
     }
+
+#ifdef HAVE_PROJ_H
+    int perr = proj_errno(pj);
+
+    if (perr)
+	G_fatal_error("PROJ 5 error %d", perr);
+#endif
+    
     info->pj = pj;
+
+    for (i = 0; i < nopt; i++)
+	G_free(opt_in[i]);
 
     return returnval;
 }
@@ -246,23 +288,28 @@ static void alloc_options(char *buffa)
     int nsize;
 
     nsize = strlen(buffa);
-    opt_in[nopt1++] = (char *)G_malloc(nsize + 1);
-    sprintf(opt_in[nopt1 - 1], "%s", buffa);
+    opt_in[nopt++] = (char *)G_malloc(nsize + 1);
+    sprintf(opt_in[nopt - 1], "%s", buffa);
     return;
 }
 
 int pj_get_string(struct pj_info *info, char *str)
 {
-    char *opt_in[MAX_PARGS];
     char *s;
-    int nopt = 0;
-    int nsize;
+    int i, nsize;
     char zonebuff[50], buffa[300];
+#ifdef HAVE_PROJ_H
+    PJ *pj;
+    PJ_CONTEXT *pjc;
+#else
     projPJ *pj;
+#endif
 
     info->zone = 0;
     info->proj[0] = '\0';
     info->meters = 1.0;
+    
+    nopt = 0;
 
     if ((str == NULL) || (str[0] == '\0')) {
 	/* Null Pointer or empty string is supplied for parameters, 
@@ -270,9 +317,7 @@ int pj_get_string(struct pj_info *info, char *str)
 	 * parameter and call pj_init PK */
 	sprintf(info->proj, "ll");
 	sprintf(buffa, "proj=latlong ellps=WGS84");
-	nsize = strlen(buffa);
-	opt_in[nopt] = (char *)G_malloc(nsize + 1);
-	sprintf(opt_in[nopt++], "%s", buffa);
+	alloc_options(buffa);
     }
     else {
 	/* Parameters have been provided; parse through them but don't
@@ -309,15 +354,20 @@ int pj_get_string(struct pj_info *info, char *str)
 		    else {
 			sprintf(buffa, "%s", s);
 		    }
-		    nsize = strlen(buffa);
-		    opt_in[nopt] = (char *)G_malloc(nsize + 1);
-		    sprintf(opt_in[nopt++], "%s", buffa);
+		    alloc_options(buffa);
 		}
 	    }
 	    s = 0;
 	}
     }
 
+#ifdef HAVE_PROJ_H
+    pjc = proj_context_create();
+    if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
+	G_warning(_("Unable to initialize pj"));
+	return -1;
+    }
+#else
     /* Set finder function for locating datum conversion tables PK */
     pj_set_finder(FINDERFUNC);
 
@@ -326,7 +376,11 @@ int pj_get_string(struct pj_info *info, char *str)
 		  pj_strerrno(pj_errno));
 	return -1;
     }
+#endif
     info->pj = pj;
+
+    for (i = 0; i < nopt; i++)
+	G_free(opt_in[i]);
 
     return 1;
 }
@@ -349,6 +403,10 @@ int pj_get_string(struct pj_info *info, char *str)
 
 int GPJ_get_equivalent_latlong(struct pj_info *pjnew, struct pj_info *pjold)
 {
+#ifdef HAVE_PROJ_H
+    G_fatal_error(_("GPJ_get_equivalent_latlong(): with the new PROJ 5+ API "
+                    "use the old pj directly with PJ_FWD/PJ_INV transformation"));
+#else
     pjnew->meters = 1.;
     pjnew->zone = 0;
     sprintf(pjnew->proj, "ll");
@@ -356,6 +414,7 @@ int GPJ_get_equivalent_latlong(struct pj_info *pjnew, struct pj_info *pjold)
 	return -1;
     else
 	return 1;
+#endif
 }
 
 /* set_proj_lib()
@@ -396,11 +455,19 @@ int pj_print_proj_params(const struct pj_info *iproj, const struct pj_info *opro
     char *str;
 
     if (iproj) {
+#ifdef HAVE_PROJ_H
+	str = gpj_get_def(iproj->pj);
+#else
 	str = pj_get_def(iproj->pj, 1);
+#endif
 	if (str != NULL) {
 	    fprintf(stderr, "%s: %s\n", _("Input Projection Parameters"),
 		    str);
+#ifdef HAVE_PROJ_H
+	    G_free(str);
+#else
 	    pj_dalloc(str);
+#endif
 	    fprintf(stderr, "%s: %.16g\n", _("Input Unit Factor"),
 		    iproj->meters);
 	}
@@ -409,11 +476,19 @@ int pj_print_proj_params(const struct pj_info *iproj, const struct pj_info *opro
     }
 
     if (oproj) {
+#ifdef HAVE_PROJ_H
+	str = gpj_get_def(oproj->pj);
+#else
 	str = pj_get_def(oproj->pj, 1);
+#endif
 	if (str != NULL) {
 	    fprintf(stderr, "%s: %s\n", _("Output Projection Parameters"),
 		    str);
+#ifdef HAVE_PROJ_H
+	    G_free(str);
+#else
 	    pj_dalloc(str);
+#endif
 	    fprintf(stderr, "%s: %.16g\n", _("Output Unit Factor"),
 		    oproj->meters);
 	}
