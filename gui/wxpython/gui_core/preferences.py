@@ -973,6 +973,22 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos=(row, 0), span=(1, 2))
 
         #
+        # show computation extent
+        #
+        row += 1
+        showCompExtent = wx.CheckBox(parent=panel, id=wx.ID_ANY, label=_(
+            "Show computational region extent"), name="IsChecked")
+        showCompExtent.SetValue(
+            self.settings.Get(
+                group='display',
+                key='showCompExtent',
+                subkey='enabled'))
+        self.winId['display:showCompExtent:enabled'] = showCompExtent.GetId()
+
+        gridSizer.Add(showCompExtent,
+                      pos=(row, 0), span=(1, 2))
+        
+        #
         # mouse wheel zoom
         #
         row += 1

@@ -533,6 +533,18 @@ class MapApp(wx.App):
 
         self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(False)
 
+        # set default properties
+        self.mapFrm.SetProperties(render=UserSettings.Get(
+            group='display', key='autoRendering', subkey='enabled'),
+                                 mode=UserSettings.Get(
+            group='display', key='statusbarMode', subkey='selection'),
+                                 alignExtent=UserSettings.Get(
+            group='display', key='alignExtent', subkey='enabled'),
+                                 constrainRes=UserSettings.Get(
+            group='display', key='compResolution', subkey='enabled'),
+                                 showCompExtent=UserSettings.Get(
+            group='display', key='showCompExtent', subkey='enabled'))
+
         self.Map.saveToFile.connect(lambda cmd: self.mapFrm.DOutFile(cmd))
         self.Map.dToRast.connect(lambda cmd: self.mapFrm.DToRast(cmd))
         self.Map.query.connect(

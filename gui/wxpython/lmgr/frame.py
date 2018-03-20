@@ -2094,6 +2094,18 @@ class GMFrame(wx.Frame):
             except:
                 pass
 
+        # set default properties
+        mapdisplay.SetProperties(render=UserSettings.Get(
+            group='display', key='autoRendering', subkey='enabled'),
+                                 mode=UserSettings.Get(
+            group='display', key='statusbarMode', subkey='selection'),
+                                 alignExtent=UserSettings.Get(
+            group='display', key='alignExtent', subkey='enabled'),
+                                 constrainRes=UserSettings.Get(
+            group='display', key='compResolution', subkey='enabled'),
+                                 showCompExtent=UserSettings.Get(
+            group='display', key='showCompExtent', subkey='enabled'))
+
         self.displayIndex += 1
 
         return self.GetMapDisplay()
