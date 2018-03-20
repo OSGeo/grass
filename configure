@@ -14617,3 +14617,12 @@ echo "  Zstandard support:          `if test -n "${USE_ZSTD}" ; then echo yes ; 
 
 echo ""
 
+# remove when the new PROJ API is stable
+if test $PROJ4API = 0 ; then
+echo "$ac_t""  using new PROJ 5+ API" 1>&6
+else
+echo "$ac_t""  using old PROJ 4 API" 1>&6
+fi
+
+echo ""
+

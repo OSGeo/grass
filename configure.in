@@ -1995,3 +1995,10 @@ LOC_MSG_USE(TIFF support,USE_TIFF)
 LOC_MSG_USE(X11 support,USE_X11)
 LOC_MSG_USE(Zstandard support,USE_ZSTD)
 LOC_MSG()
+# remove when the new PROJ API is stable
+if test $PROJ4API = 0 ; then
+AC_MSG_RESULT([  using new PROJ 5+ API])
+else
+AC_MSG_RESULT([  using old PROJ 4 API])
+fi
+LOC_MSG()
