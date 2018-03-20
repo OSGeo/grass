@@ -558,8 +558,10 @@ int main(int argc, char *argv[])
 			G_debug(3, "    area = %d Vect_point_in_area() = %d", area, ret);
 
 			if (ret >= 1) {
-                            /* read categories for matched area */
-                            Vect_get_area_cats(&In, area, Cats);
+                            if (field > 0) {
+                                /* read categories for matched area */
+                                Vect_get_area_cats(&In, area, Cats);
+                            }
 			    outside = 0;
 			    break;
 			}
