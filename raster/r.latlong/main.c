@@ -32,7 +32,9 @@ int main(int argc, char *argv[])
     struct Flag *flag1;
     struct History history;	/*metadata */
     struct pj_info iproj;
+#ifndef HAVE_PROJ_H
     struct pj_info oproj;
+#endif
     struct Key_Value *in_proj_info, *in_unit_info;
 
     /************************************/ 
@@ -93,8 +95,7 @@ int main(int argc, char *argv[])
     
     /*Stolen from r.sun */ 
     /* Set up parameters for projection to lat/long if necessary */ 
-    if ((G_projection() != PROJECTION_LL)) 
-    {
+    if ((G_projection() != PROJECTION_LL)) {
 	not_ll = 1;
 
 	if ((in_proj_info = G_get_projinfo()) == NULL)
@@ -105,13 +106,14 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to get projection key values of current location"));
 	G_free_key_value(in_proj_info);
 	G_free_key_value(in_unit_info);
-	
+#ifndef HAVE_PROJ_H
         /* Set output projection to latlong w/ same ellipsoid */ 
 	oproj.zone = 0;
 	oproj.meters = 1.;
 	sprintf(oproj.proj, "ll");
 	if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
 	    G_fatal_error(_("Unable to set up lat/long projection parameters"));
+#endif
     }	/* End of stolen from r.sun */
 
     outrast1 = Rast_allocate_d_buf();
@@ -129,7 +131,11 @@ int main(int argc, char *argv[])
 	    latitude = ymax - ((double)row * stepy);
 	    longitude = xmin + ((double)col * stepx);
 	    if (not_ll) 
+#ifdef HAVE_PROJ_H
+		if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0) 
+#else
 		if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0) 
+#endif
 		    G_fatal_error(_("Error in pj_do_proj"));
             if(flag1->answer)
 	        d = longitude;
