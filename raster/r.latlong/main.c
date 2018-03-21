@@ -130,12 +130,8 @@ int main(int argc, char *argv[])
         {
 	    latitude = ymax - ((double)row * stepy);
 	    longitude = xmin + ((double)col * stepx);
-	    if (not_ll) 
-#ifdef HAVE_PROJ_H
+	    if (not_ll)
 		if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0) 
-#else
-		if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0) 
-#endif
 		    G_fatal_error(_("Error in pj_do_proj"));
             if(flag1->answer)
 	        d = longitude;
