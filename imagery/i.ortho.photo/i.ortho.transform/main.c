@@ -139,7 +139,7 @@ static void compute_transformation(void)
     count = 0;
 
     for (n = 0; n < points->count; n++) {
-	double e1, n1, e2, n2;
+	double etmp, ntmp;
 	double fx, fy, fd, fd2;
 	double rx, ry, rd, rd2;
 
@@ -148,14 +148,16 @@ static void compute_transformation(void)
 
 	count++;
 
+	fd = fd2 = rd = rd2 = 0;
+
 	if (need_fwd) {
 	    /* image -> photo -> target */
 
 	    /* image coordinates ex, nx to photo coordinates ex1, nx1 */
-	    I_georef(points->e1[n], points->n1[n], &e1, &n1, group.E12, group.N12, 1);
+	    I_georef(points->e1[n], points->n1[n], &etmp, &ntmp, group.E12, group.N12, 1);
 
 	    /* photo coordinates ex1, nx1 to target coordinates e1, n1 */
-	    I_inverse_ortho_ref(e1, n1, points->z1[n], &e2, &n2, &z2,
+	    I_inverse_ortho_ref(etmp, ntmp, points->z1[n], &e2, &n2, &z2,
 	                        &group.camera_ref,
 				group.XC, group.YC, group.ZC, group.MI);
 
@@ -174,11 +176,11 @@ static void compute_transformation(void)
 
 	    /* target coordinates e1, n1 to photo coordinates ex1, nx1 */
 	    I_ortho_ref(points->e2[n], points->n2[n], points->z2[n],
-	                &e2, &n2, &z2, &group.camera_ref,
+	                &etmp, &ntmp, &z2, &group.camera_ref,
 			group.XC, group.YC, group.ZC, group.M);
 
 	    /* photo coordinates ex1, nx1 to image coordinates ex, nx */
-	    I_georef(e2, n2, &e1, &n1, group.E21, group.N21, 1);
+	    I_georef(etmp, ntmp, &e1, &n1, group.E21, group.N21, 1);
 
 	    rx = fabs(e1 - points->e1[n]);
 	    ry = fabs(n1 - points->n1[n]);
