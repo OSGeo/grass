@@ -125,11 +125,8 @@ long calc_solar_position(double longitude, double latitude, double timezone,
 #endif
 	/* XX do the transform 
 	 *               outx        outy    in_info  out_info */
-#ifdef HAVE_PROJ_H
+
 	if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0) {
-#else
-	if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0) {
-#endif
 	    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 	}
 
