@@ -344,6 +344,9 @@ int G_parser(int argc, char **argv)
     G_basename(tmp_name, "exe");
     st->pgm_name = tmp_name;
 
+    if (!st->module_info.label && !st->module_info.description)
+        G_warning(_("Bug in UI description. Missing module description"));
+
     /* Stash default answers */
 
     opt = &st->first_option;
@@ -351,8 +354,12 @@ int G_parser(int argc, char **argv)
 	if (opt->required)
 	    st->has_required = 1;
 
+        if (!opt->key)
+            G_warning(_("Bug in UI description. Missing option key"));
 	if (!valid_option_name(opt->key))
-	    G_warning(_("BUG in option name, '%s' is not valid"), opt->key);
+	    G_warning(_("Bug in UI description. Option key <%s> is not valid"), opt->key);
+        if (!opt->label && !opt->description)
+            G_warning(_("Bug in UI description. Description for option <%s> missing"), opt->key ? opt->key : "?");
 
 	/* Parse options */
 	if (opt->options) {
@@ -404,7 +411,7 @@ int G_parser(int argc, char **argv)
 			j++;
 		    }
 		    if (!found) {
-			G_warning(_("BUG in descriptions, option '%s' in <%s> does not exist"),
+			G_warning(_("Bug in UI description. Option '%s' in <%s> does not exist"),
 				  tokens[i], opt->key);
 		    }
 		    else {
