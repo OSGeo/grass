@@ -294,11 +294,7 @@ int main(int argc, char *argv[])
 	    north_ll = (window.north + window.south) / 2;
 	    east_ll = (window.east + window.west) / 2;
 	    if (do_reproj) {
-#ifdef HAVE_PROJ_H
 		if (GPJ_do_proj_ll(&east_ll, &north_ll, &iproj, PJ_INV) < 0)
-#else
-		if (pj_do_proj(&east_ll, &north_ll, &iproj, &oproj) < 0)
-#endif
 		    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 	    }
 	    pd.timezone = east_ll / 15.;
@@ -392,11 +388,7 @@ int main(int argc, char *argv[])
 
 	    if (do_reproj) {
 		north_ll = north;
-#ifdef HAVE_PROJ_H
 		if (GPJ_do_proj_ll(&east_ll, &north_ll, &iproj, PJ_INV) < 0)
-#else
-		if (pj_do_proj(&east_ll, &north_ll, &iproj, &oproj) < 0)
-#endif
 		    G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 	    }
 
