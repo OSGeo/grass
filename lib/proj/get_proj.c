@@ -33,21 +33,11 @@ static void alloc_options(char *);
 static char *opt_in[MAX_PARGS];
 static int nopt;
 
+/* TODO: remove hack for PROJ 5+ */
 #ifdef HAVE_PROJ_H
-static char *gpj_get_def(PJ *P)
-{
-    char *pjdef;
-    PJ_PROJ_INFO pjinfo;
-
-    if (P == NULL)
-	G_fatal_error("Invalid PJ pointer");
-
-    pjinfo = proj_pj_info(P);
-
-    pjdef = G_store(pjinfo.definition);
-
-    return pjdef;
-}
+char *pj_get_def(PJ *, int);
+void pj_dalloc(void *);
+void pj_free(PJ *);
 #endif
 
 /* TODO: rename pj_ to GPJ_ to avoid symbol clash with PROJ lib */
@@ -455,19 +445,11 @@ int pj_print_proj_params(const struct pj_info *iproj, const struct pj_info *opro
     char *str;
 
     if (iproj) {
-#ifdef HAVE_PROJ_H
-	str = gpj_get_def(iproj->pj);
-#else
 	str = pj_get_def(iproj->pj, 1);
-#endif
 	if (str != NULL) {
 	    fprintf(stderr, "%s: %s\n", _("Input Projection Parameters"),
 		    str);
-#ifdef HAVE_PROJ_H
-	    G_free(str);
-#else
 	    pj_dalloc(str);
-#endif
 	    fprintf(stderr, "%s: %.16g\n", _("Input Unit Factor"),
 		    iproj->meters);
 	}
@@ -476,19 +458,11 @@ int pj_print_proj_params(const struct pj_info *iproj, const struct pj_info *opro
     }
 
     if (oproj) {
-#ifdef HAVE_PROJ_H
-	str = gpj_get_def(oproj->pj);
-#else
 	str = pj_get_def(oproj->pj, 1);
-#endif
 	if (str != NULL) {
 	    fprintf(stderr, "%s: %s\n", _("Output Projection Parameters"),
 		    str);
-#ifdef HAVE_PROJ_H
-	    G_free(str);
-#else
 	    pj_dalloc(str);
-#endif
 	    fprintf(stderr, "%s: %.16g\n", _("Output Unit Factor"),
 		    oproj->meters);
 	}
