@@ -1894,11 +1894,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 			longitude = gridGeom.xp;
 			latitude = gridGeom.yp;
 
-#ifdef HAVE_PROJ_H
 			if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0) {
-#else
-			if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0) {
-#endif
 			    G_fatal_error("Error in pj_do_proj");
 			}
 
