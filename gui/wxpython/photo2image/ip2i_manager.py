@@ -1019,7 +1019,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             else:
                 flags = "a"
 
-            busy = wx.BusyInfo(message=_("Rectifying images, please wait..."),
+            busy = wx.BusyInfo(_("Rectifying images, please wait..."),
                                parent=self)
             wx.Yield()
 
@@ -1033,7 +1033,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                                   method=self.gr_method,
                                   flags=flags)
 
-            busy.Destroy()
+            del busy
 
             # provide feedback on failure
             if ret != 0:
@@ -1041,7 +1041,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 print(self.grwiz.src_map, file=sys.stderr)
                 print(msg, file=sys.stderr)
 
-            busy = wx.BusyInfo(message=_("Writing output image to group, please wait..."),
+            busy = wx.BusyInfo(_("Writing output image to group, please wait..."),
                                parent=self)
             wx.Yield()
 
@@ -1052,7 +1052,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                                   group=self.xygroup,
                                   input=''.join([self.grwiz.src_map.split('@')[0],self.extension]))
 
-            busy.Destroy()
+            del busy
 
             if ret1 != 0:
                 print('ip2i: Error in i.group', file=sys.stderr)

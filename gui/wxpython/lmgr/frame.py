@@ -1393,7 +1393,7 @@ class GMFrame(wx.Frame):
                 filename)
             return
 
-        busy = wx.BusyInfo(message=_("Please wait, loading workspace..."),
+        busy = wx.BusyInfo(_("Please wait, loading workspace..."),
                            parent=self)
         wx.Yield()
 
@@ -1501,8 +1501,7 @@ class GMFrame(wx.Frame):
             else:
                 maptree.SelectItem(layer, select=False)
 
-
-        busy.Destroy()
+        del busy
 
         # set render property again when all layers are loaded
         for i, display in enumerate(gxwXml.displays):
@@ -1565,7 +1564,7 @@ class GMFrame(wx.Frame):
         if not self.currentPage:
             self.NewDisplay()
 
-        busy = wx.BusyInfo(message=_("Please wait, loading workspace..."),
+        busy = wx.BusyInfo(_("Please wait, loading workspace..."),
                            parent=self)
         wx.Yield()
 
@@ -1579,7 +1578,7 @@ class GMFrame(wx.Frame):
                                        lcmd=layer['cmd'],
                                        lgroup=layer['group'])
 
-            busy.Destroy()
+        del busy
 
         if maptree:
             # reverse list of map layers

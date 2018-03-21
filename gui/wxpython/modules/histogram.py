@@ -188,7 +188,7 @@ class BufferedWindow(wx.Window):
         file. See the wx.Windows docs for wx.Bitmap::SaveFile for the
         details
         """
-        busy = wx.BusyInfo(message=_("Please wait, exporting image..."),
+        busy = wx.BusyInfo(_("Please wait, exporting image..."),
                            parent=self)
         wx.Yield()
 
@@ -204,7 +204,7 @@ class BufferedWindow(wx.Window):
         self.pdc.DrawToDC(dc)
         ibuffer.SaveFile(FileName, FileType)
 
-        busy.Destroy()
+        del busy
 
     def GetImage(self):
         """Converts files to wx.Image
