@@ -90,20 +90,12 @@ int do_geogrid(void)
 	    n1 = n2 = g;
 	    e1 = west + (ll * ((east - west) / SEGS));
 	    e2 = e1 + ((east - west) / SEGS);
-#ifdef HAVE_PROJ_H
 	    if (GPJ_do_proj_ll(&e1, &n1, &info_in, PJ_INV) < 0)
-#else
-	    if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-#endif
 		G_fatal_error(_("Error in pj_do_proj"));
 	    check_coords(e1, n1, &lon, &lat, 1);
 	    e1 = lon;
 	    n1 = lat;
-#ifdef HAVE_PROJ_H
 	    if (GPJ_do_proj_ll(&e2, &n2, &info_in, PJ_INV) < 0)
-#else
-	    if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
-#endif
 		G_fatal_error(_("Error in pj_do_proj"));
 	    check_coords(e2, n2, &lon, &lat, 1);
 	    e2 = lon;
@@ -127,20 +119,12 @@ int do_geogrid(void)
 	    e1 = e2 = g;
 	    n1 = south + (ll * ((north - south) / SEGS));
 	    n2 = n1 + ((north - south) / SEGS);
-#ifdef HAVE_PROJ_H
 	    if (GPJ_do_proj_ll(&e1, &n1, &info_in, PJ_INV) < 0)
-#else
-	    if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-#endif
 		G_fatal_error(_("Error in pj_do_proj"));
 	    check_coords(e1, n1, &lon, &lat, 2);
 	    e1 = lon;
 	    n1 = lat;
-#ifdef HAVE_PROJ_H
 	    if (GPJ_do_proj_ll(&e2, &n2, &info_in, PJ_INV) < 0)
-#else
-	    if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
-#endif
 		G_fatal_error(_("Error in pj_do_proj"));
 	    check_coords(e2, n2, &lon, &lat, 2);
 	    e2 = lon;
@@ -214,11 +198,7 @@ int do_geogrid_numbers(void)
     for (; g > south; g -= grid) {
 	e1 = east;		/* draw at east boundary */
 	n1 = g;
-#ifdef HAVE_PROJ_H
 	if (GPJ_do_proj_ll(&e1, &n1, &info_in, PJ_INV) < 0)
-#else
-	if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-#endif
 	    G_fatal_error(_("Error in pj_do_proj"));
 	check_coords(e1, n1, &lon, &lat, 1);
 	e1 = lon;
@@ -259,11 +239,7 @@ int do_geogrid_numbers(void)
     for (; g < east; g += grid) {
 	e1 = g;
 	n1 = south;		/* draw at south edge */
-#ifdef HAVE_PROJ_H
 	if (GPJ_do_proj_ll(&e1, &n1, &info_in, PJ_INV) < 0)
-#else
-	if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-#endif
 	    G_fatal_error(_("Error in pj_do_proj"));
 	check_coords(e1, n1, &lon, &lat, 2);
 	e1 = lon;
@@ -341,11 +317,7 @@ void get_ll_bounds(double *w, double *e, double *s, double *n)
     for (ew = PS.w.west; ew <= PS.w.east; ew += PS.w.ew_res) {
 	e1 = ew;
 	n1 = PS.w.north;
-#ifdef HAVE_PROJ_H
 	if (GPJ_do_proj_ll(&e1, &n1, &info_in, PJ_FWD) < 0)
-#else
-	if (pj_do_proj(&e1, &n1, &info_out, &info_in) < 0)
-#endif
 	    G_fatal_error(_("Error in pj_do_proj"));
 	if (!first) {
 	    north = n1;
@@ -361,11 +333,7 @@ void get_ll_bounds(double *w, double *e, double *s, double *n)
     for (ew = PS.w.west; ew <= PS.w.east; ew += PS.w.ew_res) {
 	e1 = ew;
 	s1 = PS.w.south;
-#ifdef HAVE_PROJ_H
 	if (GPJ_do_proj_ll(&e1, &s1, &info_in, PJ_FWD) < 0)
-#else
-	if (pj_do_proj(&e1, &s1, &info_out, &info_in) < 0)
-#endif
 	    G_fatal_error(_("Error in pj_do_proj"));
 	if (!first) {
 	    south = s1;
@@ -382,11 +350,7 @@ void get_ll_bounds(double *w, double *e, double *s, double *n)
     for (ns = PS.w.south; ns <= PS.w.north; ns += PS.w.ns_res) {
 	e1 = PS.w.east;
 	n1 = ns;
-#ifdef HAVE_PROJ_H
 	if (GPJ_do_proj_ll(&e1, &n1, &info_in, PJ_FWD) < 0)
-#else
-	if (pj_do_proj(&e1, &n1, &info_out, &info_in) < 0)
-#endif
 	    G_fatal_error(_("Error in pj_do_proj"));
 	if (!first) {
 	    east = e1;
@@ -403,11 +367,7 @@ void get_ll_bounds(double *w, double *e, double *s, double *n)
     for (ns = PS.w.south; ns <= PS.w.north; ns += PS.w.ns_res) {
 	w1 = PS.w.west;
 	n1 = ns;
-#ifdef HAVE_PROJ_H
 	if (GPJ_do_proj_ll(&w1, &n1, &info_in, PJ_FWD) < 0)
-#else
-	if (pj_do_proj(&w1, &n1, &info_out, &info_in) < 0)
-#endif
 	    G_fatal_error(_("Error in pj_do_proj"));
 	if (!first) {
 	    west = w1;
@@ -463,29 +423,17 @@ void check_coords(double e, double n, double *lon, double *lat, int par)
 
     if (proj) {
 	/* convert original coords to ll */
-#ifdef HAVE_PROJ_H
 	if (GPJ_do_proj_ll(&e, &n, &info_in, PJ_FWD) < 0)
-#else
-	if (pj_do_proj(&e, &n, &info_out, &info_in) < 0)
-#endif
 	    G_fatal_error(_("Error in pj_do_proj"));
 
 	if (par == 1) {
 	    /* lines of latitude -- const. northing */
 	    /* convert correct UTM to ll */
-#ifdef HAVE_PROJ_H
 	    if (GPJ_do_proj_ll(&x, &y, &info_in, PJ_FWD) < 0)
-#else
-	    if (pj_do_proj(&x, &y, &info_out, &info_in) < 0)
-#endif
 		G_fatal_error(_("Error in pj_do_proj"));
 
 	    /* convert new ll back to coords */
-#ifdef HAVE_PROJ_H
 	    if (GPJ_do_proj_ll(&x, &n, &info_in, PJ_INV) < 0)
-#else
-	    if (pj_do_proj(&x, &n, &info_in, &info_out) < 0)
-#endif
 		G_fatal_error(_("Error in pj_do_proj"));
 	    *lat = n;
 	    *lon = x;
@@ -493,19 +441,11 @@ void check_coords(double e, double n, double *lon, double *lat, int par)
 	if (par == 2) {
 	    /* lines of longitude -- const. easting */
 	    /* convert correct UTM to ll */
-#ifdef HAVE_PROJ_H
 	    if (GPJ_do_proj_ll(&x, &y, &info_in, PJ_FWD) < 0)
-#else
-	    if (pj_do_proj(&x, &y, &info_out, &info_in) < 0)
-#endif
 		G_fatal_error(_("Error in pj_do_proj"));
 
 	    /* convert new ll back to coords */
-#ifdef HAVE_PROJ_H
 	    if (GPJ_do_proj_ll(&e, &y, &info_in, PJ_INV) < 0)
-#else
-	    if (pj_do_proj(&e, &y, &info_in, &info_out) < 0)
-#endif
 		G_fatal_error(_("Error in pj_do_proj"));
 	    *lat = y;
 	    *lon = e;
