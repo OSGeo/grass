@@ -43,34 +43,46 @@ do {\
 
 static double METERS_in = 1.0, METERS_out = 1.0;
 
-/* TODO: remove hack for PROJ 5+ */
-#ifdef HAVE_PROJ_H
-char *pj_get_def(PJ *, int);
-void pj_dalloc(void *);
-void pj_free(PJ *);
-
 /* TODO: add to gprojects.h */
-/* Create a PROJ transformation object */
+/* Create a PROJ transformation object 
+ * to transform coordinates from an input SRS to an output SRS */
+/* PROJ 5+:
+ *   info_in, info_trans must not be null
+ *   if info_out is null, assume info_out to be ll equivalent of info_in
+ *   create info_trans from info_in to info_out
+ *   NOTE: this is against the logic of PROJ 5 which by default 
+ *         converts from ll to a given SRS
+ *         thus PROJ 5+ itself uses an inverse transformation in the
+ *         first step of the pipeline for proj_create_crs_to_crs()
+ * PROJ 4:
+ *   info_in, info_out must not be null
+ *   do nothing
+ */
 int GPJ_prepare_pjinfo(const struct pj_info *info_in,
                        const struct pj_info *info_out,
-		       struct pj_info *info_new)
+		       struct pj_info *info_trans)
 {
-    char *projdef, *projdefin, *projdefout;
+    if (info_in == NULL)
+	G_fatal_error(_("Input coordinate system is NULL"));
 
-    projdefin = pj_get_def(info_in->pj, 1);
-    projdefout = pj_get_def(info_out->pj, 1);
-    projdef = NULL;
-    G_asprintf(&projdef, "+proj=pipeline +step %s +inv +step %s", projdefin, projdefout);
-    info_new->pj = proj_create(PJ_DEFAULT_CTX, projdef);
-    if (info_new->pj == NULL)
-	G_fatal_error(_("proj_create() failed"));
-    pj_dalloc(projdefin);
-    pj_dalloc(projdefout);
-    G_free(projdef);
+#ifdef HAVE_PROJ_H
+    if (info_trans == NULL)
+	G_fatal_error(_("Transformation object for PROJ is NULL"));
+
+    G_asprintf(&(info_trans->def), "+proj=pipeline +step %s +inv +step %s",
+                         info_in->def, info_out->def);
+    info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
+    if (info_trans->pj == NULL)
+	G_fatal_error(_("proj_create() failed for '%s'"), info_trans->def);
 
     return 1;
-}
+#else
+    if (info_out == NULL)
+	G_fatal_error(_("Output coordinate system is NULL"));
+
+    return 1;
 #endif
+}
 
 /* TODO: rename pj_ to GPJ_ to avoid symbol clash with PROJ lib */
 

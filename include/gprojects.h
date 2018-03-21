@@ -49,7 +49,8 @@ struct pj_info
 #endif
     double meters;
     int zone;
-    char proj[256];
+    char proj[100];
+    char *def;
 };
 
 struct gpj_datum
@@ -84,6 +85,9 @@ struct gpj_ellps
 /* PROJ.4's private datastructures copied from projects.h as removed
    from upstream; pending better solution. see:
    http://trac.osgeo.org/proj/ticket/98 */
+
+/* In PROJ 5, the 'struct FACTORS' is back in as 'struct P5_FACTORS',
+ * and old 'struct LP' is now back in as 'PJ_UV' */
 
 typedef struct { double u, v; } LP;
 
