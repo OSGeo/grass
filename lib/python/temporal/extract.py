@@ -15,7 +15,7 @@ from .abstract_map_dataset import AbstractMapDataset
 from .open_stds import open_old_stds, check_new_stds, open_new_stds
 from .datetime_math import create_suffix_from_datetime
 from .datetime_math import create_time_suffix
-from .datetime_math import create_numeric_suffic
+from .datetime_math import create_numeric_suffix
 from multiprocessing import Process
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
@@ -103,7 +103,7 @@ def extract_dataset(input, output, type, where, expression, base, time_suffix,
                     suffix = create_time_suffix(old_map)
                     map_name = "{ba}_{su}".format(ba=base, su=suffix)
                 else:
-                    map_name = create_numeric_suffic(base, count, time_suffix)
+                    map_name = create_numeric_suffix(base, count, time_suffix)
 
                 # We need to modify the r(3).mapcalc expression
                 if type != "vector":

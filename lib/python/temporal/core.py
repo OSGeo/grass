@@ -563,6 +563,8 @@ def init(raise_fatal_error=False):
     msgr.debug(1, "Initiate the temporal database")
                   #"\n  traceback:%s"%(str("  \n".join(traceback.format_stack()))))
 
+    msgr.debug(1, ("Raise on error id: %s"%str(raise_on_error)))
+
     ciface = get_tgis_c_library_interface()
     driver_string = ciface.get_driver_name()
     database_string = ciface.get_database_name()

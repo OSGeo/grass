@@ -58,6 +58,11 @@ from .factory import dataset_factory
 from .open_stds import open_new_stds
 from spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .space_time_datasets import Raster3DDataset, RasterDataset
+from .temporal_granularity import compute_absolute_time_granularity
+
+from .datetime_math import create_suffix_from_datetime
+from .datetime_math import create_time_suffix
+from .datetime_math import create_numeric_suffix
 
 
 ##############################################################################
@@ -156,7 +161,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     def __init__(self, pid=None, run=True,
                  debug=False, spatial=False,
                  register_null=False,
-                 dry_run=False, nprocs=1):
+                 dry_run=False, nprocs=1,
+                 time_suffix=None):
 
         TemporalAlgebraParser.__init__(self,
                                        pid=pid,
@@ -165,7 +171,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                                        spatial=spatial,
                                        register_null=register_null,
                                        dry_run=dry_run,
-                                       nprocs=nprocs)
+                                       nprocs=nprocs,
+                                       time_suffix=time_suffix)
 
     def check_null(self, t):
         try:
@@ -631,23 +638,66 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 process_queue = pymod.ParallelModuleQueue(int(self.nprocs))
 
             if isinstance(t[3], list):
+
+                granularity = None
+                if len(t[3]) > 0 and self.time_suffix == 'gran':
+                    map_i = t[3][0]
+                    if map_i.is_time_absolute() is True:
+                        granularity = compute_absolute_time_granularity(t[3])
+
+                # The first loop is to check if the raster maps exists in the database
+                # Compute the size of the numerical suffix
                 num = len(t[3])
-                count = 0
                 register_list = []
                 leadzero = len(str(num))
                 for i in range(num):
+                    map_i = t[3][i]
+
+                    # Create new map with basename
+                    newident = create_numeric_suffix(self.basename, i, "%0" + str(leadzero))
+
+                    if map_i.is_time_absolute() is True and self.time_suffix and \
+                                    granularity is not None and self.time_suffix == 'gran':
+                        suffix = create_suffix_from_datetime(map_i.temporal_extent.get_start_time(),
+                                                             granularity)
+                        newident = "{ba}_{su}".format(ba=self.basename, su=suffix)
+                    # If set use the time suffix to create the map name
+                    elif map_i.is_time_absolute() is True and self.time_suffix and \
+                                    self.time_suffix == 'time':
+                        suffix = create_time_suffix(map_i)
+                        newident = "{ba}_{su}".format(ba=self.basename, su=suffix)
+
                     # Check if resultmap names exist in GRASS database.
-                    map_name = self.basename + "_" + str(i).zfill(leadzero) + "@" + self.mapset
+                    newident = newident + "@" + self.mapset
+
                     if self.stdstype == "strds":
-                        new_map = RasterDataset(map_name)
+                        new_map = RasterDataset(newident)
                     else:
-                        new_map = Raster3DDataset(map_name)
+                        new_map = Raster3DDataset(newident)
                     if new_map.map_exists() and self.overwrite is False:
                         self.msgr.fatal("Error maps with basename %s exist. "
-                                        "Use --o flag to overwrite existing file"%map_name)
+                                        "Use --o flag to overwrite existing file"%newident)
+
+                # The second loop creates the resulting raster maps
+                count = 0
                 map_test_list = []
                 for map_i in t[3]:
-                    newident = self.basename + "_" + str(count).zfill(leadzero)
+
+                    # Create new map with basename
+                    newident = create_numeric_suffix(self.basename, count,
+                                                     "%0" + str(leadzero))
+
+                    if map_i.is_time_absolute() is True and self.time_suffix and \
+                                    granularity is not None and self.time_suffix == 'gran':
+                        suffix = create_suffix_from_datetime(map_i.temporal_extent.get_start_time(),
+                                                             granularity)
+                        newident = "{ba}_{su}".format(ba=self.basename, su=suffix)
+                    # If set use the time suffix to create the map name
+                    elif map_i.is_time_absolute() is True and self.time_suffix and \
+                                    self.time_suffix == 'time':
+                        suffix = create_time_suffix(map_i)
+                        newident = "{ba}_{su}".format(ba=self.basename, su=suffix)
+
                     if "cmd_list" in dir(map_i):
                         # Build r.mapcalc module and execute expression.
                         # Change map name to given basename.

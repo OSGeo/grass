@@ -23,7 +23,7 @@ from grass.exceptions import CalledModuleError
 from .space_time_datasets import RasterDataset
 from .datetime_math import create_suffix_from_datetime
 from .datetime_math import create_time_suffix
-from .datetime_math import create_numeric_suffic
+from .datetime_math import create_numeric_suffix
 from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder, \
     create_temporal_relation_sql_where_statement
@@ -290,7 +290,7 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
                 suffix = create_time_suffix(granule)
                 output_name = "{ba}_{su}".format(ba=basename, su=suffix)
             else:
-                output_name = create_numeric_suffic(basename, count + int(offset),
+                output_name = create_numeric_suffix(basename, count + int(offset),
                                                     time_suffix)
 
             map_layer = RasterDataset("%s@%s" % (output_name,
