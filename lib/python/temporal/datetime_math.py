@@ -931,12 +931,13 @@ def create_time_suffix(mapp, end=False):
         return "{st}_{en}".format(st=sstring, en=estring)
     return sstring
 
-def create_numeric_suffic(base, count, zeros):
+
+def create_numeric_suffix(base, count, zeros):
     """Create a string based on count and number of zeros decided by zeros
 
        :param base: the basename for new map
        :param count: a number
-       :param zeros: a string containing the expected number, coming from suffix option
+       :param zeros: a string containing the expected number, coming from suffix option like "%05"
     """
     spli = zeros.split('%')
     if len(spli) == 2:

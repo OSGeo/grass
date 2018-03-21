@@ -465,6 +465,11 @@ from .temporal_operator import TemporalOperatorParser
 from spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .datetime_math import time_delta_to_relative_time, string_to_datetime
 from abstract_space_time_dataset import AbstractSpaceTimeDataset
+from .temporal_granularity import compute_absolute_time_granularity
+
+from .datetime_math import create_suffix_from_datetime
+from .datetime_math import create_time_suffix
+from .datetime_math import create_numeric_suffix
 
 ##############################################################################
 
@@ -751,7 +756,7 @@ class TemporalAlgebraParser(object):
         )
 
     def __init__(self, pid=None, run=True, debug=False, spatial=False,
-                 register_null=False, dry_run=False, nprocs=1):
+                 register_null=False, dry_run=False, nprocs=1, time_suffix=None):
         self.run = run
         self.dry_run = dry_run              # Compute the processes and output but Do not start the processes
         self.process_chain_dict = {}        # This dictionary stores all processes, as well as the maps to register and remove
@@ -777,6 +782,7 @@ class TemporalAlgebraParser(object):
         self.m_copy = pymod.Module('g.copy')
         self.nprocs = nprocs
         self.use_granularity = False
+        self.time_suffix = time_suffix
 
         # Topology lists
         self.temporal_topology_list = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED", \
@@ -2160,11 +2166,13 @@ class TemporalAlgebraParser(object):
 ###########################################################################
 
     def p_statement_assign(self, t):
-        # The expression should always return a list of maps.
+        # The expression should always return a list of maps
+        # This function starts all the work and is the last one that is called from the parser
         """
         statement : stds EQUALS expr
 
         """
+
         if self.run:
             dbif, connected = init_dbif(self.dbif)
             map_type = None
@@ -2173,6 +2181,17 @@ class TemporalAlgebraParser(object):
                 count = 0
                 register_list = []
                 if num > 0:
+
+                    # Compute the granularity for suffix creation
+                    granularity = None
+                    if len(t[3]) > 0 and self.time_suffix == 'gran':
+                        map_i = t[3][0]
+                        if map_i.is_time_absolute() is True:
+                            granularity = compute_absolute_time_granularity(t[3])
+
+                    # compute the size of the numerical suffix
+                    num = len(t[3])
+                    leadzero = len(str(num))
 
                     if self.dry_run is False:
                         process_queue = pymod.ParallelModuleQueue(int(self.nprocs))
@@ -2189,7 +2208,7 @@ class TemporalAlgebraParser(object):
                         else:
                             map_type_2 = map_i.get_type()
                             if map_type != map_type_2:
-                                self.msgr.fatal(_("Maps that should be registered in the "\
+                                self.msgr.fatal(_("Maps that should be registered in the "
                                                   "resulting space time dataset have different types."))
                         count += 1
 
@@ -2201,8 +2220,21 @@ class TemporalAlgebraParser(object):
                         map_b.select(dbif)
                         map_b_extent = map_b.get_temporal_extent_as_tuple()
                         if map_a_extent != map_b_extent:
+
                             # Create new map with basename
-                            newident = self.basename + "_" + str(count)
+                            newident = create_numeric_suffix(self.basename, count, "%0" + str(leadzero))
+
+                            if map_i.is_time_absolute() is True and self.time_suffix and \
+                                            granularity is not None and self.time_suffix == 'gran':
+                                suffix = create_suffix_from_datetime(map_i.temporal_extent.get_start_time(),
+                                                                     granularity)
+                                newident = "{ba}_{su}".format(ba=self.basename, su=suffix)
+                            # If set use the time suffix to create the map name
+                            elif map_i.is_time_absolute() is True and self.time_suffix and \
+                                            self.time_suffix == 'time':
+                                suffix = create_time_suffix(map_i)
+                                newident = "{ba}_{su}".format(ba=self.basename, su=suffix)
+
                             map_result = map_i.get_new_instance(newident + "@" + self.mapset)
 
                             if map_result.map_exists() and self.overwrite == False:
@@ -2254,7 +2286,6 @@ class TemporalAlgebraParser(object):
                         start, end = map_i.get_temporal_extent_as_tuple()
                         self.process_chain_dict["register"].append((map_i.get_name(), str(start), str(end)))
 
-                        # Check if temporal extents have changed and a new map was created
                         if hasattr(map_i, "is_new") is True:
                             # Do not register empty maps if not required
                             # In case of a null map continue, do not register null maps

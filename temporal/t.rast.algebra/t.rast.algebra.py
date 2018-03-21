@@ -46,6 +46,15 @@
 #%end
 
 #%option
+#% key: suffix
+#% type: string
+#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+#% answer: num
+#% required: no
+#% multiple: no
+#%end
+
+#%option
 #% key: nprocs
 #% type: integer
 #% description: Number of r.mapcalc processes to run in parallel
@@ -85,6 +94,7 @@ def main():
     expression = options['expression']
     basename = options['basename']
     nprocs = options["nprocs"]
+    time_suffix = options["suffix"]
     spatial = flags["s"]
     register_null = flags["n"]
     granularity = flags["g"]
@@ -105,7 +115,7 @@ def main():
                                          spatial=spatial,
                                          nprocs=nprocs,
                                          register_null=register_null,
-                                         dry_run=dry_run)
+                                         dry_run=dry_run, time_suffix=time_suffix)
 
     if granularity:
         if not p.setup_common_granularity(expression=expression,  lexer = tgis.TemporalRasterAlgebraLexer()):

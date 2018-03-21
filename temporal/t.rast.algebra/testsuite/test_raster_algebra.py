@@ -109,8 +109,8 @@ class TestTRastAlgebra(TestCase):
     def test_simple_arith_td_1(self):
         """Simple arithmetic test"""
        
-        self.assertModule("t.rast.algebra", expression='R = A + td(A)', basename="r", flags="d")
-        self.assertModule("t.rast.algebra", expression='R = A + td(A)', basename="r")
+        self.assertModule("t.rast.algebra", expression='R = A + td(A)', basename="r", flags="d", suffix="time")
+        self.assertModule("t.rast.algebra", expression='R = A + td(A)', basename="r", suffix="time")
 
         D = tgis.open_old_stds("R", type="strds")
         
@@ -124,8 +124,8 @@ class TestTRastAlgebra(TestCase):
     def test_simple_arith_td_2(self):
         """Simple arithmetic test"""
        
-        self.assertModule("t.rast.algebra", expression='R = A / td(A)', basename="r", flags="d")
-        self.assertModule("t.rast.algebra", expression='R = A / td(A)', basename="r")
+        self.assertModule("t.rast.algebra", expression='R = A / td(A)', basename="r", flags="d", suffix="gran")
+        self.assertModule("t.rast.algebra", expression='R = A / td(A)', basename="r", suffix="gran")
 
         D = tgis.open_old_stds("R", type="strds")
         
