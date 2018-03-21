@@ -43,34 +43,29 @@ do {\
 
 static double METERS_in = 1.0, METERS_out = 1.0;
 
+/* TODO: remove hack for PROJ 5+ */
 #ifdef HAVE_PROJ_H
-static char *gpj_get_def(PJ *P)
-{
-    char *pjdef;
-    PJ_PROJ_INFO pj_proj_info = proj_pj_info(P);
-
-    pjdef = G_store(pj_proj_info.definition);
-
-    return pjdef;
-}
+char *pj_get_def(PJ *, int);
+void pj_dalloc(void *);
+void pj_free(PJ *);
 
 /* TODO: add to gprojects.h */
-/* Create a transformation object */
+/* Create a PROJ transformation object */
 int GPJ_prepare_pjinfo(const struct pj_info *info_in,
                        const struct pj_info *info_out,
 		       struct pj_info *info_new)
 {
     char *projdef, *projdefin, *projdefout;
 
-    projdefin = gpj_get_def(info_in->pj);
-    projdefout = gpj_get_def(info_out->pj);
+    projdefin = pj_get_def(info_in->pj, 1);
+    projdefout = pj_get_def(info_out->pj, 1);
     projdef = NULL;
     G_asprintf(&projdef, "+proj=pipeline +step %s +inv +step %s", projdefin, projdefout);
     info_new->pj = proj_create(PJ_DEFAULT_CTX, projdef);
     if (info_new->pj == NULL)
 	G_fatal_error(_("proj_create() failed"));
-    G_free(projdefin);
-    G_free(projdefout);
+    pj_dalloc(projdefin);
+    pj_dalloc(projdefout);
     G_free(projdef);
 
     return 1;

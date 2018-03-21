@@ -33,21 +33,11 @@
 static void DatumNameMassage(char **);
 #endif
 
+/* TODO: remove hack for PROJ 5+ */
 #ifdef HAVE_PROJ_H
-char *gpj_get_def(PJ *P)
-{
-    char *pjdef;
-    PJ_PROJ_INFO pjinfo;
-
-    if (P == NULL)
-	G_fatal_error("Invalid PJ pointer");
-
-    pjinfo = proj_pj_info(P);
-
-    pjdef = G_store(pjinfo.definition);
-
-    return pjdef;
-}
+char *pj_get_def(PJ *, int);
+void pj_dalloc(void *);
+void pj_free(PJ *);
 #endif
 
 
@@ -207,22 +197,21 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
 
     hSRS = OSRNewSpatialReference(NULL);
 
+    /* create PROJ structure from GRASS key/value pairs */
     if (pj_get_kv(&pjinfo, proj_info, proj_units) < 0) {
 	G_warning(_("Unable parse GRASS PROJ_INFO file"));
 	return NULL;
     }
 
-#ifdef HAVE_PROJ_H
-    if ((proj4 = gpj_get_def(pjinfo.pj)) == NULL) {
-	G_warning(_("Unable get PROJ.4-style parameter string"));
-	return NULL;
-    }
-    proj_destroy(pjinfo.pj);
-#else
+    /* fetch the PROJ definition */
+    /* TODO: get the PROJ definition as used by pj_get_kv() */
     if ((proj4 = pj_get_def(pjinfo.pj, 0)) == NULL) {
 	G_warning(_("Unable get PROJ.4-style parameter string"));
 	return NULL;
     }
+#ifdef HAVE_PROJ_H
+    proj_destroy(pjinfo.pj);
+#else
     pj_free(pjinfo.pj);
 #endif
 
@@ -232,11 +221,9 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
 	G_asprintf(&proj4mod, "%s +to_meter=%s", proj4, unfact);
     else
 	proj4mod = G_store(proj4);
-#ifdef HAVE_PROJ_H
-    G_free(proj4);
-#else
     pj_dalloc(proj4);
-#endif
+
+    /* create GDAL OSR from proj string */
     if ((errcode = OSRImportFromProj4(hSRS, proj4mod)) != OGRERR_NONE) {
 	G_warning(_("OGR can't parse PROJ.4-style parameter string: "
 		    "%s (OGR Error code was %d)"), proj4mod, errcode);
