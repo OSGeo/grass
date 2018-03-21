@@ -33,13 +33,6 @@ static void alloc_options(char *);
 static char *opt_in[MAX_PARGS];
 static int nopt;
 
-/* TODO: remove hack for PROJ 5+ */
-#ifdef HAVE_PROJ_H
-char *pj_get_def(PJ *, int);
-void pj_dalloc(void *);
-void pj_free(PJ *);
-#endif
-
 /* TODO: rename pj_ to GPJ_ to avoid symbol clash with PROJ lib */
 
 /**
@@ -61,7 +54,7 @@ void pj_free(PJ *);
  *          2 if "default" 3-parameter datum shift values from datum.table
  *            were used
  *          3 if an unrecognised datum name was passed on to PROJ.4 (and
- *            initialization was successful
+ *            initialization was successful)
  *          1 otherwise
  **/
 
@@ -73,6 +66,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     double a, es, rf;
     int returnval = 1;
     char buffa[300], factbuff[50];
+    int deflen;
     char proj_in[250], *datum, *params;
 #ifdef HAVE_PROJ_H
     PJ *pj;
@@ -85,6 +79,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     info->zone = 0;
     info->meters = 1.0;
     info->proj[0] = '\0';
+    info->def = NULL;
 
     str = G_find_key_value("meters", in_units_keys);
     if (str != NULL) {
@@ -267,8 +262,21 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     
     info->pj = pj;
 
+    deflen = 0;
     for (i = 0; i < nopt; i++)
+	deflen += strlen(opt_in[i]) + 2;
+
+    info->def = G_malloc(deflen + 1);
+
+    sprintf(buffa,  "+%s ", opt_in[0]);
+    strcpy(info->def, buffa);
+    G_free(opt_in[0]);
+
+    for (i = 0; i < nopt; i++) {
+	sprintf(buffa,  "+%s ", opt_in[0]);
+	strcat(info->def, buffa);
 	G_free(opt_in[i]);
+    }
 
     return returnval;
 }
@@ -283,11 +291,31 @@ static void alloc_options(char *buffa)
     return;
 }
 
+/**
+ * \brief Create a pj_info struct Co-ordinate System definition from a 
+ *        string with a sequence of key=value pairs
+ * 
+ * This function takes a GRASS- or PROJ style co-ordinate system definition 
+ * and processes it to create a pj_info representation for use in 
+ * re-projecting with pj_do_proj(). In addition to the parameters passed 
+ * to it it may also make reference to the system ellipse.table and 
+ * datum.table files if necessary.
+ * 
+ * \param info Pointer to a pj_info struct (which must already exist) into 
+ *        which the co-ordinate system definition will be placed
+ * \param str input string with projection definition
+ * \param in_units_keys PROJ_UNITS-style key-value pairs
+ * 
+ * \return -1 on error (unable to initialise PROJ.4)
+ *          1 on success
+ **/
+
 int pj_get_string(struct pj_info *info, char *str)
 {
     char *s;
     int i, nsize;
     char zonebuff[50], buffa[300];
+    int deflen;
 #ifdef HAVE_PROJ_H
     PJ *pj;
     PJ_CONTEXT *pjc;
@@ -298,6 +326,7 @@ int pj_get_string(struct pj_info *info, char *str)
     info->zone = 0;
     info->proj[0] = '\0';
     info->meters = 1.0;
+    info->def = NULL;
     
     nopt = 0;
 
@@ -369,12 +398,29 @@ int pj_get_string(struct pj_info *info, char *str)
 #endif
     info->pj = pj;
 
+    deflen = 0;
     for (i = 0; i < nopt; i++)
+	deflen += strlen(opt_in[i]) + 2;
+
+    info->def = G_malloc(deflen + 1);
+
+    sprintf(buffa,  "+%s ", opt_in[0]);
+    strcpy(info->def, buffa);
+    G_free(opt_in[0]);
+
+    for (i = 0; i < nopt; i++) {
+	sprintf(buffa,  "+%s ", opt_in[0]);
+	strcat(info->def, buffa);
 	G_free(opt_in[i]);
+    }
 
     return 1;
 }
 
+#ifndef HAVE_PROJ_H
+/* GPJ_get_equivalent_latlong(): only available with PROJ 4 API
+ * with the new PROJ 5+ API, use pjold directly with PJ_FWD/PJ_INV transformation
+*/
 /**
  * \brief Define a latitude / longitude co-ordinate system with the same
  *        ellipsoid and datum parameters as an existing projected system
@@ -393,19 +439,22 @@ int pj_get_string(struct pj_info *info, char *str)
 
 int GPJ_get_equivalent_latlong(struct pj_info *pjnew, struct pj_info *pjold)
 {
-#ifdef HAVE_PROJ_H
-    G_fatal_error(_("GPJ_get_equivalent_latlong(): with the new PROJ 5+ API "
-                    "use the old pj directly with PJ_FWD/PJ_INV transformation"));
-#else
+    char *deftmp;
+
     pjnew->meters = 1.;
     pjnew->zone = 0;
+    pjnew->def = NULL;
     sprintf(pjnew->proj, "ll");
     if ((pjnew->pj = pj_latlong_from_proj(pjold->pj)) == NULL)
 	return -1;
-    else
-	return 1;
-#endif
+
+    deftmp = pj_get_def(pjnew->pj, 1);
+    pjnew->def = G_store(deftmp);
+    pj_dalloc(deftmp);
+
+    return 1;
 }
+#endif
 
 /* set_proj_lib()
  * 'finder function' for use with PROJ.4 pj_set_finder() function */
@@ -445,11 +494,10 @@ int pj_print_proj_params(const struct pj_info *iproj, const struct pj_info *opro
     char *str;
 
     if (iproj) {
-	str = pj_get_def(iproj->pj, 1);
+	str = iproj->def;
 	if (str != NULL) {
 	    fprintf(stderr, "%s: %s\n", _("Input Projection Parameters"),
 		    str);
-	    pj_dalloc(str);
 	    fprintf(stderr, "%s: %.16g\n", _("Input Unit Factor"),
 		    iproj->meters);
 	}
@@ -458,11 +506,10 @@ int pj_print_proj_params(const struct pj_info *iproj, const struct pj_info *opro
     }
 
     if (oproj) {
-	str = pj_get_def(oproj->pj, 1);
+	str = oproj->def;
 	if (str != NULL) {
 	    fprintf(stderr, "%s: %s\n", _("Output Projection Parameters"),
 		    str);
-	    pj_dalloc(str);
 	    fprintf(stderr, "%s: %.16g\n", _("Output Unit Factor"),
 		    oproj->meters);
 	}

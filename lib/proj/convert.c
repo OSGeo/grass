@@ -33,14 +33,6 @@
 static void DatumNameMassage(char **);
 #endif
 
-/* TODO: remove hack for PROJ 5+ */
-#ifdef HAVE_PROJ_H
-char *pj_get_def(PJ *, int);
-void pj_dalloc(void *);
-void pj_free(PJ *);
-#endif
-
-
 /* from proj-5.0.0/src/pj_units.c */
 struct gpj_units {
     char    *id;        /* units keyword */
@@ -205,7 +197,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
 
     /* fetch the PROJ definition */
     /* TODO: get the PROJ definition as used by pj_get_kv() */
-    if ((proj4 = pj_get_def(pjinfo.pj, 0)) == NULL) {
+    if ((proj4 = pjinfo.def) == NULL) {
 	G_warning(_("Unable get PROJ.4-style parameter string"));
 	return NULL;
     }
@@ -221,7 +213,6 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
 	G_asprintf(&proj4mod, "%s +to_meter=%s", proj4, unfact);
     else
 	proj4mod = G_store(proj4);
-    pj_dalloc(proj4);
 
     /* create GDAL OSR from proj string */
     if ((errcode = OSRImportFromProj4(hSRS, proj4mod)) != OGRERR_NONE) {
