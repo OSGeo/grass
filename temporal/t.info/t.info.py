@@ -77,7 +77,7 @@ def main():
 
     rows = tgis.get_tgis_metadata(dbif)
 
-    if system and not shellstyle:
+    if system and not shellstyle and not history:
         #      0123456789012345678901234567890
         print(" +------------------- Temporal DBMI backend information ----------------------+")
         print(" | DBMI Python interface:...... " + str(dbif.get_dbmi().__name__))
@@ -90,7 +90,7 @@ def main():
                 print(" | %s .......... %s"%(row[0], row[1]))
         print(" +----------------------------------------------------------------------------+")
         return
-    elif system:
+    elif system and not history:
         print("dbmi_python_interface=\'" + str(dbif.get_dbmi().__name__) + "\'")
         print("dbmi_string=\'" + str(tgis.get_tgis_database_string()) + "\'")
         print("sql_template_path=\'" + str(tgis.get_sql_template_path()) + "\'")
@@ -114,7 +114,7 @@ def main():
 
     dataset.select(dbif)
 
-    if history == True and type in ["strds", "stvds", "str3ds"]:
+    if history == True and type_ in ["strds", "stvds", "str3ds"]:
         dataset.print_history()
         return
 
