@@ -1594,7 +1594,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             else:
                 flags = "a"
 
-            busy = wx.BusyInfo(message=_("Rectifying images, please wait..."),
+            busy = wx.BusyInfo(_("Rectifying images, please wait..."),
                                parent=self)
             wx.Yield()
 
@@ -1608,7 +1608,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                                   method=self.gr_method,
                                   flags=flags)
 
-            busy.Destroy()
+            del busy
 
             # provide feedback on failure
             if ret != 0:
@@ -1639,7 +1639,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 ret = msg = ''
 
                 busy = wx.BusyInfo(
-                    message=_("Rectifying vector map <%s>, please wait...") %
+                    _("Rectifying vector map <%s>, please wait...") %
                     vect, parent=self)
                 wx.Yield()
 
@@ -1652,7 +1652,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                                       group=self.xygroup,
                                       order=self.gr_order)
 
-                busy.Destroy()
+                del busy
 
                 # provide feedback on failure
                 if ret != 0:

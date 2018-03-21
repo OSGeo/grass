@@ -1549,7 +1549,7 @@ class VectorColorTable(ColorTable):
             return
 
         busy = wx.BusyInfo(
-            message=_("Please wait, loading data from attribute table..."),
+            _("Please wait, loading data from attribute table..."),
             parent=self)
         wx.Yield()
 
@@ -1570,7 +1570,7 @@ class VectorColorTable(ColorTable):
                              stdout=outFile)
         else:
             self.preview.EraseMap()
-            busy.Destroy()
+            del busy
             return
 
         outFile.seek(0)
@@ -1620,7 +1620,7 @@ class VectorColorTable(ColorTable):
                     readvals = True
                     dlg.Destroy()
                 else:
-                    busy.Destroy()
+                    del busy
                     dlg.Destroy()
                     self.updateColumn = False
                     return
@@ -1636,7 +1636,7 @@ class VectorColorTable(ColorTable):
         else:
             self.rulesPanel.Clear()
 
-        busy.Destroy()
+        del busy
 
     def SetRangeLabel(self):
         """Set labels with info about attribute column range"""

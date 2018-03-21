@@ -539,7 +539,7 @@ class AnimationController(wx.EvtHandler):
 
         images = []
         busy = wx.BusyInfo(
-            message=_("Preparing export, please wait..."),
+            _("Preparing export, please wait..."),
             parent=self.frame)
         wx.Yield()
         lastBitmaps = {}
@@ -621,7 +621,7 @@ class AnimationController(wx.EvtHandler):
 
         # export
         pilImages = [WxImageToPil(image) for image in images]
-        busy = wx.BusyInfo(message=_("Exporting animation, please wait..."),
+        busy = wx.BusyInfo(_("Exporting animation, please wait..."),
                            parent=self.frame)
         wx.Yield()
         try:
