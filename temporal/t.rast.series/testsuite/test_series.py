@@ -35,21 +35,34 @@ class TestSnapAbsoluteSTRDS(TestCase):
                                     description="A test",  overwrite=True)
 
         cls.runModule("t.register", type="raster",  input="A",
-                                     maps="a1,a2,a3,a4",
-                                     start="2001-01-01",
-                                     increment="1 month",
-                                     overwrite=True)
+                                    maps="a1,a2,a3,a4",
+                                    start="2001-01-01",
+                                    increment="1 month",
+                                    flags="i",
+                                    overwrite=True)
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
         """
         cls.del_temp_region()
         cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.unregister", type="raster",
+                      maps="series_average,series_maximum,series_minimum,series_minimum_2")
         cls.runModule("g.remove", flags="f", type="raster", name="series_average")
         cls.runModule("g.remove", flags="f", type="raster", name="series_maximum")
         cls.runModule("g.remove", flags="f", type="raster", name="series_minimum")
         cls.runModule("g.remove", flags="f", type="raster", name="series_minimum_2")
         cls.runModule("g.remove", flags="f", type="raster", name="series_quantile")
+
+    def test_time_stamp(self):
+        self.assertModule("t.rast.series", input="A", method="average",
+                          output="series_time_stamp", where="start_time > '2001-02-01'")
+
+        tinfo_string="""start_time=2001-02-01 00:00:00
+                        end_time=2001-05-01 00:00:00"""
+
+        info = SimpleModule("t.info", flags="g", type="raster", input="series_time_stamp")
+        self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
     def test_average(self):
         self.assertModule("t.rast.series", input="A", method="average",
@@ -119,6 +132,8 @@ class TestSnapRelativeSTRDS(TestCase):
         """
         cls.del_temp_region()
         cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.unregister", type="raster",
+                      maps="series_average,series_maximum,series_minimum,series_minimum_2")
         cls.runModule("g.remove", flags="f", type="raster", name="series_average")
         cls.runModule("g.remove", flags="f", type="raster", name="series_maximum")
         cls.runModule("g.remove", flags="f", type="raster", name="series_minimum")
