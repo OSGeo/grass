@@ -121,19 +121,11 @@ void print_datuminfo(void)
     return;
 }
 
+/* TODO: remove hack for PROJ 5+ */
 #ifdef HAVE_PROJ_H
-static char *gpj_get_def(PJ *P)
-{
-    char *pjdef;
-    PJ_PROJ_INFO pjinfo = proj_pj_info(P);
-
-    if (P == NULL)
-	G_fatal_error("Invalid PJ pointer");
-
-    pjdef = G_store(pjinfo.definition);
-
-    return pjdef;
-}
+char *pj_get_def(PJ *, int);
+void pj_dalloc(void *);
+void pj_free(PJ *);
 #endif
 
 void print_proj4(int dontprettify)
@@ -147,13 +139,8 @@ void print_proj4(int dontprettify)
 
     if (pj_get_kv(&pjinfo, projinfo, projunits) == -1)
         G_fatal_error(_("Unable to convert projection information to PROJ.4 format"));
-#ifdef HAVE_PROJ_H
-    proj4 = gpj_get_def(pjinfo.pj);
-    proj_destroy(pjinfo.pj);
-#else
     proj4 = pj_get_def(pjinfo.pj, 0);
     pj_free(pjinfo.pj);
-#endif
     /* GRASS-style PROJ.4 strings don't include a unit factor as this is
      * handled separately in GRASS - must include it here though */
     unfact = G_find_key_value("meters", projunits);
@@ -161,11 +148,7 @@ void print_proj4(int dontprettify)
 	G_asprintf(&proj4mod, "%s +to_meter=%s", proj4, unfact);
     else
 	proj4mod = G_store(proj4);
-#ifdef HAVE_PROJ_H
-    G_free(proj4);
-#else
     pj_dalloc(proj4);
-#endif
 
     for (i = proj4mod; *i; i++) {
 	/* Don't print the first space */
