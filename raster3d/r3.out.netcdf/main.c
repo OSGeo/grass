@@ -56,6 +56,13 @@
 
 #define ERR(e) {fatalError(nc_strerror(e));}
 
+/* hack for PROJ 5+ */ 
+#ifdef HAVE_PROJ_H
+char *pj_get_def(PJ *, int );
+void pj_dalloc(void *);
+void pj_free(PJ *);
+#endif
+
 /* structs */
 typedef struct
 {
