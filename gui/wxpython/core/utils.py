@@ -537,7 +537,7 @@ def ReadEpsgCodes(path):
         code = None
         for line in f.readlines():
             line = line.strip()
-            if len(line) < 1:
+            if len(line) < 1 or line.startswith('<metadata>'):
                 continue
 
             if line[0] == '#':
