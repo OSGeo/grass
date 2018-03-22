@@ -381,6 +381,8 @@ class TplotFrame(wx.Frame):
         """Get a list of categories for a vector map"""
         vdb = grass.read_command('v.category', input=mapp, option='print')
         categories = vdb.splitlines()
+        if not cats:
+            return categories
         for cat in cats:
             if str(cat) not in categories:
                 GMessage(message=_("Category {ca} is not on vector map"
