@@ -869,6 +869,9 @@ def datetime_to_grass_datetime_string(dt):
     month_names = ["", "jan", "feb", "mar", "apr", "may", "jun",
                    "jul", "aug", "sep", "oct", "nov", "dec"]
 
+    if dt is None:
+        raise Exception("Empty datetime object in datetime_to_grass_datetime_string")
+
     # Check for time zone info in the datetime object
     if dt.tzinfo is not None:
 
