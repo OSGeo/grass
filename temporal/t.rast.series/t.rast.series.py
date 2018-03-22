@@ -122,6 +122,7 @@ def main():
             grass.fatal(_("%s failed. Check above error messages.") % 'r.series')
 
         if not add_time:
+
             # Create the time range for the output map
             if output.find("@") >= 0:
                 id = output
@@ -131,7 +132,24 @@ def main():
 
             map = sp.get_new_map_instance(id)
             map.load()
-            map.set_temporal_extent(sp.get_temporal_extent())
+
+            # We need to set the temporal extent from the subset of selected maps
+            maps = sp.get_registered_maps_as_objects(where=where, order=order, dbif=None)
+            first_map = maps[0]
+            last_map = maps[-1]
+            start_a, end_a = first_map.get_temporal_extent_as_tuple()
+            start_b, end_b = last_map.get_temporal_extent_as_tuple()
+
+            if end_b is None:
+                end_b = start_b
+
+            if first_map.is_time_absolute():
+                extent = tgis.AbsoluteTemporalExtent(start_time=start_a, end_time=end_b)
+            else:
+                extent = tgis.RelativeTemporalExtent(start_time=start_a, end_time=end_b,
+                                                     unit=first_map.get_relative_time_unit())
+
+            map.set_temporal_extent(extent=extent)
 
             # Register the map in the temporal database
             if map.is_in_db():
