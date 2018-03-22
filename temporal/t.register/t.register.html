@@ -7,32 +7,35 @@ them within input space time datasets (stds). The existing timestamp modules
 <a href="r.timestamp.html">r.timestamp</a>,
 <a href="r3.timestamp.html">r3.timestamp</a> and
 <a href="v.timestamp.html">v.timestamp</a> do not register the maps in the
-temporal database of GRASS. However, timestamps that have been created
+temporal database of GRASS GIS. However, timestamps that have been created
 with these modules can be read and used by <em>t.register</em>. This
 works only for maps that are not already registered in the temporal
 database.
 <p>
-If the <em>input</em> option is not used (i.e.: no stds is provided), maps
+If the <em>input</em> option is not used (i.e., no stds is provided), maps
 will be only registered in the temporal database with assigned
-timestamps. If, however, the <em>input</em> option
+timestamps. If, on the other hand, the <em>input</em> option
 is used and a stds is provided, maps will be first registered in the temporal
 database (if not registered before) and then, in the stds specified. If the
 user wants to register maps that are already registered in the temporal
 database in a different stds, there is no need to pass information regarding
 start and end time, <em>t.register</em> will read timestamps from the temporal
-database.
+database (i.e., in this case only passing map names will be enough).
 <p>
-This module supports absolute and relative time. The absolute temporal type
+The module <em>t.register</em> supports absolute and relative time. The absolute temporal type
 refers to a fixed date while the relative temporal type refers to data
 without fixed timestamps (e.g., sequential maps used to calculate
 multi-decadal averages).
 <p>
-Maps can be registered by command line argument (i.e.: a list of comma separated map
-names) or using an input file. The start time, the end time and a temporal
-increment can be provided by command line or in the input file. End time and
+Maps can be registered by command line argument (i.e., a list of comma separated map
+names) or using an input file. The start time, end time and a temporal
+increment can be provided through command line or in the input file. End time and
 increment are mutually exclusive. The user can register single maps or a
 list of maps at once. Maps can be registered in several space time
-datasets using the same timestamp.
+datasets using the same timestamp. For the case of vector time series,
+the user can also register a single vector map connected to different
+layers representing time steps using the <b>map:layer</b> notation (See 
+example below). 
 <p>
 The <em>increment</em> option and the <b>-i</b> flag (to create time intervals)
 work only in conjunction with the <b>start</b> option.
@@ -115,16 +118,16 @@ prec_6|2002-04-01|2002-07-01
 <h3>North Carolina dataset</h3>
 
 <h4>Using a text file</h4>
+
 Register maps in an absolute space time dataset, creating a time interval
 
 <div class="code"><pre>
 # first:  prepare a text file with a list of input maps (see above)
 # second: register maps
 t.register -i type=raster input=precipitation_monthly \
-    file=list_of_input_maps.txt start=2009-01-01 \
+    file=list_of_input_maps.txt start="2009-01-01" \
     increment="1 months"
 </pre></div>
-
 
 <h4>Using <em>g.list</em> to generate the input</h4>
 
@@ -132,8 +135,20 @@ Register maps in an absolute space time dataset, creating a time interval
 
 <div class="code"><pre>
 t.register -i type=raster input=precipitation_monthly \
-    maps=`g.list raster pattern="*precip*" sep=comma` start=2009-01-01 \
+    maps=`g.list raster pattern="*precip*" sep=comma` start="2009-01-01" \
     increment="1 months"
+</pre></div>
+
+<h4>Register a vector map with layers representing time steps</h4>
+
+Assume a vector map of points that represent meteorological stations and
+it is connected to different layers depicting daily time steps. In this
+example, only the fifth layer of the vector map will be registered.
+
+<div class="code"><pre>
+# the layer is specified behind the colon
+t.register type=vector input=meteo_stations_nc_daily \
+    maps=meteo_stations_nc:5 start="2009-01-05"
 </pre></div>
 
 <h3>Synthetic maps</h3>
@@ -237,7 +252,7 @@ file.close()
 
 # register daily maps using the file created above
 t.register -i type=raster input=temperature_mean_1950_2015_daily \
-              file=map_list.txt start=1950-01-01 increment="1 days"
+              file=map_list.txt start="1950-01-01" increment="1 days"
 </pre></div>
 
 <h2>SEE ALSO</h2>
