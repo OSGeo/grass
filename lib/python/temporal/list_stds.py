@@ -250,7 +250,8 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
     else:
         # In comma separated mode only map ids are needed
         if method == "comma":
-            columns = "id"
+            if columns not in ['id', 'name']:
+                columns = "id"
 
         rows = sp.get_registered_maps(columns, where, order, dbif)
 
@@ -260,9 +261,9 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                 count = 0
                 for row in rows:
                     if count == 0:
-                        string += row["id"]
+                        string += row[columns]
                     else:
-                        string += ",%s" % row["id"]
+                        string += ",%s" % row[columns]
                     count += 1
                 if outpath:
                     outfile.write('{st}\n'.format(st=string))
