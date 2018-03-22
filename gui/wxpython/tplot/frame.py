@@ -615,13 +615,18 @@ class TplotFrame(wx.Frame):
                             'unit', 'temporalDataType']:
                     continue
                 xdata.append(self.convert(values['start_datetime']))
-                ydata.append(values['value'])
+                if values['value'] == '':
+                    ydata.append(None)
+                else:
+                    ydata.append(values['value'])
 
             if len(ydata) == ydata.count(None):
                 GError(parent=self, showTraceback=False,
-                       message=_("Problem getting data from raster temporal"
-                                 " dataset. Empty list of values."))
-                return
+                       message=_("Problem getting data from vector temporal"
+                                 " dataset. Empty list of values for cat "
+                                 "{ca}.".format(ca=name_cat[1].replace('cat',
+                                                                       ''))))
+                continue
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
                                    datasetName=name)
             color = self.colors.next()
@@ -662,7 +667,7 @@ class TplotFrame(wx.Frame):
 
             if len(ydata) == ydata.count(None):
                 GError(parent=self, showTraceback=False,
-                       message=_("Problem getting data from raster temporal"
+                       message=_("Problem getting data from vector temporal"
                                  " dataset. Empty list of values."))
                 return
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
