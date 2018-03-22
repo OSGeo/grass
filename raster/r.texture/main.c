@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
     char *name, *result;
     char **mapname;
     FCELL **fbuf;
-    int n_measures, n_outputs, *measure_idx;
+    int n_measures, n_outputs, *measure_idx, overwrite;
     int nrows, ncols;
     int row, col, first_row, last_row, first_col, last_col;
     int i, j;
@@ -105,7 +105,6 @@ int main(int argc, char *argv[])
     G_add_keyword(_("texture"));
     module->description =
 	_("Generate images with textural features from a raster map.");
-    module->overwrite = 1;
 
     /* Define the different options */
 
@@ -243,6 +242,8 @@ int main(int argc, char *argv[])
 	mapname[i] = G_malloc(GNAME_MAX * sizeof(char));
 	fbuf[i] = Rast_allocate_buf(out_data_type);
     }
+    
+    overwrite = G_check_overwrite(argc, argv);
 
     /* open output maps */
     outfd = G_malloc(n_outputs * sizeof(int));
@@ -251,13 +252,21 @@ int main(int argc, char *argv[])
 	    for (j = 0; j < 4; j++) {
 		sprintf(mapname[i * 4 + j], "%s%s_%d", result,
 		        menu[measure_idx[i]].suffix, j * 45);
-		outfd[i * 4 + j] = Rast_open_new(mapname[i * 4 + j], out_data_type);
+		if (!G_find_raster(mapname[i * 4 + j], G_mapset()) || overwrite) {
+			outfd[i * 4 + j] = Rast_open_new(mapname[i * 4 + j], out_data_type);
+	        } else {
+		        G_fatal_error(_("At least one of the requested output maps exists. Use --o to overwrite."));
+	        }
 	    }
 	}
 	else {
 	    sprintf(mapname[i], "%s%s", result,
 	            menu[measure_idx[i]].suffix);
-	    outfd[i] = Rast_open_new(mapname[i], out_data_type);
+	    if (!G_find_raster(mapname[i], G_mapset()) || overwrite) {
+		    outfd[i] = Rast_open_new(mapname[i], out_data_type);
+	    } else {
+		    G_fatal_error(_("At least one of the requested output maps exists. Use --o to overwrite."));
+	    }
 	}
     }
     nrows = Rast_window_rows();
