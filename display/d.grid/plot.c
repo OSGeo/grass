@@ -232,9 +232,10 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 }
 
 
-int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
-                 int do_text, int gcolor, int tcolor, int bgcolor, int fontsize,
-                 int mark_type, double line_width, int direction, int wgs84)
+int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
+                 struct pj_info *info_trans, int do_text, int gcolor, 
+		 int tcolor, int bgcolor, int fontsize, int mark_type,
+		 double line_width, int direction)
 {
     double g;
     double e1, e2, n1, n2;
@@ -263,7 +264,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 
     /* get lat long min max */
     /* probably need something like boardwalk ?? */
-    get_ll_bounds(&west, &east, &south, &north, window, info_in, info_out, wgs84);
+    get_ll_bounds(&west, &east, &south, &north, window, info_in, info_out, info_trans);
 
     G_debug(3, "REGION BOUNDS N=%f S=%f E=%f W=%f", north, south, east, west);
 
@@ -283,37 +284,18 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
             n1 = n2 = g;
             e1 = west + (ll * ((east - west) / SEGS));
             e2 = e1 + ((east - west) / SEGS);
-#ifdef HAVE_PROJ_H
-	    if (!wgs84) {
-		if (GPJ_do_proj_ll(&e1, &n1, &info_out, PJ_FWD) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-	    else {
-		if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-#else
-            if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-                G_fatal_error(_("Error in pj_do_proj"));
-#endif
+	    if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+			      &e1, &n1, NULL) < 0)
+		G_fatal_error(_("Error in GPJ_transform()"));
 
-            check_coords(e1, n1, &lon, &lat, 1, window, info_in, info_out, wgs84);
+            check_coords(e1, n1, &lon, &lat, 1, window, info_in, info_out, info_trans);
             e1 = lon;
             n1 = lat;
-#ifdef HAVE_PROJ_H
-	    if (!wgs84) {
-		if (GPJ_do_proj_ll(&e2, &n2, &info_out, PJ_FWD) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-	    else {
-		if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-#else
-            if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
-                G_fatal_error(_("Error in pj_do_proj"));
-#endif
-            check_coords(e2, n2, &lon, &lat, 1, window, info_in, info_out, wgs84);
+	    if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+			      &e2, &n2, NULL) < 0)
+		G_fatal_error(_("Error in GPJ_transform()"));
+
+            check_coords(e2, n2, &lon, &lat, 1, window, info_in, info_out, info_trans);
             e2 = lon;
             n2 = lat;
             if (start_coord == -9999.) {
@@ -351,38 +333,18 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
                n1 = south + (ll *((north - south)/SEGS));
                n2 = n1 + ((north - south)/SEGS);
              */
-#ifdef HAVE_PROJ_H
-	    if (!wgs84) {
-		if (GPJ_do_proj_ll(&e1, &n1, &info_out, PJ_FWD) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-	    else {
-		if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-#else
-            if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-                G_fatal_error(_("Error in pj_do_proj"));
-#endif
+	    if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+			      &e1, &n1, NULL) < 0)
+		G_fatal_error(_("Error in GPJ_transform()"));
 
-            check_coords(e1, n1, &lon, &lat, 2, window, info_in, info_out, wgs84);
+            check_coords(e1, n1, &lon, &lat, 2, window, info_in, info_out, info_trans);
             e1 = lon;
             n1 = lat;
-#ifdef HAVE_PROJ_H
-	    if (!wgs84) {
-		if (GPJ_do_proj_ll(&e2, &n2, &info_out, PJ_FWD) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-	    else {
-		if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-#else
-            if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
-                G_fatal_error(_("Error in pj_do_proj"));
-#endif
+	    if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+			      &e2, &n2, NULL) < 0)
+		G_fatal_error(_("Error in GPJ_transform()"));
 
-            check_coords(e2, n2, &lon, &lat, 2, window, info_in, info_out, wgs84);
+            check_coords(e2, n2, &lon, &lat, 2, window, info_in, info_out, info_trans);
             e2 = lon;
             n2 = lat;
 
@@ -447,7 +409,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 
     /* get lat long min max */
     /* probably need something like boardwalk ?? */
-    get_ll_bounds(&west, &east, &south, &north, window, info_in, info_out, wgs84);
+    get_ll_bounds(&west, &east, &south, &north, window, info_in, info_out, info_trans);
 
     G_debug(3, "REGION BOUNDS N=%f S=%f E=%f W=%f", north, south, east, west);
 
@@ -466,38 +428,18 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
                 n1 = n2 = g;
                 e1 = west + (ll * ((east - west) / SEGS));
                 e2 = e1 + ((east - west) / SEGS);
-#ifdef HAVE_PROJ_H
-		if (!wgs84) {
-		    if (GPJ_do_proj_ll(&e1, &n1, &info_out, PJ_FWD) < 0)
-			G_fatal_error(_("Error in pj_do_proj"));
-		}
-		else {
-		    if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-			G_fatal_error(_("Error in pj_do_proj"));
-		}
-#else
-		if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-#endif
+		if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+				  &e1, &n1, NULL) < 0)
+		    G_fatal_error(_("Error in GPJ_transform()"));
 
-                check_coords(e1, n1, &lon, &lat, 1, window, info_in, info_out, wgs84);
+                check_coords(e1, n1, &lon, &lat, 1, window, info_in, info_out, info_trans);
                 e1 = lon;
                 n1 = lat;
-#ifdef HAVE_PROJ_H
-		if (!wgs84) {
-		    if (GPJ_do_proj_ll(&e2, &n2, &info_out, PJ_FWD) < 0)
-			G_fatal_error(_("Error in pj_do_proj"));
-		}
-		else {
-		    if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
-			G_fatal_error(_("Error in pj_do_proj"));
-		}
-#else
-		if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-#endif
+		if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+				  &e2, &n2, NULL) < 0)
+		    G_fatal_error(_("Error in GPJ_transform()"));
 
-                check_coords(e2, n2, &lon, &lat, 1, window, info_in, info_out, wgs84);
+                check_coords(e2, n2, &lon, &lat, 1, window, info_in, info_out, info_trans);
                 e2 = lon;
                 n2 = lat;
                 if (start_coord == -9999.) {
@@ -546,38 +488,18 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
                 n1 = north - (ll * ((north - south) / SEGS));
                 n2 = n1 - ((north - south) / SEGS);
 
-#ifdef HAVE_PROJ_H
-		if (!wgs84) {
-		    if (GPJ_do_proj_ll(&e1, &n1, &info_out, PJ_FWD) < 0)
-			G_fatal_error(_("Error in pj_do_proj"));
-		}
-		else {
-		    if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-			G_fatal_error(_("Error in pj_do_proj"));
-		}
-#else
-		if (pj_do_proj(&e1, &n1, &info_in, &info_out) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-#endif
+		if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+				  &e1, &n1, NULL) < 0)
+		    G_fatal_error(_("Error in GPJ_transform()"));
 
-                check_coords(e1, n1, &lon, &lat, 2, window, info_in, info_out, wgs84);
+                check_coords(e1, n1, &lon, &lat, 2, window, info_in, info_out, info_trans);
                 e1 = lon;
                 n1 = lat;
-#ifdef HAVE_PROJ_H
-		if (!wgs84) {
-		    if (GPJ_do_proj_ll(&e2, &n2, &info_out, PJ_FWD) < 0)
-			G_fatal_error(_("Error in pj_do_proj"));
-		}
-		else {
-		    if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
-			G_fatal_error(_("Error in pj_do_proj"));
-		}
-#else
-		if (pj_do_proj(&e2, &n2, &info_in, &info_out) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-#endif
+		if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+				  &e2, &n2, NULL) < 0)
+		    G_fatal_error(_("Error in GPJ_transform()"));
 
-                check_coords(e2, n2, &lon, &lat, 2, window, info_in, info_out, wgs84);
+                check_coords(e2, n2, &lon, &lat, 2, window, info_in, info_out, info_trans);
                 e2 = lon;
                 n2 = lat;
 
@@ -629,61 +551,56 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 /******************************************************
  * initialze projection stuff and return proj structures
 ********************************************************/
-void init_proj(struct pj_info *info_in, struct pj_info *info_out, int wgs84)
+void init_proj(struct pj_info *info_in, struct pj_info *info_out, 
+               struct pj_info *info_trans, int wgs84)
 {
-    struct Key_Value *out_proj_keys, *out_unit_keys;
+    struct Key_Value *in_proj_info, *in_unit_info;
 
     /* Proj stuff for geo grid */
-    /* Out Info */
-    out_proj_keys = G_get_projinfo();
-    out_unit_keys = G_get_projunits();
-    if (pj_get_kv(info_out, out_proj_keys, out_unit_keys) < 0)
+    /* In Info for current projection */
+    in_proj_info = G_get_projinfo();
+    in_unit_info = G_get_projunits();
+    if (pj_get_kv(info_in, in_proj_info, in_unit_info) < 0)
         G_fatal_error(_("Can't get projection key values of current location"));
 
-    /* In Info */
-#ifdef HAVE_PROJ_H
+    /* Out Info for ll projection */
+    info_out->pj = NULL;
     if (wgs84) {
-#else
-    if (!wgs84) {
-        /* Set lat/long to same ellipsoid as location if we're not looking
-         * for the WGS84 values */
-        if (GPJ_get_equivalent_latlong(info_in, info_out) < 0)
-            G_fatal_error(_("Unable to set up lat/long projection parameters"));
-
-    }
-    else {
-#endif
-        struct Key_Value *in_proj_info, *in_unit_info;
+	struct Key_Value *out_proj_info, *out_unit_info;
         char buff[256], dum[256];
 
-        in_proj_info = G_create_key_value();
-        in_unit_info = G_create_key_value();
+        out_proj_info = G_create_key_value();
+        out_unit_info = G_create_key_value();
 
         /* Check that datumparams are defined for this location (otherwise
          * the WGS84 values would be meaningless), and if they are set the 
          * input datum to WGS84 */
-        if (G_get_datumparams_from_projinfo(out_proj_keys, buff, dum) < 0)
+        if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
             G_fatal_error(_("WGS84 grid output not possible as this location does not contain\n"
                            "datum transformation parameters. Try running g.setproj."));
         else
-            G_set_key_value("datum", "wgs84", in_proj_info);
+            G_set_key_value("datum", "wgs84", out_proj_info);
 
         /* set input projection to lat/long */
-        G_set_key_value("proj", "ll", in_proj_info);
+        G_set_key_value("proj", "ll", out_proj_info);
 
-        G_set_key_value("unit", "degree", in_unit_info);
-        G_set_key_value("units", "degrees", in_unit_info);
-        G_set_key_value("meters", "1.0", in_unit_info);
+        G_set_key_value("unit", "degree", out_unit_info);
+        G_set_key_value("units", "degrees", out_unit_info);
+        G_set_key_value("meters", "1.0", out_unit_info);
 
-        if (pj_get_kv(info_in, in_proj_info, in_unit_info) < 0)
+        if (pj_get_kv(info_out, out_proj_info, out_unit_info) < 0)
             G_fatal_error(_("Unable to set up lat/long projection parameters"));
 
-        G_free_key_value(in_proj_info);
-        G_free_key_value(in_unit_info);
+	G_free_key_value(out_proj_info);
+	G_free_key_value(out_unit_info);
     }
-    G_free_key_value(out_proj_keys);
-    G_free_key_value(out_unit_keys);
+    /* else the latlong equivalent is generated by GPJ_init_transform() */
 
+    G_free_key_value(in_proj_info);
+    G_free_key_value(in_unit_info);
+
+    if (GPJ_init_transform(info_in, info_out, info_trans) < 0)
+	G_fatal_error(_("Unable to initialize coordinate transformation"));
 
     return;
 
@@ -694,7 +611,8 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out, int wgs84)
 ********************************************************/
 void get_ll_bounds(double *w, double *e, double *s, double *n,
                    struct Cell_head window,
-                   struct pj_info info_in, struct pj_info info_out, int wgs84)
+                   struct pj_info *info_in, struct pj_info *info_out,
+		   struct pj_info *info_trans)
 {
     double east, west, north, south;
     double e1, w1, n1, s1;
@@ -722,19 +640,9 @@ void get_ll_bounds(double *w, double *e, double *s, double *n,
     for (ew = window.west; ew <= window.east; ew += ew_res) {
         e1 = ew;
         n1 = window.north;
-#ifdef HAVE_PROJ_H
-	if (!wgs84) {
-	    if (GPJ_do_proj_ll(&e1, &n1, &info_out, PJ_INV) < 0)
-		G_fatal_error(_("Error in pj_do_proj"));
-	}
-	else {
-	    if (pj_do_proj(&e1, &n1, &info_out, &info_in) < 0)
-		G_fatal_error(_("Error in pj_do_proj"));
-	}
-#else
-        if (pj_do_proj(&e1, &n1, &info_out, &info_in) < 0)
-            G_fatal_error(_("Error in pj_do_proj"));
-#endif
+        if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
+	                  &e1, &n1, NULL) < 0)
+            G_fatal_error(_("Error in GPJ_transform()"));
         if (!first) {
             north = n1;
             first = 1;
@@ -749,19 +657,9 @@ void get_ll_bounds(double *w, double *e, double *s, double *n,
     for (ew = window.west; ew <= window.east; ew += ew_res) {
         e1 = ew;
         s1 = window.south;
-#ifdef HAVE_PROJ_H
-	if (!wgs84) {
-	    if (GPJ_do_proj_ll(&e1, &s1, &info_out, PJ_INV) < 0)
-		G_fatal_error(_("Error in pj_do_proj"));
-	}
-	else {
-	    if (pj_do_proj(&e1, &s1, &info_out, &info_in) < 0)
-		G_fatal_error(_("Error in pj_do_proj"));
-	}
-#else
-        if (pj_do_proj(&e1, &s1, &info_out, &info_in) < 0)
-            G_fatal_error(_("Error in pj_do_proj"));
-#endif
+        if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
+	                  &e1, &s1, NULL) < 0)
+            G_fatal_error(_("Error in GPJ_transform()"));
         if (!first) {
             south = s1;
             first = 1;
@@ -777,19 +675,9 @@ void get_ll_bounds(double *w, double *e, double *s, double *n,
     for (ns = window.south; ns <= window.north; ns += ns_res) {
         e1 = window.east;
         n1 = ns;
-#ifdef HAVE_PROJ_H
-	if (!wgs84) {
-	    if (GPJ_do_proj_ll(&e1, &n1, &info_out, PJ_INV) < 0)
-		G_fatal_error(_("Error in pj_do_proj"));
-	}
-	else {
-	    if (pj_do_proj(&e1, &n1, &info_out, &info_in) < 0)
-		G_fatal_error(_("Error in pj_do_proj"));
-	}
-#else
-        if (pj_do_proj(&e1, &n1, &info_out, &info_in) < 0)
-            G_fatal_error(_("Error in pj_do_proj"));
-#endif
+        if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
+	                  &e1, &n1, NULL) < 0)
+            G_fatal_error(_("Error in GPJ_transform()"));
         if (!first) {
             east = e1;
             first = 1;
@@ -805,19 +693,9 @@ void get_ll_bounds(double *w, double *e, double *s, double *n,
     for (ns = window.south; ns <= window.north; ns += ns_res) {
         w1 = window.west;
         n1 = ns;
-#ifdef HAVE_PROJ_H
-	if (!wgs84) {
-	    if (GPJ_do_proj_ll(&w1, &n1, &info_out, PJ_INV) < 0)
-		G_fatal_error(_("Error in pj_do_proj"));
-	}
-	else {
-	    if (pj_do_proj(&w1, &n1, &info_out, &info_in) < 0)
-		G_fatal_error(_("Error in pj_do_proj"));
-	}
-#else
-        if (pj_do_proj(&w1, &n1, &info_out, &info_in) < 0)
-            G_fatal_error(_("Error in pj_do_proj"));
-#endif
+        if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
+	                  &w1, &n1, NULL) < 0)
+            G_fatal_error(_("Error in GPJ_transform()"));
         if (!first) {
             west = w1;
             first = 1;
@@ -847,8 +725,9 @@ check_coords(double e,
              double *lat,
              int par,
              struct Cell_head w,
-             struct pj_info info_in, struct pj_info info_out,
-	     int wgs84)
+             struct pj_info *info_in,
+	     struct pj_info *info_out,
+	     struct pj_info *info_trans)
 {
     double x, y;
     int proj = 0;
@@ -875,85 +754,37 @@ check_coords(double e,
 
     if (proj) {
         /* convert original coords to ll */
-#ifdef HAVE_PROJ_H
-	    if (!wgs84) {
-		if (GPJ_do_proj_ll(&e, &n, &info_out, PJ_INV) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-	    else {
-		if (pj_do_proj(&e, &n, &info_in, &info_out) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-#else
-        if (pj_do_proj(&e, &n, &info_out, &info_in) < 0)
-            G_fatal_error(_("Error in pj_do_proj1"));
-#endif
+        if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
+	                  &e, &n, NULL) < 0)
+            G_fatal_error(_("Error in GPJ_transform()"));
 
         if (par == 1) {
             /* lines of latitude -- const. northing */
             /* convert correct UTM to ll */
-#ifdef HAVE_PROJ_H
-	    if (!wgs84) {
-		if (GPJ_do_proj_ll(&x, &y, &info_out, PJ_INV) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-	    else {
-		if (pj_do_proj(&x, &y, &info_out, &info_in) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-#else
-            if (pj_do_proj(&x, &y, &info_out, &info_in) < 0)
-                G_fatal_error(_("Error in pj_do_proj2"));
-#endif
+	    if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
+			      &x, &y, NULL) < 0)
+		G_fatal_error(_("Error in GPJ_transform()"));
 
             /* convert new ll back to coords */
-#ifdef HAVE_PROJ_H
-	    if (!wgs84) {
-		if (GPJ_do_proj_ll(&x, &n, &info_out, PJ_FWD) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-	    else {
-		if (pj_do_proj(&x, &n, &info_in, &info_out) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-#else
-            if (pj_do_proj(&x, &n, &info_in, &info_out) < 0)
-                G_fatal_error(_("Error in pj_do_proj3"));
-#endif
+	    if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+			      &x, &n, NULL) < 0)
+		G_fatal_error(_("Error in GPJ_transform()"));
+
             *lat = n;
             *lon = x;
         }
         if (par == 2) {
             /* lines of longitude -- const. easting */
             /* convert correct UTM to ll */
-#ifdef HAVE_PROJ_H
-	    if (!wgs84) {
-		if (GPJ_do_proj_ll(&x, &y, &info_out, PJ_INV) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-	    else {
-		if (pj_do_proj(&x, &y, &info_out, &info_in) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-#else
-            if (pj_do_proj(&x, &y, &info_out, &info_in) < 0)
-                G_fatal_error(_("Error in pj_do_proj5"));
-#endif
+	    if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
+			      &x, &y, NULL) < 0)
+		G_fatal_error(_("Error in GPJ_transform()"));
 
             /* convert new ll back to coords */
-#ifdef HAVE_PROJ_H
-	    if (!wgs84) {
-		if (GPJ_do_proj_ll(&e, &n, &info_out, PJ_FWD) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-	    else {
-		if (pj_do_proj(&e, &n, &info_in, &info_out) < 0)
-		    G_fatal_error(_("Error in pj_do_proj"));
-	    }
-#else
-            if (pj_do_proj(&e, &y, &info_in, &info_out) < 0)
-                G_fatal_error(_("Error in pj_do_proj6"));
-#endif
+	    if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+			      &e, &y, NULL) < 0)
+		G_fatal_error(_("Error in GPJ_transform()"));
+
             *lat = y;
             *lon = e;
         }

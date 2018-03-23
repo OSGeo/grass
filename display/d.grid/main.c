@@ -42,8 +42,7 @@ int main(int argc, char **argv)
         *direction, *bgcolor;
     struct Flag *noborder, *notext, *geogrid, *nogrid, *wgs84, *cross,
         *fiducial, *dot, *align;
-    struct pj_info info_in;     /* Proj structures */
-    struct pj_info info_out;    /* Proj structures */
+    struct pj_info info_in, info_out, info_trans;     /* Proj structures */
     struct Cell_head wind;
 
     /* Initialize the GIS calls */
@@ -287,10 +286,10 @@ int main(int argc, char **argv)
     if (!nogrid->answer) {
         if (geogrid->answer) {
             /* initialzie proj stuff */
-            init_proj(&info_in, &info_out, wgs84->answer);
-            plot_geogrid(gsize, info_in, info_out, do_text, colorg, colort,
-                         colorbg, fontsize, mark_type, line_width, dirn,
-			 wgs84->answer);
+            init_proj(&info_in, &info_out, &info_trans, wgs84->answer);
+            plot_geogrid(gsize, &info_in, &info_out, &info_trans,
+	                 do_text, colorg, colort, colorbg, fontsize,
+			 mark_type, line_width, dirn);
         }
         else {
             /* Do the grid plotting */
