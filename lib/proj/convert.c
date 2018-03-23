@@ -860,7 +860,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 		if (strcmp(proj4_unit, gpj_units[i].id) == 0) {
 		    if (pszUnitsName)
 			G_free(pszUnitsName);
-		    G_asprintf(&pszUnitsName, gpj_units[i].name);
+		    G_asprintf(&pszUnitsName, "%s", gpj_units[i].name);
 		    break;
 		}
 		i++;
