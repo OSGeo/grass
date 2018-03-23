@@ -377,10 +377,10 @@ class SQLBuilder(wx.Frame):
             if justsample and i > 255:
                 break
 
-            if desc['type'] != 'character':
+            if desc['type'] not in ('character', 'text'):
                 item = str(item)
             else:
-                item = GetUnicodeValue(item)
+                item = u"'{}'".format(GetUnicodeValue(item))
             self.list_values.Append(item)
             i += 1
 
