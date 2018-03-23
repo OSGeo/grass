@@ -108,12 +108,12 @@ def main():
     if options['order']:
         order = options['order']
     else:
-        gscript.fatal(_("Please provive an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"))
+        gscript.fatal(_("Please provide an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"))
 
     if options['extension']:
         extension = options['extension']
     else:
-        gscript.fatal(_("Please provive an output files extension (used by i.rectify)"))
+        gscript.fatal(_("Please provide an output files extension (used by i.rectify)"))
 
     app = wx.App()
     if not CheckWxVersion([2, 9]):
