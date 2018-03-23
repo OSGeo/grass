@@ -639,13 +639,15 @@ class VirtualAttributeList(wx.ListCtrl,
 
     def SortItems(self, sorter=cmp):
         """Sort items"""
+        wx.BeginBusyCursor()
         items = list(self.itemDataMap.keys())
         items.sort(self.Sorter)
         self.itemIndexMap = items
 
         # redraw the list
         self.Refresh()
-
+        wx.EndBusyCursor()
+        
     def Sorter(self, key1, key2):
         colName = self.GetColumn(self._col).GetText()
         ascending = self._colSortFlag[self._col]
