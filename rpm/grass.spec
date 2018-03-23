@@ -13,7 +13,6 @@ License:	GPLv2+
 URL:		https://grass.osgeo.org
 Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.tar.gz
 Source2:	%{name}-config.h
-# Patch0:		grass72_ctypes_gcc7.diff
 
 BuildRequires:	bison
 BuildRequires:	blas-devel
@@ -126,7 +125,6 @@ GRASS GIS development headers
 
 %prep
 %setup -q
-# %patch0 -p1
 
 # Correct mysql_config query
 sed -i -e 's/--libmysqld-libs/--libs/g' configure
@@ -204,25 +202,25 @@ make %{?_smp_mflags} || echo "EPEL6: ignoring failed manual pages"
 # fix paths:
 
 # Change GISBASE in startup script
-sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}-%{version}|g' \
+sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
 	%{buildroot}%{_bindir}/%{name}%{shortver}
 # fix GRASS_HOME and RUN_GISBASE in Platform.make
-sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}-%{version}|g' \
+sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
 	%{buildroot}%{_libdir}/%{name}-%{version}/include/Make/Platform.make
 # fix ARCH_DISTDIR in Grass.make
-sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}-%{version}|g' \
+sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
 	%{buildroot}%{_libdir}/%{name}-%{version}/include/Make/Grass.make
 # fix ARCH_BINDIR in Grass.make
 sed -i -e 's|%{buildroot}%{_bindir}|%{_bindir}|g' \
 	%{buildroot}%{_libdir}/%{name}-%{version}/include/Make/Grass.make
 # fix GISDBASE in demolocation
-sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}-%{version}|g' \
+sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
 	%{buildroot}%{_libdir}/%{name}-%{version}/demolocation/.grassrc%{shortver}
 # Correct font path
-sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}-%{version}|' \
+sed -i -e 's|%{buildroot}%{_libdir}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|' \
 	%{buildroot}%{_libdir}/%{name}-%{version}/etc/fontcap
 # fix paths in grass.pc
-sed -i -e 's|%{_prefix}/%{name}-%{version}|%{_libdir}/%{name-%{version}}|g' \
+sed -i -e 's|%{_prefix}/%{name}-%{version}|%{_libdir}/%{name}%{shortver}|g' \
 	%{name}.pc
 
 mkdir -p %{buildroot}%{_libdir}/pkgconfig
@@ -230,7 +228,7 @@ install -p -m 644 %{name}.pc %{buildroot}%{_libdir}/pkgconfig
 
 # Create multilib header
 mv %{buildroot}%{_libdir}/%{name}-%{version}/include/%{name}/config.h \
-   %{buildroot}%{_libdir}/%{name}-%{version}/include/%{name}/config-%{cpuarch}.h 
+   %{buildroot}%{_libdir}/%{name}-%{version}/include/%{name}/config-%{cpuarch}.h
 install -p -m 644 %{SOURCE2} %{buildroot}%{_libdir}/%{name}-%{version}/include/%{name}/config.h
 
 # Make man pages available on the system, convert to utf8 and avoid name conflict
@@ -243,19 +241,18 @@ done
 # symlink docs from GISBASE to standard system location
 mkdir -p %{buildroot}%{_docdir}
 # append shortver to destination ? man pages are unversioned
-ln -s %{_libdir}/%{name}-%{version}/docs %{buildroot}%{_docdir}/%{name}%{shortver}
+ln -s %{_libdir}/%{name}%{shortver}/docs %{buildroot}%{_docdir}/%{name}%{shortver}
 
 # Make desktop, appdata and icon files available on the system
 mv %{buildroot}%{_libdir}/%{name}-%{version}/share/* %{buildroot}%{_datadir}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/*.desktop
-# EPEL7 fails on url tag, so we ignore failure:
-appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/appdata/%{name}*.appdata.xml || echo "Ignoring appstream-util failure"
-# as per https://fedoraproject.org/wiki/Packaging:AppData
-mkdir -p %{buildroot}%{_datadir}/metainfo/
-cp %{buildroot}/%{_datadir}/appdata/%{name}*.appdata.xml %{buildroot}%{_datadir}/metainfo/
+appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/org.osgeo.%{name}.appdata.xml
 
 # Cleanup: nothing to do
 #rm -rf %%{buildroot}%%{_prefix}/%%{name}-%%{version}
+
+# Finally move entire tree to shortver subdir
+mv %{buildroot}%{_libdir}/%{name}-%{version} %{buildroot}%{_libdir}/%{name}%{shortver}
 
 # rpm macro for version checking (not from buildroot!)
 mkdir -p ${RPM_BUILD_ROOT}%{macrosdir}
@@ -286,41 +283,42 @@ fi
 %postun libs -p /sbin/ldconfig
 
 %files
-%exclude %{_libdir}/%{name}-%{version}/driver/db/*
-%exclude %{_libdir}/%{name}-%{version}/lib
-%exclude %{_libdir}/%{name}-%{version}/include
-%exclude %{_libdir}/%{name}-%{version}/gui
-%{_libdir}/%{name}-%{version}
+%exclude %{_libdir}/%{name}%{shortver}/driver/db/*
+%exclude %{_libdir}/%{name}%{shortver}/lib
+%exclude %{_libdir}/%{name}%{shortver}/include
+%exclude %{_libdir}/%{name}%{shortver}/gui
+%{_libdir}/%{name}%{shortver}
 %{_bindir}/*
-%{_datadir}/appdata/*
+%{_datadir}/metainfo/*
 %{_datadir}/applications/*
 %{_datadir}/icons/hicolor/*/apps/*
-%{_datadir}/metainfo/
 %{_mandir}/man1/*
 %{_docdir}/%{name}%{shortver}
 
 %files libs
 %license AUTHORS COPYING GPL.TXT CHANGES
-%{_libdir}/%{name}-%{version}/lib/*.%{version}.so
-%{_libdir}/%{name}-%{version}/lib/*.a
-%dir %{_libdir}/%{name}-%{version}/driver
-%dir %{_libdir}/%{name}-%{version}/driver/db
-%{_libdir}/%{name}-%{version}/driver/db/*
+%{_libdir}/%{name}%{shortver}/lib/*.%{version}.so
+%{_libdir}/%{name}%{shortver}/lib/*.a
+%dir %{_libdir}/%{name}%{shortver}/driver
+%dir %{_libdir}/%{name}%{shortver}/driver/db
+%{_libdir}/%{name}%{shortver}/driver/db/*
 
 %files gui
-%{_libdir}/%{name}-%{version}/gui
+%{_libdir}/%{name}%{shortver}/gui
 
 %files devel
 %doc TODO doc/* SUBMITTING
 %{macrosdir}/macros.%{name}
 %{_libdir}/pkgconfig/*
-%dir %{_libdir}/%{name}-%{version}/lib
-%{_libdir}/%{name}-%{version}/lib/*[!%{version}].so
-%{_libdir}/%{name}-%{version}/include
+%dir %{_libdir}/%{name}%{shortver}/lib
+%{_libdir}/%{name}%{shortver}/lib/*[!%{version}].so
+%{_libdir}/%{name}%{shortver}/include
 
 %changelog
-* Sun Jan 28 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-2
-- SPEC cleanup as per review in https://bugzilla.redhat.com/show_bug.cgi?id=1539116
+* Sun Jan 28 2018 Markus Neteler <neteler@mundialis.de> - 7.4.1-2
+- SPEC cleanup with fix of dependencies between packages (review #1539116)
+- appdata.xml file into '/usr/share/metainfo'
+- use icon cache scriplets only on EPEL
 
 * Mon Jan 15 2018 Markus Metz <metz@mundialis.de> - 7.4.0-1
 - New upstream version 7.4.0
