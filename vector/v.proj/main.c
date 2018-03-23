@@ -9,8 +9,9 @@
  *               Huidae Cho <grass4u gmail.com>, Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>, Markus Neteler <neteler itc.it>,
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
+ *               Markus Metz
  * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2008, 2018 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -41,6 +42,7 @@ int main(int argc, char *argv[])
     const char *omap_name, *map_name, *iset_name, *iloc_name;
     struct pj_info info_in;
     struct pj_info info_out;
+    struct pj_info info_trans;
     const char *gbase;
     char date[40], mon[4];
     struct GModule *module;
@@ -184,7 +186,6 @@ int main(int argc, char *argv[])
     if (stat >= 0) {		/* yes, we can access the mapset */
 	/* if requested, list the vector maps in source location - MN 5/2001 */
 	if (flag.list->answer) {
-	    int i;
 	    char **list;
 	    G_verbose_message(_("Checking location <%s> mapset <%s>"),
 			      iloc_name, iset_name);
@@ -270,6 +271,9 @@ int main(int argc, char *argv[])
 	pj_print_proj_params(&info_in, &info_out);
     }
 
+    if (GPJ_init_transform(&info_in, &info_out, &info_trans) < 0)
+	G_fatal_error(_("Unable to initialize coordinate transformation"));
+
     /* Initialize the Point / Cat structure */
     Points = Vect_new_line_struct();
     Points2 = Vect_new_line_struct();
@@ -317,10 +321,11 @@ int main(int argc, char *argv[])
 	/* NW corner */
 	x = src_box.W;
 	y = src_box.N;
-	if (pj_do_transform(1, &x, &y, NULL,
-			    &info_in, &info_out) < 0) {
-	    G_fatal_error(_("Error in pj_do_transform"));
-	}
+	if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
+			  &x, &y, NULL) < 0)
+	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+			   "GPJ_transform()");
+
 	tgt_box.E = x;
 	tgt_box.W = x;
 	tgt_box.N = y;
@@ -328,10 +333,10 @@ int main(int argc, char *argv[])
 	/* SW corner */
 	x = src_box.W;
 	y = src_box.S;
-	if (pj_do_transform(1, &x, &y, NULL,
-			    &info_in, &info_out) < 0) {
-	    G_fatal_error(_("Error in pj_do_transform"));
-	}
+	if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
+			  &x, &y, NULL) < 0)
+	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+			   "GPJ_transform()");
 	if (tgt_box.W > x)
 	    tgt_box.W = x;
 	if (tgt_box.E < x)
@@ -343,10 +348,10 @@ int main(int argc, char *argv[])
 	/* NE corner */
 	x = src_box.E;
 	y = src_box.N;
-	if (pj_do_transform(1, &x, &y, NULL,
-			    &info_in, &info_out) < 0) {
-	    G_fatal_error(_("Error in pj_do_transform"));
-	}
+	if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
+			  &x, &y, NULL) < 0)
+	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+			   "GPJ_transform()");
 	if (tgt_box.W > x) {
 	    tgt_box.E = x + 360;
 	    recommend_nowrap = 1;
@@ -358,10 +363,10 @@ int main(int argc, char *argv[])
 	/* SE corner */
 	x = src_box.E;
 	y = src_box.S;
-	if (pj_do_transform(1, &x, &y, NULL,
-			    &info_in, &info_out) < 0) {
-	    G_fatal_error(_("Error in pj_do_transform"));
-	}
+	if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
+			  &x, &y, NULL) < 0)
+	    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+			   "GPJ_transform()");
 	if (tgt_box.W > x) {
 	    if (tgt_box.E < x + 360)
 		tgt_box.E = x + 360;
@@ -423,7 +428,7 @@ int main(int argc, char *argv[])
 	    double x1, y1, z1, x2, y2, z2;
 	    double dx, dy, dz;
 	    double l;
-	    int i, n;
+	    int n;
 
 	    Vect_reset_line(Points2);
 	    for (i = 0; i < Points->n_points - 1; i++) {
@@ -439,19 +444,15 @@ int main(int argc, char *argv[])
 		dy = y2 - y1;
 		dz = z2 - z1;
 
-		if (pj_do_transform(1, &x1, &y1,
-				    flag.transformz->answer ? &z1 : NULL,
-				    &info_in, &info_out) < 0) {
-		  G_fatal_error(_("Unable to re-project vector map <%s> from <%s>"),
-				Vect_get_full_name(&Map), ilocopt->answer);
-		}
+		if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
+				  &x1, &y1, flag.transformz->answer ? &z1 : NULL) < 0)
+		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+				   "GPJ_transform()");
 
-		if (pj_do_transform(1, &x2, &y2,
-				    flag.transformz->answer ? &z2 : NULL,
-				    &info_in, &info_out) < 0) {
-		  G_fatal_error(_("Unable to re-project vector map <%s> from <%s>"),
-				Vect_get_full_name(&Map), ilocopt->answer);
-		}
+		if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
+				  &x2, &y2, flag.transformz->answer ? &z2 : NULL) < 0)
+		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+				   "GPJ_transform()");
 
 		Vect_append_point(Points2, x1, y1, z1);
 
@@ -472,12 +473,10 @@ int main(int argc, char *argv[])
 			y = y1 + dy * j / n;
 			z = z1 + dz * j / n;
 
-			if (pj_do_transform(1, &x, &y,
-					    flag.transformz->answer ? &z : NULL,
-					    &info_in, &info_out) < 0) {
+			if (GPJ_transform(&info_in, &info_out, &info_trans, PJ_FWD,
+					  &x, &y, flag.transformz->answer ? &z : NULL) < 0)
 			  G_fatal_error(_("Unable to re-project vector map <%s> from <%s>"),
 					Vect_get_full_name(&Map), ilocopt->answer);
-			}
 			Vect_append_point(Points2, x, y, z);
 		    }
 		}
@@ -486,9 +485,10 @@ int main(int argc, char *argv[])
 	    Vect_write_line(&Out_Map, type, Points2, Cats);	/* write line */
 	}
 	else {
-	    if (pj_do_transform(Points->n_points, Points->x, Points->y,
-				flag.transformz->answer ? Points->z : NULL,
-				&info_in, &info_out) < 0) {
+	    if (GPJ_transform_array(&info_in, &info_out, &info_trans, PJ_FWD,
+			            Points->x, Points->y,
+			            flag.transformz->answer ? Points->z : NULL,
+			            Points->n_points) < 0) {
 	      G_fatal_error(_("Unable to re-project vector map <%s> from <%s>"),
 			    Vect_get_full_name(&Map), ilocopt->answer);
 	    }
