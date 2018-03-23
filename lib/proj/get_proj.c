@@ -5,9 +5,9 @@
    \brief GProj library - Functions for re-projecting point data
 
    \author Original Author unknown, probably Soil Conservation Service,
-   Eric Miller, Paul Kelly
+   Eric Miller, Paul Kelly, Markus Metz
 
-   (C) 2003-2008 by the GRASS Development Team
+   (C) 2003-2008, 2018 by the GRASS Development Team
  
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
@@ -80,6 +80,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     info->meters = 1.0;
     info->proj[0] = '\0';
     info->def = NULL;
+    info->pj = NULL;
 
     str = G_find_key_value("meters", in_units_keys);
     if (str != NULL) {
@@ -272,8 +273,8 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     strcpy(info->def, buffa);
     G_free(opt_in[0]);
 
-    for (i = 0; i < nopt; i++) {
-	sprintf(buffa,  "+%s ", opt_in[0]);
+    for (i = 1; i < nopt; i++) {
+	sprintf(buffa,  "+%s ", opt_in[i]);
 	strcat(info->def, buffa);
 	G_free(opt_in[i]);
     }
@@ -327,6 +328,7 @@ int pj_get_string(struct pj_info *info, char *str)
     info->proj[0] = '\0';
     info->meters = 1.0;
     info->def = NULL;
+    info->pj = NULL;
     
     nopt = 0;
 
@@ -408,8 +410,8 @@ int pj_get_string(struct pj_info *info, char *str)
     strcpy(info->def, buffa);
     G_free(opt_in[0]);
 
-    for (i = 0; i < nopt; i++) {
-	sprintf(buffa,  "+%s ", opt_in[0]);
+    for (i = 1; i < nopt; i++) {
+	sprintf(buffa,  "+%s ", opt_in[i]);
 	strcat(info->def, buffa);
 	G_free(opt_in[i]);
     }
@@ -485,8 +487,8 @@ const char *set_proj_lib(const char *name)
  * \param iproj 'Input' co-ordinate system
  * \param oproj 'Output' co-ordinate system
  * 
- * \return 1 on success, -1 on error (i.e. if PROJ.4 pj_get_def() function
- *         returned NULL for either co-ordinate system)
+ * \return 1 on success, -1 on error (i.e. if the PROJ-style definition 
+ *         is NULL for either co-ordinate system)
  **/
 
 int pj_print_proj_params(const struct pj_info *iproj, const struct pj_info *oproj)

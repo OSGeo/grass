@@ -5,12 +5,12 @@
    \brief GProj Library - Functions for manipulating co-ordinate
    system representations
 
-   (C) 2003-2017 by the GRASS Development Team
+   (C) 2003-2018 by the GRASS Development Team
  
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Paul Kelly, Frank Warmerdam 
+   \author Paul Kelly, Frank Warmerdam, Markus Metz 
 */
 
 #include <grass/config.h>
