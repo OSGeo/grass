@@ -568,12 +568,12 @@ msgstr "Inconsistencia en los datos. Valor calculado para gráfica de dispersió
 
 #: ../lib/imagery/iscatt_core.c:745
 #, c-format
-msgid "Unbale to read find raster <%s>"
+msgid "Unable to read find raster <%s>"
 msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:755
 #, c-format
-msgid "Unbale to open raster <%s>"
+msgid "Unable to open raster <%s>"
 msgstr "No ha sido posible abrir ráster <%s>"
 
 #: ../lib/imagery/iscatt_core.c:761
@@ -634,7 +634,7 @@ msgid "Perimeter computation failed"
 msgstr "Ha fallado el cálculo de perímetro"
 
 #: ../lib/imagery/iclass_perimeter.c:208
-msgid "Absurd polygon."
+msgid "Invalid polygon"
 msgstr "Polígono absurdo."
 
 #: ../lib/imagery/iclass_perimeter.c:253
