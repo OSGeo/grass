@@ -242,7 +242,7 @@ int GPJ_transform(const struct pj_info *info_in,
     if (info_out == NULL)
 	G_fatal_error(_("No output projection"));
 
-    if (dir == FWD) {
+    if (dir == PJ_FWD) {
 	p_in = info_in;
 	p_out = info_out;
     }
@@ -445,7 +445,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
     /* PROJ 4 variant */
     const struct pj_info *p_in, *p_out;
 
-    if (dir == FWD) {
+    if (dir == PJ_FWD) {
 	p_in = info_in;
 	p_out = info_out;
     }
