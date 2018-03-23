@@ -297,6 +297,7 @@ class TplotFrame(wx.Frame):
         self.ntb.AddPage(page=self.controlPanelLabels, text=_('Labels'),
                          name='Labels')
 
+
         # ------------Buttons on the bottom(draw,help)------------
         self.vButtPanel = wx.Panel(self.mainPanel, id=wx.ID_ANY)
         self.vButtSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -604,7 +605,6 @@ class TplotFrame(wx.Frame):
             self.axes2d.set_ylabel(self.drawY)
         else:
             self.axes2d.set_ylabel(', '.join(self.yticksNames))
-        print(self.drawTitle)
         if self.drawTitle != '':
             self.axes2d.set_title(self.drawTitle)
         
@@ -878,9 +878,9 @@ class TplotFrame(wx.Frame):
         """Function to show help"""
         RunCommand(prog='g.manual', quiet=True, entry='g.gui.tplot')
 
-    def SetDatasets(self, rasters, vectors, coors, cats, attr):
+    def SetDatasets(self, rasters, vectors, coors, cats, attr, title, xlabel,
+                    ylabel):
         """Set the data
-        #TODO
         :param list rasters: a list of temporal raster dataset's name
         :param list vectors: a list of temporal vector dataset's name
         :param list coors: a list with x/y coordinates
@@ -921,6 +921,12 @@ class TplotFrame(wx.Frame):
         if self.datasetsR:
             self.datasetSelectR.SetValue(
                 ','.join(map(lambda x: x[0] + '@' + x[1], self.datasetsR)))
+        if title:
+            self.title.SetValue(title)
+        if xlabel:
+            self.x.SetValue(xlabel)
+        if ylabel:
+            self.y.SetValue(ylabel)
         self._redraw()
 
     def OnVectorSelected(self, event):

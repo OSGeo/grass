@@ -49,7 +49,6 @@
 #% required: no
 #%end
 
-
 #%option
 #% key: attr
 #% label: Name of attribute
@@ -61,6 +60,27 @@
 #% required: no
 #% label: Name for output file
 #% description: Add extension to specify format (.png, .pdf, .svg)
+#%end
+
+#%option
+#% key: title
+#% label: Title for plot
+#% description: The title for the output plot
+#% required: no
+#%end
+
+#%option
+#% key: xlabel
+#% label: Label for x axis
+#% description: The x axis label for the output plot
+#% required: no
+#%end
+
+#%option
+#% key: ylabel
+#% label: Label for y axis
+#% description: The y axis label for the output plot
+#% required: no
 #%end
 
 #%option
@@ -112,9 +132,19 @@ def main():
         elif not coords and not cats:
             gscript.warning(_("With stvds you have to use 'coordinates' or "
                               "'cats' option"))
+    title = None
+    if options['title']:
+        title = options['title']
+    xlabel = None
+    if options['xlabel']:
+        xlabel = options['xlabel']
+    ylabel = None
+    if options['ylabel']:
+        ylabel = options['ylabel']
     app = wx.App()
     frame = TplotFrame(parent=None, giface=StandaloneGrassInterface())
-    frame.SetDatasets(rasters, vectors, coords, cats, attr)
+    frame.SetDatasets(rasters, vectors, coords, cats, attr, title, xlabel,
+                      ylabel)
     if output:
         frame.OnRedraw()
         if options['size']:
