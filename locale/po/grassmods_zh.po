@@ -7995,7 +7995,7 @@ msgstr ""
 #: ../raster/r.contour/main.c:188
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
-msgstr "无法为表 <%s>创建索引 <%s>"
+msgstr "无法为表 <%s>创建索引"
 
 #: ../vector/v.in.dwg/main.c:287
 #, c-format

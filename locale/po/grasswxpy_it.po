@@ -418,7 +418,7 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:79
 msgid "GRASS GIS Supervised Classification Tool"
-msgstr ""
+msgstr "GRASS GIS Strumento Classificazione Supervisionata"
 
 #: ../gui/wxpython/iclass/frame.py:312 ../gui/wxpython/mapswipe/frame.py:291
 #: ../gui/wxpython/gcp/mapdisplay.py:261 ../gui/wxpython/mapdisp/frame.py:510
@@ -428,7 +428,7 @@ msgstr "Barra degli strumenti della mappa"
 
 #: ../gui/wxpython/iclass/frame.py:325
 msgid "IClass Toolbar"
-msgstr ""
+msgstr "Barra degli strumenti IClass"
 
 #: ../gui/wxpython/iclass/frame.py:337
 msgid "IClass Misc Toolbar"
@@ -572,11 +572,11 @@ msgstr "Istogrammi"
 
 #: ../gui/wxpython/iclass/plots.py:74
 msgid "Coincident plots"
-msgstr ""
+msgstr "Grafici delle coincidenze"
 
 #: ../gui/wxpython/iclass/plots.py:75
 msgid "Scatter plots"
-msgstr ""
+msgstr "Grafici di dispersione"
 
 #: ../gui/wxpython/iclass/plots.py:99
 #, python-format
@@ -6783,6 +6783,8 @@ msgid ""
 "Failed to run command '%(command)s'. Details:\n"
 "%(error)s"
 msgstr ""
+"Esecuzione del comando '%(command)s' fallita. Dettagli\n"
+"%(error)s"
 
 #: ../gui/wxpython/mapdisp/frame.py:258 ../gui/wxpython/lmgr/frame.py:99
 #: ../gui/wxpython/lmgr/frame.py:1206 ../gui/wxpython/gui_core/ghelp.py:113
@@ -6861,7 +6863,7 @@ msgstr "Vettoriale <%s> aperto per l'editing - saltato."
 #: ../gui/wxpython/mapdisp/frame.py:964
 #, python-brace-format
 msgid "Failed to query vector map(s) <{maps}>. Check database settings and topology."
-msgstr ""
+msgstr "Interrogazione fallita per la mappa vettoriale <{maps>. Controllare le impostazioni del database e dele topologia."
 
 #: ../gui/wxpython/mapdisp/frame.py:1393
 msgid "Set computational region extent from display"
@@ -6873,15 +6875,15 @@ msgstr "Imposta la region computazionale interattivamente"
 
 #: ../gui/wxpython/mapdisp/frame.py:1397
 msgid "Set computational region from named region"
-msgstr ""
+msgstr "Imposta regione computazionale da una regione precedentemente salvata"
 
 #: ../gui/wxpython/mapdisp/frame.py:1402
 msgid "Save computational region to named region"
-msgstr ""
+msgstr "Salva la regione computazionale a una regione con nome"
 
 #: ../gui/wxpython/mapdisp/frame.py:1535
 msgid "Raster Digitizer Toolbar"
-msgstr ""
+msgstr "Barra degli strumenti per il digitalizzatore di raster"
 
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:89
 #: ../gui/wxpython/gui_core/mapdisp.py:133 ../gui/wxpython/core/render.py:779
@@ -6944,7 +6946,7 @@ msgstr "Avvia nuovo map display <%s>..."
 #: ../gui/wxpython/mapdisp/main.py:610
 #, python-format
 msgid "Unable to create file <%s>"
-msgstr ""
+msgstr "Impossibile creare il file <%s>"
 
 #: ../gui/wxpython/mapdisp/main.py:626
 #, python-format
@@ -6961,11 +6963,11 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:35
 msgid "Add scale bar"
-msgstr ""
+msgstr "Aggiunge la barra della scala"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:37
 msgid "Add raster legend"
-msgstr ""
+msgstr "Aggiunge legenda per raster"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:39
 msgid "Add vector legend"
@@ -7019,7 +7021,7 @@ msgstr "Trascina col mouse per ruotare la scena 3D"
 #: ../gui/wxpython/mapdisp/toolbars.py:68
 #: ../gui/wxpython/nviz/preferences.py:241
 msgid "Fly-through mode"
-msgstr ""
+msgstr "Modalità vola attraverso"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:70
 msgid "Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
@@ -7128,7 +7130,7 @@ msgstr "ATTENZIONE"
 
 #: ../gui/wxpython/rlisetup/frame.py:114
 msgid "GRASS GIS Setup for r.li modules"
-msgstr ""
+msgstr "GRASS GIS Setup per i moduli r.li"
 
 #: ../gui/wxpython/rlisetup/frame.py:132
 msgid "Available sampling area configuration files"
@@ -7226,7 +7228,7 @@ msgstr "Vettoriale da utilizzare per selezionare le aree"
 
 #: ../gui/wxpython/rlisetup/wizard.py:539
 msgid "Define sampling region (region for analysis)"
-msgstr ""
+msgstr "Definire la regione di campionamento (regione per le analisi)"
 
 #: ../gui/wxpython/rlisetup/wizard.py:542
 #: ../gui/wxpython/rlisetup/wizard.py:877
@@ -7267,11 +7269,11 @@ msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:711
 msgid "Column of upper left corner"
-msgstr ""
+msgstr "Colonna per l'angolo alto a sinistra"
 
 #: ../gui/wxpython/rlisetup/wizard.py:725
 msgid "Row of upper left corner"
-msgstr ""
+msgstr "Riga dell'angolo in alto a sinistra"
 
 #: ../gui/wxpython/rlisetup/wizard.py:740
 #: ../gui/wxpython/rlisetup/wizard.py:754
@@ -7288,7 +7290,7 @@ msgstr "Regioni"
 
 #: ../gui/wxpython/rlisetup/wizard.py:879
 msgid "Sample units"
-msgstr ""
+msgstr "Unità del campionamento"
 
 #: ../gui/wxpython/rlisetup/wizard.py:880 ../gui/wxpython/menustrings.py:335
 #: ../gui/wxpython/menustrings.py:1278
@@ -7325,7 +7327,7 @@ msgstr "Numero delle regioni da disegnare:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:926
 msgid "Do you want to overwrite existing temporal maps if they exist?"
-msgstr ""
+msgstr "Si vogliono sovrascrivere le mappe temporale esistenti se sono presenti?"
 
 #: ../gui/wxpython/rlisetup/wizard.py:931
 msgid "Do you want to check vector areas?"
@@ -18102,3 +18104,6 @@ msgstr "Impossibile leggere i codici EPSG: %s"
 #, fuzzy
 msgid "failed to open '{}'"
 msgstr "Impossibile aprire '%s'"
+
+#~ msgid "Select/create group:"
+#~ msgstr "Seleziona/crea gruppo"

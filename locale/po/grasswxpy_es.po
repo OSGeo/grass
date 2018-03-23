@@ -2445,7 +2445,7 @@ msgstr "¿Sobreescribir?"
 #: ../gui/wxpython/datacatalog/tree.py:314
 #, python-brace-format
 msgid "GRASS locations in {0}"
-msgstr ""
+msgstr "Localizaciones de GRASS en {0}"
 
 #: ../gui/wxpython/datacatalog/tree.py:582
 #, python-brace-format
@@ -6800,6 +6800,8 @@ msgid ""
 "Failed to run command '%(command)s'. Details:\n"
 "%(error)s"
 msgstr ""
+"No se pudo ejecutar el comando '%(command)s'. Detalles:\n"
+"%(error)s"
 
 #: ../gui/wxpython/mapdisp/frame.py:258 ../gui/wxpython/lmgr/frame.py:99
 #: ../gui/wxpython/lmgr/frame.py:1206 ../gui/wxpython/gui_core/ghelp.py:113
@@ -8772,7 +8774,7 @@ msgstr "Las configuraciones del gráfico se guardaron en el archivo '%s'."
 #: ../gui/wxpython/tplot/frame.py:43
 #, python-brace-format
 msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr ""
+msgstr "La herramienta de gráfica temporal necesita que el paquete \"matplotlib\" (mathplotlib-python) esté instalado. {0}"
 
 #: ../gui/wxpython/tplot/frame.py:97
 msgid "GRASS GIS Temporal Plot Tool"
@@ -8850,7 +8852,7 @@ msgstr "Los conjuntos de datos tienen diferentes unidades de tiempo lo cual no e
 #: ../gui/wxpython/tplot/frame.py:386
 #, python-brace-format
 msgid "Category {ca} is not on vector map {ma} and it will be not used"
-msgstr ""
+msgstr "La categoría {ca} no está en el mapa vectorial {ma} y no será usada"
 
 #: ../gui/wxpython/tplot/frame.py:405
 msgid "Both coordinates and categories are set, coordinates will be used. The use categories remove text from coordinate form"
@@ -13304,7 +13306,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:470
 msgid "Align region to resolution"
-msgstr ""
+msgstr "Alinear la región a la resolución"
 
 #: ../gui/wxpython/gui_core/preferences.py:499
 #: ../gui/wxpython/nviz/tools.py:100
@@ -13539,7 +13541,7 @@ msgstr "Precisión:"
 #: ../gui/wxpython/location_wizard/wizard.py:1646
 #, python-brace-format
 msgid "Unable to read EPGS codes: {0}"
-msgstr ""
+msgstr "Imposible leer los códigos EPGS: {0}"
 
 #: ../gui/wxpython/gui_core/preferences.py:1892
 #, python-format
@@ -17277,7 +17279,7 @@ msgstr "Atributos de isosuperficies"
 
 #: ../gui/wxpython/nviz/tools.py:2806
 msgid "toggle normal direction"
-msgstr ""
+msgstr "conmutar dirección normal"
 
 #: ../gui/wxpython/nviz/tools.py:2815
 msgid "Isosurface value"
@@ -17289,7 +17291,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:2941
 msgid "Slice parallel to axis:"
-msgstr ""
+msgstr "Cortar paralelo al eje:"
 
 #: ../gui/wxpython/nviz/tools.py:3099
 msgid "W"
@@ -17339,11 +17341,11 @@ msgstr "Nivel {level}"
 #: ../gui/wxpython/nviz/tools.py:4493 ../gui/wxpython/nviz/tools.py:4497
 #, python-brace-format
 msgid "Slice parallel to {axis}"
-msgstr ""
+msgstr "Cortar paralelo a {axis}"
 
 #: ../gui/wxpython/nviz/tools.py:4785 ../gui/wxpython/nviz/tools.py:5573
 msgid "Slice parallel to"
-msgstr ""
+msgstr "Cortar paralelo a"
 
 #: ../gui/wxpython/nviz/tools.py:5017
 #, python-format
@@ -17674,11 +17676,11 @@ msgstr "Nombre vacío insertado."
 #: ../gui/wxpython/iscatt/plots.py:42
 #, python-brace-format
 msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr ""
+msgstr "La herramienta de gráfica de dispersión necesita que el paquete \"matplotlib\" (mathplotlib-python) esté instalado. {0}"
 
 #: ../gui/wxpython/iscatt/plots.py:617
 msgid "Zoom to scatter plot extend"
-msgstr ""
+msgstr "Acercamiento a la extensión del gráfico de dispersión"
 
 #: ../gui/wxpython/iscatt/dialogs.py:40
 msgid "Add scatter plots"
@@ -17791,7 +17793,7 @@ msgstr "Seleccionar área con polígono"
 
 #: ../gui/wxpython/iscatt/toolbars.py:60
 msgid "Pan mode for scatter plots"
-msgstr ""
+msgstr "Modo pan para gráficos de dispersión"
 
 #: ../gui/wxpython/iscatt/toolbars.py:63
 msgid "Zoom mode for scatter plots (left mouse button, wheel)"
@@ -18066,3 +18068,159 @@ msgstr "No se puede proveer sugerencia de forma de citar, por favor vea el sitio
 
 msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {}"
 msgstr "La herramienta de gráfica de dispersión necesita que el paquete \"matplotlib\" (mathplotlib-python) esté instalado. {}"
+
+#~ msgid "Select/create group:"
+#~ msgstr "Seleccionar/crear grupo:"
+
+#~ msgid "List of addons cannot be obtained because g.extension failed. Details: %s"
+#~ msgstr "No se ha podido obtener la lista de complementos porque falló g.extension. Detalles: %s"
+
+#~ msgid "Do advanced search using %s module"
+#~ msgstr "Búsqueda avanzada usando el módulo %s"
+
+#~ msgid "Documentation for %s is now open in the web browser"
+#~ msgstr "Documentación de %s ha sido abierta en el explorador web"
+
+#~ msgid "Show computational region extent"
+#~ msgstr "Mostrar la extensión de la región computacional"
+
+#~ msgid "Random colors according to category number "
+#~ msgstr "Colores aleatorios según el número de categoría"
+
+#~ msgid "Unable to create new GRASS Database"
+#~ msgstr "No se ha podido crear una nueva base de datos de GRASS"
+
+#~ msgid "Map <{layer}> marked for moving."
+#~ msgstr "Mapa <{layer}> seleccionado para mover."
+
+#~ msgid "Map <{layer}> marked for copying."
+#~ msgstr "Mapa <{layer}> seleccionado para copiar."
+
+#~ msgid "No map selected for moving."
+#~ msgstr "Ningún mapa seleccionado para mover."
+
+#~ msgid "Select new name"
+#~ msgstr "Seleccionar nombre nuevo"
+
+#~ msgid "Moving <{name}>..."
+#~ msgstr "Moviendo <{name}>..."
+
+#~ msgid "Reprojection is not implemented for 3D rasters"
+#~ msgstr "La reproyección no ha sido implementada aun para mapas ráster 3D"
+
+#~ msgid "Reproject raster"
+#~ msgstr "Reproyectar mapa ráster"
+
+#~ msgid "Reproject vector"
+#~ msgstr "Reproyectar mapa vectorial"
+
+#~ msgid "Estimated resolution:"
+#~ msgstr "Resolución estimada:"
+
+#~ msgid "Resampling method:"
+#~ msgstr "Método de remuestreo:"
+
+#~ msgid "Do&wnload"
+#~ msgstr "Do&wnload"
+
+#~ msgid "Download sample location"
+#~ msgstr "Descargar localización de muestra"
+
+#~ msgid "Documents"
+#~ msgstr "Documentos"
+
+#~ msgid "My Documents"
+#~ msgstr "Mis Documentos"
+
+#~ msgid ""
+#~ "Raster temporal dataset (strds)\n"
+#~ "Press ENTER after typing the name or select with the combobox"
+#~ msgstr ""
+#~ "Conjunto de datos ráster espacio temporales (strds)\n"
+#~ "Presione ENTER después de escribir el nombre o seleccione de la lista desplegable."
+
+#~ msgid ""
+#~ "Vector temporal dataset (stvds)\n"
+#~ "Press ENTER after typing the name or select with the combobox"
+#~ msgstr ""
+#~ "Conjunto de datos vectoriales espacio temporales (stvds)\n"
+#~ "Presione ENTER después de escribir el nombre o seleccione de la lista desplegable."
+
+#~ msgid "Problem getting data from vector temporal dataset. Empty list of values for cat {ca}."
+#~ msgstr "Problemas al obtener los datos del conjunto de datos vectoriales. Lista de valores vacía para la categoría {ca}."
+
+#~ msgid "Problem getting data from vector temporal dataset. Empty list of values."
+#~ msgstr "Problemas al obtener los datos del conjunto de datos vectoriales. Lista de valores vacía."
+
+#~ msgid "Please provide a group name to process"
+#~ msgstr "Por favor provea un nombre de grupo a procesar"
+
+#~ msgid "Please provide a raster map name to process"
+#~ msgstr "Por favor provea un nombre de mapa ráster para procesar"
+
+#~ msgid "Please provide a camera name (generated by i.ortho.camera)"
+#~ msgstr "Por favor provea el nombre de la cámara (generado por i.ortho.camera)"
+
+#~ msgid "ZIP file is unreadable: {0}"
+#~ msgstr "No se puede leer el archivo ZIP: {0}"
+
+#~ msgid "Download of <{url}> failed or file <{name}> is not a ZIP file"
+#~ msgstr "La descarga de <{url}> ha fallado o <{name}> no es un archivo ZIP"
+
+#~ msgid "Unknown format '{0}'."
+#~ msgstr "Formato desconocido '{0}'."
+
+#~ msgid "Downloaded location is not valid"
+#~ msgstr "La localización descargada no es válida"
+
+#~ msgid "Select sample location to download:"
+#~ msgstr "Seleccione la localización de muestra para descargar:"
+
+#~ msgid "Download selected location"
+#~ msgstr "Descargar la localización seleccionada"
+
+#~ msgid "Download in progress, wait until it is finished"
+#~ msgstr "Descarga en progreso, espere hasta que haya finalizado"
+
+#~ msgid "Location named <%s> already exists, download canceled"
+#~ msgstr "Localización denominada <%s> ya existe, descarga cancelada"
+
+#~ msgid "Download failed: %s"
+#~ msgstr "Ha fallado la descarga: %s"
+
+#~ msgid "Download completed. The downloaded sample data is listed in the location/mapset tabs upon closing of this window"
+#~ msgstr "Descarga completa. Los datos de muestra descargados se listan en las pestañas localización/directorio de mapas al cerrar esta ventana"
+
+#~ msgid "Location named <%s> already exists, rename it first"
+#~ msgstr "Localización denominada <%s> ya existe, renombrarla "
+
+#~ msgid "GRASS GIS Location Download"
+#~ msgstr "Descargar localización GRASS GIS"
+
+#~ msgid "Do you want to cancel location download?"
+#~ msgstr "Desea cancelar la descarga de la localización?"
+
+#~ msgid "Abort download"
+#~ msgstr "Cancelar descarga"
+
+#~ msgid "Writing CONTROL_POINTS file failed"
+#~ msgstr "Falló la escritura del archivo CONTROL_POINTS"
+
+#~ msgid "CONTROL_POINTS file saved for group <%s>"
+#~ msgstr "Archivo CONTROL_POINTS guardado para grupo <%s>"
+
+#~ msgid "Reading CONTROL_POINTS file failed"
+#~ msgstr "Falló la lectura del archivo de CONTROL_POINTS"
+
+#~ msgid ""
+#~ "Could not calculate RMS Error.\n"
+#~ "Possible error with i.ortho.transform."
+#~ msgstr ""
+#~ "No se pudo calcular el Error RMS.\n"
+#~ "Posible error en i.ortho.transform."
+
+#~ msgid "Close GUI and exit GRASS GIS shell."
+#~ msgstr "Cerrar GUI y salir de la consola de GRASS GIS."
+
+#~ msgid "Show current region"
+#~ msgstr "Mostrar región actual"

@@ -18535,3 +18535,33 @@ msgstr "L'outil Scatterplot nécessite que le paquet \"matplotlib\" (python-matp
 
 #~ msgid "Corrects scanning distortions of a scanned aerial photo."
 #~ msgstr "Corrige les distortions de scan d'une photo aérienne scannée."
+
+#~ msgid "Model computation finished"
+#~ msgstr "Calcul du modèle terminé"
+
+#~ msgid "%d intermediate maps deleted from current mapset"
+#~ msgstr "%d cartes intermédiaires supprimées du jeu de cartes courant"
+
+#~ msgid "Manage Location of Fiducial Points on a Scanned Photo"
+#~ msgstr "Gestion de la position des points fiduciaux sur une photo scannée"
+
+#~ msgid "Please provive an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
+#~ msgstr "Merci de fournir une valeur d'ordre (1 si 4 points fiduciaux, 2 si 8 points fiduciaux)"
+
+#~ msgid "Select sample location to download:"
+#~ msgstr "Sélectionner le secteur d'exemple à télécharger : "
+
+#~ msgid "Download completed. The downloaded sample data is listed in the location/mapset tabs upon closing of this window"
+#~ msgstr "Téléchargement complet. Les données d'exemple téléchargées sont listées dans l'onglet Secteur/Jeu de cartes vers le bouton de fermeture de cette fenêtre"
+
+#~ msgid "Do you want to cancel location download?"
+#~ msgstr "Voulez-vous annuler le téléchargement de ce secteur ?"
+
+#~ msgid "Abort download"
+#~ msgstr "Annuler le téléchargement"
+
+#~ msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
+#~ msgstr "Calculer la morphologie (forme du terrain) et les géométries associées à l'aide d'une approche de vision machine."
+
+#~ msgid "Vector map profiling tool"
+#~ msgstr "Outil de profilage de la carte vecteur"

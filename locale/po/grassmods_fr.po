@@ -20359,7 +20359,7 @@ msgstr "Erreur à la lecture des données binaires"
 #: ../raster3d/r3.in.bin/main.c:154
 #, c-format
 msgid "Loading %s data with %i  bytes ...  (%dx%dx%d)"
-msgstr "Chargement des données %s avec %i octets ... (%dx%dx%dx)"
+msgstr "Chargement des données %d avec %i octets ... (%dx%dx%dx)"
 
 #: ../raster3d/r3.in.bin/main.c:202 ../raster3d/r3.neighbors/main.c:311
 msgid "Error flushing tiles"
@@ -21818,7 +21818,7 @@ msgstr "La carte raster <%s@%s> est une carte de base. Supprimez d'abord la cart
 #: ../general/g.remove/check_reclass.c:54
 #, c-format
 msgid "Removing information about reclassed map from <%s@%s> failed"
-msgstr "La suppression d'information sur la carte reclassée depuis <%s@%s> a échoué"
+msgstr "La suppression d'information sur la carte reclassée depuis <%s> a échoué"
 
 #: ../general/g.remove/construct_pattern.c:37
 #, c-format

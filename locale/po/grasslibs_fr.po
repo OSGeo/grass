@@ -3351,7 +3351,7 @@ msgstr "Effectue les tests unitaires et d'intégration pour la librairie gpde"
 #: ../lib/gpde/n_gwflow.c:436 ../lib/gpde/n_gwflow.c:715
 #, c-format
 msgid "The total sum of the water budget: %g\n"
-msgstr "La somme totale du \"water budget\" : %g\n"
+msgstr ""
 
 #: ../lib/gpde/n_gwflow.c:438 ../lib/gpde/n_gwflow.c:717
 #, c-format
@@ -9641,6 +9641,9 @@ msgstr "Impossible de fermer le curseur %s"
 msgid "Boundary/centroid skipped (output feature type: %s)"
 msgstr "Contour/centroïde sauté (type d'objet en sortie : %s)"
 
+msgid "Mapset <{mapset}> is invalid for an unknown reason"
+msgstr "Le jeu de cartes <{mapset}> est invalide pour une raison inconnue"
+
 #~ msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
 #~ msgstr "La mise à jour de la référence spatiale avec la définition proj4 embarquée a échoué. définition proj4 : <%s>"
 
@@ -9667,9 +9670,6 @@ msgstr "Contour/centroïde sauté (type d'objet en sortie : %s)"
 
 #~ msgid "<%s> is not a GRASS Mapset because it is not a directory"
 #~ msgstr "<%s> n'est pas un jeu de cartes GRASS car ce n'est pas un dossier"
-
-#~ msgid "Mapset <{mapset}> is invalid for an unknown reason"
-#~ msgstr "Le jeu de cartes <{mapset}> est invalide pour une raison inconnue"
 
 #~ msgid "Unknown error reading color rule"
 #~ msgstr "Erreur inconnue à la lecture de la règle de couleur"
@@ -9793,3 +9793,78 @@ msgstr "Contour/centroïde sauté (type d'objet en sortie : %s)"
 
 #~ msgid "Option <%s> requires <%s>"
 #~ msgstr "L'option <%s> nécessite <%s>"
+
+#~ msgid "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
+#~ msgstr "<%s> n'est pas un jeu de données GRASS valide car il ne contient pas de fichier WIND"
+
+#~ msgid "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
+#~ msgstr "<%s> n'est pas un jeu de données GRASS valide car le fichier WIND n'est pas lisible"
+
+#~ msgid "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reason"
+#~ msgstr "Le jeu de données <{mapset}> où le Secteur <{location}> est invalide pour une raison inconnue"
+
+#~ msgid "Missing WIND file"
+#~ msgstr "Fichier WIND manquant"
+
+#~ msgid "Error uncompressing fp raster data for row %d of <%s>: error code %d"
+#~ msgstr "Erreur lors de la décompression des données raster fp pour la ligne %d de <%s> : code d'erreur %d"
+
+#~ msgid "Error reading raster data for row %d of <%s>: %s"
+#~ msgstr "Erreur à la lecture des données raster pour la ligne %d de <%s> : %s"
+
+#~ msgid "Error reading compressed null data for row %d of <%s>"
+#~ msgstr "Erreur de lecture des données null compressées à la ligne %d de <%s>"
+
+#~ msgid "No source buffer"
+#~ msgstr "Pas de zone tampon source"
+
+#~ msgid "No destination buffer"
+#~ msgstr "Pas de zone tampon de destination"
+
+#~ msgid "Invalid source buffer size %d"
+#~ msgstr "Taille de zone tampon source %d invalide"
+
+#~ msgid "Invalid destination buffer size %d"
+#~ msgstr "Taille de zone tampon %d de destination invalide"
+
+#~ msgid "ZLIB compression error %d: %s"
+#~ msgstr "Erreur %d de compression ZLIB : %s "
+
+#~ msgid "ZLIB decompression error %d: %s"
+#~ msgstr "Erreur %d de décompression ZLIB : %s"
+
+#~ msgid "No destination buffer allocated"
+#~ msgstr "Pas de zone tampon de destination allouée"
+
+#~ msgid "Invalid read size %d"
+#~ msgstr "Taille de lecture %d invalide"
+
+#~ msgid "Unable to read %d bytes: end of file"
+#~ msgstr "Impossible de lire %d octets : fin du fichier"
+
+#~ msgid "Unable to read %d bytes: %s"
+#~ msgstr "Impossible de lire %d octets : %s"
+
+#~ msgid "Unable to write compression flag"
+#~ msgstr "Impossible d'écrire l'en-tête de compression"
+
+#~ msgid "Unable to write %d bytes: nothing written"
+#~ msgstr "Impossible d'écrire %d octets : rien d'écrit"
+
+#~ msgid "Unable to write %d bytes: %s"
+#~ msgstr "Impossible d'écrire %d octets : %s"
+
+#~ msgid "BZIP2 version %s compression error %d"
+#~ msgstr "Erreur de compression %d avec BZIP2 en version %s"
+
+#~ msgid "BZIP2 version %s decompression error %d"
+#~ msgstr "Erreur de décompression %d avec BZIP2 en version %s"
+
+#~ msgid "Got uncompressed size %d, expected %d"
+#~ msgstr "Taille décompressée reçue %d, était attendu %d"
+
+#~ msgid "LZ4 compression error"
+#~ msgstr "erreur de compression LZ4"
+
+#~ msgid "LZ4 decompression error"
+#~ msgstr "Erreur de décompression LZ4"
