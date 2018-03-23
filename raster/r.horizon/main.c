@@ -74,8 +74,7 @@ char *outfile;
 
 struct Cell_head cellhd;
 struct Key_value *in_proj_info, *in_unit_info;
-struct pj_info iproj;
-struct pj_info oproj;
+struct pj_info iproj, oproj, tproj;
 
 struct Cell_head new_cellhd;
 double bufferZone = 0., ebufferZone = 0., wbufferZone = 0.,
@@ -540,15 +539,10 @@ int main(int argc, char *argv[])
     G_free_key_value(in_proj_info);
     G_free_key_value(in_unit_info);
 
-#ifndef HAVE_PROJ_H
     /* Set output projection to latlong w/ same ellipsoid */
-    oproj.zone = 0;
-    oproj.meters = 1.;
-    sprintf(oproj.proj, "ll");
-    if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
-	G_fatal_error(_("Unable to set up lat/long projection parameters"));
-#endif
-
+    oproj.pj = NULL;
+    if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+	G_fatal_error(_("Unable to initialize coordinate transformation"));
 
 /**********end of parser - ******************************/
 
@@ -844,9 +838,9 @@ void calculate_shadow()
 	    longitude = xp;
 	    latitude = yp;
 
-	    if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0) {
-		G_fatal_error(_("Error in pj_do_proj"));
-	    }
+	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+			      &longitude, &latitude, NULL) < 0)
+		G_fatal_error(_("Error in %s"), "GPJ_transform()");
 	}
 	else {			/* ll projection */
 	    latitude = yp;
@@ -862,9 +856,9 @@ void calculate_shadow()
 	latitude = (latitude + delt_lat) * rad2deg;
 	longitude = (longitude + delt_lon) * rad2deg;
 
-	if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_FWD) < 0) {
-	    G_fatal_error(_("Error in pj_do_proj"));
-	}
+	if (GPJ_transform(&iproj, &oproj, &tproj, PJ_INV,
+			  &longitude, &latitude, NULL) < 0)
+	    G_fatal_error(_("Error in %s"), "GPJ_transform()");
 
 	delt_east = longitude - xp;
 	delt_nor = latitude - yp;
@@ -1198,11 +1192,9 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 		    longitude = xp;
 		    latitude = yp;
 
-
-		    if ((G_projection() != PROJECTION_LL)) {
-			if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0)
-			    G_fatal_error("Error in pj_do_proj");
-		    }
+		    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+				      &longitude, &latitude, NULL) < 0)
+			G_fatal_error(_("Error in %s"), "GPJ_transform()");
 
 		    latitude *= deg2rad;
 		    longitude *= deg2rad;
@@ -1220,8 +1212,9 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 		    longitude = (longitude + delt_lon) * rad2deg;
 
 		    if ((G_projection() != PROJECTION_LL)) {
-			if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_FWD) < 0)
-			    G_fatal_error("Error in pj_do_proj");
+			if (GPJ_transform(&iproj, &oproj, &tproj, PJ_INV,
+					  &longitude, &latitude, NULL) < 0)
+			    G_fatal_error(_("Error in %s"), "GPJ_transform()");
 		    }
 
 		    delt_east = longitude - xp;
