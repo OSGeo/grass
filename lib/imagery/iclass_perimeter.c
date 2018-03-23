@@ -205,7 +205,7 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
     }
     if (first < 0) {
 	G_free(tmp_points);
-	G_warning(_("Absurd polygon."));
+	G_warning(_("Invalid polygon"));
 	return 0;
     }
 
