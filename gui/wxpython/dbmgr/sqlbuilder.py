@@ -87,24 +87,25 @@ class SQLBuilder(wx.Frame):
         self.SetClientSize(self.panel.GetSize())
         self.CenterOnParent()
 
-    def _doLayout(self, modeChoices):
+    def _doLayout(self, modeChoices, showDbInfo=False):
         """Do dialog layout"""
 
         self.pagesizer = wx.BoxSizer(wx.VERTICAL)
 
         # dbInfo
-        databasebox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
+        if showDbInfo:
+            databasebox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
                                    label=" %s " % _("Database connection"))
-        databaseboxsizer = wx.StaticBoxSizer(databasebox, wx.VERTICAL)
-        databaseboxsizer.Add(
-            CreateDbInfoDesc(
-                self.panel,
-                self.dbInfo,
-                layer=self.layer),
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=3)
-
+            databaseboxsizer = wx.StaticBoxSizer(databasebox, wx.VERTICAL)
+            databaseboxsizer.Add(
+                CreateDbInfoDesc(
+                    self.panel,
+                    self.dbInfo,
+                    layer=self.layer),
+                proportion=1,
+                flag=wx.EXPAND | wx.ALL,
+                border=3)
+        
         #
         # text areas
         #
@@ -298,8 +299,9 @@ class SQLBuilder(wx.Frame):
                                          label=_("Close dialog on apply"))
         self.close_onapply.SetValue(True)
 
-        self.pagesizer.Add(databaseboxsizer,
-                           flag=wx.ALL | wx.EXPAND, border=5)
+        if showDbInfo:
+            self.pagesizer.Add(databaseboxsizer,
+                               flag=wx.ALL | wx.EXPAND, border=5)
         self.pagesizer.Add(
             modesizer,
             proportion=0,
