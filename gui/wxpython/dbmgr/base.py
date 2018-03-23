@@ -661,7 +661,7 @@ class VirtualAttributeList(wx.ListCtrl,
         if isinstance(
                 item1, types.StringType) or isinstance(
                 item2, types.StringTypes):
-            cmpVal = locale.strcoll(str(item1), str(item2))
+            cmpVal = locale.strcoll(GetUnicodeValue(item1), GetUnicodeValue(item2))
         else:
             cmpVal = cmp(item1, item2)
 
