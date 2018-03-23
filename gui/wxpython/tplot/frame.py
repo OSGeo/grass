@@ -647,7 +647,7 @@ class TplotFrame(wx.Frame):
     def _writeCSV(self, x, y):
         """Used to write CSV file of plotted data"""
         import csv
-        if len(y) > 1:
+        if isinstance(y[0], list):
             zipped = zip(x, *y)
         else:
             zipped = zip(x, y)
@@ -661,6 +661,7 @@ class TplotFrame(wx.Frame):
         
     def drawR(self):
         ycsv = []
+        xcsv = []
         for i, name in enumerate(self.datasetsR):
             name = name[0]
             # just name; with mapset it would be long
@@ -668,7 +669,6 @@ class TplotFrame(wx.Frame):
             self.yticksPos.append(1)  # TODO
             xdata = []
             ydata = []
-            xcsv = []
             for keys, values in self.timeDataR[name].iteritems():
                 if keys in ['temporalType', 'granularity', 'validTopology',
                             'unit', 'temporalDataType']:
