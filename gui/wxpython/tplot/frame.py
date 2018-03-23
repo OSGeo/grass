@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi
 @author start stvds support Matej Krejci
 """
+import os
 from itertools import cycle
 import numpy as np
 
@@ -59,6 +60,8 @@ try:
     import wx.lib.agw.flatnotebook as FN
 except ImportError:
     import wx.lib.flatnotebook as FN
+import wx.lib.filebrowsebutton as filebrowse
+
 from gui_core.widgets import GNotebook
 
 ALPHA = 0.5
@@ -100,6 +103,7 @@ class TplotFrame(wx.Frame):
         self._giface = giface
         self.datasetsV = None
         self.datasetsR = None
+        self.overwrite = False
         # self.vectorDraw=False
         # self.rasterDraw=False
         self.init()
@@ -297,6 +301,38 @@ class TplotFrame(wx.Frame):
         self.ntb.AddPage(page=self.controlPanelLabels, text=_('Labels'),
                          name='Labels')
 
+        # ------------ITEMS IN NOTEBOOK PAGE (EXPORT)------------------------
+        self.controlPanelExport = wx.Panel(parent=self.ntb, id=wx.ID_ANY)
+        self.csvLabel = wx.StaticText(parent=self.controlPanelExport,
+                                      id=wx.ID_ANY,
+                                      label=_('Path for output CSV file '
+                                              'with plotted data'))
+        self.csvButton = filebrowse.FileBrowseButton(parent=self.controlPanelExport,
+                                                     id=wx.ID_ANY,
+                                                     size=globalvar.DIALOG_GSELECT_SIZE,
+                                                     labelText='',
+                                                     dialogTitle=_('CVS path'),
+                                                     buttonText=_('Browse'),
+                                                     startDirectory=os.getcwd(),
+                                                     fileMode=wx.FD_SAVE)
+        self.headerLabel = wx.StaticText(parent=self.controlPanelExport,
+                                         id=wx.ID_ANY,
+                                         label=_('Do you want the CSV header?'
+                                                 ))
+        self.headerCheck = wx.CheckBox(parent=self.controlPanelExport,
+                                         id=wx.ID_ANY)
+        self.controlPanelSizerCheck = wx.BoxSizer(wx.HORIZONTAL)
+        self.controlPanelSizerCheck.Add(self.headerCheck)
+        self.controlPanelSizerCheck.Add(self.headerLabel)
+        self.controlPanelSizerExport = wx.BoxSizer(wx.VERTICAL)
+        self.controlPanelSizerExport.Add(self.csvLabel)
+        self.controlPanelSizerExport.Add(self.csvButton)
+        self.controlPanelSizerExport.Add(self.controlPanelSizerCheck)
+        self.controlPanelExport.SetSizer(self.controlPanelSizerExport)
+        self.controlPanelSizerCheck.Fit(self)
+        self.controlPanelSizerExport.Fit(self)
+        self.ntb.AddPage(page=self.controlPanelExport, text=_('Export'),
+                         name='Export')
 
         # ------------Buttons on the bottom(draw,help)------------
         self.vButtPanel = wx.Panel(self.mainPanel, id=wx.ID_ANY)
@@ -607,8 +643,24 @@ class TplotFrame(wx.Frame):
             self.axes2d.set_ylabel(', '.join(self.yticksNames))
         if self.drawTitle != '':
             self.axes2d.set_title(self.drawTitle)
+
+    def _writeCSV(self, x, y):
+        """Used to write CSV file of plotted data"""
+        import csv
+        if len(y) > 1:
+            zipped = zip(x, *y)
+        else:
+            zipped = zip(x, y)
+        with open(self.csvpath, "wb") as fi:
+            writer = csv.writer(fi)
+            if self.header:
+                head = ["Time"]
+                head.extend(self.yticksNames)
+                writer.writerow(head)
+            writer.writerows(zipped)
         
     def drawR(self):
+        ycsv = []
         for i, name in enumerate(self.datasetsR):
             name = name[0]
             # just name; with mapset it would be long
@@ -616,12 +668,14 @@ class TplotFrame(wx.Frame):
             self.yticksPos.append(1)  # TODO
             xdata = []
             ydata = []
+            xcsv = []
             for keys, values in self.timeDataR[name].iteritems():
                 if keys in ['temporalType', 'granularity', 'validTopology',
                             'unit', 'temporalDataType']:
                     continue
                 xdata.append(self.convert(values['start_datetime']))
                 ydata.append(values['value'])
+                xcsv.append(values['start_datetime'])
 
             if len(ydata) == ydata.count(None):
                 GError(parent=self, showTraceback=False,
@@ -634,13 +688,18 @@ class TplotFrame(wx.Frame):
             self.plots.append(self.axes2d.plot(xdata, ydata, marker='o',
                                                color=color,
                                                label=self.plotNameListR[i])[0])
+            if self.csvpath:
+                ycsv.append(ydata)
 
+        if self.csvpath:
+            self._writeCSV(xcsv, ycsv)
         self._setLabels(self.timeDataR[name]['granularity'])
         # legend
         handles, labels = self.axes2d.get_legend_handles_labels()
         self.axes2d.legend(loc=0)
 
     def drawVCats(self):
+        ycsv = []
         for i, name in enumerate(self.plotNameListV):
             # just name; with mapset it would be long
             labelname = name.replace('+', ' ')
@@ -650,6 +709,7 @@ class TplotFrame(wx.Frame):
             self.yticksPos.append(1)  # TODO
             xdata = []
             ydata = []
+            xcsv = []
             for keys, values in self.timeDataV[
                     name_cat[0]][
                     name_cat[1]].iteritems():
@@ -661,6 +721,7 @@ class TplotFrame(wx.Frame):
                     ydata.append(None)
                 else:
                     ydata.append(values['value'])
+                xcsv.append(values['start_datetime'])
 
             if len(ydata) == ydata.count(None):
                 GError(parent=self, showTraceback=False,
@@ -680,7 +741,11 @@ class TplotFrame(wx.Frame):
                     marker='o',
                     color=color,
                     label=labelname)[0])
-        # ============================
+            if self.csvpath:
+                ycsv.append(ydata)
+
+        if self.csvpath:
+            self._writeCSV(xcsv, ycsv)
         self._setLabels(self.timeDataV[name]['granularity'])
 
         # legend
@@ -689,18 +754,21 @@ class TplotFrame(wx.Frame):
         self.listWhereConditions = []
 
     def drawV(self):
+        ycsv = []
         for i, name in enumerate(self.plotNameListV):
             # just name; with mapset it would be long
             self.yticksNames.append(self.attribute.GetValue())
             self.yticksPos.append(0)  # TODO
             xdata = []
             ydata = []
+            xcsv = []
             for keys, values in self.timeDataV[name].iteritems():
                 if keys in ['temporalType', 'granularity', 'validTopology',
                             'unit', 'temporalDataType']:
                     continue
                 xdata.append(self.convert(values['start_datetime']))
                 ydata.append(values['value'])
+                xcsv.append(values['start_datetime'])
 
             if len(ydata) == ydata.count(None):
                 GError(parent=self, showTraceback=False,
@@ -713,7 +781,11 @@ class TplotFrame(wx.Frame):
 
             self.plots.append(self.axes2d.plot(xdata, ydata, marker='o',
                                                color=color, label=name)[0])
-        # ============================
+            if self.csvpath:
+                ycsv.append(ydata)
+
+        if self.csvpath:
+            self._writeCSV(xcsv, ycsv)
         self._setLabels(self.timeDataV[name]['granularity'])
 
         # legend
@@ -723,6 +795,19 @@ class TplotFrame(wx.Frame):
 
     def OnRedraw(self, event=None):
         """Required redrawing."""
+        self.csvpath = self.csvButton.GetValue()
+        self.header = self.headerCheck.IsChecked()
+        if (os.path.exists(self.csvpath) and not self.overwrite):
+            dlg = wx.MessageDialog(self, _("{pa} already exists, do you want "
+                                   "to overwrite?".format(pa=self.csvpath)),
+                                   _("File exists"), 
+                                   wx.OK | wx.CANCEL | wx.ICON_QUESTION)
+            if dlg.ShowModal() != wx.ID_OK:
+                dlg.Destroy()
+                GError(parent=self, showTraceback=False,
+                       message=_("Please change name of output CSV file or "))
+                return
+            dlg.Destroy()
         self.init()
         datasetsR = self.datasetSelectR.GetValue().strip()
         datasetsV = self.datasetSelectV.GetValue().strip()
@@ -879,7 +964,7 @@ class TplotFrame(wx.Frame):
         RunCommand(prog='g.manual', quiet=True, entry='g.gui.tplot')
 
     def SetDatasets(self, rasters, vectors, coors, cats, attr, title, xlabel,
-                    ylabel):
+                    ylabel, csvfile, head, overwrite):
         """Set the data
         :param list rasters: a list of temporal raster dataset's name
         :param list vectors: a list of temporal vector dataset's name
@@ -927,6 +1012,10 @@ class TplotFrame(wx.Frame):
             self.x.SetValue(xlabel)
         if ylabel:
             self.y.SetValue(ylabel)
+        if csvfile:
+            self.csvpath = csvfile
+        self.header = head
+        self.overwrite = overwrite
         self._redraw()
 
     def OnVectorSelected(self, event):
