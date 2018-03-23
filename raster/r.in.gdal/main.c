@@ -44,7 +44,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 		       struct Ref *group_ref, int *rowmap, int *colmap,
 		       int col_offset);
 static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
-			     struct pj_info *iproj, struct pj_info *oproj);
+			     struct pj_info *iproj, struct pj_info *oproj,
+			     struct pj_info *tproj);
 static int dump_rat(GDALRasterBandH hBand, char *outrat, int nBand);
 static void error_handler_ds(void *p);
 static int l1bdriver;
@@ -708,8 +709,9 @@ int main(int argc, char *argv[])
 	    struct Control_Points sPoints;
 	    const GDAL_GCP *pasGCPs = GDALGetGCPs(hDS);
 	    int iGCP;
-	    struct pj_info iproj,	/* input map proj parameters    */
-	      oproj;		/* output map proj parameters   */
+	    struct pj_info iproj,	/* input map proj parameters */
+	                   oproj,	/* output map proj parameters */
+	                   tproj;	/* transformation parameters */
 	    int create_target;
 	    struct Cell_head gcpcellhd;
 	    double emin, emax, nmin, nmax;
@@ -754,7 +756,7 @@ int main(int argc, char *argv[])
 
 	    if (parm.target->answer && !create_target) {
 		SetupReprojector(GDALGetGCPProjection(hDS),
-				 parm.target->answer, &iproj, &oproj);
+				 parm.target->answer, &iproj, &oproj, &tproj);
 		G_message(_("Re-projecting GCPs table:"));
 		G_message(_("* Input projection for GCP table: %s"),
 			  iproj.proj);
@@ -777,10 +779,12 @@ int main(int argc, char *argv[])
 		/* If desired, do GCPs transformation to other projection */
 		if (parm.target->answer) {
 		    /* re-project target GCPs */
-		    if (pj_do_proj(&(sPoints.e2[iGCP]), &(sPoints.n2[iGCP]),
-				   &iproj, &oproj) < 0)
-			G_fatal_error(_("Error in pj_do_proj (can't "
-					"re-projection GCP %i)"), iGCP);
+		    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+				      &(sPoints.e2[iGCP]),
+				      &(sPoints.n2[iGCP]), NULL) < 0)
+			G_fatal_error(_("Error in %s (can't "
+					"re-project GCP %i)"), 
+				       "GPJ_transform()", iGCP);
 		}
 
 		/* figure out legal e, w, n, s values for new target location */
@@ -889,7 +893,8 @@ int main(int argc, char *argv[])
 /************************************************************************/
 
 static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
-			     struct pj_info *iproj, struct pj_info *oproj)
+			     struct pj_info *iproj, struct pj_info *oproj,
+			     struct pj_info *tproj)
 {
     struct Cell_head cellhd;
     struct Key_Value *proj_info = NULL, *proj_units = NULL;
@@ -926,6 +931,8 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 	    G_fatal_error(_("Unable to get projection units of target location"));
 	if (pj_get_kv(oproj, out_proj_info, out_unit_info) < 0)
 	    G_fatal_error(_("Unable to get projection key values of target location"));
+	if (GPJ_init_transform(iproj, oproj, tproj) < 0)
+	    G_fatal_error(_("Unable to initialize coordinate transformation"));
     }
     else {			/* can't access target mapset */
 	/* access to mapset PERMANENT in target location is not required */
