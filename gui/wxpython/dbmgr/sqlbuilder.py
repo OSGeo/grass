@@ -359,10 +359,12 @@ class SQLBuilder(wx.Frame):
 
         self.list_values.Clear()
 
+        sql = "SELECT DISTINCT {column} FROM {table} ORDER BY {column}".format(
+            column=column, table=self.tablename)
+        if justsample:
+            sql += " LIMIT {}".format(255)
         data = grass.db_select(
-            sql="SELECT %s FROM %s" %
-            (column,
-             self.tablename),
+            sql=sql,
             database=self.database,
             driver=self.driver,
             sep='{_sep_}')
@@ -373,17 +375,16 @@ class SQLBuilder(wx.Frame):
             self.dbInfo.GetTable(self.layer))[column]
 
         i = 0
-        for item in sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
-            if justsample and i > 255:
-                break
-
+        items = []
+        for item in data: #sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
             if desc['type'] not in ('character', 'text'):
-                item = str(item)
+                items.append(str(item[0]))
             else:
-                item = u"'{}'".format(GetUnicodeValue(item))
-            self.list_values.Append(item)
+                items.append(u"'{}'".format(GetUnicodeValue(item[0])))
             i += 1
 
+        self.list_values.AppendItems(items)
+        
     def OnSampleValues(self, event):
         """Get sample values"""
         self.OnUniqueValues(None, True)
