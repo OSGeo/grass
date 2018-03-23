@@ -112,7 +112,8 @@ int main(int argc, char **argv)
     struct History history;
 
     struct pj_info iproj,	/* input map proj parameters    */
-      oproj;			/* output map proj parameters   */
+		   oproj,	/* output map proj parameters   */
+		   tproj;	/* transformation parameters   */
 
     struct Key_Value *in_proj_info,	/* projection information of    */
      *in_unit_info,		/* input and output mapsets     */
@@ -316,6 +317,9 @@ int main(int argc, char **argv)
     if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
 	G_fatal_error(_("Unable to get projection key values of input map"));
 
+    if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+	G_fatal_error(_("Unable to initialize coordinate transformation"));
+
     G_free_key_value(in_proj_info);
     G_free_key_value(in_unit_info);
     G_free_key_value(out_proj_info);
@@ -355,7 +359,7 @@ int main(int argc, char **argv)
 	outcellhd.south =  1e9;
 	outcellhd.east  = -1e9;
 	outcellhd.west  =  1e9;
-	bordwalk_edge(&incellhd, &outcellhd, &iproj, &oproj);
+	bordwalk_edge(&incellhd, &outcellhd, &iproj, &oproj, &tproj, PJ_FWD);
 	inorth = outcellhd.north;
 	isouth = outcellhd.south;
 	ieast  = outcellhd.east;
@@ -385,7 +389,7 @@ int main(int argc, char **argv)
 
     /* Cut non-overlapping parts of input map */
     if (!nocrop->answer)
-	bordwalk(&outcellhd, &incellhd, &oproj, &iproj);
+	bordwalk(&outcellhd, &incellhd, &iproj, &oproj, &tproj, PJ_INV);
 
     /* Add 2 cells on each side for bilinear/cubic & future interpolation methods */
     /* (should probably be a factor based on input and output resolution) */
@@ -411,7 +415,7 @@ int main(int argc, char **argv)
     /* Adjust borders of output map */
 
     if (!nocrop->answer)
-	bordwalk(&incellhd, &outcellhd, &iproj, &oproj);
+	bordwalk(&incellhd, &outcellhd, &iproj, &oproj, &tproj, PJ_FWD);
 
 #if 0
     outcellhd.west = outcellhd.south = HUGE_VAL;
@@ -420,7 +424,9 @@ int main(int argc, char **argv)
 	ycoord1 = Rast_row_to_northing((double)(row + 0.5), &incellhd);
 	for (col = 0; col < incellhd.cols; col++) {
 	    xcoord1 = Rast_col_to_easting((double)(col + 0.5), &incellhd);
-	    pj_do_proj(&xcoord1, &ycoord1, &iproj, &oproj);
+	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+			      &xcoord1, &ycoord1, NULL) < 0)
+		G_fatal_error(_("Error in %s"), "GPJ_transform()");
 	    if (xcoord1 > outcellhd.east)
 		outcellhd.east = xcoord1;
 	    if (ycoord1 > outcellhd.north)
@@ -509,8 +515,11 @@ int main(int argc, char **argv)
 
 	    /* project coordinates in output matrix to       */
 	    /* coordinates in input matrix                   */
-	    if (pj_do_proj(&xcoord1, &ycoord1, &oproj, &iproj) < 0)
+	    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_INV,
+			      &xcoord1, &ycoord1, NULL) < 0) {
+		G_warning(_("Error in %s"), "GPJ_transform()");
 		Rast_set_null_value(obufptr, 1, cell_type);
+	    }
 	    else {
 		/* convert to row/column indices of input matrix */
 

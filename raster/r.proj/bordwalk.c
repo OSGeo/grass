@@ -84,14 +84,17 @@ static void invert(struct Cell_head *cur_hd, const struct Cell_head *ref_hd,
 }
 
 static void proj_update(const struct pj_info *from_pj, const struct pj_info *to_pj,
+			const struct pj_info *trans_pj, int dir, 
 			struct Cell_head *to_hd, double hx, double hy)
 {
-	if (pj_do_proj(&hx, &hy, from_pj, to_pj) < 0)
+	if (GPJ_transform(from_pj, to_pj, trans_pj, dir,
+			  &hx, &hy, NULL) < 0)
 	    return;
 	update(to_hd, hx, hy);
 }
 
 void bordwalk1(const struct pj_info *from_pj, const struct pj_info *to_pj,
+	       const struct pj_info *trans_pj, int dir,
 	       const struct Cell_head *from_hd, struct Cell_head *to_hd)
 {
     double idx;
@@ -99,41 +102,44 @@ void bordwalk1(const struct pj_info *from_pj, const struct pj_info *to_pj,
     /* Top */
     for (idx = from_hd->west + from_hd->ew_res / 2; idx < from_hd->east;
 	 idx += from_hd->ew_res)
-	proj_update(from_pj, to_pj, to_hd, idx, from_hd->north - from_hd->ns_res / 2);
+	proj_update(from_pj, to_pj, trans_pj, dir, to_hd, idx, from_hd->north - from_hd->ns_res / 2);
 
     debug("Top", to_hd);
 
     /* Right */
     for (idx = from_hd->north - from_hd->ns_res / 2; idx > from_hd->south;
 	 idx -= from_hd->ns_res)
-	proj_update(from_pj, to_pj, to_hd, from_hd->east - from_hd->ew_res / 2, idx);
+	proj_update(from_pj, to_pj, trans_pj, dir, to_hd, from_hd->east - from_hd->ew_res / 2, idx);
 
     debug("Right", to_hd);
 
     /* Bottom */
     for (idx = from_hd->east - from_hd->ew_res / 2; idx > from_hd->west;
 	 idx -= from_hd->ew_res)
-	proj_update(from_pj, to_pj, to_hd, idx, from_hd->south + from_hd->ns_res / 2);
+	proj_update(from_pj, to_pj, trans_pj, dir, to_hd, idx, from_hd->south + from_hd->ns_res / 2);
 
     debug("Bottom", to_hd);
 
     /* Left */
     for (idx = from_hd->south + from_hd->ns_res / 2; idx < from_hd->north;
 	 idx += from_hd->ns_res)
-	proj_update(from_pj, to_pj, to_hd, from_hd->west + from_hd->ew_res / 2, idx);
+	proj_update(from_pj, to_pj, trans_pj, dir, to_hd, from_hd->west + from_hd->ew_res / 2, idx);
 
     debug("Left", to_hd);
 }
 
 static int proj_inside(const struct pj_info *from_pj, const struct pj_info *to_pj,
+		       const struct pj_info *trans_pj, int dir, 
 		       const struct Cell_head *ref_hd, double hx, double hy)
 {
-    if (pj_do_proj(&hx, &hy, to_pj, from_pj) < 0)
+    if (GPJ_transform(from_pj, to_pj, trans_pj, -dir, &hx, &hy, NULL) < 0)
 	return 0;
     return inside(ref_hd, hx, hy);
 }
 
-static void reverse_check(const struct pj_info *from_pj, const struct pj_info *to_pj,
+static void reverse_check(const struct pj_info *from_pj,
+			  const struct pj_info *to_pj,
+			  const struct pj_info *trans_pj, int dir,
 			  const struct Cell_head *from_hd,
 			  const struct Cell_head *to_hd,
 			  struct Cell_head *cur_hd)
@@ -141,28 +147,28 @@ static void reverse_check(const struct pj_info *from_pj, const struct pj_info *t
     if (cur_hd->west > to_hd->west) {
 	double hx = to_hd->west + to_hd->ew_res / 2;
 	double hy = to_hd->south + (to_hd->north - to_hd->south) / 2;
-	if (proj_inside(from_pj, to_pj, from_hd, hx, hy))
+	if (proj_inside(from_pj, to_pj, trans_pj, dir, from_hd, hx, hy))
 	    cur_hd->west = hx;
     }
 
     if (cur_hd->east < to_hd->east) {
 	double hx = to_hd->east - to_hd->ew_res / 2;
 	double hy = to_hd->south + (to_hd->north - to_hd->south) / 2;
-	if (proj_inside(from_pj, to_pj, from_hd, hx, hy))
+	if (proj_inside(from_pj, to_pj, trans_pj, dir, from_hd, hx, hy))
 	    cur_hd->east = hx;
     }
 
     if (cur_hd->south > to_hd->south) {
 	double hx = to_hd->west + (to_hd->east - to_hd->west) / 2;
 	double hy = to_hd->south + to_hd->ns_res / 2;
-	if (proj_inside(from_pj, to_pj, from_hd, hx, hy))
+	if (proj_inside(from_pj, to_pj, trans_pj, dir, from_hd, hx, hy))
 	    cur_hd->south = hy;
     }
 
     if (cur_hd->north < to_hd->north) {
 	double hx = to_hd->west + (to_hd->east - to_hd->west) / 2;
 	double hy = to_hd->north - to_hd->ns_res / 2;
-	if (proj_inside(from_pj, to_pj, from_hd, hx, hy))
+	if (proj_inside(from_pj, to_pj, trans_pj, dir, from_hd, hx, hy))
 	    cur_hd->north = hy;
     }
 }
@@ -190,7 +196,8 @@ static void snap_to_grid(struct Cell_head *cur_hd, const struct Cell_head *ref_h
 }
 
 void bordwalk(const struct Cell_head *from_hd, struct Cell_head *to_hd,
-	      const struct pj_info *from_pj, const struct pj_info *to_pj)
+	      const struct pj_info *from_pj, const struct pj_info *to_pj,
+	      const struct pj_info *trans_pj, int dir)
 {
     struct Cell_head cur_hd;
 
@@ -200,13 +207,13 @@ void bordwalk(const struct Cell_head *from_hd, struct Cell_head *to_hd,
 
     /* Start walking */
 
-    bordwalk1(from_pj, to_pj, from_hd, &cur_hd);
+    bordwalk1(from_pj, to_pj, trans_pj, dir, from_hd, &cur_hd);
 
     intersect(&cur_hd, to_hd);
 
     /* check some special cases by reversing the projection */
 
-    reverse_check(from_pj, to_pj, from_hd, to_hd, &cur_hd);
+    reverse_check(from_pj, to_pj, trans_pj, dir, from_hd, to_hd, &cur_hd);
 
     debug("Extra check", &cur_hd);
 
@@ -227,7 +234,8 @@ void bordwalk(const struct Cell_head *from_hd, struct Cell_head *to_hd,
 }
 
 void bordwalk_edge(const struct Cell_head *from_hd, struct Cell_head *to_hd,
-	           const struct pj_info *from_pj, const struct pj_info *to_pj)
+	           const struct pj_info *from_pj, const struct pj_info *to_pj,
+		   const struct pj_info *trans_pj, int dir)
 {
     double idx;
     double hx, hy;
@@ -238,7 +246,8 @@ void bordwalk_edge(const struct Cell_head *from_hd, struct Cell_head *to_hd,
     hx = (from_hd->west + from_hd->east) / 2.0;
     hy = (from_hd->north + from_hd->south) / 2.0;
 
-    if (pj_do_proj(&hx, &hy, from_pj, to_pj) < 0)
+    if (GPJ_transform(from_pj, to_pj, trans_pj, dir,
+		      &hx, &hy, NULL) < 0)
 	G_fatal_error(_("Unable to reproject map center"));
 
     to_hd->east  = hx;
@@ -249,36 +258,36 @@ void bordwalk_edge(const struct Cell_head *from_hd, struct Cell_head *to_hd,
     /* Top */
     for (idx = from_hd->west; idx < from_hd->east;
 	 idx += from_hd->ew_res)
-	proj_update(from_pj, to_pj, to_hd, idx, from_hd->north);
+	proj_update(from_pj, to_pj, trans_pj, dir, to_hd, idx, from_hd->north);
     idx = from_hd->east;
-    proj_update(from_pj, to_pj, to_hd, idx, from_hd->north);
+    proj_update(from_pj, to_pj, trans_pj, dir, to_hd, idx, from_hd->north);
 
     debug("Top", to_hd);
 
     /* Right */
     for (idx = from_hd->north; idx > from_hd->south;
 	 idx -= from_hd->ns_res)
-	proj_update(from_pj, to_pj, to_hd, from_hd->east, idx);
+	proj_update(from_pj, to_pj, trans_pj, dir, to_hd, from_hd->east, idx);
     idx = from_hd->south;
-    proj_update(from_pj, to_pj, to_hd, from_hd->east, idx);
+    proj_update(from_pj, to_pj, trans_pj, dir, to_hd, from_hd->east, idx);
 
     debug("Right", to_hd);
 
     /* Bottom */
     for (idx = from_hd->east; idx > from_hd->west;
 	 idx -= from_hd->ew_res)
-	proj_update(from_pj, to_pj, to_hd, idx, from_hd->south);
+	proj_update(from_pj, to_pj, trans_pj, dir, to_hd, idx, from_hd->south);
     idx = from_hd->west;
-    proj_update(from_pj, to_pj, to_hd, idx, from_hd->south);
+    proj_update(from_pj, to_pj, trans_pj, dir, to_hd, idx, from_hd->south);
 
     debug("Bottom", to_hd);
 
     /* Left */
     for (idx = from_hd->south; idx < from_hd->north;
 	 idx += from_hd->ns_res)
-	proj_update(from_pj, to_pj, to_hd, from_hd->west, idx);
+	proj_update(from_pj, to_pj, trans_pj, dir, to_hd, from_hd->west, idx);
     idx = from_hd->north;
-    proj_update(from_pj, to_pj, to_hd, from_hd->west, idx);
+    proj_update(from_pj, to_pj, trans_pj, dir, to_hd, from_hd->west, idx);
 
     debug("Left", to_hd);
 }
