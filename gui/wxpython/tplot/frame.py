@@ -152,7 +152,6 @@ class TplotFrame(wx.Frame):
         self.canvas = FigCanvas(self.mainPanel, wx.ID_ANY, self.fig)
         # axes are initialized later
         self.axes2d = None
-        self.axes3d = None
 
         # Create the navigation toolbar, tied to the canvas
         #
@@ -268,6 +267,35 @@ class TplotFrame(wx.Frame):
         self.controlPanelSizerVector.Fit(self)
         self.ntb.AddPage(page=self.controlPanelVector, text=_('STVDS'),
                          name='STVDS')
+        
+        # ------------ITEMS IN NOTEBOOK PAGE (LABELS)------------------------
+        self.controlPanelLabels = wx.Panel(parent=self.ntb, id=wx.ID_ANY)
+        self.titleLabel = wx.StaticText(parent=self.controlPanelLabels,
+                                        id=wx.ID_ANY,
+                                        label=_('Set title for the plot'))
+        self.title = wx.TextCtrl(parent=self.controlPanelLabels, id=wx.ID_ANY,
+                                  size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.xLabel = wx.StaticText(parent=self.controlPanelLabels,
+                                        id=wx.ID_ANY,
+                                        label=_('Set label for X axis'))
+        self.x = wx.TextCtrl(parent=self.controlPanelLabels, id=wx.ID_ANY,
+                                  size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.yLabel = wx.StaticText(parent=self.controlPanelLabels,
+                                        id=wx.ID_ANY,
+                                        label=_('Set label for Y axis'))
+        self.y = wx.TextCtrl(parent=self.controlPanelLabels, id=wx.ID_ANY,
+                                  size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.controlPanelSizerLabels = wx.BoxSizer(wx.VERTICAL)
+        self.controlPanelSizerLabels.Add(self.titleLabel, flag=wx.EXPAND)
+        self.controlPanelSizerLabels.Add(self.title, flag=wx.EXPAND)
+        self.controlPanelSizerLabels.Add(self.xLabel, flag=wx.EXPAND)
+        self.controlPanelSizerLabels.Add(self.x, flag=wx.EXPAND)
+        self.controlPanelSizerLabels.Add(self.yLabel, flag=wx.EXPAND)
+        self.controlPanelSizerLabels.Add(self.y, flag=wx.EXPAND)
+        self.controlPanelLabels.SetSizer(self.controlPanelSizerLabels)
+        self.controlPanelSizerLabels.Fit(self)
+        self.ntb.AddPage(page=self.controlPanelLabels, text=_('Labels'),
+                         name='Labels')
 
         # ------------Buttons on the bottom(draw,help)------------
         self.vButtPanel = wx.Panel(self.mainPanel, id=wx.ID_ANY)
@@ -543,6 +571,9 @@ class TplotFrame(wx.Frame):
         self.yticksNames = []
         self.yticksPos = []
         self.plots = []
+        self.drawTitle = self.title.GetValue()
+        self.drawX = self.x.GetValue()
+        self.drawY = self.y.GetValue()
 
         if self.datasetsR:
             self.lookUp = LookUp(self.timeDataR, self.invconvert)
@@ -560,6 +591,23 @@ class TplotFrame(wx.Frame):
         self.canvas.draw()
         DataCursor(self.plots, self.lookUp, InfoFormat, self.convert)
 
+    def _setLabels(self, x):
+        """Function to set the right labels"""
+        if self.drawX != '':
+            self.axes2d.set_xlabel(self.drawX)
+        else:
+            if self.temporalType == 'absolute':
+                self.axes2d.set_xlabel(_("Temporal resolution: %s" %  x ))
+            else:
+                self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
+        if self.drawY != '':
+            self.axes2d.set_ylabel(self.drawY)
+        else:
+            self.axes2d.set_ylabel(', '.join(self.yticksNames))
+        print(self.drawTitle)
+        if self.drawTitle != '':
+            self.axes2d.set_title(self.drawTitle)
+        
     def drawR(self):
         for i, name in enumerate(self.datasetsR):
             name = name[0]
@@ -587,13 +635,7 @@ class TplotFrame(wx.Frame):
                                                color=color,
                                                label=self.plotNameListR[i])[0])
 
-        if self.temporalType == 'absolute':
-            self.axes2d.set_xlabel(
-                _("Temporal resolution: %s" % self.timeDataR[name]['granularity']))
-        else:
-            self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
-        self.axes2d.set_ylabel(', '.join(self.yticksNames))
-
+        self._setLabels(self.timeDataR[name]['granularity'])
         # legend
         handles, labels = self.axes2d.get_legend_handles_labels()
         self.axes2d.legend(loc=0)
@@ -639,12 +681,7 @@ class TplotFrame(wx.Frame):
                     color=color,
                     label=labelname)[0])
         # ============================
-        if self.temporalType == 'absolute':
-            self.axes2d.set_xlabel(
-                _("Temporal resolution: %s" % self.timeDataV[name]['granularity']))
-        else:
-            self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
-        self.axes2d.set_ylabel(', '.join(self.yticksNames))
+        self._setLabels(self.timeDataV[name]['granularity'])
 
         # legend
         handles, labels = self.axes2d.get_legend_handles_labels()
@@ -677,12 +714,7 @@ class TplotFrame(wx.Frame):
             self.plots.append(self.axes2d.plot(xdata, ydata, marker='o',
                                                color=color, label=name)[0])
         # ============================
-        if self.temporalType == 'absolute':
-            self.axes2d.set_xlabel(
-                _("Temporal resolution: %s" % self.timeDataV[name]['granularity']))
-        else:
-            self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
-        self.axes2d.set_ylabel(', '.join(self.yticksNames))
+        self._setLabels(self.timeDataV[name]['granularity'])
 
         # legend
         handles, labels = self.axes2d.get_legend_handles_labels()
