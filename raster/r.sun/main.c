@@ -109,10 +109,7 @@ char *str_step;
 
 
 struct Cell_head cellhd;
-struct pj_info iproj;
-#ifndef HAVE_PROJ_H
-struct pj_info oproj;
-#endif
+struct pj_info iproj, oproj, tproj;
 struct History hist;
 
 
@@ -791,14 +788,11 @@ int main(int argc, char *argv[])
 
 	G_free_key_value(in_proj_info);
 	G_free_key_value(in_unit_info);
-#ifndef HAVE_PROJ_H
-	/* Set output projection to latlong w/ same ellipsoid */
-	oproj.zone = 0;
-	oproj.meters = 1.;
-	sprintf(oproj.proj, "ll");
-	if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
-	    G_fatal_error(_("Unable to set up lat/long projection parameters"));
-#endif
+
+	oproj.pj = NULL;
+
+	if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+	    G_fatal_error(_("Unable to initialize coordinate transformation"));
     }
 
     if ((latin != NULL || longin != NULL) && (G_projection() == PROJECTION_LL))
@@ -1894,9 +1888,10 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 			longitude = gridGeom.xp;
 			latitude = gridGeom.yp;
 
-			if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0) {
-			    G_fatal_error("Error in pj_do_proj");
-			}
+			if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+					  &longitude, &latitude, NULL) < 0)
+			    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+					   "GPJ_transform()");
 
 			lat_max = AMAX1(lat_max, latitude);
 			lat_min = AMIN1(lat_min, latitude);
