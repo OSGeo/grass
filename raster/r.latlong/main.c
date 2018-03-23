@@ -31,10 +31,7 @@ int main(int argc, char *argv[])
     struct Option *input1, *output1;
     struct Flag *flag1;
     struct History history;	/*metadata */
-    struct pj_info iproj;
-#ifndef HAVE_PROJ_H
-    struct pj_info oproj;
-#endif
+    struct pj_info iproj, oproj, tproj;
     struct Key_Value *in_proj_info, *in_unit_info;
 
     /************************************/ 
@@ -106,14 +103,11 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to get projection key values of current location"));
 	G_free_key_value(in_proj_info);
 	G_free_key_value(in_unit_info);
-#ifndef HAVE_PROJ_H
-        /* Set output projection to latlong w/ same ellipsoid */ 
-	oproj.zone = 0;
-	oproj.meters = 1.;
-	sprintf(oproj.proj, "ll");
-	if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
-	    G_fatal_error(_("Unable to set up lat/long projection parameters"));
-#endif
+
+	oproj.pj = NULL;
+
+	if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+	    G_fatal_error(_("Unable to initialize coordinate transformation"));
     }	/* End of stolen from r.sun */
 
     outrast1 = Rast_allocate_d_buf();
@@ -130,10 +124,13 @@ int main(int argc, char *argv[])
         {
 	    latitude = ymax - ((double)row * stepy);
 	    longitude = xmin + ((double)col * stepx);
-	    if (not_ll)
-		if (GPJ_do_proj_ll(&longitude, &latitude, &iproj, PJ_INV) < 0) 
-		    G_fatal_error(_("Error in pj_do_proj"));
-            if(flag1->answer)
+	    if (not_ll) {
+		if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
+				  &longitude, &latitude, NULL) < 0)
+		    G_fatal_error(_("Error in %s (projection of input coordinate pair)"), 
+				   "GPJ_transform()");
+	    }
+            if (flag1->answer)
 	        d = longitude;
             else
 	        d = latitude;
