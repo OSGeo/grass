@@ -107,5 +107,11 @@ default: cmd
  - GPJ_osr_to_grass()
 
  - GPJ_wkt_to_grass()
+
+ - GPJ_init_transform()
+
+ - GPJ_transform()
+
+ - GPJ_transform_array()
 */
 
