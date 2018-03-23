@@ -2,15 +2,18 @@
 #define GRASS_GPROJECTSDEFS_H
 
 /* do_proj.c */
-/* TODO: rename pj_ to GPJ_ to avoid symbol clash with PROJ lib */
+int GPJ_init_transform(const struct pj_info *, const struct pj_info *,
+		       struct pj_info *);
+int GPJ_transform(const struct pj_info *, const struct pj_info *,
+                  const struct pj_info *, int, double *, double *, double *);
+int GPJ_transform_array(const struct pj_info *, const struct pj_info *,
+                        const struct pj_info *, int,
+		        double *, double *, double *, int);
+
+/* old API, to be removed */
 int pj_do_proj(double *, double *, const struct pj_info *, const struct pj_info *);
 int pj_do_transform(int, double *, double *, double *,
 		    const struct pj_info *, const struct pj_info *);
-
-/* do_proj_ll.c */
-int GPJ_do_proj_ll(double *, double *, const struct pj_info *, int);
-int GPJ_do_transform_ll(int, double *, double *, double *,
-		       const struct pj_info *, int);
 
 /* get_proj.c */
 /* TODO: rename pj_ to GPJ_ to avoid symbol clash with PROJ lib */
