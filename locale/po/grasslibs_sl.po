@@ -567,12 +567,12 @@ msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:745
 #, fuzzy, c-format
-msgid "Unbale to read find raster <%s>"
+msgid "Unable to read find raster <%s>"
 msgstr "ne morem spremeniti direktorija v %s"
 
 #: ../lib/imagery/iscatt_core.c:755
 #, fuzzy, c-format
-msgid "Unbale to open raster <%s>"
+msgid "Unable to open raster <%s>"
 msgstr "Nezmožen odpreti datoteko %s v %s"
 
 #: ../lib/imagery/iscatt_core.c:761
@@ -633,7 +633,7 @@ msgid "Perimeter computation failed"
 msgstr ""
 
 #: ../lib/imagery/iclass_perimeter.c:208
-msgid "Absurd polygon."
+msgid "Invalid polygon"
 msgstr ""
 
 #: ../lib/imagery/iclass_perimeter.c:253
