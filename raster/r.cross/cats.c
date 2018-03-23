@@ -30,10 +30,6 @@ int set_cat(CELL result, CELL * cat, struct Categories *pcats)
     static int len = 0;
     char *lbl;
 
-
-    if (result == 0)
-	return 1;
-
     n = 0;
     for (i = 0; i < nfiles; i++) {
 	lbl = get_label(cat[i], &labels[i]);
