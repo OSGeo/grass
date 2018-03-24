@@ -110,7 +110,7 @@ void GeomCond::day_number(long int ia, long int& j)
 void GeomCond::pos_fft (long int j, float tu)
 {
     /* Local variables */
-    double ah, et, az, caz, xla, tet, tsm, tsv, elev, azim, delta, amuzero;
+    double ah, et, az, caz, xla, tet, tsm, tsv, elev, azim, gdelta, amuzero;
 
     /*     solar position (zenithal angle asol,azimuthal angle phi0 */
     /*                     in degrees) */
@@ -135,18 +135,18 @@ void GeomCond::pos_fft (long int j, float tu)
     ah = tsv * 15.f * M_PI / 180.f;
 
     /* solar declination   (in radian) */
-    delta = 0.006918f - 0.399912f * cos (tet) + 0.070257f * sin (tet) - 
+    gdelta = 0.006918f - 0.399912f * cos (tet) + 0.070257f * sin (tet) - 
 	0.006758f * cos (tet * 2.f) + 9.07e-4f * sin (tet * 2.f) - 
 	0.002697f * cos (tet * 3.f) + 0.00148f * sin (tet * 3.f);
 
     /* elevation,azimuth */
-    amuzero = sin (xla) * sin (delta) + cos (xla) * cos (delta) * cos (ah);
+    amuzero = sin (xla) * sin (gdelta) + cos (xla) * cos (gdelta) * cos (ah);
     elev = asin (amuzero);
-    az = cos (delta) * sin (ah) / cos (elev);
+    az = cos (gdelta) * sin (ah) / cos (elev);
   
     if (fabs (az) - 1.f > 0.f) az = SIGN(az);
 
-    caz = (-cos (xla) * sin (delta) + sin (xla) * cos (delta) * cos (ah)) / cos (elev);
+    caz = (-cos (xla) * sin (gdelta) + sin (xla) * cos (gdelta) * cos (ah)) / cos (elev);
     azim = asin (az);
     if (caz <= 0.f) azim = M_PI - azim;
 
@@ -346,8 +346,8 @@ void GeomCond::parse()
 	posobs(tu, nc, nl);
 	break;
     }
-    case 4: campm = 1.0f;
-    case 5: 
+    case 4: campm = 1.0f; /* avhrr PM */
+    case 5:  		  /* avhrr PM and avhrr AM */
     {
 	cin >> month;
 	cin >> jday;
@@ -379,6 +379,7 @@ void GeomCond::parse()
     case 23: /* pleiades1b       * enter month,day,hh.ddd,long.,lat. */
     case 24: /* worldview3       * enter month,day,hh.ddd,long.,lat. */
     case 25: /* sentinel2a       * enter month,day,hh.ddd,long.,lat. */
+    case 26: /* sentinel2b       * enter month,day,hh.ddd,long.,lat. */
    {
 	cin >> month;
 	cin >> jday;
@@ -450,7 +451,8 @@ void GeomCond::print()
 	string(" pleiades1a observation      "),
 	string(" pleiades1b observation      "),
 	string(" worldview3 observation      "),
-	string(" sentinel2a observation      ")
+	string(" sentinel2a observation      "),
+	string(" sentinel2b observation      ")
 	};
 
     static const string head(" geometrical conditions identity  ");

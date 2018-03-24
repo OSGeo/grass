@@ -37,7 +37,7 @@ void AerosolConcentration::parse(const long int _iaer, const AtmosModel& atms)
     else if(v > 0) oda550(v, atms);
 }
 
-void AerosolConcentration::oda550(const float v, const AtmosModel& atms)
+void AerosolConcentration::oda550(const float vis, const AtmosModel& atms)
 {
     /* aerosol optical depth at wl=550nm */
     /* vertical repartition of aerosol density for v=23km */
@@ -66,7 +66,7 @@ void AerosolConcentration::oda550(const float v, const AtmosModel& atms)
     };
 
     taer55 = 0;
-    if(fabs(v) <= 0) return;
+    if(fabs(vis) <= 0) return;
     if(iaer == 0) return;
 
     for(int k = 0; k < 32; k++)
@@ -78,8 +78,8 @@ void AerosolConcentration::oda550(const float v, const AtmosModel& atms)
 	float bz = (5.f * an5[k] / 18.f) - (23.f * an23[k] / 18.f);
 	float bz1 = (5.f * an5[k+1] / 18.f) - (23.f * an23[k+1] / 18.f);
 
-	float bnz = az / v - bz;
-	float bnz1 = az1 / v - bz1;
+	float bnz = az / vis - bz;
+	float bnz1 = az1 / vis - bz1;
 
 	float ev = (float)(dz * exp((log(bnz) + log(bnz1)) / 2));
 	taer55 += ev * sigma * 1.0e-03f;

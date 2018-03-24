@@ -71,7 +71,7 @@ def read_input(csvfile):
     # fix nodata or \n
     conv = {}
     for b in range(len(bands)):
-        conv[b+1] = lambda s: float(s or -99)
+        conv[b+1] = lambda s: float(s or 0)
 
     values = np.loadtxt(csvfile, delimiter=',', skiprows=1, converters = conv)
 
@@ -85,49 +85,62 @@ def interpolate_band(values, step = 2.5):
     and min, max wl values
     values must be numpy array with 2 columns
     """
-    # These 2 lines select the subarray 
-    # remove nodata (-99) lines in values array
-    # where response is nodata?
 
+    # removing nodata and invalid values
     w = values[:,1] >= 0
-    response = values[w]
+    values_clean = values[w]
 
-    wavelengths = response[:,0]  # 1st column of input array
-    spectral_response = response[:,1]  # 2nd column
-    assert len(wavelengths) == len(spectral_response), "Number of wavelength slots and spectral responses are not equal!"
+    wavelengths = values_clean[:,0]  # 1st column of input array
+    responses = values_clean[:,1]  # 2nd column
+    assert len(wavelengths) == len(responses), "Number of wavelength slots and spectral responses are not equal!"
+
+    # spectral responses are written out with .4f in pretty_print()
+    # anything smaller than 0.0001 will become 0.0000 -> discard with ...
+    rthresh = 0.0001
+
+    # i.atcorr not only expects steps of 2.5 nm, it also expects
+    # wavelentgh values to be exact multiples of 2.5 nm
+    # in the range 250 - 4000 nm
+
+    # find first response > rthresh
+    nvalues = len(responses)
+    start = 0
+    i = 0
+    while i < nvalues - 1 and responses[i] <= rthresh:
+	i += 1
+    start = wavelengths[i] - step
+    # align to multiple of step
+    nsteps = int(start / step)
+    start = step * nsteps
+    while start < wavelengths[0]:
+	start += step
+
+    # find last response > rthresh
+    stop = 0
+    i = nvalues - 1
+    while i > 0 and responses[i] <= rthresh:
+	i -= 1
+    stop = wavelengths[i] + step
+    # align to multiple of step
+    nsteps = np.ceil(stop / step)
+    stop = step * nsteps
+    while stop > wavelengths[nvalues - 1]:
+	stop -= step
+
+    assert start < stop, "Empty spectral responses!"
 
     # interpolating
-    f = interpolate.interp1d(wavelengths, spectral_response)
-    start = wavelengths[0]
-
-    # considering last entry for np.arange
-    input_step = wavelengths[-1] - wavelengths[-2]
-
-    # if wavelength step in input data is 1 nm
-    # print "  > Wavelength step in input data is", input_step, "nm"
-    if input_step == 1:
-        addendum = 0
-        # print "    i No need to modify the stop value for the np.arrange function."
-
-    # what if input step != 1 and input step != 2.5?
-    else:
-        addendum = step
-        # print "  ! Wavelength step in input data is nor 1 nm, neither 2.5 nm.",
-        # print "Internally setting the \"stop\" value for the np.arrange()",
-        # print "function so as to not exceed the end value", wavelengths[-1],
-        # print "of the open half ended range."
-
-    stop = wavelengths[-1] + addendum
+    f = interpolate.interp1d(wavelengths, responses)
 
     filter_f = f(np.arange(start, stop, step))
    
     # how many spectral responses?
     expected = np.ceil((stop - start) / step)
-    assert len(filter_f) == expected, "Number of interpolated spectral responses not equal to expected number of interpolations" 
+    assert len(filter_f) == expected, "Number of interpolated spectral responses not equal to expected number of interpolations"
 
     # convert limits from nanometers to micrometers
-    lowerlimit = wavelengths[0]/1000
-    upperlimit = wavelengths[-1]/1000
+    lowerlimit = start/1000
+    upperlimit = stop/1000
 
     return(filter_f, (lowerlimit, upperlimit))
 
@@ -158,14 +171,18 @@ def pretty_print(filter_f):
         if i%8 is 0:
             if i is not 0:
                 value_wo_leading_zero = ('%.4f' % (filter_f[i-1])).lstrip('0')
-                pstring += value_wo_leading_zero+', '
+                pstring += value_wo_leading_zero
+	    if i > 1 and i < len(filter_f):
+                pstring += ', '
             if i is not 1: 
                 # trim the trailing whitespace at the end of line
                 pstring = pstring.rstrip()
-            pstring += "\n\t\t"
+            pstring += "\n        "
         else:
             value_wo_leading_zero = ('%.4f' % (filter_f[i-1])).lstrip('0')
-            pstring += value_wo_leading_zero+', '
+            pstring += value_wo_leading_zero
+	    if i < len(filter_f):
+		pstring += ', '
     # trim starting \n and trailing , 
     pstring = pstring.lstrip("\n").rstrip(", ")
     return pstring
@@ -177,10 +194,32 @@ def write_cpp(bands, values, sensor, folder):
     needs other functions: interpolate_bands, pretty_print
     """
     
+    # keep in sync with IWave::parse()
+    rthresh = 0.01
+    print 
+    print " > Response peaks from interpolation to 2.5 nm steps:"
+
     # getting necessary data
     # single or multiple bands?
     if len(bands) == 1:
         filter_f, limits = interpolate_band(values)
+
+	fi = filter_f
+	li = limits
+	# Get wavelength range for spectral response in band
+ 	maxresponse_idx = np.argmax(fi)
+ 	# Get minimum wavelength with spectral response
+ 	c = maxresponse_idx
+ 	while c > 0 and fi[c - 1] > rthresh:
+	    c = c - 1
+ 	min_wavelength = np.ceil(li[0] * 1000 + (2.5 * c))
+ 	# Get maximum wavelength with spectral response
+ 	c = maxresponse_idx
+ 	while c < len(fi) - 1 and fi[c + 1] > rthresh:
+	    c = c + 1
+ 	max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
+ 	print "   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength)
+
     else:
         filter_f = []
         limits = []
@@ -188,6 +227,20 @@ def write_cpp(bands, values, sensor, folder):
             fi, li = interpolate_band(values[:,[0,b+1]])
             filter_f.append(fi)
             limits.append(li)
+
+	    # Get wavelength range for spectral response in band
+	    maxresponse_idx = np.argmax(fi)
+	    # Get minimum wavelength with spectral response
+	    c = maxresponse_idx
+	    while c > 0 and fi[c - 1] > rthresh:
+		c = c - 1
+	    min_wavelength = np.ceil(li[0] * 1000 + (2.5 * c))
+	    # Get maximum wavelength with spectral response
+	    c = maxresponse_idx
+	    while c < len(fi) - 1 and fi[c + 1] > rthresh:
+		c = c + 1
+	    max_wavelength = np.floor(li[0] * 1000 + (2.5 * c))
+	    print "   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength)
     
     # writing...
     outfile = open(os.path.join(folder, sensor+"_cpp_template.txt"), 'w')
@@ -228,8 +281,8 @@ def write_cpp(bands, values, sensor, folder):
         
         # writing band limits
         for b in range(len(bands)):
-            inf = ", ".join(["%.3f" % i[0] for i in limits])
-            sup = ", ".join(["%.3f" % i[1] for i in limits])
+            inf = ", ".join(["%.4f" % i[0] for i in limits])
+            sup = ", ".join(["%.4f" % i[1] for i in limits])
         
         outfile.write('    static const float wli[%i] = {%s};\n' % (len(bands), inf))
         outfile.write('    static const float wls[%i] = {%s};\n' % (len(bands), sup))
@@ -266,9 +319,39 @@ def main():
     # getting data from file
     bands, values = read_input(inputfile)
     
+    # print spectral ranges from input file
+    # consider only wavelengths with a reasonably large response 
+    # around the peak response, keep in sync with IWave::parse()
+    rthresh = 0.01
+    print
+    print " > Response peaks from input file:"
+    for b in range(1, len(bands) + 1):
+	lowl = 0
+	hiwl = 0
+	maxr = 0
+	maxi = 0
+	for i in range(len(values[:,0])):
+	    if maxr < values[i,b]:
+		maxr = values[i,b]
+		maxi = i
+	
+	i = maxi
+	while i >= 0 and values[i,b] > rthresh:
+	    lowl = values[i,0]
+	    i -= 1
+
+	i = maxi
+	nvalues = len(values[:,0])
+	while i < nvalues and values[i,b] > rthresh:
+	    hiwl = values[i,0]
+	    i += 1
+	
+	print "   %s (%inm - %inm)" % (bands[b - 1], lowl, hiwl)
+
     # writing file in same folder of input file
     write_cpp(bands, values, sensor, os.path.dirname(inputfile))
     
+    print
     print " > Filter functions exported to %s" % ("sensors_csv/"+sensor+"_cpp_template.txt")
     print " > Please check this file for possible errors before inserting the code into file iwave.cpp"
     print " > Don't forget to add the necessary data to the files iwave.h, geomcond.h, geomcond.cpp, and to i.atcorr.html"
