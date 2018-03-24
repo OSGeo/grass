@@ -430,7 +430,12 @@ class SQLBuilder(wx.Frame):
         gotoText = event.GetString()
         lenLimit = len(gotoText)
         found = idx = 0
+        string = False
         for item in self.list_values.GetItems():
+            if idx == 0 and item.startswith("'"):
+                string = True
+            if string:
+                item = item[1:-1] # strip "'"
             if item[:lenLimit] == gotoText:
                 found = idx
                 break
