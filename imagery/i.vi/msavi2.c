@@ -15,7 +15,7 @@ double msa_vi2(double redchan, double nirchan)
     }
     else 
     {
-	result=0.5*(2*(nirchan+1)-sqrt((2*nirchan+1)*(2*nirchan+1)-8*(nirchan-redchan)));
+	result=0.5*(2*nirchan+1-sqrt((2*nirchan+1)*(2*nirchan+1)-8*(nirchan-redchan)));
     }
     return result;
 }
