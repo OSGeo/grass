@@ -325,7 +325,7 @@ class UpdateThread(Thread):
 
                     if not cparams[map]['dbInfo']:
                         cparams[map]['dbInfo'] = gselect.VectorDBInfo(map)
-                    self.data[win.GetParent().SetData] = {
+                    self.data[win.GetParent().InsertColumns] = {
                         'vector': map, 'layer': layer,
                         'dbInfo': cparams[map]['dbInfo']}
                 else:  # table
