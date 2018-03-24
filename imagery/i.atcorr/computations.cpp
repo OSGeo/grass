@@ -36,7 +36,7 @@ float odrayl(const AtmosModel &atms, const float wl)
 {
     /* air refraction index edlen 1966 / metrologia,2,71-80  putting pw=0 */
     float ak=1/wl;
-    double awl= wl*wl*wl*wl;
+    double awl= wl*wl*wl*wl * 0.0254743;
     double a1 = 130 - ak * ak;
     double a2 = 38.9 - ak * ak;
     double a3 = 2406030 / a1;
@@ -49,7 +49,7 @@ float odrayl(const AtmosModel &atms, const float wl)
     for(int k = 0; k < 33; k++)
     {
 	double dppt = (288.15 / 1013.25) * (atms.p[k] / atms.t[k] + atms.p[k+1] / atms.t[k+1]) / 2;
-	double sr = a * dppt / awl / 0.0254743;
+	double sr = a * dppt / awl;
 	tray += (float)((atms.z[k+1] - atms.z[k]) * sr);
     }
 
@@ -143,7 +143,7 @@ float trunca()
 	pl[IPL(-1)] = 0;
 	pl[IPL(0)] = 1;
 
-	for(int k = 0; k <= 80; k++)
+	for(k = 0; k <= 80; k++)
 	{
 	    pl[IPL(k+1)] = ((2 * k + 1) * rm * pl[IPL(k)] - k * pl[IPL(k-1)]) / (k + 1);
 	    sixs_trunc.betal[k] += x * pl[IPL(k)];
@@ -169,7 +169,7 @@ float trunca()
 */
 
 float discre(const float ta, const float ha, const float tr, const float hr,
-	     const int it, const int nt, const float yy, const float dd,
+	     const int it, const int ntd, const float yy, const float dd,
 	     const float ppp2, const float ppp1)
 {
     if( ha >= 7 ) 
@@ -180,7 +180,7 @@ float discre(const float ta, const float ha, const float tr, const float hr,
 
     double dt;
     if( it == 0 ) dt = 1e-17;
-    else dt = 2 * (ta + tr - yy) / (nt - it + 1);
+    else dt = 2 * (ta + tr - yy) / (ntd - it + 1);
 	
     float zx; /* return value */
     float ecart = 0;
@@ -207,8 +207,8 @@ float discre(const float ta, const float ha, const float tr, const float hr,
 	}
 
 	zx = y2;
-	float delta = (float)(1. / (1 + ta * hr / tr / ha * exp((zx - ppp1) * (1. / hr - 1. / ha))));
-	if(dd != 0) ecart = (float)fabs((dd - delta) / dd);
+	float cdelta = (float)(1. / (1 + ta * hr / tr / ha * exp((zx - ppp1) * (1. / hr - 1. / ha))));
+	if(dd != 0) ecart = (float)fabs((dd - cdelta) / dd);
     } while((ecart > 0.75) && (it != 0));
     return zx;
 
@@ -304,7 +304,7 @@ void kernel(const int is, float (&xpl)[2*mu + 1], float (&bp)[26][2*mu + 1], Gau
 	
     for(j = 0; j <= mu; j++)
     {
-	for(int k = -mu; k <= mu; k++)
+	for(k = -mu; k <= mu; k++)
 	{
 	    double sbp = 0;
 	    if(is <= 80) 
@@ -496,7 +496,7 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 
 	
     float phi = (float)geom.phirad;
-    int i;
+    int i, k;
     for(i = 0; i < np; i++) for(int m = -mu; m <= mu; m++) xl[STDI(m)][i] = 0;
 
     /* ************ incident angle mus ******* */
@@ -562,7 +562,7 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	    }
 	    /* primary scattering source function at every level within the layer */
 
-	    for(int k = 0; k <= snt; k++)
+	    for(k = 0; k <= snt; k++)
 	    {
 		float c = ch[k];
 		double a = ydel[k];
@@ -570,15 +570,14 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 		i2[k][STDI(j)] = (float)(c * (sa2 * b + sa1 * a));
 	    }
 	}
-	  
-	int k;
+
 	/* vertical integration, primary upward radiation */
 	for(k = 1; k <= mu; k++)
 	{
 	    i1[snt][STDI(k)] = 0;
 	    float zi1 = i1[snt][STDI(k)];
 
-	    for(int i = snt - 1; i >= 0; i--)
+	    for(i = snt - 1; i >= 0; i--)
 	    {
 		float f = h[i + 1] - h[i];
 		double a = (i2[i + 1][STDI(k)] - i2[i][STDI(k)]) / f;
@@ -597,7 +596,7 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	    i1[0][STDI(k)] = 0;
 	    float zi1 = i1[0][STDI(k)];
       
-	    for(int i = 1; i <= snt; i++)
+	    for(i = 1; i <= snt; i++)
 	    {
 		float f = h[i] - h[i - 1];
 		float c = (float)exp(f / gauss.rm[STDI(k)]);
@@ -641,14 +640,14 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 
 	    if(is - 2 <= 0)
 	    {
-		for(int k = 1; k <= mu; k++)
+		for(k = 1; k <= mu; k++)
 		{     
-		    for(int i = 0; i <= snt; i++)
+		    for(i = 0; i <= snt; i++)
 		    {
 			double ii1 = 0;
 			double ii2 = 0;
 
-			for(int j = 1; j <= mu; j++)
+			for(j = 1; j <= mu; j++)
 			{
 			    double bpjk = bp[j][STDI(k)] * xdel[i] + ydel[i] * (beta0 + beta2 * xpl[STDI(j)] * xpl[STDI(k)]);
 			    double bpjmk = bp[j][STDI(-k)] * xdel[i] + ydel[i] * (beta0 + beta2 * xpl[STDI(j)] * xpl[STDI(-k)]);
@@ -667,17 +666,17 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	    } 
 	    else
 	    {
-		for(int k = 1; k <= mu; k++)
+		for(k = 1; k <= mu; k++)
 		{
 		    double ii1;
 		    double ii2;
 
-		    for(int i = 0; i <= snt; i++)
+		    for(i = 0; i <= snt; i++)
 		    {
 			ii1 = 0;
 			ii2 = 0;
 
-			for(int j = 1; j <= mu; j++)
+			for(j = 1; j <= mu; j++)
 			{
 			    double bpjk = bp[j][STDI(k)] * xdel[i];
 			    double bpjmk = bp[j][STDI(-k)] * xdel[i];
@@ -697,13 +696,12 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 
 			
 	    /* vertical integration, upward radiation */
-	    int k;
 	    for(k = 1; k <= mu; k++)
 	    {
 		i1[snt][STDI(k)] = 0;
 		float zi1 = i1[snt][STDI(k)];
 
-		for(int i = snt-1; i >= 0; i--)
+		for(i = snt-1; i >= 0; i--)
 		{
 		    float f = h[i + 1] - h[i];
 		    double a = (i2[i + 1][STDI(k)] - i2[i][STDI(k)]) / f;
@@ -722,7 +720,7 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 		i1[0][STDI(k)] = 0;
 		float zi1 = i1[0][STDI(k)];
 
-		for(int i = 1; i <= snt; i++)
+		for(i = 1; i <= snt; i++)
 		{
 		    float f = h[i] - h[i - 1];
 		    float c = (float)exp(f / gauss.rm[STDI(k)]);
@@ -812,7 +810,7 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 		}
 
 		/* inm2 is the (n-2)ieme scattering order */
-		for(int k = -mu; k <= mu; k++) inm2[STDI(k)] = inm1[STDI(k)];
+		for(k = -mu; k <= mu; k++) inm2[STDI(k)] = inm1[STDI(k)];
 		roavion2 = roavion1;
 	    }
 
@@ -857,7 +855,7 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	}
 
 	if(is == 0)
-	    for(int k = 1; k <= mum1; k++) xl[STDI(0)][0] += gauss.rm[STDI(k)] * gauss.gb[STDI(k)] * i3[STDI(-k)];
+	    for(k = 1; k <= mum1; k++) xl[STDI(0)][0] += gauss.rm[STDI(k)] * gauss.gb[STDI(k)] * i3[STDI(-k)];
     
 	xl[STDI(mu)][0] += (float)(delta0s * i3[STDI(mu)] * cos(is * (geom.phirad + M_PI)));
 	xl[STDI(-mu)][0] += (float)(delta0s * roavion * cos(is * (geom.phirad + M_PI)));
@@ -1116,7 +1114,7 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 		float x = xdel[i];
 		float y = ydel[i];
       
-		for(int j = 1; j <= mu; j++)
+		for(j = 1; j <= mu; j++)
 		{
 		    float bpjk = bp[j][STDI(k)] * x + y * (beta0 + beta2 * xpl[STDI(j)] * xpl[STDI(k)]);
 		    float bpjmk= bp[j][STDI(-k)] * x + y * (beta0 + beta2 * xpl[STDI(j)] * xpl[STDI(-k)]);
@@ -1602,7 +1600,9 @@ void discom(const GeomCond &geom, const AtmosModel &atms,
     memset(&oap, 0, sizeof(oap));
 
     Gauss gauss;
+
     gauss.init();   /* discom is the only function that uses the gauss data */
+
     memset(&sixs_trunc, 0, sizeof(sixs_trunc));  /* clear this to keep preconditions the same and output consistent */
 
 /*    computation of all scattering parameters at wavelength 
@@ -1690,8 +1690,11 @@ void specinterp(const float wl, float& tamoy, float& tamoyp, float& pizmoy, floa
 {
 
     int linf = 0;
-    for(int i = 0; i < 9; i++) 
-	if(wl >= sixs_disc.wldis[i] && wl <= sixs_disc.wldis[i+1]) linf = i;
+    int i = 8;
+    while (i >= 0 && linf == 0) {
+	if (wl >= sixs_disc.wldis[i] && wl <= sixs_disc.wldis[i+1]) linf = i;
+	i--;
+    }
     if(wl > sixs_disc.wldis[9]) linf = 8;
 
     int lsup = linf + 1;

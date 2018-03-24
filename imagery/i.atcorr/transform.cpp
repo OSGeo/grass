@@ -150,9 +150,11 @@ float transform(const TransformInput ti, InputMask imask, float idn)
           
     float rapp = idn;
     float ainrpix = ti.ainr[0][0];
+    /*
     float xa = 0.0f;
     float xb = 0.0f;
     float xc = 0.0f;
+    */
     float rog = rapp / ti.tgasm;
     /* The if below was added to avoid ground reflectances lower than
        zero when ainr(1,1) greater than rapp/tgasm
@@ -176,9 +178,11 @@ float transform(const TransformInput ti, InputMask imask, float idn)
 
     rog = (rog - ainrpix / ti.tgasm) / ti.sutott / ti.sdtott;
     rog = rog / (1.f + rog * ti.sast);
+    /*
     xa = (float)M_PI * ti.sb / ti.xmus / ti.seb / ti.tgasm / ti.sutott / ti.sdtott;
     xb = ti.srotot / ti.sutott / ti.sdtott / ti.tgasm;
     xc = ti.sast;
+    */
 
     if (rog > 1) rog = 1;
     if (rog < 0) rog = 0;

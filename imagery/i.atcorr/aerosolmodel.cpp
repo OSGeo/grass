@@ -61,7 +61,7 @@ void AerosolModel::mie(float (&ex)[4][10], float (&sc)[4][10], float (&asy)[4][1
 {
     double np[4];
     double ext[10][4];
-    double sca[10][4];
+    double sca2[10][4];
     double p1[10][4][83];
 
     const double rmul = 0.99526231496887960135245539673954; /*rlogpas = 0.030;  (10**rlogpas-1.D+00)*/
@@ -78,7 +78,7 @@ void AerosolModel::mie(float (&ex)[4][10], float (&sc)[4][10], float (&asy)[4][1
 	    ex[i][j] = 0;
 	    sc[i][j] = 0;
 	    ext[j][i] = 0;
-	    sca[j][i] = 0;
+	    sca2[j][i] = 0;
 	    for(int k = 0; k < 83; k++) p1[j][i][k] = 0;
 	}
     }
@@ -159,7 +159,7 @@ void AerosolModel::mie(float (&ex)[4][10], float (&sc)[4][10], float (&asy)[4][1
 		double p11[83];
 		exscphase(alpha, mie_in.rn[j][i], mie_in.ri[j][i], Qext, Qsca, p11);
 		ext[j][i] += xndpr2 * Qext;
-		sca[j][i] += xndpr2 * Qsca;
+		sca2[j][i] += xndpr2 * Qsca;
 
 		/* phase function for each type of particle */
 		for(int k = 0; k < 83; k++) p1[j][i][k] += p11[k]*xndpr2;
@@ -176,12 +176,12 @@ void AerosolModel::mie(float (&ex)[4][10], float (&sc)[4][10], float (&asy)[4][1
        at 0.550 micron (the extinction coefficient is normalized at 0.550 micron) */
     int j;
     for(j = 0; j < 10; j++)
-	for(int i = 0; i < mie_in.icp; i++)
+	for(i = 0; i < mie_in.icp; i++)
 	{
 	    ext[j][i] /= np[i] * 1000;
-	    sca[j][i] /= np[i] * 1000;
+	    sca2[j][i] /= np[i] * 1000;
 	    ex[0][j] += (float)(mie_in.cij[i] * ext[j][i]);
-	    sc[0][j] += (float)(mie_in.cij[i] * sca[j][i]);
+	    sc[0][j] += (float)(mie_in.cij[i] * sca2[j][i]);
 	}
 
     /* computation of the phase function and the asymetry coefficient
@@ -195,7 +195,7 @@ void AerosolModel::mie(float (&ex)[4][10], float (&sc)[4][10], float (&asy)[4][1
 	for(int k = 0; k < 83; k++)
 	{
 	    sixs_aerbas.usr_ph[j][k] = 0;
-	    for(int i = 0; i < mie_in.icp; i++)
+	    for(i = 0; i < mie_in.icp; i++)
 		sixs_aerbas.usr_ph[j][k] += (float)(mie_in.cij[i] * p1[j][i][k] / np[i] / 1000);
 		
 	    sixs_aerbas.usr_ph[j][k] += (float)sc[0][j];
@@ -383,7 +383,7 @@ void AerosolModel::exscphase(const double X, const double nr,
 	PIn[1] = 0;
 	TAUn[1] = sixs_sos.cgaus[j];
 
-	for(int k = 1; k <= mu; k++)
+	for(k = 1; k <= mu; k++)
 	{
 	    double co_n = (2.0 * k + 1) / k / (k + 1);
 	    RS1 += co_n * (RAn[k] * PIn[k] + RBn[k] * TAUn[k]);
@@ -694,7 +694,7 @@ void AerosolModel::aeroso(const float xmud)
 	case 11: mie (ex, sc, asy); break;
 	}
 
-	for (int i = 0; i < 10; i++)
+	for (i = 0; i < 10; i++)
 	{
 	    dd[0][i] = (*sixs_aerbas.ph)[i][j1] + coef * ((*sixs_aerbas.ph)[i][j1] - (*sixs_aerbas.ph)[i][j1+1]);
 	    for(int k = 0; k < 83; k++) pha[0][i][k] = (*sixs_aerbas.ph)[i][k];
@@ -850,7 +850,7 @@ void AerosolModel::parse(const float xmud)
     }
     case 4: 
     {
-	for(int i = 0; i < 4; i++) cin >> c[i]; 
+	for(i = 0; i < 4; i++) cin >> c[i]; 
 	cin.ignore(numeric_limits<int>::max(),'\n');
 	break;
     }
@@ -865,7 +865,7 @@ void AerosolModel::parse(const float xmud)
 	    G_fatal_error(_("mie_in.icp: %ld > 4, will cause internal buffer overflow"), mie_in.icp);
 	}
 
-	for(int i = 0; i < mie_in.icp; i++)
+	for(i = 0; i < mie_in.icp; i++)
 	{
 	    cin >> mie_in.x1[i];
 	    cin >> mie_in.x2[i];
@@ -929,7 +929,6 @@ void AerosolModel::parse(const float xmud)
 	    G_fatal_error(_("mie_in.irsunph: %ld > 50, will cause internal buffer overflow"), mie_in.irsunph);
 	}
 
-	int i;
 	for(i = 0; i < mie_in.irsunph; i++)
 	{
 	    cin >> mie_in.rsunph[i];

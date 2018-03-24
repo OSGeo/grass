@@ -75,18 +75,22 @@ void Altitude::pressure(AtmosModel& atms, float& uw, float& uo3)
     float rmwh[34];
     float rmo3[34];
     int k;
-    for (k = 0; k < 33; ++k)
-    {
-	float roair = air * 273.16f * atms.p[k] / (atms.t[k] * 1013.25f);
-	rmwh[k] = atms.wh[k] / (roair * 1e3f);
-	rmo3[k] = atms.wo[k] / (roair * 1e3f);
-    }
+    float roair, ds;
+
+    k = 0;
+    roair = air * 273.16f * atms.p[k] / (atms.t[k] * 1013.25f);
+    rmwh[k] = atms.wh[k] / (roair * 1e3f);
+    rmo3[k] = atms.wo[k] / (roair * 1e3f);
 
     for (k = 1; k < 33; ++k)
     {
-	float ds = (atms.p[k - 1] - atms.p[k]) / atms.p[0];
-	uw += (rmwh[k] + rmwh[k - 1]) * ds / 2.f;
-	uo3 += (rmo3[k] + rmo3[k - 1]) * ds / 2.f;
+	roair = air * 273.16f * atms.p[k] / (atms.t[k] * 1013.25f);
+	rmwh[k] = atms.wh[k] / (roair * 1e3f);
+	rmo3[k] = atms.wo[k] / (roair * 1e3f);
+
+	ds = (atms.p[k - 1] - atms.p[k]) / (atms.p[0] * 2);
+	uw += (rmwh[k] + rmwh[k - 1]) * ds;
+	uo3 += (rmo3[k] + rmo3[k - 1]) * ds;
     }
     uw = uw * atms.p[0] * 100.f / g;
     uo3 = uo3 * atms.p[0] * 100.f / g;
