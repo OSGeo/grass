@@ -420,9 +420,6 @@ class SQLBuilder(wx.Frame):
             self.dbInfo.GetTable(
                 self.layer))[column]['type']
 
-        if ctype == 'character':
-            value = "'%s'" % value
-
         self._add(element='value', value=value)
 
     def OnGoTo(self, event):
