@@ -374,7 +374,7 @@ int main(int argc, char **argv)
     secondary_width_opt = G_define_option();
     secondary_width_opt->key = "secondary_width";
     secondary_width_opt->description = _("Width of point symbol lines");
-    secondary_width_opt->type = TYPE_INTEGER;
+    secondary_width_opt->type = TYPE_DOUBLE;
     secondary_width_opt->required = NO;
     secondary_width_opt->multiple = YES;
     secondary_width_opt->answer = "0.1";
