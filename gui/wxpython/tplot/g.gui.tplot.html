@@ -2,22 +2,50 @@
 <!-- meta page index: topic_gui|GUI -->
 <h2>DESCRIPTION</h2>
 
-The <b>Temporal Plot Tool</b> is a <em><a href="wxGUI.html">wxGUI</a></em> component
-which allows the user to see in a plot the values of one or more temporal datasets (strds, stvds,
-str3ds) for a queried point defined by a coordinate pair.
+The <b>Temporal Plot Tool</b> is a <em><a href="wxGUI.html">wxGUI</a></em>
+component that queries and plots the values of a point, defined by a coordinate
+pair, in one or more temporal datasets (strds, stvds, str3ds).
+
 <p>
 Supported features:
 <ul>
   <li>temporal datasets with interval/point and absolute/relative time,</li>
-  <li>2D plots,</li>
-  <!-- <li>3D plots - spatio-temporal extent (matplotlib &gt;= 1.0.0)</li> -->
   <li>pop-up annotations with values information,</li>
-  <li>automatic output to query several point.</li>
+  <li>query and plot multiple points via the command line,</li>
+  <li>zoom and pan,</li>
+  <li>change labels to x and y axes,</li>
+  <li>add title to the plot, and</li>
+  <li>export the time series values to a CSV file.</li>
 </ul>
 
-<center>
-<img src="tplot.png" border="1" alt="Temporal Plot Tool">
-</center>
+<div align="center" style="margin: 10px">
+<a href="g_gui_tplot_labels.png">
+<img src="tplot.png" width="600" height="367" alt="Temporal Plot Tool" border="0" >
+</a><br>
+<i>Figure: Temporal Plot Tool</i>
+</div>
+
+To optionally add a title to the temporal plot and/or change the x and y
+axes labels, first type the desired text and then click <em>Draw</em> as
+showed below.
+
+<div align="center" style="margin: 10px">
+<a href="g_gui_tplot_labels.png">
+<img src="g_gui_tplot_labels.png" width="600" height="482" alt="g.gui.tplot add title and axes labels" border="0">
+</a><br>
+<i>Figure: Add title and labels to a time series plot</i>
+</div>
+
+To export the time series data to a text file (date and data values), type a
+name for the file and click <em>Draw</em> again. Optionally, set the 
+check-box to print headers, as well.
+
+<div align="center" style="margin: 10px">
+<a href="g_gui_tplot_export_csv.png">
+<img src="g_gui_tplot_export_csv.png" width="600" height="481" alt="g.gui.tplot export time series as csv file" border="0">
+</a><br>
+<i>Figure: Export time series values to a text file</i>
+</div>
 
 <h2>NOTES</h2>
 
