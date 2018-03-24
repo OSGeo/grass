@@ -240,7 +240,7 @@ class UpdateThread(Thread):
 
             map = layer = None
             driver = db = None
-            if name in ('LayerSelect', 'ColumnSelect'):
+            if name in ('LayerSelect', 'ColumnSelect', 'SqlWhereSelect'):
                 if p.get('element', '') == 'vector':  # -> vector
                     # get map name
                     map = p.get('value', '')
@@ -325,7 +325,7 @@ class UpdateThread(Thread):
 
                     if not cparams[map]['dbInfo']:
                         cparams[map]['dbInfo'] = gselect.VectorDBInfo(map)
-                    self.data[win.GetParent().InsertColumns] = {
+                    self.data[win.GetParent().SetData] = {
                         'vector': map, 'layer': layer,
                         'dbInfo': cparams[map]['dbInfo']}
                 else:  # table
@@ -397,6 +397,18 @@ class UpdateThread(Thread):
                             'value', ''), 'mapset': pMapset.get(
                             'value', '')}
 
+            elif name == 'SqlWhereSelect':
+                if map:
+                    self.data[win.GetParent().SetData] = {
+                        'vector': map, 'layer': layer }
+                else:  # table
+                    if driver and db:
+                        self.data[win.GetParent().InsertTableColumns] = {
+                            'table': pTable.get('value'),
+                            'driver': driver, 'database': db}
+                    elif pTable:
+                        self.data[win.GetParent().InsertTableColumns] = {
+                            'table': pTable.get('value')}
 
 def UpdateDialog(parent, event, eventId, task):
     return UpdateThread(parent, event, eventId, task)
@@ -1394,7 +1406,8 @@ class CmdPanel(wx.Panel):
                                                'barscale',
                                                'northarrow',
                                                'datasource',
-                                               'datasource_layer'):
+                                               'datasource_layer',
+                                               'sql_query'):
                     multiple = p.get('multiple', False)
                     if p.get('age', '') == 'new':
                         mapsets = [grass.gisenv()['MAPSET'], ]
@@ -2060,6 +2073,17 @@ class CmdPanel(wx.Panel):
                             self.OnUpdateValues()  # TODO: replace by signal
 
                         self.win1.OnCheckItem = OnCheckItem
+                        
+                elif prompt == 'sql_query':
+                    win = gselect.SqlWhereSelect(
+                        parent=which_panel, param=p)
+                    p['wxId'] = [win.GetTextWin().GetId()]
+                    win.GetTextWin().Bind(wx.EVT_TEXT, self.OnSetValue)
+                    which_sizer.Add(
+                        win,
+                        proportion=0,
+                        flag=wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT,
+                        border=5)
 
             if self.parent.GetName() == 'MainFrame' and (
                     self._giface and hasattr(self._giface, "_model")):
@@ -2110,6 +2134,7 @@ class CmdPanel(wx.Panel):
         pDbase = None
         pLocation = None
         pMapset = None
+        pSqlWhere = []
         for p in self.task.params:
             if self.task.blackList['enabled'] and self.task.get_name() in self.task.blackList['items'] and \
                p.get('name', '') in self.task.blackList['items'][self.task.get_name()]['params']:
@@ -2157,6 +2182,8 @@ class CmdPanel(wx.Panel):
                 pLocation = p
             elif prompt == 'mapset':
                 pMapset = p
+            elif prompt == 'sql_query':
+                pSqlWhere.append(p)
 
         # collect ids
         pColumnIds = []
@@ -2168,16 +2195,22 @@ class CmdPanel(wx.Panel):
         pSigFileIds = []
         for p in pSigFile:
             pSigFileIds += p['wxId']
-
+        pSqlWhereIds = []
+        for p in pSqlWhere:
+            pSqlWhereIds += p['wxId']
+        
         # set wxId-bindings
         if pMap:
             pMap['wxId-bind'] = []
             if pLayer:
                 pMap['wxId-bind'] += pLayerIds
             pMap['wxId-bind'] += copy.copy(pColumnIds)
+            pMap['wxId-bind'] += copy.copy(pSqlWhereIds)
         if pLayer:
             for p in pLayer:
                 p['wxId-bind'] = copy.copy(pColumnIds)
+                p['wxId-bind'] += copy.copy(pSqlWhereIds)
+
 
         if pDriver and pTable:
             pDriver['wxId-bind'] = pTable['wxId']
