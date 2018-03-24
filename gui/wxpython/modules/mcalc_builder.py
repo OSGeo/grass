@@ -568,6 +568,8 @@ class MapCalcFrame(wx.Frame):
         self._addSomething(item)
 
         win.ChangeValue('')  # reset
+        # Map selector likes to keep focus. Set it back to expression input area
+        wx.CallAfter(self.text_mcalc.SetFocus)
 
     def OnUpdateStatusBar(self, event):
         """Update statusbar text"""
@@ -619,8 +621,17 @@ class MapCalcFrame(wx.Frame):
         except:
             pass
 
-        newmcalcstr += what + ' ' + mcalcstr[position:]
-
+        newmcalcstr += what
+        
+        # Do not add extra space if there is already one
+        try:
+            if newmcalcstr[-1] != ' ' and mcalcstr[position] != ' ':
+                newmcalcstr += ' '
+        except:
+            newmcalcstr += ' '
+        
+        newmcalcstr += mcalcstr[position:]
+        
         self.text_mcalc.SetValue(newmcalcstr)
         if len(what) > 0:
             match = re.search(pattern="\(.*\)", string=what)
@@ -628,6 +639,11 @@ class MapCalcFrame(wx.Frame):
                 position_offset += match.start() + 1
             else:
                 position_offset += len(what)
+                try:
+                    if newmcalcstr[position + position_offset] == ' ':
+                        position_offset += 1
+                except:
+                    pass
 
         self.text_mcalc.SetInsertionPoint(position + position_offset)
         self.text_mcalc.Update()
