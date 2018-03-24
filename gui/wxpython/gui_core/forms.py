@@ -401,14 +401,7 @@ class UpdateThread(Thread):
                 if map:
                     self.data[win.GetParent().SetData] = {
                         'vector': map, 'layer': layer }
-                else:  # table
-                    if driver and db:
-                        self.data[win.GetParent().InsertTableColumns] = {
-                            'table': pTable.get('value'),
-                            'driver': driver, 'database': db}
-                    elif pTable:
-                        self.data[win.GetParent().InsertTableColumns] = {
-                            'table': pTable.get('value')}
+                # TODO: table?
 
 def UpdateDialog(parent, event, eventId, task):
     return UpdateThread(parent, event, eventId, task)
