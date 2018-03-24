@@ -86,6 +86,7 @@ verify:
 		msgfmt -c $$po; \
 	done
 	@rm -f po/messages.mo
+	@echo "Note: In case of translations errors to be fixed, edit the respective translation on transifex (and not in SVN)"
 
 statistics:
 	$(call po_stats)

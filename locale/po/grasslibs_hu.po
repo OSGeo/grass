@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-10 19:26+0100\n"
+"POT-Creation-Date: 2018-03-24 01:06+0100\n"
 "PO-Revision-Date: 2018-03-10 17:22+0100\n"
 "Last-Translator: Zoltan Siki <siki@agt.bme.hu>, 2018\n"
 "Language-Team: Hungarian (https://www.transifex.com/grass-gis/teams/45198/hu/)\n"
@@ -2224,13 +2224,13 @@ msgstr ""
 msgid "The limit of open files (%i) was reached (%i). The module r.series will be run with flag z, to avoid open files limit exceeding."
 msgstr ""
 
-#: ../lib/python/temporal/temporal_raster_base_algebra.py:690
+#: ../lib/python/temporal/temporal_raster_base_algebra.py:741
 #, python-format
 msgid "Error computing map <%s>"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_raster_base_algebra.py:777
-#: ../lib/python/temporal/temporal_algebra.py:2395
+#: ../lib/python/temporal/temporal_raster_base_algebra.py:828
+#: ../lib/python/temporal/temporal_algebra.py:2426
 #, python-format
 msgid "%s map <%s> not found in GRASS spatial database"
 msgstr ""
@@ -2287,64 +2287,64 @@ msgstr ""
 msgid "Empty entry in map list, this should not happen"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:815
+#: ../lib/python/temporal/temporal_algebra.py:821
 msgid "Spatio-temporal topological operators are not supported in granularity algebra mode"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:853
+#: ../lib/python/temporal/temporal_algebra.py:859
 msgid "All input space time datasets must have a valid temporal topology."
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:862
+#: ../lib/python/temporal/temporal_algebra.py:868
 msgid "All input space time datasets must have the same temporal type."
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:1113
+#: ../lib/python/temporal/temporal_algebra.py:1119
 #, python-format
 msgid "Removing un-needed or empty %s maps"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:1168
+#: ../lib/python/temporal/temporal_algebra.py:1174
 #, python-format
 msgid "Space time %s dataset <%s> not found"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:1196
-#: ../lib/python/temporal/temporal_algebra.py:1200
+#: ../lib/python/temporal/temporal_algebra.py:1202
+#: ../lib/python/temporal/temporal_algebra.py:1206
 #, python-format
 msgid "Wrong temporal type of space time dataset <%s>                                       <%s> time is required"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:1220
+#: ../lib/python/temporal/temporal_algebra.py:1226
 msgid "Wrong type of input "
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:2186
+#: ../lib/python/temporal/temporal_algebra.py:2205
 #, python-format
 msgid "The resulting space time dataset type <%(a)s> is different from the requested type <%(b)s>"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:2192
+#: ../lib/python/temporal/temporal_algebra.py:2211
 msgid "Maps that should be registered in the resulting space time dataset have different types."
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:2401
+#: ../lib/python/temporal/temporal_algebra.py:2432
 msgid "Wrong map type. TMAP only supports single maps that are registered in the temporal GRASS database"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:2429
+#: ../lib/python/temporal/temporal_algebra.py:2460
 msgid "Merging empty map lists"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:2432
+#: ../lib/python/temporal/temporal_algebra.py:2463
 msgid "First Map list is empty, can't merge it. Return only last map list"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:2435
+#: ../lib/python/temporal/temporal_algebra.py:2466
 msgid "Second Map list is empty, can't merge it. Return only first map list"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:2443
+#: ../lib/python/temporal/temporal_algebra.py:2474
 msgid "Space time datasets to merge must have the same temporal type"
 msgstr ""
 
@@ -2480,37 +2480,37 @@ msgstr ""
 msgid "Unable to remove timestamp for vector map <%s>"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_vector_algebra.py:386
+#: ../lib/python/temporal/temporal_vector_algebra.py:387
 #, python-format
 msgid "Error vector maps with basename %s exist. Use --o flag to overwrite existing file"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_vector_algebra.py:419
+#: ../lib/python/temporal/temporal_vector_algebra.py:420
 #, python-format
 msgid ""
 "Error starting %s : \n"
 "%s"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_vector_algebra.py:492
+#: ../lib/python/temporal/temporal_vector_algebra.py:493
 #, python-format
 msgid ""
 "Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
 "%s"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:603
+#: ../lib/python/temporal/core.py:605
 msgid "Unable to initialize the temporal DBMI interface. Please use t.connect to specify the driver and the database string"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:672
+#: ../lib/python/temporal/core.py:674
 #, python-format
 msgid ""
 "Unable to receive temporal database metadata.\n"
 "Current temporal database info:%(info)s"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:677
+#: ../lib/python/temporal/core.py:679
 #, python-format
 msgid ""
 "Unsupported temporal database: version mismatch.\n"
@@ -2519,7 +2519,7 @@ msgid ""
 "Current temporal database info:%(info)s"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:685
+#: ../lib/python/temporal/core.py:687
 #, python-format
 msgid ""
 "Unsupported temporal database: version mismatch.\n"
@@ -2527,12 +2527,12 @@ msgid ""
 "Current temporal database info:%(info)s"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:773
+#: ../lib/python/temporal/core.py:775
 #, python-format
 msgid "Creating temporal database: %s"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:782
+#: ../lib/python/temporal/core.py:784
 #, python-format
 msgid ""
 "Unable to create SQLite temporal database\n"
@@ -2540,31 +2540,31 @@ msgid ""
 "Please use t.connect to set a read- and writable temporal database path"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:947
+#: ../lib/python/temporal/core.py:949
 msgid "Unable to mogrify sql statement. "
 msgstr ""
 
-#: ../lib/python/temporal/core.py:969
+#: ../lib/python/temporal/core.py:971
 msgid "Unable to check table. "
 msgstr ""
 
-#: ../lib/python/temporal/core.py:985
+#: ../lib/python/temporal/core.py:987
 msgid "Unable to execute sql statement. "
 msgstr ""
 
-#: ../lib/python/temporal/core.py:995
+#: ../lib/python/temporal/core.py:997
 msgid "Unable to fetch one. "
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1005
+#: ../lib/python/temporal/core.py:1007
 msgid "Unable to fetch all. "
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1022
+#: ../lib/python/temporal/core.py:1024
 msgid "Unable to execute transaction. "
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1126
+#: ../lib/python/temporal/core.py:1128
 #, python-format
 msgid ""
 "Unable to connect to %(db)s database: %(string)s\n"
@@ -2572,14 +2572,14 @@ msgid ""
 "Please use t.connect to set a read- and writable temporal database backend"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1286
+#: ../lib/python/temporal/core.py:1288
 #, python-format
 msgid ""
 "Unable to execute :\n"
 " %(sql)s"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1330
+#: ../lib/python/temporal/core.py:1332
 #, python-format
 msgid ""
 "Unable to execute transaction:\n"
@@ -2830,7 +2830,7 @@ msgstr ""
 msgid "Cannot parse interface description of<{name}> module: {error}"
 msgstr ""
 
-#: ../lib/python/pygrass/modules/grid/grid.py:553
+#: ../lib/python/pygrass/modules/grid/grid.py:554
 msgid "Execution of subprocesses was not successful"
 msgstr ""
 
@@ -3449,7 +3449,7 @@ msgstr ""
 msgid "WARNING"
 msgstr ""
 
-#: ../lib/init/grass.py:187 ../lib/gis/parser.c:621
+#: ../lib/init/grass.py:187 ../lib/gis/parser.c:628
 msgid "ERROR"
 msgstr ""
 
@@ -3610,22 +3610,22 @@ msgstr ""
 msgid "GUI <%s> not supported in this version"
 msgstr ""
 
-#: ../lib/init/grass.py:704
+#: ../lib/init/grass.py:708
 msgid "Searched for a web browser, but none found"
 msgstr ""
 
-#: ../lib/init/grass.py:743
+#: ../lib/init/grass.py:747
 msgid ""
 "The python command does not work as expected!\n"
 "Please check your GRASS_PYTHON environment variable.\n"
 "Use the -help option for details.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:747
+#: ../lib/init/grass.py:751
 msgid "GRASS GUI not found. Please check your installation."
 msgstr ""
 
-#: ../lib/init/grass.py:749
+#: ../lib/init/grass.py:753
 msgid ""
 "{}\n"
 "Switching to text based interface mode.\n"
@@ -3633,7 +3633,7 @@ msgid ""
 "Hit RETURN to continue.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:758
+#: ../lib/init/grass.py:762
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -3643,72 +3643,72 @@ msgid ""
 "Hit RETURN to continue.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:851 ../lib/gis/make_mapset.c:66
+#: ../lib/init/grass.py:855 ../lib/gis/make_mapset.c:66
 #, c-format, python-format
 msgid "Location <%s> doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:853
+#: ../lib/init/grass.py:857
 #, python-format
 msgid "<%s> is not a valid GRASS Location because PERMANENT Mapset is missing"
 msgstr ""
 
-#: ../lib/init/grass.py:856
+#: ../lib/init/grass.py:860
 #, python-format
 msgid "<%s> is not a valid GRASS Location because PERMANENT is not a directory"
 msgstr ""
 
-#: ../lib/init/grass.py:861
+#: ../lib/init/grass.py:865
 #, python-format
 msgid "<%s> is not a valid GRASS Location because PERMANENT Mapset does not have a DEFAULT_WIND file (default computational region)"
 msgstr ""
 
-#: ../lib/init/grass.py:866
+#: ../lib/init/grass.py:870
 #, python-brace-format
 msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset can be created by '-c' switch."
 msgstr ""
 
-#: ../lib/init/grass.py:870
+#: ../lib/init/grass.py:874
 #, python-format
 msgid "<%s> is not a GRASS Mapset because it is not a directory"
 msgstr ""
 
-#: ../lib/init/grass.py:873
+#: ../lib/init/grass.py:877
 #, python-format
 msgid "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
 msgstr ""
 
-#: ../lib/init/grass.py:877
+#: ../lib/init/grass.py:881
 #, python-format
 msgid "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
 msgstr ""
 
-#: ../lib/init/grass.py:880
+#: ../lib/init/grass.py:884
 #, python-brace-format
 msgid "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reason"
 msgstr ""
 
-#: ../lib/init/grass.py:943
+#: ../lib/init/grass.py:947
 #, python-format
 msgid "Failed to create new location. The location <%s> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:950
+#: ../lib/init/grass.py:954
 msgid "Missing WIND file"
 msgstr ""
 
-#: ../lib/init/grass.py:968
+#: ../lib/init/grass.py:972
 msgid ""
 "GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
 "Interactive startup needed."
 msgstr ""
 
-#: ../lib/init/grass.py:992
+#: ../lib/init/grass.py:996
 #, python-format
 msgid "Invalid user interface specified - <%s>. Use the --help option to see valid interface names."
 msgstr ""
 
-#: ../lib/init/grass.py:1011
+#: ../lib/init/grass.py:1015
 #, python-brace-format
 msgid ""
 "Error in GUI startup. See messages above (if any) and if necessary, please report this error to the GRASS developers.\n"
@@ -3719,19 +3719,19 @@ msgid ""
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
 
-#: ../lib/init/grass.py:1023
+#: ../lib/init/grass.py:1027
 msgid ""
 "Exit was requested in GUI.\n"
 "GRASS GIS will not start. Bye."
 msgstr ""
 
-#: ../lib/init/grass.py:1026
+#: ../lib/init/grass.py:1030
 msgid ""
 "Invalid return code from GUI startup script.\n"
 "Please advise GRASS developers of this error."
 msgstr ""
 
-#: ../lib/init/grass.py:1073
+#: ../lib/init/grass.py:1077
 #, python-brace-format
 msgid ""
 "Error reading data path information from g.gisenv.\n"
@@ -3742,55 +3742,55 @@ msgid ""
 "Check the <{file}> file."
 msgstr ""
 
-#: ../lib/init/grass.py:1279
+#: ../lib/init/grass.py:1283
 #, python-format
 msgid "Path '%s' doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:1281
+#: ../lib/init/grass.py:1285
 #, python-format
 msgid "Path '%s' not accessible."
 msgstr ""
 
 #. GTC %s is mapset's folder path
-#: ../lib/init/grass.py:1286
+#: ../lib/init/grass.py:1290
 #, python-format
 msgid "You are not the owner of '%s'."
 msgstr ""
 
-#: ../lib/init/grass.py:1294
+#: ../lib/init/grass.py:1298
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed.\n"
 "You can force launching GRASS using -f flag (note that you need permission for this operation). Have another look in the processor manager just to be sure..."
 msgstr ""
 
-#: ../lib/init/grass.py:1301
+#: ../lib/init/grass.py:1305
 #, python-format
 msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Forcing to launch GRASS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1305
+#: ../lib/init/grass.py:1309
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personnel."
 msgstr ""
 
-#: ../lib/init/grass.py:1326
+#: ../lib/init/grass.py:1330
 msgid "Building user fontcap..."
 msgstr ""
 
-#: ../lib/init/grass.py:1385
+#: ../lib/init/grass.py:1389
 msgid "The SHELL variable is not set"
 msgstr ""
 
-#: ../lib/init/grass.py:1401
+#: ../lib/init/grass.py:1405
 #, python-brace-format
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr ""
 
-#: ../lib/init/grass.py:1417
+#: ../lib/init/grass.py:1421
 #, python-format
 msgid ""
 "Job file <%s> has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
@@ -3798,109 +3798,109 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:1424
+#: ../lib/init/grass.py:1428
 #, python-format
 msgid "Change file permission to 'executable' for <%s>"
 msgstr ""
 
-#: ../lib/init/grass.py:1439
+#: ../lib/init/grass.py:1443
 #, python-format
 msgid "Executing <%s> ..."
 msgstr ""
 
-#: ../lib/init/grass.py:1446
+#: ../lib/init/grass.py:1450
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
 "{error}"
 msgstr ""
 
-#: ../lib/init/grass.py:1449
+#: ../lib/init/grass.py:1453
 #, python-format
 msgid "Execution of <%s> finished."
 msgstr ""
 
-#: ../lib/init/grass.py:1480
+#: ../lib/init/grass.py:1484
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
 msgstr ""
 
-#: ../lib/init/grass.py:1507
+#: ../lib/init/grass.py:1511
 #, python-format
 msgid "Welcome to GRASS GIS %s"
 msgstr ""
 
-#: ../lib/init/grass.py:1529
+#: ../lib/init/grass.py:1533
 msgid "GRASS GIS homepage:"
 msgstr ""
 
 #. GTC Running through: SHELL NAME
-#: ../lib/init/grass.py:1531
+#: ../lib/init/grass.py:1535
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:1533
+#: ../lib/init/grass.py:1537
 msgid "Help is available with the command:"
 msgstr ""
 
-#: ../lib/init/grass.py:1534
+#: ../lib/init/grass.py:1538
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1535
+#: ../lib/init/grass.py:1539
 msgid "See citation options with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1538
+#: ../lib/init/grass.py:1542
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1540
+#: ../lib/init/grass.py:1544
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1542
+#: ../lib/init/grass.py:1546
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:1630
+#: ../lib/init/grass.py:1634
 msgid "2D and 3D raster MASKs present"
 msgstr ""
 
-#: ../lib/init/grass.py:1631
+#: ../lib/init/grass.py:1635
 msgid "Raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:1632
+#: ../lib/init/grass.py:1636
 msgid "3D raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:1675
+#: ../lib/init/grass.py:1679
 msgid "Done."
 msgstr ""
 
-#: ../lib/init/grass.py:1677
+#: ../lib/init/grass.py:1681
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:1682
+#: ../lib/init/grass.py:1686
 msgid "Cleaning up temporary files..."
 msgstr ""
 
-#: ../lib/init/grass.py:1702
+#: ../lib/init/grass.py:1706
 msgid "Please install the GRASS GIS development package"
 msgstr ""
 
-#: ../lib/init/grass.py:1736
+#: ../lib/init/grass.py:1740
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr ""
 
-#: ../lib/init/grass.py:1880
+#: ../lib/init/grass.py:1884
 msgid "Flag -e requires also flag -c"
 msgstr ""
 
-#: ../lib/init/grass.py:1927
+#: ../lib/init/grass.py:1931
 #, python-brace-format
 msgid ""
 "Unable to start GRASS GIS. You have the choice to:\n"
@@ -3917,25 +3917,25 @@ msgid ""
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
 
-#: ../lib/init/grass.py:1950
+#: ../lib/init/grass.py:1954
 msgid "Creating new GRASS GIS location/mapset..."
 msgstr ""
 
-#: ../lib/init/grass.py:1952
+#: ../lib/init/grass.py:1956
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1973
+#: ../lib/init/grass.py:1977
 #, python-brace-format
 msgid "<{0}> requested, but not available. Run GRASS in text mode (-text) or install missing package (usually 'grass-gui')."
 msgstr ""
 
-#: ../lib/init/grass.py:2027
+#: ../lib/init/grass.py:2031
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
 
-#: ../lib/init/grass.py:2049
+#: ../lib/init/grass.py:2053
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr ""
@@ -4737,152 +4737,165 @@ msgstr ""
 msgid "No ellipsoid info given in file %s in <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:355
-#, c-format
-msgid "BUG in option name, '%s' is not valid"
+#: ../lib/gis/parser.c:348
+msgid "Bug in UI description. Missing module description"
 msgstr ""
 
-#: ../lib/gis/parser.c:407
-#, c-format
-msgid "BUG in descriptions, option '%s' in <%s> does not exist"
+#: ../lib/gis/parser.c:358
+msgid "Bug in UI description. Missing option key"
 msgstr ""
 
-#: ../lib/gis/parser.c:525
+#: ../lib/gis/parser.c:360
+#, c-format
+msgid "Bug in UI description. Option key <%s> is not valid"
+msgstr ""
+
+#: ../lib/gis/parser.c:362
+#, c-format
+msgid "Bug in UI description. Description for option <%s> missing"
+msgstr ""
+
+#: ../lib/gis/parser.c:414
+#, c-format
+msgid "Bug in UI description. Option '%s' in <%s> does not exist"
+msgstr ""
+
+#: ../lib/gis/parser.c:532
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
 msgstr ""
 
-#: ../lib/gis/parser.c:539
+#: ../lib/gis/parser.c:546
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
 msgstr ""
 
-#: ../lib/gis/parser.c:554
+#: ../lib/gis/parser.c:561
 msgid "Use either --qq or --verbose flag, not both. Assuming --qq."
 msgstr ""
 
-#: ../lib/gis/parser.c:585
+#: ../lib/gis/parser.c:592
 #, c-format
 msgid "Sorry <%s> is not a valid option"
 msgstr ""
 
-#: ../lib/gis/parser.c:598
+#: ../lib/gis/parser.c:605
 msgid "Your installation doesn't include GUI, exiting."
 msgstr ""
 
-#: ../lib/gis/parser.c:943
+#: ../lib/gis/parser.c:950
 msgid "Unable to determine program name"
 msgstr ""
 
-#: ../lib/gis/parser.c:965 ../lib/gis/parser.c:984
+#: ../lib/gis/parser.c:972 ../lib/gis/parser.c:991
 #, c-format
 msgid "%s: Sorry, <%c> is not a valid flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:1114
+#: ../lib/gis/parser.c:1121
 #, c-format
 msgid "%s: Sorry, <%s=> is ambiguous"
 msgstr ""
 
-#: ../lib/gis/parser.c:1117
+#: ../lib/gis/parser.c:1124
 #, c-format
 msgid "Option <%s=> matches"
 msgstr ""
 
-#: ../lib/gis/parser.c:1135
+#: ../lib/gis/parser.c:1142
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1148
+#: ../lib/gis/parser.c:1155
 #, c-format
 msgid "%s: Sorry, <%s> is not a valid parameter"
 msgstr ""
 
-#: ../lib/gis/parser.c:1154 ../lib/gis/parser.c:1400
+#: ../lib/gis/parser.c:1161 ../lib/gis/parser.c:1407
 #, c-format
 msgid "<%s> is an abbreviation for <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1159
+#: ../lib/gis/parser.c:1166
 #, c-format
 msgid "Option <%s> does not accept multiple answers"
 msgstr ""
 
-#: ../lib/gis/parser.c:1231
+#: ../lib/gis/parser.c:1238
 #, c-format
 msgid ""
 "Illegal range syntax for parameter <%s>\n"
 "\tPresented as: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1237
+#: ../lib/gis/parser.c:1244
 #, c-format
 msgid ""
 "Value <%s> out of range for parameter <%s>\n"
 "\tLegal range: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1243
+#: ../lib/gis/parser.c:1250
 #, c-format
 msgid "Missing value for parameter <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1249
+#: ../lib/gis/parser.c:1256
 #, c-format
 msgid ""
 "Value <%s> ambiguous for parameter <%s>\n"
 "\tValid options: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1422
+#: ../lib/gis/parser.c:1429
 #, c-format
 msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
 msgstr ""
 
-#: ../lib/gis/parser.c:1514
+#: ../lib/gis/parser.c:1521
 #, c-format
 msgid ""
 "Option <%s> must be provided in multiples of %d\n"
 "\tYou provided %d item(s): %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1588 ../lib/gis/error.c:363
+#: ../lib/gis/parser.c:1595 ../lib/gis/error.c:363
 #, c-format
 msgid "ERROR: "
 msgstr ""
 
-#: ../lib/gis/parser.c:1590 ../lib/gis/parser.c:1597
+#: ../lib/gis/parser.c:1597 ../lib/gis/parser.c:1604
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:1707
+#: ../lib/gis/parser.c:1714
 #, c-format
 msgid "%s= is not a separator option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1710
+#: ../lib/gis/parser.c:1717
 #, c-format
 msgid "No separator given for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1772 ../lib/gis/parser.c:1789
+#: ../lib/gis/parser.c:1779 ../lib/gis/parser.c:1796
 #, c-format
 msgid "%s= is not a file option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1774
+#: ../lib/gis/parser.c:1781
 #, c-format
 msgid "Opening multiple files not supported for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1780
+#: ../lib/gis/parser.c:1787
 #, c-format
 msgid "Unable to open %s file <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1786
+#: ../lib/gis/parser.c:1793
 #, c-format
 msgid "Unable to create %s file <%s>"
 msgstr ""
@@ -7044,7 +7057,7 @@ msgstr ""
 #: ../lib/vector/Vlib/header_finfo.c:113 ../lib/vector/Vlib/header_finfo.c:153
 #: ../lib/vector/Vlib/header_finfo.c:254 ../lib/vector/Vlib/close.c:284
 #: ../lib/vector/Vlib/close_ogr.c:77 ../lib/vector/Vlib/close_ogr.c:111
-#: ../lib/proj/convert.c:64
+#: ../lib/proj/convert.c:98
 msgid "GRASS is not compiled with OGR support"
 msgstr ""
 
@@ -8226,10 +8239,10 @@ msgstr ""
 msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
-#: ../lib/vector/Vlib/intersect2.c:1231 ../lib/vector/Vlib/intersect2.c:1237
-#: ../lib/vector/Vlib/intersect2.c:1239 ../lib/vector/Vlib/intersect2.c:1291
-#: ../lib/vector/Vlib/intersect2.c:1300 ../lib/vector/Vlib/intersect2.c:1321
-#: ../lib/vector/Vlib/intersect2.c:1338 ../lib/vector/Vlib/intersect.c:1194
+#: ../lib/vector/Vlib/intersect2.c:1246 ../lib/vector/Vlib/intersect2.c:1252
+#: ../lib/vector/Vlib/intersect2.c:1254 ../lib/vector/Vlib/intersect2.c:1306
+#: ../lib/vector/Vlib/intersect2.c:1315 ../lib/vector/Vlib/intersect2.c:1336
+#: ../lib/vector/Vlib/intersect2.c:1353 ../lib/vector/Vlib/intersect.c:1194
 #: ../lib/vector/Vlib/intersect.c:1200 ../lib/vector/Vlib/intersect.c:1202
 #: ../lib/vector/Vlib/intersect.c:1257 ../lib/vector/Vlib/intersect.c:1266
 #: ../lib/vector/Vlib/intersect.c:1287 ../lib/vector/Vlib/intersect.c:1304
@@ -9342,29 +9355,29 @@ msgstr ""
 msgid "conditions failed"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_nat.c:130
+#: ../lib/vector/Vlib/build_nat.c:132
 msgid "Building areas..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build_nat.c:154
+#: ../lib/vector/Vlib/build_nat.c:156
 #, c-format
 msgid "One area built"
 msgid_plural "%d areas built"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../lib/vector/Vlib/build_nat.c:155
+#: ../lib/vector/Vlib/build_nat.c:157
 #, c-format
 msgid "One isle built"
 msgid_plural "%d isles built"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../lib/vector/Vlib/build_nat.c:164
+#: ../lib/vector/Vlib/build_nat.c:168
 msgid "Attaching islands..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build_nat.c:181
+#: ../lib/vector/Vlib/build_nat.c:188
 msgid "Attaching centroids..."
 msgstr ""
 
@@ -9405,42 +9418,46 @@ msgstr ""
 msgid "Unable to open select cursor: %s"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:148
+#: ../lib/proj/get_proj.c:158
 #, c-format
 msgid "Invalid zone %s specified"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:228
-msgid "Unable to initialise PROJ.4 with the following parameter list:"
+#: ../lib/proj/get_proj.c:243
+msgid "Unable to initialise PROJ with the following parameter list:"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:236
-#, c-format
-msgid "The error message: %s"
+#: ../lib/proj/get_proj.c:252
+#, fuzzy, c-format
+msgid "The PROJ error message: %s"
 msgstr "A hibaüzenet: %s"
 
-#: ../lib/proj/get_proj.c:294
+#: ../lib/proj/get_proj.c:360
 msgid "Option input overflowed option table"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:325
+#: ../lib/proj/get_proj.c:388
+msgid "Unable to initialize pj"
+msgstr ""
+
+#: ../lib/proj/get_proj.c:396
 #, c-format
 msgid "Unable to initialize pj cause: %s"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:401
+#: ../lib/proj/get_proj.c:501
 msgid "Input Projection Parameters"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:404
+#: ../lib/proj/get_proj.c:503
 msgid "Input Unit Factor"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:414
+#: ../lib/proj/get_proj.c:513
 msgid "Output Projection Parameters"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:417
+#: ../lib/proj/get_proj.c:515
 msgid "Output Unit Factor"
 msgstr ""
 
@@ -9475,53 +9492,86 @@ msgstr ""
 msgid "Error in datum table file <%s>, line %d"
 msgstr ""
 
-#: ../lib/proj/convert.c:159
+#: ../lib/proj/convert.c:194
 msgid "Unable parse GRASS PROJ_INFO file"
 msgstr ""
 
-#: ../lib/proj/convert.c:164
+#: ../lib/proj/convert.c:201
 msgid "Unable get PROJ.4-style parameter string"
 msgstr ""
 
-#: ../lib/proj/convert.c:178
+#: ../lib/proj/convert.c:219
 #, c-format
 msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr ""
 
-#: ../lib/proj/convert.c:191
+#: ../lib/proj/convert.c:232
 #, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
 msgstr ""
 
-#: ../lib/proj/convert.c:427
+#: ../lib/proj/convert.c:469
 #, c-format
 msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
 msgstr ""
 
-#: ../lib/proj/convert.c:434
+#: ../lib/proj/convert.c:476
 msgid "Updating spatial reference with embedded proj4 definition"
 msgstr ""
 
-#: ../lib/proj/convert.c:564
+#: ../lib/proj/convert.c:610
 msgid "No projection name! Projection parameters likely to be meaningless."
 msgstr ""
 
-#: ../lib/proj/convert.c:626
+#: ../lib/proj/convert.c:672
 #, c-format
 msgid "Datum <%s> not recognised by GRASS and no parameters found"
 msgstr ""
 
-#: ../lib/proj/convert.c:642
+#: ../lib/proj/convert.c:688
 #, c-format
 msgid "Datum <%s> apparently recognised by GRASS but no parameters found. You may want to look into this."
 msgstr ""
 
-#: ../lib/proj/convert.c:646
+#: ../lib/proj/convert.c:692
 #, c-format
 msgid "Invalid transformation number %d; valid range is 1 to %d. Leaving datum transform parameters unspecified."
 msgstr ""
 
-#: ../lib/proj/do_proj.c:106 ../lib/proj/do_proj.c:180
+#: ../lib/proj/do_proj.c:87
+msgid "Input coordinate system is NULL"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:100
+#, c-format
+msgid "proj_create() failed for '%s'"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:110
+#, c-format
+msgid "Unable to create latlong equivalent for '%s'"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:160
+msgid "No input projection"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:163 ../lib/proj/do_proj.c:332
+msgid "No transformation object"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:217 ../lib/proj/do_proj.c:442
+#: ../lib/proj/do_proj.c:580 ../lib/proj/do_proj.c:743
+#, c-format
+msgid "proj_trans() failed: %d"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:243
+msgid "No output projection"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:272 ../lib/proj/do_proj.c:495
+#: ../lib/proj/do_proj.c:622 ../lib/proj/do_proj.c:786
 #, c-format
 msgid "pj_transform() failed: %s"
 msgstr ""
@@ -9543,3 +9593,6 @@ msgstr ""
 #, c-format
 msgid "Unable to access table <%s>"
 msgstr ""
+
+#~ msgid "The error message: %s"
+#~ msgstr "A hibaüzenet: %s"
