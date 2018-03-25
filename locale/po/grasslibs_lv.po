@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-24 01:06+0100\n"
+"POT-Creation-Date: 2018-03-25 16:18+0200\n"
 "PO-Revision-Date: 2017-04-01 17:03+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian <grass-translations@lists.osgeo.org>\n"
@@ -5091,433 +5091,433 @@ msgstr "SQL SELECT izteikums"
 msgid "Example: select * from towns where population > 10000"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:156
+#: ../lib/gis/parser_standard_options.c:157
 msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:157
+#: ../lib/gis/parser_standard_options.c:158
 msgid "Example: income < 1000 and population >= 10000"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:165
+#: ../lib/gis/parser_standard_options.c:166
 msgid "Name of attribute table"
 msgstr "Atribūtu tabulas nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:174
+#: ../lib/gis/parser_standard_options.c:175
 msgid "Name of database driver"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:183
+#: ../lib/gis/parser_standard_options.c:184
 msgid "Name of database"
 msgstr "Datubāzes nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:192
+#: ../lib/gis/parser_standard_options.c:193
 msgid "Database schema"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:193
+#: ../lib/gis/parser_standard_options.c:194
 msgid ""
 "Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:202
+#: ../lib/gis/parser_standard_options.c:203
 msgid "Name of attribute column"
 msgstr "Atribūtu kolonas nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:211
+#: ../lib/gis/parser_standard_options.c:212
 msgid "Name of attribute column(s)"
 msgstr "Atribūtu kolonu nosaukumi"
 
-#: ../lib/gis/parser_standard_options.c:220
+#: ../lib/gis/parser_standard_options.c:221
 msgid "Name of key column"
 msgstr "Primārās atslēgas kolonas nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:221
+#: ../lib/gis/parser_standard_options.c:222
 msgid "Must refer to an integer column"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:233
+#: ../lib/gis/parser_standard_options.c:234
 msgid "Name of input imagery group"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:241
+#: ../lib/gis/parser_standard_options.c:242
 msgid "Name of input imagery subgroup"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:251
+#: ../lib/gis/parser_standard_options.c:252
 msgid "Name of input raster map"
 msgstr "Ievades rastra faila nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:260
+#: ../lib/gis/parser_standard_options.c:261
 msgid "Name of input raster map(s)"
 msgstr "Ievades rastra kartes/šu nosaukums/i"
 
-#: ../lib/gis/parser_standard_options.c:268
+#: ../lib/gis/parser_standard_options.c:269
 msgid "Name for output raster map"
 msgstr "Izvades rastra kartes nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:277
+#: ../lib/gis/parser_standard_options.c:278
 msgid "Name for output raster map(s)"
 msgstr "Izvades rastra kartes/šu nosaukums/i"
 
-#: ../lib/gis/parser_standard_options.c:285
+#: ../lib/gis/parser_standard_options.c:286
 msgid "Name of raster map"
 msgstr "Rastra kartes nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:294
+#: ../lib/gis/parser_standard_options.c:295
 msgid "Name of raster map(s)"
 msgstr "Rastra kartes/šu nosaukums/i"
 
-#: ../lib/gis/parser_standard_options.c:302
+#: ../lib/gis/parser_standard_options.c:303
 msgid "Name of base raster map"
 msgstr "Bāzes rastra faila nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:310
+#: ../lib/gis/parser_standard_options.c:311
 msgid "Name of cover raster map"
 msgstr "Pārklājuma rastra faila nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:318
+#: ../lib/gis/parser_standard_options.c:319
 msgid "Name of input elevation raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:327
+#: ../lib/gis/parser_standard_options.c:328
 msgid "Name of input elevation raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:334
+#: ../lib/gis/parser_standard_options.c:335
 msgid "Type of raster map to be created"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:335
+#: ../lib/gis/parser_standard_options.c:336
 msgid "Storage type for resultant raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:339
+#: ../lib/gis/parser_standard_options.c:340
 msgid "Integer"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:340
+#: ../lib/gis/parser_standard_options.c:341
 msgid "Single precision floating point"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:341
+#: ../lib/gis/parser_standard_options.c:342
 msgid "Double precision floating point"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:347
+#: ../lib/gis/parser_standard_options.c:348
 msgid "Sampling interpolation method"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:351
+#: ../lib/gis/parser_standard_options.c:352
 msgid "Nearest-neighbor interpolation"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:352
+#: ../lib/gis/parser_standard_options.c:353
 msgid "Bilinear interpolation"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:353
+#: ../lib/gis/parser_standard_options.c:354
 msgid "Bicubic interpolation"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:362
+#: ../lib/gis/parser_standard_options.c:363
 msgid "Name of input basename raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:371
+#: ../lib/gis/parser_standard_options.c:372
 msgid "Name for output basename raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:381
+#: ../lib/gis/parser_standard_options.c:382
 msgid "Name of input 3D raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:390
+#: ../lib/gis/parser_standard_options.c:391
 msgid "Name of input 3D raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:398
+#: ../lib/gis/parser_standard_options.c:399
 msgid "Name for output 3D raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:406
+#: ../lib/gis/parser_standard_options.c:407
 msgid "Name of 3D raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:415
+#: ../lib/gis/parser_standard_options.c:416
 msgid "Name of 3D raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:424
+#: ../lib/gis/parser_standard_options.c:425
 msgid "Data type used in the output raster3d map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:433
+#: ../lib/gis/parser_standard_options.c:434
 msgid ""
 "Number of digits used as mantissa in the internal map storage, 0 -23 for "
 "float, 0 - 52 for double, max or default"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:443
+#: ../lib/gis/parser_standard_options.c:444
 msgid "The compression method used in the output raster3d map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:453
+#: ../lib/gis/parser_standard_options.c:454
 msgid ""
 "The dimensions of the tiles used in the output raster3d map (XxYxZ or "
 "default: 16x16x8)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:463
+#: ../lib/gis/parser_standard_options.c:464
 msgid "Name of input vector map"
 msgstr "Ieejas vektorkartes nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:464
-#: ../lib/gis/parser_standard_options.c:491
+#: ../lib/gis/parser_standard_options.c:465
+#: ../lib/gis/parser_standard_options.c:492
 msgid "Or data source for direct OGR access"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:473
+#: ../lib/gis/parser_standard_options.c:474
 msgid "Name of input vector map(s)"
 msgstr "Ieejas vektorkartes/šu nosaukums/i"
 
-#: ../lib/gis/parser_standard_options.c:474
+#: ../lib/gis/parser_standard_options.c:475
 msgid "Or data source(s) for direct OGR access"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:482
+#: ../lib/gis/parser_standard_options.c:483
 msgid "Name for output vector map"
 msgstr "Izvades vektoru kartes nosaukums "
 
-#: ../lib/gis/parser_standard_options.c:490
+#: ../lib/gis/parser_standard_options.c:491
 msgid "Name of vector map"
 msgstr "Vektoru kartes nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:500
+#: ../lib/gis/parser_standard_options.c:501
 msgid "Name of vector map(s)"
 msgstr "Vektoru kartes/šu nosaukums/i"
 
-#: ../lib/gis/parser_standard_options.c:509
-#: ../lib/gis/parser_standard_options.c:518
+#: ../lib/gis/parser_standard_options.c:510
+#: ../lib/gis/parser_standard_options.c:519
 msgid "Input feature type"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:525
+#: ../lib/gis/parser_standard_options.c:526
 msgid "Layer number or name"
 msgstr "Slāņa numurs vai nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:527
+#: ../lib/gis/parser_standard_options.c:528
 msgid ""
 "Vector features can have category values in different layers. This number "
 "determines which layer to use. When used with direct OGR access this is the "
 "layer name."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:537
+#: ../lib/gis/parser_standard_options.c:538
 msgid "Layer number or name ('-1' for all layers)"
 msgstr "Slāņa numurs vai nosaukums ('-1' priekš visiem slāņiem)"
 
-#: ../lib/gis/parser_standard_options.c:539
+#: ../lib/gis/parser_standard_options.c:540
 msgid ""
 "A single vector map can be connected to multiple database tables. This "
 "number determines which table to use. When used with direct OGR access this "
 "is the layer name."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:548
+#: ../lib/gis/parser_standard_options.c:549
 msgid "Category value"
 msgstr "Kategorijas vērtība"
 
-#: ../lib/gis/parser_standard_options.c:556
+#: ../lib/gis/parser_standard_options.c:557
 msgid "Category values"
 msgstr "Kategoriju vērtības"
 
-#: ../lib/gis/parser_standard_options.c:557
-#: ../lib/gis/parser_standard_options.c:572
+#: ../lib/gis/parser_standard_options.c:558
+#: ../lib/gis/parser_standard_options.c:573
 msgid "Example: 1,3,7-9,13"
 msgstr "Piemēram: 1,3,7-9,13"
 
-#: ../lib/gis/parser_standard_options.c:564
+#: ../lib/gis/parser_standard_options.c:565
 msgid "Feature id"
 msgstr "Objekta id"
 
-#: ../lib/gis/parser_standard_options.c:571
+#: ../lib/gis/parser_standard_options.c:572
 msgid "Feature ids"
 msgstr "Objektu id"
 
-#: ../lib/gis/parser_standard_options.c:582
-#: ../lib/gis/parser_standard_options.c:590
+#: ../lib/gis/parser_standard_options.c:583
+#: ../lib/gis/parser_standard_options.c:591
 msgid "Name of input file"
 msgstr "Ievades faila nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:598
+#: ../lib/gis/parser_standard_options.c:599
 msgid "Name for output file"
 msgstr "Izvades faila nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:607
+#: ../lib/gis/parser_standard_options.c:608
 msgid "Field separator"
 msgstr "Lauka atdalītājs"
 
-#: ../lib/gis/parser_standard_options.c:608
+#: ../lib/gis/parser_standard_options.c:609
 msgid "Special characters: pipe, comma, space, tab, newline"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:619
-#: ../lib/gis/parser_standard_options.c:630
+#: ../lib/gis/parser_standard_options.c:620
+#: ../lib/gis/parser_standard_options.c:631
 msgid "Color"
 msgstr "Krāsa"
 
-#: ../lib/gis/parser_standard_options.c:621
+#: ../lib/gis/parser_standard_options.c:622
 msgid "Either a standard color name or R:G:B triplet"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:632
+#: ../lib/gis/parser_standard_options.c:633
 msgid "Either a standard color name, R:G:B triplet, or \"none\""
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:643
+#: ../lib/gis/parser_standard_options.c:644
 msgid "Name of input directory"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:653
+#: ../lib/gis/parser_standard_options.c:654
 msgid "Units"
 msgstr "Vienības"
 
-#: ../lib/gis/parser_standard_options.c:662
+#: ../lib/gis/parser_standard_options.c:663
 msgid "Data type(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:672
+#: ../lib/gis/parser_standard_options.c:673
 msgid "Name of mapset (default: current search path)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:673
+#: ../lib/gis/parser_standard_options.c:674
 msgid "'.' for current mapset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:681
+#: ../lib/gis/parser_standard_options.c:682
 msgid "Location name"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:682
+#: ../lib/gis/parser_standard_options.c:683
 msgid "Location name (not location path)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:692
+#: ../lib/gis/parser_standard_options.c:693
 msgid "GRASS GIS database directory"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:693
+#: ../lib/gis/parser_standard_options.c:694
 msgid "Default: path to the current GRASS GIS database"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:705
+#: ../lib/gis/parser_standard_options.c:706
 msgid "Coordinates"
 msgstr "Koordinātes"
 
-#: ../lib/gis/parser_standard_options.c:714
+#: ../lib/gis/parser_standard_options.c:715
 msgid "Name of color table"
 msgstr "Krāsu tabulas nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:725
+#: ../lib/gis/parser_standard_options.c:726
 msgid "String representing NULL value"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:734
+#: ../lib/gis/parser_standard_options.c:735
 msgid "Name of saved region"
 msgstr "Saglabātā reģiona nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:744
+#: ../lib/gis/parser_standard_options.c:745
 msgid "Name of the input space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:753
+#: ../lib/gis/parser_standard_options.c:754
 msgid "Name of the input space time datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:761
+#: ../lib/gis/parser_standard_options.c:762
 msgid "Name of the output space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:769
+#: ../lib/gis/parser_standard_options.c:770
 msgid "Name of the input space time raster dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:778
+#: ../lib/gis/parser_standard_options.c:779
 msgid "Name of the input space time raster datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:786
+#: ../lib/gis/parser_standard_options.c:787
 msgid "Name of the output space time raster dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:794
+#: ../lib/gis/parser_standard_options.c:795
 msgid "Name of the input space time vector dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:803
+#: ../lib/gis/parser_standard_options.c:804
 msgid "Name of the input space time vector datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:811
+#: ../lib/gis/parser_standard_options.c:812
 msgid "Name of the output space time vector dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:819
+#: ../lib/gis/parser_standard_options.c:820
 msgid "Name of the input space time raster3d dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:828
+#: ../lib/gis/parser_standard_options.c:829
 msgid "Name of the input space time raster3d datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:836
+#: ../lib/gis/parser_standard_options.c:837
 msgid "Name of the output space time raster3d dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:845
+#: ../lib/gis/parser_standard_options.c:846
 msgid "Type of the input space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:853
+#: ../lib/gis/parser_standard_options.c:854
 msgid "Name of the input map"
 msgstr "Ievades kartes nosaukums"
 
-#: ../lib/gis/parser_standard_options.c:862
+#: ../lib/gis/parser_standard_options.c:863
 msgid "Name of the input maps"
 msgstr "Ievades karšu nosaukumi"
 
-#: ../lib/gis/parser_standard_options.c:871
+#: ../lib/gis/parser_standard_options.c:872
 msgid "Type of the input map"
 msgstr "Ievades kartes tips"
 
-#: ../lib/gis/parser_standard_options.c:880
+#: ../lib/gis/parser_standard_options.c:881
 msgid "The temporal type of the space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:887
+#: ../lib/gis/parser_standard_options.c:888
 msgid ""
 "WHERE conditions of SQL statement without 'where' keyword used in the "
 "temporal GIS framework"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:888
+#: ../lib/gis/parser_standard_options.c:889
 msgid "Example: start_time > '2001-01-01 12:30:00'"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:898
+#: ../lib/gis/parser_standard_options.c:899
 msgid "The method to be used for sampling the input dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:932
+#: ../lib/gis/parser_standard_options.c:933
 msgid "Do not create attribute table"
 msgstr "Neveidot atribūtu tabulu"
 
-#: ../lib/gis/parser_standard_options.c:936
+#: ../lib/gis/parser_standard_options.c:937
 msgid "Do not build topology"
 msgstr "Neveidot topoloģiju"
 
-#: ../lib/gis/parser_standard_options.c:937
+#: ../lib/gis/parser_standard_options.c:938
 msgid "Advantageous when handling a large number of points"
 msgstr ""
 
