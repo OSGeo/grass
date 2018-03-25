@@ -85,24 +85,25 @@ class SQLBuilder(wx.Frame):
         self.SetClientSize(self.panel.GetSize())
         self.CenterOnParent()
 
-    def _doLayout(self, modeChoices):
+    def _doLayout(self, modeChoices, showDbInfo=False):
         """Do dialog layout"""
 
         self.pagesizer = wx.BoxSizer(wx.VERTICAL)
 
         # dbInfo
-        databasebox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
+        if showDbInfo:
+            databasebox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
                                    label=" %s " % _("Database connection"))
-        databaseboxsizer = wx.StaticBoxSizer(databasebox, wx.VERTICAL)
-        databaseboxsizer.Add(
-            CreateDbInfoDesc(
-                self.panel,
-                self.dbInfo,
-                layer=self.layer),
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=3)
-
+            databaseboxsizer = wx.StaticBoxSizer(databasebox, wx.VERTICAL)
+            databaseboxsizer.Add(
+                CreateDbInfoDesc(
+                    self.panel,
+                    self.dbInfo,
+                    layer=self.layer),
+                proportion=1,
+                flag=wx.EXPAND | wx.ALL,
+                border=3)
+        
         #
         # text areas
         #
@@ -296,8 +297,9 @@ class SQLBuilder(wx.Frame):
                                          label=_("Close dialog on apply"))
         self.close_onapply.SetValue(True)
 
-        self.pagesizer.Add(databaseboxsizer,
-                           flag=wx.ALL | wx.EXPAND, border=5)
+        if showDbInfo:
+            self.pagesizer.Add(databaseboxsizer,
+                               flag=wx.ALL | wx.EXPAND, border=5)
         self.pagesizer.Add(
             modesizer,
             proportion=0,
@@ -355,10 +357,12 @@ class SQLBuilder(wx.Frame):
 
         self.list_values.Clear()
 
+        sql = "SELECT DISTINCT {column} FROM {table} ORDER BY {column}".format(
+            column=column, table=self.tablename)
+        if justsample:
+            sql += " LIMIT {}".format(255)
         data = grass.db_select(
-            sql="SELECT %s FROM %s" %
-            (column,
-             self.tablename),
+            sql=sql,
             database=self.database,
             driver=self.driver,
             sep='{_sep_}')
@@ -369,17 +373,16 @@ class SQLBuilder(wx.Frame):
             self.dbInfo.GetTable(self.layer))[column]
 
         i = 0
-        for item in sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
-            if justsample and i > 255:
-                break
-
-            if desc['type'] != 'character':
-                item = str(item)
+        items = []
+        for item in data: #sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
+            if desc['type'] not in ('character', 'text'):
+                items.append(str(item[0]))
             else:
-                item = GetUnicodeValue(item)
-            self.list_values.Append(item)
+                items.append(u"'{}'".format(GetUnicodeValue(item[0])))
             i += 1
 
+        self.list_values.AppendItems(items)
+        
     def OnSampleValues(self, event):
         """Get sample values"""
         self.OnUniqueValues(None, True)

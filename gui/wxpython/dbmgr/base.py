@@ -639,13 +639,15 @@ class VirtualAttributeList(wx.ListCtrl,
 
     def SortItems(self, sorter=cmp):
         """Sort items"""
+        wx.BeginBusyCursor()
         items = list(self.itemDataMap.keys())
         items.sort(self.Sorter)
         self.itemIndexMap = items
 
         # redraw the list
         self.Refresh()
-
+        wx.EndBusyCursor()
+        
     def Sorter(self, key1, key2):
         colName = self.GetColumn(self._col).GetText()
         ascending = self._colSortFlag[self._col]
@@ -661,7 +663,7 @@ class VirtualAttributeList(wx.ListCtrl,
         if isinstance(
                 item1, types.StringType) or isinstance(
                 item2, types.StringTypes):
-            cmpVal = locale.strcoll(str(item1), str(item2))
+            cmpVal = locale.strcoll(GetUnicodeValue(item1), GetUnicodeValue(item2))
         else:
             cmpVal = cmp(item1, item2)
 
