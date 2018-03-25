@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-24 01:06+0100\n"
+"POT-Creation-Date: 2018-03-25 16:18+0200\n"
 "PO-Revision-Date: 2005-06-10 11:15+0200\n"
 "Last-Translator: Miha Staut <mihastaut@yahoo.co.uk>\n"
 "Language-Team: Slovenščina <grass-translations@lists.osgeo.org>\n"
@@ -3636,7 +3636,8 @@ msgstr ""
 #: ../locale/scriptstrings/v.unpack_to_translate.c:1
 #, fuzzy
 msgid ""
-"Imports a vector map as GRASS GIS specific archive file (packed with v.pack)"
+"Imports a GRASS GIS specific vector archive file (packed with v.pack) as a "
+"vector map"
 msgstr "Ime rastrskega sloja"
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:5
@@ -3796,7 +3797,8 @@ msgstr "Naslov izhodnega rastrskega sloja"
 #: ../locale/scriptstrings/r.unpack_to_translate.c:1
 #, fuzzy
 msgid ""
-"Imports a raster map as GRASS GIS specific archive file (packed with r.pack)"
+"Imports a GRASS GIS specific raster archive file (packed with r.pack) as a "
+"raster map"
 msgstr "Ime rastrskega sloja"
 
 #: ../locale/scriptstrings/r.unpack_to_translate.c:6
@@ -26181,7 +26183,7 @@ msgstr "Ne najdem vhodne datoteke %s\n"
 msgid "Invalid PPM file"
 msgstr "neveljavna regija: %s"
 
-#: ../general/g.pnmcomp/main.c:96 ../scripts/v.unpack/v.unpack.py:76
+#: ../general/g.pnmcomp/main.c:96 ../scripts/v.unpack/v.unpack.py:75
 #: ../scripts/v.in.geonames/v.in.geonames.py:57
 #: ../scripts/v.db.update/v.db.update.py:92
 #, fuzzy, c-format, python-format
@@ -26411,22 +26413,10 @@ msgstr ""
 msgid "Unable to translate EPSG code"
 msgstr "ne morem posodobiti meja"
 
-#: ../general/g.proj/input.c:247
-msgid "Trying to open with OGR..."
-msgstr ""
-
-#: ../general/g.proj/input.c:255 ../general/g.proj/input.c:274
-msgid "...succeeded."
-msgstr ""
-
-#: ../general/g.proj/input.c:268
-msgid "Trying to open with GDAL..."
-msgstr ""
-
 #: ../general/g.proj/input.c:284
-#, c-format
-msgid "Could not read georeferenced file %s using either OGR nor GDAL"
-msgstr ""
+#, fuzzy, c-format
+msgid "Unable to read georeferenced file <%s> using GDAL library"
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #: ../general/g.proj/input.c:289
 #, c-format
@@ -36811,13 +36801,13 @@ msgstr ""
 msgid "4 parameters required for 'spatial' parameter"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:542 ../scripts/v.unpack/v.unpack.py:119
+#: ../vector/v.in.lidar/main.c:542 ../scripts/v.unpack/v.unpack.py:118
 #, fuzzy, c-format, python-format
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr "Ime izhodnega vektorskega sloja"
 
 #: ../vector/v.in.lidar/main.c:545 ../vector/v.in.ogr/main.c:674
-#: ../vector/v.edit/main.c:99 ../scripts/v.unpack/v.unpack.py:117
+#: ../vector/v.edit/main.c:99 ../scripts/v.unpack/v.unpack.py:116
 #, fuzzy, c-format, python-format
 msgid "Vector map <%s> already exists"
 msgstr "dig_att datoteka ne obstaja."
@@ -46747,53 +46737,53 @@ msgstr ""
 msgid "No graphics device selected. Use d.mon to select graphics device."
 msgstr "Nobena grafična naprava ni izbrana"
 
-#: ../scripts/r.in.srtm/r.in.srtm.py:143
+#: ../scripts/r.in.srtm/r.in.srtm.py:168
 msgid "This module only operates in LatLong locations"
 msgstr ""
 
-#: ../scripts/r.in.srtm/r.in.srtm.py:161
-msgid "The \"unzip\" program is required, please install it first"
-msgstr ""
-
-#: ../scripts/r.in.srtm/r.in.srtm.py:168
+#: ../scripts/r.in.srtm/r.in.srtm.py:193
 #, python-format
 msgid "'%s' does not appear to be a valid zip file."
 msgstr ""
 
-#: ../scripts/r.in.srtm/r.in.srtm.py:175
+#: ../scripts/r.in.srtm/r.in.srtm.py:200
 #, fuzzy, python-format
 msgid "File '%s' or '%s' not found"
 msgstr "Ne najdem rastrskega sloja <%s>"
 
-#: ../scripts/r.in.srtm/r.in.srtm.py:197
+#: ../scripts/r.in.srtm/r.in.srtm.py:226
 #, fuzzy, python-format
 msgid "Extracting '%s'..."
 msgstr "Zapisujem novo datoteko...\n"
 
-#: ../scripts/r.in.srtm/r.in.srtm.py:199
+#: ../scripts/r.in.srtm/r.in.srtm.py:231
 #, fuzzy
 msgid "Unable to unzip file."
 msgstr "Ime izhodne datoteke"
 
-#: ../scripts/r.in.srtm/r.in.srtm.py:201
+#: ../scripts/r.in.srtm/r.in.srtm.py:233
 #, fuzzy
 msgid "Converting input file to BIL..."
 msgstr "Rišem ..."
 
-#: ../scripts/r.in.srtm/r.in.srtm.py:225
-msgid "Attempting to import 1-arcsec data."
+#: ../scripts/r.in.srtm/r.in.srtm.py:257
+msgid "Attempting to import 1-arcsec SWBD data"
 msgstr ""
 
-#: ../scripts/r.in.srtm/r.in.srtm.py:243
+#: ../scripts/r.in.srtm/r.in.srtm.py:260
+msgid "Attempting to import 1-arcsec data"
+msgstr ""
+
+#: ../scripts/r.in.srtm/r.in.srtm.py:278
 #, fuzzy
 msgid "Unable to import data"
 msgstr "ne morem odpreti <%s>"
 
-#: ../scripts/r.in.srtm/r.in.srtm.py:251
+#: ../scripts/r.in.srtm/r.in.srtm.py:287
 msgid "Done: generated map "
 msgstr ""
 
-#: ../scripts/r.in.srtm/r.in.srtm.py:252
+#: ../scripts/r.in.srtm/r.in.srtm.py:288
 msgid ""
 "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
 msgstr ""
@@ -47355,11 +47345,11 @@ msgid "File {name} not found."
 msgstr "Ne najdem rastrskega sloja <%s>"
 
 #: ../scripts/r.unpack/r.unpack.py:82 ../scripts/r.unpack/r.unpack.py:120
-#: ../scripts/v.unpack/v.unpack.py:86 ../scripts/v.unpack/v.unpack.py:133
+#: ../scripts/v.unpack/v.unpack.py:85 ../scripts/v.unpack/v.unpack.py:132
 msgid "Pack file unreadable"
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:91 ../scripts/v.unpack/v.unpack.py:95
+#: ../scripts/r.unpack/r.unpack.py:91 ../scripts/v.unpack/v.unpack.py:94
 msgid "Pack file unreadable: file '{}' missing"
 msgstr ""
 
@@ -47390,21 +47380,21 @@ msgid ""
 "PROJ_INFO file is missing, unpack raster map in XY (unprojected) location."
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:158 ../scripts/v.unpack/v.unpack.py:164
+#: ../scripts/r.unpack/r.unpack.py:158 ../scripts/v.unpack/v.unpack.py:163
 #, python-brace-format
 msgid ""
 "Difference between PROJ_INFO file of packed map and of current location:\n"
 "{diff}"
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:161 ../scripts/v.unpack/v.unpack.py:167
+#: ../scripts/r.unpack/r.unpack.py:161 ../scripts/v.unpack/v.unpack.py:166
 #, python-brace-format
 msgid ""
 "Difference between PROJ_UNITS file of packed map and of current location:\n"
 "{diff}"
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:163 ../scripts/v.unpack/v.unpack.py:169
+#: ../scripts/r.unpack/r.unpack.py:163 ../scripts/v.unpack/v.unpack.py:168
 msgid ""
 "Projection of dataset does not appear to match current location. In case of "
 "no significant differences in the projection definitions, use the -o flag to "
@@ -48085,43 +48075,43 @@ msgstr ""
 msgid "Incorrect WMS query"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:130
+#: ../scripts/v.unpack/v.unpack.py:129
 #, python-format
 msgid ""
 "This GRASS GIS pack file contains raster data. Use r.unpack to unpack <%s>"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:143
+#: ../scripts/v.unpack/v.unpack.py:142
 msgid ""
 "PROJ_INFO file is missing, unpack vector map in XY (unprojected) location."
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:161
+#: ../scripts/v.unpack/v.unpack.py:160
 #, fuzzy
 msgid "Projection information does not match. Proceeding..."
 msgstr "Izpiši etikete kategorij"
 
-#: ../scripts/v.unpack/v.unpack.py:215
+#: ../scripts/v.unpack/v.unpack.py:214
 #, fuzzy, python-format
 msgid "Coping table <%s> as table <%s>"
 msgstr "ne najdem regije <%s>"
 
-#: ../scripts/v.unpack/v.unpack.py:226
+#: ../scripts/v.unpack/v.unpack.py:225
 #, fuzzy, python-format
 msgid "Unable to copy table <%s> as table <%s>"
 msgstr "Ime izhodne datoteke"
 
-#: ../scripts/v.unpack/v.unpack.py:228
+#: ../scripts/v.unpack/v.unpack.py:227
 #, fuzzy, python-format
 msgid "Connect table <%s> to vector map <%s> at layer <%s>"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../scripts/v.unpack/v.unpack.py:238
+#: ../scripts/v.unpack/v.unpack.py:237
 #, fuzzy, python-format
 msgid "Unable to connect table <%s> to vector map <%s>"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../scripts/v.unpack/v.unpack.py:241
+#: ../scripts/v.unpack/v.unpack.py:240
 #, fuzzy, python-format
 msgid "Vector map <%s> successfully unpacked"
 msgstr "dig_att datoteka ne obstaja."
