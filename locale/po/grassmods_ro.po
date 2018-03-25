@@ -11877,9 +11877,9 @@ msgid "%s: STEP 2 ..."
 msgstr "%s: PASUL 2 ..."
 
 #: ../raster/r.cross/main.c:171
-#, fuzzy, c-format
+#, c-format
 msgid "%d categories"
-msgstr "%ld categorii"
+msgstr ""
 
 #: ../raster/r.cross/cross.c:65
 #, c-format
@@ -43915,11 +43915,11 @@ msgstr "Memorie insuficientă pentru adxy"
 msgid "Converts a GRASS site_lists file into a vector map."
 msgstr "Convertește un fișier cu liste de situri GRASS în hartă vectorială."
 
+msgid "%ld categories"
+msgstr "%ld categorii"
+
 #~ msgid "Non-zero data only"
 #~ msgstr "Doar datele nenule"
-
-#~ msgid "%ld categories"
-#~ msgstr "%ld categorii"
 
 #~ msgid "Number of points must be > 0 (%d given)"
 #~ msgstr "Numărul de puncte trebuie să fie > 0 (%d dat)"

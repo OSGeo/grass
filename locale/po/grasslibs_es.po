@@ -3253,7 +3253,7 @@ msgstr "Ha fallado el cálculo de perímetro"
 
 #: ../lib/imagery/iclass_perimeter.c:208
 msgid "Invalid polygon"
-msgstr "Polígono absurdo."
+msgstr ""
 
 #: ../lib/imagery/iclass_perimeter.c:253
 msgid "Outlined area is too large."
@@ -3369,7 +3369,7 @@ msgstr ""
 #: ../lib/imagery/iscatt_core.c:755
 #, c-format
 msgid "Unable to open raster <%s>"
-msgstr "No ha sido posible abrir ráster <%s>"
+msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:761
 #, c-format
@@ -10000,17 +10000,17 @@ msgstr "Ocurrió un error al correr r.mapcalc"
 msgid "Object <%s> not found in the temporal database"
 msgstr "Objeto <%s> no encontrado en la base de datos temporales"
 
+msgid "Unbale to open raster <%s>"
+msgstr "No ha sido posible abrir ráster <%s>"
+
+msgid "Absurd polygon."
+msgstr "Polígono absurdo."
+
 #~ msgid "BUG in option name, '%s' is not valid"
 #~ msgstr "BUG in opción nombre, '%s' no es válido"
 
 #~ msgid "Default locale settings are missing. GRASS running with C locale."
 #~ msgstr "Faltan configuraciones locales predeterminadas. GRASS está corriendo con C local."
-
-#~ msgid "Unbale to open raster <%s>"
-#~ msgstr "No ha sido posible abrir ráster <%s>"
-
-#~ msgid "Absurd polygon."
-#~ msgstr "Polígono absurdo."
 
 #~ msgid "Unable to initialise PROJ.4 with the following parameter list:"
 #~ msgstr "No es posible inicializar PROJ 4 con la lista de parámetros siguientes."

@@ -2891,7 +2891,7 @@ msgstr "Escoger archivo de códigos IAU"
 #: ../gui/wxpython/location_wizard/wizard.py:1943
 #, python-brace-format
 msgid "Unable to read IAU codes: {0}"
-msgstr ""
+msgstr "No ha sido posible leer códigos IAU: {0}"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1963
 msgid "Choose method of specifying georeferencing parameters"
@@ -3001,7 +3001,7 @@ msgstr "Archivo <%s> no encontrado."
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:278
 msgid "Manage Location of Fiducial Points on a Scanned Photo"
-msgstr ""
+msgstr "Gestionar la posición de marcas fiduciales en una foto escaneada"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:382
 msgid "A POINTS file exists, renaming it to POINTS_BAK"
@@ -3948,7 +3948,7 @@ msgstr "Mapa vectorial <%(map)s>: %(msg)s\n"
 #: ../gui/wxpython/core/utils.py:535
 #, python-brace-format
 msgid "failed to open '{0}'"
-msgstr ""
+msgstr "no se pudo abrir '{0}'"
 
 #: ../gui/wxpython/core/utils.py:841
 #, python-format
@@ -4319,7 +4319,7 @@ msgstr "No se puede eliminar la Localización"
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:774
 #, python-brace-format
 msgid "Unicode error detected. Check your locale settings. Details: {0}"
-msgstr ""
+msgstr "Se detectó un error de Unicode. Corrobore la configuración de su locale. Detalles: {0}"
 
 #: ../gui/wxpython/gis_set.py:863
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:786
@@ -4575,12 +4575,12 @@ msgstr "Abrir nueva ventana de visualización del mapa"
 #: ../gui/wxpython/menustrings.py:30
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:31
 msgid "Render all map displays"
-msgstr ""
+msgstr "Renderizar todos los visualizadores de mapas"
 
 #: ../gui/wxpython/menustrings.py:31
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:32
 msgid "Re-render maps in all open map display windows"
-msgstr ""
+msgstr "Re-renderizar los mapas en todos los visualizadores de mapas abiertos"
 
 #: ../gui/wxpython/menustrings.py:32 ../gui/wxpython/menustrings.py:33
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:33
@@ -4649,7 +4649,7 @@ msgstr "Crear mapas ráster a partir de archivos de datos de polígonos/líneas/
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:48
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1049
 msgid "Raw binary array import"
-msgstr ""
+msgstr "Importar arreglo binario crudo"
 
 #: ../gui/wxpython/menustrings.py:48 ../gui/wxpython/menustrings.py:1067
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:49
@@ -4927,7 +4927,7 @@ msgstr "Convierte un archivo de texto ráster ASCII 3D en un mapa ráster 3D (bi
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:94
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1095
 msgid "Raw binary array 3D import"
-msgstr ""
+msgstr "Importar arreglo binario 3D crudo"
 
 #: ../gui/wxpython/menustrings.py:96 ../gui/wxpython/menustrings.py:1115
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:95
@@ -5043,7 +5043,7 @@ msgstr "Exporta un ráster de GRASS a un archivo MAT binario."
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:112
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1113
 msgid "Raw binary array export"
-msgstr ""
+msgstr "Exportar arreglo binario crudo"
 
 #: ../gui/wxpython/menustrings.py:114 ../gui/wxpython/menustrings.py:1133
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:113
@@ -5164,7 +5164,7 @@ msgstr "Exportar mapa vectorial"
 
 #: ../gui/wxpython/menustrings.py:133 ../gui/wxpython/menustrings.py:1152
 msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
-msgstr ""
+msgstr "Exporta un mapa vectorial en cualquier formato soportado por OGR. Los mapas vectoriales se exportan por defecto en el formato GeoPackage."
 
 #: ../gui/wxpython/menustrings.py:134 ../gui/wxpython/menustrings.py:1153
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:133
@@ -5258,7 +5258,7 @@ msgstr "Convierte una capa de mapa ráster 3D en un archivo de texto ASCII."
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:149
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1150
 msgid "Raw binary array 3D export"
-msgstr ""
+msgstr "Exportar arreglo binario 3D crudo"
 
 #: ../gui/wxpython/menustrings.py:152 ../gui/wxpython/menustrings.py:1171
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:150
@@ -5324,7 +5324,7 @@ msgstr "Formato de salida para datos ráster"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:164
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1165
 msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
-msgstr ""
+msgstr "Redirige el mapa ráster de salida a un archivo utilizando la librería GDAL en lugar de almacenarlo con el formato ráster de GRASS."
 
 #: ../gui/wxpython/menustrings.py:167 ../gui/wxpython/menustrings.py:1186
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:165
@@ -5652,7 +5652,7 @@ msgstr "Cerrar GUI"
 #: ../gui/wxpython/menustrings.py:214
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:210
 msgid "Close graphical user interface."
-msgstr ""
+msgstr "Cerrar la interfaz gráfica de usuario."
 
 #: ../gui/wxpython/menustrings.py:215
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:211
@@ -6573,7 +6573,7 @@ msgstr "Formas del terreno"
 
 #: ../gui/wxpython/menustrings.py:381 ../gui/wxpython/menustrings.py:1323
 msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
-msgstr ""
+msgstr "Calcula geomorfones (formas del terreno) y geometrías asociadas usando machine vision."
 
 #: ../gui/wxpython/menustrings.py:382 ../gui/wxpython/menustrings.py:1324
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:374
@@ -8351,7 +8351,7 @@ msgstr "Recortar mapas vectoriales"
 
 #: ../gui/wxpython/menustrings.py:689 ../gui/wxpython/menustrings.py:1631
 msgid "Extracts features of input map which overlay features of clip map."
-msgstr ""
+msgstr "Extrae características del mapa de entrada que se superponen con el mapa de corte."
 
 #: ../gui/wxpython/menustrings.py:691 ../gui/wxpython/menustrings.py:1633
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:681
@@ -8448,7 +8448,7 @@ msgstr "Actualiza valores de base de datos a partir de vectorial"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:697
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1623
 msgid "Populates attribute values from vector features."
-msgstr ""
+msgstr "Puebla los atributos de las características vectoriales."
 
 #: ../gui/wxpython/menustrings.py:708 ../gui/wxpython/menustrings.py:1650
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:698
@@ -8524,7 +8524,7 @@ msgstr "Diagrama de Voronoi / polígonos de Thiessen"
 
 #: ../gui/wxpython/menustrings.py:720 ../gui/wxpython/menustrings.py:1662
 msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
-msgstr ""
+msgstr "Crea un diagrama Voronoi limitado a la extensión de la región actual a partir de un mapa vectorial de entrada que contiene puntos o centroides."
 
 #: ../gui/wxpython/menustrings.py:721 ../gui/wxpython/menustrings.py:1663
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:711
@@ -9053,23 +9053,23 @@ msgstr "Calcula la corrección topográfica de la reflectancia."
 
 #: ../gui/wxpython/menustrings.py:818 ../gui/wxpython/menustrings.py:1760
 msgid "Orthophoto tools"
-msgstr ""
+msgstr "Herramientas para ortofotos"
 
 #: ../gui/wxpython/menustrings.py:819 ../gui/wxpython/menustrings.py:1761
 msgid "Manage GCPs for 3D correction"
-msgstr ""
+msgstr "Gestionar GCPs para corrección 3D"
 
 #: ../gui/wxpython/menustrings.py:820 ../gui/wxpython/menustrings.py:1762
 msgid "Georectifies a map and allows managing GCP for 3D correction."
-msgstr ""
+msgstr "Geo-rectifica un mapa y permite gestionar los GCP para corrección 3D."
 
 #: ../gui/wxpython/menustrings.py:821 ../gui/wxpython/menustrings.py:1763
 msgid "Corrects scanning distortions"
-msgstr ""
+msgstr "Corrige distorsiones de escaneo"
 
 #: ../gui/wxpython/menustrings.py:822 ../gui/wxpython/menustrings.py:1764
 msgid "Corrects scanning distortions of a scanned aerial photo."
-msgstr ""
+msgstr "Corrige distorsiones de escaneo en fotos aéreas escaneadas."
 
 #: ../gui/wxpython/menustrings.py:823 ../gui/wxpython/menustrings.py:1765
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:806
@@ -9885,7 +9885,7 @@ msgstr "Registrar mapas en conjunto de datos"
 
 #: ../gui/wxpython/menustrings.py:967 ../gui/wxpython/menustrings.py:1909
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
-msgstr ""
+msgstr "Asigna estampa temporal y registra mapas de tipo ráster, vectorial y ráster 3D en un conjunto de datos espacio temporal."
 
 #: ../gui/wxpython/menustrings.py:968 ../gui/wxpython/menustrings.py:1910
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:951
@@ -11015,7 +11015,7 @@ msgstr "Fuente N"
 #: ../gui/wxpython/image2target/ii2t_manager.py:2215
 #: ../gui/wxpython/image2target/ii2t_manager.py:2235
 msgid "source Z"
-msgstr ""
+msgstr "origen Z"
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:2216
 #: ../gui/wxpython/image2target/ii2t_manager.py:2236
@@ -11032,7 +11032,7 @@ msgstr "objetivo N"
 #: ../gui/wxpython/image2target/ii2t_manager.py:2218
 #: ../gui/wxpython/image2target/ii2t_manager.py:2238
 msgid "target Z"
-msgstr ""
+msgstr "destino Z"
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:2428
 #: ../gui/wxpython/gcp/manager.py:2356
@@ -11066,11 +11066,11 @@ msgstr "objetivo N:"
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:2590
 msgid "source Z:"
-msgstr ""
+msgstr "origen Z:"
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:2591
 msgid "target Z:"
-msgstr ""
+msgstr "destino Z:"
 
 #: ../gui/wxpython/vdigit/mapwindow.py:425
 msgid "Update categories"
@@ -11817,7 +11817,7 @@ msgstr "No se puede leer el archivo ZIP: {0}"
 #: ../gui/wxpython/startup/locdownload.py:169
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
-msgstr ""
+msgstr "No se puede leer el archivo: {0}"
 
 #: ../gui/wxpython/startup/locdownload.py:201
 #, python-brace-format
@@ -12485,7 +12485,7 @@ msgstr "Isosuperficies"
 
 #: ../gui/wxpython/nviz/tools.py:1900
 msgid "slices"
-msgstr ""
+msgstr "cortes"
 
 #: ../gui/wxpython/nviz/tools.py:1923
 msgid "Resolution:"
@@ -12610,7 +12610,7 @@ msgstr "Valor de isosuperficie"
 
 #: ../gui/wxpython/nviz/tools.py:2932
 msgid "Slice attributes"
-msgstr ""
+msgstr "Atributos de los cortes"
 
 #: ../gui/wxpython/nviz/tools.py:2941
 msgid "Slice parallel to axis:"
@@ -13135,7 +13135,7 @@ msgstr "Ejecutar comando seleccionado del árbol"
 
 #: ../gui/wxpython/gui_core/menu.py:176
 msgid "H&elp"
-msgstr ""
+msgstr "H&elp"
 
 #: ../gui/wxpython/gui_core/menu.py:178
 msgid "Show manual for selected module from the tree"
@@ -13143,7 +13143,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/menu.py:180
 msgid "Adva&nced search..."
-msgstr ""
+msgstr "Búsqueda avanzada..."
 
 #: ../gui/wxpython/gui_core/menu.py:182
 #, python-format
@@ -13226,7 +13226,7 @@ msgstr "falta archivo %s"
 #: ../gui/wxpython/gui_core/ghelp.py:300
 #, python-brace-format
 msgid "Unable to provide citation suggestion, see GRASS GIS website instead. The error was: {0}"
-msgstr ""
+msgstr "Imposible proveer una sugerencia de referencia, vea el sitio web de GRASS GIS. El error fue: {0}"
 
 #: ../gui/wxpython/gui_core/ghelp.py:376 ../gui/wxpython/gui_core/ghelp.py:449
 #, python-format
@@ -13790,7 +13790,7 @@ msgstr "Guardar la posición y tamaño actuales, tanto de la ventana del Adminis
 
 #: ../gui/wxpython/gui_core/preferences.py:454
 msgid "Region settings"
-msgstr ""
+msgstr "Configuración de la región"
 
 #: ../gui/wxpython/gui_core/preferences.py:461
 msgid "Align region to resolution"
@@ -14461,7 +14461,7 @@ msgstr "Abortar comando en ejecución"
 
 #: ../gui/wxpython/gui_core/goutput.py:171
 msgid "&Log file"
-msgstr ""
+msgstr "Archivo &Log"
 
 #: ../gui/wxpython/gui_core/goutput.py:173
 msgid "Toggle to save list of executed commands into a file; content saved when switching off."
@@ -16754,7 +16754,7 @@ msgstr "Administrador de capas de GRASS GIS %s"
 
 #: ../gui/wxpython/lmgr/frame.py:122
 msgid "There were some issues when loading menu or Modules tab:"
-msgstr ""
+msgstr "Hubo problemas al cargar el menú o la pestaña de módulos:"
 
 #: ../gui/wxpython/lmgr/frame.py:150
 msgid "Workspace Toolbar"
@@ -16958,7 +16958,7 @@ msgstr "Revisión SVN de GRASS"
 
 #: ../gui/wxpython/lmgr/frame.py:1244
 msgid "Build date"
-msgstr ""
+msgstr "Fecha de compilación"
 
 #: ../gui/wxpython/lmgr/frame.py:1246
 msgid "Build platform"
@@ -17191,7 +17191,7 @@ msgstr "Establecer la región computacional a partir del mapa(s) seleccionado(s)
 
 #: ../gui/wxpython/lmgr/layertree.py:559
 msgid "Align computational region to selected map"
-msgstr ""
+msgstr "Alinear la región computacional al mapa seleccionado"
 
 #: ../gui/wxpython/lmgr/layertree.py:573
 msgid "Export common formats"
@@ -18025,7 +18025,7 @@ msgstr "Sobreescribir mapa vectorial"
 
 #: ../gui/wxpython/vnet/vnet_core.py:304
 msgid "Creation of turntable failed."
-msgstr ""
+msgstr "Falló la creación de la tabla de giros."
 
 #: ../gui/wxpython/vnet/vnet_core.py:324
 msgid "Vector map with analysis result does not exist."
@@ -18174,7 +18174,7 @@ msgstr "capa de  nodos"
 
 #: ../gui/wxpython/vnet/vnet_data.py:183
 msgid "turntable layer"
-msgstr ""
+msgstr "capa de tabla de giros"
 
 #: ../gui/wxpython/vnet/vnet_data.py:184
 msgid "unique categories layer"
@@ -18345,7 +18345,7 @@ msgstr "Cargando tablas..."
 
 #: ../gui/wxpython/vnet/dialogs.py:704
 msgid "Creating turntable..."
-msgstr ""
+msgstr "Creando tabla de giros..."
 
 #: ../gui/wxpython/vnet/dialogs.py:869
 msgid "Input vector map does not exist."
@@ -18415,7 +18415,7 @@ msgstr "Cantidad máxima de resultados en la historia:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1481
 msgid "New vector map with turntable"
-msgstr ""
+msgstr "Nuevo mapa vectorial con tabla de giro"
 
 #: ../gui/wxpython/vnet/dialogs.py:1627
 msgid "Save analysis result"
@@ -18584,11 +18584,11 @@ msgstr "Error al mostrar la capa: no se encuentra en el Directorio de mapas actu
 
 #: ../gui/wxpython/datacatalog/tree.py:861
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
-msgstr ""
+msgstr "Para mover o copiar mapas a otros directorios de mapas, desbloquear la edición de dichos directorios"
 
 #: ../gui/wxpython/datacatalog/tree.py:965
 msgid "&Cut"
-msgstr ""
+msgstr "&Cortar"
 
 #: ../gui/wxpython/datacatalog/tree.py:971
 msgid "&Copy"
@@ -18596,7 +18596,7 @@ msgstr "&Copiar"
 
 #: ../gui/wxpython/datacatalog/tree.py:975
 msgid "Copy &name"
-msgstr ""
+msgstr "Copiar &nombre"
 
 #: ../gui/wxpython/datacatalog/tree.py:979
 #: ../gui/wxpython/datacatalog/tree.py:1016
@@ -18610,7 +18610,7 @@ msgstr "&Mostrar capa"
 
 #: ../gui/wxpython/datacatalog/tree.py:1003
 msgid "Show &metadata"
-msgstr ""
+msgstr "Mostrar &metadatos"
 
 #: ../gui/wxpython/datacatalog/tree.py:1022
 msgid "&Switch mapset"
@@ -18618,7 +18618,7 @@ msgstr "&Cambiar Directorio de mapas"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:79
 msgid "Reproject"
-msgstr ""
+msgstr "Reproyectar"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:81
 msgid "Reproject raster"
@@ -18634,6 +18634,8 @@ msgid ""
 "Map layer <{ml}> needs to be reprojected.\n"
 "Please review and modify reprojection parameters:"
 msgstr ""
+"El mapa <{ml}> necesita ser reproyectado.\n"
+"Por favor revise y modifique los parámetros de reproyección:"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:97
 msgid "Estimated resolution:"
@@ -18645,7 +18647,7 @@ msgstr "Método de remuestreo:"
 
 #: ../gui/wxpython/datacatalog/dialogs.py:104
 msgid "Maximum segment length:"
-msgstr ""
+msgstr "Longitud máxima del segmento:"
 
 #: ../gui/wxpython/datacatalog/catalog.py:33
 msgid "Data catalog"
@@ -19416,7 +19418,7 @@ msgstr "vacío"
 #: ../gui/wxpython/gmodeler/model.py:1889
 #, python-brace-format
 msgid "Details: unsupported tag name '{0}'."
-msgstr ""
+msgstr "Detalles: nombre de etiqueta no soportado '{0}'."
 
 #: ../gui/wxpython/gmodeler/model.py:2802
 msgid "Model parameters"
@@ -19460,7 +19462,7 @@ msgstr "Redibujando modelo..."
 
 #: ../gui/wxpython/gmodeler/frame.py:321
 msgid "Model computation finished"
-msgstr ""
+msgstr "Finalizó el cómputo del modelo"
 
 #: ../gui/wxpython/gmodeler/frame.py:334
 msgid "Do you want to save changes in the model?"
@@ -19477,7 +19479,7 @@ msgstr "Salir del Modelador Gráfico"
 #: ../gui/wxpython/gmodeler/frame.py:403
 #, python-format
 msgid "%d intermediate maps deleted from current mapset"
-msgstr ""
+msgstr "%d mapas intermedios removidos del directorio de mapas actual"
 
 #: ../gui/wxpython/gmodeler/frame.py:412
 msgid "No intermediate data to delete."
@@ -19917,7 +19919,7 @@ msgstr "Eliminar variables"
 #: ../gui/wxpython/timeline/frame.py:39
 #, python-brace-format
 msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr ""
+msgstr "La herramienta Línea de Tiempo necesita que el paquete \"mapplotlib\" (python-matplotlib) esté instalado. {0}"
 
 #: ../gui/wxpython/timeline/frame.py:77
 msgid "GRASS GIS Timeline Tool"
@@ -20099,7 +20101,7 @@ msgstr "Digitalizador vectorial no disponible"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:126
 msgid "Note that the wxGUI's vector digitizer is disabled in this installation. Please keep an eye out for updated versions of GRASS. In the meantime you can use \"v.edit\" for non-interactive editing from the Develop vector map menu."
-msgstr ""
+msgstr "Tenga en cuenta que el digitalizador vectorial wxGUI's se encuentra deshabilitado en esta instalación. Por favor esté alerta a versiones actualizadas de GRASS. Mientras tanto puede utilizar \"v.edit\" del menú Develop vector map para ediciones no interactivas."
 
 #: ../gui/wxpython/mapdisp/toolbars.py:133
 msgid "Raster digitizer"
@@ -20121,7 +20123,7 @@ msgstr ""
 #: ../gui/wxpython/mapdisp/frame.py:258
 #, python-format
 msgid "GRASS GIS Map Display: %(name)s - %(loc)s/%(mapset)s"
-msgstr ""
+msgstr "GRASS GIS Map Display: %(name)s - %(loc)s/%(mapset)s"
 
 #: ../gui/wxpython/mapdisp/frame.py:314
 msgid "Vector Digitizer Toolbar"

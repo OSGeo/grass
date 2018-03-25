@@ -11860,9 +11860,9 @@ msgid "%s: STEP 2 ..."
 msgstr "%s: ステップ 2 ...  "
 
 #: ../raster/r.cross/main.c:171
-#, fuzzy, c-format
+#, c-format
 msgid "%d categories"
-msgstr "%ld カテゴリー"
+msgstr ""
 
 #: ../raster/r.cross/cross.c:65
 #, c-format
@@ -44661,6 +44661,9 @@ msgstr "3Dラスター "
 msgid "Path to file location"
 msgstr "ファイルロケーションへのパス"
 
+msgid "%ld categories"
+msgstr "%ld カテゴリー"
+
 #~ msgid "Error in pj_do_proj"
 #~ msgstr "pj_do_proj の誤差 "
 
@@ -44681,9 +44684,6 @@ msgstr "ファイルロケーションへのパス"
 
 #~ msgid "Non-zero data only"
 #~ msgstr "値0を無視する "
-
-#~ msgid "%ld categories"
-#~ msgstr "%ld カテゴリー"
 
 #~ msgid "Error in pj_do_proj (can't re-projection GCP %i)"
 #~ msgstr "pj_do_proj 実行中にエラー(GCP %i を再投影できません)"

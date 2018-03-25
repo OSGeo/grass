@@ -11894,9 +11894,9 @@ msgid "%s: STEP 2 ..."
 msgstr "%s: KROK 2 ..."
 
 #: ../raster/r.cross/main.c:171
-#, fuzzy, c-format
+#, c-format
 msgid "%d categories"
-msgstr "Zbyt wiele kategorii"
+msgstr ""
 
 #: ../raster/r.cross/cross.c:65
 #, c-format

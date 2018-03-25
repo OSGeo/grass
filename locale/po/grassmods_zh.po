@@ -11858,9 +11858,9 @@ msgid "%s: STEP 2 ..."
 msgstr ""
 
 #: ../raster/r.cross/main.c:171
-#, fuzzy, c-format
+#, c-format
 msgid "%d categories"
-msgstr "读取%-5d个线类别\n"
+msgstr ""
 
 #: ../raster/r.cross/cross.c:65
 #, c-format

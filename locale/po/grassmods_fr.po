@@ -11872,9 +11872,9 @@ msgid "%s: STEP 2 ..."
 msgstr "%s : ÉTAPE 2 ..."
 
 #: ../raster/r.cross/main.c:171
-#, fuzzy, c-format
+#, c-format
 msgid "%d categories"
-msgstr "%ld catégories"
+msgstr ""
 
 #: ../raster/r.cross/cross.c:65
 #, c-format
@@ -44727,6 +44727,9 @@ msgstr "Valeur invalide détectée"
 msgid "Creates a 3D raster map from LAS LiDAR points"
 msgstr "Créer une carte raster 3D depuis des points LIDAR LAS"
 
+msgid "%ld categories"
+msgstr "%ld catégories"
+
 #~ msgid "Error in pj_do_proj"
 #~ msgstr "Erreur dans pj_do_proj"
 
@@ -44747,9 +44750,6 @@ msgstr "Créer une carte raster 3D depuis des points LIDAR LAS"
 
 #~ msgid "Non-zero data only"
 #~ msgstr "Données non nulles uniquement"
-
-#~ msgid "%ld categories"
-#~ msgstr "%ld catégories"
 
 #~ msgid "Error in pj_do_proj (projection of input coordinate pair)"
 #~ msgstr "Erreur dans pj_do_proj (projection du couple de coordonnées en entrée)"

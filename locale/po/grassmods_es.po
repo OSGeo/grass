@@ -11886,9 +11886,9 @@ msgid "%s: STEP 2 ..."
 msgstr "%s: PASO 2 ..."
 
 #: ../raster/r.cross/main.c:171
-#, fuzzy, c-format
+#, c-format
 msgid "%d categories"
-msgstr "%ld categorías"
+msgstr ""
 
 #: ../raster/r.cross/cross.c:65
 #, c-format
@@ -45354,6 +45354,9 @@ msgstr "Error al escribir datos"
 msgid "Invalid number of iterations, 100 will be used"
 msgstr "La cantidad de iteraciones no es válida, se usarán 100"
 
+msgid "%ld categories"
+msgstr "%ld categorías"
+
 #~ msgid "Error in pj_do_proj"
 #~ msgstr "Error en pj_do_proj"
 
@@ -45386,9 +45389,6 @@ msgstr "La cantidad de iteraciones no es válida, se usarán 100"
 
 #~ msgid "Non-zero data only"
 #~ msgstr "Solamente datos distintos de cero"
-
-#~ msgid "%ld categories"
-#~ msgstr "%ld categorías"
 
 #~ msgid "Using memory cache size: %.1f MiB"
 #~ msgstr "Usando tamaño de memoria caché: %.1f MiB"

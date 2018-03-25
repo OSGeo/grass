@@ -3248,7 +3248,7 @@ msgstr "Le calcul du périmètre a échoué"
 
 #: ../lib/imagery/iclass_perimeter.c:208
 msgid "Invalid polygon"
-msgstr "Polygone absurde."
+msgstr ""
 
 #: ../lib/imagery/iclass_perimeter.c:253
 msgid "Outlined area is too large."
@@ -3359,12 +3359,12 @@ msgstr "Données non cohérentes. La valeur calculée pour le graphique est en d
 #: ../lib/imagery/iscatt_core.c:745
 #, c-format
 msgid "Unable to read find raster <%s>"
-msgstr "Impossible de lire le raster <%s>"
+msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:755
 #, c-format
 msgid "Unable to open raster <%s>"
-msgstr "Impossible d'ouvrir le raster <%s>"
+msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:761
 #, c-format
@@ -10093,20 +10093,20 @@ msgstr "Par exemple : 'select * from rybniky where kapri = 'hodne'"
 msgid "Example: income < 1000 and inhab >= 10000"
 msgstr "Exemple : revenu < 1000 et habitants >= 10000"
 
+msgid "Unbale to read find raster <%s>"
+msgstr "Impossible de lire le raster <%s>"
+
+msgid "Unbale to open raster <%s>"
+msgstr "Impossible d'ouvrir le raster <%s>"
+
+msgid "Absurd polygon."
+msgstr "Polygone absurde."
+
 #~ msgid "BUG in option name, '%s' is not valid"
 #~ msgstr "BUG dans le nom de l'option, '%s' n'est pas valide"
 
 #~ msgid "Default locale settings are missing. GRASS running with C locale."
 #~ msgstr "Les paramètres de locale par défaut sont manquants. Utilisation de la locale C."
-
-#~ msgid "Unbale to read find raster <%s>"
-#~ msgstr "Impossible de lire le raster <%s>"
-
-#~ msgid "Unbale to open raster <%s>"
-#~ msgstr "Impossible d'ouvrir le raster <%s>"
-
-#~ msgid "Absurd polygon."
-#~ msgstr "Polygone absurde."
 
 #~ msgid "Unable to initialise PROJ.4 with the following parameter list:"
 #~ msgstr "Impossible d'initialiser proj.4 avec la liste de paramètres suivants :"
