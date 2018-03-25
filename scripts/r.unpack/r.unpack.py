@@ -14,7 +14,7 @@
 #############################################################################
 
 #%module
-#% description: Imports a raster map as GRASS GIS specific archive file (packed with r.pack)
+#% description: Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map
 #% keyword: raster
 #% keyword: import
 #% keyword: copying
