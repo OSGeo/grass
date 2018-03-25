@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Imports a vector map as GRASS GIS specific archive file (packed with v.pack)
+#% description: Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map
 #% keyword: vector
 #% keyword: import
 #% keyword: copying
@@ -41,7 +41,6 @@
 #% label: Print projection information of input pack file and exit
 #% guisection: Print
 #%end
-
 
 import os
 import sys
