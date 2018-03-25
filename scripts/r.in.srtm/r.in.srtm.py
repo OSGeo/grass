@@ -82,6 +82,23 @@ XDIM 0.000277777777777778
 YDIM 0.000277777777777778
 """
 
+swbd1sec = """BYTEORDER M
+LAYOUT BIL
+NROWS 3601
+NCOLS 3601
+NBANDS 1
+NBITS 8
+BANDROWBYTES 7202
+TOTALROWBYTES 7202
+BANDGAPBYTES 0
+PIXELTYPE SIGNEDINT
+NODATA -32768
+ULXMAP %s
+ULYMAP %s
+XDIM 0.000277777777777778
+YDIM 0.000277777777777778
+"""
+
 tmpl3sec = """BYTEORDER M
 LAYOUT BIL
 NROWS 1201
@@ -131,6 +148,9 @@ def main():
     global tile, tmpdir, in_temp
 
     in_temp = False
+    
+    # to support SRTM water body
+    swbd = False
 
     input = options['input']
     output = options['output']
@@ -144,7 +164,7 @@ def main():
 
     # use these from now on:
     infile = input
-    while infile[-4:].lower() in ['.hgt', '.zip']:
+    while infile[-4:].lower() in ['.hgt', '.zip', '.raw']:
         infile = infile[:-4]
     (fdir, tile) = os.path.split(infile)
 
@@ -153,8 +173,15 @@ def main():
     else:
         tileout = output
 
-    zipfile = infile + ".hgt.zip"
-    hgtfile = os.path.join(fdir, tile[:7] + ".hgt")
+    if '.hgt' in input:
+        suff = '.hgt'
+    else:
+        suff = '.raw'
+        swbd = True
+
+    zipfile = "{im}{su}.zip".format(im=infile, su=suff)
+    hgtfile = "{im}{su}".format(im=infile, su=suff)
+
     if os.path.isfile(zipfile):
         # check if we have unzip
         if not grass.find_program('unzip'):
@@ -178,18 +205,22 @@ def main():
     tmpdir = grass.tempfile()
     grass.try_remove(tmpdir)
     os.mkdir(tmpdir)
-
     if is_zip:
-        shutil.copyfile(zipfile, os.path.join(tmpdir, tile + ".hgt.zip"))
+        shutil.copyfile(zipfile, os.path.join(tmpdir,
+                                              "{im}{su}.zip".format(im=tile,
+                                                                    su=suff)))
     else:
-        shutil.copyfile(hgtfile, os.path.join(tmpdir, tile + ".hgt"))
-
+        shutil.copyfile(hgtfile, os.path.join(tmpdir,
+                                              "{im}{su}".format(im=tile[:7],
+                                                                su=suff)))
     # change to temporary directory
     os.chdir(tmpdir)
     in_temp = True
 
-    zipfile = tile + ".hgt.zip"
-    hgtfile = tile[:7] + ".hgt"
+
+    zipfile = "{im}{su}.zip".format(im=tile, su=suff)
+    hgtfile = "{im}{su}".format(im=tile[:7], su=suff)
+
     bilfile = tile + ".bil"
 
     if is_zip:
@@ -221,8 +252,11 @@ def main():
 
     if not one:
         tmpl = tmpl3sec
+    elif swbd:
+        grass.message(_("Attempting to import 1-arcsec SWBD data"))
+        tmpl = swbd1sec
     else:
-        grass.message(_("Attempting to import 1-arcsec data."))
+        grass.message(_("Attempting to import 1-arcsec data"))
         tmpl = tmpl1sec
 
     header = tmpl % (ulxmap, ulymap)
@@ -243,7 +277,8 @@ def main():
         grass.fatal(_("Unable to import data"))
 
     # nice color table
-    grass.run_command('r.colors', map=tileout, color='srtm')
+    if not swbd:
+        grass.run_command('r.colors', map=tileout, color='srtm')
 
     # write cmd history:
     grass.raster_history(tileout)
