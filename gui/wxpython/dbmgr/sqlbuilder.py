@@ -44,7 +44,7 @@ class SQLBuilder(wx.Frame):
     Base class for classes, which builds SQL statements.
     """
 
-    def __init__(self, parent, title, vectmap, modeChoices, id=wx.ID_ANY,
+    def __init__(self, parent, title, vectmap, modeChoices=[], id=wx.ID_ANY,
                  layer=1):
         wx.Frame.__init__(self, parent, id, title)
 
@@ -66,6 +66,7 @@ class SQLBuilder(wx.Frame):
         self.layer = layer
         self.dbInfo = VectorDBInfo(self.vectmap)
         self.tablename = self.dbInfo.GetTable(self.layer)
+                
         self.driver, self.database = self.dbInfo.GetDbSettings(self.layer)
 
         self.colvalues = []     # array with unique values in selected column
@@ -128,7 +129,7 @@ class SQLBuilder(wx.Frame):
         self.btn_clear.SetToolTipString(_("Set SQL statement to default"))
         self.btn_apply = wx.Button(parent=self.panel, id=wx.ID_APPLY)
         self.btn_apply.SetToolTipString(
-            _("Apply SQL statement in Attribute Table Manager"))
+            _("Apply SQL statement"))
         self.btn_close = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btn_close.SetToolTipString(_("Close the dialog"))
 
@@ -228,17 +229,18 @@ class SQLBuilder(wx.Frame):
         columnsizer.Add(self.list_columns, proportion=1,
                         flag=wx.EXPAND)
 
-        modesizer = wx.BoxSizer(wx.VERTICAL)
-
-        self.mode = wx.RadioBox(parent=self.panel, id=wx.ID_ANY,
-                                label=" %s " % _("Interactive insertion"),
-                                choices=modeChoices,
-                                style=wx.RA_SPECIFY_COLS,
-                                majorDimension=1)
-
-        self.mode.SetSelection(1)  # default 'values'
-        modesizer.Add(self.mode, proportion=1,
-                      flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border=5)
+        if modeChoices:
+            modesizer = wx.BoxSizer(wx.VERTICAL)
+            
+            self.mode = wx.RadioBox(parent=self.panel, id=wx.ID_ANY,
+                                    label=" %s " % _("Interactive insertion"),
+                                    choices=modeChoices,
+                                    style=wx.RA_SPECIFY_COLS,
+                                    majorDimension=1)
+            
+            self.mode.SetSelection(1)  # default 'values'
+            modesizer.Add(self.mode, proportion=1,
+                          flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border=5)
 
         # self.list_columns.SetMinSize((-1,130))
         # self.list_values.SetMinSize((-1,100))
@@ -300,11 +302,12 @@ class SQLBuilder(wx.Frame):
         if showDbInfo:
             self.pagesizer.Add(databaseboxsizer,
                                flag=wx.ALL | wx.EXPAND, border=5)
-        self.pagesizer.Add(
-            modesizer,
-            proportion=0,
-            flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
-            border=5)
+        if modeChoices:
+            self.pagesizer.Add(
+                modesizer,
+                proportion=0,
+                flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+                border=5)
         self.pagesizer.Add(
             self.hsizer,
             proportion=1,
@@ -327,7 +330,8 @@ class SQLBuilder(wx.Frame):
         #
         # bindings
         #
-        self.mode.Bind(wx.EVT_RADIOBOX, self.OnMode)
+        if modeChoices:
+            self.mode.Bind(wx.EVT_RADIOBOX, self.OnMode)
         # self.text_sql.Bind(wx.EVT_ACTIVATE, self.OnTextSqlActivate)TODO
 
         self.btn_unique.Bind(wx.EVT_BUTTON, self.OnUniqueValues)
@@ -413,9 +417,6 @@ class SQLBuilder(wx.Frame):
         ctype = self.dbInfo.GetTableDesc(
             self.dbInfo.GetTable(
                 self.layer))[column]['type']
-
-        if ctype == 'character':
-            value = "'%s'" % value
 
         self._add(element='value', value=value)
 
@@ -838,6 +839,52 @@ class SQLBuilderUpdate(SQLBuilder):
             'TRIM': ['TRIM (,)']
         }
 
+class SQLBuilderWhere(SQLBuilder):
+    """Class for building SELECT SQL WHERE statement"""
+
+    def __init__(self, parent, vectmap, id=wx.ID_ANY,
+                 layer=1):
+
+        title = _("GRASS SQL Builder (%(type)s) - <%(map)s>") % \
+                {'type': "WHERE", 'map': vectmap}
+
+        super(SQLBuilderWhere, self).__init__(
+            parent, title, vectmap, id=wx.ID_ANY, 
+            layer=layer)
+        
+    def OnClear(self, event):
+        self.text_sql.SetValue('')
+        
+    def OnApply(self, event):
+        self.parent.SetValue(self.text_sql.GetValue())
+
+        if self.close_onapply.IsChecked():
+            self.Destroy()
+
+        event.Skip()
+
+    def _add(self, element, value):
+        """Add element to the query
+
+        :param element: element to add (column, value)
+        """
+        sqlstr = self.text_sql.GetValue()
+        inspoint = self.text_sql.GetInsertionPoint()
+
+        newsqlstr = ''
+        if inspoint > 0 and sqlstr[inspoint-1] != ' ':
+            newsqlstr += ' '
+        newsqlstr += value
+        if inspoint < len(sqlstr):
+            newsqlstr += ' ' if sqlstr[inspoint] != ' ' else ''
+        
+        if newsqlstr:
+            self.text_sql.SetValue(sqlstr[:inspoint] + newsqlstr + sqlstr[inspoint:])
+            self.text_sql.SetInsertionPoint(inspoint + len(newsqlstr))
+                    
+        wx.CallAfter(self.text_sql.SetFocus)
+
+        
 if __name__ == "__main__":
     if len(sys.argv) not in [3, 4]:
         print >>sys.stderr, __doc__
