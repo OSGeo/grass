@@ -11865,9 +11865,9 @@ msgid "%s: STEP 2 ..."
 msgstr "%s: ADIM 2 ..."
 
 #: ../raster/r.cross/main.c:171
-#, fuzzy, c-format
+#, c-format
 msgid "%d categories"
-msgstr "%ld kategori"
+msgstr ""
 
 #: ../raster/r.cross/cross.c:65
 #, c-format
@@ -44319,6 +44319,9 @@ msgstr "Bilinmeyen raster harita tipi"
 msgid "Path to file location"
 msgstr "Dosya yeri yolu"
 
+msgid "%ld categories"
+msgstr "%ld kategori"
+
 #~ msgid "Error in pj_do_proj"
 #~ msgstr "pj_do_proj'da hata"
 
@@ -44336,6 +44339,3 @@ msgstr "Dosya yeri yolu"
 
 #~ msgid "Error in pj_do_proj6"
 #~ msgstr "pj_do_proj6 da hata"
-
-#~ msgid "%ld categories"
-#~ msgstr "%ld kategori"

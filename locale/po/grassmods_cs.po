@@ -11892,9 +11892,9 @@ msgid "%s: STEP 2 ..."
 msgstr "%s: KROK 2 ..."
 
 #: ../raster/r.cross/main.c:171
-#, fuzzy, c-format
+#, c-format
 msgid "%d categories"
-msgstr "%ld kategorií"
+msgstr ""
 
 #: ../raster/r.cross/cross.c:65
 #, c-format
@@ -44789,14 +44789,14 @@ msgstr "Chybná vzdálenost"
 msgid "Layer number"
 msgstr "Číslo vrstvy"
 
+msgid "%ld categories"
+msgstr "%ld kategorií"
+
 #~ msgid "Error in pj_do_proj"
 #~ msgstr "Chyba v pj_do_proj"
 
 #~ msgid "Non-zero data only"
 #~ msgstr "Pouze nenulová data"
-
-#~ msgid "%ld categories"
-#~ msgstr "%ld kategorií"
 
 #~ msgid "Error in pj_do_proj (can't re-projection GCP %i)"
 #~ msgstr "Chyba v pj_do_proj (nelze reprojekovat GCP %i)"

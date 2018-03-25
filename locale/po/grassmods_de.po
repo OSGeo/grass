@@ -11874,9 +11874,9 @@ msgid "%s: STEP 2 ..."
 msgstr "%s: SCHRITT  2 ..."
 
 #: ../raster/r.cross/main.c:171
-#, fuzzy, c-format
+#, c-format
 msgid "%d categories"
-msgstr "%ld Kategorien"
+msgstr ""
 
 #: ../raster/r.cross/cross.c:65
 #, c-format
@@ -44870,6 +44870,9 @@ msgstr "Pfad zum Verzeichnis der Datei."
 msgid "Invalid value detected"
 msgstr "Ungültiger Wert entdeckt"
 
+msgid "%ld categories"
+msgstr "%ld Kategorien"
+
 #~ msgid "Error in pj_do_proj"
 #~ msgstr "Error in pj_do_proj"
 
@@ -44890,9 +44893,6 @@ msgstr "Ungültiger Wert entdeckt"
 
 #~ msgid "Non-zero data only"
 #~ msgstr "Nur nicht-Null Daten"
-
-#~ msgid "%ld categories"
-#~ msgstr "%ld Kategorien"
 
 #~ msgid "Error in pj_do_proj (can't re-projection GCP %i)"
 #~ msgstr "Fehler in pj_do_proj (kann den GCP %i nicht umprojezieren)."

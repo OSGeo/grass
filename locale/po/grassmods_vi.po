@@ -11844,9 +11844,9 @@ msgid "%s: STEP 2 ..."
 msgstr ""
 
 #: ../raster/r.cross/main.c:171
-#, fuzzy, c-format
+#, c-format
 msgid "%d categories"
-msgstr "[%d] phạm trù đường được đọc"
+msgstr ""
 
 #: ../raster/r.cross/cross.c:65
 #, c-format

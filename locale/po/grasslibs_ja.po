@@ -3215,7 +3215,7 @@ msgstr ""
 
 #: ../lib/imagery/iclass_perimeter.c:208
 msgid "Invalid polygon"
-msgstr "不正なポリゴン"
+msgstr ""
 
 #: ../lib/imagery/iclass_perimeter.c:253
 msgid "Outlined area is too large."
@@ -9723,8 +9723,8 @@ msgstr "例: 'select * kapriのrybnikyから = 'hodne'  "
 msgid "Example: income < 1000 and inhab >= 10000"
 msgstr "例: 収入 < 1000 かつ 住人 >= 10000"
 
-#~ msgid "Absurd polygon."
-#~ msgstr "不正なポリゴン"
+msgid "Absurd polygon."
+msgstr "不正なポリゴン"
 
 #~ msgid "Unable to initialise PROJ.4 with the following parameter list:"
 #~ msgstr "次のパラメータリストでPROJ.4は初期化できません :"

@@ -3325,7 +3325,7 @@ msgstr ""
 #: ../lib/imagery/iscatt_core.c:755
 #, c-format
 msgid "Unable to open raster <%s>"
-msgstr "Tidak dapat membuka raster <%s>"
+msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:761
 #, c-format
@@ -9589,5 +9589,5 @@ msgstr ""
 msgid "Unable to access table <%s>"
 msgstr ""
 
-#~ msgid "Unbale to open raster <%s>"
-#~ msgstr "Tidak dapat membuka raster <%s>"
+msgid "Unbale to open raster <%s>"
+msgstr "Tidak dapat membuka raster <%s>"
