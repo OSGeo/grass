@@ -30,6 +30,12 @@ sh ~/software/grass-addons/tools/transifex_merge.sh
 make
 make verify
 # ... then fix .po files as needed.
+# after that push fixes to transifex:
+cd locale/transifex/
+tx --debug push -t
+
+#### end of i18N
+
 
 1. Local work
 
