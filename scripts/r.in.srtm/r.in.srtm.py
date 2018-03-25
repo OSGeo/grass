@@ -6,6 +6,7 @@
 # AUTHOR(S): Markus Neteler 11/2003 neteler AT itc it
 #            Hamish Bowman
 #            Glynn Clements
+#            Luca Delucchi
 # PURPOSE:   import of SRTM hgt files into GRASS
 #
 # COPYRIGHT:	(C) 2004, 2006 by the GRASS Development Team
@@ -22,6 +23,9 @@
 # April 2006: links updated from ftp://e0dps01u.ecs.nasa.gov/srtm/
 #             to current links below
 # October 2008: Converted to Python by Glynn Clements
+# March 2018: Added capabilities to import SRTM SWBD
+#             Removed unzip dependencies, now it use Python zipfile library
+#             by Luca Delucchi
 #########################
 # Derived from:
 # ftp://e0srp01u.ecs.nasa.gov/srtm/version1/Documentation/Notes_for_ARCInfo_users.txt
@@ -129,6 +133,7 @@ import shutil
 import atexit
 import grass.script as grass
 from grass.exceptions import CalledModuleError
+import zipfile as zfile
 
 # i18N
 import gettext
@@ -183,15 +188,8 @@ def main():
     hgtfile = "{im}{su}".format(im=infile, su=suff)
 
     if os.path.isfile(zipfile):
-        # check if we have unzip
-        if not grass.find_program('unzip'):
-            grass.fatal(_('The "unzip" program is required, please install it first'))
-
         # really a ZIP file?
-        # make it quiet in a safe way (just in case -qq isn't portable)
-        tenv = os.environ.copy()
-        tenv['UNZIP'] = '-qq'
-        if grass.call(['unzip', '-t', zipfile], env=tenv) != 0:
+        if not zfile.is_zipfile(zipfile):
             grass.fatal(_("'%s' does not appear to be a valid zip file.") % zipfile)
 
         is_zip = True
@@ -226,7 +224,10 @@ def main():
     if is_zip:
         # unzip & rename data file:
         grass.message(_("Extracting '%s'...") % infile)
-        if grass.call(['unzip', zipfile], env=tenv) != 0:
+        try:
+            zf=zfile.ZipFile(zipfile)
+            zf.extractall()
+        except:
             grass.fatal(_("Unable to unzip file."))
 
     grass.message(_("Converting input file to BIL..."))
