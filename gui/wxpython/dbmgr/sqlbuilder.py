@@ -369,16 +369,17 @@ class SQLBuilder(wx.Frame):
             self.dbInfo.GetTable(self.layer))[column]
 
         i = 0
+        items = []
         for item in sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
             if justsample and i > 255:
                 break
 
             if desc['type'] != 'character':
-                item = str(item)
+                items.append(str(item))
             else:
-                item = GetUnicodeValue(item)
-            self.list_values.Append(item)
+                items.append(GetUnicodeValue(item))
             i += 1
+        self.list_values.AppendItems(items)
 
     def OnSampleValues(self, event):
         """Get sample values"""
