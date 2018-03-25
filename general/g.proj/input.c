@@ -244,7 +244,7 @@ int input_georef(char *geofile)
 
     /* Try opening file with OGR first because it doesn't output a
      * (potentially confusing) error message if it can't open the file */
-    G_message(_("Trying to open with OGR..."));
+    G_debug(1, "Trying to open <%s> with OGR...", geofile);
     OGRRegisterAll();
 
     hSRS = NULL;
@@ -252,7 +252,7 @@ int input_georef(char *geofile)
 	&& (OGR_DS_GetLayerCount(ogr_ds) > 0)) {
 	OGRLayerH ogr_layer;
 
-	G_message(_("...succeeded."));
+	G_debug(1, "...succeeded.");
 	/* Get the first layer */
 	ogr_layer = OGR_DS_GetLayer(ogr_ds, 0);
 	hSRS = OGR_L_GetSpatialRef(ogr_layer);
@@ -265,13 +265,13 @@ int input_georef(char *geofile)
 	/* Try opening with GDAL */
 	GDALDatasetH gdal_ds;
 
-	G_message(_("Trying to open with GDAL..."));
+	G_debug(1, "Trying to open with GDAL...");
 	GDALAllRegister();
 
 	if ((gdal_ds = GDALOpen(geofile, GA_ReadOnly))) {
 	    char *wktstring;
 
-	    G_message(_("...succeeded."));
+	    G_debug(1, "...succeeded.");
 	    wktstring = (char *)GDALGetProjectionRef(gdal_ds);
 	    ret =
 		GPJ_wkt_to_grass(&cellhd, &projinfo, &projunits, wktstring,
@@ -281,8 +281,8 @@ int input_georef(char *geofile)
 	    hSRS = OSRNewSpatialReference(wktstring);
 	}
 	else
-	    G_fatal_error(_("Could not read georeferenced file %s using "
-			    "either OGR nor GDAL"), geofile);
+	    G_fatal_error(_("Unable to read georeferenced file <%s> using "
+			    "GDAL library"), geofile);
     }
 
     if (cellhd.proj == PROJECTION_XY)
