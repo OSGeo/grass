@@ -27,8 +27,9 @@ Classes:
  - :class:`VectorCategorySelect`
  - :class:`SignatureSelect`
  - :class:`SeparatorSelect`
+ - :class:`SqlWhereSelect`
 
-(C) 2007-2014 by the GRASS Development Team
+(C) 2007-2018 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -71,7 +72,7 @@ except ImportError as e:
 
 from gui_core.widgets import ManageSettingsWidget, CoordinatesValidator
 
-from core.gcmd import RunCommand, GError, GMessage, GWarning
+from core.gcmd import RunCommand, GError, GMessage, GWarning, GException
 from core.utils    import GetListOfLocations, GetListOfMapsets, \
     GetFormats, rasterFormatExtension, vectorFormatExtension
 from core.utils import GetSettingsPath, GetValidLayerName, ListSortLower
@@ -882,6 +883,8 @@ class VectorDBInfo:
 
         :param layer: vector layer number
         """
+        if layer not in self.layers:
+            raise GException(_("No table linked to layer <{}>.".format(layer)))
         return self.layers[layer]['table']
 
     def GetDbSettings(self, layer):
@@ -2708,3 +2711,57 @@ class SeparatorSelect(wx.ComboBox):
                                               **kwargs)
         self.SetName("SeparatorSelect")
         self.SetItems(['pipe', 'comma', 'space', 'tab', 'newline'])
+
+
+class SqlWhereSelect(wx.Panel):
+
+    def __init__(self, parent, **kwargs):
+        """Widget to define SQL WHERE condition.
+
+        :param parent: parent window
+        """
+        super(SqlWhereSelect, self).__init__(parent=parent, id=wx.ID_ANY)
+        self.parent = parent
+
+        self.sqlField = wx.TextCtrl(parent=self, id=wx.ID_ANY,
+                                    size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.GetChildren()[0].SetName("SqlWhereSelect")
+        icon = wx.Bitmap(
+            os.path.join(
+                globalvar.ICONDIR,
+                "grass",
+                "table.png"))
+        self.buttonInsSql = buttons.ThemedGenBitmapButton(
+            parent=self, id=wx.ID_ANY, bitmap=icon, size=globalvar.DIALOG_COLOR_SIZE)
+        self.buttonInsSql.Bind(wx.EVT_BUTTON, self._onClick)
+
+        self._doLayout()
+
+
+    def _doLayout(self):
+        self.dialogSizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.dialogSizer.Add(self.sqlField,
+                             proportion=1,
+                             flag=wx.EXPAND)
+        self.dialogSizer.Add(self.buttonInsSql)
+        self.SetSizer(self.dialogSizer)
+
+    def GetTextWin(self):
+        return self.sqlField
+
+    def _onClick(self, event):
+        from dbmgr.sqlbuilder import SQLBuilderWhere
+        try:
+            win = SQLBuilderWhere(parent=self,
+                                  vectmap=self.vector_map,
+                                  layer=self.vector_layer)
+            win.Show()
+        except GException as e:
+            GMessage(parent=self.parent, message='{}'.format(e))
+        
+    def SetData(self, vector, layer):
+        self.vector_map = vector
+        self.vector_layer = int(layer) # TODO: support layer names
+
+    def SetValue(self, value):
+        self.sqlField.SetValue(value)

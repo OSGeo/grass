@@ -151,6 +151,7 @@ struct Option *G_define_standard_option(int opt)
     case G_OPT_DB_WHERE:
 	Opt->key = "where";
 	Opt->type = TYPE_STRING;
+        Opt->gisprompt = "old,sql_query,sql_query";
 	Opt->key_desc = "sql_query";
 	Opt->required = NO;
 	Opt->label = _("WHERE conditions of SQL statement without 'where' keyword");
