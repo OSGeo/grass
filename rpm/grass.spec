@@ -45,7 +45,7 @@ BuildRequires:	mysql-devel
 %if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	netcdf-devel
 %endif
-BuildRequires:	numpy
+BuildRequires:	python2-numpy
 %if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	postgresql-devel
 %else
@@ -59,13 +59,13 @@ BuildRequires:	proj-nad
 # argparse is included in python2.7+ but not python2.6
 BuildRequires:  python-argparse
 %endif
-BuildRequires:	python-dateutil
-BuildRequires:	python-devel
-Requires:  python-matplotlib
+BuildRequires:	python2-dateutil
+BuildRequires:	python2-devel
+Requires:  python2-matplotlib
 ##?
-#Requires:  python-matplotlib-wx
+#Requires:  python2-matplotlib-wx
 %if (0%{?rhel} > 6 || 0%{?fedora})
-BuildRequires:	python-pillow
+BuildRequires:	python2-pillow
 %else
 BuildRequires:	python-imaging
 %endif
@@ -77,10 +77,10 @@ BuildRequires:	wxGTK-devel
 BuildRequires:	zlib-devel
 
 Requires:	geos
-Requires:	numpy
+Requires:	python2-numpy
 Requires:	proj-epsg
 Requires:	proj-nad
-Requires:	wxPython
+Requires:	python2-wxpython
 
 %if "%{_lib}" == "lib"
 %global cpuarch 32
@@ -312,7 +312,10 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
-* Sun Jan 28 2018 Markus Neteler <neteler@mundialis.de> - 7.4.1-2
+* Mon Mar 26 2018 Markus Neteler <neteler@mundialis.de> - 7.4.1-2
+- Update Python 2 dependency declarations to new packaging standards
+  (author: Iryna Shcherbina <ishcherb@redhat.com> for 7.2.3-2)
+  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
 - SPEC cleanup with fix of dependencies between packages (review #1539116)
 - appdata.xml file into '/usr/share/metainfo'
 - use icon cache scriplets only on EPEL
