@@ -24,6 +24,7 @@
 
 #include <stdlib.h>
 
+void copy_tabs(const struct Map_info *In, struct Map_info *Out);
 
 struct DecimationContext
 {
@@ -114,7 +115,7 @@ int main(int argc, char **argv)
     struct Option *skip_opt, *preserve_opt, *offset_opt, *limit_opt;
     struct Option *zdiff_opt, *limit_per_cell_opt, *zrange_opt;
     struct Flag *grid_decimation_flg, *first_point_flg, *cat_in_grid_flg;
-    struct Flag *use_z_flg, *nocats_flag, *notopo_flag;
+    struct Flag *use_z_flg, *nocats_flag, *notopo_flag, *notab_flag;
     struct Map_info vinput, voutput;
 
     G_gisinit(argv[0]);
@@ -244,6 +245,9 @@ int main(int argc, char **argv)
 
     notopo_flag = G_define_standard_flag(G_FLG_V_TOPO);
     notopo_flag->guisection = _("Speed");
+
+    notab_flag = G_define_standard_flag(G_FLG_V_TABLE);
+    notab_flag->guisection = _("Speed");
 
     /* here we have different decimations but also selections/filters */
     G_option_required(skip_opt, preserve_opt, offset_opt, limit_opt,
@@ -454,6 +458,10 @@ int main(int argc, char **argv)
     Vect_destroy_cats_struct(write_context.cats);
 
     Vect_hist_command(&voutput);
+
+    if (write_context.write_cats == TRUE && !notab_flag->answer) {
+	copy_tabs(&vinput, &voutput);
+    }
 
     Vect_close(&vinput);
     if (!notopo_flag->answer)
