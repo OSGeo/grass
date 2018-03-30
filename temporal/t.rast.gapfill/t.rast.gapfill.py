@@ -121,7 +121,7 @@ def main():
             if sp.get_temporal_type() == 'absolute' and tsuffix in ['gran', 'time']:
                 _id = "{ba}@{ma}".format(ba=base, ma=mapset)
             else:
-                map_name = tgis.create_numeric_suffic(base, num + count, tsuffix)
+                map_name = tgis.create_numeric_suffix(base, num + count, tsuffix)
                 _id = "{name}@{ma}".format(name=map_name, ma=mapset)
             _map.set_id(_id)
 
@@ -182,7 +182,7 @@ def main():
                 new_id = "{ba}_{su}@{ma}".format(ba=new_map.get_name(),
                                                  su=suffix, ma=mapset)
             else:
-                map_name = tgis.create_numeric_suffic(new_map.get_name(),
+                map_name = tgis.create_numeric_suffix(new_map.get_name(),
                                                       count, tsuffix)
                 new_id = "{name}@{ma}".format(name=map_name, ma=mapset)
 

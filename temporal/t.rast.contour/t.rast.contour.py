@@ -215,7 +215,7 @@ def main(options, flags):
             suffix = tgis.create_time_suffix(map)
             map_name = "{ba}_{su}".format(ba=base, su=suffix)
         else:
-            map_name = tgis.create_numeric_suffic(base, count, time_suffix)
+            map_name = tgis.create_numeric_suffix(base, count, time_suffix)
         new_map = tgis.open_new_map_dataset(map_name, None, type="vector",
                                             temporal_extent=map.get_temporal_extent(),
                                             overwrite=overwrite, dbif=dbif)

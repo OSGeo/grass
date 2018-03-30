@@ -341,7 +341,7 @@ def main():
                     suffix = tgis.create_time_suffix(map)
                     indicator_map_name = "{ba}_indicator_{su}".format(ba=base, su=suffix)
                 else:
-                    indicator_map_name = tgis.create_numeric_suffic(base + "_indicator",
+                    indicator_map_name = tgis.create_numeric_suffix(base + "_indicator",
                                                                     indi_count, time_suffix)
                 indicator_map_id = dummy.build_id(indicator_map_name, mapset)
                 indicator_map = input_strds.get_new_map_instance(indicator_map_id)
@@ -534,7 +534,7 @@ def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
             suffix = tgis.create_time_suffix(map)
             occurrence_map_name = "{ba}_{su}".format(ba=base, su=suffix)
         else:
-            occurrence_map_name = tgis.create_numeric_suffic(base, count, tsuffix)
+            occurrence_map_name = tgis.create_numeric_suffix(base, count, tsuffix)
 
         occurrence_map_id = map.build_id(occurrence_map_name, mapset)
         occurrence_map = input_strds.get_new_map_instance(occurrence_map_id)
