@@ -396,7 +396,7 @@ def main():
                 suffix = tgis.create_time_suffix(map)
                 output_map_name = "{ba}_{su}".format(ba=base, su=suffix)
             else:
-                output_map_name = tgis.create_numeric_suffic(base, count, time_suffix)
+                output_map_name = tgis.create_numeric_suffix(base, count, time_suffix)
 
             output_map_id = map.build_id(output_map_name, mapset)
             output_map = input_strds.get_new_map_instance(output_map_id)
