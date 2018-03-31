@@ -2469,7 +2469,7 @@ class DefaultFontDialog(wx.Dialog):
                                   label=_("Font size:"))
             gridSizer.Add(label,
                           flag=wx.ALIGN_CENTER_VERTICAL,
-                          pos=(2, 0))
+                          pos=(3, 0))
 
             self.spin = SpinCtrl(parent=panel, id=wx.ID_ANY)
             if self.fontsize:
@@ -2478,7 +2478,7 @@ class DefaultFontDialog(wx.Dialog):
             self.spin.Bind(wx.EVT_TEXT, self.OnSizeSpin)
             gridSizer.Add(self.spin,
                           flag=wx.ALIGN_CENTER_VERTICAL,
-                          pos=(3, 0))
+                          pos=(4, 0))
 
         else:
             return
