@@ -12,6 +12,7 @@
 #define PRINT_NANGLE 0x100
 #define PRINT_GMT    0x200
 #define PRINT_WMS    0x400
+#define PRINT_WF     0x800
 
 /* zoom.c */
 int zoom(struct Cell_head *, const char *, const char *);

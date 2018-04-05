@@ -13,6 +13,7 @@
  *   	    	Read the file COPYING that comes with GRASS for details.
  ****************************************************************************/
 
+#include <dirent.h> 
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
@@ -39,8 +40,11 @@ int main(int argc, char *argv[])
     const char *value;
     const char *name;
     const char *mapset;
+    char *windows_path = G_malloc(1024);
     char **rast_ptr, **vect_ptr;
     int pix;
+    DIR *d;
+    struct dirent *dir;
 
     struct GModule *module;
     struct
@@ -48,7 +52,7 @@ int main(int argc, char *argv[])
 	struct Flag
 	    *update, *print, *gprint, *flprint, *lprint, *eprint, *nangle,
 	    *center, *res_set, *dist_res, *dflt, *z, *savedefault,
-	    *bbox, *gmt_style, *wms_style;
+	    *bbox, *gmt_style, *wms_style, *list;
     } flag;
     struct
     {
@@ -164,6 +168,11 @@ int main(int argc, char *argv[])
     flag.update->key = 'u';
     flag.update->description = _("Do not update the current region");
     flag.update->guisection = _("Effects");
+
+    flag.list = G_define_flag();
+    flag.list->key = 'L';
+    flag.list->description = _("List available regions");
+    flag.list->guisection = _("Print");
 
     /* parameters */
 
@@ -362,7 +371,7 @@ int main(int argc, char *argv[])
     G_option_required(flag.dflt, flag.savedefault, flag.print, flag.lprint,
                       flag.eprint, flag.center, flag.gmt_style, flag.wms_style,
                       flag.dist_res, flag.nangle, flag. z, flag.bbox, flag.gprint,
-                      flag.res_set, flag.update, parm.region, parm.raster,
+                      flag.res_set, flag.update, flag.list, parm.region, parm.raster,
                       parm.raster3d, parm.vect, parm.north, parm.south, parm.east,
                       parm.west, parm.top, parm.bottom, parm.rows, parm.cols,
                       parm.res, parm.res3, parm.nsres, parm.ewres, parm.tbres,
@@ -849,6 +858,21 @@ int main(int argc, char *argv[])
 
     if (print_flag)
 	print_window(&window, print_flag, flat_flag);
+
+    if (flag.list->answer) {
+          mapset = G_mapset_path();
+          sprintf(windows_path, "%s/%s", mapset, "windows");
+          d = opendir(windows_path);
+
+          if (d) {
+            while ((dir = readdir(d)) != NULL) {
+              if (dir->d_type == DT_REG) {
+                printf("%s\n", dir->d_name);
+              }
+            }
+            closedir(d);
+          }
+    }
 
     exit(EXIT_SUCCESS);
 }
