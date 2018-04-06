@@ -22,7 +22,7 @@
  * <25 Jun 1995> - new site API (jdm)
  * <13 Sep 2000> - released under GPL
  *
- * COPYRIGHT:    (C) 2003-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2018 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -64,9 +64,10 @@ int main(int argc, char *argv[])
     double (*rng)(void) = G_drand48;
     double zmin, zmax;
     int seed;
-    unsigned long i, n;
+    unsigned long i, n, total_n;
     int j, k, type, usefloat;
-    int area, nareas, field;
+    int area, nareas, field, cat_area;
+    int cat, icol, ncols;
     struct boxlist *List = NULL;
     BOX_SIZE *size_list = NULL;
     int alloc_size_list = 0;
@@ -86,11 +87,13 @@ int main(int argc, char *argv[])
     {
 	struct Flag *z, *notopo, *a;
     } flag;
-    struct field_info *Fi;
-    dbDriver *driver;
-    dbTable *table;
+    int notable;
+    struct field_info *Fi, *Fi_input;
+    dbDriver *driver, *driver_input;
     dbString sql;
-
+    dbTable *table;
+    dbCatValI *cats_array = NULL;
+    
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -230,7 +233,8 @@ int main(int argc, char *argv[])
 
     /* Do we need to write random values into attribute table? */
     usefloat = -1;
-    if (parm.zcol->answer) {
+    notable = !(parm.zcol->answer || (parm.input -> answer && field > 0));
+    if (!notable) {
 	Fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
 	driver =
 	    db_start_driver_open_database(Fi->driver,
@@ -246,9 +250,46 @@ int main(int argc, char *argv[])
 	db_init_string(&sql);
 
         /* Create table */
-	sprintf(buf, "create table %s (%s integer, %s %s)", Fi->table, GV_KEY_COLUMN,
-		parm.zcol->answer, parm.ztype->answer);
-	db_set_string(&sql, buf);
+        sprintf(buf, "create table %s (%s integer", Fi->table, GV_KEY_COLUMN);
+        db_set_string(&sql, buf);
+        if (parm.zcol->answer) {
+            sprintf(buf, ", %s %s", parm.zcol->answer, parm.ztype->answer);
+            db_append_string(&sql, buf);
+        }
+        if (parm.input->answer && field > 0) {
+            dbString table_name;
+            dbColumn *col;
+            
+            Fi_input = Vect_get_field2(&In, parm.field->answer);
+            if (Fi_input == NULL)
+                G_fatal_error(_("Database connection not defined for layer <%s>"),
+                              parm.field->answer);
+            driver_input = db_start_driver_open_database(
+                Fi_input->driver,
+                Vect_subst_var(Fi_input->database, &In));
+            if (driver_input == NULL) {
+                G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+                              Vect_subst_var(Fi_input->database, &In), Fi_input->driver);
+            }
+            db_set_error_handler_driver(driver_input);
+            
+            db_init_string(&table_name);
+            db_set_string(&table_name, Fi_input->table);
+            if (db_describe_table(driver_input, &table_name, &table) != DB_OK)
+                G_fatal_error(_("Unable to describe table <%s>"),
+                              Fi_input->table);
+
+            ncols = db_get_table_number_of_columns(table);
+            for (icol = 0; icol < ncols; icol++) {
+                col = db_get_table_column(table, icol);
+                sprintf(buf, ",%s_%s %s", parm.input->answer,
+                        db_get_column_name(col),
+                        db_sqltype_name(db_get_column_sqltype(col)));
+                db_append_string(&sql, buf);
+            }
+        }
+        db_append_string(&sql, ")");
+        
 	if (db_execute_immediate(driver, &sql) != DB_OK) {
 	    G_fatal_error(_("Unable to create table: %s"),
 			  db_get_string(&sql));
@@ -272,19 +313,17 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
 	}
 
-	if (db_get_table_number_of_columns(table) != 2) {
-	    G_fatal_error(_("Table should contain only two columns"));
-	}
-
-	type = db_get_column_sqltype(db_get_table_column(table, 1));
-	if (type == DB_SQL_TYPE_SMALLINT || type == DB_SQL_TYPE_INTEGER)
-	    usefloat = 0;
-	if (type == DB_SQL_TYPE_REAL || type == DB_SQL_TYPE_DOUBLE_PRECISION)
-	    usefloat = 1;
-	if (usefloat < 0) {
-	    G_fatal_error(_("You have created unsupported column type. This module supports only INTEGER"
-			   " and DOUBLE PRECISION column types."));
-	}
+        if (parm.zcol->answer) {
+            type = db_get_column_sqltype(db_get_table_column(table, 1));
+            if (type == DB_SQL_TYPE_SMALLINT || type == DB_SQL_TYPE_INTEGER)
+                usefloat = 0;
+            if (type == DB_SQL_TYPE_REAL || type == DB_SQL_TYPE_DOUBLE_PRECISION)
+                usefloat = 1;
+            if (usefloat < 0) {
+                G_fatal_error(_("You have created unsupported column type. This module supports only INTEGER"
+                                " and DOUBLE PRECISION column types."));
+            }
+        }
 
         Vect_map_add_dblink(&Out, 1, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
 			    Fi->driver);
@@ -385,11 +424,15 @@ int main(int argc, char *argv[])
     G_message(_("Generating points..."));
     if (flag.a->answer && nareas > 0) {
 	struct bound_box abox, bbox;
-	int cat = 1;
+	cat = 1;
 
 	/* n points for each area */
 	nareas = Vect_get_num_areas(&In);
-	
+        
+        /* init cat/cat_area array */
+        total_n = n * nareas;
+        cats_array = G_malloc(total_n * sizeof(dbCatValI));
+
 	G_percent(0, nareas, 1);
 	for (area = 1; area <= nareas; area++) {
 
@@ -428,10 +471,18 @@ int main(int argc, char *argv[])
 	    if (bbox.N > box.N)
 		bbox.N = box.N;
 
+            if (field > 0)
+                Vect_cat_get(Cats, field, &cat_area);
+
 	    for (i = 0; i < n; ++i) {
 		double x, y, z;
 		int outside = 1;
 		int ret;
+
+                if (field > 0) {
+                    cats_array[cat-1].cat = cat;
+                    cats_array[cat-1].val = cat_area;
+                }
 
 		Vect_reset_line(Points);
 		Vect_reset_cats(Cats);
@@ -455,21 +506,30 @@ int main(int argc, char *argv[])
 		else
 		    Vect_append_point(Points, x, y, 0.0);
 
-		if (parm.zcol->answer) {
-		    sprintf(buf, "insert into %s values ( %ld, ", Fi->table, i + 1);
-		    db_set_string(&sql, buf);
-		    /* Round random value if column is integer type */
-		    if (usefloat)
-			sprintf(buf, "%f )", z);
-		    else
-			sprintf(buf, "%.0f )", z);
-		    db_append_string(&sql, buf);
-
-		    G_debug(3, "%s", db_get_string(&sql));
-		    if (db_execute_immediate(driver, &sql) != DB_OK) {
-			G_fatal_error(_("Cannot insert new row: %s"),
-				      db_get_string(&sql));
-		    }
+		if (!notable) {
+                    sprintf(buf, "insert into %s (%s", Fi->table, Fi->key);
+                    db_set_string(&sql, buf);
+                    if (parm.zcol->answer) {
+                        sprintf(buf, ", %s", parm.zcol->answer);
+                        db_append_string(&sql, buf);
+                    }
+                    sprintf(buf, ") values ( %d", cat);
+                    db_append_string(&sql, buf);
+                    if (parm.zcol->answer) {
+                        /* Round random value if column is integer type */
+                        if (usefloat)
+                            sprintf(buf, ", %f", z);
+                        else
+                            sprintf(buf, ", %.0f", z);
+                        db_append_string(&sql, buf);
+                    }
+                    db_append_string(&sql, ")");
+                    
+                    G_debug(3, "%s", db_get_string(&sql));
+                    if (db_execute_immediate(driver, &sql) != DB_OK) {
+                        G_fatal_error(_("Unable to insert new row: %s"),
+                                      db_get_string(&sql));
+                    }
 		}
 
 		Vect_cat_set(Cats, 1, cat++);
@@ -478,6 +538,10 @@ int main(int argc, char *argv[])
 	}
     }
     else {
+        total_n = n;
+        if (parm.input->answer && field > 0)
+            cats_array = G_malloc(n * sizeof(dbCatValI));
+
 	/* n points in total */
 	for (i = 0; i < n; ++i) {
 	    double x, y, z;
@@ -526,7 +590,7 @@ int main(int argc, char *argv[])
 				continue;
 			    }
 			}
-
+                        
 			List->id[k] = List->id[j];
 			List->box[k] = List->box[j];
 			size_list[k].i = List->id[k];
@@ -579,32 +643,114 @@ int main(int argc, char *argv[])
 	    else
 		Vect_append_point(Points, x, y, 0.0);
 
-	    if (parm.zcol->answer) {
-		sprintf(buf, "insert into %s values ( %ld, ", Fi->table, i + 1);
-		db_set_string(&sql, buf);
-		/* Round random value if column is integer type */
-		if (usefloat)
-		    sprintf(buf, "%f )", z);
-		else
-		    sprintf(buf, "%.0f )", z);
-		db_append_string(&sql, buf);
+            cat = i + 1;
+            
+            if (!notable) {
+                if (parm.input->answer) {
+                    Vect_cat_get(Cats, field, &cat_area);
 
-		G_debug(3, "%s", db_get_string(&sql));
-		if (db_execute_immediate(driver, &sql) != DB_OK) {
-		    G_fatal_error(_("Cannot insert new row: %s"),
-				  db_get_string(&sql));
-		}
-	    }
+                    cats_array[i].cat = cat;
+                    cats_array[i].val = cat_area;
+                    
+                }
+                
+                sprintf(buf, "insert into %s (%s", Fi->table, Fi->key);
+                db_set_string(&sql, buf);
+                if (parm.zcol->answer) {
+                    sprintf(buf, ", %s", parm.zcol->answer);
+                    db_append_string(&sql, buf);
+                }
+                sprintf(buf, ") values ( %ld", i + 1);
+                db_append_string(&sql, buf);
+                if (parm.zcol->answer) {
+                    /* Round random value if column is integer type */
+                    if (usefloat)
+                        sprintf(buf, ", %f", z);
+                    else
+                        sprintf(buf, ", %.0f", z);
+                    db_append_string(&sql, buf);
+                }
+                db_append_string(&sql, ")");
+                
+                G_debug(3, "%s", db_get_string(&sql));
+                if (db_execute_immediate(driver, &sql) != DB_OK) {
+                    G_fatal_error(_("Unable to insert new row: %s"),
+                                  db_get_string(&sql));
+                }
+            }
 
-	    Vect_cat_set(Cats, 1, i + 1);
+	    Vect_cat_set(Cats, 1, cat);
 	    Vect_write_line(&Out, GV_POINT, Points, Cats);
 	}
 	G_percent(1, 1, 1);
     }
     
-    if (parm.zcol->answer) {
-	db_commit_transaction(driver);
-	db_close_database_shutdown_driver(driver);
+    if (parm.input->answer && field > 0) {
+        int more, ctype;
+        const char *column_name;
+        dbColumn *column;
+        dbValue *value;
+        dbString value_str, update_str;
+        dbCursor cursor;
+            
+        db_init_string(&value_str);
+        db_init_string(&update_str);
+        sprintf(buf, "select * from %s", Fi_input->table);
+        db_set_string(&sql, buf);
+        if (db_open_select_cursor(driver_input, &sql,
+                                  &cursor, DB_SEQUENTIAL) != DB_OK)
+            G_fatal_error(_("Unable to open select cursor"));
+        table = db_get_cursor_table(&cursor);
+
+        while (TRUE) {
+            if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+                G_fatal_error(_("Unable to fetch data from table <%s>"),
+                              Fi_input->table);
+            
+            if (!more) {
+                break;
+            }
+
+            sprintf(buf, "update %s set ", Fi->table);
+            db_set_string(&update_str, buf);
+            for (icol = 0; icol < ncols; icol++) {
+                column = db_get_table_column(table, icol);
+                column_name = db_get_column_name(column);
+                value = db_get_column_value(column);
+                if (strcmp(column_name, Fi_input->key) == 0)
+                    cat_area = db_get_value_int(value);
+               
+                if (icol > 0)
+                    db_append_string(&update_str, ", ");
+                sprintf(buf, "%s_%s = ", parm.input->answer, column_name);
+                db_append_string(&update_str, buf);
+                ctype = db_sqltype_to_Ctype(db_get_column_sqltype(column));
+                db_convert_value_to_string(value, ctype, &value_str);
+                if (ctype == DB_C_TYPE_INT || ctype == DB_C_TYPE_DOUBLE)
+                    sprintf(buf, "%s", db_get_string(&value_str));
+                else
+                    sprintf(buf, "'%s'", db_get_string(&value_str));
+                db_append_string(&update_str, buf);
+            }
+            for (i = 0; i < total_n; i++) {
+                if (cat_area == cats_array[i].val) {
+                    db_copy_string(&sql, &update_str);
+                    sprintf(buf, " where %s = %d", Fi->key, cats_array[i].cat);
+                    db_append_string(&sql, buf);
+                    G_debug(3, "%s", db_get_string(&sql));
+                    if (db_execute_immediate(driver, &sql) != DB_OK) {
+                        G_fatal_error(_("Unable to update row: %s"),
+                                      db_get_string(&sql));
+                    }
+                }
+            }
+        }
+        G_free(cats_array);
+    }
+
+    if (!notable) {
+        db_commit_transaction(driver);
+        db_close_database_shutdown_driver(driver);
     }
 
     if (!flag.notopo->answer) {
