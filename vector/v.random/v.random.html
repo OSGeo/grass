@@ -3,26 +3,26 @@
 <em>v.random</em> randomly generates vector points within the
 current region using the selected random number generator.
 
-<p><em>v.random</em> can generate also 3D vector points or
-write random value to attribute table. Point height range or
-attribute value range is controlled by specifying zmin and zmax values.
-Both z values are included in range (<em>zmin &lt;= z &lt;= zmax</em>).
-Generated random attribute value type can be controlled by column
-data type. Use <b>INTEGER</b> column type for integers and 
-<b>DOUBLE PRECISION</b> for floating point numbers. Integer values are
+<p><em>v.random</em> can generate also 3D vector points or write
+random value to attribute table. Point height range or attribute value
+range is controlled by specifying <b>zmin</b> and <b>zmax</b> options.
+Both z values are included in range (<em>zmin &lt;= z &lt;=
+zmax</em>). Generated random attribute value type can be controlled
+by <b>column_type</b>. Use <i>integer</i> column type for integers and
+<i>double precision</i> for floating point numbers. Integer values are
 calculated by rounding random floating point number.
 
 <p>To produce repeatable results a random seed can be set using the
-option <em>seed</em>.
+option <b>seed</b>.
 
 <h3>Restriction to vector areas</h3>
 <p>
-If an <em>input</em> vector map with areas is specified, the location of 
-random points is restricted to the selected areas. By default, the 
+If an <b>restrict</b> vector map with areas is specified, the location
+of random points is restricted to the selected areas. By default, the
 requested number of points are distributed across all areas.
 
 <p>
-If the <em>-a</em> flag is given, the requested number of points is 
+If the <b>-a</b> flag is given, the requested number of points is 
 generated for each individual area. For example, if 20 points should be 
 generated and the input map has 100 individual areas, 2000 points will 
 be generated in total.
@@ -57,8 +57,7 @@ maximum: 16572.8
 
 Generate 20 random points with binary attributes (only 0 or 1):
 <div class="code"><pre>
-v.random output=binary_random npoints=20 zmin=0 zmax=1 \
-         column='binary' column_type=integer
+v.random output=binary_random npoints=20 zmin=0 zmax=1 column='binary' column_type=integer
 v.db.select binary_random
 cat|binary
 1|0
@@ -108,8 +107,7 @@ Random points with different X, Y, and Z coordinates
 Generate 3 random points only in selected polygons ("RALEIGH" related ZIP
 code areas):
 <div class="code"><pre>
-v.random restrict=zipcodes_wake output=zipcodes_local_random_n3 npoints=3 \
-  where="ZIPNAME = 'RALEIGH'" -a 
+v.random restrict=zipcodes_wake output=zipcodes_local_random_n3 npoints=3 where="ZIPNAME = 'RALEIGH'" -a 
 
 # visualization
 d.mon wx0
@@ -122,7 +120,7 @@ d.vect zipcodes_local_random_n3 color=red icon=basic/circle
 <a href="v_random_points_in_polygon.png">
 <img src="v_random_points_in_polygon.png" width="400" height="368" alt="v.random example" border="0">
 </a><br>
-<i>Fixd number of random points generated in selected polygons</i>
+<i>Fixed number of random points generated in selected polygons</i>
 </div>
 
 <h3>Generating random adjacent polygons</h3>
@@ -149,7 +147,7 @@ Random adjacent polygons from random points (here: used as centroids)
 
 <p>
 To eventually obtain isolated polygons, selected polygons can be extracted with
-<em>v.extract</em>.
+<em><a href="v.extract.html">v.extract</a></em>.
 <p>
 
 These vector polygons can also be rasterized:
@@ -186,8 +184,7 @@ Generate 20 random points and sample attribute data from geology (vector) map:
 g.region -p vector=geology
 v.random output=random_samples npoints=20
 v.db.addtable map=random_samples columns='cat integer, geology varchar(100)'
-v.what.vect map=random_samples column=geology \
-  query_map=geology query_layer=1 query_column=GEO_NAME 
+v.what.vect map=random_samples column=geology query_map=geology query_layer=1 query_column=GEO_NAME 
 v.db.select random_samples
 cat|geology
 1|PzZm
@@ -202,8 +199,7 @@ Generate 20 random points restricted to forested areas:
 <div class="code"><pre>
 g.region -p raster=landclass96
 r.to.vect -v input=landclass96 output=landclass96 type=area
-v.random restrict=landclass96 output=random_samples npoints=20 \
-  where="label = 'forest'" layer=1
+v.random restrict=landclass96 output=random_samples npoints=20 where="label = 'forest'" layer=1
 </pre></div>
 
 <!--
@@ -227,8 +223,7 @@ points in each water body:
 <div class="code"><pre>
 g.region -p raster=landclass96
 r.to.vect -v input=landclass96 output=landclass96 type=area
-v.random restrict=landclass96 output=random_samples npoints=2 \
-  where="label = 'water'" layer=1 -a
+v.random restrict=landclass96 output=random_samples npoints=2 where="label = 'water'" layer=1 -a
 </pre></div>
 
 <!--
