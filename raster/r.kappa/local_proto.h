@@ -13,6 +13,9 @@ void prt_label(void);
 /* prt_mat.c */
 void prn_error_mat(int out_cols, int hdr);
 
+/* prt2csv_mat.c */
+void prn2csv_error_mat(int out_cols, int hdr);
+
 /* stats.c */
 int stats(void);
 

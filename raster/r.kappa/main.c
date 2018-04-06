@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 
     struct
     {
-	struct Flag *n, *w, *h;
+	struct Flag *m, *w, *h;
     } flags;
 
     G_gisinit(argv[0]);
@@ -108,6 +108,11 @@ int main(int argc, char **argv)
     flags.h->description = _("No header in the report");
     flags.h->guisection = _("Formatting");
 
+    flags.m = G_define_flag();
+    flags.m->key = 'm';
+    flags.m->description = _("Print Matrix only");
+    flags.m->guisection = _("Output settings");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -125,16 +130,23 @@ int main(int argc, char **argv)
     /* run r.stats to obtain statistics of map layers */
     stats();
 
-    /* print header of the output */
-    if (!flags.h->answer)
-	prn_header();
+    if(flags.m->answer)
+    {
+        /* prepare the data for calculation */
+        prn2csv_error_mat(2048, flags.h->answer);
+    } 
+    else 
+    {
+        /* print header of the output */
+        if (!flags.h->answer)
+            prn_header();
 
-    /* prepare the data for calculation */
-    prn_error_mat(flags.w->answer ? 132 : 80, flags.h->answer);
+        /* prepare the data for calculation */
+        prn_error_mat(flags.w->answer ? 132 : 80, flags.h->answer);
 
-    /* generate the error matrix, kappa and variance */
-    calc_kappa();
-
+        /* generate the error matrix, kappa and variance */
+        calc_kappa();
+    }
     return EXIT_SUCCESS;
 }
 
