@@ -27,6 +27,12 @@ generated for each individual area. For example, if 20 points should be
 generated and the input map has 100 individual areas, 2000 points will 
 be generated in total.
 
+<p>
+Attributes attached to <b>restrict</b> vector map are also transfered
+if <b>layer</b> is specified,
+see <em><a href="#stratified-random-sampling:-random-sampling-from-vector-map-by-attribute">example</a></em>
+below.
+  
 <h2>EXAMPLES</h2>
 All examples are based on the North Carolina sample dataset.
 
@@ -102,9 +108,9 @@ mv map.png vrandom_z.png
 Random points with different X, Y, and Z coordinates
 </center>
 
-<h3>Generating random points in selected polygons</h3>
+<h3>Generating random points in selected areas</h3>
 
-Generate 3 random points only in selected polygons ("RALEIGH" related ZIP
+Generate 3 random points only in selected areas ("RALEIGH" related ZIP
 code areas):
 <div class="code"><pre>
 v.random restrict=zipcodes_wake output=zipcodes_local_random_n3 npoints=3 where="ZIPNAME = 'RALEIGH'" -a 
@@ -120,12 +126,12 @@ d.vect zipcodes_local_random_n3 color=red icon=basic/circle
 <a href="v_random_points_in_polygon.png">
 <img src="v_random_points_in_polygon.png" width="400" height="368" alt="v.random example" border="0">
 </a><br>
-<i>Fixed number of random points generated in selected polygons</i>
+<i>Fixed number of random points generated in selected areas</i>
 </div>
 
-<h3>Generating random adjacent polygons</h3>
+<h3>Generating random adjacent areas</h3>
 
-To generate random adjacent polygons, first the centroids are generated as
+To generate random adjacent areas, first the centroids are generated as
 points, then a triangulation is run (North Carolina sample dataset:
 
 <div class="code"><pre>
@@ -135,24 +141,24 @@ v.voronoi input=randpoints6k output=randareas6k
 v.info -t randareas6k
 v.category randareas6k option=print
 
-# plot vector polygons
+# plot vector areas
 d.mon wx0
 d.vect randareas6k -c
 </pre></div>
 <p>
 <center>
 <img src="vrandom_polygons.png" border=1><br>
-Random adjacent polygons from random points (here: used as centroids)
+Random adjacent areas from random points (here: used as centroids)
 </center>
 
 <p>
-To eventually obtain isolated polygons, selected polygons can be extracted with
+To eventually obtain isolated areas, selected areas can be extracted with
 <em><a href="v.extract.html">v.extract</a></em>.
 <p>
 
-These vector polygons can also be rasterized:
+These vector areas can also be rasterized:
 <div class="code"><pre>
-# rasterize polygons
+# rasterize areas
 # note: rastermaps must result in at least 6k pixel in this example
 g.region vector=nc_state res=500 -p -a
 v.to.rast randareas6k out=randareas6k use=cat
@@ -200,6 +206,12 @@ Generate 20 random points restricted to forested areas:
 g.region -p raster=landclass96
 r.to.vect -v input=landclass96 output=landclass96 type=area
 v.random restrict=landclass96 output=random_samples npoints=20 where="label = 'forest'" layer=1
+v.db.select map=random_samples
+cat|landclass96_cat|landclass96_label
+1|5|forest
+2|5|forest
+3|5|forest
+...
 </pre></div>
 
 <!--
