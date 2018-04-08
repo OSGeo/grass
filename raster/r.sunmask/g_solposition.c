@@ -115,6 +115,7 @@ long calc_solar_position(double longitude, double latitude, double timezone,
 		latitude);
 
 	oproj.pj = NULL;
+	tproj.def = NULL;
 
 	if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
 	    G_fatal_error(_("Unable to initialize coordinate transformation"));
