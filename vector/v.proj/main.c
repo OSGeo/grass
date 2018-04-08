@@ -47,6 +47,9 @@ int main(int argc, char *argv[])
     char date[40], mon[4];
     struct GModule *module;
     struct Option *omapopt, *mapopt, *isetopt, *ilocopt, *ibaseopt, *smax;
+#ifdef HAVE_PROJ_H
+    struct Option *pipeline;	/* name of custom PROJ pipeline */
+#endif
     struct Key_Value *in_proj_keys, *in_unit_keys;
     struct Key_Value *out_proj_keys, *out_unit_keys;
     struct line_pnts *Points, *Points2;
@@ -107,6 +110,14 @@ int main(int argc, char *argv[])
     omapopt->required = NO;
     omapopt->description = _("Name for output vector map (default: input)");
     omapopt->guisection = _("Target");
+
+#ifdef HAVE_PROJ_H
+    pipeline = G_define_option();
+    pipeline->key = "pipeline";
+    pipeline->type = TYPE_STRING;
+    pipeline->required = NO;
+    pipeline->description = _("PROJ pipeline for coordinate transformation");
+#endif
 
     flag.list = G_define_flag();
     flag.list->key = 'l';
@@ -271,6 +282,12 @@ int main(int argc, char *argv[])
 	pj_print_proj_params(&info_in, &info_out);
     }
 
+    info_trans.def = NULL;
+#ifdef HAVE_PROJ_H
+    if (pipeline->answer) {
+	info_trans.def = G_store(pipeline->answer);
+    }
+#endif
     if (GPJ_init_transform(&info_in, &info_out, &info_trans) < 0)
 	G_fatal_error(_("Unable to initialize coordinate transformation"));
 
