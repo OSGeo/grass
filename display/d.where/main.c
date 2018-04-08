@@ -145,6 +145,8 @@ int main(int argc, char **argv)
 	G_free_key_value(in_proj_info);
 	G_free_key_value(in_unit_info);
 
+	tproj.def = NULL;
+
 	if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
 	    G_fatal_error(_("Unable to initialize coordinate transformation"));
     }
