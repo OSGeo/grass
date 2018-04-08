@@ -931,6 +931,7 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 	    G_fatal_error(_("Unable to get projection units of target location"));
 	if (pj_get_kv(oproj, out_proj_info, out_unit_info) < 0)
 	    G_fatal_error(_("Unable to get projection key values of target location"));
+	tproj->def = NULL;
 	if (GPJ_init_transform(iproj, oproj, tproj) < 0)
 	    G_fatal_error(_("Unable to initialize coordinate transformation"));
     }
