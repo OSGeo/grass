@@ -68,6 +68,8 @@ static double METERS_in = 1.0, METERS_out = 1.0;
  *         converts from ll to a given SRS, not from a given SRS to ll
  *         thus PROJ 5+ itself uses an inverse transformation in the
  *         first step of the pipeline for proj_create_crs_to_crs()
+ *   if info_trans->def is not NULL, this pipeline definition will be 
+ *   used to create a transformation object 
  * PROJ 4:
  *   info_in->pj must not be null
  *   if info_out->pj is null, create info_out as ll equivalent
@@ -87,13 +89,15 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	G_fatal_error(_("Input coordinate system is NULL"));
 
 #ifdef HAVE_PROJ_H
-    if (info_out->pj != NULL && info_out->def != NULL)
-	G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s +step %s",
-		   info_in->def, info_out->def);
-    else
-	/* assume info_out to be ll equivalent of info_in */
-	G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s",
-		   info_in->def);
+    if (!info_trans->def) {
+	if (info_out->pj != NULL && info_out->def != NULL)
+	    G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s +step %s",
+		       info_in->def, info_out->def);
+	else
+	    /* assume info_out to be ll equivalent of info_in */
+	    G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s",
+		       info_in->def);
+    }
 
     info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
     if (info_trans->pj == NULL) {
