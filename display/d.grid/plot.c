@@ -599,6 +599,8 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out,
     G_free_key_value(in_proj_info);
     G_free_key_value(in_unit_info);
 
+    info_trans->def = NULL;
+
     if (GPJ_init_transform(info_in, info_out, info_trans) < 0)
 	G_fatal_error(_("Unable to initialize coordinate transformation"));
 
