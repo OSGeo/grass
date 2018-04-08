@@ -541,6 +541,7 @@ int main(int argc, char *argv[])
 
     /* Set output projection to latlong w/ same ellipsoid */
     oproj.pj = NULL;
+    tproj.def = NULL;
     if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
 	G_fatal_error(_("Unable to initialize coordinate transformation"));
 
