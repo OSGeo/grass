@@ -287,6 +287,7 @@ void init_proj(void)
 
     /* Out Info (latlong equivalent of In Info */
     info_out.pj = NULL;
+    info_trans.def = NULL;
 
     if (GPJ_init_transform(&info_in, &info_out, &info_trans) < 0)
 	G_fatal_error(_("Unable to initialize coordinate transformation"));
