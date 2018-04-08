@@ -131,10 +131,12 @@ int main(int argc, char **argv)
      *inlocation,		/* name of input location       */
      *outmap,			/* name of output layer         */
      *indbase,			/* name of input database       */
-     *interpol,			/* interpolation method:
-				   nearest neighbor, bilinear, cubic */
+     *interpol,			/* interpolation method         */
      *memory,			/* amount of memory for cache   */
      *res;			/* resolution of target map     */
+#ifdef HAVE_PROJ_H
+    struct Option *pipeline;	/* name of custom PROJ pipeline */
+#endif
     struct Cell_head incellhd,	/* cell header of input map     */
       outcellhd;		/* and output map               */
 
@@ -198,6 +200,14 @@ int main(int argc, char **argv)
     res->required = NO;
     res->description = _("Resolution of output raster map");
     res->guisection = _("Target");
+
+#ifdef HAVE_PROJ_H
+    pipeline = G_define_option();
+    pipeline->key = "pipeline";
+    pipeline->type = TYPE_STRING;
+    pipeline->required = NO;
+    pipeline->description = _("PROJ pipeline for coordinate transformation");
+#endif
 
     list = G_define_flag();
     list->key = 'l';
@@ -285,13 +295,13 @@ int main(int argc, char **argv)
     /* if requested, list the raster maps in source location - MN 5/2001 */
     if (list->answer) {
 	int i;
-	char **list;
+	char **srclist;
 	G_verbose_message(_("Checking location <%s> mapset <%s>"),
 			  inlocation->answer, setname);
-	list = G_list(G_ELEMENT_RASTER, G_getenv_nofatal("GISDBASE"),
+	srclist = G_list(G_ELEMENT_RASTER, G_getenv_nofatal("GISDBASE"),
 		      G_getenv_nofatal("LOCATION_NAME"), setname);
-	for (i = 0; list[i]; i++) {
-	    fprintf(stdout, "%s\n", list[i]);
+	for (i = 0; srclist[i]; i++) {
+	    fprintf(stdout, "%s\n", srclist	[i]);
 	}
 	fflush(stdout);
 	exit(EXIT_SUCCESS);	/* leave r.proj after listing */
@@ -317,6 +327,12 @@ int main(int argc, char **argv)
     if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
 	G_fatal_error(_("Unable to get projection key values of input map"));
 
+    tproj.def = NULL;
+#ifdef HAVE_PROJ_H
+    if (pipeline->answer) {
+	tproj.def = G_store(pipeline->answer);
+    }
+#endif
     if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
 	G_fatal_error(_("Unable to initialize coordinate transformation"));
 
