@@ -4,6 +4,7 @@ PGM = r.sunmask
 
 LIBES = $(GPROJLIB) $(RASTERLIB) $(GISLIB) $(MATHLIB)
 DEPENDENCIES = $(GPROJDEP) $(RASTERDEP) $(GISDEP)
+EXTRA_INC = $(PROJINC) $(GDALCFLAGS)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
