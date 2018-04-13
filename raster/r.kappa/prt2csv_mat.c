@@ -24,6 +24,9 @@ void prn2csv_error_mat(int out_cols, int hdr)
     const char *mapone;
     FILE *fd;
 
+    long *cats;
+    char *cl;
+
     if (output != NULL) {
 	if (hdr)
 	    fd = fopen(output, "w");
@@ -87,19 +90,30 @@ void prn2csv_error_mat(int out_cols, int hdr)
 	/*fprintf(fd, "\t\t\t  MAP1\n");*/
 	/* cat line */
 	fprintf(fd, "cat#\t");
-	for (cndx = first_col; cndx < last_col; cndx++)
-	    fprintf(fd, "%ld\t", rlst[cndx]);
+        /* print labels MAP1*/
+	for (j = 0; j < ncat; j++) {
+          cats = rlst;
+	  cl = Rast_get_c_cat((CELL *) &(cats[j]), &(layers[0].labels));
+	  if (cl)
+	    G_strip(cl);
+	  if (cl == NULL || *cl == 0)
+	    cl = "NULL";
+	  fprintf(fd, "%s\t", cl);
+	}
+	//for (cndx = first_col; cndx < last_col; cndx++)
+	//    fprintf(fd, "%ld\t", rlst[cndx]);
         fprintf(fd, "RowSum");
         fprintf(fd, "\n");
         /* body of the matrix */
 	mapone = "MAP2";
         for (rndx = 0; rndx < ncat; rndx++) {
-	    /*if (*(mapone) != '\0')
-	        fprintf(fd, " %c %5ld\t", *(mapone)++, rlst[rndx]);
-	    else
-	        fprintf(fd, "   %5ld\t", rlst[rndx]);
-	    */
-	    fprintf(fd, "%5ld\t", rlst[rndx]);
+            cats = rlst;
+	    cl = Rast_get_c_cat((CELL *) &(cats[rndx]),&(layers[1].labels));
+	    if (cl)
+	      G_strip(cl);
+	    if (cl == NULL || *cl == 0)
+	      cl = "NULL";
+	    fprintf(fd, "%s\t", cl);
 	    /* entries */
 	    for (cndx = first_col; cndx < last_col; cndx++) {
 	        thisone = (ncat * rndx) + cndx;
