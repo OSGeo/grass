@@ -511,9 +511,12 @@ int main(int argc, char *argv[])
 	if (first == -1)
 	    G_fatal_error(_("Input raster does not overlap current "
 			    "computational region. Nothing to import."));
+
+	G_debug(1, "first row in cur wind %d, first row in source %d", first, rowmapall[first]);
 	rowmap = &rowmapall[first];
 	/* crop window */
 	if (first != 0 || last != cur_wind.rows - 1) {
+	    G_debug(1, "Cropping NS extents");
 	    cur_wind.north -= first * cur_wind.ns_res;
 	    cur_wind.south += (cur_wind.rows - 1 - last) * cur_wind.ns_res;
 	    cur_wind.rows = last - first + 1;
@@ -538,10 +541,13 @@ int main(int argc, char *argv[])
 	if (first == -1)
 	    G_fatal_error(_("Input raster does not overlap current "
 			    "computational region. Nothing to import."));
-	col_offset = first;
+
+	G_debug(1, "first col in cur wind %d, first col in source %d", first, colmapall[first]);
+	col_offset = colmapall[first];
 	colmap = &colmapall[first];
 	/* crop window */
 	if (first != 0 || last != cur_wind.cols - 1) {
+	    G_debug(1, "Cropping EW extents");
 	    cur_wind.west += first * cur_wind.ew_res;
 	    cur_wind.east -= (cur_wind.cols - 1 - last) * cur_wind.ew_res;
 	    cur_wind.cols = last - first + 1;
@@ -1026,8 +1032,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     map_cols = 0;
     use_cell_gdal = 1;
 
-    for (indx = col_offset; indx < ncols; indx++) {
-	if (indx > 0 && colmap[indx] != colmap[indx - 1] + 1) {
+    for (indx = 0; indx < ncols; indx++) {
+	if (indx != colmap[indx] - col_offset) {
 	    map_cols = 1;
 	    use_cell_gdal = 0;
 	}
@@ -1039,6 +1045,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    break;
 	}
     }
+    G_debug(1, "need column mapping: %d", map_cols);
+    G_debug(1, "use cell_gdal: %d", use_cell_gdal);
     dfNoData = GDALGetRasterNoDataValue(hBand, &bNoDataEnabled);
     if (bNoDataEnabled && !nullFlags) {
 	nullFlags = (char *)G_malloc(sizeof(char) * ncols);
