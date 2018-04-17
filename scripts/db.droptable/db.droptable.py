@@ -75,8 +75,9 @@ def main():
 
     # check if table exists
     if not grass.db_table_exist(table):
-        grass.fatal(_("Table <%s> not found in database <%s>") %
-                    (table, database))
+        grass.warning(_("Table <%s> not found in database <%s>") %
+                       (table, database))
+        sys.exit(0)
 
     # check if table is used somewhere (connected to vector map)
     used = grass.db.db_table_in_vector(table)
