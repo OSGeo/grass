@@ -1139,7 +1139,7 @@ class ColumnSelect(ComboCtrl):
                             self.columns.remove(key)
                         except ValueError:
                             pass
-        except (KeyError, ValueError, GException):
+        except (KeyError, ValueError):
             self.columns[:] = []
 
         # update list

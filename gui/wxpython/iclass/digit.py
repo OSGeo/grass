@@ -167,9 +167,7 @@ class IClassVDigit(IVDigit):
         G_set_verbose(verbose)
 
         ret = Vect_get_num_lines(poMapInfoNew)
-        print os.listdir('/home/anna/grassdata/nc_spm_08_grass7/user1/.tmp/anna-laptop/vector')
         Vect_close(poMapInfoNew)
-        print os.listdir('/home/anna/grassdata/nc_spm_08_grass7/user1/.tmp/anna-laptop/vector')
 
         return ret
 
