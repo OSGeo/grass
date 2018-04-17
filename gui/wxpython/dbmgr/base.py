@@ -251,7 +251,6 @@ class VirtualAttributeList(wx.ListCtrl,
         for column in columns:
             if globalvar.wxPythonPhoenix:
                 info.Text = column
-                info.SetAlign(wx.LIST_FORMAT_LEFT)
                 self.InsertColumn(i, info)
             else:
                 info.m_text = column

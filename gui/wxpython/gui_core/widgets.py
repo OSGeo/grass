@@ -1087,7 +1087,7 @@ class SearchModuleWidget(wx.Panel):
         self._search.Bind(wx.EVT_TEXT_ENTER, self.OnEnter)
 
         if self._showTip:
-            self._searchTip = wx.StaticText(parent=self, id=wx.ID_ANY,
+            self._searchTip = StaticWrapText(parent=self, id=wx.ID_ANY,
                                   label="Choose a module", size=(-1, 35))
 
         if self._showChoice:
@@ -1160,7 +1160,6 @@ class SearchModuleWidget(wx.Panel):
         label = _("%d modules match") % len(commands)
         if self._showTip:
             self._searchTip.SetLabel(label)
-            self._searchTip.Wrap(self.GetSize()[0])
 
         self.showNotification.emit(message=label)
 
@@ -1194,7 +1193,6 @@ class SearchModuleWidget(wx.Panel):
             for module in self._results:
                 if cmd == module.data['command']:
                     self._searchTip.SetLabel(module.data['description'])
-                    self._searchTip.Wrap(self.GetSize()[0])
                     break
 
     def Reset(self):

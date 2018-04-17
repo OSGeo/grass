@@ -22,7 +22,6 @@ import wx
 import Queue
 
 from core.gconsole import EVT_CMD_DONE, wxCmdDone
-from core.gcmd import DecodeString
 
 
 class gThread(threading.Thread, wx.EvtHandler):
