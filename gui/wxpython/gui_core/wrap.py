@@ -306,3 +306,16 @@ class Rect(wx.Rect):
             return wx.Rect.Contains(self, rect=rect)
         else:
             return wx.Rect.ContainsRect(self, rect)
+
+
+class CheckBox(wx.CheckBox):
+    """Wrapper around wx.CheckBox to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.CheckBox.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.CheckBox.SetToolTip(self, tipString=tip)
+        else:
+            wx.CheckBox.SetToolTipString(self, tip)
