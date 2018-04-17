@@ -848,10 +848,9 @@ class MapFrame(SingleMapFrame):
         elif self.page:
             pgnum = self.layerbook.GetPageIndex(self.page)
             if pgnum > -1:
-                self.layerbook.RemovePage(pgnum)
+                self._mgr.UnInit()
+                self.layerbook.DeletePage(pgnum)
         Debug.msg(2, "MapFrame.OnCloseWindow(): function ends")
-        self._mgr.UnInit()
-        self.Destroy()
 
     def Query(self, x, y):
         """Query selected layers.
