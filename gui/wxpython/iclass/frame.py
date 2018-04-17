@@ -624,7 +624,8 @@ class IClassMapFrame(DoubleMapFrame):
             return
 
         # copy features to the temporary map
-        vname = self._getTempVectorName()
+        #vname = self._getTempVectorName()
+        vname = self.trainingAreaVector
         # avoid deleting temporary map
         os.environ['GRASS_VECTOR_TEMPORARY'] = '1'
         if digitClass.CopyMap(vname, tmp=True) == -1:
