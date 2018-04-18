@@ -185,7 +185,7 @@ def main():
     if flags['o'] or grass.run_command('r.in.gdal', input=GDALdatasource, flags='j',
                                        errors='status', quiet=True) == 0:
         parameters = dict(input=GDALdatasource, output=output,
-                          memory=memory, flags='k' + additional_flags + region_flag)
+                          memory=memory, flags='ak' + additional_flags + region_flag)
         if bands:
             parameters['band'] = bands
         try:
@@ -247,7 +247,7 @@ def main():
     # import into temp location
     grass.verbose(_("Importing <%s> to temporary location...") % GDALdatasource)
     parameters = dict(input=GDALdatasource, output=output,
-                      memory=memory, flags='k' + additional_flags)
+                      memory=memory, flags='ak' + additional_flags)
     if bands:
         parameters['band'] = bands
     try:
