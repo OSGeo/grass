@@ -402,7 +402,7 @@ def one_point_per_col_output(separator, output_files, output_time_list,
                         cat = row[0]
                         x = row[1]
                         y = row[2]
-                        out_str += "{sep}{cat}{sep}{x:10.10f};" \
+                        out_str += "{sep}{cat}{sep}{x:10.10f}{sep}" \
                                   "{y:10.10f}".format(cat=cat, x=float(x),
                                                            y=float(y),
                                                            sep=separator)
@@ -421,7 +421,7 @@ def one_point_per_col_output(separator, output_files, output_time_list,
                             out_str += "{sep}{site}".format(sep=separator,
                                                             site=site)
 
-            out_file.write(out_str + "\n")
+                        out_file.write(out_str + "\n")
 
         first = False
 
