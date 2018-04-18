@@ -397,31 +397,40 @@ def one_point_per_col_output(separator, output_files, output_time_list,
         if first is True:
             if write_header is True:
                 out_str = "start%(sep)send"%({"sep":separator})
+
+                # Define different separator for coordinates and sites
+                if separator == ',':
+                    coor_sep = ';'
+                else:
+                    coor_sep = ','
+
                 for row in matrix:
                     if vcat:
                         cat = row[0]
                         x = row[1]
                         y = row[2]
-                        out_str += "{sep}{cat}{sep}{x:10.10f}{sep}" \
+                        out_str += "{sep}{cat}{csep}{x:10.10f}{csep}" \
                                   "{y:10.10f}".format(cat=cat, x=float(x),
                                                            y=float(y),
-                                                           sep=separator)
+                                                           sep=separator,
+                                                           csep=coor_sep)
                         if site_input:
                             site = row[3]
-                            out_str += "{sep}{site}".format(sep=separator,
+                            out_str += "{sep}{site}".format(sep=coor_sep,
                                                             site=site)
                     else:
                         x = row[0]
                         y = row[1]
-                        out_str += "{sep}{x:10.10f};" \
+                        out_str += "{sep}{x:10.10f}{csep}" \
                                    "{y:10.10f}".format(x=float(x), y=float(y),
-                                                       sep=separator)
+                                                       sep=separator,
+                                                       csep=coor_sep)
                         if site_input:
                             site = row[2]
-                            out_str += "{sep}{site}".format(sep=separator,
+                            out_str += "{sep}{site}".format(sep=coor_sep,
                                                             site=site)
 
-                        out_file.write(out_str + "\n")
+                out_file.write(out_str + "\n")
 
         first = False
 
