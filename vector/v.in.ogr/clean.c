@@ -11,7 +11,7 @@ void convert_osm_lines(struct Map_info *Map, double snap)
     struct line_pnts *Points = Vect_new_line_struct();
     struct line_pnts *NPoints = Vect_new_line_struct();
     struct line_cats *Cats = Vect_new_cats_struct();
-    double x, y, z, nx, ny;
+    double x, y, z, nx, ny, dx, dy, snap2, dist, tdist;
     int with_z = Vect_is_3d(Map);
     int i, last_i, j, nline;
     int line_split, n_splits;
@@ -21,6 +21,8 @@ void convert_osm_lines(struct Map_info *Map, double snap)
     n_splits = 0;
     if (snap < 0)
 	snap = 0;
+
+    snap2 = snap * snap;
 
     nlines = Vect_get_num_lines(Map);
     G_percent(0, nlines, 5);
@@ -38,20 +40,71 @@ void convert_osm_lines(struct Map_info *Map, double snap)
 	    z = Points->z[i];
 	    nline = Vect_find_line(Map, x, y, z, GV_LINE, snap, with_z, line);
 	    if (nline > 0) {
-		Vect_line_distance(Points, x, y, z, with_z, &nx, &ny,
-		                   NULL, NULL, NULL, NULL);
+		/* intersection with other line */
+		Vect_read_line(Map, NPoints, NULL, nline);
 
-		if (line_split == 0)
-		    Vect_delete_line(Map, line);
-		line_split++;
-		Points->x[i] = nx;
-		Points->y[i] = ny;
-		Vect_reset_line(NPoints);
-		for (j = last_i; j <= i; j++)
-		    Vect_append_point(NPoints, Points->x[j], Points->y[j], Points->z[j]);
-		Vect_write_line(Map, GV_LINE, NPoints, Cats);
-		last_i = i;
-		n_splits++;
+		dx = NPoints->x[0] - x;
+		dy = NPoints->y[0] - y;
+		dist = dx * dx + dy * dy;
+		nx = NPoints->x[0];
+		ny = NPoints->y[0];
+		for (j = 1; j < NPoints->n_points; j++) {
+		    dx = NPoints->x[j] - x;
+		    dy = NPoints->y[j] - y;
+		    tdist = dx * dx + dy * dy;
+		    if (dist > tdist) {
+			dist = tdist;
+			nx = NPoints->x[j];
+			ny = NPoints->y[j];
+		    } 
+		}
+
+		if (dist <= snap2) {
+		    if (line_split == 0)
+			Vect_delete_line(Map, line);
+		    line_split++;
+		    Points->x[i] = nx;
+		    Points->y[i] = ny;
+		    Vect_reset_line(NPoints);
+		    for (j = last_i; j <= i; j++)
+			Vect_append_point(NPoints, Points->x[j], Points->y[j], Points->z[j]);
+		    Vect_write_line(Map, GV_LINE, NPoints, Cats);
+		    last_i = i;
+		    n_splits++;
+		}
+	    }
+	    if (last_i != i) {
+		/* self-intersection */
+		dx = Points->x[0] - x;
+		dy = Points->y[0] - y;
+		dist = dx * dx + dy * dy;
+		nx = Points->x[0];
+		ny = Points->y[0];
+		for (j = 1; j < Points->n_points; j++) {
+		    if (j == i)
+			continue;
+		    dx = Points->x[j] - x;
+		    dy = Points->y[j] - y;
+		    tdist = dx * dx + dy * dy;
+		    if (dist > tdist) {
+			dist = tdist;
+			nx = Points->x[j];
+			ny = Points->y[j];
+		    } 
+		}
+		if (dist <= snap2) {
+		    if (line_split == 0)
+			Vect_delete_line(Map, line);
+		    line_split++;
+		    Points->x[i] = nx;
+		    Points->y[i] = ny;
+		    Vect_reset_line(NPoints);
+		    for (j = last_i; j <= i; j++)
+			Vect_append_point(NPoints, Points->x[j], Points->y[j], Points->z[j]);
+		    Vect_write_line(Map, GV_LINE, NPoints, Cats);
+		    last_i = i;
+		    n_splits++;
+		}
 	    }
 	}
 	if (line_split) {
