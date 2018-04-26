@@ -35,7 +35,8 @@ DCELL **cell;
 int *cellfd;
 CELL *class_cell, *reject_cell;
 int class_fd, reject_fd;
-char *class_name, *reject_name;
+char *reject_name;
+char class_name[GNAME_MAX];
 double *B;
 double *P;
 CELL cat;
@@ -54,6 +55,7 @@ int main(int argc, char *argv[])
     {
 	struct Option *group, *subgroup, *sigfile, *class, *reject;
     } parm;
+    char xmapset[GMAPSET_MAX];
 
     G_gisinit(argv[0]);
 
@@ -95,11 +97,16 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
 
-    class_name = parm.class->answer;
     reject_name = parm.reject->answer;
     group = parm.group->answer;
     subgroup = parm.subgroup->answer;
     sigfile = parm.sigfile->answer;
+    
+    if (G_unqualified_name(parm.class->answer, G_mapset(), class_name, xmapset) < 0)
+        G_fatal_error(_("<%s> does not match the current mapset"), xmapset);
+    
+    if (G_legal_filename(class_name) < 0)
+        G_fatal_error(_("<%s> is an illegal file name"), class_name);
 
     open_files();
 

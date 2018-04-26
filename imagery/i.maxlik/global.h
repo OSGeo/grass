@@ -9,6 +9,7 @@ extern DCELL **cell;
 extern int *cellfd;
 extern CELL *class_cell, *reject_cell;
 extern int class_fd, reject_fd;
-extern char *class_name, *reject_name;
+extern char *reject_name;
+extern char class_name[GNAME_MAX];
 extern double *B;
 extern double *P;
