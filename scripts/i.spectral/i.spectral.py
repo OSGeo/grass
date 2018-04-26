@@ -36,6 +36,10 @@
 #% required : no
 #% guisection: Input
 #%end
+#%option G_OPT_I_SUBGROUP
+#% required : no
+#% guisection: Input
+#%end
 #%option G_OPT_R_INPUTS
 #% key: raster
 #% required : no
@@ -198,6 +202,7 @@ def draw_linegraph(what):
 
 def main():
     group = options['group']
+    subgroup = options['subgroup']
     raster = options['raster']
     output = options['output']
     coords = options['coordinates']
@@ -226,7 +231,10 @@ def main():
     # get data from group listing and set the x-axis labels
     if group:
         # Parse the group list output
-        s = gcore.read_command('i.group', flags='g', group=group, quiet=True)
+        if subgroup:
+            s = gcore.read_command('i.group', flags='g', group=group, subgroup=subgroup, quiet=True)
+        else:
+            s = gcore.read_command('i.group', flags='g', group=group, quiet=True)
         rastermaps = s.splitlines()
     else:
         # get data from list of files and set the x-axis labels
