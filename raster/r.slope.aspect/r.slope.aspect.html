@@ -160,10 +160,12 @@ The current mask is ignored.
 
 <p>
 The algorithm used to determine slope and aspect uses a 3x3 
-neighborhood around each cell in the raster elevation map. Thus, it is 
-not possible to determine slope and aspect for the cells adjacent to 
+neighborhood around each cell in the raster elevation map. Thus, 
+slope and aspect are not determineed for cells adjacent to 
 the edges and NULL cells in the elevation map layer. These cells are 
-set to nodata in both the slope and aspect raster maps.
+by default set to nodata in output raster maps. With the <b>-e</b> flag, 
+output values are estimated for these cells, avoiding cropping along 
+the edges.
 
 <p>
 Horn's formula is used to find the first order derivatives in x and y directions.

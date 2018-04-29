@@ -87,7 +87,8 @@ int main(int argc, char *argv[])
     int dyy_fd;
     int dxy_fd;
     DCELL *elev_cell[3], *temp;
-    DCELL *c1, *c2, *c3, *c4, *c5, *c6, *c7, *c8, *c9;
+    DCELL *pc1, *pc2, *pc3;
+    DCELL c1, c2, c3, c4, c5, c6, c7, c8, c9;
     DCELL tmp1, tmp2;
     FCELL dat1, dat2;
     CELL cat;
@@ -158,8 +159,9 @@ int main(int argc, char *argv[])
     } parm;
     struct
     {
-	struct Flag *a, *n;
+	struct Flag *a, *n, *e;
     } flag;
+    int compute_at_edges;
 
     G_gisinit(argv[0]);
 
@@ -277,6 +279,12 @@ int main(int argc, char *argv[])
 	_("Do not align the current region to the raster elevation map");
     flag.a->guisection = _("Settings");
 
+    flag.e = G_define_flag();
+    flag.e->key = 'e';
+    flag.e->description =
+	_("Compute output at edges and near NULL values");
+    flag.e->guisection = _("Settings");
+
     flag.n = G_define_flag();
     flag.n->key = 'n';
     flag.n->label =
@@ -291,6 +299,8 @@ int main(int argc, char *argv[])
 
     radians_to_degrees = 180.0 / M_PI;
     degrees_to_radians = M_PI / 180.0;
+
+    compute_at_edges = flag.e->answer;
 
     /* INC BY ONE
        answer[0] = 0.0;
@@ -609,15 +619,9 @@ int main(int argc, char *argv[])
 	else
 	    Rast_get_d_row_nomask(elevation_fd, elev_cell[2], row);
 
-	c1 = elev_cell[0];
-	c2 = c1 + 1;
-	c3 = c1 + 2;
-	c4 = elev_cell[1];
-	c5 = c4 + 1;
-	c6 = c4 + 2;
-	c7 = elev_cell[2];
-	c8 = c7 + 1;
-	c9 = c7 + 2;
+	pc1 = elev_cell[0];
+	pc2 = elev_cell[1];
+	pc3 = elev_cell[2];
 
 	if (aspect_fd >= 0) {
 	    if (Wrap)
@@ -691,18 +695,26 @@ int main(int argc, char *argv[])
 
 	/*skip first cell of the row */
 
-	for (col = ncols - 2; col-- > 0;
-	     c1++, c2++, c3++, c4++, c5++, c6++, c7++, c8++, c9++) {
+	for (col = ncols - 2; col-- > 0; pc1++, pc2++, pc3++) {
+	    c1 = *pc1;
+	    c2 = *(pc1 + 1);
+	    c3 = *(pc1 + 2);
+	    c4 = *pc2;
+	    c5 = *(pc2 + 1);
+	    c6 = *(pc2 + 2);
+	    c7 = *pc3;
+	    c8 = *(pc3 + 1);
+	    c9 = *(pc3 + 2);
 	    /*  DEBUG:
 	       fprintf(stdout, "\n%.0f %.0f %.0f\n%.0f %.0f %.0f\n%.0f %.0f %.0f\n",
-	       *c1, *c2, *c3, *c4, *c5, *c6, *c7, *c8, *c9);
+	       c1, c2, c3, c4, c5, c6, c7, c8, c9);
 	     */
 
-	    if (Rast_is_d_null_value(c1) || Rast_is_d_null_value(c2) ||
-		Rast_is_d_null_value(c3) || Rast_is_d_null_value(c4) ||
-		Rast_is_d_null_value(c5) || Rast_is_d_null_value(c6) ||
-		Rast_is_d_null_value(c7) || Rast_is_d_null_value(c8) ||
-		Rast_is_d_null_value(c9)) {
+	    if (Rast_is_d_null_value(&c5) || (!compute_at_edges && 
+	        (Rast_is_d_null_value(&c1) || Rast_is_d_null_value(&c2) ||
+		 Rast_is_d_null_value(&c3) || Rast_is_d_null_value(&c4) ||
+		 Rast_is_d_null_value(&c6) || Rast_is_d_null_value(&c7) ||
+		 Rast_is_d_null_value(&c8) || Rast_is_d_null_value(&c9)))) {
 		if (slope_fd > 0) {
 		    Rast_set_null_value(slp_ptr, 1, data_type);
 		    slp_ptr =
@@ -751,8 +763,28 @@ int main(int argc, char *argv[])
 		continue;
 	    }			/* no data */
 
-	    dx = ((*c1 + *c4 + *c4 + *c7) - (*c3 + *c6 + *c6 + *c9)) / H;
-	    dy = ((*c7 + *c8 + *c8 + *c9) - (*c1 + *c2 + *c2 + *c3)) / V;
+	    if (compute_at_edges) {
+		/* same method like ComputeVal in gdaldem_lib.cpp */
+		if (Rast_is_d_null_value(&c1))
+		    c1 = c5;
+		if (Rast_is_d_null_value(&c2))
+		    c2 = c5;
+		if (Rast_is_d_null_value(&c3))
+		    c3 = c5;
+		if (Rast_is_d_null_value(&c4))
+		    c4 = c5;
+		if (Rast_is_d_null_value(&c6))
+		    c6 = c5;
+		if (Rast_is_d_null_value(&c7))
+		    c7 = c5;
+		if (Rast_is_d_null_value(&c8))
+		    c8 = c5;
+		if (Rast_is_d_null_value(&c9))
+		    c9 = c5;
+	    }
+
+	    dx = ((c1 + c4 + c4 + c7) - (c3 + c6 + c6 + c9)) / H;
+	    dy = ((c7 + c8 + c8 + c9) - (c1 + c2 + c2 + c3)) / V;
 
 	    /* compute topographic parameters */
 	    key = dx * dx + dy * dy;
@@ -875,10 +907,10 @@ int main(int argc, char *argv[])
 		continue;
 
 	    /* compute second order derivatives */
-	    s4 = *c1 + *c3 + *c7 + *c9 - *c5 * 8.;
-	    s5 = *c4 * 4. + *c6 * 4. - *c8 * 2. - *c2 * 2.;
-	    s6 = *c8 * 4. + *c2 * 4. - *c4 * 2. - *c6 * 2.;
-	    s3 = *c7 - *c9 + *c3 - *c1;
+	    s4 = c1 + c3 + c7 + c9 - c5 * 8.;
+	    s5 = c4 * 4. + c6 * 4. - c8 * 2. - c2 * 2.;
+	    s6 = c8 * 4. + c2 * 4. - c4 * 2. - c6 * 2.;
+	    s3 = c7 - c9 + c3 - c1;
 
 	    dxx = -(s4 + s5) / ((3. / 32.) * H * H);
 	    dyy = -(s4 + s6) / ((3. / 32.) * V * V);
