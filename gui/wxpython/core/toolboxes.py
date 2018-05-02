@@ -523,7 +523,7 @@ def _getAddons():
 
     flist = []
     for line in output.splitlines():
-        if not line.startswith('executables'):
+        if not line.startswith('name'):
             continue
         for fexe in line.split('=', 1)[1].split(','):
             flist.append(fexe)
