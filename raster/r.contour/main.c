@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     cut->key = "cut";
     cut->type = TYPE_INTEGER;
     cut->required = NO;
-    cut->answer = "0";
+    cut->answer = "2";
     cut->description =
 	_("Minimum number of points for a contour line (0 -> no limit)");
 
