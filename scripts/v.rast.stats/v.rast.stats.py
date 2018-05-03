@@ -56,8 +56,8 @@
 #% description: The methods to use
 #% required: no
 #% multiple: yes
-#% options: number,minimum,maximum,range,average,stddev,variance,coeff_var,sum,first_quartile,median,third_quartile,percentile
-#% answer: number,minimum,maximum,range,average,stddev,variance,coeff_var,sum,first_quartile,median,third_quartile,percentile
+#% options: number,null_cells,minimum,maximum,range,average,stddev,variance,coeff_var,sum,first_quartile,median,third_quartile,percentile
+#% answer: number,null_cells,minimum,maximum,range,average,stddev,variance,coeff_var,sum,first_quartile,median,third_quartile,percentile
 #%end
 #%option
 #% key: percentile
@@ -134,7 +134,7 @@ def main():
     # keep boundary settings
     grass.run_command('g.region', align=raster)
 
-    grass.message(_("Preprocessing input data..."))
+    # prepare base raster for zonal statistics
     try:
         nlines = grass.vector_info_topo(vector)['lines']
         # Create densified lines rather than thin lines
@@ -198,7 +198,7 @@ def main():
         basecols[percindex] = perccol
 
     # dictionary with name of methods and position in "r.univar -gt"  output
-    variables = {'number': 2, 'minimum': 4, 'maximum': 5, 'range': 6,
+    variables = {'number': 2, 'null_cells': 3, 'minimum': 4, 'maximum': 5, 'range': 6,
                  'average': 7, 'stddev': 9, 'variance': 10, 'coeff_var': 11,
                  'sum': 12, 'first_quartile': 14, 'median': 15,
                  'third_quartile': 16, perccol: 17}
