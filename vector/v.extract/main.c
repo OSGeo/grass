@@ -100,7 +100,8 @@ int main(int argc, char **argv)
 
     opt.input = G_define_standard_option(G_OPT_V_INPUT);
 
-    opt.field = G_define_standard_option(G_OPT_V_FIELD);
+    opt.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    opt.field->answer = "1";
     opt.field->guisection = _("Selection");
     
     opt.type = G_define_standard_option(G_OPT_V_TYPE);
@@ -204,7 +205,7 @@ int main(int argc, char **argv)
         ((type & GV_AREA) || ((type & GV_CENTROID) && (type & GV_BOUNDARY)))) {
 	dissolve = TRUE;
 	if (field > 0 && opt.d_key->answer) {
-	    int i, ncols, ret;
+	    int ncols, ret;
 	    dbTable *Table;
 	    dbColumn *Col;
 	    dbString tabname;
