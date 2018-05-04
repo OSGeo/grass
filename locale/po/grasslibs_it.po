@@ -3052,7 +3052,7 @@ msgstr "Aggiungendo la regola: %lf - %lf"
 #: ../lib/raster3d/maskfn.c:95
 #, c-format
 msgid "%s: illegal value spec"
-msgstr ""
+msgstr "%s: specificazione di valore non consentita"
 
 #: ../lib/raster3d/header.c:217 ../lib/raster3d/close.c:99
 #: ../lib/raster3d/close.c:105 ../lib/raster3d/close.c:191

@@ -31362,7 +31362,7 @@ msgstr "Divisiones de línea: %d"
 #: ../vector/v.clean/rmdac.c:60
 #, c-format
 msgid "Duplicate area centroids: %d"
-msgstr "Dublicar centroides de área: %d"
+msgstr "Duplicar centroides de área: %d"
 
 #: ../vector/v.label.sa/main.c:41
 msgid "Create optimally placed labels for vector map(s)"
@@ -32448,7 +32448,7 @@ msgstr "Por ejemplo, 5 importará el 80% de los puntos. Si no se especifica, se 
 #: ../vector/v.in.lidar/main.c:238 ../vector/v.in.lidar/main.c:248
 #: ../vector/v.in.lidar/main.c:257 ../vector/v.in.lidar/main.c:266
 msgid "Decimation"
-msgstr ""
+msgstr "Decimar"
 
 #: ../vector/v.in.lidar/main.c:245
 msgid "Import only every n-th point"
@@ -37715,7 +37715,7 @@ msgstr "Grilla"
 
 #: ../vector/v.decimate/main.c:211
 msgid "Preserve only n points per grid cell"
-msgstr ""
+msgstr "Preservar solamente n puntos por celda de la retícula"
 
 #: ../vector/v.decimate/main.c:213
 msgid "Preserves only the given number of points per grid cell in grid-based decimation"
@@ -37731,7 +37731,7 @@ msgstr ""
 
 #: ../vector/v.decimate/main.c:229
 msgid "Only one point per cat in grid cell"
-msgstr ""
+msgstr "Solamente un punto por cat en celda de retícula"
 
 #: ../vector/v.decimate/main.c:234
 msgid "Use z in grid decimation"
@@ -41336,7 +41336,7 @@ msgstr ""
 #: ../scripts/i.tasscap/i.tasscap.py:139
 #, python-format
 msgid "Satellite %s..."
-msgstr ""
+msgstr "Satélite %s..."
 
 #: ../scripts/i.tasscap/i.tasscap.py:162
 #, python-format
@@ -41353,7 +41353,7 @@ msgstr ""
 
 #: ../scripts/r.mask/r.mask.py:115
 msgid "Raster MASK removed"
-msgstr ""
+msgstr "Ráster MASCARA removido"
 
 #: ../scripts/r.mask/r.mask.py:117
 msgid "No existing MASK to remove"
@@ -41411,7 +41411,7 @@ msgstr ""
 
 #: ../scripts/r.in.srtm/r.in.srtm.py:161
 msgid "The \"unzip\" program is required, please install it first"
-msgstr ""
+msgstr "Se necesita el programa \"unzip\", por favor primero instálelo "
 
 #: ../scripts/r.in.srtm/r.in.srtm.py:168
 #, python-format
@@ -41833,7 +41833,7 @@ msgstr ""
 
 #: ../scripts/r.tileset/r.tileset.py:260 ../scripts/r.tileset/r.tileset.py:271
 msgid "g.proj failed"
-msgstr ""
+msgstr "Falló g.proj"
 
 #: ../scripts/r.tileset/r.tileset.py:277
 #, python-format
@@ -41856,7 +41856,7 @@ msgstr ""
 #: ../scripts/i.spectral/i.spectral.py:121
 #, python-format
 msgid "Programmer error (%s)"
-msgstr ""
+msgstr "Error de programador (%s)"
 
 #: ../scripts/i.spectral/i.spectral.py:213
 msgid "Either group= or raster= is required"
@@ -41872,7 +41872,7 @@ msgstr ""
 
 #: ../scripts/i.spectral/i.spectral.py:224
 msgid "gnuplot required, please install first"
-msgstr ""
+msgstr "requiere gnuplot, por favor instálelo primero"
 
 #: ../scripts/i.spectral/i.spectral.py:243
 msgid "No data returned from query"
@@ -41885,17 +41885,17 @@ msgstr ""
 #: ../scripts/v.db.addcolumn/v.db.addcolumn.py:81
 #, python-format
 msgid "Column <%s> is already in the table. Skipping."
-msgstr ""
+msgstr "Columna <%s> ya existe en la tabla. Saltando."
 
 #: ../scripts/v.db.addcolumn/v.db.addcolumn.py:83
 #, python-format
 msgid "Adding column <%s> to the table"
-msgstr ""
+msgstr "Añadiendo columna <%s> a la tabla"
 
 #: ../scripts/v.db.addcolumn/v.db.addcolumn.py:89
 #, python-format
 msgid "Unable to add column <%s>."
-msgstr ""
+msgstr "No ha sido posible añadir la columna <%s>."
 
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:98
 #, python-format
@@ -41915,12 +41915,12 @@ msgstr ""
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:149
 #, python-format
 msgid "Unable to drop table <%s>"
-msgstr ""
+msgstr "No ha sido posible eliminar tabla <%s>"
 
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:158
 #, python-format
 msgid "Creating index <%s>..."
-msgstr ""
+msgstr "Creando el índice <%s>..."
 
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:165
 #, python-format
@@ -41942,7 +41942,7 @@ msgstr ""
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:249
 #, python-format
 msgid "Reconnecting layer %d..."
-msgstr ""
+msgstr "Reconectando capa %d..."
 
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:274
 #, python-format
@@ -42171,7 +42171,7 @@ msgstr ""
 #: ../scripts/r.pack/r.pack.py:126
 #, python-format
 msgid "Raster map saved to '%s'"
-msgstr ""
+msgstr "Mapa ráster guardado a '%s'"
 
 #: ../scripts/i.oif/i.oif.py:54
 #, python-format
@@ -42688,7 +42688,7 @@ msgstr ""
 #: ../scripts/v.import/v.import.py:182
 #, python-format
 msgid "Unable to import <%s>"
-msgstr ""
+msgstr "No se ha podido importar <%s>"
 
 #: ../scripts/v.import/v.import.py:190 ../scripts/r.import/r.import.py:206
 #, python-format
@@ -42717,7 +42717,7 @@ msgstr ""
 #: ../scripts/v.import/v.import.py:255
 #, python-format
 msgid "Importing <%s> ..."
-msgstr ""
+msgstr "Importando <%s>..."
 
 #: ../scripts/v.import/v.import.py:260
 #, python-format
@@ -42727,7 +42727,7 @@ msgstr ""
 #: ../scripts/v.import/v.import.py:279 ../scripts/r.import/r.import.py:374
 #, python-format
 msgid "Reprojecting <%s>..."
-msgstr ""
+msgstr "Reproyectando <%s>..."
 
 #: ../scripts/v.import/v.import.py:284
 #, python-format
@@ -42736,7 +42736,7 @@ msgstr ""
 
 #: ../scripts/v.centroids/v.centroids.py:65
 msgid "Input vector map contains no boundaries."
-msgstr ""
+msgstr "Mapa vectorial de entrada no contiene bordes."
 
 #: ../scripts/v.db.join/v.db.join.py:91
 msgid "JOIN is not supported for tables stored in DBF format"
@@ -42938,7 +42938,7 @@ msgstr ""
 
 #: ../scripts/i.image.mosaic/i.image.mosaic.py:74
 msgid "Do not forget to set region properly to cover all images."
-msgstr ""
+msgstr "No se olvide de definir adecuadamente la región para que cubra todas las imágenes."
 
 #: ../scripts/i.image.mosaic/i.image.mosaic.py:86
 #, python-format
@@ -42948,7 +42948,7 @@ msgstr ""
 #: ../scripts/i.image.mosaic/i.image.mosaic.py:99
 #, python-format
 msgid "Done. Raster map <%s> created."
-msgstr ""
+msgstr "Hecho. Mapa ráster <%s> creado."
 
 #. GTC Invalid WFS maximum features parameter
 #: ../scripts/v.in.wfs/v.in.wfs.py:109
@@ -43010,7 +43010,7 @@ msgstr ""
 #: ../scripts/r.blend/r.blend.py:119
 #, python-format
 msgid "d.rgb r=%s.r g=%s.g b=%s.b"
-msgstr ""
+msgstr "d.rgb r=%s.r g=%s.g b=%s.b"
 
 #: ../scripts/v.build.all/v.build.all.py:47
 #, python-format
@@ -43158,7 +43158,7 @@ msgstr ""
 
 #: ../scripts/r.reclass.area/r.reclass.area.py:106
 msgid "flags c and d are mutually exclusive"
-msgstr ""
+msgstr "las banderas c y d son mutuamente excluyentes"
 
 #: ../scripts/r.reclass.area/r.reclass.area.py:116
 #, python-format
@@ -43460,11 +43460,11 @@ msgstr ""
 #: ../scripts/v.in.e00/v.in.e00.py:138
 #, python-format
 msgid "Importing %ss..."
-msgstr ""
+msgstr "Importando %ss..."
 
 #: ../scripts/v.in.e00/v.in.e00.py:148
 msgid "An error occurred while running v.in.ogr"
-msgstr ""
+msgstr "Ocurrió un error mientras corría v.in.ogr"
 
 #: ../scripts/v.in.e00/v.in.e00.py:150
 #, python-format
@@ -43536,7 +43536,7 @@ msgstr ""
 
 #: ../scripts/db.univar/db.univar.py:125
 msgid "Reading column values..."
-msgstr ""
+msgstr "Leyendo valores de columna..."
 
 #: ../scripts/db.univar/db.univar.py:146
 #, python-format
@@ -43545,7 +43545,7 @@ msgstr ""
 
 #: ../scripts/db.univar/db.univar.py:151
 msgid "Calculating statistics..."
-msgstr ""
+msgstr "Calculando estadísticas..."
 
 #: ../scripts/db.univar/db.univar.py:174
 msgid "No non-null values found"

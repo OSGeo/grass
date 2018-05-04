@@ -16494,7 +16494,7 @@ msgstr ""
 #: ../gui/wxpython/lmgr/pyshell.py:43
 #, python-format
 msgid "Welcome to wxGUI Interactive Python Shell %s"
-msgstr "Üdvözöljük a wxGUI interaktív Python burokban"
+msgstr "Üdvözöljük a wxGUI interaktív Python burokban %s"
 
 #: ../gui/wxpython/lmgr/pyshell.py:44
 #, python-format

@@ -2764,7 +2764,7 @@ msgstr "color"
 #: ../lib/python/script/raster3d.py:92
 #, python-format
 msgid "An error occurred while running r3.mapcalc with expression: %s"
-msgstr ""
+msgstr "Ocurrió un error mientras corría r3.mapcalc con la expresión: %s"
 
 #: ../lib/python/script/core.py:67
 #, python-brace-format
@@ -3241,7 +3241,7 @@ msgstr "Ha fallado el cálculo de perímetro"
 
 #: ../lib/imagery/iclass_perimeter.c:208
 msgid "Invalid polygon"
-msgstr ""
+msgstr "Polígono inválido"
 
 #: ../lib/imagery/iclass_perimeter.c:253
 msgid "Outlined area is too large."
@@ -3357,7 +3357,7 @@ msgstr ""
 #: ../lib/imagery/iscatt_core.c:755
 #, c-format
 msgid "Unable to open raster <%s>"
-msgstr ""
+msgstr "No ha sido posible abrir mapa ráster <%s>"
 
 #: ../lib/imagery/iscatt_core.c:761
 #, c-format
@@ -3593,7 +3593,7 @@ msgstr "definir GISBASE adicional para Complementos instalados localmente"
 
 #: ../lib/init/grass.py:359
 msgid "shell script to be processed as batch job"
-msgstr ""
+msgstr "script de shell a ser procesado como trabajo en lote"
 
 #: ../lib/init/grass.py:360
 msgid "set Python interpreter name to override 'python'"
@@ -3655,7 +3655,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:751
 msgid "GRASS GUI not found. Please check your installation."
-msgstr ""
+msgstr "No se encontró la GUI de GRASS. Por favor revise su instalación."
 
 #: ../lib/init/grass.py:753
 msgid ""
@@ -3664,6 +3664,10 @@ msgid ""
 "\n"
 "Hit RETURN to continue.\n"
 msgstr ""
+"{}\n"
+"Cambiando al modo de interfaz basada en texto.\n"
+"\n"
+"De Enter para continuar.\n"
 
 #: ../lib/init/grass.py:762
 msgid ""
@@ -3703,17 +3707,17 @@ msgstr "No elexiste el Directorio de mapas <{mapset}> en la Localización <{loc}
 #: ../lib/init/grass.py:874
 #, python-format
 msgid "<%s> is not a GRASS Mapset because it is not a directory"
-msgstr ""
+msgstr "<%s> no es un Directorio de mapas de GRASS por que no es un directorio"
 
 #: ../lib/init/grass.py:877
 #, python-format
 msgid "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
-msgstr ""
+msgstr "<%s> no es un Directorio de mapas de GRASS válido por que no contiene un archivo WIND"
 
 #: ../lib/init/grass.py:881
 #, python-format
 msgid "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
-msgstr ""
+msgstr "<%s> no es un Directorio de mapas de GRASS válido por que su archivo WIND no es posible leerlo"
 
 #: ../lib/init/grass.py:884
 #, python-brace-format
@@ -4040,7 +4044,7 @@ msgstr "Por favor vuelva a compilar con soporte de archivos grandes (LFS)"
 
 #: ../lib/rst/interp_float/segmen2d_parallel.c:109
 msgid "Starting parallel work"
-msgstr ""
+msgstr "Empezando trabajo en paralelo"
 
 #: ../lib/rst/interp_float/segmen2d_parallel.c:188
 #: ../lib/rst/interp_float/segmen2d.c:133
