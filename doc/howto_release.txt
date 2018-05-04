@@ -129,7 +129,7 @@ mv * grass-${VERSION}/
 # do not include the debian control files:
 mv grass-${VERSION}/debian .
 # create the package:
-tar cvfzh grass-${VERSION}.tar.gz grass-${VERSION}/* --exclude=.svn
+tar cvfzh grass-${VERSION}.tar.gz --exclude=.svn grass-${VERSION}/*
 # restore src code location:
 mv ./grass-${VERSION}/* .
 rmdir ./grass-${VERSION}
