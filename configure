@@ -1593,7 +1593,7 @@ EOF
 	    #SHLIB_LD="ld -Bshareable -x"
 	    SHLIB_LD="${CC} -shared"
 	    SHLIB_SUFFIX=".so"
-	    LDFLAGS="-Wl,--export-dynamic"
+	    LDFLAGS="-export-dynamic"
 	    #LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'
 	    LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR}'
 	    # TODO: add optional pthread support with any combination of: 
