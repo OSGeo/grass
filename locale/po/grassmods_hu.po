@@ -2152,7 +2152,7 @@ msgstr ""
 #: ../raster/r.mapcalc/main.c:71 ../raster/r.quantile/main.c:266
 #: ../raster3d/r3.neighbors/main.c:209 ../vector/v.neighbors/main.c:51
 msgid "algebra"
-msgstr ""
+msgstr "algebra"
 
 #: ../locale/scriptstrings/t.vect.algebra_to_translate.c:6
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:6
@@ -4227,7 +4227,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.grow_to_translate.c:7
 #: ../raster/r.grow.distance/main.c:174
 msgid "Metric"
-msgstr ""
+msgstr "Metrikus"
 
 #: ../locale/scriptstrings/r.grow_to_translate.c:8
 msgid "Value to write for input cells which are non-NULL (-1 => NULL)"
@@ -5133,7 +5133,7 @@ msgstr ""
 #: ../raster/r.out.mpeg/main.c:286
 #, c-format
 msgid "Reading raster map <%s>..."
-msgstr ""
+msgstr "Raszter térkép olvasás <%s>..."
 
 #: ../ps/ps.map/ps_raster.c:105
 #, c-format
@@ -11081,7 +11081,7 @@ msgstr ""
 #: ../raster/r.stream.extract/close.c:255 ../raster/r.grow.distance/main.c:325
 #: ../raster/r.fill.dir/main.c:253
 msgid "Writing output raster maps..."
-msgstr ""
+msgstr "Output raszter térkép írása..."
 
 #: ../raster/r.stream.extract/close.c:320
 #, c-format
@@ -13482,7 +13482,7 @@ msgstr "VRML"
 
 #: ../raster/r.out.vrml/main.c:51
 msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
-msgstr ""
+msgstr "Raszter térkép export Virtuális valóság modellező nyelvbe (VRML)."
 
 #: ../raster/r.out.vrml/main.c:58
 msgid "Name of input color map"

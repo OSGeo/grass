@@ -45,7 +45,7 @@ msgstr "Deshacer"
 
 #: ../gui/wxpython/rdigit/toolbars.py:34
 msgid "Raster Digitizer manual"
-msgstr ""
+msgstr "Manual de Digitalizador ráster"
 
 #: ../gui/wxpython/rdigit/toolbars.py:35
 msgid "Quit raster digitizer"
@@ -1030,7 +1030,7 @@ msgstr "Líneas de ruptura/contornos"
 
 #: ../gui/wxpython/modules/vclean.py:76
 msgid "remove duplicates"
-msgstr "eliminar dublicados"
+msgstr "eliminar duplicados"
 
 #: ../gui/wxpython/modules/vclean.py:77
 msgid "remove dangles"
@@ -1054,7 +1054,7 @@ msgstr "snap líneas/contornos"
 
 #: ../gui/wxpython/modules/vclean.py:82
 msgid "remove duplicate area centroids"
-msgstr "eliminar centroides del área dublicados"
+msgstr "eliminar centroides del área duplicados"
 
 #: ../gui/wxpython/modules/vclean.py:83
 msgid "break polygons"
@@ -20839,3 +20839,6 @@ msgstr "Álgebra temporal de vectores"
 
 msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
 msgstr "Aplicar operaciones temporales y espaciales sobre un conjunto de datos vectoriales espacio temporales usando álgebra temporal."
+
+#~ msgid "Apply SQL statement"
+#~ msgstr "Aplicar sentencia SQL"
