@@ -52,7 +52,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct {
 	struct Option *input, *output, *file, *new, *type, *list,
-	    *field, *where, *nrand;
+	    *field, *where, *nrand, *d_key;
     } opt;
     struct {
 	struct Flag *t, *d, *r;
@@ -66,6 +66,7 @@ int main(int argc, char **argv)
     struct Cat_index *ci;
     
     int ucat_count, *ucat_array, prnd, seed, nrandom, nfeatures;
+    char *dissolve_key;
 
     Fi = NULL;
     ucat_array = NULL;
@@ -144,6 +145,12 @@ int main(int argc, char **argv)
     opt.new->description = _("If new >= 0, attributes is not copied");
     opt.new->guisection = _("Attributes");
     
+    opt.d_key = G_define_standard_option(G_OPT_DB_COLUMN);
+    opt.d_key->key = "dissolve_column";
+    opt.d_key->label = _("Name of attribute column for dissolving areas");
+    opt.d_key->description = _("Preserves category values");
+    opt.d_key->required = NO;
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
     
@@ -174,11 +181,6 @@ int main(int argc, char **argv)
     Vect_check_input_output_name(input, output,
 				 G_FATAL_EXIT);
     
-    if (flag.d->answer)
-	dissolve = TRUE;
-    else
-	dissolve = FALSE;
-	
     if (!opt.new->answer)
 	new_cat = 0;
     else
@@ -197,6 +199,63 @@ int main(int argc, char **argv)
 	type |= GV_CENTROID;
     }
 
+    dissolve_key = NULL;
+    if (flag.d->answer && 
+        ((type & GV_AREA) || ((type & GV_CENTROID) && (type & GV_BOUNDARY)))) {
+	dissolve = TRUE;
+	if (field > 0 && opt.d_key->answer) {
+	    int i, ncols, ret;
+	    dbTable *Table;
+	    dbColumn *Col;
+	    dbString tabname;
+
+	    dissolve_key = opt.d_key->answer;
+
+	    Fi = Vect_get_field(&In, field);
+	    if (!Fi) {
+		G_fatal_error(_("Database connection not defined for layer <%s>"),
+			      opt.field->answer);
+	    }
+
+	    G_verbose_message(_("Searching for column <%s> in table <%s>..."),
+	                      dissolve_key, Fi->table);
+
+	    driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	    if (driver == NULL)
+		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			      Fi->database, Fi->driver);
+
+	    db_init_string(&tabname);
+	    db_set_string(&tabname, Fi->table);
+
+	    if (db_describe_table(driver, &tabname, &Table) != DB_OK) {
+		G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
+	    }
+
+	    ret = 0;
+
+	    ncols = db_get_table_number_of_columns(Table);
+	    G_debug(3, "ncol = %d", ncols);
+
+	    for (i = 0; i < ncols; i++) {
+		Col = db_get_table_column(Table, i);
+		if (G_strcasecmp(db_get_column_name(Col), dissolve_key) == 0) {
+		    ret = 1;
+		    break;
+		}
+	    }
+	    db_free_table(Table);
+	    db_free_string(&tabname);
+	    db_close_database_shutdown_driver(driver);
+	    
+	    if (!ret)
+		G_fatal_error(_("Column <%s> does not exist for layer %d"),
+		              dissolve_key, field);
+	}
+    }
+    else
+	dissolve = FALSE;
+	
     /* Read categoy list */
     cat_count = 0;
     if (opt.list->answer != NULL) {
@@ -359,8 +418,8 @@ int main(int argc, char **argv)
 	Vect_copy_map_dblinks(&In, &Out, TRUE);
     }
 
-    extract_line(cat_count, cat_array, &In, &Out, new_cat, type, dissolve, field,
-		 type_only, flag.r->answer ? 1 : 0);
+    extract_line(cat_count, cat_array, &In, &Out, new_cat, type, 
+		 dissolve, dissolve_key, field, type_only, flag.r->answer ? 1 : 0);
 
     Vect_build(&Out);
 

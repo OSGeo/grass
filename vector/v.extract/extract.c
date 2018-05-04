@@ -107,12 +107,15 @@ static void extract_cats(struct line_cats *Cats, int type_only, int field, int n
 
 /* check if output cats of left and right area match */
 static int areas_new_cats_match(struct Map_info *In, int area1, int area2,
-				int type_only, int field, int new, int reverse)
+				int type_only, int field, int new, int reverse,
+				char *dissolve_key, int coltype, 
+				dbDriver *driver, struct field_info *Fi)
 {
     int i, j, found;
     int centroid1, centroid2;
     static struct line_cats *Cats1 = NULL;
     static struct line_cats *Cats2 = NULL;
+    dbValue val1, val2;
 
     G_debug(4, "areas_new_cats_match area1 = %d area2 = %d", area1, area2);
 
@@ -141,6 +144,10 @@ static int areas_new_cats_match(struct Map_info *In, int area1, int area2,
 
     for (i = 0; i < Cats1->n_cats; i++) {
 	found = 0;
+	if (dissolve_key && Cats1->field[i] == field) {
+	    db_select_value(driver, Fi->table, Fi->key, Cats1->cat[i], dissolve_key,
+			    &val1);
+	}
 	for (j = 0; j < Cats2->n_cats; j++) {
 	    G_debug(5, "%d:%d x %d:%d", Cats1->field[i], Cats1->cat[i],
 		    Cats2->field[j], Cats2->cat[j]);
@@ -148,6 +155,31 @@ static int areas_new_cats_match(struct Map_info *In, int area1, int area2,
 		Cats1->cat[i] == Cats2->cat[j]) {
 		found = 1;
 		break;
+	    }
+	    if (dissolve_key) {
+		db_select_value(driver, Fi->table, Fi->key, Cats2->cat[j], dissolve_key,
+				&val2);
+		/* compare db values */
+		switch (coltype)
+		{
+		case DB_C_TYPE_INT: {
+		    if (db_get_value_int(&val1) == db_get_value_int(&val2))
+			found = 1;
+		    break;
+		}
+		case DB_C_TYPE_DOUBLE: {
+		    if (db_get_value_int(&val1) == db_get_value_double(&val2))
+			found = 1;
+		    break;
+		}
+		default: {	/* STRING and DATETIME */
+		    if (G_strcasecmp(db_get_value_string(&val1), db_get_value_string(&val2)) == 0)
+			found = 1;
+		    break;
+		}
+		}
+		if (found == 1)
+		    break;
 	    }
 	}
 	if (!found)
@@ -192,7 +224,7 @@ static int extract_area(struct Map_info *In, struct Map_info *Out,
 
 int extract_line(int num_index, int *num_array, struct Map_info *In,
 		 struct Map_info *Out, int new, int select_type, int dissolve,
-		 int field, int type_only, int reverse)
+		 char *dissolve_key, int field, int type_only, int reverse)
 {
     G_debug(2, "extract_line(num_index=%d, new=%d, select_type=%d,"
                " dissolve=%d, field=%d, type_only=%d, reverse=%d)",
@@ -210,6 +242,9 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
     int centroid_in_area;	/* centroid is in area */
     int type;
     int i, tmp, write, area;
+    struct field_info *Fi;
+    dbDriver *driver;
+    int coltype;
 
     /* Initialize the Point structure, ONCE */
     Points = Vect_new_line_struct();
@@ -218,6 +253,29 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 
     cats_array = num_array;
     ncats_array = num_index;
+
+    /* dissolve by key column */
+    Fi = NULL;
+    driver = NULL;
+    coltype = -1;
+    if (dissolve_key) {
+	Fi = Vect_get_field(In, field);
+	if (!Fi) {
+	    G_fatal_error(_("Database connection not defined for layer <%d>"),
+			  field);
+	}
+
+	G_verbose_message(_("Loading categories from table <%s>..."), Fi->table);
+
+	driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	if (driver == NULL)
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			  Fi->database, Fi->driver);
+	
+	/* get column type as DB_C_TYPE_* */
+	coltype = db_column_Ctype(driver, Fi->table, dissolve_key);
+    }
+
 
     /* sort list */
     qsort(cats_array, ncats_array, sizeof(int), cmp);
@@ -342,7 +400,8 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 	    if (type == GV_BOUNDARY && (left_area || right_area)) {
 		if (!dissolve ||
 		    !areas_new_cats_match(In, left_area, right_area,
-					  type_only, field, new, reverse))
+					  type_only, field, new, reverse,
+					  dissolve_key, coltype, driver, Fi))
 		    write = 1;
 	    }
 	}
@@ -361,7 +420,8 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 		(left_field_match || right_field_match)) {
 		if (!dissolve ||
 		    !areas_new_cats_match(In, left_area, right_area,
-					  type_only, field, new, reverse))
+					  type_only, field, new, reverse,
+					  dissolve_key, coltype, driver, Fi))
 		    write = 1;
 	    }
 	}
@@ -381,7 +441,8 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 		(left_cat_match || right_cat_match)) {
 		if (!dissolve ||
 		    !areas_new_cats_match(In, left_area, right_area,
-					  type_only, field, new, reverse))
+					  type_only, field, new, reverse,
+					  dissolve_key, coltype, driver, Fi))
 		    write = 1;
 	    }
 	}
@@ -398,6 +459,9 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 	}
 
     }				/* end lines section */
-    
+
+    if (driver)
+	db_close_database_shutdown_driver(driver);
+
     return 0;
 }
