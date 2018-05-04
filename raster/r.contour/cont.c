@@ -92,6 +92,7 @@ void contour(double levels[],
 		hit[i][j] = 0;
 	    }
 	}
+
 	/* check each cell of top and bottom borders  */
 	for (startrow = 0; startrow < nrow; startrow += (nrow - 2)) {
 	    for (startcol = 0; startcol <= ncol - 2; startcol++) {
@@ -113,14 +114,14 @@ void contour(double levels[],
 		    if (checkedge(current.z[p1], current.z[p2], level)) {
 			getpoint(&current, level, Cell, Points);
 			/* while not off an edge, follow line */
-			while (!outside) {
-			    hit[current.r][current.c] +=
+			while (!outside && !hit[current.r][current.c]) {
+			    hit[current.r][current.c] |=
 				findcrossing(&current, level, Cell, Points,
 					     &ncrossing);
 			    newedge(&current);
 			    outside = getnewcell(&current, nrow, ncol, z);
 			}
-			if ((n_cut <= 0) || ((Points->n_points) > n_cut)) {
+			if ((n_cut <= 0) || ((Points->n_points) >= n_cut)) {
 			    Vect_reset_cats(Cats);
 			    Vect_cat_set(Cats, 1, n + 1);
 			    Vect_write_line(&Map, GV_LINE, Points, Cats);
@@ -150,14 +151,14 @@ void contour(double levels[],
 		    if (checkedge(current.z[p1], current.z[p2], level)) {
 			getpoint(&current, level, Cell, Points);
 			/* while not off an edge, follow line */
-			while (!outside) {
-			    hit[current.r][current.c] +=
+			while (!outside && !hit[current.r][current.c]) {
+			    hit[current.r][current.c] |=
 				findcrossing(&current, level, Cell, Points,
 					     &ncrossing);
 			    newedge(&current);
 			    outside = getnewcell(&current, nrow, ncol, z);
 			}
-			if ((n_cut <= 0) || ((Points->n_points) > n_cut)) {
+			if ((n_cut <= 0) || ((Points->n_points) >= n_cut)) {
 			    Vect_reset_cats(Cats);
 			    Vect_cat_set(Cats, 1, n + 1);
 			    Vect_write_line(&Map, GV_LINE, Points, Cats);
@@ -180,24 +181,24 @@ void contour(double levels[],
 		    if (!outside &&
 			checkedge(current.z[0], current.z[1], level)) {
 			getpoint(&current, level, Cell, Points);
-			hit[current.r][current.c] +=
+			hit[current.r][current.c] |=
 			    findcrossing(&current, level, Cell, Points,
 					 &ncrossing);
 			newedge(&current);
 			outside = getnewcell(&current, nrow, ncol, z);
 
 			/* while not back to starting point, follow line */
-			while (!outside &&
+			while (!outside && !hit[current.r][current.c] &&
 			       ((current.edge != 0) ||
 				((current.r != startrow) ||
 				 (current.c != startcol)))) {
-			    hit[current.r][current.c] +=
+			    hit[current.r][current.c] |=
 				findcrossing(&current, level, Cell, Points,
 					     &ncrossing);
 			    newedge(&current);
 			    outside = getnewcell(&current, nrow, ncol, z);
 			}
-			if ((n_cut <= 0) || ((Points->n_points) > n_cut)) {
+			if ((n_cut <= 0) || ((Points->n_points) >= n_cut)) {
 			    Vect_reset_cats(Cats);
 			    Vect_cat_set(Cats, 1, n + 1);
 			    Vect_write_line(&Map, GV_LINE, Points, Cats);
@@ -378,8 +379,11 @@ static void getpoint(struct cell *curr, double level,
     y = Cell.north - (y + .5) * Cell.ns_res;
     x = Cell.west + (x + .5) * Cell.ew_res;
 
-    Vect_append_point(Points, x, y, level);
-
+    if (Points->n_points == 0 || (Points->n_points > 0 &&
+        (Points->x[Points->n_points - 1] != x ||
+	 Points->y[Points->n_points - 1] != y))) {
+	Vect_append_point(Points, x, y, level);
+    }
 }
 
 /***********************************************************************
