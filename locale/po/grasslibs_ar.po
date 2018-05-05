@@ -3499,7 +3499,7 @@ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
 #: ../lib/imagery/iscatt_core.c:255
 #, fuzzy, c-format
-msgid "Unable to open category raster condtions file <%s>."
+msgid "Unable to open category raster conditions file <%s>."
 msgstr "datum لم يمكن فتح ملف جدول : %s"
 
 #: ../lib/imagery/iscatt_core.c:263
