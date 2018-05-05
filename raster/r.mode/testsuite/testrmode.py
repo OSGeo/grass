@@ -1,7 +1,7 @@
 """
 Name:       r.mode test
 Purpose:    Tests r.mode and its flags/options.
-	
+
 Author:     Supreet Singh
 Copyright:  (C) 2018 by Supreet Singh and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
@@ -13,10 +13,11 @@ Licence:    This program is free software under the GNU General Public
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
+
 class Testrmode(TestCase):
-    output='rmode'
-    base='geology'
-    cover='soils'
+    output = 'rmode'
+    base = 'geology'
+    cover = 'soils'
 
     @classmethod
     def setUpClass(cls):
@@ -31,23 +32,10 @@ class Testrmode(TestCase):
         self.runModule('g.remove', type='raster', flags='f', name=self.output)
 
     def test_1(self):
-        soilsID='soils'
         self.assertModule('r.mode', base=self.base, cover=self.cover, output=self.output)
-        self.assertRasterMinMax(map=soilsID, refmin=18683, refmax=46555,
-	                        msg="soilsID in degrees must be between 18683 and 46555")
+        self.assertRasterMinMax(map=self.output, refmin=21513, refmax=46487,
+                                msg="soils must be between 21513 and 46487")
 
-    def test_2(self):
-        lakes='lakes'
-        self.assertModule('r.mode', base=self.base, cover=self.cover, output=self.output)
-        self.assertRasterMinMax(map=lakes, refmin=34300, refmax=43600,
-	                        msg="lakes in degrees must be between 34300 and 43600")
-
-    def test_3(self):
-        elevation='elevation'
-        self.assertModule('r.mode', base=self.base, cover=self.cover, output=self.output)
-        self.assertRasterMinMax(map=elevation, refmin=2, refmax=4,
-	                        msg="elevation in degrees must be between NULL and NULL")
 
 if __name__ == '__main__':
     test()
-
