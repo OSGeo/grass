@@ -252,7 +252,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
 
     f_cat_rast = fopen(cat_rast, "rb+");
     if (!f_cat_rast) {
-	G_warning(_("Unable to open category raster condtions file <%s>."),
+	G_warning(_("Unable to open category raster conditions file <%s>."),
 		  cat_rast);
 	return -1;
     }
@@ -541,7 +541,7 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 		}
 	    }
 
-	    /* check condtions defined in scatter plots */
+	    /* check conditions defined in scatter plots */
 	    for (i_scatt = 0; i_scatt < scatts_conds->n_a_scatts; i_scatt++) {
 		b_1_rast_row = bands_rows[scatts_bands[i_scatt * 2]];
 		b_2_rast_row = bands_rows[scatts_bands[i_scatt * 2 + 1]];

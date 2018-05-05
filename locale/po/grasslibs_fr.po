@@ -3729,7 +3729,7 @@ msgstr "Impossible d'écrire dans le fichier <%s> de catégories du raster."
 
 #: ../lib/imagery/iscatt_core.c:255
 #, c-format
-msgid "Unable to open category raster condtions file <%s>."
+msgid "Unable to open category raster conditions file <%s>."
 msgstr "Impossible d'ouvrir le fichier <%s> de catégories du raster."
 
 #: ../lib/imagery/iscatt_core.c:263

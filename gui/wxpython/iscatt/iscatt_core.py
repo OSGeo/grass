@@ -426,7 +426,7 @@ class AnalyzedData:
 
 
 class ScattPlotsCondsData:
-    """Data structure for selected areas in scatter plot(condtions).
+    """Data structure for selected areas in scatter plot(conditions).
     """
 
     def __init__(self, an_data):
