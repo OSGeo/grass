@@ -9793,7 +9793,7 @@ msgstr "ne morem zapisati \"history\" podatkov za [%s]"
 
 #: ../lib/imagery/iscatt_core.c:255
 #, fuzzy, c-format
-msgid "Unable to open category raster condtions file <%s>."
+msgid "Unable to open category raster conditions file <%s>."
 msgstr "Nezmožen odpreti datoteko s tabelo fundamentalne točke: %s"
 
 #: ../lib/imagery/iscatt_core.c:263

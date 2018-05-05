@@ -9066,7 +9066,7 @@ msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:255
 #, c-format
-msgid "Unable to open category raster condtions file <%s>."
+msgid "Unable to open category raster conditions file <%s>."
 msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:263

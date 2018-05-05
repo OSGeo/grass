@@ -9174,7 +9174,7 @@ msgstr "No ha sido posible escribir en archivo de condiciones de categorías rá
 
 #: ../lib/imagery/iscatt_core.c:255
 #, c-format
-msgid "Unable to open category raster condtions file <%s>."
+msgid "Unable to open category raster conditions file <%s>."
 msgstr "No ha sido posible abrir archivo de condiciones de categorías ráster <%s>."
 
 #: ../lib/imagery/iscatt_core.c:263
