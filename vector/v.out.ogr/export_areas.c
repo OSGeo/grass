@@ -101,9 +101,6 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
         /* create polygon from area */
         Ogr_geometry = create_polygon(In, area, Points, outer_ring_ccw);
 
-        /* add feature */
-        Ogr_feature = OGR_F_Create(Ogr_featuredefn);
-        OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
         
         /* output one feature for each category */
         for (i = -1; i < Cats->n_cats; i++) {
@@ -119,14 +116,21 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
                     continue;
             }
             
+	    /* add feature */
+	    Ogr_feature = OGR_F_Create(Ogr_featuredefn);
+	    OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
+
             mk_att(cat, Fi, driver, ncol, colctype, colname, doatt, nocat,
                    Ogr_feature, n_noatt);
-            OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
-            
-            n_exported++;
+            if (OGR_L_CreateFeature(Ogr_layer, Ogr_feature) != OGRERR_NONE ) {
+		G_warning(_("Failed to create OGR feature"));
+	    }
+	    else
+		n_exported++;
+
+	    OGR_F_Destroy(Ogr_feature);
         }
         OGR_G_DestroyGeometry(Ogr_geometry);
-        OGR_F_Destroy(Ogr_feature);
     }
 
     Vect_destroy_line_struct(Points);
@@ -219,11 +223,13 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
             
             mk_att(cat, Fi, driver, ncol, colctype, colname, doatt, nocat,
                    Ogr_feature, n_noatt);
-            OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
+            if (OGR_L_CreateFeature(Ogr_layer, Ogr_feature) != OGRERR_NONE ) {
+		G_warning(_("Failed to create OGR feature"));
+	    }
+	    else
+		n_exported++;
 
             OGR_F_Destroy(Ogr_feature);
-
-            n_exported++;
         }
         else {
             /* skip empty features */
@@ -268,11 +274,13 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
         
         mk_att(cat, Fi, driver, ncol, colctype, colname, doatt, nocat,
                Ogr_feature, n_noatt);
-        OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
+	if (OGR_L_CreateFeature(Ogr_layer, Ogr_feature) != OGRERR_NONE ) {
+	    G_warning(_("Failed to create OGR feature"));
+	}
+	else
+	    n_exported++;
 
         OGR_F_Destroy(Ogr_feature);
-        
-        n_exported++;
     }
     else {
         /* skip empty features */
