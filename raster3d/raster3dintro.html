@@ -87,24 +87,33 @@ space time voxel model or some other combination.
 
 <h3>3D raster import</h3>
 
+<h4>Import from external files</h4>
+
 The modules <a href="r3.in.ascii.html">r3.in.ascii</a> and
  <a href="r3.in.bin.html">r3.in.bin</a> supports
 generic x,y,z ASCII and binary array import.
-Alternatively, 3D rasters can be generated
-from 3D point vector data (<a href="v.to.rast3.html">v.to.rast3</a>). 
-Always the full map is imported.
-3D raster can also be created based on 2D elevation map(s) and value raster map(s)
-(<a href="r.to.rast3elev.html">r.to.rast3elev</a>). Alternatively,
-a 3D raster can be composed of several 2D raster maps.
-2D rasters are considered as slices in this case and
-merged into one 3D raster map (<a href="r.to.rast3.html">r.to.rast3</a>).
-
 <p>
-Import of 3D points and their statistics can be done using
+In case of CSV tables, the modules <a href="v.in.ascii.html">v.in.ascii</a>
+(using the <b>-z</b> flag) may be a choice to first import the 3D points
+as vector points and the convert them to 3D raster (see below).
+<p>
+Import of 3D (LiDAR) points and their statistics can be done using
 <a href="r3.in.lidar.html">r3.in.lidar</a> for LiDAR data and
 <a href="r3.in.xyz.html">r3.in.xyz</a> for CSV and other ASCII text
 formats.
 
+<h4>Conversion from 3D vector points</h4>
+
+3D rasters can be generated from 3D point vector data
+(<a href="v.to.rast3.html">v.to.rast3</a>). Always the full map is imported.
+
+<h4>Conversion from 2D raster maps</h4>
+
+3D raster can also be created based on 2D elevation map(s) and value raster map(s)
+(<a href="r.to.rast3elev.html">r.to.rast3elev</a>). Alternatively,
+a 3D raster can be composed of several 2D raster maps (stack of maps).
+2D rasters are considered as slices in this case and
+merged into one 3D raster map (<a href="r.to.rast3.html">r.to.rast3</a>).
 
 <h3>3D region settings and 3D MASK</h3>
 
