@@ -6,7 +6,7 @@ void write_lines(struct Map_info *In, struct field_info *IFi, int *ALines,
 		 struct Map_info *Out, int table_flag, int reverse_flag,
 		 int nfields, int *fields, int *ncats, int **cats)
 {
-  int i, f, j, aline, nalines;
+    int i, f, j, aline, nalines;
     int atype;
     
     struct line_pnts *APoints;
@@ -59,14 +59,17 @@ void write_lines(struct Map_info *In, struct field_info *IFi, int *ALines,
 
 	if (!table_flag && (IFi != NULL)) {
 	    for (i = 0; i < ACats->n_cats; i++) {
+		f = -1;
 		for (j = 0; j < nfields; j++) {	/* find field */
 		    if (fields[j] == ACats->field[i]) {
 			f = j;
 			break;
 		    }
 		}
-		cats[f][ncats[f]] = ACats->cat[i];
-		ncats[f]++;
+		if (f >= 0) {
+		    cats[f][ncats[f]] = ACats->cat[i];
+		    ncats[f]++;
+		}
 	    }
 	}
     }
