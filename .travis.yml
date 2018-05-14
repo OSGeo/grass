@@ -35,3 +35,5 @@ notifications:
                 - wenzeslaus@gmail.com
             on_success: change
             on_failure: always
+        irc: "chat.freenode.net#grass"
+
