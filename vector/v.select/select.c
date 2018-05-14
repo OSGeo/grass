@@ -7,336 +7,375 @@
 #include "proto.h"
 
 int select_lines(struct Map_info *aIn, int atype, int afield,
-                  struct Map_info *bIn, int btype, int bfield,
-                  int cat_flag, int operator, const char *relate,
-                  int *ALines, int *AAreas, int* nskipped)
+                 struct Map_info *bIn, int btype, int bfield,
+                 int cat_flag, int operator, const char *relate,
+                 int *ALines, int *AAreas, int* nskipped)
 {
-    int i;
-    int nalines, aline, ltype;
+    int i, ai;
+    int nblines, bline, ltype;
     int nfound = 0;
     
     struct line_pnts *APoints, *BPoints;
-    struct ilist *BoundList, *LList;
-    struct boxlist *List, *TmpList;
+    struct line_pnts *OPoints, **IPoints;
+    int isle, nisles, isles_alloc;
+    struct ilist *BoundList;
+    struct boxlist *List;
 
 #ifdef HAVE_GEOS
     initGEOS(G_message, G_fatal_error);
-    GEOSGeometry *AGeom = NULL;
+    GEOSGeometry *BGeom = NULL;
 #else
-    void *AGeom = NULL;
+    void *BGeom = NULL;
 #endif
 
     nskipped[0] = nskipped[1] = 0;
     APoints = Vect_new_line_struct();
     BPoints = Vect_new_line_struct();
-    List = Vect_new_boxlist(1);
-    TmpList = Vect_new_boxlist(1);
-    BoundList = Vect_new_list();
-    LList = Vect_new_list();
-
-    nalines = Vect_get_num_lines(aIn);
+    OPoints = Vect_new_line_struct();
+    isles_alloc = 10;
+    IPoints = G_malloc(isles_alloc * sizeof(struct line_pnts *));
+    for (i = 0; i < isles_alloc; i++)
+	IPoints[i] = Vect_new_line_struct();
+    nisles = 0;
     
-    /* Lines in A. Go through all lines and mark those that meets condition */
-    if (atype & (GV_POINTS | GV_LINES)) {
+    List = Vect_new_boxlist(1);
+    BoundList = Vect_new_list();
+
+    nblines = Vect_get_num_lines(bIn);
+    
+    /* Lines in B */
+    if (btype & (GV_POINTS | GV_LINES)) {
 	G_message(_("Processing features..."));
 	
-	G_percent(0, nalines, 2);
-	for (aline = 1; aline <= nalines; aline++) {
-	    struct bound_box abox;
+	G_percent(0, nblines, 2);
+	for (bline = 1; bline <= nblines; bline++) {
+	    struct bound_box bbox;
 
-	    G_debug(3, "aline = %d", aline);
-	    G_percent(aline, nalines, 2);	/* must be before any continue */
+	    G_debug(3, "bline = %d", bline);
+	    G_percent(bline, nblines, 2);	/* must be before any continue */
 
 	    /* Check category */
-	    if (!cat_flag && Vect_get_line_cat(aIn, aline, afield) < 0) {
-		nskipped[0]++;
+	    if (!cat_flag && Vect_get_line_cat(bIn, bline, bfield) < 0) {
+		nskipped[1]++;
 		continue;
 	    }
 
 	    /* Read line and check type */
 	    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
-		AGeom = Vect_read_line_geos(aIn, aline, &ltype);
+		BGeom = Vect_read_line_geos(bIn, bline, &ltype);
 #endif
-		if (!(ltype & (GV_POINT | GV_LINE)))
-		    continue;
-
-		if (!AGeom)
+		if (!BGeom)
 		    G_fatal_error(_("Unable to read line id %d from vector map <%s>"),
-				  aline, Vect_get_full_name(aIn));
+				  bline, Vect_get_full_name(bIn));
 	    }
 	    else {
-		ltype = Vect_read_line(aIn, APoints, NULL, aline);
+		ltype = Vect_read_line(bIn, BPoints, NULL, bline);
 	    }
 	    
-	    if (!(ltype & atype))
+	    if (!(ltype & btype))
 		continue;
 	    
-	    Vect_get_line_box(aIn, aline, &abox);
+	    Vect_get_line_box(bIn, bline, &bbox);
 
-	    /* Check if this line overlaps any feature in B */
-	    /* x Lines in B */
-	    if (btype & (GV_POINTS | GV_LINES)) {
-		int found = 0;
+	    /* Check if this line overlaps any feature in A */
+	    /* x Lines in A */
+	    if (atype & (GV_POINTS | GV_LINES)) {
 		
 		/* Lines */
-		Vect_select_lines_by_box(bIn, &abox, btype, List);
-		for (i = 0; i < List->n_values; i++) {
-		    int bline;
+		Vect_select_lines_by_box(aIn, &bbox, atype, List);
+		for (ai = 0; ai < List->n_values; ai++) {
+		    int aline;
 		    
-		    bline = List->id[i];
-		    G_debug(3, "  bline = %d", bline);
+		    aline = List->id[ai];
+		    G_debug(3, "  aline = %d", aline);
+
+		    if (ALines[aline] == 1)
+			continue;
 		    
 		    /* Check category */
 		    if (!cat_flag &&
-			Vect_get_line_cat(bIn, bline, bfield) < 0) {
-			nskipped[1]++;
+			Vect_get_line_cat(aIn, aline, afield) < 0) {
+			nskipped[0]++;
 			continue;
 		    }
 		    
 		    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
-			if(line_relate_geos(bIn, AGeom,
-					    bline, operator, relate)) {
-
-			    found = 1;
-			    break;
+			if (line_relate_geos(aIn, BGeom, aline,
+			                     operator, relate)) {
+			    ALines[aline] = 1;
+			    nfound += 1;
 			}
 #endif
 		    }
 		    else {
-			Vect_read_line(bIn, BPoints, NULL, bline);
+			Vect_read_line(aIn, APoints, NULL, aline);
 
-			if (Vect_line_check_intersection2(APoints, BPoints, 0)) {
-			    found = 1;
-			    break;
+			if (Vect_line_check_intersection2(BPoints, APoints, 0)) {
+			    ALines[aline] = 1;
+			    nfound += 1;
 			}
 		    }
-		}
-		
-		if (found) {
-		    ALines[aline] = 1;
-		    nfound += 1;
-		    continue;	/* Go to next A line */
 		}
 	    }
 	    
-	    /* x Areas in B. */
-	    if (btype & GV_AREA) {
+	    /* x Areas in A. */
+	    if (atype & GV_AREA) {
 		
-		Vect_select_areas_by_box(bIn, &abox, List);
-		for (i = 0; i < List->n_values; i++) {
-		    int barea;
+		Vect_select_areas_by_box(aIn, &bbox, List);
+		for (ai = 0; ai < List->n_values; ai++) {
+		    int aarea;
 		    
-		    barea = List->id[i];
-		    G_debug(3, "  barea = %d", barea);
+		    aarea = List->id[ai];
+		    G_debug(3, "  aarea = %d", aarea);
 		    
-		    if (Vect_get_area_cat(bIn, barea, bfield) < 0) {
-			nskipped[1]++;
+		    if (AAreas[aarea] == 1)
+			continue;
+		    
+		    if (Vect_get_area_centroid(aIn, aarea) < 1)
+			continue;
+
+		    if (!cat_flag &&
+		        Vect_get_area_cat(aIn, aarea, afield) < 0) {
+			nskipped[0]++;
 			continue;
 		    }
 
 		    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
-			if(area_relate_geos(bIn, AGeom,
-					    barea, operator, relate)) {
-			    ALines[aline] = 1;
+			if (area_relate_geos(aIn, BGeom, aarea, 
+					     operator, relate)) {
+			    add_aarea(aIn, aarea, ALines, AAreas);
 			    nfound += 1;
-			    break;
 			}
 #endif
 		    }
 		    else {
-			if (line_overlap_area(APoints, bIn, barea)) {
-			    ALines[aline] = 1;
+			Vect_get_area_points(aIn, aarea, OPoints);
+			nisles = Vect_get_area_num_isles(aIn, aarea);
+			if (nisles >= isles_alloc) {
+			    IPoints = G_realloc(IPoints, (nisles + 10) * sizeof(struct line_pnts *));
+			    for (i = isles_alloc; i < nisles + 10; i++)
+				IPoints[i] = Vect_new_line_struct();
+			    isles_alloc = nisles + 10;
+			}
+			for (i = 0; i < nisles; i++) {
+			    isle = Vect_get_area_isle(aIn, aarea, i);
+			    Vect_get_isle_points(aIn, isle, IPoints[i]);
+			}
+
+			if (line_overlap_area(BPoints, OPoints, IPoints, nisles)) {
+			    add_aarea(aIn, aarea, ALines, AAreas);
 			    nfound += 1;
-			    break;
 			}
 		    }
 		}
 	    }
-	    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
-		GEOSGeom_destroy(AGeom);
-#endif
-		AGeom = NULL;
+	    if (operator != OP_OVERLAP) {
+		GEOSGeom_destroy(BGeom);
+		BGeom = NULL;
 	    }
+#endif
 	}
     }
     
-    /* Areas in A. */
-    if (atype & GV_AREA) {
-	int aarea, naareas;
+    /* Areas in B. */
+    if (btype & GV_AREA) {
+	int barea, nbareas, bcentroid;
 
 	G_message(_("Processing areas..."));
 	
-	naareas = Vect_get_num_areas(aIn);
+	nbareas = Vect_get_num_areas(bIn);
 
-	G_percent(0, naareas, 2);
-	for (aarea = 1; aarea <= naareas; aarea++) {
-	    struct bound_box abox;
+	G_percent(0, nbareas, 2);
+	for (barea = 1; barea <= nbareas; barea++) {
+	    struct bound_box bbox;
 
-	    G_percent(aarea, naareas, 1);
+	    G_percent(barea, nbareas, 1);
 
-	    if (Vect_get_area_cat(aIn, aarea, afield) < 0) {
-		nskipped[0]++;
+	    if ((bcentroid = Vect_get_area_centroid(bIn, barea)) < 1)
+		continue;
+
+	    if (!cat_flag &&
+	        Vect_get_area_cat(bIn, barea, bfield) < 0) {
+		nskipped[1]++;
 		continue;
 	    }
-	
-	    Vect_get_area_box(aIn, aarea, &abox);
-	    abox.T = PORT_DOUBLE_MAX;
-	    abox.B = -PORT_DOUBLE_MAX;
+
+	    Vect_read_line(bIn, BPoints, NULL, bcentroid);
+
+	    Vect_get_area_box(bIn, barea, &bbox);
+	    bbox.T = PORT_DOUBLE_MAX;
+	    bbox.B = -PORT_DOUBLE_MAX;
 
 	    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
-		AGeom = Vect_read_area_geos(aIn, aarea);
+		BGeom = Vect_read_area_geos(bIn, barea);
 #endif
-		if (!AGeom)
+		if (!BGeom)
 		    G_fatal_error(_("Unable to read area id %d from vector map <%s>"),
-				  aarea, Vect_get_full_name(aIn));
+				  barea, Vect_get_full_name(bIn));
+	    }
+	    else {
+		Vect_get_area_points(bIn, barea, OPoints);
+		nisles = Vect_get_area_num_isles(bIn, barea);
+		if (nisles >= isles_alloc) {
+		    IPoints = G_realloc(IPoints, (nisles + 10) * sizeof(struct line_pnts *));
+		    for (i = isles_alloc; i < nisles + 10; i++)
+			IPoints[i] = Vect_new_line_struct();
+		    isles_alloc = nisles + 10;
+		}
+		for (i = 0; i < nisles; i++) {
+		    isle = Vect_get_area_isle(bIn, barea, i);
+		    Vect_get_isle_points(bIn, isle, IPoints[i]);
+		}
 	    }
 
-	    /* x Lines in B */
-	    if (btype & (GV_POINTS | GV_LINES)) {
-		Vect_select_lines_by_box(bIn, &abox, btype, List);
+	    /* x Lines in A */
+	    if (atype & (GV_POINTS | GV_LINES)) {
+		Vect_select_lines_by_box(aIn, &bbox, atype, List);
 
-		for (i = 0; i < List->n_values; i++) {
-		    int bline;
+		for (ai = 0; ai < List->n_values; ai++) {
+		    int aline;
 
-		    bline = List->id[i];
+		    aline = List->id[ai];
+		    if (ALines[aline] == 1)
+			continue;
 
 		    if (!cat_flag &&
-			Vect_get_line_cat(bIn, bline, bfield) < 0) {
-			nskipped[1]++;
+			Vect_get_line_cat(aIn, aline, afield) < 0) {
+			nskipped[0]++;
 			continue;
 		    }
 		    
 		    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
-			if(line_relate_geos(bIn, AGeom,
-					    bline, operator, relate)) {
-			    add_aarea(aIn, aarea, ALines, AAreas);
+			if (line_relate_geos(aIn, BGeom, aline,
+					     operator, relate)) {
+			    ALines[aline] = 1;
 			    nfound += 1;
-			    break;
 			}
 #endif
 		    }
 		    else {
-			Vect_read_line(bIn, BPoints, NULL, bline);
+			Vect_read_line(aIn, APoints, NULL, aline);
 
-			if (line_overlap_area(BPoints, aIn, aarea)) {
-			    add_aarea(aIn, aarea, ALines, AAreas);
+			if (line_overlap_area(APoints, OPoints, IPoints, nisles)) {
+			    ALines[aline] = 1;
 			    nfound += 1;
-			    continue;
 			}
 		    }
 		}
 	    }
 
-	    /* x Areas in B */
-	    if (btype & GV_AREA) {
-		int naisles;
-		int found = 0;
+	    /* x Areas in A */
+	    if (atype & GV_AREA) {
 
-		/* List of areas B */
+		/* List of areas A */
+		Vect_select_areas_by_box(aIn, &bbox, List);
 
-		/* Make a list of features forming area A */
-		Vect_reset_list(LList);
+		for (ai = 0; ai < List->n_values; ai++) {
+		    int found = 0;
+		    int aarea, acentroid;
 
-		Vect_get_area_boundaries(aIn, aarea, BoundList);
-		for (i = 0; i < BoundList->n_values; i++) {
-		    Vect_list_append(LList, abs(BoundList->value[i]));
-		}
+		    aarea = List->id[ai];
+		    G_debug(3, "  aarea = %d", aarea);
+		    
+		    if (AAreas[aarea] == 1)
+			continue;
 
-		naisles = Vect_get_area_num_isles(aIn, aarea);
+		    if ((acentroid = Vect_get_area_centroid(aIn, aarea)) < 1)
+			continue;
 
-		for (i = 0; i < naisles; i++) {
-		    int j, aisle;
-
-		    aisle = Vect_get_area_isle(aIn, aarea, i);
-
-		    Vect_get_isle_boundaries(aIn, aisle, BoundList);
-		    for (j = 0; j < BoundList->n_values; j++) {
-			Vect_list_append(LList, BoundList->value[j]);
+		    if (!cat_flag &&
+		        Vect_get_area_cat(aIn, aarea, afield) < 0) {
+			nskipped[0]++;
+			continue;
 		    }
-		}
 
-		Vect_select_areas_by_box(bIn, &abox, TmpList);
-
-		for (i = 0; i < LList->n_values; i++) {
-		    int j;
-
-		    aline = abs(LList->value[i]);
-		    Vect_read_line(aIn, APoints, NULL, aline);
-
-		    for (j = 0; j < TmpList->n_values; j++) {
-			int barea, bcentroid;
-
-			barea = TmpList->id[j];
-			G_debug(3, "  barea = %d", barea);
-
-			if (Vect_get_area_cat(bIn, barea, bfield) < 0) {
-			    nskipped[1]++;
-			    continue;
-			}
-
-			/* Check if any centroid of area B is in area A.
-			 * This test is important in if area B is completely within area A */
-			if ((bcentroid = Vect_get_area_centroid(bIn, barea)) > 0)
-			    Vect_read_line(bIn, BPoints, NULL, bcentroid);
-			else {
-			    double x, y;
-
-			    Vect_get_point_in_area(bIn, barea, &x, &y);
-			    Vect_reset_line(BPoints);
-			    Vect_append_point(BPoints, x, y, 0.0);
-			}
-
-			if (operator != OP_OVERLAP) {
+		    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
-			    if(area_relate_geos(bIn, AGeom,
-						barea, operator, relate)) {
-				found = 1;
-				break;
-			    }
-#endif
+			if (area_relate_geos(aIn, BGeom, aarea,
+					     operator, relate)) {
+			    found = 1;
 			}
-			else {
+#endif
+		    }
+		    else {
+			/* A inside B ? */
+			Vect_read_line(aIn, APoints, NULL, acentroid);
+			if (line_overlap_area(APoints, OPoints, IPoints, nisles)) {
+			    found = 1;
+			}
+
+			/* B inside A ? */
+			if (!found) {
+			    struct bound_box abox;
+
+			    Vect_get_area_box(aIn, aarea, &abox);
+			    abox.T = PORT_DOUBLE_MAX;
+			    abox.B = -PORT_DOUBLE_MAX;
+
 			    if (Vect_point_in_area(BPoints->x[0], BPoints->y[0], aIn,
-			                           aarea, &abox)) {
+						   aarea, &abox)) {
 				found = 1;
-				break;
 			    }
-			    
-			    /* Check intersectin of lines from List with area B */
-			    if (line_overlap_area(APoints, bIn, barea)) {
-				found = 1;
-				break;
+			}
+
+			/* A overlaps B ? */
+			if (!found) {
+			    Vect_get_area_boundaries(aIn, aarea, BoundList);
+			    for (i = 0; i < BoundList->n_values; i++) {
+				Vect_read_line(aIn, APoints, NULL, abs(BoundList->value[i]));
+				if (line_overlap_area(APoints, OPoints, IPoints, nisles)) {
+				    found = 1;
+				    break;
+				}
+			    }
+			}
+
+			if (!found) {
+			    int j, naisles;
+
+			    naisles = Vect_get_area_num_isles(aIn, aarea);
+			    for (j = 0; j < naisles; j++) {
+
+				isle = Vect_get_area_isle(aIn, aarea, j);
+
+				Vect_get_isle_boundaries(aIn, isle, BoundList);
+				for (i = 0; i < BoundList->n_values; i++) {
+				    Vect_read_line(aIn, APoints, NULL, abs(BoundList->value[i]));
+				    if (line_overlap_area(APoints, OPoints, IPoints, nisles)) {
+					found = 1;
+					break;
+				    }
+				}
+				if (found)
+				    break;
 			    }
 			}
 		    }
 		    if (found) {
 			add_aarea(aIn, aarea, ALines, AAreas);
-		        nfound += 1;
-			break;
+			nfound += 1;
 		    }
 		}
 	    }
-	    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
-		GEOSGeom_destroy(AGeom);
-#endif
-		AGeom = NULL;
+	    if (operator != OP_OVERLAP) {
+		GEOSGeom_destroy(BGeom);
+		BGeom = NULL;
 	    }
+#endif
 	}
     }
 
     Vect_destroy_line_struct(APoints);
     Vect_destroy_line_struct(BPoints);
     Vect_destroy_list(BoundList);
-    Vect_destroy_list(LList);
     Vect_destroy_boxlist(List);
-    Vect_destroy_boxlist(TmpList);
 
     return nfound;
 }

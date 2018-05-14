@@ -113,9 +113,7 @@ int main(int argc, char *argv[])
 
     /* Alloc space for input lines array */
     ALines = (int *)G_calloc(Vect_get_num_lines(&(In[0])) + 1, sizeof(int));
-    AAreas = NULL;
-    if (flag.reverse->answer)
-	AAreas = (int *)G_calloc(Vect_get_num_areas(&(In[0])) + 1, sizeof(int));
+    AAreas = (int *)G_calloc(Vect_get_num_areas(&(In[0])) + 1, sizeof(int));
 
     /* Read field info */
     IFi = Vect_get_field(&(In[0]), ifield[0]);
@@ -150,46 +148,55 @@ int main(int argc, char *argv[])
     finishGEOS();
 #endif
 
+    if (!flag.reverse->answer) {
+	G_free(AAreas);
+	AAreas = NULL;
+    }
+
+
     if (nfound != 0) {
 
-    native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
+	native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
 
-    nfields = Vect_cidx_get_num_fields(&(In[0]));
-    cats = (int **)G_malloc(nfields * sizeof(int *));
-    ncats = (int *)G_malloc(nfields * sizeof(int));
-    fields = (int *)G_malloc(nfields * sizeof(int));
+	nfields = Vect_cidx_get_num_fields(&(In[0]));
+	cats = (int **)G_malloc(nfields * sizeof(int *));
+	ncats = (int *)G_malloc(nfields * sizeof(int));
+	fields = (int *)G_malloc(nfields * sizeof(int));
 
-    /* Write lines */
-    if (!flag.table->answer && !native) {
-	/* Copy attributes for OGR output */
-	Vect_copy_map_dblinks(&(In[0]), &Out, TRUE);
+	/* Write lines */
+	if (!flag.table->answer && !native) {
+	    /* Copy attributes for OGR output */
+	    Vect_copy_map_dblinks(&(In[0]), &Out, TRUE);
+	}
+	
+	write_lines(&(In[0]), IFi, ALines, AAreas,
+		    &Out, flag.table->answer ? 1 : 0, flag.reverse->answer ? 1 : 0,
+		    nfields, fields, ncats, cats);
+
+	/* Copy tables */
+	if (!flag.table->answer && native) {
+	    copy_tabs(&(In[0]), &Out,
+		      nfields, fields, ncats, cats);
+	}
+
+	/* print info about skipped features & close input maps */
+	for (iopt = 0; iopt < 2; iopt++) {
+	    if (nskipped[iopt] > 0) {
+		G_warning(_("%d features from <%s> without category skipped"),
+			  nskipped[iopt], Vect_get_full_name(&(In[iopt])));
+	    }
+	    Vect_close(&(In[iopt]));
+	}
+
+	Vect_build(&Out);
+	Vect_close(&Out);
+
+	G_done_msg(_("%d features written to output."), Vect_get_num_lines(&Out));
     }
-    
-    write_lines(&(In[0]), IFi, ALines, AAreas,
-		&Out, flag.table->answer ? 1 : 0, flag.reverse->answer ? 1 : 0,
-		nfields, fields, ncats, cats);
-
-    /* Copy tables */
-    if (!flag.table->answer && native) {
-	copy_tabs(&(In[0]), &Out,
-		  nfields, fields, ncats, cats);
-    }
-
-    /* print info about skipped features & close input maps */
-    for (iopt = 0; iopt < 2; iopt++) {
-        if (nskipped[iopt] > 0) {
-            G_warning(_("%d features from <%s> without category skipped"),
-                      nskipped[iopt], Vect_get_full_name(&(In[iopt])));
-        }
-        Vect_close(&(In[iopt]));
-    }
-
-    Vect_build(&Out);
-    Vect_close(&Out);
-
-    G_done_msg(_("%d features written to output."), Vect_get_num_lines(&Out));
-    } else {
-    G_done_msg(_("No features found !"));
+    else {
+	Vect_close(&In[0]);
+	Vect_close(&In[1]);
+	G_done_msg(_("No features found !"));
     }
 
     exit(EXIT_SUCCESS);
