@@ -509,13 +509,17 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
                 else:
                     matrix.append(cols[:2])
 
-            matrix[i] = matrix[i] + cols[3:]
+            if vcat:
+                matrix[i] = matrix[i] + cols[4:]
+            else:
+                matrix[i] = matrix[i] + cols[3:]
 
         first = False
 
         in_file.close()
 
-    out_file.write(header + "\n")
+    if write_header:
+        out_file.write(header + "\n")
 
     gscript.verbose(_("Writing the output file <%s>"%(output)))
     for row in matrix:
