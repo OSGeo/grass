@@ -83,7 +83,7 @@ class TestRasterWhat(TestCase):
                           nprocs=1, overwrite=True, verbose=True)
 
         self.assertFileMd5("out_col.txt",
-                           "8720cc237b46ddb18f11440469d0e13f", text=True)
+                           "885b6f50405b08fa9fe9ae33ed50e29b", text=True)
 
     def test_col_output_coords(self):
         self.assertModule("t.rast.what", strds="A", output="out_col_coords.txt",
@@ -91,7 +91,7 @@ class TestRasterWhat(TestCase):
                           nprocs=1, overwrite=True, verbose=True)
 
         self.assertFileMd5("out_col_coords.txt",
-                           "ac44ebc5aa040d4ce2a5787e95f208ec", text=True)
+                           "ecdc79a6880a9e1f163cc92fa384b8a3", text=True)
 
     def test_timerow_output(self):
         self.assertModule("t.rast.what", strds="A", output="out_timerow.txt",
@@ -107,7 +107,7 @@ class TestRasterWhat(TestCase):
                           nprocs=1, overwrite=True, verbose=True)
 
         self.assertFileMd5("out_col_cat.txt",
-                           "e1d8e6651b3bff1c35e366e48d634db4", text=True)
+                           "ac0a9b14e59920c3f8b5834282a24822", text=True)
 
     def test_timerow_output_cat(self):
         self.assertModule("t.rast.what", strds="A", output="out_col_trow.txt",
@@ -115,7 +115,7 @@ class TestRasterWhat(TestCase):
                           nprocs=1, overwrite=True, verbose=True)
 
         self.assertFileMd5("out_col_trow.txt",
-                           "55e2ff8ddaeb731a73daca48adf2768d", text=True)
+                           "1da3350f488df9c919b4009625956b3b", text=True)
 
     def test_timerow_output_coords(self):
         self.assertModule("t.rast.what", strds="A", output="out_timerow_coords.txt",
