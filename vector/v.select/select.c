@@ -52,7 +52,12 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 	    struct bound_box bbox;
 
 	    G_debug(3, "bline = %d", bline);
-	    G_percent(bline, nblines, 2);	/* must be before any continue */
+	    G_percent(bline, nblines, 1);	/* must be before any continue */
+
+	    /* Check type */
+	    ltype = Vect_get_line_type(bIn, bline);
+	    if (!(ltype & btype))
+		continue;
 
 	    /* Check category */
 	    if (!cat_flag && Vect_get_line_cat(bIn, bline, bfield) < 0) {
@@ -60,22 +65,8 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 		continue;
 	    }
 
-	    /* Read line and check type */
-	    if (operator != OP_OVERLAP) {
-#ifdef HAVE_GEOS
-		BGeom = Vect_read_line_geos(bIn, bline, &ltype);
-#endif
-		if (!BGeom)
-		    G_fatal_error(_("Unable to read line id %d from vector map <%s>"),
-				  bline, Vect_get_full_name(bIn));
-	    }
-	    else {
-		ltype = Vect_read_line(bIn, BPoints, NULL, bline);
-	    }
-	    
-	    if (!(ltype & btype))
-		continue;
-	    
+	    Vect_reset_line(BPoints);
+
 	    Vect_get_line_box(bIn, bline, &bbox);
 
 	    /* Check if this line overlaps any feature in A */
@@ -92,7 +83,12 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 
 		    if (ALines[aline] == 1)
 			continue;
-		    
+
+		    /* Check type */
+		    ltype = Vect_get_line_type(aIn, aline);
+		    if (!(ltype & atype))
+			continue;
+
 		    /* Check category */
 		    if (!cat_flag &&
 			Vect_get_line_cat(aIn, aline, afield) < 0) {
@@ -102,6 +98,12 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 		    
 		    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
+			if (!BGeom)
+			    BGeom = Vect_read_line_geos(bIn, bline, &ltype);
+			if (!BGeom)
+			    G_fatal_error(_("Unable to read line id %d from vector map <%s>"),
+					  bline, Vect_get_full_name(bIn));
+
 			if (line_relate_geos(aIn, BGeom, aline,
 			                     operator, relate)) {
 			    ALines[aline] = 1;
@@ -110,6 +112,8 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 #endif
 		    }
 		    else {
+			if (BPoints->n_points == 0)
+			    Vect_read_line(bIn, BPoints, NULL, bline);
 			Vect_read_line(aIn, APoints, NULL, aline);
 
 			if (Vect_line_check_intersection2(BPoints, APoints, 0)) {
@@ -144,6 +148,12 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 
 		    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
+			if (!BGeom)
+			    BGeom = Vect_read_line_geos(bIn, bline, &ltype);
+			if (!BGeom)
+			    G_fatal_error(_("Unable to read line id %d from vector map <%s>"),
+					  bline, Vect_get_full_name(bIn));
+
 			if (area_relate_geos(aIn, BGeom, aarea, 
 					     operator, relate)) {
 			    add_aarea(aIn, aarea, ALines, AAreas);
@@ -152,6 +162,8 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 #endif
 		    }
 		    else {
+			if (BPoints->n_points == 0)
+			    Vect_read_line(bIn, BPoints, NULL, bline);
 			Vect_get_area_points(aIn, aarea, OPoints);
 			nisles = Vect_get_area_num_isles(aIn, aarea);
 			if (nisles >= isles_alloc) {
@@ -173,7 +185,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 		}
 	    }
 #ifdef HAVE_GEOS
-	    if (operator != OP_OVERLAP) {
+	    if (BGeom != NULL) {
 		GEOSGeom_destroy(BGeom);
 		BGeom = NULL;
 	    }
@@ -189,11 +201,11 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 	
 	nbareas = Vect_get_num_areas(bIn);
 
-	G_percent(0, nbareas, 2);
+	G_percent(0, nbareas, 1);
 	for (barea = 1; barea <= nbareas; barea++) {
 	    struct bound_box bbox;
 
-	    G_percent(barea, nbareas, 1);
+	    G_percent(barea, nbareas, 2);
 
 	    if ((bcentroid = Vect_get_area_centroid(bIn, barea)) < 1)
 		continue;
@@ -204,34 +216,11 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 		continue;
 	    }
 
-	    Vect_read_line(bIn, BPoints, NULL, bcentroid);
+	    Vect_reset_line(BPoints);
 
 	    Vect_get_area_box(bIn, barea, &bbox);
 	    bbox.T = PORT_DOUBLE_MAX;
 	    bbox.B = -PORT_DOUBLE_MAX;
-
-	    if (operator != OP_OVERLAP) {
-#ifdef HAVE_GEOS
-		BGeom = Vect_read_area_geos(bIn, barea);
-#endif
-		if (!BGeom)
-		    G_fatal_error(_("Unable to read area id %d from vector map <%s>"),
-				  barea, Vect_get_full_name(bIn));
-	    }
-	    else {
-		Vect_get_area_points(bIn, barea, OPoints);
-		nisles = Vect_get_area_num_isles(bIn, barea);
-		if (nisles >= isles_alloc) {
-		    IPoints = G_realloc(IPoints, (nisles + 10) * sizeof(struct line_pnts *));
-		    for (i = isles_alloc; i < nisles + 10; i++)
-			IPoints[i] = Vect_new_line_struct();
-		    isles_alloc = nisles + 10;
-		}
-		for (i = 0; i < nisles; i++) {
-		    isle = Vect_get_area_isle(bIn, barea, i);
-		    Vect_get_isle_points(bIn, isle, IPoints[i]);
-		}
-	    }
 
 	    /* x Lines in A */
 	    if (atype & (GV_POINTS | GV_LINES)) {
@@ -244,6 +233,11 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 		    if (ALines[aline] == 1)
 			continue;
 
+		    /* Check type */
+		    ltype = Vect_get_line_type(aIn, aline);
+		    if (!(ltype & atype))
+			continue;
+
 		    if (!cat_flag &&
 			Vect_get_line_cat(aIn, aline, afield) < 0) {
 			nskipped[0]++;
@@ -252,6 +246,11 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 		    
 		    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
+			if (!BGeom)
+			    BGeom = Vect_read_area_geos(bIn, barea);
+			if (!BGeom)
+			    G_fatal_error(_("Unable to read area id %d from vector map <%s>"),
+					  barea, Vect_get_full_name(bIn));
 			if (line_relate_geos(aIn, BGeom, aline,
 					     operator, relate)) {
 			    ALines[aline] = 1;
@@ -260,6 +259,22 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 #endif
 		    }
 		    else {
+			if (BPoints->n_points == 0) {
+			    Vect_read_line(bIn, BPoints, NULL, bcentroid);
+			    Vect_get_area_points(bIn, barea, OPoints);
+			    nisles = Vect_get_area_num_isles(bIn, barea);
+			    if (nisles >= isles_alloc) {
+				IPoints = G_realloc(IPoints, (nisles + 10) * sizeof(struct line_pnts *));
+				for (i = isles_alloc; i < nisles + 10; i++)
+				    IPoints[i] = Vect_new_line_struct();
+				isles_alloc = nisles + 10;
+			    }
+			    for (i = 0; i < nisles; i++) {
+				isle = Vect_get_area_isle(bIn, barea, i);
+				Vect_get_isle_points(bIn, isle, IPoints[i]);
+			    }
+			}
+
 			Vect_read_line(aIn, APoints, NULL, aline);
 
 			if (line_overlap_area(APoints, OPoints, IPoints, nisles)) {
@@ -297,6 +312,11 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 
 		    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
+			if (!BGeom)
+			    BGeom = Vect_read_area_geos(bIn, barea);
+			if (!BGeom)
+			    G_fatal_error(_("Unable to read area id %d from vector map <%s>"),
+					  barea, Vect_get_full_name(bIn));
 			if (area_relate_geos(aIn, BGeom, aarea,
 					     operator, relate)) {
 			    found = 1;
@@ -304,6 +324,22 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 #endif
 		    }
 		    else {
+			if (BPoints->n_points == 0) {
+			    Vect_read_line(bIn, BPoints, NULL, bcentroid);
+			    Vect_get_area_points(bIn, barea, OPoints);
+			    nisles = Vect_get_area_num_isles(bIn, barea);
+			    if (nisles >= isles_alloc) {
+				IPoints = G_realloc(IPoints, (nisles + 10) * sizeof(struct line_pnts *));
+				for (i = isles_alloc; i < nisles + 10; i++)
+				    IPoints[i] = Vect_new_line_struct();
+				isles_alloc = nisles + 10;
+			    }
+			    for (i = 0; i < nisles; i++) {
+				isle = Vect_get_area_isle(bIn, barea, i);
+				Vect_get_isle_points(bIn, isle, IPoints[i]);
+			    }
+			}
+
 			/* A inside B ? */
 			Vect_read_line(aIn, APoints, NULL, acentroid);
 			if (line_overlap_area(APoints, OPoints, IPoints, nisles)) {
@@ -364,7 +400,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 		}
 	    }
 #ifdef HAVE_GEOS
-	    if (operator != OP_OVERLAP) {
+	    if (BGeom != NULL) {
 		GEOSGeom_destroy(BGeom);
 		BGeom = NULL;
 	    }
