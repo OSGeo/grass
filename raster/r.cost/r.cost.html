@@ -76,7 +76,7 @@ also considered.
 Knight's move example:
 <center>
 <img src="rcost_knightsmove.png" border="1"><br>
-<table border="0" width="590">
+<table border="0" width="600" height="221">
 <tr><td><center>
 <i>Flat cost surface without (left pane) and with the knight's move (right pane).
 The default is to grow the cost outwards in 8 directions.
@@ -86,9 +86,31 @@ Using the knight's move grows it outwards in 16 directions.</i>
 </center>
 
 <p>
-If the <em>nearest</em> output parameter is specified, the module will calculate 
+If the <b>nearest</b> output parameter is specified, the module will calculate 
 for each cell its nearest starting point based on the minimized accumulative cost
 while moving over the cost map.
+
+<p>
+The <b>solver</b> option helps to select a particular direction in case 
+of multiple directions with equal costs. Sometimes fields with equal 
+cumulative costs exist and multiple paths with equal costs would lead 
+from a start point to a stop point. By default, a path along the edge 
+of such a field would be produced or multiple paths of equal costs with 
+the <b>-b</b> flag. An additional variable can be supplied with the 
+<b>solver</b> option to help the algorithm pick a particular direction.
+<p>
+Example for solving multiple directions:
+<center>
+<img src="rcost_solvedir.png" border="1"><br>
+<table border="0" width="400" height="206">
+<tr><td><center>
+<i>A field of equal cumulative costs with multiple paths (black). By 
+default a path along the edge will be selected (red). Path selection 
+can be controlled with the solver option (blue).</i>
+</center></td></tr>
+</table>
+</center>
+
 
 <h2>NULL CELLS</h2>
 
@@ -114,24 +136,23 @@ follows:
 The user generates a raster map indicating the cost of
 traversing each cell in the north-south and east-west directions.
 This map, along with a set of starting points are submitted to
-<em>r.cost</em>. The starting points are put into a list cells from which
+<em>r.cost</em>. The starting points are put into a heap of cells from which
 costs to the adjacent cells are to be calculated. The cell on the
-list with the lowest cumulative cost is selected for computing costs to
+heap with the lowest cumulative cost is selected for computing costs to
 the neighboring cells. Costs are computed and those cells are put
-on the list and the originating cell is finalized. This process
+on the heap and the originating cell is finalized. This process
 of selecting the lowest cumulative cost cell, computing costs to the
-neighbors, putting the neighbors on the list and removing the
-originating cell from the list continues until the list is empty.
+neighbors, putting the neighbors on the heap and removing the
+originating cell from the heap continues until the heap is empty.
 <p>
 The most time consuming aspect of this algorithm is the management of
-the list of cells for which cumulative costs have been at least
-initially computed. <em>r.cost</em> uses a binary tree with an linked list
-at each node in the tree for efficiently holding cells with identical
-cumulative costs.
+the heap of cells for which cumulative costs have been at least
+initially computed. <em>r.cost</em> uses a minimum heap for efficiently 
+tracking the next cell with the lowest cumulative costs.
 <p>
 <em>r.cost</em>, like most all GRASS raster programs, is also made to 
 be run on maps larger that can fit in available computer memory. As the 
-algorithm works through the dynamic list of cells it can move almost 
+algorithm works through the dynamic heap of cells it can move almost 
 randomly around the entire area. <em>r.cost</em> divides the entire 
 area into a number of pieces and swaps these pieces in and out of 
 memory (to and from disk) as needed. This provides a virtual memory 
