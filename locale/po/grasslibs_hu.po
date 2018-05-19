@@ -70,11 +70,11 @@ msgstr ""
 #: ../lib/vector/Vlib/legal_vname.c:144
 #, c-format
 msgid "Vector map <%s> not found"
-msgstr ""
+msgstr "<%s> vektor térképet nem találom"
 
 #: ../lib/manage/do_remove.c:65
 msgid "Unable to delete vector map"
-msgstr ""
+msgstr "Nem tudom törölni a vektor térképet"
 
 #: ../lib/manage/do_remove.c:73 ../lib/manage/do_rename.c:71
 #: ../lib/raster/open.c:176 ../lib/raster/open.c:843 ../lib/raster/open.c:880
@@ -100,19 +100,19 @@ msgstr ""
 #: ../lib/gis/legal_name.c:97
 #, c-format
 msgid "Raster map <%s> not found"
-msgstr ""
+msgstr "<%s> raszter térképet nem találom"
 
 #: ../lib/manage/do_remove.c:78 ../lib/manage/do_rename.c:76
 #: ../lib/ogsf/gvl_file.c:427 ../lib/ogsf/gvl3.c:40
 #: ../lib/gpde/n_arrays_io.c:273
 #, c-format
 msgid "3D raster map <%s> not found"
-msgstr ""
+msgstr "<%s> 3D raszter térképet nem találom"
 
 #: ../lib/manage/do_remove.c:85
 #, c-format
 msgid "Unable to remove %s element"
-msgstr ""
+msgstr "%s elemet nem tudom eltávolítani"
 
 #: ../lib/manage/do_remove.c:89 ../lib/manage/do_remove.c:109
 #: ../lib/manage/do_copy.c:61 ../lib/manage/do_rename.c:87
@@ -124,12 +124,12 @@ msgstr ""
 #: ../lib/manage/do_remove.c:92 ../lib/manage/do_remove.c:112
 #, c-format
 msgid "%s removed"
-msgstr ""
+msgstr "%s-t eltávilítottam"
 
 #: ../lib/manage/do_remove.c:105
 #, c-format
 msgid "Unable to remove %s"
-msgstr ""
+msgstr "%s-t nem tudom eltávolítani"
 
 #: ../lib/manage/do_remove.c:121
 #, c-format
@@ -149,7 +149,7 @@ msgstr ""
 #: ../lib/manage/do_copy.c:72
 #, c-format
 msgid "%s copied"
-msgstr ""
+msgstr "%s-t lemásoltam"
 
 #: ../lib/manage/do_rename.c:42
 #, c-format
@@ -230,7 +230,7 @@ msgstr ""
 #: ../lib/vector/neta/timetables.c:413 ../lib/vector/neta/timetables.c:425
 #: ../lib/vector/neta/articulation_point.c:60
 msgid "Out of memory"
-msgstr ""
+msgstr "Memória megtelt"
 
 #: ../lib/arraystats/class.c:19
 #, c-format
@@ -1226,7 +1226,7 @@ msgstr ""
 #: ../lib/gpde/n_arrays_io.c:93
 #, c-format
 msgid "Reading raster map <%s> into memory"
-msgstr ""
+msgstr "<%s> raszter térkép beolvasása memóriába"
 
 #: ../lib/gpde/n_arrays_io.c:183
 msgid "N_array_2d * array is empty"
@@ -1244,7 +1244,7 @@ msgstr ""
 
 #: ../lib/gpde/n_arrays_io.c:364 ../lib/gpde/n_arrays_io.c:464
 msgid "Error closing g3d file"
-msgstr ""
+msgstr "Hiba a g3d fájl lezárásakor"
 
 #: ../lib/gpde/n_arrays_io.c:420
 #, c-format
@@ -1476,7 +1476,7 @@ msgstr ""
 
 #: ../lib/psdriver/graph_set.c:200 ../lib/pngdriver/graph_set.c:102
 msgid "enabled"
-msgstr ""
+msgstr "engedélyezett"
 
 #: ../lib/psdriver/graph_set.c:200 ../lib/pngdriver/graph_set.c:102
 msgid "disabled"
@@ -2925,7 +2925,7 @@ msgstr ""
 
 #: ../lib/raster3d/test/test_main.c:97
 msgid "unit test"
-msgstr ""
+msgstr "egység teszt"
 
 #: ../lib/raster3d/range.c:73
 #, c-format
@@ -3001,7 +3001,7 @@ msgstr ""
 #: ../lib/raster3d/open.c:233
 #, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr ""
+msgstr "<%s> térkép nincs az aktuális térképcsoportban"
 
 #: ../lib/raster3d/open.c:243
 msgid "Rast3d_open_cell_new: could not open file"
@@ -3030,12 +3030,12 @@ msgstr ""
 #: ../lib/raster3d/maskfn.c:77
 #, c-format
 msgid "Adding rule: %lf - %lf"
-msgstr ""
+msgstr "Szabály hozzáadás: %lf - %lf"
 
 #: ../lib/raster3d/maskfn.c:95
 #, c-format
 msgid "%s: illegal value spec"
-msgstr ""
+msgstr "%s:hibás érték megadás"
 
 #: ../lib/raster3d/header.c:217 ../lib/raster3d/close.c:99
 #: ../lib/raster3d/close.c:105 ../lib/raster3d/close.c:191
@@ -3072,7 +3072,7 @@ msgstr ""
 
 #: ../lib/raster3d/close.c:169
 msgid "Error in cache"
-msgstr ""
+msgstr "Hiba az átmeneti tárolóban"
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -3082,7 +3082,7 @@ msgstr ""
 #: ../lib/raster3d/color.c:354
 #, c-format
 msgid "mapset <%s> is not the current mapset"
-msgstr ""
+msgstr "<%s> térképcsoport nem az  aktuális térképcsoport"
 
 #: ../lib/cluster/c_exec.c:44
 #, c-format
@@ -3197,7 +3197,7 @@ msgstr ""
 
 #: ../lib/imagery/iclass_perimeter.c:208
 msgid "Invalid polygon"
-msgstr ""
+msgstr "Hibás polygon"
 
 #: ../lib/imagery/iclass_perimeter.c:253
 msgid "Outlined area is too large."
@@ -3984,7 +3984,7 @@ msgstr ""
 
 #: ../lib/rst/interp_float/segmen2d_parallel.c:109
 msgid "Starting parallel work"
-msgstr ""
+msgstr "Párhuzamos munka indítása"
 
 #: ../lib/rst/interp_float/segmen2d_parallel.c:188
 #: ../lib/rst/interp_float/segmen2d.c:133
@@ -4245,15 +4245,15 @@ msgstr ""
 
 #: ../lib/gmath/test/test_main.c:79 ../lib/db/dbmi_base/test/test_main.c:58
 msgid "Run all unit tests"
-msgstr ""
+msgstr "Minden egység teszt futtatása"
 
 #: ../lib/gmath/test/test_main.c:83 ../lib/db/dbmi_base/test/test_main.c:62
 msgid "Run all integration tests"
-msgstr ""
+msgstr "Minden integrációs teszt futtatása"
 
 #: ../lib/gmath/test/test_main.c:87 ../lib/db/dbmi_base/test/test_main.c:66
 msgid "Run all unit and integration tests"
-msgstr ""
+msgstr "Minden egység és integrációs teszt futtatása"
 
 #: ../lib/gmath/test/test_main.c:106
 msgid "Performs benchmarks, unit and integration tests for the gmath library"
@@ -6648,7 +6648,7 @@ msgstr ""
 
 #: ../lib/db/dbmi_base/error.c:72
 msgid "<NULL error message>"
-msgstr ""
+msgstr "<NULL error message>"
 
 #: ../lib/db/dbmi_base/error.c:91
 msgid "dbmi: Protocol error"

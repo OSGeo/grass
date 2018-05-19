@@ -20097,7 +20097,7 @@ msgstr "Vettoriale <%s> aperto per l'editing - saltato."
 #: ../gui/wxpython/mapdisp/frame.py:961
 #, python-brace-format
 msgid "Failed to query vector map(s) <{maps}>. Check database settings and topology."
-msgstr "Interrogazione fallita per la mappa vettoriale <{maps}>. Controllare le impostazioni del database e dele topologia."
+msgstr "Interrogazione fallita per la mappa vettoriale <{maps}>. Controllare le impostazioni del database e la topologia."
 
 #: ../gui/wxpython/mapdisp/frame.py:1395
 msgid "Set computational region extent from display"

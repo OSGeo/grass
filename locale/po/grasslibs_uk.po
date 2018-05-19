@@ -7096,6 +7096,7 @@ msgid_plural "%d categories loaded"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: ../lib/vector/Vlib/cats.c:627
 #, c-format
@@ -8446,6 +8447,7 @@ msgid_plural "%d primitives registered"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:386 ../lib/vector/Vlib/build_sfa.c:665
 #: ../lib/vector/Vlib/build_nat.c:118
@@ -8455,6 +8457,7 @@ msgid_plural "%d vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
@@ -8463,6 +8466,7 @@ msgid_plural "%d features without geometry skipped"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:725
 #, c-format
@@ -9330,6 +9334,7 @@ msgid_plural "%d areas built"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:154
 #, c-format
@@ -9338,6 +9343,7 @@ msgid_plural "%d isles built"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:163
 msgid "Attaching islands..."
