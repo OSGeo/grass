@@ -139,7 +139,8 @@ int main(int argc, char *argv[])
     const char *cost_layer, *dtm_layer;
     const char *dtm_mapset, *cost_mapset, *search_mapset;
     void *dtm_cell, *cost_cell, *cum_cell, *dir_cell, *cell2 = NULL;
-    SEGMENT cost_seg, dir_seg;
+    SEGMENT cost_seg, dir_seg, solve_seg;
+    int have_solver;
     double *value;
     char buf[400];
     extern struct Cell_head window;
@@ -150,7 +151,7 @@ int main(int argc, char *argv[])
     double zero = 0.0;
     int col, row, nrows, ncols;
     int maxcost, par_number;
-    int nseg;
+    int nseg, nbytes;
     int maxmem;
     int segments_in_memory;
     int cost_fd, cum_fd, dtm_fd, dir_fd;
@@ -169,6 +170,7 @@ int main(int argc, char *argv[])
     struct Flag *flag2, *flag3, *flag4, *flag5, *flag6;
     struct Option *opt1, *opt2, *opt3, *opt4, *opt5, *opt6, *opt7, *opt8;
     struct Option *opt9, *opt10, *opt11, *opt12, *opt13, *opt14, *opt15;
+    struct Option *opt_solve;
     struct cost *pres_cell;
     struct start_pt *head_start_pt = NULL;
     struct start_pt *next_start_pt;
@@ -186,6 +188,7 @@ int main(int argc, char *argv[])
     int dtm_dsize, cost_dsize;
     double disk_mb, mem_mb, pq_mb;
     int dir_bin;
+    DCELL mysolvedir[2], solvedir[2];
 
     /* Definition for dimension and region check */
     struct Cell_head dtm_cellhd, cost_cellhd;
@@ -212,6 +215,14 @@ int main(int argc, char *argv[])
 
     opt1 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt1->description = _("Name for output raster map to contain walking costs");
+
+    opt_solve = G_define_standard_option(G_OPT_R_INPUT);
+    opt_solve->key = "solver";
+    opt_solve->required = NO;
+    opt_solve->label =
+	_("Name of input raster map solving equal costs");
+    opt_solve->description =
+	_("Helper variable to pick a direction if two directions have equal cumulative costs (smaller is better)");
 
     opt11 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt11->key = "outdir";
@@ -438,6 +449,14 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Vector map <%s> not found"), opt7->answer);
     }
 
+    have_solver = 0;
+    if (dir && opt_solve->answer) {
+	search_mapset = G_find_raster2(opt_solve->answer, "");
+	if (search_mapset == NULL)
+	    G_fatal_error(_("Raster map <%s> not found"), opt_solve->answer);
+	have_solver = 1;
+    }
+
     if (!Rast_is_d_null_value(&null_cost)) {
 	if (null_cost < 0.0) {
 	    G_warning(_("Assigning negative cost to null cell. Null cells excluded."));
@@ -528,26 +547,21 @@ int main(int argc, char *argv[])
     maxmem -= pq_mb;
     if (maxmem < 10)
 	maxmem = 10;
-    if (dir == TRUE) {
-	disk_mb = (double) nrows * ncols * 28. / 1048576.;
-	segments_in_memory = maxmem / 
-	                     ((double) srows * scols * (28. / 1048576.));
-	if (segments_in_memory < 4)
-	    segments_in_memory = 4;
-	if (segments_in_memory > nseg)
-	    segments_in_memory = nseg;
-	mem_mb = (double) srows * scols * (28. / 1048576.) * segments_in_memory;
-    }
-    else {
-	disk_mb = (double) nrows * ncols * 24. / 1048576.;
-	segments_in_memory = maxmem / 
-	                     ((double) srows * scols * (24. / 1048576.));
-	if (segments_in_memory < 4)
-	    segments_in_memory = 4;
-	if (segments_in_memory > nseg)
-	    segments_in_memory = nseg;
-	mem_mb = (double) srows * scols * (24. / 1048576.) * segments_in_memory;
-    }
+
+    nbytes = 24;
+    if (dir == TRUE)
+	nbytes += 4;
+    if (have_solver)
+	nbytes += 16;
+
+    disk_mb = (double) nrows * ncols * nbytes / 1048576.;
+    segments_in_memory = maxmem / 
+			 ((double) srows * scols * (nbytes / 1048576.));
+    if (segments_in_memory < 4)
+	segments_in_memory = 4;
+    if (segments_in_memory > nseg)
+	segments_in_memory = nseg;
+    mem_mb = (double) srows * scols * (nbytes / 1048576.) * segments_in_memory;
 
     if (flag5->answer) {
 	fprintf(stdout, _("Will need at least %.2f MB of disk space"), disk_mb);
@@ -580,6 +594,32 @@ int main(int argc, char *argv[])
 	if (Segment_open(&dir_seg, G_tempfile(), nrows, ncols, srows, scols,
 		         sizeof(FCELL), segments_in_memory) != 1)
 	    G_fatal_error(_("Can not create temporary file"));
+    }
+
+    if (have_solver) {
+	int sfd, dsize;
+	void *cell;
+
+	if (Segment_open(&solve_seg, G_tempfile(), nrows, ncols, srows, scols,
+		         sizeof(DCELL) * 2, segments_in_memory) != 1)
+	    G_fatal_error(_("Can not create temporary file"));
+
+	sfd = Rast_open_old(opt_solve->answer, "");
+	cell = Rast_allocate_buf(DCELL_TYPE);
+	Rast_set_d_null_value(&solvedir[1], 1); 
+	dsize = Rast_cell_size(DCELL_TYPE);
+	for (row = 0; row < nrows; row++) {
+	    G_percent(row, nrows, 2);
+	    Rast_get_d_row(sfd, cell, row);
+	    ptr2 = cell;
+	    for (col = 0; col < ncols; col++) {
+		solvedir[0] = *(DCELL *)ptr2;
+		Segment_put(&solve_seg, solvedir, row, col);
+		ptr2 = G_incr_void_ptr(ptr2, dsize);
+	    }
+	}
+	Rast_close(sfd);
+	G_free(cell);
     }
 
     /* Write the dtm and cost layers in the segmented file */
@@ -946,6 +986,9 @@ int main(int argc, char *argv[])
 	    pres_cell = get_lowest();
 	    continue;
 	}
+
+	if (have_solver)
+	    Segment_get(&solve_seg, mysolvedir, pres_cell->row, pres_cell->col);
 
 	row = pres_cell->row;
 	col = pres_cell->col;
@@ -1419,6 +1462,11 @@ int main(int argc, char *argv[])
 			cur_dir = (1 << (int)cur_dir);
 		    Segment_put(&dir_seg, &cur_dir, row, col);
 		}
+		if (have_solver) {
+		    Segment_get(&solve_seg, solvedir, row, col);
+		    solvedir[1] = mysolvedir[0];
+		    Segment_put(&solve_seg, solvedir, row, col);
+		}
 	    }
 	    /* update with lower costs */
 	    else if (old_min_cost > min_cost) {
@@ -1430,22 +1478,47 @@ int main(int argc, char *argv[])
 			cur_dir = (1 << (int)cur_dir);
 		    Segment_put(&dir_seg, &cur_dir, row, col);
 		}
+		if (have_solver) {
+		    Segment_get(&solve_seg, solvedir, row, col);
+		    solvedir[1] = mysolvedir[0];
+		    Segment_put(&solve_seg, solvedir, row, col);
+		}
 	    }
 	    else if (dir && dir_bin && old_min_cost == min_cost) {
 		FCELL old_dir;
 		int dir_inv[16] = { 4, 5, 6, 7, 0, 1, 2, 3,
 		                   12, 13, 14, 15, 8, 9, 10, 11 };
 		int dir_fwd;
+		int equal = 1;
 
-		/* this can create circular paths:
-		 * set only if current cell does not point to neighbor
-                 * does not avoid longer circular paths */
-		Segment_get(&dir_seg, &old_dir, pres_cell->row, pres_cell->col);
-		dir_fwd = (1 << dir_inv[(int)cur_dir]);
-		if (!((int)old_dir & dir_fwd)) {
-		    Segment_get(&dir_seg, &old_dir, row, col);
-		    cur_dir = ((1 << (int)cur_dir) | (int)old_dir);
-		    Segment_put(&dir_seg, &cur_dir, row, col);
+		if (have_solver) {
+		    Segment_get(&solve_seg, solvedir, row, col);
+		    equal = (solvedir[1] == mysolvedir[0]);
+		    if (solvedir[1] > mysolvedir[0]) {
+			solvedir[1] = mysolvedir[0];
+			Segment_put(&solve_seg, solvedir, row, col);
+
+			Segment_put(&cost_seg, &costs, row, col);
+
+			if (dir == 1) {
+			    if (dir_bin)
+				cur_dir = (1 << (int)cur_dir);
+			    Segment_put(&dir_seg, &cur_dir, row, col);
+			}
+		    }
+		}
+
+		if (equal) {
+		    /* this can create circular paths:
+		     * set only if current cell does not point to neighbor
+		     * does not avoid longer circular paths */
+		    Segment_get(&dir_seg, &old_dir, pres_cell->row, pres_cell->col);
+		    dir_fwd = (1 << dir_inv[(int)cur_dir]);
+		    if (!((int)old_dir & dir_fwd)) {
+			Segment_get(&dir_seg, &old_dir, row, col);
+			cur_dir = ((1 << (int)cur_dir) | (int)old_dir);
+			Segment_put(&dir_seg, &cur_dir, row, col);
+		    }
 		}
 	    }
 	}
@@ -1464,6 +1537,10 @@ int main(int argc, char *argv[])
 
     /* free heap */
     free_heap();
+
+    if (have_solver) {
+	Segment_close(&solve_seg);
+    }
     
     /* Open cumulative cost layer for writing */
     cum_fd = Rast_open_new(cum_cost_layer, cum_data_type);
