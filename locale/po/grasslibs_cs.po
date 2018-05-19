@@ -7112,6 +7112,7 @@ msgid_plural "%d categories loaded"
 msgstr[0] "Jedna kategorie načtena"
 msgstr[1] "%d kategorie načteny"
 msgstr[2] "%d kategorií načteno"
+msgstr[3] "%d kategorií načteno"
 
 #: ../lib/vector/Vlib/cats.c:627
 #, c-format
@@ -8465,6 +8466,7 @@ msgid_plural "%d primitives registered"
 msgstr[0] "Jedno primitivum zaregistrováno"
 msgstr[1] "%d primitiva zaregistrována"
 msgstr[2] "%d primitiv zaregistrováno"
+msgstr[3] "%d primitiv zaregistrováno"
 
 #: ../lib/vector/Vlib/build_sfa.c:386 ../lib/vector/Vlib/build_sfa.c:665
 #: ../lib/vector/Vlib/build_nat.c:118
@@ -8474,6 +8476,7 @@ msgid_plural "%d vertices registered"
 msgstr[0] "Jeden opěrný bod zaregistrován"
 msgstr[1] "%d opěrné body zaregistrovány"
 msgstr[2] "%d opěrných bodů zaregistrováno"
+msgstr[3] "%d opěrných bodů zaregistrováno"
 
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
@@ -8482,6 +8485,7 @@ msgid_plural "%d features without geometry skipped"
 msgstr[0] "Jeden prvek bez geometrie ignorován"
 msgstr[1] "%d prvky bez geometrie ignorovány"
 msgstr[2] "%d prvků bez geometrie ignorováno"
+msgstr[3] "%d prvků bez geometrie ignorováno"
 
 #: ../lib/vector/Vlib/build_sfa.c:725
 #, c-format
@@ -9349,6 +9353,7 @@ msgid_plural "%d areas built"
 msgstr[0] "Jedna plocha vytvořena"
 msgstr[1] "%d plochy vytvořeny"
 msgstr[2] "%d ploch vytvořeno"
+msgstr[3] "%d ploch vytvořeno"
 
 #: ../lib/vector/Vlib/build_nat.c:154
 #, c-format
@@ -9357,6 +9362,7 @@ msgid_plural "%d isles built"
 msgstr[0] "Jeden ostrov vytvořen"
 msgstr[1] "%d ostrovy vytvořeny"
 msgstr[2] "%d ostrovů vytvořeno"
+msgstr[3] "%d ostrovů vytvořeno"
 
 #: ../lib/vector/Vlib/build_nat.c:163
 msgid "Attaching islands..."
