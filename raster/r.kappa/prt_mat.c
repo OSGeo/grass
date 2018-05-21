@@ -206,5 +206,8 @@ static int longcomp(const void *aa, const void *bb)
     const long *a = aa;
     const long *b = bb;
 
-    return (*a - *b);
+    if (*a != *b)
+	return (*a > *b ? 1 : -1);
+
+    return 0;
 }
