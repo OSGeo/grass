@@ -195,7 +195,7 @@ static int compare_fonts(const void *a, const void *b)
 
     /* Sort first by type, then by name */
     if (aa->type != bb->type)
-	return (aa->type > bb->type);
+	return (aa->type > bb->type ? 1 : -1);
     else {
 	const char *na = aa->name;
 	const char *nb = bb->name;
