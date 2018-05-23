@@ -1158,7 +1158,7 @@ int main(int argc, char *argv[])
 		    }
 		}
 
-		if (equal) {
+		if (dir_bin && equal) {
 		    /* this can create circular paths:
 		     * set only if current cell does not point to neighbor
 		     * does not avoid longer circular paths */
