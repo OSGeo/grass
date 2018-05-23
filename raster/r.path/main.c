@@ -290,7 +290,7 @@ int main(int argc, char **argv)
 	    if (1 > Vect_open_old(&In, vpointopt->answers[i], ""))
 		G_fatal_error(_("Unable to open vector map <%s>"), vpointopt->answers[i]);
 
-	    G_message(_("Reading vector map <%s> with start points..."),
+	    G_verbose_message(_("Reading vector map <%s> with start points..."),
                       Vect_get_full_name(&In));
             
 	    Vect_rewind(&In);
@@ -356,6 +356,8 @@ int main(int argc, char **argv)
     if (opt2->answer && opt3->answer) {
 	DCELL *map_buf;
 
+	G_verbose_message(_("Reading raster values map <%s> ..."), map_name);
+
 	tempfile1 = G_tempfile();
 	val_fd = open(tempfile1, O_RDWR | O_CREAT, 0666);
 
@@ -419,6 +421,7 @@ int main(int argc, char **argv)
     if (dir_format <= 0)
 	G_fatal_error(_("Invalid directions format '%s'"), dfopt->answer);
 
+    G_verbose_message(_("Reading direction map <%s> ..."), dir_name);
     dir_id = Rast_open_old(dir_name, "");
     tempfile2 = G_tempfile();
     dir_fd = open(tempfile2, O_RDWR | O_CREAT, 0666);
@@ -465,7 +468,7 @@ int main(int argc, char **argv)
     /* determine the drainage paths */
 
     /* repeat for each starting point */
-
+    G_verbose_message(_("Processing start points..."));
     next_start_pt = head_start_pt;
     while (next_start_pt) {
 	/* follow directions from start points to determine paths */
@@ -612,6 +615,8 @@ int main(int argc, char **argv)
 	close(val_fd);
 	unlink(tempfile1);
     }
+
+    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }
@@ -766,6 +771,11 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp, struct Cell_head *
 		}
 
 		/* leave this loop */
+		if (is_stack) {
+		    newp = stackp->next;
+		    G_free(stackp);
+		    stackp = newp;
+		}
 		break;
 	    }
 
