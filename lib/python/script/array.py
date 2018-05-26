@@ -224,7 +224,7 @@ class array(numpy.memmap):
         else:
             return 0
 
-    def write(self, mapname, title=None, null=None, overwrite=None):
+    def write(self, mapname, title=None, null=None, overwrite=None, quiet=None):
         """Write array into raster map
 
         :param str mapname: name for raster map
@@ -265,6 +265,7 @@ class array(numpy.memmap):
                 bytes=size,
                 anull=null,
                 overwrite=overwrite,
+                quiet=quiet,
                 north=reg['n'],
                 south=reg['s'],
                 east=reg['e'],
@@ -373,7 +374,7 @@ class array3d(numpy.memmap):
         else:
             return 0
 
-    def write(self, mapname, null=None, overwrite=None):
+    def write(self, mapname, null=None, overwrite=None, quiet=None):
         """Write array into 3D raster map
 
         :param str mapname: name for 3D raster map
@@ -408,6 +409,7 @@ class array3d(numpy.memmap):
                 bytes=size,
                 null=null,
                 overwrite=overwrite,
+                quiet=quiet,
                 north=reg['n'],
                 south=reg['s'],
                 top=reg['t'],
