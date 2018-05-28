@@ -40,7 +40,8 @@
 int patch(struct Map_info *, struct Map_info *, int, int *,
 	  struct Map_info *);
 int copy_records(dbDriver * driver_in, dbString * table_name_in,
-		 dbDriver * driver_out, dbString * table_name_out, int, int);
+		 dbDriver * driver_out, dbString * table_name_out,
+		 char *, int, int);
 int max_cat(struct Map_info *Map, int layer);
 
 int main(int argc, char *argv[])
@@ -62,6 +63,7 @@ int main(int argc, char *argv[])
     int keycol = -1;
     int maxcat = 0;
     int out_is_3d = WITHOUT_Z;
+    char colnames[4096];
 
     G_gisinit(argv[0]);
 
@@ -139,6 +141,7 @@ int main(int argc, char *argv[])
     table_out = NULL;
     fi_in = NULL;
     fi_out = NULL;
+    *colnames = '\0';
     /* Check input table structures */
     if (do_table) {
 	if (append->answer) {
@@ -207,7 +210,28 @@ int main(int argc, char *argv[])
 		db_close_database_shutdown_driver(driver_in);
 	    }
 
-	    /* Check the structure */
+	    /* Get the output table structure */
+	    if (i == 0 ) {
+		int ncols, col;
+
+		ncols = db_get_table_number_of_columns(table_out);
+
+		for (col = 0; col < ncols; col++) {
+		    dbColumn *column_out;
+
+		    column_out = db_get_table_column(table_out, col);
+		    if (col == 0)
+			strcpy(colnames, db_get_column_name(column_out));
+		    else {
+			char tmpbuf[4096];
+
+			sprintf(tmpbuf, ",%s", db_get_column_name(column_out));
+			strcat(colnames, tmpbuf);
+		    }
+		}
+	    }
+
+	    /* Check the table structure */
 	    if (i > 0 || append->answer) {
 		int ncols, col;
 
@@ -227,16 +251,30 @@ int main(int argc, char *argv[])
 		}
 
 		for (col = 0; col < ncols; col++) {
+		    int col2, colmatch;
 		    dbColumn *column_out, *column_in;
 		    int ctype_in, ctype_out;
 
-		    column_in = db_get_table_column(table_in, col);
 		    column_out = db_get_table_column(table_out, col);
+		    col2 = 0;
+		    colmatch = -1;
+		    column_in = NULL;
+		    /* find column with same name */
+		    while (colmatch < 0 && col2 < ncols) {
+			column_in = db_get_table_column(table_in, col2);
 
-		    if (G_strcasecmp(db_get_column_name(column_in),
-				     db_get_column_name(column_out)) != 0) {
-			G_fatal_error(_("Column names differ"));
+			if (G_strcasecmp(db_get_column_name(column_in),
+					 db_get_column_name(column_out)) == 0) {
+			    colmatch = col2;
+			}
+			col2++;
 		    }
+		    if (colmatch < 0) {
+			G_fatal_error(_("No column <%s> in input map <%s>"),
+			              db_get_column_name(column_out),
+				      in_name);
+		    }
+
 		    ctype_in =
 			db_sqltype_to_Ctype(db_get_column_sqltype(column_in));
 		    ctype_out =
@@ -396,7 +434,8 @@ int main(int argc, char *argv[])
 
 		db_set_string(&table_name_in, fi_in->table);
 		copy_records(driver_in, &table_name_in,
-			     driver_out, &table_name_out, keycol, add_cat);
+			     driver_out, &table_name_out,
+			     colnames, keycol, add_cat);
 
 		if (driver_in != driver_out)
 		    db_close_database_shutdown_driver(driver_in);
@@ -444,17 +483,22 @@ int main(int argc, char *argv[])
 
 int copy_records(dbDriver * driver_in, dbString * table_name_in,
 		 dbDriver * driver_out, dbString * table_name_out,
-		 int keycol, int add_cat)
+		 char *colnames, int keycol, int add_cat)
 {
     int ncols, col;
     dbCursor cursor;
     dbString value_str, sql;
     dbTable *table_in;
+    char tmpbuf[4096];
 
     db_init_string(&value_str);
     db_init_string(&sql);
 
-    db_set_string(&sql, "select * from ");
+    if (colnames && *colnames)
+	sprintf(tmpbuf, "select %s from ", colnames);
+    else
+	sprintf(tmpbuf, "select * from ");
+    db_set_string(&sql, tmpbuf);
     db_append_string(&sql, db_get_string(table_name_in));
 
     if (db_open_select_cursor(driver_in, &sql, &cursor, DB_SEQUENTIAL) !=
