@@ -681,8 +681,8 @@ static int boq_load(struct boq *q, struct line_pnts *Pnts,
 int
 Vect_line_intersection2(struct line_pnts *APoints,
 		        struct line_pnts *BPoints,
-		        struct bound_box *ABox,
-		        struct bound_box *BBox,
+		        struct bound_box *pABox,
+		        struct bound_box *pBBox,
 		        struct line_pnts ***ALines,
 		        struct line_pnts ***BLines,
 		        int *nalines, int *nblines, int with_z)
@@ -693,7 +693,7 @@ Vect_line_intersection2(struct line_pnts *APoints,
     struct line_pnts **XLines, *Points;
     struct line_pnts *Points1, *Points2;	/* first, second points */
     int seg1, seg2, vert1, vert2;
-    struct bound_box abbox;
+    struct bound_box ABox, BBox, abbox;
     struct boq bo_queue;
     struct qitem qi, *found;
     struct RB_TREE *bo_ta, *bo_tb;
@@ -780,33 +780,46 @@ Vect_line_intersection2(struct line_pnts *APoints,
      *  we have to break both A and B  at once i.e. in one Vect_line_intersection () call.
      */
 
-    if (!same && !Vect_box_overlap(ABox, BBox)) {
+    /* don't modify original bboxes: make a copy of the bboxes */
+    ABox = *pABox;
+    BBox = *pBBox;
+    if (!with_z) {
+	ABox.T = BBox.T = PORT_DOUBLE_MAX;
+	ABox.B = BBox.B = -PORT_DOUBLE_MAX;
+    }
+
+    if (!same && !Vect_box_overlap(&ABox, &BBox)) {
 	return 0;
     }
 
     /* overlap box of A line and B line */
-    abbox = *ABox;
+    abbox = BBox;
     if (!same) {
-	if (abbox.N > BBox->N)
-	    abbox.N = BBox->N;
-	if (abbox.S < BBox->S)
-	    abbox.S = BBox->S;
-	if (abbox.E > BBox->E)
-	    abbox.E = BBox->E;
-	if (abbox.W < BBox->W)
-	    abbox.W = BBox->W;
-	if (abbox.T > BBox->T)
-	    abbox.T = BBox->T;
-	if (abbox.B < BBox->B)
-	    abbox.B = BBox->B;
+	if (abbox.N > ABox.N)
+	    abbox.N = ABox.N;
+	if (abbox.S < ABox.S)
+	    abbox.S = ABox.S;
+	if (abbox.E > ABox.E)
+	    abbox.E = ABox.E;
+	if (abbox.W < ABox.W)
+	    abbox.W = ABox.W;
+
+	if (with_z) {
+	    if (abbox.T > BBox.T)
+		abbox.T = BBox.T;
+	    if (abbox.B < BBox.B)
+		abbox.B = BBox.B;
+	}
     }
 
     abbox.N += d_ulp(abbox.N, abbox.N);
     abbox.S -= d_ulp(abbox.S, abbox.S);
     abbox.E += d_ulp(abbox.E, abbox.E);
     abbox.W -= d_ulp(abbox.W, abbox.W);
-    abbox.T += d_ulp(abbox.T, abbox.T);
-    abbox.B -= d_ulp(abbox.B, abbox.B);
+    if (with_z) {
+	abbox.T += d_ulp(abbox.T, abbox.T);
+	abbox.B -= d_ulp(abbox.B, abbox.B);
+    }
 
     if (APnts->n_points < 2 || BPnts->n_points < 2) {
 	G_fatal_error("Intersection with points is not yet supported");
@@ -1361,6 +1374,10 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 
     dig_line_box(APoints, &ABox);
     dig_line_box(BPoints, &BBox);
+    if (!with_z) {
+	ABox.T = BBox.T = PORT_DOUBLE_MAX;
+	ABox.B = BBox.B = -PORT_DOUBLE_MAX;
+    }
 
     if (!Vect_box_overlap(&ABox, &BBox)) {
 	return 0;
@@ -1376,17 +1393,21 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 	abbox.E = ABox.E;
     if (abbox.W < ABox.W)
 	abbox.W = ABox.W;
-    if (abbox.T > ABox.T)
-	abbox.T = ABox.T;
-    if (abbox.B < ABox.B)
-	abbox.B = ABox.B;
 
     abbox.N += d_ulp(abbox.N, abbox.N);
     abbox.S -= d_ulp(abbox.S, abbox.S);
     abbox.E += d_ulp(abbox.E, abbox.E);
     abbox.W -= d_ulp(abbox.W, abbox.W);
-    abbox.T += d_ulp(abbox.T, abbox.T);
-    abbox.B -= d_ulp(abbox.B, abbox.B);
+
+    if (with_z) {
+	if (abbox.T > ABox.T)
+	    abbox.T = ABox.T;
+	if (abbox.B < ABox.B)
+	    abbox.B = ABox.B;
+
+	abbox.T += d_ulp(abbox.T, abbox.T);
+	abbox.B -= d_ulp(abbox.B, abbox.B);
+    }
 
     /* initialize queue */
     bo_queue.count = 0;
