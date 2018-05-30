@@ -510,11 +510,11 @@ class VectorTopo(Vector):
         >>> feature1.length()
         4.0
         >>> test_vect.read(-1)
-        Centoid(7.500000, 3.500000)
+        Centroid(7.500000, 3.500000)
         >>> len(test_vect)
         21
         >>> test_vect.read(21)
-        Centoid(7.500000, 3.500000)
+        Centroid(7.500000, 3.500000)
         >>> test_vect.read(22)                             #doctest: +ELLIPSIS
         Traceback (most recent call last):
           ...
