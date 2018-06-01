@@ -1229,7 +1229,7 @@ class LocationSelect(wx.ComboBox):
             self.SetItems([])
 
 
-class MapsetSelect(ComboCtrl):
+class MapsetSelect(wx.ComboBox):
     """Widget for selecting GRASS mapset"""
 
     def __init__(self, parent, id=wx.ID_ANY,
@@ -1241,11 +1241,13 @@ class MapsetSelect(ComboCtrl):
         # if not new and not multiple:
         ###     style = wx.CB_READONLY
 
-        ComboCtrl.__init__(self, parent, id, size=size,
-                           style=style, **kwargs)
+        wx.ComboBox.__init__(self, parent, id, size=size,
+                             style=style, **kwargs)
         self.searchPath = searchPath
         self.skipCurrent = skipCurrent
         self.SetName("MapsetSelect")
+        self.value = ''
+        self.multiple = multiple
         if not gisdbase:
             self.gisdbase = grass.gisenv()['GISDBASE']
         else:
@@ -1256,12 +1258,23 @@ class MapsetSelect(ComboCtrl):
         else:
             self.location = location
 
-        self.tcp = ListCtrlComboPopup()
-        self.SetPopupControl(self.tcp)
-        self.tcp.SetData(multiple=multiple)
-
         if setItems:
-            self.tcp.SetItems(self._getMapsets())
+            self.SetItems(self._getMapsets())
+
+        if self.multiple:
+            self.Bind(wx.EVT_COMBOBOX, self._onSelection)
+            self.Bind(wx.EVT_TEXT, self._onSelection)
+
+    def _onSelection(self, event):
+        value = self.GetValue()
+        if value:
+            if self.value:
+                self.value += ','
+            self.value += value
+            self.SetValue(self.value)
+        else:
+            self.value = value
+        event.Skip()
 
     def UpdateItems(self, location, dbase=None):
         """Update list of mapsets for given location
@@ -1274,12 +1287,10 @@ class MapsetSelect(ComboCtrl):
             self.gisdbase = dbase
         self.location = location
 
-        self.tcp.DeleteAllItems()
-
         if location:
-            self.tcp.SetItems(self._getMapsets())
+            self.SetItems(self._getMapsets())
         else:
-            self.tcp.SetItems([])
+            self.SetItems([])
 
     def _getMapsets(self):
         if self.searchPath:
@@ -1297,31 +1308,6 @@ class MapsetSelect(ComboCtrl):
             mlist.remove(gisenv['MAPSET'])
 
         return mlist
-
-    def GetStringSelection(self):
-        """For backward compatibility. MapsetSelect changed to allow
-        multiple selection, this required to change super-class from
-        wx.ComboBox to wx.combo.ComboCtrl"""
-        return self.GetValue()
-
-    def SetStringSelection(self, text):
-        """For backward compatibility. MapsetSelect changed to allow
-        multiple selection, this required to change super-class from
-        wx.ComboBox to wx.combo.ComboCtrl"""
-        return self.SetValue(text)
-
-    def SetSelection(self, sel=0):
-        """For backward compatibility. MapsetSelect changed to allow
-        multiple selection, this required to change super-class from
-        wx.ComboBox to wx.combo.ComboCtrl"""
-        self.SetValue('')  # TODO: implement SetSelection()
-
-    def SetItems(self, items):
-        """For backward compatibility. MapsetSelect changed to allow
-        multiple selection, this required to change super-class from
-        wx.ComboBox to wx.combo.ComboCtrl"""
-        self.tcp.DeleteAllItems()
-        self.tcp.SetItems(items)
 
 
 class SubGroupSelect(wx.ComboBox):
