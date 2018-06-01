@@ -1708,11 +1708,8 @@ class CmdPanel(wx.Panel):
                             win = gselect.MapsetSelect(
                                 parent=which_panel, value=value, new=new,
                                 multiple=p.get('multiple', False))
-                            textWin = win.GetTextCtrl()
-                            p['wxId'] = [textWin.GetId(), win.GetId()]
-
-                            textWin.Bind(wx.EVT_TEXT, self.OnSetValue)
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                            win.Bind(wx.EVT_TEXT, self.OnSetValue)
 
                         elif prompt == 'dbase':
                             win = gselect.DbaseSelect(
