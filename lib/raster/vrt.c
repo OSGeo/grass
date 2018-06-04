@@ -163,6 +163,8 @@ void Rast_close_vrt(struct R_vrt *vrt)
     G_free(vrt);
 }
 
+/* must only be called by get_map_row_nomask() 
+ * move to get_row.c as read_data_vrt() ? */
 int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -189,9 +191,12 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 	    int tfd;
 	    void *p1, *p2;
 
+	    /* recurse into get_map_row(), collect data for all tiles 
+	     * a mask is applied to the collected data 
+	     * after this function returns */
 	    Rast_set_null_value(tmpbuf, rd_window->cols, data_type);
 	    tfd = Rast_open_old(p->name, p->mapset);
-	    Rast_get_row(tfd, tmpbuf, row, data_type);
+	    Rast_get_row_nomask(tfd, tmpbuf, row, data_type);
 	    Rast_unopen(tfd);
 	    
 	    p1 = buf;
