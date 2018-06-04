@@ -176,6 +176,9 @@ static void write_support_files(int xtile, int ytile, int overlap)
     cellhd.south = cellhd.north - (dst_w.rows + 2 * overlap) * src_w.ns_res;
     cellhd.west = src_w.west + xtile * dst_w.cols * src_w.ew_res;
     cellhd.east = cellhd.west + (dst_w.cols + 2 * overlap) * src_w.ew_res;
+    cellhd.rows = dst_w.rows + 2 * overlap;
+    cellhd.cols = dst_w.cols + 2 * overlap;
+    G_adjust_Cell_head(&cellhd, 1, 1);
 
     Rast_put_cellhd(name, &cellhd);
 
