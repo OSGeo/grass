@@ -3,6 +3,7 @@ MODULE_TOPDIR = ..
 SUBDIRS = \
 	r.basins.fill \
 	r.buffer \
+	r.buildvrt \
 	r.carve \
 	r.category \
 	r.circle \
