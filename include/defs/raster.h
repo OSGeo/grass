@@ -570,6 +570,11 @@ void Rast_unset_window(void);
 void Rast_set_output_window(struct Cell_head *);
 void Rast_set_input_window(struct Cell_head *);
 
+/* vrt.c */
+struct R_vrt *Rast_get_vrt(const char *, const char *);
+void Rast_close_vrt(struct R_vrt *);
+int Rast_get_vrt_row(int, void *, int, RASTER_MAP_TYPE);
+
 /* window.c */
 void Rast_get_window(struct Cell_head *);
 void Rast_get_input_window(struct Cell_head *);

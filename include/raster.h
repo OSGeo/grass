@@ -249,6 +249,7 @@ struct FP_stats {
 };
 
 struct GDAL_link;
+struct R_vrt;
 
 /*** prototypes ***/
 #include <grass/defs/raster.h>
