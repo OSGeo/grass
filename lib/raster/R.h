@@ -36,6 +36,21 @@ extern CPLErr Rast_gdal_raster_IO(GDALRasterBandH, GDALRWFlag,
 				  void *, int, int, GDALDataType, int, int);
 #endif
 
+struct tileinfo		/* Information for tiles */
+{
+    char *name;			/* Name of open file            */
+    char *mapset;		/* Mapset of open file          */
+    struct Cell_head cellhd;	/* Cell header                  */
+    struct ilist *clist;	/* columns inside current region */
+};
+
+struct R_vrt
+{
+    int tilecount;
+    struct tileinfo *tileinfo;
+    struct ilist *tlist;
+};
+
 struct fileinfo			/* Information for opened cell files */
 {
     int open_mode;		/* see defines below            */
@@ -67,6 +82,7 @@ struct fileinfo			/* Information for opened cell files */
     struct GDAL_link *gdal;
     int data_fd;		/* Raster data fd               */
     off_t *null_row_ptr;	/* Null file row addresses      */
+    struct R_vrt *vrt;
 };
 
 struct R__			/*  Structure of library globals */

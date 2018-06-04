@@ -561,6 +561,11 @@ static int get_map_row_nomask(int fd, void *rast, int row,
     int r;
     int row_status;
 
+    /* is this the best place to read a vrt row, or
+     * call Rast_get_vrt_row() earlier ? */
+    if (fcb->vrt)
+	return Rast_get_vrt_row(fd, rast, row, data_type);
+
     row_status = compute_window_row(fd, row, &r);
 
     if (!row_status) {

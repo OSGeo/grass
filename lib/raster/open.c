@@ -165,6 +165,7 @@ int Rast__open_old(const char *name, const char *mapset)
     struct Reclass reclass;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     struct GDAL_link *gdal;
+    struct R_vrt *vrt;
 
     Rast__init();
 
@@ -268,6 +269,8 @@ int Rast__open_old(const char *name, const char *mapset)
     }
 
     gdal = Rast_get_gdal_link(r_name, r_mapset);
+    vrt = Rast_get_vrt(r_name, r_mapset);
+    cell_fd = -1;
     if (gdal) {
 #ifdef HAVE_GDAL
 	cell_fd = -1;
@@ -275,6 +278,9 @@ int Rast__open_old(const char *name, const char *mapset)
 	G_fatal_error(_("Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"),
 		      r_name, r_mapset);
 #endif
+    }
+    else if (vrt) {
+	cell_fd = -1;
     }
     else {
 	/* now actually open file for reading */
@@ -313,16 +319,20 @@ int Rast__open_old(const char *name, const char *mapset)
 	fcb->reclass = reclass;
 
     fcb->gdal = gdal;
-    if (!gdal)
+    fcb->vrt = vrt;
+    if (!gdal && !vrt) {
 	/* check for compressed data format, making initial reads if necessary */
 	if (Rast__check_format(fd) < 0) {
 	    close(cell_fd);	/* warning issued by check_format() */
 	    G_fatal_error(_("Error reading format for <%s@%s>"),
 			  r_name, r_mapset);
 	}
+    }
 
-    /* create the mapping from cell file to window */
-    Rast__create_window_mapping(fd);
+    if (!vrt) {
+	/* create the mapping from cell file to window */
+	Rast__create_window_mapping(fd);
+    }
 
     /*
      * allocate the data buffer
@@ -349,7 +359,7 @@ int Rast__open_old(const char *name, const char *mapset)
     fcb->nbytes = MAP_NBYTES;
     fcb->null_row_ptr = NULL;
 
-    if (!gdal) {
+    if (!gdal && !vrt) {
 	/* First, check for compressed null file */
 	fcb->null_fd = G_open_old_misc("cell_misc", NULL_FILE, r_name, r_mapset);
 	if (fcb->null_fd < 0) {

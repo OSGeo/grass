@@ -152,6 +152,8 @@ static int close_old(int fd)
 
     if (fcb->gdal)
 	Rast_close_gdal_link(fcb->gdal);
+    if (fcb->vrt)
+	Rast_close_vrt(fcb->vrt);
 
     if (fcb->null_bits)
 	G_free(fcb->null_bits);
