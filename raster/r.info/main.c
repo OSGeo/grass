@@ -463,6 +463,7 @@ int main(int argc, char **argv)
             G_unqualified_name(name, mapset, xname, xmapset);
 
             fprintf(out, "map=%s\n", xname);
+	    fprintf(out, "maptype=%s\n", hist_ok ? Rast_get_history(&hist, HIST_MAPTYPE) : "??");
             fprintf(out, "mapset=%s\n", mapset);
             fprintf(out, "location=%s\n", G_location());
             fprintf(out, "database=%s\n", G_gisdbase());
