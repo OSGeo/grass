@@ -197,6 +197,7 @@ void create_map(const char *input, int band, const char *output,
 {
     struct History history;
     struct Categories cats;
+    char buf[1024];
 
     Rast_put_cellhd(output, cellhd);
 
@@ -222,8 +223,10 @@ void create_map(const char *input, int band, const char *output,
     }
 
     G_verbose_message(_("Creating support files for %s"), output);
-    Rast_short_history(output, "raster", &history);
+    Rast_short_history(output, "GDAL-link", &history);
     Rast_command_history(&history);
+    sprintf(buf, "%s band %d", input, band);
+    Rast_set_history(&history, HIST_DATSRC_1, buf);
     Rast_write_history(output, &history);
 
     Rast_write_colors(output, G_mapset(), &info->colors);
