@@ -164,7 +164,7 @@ enum History_field
     HIST_MAPSET,
     /*! \brief User who creater raster map */
     HIST_CREATOR,
-    /*! \brief Map type (always "raster") */
+    /*! \brief Map type ("raster", "reclass", "GDAL-link", or "virtual") */
     HIST_MAPTYPE,
     /*! \brief Description of original data source (two lines) */
     HIST_DATSRC_1,
