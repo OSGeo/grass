@@ -218,7 +218,7 @@ int GPJ_transform(const struct pj_info *info_in,
     ok = proj_errno(info_trans->pj);
 
     if (ok < 0) {
-	G_warning(_("proj_trans() failed: %d"), ok);
+	G_warning(_("proj_trans() failed: %s"), proj_errno_string(ok));
 	return ok;
     }
 
@@ -443,7 +443,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	G_free(z);
 
     if (ok < 0) {
-	G_warning(_("proj_trans() failed: %d"), ok);
+	G_warning(_("proj_trans() failed: %s"), proj_errno_string(ok));
     }
 #else
     /* PROJ 4 variant */
