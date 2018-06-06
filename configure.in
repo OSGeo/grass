@@ -693,7 +693,7 @@ if test $PROJ4API = 0 ; then
     LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_PATCH,External PROJ patch,proj_ver_patch,$PROJINC,0)
     AC_MSG_RESULT([found PROJ version "${proj_ver_major}.${proj_ver_minor}.${proj_ver_patch}"])
     # minimum required PROJ 5+ version to use the new PROJ API: 5.1.0
-    if test ${proj_ver_major} = 5 && test `expr "proj_ver_minor" \< 1` = 1 ; then
+    if test ${proj_ver_major} = 5 && test `expr ${proj_ver_minor} \< 1` = 1 ; then
 	AC_MSG_WARN([At least PROJ version "5.1.0" is required for the new API ])
 	PROJ4API=1
     fi
@@ -718,7 +718,7 @@ else
     else
 	LOC_CHECK_VERSION_INT(proj_api.h,PJ_VERSION,External PROJ.4,proj_ver,$PROJINC,0)
 
-	if test `expr "$proj_ver" \< 446` = 1 ; then
+	if test `expr ${proj_ver} \< 446` = 1 ; then
 	    AC_MSG_ERROR([*** PROJ.4.4.6 or later is required.])
 	fi
     fi

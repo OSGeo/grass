@@ -5874,7 +5874,7 @@ CPPFLAGS=$ac_save_cppflags
 
     echo "$ac_t""found PROJ version "${proj_ver_major}.${proj_ver_minor}.${proj_ver_patch}"" 1>&6
     # minimum required PROJ 5+ version to use the new PROJ API: 5.1.0
-    if test ${proj_ver_major} = 5 && test `expr "proj_ver_minor" \< 1` = 1 ; then
+    if test ${proj_ver_major} = 5 && test `expr ${proj_ver_minor} \< 1` = 1 ; then
 	echo "configure: warning: At least PROJ version "5.1.0" is required for the new API " 1>&2
 	PROJ4API=1
     fi
@@ -6051,7 +6051,7 @@ fi
 CPPFLAGS=$ac_save_cppflags
 
 
-	if test `expr "$proj_ver" \< 446` = 1 ; then
+	if test `expr ${proj_ver} \< 446` = 1 ; then
 	    { echo "configure: error: *** PROJ.4.4.6 or later is required." 1>&2; exit 1; }
 	fi
     fi
