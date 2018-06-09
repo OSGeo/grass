@@ -52,7 +52,7 @@ static void regression(DCELL * result, DCELL * values, int n, int which)
 	    denom += (DCELL) i * i;
     denom -= count * xbar * xbar;
 
-    if (which >= REGRESSION_COEFF_DET) {
+    if (which >= REGRESSION_COEFF_DET || which == REGRESSION_T) {
 	denom2 = 0.0;
 	for (i = 0; i < n; i++)
 	    if (!Rast_is_d_null_value(&values[i]))
@@ -142,11 +142,11 @@ static void regression_w(DCELL * result, DCELL(*values)[2], int n, int which)
     denom = 0.0;
     for (i = 0; i < n; i++)
 	if (!Rast_is_d_null_value(&values[i][0]))
-	    denom += (DCELL) i *i * values[i][1];
+	    denom += (DCELL) i * i * values[i][1];
 
     denom -= count * xbar * xbar;
 
-    if (which == REGRESSION_COEFF_DET) {
+    if (which == REGRESSION_COEFF_DET || which == REGRESSION_T) {
 	denom2 = 0.0;
 	for (i = 0; i < n; i++)
 	    if (!Rast_is_d_null_value(&values[i][0]))
