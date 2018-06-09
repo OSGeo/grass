@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
             if (ntokens > 1) {
 	        weight = atof(G_chop(tokens[1]));
 
-		if (weight <= 0)
+		if (weight < 0)
 		    G_fatal_error(_("Weights must be positive"));
 
 		if (weight != 1)
@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
             if (num_weights) {
                 p->weight = (DCELL)atof(parm.weights->answers[i]);
 
-		if (p->weight <= 0)
+		if (p->weight < 0)
 		    G_fatal_error(_("Weights must be positive"));
 
 		if (p->weight != 1)
