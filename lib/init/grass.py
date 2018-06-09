@@ -226,6 +226,7 @@ def debug(msg):
 
 
 def readfile(path):
+    debug("Reading %s" % path)
     f = open(path, 'r')
     s = f.read()
     f.close()
@@ -233,6 +234,7 @@ def readfile(path):
 
 
 def writefile(path, s):
+    debug("Writing %s" % path)
     f = open(path, 'w')
     f.write(s)
     f.close()
@@ -290,6 +292,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
           [-e] [-f] [-text | -gtext | -gui] [--config param]
           [[[GISDBASE/]LOCATION_NAME/]MAPSET]
   $CMD_NAME [FLAG]... GISDBASE/LOCATION_NAME/MAPSET --exec EXECUTABLE [EPARAM]...
+  $CMD_NAME -c [geofile | EPSG] --tmp-location --exec EXECUTABLE [EPARAM]...
 
 {flags}:
   -h or -help or --help or --h   {help_flag}
@@ -307,6 +310,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
                                    {config_detail}
   --exec EXECUTABLE              {exec_}
                                    {exec_detail}
+  --tmp-location                 {tmp_location}
 
 {params}:
   GISDBASE                       {gisdbase}
@@ -363,6 +367,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
     executable=_("GRASS module, script or any other executable"),
     executable_params=_("parameters of the executable"),
     standard_flags=_("standard flags"),
+    tmp_location=_("create temporary location (use with -c and --exec flags)"),
     )
 
 
@@ -886,12 +891,16 @@ def get_mapset_invalid_reason(gisdbase, location, mapset):
                      mapset=mapset, loc=location)
 
 
-def set_mapset(gisrc, arg, geofile=None, create_new=False):
+def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
+               tmp_location=False, tmpdir=None):
     """Selected Location and Mapset are checked and created if requested
 
     The gisrc (GRASS environment file) is written at the end
     (nothing is returned).
+
+    tmp_location requires tmpdir (which is used as gisdbase)
     """
+    # TODO: arg param seems to be always mapset or dash, refactor
     l = None
 
     if arg == '-':
@@ -925,6 +934,18 @@ def set_mapset(gisrc, arg, geofile=None, create_new=False):
         l, location_name = os.path.split(l)
         gisdbase = l
 
+    # all was None for tmp loc so that case goes here quickly
+    # TODO: but the above code needs review anyway
+    if tmp_location:
+        # set gisdbase to temporary directory
+        gisdbase = tmpdir
+        # we are already in a unique directory, so we can use fixed name
+        location_name = "tmploc"
+        # we need only one mapset
+        mapset = "PERMANENT"
+        debug("Using temporary location <{gdb}{sep}{lc}>".format(
+            gdb=gisdbase, lc=location_name, sep=os.path.sep))
+
     if gisdbase and location_name and mapset:
         location = os.path.join(gisdbase, location_name, mapset)
 
@@ -938,11 +959,12 @@ def set_mapset(gisrc, arg, geofile=None, create_new=False):
                 # 'location' is not valid, the user wants to create
                 # mapset on the fly
                 if not is_location_valid(gisdbase, location_name):
-                    # 'location_name' is not a valid GRASS location,
-                    # create new location and 'PERMANENT' mapset
-                    gisdbase = os.path.join(gisdbase, location_name)
-                    location_name = mapset
-                    mapset = "PERMANENT"
+                    if not tmp_location:
+                        # 'location_name' is not a valid GRASS location,
+                        # create new location and 'PERMANENT' mapset
+                        gisdbase = os.path.join(gisdbase, location_name)
+                        location_name = mapset
+                        mapset = "PERMANENT"
                     if is_location_valid(gisdbase, location_name):
                         fatal(_("Failed to create new location. "
                                 "The location <%s> already exists." % location_name))
@@ -1774,7 +1796,7 @@ class Parameters(object):
         self.force_gislock_removal = None
         self.mapset = None
         self.geofile = None
-
+        self.tmp_location = False
 
 def parse_cmdline(argv, default_gui):
     """Parse the standard part of command line parameters"""
@@ -1812,13 +1834,18 @@ def parse_cmdline(argv, default_gui):
         elif i == "--config":
             print_params()
             sys.exit()
+        elif i == "--tmp-location":
+            params.tmp_location = True
         else:
             args.append(i)
     if len(args) > 1:
         params.mapset = args[1]
         params.geofile = args[0]
     elif len(args) == 1:
-        params.mapset = args[0]
+        if params.tmp_location:
+            params.geofile = args[0]
+        else: 
+            params.mapset = args[0]
     else:
         params.mapset = None
     return params
@@ -1882,9 +1909,17 @@ def main():
         params = parse_cmdline(sys.argv[1:], default_gui=default_gui)
     if params.exit_grass and not params.create_new:
         fatal(_("Flag -e requires also flag -c"))
+    if params.tmp_location and not params.create_new:
+        fatal(_("Flag --tmp-location requires also flag -c"))
+    # Theoretically -c is not needed, CRS could be value of --tmp-location
+    # or, considering current code, CRS could be just taken from args.
+    # We allow --tmp-location without --exec (usefulness to be evaluated).
 
     grass_gui = params.grass_gui  # put it to variable, it is used a lot
 
+    # TODO: with --tmp-location there is no point in loading settings
+    # i.e. rc file from home dir, but the code is too spread out
+    # to disable it at this point
     gisrcrc = get_gisrc_from_config_dir(grass_config_dir, batch_job)
 
     # Set the username
@@ -1969,7 +2004,7 @@ def main():
         save_gui(gisrc, grass_gui)
 
     # Parsing argument to get LOCATION
-    if not params.mapset:
+    if not params.mapset and not params.tmp_location:
         # Try interactive startup
         # User selects LOCATION and MAPSET if not set
         if not set_mapset_interactive(grass_gui):
@@ -1979,7 +2014,12 @@ def main():
                     "'grass-gui').").format(grass_gui))
     else:
         # Try non-interactive start up
-        if params.create_new and params.geofile:
+        if params.tmp_location:
+            # tmp loc requires other things to be set as well
+            set_mapset(gisrc=gisrc, geofile=params.geofile, 
+                       create_new=True,
+                       tmp_location=params.tmp_location, tmpdir=tmpdir)
+        elif params.create_new and params.geofile:
             set_mapset(gisrc=gisrc, arg=params.mapset,
                        geofile=params.geofile, create_new=True)
         else:
@@ -2062,7 +2102,8 @@ def main():
         # save 'last used' GISRC after removing variables which shouldn't
         # be saved, e.g. d.mon related
         clean_env(gisrc)
-        writefile(gisrcrc, readfile(gisrc))
+        if not params.tmp_location:
+            writefile(gisrcrc, readfile(gisrc))
         # After this point no more grass modules may be called
         done_message()
 

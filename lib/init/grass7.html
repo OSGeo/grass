@@ -51,6 +51,12 @@
 
 <dt><b>--exec EXECUTABLE</b>
 <dd> Execute GRASS module or script. The provided executable will be executed in a GRASS GIS non-interactive session.
+
+<dt><b>--tmp-location</b>
+<dd> Run using a temporary location which is created based on the given
+coordinate reference system and deleted at the end of the execution
+(use with -c and --exec flags)
+
 </dl>
 
 <h3>Parameters:</h3>
@@ -358,6 +364,47 @@ for raster in gscript.list_strings(type='raster'):
 gscript.message('Available vector maps:')
 for vector in gscript.list_strings(type='vector'):
     print(vector)
+</pre></div>
+
+<h4>Using temporary location</h4>
+
+Creating a new temporary location based on a georeferenced file's
+projection coordinate reference system (CRS) and simultaneously starting
+computation in a shell script:
+
+<div class="code"><pre>
+grass75 -c elevation.tiff --tmp-location --exec test.sh
+</pre></div>
+
+The same, but using an EPSG code and a Python script:
+
+<div class="code"><pre>
+grass75 -c EPSG:3358 --tmp-location --exec test.py
+</pre></div>
+
+Finally, for special cases, we can create an XY location without any CRS:
+
+<div class="code"><pre>
+grass75 -c --tmp-location --exec test.py
+</pre></div>
+
+Temporary location is automatically deleted after computation,
+so the script is expected to export, link or otherwise preserve the
+output data before ending.
+
+<p>
+A single command can be also executed, e.g. to examine properties of the
+temporary location:
+
+<div class="code"><pre>
+grass75 -c EPSG:3358 --tmp-location --exec g.proj -p
+</pre></div>
+
+A temporary XY location with single command is useful, e.g. to show
+help text of a module:
+
+<div class="code"><pre>
+grass75 -c --tmp-location --exec r.neighbors --help
 </pre></div>
 
 <h4>Troubleshooting</h4>
