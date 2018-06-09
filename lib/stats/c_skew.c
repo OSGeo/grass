@@ -48,7 +48,7 @@ void c_skew(DCELL * result, DCELL * values, int n, const void *closure)
 void w_skew(DCELL * result, DCELL(*values)[2], int n, const void *closure)
 {
     DCELL sum, ave, sumsq, sumcb, sdev;
-    int count;
+    DCELL count;
     int i;
 
     sum = 0.0;
