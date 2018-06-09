@@ -917,7 +917,7 @@ class GroupDialog(wx.Dialog):
         self._checkGSellAll()
 
     def OnSubgSelAll(self, event):
-        check = event.Checked()
+        check = event.IsChecked()
         for item in range(self.subgListBox.GetCount()):
             self.CheckSubgItem(item, check)
             self.dataChanged = True
@@ -925,7 +925,7 @@ class GroupDialog(wx.Dialog):
         event.Skip()
 
     def OnGSelAll(self, event):
-        check = event.Checked()
+        check = event.IsChecked()
         if not check:
             self.gLayerBox.DeselectAll()
         else:

@@ -2605,7 +2605,7 @@ class CmdPanel(wx.Panel):
             currentValues[isThere] = 1
         theValue = theParam['values'][myIndex]
 
-        if event.Checked():
+        if event.IsChecked():
             currentValues[theValue] = 1
         else:
             del currentValues[theValue]
