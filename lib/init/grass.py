@@ -900,28 +900,9 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
 
     tmp_location requires tmpdir (which is used as gisdbase)
     """
-    # TODO: arg param seems to be always mapset or dash, refactor
-    l = None
-
-    if arg == '-':
-        # TODO: repair or remove behavior env vars + `grass75 -` (see doc)
-        # this is broken for some time (before refactoring, e.g. r65235)
-        # is some code is added, it should be a separate function, probably
-        # called here
-        # older comment for global vars:
-        # TODO: it does not seem that these would be ever set before calling this
-        # function, so we may just delete them here (the globals are set from
-        # the gisrc later on). But where is setting from environmental variables?
-        # the following probable means if env var defined, use it
-        # originates from r37863 (Convert grass70 script to Python) but even
-        # there it seems that it will never succeed
-        # it would have to be defined also for other vars
-        # if location:
-        #    l = location
-        pass
-    else:
-        l = arg
-
+    # TODO: arg param seems to be always the mapset parameter (or a dash
+    # in a distant past), refactor
+    l = arg
     if l:
         if l == '.':
             l = os.getcwd()
