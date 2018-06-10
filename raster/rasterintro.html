@@ -279,10 +279,9 @@ The GRASS GIS raster format is architecture independent and portable between
 <h3>Raster compression</h3>
 <!-- keep in sync with raster/r.compress/r.compress.html -->
 
-All GRASS GIS raster map types are by default ZLIB compressed, i.e. using
-ZLIB's deflate algorithm. Through the environment variable
-<tt>GRASS_COMPRESSOR</tt> the compression method can be set to RLE, ZLIB,
-LZ4, BZIP2, or ZSTD.
+All GRASS GIS raster map types are by default compressed. Through the 
+environment variable <tt>GRASS_COMPRESSOR</tt> the compression method 
+can be set to RLE, ZLIB, LZ4, BZIP2, or ZSTD.
 <p>
 Important: the NULL file compression can be turned off with 
 <tt>export GRASS_COMPRESS_NULLS=0</tt>. Raster maps with NULL file 
@@ -305,11 +304,11 @@ FCELL and DCELL maps are never and have never been compressed with RLE.
 </dd>
 <dt><strong>ZLIB</strong></dt>
 <dd>ZLIB's deflate is the default compression method for all raster 
-maps. GRASS GIS 7 uses by default 1 as ZLIB compression level which is the 
-best compromise between speed and compression ratio, also when 
-compared to other available compression methods. Valid levels are in 
-the range [1, 9] and can be set with the environment variable 
-<tt>GRASS_ZLIB_LEVEL</tt>.</dd>
+maps, if ZSTD is not available. GRASS GIS 7 uses by default 1 as ZLIB 
+compression level which is the best compromise between speed and 
+compression ratio, also when compared to other available compression 
+methods. Valid levels are in the range [1, 9] and can be set with the 
+environment variable <tt>GRASS_ZLIB_LEVEL</tt>.</dd>
 <dt><strong>LZ4</strong></dt>
 <dd>LZ4 is a very fast compression method, about as fast as no 
 compression. Decompression is also very fast. The compression ratio is 
@@ -328,7 +327,7 @@ compression ratio can be worse than other compression methods.</dd>
 <dd>ZSTD (Zstandard) provides compression ratios higher than ZLIB but 
 lower than BZIP2 (for large data). ZSTD compresses up to 4x faster than 
 ZLIB, and usually decompresses 6x faster than ZLIB. ZSTD is the 
-recommended default compression method.</dd> 
+default compression method if available.</dd> 
 </dl>
 
 <p>
