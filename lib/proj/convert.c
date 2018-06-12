@@ -858,8 +858,6 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	    i = 0;
 	    while (gpj_units[i].id != NULL) {
 		if (strcmp(proj4_unit, gpj_units[i].id) == 0) {
-		    if (pszUnitsName)
-			G_free(pszUnitsName);
 		    G_asprintf(&pszUnitsName, "%s", gpj_units[i].name);
 		    break;
 		}
@@ -918,7 +916,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     *projinfo = NULL;
     *projunits = NULL;
 
-    if (hSRS != hSRS1)
+    if (hSRS != NULL && hSRS != hSRS1)
 	OSRDestroySpatialReference(hSRS);
 
     return 1;
