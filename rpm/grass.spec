@@ -268,6 +268,12 @@ cat > ${RPM_BUILD_ROOT}%{macrosdir}/macros.%{name} <<EOF
 %%%{name}_version %{version}
 EOF
 
+# Add custom lib path to ld.conf.so.d
+mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
+cat >  %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf<<EOF
+%{_libdir}/%{name}%{shortver}/lib
+EOF
+
 %post
 %if 0%{?rhel}
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
@@ -291,6 +297,7 @@ fi
 %postun libs -p /sbin/ldconfig
 
 %files
+%exclude %{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 %exclude %{_libdir}/%{name}%{shortver}/driver/db/*
 %exclude %{_libdir}/%{name}%{shortver}/lib
 %exclude %{_libdir}/%{name}%{shortver}/include
@@ -305,6 +312,7 @@ fi
 
 %files libs
 %license AUTHORS COPYING GPL.TXT CHANGES
+%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 %{_libdir}/%{name}%{shortver}/lib/*.%{version}.so
 %{_libdir}/%{name}%{shortver}/lib/*.a
 %dir %{_libdir}/%{name}%{shortver}/driver
@@ -326,6 +334,9 @@ fi
 * Tue Jun 12 2018 Markus Neteler <neteler@mundialis.de> - 7.4.1-1
 - new upstream version 7.4.1
 - do not fail on EPEL6 with appstream-util
+
+* Wed Apr 25 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-5
+- add /etc/ld.so.conf.d/grass-*.conf to find libs by Daniele Viganò <daniele@vigano.me> (RHBZ #1571441)
 
 * Mon Mar 26 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-4
 - Update Python 2 dependency declarations to new packaging standards
