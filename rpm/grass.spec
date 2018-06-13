@@ -65,8 +65,15 @@ Requires:  python2-matplotlib
 ##?
 #Requires:  python2-matplotlib-wx
 %if (0%{?rhel} > 6 || 0%{?fedora})
-BuildRequires:	python2-pillow
+%if 0%{?rhel} > 6
+# EPEL7
+BuildRequires:	python-pillow
 %else
+# Fedora
+BuildRequires:  python2-pillow
+%endif
+%else
+# EPEL6
 BuildRequires:	python-imaging
 %endif
 BuildRequires:	readline-devel
@@ -246,7 +253,8 @@ ln -s %{_libdir}/%{name}%{shortver}/docs %{buildroot}%{_docdir}/%{name}%{shortve
 # Make desktop, appdata and icon files available on the system
 mv %{buildroot}%{_libdir}/%{name}-%{version}/share/* %{buildroot}%{_datadir}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/*.desktop
-appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/org.osgeo.%{name}.appdata.xml
+# EPEL6 fails on appstream-util
+appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/org.osgeo.%{name}.appdata.xml || echo "Ignoring appstream-util failure"
 
 # Cleanup: nothing to do
 #rm -rf %%{buildroot}%%{_prefix}/%%{name}-%%{version}
@@ -315,13 +323,23 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
-* Mon Mar 26 2018 Markus Neteler <neteler@mundialis.de> - 7.4.1-2
+* Tue Jun 12 2018 Markus Neteler <neteler@mundialis.de> - 7.4.1-1
+- new upstream version 7.4.1
+- do not fail on EPEL6 with appstream-util
+
+* Mon Mar 26 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-4
 - Update Python 2 dependency declarations to new packaging standards
   (author: Iryna Shcherbina <ishcherb@redhat.com> for 7.2.3-2)
   (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
 - SPEC cleanup with fix of dependencies between packages (review #1539116)
 - appdata.xml file into '/usr/share/metainfo'
 - use icon cache scriplets only on EPEL
+
+* Thu Feb 22 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-3
+- store binaries in /usr/lib[64]/grass74/
+
+* Sun Jan 28 2018 Markus Neteler <neteler@mundialis.de> - 7.4.0-2
+- fix for EPEL in r.random.surface to avoid variable collision with GDAL
 
 * Mon Jan 15 2018 Markus Metz <metz@mundialis.de> - 7.4.0-1
 - New upstream version 7.4.0
