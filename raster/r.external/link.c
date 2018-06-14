@@ -8,8 +8,6 @@
 void query_band(GDALRasterBandH hBand, const char *output,
 		struct Cell_head *cellhd, struct band_info *info)
 {
-    int bGotMin, bGotMax;
-
     info->gdal_type = GDALGetRasterDataType(hBand);
 
     info->null_val = GDALGetRasterNoDataValue(hBand, &info->has_null);
@@ -49,11 +47,6 @@ void query_band(GDALRasterBandH hBand, const char *output,
 	break;
     }
 
-    info->range[0] = GDALGetRasterMinimum(hBand, &bGotMin);
-    info->range[1] = GDALGetRasterMaximum(hBand, &bGotMax);
-    if(!(bGotMin && bGotMax))
-	GDALComputeRasterMinMax(hBand, 0, info->range);
-
     Rast_init_colors(&info->colors);
 
     if (GDALGetRasterColorTable(hBand) != NULL) {
@@ -81,13 +74,6 @@ void query_band(GDALRasterBandH hBand, const char *output,
 	    G_verbose_message(_("Setting grey color table for <%s> (full 8bit range)"),
 			      output);
 	    Rast_make_grey_scale_colors(&info->colors, 0, 255);
-	}
-	else  {
-	    /* set data range to grey scale: */
-	    G_verbose_message(_("Setting grey color table for <%s> (data range)"),
-			      output);
-	    Rast_make_grey_scale_colors(&info->colors,
-				     (int) info->range[0], (int) info->range[1]);
 	}
     }
 }
@@ -198,6 +184,7 @@ void create_map(const char *input, int band, const char *output,
     struct History history;
     struct Categories cats;
     char buf[1024];
+    int outfd;
 
     Rast_put_cellhd(output, cellhd);
 
@@ -205,19 +192,7 @@ void create_map(const char *input, int band, const char *output,
 
     make_link(input, output, band, info, flip);
 
-    if (info->data_type == CELL_TYPE) {
-	struct Range range;
-	range.min = (CELL)info->range[0];
-	range.max = (CELL)info->range[1];
-	range.first_time = 0;
-	Rast_write_range(output, &range);
-    }
-    else {
-	struct FPRange fprange;
-	fprange.min = info->range[0];
-	fprange.max = info->range[1];
-	fprange.first_time = 0;
-	Rast_write_fp_range(output, &fprange);
+    if (info->data_type != CELL_TYPE) {
 	write_fp_format(output, info);
 	write_fp_quant(output);
     }
@@ -236,5 +211,39 @@ void create_map(const char *input, int band, const char *output,
     if (title)
 	Rast_put_cell_title(output, title);
 
-    G_done_msg(_("Link to raster map <%s> created."), output);
+    /* get stats for this raster band */
+    G_remove_misc("cell_misc", "stats", output);
+
+    outfd = Rast_open_old(output, G_mapset());
+    if (info->data_type == CELL_TYPE) {
+	int r;
+	struct Range range;
+	CELL *rbuf = Rast_allocate_buf(CELL_TYPE);
+
+	G_remove_misc("cell_misc", "range", output);
+	Rast_init_range(&range);
+	for (r = 0; r < cellhd->rows; r++) {
+	    Rast_get_row(outfd, rbuf, r, CELL_TYPE);
+	    Rast_row_update_range(rbuf, cellhd->cols, &range);
+	}
+	Rast_write_range(output, &range);
+	G_free(rbuf);
+    }
+    else {
+	int r;
+	struct FPRange fprange;
+	void *rbuf = Rast_allocate_buf(info->data_type);
+	
+	G_remove_misc("cell_misc", "f_range", output);
+	Rast_init_fp_range(&fprange);
+	for (r = 0; r < cellhd->rows; r++) {
+	    Rast_get_row(outfd, rbuf, r, info->data_type);
+	    Rast_row_update_fp_range(rbuf, cellhd->cols, &fprange, info->data_type);
+	}
+	Rast_write_fp_range(output, &fprange);
+	G_free(rbuf);
+    }
+    Rast_unopen(outfd);
+
+    G_message(_("Link to raster map <%s> created."), output);
 }

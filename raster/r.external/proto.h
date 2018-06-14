@@ -11,7 +11,6 @@ struct band_info
     GDALDataType gdal_type;
     int has_null;
     double null_val;
-    double range[2];
     struct Colors colors;
 };
 
