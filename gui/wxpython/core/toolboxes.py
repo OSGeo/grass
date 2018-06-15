@@ -491,9 +491,9 @@ def _expandUserToolboxesItem(node, toolboxes):
             'toolbox', attrib={
                 'name': 'GeneratedUserToolboxesList'})
         items.insert(idx, el)
-        label = etree.SubElement(el, tag='label')
+        label = etree.SubElement(el, 'label')
         label.text = _("Custom toolboxes")
-        it = etree.SubElement(el, tag='items')
+        it = etree.SubElement(el, 'items')
         for toolbox in tboxes:
             it.append(copy.deepcopy(toolbox))
         items.remove(n)
@@ -572,13 +572,13 @@ def _expandAddonsItem(node):
         # attib={'name': 'AddonsList'}
         el = etree.Element('menu')
         items.insert(idx, el)
-        label = etree.SubElement(el, tag='label')
+        label = etree.SubElement(el, 'label')
         label.text = _("Addons")
-        it = etree.SubElement(el, tag='items')
+        it = etree.SubElement(el, 'items')
         for addon in addons:
-            addonItem = etree.SubElement(it, tag='module-item')
+            addonItem = etree.SubElement(it, 'module-item')
             addonItem.attrib = {'name': addon}
-            addonLabel = etree.SubElement(addonItem, tag='label')
+            addonLabel = etree.SubElement(addonItem, 'label')
             addonLabel.text = addon
         items.remove(n)
 
@@ -637,7 +637,7 @@ def _expandRuntimeModules(node, loadMetadata=True):
     for module in modules:
         name = module.get('name')
         if module.find('module') is None:
-            n = etree.SubElement(parent=module, tag='module')
+            n = etree.SubElement(module, 'module')
             n.text = name
 
         if module.find('description') is None:
@@ -645,9 +645,9 @@ def _expandRuntimeModules(node, loadMetadata=True):
                 desc, keywords = _loadMetadata(name)
             else:
                 desc, keywords = '', ''
-            n = etree.SubElement(parent=module, tag='description')
+            n = etree.SubElement(module, 'description')
             n.text = _escapeXML(desc)
-            n = etree.SubElement(parent=module, tag='keywords')
+            n = etree.SubElement(module, 'keywords')
             n.text = _escapeXML(','.join(keywords))
             if loadMetadata and not desc:
                 hasErrors = True
@@ -692,13 +692,13 @@ def _addHandlers(node):
     """Add missing handlers to modules"""
     for n in node.findall('.//module-item'):
         if n.find('handler') is None:
-            handlerNode = etree.SubElement(parent=n, tag='handler')
+            handlerNode = etree.SubElement(n, 'handler')
             handlerNode.text = 'OnMenuCmd'
 
     # e.g. g.region -p
     for n in node.findall('.//wxgui-item'):
         if n.find('command') is not None:
-            handlerNode = etree.SubElement(parent=n, tag='handler')
+            handlerNode = etree.SubElement(n, 'handler')
             handlerNode.text = 'RunMenuCmd'
 
 
