@@ -115,10 +115,11 @@ import grass.script as grass
 def cleanup():
     """Delete temporary direction map."""
     if tmp_maps:
-	try:
-	    grass.run_command("g.remove", flags='f', quiet=True, type='raster', name=tmp_maps)
-	except:
-	    pass
+        try:
+            grass.run_command("g.remove", flags='f', quiet=True, type='raster', name=tmp_maps)
+        except:
+            pass
+
 
 def main():
     valmap = options['input']
@@ -131,15 +132,14 @@ def main():
     global tmp_maps
     tmp_maps = False
     atexit.register(cleanup)
-    
+
     if not dirmap:
-	# get directions with r.fill.dir, without sink filling
-	dirmap = "%s_tmp_%d" % (valmap, os.getpid())
-	fill_map = "%s_fill_%d" % (valmap, os.getpid())
-	area_map = "%s_area_%d" % (valmap, os.getpid())
-	tmp_maps = dirmap + ',' + fill_map + ',' + area_map
-	print tmp_maps
-	grass.run_command("r.fill.dir", input=valmap, output=fill_map, direction=dirmap, areas=area_map, flags='f', format='grass');
+        # get directions with r.fill.dir, without sink filling
+        dirmap = "%s_tmp_%d" % (valmap, os.getpid())
+        fill_map = "%s_fill_%d" % (valmap, os.getpid())
+        area_map = "%s_area_%d" % (valmap, os.getpid())
+        tmp_maps = dirmap + ',' + fill_map + ',' + area_map
+        grass.run_command("r.fill.dir", input=valmap, output=fill_map, direction=dirmap, areas=area_map, flags='f', format='grass')
 
     # create args for r.path
     kwargs = {}
@@ -147,24 +147,23 @@ def main():
     kwargs['values'] = valmap
     kwargs['format'] = 'degree'
     if start_coords:
-	kwargs['start_coordinates'] = start_coords
+        kwargs['start_coordinates'] = start_coords
     if start_pnts:
-	kwargs['start_points'] = start_pnts
+        kwargs['start_points'] = start_pnts
     if rpathmap:
-	kwargs['raster_path'] = rpathmap
+        kwargs['raster_path'] = rpathmap
     if vpathmap:
-	kwargs['vector_path'] = vpathmap
+        kwargs['vector_path'] = vpathmap
 
     pathflags = ''
     if flags['c']:
-	pathflags += 'c'
+        pathflags += 'c'
     if flags['a']:
-	pathflags += 'a'
+        pathflags += 'a'
     if flags['n']:
-	pathflags += 'n'
+        pathflags += 'n'
 
     grass.run_command("r.path", flags=pathflags, **kwargs)
-	
 
     return 0
 
