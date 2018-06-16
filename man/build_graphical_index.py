@@ -105,7 +105,7 @@ index_items = [
     ('https://grass.osgeo.org/grass75/manuals/libpython/index.html', std_img_name('python'), 'Python'),
     ('https://grass.osgeo.org/programming7/', std_img_name('c'), 'C library'),
     ('manual_gallery.html', std_img_name('gallery'), 'Gallery'),
-    ('http://grass.osgeo.org/grass75/manuals/addons/', std_img_name('addons'), 'Addons'),
+    ('https://grass.osgeo.org/grass7/manuals/addons/', std_img_name('addons'), 'Addons'),
 ]
 
 
