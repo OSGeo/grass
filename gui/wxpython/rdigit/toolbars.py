@@ -82,10 +82,8 @@ class RDigitToolbar(BaseToolbar):
                               lambda evt: self._cellValueChanged())
         self._valueCombo.SetSelection(0)
         self._cellValueChanged()
-        self.InsertControl(
-            6, wx.StaticText(
-                self, label=" %s" %
-                _("Cell value:")))
+        labelValue = wx.StaticText(self, label=" %s" % _("Cell value:"))
+        self.InsertControl(6, labelValue)
         self.InsertControl(7, self._valueCombo)
 
         self._widthValueId = wx.NewId()
@@ -99,7 +97,8 @@ class RDigitToolbar(BaseToolbar):
         self._widthValueChanged()
         self._widthValue.SetToolTipString(
             _("Width of currently digitized line or diameter of a digitized point in map units."))
-        self.InsertControl(8, wx.StaticText(self, label=" %s" % _("Width:")))
+        labelWidth = wx.StaticText(self, label=" %s" % _("Width:"))
+        self.InsertControl(8, labelWidth)
         self.InsertControl(9, self._widthValue)
 
         for tool in (self.area, self.line, self.point):
@@ -109,6 +108,11 @@ class RDigitToolbar(BaseToolbar):
         self._default = self.area
         # realize the toolbar
         self.Realize()
+        # workaround Mac bug
+        for t in (self._mapSelectionCombo, self._color, self._valueCombo,
+                  self._widthValue, labelValue, labelWidth):
+            t.Hide()
+            t.Show()
 
     def _toolbarData(self):
         """Toolbar data"""
