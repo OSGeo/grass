@@ -110,6 +110,7 @@ class LocationDialog(SimpleDialog):
             validator=SimpleValidator(
                 callback=self.ValidatorCallback))
         self.element1.Bind(wx.EVT_TEXT, self.OnLocation)
+        self.element1.Bind(wx.EVT_COMBOBOX, self.OnLocation)
         self.element2 = MapsetSelect(
             parent=self.panel,
             id=wx.ID_ANY,
@@ -1532,6 +1533,7 @@ class MapLayersDialogBase(wx.Dialog):
 
         # bindings
         self.mapset.Bind(wx.EVT_TEXT, self.OnChangeParams)
+        self.mapset.Bind(wx.EVT_COMBOBOX, self.OnChangeParams)
         self.layers.Bind(wx.EVT_RIGHT_DOWN, self.OnMenu)
         self.filter.Bind(wx.EVT_TEXT, self.OnFilter)
         self.toggle.Bind(wx.EVT_CHECKBOX, self.OnToggle)
