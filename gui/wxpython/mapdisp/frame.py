@@ -1557,6 +1557,7 @@ class MapFrame(SingleMapFrame):
         self.GetMap().layerAdded.disconnect(self._updateRDigitLayers)
         self.GetMap().layerRemoved.disconnect(self._updateRDigitLayers)
         self.GetMap().layerChanged.disconnect(self._updateRDigitLayers)
+        self._toolSwitcher.toggleToolChanged.disconnect(self.toolbars['rdigit'].CheckSelectedTool)
 
         self.RemoveToolbar('rdigit', destroy=True)
         self.rdigit = None
