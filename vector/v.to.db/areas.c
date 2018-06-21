@@ -59,11 +59,9 @@ int read_areas(struct Map_info *Map)
 			Values[idx].d1 += perimeter;
 			break;
 		    case O_COMPACT:
-			Values[idx].d1 =
-			    perimeter / (2.0 * sqrt(M_PI * area));
-			break;
 		    case O_FD:
-			Values[idx].d1 = 2.0 * log(perimeter) / log(area);
+			Values[idx].d1 += area;
+			Values[idx].d2 += perimeter;
 			break;
 		    case O_BBOX:
 			if (Values[idx].d1 < Bbox.N) 
@@ -90,11 +88,9 @@ int read_areas(struct Map_info *Map)
 		    Values[idx].d1 += perimeter;
 		    break;
 		case O_COMPACT:
-		    Values[idx].d1 =
-			perimeter / (2.0 * sqrt(M_PI * area));
-		    break;
 		case O_FD:
-		    Values[idx].d1 = 2.0 * log(perimeter) / log(area);
+		    Values[idx].d1 += area;
+		    Values[idx].d2 += perimeter;
 		    break;
 	        case O_BBOX:
 		    if (Values[idx].d1 < Bbox.N) 

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "global.h"
@@ -11,7 +12,7 @@ int update(struct Map_info *Map)
     int i, *catexst, *cex, upd, fcat;
     char buf1[2000], buf2[2000], left[20], right[20];
     struct field_info *qFi, *Fi;
-    dbString stmt;
+    dbString stmt, strval;
     dbDriver *driver;
 
     vstat.dupl = 0;
@@ -21,6 +22,7 @@ int update(struct Map_info *Map)
     vstat.error = 0;
 
     db_init_string(&stmt);
+    db_init_string(&strval);
 
     /* layer to find table to read from */
     qFi = Vect_get_field(Map, options.qfield);
@@ -100,8 +102,6 @@ int update(struct Map_info *Map)
 
 	case O_LENGTH:
 	case O_AREA:
-	case O_COMPACT:
-	case O_FD:
 	case O_PERIMETER:
 	case O_SLOPE:
 	case O_SINUOUS:
@@ -116,6 +116,26 @@ int update(struct Map_info *Map)
 		buf1, options.col[0], Values[i].d1, options.col[1],
 		Values[i].d2, options.col[2], Values[i].d3, options.col[3],
 	       	Values[i].d4, Fi->key, Values[i].cat);
+	    break;
+
+	case O_COMPACT:
+	    /* perimeter / (2.0 * sqrt(M_PI * area)) */
+	    Values[i].d1 = Values[i].d2 / (2.0 * sqrt(M_PI * Values[i].d1));
+	    sprintf(buf2, "%s %f where %s = %d", buf1, Values[i].d1, Fi->key,
+		    Values[i].cat);
+	    break;
+
+	case O_FD:
+	    /* 2.0 * log(perimeter) / log(area) 
+	     * avoid division by zero: 
+	     * 2.0 * log(1 + perimeter) / log(1 + area)
+	     * more in line with compactness:
+	     * 2.0 * log(perimeter / (2.0 * sqrt(M_PI)) / log(area) */
+	    if (Values[i].d1 == 1) /* log(1) == 0 */
+		Values[i].d1 += 0.000001;
+	    Values[i].d1 = 2.0 * log(Values[i].d2 / (2.0 * sqrt(M_PI))) / log(Values[i].d1);
+	    sprintf(buf2, "%s %f where %s = %d", buf1, Values[i].d1, Fi->key,
+		    Values[i].cat);
 	    break;
 
 	case O_COOR:
@@ -196,8 +216,10 @@ int update(struct Map_info *Map)
 			    Fi->key, Values[i].cat);
 		    break;
 		case (DB_C_TYPE_STRING):
+		    db_set_string(&strval, Values[i].str1);
+		    db_double_quote_string(&strval);
 		    sprintf(buf2, "%s '%s' where %s = %d", buf1,
-			    Values[i].str1, Fi->key, Values[i].cat);
+			    db_get_string(&strval), Fi->key, Values[i].cat);
 		    break;
 		case (DB_C_TYPE_DATETIME):
 		    sprintf(buf2, "%s '%s' where %s = %d", buf1,
@@ -248,6 +270,8 @@ int update(struct Map_info *Map)
 		    vstat.update++;
 		}
 		else {
+		    G_warning(_("Cannot update table: %s"),
+				db_get_string(&stmt));
 		    vstat.error++;
 		}
 	    }
