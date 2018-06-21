@@ -1,3 +1,4 @@
+#include <math.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "global.h"
@@ -57,17 +58,29 @@ int report(void)
 	break;
 
     case O_COMPACT:
+	/* perimeter / (2.0 * sqrt(M_PI * area)) */
 	if (G_verbose() > G_verbose_min())
 	    fprintf(stdout, "cat%scompact\n", options.fs);
-	for (i = 0; i < vstat.rcat; i++)
+	for (i = 0; i < vstat.rcat; i++) {
+	    Values[i].d1 = Values[i].d2 / (2.0 * sqrt(M_PI * Values[i].d1));
 	    fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs, Values[i].d1);
+	}
 	break;
 
     case O_FD:
+	/* 2.0 * log(perimeter) / log(area) 
+	 * avoid division by zero: 
+	 * 2.0 * log(1 + perimeter) / log(1 + area)
+	 * more in line with compactness:
+	 * 2.0 * log(perimeter / (2.0 * sqrt(M_PI)) / log(area) */
 	if (G_verbose() > G_verbose_min())
 	    fprintf(stdout, "cat%sfd\n", options.fs);
-	for (i = 0; i < vstat.rcat; i++)
+	for (i = 0; i < vstat.rcat; i++) {
+	    if (Values[i].d1 == 1) /* log(1) == 0 */
+		Values[i].d1 += 0.000001;
+	    Values[i].d1 = 2.0 * log(Values[i].d2 / (2.0 * sqrt(M_PI))) / log(Values[i].d1);
 	    fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs, Values[i].d1);
+	}
 	break;
 
     case O_PERIMETER:

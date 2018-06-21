@@ -23,6 +23,12 @@ int conv_units()
 	for (i = 0; i < vstat.rcat; i++)
 	    Values[i].d1 *= sq_f;
 	break;
+    case O_FD:
+	for (i = 0; i < vstat.rcat; i++) {
+	    Values[i].d1 *= sq_f;
+	    Values[i].d2 *= f;
+	}
+	break;
     case O_AZIMUTH:
 	    if (rad == 0) {
 		    for (i = 0; i < vstat.rcat; i++) {
