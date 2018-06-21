@@ -119,6 +119,15 @@ def main():
     if vect_mapset != mapset or not grass.find_file(vector, 'vector', mapset)['file']:
         grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
 
+    # check if DBF driver used, in this case cut to 10 chars col names:
+    try:
+        fi = grass.vector_db(map=vector)[int(layer)]
+    except KeyError:
+        grass.fatal(
+            _('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
+    # we need this for non-DBF driver:
+    dbfdriver = fi['driver'] == 'dbf'
+
     vector = vs[0]
 
     rastertmp = "%s_%s" % (vector, tmpname)
@@ -158,15 +167,6 @@ def main():
     number = len(cats)
     if number < 1:
         grass.fatal(_("No categories found in raster map"))
-
-    # check if DBF driver used, in this case cut to 10 chars col names:
-    try:
-        fi = grass.vector_db(map=vector)[int(layer)]
-    except KeyError:
-        grass.fatal(
-            _('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
-    # we need this for non-DBF driver:
-    dbfdriver = fi['driver'] == 'dbf'
 
     # Find out which table is linked to the vector map on the given layer
     if not fi['table']:
