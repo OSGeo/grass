@@ -114,9 +114,22 @@ int main(int argc, char **argv)
     struct History history;
 
     struct Cell_head window;
-    struct Option *opt1, *dfopt, *opt2, *coordopt, *vpointopt,
-                  *opt3, *opt4;
-    struct Flag *flag1, *flag2, *flag3;
+    struct
+    {
+	struct Option *dir;
+	struct Option *format;
+	struct Option *val;
+	struct Option *coord;
+	struct Option *vpoint;
+	struct Option *rast;
+	struct Option *vect;
+    } opt;
+    struct
+    {
+    	struct Flag *copy;
+	struct Flag *accum;
+	struct Flag *count;
+    } flag;
     struct GModule *module;
     void *dir_buf;
 
@@ -140,108 +153,105 @@ int main(int argc, char **argv)
     module->description =
 	_("Traces paths from starting points following input directions.");
 
-    opt1 = G_define_standard_option(G_OPT_R_INPUT);
-    opt1->label = _("Name of input direction");
-    opt1->description =
+    opt.dir = G_define_standard_option(G_OPT_R_INPUT);
+    opt.dir->label = _("Name of input direction");
+    opt.dir->description =
 	_("Direction in degrees CCW from east, or bitmask encoded");
 
-    dfopt = G_define_option();
-    dfopt->type = TYPE_STRING;
-    dfopt->key = "format";
-    dfopt->label = _("Format of the input direction map");
-    dfopt->required = YES;
-    dfopt->options = "auto,degree,45degree,bitmask";
-    dfopt->answer = "auto";
+    opt.format = G_define_option();
+    opt.format->type = TYPE_STRING;
+    opt.format->key = "format";
+    opt.format->label = _("Format of the input direction map");
+    opt.format->required = YES;
+    opt.format->options = "auto,degree,45degree,bitmask";
+    opt.format->answer = "auto";
     G_asprintf(&desc,
            "auto;%s;degree;%s;45degree;%s;bitmask;%s",
            _("auto-detect direction format"),
            _("degrees CCW from East"),
            _("degrees CCW from East divided by 45 (e.g. r.watershed directions)"),
            _("bitmask encoded directions (e.g. r.cost -b)"));
-    dfopt->descriptions = desc;
+    opt.format->descriptions = desc;
 
-    opt2 = G_define_standard_option(G_OPT_R_INPUT);
-    opt2->key = "values";
-    opt2->label =
+    opt.val = G_define_standard_option(G_OPT_R_INPUT);
+    opt.val->key = "values";
+    opt.val->label =
 	_("Name of input raster values to be used for output");
-    opt2->required = NO;
+    opt.val->required = NO;
 
-    opt3 = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt3->key = "raster_path";
-    opt3->required = NO;
-    opt3->label = _("Name for output raster path map");
+    opt.rast = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt.rast->key = "raster_path";
+    opt.rast->required = NO;
+    opt.rast->label = _("Name for output raster path map");
     
-    opt4 = G_define_standard_option(G_OPT_V_OUTPUT);
-    opt4->key = "vector_path";
-    opt4->required = NO;
-    opt4->label = _("Name for output vector path map");
+    opt.vect = G_define_standard_option(G_OPT_V_OUTPUT);
+    opt.vect->key = "vector_path";
+    opt.vect->required = NO;
+    opt.vect->label = _("Name for output vector path map");
     
-    coordopt = G_define_standard_option(G_OPT_M_COORDS);
-    coordopt->key = "start_coordinates";
-    coordopt->multiple = YES;
-    coordopt->description = _("Coordinates of starting point(s) (E,N)");
-    coordopt->guisection = _("Start");
+    opt.coord = G_define_standard_option(G_OPT_M_COORDS);
+    opt.coord->key = "start_coordinates";
+    opt.coord->multiple = YES;
+    opt.coord->description = _("Coordinates of starting point(s) (E,N)");
+    opt.coord->guisection = _("Start");
 
-    vpointopt = G_define_standard_option(G_OPT_V_INPUTS);
-    vpointopt->key = "start_points";
-    vpointopt->required = NO;
-    vpointopt->label = _("Name of starting vector points map(s)");
-    vpointopt->guisection = _("Start");
+    opt.vpoint = G_define_standard_option(G_OPT_V_INPUTS);
+    opt.vpoint->key = "start_points";
+    opt.vpoint->required = NO;
+    opt.vpoint->label = _("Name of starting vector points map(s)");
+    opt.vpoint->guisection = _("Start");
 
-    flag1 = G_define_flag();
-    flag1->key = 'c';
-    flag1->description = _("Copy input cell values on output");
-    flag1->guisection = _("Path settings");
+    flag.copy = G_define_flag();
+    flag.copy->key = 'c';
+    flag.copy->description = _("Copy input cell values on output");
+    flag.copy->guisection = _("Path settings");
 
-    flag2 = G_define_flag();
-    flag2->key = 'a';
-    flag2->description = _("Accumulate input values along the path");
-    flag2->guisection = _("Path settings");
+    flag.accum = G_define_flag();
+    flag.accum->key = 'a';
+    flag.accum->description = _("Accumulate input values along the path");
+    flag.accum->guisection = _("Path settings");
 
-    flag3 = G_define_flag();
-    flag3->key = 'n';
-    flag3->description = _("Count cell numbers along the path");
-    flag3->guisection = _("Path settings");
+    flag.count = G_define_flag();
+    flag.count->key = 'n';
+    flag.count->description = _("Count cell numbers along the path");
+    flag.count->guisection = _("Path settings");
+
+    G_option_required(opt.rast, opt.vect, NULL);
+    G_option_exclusive(flag.copy, flag.accum, flag.count, NULL);
+    G_option_requires_all(flag.copy, opt.rast, opt.val, NULL);
+    G_option_requires_all(flag.accum, opt.rast, opt.val, NULL);
+    G_option_requires_all(flag.count, opt.rast, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    /* check args */
-    if (!opt3->answer && !opt4->answer) {
-	G_fatal_error(_("No output requested")); 
-    }
-
-    strcpy(dir_name, opt1->answer);
+    strcpy(dir_name, opt.dir->answer);
     *map_name = '\0';
     *out_name = '\0';
-    if (opt3->answer) {
-	strcpy(out_name, opt3->answer);
-	if (opt2->answer)
-	    strcpy(map_name, opt2->answer);
+    if (opt.rast->answer) {
+	strcpy(out_name, opt.rast->answer);
+	if (opt.val->answer)
+	    strcpy(map_name, opt.val->answer);
     }
 
     pvout = NULL;
-    if (opt4->answer) {
-	if (0 > Vect_open_new(&vout, opt4->answer, 0)) {
+    if (opt.vect->answer) {
+	if (0 > Vect_open_new(&vout, opt.vect->answer, 0)) {
             G_fatal_error(_("Unable to create vector map <%s>"),
-			  opt4->answer);
+			  opt.vect->answer);
 	}
 	Vect_hist_command(&vout);
 	pvout = &vout;
     }
 
-    if ((flag1->answer + flag2->answer + flag3->answer) > 1)
-	G_fatal_error(_("Specify just one of the -c, -a and -n flags"));
-
-    out_mode = OUT_PID;
-    if (opt3->answer && opt2->answer) {
-	if (flag1->answer)
-	    out_mode = OUT_CPY;
-	if (flag2->answer)
-	    out_mode = OUT_ACC;
-	if (flag3->answer)
-	    out_mode = OUT_CNT;
-    }
+    if (flag.copy->answer)
+	out_mode = OUT_CPY;
+    else if (flag.accum->answer)
+	out_mode = OUT_ACC;
+    else if (flag.count->answer)
+	out_mode = OUT_CNT;
+    else
+	out_mode = OUT_PID;
 
     /* get the window information  */
     G_get_window(&window);
@@ -250,10 +260,10 @@ int main(int argc, char **argv)
 
     npoints = 0;
     /* TODO: use r.cost method to create a list of start points */
-    if (coordopt->answer) {
-	for (i = 0; coordopt->answers[i] != NULL; i += 2) {
-	    G_scan_easting(coordopt->answers[i], &east, G_projection());
-	    G_scan_northing(coordopt->answers[i + 1], &north, G_projection());
+    if (opt.coord->answer) {
+	for (i = 0; opt.coord->answers[i] != NULL; i += 2) {
+	    G_scan_easting(opt.coord->answers[i], &east, G_projection());
+	    G_scan_northing(opt.coord->answers[i + 1], &north, G_projection());
 	    start_col = (int)Rast_easting_to_col(east, &window);
 	    start_row = (int)Rast_northing_to_row(north, &window);
 
@@ -276,8 +286,8 @@ int main(int argc, char **argv)
 	    head_start_pt = next_start_pt;
 	}
     }
-    if (vpointopt->answers) {
-	for (i = 0; vpointopt->answers[i] != NULL; i++) {
+    if (opt.vpoint->answers) {
+	for (i = 0; opt.vpoint->answers[i] != NULL; i++) {
 	    struct Map_info In;
 	    struct bound_box box;
 	    int cat, type;
@@ -287,8 +297,8 @@ int main(int argc, char **argv)
 
 	    Vect_set_open_level(1); /* topology not required */
 
-	    if (1 > Vect_open_old(&In, vpointopt->answers[i], ""))
-		G_fatal_error(_("Unable to open vector map <%s>"), vpointopt->answers[i]);
+	    if (1 > Vect_open_old(&In, opt.vpoint->answers[i], ""))
+		G_fatal_error(_("Unable to open vector map <%s>"), opt.vpoint->answers[i]);
 
 	    G_verbose_message(_("Reading vector map <%s> with start points..."),
                       Vect_get_full_name(&In));
@@ -339,7 +349,7 @@ int main(int argc, char **argv)
 	    /* only catches maps out of range until something is found, not after */
 	    if (!have_points) {
 		G_warning(_("Starting vector map <%s> contains no points in the current region"),
-			  vpointopt->answers[i]);
+			  opt.vpoint->answers[i]);
 	    }
 	    Vect_destroy_line_struct(Points);
 	    Vect_destroy_cats_struct(Cats);
@@ -353,7 +363,7 @@ int main(int argc, char **argv)
     /* get some temp files */
     val_fd = -1;
     tempfile1 = NULL;
-    if (opt2->answer && opt3->answer) {
+    if (opt.val->answer && opt.rast->answer) {
 	DCELL *map_buf;
 
 	G_verbose_message(_("Reading raster values map <%s> ..."), map_name);
@@ -383,22 +393,22 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Invalid directions map <%s>"), dir_name);
 
     dir_format = -1;
-    if (strcmp(dfopt->answer, "degree") == 0) {
+    if (strcmp(opt.format->answer, "degree") == 0) {
 	if (dmax > 360)
 	    G_fatal_error(_("Directional degrees can not be > 360"));
 	dir_format = DIR_DEG;
     }
-    else if (strcmp(dfopt->answer, "45degree") == 0) {
+    else if (strcmp(opt.format->answer, "45degree") == 0) {
 	if (dmax > 8)
 	    G_fatal_error(_("Directional degrees divided by 45 can not be > 8"));
 	dir_format = DIR_DEG45;
     }
-    else if (strcmp(dfopt->answer, "bitmask") == 0) {
+    else if (strcmp(opt.format->answer, "bitmask") == 0) {
 	if (dmax > (1 << 16) - 1)
 	    G_fatal_error(_("Bitmask encoded directions can not be > %d"), (1 << 16) - 1);
 	dir_format = DIR_BIT;
     }
-    else if (strcmp(dfopt->answer, "auto") == 0) {
+    else if (strcmp(opt.format->answer, "auto") == 0) {
 	if (dmax <= 8) {
 	    dir_format = DIR_DEG45;
 	    G_important_message(_("Input direction format assumed to be degrees CCW from East divided by 45"));
@@ -419,7 +429,7 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Unable to detect format of input direction map <%s>"), dir_name);
     }
     if (dir_format <= 0)
-	G_fatal_error(_("Invalid directions format '%s'"), dfopt->answer);
+	G_fatal_error(_("Invalid directions format '%s'"), opt.format->answer);
 
     G_verbose_message(_("Reading direction map <%s> ..."), dir_name);
     dir_id = Rast_open_old(dir_name, "");
@@ -457,7 +467,7 @@ int main(int argc, char **argv)
     G_free(dir_buf);
 
     ppl = NULL;
-    if (opt3->answer) {
+    if (opt.rast->answer) {
 	/* raster output */
 	pl.p = NULL;
 	pl.n = 0;
@@ -508,7 +518,7 @@ int main(int argc, char **argv)
     }
 
     /* raster output */
-    if (opt3->answer) {
+    if (opt.rast->answer) {
 	int row;
 
 	if (pl.n > 1) {
@@ -602,7 +612,7 @@ int main(int argc, char **argv)
     }
 
     /* vector output */
-    if (opt4->answer) {
+    if (opt.vect->answer) {
 	Vect_build(&vout);
 	Vect_close(&vout);
     }
@@ -611,7 +621,7 @@ int main(int argc, char **argv)
     close(dir_fd);
     unlink(tempfile2);
 
-    if (opt2->answer && opt3->answer) {
+    if (opt.val->answer && opt.rast->answer) {
 	close(val_fd);
 	unlink(tempfile1);
     }
