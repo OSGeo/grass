@@ -104,6 +104,9 @@
 #% description: The input raster map is a cost surface (direction surface must also be specified)
 #% guisection: Cost surface
 #%end
+#%rules
+#% required: start_coordinates, start_points
+#%end
 
 import os
 import sys
