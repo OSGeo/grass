@@ -11,7 +11,7 @@ int update(struct Map_info *Map)
     int i, *catexst, *cex, upd, fcat;
     char buf1[2000], buf2[2000], left[20], right[20];
     struct field_info *qFi, *Fi;
-    dbString stmt;
+    dbString stmt, strval;
     dbDriver *driver;
 
     vstat.dupl = 0;
@@ -21,6 +21,7 @@ int update(struct Map_info *Map)
     vstat.error = 0;
 
     db_init_string(&stmt);
+    db_init_string(&strval);
 
     /* layer to find table to read from */
     qFi = Vect_get_field(Map, options.qfield);
@@ -196,8 +197,10 @@ int update(struct Map_info *Map)
 			    Fi->key, Values[i].cat);
 		    break;
 		case (DB_C_TYPE_STRING):
+		    db_set_string(&strval, Values[i].str1);
+		    db_double_quote_string(&strval);
 		    sprintf(buf2, "%s '%s' where %s = %d", buf1,
-			    Values[i].str1, Fi->key, Values[i].cat);
+			    db_get_string(&strval), Fi->key, Values[i].cat);
 		    break;
 		case (DB_C_TYPE_DATETIME):
 		    sprintf(buf2, "%s '%s' where %s = %d", buf1,
@@ -248,6 +251,8 @@ int update(struct Map_info *Map)
 		    vstat.update++;
 		}
 		else {
+		    G_warning(_("Cannot update table: %s"),
+				db_get_string(&stmt));
 		    vstat.error++;
 		}
 	    }
