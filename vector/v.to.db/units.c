@@ -23,6 +23,7 @@ int conv_units()
 	for (i = 0; i < vstat.rcat; i++)
 	    Values[i].d1 *= sq_f;
 	break;
+    case O_COMPACT:
     case O_FD:
 	for (i = 0; i < vstat.rcat; i++) {
 	    Values[i].d1 *= sq_f;
