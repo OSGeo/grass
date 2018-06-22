@@ -119,7 +119,8 @@ int update(struct Map_info *Map)
 	    break;
 
 	case O_COMPACT:
-	    /* perimeter / (2.0 * sqrt(M_PI * area)) */
+	    /* perimeter / perimeter of equivalent circle
+	     *   perimeter of equivalent circle: 2.0 * sqrt(M_PI * area) */
 	    Values[i].d1 = Values[i].d2 / (2.0 * sqrt(M_PI * Values[i].d1));
 	    sprintf(buf2, "%s %f where %s = %d", buf1, Values[i].d1, Fi->key,
 		    Values[i].cat);
@@ -127,13 +128,18 @@ int update(struct Map_info *Map)
 
 	case O_FD:
 	    /* 2.0 * log(perimeter) / log(area) 
+	     * this is neither
+	     *   log(perimeter) / log(perimeter of equivalent circle)
+	     *   perimeter of equivalent circle: 2 * sqrt(M_PI * area)
+	     * nor
+	     *   log(area of equivalent circle) / log(area)
+	     *   area of equivalent circle: (perimeter / (2 * sqrt(M_PI))^2
+	     * 
 	     * avoid division by zero: 
-	     * 2.0 * log(1 + perimeter) / log(1 + area)
-	     * more in line with compactness:
-	     * 2.0 * log(perimeter / (2.0 * sqrt(M_PI)) / log(area) */
+	     * 2.0 * log(1 + perimeter) / log(1 + area) */
 	    if (Values[i].d1 == 1) /* log(1) == 0 */
 		Values[i].d1 += 0.000001;
-	    Values[i].d1 = 2.0 * log(Values[i].d2 / (2.0 * sqrt(M_PI))) / log(Values[i].d1);
+	    Values[i].d1 = 2.0 * log(Values[i].d2) / log(Values[i].d1);
 	    sprintf(buf2, "%s %f where %s = %d", buf1, Values[i].d1, Fi->key,
 		    Values[i].cat);
 	    break;
