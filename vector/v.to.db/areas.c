@@ -40,7 +40,7 @@ int read_areas(struct Map_info *Map)
 	    (options.option == O_PERIMETER)) {
 	    perimeter = Vect_get_area_perimeter(Map, area_num);
 	    if (G_projection() != PROJECTION_LL && G_projection() != PROJECTION_XY)
-		    perimeter = perimeter * G_database_units_to_meters_factor();
+		perimeter = perimeter * G_database_units_to_meters_factor();
 	}
 	if (options.option == O_BBOX) {
 	    Vect_get_area_box(Map, area_num, &Bbox);
