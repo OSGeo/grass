@@ -44,12 +44,6 @@ struct rr_state
 /* count.c */
 void get_stats(struct rr_state *);
 
-/* creat_rand.c */
-long make_rand(void);
-void init_rand(void);
-long make_rand(void);
-void init_rand(void);
-
 /* random.c */
 int execute_random(struct rr_state *);
 

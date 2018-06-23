@@ -34,11 +34,12 @@ int main(int argc, char *argv[])
     gcell_count targets;
     gcell_count count;
     struct rr_state myState;
+    long seed_value;
 
     struct GModule *module;
     struct
     {
-	struct Option *input, *cover, *raster, *sites, *npoints;
+	struct Option *input, *cover, *raster, *sites, *npoints, *seed;
     } parm;
     struct
     {
@@ -80,6 +81,12 @@ int main(int argc, char *argv[])
     parm.sites = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.sites->required = NO;
     parm.sites->key = "vector";
+
+    parm.seed = G_define_option();
+    parm.seed->key = "seed";
+    parm.seed->type = TYPE_INTEGER;
+    parm.seed->required = NO;
+    parm.seed->description = _("Seed for rand() function");
 
     flag.zero = G_define_flag();
     flag.zero->key = 'z';
@@ -192,6 +199,16 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("There are no valid locations in the current region"));
 
 	myState.nRand = targets;
+    }
+
+    if (parm.seed->answer) {
+        seed_value = atol(parm.seed->answer);
+        G_srand48(seed_value);
+        G_debug(3, "Read random seed from seed=: %ld", seed_value);
+    }
+    else {
+        seed_value = G_srand48_auto();
+        G_debug(3, "Generated random seed (-s): %ld", seed_value);
     }
 
     execute_random(&myState);
