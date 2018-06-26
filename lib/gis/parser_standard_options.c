@@ -713,7 +713,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->options = G_color_rules_options();
 	Opt->description = _("Name of color table");
-	Opt->descriptions = G_color_rules_descriptions();
+	Opt->descriptions = G_color_rules_description_type();
         Opt->gisprompt = "old,colortable,colortable";
 	break;
         

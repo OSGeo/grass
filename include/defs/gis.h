@@ -178,7 +178,9 @@ void G_clicker(void);
 /* color_rules.c */
 char *G_color_rules_options(void);
 char *G_color_rules_descriptions(void);
+char *G_color_rules_description_type(void);
 void G_list_color_rules(FILE *);
+void G_list_color_rules_description_type(FILE *, char *);
 int G_find_color_rule(const char *);
 
 /* color_str.c */
