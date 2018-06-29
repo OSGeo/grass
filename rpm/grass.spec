@@ -3,7 +3,7 @@
 
 Name:		grass
 Version:	7.4.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
 %if 0%{?rhel}
@@ -84,10 +84,15 @@ BuildRequires:	wxGTK-devel
 BuildRequires:	zlib-devel
 
 Requires:	geos
-Requires:	python2-numpy
 Requires:	proj-epsg
 Requires:	proj-nad
+Requires:	python2-numpy
+%if 0%{?rhel}
+Requires:	wxPython
+%else
 Requires:	python2-wxpython
+%endif
+
 
 %if "%{_lib}" == "lib"
 %global cpuarch 32
@@ -328,6 +333,9 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Sat Jun 23 2018 Markus Neteler <neteler@mundialis.de> - 7.4.1-2
+- fix wxPython package dependency name for CentOS7
+
 * Tue Jun 12 2018 Markus Neteler <neteler@mundialis.de> - 7.4.1-1
 - new upstream version 7.4.1
 - do not fail on EPEL6 with appstream-util
