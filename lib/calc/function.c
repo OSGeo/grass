@@ -11,6 +11,8 @@ func_desc calc_func_descs[] = {
 
     {"neg", c_unop, f_neg},
     {"abs", c_unop, f_abs},
+    {"ceil", c_unop, f_ceil},
+    {"floor", c_unop, f_floor},
 
     {"gt", c_cmpop, f_gt},
     {"ge", c_cmpop, f_ge},

@@ -16,6 +16,8 @@ extern args_t c_binop;
 
 extern func_t f_neg;
 extern func_t f_abs;
+extern func_t f_ceil;
+extern func_t f_floor;
 extern args_t c_unop;
 
 extern func_t f_gt;
