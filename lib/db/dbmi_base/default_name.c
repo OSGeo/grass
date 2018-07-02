@@ -19,9 +19,9 @@
 #include <grass/glocale.h>
 
 /*!
-  \brief Get default driver name
+  \brief Get driver name from current DB connection settings
 
-  \return pointer to default driver name
+  \return pointer to driver name
   \return NULL if not set
 */
 const char *db_get_default_driver_name(void)
@@ -35,9 +35,9 @@ const char *db_get_default_driver_name(void)
 }
 
 /*!
-  \brief Get default database name
+  \brief Get database name from current DB connection settings
 
-  \return pointer to default database name
+  \return pointer to database name
   \return NULL if not set
 */
 const char *db_get_default_database_name(void)
@@ -51,9 +51,9 @@ const char *db_get_default_database_name(void)
 }
 
 /*!
-  \brief Get default schema name
+  \brief Get schema name from current DB connection settings
   
-  \return pointer to default schema name
+  \return pointer to schema name
   \return NULL if not set
 */
 const char *db_get_default_schema_name(void)
@@ -67,9 +67,9 @@ const char *db_get_default_schema_name(void)
 }
 
 /*!
-  \brief Get default group name
+  \brief Get group name from current DB connection settings
   
-  \return pointer to default group name
+  \return pointer to group name
   \return NULL if not set
 */
 const char *db_get_default_group_name(void)
@@ -85,6 +85,9 @@ const char *db_get_default_group_name(void)
 /*!
   \brief Sets up database connection settings using GRASS default from dbmi.h
 
+  This function ignores current DB connection settings and uses GRASS 
+  default settings instead.
+
   \todo DB_OK on success, DB_* error code on fail
 
   \return returns DB_OK 
@@ -97,8 +100,8 @@ int db_set_default_connection(void)
     G_debug(1,
 	    "Creating new default DB params with db_set_default_connection()");
 
-    /* is this really needed ? */
-    db_get_connection(&connection);
+    /* do not use default DB connection settings for the current mapset */
+    G_zero(&connection, sizeof(dbConnection));
 
     if (strcmp(DB_DEFAULT_DRIVER, "dbf") == 0) {
 	/* Set default values and create dbf db dir */
