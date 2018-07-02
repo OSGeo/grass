@@ -29,15 +29,19 @@ int db_set_connection(dbConnection * connection)
 {
     /* TODO: add checks and return DB_* error code if needed */
 
+    G_unsetenv2("DB_DRIVER", G_VAR_MAPSET);
     if (connection->driverName)
 	G_setenv2("DB_DRIVER", connection->driverName, G_VAR_MAPSET);
 
+    G_unsetenv2("DB_DATABASE", G_VAR_MAPSET);
     if (connection->databaseName)
 	G_setenv2("DB_DATABASE", connection->databaseName, G_VAR_MAPSET);
 
+    G_unsetenv2("DB_SCHEMA", G_VAR_MAPSET);
     if (connection->schemaName)
 	G_setenv2("DB_SCHEMA", connection->schemaName, G_VAR_MAPSET);
 
+    G_unsetenv2("DB_GROUP", G_VAR_MAPSET);
     if (connection->group)
 	G_setenv2("DB_GROUP", connection->group, G_VAR_MAPSET);
 
@@ -59,7 +63,7 @@ int db_set_connection(dbConnection * connection)
 }
 
 /*!
-  \brief Get default DB connection settings
+  \brief Get default DB connection settings for the current mapset
   
   \param[out] connection pointer to dbConnection to be modified
 
