@@ -69,17 +69,18 @@ int main(int argc, char *argv[])
     def->description = _("Overwrite current settings if already initialized");
     def->guisection = _("Set");
 
+    /* the default answers below for driver, database, schema, and group
+     * are current settings, not GRASS default settings */
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
-    driver->answer = (char *) db_get_default_driver_name();
+    driver->answer = "sqlite";
     driver->guisection = _("Set");
 
     database = G_define_standard_option(G_OPT_DB_DATABASE);
-    database->answer = (char *) db_get_default_database_name();
+    database->answer = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db";
     database->guisection = _("Set");
 
     schema = G_define_standard_option(G_OPT_DB_SCHEMA);
-    schema->answer = (char *) db_get_default_schema_name();
     schema->guisection = _("Set");
 
     group = G_define_option();
@@ -87,7 +88,6 @@ int main(int argc, char *argv[])
     group->type = TYPE_STRING;
     group->required = NO;
     group->multiple = NO;
-    group->answer = (char*) db_get_default_group_name();
     group->description = _("Default group of database users to which "
 			   "select privilege is granted");
     group->guisection = _("Set");
@@ -179,7 +179,6 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-
     if (def->answer) {
 	db_set_default_connection();
 	db_get_connection(&conn);
@@ -191,8 +190,8 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
     
-    /* set connection */
-    db_get_connection(&conn);	/* read current */
+    /* do not read current, set new connection from options */
+    G_zero(&conn, sizeof(dbConnection));
 
     if (driver->answer)
 	conn.driverName = driver->answer;
@@ -207,7 +206,12 @@ int main(int argc, char *argv[])
 	conn.group = group->answer;
 
     db_set_connection(&conn);
+    /* check */
+    if (db_get_connection(&conn) != DB_OK) {
+	G_fatal_error(_("Unable to set default database connection"));
 
+	exit(EXIT_FAILURE);
+    }
 
     exit(EXIT_SUCCESS);
 }
