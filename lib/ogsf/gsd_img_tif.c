@@ -59,7 +59,10 @@ int GS_write_tif(const char *name)
     unsigned char *buf, *tmpptr;
     unsigned char *pixbuf;
 
-    gsd_getimage(&pixbuf, &xsize, &ysize);
+    if (0 == gsd_getimage(&pixbuf, &xsize, &ysize)) {
+	G_warning(_("Unable to get image of current GL screen"));
+	return (1);
+    }
 
     out = TIFFOpen(name, "w");
     if (out == NULL) {

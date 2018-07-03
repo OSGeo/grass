@@ -947,6 +947,9 @@ int gsd_getViewport(GLint tmp[4], GLint num[2])
 
    \param pixbuf data buffer
    \param xsize,ysize picture dimension
+
+   \return 0 on failure
+   \return 1 on success
  */
 int gsd_writeView(unsigned char **pixbuf, unsigned int xsize,
 		  unsigned int ysize)
