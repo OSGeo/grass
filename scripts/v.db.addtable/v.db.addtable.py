@@ -136,6 +136,14 @@ def main():
         except CalledModuleError:
             grass.fatal(_("Unable to create table <%s>") % table)
 
+        if driver != "dbf":
+            sql = "CREATE UNIQUE INDEX IF NOT EXISTS %s_%s ON %s (%s)" % (table, key, table, key)
+            try:
+		grass.run_command('db.execute',
+				  database=database, driver=driver, sql=sql)
+	    except:
+		grass.warning(_("Unable to create index on table <%s>") % table)
+
     # connect the map to the DB:
     if schema:
         table = '{schema}.{table}'.format(schema=schema, table=table)
