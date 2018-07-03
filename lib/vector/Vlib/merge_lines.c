@@ -237,8 +237,18 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
 	/* nlines = Vect_get_num_lines(Map); */
     }
 
-    G_verbose_message(_("%d boundaries merged"), merged);
-    G_verbose_message(_("%d new boundaries"), newl);
+    if (type == GV_LINE) {
+	G_verbose_message(_("%d lines merged"), merged);
+	G_verbose_message(_("%d new lines"), newl);
+    }
+    else if (type == GV_BOUNDARY) {
+	G_verbose_message(_("%d boundaries merged"), merged);
+	G_verbose_message(_("%d new boundaries"), newl);
+    }
+    else {
+	G_verbose_message(_("%d lines and boundaries merged"), merged);
+	G_verbose_message(_("%d new lines and boundaries"), newl);
+    }
 
     if (new_lines)
 	*new_lines = newl;
