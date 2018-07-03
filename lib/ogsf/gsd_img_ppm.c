@@ -46,7 +46,10 @@ int GS_write_ppm(const char *name)
     FILE *fp;
     unsigned char *pixbuf;
 
-    gsd_getimage(&pixbuf, &xsize, &ysize);
+    if (0 == gsd_getimage(&pixbuf, &xsize, &ysize)) {
+	G_warning(_("Unable to get image of current GL screen"));
+	return (1);
+    }
 
     if (NULL == (fp = fopen(name, "w"))) {
 	G_warning(_("Unable to open file <%s> for writing"), name);
@@ -89,7 +92,10 @@ int GS_write_zoom(const char *name, unsigned int xsize, unsigned int ysize)
     FILE *fp;
     unsigned char *pixbuf;
 
-    gsd_writeView(&pixbuf, xsize, ysize);
+    if (0 == gsd_writeView(&pixbuf, xsize, ysize)) {
+	G_warning(_("Unable to write view"));
+	return (1);
+    }
 
     if (NULL == (fp = fopen(name, "w"))) {
 	G_warning(_("Unable to open file <%s> for writing"), name);
