@@ -69,15 +69,25 @@ int main(int argc, char *argv[])
     def->description = _("Overwrite current settings if already initialized");
     def->guisection = _("Set");
 
-    /* the default answers below for driver, database, schema, and group
-     * are current settings, not GRASS default settings */
+    /* the default answers below are GRASS default settings,
+     * not current settings */
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
-    driver->answer = "sqlite";
+    if (strcmp(DB_DEFAULT_DRIVER, "sqlite") == 0) {
+	driver->answer = "sqlite";
+    }
+    else {
+	driver->answer = "dbf";
+    }
     driver->guisection = _("Set");
 
     database = G_define_standard_option(G_OPT_DB_DATABASE);
-    database->answer = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db";
+    if (strcmp(DB_DEFAULT_DRIVER, "sqlite") == 0) {
+	database->answer = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db";
+    }
+    else {
+	database->answer = "$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/";
+    }
     database->guisection = _("Set");
 
     schema = G_define_standard_option(G_OPT_DB_SCHEMA);
