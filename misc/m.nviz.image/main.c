@@ -236,7 +236,9 @@ int main(int argc, char *argv[])
     if (strcmp(params->format->answer, "tif") == 0)
 	ret = write_img(output_name, FORMAT_TIF);
 
-    if (!ret)
+    if (ret == 1)
+	G_fatal_error(_("Failed to write image"));
+    else if (ret == 2)
 	G_fatal_error(_("Unsupported output format"));
 
     G_done_msg(_("File <%s> created."), output_name);
