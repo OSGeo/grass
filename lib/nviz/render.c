@@ -113,7 +113,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
         return -1;
     }
         
-    rwin->contextId = glXCreateContext(rwin->displayId, v, NULL, GL_FALSE);
+    rwin->contextId = glXCreateContext(rwin->displayId, v, NULL, GL_TRUE);
 
     if (!rwin->contextId) {
 	G_warning(_("Unable to create rendering context"));
