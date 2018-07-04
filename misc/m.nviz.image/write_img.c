@@ -23,19 +23,20 @@
 
    \param name filename
 
-   \return 1 on success
-   \return 0 on failure (unsupported format)
+   \return 0 on success
+   \return 1 on failure (failed to write image)
+   \return 2 on failure (unsupported format)
  */
 int write_img(const char *name, int format)
 {
     if (format == FORMAT_PPM)
-	GS_write_ppm(name);
+	return !GS_write_ppm(name);
 #ifdef HAVE_TIFFIO_H
     else if (format == FORMAT_TIF)
-	GS_write_tif(name);
+	return !GS_write_tif(name);
 #endif
     else
-	return 0;
+	return 2;
 
-    return 1;
+    return 0;
 }
