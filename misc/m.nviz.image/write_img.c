@@ -30,10 +30,10 @@
 int write_img(const char *name, int format)
 {
     if (format == FORMAT_PPM)
-	return !GS_write_ppm(name);
+	return GS_write_ppm(name);
 #ifdef HAVE_TIFFIO_H
     else if (format == FORMAT_TIF)
-	return !GS_write_tif(name);
+	return GS_write_tif(name);
 #endif
     else
 	return 2;
