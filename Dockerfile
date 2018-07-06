@@ -1,7 +1,8 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
-MAINTAINER Vaclav Petras <wenzeslaus@gmail.com>
-
+LABEL authors="Vaclav Petras,Markus Neteler"
+LABEL maintainer="wenzeslaus@gmail.com,neteler@osgeo.org"
+ 
 # system environment
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -14,6 +15,7 @@ RUN apt-get update \
         autoconf2.13 \
         autotools-dev \
         bison \
+        build-essential \
         flex \
         g++ \
         gettext \
@@ -25,27 +27,39 @@ RUN apt-get update \
         libgdal-dev \
         libgeos-dev \
         libglu1-mesa-dev \
+        libgsl0-dev \
         libjpeg-dev \
         liblapack-dev \
         liblas-c-dev \
         libncurses5-dev \
         libnetcdf-dev \
+        libopenjp2-7 \
+        libopenjp2-7-dev \
         libpng-dev \
         libpq-dev \
         libproj-dev \
         libreadline-dev \
         libsqlite3-dev \
+        libspatialite \
+        libspatialite-dev \
         libtiff-dev \
         libxmu-dev \
+        libzstd0 \
+        libzstd-dev \
+        gdal-bin \
+        libfftw3-bin \
         make \
         ncurses \
         netcdf-bin \
         proj-bin \
+        proj-data \
         python \
         python-dev \
         python-numpy \
         python-pil \
         python-ply \
+        sqlite3 \
+        subversion \
         unixodbc-dev \
         zlib1g-dev \
     && apt-get autoremove \
@@ -62,19 +76,19 @@ WORKDIR /code/grass
 
 # install GRASS GIS
 RUN ./configure \
-    --enable-largefile=yes \
-    --with-nls \
+    --enable-largefile \
     --with-cxx \
+    --with-nls \
     --with-readline \
     --with-bzlib \
-    --with-pthread \
+    --with-zstd \
+    --with-cairo \
+    --with-liblas --with-liblas-config=/usr/bin/liblas-config \
+    --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
     --with-proj-share=/usr/share/proj \
     --with-geos=/usr/bin/geos-config \
-    --with-cairo \
     --with-opengl-libs=/usr/include/GL \
-    --with-freetype=yes --with-freetype-includes="/usr/include/freetype2/" \
-    --with-sqlite=yes \
-    --with-liblas=yes --with-liblas-config=/usr/bin/liblas-config \
+    --with-sqlite \
     && make -j2 && make install && ldconfig
 
 # enable simple grass command regardless of version number
