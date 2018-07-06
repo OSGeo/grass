@@ -11,7 +11,7 @@ ENV DATA_DIR /data
 
 # GRASS GIS compile dependencies
 RUN apt-get update \
-    && apt-get install -y --install-recommends \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
         autoconf2.13 \
         autotools-dev \
         bison \
