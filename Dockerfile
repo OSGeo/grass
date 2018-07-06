@@ -91,6 +91,10 @@ RUN ./configure \
 # enable simple grass command regardless of version number
 RUN ln -s /usr/local/bin/grass* /usr/local/bin/grass
 
+# Reduce the image size
+RUN apt-get autoremove -y
+RUN apt-get clean -y
+
 # Fix permissions
 RUN chmod -R a+rwx $DATA_DIR
 
@@ -100,6 +104,9 @@ RUN useradd -m -U grass
 # declare volume late so permissions apply
 VOLUME $DATA_DIR
 WORKDIR $DATA_DIR
+
+# Reduce the image size further
+RUN rm -rf /code/grass
 
 # switch the user
 USER grass
