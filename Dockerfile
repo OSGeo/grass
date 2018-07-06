@@ -42,7 +42,6 @@ RUN apt-get update \
         libsqlite3-dev \
         libtiff-dev \
         libxmu-dev \
-        libzstd \
         libzstd-dev \
         gdal-bin \
         libfftw3-bin \
