@@ -40,11 +40,9 @@ RUN apt-get update \
         libproj-dev \
         libreadline-dev \
         libsqlite3-dev \
-        libspatialite \
-        libspatialite-dev \
         libtiff-dev \
         libxmu-dev \
-        libzstd0 \
+        libzstd \
         libzstd-dev \
         gdal-bin \
         libfftw3-bin \
