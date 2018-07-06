@@ -38,6 +38,7 @@ RUN apt-get update \
         libtiff-dev \
         libxmu-dev \
         make \
+        ncurses \
         netcdf-bin \
         proj-bin \
         python \
