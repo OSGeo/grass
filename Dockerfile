@@ -49,7 +49,7 @@ RUN apt-get update \
         gdal-bin \
         libfftw3-bin \
         make \
-        ncurses \
+        ncurses-bin \
         netcdf-bin \
         proj-bin \
         proj-data \
