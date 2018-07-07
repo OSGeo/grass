@@ -157,16 +157,16 @@ g.region raster=roads
 r.patch input=roads,water,forest output=result
 </pre></div>
 
-<h3>Example using Bash syntax</h3>
+<h3>Map mosaic example using Bash syntax</h3>
 
 Create a list of maps matching a pattern, extend the region to include them
 all, and patch them together to create a mosaic. Overlapping maps will be 
 used in the order listed.
 
 <div class="code"><pre>
-MAPS=`g.list type=raster sep=, pat="map_*"`
-g.region raster=$MAPS
-r.patch in=$MAPS out=mosaic
+MAPS=`g.list type=raster separator=comma pat="map_*"`
+g.region raster=$MAPS -p
+r.patch input=$MAPS output=maps_mosaic
 </pre></div>
 
 
