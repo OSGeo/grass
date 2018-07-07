@@ -2,6 +2,8 @@
 #define __LOCAL_PROTO_H__
 
 #include <gdal.h>
+#include <math.h>
+/* is it safe to #include <float.h> ? */
 
 /* range limits */
 /*
@@ -36,8 +38,9 @@
 #define TYPE_FLOAT32_MIN	(-MAXFLOAT)
 #define TYPE_FLOAT32_MAX	MAXFLOAT
 #else
-#define TYPE_FLOAT32_MIN	-3.4E38f
-#define TYPE_FLOAT32_MAX	3.4E38f
+/* formula from float.h */
+#define TYPE_FLOAT32_MIN	(float)(-((1 + (1 - pow(2, -23))) * pow(2, 127)))
+#define TYPE_FLOAT32_MAX	(float)((1 + (1 - pow(2, -23))) * pow(2, 127))
 #endif
 
 #ifdef DBL_MAX
@@ -47,8 +50,9 @@
 #define TYPE_FLOAT64_MIN	(-MAXDOUBLE)
 #define TYPE_FLOAT64_MAX	MAXDOUBLE
 #else
-#define TYPE_FLOAT64_MIN	-1.79E308
-#define TYPE_FLOAT64_MAX	1.79E308
+/* formula from float.h */
+#define TYPE_FLOAT64_MIN	(-((1 + (1 - pow(2, -52))) * pow(2, 1023)))
+#define TYPE_FLOAT64_MAX	((1 + (1 - pow(2, -52))) * pow(2, 1023))
 #endif
 
 #define GRASS_MAX_COLORS TYPE_UINT16_MAX    /* ok? */
