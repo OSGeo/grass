@@ -775,7 +775,7 @@ int range_check(double min, double max, GDALDataType datatype)
 	if ((!CPLIsInf(max) && max < TYPE_FLOAT32_MIN) ||
 	    (!CPLIsInf(min) && min > TYPE_FLOAT32_MAX)) {
 	    G_warning(_("Selected GDAL datatype does not cover data range."));
-	    G_warning(_("GDAL datatype: %s, range: %g - %g"),
+	    G_warning(_("GDAL datatype: %s, range: %.7g - %.7g"),
 		      GDALGetDataTypeName(datatype), TYPE_FLOAT32_MIN,
 		      TYPE_FLOAT32_MAX);
 	    G_warning(_("Range to be exported: %g - %g"), min, max);
