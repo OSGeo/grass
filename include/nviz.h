@@ -136,6 +136,7 @@ struct render_window
     HGLRC contextId;		/* rendering context */
     HBITMAP bitmapId;
 #endif
+    int width, height;
 };
 
 #include <grass/defs/nviz.h>
