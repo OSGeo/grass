@@ -52,6 +52,9 @@ void Nviz_init_render_window(struct render_window *rwin)
     rwin->contextId = NULL;
     rwin->bitmapId = NULL;
 #endif
+
+    rwin->width = 0;
+    rwin->height = 0;
 }
 
 /*!
@@ -174,6 +177,10 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     rwin->contextId = wglCreateContext(rwin->displayId);
     /* TODO */
 #endif
+
+    rwin->width = width;
+    rwin->height = height;
+
     return 0;
 }
 
@@ -210,6 +217,8 @@ int Nviz_make_current_render_window(const struct render_window *rwin)
 
     wglMakeCurrent(rwin->displayId, rwin->contextId);
 #endif
+
+    GS_set_viewport(0, rwin->width, 0, rwin->height);
 
     return 1;
 }
