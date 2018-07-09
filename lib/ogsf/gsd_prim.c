@@ -910,6 +910,9 @@ int gsd_getimage(unsigned char **pixbuf, unsigned int *xsize,
     *xsize = r - l + 1;
     *ysize = t - b + 1;
 
+    if (!*xsize || !*ysize)
+	return (0);
+
     *pixbuf = (unsigned char *)G_malloc((*xsize) * (*ysize) * 4);	/* G_fatal_error */
 
     if (!*pixbuf)
