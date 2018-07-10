@@ -218,7 +218,7 @@ int Nviz_make_current_render_window(const struct render_window *rwin)
     wglMakeCurrent(rwin->displayId, rwin->contextId);
 #endif
 
-    GS_set_viewport(0, rwin->width, 0, rwin->height);
+    glViewport(0, 0, rwin->width, rwin->height);
 
     return 1;
 }
