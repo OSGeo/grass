@@ -441,7 +441,7 @@ int gsd_getshademodel(void)
  */
 void gsd_bothbuffers(void)
 {
-    /* OGLXXX frontbuffer: other possibilities include GL_FRONT_AND_BACK */
+    /* OGLXXX bothbuffer: other possibilities include GL_FRONT, GL_BACK */
     glDrawBuffer(GL_FRONT_AND_BACK);
 
     return;
@@ -471,6 +471,7 @@ void gsd_backbuffer(void)
 {
     /* OGLXXX backbuffer: other possibilities include GL_FRONT_AND_BACK */
     glDrawBuffer(GL_BACK);
+
     return;
 }
 
@@ -479,9 +480,8 @@ void gsd_backbuffer(void)
  */
 void gsd_swapbuffers(void)
 {
-    /* OGLXXX swapbuffers: 
-       glXSwapBuffers(*display, window);
-       replace display and window */
+    /* OGLXXX swapbuffers: copy the back buffer to the front;
+     * the back buffer becomes undefined afterward */
 #if defined(OPENGL_X11)
     glXSwapBuffers(glXGetCurrentDisplay(), glXGetCurrentDrawable());
 #elif defined(OPENGL_AQUA)
