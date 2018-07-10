@@ -21,12 +21,18 @@
 
 #include <grass/config.h>
 
-#if defined(OPENGL_X11) || defined(OPENGL_WINDOWS)
+#if defined(OPENGL_X11)
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <GL/glx.h>
 #elif defined(OPENGL_AQUA)
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
+#include <AGL/agl.h>
+#elif defined(OPENGL_WINDOWS)
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <wingdi.h>
 #endif
 
 #include <grass/gis.h>
@@ -476,8 +482,13 @@ void gsd_swapbuffers(void)
     /* OGLXXX swapbuffers: 
        glXSwapBuffers(*display, window);
        replace display and window */
-
-    Swap_func();
+#if defined(OPENGL_X11)
+    glXSwapBuffers(glXGetCurrentDisplay(), glXGetCurrentDrawable());
+#elif defined(OPENGL_AQUA)
+    aglSwapBuffers(aglGetCurrentContext());
+#elif defined(OPENGL_WINDOWS)
+    SwapBuffers(wglGetCurrentDC());
+#endif
 
     return;
 }

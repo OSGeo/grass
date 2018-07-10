@@ -100,7 +100,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
 #if defined(OPENGL_X11)
     int attributeList[] = { GLX_RGBA, GLX_RED_SIZE, 1,
 	GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE, 1,
-	GLX_DEPTH_SIZE, 1, None
+	GLX_DEPTH_SIZE, 1, GLX_DOUBLEBUFFER, None
     };
     XVisualInfo *v;
 
@@ -135,7 +135,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
 #elif defined(OPENGL_AQUA)
     int attributeList[] = { AGL_RGBA, AGL_RED_SIZE, 1,
 	AGL_GREEN_SIZE, 1, AGL_BLUE_SIZE, 1,
-	AGL_DEPTH_SIZE, 1, AGL_NONE
+	AGL_DEPTH_SIZE, 1, AGL_DOUBLEBUFFER, AGL_NONE
     };
     /* TODO: open mac display */
 

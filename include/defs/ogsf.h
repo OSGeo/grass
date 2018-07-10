@@ -185,7 +185,6 @@ void GS_getlight_ambient(int, float *, float *, float *);
 int GS_check_cancel(void);
 void GS_set_cancel(int);
 void GS_set_cxl_func(void (*)(void));
-void GS_set_swap_func(void (*)(void));
 
 /* GS_util.c */
 double GS_geodistance(double *, double *, const char *);
