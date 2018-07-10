@@ -2623,9 +2623,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             cmd += subcmd
 
         # output
+        width, height = self.GetClientSize()
         subcmd = 'output=nviz_output '
         subcmd += 'format=ppm '
-        subcmd += 'size=%d,%d ' % self.GetClientSize()
+        subcmd += 'size=%d,%d ' % (width, height)
         cmd += subcmd
 
         return cmd
