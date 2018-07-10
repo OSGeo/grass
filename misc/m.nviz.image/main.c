@@ -26,8 +26,6 @@
 
 #include "local_proto.h"
 
-static void swap_gl();
-
 int main(int argc, char *argv[])
 {
     struct GModule *module;
@@ -73,8 +71,6 @@ int main(int argc, char *argv[])
 
     GS_libinit();
     GVL_libinit();
-
-    GS_set_swap_func(swap_gl);
 
     /* define render window */
     offscreen = Nviz_new_render_window();
@@ -250,9 +246,4 @@ int main(int argc, char *argv[])
     G_free((void *)params);
 
     exit(EXIT_SUCCESS);
-}
-
-void swap_gl()
-{
-    return;
 }

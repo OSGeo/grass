@@ -119,7 +119,6 @@ void GS_libinit(void)
 	    Region[0], Region[1], Region[2], Region[3], Gv.scale, first);
     
     Cxl_func = void_func;
-    Swap_func = void_func;
 
     
     if (first) {
