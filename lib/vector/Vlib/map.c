@@ -77,7 +77,7 @@ void Vect_destroy_map_struct(struct Map_info *p)
  */
 static int copy_file(const char *src, const char *dst)
 {
-    char buf[1024];
+    char buf[4096];
     int fd, fd2;
     FILE *f2;
     int len, len2;
@@ -93,7 +93,8 @@ static int copy_file(const char *src, const char *dst)
 
     fd2 = fileno(f2);
 
-    while ((len = read(fd, buf, 1024)) > 0) {
+    len2 = 0;
+    while ((len = read(fd, buf, 4096)) > 0) {
         while (len && (len2 = write(fd2, buf, len)) >= 0)
             len -= len2;
     }
