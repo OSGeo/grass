@@ -410,13 +410,13 @@ void gsd_endline(void)
 /*!
    \brief Set shaded model
 
-   \param bool type non-zero for GL_SMOOTH otherwise GL_FLAT
+   \param shade non-zero for GL_SMOOTH otherwise GL_FLAT
  */
-void gsd_shademodel(int bool)
+void gsd_shademodel(int shade)
 {
-    Shade = bool;
+    Shade = shade;
 
-    if (bool) {
+    if (shade) {
 	glShadeModel(GL_SMOOTH);
     }
     else {
@@ -437,7 +437,7 @@ int gsd_getshademodel(void)
 }
 
 /*!
-   \brief ADD
+   \brief Draw to the front and back buffers
  */
 void gsd_bothbuffers(void)
 {
@@ -448,10 +448,7 @@ void gsd_bothbuffers(void)
 }
 
 /*!
-   \brief Specify which color buffers are to be drawn
-   into
-
-   \param bool non-zero for enable otherwise disable front buffer
+   \brief Draw to the front buffer
  */
 void gsd_frontbuffer(void)
 {
@@ -462,10 +459,7 @@ void gsd_frontbuffer(void)
 }
 
 /*!
-   \brief Specify which color buffers are to be drawn
-   into
-
-   \param bool non-zero for enable otherwise disable back buffer
+   \brief Draw to the back buffer
  */
 void gsd_backbuffer(void)
 {
