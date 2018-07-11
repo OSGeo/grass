@@ -278,7 +278,7 @@ int main(int argc, char *argv[])
 
     dsn = NULL;
     if (options.dsn->answer)
-        dsn = get_datasource_name(options.dsn->answer, TRUE);
+        dsn = G_store(options.dsn->answer);
 
     /* create new OGR layer in datasource */
     if (flags.new->answer) {
