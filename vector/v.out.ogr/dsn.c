@@ -7,7 +7,13 @@
 char *get_datasource_name(const char *opt_dsn, int use_ogr)
 {
     char *dsn;
+
+    dsn = G_store(opt_dsn);
     
+    return dsn;
+
+    /* input OGR dsn and GRASS db connections are independent of each other */
+    /* TODO: remove below code */
     if (G_strncasecmp(opt_dsn, "PG:", 3) == 0) {
         /* PostgreSQL/PostGIS */
         size_t i;
