@@ -32,7 +32,9 @@
 #elif defined(OPENGL_WINDOWS)
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <wingdi.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#undef WIN32_LEAN_AND_MEAN
 #endif
 
 #include <grass/gis.h>
@@ -460,6 +462,7 @@ void gsd_frontbuffer(void)
 
 /*!
    \brief Draw to the back buffer
+   \param bool non-zero for enable otherwise disable back buffer
  */
 void gsd_backbuffer(void)
 {
