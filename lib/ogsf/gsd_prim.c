@@ -462,7 +462,6 @@ void gsd_frontbuffer(void)
 
 /*!
    \brief Draw to the back buffer
-   \param bool non-zero for enable otherwise disable back buffer
  */
 void gsd_backbuffer(void)
 {
