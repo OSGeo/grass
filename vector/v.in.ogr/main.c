@@ -456,7 +456,7 @@ int main(int argc, char *argv[])
 
     dsn = NULL;
     if (param.dsn->answer)
-        dsn = get_datasource_name(param.dsn->answer, TRUE);
+        dsn = G_store(param.dsn->answer);
     
     min_area = atof(param.min_area->answer);
     snap = atof(param.snap->answer);
