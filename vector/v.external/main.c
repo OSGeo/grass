@@ -101,6 +101,10 @@ int main(int argc, char *argv[])
     }
 
     dsn = NULL;
+    /* disabling GRASS-PostGIS driver:
+     *  TODO: a new fn that converts OGR dsn to PQ connection info,
+     *   ignoring current GRASS db connection */
+    use_ogr = TRUE;
     if (options.dsn->answer)
         dsn = G_store(options.dsn->answer);
     
