@@ -422,13 +422,12 @@ int main(int argc, char *argv[])
     n_max_steps = 1;
     max_map = max;
     if (max != 0) {
-	struct bound_box fbox, tbox;
 	double dx, dy, dz;
 
 	Vect_get_map_box(&From, &fbox);
-	Vect_get_map_box(&To, &tbox);
+	Vect_get_map_box(&To, &box);
 
-	Vect_box_extend(&fbox, &tbox);
+	Vect_box_extend(&fbox, &box);
 
 	dx = fbox.E - fbox.W;
 	dy = fbox.N - fbox.S;
@@ -1138,7 +1137,7 @@ int main(int argc, char *argv[])
 
 		/* For each area in box check the distance */
 		for (i = 0; i < aList->n_values; i++) {
-		    int tmp_tcat, poly;
+		    int poly;
 
 		    tarea = aList->id[i];
 		    G_debug(4, "%d: 'to' area id %d", i, tarea);
@@ -1597,6 +1596,8 @@ int main(int argc, char *argv[])
 	    }
 	}
 	else if (update_table) {	/* update table */
+	    int do_update = 0;
+
 	    /* check if exists in table */
 	    cex =
 		(int *)bsearch((void *)&(Near[i].from_cat), catexist,
@@ -1619,9 +1620,11 @@ int main(int argc, char *argv[])
 		db_append_string(&stmt, buf2);
 
 		if (Near[i].count == 0) {	/* no nearest found */
+		    /* really clear existing records if no nearest found ? */
 		    db_append_string(&stmt, " null");
 		}
 		else {
+		    do_update = 1;
 		    switch (Upload[j].upload) {
 		    case CAT:
 			if (Near[i].to_cat > 0)
@@ -1686,14 +1689,16 @@ int main(int argc, char *argv[])
 		}
 		j++;
 	    }
-	    sprintf(buf2, " where %s = %d", Fi->key, Near[i].from_cat);
-	    db_append_string(&stmt, buf2);
-	    G_debug(2, "SQL: %s", db_get_string(&stmt));
-	    if (db_execute_immediate(driver, &stmt) == DB_OK) {
-		update_ok++;
-	    }
-	    else {
-		update_err++;
+	    if (do_update) {
+		sprintf(buf2, " where %s = %d", Fi->key, Near[i].from_cat);
+		db_append_string(&stmt, buf2);
+		G_debug(2, "SQL: %s", db_get_string(&stmt));
+		if (db_execute_immediate(driver, &stmt) == DB_OK) {
+		    update_ok++;
+		}
+		else {
+		    update_err++;
+		}
 	    }
 	}
     }
