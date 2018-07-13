@@ -1748,7 +1748,6 @@ int main(int argc, char *argv[])
 	if (create_table) {
 	    dbConnection connection;
 
-	    db_set_default_connection();
 	    db_get_connection(&connection);
 	    Vect_map_add_dblink(Outp, 1, NULL, opt.table->answer, "cat",
 				connection.databaseName,
