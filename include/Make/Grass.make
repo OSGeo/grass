@@ -249,6 +249,7 @@ endif
 
 ifeq ($(OPENGL_WINDOWS),1)
 NVIZDEPS += -lgdi32
+OGSFDEPS += -lgdi32
 endif
 ifneq ($(OPENGL_X11),)
 NVIZDEPS += $(XLIBPATH) $(XLIB) $(XEXTRALIBS)
