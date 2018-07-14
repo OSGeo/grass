@@ -481,9 +481,7 @@ void gsd_swapbuffers(void)
 #elif defined(OPENGL_AQUA)
     aglSwapBuffers(aglGetCurrentContext());
 #elif defined(OPENGL_WINDOWS)
-    /* TODO: Doesn't compile? Undefined reference to __imp_SwapBuffers
     SwapBuffers(wglGetCurrentDC());
-    */
 #endif
 
     return;
