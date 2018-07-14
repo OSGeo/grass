@@ -32,9 +32,7 @@
 #elif defined(OPENGL_WINDOWS)
 #include <GL/gl.h>
 #include <GL/glu.h>
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#undef WIN32_LEAN_AND_MEAN
+#include <wingdi.h>
 #endif
 
 #include <grass/gis.h>
