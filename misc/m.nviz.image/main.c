@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
     double vp_height, z_exag;	/* calculated viewpoint height, z-exag */
     int width, height;		/* output image size */
     char *output_name;
-    int overwrite;
 
     nv_data data;
     struct render_window *offscreen;
@@ -62,7 +61,6 @@ int main(int argc, char *argv[])
 
     /* define options, call G_parser() */
     parse_command(argc, argv, params);
-    overwrite = G_check_overwrite(argc, argv);
 
     /* check parameters consistency */
     check_parameters(params);
@@ -73,7 +71,7 @@ int main(int argc, char *argv[])
 	       params->format->answer);
 
     if (access(output_name, F_OK) == 0) {
-	if (overwrite)
+	if (G_check_overwrite(argc, argv))
 	    G_warning(_("File <%s> already exists and will be overwritten"), output_name);
 	else
 	    G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"), params->output->key, output_name);
