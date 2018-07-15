@@ -19,6 +19,23 @@ db.connect -p
 db.tables -p
 </pre></div>
 
+<h3>Username and password</h3>
+
+From the <a href="https://www.postgresql.org/docs/10/static/libpq-pgpass.html">PostgresQL manual</a>:
+<p>
+The file <em>.pgpass</em> in a user's home directory can contain 
+passwords to be used if the connection requires a password (and no 
+password has been specified otherwise). On Microsoft Windows the file 
+is named <em>%APPDATA%\postgresql\pgpass.conf</em> (where 
+<em>%APPDATA%</em> refers to the Application Data subdirectory in the 
+user's profile). Alternatively, a password file can be specified using 
+the connection parameter passfile or the environment variable 
+PGPASSFILE.
+
+This file should contain lines of the following format:
+<div class="code"><pre>
+hostname:port:database:username:password
+</pre></div>
 
 <h2>Supported SQL commands</h2>
 
