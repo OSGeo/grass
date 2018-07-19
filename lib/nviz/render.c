@@ -50,7 +50,6 @@ void Nviz_init_render_window(struct render_window *rwin)
 #elif defined(OPENGL_WINDOWS)
     rwin->displayId = NULL;
     rwin->contextId = NULL;
-    rwin->bitmapId = NULL;
 #endif
 
     rwin->width = 0;
@@ -77,7 +76,6 @@ void Nviz_destroy_render_window(struct render_window *rwin)
 #elif defined(OPENGL_WINDOWS)
     wglDeleteContext(rwin->contextId);
     DeleteDC(rwin->displayId);
-    DeleteObject(rwin->bitmapId);
 #endif
 
     G_free((void *)rwin);
@@ -147,12 +145,14 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     /* create an off-screen AGL rendering area */
     aglCreatePBuffer(width, height, GL_TEXTURE_2D, GL_RGBA, 0, &(rwin->windowId));
 #elif defined(OPENGL_WINDOWS)
+    WNDCLASS wc = {0};
+    HWND hWnd;
     PIXELFORMATDESCRIPTOR pfd = {
 	sizeof(PIXELFORMATDESCRIPTOR),	//  size of this pfd 
 	1,			/* version number           */
 	PFD_DRAW_TO_WINDOW |	/* support window           */
-	    PFD_SUPPORT_OPENGL |	/* support OpenGL           */
-	    PFD_DOUBLEBUFFER,	/* double buffered          */
+	PFD_SUPPORT_OPENGL |	/* support OpenGL           */
+	PFD_DOUBLEBUFFER,	/* double buffered          */
 	PFD_TYPE_RGBA,		/* RGBA type                */
 	24,			/* 24-bit color depth       */
 	0, 0, 0, 0, 0, 0,	/* color bits ignored       */
@@ -169,13 +169,27 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     };
     int iPixelFormat;
 
-    rwin->displayId = CreateCompatibleDC(NULL);
+    wc.lpfnWndProc = DefWindowProc;
+    wc.lpszClassName = "nviz";
+
+    if (!RegisterClass(&wc)) {
+	G_warning(_("Unable to register window class"));
+	return -1;
+    }
+
+    hWnd = CreateWindow(wc.lpszClassName, wc.lpszClassName, WS_POPUP,
+	    CW_USEDEFAULT, CW_USEDEFAULT, width, height,
+	    NULL, NULL, wc.hInstance, NULL);
+
+    if (!hWnd) {
+	G_warning(_("Unable to create window"));
+	return -1;
+    }
+
+    rwin->displayId = GetDC(hWnd);
     iPixelFormat = ChoosePixelFormat(rwin->displayId, &pfd);
     SetPixelFormat(rwin->displayId, iPixelFormat, &pfd);
-    rwin->bitmapId = CreateCompatibleBitmap(rwin->displayId, width, height);
-    SelectObject(rwin->displayId, rwin->bitmapId);
     rwin->contextId = wglCreateContext(rwin->displayId);
-    /* TODO */
 #endif
 
     rwin->width = width;

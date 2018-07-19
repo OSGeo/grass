@@ -134,7 +134,6 @@ struct render_window
 #elif defined(OPENGL_WINDOWS)
     HDC displayId;		/* display context */
     HGLRC contextId;		/* rendering context */
-    HBITMAP bitmapId;
 #endif
     int width, height;
 };
