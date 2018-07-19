@@ -4,7 +4,7 @@
 current region using the selected random number generator.
 
 <p><em>v.random</em> can generate also 3D vector points or write
-random value to attribute table. Point height range or attribute value
+random value to the attribute table. Point height range or attribute value
 range is controlled by specifying <b>zmin</b> and <b>zmax</b> options.
 Both z values are included in range (<em>zmin &lt;= z &lt;=
 zmax</em>). Generated random attribute value type can be controlled
@@ -29,9 +29,14 @@ be generated in total.
 
 <p>
 Attributes attached to <b>restrict</b> vector map are also transfered
-if <b>layer</b> is specified,
+if the <b>layer</b> parameter is defined > 0,
 see <em><a href="#stratified-random-sampling:-random-sampling-from-vector-map-by-attribute">example</a></em>
 below.
+
+<h2>NOTES</h2>
+
+Importantly, attributes will only be transferred if <b>layer</b> > 0
+(e.g., <tt>layer=1</tt>).
   
 <h2>EXAMPLES</h2>
 All examples are based on the North Carolina sample dataset.
