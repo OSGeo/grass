@@ -236,7 +236,8 @@ if [ -n "$PACKAGE_PATCH" ]; then
     cd $OSGEO4W_ROOT_MSYS 
 
     # update startup script
-    sed -e "s#@VERSION@#$VERSION#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
+    sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT@#$OSGEO4W_ROOT#g" \
+	-e "s#@POSTFIX@#$MAJOR$MINOR#g" \
 	$SRC/mswindows/osgeo4w/grass.bat.tmpl > bin/${GRASS_EXECUTABLE}.bat.tmpl
     
     # bat files - unix2dos
