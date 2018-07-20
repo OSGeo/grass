@@ -144,6 +144,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
 
     /* create an off-screen AGL rendering area */
     aglCreatePBuffer(width, height, GL_TEXTURE_2D, GL_RGBA, 0, &(rwin->windowId));
+    aglSetPBuffer(rwin->contextId, rwin->windowId, 0, 0, 0);
 #elif defined(OPENGL_WINDOWS)
     WNDCLASS wc = {0};
     HWND hWnd;
@@ -224,7 +225,6 @@ int Nviz_make_current_render_window(const struct render_window *rwin)
 	return 1;
 
     aglSetCurrentContext(rwin->contextId);
-    aglSetPBuffer(rwin->contextId, rwin->windowId, 0, 0, 0);
 #elif defined(OPENGL_WINDOWS)
     if (!rwin->displayId || !rwin->contextId)
 	return 0;
