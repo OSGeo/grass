@@ -28,6 +28,8 @@
  *               Updated for calculation errors and directional surface generation
  *                 Colin Nielsen <colin.nielsen gmail com>
  *               Use min heap instead of btree (faster, less memory)
+ *               multiple directions with bitmask encoding
+ *               avoid circular paths
  *                 Markus Metz
  * PURPOSE:      anisotropic movements on cost surfaces
  * COPYRIGHT:    (C) 1999-2015 by the GRASS Development Team
@@ -108,6 +110,7 @@
 #include <grass/glocale.h>
 #include "cost.h"
 #include "stash.h"
+#include "flag.h"
 
 #define SEGCOLSIZE 	64
 
@@ -179,6 +182,7 @@ int main(int argc, char *argv[])
 	double cost_in;		/* friction costs */
 	double cost_out;	/* cumulative costs */
     } costs;
+    FLAG *visited;
 
     void *ptr1, *ptr2;
     RASTER_MAP_TYPE dtm_data_type, cost_data_type, cum_data_type =
@@ -941,6 +945,7 @@ int main(int argc, char *argv[])
     G_debug(1, "nrows x ncols: %d", nrows * ncols);
     G_message(_("Finding cost path..."));
     n_processed = 0;
+    visited = flag_create(nrows, ncols);
 
     pres_cell = get_lowest();
     while (pres_cell != NULL) {
@@ -973,7 +978,6 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 	}
-
 	my_dtm = costs.dtm;
 	if (Rast_is_d_null_value(&my_dtm)) {
 	    delete(pres_cell);
@@ -986,6 +990,12 @@ int main(int argc, char *argv[])
 	    pres_cell = get_lowest();
 	    continue;
 	}
+	if (FLAG_GET(visited, pres_cell->row, pres_cell->col)) {
+	    delete(pres_cell);
+	    pres_cell = get_lowest();
+	    continue;
+	}
+	FLAG_SET(visited, pres_cell->row, pres_cell->col);
 
 	if (have_solver)
 	    Segment_get(&solve_seg, mysolvedir, pres_cell->row, pres_cell->col);
@@ -1158,6 +1168,8 @@ int main(int argc, char *argv[])
 		continue;
 	    if (col < 0 || col >= ncols)
 		continue;
+
+	    /* skip already processed neighbors here ? */
 
 	    min_cost = dnullval;
 	    Segment_get(&cost_seg, &costs, row, col);
@@ -1484,12 +1496,17 @@ int main(int argc, char *argv[])
 		    Segment_put(&solve_seg, solvedir, row, col);
 		}
 	    }
-	    else if (dir && dir_bin && old_min_cost == min_cost) {
+	    else if (old_min_cost == min_cost &&
+	             (dir_bin || have_solver) && 
+		     !(FLAG_GET(visited, row, col))) {
 		FCELL old_dir;
 		int dir_inv[16] = { 4, 5, 6, 7, 0, 1, 2, 3,
 		                   12, 13, 14, 15, 8, 9, 10, 11 };
 		int dir_fwd;
 		int equal = 1;
+		
+		/* only update neighbors that have not yet been processed,
+		 * otherwise we might get circular paths */
 
 		if (have_solver) {
 		    Segment_get(&solve_seg, solvedir, row, col);
@@ -1508,7 +1525,7 @@ int main(int argc, char *argv[])
 		    }
 		}
 
-		if (equal) {
+		if (dir_bin && equal) {
 		    /* this can create circular paths:
 		     * set only if current cell does not point to neighbor
 		     * does not avoid longer circular paths */
@@ -1537,6 +1554,7 @@ int main(int argc, char *argv[])
 
     /* free heap */
     free_heap();
+    flag_destroy(visited);
 
     if (have_solver) {
 	Segment_close(&solve_seg);
