@@ -760,10 +760,10 @@ int main(int argc, char *argv[])
 	feature_count = 0;
 
 	ogr_feature_count = 0;
-	if (n_features[layer_id] == 0)
+	if (n_features[layer] == 0)
 	    ogr_feature_count = OGR_L_GetFeatureCount(Ogr_layer, 1);
 	if (ogr_feature_count > 0)
-	    n_features[layer_id] = ogr_feature_count;
+	    n_features[layer] = ogr_feature_count;
 
 	/* count polygons and isles */
 	G_message(_("Check if OGR layer <%s> contains polygons..."),
