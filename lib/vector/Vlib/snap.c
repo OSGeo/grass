@@ -260,8 +260,6 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map, const struct ilist *List_lines
     }
     G_percent(line_idx, List_lines->n_values, 2); /* finish it */
 
-    kdtree_optimize(KDTree, 2);
-
     npoints = point - 1;
 
     /* Go through all registered points and if not yet marked mark it as anchor and assign this anchor
@@ -359,6 +357,7 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map, const struct ilist *List_lines
 	}
 
 	/* Snap all vertices */
+	G_debug(3, "Snap all vertices");
 	for (v = 0; v < Points->n_points; v++) {
 	    /* Box */
 	    c[0] = Points->x[v];
@@ -390,11 +389,11 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map, const struct ilist *List_lines
 	Vect_reset_line(NPoints);
 
 	/* Snap all segments to anchors in threshold */
+	G_debug(3, "Snap all segments");
 	for (v = 0; v < Points->n_points - 1; v++) {
 	    int i;
 	    double x1, x2, y1, y2, xmin, xmax, ymin, ymax;
-	    double dx, dy;
-	    double kdthresh;
+	    double rc[4];
 
 	    G_debug(3, "  segment = %d end anchors : %d  %d", v, Index[v],
 		    Index[v + 1]);
@@ -425,16 +424,19 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map, const struct ilist *List_lines
 		ymax = y1;
 	    }
 
-	    c[0] = (xmin + xmax) / 2;
-	    c[1] = (ymin + ymax) / 2;
-
-	    dx = xmax - xmin;
-	    dy = ymax - ymin;
-	    kdthresh = sqrt(dx * dx + dy * dy) + thresh;
-
 	    /* Find points */
 	    Vect_reset_list(List);
-	    kd_found = kdtree_dnn(KDTree, c, &kduid, &kdd, kdthresh, NULL);
+	    G_debug(3, "  search anchors for segment %g,%g to %g,%g", x1, y1, x2, y2);
+	    /* distance search: circle around midpoint encompassing 
+	     *                  endpoints
+	     * box search: box encompassing endpoints, 
+	     *             smaller than corresponding circle */
+	    rc[0] = xmin - thresh * 2;
+	    rc[1] = ymin - thresh * 2;
+	    rc[2] = xmax + thresh * 2;
+	    rc[3] = ymax + thresh * 2;
+	    
+	    kd_found = kdtree_rnn(KDTree, rc, &kduid, NULL);
 
 	    G_debug(3, "  %d points in box", kd_found);
 
@@ -476,7 +478,6 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map, const struct ilist *List_lines
 	    }
 	    if (kd_found) {
 		G_free(kduid);
-		G_free(kdd);
 	    }
 	    G_debug(3, "  nnew = %d", nnew);
 	    /* insert new vertices */
