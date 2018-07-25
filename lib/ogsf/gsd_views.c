@@ -67,7 +67,7 @@ int gsd_get_los(float (*vect)[3], short sx, short sy)
 
     /* DEBUG - should just be a dot */
     /* OGLXXX frontbuffer: other possibilities include GL_FRONT_AND_BACK */
-    glDrawBuffer((1) ? GL_FRONT : GL_BACK);
+    GS_set_draw((1) ? GSD_FRONT : GSD_BACK);
     glPushMatrix();
     gsd_do_scale(1);
     gsd_linewidth(3);
@@ -83,7 +83,7 @@ int gsd_get_los(float (*vect)[3], short sx, short sy)
     glPopMatrix();
 
     /* OGLXXX frontbuffer: other possibilities include GL_FRONT_AND_BACK */
-    glDrawBuffer((0) ? GL_FRONT : GL_BACK);
+    GS_set_draw((0) ? GL_FRONT : GL_BACK);
 
     return (1);
 }
