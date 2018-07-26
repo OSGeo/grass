@@ -5,7 +5,7 @@
 
    GRASS OpenGL gsurf OGSF Library 
 
-   (C) 1999-2008 by the GRASS Development Team
+   (C) 1999-2008, 2018 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 
@@ -14,6 +14,7 @@
 
    \author Bill Brown USACERL (January 1993)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+   \author Support for framebuffer objects by Huidae Cho <grass4u gmail.com> (July 2018)
  */
 
 #include <stdlib.h>
@@ -28,7 +29,9 @@
 #elif defined(OPENGL_AQUA)
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
+#if defined(OPENGL_AGL)
 #include <AGL/agl.h>
+#endif
 #elif defined(OPENGL_WINDOWS)
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -441,9 +444,10 @@ int gsd_getshademodel(void)
  */
 void gsd_bothbuffers(void)
 {
+#if !defined(OPENGL_FBO)
     /* OGLXXX bothbuffer: other possibilities include GL_FRONT, GL_BACK */
     glDrawBuffer(GL_FRONT_AND_BACK);
-
+#endif
     return;
 }
 
@@ -452,9 +456,10 @@ void gsd_bothbuffers(void)
  */
 void gsd_frontbuffer(void)
 {
+#if !defined(OPENGL_FBO)
     /* OGLXXX frontbuffer: other possibilities include GL_FRONT_AND_BACK */
     glDrawBuffer(GL_FRONT);
-
+#endif
     return;
 }
 
@@ -463,9 +468,10 @@ void gsd_frontbuffer(void)
  */
 void gsd_backbuffer(void)
 {
+#if !defined(OPENGL_FBO)
     /* OGLXXX backbuffer: other possibilities include GL_FRONT_AND_BACK */
     glDrawBuffer(GL_BACK);
-
+#endif
     return;
 }
 
@@ -474,6 +480,7 @@ void gsd_backbuffer(void)
  */
 void gsd_swapbuffers(void)
 {
+#if !defined(OPENGL_FBO)
     /* OGLXXX swapbuffers: copy the back buffer to the front;
      * the back buffer becomes undefined afterward */
 #if defined(OPENGL_X11)
@@ -483,7 +490,7 @@ void gsd_swapbuffers(void)
 #elif defined(OPENGL_WINDOWS)
     SwapBuffers(wglGetCurrentDC());
 #endif
-
+#endif
     return;
 }
 
@@ -923,7 +930,9 @@ int gsd_getimage(unsigned char **pixbuf, unsigned int *xsize,
     if (!*pixbuf)
 	return (0);
 
+#if !defined(OPENGL_FBO)
     glReadBuffer(GL_FRONT);
+#endif
 
     /* OGLXXX lrectread: see man page for glReadPixels */
     glReadPixels(l, b, (r) - (l) + 1, (t) - (b) + 1, GL_RGBA,
@@ -969,8 +978,10 @@ int gsd_writeView(unsigned char **pixbuf, unsigned int xsize,
 	return (0);
     }
 
+#if !defined(OPENGL_FBO)
     /* Read image buffer */
     glReadBuffer(GL_FRONT);
+#endif
 
     /* Read Pixels into Buffer */
     glReadPixels(0, 0, xsize, ysize, GL_RGBA, GL_UNSIGNED_BYTE, *pixbuf);
