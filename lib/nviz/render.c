@@ -30,11 +30,13 @@ static PFNGLCHECKFRAMEBUFFERSTATUSPROC glCheckFramebufferStatus;
 static void *GetAnyGLFuncAddress(const char *name)
 {
     void *p = (void *)wglGetProcAddress(name);
-    if(p == 0 || p == (void*)0x1 || p == (void*)0x2 || p == (void*)0x3 ||
+    if (p == 0 || p == (void*)0x1 || p == (void*)0x2 || p == (void*)0x3 ||
 	    p == (void*)-1) {
 	HMODULE module = LoadLibraryA("opengl32.dll");
 	p = (void *)GetProcAddress(module, name);
     }
+    if (!p)
+	G_fatal_error(_("Unable to get function address for %s"), name);
     return p;
 }
 
@@ -43,13 +45,13 @@ static void find_gl_funcs()
     if (gl_funcs_found)
 	return;
 
-    glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC) GetAnyGLFuncAddress("glGenFramebuffers");
-    glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC) GetAnyGLFuncAddress("glBindFramebuffer");
-    glGenRenderbuffers = (PFNGLGENRENDERBUFFERSPROC) GetAnyGLFuncAddress("glGenRenderbuffers");
-    glBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC) GetAnyGLFuncAddress("glBindRenderbuffer");
-    glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC) GetAnyGLFuncAddress("glRenderbufferStorage");
-    glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC) GetAnyGLFuncAddress("glFramebufferRenderbuffer");
-    glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC) GetAnyGLFuncAddress("glCheckFramebufferStatus");
+    glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC)GetAnyGLFuncAddress("glGenFramebuffers");
+    glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC)GetAnyGLFuncAddress("glBindFramebuffer");
+    glGenRenderbuffers = (PFNGLGENRENDERBUFFERSPROC)GetAnyGLFuncAddress("glGenRenderbuffers");
+    glBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC)GetAnyGLFuncAddress("glBindRenderbuffer");
+    glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC)GetAnyGLFuncAddress("glRenderbufferStorage");
+    glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC)GetAnyGLFuncAddress("glFramebufferRenderbuffer");
+    glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC)GetAnyGLFuncAddress("glCheckFramebufferStatus");
 
     gl_funcs_found = 1;
 }
