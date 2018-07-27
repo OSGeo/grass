@@ -221,7 +221,6 @@ int main(int argc, char **argv)
     G_option_requires_all(flag.copy, opt.rast, opt.val, NULL);
     G_option_requires_all(flag.accum, opt.rast, opt.val, NULL);
     G_option_requires_all(flag.count, opt.rast, NULL);
-    G_option_requires(opt.val, flag.copy, flag.accum, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
