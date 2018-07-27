@@ -147,7 +147,8 @@ def main():
     # create args for r.path
     kwargs = {}
     kwargs['input'] = dirmap
-    kwargs['values'] = valmap
+    if flags['c'] or flags['a']:
+        kwargs['values'] = valmap
     kwargs['format'] = 'degree'
     if start_coords:
         kwargs['start_coordinates'] = start_coords
