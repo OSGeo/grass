@@ -170,14 +170,16 @@ int main(int argc, char *argv[])
     opt.max->type = TYPE_DOUBLE;
     opt.max->required = NO;
     opt.max->answer = "-1";
-    opt.max->description = _("Maximum distance or -1 for no limit");
+    opt.max->label = _("Maximum distance or -1 for no limit");
+    opt.max->description = _("Map units, meters for ll");
 
     opt.min = G_define_option();
     opt.min->key = "dmin";
     opt.min->type = TYPE_DOUBLE;
     opt.min->required = NO;
     opt.min->answer = "-1";
-    opt.min->description = _("Minimum distance or -1 for no limit");
+    opt.min->label = _("Minimum distance or -1 for no limit");
+    opt.min->description = _("Map units, meters for ll");
 
     opt.upload = G_define_option();
     opt.upload->key = "upload";
