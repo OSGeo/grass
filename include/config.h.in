@@ -306,4 +306,7 @@
 /* define if langinfo.h exists */
 #undef HAVE_LANGINFO_H
 
+/* Use framebuffer objects for off-screen OpenGL rendering */
+#define OPENGL_FBO 1
+
 #endif /* _config_h */
