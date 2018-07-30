@@ -355,6 +355,7 @@ class TimelineFrame(wx.Frame):
                             i - 0.1,
                             0.2),
                         facecolors=color,
+                        edgecolor='black',
                         alpha=ALPHA))
             else:
                 plots.append(
