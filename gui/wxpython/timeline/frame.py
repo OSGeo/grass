@@ -47,7 +47,7 @@ from core.gcmd import GError, GException, RunCommand
 from gui_core import gselect
 from core import globalvar
 
-ALPHA = 0.5
+ALPHA = 1
 COLORS = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
 
 
