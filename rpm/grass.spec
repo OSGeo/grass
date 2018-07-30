@@ -16,6 +16,8 @@ Source2:	%{name}-config.h
 
 BuildRequires:	bison
 BuildRequires:	blas-devel
+BuildRequires:	cairo-devel
+BuildRequires:	gcc-c++
 BuildRequires:	desktop-file-utils
 BuildRequires:	fftw-devel
 BuildRequires:	flex
@@ -45,6 +47,7 @@ BuildRequires:	mysql-devel
 %if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	netcdf-devel
 %endif
+BuildRequires:	python < 3.0
 BuildRequires:	python2-numpy
 %if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	postgresql-devel
@@ -80,7 +83,6 @@ BuildRequires:	readline-devel
 BuildRequires:	sqlite-devel
 BuildRequires:	subversion
 BuildRequires:	unixODBC-devel
-BuildRequires:	wxGTK-devel
 BuildRequires:	zlib-devel
 BuildRequires:	libzstd-devel
 Requires:	libzstd
@@ -88,6 +90,7 @@ Requires:	libzstd
 Requires:	geos
 Requires:	proj-epsg
 Requires:	proj-nad
+Requires:	python2
 Requires:	python2-numpy
 %if 0%{?rhel}
 Requires:	wxPython
@@ -142,13 +145,17 @@ GRASS GIS development headers
 sed -i -e 's/--libmysqld-libs/--libs/g' configure
 
 # Fixup shebangs
-find -type f | xargs sed -i -e 's,#!/usr/bin/env python,#!%{__python},'
+# in future python3 will be supported
+find -type f | xargs sed -i -e 's,#!/usr/bin/env python,#!%{__python2},'
+sed -i -e 's,python,%{__python2},g' include/Make/Platform.make.in
 find -name \*.pl | xargs sed -i -e 's,#!/usr/bin/env perl,#!%{__perl},'
 
 %build
 # Package is not ready for -Werror=format-security or the C++11 standard
 CFLAGS="$(echo ${RPM_OPT_FLAGS} | sed -e 's/ -Werror=format-security//')"
 CXXFLAGS="-std=c++98 ${CFLAGS}"
+# enforce python2 during build process
+export GRASS_PYTHON="/usr/bin/python2"
 %configure \
 	--with-cxx \
 	--with-tiff \
@@ -336,6 +343,18 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Sun Jul 29 2018 Markus Neteler <neteler@mundialis.de> - 7.4.1-6
+- added BuildRequires gcc-c++ to address RHBZ #1604262 due to RHBZ #1551327 (removing gcc and gcc-c++ from default buildroot)
+
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 7.4.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
+* Sun Jul 08 2018 Markus Neteler <neteler@mundialis.de> - 7.4.1-4
+- fix Python macro to explicitely use Python 2 interpreter
+
+* Sat Jul 07 2018 Scott Talbert <swt@techie.net> - 7.4.1-3
+- Update BRs: remove wxGTK-devel and add cairo-devel
+
 * Sat Jun 23 2018 Markus Neteler <neteler@mundialis.de> - 7.4.1-2
 - fix wxPython package dependency name for CentOS7
 
