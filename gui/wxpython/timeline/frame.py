@@ -381,6 +381,7 @@ class TimelineFrame(wx.Frame):
         xlim = self.axes2d.get_xlim()
         padding = ceil((xlim[1] - xlim[0]) / 20.)
         self.axes2d.set_xlim(xlim[0] - padding, xlim[1] + padding)
+        self.axes2d.set_axisbelow(True)
 
         self.canvas.draw()
         DataCursor(plots, lookUp, InfoFormat)
