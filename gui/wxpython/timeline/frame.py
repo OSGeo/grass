@@ -47,7 +47,7 @@ from core.gcmd import GError, GException, RunCommand
 from gui_core import gselect
 from core import globalvar
 
-ALPHA = 0.5
+ALPHA = 1
 COLORS = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
 
 
@@ -355,6 +355,7 @@ class TimelineFrame(wx.Frame):
                             i - 0.1,
                             0.2),
                         facecolors=color,
+                        edgecolor='black',
                         alpha=ALPHA))
             else:
                 plots.append(
@@ -380,6 +381,7 @@ class TimelineFrame(wx.Frame):
         xlim = self.axes2d.get_xlim()
         padding = ceil((xlim[1] - xlim[0]) / 20.)
         self.axes2d.set_xlim(xlim[0] - padding, xlim[1] + padding)
+        self.axes2d.set_axisbelow(True)
 
         self.canvas.draw()
         DataCursor(plots, lookUp, InfoFormat)
