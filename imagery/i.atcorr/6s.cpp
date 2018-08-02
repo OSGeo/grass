@@ -106,7 +106,6 @@ int init_6S(char* icnd_name)
     return 0;
 }
 
-
 /* Only update those objects that are affected by a height and vis change */
 void pre_compute_hv(const float height, const float vis)
 {
@@ -532,6 +531,10 @@ TransformInput compute()
 	}
     }
 
+    if (seb < accu3)
+	G_warning("compute(): variable seb is too small: %g", seb);
+    if (sb < accu3)
+	G_warning("compute(): variable sb is too small: %g", sb);
 
     /* ---- integrated values of apparent reflectance, radiance          ----*/
     /* ---- and gaseous transmittances (total,downward,separately gases) ----*/

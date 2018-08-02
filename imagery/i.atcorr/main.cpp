@@ -54,7 +54,15 @@ extern "C"
  * for 10 aerosol optical depths. Here we use finer grain. */
 
 /* TICache: create bins for altitude and visibility */
+/* altitude range: appr. 0 - 9000
+ * bin 10: change between bins is 0.05 - 0.16%
+ * bin 100: change between bins is 0.5 - 1.5% 
+ * bin 1000: change between bins is 6 - 13%*/
 #define BIN_ALT 10	/* unit is meters */
+/* visibility range: 0 - 50000
+ * bin 10: change between bins is 0.004 - 0.16%
+ * bin 100: change between bins is 0.01 - 1.6% 
+ * bin 1000: change between bins is 0.1 - 13%*/
 #define BIN_VIS 100	/* unit is meters */
 
 /* uncomment to disable cache usage */
