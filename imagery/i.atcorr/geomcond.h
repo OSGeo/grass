@@ -61,25 +61,31 @@
 /*                                                                        */
 /*         16      worldview2        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         17      quickbird2       * enter month,day,hh.ddd,long.,lat.   */
+/*         17      quickbird2        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         18      Landsat 8        * enter month,day,hh.ddd,long.,lat.   */
+/*         18      Landsat 8         * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         19      geoeye1          * enter month,day,hh.ddd,long.,lat.   */
+/*         19      geoeye1           * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         20      spot6            * enter month,day,hh.ddd,long.,lat.   */
+/*         20      spot6             * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         21      spot7            * enter month,day,hh.ddd,long.,lat.   */
+/*         21      spot7             * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         22      pleiades1a       * enter month,day,hh.ddd,long.,lat.   */
+/*         22      pleiades1a        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         23      pleiades1b       * enter month,day,hh.ddd,long.,lat.   */
+/*         23      pleiades1b        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         24      worldview3       * enter month,day,hh.ddd,long.,lat.   */
+/*         24      worldview3        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         25      sentinel2a       * enter month,day,hh.ddd,long.,lat.   */
+/*         25      sentinel2a        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
-/*         26      sentinel2b       * enter month,day,hh.ddd,long.,lat.   */
+/*         26      sentinel2b        * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         27      planetscope0c0d   * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         28      planetscope0e     * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         29      planetscope0f10   * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
 /*     note:       for hrv and tm experiments long. and lat. are the      */
 /*                 coordinates of the scene center.                       */
