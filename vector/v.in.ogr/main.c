@@ -759,10 +759,10 @@ int main(int argc, char *argv[])
 	feature_count = 0;
 
 	ogr_feature_count = 0;
-	if (n_features[layer_id] == 0)
+	if (n_features[layer] == 0)
 	    ogr_feature_count = OGR_L_GetFeatureCount(Ogr_layer, 1);
 	if (ogr_feature_count > 0)
-	    n_features[layer_id] = ogr_feature_count;
+	    n_features[layer] = ogr_feature_count;
 
 	/* count polygons and isles */
 	G_message(_("Check if OGR layer <%s> contains polygons..."),
@@ -1525,11 +1525,12 @@ int main(int argc, char *argv[])
 #endif
 
 	    cat = 0;		/* field = layer + 1 */
+	    feature_count = 0;
 	    while ((Ogr_feature = ogr_getnextfeature(&OGR_iter, layer_id,
 						     layer_names[layer],
 						     poSpatialFilter[layer],
 						     attr_filter)) != NULL) {
-		G_percent(cat, n_features[layer], 2);
+		G_percent(feature_count++, n_features[layer], 2);
 
 		/* Category */
 		if (key_idx[layer] > -1)
