@@ -378,7 +378,7 @@ static int parse_type(const char *declared, int *length)
     G_chop(buf);
     G_tolcase(buf);
 
-    *length = 1;
+    *length = 0;
 
 #define streq(a,b) (strcmp((a),(b)) == 0)
 
