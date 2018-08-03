@@ -101,8 +101,12 @@ int main(int argc, char *argv[])
     }
 
     dsn = NULL;
+    /* disabling GRASS-PostGIS driver:
+     *  TODO: a new fn that converts OGR dsn to PQ connection info,
+     *   ignoring current GRASS db connection */
+    use_ogr = TRUE;
     if (options.dsn->answer)
-        dsn = get_datasource_name(options.dsn->answer, use_ogr);
+        dsn = G_store(options.dsn->answer);
     
     if (flags.list->answer || flags.tlist->answer) {
         /* list layers */
