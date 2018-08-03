@@ -455,7 +455,7 @@ int main(int argc, char *argv[])
 
     dsn = NULL;
     if (param.dsn->answer)
-        dsn = get_datasource_name(param.dsn->answer, TRUE);
+        dsn = G_store(param.dsn->answer);
     
     min_area = atof(param.min_area->answer);
     snap = atof(param.snap->answer);
@@ -947,7 +947,7 @@ int main(int argc, char *argv[])
 	    
 	    col_info = G_malloc(ncols_out * sizeof(struct grass_col_info));
 
-	    /* Create table */
+	    /* Collect column names and types */
 	    i_out = 0;
 	    col_info[i_out].idx = i_out;
 	    col_info[i_out].name = key_column[layer];
@@ -1109,7 +1109,7 @@ int main(int argc, char *argv[])
 	    qsort(col_info, ncols_out, sizeof(struct grass_col_info),
 		  cmp_col_idx);
 
-	    /* construct sql from column names and types */
+	    /* Create table */
 	    i = 0;
 	    sprintf(buf, "create table %s (%s %s", Fi->table,
 		    col_info[i].name, col_info[i].type);
