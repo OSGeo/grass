@@ -1059,14 +1059,19 @@ int main(int argc, char *argv[])
 
 		    fwidth = OGR_Fld_GetWidth(Ogr_field);
 		    /* TODO: read all records first and find the longest string length */
-		    if (fwidth == 0) {
+		    if (fwidth == 0 && strcmp(Fi->driver, "dbf") == 0) {
 			G_warning(_("Width for column %s set to 255 (was not specified by OGR), "
 				   "some strings may be truncated!"),
 				  Ogr_fieldname);
 			fwidth = 255;
 		    }
-		    sprintf(buf, "varchar ( %d )", fwidth);
-		    col_info[i_out].type = G_store(buf);
+		    if (fwidth == 0) {
+			col_info[i_out].type = "text";
+		    }
+		    else {
+			sprintf(buf, "varchar ( %d )", fwidth);
+			col_info[i_out].type = G_store(buf);
+		    }
 		}
 		else if (Ogr_ftype == OFTStringList) {
 		    /* hack: treat as string */
