@@ -80,6 +80,18 @@ int main(int argc, char **argv)
         /* parms.sql */
         db_set_string(&stmt, parms.sql);
         ret = db_execute_immediate(driver, &stmt);
+
+	if (ret != DB_OK) {
+	    if (parms.i) {	/* ignore SQL errors */
+		G_warning(_("Error while executing: '%s'"),
+			  db_get_string(&stmt));
+		error++;
+	    }
+	    else {
+		G_fatal_error(_("Error while executing: '%s'"),
+			      db_get_string(&stmt));
+	    }
+	}
     }
     else { /* parms.input */
         while (get_stmt(fd, &stmt)) {
