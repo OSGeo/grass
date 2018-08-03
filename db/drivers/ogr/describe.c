@@ -198,7 +198,7 @@ int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
 	case OFTDate:
 	case OFTTime:
 	case OFTDateTime:
-	    size = OGR_Fld_GetWidth(hFieldDefn)
+	    size = OGR_Fld_GetWidth(hFieldDefn);
 	    if (size > 0) {
 		sqlType = DB_SQL_TYPE_CHARACTER;
 	    }
