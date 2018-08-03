@@ -60,11 +60,10 @@
 #% description: Value to write for "grown" cells
 #%end
 
-import sys
 import os
 import atexit
 import math
-from string import split
+
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
@@ -94,7 +93,7 @@ def main():
     tmp = str(os.getpid())
 
     temp_dist = "r.grow.tmp.%s.dist" % tmp
-    
+
     shrink = False
     if radius < 0.0:
         shrink = True
@@ -124,15 +123,15 @@ def main():
 
     # Workaround for r.mapcalc bug #3475
     # Mapcalc will fail if output is a fully qualified map name
-    out_name = split(options['output'], '@')
+    out_name = options['output'].split('@')
     if len(out_name) == 2:
         if out_name[1] != grass.gisenv()['MAPSET']:
             grass.fatal(_("Output can be written only to the current mapset"))
         output = out_name[0]
     else:
         output = out_name[0]
-    
-    if shrink == False:
+
+    if shrink is False:
         try:
             grass.run_command('r.grow.distance', input=input, metric=metric,
                               distance=temp_dist, value=temp_val)
@@ -159,6 +158,7 @@ def main():
 
     # write cmd history:
     grass.raster_history(output)
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()
