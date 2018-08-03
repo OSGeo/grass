@@ -198,12 +198,12 @@ int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
 	case OFTDate:
 	case OFTTime:
 	case OFTDateTime:
-	    sqlType = DB_SQL_TYPE_CHARACTER;
-	    size = OGR_Fld_GetWidth(hFieldDefn);
-	    if (size == 0) {
-		G_warning(_("column '%s', type 'string': unknown width -> stored as varchar(250) "
-			   "some data may be lost"), fieldName);
-		size = 250;
+	    size = OGR_Fld_GetWidth(hFieldDefn)
+	    if (size > 0) {
+		sqlType = DB_SQL_TYPE_CHARACTER;
+	    }
+	    else {
+		sqlType = DB_SQL_TYPE_TEXT;
 	    }
 	    precision = 0;
 	    break;
