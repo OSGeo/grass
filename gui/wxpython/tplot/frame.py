@@ -124,6 +124,7 @@ class TplotFrame(wx.Frame):
         self.plotNameListR = []
         self.plotNameListV = []
         self.poi = None
+        self.csvpath = None
 
     def __del__(self):
         """Close the database interface and stop the messenger and C-interface
