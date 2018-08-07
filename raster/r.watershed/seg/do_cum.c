@@ -290,6 +290,20 @@ int do_cum_mfd(void)
     int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
 
+    /* drainage directions bitmask encoded CW from North
+     * drainage directions are set for each current cell
+     * 
+     * bit positions, zero-based
+     * 
+     *     X = current cell
+     * 
+     *       6   7   0
+     *       5   X   1
+     *       4   3   2
+     */
+    int nextmfd[8] = { 3, 7, 5, 1, 0, 4, 2, 6 };
+    int mfdir;
+
     G_message(_("SECTION 3a: Accumulating Surface Flow with MFD."));
     G_debug(1, "MFD convergence factor set to %d.", c_fac);
 
@@ -440,6 +454,8 @@ int do_cum_mfd(void)
 			c_nbr < ncols && weight[ct_dir] > -0.5) {
 
 			if (FLAG_GET(flag_nbr[ct_dir], WORKEDFLAG)) {
+
+			    mfdir |= (1 << nextmfd[ct_dir]);
 
 			    weight[ct_dir] = weight[ct_dir] / sum_weight;
 			    /* check everything adds up to 1.0 */
