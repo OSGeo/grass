@@ -46,7 +46,8 @@ int close_array_seg(void)
 			for (bl = 90 + incr; bl <= 255; bl += 40) {
 			    flag = 1;
 			    while (flag) {
-				Rast_get_c_color(&r, &red, &green, &blue, &colors);
+				Rast_get_c_color(&r, &red, &green, &blue,
+						 &colors);
 				/* if existing rule is too dark then append a new
 				   rule to override it */
 				if ((blue * .11 + red * .30 + green * .59) <

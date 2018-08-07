@@ -23,7 +23,7 @@ int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
 	    G_free(buffer);
 	    Rast_close(map_fd);
 	    G_warning("%s(): unable to segment put row for [%s] in [%s]",
-		    me, map_name, mapset);
+		      me, map_name, mapset);
 	    return (-1);
 	}
     }

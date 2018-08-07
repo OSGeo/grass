@@ -5,8 +5,8 @@
 #include "Gwater.h"
 
 int
-seg_open(SSEG * sseg, GW_LARGE_INT nrows, GW_LARGE_INT ncols, int row_in_seg, int col_in_seg,
-	 int nsegs_in_memory, int size_struct)
+seg_open(SSEG * sseg, GW_LARGE_INT nrows, GW_LARGE_INT ncols, int row_in_seg,
+	 int col_in_seg, int nsegs_in_memory, int size_struct)
 {
     char *filename;
     int errflag;

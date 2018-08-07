@@ -19,7 +19,7 @@ int dseg_write_cellfile(DSEG * dseg, char *map_name)
 	Segment_get_row(&(dseg->seg), (DCELL *) dbuffer, row);
 	Rast_put_row(map_fd, dbuffer, DCELL_TYPE);
     }
-    G_percent(row, nrows, 1);    /* finish it */
+    G_percent(row, nrows, 1);	/* finish it */
     G_free(dbuffer);
     Rast_close(map_fd);
     return 0;

@@ -53,7 +53,7 @@ int no_stream(int row, int col, CELL basin_num,
 			else
 			    stream_length += diag;
 		    }
-		    else {		/* downdir == 4,8 */
+		    else {	/* downdir == 4,8 */
 			if (asp_value == 4 || asp_value == 8)
 			    stream_length += window.ew_res;
 			else
@@ -69,7 +69,7 @@ int no_stream(int row, int col, CELL basin_num,
 			if (aspect == drain[rr][cc]) {
 			    thisdir = updrain[rr][cc];
 			    switch (haf_basin_side
-			            (updir, (int) downdir, thisdir)) {
+				    (updir, (int)downdir, thisdir)) {
 			    case LEFT:
 				overland_cells(r, c, basin_num, basin_num - 1,
 					       &new_ele);

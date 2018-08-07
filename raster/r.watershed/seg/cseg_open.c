@@ -22,8 +22,8 @@ int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)
     }
     if (0 >
 	(errflag =
-	 Segment_format(fd, Rast_window_rows(), Rast_window_cols(), srows, scols,
-			sizeof(CELL)))) {
+	 Segment_format(fd, Rast_window_rows(), Rast_window_cols(), srows,
+			scols, sizeof(CELL)))) {
 	close(fd);
 	unlink(filename);
 	if (errflag == -1) {

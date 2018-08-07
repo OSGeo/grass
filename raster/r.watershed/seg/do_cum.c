@@ -17,22 +17,23 @@ double get_dist(double *dist_to_nbr, double *contour)
 
 	/* EW Dist at North edge */
 	ew_dist1 = G_distance(window.east, window.north,
-	                      window.west, window.north);
+			      window.west, window.north);
 	/* EW Dist at Center */
 	ew_dist2 = G_distance(window.east, (window.north + window.south) / 2.,
-	                      window.west, (window.north + window.south) / 2.);
+			      window.west,
+			      (window.north + window.south) / 2.);
 	/* EW Dist at South Edge */
 	ew_dist3 = G_distance(window.east, window.south,
-	                      window.west, window.south);
+			      window.west, window.south);
 	/* NS Dist at East edge */
 	ns_dist1 = G_distance(window.east, window.north,
-	                      window.east, window.south);
+			      window.east, window.south);
 	/* NS Dist at Center */
 	ns_dist2 = G_distance((window.west + window.east) / 2., window.north,
-	                      (window.west + window.east) / 2., window.south);
+			      (window.west + window.east) / 2., window.south);
 	/* NS Dist at West edge */
 	ns_dist3 = G_distance(window.west, window.north,
-	                      window.west, window.south);
+			      window.west, window.south);
 
 	ew_res = (ew_dist1 + ew_dist2 + ew_dist3) / (3 * window.cols);
 	ns_res = (ns_dist1 + ns_dist2 + ns_dist3) / (3 * window.rows);
@@ -41,7 +42,7 @@ double get_dist(double *dist_to_nbr, double *contour)
 	ns_res = window.ns_res;
 	ew_res = window.ew_res;
     }
-    
+
     for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 	/* get r, c (r_nbr, c_nbr) for neighbours */
 	r_nbr = nextdr[ct_dir];
@@ -79,7 +80,8 @@ double get_dist(double *dist_to_nbr, double *contour)
 	G_debug(1, "ew contour: %.4f", contour[2]);
 	contour[4] = (ew_res - contour[0]);
 	contour[5] = (ns_res - contour[2]);
-	contour[7] = sqrt(contour[4] * contour[4] + contour[5] * contour[5]) / 2.;
+	contour[7] =
+	    sqrt(contour[4] * contour[4] + contour[5] * contour[5]) / 2.;
 	G_debug(1, "diag contour: %.4f", contour[7]);
 	contour[4] = contour[5] = contour[6] = contour[7];
     }
@@ -199,11 +201,10 @@ int do_cum(void)
 	    /* topographic wetness index ln(a / tan(beta)) and
 	     * stream power index a * tan(beta) */
 	    if (atanb_flag) {
-		sca_tanb.sca = fabs(wa.wat) *
-		               (cell_size / contour[np_side]);
+		sca_tanb.sca = fabs(wa.wat) * (cell_size / contour[np_side]);
 
 		sca_tanb.tanb = get_slope_tci(wa.ele, wadown.ele,
-				              dist_to_nbr[np_side]);
+					      dist_to_nbr[np_side]);
 		seg_put(&atanb, (char *)&sca_tanb, r, c);
 	    }
 
@@ -216,7 +217,8 @@ int do_cum(void)
 	    }
 	    else {
 		seg_get(&aspflag, (char *)&afdown, dr, dc);
-		if (er_flag && !is_swale && !FLAG_GET(afdown.flag, RUSLEBLOCKFLAG))
+		if (er_flag && !is_swale &&
+		    !FLAG_GET(afdown.flag, RUSLEBLOCKFLAG))
 		    slope_length(r, c, dr, dc);
 	    }
 	}
@@ -311,12 +313,12 @@ int do_cum_mfd(void)
     dist_to_nbr = (double *)G_malloc(sides * sizeof(double));
     weight = (double *)G_malloc(sides * sizeof(double));
     contour = (double *)G_malloc(sides * sizeof(double));
-    
+
     cell_size = get_dist(dist_to_nbr, contour);
 
     flag_nbr = (char *)G_malloc(sides * sizeof(char));
-    wat_nbr = (DCELL *)G_malloc(sides * sizeof(DCELL));
-    ele_nbr = (CELL *)G_malloc(sides * sizeof(CELL));
+    wat_nbr = (DCELL *) G_malloc(sides * sizeof(DCELL));
+    ele_nbr = (CELL *) G_malloc(sides * sizeof(CELL));
 
     workedon = 0;
 
@@ -342,7 +344,7 @@ int do_cum_mfd(void)
 	/* WORKEDFLAG has been set during A* Search
 	 * reversed meaning here: 0 = done, 1 = not yet done */
 	FLAG_UNSET(af.flag, WORKEDFLAG);
-	
+
 	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {
 	    r_max = dr;
 	    c_max = dc;
@@ -390,8 +392,8 @@ int do_cum_mfd(void)
 			    if (ele_nbr[ct_dir] < ele) {
 				weight[ct_dir] =
 				    mfd_pow(((ele -
-					      ele_nbr[ct_dir]) / dist_to_nbr[ct_dir]),
-					    c_fac);
+					      ele_nbr[ct_dir]) /
+					     dist_to_nbr[ct_dir]), c_fac);
 			    }
 			    if (ele_nbr[ct_dir] == ele) {
 				weight[ct_dir] =
@@ -463,9 +465,10 @@ int do_cum_mfd(void)
 
 			    if (atanb_flag) {
 				sum_contour += contour[ct_dir];
-				sca_tanb.tanb += get_slope_tci(ele, ele_nbr[ct_dir],
-				                         dist_to_nbr[ct_dir]) *
-					         weight[ct_dir];
+				sca_tanb.tanb +=
+				    get_slope_tci(ele, ele_nbr[ct_dir],
+						  dist_to_nbr[ct_dir]) *
+				    weight[ct_dir];
 			    }
 
 			    if (value > 0) {
@@ -478,7 +481,9 @@ int do_cum_mfd(void)
 				if (wat_nbr[ct_dir] < 0)
 				    wat_nbr[ct_dir] += value * weight[ct_dir];
 				else
-				    wat_nbr[ct_dir] = value * weight[ct_dir] - wat_nbr[ct_dir];
+				    wat_nbr[ct_dir] =
+					value * weight[ct_dir] -
+					wat_nbr[ct_dir];
 			    }
 			    valued = wat_nbr[ct_dir];
 			    wa.wat = valued;
@@ -494,10 +499,10 @@ int do_cum_mfd(void)
 
 		/* adjust main drainage direction to A* path if possible */
 		/*if (fabs(wat_nbr[np_side]) >= max_acc) {
-		    max_acc = fabs(wat_nbr[np_side]);
-		    r_max = dr;
-		    c_max = dc;
-		} */
+		   max_acc = fabs(wat_nbr[np_side]);
+		   r_max = dr;
+		   c_max = dc;
+		   } */
 
 		if (fabs(prop - 1.0) > 5E-6f) {
 		    G_warning(_("MFD: cumulative proportion of flow distribution not 1.0 but %f"),
@@ -526,7 +531,7 @@ int do_cum_mfd(void)
 		if (atanb_flag) {
 		    sum_contour = contour[np_side];
 		    sca_tanb.tanb = get_slope_tci(ele, ele_nbr[np_side],
-				                  dist_to_nbr[np_side]);
+						  dist_to_nbr[np_side]);
 		}
 	    }
 
@@ -540,10 +545,10 @@ int do_cum_mfd(void)
 	seg_put(&aspflag, (char *)&af, r, c);
     }
     G_percent(do_points, do_points, 1);	/* finish it */
-    
+
     if (workedon)
-	G_warning(_("MFD: A * path already processed when distributing flow: %d of %"PRI_OFF_T" cells"),
-		  workedon, do_points);
+	G_warning(_("MFD: A * path already processed when distributing flow: %d of %"
+		   PRI_OFF_T " cells"), workedon, do_points);
 
 
     G_message(_("SECTION 3b: Adjusting drainage directions."));
@@ -563,7 +568,7 @@ int do_cum_mfd(void)
 	    dr = dc = -1;
 
 	FLAG_SET(af.flag, WORKEDFLAG);
-	
+
 	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {
 	    r_max = dr;
 	    c_max = dc;
@@ -606,7 +611,7 @@ int do_cum_mfd(void)
 		    if (is_swale)
 			swale_cells++;
 		    if ((ABS(wat_nbr[ct_dir]) + 0.5) >= threshold &&
-		        ele_nbr[ct_dir] > ele)
+			ele_nbr[ct_dir] > ele)
 			stream_cells++;
 
 		    if (!(FLAG_GET(flag_nbr[ct_dir], WORKEDFLAG))) {
@@ -658,7 +663,8 @@ int do_cum_mfd(void)
 		seg_put(&aspflag, (char *)&afdown, r_max, c_max);
 	    }
 	    else {
-		if (er_flag && !is_swale && !FLAG_GET(af.flag, RUSLEBLOCKFLAG))
+		if (er_flag && !is_swale &&
+		    !FLAG_GET(af.flag, RUSLEBLOCKFLAG))
 		    slope_length(r, c, r_max, c_max);
 	    }
 	}
@@ -666,7 +672,7 @@ int do_cum_mfd(void)
     }
 
     seg_close(&astar_pts);
-    
+
     G_free(dist_to_nbr);
     G_free(weight);
     G_free(wat_nbr);

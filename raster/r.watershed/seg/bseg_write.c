@@ -22,7 +22,7 @@ int bseg_write_cellfile(BSEG * bseg, char *map_name)
 	}
 	Rast_put_row(map_fd, buffer, CELL_TYPE);
     }
-    G_percent(row, nrows, 1);    /* finish it */
+    G_percent(row, nrows, 1);	/* finish it */
     G_free(buffer);
     Rast_close(map_fd);
     return 0;

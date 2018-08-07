@@ -21,7 +21,7 @@ int bseg_read_cell(BSEG * bseg, char *map_name, char *mapset)
     for (row = 0; row < nrows; row++) {
 	Rast_get_c_row(map_fd, buffer, row);
 	for (col = ncols; col >= 0; col--) {
-	    cbuf = (char) buffer[col];
+	    cbuf = (char)buffer[col];
 	    bseg_put(bseg, &cbuf, row, col);
 	}
     }

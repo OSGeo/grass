@@ -41,8 +41,7 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
 		    }
 		    if (doit) {
 			thisdir = updrain[rr][cc];
-			switch (haf_basin_side
-				(updir, (int) downdir, thisdir)) {
+			switch (haf_basin_side(updir, (int)downdir, thisdir)) {
 			case LEFT:
 			    overland_cells(r, c, basin_num, basin_num - 1,
 					   &new_elev);
@@ -68,7 +67,7 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
     }
     old_basin = basin_num;
     if (arm_flag) {
-	seg_get(&watalt, (char *) &wa, row, col);
+	seg_get(&watalt, (char *)&wa, row, col);
 	new_elev = wa.ele;
 	if ((slope = (new_elev - old_elev) / stream_length) < MIN_SLOPE)
 	    slope = MIN_SLOPE;

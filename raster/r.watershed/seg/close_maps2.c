@@ -21,14 +21,14 @@ int close_array_seg(void)
 	    theseg = &haf;
 	max = -9;
 	/*
-	for (r = 0; r < nrows; r++) {
-	    for (c = 0; c < ncols; c++) {
-		cseg_get(theseg, &value, r, c);
-		if (value > max)
-		    max = value;
-	    }
-	}
-	*/
+	   for (r = 0; r < nrows; r++) {
+	   for (c = 0; c < ncols; c++) {
+	   cseg_get(theseg, &value, r, c);
+	   if (value > max)
+	   max = value;
+	   }
+	   }
+	 */
 	max = n_basins;
 	G_debug(1, "%d basins created", max);
 	Rast_init_colors(&colors);
@@ -50,7 +50,8 @@ int close_array_seg(void)
 			for (bl = 90 + incr; bl <= 255; bl += 40) {
 			    flag = 1;
 			    while (flag) {
-				Rast_get_c_color(&r, &red, &green, &blue, &colors);
+				Rast_get_c_color(&r, &red, &green, &blue,
+						 &colors);
 				/* if existing rule is too dark then append a new
 				   rule to override it */
 				if ((blue * .11 + red * .30 + green * .59) <
@@ -98,7 +99,7 @@ int close_array_seg(void)
 	    }
 	    Rast_put_row(map_fd, cellrow, CELL_TYPE);
 	}
-	G_percent(nrows, nrows, 1);    /* finish it */
+	G_percent(nrows, nrows, 1);	/* finish it */
 	G_free(cellrow);
 	Rast_close(map_fd);
 	Rast_write_colors(seg_name, this_mapset, &colors);

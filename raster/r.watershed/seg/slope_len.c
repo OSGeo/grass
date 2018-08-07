@@ -20,9 +20,9 @@ int slope_length(int r, int c, int dr, int dc)
     else
 	top_ls += res;
     dseg_put(&s_l, &top_ls, r, c);
-    seg_get(&watalt, (char *) &wa, r, c);
+    seg_get(&watalt, (char *)&wa, r, c);
     top_alt = wa.ele;
-    seg_get(&watalt, (char *) &wa, dr, dc);
+    seg_get(&watalt, (char *)&wa, dr, dc);
     bot_alt = wa.ele;
     if (top_alt > bot_alt) {
 	dseg_get(&s_l, &bot_ls, dr, dc);

@@ -24,7 +24,7 @@ int dseg_read_cell(DSEG * dseg, char *map_name, char *mapset)
 	    G_free(dbuffer);
 	    Rast_close(map_fd);
 	    G_warning("%s(): unable to segment put row for [%s] in [%s]",
-		    me, map_name, mapset);
+		      me, map_name, mapset);
 	    return (-1);
 	}
     }
