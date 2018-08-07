@@ -272,6 +272,20 @@ int do_cum_mfd(void)
     int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     int this_index, down_index, nbr_index;
+
+    /* drainage directions bitmask encoded CW from North
+     * drainage directions are set for each current cell
+     * 
+     * bit positions, zero-based
+     * 
+     *     X = current cell
+     * 
+     *       6   7   0
+     *       5   X   1
+     *       4   3   2
+     */
+    int nextmfd[8] = { 3, 7, 5, 1, 0, 4, 2, 6 };
+    int mfdir;
     
     G_message(_("SECTION 3a: Accumulating Surface Flow with MFD."));
     G_debug(1, "MFD convergence factor set to %d.", c_fac);
@@ -316,6 +330,7 @@ int do_cum_mfd(void)
 	    ele = alt[this_index];
 	    is_null = 0;
 	    edge = 0;
+	    mfdir = 0;
 	    /* this loop is needed to get the sum of weights */
 	    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 		/* get r, c (r_nbr, c_nbr) for neighbours */
@@ -404,6 +419,8 @@ int do_cum_mfd(void)
 			c_nbr < ncols && weight[ct_dir] > -0.5) {
 			is_worked = FLAG_GET(worked, r_nbr, c_nbr);
 			if (is_worked == 0) {
+
+			    mfdir |= (1 << nextmfd[ct_dir]);
 
 			    nbr_index = SEG_INDEX(wat_seg, r_nbr, c_nbr);
 
