@@ -47,7 +47,8 @@ int do_astar(void)
     if (heap_size == 0)
 	G_fatal_error(_("No seeds for A* Search"));
 
-    G_debug(1, "heap size %"PRI_OFF_T", points %"PRI_OFF_T, heap_size, do_points);
+    G_debug(1, "heap size %" PRI_OFF_T ", points %" PRI_OFF_T, heap_size,
+	    do_points);
 
     count = 0;
 
@@ -61,7 +62,7 @@ int do_astar(void)
 
 	r = heap_p.pnt.r;
 	c = heap_p.pnt.c;
-	G_debug(3, "heap size %"PRI_OFF_T", r %d, c %d", heap_size, r, c);
+	G_debug(3, "heap size %" PRI_OFF_T ", r %d, c %d", heap_size, r, c);
 
 	alt_val = heap_p.ele;
 
@@ -143,8 +144,9 @@ int do_astar(void)
 	seg_put(&aspflag, (char *)&af, r, c);
     }
     if (doer != -1)
-	G_fatal_error(_("bug in A* Search: doer %"PRI_OFF_T" heap size %"PRI_OFF_T" count %"PRI_OFF_T),
-		      doer, heap_size, count);
+	G_fatal_error(_("bug in A* Search: doer %" PRI_OFF_T " heap size %"
+		       PRI_OFF_T " count %" PRI_OFF_T), doer, heap_size,
+		      count);
 
     seg_close(&search_heap);
 
@@ -263,8 +265,7 @@ HEAP_PNT drop_pt(void)
     return root_p;
 }
 
-double get_slope(int r, int c, int downr, int downc, CELL ele,
-                        CELL downe)
+double get_slope(int r, int c, int downr, int downc, CELL ele, CELL downe)
 {
     double slope;
 

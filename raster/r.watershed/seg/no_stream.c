@@ -62,7 +62,7 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 			else
 			    stream_length += diag;
 		    }
-		    else {		/* downdir == 4,8 */
+		    else {	/* downdir == 4,8 */
 
 			if (asp_value == 4 || asp_value == 8)
 			    stream_length += window.ew_res;
@@ -80,8 +80,7 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 			if (aspect == drain[rr][cc]) {
 			    thisdir = updrain[rr][cc];
 			    switch (haf_basin_side(updir,
-					       (int) downdir,
-					       thisdir)) {
+						   (int)downdir, thisdir)) {
 			    case RITE:
 				overland_cells(r, c, basin_num, basin_num,
 					       &new_ele);
@@ -108,7 +107,7 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 	}
 	else {
 	    if (arm_flag) {
-		seg_get(&watalt, (char *) &wa, row, col);
+		seg_get(&watalt, (char *)&wa, row, col);
 		hih_ele = wa.ele;
 		slope = (hih_ele - old_elev) / stream_length;
 		if (slope < MIN_SLOPE)

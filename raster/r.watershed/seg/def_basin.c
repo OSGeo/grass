@@ -56,7 +56,7 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 		    if (direction == drain[rr][cc]) {
 			thisdir = updrain[rr][cc];
 			switch (haf_basin_side
-				(oldupdir, (int) downdir, thisdir)) {
+				(oldupdir, (int)downdir, thisdir)) {
 			case LEFT:
 			    overland_cells(r, c, basin_num, basin_num - 1,
 					   &new_elev);
@@ -88,7 +88,7 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 		else
 		    stream_length += window.ew_res;
 	    }
-	    else {			/* sides == 4 */
+	    else {		/* sides == 4 */
 
 		seg_get(&aspflag, (char *)&af, row, col);
 		asp_value = af.asp;

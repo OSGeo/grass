@@ -7,7 +7,7 @@ int find_pourpts(void)
     CELL old_elev, basin_num;
 
     ocs_alloced = 2 * bas_thres;
-    ocs = (OC_STACK *)G_malloc(ocs_alloced * sizeof(OC_STACK));
+    ocs = (OC_STACK *) G_malloc(ocs_alloced * sizeof(OC_STACK));
 
     basin_num = 0;
     stream_length = old_elev = 0;

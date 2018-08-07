@@ -49,6 +49,7 @@ int drain[3][3] = { {7, 6, 5}, {8, 0, 4}, {1, 2, 3} };
 int updrain[3][3] = { {3, 2, 1}, {4, 0, 8}, {5, 6, 7} };
 int nextdr[8] = { 1, -1, 0, 0, -1, 1, 1, -1 };
 int nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
+
 char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
 char run_name[GNAME_MAX], ob_name[GNAME_MAX];
 char ril_name[GNAME_MAX], dep_name[GNAME_MAX];
@@ -57,7 +58,8 @@ char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX],
     thr_name[8];
 char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX],
     sg_name[GNAME_MAX];
-char wat_name[GNAME_MAX], asp_name[GNAME_MAX], tci_name[GNAME_MAX], spi_name[GNAME_MAX];
+char wat_name[GNAME_MAX], asp_name[GNAME_MAX], tci_name[GNAME_MAX],
+    spi_name[GNAME_MAX];
 char arm_name[GNAME_MAX], dis_name[GNAME_MAX];
 char ele_flag, pit_flag, run_flag, dis_flag, ob_flag, flat_flag;
 char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag;

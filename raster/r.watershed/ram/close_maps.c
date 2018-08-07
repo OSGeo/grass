@@ -29,7 +29,8 @@ int close_maps(void)
 	fd = Rast_open_new(wat_name, DCELL_TYPE);
 	if (abs_acc) {
 	    G_message("Writing out only positive flow accumulation values.");
-	    G_message("Cells with a likely underestimate for flow accumulation can no longer be identified.");
+	    G_message
+		("Cells with a likely underestimate for flow accumulation can no longer be identified.");
 	    for (r = 0; r < nrows; r++) {
 		Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
 		for (c = 0; c < ncols; c++) {
@@ -61,8 +62,7 @@ int close_maps(void)
 	}
 	Rast_close(fd);
 
-	stddev =
-	    sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
+	stddev = sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
 	G_debug(1, "stddev: %f", stddev);
 
 	/* set nice color rules: yellow, green, cyan, blue, black */
@@ -80,51 +80,51 @@ int close_maps(void)
 		clr_min = min - 1;
 		clr_max = -stddev - 1;
 		Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
-					  0, 0, &colors);
+				      0, 0, &colors);
 	    }
 	    clr_min = -stddev - 1.;
 	    clr_max = -1. * exp(lstddev * 0.75);
 	    Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0,
-				      0, 255, &colors);
+				  0, 255, &colors);
 	    clr_min = clr_max;
 	    clr_max = -1. * exp(lstddev * 0.5);
 	    Rast_add_d_color_rule(&clr_min, 0, 0, 255, &clr_max, 0,
-				      255, 255, &colors);
+				  255, 255, &colors);
 	    clr_min = clr_max;
 	    clr_max = -1. * exp(lstddev * 0.35);
 	    Rast_add_d_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
-				      255, 0, &colors);
+				  255, 0, &colors);
 	    clr_min = clr_max;
 	    clr_max = -1.;
 	    Rast_add_d_color_rule(&clr_min, 0, 255, 0, &clr_max, 255,
-				      255, 0, &colors);
+				  255, 0, &colors);
 	}
 	clr_min = -1.;
 	clr_max = 1.;
 	Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
-				  255, 0, &colors);
+			      255, 0, &colors);
 	clr_min = 1;
 	clr_max = exp(lstddev * 0.35);
 	Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
-				  255, 0, &colors);
+			      255, 0, &colors);
 	clr_min = clr_max;
 	clr_max = exp(lstddev * 0.5);
 	Rast_add_d_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
-				  255, 255, &colors);
+			      255, 255, &colors);
 	clr_min = clr_max;
 	clr_max = exp(lstddev * 0.75);
 	Rast_add_d_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
-				  0, 255, &colors);
+			      0, 255, &colors);
 	clr_min = clr_max;
 	clr_max = stddev + 1.;
 	Rast_add_d_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
-				  0, &colors);
+			      0, &colors);
 
 	if (max > 0 && max > stddev + 1) {
 	    clr_min = stddev + 1;
 	    clr_max = max + 1;
 	    Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
-				      0, &colors);
+				  0, &colors);
 	}
 	Rast_write_colors(wat_name, this_mapset, &colors);
     }
@@ -139,8 +139,8 @@ int close_maps(void)
 	    Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
 	    for (c = 0; c < ncols; c++) {
 		if (!Rast_is_d_null_value(&tanb[SEG_INDEX(wat_seg, r, c)])) {
-		    dvalue = log(sca[SEG_INDEX(wat_seg, r, c)] / 
-		                 tanb[SEG_INDEX(wat_seg, r, c)]);
+		    dvalue = log(sca[SEG_INDEX(wat_seg, r, c)] /
+				 tanb[SEG_INDEX(wat_seg, r, c)]);
 		    dbuf[c] = dvalue;
 		    sum += dvalue;
 		    sum_sqr += dvalue * dvalue;
@@ -151,8 +151,7 @@ int close_maps(void)
 	Rast_close(fd);
 
 	mean = sum / do_points;
-	stddev =
-	    sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
+	stddev = sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
 	G_debug(1, "stddev: %f", stddev);
 
 	/* set nice color rules: yellow, green, cyan, blue, black */
@@ -169,31 +168,31 @@ int close_maps(void)
 	    clr_min = min - 1;
 	    clr_max = mean - 0.5 * stddev;
 	    Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
-					  255, 0, &colors);
+				  255, 0, &colors);
 	}
 
 	clr_min = mean - 0.5 * stddev;
 	clr_max = mean - 0.2 * stddev;
 	Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
-				  255, 0, &colors);
+			      255, 0, &colors);
 	clr_min = clr_max;
 	clr_max = mean + 0.2 * stddev;
 	Rast_add_d_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
-				  255, 255, &colors);
+			      255, 255, &colors);
 	clr_min = clr_max;
 	clr_max = mean + 0.6 * stddev;
 	Rast_add_d_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
-				  0, 255, &colors);
+			      0, 255, &colors);
 	clr_min = clr_max;
 	clr_max = mean + 1. * stddev;
 	Rast_add_d_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
-				  0, &colors);
+			      0, &colors);
 
 	if (max > 0 && max > clr_max) {
 	    clr_min = clr_max;
 	    clr_max = max + 1;
 	    Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
-				      0, &colors);
+				  0, &colors);
 	}
 	Rast_write_colors(tci_name, this_mapset, &colors);
     }
@@ -208,7 +207,9 @@ int close_maps(void)
 	    Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
 	    for (c = 0; c < ncols; c++) {
 		if (!Rast_is_d_null_value(&tanb[SEG_INDEX(wat_seg, r, c)])) {
-		    dvalue = sca[SEG_INDEX(wat_seg, r, c)] * tanb[SEG_INDEX(wat_seg, r, c)];
+		    dvalue =
+			sca[SEG_INDEX(wat_seg, r, c)] *
+			tanb[SEG_INDEX(wat_seg, r, c)];
 		    dbuf[c] = dvalue;
 		    sum += dvalue;
 		    sum_sqr += dvalue * dvalue;
@@ -219,8 +220,7 @@ int close_maps(void)
 	Rast_close(fd);
 
 	mean = sum / do_points;
-	stddev =
-	    sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
+	stddev = sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
 	G_debug(1, "stddev: %f", stddev);
 
 	/* set nice color rules: yellow, green, cyan, blue, black */
@@ -237,31 +237,31 @@ int close_maps(void)
 	    clr_min = min - 1;
 	    clr_max = mean - 0.5 * stddev;
 	    Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
-					  255, 0, &colors);
+				  255, 0, &colors);
 	}
 
 	clr_min = mean - 0.5 * stddev;
 	clr_max = mean - 0.2 * stddev;
 	Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
-				  255, 0, &colors);
+			      255, 0, &colors);
 	clr_min = clr_max;
 	clr_max = mean + 0.2 * stddev;
 	Rast_add_d_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
-				  255, 255, &colors);
+			      255, 255, &colors);
 	clr_min = clr_max;
 	clr_max = mean + 0.6 * stddev;
 	Rast_add_d_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
-				  0, 255, &colors);
+			      0, 255, &colors);
 	clr_min = clr_max;
 	clr_max = mean + 1. * stddev;
 	Rast_add_d_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
-				  0, &colors);
+			      0, &colors);
 
 	if (max > 0 && max > clr_max) {
 	    clr_min = clr_max;
 	    clr_max = max + 1;
 	    Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
-				      0, &colors);
+				  0, &colors);
 	}
 	Rast_write_colors(spi_name, this_mapset, &colors);
     }

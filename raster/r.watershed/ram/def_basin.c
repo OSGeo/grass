@@ -51,8 +51,7 @@ CELL def_basin(int row, int col, CELL basin_num,
 		    direction = asp[SEG_INDEX(asp_seg, r, c)];
 		    if (direction == drain[rr][cc]) {
 			thisdir = updrain[rr][cc];
-			switch (haf_basin_side
-				(oldupdir, downdir, thisdir)) {
+			switch (haf_basin_side(oldupdir, downdir, thisdir)) {
 			case LEFT:
 			    overland_cells(r, c, basin_num, basin_num - 1,
 					   &new_elev);

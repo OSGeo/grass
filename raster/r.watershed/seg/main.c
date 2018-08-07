@@ -49,6 +49,7 @@ char drain[3][3] = { {7, 6, 5}, {8, 0, 4}, {1, 2, 3} };
 char updrain[3][3] = { {3, 2, 1}, {4, 0, 8}, {5, 6, 7} };
 int nextdr[8] = { 1, -1, 0, 0, -1, 1, 1, -1 };
 int nextdc[8] = { 0, 0, -1, 1, 1, -1, 1, -1 };
+
 char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
 char run_name[GNAME_MAX], ob_name[GNAME_MAX];
 char ril_name[GNAME_MAX], dep_name[GNAME_MAX];
@@ -71,7 +72,7 @@ FILE *fp;
 int main(int argc, char *argv[])
 {
     int num_open_segs;
-    
+
     zero = 0;
     one = 1;
     d_zero = 0.0;

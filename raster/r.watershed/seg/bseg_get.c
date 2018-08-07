@@ -11,7 +11,7 @@ int bseg_get(BSEG * bseg, char *value, GW_LARGE_INT row, GW_LARGE_INT col)
     return 0;
 }
 
-int bseg_get_old(BSEG * bseg, CELL *value, int row, int col)
+int bseg_get_old(BSEG * bseg, CELL * value, int row, int col)
 {
     CELL x;
 

@@ -36,8 +36,7 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
 		    }
 		    if (doit) {
 			thisdir = updrain[rr][cc];
-			switch (haf_basin_side
-				(updir, (int) downdir, thisdir)) {
+			switch (haf_basin_side(updir, (int)downdir, thisdir)) {
 			case LEFT:
 			    overland_cells(r, c, basin_num, basin_num - 1,
 					   &new_elev);

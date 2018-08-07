@@ -16,22 +16,23 @@ double get_dist(double *dist_to_nbr, double *contour)
 
 	/* EW Dist at North edge */
 	ew_dist1 = G_distance(window.east, window.north,
-	                      window.west, window.north);
+			      window.west, window.north);
 	/* EW Dist at Center */
 	ew_dist2 = G_distance(window.east, (window.north + window.south) / 2.,
-	                      window.west, (window.north + window.south) / 2.);
+			      window.west,
+			      (window.north + window.south) / 2.);
 	/* EW Dist at South Edge */
 	ew_dist3 = G_distance(window.east, window.south,
-	                      window.west, window.south);
+			      window.west, window.south);
 	/* NS Dist at East edge */
 	ns_dist1 = G_distance(window.east, window.north,
-	                      window.east, window.south);
+			      window.east, window.south);
 	/* NS Dist at Center */
 	ns_dist2 = G_distance((window.west + window.east) / 2., window.north,
-	                      (window.west + window.east) / 2., window.south);
+			      (window.west + window.east) / 2., window.south);
 	/* NS Dist at West edge */
 	ns_dist3 = G_distance(window.west, window.north,
-	                      window.west, window.south);
+			      window.west, window.south);
 
 	ew_res = (ew_dist1 + ew_dist2 + ew_dist3) / (3 * window.cols);
 	ns_res = (ns_dist1 + ns_dist2 + ns_dist3) / (3 * window.rows);
@@ -40,7 +41,7 @@ double get_dist(double *dist_to_nbr, double *contour)
 	ns_res = window.ns_res;
 	ew_res = window.ew_res;
     }
-    
+
     for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 	/* get r, c (r_nbr, c_nbr) for neighbours */
 	r_nbr = nextdr[ct_dir];
@@ -78,7 +79,8 @@ double get_dist(double *dist_to_nbr, double *contour)
 	G_debug(1, "ew contour: %.4f", contour[2]);
 	contour[4] = (ew_res - contour[0]);
 	contour[5] = (ns_res - contour[2]);
-	contour[7] = sqrt(contour[4] * contour[4] + contour[5] * contour[5]) / 2.;
+	contour[7] =
+	    sqrt(contour[4] * contour[4] + contour[5] * contour[5]) / 2.;
 	G_debug(1, "diag contour: %.4f", contour[7]);
 	contour[4] = contour[5] = contour[6] = contour[7];
     }
@@ -135,7 +137,7 @@ int do_cum(void)
 	/* skip user-defined depressions */
 	else
 	    dr = dc = -1;
-	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) { /* if ((dr = astar_pts[killer].downr) > -1) { */
+	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {	/* if ((dr = astar_pts[killer].downr) > -1) { */
 	    down_index = SEG_INDEX(wat_seg, dr, dc);
 	    value = wat[this_index];
 	    if (fabs(value) >= threshold)
@@ -196,9 +198,9 @@ int do_cum(void)
 	     * stream power index a * tan(beta) */
 	    if (atanb_flag) {
 		sca[this_index] = fabs(wat[this_index]) *
-		                  (cell_size / contour[np_side]);
+		    (cell_size / contour[np_side]);
 		tanb[this_index] = get_slope_tci(alt[this_index],
-		                                 alt[down_index],
+						 alt[down_index],
 						 dist_to_nbr[np_side]);
 	    }
 
@@ -286,7 +288,7 @@ int do_cum_mfd(void)
      */
     int nextmfd[8] = { 3, 7, 5, 1, 0, 4, 2, 6 };
     int mfdir;
-    
+
     G_message(_("SECTION 3a: Accumulating Surface Flow with MFD."));
     G_debug(1, "MFD convergence factor set to %d.", c_fac);
 
@@ -294,7 +296,7 @@ int do_cum_mfd(void)
     dist_to_nbr = (double *)G_malloc(sides * sizeof(double));
     weight = (double *)G_malloc(sides * sizeof(double));
     contour = (double *)G_malloc(sides * sizeof(double));
-    
+
     cell_size = get_dist(dist_to_nbr, contour);
 
     flag_clear_all(worked);
@@ -317,7 +319,7 @@ int do_cum_mfd(void)
 	}
 	else
 	    dr = dc = -1;
-	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) { /* if ((dr = astar_pts[killer].downr) > -1) { */
+	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {	/* if ((dr = astar_pts[killer].downr) > -1) { */
 	    value = wat[this_index];
 	    down_index = SEG_INDEX(wat_seg, dr, dc);
 
@@ -431,8 +433,8 @@ int do_cum_mfd(void)
 			    if (atanb_flag) {
 				sum_contour += contour[ct_dir];
 				tci_div += get_slope_tci(ele, alt[nbr_index],
-				                         dist_to_nbr[ct_dir]) *
-					   weight[ct_dir];
+							 dist_to_nbr[ct_dir])
+				    * weight[ct_dir];
 			    }
 
 			    valued = wat[nbr_index];
@@ -481,23 +483,23 @@ int do_cum_mfd(void)
 		if (atanb_flag) {
 		    sum_contour = contour[np_side];
 		    tci_div = get_slope_tci(ele, alt[down_index],
-				            dist_to_nbr[np_side]);
+					    dist_to_nbr[np_side]);
 		}
 	    }
 	    /* topographic wetness index ln(a / tan(beta)) and
 	     * stream power index a * tan(beta) */
 	    if (atanb_flag) {
 		sca[this_index] = fabs(wat[this_index]) *
-		                  (cell_size / sum_contour);
+		    (cell_size / sum_contour);
 		tanb[this_index] = tci_div;
 	    }
 	}
     }
     if (workedon)
-	G_warning(n_("MFD: A * path already processed when distributing flow: %d of %d cell", 
-        "MFD: A * path already processed when distributing flow: %d of %d cells", 
-        do_points),
-		  workedon, do_points);
+	G_warning(n_
+		  ("MFD: A * path already processed when distributing flow: %d of %d cell",
+		   "MFD: A * path already processed when distributing flow: %d of %d cells",
+		   do_points), workedon, do_points);
 
 
     G_message(_("SECTION 3b: Adjusting drainage directions."));
@@ -514,7 +516,7 @@ int do_cum_mfd(void)
 	}
 	else
 	    dr = dc = -1;
-	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) { /* if ((dr = astar_pts[killer].downr) > -1) { */
+	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {	/* if ((dr = astar_pts[killer].downr) > -1) { */
 	    value = wat[this_index];
 	    down_index = SEG_INDEX(wat_seg, dr, dc);
 
@@ -548,8 +550,7 @@ int do_cum_mfd(void)
 		    valued = wat[nbr_index];
 		    ele_nbr = alt[nbr_index];
 		    edge = Rast_is_c_null_value(&ele_nbr);
-		    if ((ABS(valued) + 0.5) >= threshold  &&
-		        ele_nbr > ele)
+		    if ((ABS(valued) + 0.5) >= threshold && ele_nbr > ele)
 			stream_cells++;
 
 		    is_worked = !(FLAG_GET(worked, r_nbr, c_nbr));
@@ -579,7 +580,7 @@ int do_cum_mfd(void)
 		}
 		continue;
 	    }
-	    
+
 	    /* update asp */
 	    if (dr != r_max || dc != c_max) {
 		aspect = drain[r - r_max + 1][c - c_max + 1];
