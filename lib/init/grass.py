@@ -292,7 +292,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
           [-e] [-f] [-text | -gtext | -gui] [--config param]
           [[[GISDBASE/]LOCATION_NAME/]MAPSET]
   $CMD_NAME [FLAG]... GISDBASE/LOCATION_NAME/MAPSET --exec EXECUTABLE [EPARAM]...
-  $CMD_NAME -c [geofile | EPSG] --tmp-location --exec EXECUTABLE [EPARAM]...
+  $CMD_NAME --tmp-location [geofile | EPSG] --exec EXECUTABLE [EPARAM]...
 
 {flags}:
   -h or -help or --help or --h   {help_flag}
@@ -1890,11 +1890,15 @@ def main():
         params = parse_cmdline(sys.argv[1:], default_gui=default_gui)
     if params.exit_grass and not params.create_new:
         fatal(_("Flag -e requires also flag -c"))
-    if params.tmp_location and not params.create_new:
-        fatal(_("Flag --tmp-location requires also flag -c"))
-    # Theoretically -c is not needed, CRS could be value of --tmp-location
-    # or, considering current code, CRS could be just taken from args.
-    # We allow --tmp-location without --exec (usefulness to be evaluated).
+    if params.tmp_location and not params.geofile:
+        fatal(_("Coordinate reference system argument (e.g. EPSG)"
+                " is needed for --tmp-location"))
+    if params.tmp_location and params.mapset:
+        fatal(_("Only one argument (e.g. EPSG) is needed for"
+                " --tmp-location, mapset name <{}> provided").format(
+                    params.mapset))
+    # For now, we allow, but not advertise/document, --tmp-location
+    # without --exec (usefulness to be evaluated).
 
     grass_gui = params.grass_gui  # put it to variable, it is used a lot
 
