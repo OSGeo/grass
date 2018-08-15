@@ -119,6 +119,10 @@ class LayerList(object):
         self._tree.forceCheck = True
         self._tree.CheckItem(layer._layer, checked=checked)
 
+    def SelectLayer(self, layer, select=True):
+        "Select or unselect layer"
+        self._tree.SelectItem(layer._layer, select)
+
     def IsLayerChecked(self, layer):
         """Returns True if layer is checked, False otherwise"""
         return self._tree.IsItemChecked(layer._layer)
