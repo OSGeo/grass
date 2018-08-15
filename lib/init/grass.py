@@ -287,7 +287,7 @@ help_text = r"""GRASS GIS $VERSION_NUMBER
 Geographic Resources Analysis Support System (GRASS GIS).
 
 {usage}:
-  $CMD_NAME [-h | -help | --help | --h] [-v | --version]
+  $CMD_NAME [-h | --help] [-v | --version]
           [-c | -c geofile | -c EPSG:code[:datum_trans] | -c XY]
           [-e] [-f] [--text | --gtext | --gui] [--config param]
           [[[GISDBASE/]LOCATION_NAME/]MAPSET]
@@ -295,7 +295,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
   $CMD_NAME --tmp-location [geofile | EPSG | XY] --exec EXECUTABLE [EPARAM]...
 
 {flags}:
-  -h or -help or --help or --h   {help_flag}
+  -h or --help                   {help_flag}
   -v or --version                {version_flag}
   -c                             {create}
   -e                             {exit_after}
