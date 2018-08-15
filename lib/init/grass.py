@@ -367,7 +367,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
     executable=_("GRASS module, script or any other executable"),
     executable_params=_("parameters of the executable"),
     standard_flags=_("standard flags"),
-    tmp_location=_("create temporary location (use with -c and --exec flags)"),
+    tmp_location=_("create temporary location (use with the --exec flag)"),
     )
 
 

@@ -55,7 +55,8 @@
 <dt><b>--tmp-location</b>
 <dd> Run using a temporary location which is created based on the given
 coordinate reference system and deleted at the end of the execution
-(use with -c and --exec flags)
+(use the --exec flag).
+The active mapset will be PERMANENT.
 
 </dl>
 
@@ -373,19 +374,19 @@ projection coordinate reference system (CRS) and simultaneously starting
 computation in a shell script:
 
 <div class="code"><pre>
-grass75 -c elevation.tiff --tmp-location --exec test.sh
+grass75 --tmp-location elevation.tiff --exec test.sh
 </pre></div>
 
 The same, but using an EPSG code and a Python script:
 
 <div class="code"><pre>
-grass75 -c EPSG:3358 --tmp-location --exec test.py
+grass75 --tmp-location EPSG:3358 --exec test.py
 </pre></div>
 
 Finally, for special cases, we can create an XY location without any CRS:
 
 <div class="code"><pre>
-grass75 -c --tmp-location --exec test.py
+grass75 --tmp-location XY --exec test.py
 </pre></div>
 
 Temporary location is automatically deleted after computation,
@@ -397,14 +398,14 @@ A single command can be also executed, e.g. to examine properties of the
 temporary location:
 
 <div class="code"><pre>
-grass75 -c EPSG:3358 --tmp-location --exec g.proj -p
+grass75 --tmp-location EPSG:3358 --exec g.proj -p
 </pre></div>
 
 A temporary XY location with single command is useful, e.g. to show
 help text of a module:
 
 <div class="code"><pre>
-grass75 -c --tmp-location --exec r.neighbors --help
+grass75 --tmp-location XY --exec r.neighbors --help
 </pre></div>
 
 <h4>Troubleshooting</h4>
