@@ -192,8 +192,8 @@ def draw_linegraph(what):
     colors = colors[0:len(what)]
 
     gcore.run_command('d.linegraph', x_file=xfile, y_file=yfiles,
-                      y_color=colors, title='Spectral signatures',
-                      x_title='Bands', y_title='DN Value')
+                      y_color=colors, title=_("Spectral signatures"),
+                      x_title=_("Bands"), y_title=_("DN Value"))
 
 
 def main():
