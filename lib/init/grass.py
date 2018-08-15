@@ -288,11 +288,11 @@ Geographic Resources Analysis Support System (GRASS GIS).
 
 {usage}:
   $CMD_NAME [-h | -help | --help | --h] [-v | --version]
-          [-c | -c geofile | -c EPSG:code[:datum_trans]]
+          [-c | -c geofile | -c EPSG:code[:datum_trans] | -c XY]
           [-e] [-f] [-text | -gtext | -gui] [--config param]
           [[[GISDBASE/]LOCATION_NAME/]MAPSET]
   $CMD_NAME [FLAG]... GISDBASE/LOCATION_NAME/MAPSET --exec EXECUTABLE [EPARAM]...
-  $CMD_NAME --tmp-location [geofile | EPSG] --exec EXECUTABLE [EPARAM]...
+  $CMD_NAME --tmp-location [geofile | EPSG | XY] --exec EXECUTABLE [EPARAM]...
 
 {flags}:
   -h or -help or --help or --h   {help_flag}
@@ -805,6 +805,9 @@ def create_location(gisdbase, location, geostring):
                 datum_trans = None
             gcore.create_location(gisdbase, location,
                                   epsg=epsg, datum_trans=datum_trans)
+        elif geostring == 'XY':
+            # create an XY location
+            gcore.create_location(gisdbase, location)
         else:
             # create location using georeferenced file
             gcore.create_location(gisdbase, location,
