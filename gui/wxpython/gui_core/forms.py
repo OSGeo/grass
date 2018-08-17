@@ -272,7 +272,11 @@ class UpdateThread(Thread):
                     pMapL = self.task.get_param(
                         p['wxId'][0], element='wxId-bind', raiseError=False)
                     if pMapL:
-                        map = pMapL.get('value', '')
+                        gui_deps = pMapL.get('guidependency', None)
+                        if gui_deps:
+                            gui_deps = gui_deps.split(',')
+                        if not gui_deps or (gui_deps and p.get('name', '') in gui_deps):
+                            map = pMapL.get('value', '')
 
             if name == 'TableSelect' or \
                     (name == 'ColumnSelect' and not map):
@@ -294,12 +298,13 @@ class UpdateThread(Thread):
                 # determine format
                 native = True
 
-                for id in pMap['wxId']:
-                    winVec = self.parent.FindWindowById(id)
-                    if winVec.GetName() == 'VectorFormat' and \
-                            winVec.GetSelection() != 0:
-                        native = False
-                        break
+                if pMap:
+                    for id in pMap['wxId']:
+                        winVec = self.parent.FindWindowById(id)
+                        if winVec.GetName() == 'VectorFormat' and \
+                                winVec.GetSelection() != 0:
+                            native = False
+                            break
                 # TODO: update only if needed
                 if native:
                     if map:
