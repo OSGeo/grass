@@ -150,6 +150,7 @@ int main(int argc, char *argv[])
     point_type_opt->answer = "point";
     point_type_opt->label = _("Feature type");
     point_type_opt->required = NO;
+    point_type_opt->guisection = _("Selection");
 
     point_field_opt = G_define_standard_option(G_OPT_V_FIELD);
     point_field_opt->key = "points_layer";
@@ -179,7 +180,7 @@ int main(int argc, char *argv[])
     area_where_opt = G_define_standard_option(G_OPT_DB_WHERE);
     area_where_opt->key = "areas_where";
     area_where_opt->label = _("WHERE conditions of SQL statement without 'where' keyword for area map");;
-    area_opt->guisection = _("Selection");
+    area_where_opt->guisection = _("Selection");
 
     method_opt = G_define_option();
     method_opt->key = "method";
@@ -199,38 +200,33 @@ int main(int argc, char *argv[])
 
     point_column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     point_column_opt->key = "points_column";
-    point_column_opt->required = NO;
-    point_column_opt->multiple = NO;
     point_column_opt->label =
 	_("Column name of points map to use for statistics");
     point_column_opt->description = _("Column of points map must be numeric");
 
-    count_column_opt = G_define_option();
+    count_column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     count_column_opt->key = "count_column";
     count_column_opt->type = TYPE_STRING;
-    count_column_opt->required = NO;
-    count_column_opt->multiple = NO;
     count_column_opt->label = _("Column name to upload points count");
     count_column_opt->description =
 	_("Column to hold points count, must be of type integer, will be created if not existing");
 
-    stats_column_opt = G_define_option();
+    stats_column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     stats_column_opt->key = "stats_column";
-    stats_column_opt->type = TYPE_STRING;
-    stats_column_opt->required = NO;
-    stats_column_opt->multiple = NO;
     stats_column_opt->label = _("Column name to upload statistics");
     stats_column_opt->description =
 	_("Column to hold statistics, must be of type double, will be created if not existing");
 
     fs_opt = G_define_standard_option(G_OPT_F_SEP);
-
+    fs_opt->guisection = _("Print");
+    
     print_flag = G_define_flag();
     print_flag->key = 'p';
     print_flag->label =
 	_("Print output to stdout, do not update attribute table");
     print_flag->description = _("First column is always area category");
-
+    print_flag->guisection = _("Print");
+ 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
