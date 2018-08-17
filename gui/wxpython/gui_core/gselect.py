@@ -2711,6 +2711,7 @@ class SqlWhereSelect(wx.Panel):
         """
         super(SqlWhereSelect, self).__init__(parent=parent, id=wx.ID_ANY)
         self.parent = parent
+        self.vector_map = None
 
         self.sqlField = wx.TextCtrl(parent=self, id=wx.ID_ANY,
                                     size=globalvar.DIALOG_TEXTCTRL_SIZE)
@@ -2741,6 +2742,8 @@ class SqlWhereSelect(wx.Panel):
     def _onClick(self, event):
         from dbmgr.sqlbuilder import SQLBuilderWhere
         try:
+            if not self.vector_map:
+                raise GException(_('No vector map selected'))
             win = SQLBuilderWhere(parent=self,
                                   vectmap=self.vector_map,
                                   layer=self.vector_layer)
