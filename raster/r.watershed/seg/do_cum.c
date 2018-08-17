@@ -113,6 +113,7 @@ int do_cum(void)
     int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     WAT_ALT wa, wadown;
+    char rtn_value;
     ASP_FLAG af, afdown;
     A_TANB sca_tanb;
     double *dist_to_nbr, *contour;
@@ -176,6 +177,10 @@ int do_cum(void)
 
 	    seg_get(&watalt, (char *)&wa, r, c);
 	    value = wa.wat;
+	    if (rtn_flag) {
+		bseg_get(&rtn, (char *)&rtn_value, dr, dc);
+		value *= rtn_value / 100.0;
+	    }
 	    is_swale = FLAG_GET(af.flag, SWALEFLAG);
 	    if (fabs(value) >= threshold && !is_swale) {
 		is_swale = 1;
@@ -201,7 +206,7 @@ int do_cum(void)
 	    /* topographic wetness index ln(a / tan(beta)) and
 	     * stream power index a * tan(beta) */
 	    if (atanb_flag) {
-		sca_tanb.sca = fabs(wa.wat) * (cell_size / contour[np_side]);
+		sca_tanb.sca = fabs(value) * (cell_size / contour[np_side]);
 
 		sca_tanb.tanb = get_slope_tci(wa.ele, wadown.ele,
 					      dist_to_nbr[np_side]);
@@ -276,6 +281,7 @@ int do_cum_mfd(void)
     double sum_contour, cell_size;
     POINT point;
     WAT_ALT wa;
+    char rtn_value;
     ASP_FLAG af, afdown;
     A_TANB sca_tanb;
     GW_LARGE_INT killer;
@@ -351,6 +357,10 @@ int do_cum_mfd(void)
 
 	    seg_get(&watalt, (char *)&wa, r, c);
 	    value = wa.wat;
+	    if (rtn_flag) {
+		bseg_get(&rtn, (char *)&rtn_value, dr, dc);
+		value *= rtn_value / 100.0;
+	    }
 
 	    /* get weights */
 	    max_weight = 0;

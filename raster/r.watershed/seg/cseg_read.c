@@ -7,7 +7,7 @@ static char *me = "cseg_read_cell";
 
 int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
 {
-    GW_LARGE_INT row, nrows;
+    GW_LARGE_INT row, rows;
     int map_fd;
     CELL *buffer;
 
@@ -15,9 +15,9 @@ int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
     cseg->mapset = NULL;
 
     map_fd = Rast_open_old(map_name, mapset);
-    nrows = Rast_window_rows();
+    rows = Rast_window_rows();
     buffer = Rast_allocate_c_buf();
-    for (row = 0; row < nrows; row++) {
+    for (row = 0; row < rows; row++) {
 	Rast_get_c_row(map_fd, buffer, row);
 	if (Segment_put_row(&(cseg->seg), buffer, row) < 0) {
 	    G_free(buffer);

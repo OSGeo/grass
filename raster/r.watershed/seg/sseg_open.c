@@ -5,7 +5,7 @@
 #include "Gwater.h"
 
 int
-seg_open(SSEG * sseg, GW_LARGE_INT nrows, GW_LARGE_INT ncols, int row_in_seg,
+seg_open(SSEG * sseg, GW_LARGE_INT rows, GW_LARGE_INT cols, int row_in_seg,
 	 int col_in_seg, int nsegs_in_memory, int size_struct)
 {
     char *filename;
@@ -20,7 +20,7 @@ seg_open(SSEG * sseg, GW_LARGE_INT nrows, GW_LARGE_INT ncols, int row_in_seg,
 	G_warning("seg_open(): unable to create segment file");
 	return -2;
     }
-    if (0 > (errflag = Segment_format(fd, nrows, ncols,
+    if (0 > (errflag = Segment_format(fd, rows, cols,
 				      row_in_seg, col_in_seg, size_struct))) {
 	close(fd);
 	unlink(filename);

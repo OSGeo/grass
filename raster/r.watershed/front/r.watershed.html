@@ -73,6 +73,12 @@ represent the amount of overland flow each cell contributes to surface
 flow. If omitted, a value of one (1) is assumed.
 
 <p>
+Raster <b>retention</b> map specifies correction factors per cell for 
+flow distribution. This map indicates the percentage of overland flow 
+units leaving each cell. Values should be between zero and 100. If 
+omitted, a value of 100 is assumed.
+
+<p>
 Input Raster map or value containing the percent of disturbed land
 (i.e., croplands, and construction sites) where the raster or input
 value of 17 equals 17%.  If no map or value is
@@ -567,6 +573,8 @@ Charles Ehlschlaeger, U.S. Army Construction Engineering Research Laboratory
 <br>
 Faster sorting algorithm and MFD support:
 Markus Metz &lt;markus.metz.giswork at gmail.com&gt;
+<br>
+Retention for flow distribution by Andreas Gericke (IGB Berlin)
 
 <p>
 <i>Last changed: $Date$</i>

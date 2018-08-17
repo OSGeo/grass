@@ -21,6 +21,9 @@ int close_maps(void)
     if (wat_flag || ls_flag || sl_flag || sg_flag || atanb_flag)
 	dbuf = Rast_allocate_d_buf();
     G_free(alt);
+    if (rtn_flag)
+	G_free(rtn);
+
     if (ls_flag || sg_flag)
 	G_free(r_h);
 

@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
     struct Option *opt16;
     struct Option *opt17;
     struct Option *opt18;
+    struct Option *opt19;
     struct Flag *flag_sfd;
     struct Flag *flag_flow;
     struct Flag *flag_seg;
@@ -115,6 +116,13 @@ int main(int argc, char *argv[])
 	_("For USLE. All non-NULL and non-zero cells are considered as blocking terrain.");
     opt5->required = NO;
     opt5->guisection = _("Inputs");
+
+    opt19 = G_define_standard_option(G_OPT_R_INPUT);
+    opt19->key = "retention";
+    opt19->description =
+        _("Name of input raster map with percentages for flow accumulation.");
+    opt19->required = NO;
+    opt19->guisection = _("Inputs");
 
     opt6 = G_define_option();
     opt6->key = "threshold";
@@ -306,6 +314,7 @@ int main(int argc, char *argv[])
     do_opt(opt3);
     do_opt(opt4);
     do_opt(opt5);
+    do_opt(opt19);
     do_opt(opt6);
     do_opt(opt7);
     do_opt(opt8);
