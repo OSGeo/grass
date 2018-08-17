@@ -74,13 +74,14 @@ int main(int argc, char *argv[])
     int num_digits = 0;
     int croptoregion, *rowmapall, *colmapall, *rowmap, *colmap, col_offset;
     int roff, coff;
+    char **doo;
 
     struct GModule *module;
     struct
     {
 	struct Option *input, *output, *target, *title, *outloc, *band,
 	              *memory, *offset, *num_digits, *map_names_file,
-	              *rat;
+	              *rat, *cfg, *doo;
     } parm;
     struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c, *flag_p,
         *flag_j, *flag_a, *flag_r;
@@ -180,6 +181,20 @@ int main(int argc, char *argv[])
     parm.rat->label = _("File prefix for raster attribute tables");
     parm.rat->description = _("The band number and \".csv\" will be appended to the file prefix");
     parm.rat->key_desc = "file";
+
+    parm.cfg = G_define_option();
+    parm.cfg->key = "gdal_config";
+    parm.cfg->type = TYPE_STRING;
+    parm.cfg->required = NO;
+    parm.cfg->label = _("GDAL configuration options");
+    parm.cfg->description = _("Comma-separated list of key=value pairs");
+
+    parm.doo = G_define_option();
+    parm.doo->key = "gdal_doo";
+    parm.doo->type = TYPE_STRING;
+    parm.doo->required = NO;
+    parm.doo->label = _("GDAL dataset open options");
+    parm.doo->description = _("Comma-separated list of key=value pairs");
 
     flag_o = G_define_flag();
     flag_o->key = 'o';
@@ -348,10 +363,56 @@ int main(int argc, char *argv[])
 	CPLSetConfigOption("GDAL_CACHEMAX", parm.memory->answer);
     }
 
+    /* GDAL configuration options */
+    if (parm.cfg->answer) {
+	char **tokens, *tok, *key, *value;
+	int i, ntokens;
+
+	tokens = G_tokenize(parm.cfg->answer, ",");
+	ntokens = G_number_of_tokens(tokens);
+	for (i = 0; i < ntokens; i++) {
+	    G_debug(1, "%d=[%s]", i, tokens[i]);
+	    tok = G_store(tokens[i]);
+	    G_squeeze(tok);
+	    key = tok;
+	    value = strstr(tok, "=");
+	    if (value) {
+		*value = '\0';
+		value++;
+		CPLSetConfigOption(key, value);
+	    }
+	    G_free(tok);
+	}
+	G_free_tokens(tokens);
+    }
+
+    /* GDAL dataset open options */
+    doo = NULL;
+    if (parm.doo->answer) {
+	char **tokens;
+	int i, ntokens;
+
+	tokens = G_tokenize(parm.doo->answer, ",");
+	ntokens = G_number_of_tokens(tokens);
+	doo = G_malloc(sizeof(char *) * (ntokens + 1));
+	for (i = 0; i < ntokens; i++) {
+	    G_debug(1, "%d=[%s]", i, tokens[i]);
+	    doo[i] = G_store(tokens[i]);
+	}
+	G_free_tokens(tokens);
+	doo[ntokens] = NULL;
+    }
+
     /* -------------------------------------------------------------------- */
-    /*      Open the file.                                                  */
+    /*      Open the dataset.                                               */
     /* -------------------------------------------------------------------- */
+
+#if GDAL_VERSION_NUM >= 2000000
+    hDS = GDALOpenEx(input, GDAL_OF_RASTER | GDAL_OF_READONLY, NULL,
+                     (const char **) doo, NULL);
+#else
     hDS = GDALOpen(input, GA_ReadOnly);
+#endif
     if (hDS == NULL)
         G_fatal_error(_("Unable to open datasource <%s>"), input);
     G_add_error_handler(error_handler_ds, hDS);
