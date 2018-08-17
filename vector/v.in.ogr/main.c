@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct _param {
 	struct Option *dsn, *out, *layer, *spat, *where,
-	    *min_area;
+	    *min_area, *cfg, *doo;
         struct Option *snap, *type, *outloc, *cnames, *encoding, *key, *geom;
     } param;
     struct _flag {
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 
     int OFTIntegerListlength;
 
-    char *dsn;
+    char *dsn, **doo;
     const char *driver_name;
     const char *datetime_type;
     char *output;
@@ -211,6 +211,20 @@ int main(int argc, char *argv[])
 				   "\t\tMapInfo File: directory containing mapinfo files");
     param.dsn->gisprompt = "old,datasource,datasource";
     
+    param.cfg = G_define_option();
+    param.cfg->key = "gdal_config";
+    param.cfg->type = TYPE_STRING;
+    param.cfg->required = NO;
+    param.cfg->label = _("GDAL configuration options");
+    param.cfg->description = _("Comma-separated list of key=value pairs");
+
+    param.doo = G_define_option();
+    param.doo->key = "gdal_doo";
+    param.doo->type = TYPE_STRING;
+    param.doo->required = NO;
+    param.doo->label = _("GDAL dataset open options");
+    param.doo->description = _("Comma-separated list of key=value pairs");
+
     param.layer = G_define_option();
     param.layer->key = "layer";
     param.layer->type = TYPE_STRING;
@@ -492,11 +506,52 @@ int main(int argc, char *argv[])
 	G_free(encbuf);
     }
 
+    /* GDAL configuration options */
+    if (param.cfg->answer) {
+	char **tokens, *tok, *key, *value;
+	int ntokens;
+
+	tokens = G_tokenize(param.cfg->answer, ",");
+	ntokens = G_number_of_tokens(tokens);
+	for (i = 0; i < ntokens; i++) {
+	    G_debug(1, "%d=[%s]", i, tokens[i]);
+	    tok = G_store(tokens[i]);
+	    G_squeeze(tok);
+	    key = tok;
+	    value = strstr(tok, "=");
+	    if (value) {
+		*value = '\0';
+		value++;
+		CPLSetConfigOption(key, value);
+	    }
+	    G_free(tok);
+	}
+	G_free_tokens(tokens);
+    }
+
+    /* GDAL dataset open options */
+    doo = NULL;
+    if (param.doo->answer) {
+	char **tokens;
+	int ntokens;
+
+	tokens = G_tokenize(param.doo->answer, ",");
+	ntokens = G_number_of_tokens(tokens);
+	doo = G_malloc(sizeof(char *) * (ntokens + 1));
+	for (i = 0; i < ntokens; i++) {
+	    G_debug(1, "%d=[%s]", i, tokens[i]);
+	    doo[i] = G_store(tokens[i]);
+	}
+	G_free_tokens(tokens);
+	doo[ntokens] = NULL;
+    }
+
     /* open OGR DSN */
     Ogr_ds = NULL;
     if (strlen(dsn) > 0) {
 #if GDAL_VERSION_NUM >= 2020000
-	Ogr_ds = GDALOpenEx(dsn, GDAL_OF_VECTOR, NULL, NULL, NULL);
+	Ogr_ds = GDALOpenEx(dsn, GDAL_OF_VECTOR, NULL,
+	                    (const char **) doo, NULL);
 #else
 	Ogr_ds = OGROpen(dsn, FALSE, NULL);
 #endif
