@@ -136,12 +136,12 @@ int main(int argc, char *argv[])
 
     point_opt = G_define_standard_option(G_OPT_V_INPUT);
     point_opt->key = "points";
-    point_opt->description = _("Name of existing vector map with points");
+    point_opt->label = _("Name of existing vector map with points");
     /* point_opt->guisection = _("Required"); */
 
     area_opt = G_define_standard_option(G_OPT_V_INPUT);
     area_opt->key = "areas";
-    area_opt->description = _("Name of existing vector map with areas");
+    area_opt->label = _("Name of existing vector map with areas");
     /* area_opt->guisection = _("Required"); */
 
     point_type_opt = G_define_standard_option(G_OPT_V_TYPE);
