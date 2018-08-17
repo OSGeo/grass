@@ -20,7 +20,7 @@ int init_vars(int argc, char *argv[])
 
     G_gisinit(argv[0]);
     /* input */
-    ele_flag = pit_flag = run_flag = ril_flag = 0;
+    ele_flag = pit_flag = run_flag = ril_flag = rtn_flag = 0;
     /* output */
     wat_flag = asp_flag = tci_flag = spi_flag = atanb_flag = 0;
     bas_flag = seg_flag = haf_flag = 0;
@@ -67,6 +67,8 @@ int init_vars(int argc, char *argv[])
 	    haf_flag++;
 	else if (sscanf(argv[r], "flow=%s", run_name) == 1)
 	    run_flag++;
+	else if (sscanf(argv[r], "retention=%s", rtn_name) == 1)
+	    rtn_flag++;
 	else if (sscanf(argv[r], "ar=%s", arm_name) == 1)
 	    arm_flag++;
 	/* slope length
@@ -264,6 +266,42 @@ int init_vars(int argc, char *argv[])
 	}
 	Rast_close(fd);
 	G_free(dbuf);
+    }
+
+    /* read retention map to adjust flow distribution (AG) */
+    rtn = NULL;
+    if (rtn_flag) {
+	rtn = (char *) G_malloc(sizeof(char) *
+                           size_array(&rtn_seg, nrows, ncols));
+        buf = Rast_allocate_c_buf();
+        fd = Rast_open_old(rtn_name, "");
+        for (r = 0; r < nrows; r++) {
+            Rast_get_c_row(fd, buf, r);
+            for (c = 0; c < ncols; c++) {
+                if (MASK_flag) {
+                    block_value = FLAG_GET(worked, r, c);
+                    if (!block_value) {
+                        block_value = buf[c];
+                    }
+		    else
+			block_value = 100;
+                }
+                else
+                    block_value = buf[c];
+
+                if (!Rast_is_c_null_value(&block_value)) {
+		    if (block_value < 0)
+			block_value = 0;
+		    if (block_value > 100)
+			block_value = 100;
+                    rtn[SEG_INDEX(rtn_seg, r, c)] = block_value;
+		}
+                else
+                    rtn[SEG_INDEX(rtn_seg, r, c)] = 100;
+            }
+        }
+        Rast_close(fd);
+        G_free(buf);
     }
 
     /* overland blocking map; this is also creating streams... */

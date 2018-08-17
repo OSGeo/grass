@@ -16,6 +16,9 @@ int close_maps(void)
     WAT_ALT *wabuf;
     ASP_FLAG *afbuf;
 
+    if (rtn_flag)
+        bseg_close(&rtn);
+
     if (wat_flag) {
 	G_message(_("Closing accumulation map"));
 	sum = sum_sqr = stddev = 0.0;

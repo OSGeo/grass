@@ -32,7 +32,7 @@ int init_vars(int argc, char *argv[])
 
     G_gisinit(argv[0]);
     /* input */
-    ele_flag = pit_flag = run_flag = ril_flag = 0;
+    ele_flag = pit_flag = run_flag = ril_flag  = rtn_flag = 0;
     /* output */
     wat_flag = asp_flag = tci_flag = spi_flag = atanb_flag = 0;
     bas_flag = seg_flag = haf_flag = 0;
@@ -78,6 +78,8 @@ int init_vars(int argc, char *argv[])
 	    haf_flag++;
 	else if (sscanf(argv[r], "flow=%s", run_name) == 1)
 	    run_flag++;
+	else if (sscanf(argv[r], "retention=%s", rtn_name) == 1)
+	    rtn_flag++;
 	else if (sscanf(argv[r], "ar=%s", arm_name) == 1)
 	    arm_flag++;
 	/* slope length
@@ -261,6 +263,10 @@ int init_vars(int argc, char *argv[])
 	cseg_read_cell(&r_h, ele_name, "");
     }
 
+    if (rtn_flag) {
+	bseg_open(&rtn, seg_rows, seg_cols, num_open_segs);
+    }
+
     /* read elevation input and mark NULL/masked cells */
 
     /* scattered access: alt, watalt, bitflags, asp */
@@ -397,6 +403,34 @@ int init_vars(int argc, char *argv[])
     }
 
     MASK_flag = (do_points < nrows * ncols);
+
+    /* read retention map to adjust flow distribution (AG) */
+    if (rtn_flag) {
+	char rtn_value;
+
+	fd = Rast_open_old(rtn_name, "");
+	buf = Rast_allocate_c_buf();
+	for (r = 0; r < nrows; r++) {
+	    G_percent(r, nrows, 1);
+	    Rast_get_c_row(fd, buf, r);
+	    for (c = 0; c < ncols; c++) {
+		block_value = buf[c];
+		if (Rast_is_c_null_value(&block_value))
+		    block_value = 100;
+		else {
+		    if (block_value < 0)
+			block_value = 0;
+		    if (block_value > 100)
+			block_value = 100;
+		}
+		rtn_value = block_value;
+		bseg_put(&rtn, &rtn_value, r, c);
+	    }
+	}
+	G_percent(nrows, nrows, 1);	/* finish it */
+	Rast_close(fd);
+	G_free(buf);
+    }
 
     /* do RUSLE */
     if (er_flag) {

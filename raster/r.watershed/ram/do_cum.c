@@ -140,6 +140,10 @@ int do_cum(void)
 	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {	/* if ((dr = astar_pts[killer].downr) > -1) { */
 	    down_index = SEG_INDEX(wat_seg, dr, dc);
 	    value = wat[this_index];
+            /* apply retention to adjust flow accumulation */
+            if (rtn_flag)
+                value *= rtn[this_index] / 100.0;
+
 	    if (fabs(value) >= threshold)
 		FLAG_SET(swale, r, c);
 	    valued = wat[down_index];
@@ -197,7 +201,7 @@ int do_cum(void)
 	    /* topographic wetness index ln(a / tan(beta)) and
 	     * stream power index a * tan(beta) */
 	    if (atanb_flag) {
-		sca[this_index] = fabs(wat[this_index]) *
+		sca[this_index] = fabs(value) *
 		    (cell_size / contour[np_side]);
 		tanb[this_index] = get_slope_tci(alt[this_index],
 						 alt[down_index],
@@ -321,6 +325,9 @@ int do_cum_mfd(void)
 	    dr = dc = -1;
 	if (dr >= 0 && dr < nrows && dc >= 0 && dc < ncols) {	/* if ((dr = astar_pts[killer].downr) > -1) { */
 	    value = wat[this_index];
+            /* apply retention to adjust flow accumulation */
+            if (rtn_flag)
+                value *= rtn[this_index] / 100.0;
 	    down_index = SEG_INDEX(wat_seg, dr, dc);
 
 	    /* get weights */
@@ -489,7 +496,7 @@ int do_cum_mfd(void)
 	    /* topographic wetness index ln(a / tan(beta)) and
 	     * stream power index a * tan(beta) */
 	    if (atanb_flag) {
-		sca[this_index] = fabs(wat[this_index]) *
+		sca[this_index] = fabs(value) *
 		    (cell_size / sum_contour);
 		tanb[this_index] = tci_div;
 	    }

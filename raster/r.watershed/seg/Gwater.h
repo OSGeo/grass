@@ -93,7 +93,7 @@ extern int ocs_alloced;
 extern double half_res, diag, max_length, dep_slope;
 extern int bas_thres, tot_parts;
 extern SSEG astar_pts;
-extern BSEG s_b;
+extern BSEG s_b, rtn;
 extern CSEG dis, bas, haf, r_h, dep;
 extern SSEG watalt, aspflag;
 extern DSEG slp, s_l, s_g, l_s, ril;
@@ -108,7 +108,7 @@ extern int nextdr[8];
 extern int nextdc[8];
 extern char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
 extern char run_name[GNAME_MAX], ob_name[GNAME_MAX];
-extern char ril_name[GNAME_MAX], dep_name[GNAME_MAX];
+extern char ril_name[GNAME_MAX], rtn_name[GNAME_MAX], dep_name[GNAME_MAX];
 
 extern const char *this_mapset;
 extern char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX], thr_name[8];
@@ -116,7 +116,7 @@ extern char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX], sg_name[
 extern char wat_name[GNAME_MAX], asp_name[GNAME_MAX];
 extern char tci_name[GNAME_MAX], spi_name[GNAME_MAX];
 extern char arm_name[GNAME_MAX], dis_name[GNAME_MAX];
-extern char ele_flag, pit_flag, run_flag, dis_flag, ob_flag;
+extern char ele_flag, pit_flag, run_flag, dis_flag, ob_flag, rtn_flag;
 extern char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag, tci_flag, spi_flag, atanb_flag;
 extern char bas_flag, seg_flag, haf_flag, er_flag;
 extern char st_flag, sb_flag, sg_flag, sl_flag, ls_flag;
