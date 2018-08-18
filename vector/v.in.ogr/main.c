@@ -129,6 +129,8 @@ int main(int argc, char *argv[])
     int ncols = 0, type;
     double min_area, snap;
     char buf[DB_SQL_MAX], namebuf[1024];
+    char *sqlbuf;
+    size_t sqlbufsize;
     char *separator;
 
     struct Cell_head cellhd, cur_wind;
@@ -1213,6 +1215,8 @@ int main(int argc, char *argv[])
     }
 
     /* import features */
+    sqlbuf = NULL;
+    sqlbufsize = 0;
     OGR_iterator_reset(&OGR_iter);
     for (layer = 0; layer < nlayers; layer++) {
 	layer_id = layers[layer];
@@ -1297,8 +1301,8 @@ int main(int argc, char *argv[])
 	    /* Attributes */
 	    ncols = OGR_FD_GetFieldCount(Ogr_featuredefn);
 	    if (!flag.notab->answer) {
-		sprintf(buf, "insert into %s values ( %d", Fi->table, cat);
-		db_set_string(&sql, buf);
+		G_rasprintf(&sqlbuf, &sqlbufsize, "insert into %s values ( %d", Fi->table, cat);
+		db_set_string(&sql, sqlbuf);
 		for (i = 0; i < ncols; i++) {
 		    const char *Ogr_fstring = NULL;
 
@@ -1315,7 +1319,7 @@ int main(int argc, char *argv[])
                             Ogr_ftype == OFTInteger64 ||
 #endif
                             Ogr_ftype == OFTReal) {
-			    sprintf(buf, ", %s", Ogr_fstring);
+			    G_rasprintf(&sqlbuf, &sqlbufsize, ", %s", Ogr_fstring);
 			}
 #if GDAL_VERSION_NUM >= 1320
 			    /* should we use OGR_F_GetFieldAsDateTime() here ? */
@@ -1325,9 +1329,10 @@ int main(int argc, char *argv[])
 
 			    db_set_string(&strval, (char *)Ogr_fstring);
 			    db_double_quote_string(&strval);
-			    sprintf(buf, ", '%s'", db_get_string(&strval));
-			    newbuf = G_str_replace(buf, "/", "-");	/* fix 2001/10/21 to 2001-10-21 */
-			    sprintf(buf, "%s", newbuf);
+			    G_rasprintf(&sqlbuf, &sqlbufsize, ", '%s'", db_get_string(&strval));
+			    newbuf = G_str_replace(sqlbuf, "/", "-");	/* fix 2001/10/21 to 2001-10-21 */
+			    G_rasprintf(&sqlbuf, &sqlbufsize, "%s", newbuf);
+			    G_free(newbuf);
 			}
 #endif
 			else if (Ogr_ftype == OFTString ||
@@ -1339,11 +1344,11 @@ int main(int argc, char *argv[])
                                  ) {
 			    db_set_string(&strval, (char *)Ogr_fstring);
 			    db_double_quote_string(&strval);
-			    sprintf(buf, ", '%s'", db_get_string(&strval));
+			    G_rasprintf(&sqlbuf, &sqlbufsize, ", '%s'", db_get_string(&strval));
 			}
 			else {
 			    /* column type not supported */
-			    buf[0] = 0;
+			    G_rasprintf(&sqlbuf, &sqlbufsize, "%c", '\0');
 			}
 		    }
 		    else {
@@ -1353,13 +1358,13 @@ int main(int argc, char *argv[])
                             Ogr_ftype == OFTInteger64 ||
 #endif
                             Ogr_ftype == OFTReal) {
-			    sprintf(buf, ", NULL");
+			    G_rasprintf(&sqlbuf, &sqlbufsize, ", NULL");
 			}
 #if GDAL_VERSION_NUM >= 1320
 			else if (Ogr_ftype == OFTDate ||
 				 Ogr_ftype == OFTTime || 
 				 Ogr_ftype == OFTDateTime) {
-			    sprintf(buf, ", NULL");
+			    G_rasprintf(&sqlbuf, &sqlbufsize, ", NULL");
 			}
 #endif
 			else if (Ogr_ftype == OFTString ||
@@ -1369,14 +1374,18 @@ int main(int argc, char *argv[])
                                  || Ogr_ftype == OFTInteger64List
 #endif
                                  ) {
-			    sprintf(buf, ", NULL");
+			    G_rasprintf(&sqlbuf, &sqlbufsize, ", NULL");
 			}
 			else {
 			    /* column type not supported */
-			    buf[0] = 0;
+			    G_rasprintf(&sqlbuf, &sqlbufsize, "%c", '\0');
 			}
 		    }
-		    db_append_string(&sql, buf);
+		    if (strlen(sqlbuf) >= DB_SQL_MAX) {
+			G_debug(1, "%s", sqlbuf);
+			G_debug(1, "Field %d is %ld long", i, strlen(sqlbuf));
+		    }
+		    db_append_string(&sql, sqlbuf);
 		}
 		db_append_string(&sql, " )");
 		G_debug(3, "%s", db_get_string(&sql));
