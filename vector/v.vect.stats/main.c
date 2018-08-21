@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
     point_opt->key = "points";
     point_opt->label = _("Name of existing vector map with points");
     /* point_opt->guisection = _("Required"); */
-
+      
     area_opt = G_define_standard_option(G_OPT_V_INPUT);
     area_opt->key = "areas";
     area_opt->label = _("Name of existing vector map with areas");
@@ -226,7 +226,18 @@ int main(int argc, char *argv[])
 	_("Print output to stdout, do not update attribute table");
     print_flag->description = _("First column is always area category");
     print_flag->guisection = _("Print");
- 
+
+    /* GUI dependencies */
+    G_asprintf((char **) &(point_opt->guidependency), "%s,%s,%s",
+               point_field_opt->key, point_where_opt->key, point_column_opt->key);
+    G_asprintf((char **) &(point_field_opt->guidependency), "%s,%s",
+               point_where_opt->key, point_column_opt->key);
+    G_asprintf((char **) &(area_opt->guidependency), "%s,%s,%s,%s",
+               area_field_opt->key, area_where_opt->key,
+               count_column_opt->key, stats_column_opt->key);
+    G_asprintf((char **) &(area_field_opt->guidependency), "%s,%s,%s",
+               area_where_opt->key, count_column_opt->key, stats_column_opt->key);
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
