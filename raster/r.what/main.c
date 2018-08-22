@@ -562,7 +562,9 @@ static int by_row(const void *ii, const void *jj)
 {
     const struct order *i = ii, *j = jj;
 
-    return i->row - j->row;
+    if (i->row < j->row)
+	return -1;
+    return (i->row > j->row);
 }
 
 
