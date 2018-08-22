@@ -797,27 +797,31 @@ int main(int argc, char *argv[])
                 if (G_projection() == PROJECTION_LL && (
                     window.north + xs <= 90.0 + 0.5 * window.ns_res ||
                     window.south - xs >= -90.0 - 0.5 * window.ns_res)) {
-                    G_warning(_("Box option not used with <%s> because a coordinate would become invalid"), "latitude");
+                    G_warning(_("'%s' option not used with <%s> because a coordinate would become invalid"), 
+		              parm.grow->key, "latitude");
                 } else {
                     window.north += xs;
                     window.south -= xs;
                 }
             } else {
-                G_warning(_("Box option not used with <%s> because <%s> would become minor than <%s>"), "latitude", "north", "south");
+                G_warning(_("'%s' option not used with <%s> because <%s> would become minor than <%s>"),
+		          parm.grow->key, "latitude", "north", "south");
             }
             ys = window.ew_res * pix;
             if (window.east + ys > window.west - ys){
                 window.west -= ys;
                 window.east += ys;
             } else {
-                G_warning(_("Box option not used with <%s> because <%s> would become minor than <%s>"), "longitude", "east", "west");
+                G_warning(_("'%s' option not used with <%s> because <%s> would become minor than <%s>"),
+		          parm.grow->key, "longitude", "east", "west");
             }
             zs = window.tb_res * pix;
             if (window.top + zs > window.bottom - zs){
                 window.top += zs;
                 window.bottom -= zs;
             } else {
-                G_warning(_("Box option not used with <%s> because <%s> would become minor than <%s>"), "3D", "top", "bottom");
+                G_warning(_("'%s' option not used with <%s> because <%s> would become minor than <%s>"),
+		          parm.grow->key, "3D", "top", "bottom");
             }
         }
     }
