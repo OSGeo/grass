@@ -81,7 +81,7 @@ static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
 }
 
 /* Helper for converting multipoligons to GRASS poligons */
-static int add_poly(const GEOSGeometry *OGeom, struct line_pnts *Buffer) {
+static void add_poly(const GEOSGeometry *OGeom, struct line_pnts *Buffer) {
     const GEOSGeometry *geom2;
     static struct line_pnts *gPoints;
     int i, nrings;
@@ -754,13 +754,13 @@ static int compdist(const void *d1, const void *d2)
     G_debug(5, "Comparing %f with %f", r1->distance, r2->distance);
 
     if (r1->distance == r2->distance) {
-        if (r1->cat > r2->cat)
-            return 1;
-        else
+        if (r1->cat < r2->cat)
             return -1;
+        else
+            return (r1->cat > r2->cat);
     }
-    if (r1->distance > r2->distance)
-        return 1;
-    else
+    if (r1->distance < r2->distance)
         return -1;
+    else
+        return (r1->distance > r2->distance);
 }
