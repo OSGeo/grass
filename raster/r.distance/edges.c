@@ -150,7 +150,10 @@ static int cmp(const void *aa, const void *bb)
 {
     const struct CatEdgeList *a = aa, *b = bb;
 
-    return (int)(a->cat - b->cat);
+    if (a->cat < b->cat)
+	return -1;
+
+    return (a->cat > b->cat);
 }
 
 void sort_edge_list(struct Map *map)
