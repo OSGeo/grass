@@ -73,10 +73,10 @@ typedef struct
 
 static int cmp_edge(const void *pa, const void *pb)
 {
-    if (((edge_cost_pair *) pa)->cost != ((edge_cost_pair *) pb)->cost)
-	return (((edge_cost_pair *) pa)->cost > ((edge_cost_pair *) pb)->cost ? 1 : -1);
+    if (((edge_cost_pair *) pa)->cost < ((edge_cost_pair *) pb)->cost)
+	return -1;
 
-    return 0;
+    return (((edge_cost_pair *) pa)->cost > ((edge_cost_pair *) pb)->cost);
 }
 
 /*!
