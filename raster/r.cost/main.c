@@ -170,11 +170,11 @@ int main(int argc, char *argv[])
 	  "geographic locations on an input raster map "
 	  "whose cell category values represent cost.");
 
-    opt1 = G_define_standard_option(G_OPT_R_OUTPUT);
-
     opt2 = G_define_standard_option(G_OPT_R_INPUT);
     opt2->description =
 	_("Name of input raster map containing grid cell cost information");
+
+    opt1 = G_define_standard_option(G_OPT_R_OUTPUT);
 
     opt_solve = G_define_standard_option(G_OPT_R_INPUT);
     opt_solve->key = "solver";
