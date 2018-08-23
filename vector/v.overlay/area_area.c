@@ -18,7 +18,10 @@
 /* for ilist qsort'ing and bsearch'ing */
 static int cmp_int(const void *a, const void *b)
 {
-    return (*(int *)a - *(int *)b);
+    if (*(int *)a < *(int *)b)
+	return -1;
+
+    return (*(int *)a > *(int *)b);
 }
 
 int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,

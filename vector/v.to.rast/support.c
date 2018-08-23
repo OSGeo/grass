@@ -226,7 +226,10 @@ static int cmp_labels_i(const void *a, const void *b)
     struct My_labels_rule *al = (struct My_labels_rule *) a;
     struct My_labels_rule *bl = (struct My_labels_rule *) b;
 
-    return (al->i - bl->i);
+    if (al->i < bl->i)
+	return -1;
+
+    return (al->i > bl->i);
 }
 
 /* add labels to raster cells */
