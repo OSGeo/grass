@@ -40,9 +40,10 @@ static void print_subgroups(char *group, int simple);
 int main(int argc, char *argv[])
 {
     char group[GNAME_MAX], mapset[GMAPSET_MAX];
+    char **rasters = NULL;
     int m, k = 0;
 
-    struct Option *grp, *rast, *sgrp;
+    struct Option *grp, *rast, *rastf, *sgrp;
     struct Flag *r, *l, *s, *simple_flag;
     struct GModule *module;
 
@@ -66,6 +67,11 @@ int main(int argc, char *argv[])
     rast->required = NO;	/* -l flag */
     rast->description = _("Name of raster map(s) to include in group");
     rast->guisection = _("Maps");
+
+    rastf = G_define_standard_option(G_OPT_F_INPUT);
+    rastf->key = "file";
+    rastf->description = _("Input file with one raster map name per line");
+    rastf->required = NO;
 
     r = G_define_flag();
     r->key = 'r';
@@ -97,12 +103,45 @@ int main(int argc, char *argv[])
     if ((simple_flag->answer && !s->answer) && !l->answer)
 	l->answer = TRUE;
 
-    /* Determine number of files to include */
+    /* Determine number of raster maps to include */
     if (rast->answers) {
 	for (m = 0; rast->answers[m]; m++) {
 	    k = m;
 	}
 	k++;
+	rasters = rast->answers;
+    }
+    /* process the input maps from the file */
+    else if (rastf->answer) {
+	FILE *in;
+    
+	m = 10;
+	rasters = G_malloc(m * sizeof(char *));
+	in = fopen(rastf->answer, "r");
+	if (!in)
+	    G_fatal_error(_("Unable to open input file <%s>"), rastf->answer);
+    
+	for (;;) {
+	    char buf[GNAME_MAX];
+	    char *name;
+
+	    if (!G_getl2(buf, sizeof(buf), in))
+		break;
+
+	    name = G_chop(buf);
+
+	    /* Ignore empty lines */
+	    if (!*name)
+		continue;
+
+	    if (m <= k) {
+		m += 10;
+		rasters = G_realloc(rasters, m * sizeof(char *));
+	    }
+	    rasters[k] = G_store(name);
+	    k++;
+	}
+	fclose(in);
     }
 
     if (k < 1 && !(l->answer || s->answer))	/* remove if input is requirement */
@@ -131,12 +170,12 @@ int main(int argc, char *argv[])
 	if (sgrp->answer) {
 	    G_verbose_message(_("Removing raster maps from subgroup <%s>..."),
 			      sgrp->answer);
-	    remove_subgroup_files(group, sgrp->answer, rast->answers, k);
+	    remove_subgroup_files(group, sgrp->answer, rasters, k);
 	}
 	else {
 	    G_verbose_message(_("Removing raster maps from group <%s>..."),
 			      group);
-	    remove_group_files(group, rast->answers, k);
+	    remove_group_files(group, rasters, k);
 	}
     }
     else {
@@ -188,16 +227,16 @@ int main(int argc, char *argv[])
 	    if (sgrp->answer) {
 		G_verbose_message(_("Adding raster maps to group <%s>..."),
 				  group);
-		add_or_update_group(group, rast->answers, k);
+		add_or_update_group(group, rasters, k);
 
 		G_verbose_message(_("Adding raster maps to subgroup <%s>..."),
 				  sgrp->answer);
-		add_or_update_subgroup(group, sgrp->answer, rast->answers, k);
+		add_or_update_subgroup(group, sgrp->answer, rasters, k);
 	    }
 	    else {
 		G_verbose_message(_("Adding raster maps to group <%s>..."),
 				  group);
-		add_or_update_group(group, rast->answers, k);
+		add_or_update_group(group, rasters, k);
 	    }
 	}
     }
