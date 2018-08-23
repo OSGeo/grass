@@ -202,7 +202,10 @@ static int cmp(const void *a, const void *b)
     int ai = *(int *)a;
     int bi = *(int *)b;
 
-    return (ai - bi);
+    if (ai < bi)
+	return -1;
+
+    return (ai > bi);
 }
 
 /* check topology corruption by boundary modification

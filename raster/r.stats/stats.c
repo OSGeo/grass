@@ -183,14 +183,18 @@ int update_cell_stats(CELL ** cell, int ncols, double area)
 static int node_compare(const void *pp, const void *qq)
 {
     struct Node *const *p = pp, *const *q = qq;
-    register int i, x;
+    register int i;
     register const CELL *a, *b;
 
     a = (*p)->values;
     b = (*q)->values;
-    for (i = nfiles; --i >= 0;)
-	if (x = (*a++ - *b++), x)
-	    return x;
+    for (i = nfiles; --i >= 0;) {
+	if (*a < *b)
+	    return -1;
+	else if (*a > *b)
+	    return 1;
+	a++, b++;
+    }
 
     return 0;
 }
@@ -203,7 +207,9 @@ static int node_compare_count_asc(const void *pp, const void *qq)
     a = (*p)->count;
     b = (*q)->count;
 
-    return (a - b);
+    if (a < b)
+	return -1;
+    return (a > b);
 }
 
 static int node_compare_count_desc(const void *pp, const void *qq)
@@ -214,7 +220,9 @@ static int node_compare_count_desc(const void *pp, const void *qq)
     a = (*p)->count;
     b = (*q)->count;
 
-    return (b - a);
+    if (a > b)
+	return -1;
+    return (a < b);
 }
 
 int sort_cell_stats(int do_sort)
