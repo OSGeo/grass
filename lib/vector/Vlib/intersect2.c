@@ -123,9 +123,9 @@ static double d_ulp(double a, double b)
     /* unit in the last place (ULP):
      * smallest representable difference
      * shift of the exponent
-     * float: 23, double: 52, middle: 37 */
+     * float: 23, double: 52, middle: 37.5 */
     result = frexp(dmax, &exp);
-    exp -= 23;
+    exp -= 38;
     result = ldexp(result, exp);
 
     return result;
