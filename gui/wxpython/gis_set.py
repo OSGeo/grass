@@ -37,6 +37,8 @@ from grass.script import core as grass
 
 from core.gcmd import GMessage, GError, DecodeString, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
+from startup.utils import (
+    get_lockfile_if_present, get_possible_database_path)
 from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator, StaticWrapText
@@ -540,10 +542,6 @@ class GRASSStartup(wx.Frame):
         # only if nothing is set (<UNKNOWN> comes from init script)
         if self.GetRCValue("LOCATION_NAME") != "<UNKNOWN>":
             return
-
-        # lazy import
-        from startup.utils import get_possible_database_path
-
         path = get_possible_database_path()
         if path:
             try:
@@ -892,9 +890,8 @@ class GRASSStartup(wx.Frame):
         idx = 0
         for mapset in self.listOfMapsets:
             if mapset not in self.listOfMapsetsSelectable or \
-                    os.path.isfile(os.path.join(self.gisdbase,
-                                                locationName,
-                                                mapset, ".gislock")):
+                    get_lockfile_if_present(self.gisdbase,
+                                            locationName, mapset):
                 disabled.append(idx)
             idx += 1
 
@@ -926,9 +923,8 @@ class GRASSStartup(wx.Frame):
 
         for mapset in self.listOfMapsets:
             if mapset not in self.listOfMapsetsSelectable or \
-                    os.path.isfile(os.path.join(self.gisdbase,
-                                                locationName,
-                                                mapset, ".gislock")):
+                    get_lockfile_if_present(self.gisdbase,
+                                            locationName, mapset):
                 disabled.append(idx)
             idx += 1
 
@@ -1070,8 +1066,8 @@ class GRASSStartup(wx.Frame):
         location = self.listOfLocations[self.lblocations.GetSelection()]
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
 
-        lockfile = os.path.join(dbase, location, mapset, '.gislock')
-        if os.path.isfile(lockfile):
+        lockfile = get_lockfile_if_present(dbase, location, mapset)
+        if lockfile:
             dlg = wx.MessageDialog(
                 parent=self,
                 message=_(
