@@ -39,7 +39,7 @@ from core.gcmd import GMessage, GError, DecodeString, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
     get_lockfile_if_present, get_possible_database_path)
-from startup.guiutils import SetSessionMapset
+from startup.guiutils import SetSessionMapset, NewMapsetDialog
 from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator, StaticWrapText
@@ -597,22 +597,7 @@ class GRASSStartup(wx.Frame):
                 defineRegion.Destroy()
 
             if gWizard.user_mapset:
-                dlg = TextEntryDialog(
-                    parent=self,
-                    message=_("New mapset:"),
-                    caption=_("Create new mapset"),
-                    defaultValue=self._getDefaultMapsetName(),
-                    validator=GenericValidator(
-                        grass.legal_name,
-                        self._nameValidationFailed
-                    ),
-                    style=wx.OK | wx.CANCEL | wx.HELP
-                )
-                help = dlg.FindWindowById(wx.ID_HELP)
-                help.Bind(wx.EVT_BUTTON, self.OnHelp)
-                if dlg.ShowModal() == wx.ID_OK:
-                    mapsetName = dlg.GetValue()
-                    self.CreateNewMapset(mapsetName)
+                self.OnCreateMapset(event)
 
     def ImportFile(self, filePath):
         """Tries to import file as vector or raster.
@@ -991,14 +976,12 @@ class GRASSStartup(wx.Frame):
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
-        dlg = TextEntryDialog(
+        dlg = NewMapsetDialog(
             parent=self,
-            message=_('Enter name for new mapset:'),
-            caption=_('Create new mapset'),
-            defaultValue=self._getDefaultMapsetName(),
-            validator=GenericValidator(
-                grass.legal_name,
-                self._nameValidationFailed))
+            default=self._getDefaultMapsetName(),
+            validation_failed_handler=self._nameValidationFailed,
+            help_hanlder=self.OnHelp,
+        )
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
             return self.CreateNewMapset(mapset=mapset)
