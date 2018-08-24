@@ -20,7 +20,8 @@ def get_possible_database_path():
 
     Looks for directory named grassdata in the usual locations.
 
-    Returns the path as a string or None if nothing was found.
+    Returns the path as a string or None if nothing was found, so the
+    return value can be used to test if the directory was found.
     """
     home = os.path.expanduser('~')
     # try some common directories for grassdata
@@ -47,3 +48,18 @@ def get_possible_database_path():
             path = candidate
             break  # get the first match
     return path
+
+
+def get_lockfile_if_present(database, location, mapset):
+    """Return path to lock if present, None otherwise
+
+    Returns the path as a string or None if nothing was found, so the
+    return value can be used to test if the lock is present.
+    """
+    lock_name = '.gislock'
+    lockfile = os.path.join(database, location, mapset, lock_name)
+    if os.path.isfile(lockfile):
+        return lockfile
+    else:
+        return None
+
