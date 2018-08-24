@@ -542,11 +542,11 @@ class GRASSStartup(wx.Frame):
             return
         home = os.path.expanduser('~')
         # try some common directories for grassdata
-        # always assuming grassdata (lowercase)
-        # home for Linux
+        # grassdata (lowercase) in home for Linux (first choice)
         # Documents and My Documents for Windows
         # potential translations (old Windows and some Linux)
         # but ~ and ~/Documents should cover most of the cases
+        # ordered by preference and then likelihood
         candidates = [
             os.path.join(home, "grassdata"),
             os.path.join(home, "Documents", "grassdata"),
@@ -563,6 +563,7 @@ class GRASSStartup(wx.Frame):
         for candidate in candidates:
             if os.path.exists(candidate):
                 path = candidate
+                break  # get the first match
         if path:
             try:
                 self.tgisdbase.SetValue(path)
