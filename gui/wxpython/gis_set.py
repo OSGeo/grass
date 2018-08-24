@@ -253,8 +253,16 @@ class GRASSStartup(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
     def _set_properties(self, version, revision):
-        """Set frame properties"""
-        self.SetTitle(_("GRASS GIS %s startup%s") % (version, revision))
+        """Set frame properties
+
+        :param version: Version in the form of X.Y.Z
+        :param revision: Version control revision with leading space
+
+        *revision* should be an empty string in case of release and
+        otherwise it needs a leading space to be separated from the rest
+        of the title.
+        """
+        self.SetTitle(_("GRASS GIS %s Startup%s") % (version, revision))
         self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"),
                              wx.BITMAP_TYPE_ICO))
 
