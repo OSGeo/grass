@@ -231,7 +231,7 @@ int Rast__open_old(const char *name, const char *mapset)
     }
     /* test if compressor type is supported */
     if (!G_check_compressor(cellhd.compressed)) {
-	G_fatal_error(_("Compression with %s is not supported"), G_compressor_name(cellhd.compressed));
+	G_fatal_error(_("Compression with %s is not supported in this GRASS GIS installation"), G_compressor_name(cellhd.compressed));
     }
 
     if (cellhd.proj != R__.rd_window.proj)
