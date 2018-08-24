@@ -194,14 +194,19 @@ integer, ZLIB's compression level 1 will be used.
 
 <h2>EXAMPLES</h2>
 
-Printing of current compression state:
+<h3>Printing of current compression state</h3>
+
+Example for an uncompressed raster map:
+
 <div class="code"><pre>
 r.compress compressed_no -p
   &lt;compressed_no&gt; (method 0: NONE). Data type: &lt;CELL&gt;
 </pre></div>
 
-<p>
-Applying RLE compression to a copy of the uncompressed map (not recommended!):
+<!-- do no advertise not recommended and deprecated compressions!
+
+<h3>Applying RLE compression to a copy of the uncompressed map (not recommended!)</h3>
+
 <div class="code"><pre>
 # compression of map using the deprecated RLE compression
 g.copy raster=compressed_no,compressed_RLE
@@ -210,11 +215,13 @@ export GRASS_COMPRESSOR=RLE # RLE
 r.compress compressed_RLE 
 r.compress compressed_RLE -p 
   &lt;compressed_RLE&gt; is compressed (method 1: RLE). Data type: &lt;CELL&gt;
-unset GRASS_INT_ZLIB
+unset GRASS_COMPRESSOR # switch back to default
 </pre></div>
+-->
 
-<p>
-Applying ZLIB compression to a copy of the uncompressed map:
+<h3>Applying ZLIB compression</h3>
+
+Applying ZLIB compression to a copy of the uncompressed map from above:
 <div class="code"><pre>
 # compression of map using ZLIB compression
 g.copy raster=compressed_no,compressed_ZLIB
@@ -223,11 +230,12 @@ export GRASS_COMPRESSOR=ZLIB # ZLIB
 r.compress compressed_ZLIB
 r.compress compressed_ZLIB -p
   &lt;compressed_ZLIB&gt; is compressed (method 2: ZLIB). Data type: &lt;CELL&gt;
-unset GRASS_INT_ZLIB
+unset GRASS_COMPRESSOR # switch back to default
 </pre></div>
 
-<p>
-Applying BZIP2 compression to a copy of the ZLIB-compressed map:
+<h3>Applying BZIP2 compression</h3>
+
+Applying BZIP2 compression to a copy of the ZLIB-compressed map from above:
 <div class="code"><pre>
 # compression of map using BZIP2 compression
 g.copy raster=compressed_ZLIB,compressed_BZIP2
@@ -236,11 +244,12 @@ export GRASS_COMPRESSOR=BZIP2 # BZIP2
 r.compress compressed_BZIP2
 r.compress compressed_BZIP2 -p
   &lt;compressed_BZIP2&gt; is compressed (method 4: BZIP2). Data type: &lt;CELL&gt;
-unset GRASS_COMPRESSOR
+unset GRASS_COMPRESSOR # switch back to default
 </pre></div>
 
-<p>
-Applying ZSTD compression to a copy of the BZIP2-compressed map:
+<h3>Applying ZSTD compression</h3>
+
+Applying ZSTD compression to a copy of the BZIP2-compressed map from above:
 <div class="code"><pre>
 # compression of map using ZSTD compression
 g.copy raster=compressed_BZIP2,compressed_ZSTD
