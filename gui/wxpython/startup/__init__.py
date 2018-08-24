@@ -1,3 +1,4 @@
 all = [
     'locdownload',
+    'utils',
 ]
