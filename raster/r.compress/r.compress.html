@@ -42,11 +42,10 @@ compression, by changing the compression level with the environment variable
 <tt>GRASS_ZLIB_LEVEL</tt>.
 
 <p>
-Compressed raster maps may be decompressed using <em>r.compress</em> to 
-return them to their original format, using the <b>-u</b> flag. If a 
-raster map was already decompressed and the <b>-u</b> flag is set, the 
-module simply informs the user that the map is already decompressed and 
-exits.
+Compressed raster maps may be decompressed using <em>r.compress</em> 
+with the <b>-u</b> flag. If a raster map was already decompressed and 
+the <b>-u</b> flag is set, the module simply informs the user that the 
+map is already decompressed and exits.
 
 <p>
 Information about the compression method and data type of the input 
@@ -90,10 +89,10 @@ The following compression methods are available (set by
 <li><tt>BZIP2</tt> (slowest, high compression)</li>
 </ul>
 
-Important: the NULL file compression must be explicitly turned on with 
-<tt>export GRASS_COMPRESS_NULLS=1</tt> - such raster maps can then only 
-be opened with GRASS GIS 7.2.0 or later. NULL file compression can be 
-managed with <b>r.null -z</b>.
+Important: the NULL file compression can be turned off with 
+<tt>export GRASS_COMPRESS_NULLS=0</tt>. Raster maps with NULL file 
+compression can only be opened with GRASS GIS 7.2.0 or later. NULL file 
+compression for a particular raster map can be managed with <b>r.null -z</b>.
 The NULL file compression is using the LZ4 method as being the best compromise
 between speed and compression rate.
 
@@ -188,40 +187,47 @@ integer, ZLIB's compression level 1 will be used.
 
 <h2>EXAMPLES</h2>
 
-Printing of current compression state:
+<h3>Printing of current compression state</h3>
+
+Example for an uncompressed raster map:
+
 <div class="code"><pre>
 r.compress compressed_no -p
   &lt;compressed_no&gt; (method 0: NONE). Data type: &lt;CELL&gt;
 </pre></div>
 
-<p>
-Applying RLE compression to a copy of the uncompressed map (not recommended!):
+<!-- do no advertise not recommended and deprecated compressions!
+
+<h3>Applying RLE compression to a copy of the uncompressed map (not recommended!)</h3>
+
 <div class="code"><pre>
 # compression of map using the deprecated RLE compression
 g.copy raster=compressed_no,compressed_RLE
 
-export GRASS_INT_ZLIB=0 # RLE
+export GRASS_COMPRESSOR=RLE # RLE
 r.compress compressed_RLE 
 r.compress compressed_RLE -p 
   &lt;compressed_RLE&gt; is compressed (method 1: RLE). Data type: &lt;CELL&gt;
-unset GRASS_INT_ZLIB
+unset GRASS_COMPRESSOR # switch back to default
 </pre></div>
+-->
 
-<p>
-Applying ZLIB compression to a copy of the uncompressed map:
+<h3>Applying ZLIB compression</h3>
+
+Applying ZLIB compression to a copy of the uncompressed map from above:
 <div class="code"><pre>
 # compression of map using ZLIB compression
 g.copy raster=compressed_no,compressed_ZLIB
 
-export GRASS_INT_ZLIB=1 # ZLIB
+export GRASS_COMPRESSOR=ZLIB # ZLIB
 r.compress compressed_ZLIB
 r.compress compressed_ZLIB -p
   &lt;compressed_ZLIB&gt; is compressed (method 2: ZLIB). Data type: &lt;CELL&gt;
-unset GRASS_INT_ZLIB
 </pre></div>
 
-<p>
-Applying BZIP2 compression to a copy of the ZLIB-compressed map:
+<h3>Applying BZIP2 compression</h3>
+
+Applying BZIP2 compression to a copy of the ZLIB-compressed map from above:
 <div class="code"><pre>
 # compression of map using BZIP2 compression
 g.copy raster=compressed_ZLIB,compressed_BZIP2
@@ -230,7 +236,7 @@ export GRASS_COMPRESSOR=BZIP2 # BZIP2
 r.compress compressed_BZIP2
 r.compress compressed_BZIP2 -p
   &lt;compressed_BZIP2&gt; is compressed (method 4: BZIP2). Data type: &lt;CELL&gt;
-unset GRASS_COMPRESSOR
+unset GRASS_COMPRESSOR # switch back to default
 </pre></div>
 
 <h2>SEE ALSO</h2>
