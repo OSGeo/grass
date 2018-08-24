@@ -39,6 +39,7 @@ from core.gcmd import GMessage, GError, DecodeString, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
     get_lockfile_if_present, get_possible_database_path)
+from startup.guiutils import SetSessionMapset
 from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator, StaticWrapText
@@ -877,12 +878,7 @@ class GRASSStartup(wx.Frame):
             for line in ret.splitlines():
                 self.listOfMapsetsSelectable += line.split(' ')
         else:
-            RunCommand("g.gisenv",
-                       set="GISDBASE=%s" % self.gisdbase)
-            RunCommand("g.gisenv",
-                       set="LOCATION_NAME=%s" % locationName)
-            RunCommand("g.gisenv",
-                       set="MAPSET=PERMANENT")
+            self.SetLocation(self.gisdbase, locationName, "PERMANENT")
             # first run only
             self.listOfMapsetsSelectable = copy.copy(self.listOfMapsets)
 
@@ -1110,12 +1106,7 @@ class GRASSStartup(wx.Frame):
         self.ExitSuccessfully()
 
     def SetLocation(self, dbase, location, mapset):
-        RunCommand("g.gisenv",
-                   set="GISDBASE=%s" % dbase)
-        RunCommand("g.gisenv",
-                   set="LOCATION_NAME=%s" % location)
-        RunCommand("g.gisenv",
-                   set="MAPSET=%s" % mapset)
+        SetSessionMapset(dbase, location, mapset)
 
     def _getDefaultMapsetName(self):
         """Returns default name for mapset."""

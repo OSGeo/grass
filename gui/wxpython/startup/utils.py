@@ -1,7 +1,7 @@
 """
 @package startup.utils
 
-@brief General utilities for GUI startup of GRASS GIS
+@brief General GUI-independent utilities for GUI startup of GRASS GIS
 
 (C) 2017-2018 by Vaclav Petras the GRASS Development Team
 
@@ -9,6 +9,10 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Vaclav Petras <wenzeslaus gmail com>
+
+This file should not use (import) anything from GUI code (wx or wxGUI).
+This can potentially be part of the Python library (i.e. it needs to
+solve the errors etc. in a general manner).
 """
 
 
