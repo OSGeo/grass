@@ -540,30 +540,11 @@ class GRASSStartup(wx.Frame):
         # only if nothing is set (<UNKNOWN> comes from init script)
         if self.GetRCValue("LOCATION_NAME") != "<UNKNOWN>":
             return
-        home = os.path.expanduser('~')
-        # try some common directories for grassdata
-        # grassdata (lowercase) in home for Linux (first choice)
-        # Documents and My Documents for Windows
-        # potential translations (old Windows and some Linux)
-        # but ~ and ~/Documents should cover most of the cases
-        # ordered by preference and then likelihood
-        candidates = [
-            os.path.join(home, "grassdata"),
-            os.path.join(home, "Documents", "grassdata"),
-            os.path.join(home, "My Documents", "grassdata"),
-        ]
-        try:
-            # here goes everything which has potential unicode issues
-            candidates.append(os.path.join(home, _("Documents"), "grassdata"))
-            candidates.append(os.path.join(home, _("My Documents"), "grassdata"))
-        except UnicodeDecodeError:
-            # just ignore the errors if it doesn't work
-            pass
-        path = None
-        for candidate in candidates:
-            if os.path.exists(candidate):
-                path = candidate
-                break  # get the first match
+
+        # lazy import
+        from startup.utils import get_possible_database_path
+
+        path = get_possible_database_path()
         if path:
             try:
                 self.tgisdbase.SetValue(path)
