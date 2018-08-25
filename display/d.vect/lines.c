@@ -261,7 +261,11 @@ int draw_line(int type, int ltype, int line,
     
     /* z height colors */
     if (zcolors && (ltype & GV_POINTS)) {
-	if (Rast_get_d_color(&Points->z[0], &red, &grn, &blu, zcolors) == 1)
+        struct bound_box box;
+        Vect_line_box(Points, &box);
+        double zval = (box.B + box.T) / 2; /* midpoint of line bounding box z */
+        G_debug(3, "line=%d -> zval=%f", line, zval);
+	if (Rast_get_d_color(&zval, &red, &grn, &blu, zcolors) == 1)
 	    custom_rgb = TRUE;
 	else
 	    custom_rgb = FALSE;
