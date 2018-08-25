@@ -32,17 +32,17 @@ void AerosolConcentration::parse(const long int _iaer, const AtmosModel& atms)
     {
 	cin >> taer55;
 	cin.ignore(numeric_limits<int>::max(),'\n');	/* ignore comments */
-	v = (float)(exp(-log(taer55/2.7628f)/0.79902f));
+	v = (double)(exp(-log(taer55/2.7628f)/0.79902f));
     }
     else if(v > 0) oda550(v, atms);
 }
 
-void AerosolConcentration::oda550(const float vis, const AtmosModel& atms)
+void AerosolConcentration::oda550(const double vis, const AtmosModel& atms)
 {
     /* aerosol optical depth at wl=550nm */
     /* vertical repartition of aerosol density for v=23km */
     /*                ( in nbr of part/cm3 ) */
-    static const float an23[34] = {
+    static const double an23[34] = {
 	2.828e+03,1.244e+03,5.371e+02,2.256e+02,1.192e+02,
 	8.987e+01,6.337e+01,5.890e+01,6.069e+01,5.818e+01,
 	5.675e+01,5.317e+01,5.585e+01,5.156e+01,5.048e+01,
@@ -55,7 +55,7 @@ void AerosolConcentration::oda550(const float vis, const AtmosModel& atms)
 
     /* vertical repartition of aerosol density for v=5km */
     /*                ( in nbr of part/cm3 ) */
-    static const float an5[34] = {
+    static const double an5[34] = {
 	1.378e+04,5.030e+03,1.844e+03,6.731e+02,2.453e+02,
 	8.987e+01,6.337e+01,5.890e+01,6.069e+01,5.818e+01,
 	5.675e+01,5.317e+01,5.585e+01,5.156e+01,5.048e+01,
@@ -71,17 +71,17 @@ void AerosolConcentration::oda550(const float vis, const AtmosModel& atms)
 
     for(int k = 0; k < 32; k++)
     {
-	float dz = atms.z[k+1] - atms.z[k];
-	float az = (115.f / 18.f) * (an5[k] - an23[k]);
-	float az1 = (115.f / 18.f) * (an5[k+1] - an23[k+1]);
+	double dz = atms.z[k+1] - atms.z[k];
+	double az = (115.f / 18.f) * (an5[k] - an23[k]);
+	double az1 = (115.f / 18.f) * (an5[k+1] - an23[k+1]);
 
-	float bz = (5.f * an5[k] / 18.f) - (23.f * an23[k] / 18.f);
-	float bz1 = (5.f * an5[k+1] / 18.f) - (23.f * an23[k+1] / 18.f);
+	double bz = (5.f * an5[k] / 18.f) - (23.f * an23[k] / 18.f);
+	double bz1 = (5.f * an5[k+1] / 18.f) - (23.f * an23[k+1] / 18.f);
 
-	float bnz = az / vis - bz;
-	float bnz1 = az1 / vis - bz1;
+	double bnz = az / vis - bz;
+	double bnz1 = az1 / vis - bz1;
 
-	float ev = (float)(dz * exp((log(bnz) + log(bnz1)) / 2));
+	double ev = (double)(dz * exp((log(bnz) + log(bnz1)) / 2));
 	taer55 += ev * sigma * 1.0e-03f;
     }
 }

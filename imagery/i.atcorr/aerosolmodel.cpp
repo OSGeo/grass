@@ -7,7 +7,7 @@ extern "C" {
 #include "aerosolmodel.h"
 #include "atmosmodel.h"
 #ifdef WIN32
-#pragma warning(disable:4305)	/* disable warning about initialization of a float by a double */
+#pragma warning(disable:4305)	/* disable warning about initialization of a double by a double */
 #endif /* WIN32 */
 
 /* (background desert model...) */
@@ -57,7 +57,7 @@ void AerosolModel::soot()
   isotropic sphere, the physical properties of particles whose sizes are 
   comparable to or larger than the wavelength, and to generate mixture of 
   dry particles. */
-void AerosolModel::mie(float (&ex)[4][10], float (&sc)[4][10], float (&asy)[4][10])
+void AerosolModel::mie(double (&ex)[4][10], double (&sc)[4][10], double (&asy)[4][10])
 {
     double np[4];
     double ext[10][4];
@@ -180,8 +180,8 @@ void AerosolModel::mie(float (&ex)[4][10], float (&sc)[4][10], float (&asy)[4][1
 	{
 	    ext[j][i] /= np[i] * 1000;
 	    sca2[j][i] /= np[i] * 1000;
-	    ex[0][j] += (float)(mie_in.cij[i] * ext[j][i]);
-	    sc[0][j] += (float)(mie_in.cij[i] * sca2[j][i]);
+	    ex[0][j] += (double)(mie_in.cij[i] * ext[j][i]);
+	    sc[0][j] += (double)(mie_in.cij[i] * sca2[j][i]);
 	}
 
     /* computation of the phase function and the asymetry coefficient
@@ -196,14 +196,14 @@ void AerosolModel::mie(float (&ex)[4][10], float (&sc)[4][10], float (&asy)[4][1
 	{
 	    sixs_aerbas.usr_ph[j][k] = 0;
 	    for(i = 0; i < mie_in.icp; i++)
-		sixs_aerbas.usr_ph[j][k] += (float)(mie_in.cij[i] * p1[j][i][k] / np[i] / 1000);
+		sixs_aerbas.usr_ph[j][k] += (double)(mie_in.cij[i] * p1[j][i][k] / np[i] / 1000);
 		
-	    sixs_aerbas.usr_ph[j][k] += (float)sc[0][j];
+	    sixs_aerbas.usr_ph[j][k] += (double)sc[0][j];
 	    asy_n += sixs_sos.cgaus[k] * sixs_aerbas.usr_ph[j][k] * sixs_sos.pdgs[k] / 10.;
 	    asy_d += sixs_aerbas.usr_ph[j][k] * sixs_sos.pdgs[k] / 10.;
 	}
 
-	asy[0][j] = (float)(asy_n / asy_d);
+	asy[0][j] = (double)(asy_n / asy_d);
     }
 
     sixs_aerbas.ph = &sixs_aerbas.usr_ph;
@@ -499,7 +499,7 @@ void AerosolModel::save()
   by the user (see SUBROUTINES MIE and EXSCPHASE).
   These models don't correspond to a mixture of the four basic components.
 */
-void AerosolModel::aeroso(const float xmud)
+void AerosolModel::aeroso(const double xmud)
 {
 /* sra basic components for aerosol model, extinction coefficients are */
 /* in km-1. */
@@ -511,7 +511,7 @@ void AerosolModel::aeroso(const float xmud)
     static const double ni[4] = { 54.734, 1868550., 276.05, 1805820. };
 
     /* i: 1=dust-like 2=water-soluble 3=oceanic 4=soot */
-    static const float s_ex[4][10] =
+    static const double s_ex[4][10] =
 	{
 	    {0.1796674e-01,0.1815135e-01,0.1820247e-01,0.1827016e-01,0.1842182e-01,
 	     0.1853081e-01,0.1881427e-01,0.1974608e-01,0.1910712e-01,0.1876025e-01},
@@ -523,7 +523,7 @@ void AerosolModel::aeroso(const float xmud)
 	     0.3966041e-06,0.2965532e-06,0.1493927e-06,0.1017134e-06,0.6065031e-07}
 	};
 
-    static const float s_sc[4][10] =
+    static const double s_sc[4][10] =
 	{
 	    {0.1126647e-01,0.1168918e-01,0.1180978e-01,0.1196792e-01,0.1232056e-01,
 	     0.1256952e-01,0.1319347e-01,0.1520712e-01,0.1531952e-01,0.1546761e-01},
@@ -535,44 +535,44 @@ void AerosolModel::aeroso(const float xmud)
 	     0.6469735e-07,0.3610638e-07,0.6227224e-08,0.1779378e-08,0.3050002e-09}
 	};
  
-    static const float ex2[10] = 
+    static const double ex2[10] = 
 	{ 
 	    43.83631f, 42.12415f, 41.57425f, 40.85399f, 39.1404f, 
 	    37.89763f, 34.67506f, 24.59f, 17.96726f, 10.57569f
 	};
 
-    static const float sc2[10] = 
+    static const double sc2[10] = 
 	{ 
 	    40.28625f, 39.04473f, 38.6147f, 38.03645f, 36.61054f, 
 	    35.54456f, 32.69951f, 23.41019f, 17.15375f,10.09731f
 	};
 
-    static const float ex3[10] = 
+    static const double ex3[10] = 
 	{ 
 	    95397.86f, 75303.6f, 70210.64f, 64218.28f, 52430.56f, 
 	    45577.68f, 31937.77f, 9637.68f, 3610.691f, 810.5614f
 	};
 
-    static const float sc3[10] = 
+    static const double sc3[10] = 
 	{ 
 	    92977.9f, 73397.17f, 68425.49f,	62571.8f, 51049.87f, 
 	    44348.77f, 31006.21f, 9202.678f, 3344.476f,	664.1915f
 	};
   
-    static const float ex4[10] = 
+    static const double ex4[10] = 
 	{ 
 	    54273040.f, 61981440.f, 63024320.f, 63489470.f, 61467600.f,
 	    58179720.f, 46689090.f, 15190620.f, 5133055.f, 899859.4f
 	};
 
   
-    static const float sc4[10] = 
+    static const double sc4[10] = 
 	{ 
 	    54273040.f, 61981440.f, 63024320.f, 63489470.f, 61467600.f, 
 	    58179720.f, 46689090.f, 15190620.f, 5133055.f, 899859.4f
 	};
 	
-    static const float s_asy[4][10] = 
+    static const double s_asy[4][10] = 
 	{
 	    {0.896,0.885,0.880,0.877,0.867,0.860,0.845,0.836,0.905,0.871},
 	    {0.642,0.633,0.631,0.628,0.621,0.616,0.610,0.572,0.562,0.495},
@@ -580,21 +580,21 @@ void AerosolModel::aeroso(const float xmud)
 	    {0.397,0.359,0.348,0.337,0.311,0.294,0.253,0.154,0.103,0.055}
 	};
 
-    static const float asy2[10] = { .718f, .712f, .71f, .708f, .704f, .702f, .696f, .68f, .668f, .649f };
+    static const double asy2[10] = { .718f, .712f, .71f, .708f, .704f, .702f, .696f, .68f, .668f, .649f };
 
-    static const float asy3[10] = { .704f, .69f, .686f, .68f, .667f, .659f, .637f, .541f, .437f, .241f };
-    static const float asy4[10] = { .705f, .744f, .751f, .757f, .762f, .759f, .737f, .586f, .372f, .139f };
+    static const double asy3[10] = { .704f, .69f, .686f, .68f, .667f, .659f, .637f, .541f, .437f, .241f };
+    static const double asy4[10] = { .705f, .744f, .751f, .757f, .762f, .759f, .737f, .586f, .372f, .139f };
 
     /* local */
     double coef;
-    float sigm;
+    double sigm;
     double sumni;
     double dd[4][10];
     double pha[5][10][83];
 
-    float ex[4][10];
-    float sc[4][10];
-    float asy[4][10];
+    double ex[4][10];
+    double sc[4][10];
+    double asy[4][10];
 
     int i;	/* crappy VS6 */
     /* initialize ex, sc & asy */
@@ -636,7 +636,7 @@ void AerosolModel::aeroso(const float xmud)
     {
 	load();
 	for(i = 0; i < 10; i++) 
-	    sixs_aer.phase[i] = (float)(sixs_sos.phasel[i][j1] + 
+	    sixs_aer.phase[i] = (double)(sixs_sos.phasel[i][j1] + 
 					coef*(sixs_sos.phasel[i][j1]-sixs_sos.phasel[i][j1+1]));
 	return;
     }
@@ -745,11 +745,11 @@ void AerosolModel::aeroso(const float xmud)
 	sumni = 0.f;
 	sigm = 0.f;
 
-	for(i = 0; i < 4; i++) sigm+=(float)(c[i]/vi[i]);
+	for(i = 0; i < 4; i++) sigm+=(double)(c[i]/vi[i]);
 
 	/* cij coefficients calculation */
 	for(i = 0; i < 4; i++) {
-	    mie_in.cij[i] = (float)(c[i]/vi[i]/sigm);
+	    mie_in.cij[i] = (double)(c[i]/vi[i]/sigm);
 	    sumni += mie_in.cij[i]/ni[i];
 	}
 
@@ -762,13 +762,13 @@ void AerosolModel::aeroso(const float xmud)
     {
 	for(int j = 0; j < mie_in.icp; j++)
 	{
-	    sixs_aer.ext[i] +=		(float)(ex[j][i] * mie_in.cij[j]);
-	    sca[i] +=				(float)(sc[j][i] * mie_in.cij[j]);
-	    sixs_aer.gasym[i] +=	(float)(sc[j][i] * mie_in.cij[j] * asy[j][i]);
-	    sixs_aer.phase[i] +=	(float)(sc[j][i] * mie_in.cij[j] * dd[j][i]);
+	    sixs_aer.ext[i] +=		(double)(ex[j][i] * mie_in.cij[j]);
+	    sca[i] +=				(double)(sc[j][i] * mie_in.cij[j]);
+	    sixs_aer.gasym[i] +=	(double)(sc[j][i] * mie_in.cij[j] * asy[j][i]);
+	    sixs_aer.phase[i] +=	(double)(sc[j][i] * mie_in.cij[j] * dd[j][i]);
 
 	    for(int k = 0; k < 83; k++)
-		sixs_sos.phasel[i][k] += (float)(sc[j][i] * mie_in.cij[j] * pha[j][i][k]);
+		sixs_sos.phasel[i][k] += (double)(sc[j][i] * mie_in.cij[j] * pha[j][i][k]);
 	}
 
 	sixs_aer.ome[i] = sca[i]/sixs_aer.ext[i];
@@ -777,14 +777,14 @@ void AerosolModel::aeroso(const float xmud)
 
 	for(int k = 0; k < 83; k++)	sixs_sos.phasel[i][k] /= sca[i];
 
-	sixs_aer.ext[i] *= (float)nis;
-	sca[i] *= (float)nis;
+	sixs_aer.ext[i] *= (double)nis;
+	sca[i] *= (double)nis;
     }
 
     if (filename.size() != 0 && iaer >= 8 && iaer <= 11) save();
 }
 
-void AerosolModel::parse(const float xmud)
+void AerosolModel::parse(const double xmud)
 {
     cin >> iaer;
     cin.ignore(numeric_limits<int>::max(),'\n');
@@ -937,7 +937,7 @@ void AerosolModel::parse(const float xmud)
 
 	    double sq = mie_in.rsunph[i]*mie_in.rsunph[i];
 	    const double ln10 = 2.3025850929940456840179914546844;
-	    mie_in.nrsunph[i] = (float)(mie_in.nrsunph[i]/(sq*sq)/ln10);
+	    mie_in.nrsunph[i] = (double)(mie_in.nrsunph[i]/(sq*sq)/ln10);
 	}
 	mie_in.rmin=mie_in.rsunph[0];
 	mie_in.rmax=mie_in.rsunph[mie_in.irsunph-1]+1e-07f;
@@ -1159,7 +1159,7 @@ void AerosolModel::print()
     }
 }
 
-AerosolModel AerosolModel::Parse(const float xmud)
+AerosolModel AerosolModel::Parse(const double xmud)
 {
     AerosolModel aero;
     aero.parse(xmud);

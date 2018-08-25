@@ -1,6 +1,6 @@
 #include "common.h"
 #ifdef WIN32
-#pragma warning(disable:4305)	/* disable warning about initialization of a float by a double */
+#pragma warning(disable:4305)	/* disable warning about initialization of a double by a double */
 #endif
 
 Sixs_aer sixs_aer;	/* will be initialized in AerosolModel */

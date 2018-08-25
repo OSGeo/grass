@@ -14,7 +14,7 @@
    are used as outputs or in computations when the user chooses to enter a
    specific amount of Ozone and Water Vapor.
 */
-void Altitude::pressure(AtmosModel& atms, float& uw, float& uo3)
+void Altitude::pressure(AtmosModel& atms, double& uw, double& uo3)
 {
     /* log linear interpolation */
     if(xps >= 100) xps = 99.99f;
@@ -25,17 +25,17 @@ void Altitude::pressure(AtmosModel& atms, float& uw, float& uo3)
     int isup = i;
     int iinf = i - 1;
 
-    float xa = (float)((atms.z[isup] - atms.z[iinf]) / log(atms.p[isup] / atms.p[iinf]));
-    float xb = (float)(atms.z[isup] - xa * log(atms.p[isup]));
-    float ps = (float)exp((xps - xb) / xa);
+    double xa = (double)((atms.z[isup] - atms.z[iinf]) / log(atms.p[isup] / atms.p[iinf]));
+    double xb = (double)(atms.z[isup] - xa * log(atms.p[isup]));
+    double ps = (double)exp((xps - xb) / xa);
 
     /* interpolating temperature wator vapor and ozone profile versus altitude */
-    float xalt = xps;
-    float xtemp = (atms.t[isup] - atms.t[iinf]) / (atms.z[isup] - atms.z[iinf]);
+    double xalt = xps;
+    double xtemp = (atms.t[isup] - atms.t[iinf]) / (atms.z[isup] - atms.z[iinf]);
     xtemp = xtemp * (xalt - atms.z[iinf]) + atms.t[iinf];
-    float xwo = (atms.wo[isup] - atms.wo[iinf]) / (atms.z[isup] - atms.z[iinf]);
+    double xwo = (atms.wo[isup] - atms.wo[iinf]) / (atms.z[isup] - atms.z[iinf]);
     xwo = xwo * (xalt - atms.z[iinf]) + atms.wo[iinf];
-    float xwh = (atms.wh[isup] - atms.wh[iinf]) / (atms.z[isup] - atms.z[iinf]);
+    double xwh = (atms.wh[isup] - atms.wh[iinf]) / (atms.z[isup] - atms.z[iinf]);
     xwh = xwh * (xalt - atms.z[iinf]) + atms.wh[iinf];
 
     /* updating atmospheric profile
@@ -68,14 +68,14 @@ void Altitude::pressure(AtmosModel& atms, float& uw, float& uo3)
     /* compute modified h2o and o3 integrated content */
     uw = 0;
     uo3 = 0;
-    const float g = 98.1f;
-    const float air = 0.028964f/0.0224f;
-    const float ro3 = 0.048f/0.0224f;
+    const double g = 98.1f;
+    const double air = 0.028964f/0.0224f;
+    const double ro3 = 0.048f/0.0224f;
 
-    float rmwh[34];
-    float rmo3[34];
+    double rmwh[34];
+    double rmo3[34];
     int k;
-    float roair, ds;
+    double roair, ds;
 
     k = 0;
     roair = air * 273.16f * atms.p[k] / (atms.t[k] * 1013.25f);
@@ -122,17 +122,17 @@ void Altitude::presplane(AtmosModel& atms)
     int isup = i;
     int iinf = i-1;
 
-    float xa = (float)((atms.z[isup] - atms.z[iinf]) / log(atms.p[isup] / atms.p[iinf]));
-    float xb = (float)(atms.z[isup] - xa * log(atms.p[isup]));
-    float ps = (float)(exp((xpp - xb) / xa));
+    double xa = (double)((atms.z[isup] - atms.z[iinf]) / log(atms.p[isup] / atms.p[iinf]));
+    double xb = (double)(atms.z[isup] - xa * log(atms.p[isup]));
+    double ps = (double)(exp((xpp - xb) / xa));
 
     /* interpolating temperature wator vapor and ozone profile versus altitud */
-    float xalt = xpp;
-    float xtemp  = (atms.t[isup] - atms.t[iinf])/ (atms.z[isup] - atms.z[iinf]);
+    double xalt = xpp;
+    double xtemp  = (atms.t[isup] - atms.t[iinf])/ (atms.z[isup] - atms.z[iinf]);
     xtemp = xtemp * (xalt - atms.z[iinf]) + atms.t[iinf];
-    float xwo = (atms.wo[isup] - atms.wo[iinf]) / (atms.z[isup] - atms.z[iinf]);
+    double xwo = (atms.wo[isup] - atms.wo[iinf]) / (atms.z[isup] - atms.z[iinf]);
     xwo =  xwo * (xalt - atms.z[iinf]) + atms.wo[iinf];
-    float xwh = (atms.wh[isup] - atms.wh[iinf]) / (atms.z[isup] - atms.z[iinf]);
+    double xwh = (atms.wh[isup] - atms.wh[iinf]) / (atms.z[isup] - atms.z[iinf]);
     xwh =  xwh * (xalt - atms.z[iinf]) + atms.wh[iinf];
 
     /* updating atmospheric profile
@@ -161,18 +161,18 @@ void Altitude::presplane(AtmosModel& atms)
        ftray=rp/rt */
     atms.uw = 0;
     atms.uo3 = 0;
-    const float g = 98.1f;
-    const float air = 0.028964f/0.0224f;
-    const float ro3 = 0.048f/0.0224f;
-    float rt = 0;
-    float rp = 0;
+    const double g = 98.1f;
+    const double air = 0.028964f/0.0224f;
+    const double ro3 = 0.048f/0.0224f;
+    double rt = 0;
+    double rp = 0;
 
-    float rmo3[34];
-    float rmwh[34];
+    double rmo3[34];
+    double rmwh[34];
     int k;
     for(k = 0; k < 33; k++)
     {
-	float roair = (float)(air * 273.16 * plane_sim.ppl[k] / (1013.25 * plane_sim.tpl[k]));
+	double roair = (double)(air * 273.16 * plane_sim.ppl[k] / (1013.25 * plane_sim.tpl[k]));
 	rmwh[k] = atms.wh[k] / (roair * 1000);
 	rmo3[k] = atms.wo[k] / (roair * 1000);
 	rt += (atms.p[k+1] / atms.t[k+1] + atms.p[k] / atms.p[k]) * (atms.z[k+1] - atms.z[k]);
@@ -183,7 +183,7 @@ void Altitude::presplane(AtmosModel& atms)
     ftray = rp / rt;
     for(k = 1; k < 33; k++)
     {
-	float ds = (plane_sim.ppl[k-1] - plane_sim.ppl[k]) / plane_sim.ppl[0];
+	double ds = (plane_sim.ppl[k-1] - plane_sim.ppl[k]) / plane_sim.ppl[0];
 	atms.uw += (rmwh[k] + rmwh[k-1])*ds/2;
 	atms.uo3+= (rmo3[k] + rmo3[k-1])*ds/2;
     }
@@ -198,8 +198,8 @@ void Altitude::init(AtmosModel &atms, const AerosolConcentration &aerocon)
     xps = original_xps;
     xpp = original_xpp;
 
-    float uwus;
-    float uo3us;
+    double uwus;
+    double uo3us;
     if(xps <= 0)
     {
 	xps = 0;
@@ -265,7 +265,7 @@ void Altitude::init(AtmosModel &atms, const AerosolConcentration &aerocon)
 	if ((taer55p > 0) || ((aerocon.taer55 - taer55p) < 1e-03))
 	{
 	    /* a scale heigh of 2km is assumed in case no value is given for taer55p */
-	    taer55p = (float)(aerocon.taer55 * (1 - exp(-palt / 2)));
+	    taer55p = (double)(aerocon.taer55 * (1 - exp(-palt / 2)));
 	}
 	else
 	{
@@ -273,10 +273,10 @@ void Altitude::init(AtmosModel &atms, const AerosolConcentration &aerocon)
 	    double sham = exp(-palt / 4);
 	    double sha = 1 - (taer55p / aerocon.taer55);
 
-	    if( sha >= sham) taer55p = (float)(aerocon.taer55 * (1 - exp(-palt / 4)));
+	    if( sha >= sham) taer55p = (double)(aerocon.taer55 * (1 - exp(-palt / 4)));
 	    else {
 		sha = -palt/log(sha);
-		taer55p = (float)(aerocon.taer55 * (1 - exp(-palt/sha)));
+		taer55p = (double)(aerocon.taer55 * (1 - exp(-palt/sha)));
 	    }
 	}
     }
@@ -287,8 +287,8 @@ void Altitude::update_hv(AtmosModel & atms, const AerosolConcentration & aerocon
     xps = original_xps;
     xpp = original_xpp;
 
-    float uwus;
-    float uo3us;
+    double uwus;
+    double uo3us;
 
     if (xps <= 0) {
 	xps = 0;
@@ -346,7 +346,7 @@ void Altitude::update_hv(AtmosModel & atms, const AerosolConcentration & aerocon
 
 	if ((taer55p > 0) || ((aerocon.taer55 - taer55p) < 1e-03)) {
 	    /* a scale heigh of 2km is assumed in case no value is given for taer55p */
-	    taer55p = (float)(aerocon.taer55 * (1 - exp(-palt / 2)));
+	    taer55p = (double)(aerocon.taer55 * (1 - exp(-palt / 2)));
 	}
 	else {
 	    /* compute effective scale heigh */
@@ -354,10 +354,10 @@ void Altitude::update_hv(AtmosModel & atms, const AerosolConcentration & aerocon
 	    double sha = 1 - (taer55p / aerocon.taer55);
 
 	    if (sha >= sham)
-		taer55p = (float)(aerocon.taer55 * (1 - exp(-palt / 4)));
+		taer55p = (double)(aerocon.taer55 * (1 - exp(-palt / 4)));
 	    else {
 		sha = -palt / log(sha);
-		taer55p = (float)(aerocon.taer55 * (1 - exp(-palt / sha)));
+		taer55p = (double)(aerocon.taer55 * (1 - exp(-palt / sha)));
 	    }
 	}
     }

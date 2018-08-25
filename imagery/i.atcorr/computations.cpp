@@ -20,22 +20,22 @@ extern "C" {
 
 struct OpticalAtmosProperties
 {
-    float rorayl, romix, roaero;
-    float ddirtr, ddiftr;
-    float ddirtt, ddiftt;
-    float ddirta, ddifta;
-    float udirtr, udiftr;
-    float udirtt, udiftt;
-    float udirta, udifta;
-    float sphalbr, sphalbt, sphalba;
+    double rorayl, romix, roaero;
+    double ddirtr, ddiftr;
+    double ddirtt, ddiftt;
+    double ddirta, ddifta;
+    double udirtr, udiftr;
+    double udirtt, udiftt;
+    double udirta, udifta;
+    double sphalbr, sphalbt, sphalba;
 };
 
 /* To compute the molecular optical depth as a function of wavelength for any
    atmosphere defined by the pressure and temperature profiles. */
-float odrayl(const AtmosModel &atms, const float wl)
+double odrayl(const AtmosModel &atms, const double wl)
 {
     /* air refraction index edlen 1966 / metrologia,2,71-80  putting pw=0 */
-    float ak=1/wl;
+    double ak=1/wl;
     double awl= wl*wl*wl*wl * 0.0254743;
     double a1 = 130 - ak * ak;
     double a2 = 38.9 - ak * ak;
@@ -45,12 +45,12 @@ float odrayl(const AtmosModel &atms, const float wl)
     double a = (24 * M_PI * M_PI * M_PI) * ((an * an - 1) * (an * an - 1))
 	* (6 + 3 * delta) / (6 - 7 * delta) / ((an * an + 2) * (an * an + 2));
 
-    float tray = 0;
+    double tray = 0;
     for(int k = 0; k < 33; k++)
     {
 	double dppt = (288.15 / 1013.25) * (atms.p[k] / atms.t[k] + atms.p[k+1] / atms.t[k+1]) / 2;
 	double sr = a * dppt / awl;
-	tray += (float)((atms.z[k+1] - atms.z[k]) * sr);
+	tray += (double)((atms.z[k+1] - atms.z[k]) * sr);
     }
 
     return tray;
@@ -66,13 +66,13 @@ float odrayl(const AtmosModel &atms, const float wl)
   --------
   (1-w0 f)
 */
-float trunca()
+double trunca()
 {
-    float ptemp[83];
-    float cosang[80];
-    float weight[80];
-    float rmu[83];
-    float ga[83];
+    double ptemp[83];
+    double cosang[80];
+    double weight[80];
+    double rmu[83];
+    double ga[83];
 
     int i;
     for(i = 0; i < 83; i++) ptemp[i] = sixs_trunc.pha[i];
@@ -114,32 +114,32 @@ float trunca()
     }
 	
 
-    float aa = (float)((log10(sixs_trunc.pha[kk]) - log10(sixs_trunc.pha[k])) / 
+    double aa = (double)((log10(sixs_trunc.pha[kk]) - log10(sixs_trunc.pha[k])) / 
 		       (acos(rmu[kk]) - acos(rmu[k])));
-    float x1 = (float)(log10(sixs_trunc.pha[kk]));
-    float x2 = (float)acos(rmu[kk]);
+    double x1 = (double)(log10(sixs_trunc.pha[kk]));
+    double x2 = (double)acos(rmu[kk]);
 
     for(i = kk + 1; i < 83; i++)
     {
 	double a;
 	if(fabs(rmu[i] - 1) <= 1e-08) a = x1 - aa * x2;
 	else a = x1 + aa * (acos(rmu[i]) - x2);
-	ptemp[i] = (float)pow(10,a);
+	ptemp[i] = (double)pow(10,a);
     }
 
 
     for(i = 0; i < 83; i++) sixs_trunc.pha[i] = ptemp[i];
     for(i = 0; i < 80; i++) sixs_trunc.betal[i] = 0;
 
-    float pl[83];
+    double pl[83];
 
 #define IPL(X) ((X)+1)
 
 
     for(i = 0; i < 83; i++)
     {
-	float x = sixs_trunc.pha[i] * ga[i];
-	float rm = rmu[i];
+	double x = sixs_trunc.pha[i] * ga[i];
+	double rm = rmu[i];
 	pl[IPL(-1)] = 0;
 	pl[IPL(0)] = 1;
 
@@ -152,7 +152,7 @@ float trunca()
 
     for(i = 0; i <= 80; i++) sixs_trunc.betal[i] *= (2 * i + 1) * 0.5f;
 
-    float z1 = sixs_trunc.betal[0];
+    double z1 = sixs_trunc.betal[0];
     for(i = 0; i <= 80; i++) sixs_trunc.betal[i] /= z1;
     if(sixs_trunc.betal[80] < 0) sixs_trunc.betal[80] = 0;
 
@@ -168,9 +168,9 @@ float trunca()
   unless otherwise specified by the user (using aircraft measurements).
 */
 
-float discre(const float ta, const float ha, const float tr, const float hr,
-	     const int it, const int ntd, const float yy, const float dd,
-	     const float ppp2, const float ppp1)
+double discre(const double ta, const double ha, const double tr, const double hr,
+	     const int it, const int ntd, const double yy, const double dd,
+	     const double ppp2, const double ppp1)
 {
     if( ha >= 7 ) 
     {
@@ -182,14 +182,14 @@ float discre(const float ta, const float ha, const float tr, const float hr,
     if( it == 0 ) dt = 1e-17;
     else dt = 2 * (ta + tr - yy) / (ntd - it + 1);
 	
-    float zx; /* return value */
-    float ecart = 0;
+    double zx; /* return value */
+    double ecart = 0;
     do { 
 	dt = dt / 2;
 	double ti = yy + dt;
-	float y1 = ppp2;
-	float y2;
-	float y3 = ppp1;
+	double y1 = ppp2;
+	double y2;
+	double y3 = ppp1;
 
 	while(true)
 	{
@@ -207,8 +207,8 @@ float discre(const float ta, const float ha, const float tr, const float hr,
 	}
 
 	zx = y2;
-	float cdelta = (float)(1. / (1 + ta * hr / tr / ha * exp((zx - ppp1) * (1. / hr - 1. / ha))));
-	if(dd != 0) ecart = (float)fabs((dd - cdelta) / dd);
+	double cdelta = (double)(1. / (1 + ta * hr / tr / ha * exp((zx - ppp1) * (1. / hr - 1. / ha))));
+	if(dd != 0) ecart = (double)fabs((dd - cdelta) / dd);
     } while((ecart > 0.75) && (it != 0));
     return zx;
 
@@ -221,11 +221,11 @@ float discre(const float ta, const float ha, const float tr, const float hr,
   Compute the values of Legendre polynomials used in the successive order of
   scattering method.
 */
-void kernel(const int is, float (&xpl)[2*mu + 1], float (&bp)[26][2*mu + 1], Gauss &gauss)
+void kernel(const int is, double (&xpl)[2*mu + 1], double (&bp)[26][2*mu + 1], Gauss &gauss)
 {
     const double rac3 = 1.7320508075688772935274463415059;
 #define PSI(X) ((X)+1)
-    float psl[82][2*mu + 1];
+    double psl[82][2*mu + 1];
 
     if(is == 0) 
     {
@@ -238,8 +238,8 @@ void kernel(const int is, float (&xpl)[2*mu + 1], float (&bp)[26][2*mu + 1], Gau
 
 	    double xdb = (3 * gauss.rm[STDI(j)] * gauss.rm[STDI(j)] - 1) * 0.5;
 	    if(fabs(xdb) < 1e-30) xdb = 0;
-	    psl[PSI(2)][STDI(-j)] = (float)xdb;
-	    psl[PSI(2)][STDI(j)] = (float)xdb;
+	    psl[PSI(2)][STDI(-j)] = (double)xdb;
+	    psl[PSI(2)][STDI(j)] = (double)xdb;
 	}
 	psl[PSI(1)][STDI(0)] = gauss.rm[STDI(0)];
     }
@@ -250,9 +250,9 @@ void kernel(const int is, float (&xpl)[2*mu + 1], float (&bp)[26][2*mu + 1], Gau
 	    double x = 1 - gauss.rm[STDI(j)] * gauss.rm[STDI(j)];
 	    psl[PSI(0)][STDI(j)]  = 0;
 	    psl[PSI(0)][STDI(-j)] = 0;
-	    psl[PSI(1)][STDI(-j)] = (float)sqrt(x * 0.5);
-	    psl[PSI(1)][STDI(j)]  = (float)sqrt(x * 0.5);
-	    psl[PSI(2)][STDI(j)]  = (float)(gauss.rm[STDI(j)] * psl[PSI(1)][STDI(j)] * rac3);
+	    psl[PSI(1)][STDI(-j)] = (double)sqrt(x * 0.5);
+	    psl[PSI(1)][STDI(j)]  = (double)sqrt(x * 0.5);
+	    psl[PSI(2)][STDI(j)]  = (double)(gauss.rm[STDI(j)] * psl[PSI(1)][STDI(j)] * rac3);
 	    psl[PSI(2)][STDI(-j)] = -psl[PSI(2)][STDI(j)];
 
 	}
@@ -270,8 +270,8 @@ void kernel(const int is, float (&xpl)[2*mu + 1], float (&bp)[26][2*mu + 1], Gau
 	    psl[PSI(is - 1)][STDI(j)] = 0;
 	    double xdb = a * pow(xx, is * 0.5);
 	    if(fabs(xdb) < 1e-30) xdb = 0;
-	    psl[PSI(is)][STDI(-j)] = (float)xdb;
-	    psl[PSI(is)][STDI(j)] = (float)xdb;
+	    psl[PSI(is)][STDI(-j)] = (double)xdb;
+	    psl[PSI(is)][STDI(j)] = (double)xdb;
 	}
     }
 
@@ -286,13 +286,13 @@ void kernel(const int is, float (&xpl)[2*mu + 1], float (&bp)[26][2*mu + 1], Gau
 	for(int l = k; l < ip; l++)
 	{
 	    double a = (2 * l + 1.) / sqrt((l + is + 1.) * (l - is + 1.));
-	    double b = sqrt(float((l + is) * (l - is))) / (2. * l + 1.);
+	    double b = sqrt(double((l + is) * (l - is))) / (2. * l + 1.);
 
 	    for(int j = 0; j <= mu; j++)
 	    {
 		double xdb = a * (gauss.rm[STDI(j)] * psl[PSI(l)][STDI(j)] - b * psl[PSI(l-1)][STDI(j)]);
 		if (fabs(xdb) < 1e-30) xdb = 0;
-		psl[PSI(l+1)][STDI(j)] = (float)xdb;
+		psl[PSI(l+1)][STDI(j)] = (double)xdb;
 		if(j != 0) psl[PSI(l+1)][STDI(-j)] = ig * psl[PSI(l+1)][STDI(j)];
 	    }
 	    ig = -ig;
@@ -313,7 +313,7 @@ void kernel(const int is, float (&xpl)[2*mu + 1], float (&bp)[26][2*mu + 1], Gau
 		    sbp += psl[PSI(l)][STDI(j)] * psl[PSI(l)][STDI(k)] * sixs_trunc.betal[l];
 
 		if(fabs(sbp) < 1e-30) sbp = 0;
-		bp[j][STDI(k)] = (float)sbp;
+		bp[j][STDI(k)] = (double)sbp;
 	    }
 	}
     }
@@ -326,12 +326,12 @@ void kernel(const int is, float (&xpl)[2*mu + 1], float (&bp)[26][2*mu + 1], Gau
 #define accu2 1e-3
 #define mum1 (mu - 1)
 
-void os(const float tamoy, const float trmoy, const float pizmoy, 
-	const float tamoyp, const float trmoyp,	float (&xl)[2*mu + 1][np],
+void os(const double tamoy, const double trmoy, const double pizmoy, 
+	const double tamoyp, const double trmoyp,	double (&xl)[2*mu + 1][np],
         Gauss &gauss, const Altitude &alt, const GeomCond &geom)
 {
-    float trp = trmoy - trmoyp;
-    float tap = tamoy - tamoyp;
+    double trp = trmoy - trmoyp;
+    double tap = tamoy - tamoyp;
     int iplane = 0;
 
     /* if plane observations recompute scale height for aerosol knowing:
@@ -346,40 +346,40 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
        ntp=nt-1   plane observation selected
        it's a mixing rayleigh+aerosol */
 
-    float ha = 2;
+    double ha = 2;
     int snt = nt;
     int ntp = snt;
     if(alt.palt <= 900 && alt.palt > 0)
     {
-	if(tap > 1.e-03) ha = -alt.palt / (float)log(tap / tamoy);
+	if(tap > 1.e-03) ha = -alt.palt / (double)log(tap / tamoy);
 	ntp = snt - 1;
     } 
 
-    float xmus = -gauss.rm[STDI(0)];
+    double xmus = -gauss.rm[STDI(0)];
 
     /* compute mixing rayleigh, aerosol
        case 1: pure rayleigh
        case 2: pure aerosol
        case 3: mixing rayleigh-aerosol */
 
-    float h[31];
+    double h[31];
     memset(h, 0, sizeof(h));
-    float ch[31];
-    float ydel[31];
+    double ch[31];
+    double ydel[31];
 
-    float xdel[31];
-    float altc[31];
+    double xdel[31];
+    double altc[31];
     if( (tamoy <= accu2) && (trmoy > tamoy) ) 
     {
 	for(int j = 0; j <= ntp; j++)
 	{
 	    h[j] = j * trmoy / ntp;
-	    ch[j]= (float)exp(-h[j] / xmus) / 2;
+	    ch[j]= (double)exp(-h[j] / xmus) / 2;
 	    ydel[j] = 1;
 	    xdel[j] = 0;
 
 	    if (j == 0) altc[j] = 300;
-	    else altc[j] = -(float)log(h[j] / trmoy) * 8;
+	    else altc[j] = -(double)log(h[j] / trmoy) * 8;
 	}
     }
 
@@ -389,12 +389,12 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	for(int j = 0; j <= ntp; j++)
 	{
 	    h[j] = j * tamoy / ntp;
-	    ch[j]= (float)exp(-h[j] / xmus) / 2;
+	    ch[j]= (double)exp(-h[j] / xmus) / 2;
 	    ydel[j] = 0;
 	    xdel[j] = pizmoy;
       
 	    if (j == 0) altc[j] = 300;
-	    else altc[j] = -(float)log(h[j] / tamoy) * ha;
+	    else altc[j] = -(double)log(h[j] / tamoy) * ha;
 	}
     }
 
@@ -405,7 +405,7 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	h[0] = 0;
 	ch[0] = 0.5;
 	altc[0] = 300;
-	float zx = 300;
+	double zx = 300;
 	iplane = 0;
 
 	for(int it = 0; it <= ntp; it++)
@@ -414,20 +414,20 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	    else zx = discre(tamoy, ha, trmoy, 8.0, it, ntp, h[it - 1], ydel[it - 1], 300, 0);
 
 	    double xx = -zx / ha;
-	    float ca;
+	    double ca;
 	    if( xx <= -20 ) ca = 0;
-	    else ca = tamoy * (float)exp(xx);
+	    else ca = tamoy * (double)exp(xx);
 
 	    xx = -zx / 8;
-	    float cr = trmoy * (float)exp(xx);
+	    double cr = trmoy * (double)exp(xx);
 	    h[it] = cr + ca;
 
 
 	    altc[it] = zx;
-	    ch[it] = (float)exp(-h[it] / xmus) / 2;
+	    ch[it] = (double)exp(-h[it] / xmus) / 2;
 	    cr = cr / 8;
 	    ca = ca / ha;
-	    float ratio = cr / (cr + ca);
+	    double ratio = cr / (cr + ca);
 	    xdel[it] = (1 - ratio) * pizmoy;
 	    ydel[it] = ratio;
 	}
@@ -437,13 +437,13 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
     if (ntp == (snt - 1)) 
     {
 	/* compute position of the plane layer */
-        float taup = tap + trp;
+        double taup = tap + trp;
         iplane = -1;
 	for(int i = 0; i <= ntp; i++) if (taup >= h[i]) iplane = i;
 
 	/* update the layer from the end to the position to update if necessary */
-	float xt1 = (float)fabs(h[iplane] - taup);
-        float xt2 = (float)fabs(h[iplane+1] - taup);
+	double xt1 = (double)fabs(h[iplane] - taup);
+        double xt2 = (double)fabs(h[iplane+1] - taup);
 
         if ((xt1 > 0.0005) && (xt2 > 0.0005))
 	{
@@ -467,16 +467,16 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	if ( trmoy > accu2 && tamoy > accu2 )
 	{
 
-	    float ca = tamoy * (float)exp(-alt.palt / ha);
-	    float cr = trmoy * (float)exp(-alt.palt / 8);
+	    double ca = tamoy * (double)exp(-alt.palt / ha);
+	    double cr = trmoy * (double)exp(-alt.palt / 8);
 	    h[iplane] = ca + cr;
 	    cr = cr / 8;
 	    ca = ca / ha;
-	    float ratio = cr / (cr + ca);
+	    double ratio = cr / (cr + ca);
 	    xdel[iplane] = (1 - ratio) * pizmoy;
 	    ydel[iplane] = ratio;
 	    altc[iplane] = alt.palt;
-	    ch[iplane] = (float)exp(-h[iplane] / xmus) / 2;
+	    ch[iplane] = (double)exp(-h[iplane] / xmus) / 2;
 	}
 
 	if ( trmoy > accu2 && tamoy <= accu2 )
@@ -495,28 +495,28 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
     }
 
 	
-    float phi = (float)geom.phirad;
+    double phi = (double)geom.phirad;
     int i, k;
     for(i = 0; i < np; i++) for(int m = -mu; m <= mu; m++) xl[STDI(m)][i] = 0;
 
     /* ************ incident angle mus ******* */
 
-    float aaaa = delta / (2 - delta);
-    float ron = (1 - aaaa) / (1 + 2 * aaaa);
+    double aaaa = delta / (2 - delta);
+    double ron = (1 - aaaa) / (1 + 2 * aaaa);
 
     /* rayleigh phase function */
 
-    float beta0 = 1;
-    float beta2 = 0.5f * ron;
+    double beta0 = 1;
+    double beta2 = 0.5f * ron;
 
     /* fourier decomposition */
-    float i1[31][2*mu + 1];
-    float i2[31][2*mu + 1];
-    float i3[2*mu + 1];
-    float i4[2*mu + 1];
-    float in[2*mu + 1];
-    float inm1[2*mu + 1];
-    float inm2[2*mu + 1];
+    double i1[31][2*mu + 1];
+    double i2[31][2*mu + 1];
+    double i3[2*mu + 1];
+    double i4[2*mu + 1];
+    double in[2*mu + 1];
+    double inm1[2*mu + 1];
+    double inm2[2*mu + 1];
     for(i = -mu; i <= mu; i++) i4[STDI(i)] = 0;
 
     int iborm = 80;
@@ -526,19 +526,19 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
     {
 	/* primary scattering */
 	int ig = 1;
-	float roavion0 = 0;
-	float roavion1 = 0;
-	float roavion2 = 0;
-	float roavion = 0;
+	double roavion0 = 0;
+	double roavion1 = 0;
+	double roavion2 = 0;
+	double roavion = 0;
 
 	int j;
 	for(j = -mu; j <= mu; j++) i3[STDI(j)] = 0;
 
 	/* kernel computations */
-	float xpl[2*mu + 1];
-	float bp[26][2*mu + 1];
-	memset(xpl, 0, sizeof(float)*(2*mu+1));
-	memset(bp, 0, sizeof(float)*26*(2*mu+1));
+	double xpl[2*mu + 1];
+	double bp[26][2*mu + 1];
+	memset(xpl, 0, sizeof(double)*(2*mu+1));
+	memset(bp, 0, sizeof(double)*26*(2*mu+1));
 	
 	kernel(is,xpl,bp,gauss);
 
@@ -546,12 +546,12 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 
 	for(j = -mu; j <= mu; j++)
 	{
-	    float sa1;
-	    float sa2;
+	    double sa1;
+	    double sa2;
 
 	    if((is - 2) <= 0)
 	    {
-		float spl = xpl[STDI(0)];
+		double spl = xpl[STDI(0)];
 		sa1 = beta0 + beta2 * xpl[STDI(j)] * spl;
 		sa2 = bp[0][STDI(j)];
 	    } 
@@ -564,10 +564,10 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 
 	    for(k = 0; k <= snt; k++)
 	    {
-		float c = ch[k];
+		double c = ch[k];
 		double a = ydel[k];
 		double b = xdel[k];
-		i2[k][STDI(j)] = (float)(c * (sa2 * b + sa1 * a));
+		i2[k][STDI(j)] = (double)(c * (sa2 * b + sa1 * a));
 	    }
 	}
 
@@ -575,17 +575,17 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	for(k = 1; k <= mu; k++)
 	{
 	    i1[snt][STDI(k)] = 0;
-	    float zi1 = i1[snt][STDI(k)];
+	    double zi1 = i1[snt][STDI(k)];
 
 	    for(i = snt - 1; i >= 0; i--)
 	    {
-		float f = h[i + 1] - h[i];
+		double f = h[i + 1] - h[i];
 		double a = (i2[i + 1][STDI(k)] - i2[i][STDI(k)]) / f;
 		double b = i2[i][STDI(k)] - a * h[i];
-		float c = (float)exp(-f / gauss.rm[STDI(k)]);
+		double c = (double)exp(-f / gauss.rm[STDI(k)]);
 
 		double xx = h[i] - h[i + 1] * c;
-		zi1 = (float)(c * zi1 + ((1 - c) * (b + a * gauss.rm[STDI(k)]) + a * xx) / 2);
+		zi1 = (double)(c * zi1 + ((1 - c) * (b + a * gauss.rm[STDI(k)]) + a * xx) / 2);
 		i1[i][STDI(k)] = zi1;
 	    }
 	}
@@ -594,16 +594,16 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	for(k = -mu; k <= -1; k++)
 	{
 	    i1[0][STDI(k)] = 0;
-	    float zi1 = i1[0][STDI(k)];
+	    double zi1 = i1[0][STDI(k)];
       
 	    for(i = 1; i <= snt; i++)
 	    {
-		float f = h[i] - h[i - 1];
-		float c = (float)exp(f / gauss.rm[STDI(k)]);
+		double f = h[i] - h[i - 1];
+		double c = (double)exp(f / gauss.rm[STDI(k)]);
 		double a = (i2[i][STDI(k)] -i2[i - 1][STDI(k)]) / f;
 		double b = i2[i][STDI(k)] - a * h[i];
 		double xx = h[i] - h[i - 1] * c;
-		zi1 = (float)(c * zi1 + ((1 - c) * (b + a * gauss.rm[STDI(k)]) + a * xx)/ 2);
+		zi1 = (double)(c * zi1 + ((1 - c) * (b + a * gauss.rm[STDI(k)]) + a * xx)/ 2);
 		i1[i][STDI(k)] = zi1;
 	    }
 	}
@@ -659,8 +659,8 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 					
 			if (ii2 < 1e-30) ii2 = 0;
 			if (ii1 < 1e-30) ii1 = 0;
-			i2[i][STDI(k)] = (float)ii2;
-			i2[i][STDI(-k)]= (float)ii1;
+			i2[i][STDI(k)] = (double)ii2;
+			i2[i][STDI(-k)]= (double)ii1;
 		    }
 		}
 	    } 
@@ -688,8 +688,8 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 
 			if (ii2 < 1e-30) ii2 = 0;
 			if (ii1 < 1e-30) ii1 = 0;
-			i2[i][STDI(k)]  = (float)ii2;
-			i2[i][STDI(-k)] = (float)ii1;
+			i2[i][STDI(k)]  = (double)ii2;
+			i2[i][STDI(-k)] = (double)ii1;
 		    }
 		}
 	    }
@@ -699,16 +699,16 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	    for(k = 1; k <= mu; k++)
 	    {
 		i1[snt][STDI(k)] = 0;
-		float zi1 = i1[snt][STDI(k)];
+		double zi1 = i1[snt][STDI(k)];
 
 		for(i = snt-1; i >= 0; i--)
 		{
-		    float f = h[i + 1] - h[i];
+		    double f = h[i + 1] - h[i];
 		    double a = (i2[i + 1][STDI(k)] - i2[i][STDI(k)]) / f;
 		    double b = i2[i][STDI(k)] - a * h[i];
-		    float c = (float)exp(-f / gauss.rm[STDI(k)]);
+		    double c = (double)exp(-f / gauss.rm[STDI(k)]);
 		    double xx = h[i] - h[i + 1] * c;
-		    zi1 = (float)(c * zi1 + ((1 - c) * (b + a * gauss.rm[STDI(k)]) + a * xx) / 2);
+		    zi1 = (double)(c * zi1 + ((1 - c) * (b + a * gauss.rm[STDI(k)]) + a * xx) / 2);
 		    if (fabs(zi1) <= 1e-20) zi1 = 0;
 		    i1[i][STDI(k)] = zi1;
 		}
@@ -718,16 +718,16 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	    for(k = -mu; k <= -1; k++)
 	    {
 		i1[0][STDI(k)] = 0;
-		float zi1 = i1[0][STDI(k)];
+		double zi1 = i1[0][STDI(k)];
 
 		for(i = 1; i <= snt; i++)
 		{
-		    float f = h[i] - h[i - 1];
-		    float c = (float)exp(f / gauss.rm[STDI(k)]);
+		    double f = h[i] - h[i - 1];
+		    double c = (double)exp(f / gauss.rm[STDI(k)]);
 		    double a = (i2[i][STDI(k)] - i2[i - 1][STDI(k)]) / f;
 		    double b = i2[i][STDI(k)] - a * h[i];
 		    double xx = h[i] - h[i - 1] * c;
-		    zi1 = (float)(c * zi1 + ((1 - c) * (b + a * gauss.rm[STDI(k)]) + a * xx) / 2);
+		    zi1 = (double)(c * zi1 + ((1 - c) * (b + a * gauss.rm[STDI(k)]) + a * xx) / 2);
 
 		    if (fabs(zi1) <= 1e-20) zi1 = 0;
 		    i1[i][STDI(k)] = zi1;
@@ -745,10 +745,10 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	    /*  convergence test (geometrical serie) */
 	    if(ig > 2)
 	    {
-		float a1 = roavion2;
-		float d1 = roavion1;
+		double a1 = roavion2;
+		double d1 = roavion1;
 
-		float g1 = roavion0;
+		double g1 = roavion0;
 
 
 		double z = 0;
@@ -777,7 +777,7 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 		if(z < 0.0001)
 		{
 		    /* successful test (geometrical serie) */
-		    float y1;
+		    double y1;
 
 		    for(int l = -mu; l <= mu; l++)
 		    {
@@ -837,7 +837,7 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 	} while( ig <= 20 );	/* stop if order n is greater than 20 in any case */
         
 	/* sum of the fourier component s */
-	float delta0s = 1;
+	double delta0s = 1;
 	if(is != 0) delta0s = 2;
 	for(k = -mu; k <= mu; k++) i4[STDI(k)] += delta0s * i3[STDI(k)];
 
@@ -849,16 +849,16 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
 
 	    for(int m = -mum1; m <= mum1; m++)
 	    {
-		if(m > 0) xl[STDI(m)][l] += (float)(delta0s * i3[STDI(m)] * cos(is * (phi + M_PI)));
-		else xl[STDI(m)][l] += (float)(delta0s * i3[STDI(m)] * cos(is * phi));
+		if(m > 0) xl[STDI(m)][l] += (double)(delta0s * i3[STDI(m)] * cos(is * (phi + M_PI)));
+		else xl[STDI(m)][l] += (double)(delta0s * i3[STDI(m)] * cos(is * phi));
 	    }
 	}
 
 	if(is == 0)
 	    for(k = 1; k <= mum1; k++) xl[STDI(0)][0] += gauss.rm[STDI(k)] * gauss.gb[STDI(k)] * i3[STDI(-k)];
     
-	xl[STDI(mu)][0] += (float)(delta0s * i3[STDI(mu)] * cos(is * (geom.phirad + M_PI)));
-	xl[STDI(-mu)][0] += (float)(delta0s * roavion * cos(is * (geom.phirad + M_PI)));
+	xl[STDI(mu)][0] += (double)(delta0s * i3[STDI(mu)] * cos(is * (geom.phirad + M_PI)));
+	xl[STDI(-mu)][0] += (double)(delta0s * roavion * cos(is * (geom.phirad + M_PI)));
 
 	double z = 0;
 	for(l = -mu; l <= mu; l++)
@@ -878,8 +878,8 @@ void os(const float tamoy, const float trmoy, const float pizmoy,
   Compute the atmospheric transmission for either a satellite or aircraft observation
   as well as the spherical albedo of the atmosphere.
 */
-void iso(const float tamoy, const float trmoy, const float pizmoy, 
-	 const float tamoyp, const float trmoyp, float (&xf)[3],
+void iso(const double tamoy, const double trmoy, const double pizmoy, 
+	 const double tamoyp, const double trmoyp, double (&xf)[3],
          Gauss &gauss, const Altitude &alt)
 {
     /* molecular ratio within the layer
@@ -887,8 +887,8 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
        molecules and 2km for aerosols */
 
     /* the optical thickness above plane are recomputed to give o.t above pla */
-    float trp = trmoy - trmoyp;
-    float tap = tamoy - tamoyp;
+    double trp = trmoy - trmoyp;
+    double tap = tamoy - tamoyp;
 
     /* if plane observations recompute scale height for aerosol knowing:
        the aerosol optical depth as measure from the plane 	= tamoyp
@@ -905,10 +905,10 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
     int snt = nt;
     int iplane = 0;
     int ntp = snt;
-    float ha = 2.0;
+    double ha = 2.0;
     if(alt.palt <= 900. && alt.palt > 0.0)
     {
-	if (tap > 1.e-03) ha = (float)(-alt.palt / log(tap / tamoy));
+	if (tap > 1.e-03) ha = (double)(-alt.palt / log(tap / tamoy));
         else ha = 2.;
 	ntp = snt - 1;
     } 
@@ -918,10 +918,10 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
        case 2: pure aerosol
        case 3: mixing rayleigh-aerosol */
 
-    float h[31];
-    float ydel[31];
-    float xdel[31];
-    float altc[31];
+    double h[31];
+    double ydel[31];
+    double xdel[31];
+    double altc[31];
 
     if((tamoy <= accu2) && (trmoy > tamoy)) 
     {
@@ -949,7 +949,7 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 	xdel[0] = 0.0;
 	h[0] = 0;
 	altc[0] = 300;
-	float zx = 300;
+	double zx = 300;
 	iplane = 0;
 
 	for(int it = 0; it <= ntp; it++)
@@ -958,17 +958,17 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 	    if (it == 0) zx = discre(tamoy,ha,trmoy,8.0,it,ntp,0,0,300.0,0.0);
 	    else zx = discre(tamoy,ha,trmoy,8.0,it,ntp,h[it-1],ydel[it-1],300.0,0.0);
       
-	    float ca;
+	    double ca;
 	    if ((-zx / ha) < -18) ca = 0;
-	    else ca = (float)(tamoy * exp(-zx / ha));
+	    else ca = (double)(tamoy * exp(-zx / ha));
 
-	    float cr = (float)(trmoy * exp(-zx / 8.0));
+	    double cr = (double)(trmoy * exp(-zx / 8.0));
 	    h[it] = cr + ca;
 	    altc[it] = zx;
 
 	    cr = cr / 8;
 	    ca = ca / ha;
-	    float ratio = cr / (cr + ca);
+	    double ratio = cr / (cr + ca);
 	    xdel[it] = (1 - ratio) * pizmoy;
 	    ydel[it] = ratio;
 
@@ -979,13 +979,13 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
     if (ntp == (snt-1))
     {
 	/* compute position of the plane layer */
-	float taup = tap + trp;
+	double taup = tap + trp;
         iplane = -1;
         for(int i = 0; i <= ntp; i++) if (taup >= h[i]) iplane = i;
 
 	/* update the layer from the end to the position to update if necessary */
-        float xt1 = (float)fabs(h[iplane] - taup);
-        float xt2 = (float)fabs(h[iplane + 1] - taup);
+        double xt1 = (double)fabs(h[iplane] - taup);
+        double xt2 = (double)fabs(h[iplane + 1] - taup);
         if ((xt1 > 0.005) && (xt2 > 0.005))
 	{
 	    for(int i = snt; i >= iplane + 1; i--)
@@ -1007,11 +1007,11 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 	h[iplane] = taup;
 	if ( trmoy > accu2 && tamoy > accu2) 
 	{
-	    float ca = (float)(tamoy * exp(-alt.palt / ha));
-	    float cr = (float)(trmoy * exp(-alt.palt / 8.0));
+	    double ca = (double)(tamoy * exp(-alt.palt / ha));
+	    double cr = (double)(trmoy * exp(-alt.palt / 8.0));
 	    cr = cr / 8;
 	    ca = ca / ha;
-	    float ratio = cr / (cr + ca);
+	    double ratio = cr / (cr + ca);
 	    xdel[iplane] = (1 - ratio) * pizmoy;
 
 	    ydel[iplane] = ratio;
@@ -1033,32 +1033,32 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 	}
     }
 
-    float aaaa = delta / (2-delta);
-    float ron = (1 - aaaa) / (1 + 2 * aaaa);
+    double aaaa = delta / (2-delta);
+    double ron = (1 - aaaa) / (1 + 2 * aaaa);
 
     /* rayleigh phase function */
-    float beta0 = 1;
-    float beta2 = 0.5f * ron;
+    double beta0 = 1;
+    double beta2 = 0.5f * ron;
 
     /* primary scattering */
     int ig = 1;
-    float tavion0 = 0;
-    float tavion1 = 0;
-    float tavion2 = 0;
-    float tavion = 0;
+    double tavion0 = 0;
+    double tavion1 = 0;
+    double tavion2 = 0;
+    double tavion = 0;
 
-    float i1[31][2*mu + 1];
-    float i2[31][2*mu + 1];
-    float i3[2*mu + 1];
-    float in[2*mu + 1];
-    float inm1[2*mu + 1];
-    float inm2[2*mu + 1];
+    double i1[31][2*mu + 1];
+    double i2[31][2*mu + 1];
+    double i3[2*mu + 1];
+    double in[2*mu + 1];
+    double inm1[2*mu + 1];
+    double inm2[2*mu + 1];
     int j;
     for(j = -mu; j <= mu; j++) i3[STDI(j)] = 0;
 
     /* kernel computations */
-    float xpl[2*mu + 1];
-    float bp[26][2*mu + 1];
+    double xpl[2*mu + 1];
+    double bp[26][2*mu + 1];
     kernel(0, xpl, bp, gauss);
 
     for(j = -mu; j <= mu; j++)
@@ -1070,7 +1070,7 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
     {
 	i1[snt][STDI(k)] = 1.0;
 	for(int i = snt-1; i >= 0; i--) 
-	    i1[i][STDI(k)] = (float)(exp(-(tamoy + trmoy - h[i]) / gauss.rm[STDI(k)]));
+	    i1[i][STDI(k)] = (double)(exp(-(tamoy + trmoy - h[i]) / gauss.rm[STDI(k)]));
     }
 
 
@@ -1111,19 +1111,19 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 	    {
 		double ii1 = 0;
 		double ii2 = 0;
-		float x = xdel[i];
-		float y = ydel[i];
+		double x = xdel[i];
+		double y = ydel[i];
       
 		for(j = 1; j <= mu; j++)
 		{
-		    float bpjk = bp[j][STDI(k)] * x + y * (beta0 + beta2 * xpl[STDI(j)] * xpl[STDI(k)]);
-		    float bpjmk= bp[j][STDI(-k)] * x + y * (beta0 + beta2 * xpl[STDI(j)] * xpl[STDI(-k)]);
+		    double bpjk = bp[j][STDI(k)] * x + y * (beta0 + beta2 * xpl[STDI(j)] * xpl[STDI(k)]);
+		    double bpjmk= bp[j][STDI(-k)] * x + y * (beta0 + beta2 * xpl[STDI(j)] * xpl[STDI(-k)]);
 		    ii2 += gauss.gb[STDI(j)] * (i1[i][STDI(j)] * bpjk + i1[i][STDI(-j)] * bpjmk);
 		    ii1 += gauss.gb[STDI(j)] * (i1[i][STDI(j)] * bpjmk + i1[i][STDI(-j)] * bpjk);
 		}
       
-		i2[i][STDI(k)] = (float)ii2;
-		i2[i][STDI(-k)] = (float)ii1;
+		i2[i][STDI(k)] = (double)ii2;
+		i2[i][STDI(-k)] = (double)ii1;
 	    }
 	}
 
@@ -1131,15 +1131,15 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 	for(k = 1; k <= mu; k++)
 	{
 	    i1[snt][STDI(k)] = 0.0;
-	    float zi1 = i1[snt][STDI(k)];
+	    double zi1 = i1[snt][STDI(k)];
 
 	    for(int i = snt-1; i >= 0; i--)
 	    {
-		float f = h[i+1] - h[i];
-		float a = (i2[i+1][STDI(k)] -i2[i][STDI(k)]) / f;
-		float b = i2[i][STDI(k)] - a * h[i];
-		float c = (float)exp(-f / gauss.rm[STDI(k)]);
-		float xx = h[i] - h[i+1] * c;
+		double f = h[i+1] - h[i];
+		double a = (i2[i+1][STDI(k)] -i2[i][STDI(k)]) / f;
+		double b = i2[i][STDI(k)] - a * h[i];
+		double c = (double)exp(-f / gauss.rm[STDI(k)]);
+		double xx = h[i] - h[i+1] * c;
 
 		zi1 = c * zi1 + ((1 - c) * (b + a * gauss.rm[STDI(k)]) + a * xx) / 2;
 		i1[i][STDI(k)] = zi1;
@@ -1150,15 +1150,15 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 	for(k = -mu; k <= -1; k++)
 	{
 	    i1[0][STDI(k)] = 0;
-	    float zi1 = i1[0][STDI(k)];
+	    double zi1 = i1[0][STDI(k)];
 
 	    for(int i = 1; i <= snt; i++)
 	    {
-		float f = h[i] - h[i-1];
-		float c = (float)exp(f / gauss.rm[STDI(k)]);
-		float a = (i2[i][STDI(k)] - i2[i-1][STDI(k)]) / f;
-		float b = i2[i][STDI(k)] - a * h[i];
-		float xx = h[i] - h[i-1] * c;
+		double f = h[i] - h[i-1];
+		double c = (double)exp(f / gauss.rm[STDI(k)]);
+		double a = (i2[i][STDI(k)] - i2[i-1][STDI(k)]) / f;
+		double b = i2[i][STDI(k)] - a * h[i];
+		double xx = h[i] - h[i-1] * c;
 		zi1 = c * zi1 + ((1 - c) * (b + a * gauss.rm[STDI(k)]) + a * xx) / 2;
 		i1[i][STDI(k)] = zi1;
 	    }
@@ -1176,14 +1176,14 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 	/* convergence test (geometrical serie) */
 	if(ig > 2) 
 	{
-	    float z = 0;
-	    float a1 = tavion2;
-	    float d1 = tavion1;
-	    float g1 = tavion0;
+	    double z = 0;
+	    double a1 = tavion2;
+	    double d1 = tavion1;
+	    double g1 = tavion0;
 	    if (a1 >= accu && d1 >= accu && tavion >= accu)
 	    {
-		float y = ((g1 / d1 - d1 / a1) / ((1 - g1 / d1) * (1 - g1 / d1)) * (g1 / tavion));
-		y = (float)fabs(y);
+		double y = ((g1 / d1 - d1 / a1) / ((1 - g1 / d1) * (1 - g1 / d1)) * (g1 / tavion));
+		y = (double)fabs(y);
 		z = z >= y ? z : y;
 	    }
       
@@ -1197,8 +1197,8 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 		if(d1 == 0) continue;
 		if(i3[STDI(l)] == 0) continue;
 
-		float y = ((g1 / d1 - d1 / a1) / ((1 - g1 / d1) * (1 - g1 / d1)) * (g1 / i3[STDI(l)]));
-		y = (float)fabs(y);
+		double y = ((g1 / d1 - d1 / a1) / ((1 - g1 / d1) * (1 - g1 / d1)) * (g1 / i3[STDI(l)]));
+		y = (double)fabs(y);
 		z = z >= y ? z : y;
 	    }
       
@@ -1209,7 +1209,7 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 		for(int l = -mu; l <= mu; l++)
 		{
 		    if (l == 0) continue;
-		    float y1 = 1;
+		    double y1 = 1;
 		    d1 = inm1[STDI(l)];
 		    g1 = in[STDI(l)];
 		    if(d1 == 0) continue;
@@ -1224,7 +1224,7 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 		{
 		    if (fabs(g1 - d1) >= accu)
 		    {
-			float y1 = 1 - g1 / d1;
+			double y1 = 1 - g1 / d1;
 			g1 = g1 / y1;
 		    }
 		    tavion = tavion + g1;
@@ -1248,12 +1248,12 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 	tavion = tavion + tavion0;
 
 	/* stop if order n is less than 1% of the sum */
-	float z = 0;
+	double z = 0;
 	for(k = -mu; k <= mu; k++)
 	{
 	    if(i3[STDI(k)] != 0)
 	    {
-		float y = (float)fabs(in[STDI(k)] / i3[STDI(k)]);
+		double y = (double)fabs(in[STDI(k)] / i3[STDI(k)]);
 		z = z >= y ? z : y;
 	    }
 	}
@@ -1276,7 +1276,7 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
   To compute the atmospheric reflectance for the molecular atmosphere in 
   case of satellite observation.  
 */
-float chand(const float xtau, const GeomCond &geom)
+double chand(const double xtau, const GeomCond &geom)
 {
     /* input parameters: xphi,xmus,xmuv,xtau
        xphi: azimuthal difference between sun and observation (xphi=0,
@@ -1287,15 +1287,15 @@ float chand(const float xtau, const GeomCond &geom)
        output parameter: xrray : molecular reflectance (0.:1.)
        constant : xdep: depolarization factor (0.0279) */
 
-    const float xdep = 0.0279;
+    const double xdep = 0.0279;
 
-    static const float as0[10] = {
+    static const double as0[10] = {
 	.33243832,-6.777104e-02,.16285370,1.577425e-03,-.30924818,
 	-1.240906e-02,-.10324388,3.241678e-02,.11493334,-3.503695e-02
     };
 
-    static const float as1[2] = { .19666292, -5.439061e-02 };
-    static const float as2[2] = { .14545937,-2.910845e-02 };
+    static const double as1[2] = { .19666292, -5.439061e-02 };
+    static const double as2[2] = { .14545937,-2.910845e-02 };
 
     double phios = (180 - geom.phi);
     double xcosf1 = 1;
@@ -1344,11 +1344,11 @@ float chand(const float xtau, const GeomCond &geom)
     double xitot2 = xp2 + cfonc2 * fs1 * geom.xmus;
     double xitot3 = xp3 + cfonc3 * fs2 * geom.xmus;
 	
-    float xrray = (float)(xitot1 * xcosf1);
-    xrray += (float)(xitot2 * xcosf2 * 2);
+    double xrray = (double)(xitot1 * xcosf1);
+    xrray += (double)(xitot2 * xcosf2 * 2);
 
-    xrray += (float)(xitot3 * xcosf3 * 2);
-    xrray /= (float)geom.xmus;
+    xrray += (double)(xitot3 * xcosf3 * 2);
+    xrray /= (double)geom.xmus;
 
     return xrray;
 }
@@ -1362,13 +1362,13 @@ float chand(const float xtau, const GeomCond &geom)
   CHAND.f) by semi-empirical fitting of the vectorized Successive Orders of Scattering method
   (Deuzé et al, 1989).
 */
-void atmref(const float tamoy, const float trmoy, const float pizmoy, 
-	    const float tamoyp, const float trmoyp, OpticalAtmosProperties &oap,
+void atmref(const double tamoy, const double trmoy, const double pizmoy, 
+	    const double tamoyp, const double trmoyp, OpticalAtmosProperties &oap,
             Gauss &gauss, const GeomCond &geom, const AerosolModel &aero,
             const Altitude &alt)
 {
-    float xlm1[2 * mu + 1][np];
-    float xlm2[2 * mu + 1][np];
+    double xlm1[2 * mu + 1][np];
+    double xlm2[2 * mu + 1][np];
     
     /* atmospheric reflectances */	
     oap.rorayl = 0;
@@ -1377,13 +1377,13 @@ void atmref(const float tamoy, const float trmoy, const float pizmoy,
     /* rayleigh reflectance 3 cases (satellite,plane,ground) */
     if(alt.palt < 900 && alt.palt > 0)
     {
-	gauss.rm[STDI(-mu)] = -(float)geom.xmuv;
-	gauss.rm[STDI(mu)] = (float)geom.xmuv;
-	gauss.rm[STDI(0)] = -(float)geom.xmus;
+	gauss.rm[STDI(-mu)] = -(double)geom.xmuv;
+	gauss.rm[STDI(mu)] = (double)geom.xmuv;
+	gauss.rm[STDI(0)] = -(double)geom.xmus;
 
 	os(0, trmoy, pizmoy, 0, trmoyp, xlm1, gauss, alt, geom);
 		
-	oap.rorayl = (float)(xlm1[STDI(-mu)][0] / geom.xmus);
+	oap.rorayl = (double)(xlm1[STDI(-mu)][0] / geom.xmus);
     }
     else if(alt.palt <= 0) oap.rorayl = 0;
     else oap.rorayl = chand(trmoy, geom);
@@ -1399,15 +1399,15 @@ void atmref(const float tamoy, const float trmoy, const float pizmoy,
        3 cases: satellite,plane,ground */
     if (alt.palt > 0) 
     {
-	gauss.rm[STDI(-mu)] = -(float)geom.xmuv;
-	gauss.rm[STDI(mu)] = (float)geom.xmuv;
-	gauss.rm[STDI(0)] = -(float)geom.xmus;
+	gauss.rm[STDI(-mu)] = -(double)geom.xmuv;
+	gauss.rm[STDI(mu)] = (double)geom.xmuv;
+	gauss.rm[STDI(0)] = -(double)geom.xmus;
 
 	os(tamoy, trmoy, pizmoy, tamoyp, trmoyp, xlm2, gauss, alt, geom);
-	oap.romix = (float)(xlm2[STDI(-mu)][0] / geom.xmus);
+	oap.romix = (double)(xlm2[STDI(-mu)][0] / geom.xmus);
 
 	os(tamoy, 0, pizmoy, tamoyp, 0, xlm2, gauss, alt, geom);
-	oap.roaero = (float)(xlm2[STDI(-mu)][0] / geom.xmus);
+	oap.roaero = (double)(xlm2[STDI(-mu)][0] / geom.xmus);
     }
     else
     {
@@ -1417,41 +1417,41 @@ void atmref(const float tamoy, const float trmoy, const float pizmoy,
 }
 
 
-float fintexp1(const float xtau)
+double fintexp1(const double xtau)
 {
     /* accuracy 2e-07... for 0<xtau<1 */
-    float a[6] = { -.57721566,0.99999193,-0.24991055,0.05519968,-0.00976004,0.00107857 };
-    float xftau = 1;
-    float xx = a[0];
+    double a[6] = { -.57721566,0.99999193,-0.24991055,0.05519968,-0.00976004,0.00107857 };
+    double xftau = 1;
+    double xx = a[0];
     for(int i = 1; i <= 5; i++)
     {
 	xftau *= xtau;
 	xx += a[i] * xftau;
     }	
-    return (float)(xx - log(xtau));
+    return (double)(xx - log(xtau));
 }
 
-float fintexp3(const float xtau)
+double fintexp3(const double xtau)
 {
-    return (float)((exp(-xtau) * (1. - xtau) + xtau * xtau * fintexp1(xtau)) / 2.);
+    return (double)((exp(-xtau) * (1. - xtau) + xtau * xtau * fintexp1(xtau)) / 2.);
 }
 
 /* To compute the spherical albedo of the molecular layer. */
-void csalbr(const float xtau, float& xalb)
+void csalbr(const double xtau, double& xalb)
 {    
-    xalb = (float)((3. * xtau - fintexp3(xtau) * (4. + 2. * xtau) + 2. * exp(-xtau)));
-    xalb = (float)(xalb / (4. + 3. * xtau));
+    xalb = (double)((3. * xtau - fintexp3(xtau) * (4. + 2. * xtau) + 2. * exp(-xtau)));
+    xalb = (double)(xalb / (4. + 3. * xtau));
 }
 
-void scatra(const float taer, const float taerp, 
-	    const float tray, const float trayp,
-	    const float piza, OpticalAtmosProperties& oap,
+void scatra(const double taer, const double taerp, 
+	    const double tray, const double trayp,
+	    const double piza, OpticalAtmosProperties& oap,
             Gauss &gauss, const GeomCond &geom, const Altitude &alt)
 {
     /* computations of the direct and diffuse transmittances
        for downward and upward paths , and spherical albedo */
-    float tamol,tamolp;
-    float xtrans[3];
+    double tamol,tamolp;
+    double xtrans[3];
 
     oap.ddirtt = 1;	oap.ddiftt = 0;
     oap.udirtt = 1;	oap.udiftt = 0;
@@ -1474,13 +1474,13 @@ void scatra(const float taer, const float taerp,
 	{
 	    if (alt.palt > 900)
 	    {
-		oap.udiftt = (float)((2. / 3. + geom.xmuv) + (2. / 3. - geom.xmuv) * exp(-tray / geom.xmuv));
+		oap.udiftt = (double)((2. / 3. + geom.xmuv) + (2. / 3. - geom.xmuv) * exp(-tray / geom.xmuv));
 
-		oap.udiftt = (float)(oap.udiftt / ((4. / 3.) + tray) - exp(-tray / geom.xmuv));
-		oap.ddiftt = (float)((2. / 3. + geom.xmus) + (2. / 3. - geom.xmus) * exp(-tray / geom.xmus));
-		oap.ddiftt = (float)(oap.ddiftt / ((4. / 3.) + tray) - exp(-tray / geom.xmus));
-		oap.ddirtt = (float)exp(-tray / geom.xmus);
-		oap.udirtt = (float)exp(-tray / geom.xmuv);
+		oap.udiftt = (double)(oap.udiftt / ((4. / 3.) + tray) - exp(-tray / geom.xmuv));
+		oap.ddiftt = (double)((2. / 3. + geom.xmus) + (2. / 3. - geom.xmus) * exp(-tray / geom.xmus));
+		oap.ddiftt = (double)(oap.ddiftt / ((4. / 3.) + tray) - exp(-tray / geom.xmus));
+		oap.ddirtt = (double)exp(-tray / geom.xmus);
+		oap.udirtt = (double)exp(-tray / geom.xmuv);
 
 		csalbr(tray, oap.sphalbt);
 	    } 
@@ -1488,22 +1488,22 @@ void scatra(const float taer, const float taerp,
 	    {
 		tamol = 0;
 		tamolp= 0;
-		gauss.rm[STDI(-mu)] = -(float)geom.xmuv;
-		gauss.rm[STDI(mu)] = (float)geom.xmuv;
-		gauss.rm[STDI(0)] = (float)geom.xmus;
+		gauss.rm[STDI(-mu)] = -(double)geom.xmuv;
+		gauss.rm[STDI(mu)] = (double)geom.xmuv;
+		gauss.rm[STDI(0)] = (double)geom.xmus;
 
 		iso(tamol, tray, piza, tamolp, trayp, xtrans, gauss, alt);
 				
-		oap.udiftt = (float)(xtrans[0] - exp(-trayp / geom.xmuv));
-		oap.udirtt = (float)exp(-trayp / geom.xmuv);
-		gauss.rm[STDI(-mu)] = -(float)geom.xmus;
-		gauss.rm[STDI(mu)] = (float)geom.xmus;
-		gauss.rm[STDI(0)] = (float)geom.xmus;
+		oap.udiftt = (double)(xtrans[0] - exp(-trayp / geom.xmuv));
+		oap.udirtt = (double)exp(-trayp / geom.xmuv);
+		gauss.rm[STDI(-mu)] = -(double)geom.xmus;
+		gauss.rm[STDI(mu)] = (double)geom.xmus;
+		gauss.rm[STDI(0)] = (double)geom.xmus;
 				
-		oap.ddiftt = (float)((2. / 3. + geom.xmus) + (2. / 3. - geom.xmus) * exp(-tray / geom.xmus));
-		oap.ddiftt = (float)(oap.ddiftt / ((4. / 3.) + tray) - exp(-tray / geom.xmus));
-		oap.ddirtt = (float)exp(-tray / geom.xmus);
-		oap.udirtt = (float)exp(-tray / geom.xmuv);
+		oap.ddiftt = (double)((2. / 3. + geom.xmus) + (2. / 3. - geom.xmus) * exp(-tray / geom.xmus));
+		oap.ddiftt = (double)(oap.ddiftt / ((4. / 3.) + tray) - exp(-tray / geom.xmus));
+		oap.ddirtt = (double)exp(-tray / geom.xmus);
+		oap.udirtt = (double)exp(-tray / geom.xmuv);
          
 		csalbr(tray, oap.sphalbt);
 	    } 
@@ -1524,26 +1524,26 @@ void scatra(const float taer, const float taerp,
 	{
 	    tamol = 0;
 	    tamolp= 0;
-	    gauss.rm[STDI(-mu)] = -(float)geom.xmuv;
-	    gauss.rm[STDI(mu)] = (float)geom.xmuv;
-	    gauss.rm[STDI(0)] = (float)geom.xmus;
+	    gauss.rm[STDI(-mu)] = -(double)geom.xmuv;
+	    gauss.rm[STDI(mu)] = (double)geom.xmuv;
+	    gauss.rm[STDI(0)] = (double)geom.xmus;
 
 	    iso(taer, tamol, piza, taerp, tamolp, xtrans, gauss, alt);
 
-	    oap.udiftt = (float)(xtrans[0] - exp(-taerp / geom.xmuv));
-	    oap.udirtt = (float)exp(-taerp / geom.xmuv);
-	    gauss.rm[STDI(-mu)] = -(float)geom.xmus;
-	    gauss.rm[STDI(mu)] = (float)geom.xmus;
-	    gauss.rm[STDI(0)] = (float)geom.xmus;
+	    oap.udiftt = (double)(xtrans[0] - exp(-taerp / geom.xmuv));
+	    oap.udirtt = (double)exp(-taerp / geom.xmuv);
+	    gauss.rm[STDI(-mu)] = -(double)geom.xmus;
+	    gauss.rm[STDI(mu)] = (double)geom.xmus;
+	    gauss.rm[STDI(0)] = (double)geom.xmus;
 
-	    float tmp_alt = alt.palt;
+	    double tmp_alt = alt.palt;
 	    alt.palt = 999;
 	    iso(taer, tamol, piza, taerp, tamolp, xtrans, gauss, alt);
 	    alt.palt = tmp_alt;
 
-	    oap.ddirtt = (float)exp(-taer / geom.xmus);
-	    oap.ddiftt = (float)(xtrans[2] - exp(-taer / geom.xmus));
-	    oap.sphalbt= (float)(xtrans[1] * 2);
+	    oap.ddirtt = (double)exp(-taer / geom.xmus);
+	    oap.ddiftt = (double)(xtrans[2] - exp(-taer / geom.xmus));
+	    oap.sphalbt= (double)(xtrans[1] * 2);
 
 	    if(alt.palt <= 0)
 	    {
@@ -1559,27 +1559,27 @@ void scatra(const float taer, const float taerp,
 	}
 	else if(it == 3)
 	{
-	    gauss.rm[STDI(-mu)] = -(float)geom.xmuv;
-	    gauss.rm[STDI(mu)] = (float)geom.xmuv;
-	    gauss.rm[STDI(0)] = (float)geom.xmus;
+	    gauss.rm[STDI(-mu)] = -(double)geom.xmuv;
+	    gauss.rm[STDI(mu)] = (double)geom.xmuv;
+	    gauss.rm[STDI(0)] = (double)geom.xmus;
 
 	    iso(taer, tray, piza, taerp, trayp, xtrans, gauss, alt);
 
-	    oap.udirtt = (float)exp(-(taerp + trayp) / geom.xmuv);
-	    oap.udiftt = (float)(xtrans[0] - exp(-(taerp + trayp) / geom.xmuv));
-	    gauss.rm[STDI(-mu)] = -(float)geom.xmus;
-	    gauss.rm[STDI(mu)] = (float)geom.xmus;
-	    gauss.rm[STDI(0)] = (float)geom.xmus;
+	    oap.udirtt = (double)exp(-(taerp + trayp) / geom.xmuv);
+	    oap.udiftt = (double)(xtrans[0] - exp(-(taerp + trayp) / geom.xmuv));
+	    gauss.rm[STDI(-mu)] = -(double)geom.xmus;
+	    gauss.rm[STDI(mu)] = (double)geom.xmus;
+	    gauss.rm[STDI(0)] = (double)geom.xmus;
 
-	    float tmp_alt = alt.palt;
+	    double tmp_alt = alt.palt;
 	    alt.palt = 999;
 	    iso(taer, tray, piza, taerp, trayp, xtrans, gauss, alt);
 	    alt.palt = tmp_alt;
 
-	    oap.ddiftt = (float)(xtrans[2] - exp(-(taer + tray) / geom.xmus));
-	    oap.ddirtt = (float)exp(-(taer + tray) / geom.xmus);
+	    oap.ddiftt = (double)(xtrans[2] - exp(-(taer + tray) / geom.xmus));
+	    oap.ddirtt = (double)exp(-(taer + tray) / geom.xmus);
 
-	    oap.sphalbt= (float)(xtrans[1] * 2);
+	    oap.sphalbt= (double)(xtrans[1] * 2);
 
 	    if (alt.palt <= 0)
 	    {
@@ -1615,10 +1615,10 @@ void discom(const GeomCond &geom, const AtmosModel &atms,
 	    if (((i < 9) && (sixs_disc.wldis[i] < iwave.ffu.wlinf) && (sixs_disc.wldis[i+1] < iwave.ffu.wlinf)) || 
 		((i > 0) && (sixs_disc.wldis[i] > iwave.ffu.wlsup) && (sixs_disc.wldis[i-1] > iwave.ffu.wlsup))) continue;
 
-	float wl = sixs_disc.wldis[i];
+	double wl = sixs_disc.wldis[i];
 	/* computation of rayleigh optical depth at wl */
-	float tray = odrayl(atms, wl);
-	float trayp;
+	double tray = odrayl(atms, wl);
+	double trayp;
 
 	/* plane case discussed here above */
 	if (alt.idatmp == 0) trayp = 0;
@@ -1630,9 +1630,9 @@ void discom(const GeomCond &geom, const AtmosModel &atms,
 
 	/* computation of aerosol optical properties at wl */
 
-	float taer = aerocon.taer55 * sixs_aer.ext[i] / sixs_aer.ext[3];
-	float taerp = alt.taer55p * sixs_aer.ext[i] / sixs_aer.ext[3];
-	float piza = sixs_aer.ome[i];
+	double taer = aerocon.taer55 * sixs_aer.ext[i] / sixs_aer.ext[3];
+	double taerp = alt.taer55p * sixs_aer.ext[i] / sixs_aer.ext[3];
+	double piza = sixs_aer.ome[i];
  
 	/* computation of atmospheric reflectances
 
@@ -1640,16 +1640,16 @@ void discom(const GeomCond &geom, const AtmosModel &atms,
 	roaero is aerosol ref
 	call plegen to decompose aerosol phase function in Betal */
 		
-	float coeff = 0;
+	double coeff = 0;
 	if(aero.iaer != 0)
 	{
 	    for(int k = 0; k < 83; k++) sixs_trunc.pha[k] = sixs_sos.phasel[i][k];
 	    coeff = trunca();
 	}
 
-	float tamoy = taer * (1 - piza * coeff);
-	float tamoyp = taerp * (1 - piza * coeff);
-	float pizmoy = piza * (1 - coeff) / (1 - piza * coeff);
+	double tamoy = taer * (1 - piza * coeff);
+	double tamoyp = taerp * (1 - piza * coeff);
+	double pizmoy = piza * (1 - coeff) / (1 - piza * coeff);
 
 	atmref(tamoy, tray, pizmoy, tamoyp, trayp, oap, gauss, geom, aero, alt);
 
@@ -1685,7 +1685,7 @@ void discom(const GeomCond &geom, const AtmosModel &atms,
   EQUIVWL.f) needed for the calculation of the downward radiation field used
   in the computation of the non lambertian target contribution (main.f).
 */
-void specinterp(const float wl, float& tamoy, float& tamoyp, float& pizmoy, float& pizmoyp,
+void specinterp(const double wl, double& tamoy, double& tamoyp, double& pizmoy, double& pizmoyp,
                 const AerosolConcentration &aerocon, const Altitude &alt)
 {
 
@@ -1698,28 +1698,28 @@ void specinterp(const float wl, float& tamoy, float& tamoyp, float& pizmoy, floa
     if(wl > sixs_disc.wldis[9]) linf = 8;
 
     int lsup = linf + 1;
-    float coef = (float)log(sixs_disc.wldis[lsup] / sixs_disc.wldis[linf]);
-    float wlinf = sixs_disc.wldis[linf];
+    double coef = (double)log(sixs_disc.wldis[lsup] / sixs_disc.wldis[linf]);
+    double wlinf = sixs_disc.wldis[linf];
 
-    float alphaa = (float)(log(sixs_aer.ext[lsup] * sixs_aer.ome[lsup] / 
+    double alphaa = (double)(log(sixs_aer.ext[lsup] * sixs_aer.ome[lsup] / 
 			       (sixs_aer.ext[linf] * sixs_aer.ome[linf])) / coef);
-    float betaa = (float)(sixs_aer.ext[linf] * sixs_aer.ome[linf] / pow(wlinf,alphaa));
-    float tsca = (float)(aerocon.taer55 * betaa * pow(wl,alphaa) / sixs_aer.ext[3]);
-    alphaa = (float)(log(sixs_aer.ext[lsup] / sixs_aer.ext[linf]) / coef);
-    betaa = (float)(sixs_aer.ext[linf] / pow(wlinf,alphaa));
-    tamoy = (float)(aerocon.taer55 * betaa * pow(wl,alphaa) / sixs_aer.ext[3]);
-    tamoyp= (float)(alt.taer55p * betaa * pow(wl,alphaa) / sixs_aer.ext[3]);
+    double betaa = (double)(sixs_aer.ext[linf] * sixs_aer.ome[linf] / pow(wlinf,alphaa));
+    double tsca = (double)(aerocon.taer55 * betaa * pow(wl,alphaa) / sixs_aer.ext[3]);
+    alphaa = (double)(log(sixs_aer.ext[lsup] / sixs_aer.ext[linf]) / coef);
+    betaa = (double)(sixs_aer.ext[linf] / pow(wlinf,alphaa));
+    tamoy = (double)(aerocon.taer55 * betaa * pow(wl,alphaa) / sixs_aer.ext[3]);
+    tamoyp= (double)(alt.taer55p * betaa * pow(wl,alphaa) / sixs_aer.ext[3]);
     pizmoy= tsca / tamoy;
     pizmoyp = pizmoy;
 
     for(int k = 0; k < 83; k++)
     {
-	alphaa = (float)log(sixs_sos.phasel[lsup][k] / sixs_sos.phasel[linf][k]) / coef;
-	betaa = (float)(sixs_sos.phasel[linf][k] / pow(wlinf,alphaa));
-	sixs_trunc.pha[k] = (float)(betaa * pow(wl,alphaa));
+	alphaa = (double)log(sixs_sos.phasel[lsup][k] / sixs_sos.phasel[linf][k]) / coef;
+	betaa = (double)(sixs_sos.phasel[linf][k] / pow(wlinf,alphaa));
+	sixs_trunc.pha[k] = (double)(betaa * pow(wl,alphaa));
     }
 
-    float coeff = trunca();
+    double coeff = trunca();
 
     tamoy *= 1 - pizmoy * coeff;
     tamoyp *= 1 - pizmoyp * coeff;
@@ -1736,36 +1736,36 @@ c**********************************************************************/
   To compute the environment functions F(r) which allows us to account for an
   inhomogeneous ground.
 */
-void enviro (const float difr, const float difa, const float r, const float palt,
-	     const float xmuv, float& fra, float& fae, float& fr)
+void enviro (const double difr, const double difa, const double r, const double palt,
+	     const double xmuv, double& fra, double& fae, double& fr)
 {
-    float fae0, fra0, xlnv;
-    static const float alt[16] = {
+    double fae0, fra0, xlnv;
+    static const double alt[16] = {
 	0.5,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,
 	10.0,12.0,14.0,16.0,18.0,20.0,60.0
     };
 
-    static const float cfr1[16] = {
+    static const double cfr1[16] = {
 	0.730,0.710,0.656,0.606,0.560,0.516,0.473,
 	0.433,0.395,0.323,0.258,0.209,0.171,0.142,0.122,0.070
     };
 
-    static const float cfr2[16] = {
+    static const double cfr2[16] = {
 	2.8,1.51,0.845,0.634,0.524,0.465,0.429,
 	0.405,0.390,0.386,0.409,0.445,0.488,0.545,0.608,0.868
     };
 
-    static const float cfa1[16] = {
+    static const double cfa1[16] = {
 	0.239,0.396,0.588,0.626,0.612,0.505,0.454,
 	0.448,0.444,0.445,0.444,0.448,0.448,0.448,0.448,0.448
     };
 
-    static const float cfa2[16] = {
+    static const double cfa2[16] = {
 	1.40,1.20,1.02,0.86,0.74,0.56,0.46,0.42,
 	0.38,0.34,0.3,0.28,0.27,0.27,0.27,0.27
     };
 
-    static const float cfa3[16] = {
+    static const double cfa3[16] = {
 	9.17,6.26,5.48,5.16,4.74,3.65,3.24,3.15,
 	3.07,2.97,2.88,2.83,2.83,2.83,2.83,2.83
     };
@@ -1777,26 +1777,26 @@ void enviro (const float difr, const float difa, const float r, const float palt
        this calculation have been done for nadir observation
        and are corrected of the effect of the view zenith angle. */
 
-    const float a0 = 1.3347;
-    const float b0 = 0.57757;
-    const float a1 = -1.479;
-    const float b1 = -1.5275;
+    const double a0 = 1.3347;
+    const double b0 = 0.57757;
+    const double a1 = -1.479;
+    const double b1 = -1.5275;
 
     if (palt >= 60)
     {
-	fae0 = (float)(1. - 0.448 * exp( -r * 0.27) - 0.552 * exp( -r * 2.83));
-	fra0 = (float)(1. - 0.930 * exp( -r * 0.080) - 0.070 * exp( -r * 1.100));
+	fae0 = (double)(1. - 0.448 * exp( -r * 0.27) - 0.552 * exp( -r * 2.83));
+	fra0 = (double)(1. - 0.930 * exp( -r * 0.080) - 0.070 * exp( -r * 1.100));
     }
     else
     {
 	int i;
 	for(i = 0; palt >= alt[i]; i++);
-	float xcfr1 = 0, xcfr2 = 0, xcfa1 = 0, xcfa2 = 0, xcfa3 = 0;
+	double xcfr1 = 0, xcfr2 = 0, xcfa1 = 0, xcfa2 = 0, xcfa3 = 0;
 
 	if ((i > 0) && (i < 16))
 	{
-	    float zmin = alt[i - 1];
-	    float zmax = alt[i];
+	    double zmin = alt[i - 1];
+	    double zmax = alt[i];
 	    xcfr1 = cfr1[i - 1] + (cfr1[i] - cfr1[i - 1]) * (palt - zmin) / (zmax - zmin);
 	    xcfr2 = cfr2[i - 1] + (cfr2[i] - cfr2[i - 1]) * (palt - zmin) / (zmax - zmin);
 	    xcfa1 = cfa1[i - 1] + (cfa1[i] - cfa1[i - 1]) * (palt - zmin) / (zmax - zmin);
@@ -1813,14 +1813,14 @@ void enviro (const float difr, const float difa, const float r, const float palt
 	    xcfa3 = cfa3[0];
 	}
 
-	fra0 = (float)(1. - xcfr1 * exp(-r * xcfr2) - (1. - xcfr1) * exp(-r * 0.08));
-	fae0 = (float)(1. - xcfa1 * exp(-r * xcfa2) - (1. - xcfa1) * exp(-r * xcfa3));
+	fra0 = (double)(1. - xcfr1 * exp(-r * xcfr2) - (1. - xcfr1) * exp(-r * 0.08));
+	fae0 = (double)(1. - xcfa1 * exp(-r * xcfa2) - (1. - xcfa1) * exp(-r * xcfa3));
     }
 
     /* correction of the effect of the view zenith angle */
-    xlnv = (float)log(xmuv);
-    fra = (float)(fra0 * (xlnv * (1 - fra0) + 1));
-    fae = (float)(fae0 * ((1 + a0 * xlnv + b0 * xlnv * xlnv) + fae0 * (a1 * xlnv + b1 * xlnv * xlnv) + 
+    xlnv = (double)log(xmuv);
+    fra = (double)(fra0 * (xlnv * (1 - fra0) + 1));
+    fae = (double)(fae0 * ((1 + a0 * xlnv + b0 * xlnv * xlnv) + fae0 * (a1 * xlnv + b1 * xlnv * xlnv) + 
 			  fae0 * fae0 * ((-a1 - a0) * xlnv + ( - b1 - b0) * xlnv * xlnv)));
 
     if ((difa + difr) > 1e-03) fr = (fae * difa + fra * difr) / (difa + difr);

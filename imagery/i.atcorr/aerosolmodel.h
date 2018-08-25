@@ -85,15 +85,15 @@
 struct AerosolModel
 {
 	long int iaer;	/* aerosol model */
-	float c[4];
+	double c[4];
 
 private:
 	double nis;
-	float sca[10];
+	double sca[10];
 	long int iaerp;
 
 	/* methods */
-	void aeroso(const float xmud);
+	void aeroso(const double xmud);
 
 	string filename;
 	void load();
@@ -110,34 +110,34 @@ private:
 
 	struct Mie_in
 	{
-		float rmax;
-		float rmin;
-		float rn[10][4];
-		float ri[10][4];
-		float x1[4];
-		float x2[4];
-		float x3[4];
-		float cij[4];
-		float rsunph[50];
-		float nrsunph[50];
+		double rmax;
+		double rmin;
+		double rn[10][4];
+		double ri[10][4];
+		double x1[4];
+		double x2[4];
+		double x3[4];
+		double cij[4];
+		double rsunph[50];
+		double nrsunph[50];
 
 		long int icp;
 		long int irsunph;
 	};
 
 	Mie_in mie_in;
-	void mie(float (&ex)[4][10], float (&sc)[4][10], float (&asy)[4][10]);
+	void mie(double (&ex)[4][10], double (&sc)[4][10], double (&asy)[4][10]);
 	void exscphase(const double alpha, const double nr, 
 				   const double ni, double& Qext, 
 				   double& Qsca, double (&p11)[83]);
 
-	void parse(const float xmud);
+	void parse(const double xmud);
 
 	/* format 132 */
 	void print132(string s);
 public:
 	void print();
-	static AerosolModel Parse(const float xmud);
+	static AerosolModel Parse(const double xmud);
 };
 
 

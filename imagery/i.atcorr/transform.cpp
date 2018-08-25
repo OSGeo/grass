@@ -1,7 +1,7 @@
 #include <math.h>
 #include "transform.h"
 
-void EtmDN(int iwave, float asol, bool before, float &lmin, float &lmax)
+void EtmDN(int iwave, double asol, bool before, double &lmin, double &lmax)
 {
     if (before)		/* ETM+ digital numbers taken before July 1, 2000 */
     {
@@ -132,13 +132,13 @@ void EtmDN(int iwave, float asol, bool before, float &lmin, float &lmax)
 /* Assuming input value between 0 and 1
    if rad is true, idn should first be converted to a reflectance value
    returns adjusted value also between 0 and 1 */
-float transform(const TransformInput ti, InputMask imask, float idn)
+double transform(const TransformInput ti, InputMask imask, double idn)
 {
     /* convert from radiance to reflectance */
     if((imask & ETM_BEFORE) || (imask & ETM_AFTER))
     {
         /* http://ltpwww.gsfc.nas */
-        float lmin, lmax;
+        double lmin, lmax;
         EtmDN(ti.iwave, ti.asol, imask & ETM_BEFORE, lmin, lmax);
 
         /* multiply idn by 255.f to correct precondition that idn lies in [0, 255] */
@@ -146,16 +146,16 @@ float transform(const TransformInput ti, InputMask imask, float idn)
         if (idn < 0.f) idn = 0.f;
         idn /= 255.f;
     }
-    if(imask & RADIANCE) idn += (float)M_PI * idn * 255.f * ti.sb / ti.xmus / ti.seb;
+    if(imask & RADIANCE) idn += (double)M_PI * idn * 255.f * ti.sb / ti.xmus / ti.seb;
           
-    float rapp = idn;
-    float ainrpix = ti.ainr[0][0];
+    double rapp = idn;
+    double ainrpix = ti.ainr[0][0];
     /*
-    float xa = 0.0f;
-    float xb = 0.0f;
-    float xc = 0.0f;
+    double xa = 0.0f;
+    double xb = 0.0f;
+    double xc = 0.0f;
     */
-    float rog = rapp / ti.tgasm;
+    double rog = rapp / ti.tgasm;
     /* The if below was added to avoid ground reflectances lower than
        zero when ainr(1,1) greater than rapp/tgasm
        In such case either the choice of atmospheric model was not
@@ -165,7 +165,7 @@ float transform(const TransformInput ti, InputMask imask, float idn)
        bright pixels in the image. Check the output file to see if that
        has happened. */
 
-    float decrfact = 1.0f;
+    double decrfact = 1.0f;
     if (rog < (ainrpix / ti.tgasm))
     {
 	do
@@ -179,7 +179,7 @@ float transform(const TransformInput ti, InputMask imask, float idn)
     rog = (rog - ainrpix / ti.tgasm) / ti.sutott / ti.sdtott;
     rog = rog / (1.f + rog * ti.sast);
     /*
-    xa = (float)M_PI * ti.sb / ti.xmus / ti.seb / ti.tgasm / ti.sutott / ti.sdtott;
+    xa = (double)M_PI * ti.sb / ti.xmus / ti.seb / ti.tgasm / ti.sutott / ti.sdtott;
     xb = ti.srotot / ti.sutott / ti.sdtott / ti.tgasm;
     xc = ti.sast;
     */

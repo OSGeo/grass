@@ -13,17 +13,17 @@
 struct TransformInput
 {
     int iwave;
-    float asol;
+    double asol;
     
-    float ainr[2][3];
-    float sb;
-    float seb;
-    float tgasm;
-    float sutott;
-    float sdtott;
-    float sast;
-    float srotot;
-    float xmus;
+    double ainr[2][3];
+    double sb;
+    double seb;
+    double tgasm;
+    double sutott;
+    double sdtott;
+    double sast;
+    double srotot;
+    double xmus;
 };
 
 /* The following combinations of input values types exist */
@@ -42,6 +42,6 @@ enum InputMask
 /* Assuming input value between 0 and 1
 if rad is true, idn should first be converted to a reflectance value
 returns adjusted value also between 0 and 1 */
-extern float transform(const TransformInput ti, InputMask imask, float idn);
+extern double transform(const TransformInput ti, InputMask imask, double idn);
 
 #endif /* TRANSFORM_H */

@@ -41,41 +41,41 @@ struct AerosolConcentration;
 
 struct Altitude
 {
-	float xps;
-	float xpp;
+	double xps;
+	double xpp;
 
 	/* some vars */
-	mutable float palt;
-	float pps;
+	mutable double palt;
+	double pps;
 	int	  idatmp;
-	float taer55p;
-	float puw;
-	float puo3;
-	float ftray;
+	double taer55p;
+	double puw;
+	double puo3;
+	double ftray;
 
-	float puwus;
-	float puo3us;
+	double puwus;
+	double puo3us;
 
 	struct Plane_sim
 	{
-		float zpl[34];
-		float ppl[34];
-		float tpl[34];
-		float whpl[34];
-		float wopl[34];
+		double zpl[34];
+		double ppl[34];
+		double tpl[34];
+		double whpl[34];
+		double wopl[34];
 	} plane_sim;
 
 private:
     /* remember the original input values
      these values are set the first time when parse is called
      and used in subsequent calls to init to set xps and xpp */
-    float original_xps;
-    float original_xpp;
-    float original_taer55p;
-    float original_puw;
-    float original_puo3;
+    double original_xps;
+    double original_xpp;
+    double original_taer55p;
+    double original_puw;
+    double original_puo3;
 
-	void pressure(AtmosModel& atms, float& uw, float& uo3);
+	void pressure(AtmosModel& atms, double& uw, double& uo3);
 
 	void presplane(AtmosModel& atms);
 
@@ -86,7 +86,7 @@ public:
 	void print();
 
     /* Set the height to be used the next time init is called */
-    void set_height(const float height) { original_xps = height; }
+    void set_height(const double height) { original_xps = height; }
     /* call init only once: init parses input file */
     void init(AtmosModel& atms, const AerosolConcentration &aerocon);
     /* call update_hv whenever xps changes */

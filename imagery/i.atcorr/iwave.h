@@ -42,15 +42,15 @@ struct IWave
 	int iinf;
 	int isup;
 
-	float wl;
-	float wlmoy;
+	double wl;
+	double wlmoy;
 
 	
 	struct FFu
 	{
-		float s[1501];
-		float wlinf;
-		float wlsup;
+		double s[1501];
+		double wlinf;
+		double wlsup;
 	} ffu;
 
 private:	
@@ -93,12 +93,12 @@ public:
 	/* To compute the equivalent wavelength needed for the calculation of the
 	  downward radiation field used in the computation of the non lambertian 
 	  target contribution (main.f). */
-	float equivwl() const;
+	double equivwl() const;
 
 	/* To read the solar irradiance (in Wm-2mm-1) from 250 nm to 4000 nm by 
 	steps of 2.5 nm, The total solar irradiance is put equal to 1372 Wm-2. 
 	Between 250 and 4000 nm we have 1358 Wm-2. */
-	float solirr(float wl) const;
+	double solirr(double wl) const;
 
 	void print();
 	static IWave Parse();

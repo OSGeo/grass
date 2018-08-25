@@ -29,9 +29,9 @@ extern int init_6S(char* icnd_name);
   This requires lots of computations and therefore can be very
   time consuming.
 */
-extern void pre_compute_hv(const float height, const float vis);
-extern void pre_compute_v(const float vis);
-extern void pre_compute_h(const float height);
+extern void pre_compute_hv(const double height, const double vis);
+extern void pre_compute_v(const double vis);
+extern void pre_compute_h(const double height);
 
 struct TransformInput;
 /* Compute the input parameters used to do atmospheric correction on input values
