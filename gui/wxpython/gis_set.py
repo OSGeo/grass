@@ -653,8 +653,8 @@ class GRASSStartup(wx.Frame):
                     newmapset, style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             else:
                 try:
-                    os.rename(os.path.join(self.gisdbase, location, mapset),
-                              os.path.join(self.gisdbase, location, newmapset))
+                    sutils.rename_mapset(self.gisdbase, location,
+                                         mapset, newmapset)
                     self.OnSelectLocation(None)
                     self.lbmapsets.SetSelection(
                         self.listOfMapsets.index(newmapset))
@@ -696,8 +696,8 @@ class GRASSStartup(wx.Frame):
                     newlocation, style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
             else:
                 try:
-                    os.rename(os.path.join(self.gisdbase, location),
-                              os.path.join(self.gisdbase, newlocation))
+                    sutils.rename_location(self.gisdbase,
+                                           location, newlocation)
                     self.UpdateLocations(self.gisdbase)
                     self.lblocations.SetSelection(
                         self.listOfLocations.index(newlocation))

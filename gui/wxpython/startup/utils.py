@@ -96,3 +96,17 @@ def delete_mapset(database, location, mapset):
 def delete_location(database, location):
     """Deletes a specified location"""
     shutil.rmtree(os.path.join(database, location))
+
+
+
+def rename_mapset(database, location, old_name, new_name):
+    """Rename mapset from *old_name* to *new_name*"""
+    location_path = os.path.join(database, location)
+    os.rename(os.path.join(location_path, old_name),
+              os.path.join(location_path, new_name))
+
+
+def rename_location(database, old_name, new_name):
+    """Rename location from *old_name* to *new_name*"""
+    os.rename(os.path.join(database, old_name),
+              os.path.join(database, new_name))
