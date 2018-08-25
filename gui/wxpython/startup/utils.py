@@ -96,3 +96,29 @@ def delete_mapset(database, location, mapset):
 def delete_location(database, location):
     """Deletes a specified location"""
     shutil.rmtree(os.path.join(database, location))
+
+
+# TODO: similar to (but not the same as) read_gisrc function in grass.py
+def read_gisrc(self):
+    """Read variables from a current GISRC file
+
+    Returns a dictionary representation of the file content.
+    """
+    grassrc = {}
+
+    gisrc = os.getenv("GISRC")
+
+    if gisrc and os.path.isfile(gisrc):
+        try:
+            rc = open(gisrc, "r")
+            for line in rc.readlines():
+                try:
+                    key, val = line.split(":", 1)
+                except ValueError as e:
+                    sys.stderr.write(
+                        _('Invalid line in GISRC file (%s):%s\n' % (e, line)))
+                grassrc[key.strip()] = DecodeString(val.strip())
+        finally:
+            rc.close()
+
+    return grassrc
