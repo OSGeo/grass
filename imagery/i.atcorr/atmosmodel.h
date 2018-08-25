@@ -39,15 +39,15 @@ struct AtmosModel
 	long int idatm;	/* atmospheric model*/
 
 	/* secondary */
-    float uw;
-    float uo3;
+    double uw;
+    double uo3;
 
 	/* primary */
-	float z[34];
-	float p[34];
-	float t[34];
-	float wh[34];
-	float wo[34];
+	double z[34];
+	double p[34];
+	double t[34];
+	double wh[34];
+	double wo[34];
 
 private:
 	/* methods to initialize each model */

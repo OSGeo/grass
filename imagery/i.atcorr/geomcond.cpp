@@ -46,7 +46,7 @@ extern "C" {
   return dsol		
   dsol is a multiplicative factor to apply to the mean value of solar constant 
 */
-float GeomCond::varsol ()
+double GeomCond::varsol ()
 {
 /* calculation of the variability of the solar constant during the year. 
    jday is the number of the day in the month   */
@@ -56,13 +56,13 @@ float GeomCond::varsol ()
     else j = (month - 1) * 31 - (month - 1) / 2 - 2 + jday;
 
 /* Computing 2nd power */
-    double tmp = 1.f - cos ((float) (j - 4) * 0.9856f * M_PI / 180.f) * .01673f;
-    return 1.f / (float)(tmp * tmp);
+    double tmp = 1.f - cos ((double) (j - 4) * 0.9856f * M_PI / 180.f) * .01673f;
+    return 1.f / (double)(tmp * tmp);
 }
 
 
 /* spot, landsat5 and landsat7 is handled the same way */
-void GeomCond::landsat(float tu)
+void GeomCond::landsat(double tu)
 {
 /*     warning !!! */
 /*     xlon and xlat are the coordinates of the scene center. */
@@ -77,7 +77,7 @@ void GeomCond::landsat(float tu)
   number of the month and number of the day in the month) at any Greenwich Meridian Time (GMT
   dec. hour).
 */
-void GeomCond::possol(float tu)
+void GeomCond::possol(double tu)
 {
     long int ia = 0;
     long int nojour;
@@ -107,7 +107,7 @@ void GeomCond::day_number(long int ia, long int& j)
 /* returns the sign of the element */
 #define SIGN(X) (((X) >= 0) ? 1. : -1.) 
 
-void GeomCond::pos_fft (long int j, float tu)
+void GeomCond::pos_fft (long int j, double tu)
 {
     /* Local variables */
     double ah, et, az, caz, xla, tet, tsm, tsv, elev, azim, gdelta, amuzero;
@@ -119,7 +119,7 @@ void GeomCond::pos_fft (long int j, float tu)
     /* mean solar time (heure decimale) */
     tsm = tu + xlon / 15.;
     xla = xlat * M_PI / 180.;
-    tet = (float)(j) * M_PI2 / 365.;
+    tet = (double)(j) * M_PI2 / 365.;
 
     /* time equation (in mn.dec) */
     et = 7.5e-5f + 0.001868f * cos (tet) - 0.032077f * sin (tet) - 
@@ -158,8 +158,8 @@ void GeomCond::pos_fft (long int j, float tu)
     elev = elev * 180. / M_PI;
 	
     /*     conversion in degrees */
-    asol = (float)(90. - elev);
-    phi0 = (float)(azim * 180. / M_PI);
+    asol = (double)(90. - elev);
+    phi0 = (double)(azim * 180. / M_PI);
 }
 
 /*
@@ -168,7 +168,7 @@ void GeomCond::pos_fft (long int j, float tu)
   2 = goes east observation
   3 = goes west observation
 */
-void GeomCond::posobs(float tu, int nc, int nl)
+void GeomCond::posobs(double tu, int nc, int nl)
 {
     double yr, xr, alti;
 
@@ -239,11 +239,11 @@ void GeomCond::posobs(float tu, int nc, int nl)
 	ylon = atan(xt / zt);
     }
  
-    xlat = (float)(ylat * crd);
+    xlat = (double)(ylat * crd);
 
-    if(igeom == 1) xlon = (float)(ylon * crd);
-    else if(igeom == 2) xlon = (float)(ylon * crd - 75.);
-    else xlon = (float)(ylon * crd - 135.);
+    if(igeom == 1) xlon = (double)(ylon * crd);
+    else if(igeom == 2) xlon = (double)(ylon * crd - 75.);
+    else xlon = (double)(ylon * crd - 135.);
  
     possol(tu);
  
@@ -253,11 +253,11 @@ void GeomCond::posobs(float tu, int nc, int nl)
 
     ylat = xlat * M_PI / 180.;
     double gam = sqrt(((1. / cosx2) - 1.) * cosx2);
-    avis = (float)(asin((1. + alti / re) * (gam)) * 180. / M_PI);
-    phiv = (float)((atan2(tan(ylon),sin(ylat)) + M_PI) * 180. / M_PI);
+    avis = (double)(asin((1. + alti / re) * (gam)) * 180. / M_PI);
+    phiv = (double)((atan2(tan(ylon),sin(ylat)) + M_PI) * 180. / M_PI);
 }
 
-void GeomCond::posnoa(float tu, int nc, float xlonan, float campm, float hna)
+void GeomCond::posnoa(double tu, int nc, double xlonan, double campm, double hna)
 {
 /*     noaa 6 definition
        orbite inclination ai in radians
@@ -276,7 +276,7 @@ void GeomCond::posnoa(float tu, int nc, float xlonan, float campm, float hna)
     u = campm * u * an;
     double delt = ((nc - (2048 + 1) / 2.) * 55.385 / ((2048. - 1) / 2.));
     delt = campm * delt * M_PI / 180.;
-    avis = (float)asin((1 + r) * sin(delt));
+    avis = (double)asin((1 + r) * sin(delt));
     double d = avis - delt;
     double y = cos(d) * cos(ai) * sin(u) - sin(ai) * sin(d);
     double z = cos(d) * sin(ai) * sin(u) + cos(ai) * sin(d);
@@ -291,8 +291,8 @@ void GeomCond::posnoa(float tu, int nc, float xlonan, float campm, float hna)
 	if(siny <= 0) ylon = -(M_PI + ylon);
     }
     double ylo1 = ylon + ylonan - (t - hnam) * 2. * M_PI / 86400.;
-    xlat = (float)(ylat * 180. / M_PI);
-    xlon = (float)(ylo1 * 180. / M_PI);
+    xlat = (double)(ylat * 180. / M_PI);
+    xlon = (double)(ylo1 * 180. / M_PI);
  
 
 
@@ -304,11 +304,11 @@ void GeomCond::posnoa(float tu, int nc, float xlonan, float campm, float hna)
     {
 	double xnum = sin(zlon - ylon) * cos(zlat) / sin(fabs(d));
 	double xden = (sin(zlat) - sin(ylat) * cos(d)) / cos(ylat) / sin(fabs(d));
-	phiv = (float)atan2(xnum,xden);
+	phiv = (double)atan2(xnum,xden);
     }
     else phiv = 0.;
-    phiv = (float)(phiv * 180. / M_PI);
-    avis = (float)(fabs(avis) * 180. / M_PI);
+    phiv = (double)(phiv * 180. / M_PI);
+    avis = (double)(fabs(avis) * 180. / M_PI);
 }
 
 void GeomCond::parse()
@@ -316,8 +316,8 @@ void GeomCond::parse()
     cin >> igeom;
     cin.ignore(numeric_limits<int>::max(),'\n');  /* read the rest of the scraps, like comments */
 
-    float campm = -1.0f;	/* initialize in case igeom == 5 */
-    float tu, xlonan, hna;
+    double campm = -1.0f;	/* initialize in case igeom == 5 */
+    double tu, xlonan, hna;
     int nc, nl;
 
     switch(igeom)
@@ -346,7 +346,7 @@ void GeomCond::parse()
 	posobs(tu, nc, nl);
 	break;
     }
-    case 4: campm = 1.0f; /* avhrr PM */
+    case 4: campm = 1.0f; /* avhrr PM, case 4 must fall through to case 5 */
     case 5:  		  /* avhrr PM and avhrr AM */
     {
 	cin >> month;
@@ -407,20 +407,20 @@ void GeomCond::parse()
     /*    direction                                                           */
     /*                                                                        */
     /* ********************************************************************** */
-    phi = (float)fabs(phiv - phi0);
-    phirad = (phi0 - phiv) * (float)M_PI / 180.f;
-    if (phirad < 0.f) phirad += (float)M_PI2;
-    if (phirad > M_PI2) phirad -= (float)M_PI2;
+    phi = (double)fabs(phiv - phi0);
+    phirad = (phi0 - phiv) * (double)M_PI / 180.f;
+    if (phirad < 0.f) phirad += (double)M_PI2;
+    if (phirad > M_PI2) phirad -= (double)M_PI2;
 
-    xmus = (float)cos (asol * M_PI / 180.f);
-    xmuv = (float)cos (avis * M_PI / 180.f);
-    xmup = (float)cos (phirad);
-    xmud = -xmus * xmuv - (float)sqrt (1.f - xmus * xmus) * (float)sqrt (1.f - xmuv * xmuv) * xmup;
+    xmus = (double)cos (asol * M_PI / 180.f);
+    xmuv = (double)cos (avis * M_PI / 180.f);
+    xmup = (double)cos (phirad);
+    xmud = -xmus * xmuv - (double)sqrt (1.f - xmus * xmus) * (double)sqrt (1.f - xmuv * xmuv) * xmup;
 
     /* test vermote bug */
     if (xmud > 1.f)  xmud = 1.f;
     if (xmud < -1.f) xmud = -1.f;
-    adif = (float)acos (xmud) * 180.f / (float)M_PI;
+    adif = (double)acos (xmud) * 180.f / (double)M_PI;
 
     dsol = varsol();
 }

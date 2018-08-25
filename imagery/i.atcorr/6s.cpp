@@ -22,10 +22,10 @@ extern "C" {
 extern void discom(const GeomCond &geom, const AtmosModel &atms,
                    const AerosolModel &aero, const AerosolConcentration &aerocon,
                    const Altitude &alt, const IWave &iwave);
-extern void specinterp(const float wl, float& tamoy, float& tamoyp, float& pizmoy, float& pizmoyp,
+extern void specinterp(const double wl, double& tamoy, double& tamoyp, double& pizmoy, double& pizmoyp,
                        const AerosolConcentration &aerocon, const Altitude &alt);
-extern void enviro (const float difr, const float difa, const float r, const float palt,
-		    const float xmuv, float& fra, float& fae, float& fr);
+extern void enviro (const double difr, const double difa, const double r, const double palt,
+		    const double xmuv, double& fra, double& fae, double& fr);
 void printOutput(); // forward declare this function so that it can be used in init_6S
 
 
@@ -91,14 +91,14 @@ int init_6S(char* icnd_name)
 	c**********************************************************************/
 
     /* NOTE: wlmoy is not affected by a height and/or vis change */
-    float wlmoy;
+    double wlmoy;
     if(iwave.iwave != -1) wlmoy = iwave.equivwl();
     else wlmoy = iwave.wl;
 
     iwave.wlmoy = wlmoy;
 
     discom(geom, atms, aero, aerocon, alt, iwave);
-    float tamoy, tamoyp, pizmoy, pizmoyp;
+    double tamoy, tamoyp, pizmoy, pizmoyp;
     if(aero.iaer != 0) specinterp(wlmoy, tamoy, tamoyp, pizmoy, pizmoyp, aerocon, alt);
 
     printOutput();
@@ -107,45 +107,45 @@ int init_6S(char* icnd_name)
 }
 
 /* Only update those objects that are affected by a height and vis change */
-void pre_compute_hv(const float height, const float vis)
+void pre_compute_hv(const double height, const double vis)
 {
     atms = original_atms;
     aerocon.set_visibility(vis, atms);
     alt.set_height(height);
     alt.init(atms, aerocon);
    
-    float wlmoy = iwave.wlmoy;
+    double wlmoy = iwave.wlmoy;
 
     discom(geom, atms, aero, aerocon, alt, iwave);
-    float tamoy, tamoyp, pizmoy, pizmoyp;
+    double tamoy, tamoyp, pizmoy, pizmoyp;
     if(aero.iaer != 0) specinterp(wlmoy, tamoy, tamoyp, pizmoy, pizmoyp, aerocon, alt);
 }
 
 /* Only update those objects that are affected by a visibility change */
-void pre_compute_v(const float vis)
+void pre_compute_v(const double vis)
 {
     atms = original_atms;
     aerocon.set_visibility(vis, atms);
     alt.init(atms, aerocon);
 
-    float wlmoy = iwave.wlmoy;
+    double wlmoy = iwave.wlmoy;
 
     discom(geom, atms, aero, aerocon, alt, iwave);
-    float tamoy, tamoyp, pizmoy, pizmoyp;
+    double tamoy, tamoyp, pizmoy, pizmoyp;
     if(aero.iaer != 0) specinterp(wlmoy, tamoy, tamoyp, pizmoy, pizmoyp, aerocon, alt);
 }
 
 /* Only update those objects that are affected by a height change */
-void pre_compute_h(const float height)
+void pre_compute_h(const double height)
 {
     atms = original_atms;
     alt.set_height(height);
     alt.init(atms, aerocon);
 
-    float wlmoy = iwave.wlmoy;
+    double wlmoy = iwave.wlmoy;
 
     discom(geom, atms, aero, aerocon, alt, iwave);
-    float tamoy, tamoyp, pizmoy, pizmoyp;
+    double tamoy, tamoyp, pizmoy, pizmoyp;
     if(aero.iaer != 0) specinterp(wlmoy, tamoy, tamoyp, pizmoy, pizmoyp, aerocon, alt);
 }
 
@@ -194,7 +194,7 @@ void printOutput()
 	string(" spectral volcanic debris reflectance  ")
     };
 
-    float rocave = 0;       /* block of code in Fortran will always compute 0 */
+    double rocave = 0;       /* block of code in Fortran will always compute 0 */
     ostringstream s;
     s.setf(ios::fixed, ios::floatfield);
     s << setprecision(3);
@@ -241,71 +241,71 @@ void printOutput()
 
 TransformInput compute()
 {
-    const float accu3 = 1e-07;
+    const double accu3 = 1e-07;
 /* ---- initilialization	 very liberal :) */
     int i, j;
 
-    float fr = 0;
-    float rad = 0;
-    float sb = 0;
-    float seb = 0;
-    float refet = 0;
-    float refet1 = 0;
-    float refet2 = 0;
-    float refet3 = 0;
-    float alumet = 0;
-    float tgasm = 0;
-    float rog = 0;
-    float dgasm = 0;
-    float ugasm = 0;
-    float sdwava = 0;
-    float sdozon = 0;
-    float sddica = 0;
-    float sdoxyg = 0;
-    float sdniox = 0;
-    float sdmoca = 0;
-    float sdmeth = 0;
+    double fr = 0;
+    double rad = 0;
+    double sb = 0;
+    double seb = 0;
+    double refet = 0;
+    double refet1 = 0;
+    double refet2 = 0;
+    double refet3 = 0;
+    double alumet = 0;
+    double tgasm = 0;
+    double rog = 0;
+    double dgasm = 0;
+    double ugasm = 0;
+    double sdwava = 0;
+    double sdozon = 0;
+    double sddica = 0;
+    double sdoxyg = 0;
+    double sdniox = 0;
+    double sdmoca = 0;
+    double sdmeth = 0;
 
-    float suwava = 0;
-    float suozon = 0;
-    float sudica = 0;
-    float suoxyg = 0;
-    float suniox = 0;
-    float sumoca = 0;
-    float sumeth = 0;
-    float stwava = 0;
-    float stozon = 0;
-    float stdica = 0;
-    float stoxyg = 0;
-    float stniox = 0;
-    float stmoca = 0;
-    float stmeth = 0;
-    float sodray = 0;
-    float sodrayp = 0;
-    float sodaer = 0;
-    float sodaerp = 0;
-    float sodtot = 0;
-    float sodtotp = 0;
-    float fophsr = 0;
-    float fophsa = 0;
-    float sroray = 0;
-    float sroaer = 0;
-    float srotot = 0;
-    float ssdaer = 0;
-    float sdtotr = 0;
-    float sdtota = 0;
-    float sdtott = 0;
-    float sutotr = 0;
-    float sutota = 0;
-    float sutott = 0;
-    float sasr = 0;
-    float sasa = 0;
-    float sast = 0;
+    double suwava = 0;
+    double suozon = 0;
+    double sudica = 0;
+    double suoxyg = 0;
+    double suniox = 0;
+    double sumoca = 0;
+    double sumeth = 0;
+    double stwava = 0;
+    double stozon = 0;
+    double stdica = 0;
+    double stoxyg = 0;
+    double stniox = 0;
+    double stmoca = 0;
+    double stmeth = 0;
+    double sodray = 0;
+    double sodrayp = 0;
+    double sodaer = 0;
+    double sodaerp = 0;
+    double sodtot = 0;
+    double sodtotp = 0;
+    double fophsr = 0;
+    double fophsa = 0;
+    double sroray = 0;
+    double sroaer = 0;
+    double srotot = 0;
+    double ssdaer = 0;
+    double sdtotr = 0;
+    double sdtota = 0;
+    double sdtott = 0;
+    double sutotr = 0;
+    double sutota = 0;
+    double sutott = 0;
+    double sasr = 0;
+    double sasa = 0;
+    double sast = 0;
 
-    float ani[2][3];
-    float aini[2][3];
-    float anr[2][3];
-    float ainr[2][3];
+    double ani[2][3];
+    double aini[2][3];
+    double anr[2][3];
+    double ainr[2][3];
 
     for(i = 0; i < 2; i++)
 	for(j = 0; j < 3; j++)
@@ -327,24 +327,24 @@ TransformInput compute()
     int l;
     for(l = iwave.iinf; l <= iwave.isup; l++)
     {
-        float sbor = iwave.ffu.s[l];
+        double sbor = iwave.ffu.s[l];
 
         if(l == iwave.iinf || l == iwave.isup) sbor *= 0.5f;
         if(iwave.iwave == -1) sbor = 1.0f / step;
 
-        float roc = 0; /* rocl[l]; */
-        float roe = 0; /* roel[l]; */
-        float wl = 0.25f + l * step;
+        double roc = 0; /* rocl[l]; */
+        double roe = 0; /* roel[l]; */
+        double wl = 0.25f + l * step;
 
 	AbstraStruct as;
-	float uwus, uo3us;		/* initialized in abstra */
+	double uwus, uo3us;		/* initialized in abstra */
 
-	abstra(atms, alt, wl, (float)geom.xmus, (float)geom.xmuv, atms.uw / 2.0f, atms.uo3,
+	abstra(atms, alt, wl, (double)geom.xmus, (double)geom.xmuv, atms.uw / 2.0f, atms.uo3,
 	       uwus, uo3us, alt.puw / 2.0f, alt.puo3, alt.puwus, alt.puo3us, as);
 
-	float attwava = as.ttwava;
+	double attwava = as.ttwava;
 
-	abstra(atms, alt, wl, (float)geom.xmus, (float)geom.xmuv, atms.uw, atms.uo3,
+	abstra(atms, alt, wl, (double)geom.xmus, (double)geom.xmuv, atms.uw, atms.uo3,
 	       uwus, uo3us, alt.puw, alt.puo3, alt.puwus, alt.puo3us, as);
 
         if (as.dtwava < accu3) as.dtwava = 0;
@@ -366,36 +366,36 @@ TransformInput compute()
         if (as.ttmeth < accu3) as.ttmeth = 0;
         if (as.ttmoca < accu3) as.ttmeth = 0;
 
-        float swl = iwave.solirr(wl);
+        double swl = iwave.solirr(wl);
         swl = swl * geom.dsol;
-        float coef = sbor * step * swl;
+        double coef = sbor * step * swl;
 
 	InterpStruct is;
 	memset(&is, 0, sizeof(is));
-	interp(aero.iaer, alt.idatmp, wl, aerocon.taer55, alt.taer55p, (float)geom.xmud, is);
+	interp(aero.iaer, alt.idatmp, wl, aerocon.taer55, alt.taer55p, (double)geom.xmud, is);
 
 
-        float dgtot = as.dtwava * as.dtozon * as.dtdica * as.dtoxyg * as.dtniox * as.dtmeth * as.dtmoca;
-        float tgtot = as.ttwava * as.ttozon * as.ttdica * as.ttoxyg * as.ttniox * as.ttmeth * as.ttmoca;
-        float ugtot = as.utwava * as.utozon * as.utdica * as.utoxyg * as.utniox * as.utmeth * as.utmoca;
-        float tgp1 = as.ttozon * as.ttdica * as.ttoxyg * as.ttniox * as.ttmeth * as.ttmoca;
-        float tgp2 = attwava * as.ttozon * as.ttdica * as.ttoxyg * as.ttniox * as.ttmeth * as.ttmoca;
-        float edifr = (float)(is.utotr - exp(-is.trayp / geom.xmuv));
-        float edifa = (float)(is.utota - exp(-is.taerp / geom.xmuv));
+        double dgtot = as.dtwava * as.dtozon * as.dtdica * as.dtoxyg * as.dtniox * as.dtmeth * as.dtmoca;
+        double tgtot = as.ttwava * as.ttozon * as.ttdica * as.ttoxyg * as.ttniox * as.ttmeth * as.ttmoca;
+        double ugtot = as.utwava * as.utozon * as.utdica * as.utoxyg * as.utniox * as.utmeth * as.utmoca;
+        double tgp1 = as.ttozon * as.ttdica * as.ttoxyg * as.ttniox * as.ttmeth * as.ttmoca;
+        double tgp2 = attwava * as.ttozon * as.ttdica * as.ttoxyg * as.ttniox * as.ttmeth * as.ttmoca;
+        double edifr = (double)(is.utotr - exp(-is.trayp / geom.xmuv));
+        double edifa = (double)(is.utota - exp(-is.taerp / geom.xmuv));
 
 
-	float fra, fae;
-	enviro(edifr, edifa, rad, alt.palt, (float)geom.xmuv, fra, fae, fr);
+	double fra, fae;
+	enviro(edifr, edifa, rad, alt.palt, (double)geom.xmuv, fra, fae, fr);
 
-	float avr = roc * fr + (1 - fr) * roe;
-	float rsurf = (float)(roc * is.dtott * exp(-(is.trayp + is.taerp) / geom.xmuv) / (1 - avr * is.astot)
+	double avr = roc * fr + (1 - fr) * roe;
+	double rsurf = (double)(roc * is.dtott * exp(-(is.trayp + is.taerp) / geom.xmuv) / (1 - avr * is.astot)
 			      + avr * is.dtott * (is.utott - exp(-(is.trayp + is.taerp) / geom.xmuv)) / (1 - avr * is.astot));
-        float ratm1 = (is.romix - is.rorayl) * tgtot + is.rorayl * tgp1;
-        float ratm3 = is.romix * tgp1;
-        float ratm2 = (is.romix - is.rorayl) * tgp2 + is.rorayl * tgp1;
-        float romeas1 = ratm1 + rsurf * tgtot;
-        float romeas2 = ratm2 + rsurf * tgtot;
-        float romeas3 = ratm3 + rsurf * tgtot;
+        double ratm1 = (is.romix - is.rorayl) * tgtot + is.rorayl * tgp1;
+        double ratm3 = is.romix * tgp1;
+        double ratm2 = (is.romix - is.rorayl) * tgp2 + is.rorayl * tgp1;
+        double romeas1 = ratm1 + rsurf * tgtot;
+        double romeas2 = ratm2 + rsurf * tgtot;
+        double romeas3 = ratm3 + rsurf * tgtot;
 
 	/* computing integrated values over the spectral band */
         if (iwave.iwave == -2)
@@ -418,7 +418,7 @@ TransformInput compute()
         }
 
         
-	float alumeas = (float)(geom.xmus * swl * romeas2 / M_PI);
+	double alumeas = (double)(geom.xmus * swl * romeas2 / M_PI);
         fophsa = fophsa + is.phaa * coef;
         fophsr = fophsr + is.phar * coef;
         sasr = sasr + is.asray * coef;
@@ -474,15 +474,15 @@ TransformInput compute()
         seb = seb + coef;
 
 	/* output at the ground level. */
-        float tdir = (float)exp(-(is.tray + is.taer) / geom.xmus);
-        float tdif = is.dtott - tdir;
-        float etn = is.dtott * dgtot / (1 - avr * is.astot);
-        float esn = tdir * dgtot;
-        float es = (float)(tdir * dgtot * geom.xmus * swl);
-        float ea0n = tdif * dgtot;
-        float ea0 = (float)(tdif * dgtot * geom.xmus * swl);
-        float ee0n = dgtot * avr * is.astot * is.dtott / (1 - avr * is.astot);
-        float ee0 = (float)(geom.xmus * swl * dgtot * avr * is.astot * is.dtott / (1 - avr * is.astot));
+        double tdir = (double)exp(-(is.tray + is.taer) / geom.xmus);
+        double tdif = is.dtott - tdir;
+        double etn = is.dtott * dgtot / (1 - avr * is.astot);
+        double esn = tdir * dgtot;
+        double es = (double)(tdir * dgtot * geom.xmus * swl);
+        double ea0n = tdif * dgtot;
+        double ea0 = (double)(tdif * dgtot * geom.xmus * swl);
+        double ee0n = dgtot * avr * is.astot * is.dtott / (1 - avr * is.astot);
+        double ee0 = (double)(geom.xmus * swl * dgtot * avr * is.astot * is.dtott / (1 - avr * is.astot));
 
         if (etn > accu3)
 	{
@@ -509,14 +509,14 @@ TransformInput compute()
 	}
 
 	/* output at satellite level */
-        float tmdir = (float)exp(-(is.tray + is.taer) / geom.xmuv);
-        float tmdif = is.utott - tmdir;
-        float xla0n = ratm2;
-        float xla0 = (float)(xla0n * geom.xmus * swl / M_PI);
-        float xltn = roc * is.dtott * tmdir * tgtot / (1 - avr * is.astot);
-        float xlt = (float)(xltn * geom.xmus * swl / M_PI);
-        float xlen = avr * is.dtott * tmdif * tgtot / (1 - avr * is.astot);
-        float xle = (float)(xlen * geom.xmus * swl / M_PI);
+        double tmdir = (double)exp(-(is.tray + is.taer) / geom.xmuv);
+        double tmdif = is.utott - tmdir;
+        double xla0n = ratm2;
+        double xla0 = (double)(xla0n * geom.xmus * swl / M_PI);
+        double xltn = roc * is.dtott * tmdir * tgtot / (1 - avr * is.astot);
+        double xlt = (double)(xltn * geom.xmus * swl / M_PI);
+        double xlen = avr * is.dtott * tmdif * tgtot / (1 - avr * is.astot);
+        double xle = (double)(xlen * geom.xmus * swl / M_PI);
         anr[0][0] = xla0n;
         anr[0][1] = xlen;
         anr[0][2] = xltn;
@@ -582,7 +582,7 @@ TransformInput compute()
     srotot = srotot / seb;
     alumet = alumet / sb;
     /*
-    float pizera = 0.0f;
+    double pizera = 0.0f;
     if(aero.iaer != 0) pizera = ssdaer / sodaer;
     */
     sodray = sodray / seb;

@@ -1463,7 +1463,7 @@ void IWave::etmplus(int iwa)
     }
 }
 
-float IWave::solirr(const float fwl) const
+double IWave::solirr(const double fwl) const
 {
 /*    si (in w/m2/micron) contains the values of the solar
       irradiance between 0.25 and 4.0 microns, by step of 0.0025 m.
@@ -1688,7 +1688,7 @@ float IWave::solirr(const float fwl) const
 	8.85,   8.83,   8.81
     };
 
-    float pas = 0.0025;
+    double pas = 0.0025;
     int   iwl = (int)((fwl - 0.250) / pas + 1.5);
 	  
     if(iwl >= 0) return si[iwl-1];
@@ -4862,18 +4862,18 @@ void IWave::planetscope0f10(int iwa)
 
 /* filter functions must be defined above */
 
-float IWave::equivwl() const
+double IWave::equivwl() const
 {
-    float seb = 0;
-    float wlwave = 0;
+    double seb = 0;
+    double wlwave = 0;
 
     for(int i = iinf; i <= isup; i++)
     {
-	float sbor = ffu.s[i];
+	double sbor = ffu.s[i];
 	if(i == iinf || i == isup) sbor *= 0.5;
-	float fwl = (float)(0.25 + i * step);
-	float swl = solirr(fwl);
-	float coef = sbor * step * swl;
+	double fwl = (double)(0.25 + i * step);
+	double swl = solirr(fwl);
+	double coef = sbor * step * swl;
 	seb += coef;
 	wlwave += fwl * coef;
     }
@@ -4952,7 +4952,7 @@ void IWave::parse()
 
 	if (iwave > 1) {
 	    int imax;
-	    float smax, sthreshold;
+	    double smax, sthreshold;
 
 	    imax = -1;
 	    smax = 0;

@@ -138,7 +138,7 @@ static CELL round_c(FCELL x)
 }
 
 /* round height, input and output unit is meters */
-static int round_h(float x)
+static int round_h(double x)
 {
     x /= BIN_ALT;
     x = floor(x + 0.5);
@@ -148,7 +148,7 @@ static int round_h(float x)
 }
 
 /* round visibility, input unit is km, output unit is meters */
-static int round_v(float x)
+static int round_v(double x)
 {
     x *= 1000. / BIN_VIS;
     x = floor(x + 0.5);
@@ -205,7 +205,7 @@ class TICache
     unsigned int tree_size;
 
   private:
-    struct RBitem set_alt_vis(float alt, float vis)
+    struct RBitem set_alt_vis(double alt, double vis)
     {
 	struct RBitem rbitem;
 
@@ -222,7 +222,7 @@ class TICache
 	RBTree = rbtree_create(compare_hv, sizeof(struct RBitem));
 	tree_size = 0;
     }
-    int search(float alt, float vis, TransformInput *ti)
+    int search(double alt, double vis, TransformInput *ti)
     {
 	struct RBitem search_ti = set_alt_vis(alt, vis);
 	struct RBitem *found_ti;
@@ -237,7 +237,7 @@ class TICache
 
     }
 
-    void add(TransformInput ti, float alt, float vis)
+    void add(TransformInput ti, double alt, double vis)
     {
 	struct RBitem insert_ti = set_alt_vis(alt, vis);
 
@@ -402,15 +402,17 @@ static void process_raster(int ifd, InputMask imask, ScaleRange iscale,
 	    G_debug(3, "Computed r%d (%d), c%d (%d)", row, nrows, col, ncols);
 	    /* transform from iscale.[min,max] to [0,1] */
 	    buf[col] =
-		(buf[col] - iscale.min) / ((float)iscale.max -
-					   (float)iscale.min);
+		(buf[col] - iscale.min) / ((double)iscale.max -
+					   (double)iscale.min);
 	    buf[col] = transform(ti, imask, buf[col]);
+	    if (Rast_is_f_null_value(&buf[col]))
+		G_fatal_error(_("Numerical instability in 6S"));
 	    /* transform from [0,1] to oscale.[min,max] */
 	    buf[col] =
-		buf[col] * ((float)oscale.max - (float)oscale.min) +
+		buf[col] * ((double)oscale.max - (double)oscale.min) +
 		oscale.min;
 
-	    if (oint && (buf[col] > (float)oscale.max))
+	    if (oint && (buf[col] > (double)oscale.max))
 		G_warning(_("The output data will overflow. Reflectance > 100%%"));
 	}
 
@@ -619,7 +621,7 @@ int main(int argc, char *argv[])
 			  opts.ivis->answer);
     }
 
-    /* open a floating point raster or not? */
+    /* open a doubleing point raster or not? */
     if (opts.oint->answer) {
 	if ((oimg_fd = Rast_open_new(opts.oimg->answer, CELL_TYPE)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"),
