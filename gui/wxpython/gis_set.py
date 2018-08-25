@@ -40,6 +40,7 @@ from startup.utils import (
     get_lockfile_if_present, get_possible_database_path, create_mapset)
 import startup.utils as sutils
 from startup.guiutils import SetSessionMapset, NewMapsetDialog
+import startup.guiutils as sgui
 from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator, StaticWrapText
@@ -63,7 +64,7 @@ class GRASSStartup(wx.Frame):
         # GRASS variables
         #
         self.gisbase = os.getenv("GISBASE")
-        self.grassrc = sutils.read_gisrc()
+        self.grassrc = sgui.read_gisrc()
         self.gisdbase = self.GetRCValue("GISDBASE")
 
         #
