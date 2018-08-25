@@ -17,6 +17,7 @@ solve the errors etc. in a general manner).
 
 
 import os
+import shutil
 
 
 def get_possible_database_path():
@@ -67,3 +68,17 @@ def get_lockfile_if_present(database, location, mapset):
     else:
         return None
 
+
+def create_mapset(database, location, mapset):
+    """Creates a mapset in a specified location"""
+    location_path = os.path.join(database, location)
+    mapset_path = os.path.join(location_path, mapset)
+    # create an empty directory
+    os.mkdir(mapset_path)
+    # copy WIND file and its permissions from PERMANENT
+    # this uses PERMANENT's current region instead of default (?)
+    region_file = 'WIND'
+    region_path = os.path.join(location_path, 'PERMANENT', region_file)
+    shutil.copy(region_path, mapset_path)
+    # set permissions to u+rw,go+r (disabled)
+    # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)

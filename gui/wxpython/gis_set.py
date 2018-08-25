@@ -38,7 +38,7 @@ from grass.script import core as grass
 from core.gcmd import GMessage, GError, DecodeString, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
-    get_lockfile_if_present, get_possible_database_path)
+    get_lockfile_if_present, get_possible_database_path, create_mapset)
 from startup.guiutils import SetSessionMapset, NewMapsetDialog
 from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
@@ -1014,20 +1014,7 @@ class GRASSStartup(wx.Frame):
         try:
             self.gisdbase = self.tgisdbase.GetValue()
             location = self.listOfLocations[self.lblocations.GetSelection()]
-            os.mkdir(os.path.join(self.gisdbase, location, mapset))
-            # copy WIND file and its permissions from PERMANENT and set
-            # permissions to u+rw,go+r
-            shutil.copy(
-                os.path.join(
-                    self.gisdbase,
-                    location,
-                    'PERMANENT',
-                    'WIND'),
-                os.path.join(
-                    self.gisdbase,
-                    location,
-                    mapset))
-            # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)
+            create_mapset(self.gisdbase, location, mapset)
             self.OnSelectLocation(None)
             self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
             self.bstart.SetFocus()
