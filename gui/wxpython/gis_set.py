@@ -108,18 +108,7 @@ class GRASSStartup(wx.Frame):
         # labels
         # crashes when LOCATION doesn't exist
         # get version & revision
-        versionFile = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
-        versionLine = versionFile.readline().rstrip('\n')
-        versionFile.close()
-        try:
-            grassVersion, grassRevision = versionLine.split(' ', 1)
-            if grassVersion.endswith('svn'):
-                grassRevisionStr = ' (%s)' % grassRevision
-            else:
-                grassRevisionStr = ''
-        except ValueError:
-            grassVersion = versionLine
-            grassRevisionStr = ''
+        grassVersion, grassRevisionStr = sgui.GetVersion()
 
         self.gisdbase_box = wx.StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %

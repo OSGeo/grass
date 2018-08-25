@@ -20,6 +20,7 @@ import wx
 
 import grass.script as gs
 
+from core import globalvar
 from core.gcmd import DecodeString, RunCommand
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator
@@ -82,3 +83,28 @@ def read_gisrc():
             rc.close()
 
     return grassrc
+
+
+def GetVersion():
+    """Gets version and revision
+
+    Returns tuple `(version, revision)`. For standard releases revision
+    is an empty string.
+
+    Revision string is currently wrapped in parentheses with added
+    leading space. This is an implementation detail and legacy and may
+    change anytime.
+    """
+    versionFile = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
+    versionLine = versionFile.readline().rstrip('\n')
+    versionFile.close()
+    try:
+        grassVersion, grassRevision = versionLine.split(' ', 1)
+        if grassVersion.endswith('svn'):
+            grassRevisionStr = ' (%s)' % grassRevision
+        else:
+            grassRevisionStr = ''
+    except ValueError:
+        grassVersion = versionLine
+        grassRevisionStr = ''
+    return (grassVersion, grassRevisionStr)
