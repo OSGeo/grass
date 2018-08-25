@@ -82,3 +82,17 @@ def create_mapset(database, location, mapset):
     shutil.copy(region_path, mapset_path)
     # set permissions to u+rw,go+r (disabled)
     # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)
+
+
+def delete_mapset(database, location, mapset):
+    """Deletes a specified mapset"""
+    if mapset == 'PERMANENT':
+        # TODO: translatable or not?
+        raise ValueError("Mapset PERMANENT cannot be deleted"
+                         " (whole location can be)")
+    shutil.rmtree(os.path.join(database, location, mapset))
+
+
+def delete_location(database, location):
+    """Deletes a specified location"""
+    shutil.rmtree(os.path.join(database, location))

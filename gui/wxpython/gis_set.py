@@ -22,7 +22,6 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import shutil
 import copy
 import platform
 import codecs
@@ -39,6 +38,7 @@ from core.gcmd import GMessage, GError, DecodeString, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
 from startup.utils import (
     get_lockfile_if_present, get_possible_database_path, create_mapset)
+import startup.utils as sutils
 from startup.guiutils import SetSessionMapset, NewMapsetDialog
 from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
@@ -758,7 +758,7 @@ class GRASSStartup(wx.Frame):
 
         if dlg.ShowModal() == wx.ID_YES:
             try:
-                shutil.rmtree(os.path.join(self.gisdbase, location, mapset))
+                sutils.delete_mapset(self.gisdbase, location, mapset)
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(0)
             except:
@@ -786,7 +786,7 @@ class GRASSStartup(wx.Frame):
 
         if dlg.ShowModal() == wx.ID_YES:
             try:
-                shutil.rmtree(os.path.join(self.gisdbase, location))
+                sutils.delete_location(self.gisdbase, location)
                 self.UpdateLocations(self.gisdbase)
                 self.lblocations.SetSelection(0)
                 self.OnSelectLocation(None)
