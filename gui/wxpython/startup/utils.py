@@ -99,7 +99,7 @@ def delete_location(database, location):
 
 
 # TODO: similar to (but not the same as) read_gisrc function in grass.py
-def read_gisrc(self):
+def read_gisrc():
     """Read variables from a current GISRC file
 
     Returns a dictionary representation of the file content.
