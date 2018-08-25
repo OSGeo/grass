@@ -63,7 +63,7 @@ class GRASSStartup(wx.Frame):
         # GRASS variables
         #
         self.gisbase = os.getenv("GISBASE")
-        self.grassrc = self._readGisRC()
+        self.grassrc = sutils.read_gisrc()
         self.gisdbase = self.GetRCValue("GISDBASE")
 
         #
@@ -472,28 +472,6 @@ class GRASSStartup(wx.Frame):
         sizer.Fit(self.panel)
         sizer.SetSizeHints(self)
         self.Layout()
-
-    def _readGisRC(self):
-        """Read variables from $HOME/.grass7/rc file
-        """
-        grassrc = {}
-
-        gisrc = os.getenv("GISRC")
-
-        if gisrc and os.path.isfile(gisrc):
-            try:
-                rc = open(gisrc, "r")
-                for line in rc.readlines():
-                    try:
-                        key, val = line.split(":", 1)
-                    except ValueError as e:
-                        sys.stderr.write(
-                            _('Invalid line in GISRC file (%s):%s\n' % (e, line)))
-                    grassrc[key.strip()] = DecodeString(val.strip())
-            finally:
-                rc.close()
-
-        return grassrc
 
     def _showWarning(self, text):
         """Displays a warning, hint or info message to the user.
