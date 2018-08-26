@@ -8,14 +8,14 @@ extern "C" {
 
 void AtmosModel::tropic()
 {
-    static const double z1[34] =
+    static const float z1[34] =
 	{ 
 	    0.f, 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f, 11.f, 
 	    12.f, 13.f, 14.f, 15.f, 16.f, 17.f, 18.f, 19.f, 20.f, 21.f, 
 	    22.f, 23.f, 24.f, 25.f, 30.f, 35.f, 40.f, 45.f, 50.f, 70.f, 100.f, 99999.f
 	};
 	
-    static const double p1[34] =
+    static const float p1[34] =
 	{ 
 	    1013.f, 904.f, 805.f, 715.f, 633.f, 559.f, 492.f, 432.f, 378.f, 
 	    329.f, 286.f, 247.f, 213.f, 182.f, 156.f, 132.f, 111.f, 93.7f,
@@ -23,7 +23,7 @@ void AtmosModel::tropic()
 	    3.05f, 1.59f, .854f, .0579f, 3e-4f, 0.f
 	};
 
-    static const double t1[34] =
+    static const float t1[34] =
 	{ 
 	    300.f, 294.f, 288.f, 284.f, 277.f, 270.f, 264.f, 257.f, 250.f, 
 	    244.f, 237.f, 230.f, 224.f, 217.f, 210.f, 204.f, 197.f, 195.f,
@@ -31,7 +31,7 @@ void AtmosModel::tropic()
 	    243.f, 254.f, 265.f, 270.f, 219.f, 210.f, 210.f
 	};
 
-    static const double wh1[34] =
+    static const float wh1[34] =
 	{ 
 	    19.f, 13.f, 9.3f, 4.7f, 2.2f, 1.5f, .85f, .47f, .25f, .12f, .05f, 
 
@@ -41,7 +41,7 @@ void AtmosModel::tropic()
 	    3.6e-4f, 1.1e-4f, 4.3e-5f, 1.9e-5f, 6.3e-6f, 1.4e-7f, 1e-9f, 0.f
 	};
 
-    static const double wo1[34] =
+    static const float wo1[34] =
 	{ 
 	    5.6e-5f, 5.6e-5f, 5.4e-5f, 5.1e-5f, 4.7e-5f, 4.5e-5f,
 	    4.3e-5f, 4.1e-5f, 3.9e-5f, 3.9e-5f, 3.9e-5f, 4.1e-5f, 4.3e-5f, 4.5e-5f,
@@ -63,14 +63,14 @@ void AtmosModel::tropic()
 
 void AtmosModel::midsum()
 {
-    static const double z1[34] =
+    static const float z1[34] =
 	{ 
 	    0.f, 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f, 11.f,
 	    12.f, 13.f, 14.f, 15.f, 16.f, 17.f, 18.f, 19.f, 20.f, 21.f, 22.f, 23.f,
 	    24.f, 25.f, 30.f, 35.f, 40.f, 45.f, 50.f, 70.f, 100.f, 99999.f
 	};
 
-    static const double p1[34] =
+    static const float p1[34] =
 	{ 
 	    1013.f, 902.f, 802.f, 710.f, 628.f, 554.f, 487.f, 426.f,
 	    372.f, 324.f, 281.f, 243.f, 209.f, 179.f, 153.f, 130.f, 111.f, 95.f,
@@ -78,7 +78,7 @@ void AtmosModel::midsum()
 	    3.33f, 1.76f, .951f, .0671f, 3e-4f, 0.f
 	};
 
-    static const double t1[34] =
+    static const float t1[34] =
 	{ 
 	    294.f, 290.f, 285.f, 279.f, 273.f, 267.f, 261.f, 255.f,
 	    248.f, 242.f, 235.f, 229.f, 222.f, 216.f, 216.f, 216.f, 216.f, 216.f,
@@ -86,7 +86,7 @@ void AtmosModel::midsum()
 	    270.f, 276.f, 218.f, 210.f, 210.f
 	};
 
-    static const double wh1[34] =
+    static const float wh1[34] =
 	{ 
 	    14.f, 9.3f, 5.9f, 3.3f, 1.9f, 1.f, .61f, .37f, .21f, .12f,
 	    .064f, .022f, .006f, .0018f, .001f, 7.6e-4f, 6.4e-4f, 5.6e-4f, 5e-4f,
@@ -94,7 +94,7 @@ void AtmosModel::midsum()
 	    1.1e-4f, 4.3e-5f, 1.9e-5f, 1.3e-6f, 1.4e-7f, 1e-9f, 0.f
 	};
 
-    static const double wo1[34] =
+    static const float wo1[34] =
 	{ 
 	    6e-5f, 6e-5f, 6e-5f, 6.2e-5f, 6.4e-5f, 6.6e-5f, 6.9e-5f,
 	    7.5e-5f, 7.9e-5f, 8.6e-5f, 9e-5f, 1.1e-4f, 1.2e-4f, 1.5e-4f, 1.8e-4f,
@@ -116,14 +116,14 @@ void AtmosModel::midsum()
 
 void AtmosModel::midwin()
 {
-    static const double z1[34] =
+    static const float z1[34] =
 	{ 
 	    0.f, 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f, 11.f,
 	    12.f, 13.f, 14.f, 15.f, 16.f, 17.f, 18.f, 19.f, 20.f, 21.f, 22.f, 23.f,
 	    24.f, 25.f, 30.f, 35.f, 40.f, 45.f, 50.f, 70.f, 100.f, 99999.f
 	};
 
-    static const double p1[34] =
+    static const float p1[34] =
 	{ 
 	    1018.f, 897.3f, 789.7f, 693.8f, 608.1f, 531.3f, 462.7f,
 	    401.6f, 347.3f, 299.2f, 256.8f, 219.9f, 188.2f, 161.f, 137.8f, 117.8f,
@@ -131,7 +131,7 @@ void AtmosModel::midwin()
 	    11.1f, 5.18f, 2.53f, 1.29f, .682f, .0467f, 3e-4f, 0.f
 	};
 
-    static const double t1[34] =
+    static const float t1[34] =
 	{ 
 	    272.2f, 268.7f, 265.2f, 261.7f, 255.7f, 249.7f, 243.7f,
 	    237.7f, 231.7f, 225.7f, 219.7f, 219.2f, 218.7f, 218.2f, 217.7f, 217.2f,
@@ -139,7 +139,7 @@ void AtmosModel::midwin()
 	    215.2f, 217.4f, 227.8f, 243.2f, 258.5f, 265.7f, 230.7f, 210.2f, 210.f
 	};	
 
-    static const double wh1[34] =
+    static const float wh1[34] =
 	{ 
 	    3.5f, 2.5f, 1.8f, 1.2f, .66f, .38f, .21f, .085f, .035f,
 	    .016f, .0075f, .0069f, .006f, .0018f, .001f, 7.6e-4f, 6.4e-4f, 5.6e-4f,
@@ -147,7 +147,7 @@ void AtmosModel::midwin()
 	    3.6e-4f, 1.1e-4f, 4.3e-5f, 1.9e-5f, 6.3e-6f, 1.4e-7f, 1e-9f, 0.f
 	};
 
-    static const double wo1[34] = 
+    static const float wo1[34] = 
 	{ 
 	    6e-5f, 5.4e-5f, 4.9e-5f, 4.9e-5f, 4.9e-5f, 5.8e-5f,
 	    6.4e-5f, 7.7e-5f, 9e-5f, 1.2e-4f, 1.6e-4f, 2.1e-4f, 2.6e-4f, 3e-4f,
@@ -169,14 +169,14 @@ void AtmosModel::midwin()
 
 void AtmosModel::subsum()
 {
-    static const double z1[34] =
+    static const float z1[34] =
 	{ 
 	    0.f, 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f, 11.f,
 	    12.f, 13.f, 14.f, 15.f, 16.f, 17.f, 18.f, 19.f, 20.f, 21.f, 22.f, 23.f,
 	    24.f, 25.f, 30.f, 35.f, 40.f, 45.f, 50.f, 70.f, 100.f, 99999.f
 	};
 
-    static const double p1[34] =
+    static const float p1[34] =
 	{ 
 	    1010.f, 896.f, 792.9f, 700.f, 616.f, 541.f, 473.f, 413.f,
 	    359.f, 310.7f, 267.7f, 230.f, 197.7f, 170.f, 146.f, 125.f, 108.f, 92.8f,
@@ -184,7 +184,7 @@ void AtmosModel::subsum()
 	    3.4f, 1.81f, .987f, .0707f, 3e-4f, 0.f
 	};
 
-    static const double t1[34] =
+    static const float t1[34] =
 	{ 
 	    287.f, 282.f, 276.f, 271.f, 266.f, 260.f, 253.f, 246.f,
 	    239.f, 232.f, 225.f, 225.f, 225.f, 225.f, 225.f, 225.f, 225.f, 225.f,
@@ -192,7 +192,7 @@ void AtmosModel::subsum()
 	    274.f, 277.f, 216.f, 210.f, 210.f
 	};
 
-    static const double wh1[34] =
+    static const float wh1[34] =
 	{ 
 	    9.1f, 6.f, 4.2f, 2.7f, 1.7f, 1.f, .54f, .29f, .13f, .042f,
 	    .015f, .0094f, .006f, .0018f, .001f, 7.6e-4f, 6.4e-4f, 5.6e-4f, 5e-4f,
@@ -200,7 +200,7 @@ void AtmosModel::subsum()
 	    1.1e-4f, 4.3e-5f, 1.9e-5f, 6.3e-6f, 1.4e-7f, 1e-9f, 0.f
 	};
 
-    static const double wo1[34] = 
+    static const float wo1[34] = 
 	{ 
 	    4.9e-5f, 5.4e-5f, 5.6e-5f, 5.8e-5f, 6e-5f, 6.4e-5f,
 	    7.1e-5f, 7.5e-5f, 7.9e-5f, 1.1e-4f, 1.3e-4f, 1.8e-4f, 2.1e-4f, 2.6e-4f,
@@ -222,14 +222,14 @@ void AtmosModel::subsum()
 
 void AtmosModel::subwin()
 {
-    static const double z1[34] =
+    static const float z1[34] =
 	{ 
 	    0.f, 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f, 11.f,
 	    12.f, 13.f, 14.f, 15.f, 16.f, 17.f, 18.f, 19.f, 20.f, 21.f, 22.f, 23.f,
 	    24.f, 25.f, 30.f, 35.f, 40.f, 45.f, 50.f, 70.f, 100.f, 99999.f
 	};
 
-    static const double p1[34] =
+    static const float p1[34] =
 	{ 
 	    1013.f, 887.8f, 777.5f, 679.8f, 593.2f, 515.8f, 446.7f,
 	    385.3f, 330.8f, 282.9f, 241.8f, 206.7f, 176.6f, 151.f, 129.1f, 110.3f,
@@ -237,7 +237,7 @@ void AtmosModel::subwin()
 	    22.56f, 10.2f, 4.701f, 2.243f, 1.113f, .5719f, .04016f, 3e-4f, 0.f
 	};
 
-    static const double t1[34] =
+    static const float t1[34] =
 	{ 
 	    257.1f, 259.1f, 255.9f, 252.7f, 247.7f, 240.9f, 234.1f,
 	    227.3f, 220.6f, 217.2f, 217.2f, 217.2f, 217.2f, 217.2f, 217.2f, 217.2f,
@@ -245,7 +245,7 @@ void AtmosModel::subwin()
 	    211.2f, 216.f, 222.2f, 234.7f, 247.f, 259.3f, 245.7f, 210.f, 210.f
 	};
 
-    static const double wh1[34] =
+    static const float wh1[34] =
 	{ 
 	    1.2f, 1.2f, .94f, .68f, .41f, .2f, .098f, .054f, .011f,
 	    .0084f, .0055f, .0038f, .0026f, .0018f, .001f, 7.6e-4f, 6.4e-4f, 5.6e-4f,
@@ -253,7 +253,7 @@ void AtmosModel::subwin()
 	    3.6e-4f, 1.1e-4f, 4.3e-5f, 1.9e-5f, 6.3e-6f, 1.4e-7f, 1e-9f, 0.f
 	};
 
-    static const double wo1[34] =
+    static const float wo1[34] =
 	{ 
 	    4.1e-5f, 4.1e-5f, 4.1e-5f, 4.3e-5f, 4.5e-5f, 4.7e-5f,
 	    4.9e-5f, 7.1e-5f, 9e-5f, 1.6e-4f, 2.4e-4f, 3.2e-4f, 4.3e-4f, 4.7e-4f,
@@ -275,14 +275,14 @@ void AtmosModel::subwin()
 
 void AtmosModel::us62()
 {
-    static const double z1[34] =
+    static const float z1[34] =
 	{ 
 	    0.f, 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f, 9.f, 10.f, 11.f,
 	    12.f, 13.f, 14.f, 15.f, 16.f, 17.f, 18.f, 19.f, 20.f, 21.f, 22.f, 23.f,
 	    24.f, 25.f, 30.f, 35.f, 40.f, 45.f, 50.f, 70.f, 100.f, 99999.f
 	};
 
-    static const double p1[34] =
+    static const float p1[34] =
 	{ 
 	    1013.f, 898.6f, 795.f, 701.2f, 616.6f, 540.5f, 472.2f,
 	    411.1f, 356.5f, 308.f, 265.f, 227.f, 194.f, 165.8f, 141.7f, 121.1f,
@@ -290,7 +290,7 @@ void AtmosModel::us62()
 	    11.97f, 5.746f, 2.871f, 1.491f, .7978f, .0552f, 3.008e-4f, 0.f
 	};
 
-    static const double t1[34] =
+    static const float t1[34] =
 	{ 
 	    288.1f, 281.6f, 275.1f, 268.7f, 262.2f, 255.7f, 249.2f,
 	    242.7f, 236.2f, 229.7f, 223.2f, 216.8f, 216.6f, 216.6f, 216.6f, 216.6f,
@@ -298,7 +298,7 @@ void AtmosModel::us62()
 	    221.6f, 226.5f, 236.5f, 253.4f, 264.2f, 270.6f, 219.7f, 210.f, 210.f
 	};
 
-    static const double wh1[34] =
+    static const float wh1[34] =
 	{ 
 	    5.9f, 4.2f, 2.9f, 1.8f, 1.1f, .64f, .38f, .21f, .12f,
 	    .046f, .018f, .0082f, .0037f, .0018f, 8.4e-4f, 7.2e-4f, 6.1e-4f, 5.2e-4f,
@@ -306,7 +306,7 @@ void AtmosModel::us62()
 	    3.8e-4f, 1.6e-4f, 6.7e-5f, 3.2e-5f, 1.2e-5f, 1.5e-7f, 1e-9f, 0.f
 	};
 	
-    static const double wo1[34] = 
+    static const float wo1[34] = 
 	{ 
 	    5.4e-5f, 5.4e-5f, 5.4e-5f, 5e-5f, 4.6e-5f, 4.6e-5f,
 	    4.5e-5f, 4.9e-5f, 5.2e-5f, 7.1e-5f, 9e-5f, 1.3e-4f, 1.6e-4f, 1.7e-4f,
