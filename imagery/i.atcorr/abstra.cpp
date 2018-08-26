@@ -11,7 +11,7 @@ wava6 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { .011482f, .13183f,
+    static const float acr[2048] = { .011482f, .13183f,
 				     -.0038755f, 3.4491e-6f, -.0069899f, 9.3146e-6f, 15300.f, 15310.f,
 				     .0015124f, .19547f, .0028474f, -4.7616e-6f, .0017802f, -1.079e-5f,
 				     15310.f, 15320.f, .0092482f, .16207f, -.0025675f, 1.271e-5f, -.0027267f,
@@ -348,7 +348,7 @@ wava5 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 4.6416e-4f, .04653f,
+    static const float acr[2048] = { 4.6416e-4f, .04653f,
 				     .011484f, -5.0228e-5f, .0057564f, -2.8823e-5f, 12740.f, 12750.f,
 				     2.6026e-5f, .069686f, .0050381f, -3.0969e-5f, .0023565f, -2.6498e-5f,
 				     12750.f, 12760.f, 2.1016e-4f, .078469f, -.0024738f, -2.0423e-6f,
@@ -681,7 +681,7 @@ wava4 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { .037011f, .34865f,
+    static const float acr[2048] = { .037011f, .34865f,
 				     .0071795f, -2.429e-5f, .0061217f, -2.5788e-5f, 10180.f, 10190.f,
 				     .096531f, .1963f, .0044353f, -2.7769e-5f, .0020496f, -1.902e-5f,
 				     10190.f, 10200.f, .11553f, .22356f, .0057418f, -2.861e-5f, .005252f,
@@ -1011,7 +1011,7 @@ wava3 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { .092641f, .26739f,
+    static const float acr[2048] = { .092641f, .26739f,
 				     .0074828f, -3.6295e-5f, .0065918f, -3.6255e-5f, 7620.f, 7630.f, .24311f,
 				     .19859f, .0029686f, -1.983e-5f, .0023399f, -1.6807e-5f, 7630.f, 7640.f,
 				     .12025f, .11463f, .005982f, -3.2695e-5f, .00555f, -2.817e-5f, 7640.f,
@@ -1325,7 +1325,7 @@ wava2 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { .32591f, .48473f,
+    static const float acr[2048] = { .32591f, .48473f,
 				     .010062f, 1.8245e-5f, .01189f, -1.2621e-5f, 5060.f, 5070.f, .73059f,
 				     .13181f, .010626f, 7.3795e-6f, .011376f, -1.7764e-5f, 5070.f, 5080.f,
 				     .39211f, .39522f, .01459f, -6.8376e-6f, .016326f, -3.165e-5f, 5080.f,
@@ -1641,7 +1641,7 @@ wava1 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 5.2155e-5f, .1088f,
+    static const float acr[2048] = { 5.2155e-5f, .1088f,
 				     .024708f, 5.6434e-5f, .028126f, -3.6504e-5f, 2500.f, 2510.f, 2.6024e-4f,
 				     .21216f, .025876f, 3.0026e-5f, .030504f, -6.2253e-5f, 2510.f, 2520.f,
 				     1.2221e-4f, .091374f, .023862f, -7.9891e-5f, .020651f, -8.5449e-5f,
@@ -1956,7 +1956,7 @@ void dica3 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 4.1135e-5f, .13491f,
+    static const float acr[2048] = { 4.1135e-5f, .13491f,
 				     .019511f, -8.8592e-5f, .017169f, -8.6383e-5f, 7620.f, 7630.f, 0.f, 0.f,
 				     0.f, 0.f, 0.f, 0.f, 7630.f, 7640.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 7640.f,
 				     7650.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 7650.f, 7660.f, 0.f, 0.f, 0.f, 0.f,
@@ -2260,7 +2260,7 @@ void dica2 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { .37011f, .18132f,
+    static const float acr[2048] = { .37011f, .18132f,
 				     .0098385f, -4.992e-5f, .0096965f, -3.9497e-5f, 5060.f, 5070.f, 1.7202f,
 				     .2316f, .0029954f, -2.2435e-5f, .0029757f, -9.2488e-6f, 5070.f, 5080.f,
 				     3.3606f, .25416f, -.0016977f, -4.0846e-6f, -.0013656f, 1.1658e-5f,
@@ -2567,7 +2567,7 @@ void dica1 (double a[8], const long int inu)
 
 
 
-    static const double acr[2048] = { 1.1446e-5f, .0020117f,
+    static const float acr[2048] = { 1.1446e-5f, .0020117f,
 				     -.0041334f, 3.2304e-6f, -.0069982f, 9.0084e-6f, 2500.f, 2510.f,
 				     1.9234e-5f, .0019311f, -.0017326f, -5.8646e-6f, -.0045311f,
 				     -6.0352e-7f, 2510.f, 2520.f, 9.202e-6f, .0017952f, .0034861f,
@@ -2877,7 +2877,7 @@ ozon1 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { .062007f, 2.4365f,
+    static const float acr[2048] = { .062007f, 2.4365f,
 				     -5.9503e-4f, -8.1198e-6f, -.0039418f, -2.4624e-6f, 2500.f, 2510.f,
 				     .023839f, 2.3534f, .0037377f, -6.15e-6f, .0015592f, -1.2727e-5f, 2510.f,
 				     2520.f, .0090127f, 1.2172f, -.0014733f, -4.7053e-6f, -.0042092f,
@@ -3176,7 +3176,7 @@ niox6 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 15300.f, 15310.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 15310.f, 15320.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 0.f, 15320.f, 15330.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
@@ -3507,7 +3507,7 @@ niox5 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 12740.f, 12750.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 12750.f, 12760.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 0.f, 12760.f, 12770.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
@@ -3838,7 +3838,7 @@ niox4 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 10180.f, 10190.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 10190.f, 10200.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 0.f, 10200.f, 10210.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
@@ -4170,7 +4170,7 @@ niox3 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 7620.f, 7630.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 7630.f, 7640.f, 0.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 7640.f, 7650.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 7650.f,
@@ -4465,7 +4465,7 @@ niox2 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { .072211f, .24584f,
+    static const float acr[2048] = { .072211f, .24584f,
 				     .0096738f, -5.1958e-5f, .0067533f, -4.7277e-5f, 5060.f, 5070.f, .21388f,
 				     .25456f, .0043318f, -3.1058e-5f, .0012217f, -2.5614e-5f, 5070.f, 5080.f,
 				     .57556f, .33263f, -2.6597e-4f, -1.2844e-5f, -.0033007f, -7.3238e-6f,
@@ -4755,7 +4755,7 @@ niox1 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 2.0198f, 1.2223f,
+    static const float acr[2048] = { 2.0198f, 1.2223f,
 				     .021725f, -7.4064e-5f, .021102f, -6.8716e-5f, 2500.f, 2510.f, 5.563f,
 				     .51358f, .018526f, -8.1387e-5f, .020173f, -7.5293e-5f, 2510.f, 2520.f,
 				     30.587f, .41845f, .010994f, -5.2858e-5f, .012658f, -4.4443e-5f, 2520.f,
@@ -5058,7 +5058,7 @@ meth6 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 15300.f, 15310.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 15310.f, 15320.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 0.f, 15320.f, 15330.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
@@ -5390,7 +5390,7 @@ meth5 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 12740.f, 12750.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 12750.f, 12760.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 0.f, 12760.f, 12770.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
@@ -5719,7 +5719,7 @@ meth4 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 10180.f, 10190.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 10190.f, 10200.f,
 				     0.f,
 
@@ -6049,7 +6049,7 @@ meth3 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 7620.f, 7630.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 7630.f, 7640.f, 0.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 7640.f, 7650.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 7650.f,
@@ -6343,7 +6343,7 @@ meth2 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 5060.f, 5070.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 5070.f, 5080.f, 0.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 5080.f, 5090.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 5090.f,
@@ -6637,7 +6637,7 @@ meth1 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 1.4454f, .47807f,
+    static const float acr[2048] = { 1.4454f, .47807f,
 				     .0052823f, -3.0056e-5f, .002903f, -2.686e-5f, 2500.f, 2510.f, 8.7736f,
 				     .49348f, 3.8511e-4f, -6.0533e-6f, 1.0891e-4f, -9.3895e-6f, 2510.f,
 				     2520.f, 5.7188f, .51082f, 3.239e-4f, -7.2399e-6f, 1.6424e-4f,
@@ -6940,7 +6940,7 @@ moca6 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 15300.f, 15310.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 15310.f, 15320.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 0.f, 15320.f, 15330.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
@@ -7271,7 +7271,7 @@ moca5 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 12740.f, 12750.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 12750.f, 12760.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 0.f, 12760.f, 12770.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
@@ -7599,7 +7599,7 @@ moca5 (double a[8], const long int inu)
 
 void moca4 (double a[8], const long int inu)
 {
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 10180.f, 10190.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 10190.f, 10200.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 0.f, 10200.f, 10210.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
@@ -7931,7 +7931,7 @@ moca3 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 7620.f, 7630.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 7630.f, 7640.f, 0.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 7640.f, 7650.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 7650.f,
@@ -8237,7 +8237,7 @@ moca2 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 5060.f, 5070.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 5070.f, 5080.f, 0.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 5080.f, 5090.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 5090.f,
@@ -8534,7 +8534,7 @@ moca1 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 2500.f, 2510.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 2510.f, 2520.f, 0.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 2520.f, 2530.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 2530.f,
@@ -8844,7 +8844,7 @@ oxyg6 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 15300.f, 15310.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 15310.f, 15320.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 0.f, 15320.f, 15330.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
@@ -9169,7 +9169,7 @@ oxyg6 (double a[8], const long int inu)
 
 void oxyg5 (double a[8], const long int inu)
 {
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 12740.f, 12750.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 12750.f, 12760.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 0.f, 12760.f, 12770.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
@@ -9503,7 +9503,7 @@ oxyg4 (double a[8], const long int inu)
 {
 
 
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 10180.f, 10190.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 10190.f, 10200.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 0.f, 10200.f, 10210.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
@@ -9830,7 +9830,7 @@ oxyg4 (double a[8], const long int inu)
 void
 oxyg3 (double a[8], const long int inu)
 {
-    static const double acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
+    static const float acr[2048] = { 0.f, 0.f, 0.f, 0.f, 0.f,
 				     0.f, 7620.f, 7630.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 7630.f, 7640.f, 0.f,
 				     0.f,
 				     0.f, 0.f, 0.f, 0.f, 7640.f, 7650.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 7650.f,
