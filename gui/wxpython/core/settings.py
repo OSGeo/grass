@@ -191,7 +191,7 @@ class Settings:
                     'enabled': False
                 },
                 'showCompExtent': {
-                    'enabled': False
+                    'enabled': True
                 },
                 'statusbarMode': {
                     'selection': 0
