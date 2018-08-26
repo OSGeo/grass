@@ -107,6 +107,7 @@ void color_rules_to_cats(dbCatValArray *cvarr, int is_fp,
     /* color table for categories */
     G_message(_("Converting color rules into categories..."));
     for (i = 0; i < cvarr->n_values; i++) {
+	G_percent(i, cvarr->n_values, 2);
 	cv = &(cvarr->value[i]);
 	cat = cv->cat;
 	if (is_fp) {
@@ -130,4 +131,5 @@ void color_rules_to_cats(dbCatValArray *cvarr, int is_fp,
 	Rast_add_c_color_rule((const CELL*) &cat, red, grn, blu,
 			      (const CELL*) &cat, red, grn, blu, colors);
     }
+    G_percent(2, 2, 2);
 }
