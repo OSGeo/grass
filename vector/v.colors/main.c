@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct {
-	struct Flag *r, *w, *l, *g, *a, *n, *c;
+	struct Flag *r, *w, *l, *d, *g, *a, *n, *c;
     } flag; 
 
     struct {
@@ -132,6 +132,13 @@ int main(int argc, char *argv[])
     flag.l->suppress_required = YES;
     flag.l->guisection = _("Print");
 
+    flag.d = G_define_flag();
+    flag.d->key = 'd';
+    flag.d->label = _("List available rules with description then exit");
+    flag.d->description = _("If a color rule is given, only this rule is listed");
+    flag.d->suppress_required = YES;
+    flag.d->guisection = _("Print");
+
     flag.n = G_define_flag();
     flag.n->key = 'n';
     flag.n->description = _("Invert colors");
@@ -164,6 +171,12 @@ int main(int argc, char *argv[])
     if (flag.l->answer) {
 	G_list_color_rules(stdout);
 	return EXIT_SUCCESS;
+    }
+
+    if (flag.d->answer) {
+	G_list_color_rules_description_type(stdout, opt.colr->answer);
+
+        return EXIT_SUCCESS;
     }
 
     overwrite = !flag.w->answer;
