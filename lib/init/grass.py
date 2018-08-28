@@ -894,6 +894,42 @@ def get_mapset_invalid_reason(gisdbase, location, mapset):
                      mapset=mapset, loc=location)
 
 
+def can_create_location(gisdbase, location):
+    """Checks if location can be created"""
+    path = os.path.join(gisdbase, location)
+    if os.path.exists(path):
+        return False
+    return True
+
+
+def cannot_create_location_reason(gisdbase, location):
+    """Returns a message describing why location cannot be created
+
+    The goal is to provide the most suitable error message
+    (rather than to do a quick check).
+
+    :param gisdbase: Path to GRASS GIS database directory
+    :param location: name of a Location
+    :returns: translated message
+    """
+    path = os.path.join(gisdbase, location)
+    if is_location_valid(gisdbase, location):
+        return _("Unable to create new location because"
+                 " the location <{location}>"
+                 " already exists.").format(**locals())
+    elif os.path.isfile(path):
+        return _("Unable to create new location <{location}> because"
+                 " <{path}> is a file.").format(**locals())
+    elif os.path.isdir(path):
+        return _("Unable to create new location <{location}> because"
+                 " the directory <{path}>"
+                 " already exists.").format(**locals())
+    else:
+        return _("Unable to create new location in"
+                 " the directory <{path}>"
+                 " for an unknown reason.").format(**locals())
+
+
 def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
                tmp_location=False, tmpdir=None):
     """Selected Location and Mapset are checked and created if requested
@@ -932,15 +968,21 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
 
     if gisdbase and location_name and mapset:
         path = os.path.join(gisdbase, location_name, mapset)
-
         # check if 'path' is a valid GRASS location/mapset
-        if not is_mapset_valid(path):
+        path_is_valid_mapset = is_mapset_valid(path)
+
+        if path_is_valid_mapset and create_new:
+            warning(_("Mapset <{}> already exists. Ignoring the"
+                      " request to create it. Note that this warning"
+                      " may become an error in future versions.")
+                    .format(path))
+
+        if not path_is_valid_mapset:
             if not create_new:
-                # 'path' is not a valid mapset and users does not
+                # 'path' is not a valid mapset and user does not
                 # want to create anything new
                 fatal(get_mapset_invalid_reason(gisdbase, location_name, mapset))
             else:
-                message(_("Creating new GRASS GIS location/mapset..."))
                 # 'path' is not valid and the user wants to create
                 # mapset on the fly
                 # check if 'location_name' is a valid GRASS location
@@ -954,18 +996,32 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
                         gisdbase = os.path.join(gisdbase, location_name)
                         location_name = mapset
                         mapset = "PERMANENT"
-                    if is_location_valid(gisdbase, location_name):
-                        fatal(_("Failed to create new location. "
-                                "The location <%s> already exists." % location_name))
+                    if not can_create_location(gisdbase, location_name):
+                        fatal(cannot_create_location_reason(
+                            gisdbase, location_name))
                     # create new location based on the provided EPSG/...
+                    message(_("Creating new GRASS GIS location <{}>...")
+                            .format(location_name))
                     create_location(gisdbase, location_name, geofile)
                 else:
                     # 'location_name' is a valid GRASS location,
                     # create new mapset
-                    if os.path.exists(path):
+                    message(_("Creating new GRASS GIS mapset <{}>...")
+                            .format(mapset))
+                    if os.path.isfile(path):
                         # not a valid mapset, but dir exists, assuming
                         # broken/incomplete mapset
-                        warning(_("Missing WIND file"))
+                        fatal(_("Unable to create new mapset <{mapset}>"
+                                 " because <{path}> is a file.")
+                                .format(mapset=mapset, path=path))
+                    elif os.path.isdir(path):
+                        # not a valid mapset, but dir exists, assuming
+                        # broken/incomplete mapset
+                        warning(_("The mapset <{}> is missing the WIND file"
+                                " (computational region). It will be"
+                                " fixed now. Note that this warning"
+                                " may become an error in future versions.")
+                                .format(mapset))
                     else:
                         # create mapset directory
                         os.mkdir(path)
