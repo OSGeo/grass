@@ -931,39 +931,48 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
             gdb=gisdbase, lc=location_name, sep=os.path.sep))
 
     if gisdbase and location_name and mapset:
-        location = os.path.join(gisdbase, location_name, mapset)
+        path = os.path.join(gisdbase, location_name, mapset)
 
-        # check if 'location' is a valid GRASS location/mapset
-        if not is_mapset_valid(location):
+        # check if 'path' is a valid GRASS location/mapset
+        if not is_mapset_valid(path):
             if not create_new:
-                # 'location' is not valid, check if 'location_name' is
-                # a valid GRASS location
+                # 'path' is not a valid mapset and users does not
+                # want to create anything new
                 fatal(get_mapset_invalid_reason(gisdbase, location_name, mapset))
             else:
-                # 'location' is not valid, the user wants to create
+                # 'path' is not valid and the user wants to create
                 # mapset on the fly
+                # check if 'location_name' is a valid GRASS location
                 if not is_location_valid(gisdbase, location_name):
                     if not tmp_location:
-                        # 'location_name' is not a valid GRASS location,
-                        # create new location and 'PERMANENT' mapset
+                        # 'location_name' is not a valid GRASS location
+                        # and user requested its creation, so we parsed
+                        # the path wrong and need to move one level
+                        # and use 'PERMANENT' mapset
+                        # (we already got that right in case of tmploc)
                         gisdbase = os.path.join(gisdbase, location_name)
                         location_name = mapset
                         mapset = "PERMANENT"
                     if is_location_valid(gisdbase, location_name):
                         fatal(_("Failed to create new location. "
                                 "The location <%s> already exists." % location_name))
+                    # create new location based on the provided EPSG/...
                     create_location(gisdbase, location_name, geofile)
                 else:
                     # 'location_name' is a valid GRASS location,
                     # create new mapset
-                    if os.path.exists(location):
+                    if os.path.exists(path):
+                        # not a valid mapset, but dir exists, assuming
+                        # broken/incomplete mapset
                         warning(_("Missing WIND file"))
                     else:
-                        os.mkdir(location)
+                        # create mapset directory
+                        os.mkdir(path)
+                    # make directory a mapset, add the region
                     # copy PERMANENT/DEFAULT_WIND to <mapset>/WIND
                     s = readfile(os.path.join(gisdbase, location_name,
                                               "PERMANENT", "DEFAULT_WIND"))
-                    writefile(os.path.join(location, "WIND"), s)
+                    writefile(os.path.join(path, "WIND"), s)
 
         if os.access(gisrc, os.R_OK):
             kv = read_gisrc(gisrc)
