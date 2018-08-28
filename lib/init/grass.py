@@ -940,6 +940,7 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
                 # want to create anything new
                 fatal(get_mapset_invalid_reason(gisdbase, location_name, mapset))
             else:
+                message(_("Creating new GRASS GIS location/mapset..."))
                 # 'path' is not valid and the user wants to create
                 # mapset on the fly
                 # check if 'location_name' is a valid GRASS location
@@ -1982,10 +1983,7 @@ def main():
         # (measured by presence of rc file)
         clean_temp()
 
-    if params.create_new:
-        message(_("Creating new GRASS GIS location/mapset..."))
-    else:
-        message(_("Starting GRASS GIS..."))
+    message(_("Starting GRASS GIS..."))
 
     # Ensure GUI is set
     if batch_job or params.exit_grass:
