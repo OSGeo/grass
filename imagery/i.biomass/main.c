@@ -22,7 +22,7 @@
 #include <grass/glocale.h>
 
 double solar_day(double lat, double doy, double tsw);
-double biomass(double apar, double solar_day, double evap_fr,
+double biomass(double fpar, double solar_day, double evap_fr,
         double light_use_ef);
 
 int main(int argc, char *argv[]) 
