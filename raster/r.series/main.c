@@ -26,33 +26,33 @@ struct menu
 {
     stat_func *method;		/* routine to compute new value */
     stat_func_w *method_w;	/* routine to compute new value (weighted) */
-    int is_int;			/* result is an integer */
+    RASTER_MAP_TYPE outtype;	/* type of result */
     char *name;			/* method name */
     char *text;			/* menu display - full description */
 } menu[] = {
-    {c_ave,    w_ave,    0, "average",    "average value"},
-    {c_count,  w_count,  1, "count",      "count of non-NULL cells"},
-    {c_median, w_median, 0, "median",     "median value"},
-    {c_mode,   w_mode,   0, "mode",       "most frequently occurring value"},
-    {c_min,    NULL,     0, "minimum",    "lowest value"},
-    {c_minx,   NULL,     1, "min_raster", "raster with lowest value"},
-    {c_max,    NULL,     0, "maximum",    "highest value"},
-    {c_maxx,   NULL,     1, "max_raster", "raster with highest value"},
-    {c_stddev, w_stddev, 0, "stddev",     "standard deviation"},
-    {c_range,  NULL,     0, "range",      "range of values"},
-    {c_sum,    w_sum,    0, "sum",        "sum of values"},
-    {c_var,    w_var,    0, "variance",   "statistical variance"},
-    {c_divr,   NULL,     1, "diversity",  "number of different values"},
-    {c_reg_m,  w_reg_m,  0, "slope",      "linear regression slope"},
-    {c_reg_c,  w_reg_c,  0, "offset",     "linear regression offset"},
-    {c_reg_r2, w_reg_r2, 0, "detcoeff",   "linear regression coefficient of determination"},
-    {c_reg_t,  w_reg_t,  0, "tvalue",     "linear regression t-value"},
-    {c_quart1, w_quart1, 0, "quart1",     "first quartile"},
-    {c_quart3, w_quart3, 0, "quart3",     "third quartile"},
-    {c_perc90, w_perc90, 0, "perc90",     "ninetieth percentile"},
-    {c_quant,  w_quant,  0, "quantile",   "arbitrary quantile"},
-    {c_skew,   w_skew,   0, "skewness",   "skewness"},
-    {c_kurt,   w_kurt,   0, "kurtosis",   "kurtosis"},
+    {c_ave,    w_ave,    DCELL_TYPE, "average",    "average value"},
+    {c_count,  w_count,  CELL_TYPE,  "count",      "count of non-NULL cells"},
+    {c_median, w_median, DCELL_TYPE, "median",     "median value"},
+    {c_mode,   w_mode,   -1,         "mode",       "most frequently occurring value"},
+    {c_min,    NULL,     -1,         "minimum",    "lowest value"},
+    {c_minx,   NULL,     CELL_TYPE,  "min_raster", "raster with lowest value"},
+    {c_max,    NULL,     -1,         "maximum",    "highest value"},
+    {c_maxx,   NULL,     CELL_TYPE,  "max_raster", "raster with highest value"},
+    {c_stddev, w_stddev, DCELL_TYPE, "stddev",     "standard deviation"},
+    {c_range,  NULL,     -1,         "range",      "range of values"},
+    {c_sum,    w_sum,    DCELL_TYPE, "sum",        "sum of values"},
+    {c_var,    w_var,    DCELL_TYPE, "variance",   "statistical variance"},
+    {c_divr,   NULL,     CELL_TYPE,  "diversity",  "number of different values"},
+    {c_reg_m,  w_reg_m,  DCELL_TYPE, "slope",      "linear regression slope"},
+    {c_reg_c,  w_reg_c,  DCELL_TYPE, "offset",     "linear regression offset"},
+    {c_reg_r2, w_reg_r2, DCELL_TYPE, "detcoeff",   "linear regression coefficient of determination"},
+    {c_reg_t,  w_reg_t,  DCELL_TYPE, "tvalue",     "linear regression t-value"},
+    {c_quart1, w_quart1, DCELL_TYPE, "quart1",     "first quartile"},
+    {c_quart3, w_quart3, DCELL_TYPE, "quart3",     "third quartile"},
+    {c_perc90, w_perc90, DCELL_TYPE, "perc90",     "ninetieth percentile"},
+    {c_quant,  w_quant,  DCELL_TYPE, "quantile",   "arbitrary quantile"},
+    {c_skew,   w_skew,   DCELL_TYPE, "skewness",   "skewness"},
+    {c_kurt,   w_kurt,   DCELL_TYPE, "kurtosis",   "kurtosis"},
     {NULL,     NULL,     0, NULL,         NULL}
 };
 
@@ -130,6 +130,7 @@ int main(int argc, char *argv[])
     int nrows, ncols;
     int row, col;
     double lo, hi;
+    RASTER_MAP_TYPE intype, maptype;
 
     G_gisinit(argv[0]);
 
@@ -210,6 +211,8 @@ int main(int argc, char *argv[])
 
     have_weights = 0;
 
+    intype = -1;
+
     /* process the input maps from the file */
     if (parm.file->answer) {
 	FILE *in;
@@ -266,9 +269,19 @@ int main(int argc, char *argv[])
 	    p->name = G_store(name);
             p->weight = weight;
 	    G_verbose_message(_("Reading raster map <%s> using weight %f..."), p->name, p->weight);
+	    p->fd = Rast_open_old(p->name, "");
+	    if (p->fd < 0)
+		G_fatal_error(_("Unable to open input raster <%s>"), p->name);
+	    maptype = Rast_get_map_type(p->fd);
+	    if (intype == -1)
+		intype = maptype;
+	    else {
+		if (intype != maptype)
+		    intype = DCELL_TYPE;
+	    }
+	    if (flag.lazy->answer)
+		Rast_close(p->fd);
 	    p->buf = Rast_allocate_d_buf();
-	    if (!flag.lazy->answer)
-		p->fd = Rast_open_old(p->name, "");
 	}
 
 	if (num_inputs < 1)
@@ -316,9 +329,19 @@ int main(int argc, char *argv[])
             }
 
 	    G_verbose_message(_("Reading raster map <%s> using weight %f..."), p->name, p->weight);
+	    p->fd = Rast_open_old(p->name, "");
+	    if (p->fd < 0)
+		G_fatal_error(_("Unable to open input raster <%s>"), p->name);
+	    maptype = Rast_get_map_type(p->fd);
+	    if (intype == -1)
+		intype = maptype;
+	    else {
+		if (intype != maptype)
+		    intype = DCELL_TYPE;
+	    }
+	    if (flag.lazy->answer)
+		Rast_close(p->fd);
 	    p->buf = Rast_allocate_d_buf();
-	    if (!flag.lazy->answer)
-		p->fd = Rast_open_old(p->name, "");
     	}
     }
 
@@ -346,6 +369,11 @@ int main(int argc, char *argv[])
 	    if (menu[method].method_w) {
 		out->method_fn = NULL;
 		out->method_fn_w = menu[method].method_w;
+		/* special case mode: the result of a weighed mode 
+		 * can be stored as type of input
+		 * all other weighed versions: result as DCELL_TYPE */
+		if (menu[method].outtype == CELL_TYPE)
+		    menu[method].outtype = DCELL_TYPE;
 	    }
 	    else {
 		G_warning(_("Method %s not compatible with weights, using unweighed version instead"),
@@ -354,7 +382,6 @@ int main(int argc, char *argv[])
 		out->method_fn = menu[method].method;
 		out->method_fn_w = NULL;
 	    }
-	    menu[method].is_int = 0;
 	}
 	else {
 	    out->method_fn = menu[method].method;
@@ -365,8 +392,10 @@ int main(int argc, char *argv[])
 	    ? atof(parm.quantile->answers[i])
 	    : 0;
 	out->buf = Rast_allocate_d_buf();
-	out->fd = Rast_open_new(output_name,
-				menu[method].is_int ? CELL_TYPE : DCELL_TYPE);
+	if (menu[method].outtype == -1)
+	    out->fd = Rast_open_new(output_name, intype);
+	else
+	    out->fd = Rast_open_new(output_name, menu[method].outtype);
     }
 
     /* initialise variables */
