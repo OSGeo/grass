@@ -25,6 +25,8 @@ import atexit
 import subprocess
 import shutil
 import codecs
+import string
+import random
 import types as python_types
 
 from .utils import KeyValue, parse_key_val, basename, encode
@@ -820,6 +822,30 @@ def tempdir():
     os.mkdir(tmp)
 
     return tmp
+
+
+def tempname(length, lowercase=False):
+    """Generate a GRASS and SQL compliant random name starting with tmp_
+    followed by a random part of length "length"
+
+    :param int length: length of the random part of the name to generate
+    :param bool lowercase: use only lowercase characters to generate name
+    :returns: String with a random name of length "length" starting with a letter
+    :rtype: str
+
+    :Example:
+
+    >>> tempname(12)
+    'tmp_MxMa1kAS13s9'
+    """
+
+    chars = string.ascii_lowercase + string.digits
+    if not lowercase:
+        chars += string.ascii_uppercase
+    random_part = ''.join(random.choice(chars) for _ in range(length))
+    randomname = 'tmp_' + random_part
+
+    return randomname
 
 
 def _compare_projection(dic):
