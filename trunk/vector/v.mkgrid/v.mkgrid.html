@@ -1,0 +1,194 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.mkgrid</em> creates a vector map representation of a regular 
+coordinate grid. Point, line, and area vector grids can be created.
+
+
+<h2>NOTES</h2>
+
+Grid points created with the <b>type=point</b> option will be placed at 
+the <i>center</i> of each grid cell, like centroids with the default 
+<b>type=area</b> option. 
+<p>
+Grid lines created with the <b>type=line</b> option will be identical to 
+the edges of each grid cell, like boundaries with the default 
+<b>type=area</b> option. 
+<p>
+The resultant grid can be rotated around the origin (center of the 
+grid) with the <b>angle</b> option.
+<p>
+Optionally hexagons can be created with the <b>-h</b> flag. Hexagons 
+are by default symmetric. Asymmetric hexagons can be allowed with the 
+<b>-a</b> flag.
+<p>
+This module is NOT to be used to generate a vector map of USGS 
+quadrangles, because USGS quads are not exact rectangles.
+
+
+<h2>EXAMPLES</h2>
+
+<h3>Creating a global grid in a latitude-longitude</h3>
+
+To be run in a latitude-longitude location (WGS84)
+<div class="code"><pre>
+# set the region:
+g.region n=90 s=-90 w=-180 e=180 res=10 -p
+projection: 3 (Latitude-Longitude)
+zone:       0
+datum:      wgs84
+ellipsoid:  wgs84
+north:      90N
+south:      90S
+west:       180W
+east:       180E
+nsres:      10
+ewres:      10
+rows:       18
+cols:       36
+cells:      648
+
+# create 10 degree size grid:
+v.mkgrid map=grid_10deg
+
+# create 20 degree size grid:
+v.mkgrid map=grid_20deg box=20,20
+</pre></div>
+
+<h3>Creating a grid in a metric projection</h3>
+
+Creating a 4x3 grid, cells 20km a side, with lower left corner at 2716500,6447000:
+
+<div class="code"><pre>
+v.mkgrid map=coro_grid grid=4,3 position=coor coordinates=2716500,6447000 box=20000,20000
+</pre></div>
+
+<h3>Creating a positioned grid in a latitude-longitude</h3>
+
+Creating a 10x12 lat/lon grid, cells 2 arc-min a side, with lower left corner
+at 167deg 52min east, 47deg 6min south. For use with e.g. QGIS you can then
+pull this grid into a projected location with <em>v.proj</em> before
+exporting as a Shapefile with <em>v.out.ogr</em> (within GRASS GIS you could
+just use <em>d.grid -w</em> from the projected location for the same effect):
+
+<div class="code"><pre>
+v.mkgrid map=p2min_grid grid=10,12 position=coor coordinates=167:52E,47:06S box=0:02,0:02
+</pre></div>
+
+<h3>Creating a simple point pattern</h3>
+
+North Carolina sample dataset example, creating a 1km spaced point grid
+based on the current region extent defined by the "elevation" map:
+
+<div class="code"><pre>
+g.region raster=elevation res=1000 -pa
+v.mkgrid type=point map=pointpattern
+</pre></div>
+<p>
+
+<h3>Creating a regular point pattern</h3>
+
+North Carolina sample dataset example, creating a regular spaced point grid
+based on the current region extent defined by the "elevation" map, using
+a two-step approach:
+
+<div class="code"><pre>
+# create first set of points, covering extent of "elevation" raster map
+g.region raster=elevation res=1000 -pa
+v.mkgrid type=point map=pointpattern1
+
+# shift grid by half point distance (map units)
+g.region n=n+500 w=w+500 e=e+500 s=s+500 -p
+
+# create second set of points
+v.mkgrid type=point map=pointpattern2
+
+# merge into final point pattern
+v.patch input=pointpattern1,pointpattern2 output=pointpattern3
+</pre></div>
+
+<center>
+<img src="v_mkgrid_ppattern.png"><br>
+Different point patterns for sampling design
+</center>
+
+<h3>Creating hexagons in a metric projection</h3>
+
+North Carolina sample dataset example, creating regular hexagons
+based on the current region extent defined by the "elevation" map and
+raster resolution for the hexagon size:
+
+<div class="code"><pre>
+g.region raster=elevation res=5000 -pa
+v.mkgrid map=hexagons -h
+
+d.grid 5000
+</pre></div>
+
+<center>
+<img src="v_mkgrid_hexagons.png"><br>
+Hexagon map
+</center>
+
+<h3>Using hexagons for point density</h3>
+
+To compute point density in a hexagonal grid for the vector map
+<em>points_of_interest</em> in the basic North Carolina sample dataset,
+the vector map itself is used to set extent of the computational region.
+The resolution is based on the desired size of hexagons.
+
+<div class="code"><pre>
+g.region vector=points_of_interest res=2000 -pa
+</pre></div>
+
+The hexagonal grid is created as a vector map based on the previously
+selected extent and size of the grid.
+
+<div class="code"><pre>
+v.mkgrid map=hexagons -h
+</pre></div>
+
+The following counts the number of points per hexagon using the
+<em><a href="v.vect.stats.html">v.vect.stats</a></em> module.
+
+<div class="code"><pre>
+v.vect.stats points=points_of_interest areas=hexagons count_column=count
+</pre></div>
+
+User should note that some of the points may be outside the grid
+since the hexagons cannot cover all the area around the edges
+(the computational region extent needs to be enlarged if all points
+should be considered).
+The last command sets the vector map color table to <tt>viridis</tt>
+based on the <tt>count</tt> column.
+
+<div class="code"><pre>
+v.colors map=hexagons use=attr column=count color=viridis
+</pre></div>
+
+<!--
+d.erase 77:77:77
+mogrify -trim .png
+-->
+
+<center>
+<img src="v_mkgrid.png"><br>
+Point density in a hexagonal grid
+</center>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.grid.html">d.grid</a>,
+<a href="v.in.region.html">v.in.region</a>,
+<a href="v.patch.html">v.patch</a>,
+<a href="v.vect.stats.html">v.vect.stats</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Michael Higgins,
+U.S.Army Construction Engineering 
+Research Laboratory
+<p>Update for new vectors Radim Blazek 10/2004 
+
+<p><i>Last changed: $Date$</i>

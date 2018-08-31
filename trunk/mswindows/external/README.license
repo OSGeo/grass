@@ -1,0 +1,21 @@
+
+
+In the following directories you will find code which was not
+written by The GRASS Development Team.
+
+Parts of GRASS are not copyright by The GRASS Development Team.
+The original authors hold the copyrights and you have to abide
+to their licensing terms where noted.
+(Keep in mind that code linking into GRASS can only be distributed
+if compatible with the GPL.)
+
+Specifically the source code below this directory is not necessarily
+licensed under the GPL. Check the READMEs and source code header
+comments carefully.
+
+
+
+ * Windows batchfiles for use with R / (GNU GPL v2)
+   http://code.google.com/p/batchfiles/
+   https://github.com/ggrothendieck/batchfiles (new code repository)
+

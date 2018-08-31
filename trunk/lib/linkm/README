@@ -1,0 +1,95 @@
+/*
+**  Written by David Gerdes  US Army Construction Engineering Research Lab
+**  	April 1992
+**  Copyright 1992 USA-CERL   All rights reserved.
+**
+*/
+
+LINKED LIST MEMORY MANAGER
+
+
+Assumption:  malloc/free is inefficient and wasteful for things like
+	     linked lists.
+
+Workaround:  I found myself frequently writing a program specific memory
+	     manager to allocate large chunks which were then parcelled out.
+
+Solution:   Develop a generic linked list memory manager which does all the
+	    work for you.   
+	    
+	    
+Descriptn:  Remember those school days when we used Pascal.
+	    Remember the new and dispose functions?  Well that's what
+	    you get with this library.  The front end consists of 
+	    init(), new(), dispose(), and cleanup().
+	    The innards is a memory manager which provides a structure on
+	    demand and maintains its own efficient free memory list
+	    to minimize the number of calls to malloc() and free().
+
+Notes:      The memory returned by link_new() is NOT guaranteed to be zeroed.
+	    This could be added as an option later if there is demand.
+
+            The key item for this library is that the linked list is
+            a list of homogenous elements all of the same size.  what
+            is returned by link_new() for a given token is always the
+            same size.
+
+	    Unlike free(), the contents of the disposed structure are
+	    no longer available.  The link_dispose () modifies part of 
+	    the disposed of structure.
+
+	    The minimum size of a structure is the size of a pointer.
+	    If the structure size is less than that, it will be increased
+	    to that minimum.
+
+
+Interface:
+
+	The link structure must have the following form:
+
+	struct my_linked_list
+	{
+	    struct my_linked_list *next;
+	    <data_type> data;
+	    /* optional other data */
+	};
+
+	The link to the next item MUST be the first entry.
+
+void *
+link_init (int size)
+
+	initialize the system for a given linked list.  Size is the size
+	of your link structure.
+
+	Returns a token which identifies that list's manager.
+	You can have several different lists actively managed with
+	a different structure for each.
+
+void
+link_set_chunk_size (int cnt)
+	changes the number of structures requested in each malloc
+	If this routine is not called, the default is 100.
+	Calling this routine affects all further calls to link_init()
+	or until the next call to link_set_chunk_size().
+
+
+void
+link_cleanup (struct link_head *token)
+    
+	Clean up all memory when done using the list.
+	should only be called once per list per run for best performance.
+	Pass it the token returned by link_init () 
+
+void *
+link_new (struct link_head *token)
+	
+	return a new memory slot, 'size' bytes long as specified by link_init()
+	This return pointer should be cast to your link structure type.
+
+void
+link_dispose (struct link_head *token, void *ptr)
+	
+	pass it the token and a pointer to the structure to be de-allocated.
+	The memory is returned to the memory manager.
+

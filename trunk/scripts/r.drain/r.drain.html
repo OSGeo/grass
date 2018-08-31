@@ -1,0 +1,316 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.drain</em> traces a flow through a least-cost path in an
+elevation model or cost surface. For cost surfaces, a movement
+direction map must be specified with the
+<b>direction</b> option and the <b>-d</b> flag to trace a flow path following 
+the given directions. Such a movement direction map can be generated with 
+<em><a href="r.walk.html">r.walk</a></em>, 
+<em><a href="r.cost.html">r.cost</a></em>, 
+<em><a href="r.slope.aspect.html">r.slope.aspect</a></em> or 
+<em><a href="r.watershed.html">r.watershed</a></em>
+provided that the direction is in degrees, measured counterclockwise
+from east.
+
+<p>
+The <b>output</b> raster map will show one or more least-cost paths
+between each user-provided location(s) and the minima (low category
+values) in the raster <b>input</b> map. If the <b>-d</b> flag is used
+the output least-cost paths will be found using the direction raster
+map.  By default, the <b>output</b> will be an integer CELL map with
+category 1 along the least cost path, and null cells elsewhere.
+
+<p>With the <b>-c</b> (<em>copy</em>) flag, the input raster map cell values are
+copied verbatim along the path. With the <b>-a</b> (<em>accumulate</em>)
+flag, the accumulated cell value from the starting point up to the current
+cell is written on output. With either the <b>-c</b> or the <b>-a</b> flags, the
+<b>output</b> map is created with the same cell type as
+the <b>input</b> raster map (integer, float or double).  With
+the <b>-n</b> (<em>number</em>) flag, the cells are numbered
+consecutively from the starting point to the final point.
+The <b>-c</b>, <b>-a</b>, and <b>-n</b> flags are mutually
+incompatible.
+
+<p>For an elevation surface, the path is calculated by choosing the
+steeper "slope" between adjacent cells. The slope calculation
+accurately acounts for the variable scale in lat-lon projections. For
+a cost surface, the path is calculated by following the movement
+direction surface back to the start point given
+in <em><a href="r.walk.html">r.walk</a></em> or
+<em><a href="r.cost.html">r.cost</a></em>. The path search stops 
+as soon as a region border or a neighboring NULL cell is encountered, 
+because in these cases the direction can not be determined (the path 
+could continue outside the current region).
+
+<p>The <b>start_coordinates</b> parameter consists of map E and N grid coordinates of
+a starting point. Each x,y pair is the easting and northing (respectively) of
+a starting point from which a least-cost corridor will be developed.
+The <b>start_points</b> parameter can take multiple vector maps containing 
+additional starting points.
+Up to 1024 starting points can be input from a combination of the
+<b>start_coordinates</b> and <b>start_points</b> parameters.
+
+<h3>Explanation of output values</h3>
+
+Consider the following example: 
+
+<div class="code"><pre>
+Input:                          Output:
+  ELEVATION SURFACE               LEAST COST PATH
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 19. 20. 18. 19. 16. 15. 15.    .   .   .   .   .   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 20| 19| 17. 16. 17. 16. 16.    .   . 1 . 1 . 1 .   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 18. 18. 24. 18. 15. 12. 11.    .   .   .   .   . 1 .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 22. 16. 16. 18. 10. 10. 10.    .   .   .   .   . 1 .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 15. 15. 15. 10. 8 . 8 .    .   .   .   .   .   . 1 .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 24. 16. 8 . 7 . 8 . 0 . 12.    .   .   .   .   .   . 1 .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 9 . 8 . 7 . 8 . 6 . 12.    .   .   .   .   .   .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+</pre></div>
+
+<p>
+The user-provided starting location in the above example is 
+the boxed <b>19</b> in the left-hand map. The path in the output 
+shows the least-cost corridor for moving from the starting 
+box to the lowest (smallest) possible point. This is the path a raindrop 
+would take in this landscape.
+<p>
+With the <b>-c</b> <em>(copy)</em> flag, you get the following result:
+
+<div class="code"><pre>
+Input:                          Output:
+  ELEVATION SURFACE               LEAST COST PATH
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 19. 20. 18. 19. 16. 15. 15.    .   .   .   .   .   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 20| 19| 17. 16. 17. 16. 16.    .   . 19. 17. 16.   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 18. 18. 24. 18. 15. 12. 11.    .   .   .   .   . 15.   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 22. 16. 16. 18. 10. 10. 10.    .   .   .   .   . 10.   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 15. 15. 15. 10. 8 . 8 .    .   .   .   .   .   . 8 .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 24. 16. 8 . 7 . 8 . 0 .12 .    .   .   .   .   .   . 0 .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 9 . 8 . 7 . 8 . 6 .12 .    .   .   .   .   .   .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+
+Note that the last <em>0</em> will not be put in the null values map.
+</pre></div>
+
+<p>
+With the <b>-a</b> <em>(accumulate)</em> flag, you get the following result:
+
+<div class="code"><pre>
+Input:                          Output:
+  ELEVATION SURFACE               LEAST COST PATH
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 19. 20. 18. 19. 16. 15. 15.    .   .   .   .   .   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 20| 19| 17. 16. 17. 16. 16.    .   . 19. 36. 52.   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 18. 18. 24. 18. 15. 12. 11.    .   .   .   .   . 67.   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 22. 16. 16. 18. 10. 10. 10.    .   .   .   .   . 77.   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 15. 15. 15. 10. 8 . 8 .    .   .   .   .   .   . 85.   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 24. 16. 8 . 7 . 8 . 0 .12 .    .   .   .   .   .   . 85.   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 9 . 8 . 7 . 8 . 6 .12 .    .   .   .   .   .   .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+</pre></div>
+
+<p>
+With the <b>-n</b> <em>(number)</em> flag, you get the following result:
+
+<div class="code"><pre>
+Input:                          Output:
+  ELEVATION SURFACE               LEAST COST PATH
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 19. 20. 18. 19. 16. 15. 15.    .   .   .   .   .   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 20| 19| 17. 16. 17. 16. 16.    .   . 1 . 2 . 3 .   .   .   .
+. .  ---  . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 18. 18. 24. 18. 15. 12. 11.    .   .   .   .   . 4 .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 22. 16. 16. 18. 10. 10. 10.    .   .   .   .   . 5 .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 15. 15. 15. 10. 8 . 8 .    .   .   .   .   .   . 6 .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 24. 16. 8 . 7 . 8 . 0 .12 .    .   .   .   .   .   . 7 .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+. 17. 9 . 8 . 7 . 8 . 6 .12 .    .   .   .   .   .   .   .   .
+. . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
+</pre></div>
+
+With the <b>-d</b> <em>(direction)</em> flag, the direction raster is used 
+for the input, rather than the elevation surface. The output is then created 
+according to one of the <b>-can</b> flags.
+<div class="code"><pre>
+The directions are recorded as degrees CCW from East:
+       112.5     67.5         i.e. a cell with the value 135 
+157.5  135   90  45   22.5    means the next cell is to the North-West 
+       180   x   0            
+202.5  225  270  315  337.5
+       247.5     292.5
+</pre></div>
+
+<h2>NOTES</h2>
+
+If no direction input map is given, <em>r.drain</em> currently finds
+only the lowest point (the cell having the smallest category value) in
+the input file that can be reached through directly adjacent cells
+that are less than or equal in value to the cell reached immediately
+prior to it; therefore, it will not necessarily reach the lowest point
+in the input file. It currently finds <em>pits</em> in the data,
+rather than the lowest point in the entire input
+map. The <em><a href="r.fill.dir.html">r.fill.dir</a></em>,
+<em><a href="r.terraflow.html">r.terraflow</a></em>,
+and <em><a href="r.basins.fill.html">r.basins.fill</a></em> modules
+can be used to fill in subbasins prior to processing
+with <em>r.drain</em>.
+
+<p>
+<em>r.drain</em> will not give sane results at the region boundary. On outer rows
+and columns bordering the edge of the region, the flow direction is always directly out 
+of the map. In this case, the user could try adjusting the region extents slightly with 
+<em>g.region</em> to allow additional outlet paths for <em>r.drain</em>.
+
+<h2>EXAMPLES</h2>
+
+<h3>Path to the lowest point</h3>
+
+In this example we compute drainage paths from two given points
+following decreasing elevation values to the lowest point.
+We are using the full North Carolina sample dataset.
+First we create the two points from a text file using
+<em><a href="v.in.ascii.html">v.in.ascii</a></em> module
+(here the text file is CSV and we are using unix here-file syntax
+with EOF, in GUI just enter the values directly for the parameter input):
+
+<div class="code"><pre>
+v.in.ascii input=- output=start format=point separator=comma &lt;&lt;EOF
+638667.15686275,220610.29411765
+638610.78431373,220223.03921569
+EOF
+</pre></div>
+
+Now we compute the drainage path:
+
+<div class="code"><pre>
+r.drain input=elev_lid792_1m output=drain_path drain=drain start_points=start
+</pre></div>
+
+Before we visualize the result, we set a color table for the elevation
+we are using and we create a shaded relief map:
+
+<div class="code"><pre>
+r.colors map=elev_lid792_1m color=elevation
+r.relief input=elev_lid792_1m output=relief
+</pre></div>
+
+Finally we visualize all the input and output data:
+
+<div class="code"><pre>
+d.shade shade=relief color=elev_lid792_1m
+d.vect map=drain_path color=0:0:61 width=4 legend_label="drainage paths"
+d.vect map=start color=none fill_color=224:0:0 icon=basic/circle size=15 legend_label=origins
+d.legend.vect -b
+</pre></div>
+
+<div align="center">
+<a href="r_drain.png"><img src="r_drain.png" alt="drainage using r.watershed" width="300" height="280"></a>
+<br>
+<i>Figure: Drainage paths from two points flowing into the points with
+lowest values</i>
+</div>
+
+<h3>Path following directions</h3>
+
+To continue flow even after it hits a depression, we need to supply a
+direction raster map which will tell the <em>r.drain</em> module how to
+continue from the depression. To get these directions, we use the
+<em><a href="r.watershed.html">r.watershed</a></em> module:
+
+<div class="code"><pre>
+r.watershed elevation=elev_lid792_1m accumulation=accum drainage=drain_dir
+</pre></div>
+
+The directions are categorical and we convert them to degrees using
+raster algebra:
+
+<div class="code"><pre>
+r.mapcalc "drain_deg = if(drain_dir != 0, 45. * abs(drain_dir), null())"
+</pre></div>
+
+Together with directions, we need to provide the <em>r.drain</em> module
+with cost values. We don't have any cost to assign to specific cells,
+so we create a constant surface:
+
+<div class="code"><pre>
+r.mapcalc "const1 = 1"
+</pre></div>
+
+Now we are ready to compute the drainage paths.
+We are using the two points from the previous example.
+
+<div class="code"><pre>
+r.drain -d input=const1 direction=drain_deg output=drain_path_2 drain=drain_2 start_points=start
+</pre></div>
+
+We visualize the result in the same way as in the previous example.
+
+<div align="center">
+<a href="r_drain_with_r_watershed_direction.png"><img src="r_drain_with_r_watershed_direction.png" alt="drainage using r.watershed" width="300" height="280"></a>
+<br>
+<i>Figure: Drainage paths from two points where directions from
+r.watershed were used</i>
+</div>
+
+<h2>KNOWN ISSUES</h2>
+
+<p>Sometimes, when the differences among integer cell category values in the
+<em><a href="r.cost.html">r.cost</a></em> cumulative cost surface output are 
+small, this cumulative cost output cannot accurately be used as input to
+<em>r.drain</em> (<em>r.drain</em> will output bad results).
+This problem can be circumvented by making the differences
+between cell category values in the cumulative cost output bigger. It
+is recommended that if the output from <em>r.cost</em> is to be used
+as input to <em>r.drain</em>, the user multiply the <em>r.cost</em>
+input cost surface map by the value of the map's cell resolution,
+before running <em>r.cost</em>. This can be done using
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>. The map resolution can be
+found using <em><a href="g.region.html">g.region</a></em>.
+This problem doesn't arise with floating point maps.
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r.cost.html">r.cost</a>,
+<a href="r.fill.dir.html">r.fill.dir</a>,
+<a href="r.basins.fill.html">r.basins.fill</a>,
+<a href="r.watershed.html">r.watershed</a>,
+<a href="r.terraflow.html">r.terraflow</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.walk.html">r.walk</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Completely rewritten by Roger S. Miller, 2001<br>
+July 2004 at WebValley 2004, error checking and vector points added by
+Matteo Franchi (Liceo Leonardo Da Vinci, Trento) and
+Roberto Flor (ITC-irst, Trento, Italy)
+
+<p>
+<i>Last changed: $Date$</i>

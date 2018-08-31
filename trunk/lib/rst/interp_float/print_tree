@@ -1,0 +1,55 @@
+int print_tree(tree)
+ struct quadtree *tree;
+{
+ double x_se,x_sw,x_ne,x_nw,y_se,y_sw,y_ne,y_nw;
+    static int k=0;
+    static int i=1;
+
+    if (i)
+    {
+	i = 0;
+	printf ("ORGANIZATION: USGS-NMD  DLG DATA - CHARACTE\n");
+	printf ("DIGIT DATE:   1977,\n");
+	printf ("DIGIT NAME:   grass\n");
+	printf ("MAP NAME:     RAPID CITY, SD\n");
+	printf ("MAP DATE:     1977,\n");
+	printf ("MAP SCALE:    100000\n");
+	printf ("OTHER INFO:   RC3.RDS03\n");
+	printf ("ZONE:         13\n");
+	printf ("WEST EDGE:    -123\n");
+	printf ("EAST EDGE:    8004\n");
+	printf ("SOUTH EDGE:   -20\n");
+	printf ("NORTH EDGE:   5580\n");
+	printf ("MAP THRESH:   2\n");
+	printf ("VERTI:\n");
+
+    }
+
+ if (tree==NULL) return 0;
+ if (tree->data==NULL) return 0;
+ if (tree->data->points == NULL) {
+  print_tree(tree->se_leaf);
+  print_tree(tree->sw_leaf);
+  print_tree(tree->ne_leaf);
+  print_tree(tree->nw_leaf);
+ }
+ else {
+  x_sw=tree->data->x_orig;
+  y_sw=tree->data->y_orig;
+  x_nw=x_sw;
+  y_se=y_sw;
+  x_se=x_sw+tree->data->n_cols*step;
+  y_nw=y_sw+tree->data->n_rows*step;
+  y_ne=y_nw;
+  x_ne=x_se;
+  printf("L   5\n");
+  printf(" %lf  %lf\n",y_sw,x_sw);
+  printf(" %lf  %lf\n",y_nw,x_nw);
+  printf(" %lf  %lf\n",y_ne,x_ne);
+  printf(" %lf  %lf\n",y_se,x_se);
+  printf(" %lf  %lf\n",y_sw,x_sw);
+ }
+return 1;
+}
+
+

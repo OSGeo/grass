@@ -1,0 +1,32 @@
+Current directory layout
+
+- bitmap: bitmap library for X Window Bitmaps
+- btree: binary tree library
+- D: display library
+- datetime: DateTime library
+- db: database management interface database drivers
+	- db/dbmi: general DB driver
+	- db/sqlp: SQL parser library for DBMI driver
+	- db/stubs: general DB driver
+- display: library for CELL driver
+- edit: curses library
+- external: external libraries
+	- external/shapelib: SHAPE file management functions
+- fonts: fonts
+	- fonts/fonts
+	- fonts/for_grass
+- front.end: modules front end (cmd or inter)
+- gis: main GRASS library
+- image: image library required for SG3d/Iris, saving images in SGIs
+             rgb-format
+- init: GRASS startup scripts and programs
+- linkm: linked list memory manager
+- ogsf: ported gsurf library (required for NVIZ)
+- proj: PROJ4 projection library wrapper
+- raster: GRASS raster display library
+- vask: Curses based cursor library
+- vector: GRASS vector library
+	- vector/dglib: Directed Graph Library implementation
+	- vector/dglib/examples: Directed Graph Library examples
+	- vector/diglib: more GRASS vector functions
+	- vector/Vlib: portable GRASS vector functions

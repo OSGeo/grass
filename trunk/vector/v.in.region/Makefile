@@ -1,0 +1,14 @@
+
+MODULE_TOPDIR = ../..
+
+PGM = v.in.region
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+LIBES = $(VECTORLIB) $(RASTERLIB) $(GISLIB)
+DEPENDENCIES = $(VECTORDEP) $(RASTERDEP) $(GISDEP)
+EXTRA_INC = $(VECT_INC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+default: cmd
+

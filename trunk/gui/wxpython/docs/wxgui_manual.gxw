@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gxw SYSTEM "grass-gxw.dtd">
+<gxw>
+    <layer_manager dim="204,116,540,511">
+    </layer_manager>
+    <display name="Display 1" render="1" mode="0" showCompExtent="0" alignExtent="1" constrainRes="0" dim="745,115,756,672" extent="630000.000000,215000.000000,645000.000000,228500.000000,-0.500000,0.500000" tbres="1.000000" viewMode="2d" >
+        <layer type="vector" name="roadsmajor@PERMANENT" checked="1" opacity="1.000000">
+            <task name="d.vect">
+                <parameter name="color">
+                    <value>77:77:77</value>
+                </parameter>
+                <parameter name="map">
+                    <value>roadsmajor@PERMANENT</value>
+                </parameter>
+                <parameter name="width">
+                    <value>2</value>
+                </parameter>
+            </task>
+        </layer>
+        <group name="water" checked="0">
+                <layer type="vector" name="lakes@PERMANENT" checked="1" opacity="1.000000">
+                    <task name="d.vect">
+                        <parameter name="color">
+                            <value>none</value>
+                        </parameter>
+                        <parameter name="map">
+                            <value>lakes@PERMANENT</value>
+                        </parameter>
+                        <parameter name="fill_color">
+                            <value>30:144:255</value>
+                        </parameter>
+                        <parameter name="width">
+                            <value>1</value>
+                        </parameter>
+                    </task>
+                </layer>
+                <layer type="vector" name="streams@PERMANENT" checked="1" opacity="1.000000">
+                    <task name="d.vect">
+                        <parameter name="color">
+                            <value>30:144:255</value>
+                        </parameter>
+                        <parameter name="map">
+                            <value>streams@PERMANENT</value>
+                        </parameter>
+                        <parameter name="width">
+                            <value>1</value>
+                        </parameter>
+                    </task>
+                </layer>
+        </group>
+        <layer type="raster" name="elevation@PERMANENT" checked="1" opacity="1.000000">
+            <selected />
+            <task name="d.rast">
+                <parameter name="map">
+                    <value>elevation@PERMANENT</value>
+                </parameter>
+            </task>
+        </layer>
+        <overlay name="d.barscale">
+            <parameter name="at">
+                <value>56.8,4.4</value>
+            </parameter>
+            <parameter name="segment">
+                <value>5</value>
+            </parameter>
+        </overlay>
+        <overlay name="d.legend">
+            <parameter name="raster">
+                <value>elevation@PERMANENT</value>
+            </parameter>
+            <parameter name="at">
+                <value>5.2,50.2,91.8,94.8</value>
+            </parameter>
+        </overlay>
+    </display>
+</gxw>

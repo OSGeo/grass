@@ -1,0 +1,82 @@
+<h2>DESCRIPTION</h2>
+
+
+<b>i.cca</b> is an image processing program that takes any number of
+(raster) band files and a signature file, and outputs the same number of
+raster band files transformed to provide maximum separability of the
+categories indicated by the signatures.  This implementation of the
+canonical components transformation is based on the algorithm contained in
+the <a href="http://dbwww.essc.psu.edu/lasdoc/user/canal.html">LAS image
+processing system</a>. CCA is also known as "Canonical components
+transformation".
+
+<p>
+Typically the user will use the 
+<em><a href="g.gui.iclass.html">g.gui.iclass</a></em>
+program to collect a set of signatures and then pass those
+signatures along with the raster band files to
+<em>i.cca</em>.  The raster band file names are specified
+on the command line by giving the group and subgroup that
+were used to collect the signatures.
+
+<p>
+The output raster map names are built by appending a ".1",
+".2", etc. to the output raster map name specified on the
+command line.
+
+<h3>Parameters:</h3>
+
+<dl>
+
+<dt><b>group=</b><em>name</em> 
+
+<dd>Name of the <a href="i.group.html">imagery</a> group
+to which the raster band files used belong.
+
+<dt><b>subgroup=</b><em>name</em> 
+
+<dd>Name of the <a href="i.group.html">imagery</a>
+subgroup to which the raster band files used
+belong.
+
+<dt><b>signature=</b><em>name</em> 
+
+<dd>Name of an ASCII file containing spectral signatures.
+
+<dt><b>output=</b><em>name</em> 
+
+<dd>Output raster map prefix name.  The output raster map
+layer names are built by appending a ".1", ".2", etc. onto
+the <em>output</em> name specified by the user.
+
+</dl>
+
+<h2>NOTES</h2>
+
+<em>i.cca</em> respects the current geographic region definition
+and the current mask setting while performing the transformation.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="g.gui.iclass.html">g.gui.iclass</a>,
+<a href="i.pca.html">i.pca</a>,
+<a href="r.covar.html">r.covar</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>
+</em>
+
+<h2>REFERENCES</h2>
+
+Schowengerdt, Robert A.  <b>Techniques for Image Processing and
+Classification in Remote Sensing</b>,  Academic Press, 1983.
+
+<h2>AUTHORS</h2>
+
+David Satnik, GIS Laboratory, 
+Central Washington University
+
+<br>
+
+Ali R. Vali, 
+University of Texas
+<p><i>Last changed: $Date$</i>

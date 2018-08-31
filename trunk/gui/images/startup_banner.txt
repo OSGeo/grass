@@ -1,0 +1,35 @@
+Startup banner
+
+May 22, 2016
+
+- Updated to capital "GRASS GIS" spelling
+- Contributor:
+  Vincent Bain <bain@toraval.fr>
+
+
+
+Feb 6, 2015
+
+- Startup banner source file corresponding to the latest version uploaded
+  in February : https://trac.osgeo.org/grass/changeset/64480
+
+- The SVG file was generated with Inkscape. Needs the following fonts to
+  display correctly which can be downloaded at:
+
+- Fira sans : http://www.fontsquirrel.com/fonts/fira-sans (common RPM package name: mozilla-fira-sans-fonts)
+- EB Garamond : http://www.fontsquirrel.com/fonts/eb-garamond)
+
+Contributor:
+Vincent Bain <bain@toraval.fr>
+
+------------------------
+Font installation:
+- Fira sans: use package manager
+- EB Garamond: 
+
+sudo su
+cd /usr/share/fonts/
+mkdir eb-garamond
+cd eb-garamond/
+unzip /tmp/eb-garamond.zip
+

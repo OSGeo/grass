@@ -1,0 +1,16 @@
+BUGS:
+Date: 2004-11-09
+ * non-square volumes (if re-adjusting the settings with g3.region)
+   are not exported correctly.
+
+ * if 100 rows/cols/depth are there, only 99 rows/cols/depth will
+   be exported to Vis5D: problem of center cell and corner cell
+
+ * with -m flag the "Probe" crashes in Vis5D
+
+
+RASTER3D library bug?
+        Rast3d_getValueRegion (map, x, y, z, d1p, typeIntern);                  
+     produces output with different orientation comparing to:
+        Rast3d_getValue(map, x, y, z, d1p, typeIntern); 
+

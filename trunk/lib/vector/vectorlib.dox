@@ -1,0 +1,369 @@
+/*! \page vectorlib GRASS Vector Library
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+\par Related pages
+- \subpage vlibDescription
+- \subpage vlibFormat
+- \subpage vlibTopology
+- \subpage vlibIndices
+- \subpage vlibAscii
+- \subpage vlibTin
+- \subpage vlibFAQ
+- \subpage vlibLists
+
+\par Data providers for external formats
+- \subpage vlibOgr
+- \subpage vlibPg
+
+\par Related libraries
+- \subpage veditlib
+- \subpage netalib
+
+\section vlibBackground Background
+
+Generally, the vector data model is used to describe geographic
+phenomena which may be represented by geometric entities like
+<em>points</em>, <em>lines</em>, and <em>areas</em>. The GRASS vector
+data model includes the description of <em>topology</em>, where
+besides the coordinates describing the location of the primitives
+(points, lines, boundaries, centroids, faces, kernels, and volumes),
+their spatial relations are also stored. In general, topological GIS
+requires a data structure where the common boundary between two
+adjacent areas is stored as a single boundary, simplifying vector data
+maintenance.
+
+
+\section vlibIntro Introduction
+
+The GRASS 6/7 vector format is very similar to the previous GRASS 4.x
+(5.0/5.3) vector format.
+
+This description covers the new GRASS 6/7 vector library architecture.
+This new architecture overcomes the vector limitations of GRASS
+4.x-5.4.x by extending the vector support with attributes stored in
+the external relational databases, and by new 3D capabilities. Besides
+internal file based storage the geometry may alternatively be stored
+in a PostGIS database (accessible via OGR interface). This enables
+users to maintain large data sets with simultaneous write
+access. External GIS formats such as SHAPE-files may be used directly,
+without requiring format conversion. All vector data accessed through 
+the OGR interface have only pseudo-topology and only a limited subset 
+of vector operations can be performed.
+
+The current implementation includes:   
+
+- <em>multi-layer</em>: features in one vector map may represent more
+    layers and may be linked to more external tables (see \ref
+    vlibCategoriesLayers)
+- <em>2D and 3D vector geometry</em> with full topology support for 2D and
+  partial topology support for 3D (see \ref vlibTopoManagement)
+- <em>multi-format</em>: external data formats supported (SHAPE-file,
+  OGR sources etc.)
+- <em>portability</em>: platform independent internal format, read- and
+      writable on 32bit, 64bit etc. computer architectures
+- <em>network analysis</em> using integrated dglib library
+- <em>spatial index</em>: based on R-tree method for fast vector
+  geometry access (see \ref vlibSpidx)
+- <em>multi-attribute</em>: attributes saved in external Relational
+      Database Management System (RDBMS) connected through DBMI
+      library and drivers (see \ref vlibAttributes)
+
+\section vlibVectorMap Vector map definition (native format)
+
+GRASS vector maps are stored in an <em>arc-node</em> representation,
+consisting of curves called arcs. An arc is stored as a series of
+x,y,z coordinate pairs. Two consecutive x,y,z pairs define an arc segment. 
+<em>Nodes</em> are created automatically for the two endpoints of an arc. 
+The user specifies the type of input to GRASS; GRASS doesn't decide. GRASS
+supports feature type definition which allows for multiple types to
+co-exist in the same map. An area is defined by one or more 
+boundaries that form a closed ring. A centroid is assigned to the area it is
+within/inside (geometrically). The category to which an area belongs 
+is stored with the centroid. Such centroids are stored in the same binary
+'coor' file with other primitives. Areas without centroids are from a 
+user's perspective holes within another area, therefore not presented to 
+a user as a real area, the equivalent of a polygon in Simple Feature Access.
+Each vector object may have none, one or more categories (cats). More 
+categories can be distinguished by field number (field, called "layer" 
+at user level). A vector object can also have multiple categories in the 
+same layer, an example would be buffers where a single area might belong 
+to multiple buffers of multiple buffered features. Single and 
+multi-category support on module level is implemented. The z coordinate 
+is optional and both 2D and 3D files may be written.
+
+The following <em>vector feature types (primitives)</em> are defined
+by the vector library (and holds by the coor file; see also \ref
+vlibFeatureTypes):
+
+- point: a point (2D or 3D) - GV_POINT
+- line: a directed sequence of connected vertices with two endpoints
+  called nodes (2D or 3D) - GV_LINE
+- boundary: the border line to describe an area (2D only) - GV_BOUNDARY
+- centroid: a point within a closed boundary(ies) to describe an area
+  (2D only) - GV_CENTROID
+- face: a 3D boundary (not implemented yet) - GV_FACE
+- kernel: a 3D centroid in a volume - GV_KERNEL
+
+From vector feature types mentioned above are derived:
+
+- area: the topological composition of a closed ring of boundary(ies)
+  and optionally a centroid (2D only, 3D coordinates supported but
+  ignored) - GV_AREA
+- isle: an area within area, not touching the boundaries of the outer
+  area (2D only, 3D coordinates supported but ignored)
+- volume: a 3D corpus, the topological composition of faces and
+  kernel (not implemented yet) - GV_VOLUME
+- hole: a volume within volume, 3D equivalent to isle within area (not
+  implemented yet)
+
+Note that all lines and boundaries can consist of multiple segments.
+
+Area topology also holds information about isles. <em>Isles</em> are
+located within an area, not touching the boundaries of the outer
+area. Isles consist of one or more areas and are used internally by
+the vector library to maintain correct topology of areas.
+
+\section vlibVectorLevels Levels of read access
+
+There are two levels of read access to the vector data:
+
+- <i>Level One</i> provides simple access to the vector feature
+  information. There is no access to topology information at this
+  level.
+- <i>Level Two</i> provides full access to all the information
+  including topology information. This level requires more from the
+  programmer, more memory, and longer startup time. Without this level,
+  areas are not available.
+
+The level of access is returned by Vect_open_old().
+
+<b>Example for sequential read access without topology:</b>
+\code
+int main
+{
+    int type, ltype;
+    struct Map_info Map;
+    struct line_pnts *Points;
+    struct line_cat *Cats;
+    const char *name, *mapset;
+
+    /* set open level to 1: no topology */
+    Vect_set_open_level(1);
+
+    if (Vect_open_old(&Map, name, mapset) < 1)
+	G_fatal_error(_("Failed to open vector '%s'"), name);
+
+    /* rewind vector file */
+    Vect_rewind(&Map);
+    
+    Points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
+
+    while ((ltype = Vect_read_next_line(&Map, Points, Cats) > 0) {
+    
+	/* check for desired type */
+	if (!(ltype & type))
+	    continue;
+
+	/* process the feature */
+    }
+
+    exit(EXIT_SUCCESS);
+}
+\endcode
+
+<b>Example for random read access with topology:</b>
+\code
+int main
+{
+    int line, nlines, type, ltype;
+    struct Map_info Map;
+    struct line_pnts *Points;
+    struct line_cat *Cats;
+    const char *name, *mapset;
+
+    if (Vect_open_old(&Map, name, mapset) < 2)
+	G_fatal_error(_("Failed to open vector '%s'"), name);
+
+    Points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
+    
+    nlines = Vect_get_num_lines(&Map);
+    for (line = 1; line <= nlines; line++) {
+    
+	/* check for desired type */
+	if (!(Vect_get_line_type(&Map, line) & type))
+	    continue;
+
+    	Vect_read_line(&Map, points, cats, line);
+
+	/* process the feature */
+    }
+    
+    exit(EXIT_SUCCESS);
+}
+\endcode
+
+
+<b>Example for working with areas (requires topology):</b>
+\code
+int main
+{
+    int area, nareas;
+    struct Map_info Map;
+    struct line_cat *Cats;
+    const char *name, *mapset;
+
+    if (Vect_open_old(&Map, name, mapset) < 2)
+	G_fatal_error(_("Failed to open vector '%s'"), name);
+
+    Points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
+    
+    nareas = Vect_get_num_areas(&Map);
+    for (area = 1; area <= nareas; area++) {
+
+	/* process the area */
+	/* example: get area categories */
+	if (Vect_get_area_cats(&Map, area, Cats) == -1)
+	    G_message(_("No category available for area %d"), area);
+    }
+    
+    exit(EXIT_SUCCESS);
+}
+\endcode
+
+
+<em>Note:</em> Higher level of access are planned, so when checking
+success return codes for a particular level of access (when calling
+Vect_open_old() for example), the programmer should use >= instead of
+== for compatibility with future releases.
+
+An existing vector map can be opened for reading by Vect_open_old(). 
+A new vector map can be created (or open for writing) by
+Vect_open_new(). Vect_open_old() attempts to open a vector map at the
+highest possible level of access. It will return the number of the
+level at which the map was opened. Vect_open_new() always opens at level 1
+only. If you require that a vector map be opened at a lower level
+(e.g. one), you can call the routine <tt>Vect_set_open_level(1)</tt>;
+Vect_open_old() will then either open at level one or fail. If you
+instead require the highest level access possible, you should not use
+Vect_set_open_level(), but instead check the return value of
+Vect_open_old() to make sure it is greater than or equal to the lowest
+level at which you need access. This allows for future levels to work
+without need for module change.
+
+
+
+\section vlibCategoriesLayers Categories and Layers
+
+<i>Note: "layer" was called "field" in earlier version.</i>
+
+In GRASS, a "category" or "category number" is a vector feature ID
+used to link geometry to attributes which are stored in one or several
+(external) database table(s). This category number is stored into the
+vector geometry as well as a "cat" column (integer type) in each
+attribute database table. The category number is used to lookup an
+attribute assigned to a vector object. At user level, category numbers
+can be assigned to vector objects with the <tt>v.category</tt> command.
+
+In order to assign multiple attributes in different tables to vector
+objects, each map can hold multiple category numbers. This is achieved
+by assigning more than one "layer" to the map (<tt>v.db.connect</tt>
+command). The layer number determines which table to be used for
+attribute queries. For example, a cadastrial vector area map can be
+assigned on layer 1 to an attribute table containing landuse
+descriptions which are maintained by department A while layer 2 is
+assigned to an attribute table containing owner descriptions which are
+maintained by department B.
+
+Each vector feature inside a vector map has zero, one or more
+&lt;layer,category&gt; tuple(s). A user can (but not must) create
+attribute tables which are referenced by the layer, and rows which are
+essentially referenced by the &lt;layer,category&gt; pair.
+
+%Categories start with 1 (category '0' is allowed for OGR
+layers). %Categories do not have to be continuous.
+
+Information about categories holds \ref line_cats data structure.
+
+
+\section vlibAttributes Attributes
+
+For a user-centric view about attribute management, see the explanations
+in the <a href="http://grasswiki.osgeo.org/wiki/Vector_Database_Management">GRASS GIS Wiki</a>.
+
+The attribute data are stored in external database. Connection with the
+database is done through drivers based on \ref dbmilib. Records in a
+table are linked to vector entities by layer and category number. The
+layer identifies table and the category identifies record.  I.e., for
+any unique combination
+
+\verbatim
+map+mapset+layer+category
+\endverbatim
+
+there exists one unique combination
+
+\verbatim
+driver+database+table+row
+\endverbatim
+
+The general DBMI settings are defined in the '$MAPSET/VAR' text file
+(maintained with <tt>db.connect</tt> command at user level).
+
+Note: vector boundaries are (typically) handled without category since adjacent
+parcels might have two different categories which prevents from a unique assignment.
+
+\section vlibGeometry Vector library feature geometry
+
+\subsection vlibFeatureTypes Feature types
+
+Feature types are defined in include/vect_dig_defines.h, see the list below:
+
+- GV_POINT
+- GV_LINE
+- GV_BOUNDARY
+- GV_CENTROID
+- GV_FACE    
+- GV_KERNEL  
+- GV_AREA
+- GV_VOLUME
+
+- GV_POINTS (GV_POINT | GV_CENTROID)
+- GV_LINES (GV_LINE | GV_BOUNDARY)
+
+Face and kernel are 3D equivalents of boundary and centroid, but there
+is no support (yet) for 3D topology (volumes). Faces are used in a
+couple of modules including NVIZ to visualize 3D buildings and other
+volumetric figures.
+
+
+\section vlibAuthors Authors
+
+- Radim Blazek (vector architecture) <radim.blazek gmail.com>
+
+- Roberto Micarelli (DGLib) <mi.ro iol.it>
+
+Updates for GRASS 7:
+
+- Markus Metz (file-based spatial index, vector topology)
+
+- Martin Landa (GEOS support, direct OGR read access, PostgreSQL/PostGIS support) <landa.martin gmail.com>
+
+\section vlibReferences References
+
+Text based on: R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1
+ vector architecture. In Open source GIS - GRASS users conference 2002,
+ Trento, Italy, 11-13 September 2002. University of Trento, Italy, 2002.
+ <a href="http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Blazek_Radim.pdf">http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Blazek_Radim.pdf</a>
+ 
+\section vlibSeealso See Also
+
+ - \ref dbmilib
+ 
+ - \ref veditlib
+*/

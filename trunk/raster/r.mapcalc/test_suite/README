@@ -1,0 +1,46 @@
+# r.shaded.relief is a nice and complicated test.
+
+
+#### r.blend for 3-in-1 testing
+#spearfish
+
+g.region raster=elevation.10m res=5
+export GRASS_OVERWRITE=1
+export GRASS_VERBOSE=0
+
+FIRST=elevation.10m
+SECOND=aspect
+PERCENT=35
+OUTPUT=tmp.mpclc
+
+
+# try with different numbers of workers
+for w in `seq 14` ; do
+   echo -n "Workers: $w"
+   time WORKERS=$w  r.mapcalc \
+       "$OUTPUT.r = r#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * r#$SECOND ; \
+        $OUTPUT.g = g#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * g#$SECOND ; \
+        $OUTPUT.b = b#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * b#$SECOND"
+   echo
+done
+
+
+# split combined mapcalc expression into three different processes
+export WORKERS=1
+time (
+ r.mapcalc "$OUTPUT.r = r#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * r#$SECOND"
+ r.mapcalc "$OUTPUT.g = g#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * g#$SECOND"
+ r.mapcalc "$OUTPUT.b = b#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * b#$SECOND" 
+)
+
+
+# shell backgrounding as parallelization method:
+export WORKERS=1
+time (
+ r.mapcalc "$OUTPUT.r = r#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * r#$SECOND" &
+ r.mapcalc "$OUTPUT.g = g#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * g#$SECOND" &
+ r.mapcalc "$OUTPUT.b = b#$FIRST * $PERCENT/100.0 + (1.0 - $PERCENT/100.0) * b#$SECOND" &
+ wait
+)
+
+

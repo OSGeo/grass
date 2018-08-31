@@ -1,0 +1,239 @@
+Run this test file from command line using
+
+python -m doctest -v doctest.txt
+
+
+>>> from grass.script.core import run_command, read_command, write_command
+
+Data preparation
+================
+
+>>> run_command('r.mapcalc', expression='test = if(col() < 3, col(), 2)')
+0
+>>> print(read_command('r.info', map='test', flags='r'))
+min=1
+max=2
+<BLANKLINE>
+>>> run_command('r.mapcalc', expression='test_14 = if(col() < 5, col(), 4)')
+0
+>>> print(read_command('r.info', map='test_14', flags='r'))
+min=1
+max=4
+<BLANKLINE>
+>>> run_command('r.mapcalc', expression='test_d = if(col() < 5, col() / 2., 4.5)')
+0
+>>> print(read_command('r.info', map='test_d', flags='r'))
+min=0.5
+max=4.5
+<BLANKLINE>
+
+
+Basic input and output
+======================
+
+>>> write_command('r.category', map='test', rules='-', separator=':', stdin="""
+... 1:trees
+... 2:water
+... """)
+0
+>>> read_command('r.category', map='test', separator=',')
+'1,trees\n2,water\n'
+
+
+Input and output with default separator
+=======================================
+
+>>> write_command('r.category', map='test', rules='-', stdin="""
+... 1\ttrees
+... 2\twater
+... """)
+0
+>>> read_command('r.category', map='test', separator='tab')
+'1\ttrees\n2\twater\n'
+
+Tabs needs a special treatment.
+
+
+Category range
+==============
+
+>>> write_command('r.category', map='test_14', separator=':', rules='-', stdin="""
+... 1:trees
+... 2:4:buildings
+... """)
+0
+>>> print(read_command('r.category', map='test_14', separator=' '))  # doctest: +NORMALIZE_WHITESPACE
+1 trees
+2 4:buildings
+3
+4
+<BLANKLINE>
+
+Output has spaces at the end of line.
+More importantly, the output of r.category is wrong but here we are expecting this wrong output.
+
+
+Floating point maps
+===================
+
+>>> write_command('r.category', map='test_d', separator=':', rules='-', stdin="""
+... 0:1.5:trees
+... 1.5:3:buildings
+... """)
+0
+>>> print(read_command('r.category', map='test_d', separator=' ', vals=[1, 1.1, 2.1, 4]))  # doctest: +NORMALIZE_WHITESPACE
+1 trees
+1.1 trees
+2.1 buildings
+4
+<BLANKLINE>
+
+Output has spaces at the end of line.
+More importantly, the output of r.category is wrong but here we are expecting this wrong output.
+
+
+Separators in output
+====================
+
+Test output first because now we perhaps have data correct.
+
+>>> print(read_command('r.category', map='test', separator='space'))
+1 trees
+2 water
+<BLANKLINE>
+>>> print(read_command('r.category', map='test', separator=','))
+1,trees
+2,water
+<BLANKLINE>
+>>> print(read_command('r.category', map='test', separator='XYZ'))
+1XYZtrees
+2XYZwater
+<BLANKLINE>
+>>> print(read_command('r.category', map='test', separator='newline'))
+1
+trees
+2
+water
+<BLANKLINE>
+>>> print(read_command('r.category', map='test', separator='\n&\n'))
+1
+&
+trees
+2
+&
+water
+<BLANKLINE>
+
+
+Separators in input
+===================
+
+>>> write_command('r.category', map='test', separator='comma', rules='-', stdin="""
+... 1,treesA
+... 2,waterA
+... """)
+0
+>>> print(read_command('r.category', map='test', separator='space'))
+1 treesA
+2 waterA
+<BLANKLINE>
+
+>>> write_command('r.category', map='test', separator=',', rules='-', stdin="""
+... 1,treesB
+... 2,waterB
+... """)
+0
+>>> print(read_command('r.category', map='test', separator='space'))
+1 treesB
+2 waterB
+<BLANKLINE>
+
+>>> write_command('r.category', map='test', separator='|', rules='-', stdin="""
+... 1|treesC
+... 2|waterC
+... """)
+0
+>>> print(read_command('r.category', map='test', separator=' '))
+1 treesC
+2 waterC
+<BLANKLINE>
+
+Multi words input
+=================
+
+>>> write_command('r.category', map='test', separator='|', rules='-', stdin="""
+... 1|small trees
+... 2|deep water
+... """)
+0
+>>> print(read_command('r.category', map='test', separator=' '))
+1 small trees
+2 deep water
+<BLANKLINE>
+
+>>> write_command('r.category', map='test', separator='tab', rules='-', stdin="""
+... 1\tvery small trees
+... 2\tvery deep water
+... """)
+0
+>>> print(read_command('r.category', map='test', separator=':'))
+1:very small trees
+2:very deep water
+<BLANKLINE>
+
+
+Extreme and incorrect inputs
+============================
+
+Some of these commands should not work and return 1.
+
+>>> write_command('r.category', map='test', separator='comma', rules='-', stdin="""
+... 1,trees, very green
+... 2,water, very deep
+... """)
+1
+
+>>> write_command('r.category', map='test', separator='|', rules='-', stdin="""
+... 1|trees, very green
+... 2|water, very deep
+... """)
+0
+>>> print(read_command('r.category', map='test', separator='space'))
+1 trees, very green
+2 water, very deep
+<BLANKLINE>
+
+>>> write_command('r.category', map='test', separator='tab', rules='-', stdin="""
+... 1\tvery green trees
+... 2\tvery deep\t water
+... """)
+1
+>>> print(read_command('r.category', map='test', separator='space'))
+1 trees, very green
+2 water, very deep
+<BLANKLINE>
+
+>>> write_command('r.category', map='test', separator=' ', rules='-', stdin="""
+... 1 very green
+... 2 very deep
+... """)
+1
+>>> print(read_command('r.category', map='test', separator='space'))
+1 trees, very green
+2 water, very deep
+<BLANKLINE>
+
+
+Clean the results
+=================
+
+This is useful when test is runned in location which is not deleted
+when test finishes. It could test if everything which was expected
+to be created was created if it would check all outputs properly.
+
+>>> run_command('g.remove', flags='f', type='raster', name='test')
+0
+>>> run_command('g.remove', flags='f', type='raster', name='test_14')
+0
+>>> run_command('g.remove', flags='f', type='raster', name='test_d')
+0

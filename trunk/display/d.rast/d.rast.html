@@ -1,0 +1,63 @@
+<h2>DESCRIPTION</h2>
+
+<em>d.rast</em> displays the specified raster map in the active
+display frame on the graphics monitor.
+
+<h2>EXAMPLE</h2>
+
+Display raster map &quot;elevation&quot;:
+<div class="code"><pre>
+d.rast map=elevation
+</pre></div>
+<div align="center" style="margin: 10px">
+<img src="d_rast_elevation.png" alt="d.rast elevation" border="0">
+<br>
+<i>Figure: elevation raster map visualization</i>
+</div>
+
+Display raster map &quot;elevation&quot; but only the raster cells with
+values between 75 and 80 meters:
+
+<div class="code"><pre>
+d.rast map=elevation values=75-80
+</pre></div>
+<div align="center" style="margin: 10px">
+<img src="d_rast_elevation_values.png" alt="d.rast elevation with values" border="0">
+<br>
+<i>Figure: elevation raster map showing values between 75 and 80 meters</i>
+</div>
+
+Display raster map &quot;landuse96_28m&quot; but only categories 1 and 2:
+
+<div class="code"><pre>
+d.rast landuse96_28m values=1,2
+</pre></div>
+<div align="center" style="margin: 10px">
+<img src="d_rast_landuse.png" alt="d.rast landuse" border="0">
+<br>
+<i>Figure: landuse raster map showing categories 1 and 2</i>
+</div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.rast.arrow.html">d.rast.arrow</a>,
+<a href="d.rast.num.html">d.rast.num</a>,
+<a href="d.rast.leg.html">d.rast.leg</a>,
+<a href="d.legend.html">d.legend</a>,
+<a href="d.mon.html">d.mon</a>,
+<a href="d.erase.html">d.erase</a>,
+<a href="d.vect.html">d.vect</a>
+</em>
+
+<p>
+<em>
+  <a href="wxGUI.html">wxGUI</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+James Westervelt, U.S. Army Construction Engineering Research Laboratory
+
+<p>
+<i>Last changed: $Date$</i>

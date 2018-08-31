@@ -1,0 +1,22 @@
+MODULE_TOPDIR = ../..
+
+PGM = m.nviz.image
+
+EXTRA_INC = $(VECT_INC)
+EXTRA_CFLAGS = $(INC) \
+	$(TIFFINCPATH) $(DSPINC) \
+	$(VECT_CFLAGS) $(OPENGLINC) \
+	$(VECT_CFLAGS)
+
+ifeq ($(OPENGL_X11),1)
+EXTRA_CFLAGS += $(XCFLAGS)
+endif
+
+LIBES = $(GISLIB) $(OGSFLIB) $(NVIZLIB) $(VECTORLIB) $(DBMILIB)
+DEPENDENCIES = $(GISDEP) $(OGSFDEP) $(NVIZDEP) $(VECTORDEP) $(DBMIDEP)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+ifneq ($(USE_OPENGL),)
+default: cmd
+endif

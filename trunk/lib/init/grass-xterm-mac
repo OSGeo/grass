@@ -1,0 +1,72 @@
+#!/bin/sh
+# script to emulate an xterm in OSX Terminal.app
+# 
+# -William Kyngesburye
+
+# just in case accidentally called on another system
+SYSTEMOSX=`uname -s | grep "Darwin"`
+
+if [ "$SYSTEMOSX" ] ; then
+    # manually transfer the necessary env vars
+    TMPSCRIPT="/tmp/grassxterm_$$"
+    (
+	cat <<-EOF
+	#!/bin/sh
+	DISPLAY="$DISPLAY"
+	PATH="$PATH"
+	GIS_LOCK="$GIS_LOCK"
+	GISRC="$GISRC"
+	GISBASE="$GISBASE"
+	GRASS_VERSION="$GRASS_VERSION"
+	GRASS_PAGER="$GRASS_PAGER"
+	DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH"
+	GRASS_HTML_BROWSER="$GRASS_HTML_BROWSER"
+	GRASS_HTML_BROWSER_MACOSX="$GRASS_HTML_BROWSER_MACOSX"
+	export DISPLAY PATH GIS_LOCK GISRC GISBASE GRASS_VERSION GRASS_PAGER DYLD_LIBRARY_PATH GRASS_LD_LIBRARY_PATH GRASS_HTML_BROWSER GRASS_HTML_BROWSER_MACOSX
+	EOF
+
+	if [ "$GRASS_ADDON_PATH" ] ; then
+	    echo "GRASS_ADDON_PATH=\"$GRASS_ADDON_PATH\""
+	    echo "export GRASS_ADDON_PATH"
+	fi
+
+	if [ -z "$MANPATH" ] ; then
+	    echo "MANPATH=\"$GISBASE/docs/man:`manpath`\""
+	else
+	    echo "MANPATH=\"$GISBASE/docs/man:$MANPATH\""
+	fi
+	echo "export MANPATH"
+
+	# get command, ignore all other xterm flags
+	while true ; do
+	    if [ "$1" = "-e" ] ; then break ; fi
+	    shift
+	done
+	shift
+	# and add it to end of script
+	echo "$@"
+    ) > "$TMPSCRIPT.sh"
+    chmod +x "$TMPSCRIPT.sh"
+
+    # execute
+    # save current active app/window, return to it when script finishes.
+    osascript - <<EOF
+--tell application "System Events"
+--	set save_app to item 1 of (get name of processes whose frontmost is true)
+--end tell
+tell application "Terminal"
+	activate
+	-- start new window with env/cmd script
+	do script "$TMPSCRIPT.sh; exit"
+	tell window 1
+		-- wait for it to finish
+		repeat while (processes is not equal to {})
+			delay 1
+		end repeat
+		close
+	end tell
+end tell
+--tell application save_app to activate
+EOF
+    rm -f "$TMPSCRIPT.sh"
+fi

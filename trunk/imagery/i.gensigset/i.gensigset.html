@@ -1,0 +1,234 @@
+<h2>DESCRIPTION</h2>
+
+<em>i.gensigset</em>
+is a non-interactive method for generating input into
+<em><a href="i.smap.html">i.smap</a>.</em>
+
+It is used as the first pass in the a two-pass
+classification process.  It reads a raster map layer,
+called the training map, which has some of the pixels or
+regions already classified.  <em>i.gensigset</em> will then
+extract spectral signatures from an image based on the
+classification of the pixels in the training map and make
+these signatures available to
+<em><a href="i.smap.html">i.smap</a>.</em>
+
+<p>
+The user would then execute the GRASS program <em>
+<a href="i.smap.html">i.smap</a></em> to create the
+final classified map.
+
+<h2>OPTIONS</h2>
+
+<h3>Parameters</h3>
+
+<dl>
+
+<dt><b>trainingmap=</b><em>name</em> 
+
+<dd>ground truth training map
+
+<p>
+This raster layer, supplied as input by the user, has some
+of its pixels already classified, and the rest (probably
+most) of the pixels unclassified.  Classified means that
+the pixel has a non-zero value and unclassified means that
+the pixel has a zero value.
+
+<p>
+This map must be prepared by the user in advance by using
+a combination of
+<em><a href="wxGUI.vdigit.html">wxGUI vector digitizer</a></em>
+and 
+<em><a href="v.to.rast.html">v.to.rast</a></em>,
+or some other import/developement process (e.g.,
+<em><a href="v.transects.html">v.transects</a>)</em>
+to define the areas representative of the classes in the image.
+
+<p>
+At present, there is no fully-interactive tool specifically
+designed for producing this layer.
+
+<dt><b>group=</b><em>name</em> 
+
+<dd>imagery group
+
+<p>
+This is the name of the group that contains the band files
+which comprise the image to be analyzed. The
+
+<em><a href="i.group.html">i.group</a></em>
+
+command is used to construct groups of raster layers which
+comprise an image.
+
+<p>
+<dt><b>subgroup=</b><em>name</em> 
+
+<dd>subgroup containing image files
+
+
+<p>
+This names the subgroup within the group that selects a
+subset of the bands to be analyzed. The
+
+<em><a href="i.group.html">i.group</a></em>
+
+command is also used to prepare this subgroup.  The
+subgroup mechanism allows the user to select a subset of
+all the band files that form an image.
+
+
+<dt><b>signaturefile=</b><em>name</em>
+
+<dd>resultant signature file
+
+<p>
+This is the resultant signature file (containing the means
+and covariance matrices) for each class in the training map
+that is associated with the band files in the subgroup
+selected.
+
+<p>
+
+<dt><b>maxsig=</b><em>value</em> 
+
+<dd>maximum number of sub-signatures in any class
+
+<br>
+default: 5
+
+<p>
+The spectral signatures which are produced by this program
+are "mixed" signatures (see <a href="#notes">NOTES</a>).
+Each signature contains one or more subsignatures
+(represeting subclasses).  The algorithm in this program
+starts with a maximum number of subclasses and reduces this
+number to a minimal number of subclasses which are
+spectrally distinct.  The user has the option to set this
+starting value with this option.
+</dl>
+
+
+<h2>INTERACTIVE MODE</h2>
+
+If none of the arguments are specified on the command line,
+<em>i.gensigset</em> will interactively prompt for the
+names of these maps and files.
+
+<p>
+It should be noted that interactive mode here only means
+interactive prompting for maps and files.  It does not mean
+visualization of the signatures that result from the
+process.
+
+<p>
+
+<A NAME="notes"></a><h2>NOTES</h2>
+
+The algorithm in <em>i.gensigset</em> determines the
+parameters of a spectral class model known as a Gaussian
+mixture distribution.  The parameters are estimated using
+multispectral image data and a training map which labels
+the class of a subset of the image pixels.  The mixture
+class parameters are stored as a class signature which can
+be used for subsequent segmentation (i.e., classification)
+of the multispectral image.
+
+<p>
+The Gaussian mixture class is a useful model because it can
+be used to describe the behavior of an information class
+which contains pixels with a variety of distinct spectral
+characteristics.  For example, forest, grasslands or urban
+areas are examples of information classes that a user may
+wish to separate in an image.  However, each of these
+information classes may contain subclasses each with its
+own distinctive spectral characteristic.  For example, a
+forest may contain a variety of different tree species each
+with its own spectral behavior.
+
+
+<p>
+The objective of mixture classes is to improve segmentation
+performance by modeling each information class as a
+probabilistic mixture with a variety of subclasses.  The
+mixture class model also removes the need to perform an
+initial unsupervised segmentation for the purposes of
+identifying these subclasses.  However, if misclassified
+samples are used in the training process, these erroneous
+samples may be grouped as a separate undesired subclass.
+Therefore, care should be taken to provided accurate
+training data.
+
+
+<p>
+This clustering algorithm estimates both the number of
+distinct subclasses in each class, and the spectral mean
+and covariance for each subclass.  The number of subclasses
+is estimated using Rissanen's minimum description length
+(MDL) criteria 
+[<a href="#rissanen83">1</a>].  
+This criteria attempts to determine
+the number of subclasses which "best" describe the data.
+The approximate maximum likelihood estimates of the mean
+and covariance of the subclasses are computed using the
+expectation maximization (EM) algorithm 
+[<a href="#dempster77">2</a>,<a href="#redner84">3</a>].  
+
+<h2>WARNINGS</h2>
+
+If warnings like this occur, reducing the remaining classes to 0:
+
+<div class="code"><pre>
+...
+WARNING: Removed a singular subsignature number 1 (4 remain)
+WARNING: Removed a singular subsignature number 1 (3 remain)
+WARNING: Removed a singular subsignature number 1 (2 remain)
+WARNING: Removed a singular subsignature number 1 (1 remain)
+WARNING: Unreliable clustering. Try a smaller initial number of clusters
+WARNING: Removed a singular subsignature number 1 (-1 remain)
+WARNING: Unreliable clustering. Try a smaller initial number of clusters
+Number of subclasses is 0
+</pre></div>
+
+then the user should check for:
+<ul>
+<li>the range of the input data should be between 0 and 100 or 255 but not
+  between 0.0 and 1.0 (<em>r.info</em> and <em>r.univar</em> show the range)</li>
+<li>the training areas need to contain a sufficient amount of pixels</li>
+</ul>
+
+
+<h2>REFERENCES</h2>
+
+<ul>
+<li><A NAME="rissanen83">J. Rissanen,</a>
+"A Universal Prior for Integers and Estimation by Minimum Description Length,"
+<em>Annals of Statistics,</em> vol. 11, no. 2, pp. 417-431, 1983.</li>
+<li><A NAME="dempster77">A. Dempster, N. Laird and D. Rubin,</a>
+"Maximum Likelihood from Incomplete Data via the EM Algorithm,"
+<em>J. Roy. Statist. Soc. B,</em> vol. 39, no. 1, pp. 1-38, 1977.</li>
+<li><A NAME="redner84">E. Redner and H. Walker,</a>
+"Mixture Densities, Maximum Likelihood and the EM Algorithm,"
+<em>SIAM Review,</em> vol. 26, no. 2, April 1984.</li>
+</ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="i.group.html">i.group</a>,
+<a href="i.smap.html">i.smap</a>,
+<a href="r.info.html">r.info</a>,
+<a href="r.univar.html">r.univar</a>,
+<a href="wxGUI.vdigit.html">wxGUI vector digitizer</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Charles Bouman, 
+School of Electrical Engineering, Purdue University
+<br>
+Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,67 @@
+/*! \page vlibOgr GRASS-OGR data provider
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+\section vLibPseudoTopo Pseudo-topology
+
+Reduced topology: each boundary is attached to one area only,
+i.e. smoothing, simplification, removing small areas etc. will not
+work properly for adjacent areas or areas within areas.
+
+Full topology is only available for native GRASS vectors or can only
+be built after all polygons are converted to areas and cleaned as done
+by <tt>v.in.ogr</tt>.
+
+\section vlibFrmtFileFormat Frmt file format specification
+
+Frmt is a plain text file which contains basic information about
+external format of linked vector map. Each line contains key, value
+pairs separated by comma.
+
+OGR specific format is described by:
+
+ - FORMAT - ogr
+ - DSN - OGR datasource name
+ - LAYER - OGR layer name
+
+Example:
+
+\verbatim
+FORMAT: ogr
+DSN: /path/to/shapefiles
+LAYER: cities
+\endverbatim
+
+OGR layer can be linked via <tt>v.external</tt> command. When linking
+OGR layer pseudo-topology ('topo') is built including spatial index
+file ('sidx') and category index file ('cidx'). Additionally also
+feature index file (see \ref vlibFidxFileFormat) is created.
+
+\section vlibFidxFileFormat Fidx file format specification
+
+Note: <tt>finfo</tt> is an instance of \ref Format_info structure.
+
+<table border="1" style="border-collapse: collapse" cellpadding="5">
+<tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
+
+<tr><td>Version_Major </td><td>C</td><td>1</td><td>file version (major)</td></tr>
+<tr><td>Version_Minor </td><td>C</td><td>1</td><td>file version (minor)</td></tr>
+<tr><td>Back_Major</td><td>C</td><td>1</td><td>supported from GRASS version (major)</td></tr>
+<tr><td>Back_Minor</td><td>C</td><td>1</td><td>supported from GRASS version (minor)</td></tr>
+
+<tr><td>byte_order</td><td>C</td><td>1</td><td>little or big endian
+                  flag; files are written in machine native order but
+                  files in both little and big endian order may be
+                  readl; zero for little endian</td></tr>
+
+<tr><td>length</td><td>L</td><td>1</td><td>header size</td></tr>
+
+<tr><td>fInfo.ogr.offset_num</td><td>I</td><td>1</td><td>number of records</td></tr>
+
+<tr><td>fInfo.ogr.offset</td><td>I</td><td>offset_num</td><td>offsets</td></tr>
+
+</table>
+
+*/

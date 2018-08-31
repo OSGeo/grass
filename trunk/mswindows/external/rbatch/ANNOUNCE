@@ -1,0 +1,83 @@
+A new version of the Windows batchfiles is available.  
+
+CHANGES
+
+The key change is the new R.bat utility.  R.bat has a new interface and 
+extended functionality covering many of the other prior utilities.  (These
+older utilities are no longer needed and have been removed.)
+
+Unlike R.bat which requires no configuration the new Rpathset.bat utility is
+configured by manually changing the Windows batch SET statements in it.  The
+main advantage is just that it is very simple internally which may be 
+advantageous in some situations involving customization.
+
+A new pdf document accompanies the utilties providing more detail.
+
+OVERVIEW
+
+These are self contained independent no-install Windows batch, javascript and 
+.hta files. Just place any that you wish to use on your Windows PATH.
+
+R.bat
+
+R.bat allows one to run R without setting any environment variables, registry
+keys or any modification of the Windows path.  Just download this utility,
+place it in your Windows path and then to launch Rgui.exe from the Windows cmd
+line do this:
+
+   R gui
+
+R.bat locates R, MiKTeX and Rtools using the registry or heuristics and then
+runs the subcommand indicated by the first argument.  
+
+In addition to the gui subcommand, the following subcommands are available: cd,
+cmd, dir, gui, help, ls, path, R, script, show, SetReg, tools, touch.
+
+Some examples are:
+
+R -- run R.exe
+R gui -- run Rgui.exe
+R CMD build mypkg -- run Rcmd.exe build mypkg
+R script myScript.R -- run Rscript.exe myScript.R
+
+R dir -- list directories in R_ROOT, typically those in C:\Program Files\R
+R ls -- same
+R help -- help info
+R show -- show R_ variable values used (R_ROOT, R_HOME, R_VER, R_ARCH, etc.)
+
+R path -- temporarily add R, MiKTeX and Rtools to the Windows path
+R tools -- similar but only add MiKTeX and Rtools to the Windows path
+
+Except for R touch (which updates the date on your R_HOME directory) and 
+R SetReg (which calls RSetReg.exe to update the registry with your R version),
+R.bat makes no permanent changes to your system.
+
+Rpathset.bat
+
+Rpathset.bat temporarily sets the Windows path to R, Rtools and MiKTeX
+based on SET statements that the user can configure manually.  It is an
+alternative to R.bat that lacks R.bat's "no configuration" nature but may be 
+preferred in some situations due to its internal simplicity.
+
+Also Rpathset.bat is more likely to work on systems that have not been 
+tested given its simplicity.  (The utilities were tested on 32 bit Windows 
+Vista and 64 bit Windows 8 systems.)
+
+Other
+
+Other commands which continue to be available are copydir.bat, movedir.bat, 
+el.js, clip2r.js and find-miktex.hta .  These copy and move R libraries,
+run a command in elevated mode (i.e. as Administrator), copy the clipboard to
+a running R instance and find MiKTeX.
+
+More Info
+
+The newly created sqldf discussion list will now be used for discussion of
+the batch files as well.
+
+Home Page: http://batchfiles.googlecode.com
+Discuss: http://groups.google.com/group/sqldf  ** NEW **
+
+Download: http://cran.r-project.org/contrib/extra/batchfiles
+SVN: https://code.google.com/p/batchfiles/source
+

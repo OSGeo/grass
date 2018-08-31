@@ -1,0 +1,28 @@
+/*! \page rowiolib GRASS Row Input/Output Library
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+This library is used for reading/writing raster rows.
+
+TODO: Explain in detail.
+
+\code
+#include <grass/rowio.h>
+\endcode
+
+\section listOfFunctions List of functions
+
+ - Rowio_fileno()
+
+ - Rowio_flush()
+
+ - Rowio_forget()
+
+ - Rowio_get()
+
+ - Rowio_put()
+
+ - Rowio_release()
+
+ - Rowio_setup()
+*/

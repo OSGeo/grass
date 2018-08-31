@@ -1,0 +1,67 @@
+<06 Feb 1993> man pages incomplete
+--
+s.voronoi - Uses a GRASS sites list  to  produce  a  Voronoi diagram.
+s.delauney - Uses a GRASS sites list  to  produce  to Delauney triangulation.
+
+Both of these functions utilize s.sweep (located in the ETC directory
+instead of BIN_MAIN_CMD). s.sweep is a slightly modified version of sweep2,
+which can be found on netlib sites (e.g., research.att.com).
+
+
+MANIFEST:
+README Gmakefile dt_main.c dt_triangles.c init_head.c
+s.delaunay.man s.sweep.man s.voronoi.man
+sw_defs.h sw_edgelist.c sw_geometry.c sw_heap.c sw_main.c sw_memory.c
+sw_output.c sw_voronoi.c
+vo_cats_att.c vo_extend.c vo_inregion.c vo_main.c vo_polygons.c
+-------------------------
+This was developed from something called sweep2, 
+which can be found on netlib sites (e.g., research.att.com). I
+do not claim in any way to be an expert in computational geometry.
+The only real additions that I made was the GRASS wrapper and making
+a few cosmetic changes to Fortune's output routines.
+
+There's a few places where the code needs cleaning up (i.e., there's a 
+few areas where I need to do some re-allocation of memory, but I didn't get 
+around to doing this). 
+
+This is a complete re-write of the old s.voronoi. If you find any bugs,
+let me know.
+
+James Darrell McCauley
+mccauley@ecn.purdue.edu
+
+-----------------------------------------
+UPDATE 1/5/2001
+I updtated McCauley file to address slowness, some numerical 
+problem related to line segment parameters in s.sweep output
+and to improve speed. I also updated both commands to use
+GRASS 5 site API. A speed improvement is still possible
+by making s.sweep and s.voronoi/s.delaunay a single executable,
+but up to now this does not make sense since most of the
+time is spend in label output... Hoping to fix this in GRASS5.1
+
+Andrea Aime
+aaime@libero.it
+
+-----------------------------------------
+UPDATE 10/2004
+- Copy grass/src/sites/s.voronoi to grass51/vector/v.voronoi
+- Rewritten to read/write directly GRASS vector files.
+
+Radim Blazek
+
+-----------------------------------------
+UPDATE 4/2008
+- better memory management
+- 3D support for Delaunay
+- TODO: complete it for Voronoi if desired
+
+Benjamin Ducke
+
+-----------------------------------------
+Jan 2009
+
+Removed delaunay part as rewritten in ../v.delaunay2/
+
+Markus Neteler

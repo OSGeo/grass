@@ -1,0 +1,26 @@
+this is d.legend (formerly d.leg.thin).
+
+
+HISTORY:
+From: Markus Neteler <neteler@itc.it>
+Subject: Re: [GRASS5] Changes between 5.0.1 release and current CVS head
+Date: Mon, 3 Feb 2003 13:59:06 +0100
+To: grass5@grass.itc.it
+
+[...]
+
+Once upon a time there were d.legend *and* d.leg.thin (a try for a better
+implementation of d.legend). Then I merged both, in fact I merged a few good
+pieces of d.legend into d.leg.thin and renamed it in Gmakefile to d.legend
+(to avoid user's confusion as a d.leg.thin without d.legend didn't make
+sense).
+That's why d.legend continued to live in src/display/d.leg.thin (but
+in the Gmakefile it is called d.legend).
+
+Yes, a bit confusing. But today only the directory name is confusing.
+
+Hope this clarifies it. In 5.1 we should store it into
+display/d.legend
+
+Markus
+

@@ -1,0 +1,58 @@
+TODO list
+=========
+
+GRASS 7:
+# TODO: change the examples to North Carolina wherever possible:
+
+# Spearfish tests
+g.region raster=landcover.30m -p
+r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
+d.mon wx0
+d.rast forests
+
+# g.gui.rlisetup:
+# created as described in EXAMPLES, moving window, in g.gui.rlisetup.html:
+echo "SAMPLINGFRAME 0|0|1|1
+SAMPLEAREA -1|-1|0.015021459227467811|0.011058451816745656
+MOVINGWINDOW" > $HOME/.grass7/r.li/movwindow7
+
+r.li.patchdensity forests conf=movwindow7 output=forests_p_dens7
+d.rast.leg forests_p_dens7
+
+r.to.vect forests out=forests type=area
+d.vect forests type=boundary
+
+######## TODO: CHECK THIS:
+
+# MASK test
+g.copy rast=fields,MASK
+r.li.patchdensity forests conf=movwindow7 output=forests_p_dens7mask --o
+d.erase
+d.rast.leg forests_p_dens7mask
+# -> no negative values! but MASK is respected
+
+# zero data test
+r.mapcalc "forests = 0"
+r.li.patchdensity forests conf=movwindow7 output=forests_p_dens7 --o
+d.erase
+d.rast.leg forests_p_dens7mask
+r.info -r forests_p_dens7
+min=0
+max=204.081632653061
+
+========================
+North Carolina tests
+
+# Tests with return an ASCII output file
+sh ./r.li.testing_nc_asc.sh
+
+---------
+
+echo "SAMPLINGFRAME 0|0|1|1
+SAMPLEAREA 0.0|0.0|1.0|1.0" > $HOME/.grass7/r.li/landsat_test
+
+g.region raster=lsat7_2002_40 -p
+r.li.shannon input=lsat7_2002_40 conf=landsat_test output=landsat_shannon
+--> Result written to ASCII file <$HOME/.grass7/r.li/output/landsat_shannon>
+
+

@@ -1,0 +1,15 @@
+/*! \page vlibTin Vector TINs
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+<em>This page needs to be enhanced.</em>
+
+\section vlibTinIntro Short introduction
+
+TINs are simply created as 2D/3D vector polygons consisting of 
+3 vertices. See Vect_tin_get_z().
+
+
+*/

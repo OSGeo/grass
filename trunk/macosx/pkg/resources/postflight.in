@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# configured
+
+INST_DIR="@INST_DIR@"
+MACOSX_SUPPDIR="@MACOSX_SUPPDIR@"
+GRASS_VER="@GRASS_VER@"
+
+# support folder
+
+mkdir -p "$MACOSX_SUPPDIR"
+mkdir -p "$MACOSX_SUPPDIR/Modules/bin"
+mkdir -p "$MACOSX_SUPPDIR/Modules/lib"
+mkdir -p "$MACOSX_SUPPDIR/Modules/etc"
+mkdir -p "$MACOSX_SUPPDIR/Modules/docs/html"
+
+# compile python - use python version GRASS was compiled for
+
+pyver_want="@PYVER@"
+py=`type -p python`
+if [ "$py" ] ; then
+	pyver=`python -V 2>&1 | grep " $pyver_want"`
+	if [ ! "$pyver" ] ; then
+		py=""
+	else
+		pyconf="python-config"
+	fi
+fi
+# try standard framework
+if [ ! "$py" ] ; then
+	py="/Library/Frameworks/Python.framework/Versions/$pyver_want/bin/python"
+	if [ ! -x "$py" ] ; then
+		py=""
+	else
+		pyconf="/Library/Frameworks/Python.framework/Versions/$pyver_want/bin/python-config"
+	fi
+fi
+# try system (may be the same as in shell path)
+if [ ! "$py" ] ; then
+	py="/usr/bin/python"
+	pyver=`$py -V 2>&1 | grep " $pyver_want"`
+	if [ ! "$pyver" ] ; then
+		py=""
+	else
+		pyconf="/usr/bin/python-config"
+	fi
+fi
+if [ "$py" ] ; then
+	pycompile=`$pyconf --prefix`/lib/python$pyver_want/compileall.py
+	if [ ! -e "$pycompile" ] ; then
+		pycompile=`$pyconf --prefix`/lib/python$pyver_want/compileall.pyc
+	fi
+	$py $pycompile "$INST_DIR"
+fi
+
+# readme
+# needs a better home?
+
+cp -f "$PACKAGE_PATH/Contents/Resources/ReadMe.rtf" "/Users/Shared/GRASS-$GRASS_VER-ReadMe.rtf"
+
+exit 0

@@ -1,0 +1,112 @@
+# Datum Transformation Parameter Lists for GRASS
+# (allows multiple different sets of datum transformation parameters to be
+#  supplied for any datum)
+#
+# Line Format:
+# shortname "parameters" "Where Used" "Comment"
+#
+# where
+# * parameters can be in any format accepted by PROJ.4, 
+#   so towgs84= 3 parameters or 7 parameters, or nadgrids=
+# * area of validity
+# * comment
+# Hence, 4 fields on each line, and shortname should be already
+# listed in datum.table.
+#
+# All but 1st field must be enclosed in quotes ("") An empty field can
+# contain a single space between the quotes (" ") but try to provide as
+# much detail as possible for the user.
+#
+# Note: datum.table only holds one 3-parameter transformation. Extra sets of 
+# transformation parameters may be defined in this file for each datum
+# and will be presented to the user to select the most appropriate one for
+# his/her location. The "Where Used" and "Comment" fields should contain
+# information to aid in the user's decision.
+# If only the 7-parameter transformation is desired/known, set all 3 of
+# the 3-term parameters in datum.table to be 99999, along with the correct
+# ellipsoid.
+#
+# Any supplementary files needed by the PROJ.4 library (e.g. gridshift tables) 
+# should be placed in the directory $GISBASE/etc/proj/nad/.
+#
+# http://www.osni.gov.uk/downloads/Making%20maps%20GPS%20compatible.pdf
+ire65	"towgs84=482.530,-130.596,564.557,-1.042,-0.214,-0.631,8.15" "Ireland (North & South)"	"OSi/OSNI Helmert Transformation, Accuracy 0.4m"
+# http://www.ngs.noaa.gov/TOOLS/Nadcon/Nadcon.html
+nad27	"nadgrids=conus"        "Conterminous United States"	  " "
+nad27	"nadgrids=ntv1_can.dat" "Canada"	  " "
+nad27	"nadgrids=alaska"       "Alaska" " "
+nad27	"nadgrids=hawaii"       "Hawaii" " "
+nad27	"nadgrids=prvi"         "Puerto Rico-Virgin Is." " "
+nad27	"nadgrids=stgeorge"     "St. George Is., AK" " "
+nad27	"nadgrids=stlrnc"       "St. Lawrence Island, AK" " "
+nad27	"nadgrids=stpaul"       "St. Paul Island, AK" " "
+nad83	"nadgrids=FL"           "Florida" "Transforms 'Old NAD83' to 'HPGN NAD83'"
+nad83	"nadgrids=MD"           "Maryland" "Transforms 'Old NAD83' to 'HPGN NAD83'"
+nad83	"nadgrids=TN"           "Tennessee" "Transforms 'Old NAD83' to 'HPGN NAD83'"
+nad83	"nadgrids=WI"           "Wisconsin" "Transforms 'Old NAD83' to 'HPGN NAD83'"
+nad83	"nadgrids=WO"           "Washington - Oregon" "Transforms 'Old NAD83' to 'HPGN NAD83'"
+# http://www.gps.gov.uk/guide6.asp
+osgb36  "towgs84=446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894" "Great Britain" "Accuracy 5m"
+# http://crs.ifag.de/
+# http://crs.bkg.bund.de/crs-eu
+# http://www.crs-geo.eu
+hermannskogel "towgs84=577.326,90.129,463.919,5.1366,1.4742,5.2970,2.4232" "Austria" "Accuracy approx. 1.5m"
+# http://grass.fsv.cvut.cz/gwiki/S-JTSK
+hermannskogel "towgs84=570.8,85.7,462.8,4.998,1.587,5.261,3.56" "Czech Republic" " "
+# These parameters for Slovak S-JTSK coordinate system were recommended
+# by the Geodetic and Cartographic Institute Bratislava in 19/12/2006,
+# http://www.gku.sk
+hermannskogel "towgs84=485.021,169.465,483.839,7.786342,4.397554,4.102655,0" "Slovakia" " "
+hermannskogel "towgs84=426.9,142.6,460.1,4.91,4.49,-12.42,17.1" "Slovenia" " "
+S-42    "towgs84=24.9,-126.4,-93.2,-0.063,-0.247,-0.041,1.01" "Germany (Mecklenburg-Vorpommern & Sachsen-Anhalt)" "Accuracy <1m"
+S-42    "towgs84=33.4,-146.6,-76.3,-0.359,-0.053,0.844,-0.84" "Poland" " "
+# NIMA document TR8350.2
+# http://earth-info.nga.mil/GandG/publications/tr8350.2/tr8350_2.html
+S-42    "towgs84=24,-130,-92" "Albania" " "
+S-42    "towgs84=28,-121,-77" "Hungary" " "
+S-42    "towgs84=15,-130,-84" "Kazakhstan" " "
+S-42    "towgs84=24,-124,-82" "Latvia" " "
+S-42    "towgs84=28,-121,-77" "Romania" " "
+S-42    "towgs84=26,-121,-78" "Czech Republic, Slovak Republic" " "
+# http://crs.bkg.bund.de/crs-eu
+rome40  "towgs84=-104.1,-49.1,-9.9,0.971,-2.917,0.714,-11.68" "Italy (Peninsular Part)" "Accuracy 3-4m"
+rome40  "towgs84=-168.6,-34.0,38.6,-0.374,-0.679,-1.379,-9.48" "Italy (Sardinia)" "Accuracy 3-4m"
+rome40  "towgs84=-50.2,-50.4,84.8,-0.690,-2.012,0.459,-28.08" "Italy (Sicily)" "Accuracy 3-4m"
+eur50   "towgs84=-81.1,-89.4,-115.8,0.485,0.024,0.413,-0.54" "Denmark" " "
+eur50   "towgs84=-84,-97,-117"  "France" "Accuracy about 2m"
+eur50   "towgs84=-116.8,-106.4,-154.4" "Gibraltar" " "
+eur50   "towgs84=-131,-100.3,-163.4,-1.244,-0.020,-1.144,9.39" "Spain (except Northwest)" "Accuracy about 1.5m"
+eur50   "towgs84=-178.4,-83.2,-221.3,0.540,-0.532,-0.126,21.2" "Spain (Northwest only - 41d30'N to 43d50'N and 4d30'W to 9d25'W)" "Accuracy 1.5m"
+eur50   "towgs84=-181.5,-90.3,-187.2,0.144,0.492,-0.394,17.57" "Spain (Balearic Islands)" "Accuracy about 1.5m"
+eur50   "towgs84=-84.1,-101.8,-129.7,0,0,0.468,1.05" "Turkey" "Accuracy about 2m"
+potsdam "towgs84=612.4,77.0,440.2,-0.054,0.057,-2.797,2.55" "Germany (Sachsen)" "Accuracy <1m"
+potsdam "towgs84=599.4,72.4,419.2,-0.063,-0.022,-2.723,6.46" "Germany (Thüringen)" "Accuracy <1m"
+potsdam "towgs84=590.5,69.5,411.6,-0.796,-0.052,-3.601,8.30" "Germany (West - North - 52d20'N to 55d00'N)" "Accuracy <1m"
+potsdam "towgs84=584.8,67.0,400.3,0.105,0.013,-2.378,10.29" "Germany (West - Middle - 50d20'N to 52d20'N)" "Accuracy <1m"
+potsdam "towgs84=597.1,71.4,412.1,0.894,0.068,-1.563,7.58" "Germany (West - South - 47d00N to 50d20'N)" "Accuracy <1m"
+potsdam "towgs84=598.1,73.7,418.2,0.202,0.045,-2.455,6.70" "Germany (Whole Country)" "Accuracy 3m"
+rd18    "towgs84=565.036,49.914,465.839,-0.4094,0.3597,-1.86854,-4.0772" "Netherlands" "Accuracy about 0.3m"
+bel72   "towgs84=-99.1,53.3,-112.5,0.419,-0.830,1.885,-1.00" "Belgium" "Accuracy about 0.3m"
+por73   "towgs84=-231.0,102.6,29.8,0.615,-0.198,0.881,1.79" "Portugal" " "
+lis37   "towgs84=-282.1,-72.2,120.0,-1.592,0.145,-0.890,-4.46" "Portugal" "Accuracy about 3m"
+ngo48   "towgs84=278.3,93.0,474.5,7.889,0.050,-6.610,6.21" "Norway" "Accuracy about 3m"
+rt90    "towgs84=414.1,41.3,603.1,-0.855,2.141,-7.023,0" "Sweden" " "
+# From GRASS datum.table file
+sam69   "towgs84=-60.0,-2.0,-41.0" "Brazil" " "
+sam69   "towgs84=-77.0,3.0,-45.0" "South America?" "Old GRASS sam69 parameters"
+nad27   "towgs84=-9.0,151.0,185.0" "Alaska & Canada" "Old GRASS a-can parameters"
+# http://www.linz.govt.nz/geodetic/conversion-coordinates/geodetic-datum-conversion/nzgd1949-nzgd2000/distortion-grid/
+nzgd49  "nadgrids=nzgd2kgrid0005.gsb"  "New Zealand"   "LINZ NZGD49 NTv2 Distortion Model, accuracy 10-30cm" 
+# http://www.linz.govt.nz/geodetic/conversion-coordinates/geodetic-datum-conversion/nzgd1949-nzgd2000/three-and-seven-parameter/
+#  note: values in above URL use the Helmert convention for the sign of rotation terms, while PROJ.4 uses the Bursa-Wolf convention.
+nzgd49  "towgs84=59.47,-5.04,187.44,0.47,-0.1,1.024,-4.5993" "New Zealand" "Accuracy approx. 4m"
+tokyo   "towgs84=-147.54,507.26,680.47" "Japan" " "
+tokyo   "towgs84=-147,506,687" "South Korea" " "
+# Campo Inchauspe, personal communication CONAE (http://www.conae.gov.ar), Argentina:
+cai     "towgs84=-149.1,138.1,90.9,-0.142,0.344,0.301,0.388" "Argentina" "provided by CONAE, Argentina"
+# http://lists.maptools.org/pipermail/proj/2012-September/006413.html
+itrf92	"towgs84=0,0,0,0,0,0,0" "Mexico" "Considered identical to WGS84"
+# http://epsg.io/5514 System_Jednotne_Trigonometricke_Site_Katastralni
+S_JTSK	"towgs84=570.8,85.7,462.8,4.998,1.587,5.261,3.56" "Czech Republic" "Accuracy about 1m"
+S_JTSK	"towgs84=572.213,85.334,461.94,-4.9732,-1.529,-5.2484,3.5378" "Czech Republic" "Accuracy about 1m"
+S_JTSK	"towgs84=485,169.5,483.8,7.786,4.398,4.103,0" "Slovakia" "Accuracy about 1m"

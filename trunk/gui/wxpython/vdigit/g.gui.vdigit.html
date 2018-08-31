@@ -1,0 +1,309 @@
+<!-- meta page description: wxGUI Vector Digitizer -->
+<!-- meta page index: topic_gui|GUI -->
+<h2>DESCRIPTION</h2>
+
+The <b>vector digitizer</b> is a <em><a href="wxGUI.html">wxGUI</a></em>
+component intended for interactive editing and digitizing vector maps
+(see <em><a href="v.edit.html">v.edit</a></em> for non-interactive
+vector editing GRASS capabilities).
+
+<p>
+Note that only vector maps stored or generated in the <i>current</i>
+mapset can be opened for editing.
+
+<p>
+The digitizer allows editing of 2D vector features (points, lines,
+centroids, boundaries, and areas).
+
+<p>
+Vector features can be selected by mouse (bounding box or simply by
+mouse click, see select threshold
+in <i>Settings&rarr;General&rarr;Select threshold</i>), or by query
+(eg. by line length, see <i>Settings&rarr;Query Tool</i>).
+
+<h3>STARTING THE DIGITIZER</h3>
+
+The vector digitizer can be launched from Map Display toolbar by selecting
+&quot;Digitize&quot; from <i>Tools</i> combobox. Vector map is
+selectable for editing from Digitizer toolbar (&quot;Select vector
+map&quot; combobox, note that only vector maps from the current layer
+tree in Layer Manager are listed).
+
+The vector digitizer can alternatively be activated from the contextual
+menu in the Layer Manager by selecting "Start editing" on selected vector
+map in the layer tree, or directly from the Layer Manager
+toolbar <img src="icons/edit.png" alt="icon">.
+
+The vector digitizer also can also be launched from the command line as a
+stand-alone application <em>g.gui.vdigit</em>.
+
+<h3>CREATING A NEW VECTOR MAP</h3>
+
+A new vector map can be easily created from the digitizer toolbar by
+selecting &quot;New vector map&quot; in &quot;Select vector map&quot;
+combobox. A new vector map is created, added to the current layer tree
+in Layer Manager and opened for editing. &quot;Select vector map&quot;
+combobox in the digitizer toolbar also allows easily switching between
+vector maps to be edited.
+
+<h3>EDITING AN EXISTING VECTOR MAP</h3>
+
+An existing vector map selected in the digitizer toolbar in the
+&quot;Select vector map&quot; combobox. This map is then opened for editing
+and added to the current layer tree in the <em>Layer Manager</em>. This
+&quot;Select vector map&quot; combobox in the digitizer toolbar also allows
+to easily switch between vector maps to be edited.
+
+<h3>USING A RASTER BACKGROUND MAP</h3>
+
+In order to digitize from a raster map, simply load the map into the
+<em>Map Display</em> using the <em>Layer Manager</em>. Then start digitizing,
+see below for details.
+
+<h3>USING A VECTOR BACKGROUND MAP</h3>
+
+The vector digitizer allows you to select a &quot;background&quot; vector map.
+Loading it within the digitizer is different from simply loading it via 
+<em>Layer Manager</em> since direct interaction with single vector features
+then becomes possible.<br>
+Vector features may be copied from the background map by &quot;Copy features from
+(background) vector map&quot; tool from the &quot;Additional tools&quot; of the
+digitizer toolbar.
+Newly digitized vector features are snapped in the given threshold to the features
+from the background map.
+
+<h3>DIGITIZER TOOLBAR</h3>
+
+<center>
+<br>
+<img src="vdigit_toolbar.jpg" border="1" alt="Vector Digitizer Toolbar">
+<br><br>
+</center>
+
+<dl>
+  <dt><img src="icons/point-create.png" alt="icon">&nbsp;
+    <em>Digitize new point</em></dt>
+  <dd>Add new point to vector map and optionally define its
+    attributes.</dd>
+  
+  <dt><img src="icons/line-create.png" alt="icon">&nbsp;
+    <em>Digitize new line</em></dt>
+  <dd>Add new line to vector map and optionally define its
+    attributes.</dd>
+
+  <dt><img src="icons/boundary-create.png" alt="icon">&nbsp;
+    <em>Digitize new boundary</em></dt>
+  <dd>Add new boundary to vector map and optionally define its
+    attributes.</dd>
+  
+  <dt><img src="icons/centroid-create.png" alt="icon">&nbsp;
+    <em>Digitize new centroid</em></dt>
+  <dd>Add new centroid to vector map and optionally define its
+    attributes.</dd>
+
+  <dt><img src="icons/polygon-create.png" alt="icon">&nbsp;
+    <em>Digitize new area</em></dt>
+  <dd>Add new area (closed boundary and one centroid inside) to vector
+    map and optionally define its attributes.</dd>
+  
+  <dt><img src="icons/vertex-move.png" alt="icon">&nbsp;
+    <em>Move vertex</em></dt>
+  <dd>Move selected vertex of linear feature. Thus shape of linear
+    feature is changed.</dd>
+
+  <dt><img src="icons/vertex-create.png" alt="icon">&nbsp;
+    <em>Add vertex</em></dt>
+  <dd>Add new vertex to selected linear feature (shape not
+    changed).</dd>
+
+  <dt><img src="icons/vertex-delete.png" alt="icon">&nbsp;
+    <em>Remove vertex</em></dt>
+  <dd>Remove selected vertex from linear feature. Thus shape of selected
+  feature can be changed.</dd>
+  
+  <dt><img src="icons/line-edit.png" alt="icon">&nbsp;
+    <em>Edit line/boundary</em></dt>
+  <dd>Edit selected linear feature, add new segments or remove
+  existing segments of linear feature.</dd>
+
+  <dt><img src="icons/line-move.png" alt="icon">&nbsp;
+    <em>Move feature(s)</em></dt>
+  <dd>Move selected vector features. Selection can be done by mouse or
+    by query.</dd>
+
+  <dt><img src="icons/line-delete.png" alt="icon">&nbsp;
+    <em>Delete feature(s)</em></dt>
+  <dd>Delete selected vector features (point, line, centroid, or
+  boundary). Selection can be done by mouse or by query.</dd>
+
+  <dt><img src="icons/polygon-delete.png" alt="icon">&nbsp;
+    <em>Delete areas(s)</em></dt>
+  <dd>Delete selected vector areas. Selection can be done by mouse
+  or by query.</dd>
+
+  <dt><img src="icons/cats-display.png" alt="icon">&nbsp;
+    <em>Display/update categories</em></dt>
+  <dd>Display categories of selected vector feature. Category settings
+  can be modified, new layer/category pairs added or already defined pairs
+  removed.</dd>
+
+  <dt><img src="icons/attributes-display.png" alt="icon">&nbsp;
+    <em>Display/update attributes</em></dt>
+  <dd>Display attributes of selected vector feature (based on its
+    category settings).  Attributes can be also modified. Same
+    functionality is accessible from Main toolbar "Query vector map
+    (editable mode)".</dd>
+
+  <dt><img src="icons/tools.png" alt="icon">&nbsp;
+    <em>Additional tools</em></dt>
+  <dd>
+    <ul>
+      <li><em>Break selected lines/boundaries at intersection</em><br> Split
+	given vector line or boundary into two lines on given position
+	(based on <em><a href="v.clean.html">v.clean</a></em>,
+	<tt>tool=break</tt>).</li>
+
+      <li><em>Connect two selected lines/boundaries</em><br> Connect selected
+	lines or boundaries, the first given line is connected to the
+	second one. The second line is broken if necessary on each intersection.
+	The lines are connected only if distance between them is not greater
+	than snapping threshold value.</li>
+
+      <li><em>Copy categories</em><br>Copy category settings of
+	selected vector feature to other vector
+	features. Layer/category pairs of source vector features are
+	appended to the target feature category settings. Existing
+	layer/category pairs are not removed from category settings of
+	the target features.</li>
+
+      <li><em>Copy features from (background) vector map</em><br> Make identical copy of
+	selected vector features. If a background vector map has been 
+	selected from the Layer Manager, copy features from background 
+	vector map, not from the currently modified vector map.</li>
+
+      <li><em>Copy attributes</em><br>Duplicate attributes settings of
+	selected vector feature to other vector features. New
+	category(ies) is appended to the target feature category
+	settings and attributes duplicated based on category settings
+	of source vector features. Existing layer/category pairs are
+	not removed from category settings of the target
+	features.</li>
+
+      <li><em>Feature type conversion</em><br> Change feature type of selected
+	geometry features. Points are converted to centroids,
+	centroids to points, lines to boundaries and boundaries to
+	lines.</li>
+
+      <li><em>Flip selected lines/boundaries</em><br> Flip direction of
+	selected linear features (lines or boundaries).</li>
+
+      <li><em>Merge selected lines/boundaries</em><br> Merge (at least two)
+	selected vector lines or boundaries. The geometry of the
+	merged vector lines can be changed. If the second line from
+	two selected lines is in opposite direction to the first, it
+	will be flipped. See also
+	module <em><a href="v.build.polylines.html">v.build.polylines</a></em>.</li>
+
+      <li><em>Snap selected lines/boundaries (only to nodes)</em><br> Snap
+	vector features in given threshold. See also
+	module <em><a href="v.clean.html">v.clean</a></em>. Note that
+	this tool supports only snapping to nodes. Snapping to vector
+	features from background vector map is not currently
+	supported.</li>
+
+      <li><em>Split line/boundary</em><br>Split selected line or boundary on
+      given position.</li>
+
+      <li><em>Query tool</em><br>Select vector features by defining a threshold for
+        min/max length value (linear features or dangles).</li>
+
+      <li><em>Z-bulk labeling of 3D lines</em><br> Assign z coordinate values to 3D
+	vector lines in bounding box. This is useful for labeling contour lines.</li>
+    </ul>
+  </dd>
+
+  <dt><img src="icons/undo.png" alt="icon">&nbsp;
+    <em>Undo</em></dt>
+  <dd>Undo previous operations.</dd>
+
+  <dt><img src="icons/redo.png" alt="icon">&nbsp;
+    <em>Redo</em></dt>
+  <dd>Redo previous operations.</dd>
+
+  <dt><img src="icons/settings.png" alt="icon">&nbsp;
+    <em>Settings</em></dt>
+  <dd>Digitizer settings.</dd>
+
+  <dt><img src="icons/quit.png" alt="icon">&nbsp;
+    <em>Quit digitizing tool</em></dt>
+  <dd>Changes in vector map can be optionally discarded when
+  digitizing session is quited.</dd>
+
+</dl>
+
+<h2>NOTES</h2>
+
+<dl><dt><b>Mouse button functions:</b><dd>
+	<dt><i>Left</i>   - select or deselect features</dt>
+	<dt><i>Control+Left</i> - cancel action or undo vertex when digitizing lines</dt>
+	<dt><i>Right</i>  - confirm action</dt>
+</dl>
+
+<p>
+<i>Dead (deleted)</i> features are only marked as 'dead' in the geometry file
+but remain there and occupy space. Any vector module
+used afterwards on this vector map which really reads and writes
+vector geometry (so not <em><a href="g.copy.html">g.copy</a></em>)
+will write only features which are 'alive'.
+
+<p>
+<i>Added or modified</i> vector features are <i>snapped</i> to
+existing vector features (Settings&rarr;General&rarr;Snapping). To
+disable snapping set the snapping threshold to '0'.
+
+<p>
+If the digitizer crashes for some reason, the changes are
+automatically saved. Broken topology can be repaired by running
+<em><a href="v.build.html">v.build</a></em>.
+
+<p>
+GRASS GIS uses a topological vector format, meaning that a common boundary of 
+two polygons is only stored once. When digitizing polygons it is thus important
+to be able to only draw each boundary once. When drawing a polygon adjacent to an
+existing polygon, one has to first split the existing boundary at the points where 
+the new boundary will be attached. Snapping should be set to ensure that the new 
+boundaries are automatically attached to the chosen points.
+
+<h2>REFERENCES</h2>
+
+<ul>
+  <li><a href="http://grass.osgeo.org/programming7/veditlib.html">GRASS Vedit Library</a></li>
+  <li><a href="http://grasswiki.osgeo.org/wiki/Vector_Database_Management">Vector Database Management</a> (Wiki page)</li>
+</ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="wxGUI.html">wxGUI</a><br>
+<a href="wxGUI.components.html">wxGUI components</a>
+</em>
+
+<p>
+<em>
+<a href="v.edit.html">v.edit</a>,
+<a href="v.category.html">v.category</a>,
+<a href="v.build.html">v.build</a>
+</em>
+
+<p>
+See also the <a href="http://grasswiki.osgeo.org/wiki/WxGUI_Vector_Digitizer">WxGUI Vector Digitizer Wiki page</a>
+including <a href="http://grasswiki.osgeo.org/wiki/WxGUI_Vector_Digitizer#Vector_tutorials">video
+tutorials</a>.
+
+<h2>AUTHOR</h2>
+
+Martin Landa, FBK-irst (2007-2008), Trento, Italy, and Czech Technical
+University in Prague, Czech Republic
+
+<p>
+<i>$Date$</i>

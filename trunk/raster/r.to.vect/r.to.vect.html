@@ -1,0 +1,150 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.to.vect</em> scans the named <b>input</b> raster map
+layer, extracts points, lines or area edge features from it, converts data
+to GRASS vector format.
+
+<h3>Point conversion</h3>
+
+The <em>r.to.vect</em> program extracts data from a GRASS raster map 
+layer and stores output in a new GRASS <em>vector</em> file.  
+
+<h3>Line conversion</h3>
+<em>r.to.vect</em> assumes that the <em>input</em> map has been thinned
+using <em><a href="r.thin.html">r.thin</a></em>.
+
+<p>
+<em>r.to.vect</em> extracts vectors (aka, "arcs") from a
+raster map.  These arcs may represent linear features
+(like roads or streams), or may represent area edge
+features (like political boundaries, or soil mapping
+units).  
+
+<p>
+<em><a href="r.thin.html">r.thin</a></em> and <em>r.to.vect</em>
+may create excessive nodes at every junction, and may create small spurs
+or "dangling lines" during the thinning and vectorization process.
+These excessive nodes and spurs may be removed using
+<em><a href="v.clean.html">v.clean</a></em>.
+
+
+<h3>Area conversion</h3>
+
+<em>r.to.vect</em> first traces the perimeter of each unique
+area in the raster map layer and creates vector data to
+represent it.  The cell category values for the raster map
+layer will be used to create attribute information for the
+resultant vector area edge data.
+
+<p>
+A true vector tracing of the area edges might appear
+blocky, since the vectors outline the edges of raster data
+that are stored in rectangular cells. To produce a
+better-looking vector map, <em>r.to.vect</em> smoothes the
+corners of the vector data as they are being extracted. At
+each change in direction (i.e., each corner), the two
+midpoints of the corner cell (half the cell's height and
+width) are taken, and the line segment connecting them is
+used to outline this corner in the resultant vector map.
+(The cell's cornermost node is ignored.) Because vectors
+are smoothed by this program, the resulting vector map will
+not be "true" to the raster map from which it was created.
+The user should check the resolution of the geographic
+region (and the original data) to estimate the possible
+error introduced by smoothing.
+
+<p>
+<em>r.to.vect</em> extracts only area edges from the named raster 
+input file. If the raster map contains other data (i.e., line edges, 
+or point data) the output may be wrong.
+
+<h2>EXAMPLES</h2>
+
+The examples are based on the North Carolina sample dataset:
+<p>
+<b>Conversion of raster points to vector points:</b>
+<p>
+Random sampling of points:
+<div class="code"><pre>
+g.region raster=elevation -p
+# random sampling of points (note that r.random also writes vector points)
+r.random elevation raster_output=elevrand1000 n=1000
+r.to.vect input=elevrand1000 output=elevrand1000 type=point
+# univariate statistics of sample points
+v.univar elevrand1000 column=value type=point
+# compare to univariate statistics on original full raster map
+r.univar elevation
+</pre></div>
+<p>
+
+<b>Conversion of raster lines to vector lines:</b>
+<p>
+Vectorization of streams in watershed basins map:
+<div class="code"><pre>
+g.region raster=elevation -p
+r.watershed elev=elevation stream=elev.streams thresh=50000
+r.to.vect -s input=elev.streams output=elev_streams type=line
+# drop "label" column which is superfluous in this example
+v.db.dropcolumn map=elev_streams column=label
+v.db.renamecolumn map=elev_streams column=value,basin_id
+# report length per basin ID
+v.report map=elev_streams option=length units=meters sort=asc
+</pre></div>
+<p>
+
+<b>Conversion of raster polygons to vector polygons:</b>
+<p>
+Vectorization of simplified landuse class map:
+<div class="code"><pre>
+g.region raster=landclass96 -p
+# we smooth corners of area features
+r.to.vect -s input=landclass96 output=my_landclass96 type=area
+v.colors my_landclass96 color=random
+</pre></div>
+
+<h2>KNOWN ISSUES</h2>
+
+For type=line the input raster map MUST be thinned by
+<em><a href="r.thin.html">r.thin</a></em>;
+if not, <em>r.to.vect</em> may crash.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r.thin.html">r.thin</a>,
+<a href="v.clean.html">v.clean</a>
+</em>
+
+<h2>AUTHORS</h2>
+<b>Point support</b><br>
+Bill Brown<br>
+<br>
+
+<b>Line support</b><br>
+Mike Baba<br>
+DBA Systems, Inc.<br>
+10560 Arrowhead Drive<br>
+Fairfax, Virginia 22030<br>
+<br>
+
+<b>Area support</b><br>
+<em>Original</em> version of <em>r.poly</em>: 
+<br>
+Jean Ezell and Andrew Heekin, 
+<br>
+U.S. Army Construction Engineering 
+Research Laboratory
+
+<p><em>Modified</em> program for smoothed lines: 
+<br>
+David Satnik, 
+Central Washington University
+<br>
+Updated 2001 by Andrea Aime, Modena, Italy<br>
+<br>
+
+<b>Update</b><br>
+Original r.to.sites, r.line and r.poly merged and updated to 5.7 by Radim Blazek
+
+<p><i>Last changed: $Date$</i>

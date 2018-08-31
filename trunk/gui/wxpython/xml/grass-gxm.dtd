@@ -1,0 +1,105 @@
+<!--	grass-gxm.dtd
+
+	Copyright (C) 2010 by the GRASS Development Team
+	Author: Martin Landa <landa.martin gmail.com>
+	
+	This program is free software under the GPL (>=v2)
+	Read the file COPYING coming with GRASS for details.
+-->
+
+
+<!--
+        grass-gxm defines model file content
+-->
+
+<!ELEMENT grass-gxm (gxm)>
+
+<!ELEMENT gxm (action*, data*, loop*, properties?, variables?)>
+
+<!--    an action defines action properties (usually GRASS modules)
+-->
+<!ELEMENT action (comment?, task)>
+<!ATTLIST action id	CDATA #REQUIRED>
+<!ATTLIST action name	CDATA #REQUIRED>
+<!ATTLIST action pos	CDATA #REQUIRED>
+<!ATTLIST action size	CDATA #REQUIRED>
+
+<!--    action comment
+-->
+<!ELEMENT comment         (#PCDATA)>
+
+<!--	a task describes the interface of a single
+	GRASS command
+-->
+<!ELEMENT task	        (flag*, parameter*, disabled?)>
+<!ATTLIST task	name	CDATA #REQUIRED>
+
+<!--	defines task to be enabled/disabled
+-->
+<!ELEMENT disabled    EMPTY>
+
+<!--	a parameter must have a name and a value
+-->
+<!ELEMENT parameter     (value, parameterized?)>
+<!ATTLIST parameter	name	CDATA #REQUIRED>
+
+<!--    value of parameter
+-->
+<!ELEMENT value         (#PCDATA)>
+
+<!--	parameterized
+-->
+<!ELEMENT parameterized EMPTY>
+
+<!--    enabled flag
+-->
+<!ELEMENT flag          EMPTY>
+<!ATTLIST flag          name    CDATA #REQUIRED>
+<!ATTLIST parameterized         (0|1) #IMPLIED>
+
+<!--    a data defines data properties (usually data layers)
+-->
+<!ELEMENT data (data-parameter, intermediate?, relation*)>
+<!ATTLIST data pos	CDATA #REQUIRED>
+<!ATTLIST data size	CDATA #REQUIRED>
+
+<!--	a data-parameter defines data items properties
+-->
+<!ELEMENT data-parameter  (value)>
+<!ATTLIST data-parameter  prompt	CDATA #REQUIRED>
+
+<!--	a data intermediate?
+-->
+<!ELEMENT intermediate    EMPTY>
+
+<!--	a relation defines relation between data and actions
+-->
+<!ELEMENT relation  (point*)>
+<!ATTLIST relation  id  	CDATA       #REQUIRED>
+<!ATTLIST relation  dir	        (from | to) #REQUIRED>
+<!ATTLIST relation  name  	CDATA       #REQUIRED>
+
+<!--	a point defines control point of linear shape
+-->
+<!ELEMENT point  (x, y)>
+<!ELEMENT x      (#PCDATA)>
+<!ELEMENT y      (#PCDATA)>
+
+<!--	a properties describes model properties
+-->
+<!ELEMENT properties    (name?, description?, author?, flag*)>
+<!ELEMENT name          (#PCDATA)>
+<!ELEMENT description   (#PCDATA)>
+<!ELEMENT author        (#PCDATA)>
+
+<!--	a variable describes model variable
+-->
+<!ELEMENT variables       (variable*)>
+<!ELEMENT variable        (description?, value?)>
+<!ATTLIST variable  name  CDATA                      #REQUIRED>
+<!ATTLIST variable  type  (integer | float | string) #REQUIRED>
+
+<!--	a loop describes model loops
+-->
+<!ELEMENT loop       (condition)>
+<!ELEMENT condition  (#PCDATA)>

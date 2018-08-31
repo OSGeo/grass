@@ -1,0 +1,13 @@
+MODULE_TOPDIR = ../..
+
+PGM = v.lidar.growing
+
+LIBES = $(GMATHLIB) $(VECTORLIB) $(DBMILIB) $(RASTERLIB) $(GISLIB)
+DEPENDENCIES = $(GMATHDEP) $(VECTORDEP) $(DBMIDEP) $(RASTERDEP) $(GISDEP)
+EXTRA_INC = $(VECT_INC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd
+

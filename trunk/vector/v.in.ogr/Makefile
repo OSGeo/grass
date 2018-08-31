@@ -1,0 +1,16 @@
+MODULE_TOPDIR = ../..
+
+PGM=v.in.ogr
+
+LIBES = $(GPROJLIB) $(VECTORLIB) $(DBMILIB) $(GISLIB) $(GDALLIBS) $(MATHLIB)
+DEPENDENCIES = $(GPROJDEP) $(VECTORDEP) $(DBMIDEP) $(GISDEP)
+
+EXTRA_INC = $(VECT_INC) $(PROJINC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+ifneq ($(USE_OGR),)
+default: cmd
+endif
+

@@ -1,0 +1,9 @@
+{% extends "!layout.html" %}
+{% block extrahead %}
+<link rel="stylesheet" href="{{ pathto('_static/pygrass.css', 1) }}" type="text/css" />
+{% endblock %}
+
+{% block header %}
+<img src="../grass_logo.png" alt="GRASS GIS logo">
+<hr class="header">
+{% endblock %}

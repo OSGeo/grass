@@ -1,0 +1,118 @@
+rem -----------------------------------------------------------------------------------------------------------------------
+rem Self Contained GRASS Automated Packager
+rem -----------------------------------------------------------------------------------------------------------------------
+rem Edited by: Marco Pasetti
+rem Revised for OSGeo4W by: Colin Nielsen, Helmut Kudrnovsky, and Martin Landa
+rem Last Update: $Id$
+rem -----------------------------------------------------------------------------------------------------------------------
+
+@echo off
+
+rem --------------------------------------------------------------------------------------------------------------------------
+rem Set the script variables
+rem --------------------------------------------------------------------------------------------------------------------------
+
+set PACKAGE_DIR=.\GRASS-@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@-Package
+
+set OSGEO4W_BLD_DIR=C:\OSGeo4W%1
+if exist C:\OSGeo4W%1_grass@GRASS_VERSION_MAJOR@ (
+set OSGEO4W_PKG_DIR=C:\OSGeo4W%1_grass@GRASS_VERSION_MAJOR@
+) else (
+set OSGEO4W_PKG_DIR=C:\OSGeo4W%1
+)
+
+set MSYS_BLD_DIR=C:\msys%1\mingw%1
+
+set GRASS_PREFIX=%OSGEO4W_BLD_DIR%\apps\grass\grass-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Remove the previous package and create a new PACKAGE_DIR
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+if exist %PACKAGE_DIR% rmdir /S/Q %PACKAGE_DIR%
+mkdir %PACKAGE_DIR%
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy %GRASS_PREFIX% content to PACKAGE_DIR
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+xcopy %GRASS_PREFIX% %PACKAGE_DIR% /S/V/F/I
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy extrabins to PACKAGE_DIR\extrabin
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+mkdir %PACKAGE_DIR%\extrabin
+mkdir %PACKAGE_DIR%\extrabin\gdalplugins
+
+copy %OSGEO4W_PKG_DIR%\bin\* %PACKAGE_DIR%\extrabin
+xcopy %OSGEO4W_PKG_DIR%\bin\gdalplugins\* %PACKAGE_DIR%\extrabin\gdalplugins /S/V/F/I
+del %PACKAGE_DIR%\extrabin\msvcp*
+del %PACKAGE_DIR%\extrabin\msvcr*
+del %PACKAGE_DIR%\extrabin\vcredist_*
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy 'Windows batchfiles for use with R' (GRASS-R-integration) from source to PACKAGE_DIR\extrabin
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+copy .\external\rbatch\* %PACKAGE_DIR%\extrabin
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy shared PROJ.4 files to PACKAGE_DIR\proj
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+if not exist "%PACKAGE_DIR%\share" mkdir %PACKAGE_DIR%\share
+mkdir %PACKAGE_DIR%\share\proj
+xcopy %OSGEO4W_PKG_DIR%\share\proj %PACKAGE_DIR%\share\proj /S/V/F/I
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy shared GDAL files to PACKAGE_DIR\share\gdal
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+mkdir %PACKAGE_DIR%\share\gdal
+xcopy %OSGEO4W_PKG_DIR%\share\gdal %PACKAGE_DIR%\share\gdal /S/V/F/I
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy shared GEOTIFF files to PACKAGE_DIR\share\epsg_csv
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+mkdir %PACKAGE_DIR%\share\epsg_csv
+xcopy %OSGEO4W_PKG_DIR%\share\epsg_csv %PACKAGE_DIR%\share\epsg_csv /S/V/F/I
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy Python content to PACKAGE_DIR\Python27
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+mkdir %PACKAGE_DIR%\Python27
+
+xcopy %OSGEO4W_PKG_DIR%\apps\Python27\* %PACKAGE_DIR%\Python27 /S/V/F/I
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy env.bat
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+copy env.bat %PACKAGE_DIR%\etc
+
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Packaging Completed
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.

@@ -1,0 +1,44 @@
+/****************************************************************************
+ *
+ * MODULE:       dspf library
+ * AUTHOR(S):    
+ *               Originally by Bill Brown, with contributions from
+ *               Bill Hughes, Brook Milligan, Helena Mitasova
+ *               Started in GRASS 4.x with makedspf program, then
+ *               appeared as this lib in GRASS 5.0beta_2i**. 
+ *               Subsequent (post-CVS) contributors:
+ *               Markus Neteler <neteler itc.it> 
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Bernhard Reiter <bernhard intevation.de>
+ * PURPOSE:      libraries for NVIZ: render/display volumes
+ * COPYRIGHT:    (C) 1996-2006 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
+
+Info in .grid3 headers:
+   version number
+   xdim ydim zdim
+   north south east west top bottom
+   ns_res ew_res tb_res
+   zone 
+   proj 
+   type (1=short 2=int 3=float)
+   min max (data values)
+
+Info in .dspf headers:
+   version number
+   xdim ydim zdim
+   min max
+   lightmodel (1=flat 2=gouraud)
+   number of thresholds
+   array of threshold values
+   data offset 
+   lookup offset
+
+Thu Mar 28 09:31:59 CST 1996
+In process of eliminating use of .grid3 files, using
+new 3dgrid format instead.

@@ -1,0 +1,52 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.out.lidar</em> converts GRASS vector map to a LiDAR point clouds
+in LAS format using the <a href="http://www.liblas.org">libLAS</a> library.
+
+<p>
+The <b>-r</b> flag limits the export to the current computational region
+extent (see <em><a href="g.region.html">g.region</a></em>).
+The <b>where</b> option limits the export by attributes (applied only
+when the columns are used for export).
+
+<p>
+LAS format stores the coordinates as integers rounding the decimal places.
+Before that a scale is applied to preserve a certain number of decimal
+places. This scale can be set using <b>las_xyscale</b> and <b>las_xscale</b>
+options. For example, the scale value 0.01 will preserve two decimal
+places while the value 1.0 will preserve none.
+
+
+<h2>NOTES</h2>
+
+The typical file extensions for the LAS format are .las and .laz (compressed).
+The compressed LAS (.laz) format can be exported only if libLAS has been
+compiled with <a href="http://www.laszip.org/">LASzip</a> support.
+It is also good when libLAS was compiled with GDAL. This is needed when
+working with projections.
+
+
+<h2>EXAMPLE</h2>
+
+Generate fractal surface and export is as point in LAS format:
+
+<div class="code"><pre>
+g.region raster=elevation res=100
+r.surf.fractal output=fractals
+r.to.vect input=fractals output=fractals type=point -z
+v.out.lidar input=fractals output=fractals.las
+</pre></div>
+
+
+<h2>REFERENCES</h2>
+
+<a href="http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html">
+ASPRS LAS format</a><br>
+<a href="http://www.liblas.org/">LAS library</a> <br>
+
+
+<h2>AUTHOR</h2>
+
+Vaclav Petras
+
+<p><i>Last changed: $Date$</i>

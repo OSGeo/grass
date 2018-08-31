@@ -1,0 +1,118 @@
+<h2>DESCRIPTION</h2>
+
+<em>t.rast.neighbors</em> performs <a href="r.neighbors.html">r.neighbors</a>
+computations on the maps of a space time raster dataset (STRDS). This
+module supports a subset of options that are available in
+<a href="r.neighbors.html">r.neighbors</a>. The size of the neighborhood
+and the aggregation method can be chosen.
+<p>
+The user must provide an input and an output space time raster dataset and
+the basename of the resulting raster maps. The resulting STRDS will have
+the same temporal resolution as the input dataset.
+All maps will be processed using the current region settings.
+<p>
+The user can select a subset of the input space time raster dataset for
+processing using a SQL WHERE statement. The number of CPU's to be used
+for parallel processing can be specified with the <em>nprocs</em>
+option to speedup the computation on multi-core system.
+
+
+<h2>EXAMPLE</h2>
+
+To smooth the maps contained in a space time dataset run:
+
+<div class="code"><pre>
+t.rast.neighbors input=tempmean_monthly output=smooth_tempmean_monthly \
+                 basename=tmean_smooth size=5 method=average nprocs=4
+
+# show some info about the new space time dataset
+t.info smooth_tempmean_monthly
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ smooth_tempmean_monthly@climate_2000_2012
+ | Name: ...................... smooth_tempmean_monthly
+ | Mapset: .................... climate_2000_2012
+ | Creator: ................... lucadelu
+ | Temporal type: ............. absolute
+ | Creation time: ............. 2014-11-27 11:41:36.444579
+ | Modification time:.......... 2014-11-27 11:41:39.978232
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2009-01-01 00:00:00
+ | End time:................... 2013-01-01 00:00:00
+ | Granularity:................ 1 month
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 320000.0
+ | South:...................... 10000.0
+ | East:.. .................... 935000.0
+ | West:....................... 120000.0
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Raster register table:...... raster_map_register_ea1c9a83524e41a784d72744b08c6107
+ | North-South resolution min:. 500.0
+ | North-South resolution max:. 500.0
+ | East-west resolution min:... 500.0
+ | East-west resolution max:... 500.0
+ | Minimum value min:.......... -6.428905
+ | Minimum value max:.......... 18.867296
+ | Maximum value min:.......... 4.247691
+ | Maximum value max:.......... 28.767953
+ | Aggregation type:........... None
+ | Number of registered maps:.. 48
+ |
+ | Title:
+ | Monthly precipitation
+ | Description:
+ | Dataset with monthly precipitation
+ | Command history:
+ | # 2014-11-27 11:41:36
+ | t.rast.neighbors input="tempmean_monthly"
+ |     output="smooth_tempmean_monthly" basename="tmean_smooth" size="5"
+ |     method="average" nprocs="4"
+ |
+ +----------------------------------------------------------------------------+
+
+
+# now compare the values between the original and the smoothed dataset
+
+t.rast.list input=smooth_tempmean_monthly columns=name,start_time,min,max
+name|start_time|min|max
+tmean_smooth_1|2009-01-01 00:00:00|-3.361714|7.409861
+tmean_smooth_2|2009-02-01 00:00:00|-1.820261|7.986794
+tmean_smooth_3|2009-03-01 00:00:00|2.912971|11.799684
+...
+tmean_smooth_46|2012-10-01 00:00:00|9.38767|18.709297
+tmean_smooth_47|2012-11-01 00:00:00|1.785653|10.911189
+tmean_smooth_48|2012-12-01 00:00:00|1.784212|11.983857
+
+t.rast.list input=tempmean_monthly columns=name,start_time,min,max
+name|start_time|min|max
+2009_01_tempmean|2009-01-01 00:00:00|-3.380823|7.426054
+2009_02_tempmean|2009-02-01 00:00:00|-1.820261|8.006386
+2009_03_tempmean|2009-03-01 00:00:00|2.656992|11.819274
+...
+2012_10_tempmean|2012-10-01 00:00:00|9.070884|18.709297
+2012_11_tempmean|2012-11-01 00:00:00|1.785653|10.911189
+2012_12_tempmean|2012-12-01 00:00:00|1.761019|11.983857
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.neighbors.html">r.neighbors</a>,
+<a href="t.rast.aggregate.ds.html">t.rast.aggregate.ds</a>,
+<a href="t.rast.extract.html">t.rast.extract</a>,
+<a href="t.info.html">t.info</a>,
+<a href="g.region.html">g.region</a>,
+<a href="r.mask.html">r.mask</a>
+</em>
+
+
+<h2>AUTHOR</h2>
+
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+
+<p><i>Last changed: $Date$</i>

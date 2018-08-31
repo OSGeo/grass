@@ -1,0 +1,8 @@
+This directory contains scripts to check the functionality
+of GRASS.
+They may be launched in ../demolocation/
+
+#############
+For a more advanced test suite, see
+ http://www-pool.math.tu-berlin.de/~soeren/grass/GRASS_TestSuite/?C=M;O=D
+

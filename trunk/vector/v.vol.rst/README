@@ -1,0 +1,30 @@
+dnorm: in the 3D version we normalize
+based on the overlapping window rather than segment
+(essentially based on npmin rather than segmax)
+
+Reason: the overlapping window can be large and then the
+normalization based on the segment size was not sufficient.
+But that means that the segments are smaller than dnorm.
+
+#######################################################
+HISTORY:
+
+21/feb/09 (Antonio Galea)
+  - static initialization of spline coefficients
+  - avoid calling exp() and erf() multiple times for
+    spline and derivatives
+  - do not compute first and second derivatives unless
+    required
+
+02/03/03 (jh) - added deviation site file to the output
+
+03/11/00 (jh) - re-written I/O operations, several bug fixes
+including 3D topo parameters, and 2nd RST derivatives
+
+12/07/00 (MN) - added field selection parameter for sites lists
+                (allows selecting column in site_lists)
+
+copied from Mark 15.may.1996,
+just a beta version, not fully tested
+
+

@@ -1,0 +1,9 @@
+The raster3_layout.png was created from raster3_layout.xcf by export from GIMP
+then resized to 540x477 using:
+  mogrify -resize 540x480 raster3_layout.png
+
+See also raster3d_tile_cell_generator.sh.
+
+The image is used on several places in programming and user
+documentation. To find all usages use:
+  find . -name "*raster3d_layout.png"

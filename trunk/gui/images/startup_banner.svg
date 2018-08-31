@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="618"
+   height="150"
+   id="svg3935"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="welcome_20160522.svg"
+   inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/welcome_final_bw.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <title
+     id="title3010">grass gis startup banner</title>
+  <defs
+     id="defs3937" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.7495381"
+     inkscape:cx="319.09419"
+     inkscape:cy="63.13336"
+     inkscape:document-units="pt"
+     inkscape:current-layer="g3247"
+     showgrid="false"
+     inkscape:window-width="1680"
+     inkscape:window-height="1010"
+     inkscape:window-x="0"
+     inkscape:window-y="22"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     units="pt">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4923"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       originx="-63.047241px"
+       originy="-451.18109px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3940">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>grass gis startup banner</dc:title>
+        <dc:date>20150718</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Vincent BAIN</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title />
+          </cc:Agent>
+        </dc:rights>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="bg"
+     style="display:inline">
+    <g
+       style="display:inline"
+       transform="translate(-60,-452.36218)"
+       id="g3379"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner_isis.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         style="color:#000000;fill:none;stroke:none;stroke-width:0.375;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3381"
+         width="618"
+         height="150"
+         x="60"
+         y="452.36218"
+         rx="3"
+         ry="3"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/welcome_20160120.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+    </g>
+  </g>
+  <g
+     inkscape:label="startup_banner"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-63.047241,-451.18109)"
+     style="display:none">
+    <g
+       id="g3247"
+       transform="translate(3.0472412,-1.1810913)"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner.png"
+         transform="matrix(0.97120945,0,0,0.97120945,-7.3587784,10.80061)"
+         id="g3798">
+        <path
+           sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+           inkscape:connector-curvature="0"
+           style="fill:#009000;stroke:none;display:inline"
+           d="m 134.37279,582.48696 2.78764,2.82933 0.95078,-1.02041 -1.69948,-12.66273 0.14458,-2.04472 0.86745,-3.05676 0.90877,-2.80891 0.99138,-2.20995 3.22199,5.41128 3.13937,5.72109 0.69707,3.35753 4.38114,-4.29856 2.21253,-16.63532 4.6471,-22.5126 2.9948,-15.28378 6.0722,-12.04114 0.90877,-2.49911 0.33046,-1.46642 0.12392,-2.37518 -0.37177,-1.90015 -0.86745,-1.71426 -1.59034,-1.59034 0.0826,0.43373 0.78484,0.8055 0.72289,1.69361 0.0826,1.36315 -0.99138,2.72629 -1.28053,2.93284 -2.74695,4.93625 1.52838,-11.40088 0.43372,-5.98959 -0.55765,-0.10327 -3.07741,20.48853 -0.5783,1.03269 -5.06018,9.52139 -6.46462,12.80532 -5.43194,11.11173 -3.01545,7.74516 -1.71427,-2.93284 1.074,-2.20995 5.90698,-11.33891 5.98959,-9.99643 2.4991,-4.87428 2.06538,-4.04814 0.55765,-1.3838 0.12392,-1.34249 -0.24784,-1.03269 -0.24785,0 -0.18588,0.90876 -1.03269,2.37519 -2.4991,4.21337 -7.14621,10.98779 -4.06879,6.0309 -2.78826,4.93625 1.71427,-16.99805 0.64026,-7.24946 0.2685,-15.3251 -0.0413,0 0.12395,-0.51634 0.39242,-0.95007 0.30981,-0.86746 0.37177,-0.64027 0,-1.25988 -0.12393,-1.59034 0.55766,-1.03268 -0.24785,-1.50773 0,-1.13596 0.20654,-0.64026 0.43373,-1.42511 0.3098,-0.76419 -0.5783,-0.95008 0.49569,-0.95007 -0.78484,-0.55765 -0.47504,-1.42511 0.68157,-1.1153 -0.95007,-0.30981 -0.41308,-0.74353 0,-0.64027 -0.43372,-0.72288 -0.43373,-0.39242 0.0413,-0.59896 0,-0.66092 -0.20653,-1.79688 -0.14458,-1.03269 -0.64027,-0.47504 -0.3098,-0.55765 -0.72288,-0.35111 -0.43373,-0.78485 0.0826,-0.88811 -0.0826,-0.90876 -0.47504,-0.78485 -0.82615,-0.16523 -0.76419,-0.26849 -0.39242,-0.55766 -0.2685,-0.59896 -0.59896,0.39243 -0.24784,0.76419 -0.12393,0.82615 -0.39242,1.30118 -0.2685,-0.43373 0.12392,1.59034 -0.0826,0.35112 0,0.59896 0.22719,0.47503 0.20654,0.64027 0.39242,0.51634 0.16523,0.2272 0.12392,0.59895 -0.49569,0.37177 0.20654,0.537 -0.47504,0.59896 0.0826,0.47504 0.12392,0.47503 0.39242,0.47504 0.35112,0.43373 0.47503,0.41307 0.0826,0.35112 -0.16523,0.51634 -0.39242,0.35112 -0.18589,0.28915 0.0619,0.74353 0.59896,0.39243 0.35111,0.37176 0.20654,0.74354 -0.64026,0.76419 -0.10327,0.537 0.2685,0.59895 0.39242,0.47504 0,0.47504 0.28915,0.37177 0.2685,0.3098 0.20654,0.35112 -0.12393,0.59896 0.39243,0.55765 0.35111,0.0826 0.12392,0.2685 -0.12392,0.47504 0.33046,0.68157 0.35111,0.2685 0.2685,0.55765 -0.2685,0.95008 0.39242,0.86745 0.37177,0.16523 0.18589,0.39243 0.0826,1.1153 -0.20654,0.47503 -0.18588,0.55766 0.55765,2.80891 0.99138,0.64026 -0.0826,12.18573 -1.15661,13.15644 -0.68158,7.62124 -1.1153,9.25288 -0.43373,1.1153 -3.67637,-6.29939 -1.25988,-8.44739 -1.63165,-13.7141 -1.94145,-12.72271 0.14458,11.60741 0.6816,9.604 1.17727,9.14961 -8.19955,-12.99121 -11.77264,-17.65897 -2.70565,-3.75898 -0.22719,0 0.78485,2.25126 1.46641,3.65572 2.148,4.87428 3.75898,8.05497 2.27191,4.04813 2.80892,4.87429 5.8037,9.19093 5.24606,8.34412 0.8055,7.47666 2.4991,17.08066 -0.001,-0.0106 -2.88997,-8.97377 -6.11352,-15.0566 -4.87429,-10.12034 -6.46462,-10.51277 -3.28395,-4.31663 -2.62303,-2.62302 -4.27533,-3.96553 1.77622,2.1893 2.87088,2.93284 1.69361,1.90014 1.1153,1.94145 1.34249,2.14799 2.1893,3.75899 1.90015,3.49048 1.94145,4.31664 2.37519,5.7624 4.64709,12.02049 4.87429,12.68141 2.93283,8.96373 z m -8.55271,-8.51526 -0.85054,-2.27657 -1.56968,-2.97414 -3.42853,-6.54724 -4.83298,-8.71589 -3.40787,-5.59717 -3.16002,-4.83298 -1.71427,-2.37519 -1.42511,-1.42511 2.4578,4.66776 2.25126,5.2254 3.38722,7.70385 1.48707,3.40787 1.48967,4.43009 z m -20.389,-34.74429 -0.0413,-0.0826 -0.12393,-0.0826 z m 51.8616,-15.55227 -0.82615,3.44917 -3.73833,14.95332 -1.81753,8.4887 -1.90014,10.26492 -2.10669,6.69182 -0.74353,-1.73491 -4.79168,-8.88112 1.611,-3.73833 5.24605,-10.98781 2.80891,-5.90697 3.75899,-7.93105 z m 4.6471,11.13237 -0.68157,3.96552 -1.94146,6.58855 -1.94145,4.87429 -2.14799,6.34071 -1.13596,6.23743 -1.07399,6.63115 3.8829,-3.94616 0.16523,-2.02407 0.43373,-3.51114 1.03269,-4.9569 2.25126,-8.86046 1.03269,-6.5679 z m -27.79996,18.07204 1.56968,2.62303 -0.33046,6.11351 -0.24784,0.18589 z m 2.64368,4.39925 0.90876,1.50773 -0.70223,1.6523 -0.51634,0.37177 z"
+           id="path4930" />
+        <path
+           id="path4932"
+           d="m 87.903645,540.57803 -1.982761,1.98276 14.891366,14.89136 -1.96211,1.96211 14.87071,14.87071 -1.98276,1.98276 25.42478,25.42478 25.44544,-25.42478 -1.98276,-1.98276 14.87071,-14.87071 -1.96211,-1.96211 14.89136,-14.89136 -1.98276,-1.98276 -49.27988,49.25922 -49.259225,-49.25922 z"
+           style="color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.82688445;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           inkscape:connector-curvature="0" />
+        <path
+           id="path4934"
+           d="m 137.16287,462.36222 -61.713444,61.7341 61.713444,61.7341 61.7341,-61.7341 -61.7341,-61.7341 z m 0,1.09465 60.63945,60.63945 -60.63945,60.63945 -60.639448,-60.63945 60.639448,-60.63945 z"
+           style="color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.80000001;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           inkscape:connector-curvature="0" />
+      </g>
+      <g
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner.png"
+         style="display:inline"
+         id="g4936"
+         transform="matrix(0.66092044,0,0,0.66092044,68.760029,452.46235)">
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path4938"
+           d="m 1.8761268,210.40625 0,1.25 72.3843182,0 0,-1.25 z"
+           style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.25;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+           inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/welcome_20160120.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.25;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+           d="m 99.043193,210.40625 0,1.25 809.144747,0 0,-1.25 z"
+           id="path4940"
+           inkscape:connector-curvature="0"
+           inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/welcome_20160120.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+      </g>
+      <path
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.25;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         d="m 70,462.36218 0,0.82615 48.65113,0 0,-0.82615 z"
+         id="path4938-0"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4940-1"
+         d="m 133.19717,462.36218 0,0.82615 535.69461,0 0,-0.82615 z"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.25;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <g
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner.png"
+         transform="matrix(5.2456976,0,0,5.2456976,-1476.5023,-2402.3805)"
+         id="g4549"
+         style="display:inline">
+        <flowRoot
+           inkscape:export-ydpi="600"
+           inkscape:export-xdpi="600"
+           inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/logo/logo_variant_bg.png"
+           xml:space="preserve"
+           id="flowRoot5356"
+           style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#009000;fill-opacity:1;stroke:#008f00;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans"
+           transform="matrix(0.78531774,0,0,0.78531774,56.306031,438.46065)"><flowRegion
+             id="flowRegion5358"><rect
+               id="rect5360"
+               width="89.535889"
+               height="26.105526"
+               x="358.83777"
+               y="134.13319"
+               style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#009000;fill-opacity:1;stroke:#008f00;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans" /></flowRegion><flowPara
+             style="font-size:21.84710312px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-1.77950382px;writing-mode:lr-tb;text-anchor:start;fill:#009000;fill-opacity:1;stroke:#008f00;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Medium"
+             id="flowPara5362">G<flowSpan
+   style="font-size:21.84710312px;letter-spacing:0px;fill:#009000;fill-opacity:1;stroke:#008f00;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+   id="flowSpan4547">RASS</flowSpan></flowPara></flowRoot>        <flowRoot
+           inkscape:export-ydpi="600"
+           inkscape:export-xdpi="600"
+           inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/logo/logo_variant_bg.png"
+           transform="matrix(0.78531774,0,0,0.78531774,106.84321,438.46065)"
+           style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+           id="flowRoot6517"
+           xml:space="preserve"><flowRegion
+             id="flowRegion6519"><rect
+               style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+               y="134.13319"
+               x="358.83777"
+               height="26.105526"
+               width="89.535889"
+               id="rect6521" /></flowRegion><flowPara
+             id="flowPara6523"
+             style="font-size:21.84710312px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-1.77950382px;writing-mode:lr-tb;text-anchor:start;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin">GIS</flowPara></flowRoot>      </g>
+      <flowRoot
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner.png"
+         transform="matrix(1.0129523,0,0,1.0129523,-70.250527,301.89423)"
+         style="font-size:21.71869278px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:EB Garamond;-inkscape-font-specification:EB Garamond"
+         id="flowRoot4942"
+         xml:space="preserve"><flowRegion
+           id="flowRegion4944"><rect
+             style="font-size:21.71869278px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:EB Garamond;-inkscape-font-specification:EB Garamond"
+             y="258.24249"
+             x="268.00415"
+             height="27.879639"
+             width="472.69949"
+             id="rect4946" /></flowRegion><flowPara
+           id="flowPara4948">Bringing advanced geospatial technologies to the world</flowPara></flowRoot>    </g>
+  </g>
+  <g
+     style="display:inline"
+     transform="translate(-63.047241,-451.18109)"
+     id="g4266"
+     inkscape:groupmode="layer"
+     inkscape:label="startup_banner_isis">
+    <g
+       transform="translate(3.0472412,-1.1810913)"
+       id="g4268"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner_isis.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <image
+         y="466.82547"
+         x="354.39938"
+         id="image3237"
+         xlink:href="file:///home/vincent/Documents/developpement/grass/grass_splash/welcome_final/isis_fade_alpha.png"
+         height="92.029091"
+         width="314.43271"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner_isis.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <g
+         id="g4272"
+         transform="matrix(0.97120945,0,0,0.97120945,-7.3587784,10.80061)"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner_isis.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90">
+        <path
+           id="path4274"
+           d="m 134.37279,582.48696 2.78764,2.82933 0.95078,-1.02041 -1.69948,-12.66273 0.14458,-2.04472 0.86745,-3.05676 0.90877,-2.80891 0.99138,-2.20995 3.22199,5.41128 3.13937,5.72109 0.69707,3.35753 4.38114,-4.29856 2.21253,-16.63532 4.6471,-22.5126 2.9948,-15.28378 6.0722,-12.04114 0.90877,-2.49911 0.33046,-1.46642 0.12392,-2.37518 -0.37177,-1.90015 -0.86745,-1.71426 -1.59034,-1.59034 0.0826,0.43373 0.78484,0.8055 0.72289,1.69361 0.0826,1.36315 -0.99138,2.72629 -1.28053,2.93284 -2.74695,4.93625 1.52838,-11.40088 0.43372,-5.98959 -0.55765,-0.10327 -3.07741,20.48853 -0.5783,1.03269 -5.06018,9.52139 -6.46462,12.80532 -5.43194,11.11173 -3.01545,7.74516 -1.71427,-2.93284 1.074,-2.20995 5.90698,-11.33891 5.98959,-9.99643 2.4991,-4.87428 2.06538,-4.04814 0.55765,-1.3838 0.12392,-1.34249 -0.24784,-1.03269 -0.24785,0 -0.18588,0.90876 -1.03269,2.37519 -2.4991,4.21337 -7.14621,10.98779 -4.06879,6.0309 -2.78826,4.93625 1.71427,-16.99805 0.64026,-7.24946 0.2685,-15.3251 -0.0413,0 0.12395,-0.51634 0.39242,-0.95007 0.30981,-0.86746 0.37177,-0.64027 0,-1.25988 -0.12393,-1.59034 0.55766,-1.03268 -0.24785,-1.50773 0,-1.13596 0.20654,-0.64026 0.43373,-1.42511 0.3098,-0.76419 -0.5783,-0.95008 0.49569,-0.95007 -0.78484,-0.55765 -0.47504,-1.42511 0.68157,-1.1153 -0.95007,-0.30981 -0.41308,-0.74353 0,-0.64027 -0.43372,-0.72288 -0.43373,-0.39242 0.0413,-0.59896 0,-0.66092 -0.20653,-1.79688 -0.14458,-1.03269 -0.64027,-0.47504 -0.3098,-0.55765 -0.72288,-0.35111 -0.43373,-0.78485 0.0826,-0.88811 -0.0826,-0.90876 -0.47504,-0.78485 -0.82615,-0.16523 -0.76419,-0.26849 -0.39242,-0.55766 -0.2685,-0.59896 -0.59896,0.39243 -0.24784,0.76419 -0.12393,0.82615 -0.39242,1.30118 -0.2685,-0.43373 0.12392,1.59034 -0.0826,0.35112 0,0.59896 0.22719,0.47503 0.20654,0.64027 0.39242,0.51634 0.16523,0.2272 0.12392,0.59895 -0.49569,0.37177 0.20654,0.537 -0.47504,0.59896 0.0826,0.47504 0.12392,0.47503 0.39242,0.47504 0.35112,0.43373 0.47503,0.41307 0.0826,0.35112 -0.16523,0.51634 -0.39242,0.35112 -0.18589,0.28915 0.0619,0.74353 0.59896,0.39243 0.35111,0.37176 0.20654,0.74354 -0.64026,0.76419 -0.10327,0.537 0.2685,0.59895 0.39242,0.47504 0,0.47504 0.28915,0.37177 0.2685,0.3098 0.20654,0.35112 -0.12393,0.59896 0.39243,0.55765 0.35111,0.0826 0.12392,0.2685 -0.12392,0.47504 0.33046,0.68157 0.35111,0.2685 0.2685,0.55765 -0.2685,0.95008 0.39242,0.86745 0.37177,0.16523 0.18589,0.39243 0.0826,1.1153 -0.20654,0.47503 -0.18588,0.55766 0.55765,2.80891 0.99138,0.64026 -0.0826,12.18573 -1.15661,13.15644 -0.68158,7.62124 -1.1153,9.25288 -0.43373,1.1153 -3.67637,-6.29939 -1.25988,-8.44739 -1.63165,-13.7141 -1.94145,-12.72271 0.14458,11.60741 0.6816,9.604 1.17727,9.14961 -8.19955,-12.99121 -11.77264,-17.65897 -2.70565,-3.75898 -0.22719,0 0.78485,2.25126 1.46641,3.65572 2.148,4.87428 3.75898,8.05497 2.27191,4.04813 2.80892,4.87429 5.8037,9.19093 5.24606,8.34412 0.8055,7.47666 2.4991,17.08066 -0.001,-0.0106 -2.88997,-8.97377 -6.11352,-15.0566 -4.87429,-10.12034 -6.46462,-10.51277 -3.28395,-4.31663 -2.62303,-2.62302 -4.27533,-3.96553 1.77622,2.1893 2.87088,2.93284 1.69361,1.90014 1.1153,1.94145 1.34249,2.14799 2.1893,3.75899 1.90015,3.49048 1.94145,4.31664 2.37519,5.7624 4.64709,12.02049 4.87429,12.68141 2.93283,8.96373 z m -8.55271,-8.51526 -0.85054,-2.27657 -1.56968,-2.97414 -3.42853,-6.54724 -4.83298,-8.71589 -3.40787,-5.59717 -3.16002,-4.83298 -1.71427,-2.37519 -1.42511,-1.42511 2.4578,4.66776 2.25126,5.2254 3.38722,7.70385 1.48707,3.40787 1.48967,4.43009 z m -20.389,-34.74429 -0.0413,-0.0826 -0.12393,-0.0826 z m 51.8616,-15.55227 -0.82615,3.44917 -3.73833,14.95332 -1.81753,8.4887 -1.90014,10.26492 -2.10669,6.69182 -0.74353,-1.73491 -4.79168,-8.88112 1.611,-3.73833 5.24605,-10.98781 2.80891,-5.90697 3.75899,-7.93105 z m 4.6471,11.13237 -0.68157,3.96552 -1.94146,6.58855 -1.94145,4.87429 -2.14799,6.34071 -1.13596,6.23743 -1.07399,6.63115 3.8829,-3.94616 0.16523,-2.02407 0.43373,-3.51114 1.03269,-4.9569 2.25126,-8.86046 1.03269,-6.5679 z m -27.79996,18.07204 1.56968,2.62303 -0.33046,6.11351 -0.24784,0.18589 z m 2.64368,4.39925 0.90876,1.50773 -0.70223,1.6523 -0.51634,0.37177 z"
+           style="fill:#009000;stroke:none;display:inline"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+        <path
+           inkscape:connector-curvature="0"
+           style="color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.82688445;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           d="m 87.903645,540.57803 -1.982761,1.98276 14.891366,14.89136 -1.96211,1.96211 14.87071,14.87071 -1.98276,1.98276 25.42478,25.42478 25.44544,-25.42478 -1.98276,-1.98276 14.87071,-14.87071 -1.96211,-1.96211 14.89136,-14.89136 -1.98276,-1.98276 -49.27988,49.25922 -49.259225,-49.25922 z"
+           id="path4276" />
+        <path
+           inkscape:connector-curvature="0"
+           style="color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.80000001;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           d="m 137.16287,462.36222 -61.713444,61.7341 61.713444,61.7341 61.7341,-61.7341 -61.7341,-61.7341 z m 0,1.09465 60.63945,60.63945 -60.63945,60.63945 -60.639448,-60.63945 60.639448,-60.63945 z"
+           id="path4278" />
+      </g>
+      <g
+         transform="matrix(0.66092044,0,0,0.66092044,68.760029,452.46235)"
+         id="g4280"
+         style="display:inline"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner_isis.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90">
+        <path
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/welcome_20160120.png"
+           style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.25;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+           d="m 1.8761268,210.40625 0,1.25 72.3843182,0 0,-1.25 z"
+           id="path4282"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/welcome_20160120.png"
+           inkscape:connector-curvature="0"
+           id="path4284"
+           d="m 99.043193,210.40625 0,1.25 809.144747,0 0,-1.25 z"
+           style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.25;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+           sodipodi:nodetypes="ccccc" />
+      </g>
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner_isis.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path4286"
+         d="m 70,462.36218 0,0.82615 48.65113,0 0,-0.82615 z"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.25;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner_isis.png"
+         sodipodi:nodetypes="ccccc"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.25;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         d="m 133.19717,462.36218 0,0.82615 535.69461,0 0,-0.82615 z"
+         id="path4288"
+         inkscape:connector-curvature="0" />
+      <g
+         style="display:inline"
+         id="g4290"
+         transform="matrix(3.9646729,0,0,3.9646729,-1147.2737,-1700.8424)"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner_isis.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90">
+        <flowRoot
+           transform="matrix(0.78531774,0,0,0.78531774,56.306031,438.46065)"
+           style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#009000;fill-opacity:1;stroke:#008f00;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans"
+           id="flowRoot4292"
+           xml:space="preserve"
+           inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/logo/logo_variant_bg.png"
+           inkscape:export-xdpi="600"
+           inkscape:export-ydpi="600"><flowRegion
+             id="flowRegion4294"><rect
+               style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#009000;fill-opacity:1;stroke:#008f00;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans"
+               y="134.13319"
+               x="358.83777"
+               height="26.105526"
+               width="89.535889"
+               id="rect4296" /></flowRegion><flowPara
+             id="flowPara4298"
+             style="font-size:21.84710312px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-1.77950382px;writing-mode:lr-tb;text-anchor:start;fill:#009000;fill-opacity:1;stroke:#008f00;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Medium">G<flowSpan
+   id="flowSpan4300"
+   style="font-size:21.84710312px;letter-spacing:0px;fill:#009000;fill-opacity:1;stroke:#008f00;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">RASS</flowSpan></flowPara></flowRoot>        <flowRoot
+           xml:space="preserve"
+           id="flowRoot4302"
+           style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+           transform="matrix(0.78531774,0,0,0.78531774,106.84321,438.46065)"
+           inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/logo/logo_variant_bg.png"
+           inkscape:export-xdpi="600"
+           inkscape:export-ydpi="600"><flowRegion
+             id="flowRegion4304"><rect
+               id="rect4306"
+               width="89.535889"
+               height="26.105526"
+               x="358.83777"
+               y="134.13319"
+               style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin" /></flowRegion><flowPara
+             style="font-size:21.84710312px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-1.77950382px;writing-mode:lr-tb;text-anchor:start;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+             id="flowPara4308">GIS</flowPara></flowRoot>      </g>
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot4310"
+         style="font-size:21.71869278px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:EB Garamond;-inkscape-font-specification:EB Garamond"
+         transform="matrix(1.0129523,0,0,1.0129523,-70.250527,301.89423)"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner_isis.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90"><flowRegion
+           id="flowRegion4312"><rect
+             id="rect4314"
+             width="472.69949"
+             height="27.879639"
+             x="268.00415"
+             y="258.24249"
+             style="font-size:21.71869278px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:EB Garamond;-inkscape-font-specification:EB Garamond" /></flowRegion><flowPara
+           id="flowPara4316">Bringing advanced geospatial technologies to the world</flowPara></flowRoot>      <flowRoot
+         xml:space="preserve"
+         id="flowRoot4942-0-4"
+         style="font-size:14.07890129px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Alegreya Sans;-inkscape-font-specification:Alegreya Sans Bold"
+         transform="matrix(2.7640276,0,0,2.7640276,-548.13404,-193.60807)"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/welcome_final/20160522/startup_banner_isis.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90"><flowRegion
+           id="flowRegion4944-5-5"><rect
+             id="rect4946-3-7"
+             width="472.69949"
+             height="27.879639"
+             x="268.00415"
+             y="258.24249"
+             style="font-size:14.07890129px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;font-family:Alegreya Sans;-inkscape-font-specification:Alegreya Sans Bold" /></flowRegion><flowPara
+           id="flowPara4948-1-0"
+           style="font-size:14.07890129px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;font-family:Alegreya Sans;-inkscape-font-specification:Alegreya Sans Bold">ISIS</flowPara></flowRoot>    </g>
+  </g>
+</svg>

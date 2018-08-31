@@ -1,0 +1,132 @@
+<h2>DESCRIPTION</h2>
+
+Outputs <i>raster</i> maps in <i>VTK-ASCII</i> format. <i>Map's</i> are
+valid raster map's in the current mapset.  <i>output</i> is the name of
+an VTK-ASCII file which will be written in the current working directory.
+If <i>output</i> is not specified then <b>stdout</b> is used.  
+The module is sensitive to region settings (set with g.region).
+<p>
+
+Elevation, scaling, point/celldata, vector and RGB Data are supported.
+If the map is in LL projection, the elevation values will automatically scaled to 
+degrees. It is supposed that the elevation values are provided in meters. 
+If the elevation values are in a different unit than meters, use 
+the scale parameter to convert the units. 
+<p>
+
+If no elevation map is given, the user can set the height of the map by one value. 
+Point or cell data are available. Also scaling is supported for this elevation value. 
+The elevation value must be provided in meters.
+<p>
+
+The RGB input requires three raster maps: red, green, blue  - in this order. 
+The maps must have values between 0 and 255, otherwise you will get lots of warnings
+and the values are set to 0.
+More than one RGB dataset (3 maps) is not supported. 
+<p>
+
+The vector input requires three raster maps: x, y, z -- defining the vector coordinates  - in this order. 
+More than one vector dataset (3 maps) is not supported. 
+
+<h2>NOTES</h2>
+This filter generates: 
+<ul>
+<li><i>structured points</i> with <i>celldata</i> or <i>pointdata</i> if no elevationfile is given</li>
+
+<li><i>structured grid</i> (not recommendet) with <i>pointdata</i> if an elevationfile is given</li>
+<li><i>polydataset</i> with <i>pointdata</i> if an elevationfile is given (default)</li> 
+</ul>
+and puts this in a simple VTK-ASCII file. Nor XML or 
+binary output are supported. It is possible to choose more then one raster map
+to be written to the VTK-ASCII file. Each cell-/pointdata is named like the raster map it represents.
+You can visualize this file with the 
+<em><a href="http://www.vtk.org">VTK Toolkit</a></em>, 
+<em><a href="http://www.paraview.org">Paraview</a></em> and 
+<em><a href="http://mayavi.sourceforge.net">MayaVi</a></em> which are based on VTK.
+If you have a raster map with partly no data, use the threshold filter in paraview to 
+visualize the valid data. Just filter all data which is greater/lesser than the 
+chosen null value in the VTK-ASCII file.
+<br>
+If elevation map is chosen, a polygonal grid is created with <i>quads</i>, 
+but the user can choose also <i>triangle strips</i> or <i>vertices</i>. 
+These dataformats a documented at <em><a href="http://www.vtk.org">VTK Toolkit</a></em>.
+<p>
+
+If the "-c" flag is used and the data should be visualised together with other data exported via *.out.vtk
+modules, be sure the "-c" flag was also set in these modules.
+But this will only work with data from the SAME location 
+(The reference point for the coordinates transformation is based on the center point of the default region).
+
+<h3>Difference between point- and celldata</h3>
+
+r.out.vtk can export raster cells with different representations.
+<ul>
+   <li>
+      <i>pointdata</i> -- the cells/values are represented by the center of the cell. 
+      Instead of cells, points are created. Each point can hold different values, 
+      but the user can only visualize one value at a time. These points can 
+      be connected in different ways.
+   </li>
+   <li>
+       <i>celldata</i> -- is only provided if no elevation map is given. 
+       The cells are created with the same hight and width as in GRASS. Each cell 
+       can hold different values, but the user can only visualize one value at a time. 
+   </li>
+</ul>
+
+<h2>EXAMPLE</h2>
+
+<h3>Simple Spearfish example</h3>
+
+<div class="code"><pre>
+# set region
+g.region n=4926970 s=4914857 w=591583 e=607793 res=50 -p
+
+# export the data
+r.out.vtk input=elevation.10m,slope,aspect elevation=elevation.10m output=/tmp/out.vtk
+
+# visualize in Paraview or other VTK viewer:
+paraview --data=/tmp/out.vtk
+</pre></div>
+
+<h3>Spearfish example with RGB data</h3>
+
+<div class="code"><pre>
+#set the region
+g.region n=4926990 s=4914840 w=591570 e=607800 res=30 -p
+
+# using r.in.wms to create RGB data to get a satellite coverage
+r.in.wms layers=global_mosaic mapserver=http://wms.jpl.nasa.gov/wms.cgi \
+         output=wms_global_mosaic
+
+# export the data to VTK
+r.out.vtk rgbmaps=wms_global_mosaic.red,wms_global_mosaic.green,wms_global_mosaic.blue \
+          elevation=elevation.10m output=/tmp/out.vtk
+
+# visualize in Paraview or other VTK viewer:
+paraview --data=/tmp/out.vtk
+</pre></div>
+
+<b>Paraview RGB visualization notes</b><br>
+To achieve proper RGB overlay:
+<ul>
+<li> In Paraview, click "Apply"
+<li> Select the "Display" tab and choose "Color by" to switch from input scalars to rgb scalars
+<li> Disable the "Map Scalars" check button in the display tab to avoid the use of a lookup table 
+</ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r3.out.vtk.html">r3.out.vtk</a>,
+<a href="r.out.ascii.html">r.out.ascii</a>,
+<a href="g.region.html">g.region</a>
+</em>
+
+<br>
+<a href="http://grasswiki.osgeo.org/wiki/GRASS_and_Paraview">GRASS and Paraview Wiki page</a>
+
+<h2>AUTHOR</h2>
+Soeren Gebbert
+
+<p><i>Last changed: $Date$</i>

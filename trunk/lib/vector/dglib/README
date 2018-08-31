@@ -1,0 +1,79 @@
+/*
+ * FLAT DIRECTED GRAPH (FDG) MEMORY REPRESENTATION * VERSION 1: (obsolete)
+ *
+ * FDG is represented by two arrays of 32bit words: the node-buffer and the link-buffer
+ *
+ * Each node has a entry in the node-buffer.
+ * Links (arcs connecting couples of nodes) are grouped in the link-buffer into link-areas, that is: all
+ * links departing from a given node are kept continuos in a link-area.
+ *
+ * A node-entry has the fields:
+ *  nodeid: a unique id for the node in the graph
+ *  status: flags indicating the role of the node (from/to/both)
+ *  offset: the byte offset to the link-area in the link-buffer
+ *  [attr]: optionally an arbitrary length area for user supplied node attributes.
+ *
+ * A link-area has the fields:
+ *  tocnt : the number of departing links
+ *  toarr : the array of departing links
+ *
+ * Each link in the link-area array has the fields:
+ *  offset: the byte offset in the node buffer of the destination node for this link
+ *  cost  : the effort needed to 'travel' from origin node *to* the destination node (not bidirectional)
+ *  user  : a value passed by the user for this link - it's usually a unique user supplied link-id.
+ *  [attr]: optionally an arbitrary length area for user supplied link attributes.
+ *
+ * Nodes in the node buffer are kept sorted by ascending nodeid. Thus, given that a node entry has fixed size,
+ * a node can be found using a binary search in the node buffer.
+ * 
+ * Node attributes are optionally stored by enlarging the node entry by a fixed amount of bytes (attr), as well as link
+ * attributes, which are stored in the respective link entry extension (attr).
+ * Sizes for node and link attributes are given at graph creation time and cannot be modified later on.
+ * 
+ *        +-------------------------------------------------------------------------------------------------------> ...
+ *        | +---------------------------------------------------------------------+
+ *        | | +-----------------------------------+                               |
+ *        | | |                                   V                               V
+ * Node Buffer   (nodeid|status|offset|attr)...  (nodeid|status|offset|attr)...  (nodeid|status|offset|attr)...
+ *        | | |                   |                                                               |                     
+ *        | | |   +---------------+                                      +------------------------+
+ *        | | |   V                                                      V                              
+ * Link Buffer   (tocnt|toarr) ...                                      (tocnt|toarr)                  
+ *        | | |        (offset|cost|user|attr)[0]... ()[tocnt-1]...           (offset|cost|user|attr)[0]... ()[tocnt-1]...
+ *        | | |           |                           |                         |                            ...
+ *        | | +-----------+                           |                         |
+ *        | +-----------------------------------------+                         |
+ *        +---------------------------------------------------------------------+
+ *
+ */
+
+/* FLAT DIRECTED GRAPH (FDG) FILE REPRESENTATION * VERSION 1 (obsolete)
+ *
+ * FDGs can be stored into files as they are, or in other words, they are serializable.
+ * Graphs are versioned: a pool exists of pointers to methods which implement a given graph version, for each graph version.
+ * Actually only version 1 has been defined.
+ * The version number is stored as the first byte of the graph file and must be supplied as an argument when we want to
+ * initialize a new graph. When reading a graph from a stream, the library understands by the first byte what version
+ * is it, and initializes it appropriately.
+ *
+ * Version 1 graph file format:
+ *
+ * Field                          Size/Type                     Value range          Description
+ * [VERSION...................]   1 byte                        1                    Version 1 graphs always keep value 1
+ * [ENDIANESS.................]   1 byte                        1 | 2                Integer words byte order 1=big 2=little
+ * [NODE ATTRIBUTES BYTE SIZE.]   4 bytes integer               >= 0                 Byte size of attributes area for each node
+ * [LINK ATTRIBUTES BYTE SIZE.]   4 bytes integer               >= 0                 Byte size of attributes area for each link
+ * [OPAQUE SET................]   16 words of 4 bytes           -                    Free user's storage
+ * [NODE COUNT................]   4 bytes integer               > 0                  How many nodes in graph
+ * [FROM NODE COUNT...........]   4 bytes integer               > 0                  How many nodes with from role
+ * [TO NODE COUNT.............]   4 bytes integer               > 0                  How many nodes with to role
+ * [ALONE NODE COUNT..........]   4 bytes integer               > 0                  How many nodes with alone role
+ * [ARC (LINK) COUNT..........]   4 bytes integer               > 0                  Home many links in graph
+ * [NODE BUFFER BYTE SIZE.....]   4 bytes integer               >= 0                 Byte size of the node buffer
+ * [LINK BUFFER BYTE SIZE.....]   4 bytes integer               >= 0                 Byte size of the link buffer
+ * [NODE BUFFER...............]   variable len array of bytes   V1 FDG NODE BUFFER   Node buffer
+ * [LINK BUFFER...............]   variable len array of bytes   V1 FDG LINK BUFFER   Link buffer
+ *
+ */
+
+

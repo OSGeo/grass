@@ -1,0 +1,18 @@
+   Dangles
+  ---------
+GRASS doesn't allow areas/islands with dangles. If an island has dangle, it is not built
+and attached to outer area and as a consequence, some functions do not work as expected.
+For example Vect_area_area() and Vect_find_area().
+See comments in build_nat.c: Vect_attach_centroids()
+
+   Category index
+  ----------------
+Category index is created when Vect_build(), i.e. Vect_build_partial(, GV_BUILD_ALL,) 
+is called. Plus_head.cidx_up_to_date is set to 1 if Category index is created.
+Any later call to Vect_write_line() / Vect_rewrite_line() / Vect_delete_line() resets
+Plus_head.cidx_up_to_date to 0 and doesn't update category index. 
+All modules using update on level 2 must call full build, i.e. Vect_build(), at the end.
+
+All features without category are written to category index of field 0. 
+The category index also stores type of feature, that makes it possible to find areas
+without centroid through category index.

@@ -1,0 +1,450 @@
+/*! \page vlibTopology Topology
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+\section vlibTopoManagement Vector library topology management
+
+Topology general characteristics:
+
+- geometry and attributes are stored separately
+   (don't read both if it is not necessary - usually it is not)
+- the format is topological (areas build from boundaries)
+- currently only 2D topology is supported
+
+Topology is written for native GRASS vector format; in case of
+linked OGR sources (see <tt>v.external</tt> module), only
+pseudo-topology (boundaries constructed from polygons) is written.
+
+The following rules apply to the vector data:
+
+- Boundaries should not cross each other (i.e., boundaries which would
+  cross must be split at their intersection to form distict boundaries).
+  On the contrary, lines can cross each other, e.g. bridges over rivers.
+- Lines and boundaries share nodes only if their endpoints are identical.
+  Lines or boundaries can be forced to share a common node by snapping
+  them together. This is particularly important since nodes
+  are not represented in the coor file, but only implicitly as
+  endpoints of lines and boundaries.
+- Common area boundaries should appear only once (i.e., should not be
+  double digitized).
+- Areas must be explicitly closed. This means that it must be possible
+  to complete each area by following one or more boundaries that are
+  connected by common nodes, and that such tracings result in closed
+  areas.
+- It is recommended that area features and linear features be placed
+  in separate layers. However if area features and linear features
+  must appear in one layer, common boundaries should be digitized only
+  once. For example, a boundary that is also a line (e.g., a road which
+  is also a field boundary), should be digitized as a boundary to 
+  complete the area(s), and a boundary which is functionally also a line
+  should be labeled as a line by a distinct category number.
+
+Vector map topology can be cleaned at user level by <tt>v.clean</tt>
+command.
+
+\subsection vlibTopoFileFormat Topo file format specification
+
+Topo file is read by Vect_open_topo().
+
+\subsubsection vlibTopoFileHead Header
+
+<i>Note:</i> <tt>plus</tt> is an instance of \ref Plus_head data structure.
+
+<table border="1" style="border-collapse: collapse" cellpadding="5">
+<tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
+
+<tr><td>plus->Version_Major </td><td>C</td><td>1</td><td>file version (major)</td></tr>
+<tr><td>plus->Version_Minor </td><td>C</td><td>1</td><td>file version (minor)</td></tr>
+<tr><td>plus->Back_Major</td><td>C</td><td>1</td><td>supported from GRASS version (major)</td></tr>
+<tr><td>plus->Back_Minor</td><td>C</td><td>1</td><td>supported from GRASS version (minor)</td></tr>
+
+<tr><td>plus->port->byte_order</td><td>C</td><td>1</td><td>little or big endian
+                  flag; files are written in machine native order but
+                  files in both little and big endian order may be
+                  readl; zero for little endian</td></tr>
+
+<tr><td>plus->head_size</td><td>L</td><td>1</td><td>header size</td></tr>
+
+<tr><td>plus->with_z</td><td>C</td><td>1</td><td>2D or 3D flag; zero for 2D</td></tr>
+
+<tr><td>plus->box</td><td>D</td><td>6</td><td>Bounding box coordinates (N,S,E,W,T,B)</td></tr>
+
+<tr><td>plus->n_nodes, plus->n_lines, etc.</td><td>I</td><td>7</td><td>Number of
+nodes, edges, lines, areas, isles, volumes and holes</td></tr>
+
+<tr><td>plus->n_plines, plus->n_llines, etc.</td><td>I</td><td>7</td><td>Number of
+points, lines, boundaries, centroids, faces and kernels</td></tr>
+
+<tr><td>plus->Node_offset, plus->Edge_offset,
+etc.</td><td>L</td><td>7</td><td>Offset value for nodes, edges, lines,
+areas, isles, volumes and holes</td></tr>
+
+<tr><td>plus->coor_size</td><td>L</td><td>1</td><td>File size</td></tr>
+</table>
+
+\subsubsection vlibTopoFileBody Body (nodes, lines, areas, isles)
+
+<b>Nodes</b>
+
+For each node (plus->n_nodes):
+
+<table border="1" style="border-collapse: collapse" cellpadding="5">
+<tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
+<tr><td>n_lines</td><td>I</td><td>1</td><td>Number of lines (0 for dead node)</td></tr>
+<tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids (negative id for line which ends at the node)</td></tr>
+<tr><td>angles</td><td>D</td><td>n_lines</td><td>Angle value</td></tr>
+<tr><td>n_edges</td><td>I</td><td>1</td><td>Reserved for edges (only for <tt>with_z</tt>)</td></tr>
+<tr><td>x,y</td><td>D</td><td>2</td><td>Coordinate pair (2D)</td></tr>
+<tr><td>z</td><td>D</td><td>1</td><td>Only for <tt>with_z</tt> (3D)</td></tr>
+</table>
+
+See \ref P_node data structure.
+
+<b>Lines</b>
+
+For each line (plus->n_lines):
+
+<table border="1" style="border-collapse: collapse" cellpadding="5">
+<tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
+<tr><td>feature type</td><td>C</td><td>1</td><td>0 for dead line</td></tr>
+<tr><td>offset</td><td>L</td><td>1</td><td>Line offset</td></tr>
+<tr><td>N1</td><td>I</td><td>1</td><td>Start node id (only if feature type is GV_LINE or GV_BOUNDARY)</td></tr>
+<tr><td>N2</td><td>I</td><td>1</td><td>End node id (only if feature type is GV_LINE or GV_BOUNDARY)</td></tr>
+<tr><td>left</td><td>I</td><td>1</td><td>Left area id for feature type GV_BOUNDARY / Area id for feature type GV_CENTROID</td></tr>
+<tr><td>right</td><td>I</td><td>1</td><td>Right area id (for feature type GV_BOUNDARY)</td></tr>
+<tr><td>vol</td><td>I</td><td>1</td><td>Reserved for kernel (volume number, for feature type GV_KERNEL)</td></tr>
+</table>
+
+See \ref P_line data structure.
+
+<b>Areas</b>
+
+For each area (plus->n_areas):
+
+<table border="1" style="border-collapse: collapse" cellpadding="5">
+<tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
+<tr><td>n_lines</td><td>I</td><td>1</td><td>number of boundaries</td></tr>
+<tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids forming exterior boundary (clockwise order, negative id for backward direction)</td></tr>
+<tr><td>n_isles</td><td>I</td><td>1</td><td>Number of isles</td></tr>
+<tr><td>isles</td><td>I</td><td>n_isles</td><td>Isle ids</td></tr>
+<tr><td>centroid</td><td>I</td><td>1</td><td>Centroid id</td></tr>
+</table>
+
+See \ref P_area data structure.
+
+<b>Isles</b>
+
+For each isle (plus->n_isle):
+
+<table border="1" style="border-collapse: collapse" cellpadding="5">
+<tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
+<tr><td>n_lines</td><td>I</td><td>1</td><td>number of boundaries</td></tr>
+<tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids forming exterior boundary (counter-clockwise order, negative id for backward direction)</td></tr>
+<tr><td>area</td><td>I</td><td>1</td><td>Outer area id</td></tr>
+</table>
+
+See \ref P_isle data structure.
+
+\subsection vlibTopoLevels Topology levels
+
+The vector library defines more <i>topology levels</i> (only for level
+of access 2):
+
+- GV_BUILD_NONE
+- GV_BUILD_BASE
+- GV_BUILD_AREAS
+- GV_BUILD_ATTACH_ISLES
+- GV_BUILD_CENTROIDS
+- GV_BUILD_ALL
+
+<i>Note:</i> Only the geometry type GV_BOUNDARY is used to build
+areas. The geometry type GV_LINE cannot form an area.
+
+\subsection vlibTopoExamples Topology examples
+
+<b>Points</b>
+
+\verbatim
+One point (nodes: 0, lines: 1, areas: 0, isles: 0)
+
+    + L1
+\endverbatim
+
+Line L1 (see \ref P_line)
+
+\verbatim
+line = 1, type = 1 (GV_POINT)
+\endverbatim
+
+<b>Lines</b>
+
+\verbatim
+One line (nodes: 2, lines: 1, areas: 0, isles: 0)
+
+
+   +----L1----+
+   N1         N2
+\endverbatim
+
+%Node N1 (see \ref P_node)
+
+\verbatim
+node = 1, n_lines = 1, xyz = 634624.746450, 223557.302231, 0.000000
+  line =   1, type = 2 (GV_LINE), angle = -0.436257
+\endverbatim
+
+%Node N2 (see \ref P_node)
+
+\verbatim
+node = 2, n_lines = 1, xyz = 638677.484787, 221667.849899, 0.000000
+  line =  -1, type = 2 (GV_LINE), angle = 2.705335
+\endverbatim
+
+Line L1 (see \ref P_line)
+
+\verbatim
+line = 1, type = 2 (GV_LINE), n1 = 1, n2 = 2
+\endverbatim
+
+<b>Areas without holes</b>
+
+\verbatim
+Two lines (nodes: 1, lines: 2, areas: 1, isles: 1)
+
+          +N1
+         /   \
+        /     \
+       /       \
+      /   +L2   \
+     /           \
+    -------L1------
+\endverbatim
+
+%Node N1 (see \ref P_node)
+
+\verbatim
+node = 1, n_lines = 2, xyz = 635720.081136, 225063.387424, 0.000000
+  line =   1, type = 4 (GV_BOUNDARY), angle = -2.245537
+  line =  -1, type = 4 (GV_BOUNDARY), angle = -0.842926
+\endverbatim
+
+Line L1 (see \ref P_line)
+
+\verbatim
+line = 1, type = 4 (GV_BOUNDARY), n1 = 1, n2 = 1, left = 1, right = -1
+\endverbatim
+
+Line L2 (see \ref P_line)
+
+\verbatim
+line = 2, type = 8 (GV_CENTROID), area = 1
+\endverbatim
+
+Area A1 (see \ref P_area)
+
+\verbatim
+area = 1, n_lines = 1, n_isles = 0 centroid = 2
+  line =  -1
+\endverbatim
+
+Isle I1 (see \ref P_isle)
+
+\verbatim
+isle = 1, n_lines = 1 area = 0
+  line =   1
+\endverbatim
+
+<b>Areas with holes</b>
+
+\verbatim
+Three lines (nodes: 2, lines: 3, areas: 2, isles: 2)
+
+             +N1
+            / \
+           /   \
+          /     \
+         /       \
+        /    +L2  \
+       /           \
+      /   +N2       \
+     /   /\          \
+    /   /  \          \
+   /   /    \          \
+  /    ---L3--          \
+ /                       \
+------------L1-------------
+\endverbatim
+
+%Node N1 (see \ref P_node)
+
+\verbatim
+node = 1, n_lines = 2, xyz = 635720.081136, 225063.387424, 0.000000
+  line =   1, type = 4 (GV_BOUNDARY), angle = -2.245537
+  line =  -1, type = 4 (GV_BOUNDARY), angle = -0.842926
+\endverbatim
+
+%Node N2 (see \ref P_node)
+
+\verbatim
+node = 2, n_lines = 2, xyz = 636788.032454, 223173.935091, 0.000000
+  line =   3, type = 4 (GV_BOUNDARY), angle = -2.245537
+  line =  -3, type = 4 (GV_BOUNDARY), angle = -0.866302
+\endverbatim
+
+Line L1 (see \ref P_line)
+
+\verbatim
+line = 1, type = 4 (GV_BOUNDARY), n1 = 1, n2 = 1, left = 1, right = -1
+\endverbatim
+
+Line L2 (see \ref P_line)
+
+\verbatim
+line = 2, type = 8 (GV_CENTROID), area = 1
+\endverbatim
+
+Line L3 (see \ref P_line)
+
+\verbatim
+line = 3, type = 4 (GV_BOUNDARY), n1 = 3, n2 = 3, left = 2, right = -2
+\endverbatim
+
+Area A1 (see \ref P_area)
+
+\verbatim
+area = 1, n_lines = 1, n_isles = 1 centroid = 2
+  line =  -1
+  isle =   2
+\endverbatim
+
+Area A2 (see \ref P_area)
+
+\verbatim
+area = 2, n_lines = 1, n_isles = 0 centroid = 0
+  line =  -3
+\endverbatim
+
+Isle I1 (see \ref P_isle)
+
+\verbatim
+isle = 1, n_lines = 1 area = 0
+  line =   1
+\endverbatim
+
+Isle I2 (see \ref P_isle)
+
+\verbatim
+isle = 2, n_lines = 1 area = 1
+  line =   3
+\endverbatim
+
+<b>Example 1</b>
+
+A polygon may be formed by many boundaries (several connected primitives).
+One boundary is shared by adjacent areas.
+
+\verbatim
++--1--+--5--+
+|     |     |
+2  A  4  B  6
+|     |     |
++--3--+--7--+
+
+1,2,3,4,5,6,7 = 7 boundaries (primitives)
+A,B = 2 areas
+A+B = 1 isle
+\endverbatim
+
+<b>Example 2</b>
+
+This is handled correctly in GRASS: A can be filled, B filled differently.
+
+\verbatim
++---------+
+|    A    |
++-----+   |
+|  B  |   |
++-----+   |
+|         |
++---------+
+
+A, B = 2 areas
+A+B  = 1 isle
+\endverbatim
+
+In GRASS, whenever an 'inner' ring touches the boundary of an outside
+area, even in one point, it is no longer an 'inner' ring (isle in
+GRASS topology), it is simply another area. A, B above can never be
+exported from GRASS as polygon A with inner ring B because there are
+only 2 areas A and B and one island formed by A and B together.
+
+<b>Example 3</b>
+
+This is handled correctly in GRASS: Areas A1, A2, and A3 can be filled differently.
+
+\verbatim
++---------------------+
+|  A1                 |
++   +------+------+   |
+|   |  A2  |  A3  |   |
++   +------+------+   |
+|          I1         |
++---------------------+
+
+A1,A2,A3 = 3 areas
+A1,A2+A3 = 2 isles
+\endverbatim
+
+In GRASS, whenever an 'inner' ring does not touch the boundary of an
+outside area, also not in one point, it is an 'inner' ring (isle). The
+areas A2 and A3 form a single isle I1 located within area A1. The size
+of isle I1 is subtracted from the size of area A1 when calculating
+the size of area A1. Any centroids falling into isle I1 are excluded
+when searching for a centroid that can be attached to area A1. A1
+above can be exported from GRASS as polygon A1 with inner ring I1.
+
+<b>Example 4</b>
+
+<tt>v.in.ogr/v.clean</tt> can identify dangles and change the type
+from boundary to line (in TIGER data for example). Distinction
+between line and boundary isn't important only for dangles. Example:
+
+\verbatim
++-----+-----+
+|     .     |
+|     .     |
++.....+.....+
+|     .     |
+|  x  .     |
++-----+-----+
+
+----  road + boundary of one parcel => type boundary
+....  road => type line
+x     parcel centroid (identifies whole area)
+\endverbatim
+
+Because lines are not used to build areas, we have only one
+area/centroid, instead of 4 which would be necessary in TIGER.
+
+\subsection vlibTopoMemory Topology memory management
+
+Topology is generated for all kinds of vector types.  Memory is not
+released by default. The programmer can force the library to release
+the memory by using Vect_set_release_support(). But: The programmer
+cannot run Vect_set_release_support() in mid process because all
+vectors are needed in the spatial index, which is needed to build topology.
+
+Topology is also necessary for points in case of a vector network
+because the graph is built using topology information about lines
+and points.
+
+The topology structure does not only store the topology but also
+the 'line' bounding box and line offset in coor file (index).
+The existing spatial index is using line ID in 'topology' structure
+to identify lines in 'coor' file. Currently it is not possible to build
+spatial index without topology.
+
+
+*/

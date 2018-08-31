@@ -1,0 +1,149 @@
+Update history of SHAPELIB copy:
+
+* files shpopen.c,shapefil.h,dbfopen.c:
+   from ogr/ogrsf_frmts/shape/
+* file safileio.c
+   from SHAPELIB itself (http://download.osgeo.org/shapelib/)
+
+Last update
+* taken from GDAL 2.1.2 and SHAPELIB 1.3.0 (Thu Nov 24 10:45:41 CET 2016)
+* taken from GDAL 1.5.1-SVN (Sun Mar 30 11:20:43 CEST 2008)
+* taken from GDAL 1.5.0-CVS (Wed Sep  5 13:48:48 CEST 2007)
+* taken from GDAL 1.3.2-CVS (Sat Jun 17 22:08:04 CEST 2006)
+
+Additional fixes:
+* dbfopen.c
+   around line 1270: GDAL bug #809 (http://trac.osgeo.org/gdal/ticket/809)
+   remove CPLsnprintf
+   remove CPL_IGNORE_RET_VAL_INT
+   for WIN32, define snprintf as in shpopen.c
+
+* shpopen.c
+  define CPL_UNUSED
+
+* safileio.c
+  SHP_CVSID: ISO C does not allow extra ‘;’ outside of a function
+
+* Use <grass/shapefil.h> etc rather than "shapefil.h"
+   in shpopen.c, dbfopen.c, and safileio.c
+
+
+full fix for dbf_open.c
+-->
+diff -up shapelib_gdal/dbfopen.c shapelib/dbfopen.c 
+--- shapelib_gdal/dbfopen.c	2016-10-24 13:00:32.000000000 +0200
++++ shapelib/dbfopen.c	2016-11-24 11:34:23.996675393 +0100
+@@ -157,7 +157,7 @@
+  * Treat all blank numeric fields as null too.
+  */
+ 
+-#include "shapefil.h"
++#include <grass/shapefil.h>
+ 
+ #include <math.h>
+ #include <stdlib.h>
+@@ -170,6 +170,12 @@
+ #define CPLsprintf sprintf
+ #endif
+ 
++#if defined(WIN32) || defined(_WIN32)
++#  ifndef snprintf
++#     define snprintf _snprintf
++#  endif
++#endif
++
+ SHP_CVSID("$Id$")
+ 
+ #ifndef FALSE
+@@ -177,8 +183,6 @@ SHP_CVSID("$Id: dbfopen.c,v 1.89 2011-07
+ #  define TRUE		1
+ #endif
+ 
+-CPL_INLINE static void CPL_IGNORE_RET_VAL_INT(CPL_UNUSED int unused) {}
+-
+ /************************************************************************/
+ /*                             SfRealloc()                              */
+ /*                                                                      */
+@@ -616,7 +620,7 @@ DBFClose(DBFHandle psDBF)
+     if( psDBF->bNoHeader )
+         DBFWriteHeader( psDBF );
+ 
+-    CPL_IGNORE_RET_VAL_INT(DBFFlushRecord( psDBF ));
++    DBFFlushRecord( psDBF );
+ 
+ /* -------------------------------------------------------------------- */
+ /*      Update last access date, and number of records if we have	*/
+@@ -1273,8 +1277,8 @@ DBFGetFieldInfo( DBFHandle psDBF, int iF
+     else if( psDBF->pachFieldType[iField] == 'N'
+              || psDBF->pachFieldType[iField] == 'F' )
+     {
+-	if( psDBF->panFieldDecimals[iField] > 0
+-            || psDBF->panFieldSize[iField] >= 10 )
++	if( psDBF->panFieldDecimals[iField] > 0 )
++/*            || psDBF->panFieldSize[iField] >= 10 ) */ /* GDAL bug #809 */
+ 	    return( FTDouble );
+ 	else
+ 	    return( FTInteger );
+@@ -1364,7 +1368,7 @@ static int DBFWriteAttribute(DBFHandle p
+ 
+         snprintf( szFormat, sizeof(szFormat), "%%%d.%df",
+                     nWidth, psDBF->panFieldDecimals[iField] );
+-        CPLsnprintf(szSField, sizeof(szSField), szFormat, *((double *) pValue) );
++        snprintf(szSField, sizeof(szSField), szFormat, *((double *) pValue) );
+         if( (int) strlen(szSField) > psDBF->panFieldSize[iField] )
+         {
+             szSField[psDBF->panFieldSize[iField]] = '\0';
+<--
+
+full fix for shpopen.c
+-->
+diff -up shapelib_gdal/shpopen.c shapelib/shpopen.c 
+--- shapelib_gdal/shpopen.c	2016-10-24 13:00:32.000000000 +0200
++++ shapelib/shpopen.c	2016-11-24 10:25:58.460964573 +0100
+@@ -265,7 +265,7 @@
+  *
+  */
+ 
+-#include "shapefil.h"
++#include <grass/shapefil.h>
+ 
+ #include <math.h>
+ #include <limits.h>
+@@ -276,6 +276,10 @@
+ 
+ SHP_CVSID("$Id$")
+ 
++#ifndef CPL_UNUSED
++#define CPL_UNUSED
++#endif
++
+ typedef unsigned char uchar;
+ 
+ #if UINT_MAX == 65535
+<--
+
+full fix for safileio.c
+-->
+diff -up shapelib_gdal/safileio.c shapelib/safileio.c 
+--- shapelib_gdal/safileio.c	2008-01-16 21:05:14.000000000 +0100
++++ shapelib/safileio.c	2016-11-24 10:25:42.734991066 +0100
+@@ -56,7 +56,7 @@
+  *
+  */
+ 
+-#include "shapefil.h"
++#include <grass/shapefil.h>
+ 
+ #include <math.h>
+ #include <limits.h>
+@@ -65,7 +65,7 @@
+ #include <string.h>
+ #include <stdio.h>
+ 
+-SHP_CVSID("$Id$");
++SHP_CVSID("$Id$")
+ 
+ #ifdef SHPAPI_UTF8_HOOKS
+ #   ifdef SHPAPI_WINDOWS
+<--
+

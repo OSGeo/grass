@@ -1,0 +1,719 @@
+### Renamed options between GRASS GIS 6.4 and 7.1
+#################################################
+# Entries in alphabetical order
+################################
+### Global
+##########################
+fs:separator
+nv:null_value
+dt:dtime
+dp:precision
+##########################
+### Display module changes
+##########################
+# d.barscale
+d.barscale|background_color:bgcolor
+# d.colorlist 
+d.colorlist|fs:separator
+# d.colortable
+d.colortable|cols:columns
+# d.correlate
+d.correlate|layers:map
+# d.erase
+d.erase|background:bgcolor
+# d.geodesic
+d.geodesic|lcolor:line_color
+d.geodesic|tcolor:text_color
+# d.grid
+d.grid|bordercolor:border_color
+d.grid|textcolor:text_color
+# d.legend
+d.legend|map:rast
+# d.his
+d.his|h_map:hue
+d.his|i_map:intensity
+d.his|s_map:saturation
+# d.path
+d.path|hcolor:highlight_color
+d.path|type:arc_type
+d.path|alayer:arc_layer
+d.path|nlayer:node_layer
+d.path|afcolumn:arc_column
+d.path|abcolumn:arc_backward_column
+d.path|ncolumn:node_column
+# d.polar
+d.polar|eps:output
+# d.profile
+d.profile|input:map
+d.profile|profile:coordinates
+# d.rast
+d.rast|catlist:values
+d.rast|vallist:values
+# d.rast.arrow
+d.rast.arrow|arrow_color:color
+d.rast.arrow|x_color:null_color
+# d.rast.leg
+d.rast.leg|rast:raster
+# d.rhumbline
+d.rhumbline|coord:coordinates
+d.rhumbline|lcolor:line_color
+d.rhumbline|tcolor:text_color
+# d.vect
+d.vect|attrcolumn:attribute_column
+d.vect|fcolor:fill_color
+d.vect|llayer:label_layer
+d.vect|lcolor:label_color
+d.vect|bgcolor:label_bgcolor
+d.vect|bcolor:label_boundary_color
+d.vect|lsize:label_size
+d.vect|rot_column:rotation_column
+d.vect|wcolumn:width_column
+d.vect|wscale:width_scale
+# d.vect.chart
+d.vect.chart|ctype:chart_type
+d.vect.chart|ocolor:outline_color
+d.vect.chart|sizecol:size_column
+# d.vect.thematic
+d.vect.thematic|bcolor:boundary_color
+d.vect.thematic|bwidth:boundary_width
+d.vect.thematic|nbclasses:nclasses
+######################################
+### Database management module changes
+######################################
+# db.out.ogr
+db.out.ogr|db_table:table
+# db.select
+db.select|vs:vertical_separator
+#########################################
+### General map management module changes
+#########################################
+# g.extension
+g.extension|svnurl:url
+# g.mapset
+g.mapset|gisdbase:dbase
+# g.mapsets
+g.mapsets|addmapset:operation
+g.mapsets|removemapset:operation
+g.mapsets|measure:method
+# g.pnmcomp
+g.pnmcomp|background:bgcolor
+###################################
+### Image processing module changes
+###################################
+# i.atcorr
+i.atcorr|iimg:input
+i.atcorr|iscl:range
+i.atcorr|ialt:elevation
+i.atcorr|ivis:visibility
+i.atcorr|icnd:parameters
+i.atcorr|oimg:output
+i.atcorr|oscl:rescale
+# i.biomass
+i.biomass|lightuseefficiency:lightuse_efficiency
+i.biomass|transmissivitysingleway:transmissivity_singleway
+i.biomass|wateravailability:water_availability
+# i.eb.netrad
+i.eb.netrad|transmissivitysingleway|transmissivity_singleway
+# i.evapo.mh
+i.evapo.mh|averagetemperature:average_temperature
+i.evapo.mh|maximumtemperature:maximum_temperature
+i.evapo.mh|minimumtemperature:minimum_temperature
+i.evapo.mh|netradiationdiurnal:netradiation_diurnal
+# i.evapo.pt
+i.evapo.pt|airtemperature:air_temperature
+i.evapo.pt|atmosphericpressure:atmospheric_pressure
+i.evapo.pt|netradiation:net_radiation
+i.evapo.pt|soilheatflux:soil_heatflux
+i.evapo.pt|priestley_taylor_coef:priestley_taylor_coeff
+# i.fft
+i.fft|input_image:input
+i.fft|real_image:real
+i.fft|imaginary_image:imaginary
+# i.his.rgb
+i.his.rgb|hue_input:hue
+i.his.rgb|intensity_input:intensity
+i.his.rgb|saturation_input:saturation
+i.his.rgb|red_output:red
+i.his.rgb|green_output:green
+i.his.rgb|blue_output:blue
+# i.ifft
+i.ifft|real_image:real
+i.ifft|imaginary_image:imaginary
+i.ifft|output_image:output
+# i.image.mosaic
+i.image.mosaic|images:input
+# i.in.spotvgt
+i.in.spotvgt|file:input
+i.in.spotvgt|rast:output
+# i.landsat.acca
+i.landsat.acca|input_prefix:input
+# i.landsat.toar
+i.landsat.toar|input_prefix:input
+i.landsat.toar|output_prefix:output
+# i.maxlik
+i.maxlik|sigfile:signaturefile
+i.maxlik|class:output
+# i.spectral
+i.spectral|raster:input
+i.spectral|coord:coordinates
+# i.tasscap
+i.tasscap|outprefix:basename
+# i.pansharpen
+i.pansharpen|ms1:blue
+i.pansharpen|ms2:green
+i.pansharpen|ms3:red
+i.pansharpen|output_prefix:output
+i.pansharpen|sharpen:method
+# i.pca
+i.pca|output_prefix:output
+# i.rectify
+i.rectify|res:resolution
+# i.rgb.his
+i.rgb.his|red_input:red
+i.rgb.his|green_input:green
+i.rgb.his|blue_input:blue
+i.rgb.his|hue_output:hue
+i.rgb.his|intensity_output:intensity
+i.rgb.his|saturation_output:saturation
+# i.tasscap
+i.tasscap|satellite:sensor
+# i.vi
+i.vi|chan5:band5
+i.vi|chan7:band7
+################################
+### Miscellaneous module changes
+################################
+# m.measure
+m.measure|coords:coordinates
+# m.cogo
+m.cogo|coords:coordinates
+# m.transform
+m.transform|coords:input
+#########################
+### Raster module changes
+#########################
+# r.basins.fill
+r.basins.fill|c_map:cnetwork
+r.basins.fill|t_map:tnetwork
+r.basins.fill|result:output
+# r.blend
+r.blend|output_prefix:output
+# r.carve
+r.carve|rast:raster
+r.carve|vect:vector
+# r.category
+r.category|fs:separator
+r.category|vals:values
+# r.circle
+r.circle|coordinate:coordinates
+r.circle|mult:multiplier
+# r.coin
+r.coin|map1:first
+r.coin|map2:second
+# r.colors
+r.colors|volume:raster_3d
+# r.colors.stddev
+r.colors.stddev|input:map
+# r.composite
+r.composite|lev_red:level_red
+r.composite|lev_green:level_green
+r.composite|lev_blue:level_blue
+# r.cost
+r.cost|coordinate:start_coordinates
+r.cost|start_rast:start_raster
+# r.distance
+r.distance|maps:map
+# r.drain
+r.drain|coordinates:start_coordinates
+r.drain|indir:direction
+r.drain|vector_points:start_points
+r.drain|voutput:vector_output
+# r.fill.dir
+r.fill.dir|elevation:input
+r.fill.dir|depressionless:output
+r.fill.dir|outdir:direction
+r.fill.dir|type:format
+# r.flow
+r.flow|elevin:elevation
+r.flow|aspin:aspect
+r.flow|barin:barrier
+r.flow|flout:flowline
+r.flow|lgout:flowlength
+r.flow|dsout:flowaccumulation
+# r.his
+r.his|h_map:hue
+r.his|i_map:intensity
+r.his|s_map:saturation
+r.his|r_map:red
+r.his|g_map:green
+r.his|b_map:blue
+# r.horizon
+r.horizon|basename:output
+r.horizon|coordinate:coordinates
+r.horizon|elevin:elevation
+r.horizon|horizonstep:step
+r.horizon|output:file
+# r.in.wms
+r.in.wms|mapserver:url
+# r.lake
+r.lake|wl:water_level
+r.lake|xy:coordinates
+# r.li.*
+r.li.cwed|map:input
+r.li.edgedensity|map:input
+r.li.mps|map:input
+r.li.padrange|map:input
+r.li.patchdensity|map:input
+r.li.pielou|map:input
+r.li.richness|map:input
+r.li.shape|map:input
+r.li.dominance|map:input
+r.li.mpa|map:input
+r.li.padcv|map:input
+r.li.padsd|map:input
+r.li.patchnum|map:input
+r.li.renyi|map:input
+r.li.shannon|map:input
+r.li.simpson|map:input
+# r.out.mpeg
+r.out.mpeg|qual:quality
+# r.out.vrml
+r.out.vrml|elev:elevation
+r.out.vrml|exag:exaggeration
+# r.out.vtk
+r.out.vtk|elevscale:zscale
+# r.param.scale
+r.param.scale|c_tol:curvature_tolerance
+r.param.scale|exp:exponent
+r.param.scale|param:method
+r.param.scale|s_tol:slope_tolerance
+# r.plane
+r.plane|name:output
+# r.profile
+r.profile|null:null_value
+# r.random
+r.random|raster_output:raster
+r.random|n:npoints
+r.random|vector_output:vector
+# r.reclass.area
+r.reclass.area|lesser,greater:value, mode
+# r.regression.line
+r.regression.line|map1:mapx
+r.regression.line|map2:mapy
+# r.report
+r.report|pl:page_length
+r.report|pw:page_width
+r.report|null:null_value
+# r.resamp.bspline
+r.resamp.bspline|se:ew_step
+r.resamp.bspline|sn:ns_step
+# r.resamp.rst
+r.resamp.rst|elev:elevation
+r.resamp.rst|pcurv:pcurvature
+r.resamp.rst|mcurv:mcurvature
+r.resamp.rst|tcurv:tcurvature
+r.resamp.rst|zmult:zscale
+# r.rgb
+r.rgb:|output_prefix:output
+# r.sim.sediment
+r.sim.sediment|conc:sediment_concentration
+r.sim.sediment|detin:detachment_coeff
+r.sim.sediment|diffc:diffusion_coeff
+r.sim.sediment|dxin:dx
+r.sim.sediment|dyin:dy
+r.sim.sediment|elevin:elevation
+r.sim.sediment|erdep:erosion_deposition
+r.sim.sediment|et:tlimit_erosion_deposition
+r.sim.sediment|flux:sediment_flux
+r.sim.sediment|manin:man
+r.sim.sediment|maninval:man_value
+r.sim.sediment|nwalk:nwalkers
+r.sim.sediment|niter:niterations
+r.sim.sediment|outiter:output_step
+r.sim.sediment|outwalk:walkers_output
+r.sim.sediment|tauin:shear_stress
+r.sim.sediment|tc:transport_capacity
+r.sim.sediment|tranin:transport_coeff
+r.sim.sediment|wdepth:water_depth
+# r.sim.water
+r.sim.water|diffc:diffusion_coeff
+r.sim.water|disch:discharge
+r.sim.water|dxin:dx
+r.sim.water|dyin:dy
+r.sim.water|elevin:elevation
+r.sim.water|err:error
+r.sim.water|infil:infil
+r.sim.water|infil_val:infil_value
+r.sim.water|manin:man
+r.sim.water|manin_val:man_value
+r.sim.water|niter:niterations
+r.sim.water|nwalk:nwalkers
+r.sim.water|outiter:output_step
+r.sim.water|outwalk:walkers_output
+r.sim.water|rain_val:rain_value
+r.sim.water|traps:flow_control
+# r.slope.aspect
+r.slope.aspect|min_slp_allowed:min_slope
+r.slope.aspect|pcurv:pcurvature
+r.slope.aspect|prec:precision
+r.slope.aspect|tcurv:tcurvature
+r.slope.aspect|zfactor:zscale
+# r.spreadpath
+r.spreadpath|coordinate:coordinates
+# r.stream.extract
+r.stream.extract|stream_rast:stream_raster
+r.stream.extract|stream_vect:stream_vector
+# r.sun
+r.sun|alb:albedo_value
+r.sun|albin:albedo
+r.sun|aspin:aspect
+r.sun|civiltime:civil_time
+r.sun|coefbh:coeff_bh
+r.sun|coefdh:coeff_dh
+r.sun|declin:declination
+r.sun|dist:distance_step
+r.sun|elevin:elevation
+r.sun|horizonstep:horizon_step
+r.sun|latin:lat
+r.sun|lin:linke_value
+r.sun|linkein:linke
+r.sun|longin:long
+r.sun|numpartitions:npartitions
+r.sun|slopein:slope
+# r.surf.area
+r.surf.area|input:map
+# r.terraflow
+r.terraflow|stream_dir:directory
+# r.texture
+r.texture|measure:method
+# r.to.vect
+r.to.vect|feature:type
+# r.topmodel
+r.topmodel|elevation:
+r.topmodel|basin:
+r.topmodel|depressionless:
+r.topmodel|direction:
+r.topmodel|belevation:
+r.topmodel|nidxclass:ntopidxclasses
+r.topmodel|idxstats:topidxstats
+r.topmodel|idxclass:topidxclass
+r.topmodel|qobs:
+# r.uslek
+r.uslek|usle_k:output
+# r.walk
+r.walk|coordinate:start_coordinates
+r.walk|percent_memory:memory
+r.walk|start_rast:start_raster
+# r.water.outlet
+r.water.outlet|drainage:input
+r.water.outlet|basin:output
+# r.watershed
+r.watershed|disturbed.land:disturbed_land
+r.watershed|half.basin:half_basin
+r.watershed|length.slope:length_slope
+r.watershed|max.slope.length:max_slope_length
+r.watershed|slope.steepness:slope_steepness
+# r.what
+r.what|east_north:coordinates
+# r.viewshed
+r.viewshed|obs_elev:observer_elevation
+r.viewshed|tgt_elev:target_elevation
+r.viewshed|max_dist:max_distance
+############################
+### Raster 3D module changes
+############################
+# r3.colors
+r3.colors|volume:raster_3d
+# r3.gwflow
+r3.gwflow|q:sink
+r3.gwflow|s:yield
+r3.gwflow|r:recharge
+r3.gwflow|vx:velocity_x
+r3.gwflow|vy:velocity_y
+r3.gwflow|vz:velocity_z
+# r3.out.ascii
+r3.out.ascii|dp:precision
+r3.out.ascii|null:null_value
+# r3.out.vtk
+r3.out.vtk|dp:precision
+r3.out.vtk|elevscale:zscale
+#########################
+### Temporal module changes
+#########################
+# t.rast.import
+t.rast.import|extrdir:directory
+# t.rast.export
+t.rast.export|extrdir:directory
+# t.vect.import
+t.vect.import|extrdir:directory
+# t.vect.export
+t.vect.export|extrdir:directory
+# t.info
+t.info|-s|-d
+# t.rast.list
+t.rast.list|-s|-u
+# t.rast.univar
+t.rast.univar|-s|-u
+# t.vect.list
+t.vect.list|-s|-u
+# t.vect.univar
+t.vect.univar|-s|-u
+#########################
+### Vector module changes
+#########################
+# v.buffer
+v.buffer|bufcolumn:column
+# v.clean
+v.clean|thresh:threshold
+# v.colors
+v.colors|volume:raster_3d
+# v.db.join
+v.db.join|otable:other_table
+v.db.join|ocolumn:other_column
+v.db.join|scolumns:subset_columns
+# v.db.select
+v.db.select|nv:null_value
+v.db.select|vs:vertical_separator
+# v.db.update
+v.db.update|qcolumn:query_column
+v.drape|rast:elevation
+# v.drape
+v.drape|rast:elevation
+# v.edit
+v.edit|measure:method
+v.edit|thresh:threshold
+# v.external
+v.external|dsn:input
+# v.extract
+v.extract|list:cats
+# v.extrude
+v.extrude|hcolumn:height_column
+# v.in.e00
+v.in.e00|file:input
+v.in.e00|vect:output
+# v.in.ogr
+v.in.ogr|dsn:input
+v.in.ogr|cnames:columns
+# v.in.wfs
+v.in.wfs|wfs:url
+# v.kcv
+v.kcv|input:map
+v.kcv|k:npartitions
+# v.label
+v.label|background:bgcolor
+v.label|hcolor:highlight_color
+v.label|hwidth:highlight_width
+# v.lidar.correction
+v.lidar.correction|sce:ew_step
+v.lidar.correction|scn:ns_step
+# v.lidar.edgedetection
+v.lidar.edgedetection|see:ew_step
+v.lidar.edgedetection|sen:ns_step
+# v.lrs.create
+v.lrs.create|thresh:threshold
+# v.lrs.label
+v.lrs.label|background:bgcolor
+v.lrs.label|hcolor:highlight_color
+v.lrs.label|hwidth:highlight_width
+# v.lrs.where
+v.lrs.where|thresh:threshold
+# v.kcv
+v.kcv|k:npartitions
+# v.kernel
+v.kernel|mult:multiplier
+# v.mkgrid
+v.mkgrid|coor:coordinates
+# v.net
+v.net|thresh:threshold
+v.net|alayer:arc_layer
+v.net|nlayer:node_layer
+v.net|type:arc_type
+v.net|tlayer:turn_layer
+v.net|tuclayer:turn_cat_layer
+# v.net.alloc
+v.net.alloc|alayer:arc_layer
+v.net.alloc|nlayer:node_layer
+v.net.alloc|type:arc_type
+v.net.alloc|ccats:center_cats
+v.net.alloc|ncolumn:node_column
+v.net.alloc|afcolumn:arc_column
+v.net.alloc|abcolumn:arc_backward_column
+v.net.alloc|tlayer:turn_layer
+v.net.alloc|tuclayer:turn_cat_layer
+# v.net.allpairs
+v.net.allpairs|alayer:arc_layer
+v.net.allpairs|nlayer:node_layer
+v.net.allpairs|ncolumn:node_column
+v.net.allpairs|afcolumn:arc_column
+v.net.allpairs|abcolumn:arc_backward_column
+# v.net.bridge
+v.net.bridge|alayer:arc_layer
+v.net.bridge|nlayer:node_layer
+v.net.bridge|ncolumn:node_column
+v.net.bridge|afcolumn:arc_column
+v.net.bridge|abcolumn:arc_backward_column
+# v.net.centrality
+v.net.centrality|alayer:arc_layer
+v.net.centrality|nlayer:node_layer
+v.net.centrality|ncolumn:node_column
+v.net.centrality|afcolumn:arc_column
+v.net.centrality|abcolumn:arc_backward_column
+# v.net.components
+v.net.components|alayer:arc_layer
+v.net.components|nlayer:node_layer
+v.net.components|ncolumn:node_column
+v.net.components|afcolumn:arc_column
+v.net.components|abcolumn:arc_backward_column
+# v.net.connectivity
+v.net.connectivity|alayer:arc_layer
+v.net.connectivity|nlayer:node_layer
+v.net.connectivity|ncolumn:node_column
+v.net.connectivity|afcolumn:arc_column
+v.net.connectivity|abcolumn:arc_backward_column
+# v.net.distance
+v.net.distance|alayer:arc_layer
+v.net.distance|nlayer:node_layer
+v.net.distance|type:arc_type
+v.net.distance|ncolumn:node_column
+v.net.distance|afcolumn:arc_column
+v.net.distance|abcolumn:arc_backward_column
+# v.net.flow
+v.net.flow|alayer:arc_layer
+v.net.flow|nlayer:node_layer
+v.net.flow|afcolumn:arc_column
+v.net.flow|abcolumn:arc_backward_column
+# v.net.iso
+v.net.iso|alayer:arc_layer
+v.net.iso|nlayer:node_layer
+v.net.iso|type:arc_type
+v.net.iso|ccats:center_cats
+v.net.iso|ncolumn:node_column
+v.net.iso|afcolumn:arc_column
+v.net.iso|abcolumn:arc_backward_column
+v.net.iso|tlayer:turn_layer
+v.net.iso|tuclayer:turn_cat_layer
+# v.net.path
+v.net.path|alayer:arc_layer
+v.net.path|nlayer:node_layer
+v.net.path|type:arc_type
+v.net.path|ncolumn:node_column
+v.net.path|afcolumn:arc_column
+v.net.path|abcolumn:arc_backward_column
+v.net.path|tlayer:turn_layer
+v.net.path|tuclayer:turn_cat_layer
+# v.net.salesman
+v.net.salesman|alayer:arc_layer
+v.net.salesman|nlayer:node_layer
+v.net.salesman|type:arc_type
+v.net.salesman|ccats:center_cats
+v.net.salesman|afcolumn:arc_column
+v.net.salesman|abcolumn:arc_backward_column
+v.net.salesman|tlayer:turn_layer
+v.net.salesman|tuclayer:turn_cat_layer
+# v.net.spanningtree
+v.net.spanningtree|alayer:arc_layer
+v.net.spanningtree|nlayer:node_layer
+v.net.spanningtree|ncolumn:node_column
+v.net.spanningtree|afcolumn:arc_columnw
+# v.net.steiner
+v.net.steiner|alayer:arc_layer
+v.net.steiner|nlayer:node_layer
+v.net.steiner|type:arc_type
+v.net.steiner|tcats:terminal_cats
+v.net.steiner|nsp:npoints
+# v.net.timetable
+v.net.timetable|alayer:arc_layer
+v.net.timetable|nlayer:node_layer
+v.net.timetable|ncolumn:node_column
+v.net.timetable|afcolumn:arc_column
+v.net.timetable|abcolumn:arc_backward_column
+# v.net.visibility
+v.net.visibility|coordinate|coordinates
+v.net.visibility|vis|visibility
+# v.out.ogr
+v.out.ogr|dsn:output
+v.out.ogr|olayer:output_layer
+v.out.ogr|otype:output_type
+# v.out.postgis
+v.out.postgis|dsn:output
+v.out.postgis|olayer:output_layer
+v.out.postgis|olink:output_link
+# v.out.vtk
+v.out.vtk|scale:zscale
+# v.outlier
+v.outlier|soe:ew_step
+v.outlier|son:ns_step
+v.outlier|lambda_i:lambda
+v.outlier|thres_o:threshold
+# v.qcount
+v.qcount|n:nquadrats
+v.qcount|r:radius
+# v.random
+v.random|n:npoints
+# v.rast.stats
+v.rast.stats|colprefix:column_prefix
+v.rast.stats|input:map
+# v.sample
+v.sample|z:zscale
+# v.segment
+v.segment|file:segments
+# v.support
+v.support|thresh:threshold
+# v.surf.bspline
+v.surf.bspline|sie:ew_step
+v.surf.bspline|sin:ns_step
+v.surf.bspline|raster:raster_output
+v.surf.bspline|sparse:sparse_input
+# v.surf.rst
+v.surf.rst|devi:deviations
+v.surf.rst|elev:elevation
+v.surf.rst|maskmap:mask
+v.surf.rst|mcurv:mcurvature
+v.surf.rst|overfile:overwin
+v.surf.rst|pcurv:pcurvature
+v.surf.rst|scolumn:smooth_column
+v.surf.rst|tcurv:tcurvature
+v.surf.rst|treefile:treeseg
+v.surf.rst|zmulti:zscale
+# v.to.db
+v.to.db|qlayer:query_layer
+v.to.db|qcolumn:query_column
+# v.to.points
+v.to.points|llayer:layer
+# v.to.rast
+v.to.rast|column:attribute_column
+v.to.rast|rgbcolumn:rgb_column
+v.to.rast|labelcolumn:label_column 
+# v.transform
+v.transform|attrcolumn:attribute_column
+v.transform|labelcolumn:label_column
+v.transform|rgbcolumn:rgb_column
+v.transform|zrot:zrotation
+# v.vect.stats
+v.vect.stats|alayer:areas_layer
+v.vect.stats|ccolumn:count_column
+v.vect.stats|pcolumn:points_column
+v.vect.stats|player:points_layer
+v.vect.stats|scolumn:stats_column
+# v.vol.rst
+v.vol.rst|aspect1:aspect_horizontal
+v.vol.rst|aspect2:aspect_vertical
+v.vol.rst|cellinp:cross_input
+v.vol.rst|cellout:cross_output
+v.vol.rst|devi:deviations
+v.vol.rst|elev:elevation
+v.vol.rst|gcurv:gcurvature
+v.vol.rst|mcurv:mcurvature
+v.vol.rst|ncurv:ncurvature
+v.vol.rst|scolumn:smooth_column
+v.vol.rst|wmulti:wscale
+v.vol.rst|zmulti:zscale
+# v.what.vect
+v.what.vect|qcolumn:query_column
+v.what.vect|qlayer:query_layer
+v.what.vect|qmap:query_map
+# v.what.vect
+v.what.vect|qvector:query_map
+v.what.vect|qlayer:query_layer
+v.what.vect|qcolumn:query_column
+v.what.vect|vector:map

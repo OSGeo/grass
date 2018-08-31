@@ -1,0 +1,12 @@
+<!ELEMENT toolbox (label, items)>
+<!ATTLIST toolbox name NMTOKEN #REQUIRED>
+
+<!ELEMENT items ((subtoolbox | user-toolboxes-list)*)>
+
+<!ELEMENT subtoolbox EMPTY>
+<!ATTLIST subtoolbox name NMTOKEN #REQUIRED>
+
+<!ELEMENT user-toolboxes-list EMPTY>
+
+<!ELEMENT label (#PCDATA)>
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbox SYSTEM "grass-toolbox.dtd">
+<addons version="7">
+  <toolbox name="Hydrology" code="HY">
+    <correlate code="RA" />
+    <task name="r.stream.basins" />
+    <task name="r.stream.channel" />
+    <task name="r.stream.distance" />
+    <task name="r.stream.order" />
+    <task name="r.stream.segment" />
+    <task name="r.stream.slope" />
+    <task name="r.stream.snap" />
+    <task name="r.stream.stats" />
+  </toolbox>
+  <toolbox name="mcda" code="MC">
+    <correlate code="RA" />
+    <task name="r.mcda.ahp" />
+    <task name="r.mcda.roughset" />
+    <task name="r.mcda.input" />
+    <task name="r.mcda.output" />
+  </toolbox>
+</addons>

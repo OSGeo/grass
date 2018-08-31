@@ -1,0 +1,49 @@
+<h2>DESCRIPTION</h2>
+
+<b>r.surf.random</b> produces a raster map layer of uniform random deviates
+whose range can be expressed by the user. It is essentialy the same as
+<em>r.surf.gauss</em>, but uses a linear random number generator instead.
+It uses the random number generator drand48() or rand()<!-- cite? -->,
+depending on the user's platform.
+
+<p><center>
+<img src="r_surf_random_hist.png" alt="r.surf.random map histogram"><br>
+<i>Histogram of map generated with r.surf.random</i>
+</center>
+
+<h2>EXAMPLE</h2>
+
+<div class="code"><pre>
+g.region -p n=228500 s=215000 w=630000 e=645000 res=10
+r.surf.random out=random min=0 max=100
+
+# check result
+r.univar random
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.random.surface.html">r.random.surface</a>, 
+<a href="r.surf.contour.html">r.surf.contour</a>,
+<a href="r.surf.fractal.html">r.surf.fractal</a>,
+<a href="r.surf.gauss.html">r.surf.gauss</a>,
+<a href="r.surf.idw.html">r.surf.idw</a>,
+<a href="v.surf.rst.html">v.surf.rst</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Jo Wood<br>
+Midlands Regional Research Laboratory (ASSIST)<br>
+University of Leicester<br>
+<i>October 1991</i>
+<br>
+
+<!-- almost certainly no longer valid
+<address>jwo at le.ac.uk</address>
+
+<br><a href="http://www.geog.le.ac.uk/assist/index.html">ASSIST's home</a>
+-->
+
+<p><i>Last changed: $Date$</i>

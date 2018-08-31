@@ -1,0 +1,46 @@
+TODO
+Date_ 2009-10-03
+* Add ATLAS wrapper for blas level 2 and level 3 functions.
+* Include the HAVE_ATLAS definition in the configure system
+* Replace the lu-solver in lu.c with the one from the ccmath library
+  and patch all modules using lu.c
+* Implement a robust parallelizable LU solver with pivoting
+* Move the band matrix cholesky decomposition solver from the lidar library
+  (TcholBand.c) into the gmath library and make it available for other numerical
+  programs (Integration in the common solver structure)
+
+
+TODO
+Date: 2006-11-20
+
+http://www.netlib.org/lapack/
+http://www.netlib.org/c/meschach/ (not GPL'ed, but excellent implementation!)
+
+la.c: write:
+  new gmath               function                 old MESCHACH
+
+ G_vector_free()     free vector memory              #define V_FREE(vec) ( v_free(vec),  (vec)=(VEC *)NULL )
+                                                     int v_free(vec)
+                                                          VEC     *vec;
+ G_vector_sub()      Subtract two vectors:           VEC *v_sub(vec1,vec2,out)
+                                                          VEC *vec1,*vec2,*out;
+ G_vector_norm1()    Calculate 1-norm of vector      #define v_norm1(x)  _v_norm1(x,VNULL)
+                                                     double _v_norm1(x,scale)
+                                                          VEC *x, *scale;
+ G_matrix_scalar_mult() Scalar-matrix multiplication MAT *sm_mlt(scalar,matrix,out)
+                                                          double  scalar;
+                                                          MAT  *matrix,*out;
+ G_matrix_stdin()    stdin read-function "m_input()" #define m_input(mat) m_finput(stdin,mat)
+                                                     MAT *m_finput(FILE *fp,MAT *out);
+ G_vector_stdin()    stdin read-function "v_input()" #define v_input(vec) v_finput(stdin,vec)
+                                                     VEC *v_finput(FILE *fp,VEC *out);
+
+Sample text matrix for G_matrix_stdin()
+# comment
+# enter row by col
+Matrix: 4 by 6
+row0:  8.87  13.14  11.71  35.85  28.26 10.54
+row1: 13.59  20.12  19.61  70.66 34.82 16.35
+row2: 28.26  34.82  38.27  40.1 38.27 23.7
+row3: 10.54  16.35  23.7   38.98 40.1 38.98
+

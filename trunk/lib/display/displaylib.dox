@@ -1,0 +1,277 @@
+/*! \page displaylib GRASS Display Library
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+This library provides a wide assortment of higher level graphics
+commands which in turn use the graphics library primitives. It is
+highly recommended that this section be used to understand how some of
+the GRASS graphics commands operate. Such modules like
+<tt>d.vect</tt>, <tt>d.graph</tt>, and <tt>d.rast</tt> demonstrate how
+these routines work together.
+
+The routines fall into four basic sets:
+-# frame creation and management;
+-# coordinate conversion routines;
+-# specialized efficient raster display routines, and;
+-# assorted miscellaneous routines like pop-up menus and line clipping.
+
+Note: All routines and global variables in this library, documented or
+undocumented, start with <em>D_</em> prefix. To avoid name
+conflicts, programmers should not create variables or routines in
+their own modules which use this prefix.
+
+\section displayLibFns List of functions
+
+The library functions are defined in <tt>display.h</tt> header:
+
+\code
+#include <grass/display.h>
+\endcode
+
+- D_a_to_d_col()
+
+- D_a_to_d_row()
+
+- D_a_to_u_col()
+
+- D_a_to_u_row()
+
+- D_begin()
+
+- D_box_abs()
+
+- D_box_rel()
+
+- D_c_color()
+
+- D_cell_draw_begin()
+
+- D_cell_draw_end()
+
+- D_clip_to_map()
+
+- D_close()
+
+- D_close_driver()
+
+- D_color()
+
+- D_color_number_to_RGB()
+
+- D_color_of_type()
+
+- D_cont_abs()
+
+- D_cont_rel()
+
+- D_d_color()
+
+- D_do_conversions()
+
+- D_dots()
+
+- D_draw_cell()
+
+- D_draw_c_raster()
+
+- D_draw_d_raster()
+
+- D_draw_f_raster()
+
+- D_draw_raster()
+
+- D_draw_raster_RGB()
+
+- D_d_to_a_col()
+
+- D_d_to_a_row()
+
+- D_d_to_u_col()
+
+- D_d_to_u_row()
+
+- D_encoding()
+
+- D_end()
+
+- D_erase()
+
+- D__erase()
+
+- D_f_color()
+
+- D_fill()
+
+- D_fit_d_to_u()
+
+- D_fit_u_to_d()
+
+- D_font()
+
+- D_font_info()
+
+- D_font_list()
+
+- D_get_a()
+
+- D_get_a_east()
+
+- D_get_a_north()
+
+- D_get_a_south()
+
+- D_get_a_to_d_xconv()
+
+- D_get_a_to_d_yconv()
+
+- D_get_a_to_u_xconv()
+
+- D_get_a_to_u_yconv()
+
+- D_get_a_west()
+
+- D_get_d()
+
+- D_get_d_east()
+
+- D_get_d_north()
+
+- D_get_d_south()
+
+- D_get_dst()
+
+- D_get_d_to_a_xconv()
+
+- D_get_d_to_a_yconv()
+
+- D_get_d_to_u_xconv()
+
+- D_get_d_to_u_yconv()
+
+- D_get_d_west()
+
+- D_get_ew_resolution()
+
+- D_get_grid()
+
+- D_get_ns_resolution()
+
+- D_get_src()
+
+- D_get_text_box()
+
+- D_get_u()
+
+- D_get_u_east()
+
+- D_get_u_north()
+
+- D_get_u_south()
+
+- D_get_u_to_a_xconv()
+
+- D_get_u_to_a_yconv()
+
+- D_get_u_to_d_xconv()
+
+- D_get_u_to_d_yconv()
+
+- D_get_u_west()
+
+- D_get_window()
+
+- D_is_lat_lon()
+
+- D_line_abs()
+
+- D_line_rel()
+
+- D_line_width()
+
+- D_move_abs()
+
+- D_move_rel()
+
+- D_open_driver()
+
+- D_parse_color()
+
+- D_plot_icon()
+
+- D_polydots_abs()
+
+- D_polydots_rel()
+
+- D_polygon_abs()
+
+- D_polygon_rel()
+
+- D_polyline_abs()
+
+- D_polyline_rel()
+
+- D_pos_abs()
+
+- D_pos_rel()
+
+- D_RGB_color()
+
+- D_save_command()
+
+- D_set_clip()
+
+- D_set_clip_mode()
+
+- D_set_dst()
+
+- D_set_grid()
+
+- D_set_overlay_mode()
+
+- D_set_reduction()
+
+- D_set_region()
+
+- D_set_src()
+
+- D_setup()
+
+- D_setup2()
+
+- D_setup_unity()
+
+- D_show_conversions()
+
+- D_stroke()
+
+- D_symbol()
+
+- D_symbol2()
+
+- D_text()
+
+- D_text_rotation()
+
+- D_text_size()
+
+- D_translate_color()
+
+- D_update_conversions()
+
+- D_use_color()
+
+- D_u_to_a_col()
+
+- D_u_to_a_row()
+
+- D_u_to_d_col()
+
+- D_u_to_d_row()
+
+\section Authors Authors
+
+- Original author CERL
+- Major rewrite by Glynn Clements (2008)
+- Minor updates by Martin Landa <landa.martin gmail.com> (2011)
+
+*/

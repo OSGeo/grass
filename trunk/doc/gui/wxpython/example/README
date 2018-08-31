@@ -1,0 +1,69 @@
+Motivation
+----------
+Example Tool should help new GRASS GUI programmers who are interested in
+adding or improving GRASS GIS functionality or writing GRASS GIS GUI-based
+application for their own purposes.
+
+How to use Example Tool
+-----------------------
+Example Tool is a simple template for applications which are
+supposed to display maps and make computations using GRASS modules.
+It covers several often occurring tasks. It can be helpful for all
+new developers who are interested in wxGUI programming.
+Run Example Tool, have a look at wxGUI.Example.html and than
+look at the source code to see how it works.
+
+Run Example Tool
+----------------
+To run Example Tool can run as a standalone application (in GRASS environment)
+or it can be launched from the console.
+
+1. Go to GRASS root directory
+
+2. Copy directory ./doc/gui/wxpython/example to ./gui/wxpython/example
+
+3. Edit ./gui/wxpython/Makefile:
+
+ SRCFILES := $(wildcard icons/*.* scripts/* xml/*) \
+-	$(wildcard core/* dbmgr/* gcp/* gmodeler/* ... \
++	$(wildcard core/* dbmgr/* example/* gcp/* gmodeler/* ... \
+ 
+-PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbmgr gcp gmodeler ... \
++PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbmgr example gcp gmodeler ... \
+
+4. Run make (in ./gui/wxpython)
+
+Now you can start the application by running
+
+$ g.gui.example
+
+from terminal or wxGUI command console. Try also g.gui.example --help.
+
+If you want to access Example Tool from Layer Manager menu, there are
+a few more things to be done.
+
+5. Edit ./gui/wxpython/xml/menudata.xml. Add following code to appropriate place:
+
+    <menuitem>
+      <label>Example</label>
+      <help>Example help (for statusbar)</help>
+      <keywords>raster</keywords>
+      <handler>OnExample</handler>
+    </menuitem>
+    
+6. Add folowing event handler to class GMFrame in ./gui/wxpython/lmgr/frame.py:
+
+    def OnExample(self, event):
+        """!Launch ExampleTool"""
+        from example.frame import ExampleMapFrame
+        win = ExampleMapFrame(parent=self, giface=self._giface)
+        win.CentreOnScreen()
+        
+        win.Show()
+
+7. Run make again.
+
+
+Note
+----
+Feel free to improve Example Tool or suggest possible improvements.

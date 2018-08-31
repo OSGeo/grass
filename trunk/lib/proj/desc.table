@@ -1,0 +1,43 @@
+ALPHA:lon:alpha:Azimuth angle at Cartesian Origin
+AZIM:float:azi:Azimuth Angle of Tilt in Decimal degrees
+GUAM:bool:guam:
+HEIGH:float:h:Height of Viewing Point in Meters
+KFACT:float:k_0:Scale Factor at the Central Meridian
+LAT0:lat:lat_0:Central Parallel
+LAT1:lat:lat_1:First Standard Parallel
+LAT2:lat:lat_2:Second Standard Parallel
+LAT3:lat:lat_3:Third Standard Parallel
+LATB:lat:lat_b:Angular Distance from Tangency Point
+LATTS:lat:lat_ts:Latitude of True Scale
+LON0:lon:lon_0:Central Meridian
+LON1:lon:lon_1:First Standard Meridian
+LON2:lon:lon_2:Second Standard Meridian
+LON3:lon:lon_3:Third Standard Meridian
+LONC:lon:lon_c:Longitude of Cartesian Origin
+LOTSA:bool:lotsa:LOTSA
+MFACT:float:m:m factor
+MSFACT:float:M:M factor
+NFACT:float:n:n factor
+NOCUT:bool:no_cut:Both Hemispheres
+NOROT:bool:no_rot:Suppress Rotation
+NOSKEW:bool:ns:Suppress Skew
+NOUOFF:bool:no_uoff:Suppress Offset from Pre-Rotated Axis
+OALPHA:lat:o_alpha:
+OLAT1:lat:o_lat_1:
+OLAT2:lat:o_lat_2:
+OLATP:float:o_lat_p:Latitude of New Pole
+OLON1:lon:o_lon_1:
+OLON2:lon:o_lon_2:
+OLONC:lon:o_lon_c:
+OLONP:lon:o_lon_p:Longitude of New Pole
+QFACT:float:q:q factor
+ROTCONV:bool:rot_conv:Origin Convergence Angle
+SNUM:int:lsat:Satellite Number
+SOUTH:bool:south:Southern Hemisphere
+SPATH:int:path:Satellite Path Number
+THETA:lon:theta:Theta Angle
+TILT:float:tilt:Tilt Angle in Decimal Degrees
+WFACT:float:W:W factor
+X0:float:x_0:False Easting
+Y0:float:y_0:False Northing
+ZONE:zone:zone:Projection Zone

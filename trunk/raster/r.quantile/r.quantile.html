@@ -1,0 +1,43 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.quantile</em> computes quantiles in a manner suitable
+for use with large amounts of data. It is using two passes.
+
+<h2>EXAMPLE</h2>
+
+Calculation of elevation quantiles (printed to standard-out):
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.quantile input=elevation percentiles=0.1,1,10,25,50,75,90,99,99.9
+</pre></div>
+
+The output of <em>r.quantile</em> can be used for quantile classification:
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.quantile elevation quantiles=5 -r --quiet | r.recode elevation \
+           out=elev_quant5 rules=-
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.mode.html">r.mode</a>,
+<a href="r.quant.html">r.quant</a>,
+<a href="r.quantile.html">r.quantile</a>,
+<a href="r.series.html">r.series</a>,
+<a href="r.stats.html">r.stats</a>,
+<a href="r.stats.quantile.html">r.stats.quantile</a>,
+<a href="r.stats.zonal.html">r.stats.zonal</a>,
+<a href="r.statistics.html">r.statistics</a>,
+<a href="r.univar.html">r.univar</a>,
+<a href="v.rast.stats.html">v.rast.stats</a>
+</em>
+
+
+<h2>AUTHOR</h2>
+
+Glynn Clements
+<p>
+<i>Last changed: $Date$</i>

@@ -1,0 +1,67 @@
+/*! \page cdhclib GRASS testing normality & exponentiality Library
+
+by Darrell McCauley and  GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+\section cdhcintro GRASS library for testing normality & exponentiality
+
+- Moments \sqrt{b_1} and b_2
+- Geary's a-statistic & an approx. normal
+- Cdhc_extreme normal deviates
+- D'Agostino's D & an approx. normal
+- Kuiper's V (regular & modified for normality)
+- Watson's U^2 (regular & modified for normality)
+- Durbin's Exact Test (modified Kolmogorov)
+- Anderson-Darling's A^2 (regular & modified for normality)
+- Cramer-Von Mises W^2(regular & modified for normality)
+- Kolmogorov-Smirnov's D (regular & modified for normality)
+- Chi-Square stat (equal probability classes) and d.f.
+- Shapiro-Wilk W
+- Weisberg-Bingham's W''
+- Shapiro-Wilk W''
+- Kotz' T'_f (Lognormality vs. Normality)
+
+\section Loading_the_CDHC_Library Loading the CDHC Library
+
+The library is loaded by specifying
+
+\verbatim
+$(CDHCLIB)
+\endverbatim
+
+in the <tt>Makefile</tt>.
+
+\section listOfFunctions List of functions (incomplete)
+
+- Cdhc_anderson_darling()
+- Cdhc_anderson_darling_exp()
+- Cdhc_chi_square()
+- Cdhc_chi_square_exp()
+- Cdhc_cramer_von_mises()
+- Cdhc_cramer_von_mises_exp()
+- Cdhc_dagostino_d()
+- Cdhc_dmax()
+- Cdhc_dmax_exp()
+- Cdhc_durbins_exact()
+- Cdhc_enormp()
+- Cdhc_extreme()
+- Cdhc_geary_test()
+- Cdhc_kolmogorov_smirnov()
+- Cdhc_kolmogorov_smirnov_exp()
+- Cdhc_kotz_families()
+- Cdhc_kuipers_v()
+- Cdhc_kuipers_v_exp()
+- Cdhc_normp()
+- Cdhc_omnibus_moments()
+- Cdhc_royston()
+- Cdhc_shapiro_francia()
+- Cdhc_shapiro_wilk()
+- Cdhc_shapiro_wilk_exp()
+- Cdhc_watson_u2()
+- Cdhc_watson_u2_exp()
+- Cdhc_weisberg_bingham()
+- Cdhc_xinormal()
+
+*/
+

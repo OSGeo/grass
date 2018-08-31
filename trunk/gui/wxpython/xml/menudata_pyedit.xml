@@ -1,0 +1,113 @@
+<menudata>
+  <menubar>
+    <menu>
+      <label>&amp;File</label>
+      <items>
+        <menuitem>
+          <label>Open</label>
+          <help>Load model from file</help>
+          <handler>OnOpen</handler>
+          <shortcut>Ctrl+O</shortcut>
+        </menuitem>
+        <menuitem>
+          <label>Save</label>
+          <help>Save model</help>
+          <handler>OnSave</handler>
+          <shortcut>Ctrl+S</shortcut>
+        </menuitem>
+        <menuitem>
+          <label>Quit editor</label>
+          <help>Close editor window</help>
+          <handler>OnClose</handler>
+          <shortcut>Ctrl+W</shortcut>
+        </menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Run</label>
+      <items>
+        <menuitem>
+          <label>Run</label>
+          <help>Run Python script</help>
+          <handler>OnRun</handler>
+          <shortcut>Ctrl+R</shortcut>
+        </menuitem>
+        <menuitem>
+          <label>Set parameters</label>
+          <help>Set command line parameters for the script</help>
+          <handler>OnSetParameters</handler>
+        </menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Templates</label>
+      <items>
+        <menuitem>
+          <label>Load script &amp;template</label>
+          <help>Load simple script template</help>
+          <handler>OnSimpleScriptTemplate</handler>
+        </menuitem>
+        <menuitem>
+          <label>Load GRASS &amp;module template</label>
+          <help>Load full GRASS module template</help>
+          <handler>OnGrassModuleTemplate</handler>
+        </menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Examples</label>
+      <items>
+        <menuitem>
+          <label>Load script &amp;example</label>
+          <help>Load simple script example</help>
+          <handler>OnSimpleScriptExample</handler>
+        </menuitem>
+        <menuitem>
+          <label>Load GRASS &amp;module example</label>
+          <help>Load full GRASS module example</help>
+          <handler>OnGrassModuleExample</handler>
+        </menuitem>
+        <menuitem>
+          <label>Load GRASS module error &amp;handling example</label>
+          <help>Load full GRASS module with error handling example</help>
+          <handler>OnGrassModuleErrorHandlingExample</handler>
+        </menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Help</label>
+      <items>
+        <menuitem>
+          <label>GRASS Python Help</label>
+          <help>Display documentation for writing Python code in GRASS GIS</help>
+          <handler>OnHelp</handler>
+        </menuitem>
+        <menuitem>
+          <label>Python help</label>
+          <help>Display documentation for writing Python code in general</help>
+          <handler>OnPythonHelp</handler>
+        </menuitem>
+        <menuitem>
+          <label>GRASS Modules help</label>
+          <help>Display the HTML man page index for all GRASS modules</help>
+          <handler>OnModulesHelp</handler>
+        </menuitem>
+        <menuitem>
+          <label>GRASS Python code guidelines</label>
+          <help>Display guidelines for submitting Python code to GRASS GIS</help>
+          <handler>OnSubmittingHelp</handler>
+        </menuitem>
+        <menuitem>
+          <label>Getting your code to GRASS Addons</label>
+          <help>Display instructions for submitting you code to GRASS GIS Addons repository</help>
+          <handler>OnAddonsHelp</handler>
+        </menuitem>
+        <menuitem>
+          <label>Get support</label>
+          <help>Display information about getting support for writing Python code in GRASS GIS</help>
+          <handler>OnSupport</handler>
+        </menuitem>
+      </items>
+    </menu>
+  </menubar>
+</menudata>

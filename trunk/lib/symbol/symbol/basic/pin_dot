@@ -1,0 +1,21 @@
+VERSION 1.0
+BOX -1 0 1 2
+POLYGON
+  RING
+    ARC 0 1.4 0.6 0 180
+    ARC 0 1.4 0.6 180 200
+    LINE
+    -0.483 1
+    0 0
+    0.483 1
+    END
+    ARC 0 1.4 0.6 340 360
+  END
+POLYGON
+  RING
+    FCOLOR 0 0 0
+    COLOR 0 0 0
+    ARC 0 1.4 0.25 0 360
+  END
+END
+END

@@ -1,0 +1,42 @@
+dnorm is an average size of the segment (not window); so points that are
+farther apart than dnorm + window size are computed independently.
+
+############################################################
+This is a GRASS 5.0 version of a program
+for interpolation by regularized spline with tension.
+The original version was implemented in GRASS4.1 as
+s.surf.tps.
+This version has been rewritten (see DESCRIPTION)
+and numerous enhancements were added (see S_SURF_RST.html).
+
+Original program was written by Lubos Mitas and Helena Mitasova.
+GRASS4.1 implementation by Irina Kosinovsky and Dave Gerdes
+Rewriting to floating point was done by Irina Kosinovsky 1995
+Modification for new site format was done by Darrell McCauley 1995
+Various enhancements including spatially
+variable smoothing  were added by Lubos and Helena, 1997
+Also, normalization of z was removed, so neither smoothing
+nor z is normalized.
+
+You must have the floating point patches, the new sites API,
+the datetime API, and the TimeStamp patches to install these
+programs.
+
+The methods are described in (use these papers as references in
+your publications):
+
+    Mitasova, H., and  Mitas, L., 1993, 
+       Interpolation by Regularized Spline with Tension: 
+       I. Theory  and  implementation.  Mathematical Geology, 25, 641-55. 
+       
+    Mitasova, H., and Hofierka, L., 1993
+       Interpolation by Regularized Spline with Tension: 
+       II. Application to terrain modeling and surface geometry  analysis. 
+       Mathematical Geology, 25, 657-69. 
+       
+    Mitasova, H., Mitas, L., Brown, W.M., Gerdes, D.P., Kosinovsky, I.,
+       Baker, T., 1995, Modeling spatially and temporally
+       distributed phenomena: New methods and tools for GRASS GIS. 
+       International Journal of Geographic Information Systems,9(4), 433-46.
+
+

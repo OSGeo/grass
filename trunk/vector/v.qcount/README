@@ -1,0 +1,21 @@
+This is s.qcount, version 0.5B <02 Jan 1995>
+Copyright (c) 1993-1995. James Darrell McCauley
+
+The tutorial for this program is in s.qcount-tutorial.ps.Z
+(zcat s.qcount-tutorial.ps.Z | command_to_print_PostScript).
+The man page should have been installed automatically.
+
+If you don't have a PostScript printer, there is LaTeX source
+code in the tutorial directory (If you don't have LaTeX OR a
+PostScript printer, see if someone will print/mail you a copy).
+
+Let me know if there are bugs (esp with respect to rand()).
+Enjoy.
+
+--Darrell
+James Darrell McCauley, Purdue Univ, West Lafayette, IN 47907-1146, USA
+mccauley@ecn.purdue.edu, mccauley%ecn@purccvm.bitnet, pur-ee!mccauley
+
+P.S. it seems that in Cressie's text (see tutorial), there is a factor
+of n missing before the summation in the numerator. I sent him email
+about it and am awaiting confirmation.

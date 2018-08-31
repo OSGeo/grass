@@ -1,0 +1,19 @@
+i.segment basically works in three steps:
+
+[Note: the word "segment" has two meanings here - data segments which are like data tiles (SEGMENT library) and image objects that are the result of the segmentation algorithm. In following, an attemps is made to systematically use 'segment' for the former and 'object' for the latter.]
+
+1) open input files and put the data in data segments: open_files(), implemented in open_files.c
+   Pre-defined boundaries can be supplied with the "bounds" option. The meaning of these boundaries is that objects will not cross these boundaries.
+   Seed objects can be supplied with the "seeds" option. All pixels belonging to the same seed are combined to one initial object.
+
+2) run algorithm that identifies for each pixel the id of the object this pixel is part of: create_isegs(), implemented in create_isegs.c, which currently contains only one algorithm, region-growing, implemented in region_growing() and related functions
+
+3) write output raster files: write_output() implemented in write_output.c
+
+Variables and structures used in all functions are passed around using a structure called globals, defined in iseg.h.
+
+All module parameters and flags are defined in parse_args.c 
+
+There are two generic balanced binary search tree (Red Black Tree) implementations used in the region-growing algorithm, one for keeping track of the object pixels belong to (regtree.c/h) and the other for keeping track of the neighbors (ngbrtree.c/h). There is a also a small library of routines allowing to "flag" pixels in raster maps (flag.c/h), used to flag null cells in the input maps.
+
+A new algorithm can be added by adding new methods to the method option and creating the required functions to be called by create_isegs(). Additionally, the read_seed() function in open_files.c will also need to be updated to calculate the metrics per object required by the selected method.

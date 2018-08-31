@@ -1,0 +1,29 @@
+/*! \page managelib GRASS Data Elements Manage Library
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\section manageintro Introduction
+
+This library used for management of data base elements. See modules
+<tt>g.list, g.remove, g.copy</tt> or <tt>g.rename</tt>.
+
+\code
+#include <grass/manage.h>
+\endcode
+
+\section listFn List of functions
+
+ - M_do_copy()
+ - M_do_list()
+ - M_do_remove()
+ - M_do_rename()
+ - M_find()
+ - M_read_list()
+ - M_show_elements()
+ - M_define_option()
+ - M_get_options()
+ - M_get_option_desc()
+ - M_get_element()
+ - M_get_list()
+
+*/

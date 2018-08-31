@@ -1,0 +1,15 @@
+MODULE_TOPDIR = ../..
+
+PGM=v.out.postgis
+
+LIBES = $(GPROJLIB) $(VECTORLIB) $(DBMILIB) $(GISLIB) $(PQLIB)
+DEPENDENCIES = $(GPROJDEP) $(VECTORDEP) $(DBMIDEP) $(GISDEP)
+EXTRA_INC = $(VECT_INC) $(PROJINC) $(PQINCPATH)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+EXTRA_LDFLAGS = $(PQLIBPATH)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+ifneq ($(USE_POSTGRES),)
+default: cmd
+endif

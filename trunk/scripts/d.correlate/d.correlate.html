@@ -1,0 +1,47 @@
+<h2>DESCRIPTION</h2>
+
+<em>d.correlate</em> displays graphically the results of a
+<em>r.stats</em> analysis run on two raster map layers. This module
+highlights the correlation (or lack of it) among data
+layers (scattergram).
+
+<p>The results are displayed in the active display frame on
+the user's graphics monitor. <em>d.correlate</em> erases
+the active frame before displaying results. If no graphics monitor
+is open, a file <tt>map.png</tt> is generated in the current directory.
+
+<h2>NOTES</h2>
+
+If three or four map layers are specified, the correlation
+among each combination of two data layers is displayed.
+
+<h2>EXAMPLE</h2>
+
+Scatterplot of two LANDSAT TM7 channels (North Carolina sample dataset):
+<p><div class="code"><pre>
+g.region raster=lsat7_2002_30 -p
+d.correlate map=lsat7_2002_30,lsat7_2002_40
+</pre></div>
+
+<center>
+<img src="d_correlate_plot.png" border=1 alt="Scatterplot of two LANDSAT TM7 channels"><br>
+Scatterplot of two LANDSAT TM7 channels
+</center>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.text.html">d.text</a>,
+<a href="d.graph.html">d.graph</a>,
+<a href="r.coin.html">r.coin</a>,
+<a href="r.regression.line.html">r.regression.line</a>,
+<a href="r.stats.html">r.stats</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Michael Shapiro,
+<a href="http://www.cecer.army.mil/">U.S.Army Construction Engineering Research Laboratory</a>
+<p>Rewritten to GRASS 6 (from csh to sh) by Markus Neteler; from sh to Python by Glynn Clements
+
+<p><i>Last changed: $Date$</i>

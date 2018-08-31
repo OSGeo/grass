@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task SYSTEM "grass-addons.dtd">
+<addons version="7" revision="65616" date="2015-07-19 17:32:21.164032">
+    <task name="d.frame">
+        <description>Manages display frames on the user's graphics monitor.</description>
+        <keywords>display,graphics,monitors,frame</keywords>
+        <binary>
+            <file>scripts/d.frame</file>
+            <file>docs/man/man1/d.frame.1</file>
+            <file>docs/html/d.frame.html</file>
+            <file>docs/html/d_frame.png</file>
+        </binary>
+    </task>
+    <task name="d.mon2">
+        <description>Starts a graphics display monitor which can be controlled from the command line.</description>
+        <keywords>display,CLI</keywords>
+        <binary>
+            <file>scripts/d.mon2</file>
+            <file>docs/man/man1/d.mon2.1</file>
+            <file>docs/html/d.mon2.html</file>
+        </binary>
+    </task>
+    <task name="g.copyall">
+        <description>Copies all or a filtered subset of files of selected type from another mapset to the current working mapset</description>
+        <keywords>copy,general</keywords>
+        <binary>
+            <file>scripts/g.copyall</file>
+            <file>docs/man/man1/g.copyall.1</file>
+            <file>docs/html/g.copyall.html</file>
+        </binary>
+    </task>
+    <task name="g.isis3mt">
+        <description>Generates an ISIS3 map template file according to the current GRASS coordinate reference system</description>
+        <keywords>coordinates,projection</keywords>
+        <binary>
+            <file>scripts/g.isis3mt</file>
+            <file>docs/man/man1/g.isis3mt.1</file>
+            <file>docs/html/g.isis3mt.html</file>
+        </binary>
+    </task>
+    <task name="g.proj.all">
+        <description>Reprojects raster and vector maps from given location and mapset to current mapset.</description>
+        <keywords>general,projection,transformation</keywords>
+        <binary>
+            <file>scripts/g.proj.all</file>
+            <file>docs/man/man1/g.proj.all.1</file>
+            <file>docs/html/g.proj.all.html</file>
+        </binary>
+    </task>
+    <task name="r.gdd">
+        <description>Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers.</description>
+        <keywords>raster,series</keywords>
+        <binary>
+            <file>bin/r.gdd</file>
+            <file>docs/man/man1/r.gdd.1</file>
+            <file>docs/html/r.gdd.html</file>
+        </binary>
+    </task>
+    <task name="r.geomorphon">
+        <description>Calculate geomorphons (terrain forms)and associated geometry using machine vision approach</description>
+        <keywords>Geomorphons,Terrain patterns,Machine vision geomorphometry</keywords>
+        <binary>
+            <file>bin/r.geomorphon</file>
+            <file>docs/man/man1/r.geomorphon.1</file>
+            <file>docs/html/r.geomorphon.html</file>
+            <file>docs/html/geomorphon.png</file>
+            <file>docs/html/legend.png</file>
+        </binary>
+    </task>
+    <task name="r.le.patch">
+        <description></description>
+        <keywords></keywords>
+        <binary>
+        </binary>
+    </task>
+    <task name="r.le.pixel">
+        <description></description>
+        <keywords></keywords>
+        <binary>
+        </binary>
+    </task>
+    <task name="r.traveltime">
+        <description>Estimation of travel times/isochrones. Computes the travel time of surface runoff to an outlet</description>
+        <keywords>raster,hydrology</keywords>
+        <binary>
+            <file>bin/r.traveltime</file>
+            <file>docs/man/man1/r.traveltime.1</file>
+            <file>docs/html/r.traveltime.html</file>
+        </binary>
+    </task>
+    <task name="r.univar2">
+        <description>Calculates univariate statistics from the non-null cells of a raster map.</description>
+        <keywords>raster,statistics,univariate statistics,zonal statistics</keywords>
+        <binary>
+            <file>bin/r.univar2</file>
+            <file>docs/man/man1/r.univar2.1</file>
+            <file>docs/html/r.univar2.html</file>
+        </binary>
+    </task>
+    <task name="v.civil">
+        <description></description>
+        <keywords></keywords>
+        <binary>
+            <file>scripts/v.civil.tools</file>
+            <file>scripts/v.civil.road</file>
+            <file>scripts/v.civil.river</file>
+            <file>scripts/v.civil.topo</file>
+            <file>docs/man/man1/v.civil.road.1</file>
+            <file>docs/man/man1/v.civil.tools.1</file>
+            <file>docs/man/man1/v.civil.topo.1</file>
+            <file>docs/man/man1/v.civil.river.1</file>
+            <file>docs/html/v.civil.tools.html</file>
+            <file>docs/html/vcivilroad_4.png</file>
+            <file>docs/html/vcivilroad_11.png</file>
+            <file>docs/html/vcivilroad_6.png</file>
+            <file>docs/html/vcivilroad_7.png</file>
+            <file>docs/html/vcivilroad_1.png</file>
+            <file>docs/html/v.civil.topo.html</file>
+            <file>docs/html/vcivilroad_5.png</file>
+            <file>docs/html/vcivilroad_10.png</file>
+            <file>docs/html/vcivilroad_13.png</file>
+            <file>docs/html/vcivilroad_9.png</file>
+            <file>docs/html/vcivilroad_8.png</file>
+            <file>docs/html/v.civil.road.html</file>
+            <file>docs/html/v.civil.river.html</file>
+            <file>docs/html/vcivilroad_3.png</file>
+            <file>docs/html/vcivilroad_14.png</file>
+            <file>docs/html/vcivilroad_12.png</file>
+            <file>docs/html/vcivilroad_2.png</file>
+        </binary>
+    </task>
+    <task name="v.class.ml">
+        <description></description>
+        <keywords></keywords>
+        <binary>
+            <file>scripts/v.class.ml</file>
+            <file>etc/v.class.ml/ml_classifiers.py</file>
+            <file>etc/v.class.ml/ml_functions.py</file>
+            <file>etc/v.class.ml/ml_functions.pyc</file>
+            <file>etc/v.class.ml/features.py</file>
+            <file>etc/v.class.ml/ml_classifiers.pyc</file>
+            <file>etc/v.class.ml/sqlite2npy.pyc</file>
+            <file>etc/v.class.ml/sqlite2npy.py</file>
+            <file>etc/v.class.ml/training_extraction.py</file>
+            <file>etc/v.class.ml/npy2table.pyc</file>
+            <file>etc/v.class.ml/training_extraction.pyc</file>
+            <file>etc/v.class.ml/npy2table.py</file>
+            <file>etc/v.class.ml/features.pyc</file>
+        </binary>
+    </task>
+    <task name="v.class.mlpy">
+        <description></description>
+        <keywords></keywords>
+        <binary>
+            <file>scripts/v.class.mlpy</file>
+        </binary>
+    </task>
+    <task name="v.colors2">
+        <description>Sets color rules for features in a vector map using a numeric attribute column.</description>
+        <keywords>vector,color table</keywords>
+        <binary>
+            <file>scripts/v.colors2</file>
+            <file>docs/man/man1/v.colors2.1</file>
+            <file>docs/html/v.colors2.html</file>
+        </binary>
+    </task>
+    <task name="v.delaunay3d">
+        <description>Creates a 3D triangulation from an input vector map containing points or centroids.</description>
+        <keywords>vector,geometry,3D triangulation</keywords>
+        <binary>
+            <file>bin/v.delaunay3d</file>
+            <file>docs/man/man1/v.delaunay3d.1</file>
+            <file>docs/html/v.delaunay3d.html</file>
+        </binary>
+    </task>
+    <task name="v.ellipse">
+        <description>Computes the best-fitting ellipse for given vector data.</description>
+        <keywords>vector,geometry,best-fitting ellipse</keywords>
+        <binary>
+            <file>bin/v.ellipse</file>
+            <file>docs/man/man1/v.ellipse.1</file>
+            <file>docs/html/v.ellipse.html</file>
+            <file>docs/html/v_ellipse.png</file>
+        </binary>
+    </task>
+    <task name="v.in.proj">
+        <description>Import vector data using OGR library and reproject on the fly.</description>
+        <keywords>vector,import,projection</keywords>
+        <binary>
+            <file>scripts/v.in.proj</file>
+            <file>docs/man/man1/v.in.proj.1</file>
+            <file>docs/html/v.in.proj.html</file>
+        </binary>
+    </task>
+    <task name="v.in.redwg">
+        <description></description>
+        <keywords></keywords>
+        <binary>
+        </binary>
+    </task>
+    <task name="v.neighborhoodmatrix">
+        <description>Exports the neighborhood matrix of polygons in a vector map</description>
+        <keywords>vector,neighborhood matrix</keywords>
+        <binary>
+            <file>scripts/v.neighborhoodmatrix</file>
+            <file>docs/man/man1/v.neighborhoodmatrix.1</file>
+            <file>docs/html/v.neighborhoodmatrix.html</file>
+        </binary>
+    </task>
+    <task name="v.transects">
+        <description>Creates transect lines or quadrilateral areas at regular intervals perpendicular to a polyline.</description>
+        <keywords>vector,transect</keywords>
+        <binary>
+            <file>scripts/v.transects</file>
+            <file>docs/man/man1/v.transects.1</file>
+            <file>docs/html/v.transects.html</file>
+            <file>docs/html/vtransect_options2.jpg</file>
+            <file>docs/html/vtransect_options1.jpg</file>
+        </binary>
+    </task>
+    <task name="wx.metadata">
+        <description></description>
+        <keywords></keywords>
+        <binary>
+            <file>scripts/r.info.iso</file>
+            <file>scripts/v.info.iso</file>
+            <file>scripts/g.gui.metadata</file>
+            <file>etc/config/init_md</file>
+            <file>etc/config/keywordConcepts</file>
+            <file>etc/config/keywordThemes</file>
+            <file>etc/config/keywordGroups</file>
+            <file>etc/profiles/temporalProfile.xml</file>
+            <file>etc/profiles/inspireProfile.xml</file>
+            <file>etc/profiles/basicProfile.xml</file>
+            <file>etc/mdlib/editor.pyc</file>
+            <file>etc/mdlib/editor.py</file>
+            <file>etc/mdlib/jinjainfo.py</file>
+            <file>etc/mdlib/mdgrass.py</file>
+            <file>etc/mdlib/mdgrass.pyc</file>
+            <file>etc/mdlib/mdutil.pyc</file>
+            <file>etc/mdlib/mdutil.py</file>
+            <file>etc/mdlib/jinjainfo.pyc</file>
+            <file>etc/pdf/mdpdffactory.py</file>
+            <file>etc/pdf/mdpdftheme.py</file>
+            <file>etc/pdf/mdpdftheme.pyc</file>
+            <file>etc/pdf/mdpdffactory.pyc</file>
+            <file>docs/man/man1/r.info.iso.1</file>
+            <file>docs/man/man1/v.info.iso.1</file>
+            <file>docs/html/r.info.iso.html</file>
+            <file>docs/html/v.info.iso.html</file>
+        </binary>
+    </task>
+</addons>

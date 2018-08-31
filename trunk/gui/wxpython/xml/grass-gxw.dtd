@@ -1,0 +1,198 @@
+<!--	grass-gxw.dtd
+
+	Copyright (C) 2007-2008 by the GRASS Development Team
+	Author: Martin Landa <landa.martin gmail.com>
+	
+	This program is free software under the GPL (>=v2)
+	Read the file COPYING coming with GRASS for details.
+-->
+
+
+<!--
+        a grass-gxw defines workspace file content
+-->
+
+<!ELEMENT grass-gxw (gxw)>
+
+<!ELEMENT gxw (layer_manager?, display*)>
+
+<!--    a layer_manager defines properties of Layer Manager
+	GUI component
+
+	element added 2008/04
+-->
+<!ELEMENT layer_manager (cwd?)>
+<!-- window dimenstion (x, y (ur), width, heigth -->
+<!ATTLIST layer_manager  dim       CDATA   #IMPLIED>
+
+<!--    value of current working directory
+-->
+<!ELEMENT cwd         (#PCDATA)>
+
+<!--    a display element defines map layer connected to given
+	map display widnow
+
+        render, mode and showCompExtent (added 2004/08)
+-->
+<!ELEMENT display (projection?, (group|layer)*, nviz_state?)>
+<!ATTLIST display  render	   (0 | 1) #IMPLIED>
+<!ATTLIST display  mode            (0 | 1 | 2 | 3 | 4 | 5 | 6) #IMPLIED>
+<!ATTLIST display  showCompExtent  (0 | 1) #IMPLIED>
+<!ATTLIST display  constrainRes    (0 | 1) #IMPLIED>
+<!-- window dimenstion (x, y (ur), width, heigth -->
+<!ATTLIST display  dim             CDATA   #IMPLIED>
+<!ATTLIST display  extent          CDATA   #IMPLIED>
+<!ATTLIST display  viewMode        (2d | 3d) #IMPLIED>
+
+<!-- projection (statusbar coordinates)
+-->
+<!ELEMENT projection   (value?)>
+<!ATTLIST projection   epsg	CDATA   #IMPLIED>
+
+<!--    group of map layers
+-->
+<!ELEMENT group (layer*)>
+<!ATTLIST group	name	CDATA   #REQUIRED>
+<!ATTLIST group	checked (0 | 1) #REQUIRED>
+
+<!--    map layer
+-->
+<!ELEMENT layer (selected?, task?, nviz?)>
+<!ATTLIST layer	type	CDATA   #REQUIRED>
+<!ATTLIST layer	name	CDATA   #REQUIRED>
+<!ATTLIST layer	checked (0 | 1) #REQUIRED>
+<!ATTLIST layer	opacity	CDATA   #IMPLIED>
+
+<!--	task describes the interface of a single
+	GRASS command. 
+-->
+<!ELEMENT task	        (flag*, parameter*)>
+<!ATTLIST task	name	CDATA #REQUIRED>
+
+<!--	layer selected (added 2008/04)
+-->
+<!ELEMENT selected      EMPTY>
+
+<!--	a parameter must have a name and a value
+-->
+<!ELEMENT parameter     (value)>
+<!ATTLIST parameter	name		CDATA #REQUIRED>
+
+<!--    value of parameter
+-->
+<!ELEMENT value         (#PCDATA)>
+
+<!--    enabled flag
+-->
+<!ELEMENT flag          EMPTY>
+<!ATTLIST flag          name            CDATA #REQUIRED>
+
+<!-- *********************** Vector digitizer *********************** -->
+
+<!--    vdigit layer properties
+-->
+<!ELEMENT vdigit	    (geometryAttribute?)>
+
+<!--    geometry attribute parameter
+-->
+<!ELEMENT geometryAttribute EMPTY>
+<!ATTLIST parameter	type	(length | area | perimeter) #REQUIRED>
+<!ATTLIST parameter	column	CDATA                       #REQUIRED>
+<!ATTLIST parameter	units	CDATA                       #IMPLIED>
+
+<!-- *********************** Nviz *********************** -->
+
+<!--    nviz layer properties
+-->
+<!ELEMENT nviz	        (surface? | (vlines | vpoints)?)>
+
+<!--    nviz surface properties
+-->
+<!ELEMENT surface       (attribute*, draw?, position?)>
+
+<!--    nviz surface attribute parameter
+-->
+<!ELEMENT attribute     (value)>
+<!ATTLIST attribute	name		CDATA   #REQUIRED>
+<!ATTLIST attribute	map		(0 | 1) #REQUIRED>
+
+<!--    nviz surface draw mode parameter
+-->
+<!ELEMENT draw          (resolution*, wire-color?)>
+<!ATTLIST draw	        mode		(coarse | fine | both) #IMPLIED>
+<!ATTLIST draw	        style		(wire | surface) #IMPLIED>
+<!ATTLIST draw	        shading		(gouraud | flat) #IMPLIED>
+
+<!--    nviz surface draw resolution
+-->
+<!ELEMENT resolution    (value)>
+<!ATTLIST resolution	type		(fine | coarse) #IMPLIED>
+
+<!--    nviz surface wire color
+-->
+<!ELEMENT wire_color    (value)>
+
+<!--    nviz surface position
+-->
+<!ELEMENT position     (x, y, z)>
+
+<!--    nviz surface position coordinate
+-->
+<!ELEMENT x         (#PCDATA)>
+<!ELEMENT y         (#PCDATA)>
+<!ELEMENT z         (#PCDATA)>
+
+<!--    nviz vector lines element
+-->
+<!ELEMENT vlines    (color?, width?, mode?, height?)>
+
+<!--    nviz vector points element
+-->
+<!ELEMENT vpoints   (color?, width?, mode?, height?, size?)>
+<!ATTLIST vpoints    marker (x | box | sphere | cube | diamond | dtree | ctree | aster | gyro | histogram) #REQUIRED>
+
+<!--    nviz vector elements
+-->
+<!ELEMENT color     (value)>
+<!ELEMENT width     (value)>
+<!ELEMENT height    (value)>
+<!ELEMENT mode      (map*)>
+<!ELEMENT map       (name, checked)>
+<!ELEMENT name      (#PCDATA)>
+<!ELEMENT checked   (0 | 1)>
+<!ATTLIST mode	    type (flat | surface) #REQUIRED>
+<!ELEMENT size      (value)>
+
+
+<!--    nviz state properties
+-->
+<!ELEMENT nviz_state   (view, light, constant_planes?)>
+
+<!--    nviz view position
+-->
+<!ELEMENT view       (v_position, persp, v_height, twist, z-exag, focus, background_color)>
+<!ELEMENT v_position (x, y)>
+<!ELEMENT persp      (value, step, min, max)>
+<!ELEMENT v_height   (value, step, min, max)>
+<!ELEMENT twist      (value, step, min, max)>
+<!ELEMENT z-exag     (value, step, min, max)>
+<!ELEMENT focus      (x, y, z)>
+<!ELEMENT background_color (value)>
+
+<!ELEMENT step       (#PCDATA)>
+<!ELEMENT min        (#PCDATA)>
+<!ELEMENT max        (#PCDATA)>
+
+<!--    nviz light
+-->
+<!ELEMENT light      (l_position, bright, ambient, color)>
+<!ELEMENT l_position (x, y, z)>
+<!ELEMENT bright (value)>
+<!ELEMENT ambien (value)>
+<!ELEMENT color (value)>
+
+<!--    nviz constant planes
+-->
+<!ELEMENT constant_planes      (plane*)>
+<!ELEMENT plane                (height, fine_resolution, color)>
+<!ELEMENT fine_resolution      (#PCDATA)>

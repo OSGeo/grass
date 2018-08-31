@@ -1,0 +1,109 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.clump</em> finds all areas of contiguous cell category values 
+(connected components) in the input raster map. NULL values in the 
+input are ignored. It assigns a unique category value to each such area 
+(&quot;clump&quot;) in the resulting output raster map.
+
+<p>
+Category distinctions in the input raster map are preserved.  This
+means that if distinct category values are adjacent, they will NOT be
+clumped together. The user can
+run <em><a href="r.reclass.html">r.reclass</a></em> prior
+to <em>r.clump</em> to recategorize cells and reassign cell category
+values.
+
+<p>
+<em>r.clump</em> can also perform &quot;fuzzy&quot; clumping where 
+neighboring cells that are not identical but similar to each other are 
+clumped together. Here, the spectral distance between two cells is 
+scaled to the range [0, 1] and compared to the <em>threshold</em> 
+value. Cells are clumped together if their spectral distance is &le; 
+<em>threshold</em>. The result is very sensitive to this 
+<em>threshold</em> value, a recommended start value is 0.01, then 
+increasing or decreasing this value according to the desired output. 
+Once a suitable threshold has been determined, noise can be reduced by 
+merging small clumps with the <em>minsize</em> option.
+
+<p>
+<em>r.clump</em> can also use multiple raster maps of any kind (CELL, 
+FCELL, DCELL) as input. In this case, the spectral distance between 
+cells is used to determine the similarity of two cells. This means that 
+input maps must be metric: the difference cell 1 - cell 2 must make 
+sense. Categorical maps, e.g. land cover, can not be used in this case. 
+Examples for valid inpat maps are satellite imagery, vegetation 
+indices, elevation, climatic parameters etc.
+
+<h2>NOTES</h2>
+
+By default, the resulting clumps are connected only by their four 
+direct neighbors (left, right, top, bottom). The <em>-d</em> flag 
+activates also diagonal clump tracing.
+
+<p>
+<em>r.clump</em> works properly with raster map that contains only
+&quot;fat&quot; areas (more than a single cell in width). Linear
+elements (lines that are a single cell wide) may or may not be clumped
+together depending on the direction of the line - horizontal and
+vertical lines of cells are considered to be contiguous, but diagonal
+lines of cells are not considered to be contiguous and are broken up
+into separate clumps unless the <em>-d</em> flag is used.
+
+<p>
+A random color table and other support files are generated for the
+output raster map.
+
+<h2>EXAMPLES</h2>
+
+Perform clumping on "lakes" map (North Carolina sample dataset) and
+report area sizes for each lake individually rather by waterbody type:
+
+<div class="code"><pre>
+g.region raster=lakes -p
+
+# report sizes by waterbody type
+r.report lakes units=h
+
+# clump per raster polygon
+r.clump lakes out=lakes_individual
+
+# report sizes by individual waterbody
+r.report lakes_individual units=h
+</pre></div>
+
+<p>
+Perform fuzzy clumping on Landsat 7 2002 imagery (North Carolina sample dataset)
+<div class="code"><pre>
+g.region raster=lsat7_2002_10 -p
+r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
+        out=lsat7_2002_clump threshold=0.045
+
+# reduce noise
+r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
+        out=lsat7_2002_clump_min10 threshold=0.045 minsize=10
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.average.html">r.average</a>,
+<a href="r.buffer.html">r.buffer</a>,
+<a href="r.distance.html">r.distance</a>,
+<a href="r.grow.html">r.grow</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.mfilter.html">r.mfilter</a>,
+<a href="r.neighbors.html">r.neighbors</a>,
+<a href="r.to.vect.html">r.to.vect</a>,
+<a href="r.reclass.html">r.reclass</a>,
+<a href="r.statistics.html">r.statistics</a>,
+<a href="r.support.html">r.support</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Michael Shapiro, U.S. Army Construction Engineering Research
+Laboratory<br>
+Markus Metz (diagonal clump tracing, fuzzy clumping)
+
+<p>
+<i>Last changed: $Date$</i>

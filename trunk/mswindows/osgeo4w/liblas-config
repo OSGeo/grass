@@ -1,0 +1,116 @@
+#!/bin/sh
+prefix=$OSGEO4W_ROOT_MSYS
+exec_prefix=$OSGEO4W_ROOT_MSYS/bin
+libdir=$OSGEO4W_ROOT_MSYS/lib
+
+INCLUDES="-I${prefix}/include "
+LIBS="-L$libdir -llas -llas_c"
+
+GDAL_INCLUDE=""
+if test -n "$GDAL_INCLUDE" ; then 
+    INCLUDES="$INCLUDES -I$GDAL_INCLUDE"
+fi
+GDAL_LIBRARY=""
+if test -n "$GDAL_LIBRARY" ; then 
+    LIBS="$LIBS $GDAL_LIBRARY"
+fi
+
+GEOTIFF_INCLUDE=""
+if test -n "$GEOTIFF_INCLUDE" ; then 
+    INCLUDES="$INCLUDES -I$GEOTIFF_INCLUDE"
+fi
+GEOTIFF_LIBRARY=""
+if test -n "$GEOTIFF_LIBRARY" ; then 
+    LIBS="$LIBS $GEOTIFF_LIBRARY"
+fi
+
+
+ORACLE_INCLUDE=""
+if test -n "$ORACLE_INCLUDE" ; then 
+    INCLUDES="$INCLUDES -I$ORACLE_INCLUDE"
+fi
+ORACLE_OCI_LIBRARY=""
+if test -n "$ORACLE_OCI_LIBRARY" ; then 
+    LIBS="$LIBS $ORACLE_OCI_LIBRARY   "
+fi
+
+TIFF_INCLUDE=""
+if test -n "$TIFF_INCLUDE" ; then 
+    INCLUDES="$INCLUDES -I$TIFF_INCLUDE"
+fi
+TIFF_LIBRARY=""
+if test -n "$TIFF_LIBRARY" ; then 
+    LIBS="$LIBS $TIFF_LIBRARY"
+fi
+
+LIBXML2_INCLUDE_DIR=""
+if test -n "$LIBXML2_INCLUDE_DIR" ; then 
+    INCLUDES="$INCLUDES -I$LIBXML2_INCLUDE_DIR"
+fi
+LIBXML2_LIBRARIES=""
+if test -n "$LIBXML2_LIBRARIES" ; then 
+    LIBS="$LIBS $LIBXML2_LIBRARIES"
+fi
+
+LASZIP_INCLUDE_DIR=""
+if test -n "$LASZIP_INCLUDE_DIR" ; then 
+    INCLUDES="$INCLUDES -I$LASZIP_INCLUDE_DIR"
+fi
+LASZIP_LIBRARY=""
+if test -n "$LASZIP_LIBRARY" ; then 
+    LIBS="$LIBS $LASZIP_LIBRARY"
+fi
+
+
+usage()
+{
+	cat <<EOF
+Usage: liblas-config [OPTIONS]
+Options:
+	[--libs]
+	[--cflags]
+	[--cxxflags]
+	[--defines]
+	[--includes]
+EOF
+	exit $1
+}
+
+if test $# -eq 0; then
+	usage 1 1>&2
+fi
+
+case $1 in 
+  --libs) 
+    echo $OSGEO4W_ROOT_MSYS/lib/liblas_c.lib
+    ;;
+
+  --prefix)
+    echo ${prefix}
+     ;;
+
+  --ldflags)
+    echo -L${libdir}
+    ;;
+
+  --defines)
+    echo 
+    ;;
+
+  --includes)
+    echo ${INCLUDES}
+    ;;
+
+  --cflags)
+    echo 
+    ;;
+
+  --cxxflags)
+    echo  -pedantic -ansi -Wall -Wpointer-arith -Wcast-align -Wcast-qual -Wfloat-equal -Wredundant-decls -Wno-long-long -std=c++98
+    ;;
+    
+  *)
+    usage 1 1>&2
+    ;;
+
+esac

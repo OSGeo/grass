@@ -1,0 +1,33 @@
+Date: 2002-10-23
+
+Dr. Mark Lake
+
+http://www.ucl.ac.uk/~tcrnmar/GIS/v.build.polylines.html
+
+v.build.polylines
+
+
+Description 
+
+v.build.polylines builds polylines from the lines in a binary vector file.
+It outputs the polylines in either binary or ASCII vector format, and if 
+requested, copies the attribute and category files from the original file. 
+
+A line is a single straight line segment defined by one start node, one end
+node and no other nodes. A polyline is also defined by one start node, one 
+end node and no other nodes, but is made of two or more consecutive straight 
+line segments. The connections between the constituent line
+segments of a polyline do not appear as nodes in the vector map. 
+
+Polylines provide the most appropriate representation of curved lines when
+it is important that nodes serve to define topology rather than geometry. 
+Curved lines are usually digitized as polylines, but these are sometimes 
+broken into their constituent straight line segments during conversion from 
+one data format to another. v.build.polylines can be used to rebuild such 
+broken polylines. 
+
+
+Acknowledgements 
+
+This program was written during the author's tenure of a Leverhulme Special
+Research Fellowhip. 

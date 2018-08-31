@@ -1,0 +1,52 @@
+#!/bin/sh
+
+
+CONFIG_LIBS="$OSGEO4W_ROOT_MSYS/lib/gdal_i.lib"
+CONFIG_DEP_LIBS="$OSGEO4W_ROOT_MSYS/lib/libpng13.lib $OSGEO4W_ROOT_MSYS/lib/zlib.lib"
+CONFIG_PREFIX="$OSGEO4W_ROOT_MSYS"
+CONFIG_CFLAGS="-I$OSGEO4W_ROOT_MSYS/include"
+CONFIG_OGR_ENABLED=yes
+usage()
+{
+	cat <<EOF
+Usage: gdal-config [OPTIONS]
+Options:
+	[--prefix[=DIR]]
+	[--libs]
+	[--dep-libs]
+	[--cflags]
+	[--ogr-enabled]
+EOF
+	exit $1
+}
+
+if test $# -eq 0; then
+	usage 1 1>&2
+fi
+
+case $1 in 
+  --libs)
+    echo $CONFIG_LIBS
+    ;;
+
+  --dep-libs)
+    echo $CONFIG_DEP_LIBS
+    ;;
+
+  --cflags)
+    echo $CONFIG_CFLAGS
+    ;;
+
+  --prefix)
+    echo $CONFIG_PREFIX
+    ;;
+
+  --ogr-enabled)
+    echo $CONFIG_OGR_ENABLED
+    ;;
+
+  *)
+    usage 1 1>&2
+    ;;
+
+esac

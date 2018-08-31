@@ -1,0 +1,34 @@
+<!ELEMENT toolboxes (toolbox*)>
+
+<!ELEMENT toolbox (label, items)>
+<!ATTLIST toolbox name NMTOKEN #REQUIRED>
+
+<!ELEMENT items ((module-item | wxgui-item | subtoolbox | separator)*)>
+
+<!-- Subelement label is mandatory, however this may change in the future. -->
+<!ELEMENT module-item (label, module?, description?, keywords?)>
+<!ATTLIST module-item name NMTOKEN #REQUIRED>
+
+<!ELEMENT wxgui-item (label?, ((handler, related-module?) | command)?, description?, keywords?, shortcut?, wx-id?)>
+<!ATTLIST wxgui-item name NMTOKEN #REQUIRED>
+
+<!--
+Element subtoolbox could use xlink syntax but it is not much supported,
+so it would be useless. Used syntax is easier and more conforms to other
+elements which are not typical candidates for xlink use.
+-->
+<!ELEMENT subtoolbox EMPTY>
+<!ATTLIST subtoolbox name NMTOKEN #REQUIRED>
+
+<!ELEMENT separator EMPTY>
+
+<!ELEMENT label (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT handler (#PCDATA)>
+<!ELEMENT command (#PCDATA)>
+<!ELEMENT module (#PCDATA)>
+<!ELEMENT related-module (#PCDATA)>
+<!ELEMENT keywords (#PCDATA)>
+<!ELEMENT shortcut (#PCDATA)>
+<!ELEMENT wx-id (#PCDATA)>
+

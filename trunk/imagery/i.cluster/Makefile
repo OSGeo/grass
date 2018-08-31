@@ -1,0 +1,10 @@
+MODULE_TOPDIR = ../..
+
+PGM = i.cluster
+
+LIBES = $(CLUSTERLIB) $(IMAGERYLIB) $(RASTERLIB) $(GISLIB)
+DEPENDENCIES = $(CLUSTERDEP) $(IMAGERYDEP) $(RASTERDEP) $(GISDEP)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd

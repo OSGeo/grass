@@ -1,0 +1,24 @@
+/*********************************************************************
+ * GRASS program to create a raster map with non-zero data
+ *         in random locations.
+ * Locations will be within non-zero data in the input layer.
+ *        (unless -z option specified)
+ * If it necessary to restrict the locations to only some categories
+ *    of the input map, a reclass map should be constructed first
+ *    and used as input to this program.
+ *
+ * Number of random cells can be a fixed number or a percentage of cells.
+ *
+ * Resulting raster map consists of original cell values at the selected
+ *         random locations and zero elsewhere.
+ *
+ * A sitefile may optionally be created.
+ *
+ * Usage:
+ *  r.random [-iqz] input=name [raster_output=name] [sites_output=name] n=n[%]
+ *
+ *    -i mean report number of total cells and null cells
+ *    -q means run quietly
+ *    -z means generate random locations for zero-data as well
+ *
+ *********************************************************************/

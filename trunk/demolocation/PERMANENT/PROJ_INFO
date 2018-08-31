@@ -1,0 +1,4 @@
+name: Lat/Lon
+proj: ll
+datum: wgs84
+ellps: wgs84

@@ -1,0 +1,45 @@
+/*! \page netalib GRASS Network Analysis Library
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+This library is used for network-based analysis, see <tt>v.net.*</tt>
+modules for implementation issues.
+
+\section netaFn Functions
+
+- NetA_add_point_on_node()
+- NetA_allpairs()
+- NetA_articulation_points()
+- NetA_betweenness_closeness()
+- NetA_compute_bridges()
+- NetA_degree_centrality()
+- NetA_distance_from_points()
+- NetA_eigenvector_centrality()
+- NetA_find_path()
+- NetA_flow()
+- NetA_get_node_costs()
+- NetA_initialise_varray()
+- NetA_init_timetable_from_db()
+- NetA_min_cut()
+- NetA_points_to_nodes()
+- NetA_spanning_tree()
+- NetA_split_vertices()
+- NetA_strongly_connected_components()
+- NetA_timetable_get_route_time()
+- NetA_timetable_result_release()
+- NetA_timetable_shortest_path()
+- NetA_varray_to_nodes()
+- NetA_weakly_connected_components()
+
+\section netaAuthors Authors
+
+ Daniel Bundala (Google Summer of Code 2009)
+
+\section netaSeeAlso See Also
+
+ - \ref vectorlib
+  
+ - \ref dbmilib
+*/

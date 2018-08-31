@@ -1,0 +1,43 @@
+
+                TODO
+               ------
+
+6.0.0 (can be done, but cannot stop 6.0.0 release)
+-----------------------------------------------------------------
+- Cygwin/Windows and other (Non-Linux) platform specific problems
+- i18n translations
+
+
+> 6.1.0 
+-------
+
+Vector TODO: see doc/vector/TODO
+
+- write Vect_map_exists() and implement in g.remove and v.digit -n (radim)
+- add '-d' dissolve to v.reclass
+- add 'where=' to v.to.rast
+
+Imagery
+- merge of image libraries:
+  A)
+    - lib/imagery/: standard lib, in use (i.* except for i.points3, i.rectify3)
+    - imagery/i.ortho.photo/libes/: standard lib, in use (i.ortho.photo, photo.*)
+  B)
+    - lib/image3/: never finished improvement which integrated the standard lib and
+                   the ortho lib. Seems to provide also ortho rectification for
+                   satellite data (i.points3, i.rectify3)
+- See
+  http://grasswiki.osgeo.org/wiki/Image_processing#Ideas_collection_for_improving_GRASS.27_Image_processing_capabilities
+- image modules:
+    - merge of i.rectify and i.rectify3
+    - addition of new resampling algorithms such as bilinear, cubic convolution
+      (take from r.proj?)
+    - add other warping methods (maybe thin splines from GDAL?)
+    - implement/finish linewise ortho-rectification of satellite data
+    - Add support for > 8bit colors (only 0-255 supported currently)
+
+-----------------
+See also
+
+http://trac.osgeo.org/grass/wiki/Grass7Planning
+

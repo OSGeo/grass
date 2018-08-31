@@ -1,0 +1,11 @@
+r.to.vect are merged and modified r.to.sites, r.line and r.poly:
+
+s.to.sites/main.c   -> points.c
+
+r.line/extr_lines.c -> lines.c
+r.line/extr_lines.h -> global.h
+r.line/io.c         -> lines_io.c, utils.c
+
+r.poly/bound.c      -> areas.c
+r.poly/extr_areas.h -> global.h
+r.poly/io.c         -> areas_io.c, utils.c

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+ <meta http-equiv="content-type" content="text/html;charset=iso-8859-1">
+ <title>modifications made to <em>r3.showdspf</em></title>
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+
+<body bgcolor="#ffffff">
+
+<p><font size="4"><b>Description of modifications made to r3.showdspf directory during conversion of code from
+IrisGL (running only on SGI workstations) to OpenGL (running on any OpenGL-capable UNIX workstation)</b>
+
+<p>The following files were changed (and perhaps renamed during conversion)<br>
+</font><tt>do_color.c -&gt; do_color_ogl.c<br>
+draw_cap.c -&gt; draw_cap_ogl.c<br>
+draw_polys.c -&gt; draw_polys_ogl.c<br>
+draw_cappolys.c -&gt; draw_cappolys_ogl.c<br>
+main.c -&gt; main_ogl.c<br>
+init_caps.c -&gt; init_caps.c<br>
+vizual.h -&gt; vizual.h<br>
+Gmakefile -&gt; Gmakefile<br>
+</tt><br>
+<font size="4">The following files are new files<br>
+</font><tt>new_init_graphics.c<br>
+kns_defines.h<br>
+kns_globals.h<br>
+togif.c<br>
+togif.h<br>
+</tt><br>
+<font size="4">The following files are unchanged:<br>
+</font><tt>cap_data.c<br>
+init_caps.c<br>
+debugf.c<br>
+thresh_array.c<br>
+make_header.c<br>
+r3_data.c<br>
+r3_find.c<br>
+</tt><br>
+<font size="4">The following files removed since they were made unnecessary<br>
+</font><tt>init_graphics.c<br>
+dump_rect.c -&gt; functions moved to new_init_graphics.c<br>
+</tt>axes2.c<br>
+<br>
+<font size="4" color="#ff0000"><b>*** Disclaimer ***</b></font><font size="4"><br>
+</font>The porting effort from IrisGL to OpenGL was performed with the goal of just getting things to run with
+OpenGL with some user-interface improvements. Only a small attempt was made to correct for sloppy/dangerous coding
+practices found in the <b>original</b> code. Sloppy/dangerous coding practices were modified only when they resulted
+in serious code errors (causing core dumps). Certain files, such as new_init_graphics.c, which were totally new
+files, were coded to higher standards. In general, this effort was only a porting effort, <b>not</b> a re-architecting
+effort.<br>
+<br>
+<font size="4">Above modifications made by:<br>
+</font>Ken Sakai<br>
+Lockheed Martin Space Systems<br>
+Sunnyale, California<br>
+Modification date: March 2000
+
+</body>
+
+</html>

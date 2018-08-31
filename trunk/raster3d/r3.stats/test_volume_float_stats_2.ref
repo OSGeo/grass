@@ -1,0 +1,14 @@
+  num   | minimum <= value   | value < maximum    |     volume    |   perc  | cell count
+      1          4.000000000         14.500000000      180000.000   37.50000          180
+      2         14.500000000         25.000000001      180000.000   37.50000          180
+      3                    *                    *      120000.000   25.00000          120
+
+Sum of non Null cells: 
+	Volume =    360000.000 
+	Percentage =  75.000  
+	Cell count = 360
+
+Sum of all cells: 
+	Volume =    480000.000 
+	Percentage = 100.000  
+	Cell count = 480

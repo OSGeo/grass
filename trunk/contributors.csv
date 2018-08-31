@@ -1,0 +1,63 @@
+cvs_id,name,email,country,osgeo_id,rfc2_agreed
+-,Ivan Shmakov,<ivan theory.asu.ru>,Russia,1gray,yes
+-,Eric Patton,<epatton nrcan.gc.ca>,Canada,epatton,yes
+-,Laura Toma,<ltoma bowdoin.edu>,USA,ltoma,yes
+-,Markus Metz,<markus.metz.giswork googlemail.com>,Germany,mmetz,yes
+-,Maris Nartiss,<maris.gis gmail.com>,Latvia,marisn,yes
+-,Marco Pasetti,<marco.pasetti alice.it>,Italy,marcopx,yes
+-,Yann Chemin,<yann.chemin gmail.com>,Philippines,ychemin,yes
+-,Colin Nielsen,<colin.nielsen gmail.com>,USA,cnielsen,yes
+-,Anne Ghisla,<a.ghisla gmail.com>,Italy,aghisla,yes
+-,Helmut Kudrnovsky,<hellik web.de>,Austria,hellik,yes
+-,Anna Petrášová,<kratochanna gmail.com>,Czech Republic,annakrat,yes
+-,Luca Delucchi,<lucadeluge gmail.com>,Italy,lucadelu,yes
+-,Václav Petráš,<wenzeslaus gmail.com>,Czech Republic,wenzeslaus,yes
+-,Pietro Zambelli,<peter.zamb gmail.com>,Italy,zarch,yes
+-,Štěpán Turek,<stepan.turek seznam.cz>,Czech Republic,turek,yes
+-,Margherita Di Leo,<diregola gmail com>,Italy,madi,yes
+-,Veronica Andreo,<veroandreo gmail.com>,Argentina,veroandreo,yes
+-,Stefan Blumentrath,<stefan.blumentrath nina.no>,Norway,sbl,yes
+alex,Alex Shevlakov,<sixote yahoo.com>,Russia,-,-
+andreas,Andreas Lange,<andreas.c.lange gmx.de>,Germany,-,-
+benjamin,Benjamin Ducke,<benducke fastmail.fm>,Germany,benducke,yes
+bernhard,Bernhard Reiter,<bernhard intevation.de>,Germany,-,-
+bob,Bob Covill,<bcovill tekmap.ns.ca>,Canada,-,-
+brad,Brad Douglas,<rez touchofmadness.com>,USA,bdouglas,yes
+carlos,Carlos Davila,<cdavilam jemila.jazztel.es>,Spain,cdavilam,yes
+cedric,Cedric Shock,<cedricgrass shockfamily.net>,USA,-,-
+cho,Huidae Cho,<grass4u gmail.com>,USA,hcho,yes
+danielc,Daniel Calvelo Aros,<dca.gis gmail.com>,Peru,dcalvelo,yes
+david,David D. Gray,<ddgray armadce.demon.co.uk>,UK,-,-
+eric,Eric G. Miller,<egm2 jps.net>,USA,-,-
+florian,Florian Goessmann,<florian wallweg39.de>,Germany,-,-
+frankw,Frank Warmerdam,<warmerdam pobox.com>,Canada,warmerdam,-
+glynn,Glynn Clements,<glynn gclements.plus.com>,UK,glynn,yes
+hamish,Hamish Bowman,<hamish_b yahoo.com>,New Zealand,hamish,yes
+helena,Helena Mitasova,<hmitaso unity.ncsu.edu>,USA,helena,yes
+jachym,Jachym Cepicky,<jachym.cepicky gmail.com>,Czech Republic,jachym,yes
+jan,Jan-Oliver Wagner,<jan intevation.de>,Germany,-,-
+job,Job Spijker,<spijker geo.uu.nl>,Netherlands,-,-
+john,John Huddleston,<jhudd.lamar colostate.edu>,USA,-,-
+justin,Justin Hickey,<jhickey hpcc.nectec.or.th>,Thailand,-,-
+malcolm,Malcolm Blue,<mblue nb.sympatico.ca>,Canada,-,-
+markus,Markus Neteler,<neteler osgeo.org>,Germany,neteler,yes
+martin,Martin Wegmann,<wegmann biozentrum.uni-wuerzburg.de>,Germany,wegmann,yes
+martinl,Martin Landa,<landa.martin gmail.com>,Czech Republic,martinl,yes
+massimo,Massimo Cuomo,<m.cuomo acsys.it>,Switzerland,-,-
+michael,Michael Barton,<michael.barton asu.edu>,USA,cmbarton,yes
+michel,Michel Wurtz,<mw teledetection.fr>,France,-,-
+mike,Mike Thomas,<miketh brisbane.paradigmgeo.com>,Australia,-,-
+moritz,Moritz Lennert,<mlennert club.worldonline.be>,Belgium,mlennert,yes
+msieczka,Maciej Sieczka,<msieczka sieczka.org>,Poland,msieczka,yes
+paul,Paul Kelly,<paul-grass stjohnspoint.co.uk>,UK,pkelly,yes
+paulo,Paulo Marcondes,<pmarc.debian gmail.com>,Brazil,pmarcondes,-
+pallech,Serena Pallecchi,<pallecch cli.di.unipi.it>,Italy,-,-
+radim,Radim Blazek,<radim.blazek gmail.com>,Czech Republic,rblazek,-
+roberto,Roberto Micarelli,<miro iol.it>,Italy,-,-
+robertoa,Roberto Antolin,<rantolin.geo gmail.com>,Spain,rantolin,yes
+roger,Roger S. Miller,<rgrmill rt66.com>,USA,-,-
+scott,Scott Mitchell,<smitch mac.com>,Canada,smitch,yes
+soeren,Soeren Gebbert,<soerengebbert googlemail.com>,Germany,huhabla,yes
+stephan,Stephan Holl,<stephan.holl intevation.de>,Germany,sholl,yes
+william,William Kyngesburye,<kyngchaos kyngchaos.com>,USA,kyngchaos,yes
+wolf,Wolf Bergenheim,<wolf+grass bergenheim.net>,Finland,wolf,yes

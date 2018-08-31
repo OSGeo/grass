@@ -1,0 +1,799 @@
+/*! \page gmathlib GRASS Numerical math interface
+<!-- doxygenized from "GRASS 5 Programmer's Manual"
+     by M. Neteler 8/2005
+  -->
+
+\section gmathintro The GRASS numerical math interface
+
+<P>
+Authors: probably CERL, David D. Gray, Brad Douglas, Soeren Gebbert and many others
+<P>
+
+The gmath library provides many common mathematical functions to be used in GRASS modules:
+<ul>
+ <li>Linear algebra functions of type blas level 1, 2 and 3 </li>
+ <li>Iterative and direct linear algebra solver for sparse, band and dense matrices </li>
+ <li>Eigenvalue and single value decomposition methods </li>
+ <li>Memory allocation methods for vectors and matrices </li>
+ <li>Fast fourier transformation and many more </li>
+</ul>
+The GRASS numerical math interface also makes use of 3d party libraries to
+implement linear algebra and fast Fourier transformation functions,
+like fftw-library, BLAS/LAPACK, ccmath and ATLAS. Parts of the ccmath library are
+integrated in GRASS in lib/external.
+
+There are several tests and benchmarks available for blas level 1, 2 and 3 as well
+as for ccmath and linear equation solver in the lib/gmath/test directory. These
+tests and benchmarks are not compiled by default. In case GRASS has been compiled,
+just change in the test directory and type make. A binary named test.gmath.lib
+will be available after starting GRASS.
+
+To run all tests just type:
+\verbatim
+test.gmath.lib -a
+\endverbatim
+To run a benchmark to solve a matrix size of 2000x2000 using the Krylov-Subspace iterative solver type:
+\verbatim
+test.gmath.lib solverbench=krylov rows=2000
+\endverbatim
+
+Several GRASS modules implement there own numerical functions.
+The goal is to collect all these functions in the GRASS numerical math interface,
+to standardize them and to modify all modules to make use of the gmath interface.
+
+\subsection memalloc Memory allocation functions
+
+GMATH provides several functions for vector and matrix memory allocation of different
+types. These functions should be used to allocate vectors and matrices which are
+used by gmath linear algebra functions.
+
+<P>
+Matrix and vector allocation for real types
+<P>
+double *G_alloc_vector(size_t)<br>
+double **G_alloc_matrix(int, int)<br>
+float  *G_alloc_fvector(size_t)<br>
+float  **G_alloc_fmatrix(int, int)<br>
+void G_free_vector(double *)<br>
+void G_free_matrix(double **)<br>
+void G_free_fvector(float *)<br>
+void G_free_fmatrix(float **)<br>
+
+<P>
+Matrix and vector allocation for integer types
+<P>
+int *G_alloc_ivector(size_t)<br>
+int **G_alloc_imatrix(int, int)<br>
+void G_free_ivector(int *)<br>
+void G_free_imatrix(int **)<br>
+
+\subsection commonmath Common mathematical functions
+
+<P>
+Fast Fourier Transformation
+<P>
+int fft(int, double *[2], int, int, int)<br>
+int fft2(int, double (*)[2], int, int, int)<br>
+
+<P>
+Several mathematical functions mostly used by Imagery modules
+<P>
+double G_math_rand_gauss(int, double)<br>
+long G_math_max_pow2 (long n)<br>
+long G_math_min_pow2 (long n)<br>
+float G_math_rand(int)<br>
+int del2g(double *[2], int, double)<br>
+int getg(double, double *[2], int)<br>
+int G_math_egvorder(double *, double **, long)<br>
+int G_math_complex_mult (double *v1[2], int size1, double *v2[2], int size2, double *v3[2], int size3)<br>
+int G_math_findzc(double conv[], int size, double zc[], double thresh, int num_orients);
+
+<P>
+Obsolete LU decomposition lend from numerical recipes
+<P>
+int G_ludcmp(double **, int, int *, double *);
+void G_lubksb(double **a, int n, int *indx, double b[]);
+
+\subsection gmathblas Blas like level 1,2 and 3 functions
+
+<P>
+Author: Soeren Gebbert
+<P>
+
+The gmath library provides its own implementation of blas level 1, 2 and 3
+functions for vector - vector, vector - matrix and matrix - matrix operations.
+OpenMP is internally used to parallelize the vector and matrix operations. Most of the
+function can be called from inside a OpenMP parallel region.
+Additionally a wrapper for the ATLAS blas level 1 functions is available. The wrapping
+functions can also be used, when the ATLAS library is not available. In this case
+the GRASS blas level 1 implementation is called automatically instead.
+
+\subsubsection blas_level_1 Level 1 vector - vector GRASS implementation with OpenMP thread support
+<P>
+Double precision blas level 1 functions
+<P>
+void G_math_d_x_dot_y(double *, double *, double *, int )<br>
+void G_math_d_asum_norm(double *, double *, int )<br>
+void G_math_d_euclid_norm(double *, double *, int )<br>
+void G_math_d_max_norm(double *, double *, int )<br>
+void G_math_d_ax_by(double *, double *, double *, double , double , int )<br>
+void G_math_d_copy(double *, double *, int )<br><br>
+<P>
+Single precision blas level 1 functions
+<P>
+void G_math_f_x_dot_y(float *, float *, float *, int )<br>
+void G_math_f_asum_norm(float *, float *, int )<br>
+void G_math_f_euclid_norm(float *, float *, int )<br>
+void G_math_f_max_norm(float *, float *, int )<br>
+void G_math_f_ax_by(float *, float *, float *, float , float , int )<br>
+void G_math_f_copy(float *, float *, int )<br><br>
+<P>
+Integer blas level 1 functions
+<P>
+void G_math_i_x_dot_y(int *, int *,  double *, int )<br>
+void G_math_i_asum_norm(int *,  double *, int )<br>
+void G_math_i_euclid_norm(int *,  double *,int )<br>
+void G_math_i_max_norm(int *,  int *, int )<br>
+void G_math_i_ax_by(int *, int *, int *, int , int , int )<br>
+void G_math_i_copy(int *, int *, int )<br><br>
+
+<P>
+ATLAS blas level 1 wrapper
+<P>
+double G_math_ddot(double *, double *, int )<br>
+float G_math_sdot(float *, float *, int )<br>
+float G_math_sdsdot(float *, float *, float , int )<br>
+double G_math_dnrm2(double *, int )<br>
+double G_math_dasum(double *, int )<br>
+double G_math_idamax(double *, int )<br>
+float  G_math_snrm2(float *, int )<br>
+float  G_math_sasum(float *, int )<br>
+float  G_math_isamax(float *, int )<br>
+void G_math_dscal(double *, double , int )<br>
+void G_math_sscal(float *, float , int )<br>
+void G_math_dcopy(double *, double *, int )<br>
+void G_math_scopy(float *, float *, int )<br>
+void G_math_daxpy(double *, double *, double , int )<br>
+void G_math_saxpy(float *, float *, float , int )<br>
+
+\subsubsection blas_level_2 Level 2 matrix - vector GRASS implementation with OpenMP thread support
+
+void G_math_d_Ax(double **, double *, double *, int , int )<br>
+void G_math_f_Ax(float **, float *, float *, int , int )<br>
+void G_math_d_x_dyad_y(double *, double *, double **, int, int )<br>
+void G_math_f_x_dyad_y(float *, float *, float **, int, int )<br>
+void G_math_d_aAx_by(double **, double *, double *, double , double , double *, int , int )<br>
+void G_math_f_aAx_by(float **, float *, float *, float , float , float *, int , int )<br>
+int G_math_d_A_T(double **A, int rows)<br>
+int G_math_f_A_T(float **A, int rows)<br>
+
+\subsubsection blas_level_3 Blas level 3 matrix - matrix GRASS implementation with OpenMP thread support
+
+void G_math_d_aA_B(double **, double **, double , double **, int , int )<br>
+void G_math_f_aA_B(float **, float **, float , float **, int , int )<br>
+void G_math_d_AB(double **, double **, double **, int , int , int )<br>
+void G_math_f_AB(float **,  float **,  float **,  int , int , int )<br>
+
+
+\subsection gmathccmath Ccmath library function wrapper
+
+<P>
+Author: Daniel A. Atkinson: ccmath library and documentation<br>
+        Wrapper Soeren Gebbert
+<P>
+
+GRASS make use of several functions from the ccmath library. The ccmath library is
+located in the lib/external directory. The library was designed and developed by
+Daniel A. Atkinson and is licensed under the terms of the LGPL. Ccmath provides
+many common mathematical functions. Currently GRASS uses only the linear algebra
+part of the library. These functions are available via wrapping functions.<br><br>
+
+The wrapper integrates the ccmath library functions into the gmath
+structure. Hence only gmath memory allocation function should be used to create
+vector and matrix structures used by ccmath.
+
+This is the documentation of the linear algebra part of the the ccmath library used by GRASS.
+It was written by Daniel A. Atkinson and provides a detailed description of the available
+linear algebra functions.
+\verbatim
+                              LINEAR ALGEBRA
+
+                                 Summary
+
+               The matrix algebra library contains functions that
+               perform the standard computations of linear algebra.
+               General areas covered are:
+
+                         o Solution of Linear Systems
+                         o Matrix Inversion
+                         o Eigensystem Analysis
+                         o Matrix Utility Operations
+                         o Singular Value Decomposition
+
+               The operations covered here are fundamental to many
+               areas of mathematics and statistics. Thus, functions
+               in this library segment are called by other library
+               functions. Both real and complex valued matrices
+               are covered by functions in the first four of these
+               categories.
+
+
+ Notes on Contents
+
+     Functions in this library segment provide the basic operations of
+ numerical linear algebra and some useful utility functions for operations on
+ vectors and matrices. The following list describes the functions available for
+ operations with real-valued matrices.
+
+
+ o  Solving and Inverting Linear Systems:
+
+    solv  --------- solve a general system of real linear equations.
+    solvps  ------- solve a real symmetric linear system.
+    solvru  ------- solve a real right upper triangular linear system.
+    solvtd  ------- solve a tridiagonal real linear system.
+
+    minv  --------- invert a general real square matrix.
+    psinv  -------- invert a real symmetric matrix.
+    ruinv  -------- invert a right upper triangular matrix.
+
+
+     The solution of a general linear system and efficient algorithms for
+ solving special systems with symmetric and tridiagonal matrices are provided
+ by these functions. The general solution function employs a LU factorization
+ with partial pivoting and it is very robust. It will work efficiently on any
+ problem that is not ill-conditioned. The symmetric matrix solution is based
+ on a modified Cholesky factorization. It is best used on positive definite
+ matrices that do not require pivoting for numeric stability. Tridiagonal
+ solvers require order-N operations (N = dimension). Thus, they are highly
+ recommended for this important class of sparse systems. Two matrix inversion
+ routines are provided. The general inversion function is again LU based. It
+ is suitable for use on any stable (ie. well-conditioned) problem. The
+ Cholesky based symmetric matrix inversion is efficient and safe for use on
+ matrices known to be positive definite, such as the variance matrices
+ encountered in statistical computations. Both the solver and the inverse
+ functions are designed to enhance data locality. They are very effective
+ on modern microprocessors.
+
+
+ o  Eigensystem Analysis:
+
+    eigen  ------ extract all eigen values and vectors of a real
+                  symmetric matrix.
+    eigval  ----- extract the eigen values of a real symmetric matrix.
+    evmax  ------ compute the eigen value of maximum absolute magnitude
+                  and its corresponding vector for a symmetric matrix.
+
+
+     Eigensystem functions operate on real symmetric matrices. Two forms of
+ the general eigen routine are provided because the computation of eigen values
+ only is much faster when vectors are not required. The basic algorithms use
+ a Householder reduction to tridiagonal form followed by QR iterations with
+ shifts to enhance convergence. This has become the accepted standard for
+ symmetric eigensystem computation. The evmax function uses an efficient
+ iterative power method algorithm to extract the eigen value of maximum
+ absolute size and the corresponding eigenvector.
+
+
+ o Singular Value Decomposition:
+
+    svdval  ----- compute the singular values of a m by n real matrix.
+    sv2val  ----- compute the singular values of a real matrix
+                  efficiently for m >> n.
+    svduv  ------ compute the singular values and the transformation
+                  matrices u and v for a real m by n matrix.
+    sv2uv  ------ compute the singular values and transformation
+                  matrices efficiently for m >> n.
+    svdu1v  ----- compute the singular values and transformation
+                  matrices u1 and v, where u1 overloads the input
+                  with the first n column vectors of u.
+    sv2u1v  ----- compute the singular values and the transformation
+                  matrices u1 and v efficiently for m >> n.
+
+
+     Singular value decomposition is extremely useful when dealing with linear
+ systems that may be singular. Singular values with values near zero are flags
+ of a potential rank deficiency in the system matrix. They can be used to
+ identify the presence of an ill-conditioned problem and, in some cases, to
+ deal with the potential instability. They are applied to the linear least
+ squares problem in this library. Singular values also define some important
+ matrix norm parameters such as the 2-norm and the condition value. A complete
+ decomposition provides both singular values and an orthogonal decomposition of
+ vector spaces related to the matrix identifying the range and null-space.
+ Fortunately, a highly stable algorithm based on Householder reduction to
+ bidiagonal form and QR rotations can be used to implement the decomposition.
+ The library provides two forms with one more efficient when the dimensions
+ satisfy m > (3/2)n.
+
+ General Technical Comments
+
+     Efficient computation with matrices on modern processors must be
+ adapted to the storage scheme employed for matrix elements. The functions
+ of this library segment do not employ the multidimensional array intrinsic
+ of the C language. Access to elements employs the simple row-major scheme
+ described here.
+
+     Matrices are modeled by the library functions as arrays with elements
+ stored in row order. Thus, the element in the jth row and kth column of
+ the n by n matrix M, stored in the array mat[], is addressed by
+
+           M[j,k] = mat[n*j+k]  , with   0 =< j,k <= n-1 .
+
+ (Remember that C employs zero as the starting index.) The storage order has
+ important implications for data locality.
+
+     The algorithms employed here all have excellent numerical stability, and
+ the default double precision arithmetic of C enhances this. Thus, any
+ problems encountered in using the matrix algebra functions will almost
+ certainly be due to an ill-conditioned matrix. (The Hilbert matrices,
+
+                 H[i,j] = 1/(1+i+j)  for i,j < n
+
+ form a good example of such ill-conditioned systems.) We remind the reader
+ that the appropriate response to such ill-conditioning is to seek an
+ alternative approach to the problem. The option of increasing precision has
+ already been exploited. Modification of the linear algebra algorithm code is
+ not normally effective in an ill-conditioned problem.
+\endverbatim
+
+<P>
+Ccmath functions available via wrapping:
+<P>
+
+int G_math_solv(double **,double *,int)<br>
+int G_math_solvps(double **,double *,int)<br>
+void G_math_solvtd(double *,double *,double *,double *,int)<br>
+int G_math_solvru(double **,double *,int)<br>
+int G_math_minv(double **,int)<br>
+int G_math_psinv(double **,int)<br>
+int G_math_ruinv(double **,int)<br>
+void G_math_eigval(double **,double *,int)<br>
+void G_math_eigen(double **,double *,int)<br>
+double G_math_evmax(double **,double *,int)<br>
+int G_math_svdval(double *,double **,int,int)<br>
+int G_math_sv2val(double *,double **,int,int)<br>
+int G_math_svduv(double *,double **,double **, int,double **,int)<br>
+int G_math_sv2uv(double *,double **,double **,int,double **,int)<br>
+int G_math_svdu1v(double *,double **,int,double **,int)<br>
+
+\subsection gmathsolver Linear equation solver
+
+<P>
+Author: Soeren Gebbert and other
+<P>
+
+Besides the ccmath linear equation solver GRASS provides a set of additional
+direct and iterative linear equation solver for sparse, band and dense matrices. A special sparse
+matrix structure was implemented to allow the solution of huge sparse linear
+equation systems.
+
+As iterative linear equation solver are classic (Gauss-Seidel/SOR, Jacobi) and
+Krylov-Subspace (CG and BiCGStab) solver available. All iterative solver support
+sparse and dense matrices. The Krylov-Subspace solver are parallelized with OpenMP.
+
+As direct solver are LU-decomposition and Gauss-elimination without pivoting and a bandwidth
+optimized Cholesky decomposition available. Direct solver only support dense and
+band(Cholesky only) matrices.
+
+<P>
+The row vector of the sparse matrix
+<P>
+\verbatim
+typedef struct
+{
+    double *values;		//The non null values of the row
+    unsigned int cols;	//Number of entries
+    unsigned int *index;//the index number
+} G_math_spvector;
+\endverbatim
+
+<P>
+Sparse matrix and sparse vector functions
+<P>
+G_math_spvector *G_math_alloc_spvector(int )<br>
+G_math_spvector **G_math_alloc_spmatrix(int )<br>
+void G_math_free_spmatrix(G_math_spvector ** , int )<br>
+void G_math_free_spvector(G_math_spvector * )<br>
+int G_math_add_spvector(G_math_spvector **, G_math_spvector * , int )<br>
+G_math_spvector **G_math_A_to_Asp(double **, int, double)<br>
+double **G_math_Asp_to_A(G_math_spvector **, int)<br>
+double **G_math_Asp_to_sband_matrix(G_math_spvector **, int, int)<br>
+G_math_spvector **G_math_sband_matrix_to_Asp(double **A, int rows, int bandwidth, double epsilon)<br>
+void G_math_print_spmatrix(G_math_spvector ** Asp, int rows)<br>
+void G_math_Ax_sparse(G_math_spvector **, double *, double *, int )<br>
+
+<P>
+Conversion of band matrices
+<P>
+double **G_math_matrix_to_sband_matrix(double **, int, int)<br>
+double **G_math_sband_matrix_to_matrix(double **A, int rows, int bandwidth)<br>
+void G_math_Ax_sband(double ** A, double *x, double *y, int rows, int bandwidth)<br>
+<P>
+Direct linear equation solver
+<P>
+int G_math_solver_gauss(double **, double *, double *, int )<br>
+int G_math_solver_lu(double **, double *, double *, int )<br>
+int G_math_solver_cholesky(double **, double *, double *, int , int )<br>
+void G_math_solver_cholesky_sband(double **A, double *x, double *b, int rows, int bandwidth)<br>
+void G_math_solver_cholesky_sband(double **A, double *x, double *b, int rows, int bandwidth)<br>
+
+<P>
+Classic iterative linear equation solver for dense- and sparse-matrices
+<P>
+int G_math_solver_jacobi(double **, double *, double *, int , int , double , double )<br>
+int G_math_solver_gs(double **, double *, double *, int , int , double , double )<br>
+int G_math_solver_sparse_jacobi(G_math_spvector **, double *, double *, int , int , double , double )<br>
+int G_math_solver_sparse_gs(G_math_spvector **, double *, double *, int , int , double , double )<br>
+
+<P>
+Krylov-Subspace iterative linear equation solver for dense-, band- and sparse-matrices
+<P>
+int G_math_solver_pcg(double **, double *, double *, int , int , double , int )<br>
+int G_math_solver_cg(double **, double *, double *, int , int , double )<br>
+int G_math_solver_cg_sband(double **, double *, double *, int, int, int, double)<br>
+int G_math_solver_bicgstab(double **, double *, double *, int , int , double )<br>
+int G_math_solver_sparse_pcg(G_math_spvector **, double *, double *, int , int , double , int )<br>
+int G_math_solver_sparse_cg(G_math_spvector **, double *, double *, int , int , double )<br>
+int G_math_solver_sparse_bicgstab(G_math_spvector **, double *, double *, int , int , double )<br>
+
+<P>
+LU, Gauss and Cholesky decomposition and substitution functions
+<P>
+void G_math_gauss_elimination(double **, double *, int )<br>
+void G_math_lu_decomposition(double **, double *, int )<br>
+int G_math_cholesky_decomposition(double **, int , int )<br>
+void G_math_cholesky_band_decomposition(double **A, double **T, int rows, int bandwidth)<br>
+void G_math_backward_substitution(double **, double *, double *, int )<br>
+void G_math_forward_substitution(double **, double *, double *, int )<br>
+void G_math_cholesky_band_substitution(double **T, double *x, double *b, int rows, int bandwidth)<br>
+
+\subsection gmathlapack Optional support of LAPACK/BLAS
+
+<P>
+Author: David D. Gray<br>
+Additions: Brad Douglas
+
+<P>
+(under development)
+<BR>
+<P>
+This chapter provides an explanation of how numerical algebra routines from
+LAPACK/BLAS can be accessed through the GRASS GIS library "gmath". Most of
+the functions are wrapper modules for linear algebra problems, a few are locally
+implemented.
+<BR>
+<P>
+Getting BLAS/LAPACK (one package) if not already provided by the system:
+<BR><TT><A HREF="http://www.netlib.org/lapack/">http://www.netlib.org/lapack/</A></TT>
+<BR><TT><A HREF="http://netlib.bell-labs.com/netlib/master/readme.html">http://netlib.bell-labs.com/netlib/master/readme.html</A></TT>
+<BR>
+<P>
+Pre-compiled binaries of LAPACK/BLAS are provided on many Linux
+distributions.
+
+<P>
+
+\subsubsection Implementation Implementation
+
+<P>
+The function name convention is as follows:
+
+<P>
+
+<OL>
+<LI>G_matrix_*() : corresponding to Level3 BLAS (matrix -matrix) ,
+</LI>
+<LI>G_matvect_*() : corresponding to Level2 BLAS (vector-matrix) and
+</LI>
+<LI>G_vector_*() : corresponding to Level1 BLAS (vector-vector)
+</LI>
+</OL>
+
+<P>
+
+\subsubsection matrix_matrix_functions matrix -matrix functions
+
+<P>
+mat_struct *G_matrix_init (int rows, int cols, int ldim)<br>
+  Initialise a matrix  structure Initialise a matrix structure. Set
+  the number of rows with
+  the first parameter and columns with the second. The third parameter, lead
+  dimension (>= no. of rows) needs attention by the programmer as it is
+  related to the Fortran workspace:
+
+<P>
+A 3x3 matrix would be stored as
+
+<P>
+&nbsp;&nbsp;[ x x x _ ][ x x x _ ][ x x x _ ]
+<BR>
+<P>
+This work space corresponds to the sequence:
+
+<P>
+(1,1) (2,1) (3,1) and unused are (1,2) (2,2) ... and so on, ie. it is column major.
+So although the programmer uses the normal parameter sequence of (row, col)
+the entries traverse the data column by column instead of row by row. Each
+block in the workspace must be large enough (here 4) to hold a whole column
+(3) , and trailing spaces are unused. The number of rows (ie. size of a
+column) is therefore not necessarily the same size as the block size
+allocated to hold them (called the "lead dimension") . Some operations may
+produce matrices a different size from the inputs, but still write to the
+same workspace. This may seem awkward, but it does make for efficient code.
+Unfortunately, this creates a responsibility on the programmer to specify the
+lead dimension (>= no. of rows). In most cases the programmer can just use
+the rows. So for 3 rows/2 cols it would be called:
+
+<P>
+G_matrix_init (3, 2, 3);
+
+<P>
+mat_struct *G_matrix_set (mat_struct *A, int rows, int cols, int ldim)<br>
+  Set parameters for a matrix  structureSet parameters for a matrix
+  structure that is allocated but not yet initialised fully.
+
+<P>
+<B>Note:</B>
+<BR>
+<P>
+G_matrix_set() is an alternative to G_matrix_init() . G_matrix_init()
+ initialises and returns a pointer to a dynamically allocated matrix
+ structure (ie. in the process heap) . G_matrix_set() sets the parameters for
+ an already created matrix  structure. In both cases the data workspace still
+ has to be allocated dynamically.
+
+<P>
+Example 1:
+
+<P>
+\verbatim
+mat_struct *A;
+
+G_matrix_set (A, 4, 3, 4);
+\endverbatim
+<BR>
+
+<P>
+Example 2:
+
+<P>
+
+\verbatim
+mat_struct A; /* Allocated on the local stack */
+
+G_matrix_set (&A, 4, 3, 4) ;
+\endverbatim
+<BR>
+
+<P>
+mat_struct *G_matrix_add (mat_struct *mt1, mat_struct *mt2)<br>
+  Add two matrices. Add two matrices and return the result.  The receiving structure
+  should not be initialised, as the matrix  is created by the routine.
+
+<P>
+mat_struct *G_matrix_product (mat_struct *mt1, mat_struct *mt2)<br>
+  Multiply two matricesMultiply two matrices and return the result.
+  The receiving structure should not be initialised, as the matrix  is created
+  by the routine.
+
+<P>
+mat_struct *G_matrix_scale (mat_struct *mt1, const double c)<br>
+  Scale matrix Scale the matrix  by a given scalar value and return the
+  result. The receiving structure should not be initialised, as the matrix  is
+  created by the routine.
+
+<P>
+mat_struct *G_matrix_subtract (mat_struct *mt1, mat_struct *mt2)<br>
+  Subtract two matrices. Subtract two matrices and return the result.
+  The receiving structure should not be initialised, as the matrix  is created
+  by the routine.
+
+<P>
+mat_struct *G_matrix_copy (const mat_struct *A)<br>
+  Copy a matrix. Copy a matrix  by exactly duplicating its structure.
+
+<P>
+mat_struct *G_matrix_transpose (mat_struct *mt)<br>
+  Transpose a matrix. Transpose a matrix  by creating a new one and
+  populating with transposed element s.
+
+<P>
+void G_matrix_print (mat_struct *mt)<br>
+  Print out a matrix. Print out a  representation of the matrix  to
+  standard output.
+
+<P>
+int G_matrix_LU_solve (const mat_struct *mt1, mat_struct **xmat0, const
+  mat_struct *bmat, mat_type mtype)<br>
+  Solve a general system A.X=B. Solve a general
+  system A.X=B, where A is a NxN matrix, X and B are NxC matrices, and we are to
+  solve for C  arrays in X given B. Uses LU decomposition.
+<BR>
+<P>
+Links to LAPACK function dgesv_() and similar to perform the core routine.
+  (By default solves for a general non-symmetric matrix .)
+
+<P>
+mtype is a flag to indicate what kind of matrix  (real/complex, Hermitian,
+  symmetric, general etc.) is used (NONSYM, SYM, HERMITIAN) .
+
+<P>
+<B>Warning:</B> NOT YET COMPLETE: only some solutions' options
+  available. Now, only general real matrix  is supported.
+
+<P>
+mat_struct *G_matrix_inverse (mat_struct *mt)<br>
+  Matrix inversion using
+  LU decomposition Calls G_matrix_LU_solve() to obtain matrix  inverse using
+  LU decomposition. Returns NULL on failure.
+
+<P>
+void G_matrix_free (mat_struct *mt)<br> Free up allocated matrix Free up
+  allocated matrix.
+
+<P>
+int G_matrix_set_element (mat_struct *mt, int rowval, int colval, double val)<br>
+  Set the value of the (i,j) th element Set the value of the
+  (i,j) th element to a double value. Index values are C-like ie. zero-based.
+  The row number is given first as is conventional. Returns -1 if the
+  accessed cell is outside the bounds.
+
+<P>
+double G_matrix_get_element (mat_struct *mt, int rowval, int colval)<br>
+  Retrieve value of the (i,j) th element Retrieve the value of the
+  (i,j) th element to a double value. Index values are C-like ie. zero-based.
+
+<P>
+<B>Note:</B> Does currently not set an error flag for bounds checking.
+
+<P>
+
+\section matrix_Vector_functions Matrix-Vector functions
+
+<P>
+vec_struct *G_matvect_get_column (mat_struct *mt, int
+  col) Retrieve a column of matrix Retrieve a column of the matrix  to a vector
+  structure. The receiving structure should not be initialised, as the
+  vector is created by the routine. Col 0 is the first column.
+
+<P>
+vec_struct *G_matvect_get_row (mat_struct *mt, int
+  row) Retrieve a row of matrix Retrieve a row of the matrix  to a vector
+  structure. The receiving structure should not be initialised, as the
+  vector is created by the routine. Row 0 is the first number.
+
+<P>
+int G_matvect_extract_vector (mat_struct *mt, vtype vt, int
+  indx) Convert matrix  to vectorConvert the current matrix  structure to
+  a vector structure. The vtype is RVEC or CVEC which specifies a row vector or
+  column vector. The indx indicates the row/column number (zero based) .
+
+<P>
+int G_matvect_retrieve_matrix  (vec_struct *vc) Revert a
+  vector to matrix Revert a vector structure to a matrix .
+
+<P>
+
+\section Vector_Vector_functions Vector-Vector functions
+
+vec_struct *G_vector_init (int cells, int ldim, vtype vt) Initialise
+  a vector structure Initialise a vector structure. The vtype is RVEC or
+  CVEC which specifies a row vector or column vector.
+
+<P>
+int G_vector_set (vec_struct *A, int cells, int ldim, vtype vt, int vindx) Set
+  parameters for vector structureSet parameters for a vector structure that is
+  allocated but not yet initialised fully. The vtype is RVEC or
+  CVEC which specifies a row vector or column vector.
+
+<P>
+vec_struct *G_vector_copy (const vec_struct *vc1, int
+  comp_flag) Copy a vectorCopy a vector to a new vector structure. This preserves
+  the underlying structure unless you specify DO_COMPACT comp_flag:
+
+<P>
+0   Eliminate unnecessary rows (cols) in matrix
+<BR>
+1   ... or not
+
+<P>
+double G_vector_norm_euclid (vec_struct *vc) Calculates euclidean
+  norm Calculates the euclidean norm of a row or column vector, using BLAS
+  routine dnrm2_()
+
+<P>
+double G_vector_norm_maxval (vec_struct *vc, int vflag) Calculates
+  maximum value Calculates the maximum value of a row or column vector.
+ The vflag setting defines which value to be calculated:
+
+<P>
+vflag:
+
+<P>
+1 Indicates maximum value
+<BR> -1  Indicates minimum value
+<BR>
+0 Indicates absolute value [???]
+
+<P>
+<B>Note:</B> More functions and wrappers will be implemented soon (11/2000) .
+
+<P>
+
+\section Notes Notes
+
+The numbers of rows and columns is stored in the matrix  structure:
+
+<P>
+\verbatim
+  G_message ("    M1 rows: %d, M1 cols: %d", m1->rows, m1->cols);
+\endverbatim
+
+<P>
+Draft Notes:
+
+<P>
+* G_vector_free() can be done by G_matrix_free() .
+
+<P>
+\verbatim
+#define G_vector_free(x) G_matrix_free( (x) )
+\endverbatim
+
+<P>
+* Ax calculations can be done with G_matrix_multiply()
+
+<P>
+* Vector print can be done by G_matrix_print() .
+
+<P>
+\verbatim
+#define G_vector_print(x) G_matrix_print( (x) )
+\endverbatim
+
+<P>
+
+\section Example Example
+
+The Makefile needs a reference to $(GMATHLIB) in LIBES line.
+
+
+<P>
+Example module:
+
+<P>
+\verbatim
+#include <grass/config.h>
+#include <grass/gis.h>
+#include <grass/gmath.h>
+
+int
+main (int argc, char *argv[])
+{
+    mat_struct *matrix;
+    double val;
+
+    /* init a 3x2 matrix  */
+    matrix = G_matrix_init (3, 2, 3);
+
+    /* set cell element 0,0 in matrix  to 2.2: */
+    G_matrix_set_element (matrix, 0, 0, 2.2);
+
+    /* retrieve this value */
+    val = G_matrix_get_element (matrix, 0, 0);
+
+    /* print it */
+    G_message ( "Value: %g", val);
+
+    /* Free the memory */
+    G_matrix_free (matrix);
+
+    return 0;
+}
+\endverbatim
+
+<P>
+See \ref Compiling_and_Installing_GRASS_Modules for a complete
+discussion of Makefiles.
+
+*/

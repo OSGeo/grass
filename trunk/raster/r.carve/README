@@ -1,0 +1,37 @@
+http://www4.ncsu.edu/~hmitaso/gmslab/reports/cerl99/rep99.html
+Terrain modeling and Soil Erosion Simulations for Fort Hood and Fort Polk
+test areas
+
+Geographic Modeling and Systems Laboratory,
+University of Illinois atUrbana-Champaign
+Helena Mitasova, Lubos Mitas, William M. Brown, Douglas M. Johnston
+
+
+ rast=name      raster input file
+ vect=name      vector input file containing stream
+
+ output=name    raster output file
+ [points=name]  vector output file for adjusted stream points
+ [width=value]  width of streams (in meters)
+ [depth=value]  additional depth
+
+-q              quiet - do not show progress
+-n              no flat areas allowed in flow direction
+
+r.carve does not create a depressionless DEM because many depressions are in
+flat areas and not in the streams.
+
+http://www4.ncsu.edu/~hmitaso/gmslab/reports/cerl99/demstr.gif
+                                                                                
+The program will take the vector stream data, transform them to raster, and
+subtracts a defaultdepth + additionaldepth from the DEM. If the given 
+width is more than 1 cell it will carve the stream with the given width. 
+With -n option it should eliminate all flat cells within the stream, so 
+when and if the water gets into the stream it will flow. Vector 
+('points') option generates x,y,z for points which define the stream 
+with the z value of the bottom of the carved-in stream. These points 
+can then be combined with contour points to interpolate a new DEM with 
+better representation of valleys.
+
+It has not been thoroughly tested so not all option may work properly - 
+but this was the intention.

@@ -1,0 +1,258 @@
+       GRASS 6 vector TODO
+       ---------------------
+      (Radim Blazek, May 2006)
+
+This document is summary of my ideas on how vector part of GRASS GIS
+could be improved.
+
+It can be that you come to conclusion that vectors in GRASS are bad
+and it is necessary to start from scratch. In that case I would
+recommend to leave current library and modules intact and start the
+new work in parallel (the new modules could start with w.* or v2.*). I
+was thinking for example about completely new vector library based on
+OGC standard, using either OGR directly or an abstraction layer and
+OGR as an option (driver). That does not mean that I prefer simple
+feature specification over current GRASS implementation, I am not sure
+which one is better. In any case it would be pitty to drop current
+topological format with all its flexibility. Each approach has
+advantages and disadvantages. I think that it the best to have in OS
+GIS all alternatives file/database and topology/simple feature.
+
+
+
+Historical notes
+----------------
+The current implementation of vectors is based on previous work which
+was present in GRASS5 (the vector library and modules and DBMI
+library). We started this work together with David D. Gray in autumn
+2000 (IIRC) but David had to leave GRASS project soon so that I almost
+all responsibility for vector development in GRASS6 and its results is
+mine.
+
+The current design of GRASS vectors is result of these factor:
++ very limited resources for development (necessity to use existing
+ free code/libraries/applications whenever possible)
++ relatively little experience with development of GIS application
++ respect for certain features of GRASS5 vector model and for existing
+ community which is using it
++ bad experience with quality of data produced in simple feature based
+ applications (ArcView)
+
+
+1. Library
+----------
+
+1.1 Geometry
+------------
+
+Keep topology and spatial index in file instead of in memory
+------------------------------------------------------------
+Scalability seems to be currently the biggest problem of GRASS
+vectors. The geometry of GRASS vectors (coor file) is never loaded
+whole to the memory. OTOH the support structures (topology and spatial
+index) are loaded to memory on runtime. It should be possible to use
+files for topology and spatial index also on runtime and that way
+decrease the memory occupied by running module (practicaly to
+zero). The speed will decrease a bit but not significantly because
+files are usually cached by system.
+
+* Update: implemented in r38385 (2009/07) by Markus Metz
+
+Temporary vector
+----------------
+Analytical modules process data in the output vector (for example
+v.overlay and v.buffer). Because many lines can be deleted (broken
+lines for example) and new lines are written at the end of coor file
+the output file can contain many 'dead' lines (not used space). It
+would be better to do processing in a temporary vector and copy only
+alive lines to the output when processing finished. That means
+implement Vect_open_temporary() which will work like Vect_open_new()
+but the files will be opened in temporary directory (it should not
+write to $MAPSET/vector).
+
+
+Recycle deleted lines
+---------------------
+The space which was occupied by a line in coor file is lost after call
+to Vect_delete_line(). A list of the free positions be kept and
+Vect_write_line() should write in that free space if possible instead
+of to append a new line to the end of the file. There is already empty
+structure 'recycle' in 'dig_head' where the list could be imlemented
+(without changing 'dig_head' size, to keep binary compatibility).
+
+* Note: currently wxGUI vector digitizer 'undo' depends on this 'feature'
+
+Vect_rewrite_line
+-----------------
+Implement properly Vect_rewrite_line(). Currently it simply calls
+Vect_delete_line() and Vect_write_line(). It should be implemented so
+that if the new size of the line is the same as the old size it will
+be written in the same place in the coor file where the original line
+existed.
+
+* Note: see above
+
+Remove bounding box from support structures (?)
+-----------------------------------------------
+The vector structures (P_line, P_area, P_isle) store bounding box in
+N,S,E,W,T,B (doubles). Especially in case of element type GV_POINT the
+bounding box occupies a lot of space (2-3 times more than the point
+itself). I am not sure if this is realy good idea, it is necesssary to
+valutate also how often Vect_line_box() is called and the impact of
+the necessity to calculate always the box on the fly (when it is not
+stored in the structure) which can be time consuming for example for
+areas or long lines.
+
+* See also http://trac.osgeo.org/grass/ticket/542
+* Update: implemented in r46898 (2011/07) by Markus Metz
+
+Switching to update mode
+------------------------
+It would be useful to have a possibility to switch to 'update' mode a
+map which was opened by Vect_open_old/new() and similarly to switch
+back to 'normal' mode. Currently it is necessary to call Vect_close()
+and Vect_open_update().
+
+Layer names
+-----------
+The layers are currently identified only by numbers but it is possible
+to assign to each layer number a name. The library can read these
+names but it is not possible to use the name as parameter for
+modules. It is necessary to write int Vect_get_layer_by_name ( struct
+Map_info *map, char *name) which will accept both names and numbers
+and use this function in vector modules. This is also important for
+OGR interface improvements (see below).
+
+* Update: implemented in r38548 (2009/07) by Martin Landa
+
+OGR interface
+-------------
+It is important to enable direct access to OGR data sources without
+v.external and without necessity to store anything in files. The
+problem of v.external is that topology is stored in file that means it
+can be wrong when the source is opened next time. It should be
+relatively easy to call Vect_build_ogr() whenever an OGR vector is
+opened with level2 (topology) requested and topology will be built on
+the fly. OGR vectors would be specified by virtual mapset name
+'OGR'. Each OGR datasource will be equivalent to GRASS vector and each
+OGR layer will be equivalent to GRASS layer (it is necessary to
+implement layer names, see above). It would be for example possible to
+display a shapefile or PostGIS layers directly:
+  
+  d.vect map=./shapefiles/@OGR layer=roads    # display shapefile ./shapefiles/roads.shp
+  d.vect map=PG:dbname=test@OGR layer=roads   # display table roads from database test
+
+* Update: in progess,
+  see http://trac.osgeo.org/grass/wiki/Grass7/VectorLib/OGRInterface#DirectOGRreadaccess
+
+Simple feature API and sequential reading
+-----------------------------------------
+Most GRASS modules are currently using random access to the data which
+reflects GRASS format. This works well with GRASS data but it can
+become very slow or even impossible with OGR data sources because some
+OGR drivers don't support random access or random access is very
+slow. Because conversion from topological format to simple feature is
+very simple and sequential reading of GRASS vectors is not problem it
+would be desirable to implement in GRASS vector library 'simple
+feature' API to GRASS vectors and map it directly to OGR API in case
+of OGR data sources. Then many GRASS modules can be modified to use
+sequentil reading and simple feature API and that will make more
+efficient processing of data directly read from OGR data sources.
+
+
+1.2 Attributes
+--------------
+
+In general I found the use of true RDBMS for attributes as a
+problem. The data are stored in two distinct places (vector files +
+database) and it makes it difficult to keep them consistent and manage
+(move, backup). Another problem is random access to the data in RDBMS
+from an application which is terribly slow (due to communication with
+server). RDBMS is not bad, bad is the combination of files and
+RDBMS. I think that either everything must be stored in RDBMS
+(PostGIS) or nothing. Eric G. Miller (IIRC) was right when he said
+that data are 'too distant' when RDBMS is used with geometry in file.
+
+I think that more work should be done on the drivers which are using
+embeded databases stored in files (SQLite,MySQL,DBF) with scope to
+reach similar functionality (functions, queries) which are in true
+RDBMS without penalty of communication with server. It should be also
+considered the possibility to change the default location of database
+files to vector directory ($MAPSET/vector/test). That means to keep
+all the data of one vector in a single directory. It is already
+possible but it is not the default settings, for example:
+
+  db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/vector/$MAP/'
+  db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/vector/$MAP/db.sqlite'
+  db.connect driver=mesql database='$GISDBASE/$LOCATION_NAME/$MAPSET/vector/$MAP/'
+
+Implement insert/update cursors
+-------------------------------
+GRASS modules are currently sending all data to database drivers as
+individual SQL insert/update statements. This makes the update process
+slow (cunstructing and parsing queries) and number precision can be
+lost. The solution is to implement db_open_insert/update_cursor() and
+db_insert/update() in database drivers and use these functions in
+modules.  The drivers should then use precompiled statements
+(e.g. SQLite) or they could update the database directly (DBF).
+
+Note that it is not necessary to implement these functions in all
+drivers at the same time. You can implement lib/db/stubs functions
+which will create SQL statement and send it to db_execute() which is
+implemented in all drivers until the functions are properly
+implemented in all drivers.
+
+SQLite driver
+-------------
+Current implementation is very slow with large updates/inserts. I
+think that it is because all statemets are parsed and it should be
+possible to improve by insert/update cursors (see above).
+
+DBF driver
+----------
+Add on the fly index for select/update.
+
+Implent db_copy_table() in drivers
+----------------------------------
+db_copy_table() is implement in client library and it always reads and
+writes all the data which is slow. It would be better to send this
+request to the driver (if possible, i.e. input and output driver are
+the same) which can copy tables much faster. For example true RDBMS
+can use 'create table new as select * from old' and DBF driver can
+simply copy files.
+
+Load drivers as dynamic libraries
+---------------------------------
+Database drivers are implemented as executables which communicate with
+modules via pipes. This implementation creates some problems with
+portability (especially on Windows) and it makes comunication slow (I
+am not sure how much). It would be probably desirable to implement
+drivers as loadable modules (dlopen() and equivalents).
+
+
+2. Modules
+----------
+
+v.overlay
+---------
+Select only relevant features which will be written to the output if
+'and,not,nor' operators are used. An inspiration is available in
+v.select.
+
+v.pack/v.unpack
+---------------
+Write it. New modules to pack/unpack a vector to/from single file
+(probably tar). I am not sure about format. Originaly I was thinking
+about ASCII+DBF as it can be read also without GRASS but ASCII and DBF
+can lose precision and DBF has other limitations. It whould be
+probably better to use copy of 'coor' file and attributes written to
+SQLite database.
+
+Update: see
+	http://trac.osgeo.org/grass/browser/grass-addons/grass7/vector/v.pack
+	and
+	http://trac.osgeo.org/grass/browser/grass-addons/grass7/vector/v.unpack
+	by Luca Delucchi
+
+1/2009: Other suggestions moved to
+ http://trac.osgeo.org/grass/

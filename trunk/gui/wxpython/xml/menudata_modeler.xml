@@ -1,0 +1,152 @@
+<menudata>
+  <menubar>
+    <menu>
+      <label>&amp;File</label>
+      <items>
+	<menuitem>
+	  <label>New</label>
+	  <help>Create new model</help>
+	  <handler>OnModelNew</handler>
+	  <shortcut>Ctrl+N</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Open</label>
+	  <help>Load model from file</help>
+	  <handler>OnModelOpen</handler>
+	  <shortcut>Ctrl+O</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Save</label>
+	  <help>Save model</help>
+	  <handler>OnModelSave</handler>
+	  <shortcut>Ctrl+S</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Save as</label>
+	  <help>Save model to file</help>
+	  <handler>OnModelSaveAs</handler>
+	</menuitem>
+	<menuitem>
+	  <label>Close</label>
+	  <help>Close model file</help>
+	  <handler>OnModelClose</handler>
+	</menuitem>
+	<separator />
+	<menuitem>
+	  <label>Export to image</label>
+	  <help>Export model to image</help>
+	  <handler>OnExportImage</handler>
+	</menuitem>
+	<menuitem>
+	  <label>Export to Python</label>
+	  <help>Export model to Python script</help>
+	  <handler>OnExportPython</handler>
+	  <shortcut>Ctrl+P</shortcut>
+	</menuitem>
+	<separator />
+	<menuitem>
+	  <label>Quit modeler</label>
+	  <help>Close modeler window</help>
+	  <handler>OnCloseWindow</handler>
+	  <shortcut>Ctrl+W</shortcut>
+	</menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Settings</label>
+      <items>
+	<menuitem>
+	  <label>Preferences</label>
+	  <help>Modeler settings</help>
+	  <handler>OnPreferences</handler>
+	</menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Model</label>
+      <items>
+	<menuitem>
+	  <label>Add command</label>
+	  <help>Add action (GRASS command) to model</help>
+	  <handler>OnAddAction</handler>
+	  <shortcut>Ctrl+A</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Add data</label>
+	  <help>Add data item to model</help>
+	  <handler>OnAddData</handler>
+	  <shortcut>Ctrl+D</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Define relation</label>
+	  <help>Define relation between data and action items</help>
+	  <handler>OnDefineRelation</handler>
+	</menuitem>
+	<menuitem>
+	  <label>Add loop / series</label>
+	  <help>Adds loop (series) to model</help>
+	  <handler>OnDefineLoop</handler>
+	  <shortcut>Ctrl+L</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Add condition</label>
+	  <help>Adds condition (if/else) to model</help>
+	  <handler>OnDefineCondition</handler>
+	  <shortcut>Ctrl+I</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Add comment</label>
+	  <help>Adds comment to model</help>
+	  <handler>OnAddComment</handler>
+	  <shortcut>Ctrl+#</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Remove item</label>
+	  <help>Remove action/data from model</help>
+	  <handler>OnRemoveItem</handler>
+	</menuitem>
+	<separator />
+ 	<menuitem>
+	  <label>Model properties</label>
+	  <help>Model properties (name, purpose, etc.)</help>
+	  <handler>OnModelProperties</handler>
+	</menuitem>
+	<separator />
+	<menuitem>
+	  <label>Delete intermediate data</label>
+	  <help>Delete intermediate data defined in the model</help>
+	  <handler>OnDeleteData</handler>
+	</menuitem>
+	<separator />
+	<menuitem>
+	  <label>Run model</label>
+	  <help>Run entire model</help>
+	  <handler>OnRunModel</handler>
+	  <shortcut>Ctrl+R</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Validate model</label>
+	  <help>Validate entire model</help>
+	  <handler>OnValidateModel</handler>
+	</menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Help</label>
+      <items>
+	<menuitem>
+	  <label>Help</label>
+	  <help>Display the HTML man pages of Graphical modeler</help>
+	  <handler>OnHelp</handler>
+	</menuitem>
+	<separator />
+	<menuitem>
+	  <label>About Graphical Modeler</label>
+	  <help>Display information about Graphical Modeler</help>
+	  <handler>OnAbout</handler>
+	</menuitem>
+
+      </items>
+    </menu>
+  </menubar>
+</menudata>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolbox name="TestingMainMenu">
+  <label>Testing menu</label>
+  <items>
+    <subtoolbox name="Region"/>
+    <subtoolbox name="TestingToolboxA"/>
+    <subtoolbox name="MapProjections"/>
+    <subtoolbox name="TestingToolboxB"/>
+  </items>
+</toolbox>

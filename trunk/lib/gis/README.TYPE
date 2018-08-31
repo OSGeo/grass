@@ -1,0 +1,144 @@
+.\" use -ms
+.LP
+There were two flavors of changes made to structures in gis.h
+and to calls to routines in the library:
+
+.IP 1.
+Variables in structures, parameters in argument lists to library routines,
+and return values from library routines that really represented
+CELL data but were declared as int have been changed to CELL.
+
+The following structures were changed:
+
+.DS
+Categories            [gis.h]
+Cell_stats
+Colors
+Histogram
+Range
+Reclass
+.DE
+
+The argument type for some parameters for the following routines was changed:
+
+.DS
+G_init_cats            [cats.c]
+G_get_cats 
+G_set_cats
+G_get_color            [color.c]
+G_set_color
+G_make_random_colors   [make_colr2.c]
+G_make_color_wave
+G_make_grey_scale
+G_make_color_ramp
+G_make_aspect_colors
+G_add_histogram        [histogram.c]
+G_set_histogram
+G_update_range         [range.c]
+.DE
+
+The return value for the following routines was changed:
+
+.DS
+G_number_of_cats       [cats.c]
+G_get_histogram_cat    [histogram.c]
+.DE
+
+This change does not, at present, require changes to existing code since
+the CELL type is currently defined as int.
+
+In the future, if we (or someone else) want to
+redefine CELL to long (say on a 16 bit machine), the application code
+will compile ok, but will not run correctly since the calling seqences
+(including printf and scanf) will not match anymore.
+To upgrade GRASS code for this is a big deal.
+It consists of
+finding all places that ints are used in assignments with
+CELL variables,
+modifying all the calls to the above routines,
+and modifying all calls to other routines that don't know about the CELL
+type (in particular printf, scanf, and Vask code).
+
+The way to handle printf for CELL data is to use %ld and cast the
+CELL value to long:
+.DS
+CELL x
+printf ("%ld", (long) x);
+.DE
+The way to handle scanf for CELL data is to use %ld into a long
+and assign to the CELL variable:
+.DS
+CELL x;
+long t;
+
+scanf ("%ld", &t);
+x = (CELL) t;
+.DE
+For Vask calls, assign the CELL value to a long, call Vask will the long,
+then assign the long to the CELL variable:
+.DS
+CELL x;
+long t;
+
+t = x;
+V_clear();
+V_ques (&t, 'l', ...);
+V_call();
+x = t;
+.DE
+
+The long vs int issue for CELL also presents a subtle, but
+potentially fatal, problem with malloc(n) which requires n to be int.
+
+Suppose we want to allocate an array for reclass, from
+cats min to max. What we do now is
+
+.DS
+char *table;
+CELL min,max;
+int len;
+
+len = max - min + 1;
+table = malloc (len);
+.DE
+This will fail if CELL is long and the expression max-min+1 yields
+a value which overflows an int. Therefore, we should do
+.DS
+long len;
+
+len = max - min + 1;
+if (len != (int)len)
+    error("Too many categories");
+table = malloc ((int)len);
+.DE
+.IP 2.
+Variables in structures, parameters in argument lists to library routines,
+and return values from library routines that should have been long
+but were declared as int have been changed to long.
+
+The following structures were changed:
+
+.DS
+Cell_stats         [gis.h]
+Histogram
+.DE
+
+The argument type for some parameters for the following routines was changed:
+
+.DS
+G_add_histogram         [histogram.c]
+G_set_histogram
+G_find_cell_stat        [cell_stats.c]
+G_next_cell_stat
+.DE
+
+The return value for the following routines was changed:
+
+.DS
+G_get_histogram_count    [histogram.c]
+.DE
+
+
+These changes required immediate upgrade.
+I think this update is done, but I want to review it again.
+

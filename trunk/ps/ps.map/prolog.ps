@@ -1,0 +1,156 @@
+
+% make definition operators
+/BD {bind def} bind def
+/XD {exch def} BD
+
+% make increment and decrement operators
+/IN {1 add} BD
+/DE {1 sub} BD
+
+% exch sub operator
+/XS {exch sub} BD
+
+% newpath operator
+/NP {newpath} BD
+
+% newpath moveto operator
+/NM {newpath moveto} BD
+
+% moveto operator
+/M {moveto} BD
+
+% closepath operator
+/CP {closepath} BD
+
+% closepath fill operator
+/CF {closepath fill} BD
+
+% lineto operator
+/LN {lineto} BD
+
+% divide by 2
+/D2 {2 div} BD
+
+% draw a line segment
+% assumes x2 y2 x1 y1 on top of stack
+/L {moveto LN stroke} BD
+
+/ML {moveto LN } BD
+
+% adds a relative vector to the path
+% assumes x2 y2 on top of stack
+/V {rlineto} BD
+
+% construct rectangular box path
+% assumes l b r t on top of stack
+/B {4 1 roll 2 copy 5 index 5 index 8 1 roll
+NM LN LN LN closepath} BD
+
+% set line width
+% assumes line width is on top of stack
+/W {setlinewidth} BD
+
+% stringwidth operator
+/SW {stringwidth} BD
+
+% translate operator
+/TR {translate} BD
+
+% set current color
+% assumes R G B values (0.0 to 1.0) on top of stack
+/C {setrgbcolor} BD
+
+% set color to black, line width to 1
+/BW {0 0 0 C 1 W} BD
+
+% moveto and show
+% assumes text x y on top of stack
+/MS {moveto show} BD
+
+% fill interior of current path with current color
+/F {gsave fill grestore} BD
+
+% draw current path
+/D {stroke} BD
+
+% set font name
+% assumes font name is on top of stack
+/FN {/fn exch cvn def} BD
+
+% ISO-Latin1 fonts
+/isofonts 100 dict def
+
+% set font
+% assumes size is on top of stack
+/SF {isofonts fn known {} {
+fn dup length string cvs
+dup length 4 add string 1 index 1 index copy pop
+exch length 1 index exch (-ISO) putinterval cvn
+fn findfont dup length dict copy
+dup /FID undef
+dup /FontName 3 index put
+dup /Encoding ISOLatin1Encoding put
+1 index exch definefont pop
+isofonts fn 3 -1 roll put
+} ifelse
+isofonts fn get findfont exch scalefont setfont} BD
+
+% initialize font to Helvetica, size = 10
+(Helvetica) FN 10 SF
+
+% initialize the text box path
+/ZB {0 0 NM gsave}  BD
+
+% get the path of the text box
+/PB {dup false charpath flattenpath pathbbox
+/bt exch mg add def
+/br exch mg add def
+/bb exch mg sub def
+/bl exch mg sub def} BD 
+
+% set the text box path
+/TB {bl bb br bt B} BD
+
+% text in box
+/TIB {0 0 MS grestore} BD
+
+% procs for text box path
+/LTX {mg add} BD
+/RTX {mg add br bl sub sub} BD
+/CTX {mg add br bl sub D2 sub} BD
+/UTY {mg add bt bb sub sub} BD
+/LTY {mg add} BD
+/CTY {mg add bt bb sub D2 sub} BD
+
+% proc used for highlight color
+% (temporarily change miter limit to avoid the M-problem)
+% /HC {0 0 NM dup false charpath gsave 2 setmiterlimit stroke grestore} BD
+% proc used for highlight color
+% (temporarily change line join style so highlight is rounded)
+/HC {0 0 NM dup false charpath gsave 1 setlinejoin stroke grestore} BD
+
+% proc used before included EPS file
+/BeginEPSF {
+  /inc_state save def
+  /dict_count countdictstack def
+  /op_count count 1 sub def
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin    
+  10 setmiterlimit [ ] 0 setdash newpath
+  /language level where
+  {pop languagelevel
+  1 ne
+    {false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+% proc used to restore PS state after included EPS file
+/EndEPSF {
+  count op_count sub {pop} repeat
+  countdictstack dict_count sub {end} repeat
+  inc_state restore
+} bind def
+

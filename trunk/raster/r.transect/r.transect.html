@@ -1,0 +1,43 @@
+<h2>DESCRIPTION</h2>
+
+This program outputs, in ASCII, the values in a raster map
+which lie along one or more user-defined transect lines.
+The transects are described by their starting coordinates,
+azimuth, and distance. 
+
+<!-- The transects may be single-cell
+ wide lines, or multiple-cell wide lines.  The output, for
+ each transect, may be the values at each of the cells, or a
+ single aggregate value (e.g., average or median value). -->
+<p>
+The <b>line</b> parameter is a definition of (each) transect line,
+specified by the geographic coordinates of its starting point (<em>easting,
+northing</em>), the angle and direction of its travel (<em>azimuth</em>),
+and its distance (<em>distance</em>).
+
+<p>The <em>azimuth</em> is an angle, in degrees, measured to
+the east of north.  The <em>distance</em> is in map units
+(meters for a metered database, like UTM).
+<p>The <b>null</b> parameter can optionally be set to change the character
+string representing null values.
+
+<h2>NOTES</h2>
+
+This program is a front-end to the <em>
+<a href="r.profile.html">r.profile</a></em> program.  It simply converts the
+azimuth and distance to an ending coordinate and then runs <em>
+<a href="r.profile.html">r.profile</a></em>.
+
+There once were <b>width=</b> and <b>result=</b><em>raw|median|average</em>
+ options which are not currently implemented.
+
+<h2>SEE ALSO</h2>
+
+<em><a href="r.profile.html">r.profile</a></em>,
+<em><a href="wxGUI.html">wxGUI profile tool</a></em>
+
+<h2>AUTHOR</h2>
+
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

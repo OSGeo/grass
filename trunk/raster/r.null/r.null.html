@@ -1,0 +1,72 @@
+<h2>DESCRIPTION</h2>
+
+The function of <em>r.null</em> is to explicitly create the NULL-value
+bitmap file. The intended usage is to update maps that do not have a
+NULL-value bitmap file (i.e. to indicate for each pixel if zero is a valid
+value or is to be considered as NULL, i.e. no data value). The module does
+not work with reclassified maps.
+
+<p>
+The design is flexible. Ranges of values can be set to NULL and/or the NULL
+value can be eliminated and replace with a specified value.
+<p>
+The <b>setnull</b> parameter is used to specify values in the ranges to
+be set to NULL.  A range is either a single value (e.g., 5.3), or a pair of
+values (e.g., 4.76-34.56).  Existing NULL-values are left NULL, unless the
+null argument is requested.
+<p>
+The <b>null</b> parameter eliminates the NULL value and replaces it with
+value. This argument is applied only to existing NULL values, and not to the
+NULLs created by the setnull argument.
+
+<h2>NOTES</h2>
+
+Note that the value is restricted to integer if the map is an integer map.
+
+<h3>r.null and reclassified maps</h3>
+
+<em>r.null</em> does not support reclassified maps because, if <em>r.null</em>
+was run on the reclass raster it would alter the original and any other
+reclass rasters of the original.  Therefore <em>r.null</em> does not allow
+recoding reclassified maps (products of <em>r.reclass</em>).
+<br>
+As a workaround, the way to recode such a map is: The user creates a raster
+map out of the reclassified map by copying it:<br>
+
+<div class="code"><pre>
+r.mapcalc "newmap = reclass"
+</pre></div>
+
+<h3>NULL data compression</h3>
+
+By default no data files (i.e., NULL files) are not compressed unless a
+specific environment variable is set. The NULL file compression must be
+explicitly turned on with <tt>export GRASS_COMPRESS_NULLS=1</tt>.<br>
+Warning: such raster maps can then only be opened with GRASS GIS 7.2.0 or
+later. NULL file compression can be managed with <b>r.null -z</b>.
+
+<h2>EXAMPLES</h2>
+Set specific values of a classified map to NULL:<br>
+<div class="code"><pre>
+r.null map=landcover.30m setnull=21,22
+</pre></div>
+
+Set NULL-values of a map to a specific value:<br>
+<div class="code"><pre>
+r.null map=fields null=99
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.compress.html">r.compress</a>,
+<a href="r.support.html">r.support</a>,
+<a href="r.quant.html">r.quant</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

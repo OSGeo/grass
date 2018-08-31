@@ -1,0 +1,374 @@
+/*! \mainpage GRASS GIS 7 Programmer's Manual
+<!-- * doxygenized from "GRASS 5 Programmer's Manual"
+       by M. Neteler 2/2004
+     * updated 8/2005, 2006-2008, 2010-2011, 2017
+  -->
+
+<a href="http://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
+Resources Analysis Support System</b>) is an open source, free
+software <em>Geographical Information System</em> (GIS) with raster,
+topological %vector, image processing, and graphics production
+functionality that operates on various platforms through a graphical
+user interface (GUI) or command line interface (CLI). It is released
+under <a href="http://www.fsf.org/copyleft/gpl.html">GNU General
+Public License</a> (GPL).
+
+This manual introduces the reader to the <i>Geographic Resources
+Analysis Support System</i> from the programming perspective. Design
+theory, system support libraries, system maintenance, and system
+enhancement are all presented. This work is part of ongoing research
+being performed by the <a
+href="http://grasswiki.osgeo.org/wiki/Team">GRASS Development
+Team</a>, an international team of programmers, GRASS module authors
+are cited within their module's source code and the contributed manual
+pages.
+
+&copy; 2000-2018 by the GRASS Development Team
+
+This manual is published under <a
+href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation
+License</a> (GFDL), and comes with ABSOLUTELY NO WARRANTY. The
+development of GRASS software and this manual is kindly supported by
+the <a href="http://www.osgeo.org">Open Source Geospatial
+Foundation</a>, who provides the GRASS main infrastructure.
+
+Main web site: <a
+href="https://grass.osgeo.org">https://grass.osgeo.org</a>
+
+<i>Note: Missing entries below still need to be documented in Doxygen format.</i>
+
+<!-- original:
+  http://trac.osgeo.org/grass/browser/grass-web/trunk/images/grass7_arch.odp
+-->
+\image html "grass7_arch.png" "GRASS 7 Architecture"
+
+\section libsOverview Libraries
+
+\section corelibs Core libraries
+
+(the name refers to the directory name in <tt>lib/</tt> in the source code)
+
+ - gis: \ref gislib
+ - raster: \ref rasterlib
+ - vector: \ref vectorlib
+ - Temporal GIS API: See http://grass.osgeo.org/grass75/manuals/libpython/temporal_framework.html
+
+\section libs Further libraries
+
+(the name refers to the directory name in <tt>lib/</tt> in the source code)
+
+\subsection displaylibs Display Libraries and Drivers
+
+ - display:	\ref displaylib (general display library)
+ - cairodriver: \ref cairodriver
+ - %driver:     Graphics monitor driver
+ - htmldriver:  \ref htmldriverlib (HTML graphics driver)
+ - pngdriver:   \ref pngdriverlib
+ - psdriver:    \ref psdriverlib
+
+\subsection statslibs Math and Statistics Libraries
+
+ - arraystats:  \ref arraystatslib (library of statistics for arrays of doubles)
+ - cdhc:	\ref cdhclib
+ - gmath: 	\ref gmathlib (generic mathematical functions and BLAS/LAPACK library wrapper)
+ - gpde:        \ref gpdelib
+
+\subsection rasteribs Raster Libraries
+
+ - raster:	\ref rasterlib (2D raster library)
+ - raster3d:	\ref raster3dlib (3D raster aka voxels or volumes)
+ - rowio:	\ref rowiolib (library for reading/writing raster rows)
+ - rst:	        \ref rstlib (library for interpolation with regularized splines with tension)
+ - segment:	\ref segmentlib (segment library for segmented raster reading)
+ - stats:       \ref statslib (statistics library)
+
+\subsection imagerylibs Imagery Libraries (image processing)
+
+ - cluster:     \ref clusterlib (library for k-means style of cluster analysis processing)
+ - imagery:	\ref imagerylib (library for image processing)
+
+\subsection vectoribs Vector Libraries
+
+ - %vector: \ref vectorlib (architecture description)
+  - dglib:  \ref dglib
+  - vedit:  \ref veditlib (vector editing library)
+  - neta:   \ref netalib
+  - rtree:  \ref rtree.h (R search tree library)
+
+\subsection treelibs Search tree libraries
+
+ - btree: \ref btree.h
+ - btree2: \ref btree2
+ - rtree:  \ref rtree.h (R search tree library)
+
+\subsection dblibs Database Management Libraries
+
+ - db:		\ref dbmilib
+
+\subsection ogsflibs OpenGL Libraries and friends
+
+ - ogsf:	\ref ogsflib (OpenGL (R) ported gsurf library (required for NVIZ))
+ - nviz:        \ref nvizlib (used by wxGUI Nviz extension and CLI-based Nviz module)
+
+\subsection pythonlibs Python API
+
+ - python:	See GRASS GIS Python library (http://grass.osgeo.org/grass75/manuals/libpython/)
+
+\subsection projlibs Projection Libraries
+
+ - proj:	\ref projlib (wrapper to PROJ4 projection library)
+
+\subsection misclibs Miscellaneous Libraries
+
+ - datetime:	\ref datetime (DateTime library) 
+ - external:	\ref external (External libraries from other projects such as shapelib and \ref ccmathlib)
+ - fonts:	\ref fonts (GRASS fonts library)
+ - init:	\ref init (GRASS initialization code + scripts)
+ - iostream:	\ref iostream (fast I/O library)
+ - lidar:	\ref lidar.h (LiDAR data related library)
+ - linkm:	\ref linkm (linked list memory manager)
+ - manage:      \ref managelib
+ - symbol:	\ref symbol (Drawing symbols for %point %vector data library)
+
+\section location File structure of GRASS Location
+
+A GRASS <b>raster map</b> consists of several files in several subdirectories in a mapset,
+organized as follows:
+<dl>
+ <dt><b>cellhd/</b></dt>
+ <dd>map header including projection code, coordinates representing
+  the spatial extent of the raster map, number of rows and columns, resolution, 
+  and information about map compression;</dd>
+ <dt><b>cell/, fcell/ or grid3/</b></dt>
+ <dd>generic matrix of values in a compressed, portable
+  format which depends on the raster data type (integer, floating %point or 3D grid);</dd>
+ <dt><b>hist/</b></dt>
+ <dd>history file which contains metadata such as the data source,
+  the command that was used to generate the raster map, or
+  other information provided by the user;</dd>
+ <dt><b>cats/</b></dt>
+ <dd>optional category file which contains text or numeric labels assigned
+  to the raster map categories;</dd>
+ <dt><b>colr/</b></dt> 
+ <dd>optional color table;</dd>
+ <dt><b>cell_misc/</b></dt>
+ <dd>optional timestamp, range of values, quantization rules (for floating %point maps)
+  and null (no-data) files;</dd>
+</dl>
+
+A GRASS <b>%vector maps</b> are stored in several separate files in a
+single directory (see \ref vectorlib). While the
+attributes are stored in either a DBF file, a SQLite file or in an
+external DBMS (PostgreSQL, MySQL, ODBC), the geometric data are saved
+as follows:
+
+<dl>
+ <dt><b>head</b></dt>
+ <dd>%vector map ASCII header with information about the map creation
+  (date and name), its scale and threshold;</dd>
+ <dt><b>coor</b></dt>
+ <dd>binary geometry file which includes the coordinates of graphic
+  elements (primitives) that define the %vector feature;</dd>
+ <dt><b>topo</b></dt>
+ <dd>binary topology file describes the spatial relationships between the
+  map's graphic elements;</dd>
+ <dt><b>hist</b></dt>
+ <dd>history ASCII file with complete commands that were used to
+  create the %vector map, as well as the name and date/time of the map
+  creation;</dd>
+ <dt><b>cidx</b></dt>
+ <dd>binary category index file which is used to %link the %vector
+  object IDs to the attribute table rows;</dd>
+ <dt><b>dbln</b></dt>
+ <dd>ASCII file which contains definition(s) of %link to attribute
+  storage in database (DBMS).</dd>
+</dl>
+
+<!-- original: 
+  http://trac.osgeo.org/grass/browser/grass-web/trunk/images/loc_struct.odg
+-->
+\image html "loc_struct.png" "Diagram of GRASS file structure"
+
+\section Compiling_and_Installing_GRASS_Modules Compiling and Installing GRASS Modules
+
+GRASS modules are compiled and installed using the UNIX <tt>make</tt>
+command, which reads a file named <tt>Makefile</tt> (see \ref
+Multiple_Architecture_Conventions for more information) and then runs
+the compiler. The GRASS compilation process allows for
+multiple-architecture compilation from a single copy of the source
+code (for instance, if the source code is NFS mounted to various
+machines with differing architectures). This chapter assumes that the
+programmer is familiar with <tt>make</tt> and its accompanying
+Makefile.
+<!--
+\todo Explain ''auto-conf''
+
+\todo Include contents of SUBMITTING and INSTALL files from source code
+-->
+To compile enter following:
+
+\verbatim
+./configure
+make
+make install
+\endverbatim
+
+Then the code will be compiled into "/usr/local/grass-7.x.y" directory. The start
+script "grass7x" will be placed into "/usr/local/bin/".
+
+Optionally other target directories can be specified while "configuring":
+
+\verbatim
+./configure --prefix=/opt/grass-7.x.y --with-bindir=/usr/bin
+make
+make install
+\endverbatim
+
+This will store the GRASS binaries into the directory
+"/opt/grass-7.x.y" and the script mentioned above into "/usr/bin".
+
+The script "make" is required to compile single modules. The
+compilation process and requirements are discussed in more detail now.
+
+\subsection Makefile_Variables Makefile Variables
+
+\todo Update the list.
+
+<b>GRASS Libraries</b>. The following variables name the various GRASS 
+libraries:
+
+ - <i>GISLIB</i> - This names the <b>GIS Library</b>, which is the
+principal GRASS library. See \ref gislib for details about this
+library, and \ref Loading_the_GIS_Library for a sample Makefile which
+loads this library.
+
+ - <i>SEGMENTLIB</i> - This names the <b>Segment Library</b>, which
+manages large matrix data. See \ref segmentlib for details about this
+library, and \ref Loading_the_Segment_Library for a sample
+<i>Makefile</i> which loads this library.
+
+ - <i>RASTERLIB</i> - This names the <b>Raster Library</b>, which is
+the principal GRASS library for raster data access. See \ref rasterlib
+for details about this library, and \ref Loading_the_Raster_Library
+for a sample <i>Makefile</i> which loads this library.
+
+ - <i>VECTORLIB</i> - This names the <b>Vector Library</b>, which is
+the principal GRASS library for vector data access. See \ref vectorlib
+for details about this library, and \ref Loading_the_Vector_Library
+for a sample <i>Makefile</i> which loads this library.
+
+ - <i>DISPLAYLIB</i> - This names the <b>Display Library</b>, which
+communicates with GRASS graphics drivers. See \ref displaylib for
+details about this library, and \ref
+Loading_the_Display_Library for a sample <i>Makefile</i>
+which loads this library.
+
+<b>UNIX Libraries:</b> The following variables name some useful UNIX 
+system libraries:
+
+ - <i>MATHLIB</i> - This names the math library. It should be used
+instead of the -lm loader option.
+
+<b>Compiler and loader variables.</b> The following variables are
+related to compiling and loading C programs:
+
+ - <i>EXTRA\_CFLAGS</i> - This variable can be used to add additional
+options to <tt>$CFLAGS</tt>. It has no predefined values. It is
+usually used to specify additional -I include directories, or -D
+preprocessor defines.
+
+\subsection Constructing_a_Makefile Constructing a Makefile
+
+The complete syntax for a <i>Makefile</i> is discussed in the UNIX
+documentation for <tt>make</tt> and will not be repeated here. The
+essential idea is that a target (e.g. a GRASS module) is to be built
+from a list of dependencies (e.g. object files, libraries, etc.). The
+relationship between the target, its dependencies, and the rules for
+constructing the target is expressed according to the following
+syntax:
+
+\code
+target: dependencies
+
+actions
+
+more actions
+\endcode
+
+If the target does not exist, or if any of the dependencies have a
+newer date than the target (i.e., have changed), the actions will be
+executed to build the target. The actions must be indented using a
+TAB. <tt>make</tt> is picky about this. It does not like spaces in
+place of the TAB.
+
+\section Multiple_Architecture_Conventions Multiple-Architecture Conventions
+
+The following conventions allow for multiple architecture compilation
+on a machine that uses a common or networked GRASS source code
+directory tree.
+
+Object files and library archives are compiled into subdirectories
+that represent the architecture that they were compiled on. These
+subdirectories are created in the $SRC directory as OBJ.<tt>arch</tt>
+and LIB.<tt>arch</tt>, where <tt>arch</tt> represents the architecture
+of the compiling machine. Thus, for example, $SRC/OBJ.sun4 would
+contain the object files for Sun/4 and SPARC architectures, and
+<tt>$SRC/LIB.686-pc-linux-gnu</tt> would contain library archives for
+Linux architectures. Likewise, <tt>$SRC/OBJ.686-pc-linux-gnu</tt>
+would contain the object files for Linux architectures, and
+<tt>$SRC/LIB.686-pc-linux-gnu</tt> would contain library archives for
+Linux architectures.
+
+Note that 'arch' is defined for a specific architecture during setup
+and compilation of GRASS, it is not limited to sun4 or any specific
+string.
+
+\section vectmodules Vector modules and their parameters/flags
+
+A module is a GRASS command invoked by the user.
+
+\subsection vectmodules_oper Modules operation
+
+Each module which modifies and writes data must read from <b>input</b>
+and write to <b>output</b> so that data may not be lost. For example
+<tt>v.spag</tt> works on <b>map</b> at in GRASS GIS 5.0 but if program
+(system) crashes or threshold was specified incorrectly and vector was
+not backuped, data were lost. In this case <b>map</b> option should
+be replaced by <b>input</b> and <b>output</b>.
+
+Topology is always built by default if the coor file was modified.
+
+Dimensionality is generally kept. Input 2D vector is written as 2D, 3D
+as 3D. There are a few modules which change the dimension on purpose.
+
+\subsection vectmodulesopt Modules parameters/flags
+
+Flags:
+
+ - <b>-b</b> do not build topo file; by default topo file is written
+
+ - <b>-t</b> create new table, default
+
+ - <b>-u</b> don't create new table
+
+ - <b>-z</b> write 3D vector map (if input was 2D)
+
+Parameters:
+
+ - <b>map</b> input vector map for modules without output
+
+ - <b>input</b> input vector map
+
+ - <b>output</b> output vector map
+
+ - <b>type</b> type of elements: point,line,boundary,centroid,area
+
+ - <b>cat</b> category or category list (example: 1,5,9-13,35)
+
+ - <b>layer</b> layer number or name
+
+ - <b>where</b> condition of SQL statement for selection of records
+
+ - <b>column</b> column name (in external table)
+
+*/

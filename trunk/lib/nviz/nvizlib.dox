@@ -1,0 +1,106 @@
+/*! \page nvizlib GRASS Nviz Library
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\section nvizintro Introduction to Nviz Library
+
+This library is build on \ref ogsflib and serves as the interface for
+wxGUI Nviz extension and CLI-based Nviz module.
+
+\section Functions
+
+\subsection nvizInit Initialization
+
+ - Nviz_color_from_str()
+
+ - Nviz_init_data()
+
+ - Nviz_set_bgcolor()
+
+\subsection NvizViewport Viewport settings
+
+ - Nviz_change_exag()
+
+ - Nviz_get_exag()
+
+ - Nviz_get_exag_height()
+
+ - Nviz_init_view()
+
+ - Nviz_resize_window()
+
+ - Nviz_set_focus_map()
+
+ - Nviz_set_focus_state()
+
+ - Nviz_set_viewpoint_position()
+
+ - Nviz_set_viewpoint_height()
+
+ - Nviz_set_viewpoint_persp()
+
+ - Nviz_update_ranges()
+
+\subsection nvizDraw Draw map objects
+
+ - Nviz_draw_all()
+
+ - Nviz_draw_all_surf()
+
+ - Nviz_draw_all_vect()
+
+ - Nviz_draw_quick()
+
+\subsection nvizMapObj Map objects manipulation
+
+ - Nviz_new_map_obj()
+
+ - Nviz_set_attr()
+
+ - Nviz_set_surface_attr_default()
+
+ - Nviz_set_vpoint_attr_default()
+
+ - Nviz_set_volume_attr_default()
+
+ - Nviz_unset_attr()
+
+\subsection nvizLights Lights settings
+
+ - Nviz_set_light_ambient()
+
+ - Nviz_set_light_bright()
+
+ - Nviz_set_light_color()
+
+ - Nviz_set_light_position()
+
+ - Nviz_init_light()
+
+ - Nviz_new_light()
+
+\subsection nvizCplanes Clip planes manipulation
+
+ - Nviz_draw_cplane()
+
+ - Nviz_new_cplane()
+
+ - Nviz_off_cplane()
+
+\subsection nvizRender Off-screen rendering
+
+ - Nviz_create_render_window()
+
+ - Nviz_destroy_render_window()
+
+ - Nviz_init_render_window()
+
+ - Nviz_make_current_render_window()
+
+ - Nviz_new_render_window()
+
+\section authors Authors
+
+ Martin Landa <landa.martin gmail.com>
+
+*/

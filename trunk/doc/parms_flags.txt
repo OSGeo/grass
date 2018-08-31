@@ -1,0 +1,131 @@
+GRASS: Module parameters concept
+
+All GRASS modules should use a standardized scheme.                               
+Collected idead below.
+
+1) 
+Date: Sun, 26 Nov 2000 20:34:55 -0800
+From: "Eric G . Miller" <egm2 jps.net>
+Subject: [GRASSLIST:1195] Re: [GRASS5] Re: notation standardisation
+To: grass5@grass.itc.it, GRASSLIST@baylor.edu
+
+As follow-up, I also think we should use the same parameter names used
+by g.list, g.copy, g.remove, etc. when input/output aren't appropriate.
+
+So we have "rast", "vect", "sites", "icon", "labels", "region", "group",
+and "3dview" to use (and maybe "dspf" ?).
+
+Rule of thumb [proposed]:
+
+1. If the module takes a single input and produces a single output, then 
+   use input=[name] and output=[name].
+
+2. If the module just performs some action, but doesn't produce an
+   output different from the input, then use the input "types" parameter
+   "name" (i.e. "rast", "vect", etc...).
+
+3. If the module has multiple inputs or outputs, then attempt to use the 
+   parameter names above if possible, else parameter names are left up
+   to the author.  So, If I had a module that took a raster and a vector
+   and produced a raster, it's parameters could be:
+   	r.something rast=[name] vect=[name] output=[name]
+   However, with some modules, there's more than one input or output of
+   a single "type", so then each name should be descriptive of what its
+   function is.
+
+I don't know that we ever resolved the issue of addressing sites
+attributes.  Basically we have something like:
+
+   "east", "north", "dim", "cat", "decimal", and "string";
+   
+for attribute names. For the "index", I don't know; maybe just "index"
+when there's only one to be specified, otherwise "zindex" for "dim",
+"dindex" for decimal and "sindex" for string???  I know I'm guilty of
+not being consistent here.
+
+NOTE: I'd like to get some kind of simple attribute database implemented
+in GRASS, but so far I haven't found anything that we could just plug in
+with a few tweaks.  The closest might be the Xbase library, but it's C++
+and I don't know how well Xbase files might support efforts at
+localization in the future.  Anyway, I bring this up, because
+identifying attributes by "type" and "index" is really cumbersome.
+
+-- 
+Eric G. Miller <egm2@jps.net>
+
+
+
+------------------------------------------------
+2) Here another rough concept (to be updated):
+
+Import:
+*  file=name output=name for all raster, sites and vector modules
+
+Export:
+*  input=name file=name for all raster, sites and vector modules
+*  export modules should *all* have an output= parameter, however they
+   should allow specifying "-" to write to stdout (for unix piping)
+
+-> file is external file. Should be read from current directory, not
+   within mapset!
+
+Display modules: 
+  map= for all raster and vector modules, 
+  file=name for modules that can read from stdin in the 
+       "easting northing label" format.
+
+
+Vector modules:
+  map= for map (no analysis modules)
+  input= output= for maps (analysis modules)
+
+
+Raster modules:
+  input= output= for maps (analysis modules) 
+  sometimes: elev=
+
+
+Imagery modules:
+  input= output= for maps (analysis modules)
+
+  
+Sites modules:
+  map= for map (no analysis modules)
+  input= output= for maps (analysis modules) 
+  sometimes: elev=
+  field   Attribute field type to use for operation
+           options: dim,decimal,cat
+           default: decimal
+  findex   Attribute field number to use for operation
+           default: 1
+  string   String attribute number to use for description
+           default: 1
+  -> important: attribute field selection
+
+
+Misc modules:
+  map= for map (no analysis modules)
+  input= output= for maps (analysis modules)
+
+
+General modules:
+  [rast=old,new] [vect=old,new] [icon=old,new] [labels=old,new]
+  [sites=old,new] [region=old,new] [group=old,new] [3dview=old,new]
+
+
+3D raster modules:
+ parameters following raster2d modules
+
+Database modules
+ ?
+
+------------------------------------------------------------------
+
+General proposal for import modules:
+- flag -q quiet (default is verbose)
+- flag -o overwrite (default is exit if out exists)
+- support of new envvar: GRASS_AUTO_EXTEND_LOCATION (function is already
+  present in r.in.gdal -e, this should be moved to libgis and added to
+  all import modules)
+- read from stdin with 'in=-' (for all import modules)
+- add 'timestamp' parameter to import modules 

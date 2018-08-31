@@ -1,0 +1,115 @@
+#ifdef __STDC__
+# define	P(s) s
+#else
+# define P(s) ()
+#endif
+
+double IL_crst P((double r , double fi ));
+int IL_crstg P((double r , double fi , double *gd1 , double *gd2 ));
+
+#undef P
+#ifdef __STDC__
+# define	P(s) s
+#else
+# define P(s) ()
+#endif
+
+int IL_input_data_2d P((struct interp_params *params , struct tree_info *info , double *xmin , double *xmax , double *ymin , double *ymax , double *zmin , double *zmax , int *n_points ));
+int IL_create_bitmask P((struct interp_params *params , struct BM *bitmask ));
+int translate_quad P((struct multtree *tree , double numberx , double numbery , double numberz , int n_leafs ));
+
+#undef P
+#ifdef __STDC__
+# define	P(s) s
+#else
+# define P(s) ()
+#endif
+
+int IL_grid_calc_2d P((struct interp_params *params , struct quaddata *data , struct BM *bitmask , double zmin , double zmax , double *zminac , double *zmaxac , double *gmin , double *gmax , double *c1min , double *c1max , double *c2min , double *c2max , double *ertot , double *b , int offset1 ));
+
+#undef P
+#ifdef __STDC__
+# define	P(s) s
+#else
+# define P(s) ()
+#endif
+
+int IL_matrix_create P((struct interp_params *params , struct triple *points , int n_points , double **matrix , int *indx ));
+
+#undef P
+#ifdef __STDC__
+# define	P(s) s
+#else
+# define P(s) ()
+#endif
+
+int min1 P((int arg1 , int arg2 ));
+int max1 P((int arg1 , int arg2 ));
+double amax1 P((double arg1 , double arg2 ));
+double amin1 P((double arg1 , double arg2 ));
+
+#undef P
+#ifdef __STDC__
+# define	P(s) s
+#else
+# define P(s) ()
+#endif
+
+int IL_interp_segments_new_2d P((struct interp_params *params , struct tree_info *info , struct multtree *tree , struct BM *bitmask , double zmin , double zmax , double *zminac , double *zmaxac , double *gmin , double *gmax , double *c1min , double *c1max , double *c2min , double *c2max , double *ertot , int totsegm , int offset1 ));
+
+#undef P
+#ifdef __STDC__
+# define	P(s) s
+#else
+# define P(s) ()
+#endif
+
+int IL_output_2d P((struct interp_params *params , struct Cell_head *cellhd , double zmin , double zmax , double zminac , double zmaxac , double c1min , double c1max , double c2min , double c2max , double gmin , double gmax , double ertot , char *input ));
+
+#undef P
+#ifdef __STDC__
+# define	P(s) s
+#else
+# define P(s) ()
+#endif
+
+int IL_check_at_points_2d P((struct interp_params *params , struct quaddata *data , double *b , double *ertot , double zmin ));
+
+#undef P
+#ifdef __STDC__
+# define	P(s) s
+#else
+# define P(s) ()
+#endif
+
+int IL_secpar_loop_2d P((struct interp_params *params , int ngstc , int nszc , int k , struct BM *bitmask , double *gmin , double *gmax , double *c1min , double *c1max , double *c2min , double *c2max , int cond1 , int cond2 ));
+
+#undef P
+#ifdef __STDC__
+# define	P(s) s
+#else
+# define P(s) ()
+#endif
+
+int IL_interp_segments_2d P((struct interp_params *params , struct tree_info *info , struct multtree *tree , struct BM *bitmask , double zmin , double zmax , double *zminac , double *zmaxac , double *gmin , double *gmax , double *c1min , double *c1max , double *c2min , double *c2max , double *ertot , int totsegm , int offset1 ));
+
+#undef P
+#ifdef __STDC__
+# define	P(s) s
+#else
+# define P(s) ()
+#endif
+
+int IL_vector_input_data_2d P((struct interp_params *params , struct Map_info *Map , double dmax , struct Categories *cats , int iselev , struct tree_info *info , double *xmin , double *xmax , double *ymin , double *ymax , double *zmin , double *zmax , int *n_points ));
+int process_point P((double x , double y , double z , struct tree_info *info , double zmult , double *xmin , double *xmax , double *ymin , double *ymax , double *zmin , double *zmax , int *npoint , int *OUTRANGE , int iselev , int *total ));
+
+#undef P
+#ifdef __STDC__
+# define	P(s) s
+#else
+# define P(s) ()
+#endif
+
+int IL_write_temp_2d P((struct interp_params *params , int ngstc , int nszc , int offset2 ));
+
+#undef P

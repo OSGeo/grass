@@ -1,0 +1,55 @@
+This library contains routines called both by client and drivers.
+
+The low level communication is in the xdr*.c files. The routines
+All the xdr*.c files create and destroy and XDRS structure.
+the xdr_destroy() calls fflush() on the FILE * which is necessary
+for the communication along both pipes to work properly.
+
+The client stubs are in c_*.c files.
+
+The driver implementation for any routine, say db_xxxx() is
+to be named db_driver_xxxx().
+
+The drivers must write the db_driver_xxxx()
+For example
+	db_ls()        /* client routine */
+	db_driver_ls() /* driver routine */
+
+----------------------------------------------------------	
+The following variables need to be supplied by gmake
+
+XDRLIB:
+    the library which contains the xdr_int(), et al routines
+	sun:        none, seems that these are in -lc
+	dg aviion:  none, seems that these are in -lc
+	intergraph: XDRLIB = -lbsd
+	linux0.99:  XDRLIB = -lrpclib
+	mips:       XDRLIB = -lrpcsvc
+	sgi:        XDRLIB = -lsun
+
+USE_DIRECT:
+    #define that says to use #include <sys/dir.h> and struct direct
+    instead of #include <dirent.h> and struct dirent
+
+	mips: USE_DIRECT = -DUSE_DIRECT
+
+USE_BUFFERED_IO:
+    #define that says to not to call setbuf(fd, NULL) to force unbuffered io
+
+	sun:    USE_BUFFERED_IO = -DUSE_BUFFERED_IO
+	mips:   USE_BUFFERED_IO = -DUSE_BUFFERED_IO
+    note:
+	intergraph, sgi won't work unless io is unbuffered.
+	sun, mips can use buffered io.
+
+CC:
+	mips: CC = /bsd43/bin/cc
+
+---------------
+The $DBMSCAP file should have the remote-shell full path in the
+command and not let $PATH handle it. 
+
+	sun: /usr/ucb/rsh
+	mips: /bin/net/rsh
+	intergraph: /usr/bin/rcmd
+	sgi: /usr/bsd/rsh

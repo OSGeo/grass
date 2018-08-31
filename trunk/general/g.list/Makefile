@@ -1,0 +1,14 @@
+MODULE_TOPDIR = ../..
+
+PGM = g.list
+
+LIBES = $(MANAGELIB) $(GISLIB) $(RASTERLIB) $(RASTER3DLIB) $(VECTORLIB)
+DEPENDENCIES = $(MANAGEDEP) $(GISDEP) $(RASTERDEP) $(RASTER3DDEP) $(VECTORDEP)
+EXTRA_INC = $(VECT_INC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+ifneq ($(USE_REGEX),)
+default: cmd
+endif
