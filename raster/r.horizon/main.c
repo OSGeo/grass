@@ -368,6 +368,11 @@ int main(int argc, char *argv[])
 		_("Can't read the coordinates from the \"coordinate\" option."));
 	}
 
+	if (xcoord < cellhd.west || xcoord >= cellhd.east ||
+	    ycoord <= cellhd.south || ycoord > cellhd.north) {
+	    G_fatal_error(_("Coordinates are outside of the current region"));
+	}
+
 	/* Transform the coordinates to row/column */
 
 	/*
