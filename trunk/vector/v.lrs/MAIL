@@ -1,0 +1,121 @@
+From blazek@itc.it Mon May  3 12:20:21 2004
+Content-Type: text/plain;
+  charset="iso-8859-1"
+From: Radim Blazek <blazek@itc.it>
+To: Christoph Spoerri <cspoerri@cavtel.net>
+Subject: Re: [Qgis-developer] Plugin help
+Date: Mon, 3 May 2004 12:20:21 +0200
+X-Mailer: KMail [version 1.3.2]
+References: <200404220749.i3M7nav12790@janacek.itc.it.> <200404270830.i3R8UPR20836@janacek.itc.it.> <200404282242.33983.cspoerri@cavtel.net>
+In-Reply-To: <200404282242.33983.cspoerri@cavtel.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Status: RO
+X-Status: S
+
+On Thursday 29 April 2004 04:42, you wrote:
+> Hi,
+>
+> I followed the ESRI way (the shapefile way and not the coverage way
+> though). So, each vertex has a measure value. 
+
+How do you store the 'measure'? PostGIS does not have measure AFAIK.
+
+> I searched the web for other models, but wasn't able to find any.
+
+Neither did I.
+
+> Regarding your two draw-backs of the "ESRI" system:
+> 1. what do you mean with Mile post not being precise? The system does not
+> have MP, but you can rather use it to create a layer with MPs. The measures
+> with the vertices are used to tell you how far along the line your are. 
+
+Or vice versa, MPs can (must!?) be used to create LRS. In fact I cannot find 
+how ESRI creates LRS. 
+What data are you working with? We have for example the layer of roads 
+(lines) and the layer of mileposts (points). I take these two layer 
+and make LRS from them. 
+
+My objection is, that if the MP (input point) is not near a vertex on the line, 
+and previous and next segment have different scale, you get an error, 
+which is not necessary. But well, probably not so important. Example:
+---    line
+ +     vertex
+ x1    milepost with km
+
++--------------+------+
+x0       x1           x2   
+
+The distance x0-x1 in GIS = 0.8 km (real world 1km)
+The distance x1-x2 in GIS = 1.2 km (real world 1km)
+Note that of course the distances measured in GIS differ from those 
+in real world and may be both longer and shorter
+
+Now we have 3 vertices, the first will have measure 0, the third measure 2.
+And the second? Which measure? Optimal would be to add a new vertex where
+the MP is:
++--------+-----+------+
+x0       x1           x2
+
+> 2. With smooth changes you mean a gradual change in an attribute? 
+> Like the decline of O2 concentration in a polluted stream? I believe this type of
+> data would be hard to map with any system, since attributes are discrete
+> entities.
+
+No, sorry, I mean a physical changes of mileposts in the real world.
+If you cannot maintain partial changes in LRS, the only option
+is to change always all mileposts.
+
+
+> Yes, it would be nice to have a compatible system. Do you have more
+> documentation on the LRS in GRASS? At the first glance, it seems to have a
+> bit more overhead than the ESRI (or Oracle spatial) model. 
+
+I don't have any documentation, as we use it only here. I have to write 
+something, but I don't have much time, let me know if you are interested.
+For now briefly:
+All the LRS is stored in one table, each record stores information
+about one segment between two mileposts:
+ rsid        | integer | id of LRS segment (not so important)
+ lcat        | integer | line id, unique id of the line
+ lid         | integer | id of 'route' (for example 456 for 'Highway 12')
+ start_map   | float8  | the start of segment measured from the beginning of the line
+ end_map     | float8  | the start of segment measured from the beginning of the line
+ start_mp    | float8  | milepost on the beginning of the segment
+ start_off   | float8  | offset on the beginning of the segment
+ end_mp      | float8  | milepost on the end of the segment
+ end_off     | float8  | offset on the end of the segment
+
+Say the you want to georeference a point specified by route id = 456 and 
+km+offset = 15+300.
+You find a record which has 
+lid = 456 and start_mp < 15 and start_off < 300 and end_mp > 15 and end_off > 300
+now it is possible to calculate the distance from the beginning of the line in GIS.
+
+In fact, I have here also simple web application which works with 
+this table in Postgres and line layer in PostGIS using a function in Postgres.
+
+> Also, what do you do, when you add additional segments between the 3rd and 4th MP (in
+> addition to the two points)? 
+
+Whole part between 3 and 4 must be referenced from 3, but such changes 
+are not frequent in real world and to change only the part between 3 and 4 
+is not so difficult (still talking about changes in real world, traffic signs for
+example, signs along the river etc.)
+
+> Are there any other systems/data formats that
+> implement this LRS model?
+
+I dont know any published, there is certainly one in MGE and I am 
+almost sure that it is different from ESRI.
+
+> Christoph
+>
+> P.S. it may be worth while to have a chat meeting on this. Let me know if
+> you are interested to do so.
+
+I would prefere mails.
+
+Radim
+
+

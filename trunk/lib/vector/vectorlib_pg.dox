@@ -1,0 +1,103 @@
+/*! \page vlibPg GRASS-PostGIS data provider
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+\section vlibPgInro Introduction
+
+<b>GRASS-PostGIS data provider</b> allows GRASS vector library to read and
+write PostGIS data directly without any external library (like in the
+case of \ref vlibOgr). GRASS-PostGIS data provider is implemented
+using <a
+href="http://www.postgresql.org/docs/9.2/static/libpq.html">libpq
+library</a>.
+
+Note that GRASS-PostGIS data provider is compiled only when GRASS is
+configured with <tt>--with-postgres</tt> switch.
+
+See the <a
+href="http://trac.osgeo.org/grass/wiki/Grass7/VectorLib/PostGISInterface">trac
+page</a> for more info.
+
+\section vlibFn List of functions
+
+Note that the functions listed below are lower level subroutines, in
+other word these functions are not considered to be part of public
+API. They are internally used by the vector library when accessing
+PostGIS data. The programmer should use higher level functions
+instead.
+
+- Vect_open_old() to open existing vector map (ie. PostGIS table when using GRASS-PostGIS data provider)
+- Vect_open_new() to create new vector map
+- Vect_close() to close vector map
+
+- Vect_rewind() to rewind the map for sequential access
+- Vect_read_next_line() for sequential access
+- Vect_read_line() for random access
+
+- Vect_write_line() to write a new feature
+- Vect_delete_line() to delete existing feature
+- Vect_rewrite_line() to modify existing feature
+
+- Vect_build() to build (pseudo-)topology
+
+Note that functions with <tt>V1_</tt> prefix access vector data
+without topology. Topological (pseudo-topological for simple features)
+access is provided by functions starting with <tt>V2_</tt> prefix.
+
+\par Open/Create PostGIS table as GRASS vector map
+
+- V1_open_old_pg()
+- V2_open_old_pg()
+
+- V1_open_new_pg()
+
+- V1_close_pg()
+- V2_close_pg()
+
+\par Read access
+
+- V1_rewind_pg()
+- V2_rewind_pg()
+
+- V1_read_next_line_pg()
+- V2_read_next_line_pg()
+
+- V1_read_line_pg()
+- V2_read_line_sfa()
+- V2_read_line_pg()
+
+\par Write new feature or topological element
+
+- V1_write_line_pg()
+- V2_write_line_sfa() - write new simple feature
+- V2_write_line_pg() - write new topological element in PostGIS Topology schema
+
+\par Delete existing feature or topological element
+
+- V1_delete_line_pg()
+- V2_delete_line_sfa() - delete simple feature
+- V2_delete_line_pg() - delete topological element from PostGIS Topology schema
+
+\par Modify existing feature or topological element
+
+- V1_rewrite_line_pg()
+- V2_rewrite_line_sfa() - modify simple feature
+- V2_rewrite_line_pg() - modify topological element from PostGIS Topology schema
+
+\par Build topology
+
+- Vect_open_topo_pg()
+- Vect__build_sfa()
+- Vect_build_pg()
+ 
+\section vlibPgSeeAlso See Also
+
+ - \ref vlibOgr
+
+\section vlibPgAuthors Authors
+
+Martin Landa <landa.martin gmail.com>
+
+*/

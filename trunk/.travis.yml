@@ -1,0 +1,39 @@
+# Author: Ivan Mincik, ivan.mincik@gmail.com (linux)
+#         Rainer M. Krug, Rainer@krugs.de (osx)
+
+language: c
+
+matrix:
+   include:
+      - os: linux
+        dist: trusty
+        compiler: gcc
+        sudo: required
+      - os: linux
+        dist: trusty
+        compiler: clang
+        sudo: required
+
+env:
+  global:
+    - CFLAGS="-Werror=implicit-function-declaration"
+
+before_install:
+  - ./.travis/$TRAVIS_OS_NAME.before_install.sh
+
+install:
+  - ./.travis/$TRAVIS_OS_NAME.install.sh
+
+script:
+  - ./.travis/$TRAVIS_OS_NAME.script.sh
+
+notifications:
+        email:
+            recipients:
+                - grass-dev@lists.osgeo.org
+                - landa.martin@gmail.com
+                - wenzeslaus@gmail.com
+            on_success: change
+            on_failure: always
+        irc: "chat.freenode.net#grass"
+

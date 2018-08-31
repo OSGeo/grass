@@ -1,0 +1,12 @@
+MODULE_TOPDIR = ../..
+
+PGM = r.volume
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+LIBES = $(VECTORLIB) $(RASTERLIB) $(GISLIB) $(DBMILIB)
+DEPENDENCIES = $(VECTORDEP) $(RASTERDEP) $(GISDEP) $(DBMIDEP)
+EXTRA_INC = $(VECT_INC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+default: cmd

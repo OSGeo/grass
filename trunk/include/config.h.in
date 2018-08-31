@@ -1,0 +1,324 @@
+
+/*
+ * config.h.in
+ */
+
+#ifndef _config_h
+#define _config_h
+
+#define GDEBUG 1
+
+/* define _OE_SOCKETS flag (OS/390 sys/socket.h) */
+#undef _OE_SOCKETS
+
+/* define _REENTRANT flag (for SunOS) */
+#undef _REENTRANT
+
+/* define USE_DELTA_FOR_TZ (for AIX) */
+#undef USE_DELTA_FOR_TZ
+
+/* define for Windows static build */
+#undef STATIC_BUILD
+
+/* define if limits.h exists */
+#undef HAVE_LIMITS_H
+
+/* define if termio.h exists */
+#undef HAVE_TERMIO_H
+
+/* define if termios.h exists */
+#undef HAVE_TERMIOS_H
+
+/* define if unistd.h exists */
+#undef HAVE_UNISTD_H
+
+/* define if values.h exists */
+#undef HAVE_VALUES_H
+
+/* define if zlib.h exists */
+#undef HAVE_ZLIB_H
+
+/* define if bzlib.h exists */
+#undef HAVE_BZLIB_H
+
+/* define if zstd.h exists */
+#undef HAVE_ZSTD_H
+
+/* define if sys/ioctl.h exists */
+#undef HAVE_SYS_IOCTL_H
+
+/* define if sys/mtio.h exists */
+#undef HAVE_SYS_MTIO_H
+
+/* define if sys/resource.h exists */
+#undef HAVE_SYS_RESOURCE_H
+
+/* define if sys/time.h exists */
+#undef HAVE_SYS_TIME_H
+
+/* define if time.h and sys/time.h can be included together */
+#undef TIME_WITH_SYS_TIME
+
+/* define if sys/timeb.h exists */
+#undef HAVE_SYS_TIMEB_H
+
+/* define if sys/types.h exists */
+#undef HAVE_SYS_TYPES_H
+
+/* define if sys/utsname.h exists */
+#undef HAVE_SYS_UTSNAME_H
+
+/* define if g2c.h exists */
+#undef HAVE_G2C_H
+
+/* define if f2c.h exists */
+#undef HAVE_F2C_H
+
+/* define if cblas.h exists */
+#undef HAVE_CBLAS_H
+
+/* define if clapack.h exists */
+#undef HAVE_CLAPACK_H
+
+/* define gid_t type */
+#undef gid_t
+
+/* define off_t type */
+#undef off_t
+
+/* define uid_t type */
+#undef uid_t
+
+/* define if "long long int" is available */
+#undef HAVE_LONG_LONG_INT
+
+/* define if "int64_t" is available */
+#undef HAVE_INT64_T
+
+/* Define the return type of signal handlers */
+#define RETSIGTYPE int
+
+/* define if ftime() exists */
+#undef HAVE_FTIME
+
+/* define if gethostname() exists */
+#undef HAVE_GETHOSTNAME
+
+/* define if gettimeofday() exists */
+#undef HAVE_GETTIMEOFDAY
+
+/* define if lseek() exists */
+#undef HAVE_LSEEK
+
+/* define if time() exists */
+#undef HAVE_TIME
+
+/* define if uname() exists */
+#undef HAVE_UNAME
+
+/* define if seteuid() exists */
+#undef HAVE_SETEUID
+
+/* define if setpriority() exists */
+#undef HAVE_SETPRIORITY
+
+/* define if setreuid() exists */
+#undef HAVE_SETREUID
+
+/* define if setruid() exists */
+#undef HAVE_SETRUID
+
+/* define if setpgrp() takes no argument */
+#undef SETPGRP_VOID
+
+/* define if drand48() exists */
+#undef HAVE_DRAND48
+
+/* define if nanosleep() exists */
+#undef HAVE_NANOSLEEP
+
+/* define if asprintf() exists */
+#undef HAVE_ASPRINTF
+
+/* define if postgres is to be used */
+#undef HAVE_POSTGRES
+
+/* define if SQLite is to be used */
+#undef HAVE_SQLITE
+
+#undef USE_PROJ4API
+#ifndef USE_PROJ4API
+/* define if proj.h exists and if the PROJ4 API should not be used */
+#undef HAVE_PROJ_H
+#endif
+
+/* define if GDAL is to be used */
+#undef HAVE_GDAL
+
+/* define if OGR is to be used */
+#undef HAVE_OGR
+
+/* define if GEOS is to be used */
+#undef HAVE_GEOS
+
+/* define if postgres client header exists */
+#undef HAVE_LIBPQ_FE_H
+
+/* define if PQcmdTuples in lpq */
+#undef HAVE_PQCMDTUPLES
+
+/* define if ODBC exists */
+#undef HAVE_SQL_H
+
+/* define if tiffio.h exists */
+#undef HAVE_TIFFIO_H
+
+/* define if png.h exists */
+#undef HAVE_PNG_H
+
+/* define if jpeglib.h exists */
+#undef HAVE_JPEGLIB_H
+
+/* define if fftw3.h exists */
+#undef HAVE_FFTW3_H
+
+/* define if fftw.h exists */
+#undef HAVE_FFTW_H
+
+/* define if dfftw.h exists */
+#undef HAVE_DFFTW_H
+
+/* define if BLAS exists */
+#undef HAVE_LIBBLAS
+
+/* define if LAPACK exists */
+#undef HAVE_LIBLAPACK
+
+/* define if ATLAS exists */
+#undef HAVE_LIBATLAS
+
+/* define if dbm.h exists */
+#undef HAVE_DBM_H
+
+/* define if readline exists */
+#undef HAVE_READLINE_READLINE_H
+
+/* define if ft2build.h exists */
+#undef HAVE_FT2BUILD_H
+
+/* Whether or not we are using G_socks for display communications */
+#undef USE_G_SOCKS
+
+/* define if X is disabled or unavailable */
+#undef X_DISPLAY_MISSING
+
+/* define if libintl.h exists */
+#undef HAVE_LIBINTL_H
+
+/* define if iconv.h exists */
+#undef HAVE_ICONV_H
+
+/* define if NLS requested */
+#undef USE_NLS
+
+/* define if putenv() exists */
+#undef HAVE_PUTENV
+
+/* define if setenv() exists */
+#undef HAVE_SETENV
+
+/* define if socket() exists */
+#undef HAVE_SOCKET
+
+/* define if glXCreatePbuffer exists */
+#undef HAVE_PBUFFERS
+
+/* define if glXCreateGLXPixmap exists */
+#undef HAVE_PIXMAPS
+
+/* define if OpenGL uses X11 */
+#undef OPENGL_X11
+
+/* define if OpenGL uses Aqua (MacOS X) */
+#undef OPENGL_AQUA
+
+/* define if OpenGL uses Windows */
+#undef OPENGL_WINDOWS
+
+/* define if regex.h exists */
+#undef HAVE_REGEX_H
+
+/* define if pthread.h exists */
+#undef HAVE_PTHREAD_H
+
+/* define if fseeko() exists */
+#undef HAVE_FSEEKO
+
+/*
+ * configuration information solely dependent on the above
+ * nothing below this point should need changing
+ */
+
+#if defined(HAVE_VALUES_H) && !defined(HAVE_LIMITS_H)
+#define INT_MIN -MAXINT
+#endif
+
+
+
+/*
+ * Defines needed to get large file support - from cdrtools-2.01
+ */
+
+/* MINGW32 LFS */
+
+/* define if we have LFS */
+#undef	HAVE_LARGEFILES
+
+#ifdef	HAVE_LARGEFILES		/* If we have working largefiles at all	   */
+				/* This is not defined with glibc-2.1.3	   */
+
+#if 0
+
+/* what to do with these four? configure comments these out */
+
+#undef _LARGEFILE_SOURCE	/* To make ftello() visible (HP-UX 10.20). */
+#undef _LARGE_FILES		/* Large file defined on AIX-style hosts.  */
+#undef _XOPEN_SOURCE		/* To make ftello() visible (glibc 2.1.3). */
+#undef _XOPEN_SOURCE_EXTENDED
+				/* XXX We don't use this because glibc2.1.3*/
+				/* XXX is bad anyway. If we define	   */
+				/* XXX _XOPEN_SOURCE we will loose caddr_t */
+
+#endif
+
+#if defined(__MINGW32__) && (!defined(_FILE_OFFSET_BITS) || (_FILE_OFFSET_BITS != 64))
+
+/* add/remove as needed */
+/* redefine off_t */
+#include <sys/types.h>
+#define off_t off64_t
+/* fseeko and ftello are safe because not defined by MINGW */
+#define HAVE_FSEEKO
+#define fseeko fseeko64
+#define ftello ftello64
+/* redefine lseek */
+#include <unistd.h>
+#define lseek lseek64
+/* redefine stat and fstat */
+/* use _stati64 compatible with MSVCRT < 6.1 */
+#include <sys/stat.h>
+#define stat _stati64
+#define fstat _fstati64
+
+#endif /* MINGW32 LFS */
+
+#endif	/* HAVE_LARGEFILES */
+
+
+/* define if langinfo.h exists */
+#undef HAVE_LANGINFO_H
+
+/* Use framebuffer objects for off-screen OpenGL rendering */
+#define OPENGL_FBO 1
+
+#endif /* _config_h */

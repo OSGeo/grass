@@ -1,0 +1,53 @@
+aspect: aspect oriented grey colors
+aspectcolr: aspect oriented rainbow colors
+bcyr: blue through cyan through yellow to red
+bgyr: blue through green through yellow to red
+blues: white to blue
+byg: blue through yellow to green
+byr: blue through yellow to red
+celsius: blue to red for degree Celsius temperature
+corine: EU Corine land cover colors
+curvature: for terrain curvatures (from v.surf.rst and r.slope.aspect)
+differences: differences oriented colors
+elevation: maps relative ranges of raster values to elevation color ramp
+etopo2: colors for ETOPO2 worldwide bathymetry/topography
+evi: enhanced vegetative index colors
+fahrenheit: blue to red for Fahrenheit temperature
+gdd: accumulated growing degree days
+grass: GRASS GIS green (perceptually uniform)
+greens: white to green
+grey: grey scale
+grey1.0: grey scale for raster values between 0.0-1.0
+grey255: grey scale for raster values between 0-255
+grey.eq: histogram-equalized grey scale
+grey.log: histogram logarithmic transformed grey scale
+gyr: green through yellow to red
+haxby: relative colors for bathymetry or topography
+inferno: perceptually uniform sequential color table inferno
+kelvin: blue to red for temperature in Kelvin scale
+magma: perceptually uniform sequential color table magma
+ndvi: Normalized Difference Vegetation Index colors
+ndwi: Normalized Difference Water Index colors
+oranges: white to orange
+plasma: perceptually uniform sequential color table plasma
+population: color table covering human population classification breaks
+population_dens: color table covering human population density classification breaks
+precipitation: precipitation color table (0..2000mm)
+precipitation_daily: precipitation color table (0..1000mm)
+precipitation_monthly: precipitation color table (0..1000mm)
+rainbow: rainbow color table
+ramp: color ramp
+random: random color table
+reds: white to red
+rstcurv: terrain curvature (from r.resamp.rst)
+ryb: red through yellow to blue
+ryg: red through yellow to green
+sepia: yellowish-brown through to white
+slope: r.slope.aspect-type slope colors for raster values 0-90
+soilmoisture: soilmoisture color table (0.0-1.0)
+srtm: color palette for Shuttle Radar Topography Mission elevation
+srtm_plus: color palette for Shuttle Radar Topography Mission elevation (with seafloor colors)
+terrain: global elevation color table covering -11000 to +8850m
+viridis: perceptually uniform sequential color table viridis
+water: water depth
+wave: color wave

@@ -1,0 +1,65 @@
+<h2>DESCRIPTION</h2>
+
+The <em>r.rescale</em> program rescales the range of
+category values appearing in a raster map layer. A new
+raster map layer, and an appropriate category file and
+color table based upon the original raster map layer, are
+generated with category labels that reflect the original
+category values that produced each category.  This command
+is useful for producing representations with a reduced
+number of categories from a raster map layer with a large
+range of category values (e.g., elevation).
+<em>Rescaled</em> map layers are appropriate for use in
+such GRASS GIS commands as
+
+<em><a href="r.stats.html">r.stats</a></em>,
+<em><a href="r.report.html">r.report</a></em>, and 
+<em><a href="r.coin.html">r.coin</a></em>.
+
+<h2>EXAMPLE</h2>
+
+To rescale an elevation raster map layer with category
+values ranging from 1090 meters to 1800 meters into the
+range 0-255, the following command line could be used
+(without the <em>from</em> parameter, the full value range will
+be used):
+
+<div class="code"><pre>
+r.rescale input=elevation from=1090,1800 output=elevation.255 to=0,255
+</pre></div>
+
+<h2>NOTES</h2>
+
+Category values that fall beyond the input range will
+become NULL.  This allows the user to select a subset of
+the full category value range for rescaling if desired.
+This also means that the user should know the category
+value range for the input raster map layer.  The user can
+request the <em>r.rescale</em> program to determine
+this range, or can obtain it using the
+<em><a href="r.describe.html">r.describe</a></em> or <em><a href="r.info.html">r.info</a></em> 
+command.  If the category value range is determined using
+<em>r.rescale</em>, the input raster map layer is examined,
+and the minimum and maximum non-NULL category values are
+selected as the input range.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.coin.html">r.coin</a>,
+<a href="r.describe.html">r.describe</a>,
+<a href="r.info.html">r.info</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.reclass.html">r.reclass</a>,
+<a href="r.rescale.eq.html">r.rescale.eq</a>,
+<a href="r.report.html">r.report</a>,
+<a href="r.resample.html">r.resample</a>,
+<a href="r.stats.html">r.stats</a>,
+<a href="r.univar.html">r.univar</a>
+</em>
+
+<h2>AUTHOR</h2>
+Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

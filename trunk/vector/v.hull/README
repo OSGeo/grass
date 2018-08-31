@@ -1,0 +1,20 @@
+ALGORITHM
+
+v.hull calculates the planar convex hull of a sites list by
+means of an algorithm like Graham scan, by computing
+first the upper part of the convex hull, and the
+the lower part. The algorighm has been converted to C
+from the pseudo-code found in "Computational Geometry,
+algorithms and applications", M. de Berg, M. van Kreveld,
+M. Overmars, O. Schwarzkopf, Springer.
+Some reference about the algoright can be found in the
+online course "CMSC 754: Computational geometry" by Dave Mount.
+
+
+Andrea Aime <aaime@libero.it> 9/2001
+
+-----------------
+chull.c
+http://maven.smith.edu/~orourke/books/compgeom.html
+http://maven.smith.edu/~orourke/books/ftp.html
+

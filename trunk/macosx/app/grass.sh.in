@@ -1,0 +1,222 @@
+#! /bin/sh
+#############################################################################
+#
+# MODULE:   	GRASS Initialization
+# AUTHOR(S):	Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
+#               William Kyngesburye - kyngchaos@kyngchaos.com
+# PURPOSE:  	The source file for this shell script is in
+#   	    	macosx/app/grass.sh.in and is the grass startup script for
+#               the Mac OS X application build.
+# COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#   	    	License (>=v2). Read the file COPYING that comes with GRASS
+#   	    	for details.
+#
+#############################################################################
+
+# Mac app only startup shell - complete rewrite for starting from a GRASS.app
+# in Mac OS X.  Sets defaults for unset env, adds some Mac-only config.
+
+trap "echo 'User break!' ; exit" 2 3 9 15
+
+# dummy for now - just saying we're starting GRASS.app on OSX
+GRASS_OS_STARTUP="Mac.app"
+export GRASS_OS_STARTUP
+
+SYSARCH=`uname -p`
+SYSVER=`uname -r | cut -d . -f 1`
+
+GISBASE=`dirname "$0"`
+export GISBASE
+grass_ver=`cut -d . -f 1-2 "$GISBASE/etc/VERSIONNUMBER"`
+
+#override config dir.
+GRASS_CONFIG_DIR="Library/Preferences/GRASS/$grass_Ver"
+
+GISBASE_USER="$HOME/Library/GRASS/$grass_ver"
+export GISBASE_USER
+GISBASE_SYSTEM="/Library/GRASS/$grass_ver"
+export GISBASE_SYSTEM
+
+# for extra utils
+# ideally user should have these in their PATH, but make sure here
+PATH="@GDAL_BIN_PATH@@PROJ_BIN_PATH@$PATH"
+export PATH
+
+# add some OS X style app support paths, and create user one if missing.
+mkdir -p "$GISBASE_USER/Modules/bin"
+mkdir -p "$GISBASE_USER/Modules/scripts"
+if [ ! "$GRASS_ADDON_BASE" ] ; then
+	GRASS_ADDON_BASE="$GISBASE_USER/Modules"
+fi
+export GRASS_ADDON_BASE
+
+mkdir -p "$GISBASE_USER/Modules/etc"
+addpath="$GISBASE_USER/Modules/etc:$GISBASE_SYSTEM/Modules/etc"
+if [ "$GRASS_ADDON_ETC" ] ; then
+	GRASS_ADDON_ETC="$GRASS_ADDON_ETC:$addpath"
+else
+	GRASS_ADDON_ETC="$addpath"
+fi
+export GRASS_ADDON_ETC
+
+mkdir -p "$GISBASE_USER/Modules/lib"
+addpath="$GISBASE_USER/Modules/lib:$GISBASE_SYSTEM/Modules/lib"
+if [ "$DYLD_LIBRARY_PATH" ] ; then
+	DYLD_LIBRARY_PATH="$addpath:$DYLD_LIBRARY_PATH"
+else
+	DYLD_LIBRARY_PATH="$addpath"
+fi
+export DYLD_LIBRARY_PATH
+
+mkdir -p "$GISBASE_USER/Modules/docs/html"
+
+# rebuild addon html index and gui menus
+"$GISBASE/etc/build_html_user_index.sh" "$GISBASE"
+"$GISBASE/etc/build_gui_user_menu.sh"
+
+# user fontcap files
+if [ ! "$GRASS_FONT_CAP" ] ; then
+	GRASS_FONT_CAP="$GISBASE_USER/Modules/etc/fontcap"
+fi
+export GRASS_FONT_CAP
+
+# default xterm Terminal emulator
+# note: only app startup defaults this way, CLI build still defaults to xterm
+if [ ! "$GRASS_XTERM" ] ; then
+	GRASS_XTERM="$GISBASE/etc/grass-xterm-mac"
+	export GRASS_XTERM
+fi
+
+# determine current term application (when grass.sh is run directly by the user)
+# use osascript so we can get name of term app, not shell process
+USERTERM=`osascript -e 'tell application "System Events" to item 1 of (get name of processes whose frontmost is true)'`
+if [ ! "$USERTERM" ] ; then
+	USERTERM="Terminal"
+fi
+
+### X11 stuff
+
+x11=""
+if [ "@X11@" ] ; then
+
+# start X11 if not running
+# some users may be annoyed by this, but X11 required for some stuff for now
+if [ -d "/Applications/Utilities/X11.app" ] ; then
+	# no need to start Leopard X11.app
+	if [ ! -d "/usr/X11" ] ; then
+		# check if running anyways, even though not necessary with "open"
+		if [ ! "`ps -axc | grep 'X11$'`" ] ; then
+			open /Applications/Utilities/X11.app
+		fi
+		x11="tig"
+	else
+		x11="leo"
+	fi
+fi
+
+# make sure X11 is in PATH
+pathX11=`echo "$PATH" | grep '/usr/X11\(R6\)\?/bin'`
+if [ ! "$pathX11" ] ; then
+	if [ -d "/usr/X11" ] ; then
+		PATH="$PATH:/usr/X11/bin"
+		export PATH
+	elif [ -d "/usr/X11R6" ] ; then
+		PATH="$PATH:/usr/X11R6/bin"
+		export PATH
+	fi
+fi
+
+# make sure there is a DISPLAY set
+if [ ! "$DISPLAY" ] ; then
+	DISPLAY=:0.0
+	export DISPLAY
+fi
+
+fi # X11
+
+### end X11 block
+
+# for bundling wxpython
+# change GRASS_WXBUNDLED and pyver_want here from bundle.make, or manually
+GRASS_WXBUNDLED=
+export GRASS_WXBUNDLED
+pyexe="pythonw"
+GRASS_PYTHONWX="$pyexe"
+pyver_want="@PYVER@"
+GRASS_WX64BIT="@WX64BIT@"
+export GRASS_WX64BIT
+# make sure python version used matches what wxpython wants
+py=""
+# did user set GRASS_PYTHON already? check it (must have pythonw)
+if [ "$GRASS_PYTHON" ] ; then
+	py=`echo "$GRASS_PYTHON" | grep pythonw`
+	if [ "$py" ] ; then
+		case $GRASS_PYTHON in
+			/*) py="$GRASS_PYTHON" ;;
+			*) py=`type -p $GRASS_PYTHON`
+		esac
+		pyver=`$py -V 2>&1 | grep " $pyver_want"`
+		if [ ! "$pyver" ] ; then
+			py=""
+		fi
+	else
+		py=""
+	fi
+fi # GRASS_PYTHON
+# try in shell path
+if [ ! "$py" ] ; then
+	py=`type -p pythonw$pyver_want`
+	if [ "$py" ] ; then
+		pyver=`$py -V 2>&1 | grep " $pyver_want"`
+		if [ ! "$pyver" ] ; then
+			py=""
+		fi
+	fi
+fi
+# try standard framework
+if [ ! "$py" ] ; then
+	py="/Library/Frameworks/Python.framework/Versions/$pyver_want/bin/python"
+	if [ ! -x "$py" ] ; then
+		py=""
+	fi
+fi
+# try system (may be the same as in shell path)
+if [ ! "$py" ] ; then
+	py="/usr/bin/pythonw$pyver_want"
+	pyver=`$py -V 2>&1 | grep " $pyver_want"`
+	if [ ! "$pyver" ] ; then
+		py=""
+	fi
+fi
+
+if [ "$py" ] ; then
+	echo "$pyver found."
+	GRASS_PYTHONWX="$py"
+else
+	echo "Warning: No Python $pyver_want found, needed by wxPython."
+	echo "         The wxPython GUI may not work properly."
+fi
+export GRASS_PYTHONWX
+# we will execute python scripts from the python wrapper script
+GRASS_PYTHON="python"
+export GRASS_PYTHON
+
+# if grassrc has text startup, switch back to Terminal (gotta duplicate some init.sh stuff)
+# only applies to Tiger - Leopard X11 opens automatically as needed
+GRASSRC="$HOME/$GRASS_CONFIG_DIR/rc"
+if [ ! "$GRASS_GUI" ] ; then
+	if [ -f "$GRASSRC" ] ; then
+		GRASS_GUI=`awk '/GRASS_GUI/ {print $2}' "$GRASSRC"`
+	fi
+	if [ ! "$GRASS_GUI" ] ; then
+		GRASS_GUI="wxpython"
+	fi
+fi
+if [ "$GRASS_GUI" = "text" ] && [ "$x11" = "tig" ] ; then
+	osascript -e "tell application \"$USERTERM\" to activate"
+fi
+
+# use the python wrapper to start grass
+exec "$GISBASE/bin/python" "$GISBASE/@GRASS_NAME@" "$@"

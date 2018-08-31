@@ -1,0 +1,9 @@
+%!PS-Adobe-2.0 EPSF-1.2
+%%BoundingBox: 0 0 220 220
+gsave 110 110 moveto
+/str 20 string def
+.5 setlinewidth 1 0 1 setrgbcolor /Helvetica findfont 8 scalefont setfont
+90 rotate
+100 0 90 270 {gsave rotate dup 0 rlineto [1] 0 setdash stroke grestore} for
+0 -1 -359 {/i exch def gsave i rotate dup 0 rmoveto i 10 mod 0 eq {-9 0 rlineto i neg str cvs dup stringwidth pop 2 div 10 exch rmoveto gsave 270 rotate show grestore} {i 5 mod 0 eq {-6} {-3} ifelse 0 rlineto} ifelse stroke grestore} for pop
+grestore

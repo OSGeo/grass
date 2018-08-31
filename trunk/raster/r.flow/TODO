@@ -1,0 +1,1 @@
+r.flow expects barriers to be 0 instead of NULL, needs to be reported as bug

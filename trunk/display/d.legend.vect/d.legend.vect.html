@@ -1,0 +1,107 @@
+<h2>DESCRIPTION</h2>
+Module <em>d.legend.vect</em> draws vector legend of currently displayed vector maps.
+<p>
+Parameter <b>at</b> defines the screen position of upper-left legend corner.
+Parameter <b>columns</b> defines the number of legend columns.
+User can specify a title of the legend using parameter <b>title</b>.
+The font of the title can be changed with <b>title_font</b>, <b>title_fontsize</b>.
+Flag <b>-b</b> is used to draw background of specified color (<b>bgcolor</b>),
+border color and border width (<b>border_color</b> and <b>border_width</b>).
+Parameter <b>symbol_size</b> defines the size of line and area symbols.
+The size of point symbols is based on currently set symbology of vector maps using
+<em><a href="d.vect.html">d.vect</a></em> or
+<em><a href="d.vect.thematic.html">d.vect.thematic</a></em>.
+<p>Module <em>d.vect.legend</em> supports subtitles (see section Notes).
+Their font and font size can be set using parameters <b>sub_font</b>
+and <b>sub_fontsize</b>.
+
+<h3>Changing legend symbols and labels</h3>
+Symbols for vector areas and lines, and labels for individual vector labels
+can be changed in the symbology setting of each vector map in
+<em><a href="d.vect.html">d.vect</a></em> or
+<em><a href="d.vect.thematic.html">d.vect.thematic</a></em>
+module (in Legend tab). Use its parameters
+<b>icon_area</b> and <b>icon_line</b> to pick from available symbols.
+By using parameter <b>legend_label</b> of <em>d.vect</em> module, users can change
+the default label, which is the map name.
+
+<h3>Modifying the order of legend entries and omitting certain vector maps
+from legend</h3>
+Modules <em><a href="d.vect.html">d.vect</a></em> and 
+<em><a href="d.vect.thematic.html">d.vect.thematic</a></em>
+have a flag <b>-s</b>
+which removes the particular vector or thematic vector from vector legend.
+<p>The order of entries is defined by the order in Layer Manager (if used
+in GRASS GIS GUI). If that's not desired, one can export the legend file
+into a text file using parameter <b>output</b>, change the order of entries
+(see section Notes for format description) and then upload the modified file
+with parameter <b>input</b>.
+Parameter <b>output</b> defines path to the file where the internal legend
+file will be saved to, <b>input</b> defines the input file which
+the vector legend will be based on (input file must have correct format).
+
+<h2>NOTES</h2>
+Module <em>d.legend.vect</em> draws vector legend based on legend file defined
+in shell environment variable GRASS_LEGEND_FILE.
+This file is automatically created and updated whenever
+<em><a href="d.vect.html">d.vect</a></em> command is used.
+User can create custom legend file and then use 
+<em>export GRASS_LEGEND_FILE=path/to/file</em> in shell.
+GRASS GUI and MONITORS create the legend file automatically.
+By default the legend file is stored in grassdata/location/mapset/.tmp/user
+directory (in case of d.mon deeper in /monitor_name directory).<br>
+<p>
+Legend file has this format:
+<pre>
+label|symbol_name|size|color_type|feature_color|fill_color|line_width|geometry_type|feature_count
+</pre>
+Color type can be 'lf' or 'ps'. Based on color type color columns are interpreted
+as line color and fill colors (lf), or primary and secondary colors (ps).
+Module d.vect always uses 'lf' and d.vect.thematic 'ps'.
+Here is an example of legend file with subtitles:
+<pre>
+Infrastructure||||||||
+major roads|legend/line|5|lf|black|200:200:200|2|line|355
+bridges|extra/bridge|15|lf|black|black|1|point|10938
+Hydrology||||||||
+streams|legend/line_crooked|5|lf|30:144:255|200:200:200|3|line|8554
+water bodies|legend/area_curved|5|lf|none|30:144:255|1|area|27764
+</pre>
+<img alt="Example of subheadings used in vector legend"
+ src="d_legend_vect_subheadings.png">
+
+<h2>EXAMPLES</h2>
+Open cairo monitor to render to file:
+<div class="code"><pre>
+g.region vector=nc_state
+d.mon cairo
+d.vect map=nc_state color=26:26:26 fill_color=229:229:229 width=2 legend_label="state boundaries"
+d.vect map=urbanarea color=none fill_color=127:127:127 width=1 legend_label="urban areas"
+d.vect map=railroads color=red width=1
+d.vect map=hospitals color=77:77:77 fill_color=0:187:0 width=1 icon=basic/cross3 size=10
+d.legend.vect -b at=2,40 title="Hospitals in North Carolina" symbol_size=26 fontsize=16 title_fontsize=20
+</pre></div>
+
+<center>
+<img src="d_legend_vect.png" alt="d.legend.vect example"><br>
+</center>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.vect.html">d.vect</a>,
+<a href="d.vect.thematic.html">d.vect.thematic</a>,
+<a href="d.legend.html">d.legend</a>
+</em>
+
+<p>
+Check also Python module from
+AddOns: <em><a href="https://grass.osgeo.org/grass7/manuals/addons/d.vect.thematic2.html">d.vect.thematic2</a></em>
+
+<h2>AUTHOR</h2>
+
+Adam Laza, during GSoC 2016
+Mentors: Anna Petrasova, Vaclav Petras, Martin Landa
+
+<p>
+<i>Last changed: $Date$</i>

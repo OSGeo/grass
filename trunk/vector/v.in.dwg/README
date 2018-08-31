@@ -1,0 +1,23 @@
+WARNING: 
+v.in.dwg is linked to proprietary library 'OpenDWG toolkit' (www.opendwg.org)
+and to GRASS libraries released under GPL. As a consequence, it is not allowed
+to distribute binary version of v.in.dwg.
+License of v.in.dwg itself is GPL with exception to link this program 
+to 'OpenDWG toolkit', but GRASS libraries do not allow this at present.
+
+v.in.dwg requires OpenDWG toolkit. To get this toolkit you must become at least
+"Associate Member" of OpenDWG Alliance (http://www.opendwg.org), it is free
+and it is not too painful (fill one form).
+
+Download OpenDWG toolkit libraries. 2/2003 were available for:
+DEC Alpha NT, DEC Alpha Unix, HP 700 Series, HP/UX, IBM RS/6000 AIX, Linux,
+Macintosh, Silicon Graphics, Sun Solaris 2, Sun Solaris X86, Microsoft Windows.
+
+Use configure options to enable this module and to specify paths to header files
+and library. For example:
+
+   --with-opendwg \
+   --with-opendwg-includes=/opt/openDWG/toolkit27 \
+   --with-opendwg-libs=/opt/openDWG/toolkit27
+
+Not all entity types are supported (warning printed).

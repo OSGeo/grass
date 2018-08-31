@@ -1,0 +1,39 @@
+VERSION 1.0
+BOX -1 -1 1 1
+POLYGON
+  COLOR NONE
+  FCOLOR 255 0 0
+  RING
+    LINE
+      -1  1
+       1  1
+       1 -1
+      -1 -1
+    END
+  END
+END
+POLYGON
+  COLOR NONE
+  FCOLOR 255 255 255
+  RING
+    LINE
+      -1 0.65
+      -1   1
+      -0.65 1
+      1  -0.65
+      1 -1
+      0.65 -1
+    END
+  END
+END
+POLYGON
+  FCOLOR NONE
+  RING
+    LINE
+      -1  1
+       1  1
+       1 -1
+      -1 -1
+    END
+  END
+END

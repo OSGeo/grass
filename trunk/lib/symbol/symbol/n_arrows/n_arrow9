@@ -1,0 +1,14 @@
+VERSION 1.0
+BOX -1 -1 1 1
+
+POLYGON
+  RING
+    LINE
+      0 5
+      2.25 -2.5
+      0 -1.5
+      -2.25 -2.5
+      0 5
+    END
+  END
+END

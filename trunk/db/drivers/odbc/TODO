@@ -1,0 +1,39 @@
+FUNCTIONS STATE: 
+
+- db_driver_add_column
+- db_driver_bind_update
++ db_driver_close_cursor
++ db_driver_close_database
+x db_driver_create_database 
+- db_driver_create_index
+- db_driver_create_table 
+- db_driver_delete
+x db_driver_delete_database
+P db_driver_describe_table     - add table and column privileges
+                                 add column default value
+				 add missing column types
+x db_driver_drop_column
+x db_driver_drop_constraint
+- db_driver_drop_index
++ db_driver_drop_table
++ db_driver_execute_immediate
+P db_driver_fetch              - add missing types
+x db_driver_find_database
++ db_driver_finish
++ db_driver_init
+- db_driver_insert
+x db_driver_list_constraints
++ db_driver_list_databases
+- db_driver_list_indexes
++ db_driver_list_tables
+P db_driver_open_database      - add user and password, ? datasource
+- db_driver_open_insert_cursor
++ db_driver_open_select_cursor
+- db_driver_open_update_cursor
+- db_driver_update
+x db_driver_version
+
++ implemented and works, but you can improve it
+P partially implemented, needs improvements
+- not implemented, waiting for you
+x not planned now - impossible or not urgent

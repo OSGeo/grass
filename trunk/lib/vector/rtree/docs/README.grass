@@ -1,0 +1,24 @@
+This library was originally taken from:
+http://www.superliminal.com/sources/RTree.zip
+described on:
+http://www.superliminal.com/sources/sources.htm
+Copy of this file is in sources.htm
+The current R*-tree implementation is based on
+http://dbs.mathematik.uni-marburg.de/publications/myPapers/1990/BKSS90.pdf
+
+Changes done in GRASS:
+- files converted to unix line ends
+- added this file 'README.grass'
+- added Makefile and Makefile.alone
+- added mail from Daniel Green is in 'MAILS'
+- few modifications to get rid of compiler warnings, but warnings like:
+    index.c:277: warning: `tmp_nptr' might be used uninitialized in this function 
+    were left because need deeper revision if may cause problems, insetad of blindly init to 0/NULL
+- '//' comments -> '/* */'
+- printf() - > fprintf(stdout,)
+- NUMDIMS set to 3
+- test.c 2D -> 3D
+- type RectReal: float -> double 
+- log_pi set to constant
+- added GRASS headers to all *.[hc] files
+- changed to R*-tree, near complete rewrite

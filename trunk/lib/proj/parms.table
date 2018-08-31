@@ -1,0 +1,123 @@
+AEA:Albers Equal Area:LAT0=ask,23.0;LAT1=ask,29.5;LAT2=ask,45.5;LON0=ask,-96.0;X0=ask,0.0;Y0=ask,0.0
+AEQD:Azimuthal Equidistant:LAT0=ask,0.0;LON0=ask,20.0
+AIRY:Airy:LAT0=ask,0.0;LATB=ask,90.0;LON0=ask,20.0;NOCUT=ask,nodfl
+AITOFF:Aitoff:LAT0=ask,0.0;LON0=ask,20.0
+ALSK:Mod. Stererographics of Alaska:LAT0=noask,64.0;LON0=noask,-152.0
+APIAN:Apian Globular I:LAT0=ask,0.0;LON0=ask,20.0
+AUGUST:August Epicycloidal:LAT0=ask,0.0;LON0=ask,20.0
+BACON:Bacon Globular:LAT0=ask,0.0;LON0=ask,20.0
+BIPC:Bipolar conic of western hemisphere:LAT0=ask,0.0;LON0=ask,-90.0;NOSKEW=ask,nodfl
+BOGGS:Boggs Eumorphic:LAT0=ask,0.0;LON0=ask,20.0
+BONNE:Bonne (Werner lat_1=90):LAT1=ask,40.0;LON0=ask,20.0
+CASS:Cassini:LAT0=ask,0.0;LON0=ask,20.0
+CC:Central Cylindrical:LAT0=ask,0.0;LON0=ask,20.0
+CEA:Equal Area Cylindrical:LAT0=ask,0.0;LATTS=ask,0.0;LON0=ask,20.0
+CHAMB:Chamberlin Trimetric:LAT0=ask,55.0;LAT1=ask,40.0;LAT2=ask,20.0;LAT3=ask,35.0;LON0=ask,20.0;LON1=ask,5.0;LON2=ask,55.0;LON3=ask,65.0
+COLLG:Collignon:LAT0=ask,0.0;LON0=ask,20.0
+CRAST:Craster Parabolic (Putnins P4):LAT0=ask,0.0;LON0=ask,20.0
+DENOY:Denoyer Semi-Elliptical:LAT0=ask,0.0;LON0=ask,20.0
+ECK1:Eckert I:LAT0=ask,0.0;LON0=ask,20.0
+ECK2:Eckert II:LAT0=ask,0.0;LON0=ask,20.0
+ECK3:Eckert III:LAT0=ask,0.0;LON0=ask,20.0
+ECK4:Eckert IV:LAT0=ask,0.0;LON0=ask,20.0
+ECK5:Eckert V:LAT0=ask,0.0;LON0=ask,20.0
+ECK6:Eckert VI:LAT0=ask,0.0;LON0=ask,20.0
+EQC:Equidistant Cylindrical (Plate Caree):LAT0=ask,0.0;LATTS=ask,0.0;LON0=ask,0.0
+EQDC:Equidistant Conic:LAT0=ask,40.0;LAT1=ask,20.0;LAT2=ask,60.0;LON0=ask,20.0
+EULER:Euler:LAT0=ask,55.0;LAT1=ask,45.0;LAT2=ask,65.0;LON0=ask,20.0
+FAHEY:Fahey:LAT0=ask,0.0;LON0=ask,20.0
+FOUC:Foucaut:LAT0=ask,0.0;LON0=ask,20.0
+FOUC_S:Foucaut Sinusoidal:LAT0=ask,0.0;LON0=ask,20.0
+GALL:Gall (Gall Stereographic):LAT0=ask,0.0;LON0=ask,20.0
+GEOS:Geostationary Satellite View:HEIGH=ask,35800000.0;LON0=ask,20.0;X0=ask,0.0;Y0=ask,0.0
+GINS8:Ginsburg VIII (TsNIIGAiK):LAT0=ask,0.0;LON0=ask,20.0
+GNOM:Gnomonic:LAT0=ask,0.0;LON0=ask,20.0
+GN_SINU:General Sinusoidal Series:LAT0=ask,0.0;LON0=ask,20.0;MFACT=ask,1.0;NFACT=ask,1.0
+GOODE:Goode Homolosine:LAT0=ask,0.0;LON0=ask,20.0
+GS48:Mod. Stererographics of 48 U.S.:LAT0=noask,45.0;LON0=noask,-120.0
+GS50:Mod. Stererographics of 50 U.S.:LAT0=noask,45.0;LON0=noask,-120.0
+HAMMER:Hammer & Eckert-Greifendorff:LAT0=ask,0.0;LON0=ask,20.0;MSFACT=ask,1.0;WFACT=ask,0.5
+HATANO:Hatano Asymmetrical Equal Area:LAT0=ask,0.0;LON0=ask,20.0
+IMW_P:International Map of the World Polyconic:LAT0=ask,0.0;LAT1=ask,20.0;LAT2=ask,60.0;LON0=ask,20.0;LON1=ask,20.0
+KAV5:Kavraisky V:LAT0=ask,0.0;LON0=ask,20.0
+KAV7:Kavraisky VII:LAT0=ask,0.0;LON0=ask,20.0
+KROVAK:Krovak:LAT0=noask,0.0;LON0=noask,0
+LABRD:Laborde:AZIM=noask,18.9;KFACT=noask,0.9995;LAT0=noask,18.9;LON0=noask,46.437208333;X0=noask,400000.0;Y0=noask,800000.0
+LAEA:Lambert Azimuthal Equal Area:LAT0=ask,55.0;LON0=ask,20.0;X0=ask,0.0;Y0=ask,0.0
+LAGRNG:Lagrange:LAT0=ask,0.0;LAT1=ask,0.0;LON0=ask,20.0;WFACT=ask,2.0
+LARR:Larrivee:LAT0=ask,0.0;LON0=ask,20.0
+LASK:Laskowski:LAT0=ask,0.0;LON0=ask,20.0
+LCC:Lambert Conformal Conic:LAT0=ask,23.0;LAT1=ask,33.0;LAT2=ask,45.0;LON0=ask,-96.0;X0=ask,0.0;Y0=ask,0.0
+LEAC:Lambert Equal Area Conic:LAT0=ask,55.0;LAT1=ask,0.0;LON0=ask,20.0;SOUTH=ask,nodfl
+LEE_OS:Lee Oblated Stereographic:LAT0=noask,-10.0;LON0=noask,-165.0
+LL:Latitude/Longitude (pseudo-projection):LAT0=noask,0.0;LON0=noask,0.0
+LOXIM:Loximuthal:LAT0=ask,0.0;LAT1=ask,45.0;LON0=ask,20.0
+LSAT:Space oblique for LANDSAT:LAT0=ask,0.0;LON0=ask,20.0;SNUM=ask,1;SPATH=ask,1
+MBTFPP:McBride-Thomas Flat-Polar Parabolic:LAT0=ask,0.0;LON0=ask,20.0
+MBTFPQ:McBryde-Thomas Flat-Polar Quartic:LAT0=ask,0.0;LON0=ask,20.0
+MBTFPS:McBryde-Thomas Flat-Polar Sinusoidal:LAT0=ask,0.0;LON0=ask,20.0
+MBT_FPS:McBryde-Thomas Flat-Pole Sine (No. 2):LAT0=ask,0.0;LON0=ask,20.0
+MBT_S:McBryde-Thomas Flat-Polar Sine (No. 1):LAT0=ask,0.0;LON0=ask,20.0
+MERC:Mercator:KFACT=ask,1.0;LATTS=ask,0.;LON0=ask,-96.0
+MILL:Miller Cylindrical:LAT0=ask,0.0;LON0=ask,20.0
+MIL_OS:Miller Oblated Stereographic:LAT0=noask,18.0;LON0=noask,20.0
+MOLL:Mollweide:LAT0=ask,0.0;LON0=ask,20.0
+MPOLY:Modified Polyconic:LAT0=ask,0.0;LAT1=ask,-20.0;LAT2=ask,20.0;LON0=ask,20.0;LOTSA=ask,nodfl
+MURD1:Murdoch I:LAT0=ask,0.0;LAT1=ask,-20.0;LAT2=ask,20.0;LON0=ask,20.0
+MURD2:Murdoch II:LAT0=ask,0.0;LAT1=ask,-20.0;LAT2=ask,20.0;LON0=ask,20.0
+MURD3:Murdoch III:LAT0=ask,0.0;LAT1=ask,-20.0;LAT2=ask,20.0;LON0=ask,20.0
+NELL:Nell:LAT0=ask,0.0;LON0=ask,20.0
+NELL_H:Nell-Hammer:LAT0=ask,0.0;LON0=ask,20.0
+NICOL:Nicolosi Globular:LAT0=ask,0.0;LON0=ask,20.0
+NSPER:Near-sided perspective:HEIGH=ask,50000000.0;LAT0=ask,55.0;LON0=ask,20.0
+NZMG:New Zealand Map Grid:LAT0=noask,-41.0;LON0=noask,173.0;X0=noask,2510000.0;Y0=noask,6023150.0
+OB_TRAN:General Oblique Transformation:LAT0=ask,0.0;LON0=ask,0.0;OLATP=ask,90.0;OLONP=ask,0.0
+OCEA:Oblique Cylindrical Equal Area:LAT0=ask,0.0;LAT1=ask,-45.0;LAT2=ask,45.0;LON0=ask,20.0;LON1=ask,-20.0;LON2=ask,60.0
+OEA:Oblated Equal Area:LAT0=ask,0.0;LON0=ask,20.0;MFACT=ask,1.0;NFACT=ask,1.0;THETA=ask,0.0
+OMERC:Oblique Mercator:KFACT=ask,1.0;LAT0=ask,0.0;LAT1=ask,-45.0;LAT2=ask,45.0;LON0=ask,20.0;LON1=ask,-40.0;LON2=ask,40.0;NOROT=ask,nodfl;NOUOFF=ask,nodfl;ROTCONV=ask,nodfl
+ORTEL:Ortelius Oval:LAT0=ask,0.0;LON0=ask,20.0
+ORTHO:Orthographic:LAT0=ask,0.0;LON0=ask,20.0
+PCONIC:Perspective Conic:LAT0=ask,0.0;LAT1=ask,33.0;LAT2=ask,45.0;LON0=ask,20.0
+POLY:Polyconic (American):LAT0=ask,0.0;LON0=ask,-90.0
+PUTP1:Putnins P1:LAT0=ask,0.0;LON0=ask,20.0
+PUTP2:Putnins P2:LAT0=ask,0.0;LON0=ask,20.0
+PUTP3:Putnins P3:LAT0=ask,0.0;LON0=ask,20.0
+PUTP3P:Putnins P3':LAT0=ask,0.0;LON0=ask,20.0
+PUTP4P:Putnins P4':LAT0=ask,0.0;LON0=ask,20.0
+PUTP5:Putnins P5:LAT0=ask,0.0;LON0=ask,20.0
+PUTP5P:Putnins P5':LAT0=ask,0.0;LON0=ask,20.0
+PUTP6:Putnins P6:LAT0=ask,0.0;LON0=ask,20.0
+PUTP6P:Putnins P6':LAT0=ask,0.0;LON0=ask,20.0
+QUA_AUT:Quartic Authalic:LAT0=ask,0.0;LON0=ask,20.0
+ROBIN:Robinson:LAT0=ask,0.0;LON0=ask,20.0
+RPOLY:Rectangular Polyconic:LAT0=ask,0.0;LATTS=ask,0.0;LON0=ask,20.0
+SINU:Sinusoidal (Sanson-Flamsteed):LAT0=ask,0.0;LON0=ask,20.0
+SOMERC:Swiss. Obl. Mercator:KFACT=noask,1.0;LAT0=noask,46.952405556;LON0=noask,7.4395833333;X0=noask,600000.0;Y0=noask,200000.0
+STERE:Stereographic:KFACT=ask,1.0;LAT0=ask,0.0;LATTS=ask,0.0;LON0=ask,20.0
+STEREA:Oblique Stereographic Alternative:KFACT=ask,1.0;LAT0=ask,0.0;LON0=ask,20.0
+STP:State Plane (pseudo-projection):LAT0=noask,0.0;LON0=noask,0.0
+TCC:Transverse Central Cylindrical:LAT0=ask,0.0;LON0=ask,20.0
+TCEA:Transverse Cylindrical Equal Area:KFACT=ask,1.0;LAT0=ask,0.0;LON0=ask,20.0
+TISSOT:Tissot:LAT0=ask,0.0;LAT1=ask,-30.0;LAT2=ask,45.0;LON0=ask,20.0
+TMERC:Transverse Mercator:KFACT=ask,1.0;LAT0=ask,23.0;LON0=ask,-96.0;X0=ask,0.0;Y0=ask,0.0
+TPEQD:Two Point Equidistant:LAT0=ask,0.0;LAT1=ask,-45.0;LAT2=ask,45.0;LON0=ask,20.0;LON1=ask,-20.0;LON2=ask,60.0
+TPERS:Tilted perspective:AZIM=ask,0.0;HEIGH=ask,10000.0;LAT0=ask,0.0;LON0=ask,20.0;TILT=ask,0.0
+UPS:Universal Polar Stereographic:SOUTH=ask,nodfl
+URM5:Urmaev V:ALPHA=ask,0.0;LAT0=ask,0.0;LON0=ask,20.0;NFACT=ask,1.0;QFACT=ask,1.0
+URMFPS:Urmaev Flat-Polar Sinusoidal:LAT0=ask,0.0;LON0=ask,20.0;NFACT=ask,1.0
+UTM:Universal Transverse Mercator (UTM):ZONE=ask,nodfl;SOUTH=ask,nodfl
+VANDG2:van der Grinten II:LAT0=ask,0.0;LON0=ask,20.0
+VANDG3:van der Grinten III:LAT0=ask,0.0;LON0=ask,20.0
+VANDG4:van der Grinten IV:LAT0=ask,0.0;LON0=ask,20.0
+VANDG:van der Grinten (I):LAT0=ask,0.0;LON0=ask,20.0
+WAG1:Wagner I (Kavraisky VI):LAT0=ask,0.0;LON0=ask,20.0
+WAG2:Wagner II:LAT0=ask,0.0;LON0=ask,20.0
+WAG3:Wagner III:LAT0=ask,0.0;LON0=ask,20.0
+WAG4:Wagner IV:LAT0=ask,0.0;LON0=ask,20.0
+WAG5:Wagner V:LAT0=ask,0.0;LON0=ask,20.0
+WAG6:Wagner VI:LAT0=ask,0.0;LON0=ask,20.0
+WAG7:Wagner VII:LAT0=ask,0.0;LON0=ask,20.0
+WEREN:Werenskiold I:LAT0=ask,0.0;LON0=ask,20.0
+WINK1:Winkel I:LAT0=ask,0.0;LATTS=ask,0.0;LON0=ask,20.0
+WINK2:Winkel II:LAT0=ask,0.0;LAT1=ask,0.0;LON0=ask,20.0
+WINTRI:Winkel Tripel:LAT0=ask,0.0;LAT1=ask,0.0;LON0=ask,20.0

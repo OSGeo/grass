@@ -1,0 +1,5 @@
+This code is: Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 GKX Associates Inc.
+
+All code is subject to the GNU General Public License, Version 2. See
+the file COPYING for the exact conditions under which you may
+redistribute it.

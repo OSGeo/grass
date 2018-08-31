@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Richard Hughes <richard@hughsie.com> -->
+<component type="desktop">
+  <id>org.osgeo.grass.desktop</id>
+  <name>GRASS GIS</name>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <translation type="gettext">grass</translation>
+  <summary>GRASS GIS, the Open Source Geographic Information System</summary>
+  <description>
+    <p>
+    The Geographic Resources Analysis Support System, commonly
+    referred to as GRASS GIS, is an Open Source
+    Geographic Information System providing powerful 
+    raster, vector and geospatial processing capabilities in a single 
+    integrated software suite.
+    </p>
+    <p>
+    GRASS GIS includes tools for spatial modeling, visualization of 
+    raster and vector data, management and analysis of geospatial data, 
+    and the processing of satellite and aerial imagery. It also 
+    provides the capability to produce sophisticated presentation 
+    graphics and hardcopy maps.
+    </p>
+    <p>
+    GRASS GIS has been translated into about twenty languages and 
+    supports a huge array of data formats. It can be used either as a 
+    stand-alone application or as backend for other software packages 
+    such as QGIS and R geostatistics. It is distributed freely under 
+    the terms of the GNU General Public License (GPL). GRASS GIS is a 
+    founding member of the Open Source Geospatial Foundation (OSGeo).
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://grass.osgeo.org/uploads/images/Gallery/gui/wxgui_histogram.png</image>
+      <caption/>
+    </screenshot>
+    <screenshot>
+      <image>http://grass.osgeo.org/uploads/images/Gallery/platforms/grass7_RaspberryPI.png</image>
+      <caption/>
+    </screenshot>
+    <screenshot>
+      <image>http://grass.osgeo.org/uploads/images/Gallery/LiDAR/jockeyposter1.jpg</image>
+      <caption/>
+    </screenshot>
+    <screenshot>
+      <image>http://grass.osgeo.org/uploads/images/Gallery/gui/grass7_wxNviz_volume_slices_1.png</image>
+      <caption/>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://grass.osgeo.org/</url>
+  <url type="translate">https://grass.osgeo.org/development/translations/</url>
+  <url type="donation">https://grass.osgeo.org/donations/</url>
+  <url type="bugtracker">https://grass.osgeo.org/development/bug-tracking/</url>
+  <url type="help">https://grass.osgeo.org/documentation/</url>
+  <update_contact>grass-web@lists.osgeo.org</update_contact>
+  <developer_name>GRASS Development Team</developer_name>
+</component>

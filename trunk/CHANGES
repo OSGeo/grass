@@ -1,0 +1,27 @@
+CHANGES current GRASS GIS 7.x compared to previous GRASS GIS 7.x
+
+See list of releases with changelog at
+https://trac.osgeo.org/grass/wiki/Release
+
+
+CHANGES in GRASS GIS 7.0 compared to GRASS GIS 6.x
+
+The graphical user interface based on wxPython (introduced in GRASS GIS 
+6.4) has been enriched with many new features in order to make complex 
+GIS operations available as simple as possible. The old Tcl/Tk based 
+GUI has been dropped. Relevant new features are available in the core 
+system, among the most important the  new Python interface to the C 
+library. This new feature permits Python developers to create new 
+modules in a simple way while at the same time creating powerful and 
+fast modules. Furthermore, the vector library was particularly improved 
+to make it faster and more efficient with support of  huge files. This 
+required a  easy to manage topology format update including a new 
+spatial index. Finally, there are a series of new modules to analyse 
+raster and vector data; some of the already existing modules were 
+improved and made faster (some even 1000 x faster). 
+
+In total, more than 10,000 changes have been implemented in GRASS GIS 7.0.0
+with respect to GRASS GIS 6.4.x
+
+For details, please refer to this Web page:
+http://trac.osgeo.org/grass/wiki/Grass7/NewFeatures

@@ -1,0 +1,250 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.vect.stats</em> counts the number of points in vector map
+<em>points</em> falling into each area in vector map <em>areas</em>.
+Optionally statistics on point attributes in <em>points</em> are
+calculated for each area. The results are either uploaded to the
+attribute table of the vector map <em>areas</em> or printed to stdout.
+
+<p>
+<em>Statistical Methods:</em>
+Using numeric attribute values of all points falling into a given area,
+a new value is detmined with the selected method.
+<em>v.vect.stats</em> can perform the following operations:
+
+<p><dl>
+
+<dt><b>sum</b> 
+<dd>The sum of values.
+
+<dt><b>average</b> 
+<dd>The average value of all point attributes (sum / count).
+
+<dt><b>median</b> 
+<dd>The value found half-way through a list of the
+attribute values, when these are ranged in numerical order.
+
+<dt><b>mode</b> 
+<dd>The most frequently occurring value.
+
+<dt><b>minimum</b> 
+<dd>The minimum observed value.
+
+<dt><b>min_cat</b> 
+<dd>The point category corresponding to the minimum observed value.
+
+<dt><b>maximum</b> 
+<dd>The maximum observed value.
+
+<dt><b>max_cat</b> 
+<dd>The point category corresponding to the maximum observed value.
+
+<dt><b>range</b> 
+<dd>The range of the observed values.
+
+<dt><b>stddev</b> 
+<dd>The statistical standard deviation of the attribute values.
+
+<dt><b>variance</b> 
+<dd>The statistical variance of the attribute values.
+
+<dt><b>diversity</b> 
+<dd>The number of different attribute values.
+
+</dl>
+
+
+<h2>NOTES</h2>
+
+Points not falling into any area are ignored. Areas without category
+(no centroid attached or centroid without category) are ignored. 
+If no points are falling into a given area, the point count is set to 0
+(zero) and the statistics result to "null".
+<p>The columns <em>count_column</em> and <em>stats_column</em> are created if not
+existing. If they do already exist, the <em>count_column</em> must be of
+type integer and the <em>stats_column</em> of type double precision.
+
+<h2>EXAMPLES</h2>
+
+<h3>Preparation for examples</h3>
+
+The subsequent examples are based on randomly sampled
+elevation data (North Carolina sample database):
+
+<div class="code"><pre>
+# work on map copy for attribute editing
+g.copy vector=zipcodes_wake,myzipcodes_wake
+
+# set computational region: extent of ZIP code map, raster pixels
+# aligned to raster map
+g.region vector=myzipcodes_wake align=elev_state_500m -p
+#  generate random elevation points
+r.random elev_state_500m vector=rand5000 n=5000
+v.colors rand5000 color=elevation
+
+# visualization
+d.mon wx0
+d.vect myzipcodes_wake -c
+d.vect rand5000
+</pre></div>
+
+These vector maps are used for the examples below.
+
+<h3>Count points per polygon with printed output</h3>
+
+<i>See above for the creation of the input maps.</i>
+<p>
+Counting points per polygon, print results to terminal:
+
+<div class="code"><pre>
+v.vect.stats points=rand5000 area=myzipcodes_wake -p
+</pre></div>
+
+<h3>Count points per polygon with column update</h3>
+
+<i>See above for the creation of the input maps.</i>
+<p>
+Counting of points per polygon, with update of "num_points" column
+(will be automatically created):
+
+<div class="code"><pre>
+v.vect.stats points=rand5000 area=myzipcodes_wake count_column=num_points
+# verify result
+v.db.select myzipcodes_wake column=ZIPCODE_,ZIPNAME,num_points
+</pre></div>
+
+<h3>Average values of points in polygon with printed output</h3>
+
+<i>See above for the creation of the input maps.</i>
+<p>
+Calculation of average point elevation per ZIP code
+polygon, printed to terminal in comma separated style:
+
+<div class="code"><pre>
+# check name of point map column:
+v.info -c rand5000
+v.vect.stats points=rand5000 area=myzipcodes_wake \
+  method=average points_column=value separator=comma -p
+</pre></div>
+
+<h3>Average values of points in polygon with column update</h3>
+
+<i>See above for the creation of the input maps.</i>
+<p>
+Calculation of average point elevation per ZIP code polygon,
+with update of "avg_elev" column and counting of points per polygon,
+with update of "num_points" column (new columns will be automatically
+created):
+
+<div class="code"><pre>
+# check name of point map column:
+v.info -c rand5000
+v.vect.stats points=rand5000 area=myzipcodes_wake count_column=num_points \
+  method=average points_column=value stats_column=avg_elev
+# verify result
+v.db.select myzipcodes_wake column=ZIPCODE_,ZIPNAME,avg_elev
+</pre></div>
+
+<h3>Point statistics in a hexagonal grid</h3>
+
+The grid extent and size is influenced by the current computational
+region. The extent is based on the vector map
+<em>points_of_interest</em> from the basic North Carolina sample dataset.
+
+<div class="code"><pre>
+g.region vector=points_of_interest res=2000 -pa
+</pre></div>
+
+The hexagonal grid is created using
+the <em><a href="v.mkgrid.html">v.mkgrid</a></em> module
+as a vector map based on the previously
+selected extent and size of the grid.
+
+<div class="code"><pre>
+v.mkgrid map=hexagons -h
+</pre></div>
+
+The <em>v.vect.stats</em> module
+counts the number of points and does one statistics on a selected
+column (here: <em>elev_m</em>).
+
+<div class="code"><pre>
+v.vect.stats points=points_of_interest areas=hexagons method=average \
+  points_column=elev_m count_column=count stats_column=average
+</pre></div>
+
+User should note that some of the points may be outside the grid
+since the hexagons cannot cover all the area around the edges
+(the computational region extent needs to be enlarged if all points
+should be considered).
+The last command sets the vector map color table to <tt>viridis</tt>
+based on the <tt>count</tt> column.
+
+<div class="code"><pre>
+v.colors map=hexagons use=attr column=average color=viridis
+</pre></div>
+
+<!--
+v.vect.stats points=points_of_interest areas=hexagons method=average \
+  points_column=elev_m count_column=count stats_column=average
+v.vect.stats points=points_of_interest areas=hexagons method=range \
+  points_column=elev_m count_column=count stats_column=range
+v.vect.stats points=points_of_interest areas=hexagons method=stddev \
+  points_column=elev_m count_column=count stats_column=stddev
+
+export GRASS_FONT=LiberationSans-Regular
+
+FILE=v_vect_stats.png
+
+rm $FILE
+
+d.mon cairo out=$FILE
+
+d.frame frame=f1 at=50,100,0,50 -c
+v.colors map=hexagons use=attr column=range color=viridis
+d.vect map=points_of_interest color=black fill_color=black width=1 icon=basic/point size=3
+d.text text="points" at=60,5 size=10 color=black
+
+d.frame frame=f2 at=50,100,50,100 -c
+v.colors map=hexagons use=attr column=count color=viridis
+d.vect map=hexagons where="count > 0"
+d.text text="count" at=60,5 size=10 color=black
+
+d.frame frame=f3 at=0,50,0,50 -c
+v.colors map=hexagons use=attr column=average color=viridis
+d.vect map=hexagons where="count > 0"
+d.text text="average" at=60,5 size=10 color=black
+
+d.frame frame=f4 at=0,50,50,100 -c
+v.colors map=hexagons use=attr column=stddev color=viridis
+d.vect map=hexagons where="count > 0"
+d.text text="stddev" at=60,5 size=10 color=black
+
+d.mon stop=cairo
+mogrify -trim $FILE
+-->
+
+<center>
+<img src="v_vect_stats.png"><br>
+Point statistics in a hexagonal grid (count of points, average of values
+associated with point, standard deviation)
+</center>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.distance.html">v.distance</a>,
+<a href="r.distance.html">r.distance</a>,
+<a href="v.rast.stats.html">v.rast.stats</a>,
+<a href="v.what.vect.html">v.what.vect</a>,
+<a href="v.mkgrid.html">v.mkgrid</a>
+</em>
+
+
+<h2>AUTHOR</h2>
+
+Markus Metz
+
+<p>
+<i>Last changed: $Date$</i>

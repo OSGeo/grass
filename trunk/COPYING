@@ -1,0 +1,39 @@
+Copyright and License Statement
+
+The Geographic Resources Analysis and Support System (GRASS)
+Geographic Information System (GIS) is Copyright by members
+of the GRASS Development Team.
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License, or (at your
+option) any later version.
+
+Parts of GRASS are not copyright by the GRASS development team.
+The original authors hold the copyrights and you have to abide
+to their licensing terms where noted.
+(Keep in mind that code linking into GRASS can only be distributed
+if compatible with the GPL.)
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License (GPL) for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the
+  Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor
+  Boston, MA 02110-1301 USA
+
+Questions regarding GRASS GIS should be directed to the
+GRASS Development Team at the following address:
+
+ GRASS Development Team
+ c/o Markus Neteler
+ mundialis GmbH & Co. KG
+ Kölnstrasse 99 
+ 53111 Bonn, Germany
+ neteler AT osgeo.org
+
+Internet:  http://grass.osgeo.org

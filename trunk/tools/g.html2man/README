@@ -1,0 +1,6 @@
+Used for ../../man/ only
+No need to install this into GRASS Binaries.
+
+MN
+
+TODO: Probably fix first line (in conjunction with ../../man/Makefile call).

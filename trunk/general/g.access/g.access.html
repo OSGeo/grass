@@ -1,0 +1,47 @@
+<h2>DESCRIPTION</h2>
+
+This program allows the user to control access to the
+current mapset.  Normally, any user can read data from any
+GRASS mapset. But sometimes it is desirable to prohibit
+access to certain sensitive data. The <em>g.access</em>
+command allows a user to restrict read and execute access
+to the current mapset (see UNIX <em>chmod</em> command).
+<em>g.access</em> will not modify write access to the
+current mapset.
+
+<p>
+The user may, for example, allow only users in the same
+UNIX group to read data files in the mapset, or restrict
+the mapset to personal use only.
+
+<h2>NOTES</h2>
+
+
+<p> Under GRASS, access to the mapset PERMANENT must be open to
+all users.  This is because GRASS looks for the user's default geographic
+region definition settings and the location TITLE in files that are stored
+under the PERMANENT mapset directory.  The <em>g.access</em> command,
+therefore, will not allow you to restrict access to the PERMANENT mapset.
+
+<p>The <em><a href="g.mapsets.html">g.mapsets</a></em> command isn't smart
+enough to tell if access to a specified mapset is restricted, and the user
+is therefore allowed to include the names of restricted mapsets in his
+search path.  However, the data in a restricted mapset is still protected;
+any attempts to look for or use data in a restricted mapset will fail.  The
+user will simply not see any data listed for a restricted mapset.
+
+<p>UNIX filesystem access controls and <em>g.access</em> actions are not 
+supported by MS-Windows.
+
+<h2>SEE ALSO</h2>
+
+UNIX manual entries for <em>chmod</em> and <em>group</em> 
+<br>
+<em><a href="g.mapsets.html">g.mapsets</a></em> 
+
+<h2>AUTHOR</h2>
+
+Michael Shapiro, 
+U.S. Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

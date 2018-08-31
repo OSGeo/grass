@@ -1,0 +1,659 @@
+<!-- meta page name: g.parser -->
+<!-- meta page name description: Provides full parser support for GRASS scripts. -->
+
+<h2>KEYWORDS</h2>
+<a href="general.html">general</a>, <a href="topic_support.html">support</a>, <a href="keywords.html#scripts">scripts</a>
+
+<h2>SYNOPSIS</h2>
+<b>g.parser --help</b><br>
+<b>g.parser</b> [-<b>s</b>] [-<b>t</b>]  [-<b>n</b>] <em>filename</em> [<em>argument</em>,...]
+
+<h3>Flags:</h3>
+<dl>
+<dt><b>-t</b></dt>
+<dd>Print strings for translation</dd>
+<dt><b>-s</b></dt>
+<dd>Write option values to standard output instead of reinvoking script</dd>
+<dt><b>-n</b></dt>
+<dd>Write option values to standard output separated by null character</dd>
+</dl>
+
+<h2>DESCRIPTION</h2>
+
+The <em>g.parser</em> module provides full parser support for GRASS
+scripts, including an auto-generated GUI interface, help page
+template, and command line option checking. In this way a simple
+script can very quickly be made into a full-fledged GRASS module.
+
+
+<h2>OPTIONS</h2>
+
+Unless the <b>-s</b> or <b>-n</b> switch is used, the arguments are stored in
+environment variables for use in your scripts. These variables are
+named "GIS_FLAG_&lt;NAME&gt;" for flags and "GIS_OPT_&lt;NAME&gt;" for
+options. The names of variables are converted to upper case. For
+example if an option with key <b>input</b> was defined in the script
+header, the value will be available in variable <b>GIS_OPT_INPUT</b>
+and the value of flag with key <b>f</b> will be available in variable
+<b>GIS_FLAG_F</b>.
+
+<p>
+For flags, the value will be "1" if the flag was given, and "0" otherwise.
+
+<p>
+If the <b>-s</b> or <b>-n</b> switch is used, the options and flags are written to
+standard output in the form <em>opt_&lt;name&gt;=&lt;value&gt;</em> and
+<em>flag_&lt;name&gt;=&lt;value&gt;</em>, preceded by the string
+<b>@ARGS_PARSED@</b>. If this string doesn't appear as the first line
+of standard output, it indicates that the script was invoked with a switch such
+as <b>--html-description</b>. In this case, the data written by
+<em>g.parser</em> to standard output should be copied to the script's standard output
+verbatim.
+
+If the <b>-s</b> switch is used, the options and flags are separated
+by newlines. If the <b>-n</b> switch is used, the options and flags
+are separated by null characters.
+
+<p>
+Typical header definitions are as follows:
+
+<div class="code"><pre>
+#%module
+#% description: g.parser test script   
+#%end
+#%flag
+#% key: f
+#% description: A flag
+#%end
+#%option
+#% key: raster
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Raster input map
+#% required: yes
+#%end
+</pre></div>
+
+With <tt>{NULL}</tt> it is possible to suppress a predefined <tt>description</tt>
+or <tt>label</tt>.
+
+<p>
+The parsers allows using predefined <em>standardized options and
+flags</em>, see the list
+of <a href="http://grass.osgeo.org/programming7/parser__standard__options_8c.html#a1a5da9db1229a9bbc59d16ae84540bb8">options</a> and <a href="http://grass.osgeo.org/programming7/parser__standard__options_8c.html#ad081e95e5d4dc3daab9c820d962e6902">flags</a>
+in the programmer manual. Eg. the option
+
+<div class="code"><pre>
+#%option
+#% key: raster
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Raster input map
+#% required: yes
+#%end
+</pre></div>
+
+can be easily defined as
+
+<div class="code"><pre>
+#%option G_OPT_R_MAP
+#% key: raster
+#%end
+</pre></div>
+
+The parser allows defining predefined <em>rules</em>
+for used options.
+
+The syntax of the rules section is following:
+
+<div class="code"><pre>
+#%rules
+#% exclusive: capfile_output, capfile
+#%end
+</pre></div>
+
+The parser also allows defining "OR" conditions, e.g. requiring raster
+OR vector (for details, see below), e.g.for options:
+
+<div class="code"><pre>
+#%rules
+#% required: raster, vector
+#%end
+</pre></div>
+
+and e.g., for flags:
+
+<div class="code"><pre>
+#%rules
+#% required: -i,-d,-c
+#%end
+</pre></div>
+
+<h2>NOTES</h2>
+
+An option can be instructed to allow multiple inputs by adding the
+following line:
+<div class="code"><pre>
+#% multiple: yes
+</pre></div>
+
+While this will only directly change the <i>Usage</i> section of the help
+screen, the option's environmental string may be easily parsed from within
+a script. For example, individual comma separated identities for an option 
+named "input" can be parsed with the following Bash shell code:
+
+<div class="code"><pre>IFS=,
+for opt in $GIS_OPT_INPUT ; do
+    ... "$opt"
+done
+</pre></div>
+
+<p>
+A "<tt>guisection</tt>" field may be added to each option and flag to
+specify that the options should appear in multiple tabs in the
+auto-generated GUI.  Any options without a <tt>guisection</tt> field
+go into the "Required" or "Options" tab.  For example:
+<div class="code"><pre>
+#% guisection: tabname
+</pre></div>
+would put that option in a tab named <i>tabname</i>.
+
+<p>
+A "<tt>key_desc</tt>" field may be added to each option to specify the text that
+appears in the module's usage help section. For example:
+<div class="code"><pre>
+#% key_desc: filename
+</pre></div>
+added to an <b>input</b> option would create the usage summary
+<tt>[input=filename]</tt>.
+
+<p>
+If a script is run with <b>--o</b>, the parser will
+set <tt>GRASS_OVERWRITE=1</tt>, which has the same effect as passing
+<b>--o</b> to every module which is run from the script. Similarly, passing
+<b>--q</b> or <b>--v</b> will set <tt>GRASS_VERBOSE</tt> to 0 or 3 respectively,
+which has the same effect as passing <b>--q</b> or <b>--v</b> to every module which
+is run from the script.  Rather than checking whether <b>--o</b>, <b>--q</b> or <b>--v</b>
+were used, you should be checking <tt>GRASS_OVERWRITE</tt> and/or
+<tt>GRASS_VERBOSE</tt> instead. If those variables are set, the script
+should behave the same way regardless of whether they were set
+by <b>--o</b>, <b>--q</b> or <b>--v</b> being passed to the script or
+set by other means.
+
+<h2>Conditional parameters</h2>
+
+Marking an option as "required" will result in the parser raising a
+fatal error if the option is not given, with one exception: if a flag
+has the <tt>suppress_required</tt> option, and that flag is given, all
+requirements are ignored. This feature is intended for flags which
+abandon "normal operation" for the module; e.g. <em>r.in.gdal</em>'s
+<b>-f</b> flag (list supported formats) uses it.
+<br>
+But in general, an option cannot be marked as required if it is
+optional except for the special case of a <tt>suppress_required</tt> flag.
+The parser has the ability to specify option relationships.
+
+<p>
+For C, the relevant functions are those in
+<a href="http://grass.osgeo.org/programming7/parser__dependencies_8c.html">lib/gis/parser_dependencies.c</a>.
+
+<p>
+For scripts, relationships are specified using a "rules" section, e.g.
+
+<div class="code"><pre>
+#%rules
+#% required: altitude,elevation
+#%end
+</pre></div>
+
+specifies that at least one of those options must be given. Both
+options and flags can be specified (a leading "<b>-</b>" denotes a flag).
+
+The available rule types are:
+
+<ul>
+<li> <tt>exclusive</tt>: at most one of the options may be given</li>
+<li> <tt>required</tt>: at least one of the options must be given</li>
+<li> <tt>requires</tt>: if the first option is given, at least one of the
+      subsequent options must also be given</li>
+<li> <tt>requires_all</tt>: if the first option is given, all of the
+      subsequent options must also be given</li>
+<li> <tt>excludes</tt>: if the first option is given, none of the
+      subsequent options may be given</li>
+<li> <tt>collective</tt>: all or nothing; if any option is given, all
+      must be given</li>
+</ul>
+
+<h2>AUTOMATED SCRIPT CREATION</h2>
+
+The flag <b>--script</b> added to a GRASS command, generates shell
+output. To write out a <em>g.parser</em> boilerplate for easy
+prototyping of Python scripts, the flag <b>--script</b> can be added
+to any GRASS command. Example:
+
+<div class="code"><pre>
+v.in.db --script
+</pre></div>
+
+
+<h2>Help page template (HTML)</h2>
+
+The flag <b>--html-description</b> added to a GRASS command
+generates a related help page template in HTML. Example:
+
+<div class="code"><pre>
+v.in.db --html-description
+</pre></div>
+
+
+<h2>GUI window parser (XML)</h2>
+
+The flag <b>--interface-description</b> added to a GRASS command
+generates a related help page template in XML. Example:
+
+<div class="code"><pre>
+v.in.db --interface-description
+</pre></div>
+
+<h2>Web Processing Service (WPS)</h2>
+
+The flag <b>--wps-process-description</b> added to a GRASS command
+generates a Web Processing Service process description. Example:
+
+<div class="code"><pre>
+v.in.db --wps-process-description
+</pre></div>
+
+<h2>reStructuredText</h2>
+
+The flag <b>--rst-description</b> added to a GRASS command
+generates module interface description in reStructuredText, a lightweight
+markup language. Example:
+
+<div class="code"><pre>
+v.in.db --rst-description
+</pre></div>
+
+reStructuredText is sometimes abbreviated as reST, ReST, or RST.
+The commonly used file extension is <tt>.rst</tt>.
+Don't be confused with Representational State Transfer (REST) technology.
+
+<h2>TRANSLATION</h2>
+
+<em>g.parser</em> provides some support for translating the options of
+scripts. If called with the -t switch before the script filename like
+this
+
+<div class="code"><pre>
+g.parser -t somescriptfile
+</pre></div>
+
+<em>g.parser</em> will print the text of the translatable options to
+standard output, one per line, and exit. This is for internal use within
+the build system to prepare GRASS scripts for translation.
+
+
+<h2>EXAMPLES</h2>
+
+All examples below autogenerate the graphical user interface when invoked
+without parameters of flags:
+
+<p>
+<center>
+<img src="g_parser_test.png" alt="Autogenerated GUI window">
+</center>
+
+<p>
+To run properly, the script needs to be copied into a directory listed
+in <tt>$GRASS_ADDON_PATH</tt> environmental variable with the
+executable flag being set. 
+
+<p>
+The script will provide a GUI (as above) and the following usage help
+text:
+
+<div class="code"><pre>
+test.py|sh|pl --help
+
+Description:
+ g.parser test script (python)
+
+Usage:
+ test.sh [-f] raster=string vector=string [option1=string]
+   [--verbose] [--quiet]
+
+Flags:
+  -f   A flag
+ --v   Verbose module output
+ --q   Quiet module output
+
+Parameters:
+   raster   Raster input map
+   vector   Vector input map
+  option1   An option
+</pre></div>
+
+<h3>Example code for Python</h3>
+
+<div class="code"><pre>
+#!/usr/bin/env python
+
+# g.parser demo script for python programming
+
+#%module
+#% description: g.parser test script (python)
+#% keyword: keyword1
+#% keyword: keyword2
+#%end
+#%flag
+#% key: f
+#% description: A flag
+#%end
+#%option G_OPT_R_MAP
+#% key: raster
+#% required: yes
+#%end
+#%option G_OPT_V_MAP
+#% key: vector
+#%end
+#%option
+#% key: option1
+#% type: string
+#% description: An option
+#% required: no
+#%end
+
+import os
+import sys
+
+import grass.script as grass
+
+def main():
+    flag_f = flags['f']
+    option1 = options['option1']
+    raster = options['raster']
+    vector = options['vector']
+
+    #### add your code here ####
+
+    if flag_f:
+        print "Flag -f set"
+    else:
+        print "Flag -f not set"
+
+    # test if parameter present:
+    if option1:
+        print "Value of option1 option: '%s'" % option1
+
+    print "Value of raster option: '%s'" % raster
+    print "Value of vector option: '%s'" % vector
+
+    #### end of your code ####
+
+    return 0
+
+if __name__ == "__main__":
+    options, flags = grass.parser()
+    sys.exit(main())
+</pre></div>
+
+<h3>Example code for SHELL</h3>
+
+<div class="code"><pre>
+#!/bin/sh
+
+# g.parser demo script for shell programming
+
+#%module
+#% description: g.parser test script (shell) 
+#%end
+#%flag
+#% key: f
+#% description: A flag
+#%end
+#%option G_OPT_R_MAP
+#% key: raster
+#% required: yes
+#%end
+#%option G_OPT_V_MAP
+#% key: vector
+#%end
+#%option
+#% key: option1
+#% type: string
+#% description: An option
+#% required: no
+#%end
+
+if [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1&gt;&amp;2
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    exec g.parser "$0" "$@"
+fi
+
+#### add your code below ####
+
+echo ""
+
+if [ $GIS_FLAG_F -eq 1 ] ; then
+  g.message message="Flag -f set"
+else
+  g.message message="Flag -f not set"
+fi
+
+# test if parameter present:
+if [ -n "$GIS_OPT_OPTION1" ] ; then
+    echo "Value of GIS_OPT_OPTION1: '$GIS_OPT_OPTION1'"
+fi
+
+g.message message="Value of GIS_OPT_option1: '$GIS_OPT_option1'"
+g.message message="Value of GIS_OPT_raster: '$GIS_OPT_raster'"
+g.message message="Value of GIS_OPT_vect: '$GIS_OPT_vector'"
+
+#### end of your code ####
+</pre></div>
+
+<h3>Example code for Perl</h3>
+
+<div class="code"><pre>
+#!/usr/bin/perl -w
+use strict;
+
+# g.parser demo script
+
+#%module
+#%  description: g.parser test script (perl) 
+#%  keyword: keyword1
+#%  keyword: keyword2
+#%end
+#%flag
+#%  key: f
+#%  description: A flag
+#%end
+#%option G_OPT_R_MAP
+#% key: raster
+#% required: yes
+#%end
+#%option G_OPT_V_MAP
+#% key: vector
+#%end
+#%option
+#% key: option1
+#% type: string
+#% description: An option
+#% required: no
+#%end
+
+if ( !$ENV{'GISBASE'} ) {
+    printf(STDERR  "You must be in GRASS GIS to run this program.\n");
+    exit 1;
+}
+
+if( $ARGV[0] ne '@ARGS_PARSED@' ){
+    my $arg = "";
+    for (my $i=0; $i < @ARGV;$i++) {
+        $arg .= " $ARGV[$i] ";
+    }
+    system("$ENV{GISBASE}/bin/g.parser $0 $arg");
+    exit;
+}
+
+#### add your code here ####
+print  "\n";
+if ( $ENV{'GIS_FLAG_F'} eq "1" ){
+   print "Flag -f set\n"
+}
+else {
+   print "Flag -f not set\n"
+}
+
+printf ("Value of GIS_OPT_option1: '%s'\n", $ENV{'GIS_OPT_OPTION1'});
+printf ("Value of GIS_OPT_raster: '%s'\n", $ENV{'GIS_OPT_RASTER'});
+printf ("Value of GIS_OPT_vect: '%s'\n", $ENV{'GIS_OPT_VECTOR'});
+
+#### end of your code ####
+</pre></div>
+
+<h3>Easy creation of a script</h3>
+
+By using the <b>--script</b> flag with any GRASS GIS module (must be run in
+a GRASS GIS session) header, description, keywords, parameters, flags and
+a template main Python script section will be printed in the terminal which
+can be saved to a file and used for further script programming.
+<p>
+In this example, the module <em>v.what.rast</em> is used as an example.
+The output is shown below:
+
+<div class="code"><pre>
+v.what.rast --script
+
+#!/usr/bin/env python
+############################################################################
+#
+# MODULE:       v.what.rast_wrapper
+# AUTHOR(S):    username
+# PURPOSE:      Wrapper for v.what.rast
+# COPYRIGHT:    (C) 2017 by username, and the GRASS Development Team
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+############################################################################
+
+#%module
+#% description: Uploads raster values at positions of vector points to the table.
+#% keyword: vector, sampling, raster, position, querying, attribute table, surface information
+#%end
+#%flag
+#% key: i
+#% description: Interpolate values from the nearest four cells
+#%end
+#%flag
+#% key: p
+#% description: Print categories and values instead of updating the database
+#%end
+#%option
+#% key: map
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% label: Name of vector points map for which to edit attributes
+#% description: Or data source for direct OGR access
+#% gisprompt: old,vector,vector
+#%end
+#%option
+#% key: layer
+#% type: string
+#% required: no
+#% multiple: no
+#% label: Layer number or name
+#% description: Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name.
+#% answer: 1
+#% gisprompt: old,layer,layer
+#%end
+#%option
+#% key: type
+#% type: string
+#% required: no
+#% multiple: yes
+#% options: point,centroid
+#% description: Input feature type
+#% answer: point
+#%end
+#%option
+#% key: raster
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of existing raster map to be queried
+#% gisprompt: old,cell,raster
+#%end
+#%option
+#% key: column
+#% type: string
+#% required: no
+#% multiple: no
+#% key_desc: name
+#% description: Name of attribute column to be updated with the query result
+#% gisprompt: old,dbcolumn,dbcolumn
+#%end
+#%option
+#% key: where
+#% type: string
+#% required: no
+#% multiple: no
+#% key_desc: sql_query
+#% label: WHERE conditions of SQL statement without 'where' keyword
+#% description: Example: income < 1000 and population >= 10000
+#%end
+
+import sys
+
+import grass.script as grass
+
+def main():
+    # put code here
+
+    return 0
+
+if __name__ == "__main__":
+    options, flags = grass.parser()
+    sys.exit(main())
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="g.filename.html">g.filename</a>,
+<a href="g.findfile.html">g.findfile</a>,
+<a href="g.tempfile.html">g.tempfile</a>
+</em>
+
+<p>
+Overview table: <a href="parser_standard_options.html">Parser standard options</a>
+<p>
+<a href="http://trac.osgeo.org/grass/wiki/Submitting/Python">Submitting rules for Python</a>
+
+<p>
+Related Wiki pages:
+<a href="http://grasswiki.osgeo.org/wiki/Category:Linking_to_other_languages">Using GRASS GIS with other programming languages</a>
+
+<h2>AUTHOR</h2>
+
+Glynn Clements
+
+<p>
+<i>Last changed: $Date$</i>

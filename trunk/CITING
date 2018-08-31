@@ -1,0 +1,41 @@
+The GRASS Development Team, the addon authors, further contributors and
+the user community have invested enormous efforts in making GRASS GIS
+available to you. Please give credit where credit is due and cite GRASS
+GIS and its addons when you use them for data analysis.
+
+For citation choices see below; for citing a particular GRASS GIS
+module, you may cite the main author(s) along with the GRASS
+Development Team.
+
+Choices for citing the main GRASS GIS software (update YEAR and version
+number X.Y accordingly):
+
+* GRASS Development Team, YEAR. Geographic Resources Analysis Support
+  System (GRASS) Software, Version X.Y. Open Source Geospatial
+  Foundation. http://grass.osgeo.org
+* GRASS Development Team, YEAR. Geographic Resources Analysis Support
+  System (GRASS) Programmer's Manual. Open Source Geospatial Foundation.
+  Electronic document: http://grass.osgeo.org/programming7
+
+Citing a GRASS GIS Addon (update AUTHOR(S), YEAR, Addon-NAME, and
+version number X.Y accordingly):
+
+* AUTHOR(S), and GRASS Development Team, YEAR Addon-NAME. Geographic
+  Resources Analysis Support System (GRASS) Software, Version X.Y.
+  Open Source Geospatial Foundation.
+  https://grass.osgeo.org/grass7/manuals/addons/Addon-NAME.html
+
+For other (scientific) references, see
+
+* https://grasswiki.osgeo.org/wiki/GRASS_Citation_Repository
+
+A BibTeX entry for LaTeX users is:
+
+@Manual{GRASS_GIS_software,
+  title = {Geographic Resources Analysis Support System (GRASS) Software, Version X.Y},
+  author = {{GRASS Development Team}},
+  organization = {Open Source Geospatial Foundation},
+  address = {USA},
+  year = {YEAR},
+  url = {http://grass.osgeo.org},
+}

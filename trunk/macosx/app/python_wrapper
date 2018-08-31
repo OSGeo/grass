@@ -1,0 +1,45 @@
+#! /bin/sh
+#############################################################################
+#
+# MODULE:   	python wrapper
+# AUTHOR(S):	William Kyngesburye - kyngchaos@kyngchaos.com
+# PURPOSE:  	handle arch options on OSX for running python.
+# COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#   	    	License (>=v2). Read the file COPYING that comes with GRASS
+#   	    	for details.
+#
+#############################################################################
+
+# wxpython-based scripts must be started from pythonw.  And depending on the
+# installed wxpython, it may only be available in 32bits, while python may
+# at the same time run 64bit by default.  Newer systems may also reexec python
+# as pythonw automatically as needed, except they don't respond to the arch
+# command (and that's an Apple-only thing, and only when /usr/bin/python is
+# used, yet /usr/bin/pythonw2.6 DOES respond to arch).  The most universal
+# and reliable method is probably to not depend on Apple's customizations and
+# execute pythonw directly, 32bit if necessary.
+
+if [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
+    exit 1
+fi
+
+SYSARCH=`uname -p`
+SYSVER=`uname -r | cut -d . -f 1`
+
+if [ ! "$GRASS_PYTHONWX" ] ; then
+	GRASS_PYTHONWX="pythonw"
+fi
+# can't run python 64bit if wx not 64bit, assume OSX 10.5+  possible 64bit
+if [ $(($SYSVER)) -gt 5 ] && [ "$GRASS_WX64BIT" = "0" ] ; then
+	case $SYSARCH in
+		powerpc) pyarch="-ppc" ;;
+		i386) pyarch="-i386" ;;
+		*) pyarch="" ;;
+	esac
+	exec /usr/bin/arch $pyarch "$GRASS_PYTHONWX" "$@"
+else
+	exec "$GRASS_PYTHONWX" "$@"
+fi

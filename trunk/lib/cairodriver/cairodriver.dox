@@ -1,0 +1,80 @@
+/*! \page cairodriver GRASS Cairo Display Driver
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\section cairointro Introduction to Cairo display driver
+
+Cairo is a 2D graphics library with support for multiple output
+devices. Currently supported output targets include the X Window
+System, Quartz, Win32, image buffers, PostScript, PDF, and SVG file
+output, see <a href="http://cairographics.org">Cairo website</a> for
+details.
+
+GRASS Cairo display %driver was originally written by Lars Ahlzen (<a
+href="http://lists.osgeo.org/pipermail/grass-dev/2007-October/033524.html">announcement</a>).
+
+\section cairofunctions List of functions
+
+ - Cairo_Begin()
+
+ - Cairo_begin_raster()
+
+ - Cairo_Bitmap()
+
+ - Cairo_Box()
+
+ - Cairo_Close()
+ 
+ - Cairo_Color()
+
+ - Cairo_Cont()
+
+ - Cairo_Driver()
+
+ - Cairo_end_raster()
+
+ - Cairo_Erase()
+
+ - Cairo_font_info()
+
+ - Cairo_font_list()
+
+ - Cairo_Fill()
+
+ - Cairo_Graph_close()
+
+ - Cairo_Graph_set()
+
+ - Cairo_Line_width()
+
+ - Cairo_Move()
+
+ - Cairo_Point()
+
+ - Cairo_raster()
+
+ - cairo_read_bmp()
+
+ - cairo_read_image()
+
+ - cairo_read_xid()
+
+ - Cairo_Set_window()
+
+ - Cairo_set_font()
+
+ - Cairo_Stroke()
+ 
+ - Cairo_Text()
+
+ - Cairo_text_box()
+
+ - cairo_write_bmp()
+
+ - cairo_write_image()
+
+ - cairo_write_ppm()
+
+ - cairo_write_xid()
+
+*/

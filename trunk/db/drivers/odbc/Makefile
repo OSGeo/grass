@@ -1,0 +1,10 @@
+MODULE_TOPDIR = ../../..
+
+PGM = odbc
+include $(MODULE_TOPDIR)/include/Make/DB.make
+
+DEPENDENCIES = $(DBMIDRIVERDEP) $(DBMIBASEDEP) $(GISDEP)
+
+LIBES = $(DBMIDRIVERLIB) $(DBMIBASELIB) $(GISLIB) $(ODBCLIB)
+
+default: dbmi

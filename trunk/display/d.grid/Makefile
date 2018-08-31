@@ -1,0 +1,11 @@
+MODULE_TOPDIR = ../..
+
+PGM = d.grid
+
+LIBES = $(DISPLAYLIB) $(GPROJLIB) $(SYMBLIB) $(GISLIB) $(MATHLIB)
+DEPENDENCIES = $(DISPLAYDEP) $(GPROJDEP) $(SYMBDEP) $(GISDEP)
+EXTRA_INC = $(PROJINC) $(GDALCFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd

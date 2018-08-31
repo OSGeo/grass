@@ -1,0 +1,145 @@
+From green@superliminal.com Fri Jul 19 02:55:40 2002
+Return-Path: <green@superliminal.com>
+Received: from camelot.itc.it (camelot [195.223.171.5])
+	by orchestra.itc.it (8.11.6/8.11.6) with ESMTP id g6J0uQa24233
+	for <blazek@itc.it>; Fri, 19 Jul 2002 02:56:26 +0200
+Received: from jareth.dreamhost.com (jareth.dreamhost.com [66.33.198.201])
+	by camelot.itc.it (8.11.3/8.11.3) with ESMTP id g6J0uOn13308
+	for <blazek@itc.it>; Fri, 19 Jul 2002 02:56:25 +0200 (MET DST)
+Received: from superliminal.com (adsl-63-201-35-131.dsl.snfc21.pacbell.net [63.201.35.131])
+	by jareth.dreamhost.com (Postfix) with ESMTP
+	id 39D616B5EA; Thu, 18 Jul 2002 17:56:22 -0700 (PDT)
+Message-ID: <3D37638C.7AEB82AE@superliminal.com>
+Date: Thu, 18 Jul 2002 17:55:40 -0700
+From: green@superliminal.com
+Reply-To: green@superliminal.com
+Organization: Superliminal Software
+X-Mailer: Mozilla 4.77 [en] (Windows NT 5.0; U)
+X-Accept-Language: en
+MIME-Version: 1.0
+To: Radim Blazek <blazek@itc.it>
+Cc: antonin.guttman@informix.com
+Subject: Re: R-Tree for GRASS
+References: <02071810432200.13881@janacek>
+Content-Type: text/plain;
+  charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Status: RO
+X-Status: O
+
+hello radim,
+
+i'm glad that you're finding my r-tree implementation useful. it should be noted
+that i am not the original author. i got my original implementation directly from
+toni gutman who i believe co-invented the technique with michael stonebrakier.
+that implementation was the same one they'd originally written when testing and
+benchmarking the technique. he was not proud of the original code and felt that
+while it worked, it would have been better reimplemented from scratch. instead, i
+upgraded and polished their code. another user discovered a flaw in the technique
+and suggested a solution using bounding spheres which i then implemented. for
+example, imagine you have the following three rectangles:
+    0,0 to 1,0
+    0,2 to 1,3
+    1000000,0 to 1000001,0
+if you want to partition them into two boxes, the original algorithm based only on
+box volumes would have put the first rectangle in one box and the last two in
+another. clearly a bad choice for most applications. the bounding sphere metric
+would instead place the first two rectangles in one box and the third in another.
+much better. it was definitely interesting to extend this to use n-dimensional
+spheres, but it does generalize nicely.
+
+your changes to NUMDIMS, and float to double are normal parameters you're expected
+to customize. your changes to handle compiler warnings and printf are more
+interesting to me. you didn't include your modified files, so i'd appreciate them
+which i may use to update the archive. if you can, please make careful note of
+your non-cosmetic fixes and improvements. i can't promise to update the archive
+but it will at least be useful to have. more likely i'd convert the whole thing
+into a nicely objectified java package but there's a good chance i'll never get
+around to doing that.
+
+regarding split_l.c vs. split_q.c: these involve a choice you can make between
+speed and box optimization. you should use the quadratic version ('q') if it's
+fast enough for your needs, and use the less expensive linear method if not. note
+that in both cases various branches of the resulting rectangle trees may overlap.
+there's another version of the technique called "R+ Trees" which guarantees no
+overlaps, but i don't have an implementation of that version. i believe it's even
+slower than either r-tree splitting method, so you should probably also take all
+of that into account.
+
+i did a quick search and found a citing of toni's work here:
+http://www.informatik.uni-trier.de/~ley/db/indices/a-tree/g/Guttman:Antonin.html
+for your grass header files, you should list toni's name as author, though i'd
+appreciate mention of my updates to his code and technique.
+you'll find the abstract of the paper here:
+http://www.informatik.uni-trier.de/~ley/db/conf/sigmod/Guttman84.html
+and a home page for toni here:
+http://es.ucsc.edu/~tonig/
+note that you'll also find links to his original paper and implementation there.
+i'm cc'ing him in case there's anything he'd like to add or correct; and also so
+that if he likes, he can update his implementation with my updated sources. it's
+been a very long time since i've talked with him so i hope that address is still
+current.
+
+finally, i have a question for you about grass: i've developed a technique based
+on r-trees that allows interactive navigation of enormous polygonal 3d data sets.
+it's been a solution in search of a problem. i know that some gis application
+require such data sets and i'd love to communicate with any that you know of who
+might need such a technique. it only works in static environments that are crowded
+enough such that regardless of how the user navigates, only a very small fraction
+of the entire data set are ever visible at once. it's obviously a very specialized
+technique but it scales with the log of the number of polygons and may therefore
+be very useful for applications with huge and ever-growing data sets.
+
+-daniel
+
+Radim Blazek wrote:
+
+> Ciao,
+>
+> I want to use R-Tree http://www.superliminal.com/sources/RTree.zip
+> as spatial index for GRASS (GPL GIS) http://grass.itc.it/index.html
+>
+> I tested just for line intersection function but want to use as general
+> index for vectors. Library will be part of GRASS project, but may be
+> extracted and compiled independently (Makefile.alone).
+>
+> I have done just few cosmetic changes so far (described in README.grass):
+> - files converted to unix line ends
+> - added file 'README.grass'
+> - added Makefile
+> - few modifications to get rid of compiler warnings, but warnings like:
+>     index.c:277: warning: `tmp_nptr' might be used uninitialized in this f.
+>     were left because need deeper revision if may cause problems, insetad of
+>     blindly init to 0/NULL
+> - '//' comments -> '/* */'
+> - printf() - > fprintf(stdout,)
+> - NUMDIMS set to 3
+> - test.c 2D -> 3D
+> - type RectReal: float -> double
+>
+> OK? (I hope so because you write: You're completely free to use them for any
+> purpose whatsoever.)
+>
+> If you don't mind I would like to ask you if you recall
+> how split_l.c and split_q.c differ and which should be used?
+>
+> Can I add headers to your files for GRASS?:
+> /****************************************************************************
+> * MODULE:       R-Tree library
+> *
+> * AUTHOR(S):    Daniel Green (dgreen@superliminal.com)
+> *
+> * PURPOSE:      Multidimensional index
+> *
+> * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+> *
+> *               This program is free software under the GNU General Public
+> *               License (>=v2). Read the file COPYING that comes with GRASS
+> *               for details.
+> *****************************************************************************/
+>
+> Thanks
+>
+> Radim
+
+

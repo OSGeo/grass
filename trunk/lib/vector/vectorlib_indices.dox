@@ -1,0 +1,226 @@
+/*! \page vlibIndices Spatial and category indices
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+\section vlibSpidx Vector library spatial index management
+
+Spatial index (based on R*-tree) is created with topology.
+
+Spatial index occupies a lot of memory but it is necessary for 
+topology building. Also, it takes some time to release the memory
+occupied by spatial index (see dig_spidx_free()). The spatial index can
+also be built in file to save memory by setting the environment variable
+GRASS_VECTOR_LOWMEM.
+
+The function building topology - Vect_build() - is usually called at
+the end of modules (before Vect_close()) so it is faster to call
+<tt>exit()</tt> and operating system releases all the memory much
+faster.  By default the memory is not released.
+
+It is possible to call Vect_set_release_support() before Vect_close()
+to enforce memory release, but it takes some time on large files.
+
+The spatial index is stored in file and not loaded for old vectors that
+are not updated, saving a lot of memory. Spatial queries are done in 
+file.
+
+Currently most of the modules do not release the memory occupied for
+spatial index and work like this (pseudocode):
+
+\code
+int main
+{
+     Vect_open_new();
+     /* writing new vector */
+
+     Vect_build();
+     Vect_close();  /* memory is not released */
+}
+\endcode
+
+In general it is possible to free the memory with Vect_set_release_support()
+such as:
+
+\code
+int main
+{
+     Vect_open_new();
+     /* writing new vector */
+
+     Vect_build();
+     Vect_set_release_support();
+     Vect_close();  /* memory is released */
+}
+\endcode
+
+but it takes a bit longer. 
+
+It makes sense to release the spatial index if it is used only at the beginning
+of a module or in permanently running programs like QGIS. Note that this
+applies only when creating a new vector or updating an old vector.
+For example:
+
+\code
+int main
+{
+     Vect_open_update();
+     /* select features using spatial index, e.g.  Vect_select_lines_by_box() */
+     Vect_set_release_support();
+     Vect_close();  /* memory is released */
+
+     /* do some processing which needs memory */
+}
+\endcode
+
+See also \ref spatial_index data structure.
+
+\subsection vlibSidxFileFormat Sidx file format specification
+
+Spatial index file ('sidx') is read by Vect_open_sidx().
+
+\subsubsection vlibSidxFileHead Header
+
+Note: <tt>plus</tt> is instance of \ref Plus_head structure.
+
+<table border="1" style="border-collapse: collapse" cellpadding="5">
+<tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
+
+<tr><td>plus->spidx_Version_Major </td><td>C</td><td>1</td><td>file version (major)</td></tr>
+<tr><td>plus->spidx_Version_Minor </td><td>C</td><td>1</td><td>file version (minor)</td></tr>
+<tr><td>plus->spidx_Back_Major</td><td>C</td><td>1</td><td>supported from GRASS version (major)</td></tr>
+<tr><td>plus->spidx_Back_Minor</td><td>C</td><td>1</td><td>supported from GRASS version (minor)</td></tr>
+
+<tr><td>plus->spidx_port->byte_order</td><td>C</td><td>1</td><td>little or big endian
+                  flag; files are written in machine native order but
+                  files in both little and big endian order may be
+                  readl; zero for little endian</td></tr>
+
+<tr><td>plus->spidx_port.off_t_size</td><td>C</td><td>1</td><td>off_t size (LFS)</td></tr>
+
+<tr><td>plus->spidx_head_size</td><td>L</td><td>1</td><td>header size</td></tr>
+
+<tr><td>plus->spidx_with_z</td><td>C</td><td>1</td><td>2D/3D vector data</td></tr>
+
+<tr><td>ndims</td><td>C</td><td>1</td><td>Number of dimensions</td></tr>
+
+<tr><td>nsides</td><td>C</td><td>1</td><td>Number of sides</td></tr>
+
+<tr><td>nodesize</td><td>I</td><td>1</td><td>%Node size</td></tr>
+
+<tr><td>nodecard</td><td>I</td><td>1</td><td>%Node card (?)</td></tr>
+
+<tr><td>leafcard</td><td>I</td><td>1</td><td>Leaf card (?)</td></tr>
+
+<tr><td>min_node_fill</td><td>I</td><td>1</td><td>Minimum node fill (?)</td></tr>
+
+<tr><td>min_leaf_fill</td><td>I</td><td>1</td><td>Minimum leaf fill (?)</td></tr>
+
+<tr><td>plus->Node_spidx->n_nodes</td><td>I</td><td>1</td><td>Number of nodes</td></tr>
+
+<tr><td>plus->Node_spidx->n_leafs</td><td>I</td><td>1</td><td>Number of leafs</td></tr>
+
+<tr><td>plus->Node_spidx->n_levels</td><td>I</td><td>1</td><td>Number of levels</td></tr>
+
+<tr><td>plus->Node_spidx_offset</td><td>O</td><td>1</td><td>%Node offset</td></tr>
+
+<tr><td>plus->Line_spidx->n_nodes</td><td>I</td><td>1</td><td>Number of nodes</td></tr>
+
+<tr><td>plus->Line_spidx->n_leafs</td><td>I</td><td>1</td><td>Number of leafs</td></tr>
+
+<tr><td>plus->Line_spidx->n_levels</td><td>I</td><td>1</td><td>Number of levels</td></tr>
+
+<tr><td>plus->Line_spidx_offset</td><td>O</td><td>1</td><td>Line offset</td></tr>
+
+<tr><td>plus->Area_spidx->n_nodes</td><td>I</td><td>1</td><td>Number of nodes</td></tr>
+
+<tr><td>plus->Area_spidx->n_leafs</td><td>I</td><td>1</td><td>Number of leafs</td></tr>
+
+<tr><td>plus->Area_spidx->n_levels</td><td>I</td><td>1</td><td>Number of levels</td></tr>
+
+<tr><td>plus->Area_spidx_offset</td><td>O</td><td>1</td><td>Area offset</td></tr>
+
+<tr><td>plus->Isle_spidx->n_nodes</td><td>I</td><td>1</td><td>Number of nodes</td></tr>
+
+<tr><td>plus->Isle_spidx->n_leafs</td><td>I</td><td>1</td><td>Number of leafs</td></tr>
+
+<tr><td>plus->Isle_spidx->n_levels</td><td>I</td><td>1</td><td>Number of levels</td></tr>
+
+<tr><td>plus->Isle_spidx_offset</td><td>O</td><td>1</td><td>Isle offset</td></tr>
+
+<tr><td>plus->Face_spidx_offset</td><td>O</td><td>1</td><td>Face offset</td></tr>
+
+<tr><td>plus->Volume_spidx_offset</td><td>O</td><td>1</td><td>Volume offset</td></tr>
+
+<tr><td>plus->Hole_spidx_offset</td><td>O</td><td>1</td><td>Hole offset</td></tr>
+
+<tr><td>plus->coor_size</td><td>O</td><td>1</td><td>Coor file size</td></tr>
+</table>
+
+\section vlibCidx Vector library category index management
+
+The category index (stored in the cidx file) improves the performance
+of all selections by cats/attributes (SQL, e.g. <tt>d.vect
+cats=27591</tt>, <tt>v.extract list=20000-21000</tt>). This avoids
+that all selections have to be made by looping through all vector
+lines.  Category index is also essential for simple feature
+representation of GRASS vectors.
+
+Category index is created for each field. In memory, it is stored in
+\ref Cat_index data structure.
+
+Category index is built with topology, but it is <b>not updated</b> if
+vector is edited on level 2.  Category index is stored in 'cidx' file,
+'cat' array is written/read by one call of dig__fwrite_port_I() or
+dig__fread_port_I().
+
+Stored values can be retrieved either by index in 'cat' array (if all
+features of given field are required) or by category value (one or few
+features), always by <tt>Vect_cidx_*()</tt> functions.
+
+To create category index, it will be necessary to rebuild topology for
+all existing vectors.  This is an opportunity to make (hopefully) last
+changes in 'topo', 'cidx' formats.
+
+\subsection vlibCidxFileFormat Cidx file format specification
+
+Category index file ('cidx') is read by Vect_cidx_open().
+
+\subsubsection vlibCidxFileHead Header
+
+Note: <tt>plus</tt> is instance of \ref Plus_head structure.
+
+<table border="1" style="border-collapse: collapse" cellpadding="5">
+<tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
+
+<tr><td>plus->cpidx_Version_Major </td><td>C</td><td>1</td><td>file version (major)</td></tr>
+<tr><td>plus->cpidx_Version_Minor </td><td>C</td><td>1</td><td>file version (minor)</td></tr>
+<tr><td>plus->cpidx_Back_Major</td><td>C</td><td>1</td><td>supported from GRASS version (major)</td></tr>
+<tr><td>plus->cpidx_Back_Minor</td><td>C</td><td>1</td><td>supported from GRASS version (minor)</td></tr>
+
+<tr><td>plus->cidx_port->byte_order</td><td>C</td><td>1</td><td>little or big endian
+                  flag; files are written in machine native order but
+                  files in both little and big endian order may be
+                  readl; zero for little endian</td></tr>
+
+<tr><td>plus->cidx_head_size</td><td>L</td><td>1</td><td>cidx head size</td></tr>
+
+<tr><td>plus->n_cidx</td><td>I</td><td>1</td><td>number of fields</td></tr>
+
+<tr><td>field</td><td>I</td><td>n_cidx</td><td>field number</td></tr>
+
+<tr><td>n_cats</td><td>I</td><td>n_cidx</td><td>number of categories</td></tr>
+
+<tr><td>n_ucats</td><td>I</td><td>n_cidx</td><td>number of unique categories</td></tr>
+
+<tr><td>n_types</td><td>I</td><td>n_cidx</td><td>number of feature types</td></tr>
+
+<tr><td>rtype</td><td>I</td><td>n_cidx * n_types</td><td>Feature type</td></tr>
+
+<tr><td>type[t]</td><td>I</td><td>n_cidx * n_types</td><td>Number of items</td></tr>
+
+</table>
+
+
+*/

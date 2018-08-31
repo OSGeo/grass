@@ -1,0 +1,34 @@
+TODO
+
+-------
+Probably the sun position calculation shouldbe replaced
+with 
+
+ G_calc_solar_position()
+
+currently used in r.sunmask. G_calc_solar_position() is based on
+solpos.c from NREL and very precise.
+
+MN 4/2001
+
+#### 
+Update
+  http://grasswiki.osgeo.org/wiki/R.sun
+
+####
+Fix http://trac.osgeo.org/grass/ticket/498
+
+pseudo-data test-case
+http://trac.osgeo.org/grass/ticket/498#comment:22
+#spearfish (further north than NC so more defined shadows)
+g.region -d
+r.mapcalc "undulates = (2 + sin( row() * 2 ) + cos( col() * 2 )) * 500"
+r.colors undulates color=bcyr
+nviz undulates
+
+DAY=355
+time r.sun elevin=undulates day=$DAY step=0.05 \
+  beam_rad=rad_test.und.355.beam \
+  diff_rad=rad_test.und.355.diff \
+  refl_rad=rad_test.und.355.refl
+

@@ -1,0 +1,98 @@
+<h2>DESCRIPTION</h2>
+
+<em>t.list</em> lists any dataset that is registered in the temporal
+database. Datasets are raster, 3D raster and vector maps as well as
+their corresponding space time datasets (STRDS, STR3DS and STVDS). The
+type of the dataset can be specified using the <em>type</em> option,
+default is STRDS. By default all datasets with relative and absolute
+time are listed. However, the user has the ability to specify a single
+temporal type with the <em>temporaltype</em> option. The user can
+define the columns that should be printed for each dataset and the
+order of the datasets. In addition a SQL WHERE statement can be
+specified to select a subset of the requested datasets.
+
+<h2>NOTES</h2>
+
+The SQL <em>where</em> and <em>sort</em> expression will be applied for
+each temporal database that was found in accessible mapsets. Hence
+sorting works only on mapset basis.
+<p>
+Temporal databases stored in other mapsets can be used as long as they
+are in the user's current mapset search path (managed with
+<a href="g.mapsets.html">g.mapsets</a>).
+
+<h2>EXAMPLES</h2>
+
+Obtain the list of space time raster dataset(s):
+
+<div class="code"><pre>
+t.list strds
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset &#60;climate_2000_2012&#62;:
+tempmean_monthly@climate_2000_2012
+</pre></div>
+
+Obtain the list of space time raster datasets in a specific mapset (Note 
+that the target mapset must be in the user's search path):
+
+<div class="code"><pre>
+# strds in PERMANENT
+t.list strds where="mapset = 'PERMANENT'"
+----------------------------------------------
+
+# strds in climate_2000_2012
+t.list strds where="mapset = 'climate_2000_2012'"
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset &#60;climate_2000_2012&#62;:
+precip_abs@climate_2000_2012
+precipitation@climate_2000_2012
+tempmean@climate_2000_2012
+</pre></div>
+
+The <em>where</em> option can also be used to list the stds with a 
+certain pattern in their name, i.e. as the pattern option in <a 
+href="g.list.html">g.list</a>.
+
+<div class="code"><pre>
+# strds whose name start with "precip"
+t.list type=strds where="name LIKE 'precip%'"
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset &#60;climate_1970_2012&#62;:
+precip_abs@climate_1970_2012
+precipitation@climate_1970_2012
+</pre></div>
+
+The user can also obtain the list of time stamped raster maps. These maps 
+might be registered in strds or not. The output of the following command 
+can vary according to the accessible mapsets specified through 
+<a href="g.mapsets.html">g.mapsets</a>.
+
+<div class="code"><pre>
+t.list raster
+Time stamped raster maps with absolute time available in mapset &#60;climate_2000_2012&#62;:
+2009_01_tempmean@climate_2000_2012
+2009_02_tempmean@climate_2000_2012
+2009_03_tempmean@climate_2000_2012
+...
+2012_10_tempmean@climate_2000_2012
+2012_11_tempmean@climate_2000_2012
+2012_12_tempmean@climate_2000_2012
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="g.list.html">g.list</a>,
+<a href="t.create.html">t.create</a>,
+<a href="t.info.html">t.info</a>,
+<a href="t.rast.list.html">t.rast.list</a>,
+<a href="t.rast3d.list.html">t.rast3d.list</a>,
+<a href="t.vect.list.html">t.vect.list</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+
+<p><i>Last changed: $Date$</i>
+

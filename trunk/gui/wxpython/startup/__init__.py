@@ -1,0 +1,4 @@
+all = [
+    'locdownload',
+    'utils',
+]

@@ -1,0 +1,1626 @@
+/*! \page gislib GRASS GIS General Library (aka GIS Library)
+<!-- doxygenized from "GRASS 5 Programmer's Manual" 
+     by M. Neteler 2/2004, 2005, 2006
+  -->
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+\par Subpages
+
+- \subpage gislib_cmdline_parsing
+
+This chapter is divided as follows:
+
+- \subpage gislibintro
+ - \subpage init
+ - \subpage diag
+ - \subpage envir
+
+- \subpage dbaseaccess
+ - \subpage Fully_Qualified_File_Names
+ - \subpage finding
+ - \subpage Legal_File_Names
+ - \subpage Opening_an_Existing_Database_File_for_Reading
+ - \subpage Opening_an_Existing_Database_File_for_Update
+ - \subpage Creating_and_Opening_a_New_Database_File
+ - \subpage Database_File_Management
+
+- \subpage Region
+ - \subpage Database_Region
+ - \subpage Active_Module_Region
+
+- \subpage Projection_Information
+ - \subpage Latitude_Longitude_Databases
+ - \subpage Coordinates
+ - \subpage Global_Wraparound
+ - \subpage Miscellaneous
+
+- \subpage Calculations
+ - \subpage Raster_Area_Calculations
+ - \subpage Polygonal_Area_Calculations
+ - \subpage Distance_Calculations
+
+- \subpage General_Plotting_Routines
+
+- \subpage Temporary_Files
+
+- \subpage String_Manipulation_Functions
+
+- \subpage Enhanced_UNIX_Routines
+ - \subpage Running_in_the_Background
+ - \subpage Partially_Interruptible_System_Call
+ - \subpage ENDIAN_test
+ - \subpage Miscellaneous
+
+- \subpage GIS_Library_Data_Structures
+ - \subpage struct_Cell_head
+ - \subpage struct_Categories
+ - \subpage struct_Colors
+ - \subpage struct_History
+ - \subpage struct_Range
+
+- \subpage Loading_the_GIS_Library
+
+- \subpage TimeStamp_functions
+
+- \subpage Memory_Allocation
+
+\section gislibintro Introduction
+
+The <em>GIS Library</em> is the primary programming library provided
+with the GRASS system. <b>Programs must use this library to access the
+GIS database.</b> It contains the routines which locate, create, open,
+rename, and remove GRASS database files. It contains the routines
+which read and write raster files. It contains routines which
+interface the user to the database, including prompting the user,
+listing available files, validating user access, etc. It also has
+some general purpose routines (string manipulation, user information,
+etc.) which are not tied directly to database processing.
+
+
+It is assumed that the reader has read \ref location for a general
+description of GRASS databases, \ref Raster_File_Processing for
+details about raster map layers in GRASS, and \ref Region_and_Mask
+(<b>???</b>) which discusses regions and masks. The routines in the
+<em>GIS Library</em> are presented in functional groupings, rather
+than in alphabetical order. The order of presentation will, it is
+hoped, provide a better understanding of how the library is to be
+used, as well as show the interrelationships among the various
+routines. Note that a good way to understand how to use these routines
+is to look at the source code for GRASS modules which use them. Most
+routines in this library require that the header file <b>grass/gis.h</b> be
+included in any code using these routines. Therefore, programmers
+should always include this file when writing code using routines from
+this library:
+
+\code
+#include <grass/gis.h>
+\endcode
+
+<b>Note:</b> All routines and global variables in this library,
+documented or undocumented, start with the prefix <b>G_</b>. To avoid
+name conflicts, programmers should not create variables or routines in
+their own modules which use this prefix.
+
+\subsection init Library Initialization
+
+It is <B>mandatory</B> that the system be initialized before any other 
+library routines are called.
+
+G_gisinit() initialize GIS library.
+
+This routine reads the user's GRASS environment file into memory and
+makes sure that the user has selected a valid database and mapset. It
+also initializes hidden variables used by other routines. If the
+user's database information is invalid, an error message is printed
+and the module exits.  The <b>program_name</b> is stored for later
+recall by G_program_name(). It is recommended that argv[0] be
+used for the program_name:
+
+\code
+int main (int argc, char **argv)
+{
+  G_gisinit(argv[0]);
+}
+\endcode
+
+\subsection diag Diagnostic Messages
+
+The following routines are used by other routines in the library to
+report warning and error messages. They may also be used directly by
+GRASS programs.
+
+ - G_fatal_error() print error message and exit
+
+ - G_debug() print debug message
+
+ - G_warning() print warning message and continue
+
+These routines report errors to the user. The normal mode is to write
+the <em>message</em> to the screen (on the standard error
+output). G_warning() will return and G_fatal_error() will exit.
+
+If the standard error output is not a tty device, then the message is
+mailed to the user instead.
+
+If the file GIS_ERROR_LOG exists (with write permission), in either
+the user's home directory or in the <tt>$GISBASE</tt> directory, the
+messages will also be logged to this file.
+
+While most applications will find the normal error reporting quite
+adequate, there will be times when different handling is needed. For
+example, graphics modules may want the messages displayed graphically
+instead of on the standard error output. If the programmer wants to
+handle the error messages differently, the following routines can be
+used to modify the error handling:
+
+ - G_set_error_routine() change error handling
+
+This routine provides a different error handler for G_fatal_error()
+and G_warning(). The <em>handler</em> routine must be defined as
+follows:
+
+\code
+int handler(char *message, int fatal)
+\endcode
+
+where <i>message</i> is the message to be handled and <i>fatal</i>
+indicates the type of error:
+
+ - 1 (fatal error)
+ - or 0 (warning).
+
+<b>Note:</b> The handler only provides a way to send the message
+somewhere other than to the error output. If the error is fatal, the
+module will exit after the handler returns.
+
+ - G_unset_error_routine() reset normal error handling
+
+This routine resets the error handling for G_fatal_error() and
+G_warning() back to the default action.
+
+ - G_sleep_on_error() sleep on error
+
+ - G_suppress_warnings() suppress warnings
+
+\subsection envir Environment and Database Information
+
+The following routines return information about the current database
+selected by the user. Some of this information is retrieved from the
+user's GRASS environment file. Some of it comes from files in the
+database itself.  See \ref Environment_Variables for a discussion of
+the GRASS environment.
+
+The following four routines can be used freely by the programmer:
+
+ - G_location() current location name
+
+Returns the name of the current database location. This routine should
+be used by modules that need to display the current location to the
+user. See \ref Locations for an explanation of locations.
+
+ - G_mapset() current mapset name
+
+Returns the name of the current mapset in the current location. This
+routine is often used when accessing files in the current mapset. See
+\ref Mapsets for an explanation of mapsets.
+
+ - G_myname() location title
+
+Returns a one line title for the database location. This title is read
+from the file MYNAME in the PERMANENT mapset. See also \ref
+Permanent_Mapset for a discussion of the PERMANENT mapset.
+
+ - G_gisbase() top level module directory 
+
+Returns the full path name of the top level directory for GRASS
+programs.  This directory will have subdirectories which will contain
+modules and files required for the running of the system. Some of
+these directories are:
+
+\verbatim
+bin  commands run by the user
+etc  modules and data files used by GRASS commands
+html help files
+\endverbatim
+
+The use of G_gisbase() to find these subdirectories enables GRASS modules 
+to be written independently of where the GRASS system is actually installed 
+on the machine. For example, to run the module <i>sroff</i> in the GRASS 
+<tt>etc</tt> directory: 
+
+\code
+char command[200];
+sprintf(command, "%s/etc/sroff", G_gisbase());
+G_spawn(command, "sroff", NULL);
+\endcode
+
+The following two routines return full path UNIX directory names. They
+should be used only in special cases. They are used by other routines
+in the library to build full UNIX file names for database
+files. <B>The programmer should not use the next two routines to
+bypass the normal database access routines.</B>
+
+ - G_gisdbase() top level database directory
+
+Returns the full UNIX path name of the directory which holds the
+database locations. See \ref GISDBASE for a full explanation of this
+directory.
+
+ - G_location_path() current location directory
+
+Returns the full UNIX path name of the current database location. For
+example, if the user is working in location <I>spearfish</I> in the
+<tt>/home/user/grassdata</tt> database directory, this routine will
+return a string which looks like
+<tt>/home/user/grassdata/spearfish</tt>.
+
+These next routines provide the low-level management of the
+information in the user's GRASS environment file. <B>They should not
+be used in place of the higher level interface routines described
+above.</B>
+
+ - G_getenv()
+
+ - G_getenv_nofatal()
+
+These routines look up the variable <em>name</em> in the GRASS
+environment and return its value (which is a character string). If
+<em>name</em> is not set, G_getenv() issues an error message and calls
+exit(). G_setenv_nogisrc() just returns the NULL pointer.
+
+ - G_setenv()
+
+ - G_setenv_nogisrc()
+  
+These routines set the the GRASS environment variable <em>name</em> to
+<em>value</em>. If <em>value</em> is NULL, the <em>name</em> is unset.
+
+Both routines set the value in module memory, but only G_setenv()
+writes the new value to the user's GRASS environment file.
+
+
+\section dbaseaccess Fundamental Database Access Routines
+
+
+In general, a user can only access data in the current location. For most
+modules, it's meaningless to access data from a different location as
+the projection will be wrong. A handful of modules (e.g. r.proj,
+v.proj) support accessing data from a different location, and in such
+cases there's no need for the user to own the source mapset, or even
+to own any mapset in the source location.
+
+Since r54264, it is possible to bypass the ownership check by setting
+GRASS_SKIP_MAPSET_OWNER_CHECK to any non-empty string. This was added
+mostly for accessing VFAT/NTFS-format external drives or network
+shares where the ownership checks don't behave correctly. It should
+not be used on multi-user systems, nor set by programs.
+
+But other than that, a user cannot make a mapset the current mapset (i.e.
+the one a user can modify) unless the user owns it. The user can access data from
+any mapset for which they have the relevant filesystem permissions
+(i.e. read permission for files, execute permission for the ancestor
+directories, read permission for any directories which need to be
+enumerated).
+
+Originally this restriction was related to locking (the lock file was
+created in the user's home directory, so being able to set the current
+mapset to a directory which the user didn't own meant that they could have
+multiple sessions modifying a mapset concurrently).
+
+That's no longer an issue (the lock file is created in the mapset
+directory). However, the other issue is that allowing someone other
+than the owner to modify the directory can result in problems for its
+owner.
+
+Creating a new map typically creates a subdirectory of cell_misc for
+that map, and some files within it (e.g. a "null" file). Any new files
+and subdirectories will be owned by their creator (not the mapset's
+owner) and will have permissions determined by the current umask. The
+result is that there's no guarantee that tha mapset's owner will be
+able to delete (or even access) such files or directories.
+
+In short, it's a safety mechanism against people trying to share
+directories by making them group-writeable without fully understanding
+the implications.
+
+The routines described in this section provide the low-level interface
+to the GRASS database. They search the database for files, prompt the
+user for file names, open files for reading or writing, etc. The
+programmer should never bypass this level of database interface. These
+routines must be used to access the GRASS database unless there <b>are
+other higher level library routines which perform the same
+function</b>. For example, routines to process raster files (see \ref
+Raster_File_Processing), vector files (see \ref
+Vector_File_Processing), etc., should be used instead.
+
+In the descriptions below, the term database <i>element</i> is used.
+Elements are subdirectories within a mapset and are associated with a
+specific GRASS data type. For example, raster files live in the "cell"
+and "fcell" element. See \ref Elements for more details.
+
+
+\subsection Fully_Qualified_File_Names Fully Qualified File Names
+
+All GRASS routines which access database files must be given both the
+file name and the mapset where the file resides. Often the name and
+the mapset are 2 distinct character strings. However, there is a need
+for a single character string which contains both the name and the
+mapset (e.g., for interactive interfacing to command-line
+programs). This form of the name is known as the <em>fully qualified
+file name</em> and is built by the following routine:
+
+ - G_fully_qualified_name()
+  
+Returns a fully qualified name for the file <i>name</i> in
+<i>mapset</i> Currently this string is in the form <i>name@mapset</i>,
+but the programmer should pretend not to know this and always call
+this routine to get the fully qualified name.
+
+The following example shows how an interactive version of <tt>d.rast</tt>
+interfaces with the command-line version of <tt>d.rast</tt>:
+
+\code
+#include <stdlib.h>
+#include <grass/gis.h>
+
+int main(int argc, char *argv[])
+{
+    char name[GNAME_MAX], *mapset, *fqn;
+    char command[1024];
+
+    G_gisinit(argv[0]);
+    mapset = G_ask_cell_old("", name);
+
+    if (mapset == NULL)
+        exit(EXIT_SUCCESS);
+
+    fqn = G_fully_qualified_name(name, mapset);
+    sprintf(command, "d.rast map='%s'", fqn);
+    G_spawn(command, "d.rast", NULL);
+    exit(EXIT_SUCCESS);
+}
+\endcode
+
+\subsection  finding Finding Files in the Database
+
+Command line driven module requires a database file name as one of the
+command arguments. In this case, the programmer must search the
+database to find the mapset where the file resides.
+
+The following routines search the database for files:
+
+ - G_find_file()
+  
+Look for the file <i>name</i> under the specified <i>element</i> in
+the database. The <i>mapset</i> parameter can either be the empty
+string "", which means search all the mapsets in the user's current
+mapset search path, or it can be a specific mapset, which means. Look
+for the file only in this one mapset (for example, in the current
+mapset).
+
+If found, the mapset where the file lives is returned. If not found,
+the NULL pointer is returned.
+
+If the user specifies a fully qualified file name, (i.e, a name that
+also contains the mapset; see \ref Fully_Qualified_File_Names) then
+G_find_file() modifies <em>name</em> by eliminating the mapset from
+the <em>name</em>.
+
+For example, to find a "paint/labels" file anywhere in the database:
+
+\code
+char name[GNAME_MAX];
+char *mapset;
+
+if ((mapset = G_find_file("paint/labels", name, "")) == NULL)
+
+/* not found */
+\endcode
+
+To check that the file exists in the current mapset:
+
+\code
+char name[GNAME_MAX];
+
+if (G_find_file("paint/labels", name, G_mapset()) == NULL)
+
+/* not found */
+\endcode
+
+\subsection Legal_File_Names Legal File Names
+
+Not all names that a user may enter will be legal files for the GRASS
+databases. The routines which create new files require that the new
+file have a legal name. If the name is obtained from the command line,
+the programmer must check that the name is legal. The following
+routine checks for legal file names:
+
+ - G_legal_filename()
+  
+\subsection Opening_an_Existing_Database_File_for_Reading Opening an Existing Database File for Reading
+
+The following routines open the file <i>name</i> in <i>mapset</i> from
+the specified database <i>element</i> for <b>reading</b> (but not for
+writing). The file <i>name</i> and <i>mapset</i> can be obtained using
+G_find_file().
+
+The database file <i>name</i> under the <i>element</i> in the
+specified <i>mapset</i> is opened for reading (but not for writing).
+
+ - G_open_old()
+
+The UNIX open() routine is used to open the file. If the file does not
+exist, -1 is returned. Otherwise the file descriptor from the open()
+is returned.
+
+ - G_fopen_old()
+
+The UNIX fopen() routine, with "r" read mode, is used to open the
+file. If the file does not exist, the NULL pointer is
+returned. Otherwise the file descriptor from the fopen() is returned.
+
+\subsection Opening_an_Existing_Database_File_for_Update Opening an Existing Database File for Update
+
+The following routines open the file <i>name</i> in the current mapset
+from the specified database <i>element</i> for <b>writing</b>. The
+file must exist. Its <i>name</i> can be obtained using G_find_file().
+
+The database file <i>name</i> under the <i>element</i> in the current
+mapset is opened for reading and writing.
+
+ - G_open_update()
+
+The UNIX open() routine is used to open the file. If the file does not
+exist, -1 is returned. Otherwise the file is positioned at the end of
+the file and the file descriptor from the open() is returned.
+
+- G_fopen_append()
+
+The UNIX fopen() routine, with "a" append mode, is used to open the
+file. If the file does not exist, the NULL pointer is
+returned. Otherwise the file is positioned at the end of the file and
+the file descriptor from the fopen() is returned.
+
+
+\subsection Creating_and_Opening_a_New_Database_File Creating and Opening a New Database File
+
+The following routines create the new file <i>name</i> in the current
+mapset (GRASS does not allow files to be created outside the current
+mapset; see \ref Database_Access_Rules) under the specified database
+<i>element</i> and open it for writing. The database <i>element</i> is
+created, if it does not already exist.
+
+The file <i>name</i> is obtained noninteractively (e.g., from the
+command line), G_legal_filename() should be called first to make sure
+that <i>name</i> is a valid GRASS file name. <b>Warning:</b> It is not
+an error for <i>name</i> to already exist. However, the file will be
+removed and recreated empty. G_find_file() could be used to see if
+<i>name</i> exists.
+
+The database file <i>name</i> under the <i>element</i> in the current
+mapset is created and opened for writing (but not reading).
+
+ - G_open_new()
+  
+The UNIX open() routine is used to open the file. If the file does not
+exist, -1 is returned. Otherwise the file is positioned at the end of
+the file and the file descriptor from the open() is returned.
+
+ - G_fopen_new()
+  
+The UNIX fopen() routine, with "w" write mode, is used to open the
+file.  If the file does not exist, the NULL pointer is
+returned. Otherwise the file is positioned at the end of the file and
+the file descriptor from the fopen() is returned.
+
+
+\subsection Database_File_Management Database File Management
+
+The following routines allow the renaming and removal of database
+files in the current mapset (These functions only apply to the current
+mapset since GRASS does permit users to modify things in mapsets other
+than the current mapset; see \ref Database_Access_Rules).
+
+ - G_rename() rename a database file
+  
+ - G_remove() remove a database file
+
+<b>Note:</b> These functions only apply to the specific <i>element</i>
+and not to other "related" elements. For example, if <i>element</i> is
+"cell", then the specified raster file will be removed (or renamed),
+but the other support files, such as "cellhd" or "cats", will not. To
+remove these other files as well, specific calls must be made for each
+related <i>element</i>.
+
+\section Region Region
+
+The region concept is explained in \ref Region. It can be thought of as a
+two-dimensional matrix with known boundaries and rectangular cells.
+
+There are logically two different regions. The first is the database
+region that the user has set in the current mapset. The other is the
+region that is active in the module. This active module region is what
+controls reading and writing of raster file data. The vector map
+export does not take care for the active region settings.
+
+The routines described below use a GRASS data structure
+<tt>Cell_head</tt> to hold region information. This structure is
+defined in the "gis.h" header file. It is discussed in detail under
+\ref GIS_Library_Data_Structures.
+
+
+\subsection Database_Region Database Region
+
+Reading and writing the user's database region are done by the
+following routines:
+
+Note: Previous versions of GRASS called this the "window". Due to
+overuse of this term (database window, graphics window, etc.), the
+term was changed to "region". However, to maintain compatibility with
+existing programs, library routine names were not changed - hence the
+term "window" is used in the routine name (where "region" should
+probably be used instead).
+
+ - G_get_window()
+
+Reads the database region as stored in the WIND file in the user's
+current mapset into region.
+
+An error message is printed and exit() is called if there is a problem
+reading the region.
+
+<b>Note:</b> GRASS applications that read or write raster files should
+not use this routine since its use implies that the active module
+region will not be used. Programs that read or write raster file data
+(or vector data) can query the active module region using
+G_window_rows() and G_window_cols().
+
+ - G_put_window()
+
+Writes the database region file (WIND) in the user's current mapset
+from region.
+
+<b>Warning:</b> Since this routine actually changes the database
+region, it should only be called by modules which the user knows will
+change the region. It is probably fair to say that only the
+<tt>g.region</tt> should call this routine.
+
+There is another database region. This region is the default region
+for the location. The default region provides the user with a
+"starting" region, i.e., a region to begin with and return to as a
+reference point. The GRASS modules <tt>g.region</tt> allow the user to
+set their database region from the default region (see \ref
+Permanent_Mapset for a discussion of the default region).  The
+following routine reads this region:
+
+ - G_get_default_window()
+
+\subsection Active_Module_Region Active Module Region
+
+The <em>active module region</em> is the one that is used when reading
+and writing raster file data. This region determines the resampling
+when reading raster data. It also determines the extent and resolution
+of new raster files.
+
+Initially the active module region and the user's database region are
+the same, but the programmer can make them different. The following
+routines manage the active module region.
+
+ - G_window_rows() number of rows in active region
+
+ - G_window_cols() number of columns in active region 
+
+These routines return the number of rows and columns (respectively) in
+the active module region. Before raster files can be read or written,
+it is necessary to known how many rows and columns are in the active
+region. For example:
+
+\code
+int nrows, cols;
+int row, col;
+
+nrows = G_window_rows();
+ncols = G_window_cols();
+for (row = 0; row < nrows; row++) {
+    /* read row ... */
+    for (col = 0; col < ncols; col++) {
+        /* process col ... */
+    }
+}
+\endcode
+
+ - G_set_window() set the active region 
+
+This routine sets the active region from given region. Setting the
+active region does not change the WIND file in the database. It simply
+changes the region for the duration of the module.
+
+However, the new region setting is not retained across the UNIX exec()
+call. This implies that G_set_window() cannot be used to set the
+region for a module to be executed using the system() or popen()
+routines.
+
+<b>Note:</b> This routine overrides the region as set by the user. Its
+use should be very limited since it changes what the user normally
+expects to happen. If this routine is not called, then the active
+region will be the same as what is in the user's WIND file.
+
+<b>Warning:</b> Calling this routine with already opened raster files
+has some side effects. If there are raster files which are open for
+reading, they will be read into the newly set region, not the region
+that was active when they were opened. However, CELL buffers allocated
+for reading the raster files are not automatically reallocated. The
+module must reallocate them explicitly. Also, this routine does not
+change the region for raster files which are open for writing. The
+region that was active when the open occurred still applies to these
+files.
+
+ - G_get_set_window() get the active region
+
+Gets the values of the currently active region into region. If
+G_set_window() has been called, then the values set by that call are
+retrieved. Otherwise the user's database region is retrieved.
+
+<b>Note:</b> For modules that read or write raster data, and really
+need the full region information, this routine is preferred over
+G_get_window(). However, since G_window_rows() and G_window_cols()
+return the number of rows and columns in the active region, the
+programmer should consider whether or not the full region information
+is really needed before using this routine.
+
+ - G_align_window() align two regions
+
+Modifies the input region to align to the reference region. The
+resolutions in region are set to match those in refefence region and
+the region edges (north, south, east, west) are modified to align with
+the grid of the reference region.
+
+The <i>region</i> may be enlarged if necessary to achieve the
+alignment. The north is rounded northward, the south southward, the
+east eastward and the west westward.
+
+ - G_col_to_easting()
+
+Converts a column relative to a region to an easting.
+
+<b>Note:</b> col is a double: col+0.5 will return the easting for the
+center of the column; col+0.0 will return the easting for the western
+edge of the column; and col+1.0 will return the easting for the
+eastern edge of the column.
+
+ - G_row_to_northing()
+
+Converts a row relative to a region to a northing.
+
+<b>Note:</b> row is a double: row+0.5 will return the northing for the
+center of the row; row+0.0 will return the northing for the northern
+edge of the row; and row+1.0 will return the northing for the southern
+edge of the row.
+
+ - G_easting_to_col()
+
+Converts an easting relative to a region to a column.
+
+<b>Note:</b> The result is a double. Casting it to an integer will
+give the column number.
+
+ - G_northing_to_row()
+
+Converts a northing relative to a region to a row.
+
+<b>Note:</b> the result is a double. Casting it to an integer will
+give the row number.
+
+\section Projection_Information Projection Information
+
+The following routines return information about the cartographic
+projection and zone. See \ref Region for more information about these
+values.
+
+ - G_projection()
+
+This routine returns a code indicating the projection for the active
+region. The current values are:
+
+ - PROJECTION_XY    - unreferenced x,y (imagery data)
+ - PROJECTION_UTM   - UTM
+ - PROJECTION_SP    - State Plane
+ - PROJECTION_LL    - Latitude-Longitude
+ - PROJECTION_OTHER - Other (more than 121 projections are supported)
+
+ - G_database_projection_name()
+
+Returns a pointer to a string which is a printable name for projection
+code (as returned by G_projection()).
+
+ - G_database_unit_name()
+
+Returns a string describing the database grid units.
+
+ - G_database_units_to_meters_factor()
+
+Returns a factor which converts the grid unit to meters (by
+multiplication).  If the database is not metric (eg. imagery) then 0.0
+is returned.
+
+ - G_zone()
+
+This routine returns the zone for the active region. The meaning for
+the zone depends on the projection. For example zone 18 for projection
+type 1 would be UTM zone 18.
+
+
+\subsection Latitude_Longitude_Databases Latitude-Longitude GIS Databases
+
+GRASS supports databases in a longitude-latitude grid using a
+projection where the x coordinate is the longitude and the y
+coordinate is the latitude. This projection is called the Equidistant
+Cylindrical Projection (also known as Plate Carree). ECP has the
+property that <em>where am I</em> and <em>row-column</em> calculations
+are identical to those in planimetric grids (like UTM, Universal
+Transverse Mercator Projection). This implies that normal GRASS
+registration and overlay functions will work without any special
+considerations or modifications to existing code. However, the
+projection is not planimetric. This means that distance and area
+calculations are no longed Euclidean.
+
+Also, since the world is round, maps may not have edges in the
+east-west direction, especially for global databases. Maps may have
+the same longitude at both the east and west edges of the
+display. This feature, called global wraparound, must be accounted for
+by GRASS modules (particularly vector based functions, like plotting).
+What follows is a description of the GIS Library routines that are
+available to support latitude-longitude databases.
+
+\subsection Coordinates Coordinates
+
+Latitudes and longitudes are specified in degrees. Northern latitudes
+range from 0 to 90 degrees, and southern latitudes from 0 to
+-90. Longitudes have no limits since longitudes ±360 degrees are
+equivalent.
+
+Coordinates are represented in ASCII using the format
+<tt>dd:mm:ssN</tt> or <tt>dd:mm:ssS</tt> for latitudes,
+<tt>ddd:mm:ssE</tt> or <tt>ddd.mm.ssW</tt> for longitudes, and
+<tt>dd.mm.ss</tt> for grid resolution. For example, 80:30:24N
+represents a northern latitude of 80 degrees, 30 minutes, and 24
+seconds. 120:15W represents a longitude 120 degrees and 15 minutes
+west of the prime meridian. 30:15 represents a resolution of 30
+degrees and 15 minutes. These next routines convert between ASCII
+representations and the machine representation for a coordinate. They
+work both with latitude-longitude projections and planimetric
+projections.
+
+<b>Note:</b> In each subroutine, the programmer must specify the
+projection number. If the projection number is PROJECTION_LL (defined
+in "gis.h"), then latitude-longitude ASCII format is invoked.
+Otherwise, a standard floating-point to ASCII conversion is made.
+
+ - G_format_easting() easting to ASCII
+
+ - G_format_northing() northing to ASCII
+
+Converts the double representation of the given coordinate to its
+ASCII representation.
+
+ - G_format_resolution()
+
+Converts the double representation of the resolution to its
+ASCII representation.
+
+ - G_scan_easting() ASCII easting to double
+
+ - G_scan_northing() ASCII northing to double
+
+Converts the ASCII coordinate string in to its double representation.
+
+ - G_scan_resolution() ASCII resolution to double
+
+Converts the ASCII "resolution" string to its double representation
+(into resolution).
+
+The following are examples of how these routines are used.
+
+\code
+double north;
+char buf[50];
+
+G_scan_northing(buf, north, G_projection());   /* ASCII to double */
+
+G_format_northing(north, buf, G_projection()); /* double to ASCII */
+
+G_format_northing(north, buf, -1);             /* double to ASCII */
+
+/* This last example forces floating-point ASCII format */
+\endcode
+
+\subsection Global_Wraparound Global Wraparound
+
+
+These next routines provide a mechanism for determining the relative
+position of a pair of longitudes. Since longitudes of ±360 are
+equivalent, but GRASS requires the east to be bigger than the west,
+some adjustment of coordinates is necessary.
+
+ - G_adjust_easting()
+ 
+Returns east larger than west. If the region projection is
+PROJECTION_LL, then this routine returns an equivalent <i>east</i>
+that is larger, but no more than 360 degrees larger, than the
+coordinate for the western edge of the region. Otherwise no adjustment
+is made and the original <i>east</i> is returned.
+
+ - G_adjust_east_longitude()
+
+This routine returns an equivalent <i>east</i> that is larger, but no
+more than 360 larger than the <i>west</i> coordinate.
+
+This routine should be used only with latitude-longitude coordinates.
+
+ - G_shortest_way()
+
+Returns shortest way between eastings. 
+
+\subsection Miscellaneous Miscellaneous
+
+
+ - G_ellipsoid_name()
+
+This routine returns a pointer to a string containing the name for the
+ellipsoid in the GRASS ellipsoid table. It can be used as follows:
+
+\code
+int n;
+char *name;
+
+for(n = 0; name = G_ellipsoid_name(n); n++)
+    fprintf(stdout, "%s\n", name);
+\endcode
+
+ - G_get_ellipsoid_by_name()
+
+This routine returns the semi-major axis (in meters) and
+eccentricity squared for the named ellipsoid.
+
+ - G_get_ellipsoid_parameters()
+
+This routine returns the semi-major axis (in meters) and the
+eccentricity squared for the ellipsoid associated with the
+database. If there is no ellipsoid explicitly associated with the
+database, it returns the values for the WGS 84 ellipsoid.
+
+- G_meridional_radius_of_curvature()
+
+Returns the meridional radius of curvature at a given longitude:
+
+\f$
+\rho = \frac{a (1-e^2)}{(1-e^2\sin^2 lon)^{3/2}}
+\f$
+
+ - G_transverse_radius_of_curvature()
+
+Returns the transverse radius of curvature at a given longitude:
+
+\f$
+\nu = \frac{a}{(1-e^2\sin^2 lon)^{1/2}}
+\f$
+
+ - G_radius_of_conformal_tangent_sphere()
+
+Returns the radius of the conformal sphere tangent to ellipsoid at a
+given longitude:
+
+\f$
+r = \frac{a (1-e^2)^{1/2}}{(1-e^2\sin^2 lon)}
+\f$
+
+ - G_pole_in_polygon() 
+
+For latitude-longitude coordinates, this routine determines if the
+polygon contains one of the poles.
+
+
+\section Calculations Calculations
+
+\subsection Raster_Area_Calculations Raster Area Calculations
+
+The following routines perform area calculations for raster maps.
+They are based on the fact that while the latitude-longitude grid is
+not planimetric, the size of the grid cell at a given latitude is
+constant. The first routines work in any projection.
+
+ - G_begin_cell_area_calculations()
+
+This routine must be called once before any call to
+G_area_of_cell_at_row(). It can be used in either planimetric
+projections or the latitude-longitude projection.
+
+ - G_area_of_cell_at_row()
+
+This routine returns the area in square meters of a cell in the
+specified row. This value is constant for planimetric grids and varies
+with the row if the projection is latitude-longitude.
+
+ - G_begin_zone_area_on_ellipsoid()
+
+Initializes raster area calculations for an ellipsoid.
+
+ - G_area_for_zone_on_ellipsoid()
+
+Returns the area between latitudes scaled by the factor passed to
+G_begin_zone_area_on_ellipsoid().
+
+ - G_begin_zone_area_on_sphere()
+
+Initializes raster area calculations for a sphere. 
+
+ - G_area_for_zone_on_sphere()
+
+Returns the area between latitudes.
+
+\subsection Polygonal_Area_Calculations Polygonal Area Calculations
+
+These next routines provide area calculations for polygons. Some of
+the routines are specifically for latitude-longitude, while others
+will function for all projections.
+
+However, there is an issue for latitude-longitude that does not occur
+with planimetric grids. Vector/polygon data is described as a series
+of x,y coordinates. The lines connecting the points are not stored but
+are inferred.  This is a simple, straight-forward process for
+planimetric grids, but it is not simple for latitude-longitude. What
+is the shape of the line that connects two points on the surface of a
+globe?
+
+One choice (among many) is the shortest path from <tt>x1,y1</tt> to
+<tt>x2,y2</tt>, known as the geodesic. Another is a straight line on
+the grid. The area routines described below assume the
+latter. Routines to work with the former have not yet been developed.
+
+ - G_begin_polygon_area_calculations()
+
+This initializes the polygon area calculation routines. It is used
+both for planimetric and latitude-longitude projections.
+
+ - G_area_of_polygon()
+
+
+Returns the area in square meters of the polygon. It is used both for
+planimetric and latitude-longitude projections.
+
+<B>Note.</B> If the database is planimetric with the non-meter grid,
+this routine performs the required unit conversion to produce square
+meters. 
+
+ - G_planimetric_polygon_area()
+
+Return the area in map units of the polygon,
+
+ - G_begin_ellipsoid_polygon_area()
+
+This initializes the polygon area calculations for the ellipsoid.
+
+ - G_ellipsoid_polygon_area()
+
+Returns the area in square meters of the polygon for latitude-longitude
+grids.
+
+<b>Note:</b> This routine assumes grid lines on the connecting the
+vertices (as opposed to geodesics).
+
+
+\subsection  Distance_Calculations Distance Calculations
+
+Two routines perform distance calculations for any projection.
+
+ - G_begin_distance_calculations()
+
+Initializes the distance calculations. It is used both for the
+planimetric and latitude-longitude projections.
+
+ - G_distance()
+
+This routine computes the distance between two points in meters. 
+
+ - G_begin_geodesic_distance()
+
+Initializes the distance calculations for the ellipsoid. It is used
+only for the latitude-longitude projection.
+
+ - G_geodesic_distance() geodesic distance
+
+Calculates the geodesic distance between two points in meters.
+
+The calculation of the geodesic distance is fairly costly. These next
+three routines provide a mechanism for calculating distance with two
+fixed latitudes and varying longitude separation.
+
+ - G_set_geodesic_distance_lat1() set the first latitude.
+
+ - G_set_geodesic_distance_lat2() set the second latitude.
+
+ - G_geodesic_distance_lon_to_lon()
+
+Calculates the geodesic distance between two points set by
+G_set_geodesic_distance_latl() and G_set_geodesic_distance_lat2().
+
+
+\section General_Plotting_Routines General Plotting Routines
+
+
+The following routines form the foundation of a general purpose line
+and polygon plotting capability.
+
+ - G_bresenham_line()
+
+Draws a line from one point to another using Bresenham's
+algorithm. A routine to plot points must be provided, as is defined
+as: <tt>point(x, y)</tt> plot a point at x,y.
+
+This routine does not require a previous call to G_setup_plot() to 
+function correctly, and is independent of all following routines.
+
+ - G_setup_plot()
+
+Initializes the plotting capability. This routine must be called once
+before calling the G_plot_*() routines described below.
+
+ - G_plot_line()
+
+Plots line between latlon coordinates. This routine handles global
+wrap-around for latitude-longitude databases. See G_setup_plot() for
+the required coordinate initialization procedure.
+
+ - G_plot_polygon()
+
+Plots filled polygon with n vertices. See G_setup_plot() for the
+required coordinate initialization procedure.
+
+ - G_plot_area()
+
+Plots multiple polygons. Like G_plot_polygon(), except it takes a set
+of polygons, each with n vertices, where the number of polygons is
+specified with the <i>rings</i> argument. It is especially useful for
+plotting vector areas with interior islands.
+
+ - G_plot_where_en()
+
+The pixel coordinates <i>x,y</i> are converted to map coordinates
+<i>east,north</i>. See G_setup_plot() for the required coordinate
+initialization procedure.
+
+ - G_plot_where_xy()
+
+The map coordinates <i>east,north</i> are converted to pixel
+coordinates <i>x,y</i>. See G_setup_plot() for the required
+coordinate initialization procedure.
+
+ - G_plot_fx()
+
+\section Temporary_Files Temporary Files
+
+
+Often it is necessary for modules to use temporary files to store
+information that is only useful during the module run. After the
+module finishes, the information in the temporary file is no longer
+needed and the file is removed. Commonly it is required that
+temporary file names be unique from invocation to invocation of the
+module. It would not be good for a fixed name like "/tmp/mytempfile"
+to be used. If the module were run by two users at the same time, they
+would use the same temporary file. In addition systematic use of the
+/tmp directory could leave the system vulnerable to symlink attacks.
+The following routine generates temporary file names which are unique
+within the module and across all GRASS programs.
+
+ - G_tempfile()
+
+This routine returns a pointer to a string containing a unique file
+name that can be used as a temporary file within the
+module. Successive calls to G_tempfile() will generate new names.
+
+Only the file name is generated. The file itself is not created. To
+create the file, the module must use standard UNIX functions which
+create and open files, e.g., creat() or fopen().
+
+The programmer should take reasonable care to remove (unlink) the file
+before the module exits. However, GRASS database management will
+eventually remove all temporary files created by G_tempfile() that
+have been left behind by the modules which created them.
+
+<b>Note:</b> The temporary files are created in the GRASS database
+rather than under <tt>/tmp</tt>. This is done for two reasons. The
+first is to increase the likelihood that enough disk is available for
+large temporary files since /tmp may be a very small file system. The
+second is so that abandoned temporary files can be automatically
+removed (but see the warning below).
+
+<b>Warning:</b> The temporary files are named, in part, using the
+process id of the module. GRASS database management will remove these
+files only if the module which created them is no longer
+running. However, this feature has a subtle trap. Programs which
+create child processes (using the UNIX fork(), see also G_fork()
+routine) should let the child call G_tempfile(). If the parent does it
+and then exits, the child may find that GRASS has removed the
+temporary file since the process which created it is no longer
+running.
+
+
+\section String_Manipulation_Functions String Manipulation Functions
+
+
+This section describes some routines which perform string manipulation. 
+Strings have the usual C meaning: a NULL terminated array of characters.
+
+These next 3 routines remove unwanted white space from a single string.
+
+ - G_squeeze()
+
+Leading and trailing white space is removed from the string and
+internal white space which is more than one character is reduced to a
+single space character. White space here means spaces, tabs,
+linefeeds, newlines, and formfeeds.
+
+ - G_strip()
+
+Leading and trailing white space is removed from the string.  White
+space here means only spaces and tabs. There is no return value.
+
+ - G_chop()
+
+Chop leading and trailing white spaces: space, &#92;f, &#92;n, &#92;r,
+  &#92;t, &#92;v.
+
+The next routines replaces character(s) from string.
+
+ - G_strchg()
+
+Replace all occurrences of character in string with new.
+
+This next routine copies a string to allocated memory.
+
+ - G_store()
+
+This routine allocates enough memory to hold the string, and returns a
+pointer to the allocated memory.
+
+The next 2 routines convert between upper and lower case.
+
+ - G_tolcase()
+
+Upper case letters in the string are converted to their lower case
+equivalent.
+
+ - G_toucase()
+
+Lower case letters in the string are converted to their upper case
+equivalent.
+
+ - G_trim_decimal()
+
+This routine remove trailing zeros from decimal number for example:
+23.45000 would come back as 23.45.
+
+ - G_index()
+
+ - G_rindex()
+ 
+Get position of delimiter.
+
+ - G_strcasecmp()
+
+ - G_strncasecmp()
+
+String compare ignoring case (upper or lower).
+
+ - G_strcasestr()
+
+Return a pointer to the first occurrence of subString in mainString,
+or NULL if no occurrences are found.
+
+ - G_strdup()
+
+Returns a pointer to a string that is a duplicate of the string given
+to G_strdup.  The duplicate is created using malloc. If unable to
+allocate the required space, NULL is returned.
+
+\section Enhanced_UNIX_Routines Enhanced UNIX Routines
+
+
+A number of useful UNIX library routines have side effects which are
+sometimes undesirable. The routines here provide the same functions as
+their corresponding UNIX routine, but with different side effects.
+
+\subsection Running_in_the_Background Running in the Background
+
+
+The standard UNIX <em>fork()</em> routine creates a child process which is a
+copy of the parent process. The fork() routine is useful for placing a
+module into the background. For example, a module that gathers input
+from the user interactively, but knows that the processing will take a
+long time, might want to run in the background after gathering all the
+input. It would fork() to create a child process, the parent would
+exit() allowing the child to continue in the background, and the user
+could then do other processing.
+
+However, there is a subtle problem with this logic. The fork() routine does not
+protect child processes from keyboard interrupts even if the parent is no longer
+running. Keyboard interrupts will also kill background processes that do not
+protect themselves.
+
+<i>Note:</i> Programmers who use Bash know that programs run in the
+background (using & on the command line) are not automatically
+protected from keyboard interrupts. To protect a command that is run
+in the background, Bash users must do nohup command &. Programmers
+who use the C Shell (or other variants) do not know, or forget that
+the C-shell automatically protects background processes from keyboard
+interrupts.
+
+Thus a module which puts itself in the background may never finish if
+the user interrupts another module which is running at the keyboard.
+
+\subsection Partially_Interruptible_System_Call Partially Interruptible System Call
+
+The UNIX <em>system()</em> call allows one program, the parent, to
+execute another UNIX command or module as a child process, wait for
+that process to complete, and then continue. The problem addressed
+here concerns interrupts. During the standard system() call, the child
+process inherits its responses to interrupts from the parent. This
+means that if the parent is ignoring interrupts, the child will ignore
+them as well. If the parent is terminated by an interrupt, the child
+will be also.
+
+Note that code which uses system() or popen() tends to be error-prone,
+particularly on Windows. We strongly discourage anyone from using
+either system() or popen() in the GRASS code. If you don't need to
+communicate with the child process via a pipe, you can use G_spawn()
+or G_spawn_ex(). These provide similar functionality to system() but
+without the shell getting in the way (using the shell creates problems
+if filenames or other arguments contain spaces or other characters
+which are significant to the shell). If you need to communicate via a
+pipe, you can either use G_spawn_ex() and manage the pipe yourself, or
+use popen(). See also G_popen_read() and G_popen_write() which do most of
+the work for you. Alternatively, you can use a temporary file rather
+than a pipe for communicating with the child process.
+
+\subsection ENDIAN_test ENDIAN test
+
+
+To test if the user's machine is little or big ENDIAN, the following
+function is provided:
+
+ - G_is_little_endian()
+
+Test if machine is little or big endian.
+
+\subsection Miscellaneous Miscellaneous
+
+A number of general purpose routines have been provided.
+
+ - G_date()
+
+Returns a pointer to a string which is the current date and time. The
+format is the same as that produced by the UNIX <tt>date</tt> command.
+
+ - G_home()
+
+Returns a pointer to a string which is the full path name of the
+user's home directory.
+
+ - G_percent()
+
+This routine prints a percentage complete message to stderr. Example:
+
+\code
+#include<grass/gis.h>
+#include<grass/glocale.h>
+
+int row;
+int nrows;
+
+nrows = 1352; /* 1352 is not a special value - example only */
+
+G_message(_("Percent complete:"));
+
+for (row = 0; row < nrows; row++)
+  G_percent(row, nrows, 10);
+\endcode
+
+This will print completion messages at 10% increments; i.e., 10%, 20%,
+30%, etc., up to 100%. Each message does not appear on a new line, but
+rather erases the previous message. After 100%, a new line is printed.
+
+ - G_program_name()
+
+Routine returns the name of the module as set by the call to
+G_gisinit().
+
+ - G_whoami()
+
+Returns a pointer to a string which is the user's login name.
+
+\section GIS_Library_Data_Structures GIS Library Data Structures
+
+
+Some of the data structures, defined in the "gis.h" header file and used 
+by routines in this library, are described in the sections below.
+
+\subsection struct_Cell_head struct Cell_head
+
+
+The raster header data structure is used for two purposes. It is used
+for raster header information for raster map. It also used to hold
+region values.
+
+See documentation of Cell_head structure for details.
+
+The <tt>format</tt> and <tt>compressed</tt> fields apply only to
+raster headers. The <tt>format</tt> field describes the number of
+bytes per raster data value and the <tt>compressed</tt> field
+indicates if the raster file is compressed or not. The other fields
+apply both to raster headers and regions. The geographic boundaries
+are described by <tt>north, south, east</tt> and <tt>west</tt>. The
+grid resolution is described by <tt>ew_res</tt> and
+<tt>ns_res</tt>. The cartographic projection is described by
+<tt>proj</tt> and the related zone for the projection by
+<tt>zone</tt>. The <tt>rows</tt> and <tt>cols</tt> indicate the number
+of rows and columns in the raster map, or in the region. See \ref
+Raster_Header_File for more information about raster headers, and \ref
+Region for more information about regions.
+
+The routines described in \ref Raster_Header_File use this structure.
+
+\subsection struct_Categories struct Categories
+
+The <i>Categories</i> structure contains a title for the map layer,
+the largest category in the map layer, an automatic label generation
+rule for missing labels, and a list of category labels.
+
+\code
+struct Categories
+{
+    CELL ncats;			/* total number of categories              */
+    CELL num;			/* the highest cell values. Only exists    
+				   for backwards compatibility = (CELL)
+				   max_fp_values in quant rules            */
+    char *title;		/* name of data layer                      */
+    char *fmt;			/* printf-like format to generate labels   */
+    float m1;			/* multiplication coefficient 1            */
+    float a1;			/* addition coefficient 1                  */
+    float m2;			/* multiplication coefficient 2            */
+    float a2;			/* addition coefficient 2                  */
+    struct Quant q;		/* rules mapping cell values to index in
+				   list of labels                          */
+    char **labels;		/* array of labels of size num             */
+    int *marks;			/* was the value with this label was used? */
+    int nalloc;
+    int last_marked_rule;
+};
+\endcode
+
+This structure should be accessed using the routines described in
+\ref Raster_Category_File.
+
+\subsection struct_Colors struct Colors
+
+The color data structure holds red, green, and blue color intensities
+for raster categories. The structure has become so complicated that it
+will not be described in this manual.
+
+\code
+struct Colors
+{
+    int version;		/* set by read_colors: -1=old, 1=new */
+    DCELL shift;
+    int invert;
+    int is_float;		/* defined on floating point raster data? */
+    int null_set;		/* the colors for null are set? */
+    unsigned char null_red;
+    unsigned char null_grn;
+    unsigned char null_blu;
+    int undef_set;		/* the colors for cells not in range are set? */
+    unsigned char undef_red;
+    unsigned char undef_grn;
+    unsigned char undef_blu;
+    struct _Color_Info_ fixed;
+    struct _Color_Info_ modular;
+    DCELL cmin;
+    DCELL cmax;
+    int organizing;
+};
+\endcode
+
+The routines described in \ref Raster_Color_Table must be used 
+to store and retrieve color information using this structure.
+
+\subsection struct_History struct History
+
+The History structure is used to document raster files. The
+information contained here is for the user. It is not used in any
+operational way by GRASS. 
+
+See documentation of History structure for details.
+
+The <i>mapid</i> and <i>mapset</i> are the raster file name and
+mapset, <i>title</i> is the raster file title, <i>creator</i> is the
+user who created the file, <i>maptype</i> is the map type (which
+should always be "raster"), <i>datasrc_1</i> and <i>datasrc_2</i>
+describe the original data source, <i>keywrd</i> is a one-line data
+description and <i>edhist</i> contains <i>edlinecnt</i> lines of user
+comments.
+
+The routines described in \ref Raster_History_File use this structure.
+However, there is very little support for manipulating the contents of
+this structure. The programmer must manipulate the contents directly.
+
+<b>Note:</b> Some of the information in this structure is not
+meaningful. For example, if the raster file is renamed, or copied
+into another mapset, the <i>mapid</i> and <i>mapset</i> will no longer
+be correct. Also the <i>title</i> does not reflect the true raster
+file title. The true title is maintained in the category file.
+
+<b>Warning:</b> This structure has remained unchanged since the inception of
+GRASS. There is a good possibility that it will be changed or eliminated in
+future releases.
+
+\subsection struct_Range struct Range
+
+The <i>Range</i> (<i>FPRange</i> for floating point raster maps)
+structure contains the minimum and maximum values which occur in a
+raster file.
+
+\code
+struct Range
+{
+    CELL min;
+    CELL max;
+    int first_time;		/* whether or not range was updated */
+};
+
+struct FPRange
+{
+    DCELL min;
+    DCELL max;
+    int first_time;		/* whether or not range was updated */
+};
+\endcode
+
+The routines described in \ref Raster_Range_File should be used to access
+this structure.
+
+\section Loading_the_GIS_Library Loading the GIS Library
+
+The library is loaded by specifying $(GISLIB) in the Makefile. The
+following example is a complete Makefile which compiles code that uses
+this library:
+
+<b>Makefile for $(GISLIB)</b>
+
+\verbatim
+MODULE_TOPDIR = ../..
+
+PGM = r.info
+
+LIBES = $(GISLIB)
+DEPENDENCIES = $(GISDEP)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd
+\endverbatim
+
+See \ref Compiling_and_Installing_GRASS_Modules for a complete
+discussion of Makefiles.
+
+\section TimeStamp_functions Timestamp functions
+
+This structure is defined in "gis.h", but there should be no reason to access its
+elements directly:
+
+\code
+struct TimeStamp {
+ DateTime dt[2];   /* two datetimes */
+ int count;
+};
+\endcode
+
+Using the G_*_timestamp() routines reads/writes a timestamp file in 
+the cell_misc/rastername mapset element.
+
+A TimeStamp can be one DateTime, or two DateTimes representing a 
+range. When preparing to write a TimeStamp, the programmer should
+use one of:
+
+ - G_set_timestamp() to set a single DateTime
+
+ - G_set_timestamp_range() to set two DateTimes
+
+ - G_read_raster_timestamp to read raster timestamp
+
+ - G_read_vector_timestamp to read vector timestamp
+
+ - G_get_timestamps() to copy TimeStamp into Datetimes
+
+Use to copy the TimeStamp information into Datetimes, so the members
+of struct TimeStamp shouldn't be accessed directly.
+
+ - count=0  means no datetimes were copied
+ - count=1  means 1 datetime was copied into dt1
+ - count=2  means 2 datetimes were copied
+
+ - G_init_timestamp()
+
+Sets ts-&gt;count = 0, to indicate no valid DateTimes are in TimeStamp.
+
+ - G_set_timestamp()
+
+Copies a single DateTime to a TimeStamp in preparation for writing
+(overwrites any existing information in TimeStamp).
+
+ - G_set_timestamp_range()
+
+Copies two DateTimes (a range) to a TimeStamp in preparation for
+writing (overwrites any existing information in TimeStamp).
+
+ - G_write_raster_timestamp()
+
+ - G_write_vector_timestamp()
+
+ - G_write_grid3_timestamp()
+
+ - G_format_timestamp()
+
+ - G_scan_timestamp()
+
+ - G_remove_raster_timestamp()
+
+ - G_remove_vector_timestamp()
+
+ - G_remove_grid3_timestamp()
+
+Only timestamp files in current mapset can be removed.
+
+ - G_read_grid3_timestamp()
+
+See \ref DateTime_Library for a complete discussion of GRASS datetime
+routines.
+
+\section Memory_Allocation Memory Allocation
+
+The following routines provide memory allocation capability. They are
+simply calls to the UNIX suite of memory allocation routines malloc(),
+realloc() and calloc(), except that if there is not enough memory,
+they print a diagnostic message to that effect and then call exit().
+
+ - G_malloc ()
+
+Allocates a block of memory at least <i>size</i> bytes which is
+aligned properly for all data types. A pointer to the aligned block is
+returned.
+
+ - G_realloc()
+
+Changes the <i>size</i> of a previously allocated block of memory at
+<i>ptr</i> and returns a pointer to the new block of memory. The
+<i>size</i> may be larger or smaller than the original size. If the
+original block cannot be extended "in place", then a new block is
+allocated and the original block copied to the new block.
+
+<b>Note:</b> If <i>ptr</i> is NULL, then this routine simply allocates
+a block of <i>size</i> bytes. This routine works around broken
+realloc() routines, which do not handle a NULL <i>ptr</i>.
+
+ - G_calloc()
+
+Allocates a properly aligned block of memory <i>n</i>*<i>size</i>
+bytes in length, initializes the allocated memory to zero, and returns
+a pointer to the allocated block of memory.
+
+ - G_free()
+
+Use the G_free() routine to release memory allocated by
+these routines.
+
+*/

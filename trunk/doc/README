@@ -1,0 +1,105 @@
+Graphical index images
+======================
+
+General
+-------
+
+Clipped part from grass_structure.png with Locations, Mapsets and data
+types.
+
+Alternative (can be also alternative for display):
+
+g.region n=224940 s=224590 w=638450 e=638840
+
+d.shade shade=elevation_shade color=elevation  # opacity 90%
+d.vect map=firestations color=45:107:168 fill_color=30:144:255 width=2 icon=basic/circle size=15
+d.vect map=schools color=208:208:0 fill_color=yellow width=2 icon=basic/triangle size=15
+d.vect map=hospitals color=136:0:0 fill_color=213:21:21 width=2 icon=basic/box size=15
+
+
+Raster
+------
+
+d.rast.num -a -f map=elevation grid_color=179:179:179 precision=0
+
+
+Vector
+------
+
+g.region n=224940 s=224590 w=638450 e=638840
+
+v.buffer input="streams" layer="-1" output="streams_buffer" distance=20
+
+d.vect map=census color=142:142:0 fill_color=255:255:167 width=2
+d.vect map=streams_buffer color=11:185:11 fill_color=11:185:11 width=1
+d.vect map=streams color=30:144:255 width=4
+
+
+Database
+--------
+
+streams attributes screenshot
+
+DIR="../trunk-commands/doc/"
+for FILE in *.png; do convert $FILE -resize 200x200 $DIR/`basename -s .png $FILE`.jpg; done;
+
+
+Display
+-------
+
+g.region n=226640 s=222860 w=631260 e=637170
+
+d.rast map=elevation_shade
+d.rast map=lakes
+d.vect map=schools color=16:70:123 fill_color=30:144:255 width=1 icon=basic/triangle size=10
+d.vect map=roadsmajor color=255:151:38 width=4
+d.vect map=roadsmajor color=255:172:82 width=2
+
+GUI
+---
+
+* Ubuntu 14.04 with Unity
+* landclass, roadsmajor, elevation
+* query map dialog active
+* Search modules tab active (with open subtrees)
+
+
+Imagery
+-------
+
+# this takes some time, perhaps the region below would be enough
+g.region -p raster=ortho_2001_t792_1m
+i.group group=ortho_group input=ortho_2001_t792_1m
+i.segment group=ortho_group output=ortho_segs_final threshold=0.25 min=10
+
+g.region n=221100 s=219700 w=638616 e=639316 -p
+d.mon start=cairo output=gi_imagery.png width=500 height=500
+d.frame left -c at=0,100,0,50d.rast ortho_2001_t792_1m
+d.rast ortho_2001_t792_1m
+d.frame right -c at=0,100,50,100
+d.rast ortho_segs_final
+d.mon stop=cairo
+
+
+Temporal
+--------
+
+Done in GUI.
+
+g.region raster=landuse
+
+r.mapcalc "a1 = 10"
+r.mapcalc "a2 = 20"
+r.mapcalc "a3 = 30"
+r.mapcalc "a4 = 40"
+
+m.nviz.image elevation_map=a1,a2,a3,a4 mode=fine,fine,fine,fine resolution_fine=1,6,1,1 resolution_coarse=9,9,9,9 shading=gouraud,gouraud,gouraud,gouraud style=surface,surface,surface,surface wire_color=136:136:136,136:136:136,136:136:136,136:136:136 color_map=landuse,landuse,landuse,landuse \
+position=0.03,0.31 height=92 perspective=36 twist=-99 zexag=200.000000 focus=1071,9393,30 \
+light_position=-0.57,0.75,0.80 light_brightness=80 light_ambient=20 light_color=255:255:255 \
+output=nviz_output format=ppm size=872,586  
+
+
+Miscellaneous
+-------------
+
+Taken from d.rhumbline.

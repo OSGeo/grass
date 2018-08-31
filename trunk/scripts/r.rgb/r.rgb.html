@@ -1,0 +1,57 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.rgb</em> generates separate red, green and blue maps from a
+raster map and its associated color table (grey255).
+
+<h2>EXAMPLE</h2>
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.rgb input=elevation red=elevation.r green=elevation.g blue=elevation.b
+</pre></div>
+
+<p>
+In this case <em>r.rgb</em> produces in the current mapset three new
+raster maps - 'elevation.r', 'elevation.g', 'elevation.b'.
+<p>
+<!--
+d.split.frame frames=4
+d.frame -s uno
+d.rast elevation
+d.font Vera
+echo " elevation" | d.text col=black
+
+d.frame -s dos
+d.rast elevation.r
+d.font Vera
+echo " elevation.r" | d.text col=black
+
+d.frame -s tres
+d.rast elevation.g
+d.font Vera
+echo " elevation.g" | d.text col=black
+
+d.frame -s cuatro
+d.rast elevation.b
+d.font Vera
+echo " elevation.b" | d.text col=black
+-->
+<center>
+<img src="r_rgb_elevation.png"><br>
+</center>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.composite.html">r.composite</a>,
+<a href="r.blend.html">r.blend</a>,
+<a href="r.colors.html">r.colors</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Glynn Clements
+
+<p>
+<i>Last changed: $Date$</i>

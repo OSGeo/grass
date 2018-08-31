@@ -1,0 +1,120 @@
+/*! \page vlibAscii Vector ASCII Format
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+\section vlibAsciiMain Vector ASCII Format Specifications
+
+The GRASS ASCII vector map format may contain a mix of primitives
+including points, lines, boundaries, centroids, faces, and
+kernels. The format may also contain a header with various metadata
+(see example below).
+
+Vector map can be converted to the ASCII representation at user level
+by <tt>v.out.ascii format=standard</tt> command.
+
+See \ref vlibAsciiFn for list of related functions.
+
+The header is similar as the head file of vector binary format (see
+\ref vlibHeadFileFormat) but contains bounding box also. Keywords are:
+
+\verbatim
+ORGANIZATION
+DIGIT DATE
+DIGIT NAME
+MAP NAME
+MAP DATE
+MAP SCALE
+OTHER INFO
+ZONE
+WEST EDGE
+EAST EDGE
+SOUTH EDGE
+NORTH EDGE
+MAP THRESH
+\endverbatim
+
+Example:
+
+\verbatim
+ORGANIZATION: NC OneMap
+DIGIT DATE:   
+DIGIT NAME:   helena
+MAP NAME:     North Carolina selected bridges (points map)
+MAP DATE:     Mon Nov  6 15:32:39 2006
+MAP SCALE:    1
+OTHER INFO:   
+ZONE:         0
+MAP THRESH:   0.000000
+\endverbatim
+
+The body begins with the row:
+
+\verbatim
+VERTI:
+\endverbatim
+
+followed by records of primitives:
+
+\verbatim
+TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
+ X Y [Z]
+....
+ X Y [Z]
+[ LAYER CATEGORY]
+....
+[ LAYER CATEGORY]
+\endverbatim
+
+Everything above in <tt>[]</tt> is optional. 
+
+The primitive codes are as follows:
+
+- 'P': point
+- 'L': line
+- 'B': boundary
+- 'C': centroid
+- 'F': face (3D boundary)
+- 'K': kernel (3D centroid)
+- 'A': area (boundary) - better use 'B'; kept only for backward
+compatibility
+
+The coordinates are listed following the initial line containing the
+primitive code, the total number of vectors in the series, and (optionally)
+the number of categories (1 for a single layer, higher for multiple layers).
+Below that 1 or several lines follow to indicate the layer number and
+the category number (ID).
+
+The order of coordinates is
+\verbatim
+  X Y [Z]
+\endverbatim
+
+Note: The points are stored as y, x (i.e., east, north), which is the
+reserve of the way GRASS usually represents geographic coordinates.
+
+Example:
+
+\verbatim
+P  1 1
+ 375171.4992779 317756.72097616
+ 1     1 
+B  5
+ 637740       219580      
+ 639530       219580      
+ 639530       221230      
+ 637740       221230      
+ 637740       219580      
+C  1 1
+ 638635       220405      
+ 1     2
+\endverbatim
+
+In this example, the first vector feature is a point with category
+number 1. The second vector feature is a boundary composed by 5
+points. The third feature is a centroid with category number 2. The
+boundary and the centroid form an area with category number 2. All
+vector feature mentioned above are located in layer 1.
+
+*/

@@ -1,0 +1,12 @@
+COMMAND: v.in.ogr dsn="ne_110m_admin_0_countries.shp" output="country_boundaries" min_area=0.0001 snap=1e-7
+GISDBASE: /home/neteler/grassdata
+LOCATION: ecad5_grassdata_ll MAPSET: PERMANENT USER: neteler DATE: Sun May 26 14:29:10 2013
+-----------------------------------------------------
+286 input polygons
+Total area: 1.47751E+14 (360 areas)
+Overlapping area: 7.66232E+07 (70 areas)
+Area without category: 3.87927E+11 (1 areas)
+---------------------------------------------------------------------------------
+COMMAND: v.db.connect -o map="country_boundaries" driver="sqlite" database="/home/neteler/grass70/demolocation/PERMANENT/sqlite/sqlite.db" table="country_boundaries" key="cat" layer="1" separator="|"
+GISDBASE: /home/neteler/grass70
+LOCATION: demolocation MAPSET: PERMANENT USER: neteler DATE: Sun Jun 16 19:28:19 2013

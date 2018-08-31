@@ -1,0 +1,15 @@
+VERSION 1.0
+BOX -1 -1 1 1
+STRING
+  LINE
+    0 -1
+    0 1
+  END
+END
+STRING
+  LINE
+    -0.3474 0.3466
+    0 1
+    0.3474 0.3466
+  END
+END

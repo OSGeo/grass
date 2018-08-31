@@ -1,0 +1,48 @@
+GS_get_cat_at_xy
+
+diff gsdrape.c gsdrape.bak  - region clipping not working
+(see cont. example in germany location testdata)
+Inconsistent error - depends on view res, maybe check I3d init.
+or num points returned. 
+I think fixed now.
+
+did a bunch of DIFFUSE -> AD changes for trial
+
+shininess not working
+OK - working now - will be different from SG3d due to infinite light.
+
+--------------------------------
+NVIZ color bug:
+  see /BUGS
+  -> small z-scaled elevations are displayed dark.
+  - problem in lat/long databases, too
+
+Helena wrote:
+>applied with the opengl function glNormal found in gsd_prim.c. I suspect       
+>that there is a problem with how the normal vectors are calculated and         
+>normalized. With a large Z range the normal XY values span -1 to 1, and        
+>the normal Z values span 0 -1. With lat / long data and data with a low        
+>Z range, the normal Z (temp[Z]) component is not normalized to the 0-1         
+>range but rather a small component of it.                                      
+                                                                                
+You are right that there is a problem with normals for surfaces with values     
+<0-1>- I have already reported it, it seems that it is also causing parts of    
+the surface to disapear for larger values of z for higher resolution/higher     
+zscale case. Bill fixed it for the SGI-GL version - if the GL version           
+is available it would be good to compare them. I will check with Bill,          
+but I would like him to finish the legends first.              
+
+--------------------------------
+The trans.c file should be removed and any calls to the functions in that
+file should be replaced with appropriate OpenGL calls. All the functionality
+in trans.c can be achieved with OpenGL.
+
+--------------------------------
+This library needs a general overhaul. There are many places which have
+empty functions containing only return statements, as well as several comments
+that say /* You can do better than this */ which indicates areas for
+improvements.
+
+--------------------------------
+64-bit support needs to be added and properly handled
+

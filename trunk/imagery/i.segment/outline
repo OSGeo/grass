@@ -1,0 +1,339 @@
+This is the draft pseudocode for the region growing segmentation algorithm.  More information, references, requirements, etc are at the wiki:
+http://grass.osgeo.org/wiki/GRASS_GSoC_2012_Image_Segmentation
+
+For anyone interested in background discussion, Rev 51907 includes original comments and discussion between EM, MM, and ML.  All comments were combined (and new threads started!) after that revision.
+
+TODO: Memory managment, allow user to imput how much RAM can be used.  Compare i.watershed and i.cost for two current options, initial recommendations are to follow i.watershed.
+
+TODO: Are any parts here potentially useful as library functions?  Are any of these tasks already done by existing library functions?
+
+General notes:
+Avoid use of global variables (makes multithreading easier).
+
+
+files:
+
+iseg.h - declare structures and functions
+
+Structures:
+
+files: input and output data (segmentation files and/or RAM storage)
+
+functions: parameters and function pointers
+
+
+/****************************************************/
+/******** Parse the input parameters ****************/
+/****************************************************/
+
+Using just imagery group right now.  Could add an option to allow just one raster as an input (user friendly).  Currently no plan for subgroup, it is not often used.
+
+seeds:  All pixels or user defined points (optional, default = all pixels) user defined points will initially be defined with a raster map, could add option to allow vector map later (user friendly).
+
+constraint (vector linear/polygon) (optional)
+
+segmentation algorithm (only region growing accepted to start)
+
+pixel neighbors: for a particular pixel, use 4 neighbors or 8 neigbors? (flag, not set = 4 neighbors)
+
+Later: memory usage  (r.watershed uses -m flag + memory parameter)
+
+
+
+/* Algorithm parameters */
+
+similarity threshold
+
+how quickly the threshold should be reduced
+
+Minimum number of pixels per segment (optional, default 1)
+
+Later:
+weights for shape and compactness
+
+No plans for implementation:
+layer weights, color spaces, color transformations: these should be done by the user prior to running i.segment.
+
+
+/* output parameters */
+need name for new raster map
+
+Later:
+maybe add some glue to allow the user to automatically launch r.to.vect and then the stats module.
+
+
+/************************************/
+/******** Input Validation **********/
+/************************************/
+
+Exit at first failure:
+
+confirm input algorithm parameters are in correct range
+
+Todo: confirm if Rast_get_row() and nulls are handled in a way later processing steps can deal with.  (nulls should be skipped)
+
+Grass library functions already handle basic checks (overwrite, conversion from source data resolution to region resolution, etc)
+
+End of validation checks
+
+
+/************************************/
+/******** Open maps **********/
+/************************************/
+
+Open the input and output maps.
+
+Todo: Currently using the segmentation library.  need to implement the -m option to allow possibility to store in RAM.
+
+input map structure:
+ - each cell is an array, length to match number of maps in the input group
+ - TODO: how to store optional vector boundaries
+output map structure:
+ - also an array:
+	- segment assignment
+	- candidate flag: has it been check during this iteration loop
+	- assigned flag: has it been assigned to a segment (only if number of seeds < number of pixels)
+ 
+
+/*******************************************/
+/************* preprocessing ? *************/
+/*******************************************/
+
+Any preprocessing?
+
+If complete polygons are given as boundaries:
+1. run segmentation for each polygon, mask rest of map
+2. run segmentation with polygons as mask (to segment anything not included in a polygon)
+
+I think this will apply to vector lines only, initially it was framed as being for polygons or lines.
+
+/*ML: vector to raster conversion is probably necesary. Pixels crosses by a line (polygon boundary or not) have to become part of a segment boundary.*/
+/*EM: hmm, OK, something else for discussion: These pixels that are on a vector line, should they eventually be included in one of the adjacent segments?  Is "segment boundary" just the edge pixels of the segment, or are the not included in any segment?*/
+/*ML: Here is where a difference comes into play between lines that are boundary polgons and lines as linear features. In my eyes pixels that are on boundarylines of polygons should be part of the segments that are internal to that boundary. Linear features would have to be treated differently. During discussions with colleagues we did have some difficulties finding actual use cases for linear features. Maybe we can start with only polygon features and if the use case of a linear features comes up try to integrate that then ?*/
+/*EM: But for polygons covering the entire map, there is a segment on either side of the polygon line.  If the line crosses the pixel, what should be done... It looks like this will not be a problem for multi-scalar segmentation, the polygons generated in a high level segmentation will be exactly between pixels.  This will only be an issue for polygons generated elsewhere, smoothed, at different resolution, etc.*/
+/* MM: You can not know where the polygons are coming from, therefore you have consider all cases or, better, come up with a general solution. You will need to clone (substantial) parts of the t.to.vect module if you want to rasterize polygons/boundaries. If you do not rasterize, you will need to check for a boundary/line whenever you evaluate a neighbor. This could be sped up a bit by selecting all boundaries/lines crossing the current 3x3 neighborhood. The spatial selection of vector features is fast, but doing that for every cell/3x3 neighborhood can substantially slow down the module. You will also need to check if the boundary is actually part of an area (not an invalid boundary). Then you will need to check if the focus cell is inside the area, if not, if the neighbor is inside the area. Even though some spatial information gets lost by rasterization, I tend to recommend rasterization. In any case, taking into account boundaries/lines can easily become the bulk of the code, the most complex part of the code, and the most time-consuming component of the module. */
+/* EM: left the above discussion... unresolved.  One thought: instead of storing the output as a raster, maybe it should be first converted to a map, edges representing the neighbor relationship.  After we have a map, we could use the vector map to delete edges crossing the borders.  This is done once, afterwards we never calculate neighbors, only check for edges.  It seems this will be a very large memory structure to start with, but as the segmentation continues it will get smaller.
+
+
+/*******************************************/
+/************ Processing ********************/
+/*******************************************/
+
+notes:
+If seeds < number of pixels, candidate pixels must meet the additional requirement of not yet being assigned to a segment.
+
+
+If we have polygon constraints.  Outer for loop to process the image one polygon at a time.  (Need to check if all pixels are included in a polygon, otherwise process all those pixels last.)
+
+/*
+* Roughly based on SPRING
+* Bins, et al: Satellite Imagery Segmentation: A Region Growing Approach, 1996
+* http://marte.dpi.inpe.br/col/sid.inpe.br/deise/1999/02.05.09.30/doc/T205.pdf
+*/
+
+/* Similarity threshold T(t)... as t increases, threshold for similarity is lower. SPRING used: T(t) = T(0)alphat, where T(0) > 0, t =0,1,2... and alpha <1 */
+/* MM: T(0) > ) ??? what exactly is t */
+/* EM: corrected formula, should be >0.  t = time.  It feels like the opposite of simulated annealing.  At earlier iterations in the process, it is difficult to make merges.  As time increases, it is easier.  To start with, I'm just going to implement a constant threshold, the lowering concept can be addeded later. */
+
+For t  (until no merges are made?)
+
+	Set candidate flag to true/1 for all pixels
+	
+	For each pixel that candidate flag is true:
+		function: find segment neighbors (Now we have list of pixels in current focus segment (Ri) and a list of neighbors)
+		Calculate similarity between Ri and neighbors
+		If it exists, Rk is both most similar, and also similarity is < T.
+		function: find segment neigbors of Rk
+		Calculate similarity between Rk and its neighbors
+		IF (Ri is Rk's best neighbor) (so they agree, both are best match for each other)
+			merge Ri and Rk: (probably as function?)
+				update segment values for all pixels in Ri+Rk (mean)
+				set candidate flag to false for all pixels in Ri+Rk
+			select next Ri
+			/* MM: I guess it will be important how to select the next candidate
+			 * (see above, FIFO or some kind of sorting) */
+			/* EM: I don't think the order matters: since the algorithm only accepts mutually best neighbors. */
+		Else
+			set candidate flag to false for all pixels in Ri
+			Use Rk as next Ri  /* note, this is the eCognition technique.  Seems this is a bit faster, we already have segment membership pixels
+	loop
+	
+	Were any merges made for this time step?
+	
+next t
+
+Force a merge of regions that are below minimum size threshold (just merge with most similar neighbor, no comparison with similarity threshold)
+
+/*****************************************/
+/******Function: Find Segment Neighbors **/
+/*****************************************/
+
+1 1 2 3 4
+1 9 9 9 5
+9 9 9 6 5
+7 7 7 7 9
+
+If the current segment being checked is 9
+
+Desired results:
+If no seeds:  (can merge unassigned pixels and other segments)
+	For diagonals:
+		1, 2, 3, 4, 5, 6, 7
+	else
+		1, 2, 3, 4, 5, 7
+	
+else (starting from seeds, so only want single unassigned pixels as neighbors, no merges with other segments allowed)
+	for diagonals:
+		2, 3, 4, 6
+	else
+		2, 3, 6
+
+
+Method 1: (using "rasters")
+
+Input could be single pixel or list of pixels.
+/* MM: what exactly is input? seeds? */
+/* EM: input here is the current focus pixel.  If it is a fresh Row/Column pixel, it will be a single pixel.
+ * If we just had Ri that was not mutually best neighbors with Rk, we'll use the member list of Rk as the new Ri.
+ * So in that case it will be the list of pixels we already know are part of the new Ri.
+
+Put input in "to be checked" stack
+Put input in "current segment" list
+put input in "don't check" list
+/* MM: you could also determine the status of each pixel on-the-fly when visiting this neighbor */
+/* EM: I think that could work for the "don't check" list.  But they will need to be initialized to zero each time...will that take too long?
+ * It seems we would have to initialize the entire map for each function call?  Or keep track of a window size for row/column that was processed?
+ * /
+ 
+empty "neighbor" list
+While "to be checked" stack isn't empty:
+	pop
+	find pixel neighbors
+	with pixel neighbors
+		if in "don't check" list
+			do nothing
+		else
+			put in "don't check" list
+			if candidate pixel
+				if segment ID = current segment ID
+					add to "current segment" list
+					add to "to be checked" stack
+				else
+					add to "neighbor" list
+	next neighbor
+loop...
+
+return: neighbor list, pixels in segment list
+/* MM: what is the purpose of the neighbor list and the segment list? */
+/* EM:  neighbor list: We will calculate the similarity between Ri and each neighbor.
+ * All need to be checked for the smallest similarity value (most similar), so order doesn't matter.
+ * If an Rk is selected, we'll run this routine on it, so will also have a segment membership list for Rk.
+ * If a merge is made, we have a list of pixels to be updated, members of Ri and Rk. (again order doesn't matter.)
+ * It seemed a list would be faster then querying the entire map for what pixels have a specific segment value, since that
+ * query has to look at the entire map.
+ * And it seems with the raster based storage, there was no easy way to store this for the whole time, it would be rechecked each iteration.
+ * ... see below with the map for further comments */
+neighbor list will be a listing of pixels that are neighbors?  Include segment numbers?  Only include unique segments?
+Maybe the most complete return would be a structure array, structure to include the segment ID and a list of points in it?  But the list of points would NOT be inclusive - just the points bordering the current segment...
+
+
+Method 2: (if build a map data structure at start of program)
+Using current pixel's segment ID's edges, return neighbors
+
+/* EM: So if we want to remember what pixels are part of each segment in a stable (instead of temporary) method, I think the
+ * map data structure makes more sense.  Each element in the map would have: segment ID, processing flags, current values (mean of input data),
+ * current number of pixels, and a list (linked list, sorted array, etc) of pixel members (row,column).  Edges would represent neighbor relations.
+ * 
+ * My feeling is that this will be very slow to set up, and need more memory for the first iterations (compared to the raster version)
+ * But after the number of segments is reduced and the membership in each segment is higher, processing time will be faster.
+ * 
+ * My advisor recommends to implement both methods - to check the speed, and also as a code validation / logic validation / bug testing:
+ * the segmented maps should be the same for both.
+ */
+
+Existing GRASS functions don't seem to have this "neighbor of an area" concept.  Am I missing something, should something be adapted, should I design this as a library function, or just write it as a function for this program?
+
+r.neighbors:
+is looking at the neighborhood that is a specified distance from one pixel
+
+r.watershed
+looks at the 4 or 8 adjacent neighbors.  (can use this as basis for Find Pixel Neighbors function)
+
+r.buffer
+My current understanding:  needs to know the min/max row and column that the feature is found in, it then scans that entire square, if the pixel is part of the feature, then checks distances around it.  Seems looking for min/max for every segment number will be time consuming.  Would need data structure to accomodate remembering what pixels are in each segment to use this.
+
+
+/*****************************************/
+/******Function: Find pixel Neighbors ****/
+/*****************************************/
+
+will use function pointer based on input, to select 4 or 8 neighbors
+
+
+/*****************************************/
+/******Function: calculate simularity ****/
+/*****************************************/
+
+Initially only Euclidean Distance
+
+NOTE: this is not a distance function of the coordinates at all!
+
+sqrt of the sum of squared differences between each of the input raster maps
+
+
+/****************************************/
+/************ Output ********************/
+/****************************************/
+
+renumber segments to have a sequential (1,2,3...) numbering?
+
+output raster convert segmentation file or RAM data structure to grass raster using Rast_put_row()
+
+G_message: total number of segments made.
+
+/*******************************/
+/********** tidy up ************/
+/*******************************/
+
+free memory, delete temp files
+
+
+exit - success!
+
+
+
+###############################
+###############################
+
+Statistics for the segmentation calculated in a seperate module
+
+Segmentation output = raster
+statistics module input and output = vector. The user will have to run r.to.vect between the two.
+
+Name?
+i.seg.stats
+i.segment.stats
+r.stats.seg
+
+-e  Maybe an option for basic vs. extended output statistics 
+
+
+calculate statistics to be saved in data table for the vector map
+
+one vector map of segments per hierarchy level with a series of attributes (I think this request would be handled by running the module for each hierarchy level?  Or do we need to have an attribute for hierarchy level stored with a single vector map?)
+
+spectral attributes:
+per spectral band: mean, min, max, skewness
+
+combination of bands: brightness, indices (i.e. results of multi-band calculations)
+
+textural attributes: stdev (per-band and/or multi-band), mean difference to neighbor, Haralick texture features cf r.texture
+
+geometric/morphological attributes: area, perimeter, length/width measures, see also r.li
+/* MM: perimeter is resolution-dependent, see also the famous Florida coastline problem */
+
+context attributes: mean difference to all other regions in the same upper hierarchical level, relative localisation within upper hierarchical level, absolute localisation, number of objects in lower level
+
+depending on segmentation algorithm: raster map indicating for each pixel the probability of belonging to the segment it was put into, i.e. some measure of reliability of results  (For region growing - should this be the similarity measure when it was merged?  Or similarity measure of the pixel compared to the average?)
+/*ML: Not sure, but I would think that similarity between pixel and average of region it belongs to might be a good choice. Am not a specialist in statistics, but maybe it is possible to translate this into some form of probability of really "belonging" to that region (cf i.maxlik)*/
+/* MM: I guess here it is important to not confuse classification with segmentation */

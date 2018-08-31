@@ -1,0 +1,58 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.what.rast3</em> reads 3D raster value for each point in the vector and updates <b>col</b> 
+column in vector attribute table by this value. The column should be type double. This module is based on 
+<a href="v.what.rast.html">v.what.rast</a>.
+<br>
+If more points have the same category, attribute value is set to NULL.
+If 3D raster values is NULL, attribute value is set to NULL.
+
+<h2>NOTES</h2>
+
+<h2>EXAMPLES</h2>
+
+A) Reading values from 3D raster map at position of vector points, writing these values
+   into a column of the attribute table connected to the vector map:
+<br>
+<div class="code"><pre>
+v.what.rast3 map=pnts raster3d=plume column=concentration
+</pre></div>
+
+<p>
+B) In case of a vector map without attached attribute table, first add
+a new attribute table. This table is then populated with values
+queried from the raster map:
+<br>
+<div class="code"><pre>
+# create new random 3d vector points map
+v.random -z output=pnts npoints=100 zmin=0  zmax=50
+
+# add new table, link to map
+v.db.addtable map=pnts column="concentration double precision"
+
+# query raster map and upload values to vector table into specified column
+g.region raster3d=plume -p
+v.what.rast3 map=pnts raster3d=plume column=concentration
+
+# verify new attribute table:
+v.db.select map=pnts
+
+# verify statistics of uploaded values:
+v.univar map=pnts column=concentration type=point
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.db.addtable.html">v.db.addtable</a>,
+<a href="v.db.select.html">v.db.select</a>,
+<a href="v.what.rast.html">v.what.rast</a>,
+<a href="v.what.vect.html">v.what.vect</a>,
+<a href="v.univar.html">v.univar</a>
+</em>
+
+<h2>AUTHOR</h2>
+Soeren Gebbert, heavily based on v.what.rast by Radim Blazek
+
+<p>
+<i>Last changed: $Date$</i>

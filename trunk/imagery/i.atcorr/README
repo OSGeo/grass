@@ -1,0 +1,53 @@
+Adding new band filters (see also Iwave.h):
+
+ Note: the spectral range is from 250 nm to 4000 nm (see Iwave.h) which is 
+   4000-250=3750nm. The step size is (4000-250)/1500=2.5 nm in the ffu.s array.
+
+ o bands are defined by their discrete filter function
+ o to compute a band position in the 1500 slots of ffu.s array, start
+   with 250nm using 2.5nm increments. The result is the starting index
+   for the spectral band.
+ o 1500 is the number of wavelength spectral description slots.
+   - a 'for' loop fills up the slots with 0
+   - then the ffu.s array is filled with each of the spectral band data
+     one after the other.
+     Example Lsat TM: (435-250) / 2.5 = 74
+ 
+ o run create_iwave.py and add new filter function to Iwave.cpp, before IWave::equivwl()
+ o add else-if in IWave::parse() in Iwave.cpp
+ o add print strings in Iwave.cpp
+ 
+ o add satellite sensor to Iwave.h
+ o add to GeomCond.cpp and GeomCond.h
+ o add to i.atcorr.html
+
+
+Preparation of the Iwave.cpp file code:
+
+The helper script create_iwave.py can help to interpolate the filter functions
+to the correct step size of 2.5 nm (in case that the filter function data
+are delivered with a different step size).
+The output filter function in a format as needed in the Iwave.cpp file.
+
+The script create_iwave.py basically needs a .csv file with spectral
+response for each band in a column. The first column has to be the 
+wavelength (nm). The first line (and only first) is a header with
+wavelength, followed by band names file name is used for sensor name.
+See for example ./sensors_csv/ikonos.csv.
+
+Usage 
+  create_iwave.py <csv file>
+
+It generates the filter function as an insert for IWave.cpp from the given file.
+
+Note: If the spectral response is null for a frequency, leave it empty
+in csv file. Ex.:
+
+  WL(nm),band 1,band 2,band 3,band 4
+  455,0.93,,,
+  485,0.94,0.00,,
+  545,0.00,0.87,0.00,
+
+Program will interpolate filter function to 2.5 nm steps
+and output a CPP template file in the IWave format.
+

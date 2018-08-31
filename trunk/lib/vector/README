@@ -1,0 +1,23 @@
+Contents of this directory
+
+dglib:		DGLIB (Directed Graph Library) aims at giving support to
+		network analysis.
+diglib:		Lower level functions for reading/writing/manipulating
+		vectors.
+rtree:          spatial index based on RTree (lower level functions)
+Vlib:		Higher level functions for reading/writing/manipulating
+		vectors. Intended to the module programmer.
+
+To generate the documentation, following commands are available:
+
+Generate HTML document:
+	make htmldocs
+
+Generate Latex-DVI document (requires Latex):
+	make latexdocs
+
+Generate PDF document (requires Latex):
+	make pdfdocs
+
+Delete ./latex and ./html docs directories:
+	make cleandocs

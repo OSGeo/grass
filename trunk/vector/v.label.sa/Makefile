@@ -1,0 +1,15 @@
+
+MODULE_TOPDIR = ../..
+
+PGM = v.label.sa
+
+LIBES = $(DISPLAYLIB) $(DIG2LIB) $(GRAPHLIB) $(VECTORLIB) $(DBMILIB) $(GISLIB) $(FTLIB)
+DEPENDENCIES= $(DISPLAYDEP) $(DIG2DEP) $(GRAPHDEP) $(VECTORDEP) $(DBMIDEP) $(GISDEP)
+EXTRA_INC = $(VECT_INC) $(FTINC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+ifneq ($(strip $(FTLIB)),)
+default: cmd
+endif

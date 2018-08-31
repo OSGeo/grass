@@ -1,0 +1,201 @@
+<h2>DESCRIPTION</h2>
+
+<em>i.rectify</em> uses the control points included in the source data 
+or identified with the
+<a href="wxGUI.gcp.html">Ground Control Points Manager</a>
+to calculate a transformation matrix and then converts x,y
+cell coordinates to standard map coordinates for each pixel
+in the image. The result is a planimetric image with a
+transformed coordinate system (i.e., a different coordinate
+system than before it was rectified). Supported transformation methods 
+are first, second, and third order polynomial and thin plate spline. 
+Thin plate spline is recommended for ungeoreferenced satellite imagery 
+where ground control points (GCPs) are included. Examples are 
+<a href="http://www.gdal.org/frmt_l1b.html">NOAA/AVHRR</a>
+and <a href="http://www.gdal.org/frmt_various.html#Envisat">ENVISAT</a> 
+imagery which include throusands of GCPs.
+
+<p>
+If no ground control points are available, the 
+<a href="wxGUI.gcp.html">Ground Control Points Manager</a>
+must be run before <em>i.rectify</em>. An image must be
+georeferences before it can reside in a standard coordinate
+LOCATION, and therefore be analyzed with the other map
+layers in the standard coordinate LOCATION. Upon
+completion of <em>i.rectify</em>, the rectified image is
+deposited in the target standard coordinate LOCATION. This
+LOCATION is selected using
+
+<em><a href="i.target.html">i.target</a></em>.
+
+<p>More than one raster map may be rectified at a time. Each cell file
+should be given a unique output file name. The rectified image or
+rectified raster maps will be located in the target LOCATION when the
+program is completed. The original unrectified files are not modified
+or removed.
+
+<p>If the <b>-c</b> flag is used, <em>i.rectify</em> will only rectify that
+portion of the image or raster map that occurs within the chosen window
+region in the target location, and only that portion of the cell
+file will be relocated in the target database. It is
+important therefore, to check the current mapset window in
+the target LOCATION if the <b>-c</b> flag is used.
+
+<p>
+If you are rectifying a file with plans to patch it to
+another file using the GRASS program <em>r.patch</em>,
+choose option number one, the current window in the target
+location. This window, however, must be the default window
+for the target LOCATION. When a file being rectified is
+smaller than the default window in which it is being
+rectified, NULLs are added to the rectified file. Patching
+files of the same size that contain NULL data,
+eliminates the possibility of a no-data line in the patched
+result. This is because, when the images are patched, the
+NULLs in the image are "covered" with non-NULL pixel
+values. When rectifying files that are going to be
+patched, rectify all of the files using the same default
+window.
+
+<h3>Coordinate transformation</h3>
+<p>The desired order of transformation (1, 2, or 3) is selected with the
+<b>order</b> option.
+
+The program will calculate the RMSE and check the required number of points.
+
+<h4>Linear affine transformation (1st order transformation)</h4>
+
+<dl>
+	<dd> x' = ax + by + c
+	<dd> y' = Ax + By + C
+</dl>
+
+The a,b,c,A,B,C are determined by least squares regression
+based on the control points entered.  This transformation
+applies scaling, translation and rotation. It is NOT a
+general purpose rubber-sheeting like TPS, nor is it ortho-photo
+rectification using a DEM, not second order polynomial,
+etc. It can be used if (1) you have geometrically correct
+images, and (2) the terrain or camera distortion effect can
+be ignored.
+
+<h4>Polynomial Transformation Matrix (2nd, 3d order transformation)</h4>
+
+<em>i.rectify</em> uses a first, second, or third order transformation
+matrix to calculate the registration coefficients. The number
+of control points required for a selected order of transformation
+(represented by n) is
+
+<dl>
+<dd>((n + 1) * (n + 2) / 2) 
+</dl>
+
+or 3, 6, and 10 respectively. It is strongly recommended
+that one or more additional points be identified to allow
+for an overly-determined transformation calculation which
+will generate the Root Mean Square (RMS) error values for
+each included point. The RMS error values for all the
+included control points are immediately recalculated when
+the user selects a different transformation order from the
+menu bar. The polynomial equations are performed using a 
+modified Gaussian elimination method.
+
+<h4>Thin plate spline (TPS) transformation</h4>
+TPS transformation is selected with the <b>-t</b> flag. This method of
+coordinate transformation is recommended for satellite imagery where 
+hundreds or thousands of GCPs are included, and for historical printed 
+or scanned maps with unknown georeferencing and/or known localized 
+distortions. 
+<p>
+TPS combines a linear affine transformation with individual 
+transformation coefficients for each GCP, using the radial basis kernel 
+function with the distance <em>dist</em> between any two points:
+
+<dl>
+<dd>dist<sup>2</sup> * log(dist)
+</dl>
+
+As a consequence, localized distortions can be removed with TPS 
+transformation. For example, scan line sensors will have due to the 
+changing viewing angle larger distortions towards the end points of the 
+scan line than at the center of the scan line. Even higher order 
+polynomial transformations are not able to remove these locally 
+different distortions, but TPS transformation can. For best results, 
+TPS requires an even and, for localized distortions, dense spacing of 
+GCPs.
+
+<h3>Resampling method</h3>
+<p>The rectified data is resampled with one of seven different methods: 
+<em>nearest</em>, <em>bilinear</em>, <em>cubic</em>, <em>lanczos</em>,
+<em>bilinear_f</em>, <em>cubic_f</em>, or <em>lanczos_f</em>.
+<p>The <em>method=nearest</em> method, which performs a nearest neighbor assignment,
+is the fastest of the resampling methods. It is primarily used for
+categorical data such as a land use classification, since it will not change
+the values of the data cells. The <em>method=bilinear</em> method determines the new
+value of the cell based on a weighted distance average of the 4 surrounding
+cells in the input map. The <em>method=cubic</em> method determines the new value of
+the cell based on a weighted distance average of the 16 surrounding cells in
+the input map.  The <em>method=lanczos</em> method determines the new value of
+the cell based on a weighted distance average of the 25 surrounding cells in
+the input map.
+<p>The bilinear, cubic and lanczos interpolation methods are most appropriate for
+continuous data and cause some smoothing. These options should not be used
+with categorical data, since the cell values will be altered.
+<p>In the bilinear, cubic and lanczos methods, if any of the surrounding cells used to
+interpolate the new cell value are NULL, the resulting cell will be NULL, even if
+the nearest cell is not NULL. This will cause some thinning along NULL borders,
+such as the coasts of land areas in a DEM. The bilinear_f, cubic_f and lanczos_f
+interpolation methods can be used if thinning along NULL edges is not desired.
+These methods "fall back" to simpler interpolation methods along NULL borders.
+That is, from lanczos to cubic to bilinear to nearest.
+<p>If nearest neighbor assignment is used, the output map has the same raster
+format as the input map. If any of the other interpolations is used, the
+output map is written as floating point.
+
+<p><!--
+Note: In interactive mode it is possible to define a new file name
+for the target images. This is (currently) not provided in command line
+mode.
+-->
+
+<h2>NOTES</h2>
+
+If <em>i.rectify</em> starts normally but after some time the following text is seen:
+<br><tt>
+ERROR: Error writing segment file
+</tt><br>
+the user may try the <b>-c</b> flag or the module needs more free space
+on the hard drive.
+
+
+<h2>SEE ALSO</h2>
+
+The GRASS 4 <em>
+<a href="http://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf">Image
+Processing manual</a></em>
+
+<p><em>
+  <a href="m.transform.html">m.transform</a>,
+  <a href="r.proj.html">r.proj</a>,
+  <a href="v.proj.html">v.proj</a>,
+  <a href="i.group.html">i.group</a>,
+  <a href="i.target.html">i.target</a>
+  <br>
+  <a href="wxGUI.gcp.html">Ground Control Points Manager</a>
+</em>
+
+
+<h2>AUTHORS</h2>
+
+William R. Enslin, 
+Michigan State University,
+Center for Remote Sensing
+
+<p>Modified for GRASS 5.0 by:<br>
+Luca Palmeri (palmeri@ux1.unipd.it)<br>
+Bill Hughes<br>
+Pierre de Mouveaux (pmx@audiovu.com)
+<br>
+CMD mode by Bob Covill
+
+<p><i>Last changed: $Date$</i>

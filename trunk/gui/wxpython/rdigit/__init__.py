@@ -1,0 +1,4 @@
+all = [
+    'controller',
+    'toolbars'
+]

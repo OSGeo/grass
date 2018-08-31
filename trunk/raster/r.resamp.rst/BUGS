@@ -1,0 +1,23 @@
+
+this program has not been tested and may have
+bugs in segmenting procedure and colortables
+
+Resolution bug: 
+
+r.resamp.rst N46E011.meters.90 el=N46E011.meters.1425 ew=14.25 ns=14.25
+GRASS 5.7.cvs:/nfsmnt/levi0/ssi/srtm_DEM90m_egm96geoid/original > g.region raster=N46E011.meters.1425 -p
+projection: 1 (UTM)
+zone:       32
+datum:      WGS84
+ellipsoid:  wgs84
+north:      5158710
+south:      5128470
+west:       689130
+east:       720090
+nsres:      14.25070688   <-- !!
+ewres:      14.24758399  <-- !!
+rows:       2122
+cols:       2173
+
+-> should use the functionality of 'g.region -a'
+

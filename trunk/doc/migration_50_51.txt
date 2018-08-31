@@ -1,0 +1,55 @@
+Rules to migrate GRASS 5.0 modules into GRASS 5.7
+Date: 2003-09-11
+
+While implementing GRASS 5.7 a major cleanup of GRASS modules
+has to be done. The following rules shall help the programmer
+to migrate a 5.0 module into the 5.7 environment.
+
+
+1. Add GPL statement
+
+2. Programming details:
+   o String buffer length:
+     - to be identical for all modules
+   o consistent return types. Situation in 5.0:
+     The majority of functions return 0 on error and 1 on success, but there
+     are many which return 0 on success and a negative value on failure.
+     Proposal for 5.7? see below
+
+   o Copying input parameters into a buffer, i.e.:
+
+	strcpy (name, option.input->answer);
+	strcpy (result, option.output->answer);
+
+      is usually unnecessary. Furthermore, it's something which should be
+      discouraged, due to the usual problems with fixed-size buffers.
+
+   o Pre-formatting error/warning messages, e.g.:
+
+        if (mapset == NULL)
+        {
+                char buf[200];
+                sprintf (buf, "cell file [%s] not found", name);
+                G_fatal_error (buf);
+        }
+
+        is unnecessary, as G_fatal_error() and G_warning() already do this,
+        e.g.
+
+        if (!mapset)
+                G_fatal_error("cell file [%s] not found", name);
+
+   o Ideally, all abnormal exits would be via G_fatal_error(), rather
+     than calling exit() directly.
+
+   o The value passed to exit() should be non-negative. exit(-1) is just
+     a confusing way of writing exit(255).
+
+   o C++ style comments are forbidden for portability reasons:
+     use /* comment */ but NOT //comment
+
+3. Style of file: We can reach pretty indenting through:
+    indent -i4 -npsl -di0 -br -nce -d0 -cli0 -npcs -nfc1 FILE.c
+   This should be done before uploading.
+
+... to be extended...

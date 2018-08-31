@@ -1,0 +1,31 @@
+<!-- (c) 2013 GKX Associates Inc. -->
+<!-- License: GPL 2.0 -->
+<head>
+<STYLE TYPE="text/css">
+.highlight {background:#ff00ff}
+.text {color:#ff00ff}
+.both {color:white;background:black}
+</STYLE> 
+<title>find-miktex</title>
+</head>
+<body onLoad="window.resizeTo(650,250);">
+<h1>Find MiKTeX</h1>
+<script type="text/jscript">
+
+fso = new ActiveXObject("Scripting.FileSystemObject");
+mik = new ActiveXObject("MiKTeX.Session");
+
+i = 0;
+while (true) {
+	try {
+		rt = mik.GetRootDirectory(i);
+		if (fso.FileExists(rt + "\\miktex\\bin\\latex.exe")) {
+			document.write(rt + "\\miktex\\bin<br>");
+		}
+		i++;
+	} catch(e) {break};
+}
+	
+</script>
+</body>
+</html>

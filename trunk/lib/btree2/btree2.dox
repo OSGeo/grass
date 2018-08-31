@@ -1,0 +1,175 @@
+/*! \page btree2 btree2 library
+
+\tableofcontents
+
+Red-Black tree
+==============
+
+Include and linking
+-------------------
+
+To make use of the binary balanced (Red-Black) search tree include:
+
+    #include <grass/rbtree.h>
+
+and link to `BTREE2LIB` in a Makefile.
+
+\note
+    Duplicates are not supported.
+
+Example
+-------
+
+Define custom compare function:
+
+    int my_compare_fn(const void *a, const void *b)
+    {
+        if ((mydatastruct *) a < (mydatastruct *) b)
+            return -1;
+        else if ((mydatastruct *) a > (mydatastruct *) b)
+            return 1;
+        else if ((mydatastruct *) a == (mydatastruct *) b)
+            return 0;
+    }
+
+Create and initialize tree:
+
+    struct RB_TREE *mytree = rbtree_create(my_compare_fn, item_size);
+
+Insert items to tree:
+
+    struct mydatastruct data = <some data>;
+    
+    if (rbtree_insert(mytree, &data) == 0)
+        G_warning("could not insert data");
+
+Find item in tree:
+
+    struct mydatastruct data = <some data>;
+    
+    if (rbtree_find(mytree, &data) == 0)
+        G_message("data not found");
+
+Delete item from tree:
+
+    struct mydatastruct data = <some data>;
+    
+    if (rbtree_remove(mytree, &data) == 0)
+        G_warning("could not find data in tree");
+
+Traverse tree (get all items in tree in ascending order):
+
+    struct RB_TRAV trav;
+    
+    rbtree_init_trav(&trav, tree);
+    while ((data = rbtree_traverse(&trav)) != NULL) {
+        if (my_compare_fn(data, threshold_data) == 0) break;
+            // do something with data (using C++ comments because of Doxygen)
+    }
+
+Get a selection of items: all data > data1 and < data2.
+Start in tree where data is last smaller or first larger compared to data1:
+
+    struct RB_TRAV trav;
+    
+    rbtree_init_trav(&trav, tree);
+    data = rbtree_traverse_start(&trav, &data1);
+    // do something with data
+    while ((data = rbtree_traverse(&trav)) != NULL) {
+        if (data > data2) break;
+            // do something with data
+    }
+ 
+Destroy tree:
+
+    rbtree_destroy(mytree);
+ 
+Debug the whole tree with:
+
+    rbtree_debug(mytree, mytree->root);
+
+See also \ref rbtree.h for more instructions on how to use it.
+
+
+k-d tree
+========
+
+Description
+-----------
+
+k-d tree is a multidimensional (k-dimensional) binary search tree for
+nearest neighbor search.
+
+This k-d tree finds the exact nearest neighbor(s), not some
+approximation. It supports up to 255 dimensions. It is dynamic, i.e.
+points can be inserted and removed at any time. It is balanced to
+improve search performance. It provides k nearest neighbor search
+(find k neighbors to a given coordinate) as well as radius or distance
+search (find all neighbors within radius, i.e. not farther away than
+radius to a given coordinate).
+
+
+Include and linking
+-------------------
+
+Include: 
+
+    #include <grass/kdtree.h>
+
+and link to `BTREE2LIB` in a Makefile.
+
+
+Example
+-------
+
+Create a new k-d tree (here 3D):
+
+    struct kdtree *t = kdtree_create(3, NULL);
+
+Insert items:
+
+    for (i = 0; i < npoints; i++)
+        kdtree_insert(t, c, i, 1);
+
+Find nearest neighbor for each point:
+
+    for (i = 0; i < npoints; i++)
+        int found = kdtree_knn(t, c, &uid, &dist, 1, i);
+
+Destroy the tree:
+
+    kdtree_destroy(t);
+
+
+Example usages
+--------------
+
+- Nearest neighbor statistics: test if points are randomly
+  distributed. For example, an older version of GRASS addon `v.nnstat`
+  used an external k-d tree from PCL (which in turn uses flann)
+  which finds the approximate, not the exact nearest neighbor.
+  The GRASS-native k-d tree always finds the real nearest neighbor.
+
+- Spatial cluster analysis: a point cloud can be partitioned into
+  separate clusters where points within each cluster are closer to each
+  other than to points of another cluster. For example, as used in
+  \gmod{v.cluster}.
+
+- %Point cloud thinning: a sample can be generated from a large point
+  cloud by specifying a minimum distance between sample points.
+
+- This k-d tree is used by \gmod{v.clean} `tool=snap` (Vect_snap_lines()),
+  reducing both memory consumption and processing time.
+
+
+See also
+========
+
+- \ref rbtree.h
+- \ref kdtree.h
+- \ref rtree.h
+- \ref btree.h
+- [Wikipedia article on Red-black_tree](https://en.wikipedia.org/wiki/Red-black_tree)
+- [Wikipedia article on k-d tree](https://en.wikipedia.org/wiki/K-d_tree)
+
+*/

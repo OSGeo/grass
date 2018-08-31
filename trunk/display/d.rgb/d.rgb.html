@@ -1,0 +1,75 @@
+<h2>DESCRIPTION</h2>
+
+<em>RGB</em> stands for <b>red</b>, <b>green</b>,
+and <b>blue</b>. <em>d.rgb</em> visually combines three raster maps to
+form a color image. For each map, the corresponding component from the
+layer's color table is used (e.g. for the red layer, the red component
+is used, and so on). In general, the input raster maps should use a
+grey-scale color table.
+
+<h2>NOTES</h2>
+
+<em>d.rgb</em> does not attempt to quantize the combined image into a
+fixed number of colors. Nor does it have an option to generate a
+composite layer (see <em>r.composite</em> for that).
+
+The image and raster maps will not display properly if the graphics
+device does not have a reasonable sampling of the RGB color-space.
+
+<p>
+If color quality of satellite image color composites seems to appear
+poor, run <em><a href="i.colors.enhance.html">i.colors.enhance</a></em>
+on the selected satellite channels.
+
+<p>
+An alternative is the assignment of grey color tables to each band with
+<em><a href="r.colors.html">r.colors</a></em>:
+
+<div class="code"><pre>
+r.info -r image.1
+
+min=0
+max=255
+
+r.colors map=image.1 color=grey
+
+r.colors map=image.2 rast=image.1
+r.colors map=image.3 rast=image.1
+</pre></div>
+
+<p>
+To write out the color composite to a combined R/G/B raster maps, use
+<em><a href="r.composite.html">r.composite</a></em>.
+
+<h2>EXAMPLE</h2>
+
+Visual color composite of a LANDSAT scene (North Carolina sample dataset):
+
+<div class="code"><pre>
+g.region raster=lsat7_2002_10 -p
+d.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30
+</pre></div>
+
+<div style="margin: 10px" align="center">
+<img src="d_rgb.png" alt="d.rgb example" border="0">
+<br>
+<i>Figure: Visual color composite of a LANDSAT scene (North Carolina sample dataset)</i>
+</div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.colortable.html">d.colortable</a>,
+<a href="d.his.html">d.his</a>,
+<a href="r.blend.html">r.blend</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.colors.html">r.colors</a>,
+<a href="r.composite.html">r.composite</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Glynn Clements
+
+<p>
+<i>Last changed: $Date$</i>

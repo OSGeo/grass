@@ -1,0 +1,10 @@
+<!ELEMENT module-items (module-item*)>
+
+<!ELEMENT module-item (label?, module, description, keywords)>
+<!ATTLIST module-item name NMTOKEN #REQUIRED>
+
+<!ELEMENT label (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT module (#PCDATA)>
+<!ELEMENT keywords (#PCDATA)>
+

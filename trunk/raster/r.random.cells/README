@@ -1,0 +1,53 @@
+/****************************************************************************
+ *
+ * MODULE:       r.random.cells
+ * AUTHOR(S):    Charles Ehlschlaeger; National Center for Geographic 
+ *               Information and Analysis, University of California, Santa
+ *               Barbara (original contributor)
+ *               Markus Neteler <neteler itc.it>
+ *               Roberto Flor <flor itc.it>,
+ *               Brad Douglas <rez touchofmadness.com>, 
+ *               Glynn Clements <glynn gclements.plus.com>Markus Neteler <neteler itc.it> (original contributor)
+ *               Bernhard Reiter <bernhard intevation.de>
+ * PURPOSE:      generates a random sets of cells that are at least
+ *               some distance apart
+ * COPYRIGHT:    (C) 2000-2004 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
+
+r.random.cells generates a random sets of cells that are at least
+some distance apart. The cells are numbered from 1 to the numbers of
+cells generated.  Random cells will not be generated in areas masked off.
+
+OPTIONS
+-q
+This flag prevents the program from sending a verbose description to standard
+output of what the program is doing.
+
+-output
+
+Output map: Random cells. Each random cell has a unique non-zero cell
+value ranging from 1 to the number of cells generated.  The heuristic for
+this algorithm is to randomly pick cells until there are no cells outside
+of the chosen cell's buffer of radius \fIdistance\fR.
+
+-distance
+Input value(s) [default 0.0]: distance determines the minimum distance
+the centers of the random cells will be apart. 
+
+-seed
+Input value [default: random]: Specifies the random seed that
+r.random.cells will use to generate the cells.  If the random seed
+is not given, then it will get a seed from the process ID number.
+
+NOTES
+The original purpose for this program was to generate independent random
+samples of cells in a study area.  The distancevalue is the amount
+of spatial autocorrelation for the map being studied.
+
+
+

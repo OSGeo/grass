@@ -1,0 +1,16 @@
+meters:meter:1.0
+feet:foot:0.3048
+miles:mile:1609.344
+inches:inch:2.540000e-02
+centimeters:centimeter:0.01
+nanometers:nanometer:1.000000e-09
+microns:micron:1.000000e-06
+angstroms:angstrom:1.000000e-10
+decinanometers:decinanometer:1.000000e-10
+yards:yard:0.9144
+rods:rod:5.0292
+lightyears:lightyear:9.460530e+15
+USfeet:USfoot:0.30480060960121920243
+USinches:USinch:.02540005080010160020
+USyards:USyard:.91440182880365760731
+USmiles:USmile:1609.34721869443738887477

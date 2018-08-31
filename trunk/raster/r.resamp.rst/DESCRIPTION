@@ -1,0 +1,237 @@
+        DESCRIPTION OF INTERPOLATION LIBRARY
+
+written by Irina Kosinovsky 1995
+
+this description was not edited/reviewed, please use with caution
+
+
+double 
+IL_crst (r,fi)
+   double r;  /* radius */
+   double fi; /* tension */
+
+Radial based generating function - completely regularized spline 
+with tension (d=2)
+
+
+int 
+IL_crstg (r, fi, gd1, gd2)
+    double r;  /* radius */
+    double fi; /* tension */
+    double         *gd1;
+    double         *gd2;
+
+Function for calculating derivatives (d=2)
+
+
+int 
+IL_input_data_2d(fdinp,root,zmult,xmin,xmax,ymin,ymax,zmin,zmax,
+                     MAXPOINTS,KMIN,KMAX,n_points)
+   FILE *fdinp;         /* input stream */
+   struct multtree *root;  /* quadtree */
+   double zmult;       /* multiplier for z-values */
+   double *xmin,*xmax,*ymin,*ymax,*zmin,*zmax;  
+   int maxpoints;      /* max number of points per segment for interpolation */
+   int kmin;           /* min number of points per segment for interpolation */
+   int kmax;           /* max number of points per segment */ 
+   int *n_points;      /* number of points used for interpolation */
+
+Inserts input data inside the region into a quad tree.
+Also translates data.
+Returns number of segments in the quad tree.
+
+
+
+int 
+IL_create_bitmask(maskmap,bitmask,nsizr,nsizc)
+  char *maskmap;       /* name of mask */
+  struct BM *bitmask;
+  int nsizr,nsizc;     /* number of rows and columns */
+
+Creates a bitmap mask from given raster file 
+
+
+
+int 
+IL_grid_calc_2d(data,az,adx,ady,adxx,adyy,adxy,
+          Tmp_fd_z,Tmp_fd_dx,Tmp_fd_dy,Tmp_fd_xx,Tmp_fd_yy,Tmp_fd_xy,
+          bitmask,dnorm,zmin,zmax,zminac,zmaxac,gmin,gmax,
+          c1min,c1max,c2min,c2max,ertot,fi,KMAX2,b,scik1,scik2,scik3,offset1,
+          secpar,interp,interpder,wr_temp) 
+
+    struct quaddata *data;                   /* given segment */
+    double *az,*adx,*ady,*adxx,*adyy,*adxy;  /* array for interpolated values */
+    FILE   *Tmp_fd_z,*Tmp_fd_dx,*Tmp_fd_dy,  /* temp files for writing interp.*/
+           *Tmp_fd_xx,*Tmp_fd_yy,*Tmp_fd_xy; /* values */
+    struct BM *bitmask;                      /* bitmask */
+    double dnorm;                            /* normalization factor */
+    double zmin,zmax;                        /* min and max input z-values */
+    double *zminac,*zmaxac,                  /* min and max interp. z-values */
+           *gmin,*gmax,                      /* min and max inperp. slope val.*/
+           *c1min,*c1max,*c2min,*c2max;      /* min and max interp. curv. val.*/
+    double *ertot;                           /* total interplating func. error*/
+    double fi,                               /* tension */
+    int    KMAX2;                            /* max num. of points for interp.*/
+    double *b;                               /* solutions of linear equations */
+    int    scik1,scik2,scik3;                /* multipliers for interp. values*/
+    int    offset1;                          /* offset for temp file writing */
+    int    (*secpar) ();                     /* calculates aspect,slope,curv. */
+    double (*interp) ();                     /* radial  based interp. function*/
+    int    (*interpder) ();                  /* interp. func. for derivatives */
+    int    (*wr_temp) ();                    /* writes temp files */
+
+
+Calculates grid for the given segment represented by data (contains n_rows,
+n_cols, ew_res,ns_res, and all points inside + overlap) using solutions of
+system of lin. equations and interpolating functions interp() and interpder().
+Also calls secpar() to compute slope, aspect and curvatures if required.
+
+
+
+
+int 
+IL_matrix_create(points,n_points,matrix,indx,fi,rsm,interp)
+    struct triple *points;           /* points for interpolation */
+    int           n_points;          /* number of points */
+    double       **matrix;           /* matrix */
+    int           *indx;
+    double        fi;                /* tension */
+    double        rsm;               /* smoothing */
+    double       (*interp) ();       /* interpolating function */
+
+Creates system of linear equations represented by matrix using given points
+and interpolating function interp()
+
+
+
+
+ 
+int 
+IL_check_at_points_2d (n_points, points,b,ertot,tension,interp,zmin,dnorm)
+
+    int           n_points;    /* number of points */ 
+    struct triple *points;     /* points for interpolation */
+    double        *b;          /* solution of linear equations */
+    double        *ertot;      /* total error */
+    double        tension;     /*  tension */
+    double        (*interp) ();/* interpolating function */
+    double        zmin;        /* min z-value */
+    double        dnorm;       /* normalizing factor */
+
+Checks if interpolating function interp() evaluates correct z-values at given
+points. If smoothing is used calculate the maximum error caused by smoothing.
+
+
+
+
+
+
+int 
+IL_secpar_loop_2d(ngstc,nszc,k,bitmask,adx,ady,adxx,adyy,adxy,
+           gmin,gmax,c1min,c1max,c2min,c2max,cond1,cond2)
+    int    ngstc;       /* starting column */
+    int    nszc;        /* ending column */
+    int    k;           /* current row */
+    struct BM *bitmask;
+    double *adx,*ady,*adxx,*adyy,*adxy;  /* derivatives */
+    double *gmin,*gmax,*c1min,*c1max,*c2min,*c2max; /* min,max interp. values */
+    int    cond1,cond2; /*determine if particular values need to be computed*/
+
+Computes slope, aspect and curvatures (depending on cond1, cond2) for derivative
+arrays adx,...,adxy between columns ngstc and nszc.
+
+
+
+int 
+IL_write_temp_2d(ngstc,nszc,offset2,Tmp_fd_z,Tmp_fd_dx,Tmp_fd_dy,Tmp_fd_xx,
+          Tmp_fd_yy,Tmp_fd_xy,
+          az,adx,ady,adxx,adyy,adxy,scik1,scik2,scik3)
+    int    ngstc,nszc,offset2;  /* begin. and end. column, offset */
+    FILE   *Tmp_fd_z,*Tmp_fd_dx,*Tmp_fd_dy,  /* Temp files */
+           *Tmp_fd_xx,*Tmp_fd_yy,*Tmp_fd_xy;
+    double *az,*adx,*ady,*adxx,*adyy,*adxy;  /* interpolated values */
+    int    scik1,scik2,scik3;                /* mutipliers for interp. values */
+
+Writes az,adx,...,adxy into appropriate place (depending on ngstc, nszc and
+offset) in corresponding temp file */
+
+
+
+
+int 
+IL_interp_segments_2d (root, tree,az,adx,ady,adxx,adyy,adxy,
+         Tmp_fd_z,Tmp_fd_dx,Tmp_fd_dy,Tmp_fd_xx,Tmp_fd_yy,Tmp_fd_xy,bitmask,
+         dnorm,zmin,zmax,zminac,zmaxac,gmin,gmax,c1min,c1max,
+         c2min,c2max,ertot,fi,KMIN,KMAX2,totsegm,rsm,scik1,scik2,scik3,offset1,
+         grid_calc,matrix_create,check_points,secpar,interp,interpder,wr_temp)            
+    struct multtree *root;    /* root of the quad tree */
+    struct multtree *tree;    /* current leaf of the quad tree */
+    double *az,*adx,*ady,*adxx,  /* interp. value arrays (for gridcalc()*/
+                   *adyy,*adxy;
+    FILE   *Tmp_fd_z,*Tmp_fd_dx,*Tmp_fd_dy,  /* temp files for writing */
+           *Tmp_fd_xx,*Tmp_fd_yy,*Tmp_fd_xy; /* for gridcalc()  */
+    struct BM *bitmask;                      /* bitmask */
+    double dnorm;                            /* normalizing factor */
+    double zmin,zmax;                        /* min and max input z-values */
+    double *zminac,*zmaxac,                  /* min and max interp. z-values */
+           *gmin,*gmax,                      /* min and max inperp. slope val.*/
+           *c1min,*c1max,*c2min,*c2max;      /* min and max interp. curv. val.*/
+    double *ertot;                           /* total interplating func. error*/
+    double fi,                               /* tension */
+    int    KMIN;                             /* min num. of points for interp.*/
+    int    KMAX2;                            /* max num. of points for interp.*/
+    int    totsegm;                          /* total number of segments */
+    double rsm;                              /* smoothing (for matrix comput.)*/
+    int    scik1,scik2,scik3;                /* multipliers for interp. values*/
+    int    offset1;                          /* offset for temp file writing */
+    int    (*grid_calc) ();                  /*calculates grid for given segm*/
+    int    (*matrix_create) ();              /*creates matrix for a given segm*/
+    int    (*check_points) ();               /*checks interp. func. at points */
+    int    (*secpar) ();                     /* calculates aspect,slope,curv. */
+    double (*interp) ();                     /* radial  based interp. function*/
+    int    (*interpder) ();                  /* interp. func. for derivatives */
+    int    (*wr_temp) ();                    /* writes temp files */
+
+Recursively processes each segment in a tree by
+  a) finding points from neighbouring segments so that the total number of
+     points is between KMIN and KMAX2 by calling tree function MT_get_region().
+  b) creating and solving the system of linear equations using these points
+     and interp() by calling matrix_create() and G_ludcmp().
+  c) checking the interpolating function values at points by calling
+     check_points().
+  d) computing grid for this segment using points and interp() by calling
+     grid_calc().
+    
+
+
+
+
+
+int 
+IL_output_2d (cellhd,nsizr,nsizc,elev,slope,aspect,pcurv,tcurv,mcurv,
+    Tmp_fd_z,Tmp_fd_dx,Tmp_fd_dy,Tmp_fd_xx,Tmp_fd_yy,Tmp_fd_xy,
+    zmin,zmax,zminac,zmaxac,c1min,c1max,c2min,c2max,gmin,gmax,scik1,scik2,scik3,
+    dmin,fi,rsm,dnorm,zmult,KMAX,KMIN,ertot,input)
+    struct Cell_head *cellhd;   /* current region */
+    int    nsizr,nsizc;         /* number of rows,columns */
+    char   *elev,*slope,*aspect,*pcurv,*tcurv,*mcurv; /* output files */
+    FILE   *Tmp_fd_z,*Tmp_fd_dx,*Tmp_fd_dy, /* temp files */
+           *Tmp_fd_xx,*Tmp_fd_yy,*Tmp_fd_xy;
+    double zmin,zmax,           /* min,max input z-values */
+           zminac,zmaxac,c1min,c1max,  /* min,max interpolated values */
+           c2min,c2max,gmin,gmax;
+    int    scik1,scik2,scik3;          /*multipliers for interp. values */
+    double dmin;                             /* min distance between points */
+    double fi,                               /* tension */
+    double rsm;                              /* smoothing (for matrix comput.)*/
+    double dnorm;                            /* normalizing factor */
+    double zmult;                            /* multiplier for z-values */
+    int    KMAX;                             /* max number of points per segm*/
+    int    KMIN;                             /* min num. of points for interp.*/
+    double *ertot;                           /* total interplating func. error*/
+    char   *input;                           /* input file name */
+
+Creates output files as well as history files  and color tables for them.
+
+
+

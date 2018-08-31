@@ -1,0 +1,8 @@
+This is for translation of all the g.parser options of scripts.
+
+This folder will be filled with strings extracted from scripts by running
+g.parser -t <scriptfile>
+The strings are converted into xgettext c style macros when they are extracted
+as an intermidate step to convert them into .po files. The rules for making the regular module domain, grassmods, pick these up.
+
+The rules for making these files are in include/Make/Script.make.

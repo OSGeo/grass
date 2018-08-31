@@ -1,0 +1,12 @@
+r.param.scale in=lakes.dem param=crosc size=3 out=c3
+r.param.scale in=lakes.dem param=crosc size=5 out=c5
+r.param.scale in=lakes.dem param=crosc size=7 out=c7
+r.param.scale in=lakes.dem param=crosc size=9 out=c9
+r.param.scale in=lakes.dem param=crosc size=11 out=c11
+r.param.scale in=lakes.dem param=crosc size=13 out=c13
+r.param.scale in=lakes.dem param=crosc size=15 out=c15
+r.param.scale in=lakes.dem param=crosc size=17 out=c17
+r.param.scale in=lakes.dem param=crosc size=19 out=c19
+r.param.scale in=lakes.dem param=crosc size=21 out=c21
+r.param.scale in=lakes.dem param=crosc size=23 out=c23
+r.param.scale in=lakes.dem param=crosc size=25 out=c25

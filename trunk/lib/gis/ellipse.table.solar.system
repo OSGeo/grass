@@ -1,0 +1,146 @@
+# Solar system ellipsoids.  To use, copy the contents of this file 
+#   to the end of $GISBASE/etc/ellipse.table
+# Version 2010-09-10  Alessandro Frigeri <afrigeri@unipg.it>
+#
+# Planet Mercury, IAU2000 definition
+mercury    "Planet Mercury"               a=2439700.0 b=2439700.0
+# Planet Venus, IAU2000 definition
+venus      "Planet Venus"                 a=6051800.0 b=6051800.0
+# Earth's satellite Moon, IAU2000 definition
+Moon       "Earth's satellite Moon"       a=1737400.0 b=1737400.0
+# Mars's satellite Phobos, IAU2000 definition (a is averaged)
+Phobos     "Mars's satellite Phobos"      a=12300.0 b=9200.0
+# Mars's satellite Deimos, IAU2000 definition (a is averaged)
+Deimos     "Mars's satellite Deimos"      a=6800.0 b=5200.0
+# Planet Mars, IAU2000 definition
+mars       "Planet Mars"                  a=3396190.0 b=3376200.0
+# Planet Mars, defined as a sphere
+mars_sphere "Planet Mars"                  a=3396190.0 b=3396190.0
+# Jupiter's satellite Io, IAU2000 definition (a is averaged)
+Io         "Jupiter's satellite Io"       a=1824350.0 b=1815700.0
+# Jupiter's satellite Europa, IAU2000 definition (a is averaged)
+Europa     "Jupiter's satellite Europa"   a=1562680.0 b=1560930.0
+# Jupiter's satellite Ganymede, IAU2000 definition (a is averaged)
+Ganymede   "Jupiter's satellite Ganymede" a=2632345.0 b=2632345.0
+# Jupiter's satellite Callisto, IAU2000 definition (a is averaged)
+Callisto   "Jupiter's satellite Callisto" a=2409300.0 b=2409300.0
+# Jupiter's satellite Amalthea, IAU2000 definition (a is averaged)
+Amalthea   "Jupiter's satellite Amalthea" a=99000.0 b=64000.0
+# Jupiter's satellite Himalia, IAU2000 definition
+Himalia    "Jupiter's satellite Himalia"  a=85000.0 b=85000.0
+# Jupiter's satellite Elara, IAU2000 definition
+Elara      "Jupiter's satellite Elara"    a=40000.0 b=40000.0
+# Jupiter's satellite Pasiphae, IAU2000 definition
+Pasiphae   "Jupiter's satellite Pasiphae" a=18000.0 b=18000.0
+# Jupiter's satellite Sinope, IAU2000 definition
+Sinope     "Jupiter's satellite Sinope"   a=14000.0 b=14000.0
+# Jupiter's satellite Lysithea, IAU2000 definition
+Lysithea   "Jupiter's satellite Lysithea" a=12000.0 b=12000.0
+# Jupiter's satellite Carme, IAU2000 definition
+Carme      "Jupiter's satellite Carme"    a=15000.0 b=15000.0
+# Jupiter's satellite Ananke, IAU2000 definition
+Ananke     "Jupiter's satellite Ananke"   a=10000.0 b=10000.0
+# Jupiter's satellite Leda, IAU2000 definition
+Leda       "Jupiter's satellite Leda"     a=5000.0 b=5000.0
+# Jupiter's satellite Thebe, IAU2000 definition (a is averaged)
+Thebe      "Jupiter's satellite Thebe"    a=53500.0 b=42000.0
+# Jupiter's satellite Adrastea, IAU2000 definition (a is averaged)
+Adrastea   "Jupiter's satellite Adrastea" a=9000.0 b=7000.0
+# Jupiter's satellite Metis, IAU2000 definition
+Metis      "Jupiter's satellite Metis"    a=21500.0 b=21500.0
+# Planet Jupiter, IAU2000 definition
+jupiter    "Planet Jupiter"               a=71492000.0 b=66854000.0
+# Saturn's satellite Mimas, IAU2000 definition (a is averaged)
+Mimas      "Saturn's satellite Mimas"     a=202650.0 b=191400.0
+# Saturn's satellite Enceladus, IAU2000 definition (a is averaged)
+Enceladus  "Saturn's satellite Enceladus" a=251800.0 b=244600.0
+# Saturn's satellite Tethys, IAU2000 definition (a is averaged)
+Tethys     "Saturn's satellite Tethys"    a=531900.0 b=525800.0
+# Saturn's satellite Dione, IAU2000 definition
+Dione      "Saturn's satellite Dione"     a=560000.0 b=560000.0
+# Saturn's satellite Rhea, IAU2000 definition
+Rhea       "Saturn's satellite Rhea"      a=764000.0 b=764000.0
+# Saturn's satellite Titan, IAU2000 definition
+Titan      "Saturn's satellite Titan"     a=2575000.0 b=2575000.0
+# Saturn's satellite Hyperion, IAU2000 definition (a is averaged)
+Hyperion   "Saturn's satellite Hyperion"  a=147000.0 b=107000.0
+# Saturn's satellite Iapetus, IAU2000 definition
+Iapetus    "Saturn's satellite Iapetus"   a=718000.0 b=718000.0
+# Saturn's satellite Phoebe, IAU2000 definition (a is averaged)
+Phoebe     "Saturn's satellite Phoebe"    a=112500.0 b=105000.0
+# Saturn's satellite Janus, IAU2000 definition (a is averaged)
+Janus      "Saturn's satellite Janus"     a=96000.0 b=77000.0
+# Saturn's satellite Epimetheus, IAU2000 definition (a is averaged)
+Epimetheus "Saturn's satellite Epimetheus" a=62000.0 b=55000.0
+# Saturn's satellite Helene, IAU2000 definition
+Helene     "Saturn's satellite Helene"    a=16000.0 b=16000.0
+# Saturn's satellite Telesto, IAU2000 definition (a is averaged)
+Telesto    "Saturn's satellite Telesto"   a=13750.0 b=7500.0
+# Saturn's satellite Calypso, IAU2000 definition (a is averaged)
+Calypso    "Saturn's satellite Calypso"   a=11500.0 b=8000.0
+# Saturn's satellite Atlas, IAU2000 definition (a is averaged)
+Atlas      "Saturn's satellite Atlas"     a=17850.0 b=13500.0
+# Saturn's satellite Prometheus, IAU2000 definition (a is averaged)
+Prometheus "Saturn's satellite Prometheus" a=62000.0 b=34000.0
+# Saturn's satellite Pandora, IAU2000 definition (a is averaged)
+Pandora    "Saturn's satellite Pandora"   a=49500.0 b=31000.0
+# Saturn's satellite Pan, IAU2000 definition
+Pan        "Saturn's satellite Pan"       a=10000.0 b=10000.0
+# Planet Saturn, IAU2000 definition
+saturn     "Planet Saturn"                a=60268000.0 b=54364000.0
+# Uranus's satellite Ariel, IAU2000 definition (a is averaged)
+Ariel      "Uranus's satellite Ariel"     a=579500.0 b=577700.0
+# Uranus's satellite Umbriel, IAU2000 definition
+Umbriel    "Uranus's satellite Umbriel"   a=584700.0 b=584700.0
+# Uranus's satellite Titania, IAU2000 definition
+Titania    "Uranus's satellite Titania"   a=788900.0 b=788900.0
+# Uranus's satellite Oberon, IAU2000 definition
+Oberon     "Uranus's satellite Oberon"    a=761400.0 b=761400.0
+# Uranus's satellite Miranda, IAU2000 definition (a is averaged)
+Miranda    "Uranus's satellite Miranda"   a=237300.0 b=232900.0
+# Uranus's satellite Cordelia, IAU2000 definition
+Cordelia   "Uranus's satellite Cordelia"  a=13000.0 b=13000.0
+# Uranus's satellite Ophelia, IAU2000 definition
+Ophelia    "Uranus's satellite Ophelia"   a=15000.0 b=15000.0
+# Uranus's satellite Bianca, IAU2000 definition
+Bianca     "Uranus's satellite Bianca"    a=21000.0 b=21000.0
+# Uranus's satellite Cressida, IAU2000 definition
+Cressida   "Uranus's satellite Cressida"  a=31000.0 b=31000.0
+# Uranus's satellite Desdemona, IAU2000 definition
+Desdemona  "Uranus's satellite Desdemona" a=27000.0 b=27000.0
+# Uranus's satellite Juliet, IAU2000 definition
+Juliet     "Uranus's satellite Juliet"    a=42000.0 b=42000.0
+# Uranus's satellite Portia, IAU2000 definition
+Portia     "Uranus's satellite Portia"    a=54000.0 b=54000.0
+# Uranus's satellite Rosalind, IAU2000 definition
+Rosalind   "Uranus's satellite Rosalind"  a=27000.0 b=27000.0
+# Uranus's satellite Belinda, IAU2000 definition
+Belinda    "Uranus's satellite Belinda"   a=33000.0 b=33000.0
+# Uranus's satellite Puck, IAU2000 definition
+Puck       "Uranus's satellite Puck"      a=77000.0 b=77000.0
+# Planet Uranus, IAU2000 definition
+uranus     "Planet Uranus"                a=25559000.0 b=24973000.0
+# Neptune's satellite Triton, IAU2000 definition
+Triton     "Neptune's satellite Triton"   a=1352600.0 b=1352600.0
+# Neptune's satellite Nereid, IAU2000 definition
+Nereid     "Neptune's satellite Nereid"   a=170000.0 b=170000.0
+# Neptune's satellite Naiad, IAU2000 definition
+Naiad      "Neptune's satellite Naiad"    a=29000.0 b=29000.0
+# Neptune's satellite Thalassa, IAU2000 definition
+Thalassa   "Neptune's satellite Thalassa" a=40000.0 b=40000.0
+# Neptune's satellite Despina, IAU2000 definition
+Despina    "Neptune's satellite Despina"  a=74000.0 b=74000.0
+# Neptune's satellite Galatea, IAU2000 definition
+Galatea    "Neptune's satellite Galatea"  a=79000.0 b=79000.0
+# Neptune's satellite Larissa, IAU2000 definition
+Larissa    "Neptune's satellite Larissa"  a=96000.0 b=96000.0
+# Neptune's satellite Proteus, IAU2000 definition (a is averaged)
+Proteus    "Neptune's satellite Proteus"  a=213000.0 b=201000.0
+# Planet Neptune, IAU2000 definition
+neptune    "Planet Neptune"               a=24764000.0 b=24341000.0
+# Pluto's satellite Charon, IAU2000 definition
+Charon     "Pluto's satellite Charon"     a=593000.0 b=593000.0
+# Planet Pluto, IAU2000 definition
+pluto      "Planet Pluto"                 a=1195000.0 b=1195000.0
+
+

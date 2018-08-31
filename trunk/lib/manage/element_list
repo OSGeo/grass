@@ -1,0 +1,21 @@
+# @(#)Element_List
+# this file specifies the database elements that 
+# are processed by RENAME, REMOVE, COPY, and LIST
+#
+# format:
+# main_element:alias:description:menu text
+#    support_element:description
+#
+cell:raster:raster:raster map(s)
+  cellhd:header
+  cats:category
+  colr:color
+  hist:history
+  cell_misc:misc
+  fcell:fcell
+  g3dcell:g3dcell
+grid3:raster_3d:3D raster:3D raster map(s)
+vector:vector:vector:vector map(s)
+paint/labels:label:label:paint label file(s)
+windows:region:region definition:region definition(s)
+group:group:imagery group:imagery group(s)

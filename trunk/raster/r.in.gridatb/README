@@ -1,0 +1,15 @@
+GRIDATB.FOR is available from http://www.es.lancs.ac.uk/hfdg/topmodel.html.
+
+As of May 2008, this webpage no longer exists; the closest I could find was
+http://www.es.lancs.ac.uk/hfdg/freeware/hfdg_freeware_top.htm, and all of the
+available software on this page seems to VBA/Windows only.
+
+~ Eric Patton.
+
+Thanks to Keith Beven.
+
+
+
+[r.in.gridatb]
+imports GRIDATB map file.
+

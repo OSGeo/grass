@@ -1,0 +1,147 @@
+GRASS GIS Debugging:
+
+See also
+http://grasswiki.osgeo.org/wiki/GRASS_Debugging
+
+----------------------------------------------------
+At user level:
+
+ Print debugging message if variable DEBUG
+ is set to level equal or greater
+
+g.gisenv set="DEBUG=3"
+
+Levels: (recommended levels)
+ * 0 - silence
+ * 1 - message is printed once or few times per module
+ * 3 - each row (raster) or line (vector)
+ * 5 - each cell (raster) or point (vector)
+
+Further hints:
+> How can I force gcc, to complain about missing header file?
+ 
+'-Wimplicit-function-declaration'
+'-Werror-implicit-function-declaration'
+     Give a warning (or error) whenever a function is used before being
+     declared.
+----------------------------------------------------
+
+To make gcc less tolerant in accepting errors and code flaws, compile
+with (see also ../INSTALL):
+
+export CFLAGS='-g -ansi -Wall -D_BSD_SOURCE=1 -D_SVID_SOURCE=1 -D_POSIX_SOURCE=1 -D_POSIX_C_SOURCE=199506L'
+
+Also nice to emulate gcc/MacOSX compiler:
+CFLAGS='-fno-common'
+
+It is a good idea to use '-Wall -Werror' as gcc options. This means
+it treats the warnings as errors, i.e. it stops on them. So you have time
+to read them then.
+
+The gcc switch -Wimplicit-function-declaration (implied by -Wall) should
+report missing prototypes (use -Werror-implicit-function-declaration to
+make it an error rather than a warning).
+ 
+The linker switch --warn-common (e.g. LDFLAGS='-Wl,--warn-common') might
+be useful for catching multiply-defined symbols.
+
+Be sure to compile using debug flags (gcc -g) and don't "strip" the
+binaries after compiling.
+----------------------------------------------------
+C Code debugging Software:
+
+
+1) Debugger (command-line)
+      gdb `which r.plane`
+      r <flags> <parameters>
+      bt full
+
+
+   To debug in a running process, find out the process ID (PID)
+      ps -aef
+   and then use
+      gdb --pid=PID
+
+   to attach to running process PID. It will stop, enter 'c'
+   to continue and so forth (bt full for backtrace).
+
+2a) Graphical front-end for command-line debugger: ddd
+      ddd `which r.plane`
+      RUN -> here enter Parameters/Flags
+    
+      http://www.gnu.org/software/ddd/
+       (GNU DDD is a graphical front-end for command-line debuggers such as
+        GDB, DBX, WDB, Ladebug, JDB, XDB, the Perl debugger, the bash debugger, or the
+        Python debugger. )
+
+    See mini tutorial here:
+    http://grass.osgeo.org/wiki/GRASS_Debugging
+
+2b) Graphical front-end for command-line debugger: kdbg
+      Use the menus
+
+----------------------------------------------------
+Debugging on Mac OS X
+
+ The 'ldd' command doesn't exist, but
+  otool -L 
+ does almost the same job.
+
+----------------------------------------------------
+Using valgrind to find memory leaks (http://valgrind.org/):
+
+* Memory note for vector modules:
+   Support structures are not released by default because it take long time
+   and it is much faster if it is done by system.
+
+   You have to call Vect_set_release_support() before
+   Vect_close() if you want to use valgrind.
+
+* Example (see also http://bambi.otago.ac.nz/hamish/grass/memleak/v.in.ascii/):
+
+    CMD="v.in.ascii -zt z=3 in=lidaratm2_250k.txt out=lidaratm2_250k fs=,"
+    valgrind -v --tool=addrcheck --leak-check=yes --show-reachable=yes $CMD --o
+
+* On 64bit boxed valgrind is not supported. An alternative is 'memusage':
+
+     memusage -t -T v.in.ogr -o dsn=clcit2000 layer=LAB,ARC \
+                             type=centroid,boundary output=corine2000_it
+
+----------------------------------------------------
+Profiling GRASS with GCC:
+
+Profiling allows the compiler to insert code that collects various 
+statistics for later analysis.  Profiling with GCC is particularly 
+useful for quickly locating bottleneck functions, determining how 
+much time is spent in a particular function, and how many times that 
+function was called.
+
+To profile the entire GRASS package, the following steps should be 
+followed for success:
+
+ * Before running 'configure', both the CFLAGS and LDFLAGS environment 
+   variables need to be altered by adding the -pg flag to enable 
+   profiling. This can be accomplished by the following:
+
+   CFLAGS='-pg' LDFLAGS='-pg' ./configure ...
+
+   CFLAGS and LINK_FLAGS in include/Make/Platform.make can be manually 
+   edited after running 'configure', also.
+
+ * 'configure' must be called with --disable-shared if you intend to 
+   profile GRASS libraries (recommended)
+
+ * make GRASS as normal
+
+ * In order to run GRASS without errors, lib/init must be recompiled 
+   without linking using the -pg flag.  Edit include/Make/Platform.make 
+   and remove -pg from LINK_FLAGS.  'cd lib/init; make clean; make'.  
+   GRASS can now be installed as normal.
+
+When running a GRASS C module, a file called gmon.out is created when 
+the module completes execution.  This file can be analyzed with 
+the GCC tool 'gprof'.
+
+Note that when 'make distclean' is run, the manual changes to 
+include/Make/Platform.make are also removed.
+

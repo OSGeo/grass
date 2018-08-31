@@ -1,0 +1,322 @@
+/*! \page dglib GRASS Directed Graph Library
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+\section vlibDglibShortIntro Short introduction
+
+The Directed Graph Library or DGLib (Micarelli 2002)
+provides functionality for vector network analysis. This library
+released under GPL is hosted by the GRASS project (within the GRASS
+source code). As a stand-alone library it may also be used by other
+software projects.
+
+The Directed Graph Library library provides functionality to assign
+costs to lines and/or nodes. That means that costs can be accumulated
+while traveling along polylines. The user can assign individual costs
+to all lines and/or nodes of a vector map and later calculate least costly
+path connections based on the accumulated costs. Applications are
+transport analysis, connectivity and more. Implemented applications
+cover shortest/fastest path, traveling salesman (round trip), allocation of
+sources (creation of subnetworks), minimum Steiner trees (star-like
+connections), and iso-distances (from centers).
+
+For details, please read Blazek et al. 2002 (see below).
+
+Related vector functions are:
+ Vect_graph_add_edge(),
+ Vect_graph_init(),
+ Vect_graph_set_node_costs(),
+ Vect_graph_shortest_path(),
+ Vect_net_build_graph(),
+ Vect_net_nearest_nodes(),
+ Vect_net_shortest_path(), and
+ Vect_net_shortest_path_coor().
+
+
+\section intro Introduction
+
+The Directed Graph Library or DGLib (Micarelli 2002) provides
+functionality for vector network analysis. This library released under
+GPL is hosted by the GRASS project (in the CVS server). As stand-alone
+library it may also be used by other software project.
+
+A graph is a system of logical connections between a collection of
+objects called vertices. Graphs are usually represented by a picture,
+so that each vertex is shown as a point, with the connections shown as
+line segments. These vertices are also commonly referred to as nodes,
+edges referred to as arcs. A directed graph (digraph) consists of a
+finite set of vertices, and a finite set of edges, where an edge is an
+ordered pair of vertices. A directed graph has the property that edges
+have a direction, this is the reason for defining an edge as an
+ordered pair of vertices often referred to as the head and the tail of
+the edge.
+
+The original design idea behind DGLib was to support middle sized
+graphs in RAM with a near-static structure that doesn't need to be
+dynamically modified by the user program; ability to read graphs from
+input streams and process them with no needle to rebuild internal
+trees. A representation has been defined, where graph data is stored
+in 32bit word arrays and each element pointer is converted to a
+relative offset. This representation is serializable from/to
+input/output streams and allows fast load-and-use processing. Graphs
+need to be de-serialized in order to be edited. In further
+refactorings the library has evolved to support dynamic changes and
+state-independent algorithm (algorithms can be run on both
+serializable or editable graphs).
+
+DGLib defines a serializable graph as being in FLAT state and a
+editable graph as being in TREE state. The implementation makes
+intensive use of libavl (http://www.msu.edu/~pfaffben/avl/) AVL data
+structures to support TREE state.
+
+So far DGLib defines three different graph versions, version 1
+supports directed graph with a weak concept of the edge, it can
+support many applications where one doesn't need to know about the
+input edges of a node (in-degree) and where there is no requirement to
+directly retrieve edges by their identifier but only by head/tail
+combinations. Version 2 adds in-degree support and a true edge
+addressing, yet supporting directed graph. Version 3 uses the same
+internal representation of version 2 but activates code branches to
+support undirected graphs.
+
+The DGLib user can control a number of static features and can attach
+a arbitrary amount of data to each node (node-attributes) and each
+edge (edge-attributes). Attributes are not considered to be part of
+the graph structure and can be edited also when the graph is in FLAT
+state.
+
+Graph traversal in neither recursive nor hook (callback) based, but
+built on the use of traversers for nodes and edges. By default,
+traversal is ordered by node and edge identifiers but can optionally
+be ordered by other means. For example, it is often useful to visit
+edges on a weight order} basis (greedy algorithm), this is possible
+via prioritizers that are activated by setting specific graph options.
+
+Both preemptive (blocking) and non-preemptive
+(non-blocking/multiplexed) I/O is supported, although GRASS does not
+actually use graph storage it may be easily required by any other
+library user. Thread safety is so far ensured by a data separation
+design that keeps all application context states into stack
+containers, whose life cycle is controlled by the user program. Each
+graph is a separate container and two or more graphs never
+conflict. In addition algorithms (ie. shortest path) can safely share
+the same graph, while concurrent editing on the same graph is unsafe.
+
+As DGLib is under development, only a bunch of polynomial time
+algorithms have been implemented, and the basic structure is being
+stressed to be a mature core to possibly time wasting
+computations. Current algorithms are: shortest path, depth spanning,
+and minimum spanning. Spanning algorithms silently behave as
+arborescenses when applied to directed graphs. A clip callback
+function, optionally supplied by the user, comes called by the library
+while traversing the graph in order to alter default algorithm
+behavior (i.e. user can control access to specific graph segments
+while computing shortest path).
+
+The Directed Graph Library library provides functionality to assign
+costs to lines and/or nodes. That means that costs can be accumulated
+while traveling along polylines. The user can assign individual costs
+to all lines and/or nodes of a vector map and later calculate shortest
+path connections based on the accumulated costs. Applications are
+transport analysis, connectivity and more.
+
+
+Text based on:<br>
+
+R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1 vector
+architecture. In Open source GIS - GRASS users conference 2002,
+Trento, Italy, 11-13 September 2002. University of Trento, Italy,
+2002.
+<a href="http://www.ing.unitn.it/%7Egrass/conferences/GRASS2002/proceedings/proceedings/pdfs/Blazek_Radim.pdf">http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Blazek_Radim.pdf</a>
+
+
+\section codeWalkTrough Code Walk Through explanation
+
+Directed graph library is responsible for network analysis operations
+done on vector maps. For this purpose directed graph library converts
+the vector attributes into form of a graph. This graph structure and
+related structures are defined in dglib/graph.h This header file
+contains defination of all structers required for storing components
+of graph, transversing, accessing and modifying it.
+
+Map Structure Map_info contains a instance of dglGraph_s as one of its
+elements named 'graph'. This element is populated call to api
+Vect_net_build_graph(). This API takes several arguments as defined in
+lib/vector/Vlib/net.c (see \ref vectorlib).
+
+Following structure declares dglGraph_s, main datastructure for storing graph.
+
+\verbatim
+typedef struct _dglGraph
+{
+	int				iErrno; // used to report what kind of error while operating on it lately.
+
+	dglByte_t			Version;	//graph version 1 2 or 3
+	dglByte_t			Endian;		// big or small	
+	dglInt32_t			NodeAttrSize;	 //node attr sze
+	dglInt32_t			EdgeAttrSize; //edge attribute size
+	dglInt32_t			aOpaqueSet[ 16 ];	
+
+	dglInt32_t			cNode;	// count of nodes
+	dglInt32_t			cHead;	// count of head nodes ( nodes from those edge orignates)
+	dglInt32_t			cTail;	// count of tail nodes (nodes at whom edge terimate )
+	dglInt32_t			cAlone;	// component nodes ( which are not connected to anyone )
+	dglInt32_t			cEdge;	//count of edges
+	dglInt64_t			nnCost;	//total cost of edges
+
+	dglInt32_t			Flags;	// flags for graph . This conveys whether graph is of what kind.
+	dglInt32_t			nFamily;
+	dglInt32_t			nOptions;
+
+	void *				pNodeTree;	// pointer to tree of nodes	
+	void *				pEdgeTree;	//pointer to tree of edges
+	dglByte_t * 			pNodeBuffer;	//pointer to node buffer. this points contiguous memory location containing pointers to nodes of  graph.
+	dglInt32_t			iNodeBuffer; //current index of node being accessed. This is used as offset index from pNodeBuffer
+	dglByte_t * 			pEdgeBuffer; //pointer to edge buffer. this points to contiguous memory ,containing pointer to edgesets passing through each node. Here as per i remember means orignating.
+	dglInt32_t			iEdgeBuffer; // offset index counter for edge buffer.
+
+			//rest i have not studied yet (NKD).
+	dglEdgePrioritizer_s edgePrioritizer;
+	dglNodePrioritizer_s nodePrioritizer;
+
+
+ //so far statistics are only computed by dglAddEdge() 
+#ifdef DGL_STATS
+	clock_t				clkAddEdge;  // cycles spent during the last addedge execution 
+	int					cAddEdge;    // # of calls to dglAddEdge() 
+	clock_t				clkNodeTree; // cycles spent in accessing the node binary tree 
+	int					cNodeTree;   // # of probes in the node tree 
+#endif
+}
+\endverbatim
+
+As mentioned earlier, graphs are stored as FLAT form and for all
+operations they are first converted to TREE.  In FLAT form,
+pnodeBuffer contains all information about nodes. They are stored in
+ascending order as per nodeid. pnodeBuffer points to a contiguous
+memory area contains pointer to node type structure. This node type
+structure is a memory area indexed as
+
+\verbatim
+// Node macros - addresses in a flat node ( as defined in dglib/graph_v1.h ,
+// similar for version 2)
+
+#define DGL_IN_NODEID_v1		0
+#define DGL_IN_STATUS_v1 		1
+#define DGL_IN_TAIL_OFFSET_v1 	2// this gives where edgeset pointer is in pnode 
+#define DGL_IN_ATTR_v1			3
+#define DGL_IN_SIZE_v1			DGL_IN_ATTR_v1
+\endverbatim
+
+Similarly pEdgeBuffer is a contiguous memory locations contains
+pointer to edgesets passing through each node.  These edgesets can be
+transversed using dglEdgesetTraverser_s structure defined in
+dglib/graph.h .
+
+\verbatim
+// Edge macros - addresses in a flat edge (as defined in dglib/graph_v1.h and similar for version 2)
+#define DGL_IL_HEAD_OFFSET_v1	0
+#define DGL_IL_TAIL_OFFSET_v1	1
+#define DGL_IL_COST_v1			2
+#define DGL_IL_ID_v1			3
+#define DGL_IL_ATTR_v1			4
+#define DGL_IL_SIZE_v1			DGL_IL_ATTR_v1
+\endverbatim
+
+For any operations on graph, these first need to be converted to TREE
+from XXX. Dglib first convert FLAT to AVL trees using libavl. This
+operation is called unflattening.
+
+This has been explained earlier that graph may be one of three
+versions depending on which operations will be supported. APIs for
+these has been diffrentiated from each other through a suffix _v1 and
+_v2 .  All generic graph operations are defined in dglib/graph.h
+. These APIs depending on graph version call respective version
+APIs. For version 1 they resolve into *_v1() ones declared and defined
+in dglib/graph_v1.h and dglib/graph_v1.c . For version 2, they are is
+in dglib/graph_v2.h and dglib/graph_v2.c . For version 3, DOCUMENT
+THIS. Operations on various permitives are defined in template files.
+
+<ul>
+<li> Node operations : nodemgmt-template.c ->This contains operations like  getting, setting a node, finding in and out edgeset from node.
+
+<li> Edge operations: edgemgmt-template.c -> add edge, delete edge, get edge etc.
+
+<li> Spanning tree : span-template.c -> Build the depth-first spanning tree, minimum spanning tree using Prims algorithm
+
+<li> Shortest path : sp-template.c -> it implement Dijkastra's algo using min heap. Algorithm needs to be studied more. 
+
+<li> misc operations: misc-template.c -> operations like flattening or unflattening of graph, edgeset  transversing, node set  transversing etc.
+</ul>
+
+All these files contains defination using/for macros.These macro
+definations are there to make graph version transparent and provide
+uniform interface.  Macro declaration happens in v1-defs.h for version 1
+and v2-defs.h for version 2 graphs. If you are looking for any API,
+if it is all capital, it is a macro. You need to look for its
+expansion. This expansion will be true function for that
+operation. Just a piece of advice , always keep programmers manual
+with you. Just search in it for what you want otherwise one may spend
+quite substantial time in finding desired code.
+
+Vlib/level-two.c defines various APIs used for operation done on nodes
+and edges . For example finding node coordinates, edges coming from
+head nodes. etc.
+
+dglib/example folder contains some good examples which work only on
+graph (I mean graph is required to be input). They are easy and almost
+self explanatory once you know what API are for.
+
+\section functions Functions
+
+(yet incomplete, all functions need to be doxygenized...)
+
+dglNodeGet_Id()
+
+dglGet_NodeAttrSize()
+
+dglNodeGet_Attr()
+
+dglNodeSet_Attr()
+
+dglInitialize()
+
+dglFlatten()
+
+dglAddEdge()
+
+dglGetNode()
+
+dglShortestPath()
+
+dglShortestDistance()
+
+dglEdgeGet_Id()
+
+dglEdgeGet_Cost()
+
+dglFreeSPReport()
+
+\section vlibReferences References
+
+R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1
+ vector architecture. In Open source GIS - GRASS users conference 2002,
+ Trento, Italy, 11-13 September 2002. University of Trento, Italy, 2002.
+ <a href="http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Blazek_Radim.pdf">http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Blazek_Radim.pdf</a>
+ 
+
+\section contacts Contacts
+
+Roberto Micarelli, Italy<br>
+GRASS Development Team<br>
+Nitin K Dhiman, AINN group, CAIR  <nitinkdhiman@gmail.com> (code walkthrough documentation)
+
+\section seealso See Also
+
+GRASS 6 Vector Architecture \ref vectorlib 
+
+Last change: $Date$
+*/
+

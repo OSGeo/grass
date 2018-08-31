@@ -1,0 +1,5 @@
+BUGS
+
+* areas outside of LOS should be NULL, not zero
+  really? there is a difference between invisible areas 
+  and areas whose visibility is unknown (zero != NULL)

@@ -1,0 +1,172 @@
+                                  HTMLMAP driver
+
+                                  Tom Poindexter
+                                 tpoindex@nyx.net
+
+  This display driver is to allow the generation of HTML image maps for
+area vector data.  HTML image maps are used in conjunction with images
+to provide unique URL targets for different portions of an image.  The HTMLMAP
+driver can create both client-side image maps embedded into HTML files, or
+server-side image maps used by web server software.
+
+  Note that commands that require the MOUSE will NOT work correctly (or
+at all!)
+
+  Polygons can at most have 100 vertices (this limit imposed by HTML image map 
+formats.)  The driver will attempt to trim polygons that have more that 100 
+vertices (also see GRASS_RENDER_HTMLMAXPOINTS, below.)  Also, any polygon that is 
+entirely bounded by another polygon will be discarded.
+
+  Text written to the driver before polygons are used as the HREF tag for
+all subsequent polygons written.  It is intended that all polygons 
+that exists in a vector file will have the same HREF tag.
+
+  The only GRASS display commands that should be used with this driver are:
+	d.text	 - pass href information for resulting image maps.
+	d.vect.area	 - draw polygons from a vector file.
+    
+
+    0. Set environment variables:
+
+       GRASS_RENDER_WIDTH=xxx   #if you want another size than the default 640
+       export GRASS_RENDER_WIDTH
+       GRASS_RENDER_HEIGHT=xxx  #if you want another size than the default 480
+       export GRASS_RENDER_WIDTH
+
+       Additionally, HTMLMAP driver recognizes:
+
+       export GRASS_RENDER_HTMLTYPE
+       GRASS_RENDER_HTMLTYPE=xxx  
+            specifies the type of Html map to create:
+	    CLIENT  - Netscape client-side image map (default).  (NAME="map")
+	    APACHE  - Apache/NCSA server-side image map
+	    RAW     - Raw url and polygon vertices ("url x1 y1 x2 y2 .....")
+                      suitable for conversion to CERN server format, or
+                      any other format with user supplied conversion program.
+
+       export GRASS_RENDER_FILE
+       GRASS_RENDER_FILE=xxxxxx
+	    specifies the resulting file to store the html image map,
+	    default is 'htmlmap'.  Files without absolute path names are
+            written in the current directory where the driver was started.
+
+            Any existing file is overwritten without warning.
+
+
+	export GRASS_RENDER_HTMLMINDIST
+	GRASS_RENDER_HTMLMINDIST=xx
+	    specifies the minimum distance (in pixels) that a point must
+	    change from the previous one to keep in the list of vertices
+            for a polygon.  The default is '2', which means that a point's
+	    x or y difference from the previous point must change by a number
+	    of pixels greate than this value.  This parameters helps
+	    to eliminate points closely spaced points.
+
+
+	export GRASS_RENDER_HTMLMINBBOX
+	GRASS_RENDER_HTMLMINBBOX=xx
+	    specifies the minimum bounding box dimensions (both width and
+	    height) in order to store a polygon.  The default is '2', which
+	    means any polygon having bounding box width or height extent
+	    of less than 2 pixels will not be output as a clickable area.  
+            This parameter helps to eliminate clickable areas that are one 
+	    pixel in height or width, typically a single point or line.
+	
+
+	export GRASS_RENDER_HTMLMAXPOINTS
+	GRASS_RENDER_HTMLMAXPOINTS=xx
+	    specifies the maxiumum number of vertices that a polygon can 
+	    have.  The default is 99.  Some browser can only handle
+	    image map polygons of less that 100 vertices.
+
+
+    1. Start it up.
+
+         # set the environment variables (above) if desired, or use defaults
+
+         d.mon start=HTMLMAP
+         d.mon select=HTMLMAP
+
+    2. Display text strings (href's) and area polygons:
+
+         echo "http://www.no-such-place.net/area51/" | d.text
+	 d.vect.area map=area51
+         echo "http://www.roswell-nm.net/little/green/men.html" | d.text
+	 d.vect.area map=roswell
+
+    3. When done displaying stuff to HTMLMAP driver, use
+
+         d.mon stop=HTMLMAP
+
+       This will write the image map file file. A new file called 'htmlmap' 
+       (or whatever you specified with GRASS_RENDER_FILE) will be created  
+       in your current directory.  
+
+    4. In practice, you'll want to create gif/jpg/png images that correspond 
+       with your newly created image map:
+
+         # using previous GRASS_RENDER_WIDTH & GRASS_RENDER_HEIGHT
+         d.mon start=CELL
+         d.mon select=CELL
+         d.rast map=terrain
+         d.vect.area map=area51  fillcolor=white  linecolor=blue
+         d.vect.area map=roswell fillcolor=yellow linecolor=blue
+         d.vect map=states  color=green
+         d.vect map=roads   color=blue
+         d.mon stop=CELL
+         # make the region the same as the newly created cell for ppm export
+         g.pushregion.sh  # or g.region save=saved.reg
+         g.region raster=D_cell
+         r.out.ppm -q input=D_cell output=alien.ppm
+         # use the netpbm utilities to create a gif (quantize if needed)
+         ppmquant 128 <alien.ppm |  ppmtogif >alien.gif	
+         # assemble some html with the image and the image map
+         echo '<html><body><img src="alien.gif" usemap="#map">' >alien.html
+         cat htmlmap                                           >>alien.html
+         echo '</body></html>'                                 >>alien.html
+         # don't forget to reset your region
+         g.popregion.sh   # or g.region region=saved.reg
+	 # take a look and test it out
+	 netscape file:`pwd`/alien.html &
+
+
+
+  Building the HTMLMAP driver:
+
+    Change to the HTMLMAP directory, and make it:
+
+	cd src/display/devices/HTMLMAP
+	gmake5
+    
+    If all goes well, the HTMLMAP driver will be compiled and moved into
+    your device driver directory ($GISBASE/driver) and "etc/monitorcap"
+    will be modified.
+
+
+  Other:  
+
+    Don't forget to add the HTMLMAP driver in your monitorcap file!
+    Your monitorcap file exists as $GISBASE/etc/monitorcap.
+
+        HTMLMAP:driver/HTMLMAP:Create HTML Image Map: \
+             /usr/local/grass43/dev/fifo.9a /usr/local/grass43/dev/fifo.9b \
+             ::any terminal
+
+    Note: This job will be done by the Gmakefile.    
+
+    HTMLMAP was adapted from the CELL driver in GRASS 4.3.  Point-in-
+    polygon-test code was lifted from Randolph Franklin's web page, see 
+
+	http://www.ecse.rpi.edu/Homepages/wrf/
+	http://www.ecse.rpi.edu/Homepages/wrf/research/geom/pnpoly.html
+
+
+    If you create an HTML file with two or more images & image maps, you 
+    will need to edit the map names.  The HTMLMAP driver creates its map
+    with the name 'map'.  A small sed script can easily change the map name:
+
+	sed -e 's/NAME="map"/NAME="foomap"/' <htmlmap >foomap.html
+
+
+-----------------------------
+http://www.nyx.net/~tpoindex/grass-stuff/

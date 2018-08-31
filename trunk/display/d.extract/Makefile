@@ -1,0 +1,12 @@
+MODULE_TOPDIR = ../..
+
+PGM = d.extract
+
+LIBES     = $(DISPLAYLIB) $(VECTORLIB) $(GISLIB) $(DATETIMELIB)
+DEPENDENCIES= $(VECTORDEP) $(GISDEP) $(DISPLAYDEP) $(DATETIMEDEP)
+EXTRA_INC = $(VECT_INC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd

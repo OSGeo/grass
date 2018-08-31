@@ -1,0 +1,425 @@
+<h2>DESCRIPTION</h2>
+
+<em><b>r.neighbors</b></em> looks at each cell in a raster input
+file, and examines the values assigned to the
+cells in some user-defined "neighborhood" around it.  It
+outputs a new raster map layer in which each cell is
+assigned a value that is some (user-specified)
+function of the values in that cell's neighborhood.  For
+example, each cell in the output layer might be assigned a
+value equal to the average of the values
+appearing in its 3 x 3 cell "neighborhood" in the input
+layer. Note that the centre cell is also included in the calculation.
+
+<h3>OPTIONS</h3>
+
+The user must specify the names of the raster map layers to
+be used for <b>input</b> and <b>output</b>, the
+<b>method</b> used to analyze neighborhood
+values (i.e., the neighborhood function or operation to be
+performed), and the <b>size</b> of the neighborhood.
+<p>The user can optionally
+specify a <b>selection</b> map, to compute new values only where the raster
+cells of the selection map are not NULL. In case of a NULL cells,
+the values from the input map are copied into the output map.
+This may useful to smooth only parts of an elevation map (pits, peaks, ...).
+
+<p><em>Example how to use a selection map with method=average:</em><br>
+input map:
+<div class="code"><pre>
+1 1  1 1 1
+1 1  1 1 1
+1 1 10 1 1
+1 1  1 1 1
+1 1  1 1 1
+</pre></div>
+selection map, NULL values are marked as *:
+<div class="code"><pre>
+* * * * *
+* * 1 * *
+* 1 1 1 *
+* * 1 * *
+* * * * *
+</pre></div>
+The output map:
+<div class="code"><pre>
+1 1 1 1 1
+1 1 2 1 1
+1 2 2 2 1
+1 1 2 1 1
+1 1 1 1 1
+</pre></div>
+Without using the selection map, the output map would look like this:
+<div class="code"><pre>
+1 1 1 1 1
+1 2 2 2 1
+1 2 2 2 1
+1 2 2 2 1
+1 1 1 1 1
+</pre></div>
+
+<p>Optionally, the user can also specify the <b>TITLE</b> to
+be assigned to the raster map layer <b>output</b>, elect
+to not align the resolution of the output with that of the
+input (the <b>-a</b> option), and run <em><b>r.neighbors</b></em>
+with a custom matrix weights with the <em>weight</em> option.
+These options are described further below.
+<p>
+<em>Neighborhood Operation Methods:</em>
+The <b>neighborhood</b> operators determine what new 
+value a center cell in a neighborhood will have after examining
+values inside its neighboring cells.
+Each cell in a raster map layer becomes the center cell of a neighborhood 
+as the neighborhood window moves from cell to cell throughout the map layer.
+<em><b>r.neighbors</b></em> can perform the following operations:
+
+<p><dl>
+
+<dt><b>average</b> 
+
+<dd>The average value within the neighborhood.
+In the following example, the result would be:
+
+<br>
+
+(7*4 + 6 + 5 + 4*3)/9 = 5.6667
+
+<br>
+
+The result is rounded to the nearest integer (in this case 6).
+
+<div class="code"><pre>
+   Raw Data     Operation     New Data
+   +---+---+---+          +---+---+---+
+   | 7 | 7 | 5 |          |   |   |   |
+   +---+---+---+ average  +---+---+---+
+   | 4 | 7 | 4 |---------&gt;|   | 6 |   |
+   +---+---+---+          +---+---+---+
+   | 7 | 6 | 4 |          |   |   |   |
+   +---+---+---+          +---+---+---+
+</pre></div>
+
+<dt><b>median</b> 
+
+<dd>The value found half-way through a list of the
+neighborhood's values,
+when these are ranged in numerical order.
+
+<dt><b>mode</b> 
+
+<dd>The most frequently occurring value in the neighborhood.
+
+<dt><b>minimum</b> 
+
+<dd>The minimum value within the neighborhood.
+
+<dt><b>maximum</b> 
+
+<dd>The maximum value within the neighborhood.
+
+<dt><b>range</b>
+
+<dd>The range value within the neighborhood.
+
+<dt><b>stddev</b> 
+
+<dd>The statistical standard deviation of values
+within the neighborhood (rounded to the nearest integer).
+
+<dt><b>sum</b> 
+
+<dd>The sum of values within the neighborhood.
+
+<dt><b>count</b>
+<dd>The count of filled (not NULL) cells.
+
+<dt><b>variance</b> 
+
+<dd>The statistical variance of values
+within the neighborhood (rounded to the nearest integer).
+
+<dt><b>diversity</b> 
+
+<dd>The number of different values within the neighborhood.
+In the above example, the diversity is 4.
+
+<dt><b>interspersion</b> 
+
+<dd>The percentage of cells containing values which differ from the values
+assigned to the center cell in the neighborhood, plus 1.
+In the above example, the interspersion is:
+
+<br>
+
+5/8 * 100 + 1 = 63.5
+
+<br>
+
+The result is rounded to the nearest integer (in this case 64).
+
+<dt><b>quart1, quart3</b>
+
+<dd>The result will be the first or the third quartile (equal of 25th and 75th percentiles).
+
+<dt><b>perc90</b>
+
+<dd>The result will be the 90th percentile of neighborhood.
+
+<dt><b>quantile</b>
+
+<dd>Any quantile as specified by "quantile" input parameter.
+
+</dl>
+<p><br>
+
+<em>Neighborhood Size:</em>
+The neighborhood <b>size</b> specifies which cells surrounding any given
+cell fall into the neighborhood for that cell.
+The <b>size</b> must be an odd integer and represent the length of one of
+moving window edges in cells.
+For example, a size value of 3 will result in
+<div class="code"><pre>
+                              _ _ _
+                             |_|_|_| 
+    3 x 3 neighborhood ---&gt;  |_|_|_|
+                             |_|_|_|
+
+</pre></div>
+<p>
+<em>Matrix weights:</em>
+A custom matrix can be used if none of the neighborhood operation
+methods are desirable by using the <b>weight</b>.  This option must
+be used in conjunction with the <b>size</b> option to specify the
+matrix size.  The weights desired are to be entered into a text file.
+For example, to calculate the focal mean with a matrix <b>size</b> of
+3,
+<div class="code"><pre>
+r.neigbors in=input.map out=output.map size=3 weight=weights.txt
+</pre></div>
+
+The contents of the weight.txt file:
+<div class="code"><pre>
+3 3 3
+1 4 8
+9 5 3
+</pre></div>
+
+This corresponds to the following 3x3 matrix:
+<div class="code"><pre>
++-+-+-+
+|3|3|3|
++-+-+-+
+|1|4|8|
++-+-+-+
+|9|5|3|
++-+-+-+
+</pre></div>
+
+To calculate an annulus shaped neighborhood the contents of weight.txt file 
+may be e.g. for size=5:
+<div class="code"><pre>
+ 0 1 1 1 0
+ 1 0 0 0 1
+ 1 0 0 0 1
+ 1 0 0 0 1
+ 0 1 1 1 0
+</pre></div>
+
+The way that weights are used depends upon the specific aggregate
+(<b>method</b>) being used.
+
+However, most of the aggregates have the property that multiplying all
+of the weights by the same factor won't change the final result (an
+exception is <b>method=count</b>).
+
+Also, most (if not all) of them have the properties that an integer
+weight of N is equivalent to N occurrences of the cell value, and
+having all weights equal to one produces the same result as when
+weights are not used.
+
+When weights are used, the calculation for <b>method=average</b> is:
+
+<div class="code"><pre>
+  sum(w[i]*x[i]) / sum(w[i])
+</pre></div>
+
+In the case where all weights are zero, this will end up with both the
+numerator and denominator to zero, which produces a NULL result.
+
+<h3>FLAGS</h3>
+<dl>
+<dt><b>-a</b> 
+
+<dd>If specified, <em><b>r.neighbors</b></em> will not align the output
+raster map layer with that of the input raster map layer.
+The <em><b>r.neighbors</b></em> program works in the current geographic region.
+It is recommended, but not required, that the resolution
+of the geographic region be the same as that of the raster map layer.
+By default, if unspecified,
+<em><b>r.neighbors</b></em> will align these geographic region settings.
+<p>
+<dt><b>-c</b>
+<dd>
+This flag will use a circular neighborhood for the moving analysis window,
+centered on the current cell. 
+
+<p>The exact masks for the first few neighborhood sizes are as follows:
+<div class="code"><pre>
+3x3     . X .		5x5	. . X . .	7x7	. . . X . . . 
+        X O X			. X X X .		. X X X X X .
+        . X .			X X O X X		. X X X X X .
+				. X X X .		X X X O X X X
+ 				. . X . .		. X X X X X .
+							. X X X X X .
+        						. . . X . . .							
+
+9x9	. . . . X . . . .		11x11   . . . . . X . . . . .
+	. . X X X X X . .			. . X X X X X X X . .
+        . X X X X X X X .			. X X X X X X X X X .
+        . X X X X X X X .			. X X X X X X X X X .
+        X X X X O X X X X			. X X X X X X X X X .
+        . X X X X X X X .			X X X X X O X X X X X
+        . X X X X X X X .			. X X X X X X X X X .	
+        . . X X X X X . .			. X X X X X X X X X .
+        . . . . X . . . .			. X X X X X X X X X .
+				        	. . X X X X X X X . .
+				        	. . . . . X . . . . .	
+</pre></div>
+
+</dl>
+
+<h2>NOTES</h2>
+
+The <em><b>r.neighbors</b></em> program works in the current geographic region
+with the current mask, if any.  It is recommended, but not required,
+that the resolution of the geographic region be the same as that
+of the raster map layer.  By default, <em><b>r.neighbors</b></em> will align
+these geographic region settings.  However, the user can select to keep
+original input and output resolutions which are not aligned by specifying
+this (e.g., using the <b>-a</b> option).
+<p>
+<em><b>r.neighbors</b></em> doesn't propagate NULLs, but computes the
+aggregate over the non-NULL cells in the neighborhood.
+<p>
+The <b>-c</b> flag and the <b>weights</b> parameter are mutually exclusive.  Any
+use of the two together will produce an error. Differently-shaped neighborhood
+analysis windows may be achieved by using the <b>weight=</b> parameter to
+specify a weights file where all values are equal. The user can also vary the
+weights at the edge of the neighborhood according to the proportion of the cell
+that lies inside the neighborhood circle, effectively anti-aliasing the analysis
+mask.
+<p>
+For aggregates where a weighted calculation isn't meaningful
+(specifically: minimum, maximum, diversity and interspersion), the
+weights are used to create a binary mask, where zero causes the cell
+to be ignored and any non-zero value causes the cell to be used.
+<p>
+<em><b>r.neighbors</b></em> copies the GRASS <em>color</em> files associated with
+the input raster map layer for those output map layers that are based
+on the neighborhood average, median, mode, minimum, and maximum.
+Because standard deviation, variance, diversity, and interspersion are indices,
+rather than direct correspondents to input values,
+no <em>color</em> files are copied for these map layers.
+(The user should note that although the <em>color</em> file is copied
+for <em>average</em> neighborhood function output,
+whether or not the color file makes sense for the output
+will be dependent on the input data values.)
+
+<h3>Propagation of output precision</h3>
+
+The following logic has been implemented: For any aggregate, there are
+two factors affecting the output type:
+
+<ol>
+<li> Whether the input map is integer or floating-point.</li> 
+<li> Whether the weighted or unweighted version of the aggregate is used.</li> 
+</ol>
+
+These combine to create four possibilities:
+<p>
+<table border="1">
+ <tr><th rowspan="2">input type/weight</th><th colspan="2">integer</th><th colspan="2">float</th></tr>
+ <tr><th>no</th><th>yes</th><th>no</th><th>yes</th></tr>
+ <tr><td>average</td><td>float</td><td>float</td><td>float</td><td>float</td></tr>
+ <tr><td>median</td><td>[1]</td><td>[1]</td><td>float</td><td>float</td></tr>
+ <tr><td>mode</td><td>integer</td><td>integer</td><td>[2]</td><td>[2]</td></tr>
+ <tr><td>minimum</td><td>integer</td><td>integer</td><td>float</td><td>float</td></tr>
+ <tr><td>maximum</td><td>integer</td><td>integer</td><td>float</td><td>float</td></tr>
+ <tr><td>range</td><td>integer</td><td>integer</td><td>float</td><td>float</td></tr>
+ <tr><td>stddev</td><td>float</td><td>float</td><td>float</td><td>float</td></tr>
+ <tr><td>sum</td><td>integer</td><td>float</td><td>float</td><td>float</td></tr>
+ <tr><td>count</td><td>integer</td><td>float</td><td>integer</td><td>float</td></tr>
+ <tr><td>variance</td><td>float</td><td>float</td><td>float</td><td>float</td></tr>
+ <tr><td>diversity</td><td>integer</td><td>integer</td><td>integer</td><td>integer</td></tr>
+ <tr><td>interspersion</td><td>integer</td><td>integer</td><td>integer</td><td>integer</td></tr>
+ <tr><td>quart1</td><td>[1]</td><td>[1]</td><td>float</td><td>float</td></tr>
+ <tr><td>quart3</td><td>[1]</td><td>[1]</td><td>float</td><td>float</td></tr>
+ <tr><td>perc90</td><td>[1]</td><td>[1]</td><td>float</td><td>float</td></tr>
+ <tr><td>quantile</td><td>[1]</td><td>[1]</td><td>float</td><td>float</td></tr>
+</table>
+<p>
+[1] For integer input, quantiles may produce float results from
+interpolating between adjacent values.
+<br>
+[2] Calculating the mode of floating-point data is essentially
+meaningless.
+<p>
+	
+With the current aggregates, there are 5 cases:
+
+<ol> 
+<li> Output is always float: average, variance, stddev, quantiles (with
+interpolation).</li> 
+<li> Output is always integer: diversity, interspersion.</li> 
+<li> Output is integer if unweighted, float if weighted: count.</li> 
+<li> Output matches input: minimum, maximum, range, mode (subject to
+note 2 above), quantiles (without interpolation).</li> 
+<li> Output is integer for integer input and unweighted aggregate,
+otherwise float: sum.</li> 
+</ol> 
+
+
+<h2>EXAMPLES</h2>
+
+<h3>Measure occupancy of neighborhood</h3>
+
+Set up 10x10 computational region to aid visual inspection of results
+<div class="code"><pre>
+g.region rows=10 cols=10
+</pre></div>
+
+Fill 50% of computational region with randomly located cells.
+"distance=0" will allow filling adjacent cells.
+<div class="code"><pre>
+r.random.cells output=random_cells distance=0 ncells=50
+</pre></div>
+
+Count non-empty (not NULL) cells in 3x3 neighborhood
+<div class="code"><pre>
+r.neighbors input=random_cells output=counts method=count
+</pre></div>
+
+Optionally - exclude centre cell from the count (= only look around)
+<div class="code"><pre>
+r.mapcalc "cound_around = if( isnull(random_cells), counts, counts - 1)"
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em><a href="g.region.html">g.region</a></em><br>
+<em><a href="r.clump.html">r.clump</a></em><br>
+<em><a href="r.mapcalc.html">r.mapcalc</a></em><br>
+<em><a href="r.mfilter.html">r.mfilter</a></em><br>
+<em><a href="r.statistics.html">r.statistics</a></em><br>
+<em><a href="r.support.html">r.support</a></em>
+
+
+<h2>AUTHORS</h2>
+
+Original version: Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory 
+<br>
+Updates for GRASS GIS 7 by Glynn Clements and others
+
+<p><i>Last changed: $Date$</i>  

@@ -1,0 +1,158 @@
+/*! \page ccmathlib CCMATH mathematics library source code
+
+by Daniel A. Atkinson
+
+   Copyright (C)  2000   Daniel A. Atkinson    All rights reserved.
+   This code may be redistributed under the terms of the GNU library
+   public license (LGPL). ( See the lgpl.license file for details.)
+
+   Modified by Soeren Gebbert 2009/01/08:
+   Removed all unused functions in GRASS. Only the linear algebra
+   functions are used and included.
+
+\section ccmathintro Introduction to ccmath library
+
+A mathematics library coded in the C-language containing functions for linear algebra, numerical integration, geometry and trigonometry, curve fitting, roots and optimization, Fourier analysis, simulation generation, statistics, special functions, sorts and searches, time series models, complex arithmetic, and high precision math.
+
+Note: reduces version included in GRASS GIS:
+
+\section ccmathfunctions List of functions
+
+Real Linear Systems:
+
+ - minv()
+
+ - psinv()
+
+ - ruinv()
+
+ - solv()
+
+ - solvps()
+
+ - solvru()
+
+ - solvtd()
+
+ - eigen()
+
+ - eigval()
+
+ - evmax()
+
+ - svdval()
+
+ - sv2val()
+
+ - svduv()
+
+ - sv2uv()
+
+ - svdu1v()
+
+ - sv2u1v()
+
+ - mmul()
+
+ - rmmult()
+
+ - vmul()
+
+ - vnrm()
+     
+ - matprt()
+
+ - fmatprt()
+
+ - trnm()
+
+ - mattr()
+
+ - otrma()
+
+ - otrsm()
+
+ - mcopy()
+
+ - ortho()
+
+ - smgen()
+
+
+Utility routines for real symmertic eigensystems:
+
+ - house()
+
+ - housev()
+
+ - qreval()
+
+ - qrevec()
+
+
+Utility routines for singular value decomposition:
+
+ - qrbdi()
+
+ - qrbdv()
+
+ - qrbdu1()
+
+ - ldumat()
+
+ - ldvmat()
+
+ - atou1()
+
+ - atovm()
+
+
+Complex Matrix Algebra:
+
+
+ - cminv()
+
+ - csolv()
+
+ - heigvec()
+
+ - heigval()
+
+ - hevmax()
+
+ - cmmul()
+
+ - cmmult()
+
+ - cvmul()
+
+ - cvnrm()
+
+ - cmprt()
+
+ - trncm()
+
+ - hconj()
+
+ - cmattr()
+
+ - utrncm()
+
+ - utrnhm()
+
+ - cmcpy()
+
+ - unitary()
+
+ - hmgen()
+
+
+Utility routines for hermitian eigen problems:
+
+ - chouse()
+
+ - chousv()
+
+ - qrecvc()
+
+*/

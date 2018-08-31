@@ -1,0 +1,11 @@
+MODULE_TOPDIR = ../../..
+
+PGM=test.gpde.lib
+
+LIBES = $(GISLIB) $(RASTER3DLIB) $(GPDELIB) $(OMPLIB) $(GMATHLIB)
+DEPENDENCIES = $(GISDEP) $(RASTER3DDEP) $(GPDEDEP)
+EXTRA_CFLAGS = $(OMPCFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd

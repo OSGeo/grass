@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg4066"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   enable-background="new"
+   sodipodi:docname="splash_screen.svg"
+   inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/splash_20160115.png"
+   inkscape:export-xdpi="90.028885"
+   inkscape:export-ydpi="90.028885">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.69267358"
+     inkscape:cx="163.78669"
+     inkscape:cy="500.82737"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer2"
+     showgrid="false"
+     inkscape:window-width="1680"
+     inkscape:window-height="1010"
+     inkscape:window-x="0"
+     inkscape:window-y="22"
+     inkscape:window-maximized="1" />
+  <defs
+     id="defs4068">
+    <filter
+       height="13.121305"
+       y="-6.0606526"
+       width="1.2554916"
+       x="-0.12774582"
+       id="filter5039"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur5041"
+         stdDeviation="1.9092213"
+         inkscape:collect="always" />
+    </filter>
+    <filter
+       height="13.176738"
+       y="-6.0883688"
+       width="1.0160388"
+       x="-0.0080193879"
+       id="filter5043"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur5045"
+         stdDeviation="1.9092213"
+         inkscape:collect="always" />
+    </filter>
+    <filter
+       height="1.2021172"
+       y="-0.10105858"
+       width="1.0751529"
+       x="-0.037576453"
+       id="filter5063"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur5065"
+         stdDeviation="0.72740597"
+         inkscape:collect="always" />
+    </filter>
+    <filter
+       id="filter5067"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur5069"
+         stdDeviation="0.72740597"
+         inkscape:collect="always" />
+    </filter>
+    <filter
+       id="filter5115"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur5117"
+         stdDeviation="1.5505993"
+         inkscape:collect="always" />
+    </filter>
+    <filter
+       id="filter5119"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur5121"
+         stdDeviation="1.5505993"
+         inkscape:collect="always" />
+    </filter>
+    <filter
+       id="filter5123"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur5125"
+         stdDeviation="1.5505993"
+         inkscape:collect="always" />
+    </filter>
+    <filter
+       height="1.5578844"
+       y="-0.27894222"
+       width="1.0250789"
+       x="-0.012539443"
+       id="filter5143"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur5145"
+         stdDeviation="2.4393497"
+         inkscape:collect="always" />
+    </filter>
+    <filter
+       height="10.06153"
+       y="-4.5307652"
+       width="1.0144229"
+       x="-0.00721146"
+       id="filter5163"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur5165"
+         stdDeviation="2.3597735"
+         inkscape:collect="always" />
+    </filter>
+  </defs>
+  <metadata
+     id="metadata4071">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     style="display:inline"
+     inkscape:label="bg_image"
+     id="layer2"
+     inkscape:groupmode="layer"
+     sodipodi:insensitive="true">
+    <image
+       sodipodi:absref="/home/vincent/Documents/developpement/grass/splash_startup_20160522/grass_world3-nq8.png"
+       xlink:href="grass_world3-nq8.png"
+       y="346.80118"
+       x="53.149597"
+       id="image3209"
+       height="358.75983"
+       width="637.79529" />
+  </g>
+  <g
+     style="display:inline"
+     inkscape:label="g_shadows"
+     id="layer3"
+     inkscape:groupmode="layer"
+     sodipodi:insensitive="true">
+    <g
+       style="display:inline"
+       inkscape:label="uppercase#1"
+       id="layer7"
+       inkscape:groupmode="layer">
+      <g
+         style="display:inline;filter:url(#filter5067)"
+         id="g3214"
+         transform="matrix(3.696735,0,0,3.696735,-839.08456,-1659.3059)"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/logo/logo_variant_bw_bg.png"
+         inkscape:export-xdpi="600"
+         inkscape:export-ydpi="600">
+        <flowRoot
+           transform="matrix(0.78531774,0,0,0.78531774,56.306031,438.46065)"
+           style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans"
+           id="flowRoot3216"
+           xml:space="preserve"
+           inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/logo/logo_variant_bg.png"
+           inkscape:export-xdpi="600"
+           inkscape:export-ydpi="600"><flowRegion
+             id="flowRegion3218"><rect
+               style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans"
+               y="134.13319"
+               x="358.83777"
+               height="26.105526"
+               width="89.535889"
+               id="rect3220" /></flowRegion><flowPara
+             id="flowPara3222"
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-1.77950382px;writing-mode:lr-tb;text-anchor:start;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Medium">G<flowSpan
+   id="flowSpan3224"
+   style="letter-spacing:0px;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">RASS</flowSpan></flowPara></flowRoot>        <flowRoot
+           xml:space="preserve"
+           id="flowRoot3226"
+           style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+           transform="matrix(0.78531774,0,0,0.78531774,106.84321,438.46065)"
+           inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/logo/logo_variant_bg.png"
+           inkscape:export-xdpi="600"
+           inkscape:export-ydpi="600"><flowRegion
+             id="flowRegion3228"><rect
+               id="rect3230"
+               width="89.535889"
+               height="26.105526"
+               x="358.83777"
+               y="134.13319"
+               style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin" /></flowRegion><flowPara
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-1.77950382px;writing-mode:lr-tb;text-anchor:start;stroke:#000000;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+             id="flowPara3232">GIS</flowPara></flowRoot>      </g>
+    </g>
+    <g
+       style="display:none"
+       inkscape:label="lowercase#1"
+       id="layer6"
+       inkscape:groupmode="layer">
+      <flowRoot
+         transform="matrix(3.3717264,0,0,3.3717264,-793.81579,-113.04672)"
+         style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.44487596;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;filter:url(#filter5063);font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+         id="flowRoot4917"
+         xml:space="preserve"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+         inkscape:export-xdpi="84.666664"
+         inkscape:export-ydpi="84.666664"><flowRegion
+           id="flowRegion4919"><rect
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.44487596;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+             y="134.13319"
+             x="358.83777"
+             height="26.105526"
+             width="89.535889"
+             id="rect4921" /></flowRegion><flowPara
+           id="flowPara4923"
+           style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.6777854px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.44487596;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"><flowSpan
+             id="flowSpan4925"
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.44487596;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Light">grass</flowSpan></flowPara></flowRoot>      <flowRoot
+         xml:space="preserve"
+         id="flowRoot4939"
+         style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.48194894;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;filter:url(#filter5067);font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+         transform="matrix(3.3717264,0,0,3.3717264,-613.74757,-113.04672)"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+         inkscape:export-xdpi="84.666664"
+         inkscape:export-ydpi="84.666664"><flowRegion
+           id="flowRegion4941"><rect
+             id="rect4943"
+             width="89.535889"
+             height="26.105526"
+             x="358.83777"
+             y="134.13319"
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.48194894;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin" /></flowRegion><flowPara
+           style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.6777854px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.48194894;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+           id="flowPara4945"><flowSpan
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.6777854px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.48194894;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+             id="flowSpan4947">gis</flowSpan><flowSpan
+             id="flowSpan4949"
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.6777854px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.48194894;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin" /></flowPara></flowRoot>    </g>
+  </g>
+  <g
+     style="display:inline"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="grassgis"
+     sodipodi:insensitive="true">
+    <g
+       style="display:inline"
+       inkscape:label="uppercase"
+       id="layer4"
+       inkscape:groupmode="layer">
+      <g
+         inkscape:export-ydpi="600"
+         inkscape:export-xdpi="600"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/logo/logo_variant_bw_bg.png"
+         transform="matrix(3.696735,0,0,3.696735,-839.08456,-1659.3059)"
+         id="g4549"
+         style="display:inline">
+        <flowRoot
+           inkscape:export-ydpi="600"
+           inkscape:export-xdpi="600"
+           inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/logo/logo_variant_bg.png"
+           xml:space="preserve"
+           id="flowRoot5356"
+           style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans"
+           transform="matrix(0.78531774,0,0,0.78531774,56.306031,438.46065)"><flowRegion
+             id="flowRegion5358"><rect
+               id="rect5360"
+               width="89.535889"
+               height="26.105526"
+               x="358.83777"
+               y="134.13319"
+               style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans" /></flowRegion><flowPara
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-1.77950382px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Medium"
+             id="flowPara5362">G<flowSpan
+   style="letter-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+   id="flowSpan4547">RASS</flowSpan></flowPara></flowRoot>        <flowRoot
+           inkscape:export-ydpi="600"
+           inkscape:export-xdpi="600"
+           inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/logo/logo_variant_bg.png"
+           transform="matrix(0.78531774,0,0,0.78531774,106.84321,438.46065)"
+           style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+           id="flowRoot6517"
+           xml:space="preserve"><flowRegion
+             id="flowRegion6519"><rect
+               style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+               y="134.13319"
+               x="358.83777"
+               height="26.105526"
+               width="89.535889"
+               id="rect6521" /></flowRegion><flowPara
+             id="flowPara6523"
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-1.77950382px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.31834248;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin">GIS</flowPara></flowRoot>      </g>
+    </g>
+    <g
+       style="display:none"
+       inkscape:label="lowercase"
+       id="layer5"
+       inkscape:groupmode="layer">
+      <flowRoot
+         inkscape:export-ydpi="84.666664"
+         inkscape:export-xdpi="84.666664"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+         xml:space="preserve"
+         id="flowRoot6479"
+         style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.44487596;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;filter:url(#filter5386);font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+         transform="matrix(3.3717264,0,0,3.3717264,-793.81579,-113.04672)"><flowRegion
+           id="flowRegion6481"><rect
+             id="rect6483"
+             width="89.535889"
+             height="26.105526"
+             x="358.83777"
+             y="134.13319"
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.44487596;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin" /></flowRegion><flowPara
+           style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.6777854px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.44487596;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+           id="flowPara6485"><flowSpan
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.44487596;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Light"
+             id="flowSpan6487">grass</flowSpan></flowPara></flowRoot>      <flowRoot
+         inkscape:export-ydpi="84.666664"
+         inkscape:export-xdpi="84.666664"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+         transform="matrix(3.3717264,0,0,3.3717264,-613.74757,-113.04672)"
+         style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.33365697;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;filter:url(#filter5386);font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+         id="flowRoot6501"
+         xml:space="preserve"><flowRegion
+           id="flowRegion6503"><rect
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.33365697;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+             y="134.13319"
+             x="358.83777"
+             height="26.105526"
+             width="89.535889"
+             id="rect6505" /></flowRegion><flowPara
+           id="flowPara6507"
+           style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.6777854px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.33365697;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"><flowSpan
+             id="flowSpan6509"
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.6777854px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.33365697;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin">gis</flowSpan><flowSpan
+             style="font-size:21.99999809px;font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:-0.6777854px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.33365697;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Fira Sans;-inkscape-font-specification:Fira Sans Thin"
+             id="flowSpan6511" /></flowPara></flowRoot>      <path
+         inkscape:export-ydpi="84.666664"
+         inkscape:export-xdpi="84.666664"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter5043);enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         d="m 64.125,356.28125 a 0.37629983,0.37629983 0 1 0 0.0625,0.75 l 570.59375,0 a 0.3750375,0.3750375 0 1 0 0,-0.75 l -570.59375,0 a 0.3750375,0.3750375 0 0 0 -0.0625,0 z"
+         id="path4935"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="84.666664"
+         inkscape:export-xdpi="84.666664"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter5039);enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         d="m 643.75,356.28125 a 0.37791833,0.37791833 0 1 0 0.0937,0.75 l 35.0625,0 a 0.3750375,0.3750375 0 1 0 0,-0.75 l -35.0625,0 a 0.3750375,0.3750375 0 0 0 -0.0937,0 z"
+         id="path4937"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="84.666664"
+         inkscape:export-xdpi="84.666664"
+         inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+         inkscape:connector-curvature="0"
+         id="path6499"
+         d="m 643.75,356.28125 a 0.37791833,0.37791833 0 1 0 0.0937,0.75 l 35.0625,0 a 0.3750375,0.3750375 0 1 0 0,-0.75 l -35.0625,0 a 0.3750375,0.3750375 0 0 0 -0.0937,0 z"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.75;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter5386);enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
+    </g>
+  </g>
+  <g
+     style="display:inline"
+     inkscape:label="f_shadows"
+     id="layer9"
+     inkscape:groupmode="layer"
+     sodipodi:insensitive="true">
+    <path
+       sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+       inkscape:connector-curvature="0"
+       style="fill:#000000;fill-opacity:1;stroke:none;display:inline;filter:url(#filter5115)"
+       d="m 145.18268,677.37468 3.28989,3.33906 1.12206,-1.20423 -2.00565,-14.94405 0.1704,-2.41311 1.02372,-3.60744 1.07247,-3.315 1.17,-2.60808 3.80247,6.38619 3.70497,6.7518 0.82263,3.96243 5.17047,-5.07303 2.61114,-19.6323 5.4843,-26.56848 3.53436,-18.03732 7.16616,-14.21046 1.0725,-2.94936 0.39,-1.73058 0.1461,-2.80311 -0.43875,-2.24247 -1.02375,-2.02311 -1.87686,-1.87686 0.0975,0.51189 0.92622,0.95061 0.85314,1.99872 0.0975,1.60872 -1.17,3.21747 -1.51122,3.46122 -3.24186,5.82558 1.80375,-13.45488 0.51186,-7.06866 -0.65811,-0.1221 -3.63186,24.17976 -0.6825,1.21872 -5.9718,11.23677 -7.6293,15.11235 -6.41055,13.1136 -3.55872,9.14052 -2.02311,-3.46122 1.26753,-2.60808 6.97116,-13.38174 7.06869,-11.79738 2.94933,-5.75241 2.43747,-4.77747 0.65814,-1.63311 0.1461,-1.58436 -0.2925,-1.21875 -0.2925,0 -0.2193,1.0725 -1.21875,2.80311 -2.94933,4.97244 -8.43366,12.96735 -4.80183,7.11744 -3.29061,5.82555 2.02311,-20.0604 0.75561,-8.55555 0.31689,-18.08604 -0.0489,0 0.1464,-0.60936 0.46311,-1.12125 0.36561,-1.02372 0.43875,-0.75564 0,-1.48686 -0.1461,-1.87686 0.65811,-1.21872 -0.2925,-1.77936 0,-1.34061 0.2436,-0.75564 0.51189,-1.68183 0.36561,-0.90189 -0.68247,-1.12122 0.58497,-1.12122 -0.92622,-0.65814 -0.56064,-1.68186 0.80436,-1.31622 -1.12122,-0.36564 -0.4875,-0.87747 0,-0.75564 -0.51186,-0.85311 -0.51189,-0.46314 0.0489,-0.70686 0,-0.77997 -0.2436,-2.12061 -0.1707,-1.21875 -0.75564,-0.56061 -0.36561,-0.65811 -0.85311,-0.41436 -0.51186,-0.92625 0.0975,-1.04814 -0.0975,-1.07247 -0.56064,-0.92625 -0.97497,-0.195 -0.90189,-0.31689 -0.46311,-0.65811 -0.31686,-0.70686 -0.70686,0.46311 -0.2925,0.90186 -0.1461,0.975 -0.46311,1.53561 -0.31686,-0.51186 0.1464,1.87683 -0.0975,0.41439 0,0.70686 0.2682,0.56061 0.2439,0.75564 0.46311,0.60936 0.195,0.2682 0.1461,0.70686 -0.585,0.43875 0.2436,0.63375 -0.56061,0.70686 0.0975,0.56064 0.1464,0.56061 0.46311,0.56061 0.41436,0.51189 0.56061,0.4875 0.0975,0.41436 -0.195,0.60936 -0.46311,0.41439 -0.2193,0.34125 0.0732,0.87747 0.70689,0.46314 0.41436,0.43875 0.2439,0.87747 -0.75561,0.90189 -0.1221,0.63372 0.31686,0.70686 0.46311,0.56061 0,0.56061 0.34125,0.43875 0.31686,0.36564 0.2436,0.41436 -0.1464,0.70689 0.46311,0.65811 0.41439,0.0975 0.1464,0.31686 -0.1464,0.56064 0.39,0.80436 0.41436,0.31686 0.31686,0.65814 -0.31686,1.12122 0.46311,1.02375 0.43875,0.195 0.2193,0.46311 0.0975,1.31625 -0.2436,0.56061 -0.2193,0.65814 0.65811,3.31494 1.16997,0.75561 -0.0975,14.3811 -1.365,15.52671 -0.80436,8.99427 -1.31622,10.91988 -0.51186,1.31625 -4.33872,-7.4343 -1.48686,-9.96927 -1.92561,-16.18482 -2.29122,-15.01485 0.1707,13.6986 0.80442,11.33427 1.38936,10.79799 -9.67677,-15.33168 -13.8936,-20.84043 -3.19308,-4.43619 -0.2682,0 0.92625,2.65686 1.73058,4.31433 2.535,5.75244 4.43619,9.50613 2.68122,4.77744 3.31497,5.75244 6.8493,10.84677 6.19119,9.84741 0.95061,8.82363 2.94933,20.15793 -0.002,-0.012 -3.41064,-10.59051 -7.21491,-17.76918 -5.75247,-11.94363 -7.6293,-12.40674 -3.87558,-5.0943 -3.09558,-3.09561 -5.04558,-4.67994 2.09622,2.58372 3.38811,3.46122 1.99872,2.24247 1.31625,2.29122 1.58436,2.53497 2.58372,4.43619 2.24247,4.11933 2.29122,5.09436 2.80308,6.80052 5.48433,14.1861 5.75244,14.9661 3.46122,10.57863 z m -10.09356,-10.04937 -1.00374,-2.68671 -1.8525,-3.50994 -4.04622,-7.7268 -5.70369,-10.28616 -4.0218,-6.60555 -3.72936,-5.70369 -2.02311,-2.80308 -1.68186,-1.68186 2.90061,5.50869 2.65686,6.1668 3.99747,9.0918 1.75497,4.0218 1.75803,5.22822 z m -24.06228,-41.00379 -0.0489,-0.0975 -0.1464,-0.0975 z m 61.20501,-18.35418 -0.975,4.07055 -4.41183,17.64735 -2.145,10.01799 -2.24244,12.11427 -2.48625,7.89741 -0.87747,-2.04747 -5.65494,-10.48113 1.90122,-4.41186 6.19119,-12.96735 3.31497,-6.97116 4.43619,-9.35994 z m 5.4843,13.13796 -0.80436,4.67997 -2.29122,7.77552 -2.29125,5.75244 -2.53494,7.48305 -1.34064,7.36119 -1.26747,7.8258 4.58244,-4.65708 0.195,-2.38872 0.51189,-4.14372 1.21872,-5.84994 2.65683,-10.45677 1.21875,-7.75116 z m -32.80839,21.3279 1.85247,3.09561 -0.39,7.21491 -0.2925,0.2193 z m 3.11997,5.19183 1.0725,1.77936 -0.82878,1.95 -0.60936,0.43872 z"
+       id="path4905"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+       inkscape:export-xdpi="84.666664"
+       inkscape:export-ydpi="84.666664" />
+    <path
+       id="path4907"
+       d="m 90.34166,627.91545 -2.33997,2.33997 17.57421,17.57418 -2.31561,2.31561 17.54982,17.54982 -2.33997,2.33997 30.00531,30.00531 30.0297,-30.00531 -2.34,-2.33997 17.54982,-17.54982 -2.31561,-2.31561 17.57421,-17.57418 -2.34,-2.33997 -58.15812,58.13376 -58.13379,-58.13376 z"
+       style="color:#000000;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter5119);enable-background:accumulate"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+       inkscape:export-xdpi="84.666664"
+       inkscape:export-ydpi="84.666664" />
+    <path
+       id="path4909"
+       d="m 148.47545,535.6083 -72.83175,72.85611 72.83175,72.85611 72.85611,-72.85611 -72.85611,-72.85611 z m 0,1.29186 71.56422,71.56425 -71.56422,71.56422 -71.56425,-71.56422 71.56425,-71.56425 z"
+       style="color:#000000;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter5123);enable-background:accumulate"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+       inkscape:export-xdpi="84.666664"
+       inkscape:export-ydpi="84.666664" />
+    <g
+       transform="matrix(0.77999175,0,0,0.77999175,67.74917,530.27022)"
+       id="g4911"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.6410324;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;filter:url(#filter5163)"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+       inkscape:export-xdpi="84.666664"
+       inkscape:export-ydpi="84.666664">
+      <path
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.6410324;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         d="m -1.2824118,210.40625 0,1.25 92.4699118,0 0,-1.25 z"
+         id="path4913"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4915"
+         d="m 115.83638,210.40625 0,1.25 668.22239,0 0,-1.25 z"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.6410324;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         sodipodi:nodetypes="ccccc" />
+    </g>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4927"
+       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.66477138;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;filter:url(#filter5143);font-family:EB Garamond;-inkscape-font-specification:EB Garamond"
+       transform="matrix(0.94017285,0,0,0.94017285,-16.82974,183.62613)"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+       inkscape:export-xdpi="84.666664"
+       inkscape:export-ydpi="84.666664"><flowRegion
+         id="flowRegion4929"><rect
+           id="rect4931"
+           width="472.69949"
+           height="27.879639"
+           x="268.00415"
+           y="258.24249"
+           style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.66477138;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:EB Garamond;-inkscape-font-specification:EB Garamond" /></flowRegion><flowPara
+         id="flowPara4933">Bringing advanced geospatial technologies to the world</flowPara></flowRoot>  </g>
+  <g
+     style="display:inline"
+     inkscape:label="features"
+     id="layer8"
+     inkscape:groupmode="layer"
+     sodipodi:insensitive="true">
+    <path
+       inkscape:export-ydpi="84.666664"
+       inkscape:export-xdpi="84.666664"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+       id="path6467"
+       d="m 145.18268,677.37468 3.28989,3.33906 1.12206,-1.20423 -2.00565,-14.94405 0.1704,-2.41311 1.02372,-3.60744 1.07247,-3.315 1.17,-2.60808 3.80247,6.38619 3.70497,6.7518 0.82263,3.96243 5.17047,-5.07303 2.61114,-19.6323 5.4843,-26.56848 3.53436,-18.03732 7.16616,-14.21046 1.0725,-2.94936 0.39,-1.73058 0.1461,-2.80311 -0.43875,-2.24247 -1.02375,-2.02311 -1.87686,-1.87686 0.0975,0.51189 0.92622,0.95061 0.85314,1.99872 0.0975,1.60872 -1.17,3.21747 -1.51122,3.46122 -3.24186,5.82558 1.80375,-13.45488 0.51186,-7.06866 -0.65811,-0.1221 -3.63186,24.17976 -0.6825,1.21872 -5.9718,11.23677 -7.6293,15.11235 -6.41055,13.1136 -3.55872,9.14052 -2.02311,-3.46122 1.26753,-2.60808 6.97116,-13.38174 7.06869,-11.79738 2.94933,-5.75241 2.43747,-4.77747 0.65814,-1.63311 0.1461,-1.58436 -0.2925,-1.21875 -0.2925,0 -0.2193,1.0725 -1.21875,2.80311 -2.94933,4.97244 -8.43366,12.96735 -4.80183,7.11744 -3.29061,5.82555 2.02311,-20.0604 0.75561,-8.55555 0.31689,-18.08604 -0.0489,0 0.1464,-0.60936 0.46311,-1.12125 0.36561,-1.02372 0.43875,-0.75564 0,-1.48686 -0.1461,-1.87686 0.65811,-1.21872 -0.2925,-1.77936 0,-1.34061 0.2436,-0.75564 0.51189,-1.68183 0.36561,-0.90189 -0.68247,-1.12122 0.58497,-1.12122 -0.92622,-0.65814 -0.56064,-1.68186 0.80436,-1.31622 -1.12122,-0.36564 -0.4875,-0.87747 0,-0.75564 -0.51186,-0.85311 -0.51189,-0.46314 0.0489,-0.70686 0,-0.77997 -0.2436,-2.12061 -0.1707,-1.21875 -0.75564,-0.56061 -0.36561,-0.65811 -0.85311,-0.41436 -0.51186,-0.92625 0.0975,-1.04814 -0.0975,-1.07247 -0.56064,-0.92625 -0.97497,-0.195 -0.90189,-0.31689 -0.46311,-0.65811 -0.31686,-0.70686 -0.70686,0.46311 -0.2925,0.90186 -0.1461,0.975 -0.46311,1.53561 -0.31686,-0.51186 0.1464,1.87683 -0.0975,0.41439 0,0.70686 0.2682,0.56061 0.2439,0.75564 0.46311,0.60936 0.195,0.2682 0.1461,0.70686 -0.585,0.43875 0.2436,0.63375 -0.56061,0.70686 0.0975,0.56064 0.1464,0.56061 0.46311,0.56061 0.41436,0.51189 0.56061,0.4875 0.0975,0.41436 -0.195,0.60936 -0.46311,0.41439 -0.2193,0.34125 0.0732,0.87747 0.70689,0.46314 0.41436,0.43875 0.2439,0.87747 -0.75561,0.90189 -0.1221,0.63372 0.31686,0.70686 0.46311,0.56061 0,0.56061 0.34125,0.43875 0.31686,0.36564 0.2436,0.41436 -0.1464,0.70689 0.46311,0.65811 0.41439,0.0975 0.1464,0.31686 -0.1464,0.56064 0.39,0.80436 0.41436,0.31686 0.31686,0.65814 -0.31686,1.12122 0.46311,1.02375 0.43875,0.195 0.2193,0.46311 0.0975,1.31625 -0.2436,0.56061 -0.2193,0.65814 0.65811,3.31494 1.16997,0.75561 -0.0975,14.3811 -1.365,15.52671 -0.80436,8.99427 -1.31622,10.91988 -0.51186,1.31625 -4.33872,-7.4343 -1.48686,-9.96927 -1.92561,-16.18482 -2.29122,-15.01485 0.1707,13.6986 0.80442,11.33427 1.38936,10.79799 -9.67677,-15.33168 -13.8936,-20.84043 -3.19308,-4.43619 -0.2682,0 0.92625,2.65686 1.73058,4.31433 2.535,5.75244 4.43619,9.50613 2.68122,4.77744 3.31497,5.75244 6.8493,10.84677 6.19119,9.84741 0.95061,8.82363 2.94933,20.15793 -0.002,-0.012 -3.41064,-10.59051 -7.21491,-17.76918 -5.75247,-11.94363 -7.6293,-12.40674 -3.87558,-5.0943 -3.09558,-3.09561 -5.04558,-4.67994 2.09622,2.58372 3.38811,3.46122 1.99872,2.24247 1.31625,2.29122 1.58436,2.53497 2.58372,4.43619 2.24247,4.11933 2.29122,5.09436 2.80308,6.80052 5.48433,14.1861 5.75244,14.9661 3.46122,10.57863 z m -10.09356,-10.04937 -1.00374,-2.68671 -1.8525,-3.50994 -4.04622,-7.7268 -5.70369,-10.28616 -4.0218,-6.60555 -3.72936,-5.70369 -2.02311,-2.80308 -1.68186,-1.68186 2.90061,5.50869 2.65686,6.1668 3.99747,9.0918 1.75497,4.0218 1.75803,5.22822 z m -24.06228,-41.00379 -0.0489,-0.0975 -0.1464,-0.0975 z m 61.20501,-18.35418 -0.975,4.07055 -4.41183,17.64735 -2.145,10.01799 -2.24244,12.11427 -2.48625,7.89741 -0.87747,-2.04747 -5.65494,-10.48113 1.90122,-4.41186 6.19119,-12.96735 3.31497,-6.97116 4.43619,-9.35994 z m 5.4843,13.13796 -0.80436,4.67997 -2.29122,7.77552 -2.29125,5.75244 -2.53494,7.48305 -1.34064,7.36119 -1.26747,7.8258 4.58244,-4.65708 0.195,-2.38872 0.51189,-4.14372 1.21872,-5.84994 2.65683,-10.45677 1.21875,-7.75116 z m -32.80839,21.3279 1.85247,3.09561 -0.39,7.21491 -0.2925,0.2193 z m 3.11997,5.19183 1.0725,1.77936 -0.82878,1.95 -0.60936,0.43872 z"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline;filter:url(#filter5386)"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+    <path
+       inkscape:export-ydpi="84.666664"
+       inkscape:export-xdpi="84.666664"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+       inkscape:connector-curvature="0"
+       style="color:#000000;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.82688445;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter5386);enable-background:accumulate"
+       d="m 90.34166,627.91545 -2.33997,2.33997 17.57421,17.57418 -2.31561,2.31561 17.54982,17.54982 -2.33997,2.33997 30.00531,30.00531 30.0297,-30.00531 -2.34,-2.33997 17.54982,-17.54982 -2.31561,-2.31561 17.57421,-17.57418 -2.34,-2.33997 -58.15812,58.13376 -58.13379,-58.13376 z"
+       id="path6469" />
+    <path
+       inkscape:export-ydpi="84.666664"
+       inkscape:export-xdpi="84.666664"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+       inkscape:connector-curvature="0"
+       style="color:#000000;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.80000001;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter5386);enable-background:accumulate"
+       d="m 148.47545,535.6083 -72.83175,72.85611 72.83175,72.85611 72.85611,-72.85611 -72.85611,-72.85611 z m 0,1.29186 71.56422,71.56425 -71.56422,71.56422 -71.56425,-71.56422 71.56425,-71.56425 z"
+       id="path6471" />
+    <g
+       inkscape:export-ydpi="84.666664"
+       inkscape:export-xdpi="84.666664"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+       style="fill:#ffffff;fill-opacity:1;display:inline;filter:url(#filter5386)"
+       id="g6473"
+       transform="matrix(0.77999175,0,0,0.77999175,67.74917,530.27022)">
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path6475"
+         d="m -1.2824118,210.40625 0,1.25 92.4699118,0 0,-1.25 z"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.25;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.25;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+         d="m 115.83638,210.40625 0,1.25 668.22239,0 0,-1.25 z"
+         id="path6477"
+         inkscape:connector-curvature="0" />
+    </g>
+    <flowRoot
+       inkscape:export-ydpi="84.666664"
+       inkscape:export-xdpi="84.666664"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+       transform="matrix(0.94017285,0,0,0.94017285,-16.82974,183.62613)"
+       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;display:inline;filter:url(#filter5386);font-family:EB Garamond;-inkscape-font-specification:EB Garamond"
+       id="flowRoot6489"
+       xml:space="preserve"><flowRegion
+         id="flowRegion6491"><rect
+           style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:EB Garamond;-inkscape-font-specification:EB Garamond"
+           y="258.24249"
+           x="268.00415"
+           height="27.879639"
+           width="472.69949"
+           id="rect6493" /></flowRegion><flowPara
+         id="flowPara6495">Bringing advanced geospatial technologies to the world</flowPara></flowRoot>    <path
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-ydpi="84.666664"
+       inkscape:export-xdpi="84.666664"
+       inkscape:export-filename="/home/vincent/Documents/developpement/grass/grass_splash/splash_final/synthese.png"
+       inkscape:connector-curvature="0"
+       id="path6497"
+       d="m 64.125,356.05921 c -0.422628,0.0428 -0.355386,1.01361 0.0673,0.97166 l 614.446,0 c 0.42669,0.007 0.42669,-0.97892 0,-0.97166 l -613.255287,0 c -0.02238,-0.002 -1.235632,-0.002 -1.258013,0 z"
+       style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.75;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter5386);enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
+  </g>
+</svg>

@@ -1,0 +1,19 @@
+Symbols in form of PNG images enable to choose easily symbols in d.vect
+and in g.gui.psmap dialogs. It is necessary to keep images synchronized
+with symbols from ./lib/symbol/symbol/ directories.
+
+How to create new symbol image
+------------------------------
+
+You can use following script (see its code for runtime requirements),
+run script in symbol group directory (e.g. ./lib/symbol/symbol/basic)
+within a GRASS session. ImageMagic should take care of compressing the
+image as much as possible.
+
+    tools/symbol_to_img.sh
+
+Image should have 30x30 px to be displayed correctly in GUI dialog. If the symbol
+has different width and height, you are supposed to correct it (for example
+in Gimp see Image -> Canvas size). Also consider where the reference point of symbol
+is placed (see e.g. offbox_ne, offbox_ns symbols). If you don't do that
+it will be badly displayed in the GUI.

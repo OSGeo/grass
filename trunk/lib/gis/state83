@@ -1,0 +1,249 @@
+##: State plane runline setups for proj NAD83 datum
+# 101:alabama east datum:NAD83
+101: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+06 +y_0=0 +k=0.99996e+00 +lon_0=85d50'w +lat_0=30d30'n
+# 102:alabama west datum:NAD83
+102: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +k=0.9999333333333333e+00 +lon_0=87d30'w +lat_0=30dn
+# 5010:alaska zone no. 10 datum:NAD83
+5010: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.1e+07 +y_0=0 +lon_0=176dw +lat_0=51dn +lat_1=53d50'n +lat_2=51d50'n
+# 201:arizona east datum:NAD83
+201: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.21336e+06 +y_0=0 +k=0.9999e+00 +lon_0=110d10'w +lat_0=31dn
+# 202:arizona central datum:NAD83
+202: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.21336e+06 +y_0=0 +k=0.9999e+00 +lon_0=111d55'w +lat_0=31dn
+# 203:arizona west datum:NAD83
+203: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.21336e+06 +y_0=0 +k=0.9999333333333333e+00 +lon_0=113d45'w +lat_0=31dn
+# 301:arkansas north datum:NAD83
+301: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.4e+06 +y_0=0 +lon_0=92dw +lat_0=34d20'n +lat_1=36d14'n +lat_2=34d56'n
+# 302:arkansas south datum:NAD83
+302: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.4e+06 +y_0=0.4e+06 +lon_0=92dw +lat_0=32d40'n +lat_1=34d46'n +lat_2=33d18'n
+# 401:california i datum:NAD83
+401: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+07 +y_0=0.5e+06 +lon_0=122dw +lat_0=39d20'n +lat_1=41d40'n +lat_2=40dn
+# 402:california ii datum:NAD83
+402: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+07 +y_0=0.5e+06 +lon_0=122dw +lat_0=37d40'n +lat_1=39d50'n +lat_2=38d20'n
+# 403:california iii datum:NAD83
+403: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+07 +y_0=0.5e+06 +lon_0=120d30'w +lat_0=36d30'n +lat_1=38d26'n +lat_2=37d4'n
+# 404:california iv datum:NAD83
+404: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+07 +y_0=0.5e+06 +lon_0=119dw +lat_0=35d20'n +lat_1=37d15'n +lat_2=36dn
+# 405:california v datum:NAD83
+405: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+07 +y_0=0.5e+06 +lon_0=118dw +lat_0=33d30'n +lat_1=35d28'n +lat_2=34d2'n
+# 406:california vi datum:NAD83
+406: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+07 +y_0=0.5e+06 +lon_0=116d15'w +lat_0=32d10'n +lat_1=33d53'n +lat_2=32d47'n
+# 501:colorado north datum:NAD83
+501: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.9144018289e+06 +y_0=0.3048006096e+06 +lon_0=105d30'w +lat_0=39d20'n +lat_1=40d47'n +lat_2=39d43'n
+# 502:colorado central datum:NAD83
+502: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.9144018289e+06 +y_0=0.3048006096e+06 +lon_0=105d30'w +lat_0=37d50'n +lat_1=39d45'n +lat_2=38d27'n
+# 503:colorado south datum:NAD83
+503: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.9144018289e+06 +y_0=0.3048006096e+06 +lon_0=105d30'w +lat_0=36d40'n +lat_1=38d26'n +lat_2=37d14'n
+# 600:connecticut --- datum:NAD83
+600: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.3048006096e+06 +y_0=0.1524003048e+06 +lon_0=72d45'w +lat_0=40d50'n +lat_1=41d52'n +lat_2=41d12'n
+# 700:delaware --- datum:NAD83
+700: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+06 +y_0=0 +k=0.999995e+00 +lon_0=75d25'w +lat_0=38dn
+# 901:florida east datum:NAD83
+901: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+06 +y_0=0 +k=0.9999411764705882e+00 +lon_0=81dw +lat_0=24d20'n
+# 902:florida west datum:NAD83
+902: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+06 +y_0=0 +k=0.9999411764705882e+00 +lon_0=82dw +lat_0=24d20'n
+# 903:florida north datum:NAD83
+903: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=84d30'w +lat_0=29dn +lat_1=30d45'n +lat_2=29d35'n
+# 1001:georgia east datum:NAD83
+1001: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+06 +y_0=0 +k=0.9999e+00 +lon_0=82d10'w +lat_0=30dn
+# 1002:georgia west datum:NAD83
+1002: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.7e+06 +y_0=0 +k=0.9999e+00 +lon_0=84d10'w +lat_0=30dn
+# 5101:hawaii 1 datum:NAD83
+5101: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999666666666667e+00 +lon_0=155d30'w +lat_0=18d50'n
+# 5102:hawaii 2 datum:NAD83
+5102: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999666666666667e+00 +lon_0=156d40'w +lat_0=20d20'n
+# 5103:hawaii 3 datum:NAD83
+5103: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.99999e+00 +lon_0=158dw +lat_0=21d10'n
+# 5104:hawaii 4 datum:NAD83
+5104: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.99999e+00 +lon_0=159d30'w +lat_0=21d50'n
+# 5105:hawaii 5 datum:NAD83
+5105: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.1e+01 +lon_0=160d10'w +lat_0=21d40'n
+# 1101:idaho east datum:NAD83
+1101: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+06 +y_0=0 +k=0.9999473684210526e+00 +lon_0=112d10'w +lat_0=41d40'n
+# 1102:idaho central datum:NAD83
+1102: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999473684210526e+00 +lon_0=114dw +lat_0=41d40'n
+# 1103:idaho west datum:NAD83
+1103: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.8e+06 +y_0=0 +k=0.9999333333333333e+00 +lon_0=115d45'w +lat_0=41d40'n
+# 1201:illinois east datum:NAD83
+1201: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.3e+06 +y_0=0 +k=0.999975e+00 +lon_0=88d20'w +lat_0=36d40'n
+# 1202:illinois west datum:NAD83
+1202: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.7e+06 +y_0=0 +k=0.9999411764705882e+00 +lon_0=90d10'w +lat_0=36d40'n
+# 1301:indiana east datum:NAD83
+1301: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.1e+06 +y_0=0.25e+06 +k=0.9999666666666667e+00 +lon_0=85d40'w +lat_0=37d30'n
+# 1302:indiana west datum:NAD83
+1302: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.9e+06 +y_0=0.25e+06 +k=0.9999666666666667e+00 +lon_0=87d5'w +lat_0=37d30'n
+# 1401:iowa north datum:NAD83
+1401: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.15e+07 +y_0=0.1e+07 +lon_0=93d30'w +lat_0=41d30'n +lat_1=43d16'n +lat_2=42d4'n
+# 1402:iowa south datum:NAD83
+1402: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +lon_0=93d30'w +lat_0=40dn +lat_1=41d47'n +lat_2=40d37'n
+# 1501:kansas north datum:NAD83
+1501: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.4e+06 +y_0=0 +lon_0=98dw +lat_0=38d20'n +lat_1=39d47'n +lat_2=38d43'n
+# 1502:kansas south datum:NAD83
+1502: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.4e+06 +y_0=0.4e+06 +lon_0=98d30'w +lat_0=36d40'n +lat_1=38d34'n +lat_2=37d16'n
+# 1601:kentucky north datum:NAD83
+1601: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +lon_0=84d15'w +lat_0=37d30'n +lat_1=38d58'n +lat_2=37d58'n
+# 1602:kentucky south datum:NAD83
+1602: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0.5e+06 +lon_0=85d45'w +lat_0=36d20'n +lat_1=37d56'n +lat_2=36d44'n
+# 1701:louisiana north datum:NAD83
+1701: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.1e+07 +y_0=0 +lon_0=92d30'w +lat_0=30d30'n +lat_1=32d40'n +lat_2=31d10'n
+# 1702:louisiana south datum:NAD83
+1702: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.1e+07 +y_0=0 +lon_0=91d20'w +lat_0=28d30'n +lat_1=30d42'n +lat_2=29d18'n
+# 1703:louisiana offshore datum:NAD83
+1703: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.1e+07 +y_0=0 +lon_0=91d20'w +lat_0=25d30'n +lat_1=27d50'n +lat_2=26d10'n
+# 1801:maine east datum:NAD83
+1801: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.3e+06 +y_0=0 +k=0.9999e+00 +lon_0=68d30'w +lat_0=43d40'n
+# 1802:maine west datum:NAD83
+1802: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.9e+06 +y_0=0 +k=0.9999666666666667e+00 +lon_0=70d10'w +lat_0=42d50'n
+# 1900:maryland --- datum:NAD83
+1900: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.4e+06 +y_0=0 +lon_0=77dw +lat_0=37d40'n +lat_1=39d27'n +lat_2=38d18'n
+# 2001:massachusetts mainland datum:NAD83
+2001: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+06 +y_0=0.75e+06 +lon_0=71d30'w +lat_0=41dn +lat_1=42d41'n +lat_2=41d43'n
+# 2002:massachusetts island datum:NAD83
+2002: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +lon_0=70d30'w +lat_0=41dn +lat_1=41d29'n +lat_2=41d17'n
+# 2111:michigan north datum:NAD83
+2111: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.8e+07 +y_0=0 +lon_0=87dw +lat_0=44d47'n +lat_1=47d5'n +lat_2=45d29'n
+# 2112:michigan central/l datum:NAD83
+2112: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+07 +y_0=0 +lon_0=84d22'w +lat_0=43d19'n +lat_1=45d42'n +lat_2=44d11'n
+# 2113:michigan south datum:NAD83
+2113: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.4e+07 +y_0=0 +lon_0=84d22'w +lat_0=41d30'n +lat_1=43d40'n +lat_2=42d6'n
+# 2201:minnesota north datum:NAD83
+2201: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.8e+06 +y_0=0.1e+06 +lon_0=93d6'w +lat_0=46d30'n +lat_1=48d38'n +lat_2=47d2'n
+# 2202:minnesota central datum:NAD83
+2202: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.8e+06 +y_0=0.1e+06 +lon_0=94d15'w +lat_0=45dn +lat_1=47d3'n +lat_2=45d37'n
+# 2203:minnesota south datum:NAD83
+2203: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.8e+06 +y_0=0.1e+06 +lon_0=94dw +lat_0=43dn +lat_1=45d13'n +lat_2=43d47'n
+# 2301:mississippi east datum:NAD83
+2301: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.3e+06 +y_0=0 +k=0.99995e+00 +lon_0=88d50'w +lat_0=29d30'n
+# 2302:mississippi west datum:NAD83
+2302: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.7e+06 +y_0=0 +k=0.99995e+00 +lon_0=90d20'w +lat_0=29d30'n
+# 2401:missouri east datum:NAD83
+2401: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.25e+06 +y_0=0 +k=0.9999333333333333e+00 +lon_0=90d30'w +lat_0=35d50'n
+# 2402:missouri central datum:NAD83
+2402: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999333333333333e+00 +lon_0=92d30'w +lat_0=35d50'n
+# 2403:missouri west datum:NAD83
+2403: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.85e+06 +y_0=0 +k=0.9999411764705882e+00 +lon_0=94d30'w +lat_0=36d10'n
+# 2500:montana datum:NAD83
+2500: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=109d30'w +lat_0=44d15'n +lat_1=49dn +lat_2=45dn
+# 2600:nebraska datum:NAD83
+2600: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +lon_0=100dw +lat_0=39d50'n +lat_1=43dn +lat_2=40dn
+# 2701:nevada east datum:NAD83
+2701: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+06 +y_0=0.8e+07 +k=0.9999e+00 +lon_0=115d35'w +lat_0=34d45'n
+# 2702:nevada central datum:NAD83
+2702: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0.6e+07 +k=0.9999e+00 +lon_0=116d40'w +lat_0=34d45'n
+# 2703:nevada west datum:NAD83
+2703: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.8e+06 +y_0=0.4e+07 +k=0.9999e+00 +lon_0=118d35'w +lat_0=34d45'n
+# 2800:new hampshire --- datum:NAD83
+2800: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.3e+06 +y_0=0 +k=0.9999666666666667e+00 +lon_0=71d40'w +lat_0=42d30'n
+# 2900:new jersey --- datum:NAD83
+2900: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.15e+06 +y_0=0 +k=0.9999e+00 +lon_0=74d30'w +lat_0=38d50'n
+# 3001:new mexico east datum:NAD83
+3001: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.165e+06 +y_0=0 +k=0.9999090909090909e+00 +lon_0=104d20'w +lat_0=31dn
+# 3002:new mexico central datum:NAD83
+3002: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999e+00 +lon_0=106d15'w +lat_0=31dn
+# 3003:new mexico west datum:NAD83
+3003: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.83e+06 +y_0=0 +k=0.9999166666666667e+00 +lon_0=107d50'w +lat_0=31dn
+# 3101:new york east datum:NAD83
+3101: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.15e+06 +y_0=0 +k=0.9999e+00 +lon_0=74d30'w +lat_0=38d50'n
+# 3102:new york central datum:NAD83
+3102: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.25e+06 +y_0=0 +k=0.9999375e+00 +lon_0=76d35'w +lat_0=40dn
+# 3103:new york west datum:NAD83
+3103: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.35e+06 +y_0=0 +k=0.9999375e+00 +lon_0=78d35'w +lat_0=40dn
+# 3104:new york long island datum:NAD83
+3104: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.3e+06 +y_0=0 +lon_0=74dw +lat_0=40d10'n +lat_1=41d2'n +lat_2=40d40'n
+# 3200:north carolina --- datum:NAD83
+3200: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.60960122e+06 +y_0=0 +lon_0=79dw +lat_0=33d45'n +lat_1=36d10'n +lat_2=34d20'n
+# 3301:north dakota north datum:NAD83
+3301: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=100d30'w +lat_0=47dn +lat_1=48d44'n +lat_2=47d26'n
+# 3302:north dakota south datum:NAD83
+3302: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=100d30'w +lat_0=45d40'n +lat_1=47d29'n +lat_2=46d11'n
+# 3401:ohio north datum:NAD83
+3401: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=82d30'w +lat_0=39d40'n +lat_1=41d42'n +lat_2=40d26'n
+# 3402:ohio south datum:NAD83
+3402: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=82d30'w +lat_0=38dn +lat_1=40d2'n +lat_2=38d44'n
+# 3501:oklahoma north datum:NAD83
+3501: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=98dw +lat_0=35dn +lat_1=36d46'n +lat_2=35d34'n
+# 3502:oklahoma south datum:NAD83
+3502: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=98dw +lat_0=33d20'n +lat_1=35d14'n +lat_2=33d56'n
+# 3601:oregon north datum:NAD83
+3601: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.25e+07 +y_0=0 +lon_0=120d30'w +lat_0=43d40'n +lat_1=46dn +lat_2=44d20'n
+# 3602:oregon south datum:NAD83
+3602: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.15e+07 +y_0=0 +lon_0=120d30'w +lat_0=41d40'n +lat_1=44dn +lat_2=42d20'n
+# 3701:pennsylvania north datum:NAD83
+3701: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=77d45'w +lat_0=40d10'n +lat_1=41d57'n +lat_2=40d53'n
+# 3702:pennsylvania south datum:NAD83
+3702: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=77d45'w +lat_0=39d20'n +lat_1=40d58'n +lat_2=39d56'n
+# 3800:rhode island --- datum:NAD83
+3800: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.1e+06 +y_0=0 +k=0.99999375e+00 +lon_0=71d30'w +lat_0=41d5'n
+# 3900:south carolina datum:NAD83
+3900: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6096e+06 +y_0=0 +lon_0=81dw +lat_0=31d50'n +lat_1=34d50'n +lat_2=32d30'n
+# 4001:south dakota north datum:NAD83
+4001: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=100dw +lat_0=43d50'n +lat_1=45d41'n +lat_2=44d25'n
+# 4002:south dakota south datum:NAD83
+4002: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=100d20'w +lat_0=42d20'n +lat_1=44d24'n +lat_2=42d50'n
+# 4100:tennessee --- datum:NAD83
+4100: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=86dw +lat_0=34d20'n +lat_1=36d25'n +lat_2=35d15'n
+# 4201:texas north datum:NAD83
+4201: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+06 +y_0=0.1e+07 +lon_0=101d30'w +lat_0=34dn +lat_1=36d11'n +lat_2=34d39'n
+# 4202:texas north central datum:NAD83
+4202: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0.2e+07 +lon_0=98d30'w +lat_0=31d40'n +lat_1=33d58'n +lat_2=32d8'n
+# 4203:texas central datum:NAD83
+4203: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.7e+06 +y_0=0.3e+07 +lon_0=100d20'w +lat_0=29d40'n +lat_1=31d53'n +lat_2=30d7'n
+# 4204:texas south central datum:NAD83
+4204: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0.4e+07 +lon_0=99dw +lat_0=27d50'n +lat_1=30d17'n +lat_2=28d23'n
+# 4205:texas south datum:NAD83
+4205: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.3e+06 +y_0=0.5e+07 +lon_0=98d30'w +lat_0=25d40'n +lat_1=27d50'n +lat_2=26d10'n
+# 4301:utah north datum:NAD83
+4301: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0.1e+07 +lon_0=111d30'w +lat_0=40d20'n +lat_1=41d47'n +lat_2=40d43'n
+# 4302:utah central datum:NAD83
+4302: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0.2e+07 +lon_0=111d30'w +lat_0=38d20'n +lat_1=40d39'n +lat_2=39d1'n
+# 4303:utah south datum:NAD83
+4303: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0.3e+07 +lon_0=111d30'w +lat_0=36d40'n +lat_1=38d21'n +lat_2=37d13'n
+# 4400:vermont --- datum:NAD83
+4400: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999642857142857e+00 +lon_0=72d30'w +lat_0=42d30'n
+# 4501:virginia north datum:NAD83
+4501: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.35e+07 +y_0=0.2e+07 +lon_0=78d30'w +lat_0=37d40'n +lat_1=39d12'n +lat_2=38d2'n
+# 4502:virginia south datum:NAD83
+4502: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.35e+07 +y_0=0.1e+07 +lon_0=78d30'w +lat_0=36d20'n +lat_1=37d58'n +lat_2=36d46'n
+# 4601:washington north datum:NAD83
+4601: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +lon_0=120d50'w +lat_0=47dn +lat_1=48d44'n +lat_2=47d30'n
+# 4602:washington south datum:NAD83
+4602: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +lon_0=120d30'w +lat_0=45d20'n +lat_1=47d20'n +lat_2=45d50'n
+# 4701:west virginia north datum:NAD83
+4701: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=79d30'w +lat_0=38d30'n +lat_1=40d15'n +lat_2=39dn
+# 4702:west virginia south datum:NAD83
+4702: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=81dw +lat_0=37dn +lat_1=38d53'n +lat_2=37d29'n
+# 4801:wisconsin north datum:NAD83
+4801: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=90dw +lat_0=45d10'n +lat_1=46d46'n +lat_2=45d34'n
+# 4802:wisconsin central datum:NAD83
+4802: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=90dw +lat_0=43d50'n +lat_1=45d30'n +lat_2=44d15'n
+# 4803:wisconsin south datum:NAD83
+4803: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.6e+06 +y_0=0 +lon_0=90dw +lat_0=42dn +lat_1=44d4'n +lat_2=42d44'n
+# 4901:wyoming east datum:nad83
+4901: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=200000 +y_0=0 +lon_0=105d10'w +lat_0=40d30'n +k=0.9999375e+00
+# 4902:wyoming east central datum:nad83
+4902: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=400000 +y_0=100000 +lon_0=107d20'w +lat_0=40d30'n +k=0.9999375e+00
+# 4903:wyoming west central datum:nad83
+4903: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=600000 +y_0=0 +lon_0=108d45'w +lat_0=40d30'n +k=0.9999375e+00
+# 4904:wyoming west datum:nad83
+4904: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=800000 +y_0=100000 +lon_0=110d5'w +lat_0=40d30'n +k=0.9999375e+00
+# 5001:alaska zone no. 1 datum:NAD83
+5001: +proj=omerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+07 +y_0=-0.5e+07 +k=0.9999e+00 +lonc=133d40'w +lat_0=57dn +alpha=36d52'11.6315"s
+# 5002:alaska zone no. 2 datum:NAD83
+5002: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999e+00 +lon_0=142dw +lat_0=54dn
+# 5003:alaska zone no. 3 datum:NAD83
+5003: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999e+00 +lon_0=146dw +lat_0=54dn
+# 5004:alaska zone no. 4 datum:NAD83
+5004: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999e+00 +lon_0=150dw +lat_0=54dn
+# 5005:alaska zone no. 5 datum:NAD83
+5005: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999e+00 +lon_0=154dw +lat_0=54dn
+# 5006:alaska zone no. 6 datum:NAD83
+5006: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999e+00 +lon_0=158dw +lat_0=54dn
+# 5007:alaska zone no. 7 datum:NAD83
+5007: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999e+00 +lon_0=162dw +lat_0=54dn
+# 5008:alaska zone no. 8 datum:NAD83
+5008: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999e+00 +lon_0=166dw +lat_0=54dn
+# 5009:alaska zone no. 9 datum:NAD83
+5009: +proj=tmerc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.5e+06 +y_0=0 +k=0.9999e+00 +lon_0=170dw +lat_0=54dn
+# 5301:puerto rico datum:NAD83
+5301: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+06 +y_0=0.2e+06 +lon_0=66d26'w +lat_0=17d50'n +lat_1=18d26'n +lat_2=18d2'n
+# 5201:virgin islands datum:NAD83
+5201: +proj=lcc +a=0.6378137e+07 +es=0.66943800229e-02 +x_0=0.2e+06 +y_0=0.2e+06 +lon_0=66d26'w +lat_0=17d50'n +lat_1=18d26'n +lat_2=18d2'n

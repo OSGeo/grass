@@ -1,0 +1,86 @@
+/*! \page clusterlib GRASS Cluster analysis statistics Library
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\section clusterintro Introduction
+
+This library does a k-means style of cluster analysis. It is currently
+only used by <tt>i.cluster</tt>.
+
+The library functions are defined in <tt>cluster.h</tt>.
+
+\code
+#include <grass/cluster.h>
+\endcode
+
+\section ClusterStruct Cluster structure
+
+\code
+struct Cluster
+{
+    int nbands;                 /* number of bands */
+    int npoints;                /* number of points */
+    DCELL **points;             /* array of points */
+    int np;
+
+    double *band_sum;		/* sum over each band */
+    double *band_sum2;		/* sum of squares over each band */
+
+    int *class;			/* class of each point */
+    int *reclass;		/* for removing empty classes  */
+    int *count;			/* number of points in each class */
+    int *countdiff;		/* change in count */
+    double **sum;		/* sum over band per class */
+    double **sumdiff;		/* change in sum */
+    double **sum2;		/* sum of squares per band per class */
+    double **mean;		/* initial class means */
+    struct Signature S;		/* final signature(s) */
+
+    int nclasses;               /* number of classes */
+    int merge1, merge2;
+    int iteration;              /* number of iterations */
+    double percent_stable;      /* percentage stable */
+};
+\endcode
+
+\section listFn List of functions
+
+ - I_cluster_assign()
+
+ - I_cluster_begin()
+
+ - I_cluster_clear()
+
+ - I_cluster_distinct()
+
+ - I_cluster_exec()
+
+ - I_cluster_exec_allocate()
+
+ - I_cluster_exec_free()
+
+ - I_cluster_means()
+
+ - I_cluster_merge()
+
+ - I_cluster_nclasses()
+
+ - I_cluster_point()
+
+ - I_cluster_begin_point_set()
+
+ - I_cluster_point_part()
+
+ - I_cluster_end_point_set()
+
+ - I_cluster_reassign()
+
+ - I_cluster_reclass()
+
+ - I_cluster_separation()
+
+ - I_cluster_signatures()
+
+ - I_cluster_sum2()
+
+*/

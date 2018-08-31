@@ -1,0 +1,13 @@
+TODO:
+
+in main_ogl.c the function do__draw_solid() is not yet
+implemented properly (commented):
+
+ therefore we cannot watch solids...
+
+If I remove the comment from 
+ draw_cap_side (D_spec, Headp, G3header, Cap, -1);
+
+the graphic output disappears.
+
+MN 2001

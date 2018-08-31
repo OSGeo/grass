@@ -1,0 +1,174 @@
+<!--	grass-interface.dtd
+
+	Copyright (C) 2000-2007 by the GRASS Development Team
+	Author: Jan-Oliver Wagner <jan intevation.de>
+	
+	Changes: 
+	2007-10 by Martin Landa <landa.martin gmail.com>
+	   * added keywords element
+	   * added name element (fix for value element)
+
+	2007-04 by Daniel Calvelo <dca.gis gmail.com>
+	   * added guisection element
+	   * added name-description pair for value sets
+
+	2001-06-07 by Eric G. Miller <egm2 jps.net>
+	   * make <parameter-group> optional
+	   * move descriptions first, always optional
+	   * make <default> optional  // Should it reference <value> ?
+	   
+	2001-07-09:
+	   * Make an explicit flag element
+	   * make keydesc and gispropmpt elements
+	   * move elements directly under "task"
+
+	This program is free software under the GPL (>=v2)
+	Read the file COPYING coming with GRASS for details.
+-->
+
+
+<!--	a grass-interface collect several tasks to
+	customize a grass application.
+-->
+<!ELEMENT grass-interface (description? , task+)>
+<!ATTLIST grass-interface	name	CDATA #REQUIRED>
+
+
+<!--	a task describes the interface of a single
+	GRASS command. It may consist of several
+	groups of parameters. Grouping is only for
+	semantic purposes in the (G)UI.
+	The task may optionally have a description.
+	The name of the task is the identifier
+	for the GRASS command and is used
+	to execute the task.
+-->
+<!ELEMENT task	        (description?, keywords?, parameter*, flag*, parameter-group*)>
+<!ATTLIST task	name	CDATA #REQUIRED>
+
+
+
+<!--	a parameter-group may be associated with a name,
+	but the name is not necessary for running a
+	GRASS command.
+	The group consists of a number of parameters
+	and may optionally have a description.
+-->
+<!ELEMENT parameter-group       (description?, parameter*, flag*)>
+<!ATTLIST parameter-group	name	CDATA	#IMPLIED>
+
+
+<!--	a parameter must have a name and a description.
+	the name is the parameter identifier when calling
+	the command.
+	A default may be provided. values can be given
+	as parameter options.
+	Parameters can be optional and in that case can be
+	ignored executing the task when not entered in the (G)UI.
+	Any parameter has one of these (default is string):
+	string		: a string parameter.
+	integer		: a numeric integer parameter.
+	float		: a numeric float parameter.
+	If multiple is "yes", then many values for the
+	parameter may be given in a comma-seperated list
+-->
+<!ELEMENT parameter     (description?, keydesc?, gisprompt?, default?, values?, guisection?)>
+<!ATTLIST parameter	name		CDATA #REQUIRED
+			type		(string | integer | float) "string"
+			required	(yes | no) "no"
+			multiple	(yes | no) "no">
+
+<!--    The "keydesc" defines a tuple for input, such as "x,y".
+	The program expects a comma separated list with matching
+	count of items (or multiples thereof, if multiple is true).
+-->
+<!ELEMENT keydesc      (item+)>
+
+
+<!--    An "item" is a value for a tuple of keydesc.
+        It must have an "order" attribute, to insure sort ordering
+-->
+<!ELEMENT item         (#PCDATA)>
+<!ATTLIST item         order          CDATA #REQUIRED>
+
+
+<!--    The "gisprompt" is a three part description, used for map elements
+	and files.  It consists of a comma separated list of 
+	"age,element,prompt".  "Age" is "new | old | any"; "element" is
+	a grass map element such as "dig", and "prompt" is what to present
+	to the user in a prompt, such as "vector"
+-->
+<!ELEMENT gisprompt    EMPTY>
+<!ATTLIST gisprompt    age            (any | old | new | mapset) #REQUIRED
+                       element        (cell | fcell | cellhd | cats | colr |
+                                       colr2 | cell_misc | hist | paint |
+                                       group | vector | windows | CDATA) #REQUIRED
+                       prompt         CDATA #REQUIRED>
+
+<!--    A flag must have a name and should have a description.
+        It's a toggle that is off by default
+-->
+<!ELEMENT flag         (description?)>
+<!ATTLIST flag         name            CDATA #REQUIRED>
+
+        
+<!--	a default of a parameter. Hopefully it does correspond
+	with the parameter type. How to set up rules for that
+	(same problem for <value>)?
+-->
+<!ELEMENT default    (#PCDATA)>
+
+<!--	the GUI section where the parameter would appear
+-->
+<!ELEMENT guisection	(#PCDATA)>
+
+<!--	contains a number of single values. Values may have name and description.
+-->
+<!ELEMENT values     (value+)>
+
+
+
+<!--	a potential value for a parameter. Hopefully
+	it does correpond to the parameter type.
+	How to set up rules for that (same problem for
+	<default>)?
+-->
+<!ELEMENT value	    (name, description?)>
+<!ELEMENT name          (#PCDATA)>
+
+
+
+<!-- common elements -->
+
+
+
+<!--	text that describes a grass-interface, task,
+	parameter-group or parameter.
+-->
+<!ELEMENT description   (#PCDATA)>
+
+
+
+<!--	list of keywords that describes a task
+-->
+<!ELEMENT keywords   (#PCDATA)>
+
+<!--	option inter-dependency rules
+-->
+<!ELEMENT rules   (rule+)>
+
+<!--	an option inter-dependency rule
+-->
+<!ELEMENT rule   (rule-flag*, rule-option*)>
+<!ATTLIST rule   type            (exclusive | required | requires | requires-all |
+                                  excludes | collective) #REQUIRED>
+
+<!--	a flag name
+-->
+<!ELEMENT rule-flag    EMPTY>
+<!ATTLIST rule-flag    key       CDATA #REQUIRED>
+
+<!--	an option name
+-->
+<!ELEMENT rule-option    EMPTY>
+<!ATTLIST rule-option    key       CDATA #REQUIRED>

@@ -1,0 +1,742 @@
+/****************************************************************************
+ *
+ * MODULE:       datetime
+ * AUTHOR(S):    Bill Brown <brown gis.uiuc.edu> and Michael Shapiro (CERL)
+ *               (original contributors, 1995)
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Radim Blazek <radim.blazek gmail.com>
+ *               Glynn Clements <glynn gclements.plus.com>, 
+ * PURPOSE:      library for date time structure
+ * COPYRIGHT:    (C) 2002-2007 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
+
+Note: The timestamp routines 
+       G_read_grid3_timestamp +
+       G_remove_grid3_timestamp + 
+       G_write_grid3_timestamp
+      are stored in src/libes/gis/timestamp.c
+      (added 3/2001)
+---------------------------------------------------------------------------
+
+This is the DateTime structure
+
+    typedef struct {
+	int mode; 		/* absolute or relative */
+	int from, to;           /* range of values */
+	int positive;		/* positive/negative datetime */
+	int year, month, day;
+	int hour, minute;
+	double second;
+	int fracsec;	/* #decimal place in printed seconds */
+	int tz;		/* timezone - minutes from UTC */
+    } DateTime;
+
+DateTimes have a 3-part type consisting of
+    'mode' and
+    range qualifiers 'from' and 'to'
+
+mode: one of
+
+    #define DATETIME_TYPE_ABSOLUTE 1
+    #define DATETIME_TYPE_RELATIVE 2
+
+from, to: one of
+
+    #define DATETIME_YEAR   1
+    #define DATETIME_MONTH  2
+    #define DATETIME_DAY    3
+    #define DATETIME_HOUR   4
+    #define DATETIME_MINUTE 5
+    #define DATETIME_SECOND 6
+
+The values for the from/to #defines must increase from YEAR to SECOND
+In other words YEAR < MONTH < DAY < HOUR < MINUTE < SECOND. The idea
+is that the higher elements represent higher precision for a date/time.
+For example, having seconds in the time is more precise than if seconds
+are not present.
+
+There are some restrictions on legal values for from/to.
+  1. from <= to
+  2. if the 'mode' is ABSOLUTE, then 'from' must be YEAR
+  3. if the 'mode' is RELATIVE, then
+	'from' and 'to' in {YEAR,MONTH}
+     or in
+	'from' and 'to' in {DAY,HOUR,MINUTE,SECOND}
+
+year,month,day
+hour,minute,second:
+    These are non-negative values.
+
+    For ABSOLUTE types, these must be valid date/time values 
+      year    a complete year, all the digits (not just the last 2 digits)
+	      must be positive (since 0 isn't a legal year).
+      month   [1,12]
+      day     [1,n] where n depends on the year/month.
+      hour    [0,23]
+      minute  [0,59]
+      second  [0.0,<60.0]
+
+    For RELATIVE types, the value corresponding to 'from' is
+    unrestricted (except that it can't be negative). The other values
+    are restricted as follows:
+      if from==YEAR, month is [0,11]
+      if from==DAY,  hour is [0,23], min is [0,59], sec is [0.0,<60.0]
+      if from==HOUR, min is [0,59], sec is [0.0,<60.0]
+      if from==MINUTE, sec is [0.0,<60.0]
+
+
+fracsec:
+    This controls the number of decimal places to print after the seconds.
+    It is only used if the 'to' element is SECOND. It must be non-neagtive.
+
+tz:
+    The time (hour/minute) in ABSOLUTE types is in local time.
+    The specification of a timezone (tz) is an (subtractive)
+    offset to convert from local time to UTC.
+    To get UTC from localtime: LT - TZ
+
+    tz is expressed in minutes from -720 to 780
+    (720 == 12 hours, 780 minutes == 13 hours). 
+    [See ANSI X3.51-1975, section 2.2.3]
+
+    For a timezone to be allowed, the 'to' field must be one of
+    {MINUTE, SECOND}
+
+positive:
+    this indicates if the datetime value is to considered 
+    "positive" (!=0) or "negative" (==0)
+
+    For mode ABSOLUTE, positive==0 means BC
+
+----------------------------------------------------
+API
+
+(*) Error messages
+    Guidelines:
+	All functions that return int status codes should return 
+	    0 (or positive) if OK;
+	    a negative integer if not;
+	and register the error with a call to datetime_error()
+
+	applications can test for error by
+
+	    if (datetime_function() < 0) {process the error}
+
+    int
+:+  datetime_error (int code, char *msg)
+	record 'code' and 'msg' as error code/msg (in static variables)
+	code==0 will clear the error (ie set msg=NULL)
+
+	returns 'code' so that it can be used like:
+
+		return datetime_error (-1, "bad date");
+
+    char *
+:+  datetime_get_error_msg()
+	returns pointer to static error msg (which is NULL if no error)
+
+    int
+:+  datetime_get_error_code()
+	returns error code
+
+    void
+:+  datetime_clear_error()
+	clears error code and message
+
+(*) Type:
+
+    int
+:+  datetime_set_type (DateTime *dt; int mode, from, to, fracsec)
+
+	This routine must be called before any use of dt can be made
+	with other datetime functions
+
+	initialize all the elements in dt.
+	Set all values to zero except
+	    tz        (set to illegal value - 99*24)
+	    positive  (set to 1 for positive)
+
+	Set the type info in dt: mode, from, to, fracsec
+	validate the mode/from/to/fracsec (according to the rules for the mode)
+	    ie. return the return value from datetime_check_type(dt)
+
+
+    void
+:+  datetime_get_type (DateTime *dt; int *mode, *from, *to, *fracsec)
+
+	extract the mode, from, to, and fracsec out of dt.
+
+    int
+:+  datetime_check_type (DateTime *dt)
+
+	checks the mode/from/to/fracsec in dt. 
+	returns:
+	    0: OK
+	   -1: mode is invalid - not one of {ABSOLUTE,RELATIVE}
+	   -2: from is invalid - not one of {YEAR,MONTH,DAY,HOUR,MINUTE,SECOND}
+	   -3: to is invalid   - not one of {YEAR,MONTH,DAY,HOUR,MINUTE,SECOND}
+	   -4: from/to are reversed (from>to is illegal)
+	   -5: invalid from/to combination for RELATIVE mode
+		from in {YEAR,MONTH} but to is not, or
+		from in {DAY,HOUR,MINUTE,SECOND} but to is not
+	   -6: from is invalid for ABSOLUTE mode (from != YEAR is illegal)
+	   -7: fracsec is negative (only if to==SECOND)
+
+    int
+:+  datetime_is_valid_type (DateTime *dt)
+
+	returns 1 if datetime_check_type() returns 0
+		0 if not.
+
+    int
+:+  datetime_change_from_to (DateTime *dt; int from, to; int round)
+
+	change the from/to of the type for dt.
+
+	'dt' must be  legal
+	The 'from/to' must be legal values for the mode of dt;
+	(if they are not legal, then the original values are preserved,
+	dt is not changed). 
+
+	returns 0 OK, -1 invalid 'dt', -2 invalid 'from/to'
+
+	round = negative implies floor()          [decrease magnitude]
+		 0       implies normal rounding, [incr/decr magnitude]
+		positive implies ceil()           [increase magnitude]
+
+	Rounding up should be implemented using datetime_increment().
+
+	If dt.mode is ABSOLUTE, then 'from' must be YEAR.
+
+	If dt.from < 'from' (losing "lower" elements), convert the
+	    "lost" values to the equivalent value for the new 'from'
+	    Lost elements are then set to zero.
+	    (This case can only occur for dt.mode relative):
+
+		months += lost years * 12      ; years = 0
+		hours  += lost days * 24       ; days = 0
+		minutes += lost hours * 60     ; hours = 0
+		seconds += lost minutes * 60.0 ; minutes = 0
+
+	If dt.from > 'from' (adding "lower" elements), the new elements
+	    are set to zero.
+
+	If dt.to < 'to' (adding "higher" elements), the new elements
+	    are set to zero.
+
+	If dt.to > 'to' (losing "higher" elements), the
+	    the new 'to' is adjusted according to the value for 'round'	
+	    After rounding the "lost" elements are set to zero.
+
+	    if 'round' < 0, then no change is made to the lower elements
+	    if 'round' > 0  and if the higher elements are not all zero then
+		  the new 'to' element is incremented by by creating a
+		  relative DateTime 'incr' with from='to' and to='to'
+		  and value 1 then calling datetime_increment(dt,incr)
+
+	    if round == 0, then if the doubling all higher elements
+		would cause a carry to occur, then the new 'to'
+		element is incremented, as follows 
+		create a DateTime will all higher elements
+		equal to their corresponding elements in 'dt'
+	        and then calling datetime_increment(dt,incr)
+
+    int
+:+  datetime_is_absolute (DateTime *dt)
+	Returns 
+	    1 if dt.mode is absolute
+	    0 if not (even if dt.mode is not defined)
+
+    int
+:+  datetime_is_relative (DateTime *dt)
+	Returns 
+	    1 if dt.mode is relative
+	    0 if not (even if dt.mode is not defined)
+
+(*) Copy
+
+    void
+:+  datetime_copy (DateTime *dst, *src)
+
+	This function copies the 'src' to the 'dst' by
+	    dst "=" src :
+
+		dst.from = src.from
+		dst.to   = src.to
+		...
+
+(*) Same
+    
+    int
+:+  datetime_is_same (DateTime *dt1, *dt2)
+
+	Returns
+	    1 if dt1 is exactly the same as dt2
+	    0 if they differ 
+
+(*) Ascii
+	The ascii representation of DateTime is
+
+	ABSOLUTE:  15 Jan 1994 [bc] 10:35:23.456 -0500
+	RELATIVE:  [-] 2 years 5 months
+		   [-] 100 days 15 hours 25 minutes 35.34 seconds
+	The parts can be missing.
+	ABSOLUTE:  1994 [bc]
+		   Jan 1994 [bc]
+		   15 jan 1000 [bc]
+		   15 jan 1994 [bc] 10 [+0000]
+		   15 jan 1994 [bc] 10:00 [+0100]
+		   15 jan 1994 [bc] 10:00:23.34 [-0500]
+	RELATIVE:  [-] 2 years
+	           [-] 5 months
+	           [-] 2 years 5 months
+		   [-] 100 days
+		   [-] 15 hours 25 minutes 35.34 seconds
+		   [-] 100 days 25 minutes
+		   [-] 1000 hours 35.34 seconds
+			etc.
+	    NOTE: values missing between the from/to are assumed to be zero;
+	    when scanning, they can be missing; when formatting they will
+	    appear as 0 (to preserve the from/to):
+
+	       1000 hours 0 minutes 35.34 seconds
+	       0 days 10 hours 0 minutes
+	    
+	    NOTE: when scanning the from/to are determined by the fields
+	    present. Compare:
+	       10 hours 0 minutes 35.34 seconds [from=HOUR,to=SECOND]
+	    and
+	       0 days 10 hours 0 minutes 35.34 seconds [from=DAY,to=SECOND]
+
+    int
+:+  datetime_scan (DateTime *dt, char *string)
+
+	    Convert the ascii string into a DateTime
+	    This determines the mode/from/to based on the string,
+	    inits 'dt' and then sets values in 'dt' based on the
+	    'string'
+
+	    Returns 0 if 'string' is legal, -1 if not.
+
+
+    void
+:+  datetime_format (DateTime *dt, char *string)
+
+	    Convert 'dt' to a printable string. 'string' should
+	    be large enough to hold the result, perhaps 80 bytes?
+
+(*) Values
+
+    These routines get/set elements of 'dt'. They return
+	0 if OK
+	-1 if the value being gotten or set is not a legal value
+	-2 if the from/to for 'dt' doesn't include this value
+    Values don't get set if they are invalid.
+
+    int
+:+  datetime_check_year (DateTime *dt, int year)
+	Returns
+	0 is legal year for dt
+	-1 illegal year for this dt
+	-2 dt has no year component
+
+    int
+:+  datetime_set_year (DateTime *dt, int year)
+	if dt.mode = ABSOLUTE, this also sets dt.day = 0
+
+    int
+:+  datetime_get_year (DateTime *dt, int *year)
+
+
+    int
+:+  datetime_check_month (DateTime *dt, int month)
+	Returns
+	0 is legal month for dt
+	-1 illegal month for this dt
+	-2 dt has no month component
+
+    int
+:+  datetime_set_month (DateTime *dt, int month)
+	if dt.mode = ABSOLUTE, this also sets dt.day = 0
+
+    int
+:+  datetime_get_month (DateTime *dt, int *month)
+
+    int
+:+  datetime_check_day (DateTime *dt, int day)
+	Returns
+	0 is legal day for dt
+	-1 illegal day for this dt
+	-2 dt has no day component
+	Note: if dt.mode is ABSOLUTE, then dt.year and dt.month
+		must also be legal, since the 'day' must be a legal
+		value for the dt.year/dt.month
+
+    int
+:+  datetime_set_day (DateTime *dt, int day)
+
+	if dt.mode = ABSOLUTE, then
+	'day' must be less than or equal to the number of days in
+	the dt.year,dt.month:
+
+	      if (day > datetime_days_in_month (dt.year, dt.month))
+		    {error}
+
+	This implies that year/month must be set before days for
+	ABSOLUTE datetimes.
+
+    int
+:+  datetime_get_day (DateTime *dt, int *day)
+
+    int
+:+  datetime_check_hour (DateTime *dt, int hour)
+
+    int
+:+  datetime_set_hour (DateTime *dt, int hour)
+
+    int
+:+  datetime_get_hour (DateTime *dt, int *hour)
+
+    int
+:+  datetime_check_minute (DateTime *dt, int minute)
+
+    int
+:+  datetime_set_minute (DateTime *dt, int minute)
+
+    int
+:+  datetime_get_minute (DateTime *dt, int *minute)
+
+    int
+:+  datetime_check_second (DateTime *dt, double second)
+
+    int
+:+  datetime_set_second (DateTime *dt, double second)
+
+    int
+:+  datetime_get_second (DateTime *dt, double *second)
+
+    int
+:+  datetime_check_fracsec (DateTime *dt, int fracsec)
+
+    int
+:+  datetime_set_fracsec (DateTime *dt, int fracsec)
+
+    int
+:+  datetime_get_fracsec (DateTime *dt, int *fracsec)
+
+(*) Arithmetic
+These functions perform addition/subtraction on datetimes. 
+
+    int
+:   datetime_increment (DateTime *src, *incr)
+
+	this function changes the 'src' date/time data based on the 'incr'
+	The type (mode/from/to) of the 'src' can be anything.
+	The mode of the 'incr' must be RELATIVE,
+	and the type (mode/from/to) for 'incr' must be a valid increment
+	for 'src'. See datetime_is_valid_increment(), datetime_check_increment()
+
+	returns
+	    0: OK
+	   -1: 'incr' is invalid increment for 'src'
+	   -2: 'src' is ABSOLUTE, 'incr' is a {DAY-SECOND} interval
+		 and 'src' is a date for which this function
+		 has not been implemented. NOTE: this should only happen
+		 if the total number of days in the 'src' would exceed 28
+		 since this would then cause date arithemtic to kick in
+		 to figure out if these are too many days for the month.
+## BROWN - identify which dates you know how to handle, and which you do not.
+
+	For src.mode ABSOLUTE,
+	    positive 'incr' moves into the future,
+	    negative 'incr' moves into the past.
+
+	    BC implies the year is negative, but all else is positive.
+	    Suppose the date is 10jan100bc.
+	      To add 1 year would decrease the year to 99 (10jan99bc).
+	      To increase the day by 1 would set the day to 11 (11jan100bc).
+	      To increase the month by 1 would change the month from 1 (jan)
+		 to 2 (feb) (10feb100bc)
+	    Also, year==0 is illegal: adding 1 year to 1[bc] gives 1[ad]
+
+	For src.mode RELATIVE
+	    Incrementing or decrementing must consider the 'src' and 'incr'
+	    as single values (+ or -) and work with this value.
+	    For example, suppose
+		A = -4 days, 5 hours, 15 minutes
+		B = 25 hours
+	    then
+		A = -(4*24*60 +5*60+15) = -6075
+		B =  (25*60)            =  1500
+		A + B                   = -4575 = -(3*24*60 + 4*60 + 15)
+		A = -3 days, 4 hours, 15 minutes
+
+
+
+	The 'fracsec' in 'src' is preserved.
+
+	The 'from/to' of the 'src' is preserved.
+
+	A timezone in 'src' is allowed - it's presence is ignored.
+
+	NOTE: There is no datetime_decrement()
+	      To decrement, set the 'incr' negative.
+
+    void
+:+  datetime_set_positive (DateTime *dt)
+
+    void
+:+  datetime_set_negative (DateTime *dt)
+
+    void
+:+  datetime_invert_sign (DateTime *dt)
+
+    int
+:+  datetime_is_positive (DateTime *dt)
+	these control the "sign" of the datetime value.
+
+    int
+:   datetime_difference (DateTime *a, *b, *result)
+
+	This performs the formula:   result = a - b;
+
+	both a and b must be absolute.
+	result will be relative
+	If a is "earlier" than b, then result should be set negative.
+
+	b must be no more "precise" than a.
+	   (a copy of b is "extended" to the precision of a)
+
+	       datetime_copy (tb, b)
+	       datetime_reset_from_to (tb, b.from, a.to, a.fracsec))
+
+
+	If result.to == SECOND, then result.fracsec is a.fracsec
+
+	result will have the following from/to based on a.to:
+
+			     result
+		a.to      from    to
+		YEAR      YEAR    YEAR
+		MONTH     YEAR    MONTH
+		DAY       DAY     DAY
+		HOUR      DAY     HOUR
+		MINUTE    DAY     MINUTE
+		SECOND    DAY     SECOND
+
+	If either 'a' or 'b' has a timezone, both must have a timezone.
+	The difference will account for the differences in the time zones.
+
+
+    int
+:+  datetime_is_valid_increment (DateTime *src, *incr)
+	Returns
+	    datetime_check_increment(src, incr) == 0
+
+    int
+:+  datetime_check_increment (DateTime *src, *incr)
+
+	This checks if the type of 'incr' is valid for
+	incrementing/decrementing 'src'.
+
+	Returns:
+	    1 src is not a legal DateTime, error code/msg
+		are those set by datetime_is_valid_type()
+	    2 incr is not a legal DateTime, error code/msg
+		are those set by datetime_is_valid_type()
+	   -1 incr.mode not relative
+	   -2 incr more precise that src
+	   -3 illegal incr, must be YEAR-MONTH
+	   -4 illegal incr, must be DAY-SECOND
+
+	The type (mode/from/to) of the 'src' can be anything.
+	The incr.mode must be RELATIVE
+		(return -1 if not)
+	
+	incr.to is restricted based on the src.to:
+
+	    incr.to <= src.to (incr not more precise than src)
+		(return -2 if not)
+
+	    if src.to is in {YEAR,MONTH} then
+		incr.to must be in {YEAR,MONTH}
+		(return -3 if not)
+	    if src.to is in {DAY,HOUR,MINUTE,SECOND} then
+		incr.to must be in {DAY,HOUR,MINUTE,SECOND}
+		(return -4 if not)
+
+	    note: it is ok for incr.from > src.from
+	    (which can only happen for src.mode RELATIVE).
+
+	A timezone in 'src' is allowed - it's presence is ignored.
+
+To aid in setting the 'incr' type, the following routine can be used
+
+    int
+:+  datetime_get_increment_type (DateTime *src; int *mode, *from, *to, *fracsec)
+
+	this returns the components of a type (mode/from/to/fracsec) that
+	can be used to construct a DateTime object that can be used
+	to increment the 'src'. See datetime_set_increment_type().
+
+	returns 0 dt is legal
+		!=0 why dt is illegal
+
+	Implemented as follows:
+
+	    *mode    = RELATIVE
+	    *to      = src.to
+	    *fracsec = src.fracsec
+
+	    if src.mode is ABSOLUTE
+		if src.to is in {YEAR,MONTH} then
+		    *from = YEAR
+		if src.to is in {DAY,HOUR,MINUTE,SECOND} then 
+		    *from = DAY
+
+	    if src.mode is RELATIVE, then
+		*from = src.from
+
+
+    int
+:+  datetime_set_increment_type (DateTime *src, *incr)
+
+	src must be legal
+	This is a convience routine which is implemented as follows:
+
+	    int mode, from ,to;
+	    int fracsec;
+
+	    if(datetime_get_increment_type (src, &mode, &from, &to, &fracsec))
+		return datetime_error_cde();
+	    return datetime_set_type (incr, mode, from, to, fracsec);
+
+(*) Misc
+
+    int
+:+  datetime_days_in_month (int month, year)
+
+    int
+:+  datetime_is_leap_year (int year)
+
+    int
+:+  datetime_days_in_year (int year)
+
+(*) Timezone
+
+    int
+:+  datetime_is_valid_timezone (int minutes)
+	returns:
+	 1 OK: -720 <= minutes <= 780 (720 = 12 hours; 780 = 13 hours)
+	 0 NOT OK
+
+    int
+:+  datetime_check_timezone (DateTime *dt, int minutes)
+
+	'dt' must be mode ABSOLUTE and dt.to must be one of {MINUTE,SECOND}
+	minutes must be a valid timezone offset: ie in the range [-720,+780]
+
+	return
+	  0: OK
+	 -1: mode not ABSOLUTE
+	 -2: dt.to not in {MINUTE,SECOND}
+	 -3: minutes not valid - not in the range [-720,+780]
+
+    int
+:+  datetime_set_timezone (DateTime *dt, int minutes)
+
+	if (datetime_check_timezone(dt,minutes)==0)
+	    set dt.tz=minutes
+
+	'dt' must be mode ABSOLUTE and dt.to must be one of {MINUTE,SECOND}
+	minutes must be a valid timezone offset: ie in the range [-720,+780]
+
+	return
+	  0: OK
+	 -1: mode not ABSOLUTE
+	 -2: dt.to not in {MINUTE,SECOND}
+	 -3: minutes not valid - not in the range [-720,+780]
+
+    int
+:+  datetime_get_timezone (DateTime *dt, int *minutes)
+
+	return
+	  0: OK - if 'dt' has a timezone and sets 'minutes'
+	 -1: mode not ABSOLUTE
+	 -2: dt.to not in {MINUTE,SECOND}
+	 -3: minutes not valid - not in the range [-720,+780]
+
+
+    void
+:+  datetime_unset_timezone (DateTime *dt)
+	Remove timezone from 'dt'
+	dt.tz = 99*60 (some illegal value)
+
+    int
+:+  datetime_change_timezone (DateTime *dt; int minutes)
+	if dt has a timezone,
+	    increment dt by minutes-dt.tz MINUTES
+	    set dt.tz = minutes 
+
+	returns 0 OK, datetime_check_timezone(dt) if not,
+		or -4 if minues invalid
+
+    int
+:+  datetime_change_to_utc (DateTime *dt)
+	return datetime_change_timezone (dt, 0);
+
+    void
+:+  datetime_decompose_timezone (int tz, int *hour, int *minute)
+	tz = abs(tz)
+	*hour = tz/60
+	*minute = tz%60
+
+	note: hour,minute are non-negative. Must look at sign of tz
+	itself to see if the tz is negative offset or not. This routine
+	would be used to format tz for output. For example if tz=-350
+	this would be hour=5 minute=50, but negative. Output might econde
+	this as -0550: printf ("%s%02d%02d", tz<0?"-":"", hour, minute)
+
+(*) A function that returns the timezone for the local system??
+
+    int
+:+  datetime_get_local_timezone (int *minutes)
+
+	returns 0 OK, -1 local timezone info not available
+
+(*) Local time
+
+    void
+:+  datetime_get_local_time (DateTime *dt)
+
+	set mode/from/to ABSOLUTE/YEAR/SECOND
+	set the local time into 'dt'
+
+	does not set timezone.
+
+(*) GRASS will probably have to have a function that returns the 
+    timezone of the database: 
+
+### BROWN
+##   so a database only has one timezone?  Or can each map have its own?
+### SHAPIRO
+##   good question. A location may span more than one time zone. Also timezones
+##   are not nice shapes. We probably need a function that returns a timezone
+##   for a specified latlon/longitude and/or for a region. How would this
+##   function deal with daylight savings time?
+##   The timezone(s) might have to be represented as a vector map
+##   I suggest we hold off on this and add it later.
+
+	G_get_database_timezone (int *tz)
+	    tz in minutes as defined for datetime library
+	    returns
+		0 database has no timezone
+		1 database has a timezone - returned in tz
+		-1 error reading timezone file.

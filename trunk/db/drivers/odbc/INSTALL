@@ -1,0 +1,4 @@
+1. Download, compile, install and configure ODBC (http://www.unixodbc.org/)
+2. Copy ODBC include files to /usr/include/odbc
+3. Compile src/libes/dbmi/drivers/odbc
+4. Add row for ODBC driver to dbmscap file

@@ -1,0 +1,68 @@
+From: Glynn Clements <glynn*gclements.plus.com>
+Date: Mon, 18 Dec 2006 17:28:43 +0000
+List-Archive: <http://grass.itc.it/pipermail/grass-dev>
+
+
+The relevant files (all installed into $GISBASE/etc) are:
+
+1. parms.table
+
+One line for each known projection. A sample entry:
+
+	AEA:Albers Equal Area:LAT0=ask,23.0;LAT1=ask,29.5;LAT2=ask,45.5;LON0=ask,-96.0;X0=ask,0.0;Y0=ask,0.0
+
+The first field is the projection name, as used by the old geo.h file. 
+AFAICT, the corresponding +proj= parameter is identical except in
+lower case.
+
+The remainder of the line (after the colon) is a semicolon-separated
+list of parameter definitions of the form parm=spec. The LHS is the
+parameter name as used by geo.h; these don't necessarily match the
+corresponding the proj parameter, but you can translate them using the
+desc.table file (see below).
+
+The RHS has two parts, separated by a comma. The first part is either
+"ask" or "noask", corresponding to whether or not g.setproj should
+prompt the user for a value. The second part is either "nodfl" or a
+default value. Note that the combination "noask,nodfl" never occurs;
+if an option is marked as "noask", there will always be a default
+value.
+
+2. desc.table
+
+One line for each known parameter (other than +proj=). A sample entry:
+
+	LON0:lon:lon_0:Central Meridian
+
+The first field is the parameter name as used by the old geo.h file,
+and as used in parms.table.
+
+The second field is the type, and can be one of:
+
+	bool int float lat lon zone
+
+This determines the set of valid options for the parameter (the "zone"
+type corresponds to the UTM zone).
+
+The third field is the name of the corresponding proj parameter
+(without the leading "+"), and is the key stored in the PROJ_INFO
+file.
+
+The fourth field is a textual description of the parameter.
+
+
+3. units.table
+
+One line for each known distance unit. A sample entry:
+
+	feet:foot:0.3048
+
+The three fields are (in case it isn't obvious) the plural form of the
+name, the singular form, and the size of the unit in metres.
+
+However, note that g.setproj still has a fair number of special-case
+hacks. Some of those are useful-but-not-essential (e.g. automatically
+selecting the correct ellipsoid for certain projections), while others
+are necessary (e.g. the zone= and south parameters for UTM need to go
+into the WIND/DEFAULT_WIND files as well as the PROJ_INFO file).
+

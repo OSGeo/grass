@@ -1,0 +1,109 @@
+Symbol drawing commands are stored in a text file (one file for each symbol)
+which are located in $GISBASE/etc/symbol/group/name or mapset/symbol/group/name
+
+S_read() searches first in mapsets and then in $GISBASE (symbol names in 
+$GISBASE may be overridden by symbols of the same group/name in mapset).
+
+
+File format example: 
+VERSION 1.0
+BOX -10 -10 10 10
+STRING
+  LINE
+    0 -10 
+    0  10
+  END
+END
+
+A symbol file is composed of objects, each object starts with a keyword and
+ends with a new line or 'END'. Some objects may contain other objects.
+
+- Drawing is composed of POLYGONS and STRINGS.
+- POLYGONS are composed of RINGS. The first ring is outer (clockwise for now),
+  following rings are inner (counter clockwise currently).
+- STRINGS and RINGS are composed of LINES and ARCS.
+
+POLYGONS and STRINGS are drawn using the default color and fill color
+(specified in module options such as 'd.vect color='). This color may be 
+overwritten by using the COLOR and FCOLOR keywords.
+
+Blank lines and lines starting with a #hash will be ignored.
+
+---- DESCRIPTION OF OBJECTS ----
+
+In the following descriptions these variables are used:
+  N     - integer number
+  R G B - RGB color as 3 numbers ranging 0-255
+  X,Y   - coordinates (double precision floating point)
+
+
+Keywords:
+
+VERSION N.N
+ Version number
+
+BOX X Y X Y
+ Bounding box. Lower left and upper right corner. Larger side of box is taken
+ as 1 for symbol scaling. That means that if size of box is 10 x 5, and scale
+ in application is 2, all geometry will be multiplied by: 2 / 10.
+ Origin of symbol is 0,0.
+
+COLOR NONE | R G B
+ Color used for string or outline of polygon. If NONE is used, then the polygon
+ outline is not drawn.
+
+FCOLOR NONE | R G B
+ Fill color used for polygon. If NONE is used, then the polygon is not filled.
+
+LINE 
+  X Y
+  X Y
+ [X Y]
+END
+ Line constructed from coordinate pairs.
+
+ARC X Y R A1 A2 [C]
+ Arc specified by center (X Y), radius (R), start/end angle in degrees (A1/A2)
+ and optionally direction (C for clockwise, default counter clockwise)
+ Note degrees are polar theta not navigational, i.e. 0 is east and 
+ values increase counter-clockwise from there. Reducing the angle
+ from a full circle does not make it draw like a pacman but rather
+ with a straight chord-line from the start/end points on the circle
+ as defined by the two angles.
+
+STRING
+ [COLOR R G B]
+ LINE | ARC
+ [LINE | ARC]
+END
+ String composed of any number of lines and/or arcs.
+
+RING
+ LINE | ARC
+ [LINE | ARC]
+END
+ Ring composed of any number of lines and/or arcs. A ring is automatically
+ closed with a line from last point to first point.
+
+POLYGON
+ [COLOR R G B]
+ [FCOLOR R G B]
+ RING
+ [RING]
+END
+ A polygon is composed of any number of rings. The first ring is outer
+ (clockwise) and others are inner (counter-clockwise).
+
+
+------------------------------------
+
+Note: restriction for clockwise/counter clockwise rings should be removed 
+later and replaced by reordering in symbol library. Order is required by 
+ps.map because PS uses even-odd rule for polygon filling.
+
+Internal structure:
+A symbol read into memory is stored in structure SYMBOL containing an array 
+of parts (SYMBPART). Each part may be of type S_STRING or S_POLYGON, and 
+contain an array of chains (SYMBCHAIN) where both STRING or POLYGONS are 
+stored. One chain contains an array of elements (SYMBEL).
+

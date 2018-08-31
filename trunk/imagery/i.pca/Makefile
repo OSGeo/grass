@@ -1,0 +1,10 @@
+MODULE_TOPDIR = ../..
+
+PGM = i.pca
+
+LIBES = $(GMATHLIB) $(RASTERLIB) $(IMAGERYLIB) $(GISLIB)
+DEPENDENCIES = $(GMATHDEP) $(RASTERDEP) $(IMAGERYDEP) $(GISDEP)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd

@@ -1,0 +1,129 @@
+<h2>DESCRIPTION</h2>
+
+<em>d.vect</em> displays vector maps in the active frame on the
+graphics monitor.
+
+<h2>NOTES</h2>
+
+<em>d.vect</em> can simply be used typing <tt>d.vect
+map=vector_map</tt>. There are a large variety of optional parameters
+which allow the user to specify vector type, colors, data fields, SQL
+queries, label size and justification, etc.
+
+<p>By default <em>d.vect</em> areas are filled with <b>fill_color</b> and 
+outlined with <b>color</b>. Area outlines can be suppressed with
+<div class="code"><pre>
+d.vect map=vector_map color=none
+</pre></div>
+and areas can be made transparent with
+<div class="code"><pre>
+d.vect map=vector_map fill_color=none
+</pre></div>
+
+<p>In order to display attributes in the map, <b>attribute_column</b> must
+be specified.
+
+<p>Feature colors may be specified
+by <em><a href="v.colors.html">v.colors</a></em> in a form of color
+table or in an attribute table column containing <tt>RRR:GGG:BBB</tt>
+values.
+
+<p>A table for a vector map might look like this:
+
+<div class="code"><pre>
+db.select sql="select * from testisola"
+cat|label|GRASSRGB
+0|no data|255:255:255
+90|FRASSILONGO|23:245:67
+104|LEVICO|23:145:67
+139|PERGINE VALSUGANA|223:45:237
+168|SANT'ORSOLA|223:45:67
+190|TENNA|123:45:67
+</pre></div>
+
+<p>To add the GRASSRGB color column, use <em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>:
+<div class="code"><pre>
+v.db.addcolumn map=testisola columns="GRASSRGB varchar(11)"
+</pre></div>
+
+<p>To add/change a color, use <em><a href="v.db.update.html">v.db.update</a></em>:
+<div class="code"><pre>
+v.db.update map=testisola column=GRASSRGB value="123:45:237" where="cat=139"
+</pre></div>
+
+<p>A much simpler method of color coding is by using the <b>-c</b> flag
+which displays vector elements of like category number with a random
+color.
+
+<p>This module can use FreeType/TrueType fonts if they have already been selected with
+<em><a href="d.font.html">d.font</a></em>.
+
+<p>Parameter <b>width</b> is set by default to '0'. XDRIVER specifies the
+precise behaviour for non-zero line width, but drivers have some
+freedom as to how zero-width lines are handled, so they can use the
+hardware's &quot;thin line&quot; drawing primitive, if it has one. A
+width of zero can potentially result in significantly faster operation. On
+drivers where there is no such thing as a "thin" line, the driver will
+use a sensible default (which might not be the same as '1').
+
+<h2>EXAMPLES</h2>
+
+Spearfish examples:
+
+<div class="code"><pre>
+# display roads with category numbers:
+d.vect map=roads display=shape,cat label_color=green
+
+# display randomly colorized soils map with attributes
+d.vect -c map=soils attribute_column=label
+
+# display randomly colorized selected vectors from soils map
+d.vect -c map=soils where="label='VBF'" display=shape attribute_column=label
+</pre></div>
+
+<p>3D points, 3D lines and 3D polygons colorized according to z height
+(for 3D lines and polygons a z height is computed by a midpoint of
+line/area bounding box):
+  
+<div class="code"><pre>
+g.region raster=elevation.10m
+r.random input=elevation.10m n=5000 vector=random3d -d
+d.mon start=x0
+# display as black points
+d.vect map=random3d
+# display 3D points colorized according to z height
+d.vect map=random3d zcolor=gyr
+
+# 3D contour lines
+r.contour input=elevation.10m output=contour20m step=20
+d.vect map=contour20m zcolor=gyr
+
+# generate 3D triangles
+v.delaunay input=random3d output=random3d_del
+# display 3D polygons colorized according to z height
+d.vect map=random3d_del type=area zcolor=gyr
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="v.colors.html">v.colors</a>,
+  <a href="d.erase.html">d.erase</a>,
+  <a href="d.rast.html">d.rast</a>,
+  <a href="v.colors.html">v.colors</a>,
+  <a href="v.db.addcolumn.html">v.db.addcolumn</a>,
+  <a href="v.db.update.html">v.db.update</a>
+</em>
+<p>
+<em>
+  <a href="sql.html">GRASS SQL interface</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+CERL<br>
+Radim Blazek, ITC-Irst, Trento, Italy<br>
+Support for color tables by Martin Landa, Czech Technical University in Prague (8/2011)<br>
+and many other GRASS developers
+
+<p><i>Last changed: $Date$</i>

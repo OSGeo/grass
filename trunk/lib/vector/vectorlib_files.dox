@@ -1,0 +1,220 @@
+/*! \page vlibFormat Vector format description
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+\section vlibDirectoryStructure Directory structure
+
+Vector map is stored in a number of data files. Vector map directory
+structure and file names were changed in GRASS 6 with respect to
+previous GRASS versions. All vector files for one vector map are
+stored in one directory:
+
+\verbatim
+$MAPSET/vector/vector_name/
+\endverbatim
+
+This directory contains these files:
+
+- <b>coor</b> - binary file, coordinates [former dig/ file] (see \ref vlibCoorFileFormat)
+- <b>topo</b> - binary file, topology [former dig_plus/ file] (see \ref vlibTopoFileFormat)
+- <b>sidx</b> - binary file, spatial index (see \ref vlibSidxFileFormat)
+- <b>cidx</b> - binary file, category index (see \ref vlibCidxFileFormat)
+- <b>head</b> - text file, header information [former part of dig/ file] (see \ref vlibHeadFileFormat)
+- <b>dbln</b> - text file, link(s) to attribute table(s) (see \ref vlibDblnFileFormat)
+- <b>hist</b> - text file, vector map change history
+- <b>frmt</b> - text file, format description (external formats only)
+- <b>fidx</b> - binary file, feature index (OGR format only)
+
+\section vlibHeadFileFormat Header file format specification
+
+The header contains meta information, a description of the
+vector map and many other information. The file is an unordered list
+of key/value entries. The <i>key</i> is a string separated from
+<i>value</i> by a colon and optional whitespace.
+
+Keywords are:
+
+- ORGANIZATION - organization that digitized the data
+- DIGIT DATE - date the data was digitized
+- DIGIT NAME - person who digitized the data
+- MAP NAME - title of the original source map
+- MAP DATE - date of the original source map
+- MAP SCALE - scale of the original source map
+- OTHER INFO - other comments about the map
+- ZONE - zone of the map (e.g., UTM zone)
+- MAP THRESH - digitizing threshold
+
+This information holds \ref dig_head data structure.
+
+
+\section vlibDblnFileFormat DB link file format specification
+
+Each vector maps has its own DBMI settings stored in the
+'$MAPSET/vector/vector_name/dbln' text file. For each pair <em>vector map +
+layer</em>, all of <em>table, key column, database, driver</em> must be
+defined in a new row. This definition must be written to
+'$MAPSET/vector/vector_name/dbln' text file. Each row in the 'dbln'
+file contains names separated by spaces in following order ([ ] -
+optional):
+
+\verbatim
+map[@mapset] layer table [key [database [driver]]]
+\endverbatim
+
+If key, database or driver are omitted (on second and higher row only)
+the last definition is used. When reading a vector map from another
+mapset (if mapset is specified along with map name), definitions in
+the related "dbln" file may overwrite the DBMI definition in the
+current mapset. This means that the map-wise definition is always
+"stronger".
+
+Wild cards <b>*</b> and <b>?</b> may be used in map and mapset names.
+
+Variables $GISDBASE, $LOCATION_NAME, $MAPSET, and $MAP may be used in
+table, key, database and driver names (function
+Vect_subst_var()). Note that $MAPSET is not the current mapset but
+mapset of the map the rule is defined for.
+
+Note that vector features in GRASS vector maps may have attributes in
+different tables or may be without attributes. Boundaries form areas
+but it may happen that some boundaries are not closed (such boundaries
+would not appear in polygon layer).  Boundaries may have
+attributes. All types may be mixed in one vector map.
+
+The link to the table is permanent and it is stored in 'dbln' file in
+vector directory. Tables are considered to be a part of the vector and
+the command <tt>g.remove</tt>, for example, deletes linked tables of
+the vector. Attributes must be joined with geometry.
+
+Information about database links holds \ref dblinks data structure.
+
+<b>Examples:</b>
+
+Examples are written mostly for the DBF driver, where database is full
+path to the directory with dbf files and table name is the name of dbf
+file without .dbf extension:
+
+\verbatim
+* 1 mytable id $GISDBASE/$LOCATION_NAME/$MAPSET/vector/$MAP dbf
+\endverbatim
+
+This definition says that entities with category of layer 1 are linked
+to dbf tables with names "mytable.dbf" saved in vector directories of
+each map. The attribute column containing the category numbers is
+called "id".
+
+\verbatim
+* 1 $MAP id $GISDBASE/$LOCATION_NAME/$MAPSET/dbf dbf
+\endverbatim 
+
+Similar as above but all dbf files are in one directory dbf/ in mapset
+and names of dbf files are $MAP.dbf
+
+\verbatim
+water* 1 rivers id /home/grass/dbf dbf
+water* 2 lakes lakeid /home/guser/mydb
+trans* 1 roads key basedb odbc
+trans* 5 rails
+\endverbatim
+
+These definitions define more layers (called "field" in the API) for
+one vector map i.e. in one vector map may be more features linked to
+more attribute tables. Definitions on first 2 rows are applied for
+example on maps water1, water2, ... so that more maps may share one
+table.
+
+\verbatim
+water@PERMANENT 1 myrivers id /home/guser/mydbf dbf
+\endverbatim
+
+This definion overwrites the definition saved in PERMANENT/VAR and
+links the water map from PERMANENT mapset to the user's table.
+
+Modules should be written so that connections to databases for each
+vector layer are independent. It should be possible to read attributes
+of an input vector map from one database and write to some other and
+even with some other driver (should not be a problem).
+
+There are open questions, however. For one, how does one distinguish when
+new tables should be written and when not? For example, definitions:
+
+\verbatim
+river 1 river id water odbc
+river.backup* 1 NONE
+\endverbatim
+
+could be used to say that tables should not be copied for backups of
+map river because table is stored in a reliable RDBMS.
+
+
+\section vlibCoorFileFormat Coor file format specification
+
+In the coor file the following is stored: 'line' (element) type,
+number of attributes and layer number for each category. Coordinates
+in binary file are stored as double (8 bytes). See \ref Coor_info data
+structure.
+
+\subsection vlibCoorFileHead Header
+
+<table border="1" style="border-collapse: collapse" cellpadding="5">
+<tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
+<tr><td>Version_Major</td> <td>C</td> <td>1</td> <td>file version (major)</td></tr>
+<tr><td>Version_Minor</td> <td>C</td> <td>1</td> <td>file version (minor)</td></tr>
+<tr><td>Back_Major</td>    <td>C</td> <td>1</td> <td>supported from GRASS version (major)</td></tr>
+<tr><td>Back_Minor</td>    <td>C</td> <td>1</td> <td>supported from GRASS version (minor)</td></tr>
+<tr><td>byte_order</td>    <td>C</td> <td>1</td> <td>little or big endian flag</td></tr>
+<tr><td>head_size</td>     <td>L</td> <td>1</td> <td>header size of coor file</td></tr>
+<tr><td>with_z</td>        <td>C</td> <td>1</td> <td>2D or 3D flag; zero for 2D</td></tr>
+<tr><td>size</td>          <td>L</td> <td>1</td> <td>coor file size</td></tr>
+</table>
+
+\subsection vlibCoorFileBody Body
+
+The body consists of line records:
+
+<table border="1" style="border-collapse: collapse" cellpadding="5">
+<tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
+<tr><td>record header</td><td>C</td><td>1</td><td>
+ - 0. bit: 1 - alive, 0 - dead line
+ - 1. bit: 1 - categories, 0 - no categories
+ - 2.-3. bit: type - one of: GV_POINT, GV_LINE, GV_BOUNDARY, GV_CENTROID, GV_FACE, GV_KERNEL
+ - 4.-7. bit: reserved, not used 
+</td></tr>
+
+<tr><td>ncats</td><td>I</td><td>1</td><td>number of categories 
+    (written only if categories exist) </td></tr>
+
+<tr><td>field</td><td>I</td><td>ncats</td><td>field identifier,
+    distinguishes between more categories append to one feature (written
+    only if categories exist; field is called "layer" at user
+    level)</td></tr>
+
+<tr><td>cat</td><td>I</td><td>ncats</td><td>category value (written
+    only if categories exist)</td></tr>
+
+<tr><td>ncoor</td><td>I</td><td>1</td><td>written for GV_LINES and GV_BOUNDARIES 
+    only</td></tr>
+
+<tr><td>x</td><td>D</td><td>ncoor</td><td>x coordinate</td></tr>
+
+<tr><td>y</td><td>D</td><td>ncoor</td><td>y coordinate</td></tr>
+
+<tr><td>z</td><td>D</td><td>ncoor</td><td>z coordinate; present if
+    with_z in head is set to 1</td></tr> </table>
+
+Types used in coor file:
+
+<table border="1" style="border-collapse: collapse" cellpadding="5">
+<tr><td><b>Type</b></td><td><b>Name</b></td><td><b>Size in Bytes</b></td></tr>
+<tr><td>D</td><td>Double</td><td>8</td></tr>
+<tr><td>L</td><td>Long  </td><td>4</td></tr>
+<tr><td>I</td><td>Int   </td><td>4</td></tr>
+<tr><td>S</td><td>Short </td><td>4</td></tr>
+<tr><td>C</td><td>Char  </td><td>1</td></tr>
+</table>
+
+
+
+*/

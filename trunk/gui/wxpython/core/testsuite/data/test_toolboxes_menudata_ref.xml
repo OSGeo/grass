@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--This is an auto-generated file-->
+<menudata>
+  <menubar>
+    <menu>
+      <label>Computational region</label>
+      <items>
+        <menuitem>
+          <label>Show current region</label>
+          <command>g.region -p</command>
+          <help>Shows the extent and resolution of the computational region.</help>
+          <keywords>general,settings</keywords>
+          <handler>RunMenuCmd</handler>
+        </menuitem>
+        <menuitem>
+          <label>Show region using latitude and longitude</label>
+          <command>g.region -pl</command>
+          <help>Shows the extent and resolution of the computational region.</help>
+          <keywords>general,settings</keywords>
+          <handler>RunMenuCmd</handler>
+        </menuitem>
+        <menuitem>
+          <label>Show current region extent in Map Display</label>
+          <handler>OnShowRegionExtent</handler>
+          <help>Shows the extent of the computational region in Map Display.</help>
+          <keywords>general,settings</keywords>
+        </menuitem>
+        <menuitem>
+          <label>Set region</label>
+          <command>g.region</command>
+          <help>Manages the boundary definitions for the geographic region.</help>
+          <keywords>general,settings,computational region,extent,resolution,level1</keywords>
+          <handler>OnMenuCmd</handler>
+        </menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Testing toolbox A</label>
+      <items>
+        <menuitem>
+          <label>Set region</label>
+          <command>g.region</command>
+          <help>Manages the boundary definitions for the geographic region.</help>
+          <keywords>general,settings,computational region,extent,resolution,level1</keywords>
+          <handler>OnMenuCmd</handler>
+        </menuitem>
+        <separator />
+        <menuitem>
+          <label>Testing unknown module</label>
+          <command>m.unknown</command>
+          <help />
+          <keywords />
+          <handler>OnMenuCmd</handler>
+        </menuitem>
+        <subtoolbox name="QueryRasterMap" />
+      </items>
+    </menu>
+    <menu>
+      <label>Map projections</label>
+      <items>
+        <menuitem>
+          <label>Display map projection</label>
+          <command>g.proj -p</command>
+          <help>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</help>
+          <keywords>general,projection,create location</keywords>
+          <handler>RunMenuCmd</handler>
+        </menuitem>
+        <menuitem>
+          <label>Manage projections</label>
+          <command>g.proj</command>
+          <help>Prints or modifies GRASS projection information files (in various co-ordinate system descriptions). Can also be used to create new GRASS locations.</help>
+          <keywords>general,projection,create location</keywords>
+          <handler>OnMenuCmd</handler>
+        </menuitem>
+        <separator />
+        <menuitem>
+          <label>Convert coordinates</label>
+          <command>m.proj</command>
+          <help>Converts coordinates from one projection to another (cs2cs frontend).</help>
+          <keywords>miscellaneous,projection,transformation</keywords>
+          <handler>OnMenuCmd</handler>
+        </menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Testing toolbox B</label>
+      <items>
+        <menuitem>
+          <label>Set region</label>
+          <command>g.region</command>
+          <help>Manages the boundary definitions for the geographic region.</help>
+          <keywords>general,settings,computational region,extent,resolution,level1</keywords>
+          <handler>OnMenuCmd</handler>
+        </menuitem>
+      </items>
+    </menu>
+  </menubar>
+</menudata>

@@ -1,0 +1,211 @@
+From: Glynn Clements <glynn.clements@virgin.net>
+Date: Tue, 5 Mar 2002 16:44:33 +0000
+To: Markus Neteler <neteler@itc.it>
+Subject: Re: Question on raster programming
+
+
+Markus Neteler wrote:
+
+> may I ask you for some assistance for a simple example on
+> GRASS raster programming? 
+> I would like to have r.example as reference for raster
+> programming. The module will do nothing exciting but show
+> how to deal with the different precisions.
+> 
+> the line in question is the inner col-loop, where I
+> copy the cell values from the old to the new map.
+> It does not compile due to the variable definition.
+> 
+> In old modules I have seen ugly things to deal with
+> INT, FCELL and DCELL (lots of cases etc). Probably it
+> is much more simple using the
+> 
+> void *inrast;
+> 
+> definition on top. But then, I don't understand to access
+> it... Yes, programming newbie question. Perhaps you have the
+> patience to help me. I have several older modules in the queue
+> which I would like to release after an update. Before hacking
+> in lots of case statements, I prefer to learn the up-to-date
+> method.
+
+If you want to handle multiple data types, you generally[1] have to
+use a switch statement.
+
+[1] If you are only copying values, you can use other methods (e.g. 
+memcpy), but if you wish to actually process the cell values, they
+need to be stored in a variable of the appropriate type.
+
+Suppose you wanted the equivalent of:
+
+	r.mapcalc 'out = f(in)'
+
+The main loop would look something like:
+
+	extern CELL  f_c(CELL);
+	extern FCELL f_f(FCELL);
+	extern DCELL f_d(DCELL);
+
+	...
+
+	for (col=0; col < ncols; col++)
+	{
+		CELL c;
+		FCELL f;
+		DCELL d;
+
+		switch (data_type)
+		{
+		case CELL_TYPE:
+			c = ((CELL *) inrast)[col];
+			c = f_c(c);
+			((CELL *) outrast)[col] = c;
+			break;
+		case FCELL_TYPE:
+			f = ((FCELL *) inrast)[col];
+			f = f_f(f);
+			((FCELL *) outrast)[col] = f;
+			break;
+		case DCELL_TYPE:
+			d = ((DCELL *) inrast)[col];
+			d = f_d(d);
+			((DCELL *) outrast)[col] = d;
+			break;
+		}
+	}
+
+In the most extreme case, you might have nested switch statements to
+deal with all of the different combinations of input/output types.
+
+If it isn't important that the operation is done at the map's native
+precision, a simpler approach is to just use DCELL values and let the
+G_{get,put}_*_row functions handle the conversion, e.g.
+
+        DCELL f_d(DCELL x)
+        {
+           /* some function */     
+           return x;
+        }
+
+	extern DCELL f_d(DCELL);
+
+	...
+
+	DCELL *inrast = G_allocate_d_raster_buf();
+	DCELL *outrast = G_allocate_d_raster_buf();
+
+	for (row = 0; row < nrows; row++)
+	{
+		if (G_get_d_raster_row (infd, inrast, row) < 0)
+			G_fatal_error(...);
+		
+		for (col=0; col < ncols; col++)
+		 	outrast[col] = f_d(inrast[col]);
+
+		if (G_put_d_raster_row (outfd, outrast) < 0)
+			G_fatal_error(...);
+	}
+
+One other comment about the example: it isn't necessary to use
+sprintf() to format error messages; G_fatal_error() takes a format
+string and arguments, e.g.
+
+	G_fatal_error("cell file [%s] not found", name);
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
+
+From: Glynn Clements <glynn.clements@virgin.net>
+Date: Thu, 7 Mar 2002 16:51:43 +0000
+To: Markus Neteler <neteler@itc.it>
+Subject: Re: Question on raster programming
+
+
+Markus Neteler wrote:
+
+> What do you think about the macro method implemented in
+> r.sunmask (src/raster/r.sunmask/)? Is that a good
+> or possibly slowing down the module for FCELL and DCELL
+> (in fact it's incredible slow, just for INT DEMs it is acceptable).
+
+In the case of r.sunmask, the raster_value() macro/function is
+pointless. The data is always converted to DCELL before being used;
+the code should just allocate DCELL buffers and read the data with
+G_get_d_raster_row().
+
+As for speed, I wouldn't have thought that type-handling logic would
+be significant compared to the amount of work that's done in the
+various G_get_*_row() functions.
+
+Most code should probably just work with DCELL values, and let libgis
+perform the conversions, unless the code is only applicable to CELL
+values, or it handles CELL values differently.
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
+
+
+Markus Neteler wrote:
+
+> sorry to bother you again. I am now continuing to write
+> r.example (which just copies a file) to have an example
+> on raster programming. Maybe you recall our conversation on
+> that some time ago (find it attached as well).
+> 
+> A remaining question is how to define this:
+> 
+>         extern CELL  f_c(CELL);
+>         extern FCELL f_f(FCELL);
+>         extern DCELL f_d(DCELL);
+> 
+> f_c, f_f, f_d
+> 
+> Sorry for this question, but I am clueless here.
+
+For copying a file, these would just be identity functions, e.g.
+
+	CELL f_c(CELL x)
+	{
+		return x;
+	}
+
+Actually, there aren't many things which you could do within that
+framework. For most practical applications, a cell in the output map
+would depend upon more than just the corresponding cell in a single
+input map. You would typically have multiple input maps, and/or use
+the values of multiple cells in computing the value of each output
+cell.
+
+Some other points:
+
+1. Copying input parameters into a buffer, i.e.:
+
+	strcpy (name, option.input->answer);
+	strcpy (result, option.output->answer);
+
+is usually unnecessary. Furthermore, it's something which should be
+discouraged, due to the usual problems with fixed-size buffers.
+
+2. Pre-formatting error/warning messages, e.g.:
+
+        if (mapset == NULL)
+        {
+                char buf[200];
+                sprintf (buf, "cell file [%s] not found", name);
+                G_fatal_error (buf);
+        }
+
+is unnecessary, as G_fatal_error() and G_warning() already do this,
+e.g.
+
+        if (!mapset)
+                G_fatal_error("cell file [%s] not found", name);
+
+3. Ideally, all abnormal exits would be via G_fatal_error(), rather
+than calling exit() directly.
+
+4. The value passed to exit() should be non-negative. exit(-1) is just
+a confusing way of writing exit(255).
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>

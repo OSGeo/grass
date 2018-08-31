@@ -1,0 +1,151 @@
+% ***************************************************************************
+% 
+%  MODULE:       PS driver
+%  AUTHOR(S):    Glynn Clements <glynn@gclements.plus.com>
+%  COPYRIGHT:    (C) 2007 Glynn Clements
+% 
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+% 
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+% 
+% ****************************************************************************
+
+/GRAY {
+  255.0 div
+  setgray
+} bind def
+/COLOR {
+  3 2 roll 255 div
+  3 2 roll 255 div
+  3 2 roll 255 div
+  setrgbcolor
+} bind def
+/BOX {
+  newpath
+  3 index 3 index moveto
+  1 index 3 index lineto
+  1 index 1 index lineto
+  3 index 1 index lineto
+  closepath fill
+  pop pop pop pop
+} bind def
+/POINT {
+  newpath
+  moveto
+  currentpoint lineto
+  stroke
+} bind def
+/ERASE {
+  erasepage
+} bind def
+/WIDTH {
+  setlinewidth
+} bind def
+/BITMAP {
+  gsave
+    4 2 roll translate
+    1 index 7 add 8 idiv string /tmpstr exch def
+    true [1 0 0 1 0 0] {currentfile tmpstr readhexstring pop} imagemask
+  grestore
+} bind def
+/RASTERGRAY {
+  8 exch
+  3 index string /tmpstr exch def
+  {currentfile tmpstr readhexstring pop} image
+} bind def
+/RASTERRGB {
+  8 exch
+  3 index 3 mul string /tmpstr exch def
+  {currentfile tmpstr readhexstring pop}
+  false 3 colorimage
+} bind def
+/RASTERMASK {
+  6 dict begin
+    /ncomp exch def
+    /mat exch def
+    /rows exch def
+    /cols exch def
+    /tmpstr ncomp 1 add cols mul string def
+    /imgdict 4 dict def
+    imgdict begin
+      /ImageType 3 def
+      /InterleaveType 1 def
+      /MaskDict 6 dict def
+      MaskDict begin
+	/ImageType 1 def
+	/Width cols def
+	/Height rows def
+	/ImageMatrix mat def
+	/BitsPerComponent 8 def
+	/Decode [0 1] def
+      end
+      /DataDict 7 dict def
+      MaskDict DataDict copy pop
+      DataDict begin
+	/DataSource {currentfile tmpstr readhexstring pop} def
+	/Decode [0 1 0 1 0 1] 0 ncomp 2 mul getinterval def
+      end
+    end
+    imgdict image
+  end
+} bind def
+/RASTERGRAYMASK {
+  gsave
+    /DeviceGray setcolorspace
+    1 RASTERMASK
+  grestore
+} bind def
+/RASTERRGBMASK {
+  gsave
+    /DeviceRGB setcolorspace
+    3 RASTERMASK
+  grestore
+} bind def
+/WINDOW {
+  initclip
+  exch
+  4 -1 roll
+  3 -1 roll 2 index sub
+  4 -1 roll 2 index sub
+  rectclip
+} bind def
+/EPSWINDOW {
+  exch
+  4 -1 roll
+  3 -1 roll 2 index sub
+  4 -1 roll 2 index sub
+  rectclip
+} bind def
+/BEGIN {
+  /Height exch def
+  /Width exch def
+  gsave
+} bind def
+/END {
+  grestore
+  showpage
+} bind def
+/NEW {
+  newpath
+} bind def
+/MOVE {
+  moveto
+} bind def
+/CONT {
+  lineto
+} bind def
+/CLOSE {
+  closepath
+} bind def
+/STROKE {
+  stroke
+} bind def
+/FILL {
+  eofill
+} bind def

@@ -1,0 +1,52 @@
+SQLite driver
+
+Note:
+If SQL types are wrongly detected as "numeric", check
+(at least) the function affinity_type() in describe.c.
+
+#####################################################
+# email from 10/2005:
+
+To use it, you have to set driver and database, e.g.:
+db.connect driver=sqlite \
+    database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
+
+The database is created automatically when used first time.
+That is SQLite feature followed also in the driver.
+
+SQLite uses "type affinity", (http://www.sqlite.org/datatype3.html)
+that means column types are recommended, but not required.
+
+If the driver in GRASS has to determine column type, it first reads 
+"affinity" if available (table column) and then data types of values
+in the first row. If a column in a query does not come from table and there 
+are no results, the driver cannot recognize column type.
+
+Example:
+echo "select 1 as col1 where 1 = 2" | db.select
+WARNING: SQLite driver: column 'col1', SQLite type 0 is not supported
+
+For direct work with SQLite database you can use CLI called 'sqlite3'
+which is part of SQLite distribution or one of available GUIs, 
+for example  Kexi: 
+http://www.koffice.org/kexi/screenshots.php
+http://www.koffice.org/kexi/
+
+Related. I also added new type DB_SQL_TYPE_TEXT, which is mapped 
+to DB_C_TYPE_STRING. 
+That means you don't get warning like
+
+  WARNING: column 'c3' : type text is stored as varchar(250) 
+                 some data may be lost
+
+until you try to copy the TEXT column with a driver which does not support
+TEXT. Currently TEXT is support by sqlite and postgres driver.
+It is possible and easy to add TEXT support to mysql driver, but I don't 
+have MySQL installed. If you are interested in TEXT in mysql 
+modify /drivers/mysql/create_table.c according to 
+ /drivers/postgres/create_table.c
+
+
+Radim
+
+

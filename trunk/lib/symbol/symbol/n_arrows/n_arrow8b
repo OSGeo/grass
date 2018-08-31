@@ -1,0 +1,80 @@
+VERSION 1.0
+BOX -1 -1 1 1
+
+STRING
+  ARC 0 0 5 360 0 C
+END
+POLYGON
+  COLOR NONE
+  RING
+    ARC 0 0 4.5 90 167.1604
+  END
+END
+POLYGON
+  COLOR NONE
+  RING
+    ARC 0 0 4.5 450 372.8396 C
+  END
+END
+
+POLYGON
+  COLOR NONE
+  RING
+    ARC 0 0 4.5 247.8039 167.1604 C
+  END
+END
+POLYGON
+  COLOR NONE
+  RING
+    ARC 0 0 4.5 292.1961 372.8396
+  END
+END
+
+POLYGON
+  COLOR NONE
+  RING
+    LINE
+      -1.7    1
+      -1.7   -4.1665
+      -4.3875 1
+      -1.7    1
+    END
+  END
+END
+POLYGON
+  COLOR NONE
+  RING
+    LINE
+      1.7    1
+      1.7   -4.1665
+      4.3975 1
+      1.7    1
+    END
+  END
+END
+
+# cleanup to avoid sliver visible after conversion to pdf
+POLYGON
+  COLOR NONE
+  RING
+    LINE
+      -1.7    -4.1665
+      -3.0488 -2.5
+      -4.3975  1
+      -3.0488 -0.9
+      -1.7    -4.1665
+    END
+  END
+END
+POLYGON
+  COLOR NONE
+  RING
+    LINE
+      1.7    -4.1665
+      3.0488 -2.5
+      4.3975  1
+      3.0488 -0.9
+      1.7    -4.1665
+    END
+  END
+END

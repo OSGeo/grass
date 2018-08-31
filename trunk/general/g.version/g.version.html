@@ -1,0 +1,89 @@
+<h2>DESCRIPTION</h2>
+
+<em>g.version</em> prints to standard output the GRASS version number,
+date, the GRASS GIS copyright (<b>-c</b> flag), and GRASS build information
+(<b>-b</b> flag).
+
+<h2>NOTES</h2>
+
+This program requires no command line arguments; the user simply types
+<em>g.version</em> on the command line to see the version number and
+date of the GRASS GIS software currently being run by the user.
+
+<p>
+Information about GRASS GIS
+core <a href="https://grass.osgeo.org/programming7/gislib.html">GIS
+Library</a> can be printed by <b>-r</b> flag.
+
+<p>
+Version numbers of additional libraries
+like <a href="http://trac.osgeo.org/proj/">PROJ.4</a>, <a href="http://gdal.org/">GDAL/OGR</a>
+or <a href="http://trac.osgeo.org/geos">GEOS</a> are printed
+by <b>-e</b> flag.
+
+<p>
+See also function <tt>version()</tt>
+from <a href="https://grasswiki.osgeo.org/wiki/GRASS_Python_Scripting_Library">Python
+Scripting Library</a>.
+
+<div class="code"><pre>
+import grass.script as gcore
+
+print gcore.version()
+</pre></div>
+
+<h2>EXAMPLES</h2>
+
+<h3>Basic info</h3>
+<div class="code"><pre>
+g.version 
+
+GRASS 7.5.svn (2017)
+</pre></div>
+
+<h3>GIS Library info</h3>
+
+<div class="code"><pre>
+g.version -r
+
+GRASS 7.5.svn (2017)
+libgis Revision: 70829 
+libgis Date: 2017-04-04 09:43:02 +0200 (Tue, 04 Apr 2017)
+</pre></div>
+
+<h3>Full info in shell script style</h3>
+<div class="code"><pre>
+g.version -rge
+
+version=7.5.svn
+date=2017
+revision=r71702M
+build_date=2017-11-12
+build_platform=x86_64-pc-linux-gnu
+build_off_t_size=8
+libgis_revision=70829 
+libgis_date="2017-04-04 09:43:02 +0200 (Tue, 04 Apr 2017) "
+proj4=4.9.3
+gdal=2.1.3
+geos=3.6.1
+sqlite=3.20.1
+</pre></div>
+
+<h2>Citing GRASS GIS</h2>
+
+The GRASS Development Team has invested significant time and effort
+in creating GRASS GIS, please cite it when using it for data analysis.
+
+The GRASS GIS <a href="https://grass.osgeo.org/download/software/">Web site</a>
+offers citations in different styles.
+<!-- TODO: g.version should offer this right away -->
+
+<h2>AUTHORS</h2>
+
+Michael Shapiro, 
+U.S. Army Construction Engineering 
+Research Laboratory<br>
+Extended info by Martin Landa, Czech Technical University in Prague, Czech Republic
+
+<p>
+<i>Last changed: $Date$</i>

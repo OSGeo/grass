@@ -1,0 +1,210 @@
+Feb 2000 added cwidth, offset, coffset, lpos for vectors by Radim Blazek 
+
+Jan 2000 added vector areas and legend label for vectors by Radim Blazek 
+
+1998
+Patch, which enables user to choose one vector category 
+to print from a vector file (Janne Soimasuo, Finnland)
+   -> line_cat additions
+
+files: do_vector.c, ps_vector.c
+--------------------------
+** added #include <stdlib.h> 7/98 Richard Nairn
+
+--------------------------
+PROBLEM DESCRIPTION:
+    Did not plot grid and vecors correctly in lat-lon
+    label location also didn't work in lat-lon
+STATUS:
+    FIXED and coming out with the next update
+
+PROBLEM DESCRIPTION:
+The manual for ps.map says that fields width and hwidth
+specify the width of the line in pixels, which is not true:
+they were actually interpreted as width in user space PostScript
+coordinates: 1/72 of inch. I made the width double, added width options
+for outline and grid, and also now the width ni is isnterpreted as n inches.
+ 
+STATUS:
+    FIXED and coming out with the next update
+
+PROBLEM DESCRIPTION:
+Also in file outl_io.c o_write_line()  is an exact copy of the
+write_ln() function in r.poly, which I fixed (GRASS930547) since
+it was giving segmentation faults.
+
+It looks like ps.map is doing exactly what r.poly does: creating
+a vector file with boundaries of raster areas given a raster file.
+Seems like a lot to do just to plot a map. If the user makes 10
+different plots with the same raster file using outline, then 
+every time exact same vector file is created and deleted.
+
+Instead I want to draw little line segments between every pair of
+differing cells without worrying too much about topology.
+This will have one drawback: each vector line will be drawn as many
+little line segments, each with beginning and the end, instead of
+starting the PostScript path at each node and drawing a continuous line 
+through all the points of vector line like it is done when drawing vector
+maps.
+Also I am going to add a line width parameter to outline command
+
+STATUS:
+    FIXED and coming out with the next update
+
+From anne@cast.uark.edu Mon Dec 20 16:40:49 1993
+
+FIXED BUGS:
+
+  1. removed the G_strip(buf); instructions in function comment.c
+     to allow leading and trailing spaces in comment file.
+
+  2. removed statements:
+     if (fontsize < 10) fontsize = 10;
+     if (fontsize > 50) fontsize = 50;
+     in function do_labels.c so as not to restrict the choice of font size.
+
+  3. increased the maximum number of pixels allowed on a page in function
+      map_setup.c : 
+          limit = 300000000L; 
+     if the total number of pixels is larger than "limit" then ps.map 
+     reduces it to limit
+     This change allows us to print layers at their actual resolution.
+     For example: an AVHRR layer at 151 cells per inch. 
+
+     NOTE: we are thinking about assigning different upper limits to different 
+     Postscript devices, as an additional parameter in the ps.devices files.
+
+  4. changed function plfile.c so that it accepts a line width of 0
+     NOTE: it should also be changed to allow decimal point values.
+
+(I already changed it to decimal number, and made it accept 0 .Olga)
+
+  5. changed function ps_clrtbl.c so that category 0's label is read from the
+     cats file rather than replaced by "no data"
+
+PROBLEM DESCRIPTION:
+background none in labels did not work, the box was black
+The gridnumber size was set to zero if it was >50;
+Also I want to add linewidth for grid
+STATUS:
+    FIXED and coming out with the next update
+     
+
+--------------------------------------------------------------------------
+DESCRIPTION:
+
+ps.map is called with the following arguments:
+
+    ps.map input=input_script [scale=xxxx] output=outputfile
+
+The scale is optional.  If no scale is given here and no scale request is 
+made in the input script, a scale equivalent to "1 panel" is used. 
+
+The program ps.select should be run to select a printer configuration file
+prior to running ps.map.  These files are located in the directory 
+$GISBASE/etc/paint/ps.devices.  The name of the file is the argument to
+ps.select.  These files contain the following printer info:
+
+	level: 2
+	page width: 8.5
+	page height: 11.0
+	top margin: 0.5
+	bottom margin: 0.5
+	left margin: 0.25
+	right margin: 0.25
+	resolution: 75
+
+If ps.select is not run, the default values are as shown above, where page
+width and height are the paper dimensions (in inches) and the margins are
+the unprintable edges of the page.  The level is the PostScript level and
+the resolution is the effective resolution in pixels per inch.  
+
+All of the p.map requests except for "colormode", "defpat" and "setpat"
+have been implemented.  Multiple panels are not supported at this time.
+The icons used in the point and sites requests are created with the ps.icon
+program (icons created with p.icon will not work).
+
+The following p.map requests have been modified in ps.map:
+
+    colortable (has the following additional sub-requests)   
+      where x y (distance in inches from left and top edges of page - optional)
+      width  tablewidth (maximum width of colortable in inches - optional)
+      cols table_columns (optional - defaullt = 1)
+      font fontname (optional - default = Helvetica)
+      fontsize fontsize (optional - default = 10)
+      color textcolor (optional - default = black)
+      end (required)
+
+    comments (has the following additional sub-requests)   
+      where x y (positions the comments x and y inches from the left and top 
+	edges of the page - optonal - default is immediately below the last
+	item printed, starting at the left edge of the map)
+      font fontname (optional - default = Helvetica)
+      fontsize fontsize (optional - default = 10)
+      color textcolor (optional - default = black)
+      end (required)
+
+    grid (has the following additional sub-requests)   
+      font fontname (optional - default = Helvetica)
+      fontsize fontsize (optional - default = 10)
+      end (required)
+
+    labels (has the following additional sub-requests)   
+      font fontname (optional - default = Helvetica)
+      end (required)
+
+    scale (except multiple panels are not yet implemented)
+
+    sites (has the following additional sub-request)   
+      font fontname (optional - default = Helvetica.  The size of the
+	font is proportional to the size of the icon.  The default icon
+	size is 1.0, which is equivalent to a fontsize of 10.)
+
+    vector (except the stye sub-request uses the first color for
+	    all non-zero characters in the line pattern)
+
+
+The following new script requests have been added:
+
+    greyrast (prints a raster map in shades of grey).
+
+    header
+      file filename (name of file containing header info - optional -
+		     default is the standard header of pmap, except that it is
+		     centered on the page)
+      font fontname (optional - default = Helvetica)
+      fontsize fontsize (optional - default = 10)
+      color textcolor (optional - default = black)
+      end (required)
+
+    maploc x y [width height]  (positions the map x and y inches from
+	the left and top edges of the page.  If the optional width and
+	height arguments are present, the map will be rescaled to fit.
+	If this request is not encountered, the map will be located
+	immediately below the header starting at the left margin.)
+
+    mapinfo
+      where x y (positions the information about the scale, the grid, and
+	the region x and y inches from the left and top edges of the page -
+	optonal - default is immediately below the map, starting at the
+	left edge of the map)
+      font fontname (optional - default = Helvetica)
+      fontsize fontsize (optional - default = 10)
+      color textcolor (optional - default = black)
+      end (required)
+
+    psfile filename (reads a file containing PostScript commands.  This
+	request can appear up to 20 times in a ps.map script.)
+
+    vlegend
+      where x y (positions the vector legend x and y inches from the left 
+	and top edges of the page - optonal - default is immediately below the
+	map_info, starting at the left edge of the map)
+      font fontname (optional - default = Helvetica)
+      fontsize fontsize (optional - default = 10)
+      end (required)
+
+    group <group> (prints an imagery group comprising R,G,B channels.)
+
+    rgb <red[@mapset]> <green[@mapset]> <blue[@mapset]> (prints an RGB
+      image formed from three separate layers, as for d.rgb.)

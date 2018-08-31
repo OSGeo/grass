@@ -1,0 +1,236 @@
+/* GRASS GIS documentation site style sheet
+ *
+ * send improvements to GRASS Developers list
+ * 
+ *  (eg how to reach the same result on netscape, mozilla konqueror?)
+ *
+ * Fonts:
+ *	http://www.w3.org/TR/REC-CSS2/fonts.html
+ * Tables:
+ *	http://www.w3.org/TR/REC-CSS2/tables.html
+ */
+
+body{
+    background: white;
+    color: black;
+    font-family: arial,sans-serif;
+}
+
+#container
+{
+    position: relative;
+    margin-left: 50px;
+    padding-left:  10px;
+    padding-right: 10px;
+/*    width: 750px; */
+    width: 75%;
+    background-color: white;
+    height:auto !important;
+    min-height: 100%;
+    border-style:solid;
+    border-bottom-width: 2px;
+    border-top-width: 2px;
+    border-left-width: 10px;
+    border-right-width: 10px;
+    border-color: #DDDDDD;
+}
+
+img {
+    max-width: 100%;
+}
+
+hr.header {
+    height: 3px;
+    color: gray;
+    background-color: gray;
+    width: 100%;
+}
+
+h1{
+    background-color: transparent;
+    color: rgb(25%, 60%, 25%);
+    font-family: arial,sans-serif;
+    font-weight: bold;
+    font-size: xx-large;
+    width: 80%; /* avoid collision with toc */
+}
+
+h2{
+    background-color: transparent;
+    color: rgb(25%, 60%, 25%);
+    font-family: arial,sans-serif;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+h3{
+    background-color: transparent;
+    color: rgb(25%, 60%, 25%);
+    font-family: arial,sans-serif;
+    font-weight: bold;
+    font-size: large;
+}
+
+h4{
+    background-color: transparent;
+    color: rgb(25%, 60%, 25%);
+    font-family: arial,sans-serif;
+    font-weight: bold;
+    font-size: medium;
+}
+
+a {
+    color: rgb(25%, 60%, 25%);
+}
+
+a:visited {
+    color: rgb(25%, 60%, 25%);
+}
+
+a.urlblack {
+    color: black;
+}
+
+div.code{
+    width: 97%;
+    color : black;
+    background-color: rgb(90%, 90%, 90%);
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+span.code {
+    width: 97%;
+    color : black;
+    background-color: rgb(90%, 90%, 90%);
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.leftmenu {
+    padding-left: 10px;
+}
+
+td.box {
+    border:  2px solid rgb(25%, 60%, 25%);
+    border-radius: 10px;
+    margin: 0px 2px 2px 10px;
+    padding: 4px 4px 0px 4px;
+}
+
+li.box {
+    margin-left: -20px;
+    color: rgb(25%, 60%, 25%);
+    padding-bottom: 3px;
+}
+
+li.box span {
+    color: black;
+}
+
+table.border {
+    border-collapse:collapse;
+}
+
+table.border td {
+    border: 1px solid rgb(25%, 60%, 25%);
+}
+
+td {
+    padding: 5px;
+}
+
+div.toc{
+    /* background-color: transparent; */
+    position: fixed;
+    border: solid 1px rgb(25%, 60%, 25%);
+    top: 5px;
+    right: 5px;
+    width: 17%;
+    font-size: small;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+li.toc {
+   margin-left: 0;
+   padding: 3px 3px 3px 3px;
+   padding-left: 0;
+   color: rgb(25%, 60%, 25%);
+}
+
+ul.toc {
+   margin-top: 3px;
+   margin-bottom: 3px;
+   padding-left: 10%;
+   margin-left: 5%;
+}
+
+a.toc {
+    text-decoration: none;
+}
+
+a.toc:hover, a.toc:active {
+    text-decoration: underline;
+}
+
+h4.toc {
+    padding-top: 3px;
+    margin-top: 3px;
+    padding-bottom: 3px;
+    margin-bottom: 3px;
+    padding-left: 6px;
+}
+
+/* show and hide toc */
+
+div.toc:hover ul {
+  display: block;
+}
+
+div.toc ul {
+  display: none;
+}
+
+div.toc:hover {
+  background-color: white;
+}
+
+div.toc {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* This is for a more detailed equivalent of option->descriptions
+ * (perhaps it can be used more generally as well).
+ * Creates a description list with highlighted items titles
+ * but not too visible in the overall text flow. */
+.option_descriptions dt {
+    font-weight: bold;
+    color: #222;
+}
+
+table.compact {
+    font-size: 80%;
+}
+
+/* default style is too spread out */
+table.compact td, table.compact th {
+    padding-left: 0.5em;
+    padding-right: 0.2em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+}
+
+/* do table using alternate colors of rows */
+table.compact tr:nth-child(odd) {
+    background: #EEE;
+}
+
+table.compact tr:nth-child(even) {
+    background: #FFF;
+}
+
+/* soft strike through so that we can still see the text */
+s {
+    text-decoration-color: rgba(0, 0, 0, 0.53);
+}

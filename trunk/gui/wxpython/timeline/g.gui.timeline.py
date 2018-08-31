@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+############################################################################
+#
+# MODULE:    g.gui.timeline.py
+# AUTHOR(S): Anna Kratochvilova
+# PURPOSE:   Timeline Tool is a wxGUI component (based on matplotlib)
+#            which allows the user to compare temporal datasets' extents.
+# COPYRIGHT: (C) 2012-13 by Anna Kratochvilova, and the GRASS Development Team
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+############################################################################
+
+#%module
+#% description: Allows comparing temporal datasets by displaying their temporal extents in a plot.
+#% keyword: general
+#% keyword: GUI
+#% keyword: temporal
+#%end
+#%option G_OPT_STDS_INPUTS
+#% required: no
+#%end
+#%flag
+#% key: 3
+#% description: Show also 3D plot of spatio-temporal extents
+#%end
+
+import grass.script as gscript
+
+
+def main():
+    options, flags = gscript.parser()
+
+    import wx
+
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+
+    try:
+        from timeline.frame import TimelineFrame
+    except ImportError as e:
+        # TODO: why do we need this special check here, the reason of error
+        # is wrong intallation or something, no need to report this to the
+        # user in a nice way
+        gscript.fatal(e.message)
+
+    datasets = options['inputs'].strip().split(',')
+    datasets = [data for data in datasets if data]
+    view3d = flags['3']
+
+    app = wx.App()
+    frame = TimelineFrame(None)
+    frame.SetDatasets(datasets)
+    frame.Show3D(view3d)
+    frame.Show()
+    app.MainLoop()
+
+
+if __name__ == '__main__':
+    main()

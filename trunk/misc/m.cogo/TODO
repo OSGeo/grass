@@ -1,0 +1,6 @@
+Add interactive code from r.profile to easily draw line.
+ (GRASS 6 only; interactive xmon code in modules is replaced by
+  wxGUI wrappers and non-interactive backend modules in GRASS 7)
+
+see also d.where with <middle click> between coords, which could 
+then be piped into m.cogo.
