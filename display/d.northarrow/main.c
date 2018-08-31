@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 {
     struct GModule *module;
     struct Option *bg_color_opt, *fg_color_opt, *coords, *n_arrow, *fsize,
-        *width_opt, *rotation_opt, *lbl_opt, *text_color_opt;
+        *width_opt, *rotation_opt, *lbl_opt, *text_color_opt, *font, *path, *charset;
     struct Flag *no_text, *rotate_text, *rads;
     double east, north;
     double rotation;
@@ -120,8 +120,15 @@ int main(int argc, char **argv)
     width_opt->answer = "0";
     width_opt->description = _("Line width");
 
+    font = G_define_option();
+    font->key = "font";
+    font->type = TYPE_STRING;
+    font->required = NO;
+    font->description = _("Font name");
+    font->guisection = _("Text");
+
     fsize = G_define_option();
-    fsize->key = "fontsize";
+    fsize->key = "fontsize"; /* size in d.text */
     fsize->type = TYPE_DOUBLE;
     fsize->required = NO;
     fsize->answer = "14";
@@ -129,10 +136,25 @@ int main(int argc, char **argv)
     fsize->description = _("Font size");
     fsize->guisection = _("Text");
 
+    path = G_define_standard_option(G_OPT_F_INPUT);
+    path->key = "path";
+    path->required = NO;
+    path->description = _("Path to font file");
+    path->gisprompt = "old,font,file";
+    path->guisection = _("Font settings");
+
     no_text = G_define_flag();
     no_text->key = 't';
     no_text->description = _("Draw the symbol without text");
     no_text->guisection = _("Text");
+
+    charset = G_define_option();
+    charset->key = "charset";
+    charset->type = TYPE_STRING;
+    charset->required = NO;
+    charset->description =
+	_("Text encoding (only applicable to TrueType fonts)");
+    charset->guisection = _("Text");
 
     rotate_text = G_define_flag();
     rotate_text->key = 'w';
@@ -188,7 +210,6 @@ int main(int argc, char **argv)
     else
         text_color = 0;
 
-
     line_width = atof(width_opt->answer);
     if (line_width < 0)
         line_width = 0;
@@ -196,6 +217,13 @@ int main(int argc, char **argv)
         line_width = 72;
 
     D_open_driver();
+
+    if (font->answer)
+	D_font(font->answer);
+    else if (path->answer)
+	D_font(path->answer);
+    if (charset->answer)
+	D_encoding(charset->answer);
 
     draw_n_arrow(east, north, rotation, lbl_opt->answer, rot_with_text,
                  fontsize, n_arrow->answer, line_width);
