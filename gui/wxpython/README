@@ -18,7 +18,7 @@ $Date$
 If you want to launch wxPython GUI automatically, start GRASS with
 `-gui` parameter
 
-$ grass76 -gui
+$ grass77 -gui
 
 
 3 - STARTUP FROM GRASS TERMINAL

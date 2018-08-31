@@ -227,7 +227,7 @@ vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
 
   - Update addons (grass_addons.sh) rules, eg.
 
-     compile $SVN_PATH/grass7 $GISBASE_PATH/grass760RC1   $ADDON_PATH/grass760RC1/addons
+     compile $SVN_PATH/grass7 $GISBASE_PATH/grass770RC1   $ADDON_PATH/grass770RC1/addons
 
   - Modify grass_copy_wwwroot.sh accordingly, eg.
 

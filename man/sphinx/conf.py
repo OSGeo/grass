@@ -164,7 +164,7 @@ html_use_index = False
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'grass76Documentationdoc'
+htmlhelp_basename = 'grass77Documentationdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -183,7 +183,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('content', 'grass76Documentation.tex', u'GRASS 7.4 Documentation Documentation',
+  ('content', 'grass77Documentation.tex', u'GRASS 7.4 Documentation Documentation',
    u'GRASS Development Team', 'manual'),
 ]
 
@@ -213,7 +213,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('content', 'grass76documentation', u'GRASS 7.4 Documentation Documentation',
+    ('content', 'grass77documentation', u'GRASS 7.4 Documentation Documentation',
      [u'GRASS Development Team'], 1)
 ]
 
@@ -227,8 +227,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('content', 'grass76Documentation', u'GRASS 7.4 Documentation Documentation',
-   u'GRASS Development Team', 'grass76Documentation', 'One line description of project.',
+  ('content', 'grass77Documentation', u'GRASS 7.4 Documentation Documentation',
+   u'GRASS Development Team', 'grass77Documentation', 'One line description of project.',
    'Miscellaneous'),
 ]
 

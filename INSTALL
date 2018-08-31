@@ -40,7 +40,7 @@ Installation order:
 
 GRASS source code is currently distributed in 2 forms:
 
-1) Officially released source code (e.g. grass-7.2.0.tar.gz or later)
+1) Officially released source code (e.g. grass-7.7.0.tar.gz or later)
 
   The Full source code version contains all the GRASS source code
   required for compilation. It is distributed as one file (*.tar.gz
@@ -53,8 +53,8 @@ GRASS source code is currently distributed in 2 forms:
   repository (https://svn.osgeo.org/grass/) or as a snapshot
   (*.tar.gz package) of that SVN repository. The SVN snapshot name
   contains the date when the snapshot was created (checked out from
-  the SVN repository), e.g. grass-7.2.svn_src_snapshot_2016_06_11.tar.gz
-  from https://grass.osgeo.org/grass76/source/snapshot/
+  the SVN repository), e.g. grass-7.7.svn_src_snapshot_2016_06_11.tar.gz
+  from https://grass.osgeo.org/grass77/source/snapshot/
   Further instructions at https://trac.osgeo.org/grass/wiki/DownloadSource
 
 
@@ -151,16 +151,16 @@ See also CODE OPTIMIZATION below.
 
 After compilation, the resulting code is stored in the directory
     ./dist.$ARCH
-and the scripts (grass76, ...) in
+and the scripts (grass77, ...) in
     ./bin.$ARCH
 
 To run GRASS, simply start
-    ./bin.$ARCH/grass76
+    ./bin.$ARCH/grass77
 
 or run
 
     make install
-    grass76
+    grass77
 
 
 (E) INSTALLATION ON MACOSX
