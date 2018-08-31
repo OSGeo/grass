@@ -25,6 +25,7 @@
 #% keyword: vector
 #% keyword: attribute table
 #% keyword: database
+#% keyword: rename
 #%end
 #%option G_OPT_V_MAP
 #%end
