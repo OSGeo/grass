@@ -14,7 +14,7 @@ These classes are used to manage the infrastructure of GRASS database:
 GIS data directory, Location and Mapset. Details about the GRASS GIS
 database management (locations and mapsets) can be found in the `GRASS
 GIS 7 User's Manual: GRASS GIS Quickstart
-<http://grass.osgeo.org/grass75/manuals/helptext.html>`_.
+<https://grass.osgeo.org/grass76/manuals/helptext.html>`_.
 
 .. _Region-label:
 
@@ -25,6 +25,6 @@ The :class:`~pygrass.gis.region.Region` class it is useful to obtain
 information about the computational region and to change it. Details
 about the GRASS GIS computational region management can be found in
 the `GRASS GIS Wiki: Computational region
-<http://grasswiki.osgeo.org/wiki/Computational_region>`_.
+<https://grasswiki.osgeo.org/wiki/Computational_region>`_.
 
 The classes are part of the :mod:`~pygrass.gis` module.

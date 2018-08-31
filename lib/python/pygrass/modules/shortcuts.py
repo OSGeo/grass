@@ -59,7 +59,7 @@ class MetaModule(object):
                                    name.strip('_').replace('_', '.')))
 
 
-# http://grass.osgeo.org/grass75/manuals/full_index.html
+# https://grass.osgeo.org/grass76/manuals/full_index.html
 #[ d.* | db.* | g.* | i.* | m.* | ps.* | r.* | r3.* | t.* | v.* ]
 #
 #  d.*	display commands
