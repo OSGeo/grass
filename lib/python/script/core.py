@@ -770,7 +770,7 @@ def parser():
     "flags" are Python booleans.
 
     Overview table of parser standard options:
-    https://grass.osgeo.org/grass75/manuals/parser_standard_options.html
+    https://grass.osgeo.org/grass76/manuals/parser_standard_options.html
     """
     if not os.getenv("GISBASE"):
         print("You must be in GRASS GIS to run this program.", file=sys.stderr)
