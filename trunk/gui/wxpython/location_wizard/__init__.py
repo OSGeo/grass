@@ -1,5 +1,0 @@
-all = [
-    'wizard',
-    'base',
-    'dialogs',
-]

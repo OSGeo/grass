@@ -1,4 +1,0 @@
-all = [
-    'locdownload',
-    'utils',
-]

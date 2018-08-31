@@ -1,3 +1,0 @@
-COMMAND: v.in.sites input="mysites" output="mysites"
-GISDBASE: /home/neteler/grass63
-LOCATION: demolocation MAPSET: PERMANENT USER: neteler DATE: Fri Apr 25 21:41:24 2008

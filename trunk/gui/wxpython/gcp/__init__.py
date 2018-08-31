@@ -1,5 +1,0 @@
-all = [
-    'manager',
-    'mapdisplay',
-    'toolbars',
-]

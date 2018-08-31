@@ -1,9 +1,0 @@
-SQL DB support via OGR
-
-- currently only a subset is supported:
-   - SELECT
-
------------------------------------------------------
-General Documentation
-  http://www.remotesensing.org/gdal/ogr/ogr_sql.html
-
