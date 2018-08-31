@@ -191,8 +191,8 @@ vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
 
 # write announcement
   - store in trac:
-    https://trac.osgeo.org/grass/wiki/Release/7.4.x-News
-    https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures74  <- add content of major changes only
+    https://trac.osgeo.org/grass/wiki/Release/7.6.x-News
+    https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures76  <- add content of major changes only
   - update version in https://grasswiki.osgeo.org/wiki/GRASS-Wiki
   - store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html <- how? with protected PHP upload page? (dropped since CMS)
 
@@ -227,11 +227,11 @@ vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
 
   - Update addons (grass_addons.sh) rules, eg.
 
-     compile $SVN_PATH/grass7 $GISBASE_PATH/grass740RC1   $ADDON_PATH/grass740RC1/addons
+     compile $SVN_PATH/grass7 $GISBASE_PATH/grass760RC1   $ADDON_PATH/grass760RC1/addons
 
   - Modify grass_copy_wwwroot.sh accordingly, eg.
 
-     copy_addon 741RC1 7.4.1RC1
+     copy_addon 761RC1 7.666666.1RC1
 
 # Launchpad notes:
 
@@ -305,23 +305,24 @@ vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
 1. see SVN book:
    http://svnbook.red-bean.com/en/1.1/ch04s07.html
 
-   GRASS 7.4 release branch:
-          BRANCH=releasebranch_7_4
-          URL=https://svn.osgeo.org/grass
-          svn copy $URL/grass/trunk \
-                   $URL/grass/branches/$BRANCH \
-                   -m "Release branch for GRASS 7.4.x"
+   GRASS 7.6 release branch:
 
+# see below for real example
+#          BRANCH=releasebranch_7_6
+#          URL=https://svn.osgeo.org/grass
+#          svn copy $URL/grass/trunk \
+#                   $URL/grass/branches/$BRANCH \
+#                   -m "Release branch for GRASS 7.6.x"
 
-   Switching current local copy to above development branch:
-   (http://svnbook.red-bean.com/en/1.1/ch04s05.html)
-           cd /path/to/your/local/copy/trunk
-           svn switch https://svn.osgeo.org/grass/grass/branches/releasebranch_7_4 .
-
-----------
-Example: GRASS GIS 7.4 release branch creation
+Branch creation example: GRASS GIS 7.6 release branch creation
 
 svn copy https://svn.osgeo.org/grass/grass/trunk/ \
-    https://svn.osgeo.org/grass/grass/branches/releasebranch_7_4 \
-    -m "Release branch for GRASS GIS 7.4.x"
+    https://svn.osgeo.org/grass/grass/branches/releasebranch_7_6 \
+    -m "Release branch for GRASS GIS 7.6.x"
 
+----------
+Switching current local copy to above development branch:
+   (http://svnbook.red-bean.com/en/1.1/ch04s05.html)
+
+           cd /path/to/your/local/copy/trunk
+           svn switch https://svn.osgeo.org/grass/grass/branches/releasebranch_7_6 .

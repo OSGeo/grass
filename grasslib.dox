@@ -1,10 +1,10 @@
 /*! \mainpage GRASS GIS 7 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
-     * updated 8/2005, 2006-2008, 2010-2011, 2017
+     * updated 8/2005, 2006-2008, 2010-2011, 2017, 2018
   -->
 
-<a href="http://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
+<a href="https://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
 Resources Analysis Support System</b>) is an open source, free
 software <em>Geographical Information System</em> (GIS) with raster,
 topological %vector, image processing, and graphics production
@@ -51,7 +51,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
  - gis: \ref gislib
  - raster: \ref rasterlib
  - vector: \ref vectorlib
- - Temporal GIS API: See http://grass.osgeo.org/grass75/manuals/libpython/temporal_framework.html
+ - Temporal GIS API: See https://grass.osgeo.org/grass76/manuals/libpython/temporal_framework.html
 
 \section libs Further libraries
 
@@ -112,7 +112,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 \subsection pythonlibs Python API
 
- - python:	See GRASS GIS Python library (http://grass.osgeo.org/grass75/manuals/libpython/)
+ - python:	See GRASS GIS Python library (https://grass.osgeo.org/grass76/manuals/libpython/)
 
 \subsection projlibs Projection Libraries
 

@@ -578,7 +578,7 @@ static void wps_print_process_description_begin(int store, int status, const cha
     if(abstract)
     {
         fprintf(stdout,"\t\t<ows:Abstract>");
-        fprintf(stdout, "http://grass.osgeo.org/grass75/manuals/%s.html", identifier);
+        fprintf(stdout, "https://grass.osgeo.org/grass76/manuals/%s.html", identifier);
         fprintf(stdout, "</ows:Abstract>\n");
     }
 
