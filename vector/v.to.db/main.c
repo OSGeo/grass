@@ -36,6 +36,12 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("database"));
+    G_add_keyword(_("area"));
+    G_add_keyword(_("length"));
+    G_add_keyword(_("perimeter"));
+    G_add_keyword(_("coordinates"));
+    G_add_keyword(_("bounding box"));
+    G_add_keyword(_("category"));
     module->description = _("Populates attribute values from vector features.");
 
     parse_command_line(argc, argv);
