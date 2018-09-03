@@ -67,12 +67,6 @@ import wx.lib.filebrowsebutton as filebrowse
 import grass.script as grass
 from grass.script import task as gtask
 from grass.exceptions import CalledModuleError
-try:
-    from grass.pygrass import messages
-except ImportError as e:
-    print(_("Unable to import pyGRASS: %s\n"
-            "Some functionality will be not accessible") % e,
-          file=sys.stderr)
 
 from gui_core.widgets import ManageSettingsWidget, CoordinatesValidator
 
@@ -516,7 +510,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 renamed_elements.append(elementdict[elem])
 
         if element in ('stds', 'strds', 'str3ds', 'stvds'):
-            if self.tgis_error is False:
+            if not self.tgis_error:
                 import grass.temporal as tgis
                 filesdict = tgis.tlist_grouped(
                     elementdict[element], element == 'stds')
@@ -763,11 +757,19 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             if self.type in ('stds', 'strds', 'str3ds', 'stvds'):
                 # Initiate the temporal framework. Catch database error
                 # and set the error flag for the stds listing.
-                import grass.temporal as tgis
                 try:
-                    tgis.init(True)
-                except messages.FatalError as e:
-                    sys.stderr.write("Temporal GIS error:\n%s" % e)
+                    import grass.temporal as tgis
+                    from grass.pygrass import messages
+                    try:
+                        tgis.init(True)
+                    except messages.FatalError as e:
+                        sys.stderr.write(_("Temporal GIS error:\n%s") % e)
+                        self.tgis_error = True
+                except ImportError as e:
+                    # PyGRASS (ctypes) is the likely cause
+                    sys.stderr.write(_(
+                        "Unable to import pyGRASS: %s\n"
+                        "Some functionality will be not accessible") % e)
                     self.tgis_error = True
         if 'mapsets' in kargs:
             self.mapsets = kargs['mapsets']
