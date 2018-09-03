@@ -94,33 +94,15 @@ void Init(void)
     Theory = 0;
     NumSeeds = 0;
     Seeds = (int *)G_malloc(NumMaps * sizeof(int));
+    Seed = -1;
     if (!SeedStuff->answers) {
 	for (i = 0; i < NumMaps; i++) {
-	    Seeds[i] = SEED_MIN - 1;
-	    Seed = (int)getpid();
+	    Seeds[i] = -1;
 	}
     }
     else {
 	for (i = 0; (Number = SeedStuff->answers[i]) && i < NumMaps; i++) {
 	    sscanf(Number, "%d", &(Seeds[i]));
-	    if (Seeds[i] > SEED_MAX) {
-
-		sprintf(msg, _("Seed (%d) larger than maximum (%d)"),
-			Seeds[i], SEED_MAX);
-		Seeds[i] = Seeds[i] % SEED_MAX;
-		sprintf(msg2, _(" seed is set to %d"), Seeds[i]);
-		strcat(msg, msg2);
-		G_warning("%s", msg);
-	    }
-	    else if (Seeds[i] < SEED_MIN) {
-		sprintf(msg, _("Seed (%d) smaller than minimum (%d)"),
-			Seeds[i], SEED_MIN);
-		while (Seeds[i] < SEED_MIN)
-		    Seeds[i] += SEED_MAX - SEED_MIN;
-		sprintf(msg2, _(" seed is set to %d"), Seeds[i]);
-		strcat(msg, msg2);
-		G_warning("%s", msg);
-	    }
 	}			/* /for */
     }				/* /else */
 
