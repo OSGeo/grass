@@ -8,8 +8,6 @@
 
 #define ODD(a)	((a) & 1)
 
-#define SEED_MAX		54772
-#define SEED_MIN		0
 #define MAX_INTERVAL		10
 #define MIN_INTERVAL		-10
 /* DELTA_T is the inverse of the number of subdivisions within the      */
