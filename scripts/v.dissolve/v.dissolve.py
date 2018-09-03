@@ -46,7 +46,7 @@ gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 def cleanup():
-    nuldev = file(os.devnull, 'w')
+    nuldev = open(os.devnull, 'w')
     grass.run_command(
         'g.remove', flags='f', type='vector', name='%s_%s' %
         (output, tmp), quiet=True, stderr=nuldev)

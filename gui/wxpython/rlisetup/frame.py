@@ -15,6 +15,7 @@ from rlisetup.functions import retRLiPath
 from rlisetup.wizard import RLIWizard
 import locale
 import codecs
+from gui_core.wrap import Button, StaticBox, TextCtrl
 
 
 class ViewFrame(wx.Frame):
@@ -32,20 +33,20 @@ class ViewFrame(wx.Frame):
         self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'),
                              wx.BITMAP_TYPE_ICO))
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
-        self.confilesBox = wx.StaticBox(
+        self.confilesBox = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=_(
                 "View and modify the "
                 "configuration file '{name}'".format(
                     name=self.confile)))
-        self.textCtrl = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY,
-                                    style=wx.TE_MULTILINE, size=(-1, 75))
+        self.textCtrl = TextCtrl(parent=self.panel, id=wx.ID_ANY,
+                                 style=wx.TE_MULTILINE, size=(-1, 75))
         self.textCtrl.Bind(wx.EVT_TEXT, self.OnFileText)
         f = open(self.pathfile)
         self.textCtrl.SetValue(''.join(f.readlines()))
         f.close()
         # BUTTONS      #definition
-        self.btn_close = wx.Button(parent=self, id=wx.ID_EXIT)
-        self.btn_ok = wx.Button(parent=self, id=wx.ID_SAVE)
+        self.btn_close = Button(parent=self, id=wx.ID_EXIT)
+        self.btn_ok = Button(parent=self, id=wx.ID_SAVE)
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btn_ok.Bind(wx.EVT_BUTTON, self.OnOk)
         self._layout()
@@ -127,27 +128,27 @@ class RLiSetupFrame(wx.Frame):
                              wx.BITMAP_TYPE_ICO))
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
         # box for select configuration file
-        self.confilesBox = wx.StaticBox(
+        self.confilesBox = StaticBox(
             parent=self.panel, id=wx.ID_ANY,
             label=_('Available sampling area configuration files'))
         self.listfileBox = wx.ListBox(parent=self.panel, id=wx.ID_ANY,
                                       choices=self.listfiles)
 
         # BUTTONS      #definition
-        self.btn_close = wx.Button(parent=self, id=wx.ID_CLOSE)
-        self.btn_help = wx.Button(parent=self, id=wx.ID_HELP)
-        self.btn_remove = wx.Button(parent=self, id=wx.ID_ANY,
+        self.btn_close = Button(parent=self, id=wx.ID_CLOSE)
+        self.btn_help = Button(parent=self, id=wx.ID_HELP)
+        self.btn_remove = Button(parent=self, id=wx.ID_ANY,
                                     label=_("Remove"))
-        self.btn_remove.SetToolTipString(_('Remove a configuration file'))
-        self.btn_new = wx.Button(parent=self, id=wx.ID_ANY,
+        self.btn_remove.SetToolTip(_('Remove a configuration file'))
+        self.btn_new = Button(parent=self, id=wx.ID_ANY,
                                  label=_("Create"))
-        self.btn_new.SetToolTipString(_('Create a new configuration file'))
-        self.btn_rename = wx.Button(parent=self, id=wx.ID_ANY,
+        self.btn_new.SetToolTip(_('Create a new configuration file'))
+        self.btn_rename = Button(parent=self, id=wx.ID_ANY,
                                     label=_("Rename"))
-        self.btn_rename.SetToolTipString(_('Rename a configuration file'))
-        self.btn_view = wx.Button(parent=self, id=wx.ID_ANY,
+        self.btn_rename.SetToolTip(_('Rename a configuration file'))
+        self.btn_view = Button(parent=self, id=wx.ID_ANY,
                                   label=_("View/Edit"))
-        self.btn_view.SetToolTipString(_('View and edit a configuration file'))
+        self.btn_view.SetToolTip(_('View and edit a configuration file'))
         # set action for button
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)

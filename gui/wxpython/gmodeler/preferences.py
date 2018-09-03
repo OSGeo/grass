@@ -22,7 +22,8 @@ from core import globalvar
 from gui_core.preferences import PreferencesBaseDialog
 from core.settings import UserSettings
 from core.utils import _
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, StaticText, \
+    StaticBox
 
 
 class PreferencesDialog(PreferencesBaseDialog):
@@ -55,15 +56,15 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         # colors
         border = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % _("Item properties"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % _("Item properties"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Disabled:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Disabled:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -103,15 +104,15 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         # colors
         border = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % _("Color"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % _("Color"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Valid:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Valid:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -128,8 +129,8 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos=(row, 1))
 
         row += 1
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Invalid:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Invalid:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -146,8 +147,8 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos=(row, 1))
 
         row += 1
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Running:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Running:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -173,15 +174,15 @@ class PreferencesDialog(PreferencesBaseDialog):
                    wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
 
         # size
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % _("Shape size"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % _("Shape size"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Width:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Width:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -206,8 +207,8 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos=(row, 1))
 
         row += 1
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Height:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Height:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -251,15 +252,15 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         # colors
         border = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % _("Type"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % _("Type"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Raster:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Raster:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -276,8 +277,8 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos=(row, 1))
 
         row += 1
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("3D raster:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("3D raster:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -294,8 +295,8 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos=(row, 1))
 
         row += 1
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Vector:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Vector:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -312,8 +313,8 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos=(row, 1))
 
         row += 1
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Table:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Table:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -339,15 +340,15 @@ class PreferencesDialog(PreferencesBaseDialog):
                    wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
 
         # size
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % _("Shape size"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % _("Shape size"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Width:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Width:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -372,8 +373,8 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos=(row, 1))
 
         row += 1
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Height:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Height:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -417,15 +418,15 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         # colors
         border = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % _("Color"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % _("Color"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Valid:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Valid:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -451,15 +452,15 @@ class PreferencesDialog(PreferencesBaseDialog):
                    wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
 
         # size
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % _("Shape size"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % _("Shape size"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Width:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Width:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -484,8 +485,8 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos=(row, 1))
 
         row += 1
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Height:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Height:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -529,15 +530,15 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         # colors
         border = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % _("Color"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % _("Color"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Valid:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Valid:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -567,15 +568,15 @@ class PreferencesDialog(PreferencesBaseDialog):
                    wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
 
         # size
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % _("Shape size"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % _("Shape size"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Width:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Width:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -600,8 +601,8 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos=(row, 1))
 
         row += 1
-        gridSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("Height:")),
+        gridSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=_("Height:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 0))
@@ -664,18 +665,18 @@ class PropertiesDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, id, title, size=size,
                            style=style)
 
-        self.metaBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                    label=" %s " % _("Metadata"))
-        self.cmdBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                   label=" %s " % _("Commands"))
+        self.metaBox = StaticBox(parent=self, id=wx.ID_ANY,
+                                 label=" %s " % _("Metadata"))
+        self.cmdBox = StaticBox(parent=self, id=wx.ID_ANY,
+                                label=" %s " % _("Commands"))
 
-        self.name = wx.TextCtrl(parent=self, id=wx.ID_ANY,
-                                size=(300, 25))
-        self.desc = wx.TextCtrl(parent=self, id=wx.ID_ANY,
-                                style=wx.TE_MULTILINE,
-                                size=(300, 50))
-        self.author = wx.TextCtrl(parent=self, id=wx.ID_ANY,
-                                  size=(300, 25))
+        self.name = TextCtrl(parent=self, id=wx.ID_ANY,
+                             size=(300, 25))
+        self.desc = TextCtrl(parent=self, id=wx.ID_ANY,
+                             style=wx.TE_MULTILINE,
+                             size=(300, 50))
+        self.author = TextCtrl(parent=self, id=wx.ID_ANY,
+                               size=(300, 25))
 
         # commands
         self.overwrite = wx.CheckBox(parent=self, id=wx.ID_ANY, label=_(
@@ -687,13 +688,13 @@ class PropertiesDialog(wx.Dialog):
                 subkey='enabled'))
 
         # buttons
-        self.btnOk = wx.Button(self, wx.ID_OK)
-        self.btnCancel = wx.Button(self, wx.ID_CANCEL)
+        self.btnOk = Button(self, wx.ID_OK)
+        self.btnCancel = Button(self, wx.ID_CANCEL)
         self.btnOk.SetDefault()
 
-        self.btnOk.SetToolTipString(_("Apply properties"))
+        self.btnOk.SetToolTip(_("Apply properties"))
         self.btnOk.SetDefault()
-        self.btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
+        self.btnCancel.SetToolTip(_("Close dialog and ignore changes"))
 
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
@@ -702,8 +703,8 @@ class PropertiesDialog(wx.Dialog):
     def _layout(self):
         metaSizer = wx.StaticBoxSizer(self.metaBox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
-        gridSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
-                                    label=_("Name:")),
+        gridSizer.Add(StaticText(parent=self, id=wx.ID_ANY,
+                                 label=_("Name:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 0))
@@ -711,8 +712,8 @@ class PropertiesDialog(wx.Dialog):
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos=(0, 1))
-        gridSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
-                                    label=_("Description:")),
+        gridSizer.Add(StaticText(parent=self, id=wx.ID_ANY,
+                                 label=_("Description:")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(1, 0))
@@ -720,8 +721,8 @@ class PropertiesDialog(wx.Dialog):
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos=(1, 1))
-        gridSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
-                                    label=_("Author(s):")),
+        gridSizer.Add(StaticText(parent=self, id=wx.ID_ANY,
+                                 label=_("Author(s):")),
                       flag=wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(2, 0))

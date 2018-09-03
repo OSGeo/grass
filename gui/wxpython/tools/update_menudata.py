@@ -151,7 +151,7 @@ def main(argv=None):
         print(sys.stderr, __doc__, file=sys.stderr)
         return 1
 
-    nuldev = file(os.devnull, 'w+')
+    nuldev = open(os.devnull, 'w+')
     grass.info("Step 1: running make...")
     grass.call(['make'], stderr=nuldev)
     grass.info("Step 2: parsing modules...")

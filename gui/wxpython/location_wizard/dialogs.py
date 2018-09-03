@@ -26,6 +26,8 @@ from core import globalvar
 from core.gcmd import RunCommand
 from core.utils import _
 from location_wizard.base import BaseClass
+from gui_core.wrap import Button, StaticText, StaticBox, \
+    TextCtrl
 
 from grass.script import core as grass
 
@@ -108,7 +110,7 @@ class RegionDef(BaseClass, wx.Dialog):
         self.bset = self.MakeButton(
             text=_("&Set region"),
             id=wx.ID_OK, parent=panel)
-        self.bcancel = wx.Button(panel, id=wx.ID_CANCEL)
+        self.bcancel = Button(panel, id=wx.ID_CANCEL)
         self.bset.SetDefault()
 
         #
@@ -247,13 +249,13 @@ class RegionDef(BaseClass, wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=0, hgap=0)
 
         # inputs
-        self.ttop = wx.TextCtrl(parent=pane, id=wx.ID_ANY, value=str(self.top),
-                                size=(150, -1))
-        self.tbottom = wx.TextCtrl(
+        self.ttop = TextCtrl(parent=pane, id=wx.ID_ANY, value=str(self.top),
+                             size=(150, -1))
+        self.tbottom = TextCtrl(
             parent=pane, id=wx.ID_ANY, value=str(
                 self.bottom), size=(
                 150, -1))
-        self.ttbres = wx.TextCtrl(
+        self.ttbres = TextCtrl(
             parent=pane, id=wx.ID_ANY, value=str(
                 self.tbres), size=(
                 150, -1))
@@ -263,17 +265,17 @@ class RegionDef(BaseClass, wx.Dialog):
         #                                    size = (150, -1))
 
         # labels
-        self.ldepth = wx.StaticText(
+        self.ldepth = StaticText(
             parent=pane,
             label=_("Depth: %d") %
             self.depth)
-        self.lcells3 = wx.StaticText(
+        self.lcells3 = StaticText(
             parent=pane,
             label=_("3D Cells: %d") %
             self.cells3)
 
         # top
-        gridSizer.Add(wx.StaticText(parent=pane, label=_("Top")),
+        gridSizer.Add(StaticText(parent=pane, label=_("Top")),
                       flag=wx.ALIGN_CENTER |
                       wx.LEFT | wx.RIGHT | wx.TOP, border=5,
                       pos=(0, 1))
@@ -281,7 +283,7 @@ class RegionDef(BaseClass, wx.Dialog):
                       flag=wx.ALIGN_CENTER_HORIZONTAL |
                       wx.ALL, border=5, pos=(1, 1))
         # bottom
-        gridSizer.Add(wx.StaticText(parent=pane, label=_("Bottom")),
+        gridSizer.Add(StaticText(parent=pane, label=_("Bottom")),
                       flag=wx.ALIGN_CENTER |
                       wx.LEFT | wx.RIGHT | wx.TOP, border=5,
                       pos=(0, 2))
@@ -290,7 +292,7 @@ class RegionDef(BaseClass, wx.Dialog):
                       wx.ALL, border=5, pos=(1, 2))
         # tbres
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=pane,
                 label=_("T-B resolution")),
             flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT | wx.TOP,
@@ -607,7 +609,7 @@ class SelectTransformDialog(wx.Dialog):
         #
         # dialog body
         #
-        bodyBox = wx.StaticBox(
+        bodyBox = StaticBox(
             parent=panel, id=wx.ID_ANY, label=" %s " %
             _("Select from list of datum transformations"))
         bodySizer = wx.StaticBoxSizer(bodyBox)
@@ -655,11 +657,11 @@ class SelectTransformDialog(wx.Dialog):
         #
         btnsizer = wx.StdDialogButtonSizer()
 
-        btn = wx.Button(parent=panel, id=wx.ID_OK)
+        btn = Button(parent=panel, id=wx.ID_OK)
         btn.SetDefault()
         btnsizer.AddButton(btn)
 
-        btn = wx.Button(parent=panel, id=wx.ID_CANCEL)
+        btn = Button(parent=panel, id=wx.ID_CANCEL)
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 

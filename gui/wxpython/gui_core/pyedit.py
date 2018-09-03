@@ -13,7 +13,10 @@ for details.
 import sys
 import os
 import stat
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import time
 
 import wx

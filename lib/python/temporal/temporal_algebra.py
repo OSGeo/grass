@@ -462,9 +462,9 @@ from .space_time_datasets import RasterDataset
 from .factory import dataset_factory
 from .open_stds import open_new_stds, open_old_stds
 from .temporal_operator import TemporalOperatorParser
-from spatio_temporal_relationships import SpatioTemporalTopologyBuilder
+from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .datetime_math import time_delta_to_relative_time, string_to_datetime
-from abstract_space_time_dataset import AbstractSpaceTimeDataset
+from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 from .temporal_granularity import compute_absolute_time_granularity
 
 from .datetime_math import create_suffix_from_datetime

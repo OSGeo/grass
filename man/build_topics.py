@@ -47,14 +47,14 @@ topicsfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
                         "%s Reference Manual: Topics index" % grass_version))
 topicsfile.write(headertopics_tmpl)
 
-for key, values in sorted(keywords.iteritems(), key=lambda s: s[0].lower()):
+for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):
     keyfile = open(os.path.join(path, 'topic_%s.html' % key), 'w')
     keyfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
                         "%s Reference Manual: Topic %s" % (grass_version,
                                                     key.replace('_', ' '))))
     keyfile.write(headerkey_tmpl.substitute(keyword=key.replace('_', ' ')))
     num_modules = 0
-    for mod, desc in sorted(values.iteritems()):
+    for mod, desc in sorted(values.items()):
         num_modules += 1
         keyfile.write(desc1_tmpl.substitute(cmd=mod, desc=desc,
                                             basename=mod.replace('.html', '')))

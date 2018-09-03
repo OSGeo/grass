@@ -388,7 +388,7 @@ def _removeReceiver(receiver):
     else:
         for senderkey in backSet:
             try:
-                signals = connections[senderkey].keys()
+                signals = list(connections[senderkey])
             except KeyError:
                 pass
             else:

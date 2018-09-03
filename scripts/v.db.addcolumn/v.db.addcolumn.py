@@ -43,6 +43,7 @@
 import sys
 import os
 import grass.script as grass
+from grass.script.utils import encode
 
 # i18N
 import gettext
@@ -81,9 +82,11 @@ def main():
             grass.error(_("Column <%s> is already in the table. Skipping.") % col_name)
             continue
         grass.verbose(_("Adding column <%s> to the table") % col_name)
-        p = grass.feed_command('db.execute', input='-', database=database, driver=driver)
-        p.stdin.write("ALTER TABLE %s ADD COLUMN %s" % (table, col))
-        grass.debug("ALTER TABLE %s ADD COLUMN %s" % (table, col))
+        p = grass.feed_command('db.execute', input='-',
+                               database=database, driver=driver)
+        res = "ALTER TABLE {} ADD COLUMN {}".format(table, col)
+        p.stdin.write(encode(res))
+        grass.debug(res)
         p.stdin.close()
         if p.wait() != 0:
             grass.fatal(_("Unable to add column <%s>.") % col)

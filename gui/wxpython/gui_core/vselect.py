@@ -28,6 +28,7 @@ import wx.lib.mixins.listctrl as listmix
 from core.utils import _
 from core.gcmd import GMessage, GError, GWarning
 from core.gcmd import RunCommand
+from gui_core.wrap import Button
 
 import grass.script as grass
 from grass.pydispatch.signal import Signal
@@ -132,7 +133,7 @@ class VectorSelectBase():
         self._dialog = VectorSelectDialog(parent=self.parent)
         self._dialog.Bind(wx.EVT_CLOSE, self.OnCloseDialog)
         if createButton:
-            createMap = wx.Button(
+            createMap = Button(
                 self._dialog, wx.ID_ANY, _("Create a new map"))
             createMap.Bind(wx.EVT_BUTTON, self.OnExportMap)
             self._dialog.AddWidget(createMap, proportion=0.1)

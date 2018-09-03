@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 """
 import os
 import sys
+import six
 
 import wx
 from iscatt.iscatt_core import idBandsToidScatt
@@ -31,7 +32,8 @@ from core import globalvar
 from core.gcmd import GMessage
 from core.settings import UserSettings
 from gui_core.dialogs import SimpleDialog
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, StaticText, \
+    StaticBox, TextCtrl
 
 
 class AddScattPlotDialog(wx.Dialog):
@@ -55,14 +57,14 @@ class AddScattPlotDialog(wx.Dialog):
         self.labels = {}
         self.params = {}
 
-        self.band_1_label = wx.StaticText(
+        self.band_1_label = StaticText(
             parent=self, id=wx.ID_ANY, label=_("x axis:"))
 
         self.band_1_ch = wx.ComboBox(parent=self, id=wx.ID_ANY,
                                      choices=self.bands,
                                      style=wx.CB_READONLY, size=(350, 30))
 
-        self.band_2_label = wx.StaticText(
+        self.band_2_label = StaticText(
             parent=self, id=wx.ID_ANY, label=_("y axis:"))
 
         self.band_2_ch = wx.ComboBox(parent=self, id=wx.ID_ANY,
@@ -73,11 +75,11 @@ class AddScattPlotDialog(wx.Dialog):
                                     style=wx.LB_MULTIPLE | wx.LB_NEEDED_SB)
 
         # buttons
-        self.btn_add = wx.Button(parent=self, id=wx.ID_ADD)
-        self.btn_remove = wx.Button(parent=self, id=wx.ID_REMOVE)
+        self.btn_add = Button(parent=self, id=wx.ID_ADD)
+        self.btn_remove = Button(parent=self, id=wx.ID_REMOVE)
 
-        self.btn_close = wx.Button(parent=self, id=wx.ID_CANCEL)
-        self.btn_ok = wx.Button(parent=self, id=wx.ID_OK)
+        self.btn_close = Button(parent=self, id=wx.ID_CANCEL)
+        self.btn_ok = Button(parent=self, id=wx.ID_OK)
 
         self._layout()
 
@@ -100,7 +102,7 @@ class AddScattPlotDialog(wx.Dialog):
             flag=wx.TOP | wx.ALIGN_RIGHT,
             border=5)
 
-        box = wx.StaticBox(
+        box = StaticBox(
             self, id=wx.ID_ANY, label=" %s " %
             _("Bands of scatter plots to be added (x y):"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
@@ -245,8 +247,8 @@ class ExportCategoryRaster(wx.Dialog):
         self.rasterName = rasterName
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.btnCancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
-        self.btnOK = wx.Button(parent=self.panel, id=wx.ID_OK)
+        self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btnOK = Button(parent=self.panel, id=wx.ID_OK)
         self.btnOK.SetDefault()
         self.btnOK.Enable(False)
         self.btnOK.Bind(wx.EVT_BUTTON, self.OnOK)
@@ -275,7 +277,7 @@ class ExportCategoryRaster(wx.Dialog):
         dataSizer = wx.BoxSizer(wx.VERTICAL)
 
         dataSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
                 label=_("Enter name of new vector map:")),
@@ -360,8 +362,8 @@ class SettingsDialog(wx.Dialog):
                 "selection", _("Color of selection polygon vertex:")], "sel_area": [
                 "selection", _("Selected area color:")]}
 
-        for settKey, sett in self.colorsSetts.iteritems():
-            settsLabels[settKey] = wx.StaticText(
+        for settKey, sett in six.iteritems(self.colorsSetts):
+            settsLabels[settKey] = StaticText(
                 parent=self, id=wx.ID_ANY, label=sett[1])
             col = UserSettings.Get(group='scatt', key=sett[0], subkey=settKey)
             self.settings[settKey] = csel.ColourSelect(
@@ -373,8 +375,8 @@ class SettingsDialog(wx.Dialog):
             "sel_area_opacty": ["selection", _("Selected area opacity:")]
         }
 
-        for settKey, sett in self.sizeSetts.iteritems():
-            settsLabels[settKey] = wx.StaticText(
+        for settKey, sett in six.iteritems(self.sizeSetts):
+            settsLabels[settKey] = StaticText(
                 parent=self, id=wx.ID_ANY, label=sett[1])
             self.settings[settKey] = SpinCtrl(
                 parent=self, id=wx.ID_ANY, min=0, max=100)
@@ -386,20 +388,20 @@ class SettingsDialog(wx.Dialog):
             self.settings[settKey].SetValue(size)
 
         # buttons
-        self.btnSave = wx.Button(self, wx.ID_SAVE)
-        self.btnApply = wx.Button(self, wx.ID_APPLY)
-        self.btnClose = wx.Button(self, wx.ID_CLOSE)
+        self.btnSave = Button(self, wx.ID_SAVE)
+        self.btnApply = Button(self, wx.ID_APPLY)
+        self.btnClose = Button(self, wx.ID_CLOSE)
         self.btnApply.SetDefault()
 
         # bindings
         self.btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
-        self.btnApply.SetToolTipString(
+        self.btnApply.SetToolTip(
             _("Apply changes for the current session"))
         self.btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
-        self.btnSave.SetToolTipString(
+        self.btnSave.SetToolTip(
             _("Apply and save changes to user settings file (default for next sessions)"))
         self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
-        self.btnClose.SetToolTipString(_("Close dialog"))
+        self.btnClose.SetToolTip(_("Close dialog"))
 
         # Layout
 
@@ -408,8 +410,8 @@ class SettingsDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        sel_pol_box = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                   label=" %s " % _("Selection style:"))
+        sel_pol_box = StaticBox(parent=self, id=wx.ID_ANY,
+                                label=" %s " % _("Selection style:"))
         selPolBoxSizer = wx.StaticBoxSizer(sel_pol_box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
@@ -435,8 +437,8 @@ class SettingsDialog(wx.Dialog):
         gridSizer.AddGrowableCol(1)
         selPolBoxSizer.Add(gridSizer, flag=wx.EXPAND)
 
-        ell_box = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                               label=" %s " % _("Ellipses settings:"))
+        ell_box = StaticBox(parent=self, id=wx.ID_ANY,
+                            label=" %s " % _("Ellipses settings:"))
         ellPolBoxSizer = wx.StaticBoxSizer(ell_box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
@@ -480,7 +482,7 @@ class SettingsDialog(wx.Dialog):
     def UpdateSettings(self):
 
         chanaged_setts = []
-        for settKey, sett in self.colorsSetts.iteritems():
+        for settKey, sett in six.iteritems(self.colorsSetts):
             col = tuple(self.settings[settKey].GetColour())
             col_s = UserSettings.Get(
                 group='scatt', key=sett[0], subkey=settKey)
@@ -491,7 +493,7 @@ class SettingsDialog(wx.Dialog):
                                  value=col)
                 chanaged_setts.append([settKey, sett[0]])
 
-        for settKey, sett in self.sizeSetts.iteritems():
+        for settKey, sett in six.iteritems(self.sizeSetts):
             val = self.settings[settKey].GetValue()
             val_s = UserSettings.Get(
                 group='scatt', key=sett[0], subkey=settKey)
@@ -562,7 +564,7 @@ class RenameClassDialog(SimpleDialog):
     def __init__(self, parent, old_name, title=("Change class name")):
         SimpleDialog.__init__(self, parent, title)
 
-        self.name = wx.TextCtrl(self.panel, id=wx.ID_ANY)
+        self.name = TextCtrl(self.panel, id=wx.ID_ANY)
         self.name.SetValue(old_name)
 
         self.dataSizer.Add(self.name, proportion=0,

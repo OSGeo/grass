@@ -22,6 +22,7 @@ import wx
 
 import os
 import sys
+import six
 import shutil
 
 from copy import deepcopy
@@ -36,7 +37,7 @@ from core.utils import GetSettingsPath, _
 from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 
 from gui_core.gselect import Select
-from gui_core.wrap import Button
+from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl
 
 from web_services.widgets import WSPanel, WSManageSettingsWidget
 
@@ -91,13 +92,13 @@ class WSDialogBase(wx.Dialog):
             parent=self, settingsFile=settingsFile,
             default_servers=self.default_servers)
 
-        self.settingsBox = wx.StaticBox(parent=self,
-                                        id=wx.ID_ANY,
-                                        label=_(" Server settings "))
+        self.settingsBox = StaticBox(parent=self,
+                                     id=wx.ID_ANY,
+                                     label=_(" Server settings "))
 
-        self.serverText = wx.StaticText(parent=self,
-                                        id=wx.ID_ANY, label=_("Server:"))
-        self.server = wx.TextCtrl(parent=self, id=wx.ID_ANY)
+        self.serverText = StaticText(parent=self,
+                                     id=wx.ID_ANY, label=_("Server:"))
+        self.server = TextCtrl(parent=self, id=wx.ID_ANY)
 
         self.btn_connect = Button(parent=self,
                                   id=wx.ID_ANY, label=_("&Connect"))
@@ -122,16 +123,16 @@ class WSDialogBase(wx.Dialog):
 
         self.reqDataPanel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.layerNameBox = wx.StaticBox(parent=self.reqDataPanel,
-                                         id=wx.ID_ANY,
-                                         label=_(" Layer Manager Settings "))
+        self.layerNameBox = StaticBox(parent=self.reqDataPanel,
+                                      id=wx.ID_ANY,
+                                      label=_(" Layer Manager Settings "))
 
-        self.layerNameText = wx.StaticText(
+        self.layerNameText = StaticText(
             parent=self.reqDataPanel, id=wx.ID_ANY,
             label=_("Output layer name:"))
-        self.layerName = wx.TextCtrl(parent=self.reqDataPanel, id=wx.ID_ANY)
+        self.layerName = TextCtrl(parent=self.reqDataPanel, id=wx.ID_ANY)
 
-        for ws in self.ws_panels.iterkeys():
+        for ws in six.iterkeys(self.ws_panels):
             # set class WSPanel argument layerNameTxtCtrl
             self.ws_panels[ws]['panel'] = WSPanel(parent=self.reqDataPanel,
                                                   web_service=ws)
@@ -212,7 +213,7 @@ class WSDialogBase(wx.Dialog):
         reqDataSizer.Add(self.ch_ws_sizer, proportion=0,
                          flag=wx.TOP | wx.EXPAND, border=5)
 
-        for ws in self.ws_panels.iterkeys():
+        for ws in six.iterkeys(self.ws_panels):
             reqDataSizer.Add(
                 self.ws_panels[ws]['panel'],
                 proportion=1,
@@ -253,14 +254,14 @@ class WSDialogBase(wx.Dialog):
     def MakeAdvConnPane(self, pane):
         """Create advanced connection settings pane
         """
-        self.usernameText = wx.StaticText(parent=pane,
-                                          id=wx.ID_ANY, label=_("Username:"))
-        self.username = wx.TextCtrl(parent=pane, id=wx.ID_ANY)
+        self.usernameText = StaticText(parent=pane,
+                                       id=wx.ID_ANY, label=_("Username:"))
+        self.username = TextCtrl(parent=pane, id=wx.ID_ANY)
 
-        self.passwText = wx.StaticText(parent=pane,
-                                       id=wx.ID_ANY, label=_("Password:"))
-        self.password = wx.TextCtrl(parent=pane, id=wx.ID_ANY,
-                                    style=wx.TE_PASSWORD)
+        self.passwText = StaticText(parent=pane,
+                                    id=wx.ID_ANY, label=_("Password:"))
+        self.password = TextCtrl(parent=pane, id=wx.ID_ANY,
+                                 style=wx.TE_PASSWORD)
 
         # pane layout
         adv_conn_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -339,7 +340,7 @@ class WSDialogBase(wx.Dialog):
 
     def _getCapFiles(self):
         ws_cap_files = {}
-        for v in self.ws_panels.itervalues():
+        for v in six.itervalues(self.ws_panels):
             ws_cap_files[v['panel'].GetWebService()] = v['panel'].GetCapFile()
 
         return ws_cap_files
@@ -364,7 +365,7 @@ class WSDialogBase(wx.Dialog):
         lname = event.GetString()
         lname = lname.encode('ascii', 'replace')
 
-        for v in self.ws_panels.itervalues():
+        for v in six.itervalues(self.ws_panels):
             v['panel'].SetOutputLayerName(lname.strip())
 
     def OnConnect(self, event):
@@ -388,7 +389,7 @@ class WSDialogBase(wx.Dialog):
 
         # number of panels already connected
         self.finished_panels_num = 0
-        for ws in self.ws_panels.iterkeys():
+        for ws in six.iterkeys(self.ws_panels):
             self.ws_panels[ws]['panel'].ConnectToServer(
                 url=server, username=self.username.GetValue(),
                 password=self.password.GetValue())
@@ -421,7 +422,7 @@ class WSDialogBase(wx.Dialog):
         :return: list of found web services on server (identified as keys in self.ws_panels)
         """
         conn_ws = []
-        for ws, data in self.ws_panels.iteritems():
+        for ws, data in six.iteritems(self.ws_panels):
             if data['panel'].IsConnected():
                 conn_ws.append(ws)
 
@@ -648,7 +649,7 @@ class WSPropertiesDialog(WSDialogBase):
         self.revert_cmd = cmd
 
         ws_cap = self._getWSfromCmd(cmd)
-        for ws in self.ws_panels.iterkeys():
+        for ws in six.iterkeys(self.ws_panels):
             # cap file used in cmd will be deleted, thnaks to the dialogs
             # destructor
             if ws == ws_cap and 'capfile' in cmd[1]:
@@ -663,12 +664,12 @@ class WSPropertiesDialog(WSDialogBase):
         self.btn_ok.SetDefault()
 
     def __del__(self):
-        for f in self.revert_ws_cap_files.itervalues():
+        for f in six.itervalues(self.revert_ws_cap_files):
             grass.try_remove(f)
 
     def _setRevertCapFiles(self, ws_cap_files):
 
-        for ws, f in ws_cap_files.iteritems():
+        for ws, f in six.iteritems(ws_cap_files):
             if os.path.isfile(ws_cap_files[ws]):
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
             else:
@@ -726,7 +727,7 @@ class WSPropertiesDialog(WSDialogBase):
 
         self.layerName.SetValue(cmd[1]['map'])
 
-        for ws, data in self.ws_panels.iteritems():
+        for ws, data in six.iteritems(self.ws_panels):
             cap_file = None
 
             if ws in ws_cap_files:
@@ -742,7 +743,7 @@ class WSPropertiesDialog(WSDialogBase):
         """
         conn = {'url': '', 'username': '', 'password': ''}
 
-        for k in conn.iterkeys():
+        for k in six.iterkeys(conn):
             if k in cmd[1]:
                 conn[k] = cmd[1][k]
         return conn
@@ -853,7 +854,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.labels = {}
         self.params = {}
 
-        self.labels['output'] = wx.StaticText(
+        self.labels['output'] = StaticText(
             parent=self, id=wx.ID_ANY, label=_("Name for output raster map:"))
 
         self.params['output'] = Select(
@@ -863,8 +864,8 @@ class SaveWMSLayerDialog(wx.Dialog):
                 grass.gisenv()['MAPSET']],
             size=globalvar.DIALOG_GSELECT_SIZE)
 
-        self.regionStBoxLabel = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                             label=" %s " % _("Export region"))
+        self.regionStBoxLabel = StaticBox(parent=self, id=wx.ID_ANY,
+                                          label=" %s " % _("Export region"))
 
         self.region_types_order = ['display', 'comp', 'named']
         self.region_types = {}
@@ -887,7 +888,7 @@ class SaveWMSLayerDialog(wx.Dialog):
                                      label=_("Overwrite existing raster map"))
 
         self.named_reg_panel = wx.Panel(parent=self, id=wx.ID_ANY)
-        self.labels['region'] = wx.StaticText(
+        self.labels['region'] = StaticText(
             parent=self.named_reg_panel, id=wx.ID_ANY,
             label=_("Choose named region:"))
 

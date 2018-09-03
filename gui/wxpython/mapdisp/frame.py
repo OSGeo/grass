@@ -48,6 +48,7 @@ from mapwin.analysis import ProfileController, MeasureDistanceController, \
 from gui_core.forms import GUI
 from core.giface import Notification
 from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
+from gui_core.wrap import Menu
 from mapdisp import statusbar as sb
 
 import grass.script as grass
@@ -806,7 +807,7 @@ class MapFrame(SingleMapFrame):
         """
         Print options and output menu for map display
         """
-        printmenu = wx.Menu()
+        printmenu = Menu()
         # Add items to the menu
         setup = wx.MenuItem(printmenu, wx.ID_ANY, _('Page setup'))
         printmenu.AppendItem(setup)
@@ -1383,7 +1384,7 @@ class MapFrame(SingleMapFrame):
     def OnZoomMenu(self, event):
         """Popup Zoom menu
         """
-        zoommenu = wx.Menu()
+        zoommenu = Menu()
 
         for label, handler in (
             (_('Zoom to default region'),

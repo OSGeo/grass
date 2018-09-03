@@ -48,6 +48,7 @@ import os
 import sys
 import string
 import re
+import six
 from bisect import bisect
 from datetime import datetime
 from core.globalvar import wxPythonPhoenix
@@ -89,7 +90,8 @@ from core import globalvar
 from core.utils import _
 from core.gcmd import GMessage, GError
 from core.debug import Debug
-from gui_core.wrap import Button, SearchCtrl
+from gui_core.wrap import Button, SearchCtrl, StaticText, StaticBox, \
+    TextCtrl, Menu, Rect, EmptyBitmap
 
 
 class NotebookController:
@@ -477,7 +479,7 @@ class SymbolButton(BitmapTextButton):
         :param label: displayed label
         """
         size = (15, 15)
-        buffer = wx.EmptyBitmap(*size)
+        buffer = EmptyBitmap(*size)
         BitmapTextButton.__init__(self, parent=parent, label=" " + label,
                                   bitmap=buffer, **kwargs)
 
@@ -964,7 +966,7 @@ class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
             self.Bind(wx.EVT_MENU, self.OnSelectNone, id=self.popupDataID2)
 
         # generate popup-menu
-        menu = wx.Menu()
+        menu = Menu()
         menu.Append(self.popupDataID1, _("Select all"))
         menu.Append(self.popupDataID2, _("Deselect all"))
 
@@ -1072,7 +1074,7 @@ class SearchModuleWidget(wx.Panel):
 # label = " %s " % _("Find module - (press Enter for next match)"))
 
         if sys.platform == 'win32':
-            self._search = wx.TextCtrl(
+            self._search = TextCtrl(
                 parent=self, id=wx.ID_ANY, size=(-1, 25),
                 style=wx.TE_PROCESS_ENTER)
         else:
@@ -1226,8 +1228,8 @@ class ManageSettingsWidget(wx.Panel):
 
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
 
-        self.settingsBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                        label=" %s " % _("Profiles"))
+        self.settingsBox = StaticBox(parent=self, id=wx.ID_ANY,
+                                     label=" %s " % _("Profiles"))
 
         self.settingsChoice = wx.Choice(parent=self, id=wx.ID_ANY)
         self.settingsChoice.Bind(wx.EVT_CHOICE, self.OnSettingsChanged)
@@ -1257,7 +1259,7 @@ class ManageSettingsWidget(wx.Panel):
 
         self.settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
         self.settingsSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_("Load:")),
@@ -1376,7 +1378,7 @@ class ManageSettingsWidget(wx.Panel):
         try:
             fd = open(self.settingsFile, 'w')
             fd.write('format_version=2.0\n')
-            for key, values in self._settings.iteritems():
+            for key, values in six.iteritems(self._settings):
                 first = True
                 for v in values:
                     # escaping characters
@@ -1542,7 +1544,7 @@ class PictureComboBox(OwnerDrawnComboBox):
             # painting the control, but there is no valid item selected yet
             return
 
-        r = wx.Rect(*rect)  # make a copy
+        r = Rect(*rect)  # make a copy
         r.Deflate(3, 5)
 
         # for painting the items in the popup

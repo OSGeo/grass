@@ -20,6 +20,7 @@ import glob
 import shlex
 import re
 import inspect
+import six
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -44,9 +45,14 @@ except IOError:
     _ = null_gettext
 
 
+def cmp(a, b):
+    """cmp function"""
+    return ((a > b) - (a < b))
+
+
 def normalize_whitespace(text):
     """Remove redundant whitespace from a string"""
-    return string.join(string.split(text), ' ')
+    return (' ').join(text.split())
 
 
 def split(s):
@@ -324,7 +330,7 @@ def ListOfMapsets(get='ordered'):
 
 def ListSortLower(list):
     """Sort list items (not case-sensitive)"""
-    list.sort(cmp=lambda x, y: cmp(x.lower(), y.lower()))
+    list.sort(key=lambda x: x.lower())
 
 
 def GetVectorNumberOfLayers(vector):
@@ -731,7 +737,7 @@ def _parseFormats(output, writableOnly=False):
         else:
             formats['file'].append(name)
 
-    for items in formats.itervalues():
+    for items in six.itervalues(formats):
         items.sort()
 
     return formats
@@ -917,7 +923,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     else:
         expCmd = 'export'
 
-    for key, value in environ.iteritems():
+    for key, value in six.iteritems(environ):
         fd.write('%s %s=%s\n' % (expCmd, key, value))
 
     # write also skipped lines

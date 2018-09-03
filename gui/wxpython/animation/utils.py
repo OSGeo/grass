@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 import os
 import wx
 import hashlib
+import six
 from multiprocessing import cpu_count
 try:
     from PIL import Image
@@ -29,6 +30,8 @@ except ImportError:
 
 import grass.temporal as tgis
 import grass.script as grass
+from grass.script.utils import encode
+from gui_core.wrap import EmptyBitmap
 
 from core.gcmd import GException
 from core.utils import _
@@ -97,7 +100,7 @@ def validateMapNames(names, etype):
                 raise GException(_("Map <%s> not found.") % name)
         else:
             found = False
-            for mapset, mapNames in mapDict.iteritems():
+            for mapset, mapNames in six.iteritems(mapDict):
                 if name in mapNames:
                     found = True
                     newNames.append(name + "@" + mapset)
@@ -245,10 +248,10 @@ def ComputeScaledRect(sourceSize, destSize):
 
 def RenderText(text, font, bgcolor, fgcolor):
     """Renderes text with given font to bitmap."""
-    dc = wx.MemoryDC(wx.EmptyBitmap(20, 20))
+    dc = wx.MemoryDC(EmptyBitmap(20, 20))
     dc.SetFont(font)
     w, h = dc.GetTextExtent(text)
-    bmp = wx.EmptyBitmap(w + 2, h + 2)
+    bmp = EmptyBitmap(w + 2, h + 2)
     dc.SelectObject(bmp)
     dc.SetBackgroundMode(wx.SOLID)
     dc.SetTextBackground(wx.Colour(*bgcolor))
@@ -278,7 +281,7 @@ def HashCmd(cmd, region):
     name = '_'.join(cmd)
     if region:
         name += str(sorted(region.items()))
-    return hashlib.sha1(name).hexdigest()
+    return hashlib.sha1(encode(name)).hexdigest()
 
 
 def HashCmds(cmds, region):
@@ -286,7 +289,7 @@ def HashCmds(cmds, region):
     name = ';'.join([item for sublist in cmds for item in sublist])
     if region:
         name += str(sorted(region.items()))
-    return hashlib.sha1(name).hexdigest()
+    return hashlib.sha1(encode(name)).hexdigest()
 
 
 def GetFileFromCmd(dirname, cmd, region, extension='ppm'):

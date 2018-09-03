@@ -33,6 +33,7 @@ else:
 import wx.lib.scrolledpanel as scrolled
 
 from gui_core import gselect
+from gui_core.wrap import Button, StaticText, TextCtrl
 from core.utils import _
 from location_wizard.wizard import TitledPage as TitledPage
 from rlisetup.functions import checkValue, retRLiPath
@@ -493,12 +494,12 @@ class FirstPage(TitledPage):
         self.parent = parent
 
         # name of output configuration file
-        self.newconflabel = wx.StaticText(
+        self.newconflabel = StaticText(
             parent=self, id=wx.ID_ANY,
             label=_('Name for new configuration file to create'))
 
-        self.newconftxt = wx.TextCtrl(parent=self, id=wx.ID_ANY,
-                                      size=(250, -1))
+        self.newconftxt = TextCtrl(parent=self, id=wx.ID_ANY,
+                                   size=(250, -1))
         wx.CallAfter(self.newconftxt.SetFocus)
 
         self.sizer.Add(self.newconflabel, border=5, pos=(0, 0),
@@ -506,7 +507,7 @@ class FirstPage(TitledPage):
         self.sizer.Add(self.newconftxt, border=5, pos=(0, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         # raster
-        self.mapsellabel = wx.StaticText(
+        self.mapsellabel = StaticText(
             parent=self, id=wx.ID_ANY,
             label=_('Raster map to use to select areas'))
         self.mapselect = gselect.Select(parent=self, id=wx.ID_ANY,
@@ -517,7 +518,7 @@ class FirstPage(TitledPage):
         self.sizer.Add(self.mapselect, border=5, pos=(1, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         # vector
-        self.vectsellabel = wx.StaticText(
+        self.vectsellabel = StaticText(
             parent=self, id=wx.ID_ANY,
             label=_('Vector map to use to select areas'))
         self.vectselect = gselect.Select(parent=self, id=wx.ID_ANY,
@@ -528,7 +529,7 @@ class FirstPage(TitledPage):
         self.sizer.Add(self.vectselect, border=5, pos=(2, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         # vector layer
-        self.vectlaylabel = wx.StaticText(
+        self.vectlaylabel = StaticText(
             parent=self, id=wx.ID_ANY,
             label=_('Vector map layer to use to select areas'))
         self.vectlayer = wx.ComboBox(parent=self, id=wx.ID_ANY,
@@ -554,7 +555,7 @@ class FirstPage(TitledPage):
         self.sizer.Add(self.sampling_reg,
                        flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND, border=5,
                        pos=(5, 0), span=(1, 2))
-        self.infoError = wx.StaticText(self, label='')
+        self.infoError = StaticText(self, label='')
         self.infoError.SetForegroundColour(wx.RED)
         self.sizer.Add(self.infoError,
                        flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND, border=5,
@@ -713,12 +714,12 @@ class KeyboardPage(TitledPage):
         self.row_up = '0'
 
         # column up/left
-        self.ColUpLeftlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
+        self.ColUpLeftlabel = StaticText(parent=self, id=wx.ID_ANY,
                                             label=_("Column of upper left "
                                                     "corner"))
 
-        self.ColUpLefttxt = wx.TextCtrl(parent=self, id=wx.ID_ANY,
-                                        size=(250, -1))
+        self.ColUpLefttxt = TextCtrl(parent=self, id=wx.ID_ANY,
+                                     size=(250, -1))
         wx.CallAfter(self.ColUpLeftlabel.SetFocus)
 
         self.sizer.Add(self.ColUpLeftlabel, border=5, pos=(1, 1),
@@ -727,11 +728,11 @@ class KeyboardPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.AddGrowableCol(2)
         # row up/left
-        self.RowUpLeftlabel = wx.StaticText(
+        self.RowUpLeftlabel = StaticText(
             parent=self, id=wx.ID_ANY, label=_('Row of upper left corner'))
 
-        self.RowUpLefttxt = wx.TextCtrl(parent=self, id=wx.ID_ANY,
-                                        size=(250, -1))
+        self.RowUpLefttxt = TextCtrl(parent=self, id=wx.ID_ANY,
+                                     size=(250, -1))
         wx.CallAfter(self.RowUpLeftlabel.SetFocus)
 
         self.sizer.Add(self.RowUpLeftlabel, border=5, pos=(2, 1),
@@ -740,12 +741,12 @@ class KeyboardPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
         # row length
-        self.RowLenlabel = wx.StaticText(
+        self.RowLenlabel = StaticText(
             parent=self,
             id=wx.ID_ANY,
             label=_('Row length of sampling frame'))
 
-        self.RowLentxt = wx.TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
+        self.RowLentxt = TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
         wx.CallAfter(self.RowLenlabel.SetFocus)
 
         self.sizer.Add(self.RowLenlabel, border=5, pos=(3, 1),
@@ -754,12 +755,12 @@ class KeyboardPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
         # column length
-        self.ColLenlabel = wx.StaticText(
+        self.ColLenlabel = StaticText(
             parent=self,
             id=wx.ID_ANY,
             label=_('Row length of sampling frame'))
 
-        self.ColLentxt = wx.TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
+        self.ColLentxt = TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
         wx.CallAfter(self.ColLenlabel.SetFocus)
 
         self.sizer.Add(self.ColLenlabel, border=5, pos=(4, 1),
@@ -912,10 +913,10 @@ class SamplingAreasPage(TitledPage):
 
         self.regionPanelSizer = wx.GridBagSizer(1, 2)
         self.regionNumPanel = wx.Panel(parent=self, id=wx.ID_ANY)
-        self.regionNumLabel = wx.StaticText(
+        self.regionNumLabel = StaticText(
             parent=self.regionNumPanel, id=wx.ID_ANY,
             label=_('Number of regions to draw:'))
-        self.regionNumTxt = wx.TextCtrl(parent=self.regionNumPanel,
+        self.regionNumTxt = TextCtrl(parent=self.regionNumPanel,
                                         id=wx.ID_ANY, size=(50, -1))
         self.regionPanelSizer.Add(self.regionNumLabel, flag=wx.ALIGN_CENTER,
                                   pos=(0, 0))
@@ -927,17 +928,17 @@ class SamplingAreasPage(TitledPage):
 
         self.areaPanelSizer = wx.GridBagSizer(2, 3)
         self.areaPanel = wx.Panel(parent=self, id=wx.ID_ANY)
-        self.overwriteText = wx.StaticText(
+        self.overwriteText = StaticText(
             parent=self.areaPanel, id=wx.ID_ANY, label=_(
                 'Do you want to overwrite existing'
                 ' temporal maps if they exist?'))
         self.overwriteCheck = wx.CheckBox(parent=self.areaPanel, id=wx.ID_ANY)
-        self.areaText = wx.StaticText(
+        self.areaText = StaticText(
             parent=self.areaPanel, id=wx.ID_ANY,
             label=_('Do you want to check vector areas?'))
-        self.areaOK = wx.Button(self.areaPanel, wx.ID_ANY, 'Yes', (50, 80))
+        self.areaOK = Button(self.areaPanel, wx.ID_ANY, 'Yes', (50, 80))
         self.areaOK.SetToolTip(wx.ToolTip(_("Select if use area by area")))
-        self.areaNO = wx.Button(self.areaPanel, wx.ID_ANY, 'No', (50, 80))
+        self.areaNO = Button(self.areaPanel, wx.ID_ANY, 'No', (50, 80))
         self.areaNO.SetToolTip(wx.ToolTip(_("All the features will be used")))
         self.areaOK.Bind(wx.EVT_BUTTON, self.OnVectYes)
         self.areaNO.Bind(wx.EVT_BUTTON, self.OnVectNo)
@@ -953,7 +954,7 @@ class SamplingAreasPage(TitledPage):
         self.areaPanel.SetSizer(self.areaPanelSizer)
         self.sizer.Add(self.areaPanel, flag=wx.ALIGN_CENTER, pos=(3, 0))
 
-        self.calculatingAreas = wx.StaticText(
+        self.calculatingAreas = StaticText(
             parent=self, id=wx.ID_ANY,
             label=_('Analysing all vector features...'))
         self.sizer.Add(self.calculatingAreas, flag=wx.ALIGN_CENTER, pos=(4, 0))
@@ -1189,9 +1190,9 @@ class SampleUnitsKeyPage(TitledPage):
 
         self.panelSizer.Add(self.typeBox, flag=wx.ALIGN_LEFT, pos=(0, 0),
                             span=(1, 2))
-        self.widthLabel = wx.StaticText(parent=self.scrollPanel, id=wx.ID_ANY)
-        self.widthTxt = wx.TextCtrl(parent=self.scrollPanel, id=wx.ID_ANY,
-                                    size=(250, -1))
+        self.widthLabel = StaticText(parent=self.scrollPanel, id=wx.ID_ANY)
+        self.widthTxt = TextCtrl(parent=self.scrollPanel, id=wx.ID_ANY,
+                                 size=(250, -1))
 
         self.panelSizer.Add(
             self.widthLabel, pos=(1, 0),
@@ -1200,9 +1201,9 @@ class SampleUnitsKeyPage(TitledPage):
             self.widthTxt, pos=(1, 1),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
-        self.heightLabel = wx.StaticText(parent=self.scrollPanel, id=wx.ID_ANY)
-        self.heightTxt = wx.TextCtrl(parent=self.scrollPanel, id=wx.ID_ANY,
-                                     size=(250, -1))
+        self.heightLabel = StaticText(parent=self.scrollPanel, id=wx.ID_ANY)
+        self.heightTxt = TextCtrl(parent=self.scrollPanel, id=wx.ID_ANY,
+                                  size=(250, -1))
 
         self.panelSizer.Add(
             self.heightLabel, pos=(2, 0),
@@ -1231,21 +1232,21 @@ class SampleUnitsKeyPage(TitledPage):
         self.panelSizer.Add(self.distributionBox, pos=(3, 0), span=(
             1, 2), flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
-        self.distr1Label = wx.StaticText(parent=self.scrollPanel, id=wx.ID_ANY,
+        self.distr1Label = StaticText(parent=self.scrollPanel, id=wx.ID_ANY,
                                          label=_("What number of Sampling "
                                                  "Units to use?"))
-        self.distr1Txt = wx.TextCtrl(parent=self.scrollPanel, id=wx.ID_ANY,
-                                     size=(250, -1))
+        self.distr1Txt = TextCtrl(parent=self.scrollPanel, id=wx.ID_ANY,
+                                  size=(250, -1))
         self.panelSizer.Add(
             self.distr1Label, pos=(4, 0),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.panelSizer.Add(
             self.distr1Txt, pos=(4, 1),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
-        self.distr2Label = wx.StaticText(parent=self.scrollPanel, id=wx.ID_ANY,
+        self.distr2Label = StaticText(parent=self.scrollPanel, id=wx.ID_ANY,
                                          label="")
-        self.distr2Txt = wx.TextCtrl(parent=self.scrollPanel, id=wx.ID_ANY,
-                                     size=(250, -1))
+        self.distr2Txt = TextCtrl(parent=self.scrollPanel, id=wx.ID_ANY,
+                                  size=(250, -1))
         self.panelSizer.Add(
             self.distr2Label, pos=(5, 0),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
@@ -1367,16 +1368,16 @@ class MovingKeyPage(TitledPage):
         self.typeBox.Bind(wx.EVT_RADIOBOX, self.OnType)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
-        self.widthLabel = wx.StaticText(parent=self, id=wx.ID_ANY,
+        self.widthLabel = StaticText(parent=self, id=wx.ID_ANY,
                                         label=_('Width size (in cells)?'))
-        self.widthTxt = wx.TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
+        self.widthTxt = TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
         self.sizer.Add(self.widthLabel, border=5, pos=(2, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.widthTxt, border=5, pos=(2, 2),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
-        self.heightLabel = wx.StaticText(parent=self, id=wx.ID_ANY,
+        self.heightLabel = StaticText(parent=self, id=wx.ID_ANY,
                                          label=_('Height size (in cells)?'))
-        self.heightTxt = wx.TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
+        self.heightTxt = TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
         self.sizer.Add(self.heightLabel, border=5, pos=(3, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.heightTxt, border=5, pos=(3, 2),
@@ -1456,11 +1457,11 @@ class UnitsMousePage(TitledPage):
 
         self.regionPanelSizer = wx.GridBagSizer(1, 2)
         self.regionNumPanel = wx.Panel(parent=self, id=wx.ID_ANY)
-        self.regionNumLabel = wx.StaticText(
+        self.regionNumLabel = StaticText(
             parent=self.regionNumPanel, id=wx.ID_ANY,
             label=_('Number of sampling area to draw:'))
-        self.regionNumTxt = wx.TextCtrl(parent=self.regionNumPanel,
-                                        id=wx.ID_ANY, size=(50, -1))
+        self.regionNumTxt = TextCtrl(parent=self.regionNumPanel,
+                                     id=wx.ID_ANY, size=(50, -1))
         self.regionPanelSizer.Add(self.regionNumLabel, flag=wx.ALIGN_CENTER,
                                   pos=(0, 0))
         self.regionPanelSizer.Add(self.regionNumTxt, flag=wx.ALIGN_CENTER,
@@ -1617,10 +1618,10 @@ class VectorAreasPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
         self.areaPanelSizer = wx.GridBagSizer(1, 3)
         self.areaPanel = wx.Panel(parent=self, id=wx.ID_ANY)
-        self.areaText = wx.StaticText(parent=self.areaPanel, id=wx.ID_ANY,
+        self.areaText = StaticText(parent=self.areaPanel, id=wx.ID_ANY,
                                       label=_('Is this area ok?'))
-        self.areaOK = wx.Button(self.areaPanel, wx.ID_ANY, 'Yes', (50, 80))
-        self.areaNO = wx.Button(self.areaPanel, wx.ID_ANY, 'No', (50, 80))
+        self.areaOK = Button(self.areaPanel, wx.ID_ANY, 'Yes', (50, 80))
+        self.areaNO = Button(self.areaPanel, wx.ID_ANY, 'No', (50, 80))
         self.areaOK.Bind(wx.EVT_BUTTON, self.OnYes)
         self.areaNO.Bind(wx.EVT_BUTTON, self.OnNo)
         self.areaPanelSizer.Add(self.areaText, flag=wx.ALIGN_CENTER,
@@ -1740,100 +1741,100 @@ class SummaryPage(TitledPage):
         self.parent = parent
 
         # configuration file name
-        self.conflabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                       label=_('Configuration file name:'))
-        self.conftxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                     label="")
+        self.conflabel = StaticText(parent=self, id=wx.ID_ANY,
+                                    label=_('Configuration file name:'))
+        self.conftxt = StaticText(parent=self, id=wx.ID_ANY,
+                                  label="")
         self.sizer.Add(self.conflabel, border=5, pos=(0, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.conftxt, border=5, pos=(0, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         # raster name
-        self.rastlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                       label=_('Raster name:'))
-        self.rasttxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                     label="")
+        self.rastlabel = StaticText(parent=self, id=wx.ID_ANY,
+                                    label=_('Raster name:'))
+        self.rasttxt = StaticText(parent=self, id=wx.ID_ANY,
+                                  label="")
         self.sizer.Add(self.rastlabel, border=5, pos=(1, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.rasttxt, border=5, pos=(1, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
         # vector name
-        self.vectlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                       label=_('Vector name:'))
-        self.vecttxt = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.vectlabel = StaticText(parent=self, id=wx.ID_ANY,
+                                    label=_('Vector name:'))
+        self.vecttxt = StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(self.vectlabel, border=5, pos=(2, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.vecttxt, border=5, pos=(2, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
         # region type name
-        self.regionlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                         label=_('Region type:'))
-        self.regiontxt = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.regionlabel = StaticText(parent=self, id=wx.ID_ANY,
+                                      label=_('Region type:'))
+        self.regiontxt = StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(self.regionlabel, border=5, pos=(3, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.regiontxt, border=5, pos=(3, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
         # region keyboard
-        self.regionkeylabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                            label="")
-        self.regionkeytxt = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.regionkeylabel = StaticText(parent=self, id=wx.ID_ANY,
+                                         label="")
+        self.regionkeytxt = StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(self.regionkeylabel, border=5, pos=(4, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.regionkeytxt, border=5, pos=(4, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         # sampling area
-        self.samplinglabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                           label=_('Sampling area type:'))
-        self.samplingtxt = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.samplinglabel = StaticText(parent=self, id=wx.ID_ANY,
+                                        label=_('Sampling area type:'))
+        self.samplingtxt = StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(self.samplinglabel, border=5, pos=(5, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.samplingtxt, border=5, pos=(5, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         # shapetype
-        self.shapelabel = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
-        self.shapetxt = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.shapelabel = StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.shapetxt = StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(self.shapelabel, border=5, pos=(6, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.shapetxt, border=5, pos=(6, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         # shapedim
-        self.shapewidthlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                             label="")
-        self.shapewidthtxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                           label="")
+        self.shapewidthlabel = StaticText(parent=self, id=wx.ID_ANY,
+                                          label="")
+        self.shapewidthtxt = StaticText(parent=self, id=wx.ID_ANY,
+                                        label="")
         self.sizer.Add(self.shapewidthlabel, border=5, pos=(7, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.shapewidthtxt, border=5, pos=(7, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
-        self.shapeheightlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                              label="")
-        self.shapeheighttxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                            label="")
+        self.shapeheightlabel = StaticText(parent=self, id=wx.ID_ANY,
+                                           label="")
+        self.shapeheighttxt = StaticText(parent=self, id=wx.ID_ANY,
+                                         label="")
         self.sizer.Add(self.shapeheightlabel, border=5, pos=(8, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.shapeheighttxt, border=5, pos=(8, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         # units type
-        self.unitslabel = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
-        self.unitstxt = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.unitslabel = StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.unitstxt = StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(self.unitslabel, border=5, pos=(9, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.unitstxt, border=5, pos=(9, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
-        self.unitsmorelabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                            label="")
-        self.unitsmoretxt = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.unitsmorelabel = StaticText(parent=self, id=wx.ID_ANY,
+                                         label="")
+        self.unitsmoretxt = StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(self.unitsmorelabel, border=5, pos=(10, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.unitsmoretxt, border=5, pos=(10, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
-        self.unitsmorelabel2 = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                             label="")
-        self.unitsmoretxt2 = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.unitsmorelabel2 = StaticText(parent=self, id=wx.ID_ANY,
+                                          label="")
+        self.unitsmoretxt2 = StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(self.unitsmorelabel2, border=5, pos=(11, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(self.unitsmoretxt2, border=5, pos=(11, 1),

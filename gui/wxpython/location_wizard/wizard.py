@@ -35,6 +35,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import locale
+import six
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -51,9 +52,11 @@ import wx.lib.scrolledpanel as scrolled
 
 from core import utils
 from core.utils import _
+from core.utils import cmp
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from gui_core.widgets import GenericValidator
-from gui_core.wrap import SpinCtrl, SearchCtrl
+from gui_core.wrap import SpinCtrl, SearchCtrl, StaticText, \
+    TextCtrl, Button, CheckBox, StaticBox
 from location_wizard.base import BaseClass
 from location_wizard.dialogs import SelectTransformDialog
 
@@ -80,7 +83,7 @@ class TitledPage(WizardPageSimple):
         self.page = WizardPageSimple.__init__(self, parent)
 
         # page title
-        self.title = wx.StaticText(parent=self, id=wx.ID_ANY, label=title)
+        self.title = StaticText(parent=self, id=wx.ID_ANY, label=title)
         self.title.SetFont(wx.Font(13, wx.SWISS, wx.NORMAL, wx.BOLD))
         # main sizers
         self.pagesizer = wx.BoxSizer(wx.VERTICAL)
@@ -108,10 +111,10 @@ class TitledPage(WizardPageSimple):
         """Make aligned label"""
         if not parent:
             parent = self
-        label = wx.StaticText(parent=parent, id=wx.ID_ANY, label=text,
+        label = StaticText(parent=parent, id=wx.ID_ANY, label=text,
                               style=style)
         if tooltip:
-            label.SetToolTipString(tooltip)
+            label.SetToolTip(tooltip)
         return label
 
     def MakeTextCtrl(self, text='', size=(100, -1),
@@ -119,10 +122,10 @@ class TitledPage(WizardPageSimple):
         """Generic text control"""
         if not parent:
             parent = self
-        textCtrl = wx.TextCtrl(parent=parent, id=wx.ID_ANY, value=text,
+        textCtrl = TextCtrl(parent=parent, id=wx.ID_ANY, value=text,
                                size=size, style=style)
         if tooltip:
-            textCtrl.SetToolTipString(tooltip)
+            textCtrl.SetToolTip(tooltip)
         return textCtrl
 
     def MakeButton(self, text, id=wx.ID_ANY, size=(-1, -1),
@@ -130,10 +133,10 @@ class TitledPage(WizardPageSimple):
         """Generic button"""
         if not parent:
             parent = self
-        button = wx.Button(parent=parent, id=id, label=text,
+        button = Button(parent=parent, id=id, label=text,
                            size=size)
         if tooltip:
-            button.SetToolTipString(tooltip)
+            button.SetToolTip(tooltip)
         return button
 
     def MakeCheckBox(self, text, id=wx.ID_ANY, size=(-1, -1),
@@ -141,10 +144,10 @@ class TitledPage(WizardPageSimple):
         """Generic checkbox"""
         if not parent:
             parent = self
-        chbox = wx.CheckBox(parent=parent, id=id, label=text,
+        chbox = CheckBox(parent=parent, id=id, label=text,
                             size=size)
         if tooltip:
-            chbox.SetToolTipString(tooltip)
+            chbox.SetToolTip(tooltip)
         return chbox
 
 
@@ -349,7 +352,7 @@ class CoordinateSystemPage(TitledPage):
 
         # layout
         self.sizer.SetVGap(10)
-        self.sizer.Add(wx.StaticText(parent=self, label=_("Simple methods:")),
+        self.sizer.Add(StaticText(parent=self, label=_("Simple methods:")),
                        flag=wx.ALIGN_LEFT, pos=(1, 1))
         self.sizer.Add(self.radioEpsg,
                        flag=wx.ALIGN_LEFT, pos=(2, 1))
@@ -361,7 +364,7 @@ class CoordinateSystemPage(TitledPage):
                        flag=wx.ALIGN_LEFT, pos=(4, 1))
         self.sizer.Add(self.radioXy,
                        flag=wx.ALIGN_LEFT, pos=(5, 1))
-        self.sizer.Add(wx.StaticText(parent=self, label=_("Advanced methods:")),
+        self.sizer.Add(StaticText(parent=self, label=_("Advanced methods:")),
                        flag=wx.ALIGN_LEFT, pos=(6, 1))
         self.sizer.Add(self.radioSrs,
                        flag=wx.ALIGN_LEFT, pos=(7, 1))
@@ -788,7 +791,7 @@ class ProjParamsPage(TitledPage):
         self.p4projparams = ''
         self.projdesc = ''
 
-        radioSBox = wx.StaticBox(
+        radioSBox = StaticBox(
             parent=self, id=wx.ID_ANY, label=" %s " %
             _("Select datum or ellipsoid (next page)"))
         radioSBSizer = wx.StaticBoxSizer(radioSBox)
@@ -849,7 +852,7 @@ class ProjParamsPage(TitledPage):
         """Go to next page"""
         if event.GetDirection():
             self.p4projparams = ''
-            for id, param in self.pparam.iteritems():
+            for id, param in six.iteritems(self.pparam):
                 if param['type'] == 'bool':
                     if param['value'] == False:
                         continue
@@ -875,7 +878,7 @@ class ProjParamsPage(TitledPage):
         self.projdesc = self.parent.projections[self.parent.projpage.proj][0]
         if self.prjParamSizer is None:
             # entering page for the first time
-            self.paramSBox = wx.StaticBox(
+            self.paramSBox = StaticBox(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_(" Enter parameters for %s projection ") %
@@ -922,7 +925,7 @@ class ProjParamsPage(TitledPage):
                 else:
                     param['value'] = paramgrp[2]
 
-                label = wx.StaticText(
+                label = StaticText(
                     parent=self.panel,
                     id=wx.ID_ANY,
                     label=param['desc'],
@@ -941,9 +944,9 @@ class ProjParamsPage(TitledPage):
                     win.Bind(wx.EVT_SPINCTRL, self.OnParamEntry)
                     win.Bind(wx.EVT_TEXT, self.OnParamEntry)
                 else:
-                    win = wx.TextCtrl(parent=self.panel, id=id,
-                                      value=param['value'],
-                                      size=(100, -1))
+                    win = TextCtrl(parent=self.panel, id=id,
+                                   value=param['value'],
+                                   size=(100, -1))
                     win.Bind(wx.EVT_TEXT, self.OnParamEntry)
                     if paramgrp[1] == 'noask':
                         win.Enable(False)
@@ -1699,7 +1702,7 @@ class EPSGPage(TitledPage):
             return
 
         data = list()
-        for code, val in self.epsgCodeDict.iteritems():
+        for code, val in six.iteritems(self.epsgCodeDict):
             if code is not None:
                 data.append((code, val[0], val[1]))
 
@@ -1946,7 +1949,7 @@ class IAUPage(TitledPage):
             return
 
         data = list()
-        for code, val in self.epsgCodeDict.iteritems():
+        for code, val in six.iteritems(self.epsgCodeDict):
             if code is not None:
                 data.append((code, val[0], val[1]))
 

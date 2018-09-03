@@ -47,7 +47,7 @@ from core.gcmd import GMessage
 from grass.pydispatch.signal import Signal
 from grass.pydispatch.errors import DispatcherKeyError
 
-from functions import SamplingType, checkMapExists
+from .functions import SamplingType, checkMapExists
 
 
 class Circle:

@@ -30,6 +30,7 @@ from __future__ import print_function
 
 import os
 import sys
+import six
 import time
 import shutil
 import fileinput
@@ -562,7 +563,7 @@ class MapApp(wx.App):
             # stop the timer
             # self.timer.Stop()
             # terminate thread
-            for f in monFile.itervalues():
+            for f in six.itervalues(monFile):
                 try_remove(f)
 
     def watcher(self):

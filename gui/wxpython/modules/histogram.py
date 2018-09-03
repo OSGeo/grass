@@ -32,7 +32,7 @@ from gui_core.preferences import DefaultFontDialog
 from core.debug import Debug
 from core.gcmd import GError
 from gui_core.toolbars import BaseToolbar, BaseIcons
-from gui_core.wrap import PseudoDC
+from gui_core.wrap import PseudoDC, Menu, EmptyBitmap
 
 
 class BufferedWindow(wx.Window):
@@ -80,7 +80,7 @@ class BufferedWindow(wx.Window):
 
         self.pdc = PseudoDC()
         # will store an off screen empty bitmap for saving to file
-        self._buffer = wx.EmptyBitmap(
+        self._buffer = EmptyBitmap(
             max(1, self.Map.width),
             max(1, self.Map.height))
 
@@ -160,7 +160,7 @@ class BufferedWindow(wx.Window):
         # Make new off screen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
         # a file, or whatever.
-        self._buffer = wx.EmptyBitmap(self.Map.width, self.Map.height)
+        self._buffer = EmptyBitmap(self.Map.width, self.Map.height)
 
         # get the image to be rendered
         self.img = self.GetImage()
@@ -193,7 +193,7 @@ class BufferedWindow(wx.Window):
         wx.Yield()
 
         self.Map.ChangeMapSize((width, height))
-        ibuffer = wx.EmptyBitmap(max(1, width), max(1, height))
+        ibuffer = EmptyBitmap(max(1, width), max(1, height))
         self.Map.Render(force=True, windres=True)
         img = self.GetImage()
         self.Draw(self.pdc, img, drawid=99)
@@ -496,7 +496,7 @@ class HistogramFrame(wx.Frame):
         """Print options and output menu
         """
         point = wx.GetMousePosition()
-        printmenu = wx.Menu()
+        printmenu = Menu()
         # Add items to the menu
         setup = wx.MenuItem(printmenu, id=wx.ID_ANY, text=_('Page setup'))
         printmenu.AppendItem(setup)

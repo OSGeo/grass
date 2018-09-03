@@ -57,6 +57,19 @@ ctypes_type_map = {
     ('va_list', True, 0): 'c_void_p',
 }
 
+ctypes_type_map_python_builtin = {
+    ('int',     True,   2): 'c_longlong',
+    ('int',     False,  2): 'c_ulonglong',
+    ('size_t',  True,   0): 'c_size_t',
+    ('apr_int64_t', True, 0): 'c_int64',
+    ('off64_t', True,   0): 'c_int64',
+    ('apr_uint64_t', True, 0): 'c_uint64',
+    ('wchar_t', True,   0): 'c_wchar',
+    ('ptrdiff_t', True,  0): 'c_ptrdiff_t',  # Requires definition in preamble
+    ('ssize_t', True,   0): 'c_ptrdiff_t',  # Requires definition in preamble
+    ('va_list', True,   0): 'c_void_p',
+}
+
 # This protocol is used for walking type trees.
 
 
@@ -230,11 +243,31 @@ class CtypesArray(CtypesType):
                                 self.count.py_string(False))
 
 
+class CtypesNoErrorCheck(object):
+
+    def py_string(self):
+        return 'None'
+
+    def __bool__(self):
+        return False
+    __nonzero__ = __bool__
+
+
+class CtypesPointerCast(object):
+
+    def __init__(self, target):
+        self.target = target
+
+    def py_string(self):
+        return 'lambda v,*a : cast(v, {})'.format(self.target.py_string())
+
+
 class CtypesFunction(CtypesType):
 
     def __init__(self, restype, parameters, variadic=False):
         CtypesType.__init__(self)
         self.restype = restype
+        self.errcheck = CtypesNoErrorCheck()
 
         # Don't allow POINTER(None) (c_void_p) as a restype... causes errors
         # when ctypes automagically returns it as an int.
@@ -242,12 +275,17 @@ class CtypesFunction(CtypesType):
         # you can make it any arbitrary type.
         if isinstance(self.restype, CtypesPointer) and \
            isinstance(self.restype.destination, CtypesSimple) and \
-           self.restype.destination.name == 'None':
-            self.restype = CtypesPointer(CtypesSpecial('c_void'), ())
+           self.restype.destination.name == 'void':
+            # we will provide a means of converting this to a c_void_p
+            self.restype = CtypesPointer(CtypesSpecial('c_ubyte'), ())
+            self.errcheck = CtypesPointerCast(CtypesSpecial('c_void_p'))
 
-        # Return 'ReturnString' instead of simply 'String'
+        # Return "String" instead of "POINTER(c_char)"
         if self.restype.py_string() == 'POINTER(c_char)':
-            self.restype = CtypesSpecial('ReturnString')
+            if 'const' in self.restype.qualifiers:
+                self.restype = CtypesSpecial('c_char_p')
+            else:
+                self.restype = CtypesSpecial('String')
 
         self.argtypes = [remove_function_pointer(p) for p in parameters]
         self.variadic = variadic
@@ -273,9 +311,10 @@ def anonymous_struct_tag():
 
 class CtypesStruct(CtypesType):
 
-    def __init__(self, tag, variety, members, src=None):
+    def __init__(self, tag, packed, variety, members, src=None):
         CtypesType.__init__(self)
         self.tag = tag
+        self.packed = packed
         self.variety = variety  # "struct" or "union"
         self.members = members
 

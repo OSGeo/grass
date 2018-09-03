@@ -40,6 +40,10 @@ def db_describe(table, **args):
 
     :return: parsed module output
     """
+    if 'database' in args and args['database'] == '':
+        args.pop('database')
+    if 'driver' in args and args['driver'] == '':
+        args.pop('driver')
     s = read_command('db.describe', flags='c', table=table, **args)
     if not s:
         fatal(_("Unable to describe table <%s>") % table)
@@ -80,7 +84,7 @@ def db_table_exist(table, **args):
 
     :return: True for success, False otherwise
     """
-    nuldev = file(os.devnull, 'w+')
+    nuldev = open(os.devnull, 'w+')
     ok = True
     try:
         run_command('db.describe', flags='c', table=table,
@@ -105,7 +109,7 @@ def db_connection(force=False):
     :return: parsed output of db.connect
     """
     try:
-        nuldev = file(os.devnull, 'w')
+        nuldev = open(os.devnull, 'w')
         conn = parse_command('db.connect', flags='g', stderr=nuldev)
         nuldev.close()
     except CalledModuleError:
@@ -187,7 +191,7 @@ def db_table_in_vector(table, mapset='.'):
     :param str table: name of table to query
     """
     from .vector import vector_db
-    nuldev = file(os.devnull, 'w')
+    nuldev = open(os.devnull, 'w')
     used = []
     vects = list_strings('vector', mapset=mapset)
     for vect in vects:

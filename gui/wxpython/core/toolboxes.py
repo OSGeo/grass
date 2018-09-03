@@ -34,7 +34,7 @@ else:
 
 import grass.script.task as gtask
 import grass.script.core as gcore
-from grass.script.utils import try_remove
+from grass.script.utils import try_remove, decode
 from grass.exceptions import ScriptError, CalledModuleError
 
 
@@ -766,9 +766,9 @@ def _getXMLString(root):
     :return: XML as string
     """
     xml = etree.tostring(root, encoding='UTF-8')
-    return xml.replace("<?xml version='1.0' encoding='UTF-8'?>\n",
-                       "<?xml version='1.0' encoding='UTF-8'?>\n"
-                       "<!--This is an auto-generated file-->\n")
+    return xml.replace(b"<?xml version='1.0' encoding='UTF-8'?>\n",
+                       b"<?xml version='1.0' encoding='UTF-8'?>\n"
+                       b"<!--This is an auto-generated file-->\n")
 
 
 def do_doctest_gettext_workaround():
@@ -897,7 +897,7 @@ def main():
     tree = createTree(distributionRootFile=mainFile, userRootFile=None,
                       userDefined=False)
     root = tree.getroot()
-    sys.stdout.write(_getXMLString(root))
+    sys.stdout.write(decode(_getXMLString(root), encoding='UTF-8'))
 
     return 0
 

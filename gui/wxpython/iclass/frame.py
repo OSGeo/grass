@@ -19,6 +19,7 @@ for details.
 
 import os
 import sys
+import six
 import copy
 import tempfile
 import types
@@ -47,6 +48,7 @@ from gui_core.mapdisp import DoubleMapFrame
 from core.render import Map, MapLayer
 from core.gcmd import RunCommand, GMessage, GError, GWarning
 from gui_core.dialogs import SetOpacityDialog
+from gui_core.wrap import Menu
 from mapwin.base import MapWindowProperties
 from dbmgr.vinfo import VectorDBInfo
 import grass.script as grass
@@ -223,7 +225,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.GetFirstWindow().GetDigit().CloseMap()
         self.plotPanel.CloseWindow()
         self._cleanup()
-
+        self._mgr.UnInit()
         self.Destroy()
 
     def _cleanup(self):
@@ -477,7 +479,7 @@ class IClassMapFrame(DoubleMapFrame):
 
     def OnZoomMenu(self, event):
         """Popup Zoom menu """
-        zoommenu = wx.Menu()
+        zoommenu = Menu()
         # Add items to the menu
 
         i = 0
@@ -1462,7 +1464,7 @@ class MapManager:
 
     def GetAlias(self, name):
         """Returns alias for layer"""
-        name = [k for k, v in self.layerName.iteritems() if v == name]
+        name = [k for k, v in six.iteritems(self.layerName) if v == name]
         if name:
             return name[0]
         return None

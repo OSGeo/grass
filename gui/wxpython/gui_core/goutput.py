@@ -37,7 +37,8 @@ from core.gconsole   import GConsole, \
     EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, EVT_CMD_RUN, EVT_CMD_DONE, \
     Notification
 from gui_core.prompt import GPromptSTC
-from gui_core.wrap import Button, ToggleButton
+from gui_core.wrap import Button, ToggleButton, StaticText, \
+    StaticBox
 from core.settings import UserSettings
 from core.utils import _
 from gui_core.widgets import SearchModuleWidget
@@ -145,14 +146,14 @@ class GConsoleWindow(wx.SplitterWindow):
 
         if self._gcstyle & GC_PROMPT:
             cmdLabel = _("Command prompt")
-            self.outputBox = wx.StaticBox(
+            self.outputBox = StaticBox(
                 parent=self.panelOutput,
                 id=wx.ID_ANY,
                 label=" %s " %
                 _("Output window"))
 
-            self.cmdBox = wx.StaticBox(parent=self.panelOutput, id=wx.ID_ANY,
-                                       label=" %s " % cmdLabel)
+            self.cmdBox = StaticBox(parent=self.panelOutput, id=wx.ID_ANY,
+                                    label=" %s " % cmdLabel)
 
         # buttons
         self.btnOutputClear = Button(
@@ -202,7 +203,7 @@ class GConsoleWindow(wx.SplitterWindow):
             promptSizer.Add(self.cmdPrompt, proportion=1,
                             flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
                             border=3)
-            helpText = wx.StaticText(
+            helpText = StaticText(
                 self.panelPrompt, id=wx.ID_ANY,
                 label="Press Tab to display command help, Ctrl+Space to autocomplete")
             helpText.SetForegroundColour(
@@ -629,7 +630,7 @@ class GStc(stc.StyledTextCtrl):
             group='appearance',
             key='outputfont',
             subkey='size')
-        if typesize is None or typesize <= 0:
+        if typesize is None or int(typesize) <= 0:
             typesize = 10
         typesize = float(typesize)
 

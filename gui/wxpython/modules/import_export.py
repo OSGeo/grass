@@ -40,7 +40,7 @@ from core.gcmd import RunCommand, GMessage, GWarning
 from gui_core.forms import CmdPanel
 from gui_core.gselect import OgrTypeSelect, GdalSelect, SubGroupSelect
 from gui_core.widgets import LayersList, GListCtrl, GNotebook
-from gui_core.wrap import Button
+from gui_core.wrap import Button, StaticText, StaticBox
 from core.utils import GetValidLayerName, _
 from core.settings import UserSettings, GetDisplayVectSettings
 
@@ -64,7 +64,7 @@ class ImportDialog(wx.Dialog):
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.layerBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY)
+        self.layerBox = StaticBox(parent=self.panel, id=wx.ID_ANY)
         if self.importType == 'gdal':
             label = _("List of raster layers")
         elif self.importType == 'ogr':
@@ -869,7 +869,7 @@ class ReprojectionDialog(wx.Dialog):
         columns = [_('Layer id'),
                    _('Name for output GRASS map')]
 
-        self.layerBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY)
+        self.layerBox = StaticBox(parent=self.panel, id=wx.ID_ANY)
         self.layerSizer = wx.StaticBoxSizer(self.layerBox, wx.HORIZONTAL)
 
         self.list = GListCtrl(parent=self.panel)
@@ -884,7 +884,7 @@ class ReprojectionDialog(wx.Dialog):
 
         self.list.LoadData(data)
 
-        self.labelText = wx.StaticText(parent=self.panel, id=wx.ID_ANY, label=_(
+        self.labelText = StaticText(parent=self.panel, id=wx.ID_ANY, label=_(
             "Projection of following layers do not match with projection of current location. "))
 
         label = _("Layers to be reprojected")
@@ -895,7 +895,7 @@ class ReprojectionDialog(wx.Dialog):
         # buttons
         #
         # cancel
-        self.btn_close = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btn_close = Button(parent=self.panel, id=wx.ID_CANCEL)
 
         # run
         self.btn_run = Button(

@@ -7,7 +7,7 @@ which returns a Python string representing that expression.
 '''
 
 import keyword
-
+import sys
 from .ctypedescs import *
 
 
@@ -84,10 +84,13 @@ class ConstantExpressionNode(ExpressionNode):
         neg_inf = ()
 
     def py_string(self, can_be_ctype):
-        if self.value == ConstantExpressionNode.pos_inf:
-            return "float('inf')"
-        elif self.value == ConstantExpressionNode.neg_inf:
-            return "float('-inf')"
+        if (sys.platform != 'win32' or (sys.platform == 'win32' and
+                                        sys.version_info >= (2, 6))):
+            # Windows python did not get infinity support until 2.6
+            if self.value == ConstantExpressionNode.pos_inf:
+                return "float('inf')"
+            elif self.value == ConstantExpressionNode.neg_inf:
+                return "float('-inf')"
         return repr(self.value)
 
 

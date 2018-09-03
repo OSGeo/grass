@@ -44,7 +44,7 @@ set_gui_path()
 from core.debug import Debug
 from core.utils import _
 from core.gthread import gThread
-from gui_core.wrap import Button
+from gui_core.wrap import Button, StaticText
 
 
 # TODO: labels (and descriptions) translatable?
@@ -288,7 +288,7 @@ class LocationDownloadPanel(wx.Panel):
         self.database = database
         self.locations = locations
 
-        self.label = wx.StaticText(
+        self.label = StaticText(
             parent=self,
             label=_("Select sample location to download:"))
 
@@ -307,7 +307,7 @@ class LocationDownloadPanel(wx.Panel):
         # TODO: add thumbnail for each location?
 
         # TODO: messages copied from gis_set.py, need this as API?
-        self.message = wx.StaticText(parent=self, size=(-1, 50))
+        self.message = StaticText(parent=self, size=(-1, 50))
         sys.stdout = RedirectText(self.message)
 
         # It is not clear if all wx versions supports color, so try-except.

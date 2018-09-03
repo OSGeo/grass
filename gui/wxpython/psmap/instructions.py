@@ -34,6 +34,7 @@ This program is free software under the GNU General Public License
 
 import os
 import string
+import six
 from math import ceil
 from time import strftime, localtime
 
@@ -762,8 +763,8 @@ class PageSetup(InstructionObject):
                         # e.g. paper a3
                         try:
                             instr['Format'] = pformat
-                            for key, value in availableFormats[
-                                    pformat].iteritems():
+                            for key, value in six.iteritems(availableFormats[
+                                                            pformat]):
                                 instr[key] = float(value)
                             break
                         except KeyError:

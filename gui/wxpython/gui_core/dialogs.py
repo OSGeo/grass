@@ -31,6 +31,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import re
+import six
 
 import wx
 
@@ -47,7 +48,8 @@ from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, MapV
 from core.utils import _
 from core.settings import UserSettings
 from core.debug import Debug
-from gui_core.wrap import SpinCtrl, TextCtrl
+from gui_core.wrap import SpinCtrl, TextCtrl, Button, CheckListBox, \
+    StaticText, StaticBox, Menu
 
 
 class SimpleDialog(wx.Dialog):
@@ -64,8 +66,8 @@ class SimpleDialog(wx.Dialog):
         self.SetExtraStyle(wx.WS_EX_VALIDATE_RECURSIVELY)
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.btnCancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
-        self.btnOK = wx.Button(parent=self.panel, id=wx.ID_OK)
+        self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btnOK = Button(parent=self.panel, id=wx.ID_OK)
         self.btnOK.SetDefault()
 
         self.__layout()
@@ -127,7 +129,7 @@ class LocationDialog(SimpleDialog):
     def _layout(self):
         """Do layout"""
         self.dataSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
                 label=_("Name of GRASS location:")),
@@ -138,7 +140,7 @@ class LocationDialog(SimpleDialog):
                            flag=wx.EXPAND | wx.ALL, border=1)
 
         self.dataSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
                 label=_("Name of mapset:")),
@@ -197,8 +199,8 @@ class MapsetDialog(SimpleDialog):
 
     def _layout(self):
         """Do layout"""
-        self.dataSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                         label=_("Name of mapset:")),
+        self.dataSizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                                      label=_("Name of mapset:")),
                            proportion=0, flag=wx.ALL, border=1)
         self.dataSizer.Add(self.element, proportion=0,
                            flag=wx.EXPAND | wx.ALL, border=1)
@@ -236,8 +238,8 @@ class VectorDialog(SimpleDialog):
 
     def _layout(self):
         """Do layout"""
-        self.dataSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                         label=_("Name of vector map:")),
+        self.dataSizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                                      label=_("Name of vector map:")),
                            proportion=0, flag=wx.ALL, border=1)
         self.dataSizer.Add(self.element, proportion=0,
                            flag=wx.EXPAND | wx.ALL, border=1)
@@ -292,8 +294,8 @@ class NewVectorDialog(VectorDialog):
         if showType:
             self.keycol = None
         else:
-            self.keycol = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY,
-                                      size=globalvar.DIALOG_SPIN_SIZE)
+            self.keycol = TextCtrl(parent=self.panel, id=wx.ID_ANY,
+                                   size=globalvar.DIALOG_SPIN_SIZE)
             self.keycol.SetValue(
                 UserSettings.Get(
                     group='atm',
@@ -327,7 +329,7 @@ class NewVectorDialog(VectorDialog):
     def _layout(self):
         """Do layout"""
         self.dataSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
                 label=_("Name for new vector map:")),
@@ -347,7 +349,7 @@ class NewVectorDialog(VectorDialog):
         if self.keycol:
             keySizer = wx.BoxSizer(wx.HORIZONTAL)
             keySizer.Add(
-                wx.StaticText(
+                StaticText(
                     parent=self.panel,
                     label=_("Key column:")),
                 proportion=0,
@@ -552,7 +554,7 @@ class SavedRegion(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.BoxSizer(wx.HORIZONTAL)
-        label = wx.StaticText(parent=self, id=wx.ID_ANY)
+        label = StaticText(parent=self, id=wx.ID_ANY)
         box.Add(
             label,
             proportion=0,
@@ -593,11 +595,11 @@ class SavedRegion(wx.Dialog):
 
         btnsizer = wx.StdDialogButtonSizer()
 
-        btn = wx.Button(parent=self, id=wx.ID_OK)
+        btn = Button(parent=self, id=wx.ID_OK)
         btn.SetDefault()
         btnsizer.AddButton(btn)
 
-        btn = wx.Button(parent=self, id=wx.ID_CANCEL)
+        btn = Button(parent=self, id=wx.ID_CANCEL)
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 
@@ -662,14 +664,14 @@ class GroupDialog(wx.Dialog):
         self.bodySizer = self._createDialogBody()
 
         # buttons
-        btnOk = wx.Button(parent=self, id=wx.ID_OK)
-        btnApply = wx.Button(parent=self, id=wx.ID_APPLY)
-        btnClose = wx.Button(parent=self, id=wx.ID_CANCEL)
+        btnOk = Button(parent=self, id=wx.ID_OK)
+        btnApply = Button(parent=self, id=wx.ID_APPLY)
+        btnClose = Button(parent=self, id=wx.ID_CANCEL)
 
-        btnOk.SetToolTipString(
+        btnOk.SetToolTip(
             _("Apply changes to selected group and close dialog"))
-        btnApply.SetToolTipString(_("Apply changes to selected group"))
-        btnClose.SetToolTipString(_("Close dialog, changes are not applied"))
+        btnApply.SetToolTip(_("Apply changes to selected group"))
+        btnClose.SetToolTip(_("Close dialog, changes are not applied"))
 
         # btnOk.SetDefault()
 
@@ -716,8 +718,8 @@ class GroupDialog(wx.Dialog):
                            " and '$' for the end.")
 
         # group selection
-        bodySizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
-                                    label=_("Select existing group or "
+        bodySizer.Add(StaticText(parent=self, id=wx.ID_ANY,
+                                 label=_("Select existing group or "
                                             "enter name of new group:")),
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP, border=10)
         self.groupSelect = Select(parent=self, type='group',
@@ -737,7 +739,7 @@ class GroupDialog(wx.Dialog):
         subg_sizer = wx.BoxSizer(wx.VERTICAL)
 
         subg_sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self.subg_panel,
                 id=wx.ID_ANY,
                 label=_(
@@ -773,7 +775,7 @@ class GroupDialog(wx.Dialog):
                        pos=(0, 1))
 
         gListSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self.gListPanel,
                 label=_("Pattern:")),
             flag=wx.ALIGN_CENTER_VERTICAL,
@@ -781,17 +783,17 @@ class GroupDialog(wx.Dialog):
                 1,
                 0))
 
-        self.gfilter = wx.TextCtrl(parent=self.gListPanel, id=wx.ID_ANY,
+        self.gfilter = TextCtrl(parent=self.gListPanel, id=wx.ID_ANY,
                                    value="",
                                    size=(250, -1))
-        self.gfilter.SetToolTipString(filter_tooltip)
+        self.gfilter.SetToolTip(filter_tooltip)
 
         gListSizer.Add(self.gfilter,
                        flag=wx.EXPAND,
                        pos=(1, 1))
 
         gListSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self.gListPanel,
                 label=_("List of maps:")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM,
@@ -807,13 +809,13 @@ class GroupDialog(wx.Dialog):
             style=wx.LB_MULTIPLE | wx.LB_NEEDED_SB)
         sizer.Add(self.gLayerBox, proportion=1, flag=wx.EXPAND)
 
-        self.addLayer = wx.Button(self.gListPanel, id=wx.ID_ADD)
-        self.addLayer.SetToolTipString(
+        self.addLayer = Button(self.gListPanel, id=wx.ID_ADD)
+        self.addLayer.SetToolTip(
             _("Select map layers and add them to the list."))
         buttonSizer.Add(self.addLayer, flag=wx.BOTTOM, border=10)
 
-        self.removeLayer = wx.Button(self.gListPanel, id=wx.ID_REMOVE)
-        self.removeLayer.SetToolTipString(
+        self.removeLayer = Button(self.gListPanel, id=wx.ID_REMOVE)
+        self.removeLayer.SetToolTip(
             _("Remove selected layer(s) from list."))
         buttonSizer.Add(self.removeLayer)
         sizer.Add(buttonSizer, flag=wx.LEFT, border=5)
@@ -841,7 +843,7 @@ class GroupDialog(wx.Dialog):
                           pos=(0, 1))
 
         subgListSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self.subgListPanel,
                 label=_("Pattern:")),
             flag=wx.ALIGN_CENTER_VERTICAL,
@@ -849,17 +851,17 @@ class GroupDialog(wx.Dialog):
                 1,
                 0))
 
-        self.subgfilter = wx.TextCtrl(parent=self.subgListPanel, id=wx.ID_ANY,
+        self.subgfilter = TextCtrl(parent=self.subgListPanel, id=wx.ID_ANY,
                                       value="",
                                       size=(250, -1))
-        self.subgfilter.SetToolTipString(filter_tooltip)
+        self.subgfilter.SetToolTip(filter_tooltip)
 
         subgListSizer.Add(self.subgfilter,
                           flag=wx.EXPAND,
                           pos=(1, 1))
 
         subgListSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self.subgListPanel,
                 label=_("List of maps:")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM,
@@ -868,9 +870,9 @@ class GroupDialog(wx.Dialog):
                 2,
                 0))
 
-        self.subgListBox = wx.CheckListBox(
+        self.subgListBox = CheckListBox(
             parent=self.subgListPanel, id=wx.ID_ANY, size=(250, 100))
-        self.subgListBox.SetToolTipString(
+        self.subgListBox.SetToolTip(
             _("Check maps from group to be included into subgroup."))
 
         subgListSizer.Add(self.subgListBox, flag=wx.EXPAND, pos=(2, 1))
@@ -880,7 +882,7 @@ class GroupDialog(wx.Dialog):
         self.subgListPanel.SetSizer(subgListSizer)
         bodySizer.Add(self.subgListPanel, proportion=1, flag=wx.EXPAND)
 
-        self.infoLabel = wx.StaticText(parent=self, id=wx.ID_ANY)
+        self.infoLabel = StaticText(parent=self, id=wx.ID_ANY)
         bodySizer.Add(
             self.infoLabel,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM,
@@ -1061,7 +1063,7 @@ class GroupDialog(wx.Dialog):
         """Get layers"""
         if self.edit_subg:
             layers = []
-            for maps, sel in self.subgmaps.iteritems():
+            for maps, sel in six.iteritems(self.subgmaps):
                 if sel:
                     layers.append(maps)
         else:
@@ -1106,7 +1108,7 @@ class GroupDialog(wx.Dialog):
         self.subgListBox.Set(maps)
 
         for i, m in enumerate(maps):
-            if m in self.subgmaps.iterkeys() and self.subgmaps[m]:
+            if m in six.iterkeys(self.subgmaps) and self.subgmaps[m]:
                 self.subgListBox.Check(i)
 
         self._checkSubGSellAll()
@@ -1397,8 +1399,8 @@ class MapLayersDialogBase(wx.Dialog):
         self._modelerDSeries()
 
         # buttons
-        btnCancel = wx.Button(parent=self, id=wx.ID_CANCEL)
-        btnOk = wx.Button(parent=self, id=wx.ID_OK)
+        btnCancel = Button(parent=self, id=wx.ID_CANCEL)
+        btnOk = Button(parent=self, id=wx.ID_OK)
         btnOk.SetDefault()
 
         # sizers & do layout
@@ -1460,7 +1462,7 @@ class MapLayersDialogBase(wx.Dialog):
         bodySizer = wx.GridBagSizer(vgap=3, hgap=3)
 
         # layer type
-        bodySizer.Add(wx.StaticText(parent=self, label=_("Map type:")),
+        bodySizer.Add(StaticText(parent=self, label=_("Map type:")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 0))
 
@@ -1482,7 +1484,7 @@ class MapLayersDialogBase(wx.Dialog):
                       pos=(0, 2))
 
         # mapset filter
-        bodySizer.Add(wx.StaticText(parent=self, label=_("Mapset:")),
+        bodySizer.Add(StaticText(parent=self, label=_("Mapset:")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(1, 0))
 
@@ -1492,7 +1494,7 @@ class MapLayersDialogBase(wx.Dialog):
                       pos=(1, 1), span=(1, 2))
 
         # map name filter
-        bodySizer.Add(wx.StaticText(parent=self, label=_("Pattern:")),
+        bodySizer.Add(StaticText(parent=self, label=_("Pattern:")),
                       flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(2, 0))
 
@@ -1514,16 +1516,16 @@ class MapLayersDialogBase(wx.Dialog):
 
         # layer list
         bodySizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 label=_("List of maps:")),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_TOP,
             pos=(
                 3,
                 0))
-        self.layers = wx.CheckListBox(parent=self, id=wx.ID_ANY,
-                                      size=(250, 100),
-                                      choices=[])
+        self.layers = CheckListBox(parent=self, id=wx.ID_ANY,
+                                   size=(250, 100),
+                                   choices=[])
         bodySizer.Add(self.layers,
                       flag=wx.EXPAND,
                       pos=(3, 1), span=(1, 2))
@@ -1574,7 +1576,7 @@ class MapLayersDialogBase(wx.Dialog):
             self.Bind(wx.EVT_MENU, self.OnDeselectAll, id=self.popupDataID3)
 
         # generate popup-menu
-        menu = wx.Menu()
+        menu = Menu()
         menu.Append(self.popupDataID1, _("Select all"))
         menu.Append(self.popupDataID2, _("Invert selection"))
         menu.Append(self.popupDataID3, _("Deselect all"))
@@ -1676,7 +1678,7 @@ class MapLayersDialog(MapLayersDialogBase):
             self, parent=parent, title=title, **kwargs)
 
     def _addApplyButton(self):
-        btnApply = wx.Button(parent=self, id=wx.ID_APPLY)
+        btnApply = Button(parent=self, id=wx.ID_APPLY)
         self.btnSizer.AddButton(btnApply)
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
 
@@ -1776,11 +1778,11 @@ class SetOpacityDialog(wx.Dialog):
 
         box.Add(self.value,
                 flag=wx.ALIGN_CENTRE, pos=(0, 0), span=(1, 2))
-        box.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                              label=_("transparent")),
+        box.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                           label=_("transparent")),
                 pos=(1, 0))
-        box.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                              label=_("opaque")),
+        box.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                           label=_("opaque")),
                 flag=wx.ALIGN_RIGHT,
                 pos=(1, 1))
 
@@ -1795,14 +1797,14 @@ class SetOpacityDialog(wx.Dialog):
         # buttons
         btnsizer = wx.StdDialogButtonSizer()
 
-        btnOK = wx.Button(parent=panel, id=wx.ID_OK)
+        btnOK = Button(parent=panel, id=wx.ID_OK)
         btnOK.SetDefault()
         btnsizer.AddButton(btnOK)
 
-        btnCancel = wx.Button(parent=panel, id=wx.ID_CANCEL)
+        btnCancel = Button(parent=panel, id=wx.ID_CANCEL)
         btnsizer.AddButton(btnCancel)
 
-        btnApply = wx.Button(parent=panel, id=wx.ID_APPLY)
+        btnApply = Button(parent=panel, id=wx.ID_APPLY)
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
         btnsizer.AddButton(btnApply)
         btnsizer.Realize()
@@ -1831,8 +1833,11 @@ def GetImageHandlers(image):
     """Get list of supported image handlers"""
     lext = list()
     ltype = list()
-    for h in image.GetHandlers():
-        lext.append(h.GetExtension())
+    try:
+        for h in image.GetHandlers():
+            lext.append(h.GetExtension())
+    except AttributeError:
+        lext = {'png', 'gif', 'jpg', 'pcx', 'pnm', 'tif', 'xpm'}
 
     filetype = ''
     if 'png' in lext:
@@ -1892,8 +1897,8 @@ class ImageSizeDialog(wx.Dialog):
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.box = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                label=' % s' % _("Image size"))
+        self.box = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                             label=' % s' % _("Image size"))
 
         size = self.parent.GetWindow().GetClientSize()
         self.width = SpinCtrl(parent=self.panel, id=wx.ID_ANY,
@@ -1915,9 +1920,9 @@ class ImageSizeDialog(wx.Dialog):
                                            "1600x1200",
                                            "1920x1440"])
 
-        self.btnOK = wx.Button(parent=self.panel, id=wx.ID_OK)
+        self.btnOK = Button(parent=self.panel, id=wx.ID_OK)
         self.btnOK.SetDefault()
-        self.btnCancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
 
         self.template.Bind(wx.EVT_CHOICE, self.OnTemplate)
 
@@ -1931,16 +1936,16 @@ class ImageSizeDialog(wx.Dialog):
         # body
         box = wx.StaticBoxSizer(self.box, wx.HORIZONTAL)
         fbox = wx.FlexGridSizer(cols=2, vgap=5, hgap=5)
-        fbox.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                               label=_("Width:")),
+        fbox.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                            label=_("Width:")),
                  flag=wx.ALIGN_CENTER_VERTICAL)
         fbox.Add(self.width)
-        fbox.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                               label=_("Height:")),
+        fbox.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                            label=_("Height:")),
                  flag=wx.ALIGN_CENTER_VERTICAL)
         fbox.Add(self.height)
-        fbox.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                               label=_("Template:")),
+        fbox.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                            label=_("Template:")),
                  flag=wx.ALIGN_CENTER_VERTICAL)
         fbox.Add(self.template)
 
@@ -1995,13 +2000,13 @@ class SqlQueryFrame(wx.Frame):
                 wx.BITMAP_TYPE_ICO))
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.sqlBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                   label=_(" SQL statement "))
-        self.sql = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY,
-                               style=wx.TE_MULTILINE)
+        self.sqlBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                label=_(" SQL statement "))
+        self.sql = TextCtrl(parent=self.panel, id=wx.ID_ANY,
+                            style=wx.TE_MULTILINE)
 
-        self.btnApply = wx.Button(parent=self.panel, id=wx.ID_APPLY)
-        self.btnCancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btnApply = Button(parent=self.panel, id=wx.ID_APPLY)
+        self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
         self.Bind(wx.EVT_BUTTON, self.OnCloseWindow, self.btnCancel)
 
         self._layout()
@@ -2076,7 +2081,7 @@ class SymbolDialog(wx.Dialog):
         self.folderChoice.Bind(wx.EVT_CHOICE, self.OnFolderSelect)
 
         fgSizer.Add(
-            wx.StaticText(
+            StaticText(
                 mainPanel,
                 id=wx.ID_ANY,
                 label=_("Symbol directory:")),
@@ -2086,9 +2091,9 @@ class SymbolDialog(wx.Dialog):
         fgSizer.Add(self.folderChoice, proportion=0,
                     flag=wx.ALIGN_CENTER, border=0)
 
-        self.infoLabel = wx.StaticText(mainPanel, id=wx.ID_ANY)
+        self.infoLabel = StaticText(mainPanel, id=wx.ID_ANY)
         fgSizer.Add(
-            wx.StaticText(
+            StaticText(
                 mainPanel,
                 id=wx.ID_ANY,
                 label=_("Symbol name:")),
@@ -2102,8 +2107,8 @@ class SymbolDialog(wx.Dialog):
             vSizer.Add(panel, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         mainSizer.Add(vSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
-        self.btnCancel = wx.Button(parent=mainPanel, id=wx.ID_CANCEL)
-        self.btnOK = wx.Button(parent=mainPanel, id=wx.ID_OK)
+        self.btnCancel = Button(parent=mainPanel, id=wx.ID_CANCEL)
+        self.btnOK = Button(parent=mainPanel, id=wx.ID_OK)
         self.btnOK.SetDefault()
         self.btnOK.Enable(False)
 
@@ -2246,10 +2251,10 @@ class TextEntryDialog(wx.Dialog):
 
         vbox = wx.BoxSizer(wx.VERTICAL)
 
-        stline = wx.StaticText(self, id=wx.ID_ANY, label=message)
+        stline = StaticText(self, id=wx.ID_ANY, label=message)
         vbox.Add(stline, proportion=0, flag=wx.EXPAND | wx.ALL, border=10)
 
-        self._textCtrl = wx.TextCtrl(
+        self._textCtrl = TextCtrl(
             self,
             id=wx.ID_ANY,
             value=defaultValue,
@@ -2296,7 +2301,7 @@ class HyperlinkDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        label = wx.StaticText(self, label=message)
+        label = StaticText(self, label=message)
         sizer.Add(
             label,
             proportion=0,
@@ -2340,15 +2345,15 @@ class QuitDialog(wx.Dialog):
                 wx.ART_QUESTION,
                 client=wx.ART_MESSAGE_BOX))
 
-        self.informLabel = wx.StaticText(
+        self.informLabel = StaticText(
             parent=self.panel, id=wx.ID_ANY, label=_(
                 "Do you want to quit GRASS including shell "
                 "prompt or just close the GUI?"))
-        self.btnCancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
-        self.btnClose = wx.Button(parent=self.panel, id=wx.ID_NO,
+        self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btnClose = Button(parent=self.panel, id=wx.ID_NO,
                                   label=_("Close GUI"))
         self.btnClose.SetFocus()
-        self.btnQuit = wx.Button(parent=self.panel, id=wx.ID_YES,
+        self.btnQuit = Button(parent=self.panel, id=wx.ID_YES,
                                  label=_("Quit GRASS GIS"))
         self.btnQuit.SetForegroundColour(wx.Colour(35, 142, 35))
 
@@ -2409,7 +2414,7 @@ class DefaultFontDialog(wx.Dialog):
         self.fontdict, fontdict_reverse, self.fontlist = self.GetFonts()
 
         border = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel,
             id=wx.ID_ANY,
             label=" %s " %
@@ -2418,8 +2423,8 @@ class DefaultFontDialog(wx.Dialog):
 
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                              label=_("Select font:"))
+        label = StaticText(parent=panel, id=wx.ID_ANY,
+                           label=_("Select font:"))
         gridSizer.Add(label,
                       flag=wx.ALIGN_TOP,
                       pos=(0, 0))
@@ -2449,14 +2454,14 @@ class DefaultFontDialog(wx.Dialog):
             self.encoding = self.settings.Get(group='display',
                                               key='font', subkey='encoding')
 
-            label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                  label=_("Character encoding:"))
+            label = StaticText(parent=panel, id=wx.ID_ANY,
+                               label=_("Character encoding:"))
             gridSizer.Add(label,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(3, 0))
 
-            self.textentry = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
-                                         value=self.encoding)
+            self.textentry = TextCtrl(parent=panel, id=wx.ID_ANY,
+                                      value=self.encoding)
             gridSizer.Add(self.textentry,
                           flag=wx.EXPAND, pos=(4, 0))
 
@@ -2467,8 +2472,8 @@ class DefaultFontDialog(wx.Dialog):
                                           key='outputfont', subkey='type')
             self.fontsize = self.settings.Get(group='appearance',
                                               key='outputfont', subkey='size')
-            label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                  label=_("Font size:"))
+            label = StaticText(parent=panel, id=wx.ID_ANY,
+                               label=_("Font size:"))
             gridSizer.Add(label,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(3, 0))
@@ -2503,11 +2508,11 @@ class DefaultFontDialog(wx.Dialog):
 
         btnsizer = wx.StdDialogButtonSizer()
 
-        btn = wx.Button(parent=panel, id=wx.ID_OK)
+        btn = Button(parent=panel, id=wx.ID_OK)
         btn.SetDefault()
         btnsizer.AddButton(btn)
 
-        btn = wx.Button(parent=panel, id=wx.ID_CANCEL)
+        btn = Button(parent=panel, id=wx.ID_CANCEL)
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 

@@ -22,11 +22,13 @@ import sys
 import wx
 import wx.aui
 import tempfile
+import six
 
 import grass.script as gcore
 import grass.temporal as tgis
 from core import globalvar
 from gui_core.widgets import IntegerValidator
+from gui_core.wrap import StaticText, TextCtrl
 from core.gcmd import RunCommand
 from core.utils import _
 
@@ -136,7 +138,7 @@ class AnimationFrame(wx.Frame):
                           Name('animPanel').CentrePane().CaptionVisible(False).PaneBorder(False).
                           Floatable(False).BestSize((-1, -1)).
                           CloseButton(False).DestroyOnClose(True).Layer(0))
-        for name, slider in self.animationSliders.iteritems():
+        for name, slider in six.iteritems(self.animationSliders):
             self._mgr.AddPane(
                 slider,
                 wx.aui.AuiPaneInfo().PaneBorder(False).Name(
@@ -328,6 +330,7 @@ class AnimationFrame(wx.Frame):
         if self.controller.timer.IsRunning():
             self.controller.timer.Stop()
         CleanUp(TMP_DIR)()
+        self._mgr.UnInit()
         self.Destroy()
 
     def __del__(self):
@@ -383,11 +386,11 @@ class AnimationSliderBase(wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
-        self.label1 = wx.StaticText(self, id=wx.ID_ANY)
+        self.label1 = StaticText(self, id=wx.ID_ANY)
         self.slider = wx.Slider(self, id=wx.ID_ANY, style=wx.SL_HORIZONTAL)
-        self.indexField = wx.TextCtrl(self, id=wx.ID_ANY, size=(40, -1),
-                                      style=wx.TE_PROCESS_ENTER | wx.TE_RIGHT,
-                                      validator=IntegerValidator())
+        self.indexField = TextCtrl(self, id=wx.ID_ANY, size=(40, -1),
+                                   style=wx.TE_PROCESS_ENTER | wx.TE_RIGHT,
+                                   validator=IntegerValidator())
 
         self.callbackSliderChanging = None
         self.callbackSliderChanged = None
@@ -512,8 +515,8 @@ class TimeAnimationSlider(AnimationSliderBase):
     def __init__(self, parent):
         AnimationSliderBase.__init__(self, parent)
         self.timeLabels = []
-        self.label2 = wx.StaticText(self, id=wx.ID_ANY)
-        self.label3 = wx.StaticText(self, id=wx.ID_ANY)
+        self.label2 = StaticText(self, id=wx.ID_ANY)
+        self.label3 = StaticText(self, id=wx.ID_ANY)
         self.label2Length = 0
         self.temporalType = TemporalType.RELATIVE
 

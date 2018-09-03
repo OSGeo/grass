@@ -35,19 +35,19 @@ import signal
 import traceback
 import locale
 import subprocess
-if sys.platform == 'win32':
+from threading import Thread
+import wx
+
+is_mswindows = sys.platform == 'win32'
+if is_mswindows:
     from win32file import ReadFile, WriteFile
     from win32pipe import PeekNamedPipe
     import msvcrt
 else:
     import select
     import fcntl
-from threading import Thread
-
-import wx
 
 from grass.script import core as grass
-
 from core import globalvar
 from core.debug import Debug
 
@@ -66,6 +66,9 @@ except IOError:
         return string
     _ = null_gettext
 
+if sys.version_info.major == 2:
+    bytes = str
+
 
 def DecodeString(string):
     """Decode string using system encoding
@@ -77,10 +80,9 @@ def DecodeString(string):
     if not string:
         return string
 
-    if _enc:
+    if _enc and isinstance(string, bytes):
         Debug.msg(5, "DecodeString(): enc=%s" % _enc)
         return string.decode(_enc)
-
     return string
 
 
@@ -93,11 +95,9 @@ def EncodeString(string):
     """
     if not string:
         return string
-
     if _enc:
         Debug.msg(5, "EncodeString(): enc=%s" % _enc)
         return string.encode(_enc)
-
     return string
 
 
@@ -174,7 +174,7 @@ class Popen(subprocess.Popen):
     """Subclass subprocess.Popen"""
 
     def __init__(self, args, **kwargs):
-        if subprocess.mswindows:
+        if is_mswindows:
             args = map(EncodeString, args)
 
             # The Windows shell (cmd.exe) requires some special characters to
@@ -230,7 +230,7 @@ class Popen(subprocess.Popen):
 
     def kill(self):
         """Try to kill running process"""
-        if subprocess.mswindows:
+        if is_mswindows:
             import win32api
             handle = win32api.OpenProcess(1, 0, self.pid)
             return (0 != win32api.TerminateProcess(handle, 0))
@@ -620,14 +620,14 @@ class CommandThread(Thread):
         if self.stdout:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stdout.fileno()
-            if not subprocess.mswindows:
+            if not is_mswindows:
                 flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
         if self.stderr:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stderr.fileno()
-            if not subprocess.mswindows:
+            if not is_mswindows:
                 flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
@@ -703,8 +703,8 @@ def RunCommand(prog, flags="", overwrite=False, quiet=False,
     :return: returncode, stdout, messages (read == True and getErrorMsg == True)
     :return: stdout, stderr
     """
-    cmdString = ' '.join(grass.make_command(prog, flags, overwrite,
-                                            quiet, verbose, **kwargs))
+    cmdString = b' '.join(grass.make_command(prog, flags, overwrite,
+                                             quiet, verbose, **kwargs))
 
     Debug.msg(1, "gcmd.RunCommand(): %s" % cmdString)
 
@@ -729,7 +729,7 @@ def RunCommand(prog, flags="", overwrite=False, quiet=False,
         ps.stdin.close()
         ps.stdin = None
 
-    stdout, stderr = map(DecodeString, ps.communicate())
+    stdout, stderr = list(map(DecodeString, ps.communicate()))
 
     if parent:  # restore previous settings
         os.environ['GRASS_MESSAGE_FORMAT'] = messageFormat

@@ -133,7 +133,8 @@ class WMSBase:
         else:
             self.proj_srs = grass.read_command('g.proj',
                                                flags='jf',
-                                               epsg=str(GetEpsg(self.params['srs']))).rstrip('\n')
+                                               epsg=str(GetEpsg(self.params['srs'])))
+        self.proj_srs = decode(self.proj_srs).rstrip('\n')
 
         self.proj_srs = self._modifyProj(self.proj_srs)
 
@@ -383,7 +384,7 @@ class WMSBase:
             self.temp_warpmap = grass.tempfile()
 
             if int(os.getenv('GRASS_VERBOSE', '2')) <= 2:
-                nuldev = file(os.devnull, 'w+')
+                nuldev = open(os.devnull, 'w+')
             else:
                 nuldev = None
 

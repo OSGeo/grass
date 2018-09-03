@@ -27,6 +27,7 @@ from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 from iclass.dialogs import IClassMapDialog, ContrastColor
 from gui_core.forms import GUI
+from gui_core.wrap import StaticText
 
 import grass.script as grass
 
@@ -154,7 +155,7 @@ class IClassToolbar(BaseToolbar):
         self.choice.Bind(wx.EVT_CHOICE, self.OnSelectCategory)
 
         # stupid workaround to insert small space between controls
-        self.InsertControl(4, wx.StaticText(self, id=wx.ID_ANY, label=' '))
+        self.InsertControl(4, StaticText(self, id=wx.ID_ANY, label=' '))
 
         self.combo = wx.ComboBox(self, id=wx.ID_ANY, size=(130, -1),
                                  style=wx.TE_PROCESS_ENTER)

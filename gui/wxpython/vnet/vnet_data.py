@@ -24,6 +24,7 @@ This program is free software under the GNU General Public License
 """
 import os
 import types
+import six
 from copy import deepcopy
 
 from grass.script.utils import try_remove
@@ -177,11 +178,13 @@ class VNETData:
             return False
 
         errLayerStr = ""
-        for layer, layerLabel in {
+        vals = {
                 'arc_layer': _("arc layer"),
                 'node_layer': _("node layer"),
                 'turn_layer': _("turntable layer"),
-                'turn_cat_layer': _("unique categories layer")}.iteritems():
+                'turn_cat_layer': _("unique categories layer")
+                }
+        for layer, layerLabel in six.iteritems(vals):
 
             if layer in ["turn_layer", "turn_cat_layer"] and not flags["t"]:
                 continue
@@ -327,7 +330,7 @@ class VNETPointsData:
                 "pts_data": pts_data})
 
     def SetPointData(self, pt_id, data):
-        for col, v in data.iteritems():
+        for col, v in six.iteritems(data):
             if col == 'use':
                 continue
 
@@ -402,7 +405,7 @@ class VNETPointsData:
         textProp = self.pointsToDraw.GetPropertyVal("text")
         textProp["font"].SetPointSize(ptSize + 2)
 
-        for colKey, col in colors.iteritems():
+        for colKey, col in six.iteritems(colors):
             pen = self.pointsToDraw.GetPen(colKey)
             if pen:
                 pen.SetColour(wx.Colour(col[0], col[1], col[2], 255))
@@ -419,7 +422,7 @@ class VNETPointsData:
                         width=ptWidth))
 
     def ParametersChanged(self, method, kwargs):
-        if "analysis" in kwargs["changed_params"].keys():
+        if "analysis" in list(kwargs["changed_params"].keys()):
             self._updateTypeCol()
 
             if self.an_params.GetParam("analysis")[0] == "v.net.path":
@@ -441,7 +444,7 @@ class VNETPointsData:
 
         pt_list_data = [None] * len(self.cols['name'])
 
-        for k, val in pt_data.iteritems():
+        for k, val in six.iteritems(pt_data):
             pt_list_data[self.cols["name"].index(k)] = val
 
         return pt_list_data
@@ -599,7 +602,7 @@ class VNETPointsData:
         i_red = 0
         hidden_cols.sort()
         for idx in hidden_cols:
-            for dt in cols_data.itervalues():
+            for dt in six.itervalues(cols_data):
                 dt.pop(idx - i_red)
             i_red += 1
 
@@ -632,7 +635,7 @@ class VNETAnalysisParameters:
     def SetParams(self, params, flags):
 
         changed_params = {}
-        for p, v in params.iteritems():
+        for p, v in six.iteritems(params):
             if p == "analysis" and v not in self.an_props.used_an:
                 continue
 
@@ -648,7 +651,7 @@ class VNETAnalysisParameters:
                 changed_params[p] = v
 
         changed_flags = {}
-        for p, v in flags.iteritems():
+        for p, v in six.iteritems(flags):
             if p in self.flags:
                 self.flags[p] = v
                 changed_flags[p] = v
@@ -721,7 +724,7 @@ class VNETAnalysisParameters:
                 except (KeyError, ValueError):
                     table = None
 
-            if not table or not params[col] in columnchoices.keys():
+            if not table or not params[col] in list(columnchoices.keys()):
                 invParams.append(col)
                 continue
 
@@ -893,7 +896,7 @@ class VNETAnalysesProperties:
                         #"v.net.steiner"
                         ]
 
-        for an in self.vnetProperties.keys():
+        for an in list(self.vnetProperties.keys()):
             if an not in self.used_an:
                 del self.vnetProperties[an]
                 continue
@@ -922,7 +925,7 @@ class VNETAnalysesProperties:
 
         cols = self.vnetProperties[analysis]["cmdParams"]["cols"]
 
-        for col, v in cols.iteritems():
+        for col, v in six.iteritems(cols):
             if "inputField" in col:
                 colInptF = v["inputField"]
             else:
@@ -1282,8 +1285,8 @@ class History:
     def _saveNewHistStep(self, newHist):
         """Save buffer (new step) data into file"""
         newHist.write('%s%s%s' % (os.linesep, "history step=0", os.linesep))
-        for key in self.newHistStepData.keys():
-            subkeys = self.newHistStepData[key].keys()
+        for key in list(self.newHistStepData.keys()):
+            subkeys = list(self.newHistStepData[key].keys())
             newHist.write('%s%s' % (key, self.sep))
             for idx in range(len(subkeys)):
                 value = self.newHistStepData[key][subkeys[idx]]
@@ -1291,7 +1294,7 @@ class History:
                     if idx > 0:
                         newHist.write('%s%s%s' % (os.linesep, key, self.sep))
                     newHist.write('%s%s' % (subkeys[idx], self.sep))
-                    kvalues = self.newHistStepData[key][subkeys[idx]].keys()
+                    kvalues = list(self.newHistStepData[key][subkeys[idx]].keys())
                     srange = range(len(kvalues))
                     for sidx in srange:
                         svalue = self._parseValue(

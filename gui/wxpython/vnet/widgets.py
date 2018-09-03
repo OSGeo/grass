@@ -19,14 +19,20 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import wx
+import sys
+import six
 from copy import copy, deepcopy
 
 import wx
-from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, ListCtrlAutoWidthMixin, TextEditMixin
+from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, \
+    ListCtrlAutoWidthMixin, TextEditMixin
 
 from core import globalvar
 from core.utils import _
+from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl
+
+if sys.version_info.major >= 3:
+    basestring = str
 
 
 class PointsList(wx.ListCtrl,
@@ -170,7 +176,7 @@ class PointsList(wx.ListCtrl,
 
         self.selIdxs.append(itemIndexes)
 
-        for hCol in self.hiddenCols.itervalues():
+        for hCol in six.itervalues(self.hiddenCols):
             defVal = hCol['colsData'][iDefVal]
             if type(hCol['colsData'][iColEd]).__name__ == "list":
                 hCol['itemDataMap'].append(hCol['colsData'][iColEd][defVal])
@@ -184,7 +190,7 @@ class PointsList(wx.ListCtrl,
         itemData[0] = self.selectedkey + 1
         self.itemDataMap.append(copy(itemData))
 
-        self.Append(map(str, itemData))
+        self.Append(list(map(str, itemData)))
 
         self.selected = self.GetItemCount() - 1
         self.SetItemData(self.selected, self.selectedkey)
@@ -287,7 +293,7 @@ class PointsList(wx.ListCtrl,
         self.selIdxs.pop(key)
 
         # update hidden columns
-        for hCol in self.hiddenCols.itervalues():
+        for hCol in six.itervalues(self.hiddenCols):
             hCol['itemDataMap'].pop(key)
             hCol['selIdxs'].pop(key)
 
@@ -552,8 +558,8 @@ class EditItem(wx.Dialog):
         panel = wx.Panel(parent=self)
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s %s " % (_(itemCap), str(pointNo + 1)))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s %s " % (_(itemCap), str(pointNo + 1)))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         # source coordinates
@@ -584,18 +590,18 @@ class EditItem(wx.Dialog):
 
                 if validator:
                     self.fields.append(
-                        wx.TextCtrl(
+                        TextCtrl(
                             parent=panel, id=wx.ID_ANY, validator=validator,
                             size=(150, -1)))
                 else:
-                    self.fields.append(wx.TextCtrl(parent=panel, id=wx.ID_ANY,
-                                                   size=(150, -1)))
+                    self.fields.append(TextCtrl(parent=panel, id=wx.ID_ANY,
+                                                size=(150, -1)))
                     value = cell[1]
                     if not isinstance(cell[1], basestring):
                         value = str(cell[1])
                     self.fields[iField].SetValue(value)
 
-            label = wx.StaticText(
+            label = StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_(
@@ -629,8 +635,8 @@ class EditItem(wx.Dialog):
         #
         # buttons
         #
-        self.btnCancel = wx.Button(panel, wx.ID_CANCEL)
-        self.btnOk = wx.Button(panel, wx.ID_OK)
+        self.btnCancel = Button(panel, wx.ID_CANCEL)
+        self.btnOk = Button(panel, wx.ID_OK)
         self.btnOk.SetDefault()
 
         btnSizer = wx.StdDialogButtonSizer()

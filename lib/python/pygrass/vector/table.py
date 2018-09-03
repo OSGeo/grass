@@ -30,8 +30,10 @@ from grass.pygrass.errors import DBError
 from grass.pygrass.utils import table_exist
 from grass.script.db import db_table_in_vector
 from grass.script.core import warning
+from grass.script.utils import decode
 
 from grass.pygrass.vector import sql
+from grass.lib.ctypes_preamble import String
 
 # For test purposes
 test_vector_name = "table_doctest_map"
@@ -70,6 +72,8 @@ def get_path(path, vect_name=None):
         path = path.replace('$LOCATION_NAME', mapset.location)
         path = path.replace('$MAPSET', mapset.name)
         if vect_name is not None:
+            if isinstance(vect_name, String):
+                vect_name = vect_name.data
             path = path.replace('$MAP', vect_name)
         return path
 
@@ -638,7 +642,7 @@ class Link(object):
         return self.c_fieldinfo.contents.name
 
     def _set_name(self, name):
-        self.c_fieldinfo.contents.name = name
+        self.c_fieldinfo.contents.name = String(name)
 
     name = property(fget=_get_name, fset=_set_name,
                     doc="Set and obtain name vale")
@@ -647,7 +651,7 @@ class Link(object):
         return self.c_fieldinfo.contents.table
 
     def _set_table(self, new_name):
-        self.c_fieldinfo.contents.table = new_name
+        self.c_fieldinfo.contents.table = String(new_name)
 
     table_name = property(fget=_get_table, fset=_set_table,
                           doc="Set and obtain table name value")
@@ -656,7 +660,7 @@ class Link(object):
         return self.c_fieldinfo.contents.key
 
     def _set_key(self, key):
-        self.c_fieldinfo.contents.key = key
+        self.c_fieldinfo.contents.key = String(key)
 
     key = property(fget=_get_key, fset=_set_key,
                    doc="Set and obtain cat value")
@@ -665,7 +669,7 @@ class Link(object):
         return self.c_fieldinfo.contents.database
 
     def _set_database(self, database):
-        self.c_fieldinfo.contents.database = database
+        self.c_fieldinfo.contents.database = String(database)
 
     database = property(fget=_get_database, fset=_set_database,
                         doc="Set and obtain database value")
@@ -677,7 +681,7 @@ class Link(object):
         if driver not in ('sqlite', 'pg'):
             str_err = "Driver not supported, use: %s." % ", ".join(DRIVERS)
             raise TypeError(str_err)
-        self.c_fieldinfo.contents.driver = driver
+        self.c_fieldinfo.contents.driver = String(driver)
 
     driver = property(fget=_get_driver, fset=_set_driver,
                       doc="Set and obtain driver value. The drivers supported \
@@ -746,7 +750,10 @@ class Link(object):
         >>> conn.close()
 
         """
-        if self.driver == 'sqlite':
+        driver = self.driver
+        if isinstance(driver, String):
+            driver = decode(driver.data)
+        if driver == 'sqlite':
             import sqlite3
             # Numpy is using some custom integer data types to efficiently
             # pack data into memory. Since these types aren't familiar to
@@ -756,10 +763,14 @@ class Link(object):
                 sqlite3.register_adapter(t, long)
             dbpath = get_path(self.database, self.table_name)
             dbdirpath = os.path.split(dbpath)[0]
+            if isinstance(dbpath, String):
+                dbpath = dbpath.data
+            if isinstance(dbdirpath, String):
+                dbdirpath = dbdirpath.data
             if not os.path.exists(dbdirpath):
                 os.mkdir(dbdirpath)
             return sqlite3.connect(dbpath)
-        elif self.driver == 'pg':
+        elif driver == 'pg':
             try:
                 import psycopg2
                 psycopg2.paramstyle = 'qmark'

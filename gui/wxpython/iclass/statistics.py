@@ -18,6 +18,7 @@ for details.
 """
 
 import os
+import six
 from ctypes import *
 
 import grass.script as grass
@@ -176,7 +177,7 @@ class Statistics:
 
     def SetStatistics(self, stats):
 
-        for st, val in stats.iteritems():
+        for st, val in six.iteritems(stats):
             setattr(self, st, val)
 
         self.statisticsSet.emit(stats=stats)

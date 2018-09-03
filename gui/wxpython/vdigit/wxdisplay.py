@@ -20,12 +20,14 @@ This program is free software under the GNU General Public License
 from __future__ import print_function
 
 import locale
+import six
 
 import wx
 
 from core.debug import Debug
 from core.settings import UserSettings
 from core.utils import _
+from gui_core.wrap import Rect
 
 try:
     from grass.lib.gis import *
@@ -336,7 +338,7 @@ class DisplayDriver:
                     pdc.SetPen(pen)
                     pdc.SetIdBounds(
                         dcId - 1,
-                        wx.Rect(
+                        Rect(
                             point_beg.x,
                             point_beg.y,
                             0,
@@ -348,7 +350,7 @@ class DisplayDriver:
                     dcId += 2
                 pdc.SetIdBounds(
                     dcId - 1,
-                    wx.Rect(
+                    Rect(
                         robj.point[
                             robj.npoints - 1].x,
                         robj.point[
@@ -891,7 +893,7 @@ class DisplayDriver:
                 points.x[idx],
                 points.y[idx],
                 points.z[idx])
-            rect = wx.Rect(vx, vy, 0, 0)
+            rect = Rect(vx, vy, 0, 0)
             self.dc.SetIdBounds(DCid, rect)
             DCid += 2
 
@@ -1176,7 +1178,7 @@ class DisplayDriver:
             catsDict[layer].append(cats.cat[i])
 
         catsStr = ''
-        for l, c in catsDict.iteritems():
+        for l, c in six.iteritems(catsDict):
             catsStr = '%d: (%s)' % (l, ','.join(map(str, c)))
 
         return catsStr

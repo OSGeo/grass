@@ -72,6 +72,7 @@ import sys
 import os
 import atexit
 import grass.script as grass
+from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 
 # i18N
@@ -96,7 +97,7 @@ def main():
     # we need a random name
     tmpname = grass.basename(tmp)
 
-    nuldev = file(os.devnull, 'w')
+    nuldev = open(os.devnull, 'w')
 
     raster = options['raster']
     colprefix = options['column_prefix']
@@ -161,6 +162,7 @@ def main():
     cats = []
 
     for line in p.stdout:
+        line = decode(line)
         cats.append(line.rstrip('\r\n').split(';')[0])
     p.wait()
 
@@ -247,7 +249,7 @@ def main():
     # get rid of any earlier attempts
     grass.try_remove(sqltmp)
 
-    f = file(sqltmp, 'w')
+    f = open(sqltmp, 'w')
 
     # do the stats
     p = grass.pipe_command('r.univar', flags='t' + extstat, map=raster,
@@ -261,7 +263,7 @@ def main():
             first_line = 0
             continue
 
-        vars = line.rstrip('\r\n').split(';')
+        vars = decode(line).rstrip('\r\n').split(';')
 
         f.write("UPDATE %s SET" % fi['table'])
         first_var = 1

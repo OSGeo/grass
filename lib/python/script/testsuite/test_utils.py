@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -39,25 +40,35 @@ class TestEncode(TestCase):
     def test_unicode(self):
         self.assertEqual(b'text', utils.encode(u'text'))
 
-    def test_bytes_grabage_in_out(self):
+    def test_bytes_garbage_in_out(self):
         """If the input is bytes we should not touch it for encoding"""
-        self.assertEqual(b'Příšerný kůň', utils.encode(b'Příšerný kůň'))
+        self.assertEqual(b'P\xc5\x99\xc3\xad\xc5\xa1ern\xc3\xbd k\xc5\xaf\xc5\x88',
+                         utils.encode('Příšerný kůň'))
 
     def test_int(self):
         """If the input is an integer return bytes"""
-        self.assertEqual(b'1234567890', utils.encode(1234567890))
+        if sys.version_info.major >= 3:
+            self.assertRaises(TypeError, utils.encode, 1234567890)
+        else:
+            self.assertEqual('1234567890', utils.encode(1234567890))
 
     def test_float(self):
         """If the input is a float return bytes"""
-        self.assertEqual(b'12345.6789', utils.encode(12345.6789))
+        if sys.version_info.major >= 3:
+            self.assertRaises(TypeError, utils.encode, 12345.6789)
+        else:
+            self.assertEqual('12345.6789', utils.encode(12345.6789))
 
     def test_none(self):
         """If the input is a boolean return bytes"""
-        self.assertEqual(b'None', utils.encode(None))
+        if sys.version_info.major >= 3:
+            self.assertRaises(TypeError, utils.encode, None)
+        else:
+            self.assertEqual('None', utils.encode(None))
 
 
 class TestDecode(TestCase):
-    """Tests function `encode` that convert value to unicode."""
+    """Tests function `decode` that converts value to unicode."""
 
     def test_bytes(self):
         self.assertEqual(u'text', utils.decode(b'text'))
@@ -67,15 +78,24 @@ class TestDecode(TestCase):
 
     def test_int(self):
         """If the input is an integer return bytes"""
-        self.assertEqual(u'1234567890', utils.decode(1234567890))
+        if sys.version_info.major >= 3:
+            self.assertRaises(TypeError, utils.decode, 1234567890)
+        else:
+            self.assertEqual(u'1234567890', utils.decode(1234567890))
 
     def test_float(self):
         """If the input is a float return bytes"""
-        self.assertEqual(u'12345.6789', utils.decode(12345.6789))
+        if sys.version_info.major >= 3:
+            self.assertRaises(TypeError, utils.decode, 12345.6789)
+        else:
+            self.assertEqual(u'12345.6789', utils.decode(12345.6789))
 
     def test_none(self):
         """If the input is a boolean return bytes"""
-        self.assertEqual(u'None', utils.decode(None))
+        if sys.version_info.major >= 3:
+            self.assertRaises(TypeError, utils.decode, None)
+        else:
+            self.assertEqual(u'None', utils.decode(None))
 
 
 class TestEncodeLcAllC(TestEncode, LcAllC):

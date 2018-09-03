@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 import sys
 import copy
 import time
+import six
 
 import wx
 from wx.lib.newevent import NewEvent
@@ -213,7 +214,7 @@ class RenderWMSMgr(wx.EvtHandler):
         """Create string for GRASS_REGION env variable from  dict created by _getRegionDict.
         """
         regionStr = ''
-        for k, v in region.iteritems():
+        for k, v in six.iteritems(region):
             item = k + ': ' + str(v)
             if regionStr:
                 regionStr += '; '
@@ -356,7 +357,7 @@ class GDALRasterMerger:
         if sXsize < 1 or sYsize < 1:
             return
 
-        for sBandNnum, tBandNum in sTBands.iteritems():
+        for sBandNnum, tBandNum in six.iteritems(sTBands):
             bandData = sDataset.GetRasterBand(sBandNnum).ReadRaster(
                 sXoff, sYoff, sXsize, sYsize, tXsize, tYsize, gdal.GDT_Byte)
             self.tDataset.GetRasterBand(tBandNum).WriteRaster(

@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 
 import wx
 import tempfile
+import six
 
 from grass.pydispatch.signal import Signal
 
@@ -277,9 +278,9 @@ class VDigitWindow(BufferedMapWindow):
         dbInfo = gselect.VectorDBInfo(vectorName)
         sqlfile = tempfile.NamedTemporaryFile(mode="w")
         for fid in fids:
-            for layer, cats in self.digit.GetLineCats(fid).iteritems():
+            for layer, cats in six.iteritems(self.digit.GetLineCats(fid)):
                 table = dbInfo.GetTable(layer)
-                for attrb, item in vdigit['geomAttr'].iteritems():
+                for attrb, item in six.iteritems(vdigit['geomAttr']):
                     val = -1
                     if attrb == 'length':
                         val = self.digit.GetLineLength(fid)

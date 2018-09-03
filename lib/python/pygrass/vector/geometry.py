@@ -721,7 +721,8 @@ class Line(Geo):
                                           pnt.c_points.contents.x,
                                           pnt.c_points.contents.y,
                                           pnt.c_points.contents.z,
-                                          angle, slope):
+                                          ctypes.c_double(angle),
+                                          ctypes.c_double(slope)):
             raise ValueError("Vect_point_on_line give an error.")
         pnt.is2D = self.is2D
         return pnt

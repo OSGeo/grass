@@ -165,7 +165,7 @@ def main():
     for i, band in enumerate(inputs):
         band_num = i + 1
         bands['in' + str(band_num) + 'band'] = band
-    grass.debug(1, bands)
+    grass.debug(bands, 1)
 
     # core tasseled cap components computation
     calcN(output_basename, bands, satellite)

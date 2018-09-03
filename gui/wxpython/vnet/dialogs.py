@@ -27,6 +27,10 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import types
+import six
+
+if sys.version_info.major >= 3:
+    unicode = str
 
 from copy import copy
 from grass.script import core as grass
@@ -52,7 +56,8 @@ from dbmgr.vinfo import VectorDBInfo
 from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
 from gui_core.gselect import Select, LayerSelect, ColumnSelect
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, BitmapButton, StaticText, \
+    StaticBox, TextCtrl
 
 from vnet.widgets import PointsList
 from vnet.toolbars import MainToolbar, PointListToolbar, AnalysisToolbar
@@ -227,11 +232,11 @@ class VNETDialog(wx.Dialog):
         maxDistPanel = wx.Panel(parent=anSettingsPanel)
         maxValue = 1e8
 
-        listBox = wx.StaticBox(parent=pointsPanel, id=wx.ID_ANY,
-                               label=" %s " % _("Points for analysis:"))
+        listBox = StaticBox(parent=pointsPanel, id=wx.ID_ANY,
+                            label=" %s " % _("Points for analysis:"))
         listSizer = wx.StaticBoxSizer(listBox, wx.VERTICAL)
-        anSettingsBox = wx.StaticBox(parent=anSettingsPanel, id=wx.ID_ANY,
-                                     label=" %s " % _("Analysis settings:"))
+        anSettingsBox = StaticBox(parent=anSettingsPanel, id=wx.ID_ANY,
+                                  label=" %s " % _("Analysis settings:"))
         anSettingsSizer = wx.StaticBoxSizer(anSettingsBox, wx.VERTICAL)
 
         self.notebook.AddPage(page=pointsPanel,
@@ -246,7 +251,7 @@ class VNETDialog(wx.Dialog):
             dialog=self,
             vnet_mgr=self.vnet_mgr)
 
-        maxDistLabel = wx.StaticText(
+        maxDistLabel = StaticText(
             parent=maxDistPanel, id=wx.ID_ANY,
             label=_("Maximum distance of point to the network:"))
         self.anSettings["max_dist"] = SpinCtrl(
@@ -262,11 +267,11 @@ class VNETDialog(wx.Dialog):
         #self.anSettings["show_cut"].Bind(wx.EVT_CHECKBOX, self.OnShowCut)
 
         isoLinesPanel = wx.Panel(parent=anSettingsPanel)
-        isoLineslabel = wx.StaticText(
+        isoLineslabel = StaticText(
             parent=isoLinesPanel,
             id=wx.ID_ANY,
             label=_("Iso lines:"))
-        self.anSettings["iso_lines"] = wx.TextCtrl(
+        self.anSettings["iso_lines"] = TextCtrl(
             parent=isoLinesPanel, id=wx.ID_ANY)
         self.anSettings["iso_lines"].Bind(
             wx.EVT_TEXT, lambda event: self.IsoLines())
@@ -379,9 +384,9 @@ class VNETDialog(wx.Dialog):
         # self.useTurns = wx.CheckBox(parent = dataPanel, id=wx.ID_ANY,
         #                            label = _('Use turns'))
 
-        box = wx.StaticBox(dataPanel, -1, "Vector map and layers for analysis")
+        box = StaticBox(dataPanel, -1, "Vector map and layers for analysis")
         bsizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        box2 = wx.StaticBox(dataPanel, -1, "Costs")
+        box2 = StaticBox(dataPanel, -1, "Costs")
         bsizer2 = wx.StaticBoxSizer(box2, wx.VERTICAL)
         selPanels = {}
 
@@ -400,10 +405,10 @@ class VNETDialog(wx.Dialog):
                         "layer-vector-add.png"))
                 icon.Rescale(18, 18)
                 icon = wx.BitmapFromImage(icon)
-                self.addToTreeBtn = wx.BitmapButton(
+                self.addToTreeBtn = BitmapButton(
                     parent=selPanels[dataSel[0]],
                     bitmap=icon, size=globalvar.DIALOG_COLOR_SIZE)
-                self.addToTreeBtn.SetToolTipString(
+                self.addToTreeBtn.SetToolTip(
                     _("Add vector map into layer tree"))
                 self.addToTreeBtn.Disable()
                 self.addToTreeBtn.Bind(wx.EVT_BUTTON, self.OnToTreeBtn)
@@ -415,8 +420,8 @@ class VNETDialog(wx.Dialog):
 
                 self.inputData[dataSel[0]] = dataSel[2](
                     parent=selPanels[dataSel[0]], size=(-1, -1))
-            label[dataSel[0]] = wx.StaticText(parent=selPanels[dataSel[0]],
-                                              name=dataSel[0])
+            label[dataSel[0]] = StaticText(parent=selPanels[dataSel[0]],
+                                           name=dataSel[0])
             label[dataSel[0]].SetLabel(dataSel[1])
 
         self.inputData['input'].Bind(wx.EVT_TEXT, self.OnVectSel)
@@ -797,7 +802,7 @@ class VNETDialog(wx.Dialog):
 
     def _setInputData(self):
         params = {}
-        for k, v in self.inputData.iteritems():
+        for k, v in six.iteritems(self.inputData):
             params[k] = v.GetValue()
         flags = {}
         self.vnet_mgr.SetParams(params, flags)
@@ -974,7 +979,7 @@ class VNETDialog(wx.Dialog):
         used_cols = []
         attrCols = an_props["cmdParams"]["cols"]
 
-        for col in attrCols.iterkeys():
+        for col in six.iterkeys(attrCols):
 
             if "inputField" in attrCols[col]:
                 colInptF = attrCols[col]["inputField"]
@@ -1154,7 +1159,7 @@ class PtsList(PointsList):
     def SetData(self, key, data):
 
         idx = self._findIndex(key)
-        for k, v in data.iteritems():
+        for k, v in six.iteritems(data):
             if k == "use":
 
                 if v and not self.IsChecked(idx):
@@ -1206,14 +1211,14 @@ class SettingsDialog(wx.Dialog):
         self.settings = {}
 
         # create all staticboxes before creating widgets, needed for Mac
-        otherBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                label=" %s " % _("Other settings"))
+        otherBox = StaticBox(parent=self, id=wx.ID_ANY,
+                             label=" %s " % _("Other settings"))
         otherBoxSizer = wx.StaticBoxSizer(otherBox, wx.VERTICAL)
-        ptsStyleBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                   label=" %s " % _("Point style:"))
+        ptsStyleBox = StaticBox(parent=self, id=wx.ID_ANY,
+                                label=" %s " % _("Point style:"))
         ptsStyleBoxSizer = wx.StaticBoxSizer(ptsStyleBox, wx.VERTICAL)
-        styleBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                label=" %s " % _("Analysis result style:"))
+        styleBox = StaticBox(parent=self, id=wx.ID_ANY,
+                             label=" %s " % _("Analysis result style:"))
         styleBoxSizer = wx.StaticBoxSizer(styleBox, wx.VERTICAL)
 
         rules = RunCommand('v.colors',
@@ -1222,7 +1227,7 @@ class SettingsDialog(wx.Dialog):
 
         settsLabels = {}
 
-        settsLabels['color_table'] = wx.StaticText(
+        settsLabels['color_table'] = StaticText(
             parent=self,
             id=wx.ID_ANY,
             label=_('Color table style %s:') %
@@ -1267,8 +1272,8 @@ class SettingsDialog(wx.Dialog):
                 "point_colors",
                 _("Color for selected point:")]}
 
-        for settKey, sett in self.colorsSetts.iteritems():
-            settsLabels[settKey] = wx.StaticText(
+        for settKey, sett in six.iteritems(self.colorsSetts):
+            settsLabels[settKey] = StaticText(
                 parent=self, id=wx.ID_ANY, label=sett[1])
             col = UserSettings.Get(group='vnet', key=sett[0], subkey=settKey)
             self.settings[settKey] = csel.ColourSelect(
@@ -1283,8 +1288,8 @@ class SettingsDialog(wx.Dialog):
             "max_hist_steps": ["other", _("Maximum number of results in history:")]
         }
 
-        for settKey, sett in self.sizeSetts.iteritems():
-            settsLabels[settKey] = wx.StaticText(
+        for settKey, sett in six.iteritems(self.sizeSetts):
+            settsLabels[settKey] = StaticText(
                 parent=self, id=wx.ID_ANY, label=sett[1])
             self.settings[settKey] = SpinCtrl(
                 parent=self, id=wx.ID_ANY, min=1, max=50)
@@ -1296,20 +1301,20 @@ class SettingsDialog(wx.Dialog):
             self.settings[settKey].SetValue(size)
 
         # buttons
-        self.btnSave = wx.Button(self, wx.ID_SAVE)
-        self.btnApply = wx.Button(self, wx.ID_APPLY)
-        self.btnClose = wx.Button(self, wx.ID_CLOSE)
+        self.btnSave = Button(self, wx.ID_SAVE)
+        self.btnApply = Button(self, wx.ID_APPLY)
+        self.btnClose = Button(self, wx.ID_CLOSE)
         self.btnApply.SetDefault()
 
         # bindings
         self.btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
-        self.btnApply.SetToolTipString(
+        self.btnApply.SetToolTip(
             _("Apply changes for the current session"))
         self.btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
-        self.btnSave.SetToolTipString(
+        self.btnSave.SetToolTip(
             _("Apply and save changes to user settings file (default for next sessions)"))
         self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
-        self.btnClose.SetToolTipString(_("Close dialog"))
+        self.btnClose.SetToolTip(_("Close dialog"))
 
         # Layout
 
@@ -1443,14 +1448,14 @@ class SettingsDialog(wx.Dialog):
         UserSettings.Set(group='vnet', key="res_style", subkey='line_width',
                          value=self.settings["line_width"].GetValue())
 
-        for settKey, sett in self.colorsSetts.iteritems():
+        for settKey, sett in six.iteritems(self.colorsSetts):
             col = tuple(self.settings[settKey].GetColour())
             UserSettings.Set(group='vnet',
                              key=sett[0],
                              subkey=settKey,
                              value=col)
 
-        for settKey, sett in self.sizeSetts.iteritems():
+        for settKey, sett in six.iteritems(self.sizeSetts):
             UserSettings.Set(group='vnet', key=sett[0], subkey=settKey,
                              value=self.settings[settKey].GetValue())
 
@@ -1483,7 +1488,7 @@ class CreateTtbDialog(wx.Dialog):
         """Create turntable dialog."""
         wx.Dialog.__init__(self, parent, id, title=_(title), style=style)
 
-        box = wx.StaticBox(self, -1, "Vector map and layers for analysis")
+        box = StaticBox(self, -1, "Vector map and layers for analysis")
         bsizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         label = {}
         dataSelects = [
@@ -1510,15 +1515,15 @@ class CreateTtbDialog(wx.Dialog):
                 self.inputData[dataSel[0]] = dataSel[2](
                     parent=selPanels[dataSel[0]], size=(-1, -1))
 
-            label[dataSel[0]] = wx.StaticText(parent=selPanels[dataSel[0]],
-                                              name=dataSel[0])
+            label[dataSel[0]] = StaticText(parent=selPanels[dataSel[0]],
+                                           name=dataSel[0])
             label[dataSel[0]].SetLabel(dataSel[1])
 
         self.inputData['input'].Bind(wx.EVT_TEXT, lambda event: self.InputSel)
 
         # buttons
-        self.btnCancel = wx.Button(self, wx.ID_CANCEL)
-        self.btnOk = wx.Button(self, wx.ID_OK)
+        self.btnCancel = Button(self, wx.ID_CANCEL)
+        self.btnOk = Button(self, wx.ID_OK)
         self.btnOk.SetDefault()
 
         # Layout
@@ -1537,7 +1542,7 @@ class CreateTtbDialog(wx.Dialog):
             bsizer.Add(selPanels[sel], proportion=0,
                        flag=wx.EXPAND)
 
-        for k, v in init_data.iteritems():
+        for k, v in six.iteritems(init_data):
             if k in self.inputData:
                 self.inputData[k].SetValue(v)
 
@@ -1615,7 +1620,7 @@ class CreateTtbDialog(wx.Dialog):
     def GetData(self):
 
         params = {}
-        for param, sel in self.inputData.iteritems():
+        for param, sel in six.iteritems(self.inputData):
             params[param] = sel.GetValue()
 
         return params
@@ -1629,8 +1634,8 @@ class OutputVectorDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, id, title=_(title), style=style)
 
         self.panel = wx.Panel(parent=self)
-        box = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                           label="Vector map")
+        box = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                        label="Vector map")
 
         self.boxSizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
 
@@ -1639,12 +1644,12 @@ class OutputVectorDialog(wx.Dialog):
             parent=self.panel, type='vector',
             mapsets=[grass.gisenv()['MAPSET']],
             size=(-1, -1))
-        self.vectSellabel = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                          label=_("Name:"))
+        self.vectSellabel = StaticText(parent=self.panel, id=wx.ID_ANY,
+                                       label=_("Name:"))
 
         # buttons
-        self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
-        self.btnOk = wx.Button(self.panel, wx.ID_OK)
+        self.btnCancel = Button(self.panel, wx.ID_CANCEL)
+        self.btnOk = Button(self.panel, wx.ID_OK)
         self.btnOk.SetDefault()
 
         self.SetInitialSize((400, -1))
@@ -1791,9 +1796,9 @@ class DefGlobalTurnsDialog(wx.Dialog):
 
         self.angle_list = TurnAnglesList(parent=self, data=self.data)
 
-        self.btnAdd = wx.Button(parent=self, id=wx.ID_ANY, label="Add")
-        self.btnRemove = wx.Button(parent=self, id=wx.ID_ANY, label="Remove")
-        self.btnClose = wx.Button(parent=self, id=wx.ID_CLOSE)
+        self.btnAdd = Button(parent=self, id=wx.ID_ANY, label="Add")
+        self.btnRemove = Button(parent=self, id=wx.ID_ANY, label="Remove")
+        self.btnClose = Button(parent=self, id=wx.ID_CLOSE)
         self.useUTurns = wx.CheckBox(
             parent=self, id=wx.ID_ANY, label="Use U-turns")
 

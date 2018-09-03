@@ -33,6 +33,8 @@ from gui_core.dialogs import SimpleDialog, GroupDialog
 from gui_core import gselect
 from gui_core.widgets import SimpleValidator
 from iclass.statistics import Statistics, BandStatistics
+from gui_core.wrap import CheckBox, Button, StaticText, \
+    StaticBox, TextCtrl, Menu
 
 import grass.script as grass
 
@@ -74,7 +76,7 @@ class IClassGroupDialog(SimpleDialog):
         if subgroup:
             self.subGroupSelect.SetValue(subgroup)
 
-        self.editGroup = wx.Button(parent=self.panel, id=wx.ID_ANY,
+        self.editGroup = Button(parent=self.panel, id=wx.ID_ANY,
                                    label=_("Create/edit group..."))
 
         self.editGroup.Bind(wx.EVT_BUTTON, self.OnEditGroup)
@@ -88,8 +90,8 @@ class IClassGroupDialog(SimpleDialog):
 
     def _layout(self):
         """Do layout"""
-        self.dataSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
-                                         label=_("Name of imagery group:")),
+        self.dataSizer.Add(StaticText(self.panel, id=wx.ID_ANY,
+                                      label=_("Name of imagery group:")),
                            proportion=0,
                            flag=wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT,
                            border=5)
@@ -101,7 +103,7 @@ class IClassGroupDialog(SimpleDialog):
         # flag = wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border = 5)
 
         self.dataSizer.Add(
-            wx.StaticText(
+            StaticText(
                 self.panel,
                 id=wx.ID_ANY,
                 label=_("Name of imagery subgroup:")),
@@ -257,8 +259,8 @@ class IClassMapDialog(SimpleDialog):
             label = _("Name of raster map:")
         elif self.elementType == 'vector':
             label = _("Name of vector map:")
-        self.dataSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
-                                         label=label),
+        self.dataSizer.Add(StaticText(self.panel, id=wx.ID_ANY,
+                                      label=label),
                            proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
         self.dataSizer.Add(self.element, proportion=0,
                            flag=wx.EXPAND | wx.ALL, border=5)
@@ -291,14 +293,14 @@ class IClassCategoryManagerDialog(wx.Dialog):
         panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox(panel, id=wx.ID_ANY,
-                           label=" %s " % _("Classes"))
+        box = StaticBox(panel, id=wx.ID_ANY,
+                        label=" %s " % _("Classes"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
         self.catList = CategoryListCtrl(panel, mapwindow=parent,
                                         stats_data=parent.stats_data)
-        addButton = wx.Button(panel, id=wx.ID_ADD)
-        deleteButton = wx.Button(panel, id=wx.ID_DELETE)
+        addButton = Button(panel, id=wx.ID_ADD)
+        deleteButton = Button(panel, id=wx.ID_DELETE)
 
         gridSizer.Add(
             self.catList, pos=(
@@ -321,7 +323,7 @@ class IClassCategoryManagerDialog(wx.Dialog):
             border=5)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        closeButton = wx.Button(panel, id=wx.ID_CLOSE)
+        closeButton = Button(panel, id=wx.ID_CLOSE)
         btnSizer.Add(wx.Size(-1, -1), proportion=1, flag=wx.EXPAND)
         btnSizer.Add(closeButton, proportion=0, flag=wx.ALIGN_RIGHT)
         mainSizer.Add(
@@ -539,7 +541,7 @@ class CategoryListCtrl(wx.ListCtrl,
                 id=self.popupZoomtoAreas)
 
         # generate popup-menu
-        menu = wx.Menu()
+        menu = Menu()
         menu.Append(
             self.popupZoomtoAreas,
             _("Zoom to training areas of selected class"))
@@ -631,8 +633,8 @@ class IClassSignatureFileDialog(wx.Dialog):
                                          'sig')
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.btnCancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
-        self.btnOK = wx.Button(parent=self.panel, id=wx.ID_OK)
+        self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btnOK = Button(parent=self.panel, id=wx.ID_OK)
         self.btnOK.SetDefault()
         self.btnOK.Enable(False)
 
@@ -662,28 +664,28 @@ class IClassSignatureFileDialog(wx.Dialog):
         dataSizer = wx.BoxSizer(wx.VERTICAL)
 
         dataSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
                 label=_("Enter name of signature file:")),
             proportion=0,
             flag=wx.ALL,
             border=3)
-        self.fileNameCtrl = wx.TextCtrl(
+        self.fileNameCtrl = TextCtrl(
             parent=self.panel, id=wx.ID_ANY, size=(400, -1))
         if self.fileName:
             self.fileNameCtrl.SetValue(self.fileName)
         dataSizer.Add(self.fileNameCtrl,
                       proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
 
-        dataSizer.Add(wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                    label=_("Signature file path:")),
+        dataSizer.Add(StaticText(parent=self.panel, id=wx.ID_ANY,
+                                 label=_("Signature file path:")),
                       proportion=0, flag=wx.ALL, border=3)
 
         self.pathPanel = scrolled.ScrolledPanel(self.panel, size=(-1, 40))
         pathSizer = wx.BoxSizer()
-        self.filePathText = wx.StaticText(parent=self.pathPanel, id=wx.ID_ANY,
-                                          label=self.baseFilePath)
+        self.filePathText = StaticText(parent=self.pathPanel, id=wx.ID_ANY,
+                                       label=self.baseFilePath)
         pathSizer.Add(
             self.filePathText,
             proportion=1,
@@ -741,8 +743,8 @@ class IClassExportAreasDialog(wx.Dialog):
         self.vectorName = vectorName
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.btnCancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
-        self.btnOK = wx.Button(parent=self.panel, id=wx.ID_OK)
+        self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btnOK = Button(parent=self.panel, id=wx.ID_OK)
         self.btnOK.SetDefault()
         self.btnOK.Enable(False)
         self.btnOK.Bind(wx.EVT_BUTTON, self.OnOK)
@@ -771,7 +773,7 @@ class IClassExportAreasDialog(wx.Dialog):
         dataSizer = wx.BoxSizer(wx.VERTICAL)
 
         dataSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self.panel,
                 id=wx.ID_ANY,
                 label=_("Enter name of new vector map:")),
@@ -786,10 +788,10 @@ class IClassExportAreasDialog(wx.Dialog):
             self.vectorNameCtrl.SetValue(self.vectorName)
         dataSizer.Add(self.vectorNameCtrl,
                       proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
-        self.withTableCtrl = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
+        self.withTableCtrl = CheckBox(parent=self.panel, id=wx.ID_ANY,
                                          label=_("Export attribute table"))
         self.withTableCtrl.SetValue(True)
-        self.withTableCtrl.SetToolTipString(
+        self.withTableCtrl.SetToolTip(
             _("Export attribute table containing" " computed statistical data"))
 
         dataSizer.Add(self.withTableCtrl,

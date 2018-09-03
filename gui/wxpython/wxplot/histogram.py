@@ -21,6 +21,7 @@ import wx
 
 import grass.script as grass
 import gui_core.wxlibplot as plot
+from gui_core.wrap import StockCursor
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from wxplot.base import BasePlotFrame, PlotIcons
 from wxplot.dialogs import HistRasterDialog, PlotStatsFrame
@@ -90,7 +91,7 @@ class HistogramPlotFrame(BasePlotFrame):
         plot to create a line graph of the histogram.
         """
         try:
-            self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
+            self.SetCursor(StockCursor(wx.CURSOR_ARROW))
         except:
             pass
 

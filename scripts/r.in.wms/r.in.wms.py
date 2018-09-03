@@ -177,6 +177,7 @@ import sys
 sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), 'etc', 'r.in.wms'))
 
 import grass.script as grass
+from grass.script.utils import decode
 
 # i18N
 import gettext
@@ -200,7 +201,7 @@ def GetRegionParams(opt_region):
                                quiet=True,
                                flags='ug',
                                region=opt_region)
-        region_params = grass.parse_key_val(s, val_type=float)
+        region_params = grass.parse_key_val(decode(s), val_type=float)
     else:
         region_params = grass.region()
 

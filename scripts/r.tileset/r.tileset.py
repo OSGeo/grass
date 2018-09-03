@@ -114,6 +114,7 @@ import math
 
 from grass.script.utils import separator
 from grass.script import core as gcore
+from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 
 # i18N
@@ -171,6 +172,7 @@ def project(file, source, dest):
                                  proj_out=dest['proj'],
                                  sep=';',
                                  input=file)
+        ret = decode(ret)
     except CalledModuleError:
         gcore.fatal(cs2cs + ' failed')
 
@@ -255,7 +257,8 @@ def main():
     if not options['destproj']:
         dest_proj = gcore.read_command('g.proj',
                                        quiet=True,
-                                       flags='jf').rstrip('\n')
+                                       flags='jf')
+        dest_proj = decode(dest_proj).rstrip('\n')
         if not dest_proj:
             gcore.fatal(_('g.proj failed'))
     else:

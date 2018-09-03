@@ -41,6 +41,7 @@ if sys.version_info.major == 3:
 
 from .c_libraries_interface import *
 from grass.pygrass import messages
+from grass.script.utils import decode, encode
 # Import all supported database backends
 # Ignore import errors since they are checked later
 try:
@@ -453,6 +454,7 @@ def get_available_temporal_mapsets():
     tgis_mapsets = {}
 
     for mapset in mapsets:
+        mapset = decode(mapset)
         driver = c_library_interface.get_driver_name(mapset)
         database = c_library_interface.get_database_name(mapset)
 
@@ -464,12 +466,12 @@ def get_available_temporal_mapsets():
             # Check if the temporal sqlite database exists
             # We need to set non-existing databases in case the mapset is the current mapset
             # to create it
-            if (driver == "sqlite" and os.path.exists(database)) or mapset == get_current_mapset() :
+            if (encode(driver) == "sqlite" and os.path.exists(database)) or encode(mapset) == get_current_mapset() :
                 tgis_mapsets[mapset] = (driver,  database)
 
             # We need to warn if the connection is defined but the database does not
             # exists
-            if driver == "sqlite" and not os.path.exists(database):
+            if encode(driver) == "sqlite" and not os.path.exists(database):
                 message_interface.warning("Temporal database connection defined as:\n" + \
                                           database + "\nBut database file does not exist.")
 
@@ -583,6 +585,7 @@ def init(raise_fatal_error=False):
             msgr.warning("TGIS_DISABLE_TIMESTAMP_WRITE is True")
 
     if driver_string is not None and driver_string is not "":
+        driver_string = decode(driver_string)
         if driver_string == "sqlite":
             tgis_backend = driver_string
             try:
@@ -892,6 +895,8 @@ class SQLDatabaseInterfaceConnection(object):
     def get_dbmi(self,  mapset=None):
         if mapset is None:
             mapset = self.current_mapset
+
+        mapset = decode(mapset)
         return self.connections[mapset].dbmi
 
     def rollback(self,  mapset=None):
@@ -945,6 +950,7 @@ class SQLDatabaseInterfaceConnection(object):
         if mapset is None:
             mapset = self.current_mapset
 
+        mapset = decode(mapset)
         if mapset not in self.tgis_mapsets.keys():
             self.msgr.fatal(_("Unable to mogrify sql statement. " +
                               self._create_mapset_error_message(mapset)))
@@ -967,6 +973,7 @@ class SQLDatabaseInterfaceConnection(object):
         if mapset is None:
             mapset = self.current_mapset
 
+        mapset = decode(mapset)
         if mapset not in self.tgis_mapsets.keys():
             self.msgr.fatal(_("Unable to check table. " +
                               self._create_mapset_error_message(mapset)))
@@ -983,6 +990,7 @@ class SQLDatabaseInterfaceConnection(object):
         if mapset is None:
             mapset = self.current_mapset
 
+        mapset = decode(mapset)
         if mapset not in self.tgis_mapsets.keys():
             self.msgr.fatal(_("Unable to execute sql statement. " +
                               self._create_mapset_error_message(mapset)))
@@ -993,6 +1001,7 @@ class SQLDatabaseInterfaceConnection(object):
         if mapset is None:
             mapset = self.current_mapset
 
+        mapset = decode(mapset)
         if mapset not in self.tgis_mapsets.keys():
             self.msgr.fatal(_("Unable to fetch one. " +
                               self._create_mapset_error_message(mapset)))
@@ -1003,6 +1012,7 @@ class SQLDatabaseInterfaceConnection(object):
         if mapset is None:
             mapset = self.current_mapset
 
+        mapset = decode(mapset)
         if mapset not in self.tgis_mapsets.keys():
             self.msgr.fatal(_("Unable to fetch all. " +
                               self._create_mapset_error_message(mapset)))
@@ -1020,6 +1030,7 @@ class SQLDatabaseInterfaceConnection(object):
         if mapset is None:
             mapset = self.current_mapset
 
+        mapset = decode(mapset)
         if mapset not in self.tgis_mapsets.keys():
             self.msgr.fatal(_("Unable to execute transaction. " +
                               self._create_mapset_error_message(mapset)))
@@ -1032,7 +1043,7 @@ class SQLDatabaseInterfaceConnection(object):
                  "access mapset <%(mapset)s>, or "
                  "mapset <%(mapset)s> has no temporal database. "
                  "Accessible mapsets are: <%(mapsets)s>" % \
-                 {"mapset": mapset,
+                 {"mapset": decode(mapset),
                   "mapsets":','.join(self.tgis_mapsets.keys())})
 
 ###############################################################################
@@ -1057,12 +1068,12 @@ class DBConnection(object):
         self.connected = False
         if backend is None:
             global tgis_backend
-            if tgis_backend == "sqlite":
+            if decode(tgis_backend) == "sqlite":
                 self.dbmi = sqlite3
             else:
                 self.dbmi = psycopg2
         else:
-            if backend == "sqlite":
+            if decode(backend) == "sqlite":
                 self.dbmi = sqlite3
             else:
                 self.dbmi = psycopg2
@@ -1108,6 +1119,9 @@ class DBConnection(object):
         # Connection in the current mapset
         if dbstring is None:
             dbstring = self.dbstring
+        
+        dbstring = decode(dbstring)
+
         try:
             if self.dbmi.__name__ == "sqlite3":
                 self.connection = self.dbmi.connect(dbstring,

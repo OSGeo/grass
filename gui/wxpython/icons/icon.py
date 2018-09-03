@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
+import six
 
 import wx
 
@@ -25,9 +26,10 @@ from core.settings import UserSettings
 from core.utils import _
 
 # default icon set
-import grass_icons
-iconSetDefault = grass_icons.iconSet
-iconPathDefault = grass_icons.iconPath
+from .grass_icons import iconSet as g_iconSet
+from .grass_icons import iconPath as g_iconPath
+iconSetDefault = g_iconSet
+iconPathDefault = g_iconPath
 
 iconTheme = UserSettings.Get(
     group='appearance',
@@ -46,7 +48,7 @@ try:
     if iconPath and not os.path.exists(iconPath):
         raise OSError
 
-    for key, img in iconSet.iteritems():
+    for key, img in six.iteritems(iconSet):
         if key not in iconSet or \
                 iconSet[key] is None:  # add key
             iconSet[key] = img

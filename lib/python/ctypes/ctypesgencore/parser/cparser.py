@@ -63,7 +63,9 @@ class CLexer(object):
                 t.type = t.value.upper()
             elif t.type == 'IDENTIFIER' and t.value in self.type_names:
                 if (self.pos < 2 or self.tokens[self.pos - 2].type not in
-                        ('ENUM', 'STRUCT', 'UNION')):
+                        ('VOID', '_BOOL', 'CHAR', 'SHORT', 'INT', 'LONG',
+                         'FLOAT', 'DOUBLE', 'SIGNED', 'UNSIGNED', 'ENUM',
+                         'STRUCT', 'UNION', 'TYPE_NAME')):
                     t.type = 'TYPE_NAME'
 
             t.lexer = self
@@ -101,13 +103,13 @@ class CParser(object):
         self.parser.cparser = self
 
         self.lexer = CLexer(self)
-        if stddef_types:
+        if not options.no_stddef_types:
             self.lexer.type_names.add('wchar_t')
             self.lexer.type_names.add('ptrdiff_t')
             self.lexer.type_names.add('size_t')
-        if gnu_types:
+        if not options.no_gnu_types:
             self.lexer.type_names.add('__builtin_va_list')
-        if sys.platform == 'win32':
+        if sys.platform == 'win32' and not options.no_python_types:
             self.lexer.type_names.add('__int64')
 
     def parse(self, filename, debug=False):
@@ -211,6 +213,18 @@ class DebugCParser(CParser):
 
     def handle_declaration(self, declaration, filename, lineno):
         print(declaration)
+
+    def get_ctypes_type(self, typ, declarator):
+        return typ
+
+    def handle_define_unparseable(self, name, params, value, filename, lineno):
+        if params:
+            original_string = "#define %s(%s) %s" % \
+                (name, ",".join(params), " ".join(value))
+        else:
+            original_string = "#define %s %s" % \
+                (name, " ".join(value))
+        print(original_string)
 
 if __name__ == '__main__':
     DebugCParser().parse(sys.argv[1], debug=True)

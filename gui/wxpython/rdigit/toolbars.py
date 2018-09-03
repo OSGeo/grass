@@ -21,6 +21,7 @@ from gui_core.toolbars import BaseToolbar
 from icons.icon import MetaIcon
 from gui_core.widgets import FloatValidator
 import wx.lib.colourselect as csel
+from gui_core.wrap import TextCtrl, StaticText
 
 
 rdigitIcons = {'area': MetaIcon(img='polygon-create',
@@ -82,22 +83,22 @@ class RDigitToolbar(BaseToolbar):
                               lambda evt: self._cellValueChanged())
         self._valueCombo.SetSelection(0)
         self._cellValueChanged()
-        labelValue = wx.StaticText(self, label=" %s" % _("Cell value:"))
+        labelValue = StaticText(self, label=" %s" % _("Cell value:"))
         self.InsertControl(6, labelValue)
         self.InsertControl(7, self._valueCombo)
 
         self._widthValueId = wx.NewId()
         # validator does not work with combobox, SetBackgroundColor is not
         # working
-        self._widthValue = wx.TextCtrl(
+        self._widthValue = TextCtrl(
             self, id=self._widthValueId, value='0', size=(
                 80, -1), validator=FloatValidator())
         self._widthValue.Bind(wx.EVT_TEXT,
                               lambda evt: self._widthValueChanged())
         self._widthValueChanged()
-        self._widthValue.SetToolTipString(
+        self._widthValue.SetToolTip(
             _("Width of currently digitized line or diameter of a digitized point in map units."))
-        labelWidth = wx.StaticText(self, label=" %s" % _("Width:"))
+        labelWidth = StaticText(self, label=" %s" % _("Width:"))
         self.InsertControl(8, labelWidth)
         self.InsertControl(9, self._widthValue)
 

@@ -56,7 +56,7 @@ from .core import init_dbif
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
 from .factory import dataset_factory
 from .open_stds import open_new_stds
-from spatio_temporal_relationships import SpatioTemporalTopologyBuilder
+from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .space_time_datasets import Raster3DDataset, RasterDataset
 from .temporal_granularity import compute_absolute_time_granularity
 

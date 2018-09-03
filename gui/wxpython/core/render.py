@@ -144,7 +144,7 @@ class Layer(object):
                   (self.type, self.name, self.mapfile))
 
         # prepare command for each layer
-        layertypes = utils.command2ltype.values() + ['overlay', 'command']
+        layertypes = list(utils.command2ltype.values()) + ['overlay', 'command']
 
         if self.type not in layertypes:
             raise GException(
@@ -254,7 +254,7 @@ class Layer(object):
 
     def SetType(self, ltype):
         """Set layer type"""
-        if ltype not in utils.command2ltype.values() + ['overlay', 'command']:
+        if ltype not in list(utils.command2ltype.values()) + ['overlay', 'command']:
             raise GException(_("Unsupported map layer type '%s'") % ltype)
 
         if not self.renderMgr:
@@ -1154,7 +1154,7 @@ class Map(object):
         """
         selected = []
 
-        if isinstance(ltype, types.StringType):
+        if isinstance(ltype, str):
             one_type = True
         else:
             one_type = False

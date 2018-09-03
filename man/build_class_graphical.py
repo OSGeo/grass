@@ -122,15 +122,14 @@ def get_module_image(module, images):
             return image
         if basename == module:
             return image
-    return sorted(candidates,
-                  lambda first, second: cmp(len(first), len(second)))[0]
+    return sorted(candidates, key=len)[0]
 
 
 def generate_page_for_category(short_family, module_family, imgs, year,
                                skip_no_image=False):
     filename = module_family + "_graphical.html"
 
-    output = open(filename + ".tmp", 'wb')
+    output = open(filename + ".tmp", 'w')
 
     output.write(header1_tmpl.substitute(
         title="GRASS GIS %s Reference "

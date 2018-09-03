@@ -77,7 +77,7 @@ vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
 
 
 def create_VRT_file(projfile, vrtfile, infile):
-    fh = file(projfile)
+    fh = open(projfile)
     kv = {}
     for l in fh:
         f = l.rstrip('\r\n').split()
@@ -104,7 +104,7 @@ def create_VRT_file(projfile, vrtfile, infile):
     s = t.substitute(NORTHCORNER=north_corner, WESTCORNER=west_corner,
                      XSIZE=xsize, YSIZE=ysize, RESOLUTION=map_proj_res,
                      FILENAME=infile)
-    outf = file(vrtfile, 'w')
+    outf = open(vrtfile, 'w')
     outf.write(s)
     outf.close()
 

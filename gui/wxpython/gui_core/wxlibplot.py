@@ -120,6 +120,8 @@ import wx
 # Needs NumPy
 import numpy as np
 
+from gui_core.wrap import Menu, EmptyBitmap
+
 from core.globalvar import CheckWxVersion
 if CheckWxVersion([3, 0, 0]):
     from wx import PENSTYLE_SOLID
@@ -1538,7 +1540,7 @@ class PlotCanvas(wx.Panel):
         # Make new offscreen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
         # a file, or whatever.
-        self._Buffer = wx.EmptyBitmap(Size.width, Size.height)
+        self._Buffer = EmptyBitmap(Size.width, Size.height)
         self._setSize()
 
         if not self._isWindowCreated:
@@ -1606,7 +1608,7 @@ class PlotCanvas(wx.Panel):
         width = self._Buffer.GetWidth()
         height = self._Buffer.GetHeight()
         if sys.platform != "darwin":
-            tmp_Buffer = wx.EmptyBitmap(width, height)
+            tmp_Buffer = EmptyBitmap(width, height)
             dcs = wx.MemoryDC()
             dcs.SelectObject(tmp_Buffer)
             dcs.Clear()
@@ -2234,7 +2236,7 @@ class TestFrame(wx.Frame):
         # Now Create the menu bar and items
         self.mainmenu = wx.MenuBar()
 
-        menu = wx.Menu()
+        menu = Menu()
         menu.Append(200, 'Page Setup...', 'Setup the printer page')
         self.Bind(wx.EVT_MENU, self.OnFilePageSetup, id=200)
 
@@ -2251,7 +2253,7 @@ class TestFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnFileExit, id=205)
         self.mainmenu.Append(menu, '&File')
 
-        menu = wx.Menu()
+        menu = Menu()
         menu.Append(206, 'Draw1', 'Draw plots1')
         self.Bind(wx.EVT_MENU, self.OnPlotDraw1, id=206)
         menu.Append(207, 'Draw2', 'Draw plots2')
@@ -2324,7 +2326,7 @@ class TestFrame(wx.Frame):
 
         self.mainmenu.Append(menu, '&Plot')
 
-        menu = wx.Menu()
+        menu = Menu()
         menu.Append(300, '&About', 'About this thing...')
         self.Bind(wx.EVT_MENU, self.OnHelpAbout, id=300)
         self.mainmenu.Append(menu, '&Help')

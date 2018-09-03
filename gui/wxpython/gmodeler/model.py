@@ -32,6 +32,7 @@ import copy
 import re
 import mimetypes
 import time
+import six
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
@@ -49,6 +50,7 @@ from core.gcmd import GMessage, GException, GError, RunCommand, EncodeString, GW
 from core.settings import UserSettings
 from gui_core.forms import GUI, CmdPanel
 from gui_core.widgets import GNotebook
+from gui_core.wrap import Button
 from gmodeler.giface import GraphicalModelerGrassInterface
 
 from grass.script import core as grass
@@ -119,7 +121,7 @@ class Model(object):
 
     def ReorderItems(self, idxList):
         items = list()
-        for oldIdx, newIdx in idxList.iteritems():
+        for oldIdx, newIdx in six.iteritems(idxList):
             item = self.items.pop(oldIdx)
             items.append(item)
             self.items.insert(newIdx, item)
@@ -655,7 +657,7 @@ class Model(object):
                 return
 
             err = list()
-            for key, item in params.iteritems():
+            for key, item in six.iteritems(params):
                 for p in item['params']:
                     if p.get('value', '') == '':
                         err.append(
@@ -752,7 +754,7 @@ class Model(object):
 
         # discard values
         if params:
-            for item in params.itervalues():
+            for item in six.itervalues(params):
                 for p in item['params']:
                     p['value'] = ''
 
@@ -821,7 +823,7 @@ class Model(object):
             result["variables"] = {'flags': list(),
                                    'params': params,
                                    'idx': idx}
-            for name, values in self.variables.iteritems():
+            for name, values in six.iteritems(self.variables):
                 gtype = values.get('type', 'string')
                 if gtype in ('raster', 'vector', 'mapset',
                              'file', 'region', 'dir'):
@@ -2278,7 +2280,7 @@ class WriteModelFile:
             return
         self.fd.write('%s<variables>\n' % (' ' * self.indent))
         self.indent += 4
-        for name, values in self.variables.iteritems():
+        for name, values in six.iteritems(self.variables):
             self.fd.write(
                 '%s<variable name="%s" type="%s">\n' %
                 (' ' * self.indent, EncodeString(name), values['type']))
@@ -2331,7 +2333,7 @@ class WriteModelFile:
         self.indent += 4
         if not action.IsEnabled():
             self.fd.write('%s<disabled />\n' % (' ' * self.indent))
-        for key, val in action.GetParams().iteritems():
+        for key, val in six.iteritems(action.GetParams()):
             if key == 'flags':
                 for f in val:
                     if f.get('value', False) or f.get('parameterized', False):
@@ -2576,7 +2578,7 @@ class WritePythonFile:
 """ % (EncodeString(' '.join(properties['description'].splitlines()))))
 
         variables = self.model.GetVariables()
-        for key, data in variables.iteritems():
+        for key, data in six.iteritems(variables):
             otype = self._getStandardizedOption(data['type'])
             self.fd.write(
                 r"""
@@ -2830,8 +2832,8 @@ class ModelParamDialog(wx.Dialog):
         if not rast and not vect and not rast3d:
             self.interData.Hide()
 
-        self.btnCancel = wx.Button(parent=self, id=wx.ID_CANCEL)
-        self.btnRun = wx.Button(parent=self, id=wx.ID_OK,
+        self.btnCancel = Button(parent=self, id=wx.ID_CANCEL)
+        self.btnRun = Button(parent=self, id=wx.ID_OK,
                                 label=_("&Run"))
         self.btnRun.SetDefault()
 
@@ -2870,7 +2872,7 @@ class ModelParamDialog(wx.Dialog):
     def _createPages(self):
         """Create for each parameterized module its own page"""
         nameOrdered = [''] * len(self.params.keys())
-        for name, params in self.params.iteritems():
+        for name, params in six.iteritems(self.params):
             nameOrdered[params['idx']] = name
         for name in nameOrdered:
             params = self.params[name]

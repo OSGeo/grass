@@ -246,7 +246,7 @@ def main():
             file=cats_file_name,
             quiet=quiet)
         cat_list = list()
-        cats_file = file(cats_file_name)
+        cats_file = open(cats_file_name)
         for line in cats_file:
             cat_list.append(line.rstrip('\n'))
         cats_file.close()

@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+import six
 
 import wx
 
@@ -27,6 +28,7 @@ from wxplot.dialogs import TextDialog, OptDialog
 from core.render import Map
 from icons.icon import MetaIcon
 from gui_core.toolbars import BaseIcons
+from gui_core.wrap import Menu
 from core.utils import _
 
 import grass.script as grass
@@ -127,7 +129,7 @@ class BasePlotFrame(wx.Frame):
         for assigning colors to images in imagery groups"""
 
         self.colorDict = {}
-        for clr in grass.named_colors.iterkeys():
+        for clr in six.iterkeys(grass.named_colors):
             if clr == 'white':
                 continue
             r = grass.named_colors[clr][0] * 255
@@ -512,7 +514,7 @@ class BasePlotFrame(wx.Frame):
         """Popup menu for plot and text options
         """
         point = wx.GetMousePosition()
-        popt = wx.Menu()
+        popt = Menu()
         # Add items to the menu
         settext = wx.MenuItem(popt, wx.ID_ANY, _('Text settings'))
         popt.AppendItem(settext)
@@ -606,7 +608,7 @@ class BasePlotFrame(wx.Frame):
         """Print options and output menu
         """
         point = wx.GetMousePosition()
-        printmenu = wx.Menu()
+        printmenu = Menu()
         for title, handler in ((_("Page setup"), self.OnPageSetup),
                                (_("Print preview"), self.OnPrintPreview),
                                (_("Print display"), self.OnDoPrint)):

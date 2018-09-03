@@ -20,6 +20,10 @@ import time
 import warnings
 
 from . import cdeclarations
+try:
+    from . import ctypesparser
+except:
+    import ctypesparser
 import ctypesgencore.expressions as expressions
 from . import preprocessor
 from . import yacc
@@ -40,20 +44,22 @@ tokens = (
     'AND_ASSIGN', 'XOR_ASSIGN', 'OR_ASSIGN', 'PERIOD', 'TYPE_NAME',
 
     'TYPEDEF', 'EXTERN', 'STATIC', 'AUTO', 'REGISTER',
-    'CHAR', 'SHORT', 'INT', 'LONG', 'SIGNED', 'UNSIGNED', 'FLOAT', 'DOUBLE',
+    '_BOOL', 'CHAR', 'SHORT', 'INT', 'LONG', 'SIGNED', 'UNSIGNED', 'FLOAT', 'DOUBLE',
     'CONST', 'VOLATILE', 'VOID',
     'STRUCT', 'UNION', 'ENUM', 'ELLIPSIS',
 
     'CASE', 'DEFAULT', 'IF', 'ELSE', 'SWITCH', 'WHILE', 'DO', 'FOR', 'GOTO',
-    'CONTINUE', 'BREAK', 'RETURN', '__ASM__'
+    'CONTINUE', 'BREAK', 'RETURN', '__ASM__', '__ATTRIBUTE__', 'PACKED',
+    'ALIGNED', 'TRANSPARENT_UNION',
 )
 
 keywords = [
-    'auto', 'break', 'case', 'char', 'const', 'continue', 'default', 'do',
+    'auto', '_Bool', 'break', 'case', 'char', 'const', 'continue', 'default', 'do',
     'double', 'else', 'enum', 'extern', 'float', 'for', 'goto', 'if', 'int',
     'long', 'register', 'return', 'short', 'signed', 'sizeof', 'static',
     'struct', 'switch', 'typedef', 'union', 'unsigned', 'void', 'volatile',
-    'while', '__asm__'
+    'while', '__asm__', '__attribute__', 'packed', 'aligned',
+    'transparent_union',
 ]
 
 
@@ -618,6 +624,7 @@ def p_storage_class_specifier(p):
 
 def p_type_specifier(p):
     '''type_specifier : VOID
+                      | _BOOL
                       | CHAR
                       | SHORT
                       | INT
@@ -637,8 +644,19 @@ def p_type_specifier(p):
         p[0] = cdeclarations.TypeSpecifier(p[1])
 
 
+class Attribs(dict):
+    def __init__(self, packed=False, aligned=False, transparent_union=False):
+        super(Attribs, self).__init__(
+          packed=packed, aligned=aligned, transparent_union=transparent_union,
+        )
+        self.__dict__ = self
+
+
 def p_struct_or_union_specifier(p):
-    '''struct_or_union_specifier : struct_or_union IDENTIFIER '{' struct_declaration_list '}'
+    '''struct_or_union_specifier : struct_or_union gcc_attribs IDENTIFIER '{' struct_declaration_list '}'
+         | struct_or_union gcc_attribs TYPE_NAME '{' struct_declaration_list '}'
+         | struct_or_union gcc_attribs '{' struct_declaration_list '}'
+         | struct_or_union IDENTIFIER '{' struct_declaration_list '}'
          | struct_or_union TYPE_NAME '{' struct_declaration_list '}'
          | struct_or_union '{' struct_declaration_list '}'
          | struct_or_union IDENTIFIER
@@ -647,12 +665,24 @@ def p_struct_or_union_specifier(p):
     # The TYPE_NAME ones are dodgy, needed for Apple headers
     # CoreServices.framework/Frameworks/CarbonCore.framework/Headers/Files.h.
     # CoreServices.framework/Frameworks/OSServices.framework/Headers/Power.h
-    if len(p) == 3:
-        p[0] = cdeclarations.StructTypeSpecifier(p[1], p[2], None)
-    elif p[2] == '{':
-        p[0] = cdeclarations.StructTypeSpecifier(p[1], '', p[3])
+    packed = False
+    if len(p) == 3:  # struct <id/typname>
+        p[0] = cdeclarations.StructTypeSpecifier(p[1], False, p[2], None)
     else:
-        p[0] = cdeclarations.StructTypeSpecifier(p[1], p[2], p[4])
+        if type(p[2]) is Attribs:
+            attribs = p[2]
+            if p[3] == '{':
+                tag, decl = '', p[4]
+            else:
+                tag, decl = p[3], p[5]
+        else:
+            attribs = Attribs()
+            if p[2] == '{':
+                tag, decl = '', p[3]
+            else:
+                tag, decl = p[2], p[4]
+
+        p[0] = cdeclarations.StructTypeSpecifier(p[1], attribs.packed, tag, decl)
 
     p[0].filename = p.slice[0].filename
     p[0].lineno = p.slice[0].lineno
@@ -663,6 +693,21 @@ def p_struct_or_union(p):
                        | UNION
     '''
     p[0] = p[1] == 'union'
+
+
+def p_gcc_attribs(p):
+    '''gcc_attribs : __ATTRIBUTE__ '(' '(' struct_attribute ')' ')'
+    '''
+    p[0] = Attribs()
+    p[0].packed = False if len(p) == 1 else p[4] == 'packed'
+
+
+def p_struct_attribute(p):
+    '''struct_attribute : PACKED
+                        | TRANSPARENT_UNION
+                        | ALIGNED
+    '''
+    p[0] = p[1]
 
 
 def p_struct_declaration_list(p):
@@ -688,6 +733,11 @@ def p_struct_declaration(p):
             cdeclarations.apply_specifiers(p[1], declaration)
             declaration.declarator = declarator
             r += (declaration,)
+    else:
+        # anonymous field (C11/GCC extension)
+        declaration = cdeclarations.Declaration()
+        cdeclarations.apply_specifiers(p[1], declaration)
+        r = (declaration,)
     p[0] = r
 
 
@@ -909,7 +959,6 @@ def p_type_name(p):
     '''type_name : specifier_qualifier_list
                  | specifier_qualifier_list abstract_declarator
     '''
-    from . import ctypesparser
     typ = p[1]
     if len(p) == 3:
         declarator = p[2]
@@ -919,8 +968,8 @@ def p_type_name(p):
     declaration = cdeclarations.Declaration()
     declaration.declarator = declarator
     cdeclarations.apply_specifiers(typ, declaration)
-    ctype = ctypesparser.get_ctypes_type(declaration.type,
-                                         declaration.declarator)
+    ctype = p.parser.cparser.get_ctypes_type(declaration.type,
+                                             declaration.declarator)
     p[0] = ctype
 
 

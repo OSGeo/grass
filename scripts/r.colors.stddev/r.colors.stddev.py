@@ -34,6 +34,7 @@ import os
 import atexit
 
 import grass.script as gscript
+from grass.script.utils import decode
 
 
 def z(n):
@@ -56,7 +57,7 @@ def main():
 
     if not zero:
         s = gscript.read_command('r.univar', flags='g', map=map)
-        kv = gscript.parse_key_val(s)
+        kv = gscript.parse_key_val(decode(s))
         global mean, stddev
         mean = float(kv['mean'])
         stddev = float(kv['stddev'])
@@ -103,7 +104,7 @@ def main():
                                  percentile=[95.45,
                                              68.2689,
                                              99.7300])
-        kv = gscript.parse_key_val(s)
+        kv = gscript.parse_key_val(decode(s))
 
         stddev1 = float(kv['percentile_68_2689'])
         stddev2 = float(kv['percentile_95_45'])

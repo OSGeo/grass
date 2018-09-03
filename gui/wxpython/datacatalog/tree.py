@@ -1009,7 +1009,7 @@ class DataCatalogTree(LocationMapTree):
 
     def _popupMenuMapset(self):
         """Create popup menu for mapsets"""
-        menu = wx.Menu()
+        menu = Menu()
         genv = gisenv()
         currentLocation, currentMapset = self._isCurrent(genv)
 
@@ -1030,7 +1030,7 @@ class DataCatalogTree(LocationMapTree):
 
     def _popupMenuElement(self):
         """Create popup menu for elements"""
-        menu = wx.Menu()
+        menu = Menu()
         item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)

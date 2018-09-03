@@ -23,6 +23,7 @@ import grass.script as grass
 import gui_core.wxlibplot as plot
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.wrap import StockCursor
 from wxplot.dialogs import ScatterRasterDialog, PlotStatsFrame
 from core.gcmd import RunCommand, GException, GError, GMessage
 from core.utils import _
@@ -88,7 +89,7 @@ class ScatterFrame(BasePlotFrame):
         create a list of cell value pairs. This is passed to
         plot to create a scatterplot.
         """
-        self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
+        self.SetCursor(StockCursor(wx.CURSOR_ARROW))
         self.SetGraphStyle()
         wx.BeginBusyCursor()
         wx.SafeYield()

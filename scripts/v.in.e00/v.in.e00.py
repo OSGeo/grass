@@ -109,14 +109,14 @@ def main():
     if merging:
         files.sort()
         filename = "%s.cat.%s.e00" % (e00name, e00tmp)
-        outf = file(filename, 'wb')
+        outf = open(filename, 'wb')
         for f in files:
-            inf = file(f, 'rb')
+            inf = open(f, 'rb')
             shutil.copyfileobj(inf, outf)
             inf.close()
         outf.close()
 
-    nuldev = file(os.devnull, 'w+')
+    nuldev = open(os.devnull, 'w+')
 
     gcore.message(_("An error may appear next which will be ignored..."))
     if gcore.call(['avcimport', filename, e00shortname], stdout=nuldev,

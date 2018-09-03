@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 import wx
+import six
 import numpy as np
 from math import ceil
 from multiprocessing import Process, Queue
@@ -24,6 +25,7 @@ from copy import deepcopy
 from iscatt.core_c import MergeArrays, ApplyColormap
 from iscatt.dialogs import ManageBusyCursorMixin
 from core.settings import UserSettings
+from gui_core.wrap import Menu
 
 try:
     import matplotlib
@@ -550,7 +552,7 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
 
 def _rendDtMemmapsToFiles(rend_dt):
 
-    for k, v in rend_dt.iteritems():
+    for k, v in six.iteritems(rend_dt):
         if 'dt' in v:
             rend_dt[k]['sh'] = v['dt'].shape
             rend_dt[k]['dt'] = v['dt'].filename
@@ -558,7 +560,7 @@ def _rendDtMemmapsToFiles(rend_dt):
 
 def _rendDtFilesToMemmaps(rend_dt):
 
-    for k, v in rend_dt.iteritems():
+    for k, v in six.iteritems(rend_dt):
         if 'dt' in v:
             rend_dt[k]['dt'] = np.memmap(filename=v['dt'], shape=v['sh'])
             del rend_dt[k]['sh']
@@ -613,7 +615,7 @@ class ScatterPlotContextMenu:
             return
 
         if event.button == 3:
-            menu = wx.Menu()
+            menu = Menu()
             menu_items = [["zoom_to_extend", _("Zoom to scatter plot extend"),
                            lambda event: self.plot.ZoomToExtend()]]
 

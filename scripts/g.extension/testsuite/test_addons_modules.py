@@ -16,6 +16,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.utils import silent_rmtree
+from grass.script.utils import decode
 
 import os
 
@@ -54,7 +55,7 @@ class TestModulesMetadata(TestCase):
         """List individual extensions/modules/addons"""
         module = SimpleModule('g.extension', flags='l', url=self.url)
         self.assertModule(module)
-        stdout = module.outputs.stdout
+        stdout = decode(module.outputs.stdout)
         self.assertMultiLineEqual(stdout, MODULES_OUTPUT)
 
 

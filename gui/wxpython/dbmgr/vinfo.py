@@ -16,15 +16,20 @@ This program is free software under the GNU General Public License
 
 import os
 import types
+import sys
+import six
 
 import wx
 
 from gui_core.gselect import VectorDBInfo as VectorDBInfoBase
+from gui_core.wrap import StaticText
 from core.gcmd import RunCommand, GError
 from core.settings import UserSettings
 from core.utils import _
 import grass.script as grass
 
+if sys.version_info.major >= 3:
+    unicode = str
 
 def GetUnicodeValue(value):
     """Get unicode value
@@ -33,7 +38,7 @@ def GetUnicodeValue(value):
 
     :return: unicode value
     """
-    if isinstance(value, types.UnicodeType):
+    if isinstance(value, unicode):
         return value
 
     enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
@@ -50,31 +55,31 @@ def CreateDbInfoDesc(panel, mapDBInfo, layer):
     infoFlexSizer = wx.FlexGridSizer(cols=2, hgap=1, vgap=1)
     infoFlexSizer.AddGrowableCol(1)
 
-    infoFlexSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label="Driver:"))
+    infoFlexSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label="Driver:"))
     infoFlexSizer.Add(
-        wx.StaticText(
+        StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=mapDBInfo.layers[layer]['driver']))
-    infoFlexSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label="Database:"))
+    infoFlexSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label="Database:"))
     infoFlexSizer.Add(
-        wx.StaticText(
+        StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=mapDBInfo.layers[layer]['database']))
-    infoFlexSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label="Table:"))
+    infoFlexSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label="Table:"))
     infoFlexSizer.Add(
-        wx.StaticText(
+        StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=mapDBInfo.layers[layer]['table']))
-    infoFlexSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label="Key:"))
-    infoFlexSizer.Add(wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=mapDBInfo.layers[layer]['key']))
+    infoFlexSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label="Key:"))
+    infoFlexSizer.Add(StaticText(parent=panel, id=wx.ID_ANY,
+                                 label=mapDBInfo.layers[layer]['key']))
 
     return infoFlexSizer
 
@@ -93,7 +98,7 @@ class VectorDBInfo(VectorDBInfoBase):
         except KeyError:
             return []
 
-        for name, desc in self.tables[table].iteritems():
+        for name, desc in six.iteritems(self.tables[table]):
             names[desc['index']] = name
 
         return names
@@ -131,7 +136,7 @@ class VectorDBInfo(VectorDBInfoBase):
                 continue
 
             table = record['Table']
-            for key, value in record['Attributes'].iteritems():
+            for key, value in six.iteritems(record['Attributes']):
                 if len(value) < 1:
                     value = None
                 else:
@@ -141,7 +146,7 @@ class VectorDBInfo(VectorDBInfoBase):
                         value = GetUnicodeValue(value)
                 self.tables[table][key]['values'].append(value)
 
-            for key, value in record.iteritems():
+            for key, value in six.iteritems(record):
                 if key == 'Attributes':
                     continue
                 if key in ret:

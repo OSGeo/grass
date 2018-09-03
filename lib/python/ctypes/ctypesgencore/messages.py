@@ -22,8 +22,18 @@ Warning classes are:
 from __future__ import print_function
 
 import sys
+import logging
 
 __all__ = ["error_message", "warning_message", "status_message"]
+
+log = logging.getLogger('ctypesgen')
+ch = logging.StreamHandler()  # use stdio
+logging_fmt_str = "%(levelname)s: %(message)s"
+formatter = logging.Formatter(logging_fmt_str)
+ch.setFormatter(formatter)
+log.addHandler(ch)
+# default level that ctypesgen was using with original version
+log.setLevel(logging.INFO)
 
 
 def error_message(msg, cls=None):

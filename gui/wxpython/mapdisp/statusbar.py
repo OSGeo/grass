@@ -38,16 +38,18 @@ from core import utils
 from core.gcmd import GMessage, RunCommand
 from core.settings import UserSettings
 from core.utils import _
+from gui_core.wrap import StaticText, TextCtrl
 
 from grass.script import core as grass
 
 from grass.pydispatch.signal import Signal
 
 
-class SbException:
+class SbException(Exception):
     """Exception class used in SbManager and SbItems"""
 
     def __init__(self, message):
+#        Exception.__init__(self, message)
         self.message = message
 
     def __str__(self):
@@ -676,9 +678,9 @@ class SbGoTo(SbItem):
         self.name = 'goto'
         self.label = _("Go to")
 
-        self.widget = wx.TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
-                                  value="", style=wx.TE_PROCESS_ENTER,
-                                  size=(300, -1))
+        self.widget = TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
+                               value="", style=wx.TE_PROCESS_ENTER,
+                               size=(300, -1))
 
         self.widget.Hide()
 
@@ -867,7 +869,7 @@ class SbMask(SbItem):
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = 'mask'
 
-        self.widget = wx.StaticText(
+        self.widget = StaticText(
             parent=self.statusbar,
             id=wx.ID_ANY,
             label=_('MASK'))

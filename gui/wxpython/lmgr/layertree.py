@@ -47,7 +47,7 @@ from core.gcmd import GWarning, GError, RunCommand
 from icons.icon import MetaIcon
 from web_services.dialogs import SaveWMSLayerDialog
 from gui_core.widgets import MapValidator
-from gui_core.wrap import Menu, GenBitmapButton
+from gui_core.wrap import Menu, GenBitmapButton, TextCtrl
 from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 from core.giface import Notification
 
@@ -2255,6 +2255,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         height = 25
         if sys.platform in ('win32', 'darwin'):
             height = 40
-        ctrl = wx.TextCtrl(self, id=wx.ID_ANY, value='', pos=wx.DefaultPosition, size=(
+        ctrl = TextCtrl(self, id=wx.ID_ANY, value='', pos=wx.DefaultPosition, size=(
             self.GetSize()[0] - 100, height), style=wx.TE_PROCESS_ENTER | wx.TE_DONTWRAP)
         return ctrl

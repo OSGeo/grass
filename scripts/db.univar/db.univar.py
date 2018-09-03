@@ -73,8 +73,8 @@ def cleanup():
 
 
 def sortfile(infile, outfile):
-    inf = file(infile, 'r')
-    outf = file(outfile, 'w')
+    inf = open(infile, 'r')
+    outf = open(outfile, 'w')
 
     if gscript.find_program('sort', '--help'):
         gscript.run_command('sort', flags='n', stdin=inf, stdout=outf)
@@ -134,14 +134,14 @@ def main():
     if not driver:
         driver = None
 
-    tmpf = file(tmp, 'w')
+    tmpf = open(tmp, 'w')
     gscript.run_command('db.select', flags='c', table=table,
                         database=database, driver=driver, sql=sql,
                         stdout=tmpf)
     tmpf.close()
 
     # check if result is empty
-    tmpf = file(tmp)
+    tmpf = open(tmp)
     if tmpf.read(1) == '':
         gscript.fatal(_("Table <%s> contains no data.") % table)
         tmpf.close()
@@ -157,7 +157,7 @@ def main():
     minv = 1e300
     maxv = -1e300
 
-    tmpf = file(tmp)
+    tmpf = open(tmp)
     for line in tmpf:
         if len(line.rstrip('\r\n')) == 0:
             continue
@@ -237,7 +237,7 @@ def main():
             ppos[i] = 1
         pval[i] = 0
 
-    inf = file(tmp + ".sort")
+    inf = open(tmp + ".sort")
     l = 1
     for line in inf:
         if l == q25pos:

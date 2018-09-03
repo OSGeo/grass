@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+import six
 import math
 import numpy
 
@@ -27,6 +28,7 @@ import grass.script as grass
 from core.utils import _
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.wrap import StockCursor
 from wxplot.dialogs import ProfileRasterDialog, PlotStatsFrame
 from core.gcmd import RunCommand, GWarning, GError, GMessage
 
@@ -217,7 +219,7 @@ class ProfileFrame(BasePlotFrame):
         self.ylabel = ''
         i = 0
 
-        for r in self.raster.iterkeys():
+        for r in six.iterkeys(self.raster):
             self.raster[r]['datalist'] = []
             datalist = self.CreateDatalist(r, self.coordstr)
             if len(datalist) > 0:
@@ -294,7 +296,7 @@ class ProfileFrame(BasePlotFrame):
             dlg.Destroy()
             return
 
-        self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
+        self.SetCursor(StockCursor(wx.CURSOR_ARROW))
 
         self.SetupProfile()
         p = self.CreatePlotList()
@@ -412,7 +414,7 @@ class ProfileFrame(BasePlotFrame):
         message = []
         title = _('Statistics for Profile(s)')
 
-        for r in self.raster.iterkeys():
+        for r in six.iterkeys(self.raster):
             try:
                 rast = r.split('@')[0]
                 statstr = 'Profile of %s\n\n' % rast

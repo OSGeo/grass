@@ -64,14 +64,14 @@ class DataCollectingParser(ctypesparser.CtypesParser,
 
     def parse(self):
         fd, fname = mkstemp(suffix=".h")
-        f = os.fdopen(fd, 'w+b')
+        f = os.fdopen(fd, 'w')
         for header in self.options.other_headers:
             print('#include <%s>' % header, file=f)
         for header in self.headers:
             print('#include "%s"' % os.path.abspath(header), file=f)
         f.flush()
         f.close()
-        ctypesparser.CtypesParser.parse(self, fname, None)
+        ctypesparser.CtypesParser.parse(self, fname, False)
         os.remove(fname)
 
         for name, params, expr, (filename, lineno) in self.saved_macros:
@@ -123,8 +123,8 @@ class DataCollectingParser(ctypesparser.CtypesParser,
         else:
             self.handle_struct(ctype, filename, lineno)
 
-    def handle_ctypes_function(self, name, restype, argtypes, variadic,
-                               filename, lineno):
+    def handle_ctypes_function(self, name, restype, argtypes, errcheck,
+                               variadic, filename, lineno):
         # Called by CtypesParser
         restype.visit(self)
         for argtype in argtypes:
@@ -133,6 +133,7 @@ class DataCollectingParser(ctypesparser.CtypesParser,
         function = FunctionDescription(name,
                                        restype,
                                        argtypes,
+                                       errcheck,
                                        variadic=variadic,
                                        src=(filename, repr(lineno)))
 
@@ -169,6 +170,7 @@ class DataCollectingParser(ctypesparser.CtypesParser,
         if ctypestruct.opaque:
             if name not in self.already_seen_opaque_structs:
                 struct = StructDescription(ctypestruct.tag,
+                                           ctypestruct.packed,
                                            ctypestruct.variety,
                                            None,  # No members
                                            True,  # Opaque
@@ -198,6 +200,7 @@ class DataCollectingParser(ctypesparser.CtypesParser,
 
             else:
                 struct = StructDescription(ctypestruct.tag,
+                                           ctypestruct.packed,
                                            ctypestruct.variety,
                                            ctypestruct.members,
                                            False,  # Not opaque
@@ -223,7 +226,7 @@ class DataCollectingParser(ctypesparser.CtypesParser,
         if ctypeenum.opaque:
             if tag not in self.already_seen_opaque_enums:
                 enum = EnumDescription(ctypeenum.tag,
-                                       ctypeenum.enumerators,
+                                       None,
                                        ctypeenum,
                                        src=(filename, str(lineno)))
                 enum.opaque = True
@@ -240,12 +243,13 @@ class DataCollectingParser(ctypesparser.CtypesParser,
                 enum.opaque = False
                 enum.ctype = ctypeenum
                 enum.src = ctypeenum.src
+                enum.members = ctypeenum.enumerators
 
                 del self.already_seen_opaque_enums[tag]
 
             else:
                 enum = EnumDescription(ctypeenum.tag,
-                                       None,
+                                       ctypeenum.enumerators,
                                        src=(filename, str(lineno)),
                                        ctype=ctypeenum)
                 enum.opaque = False

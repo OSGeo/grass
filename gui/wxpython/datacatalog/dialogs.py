@@ -20,6 +20,7 @@ import wx
 from gui_core.widgets import FloatValidator, IntegerValidator
 from core.giface import Notification
 from core.gcmd import RunCommand
+from gui_core.wrap import Button, StaticText, TextCtrl
 
 from grass.script import parse_key_val, region_env
 
@@ -61,26 +62,26 @@ class CatalogReprojectionDialog(wx.Dialog):
 
     def _widgets(self):
         if self.etype == 'raster':
-            self.resolution = wx.TextCtrl(self.panel, validator=FloatValidator())
+            self.resolution = TextCtrl(self.panel, validator=FloatValidator())
             self.resampling = wx.Choice(self.panel, size=(200, -1),
                                         choices=['nearest', 'bilinear', 'bicubic', 'lanczos',
                                                  'bilinear_f', 'bicubic_f', 'lanczos_f'])
         else:
-            self.vsplit = wx.TextCtrl(self.panel, validator=IntegerValidator())
+            self.vsplit = TextCtrl(self.panel, validator=IntegerValidator())
             self.vsplit.SetValue('10000')
 
         #
         # buttons
         #
-        self.btn_close = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
         self.SetEscapeId(self.btn_close.GetId())
 
         # run
-        self.btn_run = wx.Button(parent=self.panel, id=wx.ID_OK, label=_("Reproject"))
+        self.btn_run = Button(parent=self.panel, id=wx.ID_OK, label=_("Reproject"))
         if self.etype == 'raster':
-            self.btn_run.SetToolTipString(_("Reproject raster"))
+            self.btn_run.SetToolTip(_("Reproject raster"))
         elif self.etype == 'vector':
-            self.btn_run.SetToolTipString(_("Reproject vector"))
+            self.btn_run.SetToolTip(_("Reproject vector"))
         self.btn_run.SetDefault()
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnReproject)
 
@@ -91,25 +92,25 @@ class CatalogReprojectionDialog(wx.Dialog):
 
         label = _("Map layer <{ml}> needs to be reprojected.\n"
                   "Please review and modify reprojection parameters:").format(ml=self.iLayer)
-        dialogSizer.Add(wx.StaticText(self.panel, label=label),
+        dialogSizer.Add(StaticText(self.panel, label=label),
                         flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=10)
         if self.etype == 'raster':
-            optionsSizer.Add(wx.StaticText(self.panel, label=_("Estimated resolution:")),
+            optionsSizer.Add(StaticText(self.panel, label=_("Estimated resolution:")),
                              pos=(0, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
             optionsSizer.Add(self.resolution, pos=(0, 1), flag=wx.EXPAND)
-            optionsSizer.Add(wx.StaticText(self.panel, label=_("Resampling method:")),
+            optionsSizer.Add(StaticText(self.panel, label=_("Resampling method:")),
                              pos=(1, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
             optionsSizer.Add(self.resampling, pos=(1, 1), flag=wx.EXPAND)
         else:
-            optionsSizer.Add(wx.StaticText(self.panel, label=_("Maximum segment length:")),
+            optionsSizer.Add(StaticText(self.panel, label=_("Maximum segment length:")),
                              pos=(1, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
             optionsSizer.Add(self.vsplit, pos=(1, 1), flag=wx.EXPAND)
         optionsSizer.AddGrowableCol(1)
         dialogSizer.Add(optionsSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=10)
-        helptext = wx.StaticText(self.panel,
-                                 label="For more reprojection options,"
-                                       " please see {module}".format(module='r.proj' if self.etype == 'raster'
-                                                                     else 'v.proj'))
+        helptext = StaticText(self.panel,
+                              label="For more reprojection options,"
+                              " please see {module}".format(module='r.proj' if self.etype == 'raster'
+                                                            else 'v.proj'))
         dialogSizer.Add(helptext, proportion=0, flag=wx.ALL | wx.EXPAND, border=10)
         #
         # buttons

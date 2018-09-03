@@ -44,6 +44,7 @@
 
 import sys
 import grass.script as grass
+from grass.script.utils import encode
 
 # i18N
 import os
@@ -94,7 +95,7 @@ def main():
 
     p = grass.feed_command('db.execute', input='-', database=database,
                            driver=driver)
-    p.stdin.write("DROP TABLE " + table)
+    p.stdin.write(encode("DROP TABLE " + table))
     p.stdin.close()
     p.wait()
     if p.returncode != 0:

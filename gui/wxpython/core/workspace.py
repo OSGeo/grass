@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 import os
 
 import wx
+import six
 
 from core.utils import normalize_whitespace, _
 from core.settings import UserSettings
@@ -976,7 +977,7 @@ class WriteWorkspaceFile(object):
                     '%s<task name="%s">\n' %
                     (' ' * self.indent, cmd[0]))
                 self.indent += 4
-                for key, val in cmd[1].iteritems():
+                for key, val in six.iteritems(cmd[1]):
                     if key == 'flags':
                         for f in val:
                             self.file.write('%s<flag name="%s" />\n' %
@@ -1003,7 +1004,7 @@ class WriteWorkspaceFile(object):
                     self.file.write('%s<vdigit>\n' % (' ' * self.indent))
                     if 'geomAttr' in vdigit:
                         self.indent += 4
-                        for type, val in vdigit['geomAttr'].iteritems():
+                        for type, val in six.iteritems(vdigit['geomAttr']):
                             units = ''
                             if val['units'] != 'mu':
                                 units = ' units="%s"' % val['units']
@@ -1038,13 +1039,13 @@ class WriteWorkspaceFile(object):
         self.indent += 4
         self.file.write('%s<surface>\n' % (' ' * self.indent))
         self.indent += 4
-        for attrb in data.iterkeys():
+        for attrb in six.iterkeys(data):
             if len(data[attrb]) < 1:  # skip empty attributes
                 continue
             if attrb == 'object':
                 continue
 
-            for name in data[attrb].iterkeys():
+            for name in six.iterkeys(data[attrb]):
                 # surface attribute
                 if attrb == 'attribute':
                     if data[attrb][name]['map'] is None:
@@ -1064,7 +1065,7 @@ class WriteWorkspaceFile(object):
             if attrb == 'draw':
                 self.file.write('%s<%s' % (' ' * self.indent, attrb))
                 if 'mode' in data[attrb]:
-                    for tag, value in data[attrb]['mode']['desc'].iteritems():
+                    for tag, value in six.iteritems(data[attrb]['mode']['desc']):
                         self.file.write(' %s="%s"' % (tag, value))
                 self.file.write('>\n')  # <draw ...>
 
@@ -1121,14 +1122,14 @@ class WriteWorkspaceFile(object):
         self.indent += 4
         self.file.write('%s<volume>\n' % (' ' * self.indent))
         self.indent += 4
-        for attrb in data.iterkeys():
+        for attrb in six.iterkeys(data):
             if len(data[attrb]) < 1:  # skip empty attributes
                 continue
             if attrb == 'object':
                 continue
 
             if attrb == 'attribute':
-                for name in data[attrb].iterkeys():
+                for name in six.iterkeys(data[attrb]):
                     # surface attribute
                     if data[attrb][name]['map'] is None:
                         continue
@@ -1211,10 +1212,10 @@ class WriteWorkspaceFile(object):
             if attrb == 'isosurface':
                 for isosurface in data[attrb]:
                     self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
-                    for name in isosurface.iterkeys():
+                    for name in six.iterkeys(isosurface):
                         self.indent += 4
                         self.file.write('%s<%s>\n' % (' ' * self.indent, name))
-                        for att in isosurface[name].iterkeys():
+                        for att in six.iterkeys(isosurface[name]):
                             if isosurface[name][att] is True:
                                 val = '1'
                             elif isosurface[name][att] is False:
@@ -1242,10 +1243,10 @@ class WriteWorkspaceFile(object):
             if attrb == 'slice':
                 for slice_ in data[attrb]:
                     self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
-                    for name in slice_.iterkeys():
+                    for name in six.iterkeys(slice_):
                         self.indent += 4
                         self.file.write('%s<%s>\n' % (' ' * self.indent, name))
-                        for att in slice_[name].iterkeys():
+                        for att in six.iterkeys(slice_[name]):
                             if att in ('map', 'update'):
                                 continue
                             val = slice_[name][att]
@@ -1275,7 +1276,7 @@ class WriteWorkspaceFile(object):
         :param data: Nviz layer properties
         """
         self.indent += 4
-        for attrb in data.iterkeys():
+        for attrb in six.iterkeys(data):
             if len(data[attrb]) < 1:  # skip empty attributes
                 continue
 
@@ -1292,7 +1293,7 @@ class WriteWorkspaceFile(object):
                                                            attrb,
                                                            marker))
             self.indent += 4
-            for name in data[attrb].iterkeys():
+            for name in six.iterkeys(data[attrb]):
                 if name in ('object', 'marker'):
                     continue
                 if name == 'mode':
@@ -1318,14 +1319,14 @@ class WriteWorkspaceFile(object):
                     self.file.write('%s</%s>\n' % ((' ' * self.indent, name)))
                 elif name == 'thematic':
                     self.file.write('%s<%s ' % (' ' * self.indent, name))
-                    for key in data[attrb][name].iterkeys():
+                    for key in six.iterkeys(data[attrb][name]):
                         if key.startswith('use'):
                             self.file.write(
                                 '%s="%s" ' %
                                 (key, int(data[attrb][name][key])))
                     self.file.write('>\n')
                     self.indent += 4
-                    for key, value in data[attrb][name].iteritems():
+                    for key, value in six.iteritems(data[attrb][name]):
                         if key.startswith('use'):
                             continue
                         if value is None:

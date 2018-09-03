@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import six
 from grass.script.utils import try_remove
 from grass.script import core as grass
 from grass.script.task import cmdlist_to_tuple
@@ -509,7 +510,7 @@ class VNETAnalyses:
         cmdParams.append("output=" + output)
 
         cats = {}
-        for cat_name, pts_coor in catPts.iteritems():
+        for cat_name, pts_coor in six.iteritems(catPts):
 
             for coor in pts_coor:
                 cat_num = str(
@@ -527,7 +528,7 @@ class VNETAnalyses:
                 else:
                     cats[cat_name] = [cat_num]
 
-        for cat_name, cat_nums in cats.iteritems():
+        for cat_name, cat_nums in six.iteritems(cats):
             cmdParams.append(cat_name + "=" + ",".join(cat_nums))
 
         self.tmpTurnAn = AddTmpMapAnalysisMsg(
@@ -679,7 +680,7 @@ class VNETAnalyses:
 
         self._setCmdForSpecificAn(cmdParams)
 
-        for catName, catNum in catsNums.iteritems():
+        for catName, catNum in six.iteritems(catsNums):
             if catNum[0] == catNum[1]:
                 cmdParams.append(catName + "=" + str(catNum[0]))
             else:
@@ -736,8 +737,8 @@ class VNETAnalyses:
         """
 
         inParams = []
-        for col, v in self.data.GetAnalysisProperties()["cmdParams"][
-                "cols"].iteritems():
+        for col, v in six.iteritems(self.data.GetAnalysisProperties()["cmdParams"]
+                                                                     ["cols"]):
 
             if "inputField" in v:
                 colInptF = v["inputField"]
@@ -786,7 +787,7 @@ class VNETAnalyses:
         pt_ascii = ""
         catNum = maxCat
 
-        for catName, pts in catPts.iteritems():
+        for catName, pts in six.iteritems(catPts):
 
             catsNums[catName] = [catNum + 1]
             for pt in pts:
@@ -871,7 +872,7 @@ class VNETHistory():
             return
 
         # delete temporary maps in history steps which were deleted
-        for removedStep in removedHistData.itervalues():
+        for removedStep in six.itervalues(removedHistData):
             mapsNames = removedStep["tmp_data"]["maps"]
             for vectMapName in mapsNames:
                 tmpMap = self.tmp_maps.GetTmpVectMap(vectMapName)
@@ -917,7 +918,7 @@ class VNETHistory():
         # update parameters
         params = {}
         histInputData = histStepData["an_params"]
-        for inpName, inp in histInputData.iteritems():
+        for inpName, inp in six.iteritems(histInputData):
             params[inpName] = str(inp)
             if inpName == "input":
                 inpMap = inp
@@ -969,7 +970,7 @@ class VNETHistory():
                              subkey=[ptName, "checked"],
                              value=data["use"])
 
-            for param, value in params.iteritems():
+            for param, value in six.iteritems(params):
 
                 if param == "input":
                     inpMap = VectMap(self, value)

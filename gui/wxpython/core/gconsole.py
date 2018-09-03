@@ -27,7 +27,12 @@ import sys
 import re
 import time
 import threading
-import Queue
+
+if sys.version_info.major == 2:
+    import Queue
+else:
+    import queue as Queue
+
 import codecs
 import locale
 

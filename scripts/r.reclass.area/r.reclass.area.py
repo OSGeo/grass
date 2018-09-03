@@ -76,6 +76,7 @@ import sys
 import os
 import atexit
 import grass.script as grass
+from grass.script.utils import decode, encode
 
 # i18N
 import gettext
@@ -93,6 +94,7 @@ def reclass(inf, outf, lim, clump, diag, les):
     diagonal = diag
 
     s = grass.read_command("g.region", flags='p')
+    s = decode(s)
     kv = grass.parse_key_val(s, sep=':')
     s = kv['projection'].strip().split()
     if s == '0':
@@ -142,7 +144,7 @@ def reclass(inf, outf, lim, clump, diag, les):
                             rules='-')
     rules = ''
     for line in p1.stdout:
-        f = line.rstrip(os.linesep).split(';')
+        f = decode(line).rstrip(os.linesep).split(';')
         if len(f) < 5:
             continue
         hectares = float(f[4]) * 0.0001
@@ -153,7 +155,7 @@ def reclass(inf, outf, lim, clump, diag, les):
         if test:
             rules += "%s = %s %s\n" % (f[0], f[2], f[3])
     if rules:
-        p2.stdin.write(rules)
+        p2.stdin.write(encode(rules))
     p1.wait()
     p2.stdin.close()
     p2.wait()

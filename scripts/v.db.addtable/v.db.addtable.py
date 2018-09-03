@@ -56,6 +56,7 @@
 import sys
 import os
 import grass.script as grass
+from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 
 # i18N
@@ -99,7 +100,7 @@ def main():
     schema = kv['schema']
 
     # maybe there is already a table linked to the selected layer?
-    nuldev = file(os.devnull, 'w')
+    nuldev = open(os.devnull, 'w')
     try:
         grass.vector_db(map_name, stderr=nuldev)[int(layer)]
         grass.fatal(_("There is already a table linked to layer <%s>") % layer)
@@ -109,6 +110,7 @@ def main():
     # maybe there is already a table with that name?
     tables = grass.read_command('db.tables', flags='p', database=database, driver=driver,
                                 stderr=nuldev)
+    tables = decode(tables)
 
     if not table in tables.splitlines():
         colnames = []
@@ -137,15 +139,15 @@ def main():
         except CalledModuleError:
             grass.fatal(_("Unable to create table <%s>") % table)
 
-	# create index, see db/driver/*/index.c
+        # create index, see db/driver/*/index.c
         if driver != "dbf":
             sql = "CREATE UNIQUE INDEX %s_%s ON %s (%s)" % (table, key, table, key)
             try:
-		grass.run_command('db.execute',
-				  database=database, driver=driver, sql=sql)
-	    except:
-		grass.warning(_("Unable to create index on table <%s>") % table)
-		pass
+                grass.run_command('db.execute',
+                                  database=database, driver=driver, sql=sql)
+            except:
+                grass.warning(_("Unable to create index on table <%s>") % table)
+                pass
 
     # connect the map to the DB:
     if schema:

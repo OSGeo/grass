@@ -350,13 +350,13 @@ def check_for_desc_override(basename):
     return desc_override.get(basename)
 
 def read_file(name):
-    f = open(name, 'rb')
+    f = open(name, 'r')
     s = f.read()
     f.close()
     return s
 
 def write_file(name, contents):
-    f = open(name, 'wb')
+    f = open(name, 'w')
     f.write(contents)
     f.close()
 

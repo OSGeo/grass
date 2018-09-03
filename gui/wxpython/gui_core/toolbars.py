@@ -27,7 +27,7 @@ from core.utils import _
 from icons.icon import MetaIcon
 from collections import defaultdict
 from core.globalvar import IMGDIR
-from gui_core.wrap import ToolBar, Menu
+from gui_core.wrap import ToolBar, Menu, BitmapButton
 
 from grass.pydispatch.signal import Signal
 
@@ -268,9 +268,9 @@ class BaseToolbar(ToolBar):
         else:
             bitmap = wx.ArtProvider.GetBitmap(
                 id=wx.ART_MISSING_IMAGE, client=wx.ART_TOOLBAR)
-        button = wx.BitmapButton(parent=self, id=wx.ID_ANY, size=(
+        button = BitmapButton(parent=self, id=wx.ID_ANY, size=(
             (-1, self.GetToolSize()[1])), bitmap=bitmap, style=wx.NO_BORDER)
-        button.SetToolTipString(tooltip)
+        button.SetToolTip(tooltip)
 
         return button
 

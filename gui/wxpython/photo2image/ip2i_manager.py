@@ -28,6 +28,7 @@ from __future__ import print_function
 
 import os
 import sys
+import six
 import shutil
 import time
 from copy import copy
@@ -53,7 +54,8 @@ from core.gcmd import RunCommand, GMessage, GError, GWarning, EncodeString
 from core.settings import UserSettings
 from photo2image.ip2i_mapdisplay import MapFrame
 from core.giface import Notification
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
+    TextCtrl, Menu
 
 from location_wizard.wizard import TitledPage as TitledPage
 
@@ -685,7 +687,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                    "ucolor": "unused"}
         wpx = UserSettings.Get(group='gcpman', key='symbol', subkey='width')
 
-        for k, v in colours.iteritems():
+        for k, v in six.iteritems(colours):
             col = UserSettings.Get(group='gcpman', key='symbol', subkey=k)
             self.pointsToDrawSrc.GetPen(v).SetColour(wx.Colour(
                 col[0], col[1], col[2], 255))  # TODO GetPen neni to spatne?
@@ -1451,7 +1453,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         """Popup Zoom menu
         """
         point = wx.GetMousePosition()
-        zoommenu = wx.Menu()
+        zoommenu = Menu()
         # Add items to the menu
 
         zoomsource = wx.MenuItem(zoommenu, wx.ID_ANY, _(
@@ -1743,7 +1745,7 @@ class EditGCP(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        box = wx.StaticBox(
+        box = StaticBox(
             parent=panel, id=wx.ID_ANY, label=" %s %s " %
             (_("Ground Control Point No."), str(gcpno)))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
@@ -1751,10 +1753,10 @@ class EditGCP(wx.Dialog):
         # source coordinates
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
 
-        self.xcoord = wx.TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
-        self.ycoord = wx.TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
-        self.ecoord = wx.TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
-        self.ncoord = wx.TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
+        self.xcoord = TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
+        self.ycoord = TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
+        self.ecoord = TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
+        self.ncoord = TextCtrl(parent=panel, id=wx.ID_ANY, size=(150, -1))
 
         # swap source N, target E
         tmp_coord = data[1]
@@ -1768,8 +1770,8 @@ class EditGCP(wx.Dialog):
                            (_("target X:"), self.ecoord),
                            (_("source Y:"), self.ycoord),
                            (_("target Y:"), self.ncoord)):
-            label = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                  label=label)
+            label = StaticText(parent=panel, id=wx.ID_ANY,
+                               label=label)
             gridSizer.Add(label,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(row, col))
@@ -1796,8 +1798,8 @@ class EditGCP(wx.Dialog):
         #
         # buttons
         #
-        self.btnCancel = wx.Button(panel, wx.ID_CANCEL)
-        self.btnOk = wx.Button(panel, wx.ID_OK)
+        self.btnCancel = Button(panel, wx.ID_CANCEL)
+        self.btnOk = Button(panel, wx.ID_OK)
         self.btnOk.SetDefault()
 
         btnSizer = wx.StdDialogButtonSizer()
@@ -1865,19 +1867,19 @@ class GrSettingsDialog(wx.Dialog):
         self.__CreateRectificationPage(notebook)
 
         # buttons
-        btnSave = wx.Button(self, wx.ID_SAVE)
-        btnApply = wx.Button(self, wx.ID_APPLY)
-        btnClose = wx.Button(self, wx.ID_CLOSE)
+        btnSave = Button(self, wx.ID_SAVE)
+        btnApply = Button(self, wx.ID_APPLY)
+        btnClose = Button(self, wx.ID_CLOSE)
         btnApply.SetDefault()
 
         # bindings
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
-        btnApply.SetToolTipString(_("Apply changes for the current session"))
+        btnApply.SetToolTip(_("Apply changes for the current session"))
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
-        btnSave.SetToolTipString(
+        btnSave.SetToolTip(
             _("Apply and save changes to user settings file (default for next sessions)"))
         btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
-        btnClose.SetToolTipString(_("Close dialog"))
+        btnClose.SetToolTip(_("Close dialog"))
 
         # sizers
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -1923,7 +1925,7 @@ class GrSettingsDialog(wx.Dialog):
                 0))
 
         # RMS forward error threshold
-        rmslabel = wx.StaticText(
+        rmslabel = StaticText(
             parent=panel, id=wx.ID_ANY,
             label=_("Highlight RMS error > M + SD * factor:"))
         rmslabel.SetToolTip(
@@ -1940,8 +1942,8 @@ class GrSettingsDialog(wx.Dialog):
                 0))
         sdfactor = UserSettings.Get(
             group='gcpman', key='rms', subkey='sdfactor')
-        self.rmsWin = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
-                                  size=(70, -1), style=wx.TE_NOHIDESEL)
+        self.rmsWin = TextCtrl(parent=panel, id=wx.ID_ANY,
+                               size=(70, -1), style=wx.TE_NOHIDESEL)
         self.rmsWin.SetValue("%s" % str(sdfactor))
         if (self.parent.highest_only == True):
             self.rmsWin.Disable()
@@ -1951,8 +1953,8 @@ class GrSettingsDialog(wx.Dialog):
         rmsgridSizer.AddGrowableCol(1)
         sizer.Add(rmsgridSizer, flag=wx.EXPAND | wx.ALL, border=5)
 
-        box = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                           label=" %s " % _("Symbol settings"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY,
+                        label=" %s " % _("Symbol settings"))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
 
@@ -1960,7 +1962,7 @@ class GrSettingsDialog(wx.Dialog):
         # general symbol color
         #
         row = 0
-        label = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Color:"))
+        label = StaticText(parent=panel, id=wx.ID_ANY, label=_("Color:"))
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         col = UserSettings.Get(group='gcpman', key='symbol', subkey='color')
         colWin = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
@@ -1977,7 +1979,7 @@ class GrSettingsDialog(wx.Dialog):
         # symbol color for high forward RMS error
         #
         row += 1
-        label = wx.StaticText(
+        label = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Color for high RMS error:"))
@@ -1997,7 +1999,7 @@ class GrSettingsDialog(wx.Dialog):
         # symbol color for selected GCP
         #
         row += 1
-        label = wx.StaticText(
+        label = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Color for selected GCP:"))
@@ -2017,7 +2019,7 @@ class GrSettingsDialog(wx.Dialog):
         # symbol color for unused GCP
         #
         row += 1
-        label = wx.StaticText(
+        label = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Color for unused GCPs:"))
@@ -2050,7 +2052,7 @@ class GrSettingsDialog(wx.Dialog):
         # symbol size
         #
         row += 1
-        label = wx.StaticText(
+        label = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Symbol size:"))
@@ -2072,7 +2074,7 @@ class GrSettingsDialog(wx.Dialog):
         # symbol width
         #
         row += 1
-        label = wx.StaticText(
+        label = StaticText(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Line width:"))
@@ -2118,7 +2120,7 @@ class GrSettingsDialog(wx.Dialog):
         self.tgtrastselection.GetElementList()
 
         sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Select source map to display:')),
@@ -2132,7 +2134,7 @@ class GrSettingsDialog(wx.Dialog):
             border=5)
         self.srcselection.SetValue(src_map)
         sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Select target raster map to display:')),
@@ -2182,7 +2184,7 @@ class GrSettingsDialog(wx.Dialog):
         # interpolation method
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Select interpolation method:')),
@@ -2208,14 +2210,14 @@ class GrSettingsDialog(wx.Dialog):
 
         # extension
         sizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
                 label=_('Extension for output maps:')),
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5)
-        self.ext_txt = wx.TextCtrl(
+        self.ext_txt = TextCtrl(
             parent=panel, id=wx.ID_ANY, value="", size=(
                 350, -1))
         self.ext_txt.SetValue(self.parent.extension)

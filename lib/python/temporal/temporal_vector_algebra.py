@@ -56,7 +56,7 @@ from .temporal_algebra import TemporalAlgebraLexer, TemporalAlgebraParser, Globa
 from .core import init_dbif, get_current_mapset
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
 from .open_stds import open_new_stds
-from spatio_temporal_relationships import SpatioTemporalTopologyBuilder
+from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .space_time_datasets import VectorDataset
 
 

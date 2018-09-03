@@ -25,7 +25,7 @@ if len(sys.argv) > 3:
 
 filename = modclass + ".html"
 
-f = open(filename + ".tmp", 'wb')
+f = open(filename + ".tmp", 'w')
 
 write_html_header(f, "GRASS GIS %s Reference Manual: %s" % (grass_version, modclass))
 modclass_lower = modclass.lower()

@@ -44,8 +44,8 @@ import startup.guiutils as sgui
 from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator, StaticWrapText
-from gui_core.wrap import Button
-from gui_core.wrap import ListCtrl
+from gui_core.wrap import Button, ListCtrl, StaticText, StaticBox, \
+    TextCtrl
 
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
@@ -110,17 +110,17 @@ class GRASSStartup(wx.Frame):
         # get version & revision
         grassVersion, grassRevisionStr = sgui.GetVersion()
 
-        self.gisdbase_box = wx.StaticBox(
+        self.gisdbase_box = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("1. Select GRASS GIS database directory"))
-        self.location_box = wx.StaticBox(
+        self.location_box = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("2. Select GRASS Location"))
-        self.mapset_box = wx.StaticBox(
+        self.mapset_box = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("3. Select GRASS Mapset"))
 
-        self.lmessage = wx.StaticText(parent=self.panel)
+        self.lmessage = StaticText(parent=self.panel)
         # It is not clear if all wx versions supports color, so try-except.
         # The color itself may not be correct for all platforms/system settings
         # but in http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
@@ -134,7 +134,7 @@ class GRASSStartup(wx.Frame):
         self.location_panel = wx.Panel(parent=self.panel)
         self.mapset_panel = wx.Panel(parent=self.panel)
 
-        self.ldbase = wx.StaticText(
+        self.ldbase = StaticText(
             parent=self.gisdbase_panel, id=wx.ID_ANY,
             label=_("GRASS GIS database directory contains Locations."))
 
@@ -204,7 +204,7 @@ class GRASSStartup(wx.Frame):
         self.delete_mapset_button.SetToolTip(_("Delete selected mapset"))
 
         # textinputs
-        self.tgisdbase = wx.TextCtrl(
+        self.tgisdbase = TextCtrl(
             parent=self.gisdbase_panel, id=wx.ID_ANY, value="", size=(
                 300, -1), style=wx.TE_PROCESS_ENTER)
 
@@ -1001,7 +1001,9 @@ class GRASSStartup(wx.Frame):
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
 
         lockfile = get_lockfile_if_present(dbase, location, mapset)
+        print (lockfile)
         if lockfile:
+            print ('aaaa')
             dlg = wx.MessageDialog(
                 parent=self,
                 message=_(
@@ -1041,6 +1043,7 @@ class GRASSStartup(wx.Frame):
             else:
                 return
         self.SetLocation(dbase, location, mapset)
+        print ('ssssssssssssssss')
         self.ExitSuccessfully()
 
     def SetLocation(self, dbase, location, mapset):

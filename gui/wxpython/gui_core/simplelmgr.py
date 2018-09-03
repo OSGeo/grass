@@ -31,6 +31,7 @@ from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 from gui_core.forms import GUI
 from gui_core.dialogs import SetOpacityDialog
+from gui_core.wrap import CheckListBox, Menu
 from core.utils import GetLayerNameFromCmd
 from core.gcmd import GError
 from core.layerlist import LayerList
@@ -59,7 +60,7 @@ class SimpleLayerManager(wx.Panel):
 
         self._style = lmgrStyle
         self._layerList = layerList
-        self._checkList = wx.CheckListBox(self, style=wx.LB_EXTENDED)
+        self._checkList = CheckListBox(self, style=wx.LB_EXTENDED)
         if not toolbarCls:
             toolbarCls = SimpleLmgrToolbar
         self._toolbar = toolbarCls(self, lmgrStyle=self._style)
@@ -139,7 +140,7 @@ class SimpleLayerManager(wx.Panel):
             event.Skip()
             return
 
-        menu = wx.Menu()
+        menu = Menu()
         llist = [layer.name for layer in self._layerList]
         texts = [','.join(llist), ','.join(reversed(llist))]
         labels = [_("Copy map names to clipboard (top to bottom)"),

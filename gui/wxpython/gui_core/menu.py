@@ -27,7 +27,7 @@ from core.gcmd import EncodeString
 from core.utils import _
 from gui_core.widgets import SearchModuleWidget
 from gui_core.treeview import CTreeView
-from gui_core.wrap import Button
+from gui_core.wrap import Button, StaticText
 from gui_core.wrap import Menu as MenuWidget
 from icons.icon import MetaIcon
 
@@ -149,7 +149,7 @@ class SearchModuleWindow(wx.Panel):
 
         # tree
         self._tree = CTreeView(model=model, parent=self)
-        self._tree.SetToolTipString(
+        self._tree.SetToolTip(
             _("Double-click or Ctrl-Enter to run selected module"))
 
 #        self._dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
@@ -163,7 +163,7 @@ class SearchModuleWindow(wx.Panel):
             lambda result: self._tree.Select(result))
         self._search.showNotification.connect(self.showNotification)
 
-        self._helpText = wx.StaticText(
+        self._helpText = StaticText(
             parent=self, id=wx.ID_ANY,
             label="Press Enter for next match, Ctrl+Enter to run command")
         self._helpText.SetForegroundColour(

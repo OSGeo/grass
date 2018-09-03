@@ -168,7 +168,7 @@ def main():
                                                "Manual: Manual gallery" % grass_version))
         output.write(header_graphical_index_tmpl)
         output.write('<ul class="img-list">\n')
-        for image, html_file in img_html_files.iteritems():
+        for image, html_file in img_html_files.items():
             name = get_module_name(html_file)
             title = title_from_names(name, image)
             output.write(

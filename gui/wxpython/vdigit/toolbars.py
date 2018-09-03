@@ -21,7 +21,7 @@ from grass.pydispatch.signal import Signal
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.dialogs import CreateNewVector, VectorDialog
-from gui_core.wrap import PseudoDC
+from gui_core.wrap import PseudoDC, Menu
 from vdigit.preferences import VDigitSettingsDialog
 from core.debug import Debug
 from core.settings import UserSettings
@@ -553,7 +553,7 @@ class VDigitToolbar(BaseToolbar):
     def OnAdditionalToolMenu(self, event):
         """Menu for additional tools"""
         point = wx.GetMousePosition()
-        toolMenu = wx.Menu()
+        toolMenu = Menu()
 
         for label, itype, handler, desc in (
             (_('Break selected lines/boundaries at intersection'),

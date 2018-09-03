@@ -2135,7 +2135,7 @@ def yacc(
     error = 0
 
     # Add parsing method to signature
-    Signature.update(method)
+    Signature.update(method.encode())
 
     # If a "module" parameter was supplied, extract its dictionary.
     # Note: a module may in fact be an instance as well.

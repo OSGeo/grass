@@ -12,7 +12,7 @@ from build_rest import *
 os.chdir(rest_dir)
 
 filename = "index.txt"
-f = open(filename + ".tmp", 'wb')
+f = open(filename + ".tmp", 'w')
 
 write_rest_header(f, "GRASS GIS %s Reference Manual" % grass_version, True)
 write_rest_cmd_overview(f)

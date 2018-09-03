@@ -138,12 +138,12 @@ import tempfile
 from distutils.dir_util import copy_tree
 
 try:
-    from urllib2 import HTTPError, URLError
+    from urllib2 import HTTPError, URLError, ProxyHandler, build_opener
     from urllib import urlopen, urlretrieve
 except ImportError:
     # there is also HTTPException, perhaps change to list
     from urllib.error import HTTPError, URLError
-    from urllib.request import urlopen, urlretrieve
+    from urllib.request import urlopen, urlretrieve, ProxyHandler, build_opener
 
 try:
     import xml.etree.ElementTree as etree
@@ -160,6 +160,7 @@ else:
 import grass.script as gscript
 from grass.script.utils import try_rmdir
 from grass.script import core as grass
+from grass.script.utils import decode
 
 # i18N
 import gettext
@@ -178,8 +179,14 @@ def etree_fromfile(filename):
 
 def etree_fromurl(url, proxies=None):
     """Create XML element tree from a given URL"""
-    file_ = urlopen(url, proxies=proxies)
-    return etree.fromstring(file_.read())
+    if proxies:
+        proxy_handler = ProxyHandler(PROXIES)
+        opener = build_opener(proxy_handler)
+        with opener.open(url) as file_:
+            return etree.fromstring(file_.read())
+    else:
+        file_ = urlopen(url)
+        return etree.fromstring(file_.read())
 
 
 def check_progs():
@@ -527,7 +534,9 @@ def list_available_extensions_svn(url):
         file_url = '%s/%s' % (url, modclass)
         grass.debug("url = %s" % file_url, debug=2)
         try:
-            file_ = urlopen(file_url, proxies=PROXIES)
+            proxy_handler = ProxyHandler(PROXIES)
+            opener = build_opener(proxy_handler)
+            file_ = opener.open(url)
         except (HTTPError, IOError, OSError):
             grass.debug(_("Unable to fetch '%s'") % file_url, debug=1)
             continue
@@ -559,7 +568,9 @@ def get_wxgui_extensions(url):
     # construct a full URL of a file
     url = '%s/%s' % (url, 'gui/wxpython')
     grass.debug("url = %s" % url, debug=2)
-    file_ = urlopen(url, proxies=PROXIES)
+    proxy_handler = ProxyHandler(PROXIES)
+    opener = build_opener(proxy_handler)
+    file_ = opener.open(url)
     if not file_:
         grass.warning(_("Unable to fetch '%s'") % url)
         return
@@ -1030,6 +1041,7 @@ def fix_newlines(directory):
         for name in files:
             filename = os.path.join(root, name)
             data = open(filename, 'rb').read()
+            data = decode(data)
             if '\0' in data:
                 continue  # ignore binary files
             # we don't expect there would be CRLF file by purpose

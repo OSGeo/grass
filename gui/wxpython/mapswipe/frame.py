@@ -766,6 +766,7 @@ class SwipeMapFrame(DoubleMapFrame):
     def OnCloseWindow(self, event):
         self.GetFirstMap().Clean()
         self.GetSecondMap().Clean()
+        self._mgr.UnInit()
         self.Destroy()
 
 

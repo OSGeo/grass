@@ -28,6 +28,7 @@ from __future__ import print_function
 
 import os
 import sys
+import six
 
 from core import globalvar
 from core.utils import _
@@ -37,6 +38,7 @@ from grass.pydispatch.signal import Signal
 
 from core.gcmd import RunCommand, GError, GMessage
 from dbmgr.vinfo import CreateDbInfoDesc, VectorDBInfo, GetUnicodeValue
+from gui_core.wrap import Button, TextCtrl, StaticText, StaticBox
 
 import grass.script as grass
 
@@ -95,8 +97,8 @@ class SQLBuilder(wx.Frame):
 
         # dbInfo
         if showDbInfo:
-            databasebox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                   label=" %s " % _("Database connection"))
+            databasebox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                    label=" %s " % _("Database connection"))
             databaseboxsizer = wx.StaticBoxSizer(databasebox, wx.VERTICAL)
             databaseboxsizer.Add(
                 CreateDbInfoDesc(
@@ -111,11 +113,11 @@ class SQLBuilder(wx.Frame):
         # text areas
         #
         # sql box
-        sqlbox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                              label=" %s " % _("Query"))
+        sqlbox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                           label=" %s " % _("Query"))
         sqlboxsizer = wx.StaticBoxSizer(sqlbox, wx.VERTICAL)
 
-        self.text_sql = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY,
+        self.text_sql = TextCtrl(parent=self.panel, id=wx.ID_ANY,
                                     value='', size=(-1, 50),
                                     style=wx.TE_MULTILINE)
 
@@ -127,13 +129,12 @@ class SQLBuilder(wx.Frame):
         #
         # buttons
         #
-        self.btn_clear = wx.Button(parent=self.panel, id=wx.ID_CLEAR)
-        self.btn_clear.SetToolTipString(_("Set SQL statement to default"))
-        self.btn_apply = wx.Button(parent=self.panel, id=wx.ID_APPLY)
-        self.btn_apply.SetToolTipString(
-            _("Apply SQL statement"))
-        self.btn_close = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btn_close.SetToolTipString(_("Close the dialog"))
+        self.btn_clear = Button(parent=self.panel, id=wx.ID_CLEAR)
+        self.btn_clear.SetToolTip(_("Set SQL statement to default"))
+        self.btn_apply = Button(parent=self.panel, id=wx.ID_APPLY)
+        self.btn_apply.SetToolTip(_("Apply SQL statement"))
+        self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btn_close.SetToolTip(_("Close the dialog"))
 
         self.btn_logic = {'is': ['=', ],
                           'isnot': ['!=', ],
@@ -149,8 +150,8 @@ class SQLBuilder(wx.Frame):
                           'prc': ['%', ]}
 
         self.btn_logicpanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
-        for key, value in self.btn_logic.iteritems():
-            btn = wx.Button(parent=self.btn_logicpanel, id=wx.ID_ANY,
+        for key, value in six.iteritems(self.btn_logic):
+            btn = Button(parent=self.btn_logicpanel, id=wx.ID_ANY,
                             label=value[0])
             self.btn_logic[key].append(btn.GetId())
 
@@ -219,8 +220,8 @@ class SQLBuilder(wx.Frame):
         #
         self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        columnsbox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                  label=" %s " % _("Columns"))
+        columnsbox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                               label=" %s " % _("Columns"))
         columnsizer = wx.StaticBoxSizer(columnsbox, wx.VERTICAL)
         self.list_columns = wx.ListBox(
             parent=self.panel,
@@ -248,8 +249,8 @@ class SQLBuilder(wx.Frame):
         # self.list_values.SetMinSize((-1,100))
 
         self.valuespanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
-        valuesbox = wx.StaticBox(parent=self.valuespanel, id=wx.ID_ANY,
-                                 label=" %s " % _("Values"))
+        valuesbox = StaticBox(parent=self.valuespanel, id=wx.ID_ANY,
+                              label=" %s " % _("Values"))
         valuesizer = wx.StaticBoxSizer(valuesbox, wx.VERTICAL)
         self.list_values = wx.ListBox(parent=self.valuespanel, id=wx.ID_ANY,
                                       choices=self.colvalues,
@@ -258,14 +259,14 @@ class SQLBuilder(wx.Frame):
                        flag=wx.EXPAND)
         self.valuespanel.SetSizer(valuesizer)
 
-        self.btn_unique = wx.Button(parent=self.valuespanel, id=wx.ID_ANY,
+        self.btn_unique = Button(parent=self.valuespanel, id=wx.ID_ANY,
                                     label=_("Get all values"))
         self.btn_unique.Enable(False)
-        self.btn_uniquesample = wx.Button(
+        self.btn_uniquesample = Button(
             parent=self.valuespanel,
             id=wx.ID_ANY,
             label=_("Get sample"))
-        self.btn_uniquesample.SetToolTipString(
+        self.btn_uniquesample.SetToolTip(
             _("Get first 256 unique values as sample"))
         self.btn_uniquesample.Enable(False)
 
@@ -280,12 +281,12 @@ class SQLBuilder(wx.Frame):
 
         # go to
         gotosizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.goto = wx.TextCtrl(
+        self.goto = TextCtrl(
             parent=self.valuespanel,
             id=wx.ID_ANY,
             style=wx.TE_PROCESS_ENTER)
-        gotosizer.Add(wx.StaticText(parent=self.valuespanel, id=wx.ID_ANY,
-                                    label=_("Go to:")), proportion=0,
+        gotosizer.Add(StaticText(parent=self.valuespanel, id=wx.ID_ANY,
+                                 label=_("Go to:")), proportion=0,
                       flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border=5)
         gotosizer.Add(self.goto, proportion=1,
                       flag=wx.EXPAND)
@@ -339,7 +340,7 @@ class SQLBuilder(wx.Frame):
         self.btn_unique.Bind(wx.EVT_BUTTON, self.OnUniqueValues)
         self.btn_uniquesample.Bind(wx.EVT_BUTTON, self.OnSampleValues)
 
-        for key, value in self.btn_logic.iteritems():
+        for key, value in six.iteritems(self.btn_logic):
             self.FindWindowById(value[1]).Bind(wx.EVT_BUTTON, self.OnAddMark)
 
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
@@ -454,7 +455,7 @@ class SQLBuilder(wx.Frame):
                 self.btn_arithmeticpanel.IsShown():
             btns = self.btn_arithmetic
 
-        for key, value in btns.iteritems():
+        for key, value in six.iteritems(btns):
             if event.GetId() == value[1]:
                 mark = value[0]
                 break
@@ -494,13 +495,13 @@ class SQLBuilderSelect(SQLBuilder):
         SQLBuilder._doLayout(self, modeChoices)
 
         self.text_sql.SetValue("SELECT * FROM %s" % self.tablename)
-        self.text_sql.SetToolTipString(
+        self.text_sql.SetToolTip(
             _("Example: %s") %
             "SELECT * FROM roadsmajor WHERE MULTILANE = 'no' OR OBJECTID < 10")
 
-        self.btn_verify = wx.Button(parent=self.panel, id=wx.ID_ANY,
+        self.btn_verify = Button(parent=self.panel, id=wx.ID_ANY,
                                     label=_("Verify"))
-        self.btn_verify.SetToolTipString(_("Verify SQL statement"))
+        self.btn_verify.SetToolTip(_("Verify SQL statement"))
 
         self.buttonsizer.Insert(1, self.btn_verify)
 
@@ -659,8 +660,8 @@ class SQLBuilderUpdate(SQLBuilder):
 
         self.btn_arithmeticpanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
 
-        for key, value in self.btn_arithmetic.iteritems():
-            btn = wx.Button(parent=self.btn_arithmeticpanel, id=wx.ID_ANY,
+        for key, value in six.iteritems(self.btn_arithmetic):
+            btn = Button(parent=self.btn_arithmeticpanel, id=wx.ID_ANY,
                             label=value[0])
             self.btn_arithmetic[key].append(btn.GetId())
 
@@ -700,8 +701,8 @@ class SQLBuilderUpdate(SQLBuilder):
 
         self.funcpanel = wx.Panel(parent=self.panel, id=wx.ID_ANY)
         self._initSqlFunctions()
-        funcsbox = wx.StaticBox(parent=self.funcpanel, id=wx.ID_ANY,
-                                label=" %s " % _("Functions"))
+        funcsbox = StaticBox(parent=self.funcpanel, id=wx.ID_ANY,
+                             label=" %s " % _("Functions"))
         funcsizer = wx.StaticBoxSizer(funcsbox, wx.VERTICAL)
         self.list_func = wx.ListBox(parent=self.funcpanel, id=wx.ID_ANY,
                                     choices=self.sqlFuncs['sqlite'].keys(),
@@ -716,7 +717,7 @@ class SQLBuilderUpdate(SQLBuilder):
                            proportion=1, flag=wx.EXPAND)
 
         self.list_func.Bind(wx.EVT_LISTBOX, self.OnAddFunc)
-        for key, value in self.btn_arithmetic.iteritems():
+        for key, value in six.iteritems(self.btn_arithmetic):
             self.FindWindowById(value[1]).Bind(wx.EVT_BUTTON, self.OnAddMark)
         self.mode.SetSelection(0)
         self.OnMode(None)

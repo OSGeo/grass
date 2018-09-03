@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 import wx
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.wrap import Menu
 from icons.icon import MetaIcon
 from core.utils import _
 
@@ -148,7 +149,7 @@ class SwipeMainToolbar(BaseToolbar):
 
     def OnToolMenu(self, event):
         """Menu for additional tools"""
-        toolMenu = wx.Menu()
+        toolMenu = Menu()
 
         for label, itype, handler, desc in (
             (_("Switch orientation"),

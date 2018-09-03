@@ -76,8 +76,7 @@ keywordsfile.write(header1_tmpl.substitute(title="GRASS GIS %s Reference "
 keywordsfile.write(headerkeywords_tmpl)
 keywordsfile.write('<dl>')
 
-sortedKeys = keywords.keys()
-sortedKeys.sort(key=lambda s: s.lower())
+sortedKeys = sorted(keywords.keys(), key=lambda s: s.lower())
 
 for key in sortedKeys:
     keyword_line = '<dt><b><a name="%s" class="urlblack">%s</a></b></dt>' \

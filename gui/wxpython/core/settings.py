@@ -858,9 +858,9 @@ class Settings:
         """Define internal settings (based on user settings)
         """
         self.internalSettings = {}
-        for group in self.userSettings.keys():
+        for group in list(self.userSettings.keys()):
             self.internalSettings[group] = {}
-            for key in self.userSettings[group].keys():
+            for key in list(self.userSettings[group].keys()):
                 self.internalSettings[group][key] = {}
 
         # self.internalSettings['general']["mapsetPath"]['value'] = self.GetMapsetPath()
@@ -1030,9 +1030,9 @@ class Settings:
 
         try:
             file = open(self.filePath, "w")
-            for group in settings.keys():
-                for key in settings[group].keys():
-                    subkeys = settings[group][key].keys()
+            for group in list(settings.keys()):
+                for key in list(settings[group].keys()):
+                    subkeys = list(settings[group][key].keys())
                     file.write('%s%s%s%s' % (group, self.sep, key, self.sep))
                     for idx in range(len(subkeys)):
                         value = settings[group][key][subkeys[idx]]
@@ -1042,7 +1042,7 @@ class Settings:
                                     '%s%s%s%s%s' %
                                     (os.linesep, group, self.sep, key, self.sep))
                             file.write('%s%s' % (subkeys[idx], self.sep))
-                            kvalues = settings[group][key][subkeys[idx]].keys()
+                            kvalues = list(settings[group][key][subkeys[idx]].keys())
                             srange = range(len(kvalues))
                             for sidx in srange:
                                 svalue = self._parseValue(

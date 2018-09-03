@@ -64,7 +64,7 @@ class Info(object):
         """
         self.name = name
         self.mapset = mapset
-        self.c_region = ctypes.pointer(libgis.Cell_head())
+        self.c_region = ctypes.pointer(libraster.struct_Cell_head())
         self.c_range = None
 
     def _get_range(self):

@@ -227,7 +227,8 @@ class WMSDrv(WMSBase):
         # georeferencing and setting projection of temp_map
         projection = grass.read_command('g.proj',
                                         flags='wf',
-                                        epsg=self.params['srs']).rstrip('\n')
+                                        epsg=self.params['srs'])
+        projection = projection.rstrip('\n')
         temp_map_dataset.SetProjection(projection)
 
         pixel_x_length = (map_region['maxx'] - map_region['minx']) / int(map_region['cols'])

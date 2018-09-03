@@ -32,6 +32,7 @@ from core.debug import Debug
 from core.utils import _, autoCropImageFromFile
 
 from animation.utils import HashCmd, HashCmds, GetFileFromCmd, GetFileFromCmds
+from gui_core.wrap import EmptyBitmap
 
 import grass.script.core as gcore
 from grass.script.task import cmdlist_to_tuple
@@ -802,7 +803,7 @@ def createNoDataBitmap(imageWidth, imageHeight, text="No data"):
     """
     Debug.msg(4, "createNoDataBitmap: w={w}, h={h}, text={t}".format(
         w=imageWidth, h=imageHeight, t=text))
-    bitmap = wx.EmptyBitmap(imageWidth, imageHeight)
+    bitmap = EmptyBitmap(imageWidth, imageHeight)
     dc = wx.MemoryDC()
     dc.SelectObject(bitmap)
     dc.Clear()

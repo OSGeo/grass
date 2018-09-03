@@ -7,7 +7,12 @@ Created on Fri Jun 26 19:10:58 2015
 from __future__ import print_function
 import argparse
 import sys
-from urllib import urlopen
+
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen
+
 from build_html import *
 
 def parse_options(lines, startswith='Opt'):

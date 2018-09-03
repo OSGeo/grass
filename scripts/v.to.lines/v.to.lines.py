@@ -41,6 +41,7 @@
 #%end
 
 import grass.script as grass
+from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 import os
 
@@ -127,7 +128,8 @@ def main():
                           name=remove_names, quiet=quiet)
         grass.fatal(_("Error converting polygon to line"))
     report = grass.read_command('v.category', flags='g', input=out_type,
-                                option='report', quiet=quiet).split('\n')
+                                option='report', quiet=quiet)
+    report = decode(report).split('\n')
     for r in report:
         if r.find('centroid') != -1:
             min_cat = report[0].split()[-2]

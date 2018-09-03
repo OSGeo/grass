@@ -91,7 +91,7 @@ def main():
 
     gscript.message(_("Current attribute table link(s):"))
     # silently test first to avoid confusing error messages
-    nuldev = file(os.devnull, 'w')
+    nuldev = open(os.devnull, 'w')
     try:
         gscript.run_command('v.db.connect', flags='p', map=map, quiet=True,
                             stdout=nuldev, stderr=nuldev)

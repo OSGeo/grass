@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 
 import os
 import types
+import six
 
 from core import globalvar
 from core.utils import _
@@ -30,7 +31,8 @@ from core.debug import Debug
 from core.settings import UserSettings
 from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue
 from gui_core.widgets import IntegerValidator, FloatValidator
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
+    TextCtrl
 
 
 class DisplayAttributesDialog(wx.Dialog):
@@ -110,10 +112,10 @@ class DisplayAttributesDialog(wx.Dialog):
         self.fidMulti = wx.Choice(parent=self, id=wx.ID_ANY,
                                   size=(150, -1))
         self.fidMulti.Bind(wx.EVT_CHOICE, self.OnFeature)
-        self.fidText = wx.StaticText(parent=self, id=wx.ID_ANY)
+        self.fidText = StaticText(parent=self, id=wx.ID_ANY)
 
-        self.noFoundMsg = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                        label=_("No attributes found"))
+        self.noFoundMsg = StaticText(parent=self, id=wx.ID_ANY,
+                                     label=_("No attributes found"))
 
         self.UpdateDialog(query=query, cats=cats)
 
@@ -126,9 +128,9 @@ class DisplayAttributesDialog(wx.Dialog):
             self.SetTitle(_("Display attributes"))
 
         # buttons
-        btnCancel = wx.Button(self, wx.ID_CANCEL)
-        btnReset = wx.Button(self, wx.ID_UNDO, _("&Reload"))
-        btnSubmit = wx.Button(self, wx.ID_OK, _("&Submit"))
+        btnCancel = Button(self, wx.ID_CANCEL)
+        btnReset = Button(self, wx.ID_UNDO, _("&Reload"))
+        btnSubmit = Button(self, wx.ID_OK, _("&Submit"))
         if self.action == 'display':
             btnSubmit.Enable(False)
 
@@ -145,8 +147,8 @@ class DisplayAttributesDialog(wx.Dialog):
         mainSizer.Add(self.notebook, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=5)
         fidSizer = wx.BoxSizer(wx.HORIZONTAL)
-        fidSizer.Add(wx.StaticText(parent=self, id=wx.ID_ANY,
-                                   label=_("Feature id:")),
+        fidSizer.Add(StaticText(parent=self, id=wx.ID_ANY,
+                                label=_("Feature id:")),
                      proportion=0, border=5,
                      flag=wx.ALIGN_CENTER_VERTICAL)
         fidSizer.Add(self.fidMulti, proportion=0,
@@ -536,11 +538,11 @@ class DisplayAttributesDialog(wx.Dialog):
                     else:
                         value = ''
 
-                    colName = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                            label=name)
-                    colType = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                            label="[%s]:" % vtype)
-                    colValue = wx.TextCtrl(
+                    colName = StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=name)
+                    colType = StaticText(parent=panel, id=wx.ID_ANY,
+                                         label="[%s]:" % vtype)
+                    colValue = TextCtrl(
                         parent=panel, id=wx.ID_ANY, value=value)
                     colValue.SetName(name)
                     if ctype == int:
@@ -591,7 +593,7 @@ class DisplayAttributesDialog(wx.Dialog):
         table = self.mapDBInfo.GetTable(layer)
         columns = self.mapDBInfo.GetTableDesc(table)
 
-        for key, col in columns.iteritems():
+        for key, col in six.iteritems(columns):
             if key == column:
                 col['values'] = [col['ctype'](value), ]
                 break
@@ -614,15 +616,15 @@ class ModifyTableRecord(wx.Dialog):
 
         self.keyId = keyEditable[0]
 
-        box = wx.StaticBox(parent=self, id=wx.ID_ANY)
+        box = StaticBox(parent=self, id=wx.ID_ANY)
         box.Hide()
         self.dataPanel = scrolled.ScrolledPanel(parent=self, id=wx.ID_ANY,
                                                 style=wx.TAB_TRAVERSAL)
         self.dataPanel.SetupScrolling(scroll_x=False)
 
         # buttons
-        self.btnCancel = wx.Button(self, wx.ID_CANCEL)
-        self.btnSubmit = wx.Button(self, wx.ID_OK, _("&Submit"))
+        self.btnCancel = Button(self, wx.ID_CANCEL)
+        self.btnSubmit = Button(self, wx.ID_OK, _("&Submit"))
         self.btnSubmit.SetDefault()
 
         # data area
@@ -647,8 +649,8 @@ class ModifyTableRecord(wx.Dialog):
                         parent=self.dataPanel, id=wx.ID_ANY, value=value,
                         min=-1e9, max=1e9, size=(250, -1))
             else:
-                valueWin = wx.TextCtrl(parent=self.dataPanel, id=wx.ID_ANY,
-                                       value=value, size=(250, -1))
+                valueWin = TextCtrl(parent=self.dataPanel, id=wx.ID_ANY,
+                                    value=value, size=(250, -1))
                 if ctype == int:
                     valueWin.SetValidator(IntegerValidator())
                 elif ctype == float:
@@ -657,10 +659,10 @@ class ModifyTableRecord(wx.Dialog):
                     wx.CallAfter(valueWin.SetFocus)
                     winFocus = True
 
-            label = wx.StaticText(parent=self.dataPanel, id=wx.ID_ANY,
-                                  label=column)
-            ctype = wx.StaticText(parent=self.dataPanel, id=wx.ID_ANY,
-                                  label="[%s]:" % ctypeStr.lower())
+            label = StaticText(parent=self.dataPanel, id=wx.ID_ANY,
+                               label=column)
+            ctype = StaticText(parent=self.dataPanel, id=wx.ID_ANY,
+                               label="[%s]:" % ctypeStr.lower())
             self.widgets.append(
                 (label.GetId(), ctype.GetId(), valueWin.GetId()))
 
@@ -752,7 +754,7 @@ class AddColumnDialog(wx.Dialog):
         self.CenterOnParent()
 
         self.data = {}
-        self.data['addColName'] = wx.TextCtrl(
+        self.data['addColName'] = TextCtrl(
             parent=self, id=wx.ID_ANY, value='', size=(
                 150, -1), style=wx.TE_PROCESS_ENTER)
 
@@ -770,8 +772,8 @@ class AddColumnDialog(wx.Dialog):
         self.data['addColLength'].Enable(False)
 
         # buttons
-        self.btnCancel = wx.Button(self, wx.ID_CANCEL)
-        self.btnOk = wx.Button(self, wx.ID_OK)
+        self.btnCancel = Button(self, wx.ID_CANCEL)
+        self.btnOk = Button(self, wx.ID_OK)
         self.btnOk.SetDefault()
 
         self._layout()
@@ -782,7 +784,7 @@ class AddColumnDialog(wx.Dialog):
         addSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         addSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_("Column")),
@@ -793,7 +795,7 @@ class AddColumnDialog(wx.Dialog):
                      border=5)
 
         addSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_("Type")),
@@ -804,7 +806,7 @@ class AddColumnDialog(wx.Dialog):
                      border=5)
 
         addSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent=self,
                 id=wx.ID_ANY,
                 label=_("Length")),

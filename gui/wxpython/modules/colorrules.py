@@ -26,6 +26,7 @@ import os
 import shutil
 import copy
 import tempfile
+import six
 
 import wx
 import wx.lib.colourselect as csel
@@ -45,7 +46,8 @@ from gui_core.forms import GUI
 from core.debug import Debug as Debug
 from core.settings import UserSettings
 from gui_core.widgets import ColorTablesComboBox
-from gui_core.wrap import SpinCtrl, PseudoDC
+from gui_core.wrap import SpinCtrl, PseudoDC, TextCtrl, Button, StaticText, \
+    StaticBox, EmptyBitmap
 
 
 class RulesPanel:
@@ -79,12 +81,12 @@ class RulesPanel:
         self.checkAll = wx.CheckBox(parent, id=wx.ID_ANY, label=_("Check all"))
         self.checkAll.SetValue(True)
         # clear button
-        self.clearAll = wx.Button(parent, id=wx.ID_ANY, label=_("Clear all"))
+        self.clearAll = Button(parent, id=wx.ID_ANY, label=_("Clear all"))
         #  determines how many rules should be added
         self.numRules = SpinCtrl(parent, id=wx.ID_ANY,
                                  min=1, max=1e6, initial=1)
         # add rules
-        self.btnAdd = wx.Button(parent, id=wx.ID_ADD)
+        self.btnAdd = Button(parent, id=wx.ID_ADD)
 
         self.btnAdd.Bind(wx.EVT_BUTTON, self.OnAddRules)
         self.checkAll.Bind(wx.EVT_CHECKBOX, self.OnCheckAll)
@@ -133,11 +135,11 @@ class RulesPanel:
             enable.SetName('enable')
             enable.Bind(wx.EVT_CHECKBOX, self.OnRuleEnable)
             # value
-            txt_ctrl = wx.TextCtrl(parent=self.mainPanel, id=1000 + num,
+            txt_ctrl = TextCtrl(parent=self.mainPanel, id=1000 + num,
                                    size=(80, -1),
                                    style=wx.TE_NOHIDESEL)
             if self.mapType == 'vector':
-                txt_ctrl.SetToolTipString(_("Enter vector attribute values"))
+                txt_ctrl.SetToolTip(_("Enter vector attribute values"))
             txt_ctrl.Bind(wx.EVT_TEXT, self.OnRuleValue)
             txt_ctrl.SetName('source')
             if self.attributeType == 'color':
@@ -413,8 +415,8 @@ class ColorTable(wx.Frame):
             maplabel = _('Select raster map:')
         else:
             maplabel = _('Select vector map:')
-        inputBox = wx.StaticBox(parent, id=wx.ID_ANY,
-                                label=" %s " % maplabel)
+        inputBox = StaticBox(parent, id=wx.ID_ANY,
+                             label=" %s " % maplabel)
         inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
 
         self.selectionInput = Select(parent=parent, id=wx.ID_ANY,
@@ -430,7 +432,7 @@ class ColorTable(wx.Frame):
 
     def _createFileSelection(self, parent):
         """Create file (open/save rules) selection part of dialog"""
-        inputBox = wx.StaticBox(
+        inputBox = StaticBox(
             parent, id=wx.ID_ANY, label=" %s " %
             _("Import or export color table:"))
         inputSizer = wx.StaticBoxSizer(inputBox, wx.HORIZONTAL)
@@ -459,7 +461,7 @@ class ColorTable(wx.Frame):
             size=globalvar.DIALOG_COMBOBOX_SIZE,
             choices=utils.GetColorTables(),
             name="colorTableChoice")
-        self.btnSet = wx.Button(
+        self.btnSet = Button(
             parent=parent,
             id=wx.ID_ANY,
             label=_("&Set"),
@@ -470,12 +472,12 @@ class ColorTable(wx.Frame):
         # layout
         gridSizer = wx.GridBagSizer(hgap=2, vgap=2)
 
-        gridSizer.Add(wx.StaticText(parent, label=_("Load color table:")),
+        gridSizer.Add(StaticText(parent, label=_("Load color table:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(colorTable, pos=(0, 1))
         gridSizer.Add(self.btnSet, pos=(0, 2), flag=wx.ALIGN_RIGHT)
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent, label=_('Load color table from file:')), pos=(
                 1, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
@@ -483,7 +485,7 @@ class ColorTable(wx.Frame):
                 1, 1), span=(
                 1, 2), flag=wx.EXPAND)
         gridSizer.Add(
-            wx.StaticText(
+            StaticText(
                 parent, label=_('Save color table to file:')), pos=(
                 2, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(
@@ -511,12 +513,12 @@ class ColorTable(wx.Frame):
 
     def _createButtons(self, parent):
         """Create buttons for leaving dialog"""
-        self.btnHelp = wx.Button(parent, id=wx.ID_HELP)
-        self.btnCancel = wx.Button(parent, id=wx.ID_CANCEL)
-        self.btnApply = wx.Button(parent, id=wx.ID_APPLY)
-        self.btnOK = wx.Button(parent, id=wx.ID_OK)
-        self.btnDefault = wx.Button(parent, id=wx.ID_ANY,
-                                    label=_("Reload default table"))
+        self.btnHelp = Button(parent, id=wx.ID_HELP)
+        self.btnCancel = Button(parent, id=wx.ID_CANCEL)
+        self.btnApply = Button(parent, id=wx.ID_APPLY)
+        self.btnOK = Button(parent, id=wx.ID_OK)
+        self.btnDefault = Button(parent, id=wx.ID_ANY,
+                                 label=_("Reload default table"))
 
         self.btnOK.SetDefault()
         self.btnOK.Enable(False)
@@ -545,7 +547,7 @@ class ColorTable(wx.Frame):
 
         row = 0
         # label with range
-        self.cr_label = wx.StaticText(parent, id=wx.ID_ANY)
+        self.cr_label = StaticText(parent, id=wx.ID_ANY)
         bodySizer.Add(self.cr_label, pos=(row, 0), span=(1, 3),
                       flag=wx.ALL, border=5)
 
@@ -578,12 +580,12 @@ class ColorTable(wx.Frame):
         bodySizer.Add(self.rulesPanel.clearAll, pos=(row, 1))
 
         # preview button
-        self.btnPreview = wx.Button(parent, id=wx.ID_ANY,
+        self.btnPreview = Button(parent, id=wx.ID_ANY,
                                     label=_("Preview"))
         bodySizer.Add(self.btnPreview, pos=(row, 2),
                       flag=wx.ALIGN_RIGHT)
         self.btnPreview.Enable(False)
-        self.btnPreview.SetToolTipString(
+        self.btnPreview.SetToolTip(
             _("Show preview of map " "(current Map Display extent is used)."))
 
         row += 1
@@ -682,7 +684,7 @@ class ColorTable(wx.Frame):
                 return
 
         rulestxt = ''
-        for rule in self.rulesPanel.ruleslines.itervalues():
+        for rule in six.itervalues(self.rulesPanel.ruleslines):
             if 'value' not in rule:
                 continue
             rulestxt += rule['value'] + ' ' + rule['color'] + '\n'
@@ -793,7 +795,7 @@ class ColorTable(wx.Frame):
         """
         rulestxt = ''
 
-        for rule in self.rulesPanel.ruleslines.itervalues():
+        for rule in six.itervalues(self.rulesPanel.ruleslines):
             if 'value' not in rule:  # skip empty rules
                 continue
 
@@ -1105,12 +1107,12 @@ class VectorColorTable(ColorTable):
 
     def _createVectorAttrb(self, parent):
         """Create part of dialog with layer/column selection"""
-        inputBox = wx.StaticBox(parent=parent, id=wx.ID_ANY,
-                                label=" %s " % _("Select vector columns"))
-        cb_vl_label = wx.StaticText(parent, id=wx.ID_ANY,
-                                    label=_('Layer:'))
-        cb_vc_label = wx.StaticText(parent, id=wx.ID_ANY,
-                                    label=_('Attribute column:'))
+        inputBox = StaticBox(parent=parent, id=wx.ID_ANY,
+                             label=" %s " % _("Select vector columns"))
+        cb_vl_label = StaticText(parent, id=wx.ID_ANY,
+                                 label=_('Layer:'))
+        cb_vc_label = StaticText(parent, id=wx.ID_ANY,
+                                 label=_('Attribute column:'))
 
         if self.attributeType == 'color':
             labels = [_("Load color from column:"), _("Save color to column:")]
@@ -1125,19 +1127,19 @@ class VectorColorTable(ColorTable):
                 label=_("Use color column instead of color table:"))
             self.useColumn.Bind(wx.EVT_CHECKBOX, self.OnCheckColumn)
 
-        fromColumnLabel = wx.StaticText(parent, id=wx.ID_ANY,
-                                        label=labels[0])
-        toColumnLabel = wx.StaticText(parent, id=wx.ID_ANY,
-                                      label=labels[1])
+        fromColumnLabel = StaticText(parent, id=wx.ID_ANY,
+                                     label=labels[0])
+        toColumnLabel = StaticText(parent, id=wx.ID_ANY,
+                                   label=labels[1])
 
-        self.rgb_range_label = wx.StaticText(parent, id=wx.ID_ANY)
+        self.rgb_range_label = StaticText(parent, id=wx.ID_ANY)
         self.layerSelect = LayerSelect(parent)
         self.sourceColumn = ColumnSelect(parent)
         self.fromColumn = ColumnSelect(parent)
         self.toColumn = ColumnSelect(parent)
-        self.addColumn = wx.Button(parent, id=wx.ID_ANY,
+        self.addColumn = Button(parent, id=wx.ID_ANY,
                                    label=_('Add column'))
-        self.addColumn.SetToolTipString(
+        self.addColumn.SetToolTip(
             _("Add GRASSRGB column to current attribute table."))
 
         # layout
@@ -1808,7 +1810,7 @@ class VectorColorTable(ColorTable):
         """
         rulestxt = ''
 
-        for rule in self.rulesPanel.ruleslines.itervalues():
+        for rule in six.itervalues(self.rulesPanel.ruleslines):
             if 'value' not in rule:  # skip empty rules
                 break
 
@@ -1991,7 +1993,7 @@ class BufferedWindow(wx.Window):
 
     def OnPaint(self, event):
         """Draw pseudo DC to buffer"""
-        self._Buffer = wx.EmptyBitmap(self.Map.width, self.Map.height)
+        self._Buffer = EmptyBitmap(self.Map.width, self.Map.height)
         dc = wx.BufferedPaintDC(self, self._Buffer)
 
         # use PrepareDC to set position correctly
@@ -2019,7 +2021,7 @@ class BufferedWindow(wx.Window):
         # Make new off screen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
         # a file, or whatever.
-        self._Buffer = wx.EmptyBitmap(self.Map.width, self.Map.height)
+        self._Buffer = EmptyBitmap(self.Map.width, self.Map.height)
 
         # get the image to be rendered
         self.img = self.GetImage()

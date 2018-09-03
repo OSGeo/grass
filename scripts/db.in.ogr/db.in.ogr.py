@@ -60,6 +60,7 @@
 
 import os
 import grass.script as grass
+from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 
 # i18N
@@ -85,7 +86,7 @@ def main():
 
     # check if table exists
     try:
-        nuldev = file(os.devnull, 'w+')
+        nuldev = open(os.devnull, 'w+')
         s = grass.read_command('db.tables', flags='p', quiet=True, stderr=nuldev)
         nuldev.close()
     except CalledModuleError:
@@ -93,7 +94,7 @@ def main():
         grass.read_command('db.connect', flags='c')
         s = grass.read_command('db.tables', flags='p', quiet=True)
 
-    for l in s.splitlines():
+    for l in decode(s).splitlines():
         if l == output:
             if grass.overwrite():
                 grass.warning(_("Table <%s> already exists and will be "
@@ -142,7 +143,7 @@ def main():
                           name=output)
 
     # get rid of superfluous auto-added cat column (and cat_ if present)
-    nuldev = file(os.devnull, 'w+')
+    nuldev = open(os.devnull, 'w+')
     grass.run_command('db.dropcolumn', quiet=True, flags='f', table=output,
                       column='cat', stdout=nuldev, stderr=nuldev)
     nuldev.close()

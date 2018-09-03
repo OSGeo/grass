@@ -23,6 +23,7 @@ from core.debug import Debug
 from core.utils import _
 from core.settings import UserSettings
 from mapwin.buffered import BufferedMapWindow
+from gui_core.wrap import Rect
 
 
 EVT_MY_MOUSE_EVENTS = wx.NewEventType()
@@ -52,8 +53,8 @@ class SwipeBufferedWindow(BufferedMapWindow):
 
     def _bindMouseEvents(self):
         """Binds wx mouse events and custom mouse events"""
-        wx.EVT_MOUSE_EVENTS(self, self._mouseActions)
-        wx.EVT_MOTION(self, self._mouseMotion)
+        self.Bind(wx.EVT_MOUSE_EVENTS, self._mouseActions)
+        self.Bind(wx.EVT_MOTION, self._mouseMotion)
         self.Bind(EVT_MOTION, self.OnMotion)
         self.Bind(EVT_MOUSE_EVENTS, self.MouseActions)
         self.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
@@ -174,7 +175,7 @@ class SwipeBufferedWindow(BufferedMapWindow):
 
     def SetRasterNameText(self, name, textId):
         """Sets text label with map name."""
-        self.textdict[textId] = {'bbox': wx.Rect(), 'coords': [10, 10],
+        self.textdict[textId] = {'bbox': Rect(), 'coords': [10, 10],
                                  'font': self.GetFont(), 'color': wx.BLACK,
                                  'background': wx.LIGHT_GREY,
                                  'rotation': 0, 'text': name,

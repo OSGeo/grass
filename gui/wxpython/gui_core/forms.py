@@ -49,12 +49,18 @@ COPYING coming with GRASS for details.
 from __future__ import print_function
 
 import sys
-import string
 import textwrap
 import os
 import copy
 import locale
-import Queue
+import six
+
+if sys.version_info.major == 2:
+    import Queue
+else:
+    import queue as Queue
+    unicode = str
+
 import re
 import codecs
 
@@ -100,7 +106,8 @@ from core.settings import UserSettings
 from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
 from core.giface import Notification
 from gui_core.widgets import LayersList
-from gui_core.wrap import BitmapFromImage, Button, StaticText, StaticBox, SpinCtrl
+from gui_core.wrap import BitmapFromImage, Button, StaticText, StaticBox, SpinCtrl, \
+    CheckBox, BitmapButton, TextCtrl
 from core.debug import Debug
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
@@ -120,20 +127,18 @@ def text_beautify(someString, width=70):
     """
     if width > 0:
         return escape_ampersand(
-            string.strip(
-                os.linesep.join(
-                    textwrap.wrap(
-                        utils.normalize_whitespace(someString),
-                        width)),
-                ".,;:"))
+            os.linesep.join(
+                textwrap.wrap(
+                    utils.normalize_whitespace(someString),
+                    width)).strip(".,;:"))
     else:
-        return escape_ampersand(string.strip(
-            utils.normalize_whitespace(someString), ".,;:"))
+        return escape_ampersand(
+            utils.normalize_whitespace(someString).strip(".,;:"))
 
 
 def escape_ampersand(text):
     """Escapes ampersands with additional ampersand for GUI"""
-    return string.replace(text, "&", "&&")
+    return text.replace("&", "&&")
 
 
 class UpdateThread(Thread):
@@ -691,7 +696,7 @@ class TaskFrame(wx.Frame):
 
         if self.get_dcmd is None and hasNew:
             # close dialog when command is terminated
-            self.closebox = wx.CheckBox(
+            self.closebox = CheckBox(
                 parent=self.panel,
                 label=_('Close dialog on finish'),
                 style=wx.NO_BORDER)
@@ -700,7 +705,7 @@ class TaskFrame(wx.Frame):
                     group='cmd',
                     key='closeDlg',
                     subkey='enabled'))
-            self.closebox.SetToolTipString(
+            self.closebox.SetToolTip(
                 _(
                     "Close dialog when command is successfully finished. "
                     "Change this settings in Preferences dialog ('Command' tab)."))
@@ -1046,13 +1051,13 @@ class CmdPanel(wx.Panel):
             title_sizer = wx.BoxSizer(wx.HORIZONTAL)
             rtitle_txt = StaticText(parent=which_panel,
                                     label='(' + f['name'] + ')')
-            chk = wx.CheckBox(
+            chk = CheckBox(
                 parent=which_panel,
                 label=title,
                 style=wx.NO_BORDER)
             self.label_id.append(chk.GetId())
             if tooltip:
-                chk.SetToolTipString(tooltip)
+                chk.SetToolTip(tooltip)
             chk.SetValue(f.get('value', False))
             title_sizer.Add(chk, proportion=1,
                             flag=wx.EXPAND)
@@ -1164,8 +1169,8 @@ class CmdPanel(wx.Panel):
                     p['value'] = p.get('default', '')
 
             if (len(p.get('values', [])) > 0):
-                valuelist = map(str, p.get('values', []))
-                valuelist_desc = map(unicode, p.get('values_desc', []))
+                valuelist = list(map(str, p.get('values', [])))
+                valuelist_desc = list(map(unicode, p.get('values_desc', [])))
                 required_text = "*" if p.get('required', False) else ""
                 if p.get('multiple', False) and \
                         p.get('gisprompt', False) == False and \
@@ -1225,8 +1230,8 @@ class CmdPanel(wx.Panel):
                             # for multiple integers use textctrl instead of
                             # spinsctrl
                             try:
-                                minValue, maxValue = map(
-                                    int, valuelist[0].rsplit('-', 1))
+                                minValue, maxValue = list(map(
+                                    int, valuelist[0].rsplit('-', 1)))
                             except ValueError:
                                 minValue = -1e6
                                 maxValue = 1e6
@@ -1238,7 +1243,7 @@ class CmdPanel(wx.Panel):
                                 max=maxValue)
                             style = wx.BOTTOM | wx.LEFT
                         else:
-                            txt2 = wx.TextCtrl(
+                            txt2 = TextCtrl(
                                 parent=which_panel, value=p.get(
                                     'default', ''))
                             style = wx.EXPAND | wx.BOTTOM | wx.LEFT
@@ -1266,7 +1271,7 @@ class CmdPanel(wx.Panel):
                                 os.path.join(
                                     globalvar.SYMBDIR,
                                     value) + '.png')
-                            bb = wx.BitmapButton(
+                            bb = BitmapButton(
                                 parent=which_panel, id=wx.ID_ANY, bitmap=bitmap)
                             iconLabel = StaticText(
                                 parent=which_panel, id=wx.ID_ANY)
@@ -1315,7 +1320,7 @@ class CmdPanel(wx.Panel):
                 if p.get('multiple', False) or \
                         p.get('type', 'string') == 'string' or \
                         len(p.get('key_desc', [])) > 1:
-                    win = wx.TextCtrl(
+                    win = TextCtrl(
                         parent=which_panel, value=p.get(
                             'default', ''))
 
@@ -1363,7 +1368,7 @@ class CmdPanel(wx.Panel):
                     which_sizer.Add(win, proportion=0,
                                     flag=style, border=5)
                 else:  # float
-                    win = wx.TextCtrl(
+                    win = TextCtrl(
                         parent=which_panel, value=p.get(
                             'default', ''), validator=FloatValidator())
                     style = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT
@@ -1555,10 +1560,10 @@ class CmdPanel(wx.Panel):
                                 os.path.join(
                                     globalvar.ICONDIR, iconTheme,
                                     'map-info.png'))
-                            bb = wx.BitmapButton(
+                            bb = BitmapButton(
                                 parent=which_panel, bitmap=bitmap)
                             bb.Bind(wx.EVT_BUTTON, self.OnTimelineTool)
-                            bb.SetToolTipString(
+                            bb.SetToolTip(
                                 _("Show graphical representation of temporal extent of dataset(s) ."))
                             p['wxId'].append(bb.GetId())
 
@@ -1630,7 +1635,7 @@ class CmdPanel(wx.Panel):
                                 'mapset',
                                 'dbase'):
                     if p.get('multiple', 'no') == 'yes':
-                        win = wx.TextCtrl(
+                        win = TextCtrl(
                             parent=which_panel, value=p.get(
                                 'default', ''), size=globalvar.DIALOG_TEXTCTRL_SIZE)
                         win.Bind(wx.EVT_TEXT, self.OnSetValue)
@@ -1679,7 +1684,7 @@ class CmdPanel(wx.Panel):
                                     wx.EVT_COMBOBOX, self.OnUpdateSelection)
                                 win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                             else:
-                                win = wx.TextCtrl(
+                                win = TextCtrl(
                                     parent=which_panel, value=p.get(
                                         'default', ''),
                                     size=globalvar.DIALOG_TEXTCTRL_SIZE)
@@ -1757,7 +1762,7 @@ class CmdPanel(wx.Panel):
                     # and either a "transparent" checkbox or None
                     p['wxId'] = [None] * 3
                     if p.get('multiple', False):
-                        txt = wx.TextCtrl(parent=which_panel, id=wx.ID_ANY)
+                        txt = TextCtrl(parent=which_panel, id=wx.ID_ANY)
                         this_sizer.Add(
                             txt,
                             proportion=1,
@@ -1846,9 +1851,9 @@ class CmdPanel(wx.Panel):
                             'element', '') == 'file' and UserSettings.Get(
                             group='cmd', key='interactiveInput', subkey='enabled'):
                         # widget for interactive input
-                        ifbb = wx.TextCtrl(parent=which_panel, id=wx.ID_ANY,
-                                           style=wx.TE_MULTILINE,
-                                           size=(-1, 75))
+                        ifbb = TextCtrl(parent=which_panel, id=wx.ID_ANY,
+                                        style=wx.TE_MULTILINE,
+                                        size=(-1, 75))
                         if p.get('value', '') and os.path.isfile(p['value']):
                             ifbb.Clear()
                             enc = locale.getdefaultlocale()[1]
@@ -1949,7 +1954,7 @@ class CmdPanel(wx.Panel):
 
                     # normal text field
                     else:
-                        win = wx.TextCtrl(parent=which_panel)
+                        win = TextCtrl(parent=which_panel)
                         p['wxId'] = [win.GetId()]
                         win.Bind(wx.EVT_TEXT, self.OnSetValue)
 
@@ -1974,7 +1979,7 @@ class CmdPanel(wx.Panel):
                             self.parent.dialogClosing.connect(win.OnClose)
                     # normal text field
                     else:
-                        win = wx.TextCtrl(parent=which_panel)
+                        win = TextCtrl(parent=which_panel)
                         value = self._getValue(p)
                         win.SetValue(value)
                         p['wxId'] = [win.GetId()]
@@ -2242,7 +2247,7 @@ class CmdPanel(wx.Panel):
             tabsizer[section].Fit(tab[section])
             tab[section].Layout()
             minsecsizes = tabsizer[section].GetSize()
-            maxsizes = map(lambda x: max(maxsizes[x], minsecsizes[x]), (0, 1))
+            maxsizes = list(map(lambda x: max(maxsizes[x], minsecsizes[x]), (0, 1)))
 
         # TODO: be less arbitrary with these 600
         self.panelMinHeight = 100
@@ -2489,7 +2494,7 @@ class CmdPanel(wx.Panel):
         self.OnUpdateSelection(event)
 
     def OnUpdateDialog(self, event):
-        for fn, kwargs in event.data.iteritems():
+        for fn, kwargs in six.iteritems(event.data):
             fn(**kwargs)
 
         self.parent.updateValuesHook()
@@ -2559,7 +2564,7 @@ class CmdPanel(wx.Panel):
                     colorchooser = wx.FindWindowById(p['wxId'][0])
                     new_color = colorchooser.GetValue()[:]
                     new_label = utils.rgb2str.get(
-                        new_color, ':'.join(map(str, new_color)))
+                        new_color, ':'.join(list(map(str, new_color))))
                     textCtrl = wx.FindWindowById(p['wxId'][1])
                     val = textCtrl.GetValue()
                     sep = ','
@@ -2576,7 +2581,7 @@ class CmdPanel(wx.Panel):
                     # This is weird: new_color is a 4-tuple and new_color[:] is a 3-tuple
                     # under wx2.8.1
                     new_label = utils.rgb2str.get(
-                        new_color, ':'.join(map(str, new_color)))
+                        new_color, ':'.join(list(map(str, new_color))))
                     colorchooser.SetLabel(new_label)
                     colorchooser.SetColour(new_color)
                     colorchooser.Refresh()
@@ -3110,7 +3115,7 @@ if __name__ == "__main__":
                 "gisprompt": False,
                 "multiple": "yes",
                 # values must be an array of strings
-                "values": utils.str2rgb.keys() + map(str, utils.str2rgb.values()),
+                "values": utils.str2rgb.keys() + list(map(str, utils.str2rgb.values())),
                 "key_desc": ["value"],
                 "values_desc": []
             }, {

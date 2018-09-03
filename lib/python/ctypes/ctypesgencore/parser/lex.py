@@ -43,7 +43,8 @@ import re
 import sys
 import types
 import collections
-
+import functools
+from grass.script.utils import decode
 
 if PY3:
     _meth_func = "__func__"
@@ -255,7 +256,10 @@ class Lexer:
     # input() - Push a new string into the lexer
     # ------------------------------------------------------------
     def input(self, s):
-        if not (isinstance(s, bytes) or isinstance(s, str)):
+        s = decode(s)
+        if not (isinstance(s, bytes) or
+                isinstance(s, str) or
+                isinstance(s, unicode)):
             raise ValueError("Expected a string")
         self.lexdata = s
         self.lexpos = 0
@@ -682,7 +686,7 @@ def lex(module=None, object=None, debug=0, optimize=0,
                     error = 1
                     continue
                 name, statetype = s
-                if not isinstance(name, bytes):
+                if not isinstance(name, str):
                     print("lex: state name %s must be a string" % repr(name))
                     error = 1
                     continue
@@ -732,11 +736,21 @@ def lex(module=None, object=None, debug=0, optimize=0,
 
     # Sort the functions by line number
     for f in funcsym.values():
-        f.sort(lambda x, y: cmp(get_func_code(x[1]).co_firstlineno, get_func_code(y[1]).co_firstlineno))
+        if os.sys.version_info.major >= 3:
+            f.sort(key=lambda x: get_func_code(x[1]).co_firstlineno)
+        else:
+            f.sort(key=lambda x, y: cmp(get_func_code(x[1]).co_firstlineno,
+                                        get_func_code(y[1]).co_firstlineno))
 
     # Sort the strings by regular expression length
     for s in strsym.values():
-        s.sort(lambda x, y: (len(x[1]) < len(y[1])) - (len(x[1]) > len(y[1])))
+        if os.sys.version_info.major >= 3:
+            s.sort(key=functools.cmp_to_key(lambda x, y:
+                                            (len(x[1]) < len(y[1])) -
+                                            (len(x[1]) > len(y[1]))))
+        else:
+            s.sort(key=lambda x, y: (len(x[1]) < len(y[1])) -
+                                    (len(x[1]) > len(y[1])))
 
     regexs = {}
 
@@ -747,8 +761,8 @@ def lex(module=None, object=None, debug=0, optimize=0,
         # Add rules defined by functions first
         for fname, f in funcsym[state]:
             line = get_func_code(f).co_firstlineno
-            file = get_func_code(f).co_filename
-            files[file] = None
+            file_ = get_func_code(f).co_filename
+            files[file_] = None
             tokname = toknames[fname]
 
             ismethod = isinstance(f, types.MethodType)
@@ -760,17 +774,20 @@ def lex(module=None, object=None, debug=0, optimize=0,
                 else:
                     reqargs = 1
                 if nargs > reqargs:
-                    print("%s:%d: Rule '%s' has too many arguments." % (file, line, f.__name__))
+                    print("%s:%d: Rule '%s' has too many arguments."
+                          % (file_, line, f.__name__))
                     error = 1
                     continue
 
                 if nargs < reqargs:
-                    print("%s:%d: Rule '%s' requires an argument." % (file, line, f.__name__))
+                    print("%s:%d: Rule '%s' requires an argument."
+                          % (file_, line, f.__name__))
                     error = 1
                     continue
 
                 if tokname == 'ignore':
-                    print("%s:%d: Rule '%s' must be defined as a string." % (file, line, f.__name__))
+                    print("%s:%d: Rule '%s' must be defined as a string."
+                          % (file_, line, f.__name__))
                     error = 1
                     continue
 
@@ -783,25 +800,31 @@ def lex(module=None, object=None, debug=0, optimize=0,
                     try:
                         c = re.compile("(?P<%s>%s)" % (f.__name__, f.__doc__), re.VERBOSE | reflags)
                         if c.match(""):
-                            print("%s:%d: Regular expression for rule '%s' matches empty string." % (file, line, f.__name__))
+                            print("%s:%d: Regular expression for rule '%s' "
+                                  "matches empty string."
+                                  % (file_, line, f.__name__))
                             error = 1
                             continue
                     except re.error as e:
-                        print("%s:%d: Invalid regular expression for rule '%s'. %s" % (file, line, f.__name__, e))
+                        print("%s:%d: Invalid regular expression for rule '%s'. %s"
+                              % (file_, line, f.__name__, e))
                         if '#' in f.__doc__:
-                            print("%s:%d. Make sure '#' in rule '%s' is escaped with '\\#'." % (file, line, f.__name__))
+                            print("%s:%d. Make sure '#' in rule '%s' is escaped with '\\#'."
+                                  % (file_, line, f.__name__))
                         error = 1
                         continue
 
                     if debug:
-                        print("lex: Adding rule %s -> '%s' (state '%s')" % (f.__name__, f.__doc__, state))
+                        print("lex: Adding rule %s -> '%s' (state '%s')"
+                              % (f.__name__, f.__doc__, state))
 
                 # Okay. The regular expression seemed okay.  Let's append it to the master regular
                 # expression we're building
 
                 regex_list.append("(?P<%s>%s)" % (f.__name__, f.__doc__))
             else:
-                print("%s:%d: No regular expression defined for rule '%s'" % (file, line, f.__name__))
+                print("%s:%d: No regular expression defined for rule '%s'"
+                      % (file_, line, f.__name__))
 
         # Now add all of the simple rules
         for name, r in strsym[state]:

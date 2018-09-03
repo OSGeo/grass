@@ -7,6 +7,7 @@ Created on Thu Jun 28 17:44:45 2012
 import ctypes
 import grass.lib.raster as libraster
 import datetime
+from grass.script.utils import encode
 
 
 class History(object):
@@ -57,6 +58,7 @@ class History(object):
                                           libraster.HIST_CREATOR)
 
     def _set_creator(self, creator):
+        creator = encode(creator)
         return libraster.Rast_set_history(self.c_hist,
                                           libraster.HIST_CREATOR,
                                           ctypes.c_char_p(creator))
@@ -71,6 +73,7 @@ class History(object):
                                           libraster.HIST_DATSRC_1)
 
     def _set_src1(self, src1):
+        src1 = encode(src1)
         return libraster.Rast_set_history(self.c_hist,
                                           libraster.HIST_DATSRC_1,
                                           ctypes.c_char_p(src1))
@@ -85,6 +88,7 @@ class History(object):
                                           libraster.HIST_DATSRC_2)
 
     def _set_src2(self, src2):
+        src2 = encode(src2)
         return libraster.Rast_set_history(self.c_hist,
                                           libraster.HIST_DATSRC_2,
                                           ctypes.c_char_p(src2))
@@ -99,6 +103,7 @@ class History(object):
                                           libraster.HIST_KEYWRD)
 
     def _set_keyword(self, keyword):
+        keyword = encode(keyword)
         return libraster.Rast_set_history(self.c_hist,
                                           libraster.HIST_KEYWRD,
                                           ctypes.c_char_p(keyword))
@@ -120,6 +125,7 @@ class History(object):
     def _set_date(self, datetimeobj):
         if datetimeobj:
             date_str = datetimeobj.strftime(self.date_fmt)
+            date_str = encode(date_str)
             return libraster.Rast_set_history(self.c_hist,
                                               libraster.HIST_MAPID,
                                               ctypes.c_char_p(date_str))
@@ -134,6 +140,7 @@ class History(object):
                                           libraster.HIST_MAPSET)
 
     def _set_mapset(self, mapset):
+        mapset = encode(mapset)
         return libraster.Rast_set_history(self.c_hist,
                                           libraster.HIST_MAPSET,
                                           ctypes.c_char_p(mapset))
@@ -148,6 +155,7 @@ class History(object):
                                           libraster.HIST_MAPTYPE)
 
     def _set_maptype(self, maptype):
+        maptype = encode(maptype)
         return libraster.Rast_set_history(self.c_hist,
                                           libraster.HIST_MAPTYPE,
                                           ctypes.c_char_p(maptype))
@@ -177,6 +185,7 @@ class History(object):
                                           libraster.HIST_TITLE)
 
     def _set_title(self, title):
+        title = encode(title)
         return libraster.Rast_set_history(self.c_hist,
                                           libraster.HIST_TITLE,
                                           ctypes.c_char_p(title))

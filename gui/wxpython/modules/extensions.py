@@ -33,6 +33,7 @@ from core.menutree import TreeModel, ModuleNode
 from gui_core.widgets import GListCtrl, SearchModuleWidget
 from gui_core.treeview import CTreeView
 from core.toolboxes import toolboxesOutdated
+from gui_core.wrap import Button, StaticBox, TextCtrl, Menu
 
 
 class InstallExtensionWindow(wx.Frame):
@@ -53,14 +54,14 @@ class InstallExtensionWindow(wx.Frame):
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.repoBox = wx.StaticBox(
+        self.repoBox = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("Repository (leave empty to use the official one)"))
-        self.treeBox = wx.StaticBox(
+        self.treeBox = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("List of extensions - double-click to install"))
 
-        self.repo = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY)
+        self.repo = TextCtrl(parent=self.panel, id=wx.ID_ANY)
 
         # modelBuilder loads data into tree model
         self.modelBuilder = ExtensionTreeModelBuilder()
@@ -81,8 +82,8 @@ class InstallExtensionWindow(wx.Frame):
         # load data in different thread
         self.thread = gThread()
 
-        self.optionBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                      label=" %s " % _("Options"))
+        self.optionBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                   label=" %s " % _("Options"))
         task = gtask.parse_interface('g.extension')
         ignoreFlags = ['l', 'c', 'g', 'a', 'f', 't', 'help', 'quiet']
         if sys.platform == 'win32':
@@ -109,18 +110,18 @@ class InstallExtensionWindow(wx.Frame):
 
         self.statusbar = self.CreateStatusBar(number=1)
 
-        self.btnFetch = wx.Button(parent=self.panel, id=wx.ID_ANY,
-                                  label=_("&Fetch"))
-        self.btnFetch.SetToolTipString(_("Fetch list of available modules "
-                                         "from GRASS Addons SVN repository"))
-        self.btnClose = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btnInstall = wx.Button(parent=self.panel, id=wx.ID_ANY,
-                                    label=_("&Install"))
-        self.btnInstall.SetToolTipString(
+        self.btnFetch = Button(parent=self.panel, id=wx.ID_ANY,
+                               label=_("&Fetch"))
+        self.btnFetch.SetToolTip(_("Fetch list of available modules "
+                                   "from GRASS Addons SVN repository"))
+        self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btnInstall = Button(parent=self.panel, id=wx.ID_ANY,
+                                 label=_("&Install"))
+        self.btnInstall.SetToolTip(
             _("Install selected add-ons GRASS module"))
         self.btnInstall.Enable(False)
-        self.btnHelp = wx.Button(parent=self.panel, id=wx.ID_HELP)
-        self.btnHelp.SetToolTipString(_("Show g.extension manual page"))
+        self.btnHelp = Button(parent=self.panel, id=wx.ID_HELP)
+        self.btnHelp.SetToolTip(_("Show g.extension manual page"))
 
         self.btnClose.Bind(wx.EVT_BUTTON, lambda evt: self.Close())
         self.btnFetch.Bind(wx.EVT_BUTTON, self.OnFetch)
@@ -234,7 +235,7 @@ class InstallExtensionWindow(wx.Frame):
 
         data = node.data
         if data and 'command' in data:
-            self.popupMenu = wx.Menu()
+            self.popupMenu = Menu()
             self.popupMenu.Append(self.popupID['install'], text=_("Install"))
             self.Bind(wx.EVT_MENU, self.OnInstall, id=self.popupID['install'])
             self.popupMenu.AppendSeparator()
@@ -401,27 +402,27 @@ class ManageExtensionWindow(wx.Frame):
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.extBox = wx.StaticBox(
+        self.extBox = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("List of installed extensions"))
 
         self.extList = CheckListExtension(parent=self.panel)
 
         # buttons
-        self.btnUninstall = wx.Button(
+        self.btnUninstall = Button(
             parent=self.panel,
             id=wx.ID_REMOVE,
             label=_("Uninstall"))
-        self.btnUninstall.SetToolTipString(
+        self.btnUninstall.SetToolTip(
             _("Uninstall selected Addons extensions"))
-        self.btnUpdate = wx.Button(
+        self.btnUpdate = Button(
             parent=self.panel,
             id=wx.ID_REFRESH,
             label=_("Reinstall"))
-        self.btnUpdate.SetToolTipString(
+        self.btnUpdate.SetToolTip(
             _("Reinstall selected Addons extensions"))
 
-        self.btnClose = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
 
         self.btnUninstall.Bind(wx.EVT_BUTTON, self.OnUninstall)
         self.btnUpdate.Bind(wx.EVT_BUTTON, self.OnUpdate)

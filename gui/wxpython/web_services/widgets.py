@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+import six
 import shutil
 
 from copy import deepcopy
@@ -55,7 +56,8 @@ from web_services.cap_interface import WMSCapabilities, WMTSCapabilities, OnEart
 
 from gui_core.widgets import GNotebook
 from gui_core.widgets import ManageSettingsWidget
-from gui_core.wrap import SpinCtrl
+from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
+    TextCtrl
 
 import grass.script as grass
 
@@ -139,7 +141,7 @@ class WSPanel(wx.Panel):
         self.cmd_thread = CmdThread(self)
         self.cap_file = grass.tempfile()
 
-        reqDataBox = wx.StaticBox(
+        reqDataBox = StaticBox(
             parent=self, label=_(" Requested data settings "))
         self._nb_sizer = wx.StaticBoxSizer(reqDataBox, wx.VERTICAL)
         self.notebook = GNotebook(parent=self,
@@ -171,8 +173,8 @@ class WSPanel(wx.Panel):
                               name='request')
 
         # list of layers
-        self.layersBox = wx.StaticBox(parent=self.req_page_panel, id=wx.ID_ANY,
-                                      label=_("List of layers "))
+        self.layersBox = StaticBox(parent=self.req_page_panel, id=wx.ID_ANY,
+                                   label=_("List of layers "))
 
         style = wx.TR_DEFAULT_STYLE | wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT
         if self.drv_props['req_multiple_layers']:
@@ -188,7 +190,7 @@ class WSPanel(wx.Panel):
 
         self.params['srs'] = None
         if 'srs' not in self.drv_props['ignored_params']:
-            projText = wx.StaticText(
+            projText = StaticText(
                 parent=self.req_page_panel, id=wx.ID_ANY,
                 label=_("Source projection:"))
             self.params['srs'] = wx.Choice(
@@ -257,22 +259,22 @@ class WSPanel(wx.Panel):
         labels = {}
         self.l_odrder_list = None
         if 'WMS' in self.ws:
-            labels['l_order'] = wx.StaticBox(
+            labels['l_order'] = StaticBox(
                 parent=adv_setts_panel, id=wx.ID_ANY,
                 label=_("Order of layers in raster"))
             self.l_odrder_list = wx.ListBox(
                 adv_setts_panel, id=wx.ID_ANY, choices=[],
                 style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
-            self.btnUp = wx.Button(
+            self.btnUp = Button(
                 adv_setts_panel, id=wx.ID_ANY, label=_("Up"))
-            self.btnDown = wx.Button(
+            self.btnDown = Button(
                 adv_setts_panel, id=wx.ID_ANY, label=_("Down"))
 
             self.btnUp.Bind(wx.EVT_BUTTON, self.OnUp)
             self.btnDown.Bind(wx.EVT_BUTTON, self.OnDown)
 
-        labels['method'] = wx.StaticText(parent=adv_setts_panel, id=wx.ID_ANY,
-                                         label=_("Reprojection method:"))
+        labels['method'] = StaticText(parent=adv_setts_panel, id=wx.ID_ANY,
+                                      label=_("Reprojection method:"))
 
         self.reproj_methods = ['nearest', 'linear', 'cubic', 'cubicspline']
         self.params['method'] = wx.Choice(
@@ -284,13 +286,13 @@ class WSPanel(wx.Panel):
                 _('Cubic interpolation'),
                 _('Cubic spline interpolation')])
 
-        labels['maxcols'] = wx.StaticText(
+        labels['maxcols'] = StaticText(
             parent=adv_setts_panel, id=wx.ID_ANY,
             label=_("Maximum columns to request from server at time:"))
         self.params['maxcols'] = SpinCtrl(
             parent=adv_setts_panel, id=wx.ID_ANY, size=(100, -1))
 
-        labels['maxrows'] = wx.StaticText(
+        labels['maxrows'] = StaticText(
             parent=adv_setts_panel, id=wx.ID_ANY,
             label=_("Maximum rows to request from server at time:"))
         self.params['maxrows'] = SpinCtrl(
@@ -312,7 +314,7 @@ class WSPanel(wx.Panel):
                 label=_("Do not request transparent data"))
 
             self.flags['o'].Bind(wx.EVT_CHECKBOX, self.OnTransparent)
-            labels['bgcolor'] = wx.StaticText(
+            labels['bgcolor'] = StaticText(
                 parent=adv_setts_panel, id=wx.ID_ANY,
                 label=_("Background color:"))
             self.params['bgcolor'] = csel.ColourSelect(
@@ -322,10 +324,10 @@ class WSPanel(wx.Panel):
 
         self.params['urlparams'] = None
         if self.params['urlparams'] not in self.drv_props['ignored_params']:
-            labels['urlparams'] = wx.StaticText(
+            labels['urlparams'] = StaticText(
                 parent=adv_setts_panel, id=wx.ID_ANY,
                 label=_("Additional query parameters for server:"))
-            self.params['urlparams'] = wx.TextCtrl(
+            self.params['urlparams'] = TextCtrl(
                 parent=adv_setts_panel, id=wx.ID_ANY)
 
         # layout
@@ -521,7 +523,7 @@ class WSPanel(wx.Panel):
         }
 
         conn_cmd = []
-        for k, v in self.conn.iteritems():
+        for k, v in six.iteritems(self.conn):
             if v:
                 conn_cmd.append("%s=%s" % (k, v))
 
@@ -635,7 +637,7 @@ class WSPanel(wx.Panel):
         if 'method' in dcmd:
             params['method'] = dcmd['method']
 
-        for p, v in params.iteritems():
+        for p, v in six.iteritems(params):
             if self.params[p]:
                 self.params[p].SetStringSelection(v)
 
@@ -1163,8 +1165,8 @@ class WSManageSettingsWidget(ManageSettingsWidget):
 
     def _layout(self):
 
-        self.btnAddDefaultServers = wx.Button(parent=self, id=wx.ID_ANY,
-                                              label=_("Add default"))
+        self.btnAddDefaultServers = Button(parent=self, id=wx.ID_ANY,
+                                           label=_("Add default"))
         self.btnAddDefaultServers.Bind(wx.EVT_BUTTON, self.OnAddDefaultServers)
 
         ManageSettingsWidget._layout(self)
@@ -1176,8 +1178,8 @@ class WSManageSettingsWidget(ManageSettingsWidget):
 
         setts = self.GetSettings()
         self.servers_to_add = {}
-        for k, v in self.default_servers.iteritems():
-            if k not in setts.iterkeys():
+        for k, v in six.iteritems(self.default_servers):
+            if k not in six.iterkeys(setts):
                 self.servers_to_add[k] = v
             elif v != setts[k]:
                 GMessage(parent=self,

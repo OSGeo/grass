@@ -46,6 +46,7 @@ import os
 import atexit
 import math
 import grass.script as grass
+from grass.script.utils import encode
 
 # i18N
 import gettext
@@ -124,10 +125,12 @@ def main():
 
     p = grass.feed_command('r.category', map=output,
                            separator=':', rules='-')
-    p.stdin.write("1:distances calculated from these locations\n")
+    msg = "1:distances calculated from these locations\n"
+    p.stdin.write(encode(msg))
     d0 = "0"
     for n, d in enumerate(distances):
-        p.stdin.write("%d:%s-%s %s\n" % (n + 2, d0, d, units))
+        msg = "%d:%s-%s %s\n" % (n + 2, d0, d, units)
+        p.stdin.write(encode(msg))
         d0 = d
     p.stdin.close()
     p.wait()

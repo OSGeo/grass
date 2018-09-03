@@ -29,7 +29,7 @@ import string
 import random
 import types as python_types
 
-from .utils import KeyValue, parse_key_val, basename, encode
+from .utils import KeyValue, parse_key_val, basename, encode, decode
 from grass.exceptions import ScriptError, CalledModuleError
 
 # i18N
@@ -40,13 +40,13 @@ try:
     # python2
     import __builtin__
     from os import environ
+    __builtin__.__dict__['_'] = __builtin__.__dict__['_'].__self__.ugettext
 except ImportError:
     # python3
     import builtins as __builtin__
     from os import environb as environ
     unicode = str
-__builtin__.__dict__['_'] = __builtin__.__dict__['_'].__self__.lgettext
-
+    __builtin__.__dict__['_'] = __builtin__.__dict__['_'].__self__.gettext
 
 # subprocess wrapper that uses shell on Windows
 
@@ -106,6 +106,21 @@ def _make_val(val):
     except TypeError:
         pass
     return bytes(val)
+
+
+def _make_unicode(val, enc):
+    """Convert value to unicode with given encoding
+
+    :param val: value to be converted
+    :param enc: encoding to be used
+    """
+    if val is None or enc is None:
+        return val
+    else:
+        if enc == 'default':
+            return decode(val)
+        else:
+            return decode(val, encoding=enc)
 
 
 def get_commands():
@@ -303,7 +318,8 @@ def make_command(prog, flags=b"", overwrite=False, quiet=False, verbose=False,
             continue
         # convert string to bytes
         opt = encode(opt)
-        if val != None:
+        prog = encode(prog)
+        if val is not None:
             if opt.startswith(b'_'):
                 opt = opt[1:]
                 warning(_("To run the module <%s> add underscore at the end"
@@ -330,7 +346,8 @@ def handle_errors(returncode, result, args, kwargs):
     else:
         # TODO: construction of the whole command is far from perfect
         args = make_command(*args, **kwargs)
-        raise CalledModuleError(module=None, code=repr(args),
+        code = ''.join([decode(each) for each in args])
+        raise CalledModuleError(module=None, code=code,
                                 returncode=returncode)
 
 def start_command(prog, flags=b"", overwrite=False, quiet=False,
@@ -362,6 +379,9 @@ def start_command(prog, flags=b"", overwrite=False, quiet=False,
 
     :return: Popen object
     """
+    if 'encoding' in kwargs.keys():
+        encoding = kwargs.pop('encoding')
+
     options = {}
     popts = {}
     for opt, val in kwargs.items():
@@ -380,7 +400,6 @@ def start_command(prog, flags=b"", overwrite=False, quiet=False,
                                                               ' '.join(args)))
         sys.stderr.flush()
     return Popen(args, **popts)
-
 
 def run_command(*args, **kwargs):
     """Execute a module synchronously
@@ -410,11 +429,18 @@ def run_command(*args, **kwargs):
 
     :raises: ``CalledModuleError`` when module returns non-zero return code
     """
+    encoding = 'default'
+    if 'encoding' in kwargs:
+        encoding = kwargs['encoding']
+
     if _capture_stderr and 'stderr' not in kwargs.keys():
         kwargs['stderr'] = PIPE
     ps = start_command(*args, **kwargs)
     if _capture_stderr:
         stdout, stderr = ps.communicate()
+        if encoding is not None:
+            stdout = _make_unicode(stdout, encoding)
+            stderr = _make_unicode(stderr, encoding)
         returncode = ps.poll()
         if returncode:
             sys.stderr.write(stderr)
@@ -468,10 +494,17 @@ def read_command(*args, **kwargs):
 
     :return: stdout
     """
+    encoding = 'default'
+    if 'encoding' in kwargs:
+        encoding = kwargs['encoding']
+
     if _capture_stderr and 'stderr' not in kwargs.keys():
         kwargs['stderr'] = PIPE
     process = pipe_command(*args, **kwargs)
     stdout, stderr = process.communicate()
+    if encoding is not None:
+        stdout = _make_unicode(stdout, encoding)
+        stderr = _make_unicode(stderr, encoding)
     returncode = process.poll()
     if _capture_stderr and returncode:
         sys.stderr.write(stderr)
@@ -541,12 +574,22 @@ def write_command(*args, **kwargs):
 
     :raises: ``CalledModuleError`` when module returns non-zero return code
     """
+    encoding = 'default'
+    if 'encoding' in kwargs:
+        encoding = kwargs['encoding']
     # TODO: should we delete it from kwargs?
     stdin = kwargs['stdin']
+    if encoding is None or encoding == 'default':
+        stdin = encode(stdin)
+    else:
+        stdin = encode(stdin, encoding=encoding)
     if _capture_stderr and 'stderr' not in kwargs.keys():
         kwargs['stderr'] = PIPE
     process = feed_command(*args, **kwargs)
     unused, stderr = process.communicate(stdin)
+    if encoding is not None:
+        unused = _make_unicode(unused, encoding)
+        stderr = _make_unicode(stderr, encoding)
     returncode = process.poll()
     if _capture_stderr and returncode:
         sys.stderr.write(stderr)
@@ -740,14 +783,15 @@ def _parse_opts(lines):
             break
         try:
             [var, val] = line.split(b'=', 1)
+            [var, val] = [decode(var), decode(val)]
         except:
             raise SyntaxError("invalid output from g.parser: %s" % line)
 
-        if var.startswith(b'flag_'):
+        if var.startswith('flag_'):
             flags[var[5:]] = bool(int(val))
-        elif var.startswith(b'opt_'):
+        elif var.startswith('opt_'):
             options[var[4:]] = val
-        elif var in [b'GRASS_OVERWRITE', b'GRASS_VERBOSE']:
+        elif var in ['GRASS_OVERWRITE', 'GRASS_VERBOSE']:
             os.environ[var] = val
         else:
             raise SyntaxError("invalid output from g.parser: %s" % line)
@@ -1296,7 +1340,7 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
 
     :return: directory of mapsets/elements
     """
-    if isinstance(type, python_types.StringTypes) or len(type) == 1:
+    if isinstance(type, str) or len(type) == 1:
         types = [type]
         store_types = False
     else:

@@ -17,7 +17,10 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import Queue
+if sys.version_info.major == 2:
+    import Queue
+else:
+    import queue as Queue
 from math import sin, cos, pi, sqrt
 
 import wx
@@ -39,7 +42,7 @@ from core.utils import _, PilImageToWxImage
 from gui_core.forms import GUI
 from gui_core.dialogs import HyperlinkDialog
 from gui_core.ghelp import ShowAboutDialog
-from gui_core.wrap import PseudoDC
+from gui_core.wrap import PseudoDC, Rect, StockCursor, EmptyBitmap
 from psmap.menudata import PsMapMenuData
 from gui_core.toolbars import ToolSwitcher
 
@@ -103,10 +106,10 @@ class PsMapFrame(wx.Frame):
         }
         # available cursors
         self.cursors = {
-            "default": wx.StockCursor(wx.CURSOR_ARROW),
-            "cross": wx.StockCursor(wx.CURSOR_CROSS),
-            "hand": wx.StockCursor(wx.CURSOR_HAND),
-            "sizenwse": wx.StockCursor(wx.CURSOR_SIZENWSE)
+            "default": StockCursor(wx.CURSOR_ARROW),
+            "cross": StockCursor(wx.CURSOR_CROSS),
+            "hand": StockCursor(wx.CURSOR_HAND),
+            "sizenwse": StockCursor(wx.CURSOR_SIZENWSE)
         }
         # pen and brush
         self.pen = {
@@ -855,9 +858,9 @@ class PsMapFrame(wx.Frame):
         if 0 < rotation < pi:
             Y = y - H
         if rotation == 0:
-            return wx.Rect(x, y, *textExtent)
+            return Rect(x, y, *textExtent)
         else:
-            return wx.Rect(X, Y, abs(W), abs(H)).Inflate(h, h)
+            return Rect(X, Y, abs(W), abs(H)).Inflate(h, h)
 
     def makePSFont(self, textDict):
         """creates a wx.Font object from selected postscript font. To be
@@ -1255,7 +1258,7 @@ class PsMapBufferedWindow(wx.Window):
         self.pdcImage = PseudoDC()
 
         self.SetClientSize((700, 510))  # ?
-        self._buffer = wx.EmptyBitmap(*self.GetClientSize())
+        self._buffer = EmptyBitmap(*self.GetClientSize())
 
         self.idBoxTmp = wx.NewId()
         self.idZoomBoxTmp = wx.NewId()
@@ -1362,7 +1365,7 @@ class PsMapBufferedWindow(wx.Window):
 
         x = cW / 2 - pW / 2
         y = cH / 2 - pH / 2
-        self.DrawPaper(wx.Rect(x, y, pW, pH))
+        self.DrawPaper(Rect(x, y, pW, pH))
 
     def modifyRectangle(self, r):
         """Recalculates rectangle not to have negative size"""
@@ -1501,7 +1504,7 @@ class PsMapBufferedWindow(wx.Window):
         else:
             self.mouse['use'] = 'zoomout'
 
-        zoomFactor, view = self.ComputeZoom(wx.Rect(0, 0, 0, 0))
+        zoomFactor, view = self.ComputeZoom(Rect(0, 0, 0, 0))
         self.Zoom(zoomFactor, view)
         self.mouse['use'] = oldUse
 
@@ -1694,7 +1697,7 @@ class PsMapBufferedWindow(wx.Window):
                             self.dragId].type].updateDialog()
 
         elif self.mouse['use'] in ('addPoint', 'addLine', 'addRectangle'):
-            endCoordinates = self.CanvasPaperCoordinates(rect=wx.Rect(
+            endCoordinates = self.CanvasPaperCoordinates(rect=Rect(
                 event.GetX(), event.GetY(), 0, 0), canvasToPaper=True)[:2]
 
             diffX = event.GetX() - self.mouse['begin'][0]
@@ -1710,7 +1713,7 @@ class PsMapBufferedWindow(wx.Window):
                     return
 
                 beginCoordinates = self.CanvasPaperCoordinates(
-                    rect=wx.Rect(
+                    rect=Rect(
                         self.mouse['begin'][0],
                         self.mouse['begin'][1],
                         0, 0),
@@ -1772,7 +1775,7 @@ class PsMapBufferedWindow(wx.Window):
             if self.mouse['use'] in (
                     'zoomin', 'zoomout', 'addMap', 'addLine', 'addRectangle'):
                 self.mouse['end'] = event.GetPosition()
-                r = wx.Rect(
+                r = Rect(
                     self.mouse['begin'][0],
                     self.mouse['begin'][1],
                     self.mouse['end'][0] -
@@ -1847,7 +1850,7 @@ class PsMapBufferedWindow(wx.Window):
                     if newWidth < 10 or newHeight < 10:
                         return
 
-                    bounds = wx.Rect(x, y, newWidth, newHeight)
+                    bounds = Rect(x, y, newWidth, newHeight)
                     self.Draw(
                         pen=self.pen['map'],
                         brush=self.brush['map'],
@@ -1897,7 +1900,7 @@ class PsMapBufferedWindow(wx.Window):
 
                     # update paper coordinates
                     points[self.currentLinePoint] = self.CanvasPaperCoordinates(
-                        rect=wx.RectPS(pos, (0, 0)), canvasToPaper=True)[:2]
+                        rect=Rect(pos, (0, 0)), canvasToPaper=True)[:2]
 
                 self.RedrawSelectBox(self.dragId)
 
@@ -2149,7 +2152,7 @@ class PsMapBufferedWindow(wx.Window):
         self.Zoom(zoomFactor, view)
 
     def Draw(self, pen, brush, pdc, drawid=None, pdctype='rect',
-             bb=wx.Rect(0, 0, 0, 0), lineCoords=None):
+             bb=Rect(0, 0, 0, 0), lineCoords=None):
         """Draw object with given pen and brush.
 
         :param pdc: PseudoDC
@@ -2191,17 +2194,17 @@ class PsMapBufferedWindow(wx.Window):
             dc.SetFont(font)
             pdc.SetFont(font)
             text = '\n'.join(self.itemLabels[drawid])
-            w, h, lh = dc.GetMultiLineTextExtent(text)
+            w, h = dc.GetMultiLineTextExtent(text)
             textExtent = (w, h)
-            textRect = wx.Rect(0, 0, *textExtent).CenterIn(bb)
+            textRect = Rect(0, 0, *textExtent).CenterIn(bb)
             r = map(int, bb)
-            while not wx.Rect(*r).ContainsRect(textRect) and size >= 8:
+            while not Rect(*r).ContainsRect(textRect) and size >= 8:
                 size -= 2
                 font.SetPointSize(size)
                 dc.SetFont(font)
                 pdc.SetFont(font)
                 textExtent = dc.GetTextExtent(text)
-                textRect = wx.Rect(0, 0, *textExtent).CenterIn(bb)
+                textRect = Rect(0, 0, *textExtent).CenterIn(bb)
             pdc.SetTextForeground(wx.Colour(100, 100, 100, 200))
             pdc.SetBackgroundMode(wx.TRANSPARENT)
             pdc.DrawLabel(text=text, rect=textRect)
@@ -2327,7 +2330,7 @@ class PsMapBufferedWindow(wx.Window):
         else:
             pdc.DrawRotatedText(textDict['text'], coords[0], coords[1], rot)
 
-        pdc.SetIdBounds(drawId, wx.Rect(*bounds))
+        pdc.SetIdBounds(drawId, Rect(*bounds))
         self.Refresh()
         pdc.EndDrawing()
 
@@ -2382,7 +2385,7 @@ class PsMapBufferedWindow(wx.Window):
         iH = iH * self.currScale
         x = cW / 2 - iW / 2
         y = cH / 2 - iH / 2
-        imageRect = wx.Rect(x, y, iW, iH)
+        imageRect = Rect(x, y, iW, iH)
 
         return imageRect
 
@@ -2404,7 +2407,7 @@ class PsMapBufferedWindow(wx.Window):
             # draw small marks signalizing resizing
             if self.instruction[id].type in ('map', 'rectangle'):
                 controlP = self.pdcObj.GetIdBounds(id).GetBottomRight()
-                rect = wx.RectPS(controlP, self.resizeBoxSize)
+                rect = Rect(controlP, self.resizeBoxSize)
                 self.Draw(
                     pen=self.pen['resize'],
                     brush=self.brush['resize'],
@@ -2421,9 +2424,9 @@ class PsMapBufferedWindow(wx.Window):
                 p2Canvas = self.CanvasPaperCoordinates(
                     rect=Rect2DPS(p2Paper, (0, 0)), canvasToPaper=False)[:2]
                 rect = []
-                box = wx.RectS(self.resizeBoxSize)
-                rect.append(box.CenterIn(wx.RectPS(p1Canvas, wx.Size())))
-                rect.append(box.CenterIn(wx.RectPS(p2Canvas, wx.Size())))
+                box = Rect(self.resizeBoxSize)
+                rect.append(box.CenterIn(Rect(p1Canvas, wx.Size())))
+                rect.append(box.CenterIn(Rect(p2Canvas, wx.Size())))
                 for i, point in enumerate((p1Canvas, p2Canvas)):
                     self.Draw(
                         pen=self.pen['resize'],
@@ -2495,11 +2498,11 @@ class PsMapBufferedWindow(wx.Window):
         # Make new off screen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image
         # to a file, or whatever.
-        self._buffer = wx.EmptyBitmap(width, height)
+        self._buffer = EmptyBitmap(width, height)
         # re-render image on idle
         self.resize = True
 
     def ScaleRect(self, rect, scale):
         """Scale rectangle"""
-        return wx.Rect(rect.GetLeft() * scale, rect.GetTop() * scale,
+        return Rect(rect.GetLeft() * scale, rect.GetTop() * scale,
                        rect.GetSize()[0] * scale, rect.GetSize()[1] * scale)

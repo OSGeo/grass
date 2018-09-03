@@ -136,9 +136,8 @@ def main():
     except URLError as e:
         # GTC WFS request network failure
         grass.fatal(_("Failed to reach the server.\nReason: %s") % e.reason)
-        
-    
-    outf = file(tmpxml, 'wb')
+
+    outf = open(tmpxml, 'wb')
     while True:
         s = inf.read()
         if not s:

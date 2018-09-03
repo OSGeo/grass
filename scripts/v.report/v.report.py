@@ -46,6 +46,7 @@
 import sys
 import os
 import grass.script as grass
+from grass.script.utils import decode
 
 # i18N
 import gettext
@@ -68,7 +69,7 @@ def main():
     layer = options['layer']
     units = options['units']
 
-    nuldev = file(os.devnull, 'w')
+    nuldev = open(os.devnull, 'w')
 
     if not grass.find_file(mapname, 'vector')['file']:
         grass.fatal(_("Vector map <%s> not found") % mapname)
@@ -99,7 +100,7 @@ def main():
         records1 = []
         catcol = -1
         for line in p.stdout:
-            cols = line.rstrip('\r\n').split('|')
+            cols = decode(line).rstrip('\r\n').split('|')
             if catcol == -1:
                 for i in range(0, len(cols)):
                     if cols[i] == f['key']:
@@ -132,7 +133,7 @@ def main():
                                layer=layer, units=unitsp)
         records2 = []
         for line in p.stdout:
-            fields = line.rstrip('\r\n').split('|')
+            fields = decode(line).rstrip('\r\n').split('|')
             if fields[0] in ['cat', '-1', '0']:
                 continue
             records2.append([int(fields[0])] + fields[1:])
@@ -144,13 +145,15 @@ def main():
         # v.db.select can return attributes that are not linked to features.
         records3 = []
         for r2 in records2:
-            records3.append(filter(lambda r1: r1[catcol] == r2[0], records1)[0] + r2[1:])
+            res = list(filter(lambda r1: r1[catcol] == r2[0],
+                              records1))[0] + r2[1:]
+            records3.append(res)
     else:
         catcol = 0
         records1 = []
         p = grass.pipe_command('v.category', inp=mapname, layer=layer, option='print')
         for line in p.stdout:
-            field = int(line.rstrip())
+            field = int(decode(line).rstrip())
             if field > 0:
                 records1.append(field)
         p.wait()
@@ -163,7 +166,7 @@ def main():
                                layer=layer, units=unitsp)
         records3 = []
         for line in p.stdout:
-            fields = line.rstrip('\r\n').split('|')
+            fields = decode(line).rstrip('\r\n').split('|')
             if fields[0] in ['cat', '-1', '0']:
                 continue
             records3.append([int(fields[0])] + fields[1:])

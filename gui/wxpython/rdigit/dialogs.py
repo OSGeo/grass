@@ -18,6 +18,7 @@ import wx
 
 from core.utils import _
 from gui_core.gselect import Select
+from gui_core.wrap import Button, StaticText
 from core.gcmd import GWarning
 
 import grass.script.core as gcore
@@ -42,24 +43,24 @@ class NewRasterDialog(wx.Dialog):
         self._typeChoice.SetSelection(0)
         self._mapSelect.SetFocus()
 
-        btnCancel = wx.Button(parent=self, id=wx.ID_CANCEL)
-        btnOK = wx.Button(parent=self, id=wx.ID_OK)
+        btnCancel = Button(parent=self, id=wx.ID_CANCEL)
+        btnOK = Button(parent=self, id=wx.ID_OK)
         btnOK.SetDefault()
         btnOK.Bind(wx.EVT_BUTTON, self.OnOK)
 
         # do layout
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         sizer = wx.GridBagSizer(hgap=10, vgap=10)
-        sizer.Add(wx.StaticText(self, label=_("Name for new raster map:")),
+        sizer.Add(StaticText(self, label=_("Name for new raster map:")),
                   pos=(0, 0), span=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self._mapSelect, pos=(1, 0), span=(1, 2))
         sizer.Add(
-            wx.StaticText(
+            StaticText(
                 self, label=_("Optionally select background raster map:")), pos=(
                 2, 0), span=(
                 1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self._backgroundSelect, pos=(3, 0), span=(1, 2))
-        sizer.Add(wx.StaticText(self, label=_("New raster map type:")),
+        sizer.Add(StaticText(self, label=_("New raster map type:")),
                   pos=(4, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self._typeChoice, pos=(4, 1), flag=wx.EXPAND)
 

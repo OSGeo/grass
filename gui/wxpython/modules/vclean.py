@@ -25,6 +25,8 @@ from core.utils import _
 from gui_core.gselect import Select
 from core.settings import UserSettings
 from grass.script import core as grass
+from gui_core.wrap import Button, StaticText, StaticBox, \
+    TextCtrl
 
 
 class VectorCleaningFrame(wx.Frame):
@@ -122,18 +124,18 @@ class VectorCleaningFrame(wx.Frame):
         self.ctlabel = _('Choose cleaning tools and set thresholds')
 
         # top controls
-        self.inmaplabel = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                        label=_('Select input vector map:'))
+        self.inmaplabel = StaticText(parent=self.panel, id=wx.ID_ANY,
+                                     label=_('Select input vector map:'))
         self.selectionInput = Select(parent=self.panel, id=wx.ID_ANY,
                                      size=globalvar.DIALOG_GSELECT_SIZE,
                                      type='vector')
         self.ftype_check = {}
-        ftypeBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                label=_(' Feature type: '))
+        ftypeBox = StaticBox(parent=self.panel, id=wx.ID_ANY,
+                             label=_(' Feature type: '))
         self.ftypeSizer = wx.StaticBoxSizer(ftypeBox, wx.HORIZONTAL)
 
-        self.outmaplabel = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                         label=_('Select output vector map:'))
+        self.outmaplabel = StaticText(parent=self.panel, id=wx.ID_ANY,
+                                      label=_('Select output vector map:'))
         self.selectionOutput = Select(parent=self.panel, id=wx.ID_ANY,
                                       size=globalvar.DIALOG_GSELECT_SIZE,
                                       mapsets=[grass.gisenv()['MAPSET'], ],
@@ -150,32 +152,32 @@ class VectorCleaningFrame(wx.Frame):
                 subkey='enabled'))
 
         # cleaning tools
-        self.ct_label = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                      label=self.ctlabel)
+        self.ct_label = StaticText(parent=self.panel, id=wx.ID_ANY,
+                                   label=self.ctlabel)
 
         self.ct_panel = self._toolsPanel()
 
         # buttons to manage cleaning tools
-        self.btn_add = wx.Button(parent=self.panel, id=wx.ID_ADD)
-        self.btn_remove = wx.Button(parent=self.panel, id=wx.ID_REMOVE)
-        self.btn_moveup = wx.Button(parent=self.panel, id=wx.ID_UP)
-        self.btn_movedown = wx.Button(parent=self.panel, id=wx.ID_DOWN)
+        self.btn_add = Button(parent=self.panel, id=wx.ID_ADD)
+        self.btn_remove = Button(parent=self.panel, id=wx.ID_REMOVE)
+        self.btn_moveup = Button(parent=self.panel, id=wx.ID_UP)
+        self.btn_movedown = Button(parent=self.panel, id=wx.ID_DOWN)
 
         # add one tool as default
         self.AddTool()
         self.selected = -1
 
         # Buttons
-        self.btn_close = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btn_run = wx.Button(
+        self.btn_close = Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btn_run = Button(
             parent=self.panel,
             id=wx.ID_ANY,
             label=_("&Run"))
         self.btn_run.SetDefault()
-        self.btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
-        self.btn_clipboard.SetToolTipString(
+        self.btn_clipboard = Button(parent=self.panel, id=wx.ID_COPY)
+        self.btn_clipboard.SetToolTip(
             _("Copy the current command string to the clipboard (Ctrl+C)"))
-        self.btn_help = wx.Button(parent=self.panel, id=wx.ID_HELP)
+        self.btn_help = Button(parent=self.panel, id=wx.ID_HELP)
 
         # bindings
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
@@ -361,7 +363,7 @@ class VectorCleaningFrame(wx.Frame):
                                 wx.CB_READONLY | wx.TE_PROCESS_ENTER)
         self.Bind(wx.EVT_COMBOBOX, self.OnSetTool, tool_cbox)
         # threshold
-        txt_ctrl = wx.TextCtrl(
+        txt_ctrl = TextCtrl(
             parent=self.ct_panel, id=2000 + num, value='0.00', size=(100, -1),
             style=wx.TE_NOHIDESEL)
         self.Bind(wx.EVT_TEXT, self.OnThreshValue, txt_ctrl)

@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 @author start stvds support Matej Krejci
 """
 import os
+import six
 from itertools import cycle
 import numpy as np
 
@@ -63,6 +64,7 @@ except ImportError:
 import wx.lib.filebrowsebutton as filebrowse
 
 from gui_core.widgets import GNotebook
+from gui_core.wrap import TextCtrl, Button, StaticText
 
 ALPHA = 0.5
 COLORS = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
@@ -177,7 +179,7 @@ class TplotFrame(wx.Frame):
         # ------------ITEMS IN NOTEBOOK PAGE (RASTER)------------------------
 
         self.controlPanelRaster = wx.Panel(parent=self.ntb, id=wx.ID_ANY)
-        self.datasetSelectLabelR = wx.StaticText(
+        self.datasetSelectLabelR = StaticText(
             parent=self.controlPanelRaster,
             id=wx.ID_ANY,
             label=_(
@@ -189,21 +191,21 @@ class TplotFrame(wx.Frame):
         self.datasetSelectR = gselect.Select(
             parent=self.controlPanelRaster, id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE, type='strds', multiple=True)
-        self.coor = wx.StaticText(parent=self.controlPanelRaster, id=wx.ID_ANY,
-                                  label=_('X and Y coordinates separated by '
-                                          'comma:'))
+        self.coor = StaticText(parent=self.controlPanelRaster, id=wx.ID_ANY,
+                               label=_('X and Y coordinates separated by '
+                                       'comma:'))
         try:
             self._giface.GetMapWindow()
             self.coorval = gselect.CoordinatesSelect(
                 parent=self.controlPanelRaster, giface=self._giface)
         except:
-            self.coorval = wx.TextCtrl(parent=self.controlPanelRaster,
+            self.coorval = TextCtrl(parent=self.controlPanelRaster,
                                        id=wx.ID_ANY,
                                        size=globalvar.DIALOG_TEXTCTRL_SIZE,
                                        validator=CoordinatesValidator())
 
-        self.coorval.SetToolTipString(_("Coordinates can be obtained for example"
-                                        " by right-clicking on Map Display."))
+        self.coorval.SetToolTip(_("Coordinates can be obtained for example"
+                                  " by right-clicking on Map Display."))
         self.controlPanelSizerRaster = wx.BoxSizer(wx.VERTICAL)
         # self.controlPanelSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
         # label=_("Select space time raster dataset(s):")),
@@ -222,7 +224,7 @@ class TplotFrame(wx.Frame):
 
         # ------------ITEMS IN NOTEBOOK PAGE (VECTOR)------------------------
         self.controlPanelVector = wx.Panel(parent=self.ntb, id=wx.ID_ANY)
-        self.datasetSelectLabelV = wx.StaticText(
+        self.datasetSelectLabelV = StaticText(
             parent=self.controlPanelVector, id=wx.ID_ANY,
             label=_(
                 'Vector temporal '
@@ -237,22 +239,22 @@ class TplotFrame(wx.Frame):
                                  self.OnVectorSelected)
 
         self.attribute = gselect.ColumnSelect(parent=self.controlPanelVector)
-        self.attributeLabel = wx.StaticText(parent=self.controlPanelVector,
-                                            id=wx.ID_ANY,
-                                            label=_('Select attribute column'))
+        self.attributeLabel = StaticText(parent=self.controlPanelVector,
+                                         id=wx.ID_ANY,
+                                         label=_('Select attribute column'))
         # TODO fix the category selection as done for coordinates
         try:
             self._giface.GetMapWindow()
             self.cats = gselect.VectorCategorySelect(
                 parent=self.controlPanelVector, giface=self._giface)
         except:
-            self.cats = wx.TextCtrl(
+            self.cats = TextCtrl(
                 parent=self.controlPanelVector,
                 id=wx.ID_ANY,
                 size=globalvar.DIALOG_TEXTCTRL_SIZE)
-        self.catsLabel = wx.StaticText(parent=self.controlPanelVector,
-                                       id=wx.ID_ANY,
-                                       label=_('Select category of vector(s)'))
+        self.catsLabel = StaticText(parent=self.controlPanelVector,
+                                    id=wx.ID_ANY,
+                                    label=_('Select category of vector(s)'))
 
         self.controlPanelSizerVector = wx.BoxSizer(wx.VERTICAL)
         # self.controlPanelSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
@@ -275,21 +277,21 @@ class TplotFrame(wx.Frame):
         
         # ------------ITEMS IN NOTEBOOK PAGE (LABELS)------------------------
         self.controlPanelLabels = wx.Panel(parent=self.ntb, id=wx.ID_ANY)
-        self.titleLabel = wx.StaticText(parent=self.controlPanelLabels,
-                                        id=wx.ID_ANY,
-                                        label=_('Set title for the plot'))
-        self.title = wx.TextCtrl(parent=self.controlPanelLabels, id=wx.ID_ANY,
-                                  size=globalvar.DIALOG_TEXTCTRL_SIZE)
-        self.xLabel = wx.StaticText(parent=self.controlPanelLabels,
-                                        id=wx.ID_ANY,
-                                        label=_('Set label for X axis'))
-        self.x = wx.TextCtrl(parent=self.controlPanelLabels, id=wx.ID_ANY,
-                                  size=globalvar.DIALOG_TEXTCTRL_SIZE)
-        self.yLabel = wx.StaticText(parent=self.controlPanelLabels,
-                                        id=wx.ID_ANY,
-                                        label=_('Set label for Y axis'))
-        self.y = wx.TextCtrl(parent=self.controlPanelLabels, id=wx.ID_ANY,
-                                  size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.titleLabel = StaticText(parent=self.controlPanelLabels,
+                                     id=wx.ID_ANY,
+                                     label=_('Set title for the plot'))
+        self.title = TextCtrl(parent=self.controlPanelLabels, id=wx.ID_ANY,
+                              size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.xLabel = StaticText(parent=self.controlPanelLabels,
+                                 id=wx.ID_ANY,
+                                 label=_('Set label for X axis'))
+        self.x = TextCtrl(parent=self.controlPanelLabels, id=wx.ID_ANY,
+                          size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.yLabel = StaticText(parent=self.controlPanelLabels,
+                                 id=wx.ID_ANY,
+                                 label=_('Set label for Y axis'))
+        self.y = TextCtrl(parent=self.controlPanelLabels, id=wx.ID_ANY,
+                          size=globalvar.DIALOG_TEXTCTRL_SIZE)
         self.controlPanelSizerLabels = wx.BoxSizer(wx.VERTICAL)
         self.controlPanelSizerLabels.Add(self.titleLabel, flag=wx.EXPAND)
         self.controlPanelSizerLabels.Add(self.title, flag=wx.EXPAND)
@@ -304,10 +306,10 @@ class TplotFrame(wx.Frame):
 
         # ------------ITEMS IN NOTEBOOK PAGE (EXPORT)------------------------
         self.controlPanelExport = wx.Panel(parent=self.ntb, id=wx.ID_ANY)
-        self.csvLabel = wx.StaticText(parent=self.controlPanelExport,
-                                      id=wx.ID_ANY,
-                                      label=_('Path for output CSV file '
-                                              'with plotted data'))
+        self.csvLabel = StaticText(parent=self.controlPanelExport,
+                                   id=wx.ID_ANY,
+                                   label=_('Path for output CSV file '
+                                           'with plotted data'))
         self.csvButton = filebrowse.FileBrowseButton(parent=self.controlPanelExport,
                                                      id=wx.ID_ANY,
                                                      size=globalvar.DIALOG_GSELECT_SIZE,
@@ -316,10 +318,9 @@ class TplotFrame(wx.Frame):
                                                      buttonText=_('Browse'),
                                                      startDirectory=os.getcwd(),
                                                      fileMode=wx.FD_SAVE)
-        self.headerLabel = wx.StaticText(parent=self.controlPanelExport,
-                                         id=wx.ID_ANY,
-                                         label=_('Do you want the CSV header?'
-                                                 ))
+        self.headerLabel = StaticText(parent=self.controlPanelExport,
+                                      id=wx.ID_ANY,
+                                      label=_('Do you want the CSV header?'))
         self.headerCheck = wx.CheckBox(parent=self.controlPanelExport,
                                          id=wx.ID_ANY)
         self.controlPanelSizerCheck = wx.BoxSizer(wx.HORIZONTAL)
@@ -339,11 +340,11 @@ class TplotFrame(wx.Frame):
         self.vButtPanel = wx.Panel(self.mainPanel, id=wx.ID_ANY)
         self.vButtSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.drawButton = wx.Button(self.vButtPanel, id=wx.ID_ANY,
-                                    label=_("Draw"))
+        self.drawButton = Button(self.vButtPanel, id=wx.ID_ANY,
+                                 label=_("Draw"))
         self.drawButton.Bind(wx.EVT_BUTTON, self.OnRedraw)
-        self.helpButton = wx.Button(self.vButtPanel, id=wx.ID_ANY,
-                                    label=_("Help"))
+        self.helpButton = Button(self.vButtPanel, id=wx.ID_ANY,
+                                 label=_("Help"))
         self.helpButton.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.vButtSizer.Add(self.drawButton)
         self.vButtSizer.Add(self.helpButton)
@@ -670,7 +671,7 @@ class TplotFrame(wx.Frame):
             self.yticksPos.append(1)  # TODO
             xdata = []
             ydata = []
-            for keys, values in self.timeDataR[name].iteritems():
+            for keys, values in six.iteritems(self.timeDataR[name]):
                 if keys in ['temporalType', 'granularity', 'validTopology',
                             'unit', 'temporalDataType']:
                     continue
@@ -711,9 +712,8 @@ class TplotFrame(wx.Frame):
             xdata = []
             ydata = []
             xcsv = []
-            for keys, values in self.timeDataV[
-                    name_cat[0]][
-                    name_cat[1]].iteritems():
+            for keys, values in six.iteritems(self.timeDataV[name_cat[0]]
+                                                            [name_cat[1]]):
                 if keys in ['temporalType', 'granularity', 'validTopology',
                             'unit', 'temporalDataType']:
                     continue
@@ -763,7 +763,7 @@ class TplotFrame(wx.Frame):
             xdata = []
             ydata = []
             xcsv = []
-            for keys, values in self.timeDataV[name].iteritems():
+            for keys, values in six.iteritems(self.timeDataV[name]):
                 if keys in ['temporalType', 'granularity', 'validTopology',
                             'unit', 'temporalDataType']:
                     continue
@@ -911,8 +911,8 @@ class TplotFrame(wx.Frame):
         tDict = tgis.tlist_grouped(type=typ, group_type=True, dbif=self.dbif)
         # nested list with '(map, mapset, etype)' items
         allDatasets = [[[(map, mapset, etype) for map in maps]
-                        for etype, maps in etypesDict.iteritems()]
-                       for mapset, etypesDict in tDict.iteritems()]
+                        for etype, maps in six.iteritems(etypesDict)]
+                       for mapset, etypesDict in six.iteritems(tDict)]
         # flatten this list
         if allDatasets:
             allDatasets = reduce(lambda x, y: x + y, reduce(lambda x, y: x + y,
@@ -1070,7 +1070,7 @@ class LookUp:
 
     def GetInformation(self, x):
         values = {}
-        for key, value in self.data.iteritems():
+        for key, value in six.iteritems(self.data):
             if value[x]:
                 values[key] = [self.convert(x), value[x]]
 
@@ -1083,7 +1083,7 @@ class LookUp:
 def InfoFormat(timeData, values):
     """Formats information about dataset"""
     text = []
-    for key, val in values.iteritems():
+    for key, val in six.iteritems(values):
         etype = timeData[key]['temporalDataType']
         if etype == 'strds':
             text.append(_("Space time raster dataset: %s") % key)

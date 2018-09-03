@@ -222,7 +222,7 @@ class TestRasterRegisterFunctions(TestCase):
         map_3 = tgis.RasterDataset("register_map_null@" + tgis.get_current_mapset())
         map_3.select()
         start, end = map_3.get_absolute_time()
-        self.assertEqual(start, datetime.datetime(2001, 1, 2, 02, 30, 1))
+        self.assertEqual(start, datetime.datetime(2001, 1, 2, 2, 30, 1))
 
         map_list = [map_1, map_2, map_3]
 

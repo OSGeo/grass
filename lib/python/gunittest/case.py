@@ -20,6 +20,7 @@ import unittest
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
 from grass.script import shutil_which
+from grass.script.utils import decode
 
 from .gmodules import call_module, SimpleModule
 from .checkers import (check_text_ellipsis,
@@ -224,7 +225,7 @@ class TestCase(unittest.TestCase):
             reference = text_to_keyvalue(reference, sep=sep, skip_empty=True)
         module = _module_from_parameters(module, **parameters)
         self.runModule(module, expecting_stdout=True)
-        raster_univar = text_to_keyvalue(module.outputs.stdout,
+        raster_univar = text_to_keyvalue(decode(module.outputs.stdout),
                                          sep=sep, skip_empty=True)
         if not keyvalue_equals(dict_a=reference, dict_b=raster_univar,
                                a_is_subset=True, precision=precision):
@@ -404,10 +405,10 @@ class TestCase(unittest.TestCase):
         """
         module = SimpleModule('v.info', flags='t', map=reference)
         self.runModule(module)
-        ref_topo = text_to_keyvalue(module.outputs.stdout, sep='=')
+        ref_topo = text_to_keyvalue(decode(module.outputs.stdout), sep='=')
         module = SimpleModule('v.info', flags='g', map=reference)
         self.runModule(module)
-        ref_info = text_to_keyvalue(module.outputs.stdout, sep='=')
+        ref_info = text_to_keyvalue(decode(module.outputs.stdout), sep='=')
         self.assertVectorFitsTopoInfo(vector=actual, reference=ref_topo,
                                       msg=msg)
         self.assertVectorFitsRegionInfo(vector=actual, reference=ref_info,
@@ -459,6 +460,7 @@ class TestCase(unittest.TestCase):
         `assertRasterFitsUnivar()` or `assertRasterFitsInfo()`
         """
         stdout = call_module('r.info', map=map, flags='r')
+        stdout = decode(stdout)
         actual = text_to_keyvalue(stdout, sep='=')
         if refmin > actual['min']:
             stdmsg = ('The actual minimum ({a}) is smaller than the reference'
@@ -489,6 +491,7 @@ class TestCase(unittest.TestCase):
         `assertRaster3DFitsUnivar()` or `assertRaster3DFitsInfo()`
         """
         stdout = call_module('r3.info', map=map, flags='r')
+        stdout = decode(stdout)
         actual = text_to_keyvalue(stdout, sep='=')
         if refmin > actual['min']:
             stdmsg = ('The actual minimum ({a}) is smaller than the reference'
@@ -872,13 +875,13 @@ class TestCase(unittest.TestCase):
             # be more appropriate
             module = SimpleModule('v.info', flags='t', map=reference)
             self.runModule(module)
-            ref_topo = text_to_keyvalue(module.outputs.stdout, sep='=')
+            ref_topo = text_to_keyvalue(decode(module.outputs.stdout), sep='=')
             self.assertVectorFitsTopoInfo(vector=intersection,
                                           reference=ref_topo,
                                           msg=msg)
             module = SimpleModule('v.info', flags='g', map=reference)
             self.runModule(module)
-            ref_info = text_to_keyvalue(module.outputs.stdout, sep='=')
+            ref_info = text_to_keyvalue(decode(module.outputs.stdout), sep='=')
             self.assertVectorFitsRegionInfo(vector=intersection,
                                             reference=ref_info,
                                             msg=msg, precision=precision)
@@ -908,7 +911,7 @@ class TestCase(unittest.TestCase):
             # 43=98606087.5818323
             # 44=727592.902311112
             # total area=2219442027.22035
-            total_area = module.outputs.stdout.splitlines()[-1].split('=')[-1]
+            total_area = decode(module.outputs.stdout).splitlines()[-1].split('=')[-1]
             if total_area > precision:
                 stdmsg = ("Area of difference of vectors <{va}> and <{vr}>"
                           " should be 0"
@@ -1094,7 +1097,7 @@ class TestCase(unittest.TestCase):
                                     module.get_python(),
                                     errors=errors)
         # TODO: use this also in assert and apply when appropriate
-        if expecting_stdout and not module.outputs.stdout.strip():
+        if expecting_stdout and not decode(module.outputs.stdout).strip():
 
             if module.outputs.stderr:
                 errors = " The errors are:\n" + module.outputs.stderr
@@ -1156,7 +1159,7 @@ class TestCase(unittest.TestCase):
                       'See the following errors:\n'
                       '{errors}'.format(
                           m=module, code=module.get_python(),
-                          errors=module.outputs.stderr
+                          errors=decode(module.outputs.stderr)
                       ))
             self.fail(self._formatMessage(msg, stdmsg))
         print(module.outputs.stdout)

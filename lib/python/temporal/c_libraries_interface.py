@@ -27,6 +27,7 @@ import grass.lib.temporal as libtgis
 from grass.pygrass.rpc.base import RPCServerBase
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.vector import VectorTopo
+from grass.script.utils import encode, decode
 
 ###############################################################################
 
@@ -238,7 +239,7 @@ def _get_driver_name(lock, conn, data):
         mapset = libgis.G_mapset()
 
     drstring = libtgis.tgis_get_mapset_driver_name(mapset)
-    conn.send(drstring)
+    conn.send(drstring.data)
 
 ###############################################################################
 
@@ -258,13 +259,14 @@ def _get_database_name(lock, conn, data):
         if not mapset:
             mapset = libgis.G_mapset()
         dbstring = libtgis.tgis_get_mapset_database_name(mapset)
+        dbstring = dbstring.data
 
         if dbstring:
             # We substitute GRASS variables if they are located in the database string
             # This behavior is in conjunction with db.connect
-            dbstring = dbstring.replace("$GISDBASE", libgis.G_gisdbase())
-            dbstring = dbstring.replace("$LOCATION_NAME", libgis.G_location())
-            dbstring = dbstring.replace("$MAPSET", mapset)
+            dbstring = dbstring.replace(encode("$GISDBASE"), libgis.G_gisdbase())
+            dbstring = dbstring.replace(encode("$LOCATION_NAME"), libgis.G_location())
+            dbstring = dbstring.replace(encode("$MAPSET"), encode(mapset))
     except:
         raise
     finally:
@@ -297,8 +299,9 @@ def _available_mapsets(lock, conn, data):
             in_search_path = libgis.G_is_mapset_in_search_path(mapset)
 
             c = 0
-            while mapset[c] != "\x00":
-                char_list += mapset[c]
+            while mapset[c] != b"\x00":
+                val = decode(mapset[c])
+                char_list += val
                 c += 1
 
             if permission >= 0 and in_search_path == 1:
@@ -311,7 +314,7 @@ def _available_mapsets(lock, conn, data):
 
         # We need to sort the mapset list, but the first one should be
         # the current mapset
-        current_mapset = libgis.G_mapset()
+        current_mapset = decode(libgis.G_mapset())
         if current_mapset in mapset_list:
             mapset_list.remove(current_mapset)
         mapset_list.sort()
@@ -566,7 +569,7 @@ def _read_raster_info(name, mapset):
         return None
 
     # Read the region information
-    region = libgis.Cell_head()
+    region = libraster.struct_Cell_head()
     libraster.Rast_get_cellhd(name, mapset, byref(region))
 
     kvp["north"] = region.north

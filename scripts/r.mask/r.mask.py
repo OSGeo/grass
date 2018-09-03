@@ -71,6 +71,7 @@ import sys
 import atexit
 
 import grass.script as grass
+from grass.script.utils import encode
 from grass.exceptions import CalledModuleError
 
 # i18N
@@ -141,7 +142,8 @@ def main():
                 output='MASK',
                 overwrite=True,
                 rules='-')
-            p.stdin.write("%s = 1" % maskcats)
+            res = "%s = 1" % maskcats
+            p.stdin.write(encode(res))
             p.stdin.close()
             p.wait()
         elif vector:

@@ -95,7 +95,7 @@ COPYRIGHT: (c) 2006-2014 Hamish Bowman, and the GRASS Development Team
 import sys
 import os
 import threading
-from grass.script.utils import separator, parse_key_val
+from grass.script.utils import separator, parse_key_val, encode, decode
 from grass.script import core as gcore
 
 # i18N
@@ -117,6 +117,7 @@ class TrThread(threading.Thread):
             if not line:
                 break
             line = line.replace(self.ifs, ' ')
+            line = encode(line)
             self.outf.write(line)
             self.outf.flush()
 
@@ -231,7 +232,7 @@ def main():
         fd = open(tmpfile, "w")
         fd.write("%s%s%s\n" % (x, ifs, y))
         fd.close()
-        inf = file(tmpfile)
+        inf = open(tmpfile)
     else:
         if input == '-':
             infile = None
@@ -240,7 +241,7 @@ def main():
             infile = input
             if not os.path.exists(infile):
                 gcore.fatal(_("Unable to read input data"))
-            inf = file(infile)
+            inf = open(infile)
             gcore.debug("input file=[%s]" % infile)
 
     # set up output file
@@ -279,7 +280,7 @@ def main():
             outf.write("x%sy%sz\n" % (ofs, ofs))
         for line in p.stdout:
             try:
-                xy, z = line.split(' ', 1)
+                xy, z = decode(line).split(' ', 1)
                 x, y = xy.split('\t')
             except ValueError:
                 gcore.fatal(line)
@@ -290,7 +291,7 @@ def main():
         if include_header:
             outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
         for line in p.stdout:
-            inXYZ, x, rest = line.split('\t')
+            inXYZ, x, rest = decode(line).split('\t')
             inX, inY = inXYZ.split(' ')[:2]
             y, z = rest.split(' ', 1)
             outf.write('%s%s%s%s%s%s%s%s%s\n' %

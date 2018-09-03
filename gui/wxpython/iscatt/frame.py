@@ -22,6 +22,7 @@ from __future__ import print_function
 
 import os
 import sys
+import six
 
 import wx
 import wx.lib.scrolledpanel as scrolled
@@ -32,6 +33,7 @@ from core.gcmd import GException, GError, RunCommand
 
 from gui_core.gselect import Select
 from gui_core.dialogs import SetOpacityDialog
+from gui_core.wrap import StaticBox, Menu
 from iscatt.controllers import ScattsManager
 from iscatt.toolbars import MainToolbar, EditingToolbar, CategoryToolbar
 from iscatt.iscatt_core import idScattToidBands
@@ -139,8 +141,8 @@ class IClassIScattPanel(wx.Panel, ManageBusyCursorMixin):
         self.catsPanel.SetMinSize((-1, 100))
         self.catsPanel.SetInitialSize((-1, 150))
 
-        box_capt = wx.StaticBox(parent=self.catsPanel, id=wx.ID_ANY,
-                                label=' %s ' % _("Classes"),)
+        box_capt = StaticBox(parent=self.catsPanel, id=wx.ID_ANY,
+                             label=' %s ' % _("Classes"),)
         catsSizer = wx.StaticBoxSizer(box_capt, wx.VERTICAL)
 
         self.toolbars['categoryToolbar'] = self._createCategoryToolbar(
@@ -260,7 +262,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         self.scatt_mgr.cursorPlotMove.connect(self.CursorPlotMove)
 
     def SetBusy(self, busy):
-        for scatt in self.scatts.itervalues():
+        for scatt in six.itervalues(self.scatts):
             scatt.UpdateCur(busy)
 
     def CursorPlotMove(self, x, y, scatt_id):
@@ -569,7 +571,7 @@ class CategoryListCtrl(wx.ListCtrl,
         cat_id = cats[cat_idx]
         showed = self.cats_mgr.GetCategoryAttrs(cat_id)['show']
 
-        menu = wx.Menu()
+        menu = Menu()
 
         item_id = wx.NewId()
         menu.Append(item_id, text=_("Rename class"))

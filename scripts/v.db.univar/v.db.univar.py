@@ -101,5 +101,5 @@ def main():
 
 if __name__ == "__main__":
     options, flags = gscript.parser()
-    nuldev = file(os.devnull, 'w')
+    nuldev = open(os.devnull, 'w')
     main()

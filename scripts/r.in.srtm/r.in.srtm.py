@@ -262,13 +262,13 @@ def main():
 
     header = tmpl % (ulxmap, ulymap)
     hdrfile = tile + '.hdr'
-    outf = file(hdrfile, 'w')
+    outf = open(hdrfile, 'w')
     outf.write(header)
     outf.close()
 
     # create prj file: To be precise, we would need EGS96! But who really cares...
     prjfile = tile + '.prj'
-    outf = file(prjfile, 'w')
+    outf = open(prjfile, 'w')
     outf.write(proj)
     outf.close()
 

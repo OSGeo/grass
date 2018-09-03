@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 
 import wx
 from gui_core.toolbars import BaseToolbar
+from gui_core.wrap import StaticText, TextCtrl
 from icons.icon import MetaIcon
 from core.utils import _
 
@@ -46,12 +47,12 @@ class DataCatalogToolbar(BaseToolbar):
 
         self.InitToolbar(self._toolbarData())
         self.filterId = wx.NewId()
-        self.filter = wx.TextCtrl(parent=self, id=self.filterId)
+        self.filter = TextCtrl(parent=self, id=self.filterId)
         self.filter.SetSize((120, self.filter.GetBestSize()[1]))
         self.filter.Bind(wx.EVT_TEXT,
                          lambda event: self.parent.Filter(
                          self.filter.GetValue()))
-        self.AddControl(wx.StaticText(self, label=_("Search:")))
+        self.AddControl(StaticText(self, label=_("Search:")))
         self.AddControl(self.filter)
         help = _("Type to search database by map type or name. "
                  "Use prefix 'r:', 'v:' and 'r3:'"

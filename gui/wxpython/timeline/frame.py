@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 """
 import os
 import signal
+import six
 from math import ceil
 from itertools import cycle
 import numpy as np
@@ -45,6 +46,7 @@ from core.utils import _
 import grass.temporal as tgis
 from core.gcmd import GError, GException, RunCommand
 from gui_core import gselect
+from gui_core.wrap import Button, StaticText
 from core import globalvar
 
 ALPHA = 1
@@ -132,9 +134,9 @@ class TimelineFrame(wx.Frame):
         self.datasetSelect = gselect.Select(parent=self.panel, id=wx.ID_ANY,
                                             size=globalvar.DIALOG_GSELECT_SIZE,
                                             type='stds', multiple=True)
-        self.drawButton = wx.Button(self.panel, id=wx.ID_ANY, label=_("Draw"))
+        self.drawButton = Button(self.panel, id=wx.ID_ANY, label=_("Draw"))
         self.drawButton.Bind(wx.EVT_BUTTON, self.OnRedraw)
-        self.helpButton = wx.Button(self.panel, id=wx.ID_ANY, label=_("Help"))
+        self.helpButton = Button(self.panel, id=wx.ID_ANY, label=_("Help"))
         self.helpButton.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.view3dCheck = wx.CheckBox(
             self.panel, id=wx.ID_ANY,
@@ -145,8 +147,8 @@ class TimelineFrame(wx.Frame):
                                         "(matplotlib >= 1.0.0)"))
             self.view3dCheck.Disable()
 
-        gridSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
-                                    label=_("Select space time dataset(s):")),
+        gridSizer.Add(StaticText(self.panel, id=wx.ID_ANY,
+                                 label=_("Select space time dataset(s):")),
                       pos=(0, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(self.datasetSelect, pos=(1, 0), flag=wx.EXPAND)
         gridSizer.Add(self.drawButton, pos=(1, 1), flag=wx.EXPAND)
@@ -444,8 +446,8 @@ class TimelineFrame(wx.Frame):
         tDict = tgis.tlist_grouped('stds', group_type=True, dbif=self.dbif)
         # nested list with '(map, mapset, etype)' items
         allDatasets = [[[(map, mapset, etype) for map in maps]
-                        for etype, maps in etypesDict.iteritems()]
-                       for mapset, etypesDict in tDict.iteritems()]
+                        for etype, maps in six.iteritems(etypesDict)]
+                       for mapset, etypesDict in six.iteritems(tDict)]
         # flatten this list
         if allDatasets:
             allDatasets = reduce(

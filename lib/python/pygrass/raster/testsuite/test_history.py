@@ -10,6 +10,7 @@ from grass.gunittest.main import test
 
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.raster.history import History
+from grass.script.utils import decode
 
 
 class RasterHistoryTestCate(TestCase):
@@ -40,22 +41,22 @@ class RasterHistoryTestCate(TestCase):
         r = RasterRow(self.name)
         r.open("r")
         hist = r.hist
-        
-        self.assertEqual(hist.title, "A test map")
-        self.assertEqual(hist.keyword, "This is a test map")
-        
+
+        self.assertEqual(decode(hist.title), self.name)
+        self.assertEqual(decode(hist.keyword), "This is a test map")
+
         hist1 = History(self.name)
         hist1.read()
 
-        self.assertEqual(hist1.title, "A test map")
-        self.assertEqual(hist1.keyword, "This is a test map")
-        
+        self.assertEqual(decode(hist1.title), self.name)
+        self.assertEqual(decode(hist1.keyword), "This is a test map")
+
         self.assertEqual(hist, hist1)
-        self.assertEqual(hist.creator, hist1.creator)
+        self.assertEqual(decode(hist.creator), decode(hist1.creator))
         hist1.creator = "Markus"
-        self.assertNotEqual(hist.creator, hist1.creator)
+        self.assertNotEqual(decode(hist.creator), decode(hist1.creator))
         r.close()
-        
+
         hist1.title = "No such title"
         hist1.keyword = "No such description"
         hist1.src1 = "No such source 1"
@@ -65,12 +66,12 @@ class RasterHistoryTestCate(TestCase):
         r.open("r")
         hist = r.hist
 
-        self.assertEqual(hist.title, "No such title")
-        self.assertEqual(hist.keyword, "No such description")
-        self.assertEqual(hist.creator, "Markus")
-        self.assertEqual(hist.creator, "Markus")
-        self.assertEqual(hist.src1, "No such source 1")
-        self.assertEqual(hist.src2, "No such source 2")
+        self.assertEqual(decode(hist.title), "No such title")
+        self.assertEqual(decode(hist.keyword), "No such description")
+        self.assertEqual(decode(hist.creator), "Markus")
+        self.assertEqual(decode(hist.creator), "Markus")
+        self.assertEqual(decode(hist.src1), "No such source 1")
+        self.assertEqual(decode(hist.src2), "No such source 2")
         r.close()
 
 if __name__ == '__main__':

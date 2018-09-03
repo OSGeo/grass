@@ -61,7 +61,7 @@ class Segment(object):
         """
         if file_name == '':
             file_name = libgis.G_tempfile()
-        mapobj.temp_file = file(file_name, 'w')
+        mapobj.temp_file = open(file_name, 'w')
         size = ctypes.sizeof(RTYPE[mapobj.mtype]['ctypes'])
         if fill:
             libseg.Segment_format(mapobj.temp_file.fileno(), self.rows(),

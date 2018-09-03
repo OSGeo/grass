@@ -40,6 +40,7 @@ if __name__ == '__main__':
 
 from core.treemodel import TreeModel, DictNode
 from core.utils import _
+from gui_core.wrap import CustomTreeCtrl
 
 from grass.pydispatch.signal import Signal
 
@@ -183,7 +184,7 @@ class TreeView(AbstractTreeViewMixin, wx.TreeCtrl):
         self.RefreshItems()
 
 
-class CTreeView(AbstractTreeViewMixin, CT.CustomTreeCtrl):
+class CTreeView(AbstractTreeViewMixin, CustomTreeCtrl):
     """Tree view class inheriting from wx.TreeCtrl"""
 
     def __init__(self, model, parent, **kw):
