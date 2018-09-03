@@ -79,19 +79,16 @@ void Init()
     G_debug(3, "(MaxDist):%.12lf", MaxDist);
     MaxDistSq = MaxDist * MaxDist;
     if (!SeedStuff->answer) {
-	Seed = (int)getpid();
+	Seed = -1;
     }
     else {
 	sscanf(SeedStuff->answer, "%d", &(Seed));
     }
 
-    if (Seed > SEED_MAX) {
-	Seed = Seed % SEED_MAX;
-    }
-    else if (Seed < SEED_MIN) {
-	while (Seed < SEED_MIN)
-	    Seed += SEED_MAX - SEED_MIN;
-    }
+    if (Seed < 0)
+	G_srand48_auto();
+    else
+	G_srand48(Seed);
 
     G_message(_("Generating raster map <%s>..."),
 	      Output->answer);

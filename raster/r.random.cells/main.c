@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     SeedStuff->type = TYPE_INTEGER;
     SeedStuff->required = NO;
     SeedStuff->description =
-	_("Random seed (SEED_MIN >= value >= SEED_MAX) (default [random])");
+	_("Random seed, default [random]");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
