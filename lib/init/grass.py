@@ -56,24 +56,66 @@ if ENCODING is None:
     ENCODING = 'UTF-8'
     print("Default locale not found, using UTF-8")  # intentionally not translatable
 
+
+def decode(bytes_, encoding=None):
+    """Decode bytes with default locale and return (unicode) string
+    Adapted from lib/python/core/utils.py
+
+    No-op if parameter is not bytes (assumed unicode string).
+
+    :param bytes bytes_: the bytes to decode
+    :param encoding: encoding to be used, default value is None
+    """
+    if sys.version_info.major >= 3:
+        unicode = str
+    if isinstance(bytes_, unicode):
+        return bytes_
+    elif isinstance(bytes_, bytes):
+        if encoding is None:
+            enc = ENCODING
+        else:
+            enc = encoding
+        return bytes_.decode(enc)
+    else:
+        # if something else than text
+        raise TypeError("can only accept types str and bytes")
+
+
+def encode(string, encoding=None):
+    """Encode string with default locale and return bytes with that encoding
+    Adapted from lib/python/core/utils.py
+
+    No-op if parameter is bytes (assumed already encoded).
+    This ensures garbage in, garbage out.
+
+    :param str string: the string to encode
+    :param encoding: encoding to be used, default value is None
+    """
+    if sys.version_info.major >= 3:
+        unicode = str
+    if isinstance(string, bytes):
+        return string
+    # this also tests str in Py3:
+    elif isinstance(string, unicode):
+        if encoding is None:
+            enc = ENCODING
+        else:
+            enc = encoding
+        return string.encode(enc)
+    else:
+        # if something else than text
+        raise TypeError("can only accept types str and bytes")
+
+
 # currently not used, see https://trac.osgeo.org/grass/ticket/3508
 def to_text_string(obj, encoding=ENCODING):
     """Convert `obj` to (unicode) text string"""
     if PY2:
         # Python 2
-        if encoding is None:
-            return unicode(obj)
-        else:
-            return unicode(obj, encoding)
+        return encode(obj, encoding=encoding)
     else:
         # Python 3
-        if encoding is None:
-            return str(obj)
-        elif isinstance(obj, str):
-            # In case this function is not used properly, this could happen
-            return obj
-        else:
-            return str(obj, encoding)
+        return decode(obj, encoding=encoding)
 
 
 if PY2:
@@ -618,15 +660,11 @@ def set_paths(grass_config_dir):
             pass
 
         if sys_man_path:
-            # to_text_string disabled, see https://trac.osgeo.org/grass/ticket/3508
-            # os.environ['MANPATH'] = to_text_string(sys_man_path)
-            os.environ['MANPATH'] = sys_man_path
+            os.environ['MANPATH'] = to_text_string(sys_man_path)
             path_prepend(addons_man_path, 'MANPATH')
             path_prepend(grass_man_path, 'MANPATH')
         else:
-            # to_text_string disabled, see https://trac.osgeo.org/grass/ticket/3508
-            # os.environ['MANPATH'] = to_text_string(addons_man_path)
-            os.environ['MANPATH'] = addons_man_path
+            os.environ['MANPATH'] = to_text_string(addons_man_path)
             path_prepend(grass_man_path, 'MANPATH')
 
     # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
