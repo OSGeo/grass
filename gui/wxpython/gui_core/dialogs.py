@@ -1831,8 +1831,11 @@ def GetImageHandlers(image):
     """Get list of supported image handlers"""
     lext = list()
     ltype = list()
-    for h in image.GetHandlers():
-        lext.append(h.GetExtension())
+    try:
+        for h in image.GetHandlers():
+            lext.append(h.GetExtension())
+    except AttributeError:
+        lext = {'png', 'gif', 'jpg', 'pcx', 'pnm', 'tif', 'xpm'}
 
     filetype = ''
     if 'png' in lext:
