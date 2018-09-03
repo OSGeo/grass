@@ -92,7 +92,7 @@ int query(struct Map_info *Map)
     /* Query the database for each category */
     G_message(_("Querying database... "));
     for (i = 0; i < vstat.rcat; i++) {
-	int j, ctype, nrows, more;
+	int ctype, nrows, more;
 	char buf[2000];
 	dbCursor cursor;
 	dbTable *table;
