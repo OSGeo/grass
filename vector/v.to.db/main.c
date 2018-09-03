@@ -16,6 +16,7 @@
  *****************************************************************************/
 
 #include <stdlib.h>
+#include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "global.h"
 
@@ -28,7 +29,8 @@ int main(int argc, char *argv[])
     int n, i, j, cat, lastcat, type, id, findex;
     struct Map_info Map;
     struct GModule *module;
-    struct field_info *Fi;
+    struct field_info *Fi, *qFi;
+    int ncols;
 
     G_gisinit(argv[0]);
 
@@ -71,6 +73,206 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Database connection not defined for layer %d. "
 			"Use v.db.connect first."),
 		      options.field);
+    }
+
+    qFi = Vect_get_field(&Map, options.qfield);
+    if (options.option == O_QUERY && qFi == NULL)
+        G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
+                      options.qfield);
+
+    if (!options.print) {
+	dbDriver *driver = NULL;
+	dbString table_name;
+	dbTable *table;
+	dbColumn *column;
+	const char *colname;
+	int col, fncols, icol;
+	int col_sqltype[4];
+	int create_col[4], create_cols;
+	int qlength;
+
+	/* get required column types */
+	col_sqltype[0] = col_sqltype[1] = col_sqltype[2] = col_sqltype[3] = -1;
+	ncols = 1;
+	qlength = 0;
+
+	switch (options.option) {
+	case O_CAT:
+	case O_COUNT:
+	    col_sqltype[0] = DB_SQL_TYPE_INTEGER;
+	    break;
+
+	case O_LENGTH:
+	case O_AREA:
+	case O_PERIMETER:
+	case O_SLOPE:
+	case O_SINUOUS:
+	case O_AZIMUTH:
+	case O_COMPACT:
+	case O_FD:
+	    col_sqltype[0] = DB_SQL_TYPE_DOUBLE_PRECISION;
+	    break;
+	
+	case O_BBOX:
+	    col_sqltype[0] = col_sqltype[1] = col_sqltype[2] = col_sqltype[3] = DB_SQL_TYPE_DOUBLE_PRECISION;
+	    ncols = 4;
+	    break;
+
+	case O_COOR:
+	case O_START:
+	case O_END:
+	    col_sqltype[0] = col_sqltype[1] = col_sqltype[2] = DB_SQL_TYPE_DOUBLE_PRECISION;
+	    ncols = 2;
+	    if (options.col[2])
+		ncols = 3;
+	    break;
+
+	case O_SIDES:
+	    col_sqltype[0] = col_sqltype[1] = DB_SQL_TYPE_INTEGER;
+	    ncols = 2;
+	    break;
+
+	case O_QUERY:
+	    driver = db_start_driver_open_database(qFi->driver, qFi->database);
+	    db_init_string(&table_name);
+	    db_set_string(&table_name, qFi->table);
+	    if (db_describe_table(driver, &table_name, &table) != DB_OK)
+		G_fatal_error(_("Unable to describe table <%s>"),
+			      qFi->table);
+
+	    fncols = db_get_table_number_of_columns(table);
+	    for (col = 0; col < fncols; col++) {
+		column = db_get_table_column(table, col);
+		colname = db_get_column_name(column);
+		if (strcmp(options.qcol, colname) == 0) {
+		    col_sqltype[0] = db_get_column_sqltype(column);
+		    qlength = db_get_column_length(column);
+		    break;
+		}
+	    }
+	    db_close_database_shutdown_driver(driver);
+	    driver = NULL;
+	    db_free_string(&table_name);
+	    break;
+	}
+
+	/* check if columns exist */
+	create_col[0] = create_col[1] = create_col[2] = create_col[3] = 0;
+	create_cols = 0;
+	driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	db_init_string(&table_name);
+	db_set_string(&table_name, Fi->table);
+	if (db_describe_table(driver, &table_name, &table) != DB_OK)
+	    G_fatal_error(_("Unable to describe table <%s>"),
+			  qFi->table);
+
+	fncols = db_get_table_number_of_columns(table);
+	for (col = 0; col < ncols; col++) {
+	    int col_exists = 0;
+
+	    if (options.col[col] == NULL)
+		G_fatal_error(_("Missing column name for input column number %d"), col + 1);
+
+	    for (icol = 0; icol < fncols; icol++) {
+		column = db_get_table_column(table, icol);
+		colname = db_get_column_name(column);
+		if (colname == NULL)
+		    G_fatal_error(_("Missing column name for table column number %d"), col + 1);
+		if (strcmp(options.col[col], colname) == 0) {
+		    int isqltype;
+
+		    col_exists = 1;
+		    isqltype = db_get_column_sqltype(column);
+
+		    if (isqltype != col_sqltype[col]) {
+			int ctype1, ctype2;
+
+			ctype1 = db_sqltype_to_Ctype(isqltype);
+			ctype2 = db_sqltype_to_Ctype(col_sqltype[col]);
+			
+			if (ctype1 == ctype2) {
+			    G_warning(_("Existing column <%s> has a different but maybe compatible type"),
+					  options.col[col]);
+			}
+			else {
+			    G_fatal_error(_("Existing column <%s> has the wrong type"),
+					  options.col[col]);
+			}
+		    }
+
+		    G_warning(_("Values in column <%s> will be overwritten"),
+			      options.col[col]);
+
+		    break;
+		}
+	    }
+	    if (!col_exists) {
+		create_col[col] = 1;
+		create_cols = 1;
+	    }
+	}
+	db_close_database_shutdown_driver(driver);
+	driver = NULL;
+	db_free_string(&table_name);
+
+	/* create columns if not existing */
+	if (create_cols) {
+	    char sqlbuf[4096];
+	    dbString stmt;
+
+	    db_init_string(&stmt);
+	    driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	    db_begin_transaction(driver);
+	    for (col = 0; col < ncols; col++) {
+		if (!create_col[col])
+		    continue;
+
+		if (col_sqltype[col] == DB_SQL_TYPE_INTEGER) {
+		    sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s integer",
+			    Fi->table, options.col[col]);
+		}
+		else if (col_sqltype[col] == DB_SQL_TYPE_DOUBLE_PRECISION ||
+		         col_sqltype[col] == DB_SQL_TYPE_REAL) {
+		    sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s double precision",
+			    Fi->table, options.col[col]);
+		}
+		else if (col_sqltype[col] == DB_SQL_TYPE_CHARACTER) {
+		    if (qlength > 0) {
+			sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s varchar(%d)",
+				Fi->table, options.col[col], qlength);
+		    }
+		    else {
+			sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s text",
+				Fi->table, options.col[col]);
+		    }
+		}
+		else if (col_sqltype[col] == DB_SQL_TYPE_TEXT) {
+		    sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s text",
+			    Fi->table, options.col[col]);
+		}
+		else if (col_sqltype[col] == DB_SQL_TYPE_DATE) {
+		    sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s date",
+			    Fi->table, options.col[col]);
+		}
+		else if (col_sqltype[col] == DB_SQL_TYPE_TIME) {
+		    sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s time",
+			    Fi->table, options.col[col]);
+		}
+		else {
+		    sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s %s",
+			    Fi->table, options.col[col],
+			    db_sqltype_name(col_sqltype[col]));
+		}
+		db_set_string(&stmt, sqlbuf);
+		if (db_execute_immediate(driver, &stmt) != DB_OK) {
+		    G_fatal_error(_("Unable to create column <%s>"),
+				  options.col[col]);
+		}
+	    }
+	    db_commit_transaction(driver);
+	    db_close_database_shutdown_driver(driver);
+	    db_free_string(&stmt);
+	}
     }
 
     /* allocate array for values */
