@@ -330,6 +330,12 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     def __init__(self, *args, **kwargs):
         super(PseudoDC, self).__init__(*args, **kwargs)
 
+    def DrawLinePoint(self, pt1, pt2):
+        if wxPythonPhoenix:
+            super(PseudoDC, self).DrawLine(pt1, pt2)
+        else:
+            super(PseudoDC, self).DrawLinePoint(pt1, pt2)
+
     def DrawRectangleRect(self, rect):
         if wxPythonPhoenix:
             super(PseudoDC, self).DrawRectangle(rect=rect)
