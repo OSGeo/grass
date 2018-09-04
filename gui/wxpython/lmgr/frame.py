@@ -42,6 +42,7 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
     sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 
 from grass.script import core as grass
+from grass.script.utils import decode
 
 from core.gcmd import RunCommand, GError, GMessage, EncodeString
 from core.settings import UserSettings, GetDisplayVectSettings
@@ -1224,9 +1225,10 @@ class GMFrame(wx.Frame):
             osgeo4w = ''
 
         self._gconsole.WriteCmdLog(_("System Info"))
-        # platform from UTF-8 conversion was added because of the Fedora 19 release
+        # platform decoding was added because of the Fedora 19 release
         # which has the name "Schrödinger’s cat" (umlaut and special ' character)
         # which appears in the platform.platform() string
+        platform_ = decode(platform.platform())
         self._gconsole.WriteLog("%s: %s\n"
                                 "%s: %s\n"
                                 "%s: %s\n"
@@ -1256,7 +1258,7 @@ class GMFrame(wx.Frame):
                                                     'sqlite', '?'),
                                                 platform.python_version(),
                                                 wx.__version__,
-                                                _("Platform"), platform.platform().decode('utf8', 'replace'), osgeo4w),
+                                                _("Platform"), platform_, osgeo4w),
                                 notification=Notification.MAKE_VISIBLE)
         self._gconsole.WriteCmdLog(' ')
 
