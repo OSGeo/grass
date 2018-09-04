@@ -44,6 +44,10 @@ import wx
 from ctypes import *
 
 try:
+    WindowsError
+except NameError:
+    WindowsError = OSError
+try:
     from grass.lib.gis import *
     from grass.lib.raster3d import *
     from grass.lib.vector import *

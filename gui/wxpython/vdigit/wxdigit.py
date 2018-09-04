@@ -40,6 +40,10 @@ from core.utils import _
 from vdigit.wxdisplay import DisplayDriver, GetLastError
 
 try:
+    WindowsError
+except NameError:
+    WindowsError = OSError
+try:
     from grass.lib.gis import *
     from grass.lib.vector import *
     from grass.lib.vedit import *
