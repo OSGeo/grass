@@ -1549,9 +1549,17 @@ def run_batch_job(batch_job):
     """
     batch_job_string = batch_job
     if not isinstance(batch_job, string_types):
+        # for messages only
         batch_job_string = ' '.join(batch_job)
     message(_("Executing <%s> ...") % batch_job_string)
     if isinstance(batch_job, string_types):
+        # shell=True is keeping the original GRASS_BATCH_JOB behavior
+        def quote(string):
+            if '"' in string:
+                return "'%s'" % batch_job
+            else:
+                return '"%s"' % batch_job
+        batch_job = quote(batch_job)
         proc = Popen(batch_job, shell=True)
     else:
         try:
