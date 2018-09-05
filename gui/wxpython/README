@@ -6,7 +6,7 @@ $Date$
 1 - REQUIREMENTS
 
  GRASS GIS >= 6.4
- Python    >= 2.4 (Python 3 not supported)
+ Python    >= 2.4
  	Python ElementTree (only for Python 2.4)
  wxPython  >= 2.8.10.1
  NumPy     >= 1.0.4
@@ -16,9 +16,9 @@ $Date$
 2 - STARTUP WITH GRASS INITIALIZATION
 
 If you want to launch wxPython GUI automatically, start GRASS with
-`-gui` parameter
+`--gui` parameter
 
-$ grass77 -gui
+$ grass77 --gui
 
 
 3 - STARTUP FROM GRASS TERMINAL

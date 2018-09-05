@@ -4,7 +4,7 @@
 
 <b>grass77</b> [<b>-h</b> | <b>-help</b> | <b>--help</b>] [<b>-v</b> | <b>--version</b>]
     [<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code[:datum_trans]</b>]
-    [<b>-text</b> | <b>-gtext</b> | <b>-gui</b>]
+    [<b>--text</b> | <b>--gtext</b> | <b>--gui</b>]
     [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;LOCATION_NAME&gt;/</b>]
     	<b>&lt;MAPSET&gt;</b>]
 
@@ -34,15 +34,15 @@
 <dd> Exit after creation of location or mapset. Only with <b>-c</b> flag
 
 <dt><b>-f</b>
-<dd> Forces removal of .gislock if exists (use with care!). Only with -text flag
+<dd> Forces removal of .gislock if exists (use with care!). Only with --text flag
 
-<dt><b>-text</b>
+<dt><b>--text</b>
 <dd> Indicates that Text-based User Interface should be used (skip welcome screen)
 
-<dt><b>-gtext</b>
+<dt><b>--gtext</b>
 <dd> Indicates that Text-based User Interface should be used (show welcome screen)
 
-<dt><b>-gui</b>
+<dt><b>--gui</b>
 <dd> Indicates that Graphical User Interface
 (<em><a href="wxGUI.html">wxGUI</a></em>) should be used
 
@@ -97,7 +97,7 @@ and mapset. Thus, the next time the user runs GRASS, typing
 <em>grass77</em> (without any options) will start GRASS with the
 previous settings for the user interface and mapset selected.
 
-<p>If you specify a graphical user interface (<b>-gui</b>)
+<p>If you specify a graphical user interface (<b>--gui</b>)
 the <em>grass77</em> program will try to verify that the system you
 specified exists and that you can access it successfully. If any of
 these checks fail then <em>grass77</em> will automatically switch back
@@ -246,16 +246,16 @@ script. The script file must have its executable bit set.
 <dd> Start GRASS using the default user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
-<dt><b>grass77 -gui</b>
+<dt><b>grass77 --gui</b>
 <dd> Start GRASS using the graphical user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
-<dt><b>grass77 -text</b>
+<dt><b>grass77 --text</b>
 <dd> Start GRASS using the text-based user interface. Appropriate
 location and mapset must be set by environmental variables (see
 examples below) otherwise taken from the last GRASS session.</dd>
 
-<dt><b>grass77 -gtext</b>
+<dt><b>grass77 --gtext</b>
 <dd> Start GRASS using the text-based user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
@@ -263,7 +263,7 @@ examples below) otherwise taken from the last GRASS session.</dd>
 <dd> Start GRASS using the default user interface and automatically
     launch into the given mapset, bypassing the mapset selection menu.
 
-<dt><b>grass77 -gui -</b>
+<dt><b>grass77 --gui -</b>
 <dd> Start GRASS using the graphical user interface and try to
     obtain the location and mapset from environment variables.
 

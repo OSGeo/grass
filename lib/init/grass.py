@@ -1910,13 +1910,13 @@ def parse_cmdline(argv, default_gui):
         elif i in ["help", "-h", "-help", "--help", "--h"]:
             help_message(default_gui=default_gui)
             sys.exit()
-        # Check if the -text flag was given
+        # Check if the --text flag was given
         elif i in ["-text", "--text"]:
             params.grass_gui = 'text'
-        # Check if the -gtext flag was given
+        # Check if the --gtext flag was given
         elif i in ["-gtext", "--gtext"]:
             params.grass_gui = 'gtext'
-        # Check if the -gui flag was given
+        # Check if the --gui flag was given
         elif i in ["-gui", "--gui"]:
             params.grass_gui = default_gui
         # Check if the -wxpython flag was given

@@ -657,7 +657,7 @@ Section "GRASS" SecGRASS
 	;Create the Desktop Shortcut
 	SetShellVarContext current
 	
-	CreateShortCut "$DESKTOP\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-gui"\
+	CreateShortCut "$DESKTOP\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "--gui"\
 	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS GIS ${VERSION_NUMBER}"
 	
 	;Create the Windows Start Menu Shortcuts
@@ -665,7 +665,7 @@ Section "GRASS" SecGRASS
 	
 	CreateDirectory "$SMPROGRAMS\${GRASS_BASE}"
 	
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-gui"\
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "--gui"\
 	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS GIS ${VERSION_NUMBER}"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Uninstall ${GRASS_BASE}.lnk" "$INSTALL_DIR\Uninstall-GRASS.exe" ""\
