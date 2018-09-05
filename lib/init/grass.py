@@ -542,6 +542,8 @@ def read_gisrc(filename):
                           line=line, error=e, file=filename))
             continue
         kv[k.strip()] = v.strip()
+    if not kv:
+        warning(_("Empty RC file ({file})").format(file=filename))
     f.close()
 
     return kv
