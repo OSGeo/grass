@@ -1745,9 +1745,9 @@ int main(int argc, char *argv[])
 	    G_done_msg(_("%d records updated."), update_ok);
 
 	    G_free(catexist);
+	    Vect_set_db_updated(&From);
 	}
 
-	Vect_set_db_updated(&From);
     }
 
     Vect_close(&From);
