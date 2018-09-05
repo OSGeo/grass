@@ -66,7 +66,7 @@ Segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols,
 	G_warning(_("Unable to create segment file"));
 	return -1;
     }
-    if (0 > (ret = Segment_format(SEG->fd, nrows, ncols, srows,
+    if (0 > (ret = Segment_format_nofill(SEG->fd, nrows, ncols, srows,
 							scols, len))) {
 	close(SEG->fd);
 	unlink(SEG->fname);
