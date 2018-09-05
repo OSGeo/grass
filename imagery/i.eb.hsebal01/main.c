@@ -8,8 +8,10 @@
  *               This has been seen in Bastiaanssen (1995), 
  *               later modified by Chemin and Alexandridis (2001).
  *               This code is implemented in Alexandridis et al. (2009).
+ *		 2018: added map input for e_act since i.rh can generate it
+ *		 from MOD05 and MOD07 data (see GRASS-ADDONS)
  *
- * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2018 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -47,6 +49,7 @@ int main(int argc, char *argv[])
     /* buffer for in, tmp and out raster */
     void *inrast_Rn, *inrast_g0;
     void *inrast_z0m, *inrast_t0dem;
+    void *inrast_eact;
     DCELL *outrast;
     int nrows = 0, ncols = 0;
     int row = 0, col = 0;
@@ -56,17 +59,18 @@ int main(int argc, char *argv[])
     double m_row_dry = 0.0, m_col_dry = 0.0;
     int infd_Rn, infd_g0;
     int infd_z0m, infd_t0dem;
+    int infd_eact;
     int outfd;
     char *Rn, *g0;
-    char *z0m, *t0dem;
+    char *z0m, *t0dem, *eact;
     char *h0;
 
-    double ustar, ea;
+    double ustar;
     struct History history;
     struct GModule *module;
     struct Option *input_Rn, *input_g0;
     struct Option *input_z0m, *input_t0dem, *input_ustar;
-    struct Option *input_ea, *output;
+    struct Option *input_eact, *output;
     struct Option *input_row_wet, *input_col_wet;
     struct Option *input_row_dry, *input_col_dry;
     struct Flag *flag2, *flag3;
@@ -140,14 +144,11 @@ int main(int argc, char *argv[])
 	_("Value of the height independent friction velocity (u*) [m/s]");
     input_ustar->guisection = _("Parameters");
 
-    input_ea = G_define_option();
-    input_ea->key = "vapourpressureactual";
-    input_ea->type = TYPE_DOUBLE;
-    input_ea->required = YES;
-    input_ea->answer = "1.511";
-    input_ea->description =
-	_("Value of the actual vapour pressure (e_act) [KPa]");
-    input_ea->guisection = _("Parameters");
+    input_eact = G_define_standard_option(G_OPT_R_INPUT);
+    input_eact->key = "vapourpressureactual";
+    input_eact->required = YES;
+    input_eact->description =
+	_("Name of the actual vapour pressure (e_act) map [KPa]");
 
     input_row_wet = G_define_option();
     input_row_wet->key = "row_wet_pixel";
@@ -199,11 +200,11 @@ int main(int argc, char *argv[])
     g0 = input_g0->answer;
     z0m = input_z0m->answer;
     t0dem = input_t0dem->answer;
+    eact = input_eact->answer;
 
     h0 = output->answer;
 
     ustar = atof(input_ustar->answer);
-    ea = atof(input_ea->answer);
 
     /*If automatic flag, just forget the rest of options */
     if (flag2->answer)
@@ -212,7 +213,8 @@ int main(int argc, char *argv[])
     else if (!flag2->answer &&
 	     input_row_wet->answer &&
 	     input_col_wet->answer &&
-	     input_row_dry->answer && input_col_dry->answer) {
+	     input_row_dry->answer && 
+             input_col_dry->answer) {
 	m_row_wet = atof(input_row_wet->answer);
 	m_col_wet = atof(input_col_wet->answer);
 	m_row_dry = atof(input_row_dry->answer);
@@ -236,17 +238,20 @@ int main(int argc, char *argv[])
     infd_g0 = Rast_open_old(g0, "");
     infd_z0m = Rast_open_old(z0m, "");
     infd_t0dem = Rast_open_old(t0dem, "");
+    infd_eact = Rast_open_old(eact, "");
 
     Rast_get_cellhd(Rn, "", &cellhd);
     Rast_get_cellhd(g0, "", &cellhd);
     Rast_get_cellhd(z0m, "", &cellhd);
     Rast_get_cellhd(t0dem, "", &cellhd);
+    Rast_get_cellhd(eact, "", &cellhd);
 
     /* Allocate input buffer */
     inrast_Rn = Rast_allocate_d_buf();
     inrast_g0 = Rast_allocate_d_buf();
     inrast_z0m = Rast_allocate_d_buf();
     inrast_t0dem = Rast_allocate_d_buf();
+    inrast_eact = Rast_allocate_d_buf();
 
     /***************************************************/
     /* Setup pixel location variables */
@@ -401,7 +406,7 @@ int main(int argc, char *argv[])
     DCELL d_rah_dry = 0.0;
     DCELL d_roh_dry = 0.0;
 
-    DCELL d_t0dem, d_z0m;
+    DCELL d_t0dem, d_z0m, d_eact;
     DCELL d_u5;
     DCELL d_roh1;
     DCELL d_h1, d_h2, d_h3;
@@ -414,11 +419,14 @@ int main(int argc, char *argv[])
 	/* read a line input maps into buffers */
 	Rast_get_d_row(infd_z0m, inrast_z0m, row);
 	Rast_get_d_row(infd_t0dem, inrast_t0dem, row);
+	Rast_get_d_row(infd_eact, inrast_eact, row);
 	/* read every cell in the line buffers */
 	for (col = 0; col < ncols; col++) {
 	    d_z0m = ((DCELL *) inrast_z0m)[col];
 	    d_t0dem = ((DCELL *) inrast_t0dem)[col];
+	    d_eact = ((DCELL *) inrast_eact)[col];
 	    if (Rast_is_d_null_value(&d_t0dem) ||
+		Rast_is_d_null_value(&d_eact) ||
 		Rast_is_d_null_value(&d_z0m)) {
 		/* do nothing */
 		d_Roh[row][col] = -999.9;
@@ -427,12 +435,9 @@ int main(int argc, char *argv[])
 	    else {
 		d_u5 = (ustar / 0.41) * log(5 / d_z0m);
 		d_rah1 =
-		    (1 / (d_u5 * pow(0.41, 2))) * log(5 / d_z0m) * log(5 /
-								       (d_z0m
-									*
-									0.1));
+		    (1 / (d_u5 * pow(0.41, 2))) * log(5 / d_z0m) * log(5/(d_z0m*0.1));
 		d_roh1 =
-		    ((998 - ea) / (d_t0dem * 2.87)) + (ea / (d_t0dem * 4.61));
+		    ((998 - d_eact) / (d_t0dem * 2.87)) + (d_eact / (d_t0dem * 4.61));
 		if (d_roh1 > 5)
 		    d_roh1 = 1.0;
 		else
