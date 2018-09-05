@@ -381,7 +381,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
     version_flag=_("show version information and exit"),
     create=_("create given database, location or mapset if it doesn't exist"),
     exit_after=_("exit after creation of location or mapset. Only with -c flag"),
-    force_removal=_("force removal of .gislock if exists (use with care!). Only with -text flag"),
+    force_removal=_("force removal of .gislock if exists (use with care!). Only with --text flag"),
     text=_("use text based interface (skip welcome screen)"),
     text_detail=_("and set as default"),
     gtext=_("use text based interface (show welcome screen)"),
@@ -1129,7 +1129,7 @@ def gui_startup(grass_gui):
                 " report this error to the GRASS developers.\n"
                 "On systems with package manager, make sure you have the right"
                 " GUI package, probably named grass-gui, installed.\n"
-                "To run GRASS GIS in text mode use the -text flag.\n"
+                "To run GRASS GIS in text mode use the --text flag.\n"
                 "Use '--help' for further options\n"
                 "     {cmd_name} --help\n"
                 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html").format(
@@ -2109,7 +2109,7 @@ def main():
         if not set_mapset_interactive(grass_gui):
             # No GUI available, update gisrc file
             fatal(_("<{0}> requested, but not available. Run GRASS in text "
-                    "mode (-text) or install missing package (usually "
+                    "mode (--text) or install missing package (usually "
                     "'grass-gui').").format(grass_gui))
     else:
         # Try non-interactive start up
