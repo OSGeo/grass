@@ -1,11 +1,12 @@
 o GRASS text mode startup
 
-  "grass76" starts up d.m by default (if not first time user).
-  "grass76 -text" will start up in text mode.
-  "grass76 -wxpython" or "grass76 -gui" will start up in wxpython mode.
+  "grass76" starts up g.gui by default (if not first time user).
+  "grass76 --text" will start up in text mode.
+  "grass76 --gtext" will start up with graphical welcome screen but continue then in text mode.
+  "grass76 --gui" will start up in th graphical user interface (wxpython mode).
 
-  You can use alias "grass76" to "grass76 -text" to use text mode by default.
-  Or set env var GRASS_GUI=text.
+  You can set an alias "grass76" to e.g. "grass76 --text" to use text mode by default.
+  Or set the environmental variable GRASS_GUI=text.
 
 
 o GRASS non-interactive startup examples
@@ -77,5 +78,5 @@ o GRASS non-interactive startup examples
 			# GISDBASE/loc2-1/map1-1 location
 
 
-  Any suggestionss to <grass-dev@lists.osgeo.org>
+  Send any suggestions to <grass-dev@lists.osgeo.org> at https://lists.osgeo.org/pipermail/grass-dev/
 
