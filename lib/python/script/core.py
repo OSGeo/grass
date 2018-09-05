@@ -80,7 +80,7 @@ STDOUT = subprocess.STDOUT
 
 
 raise_on_error = False  # raise exception instead of calling fatal()
-_capture_stderr = True  # capture stderr of subprocesses if possible
+_capture_stderr = False  # capture stderr of subprocesses if possible
 
 
 def call(*args, **kwargs):
