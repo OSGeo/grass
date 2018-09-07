@@ -110,7 +110,7 @@ struct globals
 
     /* region growing internal structure */
     struct RG_TREE *reg_tree;   /* search tree with region stats */
-    int min_reg_size;		/* minimum region size */
+    LARGEINT min_reg_size;	/* minimum region size */
     struct reg_stats rs, rs_i, rs_k;
     struct ngbr_stats ns;
 

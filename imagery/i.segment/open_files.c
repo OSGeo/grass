@@ -522,7 +522,8 @@ static int read_seed(struct globals *globals, SEGMENT *seeds_seg, struct rc *Ri,
 static int manage_memory(int srows, int scols, struct globals *globals)
 {
     double reg_size_mb, segs_mb;
-    int reg_size_count, nseg, nseg_total;
+    LARGEINT reg_size_count;
+    int nseg, nseg_total;
     
     segs_mb = globals->mb;
     if (globals->method == ORM_RG) {
@@ -560,6 +561,7 @@ static int manage_memory(int srows, int scols, struct globals *globals)
     }
 
     /* calculate number of segments in memory */
+    /* nseg: integer overflow possible with large segs_mb */
     if (globals->bounds_map != NULL) {
 	/* input bands, segment ids, bounds map */
 	if (globals->method == ORM_MS) {
