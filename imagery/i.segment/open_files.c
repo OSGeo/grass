@@ -541,6 +541,8 @@ static int manage_memory(int srows, int scols, struct globals *globals)
 
 	/* calculate number of region stats that can be kept in memory */
 	reg_size_count = (globals->mb - segs_mb) / reg_size_mb;
+	if (reg_size_count < 1)
+	    reg_size_count = 1;
 	globals->min_reg_size = 3;
 	if (reg_size_count < (double) globals->notnullcells / globals->min_reg_size) {
 	    globals->min_reg_size = (double) globals->notnullcells / reg_size_count;
