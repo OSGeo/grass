@@ -25,6 +25,11 @@ import textwrap
 import sys
 import six
 
+if sys.version_info.major == 2:
+    _unichr = unichr
+else:
+    _unichr = chr
+
 import wx
 from wx.html import HtmlWindow
 try:
@@ -323,9 +328,8 @@ class AboutWindow(wx.Frame):
         # credits
         authfile = os.path.join(os.getenv("GISBASE"), "AUTHORS")
         if os.path.exists(authfile):
-            authorsFile = open(authfile, 'r')
-            authors = unicode(''.join(authorsFile.readlines()), "utf-8")
-            authorsFile.close()
+            with codecs.open(authfile, encoding='utf-8', mode='r') as authorsFile:
+                authors = ''.join(authorsFile.readlines())
         else:
             authors = _('%s file missing') % 'AUTHORS'
         authorwin = ScrolledPanel(self.aboutNotebook)
@@ -431,7 +435,7 @@ class AboutWindow(wx.Frame):
         """Translators info"""
         translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
         if os.path.exists(translatorsfile):
-            translatorsFile = open(translatorsfile, 'r')
+            translatorsFile = codecs.open(translatorsfile, encoding='utf-8', mode='r')
             translators = dict()
             errLines = list()
             for line in translatorsFile.readlines()[1:]:
@@ -494,9 +498,7 @@ class AboutWindow(wx.Frame):
                         StaticText(
                             parent=translatorswin,
                             id=wx.ID_ANY,
-                            label=unicode(
-                                name,
-                                "utf-8")))
+                            label=name))
                     translatorsBox.Add(
                         StaticText(
                             parent=translatorswin,
@@ -926,7 +928,7 @@ def _grassDevTeam(start):
         end = date.today().year
 
     return '%(c)s %(start)s-%(end)s by the GRASS Development Team' % {
-        'c': unichr(169), 'start': start, 'end': end}
+        'c': _unichr(169), 'start': start, 'end': end}
 
 
 def main():
