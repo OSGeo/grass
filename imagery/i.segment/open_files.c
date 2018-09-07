@@ -551,6 +551,8 @@ static int manage_memory(int srows, int scols, struct globals *globals)
 	    reg_size_count = (double) globals->notnullcells / globals->min_reg_size;
 	    /* recalculate segs_mb */
 	    segs_mb = globals->mb - reg_size_count * reg_size_mb;
+	    if (segs_mb < 10)
+		segs_mb = 10;
 	}
 
 	G_verbose_message(_("Regions with at least %d cells are stored in memory"),
