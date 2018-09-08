@@ -13,10 +13,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   vm_ram = ENV['VAGRANT_VM_RAM'] || 1024
   vm_cpu = ENV['VAGRANT_VM_CPU'] || 1
   
-  config.vm.box = "xenial64"
+  config.vm.box = "bionic64"
   
   config.vm.hostname = "grass-gis-vagrant"
-  config.vm.box_url = "https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-vagrant.box"
+  config.vm.box_url = "https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64-vagrant.box"
   config.vm.define "grass-gis-vagrant" do |host|
     
     config.vm.network :forwarded_port, guest: 80, host: 8080
