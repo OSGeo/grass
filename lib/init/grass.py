@@ -1430,7 +1430,7 @@ def get_shell():
         os.environ['OSTYPE'] = "cygwin"
     else:
         # in docker the 'SHELL' variable may not be
-        # visible in a Python session
+        # visible in a Python session unless 'ENV SHELL /bin/bash' is set in Dockerfile
         try:
             sh = os.path.basename(os.getenv('SHELL'))
         except:
