@@ -107,6 +107,9 @@ RUN ln -s /usr/local/bin/grass* /usr/local/bin/grass
 RUN apt-get autoremove -y
 RUN apt-get clean -y
 
+# set SHELL var to avoid /bin/sh fallback in interactive GRASS GIS sessions in docker
+ENV SHELL /bin/bash
+
 # Fix permissions
 RUN chmod -R a+rwx $DATA_DIR
 
