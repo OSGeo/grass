@@ -31,7 +31,7 @@ else:
     _unichr = chr
 
 import wx
-from wx.html import HtmlWindow
+from wx.html2 import WebView as HtmlWindow
 try:
     from wx.lib.agw.hyperlink import HyperLinkCtrl
 except ImportError:
