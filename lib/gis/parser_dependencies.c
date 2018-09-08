@@ -302,7 +302,7 @@ static void check_requires_all(const struct rule *rule)
 	return;
     if (count_present(rule, 1) < rule->count - 1) {
 	char *err;
-	G_asprintf(&err, _("Option %s requires all of %s"),
+	G_asprintf(&err, _("Option <%s> requires all of %s"),
 		   get_name(rule->opts[0]), describe_rule(rule, 1, 0));
 	append_error(err);
     }
@@ -329,7 +329,7 @@ static void check_excludes(const struct rule *rule)
 	return;
     if (count_present(rule, 1) > 0) {
 	char *err;
-	G_asprintf(&err, _("Option %s is mutually exclusive with all of %s"),
+	G_asprintf(&err, _("Option <%s> is mutually exclusive with all of %s"),
 		   get_name(rule->opts[0]), describe_rule(rule, 1, 0));
 	append_error(err);
     }
