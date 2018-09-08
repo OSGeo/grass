@@ -84,6 +84,7 @@ ENV CFLAGS "$MYCFLAGS"
 ENV CXXFLAGS "$MYCXXFLAGS"
 
 # Configure, compile and install GRASS GIS
+ENV NUMTHREADS=2
 RUN ./configure \
     --enable-largefile \
     --with-cxx \
@@ -102,7 +103,7 @@ RUN ./configure \
     --with-geos=/usr/bin/geos-config \
     --with-postgres --with-postgres-includes="/usr/include/postgresql" \
     --with-opengl-libs=/usr/include/GL \
-    && make -j2 && make install && ldconfig
+    && make -j $NUMTHREADS && make install && ldconfig
 
 # enable simple grass command regardless of version number
 RUN ln -s /usr/local/bin/grass* /usr/local/bin/grass
@@ -110,6 +111,9 @@ RUN ln -s /usr/local/bin/grass* /usr/local/bin/grass
 # Reduce the image size
 RUN apt-get autoremove -y
 RUN apt-get clean -y
+
+# set SHELL var to avoid /bin/sh fallback in interactive GRASS GIS sessions in docker
+ENV SHELL /bin/bash
 
 # Fix permissions
 RUN chmod -R a+rwx $DATA_DIR
