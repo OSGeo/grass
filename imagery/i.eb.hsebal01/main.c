@@ -295,25 +295,17 @@ int main(int argc, char *argv[])
 	/*********************/
 	for (row = 0; row < nrows; row++) {
 	    DCELL d_t0dem;
-	    DCELL d_z0m;
-	    DCELL d_eact;
 
 	    G_percent(row, nrows, 2);
 	    Rast_get_d_row(infd_t0dem, inrast_t0dem, row);
-	    Rast_get_d_row(infd_z0m, inrast_z0m, row);
-	    Rast_get_d_row(infd_eact, inrast_eact, row);
 	    Rast_get_d_row(infd_Rn, inrast_Rn, row);
 	    Rast_get_d_row(infd_g0, inrast_g0, row);
 	    /*process the data */
 	    for (col = 0; col < ncols; col++) {
 		d_t0dem = ((DCELL *) inrast_t0dem)[col];
-		d_z0m = ((DCELL *) inrast_z0m)[col];
-		d_eact = ((DCELL *) inrast_eact)[col];
 		d_Rn = ((DCELL *) inrast_Rn)[col];
 		d_g0 = ((DCELL *) inrast_g0)[col];
 		if (Rast_is_d_null_value(&d_t0dem) ||
-		    Rast_is_d_null_value(&d_eact) ||
-		    Rast_is_d_null_value(&d_z0m) ||
 		    Rast_is_d_null_value(&d_Rn) ||
 		    Rast_is_d_null_value(&d_g0)) {
 		    /* do nothing */
@@ -431,11 +423,6 @@ int main(int argc, char *argv[])
 		/* do nothing */
 		d_Roh[row][col] = -999.9;
 		d_Rah[row][col] = -999.9;
-		if (row == rowDry && col == colDry) {	/*collect dry pix info */
-		    d_rah_dry = d_rah1;
-		    d_roh_dry = d_roh1;
-		    G_message("d_rah_dry=%f d_roh_dry=%f",d_rah_dry,d_roh_dry);
-		}
 	    }
 	    else {
 		d_u5 = (ustar / 0.41) * log(5 / d_z0m);
