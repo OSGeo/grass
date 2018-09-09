@@ -57,6 +57,14 @@ int open_files(struct globals *globals)
 	    G_fatal_error(_("No min/max found in raster map <%s>"),
 			  globals->Ref.file[n].name);
 	Rast_get_fp_range_min_max(&(fp_range[n]), &min[n], &max[n]);
+	if (Rast_is_d_null_value(&min[n])) {
+	    G_fatal_error(_("Input map <%s> is all NULL"),
+			  globals->Ref.file[n].name);
+	}
+	if (min[n] == max[n]) {
+	    G_fatal_error(_("Input map <%s> is a constant of value %g"),
+			  globals->Ref.file[n].name, min[n]);
+	}
 
 	G_debug(1, "Range for layer %d: min = %f, max = %f",
 		    n, min[n], max[n]);
