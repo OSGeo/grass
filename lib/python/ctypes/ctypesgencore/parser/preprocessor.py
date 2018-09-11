@@ -24,8 +24,6 @@ from . import pplexer
 from . import yacc
 from .lex import TOKEN
 
-from grass.script.utils import decode
-
 
 # --------------------------------------------------------------------------
 # Lexers
@@ -173,8 +171,6 @@ class PreprocessorParser(object):
                               stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE)
         ppout, pperr = pp.communicate()
-        ppout = decode(ppout)
-        pperr = decode(pperr)
 
         for line in pperr.split("\n"):
             if line:
