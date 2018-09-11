@@ -698,7 +698,7 @@ int main(int argc, char *argv[])
 	near = NULL;
 	nlines = Vect_get_num_lines(&From);
 
-	G_percent(0, 0, 4);
+	G_percent(0, nlines, 4);
 	for (fline = 1; fline <= nlines; fline++) {
 	    int tmp_tcat;
 	    double tmp_min = (min < 0 ? 0 : min);
@@ -982,6 +982,7 @@ int main(int argc, char *argv[])
 	near = NULL;
 
 	G_message(_("Finding nearest features for areas..."));
+	G_percent(0, nfromareas, 2);
 	for (area = 1; area <= nfromareas; area++) {
 	    int tmp_tcat;
 	    double tmp_min = (min < 0 ? 0 : min);
