@@ -160,7 +160,6 @@ else:
 import grass.script as gscript
 from grass.script.utils import try_rmdir
 from grass.script import core as grass
-from grass.script.utils import decode
 
 # i18N
 import gettext
@@ -1041,12 +1040,11 @@ def fix_newlines(directory):
         for name in files:
             filename = os.path.join(root, name)
             data = open(filename, 'rb').read()
-            data = decode(data)
             if '\0' in data:
                 continue  # ignore binary files
             # we don't expect there would be CRLF file by purpose
             # if we want to allow CRLF files we would have to whitelite .py etc
-            newdata = data.replace('\r\n', '\n')
+            newdata = data.replace(b'\r\n', b'\n')
             if newdata != data:
                 newfile = open(filename, 'wb')
                 newfile.write(newdata)
