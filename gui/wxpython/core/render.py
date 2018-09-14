@@ -33,7 +33,7 @@ import time
 import wx
 
 from grass.script import core as grass
-from grass.script.utils import try_remove
+from grass.script.utils import try_remove, text_to_string
 from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
 from grass.pydispatch.signal import Signal
 from grass.exceptions import CalledModuleError
@@ -391,7 +391,7 @@ class RenderLayerMgr(wx.EvtHandler):
         if self.layer.GetType() in ('vector', 'thememap'):
             if os.path.isfile(self.layer._legrow):
                 os.remove(self.layer._legrow)
-            env_cmd['GRASS_LEGEND_FILE'] = self.layer._legrow
+            env_cmd['GRASS_LEGEND_FILE'] = text_to_string(self.layer._legrow)
 
         cmd_render = copy.deepcopy(cmd)
         cmd_render[1]['quiet'] = True  # be quiet
@@ -464,7 +464,7 @@ class RenderMapMgr(wx.EvtHandler):
                             "GRASS_RENDER_FILE_COMPRESSION": "0",
                             "GRASS_RENDER_TRUECOLOR": "TRUE",
                             "GRASS_RENDER_TRANSPARENT": "TRUE",
-                            "GRASS_LEGEND_FILE": self.Map.legfile
+                            "GRASS_LEGEND_FILE": text_to_string(self.Map.legfile)
                             }
 
         self._init()

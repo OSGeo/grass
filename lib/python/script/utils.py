@@ -235,6 +235,18 @@ def encode(string, encoding=None):
         return bytes(string)
 
 
+def text_to_string(text, encoding=None):
+    """Convert text to str. Useful when passing text into environments,
+       in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
+    """
+    if sys.version[0] == '2':
+        # Python 2
+        return encode(text, encoding=encoding)
+    else:
+        # Python 3
+        return decode(text, encoding=encoding)
+
+
 def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
     """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep` (default: `=`)
