@@ -180,7 +180,7 @@ class Animation:
         :param prefix: file prefix
         :param format: index of image file format
         """
-        w, h = self.mapWindow.GetClientSizeTuple()
+        size = self.mapWindow.GetClientSize()
         toolWin = self.mapWindow.GetToolWin()
 
         formatter = ':04.0f'
@@ -208,8 +208,8 @@ class Animation:
                 self.mapWindow.SaveToFile(
                     FileName=filepath,
                     FileType=self.formats[format],
-                    width=w,
-                    height=h)
+                    width=size[0],
+                    height=size[1])
                 self.currentFrame += 1
 
                 wx.Yield()
