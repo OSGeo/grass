@@ -334,7 +334,7 @@ class LegendController(OverlayController):
     def _finishResizing(self):
         window = self._giface.GetMapWindow()
         window.mouseLeftUp.disconnect(self._finishResizing)
-        screenSize = window.GetClientSizeTuple()
+        screenSize = window.GetClientSize()
         self.ResizeLegend(
             window.mouse["begin"],
             window.mouse["end"],
