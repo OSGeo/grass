@@ -724,7 +724,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         self.Draw(self.pdc, img, drawid=99)
 
         # compute size ratio to move overlay accordingly
-        cSize = self.GetClientSizeTuple()
+        cSize = self.GetClientSize()
         ratio = float(
             self.Map.width) / cSize[0], float(self.Map.height) / cSize[1]
 
