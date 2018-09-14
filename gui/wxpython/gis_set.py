@@ -1001,9 +1001,7 @@ class GRASSStartup(wx.Frame):
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
 
         lockfile = get_lockfile_if_present(dbase, location, mapset)
-        print (lockfile)
         if lockfile:
-            print ('aaaa')
             dlg = wx.MessageDialog(
                 parent=self,
                 message=_(
@@ -1043,7 +1041,6 @@ class GRASSStartup(wx.Frame):
             else:
                 return
         self.SetLocation(dbase, location, mapset)
-        print ('ssssssssssssssss')
         self.ExitSuccessfully()
 
     def SetLocation(self, dbase, location, mapset):
