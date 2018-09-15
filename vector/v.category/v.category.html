@@ -37,7 +37,7 @@ is reported at the end.
     
 <p>Areas are a special case because it is impossible to attach a cat to
 an area without a centroid; in this case, the module places new
-centroids in areas automatically.
+centroids in areas automatically for <b>type=area</b>.
 
 <p>The <b>cat</b> parameter is only used with <b>option</b>=<i>add</i>, 
 <b>option</b>=<i>sum</i> and <b>option</b>=<i>del</i>.
@@ -48,6 +48,11 @@ are deleted. If <b>cat</b> is zero or positive, only this category value
 will be deleted. By default, <b>cat</b> is set to <i>1</i> which means 
 that only categories of value <i>1</i> will be deleted. 
 
+<p>With <b>option=report</b>, the module reports for each layer and 
+type the total number of categories, the minimum and the maximum 
+category number. If there are e.g. two lines with line 1 having 
+category 1 and line 1 having categories 1 and 2, then there are a total 
+of three category values with minimum 1 and maximum 2.  
 
 <p>The <b>ids</b> parameter specifies the list of feature IDs to which the
 operation is performed; by default, all vector feature ids are processed. 
