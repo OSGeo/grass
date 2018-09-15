@@ -47,6 +47,22 @@ from core.settings import UserSettings
 from core.gthread import gThread
 
 
+def get_tempfile_name(suffix, create=False):
+    """Returns a name for a temporary file in system directory"""
+    # this picks TMPDIR which we have set for GRASS session
+    # which may mitigate problems (like not cleaning files) in case we
+    # go little beyond what is in the documentation in terms of opening
+    # closing and removing the tmp file
+    tmp = tempfile.NamedTemporaryFile(suffix=suffix, delete=False)
+    # we don't want it open, we just need the name
+    name = tmp.name
+    tmp.close()
+    if not create:
+        # remove empty file to have a clean state later
+        os.remove(name)
+    return name
+
+
 class Layer(object):
     """Virtual class which stores information about layers (map layers and
     overlays) of the map composition.
@@ -81,12 +97,7 @@ class Layer(object):
             else:
                 tempfile_sfx = ".ppm"
 
-            mapfile = tempfile.NamedTemporaryFile(
-                suffix=tempfile_sfx, delete=False)
-            # we don't want it open, we just need the name
-            self.mapfile = mapfile.name
-            mapfile.close()
-            os.remove(self.mapfile)  # remove empty file
+            self.mapfile = get_tempfile_name(suffix=tempfile_sfx)
 
         self.maskfile = self.mapfile.rsplit(".", 1)[0] + ".pgm"
 
@@ -118,6 +129,7 @@ class Layer(object):
                    self.active, self.opacity, self.hidden))
 
     def __del__(self):
+        self.Clean()
         Debug.msg(3, "Layer.__del__(): layer=%s, cmd='%s'" %
                   (self.name, self.GetCmd(string=True)))
 
@@ -317,6 +329,14 @@ class Layer(object):
         """Get render manager """
         return self.renderMgr
 
+    def Clean(self):
+        if self.mapfile:
+            try_remove(self.mapfile)
+            self.mapfile = None
+        if self.maskfile:
+            try_remove(self.maskfile)
+            self.maskfile = None
+
 
 class MapLayer(Layer):
 
@@ -325,7 +345,7 @@ class MapLayer(Layer):
         """
         Layer.__init__(self, *args, **kwargs)
         if self.type in ('vector', 'thememap'):
-            self._legrow = grass.tempfile(create=True)
+            self._legrow = get_tempfile_name(suffix=".legrow", create=True)
         else:
             self._legrow = ''
 
@@ -342,6 +362,12 @@ class MapLayer(Layer):
             return self.name.split('@')[1]
         except IndexError:
             return self.name
+
+    def Clean(self):
+        Layer.Clean(self)
+        if self._legrow:
+            try_remove(self._legrow)
+            self._legrow = None
 
 
 class Overlay(Layer):
@@ -633,8 +659,7 @@ class RenderMapMgr(wx.EvtHandler):
                 if layer.GetType() not in ('vector', 'thememap'):
                     continue
 
-                if os.path.isfile(layer._legrow) and layer._legrow[-1].isdigit() \
-                   and layer.hidden is False:
+                if os.path.isfile(layer._legrow) and not layer.hidden:
                     with open(layer._legrow) as infile:
                         line = infile.read()
                         outfile.write(line)
@@ -744,10 +769,8 @@ class Map(object):
         self.gisrc = gisrc
 
         # generated file for g.pnmcomp output for rendering the map
-        self.legfile = grass.tempfile(create=False) + '.leg'
-        self.tmpdir = os.path.dirname(self.legfile)
-        self.mapfile = grass.tempfile(create=False) + '.ppm'
-
+        self.legfile = get_tempfile_name(suffix='.leg')
+        self.mapfile = get_tempfile_name(suffix='.ppm')
 
         # setting some initial env. variables
         if not self.GetWindow():
@@ -1318,6 +1341,9 @@ class Map(object):
                 if base == '' or tempbase == '':
                     return None
                 basefile = os.path.join(base, tempbase) + r'.*'
+                # this comes all the way from r28605, so leaving
+                # it as it is, although it does not really fit with the
+                # new system (but probably works well enough)
                 for f in glob.glob(basefile):
                     os.remove(f)
 
@@ -1566,11 +1592,8 @@ class Map(object):
 
     def _clean(self, llist):
         for layer in llist:
-            if layer.maskfile:
-                try_remove(layer.maskfile)
-            if layer.mapfile:
-                try_remove(layer.mapfile)
-            llist.remove(layer)
+            layer.Clean()
+        del llist[:]
 
     def Clean(self):
         """Clean layer stack - go trough all layers and remove them
@@ -1580,6 +1603,8 @@ class Map(object):
         """
         self._clean(self.layers)
         self._clean(self.overlays)
+        try_remove(self.mapfile)
+        try_remove(self.legfile)
 
     def ReverseListOfLayers(self):
         """Reverse list of layers"""
