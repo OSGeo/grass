@@ -668,7 +668,7 @@ int main(int argc, char *argv[])
 			    freps[i]->max[FR_ALL]);
 	    }
 	    else {
-		if (freps[i]->table != '\0') {
+		if (freps[i]->table != NULL) {
 		    fprintf(stdout, "%s: %d/%s\n", _("Layer/table"),
 			    freps[i]->field, freps[i]->table);
 		}
