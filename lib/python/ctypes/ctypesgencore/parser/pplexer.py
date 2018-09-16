@@ -21,7 +21,6 @@ import ctypes
 from . import lex
 from . import yacc
 from .lex import TOKEN
-from grass.script.utils import encode, decode
 
 
 PY2 = True
@@ -77,7 +76,6 @@ def sub(s):
 class StringLiteral(str):
 
     def __new__(cls, value):
-        value = decode(value)
         # Unescaping probably not perfect but close enough.
         try:
             value = re.sub(r'\\x([0-9a-fA-F])(?![0-9a-fA-F])',
@@ -283,7 +281,7 @@ STRING_LITERAL = sub(r'L?"(\\.|[^\\"])*"')
 @TOKEN(STRING_LITERAL)
 def t_ANY_string_literal(t):
     t.type = 'STRING_LITERAL'
-    t.value = StringLiteral(encode(t.value))
+    t.value = StringLiteral(t.value)
     return t
 
 

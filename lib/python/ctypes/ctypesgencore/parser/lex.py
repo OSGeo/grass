@@ -44,7 +44,6 @@ import sys
 import types
 import collections
 import functools
-from grass.script.utils import decode
 
 if PY3:
     _meth_func = "__func__"
@@ -256,10 +255,7 @@ class Lexer:
     # input() - Push a new string into the lexer
     # ------------------------------------------------------------
     def input(self, s):
-        s = decode(s)
-        if not (isinstance(s, bytes) or
-                isinstance(s, str) or
-                isinstance(s, unicode)):
+        if not (isinstance(s, bytes) or isinstance(s, str)):
             raise ValueError("Expected a string")
         self.lexdata = s
         self.lexpos = 0
