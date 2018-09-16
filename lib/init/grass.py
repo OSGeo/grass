@@ -2142,6 +2142,9 @@ def main():
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed
     atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
+    # clean always at exit, cleans whatever is current mapset based on
+    # the GISRC env variable
+    atexit.register(clean_temp)
 
     # build user fontcap if specified but not present
     make_fontcap()
@@ -2153,10 +2156,8 @@ def main():
     # only non-error, interactive version continues from here
     if batch_job:
         returncode = run_batch_job(batch_job)
-        clean_temp()
         sys.exit(returncode)
     elif params.exit_grass:
-        clean_temp()
         sys.exit(0)
     else:
         clear_screen()
@@ -2193,9 +2194,6 @@ def main():
         close_gui()
         # here we are at the end of grass session
         clear_screen()
-        # TODO: can we just register this atexit?
-        # TODO: and what is difference to deleting .tmp which we do?
-        clean_temp()
         # save 'last used' GISRC after removing variables which shouldn't
         # be saved, e.g. d.mon related
         clean_env(gisrc)
