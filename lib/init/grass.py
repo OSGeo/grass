@@ -204,7 +204,6 @@ def cleanup_dir(path):
 class Cleaner(object):  # pylint: disable=R0903
     """Holds directories and files which needs to be cleaned or deleted"""
     def __init__(self):
-        self.mapset_path = None
         self.tmpdir = None
 
     def cleanup(self):
@@ -215,10 +214,6 @@ class Cleaner(object):  # pylint: disable=R0903
         # also tidy it up
         cleanup_dir(self.tmpdir)
         try_rmdir(self.tmpdir)
-        if self.mapset_path:
-            tmpdir_mapset = os.path.join(self.mapset_path, ".tmp")
-            cleanup_dir(tmpdir_mapset)
-            try_rmdir(tmpdir_mapset)
 
 
 def fatal(msg):
@@ -2142,10 +2137,6 @@ def main():
     mapset_settings = load_gisrc(gisrc, gisrcrc=gisrcrc)
 
     location = mapset_settings.full_mapset
-
-    # TODO: it seems that we are claiming mapset's tmp before locking
-    # (this is what the original code did but it is probably wrong)
-    cleaner.mapset_path = mapset_settings.full_mapset
 
     # check and create .gislock file
     lock_mapset(mapset_settings.full_mapset, user=user,
