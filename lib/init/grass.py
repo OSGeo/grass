@@ -1759,8 +1759,9 @@ def bash_startup(location, location_name, grass_env_file):
     f.write("PS1='{name} {version} ({location}):\\w > '\n".format(
         name=grass_name, version=grass_version, location=location_name))
 
+    # TODO: have a function and/or module to test this
     mask2d_test = 'test -f "$LOCATION/cell/MASK"'
-    mask3d_test = 'test -d "$LOCATION/grid3/G3D_MASK"'
+    mask3d_test = 'test -d "$LOCATION/grid3/RASTER3D_MASK"'
 
     # double curly brackets means single one for format function
     f.write(
