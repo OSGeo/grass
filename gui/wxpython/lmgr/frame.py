@@ -1375,6 +1375,41 @@ class GMFrame(wx.Frame):
         self.workspaceFile = filename
         self._setTitle()
 
+    def _tryToSwitchMapsetFromWorkspaceFile(self, gxwXml):
+        returncode, errors = RunCommand('g.mapset',
+                      dbase=gxwXml.database,
+                      location=gxwXml.location,
+                      mapset=gxwXml.mapset,
+                      getErrorMsg=True,
+                      )
+        if returncode != 0:
+            # TODO: use the function from grass.py
+            reason = _("Most likely the database, location or mapset"
+                       " does not exist")
+            details = errors
+            message = _("Unable to change to location and mapset"
+                        " specified in the workspace.\n"
+                        "Reason: {reason}\nDetails: {details}\n\n"
+                        "Do you want to proceed with opening"
+                        " the workspace anyway?"
+                        ).format(**locals())
+            dlg = wx.MessageDialog(
+                parent=self, message=message, caption=_(
+                    "Proceed with opening of the workspace?"),
+                style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+            dlg.CenterOnParent()
+            if dlg.ShowModal() in [wx.ID_NO, wx.ID_CANCEL]:
+                return False
+        else:
+            # TODO: copy from ChangeLocation function
+            GMessage(
+                parent=self,
+                message=_("Current location is <%(loc)s>.\n"
+                          "Current mapset is <%(mapset)s>.") %
+                          {'loc': gxwXml.location,
+                           'mapset': gxwXml.mapset})
+        return True
+
     def LoadWorkspaceFile(self, filename):
         """Load layer tree definition stored in GRASS Workspace XML file (gxw)
 
@@ -1393,8 +1428,13 @@ class GMFrame(wx.Frame):
                     "Reading workspace file <%s> failed.\n"
                     "Invalid file, unable to parse XML document.") %
                 filename)
-            return
+            return False
 
+        if gxwXml.database and gxwXml.location and gxwXml.mapset:
+            if not self._tryToSwitchMapsetFromWorkspaceFile(gxwXml):
+                return False
+
+        # the really busy part starts here (mapset change is fast)
         busy = wx.BusyInfo(_("Please wait, loading workspace..."),
                            parent=self)
         wx.Yield()

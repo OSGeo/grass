@@ -14,7 +14,12 @@
 
 <!ELEMENT grass-gxw (gxw)>
 
-<!ELEMENT gxw (layer_manager?, display*)>
+<!ELEMENT gxw (session?, layer_manager?, display*)>
+
+<!ELEMENT session (database, location, mapset)>
+<!ELEMENT database (#PCDATA)>
+<!ELEMENT location (#PCDATA)>
+<!ELEMENT mapset (#PCDATA)>
 
 <!--    a layer_manager defines properties of Layer Manager
 	GUI component

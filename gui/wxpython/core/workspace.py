@@ -29,6 +29,14 @@ from nviz.main import NvizSettings
 from grass.script import core as gcore
 
 
+def get_database_location_mapset():
+    """Returns GRASS database, location, and mapset as a tuple"""
+    gisenv = gcore.gisenv()
+    return (gisenv['GISDBASE'],
+            gisenv['LOCATION_NAME'],
+            gisenv['MAPSET'])
+
+
 class ProcessWorkspaceFile:
 
     def __init__(self, tree):
@@ -95,6 +103,9 @@ class ProcessWorkspaceFile:
 
     def __processFile(self):
         """Process workspace file"""
+
+        self.__processSession()
+        
         #
         # layer manager
         #
@@ -176,6 +187,17 @@ class ProcessWorkspaceFile:
             self.__processLayers(display)
             # process nviz_state
             self.__processNvizState(display)
+
+    def __processSession(self):
+        session = self.root.find('session')
+        if session is None:
+            self.database = None
+            self.location = None
+            self.mapset = None
+            return
+        self.database = self.__filterValue(self.__getNodeText(session, 'database'))
+        self.location = self.__filterValue(self.__getNodeText(session, 'location'))
+        self.mapset = self.__filterValue(self.__getNodeText(session, 'mapset'))
 
     def __processLayers(self, node, inGroup=-1):
         """Process layers/groups of selected display
@@ -812,6 +834,19 @@ class WriteWorkspaceFile(object):
         self.file.write('%s<gxw>\n' % (' ' * self.indent))
 
         self.indent = + 4
+
+        database, location, mapset = get_database_location_mapset()
+
+        file.write('{indent}<session>\n'.format(indent=' ' * self.indent))
+        self.indent += 4
+        file.write('{indent}<database>{database}</database>\n'.format(
+            indent=' ' * self.indent, database=database))
+        file.write('{indent}<location>{location}</location>\n'.format(
+            indent=' ' * self.indent, location=location))
+        file.write('{indent}<mapset>{mapset}</mapset>\n'.format(
+            indent=' ' * self.indent, mapset=mapset))
+        self.indent -= 4
+        file.write('{indent}</session>\n'.format(indent=' ' * self.indent))
 
         # layer manager
         windowPos = self.lmgr.GetPosition()
