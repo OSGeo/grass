@@ -8,6 +8,7 @@ import grass.lib.gis as libgis
 libgis.G_gisinit('')
 import grass.lib.raster as libraster
 from grass.script import core as grasscore
+from grass.script import utils as grassutils
 
 from grass.pygrass.errors import GrassError
 
@@ -124,7 +125,7 @@ def getenv(env):
     True
 
     """
-    return libgis.G_getenv_nofatal(env)
+    return grassutils.decode(libgis.G_getenv_nofatal(env))
 
 
 def get_mapset_raster(mapname, mapset=''):
@@ -134,7 +135,7 @@ def get_mapset_raster(mapname, mapset=''):
     True
 
     """
-    return libgis.G_find_raster2(mapname, mapset)
+    return grassutils.decode(libgis.G_find_raster2(mapname, mapset))
 
 
 def get_mapset_vector(mapname, mapset=''):
@@ -144,7 +145,7 @@ def get_mapset_vector(mapname, mapset=''):
     True
 
     """
-    return libgis.G_find_vector2(mapname, mapset)
+    return grassutils.decode(libgis.G_find_vector2(mapname, mapset))
 
 
 def is_clean_name(name):
