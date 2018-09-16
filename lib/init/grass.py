@@ -1786,9 +1786,6 @@ def default_startup(location, location_name):
         os.environ['PS1'] = "GRASS %s> " % (grass_version)
         # "$ETC/run" doesn't work at all???
         process = subprocess.Popen([os.getenv('SHELL')])
-        # TODO: is there a difference between this and clean_temp?
-        # TODO: why this is missing in the other startups?
-        cleanup_dir(os.path.join(location, ".tmp"))  # remove GUI session files from .tmp
     else:
         os.environ['PS1'] = "GRASS %s (%s):\\w > " % (grass_version, location_name)
         process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
