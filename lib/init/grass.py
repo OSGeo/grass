@@ -182,7 +182,7 @@ def try_rmdir(path):
 def clean_env(gisrc):
     env_curr = read_gisrc(gisrc)
     env_new = {}
-    for k,v in env_curr.items():
+    for k, v in env_curr.items():
         if k.endswith('PID') or k.startswith('MONITOR'):
             continue
         env_new[k] = v
@@ -455,8 +455,9 @@ def create_tmp(user, gis_lock):
         tmp = tempfile.gettempdir()
 
     if tmp:
-        tmpdir = os.path.join(tmp, "grass7-%(user)s-%(lock)s" % {'user': user,
-                                                             'lock': gis_lock})
+        tmpdir = os.path.join(
+            tmp, "grass7-%(user)s-%(lock)s" % {'user': user,
+                                               'lock': gis_lock})
         try:
             os.mkdir(tmpdir, 0o700)
         except:
@@ -465,8 +466,9 @@ def create_tmp(user, gis_lock):
     if not tmp:
         for ttmp in ("/tmp", "/var/tmp", "/usr/tmp"):
             tmp = ttmp
-            tmpdir = os.path.join(tmp, "grass7-%(user)s-%(lock)s" % {
-                                              'user': user, 'lock': gis_lock})
+            tmpdir = os.path.join(
+                tmp, "grass7-%(user)s-%(lock)s" % {'user': user,
+                                                   'lock': gis_lock})
             try:
                 os.mkdir(tmpdir, 0o700)
             except:
@@ -754,6 +756,7 @@ def ensure_home():
     if windows and not os.getenv('HOME'):
         os.environ['HOME'] = os.path.join(os.getenv('HOMEDRIVE'),
                                           os.getenv('HOMEPATH'))
+
 
 def create_initial_gisrc(filename):
     # for convenience, define GISDBASE as pwd:
@@ -1043,15 +1046,15 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
                         # not a valid mapset, but dir exists, assuming
                         # broken/incomplete mapset
                         fatal(_("Unable to create new mapset <{mapset}>"
-                                 " because <{path}> is a file.")
-                                .format(mapset=mapset, path=path))
+                                " because <{path}> is a file.")
+                              .format(mapset=mapset, path=path))
                     elif os.path.isdir(path):
                         # not a valid mapset, but dir exists, assuming
                         # broken/incomplete mapset
                         warning(_("The mapset <{}> is missing the WIND file"
-                                " (computational region). It will be"
-                                " fixed now. Note that this warning"
-                                " may become an error in future versions.")
+                                  " (computational region). It will be"
+                                  " fixed now. Note that this warning"
+                                  " may become an error in future versions.")
                                 .format(mapset))
                     else:
                         # create mapset directory
@@ -1084,7 +1087,7 @@ def set_mapset_interactive(grass_gui):
     if not os.path.exists(wxpath("gis_set.py")) and grass_gui != 'text':
         debug("No GUI available, switching to text mode")
         return False
-    
+
     # Check for text interface
     if grass_gui == 'text':
         # TODO: maybe this should be removed and solved from outside
@@ -1100,6 +1103,7 @@ def set_mapset_interactive(grass_gui):
                 "Use the --help option to see valid interface names.") % grass_gui)
 
     return True
+
 
 def gui_startup(grass_gui):
     """Start GUI for startup (setting gisrc file)"""
@@ -1209,7 +1213,7 @@ def load_env(grass_env_file):
         os.environ['ISIS_LIB'] = isis + os.sep + "lib"
         os.environ['ISIS_3RDPARTY'] = isis + os.sep + "3rdParty" + os.sep + "lib"
         os.environ['QT_PLUGIN_PATH'] = isis + os.sep + "3rdParty" + os.sep + "plugins"
-        #os.environ['ISIS3DATA'] = isis + "$ISIS3DATA"
+        # os.environ['ISIS3DATA'] = isis + "$ISIS3DATA"
         libpath = os.getenv('LD_LIBRARY_PATH', '')
         isislibpath = os.getenv('ISIS_LIB')
         isis3rdparty = os.getenv('ISIS_3RDPARTY')
@@ -1225,7 +1229,7 @@ def set_language(grass_config_dir):
     # thus it always on Vista and XP will print an error.
     # See discussion for Windows not following its own documentation and
     # not accepting ISO codes as valid locale identifiers http://bugs.python.org/issue10466
-    language = 'None' # Such string sometimes is present in wx file
+    language = 'None'  # Such string sometimes is present in wx file
     encoding = None
 
     # Override value is stored in wxGUI preferences file.
@@ -1242,7 +1246,7 @@ def set_language(grass_config_dir):
                 language = ''.join(line.split(';')[-1:])
                 break
         fd.close()
-    
+
     # Backwards compatability with old wx preferences files
     if language == 'C':
         language = 'en'
@@ -1257,10 +1261,12 @@ def set_language(grass_config_dir):
             # If we get here, system locale settings are terribly wrong
             # There is no point to continue as GRASS/Python will fail
             # in some other unpredictable way.
-            sys.stderr.write("System locale is not usable (LC_ALL variable not defined). "
-                  "Most likely it indicates misconfigured environment.\n")
+            sys.stderr.write(
+                "System locale is not usable (LC_ALL variable not defined)."
+                " Most likely it indicates misconfigured environment.\n")
             sys.stderr.write("Reported error message: %s\n" % e)
-            ## TOO DRASTIC: sys.exit("Fix system locale settings and then try again.")
+            # it would be too drastic to exit
+            # sys.exit("Fix system locale settings and then try again.")
             locale.setlocale(locale.LC_ALL, 'C')
             sys.stderr.write("Default locale settings are missing. GRASS running with C locale.")
 
@@ -1294,8 +1300,11 @@ def set_language(grass_config_dir):
                         os.environ['LC_MESSAGES'] = 'C'
                         os.environ['LC_NUMERIC'] = 'C'
                         os.environ['LC_TIME'] = 'C'
-                        sys.stderr.write("To avoid Unicode errors in GUI, install en_US.UTF-8 locale and restart GRASS.\n"
-                        "Also consider upgrading your Python version to one containg fix for Python Issue 30755.\n")
+                        sys.stderr.write(
+                            "To avoid Unicode errors in GUI, install"
+                            " en_US.UTF-8 locale and restart GRASS.\n"
+                            "Also consider upgrading your Python version"
+                            " to one containing fix for Python Issue 30755.\n")
                         return
                     # en_US locale might be missing, still all messages in
                     # GRASS are already in en_US language.
@@ -1316,10 +1325,12 @@ def set_language(grass_config_dir):
                         os.environ['LC_NUMERIC'] = 'C'
                         os.environ['LC_TIME'] = 'C'
                         gettext.install('grasslibs', gpath('locale'))
-                        sys.stderr.write("All attempts to enable English language have failed. "
-                            "GRASS running with C locale.\n"
-                            "If you observe UnicodeError in Python, install en_US.UTF-8 "
-                            "locale and restart GRASS.\n")
+                        sys.stderr.write(
+                            "All attempts to enable English language have"
+                            " failed. GRASS running with C locale.\n"
+                            "If you observe UnicodeError in Python,"
+                            " install en_US.UTF-8"
+                            " locale and restart GRASS.\n")
                         return
                 else:
                     # The last attempt...
@@ -1398,15 +1409,17 @@ def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
     msg = None
     if ret == 2:
         if not force_gislock_removal:
-            msg = _("%(user)s is currently running GRASS in selected mapset (" \
-                    "file %(file)s found). Concurrent use not allowed.\nYou can force launching GRASS using -f flag " \
-                    "(note that you need permission for this operation). Have another look in the processor " \
+            msg = _("%(user)s is currently running GRASS in selected mapset"
+                    " (file %(file)s found). Concurrent use not allowed.\n"
+                    "You can force launching GRASS using -f flag"
+                    " (note that you need permission for this operation)."
+                    " Have another look in the processor "
                     "manager just to be sure..." % {
                         'user': user, 'file': lockfile})
         else:
             try_remove(lockfile)
-            message(_("%(user)s is currently running GRASS in selected mapset (" \
-                      "file %(file)s found). Forcing to launch GRASS..." % {
+            message(_("%(user)s is currently running GRASS in selected mapset"
+                      " (file %(file)s found). Forcing to launch GRASS..." % {
                           'user': user, 'file': lockfile}))
     elif ret != 0:
         msg = _("Unable to properly access '%s'.\n"
@@ -1583,7 +1596,6 @@ def start_gui(grass_gui):
     """
     # Start the chosen GUI but ignore text
     debug("GRASS GUI should be <%s>" % grass_gui)
-    
     # Check for gui interface
     if grass_gui == "wxpython":
         Popen([os.getenv('GRASS_PYTHON'), wxpath("wxgui.py")])
@@ -1604,7 +1616,8 @@ def close_gui():
             os.kill(int(pid), signal.SIGTERM)
         except OSError as e:
             message(_("Unable to close GUI. {0}").format(e))
-        
+
+
 def clear_screen():
     """Clear terminal"""
     if windows:
@@ -1690,7 +1703,8 @@ def csh_startup(location, location_name, mapset, grass_env_file):
     f.write("GRASS GIS %s > '\n" % grass_version)
     f.write("set BOGUS=``;unset BOGUS\n")
 
-    path = os.path.join(userhome, ".grass.cshrc") # left for backward compatibility
+    # csh shell rc file left for backward compatibility
+    path = os.path.join(userhome, ".grass.cshrc")
     if os.access(path, os.R_OK):
         f.write(readfile(path) + '\n')
     if os.access(grass_env_file, os.R_OK):
@@ -1709,14 +1723,11 @@ def csh_startup(location, location_name, mapset, grass_env_file):
 
     path = os.getenv('PATH').split(':')
     f.write("set path = ( %s ) \n" % ' '.join(path))
-
     f.close()
     writefile(tcshrc, readfile(cshrc))
 
     process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
-    
     os.environ['HOME'] = userhome
-    
     return process
 
 
@@ -1770,14 +1781,11 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
                 f.write(line + '\n')
 
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
-    f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
-
+    f.write("export HOME=\"%s\"\n" % userhome)  # restore user home path
     f.close()
-    
+
     process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
-    
     os.environ['HOME'] = userhome
-    
     return process
 
 
@@ -1835,7 +1843,7 @@ def print_params():
         if arg == 'path':
             sys.stdout.write("%s\n" % gisbase)
         elif arg == 'arch':
-            val = grep('ARCH',linesplat)
+            val = grep('ARCH', linesplat)
             sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
         elif arg == 'build':
             build = gpath('include', 'grass', 'confparms.h')
@@ -1844,7 +1852,7 @@ def print_params():
             filebuild.close()
             sys.stdout.write("%s\n" % val.strip().strip('"').strip())
         elif arg == 'compiler':
-            val = grep('CC',linesplat)
+            val = grep('CC', linesplat)
             sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
         elif arg == 'revision':
             rev = gpath('include', 'grass', 'gis.h')
@@ -1852,7 +1860,8 @@ def print_params():
             linesrev = filerev.readlines()
             val = grep('#define GIS_H_VERSION', linesrev)
             filerev.close()
-            sys.stdout.write("%s\n" % val[0].split(':')[1].rstrip('$"\n').strip())
+            sys.stdout.write(
+                "%s\n" % val[0].split(':')[1].rstrip('$"\n').strip())
         elif arg == 'version':
             sys.stdout.write("%s\n" % grass_version)
         else:
@@ -1871,7 +1880,7 @@ def get_username():
             user = os.getenv('LOGNAME')
         if not user:
             try:
-                p = Popen(['whoami'], stdout = subprocess.PIPE)
+                p = Popen(['whoami'], stdout=subprocess.PIPE)
                 s = p.stdout.read()
                 p.wait()
                 user = s.strip()
@@ -1894,6 +1903,7 @@ class Parameters(object):
         self.mapset = None
         self.geofile = None
         self.tmp_location = False
+
 
 def parse_cmdline(argv, default_gui):
     """Parse the standard part of command line parameters"""
@@ -1941,14 +1951,14 @@ def parse_cmdline(argv, default_gui):
     elif len(args) == 1:
         if params.tmp_location:
             params.geofile = args[0]
-        else: 
+        else:
             params.mapset = args[0]
     else:
         params.mapset = None
     return params
 
 
-### MAIN script starts here
+# The main script starts here
 
 # Get the system name
 windows = sys.platform == 'win32'
@@ -1958,7 +1968,7 @@ macosx = "darwin" in sys.platform
 # TODO: it is OK to remove this?
 # at the beginning of this file were are happily getting GISBASE
 # from the environment and we don't care about inconsistencies it might cause
-### commented-out: broken winGRASS
+# The following was commented out because of breaking winGRASS
 # if 'GISBASE' in os.environ:
 #     sys.exit(_("ERROR: GRASS GIS is already running "
 #                "(environmental variable GISBASE found)"))
@@ -2026,7 +2036,8 @@ def main():
     # Set the username
     user = get_username()
 
-    # TODO: this might need to be moved before processing of parameters and getting batch job
+    # TODO: this might need to be moved before processing of parameters
+    # and getting batch job
     # Set language
     # This has to be called before any _() function call!
     # Subsequent functions are using _() calls and
@@ -2110,7 +2121,7 @@ def main():
         # Try non-interactive start up
         if params.tmp_location:
             # tmp loc requires other things to be set as well
-            set_mapset(gisrc=gisrc, geofile=params.geofile, 
+            set_mapset(gisrc=gisrc, geofile=params.geofile,
                        create_new=True,
                        tmp_location=params.tmp_location, tmpdir=tmpdir)
         elif params.create_new and params.geofile:
