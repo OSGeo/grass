@@ -1737,9 +1737,10 @@ def bash_startup(location, location_name, grass_env_file):
     if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
         os.environ['HISTSIZE'] = "3000"
 
-    # instead of changing $HOME, start bash with: --rcfile "$LOCATION/.bashrc" ?
-    #   if so, must care be taken to explicitly call .grass.bashrc et al for
-    #   non-interactive bash batch jobs?
+    # instead of changing $HOME, start bash with:
+    #   --rcfile "$LOCATION/.bashrc" ?
+    #   if so, must care be taken to explicitly call .grass.bashrc et al
+    #   for non-interactive bash batch jobs?
     userhome = os.getenv('HOME')      # save original home
     home = location                   # save .bashrc in $LOCATION
     os.environ['HOME'] = home
@@ -1749,24 +1750,36 @@ def bash_startup(location, location_name, grass_env_file):
 
     f = open(bashrc, 'w')
     f.write("test -r ~/.alias && . ~/.alias\n")
-    if os.getenv('ISISROOT'):
-        f.write("PS1='ISIS-GRASS %s (%s):\\w > '\n" % (grass_version, location_name))
-    else:
-        f.write("PS1='GRASS %s (%s):\\w > '\n" % (grass_version, location_name))
 
-    f.write("""grass_prompt() {
-	LOCATION="`g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET separator='/'`"
-	if test -d "$LOCATION/grid3/G3D_MASK" && test -f "$LOCATION/cell/MASK" ; then
-		echo [%s]
-	elif test -f "$LOCATION/cell/MASK" ; then
-		echo [%s]
-	elif test -d "$LOCATION/grid3/G3D_MASK" ; then
-		echo [%s]
-	fi
-}
-PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
-                                    _("Raster MASK present"),
-                                    _("3D raster MASK present")))
+    if os.getenv('ISISROOT'):
+        # GRASS GIS and ISIS blend
+        grass_name = "ISIS-GRASS"
+    else:
+        grass_name = "GRASS"
+    f.write("PS1='{name} {version} ({location}):\\w > '\n".format(
+        name=grass_name, version=grass_version, location=location_name))
+
+    mask2d_test = 'test -f "$LOCATION/cell/MASK"'
+    mask3d_test = 'test -d "$LOCATION/grid3/G3D_MASK"'
+
+    # double curly brackets means single one for format function
+    f.write(
+        """grass_prompt() {{
+    LOCATION="`g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET separator='/'`"
+    if {mask2d_test} && {mask3d_test} ; then
+        echo [{both_masks}]
+    elif {mask2d_test} ; then
+        echo [{mask2d}]
+    elif {mask3d_test} ; then
+        echo [{mask3d}]
+    fi
+}}
+PROMPT_COMMAND=grass_prompt\n""".format(
+            both_masks=_("2D and 3D raster MASKs present"),
+            mask2d=_("Raster MASK present"),
+            mask3d=_("3D raster MASK present"),
+            mask2d_test=mask2d_test, mask3d_test=mask3d_test
+            ))
 
     # read other settings (aliases, ...) since environmental variables
     # have been already set by load_env(), see #3462
