@@ -2081,10 +2081,6 @@ def main():
                     "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html").format(
                         cmd_name=cmd_name, gisrcrc=gisrcrc))
         create_initial_gisrc(gisrc)
-    else:
-        # clean only for user who is no first time
-        # (measured by presence of rc file)
-        clean_temp()
 
     message(_("Starting GRASS GIS..."))
 
@@ -2142,6 +2138,11 @@ def main():
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed
     atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
+    # We now own the mapset (set and lock), so we can clean temporary
+    # files which previous session may have left behind. We do it even
+    # for first time user because the cost is low and first time user
+    # doesn't necessarily mean that the mapset is used for the first time.
+    clean_temp()
     # clean always at exit, cleans whatever is current mapset based on
     # the GISRC env variable
     atexit.register(clean_temp)
