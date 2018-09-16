@@ -205,7 +205,6 @@ class Cleaner(object):  # pylint: disable=R0903
     """Holds directories and files which needs to be cleaned or deleted"""
     def __init__(self):
         self.mapset_path = None
-        self.lockfile = None
         self.tmpdir = None
 
     def cleanup(self):
@@ -220,9 +219,6 @@ class Cleaner(object):  # pylint: disable=R0903
             tmpdir_mapset = os.path.join(self.mapset_path, ".tmp")
             cleanup_dir(tmpdir_mapset)
             try_rmdir(tmpdir_mapset)
-        # remove lock-file if requested
-        if self.lockfile:
-            try_remove(self.lockfile)
 
 
 def fatal(msg):
@@ -1435,6 +1431,17 @@ def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
     return lockfile
 
 
+# TODO: the gisrcrc here does not make sense, remove it from load_gisrc
+def unlock_gisrc_mapset(gisrc, gisrcrc):
+    """Unlock mapset from the gisrc file"""
+    settings = load_gisrc(gisrc, gisrcrc)
+    lockfile = os.path.join(settings.full_mapset, ".gislock")
+    # this fails silently, perhaps a warning would be helpful to
+    # catch cases when removal was not possible due to e.g. another
+    # session force-removing the file (unlocking the mapset)
+    try_remove(lockfile)
+
+
 def make_fontcap():
     # TODO: is GRASS_FONT_CAP ever defined? It seems it must be defined in system
     fc = os.getenv('GRASS_FONT_CAP')
@@ -2141,9 +2148,12 @@ def main():
     cleaner.mapset_path = mapset_settings.full_mapset
 
     # check and create .gislock file
-    cleaner.lockfile = lock_mapset(mapset_settings.full_mapset, user=user,
-                                   force_gislock_removal=params.force_gislock_removal,
-                                   grass_gui=grass_gui)
+    lock_mapset(mapset_settings.full_mapset, user=user,
+                force_gislock_removal=params.force_gislock_removal,
+                grass_gui=grass_gui)
+    # unlock the mapset which is current at the time of turning off
+    # in case mapset was changed
+    atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
 
     # build user fontcap if specified but not present
     make_fontcap()
