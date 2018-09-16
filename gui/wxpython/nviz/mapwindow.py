@@ -24,7 +24,6 @@ import six
 import time
 import copy
 import math
-import types
 
 from threading import Thread
 
@@ -238,7 +237,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             wx.CallLater(3000, self._warningDepthBuffer)
 
         # cplanes cannot be initialized now
-        wx.CallAfter(self.InitCPlanes)
+        wx.CallLater(1000, self.InitCPlanes)
 
     def _warningDepthBuffer(self):
         if not self.initView:
@@ -1485,11 +1484,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     if sec1 == 'position':
                         data[sec][sec1]['update'] = None
                         continue
-                    if isinstance(data[sec][sec1], types.DictType):
+                    if isinstance(data[sec][sec1], dict):
                         for sec2 in data[sec][sec1].keys():
                             if sec2 not in ('all', 'init', 'id'):
                                 data[sec][sec1][sec2]['update'] = None
-                    elif isinstance(data[sec][sec1], types.ListType):
+                    elif isinstance(data[sec][sec1], list):
                         for i in range(len(data[sec][sec1])):
                             for sec2 in data[sec][sec1][i].keys():
                                 data[sec][sec1][i][sec2]['update'] = None
@@ -1932,7 +1931,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 elif attrb == 'transp':
                     self._display.UnsetSurfaceTransp(id)
             else:
-                if isinstance(value, types.StringType):
+                if isinstance(value, str):
                     if len(value) == 0:  # ignore empty values (TODO: warning)
                         continue
                     if map and not grass.find_file(value, element='cell')[
@@ -2048,7 +2047,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     elif attrb == 'transp':
                         self._display.UnsetIsosurfaceTransp(id, isosurfId)
                 else:
-                    if isinstance(value, types.StringType):
+                    if isinstance(value, str):
                         if len(value) == 0:  # ignore empty values (TODO: warning)
                             continue
                         if map and not grass.find_file(value, element='grid3')[

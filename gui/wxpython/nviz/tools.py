@@ -22,7 +22,6 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
-import types
 import six
 
 import wx
@@ -3504,22 +3503,22 @@ class NvizToolWindow(FN.FlatNotebook):
         for key, item in six.iteritems(self.win[name]):
             if key in ('map', 'surface', 'new', 'planes'):
                 continue
-            if isinstance(item, types.DictType):
+            if isinstance(item, dict):
                 for skey, sitem in six.iteritems(self.win[name][key]):
-                    if isinstance(sitem, types.DictType):
+                    if isinstance(sitem, dict):
                         for ssitem in six.itervalues(self.win[name][key][skey]):
-                            if not isinstance(ssitem, types.BooleanType) and \
-                               isinstance(ssitem, types.IntType):
+                            if not isinstance(ssitem, bool) and \
+                               isinstance(ssitem, int):
                                 self.FindWindowById(ssitem).Enable(enabled)
                     else:
                         # type(bool) != types.IntType but
                         # isinstance(bool) == types.IntType
-                        if not isinstance(sitem, types.BooleanType) and \
-                           isinstance(sitem, types.IntType):
+                        if not isinstance(sitem, bool) and \
+                           isinstance(sitem, int):
                             self.FindWindowById(sitem).Enable(enabled)
             else:
-                if not isinstance(item, types.BooleanType) and \
-                   isinstance(item, types.IntType):
+                if not isinstance(item, bool) and \
+                   isinstance(item, int):
                     self.FindWindowById(item).Enable(enabled)
 
     def SetMapObjUseMap(self, nvizType, attrb, map=None):
@@ -4898,8 +4897,8 @@ class NvizToolWindow(FN.FlatNotebook):
         except:  # TODO disabled page
             planeIndex = -1
 
-        if event.GetId() in (self.win['cplane']['rotation']['rot'].values() +
-                             self.win['cplane']['rotation']['tilt'].values()):
+        if event.GetId() in (list(self.win['cplane']['rotation']['rot'].values()) +
+                             list(self.win['cplane']['rotation']['tilt'].values())):
             action = 'rotation'
         else:
             action = 'position'
@@ -5281,7 +5280,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.FindWindowById(
                     self.win['surface']['color']['map']).SetValue(value)
             else:  # constant
-                color = map(int, value.split(':'))
+                color = list(map(int, value.split(':')))
                 self.FindWindowById(
                     self.win['surface']['color']['const']).SetColour(color)
             self.SetMapObjUseMap(
@@ -5362,7 +5361,7 @@ class NvizToolWindow(FN.FlatNotebook):
             if name == "selection":
                 win.SetSelection(value)
             elif name == "colour":
-                color = map(int, value.split(':'))
+                color = list(map(int, value.split(':')))
                 win.SetColour(color)
             else:
                 win.SetValue(value)
@@ -5434,7 +5433,7 @@ class NvizToolWindow(FN.FlatNotebook):
         width.SetValue(data['lines']['width']['value'])
 
         color = self.FindWindowById(self.win['vector']['lines']['color'])
-        color.SetValue(map(int, data['lines']['color']['value'].split(':')))
+        color.SetValue(list(map(int, data['lines']['color']['value'].split(':'))))
 
         for vtype in ('lines', 'points'):
             if vtype == 'lines':
@@ -5490,7 +5489,7 @@ class NvizToolWindow(FN.FlatNotebook):
             if name == 'selection':
                 win.SetSelection(data['points'][prop]['value'])
             elif name == 'color':
-                color = map(int, data['points'][prop]['value'].split(':'))
+                color = list(map(int, data['points'][prop]['value'].split(':')))
                 win.SetValue(color)
             else:
                 win.SetValue(data['points'][prop]['value'])
@@ -5616,7 +5615,7 @@ class NvizToolWindow(FN.FlatNotebook):
                     self.FindWindowById(
                         self.win['volume'][attrb]['map']).SetValue(value)
                 else:  # constant
-                    color = map(int, value.split(':'))
+                    color = list(map(int, value.split(':')))
                     self.FindWindowById(
                         self.win['volume'][attrb]['const']).SetColour(color)
             else:

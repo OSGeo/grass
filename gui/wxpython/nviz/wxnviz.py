@@ -59,7 +59,7 @@ except (ImportError, WindowsError) as e:
 
 from core.debug import Debug
 from core.utils import _, autoCropImageFromFile
-from core.gcmd import EncodeString
+from core.gcmd import EncodeString, DecodeString
 from core.globalvar import wxPythonPhoenix
 from gui_core.wrap import Rect
 import grass.script as grass
@@ -72,6 +72,8 @@ def print_error(msg, type):
     """Redirect stderr"""
     global log
     if log:
+        if sys.version_info.major >= 3:
+            msg = DecodeString(msg.data)
         log.write(msg)
     else:
         print(msg)
