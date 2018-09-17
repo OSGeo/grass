@@ -11,7 +11,7 @@ import grass.lib.raster as libraster
 from grass.exceptions import ImplementationError
 
 from grass.pygrass.errors import GrassError
-
+from grass.pygrass.utils import decode
 from grass.pygrass.raster.raster_type import TYPE as RTYPE
 
 
@@ -146,11 +146,11 @@ class Category(list):
         """
         min_cat = ctypes.pointer(RTYPE[self.mtype]['grass def']())
         max_cat = ctypes.pointer(RTYPE[self.mtype]['grass def']())
-        lab = libraster.Rast_get_ith_cat(ctypes.byref(self.c_cats),
-                                         index,
-                                         ctypes.cast(min_cat, ctypes.c_void_p),
-                                         ctypes.cast(max_cat, ctypes.c_void_p),
-                                         self._gtype)
+        lab = decode(libraster.Rast_get_ith_cat(ctypes.byref(self.c_cats),
+                                                index,
+                                                ctypes.cast(min_cat, ctypes.c_void_p),
+                                                ctypes.cast(max_cat, ctypes.c_void_p),
+                                                self._gtype))
         # Manage C function Errors
         if lab == '':
             raise GrassError(_("Error executing: Rast_get_ith_cat"))

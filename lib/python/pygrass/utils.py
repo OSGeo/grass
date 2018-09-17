@@ -7,6 +7,7 @@ from sqlite3 import OperationalError
 import grass.lib.gis as libgis
 libgis.G_gisinit('')
 import grass.lib.raster as libraster
+from grass.lib.ctypes_preamble import String
 from grass.script import core as grasscore
 from grass.script import utils as grassutils
 
@@ -117,6 +118,19 @@ def copy(existingmap, newmap, maptype, **kwargs):
     grasscore.run_command('g.copy', quiet=True, **kwargs)
 
 
+def decode(obj, encoding=None):
+    """Decode string coming from c functions,
+    can be ctypes class String, bytes, or None
+    """
+    if isinstance(obj, String):
+        return grassutils.decode(obj.data, encoding=encoding)
+    elif isinstance(obj, bytes):
+        return grassutils.decode(obj)
+    else:
+        # eg None
+        return obj
+
+
 def getenv(env):
     """Return the current grass environment variables
 
@@ -125,7 +139,7 @@ def getenv(env):
     True
 
     """
-    return grassutils.decode(libgis.G_getenv_nofatal(env))
+    return decode(libgis.G_getenv_nofatal(env))
 
 
 def get_mapset_raster(mapname, mapset=''):
@@ -135,7 +149,7 @@ def get_mapset_raster(mapname, mapset=''):
     True
 
     """
-    return grassutils.decode(libgis.G_find_raster2(mapname, mapset))
+    return decode(libgis.G_find_raster2(mapname, mapset))
 
 
 def get_mapset_vector(mapname, mapset=''):
@@ -145,7 +159,7 @@ def get_mapset_vector(mapname, mapset=''):
     True
 
     """
-    return grassutils.decode(libgis.G_find_vector2(mapname, mapset))
+    return decode(libgis.G_find_vector2(mapname, mapset))
 
 
 def is_clean_name(name):
