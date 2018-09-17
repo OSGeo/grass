@@ -1760,13 +1760,15 @@ def bash_startup(location, location_name, grass_env_file):
         name=grass_name, version=grass_version, location=location_name))
 
     # TODO: have a function and/or module to test this
-    mask2d_test = 'test -f "$LOCATION/cell/MASK"'
-    mask3d_test = 'test -d "$LOCATION/grid3/RASTER3D_MASK"'
+    mask2d_test = 'test -f "$MAPSET_PATH/cell/MASK"'
+    mask3d_test = 'test -d "$MAPSET_PATH/grid3/RASTER3D_MASK"'
 
     # double curly brackets means single one for format function
+    # setting LOCATION for backwards compatibility
     f.write(
         """grass_prompt() {{
-    LOCATION="`g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET separator='/'`"
+    MAPSET_PATH="`g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET separator='/'`"
+    LOCATION="$MAPSET_PATH"
     if {mask2d_test} && {mask3d_test} ; then
         echo [{both_masks}]
     elif {mask2d_test} ; then
