@@ -39,7 +39,6 @@
 #% type: integer
 #% required: no
 #% multiple: no
-#% options: 0-2047
 #% label: Maximum memory to be used (in MB)
 #% description: Cache size for raster rows
 #% answer: 300
