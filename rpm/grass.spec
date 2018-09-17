@@ -1,8 +1,8 @@
-%global shortver 75
+%global shortver 76
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	7.5.0
+Version:	7.6.0
 Release:	1%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
@@ -49,11 +49,10 @@ BuildRequires:	netcdf-devel
 %endif
 BuildRequires:	python < 3.0
 BuildRequires:	python2-numpy
-%if (0%{?rhel} > 6 || 0%{?fedora})
+%if 0%{?rhel} && 0%{?rhel} <= 7
 BuildRequires:	postgresql-devel
 %else
-# RHEL6: PG from http://yum.postgresql.org/9.6/redhat/rhel-$releasever-$basearch/
-BuildRequires:  postgresql96-devel postgresql96-libs
+BuildRequires:	libpq-devel
 %endif
 BuildRequires:	proj-devel
 BuildRequires:	proj-epsg
@@ -190,12 +189,7 @@ export GRASS_PYTHON="/usr/bin/python2"
 %else
 	--with-mysql-libs=%{_libdir}/mysql \
 %endif
-%if (0%{?rhel} > 6 || 0%{?fedora})
-        --with-postgres-includes=%{_includedir}/pgsql \
-%else
-	--with-postgres-includes=%{_prefix}/pgsql-9.6/include/ \
-	--with-postgres-libs=%{_prefix}/pgsql-9.6/lib/ \
-%endif
+	--with-postgres-includes=%{_includedir}/pgsql \
 	--with-cairo-ldflags=-lfontconfig \
 	--with-freetype-includes=%{_includedir}/freetype2 \
 	--with-zstd \
@@ -343,6 +337,12 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Thu Sep 09 2018 Pavel Raiskup <praiskup@redhat.com> - 7.4.1-8
+- Clean up of PostgreSQL support (PR#4)
+
+* Tue Jul 31 2018 Florian Weimer <fweimer@redhat.com> - 7.4.1-7
+- Rebuild with fixed binutils
+
 * Sun Jul 29 2018 Markus Neteler <neteler@mundialis.de> - 7.4.1-6
 - added BuildRequires gcc-c++ to address RHBZ #1604262 due to RHBZ #1551327 (removing gcc and gcc-c++ from default buildroot)
 
