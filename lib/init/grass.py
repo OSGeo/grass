@@ -1075,8 +1075,9 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
         kv['MAPSET'] = mapset
         write_gisrc(kv, gisrc)
     else:
-        fatal(_("GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
-                "Interactive startup needed."))
+        fatal(_("GRASS GIS database directory, location and mapset"
+                " not set properly."
+                " Use GUI or command line to set them."))
 
 
 def set_mapset_interactive(grass_gui):
