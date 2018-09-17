@@ -8,75 +8,8 @@ o GRASS text mode startup
   You can set an alias "grass77" to e.g. "grass77 --text" to use text mode by default.
   Or set the environmental variable GRASS_GUI=text.
 
-
-o GRASS non-interactive startup examples
-
-  You can startup GRASS non-interactively using some env variables.
-
-  	LOCATION
-	GISDBASE
-	LOCATION_NAME
-	MAPSET
-
-  LOCATION var overrides GISDBASE/LOCATION_NAME/MAPSET location.
-
-  ex1)
-  	export LOCATION=/usr/home/grass/usr/data1/loc1/map1
-	export GISDBASE=/usr/home/grass/usr/data1
-	export LOCATION_NAME=loc1
-	export MAPSET=map1
-
-	grass77 -	# non-interactive startup using LOCATION location
-
-  ex2)
-	export GISDBASE=/usr/home/grass/usr/data1
-	export LOCATION_NAME=loc1
-	export MAPSET=map1
-  	
-	grass77 -	# non-interactive startup using
-			# GISDBASE/LOCATION_NAME/MAPSET location
-
-
-  Also, the first argument of grass77 can override these env vars.
-
-  ex3)
-  	export LOCATION=/usr/home/grass/usr/data1/loc1/map1
-	export GISDBASE=/usr/home/grass/usr/data1
-	export LOCATION_NAME=loc1
-	export MAPSET=map1
-
-	grass77 /usr/home/grass/usr/data2/loc2-1/map1-1
-			# non-interactive startup using
-			# /usr/home/grass/usr/data2/loc2-1/map1-1 location
-
-  ex4)
-	export GISDBASE=/usr/home/grass/usr/data1
-	export LOCATION_NAME=loc1
-	export MAPSET=map1
-  	
-	grass77 /usr/home/grass/usr/data2/loc2-1/map1-1
-			# non-interactive startup using
-			# /usr/home/grass/usr/data2/loc2-1/map1-1 location
-
-  ex5)
-  	export LOCATION=/usr/home/grass/usr/data1/loc1/map1
-	export GISDBASE=/usr/home/grass/usr/data1
-	export LOCATION_NAME=loc1
-	export MAPSET=map1
-
-	grass77 map1-1	# non-interactive startup using
-			# GISDBASE/LOCATION_NAME/map1-1 location
-
-  ex6)
-  	export LOCATION=/usr/home/grass/usr/data1/loc1/map1
-	export GISDBASE=/usr/home/grass/usr/data1
-	export LOCATION_NAME=loc1
-	export MAPSET=map1
-
-	grass77 loc2-1/map1-1
-			# non-interactive startup using
-			# GISDBASE/loc2-1/map1-1 location
-
+  See grass77 --help or the command's manual page for more details
+  about invocation.
 
   Send any suggestions to <grass-dev@lists.osgeo.org> at https://lists.osgeo.org/pipermail/grass-dev/
 
