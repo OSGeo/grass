@@ -205,29 +205,6 @@ and <tt>$APPDATA\GRASS7\addons</tt> on MS Windows.
 The GRASS_HTML_BROWSER environment variable allows the user to set the
 HTML web browser to use for displaying help pages.
 
-<h3>Location Environment Variables</h3>
-
-<p>The <b>Synopsis</b> section above describes options that can be used
-to set the location and mapset that GRASS will use. These values can
-also be set with environment variables. However, specifying the
-location and mapset variables on the command line will override these
-environment variables. The available variables are as follows:
-
-<dl>
-<dt>LOCATION
-<dd> A fully qualified path to a mapset
-    (eg <tt>/usr/local/share/grassdata/spearfish70/PERMANENT</tt>). This
-    environment variable overrides the GISDBASE, LOCATION_NAME, and
-    MAPSET variables.
-<dt>GISDBASE
-<dd> Initial database directory which should be a fully qualified path
-    (eg <tt>/usr/local/share/grassdata</tt>)
-<dt>LOCATION_NAME
-<dd> Initial location directory which is a subdirectory of GISDBASE
-<dt>MAPSET
-<dd> Initial mapset directory which is a subdirectory of LOCATION_NAME
-</dl>
-
 <h3>Running non-interactive batch jobs</h3>
 
 If the GRASS_BATCH_JOB environment variable is set to the <i>full</i>
