@@ -134,7 +134,7 @@ class WMSBase:
             self.proj_srs = grass.read_command('g.proj',
                                                flags='jf',
                                                epsg=str(GetEpsg(self.params['srs'])))
-        self.proj_srs = decode(self.proj_srs).rstrip('\n')
+        self.proj_srs = self.proj_srs.rstrip('\n')
 
         self.proj_srs = self._modifyProj(self.proj_srs)
 
