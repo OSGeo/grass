@@ -776,7 +776,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("surface"));
     G_add_keyword(_("interpolation"));
     G_add_keyword(_("IDW"));
-    G_add_keyword(_("null data"));
+    G_add_keyword(_("no-data filling"));
     module->description =
         _("Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW).");
 

@@ -26,6 +26,7 @@
 #% keyword: interpolation
 #% keyword: raster
 #% keyword: time
+#% keyword: no-data filling
 #%end
 
 #%option G_OPT_STRDS_INPUT
