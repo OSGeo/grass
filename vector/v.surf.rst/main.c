@@ -147,7 +147,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("surface"));
     G_add_keyword(_("interpolation"));
+    G_add_keyword(_("RST"));
     G_add_keyword(_("3D"));
+    G_add_keyword(_("no-data filling"));
     module->label = _("Performs surface interpolation from vector points map by splines.");
     module->description =
 	_("Spatial approximation and topographic analysis from given "

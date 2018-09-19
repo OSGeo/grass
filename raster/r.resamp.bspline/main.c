@@ -80,6 +80,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("surface"));
     G_add_keyword(_("resample"));
     G_add_keyword(_("interpolation"));
+    G_add_keyword(_("splines"));
+    G_add_keyword(_("no-data filling"));
     module->description =
 	_("Performs bilinear or bicubic spline interpolation with Tykhonov regularization.");
 

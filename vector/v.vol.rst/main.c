@@ -237,6 +237,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("surface"));
     G_add_keyword(_("interpolation"));
     G_add_keyword(_("RST"));
+    G_add_keyword(_("3D"));
+    G_add_keyword(_("no-data filling"));
     module->description =
 	_("Interpolates point data to a 3D raster map using "
 	  "regularized spline with tension (RST) algorithm.");
