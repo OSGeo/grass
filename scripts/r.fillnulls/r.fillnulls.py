@@ -29,6 +29,8 @@
 #% keyword: surface
 #% keyword: elevation
 #% keyword: interpolation
+#% keyword: splines
+#% keyword: no-data filling
 #%end
 #%option G_OPT_R_INPUT
 #%end
