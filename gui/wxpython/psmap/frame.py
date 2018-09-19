@@ -42,7 +42,7 @@ from core.utils import _, PilImageToWxImage
 from gui_core.forms import GUI
 from gui_core.dialogs import HyperlinkDialog
 from gui_core.ghelp import ShowAboutDialog
-from gui_core.wrap import PseudoDC, Rect, StockCursor, EmptyBitmap
+from gui_core.wrap import ClientDC, PseudoDC, Rect, StockCursor, EmptyBitmap
 from psmap.menudata import PsMapMenuData
 from gui_core.toolbars import ToolSwitcher
 
@@ -914,13 +914,13 @@ class PsMapFrame(wx.Frame):
         """Estimates bounding rectangle of text"""
         #fontsize = str(fontsize if fontsize >= 4 else 4)
         # dc created because of method GetTextExtent, which pseudoDC lacks
-        dc = wx.ClientDC(self)
+        dc = ClientDC(self)
 
         fn = self.makePSFont(textDict)
 
         try:
             dc.SetFont(fn)
-            w, h, lh = dc.GetMultiLineTextExtent(textDict['text'])
+            w, h, lh = dc.GetFullMultiLineTextExtent(textDict['text'])
             return (w, h)
         except:
             return (0, 0)
@@ -1900,7 +1900,7 @@ class PsMapBufferedWindow(wx.Window):
 
                     # update paper coordinates
                     points[self.currentLinePoint] = self.CanvasPaperCoordinates(
-                        rect=Rect(pos, (0, 0)), canvasToPaper=True)[:2]
+                        rect=Rect(pos[0], pos[1], 0, 0), canvasToPaper=True)[:2]
 
                 self.RedrawSelectBox(self.dragId)
 
@@ -2186,7 +2186,7 @@ class PsMapBufferedWindow(wx.Window):
 
         if pdctype == 'rectText':
             # dc created because of method GetTextExtent, which pseudoDC lacks
-            dc = wx.ClientDC(self)
+            dc = ClientDC(self)
             font = dc.GetFont()
             size = 10
             font.SetPointSize(size)
@@ -2194,7 +2194,7 @@ class PsMapBufferedWindow(wx.Window):
             dc.SetFont(font)
             pdc.SetFont(font)
             text = '\n'.join(self.itemLabels[drawid])
-            w, h = dc.GetMultiLineTextExtent(text)
+            w, h, lh = dc.GetFullMultiLineTextExtent(text)
             textExtent = (w, h)
             textRect = Rect(0, 0, *textExtent).CenterIn(bb)
             r = map(int, bb)
@@ -2407,7 +2407,7 @@ class PsMapBufferedWindow(wx.Window):
             # draw small marks signalizing resizing
             if self.instruction[id].type in ('map', 'rectangle'):
                 controlP = self.pdcObj.GetIdBounds(id).GetBottomRight()
-                rect = Rect(controlP, self.resizeBoxSize)
+                rect = Rect(controlP[0], controlP[1], self.resizeBoxSize[0], self.resizeBoxSize[1])
                 self.Draw(
                     pen=self.pen['resize'],
                     brush=self.brush['resize'],
@@ -2424,9 +2424,9 @@ class PsMapBufferedWindow(wx.Window):
                 p2Canvas = self.CanvasPaperCoordinates(
                     rect=Rect2DPS(p2Paper, (0, 0)), canvasToPaper=False)[:2]
                 rect = []
-                box = Rect(self.resizeBoxSize)
-                rect.append(box.CenterIn(Rect(p1Canvas, wx.Size())))
-                rect.append(box.CenterIn(Rect(p2Canvas, wx.Size())))
+                box = Rect(0, 0, self.resizeBoxSize[0], self.resizeBoxSize[1])
+                rect.append(box.CenterIn(Rect(p1Canvas[0], p1Canvas[1], 0, 0)))
+                rect.append(box.CenterIn(Rect(p2Canvas[0], p2Canvas[1], 0, 0)))
                 for i, point in enumerate((p1Canvas, p2Canvas)):
                     self.Draw(
                         pen=self.pen['resize'],

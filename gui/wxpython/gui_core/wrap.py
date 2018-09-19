@@ -351,6 +351,19 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
             super(PseudoDC, self).EndDrawing()
 
 
+class ClientDC(wx.ClientDC):
+    """Wrapper around wx.ClientDC to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        super(ClientDC, self).__init__(*args, **kwargs)
+
+    def GetFullMultiLineTextExtent(self, string, font=None):
+        if wxPythonPhoenix:
+            return super(ClientDC, self).GetFullMultiLineTextExtent(string, font)
+        else:
+            return super(ClientDC, self).GetMultiLineTextExtent(string, font)
+
+
 class Rect(wx.Rect):
     """Wrapper around wx.Rect to have more control
     over the widget on different platforms/wxpython versions"""
