@@ -1,13 +1,12 @@
 <h2>DESCRIPTION</h2>
 
-
 <em><b>r.fill.stats</b></em> is a module for fast gap filling and
 interpolation (with smoothing) of dense raster data.
 
 <p>
 
-The <em>r.fill.stats</em> module is capable of quickly filling small
-data gaps in large and high-resolution raster maps. It's primary purpose
+The <em>r.fill.stats</em> module is capable of quickly filling <b>small
+data gaps</b> in large and high-resolution raster maps. It's primary purpose
 is to improve high-resolution, rasterized sensor data (such as Lidar
 data). As a rule of thumb, there
 should be at least as many data cells as there are "no data" (NULL) cells in
@@ -367,6 +366,8 @@ compared to the default "double precision" output.
 
 <h2>EXAMPLES</h2>
 
+<h3>Gap-filling of a dataset using spatially weighted mean (IDW)</h3>
+
 Gap-fill a dataset using spatially weighted mean (IDW) and a maximum
 search radius of 3.0 map units; also produce uncertainty estimation
 map:
@@ -463,6 +464,39 @@ d.text text="ground_filled" at=5,5 size=10 bgcolor=white color=black
 d.legend raster=ground title="Ground (filled)" at=50,95,2,10 -bsf
 d.mon stop=cairo
 -->
+
+<h3>Outlier removal and gap-filling of SRTM elevation data</h3>
+
+In this example, the SRTM elevation map in the
+North Carolina sample dataset location is filtered for outlier
+elevation values; missing pixels are then re-interpolated to obtain
+a complete elevation map:
+
+<div class="code"><pre>
+g.region raster=elev_srtm_30m -p
+d.mon wx0
+d.histogram elev_srtm_30m
+
+# remove SRTM outliers, i.e. SRTM below 50m (esp. lakes), leading to no data areas
+r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m < 50.0, null(), elev_srtm_30m)"
+d.histogram elev_srtm_30m_filt
+d.rast elev_srtm_30m_filt
+
+# using the IDW method to fill these holes in DEM without low-pass filter
+# increase distance to gap-fill larger holes
+r.fill.stats -k input=elev_srtm_30m_filt output=elev_srtm_30m_idw distance=100
+
+d.histogram elev_srtm_30m_idw
+d.rast elev_srtm_30m_idw
+
+r.mapcalc "diff_orig_idw = elev_srtm_30m - elev_srtm_30m_idw"
+r.colors diff_orig_idw color=differences
+
+r.univar -e diff_orig_idw
+d.erase
+d.rast diff_orig_idw
+d.legend diff_orig_idw
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
