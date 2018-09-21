@@ -1,7 +1,7 @@
 /*!
-  \file lib/raster/gdal.c
+  \file lib/raster/vrt.c
   
-  \brief Raster Library - Utilization of GDAL library.
+  \brief Raster Library - virtual GRASS raster maps.
   
   (C) 2010 by the GRASS Development Team
   
@@ -81,6 +81,9 @@ struct R_vrt *Rast_get_vrt(const char *vname, const char *vmapset)
 	name = buf;
 	if ((mapset = G_find_raster(name, "")) == NULL)
 	    G_fatal_error(_("Tile raster map <%s> not found"), name);
+
+	if (strcmp(name, vname) == 0)
+	    G_fatal_error(_("A virtual raster can not contain itself"));
 
 	if (tilecount >= talloc) {
 	    talloc += 100;
