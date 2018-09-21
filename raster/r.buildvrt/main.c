@@ -146,6 +146,9 @@ int main(int argc, char *argv[])
 	    if ((mapset = G_find_raster(name, "")) == NULL)
 		G_fatal_error(_("Input raster map <%s> not found"), name);
 
+	    if (strcmp(name, parm.output->answer) == 0)
+		G_fatal_error(_("Input and output raster map can not be identical"));
+
 	    Rast_read_fp_range(name, mapset, &fprange);
 	    dmin = fprange.min;
 	    if (Rast_is_d_null_value(&dmin)) {
@@ -195,6 +198,9 @@ int main(int argc, char *argv[])
 	    name = parm.input->answers[i];
 	    if ((mapset = G_find_raster(name, "")) == NULL)
 		G_fatal_error(_("Input raster map <%s> not found"), name);
+
+	    if (strcmp(name, parm.output->answer) == 0)
+		G_fatal_error(_("Input and output raster map can not be identical"));
 
 	    Rast_read_fp_range(name, mapset, &fprange);
 	    dmin = fprange.min;
