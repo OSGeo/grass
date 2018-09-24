@@ -1082,6 +1082,10 @@ class GMFrame(wx.Frame):
                              parent=self,
                              flags='c',
                              mapset=mapset)
+            # ensure that DB connection is defined
+            ret += RunCommand('db.connect',
+                              parent=self,
+                              flags='c')
             if ret == 0:
                 GMessage(parent=self,
                          message=_("Current mapset is <%s>.") % mapset)
