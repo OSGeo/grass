@@ -65,6 +65,8 @@ RUN apt-get update \
     mkdir -p $DATA_DIR
 
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
 
 RUN mkdir /code
 RUN mkdir /code/grass
