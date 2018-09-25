@@ -300,13 +300,13 @@ class LocationMapTree(TreeView):
         nlocations = len(locations)
         grassdata_node = self._model.AppendNode(
             parent=self._model.root, label=_('GRASS locations in {0}').format(
-                genv['GISDBASE']), data=dict(type='grassdata'))
+                genv['GISDBASE']), data=dict(
+                type='grassdata'))
         for location in locations:
             results[location] = dict()
-            label = '{} (current)'.format(location) if location == genv['LOCATION_NAME'] else location
             varloc = self._model.AppendNode(
-                parent=grassdata_node, label=label,
-                data=dict(type='location', name=location, current=True))
+                parent=grassdata_node, label=location, data=dict(
+                    type='location', name=location))
             location_nodes.append(varloc)
             loc_count += 1
 
@@ -333,10 +333,9 @@ class LocationMapTree(TreeView):
                         errors.append(error)
 
                     for key in sorted(maps.keys()):
-                        label = '{} (current)'.format(key) if key == genv['MAPSET'] else key
                         mapset_node = self._model.AppendNode(
                             parent=location_nodes[i],
-                            label=label, data=dict(
+                            label=key, data=dict(
                                 type='mapset', name=key))
                         self._populateMapsetItem(mapset_node, maps[key])
 
