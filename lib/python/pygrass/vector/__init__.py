@@ -27,8 +27,8 @@ _NUMOF = {"areas": libvect.Vect_get_num_areas,
           "holes": libvect.Vect_get_num_holes,
           "islands": libvect.Vect_get_num_islands,
           "kernels": libvect.Vect_get_num_kernels,
-          "points": libvect.Vect_get_num_lines,
-          "lines": libvect.Vect_get_num_lines,
+          "points": (libvect.Vect_get_num_primitives, libvect.GV_POINT),
+          "lines": (libvect.Vect_get_num_primitives, libvect.GV_LINE),
           "nodes": libvect.Vect_get_num_nodes,
           "updated_lines": libvect.Vect_get_num_updated_lines,
           "updated_nodes": libvect.Vect_get_num_updated_nodes,
@@ -370,7 +370,11 @@ class VectorTopo(Vector):
         ..
         """
         if vtype in _NUMOF.keys():
-            return _NUMOF[vtype](self.c_mapinfo)
+            if isinstance(_NUMOF[vtype], tuple):
+                fn, ptype = _NUMOF[vtype]
+                return fn(self.c_mapinfo, ptype)
+            else:
+                return _NUMOF[vtype](self.c_mapinfo)
         else:
             keys = "', '".join(sorted(_NUMOF.keys()))
             raise ValueError("vtype not supported, use one of: '%s'" % keys)
