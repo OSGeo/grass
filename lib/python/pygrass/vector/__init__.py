@@ -29,6 +29,8 @@ _NUMOF = {"areas": libvect.Vect_get_num_areas,
           "kernels": libvect.Vect_get_num_kernels,
           "points": (libvect.Vect_get_num_primitives, libvect.GV_POINT),
           "lines": (libvect.Vect_get_num_primitives, libvect.GV_LINE),
+          "centroids": (libvect.Vect_get_num_primitives, libvect.GV_CENTROID),
+          "boundaries": (libvect.Vect_get_num_primitives, libvect.GV_BOUNDARY),
           "nodes": libvect.Vect_get_num_nodes,
           "updated_lines": libvect.Vect_get_num_updated_lines,
           "updated_nodes": libvect.Vect_get_num_updated_nodes,
@@ -343,8 +345,9 @@ class VectorTopo(Vector):
 
         :param vtype: the name of type to query; the supported values are:
                       *areas*, *dblinks*, *faces*, *holes*, *islands*,
-                      *kernels*, *line_points*, *lines*, *nodes*, *points*,
-                      *update_lines*, *update_nodes*, *volumes*
+                      *kernels*, *points*, *lines*, *centroids*, *boundaries*,
+                      *nodes*, *line_points*, *update_lines*, *update_nodes*,
+                      *volumes*
         :type vtype: str
 
             >>> test_vect = VectorTopo(test_vector_name)
