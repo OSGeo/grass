@@ -70,7 +70,6 @@
 import sys
 
 import grass.script as gscript
-from grass.pygrass.raster import RasterRow
 
 # i18N
 import os
@@ -137,7 +136,8 @@ def main():
 
     check = True
     for m in [red, green, blue]:
-        if not RasterRow(m).exist():
+        ex = gscript.find_file(m)
+        if ex['name'] == '':
             check = False
             gscript.warning("Raster map <{}> not found ".format(m))
     if not check:
