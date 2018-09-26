@@ -304,7 +304,7 @@ def get_installed_modules(force=False):
         if force:
             write_xml_modules(xml_file)
         else:
-            grass.debug(1, "No addons metadata file available")
+            grass.debug("No addons metadata file available", 1)
         return []
     # read XML file
     try:
