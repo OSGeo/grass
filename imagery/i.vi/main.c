@@ -89,6 +89,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("vegetation index"));
     G_add_keyword(_("biophysical parameters"));
+    G_add_keyword(_("NDVI"));
     module->label =
 	_("Calculates different types of vegetation indices.");
     module->description = _("Uses red and nir bands mostly, "
