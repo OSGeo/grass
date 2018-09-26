@@ -70,6 +70,7 @@
 import sys
 
 import grass.script as gscript
+from grass.pygrass.raster import RasterRow
 
 # i18N
 import os
@@ -134,6 +135,13 @@ def main():
     if flags['s']:
         do_mp = False
 
+    check = True
+    for m in [red, green, blue]:
+        if not RasterRow(m).exist():
+            check = False
+            gscript.warning("Raster map <{}> not found ".format(m))
+    if not check:
+        gscript.fatal("At least one of the input raster map was not found")
     # 90 or 98? MAX value controls brightness
     # think of percent (0-100), must be positive or 0
     # must be more than "2" ?
