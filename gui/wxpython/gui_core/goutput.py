@@ -173,6 +173,7 @@ class GConsoleWindow(wx.SplitterWindow):
             size=self.btnCmdClear.GetSize())
         self.btnCmdProtocol.SetToolTip(_("Toggle to save list of executed commands into "
                                          "a file; content saved when switching off."))
+        self.cmdFileProtocol = None
 
         if not self._gcstyle & GC_PROMPT:
             self.btnCmdClear.Hide()
@@ -484,24 +485,23 @@ class GConsoleWindow(wx.SplitterWindow):
 
     def CmdProtocolSave(self):
         """Save list of manually entered commands into a text log file"""
-        if not hasattr(self, 'cmdFileProtocol'):
+        if self.cmdFileProtocol is None:
             return  # it should not happen
 
         try:
-            output = open(self.cmdFileProtocol, "a")
-            cmds = self.cmdPrompt.GetCommands()
-            output.write('\n'.join(cmds))
-            if len(cmds) > 0:
-                output.write('\n')
+            with open(self.cmdFileProtocol, "a") as output:
+                cmds = self.cmdPrompt.GetCommands()
+                output.write(os.linesep.join(cmds))
+                if len(cmds) > 0:
+                    output.write(os.linesep)
         except IOError as e:
-            GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") %
-                   {'filePath': self.cmdFileProtocol, 'error': e})
-        finally:
-            output.close()
+            GError(_("Unable to write file '{filePath}'.\n\nDetails: {error}").format(
+                filePath=self.cmdFileProtocol, error=e))
 
-        message = _("Command log saved to '%s'") % self.cmdFileProtocol
-        self.showNotification.emit(message=message)
-        del self.cmdFileProtocol
+        self.showNotification.emit(
+            message=_("Command log saved to '{}'".format(self.cmdFileProtocol))
+        )
+        self.cmdFileProtocol = None
 
     def OnCmdProtocol(self, event=None):
         """Save commands into file"""
