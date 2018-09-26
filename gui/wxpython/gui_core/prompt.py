@@ -111,8 +111,6 @@ class GPrompt(object):
         if not cmdString:
             return
 
-        self.commands.append(cmdString)  # trace commands
-
         # parse command into list
         try:
             cmd = utils.split(str(cmdString))
@@ -122,8 +120,6 @@ class GPrompt(object):
 
         self.promptRunCmd.emit(cmd=cmd)
 
-        # add command to history & clean prompt
-        # self.UpdateCmdHistory(cmd)
         self.OnCmdErase(None)
         self.ShowStatusText('')
 
@@ -300,6 +296,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """
         # add command to history
         self.cmdbuffer.append(cmd)
+        # update also traced commands
+        self.commands.append(cmd)
 
         # keep command history to a managable size
         if len(self.cmdbuffer) > 200:
