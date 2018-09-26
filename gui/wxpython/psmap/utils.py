@@ -175,9 +175,9 @@ def convertRGB(rgb):
         return str(rgb.Red()) + ':' + str(rgb.Green()) + ':' + str(rgb.Blue())
     # transform a GRASS named color or an r:g:b string into a wx.Colour tuple
     else:
-        color = (grass.parse_color(rgb)[0] * 255,
-                 grass.parse_color(rgb)[1] * 255,
-                 grass.parse_color(rgb)[2] * 255)
+        color = (int(grass.parse_color(rgb)[0] * 255),
+                 int(grass.parse_color(rgb)[1] * 255),
+                 int(grass.parse_color(rgb)[2] * 255))
         color = wx.Colour(*color)
         if color.IsOk():
             return color
