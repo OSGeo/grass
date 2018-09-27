@@ -786,7 +786,7 @@ class DatasetBase(SQLDatabaseInterface):
             print("layer=" + str(self.get_layer()))
         print("creator=" + str(self.get_creator()))
         print("temporal_type=" + str(self.get_ttype()))
-        print("creation_time=" + str(self.get_ctime()))
+        print("creation_time='{}'".format(str(self.get_ctime())))
 
 ###############################################################################
 
@@ -920,7 +920,7 @@ class STDSBase(DatasetBase):
     def print_shell_info(self):
         """Print information about this class in shell style"""
         DatasetBase.print_shell_info(self)
-        print("modification_time=" + str(self.get_mtime()))
+        print("modification_time='{}'".format(str(self.get_mtime())))
         print("semantic_type=" + str(self.get_semantic_type()))
 
 ###############################################################################

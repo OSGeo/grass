@@ -1038,8 +1038,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
-        print("start_time=" + str(self.get_start_time()))
-        print("end_time=" + str(self.get_end_time()))
+        print("start_time='{}'".format(str(self.get_start_time())))
+        print("end_time='{}'".format(str(self.get_end_time())))
 
 ###############################################################################
 
@@ -1188,7 +1188,7 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
     def print_shell_info(self):
         """Print information about this class in shell style"""
         AbsoluteTemporalExtent.print_shell_info(self)
-        print("granularity=" + str(self.get_granularity()))
+        print("granularity='{}'".format(str(self.get_granularity())))
         print("map_time=" + str(self.get_map_time()))
 
 ###############################################################################
