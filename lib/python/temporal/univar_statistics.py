@@ -69,6 +69,7 @@ def print_gridded_dataset_univar_statistics(type, input, output, where, extended
         string += "min" + fs + "max" + fs
         string += "mean_of_abs" + fs + "stddev" + fs + "variance" + fs
         string += "coeff_var" + fs + "sum" + fs + "null_cells" + fs + "cells"
+        string += fs + "non_null_cells"
         if extended is True:
             string += fs + "first_quartile" + fs + "median" + fs
             string += "third_quartile" + fs + "percentile_90"
@@ -111,6 +112,7 @@ def print_gridded_dataset_univar_statistics(type, input, output, where, extended
         string += fs + str(stats["stddev"]) + fs + str(stats["variance"])
         string += fs + str(stats["coeff_var"]) + fs + str(stats["sum"])
         string += fs + str(stats["null_cells"]) + fs + str(stats["cells"])
+        string += fs + str(int(stats["cells"]) - int(stats["null_cells"]))
         if extended is True:
             string += fs + str(stats["first_quartile"]) + fs + str(stats["median"])
             string += fs + str(stats["third_quartile"]) + fs + str(stats["percentile_90"])
