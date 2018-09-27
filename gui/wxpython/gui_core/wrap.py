@@ -17,6 +17,10 @@ This program is free software under the GNU General Public License
 
 import wx
 import wx.lib.buttons as buttons
+try:
+    import wx.lib.agw.customtreectrl as CT
+except ImportError:
+    import wx.lib.customtreectrl as CT
 
 from core.globalvar import gtk3, wxPythonPhoenix
 if wxPythonPhoenix:
@@ -99,6 +103,32 @@ class Button(wx.Button):
             wx.Button.SetToolTipString(self, tip)
 
 
+class RadioButton(wx.RadioButton):
+    """Wrapper around wx.RadioButton to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.RadioButton.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.RadioButton.SetToolTip(self, tipString=tip)
+        else:
+            wx.RadioButton.SetToolTipString(self, tip)
+
+
+class BitmapButton(wx.BitmapButton):
+    """Wrapper around wx.BitmapButton to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.BitmapButton.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.BitmapButton.SetToolTip(self, tipString=tip)
+        else:
+            wx.BitmapButton.SetToolTipString(self, tip)
+
+
 class GenBitmapButton(buttons.GenBitmapButton):
     """Wrapper around GenBitmapButton to have more control
     over the widget on different platforms/wxpython versions"""
@@ -149,6 +179,19 @@ class StaticBox(wx.StaticBox):
             wx.StaticBox.SetToolTip(self, tipString=tip)
         else:
             wx.StaticBox.SetToolTipString(self, tip)
+
+
+class CheckListBox(wx.CheckListBox):
+    """Wrapper around wx.CheckListBox to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.CheckListBox.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.CheckListBox.SetToolTip(self, tipString=tip)
+        else:
+            wx.CheckListBox.SetToolTipString(self, tip)
 
 
 class TextCtrl(wx.TextCtrl):
@@ -215,6 +258,19 @@ class TreeCtrl(wx.TreeCtrl):
             return wx.TreeCtrl.GetPyData(self, item)
 
 
+class CustomTreeCtrl(CT.CustomTreeCtrl):
+    """Wrapper around wx.lib.agw.customtreectrl to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        CT.CustomTreeCtrl.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            CT.CustomTreeCtrl.SetToolTip(self, tipString=tip)
+        else:
+            CT.CustomTreeCtrl.SetToolTipString(self, tip)
+
+
 class ToolBar(wx.ToolBar):
     """Wrapper around wx.ToolBar to have more control
     over the widget on different platforms/wxpython versions"""
@@ -274,6 +330,12 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     def __init__(self, *args, **kwargs):
         super(PseudoDC, self).__init__(*args, **kwargs)
 
+    def DrawLinePoint(self, pt1, pt2):
+        if wxPythonPhoenix:
+            super(PseudoDC, self).DrawLine(pt1, pt2)
+        else:
+            super(PseudoDC, self).DrawLinePoint(pt1, pt2)
+
     def DrawRectangleRect(self, rect):
         if wxPythonPhoenix:
             super(PseudoDC, self).DrawRectangle(rect=rect)
@@ -287,6 +349,19 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     def EndDrawing(self):
         if not wxPythonPhoenix:
             super(PseudoDC, self).EndDrawing()
+
+
+class ClientDC(wx.ClientDC):
+    """Wrapper around wx.ClientDC to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        super(ClientDC, self).__init__(*args, **kwargs)
+
+    def GetFullMultiLineTextExtent(self, string, font=None):
+        if wxPythonPhoenix:
+            return super(ClientDC, self).GetFullMultiLineTextExtent(string, font)
+        else:
+            return super(ClientDC, self).GetMultiLineTextExtent(string, font)
 
 
 class Rect(wx.Rect):
@@ -319,3 +394,16 @@ class CheckBox(wx.CheckBox):
             wx.CheckBox.SetToolTip(self, tipString=tip)
         else:
             wx.CheckBox.SetToolTipString(self, tip)
+
+
+class Choice(wx.Choice):
+    """Wrapper around wx.Choice to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.Choice.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.Choice.SetToolTip(self, tipString=tip)
+        else:
+            wx.Choice.SetToolTipString(self, tip)
