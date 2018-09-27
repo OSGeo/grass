@@ -25,6 +25,7 @@ from .datetime_math import time_delta_to_relative_time
 from .space_time_datasets import RasterDataset
 from .factory import dataset_factory
 from .open_stds import open_old_stds
+import grass.script as gscript
 
 ###############################################################################
 
@@ -254,6 +255,15 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                 columns = "id"
 
         rows = sp.get_registered_maps(columns, where, order, dbif)
+        
+        if not rows:
+            dbif.close()
+            err = "Space time %(sp)s dataset <%(i)s> is empty"
+            if where:
+                err += " or where condition is wrong"
+            gscript.fatal(_(err) % {
+                            'sp': sp.get_new_map_instance(None).get_type(),
+                            'i': sp.get_id()})
 
         if rows:
             if method == "comma":
