@@ -27,10 +27,9 @@ except:
 import grass.lib.vector as libvect
 from grass.pygrass.gis import Mapset
 from grass.pygrass.errors import DBError
-from grass.pygrass.utils import table_exist
+from grass.pygrass.utils import table_exist, decode
 from grass.script.db import db_table_in_vector
 from grass.script.core import warning
-from grass.script.utils import decode
 
 from grass.pygrass.vector import sql
 from grass.lib.ctypes_preamble import String
@@ -72,8 +71,6 @@ def get_path(path, vect_name=None):
         path = path.replace('$LOCATION_NAME', mapset.location)
         path = path.replace('$MAPSET', mapset.name)
         if vect_name is not None:
-            if isinstance(vect_name, String):
-                vect_name = vect_name.data
             path = path.replace('$MAP', vect_name)
         return path
 
@@ -639,7 +636,7 @@ class Link(object):
                      doc="Set and obtain layer number")
 
     def _get_name(self):
-        return self.c_fieldinfo.contents.name
+        return decode(self.c_fieldinfo.contents.name)
 
     def _set_name(self, name):
         self.c_fieldinfo.contents.name = String(name)
@@ -648,7 +645,7 @@ class Link(object):
                     doc="Set and obtain name vale")
 
     def _get_table(self):
-        return self.c_fieldinfo.contents.table
+        return decode(self.c_fieldinfo.contents.table)
 
     def _set_table(self, new_name):
         self.c_fieldinfo.contents.table = String(new_name)
@@ -657,7 +654,7 @@ class Link(object):
                           doc="Set and obtain table name value")
 
     def _get_key(self):
-        return self.c_fieldinfo.contents.key
+        return decode(self.c_fieldinfo.contents.key)
 
     def _set_key(self, key):
         self.c_fieldinfo.contents.key = String(key)
@@ -666,7 +663,7 @@ class Link(object):
                    doc="Set and obtain cat value")
 
     def _get_database(self):
-        return self.c_fieldinfo.contents.database
+        return decode(self.c_fieldinfo.contents.database)
 
     def _set_database(self, database):
         self.c_fieldinfo.contents.database = String(database)
@@ -675,7 +672,7 @@ class Link(object):
                         doc="Set and obtain database value")
 
     def _get_driver(self):
-        return self.c_fieldinfo.contents.driver
+        return decode(self.c_fieldinfo.contents.driver)
 
     def _set_driver(self, driver):
         if driver not in ('sqlite', 'pg'):
@@ -751,8 +748,6 @@ class Link(object):
 
         """
         driver = self.driver
-        if isinstance(driver, String):
-            driver = decode(driver.data)
         if driver == 'sqlite':
             import sqlite3
             # Numpy is using some custom integer data types to efficiently
@@ -763,10 +758,6 @@ class Link(object):
                 sqlite3.register_adapter(t, long)
             dbpath = get_path(self.database, self.table_name)
             dbdirpath = os.path.split(dbpath)[0]
-            if isinstance(dbpath, String):
-                dbpath = dbpath.data
-            if isinstance(dbdirpath, String):
-                dbdirpath = dbdirpath.data
             if not os.path.exists(dbdirpath):
                 os.mkdir(dbdirpath)
             return sqlite3.connect(dbpath)
