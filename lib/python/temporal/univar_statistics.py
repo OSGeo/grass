@@ -59,9 +59,11 @@ def print_gridded_dataset_univar_statistics(type, input, output, where, extended
 
     if not rows:
         dbif.close()
-        gscript.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
-                      'sp': sp.get_new_map_instance(None).get_type(),
-                      'i': sp.get_id()})
+        err = "Space time %(sp)s dataset <%(i)s> is empty"
+        if where:
+            err += " or where condition is wrong"
+        gscript.fatal(_(err) % {'sp': sp.get_new_map_instance(None).get_type(),
+                                'i': sp.get_id()})
 
     if no_header is False:
         string = ""
