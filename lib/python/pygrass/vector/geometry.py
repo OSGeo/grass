@@ -1377,13 +1377,13 @@ class Centroid(Point):
 
         >>> centroid = Centroid(x=0, y=10)
         >>> centroid
-        Centoid(0.000000, 10.000000)
+        Centroid(0.000000, 10.000000)
         >>> from grass.pygrass.vector import VectorTopo
         >>> test_vect = VectorTopo(test_vector_name)
         >>> test_vect.open(mode='r')
         >>> centroid = Centroid(v_id=18, c_mapinfo=test_vect.c_mapinfo)
         >>> centroid
-        Centoid(3.500000, 3.500000)
+        Centroid(3.500000, 3.500000)
         >>> test_vect.close()
 
     ..
@@ -1404,7 +1404,7 @@ class Centroid(Point):
         #self.c_pline = ctypes.pointer(libvect.P_line()) if topology else None
 
     def __repr__(self):
-        return "Centoid(%s)" % ', '.join(['%f' % co for co in self.coords()])
+        return "Centroid(%s)" % ', '.join(['%f' % co for co in self.coords()])
 
     @mapinfo_must_be_set
     def _centroid_id(self):
