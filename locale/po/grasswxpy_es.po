@@ -13138,7 +13138,7 @@ msgstr "H&elp"
 
 #: ../gui/wxpython/gui_core/menu.py:178
 msgid "Show manual for selected module from the tree"
-msgstr ""
+msgstr "Mostrar el manual del módulo seleccionado en el árbol"
 
 #: ../gui/wxpython/gui_core/menu.py:180
 msgid "Adva&nced search..."
@@ -20842,3 +20842,9 @@ msgstr "Aplicar operaciones temporales y espaciales sobre un conjunto de datos v
 
 #~ msgid "Apply SQL statement"
 #~ msgstr "Aplicar sentencia SQL"
+
+#~ msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
+#~ msgstr "Importa un archivo ráster específico de GRASS (empaquetado con r.pack) como un mapa ráster"
+
+#~ msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
+#~ msgstr "Importa un archivo vectorial específico de GRASS (empaquetado con v.pack) como un mapa vectorial"

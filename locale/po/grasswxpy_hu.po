@@ -14521,7 +14521,7 @@ msgstr "VEKTOR JELMAGYARÁZAT"
 
 #: ../gui/wxpython/psmap/frame.py:1244
 msgid "MAP INFO"
-msgstr ""
+msgstr "TÉRKÉP INFO"
 
 #: ../gui/wxpython/psmap/frame.py:1245
 msgid "SCALE BAR"
@@ -15055,7 +15055,7 @@ msgstr "Vonal stílus:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2960
 msgid "Choose linecap:"
-msgstr ""
+msgstr "Vonal csatlakozás:"
 
 #: ../gui/wxpython/psmap/dialogs.py:3013
 msgid "Pattern"
@@ -15063,7 +15063,7 @@ msgstr "Minta"
 
 #: ../gui/wxpython/psmap/dialogs.py:3018
 msgid "use pattern:"
-msgstr ""
+msgstr "használt minta:"
 
 #: ../gui/wxpython/psmap/dialogs.py:3020
 msgid "Choose pattern file:"
@@ -15071,11 +15071,11 @@ msgstr "Minta fájl:"
 
 #: ../gui/wxpython/psmap/dialogs.py:3028
 msgid "pattern line width (pts):"
-msgstr ""
+msgstr "minta vonal szélesség (pts):"
 
 #: ../gui/wxpython/psmap/dialogs.py:3032
 msgid "pattern scale factor:"
-msgstr "minta méretarány szotzó"
+msgstr "minta méretarány szorzó"
 
 #: ../gui/wxpython/psmap/dialogs.py:3392
 msgid "Raster legend"

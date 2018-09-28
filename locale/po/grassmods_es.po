@@ -7518,7 +7518,7 @@ msgstr "Calcular todas las medidas de textura"
 
 #: ../raster/r.texture/main.c:161
 msgid "Allow NULL cells in a moving window"
-msgstr ""
+msgstr "Permitir celdas nulas en una ventana móvil"
 
 #: ../raster/r.texture/main.c:162
 msgid "This will also avoid cropping along edges of the current region"
@@ -11797,7 +11797,7 @@ msgstr "Varianza de los valores de los puntos en la celda"
 
 #: ../raster/r.in.lidar/main.c:166 ../raster/r.in.xyz/main.c:206
 msgid "Coefficient of variance of point values in cell"
-msgstr ""
+msgstr "Coeficiente de varianza de los valores de los puntos en una celda"
 
 #: ../raster/r.in.lidar/main.c:167 ../raster/r.in.xyz/main.c:207
 msgid "Median value of point values in cell"
@@ -11809,11 +11809,11 @@ msgstr ""
 
 #: ../raster/r.in.lidar/main.c:169 ../raster/r.in.xyz/main.c:209
 msgid "Skewness of point values in cell"
-msgstr ""
+msgstr "Asimetría de los valores de los puntos en una celda"
 
 #: ../raster/r.in.lidar/main.c:170 ../raster/r.in.xyz/main.c:210
 msgid "Trimmed mean of point values in cell"
-msgstr ""
+msgstr "Media trunca de los valores de los puntos en una celda"
 
 #: ../raster/r.in.lidar/main.c:180
 msgid "Subtract raster values from the Z coordinates"
@@ -15355,12 +15355,12 @@ msgstr "Activar informe de caché"
 
 #: ../raster/r.what/main.c:199
 msgid "Flag 'v' required option 'points'"
-msgstr ""
+msgstr "La bandera 'v' requiere la opción 'points'"
 
 #: ../raster/r.what/main.c:214
 #, c-format
 msgid "Can only do up to %d raster maps (more than %d given)"
-msgstr ""
+msgstr "Solo es posible hacer hasta %d mapas ráster (se dieron más de %d)"
 
 #: ../raster/r.what/main.c:231
 #, c-format
@@ -41459,7 +41459,7 @@ msgstr ""
 #: ../scripts/v.pack/v.pack.py:69
 #, python-format
 msgid "Unable to pack vector map <%s>. Only native format supported."
-msgstr ""
+msgstr "No ha sido posible empaquetar mapa vectorial <%s>. Solo está soportado el formato nativo."
 
 #: ../scripts/v.pack/v.pack.py:85 ../scripts/r.pack/r.pack.py:78
 #, python-format
@@ -41474,7 +41474,7 @@ msgstr ""
 #: ../scripts/v.pack/v.pack.py:91
 #, python-format
 msgid "Packing <%s>..."
-msgstr ""
+msgstr "Empaquetado <%s>..."
 
 #: ../scripts/v.pack/v.pack.py:103
 #, python-format
@@ -41590,7 +41590,7 @@ msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:678
 msgid "Nothing to install"
-msgstr ""
+msgstr "Nada que instalar"
 
 #: ../scripts/g.extension/g.extension.py:695
 msgid "Installation failed, sorry. Please check above error messages."
@@ -41706,7 +41706,7 @@ msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:1210
 msgid "Installing..."
-msgstr ""
+msgstr "Instalando..."
 
 #: ../scripts/g.extension/g.extension.py:1224
 msgid "List of removed files:"
@@ -42226,7 +42226,7 @@ msgstr ""
 
 #: ../scripts/v.to.lines/v.to.lines.py:105
 msgid "Error creating layer 2"
-msgstr ""
+msgstr "Error al crear capa 2"
 
 #: ../scripts/v.to.lines/v.to.lines.py:113
 msgid "Error creating new table for layer 2"
@@ -42242,7 +42242,7 @@ msgstr ""
 
 #: ../scripts/v.to.lines/v.to.lines.py:144
 msgid "Error removing centroids"
-msgstr ""
+msgstr "Error al remover centroides"
 
 #: ../scripts/v.to.lines/v.to.lines.py:154
 msgid "Error removing table from layer 1"
@@ -42250,7 +42250,7 @@ msgstr ""
 
 #: ../scripts/v.to.lines/v.to.lines.py:165
 msgid "Error adding categories"
-msgstr ""
+msgstr "Error al añadir categorías"
 
 #: ../scripts/d.correlate/d.correlate.py:44
 msgid "At least 2 maps are required"
@@ -42393,7 +42393,7 @@ msgstr ""
 #: ../scripts/r.in.wms/wms_drv.py:260
 #, python-format
 msgid "Unable to open %s "
-msgstr ""
+msgstr "No ha sido posible abrir %s"
 
 #: ../scripts/r.in.wms/wms_drv.py:326
 msgid "Region is out of server data extend."
@@ -42457,12 +42457,12 @@ msgstr ""
 
 #: ../scripts/r.in.wms/wms_base.py:99
 msgid "JPEG format does not support transparency"
-msgstr ""
+msgstr "Formato JPEG no soporta transparencia"
 
 #: ../scripts/r.in.wms/wms_base.py:108
 #, python-format
 msgid "Invalid EPSG code %d"
-msgstr ""
+msgstr "Código EPSG no válido %d"
 
 #: ../scripts/r.in.wms/wms_base.py:114
 #, python-format
@@ -42471,7 +42471,7 @@ msgstr ""
 
 #: ../scripts/r.in.wms/wms_base.py:141
 msgid "Unable to get projection info"
-msgstr ""
+msgstr "No ha sido posible obtener información de la proyección"
 
 #: ../scripts/r.in.wms/wms_base.py:148
 msgid "Maxcols must be greater than 100"
@@ -42531,7 +42531,7 @@ msgstr ""
 
 #: ../scripts/r.in.wms/wms_base.py:382
 msgid "Reprojecting raster..."
-msgstr ""
+msgstr "Reproyectando ráster..."
 
 #: ../scripts/r.in.wms/wms_base.py:421 ../scripts/r.in.wms/wms_base.py:478
 #: ../scripts/r.in.wms/wms_base.py:488 ../scripts/r.in.wms/wms_base.py:518
@@ -42553,7 +42553,7 @@ msgstr ""
 #: ../scripts/r.in.wms/wms_base.py:567
 #, python-format
 msgid "<%s> created."
-msgstr ""
+msgstr "<%s> creado."
 
 #: ../scripts/r.in.wms/wms_cap_parsers.py:41
 msgid "Unable to parse XML file"
@@ -43052,7 +43052,7 @@ msgstr ""
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:173
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:245
 msgid "An error occurred. Stop."
-msgstr ""
+msgstr "Ocurrió un error. Alto."
 
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:175
 #, python-format
