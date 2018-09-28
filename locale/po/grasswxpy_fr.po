@@ -3408,7 +3408,7 @@ msgstr "Paramètres du gestionnaire de points de contrôle enregistrés dans le 
 
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:50
 msgid "GRASS GIS Manage Location of Tick Points on a Scanned Photo"
-msgstr ""
+msgstr "Gestion de l'emplacement des points d'accroche sur une photo scannée"
 
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:176
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:176
@@ -3491,11 +3491,11 @@ msgstr "Merci de fournir un nom de caméra (généré par i.ortho.camera)"
 
 #: ../gui/wxpython/photo2image/g.gui.photo2image.py:111
 msgid "Please provide an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
-msgstr ""
+msgstr "Merci de fournir une valeur d'ordre (1 si 4 fiduciaux, 2 si 8 fiduciaux)"
 
 #: ../gui/wxpython/photo2image/g.gui.photo2image.py:116
 msgid "Please provide an output files extension (used by i.rectify)"
-msgstr ""
+msgstr "Merci de fournir une extention de fichier (utilisé par i.rectify)"
 
 #: ../gui/wxpython/photo2image/ip2i_statusbar.py:38
 #: ../gui/wxpython/image2target/ii2t_statusbar.py:38
@@ -6563,7 +6563,7 @@ msgstr "Générer des cartes raster de pente, exposition, courbure et dérivées
 
 #: ../gui/wxpython/menustrings.py:379 ../gui/wxpython/menustrings.py:1321
 msgid "Landforms"
-msgstr ""
+msgstr "Relief"
 
 #: ../gui/wxpython/menustrings.py:380 ../gui/wxpython/menustrings.py:1322
 msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
@@ -8341,11 +8341,11 @@ msgstr "Superposer des cartes vectorielles"
 
 #: ../gui/wxpython/menustrings.py:687 ../gui/wxpython/menustrings.py:1629
 msgid "Clip vector maps"
-msgstr ""
+msgstr "rogner les cartes vecteur"
 
 #: ../gui/wxpython/menustrings.py:688 ../gui/wxpython/menustrings.py:1630
 msgid "Extracts features of input map which overlay features of clip map."
-msgstr ""
+msgstr "Extraire les entités de la carte d'entrée qui chevauchent les entités de la carte de sélection."
 
 #: ../gui/wxpython/menustrings.py:690 ../gui/wxpython/menustrings.py:1632
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:681
@@ -9851,13 +9851,13 @@ msgstr "Déplacer temporellement les cartes d'un jeu de données temporel."
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:944
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1870
 msgid "Snap maps of dataset"
-msgstr ""
+msgstr "Accrocher les cartes du jeu de données"
 
 #: ../gui/wxpython/menustrings.py:961 ../gui/wxpython/menustrings.py:1903
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:945
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1871
 msgid "Snaps temporally the maps of a space time dataset."
-msgstr ""
+msgstr "Accrocher temporellement les cartes du jeu de données temporel"
 
 #: ../gui/wxpython/menustrings.py:963 ../gui/wxpython/menustrings.py:1905
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:947
@@ -9879,7 +9879,7 @@ msgstr "Enregistrer des cartes dans les jeux de données"
 
 #: ../gui/wxpython/menustrings.py:966 ../gui/wxpython/menustrings.py:1908
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
-msgstr ""
+msgstr "Assigne les dates et enregistre les cartes raster, vecteur et raster3d dans un jeu de données temporel."
 
 #: ../gui/wxpython/menustrings.py:967 ../gui/wxpython/menustrings.py:1909
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:951
@@ -13874,7 +13874,7 @@ msgstr "Activer le zoom automatique sur la carte sélectionnée"
 
 #: ../gui/wxpython/gui_core/preferences.py:980
 msgid "Show computational region extent"
-msgstr ""
+msgstr "Afficher l'emprise de la région de calcul"
 
 #: ../gui/wxpython/gui_core/preferences.py:996
 msgid "Mouse wheel action:"
@@ -13948,7 +13948,7 @@ msgstr "Couleur de remplissage :"
 
 #: ../gui/wxpython/gui_core/preferences.py:1431
 msgid "Random colors according to category number "
-msgstr ""
+msgstr "Couleur aléatoire selon le numéro de catégorie"
 
 #: ../gui/wxpython/gui_core/preferences.py:1459
 msgid "Symbol:"
@@ -16490,11 +16490,11 @@ msgstr "Date [%s]"
 #: ../gui/wxpython/tplot/frame.py:625
 #, python-brace-format
 msgid "Problem getting data from vector temporal dataset. Empty list of values for cat {ca}."
-msgstr ""
+msgstr "Problème à la récupération des données du jeu de données vecteur temporel. Liste de valeurs vides pour la catégorie {ca}."
 
 #: ../gui/wxpython/tplot/frame.py:670
 msgid "Problem getting data from vector temporal dataset. Empty list of values."
-msgstr ""
+msgstr "Problème à la récupération des données du jeu de données vecteur temporel. Liste de valeurs vides."
 
 #: ../gui/wxpython/tplot/frame.py:717
 msgid "Incorrect coordinates format, should be: x,y"
@@ -21024,3 +21024,18 @@ msgstr "Algèbre temporelle vecteur"
 
 msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
 msgstr "Applique des opérations spatiales et temporelles sur des jeux de données vecteur temporel à l'aide de l'algèbre temporelle vecteur."
+
+#~ msgid "Apply SQL statement"
+#~ msgstr "Exécuter la requête SQL"
+
+#~ msgid "No table linked to layer <{}>."
+#~ msgstr "Pas de table liée à la couche <{}>."
+
+#~ msgid "No vector map selected"
+#~ msgstr "Pas de carte vecteur sélectionnée"
+
+#~ msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
+#~ msgstr "Importe un fichier d'archive raster GRASS (empaqueté avec r.pack) en tant que carte raster"
+
+#~ msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
+#~ msgstr "Importe un fichier vecteur d'archive GRASS (empaqueté avec r.pack) en tant que carte vecteur"

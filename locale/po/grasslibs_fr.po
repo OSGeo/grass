@@ -533,7 +533,7 @@ msgstr "La lecture de la carte raster <%s@%s> demande la ligne %d en dehors de l
 #: ../lib/raster/get_row.c:95
 #, c-format
 msgid "Error seeking fp raster data file for row %d of <%s>: %s"
-msgstr ""
+msgstr "Erreur de lecture du fichier de données fp du raster à la ligne %d de <%s> : %s"
 
 #: ../lib/raster/get_row.c:103
 #, c-format
@@ -543,7 +543,7 @@ msgstr "Erreur lors de la décompression des données raster fp pour la ligne %d
 #: ../lib/raster/get_row.c:138
 #, c-format
 msgid "Error seeking raster data file for row %d of <%s>: %s"
-msgstr ""
+msgstr "Erreur de lecture du fichier de données du raster à la ligne %d de <%s> : %s"
 
 #: ../lib/raster/get_row.c:145
 #, c-format
@@ -568,7 +568,7 @@ msgstr "Erreur de lecture des données raster avec GDAL à la ligne %d de <%s>"
 #: ../lib/raster/get_row.c:830
 #, c-format
 msgid "Error seeking compressed null data for row %d of <%s>"
-msgstr ""
+msgstr "Erreur de lecture des données compressées nulles à la ligne %d de <%s>"
 
 #: ../lib/raster/get_row.c:835 ../lib/raster/get_row.c:845
 #, c-format
@@ -583,7 +583,7 @@ msgstr "Erreur de décompression des données nulles à la ligne %d de <%s>"
 #: ../lib/raster/get_row.c:885
 #, c-format
 msgid "Error seeking null row %d for <%s>"
-msgstr ""
+msgstr "Erreur de lecture de la ligne vide %d pour <%s>"
 
 #: ../lib/raster/get_row.c:888
 #, c-format
@@ -1264,12 +1264,12 @@ msgstr "Écriture du tableau 3d dans la carte g3d <%s>"
 #: ../lib/gpde/n_gwflow.c:436 ../lib/gpde/n_gwflow.c:715
 #, c-format
 msgid "The total sum of the water budget: %g\n"
-msgstr ""
+msgstr "Bilan hydrique total : %g\n"
 
 #: ../lib/gpde/n_gwflow.c:438 ../lib/gpde/n_gwflow.c:717
 #, c-format
 msgid "The total sum of the water budget is significantly larger then 0: %g\n"
-msgstr ""
+msgstr "Le bilan hydrique total est significativement suppérieur à 0 : %g\n"
 
 #: ../lib/display/icon.c:80
 #, c-format
@@ -3236,7 +3236,7 @@ msgstr "Le calcul du périmètre a échoué"
 
 #: ../lib/imagery/iclass_perimeter.c:208
 msgid "Invalid polygon"
-msgstr ""
+msgstr "Polygone invalide"
 
 #: ../lib/imagery/iclass_perimeter.c:253
 msgid "Outlined area is too large."
@@ -3310,7 +3310,7 @@ msgstr "Impossible d'écrire dans le fichier <%s> de catégories du raster."
 #: ../lib/imagery/iscatt_core.c:255
 #, c-format
 msgid "Unable to open category raster conditions file <%s>."
-msgstr ""
+msgstr "Impossible d'ouvrir le fichier de conditions du raster <%s>."
 
 #: ../lib/imagery/iscatt_core.c:263
 #, c-format
@@ -3347,12 +3347,12 @@ msgstr "Données non cohérentes. La valeur calculée pour le graphique est en d
 #: ../lib/imagery/iscatt_core.c:745
 #, c-format
 msgid "Unable to read find raster <%s>"
-msgstr ""
+msgstr "Impossible de lire le raster <%s>"
 
 #: ../lib/imagery/iscatt_core.c:755
 #, c-format
 msgid "Unable to open raster <%s>"
-msgstr ""
+msgstr "Impossible d'ouvrir le raster <%s>"
 
 #: ../lib/imagery/iscatt_core.c:761
 #, c-format
@@ -10025,3 +10025,39 @@ msgstr "Impossible d'ouvrir le raster <%s>"
 
 msgid "Absurd polygon."
 msgstr "Polygone absurde."
+
+#~ msgid "Unable to get function address for %s"
+#~ msgstr "Impossible d'obtenir l'adresse de la fonction pour %s"
+
+#~ msgid "Unable to choose pixel format (CGL error = %d)"
+#~ msgstr "Impossible de choisir le format de pixel (erreur CGL = %d)"
+
+#~ msgid "Unable to create context (CGL error = %d)"
+#~ msgstr "Impossible de créer le contexte (erreur CGL = %d)"
+
+#~ msgid "Unable to register window class"
+#~ msgstr "Impossible d'enregistrer la classe fenêtre"
+
+#~ msgid "Unable to create window"
+#~ msgstr "Impossible de créer la fenêtre"
+
+#~ msgid "Unable to set current context (CGL error = %d)"
+#~ msgstr "Impossible de définir le contexte courant (erreur CGL = %d)"
+
+#~ msgid "Incomplete framebuffer status (status = %d)"
+#~ msgstr "Status framebuffer incomplet (status = %d)"
+
+#~ msgid "Compression with %s is not supported in this GRASS GIS installation"
+#~ msgstr "La compression avec %s n'est pas supportée dans cette installation de GRASS"
+
+#~ msgid "%d lines merged"
+#~ msgstr "%d lignes fusionnées"
+
+#~ msgid "%d new lines"
+#~ msgstr "%d nouvelles lignes"
+
+#~ msgid "%d lines and boundaries merged"
+#~ msgstr "%d lignes et contours fusionnés"
+
+#~ msgid "%d new lines and boundaries"
+#~ msgstr "%d nouvelles lignes et contours"

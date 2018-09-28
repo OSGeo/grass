@@ -1871,7 +1871,7 @@ msgstr ""
 #: ../vector/v.what.rast3/main.c:67 ../vector/v.what.rast/main.c:74
 #: ../vector/v.what/main.c:64
 msgid "position"
-msgstr ""
+msgstr "pozíció"
 
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:8
 #: ../vector/v.what.rast3/main.c:76 ../vector/v.what.rast/main.c:83
@@ -6761,7 +6761,7 @@ msgstr ""
 #: ../raster/r.texture/h_measure.c:738 ../raster/r.stream.extract/load.c:44
 #: ../raster/r.stream.extract/load.c:53 ../imagery/i.smap/interp.c:68
 msgid "Unable to allocate memory"
-msgstr ""
+msgstr "Nem tudok memóriát foglalni"
 
 #: ../raster/r.walk/main.c:810 ../raster/r.cost/main.c:675
 #, c-format
@@ -7179,11 +7179,11 @@ msgstr ""
 #: ../raster/r.resamp.stats/main.c:262 ../raster/r.resamp.bspline/main.c:81
 #: ../raster/r.resample/main.c:55 ../raster/r.resamp.filter/main.c:390
 msgid "resample"
-msgstr ""
+msgstr "újramintavétel"
 
 #: ../raster/r.resamp.interp/main.c:80
 msgid "Resamples raster map to a finer grid using interpolation."
-msgstr ""
+msgstr "Raszter térkép újramintavételezése interpolációval egy finomabb rácshoz"
 
 #: ../raster/r.resamp.interp/main.c:88
 msgid "Method"
@@ -7192,7 +7192,7 @@ msgstr "Módszer"
 #: ../raster/r.resamp.interp/main.c:102 ../imagery/i.topo.corr/main.c:158
 #, c-format
 msgid "Invalid method: %s"
-msgstr ""
+msgstr "Hibás módszer: %s"
 
 #: ../raster/r.resamp.interp/main.c:370 ../raster/r.mode/main.c:143
 #: ../raster/r.resamp.stats/main.c:395 ../raster/r.tile/main.c:200
@@ -13486,11 +13486,11 @@ msgstr "Raszter térkép export Virtuális valóság modellező nyelvbe (VRML)."
 
 #: ../raster/r.out.vrml/main.c:58
 msgid "Name of input color map"
-msgstr ""
+msgstr "Input szín trékép neve"
 
 #: ../raster/r.out.vrml/main.c:65 ../misc/m.nviz.image/args.c:575
 msgid "Vertical exaggeration"
-msgstr ""
+msgstr "Függőleges nagyítás"
 
 #: ../raster/r.out.vrml/main.c:69
 msgid "Name for output VRML file"
@@ -13513,11 +13513,11 @@ msgstr ""
 
 #: ../raster/r.out.vrml/put_grid.c:38
 msgid "Writing vertices..."
-msgstr ""
+msgstr "Töréspontok írása..."
 
 #: ../raster/r.out.vrml/put_grid.c:83
 msgid "Writing color file..."
-msgstr ""
+msgstr "Szín fájl írása..."
 
 #: ../raster/r.quantile/main.c:69
 msgid "Computing histogram"
