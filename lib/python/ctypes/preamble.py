@@ -333,7 +333,7 @@ class String(MutableString, Union):
 
         # Convert from bytes
         elif isinstance(obj, bytes):
-            return cls(decode(obj))
+            return cls(obj)
 
         # Convert from str/unicode
         elif isinstance(obj, (str, unicode)):
