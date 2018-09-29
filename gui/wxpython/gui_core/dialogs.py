@@ -2072,7 +2072,7 @@ class SymbolDialog(wx.Dialog):
         mainPanel = wx.Panel(self, id=wx.ID_ANY)
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         vSizer = wx.BoxSizer(wx.VERTICAL)
-        fgSizer = wx.FlexGridSizer(rows=2, vgap=5, hgap=5)
+        fgSizer = wx.FlexGridSizer(rows=2, cols=2, vgap=5, hgap=5)
         self.folderChoice = wx.Choice(
             mainPanel,
             id=wx.ID_ANY,

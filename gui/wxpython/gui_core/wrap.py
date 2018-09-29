@@ -382,6 +382,12 @@ class Rect(wx.Rect):
         else:
             return wx.Rect.ContainsRect(self, rect)
 
+    def OffsetXY(self, dx, dy):
+        if wxPythonPhoenix:
+            return wx.Rect.Offset(self, dx, dy)
+        else:
+            return wx.Rect.OffsetXY(self, dx, dy)
+
 
 class CheckBox(wx.CheckBox):
     """Wrapper around wx.CheckBox to have more control
