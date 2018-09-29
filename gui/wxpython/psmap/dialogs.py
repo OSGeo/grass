@@ -53,10 +53,12 @@ from core import globalvar
 
 if globalvar.wxPythonPhoenix:
     import wx.adv
-    from wx.adv import OwnerDrawnComboBox
+    from wx.adv import OwnerDrawnComboBox, ODCB_PAINTING_CONTROL, ODCB_PAINTING_SELECTED
+    from wx.adv import BitmapComboBox
 else:
     import wx.combo
-    from wx.combo import OwnerDrawnComboBox
+    from wx.combo import OwnerDrawnComboBox, ODCB_PAINTING_CONTROL, ODCB_PAINTING_SELECTED
+    from wx.combo import BitmapComboBox
 
 if globalvar.wxPythonPhoenix:
     from wx import Validator as Validator
@@ -175,9 +177,9 @@ class PenStyleComboBox(OwnerDrawnComboBox):
         background area of each item."""
         # If the item is selected, or its item # iseven, or we are painting the
         # combo control itself, then use the default rendering.
-        if (item & 1 == 0 or flags & (wx.combo.ODCB_PAINTING_CONTROL |
-                                      wx.combo.ODCB_PAINTING_SELECTED)):
-            wx.combo.OwnerDrawnComboBox.OnDrawBackground(
+        if (item & 1 == 0 or flags & (ODCB_PAINTING_CONTROL |
+                                      ODCB_PAINTING_SELECTED)):
+            OwnerDrawnComboBox.OnDrawBackground(
                 self, dc, rect, item, flags)
             return
 
@@ -4944,7 +4946,7 @@ class ScalebarDialog(PsmapDialog):
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         sbTypeText = wx.StaticText(panel, id=wx.ID_ANY, label=_("Type:"))
-        self.sbCombo = wx.combo.BitmapComboBox(panel, style=wx.CB_READONLY)
+        self.sbCombo = BitmapComboBox(panel, style=wx.CB_READONLY)
         # only temporary, images must be moved away
         imagePath = os.path.join(
             globalvar.IMGDIR, "scalebar-fancy.png"), os.path.join(
