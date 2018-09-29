@@ -2134,7 +2134,10 @@ class PsMapBufferedWindow(wx.Window):
         # redraw preview
         else:  # preview mode
             imageRect = self.pdcImage.GetIdBounds(self.imageId)
-            imageRect.OffsetXY(-view[0], -view[1])
+            if globalvar.wxPythonPhoenix:
+                imageRect.Offset(-view[0], -view[1])
+            else:
+                imageRect.OffsetXY(-view[0], -view[1])
             imageRect = self.ScaleRect(rect=imageRect, scale=zoomFactor)
             self.DrawImage(imageRect)
 
