@@ -91,7 +91,7 @@ from core.utils import _
 from core.gcmd import GMessage, GError
 from core.debug import Debug
 from gui_core.wrap import Button, SearchCtrl, StaticText, StaticBox, \
-    TextCtrl, Menu, Rect, EmptyBitmap
+    TextCtrl, Menu, Rect, EmptyBitmap, ListCtrl
 
 
 class NotebookController:
@@ -935,7 +935,7 @@ class SingleSymbolPanel(wx.Panel):
         self.Refresh()
 
 
-class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
+class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin,
                 listmix.CheckListCtrlMixin):
     """Generic ListCtrl with popup menu to select/deselect all
     items"""
@@ -943,7 +943,7 @@ class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
     def __init__(self, parent):
         self.parent = parent
 
-        wx.ListCtrl.__init__(self, parent, id=wx.ID_ANY,
+        ListCtrl.__init__(self, parent, id=wx.ID_ANY,
                              style=wx.LC_REPORT)
         listmix.CheckListCtrlMixin.__init__(self)
 
@@ -1035,7 +1035,10 @@ class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
 
         idx = 0
         for item in data:
-            index = self.InsertStringItem(idx, str(item[0]))
+            if wxPythonPhoenix:
+                index = self.InsertItem(idx, str(item[0]))
+            else:
+                index = self.InsertStringItem(idx, str(item[0]))
             for i in range(1, self.GetColumnCount()):
                 self.SetStringItem(index, i, item[i])
             idx += 1
