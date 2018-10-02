@@ -47,10 +47,12 @@ from core import globalvar
 from core.gcmd import RunCommand, GError
 from core.utils import ListOfMapsets, GetColorTables, ReadEpsgCodes, _
 from core.settings import UserSettings
+from core.globalvar import wxPythonPhoenix
 from gui_core.dialogs import SymbolDialog, DefaultFontDialog
 from gui_core.widgets import IntegerValidator, ColorTablesComboBox
 from core.debug import Debug
-from gui_core.wrap import SpinCtrl, Button
+from gui_core.wrap import SpinCtrl, Button, BitmapButton, StaticText, \
+    StaticBox, TextCtrl, ListCtrl
 
 
 class PreferencesBaseDialog(wx.Dialog):
@@ -2184,14 +2186,14 @@ class MapsetAccess(wx.Dialog):
 
 
 class CheckListMapset(
-        wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
+        ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
     """List of mapset/owner/group"""
 
     def __init__(self, parent, log=None):
         self.parent = parent
 
-        wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
-                             style=wx.LC_REPORT)
+        ListCtrl.__init__(self, parent, wx.ID_ANY,
+                          style=wx.LC_REPORT)
         listmix.CheckListCtrlMixin.__init__(self)
         self.log = log
 
@@ -2209,7 +2211,12 @@ class CheckListMapset(
             gisenv['LOCATION_NAME'])
 
         for mapset in self.parent.all_mapsets_ordered:
-            index = self.InsertStringItem(self.GetItemCount(), mapset)
+            # unclear why this is needed,
+            # wrap.ListrCtrl should do the job but it doesn't in this case
+            if wxPythonPhoenix:
+                index = self.InsertItem(self.GetItemCount(), mapset)
+            else:
+                index = self.InsertStringItem(self.GetItemCount(), mapset)
             mapsetPath = os.path.join(locationPath,
                                       mapset)
             stat_info = os.stat(mapsetPath)
