@@ -385,7 +385,7 @@ class PsMapFrame(wx.Frame):
                        'cols'], rows=event.userData['regionOld']['rows'])
             # wx.BusyInfo does not display the message
             busy = wx.BusyInfo(
-                message=_("Generating preview, wait please"),
+                _("Generating preview, wait please"),
                 parent=self)
             wx.Yield()
             try:
