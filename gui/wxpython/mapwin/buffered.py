@@ -696,7 +696,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         self._fileType = FileType
         self._saveToFileCallback = callback
 
-        self._busy = wx.BusyInfo(message=_("Please wait, exporting image..."),
+        self._busy = wx.BusyInfo(_("Please wait, exporting image..."),
                                  parent=self)
         wx.Yield()
 
@@ -756,7 +756,6 @@ class BufferedMapWindow(MapWindowBase, Window):
             self.pdcVector.DrawToDC(dc)
         ibuffer.SaveFile(self._fileName, self._fileType)
 
-        self._busy.Destroy()
         del self._busy
         del self._fileName
         del self._fileType
