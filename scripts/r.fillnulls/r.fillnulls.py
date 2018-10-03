@@ -102,6 +102,7 @@
 import sys
 import os
 import atexit
+import subprocess
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
@@ -446,16 +447,52 @@ def main():
         reg = grass.region()
         # launch r.resamp.bspline
         tmp_rmaps.append(prefix + 'filled')
+        # If there are no NULL cells, r.resamp.bslpine call
+        # will end with an error although for our needs it's fine
+        # Only problem - this state must be read from stderr
+        new_env = dict(os.environ)
+        new_env['LC_ALL'] = 'C'
         if usermask:
-            grass.run_command('r.resamp.bspline', input=input, mask=usermask,
-                              output=prefix + 'filled', method=method,
-                              ew_step=3 * reg['ewres'], ns_step=3 * reg['nsres'],
-                              lambda_=lambda_, flags='n')
+            try:
+                p = grass.core.start_command(
+                    'r.resamp.bspline',
+                    input=input,
+                    mask=usermask,
+                    output=prefix + 'filled',
+                    method=method,
+                    ew_step=3 * reg['ewres'],
+                    ns_step=3 * reg['nsres'],
+                    lambda_=lambda_,
+                    flags='n',
+                    stderr=subprocess.PIPE,
+                    env=new_env)
+                stdout, stderr = p.communicate()
+                if "No NULL cells found" in stderr:
+                    grass.run_command('g.copy', raster='%s,%sfilled' % (input, prefix), overwrite=True)
+                    p.returncode = 0
+                    grass.warning(_("Input map <%s> has no holes. Copying to output without modification.") % (input,))
+            except CalledModuleError as e:
+                grass.fatal(_("Failure during bspline interpolation. Error message: %s") % stderr)
         else:
-            grass.run_command('r.resamp.bspline', input=input,
-                              output=prefix + 'filled', method=method,
-                              ew_step=3 * reg['ewres'], ns_step=3 * reg['nsres'],
-                              lambda_=lambda_, flags='n')
+            try:
+                p = grass.core.start_command(
+                    'r.resamp.bspline',
+                    input=input,
+                    output=prefix + 'filled',
+                    method=method,
+                    ew_step=3 * reg['ewres'],
+                    ns_step=3 * reg['nsres'],
+                    lambda_=lambda_,
+                    flags='n',
+                    stderr=subprocess.PIPE,
+                    env=new_env)
+                stdout, stderr = p.communicate()
+                if "No NULL cells found" in stderr:
+                    grass.run_command('g.copy', raster='%s,%sfilled' % (input, prefix), overwrite=True)
+                    p.returncode = 0
+                    grass.warning(_("Input map <%s> has no holes. Copying to output without modification.") % (input,))
+            except CalledModuleError as e:
+                grass.fatal(_("Failure during bspline interpolation. Error message: %s") % stderr)
 
     # restoring user's mask, if present:
     if usermask:
@@ -494,6 +531,7 @@ def main():
         grass.message(outlist)
 
     grass.message(_("Done."))
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()
