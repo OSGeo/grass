@@ -740,8 +740,12 @@ int write_raster(int mv_fd, int random_access, struct g_area *g)
 
     Rast_set_d_null_value(cell_buf, Rast_window_cols() + 1);
 
-    for (i = 0; i < Rast_window_rows() - g->sf_y - g->rows; i++)
+    for (i = 0; i < Rast_window_rows() - g->sf_y - ((int)g->rl / 2) - g->rows; i++) {
 	Rast_put_row(mv_fd, cell_buf, DCELL_TYPE);
+    }
+
+    G_free(file_buf);
+    G_free(cell_buf);
 
     return 1;
 }
