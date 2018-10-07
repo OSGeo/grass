@@ -211,7 +211,6 @@ class QueryDialog(wx.Dialog):
 
 def QueryTreeBuilder(data, column):
     """Builds tree model from query results.
-    Convert to unicode.
 
     :param data: query results as a dictionary
     :param column: column name
@@ -220,16 +219,12 @@ def QueryTreeBuilder(data, column):
     """
     def addNode(parent, data, model):
         for k, v in six.iteritems(data):
-            if isinstance(v, str):
-                k = DecodeString(k)
             if isinstance(v, dict):
                 node = model.AppendNode(parent=parent, label=k)
                 addNode(parent=node, data=v, model=model)
             else:
-                if not isinstance(v, str):
+                if not isinstance(v, six.string_types):
                     v = str(v)
-                elif isinstance(v, str):
-                    v = DecodeString(v)
                 node = model.AppendNode(parent=parent, label=k,
                                         data={column: v})
 
