@@ -937,9 +937,9 @@ class SamplingAreasPage(TitledPage):
             parent=self.areaPanel, id=wx.ID_ANY,
             label=_('Do you want to check vector areas?'))
         self.areaOK = Button(self.areaPanel, wx.ID_ANY, 'Yes', (50, 80))
-        self.areaOK.SetToolTip(wx.ToolTip(_("Select if use area by area")))
+        self.areaOK.SetToolTip(_("Select if use area by area"))
         self.areaNO = Button(self.areaPanel, wx.ID_ANY, 'No', (50, 80))
-        self.areaNO.SetToolTip(wx.ToolTip(_("All the features will be used")))
+        self.areaNO.SetToolTip(_("All the features will be used"))
         self.areaOK.Bind(wx.EVT_BUTTON, self.OnVectYes)
         self.areaNO.Bind(wx.EVT_BUTTON, self.OnVectNo)
         self.overwriteCheck.Bind(wx.EVT_CHECKBOX, self.OnOverwrite)
