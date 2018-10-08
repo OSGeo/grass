@@ -9,7 +9,7 @@
  *
  * \author GRASS GIS Development Team
  *
- * \date 2005-2009
+ * \date 2005-2018
  */
 
 #include <string.h>
@@ -45,6 +45,12 @@
 int Segment_put(SEGMENT * SEG, const void *buf, off_t row, off_t col)
 {
     int index, n, i;
+
+    if (!SEG->scb) {
+	memcpy(SEG->cache + ((size_t)row * SEG->ncols + col) * SEG->len, buf, SEG->len);
+	
+	return 1;
+    }
 
     SEG->address(SEG, row, col, &n, &index);
     if ((i = seg_pagein(SEG, n)) < 0) {
