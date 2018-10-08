@@ -424,6 +424,12 @@ int main(int argc, char **argv)
 		G_free(dbuf);
 	    }
 
+	    if (!gflag->answer) {
+		/* always report total number of cells */
+		fprintf(out, "cells=%jd\n",
+			(grass_int64)cellhd.rows * cellhd.cols);
+	    }
+
 	    if (rstats.count > 0) {
 		double mean, sd;
 		
