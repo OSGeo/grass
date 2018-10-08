@@ -9,7 +9,7 @@
  *
  * \author GRASS GIS Development Team
  *
- * \date 2005-2009
+ * \date 2005-2018
  */
 
 #include <stdio.h>
@@ -105,9 +105,8 @@ int Segment_format_nofill(int fd, off_t nrows, off_t ncols, int srows, int scols
 }
 
 
-static int seg_format(int fd,
-			   off_t nrows, off_t ncols,
-			   int srows, int scols, int len, int fill)
+static int seg_format(int fd, off_t nrows, off_t ncols,
+		      int srows, int scols, int len, int fill)
 {
     off_t nbytes;
     int spr, size;

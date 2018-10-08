@@ -9,7 +9,7 @@
  *
  * \author GRASS GIS Development Team
  *
- * \date 2005-2009
+ * \date 2005-2018
  */
 
 #include <stdio.h>
@@ -49,6 +49,12 @@ int Segment_put_row(const SEGMENT * SEG, const void *buf, off_t row)
     int n, index;
     int result;
     off_t col;
+
+    if (!SEG->scb) {
+	memcpy(SEG->cache + ((size_t)row * SEG->ncols) * SEG->len, buf, SEG->len * SEG->ncols);
+	
+	return 1;
+    }
 
     ncols = SEG->ncols - SEG->spill;
     scols = SEG->scols;

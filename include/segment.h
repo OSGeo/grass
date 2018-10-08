@@ -58,6 +58,8 @@ typedef struct
     int nseg;			/* number of segments in memory */
     int cur;			/* last accessed segment */
     int offset;			/* offset of data past header */
+
+    char *cache;		/* all in memory cache */
 } SEGMENT;
 
 #include <grass/defs/segment.h>

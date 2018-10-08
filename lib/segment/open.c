@@ -9,7 +9,7 @@
  *
  * \author GRASS GIS Development Team
  *
- * \date 2012
+ * \date 2018
  */
 
 #include <unistd.h>
@@ -48,6 +48,26 @@ Segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols,
              int srows, int scols, int len, int nseg)
 {
     int ret;
+    int nseg_total;
+
+    nseg_total = ((nrows + srows - 1) / srows) * 
+                 ((ncols + scols - 1) / scols);
+
+    if (nseg >= nseg_total) {
+	G_verbose_message(_("Using memory cache"));
+
+	SEG->nrows = nrows;
+	SEG->ncols = ncols;
+	SEG->len = len;
+	SEG->nseg = nseg;
+	SEG->cache = G_malloc(sizeof(char) * SEG->nrows * SEG->ncols * SEG->len);
+	SEG->scb = NULL;
+	SEG->open = 1;
+	
+	return 1;
+    }
+
+    G_verbose_message(_("Using disk cache"));
 
     if (!fname) {
 	G_warning(_("Segment file name is NULL"));
