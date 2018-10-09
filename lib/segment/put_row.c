@@ -50,7 +50,7 @@ int Segment_put_row(const SEGMENT * SEG, const void *buf, off_t row)
     int result;
     off_t col;
 
-    if (!SEG->scb) {
+    if (SEG->cache) {
 	memcpy(SEG->cache + ((size_t)row * SEG->ncols) * SEG->len, buf, SEG->len * SEG->ncols);
 	
 	return 1;

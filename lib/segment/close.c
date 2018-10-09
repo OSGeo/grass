@@ -35,16 +35,16 @@ int Segment_close(SEGMENT *SEG)
     if (SEG->open != 1)
 	return -1;
 
-    if (SEG->scb) {
+    if (SEG->cache) {
+	G_free(SEG->cache);
+    }
+    else {
 	Segment_release(SEG);
 	close(SEG->fd);
 	unlink(SEG->fname);
 
 	SEG->fd = -1;
 	SEG->fname = NULL;
-    }
-    else {
-	G_free(SEG->cache);
     }
 
     SEG->open = 0;

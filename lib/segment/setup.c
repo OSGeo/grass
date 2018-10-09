@@ -39,6 +39,7 @@ int seg_setup(SEGMENT * SEG)
     int seg_exp, n_total_segs;
 
     SEG->open = 0;
+    SEG->cache = NULL;
 
     if (SEG->nrows <= 0 || SEG->ncols <= 0
 	|| SEG->srows <= 0 || SEG->scols <= 0

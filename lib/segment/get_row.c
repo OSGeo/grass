@@ -47,7 +47,7 @@ int Segment_get_row(const SEGMENT * SEG, void *buf, off_t row)
     int scols;
     int n, index;
 
-    if (!SEG->scb) {
+    if (SEG->cache) {
 	memcpy(buf, SEG->cache + ((size_t)row * SEG->ncols) * SEG->len, SEG->len * SEG->ncols);
 	
 	return 1;

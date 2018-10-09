@@ -40,7 +40,7 @@ int Segment_get(SEGMENT * SEG, void *buf, off_t row, off_t col)
 {
     int index, n, i;
 
-    if (!SEG->scb) {
+    if (SEG->cache) {
 	memcpy(buf, SEG->cache + ((size_t)row * SEG->ncols + col) * SEG->len, SEG->len);
 	
 	return 1;

@@ -46,7 +46,7 @@ int Segment_put(SEGMENT * SEG, const void *buf, off_t row, off_t col)
 {
     int index, n, i;
 
-    if (!SEG->scb) {
+    if (SEG->cache) {
 	memcpy(SEG->cache + ((size_t)row * SEG->ncols + col) * SEG->len, buf, SEG->len);
 	
 	return 1;
