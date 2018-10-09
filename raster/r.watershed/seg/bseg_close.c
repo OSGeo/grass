@@ -4,9 +4,7 @@
 
 int bseg_close(BSEG * bseg)
 {
-    Segment_release(&(bseg->seg));
-    close(bseg->fd);
-    unlink(bseg->filename);
+    Segment_close(&(bseg->seg));
     if (bseg->name) {
 	G_free(bseg->name);
 	bseg->name = NULL;

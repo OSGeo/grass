@@ -1,6 +1,7 @@
 #include <grass/gis.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <grass/glocale.h>
 #include "Gwater.h"
 
 
@@ -8,7 +9,6 @@ int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)
 {
     char *filename;
     int errflag;
-    int fd;
 
     cseg->filename = NULL;
     cseg->fd = -1;
@@ -16,44 +16,36 @@ int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)
     cseg->mapset = NULL;
 
     filename = G_tempfile();
-    if (-1 == (fd = creat(filename, 0666))) {
-	G_warning("cseg_open(): unable to create segment file");
-	return -2;
-    }
-    if (0 >
-	(errflag =
-	 Segment_format(fd, Rast_window_rows(), Rast_window_cols(), srows,
-			scols, sizeof(CELL)))) {
-	close(fd);
-	unlink(filename);
+    if (0 > (errflag = Segment_open(&(cseg->seg), filename, Rast_window_rows(),
+				    Rast_window_cols(), srows, scols,
+				    sizeof(CELL), nsegs_in_memory))) {
 	if (errflag == -1) {
-	    G_warning("cseg_open(): could not write segment file");
+	    G_warning(_("File name is invalid"));
 	    return -1;
 	}
-	else {
-	    G_warning("cseg_open(): illegal configuration parameter(s)");
+	else if (errflag == -2) {
+	    G_warning(_("File write error"));
+	    return -2;
+	}
+	else if (errflag == -3) {
+	    G_warning(_("Illegal parameters are passed"));
 	    return -3;
 	}
-    }
-    close(fd);
-    if (-1 == (fd = open(filename, 2))) {
-	unlink(filename);
-	G_warning("cseg_open(): unable to re-open segment file");
-	return -4;
-    }
-    if (0 > (errflag = Segment_init(&(cseg->seg), fd, nsegs_in_memory))) {
-	close(fd);
-	unlink(filename);
-	if (errflag == -1) {
-	    G_warning("cseg_open(): could not read segment file");
+	else if (errflag == -4) {
+	    G_warning(_("File could not be re-opened"));
+	    return -4;
+	}
+	else if (errflag == -5) {
+	    G_warning(_("Prepared file could not be read"));
 	    return -5;
 	}
-	else {
-	    G_warning("cseg_open(): out of memory");
+	else if (errflag == -6) {
+	    G_warning(_("Out of memory"));
 	    return -6;
 	}
     }
+
     cseg->filename = filename;
-    cseg->fd = fd;
+
     return 0;
 }
