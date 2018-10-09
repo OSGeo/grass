@@ -80,6 +80,7 @@ struct globals
 
     /* region growing */
     int min_segment_size;	/* smallest number of pixels/cells allowed in a final segment */
+    int *new_id;
 
     /* inactive options for region growing */
     double radio_weight;	/* weighing factor radiometric - shape */
