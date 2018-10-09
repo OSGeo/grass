@@ -245,19 +245,24 @@ examples below) otherwise taken from the last GRASS session.</dd>
     obtain the location and mapset from environment variables.
 
 <dt><b>grass77 -c EPSG:4326 $HOME/grassdata/mylocation</b>
-<dd> Creates new GRASS location with EPSG code 4326 (latitude-longitude, WGS84)
+<dd> Creates a new GRASS location with EPSG code 4326 (latitude-longitude, WGS84)
     in the specified GISDBASE
 
 <dt><b>grass77 -c EPSG:5514:3 $HOME/grassdata/mylocation</b>
-<dd> Creates new GRASS location with EPSG code 5514 (S-JTSK / Krovak
+<dd> Creates a new GRASS location with EPSG code 5514 (S-JTSK / Krovak
     East North - SJTSK) with datum transformation parameters used in
     Czech Republic in the specified GISDBASE
 
+<dt><b>grass77 -c XY $HOME/grassdata/gnomonic --exec g.proj -c proj4='+proj=gnom +lat_0=90 +lon_0=-50'</b>
+<dd>  Creates a new GRASS location from PROJ definition string
+    (here: <a href="https://proj4.org/operations/projections/gnom.html">gnomonic</a>)
+    in the specified GISDBASE
+
 <dt><b>grass77 -c myvector.shp $HOME/grassdata/mylocation</b>
-<dd> Creates new GRASS location based on georeferenced Shapefile
+<dd> Creates a new GRASS location based on georeferenced Shapefile
 
 <dt><b>grass77 -c myraster.tif $HOME/grassdata/mylocation</b>
-<dd> Creates new GRASS location based on georeferenced GeoTIFF file
+<dd> Creates a new GRASS location based on georeferenced GeoTIFF file
 </dl>
 
 <h3>Batch jobs with the exec interface</h3>
