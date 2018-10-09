@@ -9,6 +9,7 @@
  *               later modified by Chemin and Alexandridis (2001).
  *               This code is implemented in Alexandridis et al. (2009).
  *		 2018: added map input for e_act since i.rh can generate it
+ *		 2018: Fail convergence more gracefully and still write output
  *		 from MOD05 and MOD07 data (see GRASS-ADDONS)
  *
  * COPYRIGHT:    (C) 2002-2018 by the GRASS Development Team
@@ -362,7 +363,8 @@ int main(int argc, char *argv[])
 	G_message("rnet_dry=%f", d_Rn_dry);
 	G_message("g0_dry=%f", d_g0_dry);
 	G_message("h0_dry=%f", d_Rn_dry - d_g0_dry);
-    }				/* END OF FLAG2 */
+	G_message("auto config completed");
+    }	/* END OF FLAG2 */
 
     G_message("Passed here");
 
@@ -436,7 +438,7 @@ int main(int argc, char *argv[])
 	    if (Rast_is_d_null_value(&d_t0dem) ||
 		Rast_is_d_null_value(&d_eact) ||
 		Rast_is_d_null_value(&d_z0m)) {
-		/* do nothing */
+		Rast_set_d_null_value(&outrast[col], 1);
 		d_Roh[row][col] = -999.9;
 		d_Rah[row][col] = -999.9;
 		if (row == rowDry && col == colDry) {	/*collect dry pix info */
@@ -487,6 +489,9 @@ int main(int argc, char *argv[])
     G_message("d_dT_dry=%f", d_dT_dry);
     G_message("dT1=%f * t0dem + (%f)", a, b);
     DCELL d_h_dry = 0.0;
+    if(isnan(a) || isnan(b)){
+	    G_fatal_error("Delta T Convergence failed, exiting prematurily, please check output");
+    }
 
     /* ITERATION 1 */
     for (row = 0; row < nrows; row++) {
@@ -502,16 +507,23 @@ int main(int argc, char *argv[])
 	    d_roh1 = d_Roh[row][col];
 	    if (Rast_is_d_null_value(&d_t0dem) ||
 		Rast_is_d_null_value(&d_z0m)) {
-		/* do nothing */
+		Rast_set_d_null_value(&outrast[col], 1);
 	    }
 	    else {
 		if (d_rah1 < 1.0)
 		    d_h1 = 0.0;
 		else
 		    d_h1 = (1004 * d_roh1) * (a * d_t0dem + b) / d_rah1;
+		if (d_h1 < 0 && d_h1 > -50) {
+		    d_h1 = 0.0;
+		}
+		if (d_h1 < -50 || d_h1 > 1000) {
+		    Rast_set_d_null_value(&outrast[col], 1);
+		}
+		outrast[col] = d_h1;
 		d_L =
 		    -1004 * d_roh1 * pow(ustar,
-					 3) * d_t0dem / (d_h1 * 9.81 * 0.41);
+		    3) * d_t0dem / (d_h1 * 9.81 * 0.41);
 		d_x = pow((1 - 16 * (5 / d_L)), 0.25);
 		d_psim =
 		    2 * log((1 + d_x) / 2) + log((1 + pow(d_x, 2)) / 2) -
@@ -528,6 +540,7 @@ int main(int argc, char *argv[])
 		d_Rah[row][col] = d_rah1;
 	    }
 	}
+	Rast_put_d_row(outfd, outrast);
     }
 
     /*Calculate dT_dry */
@@ -545,6 +558,11 @@ int main(int argc, char *argv[])
     b = (sumy - (a * sumx)) / 2.0;
     G_message("d_dT_dry=%f", d_dT_dry);
     G_message("dT1=%f * t0dem + (%f)", a, b);
+    if(isnan(a) || isnan(b)){
+    	G_free(outrast);
+    	Rast_close(outfd);
+    	G_fatal_error("Delta T Convergence failed, exiting prematurily, please check output");
+    }
 
     /* ITERATION 2 */
 
@@ -564,7 +582,7 @@ int main(int argc, char *argv[])
 	    d_roh1 = d_Roh[row][col];
 	    if (Rast_is_d_null_value(&d_t0dem) ||
 		Rast_is_d_null_value(&d_z0m)) {
-		/* do nothing */
+		Rast_set_d_null_value(&outrast[col], 1);
 	    }
 	    else {
 		if (d_rah2 < 1.0) {
@@ -573,9 +591,16 @@ int main(int argc, char *argv[])
 		else {
 		    d_h2 = (1004 * d_roh1) * (a * d_t0dem + b) / d_rah2;
 		}
+		if (d_h2 < 0 && d_h2 > -50) {
+		    d_h2 = 0.0;
+		}
+		if (d_h2 < -50 || d_h2 > 1000) {
+		    Rast_set_d_null_value(&outrast[col], 1);
+		}
+		outrast[col] = d_h2;
 		d_L =
 		    -1004 * d_roh1 * pow(ustar,
-					 3) * d_t0dem / (d_h2 * 9.81 * 0.41);
+		    3) * d_t0dem / (d_h2 * 9.81 * 0.41);
 		d_x = pow((1 - 16 * (5 / d_L)), 0.25);
 		d_psim = 2 * log((1 + d_x) / 2) + log((1 + pow(d_x, 2)) / 2) -
 		    2 * atan(d_x) + 0.5 * M_PI;
@@ -583,10 +608,7 @@ int main(int argc, char *argv[])
 		d_u5 = (ustar / 0.41) * log(5 / d_z0m);
 		d_rah3 =
 		    (1 / (d_u5 * pow(0.41, 2))) * log((5 / d_z0m) -
-						      d_psim) * log((5 /
-								     (d_z0m *
-								      0.1)) -
-								    d_psih);
+		    d_psim) * log((5 / (d_z0m * 0.1)) - d_psih);
 		if (row == rowDry && col == colDry) {	/*collect dry pix info */
 		    d_rah_dry = d_rah3;
 		    d_h_dry = d_h2;
@@ -594,6 +616,7 @@ int main(int argc, char *argv[])
 		d_Rah[row][col] = d_rah2;
 	    }
 	}
+	Rast_put_d_row(outfd, outrast);
     }
 
     /*Calculate dT_dry */
@@ -611,6 +634,11 @@ int main(int argc, char *argv[])
     b = (sumy - (a * sumx)) / 2.0;
     G_message("d_dT_dry=%f", d_dT_dry);
     G_message("dT1=%f * t0dem + (%f)", a, b);
+    if(isnan(a) || isnan(b)){
+    	G_free(outrast);
+    	Rast_close(outfd);
+	G_fatal_error("Delta T Convergence failed, exiting prematurily, please check output");
+    }
 
     /* ITERATION 3 */
 
