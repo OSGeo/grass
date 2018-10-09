@@ -7,7 +7,6 @@ int cseg_open(CSEG *cseg, int srows, int scols, int nsegs_in_memory)
 {
     char *filename;
     int errflag;
-    int fd;
 
     cseg->filename = NULL;
     cseg->fd = -1;
@@ -15,53 +14,43 @@ int cseg_open(CSEG *cseg, int srows, int scols, int nsegs_in_memory)
     cseg->mapset = NULL;
 
     filename = G_tempfile();
-    if (-1 == (fd = creat(filename, 0666))) {
-	G_warning(_("Unable to create segment file"));
-	return -2;
-    }
-    if (0 >
-	(errflag =
-	 Segment_format(fd, Rast_window_rows(), Rast_window_cols(), srows, scols,
-			sizeof(CELL)))) {
-	close(fd);
-	unlink(filename);
+    if (0 > (errflag = Segment_open(&(cseg->seg), filename, Rast_window_rows(),
+				    Rast_window_cols(), srows, scols,
+				    sizeof(CELL), nsegs_in_memory))) {
 	if (errflag == -1) {
-	    G_warning(_("Unable to write segment file"));
+	    G_warning(_("File name is invalid"));
 	    return -1;
 	}
-	else {
-	    G_warning(_("Illegal configuration parameter(s)"));
+	else if (errflag == -2) {
+	    G_warning(_("File write error"));
+	    return -2;
+	}
+	else if (errflag == -3) {
+	    G_warning(_("Illegal parameters are passed"));
 	    return -3;
 	}
-    }
-    close(fd);
-    if (-1 == (fd = open(filename, 2))) {
-	unlink(filename);
-	G_warning(_("Unable to re-open segment file"));
-	return -4;
-    }
-    if (0 > (errflag = Segment_init(&(cseg->seg), fd, nsegs_in_memory))) {
-	close(fd);
-	unlink(filename);
-	if (errflag == -1) {
-	    G_warning(_("Unable to read segment file"));
+	else if (errflag == -4) {
+	    G_warning(_("File could not be re-opened"));
+	    return -4;
+	}
+	else if (errflag == -5) {
+	    G_warning(_("Prepared file could not be read"));
 	    return -5;
 	}
-	else {
+	else if (errflag == -6) {
 	    G_warning(_("Out of memory"));
 	    return -6;
 	}
     }
+
     cseg->filename = filename;
-    cseg->fd = fd;
+
     return 0;
 }
 
 int cseg_close(CSEG *cseg)
 {
-    Segment_release(&(cseg->seg));
-    close(cseg->fd);
-    unlink(cseg->filename);
+    Segment_close(&(cseg->seg));
     if (cseg->name) {
 	G_free(cseg->name);
 	cseg->name = NULL;
@@ -102,7 +91,7 @@ int cseg_get(CSEG *cseg, CELL *value, GW_LARGE_INT row, GW_LARGE_INT col)
 
 int cseg_read_raster(CSEG *cseg, char *map_name, char *mapset)
 {
-    int row, nrows;
+    int row, rows;
     int map_fd;
     CELL *buffer;
 
@@ -110,9 +99,9 @@ int cseg_read_raster(CSEG *cseg, char *map_name, char *mapset)
     cseg->mapset = NULL;
 
     map_fd = Rast_open_old(map_name, mapset);
-    nrows = Rast_window_rows();
+    rows = Rast_window_rows();
     buffer = Rast_allocate_c_buf();
-    for (row = 0; row < nrows; row++) {
+    for (row = 0; row < rows; row++) {
 	Rast_get_c_row(map_fd, buffer, row);
 	if (Segment_put_row(&(cseg->seg), buffer, row) < 0) {
 	    G_free(buffer);
@@ -135,19 +124,19 @@ int cseg_read_raster(CSEG *cseg, char *map_name, char *mapset)
 int cseg_write_raster(CSEG *cseg, char *map_name)
 {
     int map_fd;
-    int row, nrows;
+    int row, rows;
     CELL *buffer;
 
     map_fd = Rast_open_c_new(map_name);
-    nrows = Rast_window_rows();
+    rows = Rast_window_rows();
     buffer = Rast_allocate_c_buf();
     Segment_flush(&(cseg->seg));
-    for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 1);
+    for (row = 0; row < rows; row++) {
+	G_percent(row, rows, 1);
 	Segment_get_row(&(cseg->seg), buffer, row);
 	Rast_put_row(map_fd, buffer, CELL_TYPE);
     }
-    G_percent(row, nrows, 1);    /* finish it */
+    G_percent(row, rows, 1);    /* finish it */
     G_free(buffer);
     Rast_close(map_fd);
     return 0;

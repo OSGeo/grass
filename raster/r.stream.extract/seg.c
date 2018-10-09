@@ -10,63 +10,49 @@ seg_open(SSEG *sseg, GW_LARGE_INT nrows, GW_LARGE_INT ncols,
 {
     char *filename;
     int errflag;
-    int fd;
 
     sseg->filename = NULL;
     sseg->fd = -1;
 
     filename = G_tempfile();
-    if (-1 == (fd = creat(filename, 0666))) {
-	G_warning(_("Unable to create segment file"));
-	return -2;
-    }
-    if (fill)
-	errflag = Segment_format(fd, nrows, ncols, row_in_seg,
-	                         col_in_seg, size_struct);
-    else
-	errflag = Segment_format_nofill(fd, nrows, ncols, row_in_seg,
-	                         col_in_seg, size_struct);
-
-    if (0 > errflag) {
-	close(fd);
-	unlink(filename);
+    if (0 > (errflag = Segment_open(&(sseg->seg), filename, nrows, ncols,
+                                    row_in_seg, col_in_seg,
+				    size_struct, nsegs_in_memory))) {
 	if (errflag == -1) {
-	    G_warning(_("Unable to write segment file"));
+	    G_warning(_("File name is invalid"));
 	    return -1;
 	}
-	else {
-	    G_warning(_("Illegal configuration parameter(s)"));
+	else if (errflag == -2) {
+	    G_warning(_("File write error"));
+	    return -2;
+	}
+	else if (errflag == -3) {
+	    G_warning(_("Illegal parameters are passed"));
 	    return -3;
 	}
-    }
-    close(fd);
-    if (-1 == (fd = open(filename, 2))) {
-	unlink(filename);
-	G_warning(_("Unable to re-open file '%s'"), filename);
-	return -4;
-    }
-    if (0 > (errflag = Segment_init(&(sseg->seg), fd, nsegs_in_memory))) {
-	close(fd);
-	unlink(filename);
-	if (errflag == -1) {
-	    G_warning(_("Unable to read segment file"));
+	else if (errflag == -4) {
+	    G_warning(_("File could not be re-opened"));
+	    return -4;
+	}
+	else if (errflag == -5) {
+	    G_warning(_("Prepared file could not be read"));
 	    return -5;
 	}
-	else {
+	else if (errflag == -6) {
 	    G_warning(_("Out of memory"));
 	    return -6;
 	}
     }
+
     sseg->filename = filename;
-    sseg->fd = fd;
+
     return 0;
 }
 
 int seg_close(SSEG *sseg)
 {
-    Segment_release(&(sseg->seg));
-    close(sseg->fd);
-    unlink(sseg->filename);
+    Segment_close(&(sseg->seg));
+
     return 0;
 }
 
