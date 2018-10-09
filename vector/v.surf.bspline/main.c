@@ -55,8 +55,7 @@ int main(int argc, char *argv[])
     double **N, **obsVect;	/* Interpolation and least-square matrix */
 
     SEGMENT out_seg, mask_seg;
-    const char *out_file, *mask_file;
-    int out_fd, mask_fd;
+    char *out_file, *mask_file;
     double seg_size;
     int seg_mb, segments_in_memory;
     int have_mask;
@@ -451,7 +450,6 @@ int main(int argc, char *argv[])
     /* Alloc raster matrix */
     have_mask = 0;
     out_file = mask_file = NULL;
-    out_fd = mask_fd = -1;
     if (grid == TRUE) {
 	int row;
 	DCELL *drastbuf;
@@ -470,14 +468,9 @@ int main(int argc, char *argv[])
 	G_debug(1, "%d %dx%d segments held in memory", segments_in_memory, SEGSIZE, SEGSIZE);
 
 	out_file = G_tempfile();
-	out_fd = creat(out_file, 0666);
-	if (Segment_format(out_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(double)) != 1)
+	if (Segment_open(&out_seg, out_file, nrows, ncols, SEGSIZE,
+	     SEGSIZE, sizeof(double), segments_in_memory) != 1)
 	    G_fatal_error(_("Can not create temporary file"));
-	close(out_fd);
-
-	out_fd = open(out_file, 2);
-	if (Segment_init(&out_seg, out_fd, segments_in_memory) != 1)
-	    G_fatal_error(_("Can not initialize temporary file"));
 
 	/* initialize output */
 	G_message(_("Initializing output..."));
@@ -498,14 +491,9 @@ int main(int argc, char *argv[])
 	    G_message(_("Load masking map"));
 
 	    mask_file = G_tempfile();
-	    mask_fd = creat(mask_file, 0666);
-	    if (Segment_format(mask_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(char)) != 1)
+	    if (Segment_open(&mask_seg, mask_file, nrows, ncols, SEGSIZE,
+		 SEGSIZE, sizeof(char), segments_in_memory) != 1)
 		G_fatal_error(_("Can not create temporary file"));
-	    close(mask_fd);
-
-	    mask_fd = open(mask_file, 2);
-	    if (Segment_init(&mask_seg, mask_fd, segments_in_memory) != 1)
-		G_fatal_error(_("Can not initialize temporary file"));
 
 	    maskfd = Rast_open_old(mask_opt->answer, "");
 
@@ -904,9 +892,7 @@ int main(int argc, char *argv[])
 
 
 	if (have_mask) {
-	    Segment_release(&mask_seg);	/* release memory  */
-	    close(mask_fd);
-	    unlink(mask_file);
+	    Segment_close(&mask_seg);	/* close segment structure  */
 	}
 
 	drastbuf = Rast_allocate_buf(DCELL_TYPE);
@@ -921,9 +907,7 @@ int main(int argc, char *argv[])
 
 	Rast_close(raster);
 
-	Segment_release(&out_seg);	/* release memory  */
-	close(out_fd);
-	unlink(out_file);
+	Segment_close(&out_seg);	/* close segment structure  */
 	/* set map title */
 	sprintf(title, "%s interpolation with Tykhonov regularization",
 		type_opt->answer);
