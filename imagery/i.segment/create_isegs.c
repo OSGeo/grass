@@ -113,17 +113,7 @@ int create_isegs(struct globals *globals)
 	globals->max_rid = max_id;
 	G_debug(1, "Largest renumbered ID: %d", globals->max_rid);
 	
-	for (row = 0; row < globals->nrows; row++) {
-	    for (col = 0; col < globals->ncols; col++) {
-		Segment_get(&globals->rid_seg, &rid, row, col);
-		if (!Rast_is_c_null_value(&rid)) {
-		    rid = new_id[rid];
-		    Segment_put(&globals->rid_seg, &rid, row, col);
-		}
-	    }
-	}
-
-	G_free(new_id);
+	globals->new_id = new_id;
     }
 
     return successflag;
