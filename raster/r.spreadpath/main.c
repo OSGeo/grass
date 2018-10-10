@@ -68,12 +68,12 @@ int main(int argc, char **argv)
 	col, row,
 	len, flag,
 	srows, scols,
-	backrow_fd, backcol_fd, path_fd, in_row_fd, in_col_fd, out_fd;
-    const char *current_mapset,
-	*search_mapset,
-	*path_mapset,
-	*backrow_mapset,
-	*backcol_mapset, *in_row_file, *in_col_file, *out_file;
+	backrow_fd, backcol_fd, path_fd;
+    const char *search_mapset,
+	       *path_mapset,
+	       *backrow_mapset,
+	       *backcol_mapset;
+    char *in_row_file, *in_col_file, *out_file;
     CELL *cell;
     POINT *PRES_PT, *PRESENT_PT, *OLD_PT;
     struct Cell_head window;
@@ -113,7 +113,6 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    current_mapset = G_mapset();
     in_row_file = G_tempfile();
     in_col_file = G_tempfile();
     out_file = G_tempfile();
@@ -155,32 +154,18 @@ int main(int argc, char **argv)
     /*   Parameters for map submatrices   */
     len = sizeof(CELL);
 
+    /* TODO: improve segment handling */
     srows = nrows / 4 + 1;
     scols = ncols / 4 + 1;
 
-    G_verbose_message(_("\eading the input map -%s- and -%s- and creating some temporary files..."),
+    G_verbose_message(_("Reading the input map -%s- and -%s- and creating some temporary files..."),
 	     backrow_layer, backcol_layer);
 
     /* Create segmented files for back cell and output layers  */
-    in_row_fd = creat(in_row_file, 0666);
-    Segment_format(in_row_fd, nrows, ncols, srows, scols, len);
-    close(in_row_fd);
-    in_col_fd = creat(in_col_file, 0666);
-    Segment_format(in_col_fd, nrows, ncols, srows, scols, len);
-    close(in_col_fd);
+    Segment_open(&in_row_seg, in_row_file, nrows, ncols, srows, scols, len, 4);
+    Segment_open(&in_col_seg, in_col_file, nrows, ncols, srows, scols, len, 4);
 
-    out_fd = creat(out_file, 0666);
-    Segment_format(out_fd, nrows, ncols, srows, scols, len);
-    close(out_fd);
-
-    /*   Open initialize and segment all files  */
-    in_row_fd = open(in_row_file, 2);
-    Segment_init(&in_row_seg, in_row_fd, 4);
-    in_col_fd = open(in_col_file, 2);
-    Segment_init(&in_col_seg, in_col_fd, 4);
-
-    out_fd = open(out_file, 2);
-    Segment_init(&out_seg, out_fd, 4);
+    Segment_open(&out_seg, out_file, nrows, ncols, srows, scols, len, 4);
 
     /*   Write the back cell layers in the segmented files, and  
      *   Change UTM coordinates to ROWs and COLUMNs */
@@ -301,21 +286,13 @@ int main(int argc, char **argv)
 	Rast_put_row(path_fd, cell, CELL_TYPE);
     }
 
-    Segment_release(&in_row_seg);	/* release memory  */
-    Segment_release(&in_col_seg);
-    Segment_release(&out_seg);
-
-    close(in_row_fd);		/* close all files */
-    close(in_col_fd);
-    close(out_fd);
+    Segment_close(&in_row_seg);	/* release memory  */
+    Segment_close(&in_col_seg);
+    Segment_close(&out_seg);
 
     Rast_close(path_fd);
     Rast_close(backrow_fd);
     Rast_close(backcol_fd);
-
-    unlink(in_row_file);	/* remove submatrix files  */
-    unlink(in_col_file);
-    unlink(out_file);
 
     exit(EXIT_SUCCESS);
 }
