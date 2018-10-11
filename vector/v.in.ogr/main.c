@@ -2257,7 +2257,9 @@ int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *poSpatialFilter,
 		    ymaxl[layer] = MIN(ymaxl[layer], *ymax);
 		}
 	    }
-	    have_filter = 1;
+	    /* disable spatial filter based on extents as reported by OGR
+	     * because these extents can be wrong */ 
+	    /* have_filter = 1; */
 	}
 	else if (*xmin <= *xmax && *ymin <= *ymax) {
 	    xminl[layer] = *xmin;
