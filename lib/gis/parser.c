@@ -94,7 +94,6 @@ enum opt_error {
     REPLACED      = 5
 };
 
-#define KEYLENGTH 64
 
 #define MAX_MATCHES 50
 
@@ -120,7 +119,6 @@ static void split_opts(void);
 static void check_multiple_opts(void);
 static int check_overwrite(void);
 static void define_keywords(void);
-static void split_gisprompt(const char *, char *, char *, char *);
 static int module_gui_wx(void);
 static void append_error(const char *);
 static const char *get_renamed_option(const char *);
@@ -326,6 +324,7 @@ int G_parser(int argc, char **argv)
     int i;
     struct Option *opt;
     char force_gui = FALSE;
+    int print_json = 0;
 
     err = NULL;
     need_first_opt = 1;
@@ -520,6 +519,11 @@ int G_parser(int argc, char **argv)
 		st->overwrite = 1;
 	    }
 
+	    /* JSON print option */
+	    if (strcmp(ptr, "--json") == 0) {
+		print_json = 1;
+	    }
+
 	    /* Verbose option */
 	    else if (strcmp(ptr, "--v") == 0 || strcmp(ptr, "--verbose") == 0) {
 		char buff[32];
@@ -629,6 +633,12 @@ int G_parser(int argc, char **argv)
             }
         }
 	return -1;
+    }
+
+    /* Print the JSON definition of the command and exit */
+    if(print_json == 1) {
+        G__json();
+        exit(EXIT_SUCCESS);
     }
 
     if (!st->suppress_overwrite) {
@@ -874,7 +884,7 @@ int G__uses_new_gisprompt(void)
 	opt = &st->first_option;
 	while (opt) {
 	    if (opt->gisprompt) {
-		split_gisprompt(opt->gisprompt, age, element, desc);
+		G__split_gisprompt(opt->gisprompt, age, element, desc);
 		if (strcmp(age, "new") == 0)
 		    return 1;
 	    }
@@ -1568,7 +1578,7 @@ int check_overwrite(void)
     opt = &st->first_option;
     while (opt) {
 	if (opt->answer && opt->gisprompt) {
-	    split_gisprompt(opt->gisprompt, age, element, desc);
+	    G__split_gisprompt(opt->gisprompt, age, element, desc);
 
 	    if (strcmp(age, "new") == 0) {
 		int i;
@@ -1620,7 +1630,7 @@ int check_overwrite(void)
     return (error);
 }
 
-void split_gisprompt(const char *gisprompt, char *age, char *element,
+void G__split_gisprompt(const char *gisprompt, char *age, char *element,
 			    char *desc)
 {
     const char *ptr1;

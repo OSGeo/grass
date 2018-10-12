@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <grass/gis.h>
 
+#define KEYLENGTH 64
+
 struct Item
 {
     struct Option *option;
@@ -53,9 +55,11 @@ void G__usage_html(void);
 void G__usage_rest(void);
 void G__usage_text(void);
 void G__script(void);
+char *G__json(void);
 void G__wps_print_process_description(void);
 int  G__uses_new_gisprompt(void);
 void G__print_keywords(FILE *, void (*)(FILE *, const char *));
+void G__split_gisprompt(const char *, char *, char *, char *);
 
 void G__check_option_rules(void);
 void G__describe_option_rules(void);
