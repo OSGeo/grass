@@ -200,7 +200,7 @@ char *G__json(void)
 
     file_name = G_tempfile();
 
-    fprintf(stderr, "Filename: %s\n", file_name);
+    /* fprintf(stderr, "Filename: %s\n", file_name); */
     fp = fopen(file_name, "w+");
     if (fp == NULL)
     {
@@ -256,9 +256,6 @@ char *G__json(void)
     }
 
     /* Print the input options
-
-      TODO: Check for URLs in the answer to create import options
-      TODO: Check for mapset names in the answer and remove the current mapset name from the string
     */
     if (st->n_opts && num_inputs > 0) {
         struct Option *opt;
@@ -289,9 +286,6 @@ char *G__json(void)
     }
 
     /* Print the output options
-
-      TODO: Check export options in the answer to create export options
-      TODO: Check for mapset names in the answer and remove the mapset name from the string
     */
     if (st->n_opts && num_outputs > 0) {
         struct Option *opt;
