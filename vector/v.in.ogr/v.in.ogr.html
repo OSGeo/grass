@@ -396,34 +396,67 @@ v.in.ogr input=20141130_ST_UKSH.xml.gz layer=Okresy geometry=OriginalniHranice
 
 <h2>WARNINGS</h2>
 
-If a message like &quot;WARNING: Area size 1.3e-06, area not
-imported.&quot; appears, the <b>min_area</b> may be adjusted to a
+If a message like
+
+<div class="code"><pre>
+WARNING: Area size 1.3e-06, area not imported
+</pre></div>
+
+appears, the <b>min_area</b> may be adjusted to a
 smaller value so that all areas are imported. Otherwise tiny areas are
 filtered out during import (useful to polish digitization errors or
 non-topological data).
 
 <p>
-If a message like &quot;Try to import again, snapping with at least
-1e-008: 'snap=1e-008'&quot; appears, then the map to be imported
+If a message like
+
+<div class="code"><pre>
+Try to import again, snapping with at least 1e-008: 'snap=1e-008'
+</pre></div>
+appears, then the map to be imported
 contains topological errors. The message suggests a value for the
 <em>snap</em> parameter to be tried. For more details, see above in
 <em><a href="v.in.ogr.html#topology-cleaning">Topology Cleaning</a></em>.
 
 <h2>ERROR MESSAGES</h2>
 
-<dl>
-<dt>DBMI-DBF driver error: SQL parser error: syntax error,
-unexpected DESC, expecting NAME processing 'DESC'</dt>
-<dd>indicates that a column name corresponds to a reserved SQL word (here: 'DESC').
-A different column name should be used. The <b>columns</b> parameter can be used
-to assign different column names on the fly.</dd>
-<dt>Projection of dataset does not appear to match the current location.</dt>
-<dd>You need to create a location whose projection matches the data
-you wish to import. Try using <b>location</b> parameter to create a
-new location based upon the projection information in the file. If
+<h3>SQL syntax errors</h3>
+
+Depending on the currently selected SQL driver, error messages such as follows may arise:
+
+<div class="code"><pre>
+DBMI-SQLite driver error:
+Error in sqlite3_prepare():
+near "ORDER": syntax error
+</pre></div>
+
+Or:
+
+<div class="code"><pre>
+DBMI-DBF driver error:
+SQL parser error:
+syntax error, unexpected DESC, expecting NAME processing 'DESC
+</pre></div>
+
+This indicates that a column name in the input dataset corresponds to a reserved
+SQL word (here: 'ORDER' and 'DESC' respectively). A different column name has to be
+used in this case. The <b>columns</b> parameter can be used to assign different
+column names on the fly in order to avoid using reserved SQL words.
+
+For a list of SQL reserved words for SQLite (the default driver),
+see <a href="https://www.sqlite.org/lang_keywords.html">here</a>.
+
+<h3>Projection errors</h3>
+
+<div class="code"><pre>
+Projection of dataset does not appear to match the current location.
+</pre></div>
+
+Here you need to create or use a location whose projection matches that
+of the vector data you wish to import. Try using <b>location</b> parameter to
+create a new location based upon the projection information in the file. If
 desired, you can then re-project it to another location
-with <em><a href="v.proj.html">v.proj</a></em>.</dd>
-</dl>
+with <em><a href="v.proj.html">v.proj</a></em>.
 
 <h2>REFERENCES</h2>
 
