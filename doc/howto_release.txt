@@ -30,9 +30,11 @@ sh ~/software/grass-addons/tools/transifex_merge.sh
 make
 make verify
 # ... then fix .po files as needed.
-# after that push fixes to transifex:
-cd locale/transifex/
-tx --debug push -t
+#
+# requires https://trac.osgeo.org/grass/ticket/3539
+## after that push fixes to transifex:
+#cd locale/transifex/
+#tx --debug push -t
 
 #### end of i18N
 
