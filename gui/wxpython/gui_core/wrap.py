@@ -74,6 +74,19 @@ class Window(wx.Window):
                 wx.Window.SetToolTipString(self, tip)
 
 
+class Panel(wx.Panel):
+    """Wrapper around wx.Panel to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        wx.Panel.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            wx.Panel.SetToolTip(self, tipString=tip)
+        else:
+            wx.Panel.SetToolTipString(self, tip)
+
+
 class SpinCtrl(wx.SpinCtrl):
     """Wrapper around wx.SpinCtrl to have more control
     over the widget on different platforms"""

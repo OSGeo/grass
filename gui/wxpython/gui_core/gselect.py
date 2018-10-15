@@ -79,7 +79,7 @@ from core.settings import UserSettings
 from core.debug import Debug
 from gui_core.vselect import VectorSelectBase
 from gui_core.wrap import TreeCtrl, Button, StaticText, StaticBox, \
-    TextCtrl
+    TextCtrl, Panel
 
 from grass.pydispatch.signal import Signal
 
@@ -2368,7 +2368,7 @@ class OgrTypeSelect(wx.Panel):
             return 'boundary'
 
 
-class CoordinatesSelect(wx.Panel):
+class CoordinatesSelect(Panel):
 
     def __init__(self, parent, giface, multiple=False, **kwargs):
         """Widget to get coordinates from map window  by mouse click
