@@ -14,7 +14,7 @@
 # PURPOSE:      fills NULL (no data areas) in raster maps
 #               The script respects a user mask (MASK) if present.
 #
-# COPYRIGHT:    (C) 2001-2016 by the GRASS Development Team
+# COPYRIGHT:    (C) 2001-2018 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -97,6 +97,15 @@
 #% answer: 0.01
 #% guisection: Spline options
 #%end
+#%option
+#% key: memory
+#% type: integer
+#% required: no
+#% multiple: no
+#% label: Maximum memory to be used (in MB)
+#% description: Cache size for raster rows
+#% answer: 300
+#%end
 
 
 import sys
@@ -142,6 +151,7 @@ def main():
     segmax = int(options['segmax'])
     npmin = int(options['npmin'])
     lambda_ = float(options['lambda'])
+    memory = options['memory']
     quiet = True  # FIXME
     mapset = grass.gisenv()['MAPSET']
     unique = str(os.getpid())  # Shouldn't we use temp name?
@@ -463,6 +473,7 @@ def main():
                     ew_step=3 * reg['ewres'],
                     ns_step=3 * reg['nsres'],
                     lambda_=lambda_,
+                    memory=memory,
                     flags='n',
                     stderr=subprocess.PIPE,
                     env=new_env)
@@ -483,6 +494,7 @@ def main():
                     ew_step=3 * reg['ewres'],
                     ns_step=3 * reg['nsres'],
                     lambda_=lambda_,
+                    memory=memory,
                     flags='n',
                     stderr=subprocess.PIPE,
                     env=new_env)
