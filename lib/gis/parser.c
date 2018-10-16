@@ -508,6 +508,11 @@ int G_parser(int argc, char **argv)
 	while (--argc) {
 	    ptr = *(++argv);
 
+	    /* JSON print option */
+	    if (strcmp(ptr, "--json") == 0) {
+		print_json = 1;
+	    }
+
 	    if (strcmp(ptr, "help") == 0 || strcmp(ptr, "--h") == 0 ||
 		strcmp(ptr, "-help") == 0 || strcmp(ptr, "--help") == 0) {
 		G_usage();
@@ -517,11 +522,6 @@ int G_parser(int argc, char **argv)
 	    /* Overwrite option */
 	    if (strcmp(ptr, "--o") == 0 || strcmp(ptr, "--overwrite") == 0) {
 		st->overwrite = 1;
-	    }
-
-	    /* JSON print option */
-	    if (strcmp(ptr, "--json") == 0) {
-		print_json = 1;
 	    }
 
 	    /* Verbose option */
