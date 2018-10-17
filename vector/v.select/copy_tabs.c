@@ -83,7 +83,7 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out,
                           OFi->database, OFi->driver);
         db_set_error_handler_driver(Driver);
         
-        if (db_create_index2(Driver, OFi->table, OFi->key) != DB_OK)
+        if (db_create_index2(Driver, OFi->table, IFi->key) != DB_OK)
             G_warning(_("Unable to create index"));
         if (db_grant_on_table
 	    (Driver, OFi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
