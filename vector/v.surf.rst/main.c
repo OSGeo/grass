@@ -281,7 +281,8 @@ int main(int argc, char *argv[])
     parm.rsm->key = "smooth";
     parm.rsm->type = TYPE_DOUBLE;
     parm.rsm->required = NO;
-    parm.rsm->description = _("Smoothing parameter");
+    parm.rsm->label = _("Smoothing parameter");
+    parm.rsm->description = _("Smoothing is by default 0.5 unless smooth_column is specified");
     parm.rsm->guisection = _("Parameters");
 
     parm.scol = G_define_option();
