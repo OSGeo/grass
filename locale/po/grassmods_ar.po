@@ -39325,14 +39325,14 @@ msgstr ""
 
 #: ../vector/v.overlay/main.c:118
 msgid ""
-"also known as 'difference' (features from ainput not overlayed by features "
+"also known as 'difference' (features from ainput not overlaid by features "
 "from binput)"
 msgstr ""
 
 #: ../vector/v.overlay/main.c:120
 msgid ""
 "also known as 'symmetrical difference' (features from either ainput or "
-"binput but not those from ainput overlayed by binput (only for atype=area)"
+"binput but not those from ainput overlaid by binput (only for atype=area)"
 msgstr ""
 
 #: ../vector/v.overlay/main.c:131
