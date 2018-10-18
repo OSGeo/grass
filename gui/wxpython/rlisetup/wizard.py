@@ -886,7 +886,7 @@ class SamplingAreasPage(TitledPage):
                                              _("Sample units"),
                                              _("Moving window"),
                                              _("Select areas from the\n"
-                                               "overlayed vector map")],
+                                               "overlaid vector map")],
                                     majorDimension=1,
                                     style=wx.RA_SPECIFY_COLS | wx.NO_BORDER)
         # layout
