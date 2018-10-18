@@ -17487,7 +17487,7 @@ msgstr "Unità del campionamento"
 #: ../gui/wxpython/rlisetup/wizard.py:887
 msgid ""
 "Select areas from the\n"
-"overlayed vector map"
+"overlaid vector map"
 msgstr ""
 "Seleziona le aree dal\n"
 "vettoriale di overlay"
