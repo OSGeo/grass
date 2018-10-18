@@ -17572,7 +17572,7 @@ msgstr "Unidades muestrales"
 #: ../gui/wxpython/rlisetup/wizard.py:887
 msgid ""
 "Select areas from the\n"
-"overlayed vector map"
+"overlaid vector map"
 msgstr ""
 "Seleccionar áreas desde el\n"
 "mapa vectorial superpuesto"

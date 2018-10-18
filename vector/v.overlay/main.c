@@ -116,9 +116,9 @@ int main(int argc, char *argv[])
 	       _("also known as 'intersection' in GIS"),
 	       _("also known as 'union' in GIS (only for atype=area)"),
 	       _("also known as 'difference' (features from ainput not "
-                 "overlayed by features from binput)"),
+                 "overlaid by features from binput)"),
 	       _("also known as 'symmetrical difference' (features from either ainput or binput but "
-		 "not those from ainput overlayed by binput (only "
+		 "not those from ainput overlaid by binput (only "
 		 "for atype=area)"));
     operator_opt->descriptions = desc;
 
