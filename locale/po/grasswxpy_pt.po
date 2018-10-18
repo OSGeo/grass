@@ -17340,7 +17340,7 @@ msgstr ""
 #: ../gui/wxpython/rlisetup/wizard.py:887
 msgid ""
 "Select areas from the\n"
-"overlayed vector map"
+"overlaid vector map"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:898

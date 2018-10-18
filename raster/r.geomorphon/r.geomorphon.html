@@ -68,7 +68,7 @@ especially with low resolution DEMS.
 <DT><b>dist</b></DT>
 <DD>>Flat distance. This is additional parameter defining the distance above which the threshold starts to decrease to avoid problems with pseudo-flat line-of-sights if real elevation difference appears on the distance where its value is higher DO POPRAWKI </DD>
 <DT><b>form</b></DT>
-<DD>Returns geomorphic map with 10 most popular terrestial forms. Legend for forms, its definition by the number of <em>+</em> and <em>-</em> and its idealized  visualisation are presented at the image.
+<DD>Returns geomorphic map with 10 most popular terrestrial forms. Legend for forms, its definition by the number of <em>+</em> and <em>-</em> and its idealized  visualisation are presented at the image.
 <center>
 	
 <h3>Forms represented by geomorphons:</h3>
@@ -113,14 +113,14 @@ be helpful to avoid this problem.
 
 <h2>EXAMPLES</h2>
 
-<h3>Geomorphon calculation: extraction of terrestial landforms</h3>
+<h3>Geomorphon calculation: extraction of terrestrial landforms</h3>
 Geomorphon calculation example using the EU DEM 25m:
 
 <div class="code"><pre>
 g.region raster=eu_dem_25m -p
 r.geomorphon elevation=eu_dem_25m forms=eu_dem_25m_geomorph
 
-# verify terrestial landforms found in DEM
+# verify terrestrial landforms found in DEM
 r.category eu_dem_25m_geomorph
  1  flat
  2  summit
@@ -141,7 +141,7 @@ r.category eu_dem_25m_geomorph
 
 <h3>Extraction of summits</h3>
 
-Using the resulting terrestial landforms map, single landforms can
+Using the resulting terrestrial landforms map, single landforms can
 be extracted, e.g. the summits, and converted into a vector point map:
 
 <div class="code"><pre>
