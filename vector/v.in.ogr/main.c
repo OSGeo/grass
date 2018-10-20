@@ -2179,6 +2179,8 @@ int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *poSpatialFilter,
 
 	    /* use OGR extents if possible, needed to skip corrupted data
 	     * in OGR dsn/layer */
+	    /* BUT: OGR extents are unreliable, 
+	     * sometimes excluding valid features */
 	    have_ogr_extent[layer] = 1;
 	}
 	/* OGR_L_GetExtent(): 
@@ -2236,7 +2238,10 @@ int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *poSpatialFilter,
     for (layer = 0; layer < nlayers; layer++) {
 	int have_filter = 0;
 
-	if (have_ogr_extent[layer]) {
+	/* OGR extents are unreliable, 
+	 * sometimes excluding valid features:
+	 * disabled */
+	if (0 && have_ogr_extent[layer]) {
 	    if (*xmin <= *xmax && *ymin <= *ymax) {
 		/* check for any overlap */
 		if (xminl[layer] > *xmax || xmaxl[layer] < *xmin ||
@@ -2257,9 +2262,7 @@ int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *poSpatialFilter,
 		    ymaxl[layer] = MIN(ymaxl[layer], *ymax);
 		}
 	    }
-	    /* disable spatial filter based on extents as reported by OGR
-	     * because these extents can be wrong */ 
-	    /* have_filter = 1; */
+	    have_filter = 1;
 	}
 	else if (*xmin <= *xmax && *ymin <= *ymax) {
 	    xminl[layer] = *xmin;
