@@ -39,7 +39,7 @@ class SimpleModule(Module):
     >>> str(colors.outputs.stdout)
     ''
     >>> colors.outputs.stderr.strip()
-    "Color table for raster map <test_a> set to 'rules'"
+    u"Color table for raster map <test_a> set to 'rules'"
     """
     def __init__(self, cmd, *args, **kargs):
         for banned in ['stdout_', 'stderr_', 'finish_', 'run_']:
