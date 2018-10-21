@@ -508,15 +508,16 @@ int G_parser(int argc, char **argv)
 	while (--argc) {
 	    ptr = *(++argv);
 
-	    /* JSON print option */
-	    if (strcmp(ptr, "--json") == 0) {
-		print_json = 1;
-	    }
-
 	    if (strcmp(ptr, "help") == 0 || strcmp(ptr, "--h") == 0 ||
 		strcmp(ptr, "-help") == 0 || strcmp(ptr, "--help") == 0) {
 		G_usage();
 		exit(EXIT_SUCCESS);
+	    }
+
+	    /* JSON print option */
+	    if (strcmp(ptr, "--json") == 0) {
+		print_json = 1;
+		continue;
 	    }
 
 	    /* Overwrite option */
