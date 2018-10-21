@@ -395,7 +395,7 @@ class Module(object):
     >>> colors.outputs["stdout"].value
     u''
     >>> colors.outputs["stderr"].value.strip()
-    "Color table for raster map <test_a> set to 'rules'"
+    u"Color table for raster map <test_a> set to 'rules'"
 
     >>> colors = Module("r.colors", map="test_a", rules="-",
     ...                 run_=False, finish_=False, stdin_=PIPE)
