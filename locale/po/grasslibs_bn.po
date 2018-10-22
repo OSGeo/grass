@@ -2,14 +2,15 @@
 # Copyright (C) 2017 GRASS Development Team
 # This file is distributed under the same license as the GRASS GIS package.
 # transifex generated, 2017
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_bn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-27 23:14-0700\n"
 "PO-Revision-Date: 2018-09-28 23:33+0200\n"
-"Language-Team: Bengali (https://www.transifex.com/grass-gis/teams/45198/bn/)\n"
+"Language-Team: Bengali (https://www.transifex.com/grass-gis/teams/45198/"
+"bn/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1054,7 +1055,7 @@ msgid "Unable to write PNG"
 msgstr ""
 
 #: ../lib/pngdriver/write_png.c:71 ../lib/pngdriver/write_png.c:75
-#: ../lib/pngdriver/read_png.c:64
+#: ../lib/pngdriver/read_png.c:64 ../lib/pngdriver/read_png.c:60
 msgid "Unable to allocate PNG structure"
 msgstr ""
 
@@ -1069,10 +1070,6 @@ msgstr ""
 
 #: ../lib/pngdriver/read_png.c:42
 msgid "Unable to read PNG"
-msgstr ""
-
-#: ../lib/pngdriver/read_png.c:60
-msgid "Unable to allocate PNG structure"
 msgstr ""
 
 #: ../lib/pngdriver/read_png.c:67
@@ -1119,8 +1116,8 @@ msgstr ""
 #: ../lib/rst/interp_float/interp2d.c:232
 #, c-format
 msgid ""
-"Overshoot - increase in tension suggested. Overshoot occurs at (%d,%d) cell."
-" Z-value %f, zmin %f, zmax %f."
+"Overshoot - increase in tension suggested. Overshoot occurs at (%d,%d) cell. "
+"Z-value %f, zmin %f, zmax %f."
 msgstr ""
 
 #: ../lib/rst/interp_float/resout2d.c:77
@@ -1221,8 +1218,8 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given "
-"NPMIN=%d"
+"%d points given for interpolation (after thinning) is less than given NPMIN="
+"%d"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:282
@@ -1900,9 +1897,9 @@ msgstr ""
 #: ../lib/python/script/core.py:307
 #, python-format
 msgid ""
-"To run the module <%s> add underscore at the end of the option <%s> to avoid"
-" conflict with Python keywords. Underscore at the beginning is depreciated "
-"in GRASS GIS 7.0 and will be removed in version 7.1."
+"To run the module <%s> add underscore at the end of the option <%s> to avoid "
+"conflict with Python keywords. Underscore at the beginning is depreciated in "
+"GRASS GIS 7.0 and will be removed in version 7.1."
 msgstr ""
 
 #: ../lib/python/script/core.py:987
@@ -2199,8 +2196,8 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1880
 #, python-format
 msgid ""
-"Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database."
-" The mapset of the dataset does not match the current mapset"
+"Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database. "
+"The mapset of the dataset does not match the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1889
@@ -2238,8 +2235,8 @@ msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2066
 msgid ""
-"Only a map that was inserted in the temporal database can be registered in a"
-" space time dataset"
+"Only a map that was inserted in the temporal database can be registered in a "
+"space time dataset"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2089
@@ -2309,8 +2306,8 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2224
 #, python-format
 msgid ""
-"Map <%(map)s> with layer %(l)s is not registered in space time dataset "
-"<%(base)s>"
+"Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
+"%(base)s>"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2230
@@ -2325,15 +2322,14 @@ msgstr ""
 #: ../lib/python/temporal/abstract_dataset.py:469
 #, python-format
 msgid ""
-"Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
-" The mapset of the dataset does not match the current mapset"
+"Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. "
+"The mapset of the dataset does not match the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2291
 #, python-format
 msgid ""
-"Update metadata, spatial and temporal extent from all registered maps of "
-"<%s>"
+"Update metadata, spatial and temporal extent from all registered maps of <%s>"
 msgstr ""
 
 #: ../lib/python/temporal/stds_import.py:85
@@ -2499,8 +2495,8 @@ msgstr ""
 #: ../lib/python/temporal/temporal_vector_algebra.py:386
 #, python-format
 msgid ""
-"Error vector maps with basename %s exist. Use --o flag to overwrite existing"
-" file"
+"Error vector maps with basename %s exist. Use --o flag to overwrite existing "
+"file"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_vector_algebra.py:419
@@ -2585,8 +2581,8 @@ msgstr ""
 #: ../lib/python/temporal/temporal_algebra.py:1200
 #, python-format
 msgid ""
-"Wrong temporal type of space time dataset <%s>"
-"                                       <%s> time is required"
+"Wrong temporal type of space time dataset <"
+"%s>                                       <%s> time is required"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_algebra.py:1220
@@ -2757,22 +2753,22 @@ msgstr ""
 #: ../lib/python/temporal/register.py:245
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s> with layer %(l)s. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:252
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s>. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s>. Overwrite flag is not set."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:276
 #, python-format
 msgid ""
-"Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are"
-" different."
+"Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are "
+"different."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:282
@@ -2806,8 +2802,8 @@ msgstr ""
 #: ../lib/python/temporal/register.py:422
 #, python-format
 msgid ""
-"Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s -"
-" %(end)s"
+"Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - "
+"%(end)s"
 msgstr ""
 
 #: ../lib/python/temporal/register.py:427
@@ -2834,8 +2830,8 @@ msgstr ""
 #: ../lib/python/temporal/aggregation.py:141
 #, python-format
 msgid ""
-"Raster map <%(name)s> is already in temporal database, use overwrite flag to"
-" overwrite"
+"Raster map <%(name)s> is already in temporal database, use overwrite flag to "
+"overwrite"
 msgstr ""
 
 #: ../lib/python/temporal/aggregation.py:146
@@ -2889,8 +2885,7 @@ msgstr ""
 msgid "Unable to parse time string: %s"
 msgstr ""
 
-#: ../lib/python/temporal/sampling.py:95
-#: ../lib/python/temporal/sampling.py:100
+#: ../lib/python/temporal/sampling.py:95 ../lib/python/temporal/sampling.py:100
 #, python-format
 msgid "Dataset <%s> not found in temporal database"
 msgstr ""
@@ -2985,8 +2980,7 @@ msgstr ""
 #: ../lib/python/temporal/abstract_map_dataset.py:365
 #, python-format
 msgid ""
-"End time must be of type datetime for %(type)s map <%(id)s> with layer: "
-"%(l)s"
+"End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_map_dataset.py:372
@@ -3022,15 +3016,15 @@ msgstr ""
 #: ../lib/python/temporal/abstract_map_dataset.py:476
 #, python-format
 msgid ""
-"End time must be greater than start time for %(typ)s map <%(id)s> with layer"
-" %(l)s"
+"End time must be greater than start time for %(typ)s map <%(id)s> with layer "
+"%(l)s"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_map_dataset.py:800
 #, python-format
 msgid ""
-"Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is"
-" greater than end time"
+"Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is "
+"greater than end time"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_map_dataset.py:806
@@ -3064,8 +3058,8 @@ msgstr ""
 #: ../lib/python/temporal/abstract_dataset.py:386
 #, python-format
 msgid ""
-"Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database."
-" The mapset of the dataset does not match the current mapset"
+"Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database. "
+"The mapset of the dataset does not match the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/stds_export.py:107
@@ -3112,8 +3106,8 @@ msgstr ""
 
 #: ../lib/python/temporal/mapcalc.py:155
 msgid ""
-"Found more than a single map in a sample granule. Only the first map is used"
-" for computation. Use t.rast.aggregate.ds to create synchronous raster "
+"Found more than a single map in a sample granule. Only the first map is used "
+"for computation. Use t.rast.aggregate.ds to create synchronous raster "
 "datasets."
 msgstr ""
 
@@ -3488,8 +3482,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:860
 #, python-format
-msgid ""
-"<%s> is not a valid GRASS Location because PERMANENT is not a directory"
+msgid "<%s> is not a valid GRASS Location because PERMANENT is not a directory"
 msgstr ""
 
 #: ../lib/init/grass.py:865
@@ -3552,8 +3545,10 @@ msgstr ""
 #: ../lib/init/grass.py:1015
 #, python-brace-format
 msgid ""
-"Error in GUI startup. See messages above (if any) and if necessary, please report this error to the GRASS developers.\n"
-"On systems with package manager, make sure you have the right GUI package, probably named grass-gui, installed.\n"
+"Error in GUI startup. See messages above (if any) and if necessary, please "
+"report this error to the GRASS developers.\n"
+"On systems with package manager, make sure you have the right GUI package, "
+"probably named grass-gui, installed.\n"
 "To run GRASS GIS in text mode use the -text flag.\n"
 "Use '--help' for further options\n"
 "     {cmd_name} --help\n"
@@ -3606,8 +3601,11 @@ msgstr ""
 #: ../lib/init/grass.py:1255
 #, python-format
 msgid ""
-"%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed.\n"
-"You can force launching GRASS using -f flag (note that you need permission for this operation). Have another look in the processor manager just to be sure..."
+"%(user)s is currently running GRASS in selected mapset (file %(file)s "
+"found). Concurrent use not allowed.\n"
+"You can force launching GRASS using -f flag (note that you need permission "
+"for this operation). Have another look in the processor manager just to be "
+"sure..."
 msgstr ""
 
 #: ../lib/init/grass.py:1262
@@ -3640,7 +3638,8 @@ msgstr ""
 #: ../lib/init/grass.py:1378
 #, python-format
 msgid ""
-"Job file <%s> has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
+"Job file <%s> has been defined in the 'GRASS_BATCH_JOB' variable but not "
+"found. Exiting.\n"
 "\n"
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
@@ -3983,8 +3982,8 @@ msgstr ""
 #: ../lib/raster/get_cellhd.c:66
 #, c-format
 msgid ""
-"Unable to read header file for raster map <%s@%s>. It is a reclass of raster"
-" map <%s@%s> %s"
+"Unable to read header file for raster map <%s@%s>. It is a reclass of raster "
+"map <%s@%s> %s"
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:70
@@ -4210,8 +4209,8 @@ msgstr ""
 #: ../lib/raster/open.c:191
 #, c-format
 msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map "
-"<%s@%s> which does not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
+"%s> which does not exist"
 msgstr ""
 
 #: ../lib/raster/open.c:196
@@ -4549,8 +4548,8 @@ msgstr ""
 #: ../lib/vector/diglib/cindex_rw.c:156
 #, c-format
 msgid ""
-"This version of GRASS (%d.%d) is too old to read this category index format."
-" Try to rebuild topology or upgrade GRASS to at least version %d."
+"This version of GRASS (%d.%d) is too old to read this category index format. "
+"Try to rebuild topology or upgrade GRASS to at least version %d."
 msgstr ""
 
 #: ../lib/vector/diglib/file.c:159
@@ -4777,8 +4776,7 @@ msgstr ""
 
 #: ../lib/vector/diglib/test.c:165
 #, c-format
-msgid ""
-"Error in read/write portable char, byte_order = %d Written: %d Read: %d"
+msgid "Error in read/write portable char, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
 #: ../lib/vector/rtree/test_suite/test_basics.c:40
@@ -5018,8 +5016,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open_nat.c:156
 #, c-format
 msgid ""
-"Coor file of vector <%s@%s> is shorter than it should be (%ld bytes "
-"missing)."
+"Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
 msgstr ""
 
 #: ../lib/vector/Vlib/box.c:264
@@ -5161,24 +5158,30 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  <%d>.\n"
-"The unique categories layer is not valid therefore you will probably get incorrect results."
+"There exists more than one point of node <%d> with unique category field  <"
+"%d>.\n"
+"The unique categories layer is not valid therefore you will probably get "
+"incorrect results."
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:393
 #, c-format
 msgid ""
-"Unable to find point representing intersection <%d> in unique categories field <%d>.\n"
+"Unable to find point representing intersection <%d> in unique categories "
+"field <%d>.\n"
 "Cost for the intersection was set to 0.\n"
-"The unique categories layer is not valid therefore you will probably get incorrect results."
+"The unique categories layer is not valid therefore you will probably get "
+"incorrect results."
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:407
 #, c-format
 msgid ""
-"Unable to find node for point representing intersection <%d> in unique categories field <%d>.\n"
+"Unable to find node for point representing intersection <%d> in unique "
+"categories field <%d>.\n"
 "Cost for the intersection was set to 0.\n"
-"The unique categories layer is not valid therefore you will probably get incorrect results."
+"The unique categories layer is not valid therefore you will probably get "
+"incorrect results."
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:432
@@ -5203,7 +5206,8 @@ msgstr ""
 #, c-format
 msgid ""
 "Line with id <%d> has more unique categories defined in field <%d>.\n"
-"The unique categories layer is not valid therefore you will probably get incorrect results."
+"The unique categories layer is not valid therefore you will probably get "
+"incorrect results."
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:579
@@ -5306,8 +5310,8 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open_pg.c:559
 msgid ""
-"Connection to PostgreSQL database failed. Try to set up username/password by"
-" db.login."
+"Connection to PostgreSQL database failed. Try to set up username/password by "
+"db.login."
 msgstr ""
 
 #: ../lib/vector/Vlib/open_pg.c:566
@@ -6820,7 +6824,8 @@ msgstr ""
 #: ../lib/vector/Vlib/net_analyze.c:295 ../lib/vector/Vlib/net_analyze.c:336
 #, c-format
 msgid ""
-"There exists more than one point on node <%d> with unique category in field  <%d>.\n"
+"There exists more than one point on node <%d> with unique category in field  "
+"<%d>.\n"
 "The unique category layer may not be valid."
 msgstr ""
 
@@ -7103,8 +7108,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:89
 msgid ""
-"Random read is not supported by OGR for this layer. Unable to build "
-"topology."
+"Random read is not supported by OGR for this layer. Unable to build topology."
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:139
@@ -8014,15 +8018,14 @@ msgstr ""
 msgid "parse error"
 msgstr ""
 
-#: ../lib/gis/cmprzlib.c:99 ../lib/gis/cmprzlib.c:195
-#: ../lib/gis/compress.c:303 ../lib/gis/cmprbzip.c:90
-#: ../lib/gis/cmprbzip.c:164 ../lib/gis/cmprlz4.c:81 ../lib/gis/cmprlz4.c:138
+#: ../lib/gis/cmprzlib.c:99 ../lib/gis/cmprzlib.c:195 ../lib/gis/compress.c:303
+#: ../lib/gis/cmprbzip.c:90 ../lib/gis/cmprbzip.c:164 ../lib/gis/cmprlz4.c:81
+#: ../lib/gis/cmprlz4.c:138
 msgid "No source buffer"
 msgstr ""
 
-#: ../lib/gis/cmprzlib.c:102 ../lib/gis/cmprzlib.c:198
-#: ../lib/gis/cmprbzip.c:93 ../lib/gis/cmprbzip.c:167 ../lib/gis/cmprlz4.c:84
-#: ../lib/gis/cmprlz4.c:141
+#: ../lib/gis/cmprzlib.c:102 ../lib/gis/cmprzlib.c:198 ../lib/gis/cmprbzip.c:93
+#: ../lib/gis/cmprbzip.c:167 ../lib/gis/cmprlz4.c:84 ../lib/gis/cmprlz4.c:141
 msgid "No destination buffer"
 msgstr ""
 
@@ -8089,8 +8092,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:194
 msgid ""
-"Do not use this option if schemas are not supported by driver/database "
-"server"
+"Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:203
@@ -9829,5 +9831,6 @@ msgstr ""
 
 #: ../lib/gis/view.c:549
 #, c-format
-msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgid ""
+" Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
 msgstr ""
