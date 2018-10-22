@@ -3560,7 +3560,7 @@ msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:745
 #, fuzzy, c-format
-msgid "Unable to read find raster <%s>"
+msgid "Unable to find raster <%s>"
 msgstr "ne morem spremeniti direktorija v %s"
 
 #: ../lib/imagery/iscatt_core.c:755
