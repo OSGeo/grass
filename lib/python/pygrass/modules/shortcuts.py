@@ -26,7 +26,7 @@ class MetaModule(object):
        >>> g_list.run()
        Module('g.list')
        >>> g_list.outputs.stdout                         # doctest: +ELLIPSIS
-       '...basin...soils...'
+       u'...basin...elevation...'
        >>> r = MetaModule('r')
        >>> what = r.what
        >>> what.description
