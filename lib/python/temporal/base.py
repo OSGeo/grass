@@ -563,7 +563,7 @@ class DatasetBase(SQLDatabaseInterface):
             mapset=PERMANENT
             creator=soeren
             temporal_type=absolute
-            creation_time=2001-01-01 00:00:00
+            creation_time='2001-01-01 00:00:00'
 
     """
 
@@ -860,8 +860,8 @@ class STDSBase(DatasetBase):
         mapset=PERMANENT
         creator=soeren
         temporal_type=absolute
-        creation_time=2001-01-01 00:00:00
-        modification_time=2001-01-01 00:00:00
+        creation_time='2001-01-01 00:00:00'
+        modification_time='2001-01-01 00:00:00'
         semantic_type=average
 
     """

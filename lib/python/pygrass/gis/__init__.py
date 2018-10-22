@@ -14,6 +14,9 @@ import grass.lib.gis as libgis
 from grass.pygrass.errors import GrassError
 from grass.script.utils import encode, decode
 
+test_vector_name = "Gis_test_vector"
+test_raster_name = "Gis_test_raster"
+
 libgis.G_gisinit('')
 
 
@@ -465,9 +468,6 @@ if __name__ == "__main__":
     import doctest
     from grass.pygrass import utils
     from grass.script.core import run_command
-
-    test_vector_name = "Gis_test_vector"
-    test_raster_name = "Gis_test_raster"
 
     utils.create_test_vector_map(test_vector_name)
     run_command("g.region", n=50, s=0, e=60, w=0, res=1)

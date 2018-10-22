@@ -1075,7 +1075,7 @@ class CLibrariesInterface(RPCServerBase):
            >>> kvp['area']
            0
            >>> kvp['lines']
-           10
+           0
            >>> kvp['line']
            0
            >>> 'columns' in kvp
