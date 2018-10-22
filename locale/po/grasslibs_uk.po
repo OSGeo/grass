@@ -3126,7 +3126,7 @@ msgid "Unable to read PNG"
 msgstr ""
 
 #: ../lib/pngdriver/read_png.c:60
-msgid "Unable allocate PNG structure"
+msgid "Unable to allocate PNG structure"
 msgstr ""
 
 #: ../lib/pngdriver/read_png.c:64 ../lib/pngdriver/write_png.c:71

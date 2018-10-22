@@ -3338,7 +3338,7 @@ msgstr " %s لم يمكن فتح"
 
 #: ../lib/pngdriver/read_png.c:60
 #, fuzzy
-msgid "Unable allocate PNG structure"
+msgid "Unable to allocate PNG structure"
 msgstr "لم يمكن توفير ذاكرة كافية\n"
 
 #: ../lib/pngdriver/read_png.c:64 ../lib/pngdriver/write_png.c:71
