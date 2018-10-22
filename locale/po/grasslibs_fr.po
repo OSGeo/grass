@@ -3358,7 +3358,7 @@ msgstr "Données non cohérentes. La valeur calculée pour le graphique est en d
 
 #: ../lib/imagery/iscatt_core.c:745
 #, c-format
-msgid "Unable to read find raster <%s>"
+msgid "Unable to find raster <%s>"
 msgstr "Impossible de lire le raster <%s>"
 
 #: ../lib/imagery/iscatt_core.c:755

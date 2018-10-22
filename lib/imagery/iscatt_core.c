@@ -742,7 +742,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 		free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
 					 bands_ids, NULL, NULL,
 					 scatt_conds->n_a_cats);
-		G_warning(_("Unable to read find raster <%s>"),
+		G_warning(_("Unable to find raster <%s>"),
 			  bands[band_id]);
 		return -1;
 	    }

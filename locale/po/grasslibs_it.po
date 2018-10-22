@@ -3336,7 +3336,7 @@ msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:745
 #, c-format
-msgid "Unable to read find raster <%s>"
+msgid "Unable to find raster <%s>"
 msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:755
