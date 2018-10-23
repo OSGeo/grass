@@ -110,7 +110,7 @@ svn ci -m"GRASS GIS $VERSION" include/VERSION
 svn up
 
 # Create Changelog file on release branch:
-# http://ch.tudelft.nl/~arthur/svn2cl/
+# https://arthurdejong.org/svn2cl/
 svn2cl
 mv ChangeLog ChangeLog_$VERSION
 head ChangeLog_$VERSION
@@ -210,7 +210,7 @@ vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
   - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.4.x --> Edit Milestone
     - also: Retarget associated open tickets to milestone 7.4.x
   - Batch modify tickets, set to next milestone (update this query accordingly: two entries to change)
-     https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.4.0&milestone=7.4.1&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority
+     https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.6.0&milestone=7.6.1&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority
      - Set max items to 1000, then select all shown tickets via Status: assigned/new/reopened sections
      - Scroll down to "Batch modify": under the "Comment" section, add Field "Milestone" and set to next version
      - then use "Change ticket" button, done.
@@ -233,7 +233,7 @@ vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
 
   - Modify grass_copy_wwwroot.sh accordingly, eg.
 
-     copy_addon 761RC1 7.666666.1RC1
+     copy_addon 761RC1 7.6.1RC1
 
 # Launchpad notes:
 
