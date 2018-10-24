@@ -1,22 +1,20 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.relief</em> creates a raster shaded relief map based on 
-current resolution settings and on sun altitude, azimuth, and 
-z-exaggeration values entered by the user. If no output shademap 
-name is given, the new shaded relief map is named <em>&lt;input_map
-&gt;.shade</em>. The map is assigned a grey-scale color table.
+<em>r.relief</em> creates a raster shaded relief map based on current
+resolution settings and on sun altitude, azimuth, and z-exaggeration
+values entered by the user.
 
 <p>The parameters controlling the shading are:
 <ol>
-<li>A raster map layer to provide elevation values for the shaded 
-relief map.  Typically, this would be a map layer of elevation; 
+<li>An <b>input</b> raster map to provide elevation values for the shaded 
+relief map. Typically, this would be a map layer of elevation; 
 however, any raster map layer can be named.
 
 <li>The <b>altitude</b> of the sun in degrees above the horizon
 (a value between 0 and 90 degrees).
 
-<li>The <b>azimuth</b> of the sun in degrees to the east of north
-(a value between 0 and 360 degrees; clockwise from north).
+<li>The <b>azimuth</b> of the sun in degrees to the east of north (a
+value between 0 and 360 degrees; clockwise from north)
 
 <li>The scaling parameter, which compensates for a different 
 horizontal <b>scale</b> than vertical scale. If <b>scale</b> is a 
@@ -25,7 +23,7 @@ calculate the shading. (Default=1.0 for equivalent horizontal and
 vertical scales.)
 
 <li>The <b>zscale</b> exaggeration factor that changes the apparent relief
-for the shaded relief map.  This can be any positive (or negative) floating
+for the shaded relief map. This can be any positive (or negative) floating
 point value. (Default=1.0)
 
 <li>Horizontal distances are calculated in meters, using geodesic 
@@ -42,10 +40,11 @@ shaded relief map.
 
 <h2>NOTES</h2>
 
-To visually improve the result of shade maps from low resolution elevation
-models, use <em>r.resamp.interp</em> with bilinear or bicubic method to
-resample the DEM at higher resolution. <em>r.relief</em> is then
-run on the resampled DEM.
+To visually improve the result of shade maps from low resolution
+elevation models,
+use <em><a href="r.resamp.interp.html">r.resamp.interp</a></em> with
+bilinear or bicubic method to resample the DEM at higher
+resolution. <em>r.relief</em> is then run on the resampled DEM.
 
 <h2>EXAMPLES</h2>
 
@@ -67,7 +66,10 @@ r.relief input=elevation output=elevation_shade
 
 <h3>Colorizing a shaded relief map</h3>
 
-Color can be added later using <em><a href="r.shade.html">r.shade</a></em>:
+Color can be added later
+using <em><a href="r.shade.html">r.shade</a></em>
+or <em><a href="d.shade.html">d.shade</a></em>:
+
 <div class="code"><pre>
 r.shade shade=elevation_shade color=elevation output=elevation_shaded
 </pre></div>
@@ -89,16 +91,17 @@ The data range of shaded relief maps usually does not permit exporting the
 map to GeoTIFF format along with its associated color table due to limitations
 in the GeoTIFF format.
 <p>
-The most simple way to export it while even reducing the file size is to
-export as palette byte map. This requires a conversion done in <tt>r.mapcalc</tt>,
-using the # operator to convert map category values to their grey scale
+The most simple way to export it while even reducing the file size is
+to export as palette byte map. This requires a conversion done
+in <em><a href="r.mapcalc.html">r.mapcalc</a></em>, using the #
+operator to convert map category values to their grey scale
 equivalents:
 
 <div class="code"><pre>
 # using the map created above
 
 # create new map from map category values
-r.mapcalc "elevation_shade_byte = #elevation_shade"
+r.mapcalc expression="elevation_shade_byte = #elevation_shade"
 
 # verify data range
 r.info elevation_shade_byte
@@ -118,13 +121,6 @@ gdaladdo --config GDAL_CACHEMAX 2000 elevation_shade.tif 2 4 8 16
 <h2>SEE ALSO</h2>
 
 <p>
-<!--
-  RGB version not ported to GRASS 6 (why?):
-  <em><a href="shade.clr.sh.html">shade.clr.sh</a></em><br>
-  d.shade and r.shade probably cover most of the shade.clr functionality
-  however, it is not possible to create shade+color map in one step
-  delete this note when it is solved or if it is not considered as an issue
--->
 <em>
 <a href="d.shade.html">d.shade</a>,
 <a href="d.his.html">d.his</a>,
