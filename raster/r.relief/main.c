@@ -112,10 +112,11 @@ int main(int argc, char *argv[])
     module->label = _("Creates shaded relief map from an elevation map (DEM).");
     
     parm.elevation = G_define_standard_option(G_OPT_R_INPUT);
-
+    parm.elevation->description = _("Name of input raster (typically elevation) map");
+ 
     parm.relief = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.relief->label = _("Name for output shaded relief map");
-
+    parm.relief->description = _("Name for output shaded relief map");
+ 
     parm.altitude = G_define_option();
     parm.altitude->key = "altitude";
     parm.altitude->type = TYPE_DOUBLE;
