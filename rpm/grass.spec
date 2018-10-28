@@ -337,7 +337,10 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
-* Thu Sep 09 2018 Pavel Raiskup <praiskup@redhat.com> - 7.4.1-8
+* Sun Oct 28 2018 Markus Neteler <neteler@mundialis.de> - 7.4.2-0
+- new upstream version 7.4.2
+
+* Sun Sep 09 2018 Pavel Raiskup <praiskup@redhat.com> - 7.4.1-8
 - Clean up of PostgreSQL support (PR#4)
 
 * Tue Jul 31 2018 Florian Weimer <fweimer@redhat.com> - 7.4.1-7
@@ -381,6 +384,7 @@ fi
 
 * Mon Jan 15 2018 Markus Metz <metz@mundialis.de> - 7.4.0-1
 - New upstream version 7.4.0
+- Major cleanup of SPEC file
 - Fix grass-devel which needs include/grass and include/Make dirs
 
 * Fri Jul 21 2017 Kalev Lember <klember@redhat.com> - 7.2.1-2
