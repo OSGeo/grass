@@ -18,10 +18,12 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <assert.h>
-#include <grass/config.h>
+#include <errno.h>
+#include <grass/gis.h>
 #include "index.h"
 
 /* #define USAGE_SWAP */
@@ -153,8 +155,12 @@ size_t RTreeWriteBranch(struct RTree_Branch *b, struct RTree *t)
 {
     size_t size = 0;
 
-    size += write(t->fd, b->rect.boundary, t->rectsize);
-    size += write(t->fd, &(b->child), sizeof(union RTree_Child));
+    if (write(t->fd, b->rect.boundary, t->rectsize) != t->rectsize)
+	G_fatal_error("RTreeWriteBranch(): Unable to write (%s)", strerror(errno));
+    size += t->rectsize;
+    if (write(t->fd, &(b->child), sizeof(union RTree_Child)) != sizeof(union RTree_Child))
+	G_fatal_error("RTreeWriteBranch(): Unable to write (%s)", strerror(errno));
+    size += sizeof(union RTree_Child);
 
     return size;
 }
@@ -166,8 +172,12 @@ size_t RTreeWriteNode(struct RTree_Node *n, struct RTree *t)
     size_t size = 0;
 
     /* file position must be set first with RTreeGetFNodePos() */
-    size += write(t->fd, &(n->count), sizeof(int));
-    size += write(t->fd, &(n->level), sizeof(int));
+    if (write(t->fd, &(n->count), sizeof(int)) != sizeof(int))
+	G_fatal_error("RTreeWriteNode(): Unable to write (%s)", strerror(errno));
+    size += sizeof(int);
+    if (write(t->fd, &(n->level), sizeof(int)) != sizeof(int))
+	G_fatal_error("RTreeWriteNode(): Unable to write (%s)", strerror(errno));
+    size += sizeof(int);
 
     for (i = 0; i < MAXCARD; i++) {
 	size += RTreeWriteBranch(&(n->branch[i]), t);
