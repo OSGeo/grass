@@ -115,8 +115,11 @@ void create_map(const struct input *inputs, int num_inputs, const char *output,
 	write_fp_quant(output);
     }
     G_remove_misc("cell_misc", "stats", output);
+#if 0
+    /* does not work with overlapping tiles */
     if (have_stats)
 	Rast_write_rstats(output, ostats);
+#endif
 
     G_verbose_message(_("Creating support files for %s"), output);
     Rast_short_history(output, "virtual", &history);
