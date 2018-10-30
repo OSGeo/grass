@@ -909,6 +909,12 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 	    flags[j] = 1;
 	return;
     }
+    if (fcb->vrt) {
+	/* vrt: already done when reading the real maps, no extra NULL values */
+	for (j = 0; j < R__.rd_window.cols; j++)
+	    flags[j] = 0;
+	return;
+    }
 
     if (row != fcb->null_cur_row) {
 	if (!Rast__read_null_bits(fd, row, fcb->null_bits)) {

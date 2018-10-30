@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
 	    }
 	}
 	if (have_stats && 
-	    Rast_read_rstats(inputs[0].name, inputs[0].mapset, &rstats) == 1) {
+	    Rast_read_rstats(p->name, p->mapset, &rstats) == 1) {
 	    ostats.sum += rstats.sum;
 	    ostats.sumsq += rstats.sumsq;
 	    ostats.count += rstats.count;
