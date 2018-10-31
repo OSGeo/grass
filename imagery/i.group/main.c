@@ -35,11 +35,12 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k);
 static int remove_subgroup_files(char group[INAME_LEN],
 				 char subgroup[INAME_LEN], char **rasters,
 				 int k);
-static void print_subgroups(char *group, int simple);
+static void print_subgroups(const char *group, const char *mapset, int simple);
 
 int main(int argc, char *argv[])
 {
-    char group[GNAME_MAX], mapset[GMAPSET_MAX];
+    char group[GNAME_MAX];
+    const char *mapset = NULL;
     char **rasters = NULL;
     int m, k = 0;
 
@@ -147,18 +148,11 @@ int main(int argc, char *argv[])
     if (k < 1 && !(l->answer || s->answer))	/* remove if input is requirement */
 	G_fatal_error(_("No input raster map(s) specified"));
 
-    /* check if current mapset:  (imagery libs are very lacking in this dept)
-       - abort if not,
-       - remove @mapset part if it is
+    /* Get groups mapset. Remove @mapset if group contains
      */
-    if (G_name_is_fully_qualified(grp->answer, group, mapset)) {
-	if (strcmp(mapset, G_mapset()))
-	    G_fatal_error(_("Group must exist in the current mapset"));
-    }
-    else {
-	strcpy(group, grp->answer);	/* FIXME for buffer overflow (have the parser check that?) */
-    }
-
+    strcpy(group, grp->answer);
+    mapset = G_find_file("group", group, mapset);
+    
     if (r->answer) {
 	/* Remove files from Group */
 
@@ -181,17 +175,14 @@ int main(int argc, char *argv[])
     else {
 	if (l->answer || s->answer) {
 	    /* List raster maps in group */
+        if (!I_find_group2(group, mapset))
+            G_fatal_error(_("Group <%s> not found"), group);
 
 	    struct Ref ref;
 
-	    if (I_find_group(group) == 0) {
-		G_fatal_error(_
-			      ("Specified group does not exist in current mapset"));
-	    }
-
 	    if (sgrp->answer) {
 		/* list subgroup files */
-		I_get_subgroup_ref(group, sgrp->answer, &ref);
+		I_get_subgroup_ref2(group, sgrp->answer, mapset, &ref);
 		if (simple_flag->answer) {
 		    G_message(_
 			      ("Subgroup <%s> of group <%s> references the following raster maps:"),
@@ -202,11 +193,11 @@ int main(int argc, char *argv[])
 		    I_list_subgroup(group, sgrp->answer, &ref, stdout);
 	    }
 	    else if (s->answer) {
-		print_subgroups(group, simple_flag->answer);
+		print_subgroups(group, mapset, simple_flag->answer);
 	    }
 	    else {
 		/* list group files */
-		I_get_group_ref(group, &ref);
+		I_get_group_ref2(group, mapset, &ref);
 		if (simple_flag->answer) {
 		    G_message(_
 			      ("Group <%s> references the following raster maps:"),
@@ -445,14 +436,14 @@ static int remove_subgroup_files(char group[INAME_LEN],
     return 0;
 }
 
-static void print_subgroups(char *group, int simple)
+static void print_subgroups(const char *group, const char *mapset, int simple)
 {
     int subgs_num, i;
     int len, tot_len;
     int max;
     char **subgs;
 
-    subgs = I_list_subgroups(group, &subgs_num);
+    subgs = I_list_subgroups2(group, mapset, &subgs_num);
     if (simple)
 	for (i = 0; i < subgs_num; i++)
 	    fprintf(stdout, "%s\n", subgs[i]);
