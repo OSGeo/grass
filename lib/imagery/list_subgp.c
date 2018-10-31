@@ -15,6 +15,32 @@
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 
+char **list_subgroups(char *group, const char *mapset, int *subgs_num)
+{
+    /* Unlike I_list_subgroup and I_list_subgroup_simple this function 
+       returns array of subgroup names, it does not use fprintf. 
+       This approach should make the function usable in more cases. */
+
+    char **subgs;
+    char path[GPATH_MAX];
+    char buf[GPATH_MAX];
+    struct stat sb;
+
+    *subgs_num = 0;
+
+    if (I_find_group2(group, mapset) == 0)
+	return NULL;
+
+    sprintf(buf, "group/%s/subgroup", group);
+    G_file_name(path, buf, "", mapset);
+
+    if (!G_lstat(path, &sb) == 0 || !S_ISDIR(sb.st_mode))
+	return NULL;
+
+    subgs = G_ls2(path, subgs_num);
+    return subgs;
+}
+
 /*!
  * \brief Get list of subgroups which a group contatins.
  *  
@@ -25,30 +51,22 @@
 
 char **I_list_subgroups(const char *group, int *subgs_num)
 {
-    /* Unlike I_list_subgroup and I_list_subgroup_simple this function 
-       returns array of subgroup names, it does not use fprintf. 
-       This approach should make the function usable in more cases. */
+    
+    return list_subgroups(group, G_mapset(), subgs_num);
+}
 
-    char **subgs;
-    char path[GPATH_MAX];
-    char buf[GPATH_MAX];
-    const char *mapset;
-    struct stat sb;
+/*!
+ * \brief Get list of subgroups which a group contatins.
+ *  
+ * \param group group name
+ * \param mapset mapset name
+ * \param[out] subgs_num number of subgroups which the group contains
+ * \return array of subgroup names
+ */
 
-    *subgs_num = 0;
-
-    if (I_find_group(group) == 0)
-	return NULL;
-
-    mapset = G_mapset();
-    sprintf(buf, "group/%s/subgroup", group);
-    G_file_name(path, buf, "", mapset);
-
-    if (!G_lstat(path, &sb) == 0 || !S_ISDIR(sb.st_mode))
-	return NULL;
-
-    subgs = G_ls2(path, subgs_num);
-    return subgs;
+char **I_list_subgroups2(const char *group, const char *mapset, int *subgs_num)
+{
+    return list_subgroups(group, mapset, subgs_num);
 }
 
 /*!

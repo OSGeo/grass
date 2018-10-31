@@ -18,18 +18,24 @@ int I_get_to_eol(char *, int, FILE *);
 
 /* find.c */
 int I_find_group(const char *);
+int I_find_group2(const char *, const char *);
 int I_find_group_file(const char *, const char *);
+int I_find_group_file2(const char *, const char *, const char *);
 int I_find_subgroup(const char *, const char *);
+int I_find_subgroup2(const char *, const char *, const char *);
 int I_find_subgroup_file(const char *, const char *, const char *);
+int I_find_subgroup_file2(const char *, const char *, const char *, const char *);
 int I_find_signature_file(const char *, const char *, const char *, const char *);
 
 /* fopen.c */
 FILE *I_fopen_group_file_new(const char *, const char *);
 FILE *I_fopen_group_file_append(const char *, const char *);
 FILE *I_fopen_group_file_old(const char *, const char *);
+FILE *I_fopen_group_file_old2(const char *, const char *, const char *);
 FILE *I_fopen_subgroup_file_new(const char *, const char *, const char *);
 FILE *I_fopen_subgroup_file_append(const char *, const char *, const char *);
 FILE *I_fopen_subgroup_file_old(const char *, const char *, const char *);
+FILE *I_fopen_subgroup_file_old2(const char *, const char *, const char *, const char *);
 
 /* georef.c */
 int I_compute_georef_equations(struct Control_Points *, double *, double *,
@@ -48,7 +54,9 @@ int I_put_group(const char *);
 int I_get_subgroup(const char *, char *);
 int I_put_subgroup(const char *, const char *);
 int I_get_group_ref(const char *, struct Ref *);
+int I_get_group_ref2(const char *, const char *, struct Ref *);
 int I_get_subgroup_ref(const char *, const char *, struct Ref *);
+int I_get_subgroup_ref2(const char *, const char *, const char *, struct Ref *);
 int I_init_ref_color_nums(struct Ref *);
 int I_put_group_ref(const char *, const struct Ref *);
 int I_put_subgroup_ref(const char *, const char *, const struct Ref *);
@@ -94,6 +102,7 @@ int I_list_group_simple(const struct Ref *, FILE *);
 
 /* list_subgp.c */
 char ** I_list_subgroups(const char *, int *);
+char ** I_list_subgroups2(const char *, const char *, int *);
 int I_list_subgroup(const char *, const char *, const struct Ref *, FILE *);
 int I_list_subgroup_simple(const struct Ref *, FILE *);
 
@@ -109,8 +118,10 @@ int I_put_control_points(const char *, const struct Control_Points *);
 /* ref.c */
 FILE *I_fopen_group_ref_new(const char *);
 FILE *I_fopen_group_ref_old(const char *);
+FILE *I_fopen_group_ref_old2(const char *, const char *);
 FILE *I_fopen_subgroup_ref_new(const char *, const char *);
 FILE *I_fopen_subgroup_ref_old(const char *, const char *);
+FILE *I_fopen_subgroup_ref_old2(const char *, const char *, const char *);
 
 /* iscatt_structs.c */
 void I_sc_init_cats(struct scCats *, int, int);
