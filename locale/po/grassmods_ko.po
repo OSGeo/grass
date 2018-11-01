@@ -196,7 +196,7 @@ msgstr ""
 
 #: ../temporal/t.connect/main.c:121
 msgid "Default TGIS database is not set"
-msgstr ""
+msgstr "기본 TGIS 데이터베이스가 설정되지 않았습니다"
 
 #: ../temporal/t.connect/main.c:133 ../db/db.connect/main.c:161
 #: ../db/db.connect/main.c:188
@@ -333,7 +333,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/g.search.modules_to_translate.c:19
 msgid "JSON format"
-msgstr "JSON 형식"
+msgstr "JSON 양식"
 
 #: ../locale/scriptstrings/t.rast.extract_to_translate.c:1
 msgid "Extracts a subset of a space time raster datasets."
@@ -829,7 +829,7 @@ msgstr "속성 테이블"
 #: ../vector/v.in.db/main.c:54 ../vector/v.vect.stats/main.c:132
 #: ../vector/v.to.db/main.c:38
 msgid "database"
-msgstr "데이타베이스"
+msgstr "데이터베이스"
 
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:5
 msgid "Name of new attribute table (default: vector map name)"
@@ -1503,7 +1503,7 @@ msgstr "실제로 파일을 삭제합니다"
 
 #: ../locale/scriptstrings/db.droptable_to_translate.c:5
 msgid "Name of database driver"
-msgstr "데이타베이스 드라이버의 이름"
+msgstr "데이터베이스 드라이버의 이름"
 
 #: ../locale/scriptstrings/db.droptable_to_translate.c:6
 msgid "If not given then default driver is used"
@@ -1523,11 +1523,11 @@ msgstr "연결"
 
 #: ../locale/scriptstrings/db.droptable_to_translate.c:8
 msgid "Name of database"
-msgstr "데이타베이스의 이름"
+msgstr "데이터베이스의 이름"
 
 #: ../locale/scriptstrings/db.droptable_to_translate.c:9
 msgid "If not given then default database is used"
-msgstr "지정하지 않으면 기본 데이타베이스를 씁니다"
+msgstr "지정하지 않으면 기본 데이터베이스를 씁니다"
 
 #: ../locale/scriptstrings/db.droptable_to_translate.c:11
 msgid "Name of table to drop"
@@ -2267,7 +2267,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:1
 msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
-msgstr ""
+msgstr "시공간 래스터 자료세트 내의 빈 공간을 보간된 래스터 지도로 대체합니다."
 
 #: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:3
 #: ../locale/scriptstrings/r.fillnulls_to_translate.c:5
@@ -2554,7 +2554,7 @@ msgstr ""
 #: ../misc/m.nviz.image/args.c:70 ../vector/v.label.sa/main.c:124
 #: ../vector/v.label/main.c:187 ../vector/v.lrs/v.lrs.label/main.c:218
 msgid "Background color"
-msgstr ""
+msgstr "배경 색상"
 
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:33
 msgid "Format: 0xRRGGBB"
@@ -3016,7 +3016,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:19
 #: ../raster/r.colors/edit_colors.c:132 ../vector/v.colors/main.c:137
 msgid "Invert colors"
-msgstr ""
+msgstr "색상을 반전합니다"
 
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:21
 #: ../raster/r.colors/edit_colors.c:137 ../vector/v.colors/main.c:142
@@ -3044,7 +3044,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.rename_to_translate.c:1
 msgid "Renames a space time dataset"
-msgstr ""
+msgstr "시공간 자료세트의 이름을 변경합니다"
 
 #: ../locale/scriptstrings/t.rename_to_translate.c:4
 #: ../general/g.rename/main.c:47
@@ -3170,7 +3170,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:7
 msgid "Name of source database"
-msgstr ""
+msgstr "출처 데이터베이스의 이름"
 
 #: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:8
 msgid "Name of source database schema"
@@ -3182,7 +3182,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:10
 msgid "Name for target database"
-msgstr ""
+msgstr "표적 데이터베이스를 위한 이름"
 
 #: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:11
 msgid "Name for target database schema"
@@ -3331,7 +3331,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/db.out.ogr_to_translate.c:7
 msgid "Table format"
-msgstr "테이블 형식"
+msgstr "테이블 양식"
 
 #: ../locale/scriptstrings/db.out.ogr_to_translate.c:8
 msgid "Name for output table (default: input name)"
@@ -3611,7 +3611,7 @@ msgstr ""
 #: ../raster/r.proj/main.c:183 ../imagery/i.rectify/main.c:132
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:126
 msgid "Interpolation method to use"
-msgstr ""
+msgstr "사용할 보간 방법"
 
 #: ../locale/scriptstrings/r.fillnulls_to_translate.c:7
 msgid "Spline tension parameter"
@@ -3779,7 +3779,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.buffer.lowmem_to_translate.c:2
 msgid "This is the low-memory alternative to the classic r.buffer module."
-msgstr ""
+msgstr "기존의 r.buffer 모듈보다 메모리를 적게 쓰는 대체 모듈입니다"
 
 #: ../locale/scriptstrings/r.buffer.lowmem_to_translate.c:4
 #: ../raster/r.buffer/main.c:67 ../raster/r.circle/main.c:52
@@ -4356,7 +4356,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:7
 msgid "Basename for output raster maps"
-msgstr ""
+msgstr "출력 래스터 지도를 위한 기본이름"
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:1
 msgid "Converts coordinates from one projection to another (cs2cs frontend)."
@@ -4842,7 +4842,7 @@ msgstr ""
 #: ../ps/ps.map/r_colortable.c:65 ../ps/ps.map/r_vlegend.c:49
 #: ../ps/ps.map/r_info.c:48
 msgid "illegal where request"
-msgstr ""
+msgstr "무효한 where 요청입니다"
 
 #: ../ps/ps.map/r_colortable.c:73 ../ps/ps.map/r_colortable.c:89
 #: ../ps/ps.map/ps_outline.c:100
@@ -5039,7 +5039,7 @@ msgstr ""
 
 #: ../ps/ps.map/main.c:127
 msgid "Name for PostScript output file"
-msgstr ""
+msgstr "PostScript 출력 파일을 위한 이름"
 
 #: ../ps/ps.map/main.c:133
 msgid "Number of copies to print"
@@ -5048,7 +5048,7 @@ msgstr ""
 #: ../ps/ps.map/main.c:205
 #, c-format
 msgid "Unable to open file '%s': %s"
-msgstr ""
+msgstr "파일 '%s'를 열 수 없습니다: %s"
 
 #: ../ps/ps.map/main.c:213 ../ps/ps.map/main.c:232
 #: ../vector/v.univar/main.c:147 ../vector/v.to.db/parse.c:143
@@ -5332,7 +5332,7 @@ msgstr ""
 #: ../vector/v.to.db/query.c:89
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
-msgstr "데이타베이스 <%s>를 드라이버 <%s>로 열 수 없습니다"
+msgstr "데이터베이스 <%s>를 드라이버 <%s>로 열 수 없습니다"
 
 #: ../ps/ps.map/catval.c:63
 msgid "Column type not supported (must be string)"
@@ -5618,7 +5618,7 @@ msgstr ""
 #: ../vector/v.vect.stats/main.c:404 ../vector/v.generalize/misc.c:170
 #, c-format
 msgid "Database connection not defined for layer %d"
-msgstr ""
+msgstr "레이어 %d를 위한 데이터베이스 연결이 정의되지 않았습니다"
 
 #: ../doc/vector/v.example/main.c:129 ../raster/r.stream.extract/close.c:178
 #: ../display/d.vect.thematic/main.c:294 ../display/d.vect/opt.c:147
@@ -5878,7 +5878,7 @@ msgstr "선을 분해하는 중..."
 #: ../raster/r.path/main.c:542 ../raster/r.path/main.c:572
 #: ../raster/r.in.lidar/main.c:760 ../raster/r.drain/main.c:471
 msgid "Writing output raster map..."
-msgstr ""
+msgstr "출력 래스터 지도를 쓰는 중입니다..."
 
 #: ../raster/r.path/main.c:625
 #, fuzzy
@@ -6012,7 +6012,7 @@ msgstr ""
 #: ../raster/r.profile/main.c:208
 #, c-format
 msgid "Invalid coordinates %s %s"
-msgstr ""
+msgstr "%s %s는 무효한 좌표입니다"
 
 #: ../raster/r.profile/main.c:279
 #, c-format
@@ -6756,7 +6756,7 @@ msgstr ""
 #: ../raster/r.walk/main.c:272 ../raster/r.walk/main.c:322
 #: ../raster/r.cost/main.c:236 ../raster/r.cost/main.c:255
 msgid "NULL cells"
-msgstr ""
+msgstr "NULL 셀"
 
 #: ../raster/r.walk/main.c:281 ../raster/r.cost/main.c:245
 msgid "Maximum memory to be used in MB"
@@ -7166,7 +7166,7 @@ msgstr ""
 #: ../raster/r.colors/edit_colors.c:280
 #, c-format
 msgid "Color table of %s map <%s> not found"
-msgstr "%s지도 <%s>의 색상표를 찾을 수 없습니다"
+msgstr "%s지도 <%s>의 색상 테이블을 찾을 수 없습니다"
 
 #: ../raster/r.colors/edit_colors.c:302
 #, c-format
@@ -7227,7 +7227,7 @@ msgstr ""
 #: ../raster/r.colors/edit_colors.c:447
 #, c-format
 msgid "Color table for %s map <%s> set to '%s'"
-msgstr "%s지도 <%s>를 위한 색상표가 '%s'로 설정되었습니다"
+msgstr "%s지도 <%s>를 위한 색상 테이블이 '%s'로 설정되었습니다"
 
 #: ../raster/r.colors/stats.c:39
 #, c-format
@@ -7396,7 +7396,7 @@ msgstr ""
 #: ../raster/r.resamp.interp/main.c:102 ../imagery/i.topo.corr/main.c:158
 #, c-format
 msgid "Invalid method: %s"
-msgstr ""
+msgstr "무효한 방법입니다: %s"
 
 #: ../raster/r.resamp.interp/main.c:370 ../raster/r.mode/main.c:143
 #: ../raster/r.resamp.stats/main.c:395 ../raster/r.tile/main.c:200
@@ -7420,7 +7420,7 @@ msgstr ""
 
 #: ../raster/r.reclass/main.c:59
 msgid "Name of raster map to be reclassified"
-msgstr ""
+msgstr "재분류될 래스터 지도의 이름"
 
 #: ../raster/r.reclass/main.c:65
 msgid "File containing reclass rules"
@@ -7569,7 +7569,7 @@ msgstr ""
 
 #: ../raster/r.topmodel/main.c:55
 msgid "Simulates TOPMODEL which is a physically based hydrologic model."
-msgstr ""
+msgstr "물리 기반의 수문모형인 TOPMODEL을 모의합니다."
 
 #: ../raster/r.topmodel/main.c:60
 msgid "Name of input TOPMODEL parameters file"
@@ -7593,15 +7593,15 @@ msgstr ""
 
 #: ../raster/r.topmodel/main.c:83
 msgid "Topographic index class"
-msgstr ""
+msgstr "지형색인 분류"
 
 #: ../raster/r.topmodel/main.c:85
 msgid "Generate output for this topographic index class"
-msgstr ""
+msgstr "이 지형색인 분류를 위한 출력을 생성하기"
 
 #: ../raster/r.topmodel/main.c:92
 msgid "Name of input topographic index raster map"
-msgstr "입력 위상색인 래스터 지도의 이름"
+msgstr "입력 지형색인 래스터 지도의 이름"
 
 #: ../raster/r.topmodel/main.c:94
 msgid "Must be clipped to the catchment boundary. Used for generating outtopidxstats"
@@ -7614,7 +7614,7 @@ msgstr ""
 
 #: ../raster/r.topmodel/main.c:100
 msgid "Number of topographic index classes"
-msgstr ""
+msgstr "지형색인 분류의 개수"
 
 #: ../raster/r.topmodel/main.c:102
 msgid "Used for generating outtopidxstats"
@@ -7650,7 +7650,7 @@ msgstr ""
 #: ../raster/r.topmodel/topmodel.c:74
 #, c-format
 msgid "Invalid %s output"
-msgstr ""
+msgstr "무효한 %s 출력입니다"
 
 #: ../raster/r.texture/main.c:68
 #, c-format
@@ -7884,7 +7884,7 @@ msgstr ""
 
 #: ../raster/r.stats/raw_stats.c:118
 msgid "Invalid map type"
-msgstr ""
+msgstr "무효한 지도 타입입니다"
 
 #: ../raster/r.stats.quantile/main.c:86
 msgid "Computing histograms"
@@ -8072,7 +8072,7 @@ msgstr ""
 #: ../raster/r.out.pov/main.c:170
 #, c-format
 msgid "Invalid output filename <%s>"
-msgstr ""
+msgstr "<%s>는 무효한 출력 파일 이름입니다"
 
 #: ../raster/r.out.pov/main.c:173 ../raster/r.colors.out/raster_main.c:79
 #: ../raster/r.colors.out/raster3d_main.c:80 ../raster/r.out.vrml/main.c:131
@@ -8133,7 +8133,7 @@ msgstr ""
 #: ../raster/r.li/r.li.patchdensity/main.c:61
 #: ../raster/r.li/r.li.richness/richness.c:53
 msgid "Configuration file"
-msgstr ""
+msgstr "설정 파일"
 
 #: ../raster/r.li/r.li.shape/main.c:48
 msgid "Calculates shape index on a raster map"
@@ -8179,7 +8179,7 @@ msgstr ""
 
 #: ../raster/r.li/r.li.daemon/daemon.c:97
 msgid "Cannot create random access file"
-msgstr ""
+msgstr "무작위 접근 파일을 생성할 수 없습니다"
 
 #: ../raster/r.li/r.li.daemon/daemon.c:105
 #: ../raster/r.li/r.li.daemon/daemon.c:111
@@ -8297,7 +8297,7 @@ msgstr ""
 
 #: ../raster/r.out.ppm3/main.c:59
 msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
-msgstr ""
+msgstr "세 개의 GRASS 래스터 레이어 (R,G,B)를 PPM 이미지 파일로 변환합니다."
 
 #: ../raster/r.out.ppm3/main.c:64 ../raster/r.composite/main.c:90
 #: ../display/d.rgb/main.c:69
@@ -8554,7 +8554,7 @@ msgstr ""
 
 #: ../raster/r.resamp.rst/main.c:173
 msgid "Name for output elevation raster map"
-msgstr ""
+msgstr "출력 고도 래스터 지도를 위한 이름"
 
 #: ../raster/r.resamp.rst/main.c:179
 msgid "Name for output slope map (or fx)"
@@ -8614,7 +8614,7 @@ msgstr ""
 
 #: ../raster/r.resamp.rst/main.c:263 ../vector/v.surf.rst/main.c:171
 msgid "Output partial derivatives instead of topographic parameters"
-msgstr ""
+msgstr "지형 매개변수 대신 편미분을 출력하기"
 
 #: ../raster/r.resamp.rst/main.c:297
 msgid "Unable to read ew_res value"
@@ -8630,19 +8630,19 @@ msgstr ""
 
 #: ../raster/r.resamp.rst/main.c:306
 msgid "Invalid value for zmult"
-msgstr ""
+msgstr "zmult를 위한 무효한 값입니다"
 
 #: ../raster/r.resamp.rst/main.c:309
 msgid "Invalid value for overlap"
-msgstr ""
+msgstr "중첩을 위한 무효한 값입니다"
 
 #: ../raster/r.resamp.rst/main.c:313
 msgid "Invalid value for theta"
-msgstr ""
+msgstr "theta를 위한 무효한 값입니다"
 
 #: ../raster/r.resamp.rst/main.c:317
 msgid "Invalid value for scalex"
-msgstr ""
+msgstr "scalex를 위한 무효한 값입니다"
 
 #: ../raster/r.resamp.rst/main.c:319
 msgid "When using anisotropy both theta and scalex must be specified"
@@ -8963,12 +8963,12 @@ msgstr ""
 #: ../raster/r.random/main.c:151
 #, c-format
 msgid "<%s=%s> invalid percentage"
-msgstr ""
+msgstr "<%s=%s>는 무효한 백분율입니다"
 
 #: ../raster/r.random/main.c:162
 #, c-format
 msgid "<%s=%s> invalid number of points"
-msgstr ""
+msgstr "<%s=%s>는 무효한 점의 갯수입니다"
 
 #: ../raster/r.random/main.c:176
 #, c-format
@@ -9457,7 +9457,7 @@ msgstr ""
 
 #: ../raster/r.quant/main.c:81
 msgid "Integer range: min,max"
-msgstr ""
+msgstr "정수 범위: 최소,최대"
 
 #: ../raster/r.quant/main.c:86
 msgid "Truncate floating point data"
@@ -9503,7 +9503,7 @@ msgstr ""
 #: ../raster/r.quant/main.c:163 ../raster/r.quant/main.c:166
 #, c-format
 msgid "invalid value for %s= <%s>"
-msgstr ""
+msgstr "%s=<%s>를 위한 무효한 값입니다"
 
 #: ../raster/r.quant/main.c:168
 #, c-format
@@ -9716,7 +9716,7 @@ msgstr ""
 
 #: ../raster/r.mode/main.c:65
 msgid "Base map to be reclassified"
-msgstr ""
+msgstr "재분류될 기반지도"
 
 #: ../raster/r.mode/main.c:72
 msgid "Coverage map"
@@ -9909,7 +9909,7 @@ msgstr ""
 
 #: ../raster/r.support.stats/main.c:37
 msgid "Update raster map statistics"
-msgstr ""
+msgstr "래스터 지도의 통계를 갱신하기"
 
 #: ../raster/r.support.stats/main.c:49
 #, c-format
@@ -9962,7 +9962,7 @@ msgstr ""
 
 #: ../raster/r.to.rast3elev/main.c:366
 msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
-msgstr ""
+msgstr "2차원 고도 및 값 래스터 지도를 기반으로 3차원 볼륨 지도를 생성합니다."
 
 #: ../raster/r.to.rast3elev/main.c:400
 msgid "The upper value is not valid"
@@ -10416,7 +10416,7 @@ msgstr ""
 #: ../raster/r.describe/describe.c:94
 #, c-format
 msgid "Reading <%s> ..."
-msgstr ""
+msgstr "<%s>를 읽는 중입니다..."
 
 #: ../raster/r.what.color/main.c:91
 msgid "Queries colors for a raster map layer."
@@ -10859,7 +10859,7 @@ msgstr ""
 
 #: ../raster/r.in.ascii/main.c:74
 msgid "Converts a GRASS ASCII raster file to binary raster map."
-msgstr ""
+msgstr "GRASS ASCII 래스터 파일을 이진 래스터 지도로 변환합니다."
 
 #: ../raster/r.in.ascii/main.c:78 ../raster3d/r3.in.ascii/main.c:86
 #: ../vector/v.in.ascii/main.c:80
@@ -11192,11 +11192,8 @@ msgstr ""
 #: ../raster/r.stream.extract/dseg.c:97 ../raster/r.stream.extract/bseg.c:46
 #: ../raster/r.stream.extract/bseg.c:96 ../raster/r.stream.extract/seg.c:52
 #: ../raster/r.stream.extract/seg.c:94 ../raster/r.stream.extract/seg.c:103
-msgid "Unable to read segment file"
-msgstr ""
-
 #: ../raster/r.stream.extract/cseg.c:97
-msgid "Unabel to read segment file"
+msgid "Unable to read segment file"
 msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:120
@@ -11245,7 +11242,7 @@ msgstr ""
 
 #: ../raster/r.stream.extract/streams.c:392
 msgid "Extracting streams..."
-msgstr ""
+msgstr "하천을 추출하는 중입니다..."
 
 #: ../raster/r.stream.extract/streams.c:469
 msgid "Bug in stream extraction"
@@ -11497,7 +11494,7 @@ msgstr ""
 
 #: ../raster/r.surf.random/main.c:46
 msgid "Minimum random value"
-msgstr ""
+msgstr "최소 난수값"
 
 #: ../raster/r.surf.random/main.c:52
 msgid "Maximum random value"
@@ -11616,7 +11613,7 @@ msgstr[0] ""
 
 #: ../raster/r.clump/main.c:60
 msgid "reclass"
-msgstr ""
+msgstr "재분류"
 
 #: ../raster/r.clump/main.c:63
 msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
@@ -11766,7 +11763,7 @@ msgstr ""
 #: ../raster/r.in.png/main.c:297
 #, c-format
 msgid "Unable to open PNG file '%s'"
-msgstr ""
+msgstr "PNG 파일 '%s'를 열 수 없습니다"
 
 #: ../raster/r.in.png/main.c:300
 msgid "Input file empty or too short"
@@ -12149,12 +12146,12 @@ msgstr ""
 #: ../raster/r.in.lidar/main.c:498
 #, c-format
 msgid "Invalid %s"
-msgstr ""
+msgstr "무효한 %s입니다"
 
 #: ../raster/r.in.lidar/main.c:530 ../general/g.region/main.c:861
 #, c-format
 msgid "Invalid input <%s=%s>"
-msgstr ""
+msgstr "<%s=%s>는 무효한 입력입니다"
 
 #: ../raster/r.in.lidar/main.c:533
 #, c-format
@@ -12349,7 +12346,7 @@ msgstr ""
 #: ../raster/r.mapcalc/expression.c:221
 #, c-format
 msgid "Invalid map <%s>"
-msgstr ""
+msgstr "<%s>는 무효한 지도입니다"
 
 #: ../raster/r.mapcalc/expression.c:262
 #, c-format
@@ -12413,7 +12410,7 @@ msgstr ""
 #: ../raster/r.mapcalc/evaluate.c:189
 #, c-format
 msgid "Invalid type: %d"
-msgstr ""
+msgstr "무효한 타입입니다: %d"
 
 #: ../raster/r.mapcalc/evaluate.c:228
 #, c-format
@@ -12433,7 +12430,7 @@ msgstr ""
 #: ../raster/r.mapcalc/evaluate.c:240
 #, c-format
 msgid "Invalid return type for function '%s'"
-msgstr ""
+msgstr "함수 '%s'를 위한 무효한 반환형입니다"
 
 #: ../raster/r.mapcalc/evaluate.c:244
 #, c-format
@@ -12443,7 +12440,7 @@ msgstr ""
 #: ../raster/r.mapcalc/evaluate.c:247
 #, c-format
 msgid "Number of arguments for function '%s'"
-msgstr ""
+msgstr "함수 '%s'를 위한 인수의 개수"
 
 #: ../raster/r.mapcalc/evaluate.c:251
 #, c-format
@@ -12548,7 +12545,7 @@ msgstr ""
 
 #: ../raster/r.sunhours/main.c:118
 msgid "Day"
-msgstr ""
+msgstr "일"
 
 #: ../raster/r.sunhours/main.c:126
 msgid "Hour"
@@ -12767,7 +12764,7 @@ msgstr ""
 
 #: ../raster/r.compress/main.c:78
 msgid "Uncompress the map"
-msgstr ""
+msgstr "지도를 압축해제하기"
 
 #: ../raster/r.compress/main.c:82
 msgid "Print compression information and data type of input map(s)"
@@ -12870,7 +12867,7 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:52
 #, c-format
 msgid "Supported formats:\n"
-msgstr ""
+msgstr "지원하는 포맷:\n"
 
 #: ../raster/r.out.gdal/main.c:138
 msgid "Exports GRASS raster maps into GDAL supported formats."
@@ -12950,7 +12947,7 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:282
 #, c-format
 msgid "No raster maps in group <%s>"
-msgstr ""
+msgstr "그룹 <%s> 내에 래스터 지도가 없습니다"
 
 #: ../raster/r.out.gdal/main.c:297
 #, c-format
@@ -13197,7 +13194,7 @@ msgstr ""
 
 #: ../raster/r.out.gdal/attr.c:140 ../raster/r.out.gdal/attr.c:178
 msgid "Failed to set raster attribute table"
-msgstr ""
+msgstr "래스터 속성 테이블을 설정하는데 실패했습니다"
 
 #: ../raster/r.basins.fill/main.c:56 ../raster/r.water.outlet/main.c:59
 #: ../raster/r.watershed/front/main.c:75
@@ -13411,7 +13408,7 @@ msgstr ""
 #: ../imagery/i.smap/main.c:39 ../imagery/i.gensigset/main.c:41
 #: ../imagery/i.cluster/main.c:76 ../vector/v.class/main.c:46
 msgid "classification"
-msgstr ""
+msgstr "분류하기"
 
 #: ../raster/r.kappa/main.c:72
 msgid "Calculates error matrix and kappa parameter for accuracy assessment of classification result."
@@ -13463,7 +13460,7 @@ msgstr ""
 #: ../raster/r.coin/print_coin.c:44
 #, c-format
 msgid "Preparing report ..."
-msgstr ""
+msgstr "보고서를 준비 중입니다..."
 
 #: ../raster/r.coin/main.c:69
 msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
@@ -13500,7 +13497,7 @@ msgstr ""
 
 #: ../raster/r.coin/make_coin.c:65
 msgid "Unable to run r.stats"
-msgstr ""
+msgstr "r.stats를 실행할 수 없습니다"
 
 #: ../raster/r.coin/make_coin.c:72
 msgid "Unexpected output from r.stats"
@@ -14078,7 +14075,7 @@ msgstr ""
 #: ../raster/r.fill.stats/main.c:779 ../raster/r.null/main.c:61
 #: ../raster3d/r3.null/main.c:181
 msgid "null data"
-msgstr "널 데이타"
+msgstr "널 자료"
 
 #: ../raster/r.fill.stats/main.c:781
 msgid "Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW)."
@@ -14272,7 +14269,7 @@ msgstr ""
 
 #: ../raster/r.tile/main.c:55
 msgid "Output base name"
-msgstr ""
+msgstr "출력 기본이름"
 
 #: ../raster/r.tile/main.c:62
 msgid "Width of tiles (columns)"
@@ -14493,7 +14490,7 @@ msgstr ""
 
 #: ../raster/r.topidx/file_io.c:87
 msgid "Writing topographic index map..."
-msgstr ""
+msgstr "지형색인 지도를 쓰는 중입니다..."
 
 #: ../raster/r.topidx/main.c:41
 msgid "wetness"
@@ -14501,7 +14498,7 @@ msgstr ""
 
 #: ../raster/r.topidx/main.c:42 ../raster/r.watershed/front/main.c:80
 msgid "topographic index"
-msgstr ""
+msgstr "지형색인"
 
 #: ../raster/r.topidx/main.c:44
 msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
@@ -14509,7 +14506,7 @@ msgstr ""
 
 #: ../raster/r.topidx/main.c:50
 msgid "Name for output topographic index raster map"
-msgstr "출력 위상색인 래스터 지도의 이름"
+msgstr "출력 지형색인 래스터 지도의 이름"
 
 #: ../raster/r.topidx/topidx.c:41 ../raster/r.flow/main.c:314
 #: ../imagery/i.landsat.toar/main.c:534
@@ -14932,7 +14929,7 @@ msgstr ""
 #: ../raster/r.resamp.bspline/crosscorr.c:334
 #: ../vector/v.surf.bspline/crosscorr.c:323
 msgid "Table of results:"
-msgstr ""
+msgstr "결과 테이블:"
 
 #: ../raster/r.resamp.bspline/crosscorr.c:335
 #: ../vector/v.surf.bspline/crosscorr.c:324
@@ -14971,11 +14968,11 @@ msgstr ""
 
 #: ../raster/r.in.mat/main.c:186
 msgid "Invalid array name"
-msgstr ""
+msgstr "무효한 배열 이름입니다"
 
 #: ../raster/r.in.mat/main.c:206
 msgid "Invalid 'map_name' array"
-msgstr ""
+msgstr "무효한 'map_name' 배열입니다"
 
 #: ../raster/r.in.mat/main.c:216
 msgid "Error reading 'map_name' array"
@@ -14987,11 +14984,11 @@ msgstr ""
 
 #: ../raster/r.in.mat/main.c:236
 msgid "Invalid 'map_southern_edge' array"
-msgstr ""
+msgstr "무효한 'map_southern_edge' 배열입니다"
 
 #: ../raster/r.in.mat/main.c:245
 msgid "Invalid 'map_eastern_edge' array"
-msgstr ""
+msgstr "무효한 'map_eastern_edge' 배열입니다"
 
 #: ../raster/r.in.mat/main.c:254
 msgid "Invalid 'map_western_edge' array"
@@ -14999,7 +14996,7 @@ msgstr ""
 
 #: ../raster/r.in.mat/main.c:262
 msgid "Invalid 'map_title' array"
-msgstr ""
+msgstr "무효한 'map_title' 배열입니다"
 
 #: ../raster/r.in.mat/main.c:272
 msgid "Error reading 'map_title' array"
@@ -15007,7 +15004,7 @@ msgstr ""
 
 #: ../raster/r.in.mat/main.c:285
 msgid "Invalid 'map_data' array"
-msgstr ""
+msgstr "무효한 'map_data' 배열입니다"
 
 #: ../raster/r.in.mat/main.c:311 ../raster/r.in.mat/main.c:443
 #: ../raster/r.in.mat/main.c:522
@@ -15607,7 +15604,7 @@ msgstr ""
 #: ../raster/r.proj/readcell.c:138 ../imagery/i.rectify/readcell.c:125
 #: ../imagery/i.ortho.photo/i.ortho.rectify/readcell.c:141
 msgid "Error seeking on segment file"
-msgstr ""
+msgstr "세그먼트 파일 내의 검색에 오류가 발생했습니다"
 
 #: ../raster/r.proj/readcell.c:141 ../imagery/i.rectify/readcell.c:128
 #: ../imagery/i.ortho.photo/i.ortho.rectify/readcell.c:144
@@ -15746,7 +15743,7 @@ msgstr ""
 
 #: ../raster/r.proj/main.c:315
 msgid "Unable to get projection units of input map"
-msgstr ""
+msgstr "입력 지도의 투영 단위를 얻을 수 없습니다"
 
 #: ../raster/r.proj/main.c:318
 msgid "Unable to get projection key values of input map"
@@ -15921,7 +15918,7 @@ msgstr ""
 
 #: ../raster/r.relief/main.c:126 ../raster/r.relief/main.c:136
 msgid "Sun position"
-msgstr ""
+msgstr "태양의 위치"
 
 #: ../raster/r.relief/main.c:135
 msgid "Azimuth of the sun in degrees to the east of north"
@@ -16283,7 +16280,7 @@ msgstr ""
 
 #: ../raster/r.in.gdal/main.c:929
 msgid "Unable to get projection info of target location"
-msgstr ""
+msgstr "표적 로케이션의 투영 정보를 얻을 수 없습니다"
 
 #: ../raster/r.in.gdal/main.c:931
 msgid "Unable to get projection units of target location"
@@ -16308,7 +16305,7 @@ msgstr ""
 #: ../raster/r.in.gdal/main.c:1092 ../raster/r.in.gdal/main.c:1147
 #: ../raster/r.in.gdal/main.c:1221
 msgid "Invalid row"
-msgstr ""
+msgstr "무효한 행입니다"
 
 #: ../raster/r.in.gdal/main.c:1489 ../raster/r.in.gdal/main.c:1546
 msgid "Inconsistent color rules in RAT"
@@ -16400,7 +16397,7 @@ msgstr ""
 
 #: ../raster/r.sunmask/main.c:175
 msgid "Hour (B)"
-msgstr ""
+msgstr "시 (B)"
 
 #: ../raster/r.sunmask/main.c:183
 msgid "Minutes (B)"
@@ -16599,7 +16596,7 @@ msgstr ""
 #: ../raster/r.out.ascii/main.c:182
 #, c-format
 msgid "Read failed at row %d"
-msgstr ""
+msgstr "행 %d에서 읽기에 실패했습니다"
 
 #: ../raster/r.out.mpeg/main.c:104
 msgid "animation"
@@ -16607,7 +16604,7 @@ msgstr ""
 
 #: ../raster/r.out.mpeg/main.c:107
 msgid "Converts raster map series to MPEG movie."
-msgstr ""
+msgstr "래스터 지도 계열을 MPEG 동영상으로 변환합니다."
 
 #: ../raster/r.out.mpeg/main.c:115
 #, c-format
@@ -17017,7 +17014,7 @@ msgstr ""
 
 #: ../raster/r.external/main.c:177 ../display/d.mon/start.c:86
 msgid "Unable to get current working directory"
-msgstr ""
+msgstr "현재 작업 디렉토리를 얻을 수 없습니다"
 
 #: ../raster/r.external/main.c:214
 msgid "Proceeding with import..."
@@ -17176,7 +17173,7 @@ msgstr ""
 
 #: ../raster/r.composite/main.c:76
 msgid "Combines red, green and blue raster maps into a single composite raster map."
-msgstr ""
+msgstr "적, 녹, 청 래스터 지도를 하나의 복합 래스터 지도로 결합합니다."
 
 #: ../raster/r.composite/main.c:102
 msgid "Number of levels to be used for each component"
@@ -17364,6 +17361,8 @@ msgid ""
 "\n"
 "Would you like the data organized:"
 msgstr ""
+"\n"
+"자료를 체계화하길 원합니까:"
 
 #: ../raster/r.watershed/shed/basin_maps.c:44
 msgid ""
@@ -17920,7 +17919,7 @@ msgstr ""
 
 #: ../raster/r.watershed/front/main.c:144
 msgid "Name for output topographic index ln(a / tan(b)) map"
-msgstr ""
+msgstr "출력 지형색인 ln(a / tan(b)) 지도를 위한 이름"
 
 #: ../raster/r.watershed/front/main.c:151
 msgid "Stream power index a * tan(b)"
@@ -18160,7 +18159,7 @@ msgstr ""
 #: ../raster/r.sim/simlib/input.c:307
 #, c-format
 msgid "Raster map <%s> not found, and manin_val undefined, choose one to be allowed to process"
-msgstr ""
+msgstr "래스터 지도 <%s>를 찾을 수 없으며 manin_val도 정의되지 않았습니다. 둘 중 하나를 선택해야 합니다"
 
 #: ../raster/r.sim/simlib/input.c:420
 msgid "Zero value in Mannings n"
@@ -19350,7 +19349,7 @@ msgstr ""
 #: ../misc/m.nviz.image/args.c:288 ../misc/m.nviz.image/args.c:298
 #: ../misc/m.nviz.image/args.c:608 ../misc/m.nviz.image/args.c:620
 msgid "Draw"
-msgstr ""
+msgstr "그리기"
 
 #: ../display/d.grid/main.c:137
 msgid "Draw geographic grid (referenced to WGS84 ellipsoid)"
@@ -19404,7 +19403,7 @@ msgstr ""
 #: ../display/d.grid/main.c:238
 #, c-format
 msgid "Invalid grid size <%s>"
-msgstr ""
+msgstr "<%s>는 무효한 격자 크기입니다"
 
 #: ../display/d.grid/fiducial.c:61
 msgid "Reading symbol"
@@ -19850,7 +19849,7 @@ msgstr ""
 
 #: ../display/d.rast.num/main.c:112
 msgid "Get text color from cell color value"
-msgstr ""
+msgstr "셀 색상 값으로부터 문자 색상 얻기"
 
 #: ../display/d.rast.num/main.c:200
 #, c-format
@@ -19910,7 +19909,7 @@ msgstr ""
 #: ../display/d.labels/main.c:85
 #, c-format
 msgid "Label file <%s> not found"
-msgstr ""
+msgstr "레이블 파일 <%s>를 찾을 수 없습니다"
 
 #: ../display/d.labels/main.c:97
 msgid "Region size is lower than minreg, nothing displayed."
@@ -20211,7 +20210,7 @@ msgstr ""
 
 #: ../display/d.text/main.c:591
 msgid "Invalid coordinates"
-msgstr ""
+msgstr "무효한 좌표입니다"
 
 #: ../display/d.info/main.c:38
 msgid "Displays information about the active display monitor."
@@ -20517,7 +20516,7 @@ msgstr ""
 #: ../display/d.where/where.c:30
 #, c-format
 msgid "Invalid coordinates <%s,%s>"
-msgstr ""
+msgstr "<%s,%s>는 무효한 좌표입니다"
 
 #: ../display/d.where/main.c:48
 msgid "Identifies the geographic coordinates associated with point locations given in display coordinates."
@@ -20651,7 +20650,7 @@ msgstr ""
 
 #: ../display/d.vect/main.c:97
 msgid "Display geometry of features"
-msgstr ""
+msgstr "피쳐의 도형을 출력"
 
 #: ../display/d.vect/main.c:98
 msgid "Display category numbers of features"
@@ -20850,7 +20849,7 @@ msgstr ""
 #, c-format
 msgid "%d invalid color rule for lines skipped"
 msgid_plural "%d invalid color rules for lines skipped"
-msgstr[0] ""
+msgstr[0] "%d개의 선을 위한 무효한 색상 규칙을 건너 뛰었습니다"
 
 #: ../display/d.vect/shape.c:53
 #, c-format
@@ -20936,18 +20935,18 @@ msgstr ""
 #: ../display/d.vect/area.c:135
 #, c-format
 msgid "Invalid area %d skipped (not enough points)"
-msgstr ""
+msgstr "무효한 면 %d를 건너 뛰었습니다 (충분하지 못한 점)"
 
 #: ../display/d.vect/area.c:234
 #, c-format
 msgid "%d invalid color rule for areas skipped"
 msgid_plural "%d invalid color rules for areas skipped"
-msgstr[0] ""
+msgstr[0] "%d개의 면을 위한 무효한 색상 규칙을 건너 뛰었습니다"
 
 #: ../display/d.vect/opt.c:126
 #, c-format
 msgid "Unknown color: '%s'"
-msgstr ""
+msgstr "알려지지 않은 색상: '%s'"
 
 #: ../display/d.profile/main.c:68
 #, c-format
@@ -20977,7 +20976,7 @@ msgstr ""
 
 #: ../display/d.title/main.c:52
 msgid "Create a TITLE for a raster map in a form suitable for display with d.text."
-msgstr ""
+msgstr "d.text를 이용해서 출력하기에 적합한 래스터 지도의 제목 생성하기"
 
 #: ../display/d.title/main.c:63
 msgid "Sets the text color"
@@ -21220,7 +21219,7 @@ msgstr ""
 
 #: ../raster3d/r3.retile/main.c:135
 msgid "Rast3d_get_standard3d_params: tile dimension value invalid"
-msgstr ""
+msgstr "Rast3d_get_standard3d_params: 타일의 차원 값이 무효합니다"
 
 #: ../raster3d/r3.retile/main.c:148
 msgid "Error closing 3D raster map"
@@ -21514,7 +21513,7 @@ msgstr ""
 
 #: ../raster3d/r3.out.bin/main.c:250
 msgid "Write data as integer"
-msgstr "정보를 정수 형식으로 씁니다"
+msgstr "정보를 정수로 씁니다"
 
 #: ../raster3d/r3.out.bin/main.c:269
 msgid "Floating-point output requires bytes=4 or bytes=8"
@@ -21740,7 +21739,7 @@ msgstr ""
 
 #: ../raster3d/r3.timestamp/main.c:91
 msgid "Timestamp format is invalid"
-msgstr "타임스탬프의 형식이 잘못됐습니다"
+msgstr "타임스탬프의 양식이 잘못됐습니다"
 
 #: ../raster3d/r3.in.bin/main.c:73
 msgid "Error reading binary data"
@@ -22269,7 +22268,7 @@ msgstr ""
 #: ../general/g.ppmtopng/main.c:37
 #, c-format
 msgid "Invalid input file %s"
-msgstr ""
+msgstr "%s는 무효한 입력 파일입니다"
 
 #: ../general/g.ppmtopng/main.c:77
 msgid "Error writing PNG file"
@@ -22314,7 +22313,7 @@ msgstr ""
 
 #: ../general/g.parser/main.c:139
 msgid "Error closing script file"
-msgstr ""
+msgstr "스크립트 파일을 닫는데 오류가 발생했습니다"
 
 #: ../general/g.parser/revoke.c:64
 msgid "G_spawn() failed"
@@ -22356,7 +22355,7 @@ msgstr ""
 
 #: ../general/g.list/main.c:70
 msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
-msgstr "선택적인 검색패턴을 이용해서 사용자가 지정한 자료형의 유효한 GRASS 데이타베이스 파일을 나열합니다."
+msgstr "선택적인 검색패턴을 이용해서 사용자가 지정한 자료형의 유효한 GRASS 데이터베이스 파일을 나열합니다."
 
 #: ../general/g.list/main.c:86
 msgid "Map name search pattern (default: all)"
@@ -22476,7 +22475,7 @@ msgstr ""
 #: ../general/g.cairocomp/main.c:150 ../general/g.pnmcomp/main.c:38
 #, c-format
 msgid "Invalid color: %s"
-msgstr ""
+msgstr "무효한 색상입니다: %s"
 
 #: ../general/g.cairocomp/main.c:171
 msgid "Failed to initialize input surface"
@@ -22641,7 +22640,7 @@ msgstr ""
 
 #: ../general/g.region/main.c:267
 msgid "Number of columns in the new region"
-msgstr ""
+msgstr "새 영역 내 열의 개수"
 
 #: ../general/g.region/main.c:277
 msgid "2D grid resolution (north-south and east-west)"
@@ -22828,7 +22827,7 @@ msgstr "<%s> GUI를 배경프로세스에서 시작합니다. 기다려주세요
 
 #: ../general/g.rename/main.c:49
 msgid "Renames data base element files in the user's current mapset."
-msgstr "사용자의 현재지도세트 안에 있는 데이타베이스 요소파일들의 이름을 변경합니다."
+msgstr "사용자의 현재 지도세트 안에 있는 데이터베이스 요소파일들의 이름을 변경합니다."
 
 #: ../general/g.rename/main.c:55
 msgid "renamed"
@@ -22903,7 +22902,7 @@ msgstr "지도세트선택 GUI 대화창을 시작합니다"
 #: ../general/g.mapsets/main.c:126
 #, c-format
 msgid "Unknown operation '%s'"
-msgstr "알려지지 않은 작업 '%s'"
+msgstr "알려지지 않은 작업입니다 '%s'"
 
 #: ../general/g.mapsets/main.c:174 ../general/g.mapsets/main.c:208
 #, c-format
@@ -22913,7 +22912,7 @@ msgstr "지도세트 <%s>를 찾을 수 없습니다"
 #: ../general/g.mapsets/main.c:181 ../general/g.mapsets/main.c:240
 #, c-format
 msgid "Current mapset (<%s>) must always included in the search path"
-msgstr "현재지도세트(<%s>)이 반드시 검색경로에 포함되어야 합니다"
+msgstr "현재 지도세트(<%s>)가 반드시 검색경로에 포함되어야 합니다"
 
 #: ../general/g.mapsets/main.c:203
 #, c-format
@@ -22954,7 +22953,7 @@ msgstr ""
 #: ../general/g.pnmcomp/main.c:83 ../general/g.pnmcomp/main.c:134
 #: ../general/g.pnmcomp/main.c:147
 msgid "Invalid PPM file"
-msgstr ""
+msgstr "무효한 PPM 파일입니다"
 
 #: ../general/g.pnmcomp/main.c:96 ../scripts/v.unpack/v.unpack.py:75
 #: ../scripts/v.in.geonames/v.in.geonames.py:57
@@ -22974,11 +22973,11 @@ msgstr ""
 #: ../general/g.pnmcomp/main.c:112
 #, c-format
 msgid "Invalid magic number: 'P%c'"
-msgstr ""
+msgstr "무효한 매직숫자입니다: 'P%c'"
 
 #: ../general/g.pnmcomp/main.c:125 ../general/g.pnmcomp/main.c:142
 msgid "Invalid PGM file"
-msgstr ""
+msgstr "무효한 PGM 파일입니다"
 
 #: ../general/g.pnmcomp/main.c:247
 msgid "Error writing PPM file"
@@ -23171,7 +23170,7 @@ msgstr ""
 #: ../general/g.proj/datumtrans.c:47
 #, c-format
 msgid "Invalid datum code <%s>"
-msgstr ""
+msgstr "<%s>는 무효한 데이텀 코드입니다"
 
 #: ../general/g.proj/datumtrans.c:77
 #, c-format
@@ -23432,7 +23431,7 @@ msgstr ""
 
 #: ../general/g.message/main.c:78
 msgid "Text of the message to be printed"
-msgstr ""
+msgstr "출력할 메시지"
 
 #: ../general/g.message/main.c:79
 msgid "Message is printed on GRASS_VERBOSE>=2"
@@ -23460,7 +23459,7 @@ msgstr "g.setproj를 실행하기 위해서는 PERMANENT 지도세트 안에 있
 
 #: ../general/g.setproj/main.c:101
 msgid "PERMANENT: permission denied"
-msgstr "PERMANENT: 허가되지 않았습니다"
+msgstr "PERMANENT: 접근이 거부되었습니다"
 
 #: ../general/g.setproj/main.c:105
 msgid "Current region cannot be set"
@@ -23493,7 +23492,7 @@ msgstr "XY-로케이션은 투영할 수 없습니다"
 
 #: ../general/g.setproj/main.c:192
 msgid "Unknown projection"
-msgstr "알려지지 않은 투영"
+msgstr "알려지지 않은 투영입니다"
 
 #: ../general/g.setproj/main.c:198
 #, c-format
@@ -23545,7 +23544,7 @@ msgstr "구체의 반경을 미터로 입력하세요"
 
 #: ../general/g.setproj/main.c:336
 msgid "Invalid input ellipsoid"
-msgstr "잘못된 입력 타원체"
+msgstr "무효한 입력 타원체입니다"
 
 #: ../general/g.setproj/main.c:447
 #, c-format
@@ -23571,7 +23570,7 @@ msgstr "아직도 UTM 구역을 바꾸길 원합니까?"
 #: ../general/g.setproj/main.c:497
 #, c-format
 msgid "Error writing PROJ_INFO file <%s>"
-msgstr "PROJ_INFO 파일 <%s>를 쓰는데 오류"
+msgstr "PROJ_INFO 파일 <%s>를 쓰는데 오류가 발생했습니다"
 
 #: ../general/g.setproj/main.c:571
 #, c-format
@@ -23591,7 +23590,7 @@ msgstr "%s를 미터로 바꾸는 변환계수를 입력하세요: "
 #: ../general/g.setproj/main.c:636
 #, c-format
 msgid "Error writing into UNITS output file <%s>"
-msgstr "UNITS 출력파일 <%s>로 쓰는데 오류"
+msgstr "UNITS 출력파일 <%s>로 쓰는데 오류가 발생했습니다"
 
 #: ../general/g.setproj/main.c:643
 msgid "Unable to write to DEFAULT_WIND region file"
@@ -23645,7 +23644,7 @@ msgstr "sf key_value 임시파일을 읽습니다"
 
 #: ../general/g.setproj/get_stp.c:212
 msgid "Invalid State FIPS code"
-msgstr "잘못된 주 FIPS 코드"
+msgstr "무효한 주 FIPS 코드입니다"
 
 #: ../general/g.setproj/get_stp.c:302
 msgid "Reading cf key_value temp file"
@@ -23653,7 +23652,7 @@ msgstr "cf key_value 임시파일을 읽습니다"
 
 #: ../general/g.setproj/get_stp.c:336
 msgid "Invalid County FIPS code"
-msgstr "잘못된 카운티 FIPS 코드"
+msgstr "무효한 카운티 FIPS 코드입니다"
 
 #: ../general/g.access/exp_perms.c:11 ../general/g.access/exp_perms.c:29
 msgid "have"
@@ -23758,11 +23757,11 @@ msgstr "래스터 지도 <%s@%s>는 기반지도입니다. 재분류된 지도 <
 #: ../general/g.remove/check_reclass.c:54
 #, c-format
 msgid "Removing information about reclassed map from <%s@%s> failed"
-msgstr "<%s@%s>로부터 재분류된 지도에 대한 정보를 지우는데 실패했습니다"
+msgstr "<%s@%s>로부터 재분류된 지도에 대한 정보를 삭제하는데 실패했습니다"
 
 #: ../general/g.remove/main.c:73
 msgid "Removes data base element files from the user's current mapset using the search pattern."
-msgstr "검색패턴을 이용해서 사용자의 현재 지도세트로부터 데이타베이스 요소파일을 지웁니다."
+msgstr "검색패턴을 이용해서 사용자의 현재 지도세트로부터 데이터베이스 요소파일을 지웁니다."
 
 #: ../general/g.remove/main.c:83 ../general/g.remove/main.c:91
 #: ../general/g.remove/main.c:133 ../vector/v.kernel/main.c:121
@@ -23776,7 +23775,7 @@ msgstr ""
 
 #: ../general/g.remove/main.c:99
 msgid "Name of file(s) to ignore (default: none)"
-msgstr ""
+msgstr "무시할 파일의 이름 (기본값: 없음)"
 
 #: ../general/g.remove/main.c:105
 msgid "File name search pattern"
@@ -23792,7 +23791,7 @@ msgstr "기반 래스터 지도를 지웁니다"
 
 #: ../general/g.remove/main.c:208
 msgid "The following data base element files would be deleted:"
-msgstr "다음의 데이타베이스 요소파일들이 지워질 것입니다:"
+msgstr "다음의 데이터베이스 요소파일들이 지워질 것입니다:"
 
 #: ../general/g.remove/main.c:259
 msgid "No data base element files found"
@@ -23888,7 +23887,7 @@ msgstr ""
 
 #: ../imagery/i.eb.hsebal01/main.c:116
 msgid "Name of instantaneous net radiation raster map [W/m2]"
-msgstr ""
+msgstr "순간 순복사[W/m2] 래스터 지도의 이름"
 
 #: ../imagery/i.eb.hsebal01/main.c:121
 msgid "Name of instantaneous soil heat flux raster map [W/m2]"
@@ -24036,7 +24035,7 @@ msgstr ""
 #: ../imagery/i.segment/region_growing.c:999
 #, c-format
 msgid "Region id %d is invalid"
-msgstr ""
+msgstr "영역 ID %d가 무효합니다"
 
 #: ../imagery/i.segment/region_growing.c:1003
 msgid "Region consists of only one cell, nothing to update"
@@ -24341,7 +24340,7 @@ msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:395
 msgid "Invalid number of MB, 300 will be used"
-msgstr ""
+msgstr "무효한 MB 개수입니다. 300이 쓰입니다"
 
 #: ../imagery/i.segment/open_files.c:106
 msgid "Insufficient number of non-NULL cells in current region"
@@ -24574,7 +24573,7 @@ msgstr ""
 #: ../imagery/i.cluster/main.c:169
 #, c-format
 msgid "Group <%s> not found in current mapset"
-msgstr ""
+msgstr "현재 지도세트 내에서 그룹 <%s>를 찾지 못 했습니다"
 
 #: ../imagery/i.gensig/parse.c:44 ../imagery/i.maxlik/open.c:20
 #: ../imagery/i.smap/parse.c:64 ../imagery/i.gensigset/parse.c:50
@@ -24748,7 +24747,7 @@ msgstr ""
 
 #: ../imagery/i.rectify/cp.c:34
 msgid "Invalid order."
-msgstr ""
+msgstr "무효한 순서입니다"
 
 #: ../imagery/i.rectify/cp.c:47 ../vector/v.rectify/cp.c:359
 #, c-format
@@ -24757,7 +24756,7 @@ msgstr ""
 
 #: ../imagery/i.rectify/cp.c:58 ../vector/v.rectify/cp.c:370
 msgid "Invalid order"
-msgstr ""
+msgstr "무효한 순서입니다"
 
 #: ../imagery/i.rectify/main.c:84 ../vector/v.rectify/main.c:71
 msgid "rectify"
@@ -24931,7 +24930,7 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:27
 #, c-format
 msgid "%.1f cells per minute"
-msgstr ""
+msgstr "분당 %.1f 셀"
 
 #: ../imagery/i.rectify/target.c:13
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:13
@@ -25035,7 +25034,7 @@ msgstr ""
 #: ../imagery/i.fft/main.c:129
 #, c-format
 msgid "Reading the raster map <%s>..."
-msgstr ""
+msgstr "래스터 지도 <%s>를 읽는 중입니다..."
 
 #: ../imagery/i.fft/main.c:145
 msgid "Starting FFT..."
@@ -25051,7 +25050,7 @@ msgstr ""
 
 #: ../imagery/i.fft/main.c:200
 msgid "FFT is now complete"
-msgstr ""
+msgstr "FFT를 완료했습니다"
 
 #: ../imagery/i.smap/write_img.c:15
 msgid "Writing output raster map(s)..."
@@ -25082,7 +25081,7 @@ msgstr ""
 
 #: ../imagery/i.smap/interp.c:233
 msgid "Invalid parameter values"
-msgstr ""
+msgstr "무효한 매개변수 값입니다"
 
 #: ../imagery/i.smap/segment.c:67
 msgid "Number of classes must be < 256"
@@ -25096,7 +25095,7 @@ msgstr ""
 #: ../imagery/i.smap/read_sig.c:27
 #, c-format
 msgid "Signature file <%s> is invalid"
-msgstr ""
+msgstr "서명 파일 <%s>이 무효합니다"
 
 #: ../imagery/i.smap/read_sig.c:30
 #, c-format
@@ -25273,7 +25272,7 @@ msgstr ""
 
 #: ../imagery/i.topo.corr/main.c:49
 msgid "topographic correction"
-msgstr ""
+msgstr "지형 보정"
 
 #: ../imagery/i.topo.corr/main.c:50
 msgid "Computes topographic correction of reflectance."
@@ -25301,7 +25300,7 @@ msgstr ""
 
 #: ../imagery/i.topo.corr/main.c:85
 msgid "Topographic correction method"
-msgstr ""
+msgstr "지형 보정 방법"
 
 #: ../imagery/i.topo.corr/main.c:90
 msgid "Output sun illumination terrain model"
@@ -25909,7 +25908,7 @@ msgstr ""
 #: ../imagery/i.cluster/main.c:273
 #, c-format
 msgid "Cluster parameters%s"
-msgstr ""
+msgstr "군집 매개변수 %s"
 
 #: ../imagery/i.cluster/main.c:274
 #, c-format
@@ -27076,7 +27075,7 @@ msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:206
 msgid "Bands count"
-msgstr ""
+msgstr "밴드 개수"
 
 #: ../imagery/i.landsat.toar/main.c:206
 msgid "Sun Azimuth Angle"
@@ -27280,12 +27279,12 @@ msgstr ""
 
 #: ../imagery/i.group/main.c:344 ../imagery/i.group/main.c:403
 msgid "No raster map removed"
-msgstr ""
+msgstr "아무런 래스터 지도도 지워지지 않았습니다"
 
 #: ../imagery/i.group/main.c:386
 #, c-format
 msgid "Removing raster map <%s> from subgroup"
-msgstr ""
+msgstr "부그룹으로부터 래스터 지도 <%s>를 지우는 중입니다"
 
 #: ../imagery/i.group/main.c:422
 #, c-format
@@ -27537,7 +27536,7 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:249
 #, c-format
 msgid "Bad format in camera file for group <%s>"
-msgstr ""
+msgstr "그룹 <%s>를 위한 카메라 파일의 포맷이 잘못되었습니다"
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:255
 #, c-format
@@ -27684,7 +27683,7 @@ msgstr ""
 #: ../misc/m.transform/main.c:295
 #, c-format
 msgid "Invalid coordinates: [%s]"
-msgstr ""
+msgstr "무효한 좌표입니다: [%s]"
 
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:393
 msgid "GCP"
@@ -27940,7 +27939,7 @@ msgstr ""
 #: ../misc/m.cogo/main.c:274
 #, c-format
 msgid "Couldn't open output file <%s>"
-msgstr ""
+msgstr "출력 파일 <%s>를 열 수 없습니다"
 
 #: ../misc/m.cogo/main.c:301 ../misc/m.cogo/main.c:304
 msgid "Converting starting coordinate pair"
@@ -28031,7 +28030,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:132
 msgid "Name of raster map(s) for elevation"
-msgstr ""
+msgstr "고도 래스터 지도의 이름"
 
 #: ../misc/m.nviz.image/args.c:142
 msgid "Constant elevation value(s) to use instead of a raster DEM"
@@ -28661,7 +28660,7 @@ msgstr ""
 
 #: ../db/db.databases/main.c:99
 msgid "Lists all databases for a given driver and location."
-msgstr ""
+msgstr "주어진 드라이버와 로케이션을 위한 모든 데이터베이스를 나열합니다."
 
 #: ../db/db.drivers/main.c:39
 msgid "Unable to read dbmscap file"
@@ -28682,7 +28681,7 @@ msgstr ""
 
 #: ../db/db.drivers/main.c:73
 msgid "Lists all database drivers."
-msgstr ""
+msgstr "모든 데이터베이스 드라이버를 나열합니다."
 
 #: ../db/db.columns/main.c:44 ../db/db.copy/main.c:100
 #: ../db/db.describe/main.c:50 ../db/db.select/main.c:53
@@ -28708,7 +28707,7 @@ msgstr ""
 
 #: ../db/db.copy/main.c:52
 msgid "Input database name"
-msgstr ""
+msgstr "입력 데이터베이스 이름"
 
 #: ../db/db.copy/main.c:59
 msgid "Input table name (only, if 'select' is not used)"
@@ -28720,7 +28719,7 @@ msgstr ""
 
 #: ../db/db.copy/main.c:71
 msgid "Output database name"
-msgstr ""
+msgstr "출력 데이터베이스 이름"
 
 #: ../db/db.copy/main.c:78
 msgid "Output table name"
@@ -28772,7 +28771,7 @@ msgstr ""
 
 #: ../db/db.connect/main.c:141 ../db/db.tables/main.c:41
 msgid "Database connection not defined. Run db.connect."
-msgstr ""
+msgstr "데이터베이스 연결이 정의되지 않았습니다. db.connect를 실행하세요."
 
 #: ../db/db.connect/main.c:166
 msgid "DB settings already defined, nothing to do"
@@ -28784,7 +28783,7 @@ msgstr ""
 
 #: ../db/db.connect/main.c:175
 msgid "Default database is not set"
-msgstr ""
+msgstr "기본 데이터베이스가 설정되지 않았습니다"
 
 #: ../db/db.describe/main.c:108
 msgid "Print column names only instead of full column descriptions"
@@ -28952,11 +28951,11 @@ msgstr ""
 
 #: ../db/db.dropdb/main.c:74
 msgid "Removes an existing database."
-msgstr ""
+msgstr "존재하는 데이터베이스를 지웁니다."
 
 #: ../db/db.createdb/main.c:74
 msgid "Creates an empty database."
-msgstr ""
+msgstr "빈 데이터베이스를 생성합니다."
 
 #: ../db/drivers/ogr/listtab.c:49 ../db/drivers/sqlite/listtab.c:78
 msgid "Unable to db_alloc_string_array()"
@@ -29087,7 +29086,7 @@ msgstr ""
 
 #: ../db/drivers/sqlite/db.c:107
 msgid "Unable to open database:"
-msgstr ""
+msgstr "데이터베이스를 열 수 없습니다"
 
 #: ../db/drivers/sqlite/db.c:134
 msgid "SQLite database connection is still busy"
@@ -29105,7 +29104,7 @@ msgstr ""
 #: ../db/drivers/sqlite/db.c:186
 #, c-format
 msgid "Database <%s> not found"
-msgstr ""
+msgstr "데이터베이스 <%s>를 찾을 수 없습니다"
 
 #: ../db/drivers/sqlite/listdb.c:45 ../db/drivers/postgres/listdb.c:35
 msgid "No path given"
@@ -29408,7 +29407,7 @@ msgstr ""
 
 #: ../db/drivers/mysql/select.c:42
 msgid "Unable to select data:"
-msgstr ""
+msgstr "자료를 선택할 수 없습니다:"
 
 #: ../db/drivers/dbf/dbfexe.c:72
 msgid "SQL parser error"
@@ -29545,7 +29544,7 @@ msgstr ""
 
 #: ../db/drivers/dbf/db.c:94
 #, c-format
-msgid "Unable create DBF database: %s"
+msgid "Unable to create DBF database: %s"
 msgstr ""
 
 #: ../db/drivers/dbf/db.c:102
@@ -29715,7 +29714,7 @@ msgstr ""
 
 #: ../vector/v.mkgrid/main.c:146
 msgid "Allow asymmetric hexagons"
-msgstr ""
+msgstr "비대칭 육각형 허용"
 
 #: ../vector/v.mkgrid/main.c:186
 msgid "'coor' and 'position=region' are exclusive options"
@@ -29727,11 +29726,11 @@ msgstr ""
 
 #: ../vector/v.mkgrid/main.c:212 ../vector/v.mkgrid/main.c:248
 msgid "Invalid width"
-msgstr ""
+msgstr "무효한 폭입니다"
 
 #: ../vector/v.mkgrid/main.c:215 ../vector/v.mkgrid/main.c:251
 msgid "Invalid height"
-msgstr ""
+msgstr "무효한 높이입니다"
 
 #: ../vector/v.mkgrid/main.c:231
 msgid "'grid' option missing"
@@ -30182,7 +30181,7 @@ msgstr ""
 #: ../vector/v.extract/main.c:255
 #, c-format
 msgid "Database connection not defined for layer <%s>"
-msgstr "레이어 <%s>를 위한 데이타베이스 연결이 정의되지 않았습니다"
+msgstr "레이어 <%s>를 위한 데이터베이스 연결이 정의되지 않았습니다"
 
 #: ../vector/v.to.rast/vect2rast.c:74
 #, c-format
@@ -30344,7 +30343,7 @@ msgstr ""
 #: ../vector/v.lidar.edgedetection/main.c:207
 #: ../vector/v.lidar.correction/main.c:182 ../vector/v.outlier/main.c:146
 msgid "Unable to read name of database"
-msgstr ""
+msgstr "데이터베이스의 이름을 읽을 수 없습니다"
 
 #: ../vector/v.lidar.edgedetection/main.c:210
 #: ../vector/v.lidar.correction/main.c:185 ../vector/v.outlier/main.c:149
@@ -30882,7 +30881,7 @@ msgstr ""
 #: ../vector/v.kcv/main.c:179 ../vector/v.db.connect/main.c:341
 #, c-format
 msgid "Cannot grant privileges on table %s"
-msgstr ""
+msgstr "테이블 %s에 권한을 부여할 수 없습니다"
 
 #: ../vector/v.kcv/main.c:182 ../vector/v.db.connect/main.c:344
 msgid "Select privileges were granted on the table"
@@ -31450,7 +31449,7 @@ msgstr ""
 #: ../vector/v.net.alloc/main.c:82 ../vector/v.net.alloc/main.c:115
 #: ../vector/v.net.alloc/main.c:120 ../vector/v.net.alloc/main.c:125
 msgid "Cost"
-msgstr ""
+msgstr "비용"
 
 #: ../vector/v.net.distance/main.c:100
 msgid "From layer number or name"
@@ -31567,7 +31566,7 @@ msgstr ""
 
 #: ../vector/v.random/main.c:113
 msgid "Number of points to be created"
-msgstr ""
+msgstr "생성할 점의 개수"
 
 #: ../vector/v.random/main.c:118
 msgid "Restrict points to areas in input vector"
@@ -31708,7 +31707,7 @@ msgstr ""
 #: ../vector/v.support/main.c:190
 #, c-format
 msgid "Unable to open history file for vector map <%s>"
-msgstr ""
+msgstr "벡터 지도 <%s>를 위한 히스토리 파일을 열 수 없습니다"
 
 #: ../vector/v.out.dxf/main.c:58
 msgid "DXF"
@@ -31955,7 +31954,7 @@ msgstr ""
 
 #: ../vector/v.db.connect/main.c:55 ../vector/v.category/main.c:77
 msgid "layer"
-msgstr ""
+msgstr "레이어"
 
 #: ../vector/v.db.connect/main.c:57
 msgid "Prints/sets DB connection for a vector map to attribute table."
@@ -32599,7 +32598,7 @@ msgstr ""
 #: ../vector/v.in.lidar/attributes.c:129
 #, c-format
 msgid "Unable open database <%s> by driver <%s>"
-msgstr ""
+msgstr "데이터베이스 <%s>를 드라이버 <%s>로 열 수가 없습니다"
 
 #: ../vector/v.build.polylines/main.c:114 ../vector/v.segment/main.c:62
 #: ../vector/v.to.points/main.c:57 ../vector/v.split/main.c:57
@@ -32714,13 +32713,13 @@ msgstr ""
 #: ../vector/v.outlier/outlier.c:148 ../vector/v.outlier/outlier.c:161
 #: ../vector/v.outlier/outlier.c:185
 msgid "Impossible to read the database"
-msgstr ""
+msgstr "데이터베이스를 읽을 수 없습니다"
 
 #: ../vector/v.lidar.correction/correction.c:97
 #: ../vector/v.lidar.correction/correction.c:155
 #: ../vector/v.outlier/outlier.c:90 ../vector/v.outlier/outlier.c:152
 msgid "Impossible to update the database"
-msgstr ""
+msgstr "데이터베이스를 갱신할 수 없습니다"
 
 #: ../vector/v.lidar.correction/correction.c:107
 #: ../vector/v.lidar.correction/correction.c:115
@@ -32786,7 +32785,7 @@ msgstr ""
 #: ../vector/v.reclass/main.c:368
 #, c-format
 msgid "Category '%s' invalid"
-msgstr ""
+msgstr "'%s'는 무효한 분류입니다"
 
 #: ../vector/v.reclass/main.c:372
 #, c-format
@@ -33559,11 +33558,11 @@ msgstr "다각형을 분해하는 중..."
 #: ../vector/v.in.ogr/main.c:1434 ../vector/v.in.ogr/main.c:1448
 #: ../vector/v.overlay/area_area.c:113 ../vector/v.delaunay/main.c:144
 msgid "Removing duplicates..."
-msgstr "중복을 지우는 중..."
+msgstr "중복을 제거하는 중..."
 
 #: ../vector/v.buffer/main.c:768 ../vector/v.in.ogr/main.c:1444
 msgid "Breaking boundaries..."
-msgstr "경계를 분해하는 중"
+msgstr "경계를 분해하는 중..."
 
 #: ../vector/v.buffer/main.c:774
 msgid "Cleaning boundaries at nodes"
@@ -33572,12 +33571,12 @@ msgstr ""
 #: ../vector/v.buffer/main.c:782 ../vector/v.in.ogr/main.c:1468
 #: ../vector/v.voronoi/clean_topo.c:87
 msgid "Removing dangles..."
-msgstr "댕글을 지우는 중..."
+msgstr "댕글을 제거하는 중..."
 
 #: ../vector/v.buffer/main.c:785 ../vector/v.in.ogr/main.c:1483
 #: ../vector/v.voronoi/clean_topo.c:89
 msgid "Removing bridges..."
-msgstr "다리를 지우는 중..."
+msgstr "다리를 제거하는 중..."
 
 #: ../vector/v.buffer/main.c:788 ../vector/v.overlay/area_area.c:158
 msgid "Attaching islands..."
@@ -33619,7 +33618,7 @@ msgstr ""
 #: ../vector/v.buffer/geos.c:33 ../vector/v.profile/main.c:74
 #, c-format
 msgid "Invalid x coordinate %f"
-msgstr ""
+msgstr "%f는 무효한 x 좌표입니다"
 
 #: ../vector/v.buffer/geos.c:35 ../vector/v.profile/main.c:76
 #, c-format
@@ -33694,7 +33693,7 @@ msgstr ""
 #: ../vector/v.select/copy_tabs.c:51 ../scripts/v.to.lines/v.to.lines.py:157
 #, c-format, python-format
 msgid "No table for layer %d"
-msgstr ""
+msgstr "레이어 %d를 위한 테이블이 존재하지 않습니다"
 
 #: ../vector/v.select/copy_tabs.c:71
 #, c-format
@@ -34049,7 +34048,7 @@ msgstr ""
 #: ../vector/v.extrude/main.c:243
 #, c-format
 msgid "Column <%s>: invalid data type"
-msgstr ""
+msgstr "열 <%s>: 무효한 자료형입니다"
 
 #: ../vector/v.extrude/main.c:265
 msgid "Extruding areas..."
@@ -35379,7 +35378,7 @@ msgstr ""
 #: ../vector/v.to.3d/trans2.c:43 ../vector/v.to.3d/trans3.c:45
 #, c-format
 msgid "Invalid layer number %d, assuming 1"
-msgstr ""
+msgstr "%d는 무효한 레이어 번호입니다. 1을 가정합니다"
 
 #: ../vector/v.to.3d/trans2.c:67 ../vector/v.to.3d/trans3.c:69
 msgid "Column must be numeric"
@@ -36937,12 +36936,12 @@ msgstr ""
 
 #: ../vector/v.colors/read_rgb.c:37
 msgid "No RGB values found"
-msgstr ""
+msgstr "RGB 값을 찾을 수 없습니다"
 
 #: ../vector/v.colors/read_rgb.c:65
 #, c-format
 msgid "%d invalid RGB color values skipped"
-msgstr ""
+msgstr "%d개의 무효한 RGB 색상 값을 건너 뛰었습니다"
 
 #: ../vector/v.colors/write_rgb.c:60
 #, c-format
@@ -37671,7 +37670,7 @@ msgstr ""
 
 #: ../vector/v.what/what.c:53
 msgid "Cannot open database"
-msgstr ""
+msgstr "데이터베이스를 열 수 없습니다"
 
 #: ../vector/v.what/what.c:66
 msgid "Cannot open select cursor"
@@ -37683,7 +37682,7 @@ msgstr ""
 
 #: ../vector/v.what/what.c:76
 msgid "No database record"
-msgstr ""
+msgstr "데이터베이스 레코드가 존재하지 않습니다"
 
 #: ../vector/v.what/what.c:177
 #, c-format
@@ -37845,7 +37844,7 @@ msgstr ""
 
 #: ../vector/v.what/main.c:105
 msgid "Print the stats in JSON"
-msgstr ""
+msgstr "통계를 JSON 양식으로 출력"
 
 #: ../vector/v.what/main.c:110
 msgid "Print multiple features if overlapping features are found"
@@ -38129,7 +38128,7 @@ msgstr ""
 #: ../vector/v.kernel/main.c:301
 #, c-format
 msgid "Standard deviation: %f"
-msgstr ""
+msgstr "표준편차: %f"
 
 #: ../vector/v.kernel/main.c:306
 #, c-format
@@ -38293,7 +38292,7 @@ msgstr[0] ""
 
 #: ../vector/v.category/main.c:672
 msgid "Layer/table"
-msgstr ""
+msgstr "레이어/테이블"
 
 #: ../vector/v.category/main.c:676
 msgid "Layer"
@@ -38415,7 +38414,7 @@ msgstr ""
 #: ../vector/v.edit/main.c:171
 #, c-format
 msgid "Background vector map <%s> registered"
-msgstr ""
+msgstr "배경 벡터 지도 <%s>를 등록했습니다"
 
 #: ../vector/v.edit/main.c:208
 msgid "Threshold for snapping must be > 0. No snapping applied."
@@ -38844,12 +38843,12 @@ msgstr ""
 #: ../vector/v.info/print.c:130
 #, c-format
 msgid "Database connection for map <%s> is not defined in DB file"
-msgstr "지도 <%s>를 위한 데이타베이스 연결이 DB 파일 안에 정의되지 않았습니다"
+msgstr "지도 <%s>를 위한 데이터베이스 연결이 DB 파일 안에 정의되지 않았습니다"
 
 #: ../vector/v.info/print.c:134
 #, c-format
 msgid "Displaying column types/names for database connection of layer <%s>:"
-msgstr "레이어 <%s>의 데이타베이스 연결을 위한 열형과 이름을 출력합니다:"
+msgstr "레이어 <%s>의 데이터베이스 연결을 위한 열의 자료형과 이름을 출력합니다:"
 
 #: ../vector/v.info/print.c:142
 #, c-format
@@ -38870,7 +38869,7 @@ msgstr ""
 
 #: ../vector/v.info/print.c:327
 msgid "Database:"
-msgstr ""
+msgstr "데이터베이스:"
 
 #: ../vector/v.info/print.c:331
 msgid "Title:"
@@ -38931,7 +38930,7 @@ msgstr ""
 
 #: ../vector/v.info/print.c:413 ../vector/v.info/print.c:422
 msgid "Topology:"
-msgstr ""
+msgstr "위상:"
 
 #: ../vector/v.info/print.c:414
 msgid "schema:"
@@ -39007,7 +39006,7 @@ msgstr ""
 
 #: ../vector/v.info/print.c:498
 msgid "invalid"
-msgstr ""
+msgstr "무효합니다"
 
 #: ../vector/v.info/print.c:500
 msgid "unspecified"
@@ -39044,7 +39043,7 @@ msgstr "정보 대신에 이력을 출력하고 멈춥니다"
 
 #: ../vector/v.info/parse.c:30
 msgid "Print types/names of table columns for specified layer instead of info and exit"
-msgstr "정보 대신 지정한 레이어를 위한 표의 열형과 이름을 출력하고 멈춥니다"
+msgstr "정보 대신 지정한 레이어를 위한 테이블 열의 자료형과 이름을 출력하고 멈춥니다"
 
 #: ../vector/v.info/parse.c:35
 msgid "Print region info in shell script style"
@@ -39419,7 +39418,7 @@ msgstr ""
 #: ../vector/v.extract/copy_tab.c:117
 #, c-format
 msgid "Unable to open database <%s> with driver <%s>"
-msgstr ""
+msgstr "데이터베이스 <%s>를 드라이버 <%s>로 열 수 없습니다"
 
 #: ../vector/v.vect.stats/main.c:339
 msgid "count_column is required to upload point counts"
@@ -39695,7 +39694,7 @@ msgstr ""
 
 #: ../vector/v.lrs/v.lrs.label/main.c:412
 msgid "No record in LR table"
-msgstr ""
+msgstr "LR 테이블 내에 레코드가 없습니다"
 
 #: ../vector/v.lrs/v.lrs.label/main.c:416
 msgid "More than one record in LR table"
@@ -40448,7 +40447,7 @@ msgstr ""
 
 #: ../vector/v.generalize/main.c:136
 msgid "Chaiken's Algorithm"
-msgstr ""
+msgstr "Chaiken 알고리듬"
 
 #: ../vector/v.generalize/main.c:137
 msgid "Interpolation by Cubic Hermite Splines"
@@ -40698,7 +40697,7 @@ msgstr ""
 
 #: ../vector/v.external/list.c:168
 msgid "No feature tables found in database."
-msgstr ""
+msgstr "데이터베이스 내에 피쳐 테이블을 찾을 수 없습니다"
 
 #: ../vector/v.external/list.c:179
 #, c-format
@@ -40749,7 +40748,7 @@ msgstr ""
 
 #: ../vector/v.to.db/update.c:84
 msgid "Updating database..."
-msgstr ""
+msgstr "데이터베이스를 갱신하는 중입니다..."
 
 #: ../vector/v.to.db/update.c:125
 #, c-format
@@ -40976,7 +40975,7 @@ msgstr ""
 
 #: ../visualization/ximgview/main.c:264
 msgid "Invalid BMP header"
-msgstr ""
+msgstr "무효한 BMP 헤더입니다"
 
 #: ../visualization/ximgview/main.c:270
 msgid "Unable to map image file"
@@ -41862,12 +41861,12 @@ msgstr ""
 #: ../scripts/d.frame/d.frame.py:200
 #, python-format
 msgid "Invalid frame position: %s"
-msgstr ""
+msgstr "무효한 프레임 위치입니다: %s"
 
 #: ../scripts/d.frame/d.frame.py:228
 #, python-format
 msgid "Invalid monitor size: %dx%d"
-msgstr ""
+msgstr "무효한 모니터 크기입니다: %dx%d"
 
 #: ../scripts/d.frame/d.frame.py:284
 #, python-format
@@ -42272,7 +42271,7 @@ msgstr ""
 #: ../scripts/r.in.wms/wms_base.py:108
 #, python-format
 msgid "Invalid EPSG code %d"
-msgstr ""
+msgstr "%d는 무효한 EPSG 코드입니다"
 
 #: ../scripts/r.in.wms/wms_base.py:114
 #, python-format
@@ -42763,7 +42762,7 @@ msgstr ""
 #. GTC Invalid WFS maximum features parameter
 #: ../scripts/v.in.wfs/v.in.wfs.py:109
 msgid "Invalid maximum number of features"
-msgstr ""
+msgstr "무효한 최대 피쳐 수입니다"
 
 #. GTC Invalid WFS start index parameter
 #: ../scripts/v.in.wfs/v.in.wfs.py:115
@@ -43839,3 +43838,15 @@ msgstr "출력할 격자지도"
 #, fuzzy
 msgid "%d sites written."
 msgstr "출력할 격자지도"
+
+#~ msgid "Unabel to read segment file"
+#~ msgstr "세그먼트 파일을 읽을 수 없습니다"
+
+#~ msgid "Unable create DBF database: %s"
+#~ msgstr "DBF 데이터베이스를 생성할 수 없습니다: %s"
+
+#~ msgid "Unable to create PROJ_EPSG file: %s"
+#~ msgstr "PROJ_EPSG 파일을 생성할 수 없습니다: %s"
+
+#~ msgid "Error in pj_do_proj6"
+#~ msgstr "pj_do_proj6 내에 오류가 있습니다"

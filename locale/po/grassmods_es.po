@@ -11230,12 +11230,9 @@ msgstr "No ha sido posible reabrir archivo de segmentos"
 #: ../raster/r.stream.extract/dseg.c:97 ../raster/r.stream.extract/bseg.c:46
 #: ../raster/r.stream.extract/bseg.c:96 ../raster/r.stream.extract/seg.c:52
 #: ../raster/r.stream.extract/seg.c:94 ../raster/r.stream.extract/seg.c:103
+#: ../raster/r.stream.extract/cseg.c:97
 msgid "Unable to read segment file"
 msgstr "No ha sido posible leer archivo de segmentos"
-
-#: ../raster/r.stream.extract/cseg.c:97
-msgid "Unabel to read segment file"
-msgstr "No ha sido posible leer archivo de segmetos"
 
 #: ../raster/r.stream.extract/cseg.c:120
 #, c-format
@@ -29701,7 +29698,7 @@ msgstr "No se ha podido ejecutar sentencia."
 
 #: ../db/drivers/dbf/db.c:94
 #, c-format
-msgid "Unable create DBF database: %s"
+msgid "Unable to create DBF database: %s"
 msgstr "No se ha podido crear base de datos DBF: %s"
 
 #: ../db/drivers/dbf/db.c:102
@@ -45410,3 +45407,9 @@ msgstr "%ld categorías"
 
 #~ msgid "The \"unzip\" program is required, please install it first"
 #~ msgstr "Se necesita el programa \"unzip\", por favor primero instálelo "
+
+#~ msgid "Unabel to read segment file"
+#~ msgstr "No ha sido posible leer archivo de segmetos"
+
+#~ msgid "Unable create DBF database: %s"
+#~ msgstr "No se ha podido crear base de datos DBF: %s"

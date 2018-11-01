@@ -249,7 +249,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:723
 msgid "Invalid color table format"
-msgstr ""
+msgstr "무효한 색상 테이블 양식입니다"
 
 #: ../gui/wxpython/modules/colorrules.py:804
 #, python-format
@@ -355,7 +355,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1274
 msgid "No database connection defined"
-msgstr ""
+msgstr "데이터베이스 연결이 정의되지 않았습니다"
 
 #: ../gui/wxpython/modules/colorrules.py:1347
 #, python-format
@@ -1338,7 +1338,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:746
 #: ../gui/wxpython/animation/controller.py:295
 msgid "Invalid input"
-msgstr ""
+msgstr "무효한 입력입니다"
 
 #: ../gui/wxpython/wxplot/dialogs.py:664 ../gui/wxpython/wxplot/base.py:517
 #: ../gui/wxpython/wxplot/base.py:584
@@ -2447,7 +2447,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/dialogs.py:141
 msgid "Invalid location selected."
-msgstr ""
+msgstr "무효한 로케이션이 선택되었습니다."
 
 #: ../gui/wxpython/location_wizard/dialogs.py:142
 #: ../gui/wxpython/location_wizard/dialogs.py:161
@@ -2474,7 +2474,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/dialogs.py:160
 msgid "Invalid region"
-msgstr ""
+msgstr "무효한 영역입니다"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:191
 msgid "Click here to show 3D settings"
@@ -2555,7 +2555,7 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/dialogs.py:489
 #, python-format
 msgid "Invalid value: %s"
-msgstr ""
+msgstr "무효한 값입니다: %s"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:586
 msgid "Select datum transformation"
@@ -2608,7 +2608,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:265
 msgid "Invalid location name"
-msgstr ""
+msgstr "무효한 로케이션 이름입니다"
 
 #: ../gui/wxpython/location_wizard/wizard.py:280
 msgid "Choose GRASS data directory:"
@@ -2617,7 +2617,7 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/wizard.py:294
 #: ../gui/wxpython/location_wizard/wizard.py:2560
 msgid "Location already exists in GRASS Database."
-msgstr ""
+msgstr "GRASS 데이터베이스 내에 로케이션이 이미 존재합니다."
 
 #: ../gui/wxpython/location_wizard/wizard.py:298
 msgid "Unable to create location"
@@ -2855,7 +2855,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:2114
 msgid "GRASS Database:"
-msgstr ""
+msgstr "GRASS 데이터베이스:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2120
 msgid "Location Name:"
@@ -3509,7 +3509,7 @@ msgstr ""
 #: ../gui/wxpython/core/render.py:928
 #, python-format
 msgid "Invalid map size %d,%d\n"
-msgstr ""
+msgstr "%d,%d는 무효한 지도 크기입니다\n"
 
 #: ../gui/wxpython/core/render.py:1009
 #, python-format
@@ -3883,7 +3883,7 @@ msgstr ""
 #: ../gui/wxpython/gis_set.py:122
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:122
 msgid "1. Select GRASS GIS database directory"
-msgstr ""
+msgstr "1. GRASS GIS 데이터베이스 디렉토리를 선택하세요"
 
 #: ../gui/wxpython/gis_set.py:125
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:125
@@ -4032,7 +4032,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:474
 #, python-format
 msgid "Invalid line in GISRC file (%s):%s\n"
-msgstr ""
+msgstr "GISRC 파일 (%s) 내에 무효한 줄이 있습니다: %s\n"
 
 #: ../gui/wxpython/gis_set.py:511
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:505
@@ -4284,7 +4284,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1095
 #: ../gui/wxpython/gui_core/widgets.py:859
 msgid "Invalid name"
-msgstr ""
+msgstr "무효한 이름입니다"
 
 #: ../gui/wxpython/menustrings.py:3 ../gui/wxpython/menustrings.py:2005
 #: ../gui/wxpython/menustrings.py:2055
@@ -4800,7 +4800,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:98
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1099
 msgid "Import database table"
-msgstr ""
+msgstr "데이터베이스 테이블을 가져오기"
 
 #: ../gui/wxpython/menustrings.py:100 ../gui/wxpython/menustrings.py:1119
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:68
@@ -5137,7 +5137,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:155
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1156
 msgid "Export database table"
-msgstr ""
+msgstr "데이터베이스 테이블을 내보내기"
 
 #: ../gui/wxpython/menustrings.py:159 ../gui/wxpython/menustrings.py:1178
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:157
@@ -6650,7 +6650,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:414
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1340
 msgid "Topographic index map"
-msgstr ""
+msgstr "지형색인 지도"
 
 #: ../gui/wxpython/menustrings.py:423 ../gui/wxpython/menustrings.py:1365
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:415
@@ -8291,7 +8291,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:696
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1622
 msgid "Update database values from vector"
-msgstr ""
+msgstr "벡터로부터 데이터베이스 값 갱신하기"
 
 #: ../gui/wxpython/menustrings.py:707 ../gui/wxpython/menustrings.py:1649
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:697
@@ -8397,7 +8397,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:714
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1640
 msgid "Generate from database"
-msgstr ""
+msgstr "데이터베이스로부터 생성하기"
 
 #: ../gui/wxpython/menustrings.py:725 ../gui/wxpython/menustrings.py:1667
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:715
@@ -8892,7 +8892,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:804
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1730
 msgid "Topographic correction"
-msgstr ""
+msgstr "지형 보정"
 
 #: ../gui/wxpython/menustrings.py:817 ../gui/wxpython/menustrings.py:1759
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:805
@@ -9293,7 +9293,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:873
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1799
 msgid "List databases"
-msgstr ""
+msgstr "데이터베이스 나열하기"
 
 #: ../gui/wxpython/menustrings.py:891 ../gui/wxpython/menustrings.py:1833
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:874
@@ -9383,13 +9383,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:888
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1814
 msgid "Create database"
-msgstr ""
+msgstr "데이터베이스 생성하기"
 
 #: ../gui/wxpython/menustrings.py:906 ../gui/wxpython/menustrings.py:1848
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:889
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1815
 msgid "Creates an empty database."
-msgstr ""
+msgstr "빈 데이터베이스를 생성합니다."
 
 #: ../gui/wxpython/menustrings.py:907 ../gui/wxpython/menustrings.py:1849
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:890
@@ -9489,7 +9489,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:907
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1833
 msgid "Vector database connections"
-msgstr ""
+msgstr "벡터 데이터베이스 연결"
 
 #: ../gui/wxpython/menustrings.py:925 ../gui/wxpython/menustrings.py:1867
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:908
@@ -9586,7 +9586,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:924
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1850
 msgid "Reconnect vectors to database"
-msgstr ""
+msgstr "벡터를 데이터베이스로 재연결하기"
 
 #: ../gui/wxpython/menustrings.py:942 ../gui/wxpython/menustrings.py:1884
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:925
@@ -9622,7 +9622,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:930
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1856
 msgid "Connect temporal database"
-msgstr ""
+msgstr "시간 데이터베이스 연결하기"
 
 #: ../gui/wxpython/menustrings.py:948 ../gui/wxpython/menustrings.py:1890
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:931
@@ -13306,7 +13306,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/gselect.py:578
 #, python-format
 msgid "GSelect: invalid item: %s"
-msgstr ""
+msgstr "GSelect: 무효한 아이템입니다: %s"
 
 #: ../gui/wxpython/gui_core/gselect.py:890
 msgid "No table linked to layer <{}>."
@@ -13331,7 +13331,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/gselect.py:1444 ../gui/wxpython/dbmgr/base.py:2956
 #: ../gui/wxpython/dbmgr/base.py:3086 ../gui/wxpython/dbmgr/base.py:3355
 msgid "Database"
-msgstr ""
+msgstr "데이터베이스"
 
 #: ../gui/wxpython/gui_core/gselect.py:1448
 msgid "Protocol"
@@ -13975,6 +13975,8 @@ msgid ""
 "Invalid or empty key column.\n"
 "Unable to create vector map <%s>."
 msgstr ""
+"무효하거나 빈 키 열입니다.\n"
+"벡터 지도 <%s>를 생성할 수 없습니다."
 
 #: ../gui/wxpython/gui_core/dialogs.py:471
 #, python-format
@@ -16063,7 +16065,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:2059
 msgid "Invalid"
-msgstr ""
+msgstr "무효합니다"
 
 #: ../gui/wxpython/animation/temporal_manager.py:112
 msgid "It is not allowed to display data with different temporal types (absolute and relative)."
@@ -16088,7 +16090,7 @@ msgstr ""
 #: ../gui/wxpython/animation/temporal_manager.py:349
 #, python-format
 msgid "Topology of Space time dataset %s is invalid."
-msgstr ""
+msgstr "시공간 자료세트 %s의 위상이 무효합니다"
 
 #: ../gui/wxpython/animation/utils.py:182
 msgid "The number of maps in space-time datasets has to be the same."
@@ -16243,7 +16245,7 @@ msgstr ""
 #: ../gui/wxpython/tplot/frame.py:845 ../gui/wxpython/tplot/frame.py:866
 #: ../gui/wxpython/tplot/frame.py:992
 msgid "Invalid input coordinates"
-msgstr ""
+msgstr "무효한 입력 좌표입니다"
 
 #: ../gui/wxpython/tplot/frame.py:374 ../gui/wxpython/tplot/frame.py:487
 #: ../gui/wxpython/timeline/frame.py:180
@@ -16329,11 +16331,11 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:862
 msgid "Invalid input raster dataset"
-msgstr ""
+msgstr "무효한 입력 래스터 자료세트입니다"
 
 #: ../gui/wxpython/tplot/frame.py:879
 msgid "Invalid input vector dataset"
-msgstr ""
+msgstr "무효한 입력 벡터 자료세트입니다"
 
 #: ../gui/wxpython/tplot/frame.py:941 ../gui/wxpython/timeline/frame.py:478
 #, python-format
@@ -16346,7 +16348,7 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:985 ../gui/wxpython/tplot/frame.py:1043
 msgid "Invalid input temporal dataset"
-msgstr ""
+msgstr "무효한 입력 시간 자료세트입니다"
 
 #: ../gui/wxpython/tplot/frame.py:1064
 msgid "Datasets have different number of values"
@@ -18399,7 +18401,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:99 ../gui/wxpython/dbmgr/base.py:2278
 msgid "Database connection"
-msgstr ""
+msgstr "데이터베이스 연결"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:131
 msgid "Set SQL statement to default"
@@ -19435,7 +19437,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/preferences.py:132
 msgid "Invalid:"
-msgstr ""
+msgstr "무효합니다:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:150
 msgid "Running:"
@@ -19678,7 +19680,7 @@ msgstr ""
 
 #: ../gui/wxpython/timeline/frame.py:580
 msgid "WARNING: invalid topology"
-msgstr ""
+msgstr "경고: 무효한 위상입니다"
 
 #: ../gui/wxpython/timeline/frame.py:582
 msgid ""

@@ -94,7 +94,7 @@ int cseg_put_row(CSEG *cseg, CELL *value, GW_LARGE_INT row)
 int cseg_get(CSEG *cseg, CELL *value, GW_LARGE_INT row, GW_LARGE_INT col)
 {
     if (Segment_get(&(cseg->seg), value, row, col) < 0) {
-	G_warning(_("Unabel to read segment file"));
+	G_warning(_("Unable to read segment file"));
 	return -1;
     }
     return 0;

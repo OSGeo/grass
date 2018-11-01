@@ -91,7 +91,7 @@ int db__driver_open_database(dbHandle * handle)
 
 	    status = G_mkdir(db.name);
 	    if (status != 0) {	/* mkdir failed */
-		db_d_append_error(_("Unable create DBF database: %s"), name);
+		db_d_append_error(_("Unable to create DBF database: %s"), name);
 		db_d_report_error();
 		return DB_FAILED;
 	    }

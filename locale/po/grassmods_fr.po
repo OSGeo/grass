@@ -11216,11 +11216,8 @@ msgstr "Impossible de ré-ouvrir le fichier segment"
 #: ../raster/r.stream.extract/dseg.c:97 ../raster/r.stream.extract/bseg.c:46
 #: ../raster/r.stream.extract/bseg.c:96 ../raster/r.stream.extract/seg.c:52
 #: ../raster/r.stream.extract/seg.c:94 ../raster/r.stream.extract/seg.c:103
-msgid "Unable to read segment file"
-msgstr "Impossible de lire le fichier segment"
-
 #: ../raster/r.stream.extract/cseg.c:97
-msgid "Unabel to read segment file"
+msgid "Unable to read segment file"
 msgstr "Impossible de lire le fichier segment"
 
 #: ../raster/r.stream.extract/cseg.c:120
@@ -29652,7 +29649,7 @@ msgstr ""
 
 #: ../db/drivers/dbf/db.c:94
 #, c-format
-msgid "Unable create DBF database: %s"
+msgid "Unable to create DBF database: %s"
 msgstr ""
 
 #: ../db/drivers/dbf/db.c:102
@@ -44753,3 +44750,6 @@ msgstr "%ld catégories"
 
 #~ msgid "%d areas represent more (overlapping) features, because polygons overlap in input layer(s). Such areas are linked to more than 1 row in attribute table. The number of features for those areas is stored as category in layer %d"
 #~ msgstr "les entités surfaciques %d comprennent des objets se recouvrant, étant donné que les polygones se recouvrent dans les couches en entrée. De telles entités sont liées à plus d'un tuple de la table attributaire. Le nombre d'objets de ces entités est stocké comme une catégorie de la couche %d"
+
+#~ msgid "Unabel to read segment file"
+#~ msgstr "Impossible de lire le fichier segment"
