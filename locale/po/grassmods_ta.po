@@ -11193,11 +11193,8 @@ msgstr ""
 #: ../raster/r.stream.extract/dseg.c:97 ../raster/r.stream.extract/bseg.c:46
 #: ../raster/r.stream.extract/bseg.c:96 ../raster/r.stream.extract/seg.c:52
 #: ../raster/r.stream.extract/seg.c:94 ../raster/r.stream.extract/seg.c:103
-msgid "Unable to read segment file"
-msgstr ""
-
 #: ../raster/r.stream.extract/cseg.c:97
-msgid "Unabel to read segment file"
+msgid "Unable to read segment file"
 msgstr ""
 
 #: ../raster/r.stream.extract/cseg.c:120
@@ -29559,7 +29556,7 @@ msgstr ""
 
 #: ../db/drivers/dbf/db.c:94
 #, c-format
-msgid "Unable create DBF database: %s"
+msgid "Unable to create DBF database: %s"
 msgstr ""
 
 #: ../db/drivers/dbf/db.c:102

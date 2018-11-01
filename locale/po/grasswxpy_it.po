@@ -17544,8 +17544,6 @@ msgid ""
 "Select areas from the\n"
 "overlaid vector map"
 msgstr ""
-"Seleziona le aree dal\n"
-"vettoriale di overlay"
 
 #: ../gui/wxpython/rlisetup/wizard.py:898
 msgid "Choose a method"
