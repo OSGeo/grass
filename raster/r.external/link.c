@@ -8,8 +8,6 @@
 void query_band(GDALRasterBandH hBand, const char *output,
 		struct Cell_head *cellhd, struct band_info *info)
 {
-    int bGotMin, bGotMax;
-
     info->gdal_type = GDALGetRasterDataType(hBand);
 
     info->null_val = GDALGetRasterNoDataValue(hBand, &info->has_null);
@@ -49,10 +47,7 @@ void query_band(GDALRasterBandH hBand, const char *output,
 	break;
     }
 
-    info->range[0] = GDALGetRasterMinimum(hBand, &bGotMin);
-    info->range[1] = GDALGetRasterMaximum(hBand, &bGotMax);
-    if(!(bGotMin && bGotMax))
-	GDALComputeRasterMinMax(hBand, 0, info->range);
+    GDALComputeRasterMinMax(hBand, 0, info->range);
 
     Rast_init_colors(&info->colors);
 
