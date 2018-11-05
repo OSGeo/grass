@@ -1,13 +1,20 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.in.png</em> imports a PNG image as a GRASS raster map.
+<em>r.in.png</em> imports a non-georeferenced Portable Network Graphics (PNG) image
+as a GRASS raster map. Georeferencing .wld files are not supported, for that
+<em>r.import</em> can be used.
+
+<h2>NOTES</h2>
+
+In order to assign georeferencing after import use <em>r.region</em>.
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="r.import.html">r.import</a>,
 <a href="r.in.gdal.html">r.in.gdal</a>,
-<a href="r.out.png.html">r.out.png</a>
+<a href="r.out.png.html">r.out.png</a>,
+<a href="r.region.html">r.region</a>
 </em>
 
 <h2>AUTHORS</h2>
