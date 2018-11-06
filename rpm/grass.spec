@@ -3,7 +3,7 @@
 
 Name:		grass
 Version:	7.4.2
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
 %if 0%{?rhel}
@@ -316,7 +316,7 @@ fi
 %files libs
 %license AUTHORS COPYING GPL.TXT CHANGES
 %{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
-%{_libdir}/%{name}%{shortver}/lib/*.%{version}.so
+%{_libdir}/%{name}%{shortver}/lib/*.so
 %{_libdir}/%{name}%{shortver}/lib/*.a
 %dir %{_libdir}/%{name}%{shortver}/driver
 %dir %{_libdir}/%{name}%{shortver}/driver/db
@@ -330,11 +330,13 @@ fi
 %{macrosdir}/macros.%{name}
 %{_libdir}/pkgconfig/*
 %dir %{_libdir}/%{name}%{shortver}/lib
-%{_libdir}/%{name}%{shortver}/lib/*[!%{version}].so
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
-* Sun Oct 28 2018 Markus Neteler <neteler@mundialis.de> - 7.4.2-0
+* Tue Nov 06 2018 Markus Neteler <neteler@mundialis.de> - 7.4.2-2
+- fix to include libgrass_*.so files in grass-libs.rpm
+
+* Sun Oct 28 2018 Markus Neteler <neteler@mundialis.de> - 7.4.2-1
 - new upstream version 7.4.2
 
 * Sun Sep 09 2018 Pavel Raiskup <praiskup@redhat.com> - 7.4.1-8
