@@ -31,7 +31,7 @@ class TestRasterReport(TestCase):
         cls.del_temp_region()
 
     def tearDown(self):
-        self.runModule('g.remove', type='vector', flags='f', name=cls.output)
+        self.runModule('g.remove', type='vector', flags='f', name=self.output)
 
     def test_opo(self):
         """Testing operator overlap"""
