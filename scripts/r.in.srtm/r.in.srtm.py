@@ -56,6 +56,7 @@
 #% description: Imports SRTM HGT files into raster map.
 #% keyword: raster
 #% keyword: import
+#% keyword: SRTM
 #%End
 #%option G_OPT_F_INPUT
 #% description: Name of SRTM input tile (file without .hgt.zip extension)
