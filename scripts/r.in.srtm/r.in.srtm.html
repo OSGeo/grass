@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.in.srtm</em> imports SRTM hgt files into GRASS.
+<em>r.in.srtm</em> imports SRTM HGT files into GRASS.
 
 SRTM Version 1 and improved Version 2 data sets can be downloaded from 
 NASA at this site:<br>
@@ -15,19 +15,21 @@ Gap-filled SRTM Version 3 data can be downloaded from USGS at this site:<br>
 SRTM tiles are of 1 degree by 1 degree size. The SRTM filename contains the
 coordinates which refer to the <b>center</b> of the lower left pixel (e.g., N51E010: 
 lower left cell center at 10E, 51N). To identify a tile name, a grid can be easily
-visualized in the GRASS monitor:
+visualized by <em><a href="d.grid.html">d.grid</a></em>:
 
 <div class="code"><pre>
 d.grid size=1
 </pre></div>
 
-To import TOPEX/SRTM30 PLUS data, use <em>r.in.bin</em>.
+To import TOPEX/SRTM30 PLUS data, use <em><a href="r.in.bin.html">r.in.bin</a></em>.
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.in.bin.html">r.in.bin</a>
+<a href="r.in.bin.html">r.in.bin</a>,
+<a href="https://grass.osgeo.org/grass7/manuals/addons/r.in.srtm.region.html">r.in.srtm.region</a> (Addon)
 </em>
+
 <p>The <a href="http://www2.jpl.nasa.gov/srtm/">Shuttle Radar Topography Mission</a>
 homepage at NASA's JPL.
 <br>
