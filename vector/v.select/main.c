@@ -118,17 +118,6 @@ int main(int argc, char *argv[])
     /* Read field info */
     IFi = Vect_get_field(&(In[0]), ifield[0]);
 
-    /* Open output */
-    if (Vect_open_new(&Out, parm.output->answer, Vect_is_3d(&(In[0]))) < 0)
-	G_fatal_error(_("Unable to create vector map <%s>"),
-			parm.output->answer);
-
-    Vect_set_map_name(&Out, _("Output from v.select"));
-    Vect_set_person(&Out, G_whoami());
-    Vect_copy_head_data(&(In[0]), &Out);
-    Vect_hist_copy(&(In[0]), &Out);
-    Vect_hist_command(&Out);
-    
     /* Select features */
 #ifdef HAVE_GEOS
     nfound = select_lines(&(In[0]), itype[0], ifield[0],
@@ -155,6 +144,16 @@ int main(int argc, char *argv[])
 
 
     if (nfound != 0) {
+        /* Open output */
+        if (Vect_open_new(&Out, parm.output->answer, Vect_is_3d(&(In[0]))) < 0)
+	    G_fatal_error(_("Unable to create vector map <%s>"),
+	    		    parm.output->answer);
+
+        Vect_set_map_name(&Out, _("Output from v.select"));
+        Vect_set_person(&Out, G_whoami());
+        Vect_copy_head_data(&(In[0]), &Out);
+        Vect_hist_copy(&(In[0]), &Out);
+        Vect_hist_command(&Out);
 
 	native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
 
