@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 {
     struct Map_info In, Out, Error;
     struct line_pnts *Points;
-    struct line_cats *Cats;
+    struct line_cats *Cats, *ACats;
     int i, type, iter;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out, *error_out, *thresh_opt, *method_opt,
@@ -317,6 +317,7 @@ int main(int argc, char *argv[])
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
+    ACats = Vect_new_cats_struct();
 
     Vect_check_input_output_name(map_in->answer, map_out->answer,
 				 G_FATAL_EXIT);
@@ -438,13 +439,13 @@ int main(int argc, char *argv[])
 			    right = Vect_get_isle_area(&Out, abs(right));
 
 			if (left > 0) {
-			    Vect_get_area_cats(&Out, left, Cats);
-			    do_line = Vect_cats_in_constraint(Cats, layer, cat_list);
+			    Vect_get_area_cats(&Out, left, ACats);
+			    do_line = Vect_cats_in_constraint(ACats, layer, cat_list);
 			}
 			
 			if (!do_line && right > 0) {
-			    Vect_get_area_cats(&Out, right, Cats);
-			    do_line = Vect_cats_in_constraint(Cats, layer, cat_list);
+			    Vect_get_area_cats(&Out, right, ACats);
+			    do_line = Vect_cats_in_constraint(ACats, layer, cat_list);
 			}
 		    }
 		    if (!do_line)
