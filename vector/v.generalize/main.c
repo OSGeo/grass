@@ -358,6 +358,10 @@ int main(int argc, char *argv[])
     if (layer > 0)
 	cat_list = Vect_cats_set_constraint(&In, layer, 
 			      where_opt->answer, cat_opt->answer);
+    else if (where_opt->answer || cat_opt->answer) {
+	G_warning(_("No layer selected, '%s' and '%s' options are ignored"),
+	          where_opt->key, cat_opt->key);
+    }
 
     if (method == DISPLACEMENT) {
 	/* modifies only lines, all other features including boundaries are preserved */
