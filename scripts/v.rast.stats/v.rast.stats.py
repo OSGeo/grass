@@ -40,6 +40,8 @@
 #%end
 #%option G_OPT_V_FIELD
 #%end
+#%option G_OPT_DB_WHERE
+#%end
 #%option G_OPT_R_INPUTS
 #% key: raster
 #% description: Name of input raster map to calculate statistics from
@@ -104,6 +106,7 @@ def main():
     colprefixes = options['column_prefix'].split(',')
     vector = options['map']
     layer = options['layer']
+    where = options['where']
     percentile = options['percentile']
     basecols = options['method'].split(',')
 
@@ -155,13 +158,15 @@ def main():
     # prepare base raster for zonal statistics
     try:
         nlines = grass.vector_info_topo(vector)['lines']
+	kwargs = {}
+	if where:
+	    kwargs['where'] = where
         # Create densified lines rather than thin lines
         if flags['d'] and nlines > 0:
-            grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
-                              use='cat', flags='d', quiet=True)
-        else:
-            grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
-                              use='cat', quiet=True)
+	    kwargs['flags'] = 'd'
+
+	grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
+			  use='cat', quiet=True, **kwargs)
     except CalledModuleError:
         grass.fatal(_("An error occurred while converting vector to raster"))
 
