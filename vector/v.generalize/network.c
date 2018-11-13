@@ -184,7 +184,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
 	    Vect_reset_list(prev[j]);
 
 	while (front != back) {
-	    int v, j;
+	    int v;
 
 	    v = queue[front];
 	    comp[i]++;
@@ -220,7 +220,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
 	    }
 	memset(betw, 0, sizeof(double) * g.vertices);
 	while (front != back) {
-	    int v, j;
+	    int v;
 
 	    v = queue[front];
 	    front = (front + 1) % g.vertices;

@@ -289,7 +289,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     }
     index = 0;
     for (i = 1; i <= n_lines; i++) {
-	int type = Vect_read_line(In, Points, Cats, i);
+	type = Vect_read_line(In, Points, Cats, i);
 
 	if (type != GV_LINE ||
 	    (layer > 0 && !Vect_cats_in_constraint(Cats, layer, cat_list))) {

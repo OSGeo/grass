@@ -70,7 +70,6 @@ int douglas_peucker(struct line_pnts *Points, double thresh, int with_z)
 
 	int maxindex = -1;
 	double maxdist = -1;
-	int i;
 
 	for (i = first + 1; i <= last - 1; i++) {	/* Find the furthermost point between first, last */
 	    double px, py, pz, pdist;
@@ -87,7 +86,6 @@ int douglas_peucker(struct line_pnts *Points, double thresh, int with_z)
 	    }
 	}
 
-
 	if (maxindex == -1 || maxdist <= thresh) {	/* no points between or all point are inside the threshold */
 	    index[icount++] = last;
 	}
@@ -98,10 +96,7 @@ int douglas_peucker(struct line_pnts *Points, double thresh, int with_z)
 	    stack[top++] = first;
 	    stack[top++] = maxindex;
 	}
-
-
     }
-
 
     Points->n_points = icount;
 
@@ -114,6 +109,7 @@ int douglas_peucker(struct line_pnts *Points, double thresh, int with_z)
 
     G_free(stack);
     G_free(index);
+
     return (Points->n_points);
 }
 
