@@ -14043,7 +14043,7 @@ msgstr "No se puede abrir <%s>"
 #: ../raster/r.in.bin/main.c:554
 #, c-format
 msgid "East-West (ewres: %f) and North-South (nsres: %f) resolution differ significantly. Did you assign %s= and %s= correctly?"
-msgstr "La resolución Este-Oeste (ewres: %f) y Norte-Sur (nwres: %f) difiere significativamente. ¿Asignaste %s= y %s= correctamente?"
+msgstr "La resolución Este-Oeste (ewres: %f) y Norte-Sur (nsres: %f) difiere significativamente. ¿Asignaste %s= y %s= correctamente?"
 
 #: ../raster/r.in.bin/main.c:575
 msgid "File Size %"
