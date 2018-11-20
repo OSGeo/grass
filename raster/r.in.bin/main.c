@@ -551,7 +551,7 @@ int main(int argc, char *argv[])
     if (cellhd.proj == PROJECTION_LL && cellhd.ew_res / cellhd.ns_res > 10.)
 	/* TODO: find a reasonable value */
 	G_warning(
-	    _("East-West (ewres: %f) and North-South (nwres: %f) "
+	    _("East-West (ewres: %f) and North-South (nsres: %f) "
 	      "resolution differ significantly. "
 	      "Did you assign %s= and %s= correctly?"),
 	    cellhd.ew_res, cellhd.ns_res, parm.east->key, parm.west->key);
