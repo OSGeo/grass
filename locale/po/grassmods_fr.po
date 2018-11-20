@@ -14022,7 +14022,7 @@ msgstr "Impossible d'ouvrir <%s>"
 
 #: ../raster/r.in.bin/main.c:554
 #, c-format
-msgid "East-West (ewres: %f) and North-South (nwres: %f) resolution differ significantly. Did you assign %s= and %s= correctly?"
+msgid "East-West (ewres: %f) and North-South (nsres: %f) resolution differ significantly. Did you assign %s= and %s= correctly?"
 msgstr "Les résolutions Est-Ouest (ewres : %f) et Nord-Sud (nsres : %f) diffèrent significativement. Avez-vous renseigné %s= et %s= correctement ?"
 
 #: ../raster/r.in.bin/main.c:575

@@ -16002,7 +16002,7 @@ msgstr "Ne morem odpreti cellfile za [%s]"
 #: ../raster/r.in.bin/main.c:554
 #, c-format
 msgid ""
-"East-West (ewres: %f) and North-South (nwres: %f) resolution differ "
+"East-West (ewres: %f) and North-South (nsres: %f) resolution differ "
 "significantly. Did you assign %s= and %s= correctly?"
 msgstr ""
 
