@@ -2228,6 +2228,21 @@ def main():
 
         # close GUI if running
         close_gui()
+        # clean the sqlite db
+        from grass.script import db as gdb
+        from grass.script import core as gcore
+        conn = gdb.db_connection()
+        if conn and conn['driver'] == 'sqlite':
+	    # check if db exists
+	    gisenv = gcore.gisenv()
+	    database = conn['database']
+	    database = database.replace('$GISDBASE', gisenv['GISDBASE'])
+	    database = database.replace('$LOCATION_NAME', gisenv['LOCATION_NAME'])
+	    database = database.replace('$MAPSET', gisenv['MAPSET'])
+	    if os.path.exists(database):
+		message(_("Cleaning up sqlite database ..."))
+		gcore.start_command('db.execute', sql = 'VACUUM')
+
         # here we are at the end of grass session
         clear_screen()
         # save 'last used' GISRC after removing variables which shouldn't
