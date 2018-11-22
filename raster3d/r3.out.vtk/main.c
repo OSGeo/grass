@@ -417,8 +417,7 @@ int main(int argc, char *argv[])
         fp = fopen(param.output->answer, "w");
         if (fp == NULL) {
             perror(param.output->answer);
-            G_usage();
-            exit(EXIT_FAILURE);
+            G_fatal_error(_("Unable to open file <%s>"), param.output->answer);
         }
     } else
         fp = stdout;
