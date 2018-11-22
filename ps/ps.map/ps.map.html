@@ -10,7 +10,7 @@ information to be printed must be prepared prior to running <em>ps.map</em>.
 
 <h2>NOTES</h2> 
 
-<p>The order of commands is generally unimportant but may affect how some layers
+The order of commands is generally unimportant but may affect how some layers
 are drawn. For example to plot <b>vpoints</b> above <b>vareas</b> list the
 <b>vpoints</b> entry first. Raster maps are always drawn first, and only a
 single raster map (or 3 if part of a RGB group) may be used.
@@ -27,9 +27,9 @@ controlled by the current region settings via the
 <a href="g.region.html">g.region</a> module. The output filesize is largely
 a function of the region resolution, so special care should be taken
 if working with large raster datasets. For example if the desired output is
-US-Letter sized paper at 300dpi, with 1" margins and the raster filling the
-entire page, the usable area on the page will be 6.5" x 9", which at 300
-dots/inch is equivalent to a region of 1950 columns x 2700 rows (see 
+US-Letter sized paper at 600dpi, with 1" margins and the raster filling the
+entire page, the usable area on the page will be 6.5" x 9", which at 600
+dots/inch is equivalent to a region of 3900 columns x 5400 rows (see 
 "<tt>g.region -p</tt>"). Any higher resolution settings will make the
 output file larger, but with a consumer printer you probably won't be able
 to resolve any better detail in the hardcopy.
