@@ -153,11 +153,11 @@ g.region -dp3 res=1000 res3=1000
 r.mapcalc "bottom = 100"
 
 #export of volume to VTK:
-r3.out.vtk -s in=precip3d.500z50 top=dem500 bottom=bottom
-out=/tmp/slovakia3d.vtk
+r3.out.vtk -s in=precip3d.500z50 top=dem500 bottom=bottom \
+   output=/path/to/slovakia3d.vtk
 
 # visualize in paraview or other VTK viewer:
-paraview --data=/tmp/slovakia3d.vtk
+paraview --data=/path/to/slovakia3d.vtk
 # set Display style to 'surface#
 # set Actor Control z to 10
 </pre></div>
