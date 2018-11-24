@@ -204,3 +204,23 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
 
     os.environ['GISRC'] = write_gisrc(dbase, location, mapset)
     return os.environ['GISRC']
+
+
+# clean-up functions when terminating a GRASS session
+def clean_default_db():
+    # clean the default db if it is sqlite
+    from grass.script import db as gdb
+    from grass.script import core as gcore
+    conn = gdb.db_connection()
+    if conn and conn['driver'] == 'sqlite':
+	# check if db exists
+	gisenv = gcore.gisenv()
+	database = conn['database']
+	database = database.replace('$GISDBASE', gisenv['GISDBASE'])
+	database = database.replace('$LOCATION_NAME', gisenv['LOCATION_NAME'])
+	database = database.replace('$MAPSET', gisenv['MAPSET'])
+	if os.path.exists(database):
+	    gcore.message(_("Cleaning up sqlite database ..."))
+	    gcore.start_command('db.execute', sql = 'VACUUM')
+
+
