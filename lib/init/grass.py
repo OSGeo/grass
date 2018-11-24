@@ -640,7 +640,12 @@ def set_paths(grass_config_dir):
 
     # Set PYTHONPATH to find GRASS Python modules
     if os.path.exists(gpath('etc', 'python')):
-        path_prepend(gpath('etc', 'python'), 'PYTHONPATH')
+	pythonpath = gpath('etc', 'python')
+        path_prepend(pythonpath, 'PYTHONPATH')
+        # the env var PYTHONPATH is only evaluated when python is started,
+        # thus:
+        sys.path.append(pythonpath)
+        # now we can import stuff from GRASS lib/python 
 
     # set path for the GRASS man pages
     grass_man_path = gpath('docs', 'man')
@@ -1840,6 +1845,17 @@ def clean_temp():
     nul.close()
 
 
+def clean_all():
+    from grass.script import setup as gsetup
+    # clean default sqlite db
+    gsetup.clean_default_db()
+    # remove leftover temp files
+    clean_temp()
+    # save 'last used' GISRC after removing variables which shouldn't
+    # be saved, e.g. d.mon related
+    clean_env(os.environ['GISRC'])
+
+
 def grep(pattern, lines):
     """Search lines (list of strings) and return them when beginning matches.
 
@@ -2178,9 +2194,6 @@ def main():
     # for first time user because the cost is low and first time user
     # doesn't necessarily mean that the mapset is used for the first time.
     clean_temp()
-    # clean always at exit, cleans whatever is current mapset based on
-    # the GISRC env variable
-    atexit.register(clean_temp)
 
     # build user fontcap if specified but not present
     make_fontcap()
@@ -2192,8 +2205,12 @@ def main():
     # only non-error, interactive version continues from here
     if batch_job:
         returncode = run_batch_job(batch_job)
+        clean_all(params.tmp_location)
         sys.exit(returncode)
     elif params.exit_grass:
+        # clean always at exit, cleans whatever is current mapset based on
+        # the GISRC env variable
+        clean_all(params.tmp_location)
         sys.exit(0)
     else:
         clear_screen()
@@ -2230,15 +2247,13 @@ def main():
         close_gui()
 
         # here we are at the end of grass session
-	from grass.script import setup as gsetup
-	gsetup.clean_default_db()
         clear_screen()
-        # save 'last used' GISRC after removing variables which shouldn't
-        # be saved, e.g. d.mon related
-        clean_env(gisrc)
+        clean_all(params.tmp_location)
         if not params.tmp_location:
             writefile(gisrcrc, readfile(gisrc))
         # After this point no more grass modules may be called
+	# done message at last: no atexit.register()
+	# or register done_message() 
         done_message()
 
 if __name__ == '__main__':
