@@ -1,4 +1,4 @@
-gern# translation of grassmods_zh.po to Simplified Chinese
+# translation of grassmods_zh.po to Simplified Chinese
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2005, GRASS Development Team
 #
