@@ -2205,12 +2205,12 @@ def main():
     # only non-error, interactive version continues from here
     if batch_job:
         returncode = run_batch_job(batch_job)
-        clean_all(params.tmp_location)
+        clean_all()
         sys.exit(returncode)
     elif params.exit_grass:
         # clean always at exit, cleans whatever is current mapset based on
         # the GISRC env variable
-        clean_all(params.tmp_location)
+        clean_all()
         sys.exit(0)
     else:
         clear_screen()
@@ -2248,7 +2248,7 @@ def main():
 
         # here we are at the end of grass session
         clear_screen()
-        clean_all(params.tmp_location)
+        clean_all()
         if not params.tmp_location:
             writefile(gisrcrc, readfile(gisrc))
         # After this point no more grass modules may be called
