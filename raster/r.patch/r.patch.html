@@ -26,22 +26,37 @@ The current geographic region definition and mask settings are respected.
 
 <center>
 <img src="r_patch.png">
-<p><em>Figure: Result of patching two raster maps containing NULLs using
-the default settings</em></p>
+<p><em>Figure: Result of patching of two raster maps containing NULLs
+using the default settings.</em></p>
 </center>
 
 <h3>Stacking order</h3>
+
 <p>The first <em>name</em> listed in the string
-<b>input=</b><em>name</em>,<em>name</em>,<em>name</em>, ... is the name of
-the first map whose data values will be used to fill in "no data" cells
-in the current region. The second through last input <em>name</em>
-maps will be used, in order, to supply data values for for the remaining
-"no data" cells.
+<b>input=</b><em>name</em>,<em>name</em>,<em>name</em>,... is the name
+of the first map whose data values will be used to fill in
+cells in the current region.
+Then, the second through the last input
+maps (..., <em>name</em>, <em>name</em>, ...) will be used,
+in order, to supply data values for the remaining
+"no data" cells (or cells with value 0 with <b>-z</b> flag).
+
+<p>
+In other words, the first raster map is used first and if it had some
+"no data" cells, then second raster map is used for these cells, then
+the third and so on.
+So the formal command line syntax can be also written as
+<b>input=</b><em>primary</em>,<em>secondary</em>,<em>tertiary</em>,...
+For two raster maps, the first one can be viewed as the primary one
+or the default one and the second one as the secondary one or a fallback. 
 
 <center>
 <img src="r_patch_zeros_as_nulls.png">
-<p><em>Figure: Result of patching two raster maps using the <b>-z</b> flag
-to treat zeros as NULLs</em></p>
+<p><em>Figure: Result of patching of two raster maps using the
+<b>-z</b> flag to treat zeros as NULLs. Note the value 1 being preserved
+from the first raster while the value 6 is taken from the second raster
+instead of the value 0 from the first raster because zeros are replacedthe
+with <b>-z</b> flag active.</em></p>
 </center>
 
 <h3>Relation to SQL COALESCE() function</h3>
