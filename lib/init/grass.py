@@ -640,7 +640,7 @@ def set_paths(grass_config_dir):
 
     # Set PYTHONPATH to find GRASS Python modules
     if os.path.exists(gpath('etc', 'python')):
-	pythonpath = gpath('etc', 'python')
+        pythonpath = gpath('etc', 'python')
         path_prepend(pythonpath, 'PYTHONPATH')
         # the env var PYTHONPATH is only evaluated when python is started,
         # thus:
