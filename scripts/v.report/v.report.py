@@ -42,6 +42,10 @@
 #% options: asc,desc
 #% descriptions: asc;Sort in ascending order;desc;Sort in descending order
 #%end
+#%flag
+#% key: c
+#% description: Do not include column names in output
+#%end
 
 import sys
 import os
@@ -174,7 +178,8 @@ def main():
         records3.sort()
 
     # print table header
-    sys.stdout.write('|'.join(colnames + extracolnames) + '\n')
+    if not flags['c']:
+        sys.stdout.write('|'.join(colnames + extracolnames) + '\n')
 
     # make and print the table:
     numcols = len(colnames) + len(extracolnames)
