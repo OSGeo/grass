@@ -17516,8 +17516,6 @@ msgid ""
 "Select areas from the\n"
 "overlaid vector map"
 msgstr ""
-"Sélectionner des zones depuis\n"
-"la carte vecteur superposée"
 
 #: ../gui/wxpython/rlisetup/wizard.py:898
 msgid "Choose a method"
@@ -20198,7 +20196,7 @@ msgstr "Valeur %s inconnue pour le paramètre test."
 
 #: ../gui/wxpython/mapdisp/statusbar.py:418
 msgid "Render"
-msgstr "Générer (l'affichage)"
+msgstr "Afficher"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:422
 msgid "Enable/disable auto-rendering"
