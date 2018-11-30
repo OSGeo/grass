@@ -2252,8 +2252,8 @@ def main():
         if not params.tmp_location:
             writefile(gisrcrc, readfile(gisrc))
         # After this point no more grass modules may be called
-	# done message at last: no atexit.register()
-	# or register done_message() 
+        # done message at last: no atexit.register()
+        # or register done_message() 
         done_message()
 
 if __name__ == '__main__':
