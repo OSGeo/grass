@@ -29,7 +29,7 @@ export LC_NUMERIC=C
 
 eval `g.gisenv`
 : ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
-LOCATION=$GISDBASE/$LOCATION_NAME/$MAPSET
+MAPSET_PATH=$GISDBASE/$LOCATION_NAME/$MAPSET
 
 # some definitions
 PIXEL=3
@@ -49,7 +49,7 @@ cleanup()
 # check if a MASK is already present:
 MASKTMP=mask.$TMPNAME
 USERMASK=usermask_${MASKTMP}
-if test -f $LOCATION/cell/MASK
+if test -f $MAPSET_PATH/cell/MASK
 then
  echo "A user raster mask (MASK) is present. Saving it..."
  g.rename raster=MASK,$USERMASK > /dev/null
@@ -61,7 +61,7 @@ finalcleanup()
  g.region region=$TMPNAME
  g.remove -f type=region name=$TMPNAME > /dev/null
  #restore user mask if present:
- if test -f $LOCATION/cell/$USERMASK ; then
+ if test -f $MAPSET_PATH/cell/$USERMASK ; then
   echo "Restoring user MASK"
   g.remove -f type=raster name=MASK > /dev/null
   g.rename raster=$USERMASK,MASK > /dev/null
@@ -109,7 +109,7 @@ compare_result()
 #check if a MASK is already present:
 MASKTMP=mask.$TMPNAME
 USERMASK=usermask_${MASKTMP}
-if test -f $LOCATION/cell/MASK
+if test -f $MAPSET_PATH/cell/MASK
 then
  echo "A user raster mask (MASK) is present. Saving it..."
  g.rename raster=MASK,$USERMASK > /dev/null
