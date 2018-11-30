@@ -402,7 +402,14 @@ def get_grass_config_dir():
         grass_config_dirname = ".grass7"
         directory = os.path.join(os.getenv('HOME'), grass_config_dirname)
     if not os.path.exists(directory):
-        os.mkdir(directory)
+        try:
+            os.mkdir(directory)
+        except OSError as e:
+            # Can happen as a race condition
+            if not e.errno == 17:
+                fatal(
+                    _("Failed to create configuration directory '%s' with error: %s")
+                    % (directory, e.strerror))
     return directory
 
 
