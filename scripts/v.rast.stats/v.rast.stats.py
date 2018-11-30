@@ -158,15 +158,15 @@ def main():
     # prepare base raster for zonal statistics
     try:
         nlines = grass.vector_info_topo(vector)['lines']
-	kwargs = {}
-	if where:
-	    kwargs['where'] = where
+        kwargs = {}
+        if where:
+            kwargs['where'] = where
         # Create densified lines rather than thin lines
         if flags['d'] and nlines > 0:
-	    kwargs['flags'] = 'd'
+            kwargs['flags'] = 'd'
 
-	grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
-			  use='cat', quiet=True, **kwargs)
+        grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
+                          use='cat', quiet=True, **kwargs)
     except CalledModuleError:
         grass.fatal(_("An error occurred while converting vector to raster"))
 
