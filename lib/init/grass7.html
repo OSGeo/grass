@@ -5,7 +5,7 @@
 <b>grass76</b> [<b>-h</b> | <b>-help</b> | <b>--help</b>] [<b>-v</b> | <b>--version</b>]
     [<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code[:datum_trans]</b>]
     [<b>--text</b> | <b>--gtext</b> | <b>--gui</b>]
-    [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;LOCATION_NAME&gt;/</b>]
+    [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;LOCATION&gt;/</b>]
     	<b>&lt;MAPSET&gt;</b>]
 
 <h3>Flags:</h3>
@@ -67,11 +67,11 @@ The active mapset will be PERMANENT.
 <dd> Initial database directory which should be a fully qualified path
     (e.g., <tt>/usr/local/share/grassdata</tt>)
 
-<dt><b>LOCATION_NAME</b>
+<dt><b>LOCATION</b>
 <dd> Initial location directory which is a subdirectory of GISDBASE
 
 <dt><b>MAPSET</b>
-<dd> Initial mapset directory which is a subdirectory of LOCATION_NAME
+<dd> Initial mapset directory which is a subdirectory of LOCATION
 </dl>
 
 <i>Note</i>: These parameters must be specified in one of the
@@ -79,8 +79,8 @@ following ways:
 
 <div class="code"><pre>
     MAPSET
-    LOCATION_NAME/MAPSET
-    GISDBASE/LOCATION_NAME/MAPSET
+    LOCATION/MAPSET
+    GISDBASE/LOCATION/MAPSET
 </pre></div>
 
 <h2>DESCRIPTION</h2>

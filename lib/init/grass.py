@@ -290,8 +290,8 @@ Geographic Resources Analysis Support System (GRASS GIS).
   $CMD_NAME [-h | --help] [-v | --version]
           [-c | -c geofile | -c EPSG:code[:datum_trans] | -c XY]
           [-e] [-f] [--text | --gtext | --gui] [--config param]
-          [[[GISDBASE/]LOCATION_NAME/]MAPSET]
-  $CMD_NAME [FLAG]... GISDBASE/LOCATION_NAME/MAPSET --exec EXECUTABLE [EPARAM]...
+          [[[GISDBASE/]LOCATION/]MAPSET]
+  $CMD_NAME [FLAG]... GISDBASE/LOCATION/MAPSET --exec EXECUTABLE [EPARAM]...
   $CMD_NAME --tmp-location [geofile | EPSG | XY] --exec EXECUTABLE [EPARAM]...
 
 {flags}:
@@ -315,11 +315,11 @@ Geographic Resources Analysis Support System (GRASS GIS).
 {params}:
   GISDBASE                       {gisdbase}
                                    {gisdbase_detail}
-  LOCATION_NAME                  {location}
+  LOCATION                       {location}
                                    {location_detail}
   MAPSET                         {mapset}
 
-  GISDBASE/LOCATION_NAME/MAPSET  {full_mapset}
+  GISDBASE/LOCATION/MAPSET       {full_mapset}
 
   EXECUTABLE                     {executable}
   EPARAM                         {executable_params}
