@@ -1690,7 +1690,7 @@ def print_params():
             filerev.close()
             sys.stdout.write("%s\n" % val[0].split(':')[1].rstrip('$"\n').strip())
         elif arg == 'version':
-			sys.stdout.write("%s\n" % grass_version)
+            sys.stdout.write("%s\n" % grass_version)
         else:
             message(_("Parameter <%s> not supported") % arg)
 
