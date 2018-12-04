@@ -2241,7 +2241,7 @@ msgstr ""
 
 #: ../raster/r.in.xyz/main.c:536
 #, c-format
-msgid "Unable to process the hole map at once. Please set the %s option to some value lower than 100."
+msgid "Unable to process the whole map at once. Please set the %s option to some value lower than 100."
 msgstr ""
 
 #: ../raster/r.in.xyz/main.c:589
@@ -7749,7 +7749,7 @@ msgstr ""
 
 #: ../raster/r.in.lidar/main.c:596
 #, c-format
-msgid "Unable to process the hole map at once. Please set the '%s' option to some value lower than 100."
+msgid "Unable to process the whole map at once. Please set the '%s' option to some value lower than 100."
 msgstr ""
 
 #: ../raster/r.in.lidar/main.c:608 ../raster/r.contour/main.c:237
