@@ -9126,7 +9126,7 @@ msgstr "Mapa V a S souřadnic gridu počátečního bodu"
 
 #: ../raster/r.spreadpath/main.c:161
 #, c-format
-msgid "eading the input map -%s- and -%s- and creating some temporary files..."
+msgid "Reading the input map -%s- and -%s- and creating some temporary files..."
 msgstr ""
 
 #: ../raster/r.spreadpath/main.c:281

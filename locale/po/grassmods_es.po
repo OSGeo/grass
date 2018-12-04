@@ -9122,7 +9122,7 @@ msgstr "Coordenadas de cuadrícula E y N de mapa de los puntos iniciales"
 
 #: ../raster/r.spreadpath/main.c:161
 #, c-format
-msgid "eading the input map -%s- and -%s- and creating some temporary files..."
+msgid "Reading the input map -%s- and -%s- and creating some temporary files..."
 msgstr "leyendo mapa de entrada -%s y -%s- y creando algunos archivos temporales..."
 
 #: ../raster/r.spreadpath/main.c:281

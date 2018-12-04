@@ -10319,7 +10319,7 @@ msgstr "إحداثيات الشرق والشمال لنقطة البدء"
 
 #: ../raster/r.spreadpath/main.c:161
 #, fuzzy, c-format
-msgid "eading the input map -%s- and -%s- and creating some temporary files..."
+msgid "Reading the input map -%s- and -%s- and creating some temporary files..."
 msgstr "لم يتم تحديث الحدود"
 
 #: ../raster/r.spreadpath/main.c:281

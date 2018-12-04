@@ -10433,7 +10433,7 @@ msgstr ""
 
 #: ../raster/r.spreadpath/main.c:161
 #, fuzzy, c-format
-msgid "eading the input map -%s- and -%s- and creating some temporary files..."
+msgid "Reading the input map -%s- and -%s- and creating some temporary files..."
 msgstr "Vrednost, ki bo prirejena NULL vrednosti"
 
 #: ../raster/r.spreadpath/main.c:281

@@ -1,4 +1,4 @@
-gern# translation of grassmods_zh.po to Simplified Chinese
+# translation of grassmods_zh.po to Simplified Chinese
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2005, GRASS Development Team
 #
@@ -9105,7 +9105,7 @@ msgstr "地图东向和北向格网坐标的起点"
 
 #: ../raster/r.spreadpath/main.c:161
 #, c-format
-msgid "eading the input map -%s- and -%s- and creating some temporary files..."
+msgid "Reading the input map -%s- and -%s- and creating some temporary files..."
 msgstr ""
 
 #: ../raster/r.spreadpath/main.c:281
