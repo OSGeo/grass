@@ -20184,7 +20184,7 @@ msgstr "Problem beim Lesen von <%s> Datei in der Zeile %d."
 
 #: ../display/d.linegraph/main.c:971
 #, c-format
-msgid "Scale Y labels cannot be used with thisrange of data (%f, %f)"
+msgid "Scale Y labels cannot be used with this range of data (%f, %f)"
 msgstr ""
 
 #: ../display/d.vect.chart/main.c:65
