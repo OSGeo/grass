@@ -593,7 +593,7 @@ int main(int argc, char *argv[])
 
     if (!scan_flag->answer) {
         if (!check_rows_cols_fit_to_size_t(rows, cols))
-		G_fatal_error(_("Unable to process the hole map at once. "
+		G_fatal_error(_("Unable to process the whole map at once. "
                         "Please set the '%s' option to some value lower than 100."),
 				percent_opt->key);
         point_binning_memory_test(&point_binning, rows, cols, rtype);

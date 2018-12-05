@@ -11990,7 +11990,7 @@ msgstr "Opción '%s debe ser > 0.0"
 
 #: ../raster/r.in.lidar/main.c:596
 #, c-format
-msgid "Unable to process the hole map at once. Please set the '%s' option to some value lower than 100."
+msgid "Unable to process the whole map at once. Please set the '%s' option to some value lower than 100."
 msgstr ""
 
 #: ../raster/r.in.lidar/main.c:616
@@ -13157,7 +13157,7 @@ msgstr "vrange no válido"
 
 #: ../raster/r.in.xyz/main.c:536
 #, c-format
-msgid "Unable to process the hole map at once. Please set the %s option to some value lower than 100."
+msgid "Unable to process the whole map at once. Please set the %s option to some value lower than 100."
 msgstr "No ha sido posible procesar todo el mapa de una sola vez. Por favor defina la opción %s a una valor menor que 100."
 
 #: ../raster/r.in.xyz/main.c:589
@@ -20081,7 +20081,7 @@ msgstr "Problema al leer el archivo de datos <%s> en la línea %d"
 
 #: ../display/d.linegraph/main.c:971
 #, c-format
-msgid "Scale Y labels cannot be used with thisrange of data (%f, %f)"
+msgid "Scale Y labels cannot be used with this range of data (%f, %f)"
 msgstr ""
 
 #: ../display/d.vect.chart/main.c:65
