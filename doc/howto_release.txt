@@ -23,7 +23,7 @@ Contents
 # fix typos in source code with 
 tools/fix_typos.sh
 
-# i18N: sync from Transifex (https://www.transifex.com/grass-gis/grass72/dashboard/)
+# i18N: sync from Transifex (https://www.transifex.com/grass-gis/grass7/dashboard/)
 #  - except for Latvian; Latvian is directly edited in SVN and then sync'ed from trunk .po files
 cd locale
 sh ~/software/grass-addons/tools/transifex_merge.sh
