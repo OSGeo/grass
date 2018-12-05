@@ -969,7 +969,7 @@ int main(int argc, char **argv)
         }
         if (tic_unit != 1 && scale_y_labels)
             G_fatal_error(_("Scale Y labels cannot be used with this"
-                            "range of data (%f, %f)"), min_y, max_y);
+                            " range of data (%f, %f)"), min_y, max_y);
         /* Y-AXIS LOOP */
         for (i = (int)min_y; i <= (int)max_y; i += tic_unit) {
             if (rem(i, tic_every) == 0.0) {
