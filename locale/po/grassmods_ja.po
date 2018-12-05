@@ -12177,7 +12177,7 @@ msgstr ""
 
 #: ../raster/r.in.lidar/main.c:601
 #, c-format
-msgid "Unable to process the hole map at once. Please set the '%s' option to some value lower than 100."
+msgid "Unable to process the whole map at once. Please set the '%s' option to some value lower than 100."
 msgstr ""
 
 #: ../raster/r.in.lidar/main.c:621
@@ -13320,7 +13320,7 @@ msgstr ""
 
 #: ../raster/r.in.xyz/main.c:536
 #, c-format
-msgid "Unable to process the hole map at once. Please set the %s option to some value lower than 100."
+msgid "Unable to process the whole map at once. Please set the %s option to some value lower than 100."
 msgstr ""
 
 #: ../raster/r.in.xyz/main.c:589
@@ -20146,7 +20146,7 @@ msgstr "<%s>データファイルを読み込めません: %d行  "
 
 #: ../display/d.linegraph/main.c:971
 #, c-format
-msgid "Scale Y labels cannot be used with thisrange of data (%f, %f)"
+msgid "Scale Y labels cannot be used with this range of data (%f, %f)"
 msgstr ""
 
 #: ../display/d.vect.chart/main.c:65
