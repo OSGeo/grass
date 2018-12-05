@@ -23,7 +23,7 @@ Contents
 # fix typos in source code with 
 tools/fix_typos.sh
 
-# i18N: sync from Transifex (https://www.transifex.com/grass-gis/grass72/dashboard/)
+# i18N: sync from Transifex (https://www.transifex.com/grass-gis/grass7/dashboard/)
 #  - except for Latvian; Latvian is directly edited in SVN and then sync'ed from trunk .po files
 cd locale
 sh ~/software/grass-addons/tools/transifex_merge.sh
@@ -205,8 +205,8 @@ vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
 
 # trac updates, only when new major release:
   - Add new release to https://trac.osgeo.org/grass/admin/ticket/versions
-  - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.4.x --> Edit Milestone
-    - also: Retarget associated open tickets to milestone 7.4.x
+  - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.6.x --> Edit Milestone
+    - also: Retarget associated open tickets to milestone 7.6.x
   - Batch modify tickets, set to next milestone (update this query accordingly: two entries to change)
      https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.6.0&milestone=7.6.1&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority
      - Set max items to 1000, then select all shown tickets via Status: assigned/new/reopened sections
