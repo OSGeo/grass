@@ -533,7 +533,7 @@ int main(int argc, char *argv[])
 	    double dsize = rows * (cols + 1);
 	    
 	    if (dsize != (size_t)rows * (cols + 1))
-		G_fatal_error(_("Unable to process the hole map at once. "
+		G_fatal_error(_("Unable to process the whole map at once. "
 		                "Please set the %s option to some value lower than 100."),
 				percent_opt->key);
 	}
