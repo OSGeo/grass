@@ -59,12 +59,15 @@ North Carolina sample dataset location is buffered:
 
 <div class="code"><pre>
 g.region raster=lakes -p
+# the lake raster map pixel resolution is 10m
 r.grow input=lakes output=lakes_grown_100m radius=10
 </pre></div>
 
 Shrinking instead of growing:
 
 <div class="code"><pre>
+g.region raster=lakes -p
+# the lake raster map pixel resolution is 10m
 r.grow input=lakes output=lakes_shrunk_100m radius=-10
 </pre></div>
 
