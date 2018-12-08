@@ -13351,7 +13351,7 @@ msgstr "vrange no válido"
 #: ../raster/r.in.xyz/main.c:536
 #, c-format
 msgid "Unable to process the whole map at once. Please set the %s option to some value lower than 100."
-msgstr "No ha sido posible procesar todo el mapa de una sola vez. Por favor defina la opción %s a una valor menor que 100."
+msgstr ""
 
 #: ../raster/r.in.xyz/main.c:589
 msgid "If input is not from a file it is only possible to perform a single pass."
@@ -45413,3 +45413,9 @@ msgstr "%ld categorías"
 
 #~ msgid "Unable create DBF database: %s"
 #~ msgstr "No se ha podido crear base de datos DBF: %s"
+
+#~ msgid "East-West (ewres: %f) and North-South (nwres: %f) resolution differ significantly. Did you assign %s= and %s= correctly?"
+#~ msgstr "La resolución Este-Oeste (ewres: %f) y Norte-Sur (nwres: %f) difiere significativamente. ¿Asignaste %s= y %s= correctamente?"
+
+#~ msgid "eading the input map -%s- and -%s- and creating some temporary files..."
+#~ msgstr "leyendo mapa de entrada -%s y -%s- y creando algunos archivos temporales..."

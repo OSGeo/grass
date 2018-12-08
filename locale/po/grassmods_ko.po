@@ -3044,12 +3044,12 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.rename_to_translate.c:1
 msgid "Renames a space time dataset"
-msgstr "시공간 자료세트의 이름을 변경합니다"
+msgstr "시공간 자료세트의 이름을 바꿉니다"
 
 #: ../locale/scriptstrings/t.rename_to_translate.c:4
 #: ../general/g.rename/main.c:47
 msgid "rename"
-msgstr "이름 변경"
+msgstr "이름 바꾸기"
 
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:1
 msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
@@ -7579,7 +7579,7 @@ msgstr ""
 
 #: ../raster/r.topmodel/main.c:65
 msgid "Name of input topographic index statistics file"
-msgstr ""
+msgstr "입력 지형지표 통계 파일의 이름"
 
 #: ../raster/r.topmodel/main.c:69
 msgid "Name of input rainfall and potential evapotranspiration data file"
@@ -7595,15 +7595,15 @@ msgstr ""
 
 #: ../raster/r.topmodel/main.c:83
 msgid "Topographic index class"
-msgstr "지형색인 분류"
+msgstr "지형지표 계층"
 
 #: ../raster/r.topmodel/main.c:85
 msgid "Generate output for this topographic index class"
-msgstr "이 지형색인 계층을 위한 출력을 생성하기"
+msgstr "이 지형지표 계층을 위한 출력을 생성하기"
 
 #: ../raster/r.topmodel/main.c:92
 msgid "Name of input topographic index raster map"
-msgstr "입력 지형색인 래스터 지도의 이름"
+msgstr "입력 지형지표 래스터 지도의 이름"
 
 #: ../raster/r.topmodel/main.c:94
 msgid "Must be clipped to the catchment boundary. Used for generating outtopidxstats"
@@ -7616,7 +7616,7 @@ msgstr ""
 
 #: ../raster/r.topmodel/main.c:100
 msgid "Number of topographic index classes"
-msgstr "지형색인 계층의 개수"
+msgstr "지형지표 계층의 개수"
 
 #: ../raster/r.topmodel/main.c:102
 msgid "Used for generating outtopidxstats"
@@ -7624,7 +7624,7 @@ msgstr ""
 
 #: ../raster/r.topmodel/main.c:111
 msgid "Name for output topographic index statistics file"
-msgstr ""
+msgstr "출력 지형지표 통계 파일을 위한 이름"
 
 #: ../raster/r.topmodel/main.c:113
 msgid "Requires topidx and ntopidxclasses"
@@ -14492,7 +14492,7 @@ msgstr ""
 
 #: ../raster/r.topidx/file_io.c:87
 msgid "Writing topographic index map..."
-msgstr "지형색인 지도를 쓰는 중입니다..."
+msgstr "지형지표 지도를 쓰는 중입니다..."
 
 #: ../raster/r.topidx/main.c:41
 msgid "wetness"
@@ -14500,15 +14500,15 @@ msgstr ""
 
 #: ../raster/r.topidx/main.c:42 ../raster/r.watershed/front/main.c:80
 msgid "topographic index"
-msgstr "지형색인"
+msgstr "지형지표"
 
 #: ../raster/r.topidx/main.c:44
 msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
-msgstr ""
+msgstr "표고 래스터 지도로부터 지형지표(습윤지표) 래스터 지도를 생성합니다."
 
 #: ../raster/r.topidx/main.c:50
 msgid "Name for output topographic index raster map"
-msgstr "출력 지형색인 래스터 지도를 위한 이름"
+msgstr "출력 지형지표 래스터 지도를 위한 이름"
 
 #: ../raster/r.topidx/topidx.c:41 ../raster/r.flow/main.c:314
 #: ../imagery/i.landsat.toar/main.c:534
@@ -17921,7 +17921,7 @@ msgstr ""
 
 #: ../raster/r.watershed/front/main.c:144
 msgid "Name for output topographic index ln(a / tan(b)) map"
-msgstr "출력 지형색인 ln(a / tan(b)) 지도를 위한 이름"
+msgstr "출력 지형지표 ln(a / tan(b)) 지도를 위한 이름"
 
 #: ../raster/r.watershed/front/main.c:151
 msgid "Stream power index a * tan(b)"
@@ -22833,11 +22833,11 @@ msgstr "<%s> GUI를 배경프로세스에서 시작합니다. 기다려주세요
 
 #: ../general/g.rename/main.c:49
 msgid "Renames data base element files in the user's current mapset."
-msgstr "사용자의 현재 지도세트 안에 있는 데이터베이스 요소파일들의 이름을 변경합니다."
+msgstr "사용자의 현재 지도세트 안에 있는 데이터베이스 요소파일들의 이름을 바꿉니다."
 
 #: ../general/g.rename/main.c:55
 msgid "renamed"
-msgstr "이름을 변경"
+msgstr "이름을 바꿀"
 
 #: ../general/g.rename/main.c:76
 #, c-format
@@ -22852,7 +22852,7 @@ msgstr "<%s>가 지도세트 <%s> 안에 이미 존재합니다."
 #: ../general/g.rename/main.c:90
 #, c-format
 msgid "%s=%s,%s: files could be the same, no rename possible"
-msgstr "%s=%s,%s: 같은 파일일 수 있으므로 이름 변경이 불가능합니다"
+msgstr "%s=%s,%s: 같은 파일일 수 있으므로 이름을 바꿀 수 없습니다"
 
 #: ../general/g.rename/main.c:116
 msgid "Updating reclass maps"
@@ -22937,7 +22937,7 @@ msgstr "지도세트 <%s>를 검색경로에서 제거했습니다"
 
 #: ../general/g.mapsets/main.c:255
 msgid "Search path not modified"
-msgstr "검색경로가 변경되지 않았습니다"
+msgstr "검색경로가 수정되지 않았습니다"
 
 #: ../general/g.mapsets/main.c:273
 msgid "Unable to open SEARCH_PATH for write"
@@ -23225,7 +23225,7 @@ msgstr ""
 
 #: ../general/g.mapset/main.c:51
 msgid "Changes/reports current mapset."
-msgstr "현재 지도세트를 변경/보고합니다."
+msgstr "현재 지도세트를 바꾸거나 보고합니다."
 
 #: ../general/g.mapset/main.c:52
 msgid "Optionally create new mapset or list available mapsets in given location."
@@ -23533,7 +23533,7 @@ msgstr "타원체 매개변수를 바꾸길 원하십니까?"
 
 #: ../general/g.setproj/main.c:294
 msgid "The ellipse information has not been changed"
-msgstr "타원정보를 바꾸지 않았습니다"
+msgstr "타원체 정보를 바꾸지 않았습니다"
 
 #: ../general/g.setproj/main.c:311
 #, c-format
@@ -41028,7 +41028,7 @@ msgstr ""
 
 #: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:69
 msgid "There is no table connected to the input vector map. Cannot rename any column"
-msgstr "입력 벡터 지도에 연결된 테이블이 존재하지 않습니다. 어떤 열의 이름도 변경할 수 없습니다"
+msgstr "입력 벡터 지도에 연결된 테이블이 존재하지 않습니다. 어떤 열의 이름도 바꿀 수 없습니다"
 
 #: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:78
 #, python-format
@@ -41038,7 +41038,7 @@ msgstr ""
 #: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:83
 #, python-format
 msgid "Cannot rename column <%s> as it is needed to keep table <%s> connected to the input vector map"
-msgstr "열 <%s>의 이름은 입력 벡터 지도에 연결된 테이블 <%s>를 유지하기 위해 변경할 수 없습니다"
+msgstr "열 <%s>의 이름은 입력 벡터 지도에 연결된 테이블 <%s>를 유지하기 위해 바꿀 수 없습니다"
 
 #: ../scripts/v.rast.stats/v.rast.stats.py:137
 msgid "Preprocessing input data..."
@@ -43855,6 +43855,15 @@ msgstr "출력할 격자지도"
 msgid "%d sites written."
 msgstr "출력할 격자지도"
 
+msgid "Unable to process the hole map at once. Please set the %s option to some value lower than 100."
+msgstr "전체 지도를 한 번에 처리할 수 없습니다. %s 옵션을 100보다 작은 값으로 설정하세요."
+
+msgid "Unable to process the hole map at once. Please set the '%s' option to some value lower than 100."
+msgstr "전체 지도를 한 번에 처리할 수 없습니다. '%s' 옵션을 100보다 작은 값으로 설정하세요."
+
+msgid "Scale Y labels cannot be used with thisrange of data (%f, %f)"
+msgstr "축척 Y 꼬리표는 자료의 범위 (%f ,%f)와 함께 사용할 수 없습니다"
+
 #~ msgid "Unabel to read segment file"
 #~ msgstr "분절 파일을 읽을 수 없습니다"
 
@@ -43867,9 +43876,6 @@ msgstr "출력할 격자지도"
 #~ msgid "Error in pj_do_proj6"
 #~ msgstr "pj_do_proj6 내에 오류"
 
-#~ msgid "Unable to process the hole map at once. Please set the %s option to some value lower than 100."
-#~ msgstr "전체 지도를 한 번에 처리할 수 없습니다. %s 옵션을 100보다 작은 값으로 설정하세요."
-
 #~ msgid "East-West (ewres: %f) and North-South (nwres: %f) resolution differ significantly. Did you assign %s= and %s= correctly?"
 #~ msgstr "동-서(ewres: %f)와 남-북(nsres: %f)의 해상도가 많이 다릅니다. %s=와 %s=를 바르게 입력하셨나요?"
 
@@ -43879,9 +43885,6 @@ msgstr "출력할 격자지도"
 #~ msgid "Error in pj_do_proj"
 #~ msgstr "pj_do_proj 내에 오류"
 
-#~ msgid "Unable to process the hole map at once. Please set the '%s' option to some value lower than 100."
-#~ msgstr "전체 지도를 한 번에 처리할 수 없습니다. '%s' 옵션을 100보다 작은 값으로 설정하세요."
-
 #~ msgid "eading the input map -%s- and -%s- and creating some temporary files..."
 #~ msgstr "입력 지도 -%s-와 -%s-를 읽으면서 임시 파일을 생성하는 중입니다..."
 
@@ -43890,9 +43893,6 @@ msgstr "출력할 격자지도"
 
 #~ msgid "Could not read georeferenced file %s using either OGR nor GDAL"
 #~ msgstr "OGR 또는 GDAL을 이용해서 지리 참조 파일 %s를 읽을 수 없었습니다"
-
-#~ msgid "Scale Y labels cannot be used with thisrange of data (%f, %f)"
-#~ msgstr "축척 Y 꼬리표는 자료의 범위 (%f ,%f)와 함께 사용할 수 없습니다"
 
 #~ msgid "Error in pj_do_proj1"
 #~ msgstr "pj_do_proj1 내에 오류"

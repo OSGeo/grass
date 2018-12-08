@@ -155,32 +155,32 @@ msgstr "%s를 복사했습니다"
 #: ../lib/manage/do_rename.c:42
 #, c-format
 msgid "Rename %s <%s> to <%s>"
-msgstr "%s <%s>를 <%s>로 이름을 변경합니다"
+msgstr "%s <%s>를 <%s>로 이름을 바꿉니다"
 
 #: ../lib/manage/do_rename.c:62
 #, c-format
 msgid "Unable to rename vector map <%s> to <%s>"
-msgstr "벡터 지도 <%s>를 <%s>로 이름을 변경할 수 없습니다"
+msgstr "벡터 지도 <%s>를 <%s>로 이름을 바꿀 수 없습니다"
 
 #: ../lib/manage/do_rename.c:83 ../lib/manage/do_rename.c:103
 #, c-format
 msgid "Unable to rename %s"
-msgstr "%s의 이름을 변경할 수 없습니다"
+msgstr "%s의 이름을 바꿀 수 없습니다"
 
 #: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
 #, c-format
 msgid "%s renamed"
-msgstr "%s의 이름을 변경했습니다"
+msgstr "%s의 이름을 바꿨습니다"
 
 #: ../lib/manage/do_rename.c:119
 #, c-format
 msgid "<%s> nothing renamed"
-msgstr "<%s> 어떤 이름도 변경하지 않았습니다"
+msgstr "<%s> 어떤 이름도 바꾸지 않았습니다"
 
 #: ../lib/manage/option.c:47
 #, c-format
 msgid "%s to be %s"
-msgstr "%2$s할 %1$s"
+msgstr "%2$s %1$s"
 
 #: ../lib/manage/option.c:51
 msgid "Raster"
@@ -1391,7 +1391,7 @@ msgstr ""
 #: ../lib/cairodriver/read_ppm.c:28 ../lib/cairodriver/read_bmp.c:88
 #, c-format
 msgid "Cairo: unable to open input file <%s>"
-msgstr ""
+msgstr "Cairo: 입력 파일 <%s>를 열 수 없습니다"
 
 #: ../lib/cairodriver/read_ppm.c:32 ../lib/cairodriver/read_bmp.c:92
 #, c-format
@@ -3845,36 +3845,36 @@ msgstr "GRASS GIS %s에 오신 것을 환영합니다"
 
 #: ../lib/init/grass.py:1533
 msgid "GRASS GIS homepage:"
-msgstr "GRASS GIS 홈페이지:"
+msgstr "GRASS GIS 홈페이지:                      "
 
 #. GTC Running through: SHELL NAME
 #: ../lib/init/grass.py:1535
 msgid "This version running through:"
-msgstr ""
+msgstr "실행 셸:                                 "
 
 #: ../lib/init/grass.py:1537
 msgid "Help is available with the command:"
-msgstr ""
+msgstr "도움말:                                  "
 
 #: ../lib/init/grass.py:1538
 msgid "See the licence terms with:"
-msgstr ""
+msgstr "사용권 조건:                             "
 
 #: ../lib/init/grass.py:1539
 msgid "See citation options with:"
-msgstr ""
+msgstr "인용:                                    "
 
 #: ../lib/init/grass.py:1542
 msgid "If required, restart the GUI with:"
-msgstr ""
+msgstr "GUI 재시작:                              "
 
 #: ../lib/init/grass.py:1544
 msgid "Start the GUI with:"
-msgstr ""
+msgstr "GUI 시작:                                "
 
 #: ../lib/init/grass.py:1546
 msgid "When ready to quit enter:"
-msgstr "종료시에는 다음을 입력하세요:"
+msgstr "종료:                                    "
 
 #: ../lib/init/grass.py:1634
 msgid "2D and 3D raster MASKs present"
