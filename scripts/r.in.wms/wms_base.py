@@ -380,7 +380,7 @@ class WMSBase:
         # reprojection of raster
         if self.proj_srs != self.proj_location:  # TODO: do it better
             grass.message(_("Reprojecting raster..."))
-            self.temp_warpmap = grass.tempfile()
+            self.temp_warpmap = grass.tempfile() + '.tif'
 
             if int(os.getenv('GRASS_VERBOSE', '2')) <= 2:
                 nuldev = file(os.devnull, 'w+')
@@ -511,7 +511,8 @@ class GRASSImporter:
         """
         # importing temp_map into GRASS
         try:
-            grass.run_command('r.in.gdal',
+            # -o flag needed to overcome different ellipsoid representations
+            grass.run_command('r.in.gdal', flags='o',
                               quiet=True, overwrite=True,
                               input=raster, output=self.opt_output)
         except CalledModuleError:
