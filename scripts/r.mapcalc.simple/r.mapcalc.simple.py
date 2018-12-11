@@ -18,9 +18,10 @@ for details.
 """
 
 #%module
-#% description: Calculate new raster map from a r.mapcalc expression
+#% description: Calculates a new raster map from a simple r.mapcalc expression.
 #% keyword: raster
 #% keyword: algebra
+#% keyword: simple
 #%end
 #%option
 #% key: expression
@@ -30,38 +31,41 @@ for details.
 #%end
 #%option G_OPT_R_INPUT
 #% key: a
-#% description: A
+#% description: Name of input A raster map
 #% required : no
+#% guisection: Input maps
 #%end
 #%option G_OPT_R_INPUT
 #% key: b
-#% description: B
+#% description: Name of input B raster map
 #% required : no
+#% guisection: Input maps
 #%end
 #%option G_OPT_R_INPUT
 #% key: c
-#% description: C
+#% description: Name of input C raster map
 #% required : no
+#% guisection: Input maps
 #%end
 #%option G_OPT_R_INPUT
 #% key: d
-#% description: D
+#% description: Name of input D raster map
 #% required : no
+#% guisection: Input maps
 #%end
 #%option G_OPT_R_INPUT
 #% key: e
-#% description: E
+#% description: Name of input E raster map
 #% required : no
+#% guisection: Input maps
 #%end
 #%option G_OPT_R_INPUT
 #% key: f
-#% description: F
+#% description: Name of input F raster map
 #% required : no
+#% guisection: Input maps
 #%end
-#%option
-#% key: output
-#% description: Name for output raster map
-#% required : yes
+#%option G_OPT_R_OUTPUT
 #%end
 #%option
 #% key: seed
@@ -69,14 +73,17 @@ for details.
 #% required: no
 #% multiple: no
 #% description: Seed for rand() function
+#% guisection: Random
 #%end
 #%flag
 #% key: s
 #% description: Generate random seed (result is non-deterministic)
+#% guisection: Random
 #%end
 #%flag
 #% key: q
 #% description: Quote the map names
+#% guisection: Input maps
 #%end
 #%flag
 #% key: c
