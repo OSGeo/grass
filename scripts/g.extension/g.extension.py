@@ -1036,20 +1036,28 @@ def fix_newlines(directory):
 
     Binary files are ignored. Recurses into subdirectories.
     """
+    # skip binary files
+    # see https://stackoverflow.com/a/7392391
+    textchars = bytearray({7,8,9,10,12,13,27} | set(range(0x20, 0x100)) - {0x7f})
+    is_binary_string = lambda bytes: bool(bytes.translate(None, textchars))
+
     for root, unused, files in os.walk(directory):
         for name in files:
             filename = os.path.join(root, name)
-            data = open(filename, 'rb').read()
-            if '\0' in data:
+            if is_binary_string(open(filename, 'rb').read(1024)):
                 continue  # ignore binary files
-            # we don't expect there would be CRLF file by purpose
-            # if we want to allow CRLF files we would have to whitelite .py etc
+
+            # read content of text file
+            with open(filename, 'rb') as fd:
+                data = fd.read()
+
+            # we don't expect there would be CRLF file by
+            # purpose if we want to allow CRLF files we would
+            # have to whitelite .py etc
             newdata = data.replace(b'\r\n', b'\n')
             if newdata != data:
-                newfile = open(filename, 'wb')
-                newfile.write(newdata)
-                newfile.close()
-
+                with open(filename, 'wb') as newfile:
+                    newfile.write(newdata)
 
 def extract_zip(name, directory, tmpdir):
     """Extract a ZIP file into a directory"""
