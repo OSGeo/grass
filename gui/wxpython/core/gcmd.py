@@ -50,6 +50,7 @@ else:
 from grass.script import core as grass
 from core import globalvar
 from core.debug import Debug
+from grass.script.utils import decode
 
 # cannot import from the core.utils module to avoid cross dependencies
 try:
@@ -342,7 +343,7 @@ def recv_some(p, t=.1, e=1, tr=5, stderr=0):
             else:
                 break
         elif r:
-            y.append(r)
+            y.append(decode(r))
         else:
             time.sleep(max((x - time.time()) / tr, 0))
     return ''.join(y)
