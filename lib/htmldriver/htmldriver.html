@@ -100,20 +100,21 @@ Several environment variables affect the operation of the HTML driver:
 Start up the driver
 
 <div class="code"><pre>
+g.region vector=zipcodes_wake 
 d.mon start=html
 </pre></div>
 
 Display text strings (HREF's) and polygons
 
 <div class="code"><pre>
-echo "http://www.no-such-place.net/area51/" | d.text
-d.vect map=area51
-echo "http://www.roswell-nm.net/little/green/men.html" | d.text
-d.vect map=roswell
+echo "https://en.wikipedia.org/wiki/Raleigh,_North_Carolina" | d.text
+d.vect map=zipcodes_wake where="ZIPNAME = 'RALEIGH'"
+echo "https://en.wikipedia.org/wiki/Cary,_North_Carolina" | d.text
+d.vect map=zipcodes_wake where="ZIPNAME = 'CARY'" fill_color=180:200:210
 </pre></div>
 
-Stop the driver when all polygon have been displayed. This will cause
-a file named 'htmlmap' to be created in your current directory.
+Stop the driver once all polygon have been displayed. This will create
+a file named 'htmlmap' in your current directory:
 
 <div class="code"><pre>
 d.mon stop=html
