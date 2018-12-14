@@ -40,6 +40,7 @@ SUBDIRS = \
 	r.in.aster \
 	r.in.srtm \
 	r.in.wms \
+	r.mapcalc.simple \
 	r.mask \
 	r.out.xyz \
 	r.pack \
