@@ -3,34 +3,47 @@
 <em>r.reclass.area</em> reclasses a raster map greater or
 less than a user specified area size (in hectares).
 <p>
-If the <em>-c</em> flag is used, <em>r.reclass.area</em> will skip the creation
-of a clumped raster and assume that the input raster is already clumped.
+If the <b>-c</b> flag is used, <em>r.reclass.area</em> will skip the
+creation of a clumped raster and assume that the input raster is
+already clumped.
 
 <h2>EXAMPLES</h2>
 
-In this example, the ZIP code map in the North Carolina sample dataset location
-is filtered for large areas (removing smaller areas from the map):
+In this example, the ZIP code map in the North Carolina sample dataset
+location is filtered for large areas (removing smaller areas from the
+map).
 
 <div class="code"><pre>
 g.region raster=zipcodes -p
 r.report zipcodes unit=h
+</pre></div>
 
-# extract only areas greater than 2000 ha, NULL otherwise:
-r.reclass.area input=zipcodes output=zipcodes_larger2000ha \
-               mode=greater value=2000
+Extract only areas greater than 2000 ha, NULL otherwise:
 
+<div class="code"><pre>
+r.reclass.area input=zipcodes output=zipcodes_larger2000ha mode=greater value=2000
+    
 r.report zipcodes_larger2000ha unit=h
 </pre></div>
 
-In this example, the ZIP code map in the North Carolina sample dataset location
-is filtered for smaller areas which are substituted with the value of the respective
-adjacent area with largest shared boundary:
+<div align="center" style="margin: 10px">
+<img src="zipcodes_larger2000ha.png" width="800px" height="264px"><br>
+<i>Figure: r.reclass.area method=reclass</i>
+</div>
+
+In this example, the ZIP code map in the North Carolina sample dataset
+location is filtered for smaller areas which are substituted with the
+value of the respective adjacent area with largest shared
+boundary. Reclass by substitutional removing of areas minor of 1000 ha:
 
 <div class="code"><pre>
-# reclass by substitutional removing of areas minor of 1000 ha
-r.reclass.area input=zipcodes output=zipcodes_minor1000ha \
-               mode=lesser value=1000 method=rmarea
+r.reclass.area input=zipcodes output=zipcodes_minor1000ha mode=lesser value=1000 method=rmarea
 </pre></div>
+
+<div align="center" style="margin: 10px">
+<img src="zipcodes_minor1000ha.png" width="800px" height="264px"><br>
+<i>Figure: r.reclass.area method=rmarea</i>
+</div>
 
 <h2>SEE ALSO</h2>
 
