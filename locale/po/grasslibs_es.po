@@ -1334,7 +1334,7 @@ msgstr "Mala conexión con el servidor"
 
 #: ../lib/nviz/render.c:112
 msgid "Unable to get visual info"
-msgstr ""
+msgstr "No ha sido posible obtener la información visual."
 
 #: ../lib/nviz/render.c:119
 msgid "Unable to create rendering context"
@@ -1467,7 +1467,7 @@ msgstr "No ha sido posible abrir el visualizador"
 
 #: ../lib/cairodriver/graph.c:85
 msgid "Unable to obtain visual"
-msgstr ""
+msgstr "No ha sido posible obtener la visualización."
 
 #: ../lib/cairodriver/graph.c:160
 #, c-format
@@ -2981,7 +2981,7 @@ msgstr "ráster3d"
 
 #: ../lib/raster3d/test/test_main.c:97
 msgid "unit test"
-msgstr ""
+msgstr "Prueba de unidad."
 
 #: ../lib/raster3d/range.c:73
 #, c-format
@@ -3016,7 +3016,7 @@ msgstr "Rast3d_open_cell_old: error en Rast3d_open_cell_old_no_header"
 
 #: ../lib/raster3d/open.c:98
 msgid "Rast3d_open_cell_old: can't rewind file"
-msgstr ""
+msgstr "Rast3d_open_cell_old: No se puede rebobinar el archivo."
 
 #: ../lib/raster3d/open.c:111
 msgid "Rast3d_open_cell_old: error in Rast3d_read_header"
@@ -3036,7 +3036,7 @@ msgstr "Rast3d_open_cell_old: no se puede leer encabezado"
 
 #: ../lib/raster3d/open.c:141
 msgid "Rast3d_open_cell_old: index does not fit into long"
-msgstr ""
+msgstr "Rast3d_open_cell_old: El índice no cabe en una variable de tipo long."
 
 #: ../lib/raster3d/open.c:145
 msgid "Rast3d_open_cell_old: error in Rast3d_malloc"
@@ -3097,7 +3097,7 @@ msgstr "%s: especificación de valor no admitida"
 #: ../lib/raster3d/close.c:105 ../lib/raster3d/close.c:191
 #, c-format
 msgid "Unable to write header for 3D raster map <%s>"
-msgstr "No ha sido posible escribir encabezado para mapa ráster 3D <%s>"
+msgstr "No ha sido posible escribir el encabezado para el mapa ráster 3D <%s>"
 
 #: ../lib/raster3d/close.c:47
 #, c-format
@@ -3107,24 +3107,24 @@ msgstr "No ha sido posible escribir historia para mapa ráster 3D <%s>"
 #: ../lib/raster3d/close.c:62
 #, c-format
 msgid "Unable to move temp raster map <%s> to 3D raster map <%s>"
-msgstr "No ha sido posible mover mapa ráster temp <%s> a mapa ráster 3D <%s>"
+msgstr "No ha sido posible mover el mapa ráster temp <%s> al mapa ráster 3D <%s>"
 
 #: ../lib/raster3d/close.c:79
 msgid "Unable to flush all tiles"
-msgstr "Imposible levantar todos los tiles"
+msgstr "No se pueden vaciar todos los mosaicos."
 
 #: ../lib/raster3d/close.c:84
 msgid "Unable to flush index"
-msgstr ""
+msgstr "No se puede vaciar el índice."
 
 #: ../lib/raster3d/close.c:94
 msgid "Unable to position file"
-msgstr "No ha sido posible encontrar archivo de posición"
+msgstr "No ha sido posible encontrar el archivo de posición."
 
 #: ../lib/raster3d/close.c:110 ../lib/raster3d/close.c:153
 #, c-format
 msgid "Unable to create 3D raster map <%s>"
-msgstr "No ha sido posible crear mapa ráster 3D <%s>"
+msgstr "No ha sido posible crear el mapa ráster 3D <%s>"
 
 #: ../lib/raster3d/close.c:169
 msgid "Error in cache"
@@ -3133,12 +3133,12 @@ msgstr "Error en caché"
 #: ../lib/raster3d/history.c:43
 #, c-format
 msgid "can't get history information for [%s] in mapset [%s]"
-msgstr "No se puede obtener la información de la historial para [%s] en Directorio de mapas [%s]"
+msgstr "No se puede obtener la información del historial para [%s] en el directorio del conjuto de mapas (Mapset) [%s]"
 
 #: ../lib/raster3d/color.c:354
 #, c-format
 msgid "mapset <%s> is not the current mapset"
-msgstr "Directorio de mapas <%s> no es el Directorio de mapas actual"
+msgstr "El directorio del grupo de mapas (Mapset) <%s> no es el directorio del conjunto de mapas actual."
 
 #: ../lib/cluster/c_exec.c:44
 #, c-format
@@ -3153,12 +3153,12 @@ msgstr "Producido por i.cluster."
 #: ../lib/pngdriver/graph_set.c:101
 #, c-format
 msgid "png: truecolor status %s"
-msgstr ""
+msgstr "png: Estado del color verdadero %s"
 
 #: ../lib/pngdriver/graph_set.c:149
 #, c-format
 msgid "png: collecting to file '%s'"
-msgstr ""
+msgstr "png: recolectando a archivo '%s'."
 
 #: ../lib/pngdriver/graph_set.c:150
 #, c-format
@@ -3193,7 +3193,7 @@ msgstr "Archivo PNG de entrada no es RGBA"
 
 #: ../lib/pngdriver/read_png.c:94
 msgid "Input PNG file is not indexed color"
-msgstr ""
+msgstr "El archivo PNG de entrada no es del tipo color indexado."
 
 #: ../lib/pngdriver/read_png.c:104
 msgid "Input PNG file has invalid palette"
@@ -3323,17 +3323,17 @@ msgstr "No ha sido posible escribir en archivo de condiciones de categorías rá
 #: ../lib/imagery/iscatt_core.c:255
 #, c-format
 msgid "Unable to open category raster conditions file <%s>."
-msgstr ""
+msgstr "No ha sido posible abrir el archivo de condiciones de categoría raster <%s>."
 
 #: ../lib/imagery/iscatt_core.c:263
 #, c-format
 msgid "Unable to find patch raster <%s>."
-msgstr ""
+msgstr "No ha sido posible encontrar el raster de parche <%s>."
 
 #: ../lib/imagery/iscatt_core.c:280
 #, c-format
 msgid "Resolutions of patch <%s> and patched file <%s> are not same."
-msgstr ""
+msgstr "Las resoluciones del parche <%s>  y el archivo parchado <%s> no son iguales."
 
 #: ../lib/imagery/iscatt_core.c:307 ../lib/imagery/iscatt_core.c:349
 #, c-format
@@ -3389,7 +3389,7 @@ msgstr "Archivo de condiciones de categorías ráster corrompido (ha fallado fse
 #: ../lib/imagery/iscatt_core.c:972 ../lib/imagery/iclass_statistics.c:227
 #, c-format
 msgid "prepare_signature: scan line %d has odd number of points."
-msgstr ""
+msgstr "prepare_signature: El escaneo de la línea %d tiene un número impar de puntos."
 
 #: ../lib/imagery/iscatt_core.c:981 ../lib/imagery/iclass_statistics.c:237
 msgid "signature: perimeter points out of order."
@@ -3397,7 +3397,7 @@ msgstr "firma: perímetro puntos fuera de orden."
 
 #: ../lib/imagery/iclass_statistics.c:218
 msgid "prepare_signature: outline has odd number of points."
-msgstr ""
+msgstr "prepare_signature: El contorno tiene un número impar de puntos."
 
 #: ../lib/imagery/iclass_statistics.c:248
 #, c-format
@@ -3447,11 +3447,11 @@ msgstr "No se puede crear el archivo de puntos de control del grupo [%s en %s]."
 
 #: ../lib/imagery/georef_tps.c:219
 msgid "Calculating forward transformation coefficients"
-msgstr ""
+msgstr "Calculando los coeficientes de \"transformación hacia adelante\"."
 
 #: ../lib/imagery/georef_tps.c:236
 msgid "Calculating backward transformation coefficients"
-msgstr ""
+msgstr "Calculando los coeficientes de \"transformación hacia atrás\"."
 
 #: ../lib/imagery/georef_tps.c:279 ../lib/imagery/georef_tps.c:282
 #: ../lib/imagery/georef_tps.c:285 ../lib/imagery/georef_tps.c:290
@@ -4028,7 +4028,7 @@ msgstr "No ha sido posible escribir el archivo de segmentos"
 
 #: ../lib/segment/open.c:78
 msgid "Illegal segment configuration parameter(s)"
-msgstr ""
+msgstr "El parámetro o parámetros de configuración del segmento no son legales."
 
 #: ../lib/segment/open.c:87
 msgid "Unable to re-open segment file"
@@ -9586,7 +9586,7 @@ msgstr "No se ha dado información del elipsoide en el archivo."
 
 #: ../lib/proj/datum.c:195
 msgid "Failed to detect nadgrids path, GRASS_PROJSHARE not defined"
-msgstr ""
+msgstr "Error al detectar la ruta de acceso a nadgrids, GRASS_PROJSHARE no está definido."
 
 #: ../lib/proj/datum.c:278 ../lib/proj/datum.c:358
 #, c-format
@@ -9619,11 +9619,11 @@ msgstr "OGR no puede obtener la cadena de texto con los parámetros de estilo WK
 #: ../lib/proj/convert.c:469
 #, c-format
 msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
-msgstr ""
+msgstr "Error al actualizar la referencia espacial con la definición de proj4 incrustada. Definición de Proj4: <%s>."
 
 #: ../lib/proj/convert.c:476
 msgid "Updating spatial reference with embedded proj4 definition"
-msgstr ""
+msgstr "Actualizando el sistema de referencia espacial con la definición proj4 incrustada."
 
 #: ../lib/proj/convert.c:610
 msgid "No projection name! Projection parameters likely to be meaningless."
@@ -10029,3 +10029,21 @@ msgstr "Polígono absurdo."
 
 #~ msgid "Unable allocate PNG structure"
 #~ msgstr "No ha sido posible asignar estructura PNG"
+
+#~ msgid "Unable to read find raster <%s>"
+#~ msgstr "No se puede leer \"Encontrar ráster <% s>\"."
+
+#~ msgid "Unable to get function address for %s"
+#~ msgstr "No ha sido posible obtener la dirección de la función  para %s."
+
+#~ msgid "Unable to choose pixel format (CGL error = %d)"
+#~ msgstr "No ha sido posible seleccionar el formato del pixel (Error CGL= %d)."
+
+#~ msgid "Unable to create context (CGL error = %d)"
+#~ msgstr "No ha sido posible crear el contexto (Error CGL=1%d)."
+
+#~ msgid "Unable to register window class"
+#~ msgstr "No ha sido posible registrar la clase de la ventana."
+
+#~ msgid "Unable to create window"
+#~ msgstr "No ha sido posible crear la ventana."

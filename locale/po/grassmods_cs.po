@@ -841,7 +841,7 @@ msgstr ""
 #: ../vector/v.in.db/main.c:54 ../vector/v.vect.stats/main.c:132
 #: ../vector/v.to.db/main.c:38
 msgid "database"
-msgstr ""
+msgstr "databáze"
 
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:5
 msgid "Name of new attribute table (default: vector map name)"
@@ -912,7 +912,7 @@ msgstr ""
 #: ../vector/v.parallel/main.c:50 ../vector/v.transform/main.c:72
 #: ../vector/v.generalize/main.c:83
 msgid "geometry"
-msgstr ""
+msgstr "geometrie"
 
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:4
 #: ../locale/scriptstrings/v.clip_to_translate.c:4
@@ -954,7 +954,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.support_to_translate.c:1
 msgid "Modifies the metadata of a space time dataset."
-msgstr ""
+msgstr "Modifikuje metadata množiny časoprostorových dat."
 
 #: ../locale/scriptstrings/t.support_to_translate.c:5
 #: ../locale/scriptstrings/t.create_to_translate.c:7
@@ -1501,7 +1501,7 @@ msgstr "Spočítej rozšířenou statistiku"
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:15
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:11
 msgid "Suppress printing of column names"
-msgstr ""
+msgstr "Potlačit tisk názvů sloupců"
 
 #: ../locale/scriptstrings/db.droptable_to_translate.c:1
 msgid "Drops an attribute table."
@@ -1561,7 +1561,7 @@ msgstr ""
 #: ../locale/scriptstrings/g.extension_to_translate.c:5
 #: ../locale/scriptstrings/g.extension.all_to_translate.c:5
 msgid "extensions"
-msgstr ""
+msgstr "rozšíření"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:6
 msgid "addons"
@@ -1633,7 +1633,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:27
 msgid "Do not install new extension, just compile it"
-msgstr ""
+msgstr "Neinstalujte nové rozšíření, stačí ho zkompilovat"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:29
 msgid "Force removal when uninstalling extension (operation=remove)"
@@ -1691,7 +1691,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:9
 #: ../locale/scriptstrings/t.rast.what_to_translate.c:8
 msgid "Sort the maps by category"
-msgstr ""
+msgstr "Řazení map podle kategorií"
 
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:10
 msgid "Do not assign the space time raster dataset start and end time to the output map"
@@ -1884,7 +1884,7 @@ msgstr ""
 #: ../vector/v.what.rast3/main.c:67 ../vector/v.what.rast/main.c:74
 #: ../vector/v.what/main.c:64
 msgid "position"
-msgstr ""
+msgstr "pozice"
 
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:8
 #: ../vector/v.what.rast3/main.c:76 ../vector/v.what.rast/main.c:83
@@ -1912,7 +1912,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:13
 msgid "query_layer,query_column"
-msgstr ""
+msgstr "query_layer,query_column"
 
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:14
 msgid "query_column"
@@ -2418,7 +2418,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:4
 msgid "Input map is in Matlab format"
-msgstr ""
+msgstr "Vstupní mapa je ve formátu Matlab"
 
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:5
 msgid "Create a 3D vector points map from 3 column Matlab data"
@@ -2438,7 +2438,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.shade_to_translate.c:10
 msgid "Name of shaded raster map"
-msgstr ""
+msgstr "Název stínované rastrové mapy"
 
 #: ../locale/scriptstrings/r.shade_to_translate.c:12 ../raster/r.his/main.c:121
 msgid "Color to use instead of NULL values"
@@ -2528,7 +2528,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:17
 msgid "WMS standard version"
-msgstr ""
+msgstr "standardní verze WMS"
 
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:19
 msgid "Maximum columns to request at a time"
@@ -2637,7 +2637,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.tileset_to_translate.c:7
 msgid "Source projection"
-msgstr ""
+msgstr "Zdrojová projekce"
 
 #: ../locale/scriptstrings/r.tileset_to_translate.c:8
 #: ../locale/scriptstrings/r.tileset_to_translate.c:10
@@ -2964,7 +2964,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:18
 msgid "The user defined values that indicate start, intermediate and end status in the indicator output space time raster dataset"
-msgstr ""
+msgstr "Hodnoty definované uživatelem, které udávají stav startu, meziprocesu a konce v datovém rastru časového výstupu"
 
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:1
 msgid "Creates/modifies the color table associated with each raster map of the space time raster dataset."
@@ -3364,7 +3364,7 @@ msgstr ""
 #: ../locale/scriptstrings/i.spectral_to_translate.c:5
 #: ../locale/scriptstrings/i.oif_to_translate.c:3
 msgid "multispectral"
-msgstr ""
+msgstr "multispektrální"
 
 #: ../locale/scriptstrings/i.spectral_to_translate.c:9
 msgid "Name for output image (or text file for -t)"
@@ -3694,7 +3694,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.sample_to_translate.c:12
 msgid "Check for spatial topological overlap"
-msgstr ""
+msgstr "Zkontrolovat prostorové topologické překrytí"
 
 #: ../locale/scriptstrings/d.redraw_to_translate.c:1
 msgid "Redraws the content of currently selected monitor."
@@ -3825,7 +3825,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:6
 msgid "Layer number or name."
-msgstr ""
+msgstr "Číslo nebo název vrstvy."
 
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:7
 msgid "Name of attribute column used to dissolve common boundaries"
@@ -4156,7 +4156,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.register_to_translate.c:13
 msgid "Valid start date and time of the first map"
-msgstr ""
+msgstr "Platný počáteční datum a čas první mapy"
 
 #: ../locale/scriptstrings/t.register_to_translate.c:14
 #: ../locale/scriptstrings/t.register_to_translate.c:17
@@ -4169,7 +4169,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.register_to_translate.c:24
 #: ../locale/scriptstrings/t.register_to_translate.c:28
 msgid "Time & Date"
-msgstr ""
+msgstr "Čas a datum"
 
 #: ../locale/scriptstrings/t.register_to_translate.c:16
 msgid "Valid end date and time of all map"
@@ -4193,7 +4193,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.register_to_translate.c:25
 msgid "Field separator character of the input file"
-msgstr ""
+msgstr "Oddělovací znak pole vstupního souboru"
 
 #: ../locale/scriptstrings/t.register_to_translate.c:27
 msgid "Create an interval (start and end time) in case an increment and the start time are provided"
@@ -4569,7 +4569,7 @@ msgstr ""
 #: ../vector/v.lidar.growing/main.c:76 ../vector/v.decimate/main.c:124
 #: ../vector/v.outlier/main.c:74
 msgid "LIDAR"
-msgstr ""
+msgstr "LIDAR"
 
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:9
 #: ../raster/r.in.lidar/main.c:114 ../raster/r.in.xyz/main.c:163
@@ -4664,7 +4664,7 @@ msgstr "Vyřadit <trim> procent nejmenších a <trim> procent nejvetších hodno
 
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:35
 msgid "Number of parallel processes to launch"
-msgstr ""
+msgstr "Počet paralelních procesů ke spuštění"
 
 #: ../locale/scriptstrings/v.pack_to_translate.c:1
 msgid "Exports a vector map as GRASS GIS specific archive file"
@@ -4722,7 +4722,7 @@ msgstr ""
 #: ../display/d.text/main.c:140 ../display/d.northarrow/main.c:47
 #: ../display/d.title/main.c:50
 msgid "cartography"
-msgstr ""
+msgstr "kartografie"
 
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:4
 #: ../display/d.vect.thematic/main.c:88 ../display/d.legend.vect/main.c:53
@@ -4770,7 +4770,7 @@ msgstr "Název tabulky (výchozí: název vektorové vrstvy)"
 
 #: ../locale/scriptstrings/db.univar_to_translate.c:1
 msgid "Calculates univariate statistics on selected table column."
-msgstr ""
+msgstr "Vypočítá statistické údaje o vybraném sloupci tabulky."
 
 #: ../locale/scriptstrings/t.rast.export_to_translate.c:1
 msgid "Exports space time raster dataset."
@@ -4791,7 +4791,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.export_to_translate.c:11
 #: ../raster/r.out.gdal/main.c:201
 msgid "Data type"
-msgstr ""
+msgstr "Datový typ"
 
 #: ../locale/scriptstrings/t.rast.export_to_translate.c:12
 msgid "Supported only for GTiff"
@@ -4947,7 +4947,7 @@ msgstr ""
 
 #: ../ps/ps.map/r_instructions.c:144 ../ps/ps.map/r_instructions.c:340
 msgid "no raster map selected yet"
-msgstr ""
+msgstr "zatím nevybrána žádná rastrová mapa"
 
 #: ../ps/ps.map/r_instructions.c:160
 msgid "illegal value list"
@@ -6560,7 +6560,7 @@ msgstr ""
 
 #: ../raster/r.solute.transport/main.c:63
 msgid "The piezometric head in [m]"
-msgstr ""
+msgstr "Piezometrická hladina v [m]"
 
 #: ../raster/r.solute.transport/main.c:68
 msgid "The x-part of the hydraulic conductivity tensor in [m/s]"
@@ -6712,7 +6712,7 @@ msgstr ""
 #: ../raster/r.walk/main.c:198 ../raster/r.cost/main.c:159
 #: ../raster/r.spreadpath/main.c:90
 msgid "cumulative costs"
-msgstr ""
+msgstr "kumulativní náklady"
 
 #: ../raster/r.walk/main.c:199 ../raster/r.cost/main.c:160
 #: ../vector/v.net.iso/main.c:78 ../vector/v.net.alloc/main.c:66
@@ -7290,7 +7290,7 @@ msgstr "Počet iterací"
 #: ../raster/r.mfilter/main.c:80 ../raster/r.mfilter/main.c:99
 #: ../imagery/i.pca/main.c:109 ../imagery/i.pca/main.c:120
 msgid "Filter"
-msgstr ""
+msgstr "Filtr"
 
 #: ../raster/r.mfilter/main.c:86
 msgid "Output raster map title"
@@ -7413,7 +7413,7 @@ msgstr ""
 
 #: ../raster/r.resamp.interp/main.c:88
 msgid "Method"
-msgstr ""
+msgstr "Metoda"
 
 #: ../raster/r.resamp.interp/main.c:102 ../imagery/i.topo.corr/main.c:158
 #, c-format
@@ -7705,7 +7705,7 @@ msgstr ""
 
 #: ../raster/r.texture/main.c:151
 msgid "Separate output for each angle (0, 45, 90, 135)"
-msgstr ""
+msgstr "Oddělený výstup pro každý úhel (0, 45, 90, 135)"
 
 #: ../raster/r.texture/main.c:152
 msgid "Angles are counterclockwise from east: 0 is East to West, 45 is North-East to South-West"
@@ -7792,7 +7792,7 @@ msgstr ""
 
 #: ../raster/r.stats/main.c:144 ../raster/r.report/parse.c:102
 msgid "Sort output statistics by cell counts"
-msgstr ""
+msgstr "Seřadit výstupní statistiku podle počtu buněk"
 
 #: ../raster/r.stats/main.c:145 ../raster/r.report/parse.c:103
 msgid "Default: sorted by categories or intervals"
@@ -8318,7 +8318,7 @@ msgstr "Počítá index hustoty plošek na rastrové mapě za použití algoritm
 
 #: ../raster/r.li/r.li.richness/richness.c:42
 msgid "Calculates richness index on a raster map"
-msgstr ""
+msgstr "Vypočítá index bohatství na rastrové mapě"
 
 #: ../raster/r.out.ppm3/main.c:59
 msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
@@ -8370,7 +8370,7 @@ msgstr "Soubor s tabulkou barev pro <%s> není dostupný"
 
 #: ../raster/r.out.ppm3/main.c:160
 msgid "Converting... "
-msgstr ""
+msgstr "Převádění ..."
 
 #: ../raster/r.out.bin/main.c:53 ../raster/r.out.bin/main.c:62
 #: ../raster/r.out.bin/main.c:470 ../raster/r.mapcalc/map3.c:129
@@ -9228,7 +9228,7 @@ msgstr ""
 
 #: ../raster/r.report/parse.c:83
 msgid "Page width"
-msgstr ""
+msgstr "Šířka stránky"
 
 #: ../raster/r.report/parse.c:113
 msgid "Suppress page headers"
@@ -10269,7 +10269,7 @@ msgstr ""
 
 #: ../raster/r.colors.out/raster_main.c:49
 msgid "Exports the color table associated with a raster map."
-msgstr ""
+msgstr "Exportuje tabulku barev přidruženou k rastrové mapě."
 
 #: ../raster/r.colors.out/raster_main.c:55
 #: ../raster/r.colors.out/raster3d_main.c:56 ../vector/v.colors.out/main.c:61
@@ -10285,7 +10285,7 @@ msgstr ""
 #: ../raster/r.colors.out/raster_main.c:61
 #: ../raster/r.colors.out/raster3d_main.c:62 ../vector/v.colors.out/main.c:72
 msgid "Output values as percentages"
-msgstr ""
+msgstr "Výstupní hodnoty v procentech"
 
 #: ../raster/r.colors.out/raster3d_main.c:50
 msgid "Exports the color table associated with a 3D raster map."
@@ -10386,7 +10386,7 @@ msgstr ""
 
 #: ../raster/r.gwflow/main.c:209 ../raster3d/r3.gwflow/main.c:160
 msgid "groundwater flow"
-msgstr ""
+msgstr "proudění podzemní vody"
 
 #: ../raster/r.gwflow/main.c:212
 msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
@@ -11141,7 +11141,7 @@ msgstr ""
 
 #: ../raster/r.stream.extract/main.c:240
 msgid "At least one output raster maps must be specified"
-msgstr ""
+msgstr "Musí být specifikována alespoň jedna rastrová mapa"
 
 #: ../raster/r.stream.extract/main.c:314
 #, c-format
@@ -11162,7 +11162,7 @@ msgstr ""
 
 #: ../raster/r.stream.extract/main.c:324
 msgid "Creating temporary files..."
-msgstr ""
+msgstr "Vytváření dočasných souborů ..."
 
 #: ../raster/r.stream.extract/main.c:344
 msgid "Unable to load input raster map(s)"
@@ -11407,7 +11407,7 @@ msgstr ""
 
 #: ../raster/r.grow.distance/main.c:180
 msgid "Output distances in meters instead of map units"
-msgstr ""
+msgstr "Výstupní vzdálenosti v metrech namísto mapových jednotek"
 
 #: ../raster/r.grow.distance/main.c:184
 msgid "Calculate distance to nearest NULL cell"
@@ -11842,7 +11842,7 @@ msgstr ""
 
 #: ../raster/r.in.png/main.c:314
 msgid "PNG error"
-msgstr ""
+msgstr "PNG chyba"
 
 #: ../raster/r.in.png/main.c:485 ../raster/r.cross/main.c:161
 #: ../raster/r.basins.fill/main.c:146 ../raster/r.resample/main.c:125
@@ -12081,7 +12081,7 @@ msgstr ""
 
 #: ../raster/r.in.lidar/main.c:242
 msgid "Discard given percentage of the smallest and largest values"
-msgstr ""
+msgstr "Zrušit procento uvedené u nejmenších a největších hodnot"
 
 #: ../raster/r.in.lidar/main.c:252
 msgid "Output raster resolution"
@@ -12610,7 +12610,7 @@ msgstr ""
 
 #: ../raster/r.sunhours/main.c:118
 msgid "Day"
-msgstr ""
+msgstr "Den"
 
 #: ../raster/r.sunhours/main.c:126
 msgid "Hour"
@@ -12781,11 +12781,11 @@ msgstr ""
 
 #: ../raster/r.stats.zonal/main.c:248
 msgid "First pass"
-msgstr ""
+msgstr "První průchod"
 
 #: ../raster/r.stats.zonal/main.c:327
 msgid "Second pass"
-msgstr ""
+msgstr "Druhý průchod"
 
 #: ../raster/r.stats.zonal/main.c:474
 msgid "Generating reclass map"
@@ -13259,7 +13259,7 @@ msgstr ""
 
 #: ../raster/r.out.gdal/attr.c:140 ../raster/r.out.gdal/attr.c:178
 msgid "Failed to set raster attribute table"
-msgstr ""
+msgstr "Selhalo nastavení tabulky atributů rastru"
 
 #: ../raster/r.basins.fill/main.c:56 ../raster/r.water.outlet/main.c:59
 #: ../raster/r.watershed/front/main.c:75
@@ -13795,7 +13795,7 @@ msgstr "Rozlišení V-Z a S-J jsou různá, beru průměr."
 
 #: ../raster/r.param.scale/interface.c:55
 msgid "geomorphology"
-msgstr ""
+msgstr "geomorfologie"
 
 #: ../raster/r.param.scale/interface.c:58
 msgid "landform"
@@ -13933,7 +13933,7 @@ msgstr ""
 
 #: ../raster/r.in.bin/main.c:313
 msgid "Header size in bytes"
-msgstr ""
+msgstr "Velikost záhlaví v bajtech"
 
 #: ../raster/r.in.bin/main.c:321
 msgid "Number of bands in input file"
@@ -15006,7 +15006,7 @@ msgstr "Minimální hodnota pro test (rms=%lf) byla odvozena s: lambda_i = %.3f"
 #: ../raster/r.resamp.bspline/crosscorr.c:334
 #: ../vector/v.surf.bspline/crosscorr.c:323
 msgid "Table of results:"
-msgstr ""
+msgstr "Tabulka výsledků:"
 
 #: ../raster/r.resamp.bspline/crosscorr.c:335
 #: ../vector/v.surf.bspline/crosscorr.c:324
@@ -15335,7 +15335,7 @@ msgstr "Seznam hodnot buněk pro nastavení NULL"
 #: ../raster/r.null/main.c:74 ../raster/r.null/main.c:82
 #: ../general/g.proj/main.c:193
 msgid "Modify"
-msgstr ""
+msgstr "Upravit"
 
 #: ../raster/r.null/main.c:81 ../raster3d/r3.null/main.c:70
 msgid "The value to replace the null value by"
@@ -15924,7 +15924,7 @@ msgstr ""
 
 #: ../raster/r.out.png/main.c:130
 msgid "Compression level of PNG file"
-msgstr ""
+msgstr "Úroveň komprese souboru PNG"
 
 #: ../raster/r.out.png/main.c:131
 msgid "(0 = none, 1 = fastest, 9 = best)"
@@ -16497,7 +16497,7 @@ msgstr ""
 
 #: ../raster/r.sunmask/main.c:211
 msgid "Easting coordinate (point of interest)"
-msgstr ""
+msgstr "Výchozí souřadnice (bodu zájmu)"
 
 #: ../raster/r.sunmask/main.c:212 ../raster/r.sunmask/main.c:222
 msgid "Default: map center"
@@ -16684,7 +16684,7 @@ msgstr ""
 
 #: ../raster/r.out.mpeg/main.c:107
 msgid "Converts raster map series to MPEG movie."
-msgstr ""
+msgstr "Převede sadu rastrových map na film MPEG."
 
 #: ../raster/r.out.mpeg/main.c:115
 #, c-format
@@ -16878,7 +16878,7 @@ msgstr ""
 
 #: ../raster/r.lake/main.c:153
 msgid "flood"
-msgstr ""
+msgstr "záplava"
 
 #: ../raster/r.lake/main.c:154
 msgid "Fills lake at given point to given level."
@@ -18714,7 +18714,7 @@ msgstr ""
 
 #: ../display/d.mon/main.c:87
 msgid "Default value: 480"
-msgstr ""
+msgstr "Výchozí hodnota: 480"
 
 #: ../display/d.mon/main.c:94
 msgid "Dimensions of display monitor versus current size"
@@ -19044,7 +19044,7 @@ msgstr ""
 
 #: ../display/d.vect.thematic/main.c:214 ../display/d.vect.thematic/main.c:236
 msgid "DEPRECATED"
-msgstr ""
+msgstr "ZASTARALÉ"
 
 #: ../display/d.vect.thematic/main.c:215
 msgid "Output legend file"
@@ -19790,7 +19790,7 @@ msgstr ""
 
 #: ../display/d.graph/main.c:80
 msgid "Coordinates are given in map units"
-msgstr ""
+msgstr "Souřadnice jsou uvedeny v mapových jednotkách"
 
 #: ../display/d.graph/main.c:91
 #, c-format
@@ -19895,7 +19895,7 @@ msgstr ""
 
 #: ../display/d.legend/main.c:257
 msgid "Do not show category numbers"
-msgstr ""
+msgstr "Nezobrazovat čísla kategorií"
 
 #: ../display/d.legend/main.c:262
 msgid "Draw legend ticks for labels"
@@ -19903,7 +19903,7 @@ msgstr ""
 
 #: ../display/d.legend/main.c:267
 msgid "Skip categories with no label"
-msgstr ""
+msgstr "Přeskočit kategorie bez popisku"
 
 #: ../display/d.legend/main.c:282
 msgid "Add histogram to smoothed legend"
@@ -19998,7 +19998,7 @@ msgstr ""
 
 #: ../display/d.rast.num/main.c:78 ../display/d.rast.arrow/main.c:98
 msgid "map annotations"
-msgstr ""
+msgstr "mapové anotace"
 
 #: ../display/d.rast.num/main.c:81
 msgid "Overlays cell category values on a raster map displayed in the active graphics frame."
@@ -21371,7 +21371,7 @@ msgstr ""
 
 #: ../raster3d/r3.out.netcdf/main.c:111
 msgid "Export projection information as wkt and proj4 parameter"
-msgstr ""
+msgstr "Exportovat informace o projekci jako parametry wkt a proj4"
 
 #: ../raster3d/r3.out.netcdf/main.c:589
 msgid "netCDF"
@@ -21646,7 +21646,7 @@ msgstr "Vytvoří aktuální pracovní 3D rastrovou masku."
 
 #: ../raster3d/r3.mask/main.c:145
 msgid "3D raster map with reference values"
-msgstr ""
+msgstr "3D rastrová mapa s referenčními hodnotami"
 
 #: ../raster3d/r3.mask/main.c:153
 msgid "List of cell values to be masked out"
@@ -21864,7 +21864,7 @@ msgstr "Výstupní mapa již existuje. Mapa bude přepsána!"
 
 #: ../raster3d/r3.cross.rast/main.c:338
 msgid "Wrong 3D raster datatype! Cannot create raster map"
-msgstr ""
+msgstr "Chybný datový typ 3D rastru! Nelze vytvořit rastrovou mapu"
 
 #: ../raster3d/r3.out.v5d/main.c:73
 msgid "3D raster map to be converted to Vis5D (V5D) file"
@@ -22292,7 +22292,7 @@ msgstr ""
 
 #: ../raster3d/r3.in.ascii/main.c:403
 msgid "Unable to close ASCII file"
-msgstr ""
+msgstr "Soubor ASCII nelze zavřít"
 
 #: ../general/g.findfile/main.c:40 ../general/g.findetc/main.c:30
 #: ../general/g.dirseps/main.c:36 ../general/g.gisenv/main.c:46
@@ -22476,7 +22476,7 @@ msgstr ""
 
 #: ../general/g.parser/main.c:74
 msgid "Usage"
-msgstr ""
+msgstr "Užití"
 
 #: ../general/g.parser/main.c:84
 msgid "Unable to open script file"
@@ -22715,7 +22715,7 @@ msgstr ""
 
 #: ../general/g.region/main.c:84
 msgid "Only possible from the PERMANENT mapset"
-msgstr ""
+msgstr "Možné pouze z mapového souboru PERMANENT"
 
 #: ../general/g.region/main.c:89
 msgid "Print the current region"
@@ -22816,7 +22816,7 @@ msgstr ""
 
 #: ../general/g.region/main.c:267
 msgid "Number of columns in the new region"
-msgstr ""
+msgstr "Počet sloupců v nové oblasti"
 
 #: ../general/g.region/main.c:277
 msgid "2D grid resolution (north-south and east-west)"
@@ -22918,7 +22918,7 @@ msgstr ""
 
 #: ../general/g.gui/main.c:41
 msgid "user interface"
-msgstr ""
+msgstr "uživatelské rozhraní"
 
 #: ../general/g.gui/main.c:44
 msgid "Launches a GRASS graphical user interface (GUI) session."
@@ -22948,7 +22948,7 @@ msgstr ""
 #: ../general/g.message/main.c:48 ../general/g.message/main.c:53
 #: ../general/g.message/main.c:58
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: ../general/g.gui/main.c:66
 msgid "Name of workspace file to load on start-up"
@@ -23116,11 +23116,11 @@ msgstr ""
 
 #: ../general/g.mapsets/list.c:10
 msgid "Available mapsets:"
-msgstr ""
+msgstr "Dostupné sady map:"
 
 #: ../general/g.mapsets/list.c:35
 msgid "Accessible mapsets:"
-msgstr ""
+msgstr "Dostupné mapové sady:"
 
 #: ../general/g.pnmcomp/main.c:54
 msgid "Error reading PPM file"
@@ -23242,7 +23242,7 @@ msgstr ""
 #: ../general/g.proj/main.c:129 ../general/g.proj/main.c:138
 #: ../general/g.proj/main.c:148 ../general/g.proj/main.c:158
 msgid "Specification"
-msgstr ""
+msgstr "Specifikace"
 
 #: ../general/g.proj/main.c:130
 msgid "Name of georeferenced data file to read projection information from"
@@ -23487,7 +23487,7 @@ msgstr ""
 
 #: ../general/g.dirseps/main.c:38
 msgid "Internal GRASS utility for converting directory separator characters."
-msgstr ""
+msgstr "Interní nástroj GRASS pro konverzi znaků oddělovačů adresářů."
 
 #: ../general/g.gisenv/main.c:45
 msgid "variables"
@@ -23729,7 +23729,7 @@ msgstr ""
 
 #: ../general/g.setproj/main.c:450
 msgid "Do you want to change the UTM zone?"
-msgstr ""
+msgstr "Chcete změnit UTM zónu?"
 
 #: ../general/g.setproj/main.c:451
 msgid "UTM zone information has not been updated"
@@ -23910,7 +23910,7 @@ msgstr ""
 
 #: ../general/g.filename/main.c:56
 msgid "Name of a database file"
-msgstr ""
+msgstr "Název souboru databáze"
 
 #: ../general/g.filename/main.c:62
 msgid "Name of a mapset (default: current)"
@@ -24296,7 +24296,7 @@ msgstr ""
 #: ../vector/v.distance/main.c:810 ../vector/v.distance/main.c:887
 #: ../vector/v.distance/main.c:1097
 msgid "Out of memory!"
-msgstr ""
+msgstr "Nedostatek paměti!"
 
 #: ../imagery/i.segment/watershed.c:19
 msgid "Watershed is not yet implemented"
@@ -25223,7 +25223,7 @@ msgstr "Zapisuji transformovaná data..."
 
 #: ../imagery/i.fft/main.c:200
 msgid "FFT is now complete"
-msgstr ""
+msgstr "FFT je nyní dokončen"
 
 #: ../imagery/i.smap/write_img.c:15
 msgid "Writing output raster map(s)..."
@@ -25464,7 +25464,7 @@ msgstr ""
 
 #: ../imagery/i.topo.corr/main.c:66
 msgid "Name of input base raster map (elevation or illumination)"
-msgstr ""
+msgstr "Název vstupní rastrové mapy (nadmořská výška nebo obarvení)"
 
 #: ../imagery/i.topo.corr/main.c:72
 msgid "Solar zenith in degrees"
@@ -25569,7 +25569,7 @@ msgstr ""
 
 #: ../imagery/i.vi/main.c:90
 msgid "vegetation index"
-msgstr ""
+msgstr "vegetační index"
 
 #: ../imagery/i.vi/main.c:91
 msgid "biophysical parameters"
@@ -25595,7 +25595,7 @@ msgstr ""
 
 #: ../imagery/i.vi/main.c:110
 msgid "Type of vegetation index"
-msgstr ""
+msgstr "Typ vegetačního indexu"
 
 #: ../imagery/i.vi/main.c:115
 msgid "Atmospherically Resistant Vegetation Index"
@@ -26941,7 +26941,7 @@ msgstr ""
 
 #: ../imagery/i.zc/main.c:54 ../vector/v.lidar.edgedetection/main.c:77
 msgid "edges"
-msgstr ""
+msgstr "okraje"
 
 #: ../imagery/i.zc/main.c:56
 msgid "Zero-crossing \"edge detection\" raster function for image processing."
@@ -27118,7 +27118,7 @@ msgstr ""
 
 #: ../imagery/i.landsat.toar/main.c:75
 msgid "atmospheric correction"
-msgstr ""
+msgstr "atmosférická korekce"
 
 #: ../imagery/i.landsat.toar/main.c:86
 msgid "Prefix for output raster maps"
@@ -28202,11 +28202,11 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:115
 msgid "Size (width, height) of output image"
-msgstr ""
+msgstr "Velikost (šířka, výška) výstupního obrazu"
 
 #: ../misc/m.nviz.image/args.c:132
 msgid "Name of raster map(s) for elevation"
-msgstr ""
+msgstr "Název výškové rastrové map(y)"
 
 #: ../misc/m.nviz.image/args.c:142
 msgid "Constant elevation value(s) to use instead of a raster DEM"
@@ -28322,7 +28322,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:390
 msgid "Vector lines position"
-msgstr ""
+msgstr "Pozice vektorových čar"
 
 #: ../misc/m.nviz.image/args.c:402
 msgid "Name of point vector overlay map(s)"
@@ -28476,7 +28476,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:771
 msgid "Light position (x,y,z model coordinates)"
-msgstr ""
+msgstr "Pozice světla (souřadnice x, y, z)"
 
 #: ../misc/m.nviz.image/args.c:772 ../misc/m.nviz.image/args.c:778
 #: ../misc/m.nviz.image/args.c:787 ../misc/m.nviz.image/args.c:797
@@ -28527,7 +28527,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:871
 msgid "North-East edge"
-msgstr ""
+msgstr "Severovýchodní okraj"
 
 #: ../misc/m.nviz.image/args.c:872
 msgid "South-West edge"
@@ -28993,7 +28993,7 @@ msgstr ""
 
 #: ../db/db.execute/main.c:132
 msgid "SQL statement"
-msgstr ""
+msgstr "Příkaz SQL"
 
 #: ../db/db.execute/main.c:133
 msgid "Example: update rybniky set kapri = 'hodne' where kapri = 'malo'"
@@ -29221,7 +29221,7 @@ msgstr ""
 
 #: ../db/drivers/sqlite/listtab.c:50 ../db/drivers/sqlite/listtab.c:66
 msgid "Unable to list tables:"
-msgstr ""
+msgstr "Tabulky nelze zobrazit:"
 
 #: ../db/drivers/sqlite/table.c:37
 msgid "Error in sqlite3_exec():"
@@ -29275,7 +29275,7 @@ msgstr ""
 
 #: ../db/drivers/sqlite/db.c:162
 msgid "Unable to create database:"
-msgstr ""
+msgstr "Nelze vytvořit databázi:"
 
 #: ../db/drivers/sqlite/db.c:186
 #, c-format
@@ -29340,7 +29340,7 @@ msgstr ""
 
 #: ../db/drivers/sqlite/fetch.c:171 ../db/drivers/postgres/fetch.c:129
 msgid "Unable to scan date:"
-msgstr ""
+msgstr "Nelze skenovat datum:"
 
 #: ../db/drivers/sqlite/fetch.c:188 ../db/drivers/postgres/fetch.c:147
 msgid "Unable to scan time:"
@@ -29890,7 +29890,7 @@ msgstr ""
 
 #: ../vector/v.mkgrid/main.c:146
 msgid "Allow asymmetric hexagons"
-msgstr ""
+msgstr "Povolit asymetrické šestiúhelníky"
 
 #: ../vector/v.mkgrid/main.c:186
 msgid "'coor' and 'position=region' are exclusive options"
@@ -29934,7 +29934,7 @@ msgstr ""
 
 #: ../vector/v.mkgrid/main.c:322 ../vector/v.mkgrid/main.c:325
 msgid "Please use a higher resolution or a larger region"
-msgstr ""
+msgstr "Použijte prosím vyšší rozlišení nebo větší oblast"
 
 #: ../vector/v.mkgrid/main.c:329
 #, c-format
@@ -29959,7 +29959,7 @@ msgstr "Nelze vložit nový záznam: %s"
 
 #: ../vector/v.mkgrid/main.c:372
 msgid "The rectangles will be asymmetrical."
-msgstr ""
+msgstr "Obdélníky budou asymetrické."
 
 #: ../vector/v.mkgrid/main.c:417
 msgid "Creating centroids..."
@@ -30455,7 +30455,7 @@ msgstr ""
 
 #: ../vector/v.to.rast/do_areas.c:118
 msgid "Area without centroid (OK for island)"
-msgstr ""
+msgstr "Plocha bez centroidu (OK pro ostrov)"
 
 #: ../vector/v.to.rast/do_areas.c:128
 msgid "Area centroid without category"
@@ -31143,7 +31143,7 @@ msgstr "Nelze vložit nový řádek: %s"
 
 #: ../vector/v.kcv/main.c:300
 msgid "internal error"
-msgstr ""
+msgstr "interní chyba"
 
 #: ../vector/v.surf.idw/main.c:92
 msgid "Provides surface interpolation from vector point data by Inverse Distance Squared Weighting."
@@ -31706,7 +31706,7 @@ msgstr ""
 #: ../vector/v.net.alloc/main.c:82 ../vector/v.net.alloc/main.c:115
 #: ../vector/v.net.alloc/main.c:120 ../vector/v.net.alloc/main.c:125
 msgid "Cost"
-msgstr ""
+msgstr "Cena"
 
 #: ../vector/v.net.distance/main.c:100
 msgid "From layer number or name"
@@ -32374,7 +32374,7 @@ msgstr ""
 
 #: ../vector/v.out.ascii/main.c:156
 msgid "No points found, nothing to be exported"
-msgstr ""
+msgstr "Nenalezeny žádné body, není co exportovat"
 
 #: ../vector/v.out.ascii/main.c:159
 msgid "No features found, nothing to be exported"
@@ -32668,7 +32668,7 @@ msgstr ""
 
 #: ../vector/v.in.lidar/main.c:265
 msgid "Imports only the given number of points"
-msgstr ""
+msgstr "Importuje pouze daný počet bodů"
 
 #: ../vector/v.in.lidar/main.c:288
 msgid "Invert mask when selecting points"
@@ -32678,7 +32678,7 @@ msgstr ""
 #: ../vector/v.in.lidar/main.c:316 ../vector/v.decimate/main.c:243
 #: ../vector/v.decimate/main.c:246
 msgid "Speed"
-msgstr ""
+msgstr "Rychlost"
 
 #: ../vector/v.in.lidar/main.c:310
 msgid "Do not automatically add unique ID as category to each point"
@@ -33203,7 +33203,7 @@ msgstr[3] "%d linií zapsáno do výstupní mapy (%s)"
 #: ../vector/v.extrude/main.c:70 ../vector/v.hull/main.c:54
 #: ../vector/v.to.3d/main.c:38 ../vector/v.out.postgis/main.c:49
 msgid "3D"
-msgstr ""
+msgstr "3D"
 
 #: ../vector/v.surf.rst/main.c:151
 msgid "Performs surface interpolation from vector points map by splines."
@@ -33386,7 +33386,7 @@ msgstr ""
 
 #: ../vector/v.surf.rst/main.c:749
 msgid "Unable to write raster maps - try to increase resolution"
-msgstr ""
+msgstr "Nelze zapsat rastrové mapy - zkuste zvýšit rozlišení"
 
 #: ../vector/v.surf.bspline/main.c:96
 msgid "Performs bicubic or bilinear spline interpolation with Tykhonov regularization."
@@ -35090,7 +35090,7 @@ msgstr ""
 
 #: ../vector/v.in.ogr/geom.c:199 ../vector/v.in.ogr/geom.c:220
 msgid "Unable to read part of geometry"
-msgstr ""
+msgstr "Nelze načíst část geometrie"
 
 #: ../vector/v.in.ogr/geom.c:320
 #, c-format
@@ -36767,7 +36767,7 @@ msgstr ""
 
 #: ../vector/v.in.ascii/main.c:95
 msgid "GRASS vector ASCII format"
-msgstr ""
+msgstr "GRASS vektorový formát ASCII"
 
 #: ../vector/v.in.ascii/main.c:98
 msgid "Input file format"
@@ -36776,7 +36776,7 @@ msgstr "Formát vstupního souboru"
 #: ../vector/v.in.ascii/main.c:99 ../vector/v.in.ascii/main.c:102
 #: ../vector/v.in.ascii/main.c:109 ../vector/v.in.ascii/main.c:187
 msgid "Input format"
-msgstr ""
+msgstr "Vstupní formát"
 
 #: ../vector/v.in.ascii/main.c:108
 msgid "Special characters: doublequote, singlequote, none"
@@ -37254,7 +37254,7 @@ msgstr ""
 
 #: ../vector/v.colors/read_rgb.c:37
 msgid "No RGB values found"
-msgstr ""
+msgstr "Nenalezeny žádné hodnoty RGB"
 
 #: ../vector/v.colors/read_rgb.c:65
 #, c-format
@@ -37499,7 +37499,7 @@ msgstr ""
 
 #: ../vector/v.split/main.c:56
 msgid "densification"
-msgstr ""
+msgstr "zhutnění"
 
 #: ../vector/v.split/main.c:60
 msgid "Splits vector lines to shorter segments."
@@ -37507,7 +37507,7 @@ msgstr ""
 
 #: ../vector/v.split/main.c:73
 msgid "Maximum segment length"
-msgstr ""
+msgstr "Maximální délka segmentu"
 
 #: ../vector/v.split/main.c:82
 msgid "Length units"
@@ -37697,7 +37697,7 @@ msgstr ""
 
 #: ../vector/v.vol.rst/main.c:282
 msgid "Name of column with smoothing parameters"
-msgstr ""
+msgstr "Název sloupce s vyhlazovacími parametry"
 
 #: ../vector/v.vol.rst/main.c:302
 msgid "Name of input raster map used as mask"
@@ -37705,7 +37705,7 @@ msgstr ""
 
 #: ../vector/v.vol.rst/main.c:328
 msgid "Maximum number of points for approximation in a segment (>npmin)"
-msgstr ""
+msgstr "Maximální počet bodů pro aproximaci v segmentu (>npmin)"
 
 #: ../vector/v.vol.rst/main.c:345
 msgid "Conversion factor for w-values used for interpolation"
@@ -37813,7 +37813,7 @@ msgstr ""
 
 #: ../vector/v.vol.rst/main.c:909
 msgid "Interpolation failed"
-msgstr ""
+msgstr "Interpolace selhala"
 
 #: ../vector/v.vol.rst/user3.c:548
 msgid "Secpar_loop failed"
@@ -37824,7 +37824,7 @@ msgstr ""
 #: ../vector/v.vol.rst/user3.c:632 ../vector/v.vol.rst/user3.c:643
 #: ../vector/v.vol.rst/user3.c:654 ../vector/v.vol.rst/user3.c:665
 msgid "Not enough disk space--cannot write files"
-msgstr ""
+msgstr "Nedostatek místa na disku - nelze zapisovat soubory"
 
 #: ../vector/v.vol.rst/user2.c:213
 msgid "Cannot allocate A"
@@ -37864,7 +37864,7 @@ msgstr "Silně souvislé komponenty"
 
 #: ../vector/v.net.components/main.c:127
 msgid "Type of components"
-msgstr ""
+msgstr "Typ komponentů"
 
 #: ../vector/v.net.components/main.c:131 ../vector/v.net.centrality/main.c:192
 msgid "Add points on nodes"
@@ -38481,7 +38481,7 @@ msgstr ""
 #: ../vector/v.kernel/main.c:301
 #, c-format
 msgid "Standard deviation: %f"
-msgstr ""
+msgstr "Standardní odchylka: %f"
 
 #: ../vector/v.kernel/main.c:306
 #, c-format
@@ -39287,7 +39287,7 @@ msgstr "Mapset:"
 
 #: ../vector/v.info/print.c:324
 msgid "Location:"
-msgstr ""
+msgstr "Lokace:"
 
 #: ../vector/v.info/print.c:327
 msgid "Database:"
@@ -39392,7 +39392,7 @@ msgstr ""
 
 #: ../vector/v.info/print.c:459
 msgid "Number of islands:"
-msgstr ""
+msgstr "Počet ostrovů:"
 
 #: ../vector/v.info/print.c:465
 msgid "Number of faces:"
@@ -39540,7 +39540,7 @@ msgstr ""
 
 #: ../vector/v.out.postgis/main.c:47
 msgid "simple features"
-msgstr ""
+msgstr "jednoduché funkce"
 
 #: ../vector/v.out.postgis/main.c:52
 msgid "Exports a vector map layer to PostGIS feature table."
@@ -39835,7 +39835,7 @@ msgstr ""
 
 #: ../vector/v.vect.stats/main.c:232
 msgid "First column is always area category"
-msgstr ""
+msgstr "První sloupec je vždy kategorie plochy"
 
 #: ../vector/v.vect.stats/main.c:273
 #, c-format
@@ -40878,7 +40878,7 @@ msgstr ""
 
 #: ../vector/v.generalize/main.c:102
 msgid "Error map with failed generalizations"
-msgstr ""
+msgstr "Chybová mapa s nevhodnými zobecněními"
 
 #: ../vector/v.generalize/main.c:104
 msgid "Lines and boundaries causing errors (collapsed to a point or topology errors)"

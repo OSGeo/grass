@@ -6314,13 +6314,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:350
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1276
 msgid "Solar radiance and shadows"
-msgstr ""
+msgstr "태양 복사 및 그림자"
 
 #: ../gui/wxpython/menustrings.py:357 ../gui/wxpython/menustrings.py:1299
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:351
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1277
 msgid "LatLong map"
-msgstr ""
+msgstr "위경도 지도"
 
 #: ../gui/wxpython/menustrings.py:358 ../gui/wxpython/menustrings.py:1300
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:352
@@ -6332,7 +6332,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:353
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1279
 msgid "Solar irradiance and irradiation"
-msgstr ""
+msgstr "태양 복사 조도 및 조사"
 
 #: ../gui/wxpython/menustrings.py:360 ../gui/wxpython/menustrings.py:1302
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:354
@@ -8230,7 +8230,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1605
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1606
 msgid "Overlay vector maps"
-msgstr ""
+msgstr "벡터 지도 중첩"
 
 #: ../gui/wxpython/menustrings.py:688 ../gui/wxpython/menustrings.py:1630
 msgid "Clip vector maps"
@@ -13315,7 +13315,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/toolbars.py:81
 msgid "Overlay elements like scale and legend onto map"
-msgstr ""
+msgstr "축척 및 범례같은 요소를 지도 상에 중첩"
 
 #: ../gui/wxpython/gui_core/toolbars.py:83
 msgid "Create histogram with d.histogram"
@@ -14409,7 +14409,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/toolbars.py:109
 msgid "Add overlays"
-msgstr ""
+msgstr "중첩 추가"
 
 #: ../gui/wxpython/psmap/toolbars.py:111 ../gui/wxpython/lmgr/layertree.py:104
 msgid "Add labels"
@@ -15705,7 +15705,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/provider.py:530
 msgid "Overlaying map layers"
-msgstr ""
+msgstr "지도 레이어 중첩"
 
 #: ../gui/wxpython/animation/provider.py:757
 #, python-brace-format
@@ -16474,7 +16474,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/toolbars.py:109
 msgid "Add various overlays"
-msgstr ""
+msgstr "다양한 중첩 추가"
 
 #: ../gui/wxpython/lmgr/toolbars.py:112
 msgid "Remove selected map layer(s) from layer tree"
