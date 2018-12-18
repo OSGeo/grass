@@ -1521,7 +1521,9 @@ def get_shell():
         elif sh == "zsh":
             shellname = "Z Shell"
         elif sh == "cmd":
-            shellname = "Command Shell"
+            shellname = "Command Prompt"
+        elif sh == "powershell":
+            shellname = "Windows PowerShell"
         else:
             shellname = "shell"
     # check for SHELL
@@ -1538,7 +1540,7 @@ def get_grass_env_file(sh, grass_config_dir):
         grass_env_file = os.path.join(grass_config_dir, 'bashrc')
     elif sh == 'zsh':
         grass_env_file = os.path.join(grass_config_dir, 'zshrc')
-    elif sh == 'cmd':
+    elif sh in ['cmd', 'powershell']:
         grass_env_file = os.path.join(grass_config_dir, 'env.bat')
     else:
         grass_env_file = os.path.join(grass_config_dir, 'bashrc')
