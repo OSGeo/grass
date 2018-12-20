@@ -128,6 +128,7 @@ int main(int argc, char *argv[])
        Centroids, Boundaries and Kernels always have to be exported
        explicitly, using the "type=" option.
      */
+    field = 0;
     if (!flags.new->answer) {
 	/* open input vector (topology required) */
 	Vect_set_open_level(2);
@@ -189,9 +190,8 @@ int main(int argc, char *argv[])
 		G_warning(_("Unable to determine input map's vector feature type(s)."));
             }
 	}
+	field = Vect_get_field_number(&In, options.field->answer);
     }
-
-    field = Vect_get_field_number(&In, options.field->answer);
 
     /* check output feature type */
     otype = Vect_option_to_types(options.type);
@@ -678,86 +678,90 @@ int main(int argc, char *argv[])
 	    
 	    if (create_field) {
 		Ogr_field = OGR_Fld_Create(GV_KEY_COLUMN, OFTInteger);
-		OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
+		if (OGR_L_CreateField(Ogr_layer, Ogr_field, 0) != OGRERR_NONE)
+		    G_fatal_error(_("Unable to create column <%s>"),
+		                  GV_KEY_COLUMN);
 		OGR_Fld_Destroy(Ogr_field);
 	    }
 	    
 	    doatt = 0;
-	 }
-	 else {
-	     Driver = db_start_driver_open_database(Fi->driver, Fi->database);
-	     if (!Driver)
-		 G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+	}
+	else {
+	    Driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	    if (!Driver)
+		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			       Fi->database, Fi->driver);
 
-	     db_set_string(&dbstring, Fi->table);
-	     if (db_describe_table(Driver, &dbstring, &Table) != DB_OK)
-		 G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
+	    db_set_string(&dbstring, Fi->table);
+	    if (db_describe_table(Driver, &dbstring, &Table) != DB_OK)
+		G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
 
-	     ncol = db_get_table_number_of_columns(Table);
-	     G_debug(2, "ncol = %d", ncol);
-	     colctype = G_malloc(ncol * sizeof(int));
-	     colname = G_malloc(ncol * sizeof(char *));
-	     keycol = -1;
-	     for (i = 0; i < ncol; i++) {
-		 Column = db_get_table_column(Table, i);
-		 colname[i] =  G_store(db_get_column_name(Column));
-		 colsqltype = db_get_column_sqltype(Column);
-		 colctype[i] = db_sqltype_to_Ctype(colsqltype);
-		 colwidth = db_get_column_length(Column);
-		 G_debug(3, "col %d: %s sqltype=%d ctype=%d width=%d",
-			 i, colname[i], colsqltype, colctype[i], colwidth);
+	    ncol = db_get_table_number_of_columns(Table);
+	    G_debug(2, "ncol = %d", ncol);
+	    colctype = G_malloc(ncol * sizeof(int));
+	    colname = G_malloc(ncol * sizeof(char *));
+	    keycol = -1;
+	    for (i = 0; i < ncol; i++) {
+		Column = db_get_table_column(Table, i);
+		colname[i] =  G_store(db_get_column_name(Column));
+		colsqltype = db_get_column_sqltype(Column);
+		colctype[i] = db_sqltype_to_Ctype(colsqltype);
+		colwidth = db_get_column_length(Column);
+		G_debug(3, "col %d: %s sqltype=%d ctype=%d width=%d",
+			i, colname[i], colsqltype, colctype[i], colwidth);
 		 
-		 switch (colctype[i]) {
-		 case DB_C_TYPE_INT:
-		     ogr_ftype = OFTInteger;
-		     break;
-		 case DB_C_TYPE_DOUBLE:
-		     ogr_ftype = OFTReal;
-		     break;
-		 case DB_C_TYPE_STRING:
-		     ogr_ftype = OFTString;
-		     break;
-		 case DB_C_TYPE_DATETIME:
-		     ogr_ftype = OFTString;
-		     break;
-		 }
-		 G_debug(2, "ogr_ftype = %d", ogr_ftype);
+		switch (colctype[i]) {
+		case DB_C_TYPE_INT:
+		    ogr_ftype = OFTInteger;
+		    break;
+		case DB_C_TYPE_DOUBLE:
+		    ogr_ftype = OFTReal;
+		    break;
+		case DB_C_TYPE_STRING:
+		    ogr_ftype = OFTString;
+		    break;
+		case DB_C_TYPE_DATETIME:
+		    ogr_ftype = OFTString;
+		    break;
+		}
+		G_debug(2, "ogr_ftype = %d", ogr_ftype);
 
-		 strcpy(key1, Fi->key);
-		 G_tolcase(key1);
-		 strcpy(key2, colname[i]);
-		 G_tolcase(key2);
-		 if (strcmp(key1, key2) == 0)
-		     keycol = i;
-		 G_debug(2, "%s x %s -> %s x %s -> keycol = %d", Fi->key,
-			 colname[i], key1, key2, keycol);
+		strcpy(key1, Fi->key);
+		G_tolcase(key1);
+		strcpy(key2, colname[i]);
+		G_tolcase(key2);
+		if (strcmp(key1, key2) == 0)
+		    keycol = i;
+		G_debug(2, "%s x %s -> %s x %s -> keycol = %d", Fi->key,
+			colname[i], key1, key2, keycol);
 
-		 if (flags.nocat->answer &&
-		     strcmp(Fi->key, colname[i]) == 0)
-		     /* skip export of 'cat' field */
-		     continue;
+		if (flags.nocat->answer &&
+		    strcmp(Fi->key, colname[i]) == 0)
+		    /* skip export of 'cat' field */
+		    continue;
 
-		 if (flags.append->answer) {
-		     Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
-		     if (OGR_FD_GetFieldIndex(Ogr_field, colname[i]) > -1)
-			 /* skip existing fields */
-			 continue;
-		     else
-			 G_warning(_("New attribute column <%s> added to the table"),
+		if (flags.append->answer) {
+		    Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
+		    if (OGR_FD_GetFieldIndex(Ogr_field, colname[i]) > -1)
+			/* skip existing fields */
+			continue;
+		    else
+			G_warning(_("New attribute column <%s> added to the table"),
 				   colname[i]);
-		 }
+		}
 		 
-		 Ogr_field = OGR_Fld_Create(colname[i], ogr_ftype);
-		 if (ogr_ftype == OFTString && colwidth > 0)
-		     OGR_Fld_SetWidth(Ogr_field, colwidth);
-		 OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
+		Ogr_field = OGR_Fld_Create(colname[i], ogr_ftype);
+		if (ogr_ftype == OFTString && colwidth > 0)
+		    OGR_Fld_SetWidth(Ogr_field, colwidth);
+		if (OGR_L_CreateField(Ogr_layer, Ogr_field, 0) != OGRERR_NONE)
+		    G_fatal_error(_("Unable to create column <%s>"),
+		                  colname[i]);
 		 
-		 OGR_Fld_Destroy(Ogr_field);
-	     }
-	     if (keycol == -1)
-		 G_fatal_error(_("Key column <%s> not found"), Fi->key);
-	 }
+		OGR_Fld_Destroy(Ogr_field);
+	    }
+	    if (keycol == -1)
+		G_fatal_error(_("Key column <%s> not found"), Fi->key);
+	}
     }
     
     Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
