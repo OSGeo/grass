@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
        Centroids, Boundaries and Kernels always have to be exported
        explicitly, using the "type=" option.
      */
+    field = 0;
     if (!flags.new->answer) {
 	/* open input vector (topology required) */
 	Vect_set_open_level(2);
@@ -188,9 +189,8 @@ int main(int argc, char *argv[])
 		G_warning(_("Unable to determine input map's vector feature type(s)."));
             }
 	}
+	field = Vect_get_field_number(&In, options.field->answer);
     }
-
-    field = Vect_get_field_number(&In, options.field->answer);
 
     /* check output feature type */
     otype = Vect_option_to_types(options.type);
