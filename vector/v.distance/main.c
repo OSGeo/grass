@@ -503,6 +503,20 @@ int main(int argc, char *argv[])
 	max_step[0] = max_map;
     }
 
+    if (max > 0) {
+	G_debug(2, "reduce max steps");
+	for (i = 0; i < n_max_steps; i++) {
+	    if (max_step[i] > max) {
+		if (i == 1) {
+		    i = 0;
+		}
+		n_max_steps = i + 1;
+		max_step[i] = max;
+		break;
+	    }
+	}
+    }
+
     /* Open database driver */
     db_init_string(&stmt);
     db_init_string(&dbstr);
