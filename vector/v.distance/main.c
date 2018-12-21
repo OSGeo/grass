@@ -503,6 +503,20 @@ int main(int argc, char *argv[])
 	max_step[0] = max_map;
     }
 
+    if (max > 0) {
+	G_debug(2, "reduce max steps");
+	for (i = 0; i < n_max_steps; i++) {
+	    if (max_step[i] > max) {
+		if (i == 1) {
+		    i = 0;
+		}
+		n_max_steps = i + 1;
+		max_step[i] = max;
+		break;
+	    }
+	}
+    }
+
     /* Open database driver */
     db_init_string(&stmt);
     db_init_string(&dbstr);
@@ -698,7 +712,7 @@ int main(int argc, char *argv[])
 	near = NULL;
 	nlines = Vect_get_num_lines(&From);
 
-	G_percent(0, 0, 4);
+	G_percent(0, nlines, 4);
 	for (fline = 1; fline <= nlines; fline++) {
 	    int tmp_tcat;
 	    double tmp_min = (min < 0 ? 0 : min);
@@ -982,6 +996,7 @@ int main(int argc, char *argv[])
 	near = NULL;
 
 	G_message(_("Finding nearest features for areas..."));
+	G_percent(0, nfromareas, 2);
 	for (area = 1; area <= nfromareas; area++) {
 	    int tmp_tcat;
 	    double tmp_min = (min < 0 ? 0 : min);
