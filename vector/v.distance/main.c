@@ -460,8 +460,8 @@ int main(int argc, char *argv[])
 	/* max 9 steps from testing */
 	if (n_max_steps > 9)
 	    n_max_steps = 9;
-	if (n_max_steps < 2)
-	    n_max_steps = 2;
+	if (n_max_steps < 3)
+	    n_max_steps = 3;
 	if (n_max_steps > nto)
 	    n_max_steps = nto;
 
@@ -469,6 +469,9 @@ int main(int argc, char *argv[])
 	G_debug(2, "maximum reasonable search distance = %g", max_map);
 	G_debug(2, "n 'to' features = %d", nto);
 	G_debug(2, "n_max_steps = %d", n_max_steps);
+
+	if (!geodesic)
+	    max_map = max;
     }
 
     if (min > max)
@@ -487,7 +490,7 @@ int main(int argc, char *argv[])
 	    /* for 9 steps, this would be max / [128, 64, 32, 16, 8, 4, 2] */
 	    max_step[curr_step] = max_map / (2 << (n_max_steps - 1 - curr_step));
 	}
-	/* last step always max */
+	/* last step always max_map */
 	max_step[n_max_steps - 1] = max_map;
 	j = 1;
 	for (i = 1; i < n_max_steps; i++) {
@@ -497,24 +500,13 @@ int main(int argc, char *argv[])
 	    }
 	}
 	n_max_steps = j;
+	for (i = 0; i < n_max_steps; i++) {
+	    G_debug(2, "max step %d: %g", i, max_step[i]);
+	}
     }
     else {
 	max_step = G_malloc(sizeof(double));
 	max_step[0] = max_map;
-    }
-
-    if (max > 0) {
-	G_debug(2, "reduce max steps");
-	for (i = 0; i < n_max_steps; i++) {
-	    if (max_step[i] > max) {
-		if (i == 1) {
-		    i = 0;
-		}
-		n_max_steps = i + 1;
-		max_step[i] = max;
-		break;
-	    }
-	}
     }
 
     /* Open database driver */
