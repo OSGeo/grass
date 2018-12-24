@@ -85,13 +85,6 @@
     <description>User GUI preferences (display font, commands, digitizer, etc.)</description>
     <wx-id>ID_PREFERENCES</wx-id>
   </wxgui-item>
-  <wxgui-item name="RasterMapCalculator">
-    <label>Raster map calculator</label>
-    <handler>OnMapCalculator</handler>
-    <related-module>r.mapcalc</related-module>
-    <description>Raster map calculator</description>
-    <keywords>raster,algebra</keywords>
-  </wxgui-item>
   <wxgui-item name="Histogram">
     <label>Histogram</label>
     <handler>OnHistogram</handler>
