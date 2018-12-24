@@ -79,7 +79,7 @@ class StringLiteral(str):
         # Unescaping probably not perfect but close enough.
         try:
             value = re.sub(r'\\x([0-9a-fA-F])(?![0-9a-fA-F])',
-                           r'\x0\1', value[1:-1])
+                           r'\\x0\\1', value[1:-1])
         except ValueError as e:
             raise ValueError("invalid \\x escape in %s" % value)
 
