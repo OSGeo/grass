@@ -1010,16 +1010,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         if self._properties.showRegion:
             compReg = self.Map.GetRegion()
             dispReg = self.Map.GetCurrentRegion()
-            reg = None
-            if utils.isInRegion(dispReg, compReg):
-                self.polypen = wx.Pen(
-                    colour=wx.Colour(0, 0, 255, 128),
-                    width=3, style=wx.SOLID)
-                reg = dispReg
-            else:
-                self.polypen = wx.Pen(colour=wx.Colour(255, 0, 0, 128),
-                                      width=3, style=wx.SOLID)
-                reg = compReg
+            reg = dispReg if utils.isInRegion(dispReg, compReg) else compReg
 
             regionCoords = []
             regionCoords.append((reg['w'], reg['n']))
@@ -1027,7 +1018,10 @@ class BufferedMapWindow(MapWindowBase, Window):
             regionCoords.append((reg['e'], reg['s']))
             regionCoords.append((reg['w'], reg['s']))
             regionCoords.append((reg['w'], reg['n']))
+
             # draw region extent
+            self.polypen = wx.Pen(colour=wx.Colour(255, 0, 0, 128),
+                                  width=3, style=wx.SOLID)
             self.DrawLines(pdc=self.pdcTransparent, polycoords=regionCoords)
 
     def EraseMap(self):
