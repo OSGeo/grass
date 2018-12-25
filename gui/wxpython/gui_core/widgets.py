@@ -1073,6 +1073,9 @@ class SearchModuleWidget(wx.Panel):
 
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY, **kwargs)
 
+#        self._box = wx.StaticBox(parent = self, id = wx.ID_ANY,
+# label = " %s " % _("Find module - (press Enter for next match)"))
+
         if sys.platform == 'win32':
             self._search = TextCtrl(
                 parent=self, id=wx.ID_ANY, size=(-1, 25),

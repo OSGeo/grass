@@ -127,9 +127,9 @@ class InstallExtensionWindow(wx.Frame):
         # self.btnFetch.Bind(wx.EVT_BUTTON, self.OnFetch)
         self.btnInstall.Bind(wx.EVT_BUTTON, self.OnInstall)
         self.btnHelp.Bind(wx.EVT_BUTTON, self.OnHelp)
-        #self.tree.selectionChanged.connect(self.OnItemSelected)
-        #self.tree.itemActivated.connect(self.OnItemActivated)
-        #self.tree.contextMenu.connect(self.OnContextMenu)
+        self.tree.selectionChanged.connect(self.OnItemSelected)
+        self.tree.itemActivated.connect(self.OnItemActivated)
+        self.tree.contextMenu.connect(self.OnContextMenu)
 
         wx.CallAfter(self._fetch)
 

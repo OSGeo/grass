@@ -112,24 +112,16 @@ class AbstractTreeViewMixin(VirtualTree):
         :param node: node representing item
         :param select: True/False to select/deselect
         """
-        print (node)
         index = self._model.GetIndexOfNode(node)
-
-        # expand parents
         for i in range(len(index))[1:]:
-            print (index[:i])
             item = self.GetItemByIndex(index[:i])
-            print (item, item.GetText())
             self.Expand(item)
             # needed for wxPython 3:
-            # self.EnsureVisible(item)
+            self.EnsureVisible(item)
 
-        print (index)
         item = self.GetItemByIndex(index)
-        print (item, item.GetText())
-        self.EnsureVisible(item)
         self.SelectItem(item, select)
-        
+
     def ExpandNode(self, node, recursive=True):
         """Expand items.
 

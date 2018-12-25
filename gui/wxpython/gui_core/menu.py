@@ -152,6 +152,9 @@ class SearchModuleWindow(wx.Panel):
         self._tree.SetToolTip(
             _("Double-click or Ctrl-Enter to run selected module"))
 
+#        self._dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+#                                     label = " %s " % _("Module tree"))
+
         # search widget
         self._search = SearchModuleWidget(parent=self,
                                           model=model,
