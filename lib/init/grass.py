@@ -612,7 +612,7 @@ def set_paths(grass_config_dir):
         # the env var PYTHONPATH is only evaluated when python is started,
         # thus:
         sys.path.append(pythonpath)
-        # now we can import stuff from GRASS lib/python 
+        # now we can import stuff from GRASS lib/python
 
     # set path for the GRASS man pages
     grass_man_path = gpath('docs', 'man')
@@ -1231,7 +1231,7 @@ def set_language(grass_config_dir):
                 break
         fd.close()
 
-    # Backwards compatability with old wx preferences files
+    # Backwards compatibility with old wx preferences files
     if language == 'C':
         language = 'en'
 
@@ -1622,10 +1622,10 @@ def say_hello():
 
 
 def show_info(shellname, grass_gui, default_gui):
-    """Write basic infor about GRASS GIS and GRASS session to stderr"""
+    """Write basic info about GRASS GIS and GRASS session to stderr"""
     sys.stderr.write(
 r"""
-%-41shttp://grass.osgeo.org
+%-41shttps://grass.osgeo.org
 %-41s%s (%s)
 %-41sg.manual -i
 %-41sg.version -c
@@ -1714,6 +1714,7 @@ def bash_startup(location, location_name, grass_env_file):
 
     f = open(bashrc, 'w')
     f.write("test -r ~/.alias && . ~/.alias\n")
+
     if os.getenv('ISISROOT'):
         f.write("PS1='ISIS-GRASS %s (%s):\\w > '\n" % (grass_version, location_name))
     else:
@@ -2192,7 +2193,7 @@ def main():
             writefile(gisrcrc, readfile(gisrc))
         # After this point no more grass modules may be called
         # done message at last: no atexit.register()
-        # or register done_message() 
+        # or register done_message()
         done_message()
 
 if __name__ == '__main__':
