@@ -54,14 +54,14 @@ class InstallExtensionWindow(wx.Frame):
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.repoBox = StaticBox(
-            parent=self.panel, id=wx.ID_ANY, label=" %s " %
-            _("Repository (leave empty to use the official one)"))
+        # self.repoBox = StaticBox(
+        #     parent=self.panel, id=wx.ID_ANY, label=" %s " %
+        #     _("Repository (leave empty to use the official one)"))
         self.treeBox = StaticBox(
             parent=self.panel, id=wx.ID_ANY, label=" %s " %
             _("List of extensions - double-click to install"))
 
-        self.repo = TextCtrl(parent=self.panel, id=wx.ID_ANY)
+        # self.repo = TextCtrl(parent=self.panel, id=wx.ID_ANY)
 
         # modelBuilder loads data into tree model
         self.modelBuilder = ExtensionTreeModelBuilder()
@@ -101,19 +101,19 @@ class InstallExtensionWindow(wx.Frame):
                 continue
             self.options[name] = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
                                              label=desc)
-        defaultUrl = ''  # default/official one will be used when option empty
-        self.repo.SetValue(
-            task.get_param(
-                value='url').get(
-                'default',
-                defaultUrl))
+        # defaultUrl = ''  # default/official one will be used when option empty
+        # self.repo.SetValue(
+        #     task.get_param(
+        #         value='url').get(
+        #         'default',
+        #         defaultUrl))
 
         self.statusbar = self.CreateStatusBar(number=1)
 
-        self.btnFetch = Button(parent=self.panel, id=wx.ID_ANY,
-                               label=_("&Fetch"))
-        self.btnFetch.SetToolTip(_("Fetch list of available modules "
-                                   "from GRASS Addons SVN repository"))
+        # self.btnFetch = Button(parent=self.panel, id=wx.ID_ANY,
+        #                        label=_("&Fetch"))
+        # self.btnFetch.SetToolTip(_("Fetch list of available modules "
+        #                            "from GRASS Addons SVN repository"))
         self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btnInstall = Button(parent=self.panel, id=wx.ID_ANY,
                                  label=_("&Install"))
@@ -124,7 +124,7 @@ class InstallExtensionWindow(wx.Frame):
         self.btnHelp.SetToolTip(_("Show g.extension manual page"))
 
         self.btnClose.Bind(wx.EVT_BUTTON, lambda evt: self.Close())
-        self.btnFetch.Bind(wx.EVT_BUTTON, self.OnFetch)
+        # self.btnFetch.Bind(wx.EVT_BUTTON, self.OnFetch)
         self.btnInstall.Bind(wx.EVT_BUTTON, self.OnInstall)
         self.btnHelp.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.tree.selectionChanged.connect(self.OnItemSelected)
@@ -138,14 +138,14 @@ class InstallExtensionWindow(wx.Frame):
     def _layout(self):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
-        repoSizer = wx.StaticBoxSizer(self.repoBox, wx.VERTICAL)
-        repo1Sizer = wx.BoxSizer(wx.HORIZONTAL)
-        repo1Sizer.Add(self.repo, proportion=1,
-                       flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=1)
-        repo1Sizer.Add(self.btnFetch, proportion=0,
-                       flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=1)
-        repoSizer.Add(repo1Sizer,
-                      flag=wx.EXPAND)
+        # repoSizer = wx.StaticBoxSizer(self.repoBox, wx.VERTICAL)
+        # repo1Sizer = wx.BoxSizer(wx.HORIZONTAL)
+        # repo1Sizer.Add(self.repo, proportion=1,
+        #                flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=1)
+        # repo1Sizer.Add(self.btnFetch, proportion=0,
+        #                flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=1)
+        # repoSizer.Add(repo1Sizer,
+        #               flag=wx.EXPAND)
 
         findSizer = wx.BoxSizer(wx.HORIZONTAL)
         findSizer.Add(self.search, proportion=1)
@@ -166,10 +166,10 @@ class InstallExtensionWindow(wx.Frame):
                      flag=wx.RIGHT, border=5)
         btnSizer.Add(self.btnInstall, proportion=0)
 
-        sizer.Add(repoSizer, proportion=0,
-                  flag=wx.ALL | wx.EXPAND, border=3)
+        # sizer.Add(repoSizer, proportion=0,
+        #           flag=wx.ALL | wx.EXPAND, border=3)
         sizer.Add(findSizer, proportion=0,
-                  flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
+                  flag=wx.ALL | wx.EXPAND, border=3)
         sizer.Add(treeSizer, proportion=1,
                   flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
         sizer.Add(optionSizer, proportion=0,
@@ -198,8 +198,8 @@ class InstallExtensionWindow(wx.Frame):
                 else:
                     flags.append('--%s' % key)
 
-        return ['g.extension'] + flags + ['extension=' + name,
-                                          'url=' + self.repo.GetValue().strip()]
+        # 'url=' + self.repo.GetValue().strip()]                    
+        return ['g.extension'] + flags + ['extension={}'.format(name) ]
 
     def OnFetch(self, event):
         """Fetch list of available extensions"""
@@ -213,7 +213,7 @@ class InstallExtensionWindow(wx.Frame):
         try:
             self.thread.Run(
                 callable=self.modelBuilder.Load,
-                url=self.repo.GetValue().strip(),
+                url='', # self.repo.GetValue().strip(),
                 ondone=lambda event: self._fetchDone())
         except GException as e:
             self._fetchDone()
