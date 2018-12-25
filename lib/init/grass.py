@@ -495,6 +495,8 @@ def read_gisrc(filename):
                           line=line, error=e, file=filename))
             continue
         kv[k.strip()] = v.strip()
+    if not kv:
+        warning(_("Empty RC file ({file})").format(file=filename))
     f.close()
 
     return kv
@@ -718,6 +720,7 @@ def ensure_home():
     if windows and not os.getenv('HOME'):
         os.environ['HOME'] = os.path.join(os.getenv('HOMEDRIVE'),
                                           os.getenv('HOMEPATH'))
+
 
 def create_initial_gisrc(filename):
     # for convenience, define GISDBASE as pwd:
@@ -981,7 +984,7 @@ def set_mapset_interactive(grass_gui):
     if not os.path.exists(wxpath("gis_set.py")) and grass_gui != 'text':
         debug("No GUI available, switching to text mode")
         return False
-    
+
     # Check for text interface
     if grass_gui == 'text':
         # TODO: maybe this should be removed and solved from outside
@@ -997,6 +1000,7 @@ def set_mapset_interactive(grass_gui):
                 "Use the --help option to see valid interface names.") % grass_gui)
 
     return True
+
 
 def gui_startup(grass_gui):
     """Start GUI for startup (setting gisrc file)"""
@@ -1106,7 +1110,7 @@ def load_env(grass_env_file):
         os.environ['ISIS_LIB'] = isis + os.sep + "lib"
         os.environ['ISIS_3RDPARTY'] = isis + os.sep + "3rdParty" + os.sep + "lib"
         os.environ['QT_PLUGIN_PATH'] = isis + os.sep + "3rdParty" + os.sep + "plugins"
-        #os.environ['ISIS3DATA'] = isis + "$ISIS3DATA"
+        # os.environ['ISIS3DATA'] = isis + "$ISIS3DATA"
         libpath = os.getenv('LD_LIBRARY_PATH', '')
         isislibpath = os.getenv('ISIS_LIB')
         isis3rdparty = os.getenv('ISIS_3RDPARTY')
@@ -1122,7 +1126,7 @@ def set_language(grass_config_dir):
     # thus it always on Vista and XP will print an error.
     # See discussion for Windows not following its own documentation and
     # not accepting ISO codes as valid locale identifiers http://bugs.python.org/issue10466
-    language = 'None' # Such string sometimes is present in wx file
+    language = 'None'  # Such string sometimes is present in wx file
     encoding = None
 
     # Override value is stored in wxGUI preferences file.
@@ -1418,7 +1422,6 @@ def start_gui(grass_gui):
     """
     # Start the chosen GUI but ignore text
     debug("GRASS GUI should be <%s>" % grass_gui)
-    
     # Check for gui interface
     if grass_gui == "wxpython":
         Popen([os.getenv('GRASS_PYTHON'), wxpath("wxgui.py")])
@@ -1439,7 +1442,8 @@ def close_gui():
             os.kill(int(pid), signal.SIGTERM)
         except OSError as e:
             message(_("Unable to close GUI. {0}").format(e))
-        
+
+
 def clear_screen():
     """Clear terminal"""
     if windows:
@@ -1479,10 +1483,10 @@ def say_hello():
 
 
 def show_info(shellname, grass_gui, default_gui):
-    """Write basic infor about GRASS GIS and GRASS session to stderr"""
+    """Write basic info about GRASS GIS and GRASS session to stderr"""
     sys.stderr.write(
 r"""
-%-41shttp://grass.osgeo.org
+%-41shttps://grass.osgeo.org
 %-41s%s (%s)
 %-41sg.manual -i
 %-41sg.version -c
@@ -1525,7 +1529,8 @@ def csh_startup(location, location_name, mapset, grass_env_file):
     f.write("GRASS GIS %s > '\n" % grass_version)
     f.write("set BOGUS=``;unset BOGUS\n")
 
-    path = os.path.join(userhome, ".grass.cshrc") # left for backward compatibility
+    # csh shell rc file left for backward compatibility
+    path = os.path.join(userhome, ".grass.cshrc")
     if os.access(path, os.R_OK):
         f.write(readfile(path) + '\n')
     if os.access(grass_env_file, os.R_OK):
@@ -1544,14 +1549,11 @@ def csh_startup(location, location_name, mapset, grass_env_file):
 
     path = os.getenv('PATH').split(':')
     f.write("set path = ( %s ) \n" % ' '.join(path))
-
     f.close()
     writefile(tcshrc, readfile(cshrc))
 
     process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
-    
     os.environ['HOME'] = userhome
-    
     return process
 
 
@@ -1603,14 +1605,11 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
                 f.write(line + '\n')
 
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
-    f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
-
+    f.write("export HOME=\"%s\"\n" % userhome)  # restore user home path
     f.close()
-    
+
     process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
-    
     os.environ['HOME'] = userhome
-    
     return process
 
 
@@ -1779,7 +1778,7 @@ def parse_cmdline(argv, default_gui):
     return params
 
 
-### MAIN script starts here
+# The main script starts here
 
 # Get the system name
 windows = sys.platform == 'win32'
@@ -1789,7 +1788,7 @@ macosx = "darwin" in sys.platform
 # TODO: it is OK to remove this?
 # at the beginning of this file were are happily getting GISBASE
 # from the environment and we don't care about inconsistencies it might cause
-### commented-out: broken winGRASS
+# The following was commented out because of breaking winGRASS
 # if 'GISBASE' in os.environ:
 #     sys.exit(_("ERROR: GRASS GIS is already running "
 #                "(environmental variable GISBASE found)"))
@@ -1845,7 +1844,8 @@ def main():
     # Set the username
     user = get_username()
 
-    # TODO: this might need to be moved before processing of parameters and getting batch job
+    # TODO: this might need to be moved before processing of parameters
+    # and getting batch job
     # Set language
     # This has to be called before any _() function call!
     # Subsequent functions are using _() calls and
@@ -2009,6 +2009,7 @@ def main():
 
         # close GUI if running
         close_gui()
+
         # here we are at the end of grass session
         clear_screen()
         # TODO: can we just register this atexit?
