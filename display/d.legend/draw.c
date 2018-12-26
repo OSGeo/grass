@@ -1,7 +1,7 @@
 /* draw.c:
  *    Compute position of legend, title, labels and ticks
  *    Extracted from original d.legend/main.c for background purpose
- *    Moving to seperate file: Adam Laza, GSoC 2016
+ *    Moving to separate file: Adam Laza, GSoC 2016
  *
  *    Copyright (C) 2014 by Hamish Bowman, and the GRASS Development Team*
  *    This program is free software under the GPL (>=v2)
@@ -895,7 +895,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
 
         /* Display sidebar histogram, if requested.
            /  In case of horizontal legend, maximum of histogram - max_hist
-           will efect the title position */
+           will affect the title position */
         max_hist = 0;
         if (histo->answer) {
             render_range.min = (DCELL) (fp ? dmin : min_ind);

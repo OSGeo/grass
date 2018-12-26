@@ -632,7 +632,7 @@ double find_max_value(TreeNode * root)
 	return SMALLEST_GRADIENT;
     assert(root);
     /*assert(root->value.maxGradient != SMALLEST_GRADIENT);
-       //LT: this shoudl be fixed
+       //LT: this should be fixed
        //if (root->value.maxGradient != SMALLEST_GRADIENT) */
     return root->value.maxGradient;
 }

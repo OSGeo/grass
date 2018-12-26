@@ -23,8 +23,8 @@
  *          Provides a means of creating a new projection
  *             information file
  *
- *  ------Rev 4.+ arguements --------------------------------------
- *    Input arguements:
+ *  ------Rev 4.+ arguments --------------------------------------
+ *    Input arguments:
  *             m.setproj set=mapset for output project info file
  *                    proj=projection of the output project info file
  *

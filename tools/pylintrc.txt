@@ -13,7 +13,7 @@
 #   pylint --rcfile=../../tools/pylintrc.txt -f parseable -r n -i y lmgr/
 
 # A lot of errors need to be ignored now to avoid a large number of messages.
-# Files need to be fixed one by one (partialy without this configuration).
+# Files need to be fixed one by one (partially without this configuration).
 
 # Save this file ~/.pylintrc on Linux
 

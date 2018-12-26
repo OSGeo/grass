@@ -18,7 +18,7 @@
  * cell is based on the Fortran code by Pat Andrews (1983)
  * of the Northern Forest Fire Laboratory, USDA Forest
  * Service. These three raster map layers are expected to
- * be the inputs for a seperate GRASS raster module 
+ * be the inputs for a separate GRASS raster module 
  * 'r.spread'.
  * 
  * 'r.ros' can be run in two standard GRASS modes:
@@ -637,7 +637,7 @@ int main(int argc, char *argv[])
 		aspect[col] = (630 - aspect[col]) % 360;
 
 	    /* assign some dead fuel moisture if not completely 
-	     *     given based on emperical relationship*/
+	     *     given based on empirical relationship*/
 	    if (!(parm.mois_10h->answer || parm.mois_100h->answer)) {
 		moisture[1] = moisture[0] + 0.01;
 		moisture[2] = moisture[0] + 0.02;

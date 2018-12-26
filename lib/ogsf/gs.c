@@ -964,7 +964,7 @@ int gs_masked(typbuff * tb, int col, int row, int offset)
    \param coloratt color attribute
    \param offset offset value
 
-   \return packed color for catagory at offset
+   \return packed color for category at offset
  */
 int gs_mapcolor(typbuff * cobuff, gsurf_att * coloratt, int offset)
 {

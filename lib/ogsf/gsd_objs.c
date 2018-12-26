@@ -29,7 +29,7 @@
 static void init_stuff(void);
 
 /*!
-   \brief vertices for octohedron
+   \brief vertices for octahedron
  */
 float Octo[6][3] = {
     {1.0, 0.0, 0.0},
@@ -43,7 +43,7 @@ float Octo[6][3] = {
 #define ONORM .57445626
 
 /*!
-   \brief normals for flat-shaded octohedron
+   \brief normals for flat-shaded octahedron
  */
 float OctoN[8][3] = {
     {ONORM, ONORM, ONORM},

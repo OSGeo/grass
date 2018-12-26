@@ -163,7 +163,7 @@ float trunca()
 /*
   Decompose the atmosphere in a finite number of layers. For each layer, DISCRE
   provides the optical thickness, the proportion of molecules and aerosols assuming an exponential
-  distribution for each constituants. Figure 1 illustrate the way molecules and aerosols are mixed in a
+  distribution for each constituents. Figure 1 illustrate the way molecules and aerosols are mixed in a
   realistic atmosphere. For molecules, the scale height is 8km. For aerosols it is assumed to be 2km
   unless otherwise specified by the user (using aircraft measurements).
 */
@@ -1395,7 +1395,7 @@ void atmref(const float tamoy, const float trmoy, const float pizmoy,
     }
 
     /* rayleigh+aerosol=romix,aerosol=roaero reflectance computed
-       using sucessive order of scattering method
+       using successive order of scattering method
        3 cases: satellite,plane,ground */
     if (alt.palt > 0) 
     {

@@ -11,7 +11,7 @@
  *     sets the flag at position bitno to zero.
  *
  * int flag_get(flag, bitno)
- *     checks if the flag is set at postion bitno.
+ *     checks if the flag is set at position bitno.
  *
  * Examples:
  * set flag at position 0: FLAG_SET(flag, 0)

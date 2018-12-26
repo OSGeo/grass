@@ -233,8 +233,8 @@ int do_cum(void)
  * 
  * implemented here:
  * Holmgren (1994) with modifications to honour A * path in order to get
- * out of depressions and across obstacles with gracefull flow convergence
- * before depressions/obstacles and gracefull flow divergence after 
+ * out of depressions and across obstacles with graceful flow convergence
+ * before depressions/obstacles and graceful flow divergence after 
  * depressions/obstacles
  * 
  * Topographic Convergence Index (TCI)

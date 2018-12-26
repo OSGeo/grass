@@ -377,7 +377,7 @@ overwrite such packages delete them from the target first using the Windows
 
 ## el.js ##
 
-`el.js` runs its arguments elevated (i.e. with Adminstrator privileges).  For example,
+`el.js` runs its arguments elevated (i.e. with Administrator privileges).  For example,
 
 	el R touch
 

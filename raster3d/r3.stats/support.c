@@ -353,7 +353,7 @@ void check_range_value(stat_table *stats, double value)
  *                                                                     / \ 
  *                                                               [[7,8]]  [[8,9]]
  *
- * Searching the value 5.5 will result in the follwoing steps:
+ * Searching the value 5.5 will result in the following steps:
  *
  * value 5.5 in range of
  * 1.) left array index = 0 - right array index = 8 -> range [0 - 9]

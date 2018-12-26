@@ -31,7 +31,7 @@ GLuint label_id;
 /*!
    \brief Put label
 
-   \todo Allocate label dynamicaly
+   \todo Allocate label dynamically
 
    \param fontbase fontbase settings
    \param size font size
