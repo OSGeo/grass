@@ -15,7 +15,7 @@
 
 int remove_small_clumps(struct globals *globals);
 
-/* standard gauss funtion:
+/* standard gauss function:
  * a * exp(-(x - m)^2 / (2 * stddev^2)
  * a is not needed because the sum of weights is calculated for each 
  * sampling window

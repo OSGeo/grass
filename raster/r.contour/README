@@ -86,13 +86,13 @@ The original r.contour worked pretty well, so I assume that most
 problems may be due to the floating point and NULL (which would
 change the handling of special cases and which probably wasn't taken
 care of.)
-I don't remeber who ported r.contour to FP - it might have been Olga
+I don't remember who ported r.contour to FP - it might have been Olga
 Waupotitsch (she did most of the FP port).  Bill is right, I don't believe
 that Terry (she is a woman, BTW) could help too much here. I use r.contour
 occasionally and I don't remember any problems, although I usually run it
 without mask, so NULLs may be the most problematic issue (Terry left before
 those were introduced.) I hope that Bill's description of the algorithm will
-be helpfull,
+be helpful,
 
 Helena
 --------------------------------------------------

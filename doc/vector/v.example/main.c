@@ -6,7 +6,7 @@
  * AUTHOR(S):  GRASS Development Team, Radim Blazek, Maris Nartiss
  *
  * PURPOSE:    copies vector data from source map to destination map
- *             prints out all point coordinates and atributes
+ *             prints out all point coordinates and attributes
  *
  * COPYRIGHT:  (C) 2002-2009 by the GRASS Development Team
  *
@@ -226,6 +226,6 @@ int main(int argc, char *argv[])
     Vect_close(&Out);
     db_close_database_shutdown_driver(driver);
 
-    /* Don't forget to report to caller sucessfull end of data processing :) */
+    /* Don't forget to report to caller successful end of data processing :) */
     exit(EXIT_SUCCESS);
 }

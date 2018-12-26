@@ -60,7 +60,7 @@ int print_output(OUTPUT * output)
 	fprintf(output->out_file, "             Area       Percent Basin\n");
 	for (b = 0; b < output->num_maps; b++) {
 	    fprintf(output->out_file,
-		    "<< %20s >> map layer, average catagory value: %.2f\n",
+		    "<< %20s >> map layer, average category value: %.2f\n",
 		    output->maps[b].name,
 		    ((double)output->maps[b].basins[c].sum_values) /
 		    output->basin_facts[c].num_cells);

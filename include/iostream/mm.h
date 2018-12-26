@@ -86,7 +86,7 @@ enum MM_stream_usage {
 
 
 
-// Declarations of a very simple memory manager desgined to work with
+// Declarations of a very simple memory manager designed to work with
 // BTEs that rely on the underlying OS to manage physical memory.
 class MM_register {
 private:

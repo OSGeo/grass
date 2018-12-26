@@ -309,7 +309,7 @@ void collect_values_and_frequencies_filtered(double val1, double val2,
 
 
 /*
- * Simple double comparision function for use by qsort().
+ * Simple double comparison function for use by qsort().
  * This is needed for calculating median statistics.
  */
 int compare_dbl(const void *val1, const void *val2)

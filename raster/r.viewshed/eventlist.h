@@ -96,7 +96,7 @@ void print_event(AEvent a, int debug_level);
 
     /*computes the distance from the event to the viewpoint. Note: all 3
        //events associate to a cell are considered at the same distance, from
-       //the center of teh cell to the viewpoint */
+       //the center of the cell to the viewpoint */
 double get_square_distance_from_viewpoint(const AEvent & a,
 					  const Viewpoint & vp);
 

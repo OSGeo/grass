@@ -930,7 +930,7 @@ int slice_calc(geovol * gvl, int ndx_slc, void *colors)
     f_rows = distz / modz;
     rows = f_rows > (int)f_rows ? (int)f_rows + 1 : (int)f_rows;
 
-    /* set x,y intially to first slice point */
+    /* set x,y initially to first slice point */
     x = slice->x1;
     y = slice->y1;
 

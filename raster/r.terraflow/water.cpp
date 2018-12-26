@@ -349,7 +349,7 @@ generateWatersheds(AMI_STREAM<waterWindowType> **waterWindows,
 				  winp->getDepth(k),
 				  winp->i + i, winp->j + j);
 #ifndef NDEBUG
-	      /* dont insert if preceeds us */
+	      /* dont insert if precedes us */
 	      if(winp->getPriority() < prio) {
 		fillPLabel plabel(prio, label);
 		pq->insert(plabel);

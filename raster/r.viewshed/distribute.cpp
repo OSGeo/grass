@@ -1015,7 +1015,7 @@ int compute_n_sectors()
        //technically, if there is not enough memory to hold two
        //blocks, the function should enter solve_in_memory; so there
        //is not enough memory to solve in memory nor to
-       //distribute...this shoudl happen only under tests with very
+       //distribute...this should happen only under tests with very
        //very little memory. just set nsect=2 and hope that it
        //works */
 

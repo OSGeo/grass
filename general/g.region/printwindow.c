@@ -534,7 +534,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
     }
 
     /* flag.bbox
-       Calculate the largest bouding box in lat-lon coordinates 
+       Calculate the largest bounding box in lat-lon coordinates 
        and print it to stdout
      */
     if (print_flag & PRINT_MBBOX) {

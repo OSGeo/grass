@@ -220,7 +220,7 @@ int main(int argc, char **argv)
 	Headfax.g3mapin = g3map;
 
 	/* currently seems rather redundant, but may have future use to
-	   keep them seperate. */
+	   keep them separate. */
 	copy_head(&G3header, &Headfax);
 
 	/* INIT */
@@ -804,7 +804,7 @@ do_draw(file_info * Headp, file_info * G3p, struct dspec *D_spec,
 	do__draw_solid(Headp, G3p, D_spec, Cap);
     else if (type & DRAW_CAP)
 	draw_cap_side(D_spec, Headp, G3p, Cap, (type >> 16) & 0x3f);
-    /* bring over arguement to DRAW_CAP in high 16 bits to low 16 */
+    /* bring over argument to DRAW_CAP in high 16 bits to low 16 */
     /*    and AND with   00111111  for sides 1-6 */
 
 
@@ -933,7 +933,7 @@ do_draw_no_transformations(file_info * Headp, file_info * G3p,
 	do__draw_solid(Headp, G3p, D_spec, Cap);
     else if (type & DRAW_CAP)
 	draw_cap_side(D_spec, Headp, G3p, Cap, (type >> 16) & 0x3f);
-    /* bring over arguement to DRAW_CAP in high 16 bits to low 16 */
+    /* bring over argument to DRAW_CAP in high 16 bits to low 16 */
     /*    and AND with   00111111  for sides 1-6 */
 
 }

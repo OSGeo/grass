@@ -1486,7 +1486,7 @@ int main(int argc, char *argv[])
 	/* It is not to clean to snap centroids, but I have seen data with 2 duplicate polygons
 	 * (as far as decimal places were printed) and centroids were not identical */
 	/* Disabled, because the mechanism has changed:
-	 * at this stage, there are no centroids yet, centroids are caluclated 
+	 * at this stage, there are no centroids yet, centroids are calculated 
 	 * later for output areas, not fo input polygons */
 	/*
 	   fprintf ( stderr, separator );
