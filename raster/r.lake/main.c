@@ -70,7 +70,7 @@ void save_map(FCELL ** out, int out_fd, int rows, int cols, int flag,
 		*volume += cellsize * out[row][col];
 	    }
 
-	    /* Get min/max depth. Can be usefull ;) */
+	    /* Get min/max depth. Can be useful ;) */
 	    if (out[row][col] > *max_depth)
 		*max_depth = out[row][col];
 	    if (out[row][col] < *min_depth)

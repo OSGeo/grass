@@ -189,7 +189,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 	double dist_grnd, dist_photo;
 	double meanx, meany, meanX, meanY, meanZ;
 	
-	/* set intial XC and YC from mean values of control points */
+	/* set initial XC and YC from mean values of control points */
 	meanx = meany = meanX = meanY = meanZ = 0;
 	x = y = X = Y = 0;
 	n = 0;
@@ -283,7 +283,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
     epsilon.x[5][0] = *Kappa;
 
 /************************** Start Iterations *****************************/
-    /* itererate untill convergence */
+    /* itererate until convergence */
 
     for (iter = 0; iter <= MAX_ITERS; iter++) {
 	/*  break if converged */

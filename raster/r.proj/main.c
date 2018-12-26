@@ -42,7 +42,7 @@
 *		 needed amount of memory will be allocated for the projection
 *	
 *		 Bugfixes 20050328: added floor() before (int) typecasts to in avoid
-*		 assymetrical rounding errors. Added missing offset outcellhd.ew_res/2 
+*		 asymmetrical rounding errors. Added missing offset outcellhd.ew_res/2 
 *		 to initial xcoord for each row in main projection loop (we want to  project 
 *		 center of cell, not border).
 *

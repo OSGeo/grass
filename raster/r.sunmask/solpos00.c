@@ -305,7 +305,7 @@ static long int validate(struct posdata *pdat)
 
     /* No absurd dates, please. */
     if (pdat->function & L_GEOM) {
-	if ((pdat->year < 1950) || (pdat->year > 2050))	/* limits of algoritm */
+	if ((pdat->year < 1950) || (pdat->year > 2050))	/* limits of algorithm */
 	    retval |= (1L << S_YEAR_ERROR);
 	if (!(pdat->function & S_DOY) &&
 	    ((pdat->month < 1) || (pdat->month > 12)))

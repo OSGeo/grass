@@ -167,7 +167,7 @@ Gets new color values for D_spec->ctable from file cfile,
 which is the original (per threshold) color table 
 (i.e. gets out of per cube color mode).
 If unable to open cfile (colortable file), prints error message 
-andd uses default color table.
+and uses default color table.
 ******************************************************************************/
 void no_color_file(D_spec, cfile)
      struct dspec *D_spec;

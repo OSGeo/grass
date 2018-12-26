@@ -183,7 +183,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 	    z_style = NULL;
 	}
         else if (rgb_column) {
-            /* this should not happend, zcolor and rgb_columns are mutually exclusive */
+            /* this should not happen, zcolor and rgb_columns are mutually exclusive */
 	    z_style = NULL;
         }
 	else {

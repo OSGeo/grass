@@ -85,8 +85,8 @@ struct Options
     /* flags */
     struct Flag *oint;		/* output data as integer */
     struct Flag *irad;		/* treat input values as reflectance instead of radiance values */
-    struct Flag *etmafter;	/* treat input data as a satelite image of type etm+ taken after July 1, 2000 */
-    struct Flag *etmbefore;	/* treat input data as a satelite image of type etm+ taken before July 1, 2000 */
+    struct Flag *etmafter;	/* treat input data as a satellite image of type etm+ taken after July 1, 2000 */
+    struct Flag *etmbefore;	/* treat input data as a satellite image of type etm+ taken before July 1, 2000 */
 };
 
 struct ScaleRange
@@ -116,7 +116,7 @@ static void read_scale(Option *, ScaleRange &);
 /* 
    Adjust the region to that of the input raster.
    Atmospheric corrections should be done on the whole
-   satelite image, not just portions.
+   satellite image, not just portions.
  */
 static void adjust_region(const char *name)
 {

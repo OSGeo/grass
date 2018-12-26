@@ -4,9 +4,9 @@
  *                    Provide a means of collecting user lat/long
  *                    data, in different formats; convert to
  *                       decimal degrees
- *    Input arguements : lat or long string   and
+ *    Input arguments : lat or long string   and
  *                       a 1 for latitude or 0 for longitude
- *    Output arguements: decimal degrees in string
+ *    Output arguments: decimal degrees in string
  *
  *            Note: All functions are callable directly see
  *                    g.get_stp       g.get_fips      g.stp_proj  geo

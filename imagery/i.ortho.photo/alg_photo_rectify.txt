@@ -148,7 +148,7 @@ rectify.c
           	ref equ: case good
           		E21 = -943.487394	 -0.990568	 0.540622 
           		N21 = -1672.101767	 -0.719668	 -0.167699 
-          	 got psuedo pts: row 0 	 col 0 
+          	 got pseudo pts: row 0 	 col 0 
           		compute geo matrix
           		perform georef 
           		write matrix 
@@ -187,7 +187,7 @@ rectify.c
           	ref equ: case good
           		E21 = -1388.336416	 -0.227609	 0.176021 
           		N21 = -765.007897	 0.036045	 0.516496 
-          	 got psuedo pts: row 21 	 col 27 
+          	 got pseudo pts: row 21 	 col 27 
           		compute geo matrix
           		perform georef 
           		write matrix 
@@ -225,7 +225,7 @@ rectify.c
           	ref equ: case good
           		E21 = -1382.560261	 -0.243551	 0.194739 
           		N21 = -748.402304	 0.027409	 0.505204 
-          	 got psuedo pts: row 22 	 col 27 
+          	 got pseudo pts: row 22 	 col 27 
           		compute geo matrix
           		perform georef 
           		write matrix 

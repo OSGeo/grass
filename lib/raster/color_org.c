@@ -75,7 +75,7 @@ static int organize_fp_lookup(struct Colors *colors, int mod)
     qsort((char *)cp->fp_lookup.vals, cp->fp_lookup.nalloc,
 	  sizeof(DCELL), &double_comp);
 
-    /* now find the rule to apply inbetween each 2 values in a list */
+    /* now find the rule to apply between each 2 values in a list */
     for (i = 0; i < cp->fp_lookup.nalloc - 1; i++) {
 	val = (cp->fp_lookup.vals[i] + cp->fp_lookup.vals[i + 1]) / 2.;
 	/* fprintf (stderr, "%lf %lf ", cp->fp_lookup.vals[i], cp->fp_lookup.vals[i+1]); */

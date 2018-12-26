@@ -31,7 +31,7 @@
  *	3) the landing firebrand may ignite spread based on fine fuel
  *	   moisture dictated probability simplified from Rothermel (1983);
  *	4) spotting travel time is proportional to but slower than windspeed;
- *	5) there is an elapsed time to reach equilibium rate of spread (ROS).
+ *	5) there is an elapsed time to reach equilibrium rate of spread (ROS).
  *	   This elapsed time is proportional to the ROS. 
  * Refs:
  * Chase, C. H., 1984, Spotting distance from wind-driven surface fires --

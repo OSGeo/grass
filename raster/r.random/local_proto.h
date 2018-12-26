@@ -28,7 +28,7 @@ typedef unsigned long long gcell_count;
 typedef unsigned long gcell_count;
 #endif
 
-/* Put all the state infomation into a struct */
+/* Put all the state information into a struct */
 struct rr_state
 {
     char *inraster, *inrcover, *outraster, *outvector;

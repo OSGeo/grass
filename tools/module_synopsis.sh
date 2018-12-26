@@ -2,7 +2,7 @@
 ############################################################################
 #
 # TOOL:         module_synopsis.sh
-# AUTHOR:       M. Hamish Bowman, Dept. Marine Science, Otago Univeristy,
+# AUTHOR:       M. Hamish Bowman, Dept. Marine Science, Otago University,
 #                 New Zealand
 # PURPOSE:      Runs through GRASS modules and creates a synopsis list of
 #		  module names and descriptions.
@@ -240,7 +240,7 @@ sed -i -e 's+\(a href="\)\([^#\.h]\)+\1../../grass64/manuals/html64_user/\2+'
   <li> db.* - <a href="#db">database</a> commands
   <li> g.* - <a href="#g">general</a> commands
   <li> i.* - <a href="#i">imagery</a> commands
-  <li> m.* - <a href="#m">miscellanous</a> commands
+  <li> m.* - <a href="#m">miscellaneous</a> commands
   <li> ps.* - <a href="#ps">PostScript</a> commands
   <li> r.* - <a href="#r">raster</a> commands
   <li> r3.* - <a href="#r3">raster3D</a> commands
@@ -380,7 +380,7 @@ cat << EOF > "${TMP}.tex"
 \item [db.{*}]database commands
 \item [g.{*}]general commands
 \item [i.{*}]imagery commands
-\item [m.{*}]miscellanous commands
+\item [m.{*}]miscellaneous commands
 \item [ps.{*}]postscript commands
 \item [r.{*}]raster commands
 \item [r3.{*}]raster3D commands

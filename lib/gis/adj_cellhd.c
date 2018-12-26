@@ -516,7 +516,7 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
     char buf[100], buf2[100];
     double diff;
     double old, new;
-    struct Cell_head cellhds;	/* everyting in seconds, not degrees */
+    struct Cell_head cellhds;	/* everything in seconds, not degrees */
 
     /* lat/lon checks */
     if (cellhd->proj != PROJECTION_LL)

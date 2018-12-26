@@ -408,7 +408,7 @@ setSinkWatershedColorTable(char* cellname) {
 
 
 
-/* print the largest interm file that will be generated during
+/* print the largest interim file that will be generated during
    r.terraflow */
 void
 printMaxSortSize(long nodata_count) {
@@ -548,7 +548,7 @@ main(int argc, char *argv[]) {
   long nodata_count;
   elstr = cell2stream<elevation_type>(opt->elev_grid, elevation_type_max,
 									  &nodata_count);
-  /* print the largest interm file that will be generated */
+  /* print the largest interim file that will be generated */
   printMaxSortSize(nodata_count);
   
 

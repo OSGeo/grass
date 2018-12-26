@@ -480,7 +480,7 @@ int main(int argc, char *argv[])
     G_debug(1, " NS resolution %s (%g)", buf, window.ns_res);
 
     /* this is most probably the limitation of r.walk for large datasets
-     * segment size needs to be reduced to avoid unecessary disk IO
+     * segment size needs to be reduced to avoid unnecessary disk IO
      * but it doesn't make sense to go down to 1
      * so use 64 segment rows and cols for <= 200 million cells
      * for larger regions, 32 segment rows and cols

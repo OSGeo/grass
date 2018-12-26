@@ -1,4 +1,4 @@
-# The module r3.retile is the object of ths test case
+# The module r3.retile is the object of the test case
 
 
 # We need to set a specific region in the

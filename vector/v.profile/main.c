@@ -742,7 +742,7 @@ int main(int argc, char *argv[])
     if (ascii != NULL)
         fclose(ascii);
 
-    /* Don't forget to report to caller sucessfull end of data processing :) */
+    /* Don't forget to report to caller successful end of data processing :) */
     exit(EXIT_SUCCESS);
 }
 
