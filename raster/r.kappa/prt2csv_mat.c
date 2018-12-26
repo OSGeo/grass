@@ -100,8 +100,8 @@ void prn2csv_error_mat(int out_cols, int hdr)
 	    cl = "NULL";
 	  fprintf(fd, "%s\t", cl);
 	}
-	//for (cndx = first_col; cndx < last_col; cndx++)
-	//    fprintf(fd, "%ld\t", rlst[cndx]);
+	/*for (cndx = first_col; cndx < last_col; cndx++) */
+	/*    fprintf(fd, "%ld\t", rlst[cndx]); */
         fprintf(fd, "RowSum");
         fprintf(fd, "\n");
         /* body of the matrix */

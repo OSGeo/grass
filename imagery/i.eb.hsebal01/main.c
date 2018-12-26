@@ -520,8 +520,8 @@ int main(int argc, char *argv[])
     /* ITERATION 1 */
     /***************************************************/
     /***************************************************/
-    //outfd = Rast_open_old(h0, "");
-    //Rast_get_cellhd(h0, "", &cellhd);
+    /* outfd = Rast_open_old(h0, ""); */
+    /* Rast_get_cellhd(h0, "", &cellhd); */
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	/* read every cell in the line buffers */
