@@ -23,7 +23,7 @@
 int main(int argc, char **argv)
 {
     struct GModule *module;
-//    struct Option *opt_input, *opt_sep;
+/*    struct Option *opt_input, *opt_sep; */
     struct Option *opt_at, *opt_cols, *opt_font, *opt_fontsize,
             *opt_fontcolor, *opt_title, *opt_tit_font, *opt_tit_fontsize, *opt_sub_font,
             *opt_sub_fontsize, *opt_bcolor, *opt_bgcolor, *opt_symb_size,
