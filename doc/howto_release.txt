@@ -85,7 +85,7 @@ vim include/VERSION
 
 #example:
 7
-4
+6
 1RC1
 2018
 
@@ -124,7 +124,7 @@ RELEASETAG=release_${TODAY}_grass_${MAJOR}_${MINOR}_${RELEASE}
 echo $RELEASETAG
 
 URL=https://svn.osgeo.org/grass
-svn copy $URL/grass/branches/releasebranch_7_4 \
+svn copy $URL/grass/branches/releasebranch_7_6 \
 	$URL/grass/tags/$RELEASETAG \
 	-m "Tagging release grass_${MAJOR}_${MINOR}_${RELEASE}"
       
@@ -147,7 +147,7 @@ vim include/VERSION
 
 #example
 7
-4
+6
 1svn
 2018
 
@@ -222,7 +222,7 @@ vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
   - Update grass_packager_release.bat, eg.
 
      set MAJOR=7
-     set MINOR=4
+     set MINOR=6
      set PATCH=1RC1
 
   - Update addons (grass_addons.sh) rules, eg.
