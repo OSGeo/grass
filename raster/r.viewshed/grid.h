@@ -56,7 +56,7 @@ extern "C"
 typedef float surface_type;
 typedef FCELL G_SURFACE_T;
 
-/* this should accomodate grid sizes up to 2^16-1=65,535
+/* this should accommodate grid sizes up to 2^16-1=65,535
    If this is not enough, change type and recompile */
 typedef unsigned short int dimensionType;
 static const dimensionType maxDimension = USHRT_MAX - 1;

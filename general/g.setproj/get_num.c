@@ -50,7 +50,7 @@ int get_LL_stuff(const struct proj_parm *parm, const struct proj_desc *desc,
     char answer[200];
     char buff[256];
 
-    /*  get LONCEN value arguements */
+    /*  get LONCEN value arguments */
     if (parm->def_exists == 1) {
 	if (lat == 1) {
 	    G_format_northing(parm->deflt, buff, PROJECTION_LL);

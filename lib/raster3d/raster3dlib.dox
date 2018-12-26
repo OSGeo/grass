@@ -664,7 +664,7 @@ void Rast3d_printError(char (*msg)(char *)) This function prints the
 <P>
 void Rast3d_fatalError(char (*msg)(char *)) This function prints the
   error message <EM>msg</EM> to <EM>stderr</EM>, flushes <EM>stdout</EM> 
-  and <EM>stderr</EM>, and terminates the program with a segementation fault.
+  and <EM>stderr</EM>, and terminates the program with a segmentation fault.
 
 <P>
 

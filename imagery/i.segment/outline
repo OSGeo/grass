@@ -3,7 +3,7 @@ http://grass.osgeo.org/wiki/GRASS_GSoC_2012_Image_Segmentation
 
 For anyone interested in background discussion, Rev 51907 includes original comments and discussion between EM, MM, and ML.  All comments were combined (and new threads started!) after that revision.
 
-TODO: Memory managment, allow user to imput how much RAM can be used.  Compare i.watershed and i.cost for two current options, initial recommendations are to follow i.watershed.
+TODO: Memory management, allow user to imput how much RAM can be used.  Compare i.watershed and i.cost for two current options, initial recommendations are to follow i.watershed.
 
 TODO: Are any parts here potentially useful as library functions?  Are any of these tasks already done by existing library functions?
 
@@ -107,7 +107,7 @@ If complete polygons are given as boundaries:
 
 I think this will apply to vector lines only, initially it was framed as being for polygons or lines.
 
-/*ML: vector to raster conversion is probably necesary. Pixels crosses by a line (polygon boundary or not) have to become part of a segment boundary.*/
+/*ML: vector to raster conversion is probably necessary. Pixels crosses by a line (polygon boundary or not) have to become part of a segment boundary.*/
 /*EM: hmm, OK, something else for discussion: These pixels that are on a vector line, should they eventually be included in one of the adjacent segments?  Is "segment boundary" just the edge pixels of the segment, or are the not included in any segment?*/
 /*ML: Here is where a difference comes into play between lines that are boundary polgons and lines as linear features. In my eyes pixels that are on boundarylines of polygons should be part of the segments that are internal to that boundary. Linear features would have to be treated differently. During discussions with colleagues we did have some difficulties finding actual use cases for linear features. Maybe we can start with only polygon features and if the use case of a linear features comes up try to integrate that then ?*/
 /*EM: But for polygons covering the entire map, there is a segment on either side of the polygon line.  If the line crosses the pixel, what should be done... It looks like this will not be a problem for multi-scalar segmentation, the polygons generated in a high level segmentation will be exactly between pixels.  This will only be an issue for polygons generated elsewhere, smoothed, at different resolution, etc.*/
@@ -260,7 +260,7 @@ r.watershed
 looks at the 4 or 8 adjacent neighbors.  (can use this as basis for Find Pixel Neighbors function)
 
 r.buffer
-My current understanding:  needs to know the min/max row and column that the feature is found in, it then scans that entire square, if the pixel is part of the feature, then checks distances around it.  Seems looking for min/max for every segment number will be time consuming.  Would need data structure to accomodate remembering what pixels are in each segment to use this.
+My current understanding:  needs to know the min/max row and column that the feature is found in, it then scans that entire square, if the pixel is part of the feature, then checks distances around it.  Seems looking for min/max for every segment number will be time consuming.  Would need data structure to accommodate remembering what pixels are in each segment to use this.
 
 
 /*****************************************/
@@ -305,7 +305,7 @@ exit - success!
 ###############################
 ###############################
 
-Statistics for the segmentation calculated in a seperate module
+Statistics for the segmentation calculated in a separate module
 
 Segmentation output = raster
 statistics module input and output = vector. The user will have to run r.to.vect between the two.

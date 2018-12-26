@@ -152,7 +152,7 @@ void new_getsize(long *x, long *y)
   initializeFonts()
   This function initializes the OpenGL display lists required for drawing 
   2D text in a 3D window.  FontBase will end up pointing to a sequence
-  of display lists in which each individual display charactor in a font.
+  of display lists in which each individual display character in a font.
   The font chosen in a Courier Bold font chosen to match the font used 
   by the IRISGL charstr() function.
   -------------------------------------------------------------------

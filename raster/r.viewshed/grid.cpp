@@ -116,7 +116,7 @@ Grid *create_empty_grid()
 
 
 /* ------------------------------------------------------------ */
-/* allocate memroy for grid_data; grid must have a header that gives
+/* allocate memory for grid_data; grid must have a header that gives
    the dimensions */
 void alloc_grid_data(Grid * pgrid)
 {

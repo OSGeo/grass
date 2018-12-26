@@ -5,7 +5,7 @@
  * PURPOSE:      Create paint labels, but use a Simulated Annealing
  *               algorithm to avoid overlapping labels.
  *               This file contains the command line parsing and main function.
- *               The paint label file writing funtion (print_label()) is also
+ *               The paint label file writing function (print_label()) is also
  *               part of this file.
  * COPYRIGHT:    (C) 2007 by the GRASS Development Team
  *

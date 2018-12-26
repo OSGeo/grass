@@ -241,7 +241,7 @@ int raster_Output(int fd, int aid, struct g_area *g, double res);
  /**
   * \brief calculates a simple index for code debugging
   * \param fd file descriptor of raster
-  * \param par the parameters of index not included in funtion 
+  * \param par the parameters of index not included in function 
   * declaration
   * \param result where to return result
   * \return 0 on error, 1 otherwise

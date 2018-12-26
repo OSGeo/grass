@@ -5,7 +5,7 @@
 
    GRASS OpenGL gsurf OGSF Library 
 
-   The idea here is to treat datasets as seperate objects, which SHOULD:
+   The idea here is to treat datasets as separate objects, which SHOULD:
    - allow easier reuse of data for different attributes.
    - allow a mechanism for changing data and have changes reflected
    in each attribute using that data.

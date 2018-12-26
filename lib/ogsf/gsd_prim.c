@@ -76,7 +76,7 @@ static float ogl_mat_emis[4];
 static float ogl_mat_shin;
 
 /*!
-   \brief Mostly for flushing drawing commands accross a network
+   \brief Mostly for flushing drawing commands across a network
 
    glFlush doesn't block, so if blocking is desired use glFinish.
  */
@@ -372,7 +372,7 @@ void gsd_bgnpolygon(void)
 {
     /* OGLXXX
      * special cases for polygons:
-     *  independant quads: use GL_QUADS
+     *  independent quads: use GL_QUADS
      *  independent triangles: use GL_TRIANGLES
      */
     glBegin(GL_POLYGON);
