@@ -18,7 +18,7 @@ void make_pyramid(LIKELIHOOD **** ll_pym,	/* log likelihood pyramid, ll_pym[scal
     int wd, ht;
     struct Region region_buff;
 
-    /* save region stucture */
+    /* save region structure */
     copy_reg(region, &region_buff);
 
     D = 0;

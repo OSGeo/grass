@@ -30,7 +30,7 @@ static RASTER3D_Region wind3;
 static double Region[6];
 
 /*!
-   \brief Library intialization for volumes
+   \brief Library initialization for volumes
 
    Set region extent (N,S,W,E,T,B)
  */

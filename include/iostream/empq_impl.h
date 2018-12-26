@@ -293,7 +293,7 @@ em_pqueue<T,Key>::em_pqueue() {
   
   //assign M/2 to AMI_STREAMS and compute arity
   /* arity is mainly constrained by the size of an AMI_STREAM; the
-     rest of the memory must accomodate for arity * max_nbuf
+     rest of the memory must accommodate for arity * max_nbuf
      *sizeof(AMI_STREAM); there are some temporary stuff like arity *
      sizeof(long) (the deleted array), arity * sizeof(T) (the array of
      keys for merging) and so on, but the main factor is the
@@ -338,11 +338,11 @@ em_pqueue<T,Key>::em_pqueue() {
     buff[i] = NULL;
   }
 
-  //max nb of items the structure can accomodate (constrained by max_nbuf)
+  //max nb of items the structure can accommodate (constrained by max_nbuf)
   cout << "EM_PQUEUE: maximum length is " << maxlen() << "\n";
   cout.flush(); 
   
-  //check that structure can accomodate N elements
+  //check that structure can accommodate N elements
   //  assert(N < buf_arity * (buf_arity + 1) * bufsize);
   //assert(N < maxlen());  
   mm_avail = getAvailableMemory();

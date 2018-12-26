@@ -1,5 +1,5 @@
 /****************************************************************************
- r.sun: rsunlib.c. This program was writen by Jaro Hofierka in Summer 1993
+ r.sun: rsunlib.c. This program was written by Jaro Hofierka in Summer 1993
    and re-engineered in 1996-1999. In cooperation with Marcel Suri and
    Thomas Huld from JRC in Ispra a new version of r.sun was prepared using
    ESRA solar radiation formulas.  See the manual page for details.

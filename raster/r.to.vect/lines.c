@@ -18,7 +18,7 @@
  * USA CERL on nov, 1993
  * because the previous implementation was incosistent
  * stopped in the middle of map, because it tried to continue
- * a line wich was presumed to have been started earlier
+ * a line which was presumed to have been started earlier
  * but in fact was not started.
  * also the write_line() complained that the lines end unexpectedly
  *
@@ -333,13 +333,13 @@ static int update_list(int count)
 		    v_list[col - 1].right = new_ptr1;
 	    }
 	    else {		/* lower-left */
-		/* if the non-zero neigbours are adjacent */
+		/* if the non-zero neighbors are adjacent */
 		if (mr && br)
 		    h_ptr = start_line(1);
 		else if ((br && bc) || (bl && bc))
 		    v_list[col].center = start_line(1);
 		else
-		    /* the non-zero neigbours are not adjacent */
+		    /* the non-zero neighbors are not adjacent */
 		{		/* starting in middle of line */
 		    new_ptr1 = get_ptr();
 		    new_ptr2 = get_ptr();

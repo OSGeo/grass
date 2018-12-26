@@ -418,7 +418,7 @@ int GK_delete_key(float pos, float precis, int justone)
    pre-existing keyframe. e.g., if anykey.pos - newkey.pos &lt;= precis,
    GK_add_key() will fail unless force_replace is TRUE.
 
-   \param pos postion
+   \param pos position
    \param fmaks
    \param force_replace
    \param precis precision value

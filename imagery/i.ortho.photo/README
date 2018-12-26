@@ -1,7 +1,7 @@
 STATUS:
 	The i.ortho.photo suite of modules has been temporarily disabled 
 	from GRASS 7 as they are heavily dependent on the text-based
-	Vask libary and interactive XDRIVER monitors, both of which
+	Vask library and interactive XDRIVER monitors, both of which
 	have been removed. As the modules are rewritten to run in non-
 	interactive mode or with a wxPython frontend, they will be
 	added back into GRASS 7. This work will be undertaken in the

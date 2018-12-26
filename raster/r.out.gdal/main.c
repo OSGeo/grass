@@ -15,7 +15,7 @@
 *
 *****************************************************************************/
 
-/* Undefine this if you do not want any extra funtion calls before G_parse() */
+/* Undefine this if you do not want any extra function calls before G_parse() */
 #define __ALLOW_DYNAMIC_OPTIONS__
 
 #include <stdlib.h>
@@ -680,7 +680,7 @@ int main(int argc, char *argv[])
 	}
     }
 
-    /* Finaly create user requested raster format from memory raster 
+    /* Finally create user requested raster format from memory raster 
      * if in-memory driver was used */
     if (hMEMDS) {
 	hDstDS =
