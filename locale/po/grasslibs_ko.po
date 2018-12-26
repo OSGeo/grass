@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-24 00:06+0100\n"
+"POT-Creation-Date: 2018-12-26 11:43+0100\n"
 "PO-Revision-Date: 2013-10-30 22:07-0500\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -47,7 +47,7 @@ msgstr ""
 #: ../lib/manage/do_list.c:30
 #, c-format
 msgid "%s: invalid index %d"
-msgstr "%s: 무효한 색인입니다 %d"
+msgstr "%s: 무효한 색인 %d"
 
 #: ../lib/manage/read_list.c:73
 #, c-format
@@ -67,7 +67,7 @@ msgstr "%s <%s>를 삭제하는 중입니다"
 #: ../lib/manage/do_remove.c:57 ../lib/manage/do_rename.c:54
 #: ../lib/ogsf/gp3.c:56 ../lib/ogsf/gp3.c:191 ../lib/ogsf/gv3.c:60
 #: ../lib/ogsf/gv3.c:333 ../lib/vector/Vlib/open.c:235
-#: ../lib/vector/Vlib/map.c:263 ../lib/vector/Vlib/legal_vname.c:141
+#: ../lib/vector/Vlib/map.c:264 ../lib/vector/Vlib/legal_vname.c:141
 #: ../lib/vector/Vlib/legal_vname.c:144
 #, c-format
 msgid "Vector map <%s> not found"
@@ -78,8 +78,8 @@ msgid "Unable to delete vector map"
 msgstr "벡터 지도를 삭제할 수 없습니다"
 
 #: ../lib/manage/do_remove.c:73 ../lib/manage/do_rename.c:71
-#: ../lib/raster/open.c:176 ../lib/raster/open.c:843 ../lib/raster/open.c:880
-#: ../lib/raster/open.c:932 ../lib/ogsf/gs3.c:125 ../lib/ogsf/gs3.c:189
+#: ../lib/raster/open.c:177 ../lib/raster/open.c:853 ../lib/raster/open.c:890
+#: ../lib/raster/open.c:942 ../lib/ogsf/gs3.c:125 ../lib/ogsf/gs3.c:189
 #: ../lib/ogsf/gs3.c:264 ../lib/ogsf/gs3.c:336 ../lib/ogsf/gs3.c:442
 #: ../lib/ogsf/gs3.c:529 ../lib/ogsf/gs3.c:588 ../lib/ogsf/gs3.c:645
 #: ../lib/ogsf/gs3.c:716 ../lib/ogsf/gs3.c:786 ../lib/ogsf/gsd_legend.c:239
@@ -155,32 +155,32 @@ msgstr "%s를 복사했습니다"
 #: ../lib/manage/do_rename.c:42
 #, c-format
 msgid "Rename %s <%s> to <%s>"
-msgstr "%s <%s>를 <%s>로 이름을 변경합니다"
+msgstr "%s <%s>를 <%s>로 이름을 바꿉니다"
 
 #: ../lib/manage/do_rename.c:62
 #, c-format
 msgid "Unable to rename vector map <%s> to <%s>"
-msgstr "벡터 지도 <%s>를 <%s>로 이름을 변경할 수 없습니다"
+msgstr "벡터 지도 <%s>를 <%s>로 이름을 바꿀 수 없습니다"
 
 #: ../lib/manage/do_rename.c:83 ../lib/manage/do_rename.c:103
 #, c-format
 msgid "Unable to rename %s"
-msgstr "%s의 이름을 변경할 수 없습니다"
+msgstr "%s의 이름을 바꿀 수 없습니다"
 
 #: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
 #, c-format
 msgid "%s renamed"
-msgstr "%s의 이름을 변경했습니다"
+msgstr "%s의 이름을 바꿨습니다"
 
 #: ../lib/manage/do_rename.c:119
 #, c-format
 msgid "<%s> nothing renamed"
-msgstr "<%s> 어떤 이름도 변경하지 않았습니다"
+msgstr "<%s> 어떤 이름도 바꾸지 않았습니다"
 
 #: ../lib/manage/option.c:47
 #, c-format
 msgid "%s to be %s"
-msgstr "%2$s할 %1$s"
+msgstr "%2$s %1$s"
 
 #: ../lib/manage/option.c:51
 msgid "Raster"
@@ -207,7 +207,7 @@ msgstr "프로그래머 오류 - 현재 SQLite 드라이버만 지원합니다"
 msgid "Mapset <%s> does not exist."
 msgstr "지도세트 <%s>가 존재하지 않습니다."
 
-#: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67 ../lib/segment/open.c:98
+#: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67 ../lib/segment/open.c:118
 #: ../lib/rst/interp_float/segmen2d_parallel.c:78
 #: ../lib/rst/interp_float/segmen2d_parallel.c:85
 #: ../lib/rst/interp_float/segmen2d_parallel.c:92
@@ -219,9 +219,9 @@ msgstr "지도세트 <%s>가 존재하지 않습니다."
 #: ../lib/rst/interp_float/segmen2d.c:203
 #: ../lib/rst/interp_float/segmen2d.c:209
 #: ../lib/rst/interp_float/segmen2d.c:219
-#: ../lib/vector/diglib/struct_alloc.c:491 ../lib/vector/Vlib/line.c:50
+#: ../lib/vector/diglib/struct_alloc.c:494 ../lib/vector/Vlib/line.c:50
 #: ../lib/vector/Vlib/line.c:154 ../lib/vector/Vlib/map.c:48
-#: ../lib/vector/neta/bridge.c:58 ../lib/vector/neta/spanningtree.c:101
+#: ../lib/vector/neta/bridge.c:58 ../lib/vector/neta/spanningtree.c:104
 #: ../lib/vector/neta/path.c:262 ../lib/vector/neta/components.c:71
 #: ../lib/vector/neta/components.c:176 ../lib/vector/neta/centrality.c:63
 #: ../lib/vector/neta/centrality.c:145 ../lib/vector/neta/flow.c:66
@@ -236,7 +236,7 @@ msgstr "메모리가 부족합니다"
 #: ../lib/arraystats/class.c:19
 #, c-format
 msgid "Unknown algorithm '%s'"
-msgstr "알려지지 않은 알고리듬입니다 '%s'"
+msgstr "알려지지 않은 알고리듬 '%s'"
 
 #: ../lib/arraystats/class.c:42
 msgid "Discont algorithm currently not available because of bugs"
@@ -255,26 +255,37 @@ msgstr ""
 msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
 msgstr ""
 
-#: ../lib/raster/range.c:101
+#: ../lib/raster/range.c:103
 #, c-format
 msgid "Unable to read fp range file for <%s>"
 msgstr ""
 
-#: ../lib/raster/range.c:168
+#: ../lib/raster/range.c:170
 #, c-format
 msgid "Unable to read quant rules for raster map <%s>"
 msgstr ""
 
-#: ../lib/raster/range.c:205 ../lib/raster/range.c:225
+#: ../lib/raster/range.c:207 ../lib/raster/range.c:227
 #, c-format
 msgid "Unable to read range file for <%s>"
 msgstr ""
 
-#: ../lib/raster/range.c:263 ../lib/raster/range.c:269
-#: ../lib/raster/range.c:299 ../lib/raster/range.c:313
+#: ../lib/raster/range.c:286
+#, fuzzy, c-format
+msgid "Unable to read stats file for <%s>"
+msgstr "<%s>를 위한 범위 파일을 열 수 없습니다"
+
+#: ../lib/raster/range.c:368 ../lib/raster/range.c:374
+#: ../lib/raster/range.c:406 ../lib/raster/range.c:420
 #, c-format
 msgid "Unable to write range file for <%s>"
 msgstr ""
+
+#: ../lib/raster/range.c:450 ../lib/raster/range.c:464
+#: ../lib/raster/range.c:482 ../lib/raster/range.c:487
+#, fuzzy, c-format
+msgid "Unable to write stats file for <%s>"
+msgstr "<%s>를 위한 범위 파일을 열 수 없습니다"
 
 #: ../lib/raster/raster_metadata.c:109
 #, c-format
@@ -314,7 +325,7 @@ msgstr ""
 #: ../lib/raster/cats.c:971
 #, c-format
 msgid "Unable to open %s file for map <%s>"
-msgstr ""
+msgstr "지도 <%2$s>를 위한 %1$s 파일을 열 수 없습니다"
 
 #: ../lib/raster/put_row.c:121
 #, c-format
@@ -326,163 +337,163 @@ msgstr ""
 msgid "Error writing compressed FP data for row %d of <%s>: %s"
 msgstr ""
 
-#: ../lib/raster/put_row.c:386 ../lib/raster/put_row.c:392
+#: ../lib/raster/put_row.c:391 ../lib/raster/put_row.c:397
 #, c-format
 msgid "Error writing compressed data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:402
+#: ../lib/raster/put_row.c:407
 #, c-format
 msgid "Error writing uncompressed data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:462
+#: ../lib/raster/put_row.c:467
 #, c-format
 msgid "Error writing data via GDAL for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:486
+#: ../lib/raster/put_row.c:491
 msgid "GDAL output doesn't support writing null rows separately"
 msgstr ""
 
-#: ../lib/raster/put_row.c:489
+#: ../lib/raster/put_row.c:494
 #, c-format
 msgid "No null file for <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:513 ../lib/raster/put_row.c:518
+#: ../lib/raster/put_row.c:521 ../lib/raster/put_row.c:526
 #, c-format
 msgid "Error writing compressed null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:552 ../lib/raster/put_row.c:555
+#: ../lib/raster/put_row.c:560 ../lib/raster/put_row.c:563
 #, c-format
 msgid "Error writing null row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:680
+#: ../lib/raster/put_row.c:688
 #, c-format
 msgid "put_raster_row: raster map <%s> not open for write - request ignored"
 msgstr ""
 
-#: ../lib/raster/put_row.c:687
+#: ../lib/raster/put_row.c:695
 msgid "put_raster_row: unopened file descriptor - request ignored"
 msgstr ""
 
-#: ../lib/raster/open.c:191
+#: ../lib/raster/open.c:192
 #, c-format
 msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
 msgstr ""
 
-#: ../lib/raster/open.c:196
+#: ../lib/raster/open.c:197
 #, c-format
 msgid "Error reading reclass file for raster map <%s>"
 msgstr ""
 
-#: ../lib/raster/open.c:207
+#: ../lib/raster/open.c:208
 #, c-format
 msgid "Error reading map type for raster map <%s>"
 msgstr ""
 
-#: ../lib/raster/open.c:215
+#: ../lib/raster/open.c:216
 #, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
 msgstr ""
 
-#: ../lib/raster/open.c:234
+#: ../lib/raster/open.c:235
 #, c-format
-msgid "Compression with %s is not supported"
+msgid "Compression with %s is not supported in this GRASS GIS installation"
 msgstr ""
 
-#: ../lib/raster/open.c:238
+#: ../lib/raster/open.c:239
 #, c-format
 msgid "Raster map <%s> is in different projection than current region. Found <%s>, should be <%s>."
 msgstr ""
 
-#: ../lib/raster/open.c:245
+#: ../lib/raster/open.c:246
 #, c-format
 msgid "Raster map <%s> is in different zone (%d) than current region (%d)"
 msgstr ""
 
-#: ../lib/raster/open.c:250
+#: ../lib/raster/open.c:251
 #, c-format
 msgid "Raster map <%s>: bytes per cell (%d) too large"
 msgstr ""
 
-#: ../lib/raster/open.c:275
+#: ../lib/raster/open.c:278
 #, c-format
 msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
 msgstr ""
 
-#: ../lib/raster/open.c:283
+#: ../lib/raster/open.c:289
 #, c-format
 msgid "Unable to open %s file for raster map <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/open.c:320
+#: ../lib/raster/open.c:327
 #, c-format
 msgid "Error reading format for <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/open.c:525
+#: ../lib/raster/open.c:535
 msgid "Unable to create GDAL link"
 msgstr "GDAL 링크를 생성할 수 없습니다"
 
-#: ../lib/raster/open.c:597 ../lib/raster/gdal.c:477
+#: ../lib/raster/open.c:607 ../lib/raster/gdal.c:479
 #, c-format
 msgid "Invalid map type <%d>"
-msgstr "무효한 지도 타입입니다 <%d>"
+msgstr "무효한 지도 유형 <%d>"
 
-#: ../lib/raster/open.c:602 ../lib/raster/open.c:757
+#: ../lib/raster/open.c:612 ../lib/raster/open.c:767
 #, c-format
 msgid "Raster map <%s> is not in the current mapset (%s)"
 msgstr ""
 
-#: ../lib/raster/open.c:609
+#: ../lib/raster/open.c:619
 #, c-format
 msgid "<%s> is an illegal file name"
-msgstr ""
+msgstr "<%s>는 잘못된 파일 이름입니다"
 
-#: ../lib/raster/open.c:624 ../lib/raster/open.c:704 ../lib/raster/open.c:780
+#: ../lib/raster/open.c:634 ../lib/raster/open.c:714 ../lib/raster/open.c:790
 #, c-format
 msgid "No temp files available: %s"
-msgstr ""
+msgstr "유효한 임시 파일이 없습니다: %s"
 
-#: ../lib/raster/open.c:753
+#: ../lib/raster/open.c:763
 #, c-format
 msgid "Raster map <%s> does not exist in the current mapset (%s)"
 msgstr ""
 
-#: ../lib/raster/open.c:819
+#: ../lib/raster/open.c:829
 msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
 msgstr ""
 
-#: ../lib/raster/open.c:877
+#: ../lib/raster/open.c:887
 #, c-format
 msgid "Raster map <%s> not found in mapset <%s>"
 msgstr ""
 
-#: ../lib/raster/open.c:938
+#: ../lib/raster/open.c:948
 #, c-format
 msgid "Unable to find '%s'"
 msgstr ""
 
-#: ../lib/raster/open.c:949
+#: ../lib/raster/open.c:959
 #, c-format
 msgid "Invalid type: field '%s' in file '%s'"
-msgstr "무효한 타입입니다: 파일 '%2$s' 내의 필드 '%1$s'"
+msgstr "무효한 유형: 파일 '%2$s' 내의 필드 '%1$s'"
 
-#: ../lib/raster/open.c:954
+#: ../lib/raster/open.c:964
 #, c-format
 msgid "Missing type: field in file '%s'"
 msgstr ""
 
-#: ../lib/raster/open.c:959
+#: ../lib/raster/open.c:969
 #, c-format
 msgid "Raster map <%s> is not xdr: byte_order: %s"
 msgstr ""
 
-#: ../lib/raster/open.c:1028
+#: ../lib/raster/open.c:1038
 msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
 msgstr ""
 
@@ -521,7 +532,7 @@ msgstr ""
 msgid "Unable to create <%s> file for map <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:35 ../lib/raster/get_row.c:901
+#: ../lib/raster/get_row.c:35 ../lib/raster/get_row.c:906
 #, c-format
 msgid "Reading raster map <%s@%s> request for row %d is outside region"
 msgstr ""
@@ -561,27 +572,27 @@ msgstr ""
 msgid "Error reading raster data via GDAL for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:830
+#: ../lib/raster/get_row.c:835
 #, c-format
 msgid "Error seeking compressed null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:835 ../lib/raster/get_row.c:845
+#: ../lib/raster/get_row.c:840 ../lib/raster/get_row.c:850
 #, c-format
 msgid "Error reading compressed null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:851
+#: ../lib/raster/get_row.c:856
 #, c-format
 msgid "Error uncompressing null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:885
+#: ../lib/raster/get_row.c:890
 #, c-format
 msgid "Error seeking null row %d for <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:888
+#: ../lib/raster/get_row.c:893
 #, c-format
 msgid "Error reading null row %d for <%s>"
 msgstr ""
@@ -639,6 +650,15 @@ msgstr ""
 msgid "Unable to create dependency file in <%s@%s>"
 msgstr ""
 
+#: ../lib/raster/vrt.c:83
+#, fuzzy, c-format
+msgid "Tile raster map <%s> not found"
+msgstr "3차원 래스터 지도 <%s>를 찾을 수 없습니다"
+
+#: ../lib/raster/vrt.c:86
+msgid "A virtual raster can not contain itself"
+msgstr ""
+
 #: ../lib/raster/alloc_cell.c:151
 #, c-format
 msgid "Rast__null_bitstream_size: cols (%d) is negative"
@@ -652,7 +672,7 @@ msgstr ""
 #: ../lib/raster/interp.c:211
 #, c-format
 msgid "Unknown interpolation method: %s"
-msgstr "알려지지 않은 보간 방법입니다: %s"
+msgstr "알려지지 않은 보간 방법: %s"
 
 #: ../lib/raster/mask_info.c:43
 #, c-format
@@ -705,7 +725,7 @@ msgstr ""
 #: ../lib/raster/histogram.c:62
 #, c-format
 msgid "Can't read histogram for [%s in %s]"
-msgstr ""
+msgstr "[%2$s 내 %1$s]를 위한 주상도를 읽을 수 없습니다"
 
 #: ../lib/raster/histogram.c:66 ../lib/raster/histogram.c:73
 #, c-format
@@ -719,11 +739,11 @@ msgstr ""
 
 #: ../lib/raster/color_rules.c:120
 msgid "syntax error in the color rule"
-msgstr ""
+msgstr "색상 규칙 내에 구문 오류"
 
 #: ../lib/raster/color_rules.c:122
 msgid "syntax error in the color format"
-msgstr ""
+msgstr "색상 서식 내에 구문 오류"
 
 #: ../lib/raster/color_rules.c:130
 msgid "percentage not in range 0-100"
@@ -731,11 +751,11 @@ msgstr ""
 
 #: ../lib/raster/color_rules.c:132
 msgid "invalid value"
-msgstr "무효한 값입니다"
+msgstr "무효한 값"
 
 #: ../lib/raster/color_rules.c:134
 msgid "unknown error"
-msgstr "알려지지 않은 오류입니다"
+msgstr "알려지지 않은 오류"
 
 #: ../lib/raster/color_rules.c:180
 #, c-format
@@ -744,7 +764,7 @@ msgstr ""
 
 #: ../lib/raster/color_rules.c:232
 msgid "Unknown error reading color rule"
-msgstr "색상 규칙을 읽는데 알려지지 않은 오류가 발생했습니다"
+msgstr "색상 규칙을 읽는데 알려지지 않은 오류"
 
 #: ../lib/raster/color_rules.c:330
 #, c-format
@@ -761,17 +781,17 @@ msgstr ""
 msgid "Invalid descriptor: %d"
 msgstr ""
 
-#: ../lib/raster/close.c:392 ../lib/raster/close.c:520
+#: ../lib/raster/close.c:394 ../lib/raster/close.c:522
 #, c-format
 msgid "Unable to rename null file '%s' to '%s': %s"
 msgstr ""
 
-#: ../lib/raster/close.c:462
+#: ../lib/raster/close.c:464
 #, c-format
 msgid "Unable to rename cell file '%s' to '%s': %s"
 msgstr ""
 
-#: ../lib/raster/close.c:542
+#: ../lib/raster/close.c:544
 msgid "unable to write f_format file for CELL maps"
 msgstr ""
 
@@ -795,62 +815,62 @@ msgstr ""
 msgid "Unable to locate symbol <%s>"
 msgstr ""
 
-#: ../lib/raster/gdal.c:145
+#: ../lib/raster/gdal.c:147
 msgid "Unable to load GDAL library"
 msgstr ""
 
-#: ../lib/raster/gdal.c:375
+#: ../lib/raster/gdal.c:377
 msgid "Unable to open GDAL file"
 msgstr ""
 
-#: ../lib/raster/gdal.c:483
+#: ../lib/raster/gdal.c:485
 #, c-format
 msgid "Unable to get <%s> driver"
 msgstr ""
 
-#: ../lib/raster/gdal.c:492
+#: ../lib/raster/gdal.c:494
 #, c-format
 msgid "Unable to create <%s> dataset using <%s> driver"
 msgstr ""
 
-#: ../lib/raster/gdal.c:500
+#: ../lib/raster/gdal.c:502
 #, c-format
 msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
 msgstr ""
 
-#: ../lib/raster/gdal.c:506
+#: ../lib/raster/gdal.c:508
 msgid "Unable to get in-memory raster driver"
 msgstr ""
 
-#: ../lib/raster/gdal.c:513
+#: ../lib/raster/gdal.c:515
 #, c-format
 msgid "Unable to create <%s> dataset using memory driver"
 msgstr ""
 
-#: ../lib/raster/gdal.c:517
+#: ../lib/raster/gdal.c:519
 #, c-format
 msgid "Driver <%s> does not support creating rasters"
 msgstr ""
 
-#: ../lib/raster/gdal.c:533
+#: ../lib/raster/gdal.c:535
 msgid "Unable to set geo transform"
 msgstr ""
 
-#: ../lib/raster/gdal.c:537
+#: ../lib/raster/gdal.c:539
 msgid "Unable to set projection"
 msgstr ""
 
-#: ../lib/raster/gdal.c:541
+#: ../lib/raster/gdal.c:543
 #, c-format
 msgid "Unable to create cell_misc/%s/gdal file"
 msgstr ""
 
-#: ../lib/raster/gdal.c:557
+#: ../lib/raster/gdal.c:559
 #, c-format
 msgid "Error writing cell_misc/%s/gdal file"
 msgstr ""
 
-#: ../lib/raster/gdal.c:605
+#: ../lib/raster/gdal.c:607
 #, c-format
 msgid "Unable to create output file <%s> using driver <%s>"
 msgstr ""
@@ -866,7 +886,7 @@ msgstr ""
 
 #: ../lib/raster/get_cellhd.c:71
 msgid "whose header file can't be opened."
-msgstr ""
+msgstr "헤더 파일을 열 수 없습니다"
 
 #: ../lib/raster/get_cellhd.c:76
 #, c-format
@@ -875,7 +895,7 @@ msgstr ""
 
 #: ../lib/raster/sample.c:70
 msgid "Unknown interpolation type"
-msgstr "알려지지 않은 보간 유형입니다"
+msgstr "알려지지 않은 보간 유형"
 
 #: ../lib/raster/sample.c:327
 msgid "\"no data\" label found; setting to zero"
@@ -888,7 +908,7 @@ msgstr ""
 
 #: ../lib/raster/put_title.c:37
 msgid "G_put_title - can't create a temp file"
-msgstr ""
+msgstr "G_put_title - 임시 파일을 생성할 수 없습니다"
 
 #: ../lib/raster/put_title.c:53
 #, c-format
@@ -897,29 +917,30 @@ msgstr ""
 
 #: ../lib/raster/put_title.c:60
 msgid "G_put_title - can't reopen temp file"
-msgstr ""
+msgstr "G_put_title - 임시 파일을 다시 열 수 없습니다"
 
 #: ../lib/raster/put_title.c:67
 #, c-format
 msgid "can't write category information for [%s] in [%s]"
-msgstr ""
+msgstr "[%2$s] 내 [%1$s]를 위한 범주 정보를 쓸 수 없습니다"
 
 #: ../lib/raster/init.c:61
 msgid "Raster library not initialized. Programmer forgot to call Rast_init()."
-msgstr ""
+msgstr "래스터 라이브러리가 초기화되지 않았습니다. 프로그래머가 Rast_init() 호출을 잊어버렸습니다."
 
 #: ../lib/raster/init.c:109
-#, c-format
-msgid "Unknown compression method <%s>, using default ZLIB"
+#, fuzzy, c-format
+msgid "Unknown compression method <%s>, using default %s"
 msgstr "알려지지 않은 압축 방법입니다 <%s>, 기본 ZLIB를 사용합니다"
 
 #: ../lib/raster/init.c:113
-msgid "No compression is not supported for GRASS raster maps, using default ZLIB"
+#, c-format
+msgid "No compression is not supported for GRASS raster maps, using default %s"
 msgstr ""
 
-#: ../lib/raster/init.c:118
+#: ../lib/raster/init.c:120
 #, c-format
-msgid "This GRASS version does not support %s compression, using default ZLIB"
+msgid "This GRASS version does not support %s compression, using default %s"
 msgstr ""
 
 #: ../lib/raster/null_val.c:64
@@ -928,7 +949,7 @@ msgstr ""
 
 #: ../lib/raster/null_val.c:114
 msgid "Rast_set_null_value: wrong data type!"
-msgstr ""
+msgstr "Rast_set_null_value: 틀린 자료형!"
 
 #: ../lib/raster/auto_mask.c:69
 msgid "Unable to open automatic MASK file"
@@ -952,8 +973,13 @@ msgstr ""
 msgid "Output window changed while maps are open for write. Map name <%s>"
 msgstr ""
 
-#: ../lib/ogsf/gsd_img_tif.c:66 ../lib/ogsf/gk2.c:216
-#: ../lib/ogsf/gsd_img_ppm.c:52 ../lib/ogsf/gsd_img_ppm.c:95
+#: ../lib/ogsf/gsd_img_tif.c:63 ../lib/ogsf/gsd_img_ppm.c:50
+#, fuzzy
+msgid "Unable to get image of current GL screen"
+msgstr "래스터 <%s>의 범위를 읽을 수 없습니다"
+
+#: ../lib/ogsf/gsd_img_tif.c:69 ../lib/ogsf/gk2.c:216
+#: ../lib/ogsf/gsd_img_ppm.c:55 ../lib/ogsf/gsd_img_ppm.c:101
 #, c-format
 msgid "Unable to open file <%s> for writing"
 msgstr ""
@@ -966,32 +992,32 @@ msgstr ""
 msgid "Need at least 2 keyframes for interpolation"
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1211
+#: ../lib/ogsf/gs2.c:1210
 #, c-format
 msgid "no category info"
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1230
+#: ../lib/ogsf/gs2.c:1229
 #, c-format
 msgid "no data"
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1655
+#: ../lib/ogsf/gs2.c:1654
 #, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1733 ../lib/ogsf/gs2.c:1739 ../lib/ogsf/gs2.c:1747
-#: ../lib/ogsf/gs2.c:1756 ../lib/ogsf/gs2.c:1764 ../lib/ogsf/gs2.c:1774
-#: ../lib/ogsf/gs2.c:1822
+#: ../lib/ogsf/gs2.c:1732 ../lib/ogsf/gs2.c:1738 ../lib/ogsf/gs2.c:1746
+#: ../lib/ogsf/gs2.c:1755 ../lib/ogsf/gs2.c:1763 ../lib/ogsf/gs2.c:1773
+#: ../lib/ogsf/gs2.c:1821
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
 msgstr "GS_load_att_map(): 메모리가 부족해서 지도를 읽어 들일 수 없습니다"
 
-#: ../lib/ogsf/gs2.c:1850
+#: ../lib/ogsf/gs2.c:1849
 msgid "Loading failed"
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1854
+#: ../lib/ogsf/gs2.c:1853
 msgid "Error finding range"
 msgstr ""
 
@@ -1026,8 +1052,8 @@ msgstr "메모리가 부족해서 벡터 지도를 처리할 수 없습니다"
 #: ../lib/ogsf/gp3.c:62 ../lib/ogsf/gp3.c:196 ../lib/ogsf/gv3.c:66
 #: ../lib/ogsf/gv3.c:338 ../lib/python/temporal/c_libraries_interface.py:747
 #: ../lib/vector/Vlib/open.c:301 ../lib/vector/Vlib/open.c:437
-#: ../lib/vector/Vlib/map.c:192 ../lib/vector/Vlib/map.c:202
-#: ../lib/vector/Vlib/map.c:274
+#: ../lib/vector/Vlib/map.c:193 ../lib/vector/Vlib/map.c:203
+#: ../lib/vector/Vlib/map.c:275
 #, c-format, python-format
 msgid "Unable to open vector map <%s>"
 msgstr ""
@@ -1051,7 +1077,7 @@ msgstr ""
 #: ../lib/ogsf/gp3.c:202 ../lib/ogsf/gv3.c:344
 #: ../lib/rst/interp_float/vinput2d.c:100 ../lib/vector/Vlib/cats.c:589
 #: ../lib/vector/Vlib/copy.c:620 ../lib/vector/Vlib/copy.c:730
-#: ../lib/vector/Vlib/map.c:300 ../lib/vector/Vlib/map.c:436
+#: ../lib/vector/Vlib/map.c:301 ../lib/vector/Vlib/map.c:437
 #: ../lib/vector/Vlib/ascii.c:398 ../lib/vector/Vlib/array.c:276
 #: ../lib/vector/Vlib/net_build.c:159 ../lib/vector/Vlib/net_build.c:206
 #: ../lib/vector/Vlib/net_build.c:490 ../lib/vector/Vlib/net_build.c:791
@@ -1065,7 +1091,7 @@ msgstr "레이어 %d를 위한 데이터베이스 연결이 정의되지 않았�
 #: ../lib/db/dbmi_client/copy_tab.c:112 ../lib/db/dbmi_client/copy_tab.c:133
 #: ../lib/vector/Vlib/cats.c:597 ../lib/vector/Vlib/close_nat.c:160
 #: ../lib/vector/Vlib/write_ogr.c:198 ../lib/vector/Vlib/write_pg.c:2915
-#: ../lib/vector/Vlib/map.c:341 ../lib/vector/Vlib/ascii.c:410
+#: ../lib/vector/Vlib/map.c:342 ../lib/vector/Vlib/ascii.c:410
 #: ../lib/vector/Vlib/array.c:282 ../lib/vector/Vlib/net_build.c:165
 #: ../lib/vector/Vlib/net_build.c:211 ../lib/vector/Vlib/net_build.c:496
 #: ../lib/vector/Vlib/net_build.c:797 ../lib/vector/Vlib/net_build.c:976
@@ -1087,7 +1113,7 @@ msgstr ""
 #: ../lib/ogsf/gp3.c:249 ../lib/ogsf/gv3.c:392
 #, c-format
 msgid "Invalid color definition (%s)"
-msgstr "무효한 색상 정의입니다 (%s)"
+msgstr "무효한 색상 정의 (%s)"
 
 #: ../lib/ogsf/gp3.c:288
 #, c-format
@@ -1097,6 +1123,11 @@ msgstr ""
 #: ../lib/ogsf/gsd_surf.c:1742
 msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
 msgstr ""
+
+#: ../lib/ogsf/gsd_img_ppm.c:96
+#, fuzzy
+msgid "Unable to write view"
+msgstr "PNG를 쓸 수 없습니다"
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, c-format
@@ -1170,7 +1201,7 @@ msgstr ""
 #: ../lib/python/temporal/c_libraries_interface.py:676
 #, c-format, python-format
 msgid "Unable to open 3D raster map <%s>"
-msgstr ""
+msgstr "3차원 래스터 지도 <%s>를 열 수 없습니다"
 
 #: ../lib/ogsf/gvl_file.c:442
 #, c-format
@@ -1189,15 +1220,15 @@ msgstr "3차원 래스터 지도 <%s>를 닫을 수 없습니다"
 msgid "Maximum number of datasets exceeded"
 msgstr ""
 
-#: ../lib/ogsf/gsd_prim.c:146
+#: ../lib/ogsf/gsd_prim.c:155
 #, c-format
 msgid "Color Material: %d"
 msgstr ""
 
-#: ../lib/ogsf/gsd_prim.c:630
+#: ../lib/ogsf/gsd_prim.c:642
 #, c-format
 msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
-msgstr ""
+msgstr "gsd_rot(): %c는 무효한 축 사양입니다. 회전을 무시합니다. GRASS 개발자에게 이 오류를 알려 주세요."
 
 #: ../lib/ogsf/trans.c:180
 msgid "Out of matrix stack space"
@@ -1214,7 +1245,7 @@ msgstr ""
 
 #: ../lib/ogsf/gp2.c:705
 msgid "Unknown icon marker, using \"sphere\""
-msgstr "알려지지 않은 아이콘 마커입니다, \"sphere\"를 사용합니다"
+msgstr "알려지지 않은 아이콘 마커, \"sphere\"를 사용합니다"
 
 #: ../lib/gpde/test/test_main.c:88
 msgid "Performs unit and integration tests for gpde library"
@@ -1285,7 +1316,7 @@ msgstr ""
 #: ../lib/display/r_raster.c:150
 #, c-format
 msgid "Unknown display driver <%s>"
-msgstr "알려지지 않은 디스플레이 드라이버입니다 <%s>"
+msgstr "알려지지 않은 디스플레이 드라이버 <%s>"
 
 #: ../lib/display/r_raster.c:151
 #, c-format
@@ -1304,18 +1335,51 @@ msgstr ""
 #: ../lib/nviz/nviz.c:128
 #, c-format
 msgid "Invalid color (%s), using \"white\" as default"
-msgstr "무효한 색상입니다 (%s), 기본 \"white\"를 사용합니다"
+msgstr "무효한 색상 (%s), 기본 \"white\"를 사용합니다"
 
-#: ../lib/nviz/render.c:106
+#: ../lib/nviz/render.c:39
+#, c-format
+msgid "Unable to get function address for %s"
+msgstr ""
+
+#: ../lib/nviz/render.c:163
 msgid "Bad server connection"
 msgstr ""
 
-#: ../lib/nviz/render.c:112
+#: ../lib/nviz/render.c:169
 msgid "Unable to get visual info"
 msgstr ""
 
-#: ../lib/nviz/render.c:119
+#: ../lib/nviz/render.c:176
 msgid "Unable to create rendering context"
+msgstr ""
+
+#: ../lib/nviz/render.c:225
+#, c-format
+msgid "Unable to choose pixel format (CGL error = %d)"
+msgstr ""
+
+#: ../lib/nviz/render.c:231
+#, c-format
+msgid "Unable to create context (CGL error = %d)"
+msgstr ""
+
+#: ../lib/nviz/render.c:266
+msgid "Unable to register window class"
+msgstr ""
+
+#: ../lib/nviz/render.c:275
+msgid "Unable to create window"
+msgstr ""
+
+#: ../lib/nviz/render.c:323
+#, c-format
+msgid "Unable to set current context (CGL error = %d)"
+msgstr ""
+
+#: ../lib/nviz/render.c:361
+#, c-format
+msgid "Incomplete framebuffer status (status = %d)"
 msgstr ""
 
 #: ../lib/nviz/map_obj.c:59
@@ -1379,12 +1443,12 @@ msgstr ""
 #: ../lib/cairodriver/read_ppm.c:28 ../lib/cairodriver/read_bmp.c:88
 #, c-format
 msgid "Cairo: unable to open input file <%s>"
-msgstr ""
+msgstr "Cairo: 입력 파일 <%s>를 열 수 없습니다"
 
 #: ../lib/cairodriver/read_ppm.c:32 ../lib/cairodriver/read_bmp.c:92
 #, c-format
 msgid "Cairo: invalid input file <%s>"
-msgstr "Cairo: 무효한 입력 파일입니다 <%s>"
+msgstr "Cairo: 무효한 입력 파일 <%s>"
 
 #: ../lib/cairodriver/read_ppm.c:38
 #, c-format
@@ -1399,7 +1463,7 @@ msgstr ""
 #: ../lib/cairodriver/read_ppm.c:50
 #, c-format
 msgid "Cairo: invalid input mask file <%s>"
-msgstr "Cairo: 무효한 입력 매스크 파일입니다 <%s>"
+msgstr "Cairo: 무효한 입력 매스크 파일 <%s>"
 
 #: ../lib/cairodriver/read_ppm.c:56
 #, c-format
@@ -1409,7 +1473,7 @@ msgstr ""
 #: ../lib/cairodriver/read_bmp.c:96
 #, c-format
 msgid "Cairo: Invalid BMP header for <%s>"
-msgstr "Cairo: <%s>를 위한 무효한 BMP 헤더입니다"
+msgstr "Cairo: <%s>를 위한 무효한 BMP 헤더"
 
 #: ../lib/cairodriver/write_bmp.c:72 ../lib/cairodriver/write_ppm.c:27
 #, c-format
@@ -1450,7 +1514,7 @@ msgstr "비쥬얼을 획득할 수 없습니다"
 #: ../lib/cairodriver/graph.c:160
 #, c-format
 msgid "Unknown file extension: %s"
-msgstr "알려지지 않은 파일 확장자입니다: %s"
+msgstr "알려지지 않은 파일 확장자: %s"
 
 #: ../lib/cairodriver/graph.c:190
 #, c-format
@@ -1464,7 +1528,7 @@ msgstr "cairo: 이미지 크기 %dx%d"
 
 #: ../lib/cairodriver/graph.c:371
 msgid "Unknown Cairo surface type"
-msgstr "알려지지 않은 Cairo 표면 유형입니다"
+msgstr "알려지지 않은 Cairo 표면 유형"
 
 #: ../lib/cairodriver/graph.c:376
 msgid "Failed to initialize Cairo surface"
@@ -1497,7 +1561,7 @@ msgstr ""
 #: ../lib/python/temporal/open_stds.py:119
 #, python-format
 msgid "Unknown type: %s"
-msgstr "알려지지 않은 유형입니다: %s"
+msgstr "알려지지 않은 유형: %s"
 
 #: ../lib/python/temporal/open_stds.py:69
 #, python-format
@@ -1533,13 +1597,13 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:301
 #, python-format
 msgid "Unknown temporal type \"%s\""
-msgstr "알려지지 않은 시간 유형입니다 \"%s\""
+msgstr "알려지지 않은 시간 유형 \"%s\""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:294
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1062
 #, python-format
 msgid "Wrong granularity: \"%s\""
-msgstr "틀린 세분성입니다: \"%s\""
+msgstr "틀린 세분성: \"%s\""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:322
 #, python-format
@@ -1600,7 +1664,7 @@ msgstr "시간 데이터베이스로부터 시공간 %s 자료세트 <%s>를 삭
 #: ../lib/python/temporal/abstract_map_dataset.py:841
 #, python-format
 msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
-msgstr "시간 데이터베이스로부터 타입 %{type}s의 자료세트 <%(ds)s>를 삭제할 수 없습니다. 자료세트의 지도세트가 현재 지도세트와 일치하지 않습니다"
+msgstr "시간 데이터베이스로부터 타입 %(type)s의 자료세트 <%(ds)s>를 삭제할 수 없습니다. 자료세트의 지도세트가 현재 지도세트와 일치하지 않습니다"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1973
 #, python-format
@@ -1609,7 +1673,7 @@ msgstr "지도 등록 테이블을 삭제합니다: %s"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2028
 msgid "Error in register table request"
-msgstr ""
+msgstr "등록 테이블 요청 내에 오류"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2057
 #, python-format
@@ -1910,7 +1974,7 @@ msgstr ""
 #: ../lib/python/temporal/factory.py:51
 #, python-format
 msgid "Unknown dataset type: %s"
-msgstr "알려지지 않은 자료세트 유형입니다: %s"
+msgstr "알려지지 않은 자료세트 유형: %s"
 
 #: ../lib/python/temporal/stds_import.py:85
 #, python-format
@@ -1969,7 +2033,7 @@ msgstr "투영 파일 <%s>를 찾을 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:229
 msgid "Extracting data..."
-msgstr "자료를 추출하는 중..."
+msgstr "자료를 추출하는 중입니다..."
 
 #: ../lib/python/temporal/stds_import.py:269
 msgid "Projection information does not match. Proceeding..."
@@ -2036,7 +2100,7 @@ msgstr ""
 
 #: ../lib/python/temporal/stds_import.py:429
 msgid "Unsupported input format"
-msgstr "지원하지 않는 입력 양식"
+msgstr "지원하지 않는 입력 서식"
 
 #: ../lib/python/temporal/stds_import.py:435
 #, python-format
@@ -2213,13 +2277,13 @@ msgstr ""
 msgid "The limit of open files (%i) was reached (%i). The module r.series will be run with flag z, to avoid open files limit exceeding."
 msgstr ""
 
-#: ../lib/python/temporal/temporal_raster_base_algebra.py:690
+#: ../lib/python/temporal/temporal_raster_base_algebra.py:741
 #, python-format
 msgid "Error computing map <%s>"
 msgstr "지도 <%s>를 계산하는데 오류"
 
-#: ../lib/python/temporal/temporal_raster_base_algebra.py:777
-#: ../lib/python/temporal/temporal_algebra.py:2395
+#: ../lib/python/temporal/temporal_raster_base_algebra.py:828
+#: ../lib/python/temporal/temporal_algebra.py:2426
 #, python-format
 msgid "%s map <%s> not found in GRASS spatial database"
 msgstr ""
@@ -2250,7 +2314,7 @@ msgstr ""
 
 #: ../lib/python/temporal/extract.py:176
 msgid "Error in computation process"
-msgstr ""
+msgstr "계산 과정 내에 오류"
 
 #: ../lib/python/temporal/temporal_granularity.py:1054
 #: ../lib/python/temporal/temporal_granularity.py:1096
@@ -2276,64 +2340,64 @@ msgstr "빈 지도 리스트"
 msgid "Empty entry in map list, this should not happen"
 msgstr "지도 리스트 내에 빈 엔트리, 일어나서는 안 될 오류입니다"
 
-#: ../lib/python/temporal/temporal_algebra.py:815
+#: ../lib/python/temporal/temporal_algebra.py:821
 msgid "Spatio-temporal topological operators are not supported in granularity algebra mode"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:853
+#: ../lib/python/temporal/temporal_algebra.py:859
 msgid "All input space time datasets must have a valid temporal topology."
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:862
+#: ../lib/python/temporal/temporal_algebra.py:868
 msgid "All input space time datasets must have the same temporal type."
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:1113
+#: ../lib/python/temporal/temporal_algebra.py:1119
 #, python-format
 msgid "Removing un-needed or empty %s maps"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:1168
+#: ../lib/python/temporal/temporal_algebra.py:1174
 #, python-format
 msgid "Space time %s dataset <%s> not found"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:1196
-#: ../lib/python/temporal/temporal_algebra.py:1200
+#: ../lib/python/temporal/temporal_algebra.py:1202
+#: ../lib/python/temporal/temporal_algebra.py:1206
 #, python-format
 msgid "Wrong temporal type of space time dataset <%s>                                       <%s> time is required"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:1220
+#: ../lib/python/temporal/temporal_algebra.py:1226
 msgid "Wrong type of input "
-msgstr "틀린 입력 유형입니다"
+msgstr "틀린 입력 유형"
 
-#: ../lib/python/temporal/temporal_algebra.py:2186
+#: ../lib/python/temporal/temporal_algebra.py:2205
 #, python-format
 msgid "The resulting space time dataset type <%(a)s> is different from the requested type <%(b)s>"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:2192
+#: ../lib/python/temporal/temporal_algebra.py:2211
 msgid "Maps that should be registered in the resulting space time dataset have different types."
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:2401
+#: ../lib/python/temporal/temporal_algebra.py:2432
 msgid "Wrong map type. TMAP only supports single maps that are registered in the temporal GRASS database"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:2429
+#: ../lib/python/temporal/temporal_algebra.py:2460
 msgid "Merging empty map lists"
-msgstr "빈 지도 리스트를 합칩니다"
+msgstr "빈 지도 리스트를 병합하는 중입니다"
 
-#: ../lib/python/temporal/temporal_algebra.py:2432
+#: ../lib/python/temporal/temporal_algebra.py:2463
 msgid "First Map list is empty, can't merge it. Return only last map list"
-msgstr ""
+msgstr "첫 번째 지도 목록이 비어 있습니다, 병합할 수 없습니다. 마지막 지도 목록만 반환합니다"
 
-#: ../lib/python/temporal/temporal_algebra.py:2435
+#: ../lib/python/temporal/temporal_algebra.py:2466
 msgid "Second Map list is empty, can't merge it. Return only first map list"
-msgstr ""
+msgstr "두 번째 지도 목록이 비어 있습니다, 병합할 수 없습니다. 첫 번째 지도 목록만 반환합니다"
 
-#: ../lib/python/temporal/temporal_algebra.py:2443
+#: ../lib/python/temporal/temporal_algebra.py:2474
 msgid "Space time datasets to merge must have the same temporal type"
 msgstr ""
 
@@ -2365,33 +2429,33 @@ msgstr ""
 msgid "Area computation is not supported for LL projections"
 msgstr ""
 
-#: ../lib/python/temporal/gui_support.py:58 ../lib/python/script/core.py:1298
+#: ../lib/python/temporal/gui_support.py:58 ../lib/python/script/core.py:1324
 #, python-format
 msgid "Invalid element '%s'"
-msgstr "무효한 요소입니다 '%s'"
+msgstr "무효한 요소 '%s'"
 
 #: ../lib/python/temporal/univar_statistics.py:62
-#: ../lib/python/temporal/univar_statistics.py:178
+#: ../lib/python/temporal/univar_statistics.py:180
 #, python-format
 msgid "Space time %(sp)s dataset <%(i)s> is empty"
 msgstr ""
 
-#: ../lib/python/temporal/univar_statistics.py:101
+#: ../lib/python/temporal/univar_statistics.py:102
 #, python-format
 msgid "Unable to get statistics for raster map <%s>"
 msgstr ""
 
-#: ../lib/python/temporal/univar_statistics.py:104
+#: ../lib/python/temporal/univar_statistics.py:105
 #, python-format
 msgid "Unable to get statistics for 3d raster map <%s>"
 msgstr ""
 
-#: ../lib/python/temporal/univar_statistics.py:168
+#: ../lib/python/temporal/univar_statistics.py:170
 #, python-format
 msgid "Space time %(sp)s dataset <%(i)s> not found"
 msgstr ""
 
-#: ../lib/python/temporal/univar_statistics.py:222
+#: ../lib/python/temporal/univar_statistics.py:224
 #, python-format
 msgid "Unable to get statistics for vector map <%s>"
 msgstr ""
@@ -2402,11 +2466,11 @@ msgstr ""
 
 #: ../lib/python/temporal/base.py:462 ../lib/python/temporal/base.py:513
 msgid "Missing identifier"
-msgstr "식별자가 없습니다"
+msgstr "누락된 식별자"
 
 #: ../lib/python/temporal/base.py:621
 msgid "Wrong identifier, the mapset is missing"
-msgstr "틀린 식별자입니다, 지도세트가 없습니다"
+msgstr "틀린 식별자, 지도세트가 없습니다"
 
 #: ../lib/python/temporal/space_time_datasets.py:251
 #, python-format
@@ -2469,37 +2533,37 @@ msgstr ""
 msgid "Unable to remove timestamp for vector map <%s>"
 msgstr "벡터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
 
-#: ../lib/python/temporal/temporal_vector_algebra.py:386
+#: ../lib/python/temporal/temporal_vector_algebra.py:387
 #, python-format
 msgid "Error vector maps with basename %s exist. Use --o flag to overwrite existing file"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_vector_algebra.py:419
+#: ../lib/python/temporal/temporal_vector_algebra.py:420
 #, python-format
 msgid ""
 "Error starting %s : \n"
 "%s"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_vector_algebra.py:492
+#: ../lib/python/temporal/temporal_vector_algebra.py:493
 #, python-format
 msgid ""
 "Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
 "%s"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:603
+#: ../lib/python/temporal/core.py:605
 msgid "Unable to initialize the temporal DBMI interface. Please use t.connect to specify the driver and the database string"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:672
+#: ../lib/python/temporal/core.py:674
 #, python-format
 msgid ""
 "Unable to receive temporal database metadata.\n"
 "Current temporal database info:%(info)s"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:677
+#: ../lib/python/temporal/core.py:679
 #, python-format
 msgid ""
 "Unsupported temporal database: version mismatch.\n"
@@ -2508,7 +2572,7 @@ msgid ""
 "Current temporal database info:%(info)s"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:685
+#: ../lib/python/temporal/core.py:687
 #, python-format
 msgid ""
 "Unsupported temporal database: version mismatch.\n"
@@ -2516,12 +2580,12 @@ msgid ""
 "Current temporal database info:%(info)s"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:773
+#: ../lib/python/temporal/core.py:775
 #, python-format
 msgid "Creating temporal database: %s"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:782
+#: ../lib/python/temporal/core.py:784
 #, python-format
 msgid ""
 "Unable to create SQLite temporal database\n"
@@ -2529,31 +2593,31 @@ msgid ""
 "Please use t.connect to set a read- and writable temporal database path"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:947
+#: ../lib/python/temporal/core.py:949
 msgid "Unable to mogrify sql statement. "
 msgstr ""
 
-#: ../lib/python/temporal/core.py:969
+#: ../lib/python/temporal/core.py:971
 msgid "Unable to check table. "
 msgstr ""
 
-#: ../lib/python/temporal/core.py:985
+#: ../lib/python/temporal/core.py:987
 msgid "Unable to execute sql statement. "
 msgstr ""
 
-#: ../lib/python/temporal/core.py:995
+#: ../lib/python/temporal/core.py:997
 msgid "Unable to fetch one. "
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1005
+#: ../lib/python/temporal/core.py:1007
 msgid "Unable to fetch all. "
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1022
+#: ../lib/python/temporal/core.py:1024
 msgid "Unable to execute transaction. "
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1126
+#: ../lib/python/temporal/core.py:1128
 #, python-format
 msgid ""
 "Unable to connect to %(db)s database: %(string)s\n"
@@ -2561,14 +2625,14 @@ msgid ""
 "Please use t.connect to set a read- and writable temporal database backend"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1286
+#: ../lib/python/temporal/core.py:1288
 #, python-format
 msgid ""
 "Unable to execute :\n"
 " %(sql)s"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1330
+#: ../lib/python/temporal/core.py:1332
 #, python-format
 msgid ""
 "Unable to execute transaction:\n"
@@ -2589,7 +2653,7 @@ msgstr ""
 
 #: ../lib/python/gunittest/gmodules.py:110
 msgid "You cannot merge stdout and stderr and not capture them"
-msgstr ""
+msgstr "표준 출력과 표준 오류를 병합하고 안 잡을 수는 없습니다"
 
 #: ../lib/python/gunittest/gmodules.py:112
 msgid "stdout argument not allowed, it could be overridden"
@@ -2623,33 +2687,33 @@ msgid ". See errors in the (error) output."
 msgstr ""
 
 #: ../lib/python/script/array.py:157 ../lib/python/script/array.py:207
-#: ../lib/python/script/array.py:254 ../lib/python/script/array.py:305
-#: ../lib/python/script/array.py:356 ../lib/python/script/array.py:398
+#: ../lib/python/script/array.py:254 ../lib/python/script/array.py:306
+#: ../lib/python/script/array.py:357 ../lib/python/script/array.py:399
 #, python-format
 msgid "Invalid kind <%s>"
-msgstr "무효한 종류입니다 <%s>"
+msgstr "무효한 종류 <%s>"
 
 #: ../lib/python/script/array.py:160 ../lib/python/script/array.py:210
-#: ../lib/python/script/array.py:308 ../lib/python/script/array.py:359
+#: ../lib/python/script/array.py:309 ../lib/python/script/array.py:360
 #, python-format
 msgid "Invalid size <%d>"
-msgstr "무효한 크기입니다 <%d>"
+msgstr "무효한 크기 <%d>"
 
 #: ../lib/python/script/array.py:197
 msgid "grass.script.array.read is deprecated and does not work on MS Windows, pass raster name in the constructor"
 msgstr ""
 
-#: ../lib/python/script/array.py:247 ../lib/python/script/array.py:392
+#: ../lib/python/script/array.py:247 ../lib/python/script/array.py:393
 #, python-format
 msgid "Invalid FP size <%d>"
-msgstr "무효한 FP 크기입니다 <%d>"
+msgstr "무효한 FP 크기 <%d>"
 
-#: ../lib/python/script/array.py:251 ../lib/python/script/array.py:395
+#: ../lib/python/script/array.py:251 ../lib/python/script/array.py:396
 #, python-format
 msgid "Invalid integer size <%d>"
-msgstr "무효한 정수 크기입니다 <%d>"
+msgstr "무효한 정수 크기 <%d>"
 
-#: ../lib/python/script/array.py:346
+#: ../lib/python/script/array.py:347
 msgid "grass.script.array3d.read is deprecated and does not work on MS Windows, pass 3D raster name in the constructor"
 msgstr ""
 
@@ -2662,7 +2726,7 @@ msgstr "테이블 <%s>를 설명할 수 없습니다"
 #: ../lib/python/script/db.py:153
 #, python-format
 msgid "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
-msgstr ""
+msgstr "프로그래머 오류: '%(sql)s', '%(filename)s', 또는 '%(table)s'가 반드시 주어져야 합니다"
 
 #: ../lib/python/script/db.py:163
 msgid "Fetching data failed"
@@ -2720,65 +2784,74 @@ msgstr ""
 msgid "color"
 msgstr ""
 
+#: ../lib/python/script/setup.py:229
+#, fuzzy
+msgid "Cleaning up default sqlite database ..."
+msgstr "임시 파일을 삭제 중..."
+
+#: ../lib/python/script/setup.py:247 ../lib/init/grass.py:1782
+msgid "Cleaning up temporary files..."
+msgstr "임시 파일을 정리하는 중입니다..."
+
 #: ../lib/python/script/raster3d.py:92
 #, python-format
 msgid "An error occurred while running r3.mapcalc with expression: %s"
 msgstr ""
 
-#: ../lib/python/script/core.py:67
+#: ../lib/python/script/core.py:69
 #, python-brace-format
 msgid "Cannot find the executable {0}"
-msgstr ""
+msgstr "실행 파일 {0}를 찾을 수 없습니다"
 
-#: ../lib/python/script/core.py:307
+#: ../lib/python/script/core.py:309
 #, python-format
 msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
 msgstr "모듈 <%s>를 실행하기 위해서는 옵션 <%s>의 끝에 언더스코어를 추가해서 파이썬 키위드와의 충돌을 방지해야 합니다. 앞부분의 언더스코어는 GRASS GIS 7.0에서는 추천하지 않으며 버전 7.1부터는 지원하지 않을 것입니다."
 
-#: ../lib/python/script/core.py:987
+#: ../lib/python/script/core.py:1013
 msgid "Mixing value types. Will try to compare after integer conversion"
 msgstr ""
 
-#: ../lib/python/script/core.py:1188
+#: ../lib/python/script/core.py:1214
 #, python-format
 msgid "Element type should be \"cell\" and not \"%s\""
 msgstr ""
 
-#: ../lib/python/script/core.py:1217 ../lib/python/script/core.py:1282
+#: ../lib/python/script/core.py:1243 ../lib/python/script/core.py:1308
 #, python-format
 msgid "Element type should be \"raster\" and not \"%s\""
 msgstr ""
 
-#: ../lib/python/script/core.py:1437
+#: ../lib/python/script/core.py:1463
 msgid "Unable to list mapsets"
 msgstr "지도세트를 나열할 수 없습니다"
 
-#: ../lib/python/script/core.py:1476
+#: ../lib/python/script/core.py:1502
 #, python-format
 msgid "Location <%s> already exists. Operation canceled."
 msgstr ""
 
-#: ../lib/python/script/core.py:1479
+#: ../lib/python/script/core.py:1505
 #, python-format
 msgid "Location <%s> already exists and will be overwritten"
 msgstr ""
 
-#: ../lib/python/script/core.py:1603
+#: ../lib/python/script/core.py:1629
 #, python-brace-format
 msgid "Debug level {0}"
 msgstr "디버그 레벨 {0}"
 
-#: ../lib/python/script/core.py:1606
+#: ../lib/python/script/core.py:1632
 #, python-brace-format
 msgid "WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {0}\n"
 msgstr ""
 
-#: ../lib/python/script/core.py:1622
+#: ../lib/python/script/core.py:1648
 #, python-format
 msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
-msgstr ""
+msgstr "잘못된 파일 이름 <%s>. 'NULL'이거나 '.'로 시작할 수 없습니다."
 
-#: ../lib/python/script/core.py:1631
+#: ../lib/python/script/core.py:1657
 #, python-format
 msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
 msgstr ""
@@ -2817,9 +2890,9 @@ msgstr ""
 #: ../lib/python/script/task.py:523
 #, python-brace-format
 msgid "Cannot parse interface description of<{name}> module: {error}"
-msgstr ""
+msgstr "<{name}> 모듈의 인터페이스 설명을 해석할 수 없습니다: {error}"
 
-#: ../lib/python/pygrass/modules/grid/grid.py:553
+#: ../lib/python/pygrass/modules/grid/grid.py:554
 msgid "Execution of subprocesses was not successful"
 msgstr ""
 
@@ -2840,17 +2913,17 @@ msgstr ""
 msgid "Error executing: Rast_set_cat"
 msgstr ""
 
-#: ../lib/python/pygrass/raster/abstract.py:275
+#: ../lib/python/pygrass/raster/abstract.py:274
 #, python-brace-format
 msgid "Mode type: {0} not supported ('r', 'w')"
 msgstr ""
 
-#: ../lib/python/pygrass/raster/abstract.py:286
+#: ../lib/python/pygrass/raster/abstract.py:285
 #, python-brace-format
 msgid "Overwrite type: {0} not supported (True/False)"
 msgstr ""
 
-#: ../lib/python/pygrass/raster/abstract.py:299
+#: ../lib/python/pygrass/raster/abstract.py:298
 #: ../lib/python/pygrass/vector/abstract.py:97
 #, python-brace-format
 msgid "Map name {0} not valid"
@@ -2858,7 +2931,7 @@ msgstr ""
 
 #: ../lib/python/pygrass/raster/__init__.py:209
 msgid "The map does not exist, I can't open in 'r' mode"
-msgstr ""
+msgstr "지도가 존재하지 않습니다, 'r' 모드에서 열 수 없습니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:214
 #, python-brace-format
@@ -2889,11 +2962,11 @@ msgstr ""
 msgid "Raster map <{0}> does not exist"
 msgstr ""
 
-#: ../lib/python/pygrass/errors.py:17
+#: ../lib/python/pygrass/errors.py:18
 msgid "The map is close!"
 msgstr ""
 
-#: ../lib/python/pygrass/errors.py:28
+#: ../lib/python/pygrass/errors.py:29
 msgid "The self.c_mapinfo pointer must be correctly initiated"
 msgstr ""
 
@@ -2910,12 +2983,12 @@ msgstr ""
 msgid "You must use the force flag to actually remove it. Exiting."
 msgstr "실제로 제거하기 위해서는 강제 플래그를 사용해야 합니다. 종료합니다."
 
-#: ../lib/python/pygrass/vector/__init__.py:806
+#: ../lib/python/pygrass/vector/__init__.py:813
 #, python-format
 msgid "Unable to read line of feature %i"
 msgstr ""
 
-#: ../lib/python/pygrass/vector/__init__.py:895
+#: ../lib/python/pygrass/vector/__init__.py:902
 #, python-format
 msgid "Unable to read area with id %i"
 msgstr ""
@@ -2926,7 +2999,7 @@ msgstr ""
 
 #: ../lib/raster3d/test/test_main.c:97
 msgid "unit test"
-msgstr ""
+msgstr "단위 검정"
 
 #: ../lib/raster3d/range.c:73
 #, c-format
@@ -2936,7 +3009,7 @@ msgstr "[%2$s 안의 %1$s]를 위한 범위 파일을 열 수 없습니다"
 #: ../lib/raster3d/range.c:88
 #, c-format
 msgid "Error reading range file for [%s in %s]"
-msgstr "[%2$s 안의 %1$s]를 위한 범위 파일을 읽는데 오류가 발생했습니다"
+msgstr "[%2$s 안의 %1$s]를 위한 범위 파일을 읽는데 오류"
 
 #: ../lib/raster3d/range.c:150
 #, c-format
@@ -3018,11 +3091,11 @@ msgstr "Rast3d_open_cell_new: Rast3d_fill_header 내에 오류"
 
 #: ../lib/raster3d/param.c:84
 msgid "Rast3d_get_standard3d_params: precision value invalid"
-msgstr "Rast3d_get_standard3d_params: 정밀도 값이 무효합니다"
+msgstr "Rast3d_get_standard3d_params: 정밀도값이 무효합니다"
 
 #: ../lib/raster3d/param.c:105
 msgid "Rast3d_get_standard3d_params: tile dimension value invalid"
-msgstr "Rast3d_get_standard3d_params: 타일의 차원 값이 무효합니다"
+msgstr "Rast3d_get_standard3d_params: 타일의 차원값이 무효합니다"
 
 #: ../lib/raster3d/param.c:129
 msgid "Window replacing the default"
@@ -3036,7 +3109,7 @@ msgstr "규칙 추가: %lf - %lf"
 #: ../lib/raster3d/maskfn.c:95
 #, c-format
 msgid "%s: illegal value spec"
-msgstr "%s: 잘못된 값 사양입니다"
+msgstr "%s: 잘못된 값 사양"
 
 #: ../lib/raster3d/header.c:217 ../lib/raster3d/close.c:99
 #: ../lib/raster3d/close.c:105 ../lib/raster3d/close.c:191
@@ -3073,7 +3146,7 @@ msgstr "3차원 래스터 지도 <%s>를 생성할 수 없습니다"
 
 #: ../lib/raster3d/close.c:169
 msgid "Error in cache"
-msgstr "캐시 오류"
+msgstr "캐시 내에 오류"
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -3114,12 +3187,8 @@ msgstr "png: 이미지 크기 %dx%d"
 msgid "Unable to read PNG"
 msgstr "PNG를 읽을 수 없습니다"
 
-#: ../lib/pngdriver/read_png.c:60
-msgid "Unable allocate PNG structure"
-msgstr "PNG 구조체를 할당할 수 없습니다"
-
-#: ../lib/pngdriver/read_png.c:64 ../lib/pngdriver/write_png.c:71
-#: ../lib/pngdriver/write_png.c:75
+#: ../lib/pngdriver/read_png.c:60 ../lib/pngdriver/read_png.c:64
+#: ../lib/pngdriver/write_png.c:71 ../lib/pngdriver/write_png.c:75
 msgid "Unable to allocate PNG structure"
 msgstr "PNG 구조체를 할당할 수 없습니다"
 
@@ -3164,7 +3233,7 @@ msgstr "출력 PNG 파일 <%s>를 열 수 없습니다"
 #: ../lib/symbol/read.c:211
 #, c-format
 msgid "Cannot read symbol line coordinates: %s"
-msgstr ""
+msgstr "심벌 선 좌표를 읽을 수 없습니다: %s"
 
 #: ../lib/symbol/read.c:260
 #, c-format
@@ -3174,7 +3243,7 @@ msgstr ""
 #: ../lib/symbol/read.c:284
 #, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr ""
+msgstr "심벌을 찾거나 열 수 없습니다: '%s'"
 
 #: ../lib/symbol/read.c:393 ../lib/symbol/read.c:411 ../lib/symbol/read.c:421
 #: ../lib/symbol/read.c:439
@@ -3185,7 +3254,7 @@ msgstr ""
 #: ../lib/imagery/iclass_signatures.c:120
 #, c-format
 msgid "Unable to open output signature file '%s'"
-msgstr ""
+msgstr "출력 서명 파일 '%s'를 열 수 없습니다"
 
 #: ../lib/imagery/iclass_perimeter.c:109
 #, c-format
@@ -3198,7 +3267,7 @@ msgstr ""
 
 #: ../lib/imagery/iclass_perimeter.c:208
 msgid "Invalid polygon"
-msgstr "무효한 다각형입니다"
+msgstr "무효한 다각형"
 
 #: ../lib/imagery/iclass_perimeter.c:253
 msgid "Outlined area is too large."
@@ -3307,8 +3376,8 @@ msgid "Data inconsistent. Value computed for scatter plot is out of initialized 
 msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:745
-#, c-format
-msgid "Unable to read find raster <%s>"
+#, fuzzy, c-format
+msgid "Unable to find raster <%s>"
 msgstr "래스터 <%s>를 찾을 수 없습니다"
 
 #: ../lib/imagery/iscatt_core.c:755
@@ -3438,7 +3507,7 @@ msgstr ""
 msgid "WARNING"
 msgstr ""
 
-#: ../lib/init/grass.py:187 ../lib/gis/parser.c:621
+#: ../lib/init/grass.py:187 ../lib/gis/parser.c:628
 msgid "ERROR"
 msgstr ""
 
@@ -3446,175 +3515,189 @@ msgstr ""
 msgid "Exiting..."
 msgstr ""
 
-#: ../lib/init/grass.py:332
+#: ../lib/init/grass.py:336
 msgid "Usage"
 msgstr ""
 
-#: ../lib/init/grass.py:333 ../lib/gis/parser_html.c:141
+#: ../lib/init/grass.py:337 ../lib/gis/parser_html.c:141
 #: ../lib/gis/parser_rest.c:146
 msgid "Flags"
 msgstr ""
 
-#: ../lib/init/grass.py:334
+#: ../lib/init/grass.py:338
 msgid "print this help message"
 msgstr ""
 
-#: ../lib/init/grass.py:335
+#: ../lib/init/grass.py:339
 msgid "show version information and exit"
 msgstr ""
 
-#: ../lib/init/grass.py:336
+#: ../lib/init/grass.py:340
 msgid "create given database, location or mapset if it doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:337
+#: ../lib/init/grass.py:341
 msgid "exit after creation of location or mapset. Only with -c flag"
 msgstr ""
 
-#: ../lib/init/grass.py:338
-msgid "force removal of .gislock if exists (use with care!). Only with -text flag"
-msgstr ""
-
-#: ../lib/init/grass.py:339
-msgid "use text based interface (skip welcome screen)"
-msgstr ""
-
-#: ../lib/init/grass.py:340 ../lib/init/grass.py:342 ../lib/init/grass.py:344
-msgid "and set as default"
-msgstr ""
-
-#: ../lib/init/grass.py:341
-msgid "use text based interface (show welcome screen)"
+#: ../lib/init/grass.py:342
+msgid "force removal of .gislock if exists (use with care!). Only with --text flag"
 msgstr ""
 
 #: ../lib/init/grass.py:343
-msgid "use $DEFAULT_GUI graphical user interface"
+msgid "use text based interface (skip welcome screen)"
+msgstr ""
+
+#: ../lib/init/grass.py:344 ../lib/init/grass.py:346 ../lib/init/grass.py:348
+msgid "and set as default"
 msgstr ""
 
 #: ../lib/init/grass.py:345
+msgid "use text based interface (show welcome screen)"
+msgstr ""
+
+#: ../lib/init/grass.py:347
+msgid "use $DEFAULT_GUI graphical user interface"
+msgstr ""
+
+#: ../lib/init/grass.py:349
 msgid "print GRASS configuration parameters"
 msgstr ""
 
-#: ../lib/init/grass.py:346
+#: ../lib/init/grass.py:350
 msgid "options: arch,build,compiler,path,revision,version"
 msgstr ""
 
-#: ../lib/init/grass.py:347 ../lib/gis/parser_html.c:189
+#: ../lib/init/grass.py:351 ../lib/gis/parser_html.c:189
 #: ../lib/gis/parser_rest.c:179
 msgid "Parameters"
 msgstr ""
 
-#: ../lib/init/grass.py:348
+#: ../lib/init/grass.py:352
 msgid "initial GRASS GIS database directory"
-msgstr ""
+msgstr "초기 GRASS GIS 데이터베이스 디렉토리"
 
-#: ../lib/init/grass.py:349
+#: ../lib/init/grass.py:353
 msgid "directory containing Locations"
 msgstr ""
 
-#: ../lib/init/grass.py:350
+#: ../lib/init/grass.py:354
 msgid "initial GRASS Location"
 msgstr ""
 
-#: ../lib/init/grass.py:351
+#: ../lib/init/grass.py:355
 msgid "directory containing Mapsets with one common coordinate system (projection)"
 msgstr ""
 
-#: ../lib/init/grass.py:352
+#: ../lib/init/grass.py:356
 msgid "initial GRASS Mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:353
+#: ../lib/init/grass.py:357
 msgid "fully qualified initial Mapset directory"
 msgstr ""
 
-#: ../lib/init/grass.py:354
+#: ../lib/init/grass.py:358
 msgid "Environment variables relevant for startup"
 msgstr ""
 
-#: ../lib/init/grass.py:355
+#: ../lib/init/grass.py:359
 msgid "select GUI (text, gui, gtext)"
 msgstr ""
 
-#: ../lib/init/grass.py:356
+#: ../lib/init/grass.py:360
 msgid "set html web browser for help pages"
 msgstr ""
 
-#: ../lib/init/grass.py:357
+#: ../lib/init/grass.py:361
 msgid "set additional path(s) to local GRASS modules or user scripts"
 msgstr ""
 
-#: ../lib/init/grass.py:358
+#: ../lib/init/grass.py:362
 msgid "set additional GISBASE for locally installed GRASS Addons"
 msgstr ""
 
-#: ../lib/init/grass.py:359
+#: ../lib/init/grass.py:363
 msgid "shell script to be processed as batch job"
 msgstr ""
 
-#: ../lib/init/grass.py:360
+#: ../lib/init/grass.py:364
 msgid "set Python interpreter name to override 'python'"
 msgstr ""
 
-#: ../lib/init/grass.py:361
+#: ../lib/init/grass.py:365
 msgid "execute GRASS module or script"
 msgstr ""
 
-#: ../lib/init/grass.py:362
+#: ../lib/init/grass.py:366
 msgid "provided executable will be executed in GRASS session"
 msgstr ""
 
-#: ../lib/init/grass.py:363
+#: ../lib/init/grass.py:367
 msgid "GRASS module, script or any other executable"
 msgstr ""
 
-#: ../lib/init/grass.py:364
+#: ../lib/init/grass.py:368
 msgid "parameters of the executable"
 msgstr ""
 
-#: ../lib/init/grass.py:365
+#: ../lib/init/grass.py:369
 msgid "standard flags"
 msgstr ""
 
-#: ../lib/init/grass.py:390
+#: ../lib/init/grass.py:370
+msgid "create temporary location (use with the --exec flag)"
+msgstr ""
+
+#: ../lib/init/grass.py:395
 msgid "The APPDATA variable is not set, ask your operating system support"
 msgstr ""
 
-#: ../lib/init/grass.py:393
+#: ../lib/init/grass.py:398
 msgid "The APPDATA variable points to directory which does not exist, ask your operating system support"
 msgstr ""
 
-#: ../lib/init/grass.py:440
+#: ../lib/init/grass.py:411
+#, fuzzy, python-format
+msgid "Failed to create configuration directory '%s' with error: %s"
+msgstr "디렉토리 '%s'를 제거할 수 없습니다: %s"
+
+#: ../lib/init/grass.py:454
 #, python-format
 msgid "Unable to create temporary directory <grass7-%(user)s-%(lock)s>! Exiting."
 msgstr ""
 
-#: ../lib/init/grass.py:493
+#: ../lib/init/grass.py:507
 #, python-brace-format
 msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
 msgstr ""
 
-#: ../lib/init/grass.py:547
+#: ../lib/init/grass.py:513
+#, python-brace-format
+msgid "Empty RC file ({file})"
+msgstr ""
+
+#: ../lib/init/grass.py:563
 #, python-format
 msgid "GUI <%s> not supported in this version"
 msgstr ""
 
-#: ../lib/init/grass.py:708
+#: ../lib/init/grass.py:729
 msgid "Searched for a web browser, but none found"
 msgstr ""
 
-#: ../lib/init/grass.py:747
+#: ../lib/init/grass.py:769
 msgid ""
 "The python command does not work as expected!\n"
 "Please check your GRASS_PYTHON environment variable.\n"
 "Use the -help option for details.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:751
+#: ../lib/init/grass.py:773
 msgid "GRASS GUI not found. Please check your installation."
 msgstr ""
 
-#: ../lib/init/grass.py:753
+#: ../lib/init/grass.py:775
 msgid ""
 "{}\n"
 "Switching to text based interface mode.\n"
@@ -3622,7 +3705,7 @@ msgid ""
 "Hit RETURN to continue.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:762
+#: ../lib/init/grass.py:784
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -3638,97 +3721,131 @@ msgstr ""
 "\n"
 "진행하려면 RETURN을 누르세요.\n"
 
-#: ../lib/init/grass.py:855 ../lib/gis/make_mapset.c:66
+#: ../lib/init/grass.py:880 ../lib/gis/make_mapset.c:66
 #, c-format, python-format
 msgid "Location <%s> doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:857
+#: ../lib/init/grass.py:882
 #, python-format
 msgid "<%s> is not a valid GRASS Location because PERMANENT Mapset is missing"
 msgstr ""
 
-#: ../lib/init/grass.py:860
+#: ../lib/init/grass.py:885
 #, python-format
 msgid "<%s> is not a valid GRASS Location because PERMANENT is not a directory"
 msgstr ""
 
-#: ../lib/init/grass.py:865
+#: ../lib/init/grass.py:890
 #, python-format
 msgid "<%s> is not a valid GRASS Location because PERMANENT Mapset does not have a DEFAULT_WIND file (default computational region)"
 msgstr ""
 
-#: ../lib/init/grass.py:870
+#: ../lib/init/grass.py:895
 #, python-brace-format
 msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset can be created by '-c' switch."
 msgstr ""
 
-#: ../lib/init/grass.py:874
+#: ../lib/init/grass.py:899
 #, python-format
 msgid "<%s> is not a GRASS Mapset because it is not a directory"
 msgstr ""
 
-#: ../lib/init/grass.py:877
+#: ../lib/init/grass.py:902
 #, python-format
 msgid "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
 msgstr ""
 
-#: ../lib/init/grass.py:881
+#: ../lib/init/grass.py:906
 #, python-format
 msgid "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
 msgstr ""
 
-#: ../lib/init/grass.py:884
+#: ../lib/init/grass.py:909
 #, python-brace-format
 msgid "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reason"
 msgstr "지도세트 <{mapset}> 또는 로케이션 <{location}>이 알려지지 않은 이유로 무효합니다"
 
-#: ../lib/init/grass.py:947
-#, python-format
-msgid "Failed to create new location. The location <%s> already exists."
+#: ../lib/init/grass.py:934
+#, python-brace-format
+msgid "Unable to create new location because the location <{location}> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:954
-msgid "Missing WIND file"
+#: ../lib/init/grass.py:938
+#, python-brace-format
+msgid "Unable to create new location <{location}> because <{path}> is a file."
 msgstr ""
 
-#: ../lib/init/grass.py:972
-msgid ""
-"GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
-"Interactive startup needed."
+#: ../lib/init/grass.py:941
+#, python-brace-format
+msgid "Unable to create new location <{location}> because the directory <{path}> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:996
+#: ../lib/init/grass.py:945
+#, fuzzy, python-brace-format
+msgid "Unable to create new location in the directory <{path}> for an unknown reason."
+msgstr "지도세트 <{mapset}> 또는 로케이션 <{location}>이 알려지지 않은 이유로 무효합니다"
+
+#: ../lib/init/grass.py:992
+msgid "Mapset <{}> already exists. Ignoring the request to create it. Note that this warning may become an error in future versions."
+msgstr ""
+
+#: ../lib/init/grass.py:1020
+#, fuzzy
+msgid "Creating new GRASS GIS location <{}>..."
+msgstr "GRASS GIS를 시작합니다..."
+
+#: ../lib/init/grass.py:1026
+#, fuzzy
+msgid "Creating new GRASS GIS mapset <{}>..."
+msgstr "GRASS GIS를 시작합니다..."
+
+#: ../lib/init/grass.py:1031
+#, python-brace-format
+msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
+msgstr ""
+
+#: ../lib/init/grass.py:1037
+msgid "The mapset <{}> is missing the WIND file (computational region). It will be fixed now. Note that this warning may become an error in future versions."
+msgstr ""
+
+#: ../lib/init/grass.py:1061
+msgid "GRASS GIS database directory, location and mapset not set properly. Use GUI or command line to set them."
+msgstr ""
+
+#: ../lib/init/grass.py:1086
 #, python-format
 msgid "Invalid user interface specified - <%s>. Use the --help option to see valid interface names."
 msgstr ""
 
-#: ../lib/init/grass.py:1015
+#: ../lib/init/grass.py:1106
 #, python-brace-format
 msgid ""
 "Error in GUI startup. See messages above (if any) and if necessary, please report this error to the GRASS developers.\n"
 "On systems with package manager, make sure you have the right GUI package, probably named grass-gui, installed.\n"
-"To run GRASS GIS in text mode use the -text flag.\n"
+"To run GRASS GIS in text mode use the --text flag.\n"
 "Use '--help' for further options\n"
 "     {cmd_name} --help\n"
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
 
-#: ../lib/init/grass.py:1027
+#: ../lib/init/grass.py:1118
 msgid ""
 "Exit was requested in GUI.\n"
 "GRASS GIS will not start. Bye."
 msgstr ""
+"GUI에서 종료를 요청했습니다.\n"
+"GRASS GIS를 시작하지 않습니다. 안녕히 가세요."
 
-#: ../lib/init/grass.py:1030
+#: ../lib/init/grass.py:1121
 msgid ""
 "Invalid return code from GUI startup script.\n"
 "Please advise GRASS developers of this error."
 msgstr ""
-"GUI 시작 스크립트가 무효한 코드를 반환했습니다.\n"
-"이 오류에 대해 GRASS 개발자에게 자문을 구하세요."
+"GUI 시작 스크립트로부터 무효한 반환 코드.\n"
+"GRASS 개발자에게 이 오류를 알려 주세요."
 
-#: ../lib/init/grass.py:1077
+#: ../lib/init/grass.py:1168
 #, python-brace-format
 msgid ""
 "Error reading data path information from g.gisenv.\n"
@@ -3739,59 +3856,55 @@ msgid ""
 "Check the <{file}> file."
 msgstr ""
 
-#: ../lib/init/grass.py:1158 ../lib/init/grass.py:1162
-msgid "Default locale settings are missing. GRASS running with C locale."
-msgstr ""
-
-#: ../lib/init/grass.py:1240
+#: ../lib/init/grass.py:1381
 #, python-format
 msgid "Path '%s' doesn't exist"
 msgstr "경로 '%s'가 존재하지 않습니다"
 
-#: ../lib/init/grass.py:1242
+#: ../lib/init/grass.py:1383
 #, python-format
 msgid "Path '%s' not accessible."
 msgstr "경로 '%s'에 접근할 수 없습니다"
 
 #. GTC %s is mapset's folder path
-#: ../lib/init/grass.py:1247
+#: ../lib/init/grass.py:1388
 #, python-format
 msgid "You are not the owner of '%s'."
 msgstr "당신은 '%s'의 소유자가 아닙니다"
 
-#: ../lib/init/grass.py:1255
+#: ../lib/init/grass.py:1396
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed.\n"
 "You can force launching GRASS using -f flag (note that you need permission for this operation). Have another look in the processor manager just to be sure..."
 msgstr ""
 
-#: ../lib/init/grass.py:1262
+#: ../lib/init/grass.py:1405
 #, python-format
 msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Forcing to launch GRASS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1266
+#: ../lib/init/grass.py:1409
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personnel."
 msgstr ""
 
-#: ../lib/init/grass.py:1287
+#: ../lib/init/grass.py:1430
 msgid "Building user fontcap..."
-msgstr "사용자 글꼴캡을 생성 중..."
+msgstr "사용자 글꼴캡을 생성하는 중입니다..."
 
-#: ../lib/init/grass.py:1346
+#: ../lib/init/grass.py:1489
 msgid "The SHELL variable is not set"
 msgstr "SHELL 변수가 설정되지 않았습니다"
 
-#: ../lib/init/grass.py:1362
+#: ../lib/init/grass.py:1505
 #, python-brace-format
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr ""
 
-#: ../lib/init/grass.py:1378
+#: ../lib/init/grass.py:1521
 #, python-format
 msgid ""
 "Job file <%s> has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
@@ -3799,114 +3912,118 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:1385
+#: ../lib/init/grass.py:1528
 #, python-format
 msgid "Change file permission to 'executable' for <%s>"
 msgstr ""
 
-#: ../lib/init/grass.py:1400
+#: ../lib/init/grass.py:1543
 #, python-format
 msgid "Executing <%s> ..."
-msgstr "<%s>를 실행 중..."
+msgstr "<%s>를 실행하는 중입니다..."
 
-#: ../lib/init/grass.py:1407
+#: ../lib/init/grass.py:1550
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
 "{error}"
 msgstr ""
 
-#: ../lib/init/grass.py:1410
+#: ../lib/init/grass.py:1553
 #, python-format
 msgid "Execution of <%s> finished."
 msgstr "<%s>의 실행을 종료했습니다."
 
-#: ../lib/init/grass.py:1441
+#: ../lib/init/grass.py:1583
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
 msgstr "GUI를 닫을 수 없습니다. {0}"
 
-#: ../lib/init/grass.py:1468
+#: ../lib/init/grass.py:1611
 #, python-format
 msgid "Welcome to GRASS GIS %s"
 msgstr "GRASS GIS %s에 오신 것을 환영합니다"
 
-#: ../lib/init/grass.py:1490
+#: ../lib/init/grass.py:1633
 msgid "GRASS GIS homepage:"
-msgstr "GRASS GIS 홈페이지:"
+msgstr "GRASS GIS 홈페이지:                      "
 
 #. GTC Running through: SHELL NAME
-#: ../lib/init/grass.py:1492
+#: ../lib/init/grass.py:1635
 msgid "This version running through:"
-msgstr ""
+msgstr "실행 셸:                                 "
 
-#: ../lib/init/grass.py:1494
+#: ../lib/init/grass.py:1637
 msgid "Help is available with the command:"
-msgstr ""
+msgstr "도움말:                                  "
 
-#: ../lib/init/grass.py:1495
+#: ../lib/init/grass.py:1638
 msgid "See the licence terms with:"
-msgstr ""
+msgstr "사용권 조건:                             "
 
-#: ../lib/init/grass.py:1496
+#: ../lib/init/grass.py:1639
 msgid "See citation options with:"
-msgstr ""
+msgstr "인용:                                    "
 
-#: ../lib/init/grass.py:1499
+#: ../lib/init/grass.py:1642
 msgid "If required, restart the GUI with:"
-msgstr ""
+msgstr "GUI 재시작:                              "
 
-#: ../lib/init/grass.py:1501
+#: ../lib/init/grass.py:1644
 msgid "Start the GUI with:"
-msgstr ""
+msgstr "GUI 시작:                                "
 
-#: ../lib/init/grass.py:1503
+#: ../lib/init/grass.py:1646
 msgid "When ready to quit enter:"
-msgstr "종료시에는 다음을 입력하세요:"
+msgstr "종료:                                    "
 
-#: ../lib/init/grass.py:1591
+#: ../lib/init/grass.py:1733
 msgid "2D and 3D raster MASKs present"
 msgstr "2차원 및 3차원 래스터 매스크가 존재합니다"
 
-#: ../lib/init/grass.py:1592
+#: ../lib/init/grass.py:1734
 msgid "Raster MASK present"
 msgstr "래스터 매스크가 존재합니다"
 
-#: ../lib/init/grass.py:1593
+#: ../lib/init/grass.py:1735
 msgid "3D raster MASK present"
 msgstr "3차원 래스터 매스크가 존재합니다"
 
-#: ../lib/init/grass.py:1634
+#: ../lib/init/grass.py:1775
 msgid "Done."
 msgstr "완료."
 
-#: ../lib/init/grass.py:1636
+#: ../lib/init/grass.py:1777
 msgid "Goodbye from GRASS GIS"
 msgstr "GRASS GIS를 종료합니다"
 
-#: ../lib/init/grass.py:1641
-msgid "Cleaning up temporary files..."
-msgstr "임시 파일을 삭제 중..."
-
-#: ../lib/init/grass.py:1661
+#: ../lib/init/grass.py:1813
 msgid "Please install the GRASS GIS development package"
 msgstr "GRASS GIS 개발 패키지를 설치하세요"
 
-#: ../lib/init/grass.py:1695
+#: ../lib/init/grass.py:1848
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "매개변수 <%s>를 지원하지 않습니다"
 
-#: ../lib/init/grass.py:1839
+#: ../lib/init/grass.py:1998
 msgid "Flag -e requires also flag -c"
 msgstr ""
 
-#: ../lib/init/grass.py:1886
+#: ../lib/init/grass.py:2000
+msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-location"
+msgstr ""
+
+#: ../lib/init/grass.py:2003
+msgid "Only one argument (e.g. EPSG) is needed for --tmp-location, mapset name <{}> provided"
+msgstr ""
+
+#: ../lib/init/grass.py:2058
 #, python-brace-format
 msgid ""
 "Unable to start GRASS GIS. You have the choice to:\n"
-" - Launch the graphical user interface with the '-gui' switch\n"
-"     {cmd_name} -gui\n"
+" - Launch the graphical user interface with the '--gui' switch\n"
+"     {cmd_name} --gui\n"
 " - Launch with path to the location/mapset as an argument\n"
 "     {cmd_name} /path/to/location/mapset`\n"
 " - Create a location with '-c' and launch in its PERMANENT mapset\n"
@@ -3918,25 +4035,21 @@ msgid ""
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
 
-#: ../lib/init/grass.py:1909
-msgid "Creating new GRASS GIS location/mapset..."
-msgstr ""
-
-#: ../lib/init/grass.py:1911
+#: ../lib/init/grass.py:2080
 msgid "Starting GRASS GIS..."
-msgstr "GRASS GIS를 시작합니다..."
+msgstr "GRASS GIS를 시작하는 중입니다..."
 
-#: ../lib/init/grass.py:1932
+#: ../lib/init/grass.py:2101
 #, python-brace-format
-msgid "<{0}> requested, but not available. Run GRASS in text mode (-text) or install missing package (usually 'grass-gui')."
+msgid "<{0}> requested, but not available. Run GRASS in text mode (--text) or install missing package (usually 'grass-gui')."
 msgstr ""
 
-#: ../lib/init/grass.py:1986
+#: ../lib/init/grass.py:2162
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "<%s> GUI를 배경프로세스에서 시작합니다. 기다려주세요..."
 
-#: ../lib/init/grass.py:2008
+#: ../lib/init/grass.py:2184
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr ""
@@ -3955,39 +4068,47 @@ msgstr ""
 msgid "Unable to write lockfile %s (%s)"
 msgstr ""
 
-#: ../lib/segment/open.c:53
-msgid "Segment file name is NULL"
-msgstr "분절 파일명이 NULL입니다"
+#: ../lib/segment/open.c:57
+msgid "Using memory cache"
+msgstr ""
 
-#: ../lib/segment/open.c:58
+#: ../lib/segment/open.c:70
+msgid "Using disk cache"
+msgstr ""
+
+#: ../lib/segment/open.c:73
+msgid "Segment file name is NULL"
+msgstr "분절 파일 이름이 널입니다"
+
+#: ../lib/segment/open.c:78
 msgid "Segment file exists already"
 msgstr "분절 파일이 이미 존재합니다"
 
-#: ../lib/segment/open.c:66
+#: ../lib/segment/open.c:86
 msgid "Unable to create segment file"
 msgstr "분절 파일을 생성할 수 없습니다"
 
-#: ../lib/segment/open.c:74
+#: ../lib/segment/open.c:94
 msgid "Could not write segment file"
 msgstr "분절 파일을 쓸 수 없었습니다"
 
-#: ../lib/segment/open.c:78
+#: ../lib/segment/open.c:98
 msgid "Illegal segment configuration parameter(s)"
-msgstr "잘못된 분절 설정 매개변수입니다"
+msgstr "잘못된 분절 설정 매개변수"
 
-#: ../lib/segment/open.c:87
+#: ../lib/segment/open.c:107
 msgid "Unable to re-open segment file"
 msgstr "분절 파일을 다시 열 수 없습니다"
 
-#: ../lib/segment/open.c:94
+#: ../lib/segment/open.c:114
 msgid "Could not read segment file"
 msgstr "분절 파일을 읽을 수 없었습니다"
 
-#: ../lib/segment/format.c:144
+#: ../lib/segment/format.c:143
 msgid "Segment format: file size too large"
-msgstr "분절 양식: 파일이 너무 큽니다"
+msgstr "분절 서식: 파일이 너무 큽니다"
 
-#: ../lib/segment/format.c:145
+#: ../lib/segment/format.c:144
 msgid "Please recompile with Large File Support (LFS)"
 msgstr "Large File Support(LFS)와 함께 다시 컴파일하세요"
 
@@ -4043,7 +4164,7 @@ msgstr "벡터 지도 <%s>가 3차원이 아닙니다"
 
 #: ../lib/rst/interp_float/vinput2d.c:97
 msgid "Loading data from attribute table ..."
-msgstr "속성 테이블에서 자료를 읽는 중입니다..."
+msgstr "속성 테이블로부터 자료를 읽는 중입니다..."
 
 #: ../lib/rst/interp_float/vinput2d.c:115
 #: ../lib/rst/interp_float/vinput2d.c:129 ../lib/db/dbmi_client/copy_tab.c:291
@@ -4059,7 +4180,7 @@ msgstr "열 <%s>의 자료형은 숫자라야 합니다"
 
 #: ../lib/rst/interp_float/vinput2d.c:142
 msgid "Reading features from vector map ..."
-msgstr "벡터 지도에서 피쳐를 읽는 중..."
+msgstr "벡터 지도에서 피쳐를 읽는 중입니다..."
 
 #: ../lib/rst/interp_float/vinput2d.c:174
 #, c-format
@@ -4258,7 +4379,7 @@ msgstr ""
 
 #: ../lib/gmath/test/test_main.c:83 ../lib/db/dbmi_base/test/test_main.c:62
 msgid "Run all integration tests"
-msgstr ""
+msgstr "모든 통합 검정을 실행합니다"
 
 #: ../lib/gmath/test/test_main.c:87 ../lib/db/dbmi_base/test/test_main.c:66
 msgid "Run all unit and integration tests"
@@ -4346,7 +4467,7 @@ msgstr ""
 
 #: ../lib/gmath/la.c:155
 msgid "Unable to allocate space for matrix copy"
-msgstr ""
+msgstr "행렬 복사를 위한 공간을 할당할 수 없습니다"
 
 #: ../lib/gmath/la.c:220
 msgid "Input matrix is uninitialized"
@@ -4366,11 +4487,11 @@ msgstr ""
 
 #: ../lib/gmath/la.c:310
 msgid "Unable to allocate space for matrix sum"
-msgstr ""
+msgstr "행렬 합셈을 위한 공간을 할당할 수 없습니다"
 
 #: ../lib/gmath/la.c:374
 msgid "Unable to allocate space for matrix product"
-msgstr ""
+msgstr "행렬 곱셈을 위한 공간을 할당할 수 없습니다"
 
 #: ../lib/gmath/la.c:486
 msgid "Input: one or both data matrices uninitialised"
@@ -4406,11 +4527,11 @@ msgstr ""
 
 #: ../lib/gmath/la.c:614
 msgid "Matrix is not square. Cannot determine inverse"
-msgstr ""
+msgstr "행렬이 정방형이 아닙니다. 역을 결정할 수 없습니다"
 
 #: ../lib/gmath/la.c:619
 msgid "Unable to allocate space for matrix"
-msgstr ""
+msgstr "행렬을 위한 공간을 할당할 수 없습니다"
 
 #: ../lib/gmath/la.c:636
 msgid "Matrix is singular"
@@ -4422,7 +4543,7 @@ msgstr ""
 
 #: ../lib/gmath/la.c:729
 msgid "Element array has not been allocated"
-msgstr ""
+msgstr "요소 배열이 할당되지 않았습니다"
 
 #: ../lib/gmath/la.c:734
 msgid "Specified element is outside array bounds"
@@ -4439,7 +4560,7 @@ msgstr ""
 
 #: ../lib/gmath/la.c:798 ../lib/gmath/la.c:839
 msgid "Could not allocate space for vector structure"
-msgstr "벡터 구조를 위한 공간을 할당할 수 없었습니다"
+msgstr "벡터 구조체를 위한 공간을 할당할 수 없었습니다"
 
 #: ../lib/gmath/la.c:829
 msgid "Specified matrix row index is outside range"
@@ -4455,7 +4576,7 @@ msgstr ""
 
 #: ../lib/gmath/la.c:894
 msgid "Unknown vector type."
-msgstr "알려지지 않은 벡터 유형입니다."
+msgstr "알려지지 않은 벡터 유형."
 
 #: ../lib/gmath/la.c:949
 msgid "Input matrix and vector have differing dimensions1"
@@ -4586,55 +4707,60 @@ msgstr ""
 msgid "Pseudo-random number generator not seeded"
 msgstr ""
 
-#: ../lib/gis/cmprlz4.c:81 ../lib/gis/cmprlz4.c:138 ../lib/gis/cmprbzip.c:90
-#: ../lib/gis/cmprbzip.c:164 ../lib/gis/cmprzlib.c:99 ../lib/gis/cmprzlib.c:195
-#: ../lib/gis/compress.c:303
+#: ../lib/gis/cmprlz4.c:89 ../lib/gis/cmprlz4.c:156 ../lib/gis/cmprbzip.c:104
+#: ../lib/gis/cmprbzip.c:183 ../lib/gis/cmprzstd.c:102
+#: ../lib/gis/cmprzstd.c:176 ../lib/gis/cmprzlib.c:100
+#: ../lib/gis/cmprzlib.c:179 ../lib/gis/compress.c:335
 msgid "No source buffer"
 msgstr ""
 
-#: ../lib/gis/cmprlz4.c:84 ../lib/gis/cmprlz4.c:141 ../lib/gis/cmprbzip.c:93
-#: ../lib/gis/cmprbzip.c:167 ../lib/gis/cmprzlib.c:102
-#: ../lib/gis/cmprzlib.c:198
+#: ../lib/gis/cmprlz4.c:92 ../lib/gis/cmprlz4.c:159 ../lib/gis/cmprbzip.c:107
+#: ../lib/gis/cmprbzip.c:186 ../lib/gis/cmprzstd.c:105
+#: ../lib/gis/cmprzstd.c:179 ../lib/gis/cmprzlib.c:103
+#: ../lib/gis/cmprzlib.c:182
 msgid "No destination buffer"
 msgstr ""
 
-#: ../lib/gis/cmprlz4.c:91 ../lib/gis/cmprlz4.c:148 ../lib/gis/cmprbzip.c:100
-#: ../lib/gis/cmprbzip.c:174 ../lib/gis/cmprzlib.c:109
-#: ../lib/gis/cmprzlib.c:205 ../lib/gis/compress.c:305
+#: ../lib/gis/cmprlz4.c:99 ../lib/gis/cmprlz4.c:166 ../lib/gis/cmprbzip.c:114
+#: ../lib/gis/cmprbzip.c:193 ../lib/gis/cmprzstd.c:112
+#: ../lib/gis/cmprzstd.c:186 ../lib/gis/cmprzlib.c:110
+#: ../lib/gis/cmprzlib.c:189 ../lib/gis/compress.c:337
 #, c-format
 msgid "Invalid source buffer size %d"
-msgstr "무효한 원천 버퍼 크기입니다 %d"
+msgstr "무효한 원천 버퍼 크기 %d"
 
-#: ../lib/gis/cmprlz4.c:93 ../lib/gis/cmprlz4.c:150 ../lib/gis/cmprbzip.c:102
-#: ../lib/gis/cmprbzip.c:176 ../lib/gis/cmprzlib.c:111
-#: ../lib/gis/cmprzlib.c:207 ../lib/gis/compress.c:225
+#: ../lib/gis/cmprlz4.c:101 ../lib/gis/cmprlz4.c:168 ../lib/gis/cmprbzip.c:116
+#: ../lib/gis/cmprbzip.c:195 ../lib/gis/cmprzstd.c:114
+#: ../lib/gis/cmprzstd.c:188 ../lib/gis/cmprzlib.c:112
+#: ../lib/gis/cmprzlib.c:191 ../lib/gis/compress.c:257
 #, c-format
 msgid "Invalid destination buffer size %d"
-msgstr "무효한 목적지 버퍼 크기입니다 %d"
+msgstr "무효한 목적지 버퍼 크기 %d"
 
-#: ../lib/gis/cmprlz4.c:107
+#: ../lib/gis/cmprlz4.c:121
 msgid "LZ4 compression error"
 msgstr "LZ4 압축 오류"
 
-#: ../lib/gis/cmprlz4.c:159
+#: ../lib/gis/cmprlz4.c:177
 msgid "LZ4 decompression error"
 msgstr "LZ4 압축해제 오류"
 
-#: ../lib/gis/cmprlz4.c:168 ../lib/gis/cmprbzip.c:200
+#: ../lib/gis/cmprlz4.c:186 ../lib/gis/cmprbzip.c:219 ../lib/gis/cmprzstd.c:206
+#: ../lib/gis/cmprzlib.c:215
 #, c-format
 msgid "Got uncompressed size %d, expected %d"
 msgstr ""
 
-#: ../lib/gis/cmprbzip.c:83 ../lib/gis/cmprbzip.c:157
+#: ../lib/gis/cmprbzip.c:97 ../lib/gis/cmprbzip.c:176
 msgid "GRASS needs to be compiled with BZIP2 for BZIP2 compression"
 msgstr ""
 
-#: ../lib/gis/cmprbzip.c:122
+#: ../lib/gis/cmprbzip.c:141
 #, c-format
 msgid "BZIP2 version %s compression error %d"
 msgstr ""
 
-#: ../lib/gis/cmprbzip.c:189
+#: ../lib/gis/cmprbzip.c:208
 #, c-format
 msgid "BZIP2 version %s decompression error %d"
 msgstr ""
@@ -4721,7 +4847,7 @@ msgstr ""
 #: ../lib/gis/get_ellipse.c:356
 #, c-format
 msgid "Invalid ellipsoid '%s' in file %s in <%s>"
-msgstr "<%3$s> 내 파일 %2$s 안에 무효한 타원체 '%1$s'가 있습니다"
+msgstr "<%3$s> 안의 파일 %2$s 내에 무효한 타원체 '%1$s'"
 
 #: ../lib/gis/get_ellipse.c:370
 #, c-format
@@ -4733,152 +4859,165 @@ msgstr ""
 msgid "No ellipsoid info given in file %s in <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:355
-#, c-format
-msgid "BUG in option name, '%s' is not valid"
+#: ../lib/gis/parser.c:348
+msgid "Bug in UI description. Missing module description"
 msgstr ""
 
-#: ../lib/gis/parser.c:407
-#, c-format
-msgid "BUG in descriptions, option '%s' in <%s> does not exist"
+#: ../lib/gis/parser.c:358
+msgid "Bug in UI description. Missing option key"
 msgstr ""
 
-#: ../lib/gis/parser.c:525
+#: ../lib/gis/parser.c:360
+#, c-format
+msgid "Bug in UI description. Option key <%s> is not valid"
+msgstr ""
+
+#: ../lib/gis/parser.c:362
+#, c-format
+msgid "Bug in UI description. Description for option <%s> missing"
+msgstr ""
+
+#: ../lib/gis/parser.c:414
+#, c-format
+msgid "Bug in UI description. Option '%s' in <%s> does not exist"
+msgstr ""
+
+#: ../lib/gis/parser.c:532
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
 msgstr ""
 
-#: ../lib/gis/parser.c:539
+#: ../lib/gis/parser.c:546
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
 msgstr ""
 
-#: ../lib/gis/parser.c:554
+#: ../lib/gis/parser.c:561
 msgid "Use either --qq or --verbose flag, not both. Assuming --qq."
 msgstr ""
 
-#: ../lib/gis/parser.c:585
+#: ../lib/gis/parser.c:592
 #, c-format
 msgid "Sorry <%s> is not a valid option"
 msgstr ""
 
-#: ../lib/gis/parser.c:598
+#: ../lib/gis/parser.c:605
 msgid "Your installation doesn't include GUI, exiting."
 msgstr ""
 
-#: ../lib/gis/parser.c:943
+#: ../lib/gis/parser.c:950
 msgid "Unable to determine program name"
 msgstr ""
 
-#: ../lib/gis/parser.c:965 ../lib/gis/parser.c:984
+#: ../lib/gis/parser.c:972 ../lib/gis/parser.c:991
 #, c-format
 msgid "%s: Sorry, <%c> is not a valid flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:1114
+#: ../lib/gis/parser.c:1121
 #, c-format
 msgid "%s: Sorry, <%s=> is ambiguous"
 msgstr ""
 
-#: ../lib/gis/parser.c:1117
+#: ../lib/gis/parser.c:1124
 #, c-format
 msgid "Option <%s=> matches"
 msgstr ""
 
-#: ../lib/gis/parser.c:1135
+#: ../lib/gis/parser.c:1142
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1148
+#: ../lib/gis/parser.c:1155
 #, c-format
 msgid "%s: Sorry, <%s> is not a valid parameter"
 msgstr ""
 
-#: ../lib/gis/parser.c:1154 ../lib/gis/parser.c:1400
+#: ../lib/gis/parser.c:1161 ../lib/gis/parser.c:1407
 #, c-format
 msgid "<%s> is an abbreviation for <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1159
+#: ../lib/gis/parser.c:1166
 #, c-format
 msgid "Option <%s> does not accept multiple answers"
 msgstr ""
 
-#: ../lib/gis/parser.c:1231
+#: ../lib/gis/parser.c:1238
 #, c-format
 msgid ""
 "Illegal range syntax for parameter <%s>\n"
 "\tPresented as: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1237
+#: ../lib/gis/parser.c:1244
 #, c-format
 msgid ""
 "Value <%s> out of range for parameter <%s>\n"
 "\tLegal range: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1243
+#: ../lib/gis/parser.c:1250
 #, c-format
 msgid "Missing value for parameter <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1249
+#: ../lib/gis/parser.c:1256
 #, c-format
 msgid ""
 "Value <%s> ambiguous for parameter <%s>\n"
 "\tValid options: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1422
+#: ../lib/gis/parser.c:1429
 #, c-format
 msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
 msgstr ""
 
-#: ../lib/gis/parser.c:1514
+#: ../lib/gis/parser.c:1521
 #, c-format
 msgid ""
 "Option <%s> must be provided in multiples of %d\n"
 "\tYou provided %d item(s): %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1588 ../lib/gis/error.c:363
+#: ../lib/gis/parser.c:1595 ../lib/gis/error.c:363
 #, c-format
 msgid "ERROR: "
 msgstr ""
 
-#: ../lib/gis/parser.c:1590 ../lib/gis/parser.c:1597
+#: ../lib/gis/parser.c:1597 ../lib/gis/parser.c:1604
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:1707
+#: ../lib/gis/parser.c:1714
 #, c-format
 msgid "%s= is not a separator option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1710
+#: ../lib/gis/parser.c:1717
 #, c-format
 msgid "No separator given for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1772 ../lib/gis/parser.c:1789
+#: ../lib/gis/parser.c:1779 ../lib/gis/parser.c:1796
 #, c-format
 msgid "%s= is not a file option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1774
+#: ../lib/gis/parser.c:1781
 #, c-format
 msgid "Opening multiple files not supported for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1780
+#: ../lib/gis/parser.c:1787
 #, c-format
 msgid "Unable to open %s file <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1786
+#: ../lib/gis/parser.c:1793
 #, c-format
 msgid "Unable to create %s file <%s>"
 msgstr ""
@@ -4891,420 +5030,420 @@ msgstr ""
 msgid "Example: select * from towns where population > 10000"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:156
+#: ../lib/gis/parser_standard_options.c:157
 msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:157
+#: ../lib/gis/parser_standard_options.c:158
 msgid "Example: income < 1000 and population >= 10000"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:165
+#: ../lib/gis/parser_standard_options.c:166
 msgid "Name of attribute table"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:174
+#: ../lib/gis/parser_standard_options.c:175
 msgid "Name of database driver"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:183
+#: ../lib/gis/parser_standard_options.c:184
 msgid "Name of database"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:192
+#: ../lib/gis/parser_standard_options.c:193
 msgid "Database schema"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:193
+#: ../lib/gis/parser_standard_options.c:194
 msgid "Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:202
+#: ../lib/gis/parser_standard_options.c:203
 msgid "Name of attribute column"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:211
+#: ../lib/gis/parser_standard_options.c:212
 msgid "Name of attribute column(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:220
+#: ../lib/gis/parser_standard_options.c:221
 msgid "Name of key column"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:221
+#: ../lib/gis/parser_standard_options.c:222
 msgid "Must refer to an integer column"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:233
+#: ../lib/gis/parser_standard_options.c:234
 msgid "Name of input imagery group"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:241
+#: ../lib/gis/parser_standard_options.c:242
 msgid "Name of input imagery subgroup"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:251
+#: ../lib/gis/parser_standard_options.c:252
 msgid "Name of input raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:260
+#: ../lib/gis/parser_standard_options.c:261
 msgid "Name of input raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:268
+#: ../lib/gis/parser_standard_options.c:269
 msgid "Name for output raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:277
+#: ../lib/gis/parser_standard_options.c:278
 msgid "Name for output raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:285
+#: ../lib/gis/parser_standard_options.c:286
 msgid "Name of raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:294
+#: ../lib/gis/parser_standard_options.c:295
 msgid "Name of raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:302
+#: ../lib/gis/parser_standard_options.c:303
 msgid "Name of base raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:310
+#: ../lib/gis/parser_standard_options.c:311
 msgid "Name of cover raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:318
+#: ../lib/gis/parser_standard_options.c:319
 msgid "Name of input elevation raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:327
+#: ../lib/gis/parser_standard_options.c:328
 msgid "Name of input elevation raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:334
+#: ../lib/gis/parser_standard_options.c:335
 msgid "Type of raster map to be created"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:335
+#: ../lib/gis/parser_standard_options.c:336
 msgid "Storage type for resultant raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:339
+#: ../lib/gis/parser_standard_options.c:340
 msgid "Integer"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:340
+#: ../lib/gis/parser_standard_options.c:341
 msgid "Single precision floating point"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:341
+#: ../lib/gis/parser_standard_options.c:342
 msgid "Double precision floating point"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:347
+#: ../lib/gis/parser_standard_options.c:348
 msgid "Sampling interpolation method"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:351
+#: ../lib/gis/parser_standard_options.c:352
 msgid "Nearest-neighbor interpolation"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:352
+#: ../lib/gis/parser_standard_options.c:353
 msgid "Bilinear interpolation"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:353
+#: ../lib/gis/parser_standard_options.c:354
 msgid "Bicubic interpolation"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:362
+#: ../lib/gis/parser_standard_options.c:363
 msgid "Name of input basename raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:371
+#: ../lib/gis/parser_standard_options.c:372
 msgid "Name for output basename raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:381
+#: ../lib/gis/parser_standard_options.c:382
 msgid "Name of input 3D raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:390
+#: ../lib/gis/parser_standard_options.c:391
 msgid "Name of input 3D raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:398
+#: ../lib/gis/parser_standard_options.c:399
 msgid "Name for output 3D raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:406
+#: ../lib/gis/parser_standard_options.c:407
 msgid "Name of 3D raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:415
+#: ../lib/gis/parser_standard_options.c:416
 msgid "Name of 3D raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:424
+#: ../lib/gis/parser_standard_options.c:425
 msgid "Data type used in the output raster3d map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:433
+#: ../lib/gis/parser_standard_options.c:434
 msgid "Number of digits used as mantissa in the internal map storage, 0 -23 for float, 0 - 52 for double, max or default"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:443
+#: ../lib/gis/parser_standard_options.c:444
 msgid "The compression method used in the output raster3d map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:453
+#: ../lib/gis/parser_standard_options.c:454
 msgid "The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:463
+#: ../lib/gis/parser_standard_options.c:464
 msgid "Name of input vector map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:464
-#: ../lib/gis/parser_standard_options.c:491
+#: ../lib/gis/parser_standard_options.c:465
+#: ../lib/gis/parser_standard_options.c:492
 msgid "Or data source for direct OGR access"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:473
+#: ../lib/gis/parser_standard_options.c:474
 msgid "Name of input vector map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:474
+#: ../lib/gis/parser_standard_options.c:475
 msgid "Or data source(s) for direct OGR access"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:482
+#: ../lib/gis/parser_standard_options.c:483
 msgid "Name for output vector map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:490
+#: ../lib/gis/parser_standard_options.c:491
 msgid "Name of vector map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:500
+#: ../lib/gis/parser_standard_options.c:501
 msgid "Name of vector map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:509
-#: ../lib/gis/parser_standard_options.c:518
+#: ../lib/gis/parser_standard_options.c:510
+#: ../lib/gis/parser_standard_options.c:519
 msgid "Input feature type"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:525
+#: ../lib/gis/parser_standard_options.c:526
 msgid "Layer number or name"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:527
+#: ../lib/gis/parser_standard_options.c:528
 msgid "Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:537
+#: ../lib/gis/parser_standard_options.c:538
 msgid "Layer number or name ('-1' for all layers)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:539
+#: ../lib/gis/parser_standard_options.c:540
 msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. When used with direct OGR access this is the layer name."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:548
+#: ../lib/gis/parser_standard_options.c:549
 msgid "Category value"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:556
+#: ../lib/gis/parser_standard_options.c:557
 msgid "Category values"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:557
-#: ../lib/gis/parser_standard_options.c:572
+#: ../lib/gis/parser_standard_options.c:558
+#: ../lib/gis/parser_standard_options.c:573
 msgid "Example: 1,3,7-9,13"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:564
+#: ../lib/gis/parser_standard_options.c:565
 msgid "Feature id"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:571
+#: ../lib/gis/parser_standard_options.c:572
 msgid "Feature ids"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:582
-#: ../lib/gis/parser_standard_options.c:590
+#: ../lib/gis/parser_standard_options.c:583
+#: ../lib/gis/parser_standard_options.c:591
 msgid "Name of input file"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:598
+#: ../lib/gis/parser_standard_options.c:599
 msgid "Name for output file"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:607
+#: ../lib/gis/parser_standard_options.c:608
 msgid "Field separator"
 msgstr "필드 구분자"
 
-#: ../lib/gis/parser_standard_options.c:608
+#: ../lib/gis/parser_standard_options.c:609
 msgid "Special characters: pipe, comma, space, tab, newline"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:619
-#: ../lib/gis/parser_standard_options.c:630
+#: ../lib/gis/parser_standard_options.c:620
+#: ../lib/gis/parser_standard_options.c:631
 msgid "Color"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:621
+#: ../lib/gis/parser_standard_options.c:622
 msgid "Either a standard color name or R:G:B triplet"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:632
+#: ../lib/gis/parser_standard_options.c:633
 msgid "Either a standard color name, R:G:B triplet, or \"none\""
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:643
+#: ../lib/gis/parser_standard_options.c:644
 msgid "Name of input directory"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:653
+#: ../lib/gis/parser_standard_options.c:654
 msgid "Units"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:662
+#: ../lib/gis/parser_standard_options.c:663
 msgid "Data type(s)"
 msgstr "자료형"
 
-#: ../lib/gis/parser_standard_options.c:672
+#: ../lib/gis/parser_standard_options.c:673
 msgid "Name of mapset (default: current search path)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:673
+#: ../lib/gis/parser_standard_options.c:674
 msgid "'.' for current mapset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:681
+#: ../lib/gis/parser_standard_options.c:682
 msgid "Location name"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:682
+#: ../lib/gis/parser_standard_options.c:683
 msgid "Location name (not location path)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:692
-msgid "GRASS GIS database directory"
-msgstr ""
-
 #: ../lib/gis/parser_standard_options.c:693
-msgid "Default: path to the current GRASS GIS database"
-msgstr ""
+msgid "GRASS GIS database directory"
+msgstr "GRASS GIS 데이터베이스 디렉토리"
 
-#: ../lib/gis/parser_standard_options.c:705
+#: ../lib/gis/parser_standard_options.c:694
+msgid "Default: path to the current GRASS GIS database"
+msgstr "기본값: 현재 GRASS GIS 데이터베이스 경로"
+
+#: ../lib/gis/parser_standard_options.c:706
 msgid "Coordinates"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:714
+#: ../lib/gis/parser_standard_options.c:715
 msgid "Name of color table"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:725
+#: ../lib/gis/parser_standard_options.c:726
 msgid "String representing NULL value"
-msgstr "NULL 값을 대표하는 문자열"
+msgstr "널값을 대표하는 문자열"
 
-#: ../lib/gis/parser_standard_options.c:734
+#: ../lib/gis/parser_standard_options.c:735
 msgid "Name of saved region"
 msgstr "저장된 영역의 이름"
 
-#: ../lib/gis/parser_standard_options.c:744
+#: ../lib/gis/parser_standard_options.c:745
 msgid "Name of the input space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:753
+#: ../lib/gis/parser_standard_options.c:754
 msgid "Name of the input space time datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:761
+#: ../lib/gis/parser_standard_options.c:762
 msgid "Name of the output space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:769
+#: ../lib/gis/parser_standard_options.c:770
 msgid "Name of the input space time raster dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:778
+#: ../lib/gis/parser_standard_options.c:779
 msgid "Name of the input space time raster datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:786
+#: ../lib/gis/parser_standard_options.c:787
 msgid "Name of the output space time raster dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:794
+#: ../lib/gis/parser_standard_options.c:795
 msgid "Name of the input space time vector dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:803
+#: ../lib/gis/parser_standard_options.c:804
 msgid "Name of the input space time vector datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:811
+#: ../lib/gis/parser_standard_options.c:812
 msgid "Name of the output space time vector dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:819
+#: ../lib/gis/parser_standard_options.c:820
 msgid "Name of the input space time raster3d dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:828
+#: ../lib/gis/parser_standard_options.c:829
 msgid "Name of the input space time raster3d datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:836
+#: ../lib/gis/parser_standard_options.c:837
 msgid "Name of the output space time raster3d dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:845
+#: ../lib/gis/parser_standard_options.c:846
 msgid "Type of the input space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:853
+#: ../lib/gis/parser_standard_options.c:854
 msgid "Name of the input map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:862
+#: ../lib/gis/parser_standard_options.c:863
 msgid "Name of the input maps"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:871
+#: ../lib/gis/parser_standard_options.c:872
 msgid "Type of the input map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:880
+#: ../lib/gis/parser_standard_options.c:881
 msgid "The temporal type of the space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:887
+#: ../lib/gis/parser_standard_options.c:888
 msgid "WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:888
+#: ../lib/gis/parser_standard_options.c:889
 msgid "Example: start_time > '2001-01-01 12:30:00'"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:898
+#: ../lib/gis/parser_standard_options.c:899
 msgid "The method to be used for sampling the input dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:932
+#: ../lib/gis/parser_standard_options.c:933
 msgid "Do not create attribute table"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:936
+#: ../lib/gis/parser_standard_options.c:937
 msgid "Do not build topology"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:937
+#: ../lib/gis/parser_standard_options.c:938
 msgid "Advantageous when handling a large number of points"
 msgstr ""
 
@@ -5325,7 +5464,7 @@ msgstr ""
 
 #: ../lib/gis/gisinit.c:102
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
-msgstr ""
+msgstr "시스템이 초기화되지 않았습니다. 프로그래머가 G_gisinit() 호출을 잊어버렸습니다."
 
 #: ../lib/gis/view.c:176
 #, c-format
@@ -5369,35 +5508,35 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:57
 #, c-format
 msgid "Illegal n-s resolution value <%lf>"
-msgstr "잘못된 n-s 해상도 값입니다 <%lf>"
+msgstr "잘못된 n-s 해상도값 <%lf>"
 
 #: ../lib/gis/adj_cellhd.c:61 ../lib/gis/adj_cellhd.c:163
 msgid "Illegal row value"
-msgstr "잘못된 row 값입니다"
+msgstr "잘못된 row 값"
 
 #: ../lib/gis/adj_cellhd.c:65 ../lib/gis/adj_cellhd.c:169
 msgid "Illegal e-w resolution value"
-msgstr "잘못된 e-w 해상도 값입니다"
+msgstr "잘못된 e-w 해상도값"
 
 #: ../lib/gis/adj_cellhd.c:69 ../lib/gis/adj_cellhd.c:175
 msgid "Illegal col value"
-msgstr "잘못된 col 값입니다"
+msgstr "잘못된 col 값"
 
 #: ../lib/gis/adj_cellhd.c:75 ../lib/gis/adj_cellhd.c:191
 msgid "North must be north of South"
-msgstr "북쪽경계는 남쪽경계의 북쪽이어야합니다"
+msgstr "북쪽 경계는 남쪽 경계의 북쪽이어야합니다"
 
 #: ../lib/gis/adj_cellhd.c:77 ../lib/gis/adj_cellhd.c:193
 msgid "North must be larger than South"
-msgstr "북쪽경계는 남쪽경계보다 값이 커야합니다"
+msgstr "북쪽 경계는 남쪽 경계보다 값이 커야합니다"
 
 #: ../lib/gis/adj_cellhd.c:83 ../lib/gis/adj_cellhd.c:199
 msgid "East must be larger than West"
-msgstr "동쪽경계는 서쪽경계보다 값이 커야합니다"
+msgstr "동쪽 경계는 서쪽 경계보다 값이 커야합니다"
 
 #: ../lib/gis/adj_cellhd.c:102 ../lib/gis/adj_cellhd.c:242
 msgid "Invalid coordinates"
-msgstr "무효한 좌표입니다"
+msgstr "무효한 좌표"
 
 #: ../lib/gis/adj_cellhd.c:109 ../lib/gis/adj_cellhd.c:249
 msgid "NS resolution has been changed"
@@ -5413,31 +5552,31 @@ msgstr "NS와 EW 해상도가 다릅니다"
 
 #: ../lib/gis/adj_cellhd.c:157
 msgid "Illegal n-s resolution value"
-msgstr "잘못된 n-s 해상도 값입니다"
+msgstr "잘못된 n-s 해상도값"
 
 #: ../lib/gis/adj_cellhd.c:159
 msgid "Illegal n-s3 resolution value"
-msgstr "잘못된 n-s3 해상도 값입니다"
+msgstr "잘못된 n-s3 해상도값"
 
 #: ../lib/gis/adj_cellhd.c:165
 msgid "Illegal row3 value"
-msgstr "잘못된 row3 값입니다"
+msgstr "잘못된 row3 값"
 
 #: ../lib/gis/adj_cellhd.c:171
 msgid "Illegal e-w3 resolution value"
-msgstr "잘못된 e-w3 해상도 값입니다"
+msgstr "잘못된 e-w3 해상도값"
 
 #: ../lib/gis/adj_cellhd.c:177
 msgid "Illegal col3 value"
-msgstr "잘못된 col3 값입니다"
+msgstr "잘못된 col3 값"
 
 #: ../lib/gis/adj_cellhd.c:181
 msgid "Illegal t-b3 resolution value"
-msgstr "잘못된 t-b3 해상도 값입니다"
+msgstr "잘못된 t-b3 해상도값"
 
 #: ../lib/gis/adj_cellhd.c:185
 msgid "Illegal depths value"
-msgstr "잘못된 depths 값입니다"
+msgstr "잘못된 depths 값"
 
 #: ../lib/gis/adj_cellhd.c:202
 msgid "Top must be larger than Bottom"
@@ -5446,27 +5585,27 @@ msgstr "상부경계가 하부경계보다 값이 커야합니다"
 #: ../lib/gis/adj_cellhd.c:276
 #, c-format
 msgid "East (%.15g) is not larger than West (%.15g)"
-msgstr "동쪽경계(%.15g)가 서쪽경계(%.15g)보다 크지 않습니다"
+msgstr "동쪽 경계(%.15g)가 서쪽 경계(%.15g)보다 크지 않습니다"
 
 #: ../lib/gis/adj_cellhd.c:311
 #, c-format
 msgid "Illegal latitude for North: %g"
-msgstr "북쪽경계를 위한 잘못된 위도입니다: %g"
+msgstr "북쪽 경계를 위한 잘못된 위도: %g"
 
 #: ../lib/gis/adj_cellhd.c:313
 #, c-format
 msgid "Illegal latitude for South: %g"
-msgstr "남쪽경계를 위한 잘못된 위도입니다: %g"
+msgstr "남쪽 경계를 위한 잘못된 위도: %g"
 
 #: ../lib/gis/adj_cellhd.c:319
 #, c-format
 msgid "Illegal longitude for West: %g"
-msgstr "서쪽경계를 위한 잘못된 경도입니다: %g"
+msgstr "서쪽 경계를 위한 잘못된 경도: %g"
 
 #: ../lib/gis/adj_cellhd.c:323
 #, c-format
 msgid "Illegal longitude for East: %g"
-msgstr "동쪽경계를 위한 잘못된 경도입니다: %g"
+msgstr "동쪽 경계를 위한 잘못된 경도: %g"
 
 #: ../lib/gis/adj_cellhd.c:351
 #, c-format
@@ -5491,7 +5630,7 @@ msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:402
 msgid "Illegal latitude for North"
-msgstr "북쪽경계를 위한 잘못된 위도입니다"
+msgstr "북쪽 경계를 위한 잘못된 위도"
 
 #: ../lib/gis/adj_cellhd.c:410
 #, c-format
@@ -5511,7 +5650,7 @@ msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:452
 msgid "Illegal latitude for South"
-msgstr "남쪽경계를 위한 잘못된 위도입니다"
+msgstr "남쪽 경계를 위한 잘못된 위도"
 
 #: ../lib/gis/adj_cellhd.c:481
 #, c-format
@@ -5530,27 +5669,27 @@ msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:528
 msgid "Invalid NS resolution"
-msgstr "무효한 남북 해상도입니다"
+msgstr "무효한 남북 해상도"
 
 #: ../lib/gis/adj_cellhd.c:533
 msgid "Invalid EW resolution"
-msgstr "무효한 동서 해상도입니다"
+msgstr "무효한 동서 해상도"
 
 #: ../lib/gis/adj_cellhd.c:538
 msgid "Invalid North"
-msgstr "무효한 북쪽경계입니다"
+msgstr "무효한 북쪽 경계"
 
 #: ../lib/gis/adj_cellhd.c:543
 msgid "Invalid South"
-msgstr "무효한 남쪽경계입니다"
+msgstr "무효한 남쪽 경계"
 
 #: ../lib/gis/adj_cellhd.c:548
 msgid "Invalid West"
-msgstr "무효한 서쪽경계입니다"
+msgstr "무효한 서쪽 경계"
 
 #: ../lib/gis/adj_cellhd.c:553
 msgid "Invalid East"
-msgstr "무효한 동쪽경계입니다"
+msgstr "무효한 동쪽 경계"
 
 #: ../lib/gis/adj_cellhd.c:606
 #, c-format
@@ -5786,7 +5925,7 @@ msgstr "출력 파일 <%s>를 열 수 없습니다: %s"
 #: ../lib/gis/key_value3.c:36
 #, c-format
 msgid "Error writing file <%s>: %s"
-msgstr "파일 <%s>를 쓰는데 오류가 발생했습니다: %s"
+msgstr "파일 <%s>를 쓰는데 오류: %s"
 
 #: ../lib/gis/key_value3.c:39
 #, c-format
@@ -5824,17 +5963,17 @@ msgstr ""
 #: ../lib/gis/alloc.c:47
 #, c-format
 msgid "G_malloc: unable to allocate %lu bytes of memory at %s:%d"
-msgstr ""
+msgstr "G_malloc: %2$s에서 %1$lu 바이트의 메모리를 할당할 수 없습니다: %3$d"
 
 #: ../lib/gis/alloc.c:89
 #, c-format
 msgid "G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"
-msgstr ""
+msgstr "G_calloc: %3$s에서 %1$lu * %2$lu 바이트의 메모리를 할당할 수 없습니다: %4$d"
 
 #: ../lib/gis/alloc.c:135
 #, c-format
 msgid "G_realloc: unable to allocate %lu bytes of memory at %s:%d"
-msgstr ""
+msgstr "G_realloc: %2$s에서 %1$lu 바이트의 메모리를 할당할 수 없습니다: %3$d"
 
 #: ../lib/gis/env.c:311
 msgid "GISRC - variable not set"
@@ -5862,7 +6001,7 @@ msgstr ""
 
 #: ../lib/gis/list.c:204
 msgid "G_list: Unknown element type"
-msgstr "G_list: 알려지지 않은 요소 유형입니다"
+msgstr "G_list: 알려지지 않은 요소 유형"
 
 #: ../lib/gis/error.c:362
 msgid "WARNING: "
@@ -5919,7 +6058,7 @@ msgstr ""
 #: ../lib/gis/spawn.c:429 ../lib/gis/spawn.c:619
 #, c-format
 msgid "G_spawn: unable to open file %s"
-msgstr ""
+msgstr "G_spawn: 파일 %s를 열 수 없습니다"
 
 #: ../lib/gis/spawn.c:503
 msgid "G_spawn: unable to execute command"
@@ -5977,13 +6116,13 @@ msgstr ""
 #: ../lib/gis/datum.c:182
 #, c-format
 msgid "error in datum table file, line %d"
-msgstr ""
+msgstr "측지계 테이블 파일, 줄 %d 내에 오류"
 
 #: ../lib/gis/rd_cellhd.c:141 ../lib/gis/rd_cellhd.c:180
 #: ../lib/gis/rd_cellhd.c:357
 #, c-format
 msgid "Syntax error in cell header, line %d: %s"
-msgstr ""
+msgstr "셀 헤더, 줄 %d 내에 구문 오류: %s"
 
 #: ../lib/gis/rd_cellhd.c:150
 msgid "Duplicate projection field"
@@ -6020,7 +6159,7 @@ msgstr ""
 #: ../lib/gis/rd_cellhd.c:197
 #, c-format
 msgid "Invalid north field: %s"
-msgstr "무효한 북쪽 필드입니다: %s"
+msgstr "무효한 북쪽 필드: %s"
 
 #: ../lib/gis/rd_cellhd.c:203
 msgid "Duplicate south field"
@@ -6029,7 +6168,7 @@ msgstr ""
 #: ../lib/gis/rd_cellhd.c:205
 #, c-format
 msgid "Invalid south field: %s"
-msgstr "무효한 남쪽 필드입니다: %s"
+msgstr "무효한 남쪽 필드: %s"
 
 #: ../lib/gis/rd_cellhd.c:211
 msgid "Duplicate east field"
@@ -6038,7 +6177,7 @@ msgstr ""
 #: ../lib/gis/rd_cellhd.c:213
 #, c-format
 msgid "Invalid east field: %s"
-msgstr "무효한 동쪽 필드입니다: %s"
+msgstr "무효한 동쪽 필드: %s"
 
 #: ../lib/gis/rd_cellhd.c:219
 msgid "Duplicate west field"
@@ -6047,7 +6186,7 @@ msgstr ""
 #: ../lib/gis/rd_cellhd.c:221
 #, c-format
 msgid "Invalid west field: %s"
-msgstr "무효한 서쪽 필드입니다: %s"
+msgstr "무효한 서쪽 필드: %s"
 
 #: ../lib/gis/rd_cellhd.c:227
 msgid "Duplicate top field"
@@ -6092,7 +6231,7 @@ msgstr ""
 #: ../lib/gis/rd_cellhd.c:265 ../lib/gis/rd_cellhd.c:267
 #, c-format
 msgid "Invalid n-s resolution field: %s"
-msgstr "무효한 남북 해상도 필드입니다: %s"
+msgstr "무효한 남북 해상도 필드: %s"
 
 #: ../lib/gis/rd_cellhd.c:273
 msgid "Duplicate 3D n-s resolution field"
@@ -6183,10 +6322,19 @@ msgstr ""
 msgid "Seek offset out of range"
 msgstr ""
 
+#: ../lib/gis/cmprzstd.c:80 ../lib/gis/cmprzstd.c:95 ../lib/gis/cmprzstd.c:169
+msgid "GRASS needs to be compiled with ZSTD for ZSTD compression"
+msgstr ""
+
+#: ../lib/gis/cmprzstd.c:134 ../lib/gis/cmprzstd.c:196
+#, fuzzy, c-format
+msgid "ZSTD compression error %d: %s"
+msgstr "LZ4 압축 오류"
+
 #: ../lib/gis/paths.c:201
 #, c-format
 msgid "Unable to open file <%s> for reading"
-msgstr ""
+msgstr "파일 <%s>를 읽기 위해 열 수 없습니다"
 
 #: ../lib/gis/paths.c:217
 #, c-format
@@ -6197,9 +6345,29 @@ msgstr ""
 msgid "Multiple outputs are not supported by WPS 1.0.0"
 msgstr ""
 
-#: ../lib/gis/color_rules.c:88
+#: ../lib/gis/color_rules.c:98
 msgid "no description"
 msgstr ""
+
+#: ../lib/gis/color_rules.c:292
+#, fuzzy
+msgid "Unable to open color rule"
+msgstr "색상 규칙 <%s>를 읽어들일 수 없습니다"
+
+#: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
+#: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
+msgid "range: map values"
+msgstr ""
+
+#: ../lib/gis/color_rules.c:343
+#, c-format
+msgid "range: %g to %g"
+msgstr ""
+
+#: ../lib/gis/color_rules.c:368
+#, fuzzy
+msgid "Unable to open color descriptions"
+msgstr "색상 규칙 <%s>를 읽어들일 수 없습니다"
 
 #: ../lib/gis/mapset_msc.c:90
 #, c-format
@@ -6211,12 +6379,12 @@ msgstr ""
 msgid "Unable to access mapset element %s (%s): %s"
 msgstr ""
 
-#: ../lib/gis/cmprzlib.c:139 ../lib/gis/cmprzlib.c:157
+#: ../lib/gis/cmprzlib.c:142
 #, c-format
 msgid "ZLIB compression error %d: %s"
 msgstr ""
 
-#: ../lib/gis/cmprzlib.c:225 ../lib/gis/cmprzlib.c:242
+#: ../lib/gis/cmprzlib.c:204
 #, c-format
 msgid "ZLIB decompression error %d: %s"
 msgstr ""
@@ -6276,12 +6444,12 @@ msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:305
 #, c-format
-msgid "Option %s requires all of %s"
+msgid "Option <%s> requires all of %s"
 msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:332
 #, c-format
-msgid "Option %s is mutually exclusive with all of %s"
+msgid "Option <%s> is mutually exclusive with all of %s"
 msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:358
@@ -6292,7 +6460,7 @@ msgstr ""
 #: ../lib/gis/parser_dependencies.c:391 ../lib/gis/parser_dependencies.c:428
 #, c-format
 msgid "Internal error: invalid rule type: %d"
-msgstr "내부 오류: 무효한 규칙 타입입니다: %d"
+msgstr "내부 오류: 무효한 규칙 유형: %d"
 
 #: ../lib/gis/get_projinfo.c:37 ../lib/gis/get_projinfo.c:66
 #, c-format
@@ -6311,49 +6479,49 @@ msgstr ""
 #: ../lib/gis/debug.c:80
 #, c-format
 msgid "Cannot open debug file '%s'"
-msgstr ""
+msgstr "디버그 파일 '%s'를 열 수 없습니다"
 
 #: ../lib/gis/worker.c:84
 msgid "Task already has a worker"
 msgstr ""
 
-#: ../lib/gis/compress.c:132 ../lib/gis/compress.c:193
-#: ../lib/gis/compress.c:208
+#: ../lib/gis/compress.c:143 ../lib/gis/compress.c:208
+#: ../lib/gis/compress.c:225 ../lib/gis/compress.c:240
 msgid "Request for unsupported compressor"
 msgstr ""
 
-#: ../lib/gis/compress.c:223
+#: ../lib/gis/compress.c:255
 msgid "No destination buffer allocated"
-msgstr ""
+msgstr "목적지 버퍼가 할당되지 않았습니다"
 
-#: ../lib/gis/compress.c:230
+#: ../lib/gis/compress.c:262
 #, c-format
 msgid "Invalid read size %d"
-msgstr "무효한 읽기 크기입니다 %d"
+msgstr "무효한 읽기 크기 %d"
 
-#: ../lib/gis/compress.c:251
+#: ../lib/gis/compress.c:283
 #, c-format
 msgid "Unable to read %d bytes: end of file"
 msgstr ""
 
-#: ../lib/gis/compress.c:253
+#: ../lib/gis/compress.c:285
 #, c-format
 msgid "Unable to read %d bytes: %s"
 msgstr ""
 
-#: ../lib/gis/compress.c:327 ../lib/gis/compress.c:350
-#: ../lib/gis/compress.c:391
+#: ../lib/gis/compress.c:360 ../lib/gis/compress.c:383
+#: ../lib/gis/compress.c:424
 msgid "Unable to write compression flag"
 msgstr ""
 
-#: ../lib/gis/compress.c:338 ../lib/gis/compress.c:361
-#: ../lib/gis/compress.c:404
+#: ../lib/gis/compress.c:371 ../lib/gis/compress.c:394
+#: ../lib/gis/compress.c:437
 #, c-format
 msgid "Unable to write %d bytes: nothing written"
 msgstr ""
 
-#: ../lib/gis/compress.c:340 ../lib/gis/compress.c:363
-#: ../lib/gis/compress.c:406
+#: ../lib/gis/compress.c:373 ../lib/gis/compress.c:396
+#: ../lib/gis/compress.c:439
 #, c-format
 msgid "Unable to write %d bytes: %s"
 msgstr ""
@@ -6386,7 +6554,7 @@ msgstr ""
 #: ../lib/gis/timestamp.c:488
 #, c-format
 msgid "Invalid timestamp file for vector map <%s@%s>"
-msgstr "벡터 지도 <%s@%s>를 위한 무효한 타임스탬프입니다"
+msgstr "벡터 지도 <%s@%s>를 위한 무효한 타임스탬프"
 
 #: ../lib/gis/timestamp.c:524
 #, c-format
@@ -6401,7 +6569,7 @@ msgstr "벡터 지도 <%s@%s>를 위한 무효한 타임스탬프를 지정했�
 #: ../lib/gis/legal_name.c:39
 #, c-format
 msgid "Illegal filename <%s>. Cannot start with '.' or be 'NULL'."
-msgstr ""
+msgstr "잘못된 파일 이름 <%s>. '.'로 시작하거나 'NULL'일 수 없습니다."
 
 #: ../lib/gis/legal_name.c:46
 #, c-format
@@ -6420,7 +6588,7 @@ msgstr ""
 
 #: ../lib/gis/proj3.c:121 ../lib/vector/Vlib/header.c:552
 msgid "Unknown projection"
-msgstr "알려지지 않은 투영입니다"
+msgstr "알려지지 않은 투영"
 
 #: ../lib/gis/get_window.c:118
 #, c-format
@@ -6444,7 +6612,7 @@ msgstr ""
 
 #: ../lib/gis/mkstemp.c:132
 msgid "Attempt to create read-only temporary file"
-msgstr ""
+msgstr "읽기 전용 임시 파일의 생성을 시도하세요"
 
 #: ../lib/gis/mkstemp.c:138
 #, c-format
@@ -6522,7 +6690,7 @@ msgstr ""
 #: ../lib/db/dbmi_client/copy_tab.c:394
 #, c-format
 msgid "Unknown column type (column <%s>)"
-msgstr "알려지지 않은 열 유형입니다 (열 <%s>)"
+msgstr "알려지지 않은 열 유형 (열 <%s>)"
 
 #: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:221
 #: ../lib/db/dbmi_client/select.c:288
@@ -6599,9 +6767,9 @@ msgid ""
 "-- Table unit tests finished successfully --"
 msgstr ""
 
-#: ../lib/db/dbmi_base/default_name.c:136
+#: ../lib/db/dbmi_base/default_name.c:139
 msgid "Programmer error"
-msgstr ""
+msgstr "프로그래머 오류"
 
 #: ../lib/db/dbmi_base/legal_dbname.c:38
 #, c-format
@@ -6628,7 +6796,7 @@ msgstr ""
 
 #: ../lib/db/dbmi_base/xdrvalue.c:82
 msgid "send data: invalid C-type"
-msgstr "자료 보내기: 무효한 C-타입입니다"
+msgstr "자료 보내기: 무효한 C-유형"
 
 #: ../lib/db/dbmi_base/login.c:115
 #, c-format
@@ -6675,7 +6843,7 @@ msgstr "dbmi: %s()가 구현되지 않았습니다"
 #: ../lib/db/dbmi_base/error.c:163
 #, c-format
 msgid "dbmi: Invalid procedure %d"
-msgstr "dbmi: 무효한 프로시져입니다 %d"
+msgstr "dbmi: 무효한 프로시져 %d"
 
 #: ../lib/db/dbmi_base/xdrtable.c:109
 msgid "fetch: table has wrong number of columns"
@@ -6683,30 +6851,35 @@ msgstr ""
 
 #: ../lib/db/dbmi_base/index.c:180
 msgid "db_set_index_column_name(): invalid column number"
-msgstr "db_set_index_column_name(): 무효한 열 번호입니다"
+msgstr "db_set_index_column_name(): 무효한 열 번호"
 
 #: ../lib/db/dbmi_base/index.c:197
 msgid "db_get_index_column_name(): invalid column number"
 msgstr ""
 
-#: ../lib/vector/diglib/spindex_rw.c:98 ../lib/vector/diglib/spindex_rw.c:106
+#: ../lib/vector/diglib/spindex_rw.c:99 ../lib/vector/diglib/spindex_rw.c:107
 msgid "Topology file must be written before spatial index file"
 msgstr ""
 
-#: ../lib/vector/diglib/spindex_rw.c:302
+#: ../lib/vector/diglib/spindex_rw.c:303
 #, c-format
 msgid "This version of GRASS (%d.%d) is too old to read this spatial index format. Try to rebuild topology or upgrade GRASS to at least version %d."
 msgstr ""
 
-#: ../lib/vector/diglib/spindex_rw.c:308
+#: ../lib/vector/diglib/spindex_rw.c:309
 #, c-format
 msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
-#: ../lib/vector/diglib/spindex_rw.c:317
+#: ../lib/vector/diglib/spindex_rw.c:318
 #, c-format
 msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
 msgstr ""
+
+#: ../lib/vector/diglib/plus_line.c:262 ../lib/vector/diglib/plus_line.c:302
+#, fuzzy, c-format
+msgid "Attempt to delete not registered line %d from node %d"
+msgstr "면 %2$d로부터 등록되지 않은 섬 %1$d의 삭제를 시도합니다"
 
 #: ../lib/vector/diglib/cindex_rw.c:156
 #, c-format
@@ -6813,7 +6986,7 @@ msgstr ""
 msgid "Unable to write isles to plus file"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_node.c:214
+#: ../lib/vector/diglib/plus_node.c:213
 #, c-format
 msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
 msgstr ""
@@ -6842,76 +7015,76 @@ msgstr ""
 #: ../lib/vector/diglib/test.c:75
 #, c-format
 msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
-msgstr ""
+msgstr "이식 가능한 double의 읽기/쓰기에 오류, byte_order = %d 씀: %.16e3E 읽음: %.16e3E"
 
 #: ../lib/vector/diglib/test.c:89
 #, c-format
 msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
-msgstr ""
+msgstr "이식 가능한 float의 읽기/쓰기에 오류, byte_order = %d 씀: %.8e3E 읽음: %.8e3E"
 
 #: ../lib/vector/diglib/test.c:104
 #, c-format
 msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
-msgstr ""
+msgstr "이식 가능한 off_t의 읽기/쓰기에 오류, byte_order = %d 씀: %lu 읽음: %lu"
 
 #: ../lib/vector/diglib/test.c:119
 #, c-format
 msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
-msgstr ""
+msgstr "이식 가능한 long의 읽기/쓰기에 오류, byte_order = %d 씀: %lu 읽음: %lu"
 
 #: ../lib/vector/diglib/test.c:134
 #, c-format
 msgid "Error in read/write portable int, byte_order = %d Written: %d Read: %d"
-msgstr ""
+msgstr "이식 가능한 int의 읽기/쓰기에 오류, byte_order = %d 씀: %d 읽음: %d"
 
 #: ../lib/vector/diglib/test.c:150
 #, c-format
 msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
-msgstr ""
+msgstr "이식 가능한 short의 읽기/쓰기에 오류, byte_order = %d 씀: %d 읽음: %d"
 
 #: ../lib/vector/diglib/test.c:165
 #, c-format
 msgid "Error in read/write portable char, byte_order = %d Written: %d Read: %d"
-msgstr ""
+msgstr "이식 가능한 char의 읽기/쓰기에 오류, byte_order = %d 씀: %d 읽음: %d"
 
-#: ../lib/vector/diglib/plus_area.c:215 ../lib/vector/diglib/plus_area.c:716
+#: ../lib/vector/diglib/plus_area.c:218 ../lib/vector/diglib/plus_area.c:718
 #, c-format
 msgid "Line %d already has area/isle %d to left"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:225 ../lib/vector/diglib/plus_area.c:724
+#: ../lib/vector/diglib/plus_area.c:228 ../lib/vector/diglib/plus_area.c:726
 #, c-format
 msgid "Line %d already has area/isle %d to right"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:279
+#: ../lib/vector/diglib/plus_area.c:282
 msgid "Isle already registered in area"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:313
+#: ../lib/vector/diglib/plus_area.c:316
 msgid "Attempt to delete isle from dead area"
 msgstr "무효한 면으로부터 섬의 삭제를 시도합니다"
 
-#: ../lib/vector/diglib/plus_area.c:330
+#: ../lib/vector/diglib/plus_area.c:324
 #, c-format
 msgid "Attempt to delete not registered isle %d from area %d"
 msgstr "면 %2$d로부터 등록되지 않은 섬 %1$d의 삭제를 시도합니다"
 
-#: ../lib/vector/diglib/plus_area.c:369
+#: ../lib/vector/diglib/plus_area.c:371
 msgid "Attempt to delete dead area"
 msgstr "무효한 면의 삭제를 시도합니다"
 
-#: ../lib/vector/diglib/plus_area.c:408
+#: ../lib/vector/diglib/plus_area.c:410
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:431
+#: ../lib/vector/diglib/plus_area.c:433
 #, c-format
 msgid "Attempt to delete area %d info from dead isle %d"
 msgstr "무효한 섬 %2$d로부터 면 %1$d 정보의 삭제를 시도합니다"
 
-#: ../lib/vector/diglib/plus_area.c:782
+#: ../lib/vector/diglib/plus_area.c:784
 #, c-format
 msgid "Attempt to delete isle %d info from dead area %d"
 msgstr "무효한 면 %d로부터 섬 %d 정보의 삭제를 시도합니다"
@@ -6971,7 +7144,7 @@ msgstr ""
 #: ../lib/vector/vedit/delete.c:76
 #, c-format
 msgid "Duplicate centroid %d, unable to delete area"
-msgstr "중복된 중앙점 %d, 면을 삭제할 수 없습니다"
+msgstr "중복된 도심 %d, 면을 삭제할 수 없습니다"
 
 #: ../lib/vector/vedit/delete.c:105
 #, c-format
@@ -6985,7 +7158,7 @@ msgstr ""
 
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
-msgstr "알려지지 않은 질의 도구입니다"
+msgstr "알려지지 않은 질의 도구"
 
 #: ../lib/vector/Vlib/cindex.c:32
 msgid "Category index is not up to date"
@@ -7011,7 +7184,7 @@ msgstr ""
 #: ../lib/vector/Vlib/cindex.c:539 ../lib/vector/Vlib/open.c:393
 #, c-format
 msgid "Unable to open category index file for vector map <%s>"
-msgstr ""
+msgstr "벡터 지도 <%s>를 위한 범주 색인 파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/read_ogr.c:56 ../lib/vector/Vlib/read_ogr.c:157
 #: ../lib/vector/Vlib/read_ogr.c:242 ../lib/vector/Vlib/build_ogr.c:101
@@ -7026,7 +7199,7 @@ msgstr ""
 #: ../lib/vector/Vlib/header_finfo.c:113 ../lib/vector/Vlib/header_finfo.c:153
 #: ../lib/vector/Vlib/header_finfo.c:254 ../lib/vector/Vlib/close.c:284
 #: ../lib/vector/Vlib/close_ogr.c:77 ../lib/vector/Vlib/close_ogr.c:111
-#: ../lib/proj/convert.c:64
+#: ../lib/proj/convert.c:98
 msgid "GRASS is not compiled with OGR support"
 msgstr ""
 
@@ -7199,7 +7372,7 @@ msgid "Unable to add database link for vector map <%s>"
 msgstr ""
 
 #: ../lib/vector/Vlib/copy.c:764 ../lib/vector/Vlib/close_nat.c:102
-#: ../lib/vector/Vlib/map.c:317
+#: ../lib/vector/Vlib/map.c:318
 #, c-format
 msgid "Unable to copy table <%s>"
 msgstr ""
@@ -7247,7 +7420,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open.c:277
 msgid "Vector map which is not in the current mapset cannot be opened for update"
-msgstr ""
+msgstr "현재 지도세트 내에 존재하지 않는 벡터 지도는 갱신을 위해 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open.c:311
 #, c-format
@@ -7260,7 +7433,7 @@ msgid "Unable to open topology file for vector map <%s>"
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:367 ../lib/vector/Vlib/open.c:871
-#: ../lib/vector/Vlib/build.c:865
+#: ../lib/vector/Vlib/build.c:866
 #, c-format
 msgid "Unable to open spatial index file for vector map <%s>"
 msgstr ""
@@ -7268,7 +7441,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:419
 #, c-format
 msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology with v.build."
-msgstr ""
+msgstr "벡터 지도 <%s>를 단계 %d에서 열 수 없습니다. v.build로 벡터 위상을 복구해 보세요."
 
 #: ../lib/vector/Vlib/open.c:445
 #, c-format
@@ -7296,13 +7469,13 @@ msgid "Unable to create vector map: <%s> is not SQL compliant"
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:813 ../lib/vector/Vlib/open.c:826
-#: ../lib/vector/Vlib/map.c:159
+#: ../lib/vector/Vlib/map.c:160
 #, c-format
 msgid "Unable to delete vector map <%s>"
 msgstr "벡터 지도 <%s>를 삭제할 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:821 ../lib/vector/Vlib/map.c:155
-#: ../lib/vector/Vlib/map.c:249
+#: ../lib/vector/Vlib/open.c:821 ../lib/vector/Vlib/map.c:156
+#: ../lib/vector/Vlib/map.c:250
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr ""
@@ -7337,7 +7510,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:1049
 #, c-format
 msgid "unknown %d (update Vect_maptype_info)"
-msgstr "알려지지 않은 양식입니다 %d (Vect_maptype_info를 갱신하세요)"
+msgstr "알려지지 않은 %d (Vect_maptype_info를 갱신하세요)"
 
 #: ../lib/vector/Vlib/open.c:1138
 msgid "Size of 'coor' file differs from value saved in topology file"
@@ -7354,7 +7527,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open.c:1317
 msgid "Unable to open OGR file"
-msgstr ""
+msgstr "OGR 파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open.c:1343
 msgid "OGR output also detected, using OGR"
@@ -7363,7 +7536,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:1355 ../lib/vector/Vlib/write_pg.c:612
 #: ../lib/vector/Vlib/write_pg.c:880 ../lib/vector/Vlib/build_pg.c:411
 msgid "Unable to open PG file"
-msgstr ""
+msgstr "PG 파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write.c:30 ../lib/vector/Vlib/write.c:36
 #: ../lib/vector/Vlib/write.c:42 ../lib/vector/Vlib/write.c:49
@@ -7439,7 +7612,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/remove_areas.c:581
 msgid "Area merging failed"
-msgstr ""
+msgstr "면 병합에 실패했습니다"
 
 #: ../lib/vector/Vlib/close_pg.c:66 ../lib/vector/Vlib/read_pg.c:1420
 #, c-format
@@ -7516,7 +7689,7 @@ msgstr ""
 #: ../lib/vector/Vlib/read_pg.c:787
 #, c-format
 msgid "Invalid WKB content: %d bytes"
-msgstr "무효한 WKB 내용입니다: %d 바이트"
+msgstr "무효한 WKB 내용: %d 바이트"
 
 #: ../lib/vector/Vlib/read_pg.c:803
 msgid "Reading EWKB with 4-dimensional coordinates (XYZM) is not supported"
@@ -7539,7 +7712,7 @@ msgstr ""
 #: ../lib/vector/Vlib/read_pg.c:1077
 #, c-format
 msgid "Invalid cache index %d (max: %d)"
-msgstr "무효한 캐시 색인입니다 %d (최대: %d)"
+msgstr "무효한 캐시 색인 %d (최대: %d)"
 
 #: ../lib/vector/Vlib/read_pg.c:1215
 #, c-format
@@ -7779,7 +7952,7 @@ msgstr ""
 #: ../lib/vector/Vlib/field.c:614 ../lib/vector/Vlib/field.c:622
 #, c-format
 msgid "Error in rule on row %d in <%s>"
-msgstr ""
+msgstr "<%2$s> 안의 행 %1$d 상에 있는 규칙 내에 오류"
 
 #: ../lib/vector/Vlib/field.c:690 ../lib/vector/Vlib/open_ogr.c:77
 #, c-format
@@ -7793,7 +7966,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/field.c:734
 msgid "Unable to open OGR DBMI driver"
-msgstr ""
+msgstr "OGR DBMI 드라이버를 열 수 없습니다"
 
 #: ../lib/vector/Vlib/field.c:773
 msgid "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' available in OGR DB table"
@@ -7810,7 +7983,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/field.c:892
 msgid "Unknown vector map format"
-msgstr "알려지지 않은 벡터 지도 양식입니다"
+msgstr "알려지지 않은 벡터 지도 서식"
 
 #: ../lib/vector/Vlib/field.c:925
 #, c-format
@@ -7821,29 +7994,29 @@ msgstr ""
 msgid "Bug: attempt to update map which is not in current mapset"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:223 ../lib/vector/Vlib/snap.c:582
+#: ../lib/vector/Vlib/snap.c:223 ../lib/vector/Vlib/snap.c:583
 msgid "Snap vertices Pass 1: select points"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:270 ../lib/vector/Vlib/snap.c:636
+#: ../lib/vector/Vlib/snap.c:268 ../lib/vector/Vlib/snap.c:637
 msgid "Snap vertices Pass 2: assign anchor vertices"
 msgstr "정점 끌어 붙이기 2단계: 닻 정점을 할당합니다"
 
-#: ../lib/vector/Vlib/snap.c:339 ../lib/vector/Vlib/snap.c:705
+#: ../lib/vector/Vlib/snap.c:337 ../lib/vector/Vlib/snap.c:706
 msgid "Snap vertices Pass 3: snap to assigned points"
 msgstr "정점 끌어 붙이기 3단계: 할당된 점을 끌어 붙입니다"
 
-#: ../lib/vector/Vlib/snap.c:525 ../lib/vector/Vlib/snap.c:888
+#: ../lib/vector/Vlib/snap.c:526 ../lib/vector/Vlib/snap.c:889
 #, c-format
 msgid "Snapped vertices: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:526 ../lib/vector/Vlib/snap.c:889
+#: ../lib/vector/Vlib/snap.c:527 ../lib/vector/Vlib/snap.c:890
 #, c-format
 msgid "New vertices: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:916
+#: ../lib/vector/Vlib/snap.c:917
 msgid "Reading features..."
 msgstr ""
 
@@ -7935,7 +8108,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:1365
 #, c-format
 msgid "Invalid feature type (%d) for nodes"
-msgstr "노드를 위한 무효한 피쳐 타입입니다 (%d)"
+msgstr "노드를 위한 무효한 피쳐 유형 (%d)"
 
 #: ../lib/vector/Vlib/write_pg.c:1379
 msgid "PostGIS topology schema not defined"
@@ -7960,22 +8133,22 @@ msgstr ""
 
 #: ../lib/vector/Vlib/write_pg.c:2089
 msgid "Invalid value for FID column: NULL"
-msgstr "FID 열을 위한 무효한 값입니다: NULL"
+msgstr "FID 열을 위한 무효한 값: 널"
 
 #: ../lib/vector/Vlib/write_pg.c:2181
 #, c-format
 msgid "Invalid feature %d (max: %d)"
-msgstr "무효한 피쳐입니다 %d (최대: %d)"
+msgstr "무효한 피쳐 %d (최대: %d)"
 
 #: ../lib/vector/Vlib/write_pg.c:2195
 #, c-format
 msgid "Invalid feature type (%d) for node"
-msgstr "노드를 위한 무효한 피쳐 타입입니다 (%d)"
+msgstr "노드를 위한 무효한 피쳐 유형 (%d)"
 
 #: ../lib/vector/Vlib/write_pg.c:2199
 #, c-format
 msgid "Invalid node %d (%d)"
-msgstr "무효한 교점입니다 %d (%d)"
+msgstr "무효한 교점 %d (%d)"
 
 #: ../lib/vector/Vlib/write_pg.c:2277
 #, c-format
@@ -7988,7 +8161,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/write_pg.c:2381 ../lib/vector/Vlib/write_pg.c:2388
 msgid "Invalid topology"
-msgstr "무효한 위상입니다"
+msgstr "무효한 위상"
 
 #: ../lib/vector/Vlib/write_pg.c:2587 ../lib/vector/Vlib/write_pg.c:2684
 #, c-format
@@ -8034,7 +8207,7 @@ msgstr ""
 #: ../lib/vector/Vlib/level_two.c:284
 #, c-format
 msgid "Invalid node id: %d"
-msgstr "무효한 교점 ID입니다: %d"
+msgstr "무효한 교점 ID: %d"
 
 #: ../lib/vector/Vlib/level_two.c:316
 #, c-format
@@ -8089,71 +8262,71 @@ msgstr ""
 msgid "Vect_get_point_in_poly() failed"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:139 ../lib/vector/Vlib/map.c:245
+#: ../lib/vector/Vlib/map.c:140 ../lib/vector/Vlib/map.c:246
 msgid "Vector map name is not SQL compliant"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:143
+#: ../lib/vector/Vlib/map.c:144
 #, c-format
 msgid "Unable to find vector map <%s> in <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:179 ../lib/vector/Vlib/map.c:267
+#: ../lib/vector/Vlib/map.c:180 ../lib/vector/Vlib/map.c:268
 #, c-format
 msgid "Unable to copy vector map <%s> to <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:331 ../lib/vector/Vlib/map.c:462
+#: ../lib/vector/Vlib/map.c:332 ../lib/vector/Vlib/map.c:463
 #, c-format
 msgid "Unable to delete table <%s>"
 msgstr "테이블 <%s>를 삭제할 수 없습니다"
 
-#: ../lib/vector/Vlib/map.c:346
+#: ../lib/vector/Vlib/map.c:347
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:402
+#: ../lib/vector/Vlib/map.c:403
 #, c-format
 msgid "Ignoring invalid mapset: %s"
 msgstr "무효한 지도세트를 무시합니다: %s"
 
-#: ../lib/vector/Vlib/map.c:407
+#: ../lib/vector/Vlib/map.c:408
 #, c-format
 msgid "Invalid vector map name <%s>"
-msgstr "무효한 벡터 지도 이름입니다 <%s>"
+msgstr "무효한 벡터 지도 이름 <%s>"
 
-#: ../lib/vector/Vlib/map.c:417
+#: ../lib/vector/Vlib/map.c:418
 #, c-format
 msgid "Unable to open header file for vector map <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:449
+#: ../lib/vector/Vlib/map.c:450
 #, c-format
 msgid "Unable to find table <%s> linked to vector map <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:472
+#: ../lib/vector/Vlib/map.c:473
 #, c-format
 msgid "Table <%s> linked to vector map <%s> does not exist"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:485
+#: ../lib/vector/Vlib/map.c:486
 #, c-format
 msgid "Unable to open directory '%s'"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:499
+#: ../lib/vector/Vlib/map.c:500
 #, c-format
 msgid "Unable to delete file '%s'"
 msgstr "파일 '%s'를 삭제할 수 없습니다"
 
-#: ../lib/vector/Vlib/map.c:519
+#: ../lib/vector/Vlib/map.c:520
 #, c-format
 msgid "Unable to rename directory '%s' to '%s'"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:528
+#: ../lib/vector/Vlib/map.c:529
 #, c-format
 msgid "Unable to remove directory '%s': %s"
 msgstr "디렉토리 '%s'를 제거할 수 없습니다: %s"
@@ -8207,15 +8380,15 @@ msgstr ""
 msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
-#: ../lib/vector/Vlib/intersect2.c:1202 ../lib/vector/Vlib/intersect2.c:1208
-#: ../lib/vector/Vlib/intersect2.c:1210 ../lib/vector/Vlib/intersect2.c:1262
-#: ../lib/vector/Vlib/intersect2.c:1271 ../lib/vector/Vlib/intersect2.c:1292
-#: ../lib/vector/Vlib/intersect2.c:1309 ../lib/vector/Vlib/intersect.c:1194
+#: ../lib/vector/Vlib/intersect2.c:1259 ../lib/vector/Vlib/intersect2.c:1265
+#: ../lib/vector/Vlib/intersect2.c:1267 ../lib/vector/Vlib/intersect2.c:1319
+#: ../lib/vector/Vlib/intersect2.c:1328 ../lib/vector/Vlib/intersect2.c:1349
+#: ../lib/vector/Vlib/intersect2.c:1366 ../lib/vector/Vlib/intersect.c:1194
 #: ../lib/vector/Vlib/intersect.c:1200 ../lib/vector/Vlib/intersect.c:1202
 #: ../lib/vector/Vlib/intersect.c:1257 ../lib/vector/Vlib/intersect.c:1266
 #: ../lib/vector/Vlib/intersect.c:1287 ../lib/vector/Vlib/intersect.c:1304
 msgid "Error while adding point to array. Out of memory"
-msgstr "메모리가 부족해서 점을 배열에 추가하는 중 오류가 발생했습니다"
+msgstr "메모리가 부족해서 점을 배열에 추가하는 중 오류"
 
 #: ../lib/vector/Vlib/bridges.c:213
 #, c-format
@@ -8235,7 +8408,7 @@ msgstr ""
 #: ../lib/vector/Vlib/ascii.c:123
 #, c-format
 msgid "Error reading ASCII file: (unknown type) [%s]"
-msgstr "ASCII 파일을 읽는데 오류가 발생했습니다: (알려지지 않은 유형) [%s]"
+msgstr "ASCII 파일을 읽는데 오류: (알려지지 않은 유형) [%s]"
 
 #: ../lib/vector/Vlib/ascii.c:143
 msgid "End of ASCII file reached before end of coordinates"
@@ -8284,7 +8457,7 @@ msgstr ""
 #: ../lib/vector/Vlib/ascii.c:306
 #, c-format
 msgid "Unknown keyword <%s> in vector head"
-msgstr "벡터 헤더 안에 알려지지 않은 키워드가 있습니다 <%s>"
+msgstr "벡터 헤더 내에 알려지지 않은 키워드 <%s>"
 
 #: ../lib/vector/Vlib/ascii.c:465
 #, c-format
@@ -8302,7 +8475,7 @@ msgstr ""
 #: ../lib/vector/Vlib/ascii.c:505
 #, c-format
 msgid "Unknown type of column <%s>, export cancelled"
-msgstr "열 <%s>의 알려지지 않은 유형입니다, 내보내기가 취소되었습니다"
+msgstr "열 <%s>의 알려지지 않은 유형, 내보내기가 취소됐습니다"
 
 #: ../lib/vector/Vlib/ascii.c:539
 #, c-format
@@ -8312,7 +8485,7 @@ msgstr ""
 #: ../lib/vector/Vlib/ascii.c:661
 #, c-format
 msgid "Unknown feature type %d"
-msgstr "알려지지 않은 피쳐 유형입니다 %d"
+msgstr "알려지지 않은 피쳐 유형 %d"
 
 #: ../lib/vector/Vlib/ascii.c:701
 #, c-format
@@ -8322,7 +8495,7 @@ msgstr ""
 #: ../lib/vector/Vlib/ascii.c:718
 #, c-format
 msgid "Cannot select attributes for cat = %d"
-msgstr ""
+msgstr "cat = %d를 위한 속성을 선택할 수 없습니다"
 
 #: ../lib/vector/Vlib/ascii.c:724
 msgid "Unable to fetch data from table"
@@ -8343,7 +8516,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/ascii.c:840
 msgid "Unknown format"
-msgstr "알려지지 않은 양식입니다"
+msgstr "알려지지 않은 서식"
 
 #: ../lib/vector/Vlib/ascii.c:850
 msgid "Topology not available, unable to process areas"
@@ -8428,7 +8601,7 @@ msgstr ""
 #: ../lib/vector/Vlib/header.c:175
 #, c-format
 msgid "Unknown keyword '%s' in vector head"
-msgstr "벡터 헤더 안에 알려지지 않은 키워드가 있습니다 '%s'"
+msgstr "벡터 헤더 내에 알려지지 않은 키워드 '%s'"
 
 #: ../lib/vector/Vlib/build_sfa.c:279 ../lib/vector/Vlib/build_sfa.c:546
 #, c-format
@@ -8441,19 +8614,19 @@ msgid "Feature type %d not supported"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_sfa.c:339 ../lib/vector/Vlib/build_sfa.c:632
-#: ../lib/vector/Vlib/build_nat.c:74
+#: ../lib/vector/Vlib/build_nat.c:75
 msgid "Registering primitives..."
 msgstr ""
 
 #: ../lib/vector/Vlib/build_sfa.c:385 ../lib/vector/Vlib/build_sfa.c:664
-#: ../lib/vector/Vlib/build_nat.c:117
+#: ../lib/vector/Vlib/build_nat.c:118
 #, c-format
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
 msgstr[0] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:386 ../lib/vector/Vlib/build_sfa.c:665
-#: ../lib/vector/Vlib/build_nat.c:118
+#: ../lib/vector/Vlib/build_nat.c:119
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
@@ -8477,7 +8650,7 @@ msgstr ""
 #: ../lib/vector/Vlib/simple_features.c:225
 #, c-format
 msgid "Unknown Simple Features type (%d)"
-msgstr "알려지지 않은 Simple Features 유형입니다 (%d)"
+msgstr "알려지지 않은 Simple Features 유형 (%d)"
 
 #: ../lib/vector/Vlib/simple_features.c:332
 msgid "Unable to get number of simple features"
@@ -8486,7 +8659,7 @@ msgstr ""
 #: ../lib/vector/Vlib/simple_features.c:341
 #, c-format
 msgid "Unable to report simple features for vector map <%s>"
-msgstr ""
+msgstr "벡터 지도 <%s>를 위한 단순한 피쳐를 보고할 수 없습니다"
 
 #: ../lib/vector/Vlib/build_pg.c:88
 msgid "No DB connection"
@@ -8512,7 +8685,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/build_pg.c:237
 msgid "Cleaning-up topology schema..."
-msgstr ""
+msgstr "위상 스키마를 정리하는 중입니다..."
 
 #: ../lib/vector/Vlib/build_pg.c:282
 msgid "Updating faces..."
@@ -8520,7 +8693,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/build_pg.c:314
 msgid "Updating edges..."
-msgstr ""
+msgstr "모서리를 갱신하는 중입니다..."
 
 #: ../lib/vector/Vlib/build_pg.c:323
 msgid "Inconsistency in topology detected. Dead line found."
@@ -8817,7 +8990,7 @@ msgstr ""
 msgid "Attempt to read topo for dead isle (%d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/break_lines.c:572
+#: ../lib/vector/Vlib/break_lines.c:574
 #, c-format
 msgid "Intersections: %d"
 msgstr ""
@@ -8847,7 +9020,7 @@ msgstr ""
 msgid "Topology not available for vector map <%s>. Registering primitives..."
 msgstr ""
 
-#: ../lib/vector/Vlib/box.c:436 ../lib/vector/Vlib/build_nat.c:84
+#: ../lib/vector/Vlib/box.c:436 ../lib/vector/Vlib/build_nat.c:85
 msgid "Unable to read vector map"
 msgstr ""
 
@@ -8891,7 +9064,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:332 ../lib/vector/Vlib/net_build.c:352
 msgid "Cannot add network arc for virtual node connection."
-msgstr ""
+msgstr "가상의 교점 연결을 위한 네트워크 호를 추가할 수 없습니다."
 
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
@@ -8923,7 +9096,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:465
 msgid "Cannot add network arc representing turn."
-msgstr ""
+msgstr "회전을 표현할 네트워크 호를 추가할 수 없습니다."
 
 #: ../lib/vector/Vlib/net_build.c:487 ../lib/vector/Vlib/net_build.c:788
 msgid "Arc field < 1"
@@ -8975,7 +9148,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:937
 msgid "Cannot add network arc"
-msgstr ""
+msgstr "네트워크 호를 추가할 수 없습니다"
 
 #: ../lib/vector/Vlib/legal_vname.c:43
 #, c-format
@@ -8995,7 +9168,7 @@ msgstr ""
 #: ../lib/vector/Vlib/legal_vname.c:65
 #, c-format
 msgid "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
-msgstr ""
+msgstr "잘못된 벡터 지도 이름 <%s>. SQL 키워드는 벡터 지도의 이름으로 사용할 수 없습니다."
 
 #: ../lib/vector/Vlib/legal_vname.c:100 ../lib/vector/Vlib/legal_vname.c:104
 #, c-format
@@ -9012,14 +9185,34 @@ msgstr ""
 msgid "Output vector map <%s> is used as input"
 msgstr ""
 
-#: ../lib/vector/Vlib/merge_lines.c:240
+#: ../lib/vector/Vlib/merge_lines.c:241
+#, c-format
+msgid "%d lines merged"
+msgstr ""
+
+#: ../lib/vector/Vlib/merge_lines.c:242
+#, c-format
+msgid "%d new lines"
+msgstr ""
+
+#: ../lib/vector/Vlib/merge_lines.c:245
 #, c-format
 msgid "%d boundaries merged"
 msgstr ""
 
-#: ../lib/vector/Vlib/merge_lines.c:241
+#: ../lib/vector/Vlib/merge_lines.c:246
 #, c-format
 msgid "%d new boundaries"
+msgstr ""
+
+#: ../lib/vector/Vlib/merge_lines.c:249
+#, c-format
+msgid "%d lines and boundaries merged"
+msgstr ""
+
+#: ../lib/vector/Vlib/merge_lines.c:250
+#, c-format
+msgid "%d new lines and boundaries"
 msgstr ""
 
 #: ../lib/vector/Vlib/open_nat.c:56
@@ -9087,7 +9280,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/overlay.c:72
 msgid "unknown operator"
-msgstr "알려지지 않은 조작자입니다"
+msgstr "알려지지 않은 조작자"
 
 #: ../lib/vector/Vlib/overlay.c:124
 msgid "Overlay: line/boundary types not supported by AND operator"
@@ -9109,178 +9302,178 @@ msgstr ""
 msgid "Vect_segment_intersection() ERROR (collinear non vertical segments)"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:115
+#: ../lib/vector/Vlib/build.c:116
 msgid "Area of size = 0.0 (less than 4 vertices) ignored"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:131
+#: ../lib/vector/Vlib/build.c:132
 msgid "Unable to add area (map closed, topo saved)"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:139
+#: ../lib/vector/Vlib/build.c:140
 msgid "Unable to add isle (map closed, topo saved)"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:149
+#: ../lib/vector/Vlib/build.c:150
 msgid "Area of size = 0.0 ignored"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:200
+#: ../lib/vector/Vlib/build.c:201
 msgid "Request to find area outside nonexistent isle"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:351
+#: ../lib/vector/Vlib/build.c:352
 msgid "Larger bbox but smaller area!!!"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:606
+#: ../lib/vector/Vlib/build.c:607
 msgid "Checking for topological errors..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:641
+#: ../lib/vector/Vlib/build.c:642
 #, c-format
 msgid "Number of lines of length zero: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:643
+#: ../lib/vector/Vlib/build.c:644
 #, c-format
 msgid "Number of boundaries of length zero: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:652
+#: ../lib/vector/Vlib/build.c:653
 #, c-format
 msgid "Number of boundary intersections: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:676
+#: ../lib/vector/Vlib/build.c:677
 msgid "Skipping further checks because of incorrect boundaries"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:726
+#: ../lib/vector/Vlib/build.c:727
 #, c-format
 msgid "Number of redundant holes: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:871
+#: ../lib/vector/Vlib/build.c:872
 #, c-format
 msgid "Building topology for vector map <%s>..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:889
+#: ../lib/vector/Vlib/build.c:890
 msgid "Topology was built"
-msgstr ""
-
-#: ../lib/vector/Vlib/build.c:900
-#, c-format
-msgid "Number of nodes: %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/build.c:901
 #, c-format
-msgid "Number of primitives: %d"
+msgid "Number of nodes: %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/build.c:902
 #, c-format
-msgid "Number of points: %d"
+msgid "Number of primitives: %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/build.c:903
 #, c-format
-msgid "Number of lines: %d"
+msgid "Number of points: %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/build.c:904
 #, c-format
-msgid "Number of boundaries: %d"
+msgid "Number of lines: %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/build.c:905
 #, c-format
+msgid "Number of boundaries: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/build.c:906
+#, c-format
 msgid "Number of centroids: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:908
+#: ../lib/vector/Vlib/build.c:909
 #, c-format
 msgid "Number of faces: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:911
+#: ../lib/vector/Vlib/build.c:912
 #, c-format
 msgid "Number of kernels: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:957
+#: ../lib/vector/Vlib/build.c:958
 #, c-format
 msgid "Number of areas: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:958
+#: ../lib/vector/Vlib/build.c:959
 #, c-format
 msgid "Number of isles: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:963
+#: ../lib/vector/Vlib/build.c:964
 #, c-format
 msgid "Number of areas without centroid: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:968
+#: ../lib/vector/Vlib/build.c:969
 #, c-format
 msgid "Number of centroids exceeds number of areas: %d > %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:972
+#: ../lib/vector/Vlib/build.c:973
 #, c-format
 msgid "Number of incorrect boundaries: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:976
+#: ../lib/vector/Vlib/build.c:977
 #, c-format
 msgid "Number of centroids outside area: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:980
+#: ../lib/vector/Vlib/build.c:981
 #, c-format
 msgid "Number of duplicate centroids: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:984
+#: ../lib/vector/Vlib/build.c:985
 msgid "Number of areas: -"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:985
+#: ../lib/vector/Vlib/build.c:986
 msgid "Number of isles: -"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1013
+#: ../lib/vector/Vlib/build.c:1014
 #, c-format
 msgid "Unable to create topo file for vector map <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1021
+#: ../lib/vector/Vlib/build.c:1022
 msgid "Error writing out topo file"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1210
+#: ../lib/vector/Vlib/build.c:1211
 msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1233
+#: ../lib/vector/Vlib/build.c:1234
 #, c-format
 msgid "%s is no longer supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1256
+#: ../lib/vector/Vlib/build.c:1257
 msgid "Spatial index not available, can not be saved"
-msgstr ""
+msgstr "공간 색인이 유효하지 않습니다, 저장할 수 없습니다"
 
-#: ../lib/vector/Vlib/build.c:1268
+#: ../lib/vector/Vlib/build.c:1269
 #, c-format
 msgid "Unable to create spatial index file for vector map <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1277
+#: ../lib/vector/Vlib/build.c:1278
 msgid "Error writing out spatial index file"
 msgstr ""
 
@@ -9320,27 +9513,27 @@ msgstr ""
 msgid "conditions failed"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_nat.c:129
+#: ../lib/vector/Vlib/build_nat.c:132
 msgid "Building areas..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build_nat.c:153
+#: ../lib/vector/Vlib/build_nat.c:156
 #, c-format
 msgid "One area built"
 msgid_plural "%d areas built"
 msgstr[0] ""
 
-#: ../lib/vector/Vlib/build_nat.c:154
+#: ../lib/vector/Vlib/build_nat.c:157
 #, c-format
 msgid "One isle built"
 msgid_plural "%d isles built"
 msgstr[0] ""
 
-#: ../lib/vector/Vlib/build_nat.c:163
+#: ../lib/vector/Vlib/build_nat.c:168
 msgid "Attaching islands..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build_nat.c:180
+#: ../lib/vector/Vlib/build_nat.c:188
 msgid "Attaching centroids..."
 msgstr ""
 
@@ -9349,7 +9542,7 @@ msgstr ""
 msgid "Unable to delete item %d from spatial index"
 msgstr "공간 색인으로부터 항목 %d를 삭제할 수 없습니다"
 
-#: ../lib/vector/neta/spanningtree.c:106
+#: ../lib/vector/neta/spanningtree.c:109
 msgid "Computing minimum spanning tree..."
 msgstr ""
 
@@ -9381,49 +9574,54 @@ msgstr ""
 msgid "Unable to open select cursor: %s"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:148
+#: ../lib/proj/get_proj.c:158
 #, c-format
 msgid "Invalid zone %s specified"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:228
-msgid "Unable to initialise PROJ.4 with the following parameter list:"
+#: ../lib/proj/get_proj.c:243
+msgid "Unable to initialise PROJ with the following parameter list:"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:236
+#: ../lib/proj/get_proj.c:252
 #, c-format
-msgid "The error message: %s"
+msgid "The PROJ error message: %s"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:294
+#: ../lib/proj/get_proj.c:360
 msgid "Option input overflowed option table"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:325
+#: ../lib/proj/get_proj.c:388
+#, fuzzy
+msgid "Unable to initialize pj"
+msgstr "초기화 파일 <%s>를 찾을 수 없습니다"
+
+#: ../lib/proj/get_proj.c:396
 #, c-format
 msgid "Unable to initialize pj cause: %s"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:401
+#: ../lib/proj/get_proj.c:501
 msgid "Input Projection Parameters"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:404
+#: ../lib/proj/get_proj.c:503
 msgid "Input Unit Factor"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:414
+#: ../lib/proj/get_proj.c:513
 msgid "Output Projection Parameters"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:417
+#: ../lib/proj/get_proj.c:515
 msgid "Output Unit Factor"
 msgstr ""
 
 #: ../lib/proj/ellipse.c:97
 #, c-format
 msgid "Invalid ellipsoid <%s> in file"
-msgstr "파일 내에 무효한 타원체입니다 <%s>"
+msgstr "파일 내에 무효한 타원체 <%s>"
 
 #: ../lib/proj/ellipse.c:124
 msgid "No secondary ellipsoid descriptor (rf, es or b) in file"
@@ -9444,73 +9642,112 @@ msgstr ""
 #: ../lib/proj/datum.c:278 ../lib/proj/datum.c:358
 #, c-format
 msgid "Unable to open datum table file <%s>"
-msgstr ""
+msgstr "측지계 테이블 파일 <%s>를 열 수 없습니다"
 
 #: ../lib/proj/datum.c:291 ../lib/proj/datum.c:372
 #, c-format
 msgid "Error in datum table file <%s>, line %d"
-msgstr ""
+msgstr "측지계 테이블 파일 <%s>, 줄 %d 내에 오류"
 
-#: ../lib/proj/convert.c:159
+#: ../lib/proj/convert.c:194
 msgid "Unable parse GRASS PROJ_INFO file"
 msgstr ""
 
-#: ../lib/proj/convert.c:164
+#: ../lib/proj/convert.c:201
 msgid "Unable get PROJ.4-style parameter string"
 msgstr ""
 
-#: ../lib/proj/convert.c:178
+#: ../lib/proj/convert.c:219
 #, c-format
 msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
-msgstr ""
+msgstr "OGR이 PROJ.4 형식의 매개변수 문자열을 해석할 수 없습니다: %s (OGR 오류 코드 %d)"
 
-#: ../lib/proj/convert.c:191
+#: ../lib/proj/convert.c:232
 #, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
-msgstr ""
+msgstr "OGR이 WKT 형식의 매개변수 문자열을 얻을 수 없습니다 (OGR 오류 코드 %d)"
 
-#: ../lib/proj/convert.c:427
+#: ../lib/proj/convert.c:469
 #, c-format
 msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
 msgstr ""
 
-#: ../lib/proj/convert.c:434
+#: ../lib/proj/convert.c:476
 msgid "Updating spatial reference with embedded proj4 definition"
 msgstr ""
 
-#: ../lib/proj/convert.c:564
+#: ../lib/proj/convert.c:610
 msgid "No projection name! Projection parameters likely to be meaningless."
 msgstr ""
 
-#: ../lib/proj/convert.c:626
+#: ../lib/proj/convert.c:672
 #, c-format
 msgid "Datum <%s> not recognised by GRASS and no parameters found"
 msgstr ""
 
-#: ../lib/proj/convert.c:642
+#: ../lib/proj/convert.c:688
 #, c-format
 msgid "Datum <%s> apparently recognised by GRASS but no parameters found. You may want to look into this."
 msgstr ""
 
-#: ../lib/proj/convert.c:646
+#: ../lib/proj/convert.c:692
 #, c-format
 msgid "Invalid transformation number %d; valid range is 1 to %d. Leaving datum transform parameters unspecified."
 msgstr ""
 
-#: ../lib/proj/do_proj.c:106 ../lib/proj/do_proj.c:180
+#: ../lib/proj/do_proj.c:89
+msgid "Input coordinate system is NULL"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:104
+#, c-format
+msgid "proj_create() failed for '%s'"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:114
+#, fuzzy, c-format
+msgid "Unable to create latlong equivalent for '%s'"
+msgstr "<%s>를 위한 범위 파일을 열 수 없습니다"
+
+#: ../lib/proj/do_proj.c:164
+#, fuzzy
+msgid "No input projection"
+msgstr "알려지지 않은 투영입니다"
+
+#: ../lib/proj/do_proj.c:167 ../lib/proj/do_proj.c:336
+msgid "No transformation object"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:221 ../lib/proj/do_proj.c:446
+#, c-format
+msgid "proj_trans() failed: %s"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:247
+#, fuzzy
+msgid "No output projection"
+msgstr "알려지지 않은 투영입니다"
+
+#: ../lib/proj/do_proj.c:276 ../lib/proj/do_proj.c:499
+#: ../lib/proj/do_proj.c:626 ../lib/proj/do_proj.c:790
 #, c-format
 msgid "pj_transform() failed: %s"
+msgstr ""
+
+#: ../lib/proj/do_proj.c:584 ../lib/proj/do_proj.c:747
+#, c-format
+msgid "proj_trans() failed: %d"
 msgstr ""
 
 #: ../lib/lidar/zones.c:476 ../lib/lidar/zones.c:513
 #, c-format
 msgid "<%s> created in database."
-msgstr "데이터베이스 내에 <%s>를 생성했습니다"
+msgstr "데이터베이스 안에 <%s>를 생성했습니다"
 
 #: ../lib/lidar/zones.c:480 ../lib/lidar/zones.c:517
 #, c-format
 msgid "<%s> has not been created in database."
-msgstr "데이터베이스 내에 <%s>가 생성되지 않았습니다"
+msgstr "데이터베이스 안에 <%s>가 생성되지 않았습니다"
 
 #: ../lib/lidar/raster.c:74 ../lib/lidar/raster.c:89 ../lib/lidar/raster.c:102
 #: ../lib/lidar/raster.c:119 ../lib/lidar/raster.c:134
@@ -9584,3 +9821,30 @@ msgstr "G_oldsite_new_struct: 잘못된 차원 또는 필드 개수입니다."
 
 msgid "G_oldsite_describe() must be called immediately after G_fopen_sites_old()."
 msgstr "G_fopen_sites_old() 다음 즉시 G_oldsite_describe()를 호출해야 합니다."
+
+#~ msgid "Unable allocate PNG structure"
+#~ msgstr "PNG 구조체를 할당할 수 없습니다"
+
+#~ msgid "Unable to read find raster <%s>"
+#~ msgstr "래스터 <%s>를 찾을 수 없습니다"
+
+#~ msgid ""
+#~ "Error in GUI startup. See messages above (if any) and if necessary, please report this error to the GRASS developers.\n"
+#~ "On systems with package manager, make sure you have the right GUI package, probably named grass-gui, installed.\n"
+#~ "To run GRASS GIS in text mode use the -text flag.\n"
+#~ "Use '--help' for further options\n"
+#~ "     {cmd_name} --help\n"
+#~ "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+#~ msgstr ""
+#~ "GUI 시작 내에 오류. (만약 있다면) 위의 메시지를 확인하고 필요한 경우 이 오류를 GRASS 개발자에게 보고하세요.\n"
+#~ "패키지 관리자가 있는 시스템이라면 (아마도 grass-gui로 명명된) 올바른 GUI 패키지가 있는지 확인하세요.\n"
+#~ "GRASS GIS를 문자 모드에서 실행하기 위해서는 -text 플래그를 사용하세요.\n"
+#~ "더 많은 옵션들을 보려면 '--help'를 사용할 수 있습니다\n"
+#~ "{cmd_name} --help\n"
+#~ "다음 문서를 읽어 보세요: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+
+#~ msgid "Creating new GRASS GIS location/mapset..."
+#~ msgstr "새 GRASS GIS 로케이션/지도세트를 생성하는 중입니다..."
+
+#~ msgid "Unknown compression method <%s>, using default ZLIB"
+#~ msgstr "알려지지 않은 압축 방법 <%s>, 기본 ZLIB를 사용합니다"
