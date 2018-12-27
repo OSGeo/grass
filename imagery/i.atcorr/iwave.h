@@ -88,6 +88,7 @@ private:
 	void planetscope0c0d(int iwa);
 	void planetscope0e(int iwa);
 	void planetscope0f10(int iwa);
+	void worldview4(int iwa);
 
 public:
 	/* To compute the equivalent wavelength needed for the calculation of the

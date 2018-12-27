@@ -383,6 +383,7 @@ void GeomCond::parse()
     case 27: /* planetscope0c0d  * enter month,day,hh.ddd,long.,lat. */
     case 28: /* planetscope0e    * enter month,day,hh.ddd,long.,lat. */
     case 29: /* planetscope0f10  * enter month,day,hh.ddd,long.,lat. */
+    case 30: /* worldview4       * enter month,day,hh.ddd,long.,lat. */
    {
 	cin >> month;
 	cin >> jday;
@@ -458,7 +459,8 @@ void GeomCond::print()
 	string(" sentinel2b observation      "),
 	string(" planetscope 0c 0d observation"),
 	string(" planetscope 0e observation  "),
-	string(" planetscope 0f 10 observation")
+	string(" planetscope 0f 10 observation"),
+	string(" worldview4 observation      ")
 	};
 
     static const string head(" geometrical conditions identity  ");
