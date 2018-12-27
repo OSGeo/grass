@@ -61,6 +61,12 @@ multi-features are not supported by all formats.
 ESRI Shapefile export: note that due to the DBF table specifications
 column names may not be longer than 10 characters.
 
+<p>
+Performance: export to SQLite based formats including OGC GeoPackage may
+become faster with the environmental variable <tt>OGR_SQLITE_CACHE=1024</tt>
+being set (value depends on available RAM, see
+<a href="https://trac.osgeo.org/gdal/wiki/ConfigOptions#OGR_SQLITE_CACHE">OGR ConfigOptions</a>).
+
 <h2>EXAMPLES</h2>
 
 <h3>Export to OGC GeoPackage</h3>
