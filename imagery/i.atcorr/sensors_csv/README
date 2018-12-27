@@ -68,13 +68,20 @@ spot
     VGT2_spot5.csv
 
 worldview2
-=========
+==========
   see https://apollomapping.com/blog/new-documents-atmospheric-correction-digitalglobe-satellites-2
   files
     worldview2.csv
 
 worldview3
-=========
+==========
   see ?
   files
     worldview3.csv
+
+worldview4
+==========
+  see https://www.digitalglobe.com/resources/technical-information -> https://dg-cms-uploads-production.s3.amazonaws.com/uploads/document/file/242/relative_spectral_response_WV4.pdf
+  files
+    worldview4.csv
+
