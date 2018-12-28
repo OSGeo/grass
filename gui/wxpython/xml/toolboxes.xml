@@ -70,7 +70,7 @@
       <module-item name="r.mask">
         <label>Mask</label>
       </module-item>
-      <wxgui-item name="RasterMapCalculator"/>
+      <subtoolbox name="RasterMapCalculator"/>
       <subtoolbox name="NeighborhoodAnalysis"/>
       <subtoolbox name="OverlayRasters"/>
       <subtoolbox name="SolarRadianceAndShadows"/>
@@ -572,6 +572,18 @@
       </module-item>
       <module-item name="r.grow.distance">
         <label>Distance to features</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="RasterMapCalculator">
+    <label>Raster map calculator</label>
+    <items>
+      <module-item name="r.mapcalc.simple">
+        <label>Simplified raster map calculator</label>
+      </module-item>
+      <module-item name="r.mapcalc">
+        <label>Raster map calculator</label>
+        <handler>OnMapCalculator</handler>
       </module-item>
     </items>
   </toolbox>
