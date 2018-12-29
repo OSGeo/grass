@@ -97,6 +97,27 @@ def adjust_region(width, height):
 
     os.environ['GRASS_REGION'] = grass_region
 
+# read any input from stdin and create a temporary file
+def read_stdin(cmd):
+    opt = None
+
+    if (cmd[0] == 'd.text' and not 'text' in cmd[1] and
+        (not 'input' in cmd[1] or cmd[1]['input'] == '-')):
+        if sys.stdin.isatty():
+            sys.stderr.write("\nPlease enter text instructions.  Enter EOF (ctrl-d) on last line to quit\n")
+        opt = 'input'
+
+    if opt:
+        tmpfile = tempfile.NamedTemporaryFile(dir=path).name + '.txt'
+        fd = open(tmpfile, 'w')
+        while 1:
+            line = sys.stdin.readline()
+            if not line:
+                break
+            fd.write(line)
+        fd.close()
+        cmd[1][opt] = tmpfile
+
 if __name__ == "__main__":
     cmd = gtask.cmdstring_to_tuple(sys.argv[1])
     if not cmd[0] or cmd[0] == 'd.mon':
@@ -114,6 +135,8 @@ if __name__ == "__main__":
     else:
         mapfile = None
         adjust_region(width, height)
+
+    read_stdin(cmd)
 
     render(cmd, mapfile)
     update_cmd_file(os.path.join(path, 'cmd'), cmd, mapfile)
