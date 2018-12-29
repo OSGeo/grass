@@ -45,6 +45,9 @@ export OSGEO4W_ROOT="C:\\\OSGeo4W${OSGEO4W_POSTFIX}"
 
 export PATH=/usr/bin:/mingw${MINGW_POSTFIX}/bin/:$OSGEO4W_ROOT_MSYS/bin:$PWD/mswindows/osgeo4w/lib:$PWD/mswindows/osgeo4w
 
+# Force Python3
+alias python=python3
+
 T0=$(date +%s) 
 LT=$T0 
 CS="" 
