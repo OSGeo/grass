@@ -101,6 +101,8 @@ class ProfileFrame(BasePlotFrame):
         # Bind events
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
+        self.SetGraphStyle()
+
     def _initOpts(self):
         """Initialize plot options
         """
