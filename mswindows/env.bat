@@ -2,8 +2,8 @@ REM
 REM Environmental variables for GRASS stand-alone installer
 REM
 
-set GRASS_PYTHON=%GISBASE%\extrabin\python.exe
-set PYTHONHOME=%GISBASE%\Python27
+set GRASS_PYTHON=%GISBASE%\extrabin\python3.exe
+set PYTHONHOME=%GISBASE%\Python37
 
 set GRASS_PROJSHARE=%GISBASE%\share\proj
 
