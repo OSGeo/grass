@@ -84,7 +84,7 @@ class Log:
             self.parent.SetStatusText(text_string.strip())
 
 
-class VirtualAttributeList(wx.ListCtrl,
+class VirtualAttributeList(ListCtrl,
                            listmix.ListCtrlAutoWidthMixin,
                            listmix.ColumnSorterMixin):
     """Support virtual list class for Attribute Table Manager (browse page)
@@ -105,7 +105,7 @@ class VirtualAttributeList(wx.ListCtrl,
 
         self.sqlFilter = {}
 
-        wx.ListCtrl.__init__(self, parent=parent, id=wx.ID_ANY,
+        ListCtrl.__init__(self, parent=parent, id=wx.ID_ANY,
                              style=wx.LC_REPORT | wx.LC_HRULES | wx.LC_VRULES |
                              wx.LC_VIRTUAL | wx.LC_SORT_ASCENDING)
 
@@ -687,6 +687,9 @@ class VirtualAttributeList(wx.ListCtrl,
     def GetSortImages(self):
         """Used by the ColumnSorterMixin, see wx/lib/mixins/listctrl.py"""
         return (self.sm_dn, self.sm_up)
+
+    def OnGetItemImage(self, item):
+        return -1
 
     def IsEmpty(self):
         """Check if list if empty"""
