@@ -399,7 +399,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1857
 msgid "No color column defined. Operation canceled."
-msgstr ""
+msgstr "Není definován žádný sloupec barvy. Operace zrušena."
 
 #: ../gui/wxpython/modules/colorrules.py:1874
 msgid "Thematic mapping for vector map in 3D view"
@@ -1898,7 +1898,7 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:1117
 msgid "Outdated signatures"
-msgstr ""
+msgstr "Zastaralé podpisy"
 
 #: ../gui/wxpython/iclass/frame.py:1135
 #, python-format
@@ -2064,7 +2064,7 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/dialogs.py:777 ../gui/wxpython/iscatt/dialogs.py:281
 msgid "Enter name of new vector map:"
-msgstr ""
+msgstr "Zadat název nové vektorové mapy:"
 
 #: ../gui/wxpython/iclass/dialogs.py:790 ../gui/wxpython/lmgr/layertree.py:602
 msgid "Export attribute table"
@@ -2228,7 +2228,7 @@ msgstr ""
 
 #: ../gui/wxpython/iscatt/toolbars.py:57
 msgid "Select area with polygon"
-msgstr ""
+msgstr "Vybrat plochu polygonem"
 
 #: ../gui/wxpython/iscatt/toolbars.py:60
 msgid "Pan mode for scatter plots"
@@ -2338,7 +2338,7 @@ msgstr ""
 
 #: ../gui/wxpython/iscatt/frame.py:607
 msgid "Move to bottom"
-msgstr ""
+msgstr "Přesunout dolů"
 
 #: ../gui/wxpython/iscatt/frame.py:615
 msgid "Move category up"
@@ -2359,7 +2359,7 @@ msgstr ""
 
 #: ../gui/wxpython/iscatt/frame.py:726
 msgid "Empty name was inserted."
-msgstr ""
+msgstr "Byl vložen prázdný název."
 
 #: ../gui/wxpython/iscatt/dialogs.py:40
 msgid "Add scatter plots"
@@ -2367,7 +2367,7 @@ msgstr ""
 
 #: ../gui/wxpython/iscatt/dialogs.py:59
 msgid "x axis:"
-msgstr ""
+msgstr "osa x:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:66
 msgid "y axis:"
@@ -3762,7 +3762,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:948
 msgid "circle"
-msgstr ""
+msgstr "kruh"
 
 #: ../gui/wxpython/core/settings.py:981
 #, python-format
@@ -9028,7 +9028,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:813
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1739
 msgid "Emissivity"
-msgstr ""
+msgstr "Emisivita"
 
 #: ../gui/wxpython/menustrings.py:830 ../gui/wxpython/menustrings.py:1772
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:814
@@ -9850,7 +9850,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:959
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1885
 msgid "Import"
-msgstr ""
+msgstr "Import"
 
 #: ../gui/wxpython/menustrings.py:976 ../gui/wxpython/menustrings.py:1918
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:960
@@ -9924,7 +9924,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:971
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1897
 msgid "Convert raster dataset to 3D raster"
-msgstr ""
+msgstr "Převést rastrový dataset do 3D rastru"
 
 #: ../gui/wxpython/menustrings.py:988 ../gui/wxpython/menustrings.py:1930
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:972
@@ -13211,7 +13211,7 @@ msgstr "Vybrat prvky"
 
 #: ../gui/wxpython/gui_core/vselect.py:136
 msgid "Create a new map"
-msgstr ""
+msgstr "Vytvořit novou mapu"
 
 #: ../gui/wxpython/gui_core/vselect.py:265
 #, python-format
@@ -14528,7 +14528,7 @@ msgstr ""
 #: ../gui/wxpython/psmap/frame.py:636 ../gui/wxpython/psmap/frame.py:661
 #: ../gui/wxpython/psmap/dialogs.py:1635
 msgid "Please, create map frame first."
-msgstr ""
+msgstr "Nejprve vytvořte rámeček mapy."
 
 #: ../gui/wxpython/psmap/frame.py:678
 msgid "Scalebar is not appropriate for this projection"
@@ -14870,7 +14870,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:1420
 msgid "No map selected!"
-msgstr ""
+msgstr "Nebyla vybrána žádná mapa!"
 
 #: ../gui/wxpython/psmap/dialogs.py:1444
 msgid "No region selected!"
@@ -14978,7 +14978,7 @@ msgstr "Databázové spojení není definováno v DB souboru."
 
 #: ../gui/wxpython/psmap/dialogs.py:2228
 msgid "Select layer:"
-msgstr ""
+msgstr "Vybrat vrstvu:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2257
 msgid "list of categories (e.g. 1,3,5-7)"
@@ -15744,7 +15744,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:100
 msgid "Simple mode"
-msgstr ""
+msgstr "Jednoduchý režim"
 
 #: ../gui/wxpython/animation/dialogs.py:105
 msgid "Frame duration:"
@@ -15805,7 +15805,7 @@ msgstr "Rozšířené"
 
 #: ../gui/wxpython/animation/dialogs.py:375
 msgid "top left"
-msgstr ""
+msgstr "vlevo nahoře"
 
 #: ../gui/wxpython/animation/dialogs.py:376
 msgid "top right"
@@ -15904,7 +15904,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:765
 msgid "List of animations"
-msgstr ""
+msgstr "Seznam animací"
 
 #: ../gui/wxpython/animation/dialogs.py:778
 msgid "Edit"
@@ -15942,7 +15942,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1078
 msgid "Image file:"
-msgstr ""
+msgstr "Soubor obrázku:"
 
 #: ../gui/wxpython/animation/dialogs.py:1079
 msgid "Choose image file"
@@ -15978,7 +15978,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1189
 msgid "animation_"
-msgstr ""
+msgstr "animation_"
 
 #: ../gui/wxpython/animation/dialogs.py:1197
 msgid "Choose directory for export"
@@ -15996,7 +15996,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1256
 msgid "SWF file:"
-msgstr ""
+msgstr "SWF soubor:"
 
 #: ../gui/wxpython/animation/dialogs.py:1279
 msgid ""
@@ -16124,7 +16124,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:2008
 msgid "Learn more about formatting options"
-msgstr ""
+msgstr "Další informace o možnostech formátování"
 
 #: ../gui/wxpython/animation/dialogs.py:2022
 msgid "Display instances with no data"
@@ -16264,7 +16264,7 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:216
 msgid "STRDS"
-msgstr ""
+msgstr "STRDS"
 
 #: ../gui/wxpython/tplot/frame.py:224
 msgid ""
@@ -16575,7 +16575,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:159
 msgid "Tools Toolbar"
-msgstr ""
+msgstr "Panel nástrojů"
 
 #: ../gui/wxpython/lmgr/frame.py:162
 msgid "Vector Toolbar"
@@ -17125,7 +17125,7 @@ msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:23
 msgid "Modify the configuration file"
-msgstr ""
+msgstr "Upravit konfigurační soubor"
 
 #: ../gui/wxpython/rlisetup/frame.py:37
 #, python-brace-format
@@ -17301,7 +17301,7 @@ msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:549
 msgid "Keyboard setting"
-msgstr ""
+msgstr "Nastavení klávesnice"
 
 #: ../gui/wxpython/rlisetup/wizard.py:550
 msgid "Draw the sampling frame"
@@ -17646,7 +17646,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapwin/buffered.py:262
 msgid "Hide toolbars"
-msgstr ""
+msgstr "Skrýt panely nástrojů"
 
 #: ../gui/wxpython/mapwin/buffered.py:264
 msgid "Show toolbars"
@@ -18232,7 +18232,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:54
 msgid "Search:"
-msgstr ""
+msgstr "Hledat:"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:56
 msgid "Type to search database by map type or name. Use prefix 'r:', 'v:' and 'r3:'to show only raster, vector or 3D raster data, respectively. Use Python regular expressions to refine your search."
@@ -18347,7 +18347,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:793
 msgid "Delete map"
-msgstr ""
+msgstr "Smazat mapu"
 
 #: ../gui/wxpython/datacatalog/tree.py:794
 #, python-brace-format
@@ -19918,7 +19918,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:459
 msgid "Switching back to 2D view mode..."
-msgstr ""
+msgstr "Přepnutí zpět do 2D režimu zobrazení ..."
 
 #: ../gui/wxpython/mapdisp/frame.py:717 ../gui/wxpython/mapdisp/frame.py:725
 #: ../gui/wxpython/mapdisp/frame.py:740

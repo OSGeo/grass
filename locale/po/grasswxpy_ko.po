@@ -249,7 +249,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:723
 msgid "Invalid color table format"
-msgstr "무효한 색상 테이블 양식입니다"
+msgstr "무효한 색상 테이블 서식"
 
 #: ../gui/wxpython/modules/colorrules.py:804
 #, python-format
@@ -360,7 +360,7 @@ msgstr "데이터베이스 연결이 정의되지 않았습니다"
 #: ../gui/wxpython/modules/colorrules.py:1347
 #, python-format
 msgid "Selected map <%(map)s> is not in current mapset <%(mapset)s>. Attribute table cannot be edited."
-msgstr ""
+msgstr "선택된 지도 <%(map)s>가 현재 지도세트 <%(mapset)s> 내에 존재하지 않습니다. 속성 테이블을 편집할 수 없습니다."
 
 #: ../gui/wxpython/modules/colorrules.py:1518
 #, python-format
@@ -404,11 +404,11 @@ msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:56
 msgid "GRASS GIS Raster Map Calculator"
-msgstr ""
+msgstr "GRASS GIS 래스터 지도 계산기"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:59
 msgid "GRASS GIS 3D Raster Map Calculator"
-msgstr ""
+msgstr "GRASS GIS 3차원 래스터 지도 계산기"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:75
 msgid "mapcalc statement"
@@ -695,7 +695,7 @@ msgstr ""
 #: ../gui/wxpython/modules/import_export.py:400
 #: ../gui/wxpython/modules/import_export.py:541
 msgid "&Import"
-msgstr ""
+msgstr "가져오기(&I)"
 
 #: ../gui/wxpython/modules/import_export.py:124
 #: ../gui/wxpython/modules/import_export.py:401
@@ -717,7 +717,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1160
 #: ../gui/wxpython/lmgr/layertree.py:60
 msgid "Link external raster data"
-msgstr ""
+msgstr "외부 래스터 자료 연결"
 
 #: ../gui/wxpython/modules/import_export.py:378
 #: ../gui/wxpython/menustrings.py:36 ../gui/wxpython/menustrings.py:1054
@@ -725,7 +725,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1038
 #: ../gui/wxpython/lmgr/layertree.py:58
 msgid "Import raster data"
-msgstr ""
+msgstr "래스터 자료 가져오기"
 
 #: ../gui/wxpython/modules/import_export.py:386
 #: ../gui/wxpython/modules/import_export.py:527
@@ -763,7 +763,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1162
 #: ../gui/wxpython/lmgr/layertree.py:68
 msgid "Link external vector data"
-msgstr ""
+msgstr "외부 벡터 자료 연결"
 
 #: ../gui/wxpython/modules/import_export.py:519
 #: ../gui/wxpython/menustrings.py:67 ../gui/wxpython/menustrings.py:1085
@@ -771,7 +771,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1068
 #: ../gui/wxpython/lmgr/layertree.py:66
 msgid "Import vector data"
-msgstr ""
+msgstr "벡터 자료 가져오기"
 
 #: ../gui/wxpython/modules/import_export.py:662
 msgid "Define output format for vector data"
@@ -968,7 +968,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/histogram.py:293
 msgid "GRASS GIS Histogramming Tool (d.histogram)"
-msgstr ""
+msgstr "GRASS GIS 주상도 도구 (d.histogram)"
 
 #: ../gui/wxpython/modules/histogram.py:400
 #: ../gui/wxpython/iclass/g.gui.iclass.py:91 ../gui/wxpython/nviz/wxnviz.py:347
@@ -1017,7 +1017,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:34 ../gui/wxpython/modules/vclean.py:120
 msgid "Set up vector cleaning tools"
-msgstr ""
+msgstr "벡터 정리 도구를 설정합니다"
 
 #: ../gui/wxpython/modules/vclean.py:75
 msgid "break lines/boundaries"
@@ -1049,7 +1049,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:82
 msgid "remove duplicate area centroids"
-msgstr "중복된 면 중앙점을 제거합니다"
+msgstr "중복된 면 도심을 제거합니다"
 
 #: ../gui/wxpython/modules/vclean.py:83
 msgid "break polygons"
@@ -1073,7 +1073,7 @@ msgstr "교점에 위치한 작은 각을 제거합니다"
 
 #: ../gui/wxpython/modules/vclean.py:122
 msgid "Choose cleaning tools and set thresholds"
-msgstr ""
+msgstr "정리 도구를 선택하고 임계값을 설정합니다"
 
 #: ../gui/wxpython/modules/vclean.py:126
 msgid "Select input vector map:"
@@ -1119,42 +1119,42 @@ msgstr ""
 #: ../gui/wxpython/modules/vclean.py:401
 #, python-format
 msgid "%s. cleaning tool removed, will be ignored"
-msgstr "%s. 청소 도구가 제거됐습니다, 무시합니다"
+msgstr "%s. 정리 도구가 제거됐습니다, 무시합니다"
 
 #: ../gui/wxpython/modules/vclean.py:404
 msgid "Please select a cleaning tool to remove"
-msgstr "제거할 청소 도구를 선택하세요"
+msgstr "제거할 정리 도구를 선택하세요"
 
 #: ../gui/wxpython/modules/vclean.py:428
 #, python-format
 msgid "%s. cleaning tool moved up"
-msgstr ""
+msgstr "%s. 정리 도구를 위로 이동했습니다"
 
 #: ../gui/wxpython/modules/vclean.py:430
 msgid "1. cleaning tool can not be moved up "
-msgstr ""
+msgstr "1. 정리 도구를 위로 이동할 수 없습니다"
 
 #: ../gui/wxpython/modules/vclean.py:432
 msgid "Please select a cleaning tool to move up"
-msgstr ""
+msgstr "위로 이동할 정리 도구를 선택하세요"
 
 #: ../gui/wxpython/modules/vclean.py:460
 #, python-format
 msgid "%s. cleaning tool moved down"
-msgstr ""
+msgstr "%s. 정리 도구를 아래로 이동했습니다"
 
 #: ../gui/wxpython/modules/vclean.py:462
 msgid "Last cleaning tool can not be moved down "
-msgstr ""
+msgstr "마지막 정리 도구는 아래로 이동할 수 없습니다"
 
 #: ../gui/wxpython/modules/vclean.py:464
 msgid "Please select a cleaning tool to move down"
-msgstr ""
+msgstr "아래로 이동할 정리 도구를 선택하세요"
 
 #: ../gui/wxpython/modules/vclean.py:478
 #, python-format
 msgid "cleaning tool: '%s'"
-msgstr ""
+msgstr "정리 도구: '%s'"
 
 #: ../gui/wxpython/modules/vclean.py:488
 #, python-format
@@ -1193,11 +1193,11 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:528
 msgid "Executing selected cleaning operations..."
-msgstr ""
+msgstr "선택된 정리 조작을 실행하는 중입니다..."
 
 #: ../gui/wxpython/modules/vclean.py:585
 msgid "Vector cleaning command copied to clipboard"
-msgstr ""
+msgstr "벡터 정리 명령을 클립보드로 복사했습니다"
 
 #: ../gui/wxpython/wxplot/profile.py:49
 msgid "GRASS Profile Analysis Tool"
@@ -1260,6 +1260,8 @@ msgid ""
 "Unable to open file <%s> for writing.\n"
 "Reason: %s"
 msgstr ""
+"파일 <%s>를 쓰기 위해 열 수 없습니다.\n"
+"이유: %s"
 
 #: ../gui/wxpython/wxplot/profile.py:402
 #, python-format
@@ -1342,7 +1344,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:743
 #: ../gui/wxpython/animation/controller.py:295
 msgid "Invalid input"
-msgstr "무효한 입력입니다"
+msgstr "무효한 입력"
 
 #: ../gui/wxpython/wxplot/dialogs.py:664 ../gui/wxpython/wxplot/base.py:517
 #: ../gui/wxpython/wxplot/base.py:584
@@ -1643,7 +1645,7 @@ msgstr ""
 
 #: ../gui/wxpython/wxplot/histogram.py:43
 msgid "GRASS GIS Histogramming Tool"
-msgstr ""
+msgstr "GRASS GIS 주상도 도구"
 
 #: ../gui/wxpython/wxplot/histogram.py:51
 msgid "Histogram of"
@@ -1780,7 +1782,7 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:79
 msgid "GRASS GIS Supervised Classification Tool"
-msgstr ""
+msgstr "GRASS GIS 감독 분류 도구"
 
 #: ../gui/wxpython/iclass/frame.py:312
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:260
@@ -1852,7 +1854,7 @@ msgstr ""
 #: ../gui/wxpython/iclass/frame.py:622
 #, python-format
 msgid "Unable to open vector map <%s>"
-msgstr ""
+msgstr "벡터 지도 <%s>를 열 수 없습니다"
 
 #: ../gui/wxpython/iclass/frame.py:633
 #, python-format
@@ -1861,7 +1863,7 @@ msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:645
 msgid "Unable to open temporary vector map"
-msgstr ""
+msgstr "임시 벡터 지도를 열 수 없습니다"
 
 #: ../gui/wxpython/iclass/frame.py:741
 msgid "No training areas to export."
@@ -2141,6 +2143,10 @@ msgid ""
 "\n"
 "You can reduce number of cells in current region using <g.region> command."
 msgstr ""
+"대화식 산점도 도구를 사용할 수 없습니다.\n"
+"현재 영역 내 셀의 개수 (행*열) <%d>이 최대 한도 <%d>보다 큽니다.\n"
+"\n"
+"<g.region> 명령을 이용해서 현재 영역 내 셀의 개수를 줄일 수 있습니다."
 
 #: ../gui/wxpython/iscatt/controllers.py:231
 #, python-format
@@ -2163,7 +2169,7 @@ msgstr ""
 
 #: ../gui/wxpython/iscatt/controllers.py:304
 msgid "Scatter plot cannot be added.\n"
-msgstr ""
+msgstr "산점도를 추가할 수 없습니다.\n"
 
 #: ../gui/wxpython/iscatt/controllers.py:310
 #, python-format
@@ -2171,6 +2177,8 @@ msgid ""
 "Scatter plot cannot be added.\n"
 "Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <%d>.\n"
 msgstr ""
+"산점도를 추가할 수 없습니다.\n"
+"복수의 밴드 범위 <%s:%d * %s:%d = %d>가 최대 한도 <%d>보다 큽니다.\n"
 
 #: ../gui/wxpython/iscatt/controllers.py:320
 #, python-format
@@ -2303,7 +2311,7 @@ msgstr "선택된 계층을 제거합니다"
 
 #: ../gui/wxpython/iscatt/frame.py:166
 msgid "GRASS GIS Interactive Scatter Plot Tool"
-msgstr ""
+msgstr "GRASS GIS 대화식 산점도 도구"
 
 #: ../gui/wxpython/iscatt/frame.py:398
 msgid "scatter plot"
@@ -2447,11 +2455,11 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/dialogs.py:109
 msgid "&Set region"
-msgstr ""
+msgstr "영역 설정(&S)"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:141
 msgid "Invalid location selected."
-msgstr "무효한 로케이션이 선택되었습니다."
+msgstr "무효한 로케이션이 선택됐습니다."
 
 #: ../gui/wxpython/location_wizard/dialogs.py:142
 #: ../gui/wxpython/location_wizard/dialogs.py:161
@@ -2478,7 +2486,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/dialogs.py:160
 msgid "Invalid region"
-msgstr "무효한 영역입니다"
+msgstr "무효한 영역"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:191
 msgid "Click here to show 3D settings"
@@ -2559,7 +2567,7 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/dialogs.py:489
 #, python-format
 msgid "Invalid value: %s"
-msgstr "무효한 값입니다: %s"
+msgstr "무효한 값: %s"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:586
 msgid "Select datum transformation"
@@ -2612,7 +2620,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:265
 msgid "Invalid location name"
-msgstr "무효한 로케이션 이름입니다"
+msgstr "무효한 로케이션 이름"
 
 #: ../gui/wxpython/location_wizard/wizard.py:280
 msgid "Choose GRASS data directory:"
@@ -2621,7 +2629,7 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/wizard.py:294
 #: ../gui/wxpython/location_wizard/wizard.py:2560
 msgid "Location already exists in GRASS Database."
-msgstr "GRASS 데이터베이스 내에 로케이션이 이미 존재합니다."
+msgstr "GRASS 데이터베이스 안에 로케이션이 이미 존재합니다."
 
 #: ../gui/wxpython/location_wizard/wizard.py:298
 msgid "Unable to create location"
@@ -3505,7 +3513,7 @@ msgstr ""
 #: ../gui/wxpython/core/render.py:814
 #, python-format
 msgid "Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n"
-msgstr ""
+msgstr "오류: '%(file)s'을 열 수 없습니다. 이유: %(ret)s. wxGUI를 종료했습니다.\n"
 
 #: ../gui/wxpython/core/render.py:824
 #, python-format
@@ -3517,7 +3525,7 @@ msgstr ""
 #: ../gui/wxpython/core/render.py:928
 #, python-format
 msgid "Invalid map size %d,%d\n"
-msgstr "무효한 지도 크기입니다 %d,%d\n"
+msgstr "무효한 지도 크기 %d,%d\n"
 
 #: ../gui/wxpython/core/render.py:1009
 #, python-format
@@ -3558,7 +3566,7 @@ msgstr ""
 #: ../gui/wxpython/core/toolboxes.py:517
 #, python-format
 msgid "List of addons cannot be obtained because g.extension failed. Details: %s"
-msgstr ""
+msgstr "g.extension이 실패했기 때문에 애드온의 목록을 얻을 수 없습니다. 세부 사항: %s"
 
 #: ../gui/wxpython/core/toolboxes.py:574
 msgid "Addons"
@@ -3567,7 +3575,7 @@ msgstr ""
 #: ../gui/wxpython/core/workspace.py:1614
 #, python-format
 msgid "Unable to open file <%s> for reading."
-msgstr ""
+msgstr "파일 <%s>를 읽기 위해 열 수 없습니다."
 
 #: ../gui/wxpython/core/workspace.py:1631
 #, python-format
@@ -3588,6 +3596,8 @@ msgid ""
 "Unable to load GDAL Python bindings.\n"
 "WMS layers can not be displayed without the bindings.\n"
 msgstr ""
+"GDAL 파이썬 바인딩을 적재할 수 없습니다.\n"
+"바인딩 없이 WMS 레이어를 보여 줄 수 없습니다.\n"
 
 #: ../gui/wxpython/core/gcmd.py:126
 msgid "Reason"
@@ -3617,7 +3627,7 @@ msgstr ""
 #: ../gui/wxpython/core/gcmd.py:747 ../gui/wxpython/gui_core/forms.py:2740
 #, python-format
 msgid "Error in %s"
-msgstr ""
+msgstr "%s 내에 오류"
 
 #: ../gui/wxpython/core/debug.py:48
 #, python-brace-format
@@ -3865,7 +3875,7 @@ msgstr ""
 #: ../gui/wxpython/core/utils.py:882
 #, python-format
 msgid "Unable to open file '%s'\n"
-msgstr ""
+msgstr "파일 '%s'를 열 수 없습니다\n"
 
 #: ../gui/wxpython/core/utils.py:892
 #, python-format
@@ -3906,17 +3916,17 @@ msgstr "3. GRASS 지도세트를 선택하세요"
 #: ../gui/wxpython/gis_set.py:146
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:146
 msgid "GRASS GIS database directory contains Locations."
-msgstr ""
+msgstr "GRASS GIS 데이터베이스 디렉토리는 로케이션을 포함합니다."
 
 #: ../gui/wxpython/gis_set.py:150
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:150
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
-msgstr "한 로케이션 내의 모든 자료는 같은 투영을 공유합니다. 로케이션 하나가 프로젝트 하나가 될 수 있습니다. 로케이션 내에는 지도세트가 생성됩니다."
+msgstr "한 로케이션 내의 모든 자료는 같은 투영을 공유합니다. 로케이션 하나가 프로젝트 하나가 될 수 있습니다. 로케이션은 지도세트를 포함합니다."
 
 #: ../gui/wxpython/gis_set.py:158
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:158
 msgid "Mapset contains GIS data related to one project, task within one project, subregion or user."
-msgstr "지도세트 내에는 프로젝트, 작업, 부영역 또는 사용자와 관련된 GIS 자료가 생성됩니다."
+msgstr "지도세트는 프로젝트, 작업, 부영역 또는 사용자와 관련된 GIS 자료를 포함합니다."
 
 #: ../gui/wxpython/gis_set.py:173
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:173
@@ -3926,13 +3936,13 @@ msgstr "&GRASS 세션 시작"
 #: ../gui/wxpython/gis_set.py:179
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:179
 msgid "&Browse"
-msgstr ""
+msgstr "찾아보기(&B)"
 
 #. GTC New mapset
 #: ../gui/wxpython/gis_set.py:182
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:182
 msgid "&New"
-msgstr ""
+msgstr "새로 만들기(&N)"
 
 #: ../gui/wxpython/gis_set.py:183
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:183
@@ -3943,7 +3953,7 @@ msgstr ""
 #: ../gui/wxpython/gis_set.py:186
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:186
 msgid "N&ew"
-msgstr ""
+msgstr "새로 만들기(&e)"
 
 #: ../gui/wxpython/gis_set.py:189
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:189
@@ -3954,7 +3964,7 @@ msgstr ""
 #: ../gui/wxpython/gis_set.py:194
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:194
 msgid "Ren&ame"
-msgstr ""
+msgstr "이름 변경하기(&a)"
 
 #: ../gui/wxpython/gis_set.py:195 ../gui/wxpython/gis_set.py:727
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:195
@@ -3966,7 +3976,7 @@ msgstr ""
 #: ../gui/wxpython/gis_set.py:198
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:198
 msgid "De&lete"
-msgstr ""
+msgstr "삭제(&l)"
 
 #: ../gui/wxpython/gis_set.py:199 ../gui/wxpython/gis_set.py:810
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:199
@@ -3976,7 +3986,7 @@ msgstr "선택된 로케이션을 삭제합니다"
 
 #: ../gui/wxpython/gis_set.py:201 ../gui/wxpython/startup/locdownload.py:303
 msgid "Do&wnload"
-msgstr ""
+msgstr "내려받기(&w)"
 
 #: ../gui/wxpython/gis_set.py:202
 msgid "Download sample location"
@@ -3987,7 +3997,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:202
 #: ../gui/wxpython/datacatalog/tree.py:990 ../gui/wxpython/dbmgr/base.py:2409
 msgid "&Rename"
-msgstr ""
+msgstr "이름 바꾸기(&R)"
 
 #: ../gui/wxpython/gis_set.py:207 ../gui/wxpython/gis_set.py:684
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:203
@@ -4000,7 +4010,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:206
 #: ../gui/wxpython/datacatalog/tree.py:985
 msgid "&Delete"
-msgstr "삭제"
+msgstr "삭제(&D)"
 
 #: ../gui/wxpython/gis_set.py:211 ../gui/wxpython/gis_set.py:782
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:207
@@ -4012,7 +4022,7 @@ msgstr "선택된 지도세트를 삭제합니다"
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:252
 #, python-format
 msgid "GRASS GIS %s startup%s"
-msgstr ""
+msgstr "GRASS GIS %s 시작 %s"
 
 #: ../gui/wxpython/gis_set.py:262
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:257
@@ -4040,7 +4050,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:474
 #, python-format
 msgid "Invalid line in GISRC file (%s):%s\n"
-msgstr "GISRC 파일 (%s) 내에 무효한 줄이 있습니다: %s\n"
+msgstr "GISRC 파일 (%s) 내에 무효한 줄: %s\n"
 
 #: ../gui/wxpython/gis_set.py:511
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:505
@@ -4108,6 +4118,9 @@ msgid ""
 "\n"
 "This mapset cannot be renamed."
 msgstr ""
+"유효한 GRASS 로케이션을 위해서는 지도세트 <PERMANENT>가 필요합니다.\n"
+"\n"
+"이 지도세트의 이름은 바꿀 수 없습니다."
 
 #: ../gui/wxpython/gis_set.py:682 ../gui/wxpython/gis_set.py:725
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:625
@@ -4174,7 +4187,7 @@ msgid ""
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
 msgstr ""
-"로케이션 <%{location}s>로부터 지도세트 <%{mapset}s>의 삭제를 진행할까요?\n"
+"로케이션 <%(location)s>로부터 지도세트 <%(mapset)s>의 삭제를 진행할까요?\n"
 "\n"
 "이 지도세트에 포함된 모든 지도들이 영구히 삭제될 것입니다!"
 
@@ -4309,7 +4322,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1095
 #: ../gui/wxpython/gui_core/widgets.py:859
 msgid "Invalid name"
-msgstr "무효한 이름입니다"
+msgstr "무효한 이름"
 
 #: ../gui/wxpython/menustrings.py:3 ../gui/wxpython/menustrings.py:2004
 #: ../gui/wxpython/menustrings.py:2054
@@ -4317,7 +4330,7 @@ msgstr "무효한 이름입니다"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1972
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2022
 msgid "&File"
-msgstr ""
+msgstr "파일(&F)"
 
 #: ../gui/wxpython/menustrings.py:4
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:5
@@ -4453,7 +4466,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:30
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:31
 msgid "Render all map displays"
-msgstr "모든 지도 디스플레이를 표시합니다"
+msgstr "모든 지도 디스플레이 표시"
 
 #: ../gui/wxpython/menustrings.py:31
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:32
@@ -4474,7 +4487,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:37 ../gui/wxpython/menustrings.py:1055
 msgid "Simplified raster import with reprojection"
-msgstr ""
+msgstr "재투영과 동시에 단순화된 래스터 가져오기"
 
 #: ../gui/wxpython/menustrings.py:38 ../gui/wxpython/menustrings.py:40
 #: ../gui/wxpython/menustrings.py:1056 ../gui/wxpython/menustrings.py:1058
@@ -4485,13 +4498,13 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:39 ../gui/wxpython/menustrings.py:1057
 msgid "Import of common raster formats"
-msgstr ""
+msgstr "일반적인 래스터 서식 가져오기"
 
 #: ../gui/wxpython/menustrings.py:41 ../gui/wxpython/menustrings.py:1059
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:42
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1043
 msgid "ASCII x,y,z point import and gridding"
-msgstr ""
+msgstr "ASCII x,y,z 점 가져오기 및 격자화"
 
 #: ../gui/wxpython/menustrings.py:42 ../gui/wxpython/menustrings.py:1060
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:43
@@ -4503,7 +4516,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:44
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1045
 msgid "ASCII grid import"
-msgstr ""
+msgstr "ASCII 격자 가져오기"
 
 #: ../gui/wxpython/menustrings.py:44 ../gui/wxpython/menustrings.py:1062
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:45
@@ -4515,7 +4528,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:46
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1047
 msgid "ASCII polygons, lines, and point import"
-msgstr ""
+msgstr "ASCII 다각형, 선, 점 가져오기"
 
 #: ../gui/wxpython/menustrings.py:46 ../gui/wxpython/menustrings.py:1064
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:47
@@ -4527,7 +4540,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:48
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1049
 msgid "Raw binary array import"
-msgstr ""
+msgstr "순수 이진 배열 가져오기"
 
 #: ../gui/wxpython/menustrings.py:48 ../gui/wxpython/menustrings.py:1066
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:49
@@ -4539,7 +4552,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:50
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1051
 msgid "GRIDATB.FOR import"
-msgstr ""
+msgstr "GRIDATB.FOR 가져오기"
 
 #: ../gui/wxpython/menustrings.py:50 ../gui/wxpython/menustrings.py:1068
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:51
@@ -4551,7 +4564,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:52
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1053
 msgid "Matlab 2D array import"
-msgstr ""
+msgstr "매트랩 2차원 배열 가져오기"
 
 #: ../gui/wxpython/menustrings.py:52 ../gui/wxpython/menustrings.py:1070
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:53
@@ -4563,7 +4576,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:54
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1055
 msgid "PNG import"
-msgstr ""
+msgstr "PNG 가져오기"
 
 #: ../gui/wxpython/menustrings.py:54 ../gui/wxpython/menustrings.py:1072
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:55
@@ -4575,7 +4588,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:56
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1057
 msgid "SPOT NDVI import"
-msgstr ""
+msgstr "SPOT NDVI 가져오기"
 
 #: ../gui/wxpython/menustrings.py:56 ../gui/wxpython/menustrings.py:1074
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:57
@@ -4587,7 +4600,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:58
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1059
 msgid "SRTM HGT import"
-msgstr ""
+msgstr "SRTM HGT 가져오기"
 
 #: ../gui/wxpython/menustrings.py:58 ../gui/wxpython/menustrings.py:1076
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:59
@@ -4599,7 +4612,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:60
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1061
 msgid "Terra ASTER HDF import"
-msgstr ""
+msgstr "Terra ASTER HDF 가져오기"
 
 #: ../gui/wxpython/menustrings.py:60 ../gui/wxpython/menustrings.py:1078
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:61
@@ -4614,7 +4627,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1063
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1087
 msgid "LAS LiDAR points import"
-msgstr ""
+msgstr "LAS LiDAR 점 가져오기"
 
 #: ../gui/wxpython/menustrings.py:62 ../gui/wxpython/menustrings.py:1080
 msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
@@ -4624,7 +4637,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:63
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1064
 msgid "Unpack raster map"
-msgstr ""
+msgstr "래스터 지도 풀기"
 
 #: ../gui/wxpython/menustrings.py:64 ../gui/wxpython/menustrings.py:1082
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:64
@@ -4639,7 +4652,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1066
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1212
 msgid "Reproject raster map from different GRASS location"
-msgstr ""
+msgstr "다른 GRASS 로케이션으로부터 래스터 지도 재투영"
 
 #: ../gui/wxpython/menustrings.py:66 ../gui/wxpython/menustrings.py:292
 #: ../gui/wxpython/menustrings.py:1084 ../gui/wxpython/menustrings.py:1234
@@ -4652,7 +4665,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:68 ../gui/wxpython/menustrings.py:1086
 msgid "Simplified vector import with reprojection"
-msgstr ""
+msgstr "재투영과 동시에 단순화된 벡터 가져오기"
 
 #: ../gui/wxpython/menustrings.py:69 ../gui/wxpython/menustrings.py:71
 #: ../gui/wxpython/menustrings.py:1087 ../gui/wxpython/menustrings.py:1089
@@ -4663,13 +4676,13 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:70 ../gui/wxpython/menustrings.py:1088
 msgid "Import of common vector formats"
-msgstr ""
+msgstr "일반적인 벡터 서식 가져오기"
 
 #: ../gui/wxpython/menustrings.py:72 ../gui/wxpython/menustrings.py:1090
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:72
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1073
 msgid "ASCII points or GRASS ASCII format"
-msgstr ""
+msgstr "ASCII 점 또는 GRASS ASCII 서식"
 
 #: ../gui/wxpython/menustrings.py:73 ../gui/wxpython/menustrings.py:1091
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:73
@@ -4681,7 +4694,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:74
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1075
 msgid "ASCII points as a vector lines"
-msgstr ""
+msgstr "ASCII 점을 벡터 선으로 가져오기"
 
 #: ../gui/wxpython/menustrings.py:75 ../gui/wxpython/menustrings.py:1093
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:75
@@ -4693,7 +4706,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:76
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1077
 msgid "DXF import"
-msgstr ""
+msgstr "DXF 가져오기"
 
 #: ../gui/wxpython/menustrings.py:77 ../gui/wxpython/menustrings.py:1095
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:77
@@ -4717,7 +4730,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:80
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1081
 msgid "ESRI e00 import"
-msgstr ""
+msgstr "ESRI e00 가져오기"
 
 #: ../gui/wxpython/menustrings.py:81 ../gui/wxpython/menustrings.py:1099
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:81
@@ -4729,7 +4742,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:82
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1083
 msgid "Geonames import"
-msgstr ""
+msgstr "Geonames 가져오기"
 
 #: ../gui/wxpython/menustrings.py:83 ../gui/wxpython/menustrings.py:1101
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:83
@@ -4741,13 +4754,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:84
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1085
 msgid "Matlab array or Mapgen format import"
-msgstr ""
+msgstr "매트랩 배열 또는 맵젠 서식 가져오기"
 
 #: ../gui/wxpython/menustrings.py:85 ../gui/wxpython/menustrings.py:1103
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:85
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1086
 msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
-msgstr ""
+msgstr "맵젠 또는 매트랩-ASCII 벡터 지도를 GRASS로 가져옵니다."
 
 #: ../gui/wxpython/menustrings.py:87 ../gui/wxpython/menustrings.py:1105
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
@@ -4757,7 +4770,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:87
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1088
 msgid "Unpack vector map"
-msgstr ""
+msgstr "벡터 지도 풀기"
 
 #: ../gui/wxpython/menustrings.py:89 ../gui/wxpython/menustrings.py:1107
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:88
@@ -4772,7 +4785,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1090
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1490
 msgid "Reproject vector map from different GRASS location"
-msgstr ""
+msgstr "다른 GRASS 로케이션으로부터 벡터 지도 재투영"
 
 #: ../gui/wxpython/menustrings.py:91 ../gui/wxpython/menustrings.py:572
 #: ../gui/wxpython/menustrings.py:1109 ../gui/wxpython/menustrings.py:1514
@@ -4787,13 +4800,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:91
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1092
 msgid "Import 3D raster data"
-msgstr ""
+msgstr "3차원 래스터 자료 가져오기"
 
 #: ../gui/wxpython/menustrings.py:93 ../gui/wxpython/menustrings.py:1111
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:92
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1093
 msgid "ASCII 3D import"
-msgstr ""
+msgstr "ASCII 3차원 가져오기"
 
 #: ../gui/wxpython/menustrings.py:94 ../gui/wxpython/menustrings.py:1112
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:93
@@ -4805,7 +4818,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:94
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1095
 msgid "Raw binary array 3D import"
-msgstr ""
+msgstr "순수 이진 배열 3차원 가져오기"
 
 #: ../gui/wxpython/menustrings.py:96 ../gui/wxpython/menustrings.py:1114
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:95
@@ -4817,7 +4830,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:96
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1097
 msgid "Vis5D import"
-msgstr ""
+msgstr "Vis5D 가져오기"
 
 #: ../gui/wxpython/menustrings.py:98 ../gui/wxpython/menustrings.py:1116
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:97
@@ -4829,7 +4842,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:98
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1099
 msgid "Import database table"
-msgstr "데이터베이스 테이블을 가져오기"
+msgstr "데이터베이스 테이블 가져오기"
 
 #: ../gui/wxpython/menustrings.py:100 ../gui/wxpython/menustrings.py:1118
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:68
@@ -4837,7 +4850,7 @@ msgstr "데이터베이스 테이블을 가져오기"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1069
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1100
 msgid "Common import formats"
-msgstr ""
+msgstr "일반적인 가져오기 서식"
 
 #: ../gui/wxpython/menustrings.py:101 ../gui/wxpython/menustrings.py:1119
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:100
@@ -4849,7 +4862,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:101
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1102
 msgid "Export raster map"
-msgstr ""
+msgstr "래스터 지도 내보내기"
 
 #: ../gui/wxpython/menustrings.py:103 ../gui/wxpython/menustrings.py:132
 #: ../gui/wxpython/menustrings.py:158 ../gui/wxpython/menustrings.py:1121
@@ -4861,7 +4874,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1132
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1157
 msgid "Common export formats"
-msgstr ""
+msgstr "일반적인 내보내기 서식"
 
 #: ../gui/wxpython/menustrings.py:104 ../gui/wxpython/menustrings.py:1122
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:103
@@ -4873,7 +4886,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:104
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1105
 msgid "ASCII grid export"
-msgstr ""
+msgstr "ASCII 격자 내보내기"
 
 #: ../gui/wxpython/menustrings.py:106 ../gui/wxpython/menustrings.py:1124
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:105
@@ -4885,7 +4898,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:106
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1107
 msgid "ASCII x,y,z points export"
-msgstr ""
+msgstr "ASCII x,y,z 점 내보내기"
 
 #: ../gui/wxpython/menustrings.py:108 ../gui/wxpython/menustrings.py:1126
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:107
@@ -4897,7 +4910,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:108
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1109
 msgid "GRIDATB.FOR export"
-msgstr ""
+msgstr "GRIDATB.FOR 내보내기"
 
 #: ../gui/wxpython/menustrings.py:110 ../gui/wxpython/menustrings.py:1128
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:109
@@ -4909,7 +4922,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:110
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1111
 msgid "Matlab 2D array export"
-msgstr ""
+msgstr "매트랩 2차원 배열 내보내기"
 
 #: ../gui/wxpython/menustrings.py:112 ../gui/wxpython/menustrings.py:1130
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:111
@@ -4921,7 +4934,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:112
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1113
 msgid "Raw binary array export"
-msgstr ""
+msgstr "순수 이진 배열 내보내기"
 
 #: ../gui/wxpython/menustrings.py:114 ../gui/wxpython/menustrings.py:1132
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:113
@@ -4933,7 +4946,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:114
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1115
 msgid "MPEG-1 export"
-msgstr ""
+msgstr "MPEG-1 내보내기"
 
 #: ../gui/wxpython/menustrings.py:116 ../gui/wxpython/menustrings.py:1134
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:115
@@ -4945,7 +4958,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:116
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1117
 msgid "PNG export"
-msgstr ""
+msgstr "PNG 내보내기"
 
 #: ../gui/wxpython/menustrings.py:118 ../gui/wxpython/menustrings.py:1136
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:117
@@ -4957,7 +4970,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:118
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1119
 msgid "PPM export"
-msgstr ""
+msgstr "PPM 내보내기"
 
 #: ../gui/wxpython/menustrings.py:120 ../gui/wxpython/menustrings.py:1138
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:119
@@ -4969,7 +4982,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:120
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1121
 msgid "PPM from RGB export"
-msgstr ""
+msgstr "RGB를 PPM으로 내보내기"
 
 #: ../gui/wxpython/menustrings.py:122 ../gui/wxpython/menustrings.py:1140
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:121
@@ -4984,7 +4997,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1123
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1139
 msgid "POV-Ray export"
-msgstr ""
+msgstr "POV-Ray 내보내기"
 
 #: ../gui/wxpython/menustrings.py:124 ../gui/wxpython/menustrings.py:1142
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:123
@@ -4996,7 +5009,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:124
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1125
 msgid "VRML export"
-msgstr ""
+msgstr "VRML 내보내기"
 
 #: ../gui/wxpython/menustrings.py:126 ../gui/wxpython/menustrings.py:1144
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:125
@@ -5014,7 +5027,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1143
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1154
 msgid "VTK export"
-msgstr ""
+msgstr "VTK 내보내기"
 
 #: ../gui/wxpython/menustrings.py:128 ../gui/wxpython/menustrings.py:1146
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:127
@@ -5026,7 +5039,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:128
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1129
 msgid "Pack raster map"
-msgstr ""
+msgstr "래스터 지도 꾸리기"
 
 #: ../gui/wxpython/menustrings.py:130 ../gui/wxpython/menustrings.py:1148
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:129
@@ -5038,7 +5051,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:130
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1131
 msgid "Export vector map"
-msgstr ""
+msgstr "벡터 지도 내보내기"
 
 #: ../gui/wxpython/menustrings.py:133 ../gui/wxpython/menustrings.py:1151
 msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
@@ -5048,7 +5061,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:133
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1134
 msgid "ASCII points or GRASS ASCII vector export"
-msgstr ""
+msgstr "ASCII 점 또는 GRASS ASCII 벡터 내보내기"
 
 #: ../gui/wxpython/menustrings.py:135 ../gui/wxpython/menustrings.py:1153
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:134
@@ -5060,7 +5073,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:135
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1136
 msgid "DXF export"
-msgstr ""
+msgstr "DXF 내보내기"
 
 #: ../gui/wxpython/menustrings.py:137 ../gui/wxpython/menustrings.py:1155
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:136
@@ -5072,7 +5085,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:137
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1138
 msgid "PostGIS export"
-msgstr ""
+msgstr "PostGIS 내보내기"
 
 #: ../gui/wxpython/menustrings.py:139 ../gui/wxpython/menustrings.py:1157
 msgid "Exports a vector map layer to PostGIS feature table."
@@ -5088,7 +5101,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:140
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1141
 msgid "SVG export"
-msgstr ""
+msgstr "SVG 내보내기"
 
 #: ../gui/wxpython/menustrings.py:143 ../gui/wxpython/menustrings.py:1161
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:141
@@ -5106,7 +5119,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:144
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1145
 msgid "Pack vector map"
-msgstr ""
+msgstr "벡터 지도 꾸리기"
 
 #: ../gui/wxpython/menustrings.py:147 ../gui/wxpython/menustrings.py:1165
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:145
@@ -5118,13 +5131,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:146
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1147
 msgid "Export 3D raster maps"
-msgstr ""
+msgstr "3차원 래스터 지도 내보내기"
 
 #: ../gui/wxpython/menustrings.py:149 ../gui/wxpython/menustrings.py:1167
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:147
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1148
 msgid "ASCII 3D export"
-msgstr ""
+msgstr "ASCII 3차원 내보내기"
 
 #: ../gui/wxpython/menustrings.py:150 ../gui/wxpython/menustrings.py:1168
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:148
@@ -5136,7 +5149,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:149
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1150
 msgid "Raw binary array 3D export"
-msgstr ""
+msgstr "순수 이진 배열 3차원 내보내기"
 
 #: ../gui/wxpython/menustrings.py:152 ../gui/wxpython/menustrings.py:1170
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:150
@@ -5148,7 +5161,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:151
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1152
 msgid "Vis5D export"
-msgstr ""
+msgstr "Vis5D 내보내기"
 
 #: ../gui/wxpython/menustrings.py:154 ../gui/wxpython/menustrings.py:1172
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:152
@@ -5166,7 +5179,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:155
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1156
 msgid "Export database table"
-msgstr "데이터베이스 테이블을 내보내기"
+msgstr "데이터베이스 테이블 내보내기"
 
 #: ../gui/wxpython/menustrings.py:159 ../gui/wxpython/menustrings.py:1177
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:157
@@ -5178,7 +5191,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:158
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1159
 msgid "Link external data"
-msgstr ""
+msgstr "외부 자료 연결"
 
 #: ../gui/wxpython/menustrings.py:162 ../gui/wxpython/menustrings.py:1180
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:160
@@ -5196,7 +5209,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:163
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1164
 msgid "Output format for raster data"
-msgstr ""
+msgstr "래스터 자료를 위한 출력 서식"
 
 #: ../gui/wxpython/menustrings.py:166 ../gui/wxpython/menustrings.py:1184
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:164
@@ -5208,7 +5221,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:165
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1166
 msgid "Output format for vector data"
-msgstr ""
+msgstr "벡터 자료를 위한 출력 서식"
 
 #: ../gui/wxpython/menustrings.py:168 ../gui/wxpython/menustrings.py:1186
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:166
@@ -5220,14 +5233,14 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:167
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1168
 msgid "Manage maps"
-msgstr ""
+msgstr "지도 관리"
 
 #: ../gui/wxpython/menustrings.py:170 ../gui/wxpython/menustrings.py:1188
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:168
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1169
 #: ../gui/wxpython/gui_core/forms.py:611
 msgid "Copy"
-msgstr ""
+msgstr "복사"
 
 #: ../gui/wxpython/menustrings.py:171 ../gui/wxpython/menustrings.py:1189
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:169
@@ -5242,7 +5255,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1171
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1872
 msgid "List"
-msgstr ""
+msgstr "목록"
 
 #: ../gui/wxpython/menustrings.py:173 ../gui/wxpython/menustrings.py:1191
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:171
@@ -5258,7 +5271,7 @@ msgstr "사용자가 지정한 자료형의 유효한 GRASS 데이터베이스 �
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1860
 #: ../gui/wxpython/lmgr/layertree.py:468 ../gui/wxpython/rlisetup/frame.py:146
 msgid "Rename"
-msgstr ""
+msgstr "이름 바꾸기"
 
 #: ../gui/wxpython/menustrings.py:175 ../gui/wxpython/menustrings.py:1193
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:173
@@ -5294,7 +5307,7 @@ msgstr "검색패턴을 이용해서 사용자의 현재 지도세트로부터 �
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1528
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1773
 msgid "Map type conversions"
-msgstr ""
+msgstr "지도 유형 변환"
 
 #: ../gui/wxpython/menustrings.py:179 ../gui/wxpython/menustrings.py:316
 #: ../gui/wxpython/menustrings.py:1258
@@ -5302,7 +5315,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:311
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1237
 msgid "Raster to vector"
-msgstr ""
+msgstr "래스터를 벡터로 변환"
 
 #: ../gui/wxpython/menustrings.py:180 ../gui/wxpython/menustrings.py:317
 #: ../gui/wxpython/menustrings.py:1259
@@ -5318,7 +5331,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:313
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1239
 msgid "Raster series to 3D raster"
-msgstr ""
+msgstr "래스터 계열을 3차원 래스터로 변환"
 
 #: ../gui/wxpython/menustrings.py:182 ../gui/wxpython/menustrings.py:319
 #: ../gui/wxpython/menustrings.py:1261
@@ -5334,7 +5347,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:315
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1241
 msgid "Raster 2.5D to 3D raster"
-msgstr ""
+msgstr "2.5차원 래스터를 3차원 래스터로 변환"
 
 #: ../gui/wxpython/menustrings.py:184 ../gui/wxpython/menustrings.py:321
 #: ../gui/wxpython/menustrings.py:1263
@@ -5520,7 +5533,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:209
 #: ../gui/wxpython/gui_core/dialogs.py:2347
 msgid "Close GUI"
-msgstr ""
+msgstr "GUI 닫기"
 
 #: ../gui/wxpython/menustrings.py:213
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:210
@@ -5532,18 +5545,18 @@ msgstr ""
 #: ../gui/wxpython/gui_core/dialogs.py:2326
 #: ../gui/wxpython/gui_core/dialogs.py:2350
 msgid "Quit GRASS GIS"
-msgstr ""
+msgstr "GRASS GIS 종료"
 
 #: ../gui/wxpython/menustrings.py:215
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:212
 msgid "Close GUI and exit GRASS GIS shell."
-msgstr ""
+msgstr "GUI를 닫고 GRASS GIS 셸을 종료합니다."
 
 #: ../gui/wxpython/menustrings.py:216 ../gui/wxpython/menustrings.py:2021
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:213
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1989
 msgid "&Settings"
-msgstr ""
+msgstr "설정(&S)"
 
 #: ../gui/wxpython/menustrings.py:217 ../gui/wxpython/menustrings.py:1196
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:214
@@ -5551,13 +5564,13 @@ msgstr ""
 #: ../gui/wxpython/mapdisp/statusbar.py:1152
 #: ../gui/wxpython/web_services/dialogs.py:874
 msgid "Computational region"
-msgstr ""
+msgstr "계산 영역"
 
 #: ../gui/wxpython/menustrings.py:218 ../gui/wxpython/menustrings.py:1197
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:215
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1178
 msgid "Show current region"
-msgstr ""
+msgstr "현재 영역 보기"
 
 #: ../gui/wxpython/menustrings.py:219 ../gui/wxpython/menustrings.py:221
 #: ../gui/wxpython/menustrings.py:1198 ../gui/wxpython/menustrings.py:1200
@@ -5572,21 +5585,21 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:217
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1180
 msgid "Show region using latitude and longitude"
-msgstr ""
+msgstr "위도 및 경도를 이용한 영역 보기"
 
 #: ../gui/wxpython/menustrings.py:222 ../gui/wxpython/menustrings.py:1201
 msgid "Show current region extent in Map Display"
-msgstr "지도 디스플레이 안 현재 영역의 범위를 보여 줍니다"
+msgstr "지도 디스플레이 내 현재 영역의 범위 보기"
 
 #: ../gui/wxpython/menustrings.py:223 ../gui/wxpython/menustrings.py:1202
 msgid "Shows the extent of the computational region in Map Display."
-msgstr "지도 디스플레이 안 계산 영역의 범위를 보여 줍니다."
+msgstr "지도 디스플레이 내 계산 영역의 범위를 보여 줍니다."
 
 #: ../gui/wxpython/menustrings.py:224 ../gui/wxpython/menustrings.py:1203
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:219
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1182
 msgid "Set region"
-msgstr ""
+msgstr "영역 설정"
 
 #: ../gui/wxpython/menustrings.py:225 ../gui/wxpython/menustrings.py:1204
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:220
@@ -5627,7 +5640,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:232
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:227
 msgid "Changes/reports current mapset. Optionally create new mapset or list available mapsets in given location."
-msgstr ""
+msgstr "현재 지도세트를 바꾸거나 보고합니다. 선택적으로 새 지도세트를 생성하거나 주어진 로케이션 안에 유효한 지도세트를 나열합니다."
 
 #: ../gui/wxpython/menustrings.py:233
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:228
@@ -5775,19 +5788,19 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:258
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1184
 msgid "&Raster"
-msgstr ""
+msgstr "래스터(&R)"
 
 #: ../gui/wxpython/menustrings.py:264 ../gui/wxpython/menustrings.py:1206
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:259
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1185
 msgid "Develop raster map"
-msgstr ""
+msgstr "래스터 지도 개발"
 
 #: ../gui/wxpython/menustrings.py:265 ../gui/wxpython/menustrings.py:1207
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:260
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1186
 msgid "Compress/decompress"
-msgstr ""
+msgstr "압축/해제"
 
 #: ../gui/wxpython/menustrings.py:266 ../gui/wxpython/menustrings.py:1208
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:261
@@ -5799,7 +5812,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:262
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1188
 msgid "Region boundaries"
-msgstr ""
+msgstr "영역 경계"
 
 #: ../gui/wxpython/menustrings.py:268 ../gui/wxpython/menustrings.py:1210
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:263
@@ -5811,7 +5824,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:264
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1190
 msgid "Manage NULL values"
-msgstr ""
+msgstr "널값 관리"
 
 #: ../gui/wxpython/menustrings.py:270 ../gui/wxpython/menustrings.py:1212
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:265
@@ -5823,7 +5836,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:266
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1192
 msgid "Quantization"
-msgstr ""
+msgstr "양자화"
 
 #: ../gui/wxpython/menustrings.py:272 ../gui/wxpython/menustrings.py:1214
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:267
@@ -5835,7 +5848,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:268
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1194
 msgid "Timestamp"
-msgstr ""
+msgstr "타임스탬프"
 
 #: ../gui/wxpython/menustrings.py:274 ../gui/wxpython/menustrings.py:1216
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:269
@@ -5847,31 +5860,31 @@ msgstr "래스터 지도를 위한 타임스탬프를 수정합니다. 래스터
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:270
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1196
 msgid "Resample using aggregate statistics"
-msgstr ""
+msgstr "집계 통계를 이용한 재추출"
 
 #: ../gui/wxpython/menustrings.py:276 ../gui/wxpython/menustrings.py:1218
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:271
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1197
 msgid "Resamples raster map layers to a coarser grid using aggregation."
-msgstr ""
+msgstr "집계를 이용해서 래스터 지도 레이어를 더 큰 격자로 재추출합니다."
 
 #: ../gui/wxpython/menustrings.py:277 ../gui/wxpython/menustrings.py:1219
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:272
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1198
 msgid "Resample using multiple methods"
-msgstr ""
+msgstr "복수의 방법을 이용한 재추출"
 
 #: ../gui/wxpython/menustrings.py:278 ../gui/wxpython/menustrings.py:1220
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:273
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1199
 msgid "Resamples raster map to a finer grid using interpolation."
-msgstr ""
+msgstr "보간을 이용해서 래스터 지도를 더 작은 격자로 재추출합니다."
 
 #: ../gui/wxpython/menustrings.py:279 ../gui/wxpython/menustrings.py:1221
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:274
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1200
 msgid "Resample using nearest neighbor"
-msgstr ""
+msgstr "최근접 이웃을 이용한 재추출"
 
 #: ../gui/wxpython/menustrings.py:280 ../gui/wxpython/menustrings.py:1222
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:275
@@ -5883,7 +5896,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:276
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1202
 msgid "Resample using spline tension"
-msgstr ""
+msgstr "스플라인 장력을 이용한 재추출"
 
 #: ../gui/wxpython/menustrings.py:282 ../gui/wxpython/menustrings.py:1224
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:277
@@ -5895,7 +5908,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:278
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1204
 msgid "Resample using bspline"
-msgstr ""
+msgstr "B-스플라인을 이용한 재추출"
 
 #: ../gui/wxpython/menustrings.py:284 ../gui/wxpython/menustrings.py:1226
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:279
@@ -5907,13 +5920,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:280
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1206
 msgid "Resample using analytic kernel"
-msgstr ""
+msgstr "분석적인 커널을 이용한 재추출"
 
 #: ../gui/wxpython/menustrings.py:286 ../gui/wxpython/menustrings.py:1228
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:281
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1207
 msgid "Resamples raster map layers using an analytic kernel."
-msgstr ""
+msgstr "분석적인 커널을 이용해서 래스터 지도 레이어를 재추출합니다."
 
 #: ../gui/wxpython/menustrings.py:287 ../gui/wxpython/menustrings.py:573
 #: ../gui/wxpython/menustrings.py:1229 ../gui/wxpython/menustrings.py:1515
@@ -5922,7 +5935,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1208
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1492
 msgid "Support file maintenance"
-msgstr ""
+msgstr "지원 파일 유지 관리"
 
 #: ../gui/wxpython/menustrings.py:288 ../gui/wxpython/menustrings.py:1230
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:283
@@ -5934,7 +5947,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:284
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1210
 msgid "Update map statistics"
-msgstr ""
+msgstr "지도 통계 갱신"
 
 #: ../gui/wxpython/menustrings.py:290 ../gui/wxpython/menustrings.py:1232
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:285
@@ -5946,7 +5959,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:288
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1214
 msgid "Tiling"
-msgstr ""
+msgstr "타일 생성"
 
 #: ../gui/wxpython/menustrings.py:294 ../gui/wxpython/menustrings.py:1236
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:289
@@ -5961,7 +5974,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1216
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1511
 msgid "Manage colors"
-msgstr ""
+msgstr "색상 관리"
 
 #: ../gui/wxpython/menustrings.py:296 ../gui/wxpython/menustrings.py:593
 #: ../gui/wxpython/menustrings.py:1238 ../gui/wxpython/menustrings.py:1535
@@ -5970,7 +5983,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1217
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1512
 msgid "Color tables"
-msgstr ""
+msgstr "색상 테이블"
 
 #: ../gui/wxpython/menustrings.py:297 ../gui/wxpython/menustrings.py:1239
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:292
@@ -5982,7 +5995,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:293
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1219
 msgid "Color tables (stddev)"
-msgstr ""
+msgstr "색상 테이블 (표준편차)"
 
 #: ../gui/wxpython/menustrings.py:299 ../gui/wxpython/menustrings.py:1241
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:294
@@ -5997,7 +6010,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1221
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1514
 msgid "Manage color rules interactively"
-msgstr ""
+msgstr "대화식 색상 규칙 관리"
 
 #: ../gui/wxpython/menustrings.py:301 ../gui/wxpython/menustrings.py:1243
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:296
@@ -6012,7 +6025,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1223
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1516
 msgid "Export color table"
-msgstr ""
+msgstr "색상 테이블 내보내기"
 
 #: ../gui/wxpython/menustrings.py:303 ../gui/wxpython/menustrings.py:1245
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:298
@@ -6024,7 +6037,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:299
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1225
 msgid "Blend 2 color rasters"
-msgstr ""
+msgstr "두 개의 색상 래스터 혼합"
 
 #: ../gui/wxpython/menustrings.py:305 ../gui/wxpython/menustrings.py:1247
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:300
@@ -6036,7 +6049,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:301
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1227
 msgid "Create RGB"
-msgstr ""
+msgstr "RGB 생성"
 
 #: ../gui/wxpython/menustrings.py:307 ../gui/wxpython/menustrings.py:1249
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:302
@@ -6051,7 +6064,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1229
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1680
 msgid "RGB to HIS"
-msgstr ""
+msgstr "RGB를 HIS로 변환"
 
 #: ../gui/wxpython/menustrings.py:309 ../gui/wxpython/menustrings.py:1251
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:304
@@ -6063,13 +6076,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:305
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1231
 msgid "Query raster maps"
-msgstr ""
+msgstr "래스터 지도 질의"
 
 #: ../gui/wxpython/menustrings.py:311 ../gui/wxpython/menustrings.py:1253
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:306
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1232
 msgid "Query values by coordinates"
-msgstr ""
+msgstr "좌표로 값 질의"
 
 #: ../gui/wxpython/menustrings.py:312 ../gui/wxpython/menustrings.py:1254
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:307
@@ -6081,7 +6094,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:308
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1234
 msgid "Query colors by value"
-msgstr ""
+msgstr "값으로 색상 질의"
 
 #: ../gui/wxpython/menustrings.py:314 ../gui/wxpython/menustrings.py:1256
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:309
@@ -6093,13 +6106,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:317
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1243
 msgid "Raster buffers and distance"
-msgstr ""
+msgstr "래스터 버퍼 및 거리"
 
 #: ../gui/wxpython/menustrings.py:323 ../gui/wxpython/menustrings.py:1265
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:318
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1244
 msgid "Buffer rasters"
-msgstr ""
+msgstr "래스터 버퍼"
 
 #: ../gui/wxpython/menustrings.py:324 ../gui/wxpython/menustrings.py:1266
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:319
@@ -6111,7 +6124,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:320
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1246
 msgid "Concentric circles"
-msgstr ""
+msgstr "동심원"
 
 #: ../gui/wxpython/menustrings.py:326 ../gui/wxpython/menustrings.py:1268
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:321
@@ -6123,7 +6136,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:322
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1248
 msgid "Closest points"
-msgstr ""
+msgstr "최근접 점"
 
 #: ../gui/wxpython/menustrings.py:328 ../gui/wxpython/menustrings.py:1270
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:323
@@ -6135,7 +6148,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:324
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1250
 msgid "Grow by one cell"
-msgstr ""
+msgstr "한 셀 키우기"
 
 #: ../gui/wxpython/menustrings.py:330 ../gui/wxpython/menustrings.py:395
 #: ../gui/wxpython/menustrings.py:1272 ../gui/wxpython/menustrings.py:1337
@@ -6153,7 +6166,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1252
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1306
 msgid "Distance to features"
-msgstr ""
+msgstr "피쳐까지 거리"
 
 #: ../gui/wxpython/menustrings.py:332 ../gui/wxpython/menustrings.py:388
 #: ../gui/wxpython/menustrings.py:1274 ../gui/wxpython/menustrings.py:1330
@@ -6170,7 +6183,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:977 ../gui/wxpython/nviz/tools.py:2817
 #: ../gui/wxpython/psmap/dialogs.py:2310
 msgid "Mask"
-msgstr ""
+msgstr "마스크"
 
 #: ../gui/wxpython/menustrings.py:334 ../gui/wxpython/menustrings.py:1276
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:329
@@ -6185,50 +6198,50 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1256
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1257
 msgid "Raster map calculator"
-msgstr ""
+msgstr "래스터 지도 계산기"
 
 #: ../gui/wxpython/menustrings.py:337 ../gui/wxpython/menustrings.py:1279
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:332
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1258
 msgid "Neighborhood analysis"
-msgstr ""
+msgstr "이웃 분석"
 
 #: ../gui/wxpython/menustrings.py:338 ../gui/wxpython/menustrings.py:1280
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:333
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1259
 #: ../gui/wxpython/rlisetup/wizard.py:886
 msgid "Moving window"
-msgstr ""
+msgstr "이동 창"
 
 #: ../gui/wxpython/menustrings.py:339 ../gui/wxpython/menustrings.py:1281
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:334
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1260
 msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
-msgstr "각 셀의 범주 값은 그 주변 셀에 할당된 범주 값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도 레이어에 저장됩니다."
+msgstr "각 셀의 범주 값은 그 주변 셀에 할당된 범주값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도 레이어에 저장됩니다."
 
 #: ../gui/wxpython/menustrings.py:340 ../gui/wxpython/menustrings.py:1282
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:335
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1261
 msgid "Neighborhood points"
-msgstr ""
+msgstr "이웃 점"
 
 #: ../gui/wxpython/menustrings.py:341 ../gui/wxpython/menustrings.py:1283
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:336
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1262
 msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
-msgstr "벡터 점 지도를 위한 이웃 분석 도구. 각 셀의 값은 그 주변 벡터 점 또는 중앙점에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
+msgstr "벡터 점 지도를 위한 이웃 분석 도구. 각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
 
 #: ../gui/wxpython/menustrings.py:342 ../gui/wxpython/menustrings.py:1284
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:337
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1263
 msgid "Overlay rasters"
-msgstr ""
+msgstr "래스터 중첩"
 
 #: ../gui/wxpython/menustrings.py:343 ../gui/wxpython/menustrings.py:1285
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:338
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1264
 msgid "Cross product"
-msgstr ""
+msgstr "벡터곱"
 
 #: ../gui/wxpython/menustrings.py:344 ../gui/wxpython/menustrings.py:1286
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:339
@@ -6240,7 +6253,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:340
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1266
 msgid "Patch raster maps"
-msgstr ""
+msgstr "래스터 지도 덧대기"
 
 #: ../gui/wxpython/menustrings.py:346 ../gui/wxpython/menustrings.py:1288
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:341
@@ -6252,7 +6265,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:342
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1268
 msgid "Raster series aggregation"
-msgstr ""
+msgstr "래스터 계열 집계"
 
 #: ../gui/wxpython/menustrings.py:348 ../gui/wxpython/menustrings.py:1290
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:343
@@ -6264,7 +6277,7 @@ msgstr "각 출력 셀의 값은 입력 래스터 지도 레이어 안의 해당
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:344
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1270
 msgid "Raster series accumulation"
-msgstr ""
+msgstr "래스터 계열 누적"
 
 #: ../gui/wxpython/menustrings.py:350 ../gui/wxpython/menustrings.py:1292
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:345
@@ -6276,7 +6289,7 @@ msgstr "각 출력 셀의 값은 입력 래스터 지도 레이어 안의 해당
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:346
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1272
 msgid "Statistical overlay"
-msgstr ""
+msgstr "통계적 중첩"
 
 #: ../gui/wxpython/menustrings.py:352 ../gui/wxpython/menustrings.py:1294
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:347
@@ -6288,7 +6301,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:348
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1274
 msgid "Quantiles overlay"
-msgstr ""
+msgstr "분위수 중첩"
 
 #: ../gui/wxpython/menustrings.py:354 ../gui/wxpython/menustrings.py:1296
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:349
@@ -6300,13 +6313,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:350
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1276
 msgid "Solar radiance and shadows"
-msgstr ""
+msgstr "태양 복사 및 그림자"
 
 #: ../gui/wxpython/menustrings.py:356 ../gui/wxpython/menustrings.py:1298
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:351
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1277
 msgid "LatLong map"
-msgstr ""
+msgstr "위경도 지도"
 
 #: ../gui/wxpython/menustrings.py:357 ../gui/wxpython/menustrings.py:1299
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:352
@@ -6318,7 +6331,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:353
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1279
 msgid "Solar irradiance and irradiation"
-msgstr ""
+msgstr "태양 복사 조도 및 조사"
 
 #: ../gui/wxpython/menustrings.py:359 ../gui/wxpython/menustrings.py:1301
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:354
@@ -6674,13 +6687,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:414
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1340
 msgid "Topographic index map"
-msgstr "지형색인 지도"
+msgstr "지형지표 지도"
 
 #: ../gui/wxpython/menustrings.py:422 ../gui/wxpython/menustrings.py:1364
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:415
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1341
 msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
-msgstr ""
+msgstr "표고 래스터 지도로부터 지형지표(습윤지표) 래스터 지도를 생성합니다."
 
 #: ../gui/wxpython/menustrings.py:423 ../gui/wxpython/menustrings.py:1365
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:416
@@ -7279,7 +7292,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1762
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1934
 msgid "Reports and statistics"
-msgstr ""
+msgstr "보고 및 통계"
 
 #: ../gui/wxpython/menustrings.py:519 ../gui/wxpython/menustrings.py:1461
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:512
@@ -7339,7 +7352,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:523
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1449
 msgid "Reports statistics for raster maps."
-msgstr ""
+msgstr "래스터 지도를 위한 통계를 보고합니다"
 
 #: ../gui/wxpython/menustrings.py:531 ../gui/wxpython/menustrings.py:1473
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:524
@@ -7455,7 +7468,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:542
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1468
 msgid "&Vector"
-msgstr ""
+msgstr "벡터(&V)"
 
 #: ../gui/wxpython/menustrings.py:550 ../gui/wxpython/menustrings.py:1492
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:543
@@ -7661,13 +7674,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:579
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1505
 msgid "Clean vector map"
-msgstr ""
+msgstr "벡터 지도 정리"
 
 #: ../gui/wxpython/menustrings.py:587 ../gui/wxpython/menustrings.py:1529
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:580
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1506
 msgid "Toolset for cleaning topology of vector map."
-msgstr ""
+msgstr "벡터 지도의 위상 정리를 위한 도구세트"
 
 #: ../gui/wxpython/menustrings.py:588 ../gui/wxpython/menustrings.py:1530
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:581
@@ -7802,7 +7815,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1538
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1551
 msgid "Identify and remove outliers"
-msgstr "이상치를 식별하고 제거합니다"
+msgstr "이상치 식별 및 제거"
 
 #: ../gui/wxpython/menustrings.py:620 ../gui/wxpython/menustrings.py:633
 #: ../gui/wxpython/menustrings.py:732 ../gui/wxpython/menustrings.py:1562
@@ -7994,7 +8007,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:642
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1568
 msgid "Nearest features"
-msgstr ""
+msgstr "최근접 피쳐"
 
 #: ../gui/wxpython/menustrings.py:650 ../gui/wxpython/menustrings.py:1592
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:643
@@ -8037,11 +8050,11 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:649
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1575
 msgid "Allocate subnets"
-msgstr ""
+msgstr "서브넷 할당"
 
 #: ../gui/wxpython/menustrings.py:657 ../gui/wxpython/menustrings.py:1599
 msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
-msgstr ""
+msgstr "최근접 중심을 위한 서브넷을 할당합니다. 중심 교점이 열려 있어야 합니다 (비용 >= 0). 중심 교점의 비용은 계산에 사용됩니다."
 
 #: ../gui/wxpython/menustrings.py:658 ../gui/wxpython/menustrings.py:1600
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:651
@@ -8216,7 +8229,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1605
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1606
 msgid "Overlay vector maps"
-msgstr ""
+msgstr "벡터 지도 중첩"
 
 #: ../gui/wxpython/menustrings.py:687 ../gui/wxpython/menustrings.py:1629
 msgid "Clip vector maps"
@@ -8254,7 +8267,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:685
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1611
 msgid "Change or report categories"
-msgstr ""
+msgstr "범주 변경 또는 보고"
 
 #: ../gui/wxpython/menustrings.py:695 ../gui/wxpython/menustrings.py:1637
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:686
@@ -8315,7 +8328,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:696
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1622
 msgid "Update database values from vector"
-msgstr "벡터로부터 데이터베이스 값 갱신하기"
+msgstr "벡터로부터 데이터베이스값 갱신"
 
 #: ../gui/wxpython/menustrings.py:706 ../gui/wxpython/menustrings.py:1648
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:697
@@ -8421,7 +8434,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:714
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1640
 msgid "Generate from database"
-msgstr "데이터베이스로부터 생성하기"
+msgstr "데이터베이스로부터 생성"
 
 #: ../gui/wxpython/menustrings.py:724 ../gui/wxpython/menustrings.py:1666
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:715
@@ -8457,7 +8470,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:722
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1648
 msgid "Remove outliers in point sets"
-msgstr "점 세트 안의 이상치를 제거합니다"
+msgstr "점 세트 내 이상치 제거"
 
 #: ../gui/wxpython/menustrings.py:736 ../gui/wxpython/menustrings.py:1678
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:727
@@ -8487,13 +8500,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:731
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1657
 msgid "Report topology by category"
-msgstr ""
+msgstr "범주별 위상 보고"
 
 #: ../gui/wxpython/menustrings.py:741 ../gui/wxpython/menustrings.py:1683
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:732
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1658
 msgid "Reports geometry statistics for vector maps."
-msgstr ""
+msgstr "벡터 지도를 위한 지형 통계를 보고합니다."
 
 #: ../gui/wxpython/menustrings.py:742 ../gui/wxpython/menustrings.py:1684
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:733
@@ -8539,7 +8552,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:741
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1667
 msgid "&Imagery"
-msgstr ""
+msgstr "영상(&I)"
 
 #: ../gui/wxpython/menustrings.py:753 ../gui/wxpython/menustrings.py:1695
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:742
@@ -8605,7 +8618,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:752
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1678
 msgid "HIS to RGB"
-msgstr ""
+msgstr "HIS를 RGB로 변환"
 
 #: ../gui/wxpython/menustrings.py:764 ../gui/wxpython/menustrings.py:1706
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:753
@@ -8678,19 +8691,19 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:765
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1691
 msgid "Clustering input for unsupervised classification"
-msgstr ""
+msgstr "무감독 분류를 위한 군집 입력"
 
 #: ../gui/wxpython/menustrings.py:777 ../gui/wxpython/menustrings.py:1719
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:766
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1692
 msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm. The resulting signature file is used as input for i.maxlik, to generate an unsupervised image classification."
-msgstr ""
+msgstr "군집 알고리듬을 이용해서 영상 안 토지 피복 유형을 위한 스펙트럼 서명을 생성합니다. 만들어질 서명 파일은 무감독 영상 분류를 생성하기 위해 i.maxlik를 위한 입력으로 쓰입니다."
 
 #: ../gui/wxpython/menustrings.py:778 ../gui/wxpython/menustrings.py:1720
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:767
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1693
 msgid "Input for supervised MLC"
-msgstr ""
+msgstr "감독 MLC를 위한 입력"
 
 #: ../gui/wxpython/menustrings.py:779 ../gui/wxpython/menustrings.py:1721
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:768
@@ -8716,7 +8729,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1697
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1962
 msgid "Interactive input for supervised classification"
-msgstr ""
+msgstr "감독 분류를 위한 대화식 입력"
 
 #: ../gui/wxpython/menustrings.py:783 ../gui/wxpython/menustrings.py:1725
 #: ../gui/wxpython/menustrings.py:1995
@@ -8730,7 +8743,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:773
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1699
 msgid "Input for supervised SMAP"
-msgstr ""
+msgstr "감독 SMAP을 위한 입력"
 
 #: ../gui/wxpython/menustrings.py:785 ../gui/wxpython/menustrings.py:1727
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:774
@@ -9152,19 +9165,19 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:841
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1767
 msgid "3D r&aster"
-msgstr ""
+msgstr "3차원 래스터(&a)"
 
 #: ../gui/wxpython/menustrings.py:858 ../gui/wxpython/menustrings.py:1800
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:842
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1768
 msgid "Develop 3D raster map"
-msgstr ""
+msgstr "3차원 래스터 지도 개발"
 
 #: ../gui/wxpython/menustrings.py:859 ../gui/wxpython/menustrings.py:1801
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:843
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1769
 msgid "Manage 3D NULL values"
-msgstr ""
+msgstr "3차원 널값 관리"
 
 #: ../gui/wxpython/menustrings.py:860 ../gui/wxpython/menustrings.py:1802
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:844
@@ -9233,7 +9246,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1782
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1783
 msgid "3D raster map calculator"
-msgstr ""
+msgstr "3차원 래스터 지도 계산기"
 
 #: ../gui/wxpython/menustrings.py:874 ../gui/wxpython/menustrings.py:1816
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:858
@@ -9305,7 +9318,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:871
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1797
 msgid "&Database"
-msgstr ""
+msgstr "데이터베이스(&D)"
 
 #: ../gui/wxpython/menustrings.py:888 ../gui/wxpython/menustrings.py:1830
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:872
@@ -9317,7 +9330,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:873
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1799
 msgid "List databases"
-msgstr "데이터베이스 나열하기"
+msgstr "데이터베이스 나열"
 
 #: ../gui/wxpython/menustrings.py:890 ../gui/wxpython/menustrings.py:1832
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:874
@@ -9407,7 +9420,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:888
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1814
 msgid "Create database"
-msgstr "데이터베이스 생성하기"
+msgstr "데이터베이스 생성"
 
 #: ../gui/wxpython/menustrings.py:905 ../gui/wxpython/menustrings.py:1847
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:889
@@ -9419,7 +9432,7 @@ msgstr "빈 데이터베이스를 생성합니다."
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:890
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1816
 msgid "Drop database"
-msgstr "데이터베이스를 삭제합니다"
+msgstr "데이터베이스 삭제"
 
 #: ../gui/wxpython/menustrings.py:907 ../gui/wxpython/menustrings.py:1849
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:891
@@ -9431,7 +9444,7 @@ msgstr "기존 데이터베이스를 제거합니다"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:892
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1818
 msgid "Drop table"
-msgstr "테이블을 삭제합니다"
+msgstr "테이블 삭제"
 
 #: ../gui/wxpython/menustrings.py:909 ../gui/wxpython/menustrings.py:1851
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:893
@@ -9458,7 +9471,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1822
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1842
 msgid "Drop column"
-msgstr "열을 삭제합니다"
+msgstr "열 삭제"
 
 #: ../gui/wxpython/menustrings.py:913 ../gui/wxpython/menustrings.py:1855
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:897
@@ -9470,7 +9483,7 @@ msgstr "선택된 속성 테이블로부터 열을 삭제합니다."
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:898
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1824
 msgid "Test"
-msgstr ""
+msgstr "검정"
 
 #: ../gui/wxpython/menustrings.py:915 ../gui/wxpython/menustrings.py:1857
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:899
@@ -9531,7 +9544,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:910
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1836
 msgid "Remove table"
-msgstr "테이블을 제거합니다"
+msgstr "테이블 제거"
 
 #: ../gui/wxpython/menustrings.py:927 ../gui/wxpython/menustrings.py:1869
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:911
@@ -9598,7 +9611,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:922
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1848
 msgid "Drop row"
-msgstr "행을 삭제합니다"
+msgstr "행 삭제"
 
 #: ../gui/wxpython/menustrings.py:939 ../gui/wxpython/menustrings.py:1881
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:923
@@ -9610,7 +9623,7 @@ msgstr "속성 선택을 이용해서 벡터 지도로부터 벡터 피쳐를 �
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:924
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1850
 msgid "Reconnect vectors to database"
-msgstr "벡터를 데이터베이스로 재연결하기"
+msgstr "벡터를 데이터베이스로 재연결"
 
 #: ../gui/wxpython/menustrings.py:941 ../gui/wxpython/menustrings.py:1883
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:925
@@ -9634,7 +9647,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:928
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1854
 msgid "&Temporal"
-msgstr ""
+msgstr "시간(&T)"
 
 #: ../gui/wxpython/menustrings.py:945 ../gui/wxpython/menustrings.py:1887
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:929
@@ -9646,7 +9659,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:930
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1856
 msgid "Connect temporal database"
-msgstr "시간 데이터베이스를 연결합니다"
+msgstr "시간 데이터베이스 연결"
 
 #: ../gui/wxpython/menustrings.py:947 ../gui/wxpython/menustrings.py:1889
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:931
@@ -10156,7 +10169,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1017
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1943
 msgid "Report temporal topology"
-msgstr ""
+msgstr "시간 위상 보고"
 
 #: ../gui/wxpython/menustrings.py:1034 ../gui/wxpython/menustrings.py:1976
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1018
@@ -10170,7 +10183,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1945
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1952
 msgid "GUI tools"
-msgstr ""
+msgstr "GUI 도구"
 
 #: ../gui/wxpython/menustrings.py:1038 ../gui/wxpython/menustrings.py:1980
 #: ../gui/wxpython/menustrings.py:2000
@@ -10210,7 +10223,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2015
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2058
 msgid "&Help"
-msgstr ""
+msgstr "도움말(&H)"
 
 #: ../gui/wxpython/menustrings.py:1043
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1027
@@ -10221,7 +10234,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1028
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1030
 msgid "Display the HTML man pages of GRASS GIS"
-msgstr ""
+msgstr "GRASS GIS의 HTML 설명서를 보여 줍니다"
 
 #: ../gui/wxpython/menustrings.py:1045
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1029
@@ -10243,12 +10256,12 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1034
 #: ../gui/wxpython/gui_core/ghelp.py:53
 msgid "About GRASS GIS"
-msgstr ""
+msgstr "GRASS GIS에 대해"
 
 #: ../gui/wxpython/menustrings.py:1053
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1037
 msgid "Import, export and link data"
-msgstr ""
+msgstr "가져오기, 내보내기, 자료 연결"
 
 #: ../gui/wxpython/menustrings.py:1987
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1955
@@ -10657,7 +10670,7 @@ msgstr "지도 작성자에 대한 정보를 보여 줍니다"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:38
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1039
 msgid "Common formats import"
-msgstr ""
+msgstr "일반적인 서식 가져오기"
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:40
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:70
@@ -10688,7 +10701,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:650
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1576
 msgid "Allocates subnets for nearest centers (direction from center). center node must be opened (costs >= 0). Costs of center node are used in calculation"
-msgstr ""
+msgstr "최근접 중심을 위한 서브넷을 할당합니다 (중심으로부터의 방향). 중심 교점이 열려 있어야 합니다 (비용 >= 0). 중심 교점의 비용은 계산에 사용됩니다."
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:652
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1578
@@ -10703,7 +10716,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:864
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1790
 msgid "Reports and Statistics"
-msgstr ""
+msgstr "보고 및 통계"
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:950
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1876
@@ -10713,7 +10726,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:50
 #: ../gui/wxpython/gcp/mapdisplay.py:50
 msgid "GRASS GIS Manage Ground Control Points"
-msgstr ""
+msgstr "GRASS GIS 지상 제어점 관리"
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:177
 #: ../gui/wxpython/gcp/manager.py:148
@@ -11018,7 +11031,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/toolbars.py:152
 msgid "Delete selected point(s), line(s), boundary(ies) or centroid(s)"
-msgstr "선택된 점, 선, 경계, 또는 중앙점을 삭제합니다"
+msgstr "선택된 점, 선, 경계, 또는 도심을 삭제합니다"
 
 #: ../gui/wxpython/vdigit/toolbars.py:155
 msgid "Delete selected area(s)"
@@ -11209,7 +11222,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:69
 msgid "GRASS GIS Vector Digitizer"
-msgstr ""
+msgstr "GRASS GIS 벡터 디지타이저"
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:85
 #, python-format
@@ -11620,7 +11633,7 @@ msgstr ""
 #: ../gui/wxpython/vdigit/wxdigit.py:61
 #, python-format
 msgid "Unable to open vector map <%s>."
-msgstr ""
+msgstr "벡터 지도 <%s>를 열 수 없습니다."
 
 #: ../gui/wxpython/vdigit/wxdigit.py:64
 msgid "Operation canceled."
@@ -11652,7 +11665,7 @@ msgstr ""
 #: ../gui/wxpython/vdigit/wxdigit.py:106
 #, python-format
 msgid "Unable to open database <%(db)s> by driver <%(driver)s>. Operation canceled."
-msgstr ""
+msgstr "데이터베이스 <%(db)s>를 드라이버 <%(driver)s>로 열 수 없습니다. 조작이 취소되었습니다."
 
 #: ../gui/wxpython/vdigit/wxdigit.py:114
 #, python-format
@@ -11672,7 +11685,7 @@ msgstr ""
 #: ../gui/wxpython/vdigit/wxdigit.py:500
 #, python-format
 msgid "Unknown feature type '%s'"
-msgstr "알려지지 않은 피쳐의 유형입니다 '%s'"
+msgstr "알려지지 않은 피쳐 유형 '%s'"
 
 #: ../gui/wxpython/vdigit/wxdigit.py:505
 msgid "Not enough points for line"
@@ -11696,7 +11709,7 @@ msgstr ""
 #: ../gui/wxpython/startup/locdownload.py:217
 #, python-brace-format
 msgid "Unknown format '{0}'."
-msgstr "알려지지 않은 양식입니다 '{0}'."
+msgstr "알려지지 않은 서식 '{0}'."
 
 #: ../gui/wxpython/startup/locdownload.py:233
 msgid "Downloaded location is not valid"
@@ -11736,7 +11749,7 @@ msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:458
 msgid "GRASS GIS Location Download"
-msgstr ""
+msgstr "GRASS GIS 로케이션 내려받기"
 
 #: ../gui/wxpython/startup/locdownload.py:491
 msgid "Do you want to cancel location download?"
@@ -11757,11 +11770,11 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/mapwindow.py:1021
 msgid "Easting"
-msgstr ""
+msgstr "동거"
 
 #: ../gui/wxpython/nviz/mapwindow.py:1022
 msgid "Northing"
-msgstr ""
+msgstr "북거"
 
 #: ../gui/wxpython/nviz/mapwindow.py:1023
 msgid "Elevation"
@@ -12220,7 +12233,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:1167
 msgid "blend"
-msgstr ""
+msgstr "혼합"
 
 #: ../gui/wxpython/nviz/tools.py:1168
 msgid "shaded"
@@ -12587,7 +12600,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:5681 ../gui/wxpython/nviz/tools.py:5692
 #: ../gui/wxpython/nviz/tools.py:5700
 msgid "Northing (Y):"
-msgstr ""
+msgstr "북거 (Y):"
 
 #: ../gui/wxpython/nviz/tools.py:5682 ../gui/wxpython/nviz/tools.py:5691
 #: ../gui/wxpython/nviz/tools.py:5701
@@ -12597,7 +12610,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:5683 ../gui/wxpython/nviz/tools.py:5690
 #: ../gui/wxpython/nviz/tools.py:5699
 msgid "Easting (X):"
-msgstr ""
+msgstr "동거 (X):"
 
 #: ../gui/wxpython/nviz/tools.py:5696
 msgid "Bottom edge:"
@@ -12864,7 +12877,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/forms.py:1872
 msgid "Enter file content directly instead of specifying a file. Temporary file will be automatically created."
-msgstr ""
+msgstr "파일을 지정하는 대신 파일 내용을 직접 입력하세요. 임시 파일이 자동으로 생성됩니다."
 
 #: ../gui/wxpython/gui_core/forms.py:1910
 #: ../gui/wxpython/gui_core/gselect.py:1434
@@ -12986,7 +12999,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:581
 msgid "GRASS GIS Simple Python Editor"
-msgstr ""
+msgstr "GRASS GIS 단순한 파이썬 편집기"
 
 #: ../gui/wxpython/gui_core/menu.py:153
 msgid "Double-click or Ctrl-Enter to run selected module"
@@ -13024,7 +13037,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/ghelp.py:76
 msgid "Copyright"
-msgstr ""
+msgstr "저작권"
 
 #: ../gui/wxpython/gui_core/ghelp.py:77
 msgid "License"
@@ -13061,7 +13074,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/ghelp.py:131 ../gui/wxpython/lmgr/frame.py:1241
 msgid "unknown version"
-msgstr "알려지지 않은 버전입니다"
+msgstr "알려지지 않은 버전"
 
 #: ../gui/wxpython/gui_core/ghelp.py:147
 msgid "Official GRASS site:"
@@ -13295,7 +13308,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/toolbars.py:81
 msgid "Overlay elements like scale and legend onto map"
-msgstr ""
+msgstr "축척 및 범례같은 요소를 지도 상에 중첩"
 
 #: ../gui/wxpython/gui_core/toolbars.py:83
 msgid "Create histogram with d.histogram"
@@ -13587,7 +13600,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:237
 msgid "Key column cannot be empty string."
-msgstr ""
+msgstr "키 열은 빈 문자열일 수 없습니다"
 
 #: ../gui/wxpython/gui_core/preferences.py:256
 msgid "GUI Settings"
@@ -13995,7 +14008,7 @@ msgid ""
 "Invalid or empty key column.\n"
 "Unable to create vector map <%s>."
 msgstr ""
-"무효하거나 빈 키 열입니다.\n"
+"무효하거나 빈 키 열.\n"
 "벡터 지도 <%s>를 생성할 수 없습니다."
 
 #: ../gui/wxpython/gui_core/dialogs.py:471
@@ -14013,7 +14026,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:619
 msgid "Name cannot begin with '.' and must not contain space, quotes, '/', ''', '@', ',', '=', '*', and all other non-alphanumeric characters."
-msgstr ""
+msgstr "이름은 '.'로 시작할 수 없고 공백, 따옴표, '/', ''', '@', ',', '=', '*', 그리고 모든 알파벳이나 숫자가 아닌 문자를 포함할 수 없습니다."
 
 #: ../gui/wxpython/gui_core/dialogs.py:635
 msgid "Create or edit imagery groups"
@@ -14181,7 +14194,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:1981
 msgid "GRASS GIS SQL Query Utility"
-msgstr ""
+msgstr "GRASS GIS SQL 질의 유틸리티"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1997
 msgid " SQL statement "
@@ -14201,7 +14214,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2343
 msgid "Do you want to quit GRASS including shell prompt or just close the GUI?"
-msgstr ""
+msgstr "셸 프롬프트와 함께 GRASS를 종료할까요? 아니면 GUI만 닫을까요?"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2420
 msgid "Select font:"
@@ -14385,7 +14398,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/toolbars.py:109
 msgid "Add overlays"
-msgstr ""
+msgstr "중첩 추가"
 
 #: ../gui/wxpython/psmap/toolbars.py:111 ../gui/wxpython/lmgr/layertree.py:104
 msgid "Add labels"
@@ -14543,6 +14556,8 @@ msgid ""
 "Unable to open file\n"
 "%s"
 msgstr ""
+"파일을 열 수 없습니다\n"
+"%s"
 
 #: ../gui/wxpython/psmap/instructions.py:498
 #, python-format
@@ -14555,6 +14570,8 @@ msgid ""
 "Region cannot be set\n"
 "%s"
 msgstr ""
+"영역을 설정할 수 없습니다\n"
+"%s"
 
 #: ../gui/wxpython/psmap/instructions.py:664
 #: ../gui/wxpython/psmap/instructions.py:863
@@ -14607,7 +14624,7 @@ msgid ""
 "Unknown format %(for)s"
 msgstr ""
 "지시 %(file)s를 읽는데 실패했습니다.\n"
-"알려지지 않은 양식입니다 %(for)s"
+"알려지지 않은 서식입니다 %(for)s"
 
 #: ../gui/wxpython/psmap/instructions.py:786
 #, python-format
@@ -14833,7 +14850,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:1495
 msgid "Invalid scale or map center!"
-msgstr ""
+msgstr "무효한 축척 또는 지도 중심!"
 
 #: ../gui/wxpython/psmap/dialogs.py:1565
 msgid "Choose raster map"
@@ -15477,7 +15494,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapswipe/frame.py:44
 msgid "GRASS GIS Map Swipe"
-msgstr ""
+msgstr "GRASS GIS 지도 밀기"
 
 #: ../gui/wxpython/mapswipe/frame.py:303 ../gui/wxpython/animation/frame.py:160
 msgid "Main Toolbar"
@@ -15645,7 +15662,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/frame.py:51
 msgid "GRASS GIS Animation tool"
-msgstr ""
+msgstr "GRASS GIS 동화 도구"
 
 #: ../gui/wxpython/animation/frame.py:170
 msgid "Animation Toolbar"
@@ -15677,7 +15694,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/provider.py:530
 msgid "Overlaying map layers"
-msgstr ""
+msgstr "지도 레이어 중첩"
 
 #: ../gui/wxpython/animation/provider.py:757
 #, python-brace-format
@@ -16171,7 +16188,7 @@ msgstr ""
 #: ../gui/wxpython/icons/icon.py:38
 #, python-format
 msgid "Unknown iconset '%s', using default 'grass'...\n"
-msgstr "알려지지 않은 아이콘세트입니다 '%s', 기본 'grass'를 사용합니다...\n"
+msgstr "알려지지 않은 아이콘 세트 '%s', 기본 'grass'를 사용합니다...\n"
 
 #: ../gui/wxpython/icons/icon.py:56
 #, python-format
@@ -16197,7 +16214,7 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:97
 msgid "GRASS GIS Temporal Plot Tool"
-msgstr ""
+msgstr "GRASS GIS 시간 도표 도구"
 
 #: ../gui/wxpython/tplot/frame.py:180
 msgid ""
@@ -16239,7 +16256,7 @@ msgstr ""
 #: ../gui/wxpython/tplot/frame.py:728 ../gui/wxpython/tplot/frame.py:749
 #: ../gui/wxpython/tplot/frame.py:875
 msgid "Invalid input coordinates"
-msgstr "무효한 입력 좌표입니다"
+msgstr "무효한 입력 좌표"
 
 #: ../gui/wxpython/tplot/frame.py:309 ../gui/wxpython/tplot/frame.py:422
 #: ../gui/wxpython/timeline/frame.py:180
@@ -16264,7 +16281,7 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:407
 msgid "Both coordinates and categories are set, coordinates will be used. The use categories remove text from coordinate form"
-msgstr "좌표와 범주가 모두 설정되었습니다, 좌표가 사용됩니다. 범주를 사용하면 좌표 양식에서 문자를 제거합니다"
+msgstr "좌표와 범주가 모두 설정됐습니다, 좌표가 사용됩니다. 범주를 사용하면 좌표 양식에서 문자를 제거합니다"
 
 #: ../gui/wxpython/tplot/frame.py:412
 msgid "With Vector temporal dataset you have to select an attribute column"
@@ -16314,11 +16331,11 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:745
 msgid "Invalid input raster dataset"
-msgstr "무효한 입력 래스터 자료세트입니다"
+msgstr "무효한 입력 래스터 자료세트"
 
 #: ../gui/wxpython/tplot/frame.py:762
 msgid "Invalid input vector dataset"
-msgstr "무효한 입력 벡터 자료세트입니다"
+msgstr "무효한 입력 벡터 자료세트"
 
 #: ../gui/wxpython/tplot/frame.py:824 ../gui/wxpython/timeline/frame.py:478
 #, python-format
@@ -16331,7 +16348,7 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:868 ../gui/wxpython/tplot/frame.py:916
 msgid "Invalid input temporal dataset"
-msgstr "무효한 입력 시간 자료세트입니다"
+msgstr "무효한 입력 시간 자료세트"
 
 #: ../gui/wxpython/tplot/frame.py:937
 msgid "Datasets have different number of values"
@@ -16407,7 +16424,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/toolbars.py:109
 msgid "Add various overlays"
-msgstr ""
+msgstr "다양한 중첩 추가"
 
 #: ../gui/wxpython/lmgr/toolbars.py:112
 msgid "Remove selected map layer(s) from layer tree"
@@ -16419,7 +16436,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/toolbars.py:156
 msgid "Raster Map Calculator"
-msgstr ""
+msgstr "래스터 지도 계산기"
 
 #: ../gui/wxpython/lmgr/toolbars.py:160
 msgid "Georectifier"
@@ -16486,7 +16503,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/pyshell.py:55
 msgid "Delete all text from the shell"
-msgstr "명령창으로부터 모든 문자를 삭제합니다"
+msgstr "셸로부터 모든 문자를 삭제합니다"
 
 #: ../gui/wxpython/lmgr/pyshell.py:60
 msgid "Simple &editor"
@@ -16510,7 +16527,7 @@ msgstr ""
 #: ../gui/wxpython/lmgr/frame.py:89
 #, python-format
 msgid "GRASS GIS %s Layer Manager"
-msgstr ""
+msgstr "GRASS GIS %s 레이어 관리자"
 
 #: ../gui/wxpython/lmgr/frame.py:122
 msgid "There were some issues when loading menu or Modules tab:"
@@ -16618,7 +16635,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:983
 msgid "Due to the limitations of your operating system, the script path cannot contain certain non-ascii characters. Please rename the script or move it to a different location."
-msgstr ""
+msgstr "운영 체계의 한계 때문에 스크립트의 경로는 특정 ASCII가 아닌 문자를 포함할 수 없습니다. 스크립트의 이름을 바꾸거나 다른 장소로 이동하세요."
 
 #: ../gui/wxpython/lmgr/frame.py:990
 #, python-format
@@ -16765,7 +16782,7 @@ msgstr ""
 #: ../gui/wxpython/lmgr/frame.py:1672 ../gui/wxpython/gmodeler/frame.py:1139
 #, python-format
 msgid "Unable to open file <%s> for writing."
-msgstr ""
+msgstr "파일 <%s>를 쓰기 위해 열 수 없습니다."
 
 #: ../gui/wxpython/lmgr/frame.py:1716
 msgid "Enter new name:"
@@ -16778,6 +16795,9 @@ msgid ""
 "\n"
 "Reason: %s"
 msgstr ""
+"\"감독 분류 도구\"를 시작할 수 없습니다.\n"
+"\n"
+"이유: %s"
 
 #: ../gui/wxpython/lmgr/frame.py:1856
 msgid "Unable to start Timeline Tool."
@@ -16829,7 +16849,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:2559
 msgid "Unable to exit GRASS shell: unknown PID"
-msgstr "GRASS 명령창을 종료할 수 없습니다: 알려지지 않은 PID입니다"
+msgstr "GRASS 셸을 종료할 수 없습니다: 알려지지 않은 PID"
 
 #: ../gui/wxpython/lmgr/frame.py:2579
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
@@ -16992,7 +17012,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/layertree.py:816
 msgid "Report raster statistics"
-msgstr ""
+msgstr "래스터 통계를 보고합니다"
 
 #: ../gui/wxpython/lmgr/layertree.py:828
 msgid "Profile"
@@ -17094,7 +17114,7 @@ msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:114
 msgid "GRASS GIS Setup for r.li modules"
-msgstr ""
+msgstr "r.li 모듈을 위한 GRASS GIS 설정"
 
 #: ../gui/wxpython/rlisetup/frame.py:132
 msgid "Available sampling area configuration files"
@@ -17151,7 +17171,7 @@ msgstr ""
 #: ../gui/wxpython/rlisetup/wizard.py:1671
 #, python-format
 msgid "The raster map <%s> already exists. Please remove or rename the maps with the prefix '%s' or select the option to overwrite existing maps"
-msgstr "래스터 지도 <%s>가 이미 존재합니다. '%s'를 접두사로 가진 지도를 제거 또는 개명하세요. 아니면 기존 지도를 덮어쓰는 옵션을 선택하세요"
+msgstr "래스터 지도 <%s>가 이미 존재합니다. '%s'를 접두사로 가진 지도를 제거 또는 이름을 바꾸세요. 아니면 기존 지도를 덮어쓰는 옵션을 선택하세요"
 
 #: ../gui/wxpython/rlisetup/sampling_frame.py:217
 #: ../gui/wxpython/rlisetup/sampling_frame.py:326
@@ -17807,7 +17827,7 @@ msgstr ""
 #: ../gui/wxpython/vnet/vnet_core.py:1039
 #: ../gui/wxpython/vnet/vnet_core.py:1062
 msgid "Snapping mode can not be activated."
-msgstr ""
+msgstr "끌어 붙이기 모드를 활성화할 수 없습니다"
 
 #: ../gui/wxpython/vnet/vnet_core.py:1069
 msgid "Do you really want to activate snapping and overwrite it?"
@@ -17878,7 +17898,7 @@ msgstr ""
 
 #: ../gui/wxpython/vnet/widgets.py:384
 msgid "Invalid value inserted. Operation canceled."
-msgstr ""
+msgstr "무효한 값이 삽입됐습니다. 조작이 취소됐습니다."
 
 #: ../gui/wxpython/vnet/widgets.py:545
 msgid "Edit point"
@@ -18031,7 +18051,7 @@ msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:73
 msgid "GRASS GIS Vector Network Analysis Tool"
-msgstr ""
+msgstr "GRASS GIS 벡터 네트워크 분석 도구"
 
 #: ../gui/wxpython/vnet/dialogs.py:190
 msgid "Point list toolbar"
@@ -18189,11 +18209,11 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/frame.py:36
 msgid "GRASS GIS Data Catalog"
-msgstr ""
+msgstr "GRASS GIS 자료 목록"
 
 #: ../gui/wxpython/datacatalog/frame.py:66
 msgid "Close GRASS GIS Data Catalog"
-msgstr ""
+msgstr "GRASS GIS 자료 목록 닫기"
 
 #: ../gui/wxpython/datacatalog/tree.py:122
 #, python-brace-format
@@ -18292,7 +18312,7 @@ msgstr "g.remove를 완료했습니다"
 #: ../gui/wxpython/datacatalog/tree.py:788
 #, python-brace-format
 msgid "Do you really want to delete map <{m}> of type <{etype}> from mapset <{mapset}> in location <{loc}>?"
-msgstr "로케이션 <{loc}> 안의 지도세트 <{mapset}>으로부터 <{etype}> 타입의 지도 <{m}>를 정말로 삭제하길 원하십니까?"
+msgstr "로케이션 <{loc}> 내 지도세트 <{mapset}>으로부터 <{etype}> 타입의 지도 <{m}>를 정말로 삭제하길 원하십니까?"
 
 #: ../gui/wxpython/datacatalog/tree.py:793
 msgid "Delete map"
@@ -18513,7 +18533,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:56
 msgid "GRASS GIS Attribute Table Manager"
-msgstr ""
+msgstr "GRASS GIS 속성 테이블 관리자"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:79
 #, python-format
@@ -18577,7 +18597,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:79
 msgid "GRASS GIS Attribute Table Manager - "
-msgstr ""
+msgstr "GRASS GIS 속성 테이블 관리자"
 
 #: ../gui/wxpython/dbmgr/manager.py:81
 msgid "READONLY - "
@@ -18648,7 +18668,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:341
 msgid "Unknown value"
-msgstr "알려지지 않은 값입니다"
+msgstr "알려지지 않은 값"
 
 #: ../gui/wxpython/dbmgr/base.py:347
 msgid "Unable to decode value. Set encoding in GUI preferences ('Attributes')."
@@ -18993,7 +19013,7 @@ msgstr "제거할 레이어"
 
 #: ../gui/wxpython/dbmgr/base.py:3289
 msgid "&Remove layer"
-msgstr "레이어를 제거합니다"
+msgstr "레이어 제거(&R)"
 
 #: ../gui/wxpython/dbmgr/base.py:3332
 msgid "Modify layer"
@@ -19141,7 +19161,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:74
 msgid "GRASS GIS Graphical Modeler"
-msgstr ""
+msgstr "GRASS GIS 그래픽 모델러"
 
 #: ../gui/wxpython/gmodeler/frame.py:156
 msgid "Model"
@@ -19186,7 +19206,7 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/frame.py:403
 #, python-format
 msgid "%d intermediate maps deleted from current mapset"
-msgstr "현재 지도세트로부터 %d개의 중간 지도가 삭제되었습니다"
+msgstr "현재 지도세트로부터 %d개의 중간 지도가 삭제됐습니다"
 
 #: ../gui/wxpython/gmodeler/frame.py:412
 msgid "No intermediate data to delete."
@@ -19425,7 +19445,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/preferences.py:132
 msgid "Invalid:"
-msgstr "무효합니다:"
+msgstr "무효:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:150
 msgid "Running:"
@@ -19609,7 +19629,7 @@ msgstr ""
 
 #: ../gui/wxpython/timeline/frame.py:77
 msgid "GRASS GIS Timeline Tool"
-msgstr ""
+msgstr "GRASS GIS 시간선 도구"
 
 #: ../gui/wxpython/timeline/frame.py:141
 msgid "3D plot of spatio-temporal extents"
@@ -19793,7 +19813,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:63
 msgid "GRASS GIS - Map display"
-msgstr ""
+msgstr "GRASS GIS - 지도 디스플레이"
 
 #: ../gui/wxpython/mapdisp/frame.py:241
 #, python-format
@@ -19909,7 +19929,7 @@ msgstr ""
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:343
 #, python-format
 msgid "Unknown value %s of test parameter."
-msgstr "알려지지 않은 검사 매개변수의 값입니다 %s"
+msgstr "알려지지 않은 검정 매개변수의 값 %s"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:418
 msgid "Render"
@@ -19970,7 +19990,7 @@ msgstr ""
 #: ../gui/wxpython/mapdisp/statusbar.py:1024
 #: ../gui/wxpython/mapdisp/statusbar.py:1125
 msgid "Error in projection (check the settings)"
-msgstr ""
+msgstr "투영 내에 오류 (설정을 확인하세요)"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:826
 msgid "Use defined projection"
@@ -19982,7 +20002,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:873
 msgid "MASK"
-msgstr ""
+msgstr "마스크"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:921
 msgid "Display geometry"
@@ -20026,7 +20046,7 @@ msgstr ""
 
 #: ../gui/wxpython/web_services/widgets.py:282
 msgid "Nearest neighbor"
-msgstr ""
+msgstr "최근접 이웃"
 
 #: ../gui/wxpython/web_services/widgets.py:283
 msgid "Linear interpolation"
