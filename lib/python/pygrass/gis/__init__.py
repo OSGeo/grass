@@ -50,7 +50,7 @@ def is_valid(value, path, type):
     :return: True if valid else False
     :rtype: str
     """
-    return bool(CHECK_IS[type](encode(join(path, value))))
+    return bool(CHECK_IS[type](join(path, value)))
 
 
 def _check_raise(value, path, type):

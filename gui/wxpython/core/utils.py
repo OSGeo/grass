@@ -260,7 +260,7 @@ def ListOfCatsToRange(cats):
     catstr = ''
 
     try:
-        cats = map(int, cats)
+        cats = list(map(int, cats))
     except:
         return catstr
 

@@ -8,6 +8,7 @@ import ctypes
 import grass.lib.raster as libraster
 import datetime
 from grass.script.utils import encode
+from grass.pygrass.utils import decode
 
 
 class History(object):
@@ -54,8 +55,8 @@ class History(object):
     # ----------------------------------------------------------------------
     # libraster.HIST_CREATOR
     def _get_creator(self):
-        return libraster.Rast_get_history(self.c_hist,
-                                          libraster.HIST_CREATOR)
+        return decode(libraster.Rast_get_history(self.c_hist,
+                                                 libraster.HIST_CREATOR))
 
     def _set_creator(self, creator):
         creator = encode(creator)
@@ -69,8 +70,8 @@ class History(object):
     # ----------------------------------------------------------------------
     # libraster.HIST_DATSRC_1
     def _get_src1(self):
-        return libraster.Rast_get_history(self.c_hist,
-                                          libraster.HIST_DATSRC_1)
+        return decode(libraster.Rast_get_history(self.c_hist,
+                                                 libraster.HIST_DATSRC_1))
 
     def _set_src1(self, src1):
         src1 = encode(src1)
@@ -84,8 +85,8 @@ class History(object):
     # ----------------------------------------------------------------------
     # libraster.HIST_DATSRC_2
     def _get_src2(self):
-        return libraster.Rast_get_history(self.c_hist,
-                                          libraster.HIST_DATSRC_2)
+        return decode(libraster.Rast_get_history(self.c_hist,
+                                                 libraster.HIST_DATSRC_2))
 
     def _set_src2(self, src2):
         src2 = encode(src2)
@@ -99,8 +100,8 @@ class History(object):
     # ----------------------------------------------------------------------
     # libraster.HIST_KEYWORD
     def _get_keyword(self):
-        return libraster.Rast_get_history(self.c_hist,
-                                          libraster.HIST_KEYWRD)
+        return decode(libraster.Rast_get_history(self.c_hist,
+                                                 libraster.HIST_KEYWRD))
 
     def _set_keyword(self, keyword):
         keyword = encode(keyword)
@@ -114,8 +115,8 @@ class History(object):
     # ----------------------------------------------------------------------
     # libraster.HIST_MAPID
     def _get_date(self):
-        date_str = libraster.Rast_get_history(self.c_hist,
-                                              libraster.HIST_MAPID)
+        date_str = decode(libraster.Rast_get_history(self.c_hist,
+                                                     libraster.HIST_MAPID))
         if date_str:
             try:
                 return datetime.datetime.strptime(date_str, self.date_fmt)
@@ -136,8 +137,8 @@ class History(object):
     # ----------------------------------------------------------------------
     # libraster.HIST_MAPSET
     def _get_mapset(self):
-        return libraster.Rast_get_history(self.c_hist,
-                                          libraster.HIST_MAPSET)
+        return decode(libraster.Rast_get_history(self.c_hist,
+                                                 libraster.HIST_MAPSET))
 
     def _set_mapset(self, mapset):
         mapset = encode(mapset)
@@ -151,8 +152,8 @@ class History(object):
     # ----------------------------------------------------------------------
     # libraster.HIST_MAPTYPE
     def _get_maptype(self):
-        return libraster.Rast_get_history(self.c_hist,
-                                          libraster.HIST_MAPTYPE)
+        return decode(libraster.Rast_get_history(self.c_hist,
+                                                 libraster.HIST_MAPTYPE))
 
     def _set_maptype(self, maptype):
         maptype = encode(maptype)
@@ -181,8 +182,8 @@ class History(object):
     # ----------------------------------------------------------------------
     # libraster.HIST_TITLE
     def _get_title(self):
-        return libraster.Rast_get_history(self.c_hist,
-                                          libraster.HIST_TITLE)
+        return decode(libraster.Rast_get_history(self.c_hist,
+                                                 libraster.HIST_TITLE))
 
     def _set_title(self, title):
         title = encode(title)

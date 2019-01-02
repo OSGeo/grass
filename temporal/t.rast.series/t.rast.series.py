@@ -137,7 +137,7 @@ def main():
             if output.find("@") >= 0:
                 id = output
             else:
-                mapset = grass.encode(grass.gisenv()["MAPSET"])
+                mapset = grass.gisenv()["MAPSET"]
                 id = output + "@" + mapset
 
             map = sp.get_new_map_instance(id)

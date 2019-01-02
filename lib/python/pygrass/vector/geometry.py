@@ -14,6 +14,7 @@ import numpy as np
 import grass.lib.gis as libgis
 import grass.lib.vector as libvect
 
+from grass.pygrass.utils import decode
 from grass.pygrass.errors import GrassError, mapinfo_must_be_set
 
 from grass.pygrass.vector.basic import Ilist, Bbox, Cats
@@ -375,7 +376,7 @@ class Geo(object):
             >>> pnt.to_wkt()
             'POINT (10.0000000000000000 100.0000000000000000)'
         """
-        return libvect.Vect_line_to_wkt(self.c_points, self.gtype, not self.is2D)
+        return decode(libvect.Vect_line_to_wkt(self.c_points, self.gtype, not self.is2D))
 
     def to_wkb(self):
         """Return a "well know binary" (WKB) geometry byte array, this method uses
@@ -721,8 +722,8 @@ class Line(Geo):
                                           pnt.c_points.contents.x,
                                           pnt.c_points.contents.y,
                                           pnt.c_points.contents.z,
-                                          ctypes.c_double(angle),
-                                          ctypes.c_double(slope)):
+                                          ctypes.pointer(ctypes.c_double(angle)),
+                                          ctypes.pointer(ctypes.c_double(slope))):
             raise ValueError("Vect_point_on_line give an error.")
         pnt.is2D = self.is2D
         return pnt
@@ -1710,7 +1711,7 @@ class Area(Geo):
         """Return a "well know text" (WKT) area string, this method uses
            the GEOS implementation in the vector library. ::
         """
-        return libvect.Vect_read_area_to_wkt(self.c_mapinfo, self.id)
+        return decode(libvect.Vect_read_area_to_wkt(self.c_mapinfo, self.id))
 
     def to_wkb(self):
         """Return a "well know binary" (WKB) area byte array, this method uses

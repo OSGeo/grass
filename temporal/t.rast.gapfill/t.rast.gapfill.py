@@ -89,7 +89,7 @@ def main():
     nprocs = options["nprocs"]
     tsuffix = options["suffix"]
 
-    mapset = grass.encode(grass.gisenv()["MAPSET"])
+    mapset = grass.gisenv()["MAPSET"]
 
     # Make sure the temporal database exists
     tgis.init()

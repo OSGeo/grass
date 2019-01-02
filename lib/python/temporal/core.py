@@ -450,31 +450,29 @@ def get_available_temporal_mapsets():
     global message_interface
 
     mapsets = c_library_interface.available_mapsets()
-
+    
     tgis_mapsets = {}
 
     for mapset in mapsets:
-        mapset = decode(mapset)
+        mapset = mapset
         driver = c_library_interface.get_driver_name(mapset)
         database = c_library_interface.get_database_name(mapset)
 
         message_interface.debug(1, "get_available_temporal_mapsets: "\
                                    "\n  mapset %s\n  driver %s\n  database %s"%(mapset,
                                    driver, database))
-
         if driver and database:
             # Check if the temporal sqlite database exists
             # We need to set non-existing databases in case the mapset is the current mapset
             # to create it
-            if (encode(driver) == "sqlite" and os.path.exists(database)) or encode(mapset) == get_current_mapset() :
+            if (driver == "sqlite" and os.path.exists(database)) or mapset == get_current_mapset() :
                 tgis_mapsets[mapset] = (driver,  database)
 
             # We need to warn if the connection is defined but the database does not
             # exists
-            if encode(driver) == "sqlite" and not os.path.exists(database):
+            if driver == "sqlite" and not os.path.exists(database):
                 message_interface.warning("Temporal database connection defined as:\n" + \
                                           database + "\nBut database file does not exist.")
-
     return tgis_mapsets
 
 ###############################################################################
@@ -543,9 +541,9 @@ def init(raise_fatal_error=False):
     grassenv = gscript.gisenv()
 
     # Set the global variable for faster access
-    current_mapset = gscript.encode(grassenv["MAPSET"])
-    current_location = gscript.encode(grassenv["LOCATION_NAME"])
-    current_gisdbase = gscript.encode(grassenv["GISDBASE"])
+    current_mapset = grassenv["MAPSET"]
+    current_location = grassenv["LOCATION_NAME"]
+    current_gisdbase = grassenv["GISDBASE"]
 
     # Check environment variable GRASS_TGIS_RAISE_ON_ERROR
     if os.getenv("GRASS_TGIS_RAISE_ON_ERROR") == "True" or \

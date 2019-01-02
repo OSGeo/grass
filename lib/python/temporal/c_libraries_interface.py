@@ -27,7 +27,8 @@ import grass.lib.temporal as libtgis
 from grass.pygrass.rpc.base import RPCServerBase
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.vector import VectorTopo
-from grass.script.utils import encode, decode
+from grass.script.utils import encode
+from grass.pygrass.utils import decode
 
 ###############################################################################
 
@@ -190,7 +191,7 @@ def _get_mapset(lock, conn, data):
        :returns: Name of the current mapset
     """
     mapset = libgis.G_mapset()
-    conn.send(mapset)
+    conn.send(decode(mapset))
 
 ###############################################################################
 
@@ -205,7 +206,7 @@ def _get_location(lock, conn, data):
        :returns: Name of the location
     """
     location = libgis.G_location()
-    conn.send(location)
+    conn.send(decode(location))
 
 ###############################################################################
 
@@ -220,7 +221,7 @@ def _get_gisdbase(lock, conn, data):
        :returns: Name of the gisdatabase
     """
     gisdbase = libgis.G_gisdbase()
-    conn.send(gisdbase)
+    conn.send(decode(gisdbase))
 
 ###############################################################################
 
@@ -237,9 +238,11 @@ def _get_driver_name(lock, conn, data):
     mapset = data[1]
     if not mapset:
         mapset = libgis.G_mapset()
+    else:
+        mapset = encode(mapset)
 
     drstring = libtgis.tgis_get_mapset_driver_name(mapset)
-    conn.send(drstring.data)
+    conn.send(decode(drstring.data))
 
 ###############################################################################
 
@@ -258,6 +261,8 @@ def _get_database_name(lock, conn, data):
         mapset = data[1]
         if not mapset:
             mapset = libgis.G_mapset()
+        else:
+            mapset = encode(mapset)
         dbstring = libtgis.tgis_get_mapset_database_name(mapset)
         dbstring = dbstring.data
 
@@ -266,11 +271,11 @@ def _get_database_name(lock, conn, data):
             # This behavior is in conjunction with db.connect
             dbstring = dbstring.replace(encode("$GISDBASE"), libgis.G_gisdbase())
             dbstring = dbstring.replace(encode("$LOCATION_NAME"), libgis.G_location())
-            dbstring = dbstring.replace(encode("$MAPSET"), encode(mapset))
+            dbstring = dbstring.replace(encode("$MAPSET"), mapset)
     except:
         raise
     finally:
-        conn.send(dbstring)
+        conn.send(decode(dbstring))
 
 ###############################################################################
 

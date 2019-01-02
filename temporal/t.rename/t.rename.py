@@ -57,7 +57,7 @@ def main():
     tgis.init()
 
     #Get the current mapset to create the id of the space time dataset
-    mapset = grass.encode(grass.gisenv()["MAPSET"])
+    mapset = grass.gisenv()["MAPSET"]
 
     if input.find("@") >= 0:
         old_id = input

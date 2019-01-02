@@ -88,7 +88,7 @@ class Vector(Info):
         return self
 
     @must_be_open
-    def next(self):
+    def __next__(self):
         """::
 
             >>> test_vect = Vector(test_vector_name)
@@ -103,6 +103,10 @@ class Vector(Info):
         """
         return read_next_line(self.c_mapinfo, self.table, self.writeable,
                               is2D=not self.is_3D())
+
+    @must_be_open
+    def next(self):
+        return self.__next__()
 
     @must_be_open
     def rewind(self):

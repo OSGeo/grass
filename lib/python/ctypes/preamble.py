@@ -3,7 +3,7 @@ import os
 import sys
 import six
 from ctypes import *
-from grass.script.utils import encode, decode
+from grass.script.utils import encode
 
 if sys.version_info.major >= 3:
     long = int
@@ -20,6 +20,13 @@ for t in _int_types:
         c_ptrdiff_t = t
 del t
 del _int_types
+
+
+class c_void(Structure):
+    # c_void_p is a buggy return type, converting to int, so
+    # POINTER(None) == c_void_p is actually written as
+    # POINTER(c_void), so it can be treated as a real pointer.
+    _fields_ = [('dummy', c_int)]
 
 
 def POINTER(obj):
@@ -40,33 +47,26 @@ def POINTER(obj):
 
 class UserString:
     def __init__(self, seq):
-        if isinstance(seq, basestring):
+        if isinstance(seq, str):
             self.data = seq
         elif isinstance(seq, UserString):
             self.data = seq.data[:]
         else:
             self.data = str(seq)
 
-    def __str__(self):
-        return str(self.data)
+    def __str__(self): return str(self.data)
 
-    def __repr__(self):
-        return repr(self.data)
+    def __repr__(self): return repr(self.data)
 
-    def __int__(self):
-        return int(self.data)
+    def __int__(self): return int(self.data)
 
-    def __long__(self):
-        return long(self.data)
+    def __long__(self): return long(self.data)
 
-    def __float__(self):
-        return float(self.data)
+    def __float__(self): return float(self.data)
 
-    def __complex__(self):
-        return complex(self.data)
+    def __complex__(self): return complex(self.data)
 
-    def __hash__(self):
-        return hash(self.data)
+    def __hash__(self): return hash(self.data)
 
     def __cmp__(self, string):
         if isinstance(string, UserString):
@@ -77,11 +77,9 @@ class UserString:
     def __contains__(self, char):
         return char in self.data
 
-    def __len__(self):
-        return len(self.data)
+    def __len__(self): return len(self.data)
 
-    def __getitem__(self, index):
-        return self.__class__(self.data[index])
+    def __getitem__(self, index): return self.__class__(self.data[index])
 
     def __getslice__(self, start, end):
         start = max(start, 0)
@@ -91,13 +89,13 @@ class UserString:
     def __add__(self, other):
         if isinstance(other, UserString):
             return self.__class__(self.data + other.data)
-        elif isinstance(other, basestring):
+        elif isinstance(other, str):
             return self.__class__(self.data + other)
         else:
             return self.__class__(self.data + str(other))
 
     def __radd__(self, other):
-        if isinstance(other, basestring):
+        if isinstance(other, str):
             return self.__class__(other + self.data)
         else:
             return self.__class__(str(other) + self.data)
@@ -110,8 +108,7 @@ class UserString:
         return self.__class__(self.data % args)
 
     # the following methods are defined in alphabetical order:
-    def capitalize(self):
-        return self.__class__(self.data.capitalize())
+    def capitalize(self): return self.__class__(self.data.capitalize())
 
     def center(self, width, *args):
         return self.__class__(self.data.center(width, *args))
@@ -149,44 +146,32 @@ class UserString:
     def index(self, sub, start=0, end=sys.maxsize):
         return self.data.index(sub, start, end)
 
-    def isalpha(self):
-        return self.data.isalpha()
+    def isalpha(self): return self.data.isalpha()
 
-    def isalnum(self):
-        return self.data.isalnum()
+    def isalnum(self): return self.data.isalnum()
 
-    def isdecimal(self):
-        return self.data.isdecimal()
+    def isdecimal(self): return self.data.isdecimal()
 
-    def isdigit(self):
-        return self.data.isdigit()
+    def isdigit(self): return self.data.isdigit()
 
-    def islower(self):
-        return self.data.islower()
+    def islower(self): return self.data.islower()
 
-    def isnumeric(self):
-        return self.data.isnumeric()
+    def isnumeric(self): return self.data.isnumeric()
 
-    def isspace(self):
-        return self.data.isspace()
+    def isspace(self): return self.data.isspace()
 
-    def istitle(self):
-        return self.data.istitle()
+    def istitle(self): return self.data.istitle()
 
-    def isupper(self):
-        return self.data.isupper()
+    def isupper(self): return self.data.isupper()
 
-    def join(self, seq):
-        return self.data.join(seq)
+    def join(self, seq): return self.data.join(seq)
 
     def ljust(self, width, *args):
         return self.__class__(self.data.ljust(width, *args))
 
-    def lower(self):
-        return self.__class__(self.data.lower())
+    def lower(self): return self.__class__(self.data.lower())
 
-    def lstrip(self, chars=None):
-        return self.__class__(self.data.lstrip(chars))
+    def lstrip(self, chars=None): return self.__class__(self.data.lstrip(chars))
 
     def partition(self, sep):
         return self.data.partition(sep)
@@ -206,8 +191,7 @@ class UserString:
     def rpartition(self, sep):
         return self.data.rpartition(sep)
 
-    def rstrip(self, chars=None):
-        return self.__class__(self.data.rstrip(chars))
+    def rstrip(self, chars=None): return self.__class__(self.data.rstrip(chars))
 
     def split(self, sep=None, maxsplit=-1):
         return self.data.split(sep, maxsplit)
@@ -215,29 +199,23 @@ class UserString:
     def rsplit(self, sep=None, maxsplit=-1):
         return self.data.rsplit(sep, maxsplit)
 
-    def splitlines(self, keepends=0):
-        return self.data.splitlines(keepends)
+    def splitlines(self, keepends=0): return self.data.splitlines(keepends)
 
     def startswith(self, prefix, start=0, end=sys.maxsize):
         return self.data.startswith(prefix, start, end)
 
-    def strip(self, chars=None):
-        return self.__class__(self.data.strip(chars))
+    def strip(self, chars=None): return self.__class__(self.data.strip(chars))
 
-    def swapcase(self):
-        return self.__class__(self.data.swapcase())
+    def swapcase(self): return self.__class__(self.data.swapcase())
 
-    def title(self):
-        return self.__class__(self.data.title())
+    def title(self): return self.__class__(self.data.title())
 
     def translate(self, *args):
         return self.__class__(self.data.translate(*args))
 
-    def upper(self):
-        return self.__class__(self.data.upper())
+    def upper(self): return self.__class__(self.data.upper())
 
-    def zfill(self, width):
-        return self.__class__(self.data.zfill(width))
+    def zfill(self, width): return self.__class__(self.data.zfill(width))
 
 
 class MutableString(UserString):
@@ -281,7 +259,7 @@ class MutableString(UserString):
         end = max(end, 0)
         if isinstance(sub, UserString):
             self.data = self.data[:start] + sub.data + self.data[end:]
-        elif isinstance(sub, basestring):
+        elif isinstance(sub, str):
             self.data = self.data[:start] + sub + self.data[end:]
         else:
             self.data = self.data[:start] + str(sub) + self.data[end:]
@@ -297,7 +275,7 @@ class MutableString(UserString):
     def __iadd__(self, other):
         if isinstance(other, UserString):
             self.data += other.data
-        elif isinstance(other, basestring):
+        elif isinstance(other, str):
             self.data += other
         else:
             self.data += str(other)
@@ -314,8 +292,8 @@ class String(MutableString, Union):
                 ('data', c_char_p)]
 
     def __init__(self, obj=""):
-        if isinstance(obj, (str, unicode, UserString)):
-            self.data = encode(str(obj))
+        if isinstance(obj, (str, unicode, bytes, UserString)):
+            self.data = encode(obj)
         else:
             self.raw = obj
 

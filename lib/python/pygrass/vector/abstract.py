@@ -119,7 +119,7 @@ class Info(object):
 
     def _set_organization(self, org):
         """Private method to change the Vector organization"""
-        libvect.Vect_set_organization(self.c_mapinfo, ctypes.c_char_p(org))
+        libvect.Vect_set_organization(self.c_mapinfo, org)
 
     organization = property(fget=_get_organization, fset=_set_organization,
                             doc="Set or obtain the Vector organization")
@@ -130,7 +130,7 @@ class Info(object):
 
     def _set_date(self, date):
         """Private method to change the Vector date"""
-        return libvect.Vect_set_date(self.c_mapinfo, ctypes.c_char_p(date))
+        return libvect.Vect_set_date(self.c_mapinfo, date)
 
     date = property(fget=_get_date, fset=_set_date,
                     doc="Set or obtain the Vector date")
@@ -141,7 +141,7 @@ class Info(object):
 
     def _set_person(self, person):
         """Private method to change the Vector person"""
-        libvect.Vect_set_person(self.c_mapinfo, ctypes.c_char_p(person))
+        libvect.Vect_set_person(self.c_mapinfo, person)
 
     person = property(fget=_get_person, fset=_set_person,
                       doc="Set or obtain the Vector author")
@@ -152,7 +152,7 @@ class Info(object):
 
     def _set_title(self, title):
         """Private method to change the Vector title"""
-        libvect.Vect_set_map_name(self.c_mapinfo, ctypes.c_char_p(title))
+        libvect.Vect_set_map_name(self.c_mapinfo, title)
 
     title = property(fget=_get_title, fset=_set_title,
                      doc="Set or obtain the Vector title")
@@ -168,7 +168,7 @@ class Info(object):
     def _set_map_date(self, datetimeobj):
         """Private method to change the Vector map date"""
         date_str = datetimeobj.strftime(self.date_fmt)
-        libvect.Vect_set_map_date(self.c_mapinfo, ctypes.c_char_p(date_str))
+        libvect.Vect_set_map_date(self.c_mapinfo, date_str)
 
     map_date = property(fget=_get_map_date, fset=_set_map_date,
                         doc="Set or obtain the Vector map date")
@@ -190,7 +190,7 @@ class Info(object):
 
     def _set_comment(self, comm):
         """Private method to set the Vector comment"""
-        return libvect.Vect_set_comment(self.c_mapinfo, ctypes.c_char_p(comm))
+        return libvect.Vect_set_comment(self.c_mapinfo, comm)
 
     comment = property(fget=_get_comment, fset=_set_comment,
                        doc="Set or obtain the Vector comment")

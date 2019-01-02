@@ -104,7 +104,7 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    mapset = grass.encode(grass.gisenv()["MAPSET"])
+    mapset = grass.gisenv()["MAPSET"]
 
     out_sp = tgis.check_new_stds(output, "stvds", dbif, overwrite)
 
