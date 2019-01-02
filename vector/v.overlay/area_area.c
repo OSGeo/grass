@@ -18,7 +18,10 @@
 /* for ilist qsort'ing and bsearch'ing */
 static int cmp_int(const void *a, const void *b)
 {
-    return (*(int *)a - *(int *)b);
+    if (*(int *)a < *(int *)b)
+	return -1;
+
+    return (*(int *)a > *(int *)b);
 }
 
 int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
@@ -35,6 +38,12 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
     dbString stmt;
     int nmodif;
     int verbose;
+    struct bound_box box;
+    struct spatial_index si;
+    int ocentr, ncentr;
+    int isle, nisles_alloc;
+    struct line_pnts *APoints, **IPoints;
+    struct ilist *List;
 
     verbose = G_verbose();
 
@@ -44,7 +53,6 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
     /* optional snap */
     if (snap > 0) {
 	int i, j, snapped_lines = 0;
-	struct bound_box box;
 	struct boxlist *boxlist = Vect_new_boxlist(0);
 	struct ilist *reflist = Vect_new_list();
 	
@@ -176,44 +184,106 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 	}
     }
 
+    /* build a spatial index for new centroids */
+    Vect_spatial_index_init(&si, 0);
+    ncentr = nareas;
+    for (ocentr = 1; ocentr <= ncentr; ocentr++) {
+	box.N = box.S = Centr[ocentr].y;
+	box.E = box.W = Centr[ocentr].x;
+	box.T = box.B = 0;
+	Vect_spatial_index_add_item(&si, ocentr, &box);
+
+	Centr[ocentr].cat[0] = Vect_new_cats_struct();
+	Centr[ocentr].cat[1] = Vect_new_cats_struct();
+    }
+
+    nisles_alloc = 10;
+    IPoints = G_malloc(nisles_alloc * sizeof(struct line_pnts *));
+    for (isle = 0; isle < nisles_alloc; isle++)
+	IPoints[isle] = Vect_new_line_struct();
+    APoints = Vect_new_line_struct();
+
+    List = Vect_new_list();
+
     /* Query input maps */
     for (input = 0; input < 2; input++) {
 	G_message(_("Querying vector map <%s>..."),
 		  Vect_get_full_name(&(In[input])));
 
+	nareas = Vect_get_num_areas(&(In[input]));
+	G_percent(0, nareas, 1);
 	for (area = 1; area <= nareas; area++) {
-	    Centr[area].cat[input] = Vect_new_cats_struct();
 
 	    G_percent(area, nareas, 1);
 
-	    in_area =
-		Vect_find_area(&(In[input]), Centr[area].x, Centr[area].y);
-	    if (in_area > 0) {
-		in_centr = Vect_get_area_centroid(&(In[input]), in_area);
-		if (in_centr > 0) {
-		    int i;
+	    in_centr = Vect_get_area_centroid(&(In[input]), area);
+	    if (in_centr > 0) {
+		int i, j;
+		int nisles;
+		
 
-		    Vect_read_line(&(In[input]), NULL, Cats, in_centr);
-		    /* Add all cats with original field number */
-		    for (i = 0; i < Cats->n_cats; i++) {
-			if (Cats->field[i] == field[input]) {
-			    ATTR *at;
+		Vect_read_line(&(In[input]), NULL, Cats, in_centr);
+		Vect_get_area_points(&(In[input]), area, APoints);
+		nisles = Vect_get_area_num_isles(&(In[input]), area);
+		if (nisles > nisles_alloc) {
+		    IPoints = G_realloc(IPoints, (nisles + 10) * sizeof(struct line_pnts *));
+		    for (isle = nisles_alloc; isle < nisles + 10; isle++)
+			IPoints[isle] = Vect_new_line_struct();
+		    nisles_alloc = nisles + 10;
+		}
+		for (isle = 0; isle < nisles; isle++) {
+		    int isle_id = Vect_get_area_isle(&(In[input]), area, isle);
 
-			    Vect_cat_set(Centr[area].cat[input], field[input],
-					 Cats->cat[i]);
+		    Vect_get_isle_points(&(In[input]), isle_id, IPoints[isle]);
+		}
 
-			    /* Mark as used */
-			    at = find_attr(&(attr[input]), Cats->cat[i]);
-			    if (!at)
-				G_fatal_error(_("Attribute not found"));
+		Vect_line_box(APoints, &box);
+		/* centroid's z is set to zero */
+		box.T = box.B = 0;
 
-			    at->used = 1;
+		Vect_spatial_index_select(&si, &box, List);
+		for (j = 0; j < List->n_values; j++) {
+		    int centr_in_area;
+
+		    ocentr = List->value[j];
+		    centr_in_area = Vect_point_in_poly(Centr[ocentr].x,
+						       Centr[ocentr].y,
+						       APoints);
+		    if (centr_in_area == 1) {
+			for (isle = 0; isle < nisles; isle++) {
+			    if (Vect_point_in_poly(Centr[ocentr].x,
+						   Centr[ocentr].y,
+						   IPoints[isle]) > 0) {
+				centr_in_area = 0;
+				break;
+			    }
+			}
+		    }
+
+		    if (centr_in_area > 0) {
+			/* Add all cats with original field number */
+			for (i = 0; i < Cats->n_cats; i++) {
+			    if (Cats->field[i] == field[input]) {
+				ATTR *at;
+
+				Vect_cat_set(Centr[ocentr].cat[input], field[input],
+					     Cats->cat[i]);
+
+				/* Mark as used */
+				at = find_attr(&(attr[input]), Cats->cat[i]);
+				if (!at)
+				    G_fatal_error(_("Attribute not found"));
+
+				at->used = 1;
+			    }
 			}
 		    }
 		}
 	    }
 	}
     }
+    Vect_spatial_index_destroy(&si);
+    nareas = Vect_get_num_areas(Tmp);
 
     G_message(_("Writing centroids..."));
 
@@ -374,6 +444,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
     Vect_build_partial(Tmp, GV_BUILD_CENTROIDS);
     G_set_verbose(verbose);
     /* Copy valid boundaries to final output */
+    G_message(_("Copying results to final output map..."));
+
     nlines = Vect_get_num_lines(Tmp);
 
     for (line = 1; line <= nlines; line++) {
