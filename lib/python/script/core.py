@@ -27,6 +27,7 @@ import shutil
 import codecs
 import string
 import random
+import pipes
 import types as python_types
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode
@@ -39,12 +40,10 @@ gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 try:
     # python2
     import __builtin__
-    from os import environ
     __builtin__.__dict__['_'] = __builtin__.__dict__['_'].__self__.ugettext
 except ImportError:
     # python3
     import builtins as __builtin__
-    from os import environb as environ
     unicode = str
     __builtin__.__dict__['_'] = __builtin__.__dict__['_'].__self__.gettext
 
@@ -820,9 +819,9 @@ def parser():
         print("You must be in GRASS GIS to run this program.", file=sys.stderr)
         sys.exit(1)
 
-    cmdline = [basename(encode(sys.argv[0]))]
-    cmdline += [b'"' + encode(arg) + b'"' for arg in sys.argv[1:]]
-    environ[b'CMDLINE'] = b' '.join(cmdline)
+    cmdline = [basename(sys.argv[0])]
+    cmdline += [pipes.quote(a) for a in sys.argv[1:]]
+    os.environ['CMDLINE'] = ' '.join(cmdline)
 
     argv = sys.argv[:]
     name = argv[0]
