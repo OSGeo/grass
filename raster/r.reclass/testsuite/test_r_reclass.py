@@ -37,7 +37,7 @@ class Testrr(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-	cls.runModule('g.region', raster=cls.input)
+        cls.runModule('g.region', raster=cls.input)
 	
     @classmethod
     def tearDownClass(cls):
@@ -48,37 +48,37 @@ class Testrr(TestCase):
 
     def test_rules1(self):
         """Testing rules 1 """
-	reclass = SimpleModule('r.reclass', input=self.input, output=self.output,
+        reclass = SimpleModule('r.reclass', input=self.input, output=self.output,
                               rules='-')
         reclass.inputs.stdin = rules1
         self.assertModule(reclass)
-	info = 'min=1\nmax=2\ndatatype=CELL'
+        info = 'min=1\nmax=2\ndatatype=CELL'
         self.assertRasterFitsInfo(raster='reclass', reference=info)
 
     def test_rules2(self):
         """Testing Rules2"""
-	reclass = SimpleModule('r.reclass', input=self.input, output=self.output,
+        reclass = SimpleModule('r.reclass', input=self.input, output=self.output,
                               rules='-')
         reclass.inputs.stdin = rules2
         self.assertModule(reclass)
-	info = 'min=1\nmax=2\ndatatype=CELL'
+        info = 'min=1\nmax=2\ndatatype=CELL'
         self.assertRasterFitsInfo(raster='reclass', reference=info)
 
     def test_rules3(self):
         """Testing rules3"""
-	reclass = SimpleModule('r.reclass', input=self.input, output=self.output,
+        reclass = SimpleModule('r.reclass', input=self.input, output=self.output,
                               rules='-')
         reclass.inputs.stdin = rules3
         self.assertModule(reclass)
-	info = 'min=1\nmax=3\ndatatype=CELL'
+        info = 'min=1\nmax=3\ndatatype=CELL'
         self.assertRasterFitsInfo(raster='reclass', reference=info)
 
     def test_rules4(self):
         """Testing rules with external file"""
-	reclass = SimpleModule('r.reclass', input=self.input, output=self.output,
+        reclass = SimpleModule('r.reclass', input=self.input, output=self.output,
                               rules='data/rules.txt')
         self.assertModule(reclass)
-	info = 'min=1\nmax=3\ndatatype=CELL'
+        info = 'min=1\nmax=3\ndatatype=CELL'
         self.assertRasterFitsInfo(raster='reclass', reference=info)
 
 if __name__ == '__main__':
