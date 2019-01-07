@@ -8,8 +8,8 @@ LDFLAGS += $(SHLIB_LDFLAGS)
 
 $(SHLIB): $(SHLIB_OBJS)
 	$(SHLIB_LD) -o $@ $(LDFLAGS) $^ $(LIBES) $(EXTRA_LIBS) $(MATHLIB)
-        # unversioned names are supposed to be symlinks, Windows
-        # doesn't have symlinks, so MinGW's "ln" just copies the file
+ifndef MINGW
 	(cd $(ARCH_LIBDIR); ln -f -s $(notdir $@) $(patsubst %.$(GRASS_VERSION_NUMBER)$(SHLIB_SUFFIX),%$(SHLIB_SUFFIX),$@))
+endif
 
 shlib: $(SHLIB)
