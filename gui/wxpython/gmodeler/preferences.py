@@ -23,7 +23,7 @@ from gui_core.preferences import PreferencesBaseDialog
 from core.settings import UserSettings
 from core.utils import _
 from gui_core.wrap import SpinCtrl, Button, StaticText, \
-    StaticBox
+    StaticBox, TextCtrl
 
 
 class PreferencesDialog(PreferencesBaseDialog):
