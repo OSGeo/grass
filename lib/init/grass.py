@@ -347,7 +347,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
     gui=_("use $DEFAULT_GUI graphical user interface"),
     gui_detail=_("and set as default"),
     config=_("print GRASS configuration parameters"),
-    config_detail=_("options: arch,build,compiler,path,revision,version"),
+    config_detail=_("options: arch,build,compiler,path,revision,svn_revision,version"),
     params=_("Parameters"),
     gisdbase=_("initial GRASS GIS database directory"),
     gisdbase_detail=_("directory containing Locations"),
@@ -1842,6 +1842,15 @@ def print_params():
             filerev.close()
             sys.stdout.write(
                 "%s\n" % val[0].split(':')[1].rstrip('$"\n').strip())
+        elif arg == 'svn_revision':
+            filerev = open(gpath('etc', 'VERSIONNUMBER'))
+            linerev = filerev.readline().rstrip('\n')
+            filerev.close()
+            try:
+               revision = linerev.split(' ')[1]
+               sys.stdout.write("%s\n" % revision[1:])
+            except:
+               sys.stdout.write("No SVN revision defined\n")
         elif arg == 'version':
             sys.stdout.write("%s\n" % grass_version)
         else:
