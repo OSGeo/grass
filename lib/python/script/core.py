@@ -72,6 +72,7 @@ class Popen(subprocess.Popen):
             if ext.lower() not in self._builtin_exts:
                 kwargs['shell'] = True
                 args = [self._escape_for_shell(arg) for arg in args]
+            args = [decode(arg) for arg in args]
         subprocess.Popen.__init__(self, args, **kwargs)
 
 PIPE = subprocess.PIPE
@@ -208,16 +209,17 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
         if not os.curdir in path:
             path.insert(0, os.curdir)
 
-        # PATHEXT is necessary to check on Windows.
-        pathext = os.environ.get("PATHEXT", "").split(os.pathsep)
-        map(lambda x: x.lower(), pathext) # force lowercase
-        if '.py' not in pathext:          # we assume that PATHEXT contains always '.py'
-            pathext.insert(0, '.py')
+        # PATHEXT is necessary to check on Windows (force lowercase)
+        pathext = list(map(lambda x: encode(x.lower()),
+                           os.environ.get("PATHEXT", "").split(os.pathsep)))
+        if b'.py' not in pathext:
+            # we assume that PATHEXT contains always '.py'
+            pathext.insert(0, b'.py')
         # See if the given file matches any of the expected path extensions.
         # This will allow us to short circuit when given "python.exe".
         # If it does match, only test that one, otherwise we have to try
         # others.
-        if any(cmd.lower().endswith(ext.lower()) for ext in pathext):
+        if any(cmd.lower().endswith(ext) for ext in pathext):
             files = [cmd]
         else:
             files = [cmd + ext for ext in pathext]
@@ -232,7 +234,7 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
         if not normdir in seen:
             seen.add(normdir)
             for thefile in files:
-                name = os.path.join(dir, thefile)
+                name = os.path.join(encode(dir), thefile)
                 if _access_check(name, mode):
                     return name
     return None

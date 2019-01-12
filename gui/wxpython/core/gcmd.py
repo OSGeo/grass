@@ -47,25 +47,12 @@ else:
     import select
     import fcntl
 
-from grass.script import core as grass
-from core import globalvar
 from core.debug import Debug
+from core.globalvar import SCT_EXT, _
+
+from grass.script import core as grass
 from grass.script.utils import decode
 
-# cannot import from the core.utils module to avoid cross dependencies
-try:
-    # intended to be used also outside this module
-    import gettext
-    _ = gettext.translation(
-        'grasswxpy',
-        os.path.join(
-            os.getenv("GISBASE"),
-            'locale')).ugettext
-except IOError:
-    # using no translation silently
-    def null_gettext(string):
-        return string
-    _ = null_gettext
 
 if sys.version_info.major == 2:
     bytes = str
@@ -586,7 +573,7 @@ class CommandThread(Thread):
         # changing from one chdir to get_real_command function
         args = self.cmd
         if sys.platform == 'win32':
-            if os.path.splitext(args[0])[1] == globalvar.SCT_EXT:
+            if os.path.splitext(args[0])[1] == SCT_EXT:
                 args[0] = args[0][:-3]
             # using Python executable to run the module if it is a script
             # expecting at least module name at first position

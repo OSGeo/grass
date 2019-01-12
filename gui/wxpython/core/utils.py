@@ -26,24 +26,9 @@ from grass.script import core as grass
 from grass.script import task as gtask
 from grass.exceptions import OpenError
 
-from core import globalvar
 from core.gcmd import RunCommand
 from core.debug import Debug
-
-try:
-    # intended to be used also outside this module
-    import gettext
-    _ = gettext.translation(
-        'grasswxpy',
-        os.path.join(
-            os.getenv("GISBASE"),
-            'locale')).ugettext
-except IOError:
-    # using no translation silently
-    def null_gettext(string):
-        return string
-    _ = null_gettext
-
+from core.globalvar import ETCDIR, wxPythonPhoenix, _
 
 def cmp(a, b):
     """cmp function"""
@@ -840,7 +825,7 @@ def GetSettingsPath():
     """Get full path to the settings directory
     """
     try:
-        verFd = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
+        verFd = open(os.path.join(ETCDIR, "VERSIONNUMBER"))
         version = int(verFd.readlines()[0].split(' ')[0].split('.')[0])
     except (IOError, ValueError, TypeError, IndexError) as e:
         sys.exit(
@@ -1097,7 +1082,7 @@ def PilImageToWxImage(pilImage, copyAlpha=True):
                 pilImageCopyRGBA,
                 "tostring"))
         # Create layer and insert alpha values.
-        if globalvar.wxPythonPhoenix:
+        if wxPythonPhoenix:
             wxImage.SetAlpha(fn()[3::4])
         else:
             wxImage.SetAlphaData(fn()[3::4])

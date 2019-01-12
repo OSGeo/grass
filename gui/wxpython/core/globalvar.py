@@ -30,15 +30,14 @@ SYMBDIR = os.path.join(IMGDIR, "symbols")
 
 from core.debug import Debug
 
-# cannot import from the core.utils module to avoid cross dependencies
 try:
     # intended to be used also outside this module
     import gettext
-    _ = gettext.translation(
-        'grasswxpy',
-        os.path.join(
-            os.getenv("GISBASE"),
-            'locale')).ugettext
+    trans = gettext.translation('grasswxpy',
+                                os.path.join(os.getenv("GISBASE"),
+                                                       'locale')
+    )
+    _ = trans.gettext if sys.version_info.major >=3 else trans.ugettext
 except IOError:
     # using no translation silently
     def null_gettext(string):
