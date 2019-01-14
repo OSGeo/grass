@@ -70,7 +70,9 @@ def main():
 
     # write groff
     with open(sys.argv[2], 'wb') as outf:
-        outf.write(s.encode('UTF-8'))
+        if sys.version_info.major >= 3:
+            s = s.encode('UTF-8')
+        outf.write(s)
 
 if __name__ == "__main__":
     main()
