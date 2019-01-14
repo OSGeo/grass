@@ -69,9 +69,8 @@ def main():
     s = s.lstrip()
 
     # write groff
-    outf = open(sys.argv[2], 'w')
-    outf.write(s)
-    outf.close()
+    with open(sys.argv[2], 'wb') as outf:
+        outf.write(s.encode('UTF-8'))
 
 if __name__ == "__main__":
     main()
