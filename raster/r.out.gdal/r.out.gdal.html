@@ -111,6 +111,16 @@ possible values which is very large for e.g. Int32 or Float32. E.g.
 stretching the color table to actual min/max would help (sometimes under
 symbology).
 
+<h3>Adding overviews to speed up map display in other software</h3>
+
+Adding overviews with <tt><a href="https://www.gdal.org/gdaladdo.html">gdaladdo</a></tt>
+after exporting can speed up display. The overviews are created internally
+within the exported file. The amount of levels (power-of-two factors) are
+controlled with the <b>overviews</b> parameter. The higher the overview level
+defined by the user the more lower resolution internal overviews are added
+Note that other software might create their own overviews, ignoring existing
+overviews.
+
 <h3>GeoTIFF caveats</h3>
 
 GeoTIFF exports can only be displayed by standard image viewers
@@ -125,7 +135,7 @@ ImageMagick, the interleaving mode should be set to "pixel" using
 efficient, but not supported by some applications.
 <!-- GDAL switched default from BAND to PIXEL interleave on 08/01/07 (r11823) -->
 This issue only arises when writing out multi-band imagery groups.
-<p>
+
 <h3>Improving GeoTIFF compatibility</h3>
 
 To create a GeoTIFF that is highly compatible with various other GIS
@@ -156,10 +166,6 @@ a method to reset the color table and assign a new color table
 <li>Keep metadata simple with <tt>createopt="PROFILE=GeoTIFF"</tt> or 
 <tt>createopt="PROFILE=BASELINE"</tt>. With BASELINE no GDAL or GeoTIFF
 tags will be written and a World file is required (<em>createopt="TFW=YES"</em>).
-
-<li>Adding overviews with <tt>gdaladdo</tt> after exporting can speed up display.
-Note that other software might create their own overviews, ignoring existing
-overviews.
 </ul>
 
 <p>
@@ -190,6 +196,14 @@ r.out.gdal in=elevation output=elevation.tif createopt="PROFILE=GeoTIFF,TFW=YES"
 <div class="code"><pre>
 g.region raster=elevation -p
 r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE"
+</pre></div>
+
+<h3>Export a raster map with internal overview in "Deflate" compressed GeoTIFF format</h3>
+
+<div class="code"><pre>
+g.region raster=elevation -p
+# overviews=5 corresponds to 'gdaladdo ... 2 4 8 16 32'
+r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE" overviews=5
 </pre></div>
 
 
