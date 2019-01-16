@@ -30,7 +30,7 @@ ref2 = """azimuth,horizon_height
 280.000000,0.039774
 300.000000,0.032360
 320.000000,0.014804
-340.000000,0.000000
+340.000000,-0.001438
 360.000000,0.004724
 20.000000,0.012612
 40.000000,0.015207
@@ -51,7 +51,7 @@ ref3 = """azimuth,horizon_height
 280.000000,0.039774
 300.000000,0.032360
 320.000000,0.014804
-340.000000,0.000000
+340.000000,-0.001438
 360.000000,0.004724
 20.000000,0.012612
 40.000000,0.015207
@@ -106,7 +106,7 @@ class TestHorizon(TestCase):
         module = SimpleModule('r.horizon', elevation='elevation',
                               output=self.horizon_output, direction=50)
         self.assertModule(module)
-        ref = {'min': 0, 'max': 0.70678365230560, 'stddev': 0.0360724286360789}
+        ref = {'min': -1.57079637050629, 'max': 0.70678365230560, 'stddev': 0.0708080140468585}
         self.assertRasterFitsUnivar(raster='test_horizon_output_from_elevation_050', reference=ref, precision=1e6)
 
     def test_raster_mode_multiple_direction(self):
