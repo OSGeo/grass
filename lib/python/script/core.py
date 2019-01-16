@@ -1478,7 +1478,8 @@ def find_program(pgm, *args):
     nuldev = open(os.devnull, 'w+')
     try:
         # TODO: the doc or impl is not correct, any return code is accepted
-        call([pgm] + list(args), stdin = nuldev, stdout = nuldev, stderr = nuldev)
+        cmd = list(map(lambda x: encode(x), [pgm] + list(args)))
+        call(cmd, stdin = nuldev, stdout = nuldev, stderr = nuldev)
         found = True
     except:
         found = False
