@@ -5,7 +5,7 @@ AUTHOR(S): Jachym Cepicky <jachym.cepicky gmail com>
 
 PURPOSE:   Test g.search.modules script outputs
 
-COPYRIGHT: (C) 2015 Jachym Ceppicky, and by the GRASS Development Team
+COPYRIGHT: (C) 2015 Jachym Cepicky, and by the GRASS Development Team
 
            This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
