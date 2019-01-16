@@ -115,6 +115,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     static int first_3d = 1;
     double d, d1, d2, r1, dtol, t;
     int switched;
+    int end_points;
 
     /* TODO: Works for points ? */
 
@@ -127,6 +128,13 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 	G_warning(_("3D not supported by Vect_segment_intersection()"));
 	first_3d = 0;
     }
+
+    *x1 = 0;
+    *y1 = 0;
+    *z1 = 0;
+    *x2 = 0;
+    *y2 = 0;
+    *z2 = 0;
 
     /*  'Sort' each segment by x, y 
      *   MUST happen before D, D1, D2 are calculated */
@@ -230,6 +238,28 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     G_debug(2, "Vect_segment_intersection(): d = %f, d1 = %f, d2 = %f", d, d1,
 	    d2);
 
+    end_points = 0;
+    if (ax1 == bx1 && ay1 == by1) {
+	end_points = 1;
+	*x1 = ax1;
+	*y1 = ay1;
+    }
+    if (ax1 == bx2 && ay1 == by2) {
+	end_points = 1;
+	*x1 = ax1;
+	*y1 = ay1;
+    }
+    if (ax2 == bx1 && ay2 == by1) {
+	end_points = 2;
+	*x1 = ax2;
+	*y1 = ay2;
+    }
+    if (ax2 == bx2 && ay2 == by2) {
+	end_points = 2;
+	*x1 = ax2;
+	*y1 = ay2;
+    }
+
     /* TODO: dtol was originally set to 1.0e-10, which was usually working but not always. 
      *       Can it be a problem to set the tolerance to 0.0 ? */
     dtol = 0.0;
@@ -238,14 +268,30 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 	G_debug(2, " -> not parallel/collinear: d1 = %f, d2 = %f", d1, d2);
 	if (d > 0) {
 	    if (d1 < 0 || d1 > d || d2 < 0 || d2 > d) {
-		G_debug(2, "  -> no intersection");
-		return 0;
+		if (end_points) {
+		    G_debug(2, "  -> fp error, but intersection at end points %f, %f", *x1, *y1);
+
+		    return 1;
+		}
+		else {
+		    G_debug(2, "  -> no intersection");
+
+		    return 0;
+		}
 	    }
 	}
 	else {
 	    if (d1 < d || d1 > 0 || d2 < d || d2 > 0) {
-		G_debug(2, "  -> no intersection");
-		return 0;
+		if (end_points) {
+		    G_debug(2, "  -> fp error, but intersection at end points %f, %f", *x1, *y1);
+
+		    return 1;
+		}
+		else {
+		    G_debug(2, "  -> no intersection");
+
+		    return 0;
+		}
 	    }
 	}
 
@@ -264,7 +310,10 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 
     if (d1 || d2) {		/* lines are parallel */
 	G_debug(2, "  -> parallel");
-	return 0;
+	if (end_points)
+	    G_debug(2, "Segments are apparently parallel, but connected at end points -> collinear");
+	else
+	    return 0;
     }
 
     /* segments are colinear. check for overlap */
