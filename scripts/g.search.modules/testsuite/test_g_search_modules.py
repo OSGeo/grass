@@ -5,7 +5,7 @@ AUTHOR(S): Jachym Cepicky <jachym.cepicky gmail com>
 
 PURPOSE:   Test g.search.modules script outputs
 
-COPYRIGHT: (C) 2015 Jachym Ceppicky, and by the GRASS Development Team
+COPYRIGHT: (C) 2015 Jachym Cepicky, and by the GRASS Development Team
 
            This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
@@ -16,7 +16,13 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
-import termcolor
+import unittest
+
+try:
+    has_termcolor = True
+    import termcolor
+except ImportError:
+    has_termcolor = False
 
 
 class TestSearchModule(TestCase):
@@ -44,6 +50,8 @@ class TestSearchModule(TestCase):
         self.assertEqual(len(stdout), 6)
         self.assertEqual(stdout[3], 'r.water.outlet')
 
+    @unittest.skipUnless(has_termcolor,
+                         "not supported in this library version")
     def test_colored_terminal(self):
         module = SimpleModule('g.search.modules', keyword="water", flags="c")
         self.assertModule(module)
