@@ -46,8 +46,8 @@ int stats(void)
     argv[argc++] = "separator=:";
 
     sprintf(buf, "input=%s,%s",
-	    G_fully_qualified_name(maps[1], mmapset),
-	    G_fully_qualified_name(maps[0], rmapset));
+	    G_fully_qualified_name(mname, mmapset),
+	    G_fully_qualified_name(rname, rmapset));
     argv[argc++] = buf;
 
     argv[argc++] = SF_REDIRECT_FILE;
