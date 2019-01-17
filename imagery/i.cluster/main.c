@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
     parm.sample_interval->type = TYPE_INTEGER;
     parm.sample_interval->required = NO;
     parm.sample_interval->description =
-	_("Sampling intervals (by row and col); default: ~10,000 pixels");
+	_("Sampling intervals, i.e., every how many rows and columns a sample pixel is taken; default sample size: ~10,000 pixels");
     parm.sample_interval->guisection = _("Settings");
 
     parm.iterations = G_define_option();
