@@ -472,7 +472,7 @@ def get_interface_description(cmd):
     :param cmd: command (name of GRASS module)
     """
     try:
-        p = Popen([cmd, '--interface-description'], stdout=PIPE,
+        p = Popen([encode(cmd), b'--interface-description'], stdout=PIPE,
                   stderr=PIPE)
         cmdout, cmderr = p.communicate()
 
