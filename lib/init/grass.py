@@ -373,16 +373,16 @@ Geographic Resources Analysis Support System (GRASS GIS).
     create=_("create given database, location or mapset if it doesn't exist"),
     exit_after=_("exit after creation of location or mapset. Only with -c flag"),
     force_removal=_("force removal of .gislock if exists (use with care!). Only with --text flag"),
-    text=_("use text based interface (skip welcome screen)"),
+    text=_("use text based interface (skip graphical welcome screen)"),
     text_detail=_("and set as default"),
-    gtext=_("use text based interface (show welcome screen)"),
+    gtext=_("use text based interface (show graphical welcome screen)"),
     gtext_detail=_("and set as default"),
     gui=_("use $DEFAULT_GUI graphical user interface"),
     gui_detail=_("and set as default"),
     config=_("print GRASS configuration parameters"),
     config_detail=_("options: arch,build,compiler,path,revision,svn_revision,version"),
     params=_("Parameters"),
-    gisdbase=_("initial GRASS GIS database directory"),
+    gisdbase=_("initial GRASS database directory"),
     gisdbase_detail=_("directory containing Locations"),
     location=_("initial GRASS Location"),
     location_detail=_("directory containing Mapsets with one common coordinate system (projection)"),
@@ -755,10 +755,11 @@ def set_browser():
         browser = gpath('etc', "html_browser_mac.sh")
 
     if not browser:
-        warning(_("Searched for a web browser, but none found"))
-        # even so we set konqueror to make lib/gis/parser.c happy:
-        # TODO: perhaps something more probable would be better, e.g. xdg-open
-        browser = "konqueror"
+        # no browser msg spam in batch jobs
+        if not grass_gui == 'text':
+            warning(_("Searched for a web browser, but none found"))
+        # even so we set to 'xdg-open' to make lib/gis/parser.c happy:
+        browser = "xdg-open"
 
     os.environ['GRASS_HTML_BROWSER'] = browser
 
