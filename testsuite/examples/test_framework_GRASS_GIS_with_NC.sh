@@ -1,7 +1,7 @@
 #!/bin/bash
 ############################################################################
 #
-# MODULE:       r.drain
+# MODULE:       Example script to run testsuite
 # AUTHOR(S):    Markus Neteler, Sören Gebbert, Vaclav Petras
 # PURPOSE:      Test GRASS GIS using the test framework
 #               Documentation:
@@ -103,6 +103,8 @@ g.copy raster=landcover_1m,landcover
 g.copy raster=geology_30m,geology
 g.copy raster=landuse96_28m,landuse
 g.copy raster=soilsID,soils
+g.copy vector=census_wake2000,census
+g.copy vector=elev_lid792_bepts,elev_points
 g.copy vector=zipcodes_wake,zipcodes
 g.copy vector=schools_wake,schools
 " > $GRASSDATA/tmp_rename.sh
