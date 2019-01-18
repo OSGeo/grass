@@ -568,7 +568,7 @@ class ProjectionsPage(TitledPage):
 
     def OnItemSelected(self, event):
         """Projection selected"""
-        index = event.m_itemIndex
+        index = event.GetIndex()
 
         # set values
         self.proj = self.projlist.GetItem(index, 0).GetText().lower()
@@ -654,7 +654,7 @@ class ItemList(wx.ListCtrl,
             self.sourceData = data
 
         try:
-            data.sort()
+            data = sorted(data)
             self.DeleteAllItems()
             row = 0
             for value in data:
@@ -702,6 +702,9 @@ class ItemList(wx.ListCtrl,
         s = str(self.itemDataMap[index][col])
         return s
 
+    def OnGetItemImage(self, item):
+        return -1
+
     def OnGetItemAttr(self, item):
         """Get item attributes"""
         index = self.itemIndexMap[item]
@@ -713,7 +716,11 @@ class ItemList(wx.ListCtrl,
     def SortItems(self, sorter=cmp):
         """Sort items"""
         items = list(self.itemDataMap.keys())
-        items.sort(self.Sorter)
+        if sys.version_info[0] >= 3:
+            # not sure what Sorter is needed for
+            items.sort()
+        else:
+            items.sort(self.Sorter)
         self.itemIndexMap = items
 
         # redraw the list
@@ -1149,7 +1156,7 @@ class DatumPage(TitledPage):
 
     def OnDatumSelected(self, event):
         """Datum selected"""
-        index = event.m_itemIndex
+        index = event.GetIndex()
         item = event.GetItem()
 
         self.datum = self.datumlist.GetItem(index, 0).GetText()
@@ -1309,7 +1316,7 @@ class EllipsePage(TitledPage):
 
     def OnItemSelected(self, event):
         """Ellipsoid selected"""
-        index = event.m_itemIndex
+        index = event.GetIndex()
         item = event.GetItem()
 
         self.ellipse = self.ellipselist.GetItem(index, 0).GetText()
@@ -1680,7 +1687,7 @@ class EPSGPage(TitledPage):
 
     def OnItemSelected(self, event):
         """EPSG code selected from the list"""
-        index = event.m_itemIndex
+        index = event.GetIndex()
         item = event.GetItem()
 
         self.epsgcode = int(self.epsglist.GetItem(index, 0).GetText())
@@ -1925,7 +1932,7 @@ class IAUPage(TitledPage):
 
     def OnItemSelected(self, event):
         """IAU code selected from the list"""
-        index = event.m_itemIndex
+        index = event.GetIndex()
         item = event.GetItem()
 
         self.epsgcode = int(self.epsglist.GetItem(index, 0).GetText())
