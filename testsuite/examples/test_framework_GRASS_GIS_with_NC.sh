@@ -107,6 +107,7 @@ g.copy vector=census_wake2000,census
 g.copy vector=elev_lid792_bepts,elev_points
 g.copy vector=zipcodes_wake,zipcodes
 g.copy vector=schools_wake,schools
+g.copy vector=streets_wake,streets
 " > $GRASSDATA/tmp_rename.sh
 $GRASSBIN $GRASSDATA/nc_spm_08_grass7/PERMANENT --exec sh $GRASSDATA/tmp_rename.sh
 rm -f $GRASSDATA/tmp_rename.sh
