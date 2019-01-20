@@ -164,7 +164,7 @@ int I_InitSigSet(struct SigSet *);
 int I_SigSetNBands(struct SigSet *, int);
 struct ClassSig *I_NewClassSig(struct SigSet *);
 struct SubSig *I_NewSubSig(struct SigSet *, struct ClassSig *);
-int I_ReadSigSet(FILE *, struct SigSet *);
+int I_ReadSigSet(FILE *, struct SigSet *) WARN_UNUSED_RESULT;
 int I_SetSigTitle(struct SigSet *, const char *);
 const char *I_GetSigTitle(const struct SigSet *);
 int I_SetClassTitle(struct ClassSig *, const char *);

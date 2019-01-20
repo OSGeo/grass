@@ -67,6 +67,13 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #  define HOST_NEWLINE "\n"
 #endif
 
+/*! \brief Generate warning if function return value is unused */
+#if __GNUC_PREREQ (3,4)
+    #define WARN_UNUSED_RESULT __attribute__ ((warn_unused_result))
+#else
+    #define WARN_UNUSED_RESULT
+#endif
+
 /*!
   \brief List of units
 */
