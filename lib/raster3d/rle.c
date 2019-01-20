@@ -264,6 +264,10 @@ Rast3d_rle_decode(char *src, char *dst, int nofElts, int eltLength,
 
 /*---------------------------------------------------------------------------*/
 
+/* TODO: Find out if this function used at all.
+ * Seems to be some leftover from the early pre-SVN days of GRASS GIS.
+ * Maris, 2018.
+ */
 void test_rle()
 {
     char c[100];
@@ -271,7 +275,8 @@ void test_rle()
 
     do {
 	printf("length? ");
-	scanf("%d", &length);
+	if (scanf("%d", &length) != 1)
+        Rast3d_fatal_error("Error reading length");
 	printf("length = %d\n", length);
 	printf("codeLength %d   ", G_rle_codeLength(length));
 	(void)rle_length2code(length, c);
