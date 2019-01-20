@@ -270,7 +270,7 @@ int region_growing(struct globals *globals)
 	    }
 	}
 
-	G_debug(4, "Starting to process %ld candidate cells",
+	G_debug(4, "Starting to process %"PRI_LONG" candidate cells",
 		globals->candidate_count);
 
 	/*process candidate cells */
@@ -580,7 +580,7 @@ int region_growing(struct globals *globals)
 	    }
 	}
 
-	G_debug(4, "Starting to process %ld candidate cells",
+	G_debug(4, "Starting to process %"PRI_LONG" candidate cells",
 		globals->candidate_count);
 
 	/* process candidate cells */
@@ -985,7 +985,7 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
     G_debug(4, "update_band_vals()");
 
     if (rs->count >= globals->min_reg_size) {
-	G_fatal_error(_("Region stats should go in tree, %d >= %d"),
+	G_fatal_error(_("Region stats should go in tree, %d >= %"PRI_LONG""),
 	              rs->count, globals->min_reg_size);
     }
 

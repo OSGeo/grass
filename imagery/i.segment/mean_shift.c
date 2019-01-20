@@ -209,7 +209,7 @@ int mean_shift(struct globals *globals)
 	G_message(_("Range bandwidth: %g"), hspec);
     }
 
-    G_debug(4, "Starting to process %ld candidate cells",
+    G_debug(4, "Starting to process %"PRI_LONG" candidate cells",
 	    globals->candidate_count);
 
     t = 0;
@@ -392,7 +392,7 @@ int mean_shift(struct globals *globals)
 	    }
 	}
 	G_percent(1, 1, 1);
-	G_message(_("Changes > threshold: %d, largest change: %g"), n_changes, sqrt(maxdiff2));
+	G_message(_("Changes > threshold: %"PRI_LONG", largest change: %g"), n_changes, sqrt(maxdiff2));
     }
     if (n_changes > 1)
 	G_message(_("Mean shift stopped at %d due to reaching max iteration limit, more changes may be possible"), t);

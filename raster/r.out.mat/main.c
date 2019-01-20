@@ -294,7 +294,7 @@ int main(int argc, char *argv[])
 	G_calloc((Rast_window_rows() + 1) * (Rast_window_cols() + 1),
 		 Rast_cell_size(map_type));
 
-    G_debug(1, "mem alloc is %d bytes\n",	/* I think _cols()+1 is unneeded? */
+    G_debug(1, "mem alloc is %zu bytes\n",	/* I think _cols()+1 is unneeded? */
 	    Rast_cell_size(map_type) * (Rast_window_rows() +
 				       1) * (Rast_window_cols() + 1));
 

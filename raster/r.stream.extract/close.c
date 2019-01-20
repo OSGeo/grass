@@ -206,7 +206,7 @@ int close_streamvect(char *stream_vect)
     /* stream nodes */
     for (i = 1; i <= n_stream_nodes; i++) {
 
-	sprintf(buf, "insert into %s values ( %lld, \'%s\', %d, %d )",
+	sprintf(buf, "insert into %s values ( %"PRI_OFF_T", \'%s\', %d, %d )",
 		Fi->table, i,
 		(stream_node[i].n_trib > 0 ? "intermediate" : "start"),
 		(stream_node[i].n_trib > 0), network_id[i]);

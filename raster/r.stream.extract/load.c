@@ -167,7 +167,7 @@ int load_maps(int ele_fd, int acc_fd)
 	G_free(acc_buf);
     }
     
-    G_debug(1, "%lld non-NULL cells", n_points);
+    G_debug(1, "%"PRI_OFF_T" non-NULL cells", n_points);
 
     return (n_points > 0);
 }

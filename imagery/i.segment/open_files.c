@@ -550,7 +550,7 @@ static int manage_memory(int srows, int scols, struct globals *globals)
 		segs_mb = 10;
 	}
 
-	G_verbose_message(_("Regions with at least %d cells are stored in memory"),
+	G_verbose_message(_("Regions with at least %"PRI_LONG" cells are stored in memory"),
 			  globals->min_reg_size);
     }
 

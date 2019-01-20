@@ -22,10 +22,13 @@
 
 #ifdef HAVE_LONG_LONG_INT
 #define LARGEINT long long
+#define PRI_LONG "lld"
 #elif defined HAVE_LARGEFILES
 #define LARGEINT off_t
+#define PRI_LONG PRI_OFF_T
 #else
 #define LARGEINT long
+#define PRI_LONG "ld"
 #endif
 
 /* methods */
