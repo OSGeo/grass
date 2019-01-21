@@ -27,33 +27,9 @@
 ############################################################################
 
 ### CONFIGURATION
-#
-# computer architecture:
-ARCH=x86_64-pc-linux-gnu
-# name of binary:
-GRASSBIN=grass76
-# source code directory as full path:
-GRASSSRC="$HOME/software/grass76"
-# temporary grassdata directory
-GRASSDATA="$HOME/grassdata/tests-grassdata"
 
-# Python binary to be used (python|python3)
-PYTHON=python
 
-# here we suppose default compilation settings of GRASS GIS and no 'make install'
-# may be no|yes
-COMPILE="no"
-# configure metascript with compiler flags:
-CONFIGURE="${GRASSSRC}/conf_grass7.sh"
-
-# directory to store reports, e.g. in a subdirectory
-REPORTS="testreports"
-
-# publish report on WWW Server (not needed for local tests)
-# may be no|yes
-PUBLISH="no"
-# upload WWW dir on server for report publication (not used for local tests)
-SERVERDIR="/var/www/html/grassgistestreports"
+source test_framework_GRASS_GIS_with_NC.conf
 
 ######### nothing to change below
 
