@@ -252,10 +252,10 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
 	    G_warning(_("[%s] already compressed"), name);
 	    return 1;
 	    */
-	    G_message(_("Re-compressing <%s>"), name);
+	    G_message(_("Re-compressing <%s> with method %s..."), name, G_compressor_name(cellhd.compressed));
 	}
 	else
-	    G_message(_("Compressing <%s>"), name);
+	    G_message(_("Compressing <%s> with method %s..."), name, G_compressor_name(cellhd.compressed));
     }
 
     Rast_set_window(&cellhd);
