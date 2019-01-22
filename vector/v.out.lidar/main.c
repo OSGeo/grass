@@ -118,9 +118,11 @@ static dbCatValArray *select_integers_from_database(dbDriver * driver,
         G_fatal_error(_("Column <%s> not found in table <%s>"),
                       column, f_info->table);
     if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-        G_fatal_error(_("Only numeric column type is supported"));
+        G_fatal_error(_("Only numeric column type is supported (column <%s> in table <%s>)"),
+                      column, f_info->table);
     if (ctype == DB_C_TYPE_DOUBLE)
-        G_warning(_("Double values will be converted to integers"));
+        G_warning(_("Double values will be converted to integers (column <%s> in table <%s>)"),
+                      column, f_info->table);
 
     db_CatValArray_init(column_values);
     int nrec =
