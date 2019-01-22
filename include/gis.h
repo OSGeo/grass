@@ -68,10 +68,10 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #endif
 
 /*! \brief Generate warning if function return value is unused */
-#if __GNUC_PREREQ (3,4)
-    #define WARN_UNUSED_RESULT __attribute__ ((warn_unused_result))
+#if __GNUC__ && (__GNUC__ >= 3 && __GNUC_MINOR__ >= 4)
+#   define WARN_UNUSED_RESULT __attribute__ ((warn_unused_result))
 #else
-    #define WARN_UNUSED_RESULT
+#   define WARN_UNUSED_RESULT
 #endif
 
 /*!
