@@ -112,11 +112,11 @@ int main(int argc, char *argv[])
 
     parm.sample_interval = G_define_option();
     parm.sample_interval->key = "sample";
-    parm.sample_interval->key_desc = "row_interval,col_interval";
+    parm.sample_interval->key_desc = "rows,cols";
     parm.sample_interval->type = TYPE_INTEGER;
     parm.sample_interval->required = NO;
     parm.sample_interval->description =
-	_("Sampling intervals, i.e., every how many rows and columns a sample pixel is taken; default sample size: ~10,000 pixels");
+	_("Number of rows and columns over which a sample pixel is taken");
     parm.sample_interval->guisection = _("Settings");
 
     parm.iterations = G_define_option();

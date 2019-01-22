@@ -121,11 +121,13 @@ The purpose of seed signatures is to optimize the cluster
 decision boundaries (means) for the number of clusters
 specified.
 
-<dt><b>sample=</b><em>row_interval,col_interval</em> 
+<dt><b>sample=</b><em>rows,cols</em> 
 
 <dd>These numbers are optional with default values based on
 the size of the data set such that the total pixels to be
-processed is approximately 10,000 (consider round up).
+processed is approximately 10,000 (consider round up). The 
+smaller these numbers, the larger the sample size used to
+generate the signatures for the classes defined.
 
 <dt><b>iterations=</b><em>value</em> 
 
