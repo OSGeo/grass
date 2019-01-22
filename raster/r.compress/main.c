@@ -235,8 +235,17 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     struct Cell_head cellhd;
     int new, old, nrows, row;
     void *rast;
+    char *cname;
 
     Rast_get_cellhd(name, G_mapset(), &cellhd);
+    cname = getenv("GRASS_COMPRESSOR");
+    if (cname && *cname) {
+       if (G_compressor_number(cname) < 1)
+           cname = G_compressor_name(G_default_compressor());
+       else
+           cname = G_compressor_name(G_compressor_number(cname));
+    } else
+           cname = G_compressor_name(G_default_compressor());
 
     /* check if already compressed/decompressed */
     if (uncompress) {
@@ -252,10 +261,10 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
 	    G_warning(_("[%s] already compressed"), name);
 	    return 1;
 	    */
-	    G_message(_("Re-compressing <%s> with method %s..."), name, G_compressor_name(cellhd.compressed));
+	    G_message(_("Re-compressing <%s> with method %s..."), name, cname);
 	}
 	else
-	    G_message(_("Compressing <%s> with method %s..."), name, G_compressor_name(cellhd.compressed));
+	    G_message(_("Compressing <%s> with method %s..."), name, cname);
     }
 
     Rast_set_window(&cellhd);
