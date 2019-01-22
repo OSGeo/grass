@@ -269,7 +269,7 @@ vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
                        http://lists.osgeo.org/mailman/listinfo/grassuser
                          <grass-user@lists.osgeo.org>
 
-   DebianGIS:          <debian-gis@lists.debian.org>
+   DebianGIS:          <debian-gis@lists.debian.org> - send only small note
    FreeGIS:            <freegis-list@intevation.de>
    Geowanking:         <geowanking@geowanking.org>
    OSGeo.org:          <news_item@osgeo.org>
@@ -278,7 +278,6 @@ vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
    info@osgeo.org
    http://www.gis-news.de/  (franz-josef.behr@gismngt.de)
    http://spatialnews.geocomm.com/submitnews.html (not free any more, convince editor@geocomm.com)
-   redazione@geoforus.it
    mfeilner@linuxnewmedia.de
    info@harzer.de
    editor-geo@geoconnexion.com
