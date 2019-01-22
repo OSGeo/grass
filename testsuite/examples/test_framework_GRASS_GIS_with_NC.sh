@@ -26,9 +26,40 @@
 #
 ############################################################################
 
-### CONFIGURATION
+### Fetch CONFIGURATION
 
-source test_framework_GRASS_GIS_with_NC.conf
+CONF="test_framework_GRASS_GIS_with_NC.conf"
+
+usage_msg(){
+echo "Usage:
+  $0 [conf_file]
+
+Example:
+  $0 ${CONF}
+"
+}
+
+if [ ! -z "$1" ] ; then
+   case "$1" in
+      -h | --h | -help | --help)
+         usage_msg
+         exit 0
+         ;;
+      *)
+         if [ -f ${1} ] ; then
+            CONF="$1"
+         else
+            echo "ERROR: $1 is not a file"
+            exit 1
+         fi
+         ;;
+    esac
+else
+    usage_msg
+    exit 0
+fi
+
+source ${CONF}
 
 ######### nothing to change below
 
