@@ -65,6 +65,9 @@ source ${CONF}
 
 set -e  # fail fast
 
+# computer architecture:
+ARCH=`${GRASSBIN} --config arch`
+
 # here we suppose default compilation settings of GRASS GIS and no make install
 GRASSBIN="$GRASSSRC/bin.${ARCH}/${GRASSBIN}"
 GRASSDIST="$GRASSSRC/dist.${ARCH}"
@@ -79,8 +82,11 @@ NOW=$(date $DATE_FLAGS)
 
 # get number of processors of current machine
 MYNPROC=`getconf _NPROCESSORS_ONLN`
-# leave one PROC free for other tasks
-GCCTHREADS=`expr $MYNPROC - 1`
+# leave some free for other tasks
+GCCTHREADS=`expr $MYNPROC - $FREECPU`
+if [ $GCCTHREADS -lt 1 ] ; then
+   GCCTHREADS=1
+fi
 
 # contains last executed command stdout and stderr
 # here were rely on reports being absolute
