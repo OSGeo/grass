@@ -726,10 +726,7 @@ def set_browser():
         browser = gpath('etc', "html_browser_mac.sh")
 
     if not browser:
-        # no browser msg spam in batch jobs
-        if not grass_gui == 'text':
-            warning(_("Searched for a web browser, but none found"))
-        # even so we set to 'xdg-open' to make lib/gis/parser.c happy:
+        # even so we set to 'xdg-open' as a generic fallback
         browser = "xdg-open"
 
     os.environ['GRASS_HTML_BROWSER'] = browser
