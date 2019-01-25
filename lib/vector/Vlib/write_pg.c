@@ -61,6 +61,7 @@ static int write_feature(struct Map_info *, int, int,
                          const struct line_pnts **, int, int);
 static char *build_insert_stmt(const struct Format_info_pg *, const char *, int, int);
 static int insert_topo_element(struct Map_info *, int, int, const char *);
+static int type_to_topogeom(const struct Format_info_pg *);
 static int update_next_edge(struct Map_info*, int, int);
 static int delete_face(const struct Map_info *, int);
 static int update_topo_edge(struct Map_info *, int);
@@ -1912,6 +1913,11 @@ int write_feature(struct Map_info *Map, int line, int type,
             
             return -1;
         }
+
+        if (pg_info->feature_type != SF_POLYGON) {
+            /* define relation */
+            Vect__define_topo_relation(pg_info, topo_id, topo_id);
+        }
     }
 
     /* build INSERT statement
@@ -1961,20 +1967,9 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
     
     topogeom_type = -1;
     if (pg_info->toposchema_name) {
-        switch (pg_info->feature_type) {
-        case SF_POINT:
-            topogeom_type = 1;
-            break;
-        case SF_LINESTRING:
-            topogeom_type = 2;
-            break;
-        case SF_POLYGON:
-            topogeom_type = 3;
-            break;
-        default:
-            G_warning(_("Unsupported feature type %d"), pg_info->feature_type);
+        topogeom_type = type_to_topogeom(pg_info);
+        if (topogeom_type < 0)
             return NULL;
-        }
     }
 
     Fi = pg_info->fi;
@@ -2345,6 +2340,49 @@ int insert_topo_element(struct Map_info *Map, int id, int type,
     }
     
     return topo_id;
+}
+
+int type_to_topogeom(const struct Format_info_pg *pg_info)
+{
+    int topogeom_type;
+    
+    topogeom_type = -1;
+    switch (pg_info->feature_type) {
+    case SF_POINT:
+        topogeom_type = 1;
+        break;
+    case SF_LINESTRING:
+        topogeom_type = 2;
+        break;
+    case SF_POLYGON:
+        topogeom_type = 3;
+        break;
+    default:
+        G_warning(_("Unsupported feature type %d"), pg_info->feature_type);
+    }
+
+    return topogeom_type;
+}
+
+int Vect__define_topo_relation(const struct Format_info_pg *pg_info, int topo_id, int element_id)
+{
+    int topogeom_type;
+    char stmt[DB_SQL_MAX];
+
+    topogeom_type = type_to_topogeom(pg_info);
+    if (topogeom_type < 0)
+        return -1;
+
+    sprintf(stmt, "INSERT into \"%s\".relation VALUES(%d, 1, %d, %d)",
+            pg_info->toposchema_name, topo_id, element_id, topogeom_type);
+    G_debug(3, "SQL: %s", stmt);
+
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    return 0;
 }
 
 /*!
