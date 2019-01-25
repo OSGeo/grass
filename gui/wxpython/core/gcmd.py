@@ -163,7 +163,8 @@ class Popen(subprocess.Popen):
 
     def __init__(self, args, **kwargs):
         if is_mswindows:
-            args = map(EncodeString, args)
+            # encoding not needed for Python3
+            # args = list(map(EncodeString, args))
 
             # The Windows shell (cmd.exe) requires some special characters to
             # be escaped by preceding them with 3 carets (^^^). cmd.exe /?
@@ -233,13 +234,14 @@ class Popen(subprocess.Popen):
             if not self.stdin:
                 return None
 
+            import pywintypes
             try:
                 x = msvcrt.get_osfhandle(self.stdin.fileno())
                 (errCode, written) = WriteFile(x, input)
             except ValueError:
                 return self._close('stdin')
-            except (subprocess.pywintypes.error, Exception) as why:
-                if why[0] in (109, errno.ESHUTDOWN):
+            except (pywintypes.error, Exception) as why:
+                if why.winerror in (109, errno.ESHUTDOWN):
                     return self._close('stdin')
                 raise
 
@@ -250,6 +252,7 @@ class Popen(subprocess.Popen):
             if conn is None:
                 return None
 
+            import pywintypes
             try:
                 x = msvcrt.get_osfhandle(conn.fileno())
                 (read, nAvail, nMessage) = PeekNamedPipe(x, 0)
@@ -259,8 +262,8 @@ class Popen(subprocess.Popen):
                     (errCode, read) = ReadFile(x, nAvail, None)
             except ValueError:
                 return self._close(which)
-            except (subprocess.pywintypes.error, Exception) as why:
-                if why[0] in (109, errno.ESHUTDOWN):
+            except (pywintypes.error, Exception) as why:
+                if why.winerror in (109, errno.ESHUTDOWN):
                     return self._close(which)
                 raise
 

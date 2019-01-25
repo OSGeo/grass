@@ -274,7 +274,7 @@ def get_real_command(cmd):
         # so, lets remove extension
         if os.path.splitext(cmd)[1] == '.py':
             cmd = cmd[:-3]
-        full_path = shutil_which(cmd + '.py')
+        full_path = shutil_which(encode(cmd) + b'.py')
         if full_path:
             return full_path
 
