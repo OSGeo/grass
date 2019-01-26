@@ -91,7 +91,8 @@ read MAJOR <&3
 read MINOR <&3 
 read PATCH <&3 
 
-export VERSION=$MAJOR.$MINOR.$PATCH
+export VERSION=${MAJOR}.${MINOR}.${PATCH}
+export POSTFIX=${MAJOR}${MINOR}
 
 if [[ "$PATCH" == *svn* ]] ; then
     GRASS_EXECUTABLE=grass${MAJOR}${MINOR}svn
@@ -214,25 +215,25 @@ log cleanup
 rm -f diib*
 
 log prepare packaging
-mv $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h \
-    $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h.mingw
-cp mswindows/osgeo4w/config.h.switch $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h
-cp mswindows/osgeo4w/config.h.vc $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass
+mv $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/include/grass/config.h \
+   $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/include/grass/config.h.mingw
+cp mswindows/osgeo4w/config.h.switch $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/include/grass/config.h
+cp mswindows/osgeo4w/config.h.vc $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/include/grass
 mkdir -p $OSGEO4W_ROOT_MSYS/etc/preremove $OSGEO4W_ROOT_MSYS/etc/postinstall
-sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT@#$OSGEO4W_ROOT#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
+sed -e "s#@POSTFIX@#$POSTFIX#g" \
     mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/${GRASS_EXECUTABLE}.bat
-sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#$OSGEO4W_ROOT#g" \
-    mswindows/osgeo4w/env.bat.tmpl >$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/env.bat
-sed -e "s#@VERSION@#$VERSION#g" -e "s#@GRASS_EXECUTABLE@#$GRASS_EXECUTABLE#g" \
+sed -e "s#@POSTFIX@#$POSTFIX#g" \
+    mswindows/osgeo4w/env.bat.tmpl >$OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/etc/env.bat
+sed -e "s#@POSTFIX@#$POSTFIX#g" -e "s#@VERSION@#$VERSION#g" -e "s#@GRASS_EXECUTABLE@#$GRASS_EXECUTABLE#g" \
     mswindows/osgeo4w/postinstall.bat >$OSGEO4W_ROOT_MSYS/etc/postinstall/grass${PACKAGE_POSTFIX}.bat
-sed -e "s#@VERSION@#$VERSION#g" -e "s#@GRASS_EXECUTABLE@#$GRASS_EXECUTABLE#g" \
+sed -e "s#@POSTFIX@#$POSTFIX#g" -e "s#@VERSION@#$VERSION#g" -e "s#@GRASS_EXECUTABLE@#$GRASS_EXECUTABLE#g" \
     mswindows/osgeo4w/preremove.bat >$OSGEO4W_ROOT_MSYS/etc/preremove/grass${PACKAGE_POSTFIX}.bat 
 
 if [ -n "$PACKAGE_PATCH" ]; then
     log building vc libraries 
     OSGEO4W_POSTFIX=$OSGEO4W_POSTFIX sh \
-        mswindows/osgeo4w/mklibs.sh $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib/*.$VERSION.dll 
-    mv mswindows/osgeo4w/vc/grass*.lib $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib
+        mswindows/osgeo4w/mklibs.sh $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/lib/*.$VERSION.dll 
+    mv mswindows/osgeo4w/vc/grass*.lib $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/lib
     
     log creating package
     mkdir -p mswindows/osgeo4w/package
@@ -242,8 +243,7 @@ if [ -n "$PACKAGE_PATCH" ]; then
     cd $OSGEO4W_ROOT_MSYS 
 
     # update startup script
-    sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT@#$OSGEO4W_ROOT#g" \
-	-e "s#@POSTFIX@#$MAJOR$MINOR#g" \
+    sed -e "s#@POSTFIX@#$POSTFIX#g" \
 	$SRC/mswindows/osgeo4w/grass.bat.tmpl > bin/${GRASS_EXECUTABLE}.bat.tmpl
     
     # bat files - unix2dos
@@ -272,13 +272,13 @@ if [ -n "$PACKAGE_PATCH" ]; then
 	/mingw${MINGW_POSTFIX}/bin/libtre-5.dll \
         /mingw${MINGW_POSTFIX}/bin/zlib1.dll \
         /mingw${MINGW_POSTFIX}/bin/libstdc++-6.dll \
-	apps/grass/grass-$VERSION/bin
+	apps/grass/grass$POSTFIX/bin
     cp -uv /mingw${MINGW_POSTFIX}/etc/fonts/fonts.conf \
-	apps/grass/grass-$VERSION/etc
+	apps/grass/grass$POSTFIX/etc
     
     # creating grass package
     tar -cjf $PDIR/grass$PACKAGE_POSTFIX-$VERSION-$PACKAGE_PATCH.tar.bz2 \
-	apps/grass/grass-$VERSION \
+	apps/grass/grass$POSTFIX \
 	bin/${GRASS_EXECUTABLE}.bat.tmpl \
 	etc/postinstall/grass${PACKAGE_POSTFIX}.bat \
 	etc/preremove/grass${PACKAGE_POSTFIX}.bat
