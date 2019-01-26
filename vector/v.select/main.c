@@ -6,8 +6,9 @@
  *               Glynn Clements <glynn gclements.plus.com>
  *               Markus Neteler <neteler itc.it>
  *               Martin Landa <landa.martin gmail.com> (GEOS support)
+ *               Huidae Cho <grass4u gmail.com> (reverse flag fix)
  * PURPOSE:      Select features from one map by features in another map.
- * COPYRIGHT:    (C) 2003-2017 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2017, 2019 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -41,6 +42,7 @@ int main(int argc, char *argv[])
     struct GFlag flag;
     struct Map_info In[2], Out;
     struct field_info *IFi;
+    int nlines, nareas;
 
     G_gisinit(argv[0]);
 
@@ -112,8 +114,11 @@ int main(int argc, char *argv[])
     }
 
     /* Alloc space for input lines array */
-    ALines = (int *)G_calloc(Vect_get_num_lines(&(In[0])) + 1, sizeof(int));
-    AAreas = (int *)G_calloc(Vect_get_num_areas(&(In[0])) + 1, sizeof(int));
+    nlines = Vect_get_num_lines(&(In[0]));
+    nareas = Vect_get_num_areas(&(In[0]));
+
+    ALines = (int *)G_calloc(nlines + 1, sizeof(int));
+    AAreas = (int *)G_calloc(nareas + 1, sizeof(int));
 
     /* Read field info */
     IFi = Vect_get_field(&(In[0]), ifield[0]);
@@ -143,7 +148,8 @@ int main(int argc, char *argv[])
     }
 
 
-    if (nfound != 0) {
+    if ((!flag.reverse->answer && nfound > 0) ||
+	(flag.reverse->answer && nlines + nareas - nfound > 0)) {
         /* Open output */
         if (Vect_open_new(&Out, parm.output->answer, Vect_is_3d(&(In[0]))) < 0)
 	    G_fatal_error(_("Unable to create vector map <%s>"),
