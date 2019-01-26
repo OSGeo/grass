@@ -6,7 +6,7 @@
 # AUTHOR(S):    Markus Neteler, converted to Python by Glynn Clements
 #               Bug fixes, sort for coor by Huidae Cho <grass4u gmail.com>
 # PURPOSE:      Reports geometry statistics for vector maps
-# COPYRIGHT:    (C) 2005, 2007-2017 by MN and the GRASS Development Team
+# COPYRIGHT:    (C) 2005, 2007-2017, 2019 by MN and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -103,10 +103,12 @@ def main():
         p = grass.pipe_command('v.db.select', quiet=True, map=mapname, layer=layer)
         records1 = []
         catcol = -1
+        ncols = 0
         for line in p.stdout:
             cols = decode(line).rstrip('\r\n').split('|')
             if catcol == -1:
-                for i in range(0, len(cols)):
+                ncols = len(cols)
+                for i in range(0, ncols):
                     if cols[i] == f['key']:
                         catcol = i
                         break
@@ -149,8 +151,11 @@ def main():
         # v.db.select can return attributes that are not linked to features.
         records3 = []
         for r2 in records2:
-            res = list(filter(lambda r1: r1[catcol] == r2[0],
-                              records1))[0] + r2[1:]
+            rec = list(filter(lambda r1: r1[catcol] == r2[0], records1))
+            if len(rec) > 0:
+                res = rec[0] + r2[1:]
+            else:
+                res = [r2[0]] + [''] * (ncols - 1) + r2[1:]
             records3.append(res)
     else:
         catcol = 0
