@@ -46,6 +46,10 @@
 #% key: c
 #% description: Do not include column names in output
 #%end
+#%flag
+#% key: d
+#% description: Report for geometries with no database records
+#%end
 
 import sys
 import os
@@ -154,8 +158,10 @@ def main():
             rec = list(filter(lambda r1: r1[catcol] == r2[0], records1))
             if len(rec) > 0:
                 res = rec[0] + r2[1:]
-            else:
+            elif flags['d']:
                 res = [r2[0]] + [''] * (ncols - 1) + r2[1:]
+            else:
+                continue
             records3.append(res)
     else:
         catcol = 0
