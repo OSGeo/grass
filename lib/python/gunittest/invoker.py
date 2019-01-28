@@ -161,9 +161,11 @@ class GrassTestFilesInvoker(object):
             # ignoring shebang line to use current Python
             # and also pass parameters to it
             # add also '-Qwarn'?
-            p = subprocess.Popen([sys.executable, '-tt', '-3',
-                                  module.abs_file_path],
-                                 cwd=cwd, env=env,
+            if sys.version_info.major >= 3:
+                args = [sys.executable, '-tt', module.abs_file_path]
+            else:
+                args = [sys.executable, '-tt', '-3', module.abs_file_path]
+            p = subprocess.Popen(args, cwd=cwd, env=env,
                                  stdout=stdout, stderr=stderr)
         elif module.file_type == 'sh':
             # ignoring shebang line to pass parameters to shell

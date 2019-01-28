@@ -16,6 +16,49 @@ import os
 import argparse
 import itertools
 import subprocess
+import locale
+
+try:
+    from itertools import izip as zip
+except ImportError:  # will be 3.x series
+    pass
+
+if sys.version_info.major >= 3:
+    unicode = str
+
+
+def _get_encoding():
+    encoding = locale.getdefaultlocale()[1]
+    if not encoding:
+        encoding = 'UTF-8'
+    return encoding
+
+
+def decode(bytes_, encoding=None):
+    if isinstance(bytes_, bytes):
+        return bytes_.decode(_get_encoding())
+    else:
+        return bytes_
+
+
+def encode(string, encoding=None):
+    if isinstance(string, unicode):
+        return string.encode(_get_encoding())
+    else:
+        return string
+
+
+def text_to_string(text):
+    """Convert text to str. Useful when passing text into environments,
+       in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
+    """
+    if sys.version[0] == '2':
+        # Python 2
+        return encode(text)
+    else:
+        # Python 3
+        return decode(text)
+
 
 
 def main():
@@ -70,10 +113,10 @@ def main():
     if p.returncode != 0:
         print("ERROR: Cannot find GRASS GIS 7 start script (%s):\n%s" % (startcmd, err), file=sys.stderr)
         return 1
-    gisbase = out.strip('\n')
+    gisbase = decode(out.strip())
 
     # set GISBASE environment variable
-    os.environ['GISBASE'] = gisbase
+    os.environ['GISBASE'] = text_to_string(gisbase)
     # define GRASS Python environment
     grass_python_dir = os.path.join(gisbase, "etc", "python")
     sys.path.append(grass_python_dir)
@@ -82,7 +125,7 @@ def main():
     # define GRASS DATABASE
     
     # Set GISDBASE environment variable
-    os.environ['GISDBASE'] = gisdb
+    os.environ['GISDBASE'] = text_to_string(gisdb)
 
     # import GRASS Python package for initialization
     import grass.script.setup as gsetup
@@ -95,7 +138,7 @@ def main():
     gsetup.init(gisbase, gisdb, location, mapset)
 
     reports = []
-    for location, location_type in itertools.izip(locations, locations_types):
+    for location, location_type in zip(locations, locations_types):
         # here it is quite a good place to parallelize
         # including also type to make it unique and preserve it for sure
         report = 'report_for_' + location + '_' + location_type
