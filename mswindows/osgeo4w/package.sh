@@ -226,7 +226,7 @@ sed -e "s#@POSTFIX@#$POSTFIX#g" -e "s#@VERSION@#$VERSION#g" -e "s#@GRASS_EXECUTA
 if [ -n "$PACKAGE_PATCH" ]; then
     log building vc libraries 
     OSGEO4W_POSTFIX=$OSGEO4W_POSTFIX sh \
-        mswindows/osgeo4w/mklibs.sh $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/lib/*.$VERSION.dll 
+        mswindows/osgeo4w/mklibs.sh $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/lib/*.${MAJOR}.${MINOR}.dll 
     mv mswindows/osgeo4w/vc/grass*.lib $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/lib
     
     log creating package
