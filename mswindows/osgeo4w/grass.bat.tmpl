@@ -5,13 +5,12 @@ rem # GRASS initialization bat script (OSGeo4W)
 rem #
 rem #########################################################################
 
-SET OSGEO4W_ROOT=@osgeo4w@
-
 rem
 rem Set environmental variables
 rem
-call %OSGEO4W_ROOT%\bin\o4w_env.bat
-call %OSGEO4W_ROOT%\apps\grass\grass-@VERSION@\etc\env.bat
+call "%~dp0\o4w_env.bat"
+call "%OSGEO4W_ROOT%\apps\grass\grass-@VERSION@\etc\env.bat"
+@echo off
 
 rem
 rem Launch GRASS GIS
