@@ -9,10 +9,8 @@ rem
 rem Set environmental variables
 rem
 call "%~dp0\o4w_env.bat"
-call py3_env.bat
+call "%OSGEO4W_ROOT%\apps\grass\grass-@VERSION@\etc\env.bat"
 @echo off
-
-call %OSGEO4W_ROOT%\apps\grass\grass-@VERSION@\etc\env.bat
 
 rem
 rem Launch GRASS GIS
