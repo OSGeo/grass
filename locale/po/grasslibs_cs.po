@@ -1880,7 +1880,7 @@ msgstr ""
 
 #: ../lib/python/temporal/register.py:175
 msgid "The increment option will be ignored because of time stamps in input file"
-msgstr ""
+msgstr "Přírůstek bude ignorován kvůli časovým razítkům ve vstupním souboru"
 
 #: ../lib/python/temporal/register.py:179
 msgid "The interval flag will be ignored because of time stamps in input file"
@@ -3239,7 +3239,7 @@ msgstr ""
 
 #: ../lib/pngdriver/write_png.c:78
 msgid "Unable to write PNG file"
-msgstr ""
+msgstr "Nelze zapisovat soubor PNG"
 
 #: ../lib/pngdriver/write_png.c:82
 #, c-format
@@ -3448,7 +3448,7 @@ msgstr ""
 #: ../lib/imagery/iclass_statistics.c:735
 #: ../lib/imagery/iclass_statistics.c:758
 msgid "Band index out of range"
-msgstr ""
+msgstr "Index pásma mimo rozsah"
 
 #: ../lib/imagery/iclass_statistics.c:684
 msgid "Cell category value out of range"
@@ -4110,7 +4110,7 @@ msgstr ""
 
 #: ../lib/segment/format.c:143
 msgid "Segment format: file size too large"
-msgstr ""
+msgstr "Formát segmentu: velikost souboru je příliš velká"
 
 #: ../lib/segment/format.c:144
 msgid "Please recompile with Large File Support (LFS)"
@@ -5166,7 +5166,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:354
 msgid "Bicubic interpolation"
-msgstr ""
+msgstr "Bikubická interpolace"
 
 #: ../lib/gis/parser_standard_options.c:363
 msgid "Name of input basename raster map(s)"
@@ -5371,7 +5371,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:754
 msgid "Name of the input space time datasets"
-msgstr ""
+msgstr "Název datových množin vstupních prostoročasů"
 
 #: ../lib/gis/parser_standard_options.c:762
 msgid "Name of the output space time dataset"
@@ -5399,7 +5399,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:812
 msgid "Name of the output space time vector dataset"
-msgstr ""
+msgstr "Název vektorové datové množiny výstupního prostoru"
 
 #: ../lib/gis/parser_standard_options.c:820
 msgid "Name of the input space time raster3d dataset"
@@ -7776,7 +7776,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:89
 msgid "Random read is not supported by OGR for this layer. Unable to build topology."
-msgstr ""
+msgstr "Náhodné čtení pro tuto vrstvu nepodporuje OGR. Nelze vytvořit topologii."
 
 #: ../lib/vector/Vlib/build_ogr.c:95 ../lib/vector/Vlib/build_pg.c:101
 #, c-format
@@ -8558,7 +8558,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/constraint.c:150
 msgid "Layer constraint ignored for non-native vector formats"
-msgstr ""
+msgstr "Povolení vrstvy byla ignorována pro ne-nativní vektorové formáty"
 
 #: ../lib/vector/Vlib/geos.c:52
 msgid "vector map is not opened"

@@ -311,7 +311,7 @@ msgstr "Atributový sloupec:"
 
 #: ../gui/wxpython/modules/colorrules.py:1118
 msgid "Load color from column:"
-msgstr ""
+msgstr "Načíst barvu ze sloupce:"
 
 #: ../gui/wxpython/modules/colorrules.py:1118
 msgid "Save color to column:"
@@ -826,7 +826,7 @@ msgstr "Procházet"
 
 #: ../gui/wxpython/modules/import_export.py:780
 msgid "No layers selected."
-msgstr ""
+msgstr "Nevybrány žádné vrstvy."
 
 #: ../gui/wxpython/modules/import_export.py:858
 #: ../gui/wxpython/datacatalog/dialogs.py:33
@@ -11102,7 +11102,7 @@ msgstr "Znovu"
 
 #: ../gui/wxpython/vdigit/toolbars.py:189
 msgid "Redo previous changes"
-msgstr ""
+msgstr "Obnovit předchozí změny"
 
 #: ../gui/wxpython/vdigit/toolbars.py:559
 msgid "Break selected lines/boundaries at intersection"
@@ -12711,7 +12711,7 @@ msgstr "barva sítě:"
 
 #: ../gui/wxpython/nviz/preferences.py:599
 msgid "Automatic size"
-msgstr ""
+msgstr "Automatická velikost"
 
 #: ../gui/wxpython/nviz/preferences.py:600
 msgid "Icon size is set automatically based on landscape dimensions."
@@ -14947,7 +14947,7 @@ msgstr ""
 #: ../gui/wxpython/psmap/dialogs.py:1771 ../gui/wxpython/psmap/dialogs.py:3669
 #: ../gui/wxpython/web_services/widgets.py:269
 msgid "Up"
-msgstr ""
+msgstr "Nahoru"
 
 #: ../gui/wxpython/psmap/dialogs.py:1772 ../gui/wxpython/psmap/dialogs.py:3670
 #: ../gui/wxpython/web_services/widgets.py:271
@@ -16821,7 +16821,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1250
 msgid "Build date"
-msgstr ""
+msgstr "Datum výstavby"
 
 #: ../gui/wxpython/lmgr/frame.py:1252
 msgid "Build platform"
