@@ -24,8 +24,6 @@ RUN apt-get update \
         libgsl0-dev \
         libjpeg-dev \
         liblapack-dev \
-        liblas-dev \
-        liblas-c-dev \
         libncurses5-dev \
         libnetcdf-dev \
         libopenjp2-7 \
@@ -99,7 +97,6 @@ RUN ./configure \
     --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
     --with-fftw \
     --with-netcdf \
-    --with-liblas --with-liblas-config=/usr/bin/liblas-config \
     --with-pdal \
     --with-proj --with-proj-share=/usr/share/proj \
     --with-geos=/usr/bin/geos-config \
