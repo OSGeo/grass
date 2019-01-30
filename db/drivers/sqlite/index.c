@@ -46,8 +46,8 @@ int db__driver_create_index(dbIndex * index)
     if (db_test_index_type_unique(index))
 	db_append_string(&sql, " unique");
 
-    db_append_string(&sql, " index");
-    db_append_string(&sql, " if not exists ");
+    db_append_string(&sql, " index ");
+    db_append_string(&sql, "if not exists ");
     db_append_string(&sql, db_get_index_name(index));
     db_append_string(&sql, " on ");
 
