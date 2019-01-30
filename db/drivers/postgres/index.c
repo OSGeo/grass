@@ -34,7 +34,7 @@ int db__driver_create_index(dbIndex * index)
 	db_append_string(&sql, " unique");
 
     db_append_string(&sql, " index ");
-    if (PQserverVersion(pg_conn) >= 905000)
+    if (PQserverVersion(pg_conn) >= 90500)
 	db_append_string(&sql, " if not exists ");
     db_append_string(&sql, db_get_index_name(index));
     db_append_string(&sql, " on ");
