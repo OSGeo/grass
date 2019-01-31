@@ -1933,6 +1933,8 @@ def get_username():
                 s = p.stdout.read()
                 p.wait()
                 user = s.strip()
+                if type(user) is bytes:
+                    user = decode(user)
             except:
                 pass
         if not user:
