@@ -168,14 +168,14 @@ def try_remove(path):
         pass
 
 
-def clean_env(gisrc):
+def clean_env():
+    gisrc = os.environ['GISRC']
     env_curr = read_gisrc(gisrc)
     env_new = {}
     for k, v in env_curr.items():
         if k.endswith('PID') or k.startswith('MONITOR'):
             continue
         env_new[k] = v
-
     write_gisrc(env_new, gisrc)
 
 
@@ -1815,7 +1815,7 @@ def clean_all():
     clean_temp()
     # save 'last used' GISRC after removing variables which shouldn't
     # be saved, e.g. d.mon related
-    clean_env(os.environ['GISRC'])
+    clean_env()
 
 
 def grep(pattern, lines):
