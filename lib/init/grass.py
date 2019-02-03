@@ -58,31 +58,28 @@ if ENCODING is None:
     print("Default locale not found, using UTF-8")  # intentionally not translatable
 
 
-def decode(bytes_, encoding=None):
+def decode(bytes_, encoding=ENCODING):
     """Decode bytes with default locale and return (unicode) string
     Adapted from lib/python/core/utils.py
 
     No-op if parameter is not bytes (assumed unicode string).
 
     :param bytes bytes_: the bytes to decode
-    :param encoding: encoding to be used, default value is None
+    :param encoding: encoding to be used, default value is the system's default
+        encoding or, if that cannot be determined, 'UTF-8'.
     """
     if sys.version_info.major >= 3:
         unicode = str
     if isinstance(bytes_, unicode):
         return bytes_
     elif isinstance(bytes_, bytes):
-        if encoding is None:
-            enc = ENCODING
-        else:
-            enc = encoding
-        return bytes_.decode(enc)
+        return bytes_.decode(encoding)
     else:
         # if something else than text
         raise TypeError("can only accept types str and bytes")
 
 
-def encode(string, encoding=None):
+def encode(string, encoding=ENCODING):
     """Encode string with default locale and return bytes with that encoding
     Adapted from lib/python/core/utils.py
 
@@ -90,7 +87,8 @@ def encode(string, encoding=None):
     This ensures garbage in, garbage out.
 
     :param str string: the string to encode
-    :param encoding: encoding to be used, default value is None
+    :param encoding: encoding to be used, default value is the system's default
+        encoding or, if that cannot be determined, 'UTF-8'.
     """
     if sys.version_info.major >= 3:
         unicode = str
@@ -98,11 +96,7 @@ def encode(string, encoding=None):
         return string
     # this also tests str in Py3:
     elif isinstance(string, unicode):
-        if encoding is None:
-            enc = ENCODING
-        else:
-            enc = encoding
-        return string.encode(enc)
+        return string.encode(encoding)
     else:
         # if something else than text
         raise TypeError("can only accept types str and bytes")
