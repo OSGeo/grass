@@ -41,9 +41,12 @@ from __future__ import print_function
 import sys
 import os
 import atexit
+import gettext
 import shutil
+import signal
 import string
 import subprocess
+import types
 import re
 import platform
 import tempfile
@@ -114,7 +117,6 @@ def to_text_string(obj, encoding=ENCODING):
 
 
 if PY2:
-    import types
     string_types = basestring,
     integer_types = (int, long)
     class_types = (type, types.ClassType)
@@ -151,7 +153,6 @@ else:
 gisbase = os.path.normpath(gisbase)
 
 # i18N
-import gettext
 # TODO: is this needed or even desirable when we have set_language()?
 gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
 
@@ -1584,7 +1585,6 @@ def close_gui():
     env = gcore.gisenv()
     if 'GUI_PID' not in env:
         return
-    import signal
     for pid in env['GUI_PID'].split(','):
         debug("Exiting GUI with pid={0}".format(pid))
         try:
