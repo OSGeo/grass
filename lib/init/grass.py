@@ -181,10 +181,6 @@ def to_text_string(obj, encoding=ENCODING):
         return decode(obj, encoding=encoding)
 
 
-def warning(text):
-    sys.stderr.write(_("WARNING") + ': ' + text + os.linesep)
-
-
 def try_remove(path):
     try:
         os.remove(path)
@@ -201,16 +197,6 @@ def clean_env():
             continue
         env_new[k] = v
     write_gisrc(env_new, gisrc)
-
-
-def fatal(msg):
-    sys.stderr.write("%s: " % _('ERROR') + msg + os.linesep)
-    sys.exit(_("Exiting..."))
-
-
-def message(msg):
-    sys.stderr.write(msg + "\n")
-    sys.stderr.flush()
 
 
 def is_debug():
@@ -238,6 +224,20 @@ def debug(msg):
     if is_debug():
         sys.stderr.write("DEBUG: %s\n" % msg)
         sys.stderr.flush()
+
+
+def message(msg):
+    sys.stderr.write(msg + "\n")
+    sys.stderr.flush()
+
+
+def warning(text):
+    sys.stderr.write(_("WARNING") + ': ' + text + os.linesep)
+
+
+def fatal(msg):
+    sys.stderr.write("%s: " % _('ERROR') + msg + os.linesep)
+    sys.exit(_("Exiting..."))
 
 
 def readfile(path):
