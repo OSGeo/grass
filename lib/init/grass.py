@@ -108,7 +108,7 @@ def encode(string, encoding=None):
         raise TypeError("can only accept types str and bytes")
 
 
-# currently not used, see https://trac.osgeo.org/grass/ticket/3508
+# see https://trac.osgeo.org/grass/ticket/3508
 def to_text_string(obj, encoding=ENCODING):
     """Convert `obj` to (unicode) text string"""
     if PY2:
