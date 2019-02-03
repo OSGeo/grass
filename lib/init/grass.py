@@ -105,9 +105,9 @@ else:
 gisbase = os.path.normpath(gisbase)
 
 # Get the system name
-windows = sys.platform == 'win32'
-cygwin = "cygwin" in sys.platform
-macosx = "darwin" in sys.platform
+WINDOWS = sys.platform == 'win32'
+CYGWIN = "cygwin" in sys.platform
+MACOSX = "darwin" in sys.platform
 
 # TODO: it is OK to remove this?
 # at the beginning of this file were are happily getting GISBASE
@@ -257,14 +257,14 @@ def writefile(path, s):
 
 def call(cmd, **kwargs):
     """Wrapper for subprocess.call to deal with platform-specific issues"""
-    if windows:
+    if WINDOWS:
         kwargs['shell'] = True
     return subprocess.call(cmd, **kwargs)
 
 
 def Popen(cmd, **kwargs):  # pylint: disable=C0103
     """Wrapper for subprocess.Popen to deal with platform-specific issues"""
-    if windows:
+    if WINDOWS:
         kwargs['shell'] = True
     return subprocess.Popen(cmd, **kwargs)
 
@@ -294,7 +294,7 @@ def wxpath(*args):
 
 # using format for most but leaving usage of template for the dynamic ones
 # two different methods are easy way to implement two phase construction
-help_text = r"""GRASS GIS $VERSION_NUMBER
+HELP_TEXT = r"""GRASS GIS $VERSION_NUMBER
 Geographic Resources Analysis Support System (GRASS GIS).
 
 {usage}:
@@ -383,7 +383,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
 
 
 def help_message(default_gui):
-    t = string.Template(help_text)
+    t = string.Template(HELP_TEXT)
     s = t.substitute(CMD_NAME=cmd_name, DEFAULT_GUI=default_gui,
                      VERSION_NUMBER=grass_version)
     sys.stderr.write(s)
@@ -607,12 +607,12 @@ def set_paths(grass_config_dir):
     if not addon_base:
         addon_base = os.path.join(grass_config_dir, 'addons')
         os.environ['GRASS_ADDON_BASE'] = addon_base
-    if not windows:
+    if not WINDOWS:
         path_prepend(os.path.join(addon_base, 'scripts'), 'PATH')
     path_prepend(os.path.join(addon_base, 'bin'), 'PATH')
 
     # standard installation
-    if not windows:
+    if not WINDOWS:
         path_prepend(gpath('scripts'), 'PATH')
     path_prepend(gpath('bin'), 'PATH')
 
@@ -672,7 +672,7 @@ def set_defaults():
             pager = "more"
         elif find_exe("less"):
             pager = "less"
-        elif windows:
+        elif WINDOWS:
             pager = "more"
         else:
             pager = "cat"
@@ -680,7 +680,7 @@ def set_defaults():
 
     # GRASS_PYTHON
     if not os.getenv('GRASS_PYTHON'):
-        if windows:
+        if WINDOWS:
             os.environ['GRASS_PYTHON'] = "python.exe"
         else:
             os.environ['GRASS_PYTHON'] = "python"
@@ -706,15 +706,15 @@ def set_browser():
     # GRASS_HTML_BROWSER
     browser = os.getenv('GRASS_HTML_BROWSER')
     if not browser:
-        if macosx:
+        if MACOSX:
             # OSX doesn't execute browsers from the shell PATH - route through a
             # script
             browser = gpath('etc', "html_browser_mac.sh")
             os.environ['GRASS_HTML_BROWSER_MACOSX'] = "-b com.apple.helpviewer"
 
-        if windows:
+        if WINDOWS:
             browser = "start"
-        elif cygwin:
+        elif CYGWIN:
             browser = "explorer"
         else:
             # the usual suspects
@@ -726,7 +726,7 @@ def set_browser():
                     browser = b
                     break
 
-    elif macosx:
+    elif MACOSX:
         # OSX doesn't execute browsers from the shell PATH - route through a
         # script
         os.environ['GRASS_HTML_BROWSER_MACOSX'] = "-b %s" % browser
@@ -741,7 +741,7 @@ def set_browser():
 
 def ensure_home():
     """Set HOME if not set on MS Windows"""
-    if windows and not os.getenv('HOME'):
+    if WINDOWS and not os.getenv('HOME'):
         os.environ['HOME'] = os.path.join(os.getenv('HOMEDRIVE'),
                                           os.getenv('HOMEPATH'))
 
@@ -758,7 +758,7 @@ MAPSET: <UNKNOWN>
 def check_gui(expected_gui):
     grass_gui = expected_gui
     # Check if we are running X windows by checking the DISPLAY variable
-    if os.getenv('DISPLAY') or windows or macosx:
+    if os.getenv('DISPLAY') or WINDOWS or MACOSX:
         # Check if python is working properly
         if expected_gui in ('wxpython', 'gtext'):
             nul = open(os.devnull, 'w')
@@ -1459,7 +1459,7 @@ def ensure_db_connected(mapset):
 def get_shell():
     # set SHELL on ms windowns
     # this was at the very beginning of the script but it can be anywhere
-    if windows:
+    if WINDOWS:
         if os.getenv('GRASS_SH'):
             os.environ['SHELL'] = os.getenv('GRASS_SH')
         if not os.getenv('SHELL'):
@@ -1468,7 +1468,7 @@ def get_shell():
     # cygwin has many problems with the shell setup
     # below, so i hardcoded everything here.
     if sys.platform == 'cygwin':
-        sh = "cygwin"
+        sh = "CYGWIN"
         shellname = "GNU Bash (Cygwin)"
         os.environ['SHELL'] = "/usr/bin/bash.exe"
         os.environ['OSTYPE'] = "cygwin"
@@ -1481,7 +1481,7 @@ def get_shell():
             sh = 'sh'
             os.environ['SHELL'] = sh
 
-        if windows and sh:
+        if WINDOWS and sh:
             sh = os.path.splitext(sh)[0]
 
         if sh == "ksh":
@@ -1610,7 +1610,7 @@ def close_gui():
 
 def clear_screen():
     """Clear terminal"""
-    if windows:
+    if WINDOWS:
         pass
     # TODO: uncomment when PDCurses works.
     #   cls
@@ -1783,7 +1783,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
         for line in readfile(env_file).splitlines():
             # Bug related to OS X "SIP", see
             # https://trac.osgeo.org/grass/ticket/3462#comment:13
-            if macosx or not line.startswith('export'):
+            if MACOSX or not line.startswith('export'):
                 f.write(line + '\n')
 
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
@@ -1796,7 +1796,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
 
 
 def default_startup(location, location_name):
-    if windows:
+    if WINDOWS:
         os.environ['PS1'] = "GRASS %s> " % (grass_version)
         # "$ETC/run" doesn't work at all???
         process = subprocess.Popen([os.getenv('SHELL')])
@@ -1896,7 +1896,7 @@ def print_params():
 
 def get_username():
     """Get name of the current user"""
-    if windows:
+    if WINDOWS:
         user = os.getenv('USERNAME')
         if not user:
             user = "user_name"
