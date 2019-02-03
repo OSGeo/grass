@@ -53,12 +53,77 @@ import tempfile
 import locale
 
 
+# mechanism meant for debugging this script (only)
+# private global to store if we are debugging
+_DEBUG = None
+
+# for wxpath
+_WXPYTHON_BASE = None
+
 # ----+- Python 3 compatibility start -+----
 PY2 = sys.version[0] == '2'
 ENCODING = locale.getdefaultlocale()[1]
 if ENCODING is None:
     ENCODING = 'UTF-8'
     print("Default locale not found, using UTF-8")  # intentionally not translatable
+
+
+if PY2:
+    string_types = basestring,
+    integer_types = (int, long)
+    class_types = (type, types.ClassType)
+    text_type = unicode
+    binary_type = str
+else:
+    string_types = str,
+    integer_types = int,
+    class_types = type,
+    text_type = str
+    binary_type = bytes
+    MAXSIZE = sys.maxsize
+
+# ----+- Python 3 compatibility end -+----
+
+# Variables substituted during build process
+if 'GISBASE' in os.environ and len(os.getenv('GISBASE')) > 0:
+    # TODO: should this be something like GRASS_PATH?
+    # GISBASE marks complete runtime, so no need to get it here when
+    # setting it up, possible scenario: existing runtime and starting
+    # GRASS in that, we want to overwrite the settings, not to take it
+    # possibly same for GRASS_PROJSHARE and others but maybe not
+    gisbase = os.environ['GISBASE']
+else:
+    gisbase = "@GISBASE@"
+cmd_name = "@START_UP@"
+grass_version = "@GRASS_VERSION_NUMBER@"
+ld_library_path_var = '@LD_LIBRARY_PATH_VAR@'
+if 'GRASS_PROJSHARE' in os.environ:
+    config_projshare = os.environ['GRASS_PROJSHARE']
+else:
+    config_projshare = "@CONFIG_PROJSHARE@"
+
+gisbase = os.path.normpath(gisbase)
+
+# Get the system name
+windows = sys.platform == 'win32'
+cygwin = "cygwin" in sys.platform
+macosx = "darwin" in sys.platform
+
+# TODO: it is OK to remove this?
+# at the beginning of this file were are happily getting GISBASE
+# from the environment and we don't care about inconsistencies it might cause
+# The following was commented out because of breaking winGRASS
+# if 'GISBASE' in os.environ:
+#     sys.exit(_("ERROR: GRASS GIS is already running "
+#                "(environmental variable GISBASE found)"))
+# this is not really an issue, we should be able to overpower another session
+
+# Set GISBASE
+os.environ['GISBASE'] = gisbase
+
+# i18N
+# TODO: is this needed or even desirable when we have set_language()?
+gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
 
 
 def decode(bytes_, encoding=ENCODING):
@@ -116,47 +181,6 @@ def to_text_string(obj, encoding=ENCODING):
         return decode(obj, encoding=encoding)
 
 
-if PY2:
-    string_types = basestring,
-    integer_types = (int, long)
-    class_types = (type, types.ClassType)
-    text_type = unicode
-    binary_type = str
-else:
-    string_types = str,
-    integer_types = int,
-    class_types = type,
-    text_type = str
-    binary_type = bytes
-    MAXSIZE = sys.maxsize
-
-# ----+- Python 3 compatibility end -+----
-
-# Variables substituted during build process
-if 'GISBASE' in os.environ and len(os.getenv('GISBASE')) > 0:
-    # TODO: should this be something like GRASS_PATH?
-    # GISBASE marks complete runtime, so no need to get it here when
-    # setting it up, possible scenario: existing runtime and starting
-    # GRASS in that, we want to overwrite the settings, not to take it
-    # possibly same for GRASS_PROJSHARE and others but maybe not
-    gisbase = os.environ['GISBASE']
-else:
-    gisbase = "@GISBASE@"
-cmd_name = "@START_UP@"
-grass_version = "@GRASS_VERSION_NUMBER@"
-ld_library_path_var = '@LD_LIBRARY_PATH_VAR@'
-if 'GRASS_PROJSHARE' in os.environ:
-    config_projshare = os.environ['GRASS_PROJSHARE']
-else:
-    config_projshare = "@CONFIG_PROJSHARE@"
-
-gisbase = os.path.normpath(gisbase)
-
-# i18N
-# TODO: is this needed or even desirable when we have set_language()?
-gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
-
-
 def warning(text):
     sys.stderr.write(_("WARNING") + ': ' + text + os.linesep)
 
@@ -187,11 +211,6 @@ def fatal(msg):
 def message(msg):
     sys.stderr.write(msg + "\n")
     sys.stderr.flush()
-
-
-# mechanism meant for debugging this script (only)
-# private global to store if we are debugging
-_DEBUG = None
 
 
 def is_debug():
@@ -256,10 +275,6 @@ def gpath(*args):
     Can be called only after gisbase was set.
     """
     return os.path.join(gisbase, *args)
-
-
-# for wxpath
-_WXPYTHON_BASE = None
 
 
 def wxpath(*args):
@@ -1969,26 +1984,6 @@ def parse_cmdline(argv, default_gui):
     else:
         params.mapset = None
     return params
-
-
-# The main script starts here
-
-# Get the system name
-windows = sys.platform == 'win32'
-cygwin = "cygwin" in sys.platform
-macosx = "darwin" in sys.platform
-
-# TODO: it is OK to remove this?
-# at the beginning of this file were are happily getting GISBASE
-# from the environment and we don't care about inconsistencies it might cause
-# The following was commented out because of breaking winGRASS
-# if 'GISBASE' in os.environ:
-#     sys.exit(_("ERROR: GRASS GIS is already running "
-#                "(environmental variable GISBASE found)"))
-# this is not really an issue, we should be able to overpower another session
-
-# Set GISBASE
-os.environ['GISBASE'] = gisbase
 
 
 def main():
