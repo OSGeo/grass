@@ -41,6 +41,7 @@ from __future__ import print_function
 import sys
 import os
 import atexit
+import shutil
 import string
 import subprocess
 import re
@@ -172,13 +173,6 @@ def try_remove(path):
         pass
 
 
-def try_rmdir(path):
-    try:
-        os.rmdir(path)
-    except:
-        pass
-
-
 def clean_env(gisrc):
     env_curr = read_gisrc(gisrc)
     env_new = {}
@@ -188,32 +182,6 @@ def clean_env(gisrc):
         env_new[k] = v
 
     write_gisrc(env_new, gisrc)
-
-
-def cleanup_dir(path):
-    if not path:
-        return
-
-    for root, dirs, files in os.walk(path, topdown=False):
-        for name in files:
-            try_remove(os.path.join(root, name))
-        for name in dirs:
-            try_rmdir(os.path.join(root, name))
-
-
-class Cleaner(object):  # pylint: disable=R0903
-    """Holds directories and files which needs to be cleaned or deleted"""
-    def __init__(self):
-        self.tmpdir = None
-
-    def cleanup(self):
-        """This can be registered with atexit
-
-        Object can then still change and add or remove directories to clean"""
-        # all exits after setting up tmp dirs (system/location) should
-        # also tidy it up
-        cleanup_dir(self.tmpdir)
-        try_rmdir(self.tmpdir)
 
 
 def fatal(msg):
@@ -2106,10 +2074,9 @@ def main():
     # Create the temporary directory and session grassrc file
     tmpdir = create_tmp(user, gis_lock)
 
-    cleaner = Cleaner()
-    cleaner.tmpdir = tmpdir
-    # object is not destroyed when its method is registered
-    atexit.register(cleaner.cleanup)
+    # Remove the tmpdir
+    # The removal will be executed when the python process terminates.
+    atexit.register(lambda: shutil.rmtree(tmpdir, ignore_errors=True))
 
     # Create the session grassrc file
     gisrc = create_gisrc(tmpdir, gisrcrc)
