@@ -74,8 +74,10 @@ if 'GISBASE' in os.environ and len(os.getenv('GISBASE')) > 0:
     # GRASS in that, we want to overwrite the settings, not to take it
     # possibly same for GRASS_PROJSHARE and others but maybe not
     gisbase = os.environ['GISBASE']
+    gisbase = os.path.normpath(gisbase)
 else:
     gisbase = "@GISBASE@"
+    os.environ['GISBASE'] = gisbase
 cmd_name = "@START_UP@"
 grass_version = "@GRASS_VERSION_NUMBER@"
 ld_library_path_var = '@LD_LIBRARY_PATH_VAR@'
@@ -84,15 +86,11 @@ if 'GRASS_PROJSHARE' in os.environ:
 else:
     config_projshare = "@CONFIG_PROJSHARE@"
 
-gisbase = os.path.normpath(gisbase)
 
 # Get the system name
 WINDOWS = sys.platform == 'win32'
 CYGWIN = "cygwin" in sys.platform
 MACOSX = "darwin" in sys.platform
-
-# Set GISBASE
-os.environ['GISBASE'] = gisbase
 
 # i18N
 # TODO: is this needed or even desirable when we have set_language()?
