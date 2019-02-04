@@ -1145,11 +1145,11 @@ def load_gisrc(gisrc, gisrcrc):
     mapset_settings.mapset = kv.get('MAPSET')
     if not mapset_settings.is_valid():
         fatal(_("Error reading data path information from g.gisenv.\n"
-                "GISDBASE={gisbase}\n"
+                "GISDBASE={gisdbase}\n"
                 "LOCATION_NAME={location}\n"
                 "MAPSET={mapset}\n\n"
                 "Check the <{file}> file.").format(
-                    gisbase=mapset_settings.gisdbase,
+                    gisdbase=mapset_settings.gisdbase,
                     location=mapset_settings.location,
                     mapset=mapset_settings.mapset,
                     file=gisrcrc))
