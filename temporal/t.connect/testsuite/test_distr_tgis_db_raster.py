@@ -180,9 +180,9 @@ class TestRasterExtraction(TestCase):
         tinfo_string = """id=A@test1
                                     name=A
                                     mapset=test1
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2001-04-01 00:00:00
-                                    granularity=1 month"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2001-04-01 00:00:00'
+                                    granularity='1 month'"""
 
         info = SimpleModule("t.info", flags="g", input="A@test1")
         self.assertModuleKeyValue(
@@ -192,9 +192,9 @@ class TestRasterExtraction(TestCase):
         tinfo_string = """id=A@test2
                                     name=A
                                     mapset=test2
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2001-07-01 00:00:00
-                                    granularity=2 months"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2001-07-01 00:00:00'
+                                    granularity='2 months'"""
 
         info = SimpleModule("t.info", flags="g", input="A@test2")
         self.assertModuleKeyValue(
@@ -204,9 +204,9 @@ class TestRasterExtraction(TestCase):
         tinfo_string = """id=A@test3
                                     name=A
                                     mapset=test3
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2001-10-01 00:00:00
-                                    granularity=3 months"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2001-10-01 00:00:00'
+                                    granularity='3 months'"""
 
         info = SimpleModule("t.info", flags="g", input="A@test3")
         self.assertModuleKeyValue(
@@ -216,9 +216,9 @@ class TestRasterExtraction(TestCase):
         tinfo_string = """id=A@test4
                                     name=A
                                     mapset=test4
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2002-01-01 00:00:00
-                                    granularity=4 months"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2002-01-01 00:00:00'
+                                    granularity='4 months'"""
 
         info = SimpleModule("t.info", flags="g", input="A@test4")
         self.assertModuleKeyValue(
@@ -227,9 +227,9 @@ class TestRasterExtraction(TestCase):
         tinfo_string = """id=A@test5
                                     name=A
                                     mapset=test5
-                                    start_time=2001-01-01 00:00:00
-                                    end_time=2002-04-01 00:00:00
-                                    granularity=5 months"""
+                                    start_time='2001-01-01 00:00:00'
+                                    end_time='2002-04-01 00:00:00'
+                                    granularity='5 months'"""
 
         info = SimpleModule("t.info", flags="g", input="A@test5")
         self.assertModuleKeyValue(
@@ -241,8 +241,8 @@ class TestRasterExtraction(TestCase):
                                 name=a1
                                 mapset=test1
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-02-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-02-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="raster", input="a1@test1")
@@ -253,8 +253,8 @@ class TestRasterExtraction(TestCase):
                                 name=a1
                                 mapset=test2
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-03-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-03-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="raster", input="a1@test2")
@@ -265,8 +265,8 @@ class TestRasterExtraction(TestCase):
                                 name=a1
                                 mapset=test3
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-04-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-04-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="raster", input="a1@test3")
@@ -277,8 +277,8 @@ class TestRasterExtraction(TestCase):
                                 name=a1
                                 mapset=test4
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-05-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-05-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="raster", input="a1@test4")
@@ -289,8 +289,8 @@ class TestRasterExtraction(TestCase):
                                 name=a1
                                 mapset=test5
                                 temporal_type=absolute
-                                start_time=2001-01-01 00:00:00
-                                end_time=2001-06-01 00:00:00 """
+                                start_time='2001-01-01 00:00:00'
+                                end_time='2001-06-01 00:00:00'"""
 
         info = SimpleModule(
             "t.info", flags="g", type="raster", input="a1@test5")
