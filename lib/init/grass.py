@@ -93,7 +93,10 @@ CYGWIN = "cygwin" in sys.platform
 MACOSX = "darwin" in sys.platform
 
 # i18N
-# TODO: is this needed or even desirable when we have set_language()?
+# Calling gettext.install() is required since it installs _() in the builtins namespace
+# https://docs.python.org/2/library/gettext.html#gettext.install
+# If we remove it, we are going to be getting NameErrors when we define e.g. `HELP_TEXT`
+#
 gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
 
 
