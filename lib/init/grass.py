@@ -81,11 +81,7 @@ else:
 CMD_NAME = "@START_UP@"
 GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
 LD_LIBRARY_PATH_VAR = '@LD_LIBRARY_PATH_VAR@'
-if 'GRASS_PROJSHARE' in os.environ:
-    CONFIG_PROJSHARE = os.environ['GRASS_PROJSHARE']
-else:
-    CONFIG_PROJSHARE = "@CONFIG_PROJSHARE@"
-
+CONFIG_PROJSHARE = os.environ.get('GRASS_PROJSHARE', "@CONFIG_PROJSHARE@")
 
 # Get the system name
 WINDOWS = sys.platform == 'win32'
