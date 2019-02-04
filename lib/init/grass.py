@@ -91,15 +91,6 @@ WINDOWS = sys.platform == 'win32'
 CYGWIN = "cygwin" in sys.platform
 MACOSX = "darwin" in sys.platform
 
-# TODO: it is OK to remove this?
-# at the beginning of this file were are happily getting GISBASE
-# from the environment and we don't care about inconsistencies it might cause
-# The following was commented out because of breaking winGRASS
-# if 'GISBASE' in os.environ:
-#     sys.exit(_("ERROR: GRASS GIS is already running "
-#                "(environmental variable GISBASE found)"))
-# this is not really an issue, we should be able to overpower another session
-
 # Set GISBASE
 os.environ['GISBASE'] = gisbase
 
