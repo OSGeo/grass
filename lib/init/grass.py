@@ -1966,6 +1966,26 @@ def parse_cmdline(argv, default_gui):
     return params
 
 
+def validate_cmdline(params):
+    """ Validate the cmdline params and exit if necessary. """
+    if params.exit_grass and not params.create_new:
+        fatal(_("Flag -e requires also flag -c"))
+    if params.tmp_location and not params.geofile:
+        fatal(
+            _(
+                "Coordinate reference system argument (e.g. EPSG)"
+                " is needed for --tmp-location"
+            )
+        )
+    if params.tmp_location and params.mapset:
+        fatal(
+            _(
+                "Only one argument (e.g. EPSG) is needed for"
+                " --tmp-location, mapset name <{}> provided"
+            ).format(params.mapset)
+        )
+
+
 def main():
     """The main function which does the whole setup and run procedure
 
@@ -2002,15 +2022,7 @@ def main():
         params = parse_cmdline(clean_argv, default_gui=default_gui)
     except ValueError:
         params = parse_cmdline(sys.argv[1:], default_gui=default_gui)
-    if params.exit_grass and not params.create_new:
-        fatal(_("Flag -e requires also flag -c"))
-    if params.tmp_location and not params.geofile:
-        fatal(_("Coordinate reference system argument (e.g. EPSG)"
-                " is needed for --tmp-location"))
-    if params.tmp_location and params.mapset:
-        fatal(_("Only one argument (e.g. EPSG) is needed for"
-                " --tmp-location, mapset name <{}> provided").format(
-                    params.mapset))
+    validate_cmdline(params)
     # For now, we allow, but not advertise/document, --tmp-location
     # without --exec (usefulness to be evaluated).
 
