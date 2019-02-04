@@ -73,18 +73,18 @@ if 'GISBASE' in os.environ and len(os.getenv('GISBASE')) > 0:
     # setting it up, possible scenario: existing runtime and starting
     # GRASS in that, we want to overwrite the settings, not to take it
     # possibly same for GRASS_PROJSHARE and others but maybe not
-    gisbase = os.environ['GISBASE']
-    gisbase = os.path.normpath(gisbase)
+    GISBASE = os.environ['GISBASE']
+    GISBASE = os.path.normpath(GISBASE)
 else:
-    gisbase = "@GISBASE@"
-    os.environ['GISBASE'] = gisbase
-cmd_name = "@START_UP@"
-grass_version = "@GRASS_VERSION_NUMBER@"
-ld_library_path_var = '@LD_LIBRARY_PATH_VAR@'
+    GISBASE = "@GISBASE@"
+    os.environ['GISBASE'] = GISBASE
+CMD_NAME = "@START_UP@"
+GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
+LD_LIBRARY_PATH_VAR = '@LD_LIBRARY_PATH_VAR@'
 if 'GRASS_PROJSHARE' in os.environ:
-    config_projshare = os.environ['GRASS_PROJSHARE']
+    CONFIG_PROJSHARE = os.environ['GRASS_PROJSHARE']
 else:
-    config_projshare = "@CONFIG_PROJSHARE@"
+    CONFIG_PROJSHARE = "@CONFIG_PROJSHARE@"
 
 
 # Get the system name
@@ -97,7 +97,7 @@ MACOSX = "darwin" in sys.platform
 # https://docs.python.org/2/library/gettext.html#gettext.install
 # If we remove it, we are going to be getting NameErrors when we define e.g. `HELP_TEXT`
 #
-gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
+gettext.install('grasslibs', os.path.join(GISBASE, 'locale'))
 
 
 def decode(bytes_, encoding=ENCODING):
@@ -246,22 +246,22 @@ def Popen(cmd, **kwargs):  # pylint: disable=C0103
 def gpath(*args):
     """Costruct path to file or directory in GRASS GIS installation
 
-    Can be called only after gisbase was set.
+    Can be called only after GISBASE was set.
     """
-    return os.path.join(gisbase, *args)
+    return os.path.join(GISBASE, *args)
 
 
 def wxpath(*args):
     """Costruct path to file or directory in GRASS wxGUI
 
-    Can be called only after gisbase was set.
+    Can be called only after GISBASE was set.
 
     This function does not check if the directories exist or if GUI works
     this must be done by the caller if needed.
     """
     global _WXPYTHON_BASE
     if not _WXPYTHON_BASE:
-        # this can be called only after gisbase was set
+        # this can be called only after GISBASE was set
         _WXPYTHON_BASE = gpath("gui", "wxpython")
     return os.path.join(_WXPYTHON_BASE, *args)
 
@@ -358,8 +358,8 @@ Geographic Resources Analysis Support System (GRASS GIS).
 
 def help_message(default_gui):
     t = string.Template(HELP_TEXT)
-    s = t.substitute(CMD_NAME=cmd_name, DEFAULT_GUI=default_gui,
-                     VERSION_NUMBER=grass_version)
+    s = t.substitute(CMD_NAME=CMD_NAME, DEFAULT_GUI=default_gui,
+                     VERSION_NUMBER=GRASS_VERSION)
     sys.stderr.write(s)
 
 
@@ -628,7 +628,7 @@ def set_paths(grass_config_dir):
 
     # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
     # this works for subprocesses but won't affect the current process
-    path_prepend(gpath("lib"), ld_library_path_var)
+    path_prepend(gpath("lib"), LD_LIBRARY_PATH_VAR)
 
 
 def find_exe(pgm):
@@ -665,7 +665,7 @@ def set_defaults():
 
     # GRASS_PROJSHARE
     if not os.getenv('GRASS_PROJSHARE'):
-        os.environ['GRASS_PROJSHARE'] = config_projshare
+        os.environ['GRASS_PROJSHARE'] = CONFIG_PROJSHARE
 
 
 def set_display_defaults():
@@ -1091,7 +1091,7 @@ def gui_startup(grass_gui):
                 "Use '--help' for further options\n"
                 "     {cmd_name} --help\n"
                 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html").format(
-                    cmd_name=cmd_name))
+                    cmd_name=CMD_NAME))
     elif ret == 5:  # defined in gui/wxpython/gis_set.py
         # User wants to exit from GRASS
         message(_("Exit was requested in GUI.\nGRASS GIS will not start. Bye."))
@@ -1607,8 +1607,8 @@ def show_banner():
 
 def say_hello():
     """Write welcome to stderr including Subversion revision if in svn copy"""
-    sys.stderr.write(_("Welcome to GRASS GIS %s") % grass_version)
-    if grass_version.endswith('svn'):
+    sys.stderr.write(_("Welcome to GRASS GIS %s") % GRASS_VERSION)
+    if GRASS_VERSION.endswith('svn'):
         try:
             filerev = open(gpath('etc', 'VERSIONNUMBER'))
             linerev = filerev.readline().rstrip('\n')
@@ -1667,7 +1667,7 @@ def csh_startup(location, location_name, mapset, grass_env_file):
 
     f.write("set prompt = '\\\n")
     f.write("Mapset <%s> in Location <%s> \\\n" % (mapset, location_name))
-    f.write("GRASS GIS %s > '\n" % grass_version)
+    f.write("GRASS GIS %s > '\n" % GRASS_VERSION)
     f.write("set BOGUS=``;unset BOGUS\n")
 
     # csh shell rc file left for backward compatibility
@@ -1724,7 +1724,7 @@ def bash_startup(location, location_name, grass_env_file):
     else:
         grass_name = "GRASS"
     f.write("PS1='{name} {version} ({location}):\\w > '\n".format(
-        name=grass_name, version=grass_version, location=location_name))
+        name=grass_name, version=GRASS_VERSION, location=location_name))
 
     # TODO: have a function and/or module to test this
     mask2d_test = 'test -f "$MAPSET_PATH/cell/MASK"'
@@ -1774,11 +1774,11 @@ PROMPT_COMMAND=grass_prompt\n""".format(
 
 def default_startup(location, location_name):
     if WINDOWS:
-        os.environ['PS1'] = "GRASS %s> " % (grass_version)
+        os.environ['PS1'] = "GRASS %s> " % (GRASS_VERSION)
         # "$ETC/run" doesn't work at all???
         process = subprocess.Popen([os.getenv('SHELL')])
     else:
-        os.environ['PS1'] = "GRASS %s (%s):\\w > " % (grass_version, location_name)
+        os.environ['PS1'] = "GRASS %s (%s):\\w > " % (GRASS_VERSION, location_name)
         process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
 
     return process
@@ -1835,7 +1835,7 @@ def print_params():
 
     for arg in params:
         if arg == 'path':
-            sys.stdout.write("%s\n" % gisbase)
+            sys.stdout.write("%s\n" % GISBASE)
         elif arg == 'arch':
             val = grep('ARCH', linesplat)
             sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
@@ -1866,7 +1866,7 @@ def print_params():
             except:
                sys.stdout.write("No SVN revision defined\n")
         elif arg == 'version':
-            sys.stdout.write("%s\n" % grass_version)
+            sys.stdout.write("%s\n" % GRASS_VERSION)
         else:
             message(_("Parameter <%s> not supported") % arg)
 
@@ -1917,7 +1917,7 @@ def parse_cmdline(argv, default_gui):
     for i in argv:
         # Check if the user asked for the version
         if i in ["-v", "--version"]:
-            message("GRASS GIS %s" % grass_version)
+            message("GRASS GIS %s" % GRASS_VERSION)
             message('\n' + readfile(gpath("etc", "license")))
             sys.exit()
         # Check if the user asked for help
@@ -1979,7 +1979,7 @@ def main():
 
     # Set GRASS version number for R interface etc
     # (must be an env var for MS Windows)
-    os.environ['GRASS_VERSION'] = grass_version
+    os.environ['GRASS_VERSION'] = GRASS_VERSION
 
     # Set the GIS_LOCK variable to current process id
     gis_lock = str(os.getpid())
@@ -2074,7 +2074,7 @@ def main():
                     " - Use '--help' for further options\n"
                     "     {cmd_name} --help\n"
                     "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html").format(
-                        cmd_name=cmd_name, gisrcrc=gisrcrc))
+                        cmd_name=CMD_NAME, gisrcrc=gisrcrc))
         create_initial_gisrc(gisrc)
 
     message(_("Starting GRASS GIS..."))
