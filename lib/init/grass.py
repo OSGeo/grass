@@ -66,17 +66,24 @@ if ENCODING is None:
     ENCODING = 'UTF-8'
     print("Default locale not found, using UTF-8")  # intentionally not translatable
 
-# Variables substituted during build process
+# The "@...@" variables are being substituted during build process
+#
+# TODO: should GISBASE be renamed to something like GRASS_PATH?
+# GISBASE marks complete runtime, so no need to get it here when
+# setting it up, possible scenario: existing runtime and starting
+# GRASS in that, we want to overwrite the settings, not to take it
+# possibly same for GRASS_PROJSHARE and others but maybe not
+#
+# We need to simultaneously make sure that:
+# - we get GISBASE from os.environ if it is defined (doesn't this mean that we are already
+#   inside a GRASS session? If we are, why do we need to run this script again???).
+# - GISBASE exists as an ENV variable
+#
+# pmav99: Ugly as hell, but that's what the code before the refactoring was doing.
 if 'GISBASE' in os.environ and len(os.getenv('GISBASE')) > 0:
-    # TODO: should this be something like GRASS_PATH?
-    # GISBASE marks complete runtime, so no need to get it here when
-    # setting it up, possible scenario: existing runtime and starting
-    # GRASS in that, we want to overwrite the settings, not to take it
-    # possibly same for GRASS_PROJSHARE and others but maybe not
-    GISBASE = os.environ['GISBASE']
-    GISBASE = os.path.normpath(GISBASE)
+    GISBASE = os.path.normpath(os.environ["GISBASE"])
 else:
-    GISBASE = "@GISBASE@"
+    GISBASE = os.path.normpath("@GISBASE@")
     os.environ['GISBASE'] = GISBASE
 CMD_NAME = "@START_UP@"
 GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
