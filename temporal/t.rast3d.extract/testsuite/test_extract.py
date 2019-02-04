@@ -57,9 +57,9 @@ class TestRaster3dExtraction(TestCase):
 
         #self.assertModule("t.info",  flags="g",  input="B")
 
-        tinfo_string="""start_time=2001-07-01 00:00:00
-        end_time=2002-07-01 00:00:00
-        granularity=3 months
+        tinfo_string="""start_time='2001-07-01 00:00:00'
+        end_time='2002-07-01 00:00:00'
+        granularity='3 months'
         map_time=interval
         aggregation_type=None
         number_of_maps=4
@@ -80,9 +80,9 @@ class TestRaster3dExtraction(TestCase):
 
         #self.assertModule("t.info",  flags="g",  input="B")
 
-        tinfo_string="""start_time=2002-01-01 00:00:00
-        end_time=2002-07-01 00:00:00
-        granularity=3 months
+        tinfo_string="""start_time='2002-01-01 00:00:00'
+        end_time='2002-07-01 00:00:00'
+        granularity='3 months'
         map_time=interval
         aggregation_type=None
         number_of_maps=2
@@ -102,9 +102,9 @@ class TestRaster3dExtraction(TestCase):
 
         #self.assertModule("t.info",  flags="g",  input="B")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-        end_time=2002-07-01 00:00:00
-        granularity=3 months
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+        end_time='2002-07-01 00:00:00'
+        granularity='3 months'
         map_time=interval
         aggregation_type=None
         number_of_maps=6
