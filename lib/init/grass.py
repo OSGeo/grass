@@ -60,29 +60,17 @@ _DEBUG = None
 # for wxpath
 _WXPYTHON_BASE = None
 
-# ----+- Python 3 compatibility start -+----
-PY2 = sys.version[0] == '2'
 ENCODING = locale.getdefaultlocale()[1]
 if ENCODING is None:
     ENCODING = 'UTF-8'
     print("Default locale not found, using UTF-8")  # intentionally not translatable
 
-
+# Python 3 compatibility start
+PY2 = sys.version[0] == '2'
 if PY2:
     string_types = basestring,
-    integer_types = (int, long)
-    class_types = (type, types.ClassType)
-    text_type = unicode
-    binary_type = str
 else:
     string_types = str,
-    integer_types = int,
-    class_types = type,
-    text_type = str
-    binary_type = bytes
-    MAXSIZE = sys.maxsize
-
-# ----+- Python 3 compatibility end -+----
 
 # Variables substituted during build process
 if 'GISBASE' in os.environ and len(os.getenv('GISBASE')) > 0:
