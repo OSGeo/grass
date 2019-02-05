@@ -71,9 +71,9 @@ class TestRasterExtraction(TestCase):
 
         #self.assertModule("t.info",  flags="g",  input="precip_abs2")
 
-        tinfo_string="""start_time=2001-07-01 00:00:00
-        end_time=2002-07-01 00:00:00
-        granularity=3 months
+        tinfo_string="""start_time='2001-07-01 00:00:00'
+        end_time='2002-07-01 00:00:00'
+        granularity='3 months'
         map_time=interval
         north=80.0
         south=0.0
@@ -104,9 +104,9 @@ class TestRasterExtraction(TestCase):
 
         #self.assertModule("t.info",  flags="g",  input="precip_abs2")
 
-        tinfo_string="""start_time=2002-01-01 00:00:00
-        end_time=2002-07-01 00:00:00
-        granularity=3 months
+        tinfo_string="""start_time='2002-01-01 00:00:00'
+        end_time='2002-07-01 00:00:00'
+        granularity='3 months'
         map_time=interval
         north=80.0
         south=0.0
@@ -136,9 +136,9 @@ class TestRasterExtraction(TestCase):
 
         #self.assertModule("t.info",  flags="g",  input="precip_abs2")
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-        end_time=2002-07-01 00:00:00
-        granularity=3 months
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+        end_time='2002-07-01 00:00:00'
+        granularity='3 months'
         map_time=interval
         north=80.0
         south=0.0
