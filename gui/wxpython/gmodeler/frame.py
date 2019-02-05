@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
+@author Python parameterization Ondrej Pesek <pesej.ondrek gmail.com>
 """
 
 import os
@@ -88,6 +89,7 @@ class ModelFrame(wx.Frame):
         self.searchDialog = None  # module search dialog
         self.baseTitle = title
         self.modelFile = None    # loaded model
+        self.start_time = None
         self.modelChanged = False
         self.randomness = 40  # random layout
 
@@ -319,7 +321,7 @@ class ModelFrame(wx.Frame):
             action = self.GetModel().GetItems()[event.pid]
             if hasattr(action, "task"):
                 action.Update(running=True)
-            if event.pid == self._gconsole.cmdThread.GetId() - 1:
+            if event.pid == self._gconsole.cmdThread.GetId() - 1 and self.start_time:
                 self.goutput.WriteCmdLog('({}) {} ({})'.format(
                     str(time.ctime()), _("Model computation finished"), time_elapsed(self.start_time)),
                                          notification=event.notification)
@@ -2034,9 +2036,17 @@ class PythonPanel(wx.Panel):
             mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
             os.chmod(self.filename, mode | stat.S_IXUSR)
 
-        self.parent._gconsole.RunCmd(
-            [fd.name],
-            skipInterface=True, onDone=self.OnDone)
+        for item in self.parent.GetModel().GetItems():
+            if len(item.GetParameterizedParams()['params']) + len(
+                    item.GetParameterizedParams()['flags']) > 0:
+                self.parent._gconsole.RunCmd(
+                    [fd.name, '--ui'],
+                    skipInterface=False, onDone=self.OnDone)
+                break
+        else:
+            self.parent._gconsole.RunCmd(
+                [fd.name],
+                skipInterface=True, onDone=self.OnDone)
 
         event.Skip()
 
