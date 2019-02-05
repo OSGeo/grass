@@ -2681,8 +2681,12 @@ def getParameterizedFlags(paramFlags, itemFlags):
 if __name__ == "__main__":
     options, flags = parser()
     atexit.register(cleanup)
-    sys.exit(main(options, flags))
 """)
+
+        if properties.get('overwrite'):
+            self.fd.write('    os.environ["GRASS_OVERWRITE"] = "1"\n')
+
+        self.fd.write('    sys.exit(main())\n')
 
     def _writePythonItem(self, item, ignoreBlock=True, variables={}):
         """Write model object to Python file"""
