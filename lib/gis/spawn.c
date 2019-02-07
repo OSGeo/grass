@@ -686,7 +686,7 @@ static int do_spawn(struct spawn *sp, const char *command)
 	do_bindings(sp->bindings, sp->num_bindings);
 
 	execvp(command, (char **)sp->args);
-	G_warning(_("Unable to execute command"));
+	G_warning(_("Unable to execute command '%s': %s"), command, strerror(errno));
 	_exit(127);
     }
 
