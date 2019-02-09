@@ -280,9 +280,12 @@ int input_georef(char *geofile)
 	    set_gdal_region(gdal_ds);
 	    hSRS = OSRNewSpatialReference(wktstring);
 	}
-	else
-	    G_fatal_error(_("Unable to read georeferenced file <%s> using "
-			    "GDAL library"), geofile);
+	else {
+	    G_warning(_("Unable to read georeferenced file <%s> using "
+			"GDAL library, trying to open it as ESRI WKT"), geofile);
+
+	    return input_wkt(geofile);
+	}
     }
 
     if (cellhd.proj == PROJECTION_XY)
