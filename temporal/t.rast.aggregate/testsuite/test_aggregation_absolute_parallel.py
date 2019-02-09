@@ -61,9 +61,9 @@ class TestAggregationAbsoluteParallel(TestCase):
                           method="sum", sampling=["contains"],
                           nprocs=9, file_limit=2)
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2001-04-01 00:00:00
-                        granularity=12 hours
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2001-04-01 00:00:00'
+                        granularity='12 hours'
                         map_time=interval
                         aggregation_type=sum
                         number_of_maps=180
@@ -90,9 +90,9 @@ class TestAggregationAbsoluteParallel(TestCase):
         delta = end - start
         print("test_aggregation_1day_4procs:",  delta.total_seconds())
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2001-04-01 00:00:00
-                        granularity=1 day
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2001-04-01 00:00:00'
+                        granularity='1 day'
                         map_time=interval
                         aggregation_type=sum
                         number_of_maps=90"""
@@ -116,9 +116,9 @@ class TestAggregationAbsoluteParallel(TestCase):
         print("test_aggregation_1day_3procs:",  delta.total_seconds())
 
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2001-04-01 00:00:00
-                        granularity=1 day
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2001-04-01 00:00:00'
+                        granularity='1 day'
                         map_time=interval
                         aggregation_type=sum
                         number_of_maps=90
@@ -146,9 +146,9 @@ class TestAggregationAbsoluteParallel(TestCase):
         print("test_aggregation_1day_2procs:",  delta.total_seconds())
 
 
-        tinfo_string="""start_time=2001-01-01 00:00:00
-                        end_time=2001-04-01 00:00:00
-                        granularity=1 day
+        tinfo_string="""start_time='2001-01-01 00:00:00'
+                        end_time='2001-04-01 00:00:00'
+                        granularity='1 day'
                         map_time=interval
                         aggregation_type=sum
                         number_of_maps=90

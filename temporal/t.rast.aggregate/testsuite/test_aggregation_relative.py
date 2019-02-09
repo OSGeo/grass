@@ -59,8 +59,8 @@ class TestAggregationRelative(TestCase):
                           sampling=["overlaps","overlapped","contains"],
                           nprocs=2, verbose=True)
 
-        tinfo_string="""start_time=0
-                        end_time=18
+        tinfo_string="""start_time='0'
+                        end_time='18'
                         unit=days
                         granularity=6
                         map_time=interval
@@ -86,8 +86,8 @@ class TestAggregationRelative(TestCase):
                           nprocs=4, flags="n", verbose=True)
 
         tinfo_string="""semantic_type=mean
-                        start_time=0
-                        end_time=27
+                        start_time='0'
+                        end_time='27'
                         unit=days
                         granularity=9
                         map_time=interval
@@ -113,8 +113,8 @@ class TestAggregationRelative(TestCase):
                           nprocs=4, verbose=True)
 
         tinfo_string="""semantic_type=mean
-                        start_time=0
-                        end_time=18
+                        start_time='0'
+                        end_time='18'
                         unit=days
                         granularity=9
                         map_time=interval
@@ -140,8 +140,8 @@ class TestAggregationRelative(TestCase):
                           nprocs=4, verbose=True)
 
         tinfo_string="""semantic_type=mean
-                        start_time=0
-                        end_time=21
+                        start_time='0'
+                        end_time='21'
                         unit=days
                         granularity=21
                         map_time=interval

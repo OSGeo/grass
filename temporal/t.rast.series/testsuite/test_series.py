@@ -58,8 +58,8 @@ class TestSnapAbsoluteSTRDS(TestCase):
         self.assertModule("t.rast.series", input="A", method="average",
                           output="series_time_stamp", where="start_time > '2001-02-01'")
 
-        tinfo_string="""start_time=2001-02-01 00:00:00
-                        end_time=2001-05-01 00:00:00"""
+        tinfo_string="""start_time='2001-02-01 00:00:00'
+                        end_time='2001-05-01 00:00:00'"""
 
         info = SimpleModule("t.info", flags="g", type="raster", input="series_time_stamp")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
