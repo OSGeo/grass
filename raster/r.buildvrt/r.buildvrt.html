@@ -11,7 +11,7 @@ read requests.
 located in different mapsets. The output is a read-only link to 
 the original raster maps which is only valid if the original raster 
 maps remain in the originally indicated mapset. A VRT can also be built 
-from raster maps registered with <em>r.external</em>.
+from raster maps registered with <em><a href="r.external.html">r.external</a></em>.
 
 <p>
 Reading the whole VRT is slower than reading the equivalent single 
@@ -39,7 +39,7 @@ r.resamp.interp input=elev_state_500m output=elev_state_50m method=bilinear
 # create tiles
 r.tile input=elev_state_50m output=elev_state_50m_tile_ width=1000 height=1000 overlap=0
 # dump list of tiles to a file
-g.list type=raster pattern=elev_state_50m_tile_* > tilelist
+g.list type=raster pattern=elev_state_50m_tile_* output=tilelist
 # build a vrt
 r.buildvrt file=tilelist output=elev_state_50m_vrt
 </pre></div>
@@ -48,7 +48,8 @@ r.buildvrt file=tilelist output=elev_state_50m_vrt
 
 <em>
 <a href="r.tile.html">r.tile</a>,
-<a href="r.patch.html">r.patch</a>
+<a href="r.patch.html">r.patch</a>,
+<a href="r.external.html">r.external</a>
 </em>
 
 <p>
