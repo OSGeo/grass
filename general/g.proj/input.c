@@ -281,10 +281,19 @@ int input_georef(char *geofile)
 	    hSRS = OSRNewSpatialReference(wktstring);
 	}
 	else {
-	    G_warning(_("Unable to read georeferenced file <%s> using "
-			"GDAL library, trying to open it as ESRI WKT"), geofile);
+	    int namelen;
 
-	    return input_wkt(geofile);
+	    namelen = strlen(geofile);
+	    if (namelen > 4 && G_strcasecmp(geofile + (namelen - 4), ".prj") == 0) {
+		G_warning(_("<%s> is not a GDAL dataset, trying to open it as ESRI WKT"),
+			  geofile);
+
+		return input_wkt(geofile);
+	    }
+	    else {
+		G_fatal_error(_("Unable to read georeferenced file <%s> using "
+				"GDAL library"), geofile);
+	    }
 	}
     }
 
