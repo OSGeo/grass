@@ -79,9 +79,12 @@ use <em><a href="r.report.html">r.report</a></em>.
 
 <h2>EXAMPLES</h2>
 
+<h3>Report area for each category</h3>
+
 Report area for each category in the single raster map:
 
 <div class="code"><pre>
+g.region raster=geology_30m
 r.stats -a in=geology_30m nv=no-data sep=tab
 
 217     71960000.000000
@@ -99,11 +102,14 @@ r.stats -a in=geology_30m nv=no-data sep=tab
 no-data 33375200000.000004
 </pre></div>
 
+<h3>Report sorted number of cells for each category</h3>
+
 Report sorted number of cells for each category in the single raster
 map (suppress NULL data):
 
 <div class="code"><pre>
-r.stats -cn in=geology_30m sort=desc
+g.region raster=geology_30m
+r.stats -cn input=geology_30m sort=desc
 
 217 1799
 270 1694
@@ -119,11 +125,14 @@ r.stats -cn in=geology_30m sort=desc
 948 2
 </pre></div>
 
+<h3>Report area, number of cells, and percents in multiple raster maps</h3>
+
 Report area, number of cells, and percents (separated by tabs) for
-each category in the multiple raster maps (suppress NULL data):
+each category in multiple raster maps (suppress NULL data):
 
 <div class="code"><pre>
-r.stats -nacp in=towns,urban sep=tab
+g.region raster=towns
+r.stats -nacp input=towns,urban separator=tab
 
 1       55      23840000.000000 596     11.89%
 2       55      13680000.000000 342     6.82%
@@ -133,11 +142,14 @@ r.stats -nacp in=towns,urban sep=tab
 6       55      19760000.000000 494     9.85%
 </pre></div>
 
+<h3>Report sorted area intervals of floating-point raster map</h3>
+
 Report sorted area for each interval of floating-point input raster
 map. Number of intervals are given by <b>nsteps</b> option.
 
 <div class="code"><pre>
-r.stats -an in=elevation nsteps=10 sort=desc sep=tab
+g.region raster=elevation
+r.stats -an input=elevation nsteps=10 sort=desc separator=tab
 
 95.879221-105.954329    36440000.000000
 85.804114-95.879221     30800000.000000
@@ -151,6 +163,18 @@ r.stats -an in=elevation nsteps=10 sort=desc sep=tab
 55.578793-65.6539       760000.000000
 </pre></div>
 
+<h3>Report raster cell counts in multiple raster maps</h3>
+
+Report raster cell counts of landuse and geological categories within
+zipcode areas:
+
+<div class="code"><pre>
+g.region raster=zipcodes
+# landuse/landcover and zipcodes
+r.stats -c input=landclass96,zipcodes separator=comma 
+
+# landuse/landcover, geology and zipcodes with category labels
+r.stats -c input=landclass96,zipcodes,geology_30m separator=comma -l
 <h2>SEE ALSO</h2>
 
 <em>
