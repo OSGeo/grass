@@ -214,7 +214,7 @@ def main():
     # replaced by user choiche
     #basecols = ['n', 'min', 'max', 'range', 'mean', 'stddev', 'variance', 'cf_var', 'sum']
 
-    for i in xrange(len(rasters)):
+    for i in range(len(rasters)):
         raster = rasters[i]
         colprefix = colprefixes[i]
         # we need at least three chars to distinguish [mea]n from [med]ian
