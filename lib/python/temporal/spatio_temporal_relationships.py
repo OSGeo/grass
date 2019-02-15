@@ -375,7 +375,7 @@ class SpatioTemporalTopologyBuilder(object):
 
     def _detect_first(self):
         if len(self) > 0:
-            prev_ = self._store.values()[0]
+            prev_ = list(self._store.values())[0]
             while prev_ is not None:
                 self._first = prev_
                 prev_ = prev_.prev()
