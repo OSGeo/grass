@@ -650,9 +650,9 @@ class TplotFrame(wx.Frame):
         """Used to write CSV file of plotted data"""
         import csv
         if isinstance(y[0], list):
-            zipped = zip(x, *y)
+            zipped = list(zip(x, *y))
         else:
-            zipped = zip(x, y)
+            zipped = list(zip(x, y))
         with open(self.csvpath, "wb") as fi:
             writer = csv.writer(fi)
             if self.header:
@@ -1186,7 +1186,7 @@ class DataCursor(object):
                 x = xData[np.argmin(abs(xData - x))]
 
             info = self.lookUp.GetInformation(x)
-            ys = zip(*info[1].values())[1]
+            ys = list(zip(*info[1].values()))[1]
             if not info:
                 return
             # Update the annotation in the current axis..

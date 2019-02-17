@@ -836,7 +836,7 @@ class PolygonDrawer:
             coords.append(tup)
 
         self.pol.xy = coords
-        self.line.set_data(zip(*self.pol.xy))
+        self.line.set_data(list(zip(*self.pol.xy)))
 
         self.Redraw()
 
@@ -856,7 +856,7 @@ class PolygonDrawer:
                     list(self.pol.xy[:i + 1]) +
                     [(event.xdata, event.ydata)] +
                     list(self.pol.xy[i + 1:]))
-                self.line.set_data(zip(*self.pol.xy))
+                self.line.set_data(list(zip(*self.pol.xy)))
                 break
 
         self.Redraw()
@@ -874,7 +874,7 @@ class PolygonDrawer:
                 list(self.pol.xy[1:]) +
                 [(event.xdata, event.ydata)])
 
-        self.line.set_data(zip(*self.pol.xy))
+        self.line.set_data(list(zip(*self.pol.xy)))
 
         self.Redraw()
 
@@ -903,7 +903,7 @@ class PolygonDrawer:
         elif self.moving_ver_idx == len(self.pol.xy) - 1:
             self.pol.xy[0] = x, y
 
-        self.line.set_data(zip(*self.pol.xy))
+        self.line.set_data(list(zip(*self.pol.xy)))
 
         self.canvas.restore_region(self.background)
 
