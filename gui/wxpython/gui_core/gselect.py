@@ -2456,7 +2456,7 @@ class CoordinatesSelect(Panel):
 
             coords = self._getCoords()
             if coords is not None:
-                for i in range(len(coords) / 2):
+                for i in range(len(coords) // 2):
                     i = i * 2
                     self.pointsToDraw.AddItem(
                         coords=(coords[i], coords[i + 1]))

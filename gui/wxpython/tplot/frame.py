@@ -686,7 +686,7 @@ class TplotFrame(wx.Frame):
                 return
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
                                    datasetName=name)
-            color = self.colors.next()
+            color = next(self.colors)
             self.plots.append(self.axes2d.plot(xdata, ydata, marker='o',
                                                color=color,
                                                label=self.plotNameListR[i])[0])
@@ -733,7 +733,7 @@ class TplotFrame(wx.Frame):
                 continue
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
                                    datasetName=name)
-            color = self.colors.next()
+            color = next(self.colors)
 
             self.plots.append(
                 self.axes2d.plot(
@@ -778,7 +778,7 @@ class TplotFrame(wx.Frame):
                 return
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
                                    datasetName=name)
-            color = self.colors.next()
+            color = next(self.colors)
 
             self.plots.append(self.axes2d.plot(xdata, ydata, marker='o',
                                                color=color, label=name)[0])
