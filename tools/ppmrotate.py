@@ -68,9 +68,9 @@ def write_ppm(dst, data):
 
 def rotate_ppm(srcd):
     dstd = array.array('B', len(srcd) * '\0')
-    for y in xrange(height):
-        for x in xrange(width):
-            for c in xrange(3):
+    for y in range(height):
+        for x in range(width):
+            for c in range(3):
                 old_pos = (y * width + x) * 3 + c
                 new_pos = (x * height + (height - 1 - y)) * 3 + c
                 dstd[new_pos] = srcd[old_pos]
@@ -80,7 +80,7 @@ def rotate_ppm(srcd):
 def flip_ppm(srcd):
     dstd = array.array('B', len(srcd) * '\0')
     stride = width * 3
-    for y in xrange(height):
+    for y in range(height):
         dy = (height - 1 - y)
         dstd[dy * stride:(dy + 1) * stride] = srcd[y * stride:(y + 1) * stride]
     return dstd

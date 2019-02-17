@@ -156,7 +156,7 @@ def main():
     minimum = options["minimum"]
     maximum = options["maximum"]
     occurrence = options["occurrence"]
-    range = options["range"]
+    range_ = options["range"]
     indicator = options["indicator"]
     staend = options["staend"]
     register_null = flags["n"]
@@ -191,7 +191,7 @@ def main():
     # The occurrence space time raster dataset
     if occurrence:
         if not minimum or not maximum:
-            if not range:
+            if not range_:
                 dbif.close()
                 grass.fatal(_("You need to set the range to compute the occurrence"
                               " space time raster dataset"))
@@ -320,14 +320,14 @@ def main():
 
         count = compute_occurrence(occurrence_maps, input_strds, input_maps,
                                    start, base, count, time_suffix, mapset,
-                                   where, reverse, range, minimum_strds,
+                                   where, reverse, range_, minimum_strds,
                                    maximum_strds, dbif)
 
         # Indicator computation is based on the occurrence so we need to start it after
         # the occurrence cycle
         if indicator:
             num_maps = len(input_maps)
-            for i in xrange(num_maps):
+            for i in range(num_maps):
                 if reverse:
                     map = input_maps[num_maps - i - 1]
                 else:
@@ -492,7 +492,7 @@ def create_strds_register_maps(in_strds, out_strds, out_maps, register_null,
 ############################################################################
 
 def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
-                       count, tsuffix, mapset, where, reverse, range,
+                       count, tsuffix, mapset, where, reverse, range_,
                        minimum_strds, maximum_strds, dbif):
 
     if minimum_strds:
@@ -511,7 +511,7 @@ def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
 
     # Aggregate
     num_maps = len(input_maps)
-    for i in xrange(num_maps):
+    for i in range(num_maps):
         if reverse:
             map = input_maps[num_maps - i - 1]
         else:
@@ -550,7 +550,7 @@ def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
                              " database, use overwrite flag to overwrite.") %
                             (occurrence_map.get_map_id()))
 
-        range_vals = range.split(",")
+        range_vals = range_.split(",")
         min = range_vals[0]
         max = range_vals[1]
 
