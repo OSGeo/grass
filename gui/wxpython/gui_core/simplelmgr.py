@@ -131,6 +131,10 @@ class SimpleLayerManager(wx.Panel):
         for i, layer in enumerate(self._layerList):
             layer.Select(i in selected)
 
+    def UnInit(self):
+        """Needs to be called before destroying this window"""
+        self._auimgr.UnInit()
+
     def OnContextMenu(self, event):
         """Show context menu.
 

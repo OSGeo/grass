@@ -736,9 +736,13 @@ class InputDialog(wx.Dialog):
             self.animationData.endRegion = None
             self.animationData.zoomRegionValue = None
 
+    def UnInit(self):
+        self.simpleLmgr.UnInit()
+
     def OnOk(self, event):
         try:
             self._update()
+            self.UnInit()
             self.EndModal(wx.ID_OK)
         except (GException, ValueError, IOError) as e:
             GError(
@@ -848,6 +852,7 @@ class EditDialog(wx.Dialog):
         dlg = InputDialog(parent=self, mode='add', animationData=animData)
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_CANCEL:
+            dlg.UnInit()
             dlg.Destroy()
             return
         dlg.Destroy()
@@ -864,6 +869,7 @@ class EditDialog(wx.Dialog):
         dlg = InputDialog(parent=self, mode='edit', animationData=animData)
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_CANCEL:
+            dlg.UnInit()
             dlg.Destroy()
             return
         dlg.Destroy()

@@ -81,6 +81,10 @@ class SwipeMapDialog(wx.Dialog):
 
         self._layout()
 
+    def UnInit(self):
+        self._firstLmgr.UnInit()
+        self._secondLmgr.UnInit()
+
     def _layout(self):
         """Do layout"""
         mainSizer = wx.BoxSizer(wx.VERTICAL)

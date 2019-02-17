@@ -252,6 +252,7 @@ class AnimationController(wx.EvtHandler):
             animationData=animData)
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_CANCEL:
+            dlg.UnInit()
             dlg.Destroy()
             return
         dlg.Destroy()
@@ -324,7 +325,6 @@ class AnimationController(wx.EvtHandler):
         self._updateAnimations(
             activeIndices=indices,
             mapNamesDict=mapNamesDict)
-        wx.Yield()
         self._updateBitmapData()
         # if running:
         #     self.PauseAnimation(False)
