@@ -311,7 +311,7 @@ class WSDialogBase(wx.Dialog):
     def OnSettingsChanged(self, data):
         """Update widgets according to chosen settings"""
         # data list: [server, username, password]
-        if len < 3:
+        if len(data) < 3:
             return
 
         self.server.SetValue(data[0])
