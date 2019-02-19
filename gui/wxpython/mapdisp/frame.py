@@ -257,7 +257,7 @@ class MapFrame(SingleMapFrame):
         """
         gisenv = grass.gisenv()
         title = _("GRASS GIS Map Display: %(name)s - %(loc)s/%(mapset)s") % {
-            'name': str(name),
+            'name': name,
             'loc': gisenv["LOCATION_NAME"],
             'mapset': gisenv["MAPSET"]}
 

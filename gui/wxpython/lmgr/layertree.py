@@ -204,7 +204,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # here (with initial auto-generated names) we use just the
         # number, not the whole name for simplicity
-        self.mapdisplay.SetTitleWithName(self.displayIndex + 1)
+        self.mapdisplay.SetTitleWithName(str(self.displayIndex + 1))
 
         # show new display
         if showMapDisplay is True:

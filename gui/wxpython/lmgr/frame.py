@@ -1117,7 +1117,7 @@ class GMFrame(wx.Frame):
             # renamed (it just uses the numbers)
             dispId = 1
             for display in self.GetMapDisplay(onlyCurrent=False):
-                display.SetTitleWithName(dispId)  # TODO: signal ?
+                display.SetTitleWithName(str(dispId))  # TODO: signal ?
                 dispId += 1
 
     def OnChangeCWD(self, event=None, cmd=None):
