@@ -49,7 +49,8 @@ from core.gconsole        import GConsole, \
 from gui_core.goutput import GConsoleWindow
 from core.debug import Debug
 from core.gcmd import GMessage, GException, GWarning, GError, RunCommand
-from gui_core.dialogs import GetImageHandlers, TextEntryDialog
+from gui_core.dialogs import GetImageHandlers
+from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
 from gui_core.ghelp import ShowAboutDialog
 from gui_core.preferences import PreferencesBaseDialog
 from core.settings import UserSettings
@@ -65,6 +66,7 @@ from gmodeler.model import *
 from gmodeler.dialogs import *
 from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl, \
     Menu, StockCursor, EmptyBitmap
+from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
 
 wxModelDone, EVT_MODEL_DONE = NewEvent()
 
@@ -882,7 +884,7 @@ class ModelFrame(wx.Frame):
 
     def OnAddComment(self, event):
         """Add comment to the model"""
-        dlg = TextEntryDialog(
+        dlg = CustomTextEntryDialog(
             parent=self,
             message=_("Comment:"),
             caption=_("Add comment"),
@@ -1609,11 +1611,11 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
 
     def OnSetLabel(self, event):
         shape = self.GetShape()
-        dlg = wx.TextEntryDialog(
+        dlg = wxTextEntryDialog(
             parent=self.frame,
             message=_("Label:"),
             caption=_("Set label"),
-            defaultValue=shape.GetLabel())
+            value=shape.GetLabel())
         if dlg.ShowModal() == wx.ID_OK:
             label = dlg.GetValue()
             shape.SetLabel(label)
@@ -1624,7 +1626,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
 
     def OnSetComment(self, event):
         shape = self.GetShape()
-        dlg = TextEntryDialog(
+        dlg = CustomTextEntryDialog(
             parent=self.frame, message=_("Comment:"),
             caption=_("Set comment"),
             defaultValue=shape.GetComment(),

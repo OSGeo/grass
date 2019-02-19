@@ -426,3 +426,16 @@ class Choice(wx.Choice):
             wx.Choice.SetToolTip(self, tipString=tip)
         else:
             wx.Choice.SetToolTipString(self, tip)
+
+
+class TextEntryDialog(wx.TextEntryDialog):
+    """Wrapper around wx.TextEntryDialog to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, parent, message, caption="Please enter text", value="",
+                 style=wx.OK | wx.CANCEL | wx.CENTRE, pos=wx.DefaultPosition):
+        if wxPythonPhoenix:
+            super(TextEntryDialog, self).__init__(parent=parent, message=message, caption=caption,
+                                                  value=value, style=style, pos=pos)
+        else:
+            super(TextEntryDialog, self).__init__(parent=parent, message=message, caption=caption,
+                                                  defaultValue=value, style=style, pos=pos)

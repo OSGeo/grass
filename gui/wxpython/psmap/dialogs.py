@@ -73,7 +73,7 @@ from gui_core.gselect import Select
 from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
 from gui_core.wrap import SpinCtrl, Button, TextCtrl, BitmapButton, \
-    StaticText, StaticBox, Rect, EmptyBitmap
+    StaticText, StaticBox, Rect, EmptyBitmap, TextEntryDialog
 from psmap.utils import *
 from psmap.instructions import *
 
@@ -4145,11 +4145,11 @@ class LegendDialog(PsmapDialog):
         if self.vectorListCtrl.GetFirstSelected() != -1:
             idx = self.vectorListCtrl.GetFirstSelected()
             default = self.vectorListCtrl.GetItem(idx, 1).GetText()
-            dlg = wx.TextEntryDialog(
+            dlg = TextEntryDialog(
                 self,
                 message=_("Edit legend label:"),
                 caption=_("Edit label"),
-                defaultValue=default,
+                value=default,
                 style=wx.OK | wx.CANCEL | wx.CENTRE)
             if dlg.ShowModal() == wx.ID_OK:
                 new = dlg.GetValue()
