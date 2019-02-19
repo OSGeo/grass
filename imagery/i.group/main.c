@@ -39,10 +39,11 @@ static void print_subgroups(const char *group, const char *mapset, int simple);
 
 int main(int argc, char *argv[])
 {
-    char group[GNAME_MAX];
-    const char *mapset = NULL;
+    char group[GNAME_MAX], mapset[GMAPSET_MAX];
+    char xgroup[GNAME_MAX];
     char **rasters = NULL;
     int m, k = 0;
+    int can_edit;
 
     struct Option *grp, *rast, *rastf, *sgrp;
     struct Flag *r, *l, *s, *simple_flag;
@@ -150,10 +151,10 @@ int main(int argc, char *argv[])
 
     /* Get groups mapset. Remove @mapset if group contains
      */
-    strcpy(group, grp->answer);
-    mapset = G_find_file("group", group, mapset);
+    strcpy(xgroup, grp->answer);
+    can_edit = G_unqualified_name(xgroup, G_mapset(), group, mapset) != -1;
     
-    if (r->answer) {
+    if (r->answer && can_edit) {
 	/* Remove files from Group */
 
 	if (I_find_group(group) == 0) {
@@ -209,6 +210,10 @@ int main(int argc, char *argv[])
 	    }
 	}
 	else {
+        if (!can_edit) {
+            /* GTC Group refers to an image group */
+            G_fatal_error(_("Only groups from the current mapset can be edited"));
+        }
 	    /* Create or update Group REF */
 	    if (I_find_group(group) == 0)
 		G_verbose_message(_
