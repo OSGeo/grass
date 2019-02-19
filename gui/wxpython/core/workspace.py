@@ -20,6 +20,10 @@ import os
 
 import wx
 import six
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 from core.utils import normalize_whitespace, _
 from core.settings import UserSettings
@@ -820,6 +824,8 @@ class WriteWorkspaceFile(object):
     """Generic class for writing workspace file"""
 
     def __init__(self, lmgr, file):
+        self.outfile = file
+        file = StringIO()
         self.file = file
         self.lmgr = lmgr
         self.indent = 0
@@ -892,7 +898,7 @@ class WriteWorkspaceFile(object):
                        'extent="%f,%f,%f,%f,%f,%f" '
                        'tbres="%f" '  # needed only for animation tool
                        'viewMode="%s" >\n' % (' ' * self.indent,
-                                              dispName.encode('utf8'),
+                                              dispName,
                                               int(mapdisp.mapWindowProperties.autoRender),
                                               mapdisp.statusbarManager.GetMode(),
                                               int(mapdisp.mapWindowProperties.showRegion),
@@ -952,6 +958,9 @@ class WriteWorkspaceFile(object):
         self.indent = - 4
         file.write('%s</gxw>\n' % (' ' * self.indent))
 
+        self.outfile.write(EncodeString(file.getvalue()))
+        file.close()
+
     def __filterValue(self, value):
         """Make value XML-valid"""
         value = value.replace('<', '&lt;')
@@ -978,13 +987,13 @@ class WriteWorkspaceFile(object):
                     string=True)
                 self.file.write(
                     '%s<layer type="%s" name="%s" checked="%d">\n' %
-                    (' ' * self.indent, type, EncodeString(cmd), checked))
+                    (' ' * self.indent, type, cmd, checked))
                 self.file.write('%s</layer>\n' % (' ' * self.indent))
             elif type == 'group':
                 name = mapTree.GetItemText(item)
                 self.file.write(
                     '%s<group name="%s" checked="%d">\n' %
-                    (' ' * self.indent, EncodeString(name), checked))
+                    (' ' * self.indent, name, checked))
                 self.indent += 4
                 subItem = mapTree.GetFirstChild(item)[0]
                 self.__writeLayer(mapTree, subItem)
@@ -1001,7 +1010,7 @@ class WriteWorkspaceFile(object):
                     name = name.split('(', -1)[0].strip()
                 self.file.write(
                     '%s<layer type="%s" name="%s" checked="%d" opacity="%f">\n' %
-                    (' ' * self.indent, type, EncodeString(name), checked, opacity))
+                    (' ' * self.indent, type, name, checked, opacity))
 
                 self.indent += 4
                 # selected ?
@@ -1026,7 +1035,7 @@ class WriteWorkspaceFile(object):
                         self.indent += 4
                         self.file.write(
                             '%s<value>%s</value>\n' %
-                            (' ' * self.indent, EncodeString(self.__filterValue(val))))
+                            (' ' * self.indent, self.__filterValue(val)))
                         self.indent -= 4
                         self.file.write(
                             '%s</parameter>\n' %
@@ -1609,7 +1618,7 @@ class WriteWorkspaceFile(object):
             else:
                 self.file.write('%s<parameter name="%s">\n' % (' ' * self.indent, prm.split("=", 1)[0]))
                 self.indent += 4
-                self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, EncodeString(prm.split("=", 1)[1])))
+                self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, prm.split("=", 1)[1]))
                 self.indent -= 4
                 self.file.write('%s</parameter>\n' % (' ' * self.indent))
         self.indent -= 4
