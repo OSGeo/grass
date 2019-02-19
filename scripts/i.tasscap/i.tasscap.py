@@ -6,6 +6,7 @@
 # AUTHOR(S):	Agustin Lobo, Markus Neteler
 #               Converted to Python by Glynn Clements
 #               Code improvements by Leonardo Perathoner
+#               Sentinel-2 support by Veronica Andreo
 #
 # PURPOSE:	At-satellite reflectance based tasseled cap transformation.
 # COPYRIGHT:	(C) 1997-2014 by the GRASS Development Team
@@ -36,11 +37,16 @@
 #              based on Landsat 8 at-satellite reflectance. Remote Sensing Letters 5, 423-431.
 #              doi:10.1080/2150704X.2014.915434
 #
-#  MODIS Tasselled Cap coefficients
+#  MODIS Tasseled Cap coefficients
 #  https://gis.stackexchange.com/questions/116107/tasseled-cap-transformation-on-modis-in-grass/116110
 #  Ref: Lobser & Cohen (2007). MODIS tasselled cap: land cover characteristics
 #                              expressed through transformed MODIS data.
 #       International Journal of Remote Sensing, Volume 28(22), Table 3
+#
+#  Sentinel-2 Tasseled Cap coefficients
+#  https://www.researchgate.net/publication/329184434_ORTHOGONAL_TRANSFORMATION_OF_SEGMENTED_IMAGES_FROM_THE_SATELLITE_SENTINEL-2
+#  Nedkov, R. (2017). ORTHOGONAL TRANSFORMATION OF SEGMENTED IMAGES FROM THE SATELLITE SENTINEL-2.
+#  Comptes rendus de l'Académie bulgare des sciences. 70. 687-692.
 #
 #############################################################################
 
@@ -54,11 +60,11 @@
 #%end
 
 #%option G_OPT_R_INPUTS
-#% description: For Landsat4-7: bands 1, 2, 3, 4, 5, 7; for Landsat8: bands 2, 3, 4, 5, 6, 7; for MODIS: bands 1, 2, 3, 4, 5, 6, 7
+#% description: For Landsat4-7: bands 1, 2, 3, 4, 5, 7; for Landsat8: bands 2, 3, 4, 5, 6, 7; for MODIS: bands 1, 2, 3, 4, 5, 6, 7; for Sentinel-2: bands 1 to 12, 8A
 #%end
 
 #%option G_OPT_R_BASENAME_OUTPUT
-#% label: Name for output basename raster map(s)
+#% label: basename for output raster map(s)
 #%end
 
 #%option
@@ -67,8 +73,7 @@
 #% description: Satellite sensor
 #% required: yes
 #% multiple: no
-#% options: landsat4_tm,landsat5_tm,landsat7_etm,landsat8_oli,modis
-#% descriptions: landsat4_tm;Use transformation rules for Landsat 4 TM;landsat5_tm;Use transformation rules for Landsat 5 TM;landsat7_etm;Use transformation rules for Landsat 7 ETM;landsat8_oli;Use transformation rules for Landsat 8 OLI;modis;Use transformation rules for MODIS
+#% options: landsat4_tm,landsat5_tm,landsat7_etm,landsat8_oli,modis,sentinel2
 #%end
 
 import grass.script as grass
@@ -80,6 +85,7 @@ gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 # weights for 6 Landsat bands: TM4, TM5, TM7, OLI
 # MODIS: Red, NIR1, Blue, Green, NIR2, SWIR1, SWIR2
+# Sentinel-2: B1 to B12, B8A
 parms = [[(0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863),  # Landsat TM4
           (-0.2848, -0.2435, -0.5435, 0.7243, 0.0840, -0.1800),
           (0.1509, 0.1973, 0.3279, 0.3406, -0.7112, -0.4572)],
@@ -97,13 +103,16 @@ parms = [[(0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863),  # Landsat TM4
           (-0.8239, 0.0849, 0.4396, -0.0580, 0.2013, -0.2773)],
          [(0.4395, 0.5945, 0.2460, 0.3918, 0.3506, 0.2136, 0.2678),  # MODIS
           (-0.4064, 0.5129, -0.2744, -0.2893, 0.4882, -0.0036, -0.4169),
-          (0.1147, 0.2489, 0.2408, 0.3132, -0.3122, -0.6416, -0.5087)]]
+          (0.1147, 0.2489, 0.2408, 0.3132, -0.3122, -0.6416, -0.5087)],
+         [(0.0356, 0.0822, 0.1360, 0.2611, 0.2964, 0.3338, 0.3877, 0.3895, 0.0949, 0.0009, 0.3882, 0.1366, 0.4750), # Sentinel-2
+          (-0.0635, -0.1128, -0.1680, -0.3480, -0.3303, 0.0852, 0.3302, 0.3165, 0.0467, -0.0009, -0.4578, -0.4064, 0.3625),
+          (0.0649, 0.1363, 0.2802, 0.3072, 0.5288, 0.1379, -0.0001, -0.0807, -0.0302, 0.0003, -0.4064, -0.5602, -0.1389)]]
 
 
 # satellite information
 satellites = ['landsat4_tm', 'landsat5_tm', 'landsat7_etm', 'landsat8_oli',
-              'modis']
-used_bands = [6, 6, 6, 6, 7]
+              'modis', 'sentinel2']
+used_bands = [6, 6, 6, 6, 7, 13]
 
 # components information
 ordinals = ["first", "second", "third", "fourth"]
@@ -129,6 +138,19 @@ def calc1bands7(out, bands, k1, k2, k3, k4, k5, k6, k7):
                 '$in7band')
     grass.mapcalc(equation, out=out, k1=k1, k2=k2, k3=k3, k4=k4, k5=k5, k6=k6,
                   k7=k7, **bands)
+
+
+def calc1bands13(out, bands, k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, k11, k12, k13):
+    """
+    Tasseled cap transformation equation for Sentinel-2 bands
+    """
+    equation = ('$out = $k1 * $in1band + $k2 * $in2band + $k3 * $in3band + '
+                '$k4 * $in4band + $k5 * $in5band + $k6 * $in6band + $k7 * '
+                '$in7band + $k8 * $in8band + $k9 * $in9band + $k10 * $in10band + '
+                '$k11 * $in11band + $k12 * $in12band + $k13 * $in13band')
+    grass.mapcalc(equation, out=out, k1=k1, k2=k2, k3=k3, k4=k4, k5=k5, k6=k6,
+                  k7=k7, k8=k8, k9=k9, k10=k10, k11=k11, k12=k12, k13=k13,
+                  **bands)
 
 
 def calcN(outpre, bands, satel):
@@ -171,7 +193,9 @@ def main():
     calcN(output_basename, bands, satellite)
 
     # assign "Data Description" field in all four component maps
-    for i, comp in enumerate(names):
+    num_comp=len(parms[satellites.index(satellite)])
+    for i in range(0,num_comp):
+        comp=names[i]
         grass.run_command('r.support', map="%s.%d" % (output_basename, i + 1),
                           description="Tasseled Cap %d: %s" % (i + 1, comp))
 

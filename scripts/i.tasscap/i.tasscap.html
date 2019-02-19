@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>i.tasscap</em> calculates Tasseled Cap (Kauth Thomas, TC) transformation
-for Landsat TM data (TM4, TM5, ETM7) and MODIS data.
+for Landsat TM data (TM4, TM5, ETM7), MODIS and Sentinel-2 data.
 
 The tasseled cap transformation is effectively a compression method to
 reduce multiple spectral data into a few bands. The method was originally
@@ -27,7 +27,7 @@ The following tasseled cap components are generated:
 Calculation of TC maps from North Carolina Landsat 7 ETM scene:
 
 <div class="code"><pre>
-# See manual page of i.landsat.toar for preprocessing
+# See manual page of i.landsat.toar for pre-processing
 
 g.region raster=lsat7_2002_toar.1 -p
 
@@ -92,9 +92,12 @@ Results:
   http://landcover.usgs.gov/pdf/tasseled.pdf
 <br>
  This is published as well in INT. J. OF RS, 2002, VOL 23, NO. 8, 1741-1748.
-<li> MODIS Tasselled Cap coefficients - Ref: Lobser & Cohen (2007). MODIS tasselled cap:
+<li> MODIS Tasseled Cap coefficients - Ref: Lobser & Cohen (2007). MODIS tasseled cap:
  land cover characteristics expressed through transformed MODIS data.
  International Journal of Remote Sensing, Volume 28(22), Table 3
+<li> Sentinel-2 Tasseled Cap coefficients - Ref: Nedkov, R. (2017). Orthogonal transformation
+  of segmented images from the satellite Sentinel-2.
+  Comptes rendus de l'Académie bulgare des sciences, 70:687-692.
 </ul>
 
 <h2>SEE ALSO</h2>
