@@ -138,6 +138,7 @@ import tempfile
 from distutils.dir_util import copy_tree
 
 try:
+    import requests, zipfile
     from urllib2 import HTTPError, URLError, ProxyHandler, build_opener
     from urllib import urlopen, urlretrieve
 except ImportError:
@@ -1113,10 +1114,15 @@ def download_source_code(source, url, name, outdev,
     elif source in ['remote_zip', 'official']:
         # we expect that the module.zip file is not by chance in the archive
         zip_name = os.path.join(tmpdir, 'extension.zip')
-        f, h = urlretrieve(url, zip_name)
-        if h.get('content-type', '') != 'application/zip':
+        ses = requests.Session()
+        if 'PROXIES' in globals():
+            ses.proxies = PROXIES
+        res = ses.get(url, stream=True)
+        if str(res.status_code) != '200':
             grass.fatal(_("Extension <%s> not found") % name)
-
+        zipcontent = res.content
+        with open(zip_name, "wb") as f:
+            f.write(zipcontent)
         extract_zip(name=zip_name, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
     elif source.startswith('remote_') and \

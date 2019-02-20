@@ -149,14 +149,14 @@ g.extension r.stream.distance
 Example for an open http proxy:
 <div class="code"><pre>
 # syntax: http://proxyurl:proxyport
-g.extension extension=r.stream.distance proxy="http://proxy.example.com:8080"
+g.extension extension=r.stream.distance proxy="http=http://proxy.example.com:8080"
 </pre></div>
 
 <p>
 Example for a proxy with proxy authentication:
 <div class="code"><pre>
 # syntax: http://username:password@proxyurl:proxyport
-g.extension extension=r.stream.distance proxy="http://username:password@proxy.example.com:8080"
+g.extension extension=r.stream.distance proxy="http=http://username:password@proxy.example.com:8080"
 </pre></div>
 
 <h3>Managing the extensions</h3>
