@@ -15,11 +15,11 @@ variable is set to explicitly disable NULL file compression
 <p>
 During compression or re-compression, <em>r.compress</em> compresses 
 raster maps using the method specified by means of the environment 
-variable <tt>GRASS_COMPRESSOR</tt>. The default compression method is  
-ZLIB's "deflate" algorithm (LZ77-based). Raster maps that contain very 
-little information (such as boundary, geology, soils and land use maps) 
-can be greatly reduced in size. Some raster maps are shrunk to roughly 
-1% of their original sizes. 
+variable <tt>GRASS_COMPRESSOR</tt>. The default compression method is 
+ZSTD if available, otherwise ZLIB's "deflate" algorithm (LZ77-based). 
+Raster maps that contain very little information (such as boundary, 
+geology, soils and land use maps) can be greatly reduced in size. Some 
+raster maps are shrunk to roughly 1% of their original sizes. 
 All newly generated raster maps are automatically stored as compressed
 data with varying methods depending on the raster format (i.e.,
 CELL: integer; FCELL: single precision; DCELL: double precision; see
@@ -101,10 +101,10 @@ between speed and compression rate.
 <h3>COMPRESSION ALGORITHM DETAILS</h3>
 <!-- keep in sync with raster/rasterintro.html -->
 
-All GRASS GIS raster map types are by default ZLIB compressed, i.e. using
-ZLIB's deflate algorithm. Through the environment variable
-<tt>GRASS_COMPRESSOR</tt> the compression method can be set to RLE, ZLIB,
-LZ4, BZIP2, or ZSTD.
+All GRASS GIS raster map types are by default ZSTD compressed if 
+available, otherwise ZLIB compressed. Through the environment variable 
+<tt>GRASS_COMPRESSOR</tt> the compression method can be set to RLE, 
+ZLIB, LZ4, BZIP2, or ZSTD.
 <p>
 Integer (CELL type) raster maps can be compressed with RLE if
 the environment variable <tt>GRASS_COMPRESSOR</tt> exists and is set to 
@@ -115,6 +115,9 @@ they are either compressed with ZLIB, LZ4, BZIP2, ZSTD or are uncompressed.
 
 <!-- BTW, why not having an option "method" and another one "level"
      instead of the environment variables? Is it too complicated?
+     
+     Where should these options "method" and "level" be available/
+     exposed to the user? Surely not in every module creating a raster map.
 -->
 <dl>
 <dt><strong>RLE</strong></dt>

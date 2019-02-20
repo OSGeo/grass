@@ -279,9 +279,10 @@ The GRASS GIS raster format is architecture independent and portable between
 <h3>Raster compression</h3>
 <!-- keep in sync with raster/r.compress/r.compress.html -->
 
-All GRASS GIS raster map types are by default compressed. Through the 
-environment variable <tt>GRASS_COMPRESSOR</tt> the compression method 
-can be set to RLE, ZLIB, LZ4, BZIP2, or ZSTD.
+All GRASS GIS raster map types are by default ZSTD compressed if 
+available, otherwise ZLIB compressed. Through the environment variable 
+<tt>GRASS_COMPRESSOR</tt> the compression method can be set to RLE, 
+ZLIB, LZ4, BZIP2, or ZSTD.
 <p>
 Important: the NULL file compression can be turned off with 
 <tt>export GRASS_COMPRESS_NULLS=0</tt>. Raster maps with NULL file 
