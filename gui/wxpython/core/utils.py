@@ -791,33 +791,35 @@ rasterFormatExtension = {
     'Northwood Classified Grid Format .grc/.tab': '',
     'ARC Digitized Raster Graphics': 'arc',
     'Magellan topo (.blx)': 'blx',
-    'SAGA GIS Binary Grid (.sdat)': 'sdat'
+    'SAGA GIS Binary Grid (.sdat)': 'sdat',
+    'GeoPackage (.gpkg)': 'gpkg'
 }
 
 
 vectorFormatExtension = {
     'ESRI Shapefile': 'shp',
+    'GeoPackage': 'gpkg',
     'UK .NTF': 'ntf',
     'SDTS': 'ddf',
-            'DGN': 'dgn',
-            'VRT': 'vrt',
-            'REC': 'rec',
-            'BNA': 'bna',
-            'CSV': 'csv',
-            'GML': 'gml',
-            'GPX': 'gpx',
-            'KML': 'kml',
-            'GMT': 'gmt',
-            'PGeo': 'mdb',
-            'XPlane': 'dat',
-            'AVCBin': 'adf',
-            'AVCE00': 'e00',
-            'DXF': 'dxf',
-            'Geoconcept': 'gxt',
-            'GeoRSS': 'xml',
-            'GPSTrackMaker': 'gtm',
-            'VFK': 'vfk',
-            'SVG': 'svg',
+    'DGN': 'dgn',
+    'VRT': 'vrt',
+    'REC': 'rec',
+    'BNA': 'bna',
+    'CSV': 'csv',
+    'GML': 'gml',
+    'GPX': 'gpx',
+    'KML': 'kml',
+    'GMT': 'gmt',
+    'PGeo': 'mdb',
+    'XPlane': 'dat',
+    'AVCBin': 'adf',
+    'AVCE00': 'e00',
+    'DXF': 'dxf',
+    'Geoconcept': 'gxt',
+    'GeoRSS': 'xml',
+    'GPSTrackMaker': 'gtm',
+    'VFK': 'vfk',
+    'SVG': 'svg'
 }
 
 
