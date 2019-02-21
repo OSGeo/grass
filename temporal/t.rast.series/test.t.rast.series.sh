@@ -18,6 +18,7 @@ t.create --o type=strds temporaltype=absolute output=precip_abs title="A test" d
 t.register type=raster input=precip_abs maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="1 months"
 t.rast.list precip_abs
 
+t.rast.series --o -t input=precip_abs method=average,range output=prec_average,prec_range where="start_time > '2001-03-01'"
 t.rast.series --o -t input=precip_abs method=average output=prec_average where="start_time > '2001-03-01'"
 t.rast.series --o    input=precip_abs method=maximum output=prec_max order=start_time
 t.rast.series        input=precip_abs method=sum output=prec_sum
@@ -32,4 +33,4 @@ r.info prec_sum
 t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,prec_sum,prec_max
 t.remove type=strds input=precip_abs
 
-g.remove -f type=raster name=prec_sum,prec_max,prec_average
+g.remove -f type=raster name=prec_sum,prec_max,prec_average,prec_range
