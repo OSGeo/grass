@@ -786,6 +786,15 @@ struct Option *G_define_standard_option(int opt)
 	Opt->gisprompt = "new,strds,strds";
 	Opt->description = _("Name of the output space time raster dataset");
 	break;
+    case G_OPT_STRDS_OUTPUTS:
+	Opt->key = "outputs";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->multiple = YES;
+	Opt->gisprompt = "new,strds,strds";
+	Opt->description = _("Name of the output space time raster datasets");
+	break;
     case G_OPT_STVDS_INPUT:
 	Opt->key = "input";
 	Opt->type = TYPE_STRING;

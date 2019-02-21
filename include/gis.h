@@ -298,6 +298,7 @@ typedef enum
     G_OPT_STRDS_INPUT,          /*!< old input space time raster dataset */
     G_OPT_STRDS_INPUTS,         /*!< old input space time raster datasets */
     G_OPT_STRDS_OUTPUT,         /*!< new output space time raster dataset */
+    G_OPT_STRDS_OUTPUTS,        /*!< new output space time raster datasets */
     G_OPT_STR3DS_INPUT,         /*!< old input space time raster3d dataset */
     G_OPT_STR3DS_INPUTS,        /*!< old input space time raster3d datasets */
     G_OPT_STR3DS_OUTPUT,        /*!< new output space time raster3d dataset */
