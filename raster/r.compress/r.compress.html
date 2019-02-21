@@ -6,11 +6,12 @@ data type of the input raster map(s).
 
 <p>
 All raster maps (those imported for the first time and those newly 
-generated) are compressed by default using the ZLIB compression 
-method (see below). Related no data files (i.e.: NULL files), if 
-present, are compressed by default unless a specific environment 
-variable is set to explicitly disable NULL file compression 
-(<tt>GRASS_COMPRESS_NULLS</tt>, see below).
+generated) are compressed by default using the ZSTD compression 
+method if available, otherwise ZLIB compression is used (see below). 
+Related no data files (i.e.: NULL files), if present, are compressed by 
+default unless a specific environment variable is set to explicitly 
+disable NULL file compression (<tt>GRASS_COMPRESS_NULLS</tt>, see 
+below).
 
 <p>
 During compression or re-compression, <em>r.compress</em> compresses 
