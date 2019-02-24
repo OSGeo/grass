@@ -95,13 +95,6 @@ WINDOWS = sys.platform == 'win32'
 CYGWIN = "cygwin" in sys.platform
 MACOSX = "darwin" in sys.platform
 
-# i18N
-# Calling gettext.install() is required since it installs _() in the builtins namespace
-# https://docs.python.org/2/library/gettext.html#gettext.install
-# If we remove it, we are going to be getting NameErrors when we define e.g. `HELP_TEXT`
-#
-gettext.install('grasslibs', os.path.join(GISBASE, 'locale'))
-
 
 def decode(bytes_, encoding=ENCODING):
     """Decode bytes with default locale and return (unicode) string
@@ -1993,6 +1986,13 @@ def main():
 
     Only few things are set on the module level.
     """
+    # Set language
+    # This has to be called before any _() function call!
+    # Subsequent functions are using _() calls and
+    # thus must be called only after Language has been set.
+    grass_config_dir = get_grass_config_dir()
+    set_language(grass_config_dir)
+
     # Set default GUI
     default_gui = "wxpython"
 
@@ -2009,8 +2009,6 @@ def main():
     # Set the GIS_LOCK variable to current process id
     gis_lock = str(os.getpid())
     os.environ['GIS_LOCK'] = gis_lock
-
-    grass_config_dir = get_grass_config_dir()
 
     batch_job = get_batch_job_from_env_variable()
 
@@ -2038,13 +2036,6 @@ def main():
     # Set the username
     user = get_username()
 
-    # TODO: this might need to be moved before processing of parameters
-    # and getting batch job
-    # Set language
-    # This has to be called before any _() function call!
-    # Subsequent functions are using _() calls and
-    # thus must be called only after Language has been set.
-    set_language(grass_config_dir)
 
     # Set shell (needs to be called before load_env())
     sh, shellname = get_shell()
