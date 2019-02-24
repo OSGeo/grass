@@ -320,47 +320,49 @@ Geographic Resources Analysis Support System (GRASS GIS).
   GRASS_ADDON_BASE               {addon_base_var}
   GRASS_BATCH_JOB                {batch_var}
   GRASS_PYTHON                   {python_var}
-""".format(
-    usage=_("Usage"),
-    flags=_("Flags"),
-    help_flag=_("print this help message"),
-    version_flag=_("show version information and exit"),
-    create=_("create given database, location or mapset if it doesn't exist"),
-    exit_after=_("exit after creation of location or mapset. Only with -c flag"),
-    force_removal=_("force removal of .gislock if exists (use with care!). Only with --text flag"),
-    text=_("use text based interface (skip graphical welcome screen)"),
-    text_detail=_("and set as default"),
-    gtext=_("use text based interface (show graphical welcome screen)"),
-    gtext_detail=_("and set as default"),
-    gui=_("use $DEFAULT_GUI graphical user interface"),
-    gui_detail=_("and set as default"),
-    config=_("print GRASS configuration parameters"),
-    config_detail=_("options: arch,build,compiler,path,revision,svn_revision,version"),
-    params=_("Parameters"),
-    gisdbase=_("initial GRASS database directory"),
-    gisdbase_detail=_("directory containing Locations"),
-    location=_("initial GRASS Location"),
-    location_detail=_("directory containing Mapsets with one common coordinate system (projection)"),
-    mapset=_("initial GRASS Mapset"),
-    full_mapset=_("fully qualified initial Mapset directory"),
-    env_vars=_("Environment variables relevant for startup"),
-    gui_var=_("select GUI (text, gui, gtext)"),
-    html_var=_("set html web browser for help pages"),
-    addon_path_var=_("set additional path(s) to local GRASS modules or user scripts"),
-    addon_base_var=_("set additional GISBASE for locally installed GRASS Addons"),
-    batch_var=_("shell script to be processed as batch job"),
-    python_var=_("set Python interpreter name to override 'python'"),
-    exec_=_("execute GRASS module or script"),
-    exec_detail=_("provided executable will be executed in GRASS session"),
-    executable=_("GRASS module, script or any other executable"),
-    executable_params=_("parameters of the executable"),
-    standard_flags=_("standard flags"),
-    tmp_location=_("create temporary location (use with the --exec flag)"),
-    )
+"""
 
 
 def help_message(default_gui):
-    t = string.Template(HELP_TEXT)
+    t = string.Template(
+        HELP_TEXT.format(
+            usage=_("Usage"),
+            flags=_("Flags"),
+            help_flag=_("print this help message"),
+            version_flag=_("show version information and exit"),
+            create=_("create given database, location or mapset if it doesn't exist"),
+            exit_after=_("exit after creation of location or mapset. Only with -c flag"),
+            force_removal=_("force removal of .gislock if exists (use with care!). Only with --text flag"),
+            text=_("use text based interface (skip graphical welcome screen)"),
+            text_detail=_("and set as default"),
+            gtext=_("use text based interface (show graphical welcome screen)"),
+            gtext_detail=_("and set as default"),
+            gui=_("use $DEFAULT_GUI graphical user interface"),
+            gui_detail=_("and set as default"),
+            config=_("print GRASS configuration parameters"),
+            config_detail=_("options: arch,build,compiler,path,revision,svn_revision,version"),
+            params=_("Parameters"),
+            gisdbase=_("initial GRASS database directory"),
+            gisdbase_detail=_("directory containing Locations"),
+            location=_("initial GRASS Location"),
+            location_detail=_("directory containing Mapsets with one common coordinate system (projection)"),
+            mapset=_("initial GRASS Mapset"),
+            full_mapset=_("fully qualified initial Mapset directory"),
+            env_vars=_("Environment variables relevant for startup"),
+            gui_var=_("select GUI (text, gui, gtext)"),
+            html_var=_("set html web browser for help pages"),
+            addon_path_var=_("set additional path(s) to local GRASS modules or user scripts"),
+            addon_base_var=_("set additional GISBASE for locally installed GRASS Addons"),
+            batch_var=_("shell script to be processed as batch job"),
+            python_var=_("set Python interpreter name to override 'python'"),
+            exec_=_("execute GRASS module or script"),
+            exec_detail=_("provided executable will be executed in GRASS session"),
+            executable=_("GRASS module, script or any other executable"),
+            executable_params=_("parameters of the executable"),
+            standard_flags=_("standard flags"),
+            tmp_location=_("create temporary location (use with the --exec flag)"),
+        )
+    )
     s = t.substitute(CMD_NAME=CMD_NAME, DEFAULT_GUI=default_gui,
                      VERSION_NUMBER=GRASS_VERSION)
     sys.stderr.write(s)
