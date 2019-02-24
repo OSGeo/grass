@@ -40,6 +40,7 @@ is not safe, i.e. it has side effects (this should be changed in the future).
 from __future__ import print_function
 import sys
 import os
+import errno
 import atexit
 import gettext
 import shutil
@@ -384,12 +385,12 @@ def get_grass_config_dir():
     else:
         grass_config_dirname = ".grass7"
         directory = os.path.join(os.getenv('HOME'), grass_config_dirname)
-    if not os.path.exists(directory):
+    if not os.path.isdir(directory) :
         try:
             os.mkdir(directory)
         except OSError as e:
             # Can happen as a race condition
-            if not e.errno == 17:
+            if not e.errno == errno.EEXIST or not os.path.isdir(directory):
                 fatal(
                     _("Failed to create configuration directory '%s' with error: %s")
                     % (directory, e.strerror))
