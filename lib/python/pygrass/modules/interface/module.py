@@ -61,7 +61,7 @@ class ParallelModuleQueue(object):
 
     >>> mapcalc = Module("r.mapcalc", overwrite=True, run_=False)
     >>> queue = ParallelModuleQueue(nprocs=3)
-    >>> for i in xrange(5):
+    >>> for i in range(5):
     ...     new_mapcalc = copy.deepcopy(mapcalc)
     ...     mapcalc_list.append(new_mapcalc)
     ...     m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
@@ -84,7 +84,7 @@ class ParallelModuleQueue(object):
 
     >>> queue = ParallelModuleQueue(nprocs=8)
     >>> mapcalc_list = []
-    >>> for i in xrange(5):
+    >>> for i in range(5):
     ...     new_mapcalc = copy.deepcopy(mapcalc)
     ...     mapcalc_list.append(new_mapcalc)
     ...     m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
@@ -108,7 +108,7 @@ class ParallelModuleQueue(object):
     >>> gregion = Module("g.region", flags="p", run_=False)
     >>> queue = ParallelModuleQueue(nprocs=3)
     >>> proc_list = []
-    >>> for i in xrange(3):
+    >>> for i in range(3):
     ...     new_gregion = copy.deepcopy(gregion)
     ...     proc_list.append(new_gregion)
     ...     new_mapcalc = copy.deepcopy(mapcalc)

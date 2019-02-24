@@ -409,7 +409,7 @@ class RasterSegment(RasterAbstractBase):
             >>> map_b = RasterSegment(test_raster_name + "_segment")
             >>> map_a.open('r')
             >>> map_b.open('w', mtype="CELL", overwrite=True)
-            >>> for row in xrange(map_a.info.rows):
+            >>> for row in range(map_a.info.rows):
             ...     map_b[row] = map_a[row] + 1000
             >>> map_a.close()
             >>> map_b.close()
@@ -439,7 +439,7 @@ class RasterSegment(RasterAbstractBase):
 
             >>> elev = RasterSegment(test_raster_name)
             >>> elev.open('r')
-            >>> for i in xrange(4):
+            >>> for i in range(4):
             ...     elev.get(i,i)
             11
             22
@@ -476,8 +476,8 @@ class RasterSegment(RasterAbstractBase):
             >>> map_b = RasterSegment(test_raster_name + "_segment")
             >>> map_a.open('r')
             >>> map_b.open('w', mtype="FCELL", overwrite=True)
-            >>> for row in xrange(map_a.info.rows):
-            ...     for col in xrange(map_a.info.cols):
+            >>> for row in range(map_a.info.rows):
+            ...     for col in range(map_a.info.cols):
             ...         value = map_a.get(row,col)
             ...         map_b.put(row,col,value + 100)
             >>> map_a.close()

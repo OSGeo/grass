@@ -1143,7 +1143,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
                 >>> import grass.temporal as tgis
                 >>> maps = []
-                >>> for i in xrange(3):
+                >>> for i in range(3):
                 ...     map = tgis.RasterDataset("map%i@PERMANENT"%i)
                 ...     check = map.set_relative_time(i + 2, i + 3, "days")
                 ...     maps.append(map)
