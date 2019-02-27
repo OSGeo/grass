@@ -2132,7 +2132,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             layer=self.GetLayerInfo(
                 item,
                 key='maplayer'),
-            type=type,
+            ltype=type,
             command=cmdlist,
             name=layerName,
             active=chk,
