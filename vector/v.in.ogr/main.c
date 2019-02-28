@@ -768,7 +768,22 @@ int main(int argc, char *argv[])
 
 	for (layer = 0; layer < nlayers; layer++) {
 	    Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+#if GDAL_VERSION_NUM >= 1110000
+	    if (param.geom->answer) {
+		Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+		igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
+		if (igeom < 0)
+		    G_fatal_error(_("Geometry column <%s> not found in input layer <%s>"),
+				  param.geom->answer, OGR_L_GetName(Ogr_layer));
+
+		OGR_L_SetSpatialFilterEx(Ogr_layer, igeom, poSpatialFilter[layer]);
+	    }
+	    else {
+		OGR_L_SetSpatialFilter(Ogr_layer, poSpatialFilter[layer]);
+	    }
+#else
 	    OGR_L_SetSpatialFilter(Ogr_layer, poSpatialFilter[layer]);
+#endif
 	    if (OGR_L_SetAttributeFilter(Ogr_layer, attr_filter) != OGRERR_NONE)
 		G_fatal_error(_("Error setting attribute filter '%s'"),
 			      attr_filter);
