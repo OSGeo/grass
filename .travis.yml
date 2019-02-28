@@ -6,11 +6,11 @@ language: c
 matrix:
    include:
       - os: linux
-        dist: trusty
+        dist: xenial
         compiler: gcc
         sudo: required
       - os: linux
-        dist: trusty
+        dist: xenial
         compiler: clang
         sudo: required
 
