@@ -8,12 +8,6 @@ char *get_datasource_name(const char *opt_dsn, int use_ogr)
 {
     char *dsn;
 
-    dsn = G_store(opt_dsn);
-    
-    return dsn;
-
-    /* OGR dsn and GRASS db connections are independent of each other */
-
     if (G_strncasecmp(opt_dsn, "PG:", 3) == 0) {
         /* PostgreSQL/PostGIS */
         size_t i;
