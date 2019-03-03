@@ -3726,7 +3726,7 @@ msgstr "Ligne invalide dans le fichier RC ({file}) : '{line}' ({error})\n"
 #: ../lib/init/grass.py:546
 #, python-brace-format
 msgid "Empty RC file ({file})"
-msgstr ""
+msgstr "Fichier RC ({file}) vide"
 
 #: ../lib/init/grass.py:596
 #, python-format
@@ -3898,7 +3898,7 @@ msgid ""
 "Exit was requested in GUI.\n"
 "GRASS GIS will not start. Bye."
 msgstr ""
-"Fermeture demandée depuis l'intergace graphuique.\n"
+"Fermeture demandée depuis l'interface graphique.\n"
 "GRASS ne va pas démarrer. Au revoir."
 
 #: ../lib/init/grass.py:1150
@@ -10381,3 +10381,9 @@ msgstr "Polygone absurde."
 
 #~ msgid "Unable to seek"
 #~ msgstr "Recherche impossible"
+
+#~ msgid "options: arch,build,compiler,path,revision,svn_revision,version"
+#~ msgstr "options : arch, build, compilateur, path, révision, révision_svn, version"
+
+#~ msgid "Unable to execute command '%s': %s"
+#~ msgstr "Impossible d'exécuter la commande '%s' : %s"

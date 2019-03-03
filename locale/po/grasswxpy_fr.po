@@ -12873,7 +12873,7 @@ msgstr "Résuluats de la requête :"
 
 #: ../gui/wxpython/gui_core/query.py:183
 msgid " "
-msgstr ""
+msgstr " "
 
 #: ../gui/wxpython/gui_core/query.py:267
 msgid "east, north"
@@ -14519,10 +14519,13 @@ msgid ""
 "\n"
 "Details: {error}"
 msgstr ""
+"Impossible d'écrire le fichier '{filePath}'.\n"
+"\n"
+"Détails : {error}"
 
 #: ../gui/wxpython/gui_core/goutput.py:502
 msgid "Command log saved to '{}'"
-msgstr ""
+msgstr "Log de la commande enregistrée dans '{}'"
 
 #: ../gui/wxpython/psmap/toolbars.py:79
 msgid "Full extent"
@@ -17595,6 +17598,8 @@ msgid ""
 "Select areas from the\n"
 "overlaid vector map"
 msgstr ""
+"Sélectionner une zone depuis la\n"
+"carte vecteur supérieure"
 
 #: ../gui/wxpython/rlisetup/wizard.py:899
 msgid "Choose a method"
