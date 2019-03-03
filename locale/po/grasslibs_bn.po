@@ -45,7 +45,7 @@ msgstr ""
 #: ../lib/manage/do_list.c:30
 #, c-format
 msgid "%s: invalid index %d"
-msgstr ""
+msgstr "%s: অবৈধ সূচক %d"
 
 #: ../lib/manage/read_list.c:73
 #, c-format
@@ -60,7 +60,7 @@ msgstr ""
 #: ../lib/manage/do_remove.c:42
 #, c-format
 msgid "Removing %s <%s>"
-msgstr ""
+msgstr "মোছা হচ্ছে %s <%s>"
 
 #: ../lib/manage/do_remove.c:57 ../lib/manage/do_rename.c:54
 #: ../lib/ogsf/gp3.c:56 ../lib/ogsf/gp3.c:191 ../lib/ogsf/gv3.c:60
@@ -69,11 +69,11 @@ msgstr ""
 #: ../lib/vector/Vlib/legal_vname.c:144
 #, c-format
 msgid "Vector map <%s> not found"
-msgstr ""
+msgstr "ভেক্টর ম্যাপ <%s> পাওয়া যায় নি"
 
 #: ../lib/manage/do_remove.c:65
 msgid "Unable to delete vector map"
-msgstr ""
+msgstr "ভেক্টর ম্যাপ মুছতে অপারগ"
 
 #: ../lib/manage/do_remove.c:73 ../lib/manage/do_rename.c:71
 #: ../lib/raster/open.c:177 ../lib/raster/open.c:853 ../lib/raster/open.c:890
@@ -99,14 +99,14 @@ msgstr ""
 #: ../lib/gis/legal_name.c:97
 #, c-format
 msgid "Raster map <%s> not found"
-msgstr ""
+msgstr "রাস্টার ম্যাপ <%s> পাওয়া যায় নি"
 
 #: ../lib/manage/do_remove.c:78 ../lib/manage/do_rename.c:76
 #: ../lib/ogsf/gvl_file.c:427 ../lib/ogsf/gvl3.c:40
 #: ../lib/gpde/n_arrays_io.c:273
 #, c-format
 msgid "3D raster map <%s> not found"
-msgstr ""
+msgstr "ত্রিমাত্রিক রাস্টার ম্যাপ <%s> পাওয়া যায় নি"
 
 #: ../lib/manage/do_remove.c:85
 #, c-format
@@ -118,22 +118,22 @@ msgstr ""
 #: ../lib/manage/do_rename.c:107
 #, c-format
 msgid "%s is missing"
-msgstr ""
+msgstr "%s অনুপস্থিত"
 
 #: ../lib/manage/do_remove.c:92 ../lib/manage/do_remove.c:112
 #, c-format
 msgid "%s removed"
-msgstr ""
+msgstr "%s অপসারিত"
 
 #: ../lib/manage/do_remove.c:105
 #, c-format
 msgid "Unable to remove %s"
-msgstr ""
+msgstr "%sঅপসারণ করতে অক্ষম"
 
 #: ../lib/manage/do_remove.c:121
 #, c-format
 msgid "<%s> nothing removed"
-msgstr ""
+msgstr "%s কিছুই অপসারিত হয়নি"
 
 #: ../lib/manage/do_copy.c:43
 #, c-format
@@ -148,7 +148,7 @@ msgstr ""
 #: ../lib/manage/do_copy.c:72
 #, c-format
 msgid "%s copied"
-msgstr ""
+msgstr "%s প্রতিলিপিত"
 
 #: ../lib/manage/do_rename.c:42
 #, c-format
@@ -163,17 +163,17 @@ msgstr ""
 #: ../lib/manage/do_rename.c:83 ../lib/manage/do_rename.c:103
 #, c-format
 msgid "Unable to rename %s"
-msgstr ""
+msgstr "%sপুনঃনামকরন করতে অক্ষম"
 
 #: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
 #, c-format
 msgid "%s renamed"
-msgstr ""
+msgstr "%s পুনঃনামাঙ্কিত"
 
 #: ../lib/manage/do_rename.c:119
 #, c-format
 msgid "<%s> nothing renamed"
-msgstr ""
+msgstr "<%s> কিছুই পুনঃনামাঙ্কিত হয়নি"
 
 #: ../lib/manage/option.c:47
 #, c-format
@@ -182,19 +182,19 @@ msgstr ""
 
 #: ../lib/manage/option.c:51
 msgid "Raster"
-msgstr ""
+msgstr "রাস্টার"
 
 #: ../lib/manage/option.c:53
 msgid "Vector"
-msgstr ""
+msgstr "ভেক্টর"
 
 #: ../lib/manage/option.c:55
 msgid "Region"
-msgstr ""
+msgstr "অঞ্চল"
 
 #: ../lib/manage/option.c:57
 msgid "Group"
-msgstr ""
+msgstr "দল"
 
 #: ../lib/temporal/lib/default_name.c:69
 msgid "Programmer error - only SQLite driver is currently supported"
@@ -2778,7 +2778,7 @@ msgstr ""
 
 #: ../lib/python/script/raster.py:197
 msgid "color"
-msgstr ""
+msgstr "বর্ণ"
 
 #: ../lib/python/script/setup.py:229
 msgid "Cleaning up default sqlite database ..."
@@ -2853,7 +2853,7 @@ msgstr ""
 
 #: ../lib/python/script/task.py:58
 msgid "unknown"
-msgstr ""
+msgstr "অজ্ঞাত"
 
 #: ../lib/python/script/task.py:169
 #, python-format
@@ -2868,11 +2868,11 @@ msgstr ""
 #: ../lib/python/script/task.py:203
 #, python-format
 msgid "Parameter '%(name)s' (%(desc)s) is missing."
-msgstr ""
+msgstr "মানদণ্ড '%(name)s' (%(desc)s) টি অনুপস্থিত।"
 
 #: ../lib/python/script/task.py:236
 msgid "<required>"
-msgstr ""
+msgstr "<required>"
 
 #: ../lib/python/script/task.py:496 ../lib/python/script/task.py:500
 #, python-format
@@ -3141,7 +3141,7 @@ msgstr ""
 
 #: ../lib/raster3d/close.c:169
 msgid "Error in cache"
-msgstr ""
+msgstr "ক্যাশে ত্রুটি"
 
 #: ../lib/raster3d/history.c:43
 #, c-format
@@ -6806,7 +6806,7 @@ msgstr ""
 
 #: ../lib/db/dbmi_base/error.c:72
 msgid "<NULL error message>"
-msgstr ""
+msgstr "<NULL error message>"
 
 #: ../lib/db/dbmi_base/error.c:91
 msgid "dbmi: Protocol error"
