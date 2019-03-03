@@ -255,6 +255,31 @@ generates a related help page template in XML. Example:
 v.in.db --interface-description
 </pre></div>
 
+<h2>JSON</h2>
+
+The flag <b>--json</b> added to a GRASS command with parameters mandatorily
+to be specified generates a module interface description in JSON. Example:
+
+<div class="code"><pre>
+v.in.db driver=sqlite database=mysqlite.db table=pointsfile x=x y=y z=z key=idcol out=dtmpoints --json
+{
+  "module": "v.in.db",
+  "id": "v.in.db_1804289383",
+  "inputs":[
+     {"param": "table", "value": "pointsfile"},
+     {"param": "driver", "value": "sqlite"},
+     {"param": "database", "value": "mysqlite.db"},
+     {"param": "x", "value": "x"},
+     {"param": "y", "value": "y"},
+     {"param": "z", "value": "z"},
+     {"param": "key", "value": "idcol"}
+   ],
+  "outputs":[
+     {"param": "output", "value": "dtmpoints"}
+   ]
+}
+</pre></div>
+
 <h2>Web Processing Service (WPS)</h2>
 
 The flag <b>--wps-process-description</b> added to a GRASS command
