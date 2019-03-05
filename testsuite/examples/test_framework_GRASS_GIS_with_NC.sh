@@ -35,7 +35,7 @@ echo "Usage:
   $0 [conf_file]
 
 Example:
-  $0 ${CONF}
+  $0 ./${CONF}
 "
 }
 
