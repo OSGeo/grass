@@ -87,7 +87,7 @@ class TestSnapAbsoluteSTRDS(TestCase):
 
     def test_multi_stats(self):
         self.assertModule("t.rast.series", input="A",
-                          method=["average", "maximum", "minimum",
+                          method=["average", "maximum", "minimum"],
                           output=["series_average", "series_maximum",
                                   "series_minimum"],
                           overwrite=True)
