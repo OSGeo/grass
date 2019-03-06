@@ -1,7 +1,7 @@
 #!/bin/bash
 ############################################################################
 #
-# MODULE:       r.drain
+# MODULE:       Example script to run testsuite
 # AUTHOR(S):    Markus Neteler, Sören Gebbert, Vaclav Petras
 # PURPOSE:      Test GRASS GIS using the test framework
 #               Documentation:
@@ -26,14 +26,47 @@
 #
 ############################################################################
 
-### CONFIGURATION
+### Fetch CONFIGURATION
 
+CONF="test_framework_GRASS_GIS_with_NC.conf"
 
-source test_framework_GRASS_GIS_with_NC.conf
+usage_msg(){
+echo "Usage:
+  $0 [conf_file]
+
+Example:
+  $0 ./${CONF}
+"
+}
+
+if [ ! -z "$1" ] ; then
+   case "$1" in
+      -h | --h | -help | --help)
+         usage_msg
+         exit 0
+         ;;
+      *)
+         if [ -f ${1} ] ; then
+            CONF="$1"
+         else
+            echo "ERROR: $1 is not a file"
+            exit 1
+         fi
+         ;;
+    esac
+else
+    usage_msg
+    exit 0
+fi
+
+source ${CONF}
 
 ######### nothing to change below
 
 set -e  # fail fast
+
+# computer architecture:
+ARCH=`${GRASSBIN} --config arch`
 
 # here we suppose default compilation settings of GRASS GIS and no make install
 GRASSBIN="$GRASSSRC/bin.${ARCH}/${GRASSBIN}"
@@ -49,8 +82,11 @@ NOW=$(date $DATE_FLAGS)
 
 # get number of processors of current machine
 MYNPROC=`getconf _NPROCESSORS_ONLN`
-# leave one PROC free for other tasks
-GCCTHREADS=`expr $MYNPROC - 1`
+# leave some free for other tasks
+GCCTHREADS=`expr $MYNPROC - $FREECPU`
+if [ $GCCTHREADS -lt 1 ] ; then
+   GCCTHREADS=1
+fi
 
 # contains last executed command stdout and stderr
 # here were rely on reports being absolute
@@ -79,8 +115,11 @@ g.copy raster=landcover_1m,landcover
 g.copy raster=geology_30m,geology
 g.copy raster=landuse96_28m,landuse
 g.copy raster=soilsID,soils
+g.copy vector=census_wake2000,census
+g.copy vector=elev_lid792_bepts,elev_points
 g.copy vector=zipcodes_wake,zipcodes
 g.copy vector=schools_wake,schools
+g.copy vector=streets_wake,streets
 " > $GRASSDATA/tmp_rename.sh
 $GRASSBIN $GRASSDATA/nc_spm_08_grass7/PERMANENT --exec sh $GRASSDATA/tmp_rename.sh
 rm -f $GRASSDATA/tmp_rename.sh
