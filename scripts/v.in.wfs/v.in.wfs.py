@@ -27,6 +27,7 @@
 #% keyword: vector
 #% keyword: import
 #% keyword: OGC web services
+#% keyword: OGC WFS
 #%end
 #%option
 #% key: url
