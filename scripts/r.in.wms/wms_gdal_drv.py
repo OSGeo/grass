@@ -24,7 +24,7 @@ try:
     from osgeo import gdal
     from osgeo import gdalconst
 except:
-    grass.fatal(_("Unable to load GDAL Python bindings"))
+    grass.fatal(_("Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"))
 
 import xml.etree.ElementTree as etree
 
