@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.in.wms</em> handles all of downloading and importing raster data
-from an <a href="http://www.opengeospatial.org/standards/wms">OGC
+from <a href="http://www.opengeospatial.org/standards/wms">OGC
 WMS</a> and <a href="http://www.opengeospatial.org/standards/wmts">OGC
 WMTS</a> web mapping servers. It only needs be told the
 desired data to collect (bounds and resolution) via a region, the
@@ -80,10 +80,16 @@ g.region raster=elevation -p
 r.in.wms url="https://tiles.maps.eox.at/wms?" layers=s2cloudless output=sentinel2 format=png
 </pre></div>
 
+<div align="center" style="margin: 10px">
+<a href="r_in_wms_sentinel2.jpg"><img src="r_in_wms_sentinel2.jpg" width="600px" height="531px"></a><br>
+<i>Figure: Raleigh (NC, USA) seen by Sentinel-2 (10m resolution; image courtesy: EOX)</i>
+</div>
+
 <h4>OGC WMTS Example</h4>
 
 <div class="code"><pre>
-r.in.wms url="http://gpp3-wxs.ign.fr/yourAPIkey/geoportail/wmts" layers=ORTHOIMAGERY.ORTHOPHOTOS output=orthophoto srs=3857 format=jpeg driver=WMTS_GRASS style=normal password="*" username="*"
+r.in.wms url="http://gpp3-wxs.ign.fr/yourAPIkey/geoportail/wmts" layers=ORTHOIMAGERY.ORTHOPHOTOS \
+         output=orthophoto srs=3857 format=jpeg driver=WMTS_GRASS style=normal password="*" username="*"
 </pre></div>
 
 Note: username, password and API key can be obtained from <a href="http://api.ign.fr/">IGN API</a> website
@@ -95,15 +101,16 @@ r.in.wms url="http://wms.cuzk.cz/wms.asp" layers=prehledka_kraju-linie srs=4326 
 </pre></div>
 
 <div class="code"><pre>
-r.in.wms url="http://geoportal.cuzk.cz/WMTS_ORTOFOTO/WMTService.aspx" layers=orto output=ortofoto srs=3857 format=jpeg driver=WMTS_GRASS style=default
+r.in.wms url="http://geoportal.cuzk.cz/WMTS_ORTOFOTO/WMTService.aspx" layers=orto output=ortofoto \
+         srs=3857 format=jpeg driver=WMTS_GRASS style=default
 </pre></div>
 
-Note: data are provided by <a href="http://cuzk.cz/Dokument.aspx?PRARESKOD=998&MENUID=10384&AKCE=DOC:10-ENGLISH">Czech office for surveying, mapping and cadastre</a>.
+Note: data are provided by
+<a href="https://cuzk.cz/en">Czech office for surveying, mapping and cadastre</a>.
 
 <h2>REQUIREMENTS</h2>
 
-<em>r.in.wms</em>
-requires the <a href="http://www.gdal.org/gdalwarp.html">gdalwarp</a>
+<em>r.in.wms</em> requires the <a href="https://www.gdal.org/gdalwarp.html">gdalwarp</a>
 utility from the GDAL/OGR library.
 
 <h2>REFERENCES</h2>
@@ -129,7 +136,7 @@ See also
 
 <h2>AUTHOR</h2>
 
-Stepan Turek, Czech Technical University in Prague, Czech Republic
+Stepan Turek, Czech Technical University in Prague, Czech Republic<br>
 (bachelor's final project 2012, mentor: Martin Landa)
 
 <p>

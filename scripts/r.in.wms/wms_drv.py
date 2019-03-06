@@ -30,7 +30,7 @@ try:
     from osgeo import gdal
     from osgeo import gdalconst
 except:
-    grass.fatal(_("Unable to load GDAL python bindings"))
+    grass.fatal(_("Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"))
 
 import numpy as Numeric
 Numeric.arrayrange = Numeric.arange
