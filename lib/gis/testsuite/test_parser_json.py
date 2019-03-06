@@ -10,7 +10,7 @@ for details.
 
 import subprocess
 from grass.gunittest.case import TestCase
-import simplejson
+import json
 
 
 class TestParserJson(TestCase):
@@ -39,7 +39,7 @@ class TestParserJson(TestCase):
 
         stdout, stderr = subprocess.Popen(args, stdout=subprocess.PIPE).communicate()
         print(stdout)
-        json_code = simplejson.loads(stdout)
+        json_code = json.loads(stdout)
         self.assertEqual(json_code["module"], "r.slope.aspect")
         self.assertEqual(len(json_code["inputs"]), 5)
         self.assertEqual(json_code["inputs"], inputs)
@@ -67,7 +67,7 @@ class TestParserJson(TestCase):
 
         stdout, stderr = subprocess.Popen(args, stdout=subprocess.PIPE).communicate()
         print(stdout)
-        json_code = simplejson.loads(stdout)
+        json_code = json.loads(stdout)
         self.assertEqual(json_code["module"], "v.out.ascii")
         self.assertEqual(len(json_code["inputs"]), 6)
         self.assertEqual(json_code["inputs"], inputs)
@@ -86,7 +86,7 @@ class TestParserJson(TestCase):
 
         stdout, stderr = subprocess.Popen(args, stdout=subprocess.PIPE).communicate()
         print(stdout)
-        json_code = simplejson.loads(stdout)
+        json_code = json.loads(stdout)
         self.assertEqual(json_code["module"], "v.info")
         self.assertEqual(len(json_code["inputs"]), 2)
         self.assertEqual(json_code["inputs"], inputs)
