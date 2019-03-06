@@ -20,6 +20,8 @@
 #% keyword: vector
 #% keyword: attribute table
 #% keyword: database
+#% keyword: attribute update
+#% keyword: type casting
 #%end
 #%option G_OPT_V_MAP
 #%end

@@ -60,9 +60,16 @@ Points not falling into any area are ignored. Areas without category
 (no centroid attached or centroid without category) are ignored. 
 If no points are falling into a given area, the point count is set to 0
 (zero) and the statistics result to "null".
-<p>The columns <em>count_column</em> and <em>stats_column</em> are created if not
-existing. If they do already exist, the <em>count_column</em> must be of
+<p>
+The columns <em>count_column</em> and <em>stats_column</em> are created if not
+yet existing. If they do already exist, the <em>count_column</em> must be of
 type integer and the <em>stats_column</em> of type double precision.
+<p>
+In case that <em>v.vect.stats</em> complains about the <em>points_column</em>
+of the input points vector map not being numeric, the module
+<em>v.db.update</em> can be used to perform type casting, i.e. adding and
+populating an additional numeric column with the values type converted from
+string attributes to floating point numbers.
 
 <h2>EXAMPLES</h2>
 
