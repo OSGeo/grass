@@ -1,5 +1,12 @@
 #include <grass/config.h>
 
+#ifdef HAVE_PROJ_H
+#include <proj.h>
+#if PROJ_VERSION_MAJOR >= 6
+#define USE_PROJDB
+#endif
+#endif
+
 extern struct Key_Value *projinfo, *projunits, *projepsg;
 extern struct Cell_head cellhd;
 

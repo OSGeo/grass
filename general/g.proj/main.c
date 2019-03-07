@@ -17,14 +17,55 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/config.h>
 
+#ifndef HAVE_PROJ_H
+#include <proj_api.h>
+#endif
 #include "local_proto.h"
 
 struct Key_Value *projinfo, *projunits, *projepsg;
 struct Cell_head cellhd;
+
+static char *get_authority_names()
+{
+    char *authnames;
+
+#ifdef USE_PROJDB
+    /* PROJ 6 */
+    int i, len;
+    PROJ_STRING_LIST authlist = proj_get_authorities_from_database(NULL);
+
+    len = 0;
+    for (i = 0; authlist[i]; i++) {
+	len += strlen(authlist[i]) + 1;
+    }
+    if (len > 0) {
+	authnames = G_malloc((len + 1) * sizeof(char)); /* \0 */
+	*authnames = '\0';
+	for (i = 0; authlist[i]; i++) {
+	    if (i > 0)
+		strcat(authnames, ",");
+	    strcat(authnames, authlist[i]);
+	}
+    }
+    else {
+	authnames = G_store("");
+    }
+#else
+    /* PROJ 4, 5 */
+    /* there are various init files in share/proj/:
+     * EPSG,GL27,IGNF,ITRF2000,ITRF2008,ITRF2014,nad27,nad83,esri
+     * but they have different formats: bothering only with EPSG here */ 
+    authnames = G_store("EPSG");
+#endif
+
+    return authnames;
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -48,6 +89,7 @@ int main(int argc, char *argv[])
 	*ingeo,			/* Input geo-referenced file readable by 
 				 * GDAL or OGR                              */
 #endif
+	*listcodes,		/* list codes of given authority */
 	*datum,			/* datum to add (or replace existing datum) */
 	*dtrans;		/* index to datum transform option          */
     struct GModule *module;
@@ -159,6 +201,14 @@ int main(int argc, char *argv[])
     inepsg->description = _("EPSG projection code");
 #endif
 
+    listcodes = G_define_option();
+    listcodes->key = "list_codes";
+    listcodes->type = TYPE_STRING;
+    listcodes->required = NO;
+    listcodes->options = get_authority_names();
+    listcodes->guisection = _("Print");
+    listcodes->description = _("List codes for given authority, e.g. EPSG, and exit");
+
     datum = G_define_option();
     datum->key = "datum";
     datum->type = TYPE_STRING;
@@ -206,6 +256,136 @@ int main(int argc, char *argv[])
 
 
     /* Initialisation & Validation */
+
+    /* list codes for given authority */
+    if (listcodes->answer) {
+#ifdef USE_PROJDB
+	/* PROJ 6+ */
+	int i, crs_cnt;
+	PROJ_CRS_INFO **proj_crs_info;
+	
+	crs_cnt = 0;
+	proj_crs_info = proj_get_crs_info_list_from_database(NULL, listcodes->answer, NULL, &crs_cnt);
+	if (crs_cnt < 1)
+	    G_fatal_error(_("No codes found for authority %s"),
+		          listcodes->answer;
+		
+	for (i = 0; i < crs_cnt; i++) {
+	    char *proj_definition;
+	    PJ *pj;
+
+
+	    pj = proj_create_from_database(NULL,
+	                                   proj_crs_info[i]->auth_name,
+	                                   proj_crs_info[i]->code,
+					   PJ_CATEGORY_CRS,
+					   0, NULL);
+	    proj_definition = proj_as_proj_string(NULL, pj, PJ_PROJ_5, NULL);
+
+	    fprintf(stdout, "%s|%s|%s\n", proj_crs_info[i]->code,
+					  proj_crs_info[i]->name,
+					  proj_definition);
+	}
+#else
+	char pathname[GPATH_MAX];
+	char *authname;
+	char code[GNAME_MAX], name[GNAME_MAX], proj_def[GNAME_MAX];
+	FILE *fp;
+	char buf[4096];
+	int line, have_name;
+
+#ifdef HAVE_PROJ_H
+	/* PROJ 5 */
+	PJ_INIT_INFO init_info;
+
+	authname = listcodes->answer;
+	if (G_strcasecmp(authname, "EPSG") == 0)
+	    authname = "epsg";
+
+	init_info = proj_init_info(authname);
+	sprintf(pathname, init_info.filename);
+	
+	if (access(pathname, F_OK) != 0)
+	    G_fatal_error(_("Unable to find init file %s"), authname);
+
+#else
+	/* PROJ 4 */
+	projCtx ctx;
+	
+	authname = listcodes->answer;
+	if (G_strcasecmp(authname, "EPSG") == 0)
+	    authname = "epsg";
+
+	ctx = pj_ctx_alloc();
+	if (!pj_find_file(ctx, authname, pathname, GPATH_MAX))
+	    G_fatal_error(_("Unable to find init file %s"), authname);
+	pj_ctx_free(ctx);
+#endif
+
+	/* PROJ 4 / 5 */
+	
+	/* the init files do not have a common structure, thus restrict to epsg */
+	if (strcmp(authname, "epsg") != 0)
+	    G_fatal_error(_("Only epsg file is currently supported"));
+	
+	/* open the init file */
+	fp = fopen(pathname, "r");
+	if (!fp) {
+	    G_fatal_error(_("Unable to open init file <%s>"), authname);
+	}
+	have_name = 0;
+	/* print list of codes, names, definitions */
+	for (line = 1; G_getl2(buf, sizeof(buf), fp); line++) {
+
+	    G_strip(buf);
+	    if (*buf == '\0')
+		continue;
+
+	    if (strncmp(buf, "<metadata>", strlen("<metadata>")) == 0)
+		continue;
+
+	    /* name: line starts with '# ' */
+	    /* code and definition in next line */
+
+	    if (!have_name) {
+		if (*buf != '#')
+		    continue;
+		sprintf(name, buf + 2);
+		have_name = 1;
+	    }
+	    if (have_name && *buf == '#') {
+		sprintf(name, buf + 2);
+		continue;
+	    }
+
+	    if (have_name && *buf == '<') {
+		int i, j, buflen;
+		
+		buflen = strlen(buf);
+		
+		i = 0;
+		while (i < buflen && buf[i] != '>')
+		    i++;
+		buf[i] = '\0';
+		sprintf(code, buf + 1);
+		i++;
+		j = i;
+		while (i < buflen && buf[i] != '<')
+		    i++;
+		if (i < buflen && buf[i] == '<')
+		    buf[i] = '\0';
+		sprintf(proj_def, buf + j);
+		G_strip(proj_def);
+
+		fprintf(stdout, "%s|%s|%s\n", code, name, proj_def);
+		have_name = 0;
+		name[0] = '\0';
+	    }
+	}
+	fclose(fp);
+#endif
+	exit(EXIT_SUCCESS);
+    }
 
 #ifdef HAVE_OGR
     /* -e implies -w */
