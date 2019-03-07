@@ -196,7 +196,6 @@ FTLIB               = @FTLIB@
 #PROJ.4:
 PROJINC             = @PROJINC@
 PROJLIB             = @PROJLIB@
-NAD2BIN             = @NAD2BIN@
 PROJSHARE           = @PROJSHARE@
 
 #OPENDWG:
