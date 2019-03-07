@@ -1699,7 +1699,7 @@ class EPSGPage(TitledPage):
     def OnBrowseCodes(self, event, search=None):
         """Browse EPSG codes"""
         try:
-            self.epsgCodeDict = utils.ReadEpsgCodes(self.tfile.GetValue())
+            self.epsgCodeDict = utils.ReadEpsgCodes()
         except OpenError as e:
             GError(
                 parent=self,
@@ -1946,7 +1946,7 @@ class IAUPage(TitledPage):
     def OnBrowseCodes(self, event, search=None):
         """Browse IAU codes"""
         try:
-            self.epsgCodeDict = utils.ReadEpsgCodes(self.tfile.GetValue())
+            self.epsgCodeDict = utils.ReadEpsgCodes()
         except OpenError as e:
             GError(
                 parent=self,

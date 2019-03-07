@@ -509,44 +509,20 @@ def PathJoin(*args):
     return path
 
 
-def ReadEpsgCodes(path):
-    """Read EPSG code from the file
-
-    :param path: full path to the file with EPSG codes
-
-    Raise OpenError on failure.
+def ReadEpsgCodes():
+    """Read EPSG codes with g.proj
 
     :return: dictionary of EPSG code
     """
     epsgCodeDict = dict()
-    try:
-        try:
-            f = open(path, "r")
-        except IOError:
-            raise OpenError(_("failed to open '{0}'").format(path))
 
-        code = None
-        for line in f.readlines():
-            line = line.strip()
-            if len(line) < 1 or line.startswith('<metadata>'):
-                continue
+    ret = RunCommand('g.proj',
+                     read=True,
+                     list_codes="EPSG")
 
-            if line[0] == '#':
-                descr = line[1:].strip()
-            elif line[0] == '<':
-                code, params = line.split(" ", 1)
-                try:
-                    code = int(code.replace('<', '').replace('>', ''))
-                except ValueError as e:
-                    raise OpenError('{0}'.format(e))
-
-            if code is not None:
-                epsgCodeDict[code] = (descr, params)
-                code = None
-
-        f.close()
-    except Exception as e:
-        raise OpenError('{0}'.format(e))
+    for line in ret.splitlines():
+        code, descr, params = line.split("|")
+        epsgCodeDict[code] = (descr, params)
 
     return epsgCodeDict
 

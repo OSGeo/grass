@@ -1901,7 +1901,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             self.winId['projection:statusbar:epsg'])
         wx.BeginBusyCursor()
         try:
-            self.epsgCodeDict = ReadEpsgCodes(path)
+            self.epsgCodeDict = ReadEpsgCodes()
         except OpenError as e:
             wx.EndBusyCursor()
             epsgCombo.SetItems([])
