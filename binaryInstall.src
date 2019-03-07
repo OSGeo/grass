@@ -317,27 +317,6 @@ chmod -R 1777 $DESTDIR/locks
 
 echo""
 
-echo "Creating datum transformation gridshift files..."
-
-if test -x "${DESTDIR}/etc/proj/nad2bin" ; then
-    NAD2BIN="${DESTDIR}/etc/proj/nad2bin"
-else
-    # Use version installed with PROJ.4 (should be in path)
-    NAD2BIN=nad2bin
-fi
-
-for i in "${DESTDIR}"/etc/proj/nad/src/*.lla
-do 
-    "${NAD2BIN}" < $i \
-    "${DESTDIR}"/etc/proj/nad/`echo \`basename "$i"\` | sed 's/.lla//'` && rm -f "$i"
-done
-
-if test -z "`ls \"${DESTDIR}/etc/proj/nad/src\"`" ; then
-    rmdir "${DESTDIR}/etc/proj/nad/src"
-fi
-
-echo""
-
 echo "Generating display font configuration file..."
 
 GISBASE="$DESTDIR" GISRC=junk LD_LIBRARY_PATH_VAR="${DESTDIR}/lib:$LD_LIBRARY_PATH_VAR" "${DESTDIR}/bin/g.mkfontcap" -o
