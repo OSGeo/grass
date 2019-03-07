@@ -310,16 +310,19 @@ int main(int argc, char *argv[])
 
 #else
 	/* PROJ 4 */
-	projCtx ctx;
+	/* can't use pj_find_file() from the old proj api
+	 * because it does not exist in PROJ 4 */
+	char *grass_proj_share;
 	
 	authname = listcodes->answer;
 	if (G_strcasecmp(authname, "EPSG") == 0)
 	    authname = "epsg";
 
-	ctx = pj_ctx_alloc();
-	if (!pj_find_file(ctx, authname, pathname, GPATH_MAX))
-	    G_fatal_error(_("Unable to find init file %s"), authname);
-	pj_ctx_free(ctx);
+	grass_proj_share = getenv("GRASS_PROJSHARE");
+	if (!grass_proj_share)
+	    G_fatal_error(_("Environment variable GRASS_PROJSHARE is not set"));
+	sprintf(pathname, "%s/%s", grass_proj_share, authname);
+	G_convert_dirseps_to_host(pathname);
 #endif
 
 	/* PROJ 4 / 5 */
