@@ -265,15 +265,18 @@ int main(int argc, char *argv[])
 	PROJ_CRS_INFO **proj_crs_info;
 	
 	crs_cnt = 0;
-	proj_crs_info = proj_get_crs_info_list_from_database(NULL, listcodes->answer, NULL, &crs_cnt);
+	proj_crs_info = proj_get_crs_info_list_from_database(NULL,
+			    listcodes->answer, NULL, &crs_cnt);
 	if (crs_cnt < 1)
 	    G_fatal_error(_("No codes found for authority %s"),
 		          listcodes->answer);
 		
 	for (i = 0; i < crs_cnt; i++) {
 	    const char *proj_definition;
+	    char emptystr;
 	    PJ *pj;
 
+	    emptystr = '\0';
 	    pj = proj_create_from_database(NULL,
 	                                   proj_crs_info[i]->auth_name,
 	                                   proj_crs_info[i]->code,
@@ -281,21 +284,19 @@ int main(int argc, char *argv[])
 					   0, NULL);
 	    proj_definition = proj_as_proj_string(NULL, pj, PJ_PROJ_5, NULL);
 	    if (!proj_definition) {
-		int err = proj_errno(pj);
-		
-		if (err) {
-		    G_warning(_("Unable to fetch proj string: %s"),
-			      proj_errno_string(err));
-		}
-		else {
-		    G_warning(_("Unable to fetch proj string: unknown error"));
-		}
+		/* what to do with a CRS without proj string ? */
+		G_debug(1, "No proj string for %s:%s",
+			proj_crs_info[i]->auth_name,
+			proj_crs_info[i]->code);
+		proj_definition = &emptystr;
 	    }
-	    else {
+
+	    if (proj_definition) {
 		fprintf(stdout, "%s|%s|%s\n", proj_crs_info[i]->code,
 					      proj_crs_info[i]->name,
 					      proj_definition);
 	    }
+
 	    proj_destroy(pj);
 	}
 #else
