@@ -51,6 +51,7 @@ struct pj_info
     int zone;
     char proj[100];
     char *def;
+    char *srid;
 };
 
 struct gpj_datum

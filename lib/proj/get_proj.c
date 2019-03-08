@@ -81,6 +81,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     info->proj[0] = '\0';
     info->def = NULL;
     info->pj = NULL;
+    info->srid = NULL;
 
     str = G_find_key_value("meters", in_units_keys);
     if (str != NULL) {
@@ -98,11 +99,20 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     }
     if (strlen(info->proj) <= 0)
 	sprintf(info->proj, "ll");
+    str = G_find_key_value("init", in_proj_keys);
+    if (str != NULL) {
+	info->srid = G_store(str);
+    }
 
     nopt = 0;
     for (i = 0; i < in_proj_keys->nitems; i++) {
 	/* the name parameter is just for grasses use */
 	if (strcmp(in_proj_keys->key[i], "name") == 0) {
+	    continue;
+
+	    /* init is here ignored */
+	}
+	else if (strcmp(in_proj_keys->key[i], "init") == 0) {
 	    continue;
 
 	    /* zone handled separately at end of loop */
@@ -328,6 +338,7 @@ int pj_get_string(struct pj_info *info, char *str)
     info->proj[0] = '\0';
     info->meters = 1.0;
     info->def = NULL;
+    info->srid = NULL;
     info->pj = NULL;
     
     nopt = 0;
@@ -365,6 +376,10 @@ int pj_get_string(struct pj_info *info, char *str)
 			sscanf(zonebuff, "%d", &(info->zone));
 		    }
 
+		    if (strncmp(s, "init=", 5) == 0) {
+			info->srid = G_store(s + 6);
+		    }
+
 		    if (strncmp("proj=", s, 5) == 0) {
 			sprintf(info->proj, "%s", s + 5);
 			if (strcmp(info->proj, "ll") == 0)
@@ -385,7 +400,8 @@ int pj_get_string(struct pj_info *info, char *str)
 #ifdef HAVE_PROJ_H
     pjc = proj_context_create();
     if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
-	G_warning(_("Unable to initialize pj"));
+	G_warning(_("Unable to initialize pj cause: %s"),
+	          proj_errno_string(proj_context_errno(pjc)));
 	return -1;
     }
 #else

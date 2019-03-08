@@ -89,17 +89,39 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	G_fatal_error(_("Input coordinate system is NULL"));
 
 #ifdef HAVE_PROJ_H
+    info_trans->pj = NULL;
     if (!info_trans->def) {
-	if (info_out->pj != NULL && info_out->def != NULL)
-	    G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s +step %s",
-		       info_in->def, info_out->def);
-	else
-	    /* assume info_out to be ll equivalent of info_in */
-	    G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s",
-		       info_in->def);
+	if (info_in->srid && info_out->pj && info_out->srid) {
+	    /* ask PROJ for the best pipeline */
+	    info_trans->pj = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
+	                                            info_in->srid,
+						    info_out->srid,
+						    NULL);
+
+	    if (info_trans->pj == NULL)
+		G_warning(_("proj_create_crs_to_crs() failed for '%s' and '%s'"),
+		          info_in->srid, info_out->srid);
+	    else {
+		char *str = proj_as_proj_string(NULL, info_trans->pj,
+		                                PJ_PROJ_5, NULL);
+
+		if (str)
+		    info-trans->def = G_store(str);
+	    }
+	}
+	if (info_trans->pj == NULL) {
+	    if (info_out->pj != NULL && info_out->def != NULL)
+		G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s +step %s",
+			   info_in->def, info_out->def);
+	    else
+		/* assume info_out to be ll equivalent of info_in */
+		G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s",
+			   info_in->def);
+	}
     }
 
-    info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
+    if (info_trans->pj == NULL)
+	info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
     if (info_trans->pj == NULL) {
 	G_warning(_("proj_create() failed for '%s'"), info_trans->def);
 	return -1;

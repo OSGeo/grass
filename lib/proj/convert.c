@@ -38,7 +38,7 @@ struct gpj_units {
     char    *id;        /* units keyword */
     char    *to_meter;  /* multiply by value to get meters */
     char    *name;      /* comments */
-    double   factor;       /* to_meter factor in actual numbers */
+    double   factor;    /* to_meter factor in actual numbers */
 };
 
 struct gpj_units
