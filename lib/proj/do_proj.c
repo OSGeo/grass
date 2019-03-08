@@ -98,9 +98,11 @@ int GPJ_init_transform(const struct pj_info *info_in,
 						    info_out->srid,
 						    NULL);
 
-	    if (info_trans->pj == NULL)
+	    if (info_trans->pj == NULL) {
 		G_warning(_("proj_create_crs_to_crs() failed for '%s' and '%s'"),
 		          info_in->srid, info_out->srid);
+	    }
+#if PROJ_VERSION_MAJOR >= 6
 	    else {
 		char *str = proj_as_proj_string(NULL, info_trans->pj,
 		                                PJ_PROJ_5, NULL);
@@ -108,6 +110,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 		if (str)
 		    info-trans->def = G_store(str);
 	    }
+#endif
 	}
 	if (info_trans->pj == NULL) {
 	    if (info_out->pj != NULL && info_out->def != NULL)
