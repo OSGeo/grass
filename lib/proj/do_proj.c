@@ -104,11 +104,11 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    }
 #if PROJ_VERSION_MAJOR >= 6
 	    else {
-		char *str = proj_as_proj_string(NULL, info_trans->pj,
+		const char *str = proj_as_proj_string(NULL, info_trans->pj,
 		                                PJ_PROJ_5, NULL);
 
 		if (str)
-		    info-trans->def = G_store(str);
+		    info_trans->def = G_store(str);
 	    }
 #endif
 	}
