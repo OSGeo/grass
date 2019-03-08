@@ -39,6 +39,8 @@ void print_projinfo(int shell)
 	fprintf(stdout,
 		"-PROJ_INFO-------------------------------------------------\n");
     for (i = 0; i < projinfo->nitems; i++) {
+	if (strcmp(projinfo->key[i], "init") == 0)
+	    continue;
 	if (shell)
 	    fprintf(stdout, "%s=%s\n", projinfo->key[i], projinfo->value[i]);
 	else
