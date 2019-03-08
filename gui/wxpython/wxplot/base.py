@@ -132,9 +132,9 @@ class BasePlotFrame(wx.Frame):
         for clr in six.iterkeys(grass.named_colors):
             if clr == 'white':
                 continue
-            r = grass.named_colors[clr][0] * 255
-            g = grass.named_colors[clr][1] * 255
-            b = grass.named_colors[clr][2] * 255
+            r = int(grass.named_colors[clr][0] * 255)
+            g = int(grass.named_colors[clr][1] * 255)
+            b = int(grass.named_colors[clr][2] * 255)
             self.colorDict[clr] = (r, g, b, 255)
 
     def InitPlotOpts(self, plottype):
