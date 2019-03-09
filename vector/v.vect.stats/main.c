@@ -68,7 +68,10 @@ static int cmp_area(const void *pa, const void *pb)
     AREA_CAT *p1 = (AREA_CAT *) pa;
     AREA_CAT *p2 = (AREA_CAT *) pb;
 
-    return (p1->area_cat - p2->area_cat);
+    if (p1->area_cat < p2->area_cat)
+	return -1;
+
+    return (p1->area_cat > p2->area_cat);
 }
 
 int main(int argc, char *argv[])
