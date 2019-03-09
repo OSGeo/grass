@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     unsigned int x, y, z;
     double dmin, dmax;
     int zone, n_zones, use_zone = 0;
-    char *mapset, *name;
+    const char *mapset, *name;
 
     struct GModule *module;
 
