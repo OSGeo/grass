@@ -131,6 +131,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 		          row, buf);
 	    }
 	    else {
+		G_warning(_("Expected %d columns, found %d columns"), ncols, ntokens);
 		G_fatal_error(_("Broken row %d: '%s'"), row, buf);
 	    }
 	}
@@ -141,6 +142,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 		continue;
 	    }
 	    else {
+		G_warning(_("ntokens: %d, xcol: %d, ycol: %d, zcol: %d"), xcol, ycol, zcol);
 		G_fatal_error(_("Broken row %d: '%s'"), row, buf);
 	    }
 	}

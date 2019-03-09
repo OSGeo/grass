@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     tdelim_opt = G_define_standard_option(G_OPT_F_SEP);
     tdelim_opt->key = "text";
     tdelim_opt->label = "Text delimiter";
-    tdelim_opt->answer = "doublequote";
+    tdelim_opt->answer = NULL;
     tdelim_opt->description = _("Special characters: doublequote, singlequote, none");
     tdelim_opt->guisection = _("Input format");
 
