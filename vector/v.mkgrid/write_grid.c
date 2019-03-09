@@ -31,7 +31,8 @@ int write_vect(double x1, double y1, double x2, double y2,
     return 0;
 }
 
-int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbreaks, int out_type)
+int write_grid(struct grid_description *grid_info, struct Map_info *Map,
+               int nbreaks, int out_type, int diag)
 {
 
     int i, k, j;
@@ -42,6 +43,7 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
     double width, height;
     double next_x, next_y;
     double snext_x, snext_y;
+    double xdiag, ydiag;
     double angle, dum;
 
     struct line_pnts *Points;
@@ -61,8 +63,8 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
      * to make sure that each section of the grid
      * line is less than half way around the globe
      */
-     x_len = width / (1. * nbreaks + 1);
-     y_len = height / (1. * nbreaks + 1);
+    x_len = width / (1. * nbreaks + 1);
+    y_len = height / (1. * nbreaks + 1);
 
     /* write out all the vector lengths (x vectors) of the entire grid  */
     G_message(_("Writing out vector rows..."));
@@ -92,6 +94,19 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
 		rotate(&next_x, &dum, grid_info->xo, grid_info->yo, 
 		       angle);
 		write_vect(x, y, next_x, dum, Map, Points, out_type);
+		if (diag && i < num_v_rows - 1) {
+		    xdiag = snext_x;
+		    ydiag = sy + height;
+		    rotate(&xdiag, &ydiag, grid_info->xo, grid_info->yo, 
+			   angle);
+		    write_vect(x, y, xdiag, ydiag, Map, Points, out_type);
+
+		    xdiag = sx;
+		    ydiag = sy + height;
+		    rotate(&xdiag, &ydiag, grid_info->xo, grid_info->yo, 
+			   angle);
+		    write_vect(xdiag, ydiag, next_x, dum, Map, Points, out_type);
+		}
 
 		y = sy;
 		x = next_x = snext_x;
@@ -112,30 +127,30 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
 	G_percent(i, num_v_cols, 2);
 
 	for (k = 0; k < rows; k++) {
-	  y = starty;
-	  j = 0;
-	  do {
-	      if (j < nbreaks)
-		  next_y = y + y_len;
-	      else
-		  next_y = starty + height;
+	    y = starty;
+	    j = 0;
+	    do {
+	        if (j < nbreaks)
+		    next_y = y + y_len;
+	        else
+		    next_y = starty + height;
 
-	      sx = x;
-	      sy = y;
-	      snext_y = next_y;
-	      dum = x;
-	      rotate(&x, &y, grid_info->xo, grid_info->yo, angle);
-	      rotate(&dum, &next_y, grid_info->xo, grid_info->yo,
+		sx = x;
+		sy = y;
+		snext_y = next_y;
+		dum = x;
+		rotate(&x, &y, grid_info->xo, grid_info->yo, angle);
+		rotate(&dum, &next_y, grid_info->xo, grid_info->yo,
 		    angle);
 
-	      write_vect(x, y, dum, next_y, Map, Points, out_type);
+		write_vect(x, y, dum, next_y, Map, Points, out_type);
 
-	      x = sx;
-	      y = next_y = snext_y;
-	      j++;
-	  } while (j <= nbreaks);
-	  /* To get exactly the same coordinates as above, y+=width is wrong */
-	  starty += height;
+	        x = sx;
+	        y = next_y = snext_y;
+	        j++;
+	    } while (j <= nbreaks);
+	    /* To get exactly the same coordinates as above, y+=width is wrong */
+	    starty += height;
 	}
 	x += width;
     }
