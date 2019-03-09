@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     flag.wrap->description = _("Latlon output only, default is -180,180");
     flag.wrap->label =
 	_("Disable wrapping to -180,180 for latlon output");
-    flag.transformz->guisection = _("Target");
+    flag.wrap->guisection = _("Target");
 
     flag.no_topol = G_define_flag();
     flag.no_topol->key = 'b';
