@@ -178,6 +178,12 @@ int thin_lines(int iterations)
 
 /* encode_neighbours- return neighborhood information for pixel at (middle,col) */
 
+/* bit position
+ * 1 8 7
+ * 2 x 6 
+ * 3 4 5
+ */
+
 char
 encode_neighbours(CELL * top, CELL * middle, CELL * bottom, int col, int neg)
 {
