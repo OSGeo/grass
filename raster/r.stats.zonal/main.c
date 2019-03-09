@@ -87,6 +87,7 @@ int main(int argc, char **argv)
     int reclass;
     int base_fd, cover_fd;
     struct Categories cats;
+    struct History history;
     CELL *base_buf;
     DCELL *cover_buf;
     struct Range range;
@@ -516,6 +517,10 @@ int main(int argc, char **argv)
 	G_percent(row, rows, 2);
 
 	Rast_close(out_fd);
+
+	Rast_short_history(output, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(output, &history);
 
 	if (Rast_read_colors(covermap, "", &colors) > 0)
 	    Rast_write_colors(output, G_mapset(), &colors);
