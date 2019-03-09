@@ -190,15 +190,20 @@ int main(int argc, char *argv[])
 		G_warning(_("%d features from <%s> without category skipped"),
 			  nskipped[iopt], Vect_get_full_name(&(In[iopt])));
 	    }
+	    Vect_set_release_support(&In[iopt]);
 	    Vect_close(&(In[iopt]));
 	}
 
 	Vect_build(&Out);
+	nfound = Vect_get_num_lines(&Out);
+	Vect_set_release_support(&Out);
 	Vect_close(&Out);
 
-	G_done_msg(_("%d features written to output."), Vect_get_num_lines(&Out));
+	G_done_msg(_("%d features written to output."), nfound);
     }
     else {
+	Vect_set_release_support(&In[0]);
+	Vect_set_release_support(&In[1]);
 	Vect_close(&In[0]);
 	Vect_close(&In[1]);
 	G_done_msg(_("No features found !"));
