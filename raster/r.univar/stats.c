@@ -113,15 +113,11 @@ int print_stats(univar_stat * stats)
 	char sum_str[100];
 	double mean, variance, stdev, var_coef;
 
-	/* for extendet stats */
+	/* for extended stats */
 	double quartile_25 = 0.0, quartile_75 = 0.0, *quartile_perc;
 	double median = 0.0;
 	unsigned int i;
 	int qpos_25, qpos_75, *qpos_perc;
-
-	/* stats collected for this zone? */
-	if (stats[z].n == 0)
-	    continue;
 
 	/* all these calculations get promoted to doubles, so any DIV0 becomes nan */
 	mean = stats[z].sum / stats[z].n;
@@ -131,6 +127,8 @@ int print_stats(univar_stat * stats)
 	stdev = sqrt(variance);
 	var_coef = (stdev / mean) * 100.;	/* perhaps stdev/fabs(mean) ? */
 
+	if (stats[z].n == 0)
+	    stats[z].sum = stats[z].sum_abs = 0.0 / 0.0;
 	sprintf(sum_str, "%.15g", stats[z].sum);
 	G_trim_decimal(sum_str);
 
@@ -182,63 +180,71 @@ int print_stats(univar_stat * stats)
 	if (param.extended->answer) {
 	    qpos_perc = (int *)G_calloc(stats[z].n_perc, sizeof(int));
 	    quartile_perc = (double *)G_calloc(stats[z].n_perc, sizeof(double));
-	    for (i = 0; i < stats[z].n_perc; i++) {
-		qpos_perc[i] = (int)(stats[z].n * 1e-2 * stats[z].perc[i] - 0.5);
+
+	    if (stats[z].n == 0) {
+		quartile_25 = median = quartile_75 = 0.0 / 0.0;
+		for (i = 0; i < stats[z].n_perc; i++)
+		    quartile_perc[i] = 0.0 / 0.0;
 	    }
-	    qpos_25 = (int)(stats[z].n * 0.25 - 0.5);
-	    qpos_75 = (int)(stats[z].n * 0.75 - 0.5);
-
-	    switch (stats[z].map_type) {
-	    case CELL_TYPE:
-		heapsort_int(stats[z].cell_array, stats[z].n);
-
-		quartile_25 = (double)stats[z].cell_array[qpos_25];
-		if (stats[z].n % 2)	/* odd */
-		    median = (double)stats[z].cell_array[(int)(stats[z].n / 2)];
-		else		/* even */
-		    median =
-			(double)(stats[z].cell_array[stats[z].n / 2 - 1] +
-				 stats[z].cell_array[stats[z].n / 2]) / 2.0;
-		quartile_75 = (double)stats[z].cell_array[qpos_75];
+	    else {
 		for (i = 0; i < stats[z].n_perc; i++) {
-		    quartile_perc[i] = (double)stats[z].cell_array[qpos_perc[i]];
+		    qpos_perc[i] = (int)(stats[z].n * 1e-2 * stats[z].perc[i] - 0.5);
 		}
-		break;
+		qpos_25 = (int)(stats[z].n * 0.25 - 0.5);
+		qpos_75 = (int)(stats[z].n * 0.75 - 0.5);
 
-	    case FCELL_TYPE:
-		heapsort_float(stats[z].fcell_array, stats[z].n);
+		switch (stats[z].map_type) {
+		case CELL_TYPE:
+		    heapsort_int(stats[z].cell_array, stats[z].n);
 
-		quartile_25 = (double)stats[z].fcell_array[qpos_25];
-		if (stats[z].n % 2)	/* odd */
-		    median = (double)stats[z].fcell_array[(int)(stats[z].n / 2)];
-		else		/* even */
-		    median =
-			(double)(stats[z].fcell_array[stats[z].n / 2 - 1] +
-				 stats[z].fcell_array[stats[z].n / 2]) / 2.0;
-		quartile_75 = (double)stats[z].fcell_array[qpos_75];
-		for (i = 0; i < stats[z].n_perc; i++) {
-		    quartile_perc[i] = (double)stats[z].fcell_array[qpos_perc[i]];
+		    quartile_25 = (double)stats[z].cell_array[qpos_25];
+		    if (stats[z].n % 2)	/* odd */
+			median = (double)stats[z].cell_array[(int)(stats[z].n / 2)];
+		    else		/* even */
+			median =
+			    (double)(stats[z].cell_array[stats[z].n / 2 - 1] +
+				     stats[z].cell_array[stats[z].n / 2]) / 2.0;
+		    quartile_75 = (double)stats[z].cell_array[qpos_75];
+		    for (i = 0; i < stats[z].n_perc; i++) {
+			quartile_perc[i] = (double)stats[z].cell_array[qpos_perc[i]];
+		    }
+		    break;
+
+		case FCELL_TYPE:
+		    heapsort_float(stats[z].fcell_array, stats[z].n);
+
+		    quartile_25 = (double)stats[z].fcell_array[qpos_25];
+		    if (stats[z].n % 2)	/* odd */
+			median = (double)stats[z].fcell_array[(int)(stats[z].n / 2)];
+		    else		/* even */
+			median =
+			    (double)(stats[z].fcell_array[stats[z].n / 2 - 1] +
+				     stats[z].fcell_array[stats[z].n / 2]) / 2.0;
+		    quartile_75 = (double)stats[z].fcell_array[qpos_75];
+		    for (i = 0; i < stats[z].n_perc; i++) {
+			quartile_perc[i] = (double)stats[z].fcell_array[qpos_perc[i]];
+		    }
+		    break;
+
+		case DCELL_TYPE:
+		    heapsort_double(stats[z].dcell_array, stats[z].n);
+
+		    quartile_25 = stats[z].dcell_array[qpos_25];
+		    if (stats[z].n % 2)	/* odd */
+			median = stats[z].dcell_array[(int)(stats[z].n / 2)];
+		    else		/* even */
+			median =
+			    (stats[z].dcell_array[stats[z].n / 2 - 1] +
+			     stats[z].dcell_array[stats[z].n / 2]) / 2.0;
+		    quartile_75 = stats[z].dcell_array[qpos_75];
+		    for (i = 0; i < stats[z].n_perc; i++) {
+			quartile_perc[i] = stats[z].dcell_array[qpos_perc[i]];
+		    }
+		    break;
+
+		default:
+		    break;
 		}
-		break;
-
-	    case DCELL_TYPE:
-		heapsort_double(stats[z].dcell_array, stats[z].n);
-
-		quartile_25 = stats[z].dcell_array[qpos_25];
-		if (stats[z].n % 2)	/* odd */
-		    median = stats[z].dcell_array[(int)(stats[z].n / 2)];
-		else		/* even */
-		    median =
-			(stats[z].dcell_array[stats[z].n / 2 - 1] +
-			 stats[z].dcell_array[stats[z].n / 2]) / 2.0;
-		quartile_75 = stats[z].dcell_array[qpos_75];
-		for (i = 0; i < stats[z].n_perc; i++) {
-		    quartile_perc[i] = stats[z].dcell_array[qpos_perc[i]];
-		}
-		break;
-
-	    default:
-		break;
 	    }
 
 	    if (param.shell_style->answer) {
@@ -358,7 +364,7 @@ int print_stats_table(univar_stat * stats)
 	int qpos_25, qpos_75, *qpos_perc;
 
 	/* stats collected for this zone? */
-	if (stats[z].n == 0)
+	if (stats[z].size == 0)
 	    continue;
 
 	i = 0;
@@ -370,6 +376,9 @@ int print_stats_table(univar_stat * stats)
 	    variance = 0.0;
 	stdev = sqrt(variance);
 	var_coef = (stdev / mean) * 100.;	/* perhaps stdev/fabs(mean) ? */
+
+	if (stats[z].n == 0)
+	    stats[z].sum = stats[z].sum_abs = 0.0 / 0.0;
 
 	if (zone_info.n_zones) {
 	    int z_cat = z + zone_info.min;
@@ -412,63 +421,72 @@ int print_stats_table(univar_stat * stats)
 	if (param.extended->answer) {
 	    qpos_perc = (int *)G_calloc(stats[z].n_perc, sizeof(int));
 	    quartile_perc = (double *)G_calloc(stats[z].n_perc, sizeof(double));
-	    for (i = 0; i < stats[z].n_perc; i++) {
-		qpos_perc[i] = (int)(stats[z].n * 1e-2 * stats[z].perc[i] - 0.5);
+
+
+	    if (stats[z].n == 0) {
+		quartile_25 = median = quartile_75 = 0.0 / 0.0;
+		for (i = 0; i < stats[z].n_perc; i++)
+		    quartile_perc[i] = 0.0 / 0.0;
 	    }
-	    qpos_25 = (int)(stats[z].n * 0.25 - 0.5);
-	    qpos_75 = (int)(stats[z].n * 0.75 - 0.5);
-
-	    switch (stats[z].map_type) {
-	    case CELL_TYPE:
-		heapsort_int(stats[z].cell_array, stats[z].n);
-
-		quartile_25 = (double)stats[z].cell_array[qpos_25];
-		if (stats[z].n % 2)	/* odd */
-		    median = (double)stats[z].cell_array[(int)(stats[z].n / 2)];
-		else		/* even */
-		    median =
-			(double)(stats[z].cell_array[stats[z].n / 2 - 1] +
-				 stats[z].cell_array[stats[z].n / 2]) / 2.0;
-		quartile_75 = (double)stats[z].cell_array[qpos_75];
+	    else {
 		for (i = 0; i < stats[z].n_perc; i++) {
-		    quartile_perc[i] = (double)stats[z].cell_array[qpos_perc[i]];
+		    qpos_perc[i] = (int)(stats[z].n * 1e-2 * stats[z].perc[i] - 0.5);
 		}
-		break;
+		qpos_25 = (int)(stats[z].n * 0.25 - 0.5);
+		qpos_75 = (int)(stats[z].n * 0.75 - 0.5);
 
-	    case FCELL_TYPE:
-		heapsort_float(stats[z].fcell_array, stats[z].n);
+		switch (stats[z].map_type) {
+		case CELL_TYPE:
+		    heapsort_int(stats[z].cell_array, stats[z].n);
 
-		quartile_25 = (double)stats[z].fcell_array[qpos_25];
-		if (stats[z].n % 2)	/* odd */
-		    median = (double)stats[z].fcell_array[(int)(stats[z].n / 2)];
-		else		/* even */
-		    median =
-			(double)(stats[z].fcell_array[stats[z].n / 2 - 1] +
-				 stats[z].fcell_array[stats[z].n / 2]) / 2.0;
-		quartile_75 = (double)stats[z].fcell_array[qpos_75];
-		for (i = 0; i < stats[z].n_perc; i++) {
-		    quartile_perc[i] = (double)stats[z].fcell_array[qpos_perc[i]];
+		    quartile_25 = (double)stats[z].cell_array[qpos_25];
+		    if (stats[z].n % 2)	/* odd */
+			median = (double)stats[z].cell_array[(int)(stats[z].n / 2)];
+		    else		/* even */
+			median =
+			    (double)(stats[z].cell_array[stats[z].n / 2 - 1] +
+				     stats[z].cell_array[stats[z].n / 2]) / 2.0;
+		    quartile_75 = (double)stats[z].cell_array[qpos_75];
+		    for (i = 0; i < stats[z].n_perc; i++) {
+			quartile_perc[i] = (double)stats[z].cell_array[qpos_perc[i]];
+		    }
+		    break;
+
+		case FCELL_TYPE:
+		    heapsort_float(stats[z].fcell_array, stats[z].n);
+
+		    quartile_25 = (double)stats[z].fcell_array[qpos_25];
+		    if (stats[z].n % 2)	/* odd */
+			median = (double)stats[z].fcell_array[(int)(stats[z].n / 2)];
+		    else		/* even */
+			median =
+			    (double)(stats[z].fcell_array[stats[z].n / 2 - 1] +
+				     stats[z].fcell_array[stats[z].n / 2]) / 2.0;
+		    quartile_75 = (double)stats[z].fcell_array[qpos_75];
+		    for (i = 0; i < stats[z].n_perc; i++) {
+			quartile_perc[i] = (double)stats[z].fcell_array[qpos_perc[i]];
+		    }
+		    break;
+
+		case DCELL_TYPE:
+		    heapsort_double(stats[z].dcell_array, stats[z].n);
+
+		    quartile_25 = stats[z].dcell_array[qpos_25];
+		    if (stats[z].n % 2)	/* odd */
+			median = stats[z].dcell_array[(int)(stats[z].n / 2)];
+		    else		/* even */
+			median =
+			    (stats[z].dcell_array[stats[z].n / 2 - 1] +
+			     stats[z].dcell_array[stats[z].n / 2]) / 2.0;
+		    quartile_75 = stats[z].dcell_array[qpos_75];
+		    for (i = 0; i < stats[z].n_perc; i++) {
+			quartile_perc[i] = stats[z].dcell_array[qpos_perc[i]];
+		    }
+		    break;
+
+		default:
+		    break;
 		}
-		break;
-
-	    case DCELL_TYPE:
-		heapsort_double(stats[z].dcell_array, stats[z].n);
-
-		quartile_25 = stats[z].dcell_array[qpos_25];
-		if (stats[z].n % 2)	/* odd */
-		    median = stats[z].dcell_array[(int)(stats[z].n / 2)];
-		else		/* even */
-		    median =
-			(stats[z].dcell_array[stats[z].n / 2 - 1] +
-			 stats[z].dcell_array[stats[z].n / 2]) / 2.0;
-		quartile_75 = stats[z].dcell_array[qpos_75];
-		for (i = 0; i < stats[z].n_perc; i++) {
-		    quartile_perc[i] = stats[z].dcell_array[qpos_perc[i]];
-		}
-		break;
-
-	    default:
-		break;
 	    }
 
 	    /* first quartile */
