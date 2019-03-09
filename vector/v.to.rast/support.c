@@ -226,7 +226,10 @@ static int cmp_labels_i(const void *a, const void *b)
     struct My_labels_rule *al = (struct My_labels_rule *) a;
     struct My_labels_rule *bl = (struct My_labels_rule *) b;
 
-    return (al->i - bl->i);
+    if (al->i < bl->i)
+	return -1;
+
+    return (al->i > bl->i);
 }
 
 /* add labels to raster cells */
@@ -587,13 +590,20 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		}			/* for each value in database */
 	    }
 	    else  {
-		fd = Rast_open_old(rast_name, G_mapset());
-
-		rowbuf = Rast_allocate_buf(map_type);
-
-		Rast_init_cell_stats(&stats);
 		Rast_set_cats_title("Rasterized vector map from categories", &rast_cats);
 
+		/* Rast_set_cat() is terribly slow for many categories,
+		 * and the added labels are not really informative:
+		 * 1:Category 1
+		 * 2:Category 2
+		 * ...
+		 * 100000:Category 100000
+		 * -> skip */
+
+#if 0
+		fd = Rast_open_old(rast_name, G_mapset());
+		rowbuf = Rast_allocate_buf(map_type);
+		Rast_init_cell_stats(&stats);
 		rows = Rast_window_rows();
 
 		for (row = 0; row < rows; row++) {
@@ -609,9 +619,9 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		    sprintf(msg, "Category %d", n);
 		    Rast_set_cat(&n, &n, msg, &rast_cats, map_type);
 		}
-
 		Rast_close(fd);
 		G_free(rowbuf);
+#endif
 	    }
 	}
 	break;
@@ -619,7 +629,6 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	{
 	    DCELL fmin, fmax;
 	    RASTER_MAP_TYPE map_type;
-	    int i;
 	    char msg[64];
 
 	    map_type = Rast_map_type(rast_name, G_mapset());
