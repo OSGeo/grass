@@ -695,8 +695,21 @@ int main(int argc, char *argv[])
     if (mcurv != NULL)
 	ddisk += disk;
     ddisk += sddisk;
-    G_verbose_message(_("Processing all selected output files "
-			"will require %d bytes of disk space for temp files"), ddisk);
+
+    G_message(_("Processing all selected output files will require"));
+    if (ddisk > 1024) {
+	if (ddisk > 1024 * 1024) {
+	    if (ddisk > 1024 * 1024 * 1024) {
+		G_message(_("%.2f GB of disk space for temp files."), ddisk / (1024. * 1024. * 1024.));
+	    }
+	    else
+		G_message(_("%.2f MB of disk space for temp files."), ddisk / (1024. * 1024.));
+	}
+	else
+	    G_message(_("%.2f KB of disk space for temp files."), ddisk / 1024.);
+    }
+    else
+	G_message(_("%d bytes of disk space for temp files."), (int)ddisk);
 
     deltx = xmax - xmin;
     delty = ymax - ymin;
