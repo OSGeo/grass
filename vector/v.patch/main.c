@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
@@ -64,6 +65,7 @@ int main(int argc, char *argv[])
     int maxcat = 0;
     int out_is_3d = WITHOUT_Z;
     char colnames[4096];
+    double snap = -1;
 
     G_gisinit(argv[0]);
 
@@ -457,6 +459,108 @@ int main(int argc, char *argv[])
     if (!no_topo->answer) {
 	if (append->answer)
 	    Vect_build_partial(&OutMap, GV_BUILD_NONE);
+
+	Vect_build_partial(&OutMap, GV_BUILD_BASE);
+
+	if (Vect_get_num_primitives(&OutMap, GV_BOUNDARY) > 0) {
+	    int nmodif;
+	    struct bound_box box;
+	    double xmax, ymax, min_snap, max_snap;
+	    int exp;
+	    char *separator = "-----------------------------------------------------";
+
+	    Vect_get_map_box(&OutMap, &box);
+
+	    if (abs(box.E) > abs(box.W))
+		xmax = abs(box.E);
+	    else
+		xmax = abs(box.W);
+	    if (abs(box.N) > abs(box.S))
+		ymax = abs(box.N);
+	    else
+		ymax = abs(box.S);
+
+	    if (xmax < ymax)
+		xmax = ymax;
+
+	    /* double precision ULP */
+	    min_snap = frexp(xmax, &exp);
+	    exp -= 52;
+	    min_snap = ldexp(min_snap, exp);
+	    /* human readable */
+	    min_snap = log10(min_snap);
+	    if (min_snap < 0)
+		min_snap = (int)min_snap;
+	    else
+		min_snap = (int)min_snap + 1;
+
+	    /* single precision ULP */
+	    max_snap = frexp(xmax, &exp);
+	    exp -= 23;
+	    max_snap = ldexp(max_snap, exp);
+	    /* human readable */
+	    max_snap = log10(max_snap);
+	    if (max_snap < 0)
+		max_snap = (int)max_snap;
+	    else
+		max_snap = (int)max_snap + 1;
+
+	    snap = (min_snap + max_snap) / 2 - 1.5;
+	    snap = pow(10, snap);
+
+	    if (snap >= 0) {
+		G_message("%s", separator);
+		G_message(_("Snapping boundaries (threshold = %.3e)..."), snap);
+		Vect_snap_lines(&OutMap, GV_BOUNDARY, snap, NULL);
+	    }
+
+	    G_message("%s", separator);
+	    G_message(_("Breaking polygons..."));
+	    Vect_break_polygons(&OutMap, GV_BOUNDARY, NULL);
+
+	    G_message("%s", separator);
+	    G_message(_("Removing duplicates..."));
+	    Vect_remove_duplicates(&OutMap, GV_BOUNDARY, NULL);
+
+	    /* in non-pathological cases, the bulk of the cleaning is now done */
+
+	    /* Vect_clean_small_angles_at_nodes() can change the geometry so that new intersections
+	     * are created. We must call Vect_break_lines(), Vect_remove_duplicates()
+	     * and Vect_clean_small_angles_at_nodes() until no more small angles are found */
+	    do {
+		G_message("%s", separator);
+		G_message(_("Breaking boundaries..."));
+		Vect_break_lines(&OutMap, GV_BOUNDARY, NULL);
+
+		G_message("%s", separator);
+		G_message(_("Removing duplicates..."));
+		Vect_remove_duplicates(&OutMap, GV_BOUNDARY, NULL);
+
+		G_message("%s", separator);
+		G_message(_("Cleaning boundaries at nodes..."));
+		nmodif =
+		    Vect_clean_small_angles_at_nodes(&OutMap, GV_BOUNDARY, NULL);
+	    } while (nmodif > 0);
+
+	    /* merge boundaries */
+	    G_message("%s", separator);
+	    G_message(_("Merging boundaries..."));
+	    Vect_merge_lines(&OutMap, GV_BOUNDARY, NULL, NULL);
+
+	    G_message("%s", separator);
+	    G_message(_("Removing dangles..."));
+	    Vect_remove_dangles(&OutMap, GV_BOUNDARY, -1.0, NULL);
+
+	    G_message("%s", separator);
+	    Vect_build_partial(&OutMap, GV_BUILD_ALL);
+
+	    G_message(_("Removing bridges..."));
+	    Vect_remove_bridges(&OutMap, NULL, &nmodif, NULL);
+
+	    /* Boundaries are hopefully clean, build areas */
+	    G_message("%s", separator);
+	    Vect_build_partial(&OutMap, GV_BUILD_NONE);
+	}
 	Vect_build(&OutMap);
     }
     Vect_close(&OutMap);
