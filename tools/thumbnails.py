@@ -74,6 +74,19 @@ def make_gradient(path):
                 minval += abs(minval / 100)
             maxval = float(records[-1][0])
             maxval = min(maxval, 2500000)
+        if os.path.basename(path) in ('ndvi', 'ndwi', 'ndwi2'):
+            minval = -1.0
+            maxval = 1.0
+        if os.path.basename(path) == 'ndvi_MODIS':
+            minval = -10000.0
+            maxval = 10000.0
+        if os.path.basename(path) == 'population_dens':
+            maxval = 1000.0
+        if os.path.basename(path) == 'precipitation':
+            maxval = 2000.0
+        if os.path.basename(path) in ('terrain', 'srtm', 'srtm_plus'):
+            minval = -500.0
+            maxval = 3000.0
         grad = tmp_grad_abs
         grass.mapcalc("$grad = "
                       " float($min) + (col() - 1) * "
@@ -148,6 +161,8 @@ def main():
     for var in ['GRASS_RENDER_LINE_WIDTH']:
         if var in os.environ:
             del os.environ[var]
+
+    os.environ['GRASS_ANTIALIAS'] = 'none'
 
     grass.use_temp_region()
     grass.run_command('g.region', s=0, w=0, n=height, e=width,
