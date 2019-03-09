@@ -101,7 +101,7 @@ def main():
 
             cmds = [
                 "BEGIN TRANSACTION",
-                "CREATE TEMPORARY TABLE ${table}_backup(${coldef})",
+                "CREATE TEMPORARY TABLE ${table}_backup (${coldef})",
                 "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
                 "DROP TABLE ${table}",
                 "CREATE TABLE ${table}(${coldef})",
