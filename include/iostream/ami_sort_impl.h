@@ -101,7 +101,7 @@ template<class T, class Compare>
 size_t makeRun_Block(AMI_STREAM<T> *instream, T* data, 
 		   unsigned int run_size, Compare *cmp) {
   AMI_err err;
-  off_t new_run_size;
+  off_t new_run_size = 0;
 
   //read next run from input stream
   err = instream->read_array(data, run_size, &new_run_size); 
@@ -256,7 +256,7 @@ runFormation(AMI_STREAM<T> *instream, Compare *cmp) {
       delete str;
     }
 
-  };
+  }
   SDEBUG MM_manager.print();
   //release the run memory!
   delete [] data;
@@ -265,7 +265,7 @@ runFormation(AMI_STREAM<T> *instream, Compare *cmp) {
   SDEBUG MM_manager.print();
 
   return runList;
-};
+}
 
 
 

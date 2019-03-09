@@ -315,7 +315,7 @@ AMI_STREAM<T>::AMI_STREAM(const char *path_name, AMI_stream_type st) {
   //size_t usage; 
   //main_memory_usage(&usage,  MM_STREAM_USAGE_CURRENT);
   //MM_manager.register_allocation(usage);
-};
+}
 
 
 
@@ -378,7 +378,7 @@ AMI_err AMI_STREAM<T>::new_substream(AMI_stream_type st,
   //*sub_stream = (AMI_base_stream < T > *)substr;
   *sub_stream = substr;
   return  AMI_ERROR_NO_ERROR;
-};
+}
 
 
 
@@ -417,8 +417,8 @@ off_t AMI_STREAM<T>::stream_len(void) {
 
   return (st_size / sizeof(T));
 #else
-  struct stat buf;
-  if (stat(path, &buf) == -1) {
+  struct stat statbuf;
+  if (stat(path, &statbuf) == -1) {
     perror("AMI_STREAM::stream_len(): fstat failed ");
     DEBUG_ASSERT assert(0);
     exit(1);
@@ -426,11 +426,11 @@ off_t AMI_STREAM<T>::stream_len(void) {
 
   //debug stream_len:
   DEBUG_STREAM_LEN fprintf(stderr, "%s: length = %lld   sizeof(T)=%lud\n",
-	  path, (long long int)buf.st_size, sizeof(T));
+	  path, (long long int)statbuf.st_size, sizeof(T));
 
-  return (buf.st_size / sizeof(T));
+  return (statbuf.st_size / sizeof(T));
 #endif
-};
+}
 
 
 
@@ -443,14 +443,14 @@ AMI_err AMI_STREAM<T>::name(char **stream_name)  {
   strcpy(*stream_name, path);
   
   return AMI_ERROR_NO_ERROR;
-};
+}
 
 // Return the path name of this stream.
 template<class T>
 const char *
 AMI_STREAM<T>::name() const {
   return path;
-};
+}
 
 
 
@@ -508,7 +508,7 @@ AMI_STREAM<T>::main_memory_usage(size_t *usage, MM_stream_usage usage_type) {
      break;
    }
    return AMI_ERROR_NO_ERROR;
-};
+}
 
 
 
@@ -534,7 +534,7 @@ AMI_STREAM<T>::~AMI_STREAM(void)  {
   //size_t usage; 
   //main_memory_usage(&usage,  MM_STREAM_USAGE_CURRENT);
   //MM_manager.register_deallocation(usage);
- };
+ }
 
 
 
@@ -563,7 +563,7 @@ AMI_err AMI_STREAM<T>::read_item(T **elt)  {
     *elt = &read_tmp;
     return AMI_ERROR_NO_ERROR; 
   }
-};
+}
 
 
 
@@ -596,7 +596,7 @@ AMI_err AMI_STREAM<T>::read_array(T *data, off_t len, off_t *lenp) {
     if(lenp) *lenp = nobj;
     return AMI_ERROR_NO_ERROR; 
   }
-};
+}
 
 
 
@@ -623,7 +623,7 @@ AMI_err AMI_STREAM<T>::write_item(const T &elt) {
 
     return AMI_ERROR_NO_ERROR;
   }
-};
+}
 
 
 /**********************************************************************/
@@ -649,14 +649,14 @@ AMI_err AMI_STREAM<T>::write_array(const T *data, off_t len) {
     }
    return AMI_ERROR_NO_ERROR;
   }
-};
+}
         
 
 /**********************************************************************/
 template<class T>
 void AMI_STREAM<T>::persist(persistence p)  {
   per = p;
-};
+}
 
 
 
@@ -669,16 +669,16 @@ void AMI_STREAM<T>::persist(persistence p)  {
 // if you are careful.
 template<class T>
 char *AMI_STREAM<T>::sprint()  {
-  static char buf[BUFSIZ];
-  sprintf(buf, "[AMI_STREAM %s %ld]", path, (long)stream_len());
-  return buf;
-};
+  static char desc[BUFSIZ];
+  sprintf(desc, "[AMI_STREAM %s %ld]", path, (long)stream_len());
+  return desc;
+}
 
 /**********************************************************************/
 template<class T>
 int AMI_STREAM<T>::eof()  {
   return eof_reached;
-};
+}
 
 
 #endif // _AMI_STREAM_H 

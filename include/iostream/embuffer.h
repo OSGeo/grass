@@ -487,12 +487,12 @@ em_buffer<T,Key>::em_buffer(const unsigned short i, const unsigned long bs,
   
   //initialize the <arity> streams to NULL, deleted[], streamsize[]
   //and name[]
-  for (unsigned int i=0; i< arity; i++) {
-    data[i] = NULL;
-    deleted[i] = 0;
-    streamsize[i] = 0;
+  for (unsigned int ui=0; ui< arity; ui++) {
+    data[ui] = NULL;
+    deleted[ui] = 0;
+    streamsize[ui] = 0;
 #ifdef SAVE_MEMORY
-    name[i] = NULL;
+    name[ui] = NULL;
 #endif
   }   
   //set index

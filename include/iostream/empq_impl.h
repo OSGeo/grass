@@ -1009,7 +1009,7 @@ bool em_pqueue<T,Key>::insert(const T& x) {
   }
   if (!pq->empty()) {
     T pqmax;
-    bool ok;
+
     ok = pq->max(pqmax);
     assert(ok);
     // cout << "insert " << x << " max: " << pqmax << "\n";

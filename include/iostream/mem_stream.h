@@ -83,7 +83,7 @@ MEM_STREAM<T>::MEM_STREAM(T *datap, int lenv) {
   curr = datap;
   len = lenv;
 
-};
+}
 
 
 /**********************************************************************/
@@ -93,7 +93,7 @@ off_t MEM_STREAM<T>::stream_len(void) {
 
   return len;
 
-};
+}
 
 
 
@@ -108,7 +108,7 @@ AMI_err MEM_STREAM<T>::name(char **stream_name)  {
   strcpy(*stream_name, path);
 
   return AMI_ERROR_NO_ERROR;
-};
+}
 
 
 /**********************************************************************/
@@ -128,7 +128,7 @@ AMI_err MEM_STREAM<T>::seek(off_t offset) {
 /**********************************************************************/
 template<class T>
 MEM_STREAM<T>::~MEM_STREAM(void)  {
-};
+}
 
 
 
@@ -144,7 +144,7 @@ AMI_err MEM_STREAM<T>::read_item(T **elt)  {
   *elt = curr;
   curr++;
   return AMI_ERROR_NO_ERROR;
-};
+}
 
 
 
@@ -162,7 +162,7 @@ AMI_err MEM_STREAM<T>::write_item(const T &elt) {
   *curr = elt;
   curr++;
   return AMI_ERROR_NO_ERROR;
-};
+}
 
 
 /**********************************************************************/
@@ -177,6 +177,6 @@ char *MEM_STREAM<T>::sprint()  {
   static char buf[BUFSIZ];
   sprintf(buf, "[MEM_STREAM %d]", stream_len());
   return buf;
-};
+}
 
 #endif // _MEM_STREAM_H 
