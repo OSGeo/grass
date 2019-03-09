@@ -290,7 +290,7 @@ int do_cum_mfd(void)
     /* MFD */
     int mfd_cells, stream_cells, swale_cells, astar_not_set, is_null;
     double *dist_to_nbr, *contour, *weight, sum_weight, max_weight;
-    int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side;
+    int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side, max_side;
     CELL ele, *ele_nbr;
     double prop, max_val;
     int workedon, edge, is_swale, flat;
@@ -466,9 +466,6 @@ int do_cum_mfd(void)
 			c_nbr < ncols && weight[ct_dir] > -0.5) {
 
 			if (FLAG_GET(flag_nbr[ct_dir], WORKEDFLAG)) {
-
-			    mfdir |= (1 << nextmfd[ct_dir]);
-
 			    weight[ct_dir] = weight[ct_dir] / sum_weight;
 			    /* check everything adds up to 1.0 */
 			    prop += weight[ct_dir];
@@ -588,6 +585,9 @@ int do_cum_mfd(void)
 
 	    /* get max flow accumulation */
 	    max_val = -1;
+	    max_side = 0;
+	    mfd_cells = 0;
+	    mfdir = 0;
 	    stream_cells = 0;
 	    swale_cells = 0;
 	    ele = wa.ele;
@@ -634,6 +634,11 @@ int do_cum_mfd(void)
 			    max_val = ABS(wa.wat);
 			    r_max = r_nbr;
 			    c_max = c_nbr;
+			    max_side = ct_dir;
+			}
+			if (!is_null && ele_nbr[ct_dir] <= ele) {
+			    mfdir |= (1 << nextmfd[ct_dir]);
+			    mfd_cells++;
 			}
 		    }
 		}
@@ -659,6 +664,9 @@ int do_cum_mfd(void)
 		else
 		    af.asp = drain[r - r_max + 1][c - c_max + 1];
 	    }
+	    if (mfd_cells == 1)
+		mfdir = (1 << nextmfd[max_side]);
+
 	    is_swale = FLAG_GET(af.flag, SWALEFLAG);
 	    /* start new stream */
 	    if (!is_swale && fabs(value) >= threshold && stream_cells < 1 &&
