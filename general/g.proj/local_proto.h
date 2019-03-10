@@ -1,12 +1,5 @@
 #include <grass/config.h>
 
-#ifdef HAVE_PROJ_H
-#include <proj.h>
-#if PROJ_VERSION_MAJOR >= 6
-#define USE_PROJDB
-#endif
-#endif
-
 extern struct Key_Value *projinfo, *projunits, *projepsg;
 extern struct Cell_head cellhd;
 
@@ -34,3 +27,7 @@ int set_datumtrans(int, int);
 /* create.c */
 void create_location(const char *);
 void modify_projinfo();
+
+/* list_codes.c */
+char *get_authority_names(void);
+void list_codes(char *);
