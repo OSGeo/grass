@@ -116,8 +116,7 @@ void list_codes(char *authname)
     /* can't use pj_find_file() from the old proj api
      * because it does not exist in PROJ 4 */
     char *grass_proj_share;
-    
-    authname = listcodes->answer;
+
     if (G_strcasecmp(authname, "EPSG") == 0)
 	authname = "epsg";
 
