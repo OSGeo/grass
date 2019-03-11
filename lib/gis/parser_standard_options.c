@@ -3,7 +3,7 @@
   
   \brief GIS Library - Argument parsing functions (standard options)
   
-  (C) 2001-2016 by the GRASS Development Team
+  (C) 2001-2019 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -33,6 +33,7 @@
   If an invalid parameter was specified a empty Option structure will
   be returned (not NULL).
 
+  Values also need to be added to general/g.parser/standard_option.c
 
   \par List of STD_OPT values sorted by module group
   - database:
@@ -115,6 +116,7 @@
    - G_OPT_STRDS_INPUT
    - G_OPT_STRDS_INPUTS
    - G_OPT_STRDS_OUTPUT
+   - G_OPT_STRDS_OUTPUTS
    - G_OPT_STR3DS_INPUT
    - G_OPT_STR3DS_INPUTS
    - G_OPT_STR3DS_OUTPUT
