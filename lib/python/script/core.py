@@ -164,7 +164,7 @@ def get_commands():
 
     return set(cmd), scripts
 
-
+# TODO: Please replace this function with shutil.which() before 8.0 comes out
 # replacement for which function from shutil (not available in all versions)
 # from http://hg.python.org/cpython/file/6860263c05b3/Lib/shutil.py#l1068
 # added because of Python scripts running Python scripts on MS Windows
@@ -239,6 +239,8 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
                     return name
     return None
 
+if sys.version_info.major > 2:
+    shutil_which = shutil.which
 
 # Added because of scripts calling scripts on MS Windows.
 # Module name (here cmd) differs from the file name (does not have extension).
