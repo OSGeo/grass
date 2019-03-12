@@ -93,7 +93,7 @@ void list_codes(char *authname)
     }
 #else
     char pathname[GPATH_MAX];
-    char code[GNAME_MAX], name[GNAME_MAX], proj_def[GNAME_MAX];
+    char code[GNAME_MAX], name[GNAME_MAX], proj_def[8192];
     FILE *fp;
     char buf[4096];
     int line;
@@ -140,10 +140,14 @@ void list_codes(char *authname)
     if (!fp) {
 	G_fatal_error(_("Unable to open init file <%s>"), authname);
     }
+
+    code[0] = '\0';
     name[0] = '\0';
+    proj_def[0] = '\0';
     /* print list of codes, names, definitions */
     for (line = 1; G_getl2(buf, sizeof(buf), fp); line++) {
-	int buflen;
+	int buflen, bufstart;
+	int i, j;
 
 	G_strip(buf);
 	buflen = strlen(buf);
@@ -154,36 +158,89 @@ void list_codes(char *authname)
 	    continue;
 	}
 
-	if (strncmp(buf, "<metadata>", strlen("<metadata>")) == 0)
-	    continue;
-
-	/* name: line starts with '# ' */
-	/* code and definition in next line */
+	/* name: could be text following '# ' */
+	/* code: <code> 
+	 * definition follows code until next '<' */
 
 	if (*buf == '#' && buflen > 2) {
 	    sprintf(name, buf + 2);
 	    continue;
 	}
 
-	if (*buf == '<') {
-	    int i, j;
+	i = 0;
+	bufstart = 0;
+	while (i < buflen) {
 	    
-	    i = 0;
-	    while (i < buflen && buf[i] != '>')
-		i++;
-	    buf[i] = '\0';
-	    sprintf(code, buf + 1);
-	    i++;
-	    j = i;
-	    while (i < buflen && buf[i] != '<')
-		i++;
-	    if (i < buflen && buf[i] == '<')
-		buf[i] = '\0';
-	    sprintf(proj_def, buf + j);
-	    G_strip(proj_def);
+	    if (buf[i] == '<') {
+		/* end of section ? */
+		if (code[0] != '\0') {
+		    G_strip(proj_def);
+		    /* the descriptive name may be hidden in proj_def as
+		     * +title=
+		     * e.g. IGNF */
+		    fprintf(stdout, "%s|%s|%s\n", code, name, proj_def);
+		    code[0] = '\0';
+		    name[0] = '\0';
+		    proj_def[0] = '\0';
+		}
 
-	    fprintf(stdout, "%s|%s|%s\n", code, name, proj_def);
-	    name[0] = '\0';
+		/* start of section ? */
+		bufstart = i + 1;
+		j = bufstart;
+		while (j < buflen && buf[j] != '>')
+		    j++;
+
+		if (j < buflen) {
+		    buf[j] = '\0';
+		    sprintf(code, buf + bufstart);
+		}
+		i = j + 1;
+		bufstart = i;
+		continue;
+	    }
+	    
+	    if (buf[i] == '#') {
+		/* the remaining content of the line could be the name */
+		bufstart = i + 1;
+		if (bufstart < buflen) {
+		    sprintf(name, buf + bufstart);
+		    G_strip(name);
+		}
+		i = buflen;
+		continue;
+	    }
+
+	    if (code[0] != '\0') {
+		char stopchar;
+		int proj_len;
+
+		/* inside a section definition */
+		/* test for '<' or '#' later on in the line */
+		j = bufstart;
+		while (j < buflen && buf[j] != '<' && buf[j] != '#')
+		    j++;
+		if (j < buflen) {
+		    stopchar = buf[j];
+		    buf[j] = '\0';
+		    proj_len = strlen(proj_def);
+		    proj_def[proj_len] = ' ';
+		    proj_def[proj_len + 1] = '\0';
+		    strcat(proj_def, buf + bufstart);
+		    buf[j] = stopchar;
+		    i = j;
+		    bufstart = i;
+		}
+		else {
+		    proj_len = strlen(proj_def);
+		    proj_def[proj_len] = ' ';
+		    proj_def[proj_len + 1] = '\0';
+		    strcat(proj_def, buf + bufstart);
+		    i = buflen;
+		    bufstart = i;
+		}
+	    }
+	    else
+		i++;
 	}
     }
     fclose(fp);
