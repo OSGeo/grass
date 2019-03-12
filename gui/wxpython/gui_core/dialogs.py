@@ -35,6 +35,11 @@ import six
 
 import wx
 
+try:
+    from wx.adv import HyperlinkCtrl
+except ImportError:
+    from wx import HyperlinkCtrl
+
 from grass.script import core as grass
 from grass.script.utils import natural_sort, try_remove
 
@@ -2308,7 +2313,7 @@ class HyperlinkDialog(wx.Dialog):
             flag=wx.ALIGN_CENTRE | wx.ALL,
             border=10)
         hyperlinkLabel = hyperlinkLabel if hyperlinkLabel else hyperlink
-        hyperlinkCtrl = wx.HyperlinkCtrl(
+        hyperlinkCtrl = HyperlinkCtrl(
             self, id=wx.ID_ANY, label=hyperlinkLabel, url=hyperlink,
             style=wx.HL_ALIGN_LEFT | wx.HL_CONTEXTMENU)
         sizer.Add(

@@ -29,6 +29,10 @@ import datetime
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel as SP
 import wx.lib.colourselect as csel
+try:
+    from wx.adv import HyperlinkCtrl
+except ImportError:
+    from wx import HyperlinkCtrl
 
 from core.gcmd import GMessage, GError, GException
 from core import globalvar
@@ -2013,7 +2017,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self._setTimeFormat(self.tempFormat.GetValue())
 
         row += 1
-        link = wx.HyperlinkCtrl(
+        link = HyperlinkCtrl(
             panel, id=wx.ID_ANY,
             label=_("Learn more about formatting options"),
             url="http://docs.python.org/2/library/datetime.html#"
