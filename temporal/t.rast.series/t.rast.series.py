@@ -100,12 +100,13 @@ def main():
     nulls = flags["n"]
 
     # Check if number of methods and output maps matches
-    print((method.split(',')))
-    print(len(list(filter(None, quantile.split(',')))))
-    print((output.split(',')))
+    if 'quantile' in method:
+        len_method = len(method.split(',')) - 1
+    else:
+        len_method = len(method.split(','))
     
     if (len(list(filter(None, quantile.split(',')))) + 
-        len(method.split(','))) != len(output.split(',')):
+        len_method) != len(output.split(',')):
         grass.fatal(_('Number requested methods and output maps do not match.'))
 
     # Make sure the temporal database exists
