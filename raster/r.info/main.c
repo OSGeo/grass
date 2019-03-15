@@ -197,7 +197,7 @@ int main(int argc, char **argv)
 	{
 	    compose_line(out, "  Rows:         %d", cellhd.rows);
 	    compose_line(out, "  Columns:      %d", cellhd.cols);
-	    compose_line(out, "  Total Cells:  %ju",
+	    compose_line(out, "  Total Cells:  %jd",
 			 (grass_int64)cellhd.rows * cellhd.cols);
 
 	    /* This is printed as a guide to what the following eastings and
