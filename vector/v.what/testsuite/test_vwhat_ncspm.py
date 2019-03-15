@@ -182,21 +182,21 @@ class TestNCMaps(TestCase):
 
     def test_multiple_maps(self):
         self.assertModule(self.vwhat)
-        self.assertMultiLineEqual(first=out1, second=self.vwhat.outputs.stdout)
+        self.assertMultiLineEqual(first=out1, second=self.vwhat.outputs.stdout.encode('utf8'))
 
     def test_print_options(self):
         self.vwhat.flags['a'].value = True
         self.assertModule(self.vwhat)
-        self.assertLooksLike(reference=out2, actual=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out2, actual=self.vwhat.outputs.stdout.encode('utf8'))
 
         self.vwhat.flags['g'].value = True
         self.assertModule(self.vwhat)
-        self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout.encode('utf8'))
 
     def test_threshold(self):
         self.vwhat.inputs['distance'].value = 100
         self.assertModule(self.vwhat)
-        self.assertLooksLike(reference=out4, actual=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out4, actual=self.vwhat.outputs.stdout.encode('utf8'))
 
     def test_print_options_json(self):
         import json

@@ -178,16 +178,16 @@ class TestMultiLayerMap(TestCase):
 
     def test_run(self):
         self.assertModule(self.vwhat)
-        self.assertLooksLike(reference=out1, actual=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out1, actual=self.vwhat.outputs.stdout.encode('utf8'))
 
     def test_print_options(self):
         self.vwhat.flags['a'].value = True
         self.assertModule(self.vwhat)
-        self.assertLooksLike(reference=out2, actual=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out2, actual=self.vwhat.outputs.stdout.encode('utf8'))
 
         self.vwhat.flags['g'].value = True
         self.assertModule(self.vwhat)
-        self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout.encode('utf8'))
 
     def test_print_options_json(self):
         import json
@@ -204,16 +204,16 @@ class TestMultiLayerMap(TestCase):
         self.vwhat.flags['g'].value = True
         self.vwhat.flags['a'].value = True
         self.assertModule(self.vwhat)
-        self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout.encode('utf8'))
 
         self.vwhat.inputs.layer = 1
         self.assertModule(self.vwhat)
-        self.assertLooksLike(reference=out4, actual=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out4, actual=self.vwhat.outputs.stdout.encode('utf8'))
 
         self.vwhat.inputs.layer = 2
         self.vwhat.flags['a'].value = False
         self.assertModule(self.vwhat)
-        self.assertLooksLike(reference=out5, actual=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out5, actual=self.vwhat.outputs.stdout.encode('utf8'))
 
 if __name__ == '__main__':
     test()
