@@ -183,7 +183,8 @@ int main(int argc, char *argv[])
 
     flag.x = G_define_flag();
     flag.x->key = 'x';
-    flag.x->description = _("Print x and y (column and row)");
+    flag.x->label = _("Print x and y (column and row)");
+    flag.x->description = _("Indexing starts with 1: first column and row are 1");
     flag.x->guisection = _("Coordinates");
 
     flag.A = G_define_flag();
