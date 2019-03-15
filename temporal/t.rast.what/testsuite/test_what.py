@@ -144,7 +144,7 @@ class TestRasterWhat(TestCase):
 79.6816763826|45.2391522853|2001-10-01 00:00:00|2002-01-01 00:00:00|400
 97.4892579600|79.2347263950|2001-10-01 00:00:00|2002-01-01 00:00:00|400
 """
-        self.assertLooksLike(text, t_rast_what.outputs.stdout)
+        self.assertLooksLike(text, t_rast_what.outputs.stdout.encode('utf8'))
 
     def test_row_stdout_where_parallel_cat(self):
 
@@ -165,7 +165,7 @@ class TestRasterWhat(TestCase):
 2|79.6816763826|45.2391522853|2001-10-01 00:00:00|2002-01-01 00:00:00|400
 3|97.4892579600|79.2347263950|2001-10-01 00:00:00|2002-01-01 00:00:00|400
 """
-        self.assertLooksLike(text, t_rast_what.outputs.stdout)
+        self.assertLooksLike(text, t_rast_what.outputs.stdout.encode('utf8'))
 
     def test_row_stdout_where_parallel2(self):
         """Here without output definition, the default is used then"""
@@ -186,7 +186,7 @@ class TestRasterWhat(TestCase):
 79.6816763826|45.2391522853|2001-10-01 00:00:00|2002-01-01 00:00:00|400
 97.4892579600|79.2347263950|2001-10-01 00:00:00|2002-01-01 00:00:00|400
 """
-        self.assertLooksLike(text, t_rast_what.outputs.stdout)
+        self.assertLooksLike(text, t_rast_what.outputs.stdout.encode('utf8'))
 
     def test_row_output_where_parallel(self):
         self.assertModule("t.rast.what", strds="A", output="out_where.txt",
@@ -260,7 +260,7 @@ class TestRasterWhatNull(TestCase):
 115.0043586274|36.3593955783|2001-01-01 00:00:00|2001-04-01 00:00:00|100
 115.0043586274|36.3593955783|2001-04-01 00:00:00|2001-07-01 00:00:00|NULL
 """
-        self.assertLooksLike(text,  t_rast_what.outputs.stdout)
+        self.assertLooksLike(text,  t_rast_what.outputs.stdout.encode('utf8'))
 
 
 if __name__ == '__main__':
