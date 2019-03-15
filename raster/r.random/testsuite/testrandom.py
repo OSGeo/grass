@@ -1,18 +1,19 @@
 """
 Name:       r.random test
 Purpose:    Tests r.to.vect and its flags/options.
-	
+
 Author:     Sunveer Singh, Google Code-in 2018
 Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
-	            License (>=v2). Read the file COPYING that comes with GRASS
-	            for details.
+                License (>=v2). Read the file COPYING that comes with GRASS
+                for details.
 """
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
 class Testrr(TestCase):
+
     input='lakes'
     cover="elevation"
     raster="routfile"
@@ -28,9 +29,10 @@ class Testrr(TestCase):
         cls.del_temp_region()
     
     def tearDown(self):
-	"""Remove the vector map after each test method"""
-	self.runModule('g.remove', flags='f', type='vector', name=self.vector)
-	self.runModule('g.remove', flags='f', type='raster', name=self.raster)
+        """Remove the vector map after each test method"""
+
+        self.runModule('g.remove', flags='f', type='vector', name=self.vector)
+        self.runModule('g.remove', flags='f', type='raster', name=self.raster)
 
     def test_flag_z(self):
         """Testing flag z"""
@@ -59,14 +61,16 @@ class Testrr(TestCase):
         self.assertModule('r.random', input=self.input, cover=self.cover, npoints=100, vector=self.vector, flags='d')
         self.assertModule('v.info', map=self.vector, flags='t')
         topology = dict(points=100, lines=0, areas=0, map3d=1)
-	self.assertVectorFitsTopoInfo(self.vector, topology)  
+        self.assertVectorFitsTopoInfo(self.vector, topology)  
 
     def test_flag_b(self):
         """Testing flag b"""
-        self.assertModule('r.random', input=self.input, cover=self.cover, npoints=36011, vector=self.vector, flags='b')
+        self.assertModule('r.random', input=self.input, cover=self.cover,
+                          npoints=36011, vector=self.vector, flags='b',
+                          overwrite=True)
         self.assertModule('v.info', map=self.vector, flags='t') 
         topology = dict(points=36011, lines=0, areas=0)
-	self.assertVectorFitsTopoInfo(self.vector, topology) 
+        self.assertVectorFitsTopoInfo(self.vector, topology) 
         
 
 
