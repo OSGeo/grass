@@ -61,7 +61,7 @@ class TestRastStats(TestCase):
         v_db_select = SimpleModule("v.db.select", map="zone_map")
 
         self.runModule(v_db_select)
-        self.assertLooksLike(univar_string, v_db_select.outputs.stdout)
+        self.assertLooksLike(univar_string, v_db_select.outputs.stdout.encode('utf-8'))
 
 
     def test_line_d(self):
@@ -75,7 +75,7 @@ class TestRastStats(TestCase):
         v_db_select = SimpleModule("v.db.select", map="test_line")
         
         self.runModule(v_db_select)
-        self.assertLooksLike(output_str, v_db_select.outputs.stdout)
+        self.assertLooksLike(output_str, v_db_select.outputs.stdout.encode('utf-8'))
 
 
     def test_line(self):
@@ -90,7 +90,7 @@ class TestRastStats(TestCase):
         v_db_select = SimpleModule("v.db.select", map="test_line")
         
         self.runModule(v_db_select)
-        self.assertLooksLike(output_str, v_db_select.outputs.stdout)
+        self.assertLooksLike(output_str, v_db_select.outputs.stdout.encode('utf-8'))
 
 
 class TestRastStatsFails(TestCase):
