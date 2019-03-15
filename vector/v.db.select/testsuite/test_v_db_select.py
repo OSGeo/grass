@@ -188,7 +188,7 @@ class SelectTest(TestCase):
         sel = SimpleModule('v.db.select', flags='c', map=self.invect,
                            columns=self.col, group=self.col)
         sel.run()
-        self.assertLooksLike(reference=out_group, actual=sel.outputs.stdout)
+        self.assertLooksLike(reference=out_group, actual=sel.outputs.stdout.encode('utf8'))
 
     def testWhere(self):
         """Testing v.db.select with where option"""
@@ -196,7 +196,7 @@ class SelectTest(TestCase):
                            where="{col}='{val}'".format(col=self.col,
                                                         val=self.val))
         sel.run()
-        self.assertLooksLike(reference=out_where, actual=sel.outputs.stdout)
+        self.assertLooksLike(reference=out_where, actual=sel.outputs.stdout.encode('utf8'))
 
     def testSeparator(self):
         sel = SimpleModule('v.db.select', flags='c', map=self.invect,
@@ -204,7 +204,7 @@ class SelectTest(TestCase):
                                                         val=self.val),
                            separator='comma')
         sel.run()
-        self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout)
+        self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout.encode('utf8'))
 
     def testComma(self):
         sel = SimpleModule('v.db.select', flags='c', map=self.invect,
@@ -212,7 +212,7 @@ class SelectTest(TestCase):
                                                         val=self.val),
                            separator=',')
         sel.run()
-        self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout)
+        self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout.encode('utf8'))
 
 if __name__ == '__main__':
     test()
