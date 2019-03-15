@@ -51,7 +51,7 @@ Number,Distance,cat,dbl_1,dbl_2,int_1
 class TestProfiling(TestCase):
     to_remove = []
     points = 'test_v_profile_points'
-    in_points = 'points_of_interest'
+    in_points = 'poi_names_wake'
     in_map = 'roadsmajor'
     where = "cat='354'"
     prof_ponts = (647952, 236176, 647950, 236217)
@@ -111,26 +111,26 @@ class TestProfiling(TestCase):
         vpro = SimpleModule('v.profile', input=self.in_points, profile_map=self.in_map, buffer=200,
             profile_where=self.where)
         vpro.run()
-        self.assertLooksLike(reference=output_full, actual=vpro.outputs.stdout)
+        self.assertLooksLike(reference=output_full, actual=vpro.outputs.stdout.encode('utf8'))
         # Without column names
         vpro = SimpleModule('v.profile', input=self.in_points, profile_map=self.in_map, buffer=200,
             profile_where=self.where, c=True)
         vpro.run()
-        self.assertLooksLike(reference=output_nocols, actual=vpro.outputs.stdout)
+        self.assertLooksLike(reference=output_nocols, actual=vpro.outputs.stdout.encode('utf8'))
         # Filtering input points
         vpro = SimpleModule('v.profile', input=self.in_points, profile_map=self.in_map, buffer=200,
             where="class='Dam'", profile_where=self.where)
         vpro.run()
-        self.assertLooksLike(reference=output_filtered, actual=vpro.outputs.stdout)
+        self.assertLooksLike(reference=output_filtered, actual=vpro.outputs.stdout.encode('utf8'))
         # Providing profiling line from coordinates
         vpro = SimpleModule('v.profile', input=self.in_points, coordinates=self.prof_ponts, buffer=200)
         vpro.run()
-        self.assertLooksLike(reference=output_coords, actual=vpro.outputs.stdout)
+        self.assertLooksLike(reference=output_coords, actual=vpro.outputs.stdout.encode('utf8'))
     
     def testBuffering(self):
         """Test against errors in buffering implementation"""
         vpro = SimpleModule('v.profile', input=self.points, separator='comma', dp=3,
-            buffer=500, profile_map='roadsmajor@PERMANENT', profile_where='cat=193')
+            buffer=500, profile_map=self.in_map, profile_where='cat=193')
         vpro.run()
         
 
