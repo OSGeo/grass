@@ -105,7 +105,7 @@ class Testrr(TestCase):
         self.assertModule('r.contour', input=self.input, output=self.output, step=2)
         v_db_select = SimpleModule('v.db.select', map=self.output)
         v_db_select.run()
-        self.assertLooksLike(reference=out_where, actual=v_db_select.outputs.stdout)
+        self.assertLooksLike(reference=out_where, actual=v_db_select.outputs.stdout.encode('utf8'))
 
 if __name__ == '__main__':
     from grass.gunittest.main import test
