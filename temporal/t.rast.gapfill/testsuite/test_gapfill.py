@@ -86,7 +86,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 """
         rast_list = SimpleModule("t.rast.list", columns=("name","start_time","end_time","min,max"),  input="A")
         self.assertModule(rast_list)
-        self.assertLooksLike(text,  rast_list.outputs.stdout)
+        self.assertLooksLike(text,  rast_list.outputs.stdout.encode('utf8'))
 
     def test_simple_where(self):
         self.assertModule("t.rast.gapfill", input="A",  where="start_time >= '2001-03-01'", 
@@ -121,7 +121,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 """
         rast_list = SimpleModule("t.rast.list", columns=("name","start_time","end_time","min,max"),  input="A")
         self.assertModule(rast_list)
-        self.assertLooksLike(text,  rast_list.outputs.stdout)
+        self.assertLooksLike(text,  rast_list.outputs.stdout.encode('utf8'))
 
     def test_simple_where_2(self):
         self.assertModule("t.rast.gapfill", input="A",  where="start_time <= '2001-05-01'", 
@@ -151,7 +151,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 """
         rast_list = SimpleModule("t.rast.list", columns=("name","start_time","end_time","min,max"),  input="A")
         self.assertModule(rast_list)
-        self.assertLooksLike(text,  rast_list.outputs.stdout)
+        self.assertLooksLike(text,  rast_list.outputs.stdout.encode('utf8'))
 
     def test_simple_empty(self):
         self.assertModule("t.rast.gapfill", input="A",  where="start_time >= '2001-10-01'", 
@@ -179,7 +179,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 """
         rast_list = SimpleModule("t.rast.list", columns=("name","start_time","end_time","min,max"),  input="A")
         self.assertModule(rast_list)
-        self.assertLooksLike(text,  rast_list.outputs.stdout)
+        self.assertLooksLike(text,  rast_list.outputs.stdout.encode('utf8'))
 
     def test_simple_gran(self):
         self.assertModule("t.rast.gapfill", input="A",
@@ -217,7 +217,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 """
         rast_list = SimpleModule("t.rast.list", columns=("name","start_time","end_time","min,max"),  input="A")
         self.assertModule(rast_list)
-        self.assertLooksLike(text,  rast_list.outputs.stdout)
+        self.assertLooksLike(text,  rast_list.outputs.stdout.encode('utf8'))
 
     def test_simple_gran(self):
         self.assertModule("t.rast.gapfill", input="A", suffix="time",
@@ -255,7 +255,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 """
         rast_list = SimpleModule("t.rast.list", columns=("name","start_time","end_time","min,max"),  input="A")
         self.assertModule(rast_list)
-        self.assertLooksLike(text,  rast_list.outputs.stdout)
+        self.assertLooksLike(text,  rast_list.outputs.stdout.encode('utf8'))
 
 if __name__ == '__main__':
     from grass.gunittest.main import test
