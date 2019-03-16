@@ -1,12 +1,12 @@
 """
 Name:       r.contour test
 Purpose:    Tests r.contour and its flags/options.
-	
+    
 Author:     Sunveer Singh, Google Code-in 2018
 Copyright:  (C) 2018 by Sunveer Singh and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
-	            License (>=v2). Read the file COPYING that comes with GRASS
-	            for details.
+                License (>=v2). Read the file COPYING that comes with GRASS
+                for details.
 """
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -74,7 +74,7 @@ class Testrr(TestCase):
     def setUpClass(cls):
         cls.use_temp_region()
         cls.runModule('g.region', raster=cls.input)
-	
+    
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
@@ -90,15 +90,14 @@ class Testrr(TestCase):
         max=6"""
         self.assertModule('r.contour', input=self.input, output=self.output, levels=1, step=1, flags='t')
         self.assertRasterFitsUnivar(self.output,
-	                            reference=string, precision=2)
+                                reference=string, precision=2)
 
     def test_vector(self):
         """Testing vector output"""
         self.assertModule('r.contour', input=self.input, output=self.output, step=5, flags='t')
         self.assertModule('v.info', map=self.output, flags='t')
         topology = dict(points=0, lines=2222, areas=0)
-	self.assertVectorFitsTopoInfo(self.output, topology)
-        
+        self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_v_db_select(self):
         """Testing attribute values of contours with v.db.select """
