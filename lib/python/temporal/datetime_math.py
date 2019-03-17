@@ -830,7 +830,7 @@ def string_to_datetime(time_string):
                  could not be converted
     """
 
-    if not isinstance(time_string, str):
+    if not isinstance(time_string, unicode) and not isinstance(time_string, str):
         return None
 
     time_object = check_datetime_string(time_string)
