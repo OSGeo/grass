@@ -12,7 +12,8 @@ Licence:   This program is free software under the GNU General Public
 import os
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
+import unittest
+from grass.script import shutil_which
 
 POINTS = """\
 17.46938776,18.67346939,143,1,1,2
@@ -84,6 +85,7 @@ class FilterTest(TestCase):
         self.runModule('g.remove', flags='f', type='vector',
             name=self.imported_points)
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_no_filter(self):
         """Test to see if the standard outputs are created
 
@@ -96,6 +98,7 @@ class FilterTest(TestCase):
             vector=self.imported_points,
             reference=dict(points=19))
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def return_filter(self, name, npoints):
         """Mid return filter test"""
         self.assertModule('v.in.pdal', input=self.las_file,
@@ -106,18 +109,22 @@ class FilterTest(TestCase):
             vector=self.imported_points,
             reference=dict(points=npoints))
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_first_return_filter(self):
         """First return filter test"""
         self.return_filter('first', 9)
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_mid_return_filter(self):
         """Mid return filter test"""
         self.return_filter('mid', 5)
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_last_return_filter(self):
         """Last return filter test"""
         self.return_filter('last', 5)
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def class_filter(self, class_n, npoints):
         """Actual code for testing class filter"""
         self.assertModule('v.in.pdal', input=self.las_file,
@@ -128,22 +135,27 @@ class FilterTest(TestCase):
             vector=self.imported_points,
             reference=dict(points=npoints))
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_class_2_filter(self):
         """Test to filter classes"""
         self.class_filter(2, 2)
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_class_3_filter(self):
         """Test to filter classes"""
         self.class_filter(3, 5)
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_class_4_filter(self):
         """Test to filter classes"""
         self.class_filter(4, 4)
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_class_5_filter(self):
         """Test to filter classes"""
         self.class_filter(5, 8)
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def return_and_class_filter(self, return_name, class_n, npoints):
         """Return and class filter combined test code"""
         self.assertModule('v.in.pdal', input=self.las_file,
@@ -154,14 +166,17 @@ class FilterTest(TestCase):
             vector=self.imported_points,
             reference=dict(points=npoints))
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_first_return_and_class_filter(self):
         """Combined test for return and class"""
         self.return_and_class_filter('first', 2, 2)
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_last_return_and_class_filter(self):
         """Combined test for return and class"""
         self.return_and_class_filter('last', 5, 3)
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def zrange_filter(self, zrange, npoints):
         """Actual code for zrange option test"""
         self.assertModule('v.in.pdal', input=self.las_file,
@@ -172,10 +187,12 @@ class FilterTest(TestCase):
             vector=self.imported_points,
             reference=dict(points=npoints))
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_zrange_filter(self):
         """Test zrange option"""
         self.zrange_filter((130.1, 139.9), 3)
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_non_int_zrange_filter(self):
         """Test zrange option with float number
 
@@ -183,6 +200,7 @@ class FilterTest(TestCase):
         """
         self.zrange_filter((140.5, 900), 8)
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_zrange_and_class_filter(self):
         """zrange and class_filter option combined test"""
         self.assertModule('v.in.pdal', input=self.las_file,
@@ -193,6 +211,7 @@ class FilterTest(TestCase):
             vector=self.imported_points,
             reference=dict(points=4))
 
+    @unittest.skipIf(shutil_which('v.in.pdal') is None, "Cannot find v.in.pdal")
     def test_zrange_and_return_filter(self):
         """zrange and class_filter option combined test"""
         self.assertModule('v.in.pdal', input=self.las_file,
