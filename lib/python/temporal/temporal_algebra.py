@@ -1158,7 +1158,7 @@ class TemporalAlgebraParser(object):
 
         :return: List of maps.
         """
-        if isinstance(input, str):
+        if isinstance(input, unicode) or isinstance(input, str):
             # Check for mapset in given stds input.
             if input.find("@") >= 0:
                 id_input = input
