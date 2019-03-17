@@ -91,21 +91,36 @@ the input line.
 <p>
 Use the <b>-r</b> flag to create points starting from the end node.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
+<h3>Points along the input lines</h3>
 In this example, the 'railroads' vector lines map of the North Carolina
 sample dataset is used to create points along the input lines:
 
 <div class="code"><pre>
 # The North Carolina data are metric.
-# 200m distance for nodes (maximum limit but not an exact distance)
-v.to.points railroads output=railroads_nodes use=node dmax=200
+# 200m distance for points (maximum limit but not an exact distance)
+v.to.points input=railroads output=railroads_points dmax=200
 
 # verify the two layers in the resulting map
-v.category railroads_nodes option=report
+v.category map=railroads_points option=report
 
 # vector info
-v.info railroads_nodes
+v.info map=railroads_points
+</pre></div>
+
+<h3>Extract nodes as points</h3>
+
+<div class="code"><pre>
+v.to.points input=railroads output=railroads_nodes use=node
+</pre></div>
+
+<h3>Extract starting/ending nodes as points</h3>
+
+<div class="code"><pre>
+v.to.points input=railroads output=railroads_start use=start
+
+v.to.points input=railroads output=railroads_end use=end    
 </pre></div>
 
 <h2>SEE ALSO</h2>
