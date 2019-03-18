@@ -1679,6 +1679,38 @@ def resolve_source_code(url=None, name=None):
                    .format(version=version[0],
                            module_class=module_class, module_name=name)
         return 'official', trac_url
+
+    # Check if URL can be found
+    # Catch corner case if local URL is given starting with file://
+    url = url[6:] if url.startswith('file://') else url
+    if not os.path.exists(url):
+        url_validated = False
+        if url.startswith('http'):
+            try:
+                open_url = urlopen(url)
+                open_url.close()
+                url_validated = True
+            except:
+                pass
+        else:
+            try:
+                open_url = urlopen('http://' + url)
+                open_url.close()
+                url_validted = True
+            except:
+                pass
+            try:
+                open_url = urlopen('https://' + url)
+                open_url.close()
+                url_validated = True
+            except:
+                pass
+
+        if not url_validated:
+            grass.fatal(_('Cannot open URL: {}'.format(url)))
+
+
+    # Handle local URLs
     if os.path.isdir(url):
         return 'dir', os.path.abspath(url)
     elif os.path.exists(url):
@@ -1687,6 +1719,7 @@ def resolve_source_code(url=None, name=None):
         for suffix in extract_tar.supported_formats:
             if url.endswith('.' + suffix):
                 return suffix, os.path.abspath(url)
+    # Handle remote URLs
     else:
         source, resolved_url = resolve_known_host_service(url)
         if source:
