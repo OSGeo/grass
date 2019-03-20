@@ -23,8 +23,7 @@ class TestVsurfrst(TestCase):
     def setUpClass(cls):
         cls.use_temp_region()
         cls.runModule('g.region', vector='elev_points', res=1)
-        cls.runModule('v.to.3d', input='elev_points', type='point',
-                      output='elev_points3d', column='value', overwrite=True)
+        cls.runModule('g.copy', vector=['elev_points','elev_points3d'])
 
     @classmethod
     def tearDownClass(cls):
