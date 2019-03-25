@@ -265,8 +265,11 @@ def main():
 
     # Cleanup
     grass.message(_("cleaning up temp files"))
-    grass.run_command('g.remove', flags="f", type="raster",
-                       pattern="tmp%s*" % pid, quiet=True)
+    try:
+        grass.run_command('g.remove', flags="f", type="raster",
+                           pattern="tmp%s*" % pid, quiet=True)
+    except:
+        ""
 
 def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
     grass.verbose(_("Using Brovey algorithm"))
@@ -311,13 +314,18 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
                                  (out, ms3, panmatch3, ms1, ms2, ms3),
                                  overwrite=True)
 
-        pb.wait()
-        pg.wait()
-        pr.wait()
+        pb.wait(), pg.wait(), pr.wait()
+        try:
+            pb.terminate(), pg.terminate(), pr.terminate()
+        except:
+            ""
 
     # Cleanup
-    grass.run_command('g.remove', flags='f', quiet=True, type='raster',
-                      name='%s,%s,%s' % (panmatch1, panmatch2, panmatch3))
+    try:
+        grass.run_command('g.remove', flags='f', quiet=True, type='raster',
+                          name='%s,%s,%s' % (panmatch1, panmatch2, panmatch3))
+    except:
+        ""
 
 def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
     grass.verbose(_("Using IHS<->RGB algorithm"))
@@ -347,8 +355,11 @@ def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
                       blue="%s_blue" % out)
 
     # Cleanup
-    grass.run_command('g.remove', flags='f', quiet=True, type='raster',
-                      name=panmatch)
+    try:
+        grass.run_command('g.remove', flags='f', quiet=True, type='raster',
+                          name=panmatch)
+    except:
+        ""
 
 def pca(pan, ms1, ms2, ms3, out, pid, sproc):
 
@@ -477,16 +488,15 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
                                         b3mean),
                                      overwrite=True)
 
-            pb.wait()
-            pg.wait()
-            pr.wait()
+            pb.wait(), pg.wait(), pr.wait()
+            try:
+                pb.terminate(), pg.terminate(), pr.terminate()
+            except:
+                ""
 
     # Cleanup
     grass.run_command('g.remove', flags='f', quiet=True, type='raster',
                       name='%s,%s,%s' % (panmatch1, panmatch2, panmatch3))
-    grass.run_command('g.remove', flags='f', quiet=True, type="raster",
-                      pattern='tmp%s*' % pid)
-
 
 def matchhist(original, target, matched):
     # pan/intensity histogram matching using numpy arrays
