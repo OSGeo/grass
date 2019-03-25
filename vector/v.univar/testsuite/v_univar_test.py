@@ -15,24 +15,24 @@ from grass.gunittest.gmodules import SimpleModule
 class TestProfiling(TestCase):
 
     def test_flagg(self):
-        """Testing flag g with map census"""
-        output_str = """n=2537
+        """Testing flag g with map lakes"""
+        output_str = """n=15279
 nmissing=0
 nnull=0
 min=1
-max=2537
-range=2536
-sum=3.21945e+06
-mean=1269
-mean_abs=1269
-population_stddev=732.369
-population_variance=536364
-population_coeff_variation=0.577123
-sample_stddev=732.513
-sample_variance=536576
-kurtosis=-1.20142
-skewness=0"""
-        v_univar = SimpleModule("v.univar", flags="g", map='census', column='cat')
+max=15279
+range=15278
+sum=1.16732e+08
+mean=7640
+mean_abs=7640
+population_stddev=4410.67
+population_variance=1.9454e+07
+population_coeff_variation=0.577312
+sample_stddev=4410.81
+sample_variance=1.94553e+07
+kurtosis=-1.20024
+skewness=-2.41826e-14"""
+        v_univar = SimpleModule("v.univar", flags="g", map='lakes', column='cat')
         v_univar.run()
         self.assertLooksLike(actual=v_univar.outputs.stdout.encode('utf8'),
                              reference=output_str)
