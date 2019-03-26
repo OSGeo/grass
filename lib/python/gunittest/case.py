@@ -675,13 +675,15 @@ class TestCase(unittest.TestCase):
         """
         diff = self._get_unique_name('compute_difference_raster_' + name_part
                                      + '_' + first + '_minus_' + second)
-        call_module('r.mapcalc',
-                    stdin='"{d}" = "{f}" - "{s}"'.format(d=diff,
-                                                         f=first,
-                                                         s=second))
+        expression = '"{diff}" = "{first}" - "{second}"'.format(
+            diff=diff,
+            first=first,
+            second=second
+        )
+        call_module('r.mapcalc', stdin=expression.encode("utf-8"))
         return diff
 
-    # TODO: name of map generation is repeted three times
+    # TODO: name of map generation is repeated three times
     # TODO: this method is almost the same as the one for 2D
     def _compute_difference_raster3d(self, first, second, name_part):
         """Compute difference of two rasters (first - second)
