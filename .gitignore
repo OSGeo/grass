@@ -28,4 +28,5 @@ raster/r.mapcalc/mapcalc.output
 raster/r.mapcalc/mapcalc.tab.c
 raster/r.mapcalc/mapcalc.tab.h
 raster/r.mapcalc/mapcalc.yy.c
+testsuite/examples/testreports/
 
