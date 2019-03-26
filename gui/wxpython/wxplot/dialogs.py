@@ -28,7 +28,6 @@ import wx.lib.scrolledpanel as scrolled
 from core import globalvar
 from core.settings import UserSettings
 from core.globalvar import ICONDIR
-from core.utils import _
 from gui_core.gselect import Select
 from gui_core.wrap import SpinCtrl, Button, StaticText, \
     StaticBox, TextCtrl, Choice

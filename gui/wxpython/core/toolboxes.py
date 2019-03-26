@@ -83,25 +83,6 @@ def _getUserMainMenuFile():
     return userMainMenuFile
 
 
-def _(string):
-    """Get translated version of a string"""
-    # is attribute initialized to actual value?
-    if _.translate is None:
-        try:
-            # if not get the translate function named _
-            from core.utils import _ as actual_translate
-            # assign the imported function to translade attribute
-            _.translate = actual_translate
-        except ImportError:
-            # speak English if there is a problem with import of wx
-            def noop_traslate(string):
-                return string
-            _.translate = noop_traslate
-    return _.translate(string)
-
-# attribute translate of function _
-_.translate = None
-
 # TODO: this should be part of some reader object
 _MESSAGES = []
 

@@ -27,12 +27,13 @@ import platform
 import codecs
 import getpass
 
+# i18n is taken care of in the grass library code.
+# So we need to import it before any of the GUI code.
+from grass.script import core as grass
+
 from core import globalvar
-from core.utils import _
 import wx
 import wx.lib.mixins.listctrl as listmix
-
-from grass.script import core as grass
 
 from core.gcmd import GMessage, GError, DecodeString, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets

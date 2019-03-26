@@ -8,8 +8,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-# i18N
-import gettext
 from .core import get_tgis_message_interface, get_current_mapset, SQLDatabaseInterfaceConnection
 from .abstract_map_dataset import AbstractMapDataset
 from .open_stds import open_old_stds, check_new_stds, open_new_stds

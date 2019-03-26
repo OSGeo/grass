@@ -39,7 +39,6 @@ def main():
     from grass.script.setup import set_gui_path
     set_gui_path()
 
-    from core.utils import _
     from dbmgr.manager import AttributeManager
 
     mapName = gscript.find_file(options['map'], element='vector')['fullname']

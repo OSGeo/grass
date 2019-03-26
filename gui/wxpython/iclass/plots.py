@@ -19,7 +19,6 @@ import wx
 
 import gui_core.wxlibplot as plot
 import wx.lib.scrolledpanel as scrolled
-from core.utils import _
 from core.gcmd import GError
 
 

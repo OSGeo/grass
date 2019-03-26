@@ -18,7 +18,6 @@ import wx
 from gui_core.toolbars import BaseToolbar
 from gui_core.wrap import StaticText, TextCtrl
 from icons.icon import MetaIcon
-from core.utils import _
 
 icons = {
     'reloadTree': MetaIcon(

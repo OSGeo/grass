@@ -17,7 +17,6 @@ import os
 import wx
 import six
 
-from core.utils import _
 from core.gcmd import DecodeString
 from gui_core.treeview import TreeListView
 from gui_core.wrap import Button, StaticText, Menu

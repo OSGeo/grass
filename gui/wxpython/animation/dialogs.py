@@ -40,7 +40,6 @@ from gui_core.dialogs import MapLayersDialog, GetImageHandlers
 from gui_core.preferences import PreferencesBaseDialog
 from gui_core.forms import GUI
 from core.settings import UserSettings
-from core.utils import _
 from gui_core.gselect import Select
 from gui_core.widgets import FloatValidator
 from gui_core.wrap import SpinCtrl, CheckBox, TextCtrl, Button, \

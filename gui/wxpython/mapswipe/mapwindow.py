@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 import wx
 
 from core.debug import Debug
-from core.utils import _
 from core.settings import UserSettings
 from mapwin.buffered import BufferedMapWindow
 from gui_core.wrap import Rect

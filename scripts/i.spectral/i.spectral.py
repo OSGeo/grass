@@ -83,10 +83,6 @@ import atexit
 from grass.script.utils import try_rmdir
 from grass.script import core as gcore
 
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 def cleanup():
     try_rmdir(tmp_dir)

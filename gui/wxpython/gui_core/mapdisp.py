@@ -27,7 +27,6 @@ import wx
 
 from core import globalvar
 from core.debug import Debug
-from core.utils import _
 from gui_core.toolbars import ToolSwitcher
 
 from grass.script import core as grass

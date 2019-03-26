@@ -26,7 +26,6 @@ from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.wrap import StockCursor
 from wxplot.dialogs import ScatterRasterDialog, PlotStatsFrame
 from core.gcmd import RunCommand, GException, GError, GMessage
-from core.utils import _
 
 
 class ScatterFrame(BasePlotFrame):

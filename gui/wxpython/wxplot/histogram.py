@@ -26,7 +26,6 @@ from gui_core.toolbars import BaseToolbar, BaseIcons
 from wxplot.base import BasePlotFrame, PlotIcons
 from wxplot.dialogs import HistRasterDialog, PlotStatsFrame
 from core.gcmd import RunCommand, GException, GError
-from core.utils import _
 
 
 class HistogramPlotFrame(BasePlotFrame):

@@ -45,7 +45,6 @@ from core import utils
 from core.giface import StandaloneGrassInterface
 from core.gcmd import RunCommand
 from core.render import Map, MapLayer, Overlay, RenderMapMgr
-from core.utils import _
 from mapdisp.frame import MapFrame
 from core.debug import Debug
 from core.settings import UserSettings

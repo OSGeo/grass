@@ -56,7 +56,7 @@ from grass.script.utils import decode
 
 from dbmgr.sqlbuilder import SQLBuilderSelect, SQLBuilderUpdate
 from core.gcmd import RunCommand, GException, GError, GMessage, GWarning
-from core.utils import ListOfCatsToRange, _
+from core.utils import ListOfCatsToRange
 from gui_core.dialogs import CreateNewVector
 from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc
 from core.debug import Debug
@@ -654,7 +654,7 @@ class VirtualAttributeList(ListCtrl,
         # redraw the list
         self.Refresh()
         wx.EndBusyCursor()
-        
+
     def Sorter(self, key1, key2):
         colName = self.GetColumn(self._col).GetText()
         ascending = self._colSortFlag[self._col]

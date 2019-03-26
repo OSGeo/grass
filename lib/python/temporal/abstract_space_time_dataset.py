@@ -16,7 +16,6 @@ import uuid
 import os
 import copy
 from datetime import datetime
-import gettext
 from abc import ABCMeta, abstractmethod
 from .core import init_dbif, get_sql_template_path, get_tgis_metadata, get_current_mapset, \
     get_enable_mapset_check

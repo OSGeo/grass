@@ -46,11 +46,6 @@ import sys
 import grass.script as grass
 from grass.script.utils import encode
 
-# i18N
-import os
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 def main():
     table = options['table']

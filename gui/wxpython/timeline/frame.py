@@ -41,7 +41,6 @@ except ImportError as e:
                         '(python-matplotlib) package to be installed. {0}').format(e))
 
 import grass.script as grass
-from core.utils import _
 
 import grass.temporal as tgis
 from core.gcmd import GError, GException, RunCommand

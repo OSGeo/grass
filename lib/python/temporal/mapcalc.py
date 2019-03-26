@@ -8,8 +8,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-# i18N
-import gettext
 import copy
 from datetime import datetime
 from multiprocessing import Process

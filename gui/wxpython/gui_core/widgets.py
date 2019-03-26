@@ -87,7 +87,6 @@ from grass.script import core as grass
 from grass.pydispatch.signal import Signal
 
 from core import globalvar
-from core.utils import _
 from core.gcmd import GMessage, GError
 from core.debug import Debug
 from gui_core.wrap import Button, SearchCtrl, StaticText, StaticBox, \

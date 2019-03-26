@@ -58,7 +58,7 @@ except (ImportError, WindowsError) as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 from core.debug import Debug
-from core.utils import _, autoCropImageFromFile
+from core.utils import autoCropImageFromFile
 from core.gcmd import EncodeString, DecodeString
 from core.globalvar import wxPythonPhoenix
 from gui_core.wrap import Rect

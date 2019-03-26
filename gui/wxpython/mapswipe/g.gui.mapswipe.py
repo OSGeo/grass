@@ -59,7 +59,6 @@ def main():
     from core.settings import UserSettings
     from core.globalvar import CheckWxVersion
     from core.giface import StandaloneGrassInterface
-    from core.utils import _
     from mapswipe.frame import SwipeMapFrame
 
     driver = UserSettings.Get(group='display', key='driver', subkey='type')

@@ -51,7 +51,6 @@ else:
 import wx.lib.scrolledpanel as scrolled
 
 from core import utils
-from core.utils import _
 from core.utils import cmp
 from core.gcmd import RunCommand, GError, GMessage, GWarning
 from gui_core.widgets import GenericValidator

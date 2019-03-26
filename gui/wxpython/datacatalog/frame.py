@@ -21,7 +21,6 @@ import sys
 
 import wx
 
-from core.utils import _
 from core.globalvar import ICONDIR
 from core.gcmd import RunCommand, GMessage
 from datacatalog.tree import DataCatalogTree

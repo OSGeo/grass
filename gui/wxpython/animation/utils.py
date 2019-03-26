@@ -34,7 +34,6 @@ from grass.script.utils import encode
 from gui_core.wrap import EmptyBitmap
 
 from core.gcmd import GException
-from core.utils import _
 
 
 class TemporalMode:

@@ -52,7 +52,6 @@ import grass.script as grass
 
 from core import utils
 from core.render import Map
-from core.utils import _
 from gui_core.gselect import Select, LocationSelect, MapsetSelect
 from gui_core.dialogs import GroupDialog
 from core.gcmd import RunCommand, GMessage, GError, GWarning, EncodeString

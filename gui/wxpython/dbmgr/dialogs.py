@@ -22,7 +22,6 @@ import types
 import six
 
 from core import globalvar
-from core.utils import _
 import wx
 import wx.lib.scrolledpanel as scrolled
 

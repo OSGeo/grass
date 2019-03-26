@@ -38,7 +38,7 @@ from gui_core.forms import GUI
 from mapdisp.frame import MapFrame
 from core.render import Map
 from wxplot.histogram import HistogramPlotFrame
-from core.utils import GetLayerNameFromCmd, ltype2command, _
+from core.utils import GetLayerNameFromCmd, ltype2command
 from wxplot.profile import ProfileFrame
 from core.debug import Debug
 from core.settings import UserSettings, GetDisplayVectSettings

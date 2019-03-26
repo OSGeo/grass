@@ -162,10 +162,6 @@ import grass.script as gscript
 from grass.script.utils import try_rmdir
 from grass.script import core as grass
 
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 # temp dir
 REMOVE_TMPDIR = True
 PROXIES = {}
@@ -1791,7 +1787,6 @@ def main():
 if __name__ == "__main__":
     if len(sys.argv) == 2 and sys.argv[1] == '--doctest':
         import doctest
-        _ = str  # doctest gettext workaround
         sys.exit(doctest.testmod().failed)
     options, flags = grass.parser()
     global TMPDIR

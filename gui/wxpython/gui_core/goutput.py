@@ -40,7 +40,6 @@ from gui_core.prompt import GPromptSTC
 from gui_core.wrap import Button, ToggleButton, StaticText, \
     StaticBox
 from core.settings import UserSettings
-from core.utils import _
 from gui_core.widgets import SearchModuleWidget
 
 

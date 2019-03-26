@@ -43,7 +43,7 @@ from nviz.workspace import NvizSettings
 from nviz.animation import Animation
 from nviz import wxnviz
 from core.globalvar import CheckWxVersion
-from core.utils import str2rgb, _
+from core.utils import str2rgb
 from core.giface import Notification
 
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()

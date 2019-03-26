@@ -28,23 +28,11 @@ ICONDIR = os.path.join(GUIDIR, "icons")
 IMGDIR = os.path.join(GUIDIR, "images")
 SYMBDIR = os.path.join(IMGDIR, "symbols")
 
-from core.debug import Debug
-
-try:
-    # intended to be used also outside this module
-    import gettext
-    trans = gettext.translation('grasswxpy',
-                                os.path.join(os.getenv("GISBASE"),
-                                                       'locale')
-    )
-    _ = trans.gettext if sys.version_info.major >=3 else trans.ugettext
-except IOError:
-    # using no translation silently
-    def null_gettext(string):
-        return string
-    _ = null_gettext
-
+# i18n is taken care of in the grass library code.
+# So we need to import it before any of the GUI code.
 from grass.script.core import get_commands
+
+from core.debug import Debug
 
 
 def CheckWxPhoenix():

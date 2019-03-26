@@ -18,8 +18,6 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-# i18N
-import gettext
 from .datetime_math import *
 from .core import get_tgis_message_interface
 from functools import reduce

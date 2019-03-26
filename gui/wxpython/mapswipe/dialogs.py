@@ -20,7 +20,6 @@ import wx.lib.scrolledpanel as SP
 import wx.lib.colourselect as csel
 
 from core import globalvar
-from core.utils import _
 from gui_core import gselect
 from gui_core.widgets import SimpleValidator
 from gui_core.preferences import PreferencesBaseDialog

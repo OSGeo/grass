@@ -98,10 +98,6 @@ import threading
 from grass.script.utils import separator, parse_key_val, encode, decode
 from grass.script import core as gcore
 
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 class TrThread(threading.Thread):
 

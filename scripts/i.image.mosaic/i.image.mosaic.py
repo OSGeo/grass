@@ -36,11 +36,6 @@ from __future__ import print_function
 
 import grass.script as gscript
 
-# i18N
-import os
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 def copy_colors(fh, map, offset):
     p = gscript.pipe_command('r.colors.out', map=map)

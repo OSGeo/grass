@@ -41,7 +41,7 @@ from gui_core.forms import CmdPanel
 from gui_core.gselect import OgrTypeSelect, GdalSelect, SubGroupSelect
 from gui_core.widgets import LayersList, GListCtrl, GNotebook
 from gui_core.wrap import Button, StaticText, StaticBox
-from core.utils import GetValidLayerName, _
+from core.utils import GetValidLayerName
 from core.settings import UserSettings, GetDisplayVectSettings
 
 

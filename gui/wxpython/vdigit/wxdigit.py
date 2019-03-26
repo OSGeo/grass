@@ -36,7 +36,6 @@ from grass.pydispatch.signal import Signal
 from core.gcmd import GError
 from core.debug import Debug
 from core.settings import UserSettings
-from core.utils import _
 from vdigit.wxdisplay import DisplayDriver, GetLastError
 
 try:

@@ -27,7 +27,7 @@ import copy
 
 from core import globalvar
 from core.gcmd import GException, GError
-from core.utils import GetSettingsPath, PathJoin, rgb2str, _
+from core.utils import GetSettingsPath, PathJoin, rgb2str
 
 
 class Settings:

@@ -25,7 +25,6 @@ import datetime
 import grass.script as grass
 import grass.temporal as tgis
 from core.gcmd import GException
-from core.utils import _
 from core.settings import UserSettings
 from animation.utils import validateTimeseriesName, TemporalType
 

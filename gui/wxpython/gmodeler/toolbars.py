@@ -20,7 +20,6 @@ import sys
 import wx
 
 from core import globalvar
-from core.utils import _
 from gui_core.toolbars import BaseToolbar, BaseIcons
 
 from icons.icon import MetaIcon

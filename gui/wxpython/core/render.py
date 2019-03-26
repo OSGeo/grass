@@ -39,7 +39,6 @@ from grass.pydispatch.signal import Signal
 from grass.exceptions import CalledModuleError
 
 from core import utils
-from core.utils import _
 from core.ws import RenderWMSMgr
 from core.gcmd import GException, GError, RunCommand, EncodeString
 from core.debug import Debug

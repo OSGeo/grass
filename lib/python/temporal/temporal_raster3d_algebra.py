@@ -18,8 +18,6 @@ try:
 except:
     pass
 
-# i18N
-import gettext
 from .temporal_raster_base_algebra import TemporalRasterBaseAlgebraParser,\
     TemporalRasterAlgebraLexer
 import grass.pygrass.modules as pymod

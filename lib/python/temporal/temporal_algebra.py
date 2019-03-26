@@ -446,8 +446,6 @@ try:
 except:
     pass
 
-# i18N
-import gettext
 import os
 import copy
 from datetime import datetime

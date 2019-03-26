@@ -29,7 +29,6 @@ from wx.py.version import VERSION
 import grass.script as grass
 from grass.script.utils import try_remove
 
-from core.utils import _
 from gui_core.wrap import Button
 
 

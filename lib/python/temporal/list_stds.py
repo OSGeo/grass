@@ -18,8 +18,6 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-# i18N
-import gettext
 from .core import get_tgis_message_interface, get_available_temporal_mapsets, init_dbif
 from .datetime_math import time_delta_to_relative_time
 from .space_time_datasets import RasterDataset

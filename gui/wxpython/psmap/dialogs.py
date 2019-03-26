@@ -67,7 +67,7 @@ else:
 
 import grass.script as grass
 
-from core.utils import _, PilImageToWxImage
+from core.utils import PilImageToWxImage
 from dbmgr.vinfo import VectorDBInfo
 from gui_core.gselect import Select
 from core.gcmd import RunCommand, GError, GMessage

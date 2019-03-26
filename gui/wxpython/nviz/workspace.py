@@ -18,7 +18,6 @@ import copy
 import six
 
 from core.settings import UserSettings
-from core.utils import _
 
 try:
     from nviz import wxnviz

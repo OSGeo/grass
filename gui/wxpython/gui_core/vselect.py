@@ -25,7 +25,6 @@ import random
 import wx
 import wx.lib.mixins.listctrl as listmix
 
-from core.utils import _
 from core.gcmd import GMessage, GError, GWarning
 from core.gcmd import RunCommand
 from gui_core.wrap import Button

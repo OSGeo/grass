@@ -27,7 +27,6 @@ from mapdisp.toolbars import MapToolbar
 from gcp.toolbars import GCPDisplayToolbar, GCPManToolbar
 from mapdisp.gprint import PrintOptions
 from core.gcmd import GMessage
-from core.utils import _
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from gui_core.mapdisp import SingleMapFrame
 from gui_core.wrap import Menu

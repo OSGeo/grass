@@ -19,7 +19,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-from core.utils import _
 
 import wx
 

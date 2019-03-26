@@ -20,7 +20,6 @@ from copy import copy
 
 import wx
 
-from core.utils import _
 
 
 class GraphicsSet:

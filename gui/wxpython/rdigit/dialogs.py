@@ -16,7 +16,6 @@ for details.
 
 import wx
 
-from core.utils import _
 from gui_core.gselect import Select
 from gui_core.wrap import Button, StaticText
 from core.gcmd import GWarning

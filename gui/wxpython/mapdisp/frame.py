@@ -33,7 +33,7 @@ import wx.aui
 from mapdisp.toolbars import MapToolbar, NvizIcons
 from mapdisp.gprint import PrintOptions
 from core.gcmd import GError, GMessage, RunCommand
-from core.utils import ListOfCatsToRange, GetLayerNameFromCmd, _
+from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings

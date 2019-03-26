@@ -40,7 +40,6 @@ import grass.script as grass
 
 from core.gcmd import GMessage
 from core.debug import Debug
-from core.utils import _
 from dbmgr.base import DbMgrBase
 from gui_core.widgets import GNotebook
 from gui_core.wrap import Button

@@ -25,7 +25,6 @@ from core.debug import Debug
 from gui_core.gselect import ColumnSelect
 from core.units import Units
 from core.settings import UserSettings
-from core.utils import _
 from gui_core.wrap import SpinCtrl, Button, StaticText, \
     StaticBox
 

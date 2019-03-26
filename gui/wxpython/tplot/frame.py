@@ -27,7 +27,6 @@ import wx
 from grass.pygrass.modules import Module
 
 import grass.script as grass
-from core.utils import _
 from functools import reduce
 
 try:
@@ -45,7 +44,6 @@ except ImportError as e:
     raise ImportError(_('The Temporal Plot Tool needs the "matplotlib" '
                         '(python-matplotlib) package to be installed. {0}').format(e))
 
-from core.utils import _
 
 import grass.temporal as tgis
 from core.gcmd import GMessage, GError, GException, RunCommand

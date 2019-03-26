@@ -23,7 +23,6 @@ import six
 import copy
 import tempfile
 import types
-from core.utils import _
 
 from core import globalvar
 import wx

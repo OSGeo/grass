@@ -39,7 +39,6 @@ if __name__ == '__main__':
     set_gui_path()
 
 from core.treemodel import TreeModel, DictNode
-from core.utils import _
 from gui_core.wrap import CustomTreeCtrl
 
 from grass.pydispatch.signal import Signal

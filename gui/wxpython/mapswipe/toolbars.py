@@ -21,7 +21,6 @@ import wx
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.wrap import Menu
 from icons.icon import MetaIcon
-from core.utils import _
 
 
 swipeIcons = {

@@ -43,7 +43,7 @@ from core.gcmd import RunCommand, GException, GError, GMessage
 from core.debug import Debug
 from core.settings import UserSettings
 from mapwin.base import MapWindowBase
-from core.utils import GetGEventAttribsForHandler, _
+from core.utils import GetGEventAttribsForHandler
 import core.utils as utils
 from mapwin.graphics import GraphicsSet
 from core.gthread import gThread

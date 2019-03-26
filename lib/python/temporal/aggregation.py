@@ -17,7 +17,6 @@ for details.
 :author: Soeren Gebbert
 """
 
-import gettext
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
 from .space_time_datasets import RasterDataset

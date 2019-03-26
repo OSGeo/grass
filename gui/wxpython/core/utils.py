@@ -28,7 +28,7 @@ from grass.exceptions import OpenError
 
 from core.gcmd import RunCommand
 from core.debug import Debug
-from core.globalvar import ETCDIR, wxPythonPhoenix, _
+from core.globalvar import ETCDIR, wxPythonPhoenix
 
 def cmp(a, b):
     """cmp function"""

@@ -25,7 +25,7 @@ from core.gcmd import RunCommand, GMessage, GError
 from core.debug import Debug
 from mapwin.buffered import BufferedMapWindow
 from core.settings import UserSettings
-from core.utils import ListOfCatsToRange, _
+from core.utils import ListOfCatsToRange
 from core.globalvar import QUERYLAYER
 from vdigit.dialogs import VDigitCategoryDialog, VDigitZBulkDialog, VDigitDuplicatesDialog
 from gui_core import gselect

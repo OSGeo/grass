@@ -29,7 +29,6 @@ from core.render import Map
 from mapdisp import statusbar as sb
 from core.debug import Debug
 from core.gcmd import GError, GMessage
-from core.utils import _
 from core.layerlist import LayerListToRendererConverter
 from gui_core.query import QueryDialog, PrepareQueryResults
 

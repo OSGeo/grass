@@ -11,7 +11,7 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-import gettext
+
 from grass.exceptions import ImplementationError
 from datetime import datetime
 from abc import ABCMeta, abstractmethod

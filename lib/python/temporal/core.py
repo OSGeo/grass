@@ -32,9 +32,6 @@ for details.
 import os
 import sys
 import grass.script as gscript
-# i18N
-import gettext
-gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 if sys.version_info.major == 3:
     long = int

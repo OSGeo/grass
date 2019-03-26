@@ -28,7 +28,6 @@ import wx.lib.mixins.listctrl as listmix
 from core.gcmd import RunCommand, GError
 from core.debug import Debug
 from core.settings import UserSettings
-from core.utils import _
 from gui_core.wrap import SpinCtrl, Button, StaticText, \
     StaticBox, Menu
 

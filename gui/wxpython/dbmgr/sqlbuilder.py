@@ -31,7 +31,6 @@ import sys
 import six
 
 from core import globalvar
-from core.utils import _
 import wx
 
 from grass.pydispatch.signal import Signal

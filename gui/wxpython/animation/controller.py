@@ -17,7 +17,6 @@ import os
 import wx
 
 from core.gcmd import GException, GError, GMessage
-from core.utils import _
 from grass.imaging import writeAvi, writeGif, writeIms, writeSwf
 from core.settings import UserSettings
 

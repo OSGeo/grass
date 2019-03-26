@@ -22,7 +22,6 @@ import six
 from ctypes import *
 
 import grass.script as grass
-from core.utils import _
 
 try:
     from grass.lib.imagery import *

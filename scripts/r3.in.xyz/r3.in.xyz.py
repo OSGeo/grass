@@ -174,10 +174,6 @@ import atexit
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 def cleanup():
     grass.run_command('g.remove', flags='f',

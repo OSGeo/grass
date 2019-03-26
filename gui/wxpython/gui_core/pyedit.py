@@ -29,7 +29,6 @@ if __name__ == '__main__':
     from grass.script.setup import set_gui_path
     set_gui_path()
 
-from core.utils import _
 from core.gcmd import EncodeString, GError
 from gui_core.pystc import PyStc
 from core import globalvar

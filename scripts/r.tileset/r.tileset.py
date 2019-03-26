@@ -117,11 +117,6 @@ from grass.script import core as gcore
 from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 
-# i18N
-import os
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 def bboxToPoints(bbox):
     """Make points that are the corners of a bounding box"""

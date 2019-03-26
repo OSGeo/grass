@@ -24,7 +24,6 @@ import six
 
 from core.settings import UserSettings
 from core.gcmd import GError
-from core.utils import _
 from gui_core.wrap import StockCursor
 
 from grass.script import core as grass

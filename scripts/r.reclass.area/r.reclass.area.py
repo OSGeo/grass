@@ -78,10 +78,6 @@ import atexit
 import grass.script as grass
 from grass.script.utils import decode, encode
 
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 TMPRAST = []
 
 

@@ -85,10 +85,6 @@ except ImportError:
     from urllib.request import urlopen
     from urllib.error import URLError, HTTPError
 
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 def main():
     out = options['output']

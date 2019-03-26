@@ -17,8 +17,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-# i18N
-import gettext
 from .core import init_dbif, get_current_mapset, get_tgis_message_interface
 from .factory import dataset_factory
 from .abstract_map_dataset import AbstractMapDataset

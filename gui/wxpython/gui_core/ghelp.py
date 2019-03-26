@@ -45,7 +45,6 @@ if __name__ == '__main__':
     set_gui_path()
 
 from core import globalvar
-from core.utils import _
 from core.gcmd import GError, DecodeString
 from gui_core.widgets import FormNotebook, ScrolledPanel
 from gui_core.wrap import Button, StaticText, TextCtrl

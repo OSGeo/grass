@@ -26,7 +26,6 @@ from vdigit.preferences import VDigitSettingsDialog
 from core.debug import Debug
 from core.settings import UserSettings
 from core.gcmd import GError, RunCommand
-from core.utils import _
 from icons.icon import MetaIcon
 from iclass.digit import IClassVDigit
 from core.giface import Notification

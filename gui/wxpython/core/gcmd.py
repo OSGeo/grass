@@ -48,7 +48,7 @@ else:
     import fcntl
 
 from core.debug import Debug
-from core.globalvar import SCT_EXT, _
+from core.globalvar import SCT_EXT
 
 from grass.script import core as grass
 from grass.script.utils import decode

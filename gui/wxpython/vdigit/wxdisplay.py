@@ -26,7 +26,6 @@ import wx
 
 from core.debug import Debug
 from core.settings import UserSettings
-from core.utils import _
 from gui_core.wrap import Rect
 
 try:

@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 import wx
 
 from core.gcmd import GMessage
-from core.utils import _
 from mapdisp.statusbar import SbItem, SbTextItem
 from gui_core.wrap import SpinCtrl
 

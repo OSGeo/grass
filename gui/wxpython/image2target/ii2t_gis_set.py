@@ -29,7 +29,6 @@ import codecs
 import getpass
 
 from core import globalvar
-from core.utils import _
 import wx
 import wx.lib.mixins.listctrl as listmix
 

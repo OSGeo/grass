@@ -50,7 +50,6 @@ from core.gcmd import GError, RunCommand, GMessage
 from gui_core.gselect import LocationSelect, MapsetSelect, Select, \
     OgrTypeSelect, SubGroupSelect
 from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, MapValidator
-from core.utils import _
 from core.settings import UserSettings
 from core.debug import Debug
 from gui_core.wrap import SpinCtrl, TextCtrl, Button, CheckListBox, \

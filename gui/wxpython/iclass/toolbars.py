@@ -22,7 +22,6 @@ from __future__ import print_function
 
 import wx
 
-from core.utils import _
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 from iclass.dialogs import IClassMapDialog, ContrastColor

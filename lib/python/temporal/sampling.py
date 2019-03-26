@@ -17,8 +17,6 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-# i18N
-import gettext
 from .core import get_current_mapset, get_tgis_message_interface, SQLDatabaseInterfaceConnection
 from .datetime_math import time_delta_to_relative_time
 from .factory import dataset_factory

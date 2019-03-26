@@ -25,7 +25,6 @@ import wx
 
 import gui_core.wxlibplot as plot
 import grass.script as grass
-from core.utils import _
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.wrap import StockCursor

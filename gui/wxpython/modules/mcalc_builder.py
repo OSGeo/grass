@@ -25,7 +25,6 @@ import grass.script as grass
 from core import globalvar
 from core.gcmd import GError, RunCommand
 from core.giface import StandaloneGrassInterface
-from core.utils import _
 from gui_core.gselect import Select
 from gui_core.forms import GUI
 from gui_core.widgets import IntegerValidator

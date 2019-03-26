@@ -45,7 +45,7 @@ from grass.exceptions import OpenError
 
 from core import globalvar
 from core.gcmd import RunCommand, GError
-from core.utils import ListOfMapsets, GetColorTables, ReadEpsgCodes, _
+from core.utils import ListOfMapsets, GetColorTables, ReadEpsgCodes
 from core.settings import UserSettings
 from core.globalvar import wxPythonPhoenix
 from gui_core.dialogs import SymbolDialog, DefaultFontDialog

@@ -28,7 +28,6 @@ from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, \
     ListCtrlAutoWidthMixin, TextEditMixin
 
 from core import globalvar
-from core.utils import _
 from gui_core.wrap import Button, StaticText, StaticBox, TextCtrl
 
 if sys.version_info.major >= 3:

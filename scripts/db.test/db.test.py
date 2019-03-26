@@ -33,10 +33,6 @@ from grass.script import core as gcore
 from grass.script import db as grassdb
 from grass.exceptions import CalledModuleError
 
-# i18N
-import gettext
-gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-
 
 def main():
     test_file = options['test']

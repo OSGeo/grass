@@ -25,7 +25,6 @@ from gui_core.gselect import VectorDBInfo as VectorDBInfoBase
 from gui_core.wrap import StaticText
 from core.gcmd import RunCommand, GError
 from core.settings import UserSettings
-from core.utils import _
 import grass.script as grass
 
 if sys.version_info.major >= 3:

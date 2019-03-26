@@ -29,7 +29,7 @@ from multiprocessing import Process, Queue
 from core.gcmd import RunCommand, GException
 from core.settings import UserSettings
 from core.debug import Debug
-from core.utils import _, autoCropImageFromFile
+from core.utils import autoCropImageFromFile
 
 from animation.utils import HashCmd, HashCmds, GetFileFromCmd, GetFileFromCmds
 from gui_core.wrap import EmptyBitmap

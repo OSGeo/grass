@@ -66,7 +66,6 @@ def main():
     set_gui_path()
 
     from core.globalvar import CheckWxVersion
-    from core.utils import _
     from core.giface import StandaloneGrassInterface
     from core.layerlist import LayerList
     from animation.frame import AnimationFrame, MAX_COUNT

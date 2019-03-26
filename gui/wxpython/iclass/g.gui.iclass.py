@@ -65,7 +65,6 @@ def main():
     from core.settings import UserSettings
     from core.globalvar import CheckWxVersion
     from core.giface import StandaloneGrassInterface
-    from core.utils import _
     from iclass.frame import IClassMapFrame
 
     group_name = subgroup_name = map_name = trainingmap_name = None

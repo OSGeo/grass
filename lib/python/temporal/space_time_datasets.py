@@ -8,8 +8,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-# i18N
-import gettext
 import getpass
 from datetime import datetime
 from .core import get_current_mapset

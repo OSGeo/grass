@@ -46,7 +46,7 @@ from grass.script.utils import decode
 
 from core.gcmd import RunCommand, GError, GMessage, EncodeString
 from core.settings import UserSettings, GetDisplayVectSettings
-from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, _
+from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree

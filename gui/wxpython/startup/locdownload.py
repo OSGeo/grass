@@ -42,7 +42,6 @@ from grass.script.setup import set_gui_path
 set_gui_path()
 
 from core.debug import Debug
-from core.utils import _
 from core.gthread import gThread
 from gui_core.wrap import Button, StaticText
 

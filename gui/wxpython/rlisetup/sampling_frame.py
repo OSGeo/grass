@@ -36,7 +36,6 @@ try:
 except ImportError:
     pass
 
-from core.utils import _
 from core.giface import StandaloneGrassInterface
 from mapwin.base import MapWindowProperties
 from mapwin.buffered import BufferedMapWindow

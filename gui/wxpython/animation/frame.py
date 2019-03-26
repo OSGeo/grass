@@ -30,7 +30,6 @@ from core import globalvar
 from gui_core.widgets import IntegerValidator
 from gui_core.wrap import StaticText, TextCtrl
 from core.gcmd import RunCommand
-from core.utils import _
 
 from animation.mapwindow import AnimationWindow
 from animation.provider import BitmapProvider, BitmapPool, \

@@ -24,7 +24,6 @@ import wx.lib.colourselect as csel
 
 from core import globalvar
 from core.settings import UserSettings
-from core.utils import _
 from gui_core.preferences import PreferencesBaseDialog
 from gui_core.wrap import SpinCtrl, Button, CheckBox, StaticText, \
     StaticBox

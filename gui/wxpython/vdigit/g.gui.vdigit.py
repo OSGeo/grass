@@ -51,7 +51,6 @@ def main():
     set_gui_path()
 
     from core.globalvar import CheckWxVersion
-    from core.utils import _
     from core.render import Map
     from mapdisp.frame import MapFrame
     from mapdisp.main import DMonGrassInterface

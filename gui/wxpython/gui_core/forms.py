@@ -101,7 +101,6 @@ from gui_core.ghelp import HelpPanel
 from gui_core import gselect
 from core import gcmd
 from core import utils
-from core.utils import _
 from core.settings import UserSettings
 from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
 from core.giface import Notification

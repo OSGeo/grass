@@ -98,13 +98,6 @@ except ImportError:
 
 import grass.script as grass
 
-# i18N
-try:
-    import gettext
-    hasGetText = True
-    gettext.install('grassmods', os.path.join(os.getenv("GISBASE"), 'locale'))
-except ImportError:
-    hasGetText = False
 
 def main():
     if not hasNumPy:
@@ -119,10 +112,6 @@ def main():
     bits      = options['bitdepth'] # bit depth of image channels
     bladjust  = flags['l']  # adjust blue channel
     sproc     = flags['s']  # serial processing
-
-    # Internationalization
-    if not hasGetText:
-        grass.warning(_("No gettext international language support"))
 
     # Checking bit depth
     bits = float(bits)

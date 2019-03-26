@@ -33,23 +33,11 @@ import types as python_types
 from .utils import KeyValue, parse_key_val, basename, encode, decode
 from grass.exceptions import ScriptError, CalledModuleError
 
-# i18N
-import gettext
-gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
-
-try:
-    # python2
-    import __builtin__
-    __builtin__.__dict__['_'] = __builtin__.__dict__['_'].__self__.ugettext
-except ImportError:
-    # python3
-    import builtins as __builtin__
+# PY2/PY3 compat
+if sys.version_info.major > 2:
     unicode = str
-    __builtin__.__dict__['_'] = __builtin__.__dict__['_'].__self__.gettext
 
 # subprocess wrapper that uses shell on Windows
-
-
 class Popen(subprocess.Popen):
     _builtin_exts = set(['.com', '.exe', '.bat', '.cmd'])
 

@@ -31,7 +31,6 @@ from grass.exceptions import CalledModuleError
 from core import utils
 from core.debug import Debug
 from core.gthread import gThread
-from core.utils import _
 
 try:
     haveGdal = True

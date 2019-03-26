@@ -114,7 +114,6 @@ def main():
     from grass.script.setup import set_gui_path
     set_gui_path()
 
-    from core.utils import _
     from core.giface import StandaloneGrassInterface
     try:
         from tplot.frame import TplotFrame

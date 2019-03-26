@@ -42,7 +42,6 @@ else:
     import wx.lib.flatnotebook as FN
 from wx.lib.newevent import NewEvent
     
-from core.utils import _
 from gui_core.widgets import GNotebook
 from core.gconsole        import GConsole, \
     EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE

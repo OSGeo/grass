@@ -51,7 +51,6 @@ from core.toolboxes import expandAddons as expAddons
 from core.toolboxes import getMessages as getToolboxMessages
 from core.toolboxes import clearMessages as clearToolboxMessages
 from core.gcmd import GError
-from core.utils import _
 
 if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")

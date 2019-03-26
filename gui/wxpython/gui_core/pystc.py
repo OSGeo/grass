@@ -19,7 +19,6 @@ import keyword
 
 import wx
 from wx import stc
-from core.utils import _
 
 
 class PyStc(stc.StyledTextCtrl):

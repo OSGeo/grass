@@ -21,7 +21,6 @@ from core.menutree import MenuTreeModelBuilder
 from core.toolboxes import getMenudataFile, getMessages, clearMessages
 from core.globalvar import WXGUIDIR
 from core.gcmd import GError
-from core.utils import _
 
 
 class LayerManagerMenuData(MenuTreeModelBuilder):

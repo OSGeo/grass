@@ -37,7 +37,6 @@ import wx
 from core import utils
 from core.gcmd import RunCommand, GMessage
 from core.settings import UserSettings
-from core.utils import _
 
 from vnet.vnet_utils import ParseMapStr, SnapToNode
 

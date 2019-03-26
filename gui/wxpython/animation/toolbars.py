@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 import wx
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
-from core.utils import _
 from gui_core.simplelmgr import SimpleLmgrToolbar
 from animation.anim import ReplayMode
 

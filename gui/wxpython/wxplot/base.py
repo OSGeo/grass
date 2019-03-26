@@ -29,7 +29,6 @@ from core.render import Map
 from icons.icon import MetaIcon
 from gui_core.toolbars import BaseIcons
 from gui_core.wrap import Menu
-from core.utils import _
 
 import grass.script as grass
 

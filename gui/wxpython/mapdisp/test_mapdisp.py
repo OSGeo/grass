@@ -58,7 +58,6 @@ import grass.script as grass
 from grass.script.setup import set_gui_path
 set_gui_path()
 
-from core.utils import _
 from core.settings import UserSettings
 from core.globalvar import CheckWxVersion
 from core.giface import StandaloneGrassInterface

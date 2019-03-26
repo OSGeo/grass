@@ -25,8 +25,6 @@ for details.
 :authors: Soeren Gebbert
 """
 
-# i18N
-import gettext
 import shutil
 import os
 import tarfile

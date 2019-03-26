@@ -23,7 +23,6 @@ import six
 import wx
 
 from core.settings import UserSettings
-from core.utils import _
 
 # default icon set
 from .grass_icons import iconSet as g_iconSet

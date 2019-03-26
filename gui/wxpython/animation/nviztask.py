@@ -24,7 +24,7 @@ except ImportError:
 
 from core.workspace import ProcessWorkspaceFile
 from core.gcmd import RunCommand, GException
-from core.utils import GetLayerNameFromCmd, _
+from core.utils import GetLayerNameFromCmd
 from grass.script import task as gtask
 from core.settings import UserSettings
 

@@ -16,7 +16,6 @@ for details.
 
 import wx
 
-from core.utils import _
 from gui_core.toolbars import BaseToolbar
 from icons.icon import MetaIcon
 from gui_core.widgets import FloatValidator

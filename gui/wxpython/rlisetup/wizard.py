@@ -34,7 +34,6 @@ import wx.lib.scrolledpanel as scrolled
 
 from gui_core import gselect
 from gui_core.wrap import Button, StaticText, TextCtrl
-from core.utils import _
 from location_wizard.wizard import TitledPage as TitledPage
 from rlisetup.functions import checkValue, retRLiPath
 from rlisetup.sampling_frame import RLiSetupMapPanel

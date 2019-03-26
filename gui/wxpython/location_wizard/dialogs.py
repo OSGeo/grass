@@ -24,7 +24,6 @@ import wx.lib.scrolledpanel as scrolled
 
 from core import globalvar
 from core.gcmd import RunCommand
-from core.utils import _
 from location_wizard.base import BaseClass
 from gui_core.wrap import Button, StaticText, StaticBox, \
     TextCtrl
