@@ -349,7 +349,7 @@ def handle_errors(returncode, result, args, kwargs):
     else:
         # TODO: construction of the whole command is far from perfect
         args = make_command(*args, **kwargs)
-        code = ''.join([decode(each) for each in args])
+        code = ' '.join([decode(each) for each in args])
         raise CalledModuleError(module=None, code=code,
                                 returncode=returncode)
 
