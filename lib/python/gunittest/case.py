@@ -31,9 +31,10 @@ from .gutils import is_map_in_mapset
 
 
 if sys.version_info[0] == 2:
-    import StringIO
+    from StringIO import StringIO
 else:
     from io import StringIO
+    unicode = str
 
 
 class TestCase(unittest.TestCase):
@@ -1024,7 +1025,7 @@ class TestCase(unittest.TestCase):
         stdmsg = ("There is a difference between vectors when compared as"
                   " ASCII files.\n")
 
-        output = StringIO.StringIO()
+        output = StringIO()
         # TODO: there is a diff size constant which we can use
         # we are setting it unlimited but we can just set it large
         maxlines = 100
