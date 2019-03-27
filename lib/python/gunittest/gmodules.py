@@ -11,6 +11,7 @@ for details.
 
 import subprocess
 from grass.script.core import start_command
+from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 from grass.pygrass.modules import Module
 
