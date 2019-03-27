@@ -135,10 +135,11 @@ import atexit
 import shutil
 import zipfile
 import tempfile
+import xml.etree.ElementTree as etree
 from distutils.dir_util import copy_tree
 
+
 try:
-    import requests, zipfile
     from urllib2 import HTTPError, URLError, ProxyHandler, build_opener
     from urllib import urlopen, urlretrieve
 except ImportError:
@@ -146,10 +147,8 @@ except ImportError:
     from urllib.error import HTTPError, URLError
     from urllib.request import urlopen, urlretrieve, ProxyHandler, build_opener
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import requests
+
 # Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
 # and ElementTree 1.3.
 from xml.parsers import expat  # TODO: works for any Python?
