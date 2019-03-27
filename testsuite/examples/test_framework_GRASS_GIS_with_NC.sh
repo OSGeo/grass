@@ -9,8 +9,7 @@
 #                 https://grass.osgeo.org/grass76/manuals/libpython/gunittest_running_tests.html#example-bash-script-to-run-be-used-as-a-cron-job
 #
 #               Data:
-#                 Since we use the full NC dataset (nc_spm_08_grass7.tar.gz) here, we need to generate
-#                 some simplified names as used in NC basic for some test cases. This happens automatically below.
+#                 We use the full NC dataset (nc_spm_full_v2_alpha.tar.gz)
 #
 # COPYRIGHT:    (C) 2019 by Markus Neteler, and the GRASS Development Team
 #
@@ -102,27 +101,12 @@ mkdir -p $REPORTS/$CURRENT_REPORTS_DIR
 mkdir -p $GRASSDATA
 
 # fetch sample data
-SAMPLEDATA=nc_spm_08_grass7.tar.gz
-(cd $GRASSDATA ; wget -c https://grass.osgeo.org/sampledata/north_carolina/$SAMPLEDATA ; tar xfz $SAMPLEDATA )
+SAMPLEDATA=nc_spm_full_v2alpha
+(cd $GRASSDATA ; wget -c http://fatra.cnr.ncsu.edu/data/$SAMPLEDATA.tar.gz ; tar xfz $SAMPLEDATA.tar.gz --strip-components 2)
 
-echo "Nightly GRASS GIS test started: $NOW" >> ${LOGFILE}
+set -x
 
-# Preparation: Since we use the full NC dataset, we need to generate some simplified names as used in NC basic for some test cases
-echo "
-g.copy raster=basin_50K,basin
-g.copy raster=boundary_county_500m,boundary
-g.copy raster=landcover_1m,landcover
-g.copy raster=geology_30m,geology
-g.copy raster=landuse96_28m,landuse
-g.copy raster=soilsID,soils
-g.copy vector=census_wake2000,census
-g.copy vector=elev_lid792_bepts,elev_points
-g.copy vector=zipcodes_wake,zipcodes
-g.copy vector=schools_wake,schools
-g.copy vector=streets_wake,streets
-" > $GRASSDATA/tmp_rename.sh
-$GRASSBIN $GRASSDATA/nc_spm_08_grass7/PERMANENT --exec sh $GRASSDATA/tmp_rename.sh
-rm -f $GRASSDATA/tmp_rename.sh
+echo "Testing of GRASS GIS started: $NOW" >> ${LOGFILE}
 
 if [ "$COMPILE" = "yes" ] ; then
    ## compile current source code from scratch
@@ -139,7 +123,7 @@ $PYTHON $GRASS_MULTI_RUNNER \
     --grassbin $GRASSBIN \
     --grasssrc $GRASSSRC \
     --grassdata $GRASSDATA \
-    --location nc_spm_08_grass7 --location-type nc \
+    --location $SAMPLEDATA --location-type nc \
     --location other_location --location-type other_type
 
 # create overall report of all so far executed tests
