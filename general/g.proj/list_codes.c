@@ -106,7 +106,7 @@ void list_codes(char *authname)
 	authname = "epsg";
 
     init_info = proj_init_info(authname);
-    sprintf(pathname, init_info.filename);
+    sprintf(pathname, "%s", init_info.filename);
     
     if (access(pathname, F_OK) != 0)
 	G_fatal_error(_("Unable to find init file %s"), authname);
@@ -163,7 +163,7 @@ void list_codes(char *authname)
 	 * definition follows code until next '<' */
 
 	if (*buf == '#' && buflen > 2) {
-	    sprintf(name, buf + 2);
+	    sprintf(name, "%s", buf + 2);
 	    continue;
 	}
 
@@ -192,7 +192,7 @@ void list_codes(char *authname)
 
 		if (j < buflen) {
 		    buf[j] = '\0';
-		    sprintf(code, buf + bufstart);
+		    sprintf(code, "%s", buf + bufstart);
 		}
 		i = j + 1;
 		bufstart = i;
@@ -203,7 +203,7 @@ void list_codes(char *authname)
 		/* the remaining content of the line could be the name */
 		bufstart = i + 1;
 		if (bufstart < buflen) {
-		    sprintf(name, buf + bufstart);
+		    sprintf(name, "%s", buf + bufstart);
 		    G_strip(name);
 		}
 		i = buflen;
