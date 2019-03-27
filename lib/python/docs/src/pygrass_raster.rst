@@ -11,8 +11,8 @@ PyGRASS uses 3 different raster classes, that respect the 3 different
 approaches of GRASS-C API. The classes use a standardized interface to
 keep methods consistent between them. The read access is row wise for
 :ref:`RasterRow-label` and :ref:`RasterRowIO-label` and additionally
-cached in the RowIO class. Both classes write sequentially.  RowIO is
-row cached, :ref:`RasterSegment-label` is tile cached for reading and
+cached in the RowIO class. Only the first class writes sequentially.
+RowIO is row cached, :ref:`RasterSegment-label` is tile cached for reading and
 writing; therefore, random access is possible.  Hence RasterRow and
 RasterRowIO should be used for fast (cached) row read access and
 RasterRow for fast sequential writing.  RasterSegment should be used
