@@ -49,6 +49,7 @@ r.in.wms -c url="http://wms.cuzk.cz/wms.asp"
 # OSM
 g.region n=90 s=-90 w=-180 e=180 res=0:10:00 -p
 r.in.wms url="http://watzmann-geog.urz.uni-heidelberg.de/cached/osm" layers=osm_auto:all output=osm format=png
+r.info osm
 </pre></div>
 
 <div class="code"><pre>
@@ -57,9 +58,11 @@ r.in.wms url="http://ows.mundialis.de/services/service?" layer=OSM-Overlay-WMS o
 
 # TOPO-OSM-WMS
 r.in.wms url="http://ows.mundialis.de/services/service?" layer=TOPO-OSM-WMS output=topo_osm format=png
+r.info topo_osm
 
 # TOPO-WMS
 r.in.wms url="http://ows.mundialis.de/services/service?" layer=TOPO-WMS output=topo format=png
+r.info topo
 </pre></div>
 <p>
 More OSM WMS servers can be found online, e.g. on the OSM wiki in a
@@ -70,6 +73,7 @@ and on the <a href="http://wiki.openstreetmap.org/wiki/OSM-WMS-EUROPE">OSM-WMS-E
 
 <div class="code"><pre>
 r.in.wms url="http://www2.demis.nl/WMS/wms.asp" layers=Countries,Borders,Coastline output=countries srs=4326 format=png 
+r.info countries
 </pre></div>
 
 <h4>Sentinel-2 satellite cloud free global coverage</h4>
@@ -78,6 +82,7 @@ r.in.wms url="http://www2.demis.nl/WMS/wms.asp" layers=Countries,Borders,Coastli
 # North Carolina sample data
 g.region raster=elevation -p
 r.in.wms url="https://tiles.maps.eox.at/wms?" layers=s2cloudless output=sentinel2 format=png
+r.info sentinel2
 </pre></div>
 
 <div align="center" style="margin: 10px">
@@ -90,6 +95,7 @@ r.in.wms url="https://tiles.maps.eox.at/wms?" layers=s2cloudless output=sentinel
 <div class="code"><pre>
 r.in.wms url="http://gpp3-wxs.ign.fr/yourAPIkey/geoportail/wmts" layers=ORTHOIMAGERY.ORTHOPHOTOS \
          output=orthophoto srs=3857 format=jpeg driver=WMTS_GRASS style=normal password="*" username="*"
+r.info orthophoto
 </pre></div>
 
 Note: username, password and API key can be obtained from <a href="http://api.ign.fr/">IGN API</a> website
@@ -101,12 +107,34 @@ r.in.wms url="http://wms.cuzk.cz/wms.asp" layers=prehledka_kraju-linie srs=4326 
 </pre></div>
 
 <div class="code"><pre>
-r.in.wms url="http://geoportal.cuzk.cz/WMTS_ORTOFOTO/WMTService.aspx" layers=orto output=ortofoto \
+r.in.wms url="http://geoportal.cuzk.cz/WMTS_ORTOFOTO/WMTService.aspx" layers=orto output=orthophoto \
          srs=3857 format=jpeg driver=WMTS_GRASS style=default
+r.info orthophoto
 </pre></div>
 
 Note: data are provided by
 <a href="https://cuzk.cz/en">Czech office for surveying, mapping and cadastre</a>.
+
+
+<h4>Satellite data covering Europe</h4>
+
+Copernicus Core003 View Services - Optical VHR2 coverage over EU 2011-2013 (provided by JRC;
+usage is restricted to non-commercial activities):
+
+<div class="code"><pre>
+# get WMS layer list
+r.in.wms -c url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/public/core003?"
+r.in.wms -c url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/public/core003?" | grep Name
+
+# spatial subset of Europe
+# enlarging maxcols and maxrows in order to minimize impact of copyright notice in map
+g.region n=56 s=47 w=5 e=16 res=0:00:10 -pa
+r.in.wms url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/public/core003?" \
+         layer="OI.Mosaic.NaturalColor.Feathering" output="jrc_copernicus_core003_mosaik" \
+         maxcols=3400 maxrows=3400
+r.info jrc_copernicus_core003_mosaik
+</pre></div>
+
 
 <h2>REQUIREMENTS</h2>
 
