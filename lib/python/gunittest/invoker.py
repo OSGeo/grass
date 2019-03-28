@@ -24,6 +24,8 @@ from .reporters import (GrassTestFilesMultiReporter,
                         NoopFileAnonymizer, keyvalue_to_text)
 from .utils import silent_rmtree, ensure_dir
 
+from grass.script.utils import decode, encode, _get_encoding
+
 try:
     from string import maketrans
 except ImportError:
@@ -151,8 +153,6 @@ class GrassTestFilesInvoker(object):
 
         stdout_path = os.path.join(cwd, 'stdout.txt')
         stderr_path = os.path.join(cwd, 'stderr.txt')
-        stdout = open(stdout_path, 'w')
-        stderr = open(stderr_path, 'w')
 
         self.reporter.start_file_test(module)
         # TODO: we might clean the directory here before test if non-empty
@@ -166,7 +166,8 @@ class GrassTestFilesInvoker(object):
             else:
                 args = [sys.executable, '-tt', '-3', module.abs_file_path]
             p = subprocess.Popen(args, cwd=cwd, env=env,
-                                 stdout=stdout, stderr=stderr)
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
         elif module.file_type == 'sh':
             # ignoring shebang line to pass parameters to shell
             # expecting system to have sh or something compatible
@@ -182,14 +183,40 @@ class GrassTestFilesInvoker(object):
             #                of an '&&' or '||' operator.
             p = subprocess.Popen(['sh', '-e', '-x', module.abs_file_path],
                                  cwd=cwd, env=env,
-                                 stdout=stdout, stderr=stderr)
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
         else:
             p = subprocess.Popen([module.abs_file_path],
                                  cwd=cwd, env=env,
-                                 stdout=stdout, stderr=stderr)
-        returncode = p.wait()
-        stdout.close()
-        stderr.close()
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
+        stdout, stderr = p.communicate()
+        returncode = p.returncode
+        encodings = [_get_encoding(), 'utf8', 'latin-1', 'ascii']
+        detected = False
+        idx = 0
+        while not detected:
+            try:
+                stdout = decode(stdout, encoding=encodings[idx])
+                detected = True
+            except:
+                idx += 1
+                pass
+
+        detected = False
+        idx = 0
+        while not detected:
+            try:
+                stderr = decode(stderr, encoding=encodings[idx])
+                detected = True
+            except:
+                idx += 1
+                pass
+                    
+        with open(stdout_path, 'w') as stdout_file:
+            stdout_file.write(encode(stdout))
+        with open(stderr_path, 'w') as stderr_file:
+            stderr_file.write(encode(stderr))
         self._file_anonymizer.anonymize([stdout_path, stderr_path])
 
         test_summary = update_keyval_file(
