@@ -588,15 +588,15 @@ class Link(object):
     >>> link.layer
     1
     >>> link.name
-    'link0'
+    u'link0'
     >>> link.table_name
-    'table_doctest_map'
+    u'table_doctest_map'
     >>> link.key
-    'cat'
+    u'cat'
     >>> link.database
-    '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+    u'$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
     >>> link.driver
-    'sqlite'
+    u'sqlite'
     >>> link
     Link(1, link0, sqlite)
 
@@ -737,7 +737,7 @@ class Link(object):
         >>> conn = link.connection()
         >>> cur = conn.cursor()
         >>> link.table_name
-        'table_doctest_map'
+        u'table_doctest_map'
         >>> cur.execute("SELECT cat, name, value from %s" %
         ...             link.table_name)              # doctest: +ELLIPSIS
         <sqlite3.Cursor object at ...>

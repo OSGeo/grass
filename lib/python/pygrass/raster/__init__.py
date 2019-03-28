@@ -85,9 +85,9 @@ class RasterRow(RasterAbstractBase):
         >>> elev.hist.title = "A test map"
         >>> elev.hist.write()
         >>> elev.hist.title
-        'A test map'
+        u'A test map'
         >>> elev.hist.keyword
-        'This is a test map'
+        u'This is a test map'
 
         >>> attrs = list(elev.hist)
         >>> attrs[0]
@@ -487,10 +487,10 @@ class RasterSegment(RasterAbstractBase):
             >>> map_b.open("r")
             >>> for row in map_b:
             ...         row
-            Buffer([ 111.,  121.,  131.,  141.], dtype=float32)
-            Buffer([ 112.,  122.,  132.,  142.], dtype=float32)
-            Buffer([ 113.,  123.,  133.,  143.], dtype=float32)
-            Buffer([ 114.,  124.,  134.,  144.], dtype=float32)
+            Buffer([111., 121., 131., 141.], dtype=float32)
+            Buffer([112., 122., 132., 142.], dtype=float32)
+            Buffer([113., 123., 133., 143.], dtype=float32)
+            Buffer([114., 124., 134., 144.], dtype=float32)
             >>> map_b.close()
 
         """

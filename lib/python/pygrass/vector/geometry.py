@@ -374,7 +374,7 @@ class Geo(object):
 
             >>> pnt = Point(10, 100)
             >>> pnt.to_wkt()
-            'POINT (10.0000000000000000 100.0000000000000000)'
+            u'POINT (10.0000000000000000 100.0000000000000000)'
         """
         return decode(libvect.Vect_line_to_wkt(self.c_points, self.gtype, not self.is2D))
 

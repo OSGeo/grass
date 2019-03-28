@@ -363,7 +363,7 @@ class VectorTopo(Vector):
             >>> test_vect.number_of("holes")
             0
             >>> test_vect.number_of("lines")
-            21
+            3
             >>> test_vect.number_of("nodes")
             15
             >>> test_vect.number_of("pizza")
