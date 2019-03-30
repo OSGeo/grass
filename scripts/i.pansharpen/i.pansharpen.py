@@ -284,22 +284,22 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
     if sproc:
         # serial processing
         e = '''eval(k = "$ms1" + "$ms2" + "$ms3")
-            "$outr" = 1.0 * "$ms3" * "$panmatch3" / k
-            "$outg" = 1.0 * "$ms2" * "$panmatch2" / k
-            "$outb" = 1.0 * "$ms1" * "$panmatch1" / k'''
+            "$outr" = 1 * round("$ms3" * "$panmatch3" / k)
+            "$outg" = 1 * round("$ms2" * "$panmatch2" / k)
+            "$outb" = 1 * round("$ms1" * "$panmatch1" / k)'''
         grass.mapcalc(e, outr=outr, outg=outg, outb=outb,
                       panmatch1=panmatch1, panmatch2=panmatch2,
                       panmatch3=panmatch3, ms1=ms1, ms2=ms2, ms3=ms3,
                       overwrite=True)
     else:
         # parallel processing
-        pb = grass.mapcalc_start('%s_blue = (1.0 * %s * %s) / (%s + %s + %s)' %
+        pb = grass.mapcalc_start('%s_blue = 1 * round((%s * %s) / (%s + %s + %s))' %
                                  (out, ms1, panmatch1, ms1, ms2, ms3),
                                  overwrite=True)
-        pg = grass.mapcalc_start('%s_green = (1.0 * %s * %s) / (%s + %s + %s)' %
+        pg = grass.mapcalc_start('%s_green = 1 * round((%s * %s) / (%s + %s + %s))' %
                                  (out, ms2, panmatch2, ms1, ms2, ms3),
                                  overwrite=True)
-        pr = grass.mapcalc_start('%s_red = (1.0 * %s * %s) / (%s + %s + %s)' %
+        pr = grass.mapcalc_start('%s_red = 1 * round((%s * %s) / (%s + %s + %s))' %
                                  (out, ms3, panmatch3, ms1, ms2, ms3),
                                  overwrite=True)
 
@@ -413,75 +413,75 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
 
     if sproc:
         # serial processing
-            outr = '%s_red' % out
-            outg = '%s_green' % out
-            outb = '%s_blue' % out
+        outr = '%s_red' % out
+        outg = '%s_green' % out
+        outb = '%s_blue' % out
 
-            cmd1 = "$outb = (1.0 * $panmatch1 * $b1evect1) + ($pca2 * $b1evect2) + ($pca3 * $b1evect3) + $b1mean"
-            cmd2 = "$outg = (1.0 * $panmatch2 * $b2evect1) + ($pca2 * $b2evect2) + ($pca3 * $b2evect3) + $b2mean"
-            cmd3 = "$outr = (1.0 * $panmatch3 * $b3evect1) + ($pca2 * $b3evect2) + ($pca3 * $b3evect3) + $b3mean"
+        cmd1 = "$outb = 1 * round(($panmatch1 * $b1evect1) + ($pca2 * $b1evect2) + ($pca3 * $b1evect3) + $b1mean)"
+        cmd2 = "$outg = 1 * round(($panmatch2 * $b2evect1) + ($pca2 * $b2evect2) + ($pca3 * $b2evect3) + $b2mean)"
+        cmd3 = "$outr = 1 * round(($panmatch3 * $b3evect1) + ($pca2 * $b3evect2) + ($pca3 * $b3evect3) + $b3mean)"
 
-            cmd = '\n'.join([cmd1, cmd2, cmd3])
+        cmd = '\n'.join([cmd1, cmd2, cmd3])
 
-            grass.mapcalc(cmd, outb=outb, outg=outg, outr=outr,
-                          panmatch1=panmatch1,
-                          panmatch2=panmatch2,
-                          panmatch3=panmatch3,
-                          pca2=pca2,
-                          pca3=pca3,
-                          b1evect1=b1evect1,
-                          b2evect1=b2evect1,
-                          b3evect1=b3evect1,
-                          b1evect2=b1evect2,
-                          b2evect2=b2evect2,
-                          b3evect2=b3evect2,
-                          b1evect3=b1evect3,
-                          b2evect3=b2evect3,
-                          b3evect3=b3evect3,
-                          b1mean=b1mean,
-                          b2mean=b2mean,
-                          b3mean=b3mean,
-                          overwrite=True)
+        grass.mapcalc(cmd, outb=outb, outg=outg, outr=outr,
+                      panmatch1=panmatch1,
+                      panmatch2=panmatch2,
+                      panmatch3=panmatch3,
+                      pca2=pca2,
+                      pca3=pca3,
+                      b1evect1=b1evect1,
+                      b2evect1=b2evect1,
+                      b3evect1=b3evect1,
+                      b1evect2=b1evect2,
+                      b2evect2=b2evect2,
+                      b3evect2=b3evect2,
+                      b1evect3=b1evect3,
+                      b2evect3=b2evect3,
+                      b3evect3=b3evect3,
+                      b1mean=b1mean,
+                      b2mean=b2mean,
+                      b3mean=b3mean,
+                      overwrite=True)
     else:
         # parallel processing
-            pb = grass.mapcalc_start('%s_blue = (%s * %f) + (%s * %f) + (%s * %f) + %f'
-                                     % (out,
-                                        panmatch1,
-                                        b1evect1,
-                                        pca2,
-                                        b1evect2,
-                                        pca3,
-                                        b1evect3,
-                                        b1mean),
-                                     overwrite=True)
+        pb = grass.mapcalc_start('%s_blue = 1 * round((%s * %f) + (%s * %f) + (%s * %f) + %f)'
+                                 % (out,
+                                    panmatch1,
+                                    b1evect1,
+                                    pca2,
+                                    b1evect2,
+                                    pca3,
+                                    b1evect3,
+                                    b1mean),
+                                 overwrite=True)
 
-            pg = grass.mapcalc_start('%s_green = (%s * %f) + (%s * %f) + (%s * %f) + %f'
-                                     % (out,
-                                        panmatch2,
-                                        b2evect1,
-                                        pca2,
-                                        b2evect2,
-                                        pca3,
-                                        b2evect3,
-                                        b2mean),
-                                     overwrite=True)
+        pg = grass.mapcalc_start('%s_green = 1 * round((%s * %f) + (%s * %f) + (%s * %f) + %f)'
+                                 % (out,
+                                    panmatch2,
+                                    b2evect1,
+                                    pca2,
+                                    b2evect2,
+                                    pca3,
+                                    b2evect3,
+                                    b2mean),
+                                 overwrite=True)
 
-            pr = grass.mapcalc_start('%s_red = (%s * %f) + (%s * %f) + (%s * ''%f) + %f'
-                                     % (out,
-                                        panmatch3,
-                                        b3evect1,
-                                        pca2,
-                                        b3evect2,
-                                        pca3,
-                                        b3evect3,
-                                        b3mean),
-                                     overwrite=True)
+        pr = grass.mapcalc_start('%s_red = 1 * round((%s * %f) + (%s * %f) + (%s * %f) + %f)'
+                                 % (out,
+                                    panmatch3,
+                                    b3evect1,
+                                    pca2,
+                                    b3evect2,
+                                    pca3,
+                                    b3evect3,
+                                    b3mean),
+                                 overwrite=True)
 
-            pb.wait(), pg.wait(), pr.wait()
-            try:
-                pb.terminate(), pg.terminate(), pr.terminate()
-            except:
-                ""
+        pb.wait(), pg.wait(), pr.wait()
+        try:
+            pb.terminate(), pg.terminate(), pr.terminate()
+        except:
+            ""
 
     # Cleanup
     grass.run_command('g.remove', flags='f', quiet=True, type='raster',
@@ -554,7 +554,7 @@ def matchhist(original, target, matched):
         for j in arrays[target]:
             # find the grey value in target that corresponds to the cdf
             #   closest to the original cdf
-            if j[1] == i[1] + min_difference or j[1] == i[1] - min_difference:
+            if j[1] <= i[1] + min_difference and j[1] >= i[1] - min_difference:
                 # build a reclass rules file from the original grey value and
                 #   corresponding grey value from target
                 out_line = "%d = %d\n" % (i[0], j[0])
