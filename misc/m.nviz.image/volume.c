@@ -32,7 +32,7 @@ int load_rasters3d(const struct GParams *params, nv_data * data)
 {
     int i, nvol, id;
     float x, y, z;
-    char *mapset;
+    const char *mapset;
 
     nvol = opt_get_num_answers(params->volume);
 
