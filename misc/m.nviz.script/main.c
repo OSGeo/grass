@@ -240,6 +240,7 @@ int main(int argc, char *argv[])
     }
 
     /* Coords from Command Line */
+    k = 0;
     for (i = 0; parm.route->answers[i]; i += 2) {
 	/* Test for number coordinate pairs */
 	k = i;
@@ -264,7 +265,7 @@ int main(int argc, char *argv[])
 		do_profile(e2, e2, n2, n2, name, fd, data_type);
 	}
     }
-	/* done with coordinates */
+    /* done with coordinates */
 
 
     /* Output final part of script */
@@ -292,7 +293,7 @@ int main(int argc, char *argv[])
     if (parm.f->answer) {
 	/* Full render and save */
 	fprintf(fp, "\nset name %s", img_name);
-	fprintf(fp, "\nset num2 [format \"\%%04d\" $num]");
+	fprintf(fp, "\nset num2 [format \"%%04d\" $num]");
 	fprintf(fp, "\nappend name $num2 \".ppm\"");
 	fprintf(fp, "\nSendScriptLine \"Ndo_framestep $frame 1\"");
 	fprintf(fp, "\nSendScriptLine \"Nwrite_ppm $name \"");
@@ -302,7 +303,7 @@ int main(int argc, char *argv[])
 	/* Quick draw wire */
 	/* output full variables commented so can be easily changed */
 	fprintf(fp, "\nset name %s", img_name);
-	fprintf(fp, "\nset num2 [format \"\%%04d\" $num]");
+	fprintf(fp, "\nset num2 [format \"%%04d\" $num]");
 	fprintf(fp, "\nappend name $num2 \".ppm\"");
 	fprintf(fp,
 		"\n## To render in full set to 1 and uncomment Nwrite_ppm \"");
@@ -330,7 +331,7 @@ int main(int argc, char *argv[])
 
 
 /* ************************************
- * Claculate camera and eye coordinates
+ * Calculate camera and eye coordinates
  **************************************/
 int do_profile(double e1, double e2, double n1, double n2,
 	       const char *name, int fd, int data_type)
@@ -350,6 +351,7 @@ int do_profile(double e1, double e2, double n1, double n2,
 	return 0;
     }
 
+    /* dist is not initialized ! */
     if (rows >= 0 && cols < 0) {
 	/* SE Quad or due east */
 	AZI = fabs(atan((rows / cols)));
@@ -402,6 +404,8 @@ int do_profile(double e1, double e2, double n1, double n2,
 	read_rast(e2, n2, LEN, fd, 0, data_type);
     }
 
+    /* dist is not used ! */
+
     return 0;
 }				/* done with do_profile */
 
@@ -414,7 +418,7 @@ int do_profile(double e1, double e2, double n1, double n2,
 int read_rast
     (double east,
      double north,
-     double dist, int fd, int out_type, RASTER_MAP_TYPE data_type)
+     double rrdist, int fd, int out_type, RASTER_MAP_TYPE data_type)
 {
     int row, col, nrows, ncols;
     struct Cell_head window;
@@ -488,7 +492,7 @@ int read_rast
 	/* Set Camera Position */
 	sprintf(buf2, "\nSendScriptLine \"Nmove_to_real %f %f %f\"",
 		east, north, camera_height);
-	key_time += (dist + fabs(camera_height - OLD_DEPTH)) / 10000.;
+	key_time += (rrdist + fabs(camera_height - OLD_DEPTH)) / 10000.;
     }
     else {
 
