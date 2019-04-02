@@ -450,11 +450,11 @@ int read_rast
     if (data_type == CELL_TYPE) {
 	cell = Rast_allocate_c_buf();
 	Rast_get_c_row(fd, cell, row);
-
 	if (Rast_is_c_null_value(&cell[col]))
 	    camera_height = (double)9999.;
 	else
 	    camera_height = (double)cell[col];
+	G_free(cell);
     }
 
     if (data_type == FCELL_TYPE) {
@@ -464,6 +464,7 @@ int read_rast
 	    camera_height = (double)9999.;
 	else
 	    camera_height = (double)fcell[col];
+	G_free(fcell);
     }
 
     if (data_type == DCELL_TYPE) {
@@ -473,6 +474,7 @@ int read_rast
 	    camera_height = (double)9999.;
 	else
 	    camera_height = (double)dcell[col];
+	G_free(dcell);
     }
 
     /* Output script commands */
