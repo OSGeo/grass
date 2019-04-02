@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.out.png</em> exports a GRASS raster map in non-georeferenced
+<em>r.out.png</em> exports a GRASS GIS raster map in non-georeferenced
 Portable Network Graphics (PNG) image format, respecting the current
 region resolution and bounds.
 
@@ -11,6 +11,20 @@ create images useful for KML, TMS, or WMS overlays. (e.g. for use in
 Google Earth or as OpenLayers tiles) If output is redirected to stdout,
 the world file will be called <tt>png_map.wld</tt>.
 
+
+<h2>EXAMPLE</h2>
+
+The example is based on the North Carolina sample data location.
+<p>
+Export of the soil map to PNG format with world file:
+
+<div class="code"><pre>
+g.region raster=soils_Kfactor -p
+# export PNG file with additional world file
+r.out.png input=soils_Kfactor output=soils_Kfactor -w
+# verify
+gdalinfo soils_Kfactor.png
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
