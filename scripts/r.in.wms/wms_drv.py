@@ -63,6 +63,7 @@ class WMSDrv(WMSBase):
         @return temp_map with downloaded data
         """
         grass.message(_("Downloading data from WMS server..."))
+        server_url = self.params["url"]
 
         if "?" in self.params["url"]:
             self.params["url"] += "&"
@@ -187,6 +188,8 @@ class WMSDrv(WMSBase):
                     grass.fatal(_("WMS server unknown error"))
 
             temp_tile_pct2rgb = None
+            if tile_dataset_info.RasterCount < 1:
+                grass.fatal(_("WMS server error: no band(s) received. Is server URL correct? <%s>") % server_url )
             if tile_dataset_info.RasterCount == 1 and \
                tile_dataset_info.GetRasterBand(1).GetRasterColorTable() is not None:
                 # expansion of color table into bands
