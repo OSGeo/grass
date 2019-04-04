@@ -6,7 +6,7 @@ List of classes:
  - wms_base::GRASSImporter
  - wms_base::WMSDriversInfo
 
-(C) 2012-2016 by the GRASS Development Team
+(C) 2012-2019 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -127,8 +127,8 @@ class WMSBase:
         if 'epsg' in target_crs.keys():
             self.target_epsg = target_crs['epsg']
             if self.source_epsg != self.target_epsg:
-                grass.warning(_("Source EPSG %s != location EPSG %s") % 
-                              (self.source_epsg, self.target_epsg))
+                grass.warning(_("SRS differences: WMS source EPSG %s != location EPSG %s (use srs=%s to adjust)") % 
+                              (self.source_epsg, self.target_epsg, self.target_epsg))
 
         self.proj_srs = grass.read_command('g.proj',
                                            flags='jf',
