@@ -170,6 +170,12 @@ This program is free software under the GNU General Public License
 #% guisection: Map style
 #%end
 
+#%flag
+#% key: b
+#% description: Keep original bands (default: create composite)
+#% guisection: Map style
+#%end
+
 #%rules
 #% exclusive: capfile_output, capfile
 #%end
@@ -228,7 +234,7 @@ def main():
         if not fetched_map:
             grass.warning(_("Nothing to import.\nNo data has been downloaded from wms server."))
             return
-        importer = GRASSImporter(options['output'])
+        importer = GRASSImporter(options['output'], (flags['b'] == False))
         importer.ImportMapIntoGRASS(fetched_map)
 
     return 0

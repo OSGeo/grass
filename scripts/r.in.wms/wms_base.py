@@ -121,15 +121,18 @@ class WMSBase:
                                                 flags='jf').rstrip('\n')
         self.proj_location = self._modifyProj(self.proj_location)
 
-        if self.params['srs'] in [3857, 900913]:
-            # HACK: epsg 3857 def: http://spatialreference.org/ref/sr-org/7483/
-            # g.proj can return: ...+a=6378137 +rf=298.257223563... (WGS84 elipsoid def instead of sphere), it can make 20km shift in Y, when raster is transformed
-            # needed to be tested on more servers
-            self.proj_srs = '+proj=merc +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +no_defs +a=6378137 +b=6378137 +nadgrids=@null +to_meter=1'
-        else:
-            self.proj_srs = grass.read_command('g.proj',
-                                               flags='jf',
-                                               epsg=str(GetEpsg(self.params['srs'])))
+        self.source_epsg = str(GetEpsg(self.params['srs']))
+        self.target_epsg = None
+        target_crs = grass.parse_command('g.proj', flags='g', delimiter = '=')
+        if 'epsg' in target_crs.keys():
+            self.target_epsg = target_crs['epsg']
+            if self.source_epsg != self.target_epsg:
+                grass.warning(_("Source EPSG %s != location EPSG %s") % 
+                              (self.source_epsg, self.target_epsg))
+
+        self.proj_srs = grass.read_command('g.proj',
+                                           flags='jf',
+                                           epsg=str(GetEpsg(self.params['srs'])))
         self.proj_srs = self.proj_srs.rstrip('\n')
 
         self.proj_srs = self._modifyProj(self.proj_srs)
@@ -375,7 +378,14 @@ class WMSBase:
         """!Reproject data  using gdalwarp if needed
         """
         # reprojection of raster
-        if self.proj_srs != self.proj_location:  # TODO: do it better
+        do_reproject = True
+        if self.source_epsg is not None and self.target_epsg is not None \
+            and self.source_epsg == self.target_epsg:
+            do_reproject = False
+        # TODO: correctly compare source and target crs 
+        if do_reproject == True and self.proj_srs == self.proj_location:
+            do_reproject = False
+        if do_reproject:
             grass.message(_("Reprojecting raster..."))
             self.temp_warpmap = grass.tempfile() + '.tif'
 
@@ -391,7 +401,6 @@ class WMSBase:
             else:
                 gdal_method = self.params['method']
 
-            #"+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs"
             # RGB rasters - alpha layer is added for cropping edges of projected raster
             try:
                 if self.temp_map_bands_num == 3:
@@ -442,10 +451,10 @@ class WMSBase:
 
 class GRASSImporter:
 
-    def __init__(self, opt_output):
+    def __init__(self, opt_output, cleanup_bands):
 
         self.cleanup_mask = False
-        self.cleanup_layers = False
+        self.cleanup_bands = cleanup_bands
 
         # output map name
         self.opt_output = opt_output
@@ -485,30 +494,47 @@ class GRASSImporter:
                     grass.fatal(_('%s failed') % 'g.copy')
 
         # remove temporary created rasters
-        if self.cleanup_layers:
-            maps = []
-            for suffix in ('.red', '.green', '.blue', '.alpha', self.original_mask_suffix):
+        maps = []
+        rast = self.opt_output + '.alpha'
+        if grass.find_file(rast, element='cell', mapset='.')['file']:
+            maps.append(rast)
+
+        if self.cleanup_bands:
+            for suffix in ('.red', '.green', '.blue', self.original_mask_suffix):
                 rast = self.opt_output + suffix
                 if grass.find_file(rast, element='cell', mapset='.')['file']:
                     maps.append(rast)
 
-            if maps:
-                grass.run_command('g.remove',
-                                  quiet=True,
-                                  flags='fb',
-                                  type='raster',
-                                  name=','.join(maps))
+        if maps:
+            grass.run_command('g.remove',
+                              quiet=True,
+                              flags='fb',
+                              type='raster',
+                              name=','.join(maps))
 
         # delete environmental variable which overrides region
         if 'GRASS_REGION' in os.environ.keys():
             os.environ.pop('GRASS_REGION')
+
+        maplist = grass.read_command('g.list', type = 'raster',
+                                     pattern = '%s*' % (self.opt_output),
+                                     mapset = '.', separator = ',').rstrip('\n')
+
+        if len(maplist) == 0:
+            grass.fatal(_('WMS import failed, nothing imported'))
+        else:
+            for raster in maplist.split(','):
+                grass.raster_history(raster, overwrite = True)
+                grass.run_command('r.support', map=raster, description='generated by r.in.wms')
+                grass.message(_('<%s> created.') % raster)
+
 
     def ImportMapIntoGRASS(self, raster):
         """!Import raster into GRASS.
         """
         # importing temp_map into GRASS
         try:
-            # -o flag needed to overcome different ellipsoid representations
+            # do not use -o flag !
             grass.run_command('r.in.gdal', flags='o',
                               quiet=True, overwrite=True,
                               input=raster, output=self.opt_output)
@@ -517,7 +543,6 @@ class GRASSImporter:
 
         # information for destructor to cleanup temp_layers, created
         # with r.in.gdal
-        self.cleanup_layers = True
 
         # setting region for full extend of imported raster
         if grass.find_file(self.opt_output + '.red', element='cell', mapset='.')['file']:
@@ -550,8 +575,17 @@ class GRASSImporter:
             except CalledModuleError:
                 grass.fatal(_('%s failed') % 'r.mask')
 
+            if not self.cleanup_bands:
+                # use the MASK to set NULL vlues
+                for suffix in ('.red', '.green', '.blue'):
+                    rast = self.opt_output + suffix
+                    if grass.find_file(rast, element='cell', mapset='.')['file']:
+                        grass.run_command('g.rename', rast='%s,%s' % (rast, rast + '_null'), quiet = True)
+                        grass.run_command('r.mapcalc', expression = '%s = %s' % (rast, rast + '_null'), quiet = True)
+                        grass.run_command('g.remove', type='raster', name='%s' % (rast + '_null'), flags = 'f', quiet = True)
+
         # TODO one band + alpha band?
-        if grass.find_file(self.opt_output + '.red', element='cell', mapset='.')['file']:
+        if grass.find_file(self.opt_output + '.red', element='cell', mapset='.')['file'] and self.cleanup_bands:
             try:
                 grass.run_command('r.composite',
                                   quiet=True, overwrite=True,
@@ -561,8 +595,6 @@ class GRASSImporter:
                                   output=self.opt_output)
             except CalledModuleError:
                 grass.fatal(_('%s failed') % 'r.composite')
-
-        grass.message(_('<%s> created.') % self.opt_output)
 
 
 class WMSDriversInfo:

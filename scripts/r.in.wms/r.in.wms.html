@@ -16,6 +16,10 @@ capabilities of the WMS server. This should be available via a capabilities
 request (see examples)
 
 <p>
+If possible, the EPSG code of the current location should be used with the 
+<b>srs</b> option to avoid unnecessary reprojection.
+
+<p>
 When using GDAL WMS driver (<b>driver=WMS_GDAL</b>), the GDAL library
 needs to be built with WMS support,
 see <a href="http://gdal.org/frmt_wms.html">GDAL WMS</a> manual page
