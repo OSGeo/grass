@@ -214,9 +214,9 @@ class GrassTestFilesInvoker(object):
                 pass
                     
         with open(stdout_path, 'w') as stdout_file:
-            stdout_file.write(encode(stdout))
+            stdout_file.write(stdout)
         with open(stderr_path, 'w') as stderr_file:
-            stderr_file.write(encode(stderr))
+            stderr_file.write(stderr)
         self._file_anonymizer.anonymize([stdout_path, stderr_path])
 
         test_summary = update_keyval_file(
