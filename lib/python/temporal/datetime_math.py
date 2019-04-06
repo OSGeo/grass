@@ -8,6 +8,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+import sys
 from datetime import datetime, timedelta
 from .core import get_tgis_message_interface
 import copy
@@ -17,6 +18,9 @@ try:
     has_dateutil = True
 except:
     has_dateutil = False
+
+if sys.version_info[0]:
+    unicode = str
 
 DAY_IN_SECONDS = 86400
 SECOND_AS_DAY = 1.1574074074074073e-05
