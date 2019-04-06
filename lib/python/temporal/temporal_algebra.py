@@ -447,6 +447,7 @@ except:
     pass
 
 import os
+import sys
 import copy
 from datetime import datetime
 import grass.pygrass.modules as pymod
@@ -468,6 +469,9 @@ from .temporal_granularity import compute_absolute_time_granularity
 from .datetime_math import create_suffix_from_datetime
 from .datetime_math import create_time_suffix
 from .datetime_math import create_numeric_suffix
+
+if sys.version_info[0]:
+    unicode = str
 
 ##############################################################################
 
