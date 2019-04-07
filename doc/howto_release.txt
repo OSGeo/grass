@@ -181,6 +181,11 @@ vim grass-addons/tools/wingrass-packager/grass_addons.sh
 vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
 vim grass-addons/tools/wingrass-packager/cronjob.sh             # major/minor release only
 
+# update addons - major/minor release only
+vim grass-addons/tools/addons/grass-addons-publish.sh
+vim grass-addons/tools/addons/grass-addons-build.sh
+vim grass-addons/tools/addons/grass-addons.sh
+
 ###################
 # update web site to new version: CMS
   - News section
