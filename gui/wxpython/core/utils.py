@@ -522,7 +522,7 @@ def ReadEpsgCodes():
 
     for line in ret.splitlines():
         code, descr, params = line.split("|")
-        epsgCodeDict[code] = (descr, params)
+        epsgCodeDict[int(code)] = (descr, params)
 
     return epsgCodeDict
 
