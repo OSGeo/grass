@@ -19,7 +19,7 @@ try:
 except:
     has_dateutil = False
 
-if sys.version_info[0]:
+if sys.version_info[0] == 3:
     unicode = str
 
 DAY_IN_SECONDS = 86400
