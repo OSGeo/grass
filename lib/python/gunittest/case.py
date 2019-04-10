@@ -172,7 +172,7 @@ class TestCase(unittest.TestCase):
         # SimpleModule delivers bytes for stderr and stdout
         # Instead of decoding stdout and stderr in every test, decoding
         # is done here
-        if pyversion == 3:
+        if pyversion >= 3:
             if isinstance(first, bytes):
                 first = decode(first)
             if isinstance(second, bytes):
@@ -196,7 +196,7 @@ class TestCase(unittest.TestCase):
         # SimpleModule delivers bytes for stderr and stdout
         # Instead of decoding stdout and stderr in every test, decoding
         # is done here
-        if pyversion == 3:
+        if pyversion >= 3:
             if isinstance(actual, bytes):
                 actual = decode(actual)
         self.assertTrue(isinstance(actual, str), (
@@ -421,7 +421,7 @@ class TestCase(unittest.TestCase):
         # SimpleModule delivers bytes for stderr and stdout
         # Instead of decoding stdout and stderr in every test, decoding
         # is done here
-        if pyversion == 3:
+        if pyversion >= 3:
             if isinstance(actual, bytes):
                 actual = decode(actual)
         module = SimpleModule('v.info', flags='t', map=reference)
