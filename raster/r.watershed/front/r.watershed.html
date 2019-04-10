@@ -144,6 +144,16 @@ geographic region.
 <p>
 Output <b>drainage</b> raster map contains drainage direction.
 Provides the &quot;aspect&quot; for each cell measured CCW from East.
+
+<div align="center" style="margin: 10px">
+<a href="r_watershed_drainage.png">
+<img src="r_watershed_drainage.png" width="116" height="89" alt="drainage" border="0">
+</a><br>
+<i>Figure: Drainage is 8 directions numbered counter-clockwise
+starting from 1 in north-east direction
+(<a href="https://idea.isnew.info/how-to-import-arcgis-flow-direction-into-grass-gis.html">source</a>)</i>
+</div>
+
 Multiplying positive values by 45 will give the direction in degrees
 that the surface runoff will travel from that cell.  The value 0
 (zero) indicates that the cell is a depression area (defined by the
