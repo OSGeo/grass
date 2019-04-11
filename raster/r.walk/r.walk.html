@@ -135,7 +135,7 @@ while taking into account the topography and landcover.
 g.region swwake_30m -p
 
 # create friction map based on land cover
-r.recode landclass96 out=friction &lt;&lt; EOF
+r.recode landclass96 out=friction rules=- &lt;&lt; EOF
 1:3:0.1:0.1
 4:5:10.:10.
 6:6:1000.0:1000.0

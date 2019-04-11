@@ -138,10 +138,10 @@ void add_stop_pnt(int r, int c);
 
 int main(int argc, char *argv[])
 {
-    const char *cum_cost_layer, *move_dir_layer;
+    const char *cum_cost_layer, *move_dir_layer, *nearest_layer;
     const char *cost_layer, *dtm_layer;
     const char *dtm_mapset, *cost_mapset, *search_mapset;
-    void *dtm_cell, *cost_cell, *cum_cell, *dir_cell, *cell2 = NULL;
+    void *dtm_cell, *cost_cell, *cum_cell, *dir_cell, *cell2 = NULL, *nearest_cell;
     SEGMENT cost_seg, dir_seg, solve_seg;
     int have_solver;
     double *value;
@@ -157,9 +157,9 @@ int main(int argc, char *argv[])
     int nseg, nbytes;
     int maxmem;
     int segments_in_memory;
-    int cost_fd, cum_fd, dtm_fd, dir_fd;
+    int cost_fd, cum_fd, dtm_fd, dir_fd, nearest_fd;
     int dir = 0;
-    double my_dtm, my_cost, check_dtm;
+    double my_dtm, my_cost, check_dtm, nearest;
     double null_cost, dnullval;
     double a, b, c, d, lambda, slope_factor;
     int srows, scols;
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Flag *flag2, *flag3, *flag4, *flag5, *flag6;
     struct Option *opt1, *opt2, *opt3, *opt4, *opt5, *opt6, *opt7, *opt8;
-    struct Option *opt9, *opt10, *opt11, *opt12, *opt13, *opt14, *opt15;
+    struct Option *opt9, *opt10, *opt11, *opt12, *opt13, *opt14, *opt15, *opt16;
     struct Option *opt_solve;
     struct cost *pres_cell;
     struct start_pt *head_start_pt = NULL;
@@ -181,15 +181,17 @@ int main(int argc, char *argv[])
 	double dtm;		/* elevation model */
 	double cost_in;		/* friction costs */
 	double cost_out;	/* cumulative costs */
+	double nearest;		/* nearest start point */
     } costs;
     FLAG *visited;
 
     void *ptr1, *ptr2;
     RASTER_MAP_TYPE dtm_data_type, cost_data_type, cum_data_type =
-	DCELL_TYPE, dir_data_type = FCELL_TYPE;
+	DCELL_TYPE, dir_data_type = FCELL_TYPE,
+	nearest_data_type = CELL_TYPE;	/* output nearest type */
     struct History history;
     double peak = 0.0;
-    int dtm_dsize, cost_dsize;
+    int dtm_dsize, cost_dsize, nearest_size;
     double disk_mb, mem_mb, pq_mb;
     int dir_bin;
     DCELL mysolvedir[2], solvedir[2];
@@ -227,6 +229,13 @@ int main(int argc, char *argv[])
 	_("Name of input raster map solving equal costs");
     opt_solve->description =
 	_("Helper variable to pick a direction if two directions have equal cumulative costs (smaller is better)");
+
+    opt16 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt16->key = "nearest";
+    opt16->required = NO;
+    opt16->description =
+	_("Name for output raster map with nearest start point");
+    opt16->guisection = _("Optional outputs");
 
     opt11 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt11->key = "outdir";
@@ -475,6 +484,7 @@ int main(int argc, char *argv[])
     cost_layer = opt2->answer;
     move_dir_layer = opt11->answer;
     dtm_layer = opt12->answer;
+    nearest_layer = opt16->answer;
 
     /* Find number of rows and columns in window */
     nrows = Rast_window_rows();
@@ -638,6 +648,7 @@ int main(int argc, char *argv[])
 
 	Rast_set_d_null_value(&dnullval, 1);
 	costs.cost_out = dnullval;
+	costs.nearest = 0;
 
 	total_cells = nrows * ncols;
 
@@ -853,6 +864,7 @@ int main(int argc, char *argv[])
 
 	fd = Rast_open_old(opt9->answer, search_mapset);
 	data_type2 = Rast_get_map_type(fd);
+	nearest_data_type = data_type2;
 	dsize2 = Rast_cell_size(data_type2);
 	cell2 = Rast_allocate_buf(data_type2);
 	if (!cell2)
@@ -874,12 +886,14 @@ int main(int argc, char *argv[])
 		    if (start_with_raster_vals == 1) {
                         insert(cellval, row, col);
 			costs.cost_out = cellval;
+			costs.nearest = cellval;
 			Segment_put(&cost_seg, &costs, row, col);
 		    }
 		    else {
 			value = &zero;
 			insert(zero, row, col);
 			costs.cost_out = *value;
+			costs.nearest = cellval;
 			Segment_put(&cost_seg, &costs, row, col);
 		    }
 		    got_one = 1;
@@ -909,6 +923,8 @@ int main(int argc, char *argv[])
 	    Segment_get(&cost_seg, &costs, next_start_pt->row,
 			next_start_pt->col);
 	    costs.cost_out = *value;
+	    costs.nearest = next_start_pt->value;
+
 	    Segment_put(&cost_seg, &costs, next_start_pt->row,
 			next_start_pt->col);
 	    next_start_pt = next_start_pt->next;
@@ -999,6 +1015,8 @@ int main(int argc, char *argv[])
 
 	if (have_solver)
 	    Segment_get(&solve_seg, mysolvedir, pres_cell->row, pres_cell->col);
+
+	nearest = costs.nearest;
 
 	row = pres_cell->row;
 	col = pres_cell->col;
@@ -1467,6 +1485,7 @@ int main(int argc, char *argv[])
 	    /* add to list */
 	    if (Rast_is_d_null_value(&old_min_cost)) {
 		costs.cost_out = min_cost;
+		costs.nearest = nearest;
 		Segment_put(&cost_seg, &costs, row, col);
 		insert(min_cost, row, col);
 		if (dir == 1) {
@@ -1483,6 +1502,7 @@ int main(int argc, char *argv[])
 	    /* update with lower costs */
 	    else if (old_min_cost > min_cost) {
 		costs.cost_out = min_cost;
+		costs.nearest = nearest;
 		Segment_put(&cost_seg, &costs, row, col);
 		insert(min_cost, row, col);
 		if (dir == 1) {
@@ -1515,6 +1535,7 @@ int main(int argc, char *argv[])
 			solvedir[1] = mysolvedir[0];
 			Segment_put(&solve_seg, solvedir, row, col);
 
+			costs.nearest = nearest;
 			Segment_put(&cost_seg, &costs, row, col);
 
 			if (dir == 1) {
@@ -1559,18 +1580,33 @@ int main(int argc, char *argv[])
     if (have_solver) {
 	Segment_close(&solve_seg);
     }
-    
+
     /* Open cumulative cost layer for writing */
     cum_fd = Rast_open_new(cum_cost_layer, cum_data_type);
     cum_cell = Rast_allocate_buf(cum_data_type);
 
+    /* Open nearest start point layer */
+    if (nearest_layer) {
+	nearest_fd = Rast_open_new(nearest_layer, nearest_data_type);
+	nearest_cell = Rast_allocate_buf(nearest_data_type);
+    }
+    else {
+	nearest_fd = -1;
+	nearest_cell = NULL;
+    }
+    nearest_size = Rast_cell_size(nearest_data_type);
+
     /* Copy segmented map to output map */
     G_message(_("Writing output raster map <%s>... "), cum_cost_layer);
+    if (nearest_layer) {
+	G_message(_("Writing raster map with nearest start point <%s>..."), nearest_layer);
+    }
 
     cell2 = Rast_allocate_buf(dtm_data_type);
     {
 	void *p;
 	void *p2;
+	void *p3;
 	int cum_dsize = Rast_cell_size(cum_data_type);
 
 	Rast_set_null_value(cell2, ncols, dtm_data_type);
@@ -1582,19 +1618,28 @@ int main(int argc, char *argv[])
 
 	    p = cum_cell;
 	    p2 = cell2;
+	    p3 = nearest_cell;
 	    for (col = 0; col < ncols; col++) {
 		if (keep_nulls) {
 		    if (Rast_is_null_value(p2, dtm_data_type)) {
 			Rast_set_null_value(p, 1, cum_data_type);
 			p = G_incr_void_ptr(p, cum_dsize);
 			p2 = G_incr_void_ptr(p2, dtm_dsize);
+			if (nearest_layer) {
+			    Rast_set_null_value(p3, 1, nearest_data_type);
+			    p3 = G_incr_void_ptr(p3, nearest_size);
+			}
+
 			continue;
 		    }
 		}
 		Segment_get(&cost_seg, &costs, row, col);
 		min_cost = costs.cost_out;
+		nearest = costs.nearest;
 		if (Rast_is_d_null_value(&min_cost)) {
 		    Rast_set_null_value((p), 1, cum_data_type);
+		    if (nearest_layer)
+			Rast_set_null_value(p3, 1, nearest_data_type);
 		}
 		else {
 		    if (min_cost > peak)
@@ -1611,15 +1656,35 @@ int main(int argc, char *argv[])
 			*(DCELL *)p = (DCELL)(min_cost);
 			break;
 		    }
+
+		    if (nearest_layer) {
+			switch (nearest_data_type) {
+			case CELL_TYPE:
+			    *(CELL *)p3 = (CELL)(nearest);
+			    break;
+			case FCELL_TYPE:
+			    *(FCELL *)p3 = (FCELL)(nearest);
+			    break;
+			case DCELL_TYPE:
+			    *(DCELL *)p3 = (DCELL)(nearest);
+			    break;
+			}
+		    }
 		}
 		p = G_incr_void_ptr(p, cum_dsize);
 		p2 = G_incr_void_ptr(p2, dtm_dsize);
+		if (nearest_layer)
+		    p3 = G_incr_void_ptr(p3, nearest_size);
 	    }
 	    Rast_put_row(cum_fd, cum_cell, cum_data_type);
+	    if (nearest_layer)
+		Rast_put_row(nearest_fd, nearest_cell, nearest_data_type);
 	}
 	G_percent(1, 1, 1);
 	G_free(cum_cell);
 	G_free(cell2);
+	if (nearest_layer)
+	    G_free(nearest_cell);
     }
 
     if (dir == 1) {
@@ -1653,6 +1718,8 @@ int main(int argc, char *argv[])
     Rast_close(cum_fd);
     if (dir == 1)
 	Rast_close(dir_fd);
+    if (nearest_layer)
+	Rast_close(nearest_fd);
 
     /* writing history file */
     Rast_short_history(cum_cost_layer, "raster", &history);
@@ -1663,6 +1730,27 @@ int main(int argc, char *argv[])
 	Rast_short_history(move_dir_layer, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history(move_dir_layer, &history);
+    }
+
+    if (nearest_layer) {
+	Rast_short_history(nearest_layer, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(nearest_layer, &history);
+	if (opt9->answer) {
+	    struct Colors colors;
+	    Rast_read_colors(opt9->answer, "", &colors);
+	    Rast_write_colors(nearest_layer, G_mapset(), &colors);
+	}
+	else {
+	    struct Colors colors;
+	    struct Range range;
+	    CELL min, max;
+	    
+	    Rast_read_range(nearest_layer, G_mapset(), &range);
+	    Rast_get_range_min_max(&range, &min, &max);
+	    Rast_make_random_colors(&colors, min, max);
+	    Rast_write_colors(nearest_layer, G_mapset(), &colors);
+	}
     }
 
     /* Create colours for output map */
