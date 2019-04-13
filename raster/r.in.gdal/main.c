@@ -50,6 +50,36 @@ static int dump_rat(GDALRasterBandH hBand, char *outrat, int nBand);
 static void error_handler_ds(void *p);
 static int l1bdriver;
 
+static GDALDatasetH opends(char *dsname, const char **doo, GDALDriverH *hDriver)
+{
+    GDALDatasetH hDS = NULL;
+
+#if GDAL_VERSION_NUM >= 2000000
+    hDS = GDALOpenEx(dsname, GDAL_OF_RASTER | GDAL_OF_READONLY, NULL,
+                     doo, NULL);
+#else
+    hDS = GDALOpen(dsname, GA_ReadOnly);
+#endif
+    if (hDS == NULL)
+        G_fatal_error(_("Unable to open datasource <%s>"), dsname);
+    G_add_error_handler(error_handler_ds, hDS);
+    
+    *hDriver = GDALGetDatasetDriver(hDS);	/* needed for AVHRR data */
+    /* L1B - NOAA/AVHRR data must be treated differently */
+    /* for hDriver names see gdal/frmts/gdalallregister.cpp */
+    G_debug(3, "GDAL Driver: %s", GDALGetDriverShortName(*hDriver));
+    if (strcmp(GDALGetDriverShortName(*hDriver), "L1B") != 0)
+	l1bdriver = 0;
+    else {
+	l1bdriver = 1;		/* AVHRR found, needs north south flip */
+	G_warning(_("Input seems to be NOAA/AVHRR data which needs to be "
+	            "georeferenced with thin plate spline transformation "
+		    "(%s or %s)."), "i.rectify -t", "gdalwarp -tps");
+    }
+
+    return hDS;
+}
+
 /************************************************************************/
 /*                                main()                                */
 
@@ -407,28 +437,7 @@ int main(int argc, char *argv[])
     /*      Open the dataset.                                               */
     /* -------------------------------------------------------------------- */
 
-#if GDAL_VERSION_NUM >= 2000000
-    hDS = GDALOpenEx(input, GDAL_OF_RASTER | GDAL_OF_READONLY, NULL,
-                     (const char **) doo, NULL);
-#else
-    hDS = GDALOpen(input, GA_ReadOnly);
-#endif
-    if (hDS == NULL)
-        G_fatal_error(_("Unable to open datasource <%s>"), input);
-    G_add_error_handler(error_handler_ds, hDS);
-    
-    hDriver = GDALGetDatasetDriver(hDS);	/* needed for AVHRR data */
-    /* L1B - NOAA/AVHRR data must be treated differently */
-    /* for hDriver names see gdal/frmts/gdalallregister.cpp */
-    G_debug(3, "GDAL Driver: %s", GDALGetDriverShortName(hDriver));
-    if (strcmp(GDALGetDriverShortName(hDriver), "L1B") != 0)
-	l1bdriver = 0;
-    else {
-	l1bdriver = 1;		/* AVHRR found, needs north south flip */
-	G_warning(_("Input seems to be NOAA/AVHRR data which needs to be "
-	            "georeferenced with thin plate spline transformation "
-		    "(%s or %s)."), "i.rectify -t", "gdalwarp -tps");
-    }
+    hDS = opends(input, (const char **)doo, &hDriver);
 
     /* does the driver support subdatasets? */
     /* test for capability GDAL_DMD_SUBDATASETS */
@@ -438,10 +447,77 @@ int main(int argc, char *argv[])
 	char **sds = GDALGetMetadata(hDS, "SUBDATASETS");
 
 	if (sds && *sds) {
+	    int i;
+
 	    G_warning(_("Input contains subdatasets which may need to "
-	                "be imported separately"));
-	    /* list subdatasets? */
+	                "be imported separately by name:"));
+	    /* list subdatasets */
+	    for (i = 0; sds[i] != NULL; i++) {
+		char *sdsi = G_store(sds[i]);
+		char *p = sdsi;
+
+		while (*p != '=' && *p != '\0')
+		    p++;
+		if (*p == '=')
+		    p++;
+		if ((i & 1) == 0) {
+		    fprintf(stderr, "Subdataset %d:\n", i + 1);
+		    fprintf(stderr, "  Name: %s\n", p);
+		}
+		else {
+		    char *sdsdim, *sdsdesc, *sdstype;
+		    int sdsdlen;
+
+		    sdsdim = sdsdesc = sdstype = NULL;
+		    sdsdlen = strlen(sdsi);
+		    while (*p != '[' && *p != '\0')
+			p++;
+		    if (*p == '[') {
+			p++;
+			sdsdim = p;
+			while (*p != ']' && *p != '\0')
+			    p++;
+			if (*p == ']') {
+			    *p = '\0';
+			    p++;
+			}
+		    }
+		    while (*p == ' ' && *p != '\0')
+			p++;
+		    sdsdesc = p;
+		    if (*p != '\0') {
+			p = sdsi + sdsdlen - 1;
+
+			if (*p == ')') {
+			    *p = '\0';
+			    p--;
+			    while (*p != '(')
+				p--;
+			    if (*p == '(') {
+				sdstype = p + 1;
+			    p--;
+			    while (*p == ' ')
+				p--;
+			    }
+			    p++;
+			    if (*p == ' ')
+				*p = '\0';
+			}
+		    }
+		    if (sdsdesc && *sdsdesc)
+			fprintf(stderr, "  Description: %s\n", sdsdesc);
+		    if (sdsdim && *sdsdim)
+			fprintf(stderr, "  Dimension: %s\n", sdsdim);
+		    if (sdstype && *sdstype)
+			fprintf(stderr, "  Data type: %s\n", sdstype);
+		}
+		G_free(sdsi);
+	    }
 	}
+    }
+
+    if (GDALGetRasterCount(hDS) == 0) {
+	G_fatal_error(_("No raster bands found in <%s>"), input);
     }
 
     if (flag_p->answer) {
@@ -477,9 +553,14 @@ int main(int argc, char *argv[])
 
     if (GDALGetGeoTransform(hDS, adfGeoTransform) == CE_None) {
 	if (adfGeoTransform[2] != 0.0 || adfGeoTransform[4] != 0.0 ||
-	    adfGeoTransform[1] <= 0.0 || adfGeoTransform[5] >= 0.0)
+	    adfGeoTransform[1] <= 0.0 || adfGeoTransform[5] >= 0.0) {
+	    G_debug(0, "adfGeoTransform[2] %g", adfGeoTransform[2]);
+	    G_debug(0, "adfGeoTransform[4] %g", adfGeoTransform[4]);
+	    G_debug(0, "adfGeoTransform[1] %g", adfGeoTransform[1]);
+	    G_debug(0, "adfGeoTransform[5] %g", adfGeoTransform[5]);
 	    G_fatal_error(_("Input raster map is flipped or rotated - cannot import. "
 			    "You may use 'gdalwarp' to transform the map to North-up."));
+	    }
 	cellhd.north = adfGeoTransform[3];
 	cellhd.ns_res = fabs(adfGeoTransform[5]);
 	cellhd.ns_res3 = fabs(adfGeoTransform[5]);
@@ -676,7 +757,7 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     else {
 	struct Ref ref;
-	char szBandName[512];
+	char szBandName[1024];
 	int nBand = 0;
 	char colornamebuf[512], colornamebuf2[512];
 	FILE *map_names_file = NULL;
@@ -965,7 +1046,7 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 {
     struct Cell_head cellhd;
     struct Key_Value *proj_info = NULL, *proj_units = NULL;
-    char errbuf[256];
+    char errbuf[1024];
     int permissions;
     char target_mapset[GMAPSET_MAX];
     struct Key_Value *out_proj_info,	/* projection information of    */
