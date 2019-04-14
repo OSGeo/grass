@@ -138,16 +138,8 @@ import tempfile
 import xml.etree.ElementTree as etree
 from distutils.dir_util import copy_tree
 
-
-try:
-    from urllib2 import HTTPError, URLError, ProxyHandler, build_opener
-    from urllib import urlopen, urlretrieve
-except ImportError:
-    # there is also HTTPException, perhaps change to list
-    from urllib.error import HTTPError, URLError
-    from urllib.request import urlopen, urlretrieve, ProxyHandler, build_opener
-
-import requests
+from six.moves.urllib.request import urlopen, urlretrieve, ProxyHandler, build_opener, install_opener
+from six.moves.urllib.error import HTTPError, URLError
 
 # Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
 # and ElementTree 1.3.
@@ -172,16 +164,10 @@ def etree_fromfile(filename):
         return etree.fromstring(file_.read())
 
 
-def etree_fromurl(url, proxies=None):
+def etree_fromurl(url):
     """Create XML element tree from a given URL"""
-    if proxies:
-        proxy_handler = ProxyHandler(PROXIES)
-        opener = build_opener(proxy_handler)
-        with opener.open(url) as file_:
-            return etree.fromstring(file_.read())
-    else:
-        file_ = urlopen(url)
-        return etree.fromstring(file_.read())
+    file_ = urlopen(url)
+    return etree.fromstring(file_.read())
 
 
 def check_progs():
@@ -357,7 +343,7 @@ def get_available_toolboxes(url):
     tdict = dict()
     url = url + "toolboxes.xml"
     try:
-        tree = etree_fromurl(url, proxies=PROXIES)
+        tree = etree_fromurl(url)
         for tnode in tree.findall('toolbox'):
             mlist = list()
             clist = list()
@@ -387,7 +373,7 @@ def get_toolbox_modules(url, name):
     url = url + "toolboxes.xml"
 
     try:
-        tree = etree_fromurl(url, proxies=PROXIES)
+        tree = etree_fromurl(url)
         for tnode in tree.findall('toolbox'):
             if name == tnode.get('code'):
                 for mnode in tnode.findall('task'):
@@ -462,7 +448,7 @@ def list_available_modules(url, mlist=None):
     file_url = url + "modules.xml"
     grass.debug("url=%s" % file_url, 1)
     try:
-        tree = etree_fromurl(file_url, proxies=PROXIES)
+        tree = etree_fromurl(file_url)
     except ETREE_EXCEPTIONS:
         grass.warning(_("Unable to parse '%s'. Trying to scan"
                         " SVN repository (may take some time)...") % file_url)
@@ -529,9 +515,7 @@ def list_available_extensions_svn(url):
         file_url = '%s/%s' % (url, modclass)
         grass.debug("url = %s" % file_url, debug=2)
         try:
-            proxy_handler = ProxyHandler(PROXIES)
-            opener = build_opener(proxy_handler)
-            file_ = opener.open(url)
+            file_ = urlopen(url)
         except (HTTPError, IOError, OSError):
             grass.debug(_("Unable to fetch '%s'") % file_url, debug=1)
             continue
@@ -563,9 +547,7 @@ def get_wxgui_extensions(url):
     # construct a full URL of a file
     url = '%s/%s' % (url, 'gui/wxpython')
     grass.debug("url = %s" % url, debug=2)
-    proxy_handler = ProxyHandler(PROXIES)
-    opener = build_opener(proxy_handler)
-    file_ = opener.open(url)
+    file_ = urlopen(url)
     if not file_:
         grass.warning(_("Unable to fetch '%s'") % url)
         return
@@ -730,7 +712,7 @@ def get_toolboxes_metadata(url):
     """
     data = dict()
     try:
-        tree = etree_fromurl(url, proxies=PROXIES)
+        tree = etree_fromurl(url)
         for tnode in tree.findall('toolbox'):
             clist = list()
             for cnode in tnode.findall('correlate'):
@@ -815,7 +797,7 @@ def get_addons_metadata(url, mlist):
     data = {}
     bin_list = []
     try:
-        tree = etree_fromurl(url, proxies=PROXIES)
+        tree = etree_fromurl(url)
     except (HTTPError, URLError, IOError, OSError) as error:
         grass.error(_("Unable to read addons metadata file"
                       " from the remote server: {0}").format(error))
@@ -1109,15 +1091,12 @@ def download_source_code(source, url, name, outdev,
     elif source in ['remote_zip', 'official']:
         # we expect that the module.zip file is not by chance in the archive
         zip_name = os.path.join(tmpdir, 'extension.zip')
-        ses = requests.Session()
-        if 'PROXIES' in globals():
-            ses.proxies = PROXIES
-        res = ses.get(url, stream=True)
-        if str(res.status_code) != '200':
+        try:
+            response = urlopen(url)
+        except URLError:
             grass.fatal(_("Extension <%s> not found") % name)
-        zipcontent = res.content
-        with open(zip_name, "wb") as f:
-            f.write(zipcontent)
+        with open(zip_name, 'wb') as out_file:
+            shutil.copyfileobj(response, out_file)
         extract_zip(name=zip_name, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
     elif source.startswith('remote_') and \
@@ -1691,7 +1670,7 @@ def resolve_source_code(url=None, name=None):
             try:
                 open_url = urlopen('http://' + url)
                 open_url.close()
-                url_validted = True
+                url_validated = True
             except:
                 pass
             try:
@@ -1744,6 +1723,9 @@ def main():
         PROXIES = {}
         for ptype, purl in (p.split('=') for p in options['proxy'].split(',')):
             PROXIES[ptype] = purl
+        proxy = ProxyHandler(PROXIES)
+        opener = build_opener(proxy)
+        install_opener(opener)
 
     # define path
     options['prefix'] = resolve_install_prefix(path=options['prefix'],
