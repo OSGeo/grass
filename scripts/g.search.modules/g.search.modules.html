@@ -1,15 +1,18 @@
 <h2>DESCRIPTION</h2>
 
-<em>g.search.module</em> searches for given keyword in GRASS modules name,
-description, keywords and optionally manpages too.
+<em>g.search.module</em> searches for given keyword in GRASS GIS modules name,
+description, keywords and optionally manpages, too. Also installed addons are
+considered in the search.
 
 <h2>NOTES</h2>
 
-There can be more keywords, <em>g.search.modules</em> will search for each of them
+Multiple keywords may be specified, <em>g.search.modules</em> will search for
+all of them.
 
 <h2>EXAMPLE</h2>
 
-Search all modules, where keywords <em>buffer</em> OR <em>clip</em> can be found
+Search all modules, where keywords <em>buffer</em> OR <em>clip</em> can be found:
+
 <div class="code"><pre>
 g.search.modules keyword=buffer,clip
 
@@ -30,17 +33,28 @@ r.buffer
                  that contain non-NULL category values.
 </pre></div>
 
+<p>
 Search all modules, where keywords <em>overlay</em> AND <em>clip</em> can be
-found with some fancy terminal output
+found with some fancy terminal output (not shown here):
+
 <div class="code"><pre>
 g.search.modules keyword=clip,overlay -a -c
 
+v.clip
+    keywords: vector,clip,area
+    description: Extracts features of input map which overlay features
+                 of clip map.
+
 v.overlay
-    keywords: vector,geometry,spatial query,intersection,union,clip
-    description: Overlays two vector maps.;
+    keywords: vector,geometry,spatial
+              query,clip,difference,intersection,union
+    description: Overlays two vector maps offering clip, intersection,
+                 difference, symmetrical difference, union operators.
 </pre></div>
 
-Search in manual pages too 
+<p>
+Search in manual pages as well:
+
 <div class="code"><pre>
 g.search.modules -m keyword=kapri
 
@@ -64,7 +78,9 @@ db.select
 
 <h2>AUTHORS</h2>
 
-Jachym Cepicky, OpenGeoLabs s.r.o., Czech Republic
+Jachym Cepicky, OpenGeoLabs s.r.o., Czech Republic: original author
+<br>
+Anika Bettge, mundialis, Germany: addon search added
 
 <p>
 <i>Last changed: $Date$</i>

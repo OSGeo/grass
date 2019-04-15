@@ -61,6 +61,7 @@
 #% description: JSON format
 #% guisection: Output
 #%end
+
 from __future__ import print_function
 import os
 import sys
@@ -198,6 +199,15 @@ def _search_module(keywords, logical_and=False, invert=False, manpages=False,
 
     items = menudata.findall('module-item')
 
+    # add installed addons to modules list
+    if os.getenv("GRASS_ADDON_BASE"):
+        filename_addons = os.path.join(os.getenv("GRASS_ADDON_BASE"), 'modules.xml')
+        addon_menudata_file = open(filename_addons, 'r')
+        addon_menudata = etree.parse(addon_menudata_file)
+        addon_menudata_file.close()
+        addon_items = addon_menudata.findall('task')
+        items.extend(addon_items)
+
     found_modules = []
     for item in items:
         name = item.attrib['name']
@@ -246,7 +256,7 @@ def _search_module(keywords, logical_and=False, invert=False, manpages=False,
                 }
             })
 
-    return found_modules
+    return sorted(found_modules, key=lambda k: k['name'])
 
 
 def _basic_search(pattern, name, description, module_keywords):
@@ -255,11 +265,13 @@ def _basic_search(pattern, name, description, module_keywords):
     This lowercases the strings before searching in them, so the pattern
     string should be lowercased too.
     """
-    if name.lower().find(pattern) > -1 or\
-       description.lower().find(pattern) > -1 or\
-       module_keywords.lower().find(pattern) > -1:
-
-        return True
+    if (name and description and module_keywords):
+        if name.lower().find(pattern) > -1 or\
+           description.lower().find(pattern) > -1 or\
+           module_keywords.lower().find(pattern) > -1:
+           return True
+        else:
+            return False
     else:
         return False
 
@@ -282,6 +294,7 @@ def _manpage_search(pattern, name):
     manpage = grass.read_command('g.manual', flags='m', entry=name)
 
     return manpage.lower().find(pattern) > -1
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()
