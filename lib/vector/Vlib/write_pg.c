@@ -693,7 +693,7 @@ int create_table(struct Format_info_pg *pg_info)
             }
 
             /* append column */
-            sprintf(stmt_col, ",%s %s", colname, db_sqltype_name(sqltype));
+            sprintf(stmt_col, ",\"%s\" %s", colname, db_sqltype_name(sqltype));
             strcat(stmt, stmt_col);
             if (sqltype == DB_SQL_TYPE_CHARACTER) {
                 /* length only for string columns */
@@ -2046,7 +2046,7 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
 		    }
 
                     /* -> columns */
-                    sprintf(buf_tmp, "%s", colname);
+                    sprintf(buf_tmp, "\"%s\"", colname);
                     strcat(buf, buf_tmp);
                     if (col < ncol - 1)
                         strcat(buf, ",");
