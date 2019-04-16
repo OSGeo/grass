@@ -62,7 +62,7 @@ bands include Landsat 7 ETM, QuickBird, and SPOT.
 The module works for 2-bit to 30-bit images. All images are rescaled to 8-bit
 for processing. By default, the entire possible range for the selected bit depth is
 rescaled to 8-bit. For example, the range of 0-65535 for a 16-bit image is
-rescaled to 0-255). The 'r' flag allows the range of pixel values actually 
+rescaled to 0-255). The 'r' flag allows the range of pixel values actually
 present in an image rescaled to a full 8-bit range. For example, a 16 bit image
 might only have pixels that range from 70 to 35000; this range of 70-35000 would
 be rescaled to 0-255. This can give better visual distinction to features,
@@ -90,24 +90,25 @@ the 3 pan sharpening algorithms differ in terms of spectral response.
 
 <h3>Pan sharpening comparison example</h3>
 
-Pan sharpening of a Landsat image from Boulder, Colorado, USA:
+Pan sharpening of a Landsat image from Boulder, Colorado, USA
+(LANDSAT ETM+ [Landsat 7] spectral bands 5,4,2, and pan band 8):
 
 <div class="code"><pre>
 # R, G, B composite at 30m
-g.region raster=p034r032_7dt20010924_z13_10 -p
-d.rgb b=p034r032_7dt20010924_z13_10 g=lp034r032_7dt20010924_z13_20
-    r=p034r032_7dt20010924_z13_30
+g.region raster=p034r032_7dt20010924_z13_20 -p
+d.rgb b=p034r032_7dt20010924_z13_20 g=lp034r032_7dt20010924_z13_40
+    r=p034r032_7dt20010924_z13_50
 
 # i.pansharpen with IHS algorithm
-i.pansharpen red=p034r032_7dt20010924_z13_30 green=p034r032_7dt20010924_z13_20
-    blue=p034r032_7dt20010924_z13_10 pan=p034r032_7dp20010924_z13_80
+i.pansharpen red=p034r032_7dt20010924_z13_50 green=p034r032_7dt20010924_z13_40
+    blue=p034r032_7dt20010924_z13_20 pan=p034r032_7dp20010924_z13_80
     output=ihs321 method=ihs
 
 # ... likewise with method=brovey and method=pca
 
 # display at 15m
-g.region raster=ihs321_blue -p
-d.rgb b=ihs321_blue g=ihs321_green r=ihs321_red
+g.region raster=ihs542_blue -p
+d.rgb b=ihs542_blue g=ihs542_green r=ihs542_red
 </pre></div>
 
 <p>
