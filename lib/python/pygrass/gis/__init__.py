@@ -12,7 +12,7 @@ import fnmatch
 
 import grass.lib.gis as libgis
 from grass.pygrass.errors import GrassError
-from grass.script.utils import encode, decode
+from grass.script.utils import encode, decode, getenv
 
 test_vector_name = "Gis_test_vector"
 test_raster_name = "Gis_test_raster"
@@ -369,9 +369,9 @@ class Mapset(object):
 
     def is_current(self):
         """Check if the MAPSET is the working MAPSET"""
-        return (self.name == libgis.G_getenv('MAPSET') and
-                self.location == libgis.G_getenv('LOCATION_NAME') and
-                self.gisdbase == libgis.G_getenv('GISDBASE'))
+        return (self.name == getenv('MAPSET') and
+                self.location == getenv('LOCATION_NAME') and
+                self.gisdbase == getenv('GISDBASE'))
 
     def current(self):
         """Set the mapset as current"""
