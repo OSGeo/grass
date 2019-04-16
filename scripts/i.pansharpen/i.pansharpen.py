@@ -87,6 +87,10 @@
 #% key: l
 #% description: Rebalance blue channel for LANDSAT
 #%end
+#%flag
+#% key: r
+#% description: Rescale (stretch) the range of pixel values in each channel to the entire 0-255 8-bit range for processing (see notes)
+#%end
 
 import os
 
@@ -112,6 +116,7 @@ def main():
     bits      = options['bitdepth'] # bit depth of image channels
     bladjust  = flags['l']  # adjust blue channel
     sproc     = flags['s']  # serial processing
+    rescale   = flags['r'] # rescale to spread pixel values to entire 0-255 range
 
     # Checking bit depth
     bits = float(bits)
@@ -136,63 +141,105 @@ def main():
     ms3 = 'tmp%s_ms3' % pid
     pan = 'tmp%s_pan' % pid
 
-    if bits == 8:
-        grass.message(_("Using 8bit image channels"))
-        if sproc:
-            # serial processing
-            grass.run_command('g.copy', raster='%s,%s' % (ms1_orig, ms1),
-                               quiet=True, overwrite=True)
-            grass.run_command('g.copy', raster='%s,%s' % (ms2_orig, ms2),
-                               quiet=True, overwrite=True)
-            grass.run_command('g.copy', raster='%s,%s' % (ms3_orig, ms3),
-                               quiet=True, overwrite=True)
-            grass.run_command('g.copy', raster='%s,%s' % (pan_orig, pan),
-                               quiet=True, overwrite=True)
-        else:
-            # parallel processing
-            pb = grass.start_command('g.copy', raster='%s,%s' % (ms1_orig, ms1),
+    if rescale == False:
+        if bits == 8:
+            grass.message(_("Using 8bit image channels"))
+            if sproc:
+                # serial processing
+                grass.run_command('g.copy', raster='%s,%s' % (ms1_orig, ms1),
                                    quiet=True, overwrite=True)
-            pg = grass.start_command('g.copy', raster='%s,%s' % (ms2_orig, ms2),
+                grass.run_command('g.copy', raster='%s,%s' % (ms2_orig, ms2),
                                    quiet=True, overwrite=True)
-            pr = grass.start_command('g.copy', raster='%s,%s' % (ms3_orig, ms3),
+                grass.run_command('g.copy', raster='%s,%s' % (ms3_orig, ms3),
                                    quiet=True, overwrite=True)
-            pp = grass.start_command('g.copy', raster='%s,%s' % (pan_orig, pan),
+                grass.run_command('g.copy', raster='%s,%s' % (pan_orig, pan),
                                    quiet=True, overwrite=True)
+            else:
+                # parallel processing
+                pb = grass.start_command('g.copy', raster='%s,%s' % (ms1_orig, ms1),
+                                       quiet=True, overwrite=True)
+                pg = grass.start_command('g.copy', raster='%s,%s' % (ms2_orig, ms2),
+                                       quiet=True, overwrite=True)
+                pr = grass.start_command('g.copy', raster='%s,%s' % (ms3_orig, ms3),
+                                       quiet=True, overwrite=True)
+                pp = grass.start_command('g.copy', raster='%s,%s' % (pan_orig, pan),
+                                       quiet=True, overwrite=True)
 
-            pb.wait()
-            pg.wait()
-            pr.wait()
-            pp.wait()
+                pb.wait()
+                pg.wait()
+                pr.wait()
+                pp.wait()
+
+        else:
+            grass.message(_("Converting image chanels to 8bit for processing"))
+            maxval = pow(2, bits) - 1
+            if sproc:
+                # serial processing
+                grass.run_command('r.rescale', input=ms1_orig, from_='0,%f' % maxval,
+                                   output=ms1, to='0,255', quiet=True, overwrite=True)
+                grass.run_command('r.rescale', input=ms2_orig, from_='0,%f' % maxval,
+                                   output=ms2, to='0,255', quiet=True, overwrite=True)
+                grass.run_command('r.rescale', input=ms3_orig, from_='0,%f' % maxval,
+                                   output=ms3, to='0,255', quiet=True, overwrite=True)
+                grass.run_command('r.rescale', input=pan_orig, from_='0,%f' % maxval,
+                                   output=pan, to='0,255', quiet=True, overwrite=True)
+
+            else:
+                # parallel processing
+                pb = grass.start_command('r.rescale', input=ms1_orig, from_='0,%f' % maxval,
+                                       output=ms1, to='0,255', quiet=True, overwrite=True)
+                pg = grass.start_command('r.rescale', input=ms2_orig, from_='0,%f' % maxval,
+                                       output=ms2, to='0,255', quiet=True, overwrite=True)
+                pr = grass.start_command('r.rescale', input=ms3_orig, from_='0,%f' % maxval,
+                                       output=ms3, to='0,255', quiet=True, overwrite=True)
+                pp = grass.start_command('r.rescale', input=pan_orig, from_='0,%f' % maxval,
+                                       output=pan, to='0,255', quiet=True, overwrite=True)
+
+                pb.wait()
+                pg.wait()
+                pr.wait()
+                pp.wait()
 
     else:
-        grass.message(_("Converting image chanels to 8bit for processing"))
+        grass.message(_("Rescaling image chanels to 8bit for processing"))
+
+        min_ms1 = int(grass.raster_info(ms1_orig)['min'])
+        max_ms1 = int(grass.raster_info(ms1_orig)['max'])
+        min_ms2 = int(grass.raster_info(ms2_orig)['min'])
+        max_ms2 = int(grass.raster_info(ms2_orig)['max'])
+        min_ms3 = int(grass.raster_info(ms3_orig)['min'])
+        max_ms3 = int(grass.raster_info(ms3_orig)['max'])
+        min_pan = int(grass.raster_info(pan_orig)['min'])
+        max_pan = int(grass.raster_info(pan_orig)['max'])
+
         maxval = pow(2, bits) - 1
         if sproc:
             # serial processing
-            grass.run_command('r.rescale', input=ms1_orig, from_='0,%f' % maxval,
+            grass.run_command('r.rescale', input=ms1_orig, from_='%f,%f' % (min_ms1, max_ms1),
                                output=ms1, to='0,255', quiet=True, overwrite=True)
-            grass.run_command('r.rescale', input=ms2_orig, from_='0,%f' % maxval,
+            grass.run_command('r.rescale', input=ms2_orig, from_='%f,%f' % (min_ms2, max_ms2),
                                output=ms2, to='0,255', quiet=True, overwrite=True)
-            grass.run_command('r.rescale', input=ms3_orig, from_='0,%f' % maxval,
+            grass.run_command('r.rescale', input=ms3_orig, from_='%f,%f' % (min_ms3, max_ms3),
                                output=ms3, to='0,255', quiet=True, overwrite=True)
-            grass.run_command('r.rescale', input=pan_orig, from_='0,%f' % maxval,
+            grass.run_command('r.rescale', input=pan_orig, from_='%f,%f' % (min_pan, max_pan),
                                output=pan, to='0,255', quiet=True, overwrite=True)
 
         else:
             # parallel processing
-            pb = grass.start_command('r.rescale', input=ms1_orig, from_='0,%f' % maxval,
+            pb = grass.start_command('r.rescale', input=ms1_orig, from_='%f,%f' % (min_ms1, max_ms1),
                                    output=ms1, to='0,255', quiet=True, overwrite=True)
-            pg = grass.start_command('r.rescale', input=ms2_orig, from_='0,%f' % maxval,
+            pg = grass.start_command('r.rescale', input=ms2_orig, from_='%f,%f' % (min_ms2, max_ms2),
                                    output=ms2, to='0,255', quiet=True, overwrite=True)
-            pr = grass.start_command('r.rescale', input=ms3_orig, from_='0,%f' % maxval,
+            pr = grass.start_command('r.rescale', input=ms3_orig, from_='%f,%f' % (min_ms3, max_ms3),
                                    output=ms3, to='0,255', quiet=True, overwrite=True)
-            pp = grass.start_command('r.rescale', input=pan_orig, from_='0,%f' % maxval,
+            pp = grass.start_command('r.rescale', input=pan_orig, from_='%f,%f' % (min_pan, max_pan),
                                    output=pan, to='0,255', quiet=True, overwrite=True)
 
             pb.wait()
             pg.wait()
             pr.wait()
             pp.wait()
+
 
     # get PAN resolution:
     kv = grass.raster_info(map=pan)
@@ -226,13 +273,12 @@ def main():
     # light, so output blue channed can be modified
     if bladjust:
         grass.message(_("Adjusting blue channel color table..."))
-        rules = grass.tempfile()
-        colors = open(rules, 'w')
-        colors.write('5 0 0 0\n20 200 200 200\n40 230 230 230\n67 255 255 255 \n')
-        colors.close()
-
-        grass.run_command('r.colors', map="%s_blue" % out, rules=rules, quiet=True)
-        os.remove(rules)
+        blue_colors = ['0 0 0 0\n5% 0 0 0\n67% 255 255 255\n100% 255 255 255']
+        # these previous colors are way too blue for landsat
+        # blue_colors = ['0 0 0 0\n10% 0 0 0\n20% 200 200 200\n40% 230 230 230\n67% 255 255 255\n100% 255 255 255']
+        bc = grass.feed_command('r.colors', quiet = True, map = "%s_blue" % out, rules = "-")
+        bc.stdin.write('\n'.join(blue_colors))
+        bc.stdin.close()
 
     # output notice
     grass.verbose(_("The following pan-sharpened output maps have been generated:"))
@@ -499,9 +545,9 @@ def matchhist(original, target, matched):
     # create a dictionary to hold arrays for each image
     arrays = {}
 
-    for i in images:
+    for img in images:
         # calculate number of cells for each grey value for for each image
-        stats_out = grass.pipe_command('r.stats', flags='cin', input=i,
+        stats_out = grass.pipe_command('r.stats', flags='cin', input=img,
                                        sep=':')
         stats = stats_out.communicate()[0].split('\n')[:-1]
         stats_dict = dict(s.split(':', 1) for s in stats)
@@ -518,7 +564,7 @@ def matchhist(original, target, matched):
         #   cumulative distribution function (CDF) for each grey value.
         #   Grey value is the integer (i4) and cdf is float (f4).
 
-        arrays[i] = np.zeros((256, ), dtype=('i4,f4'))
+        arrays[img] = np.zeros((256, ), dtype=('i4,f4'))
         cum_cells = 0  # cumulative total of cells for sum of current and all lower grey values
 
         for n in range(0, 256):
@@ -534,7 +580,7 @@ def matchhist(original, target, matched):
             cdf = float(cum_cells) / float(total_cells)
 
             # insert values into array
-            arrays[i][n] = (n, cdf)
+            arrays[img][n] = (n, cdf)
 
     # open file for reclass rules
     outfile = open(grass.tempfile(), 'w')
