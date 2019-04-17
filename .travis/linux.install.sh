@@ -14,6 +14,7 @@ sudo apt-get install --no-install-recommends \
     libfftw3-dev \
     libfreetype6-dev \
     libgdal-dev \
+    libzstd-dev \
     libgeos-dev \
     libglu1-mesa-dev \
     libjpeg-dev \
