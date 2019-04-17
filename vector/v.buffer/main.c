@@ -666,6 +666,11 @@ int main(int argc, char *argv[])
 		G_debug(2, _("The tolerance in map units: %g"),
 			unit_tolerance);
 	    }
+
+	    if (da <= 0) {
+		G_warning(_("Distances must be positive, ignoring distance %g"), da);
+		continue;
+	    }
 	    
 	    Vect_line_prune(Points);
 	    if (ltype & GV_POINTS || Points->n_points == 1) {
