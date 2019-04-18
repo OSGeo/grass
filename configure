@@ -69,7 +69,7 @@ ac_help="$ac_help
 ac_help="$ac_help
   --with-bzlib            support BZIP2 functionality (default: no)"
 ac_help="$ac_help
-  --with-zstd             support Zstandard functionality (default: no)"
+  --with-zstd             support Zstandard functionality (default: yes)"
 ac_help="$ac_help
   --with-gdal[=path/gdal-config]
                           enable GDAL/OGR support (gdal-config with path,
@@ -1909,7 +1909,7 @@ if test "${with_zstd+set}" = set; then
   withval="$with_zstd"
   :
 else
-  with_zstd=no
+  with_zstd=yes
 fi
 
 

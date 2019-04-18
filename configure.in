@@ -268,7 +268,7 @@ LOC_ARG_WITH(pthread, POSIX threads, no)
 LOC_ARG_WITH(openmp, OpenMP, no)
 LOC_ARG_WITH(opencl, OpenCL, no)
 LOC_ARG_WITH(bzlib, BZIP2, no)
-LOC_ARG_WITH(zstd, Zstandard, no)
+LOC_ARG_WITH(zstd, Zstandard)
 
 AC_ARG_WITH(gdal,
 [  --with-gdal[=path/gdal-config]
