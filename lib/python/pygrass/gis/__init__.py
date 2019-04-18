@@ -12,7 +12,8 @@ import fnmatch
 
 import grass.lib.gis as libgis
 from grass.pygrass.errors import GrassError
-from grass.script.utils import encode, decode, getenv
+from grass.script.utils import encode, decode
+from grass.pygrass.utils import getenv
 
 test_vector_name = "Gis_test_vector"
 test_raster_name = "Gis_test_raster"
