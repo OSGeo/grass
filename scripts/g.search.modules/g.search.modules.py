@@ -4,7 +4,7 @@
 # MODULE:	g.search.modules
 # AUTHOR(S):	Jachym Cepicky <jachym.cepicky gmail.com>
 # PURPOSE:	g.search.modules in grass modules using keywords
-# COPYRIGHT:	(C) 2015-2016 by the GRASS Development Team
+# COPYRIGHT:	(C) 2015-2019 by the GRASS Development Team
 #
 #		This program is free software under the GNU General
 #		Public License (>=v2). Read the file COPYING that
@@ -202,11 +202,21 @@ def _search_module(keywords, logical_and=False, invert=False, manpages=False,
     # add installed addons to modules list
     if os.getenv("GRASS_ADDON_BASE"):
         filename_addons = os.path.join(os.getenv("GRASS_ADDON_BASE"), 'modules.xml')
-        addon_menudata_file = open(filename_addons, 'r')
-        addon_menudata = etree.parse(addon_menudata_file)
-        addon_menudata_file.close()
-        addon_items = addon_menudata.findall('task')
-        items.extend(addon_items)
+        if os.path.isfile(filename_addons):
+            addon_menudata_file = open(filename_addons, 'r')
+            addon_menudata = etree.parse(addon_menudata_file)
+            addon_menudata_file.close()
+            addon_items = addon_menudata.findall('task')
+            items.extend(addon_items)
+
+    # add system-wide installed addons to modules list
+    filename_addons_s = os.path.join(os.getenv("GISBASE"), 'modules.xml')
+    if os.path.isfile(filename_addons_s):
+        addon_menudata_file_s = open(filename_addons_s, 'r')
+        addon_menudata_s = etree.parse(addon_menudata_file_s)
+        addon_menudata_file_s.close()
+        addon_items_s = addon_menudata_s.findall('task')
+        items.extend(addon_items_s)
 
     found_modules = []
     for item in items:
@@ -228,7 +238,10 @@ def _search_module(keywords, logical_and=False, invert=False, manpages=False,
                 keyword_found = _basic_search(keyword, name, description,
                                               module_keywords)
 
-            if not keyword_found and manpages:
+            # meta-modules (i.sentinel, r.modis, ...) do not have descriptions
+            # and keywords, but they have a manpage
+            # TODO change the handling of meta-modules
+            if (description and module_keywords) and not keyword_found and manpages:
                 keyword_found = _manpage_search(keyword, name)
 
             if keyword_found:
@@ -294,7 +307,6 @@ def _manpage_search(pattern, name):
     manpage = grass.read_command('g.manual', flags='m', entry=name)
 
     return manpage.lower().find(pattern) > -1
-
 
 if __name__ == "__main__":
     options, flags = grass.parser()
