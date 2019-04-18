@@ -77,6 +77,7 @@ class Info(object):
         self.c_mapinfo = ctypes.pointer(libvect.Map_info())
         self._topo_level = 1
         self._class_name = 'Vector'
+        self._mode = 'r'
         self.overwrite = False
         self.date_fmt = '%a %b  %d %H:%M:%S %Y'
 
@@ -86,6 +87,17 @@ class Info(object):
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
+
+    def _get_mode(self):
+        return self._mode
+
+    def _set_mode(self, mode):
+        if mode.upper() not in ('R', 'W'):
+            str_err = _("Mode type: {0} not supported ('r', 'w')")
+            raise ValueError(str_err.format(mode))
+        self._mode = mode
+
+    mode = property(fget=_get_mode, fset=_set_mode)
 
     def _get_name(self):
         """Private method to obtain the Vector name"""
@@ -322,26 +334,27 @@ class Info(object):
         See more examples in the documentation of the ``read`` and ``write``
         methods
         """
+        self.mode = mode if mode else self.mode
         with_z = libvect.WITH_Z if with_z else libvect.WITHOUT_Z
         # check if map exists or not
-        if not self.exist() and mode != 'w':
+        if not self.exist() and self.mode != 'w':
             raise OpenError("Map <%s> not found." % self._name)
         if libvect.Vect_set_open_level(self._topo_level) != 0:
             raise OpenError("Invalid access level.")
         # update the overwrite attribute
         self.overwrite = overwrite if overwrite is not None else self.overwrite
         # check if the mode is valid
-        if mode not in ('r', 'rw', 'w'):
+        if self.mode not in ('r', 'rw', 'w'):
             raise ValueError("Mode not supported. Use one of: 'r', 'rw', 'w'.")
 
         # check if the map exist
-        if self.exist() and mode in ('r', 'rw'):
+        if self.exist() and self.mode in ('r', 'rw'):
             # open in READ mode
-            if mode == 'r':
+            if self.mode == 'r':
                 openvect = libvect.Vect_open_old2(self.c_mapinfo, self.name,
                                                   self.mapset, str(layer))
             # open in READ and WRITE mode
-            elif mode == 'rw':
+            elif self.mode == 'rw':
                 openvect = libvect.Vect_open_update2(self.c_mapinfo, self.name,
                                                      self.mapset, str(layer))
 
@@ -349,11 +362,11 @@ class Info(object):
             self.dblinks = DBlinks(self.c_mapinfo)
 
         # If it is opened in write mode
-        if mode == 'w':
+        if self.mode == 'w':
             openvect = libvect.Vect_open_new(self.c_mapinfo, self.name, with_z)
             self.dblinks = DBlinks(self.c_mapinfo)
 
-        if mode in ('w', 'rw') and tab_cols:
+        if self.mode in ('w', 'rw') and tab_cols:
             # create a link
             link = Link(layer,
                         link_name if link_name else self.name,
