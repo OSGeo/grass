@@ -51,8 +51,7 @@ from core.debug import Debug
 from core.globalvar import SCT_EXT
 
 from grass.script import core as grass
-from grass.script.utils import decode
-
+from grass.script.utils import decode, encode
 
 if sys.version_info.major == 2:
     bytes = str
@@ -716,7 +715,7 @@ def RunCommand(prog, flags="", overwrite=False, quiet=False,
     ps = grass.start_command(prog, flags, overwrite, quiet, verbose, **kwargs)
 
     if stdin:
-        ps.stdin.write(stdin)
+        ps.stdin.write(encode(stdin))
         ps.stdin.close()
         ps.stdin = None
 
