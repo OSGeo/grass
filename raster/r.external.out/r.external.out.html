@@ -27,8 +27,8 @@ directly in GeoTIFF format (any GDAL supported format can be used here):
 # define output directory for files resulting from GRASS calculation(s)
 # and target format:
 mkdir $HOME/gisoutput/
-r.external.out directory=$HOME/gisoutput/ format="GTiff"
-
+# hint: the create options are not mandatory
+r.external.out directory=$HOME/gisoutput/ format="GTiff" option="BIGTIFF=YES,COMPRESS=DEFLATE"
 # prepare sample analysis
 g.region raster=elevation -p
 
