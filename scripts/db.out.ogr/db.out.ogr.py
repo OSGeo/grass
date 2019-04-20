@@ -18,6 +18,7 @@
 #% description: Exports attribute tables into various formats.
 #% keyword: database
 #% keyword: export
+#% keyword: output
 #% keyword: attribute table
 #%end
 

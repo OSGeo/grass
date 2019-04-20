@@ -375,6 +375,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("output"));
     G_add_keyword(_("voxel"));
     G_add_keyword("VTK");
     module->description =

@@ -24,6 +24,7 @@
 #% description: Exports space time raster dataset as VTK time series.
 #% keyword: temporal
 #% keyword: export
+#% keyword: output
 #% keyword: raster
 #% keyword: VTK
 #% keyword: time

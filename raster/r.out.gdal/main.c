@@ -138,6 +138,7 @@ int main(int argc, char *argv[])
 	_("Exports GRASS raster maps into GDAL supported formats.");
     G_add_keyword(_("raster"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("output"));
 
     flag_l = G_define_flag();
     flag_l->key = 'l';

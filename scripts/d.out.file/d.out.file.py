@@ -17,6 +17,7 @@
 #% description: Saves the contents of the active display monitor to a graphics file.
 #% keyword: display
 #% keyword: export
+#% keyword: output
 #%end
 #%option G_OPT_F_OUTPUT
 #% description: Name for output file
