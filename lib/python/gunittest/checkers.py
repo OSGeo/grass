@@ -603,7 +603,7 @@ def text_file_md5(filename, exclude_lines=None, exclude_re=None,
                 continue
             if exclude_re and regexp.match(line):
                 continue
-            hasher.update(line)
+            hasher.update(line.encode("utf-8"))
     if append_lines:
         for line in append_lines:
             hasher.update(line)
