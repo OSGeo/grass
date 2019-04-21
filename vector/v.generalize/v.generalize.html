@@ -1,9 +1,16 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.generalize</em>
-is a module for the generalization of GRASS vector maps. This module
-consists of algorithms for line simplification, line smoothing,
-network generalization and displacement (new methods may be added later).
+<em>v.generalize</em> is a module for the generalization of GRASS 
+vector maps. This module consists of algorithms for line 
+simplification, line smoothing, network generalization and displacement 
+(new methods may be added later).
+
+<p>
+The <b>cats</b> and <b>where</b> options are used only if a <b>layer</b> 
+&gt; 0 is specified, otherwise, those options are ignored. Be aware 
+that the default is <em>layer=-1</em>, meaning that all layers are 
+processed, ignoring the <b>cats</b> and <b>where</b> options.
+
 <p>If <b>type=area</b> is selected, boundaries of selected areas will be 
 generalized, and the options <b>cats</b>, <b>where</b>, and 
 <b>layer</b> will be used to select areas. 
