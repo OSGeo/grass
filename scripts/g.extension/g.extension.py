@@ -1535,7 +1535,7 @@ KNOWN_HOST_SERVICES_INFO = {
         'ignored_suffixes': ['.zip', '.tar.gz', '.gz', '.bz2'],
         'possible_starts': ['', 'https://', 'http://'],
         'url_start': 'https://',
-        'url_end': '/get/default.zip',
+        'url_end': '/get/master.zip',
     },
 }
 
