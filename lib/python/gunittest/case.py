@@ -1105,7 +1105,7 @@ class TestCase(unittest.TestCase):
             # here exception raised by run() with finish_=True would be
             # almost enough but we want some additional info to be included
             # in the test report
-            errors = module.outputs.stderr
+            errors = decode(module.outputs.stderr)
             # provide diagnostic at least in English locale
             # TODO: standardized error code would be handy here
             import re
