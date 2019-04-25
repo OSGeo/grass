@@ -125,10 +125,8 @@ char *G_compressor_name(int number)
 
 int G_default_compressor(void)
 {
-#ifdef HAVE_ZSTD_H
-    /* ZSTD */
-    return 5;
-#endif
+    /* do not use ZSTD if available */
+
     /* ZLIB */
     return 2;
 }
