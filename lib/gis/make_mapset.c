@@ -75,7 +75,7 @@ int G_make_mapset(const char *gisdbase_name, const char *location_name,
 
     /* Get PERMANENT default window */
     G_setenv_nogisrc("GISDBASE", gisdbase_name);
-    G_setenv_nogisrc("LOCATION", location_name);
+    G_setenv_nogisrc("LOCATION_NAME", location_name);
     G_setenv_nogisrc("MAPSET", "PERMANENT");
     G_get_default_window(&default_window);
 
