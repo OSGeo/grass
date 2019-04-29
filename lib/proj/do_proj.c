@@ -92,16 +92,44 @@ int GPJ_init_transform(const struct pj_info *info_in,
     info_trans->pj = NULL;
     if (!info_trans->def) {
 	if (info_in->srid && info_out->pj && info_out->srid) {
+	    char *insrid, *outsrid;
+
+#if PROJ_VERSION_MAJOR >= 6
+	    /* PROJ6+: EPSG must uppercase EPSG */
+	    if (strncmp(info_in->srid, "epsg", 4) == 0)
+		insrid = G_store_upper(info_in->srid);
+	    else
+		insrid = G_store(info_in->srid);
+
+	    if (strncmp(info_out->srid, "epsg", 4) == 0)
+		outsrid = G_store_upper(info_out->srid);
+	    else
+		outsrid = G_store(info_out->srid);
+#else
+	    /* PROJ5: EPSG must lowercase epsg */
+	    if (strncmp(info_in->srid, "EPSG", 4) == 0)
+		insrid = G_store_lower(info_in->srid);
+	    else
+		insrid = G_store(info_in->srid);
+
+	    if (strncmp(info_out->srid, "EPSG", 4) == 0)
+		outsrid = G_store_lower(info_out->srid);
+	    else
+		outsrid = G_store(info_out->srid);
+
+#endif
 	    /* ask PROJ for the best pipeline */
 	    info_trans->pj = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
-	                                            info_in->srid,
-						    info_out->srid,
+	                                            insrid,
+						    outsrid,
 						    NULL);
 
 	    if (info_trans->pj == NULL) {
 		G_warning(_("proj_create_crs_to_crs() failed for '%s' and '%s'"),
-		          info_in->srid, info_out->srid);
+		          insrid, outsrid);
 	    }
+	    G_free(insrid);
+	    G_free(outsrid);
 #if PROJ_VERSION_MAJOR >= 6
 	    else {
 		const char *str = proj_as_proj_string(NULL, info_trans->pj,
@@ -221,6 +249,8 @@ int GPJ_transform(const struct pj_info *info_in,
     /* prepare */
     if (in_is_ll) {
 	/* convert to radians */
+	/* PROJ 6: conversion to radians is not always needed:
+	 * if proj_angular_input(info_trans->pj, dir) == 1 -> convert */
 	c.lpzt.lam = (*x) / RAD_TO_DEG;
 	c.lpzt.phi = (*y) / RAD_TO_DEG;
 	c.lpzt.z = 0;
@@ -250,6 +280,8 @@ int GPJ_transform(const struct pj_info *info_in,
     /* output */
     if (out_is_ll) {
 	/* convert to degrees */
+	/* PROJ 6: conversion to radians is not always needed:
+	 * if proj_angular_output(info_trans->pj, dir) == 1 -> convert */
 	*x = c.lpzt.lam * RAD_TO_DEG;
 	*y = c.lpzt.phi * RAD_TO_DEG;
 	if (z)
