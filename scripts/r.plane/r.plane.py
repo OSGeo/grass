@@ -73,8 +73,15 @@ def main():
     type = options['type']
     dip = float(options['dip'])
     az = float(options['azimuth'])
-    ea = float(options['easting'])
-    no = float(options['northing'])
+    try:
+        ea = float(options['easting'])
+        no = float(options['northing'])
+    except ValueError:
+        try:
+            ea = float(gscript.utils.float_or_dms(options['easting']))
+            no = float(gscript.utils.float_or_dms(options['northing']))
+        except:
+            gscript.fatal(_("Input coordinates seems to be invalid"))
     el = float(options['elevation'])
 
     # reg = gscript.region()
