@@ -86,7 +86,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                                      wx.LC_HRULES |
                                      wx.LC_VRULES)
         # sorter
-        self.fid = self.cats.keys()[0]
+        self.fid = list(self.cats.keys())[0]
         self.itemDataMap = self.list.Populate(self.cats[self.fid])
         listmix.ColumnSorterMixin.__init__(self, 2)
         self.fidMulti = wx.Choice(parent=self, id=wx.ID_ANY,
@@ -526,7 +526,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.cats_orig = copy.deepcopy(self.cats)
 
         # polulate list
-        self.fid = self.cats.keys()[0]
+        self.fid = list(self.cats.keys())[0]
         self.itemDataMap = self.list.Populate(self.cats[self.fid],
                                               update=True)
 
