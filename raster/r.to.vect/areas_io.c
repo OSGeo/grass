@@ -152,9 +152,9 @@ static int write_bnd(struct COOR *line_begin, struct COOR *line_end,	/* start an
 	/* this should NEVER happen */
 	if ((p = move(p)) == NULPTR)
 	    G_fatal_error(_("write_bnd:  line terminated unexpectedly\n"
-			    "previous (%d) point %p (%d,%d,%d) %p %p"),
-			  direction, last, last->row, last->col, last->node,
-			  last->fptr, last->bptr);
+			    "previous (%d) point %d (%d,%d,%d) %p %p"),
+			  direction, i, last->row, last->col, last->node,
+			  (void *)last->fptr, (void *)last->bptr);
 
 	y = cell_head.north - p->row * cell_head.ns_res;
 	x = cell_head.west + p->col * cell_head.ew_res;
@@ -203,9 +203,9 @@ static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,	/* s
 	last = p;
 	if ((p = move(p)) == NULPTR) {	/* this should NEVER happen */
 	    G_debug(3, "write_smooth_bnd:  line terminated unexpectedly\n");
-	    G_debug(3, "  previous (%d) point %p (%d,%d,%d) %p %p\n",
-		    direction, last, last->row, last->col, last->node,
-		    last->fptr, last->bptr);
+	    G_debug(3, "  previous (%d) point %d (%d,%d,%d) %p %p\n",
+		    direction, i, last->row, last->col, last->node,
+		    (void *)last->fptr, (void *)last->bptr);
 
 	    exit(EXIT_FAILURE);
 	}

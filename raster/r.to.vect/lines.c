@@ -16,7 +16,7 @@
  *
  * Algorithm was modified by Olga Waupotitsch
  * USA CERL on nov, 1993
- * because the previous implementation was incosistent
+ * because the previous implementation was inconsistent
  * stopped in the middle of map, because it tried to continue
  * a line which was presumed to have been started earlier
  * but in fact was not started.
