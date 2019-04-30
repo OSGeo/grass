@@ -26,7 +26,6 @@
 #define false 0
 #define DELETED_PIX   9999
 
-static char *work_file_name;
 static int n_rows, n_cols, pad_size;
 static int box_right, box_left, box_top, box_bottom;
 
@@ -37,7 +36,8 @@ int thin_lines(int iterations)
 {
     int j, i, col, deleted, row;
     CELL *row_buf, *new_med, *med, *bottom, *top, *get_a_row();
-    char W, N_W, Templ[8], N_Templ[8];
+    char W, N_W;
+    unsigned char Templ[8], N_Templ[8];
 
     map_size(&n_rows, &n_cols, &pad_size);
     box_right = box_bottom = 0;
@@ -63,7 +63,6 @@ int thin_lines(int iterations)
 	put_a_row(row, bottom);
     }				/* row-loop */
     if (box_right < box_left || box_bottom < box_top) {
-	unlink(work_file_name);
 	G_fatal_error(_("Unable to find bounding box for lines"));
     }
     G_message(_("Bounding box:  l = %d, r = %d, t = %d, b = %d"),
@@ -177,6 +176,12 @@ int thin_lines(int iterations)
 
 
 /* encode_neighbours- return neighborhood information for pixel at (middle,col) */
+
+/* bit position
+ * 1 8 7
+ * 2 x 6 
+ * 3 4 5
+ */
 
 char
 encode_neighbours(CELL * top, CELL * middle, CELL * bottom, int col, int neg)
