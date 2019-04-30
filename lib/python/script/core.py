@@ -386,9 +386,10 @@ def start_command(prog, flags=b"", overwrite=False, quiet=False,
     args = make_command(prog, flags, overwrite, quiet, verbose, **options)
 
     if debug_level() > 0:
-        sys.stderr.write("D1/%d: %s.start_command(): %s\n" % (debug_level(),
-                                                              __name__,
-                                                              ' '.join(args)))
+        sys.stderr.write("D1/{}: {}.start_command(): {}\n".format(
+            debug_level(), __name__,
+            ' '.join([decode(arg) for arg in args]))
+        )
         sys.stderr.flush()
     return Popen(args, **popts)
 
