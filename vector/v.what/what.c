@@ -73,7 +73,7 @@ static void F_generate(const char *drvname, const char *dbname,
 	G_fatal_error(_("Cannot fetch next record"));
 
     if (!more) {
-	G_warning(_("No database record"));
+	G_verbose_message(_("No database record"));
 	*form = G_store("No record selected.");
     }
     else {
@@ -91,6 +91,7 @@ static void F_generate(const char *drvname, const char *dbname,
 	    switch (output) {
 	    case OUTPUT_JSON:
 		formbuf = G_str_replace(db_get_string(&str), "\\", "\\\\");
+		formbuf = G_str_replace(formbuf, "\"", "\\\"");
 		sprintf(buf, "%s\"%s\": \"%s\"", col == 0 ? "" : ",\n",
 			colname, formbuf);
 		G_free(formbuf);
