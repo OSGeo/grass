@@ -36,8 +36,7 @@ int thin_lines(int iterations)
 {
     int j, i, col, deleted, row;
     CELL *row_buf, *new_med, *med, *bottom, *top, *get_a_row();
-    char W, N_W;
-    unsigned char Templ[8], N_Templ[8];
+    unsigned char W, N_W, Templ[8], N_Templ[8];
 
     map_size(&n_rows, &n_cols, &pad_size);
     box_right = box_bottom = 0;
@@ -183,7 +182,7 @@ int thin_lines(int iterations)
  * 3 4 5
  */
 
-char
+unsigned char
 encode_neighbours(CELL * top, CELL * middle, CELL * bottom, int col, int neg)
 {
     char T;
