@@ -39,6 +39,18 @@
 static int close_old(int);
 static int close_new(int, int);
 
+static void sync_and_close(int fd, char *element, char *name)
+{
+    if (0 && fsync(fd)) {
+	G_warning(_("Unable to flush %s file for raster map %s: %s"),
+	            element, name, strerror(errno));
+		}
+    if (close(fd)) {
+	G_warning(_("Unable to close %s file for raster map %s: %s"),
+	            element, name, strerror(errno));
+    }
+}
+
 static void write_fp_format(int fd);
 
 /*!
@@ -436,11 +448,16 @@ static int close_new(int fd, int ok)
     }				/* ok */
     /* NOW CLOSE THE FILE DESCRIPTOR */
 
-    close(fcb->data_fd);
+    sync_and_close(fcb->data_fd,
+                   (fcb->map_type == CELL_TYPE ? "cell" : "fcell"),
+		   fcb->name);
     fcb->open_mode = -1;
 
-    if (fcb->null_fd >= 0)
-	close(fcb->null_fd);
+    if (fcb->null_fd >= 0) {
+	sync_and_close(fcb->null_fd,
+	               (fcb->null_row_ptr ? NULLC_FILE : NULL_FILE),
+		       fcb->name);
+    }
     fcb->null_fd = -1;
 
     if (fcb->data != NULL)
