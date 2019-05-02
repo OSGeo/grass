@@ -999,7 +999,9 @@ class MapFrame(SingleMapFrame):
         """Highlight category from query."""
         if len(vectQuery) > 0:
             self._highlighter_layer.SetLayer(vectQuery[0]['Layer'])
-            self._highlighter_layer.SetMap(vectQuery[0]['Map'])
+            self._highlighter_layer.SetMap(
+                vectQuery[0]['Map'] + '@' + vectQuery[0]['Mapset']
+            )
             tmp = list()
             for i in vectQuery:
                 tmp.append(i['Category'])
@@ -1061,17 +1063,14 @@ class MapFrame(SingleMapFrame):
 
         pattern = [
             "d.vect",
-            "map=%s" %
-            name,
-            "color=%s" %
-            colorStr,
-            "fill_color=%s" %
-            colorStr,
-            "width=%d" %
-            UserSettings.Get(
+            "map=%s" % name,
+            "color=%s" % colorStr,
+            "fill_color=%s" % colorStr,
+            "width=%d" % UserSettings.Get(
                 group='atm',
                 key='highlight',
-                subkey='width')]
+                subkey='width')
+        ]
         if icon != '':
             pattern.append('icon=%s' % icon)
         if size > 0:

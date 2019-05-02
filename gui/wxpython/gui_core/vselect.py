@@ -244,7 +244,9 @@ class VectorSelectBase():
         self.updateLayer.emit()
         if len(self.selectedFeatures) > 0:
             self.painter.SetLayer(self.selectedFeatures[0]['Layer'])
-            self.painter.SetMap(self.selectedFeatures[0]['Map'])
+            self.painter.SetMap(
+                self.selectedFeatures[0]['Map'] + '@' + self.selectedFeatures[0]['Mapset']
+            )
             tmp = list()
             for i in self.selectedFeatures:
                 tmp.append(i['Category'])
