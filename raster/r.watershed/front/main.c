@@ -41,7 +41,7 @@ static void do_opt(const struct Option *opt)
 int main(int argc, char *argv[])
 {
     char command[GPATH_MAX];
-    int err, ret;
+    int ret;
     struct Option *opt1;
     struct Option *opt2;
     struct Option *opt3;
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
 
     opt18 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt18->key = "spi";
-    opt18->label = _("Stream power index a * tan(b)");
+    opt18->label = _("Name for output stream power index a * tan(b)");
     opt18->required = NO;
     opt18->guisection = _("Outputs");
 
@@ -245,48 +245,23 @@ int main(int argc, char *argv[])
     flag_flat->description =
 	_("Flow direction in flat areas is modified to look prettier");
 
-    if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
-
-
-    /* Check option combinations */
+    /* Some options requires threshold */
+    G_option_requires(opt10, opt6, NULL);
+    G_option_requires(opt11, opt6, NULL);
+    G_option_requires(opt12, opt6, NULL);
+    G_option_requires(opt13, opt6, NULL);
+    G_option_requires(opt14, opt6, NULL);
 
     /* Check for some output map */
-    if ((opt8->answer == NULL)
-	&& (opt9->answer == NULL)
-	&& (opt10->answer == NULL)
-	&& (opt11->answer == NULL)
-	&& (opt12->answer == NULL)
-	&& (opt14->answer == NULL)
-	&& (opt15->answer == NULL)) {
-	G_fatal_error(_("Sorry, you must choose an output map."));
-    }
+    G_option_required(opt8, opt17, opt18, opt9, opt10, opt11, opt12, opt13, opt14, NULL);
+      
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
     /* basin threshold */
     if (opt6->answer) {
 	if (atoi(opt6->answer) <= 0)
 	    G_fatal_error(_("The basin threshold must be a positive number."));
-    }
-
-    err = 0;
-    /* basin and basin threshold */
-    err += (opt10->answer != NULL && opt6->answer == NULL);
-    /* stream and basin threshold */
-    err += (opt11->answer != NULL && opt6->answer == NULL);
-    /* half_basin and basin threshold */
-    err += (opt12->answer != NULL && opt6->answer == NULL);
-    /* LS factor and basin threshold */
-    err += (opt13->answer != NULL && opt6->answer == NULL);
-    /* S factor and basin threshold */
-    err += (opt14->answer != NULL && opt6->answer == NULL);
-
-    if (err) {
-	G_message(_("Sorry, if any of the following options are set:\n"
-		    "    basin, stream, half_basin, length_slope, or slope_steepness\n"
-		    "    you MUST provide a value for the basin "
-		    "threshold parameter."));
-	G_usage();
-	exit(EXIT_FAILURE);
     }
 
     /* Build command line */
