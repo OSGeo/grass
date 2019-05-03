@@ -395,8 +395,11 @@ static int close_new(int fd, int ok)
 	    Rast__write_null_row_ptrs(fd, fcb->null_fd);
 	}
 
-	if (fcb->null_fd >= 0)
-	    close(fcb->null_fd);
+	if (fcb->null_fd >= 0) {
+	    sync_and_close(fcb->null_fd,
+			   (fcb->null_row_ptr ? NULLC_FILE : NULL_FILE),
+			   fcb->name);
+	}
 	fcb->null_fd = -1;
 
 	/* create path : full null file name */
