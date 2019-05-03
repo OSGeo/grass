@@ -41,12 +41,22 @@ static int close_new(int, int);
 
 static void sync_and_close(int fd, char *element, char *name)
 {
+    /* from man 2 write:
+     * A successful return from write() does not make any guarantee 
+     * that data has been committed to disk.  On some filesystems, 
+     * including NFS, it does not even guarantee that space has 
+     * successfully been reserved for the data.  In this case, some 
+     * errors might be delayed until a future write(2), fsync(2), or 
+     * even close(2).  The only way to be sure is to call fsync(2) 
+     * after you are done writing all your data.
+     */
+
     if (fsync(fd)) {
-	G_warning(_("Unable to flush %s file for raster map %s: %s"),
+	G_warning(_("Unable to flush file %s for raster map %s: %s"),
 	            element, name, strerror(errno));
-		}
+    }
     if (close(fd)) {
-	G_warning(_("Unable to close %s file for raster map %s: %s"),
+	G_warning(_("Unable to close file %s for raster map %s: %s"),
 	            element, name, strerror(errno));
     }
 }
