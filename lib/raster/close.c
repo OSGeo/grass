@@ -41,7 +41,7 @@ static int close_new(int, int);
 
 static void sync_and_close(int fd, char *element, char *name)
 {
-    if (0 && fsync(fd)) {
+    if (fsync(fd)) {
 	G_warning(_("Unable to flush %s file for raster map %s: %s"),
 	            element, name, strerror(errno));
 		}
