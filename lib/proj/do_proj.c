@@ -25,7 +25,6 @@
 /* a couple defines to simplify reading the function */
 #define MULTIPLY_LOOP(x,y,c,m) \
 do {\
-   int i; \
    for (i = 0; i < c; ++i) {\
        x[i] *= m; \
        y[i] *= m; \
@@ -34,7 +33,6 @@ do {\
 
 #define DIVIDE_LOOP(x,y,c,m) \
 do {\
-   int i; \
    for (i = 0; i < c; ++i) {\
        x[i] /= m; \
        y[i] /= m; \
@@ -723,9 +721,9 @@ int pj_do_transform(int count, double *x, double *y, double *h,
 		    const struct pj_info *info_in, const struct pj_info *info_out)
 {
     int ok;
+    int i;
     int has_h = 1;
 #ifdef HAVE_PROJ_H
-    int i;
     struct pj_info info_trans;
     PJ_COORD c;
 
@@ -818,8 +816,6 @@ int pj_do_transform(int count, double *x, double *y, double *h,
     METERS_out = info_out->meters;
 
     if (h == NULL) {
-	int i;
-
 	h = G_malloc(sizeof *h * count);
 	/* they say memset is only guaranteed for chars ;-( */
 	for (i = 0; i < count; ++i)
