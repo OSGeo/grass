@@ -38,5 +38,6 @@ sudo apt-get install --no-install-recommends \
     dpatch \
     libblas-dev \
     liblapack-dev \
-    python-numpy
+    python-numpy \
+    python-six
 

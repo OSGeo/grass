@@ -54,6 +54,7 @@ RUN apt-get update \
         python-numpy \
         python-pil \
         python-ply \
+        python-six \
         sqlite3 \
         subversion \
         unixodbc-dev \
