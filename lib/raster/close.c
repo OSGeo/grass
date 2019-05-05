@@ -56,6 +56,9 @@ static void sync_and_close(int fd, char *element, char *name)
 	G_warning(_("Unable to flush file %s for raster map %s: %s"),
 	            element, name, strerror(errno));
     }
+    /* for MS Windows, try fdopen(int, char *) + fflush(FILE *) + fclose(FILE *)
+     * flcose() closes the underlying file descriptor, thus no need to 
+     * call close(fd) afterwards */
 #endif
     if (close(fd)) {
 	G_warning(_("Unable to close file %s for raster map %s: %s"),
