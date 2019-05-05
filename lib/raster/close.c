@@ -51,10 +51,12 @@ static void sync_and_close(int fd, char *element, char *name)
      * after you are done writing all your data.
      */
 
+#ifndef __MINGW32__
     if (fsync(fd)) {
 	G_warning(_("Unable to flush file %s for raster map %s: %s"),
 	            element, name, strerror(errno));
     }
+#endif
     if (close(fd)) {
 	G_warning(_("Unable to close file %s for raster map %s: %s"),
 	            element, name, strerror(errno));
