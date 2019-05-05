@@ -123,8 +123,8 @@ $PYTHON $GRASS_MULTI_RUNNER \
     --grassbin $GRASSBIN \
     --grasssrc $GRASSSRC \
     --grassdata $GRASSDATA \
-    --location $SAMPLEDATA --location-type nc \
-    --location other_location --location-type other_type
+    --location $SAMPLEDATA --location-type nc # \
+#    --location other_location --location-type other_type
 
 # create overall report of all so far executed tests
 # the script depends on GRASS but just Python part is enough
