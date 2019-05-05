@@ -105,6 +105,10 @@ int GPJ_init_transform(const struct pj_info *info_in,
 		outsrid = G_store_upper(info_out->srid);
 	    else
 		outsrid = G_store(info_out->srid);
+
+	    /* PROJ6+: enforce axis order easting, northing
+	     * +axis=enu (works with proj-4.8+) */
+
 #else
 	    /* PROJ5: EPSG must lowercase epsg */
 	    if (strncmp(info_in->srid, "EPSG", 4) == 0)
@@ -141,7 +145,11 @@ int GPJ_init_transform(const struct pj_info *info_in,
 #endif
 	}
 	if (info_trans->pj == NULL) {
-	    if (info_out->pj != NULL && info_out->def != NULL)
+	    /* PROJ6+: enforce axis order easting, northing
+	     * +axis=enu (works with proj-4.8+) */
+	    /* PROJ6+: what should we do with +towgs ? 
+	     * +towgs works only if WGS84 is used as pivot datum on both sides */
+  	    if (info_out->pj != NULL && info_out->def != NULL)
 		G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s +step %s",
 			   info_in->def, info_out->def);
 	    else
@@ -250,7 +258,8 @@ int GPJ_transform(const struct pj_info *info_in,
     if (in_is_ll) {
 	/* convert to radians */
 	/* PROJ 6: conversion to radians is not always needed:
-	 * if proj_angular_input(info_trans->pj, dir) == 1 -> convert */
+	 * if proj_angular_input(info_trans->pj, dir) == 1 
+	 * -> convert from degrees to radians */
 	c.lpzt.lam = (*x) / RAD_TO_DEG;
 	c.lpzt.phi = (*y) / RAD_TO_DEG;
 	c.lpzt.z = 0;
@@ -281,7 +290,8 @@ int GPJ_transform(const struct pj_info *info_in,
     if (out_is_ll) {
 	/* convert to degrees */
 	/* PROJ 6: conversion to radians is not always needed:
-	 * if proj_angular_output(info_trans->pj, dir) == 1 -> convert */
+	 * if proj_angular_output(info_trans->pj, dir) == 1 
+	 * -> convert from radians to degrees */
 	*x = c.lpzt.lam * RAD_TO_DEG;
 	*y = c.lpzt.phi * RAD_TO_DEG;
 	if (z)
