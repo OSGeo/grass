@@ -569,7 +569,7 @@ class Region(object):
         """
         self.adjust()
         if libgis.G_put_window(self.byref()) < 0:
-            raise GrassError("Cannot change region (DEFAUL_WIND file).")
+            raise GrassError("Cannot change region (WIND file).")
 
 
     def read_default(self):
