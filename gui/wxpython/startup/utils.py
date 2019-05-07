@@ -75,12 +75,12 @@ def create_mapset(database, location, mapset):
     mapset_path = os.path.join(location_path, mapset)
     # create an empty directory
     os.mkdir(mapset_path)
-    # copy WIND file and its permissions from PERMANENT
-    # this uses PERMANENT's current region instead of default (?)
-    region_file = 'WIND'
-    region_path = os.path.join(location_path, 'PERMANENT', region_file)
-    shutil.copy(region_path, mapset_path)
-    # set permissions to u+rw,go+r (disabled)
+    # copy DEFAULT_WIND file and its permissions from PERMANENT 
+    # to WIND in the new mapset
+    region_path1 = os.path.join(location_path, 'PERMANENT', 'DEFAULT_WIND')
+    region_path2 = os.path.join(location_path, mapset, 'WIND')
+    shutil.copy(region_path1, region_path2)
+    # set permissions to u+rw,go+r (disabled; why?)
     # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)
 
 
