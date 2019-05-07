@@ -105,6 +105,7 @@ class GrassTestFilesInvoker(object):
 
         :param loader.GrassTestPythonModule module:
         """
+        # TODO: use g.mapset -c, no need to duplicate functionality
         # using path.sep but also / and \ for cases when it is confused
         # (namely the case of Unix path on MS Windows)
         # replace . to get rid of unclean path
@@ -118,11 +119,11 @@ class GrassTestFilesInvoker(object):
             silent_rmtree(mapset_dir)
         os.mkdir(mapset_dir)
         # TODO: default region in mapset will be what?
-        # copy WIND file from PERMANENT
+        # copy DEFAULT_WIND file from PERMANENT to WIND
         # TODO: this should be a function in grass.script (used also in gis_set.py, PyGRASS also has its way with Mapset)
         # TODO: are premisions an issue here?
-        shutil.copy(os.path.join(gisdbase, location, 'PERMANENT', 'WIND'),
-                    os.path.join(mapset_dir))
+        shutil.copy(os.path.join(gisdbase, location, 'PERMANENT', 'DEFAULT_WIND'),
+                    os.path.join(mapset_dir, 'WIND'))
         return mapset, mapset_dir
 
     def _run_test_module(self, module, results_dir, gisdbase, location):
