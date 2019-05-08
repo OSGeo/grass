@@ -362,7 +362,7 @@ class Mapset(object):
         for el in clist:
             el_name = ct.cast(el, ct.c_char_p).value
             if el_name:
-                elist.append(el_name)
+                elist.append(decode(el_name))
             else:
                 if pattern:
                     return fnmatch.filter(elist, pattern)
