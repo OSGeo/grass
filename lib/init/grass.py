@@ -136,7 +136,7 @@ else:
 # ----+- Python 3 compatibility end -+----
 
 # Variables substituted during build process
-if 'GISBASE' in os.environ:
+if 'GISBASE' in os.environ and len(os.getenv('GISBASE')) > 0:
     # TODO: should this be something like GRASS_PATH?
     # GISBASE marks complete runtime, so no need to get it here when
     # setting it up, possible scenario: existing runtime and starting
