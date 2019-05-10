@@ -73,8 +73,8 @@ COPY . /code/grass
 
 WORKDIR /code/grass
 
-# Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
-ENV MYCFLAGS "-O2 -march=native -std=gnu99 -m64"
+# Set gcc/g++ environment variables for GRASS GIS compilation, without debug symbols
+ENV MYCFLAGS "-O2 -std=gnu99 -m64"
 ENV MYLDFLAGS "-s"
 # CXX stuff:
 ENV LD_LIBRARY_PATH "/usr/local/lib"
@@ -103,7 +103,11 @@ RUN ./configure \
     && make -j $NUMTHREADS && make install && ldconfig
 
 # enable simple grass command regardless of version number
-RUN ln -s /usr/local/bin/grass* /usr/local/bin/grass
+# Create generic GRASS GIS binary name regardless of version number
+RUN ln -sf `find /usr/local/bin -name "grass??" | sort | tail -n 1` /usr/local/bin/grass
+# Create a generic link to GRASS GIS libs
+RUN ln -s `grass --config path` /usr/local/grass7
+
 
 # Reduce the image size
 RUN apt-get autoremove -y
