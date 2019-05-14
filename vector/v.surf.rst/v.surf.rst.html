@@ -295,6 +295,19 @@ present that needs to be smoothed out.
 
 <h2>EXAMPLE</h2>
 
+<h3>Setting for lidar point cloud</h3>
+
+Lidar point clouds as well as UAS SfM-based (phodar) point clouds tend
+to be dense in relation to the desired raster resolution and thus a
+different set of parameters is more advantageous, e.g. in comparison to
+a typical temperature data interpolation.
+
+<div class="code"><pre>
+v.surf.rst input=points elevation=elevation npmin=100
+</pre></div>
+
+<h3>Usage of the where parameter</h3>
+
 Using the <b>where</b> parameter, the interpolation can be limited to
 use only a subset of the input vectors.
 
