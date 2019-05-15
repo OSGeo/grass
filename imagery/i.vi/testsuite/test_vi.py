@@ -1,7 +1,7 @@
 """
 Name:       i.vi test
 Purpose:    Tests i.vi and its flags/options.
-    
+
 Author:     Sunveer Singh, Google Code-in 2017
 Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
@@ -10,12 +10,13 @@ Licence:    This program is free software under the GNU General Public
 """
 from grass.gunittest.case import TestCase
 
+
 class TestReport(TestCase):
-    blue='lsat5_1987_10' 
-    green='lsat5_1987_20' 
-    red='lsat5_1987_30' 
-    nir= 'lsat5_1987_40'
-    
+    blue = 'lsat5_1987_10'
+    green = 'lsat5_1987_20'
+    red = 'lsat5_1987_30'
+    nir = 'lsat5_1987_40'
+
     @classmethod
     def setUpClass(cls):
         """Use temporary region settings"""
@@ -32,12 +33,11 @@ class TestReport(TestCase):
         cls.runModule("g.remove", flags='f', type="raster", name="gari")
         cls.runModule("g.remove", flags='f', type="raster", name="gemi")
         cls.del_temp_region()
-        
-    
+
     def test_vinameipvi(self):
         """Testing viname ipvi"""
         map_output = 'ipvi'
-        self.assertModule('i.vi', red=self.red, nir=self.nir, 
+        self.assertModule('i.vi', red=self.red, nir=self.nir,
                           output=map_output, viname='ipvi')
         self.assertRasterMinMax(map=map_output, refmin=0.0454545454545,
                                 refmax=0.906666666667,
@@ -58,7 +58,6 @@ class TestReport(TestCase):
                           output=map_output, viname='sr')
         self.assertRasterMinMax(map=map_output, refmin=0.04, refmax=9.73,
                                 msg="sr in percent must be between 0.04 and 9.72")
-    
 
     def test_vinameevi(self):
         """Testing viname evi"""
@@ -77,13 +76,13 @@ class TestReport(TestCase):
         self.assertRasterMinMax(map=map_output, refmin=-0.33, refmax=0.74,
                                 msg="evi2 in degrees must be between -0.33 and 0.74")
 
-    def test_vinamegari(self):      
+    def test_vinamegari(self):
         """Testing viname gari"""
         map_output = 'gari'
         self.assertModule('i.vi', red=self.red, nir=self.nir, blue=self.blue,
                           green=self.green, output=map_output, viname='gari')
         self.assertRasterMinMax(map=map_output, refmin=-1.58244128083e+17,
-                                refmax='inf',
+                                refmax=float('inf'),
                                 msg="gari in degrees must be between -1.58")
 
     def test_vinamegemi(self):
@@ -96,4 +95,4 @@ class TestReport(TestCase):
 
 if __name__ == '__main__':
     from grass.gunittest.main import test
-    test()       
+    test()
