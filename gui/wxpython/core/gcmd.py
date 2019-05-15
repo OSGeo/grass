@@ -693,8 +693,8 @@ def RunCommand(prog, flags="", overwrite=False, quiet=False,
     :return: returncode, stdout, messages (read == True and getErrorMsg == True)
     :return: stdout, stderr
     """
-    cmdString = b' '.join(grass.make_command(prog, flags, overwrite,
-                                             quiet, verbose, **kwargs))
+    cmdString = ' '.join(grass.make_command(prog, flags, overwrite,
+                                            quiet, verbose, **kwargs))
 
     Debug.msg(1, "gcmd.RunCommand(): %s" % cmdString)
 

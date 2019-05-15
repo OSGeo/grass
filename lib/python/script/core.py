@@ -60,7 +60,6 @@ class Popen(subprocess.Popen):
             if ext.lower() not in self._builtin_exts:
                 kwargs['shell'] = True
                 args = [self._escape_for_shell(arg) for arg in args]
-            args = [decode(arg) for arg in args]
         subprocess.Popen.__init__(self, args, **kwargs)
 
 PIPE = subprocess.PIPE
@@ -82,18 +81,16 @@ _popen_args = ["bufsize", "executable", "stdin", "stdout", "stderr",
 
 
 def _make_val(val):
-    """Convert value to bytes"""
-    if isinstance(val, bytes):
-        return val
-    if isinstance(val, (str, unicode)):
-        return encode(val)
+    """Convert value to unicode"""
+    if isinstance(val, (bytes, str, unicode)):
+        return decode(val)
     if isinstance(val, (int, float)):
-        return encode(str(val))
+        return unicode(val)
     try:
-        return b",".join(map(_make_val, iter(val)))
+        return ",".join(map(_make_val, iter(val)))
     except TypeError:
         pass
-    return bytes(val)
+    return unicode(val)
 
 
 def _make_unicode(val, enc):
@@ -198,11 +195,11 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
             path.insert(0, os.curdir)
 
         # PATHEXT is necessary to check on Windows (force lowercase)
-        pathext = list(map(lambda x: encode(x.lower()),
+        pathext = list(map(lambda x: x.lower(),
                            os.environ.get("PATHEXT", "").split(os.pathsep)))
-        if b'.py' not in pathext:
+        if '.py' not in pathext:
             # we assume that PATHEXT contains always '.py'
-            pathext.insert(0, b'.py')
+            pathext.insert(0, '.py')
         # See if the given file matches any of the expected path extensions.
         # This will allow us to short circuit when given "python.exe".
         # If it does match, only test that one, otherwise we have to try
@@ -222,7 +219,7 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
         if not normdir in seen:
             seen.add(normdir)
             for thefile in files:
-                name = os.path.join(encode(dir), thefile)
+                name = os.path.join(dir, thefile)
                 if _access_check(name, mode):
                     return name
     return None
@@ -264,14 +261,14 @@ def get_real_command(cmd):
         # so, lets remove extension
         if os.path.splitext(cmd)[1] == '.py':
             cmd = cmd[:-3]
-        full_path = shutil_which(encode(cmd) + b'.py')
+        full_path = shutil_which(cmd + '.py')
         if full_path:
             return full_path
 
     return cmd
 
 
-def make_command(prog, flags=b"", overwrite=False, quiet=False, verbose=False,
+def make_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
                  superquiet=False, errors=None, **options):
     """Return a list of strings suitable for use as the args parameter to
     Popen() or call(). Example:
@@ -292,35 +289,33 @@ def make_command(prog, flags=b"", overwrite=False, quiet=False, verbose=False,
     """
     args = [_make_val(prog)]
     if overwrite:
-        args.append(b"--o")
+        args.append("--o")
     if quiet:
-        args.append(b"--q")
+        args.append("--q")
     if verbose:
-        args.append(b"--v")
+        args.append("--v")
     if superquiet:
-        args.append(b"--qq")
+        args.append("--qq")
     if flags:
         flags = _make_val(flags)
-        if b'-' in flags:
+        if '-' in flags:
             raise ScriptError("'-' is not a valid flag")
-        args.append(b"-" + bytes(flags))
+        args.append("-" + flags)
     for opt, val in options.items():
         if opt in _popen_args:
             continue
         # convert string to bytes
-        opt = encode(opt)
-        prog = encode(prog)
         if val is not None:
-            if opt.startswith(b'_'):
+            if opt.startswith('_'):
                 opt = opt[1:]
                 warning(_("To run the module <%s> add underscore at the end"
                     " of the option <%s> to avoid conflict with Python"
                     " keywords. Underscore at the beginning is"
                     " depreciated in GRASS GIS 7.0 and will be removed"
                     " in version 7.1.") % (prog, opt))
-            elif opt.endswith(b'_'):
+            elif opt.endswith('_'):
                 opt = opt[:-1]
-            args.append(opt + b'=' + _make_val(val))
+            args.append(opt + '=' + _make_val(val))
     return args
 
 
@@ -337,11 +332,11 @@ def handle_errors(returncode, result, args, kwargs):
     else:
         # TODO: construction of the whole command is far from perfect
         args = make_command(*args, **kwargs)
-        code = ' '.join([decode(each) for each in args])
+        code = ' '.join(args)
         raise CalledModuleError(module=None, code=code,
                                 returncode=returncode)
 
-def start_command(prog, flags=b"", overwrite=False, quiet=False,
+def start_command(prog, flags="", overwrite=False, quiet=False,
                   verbose=False, superquiet=False, **kwargs):
     """Returns a Popen object with the command created by make_command.
     Accepts any of the arguments which Popen() accepts apart from "args"
@@ -379,8 +374,6 @@ def start_command(prog, flags=b"", overwrite=False, quiet=False,
         if opt in _popen_args:
             popts[opt] = val
         else:
-            if isinstance(val, unicode):
-                val = encode(val)
             options[opt] = val
 
     args = make_command(prog, flags, overwrite, quiet, verbose, **options)
@@ -388,10 +381,11 @@ def start_command(prog, flags=b"", overwrite=False, quiet=False,
     if debug_level() > 0:
         sys.stderr.write("D1/{}: {}.start_command(): {}\n".format(
             debug_level(), __name__,
-            ' '.join([decode(arg) for arg in args]))
+            ' '.join(args))
         )
         sys.stderr.flush()
     return Popen(args, **popts)
+
 
 def run_command(*args, **kwargs):
     """Execute a module synchronously
