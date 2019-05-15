@@ -1719,7 +1719,7 @@ def resolve_source_code(url=None, name=None):
 
     ZIP files online:
 
-    >>> resolve_source_code('https://trac.osgeo.org/.../r.modis?format=zip')
+    >>> resolve_source_code('https://trac.osgeo.org/.../r.modis?format=zip') # doctest: +SKIP
     ('remote_zip', 'https://trac.osgeo.org/.../r.modis?format=zip')
 
     Local directories and ZIP files:
@@ -1731,34 +1731,34 @@ def resolve_source_code(url=None, name=None):
 
     OSGeo Trac:
 
-    >>> resolve_source_code('trac.osgeo.org/.../r.agent.aco')
+    >>> resolve_source_code('trac.osgeo.org/.../r.agent.aco') # doctest: +SKIP
     ('remote_zip', 'https://trac.osgeo.org/.../r.agent.aco?format=zip')
-    >>> resolve_source_code('https://trac.osgeo.org/.../r.agent.aco')
+    >>> resolve_source_code('https://trac.osgeo.org/.../r.agent.aco') # doctest: +SKIP
     ('remote_zip', 'https://trac.osgeo.org/.../r.agent.aco?format=zip')
 
     GitHub:
 
-    >>> resolve_source_code('github.com/user/g.example')
+    >>> resolve_source_code('github.com/user/g.example') # doctest: +SKIP
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
-    >>> resolve_source_code('github.com/user/g.example/')
+    >>> resolve_source_code('github.com/user/g.example/') # doctest: +SKIP
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
-    >>> resolve_source_code('https://github.com/user/g.example')
+    >>> resolve_source_code('https://github.com/user/g.example') # doctest: +SKIP
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
-    >>> resolve_source_code('https://github.com/user/g.example/')
+    >>> resolve_source_code('https://github.com/user/g.example/') # doctest: +SKIP
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
 
     GitLab:
 
-    >>> resolve_source_code('gitlab.com/JoeUser/GrassModule')
+    >>> resolve_source_code('gitlab.com/JoeUser/GrassModule') # doctest: +SKIP
     ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/repository/archive.zip')
-    >>> resolve_source_code('https://gitlab.com/JoeUser/GrassModule')
+    >>> resolve_source_code('https://gitlab.com/JoeUser/GrassModule') # doctest: +SKIP
     ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/repository/archive.zip')
 
     Bitbucket:
 
-    >>> resolve_source_code('bitbucket.org/joe-user/grass-module')
+    >>> resolve_source_code('bitbucket.org/joe-user/grass-module') # doctest: +SKIP
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
-    >>> resolve_source_code('https://bitbucket.org/joe-user/grass-module')
+    >>> resolve_source_code('https://bitbucket.org/joe-user/grass-module') # doctest: +SKIP
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
     """
     if not url and name:
