@@ -35,6 +35,9 @@
 #%end
 
 import os
+import sys
+if sys.version_info.major == 2:
+    from io import open
 import grass.script as grass
 
 
@@ -59,8 +62,8 @@ def main():
         grass.warning(
             _("Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content"))
 
-    with open(infile) as f:
-        num_places = sum(1 for _ in f)
+    with open(infile, encoding='utf-8') as f:
+        num_places = sum(1 for each in f)
     grass.message(_("Converting %d place names...") % num_places)
 
     # pump data into GRASS:
