@@ -8,8 +8,7 @@ from xml.etree.ElementTree import fromstring
 
 from grass.exceptions import CalledModuleError, GrassError, ParameterError
 from grass.script.core import Popen, PIPE, use_temp_region, del_temp_region
-from grass.script.utils import encode
-from grass.pygrass.utils import decode
+from grass.script.utils import encode, decode
 from .docstring import docstring_property
 from .parameter import Parameter
 from .flag import Flag
