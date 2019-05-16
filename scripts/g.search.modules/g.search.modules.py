@@ -68,6 +68,7 @@ import sys
 
 from grass.script.utils import diff_files, try_rmdir
 from grass.script import core as grass
+from grass.exceptions import CalledModuleError
 
 try:
     import xml.etree.ElementTree as etree
@@ -303,8 +304,11 @@ def _exact_search(keyword, module_keywords):
 
 
 def _manpage_search(pattern, name):
-
-    manpage = grass.read_command('g.manual', flags='m', entry=name)
+    try:
+        manpage = grass.read_command('g.manual', flags='m', entry=name)
+    except CalledModuleError:
+        # in case man page is missing
+        return False
 
     return manpage.lower().find(pattern) > -1
 
