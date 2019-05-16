@@ -19,7 +19,7 @@ import unittest
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
-from grass.script import shutil_which
+from grass.script import shutil_which, text_to_string
 
 from .gmodules import call_module, SimpleModule
 from .checkers import (check_text_ellipsis,
@@ -1149,8 +1149,8 @@ class TestCase(unittest.TestCase):
             module.run()
             self.grass_modules.append(module.name)
         except CalledModuleError:
-            print(module.outputs.stdout)
-            print(module.outputs.stderr)
+            print(text_to_string(module.outputs.stdout))
+            print(text_to_string(module.outputs.stderr))
             # TODO: message format
             # TODO: stderr?
             stdmsg = ('Running <{m.name}> module ended'
@@ -1162,8 +1162,8 @@ class TestCase(unittest.TestCase):
                           errors=module.outputs.stderr
                       ))
             self.fail(self._formatMessage(msg, stdmsg))
-        print(module.outputs.stdout)
-        print(module.outputs.stderr)
+        print(text_to_string(module.outputs.stdout))
+        print(text_to_string(module.outputs.stderr))
         # log these to final report
         # TODO: always or only if the calling test method failed?
         # in any case, this must be done before self.fail()
@@ -1183,11 +1183,11 @@ class TestCase(unittest.TestCase):
             module.run()
             self.grass_modules.append(module.name)
         except CalledModuleError:
-            print(module.outputs.stdout)
-            print(module.outputs.stderr)
+            print(text_to_string(module.outputs.stdout))
+            print(text_to_string(module.outputs.stderr))
         else:
-            print(module.outputs.stdout)
-            print(module.outputs.stderr)
+            print(text_to_string(module.outputs.stdout))
+            print(text_to_string(module.outputs.stderr))
             stdmsg = ('Running <%s> ended with zero (successful) return code'
                       ' when expecting module to fail' % module.get_python())
             self.fail(self._formatMessage(msg, stdmsg))
