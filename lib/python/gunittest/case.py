@@ -20,7 +20,6 @@ import unittest
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
 from grass.script import shutil_which
-from grass.script.utils import decode
 
 from .gmodules import call_module, SimpleModule
 from .checkers import (check_text_ellipsis,
@@ -169,14 +168,6 @@ class TestCase(unittest.TestCase):
             If you need to test the actual newline characters, use the standard
             string comparison and functions such as ``find()``.
         """
-        # SimpleModule delivers bytes for stderr and stdout
-        # Instead of decoding stdout and stderr in every test, decoding
-        # is done here
-        if pyversion >= 3:
-            if isinstance(first, bytes):
-                first = decode(first)
-            if isinstance(second, bytes):
-                second = decode(second)
         if os.linesep != '\n':
             if os.linesep in first:
                 first = first.replace(os.linesep, '\n')
@@ -193,15 +184,9 @@ class TestCase(unittest.TestCase):
 
         See :func:`check_text_ellipsis` for details of behavior.
         """
-        # SimpleModule delivers bytes for stderr and stdout
-        # Instead of decoding stdout and stderr in every test, decoding
-        # is done here
-        if pyversion >= 3:
-            if isinstance(actual, bytes):
-                actual = decode(actual)
-        self.assertTrue(isinstance(actual, str), (
+        self.assertTrue(isinstance(actual, (str, unicode)), (
                         'actual argument is not a string'))
-        self.assertTrue(isinstance(reference, str), (
+        self.assertTrue(isinstance(reference, (str, unicode)), (
                         'reference argument is not a string'))
         if os.linesep != '\n' and os.linesep in actual:
             actual = actual.replace(os.linesep, '\n')
@@ -240,7 +225,7 @@ class TestCase(unittest.TestCase):
             reference = text_to_keyvalue(reference, sep=sep, skip_empty=True)
         module = _module_from_parameters(module, **parameters)
         self.runModule(module, expecting_stdout=True)
-        raster_univar = text_to_keyvalue(decode(module.outputs.stdout),
+        raster_univar = text_to_keyvalue(module.outputs.stdout,
                                          sep=sep, skip_empty=True)
         if not keyvalue_equals(dict_a=reference, dict_b=raster_univar,
                                a_is_subset=True, precision=precision):
@@ -418,18 +403,12 @@ class TestCase(unittest.TestCase):
         This function does not test geometry itself just the region of the
         vector map and number of features.
         """
-        # SimpleModule delivers bytes for stderr and stdout
-        # Instead of decoding stdout and stderr in every test, decoding
-        # is done here
-        if pyversion >= 3:
-            if isinstance(actual, bytes):
-                actual = decode(actual)
         module = SimpleModule('v.info', flags='t', map=reference)
         self.runModule(module)
-        ref_topo = text_to_keyvalue(decode(module.outputs.stdout), sep='=')
+        ref_topo = text_to_keyvalue(module.outputs.stdout, sep='=')
         module = SimpleModule('v.info', flags='g', map=reference)
         self.runModule(module)
-        ref_info = text_to_keyvalue(decode(module.outputs.stdout), sep='=')
+        ref_info = text_to_keyvalue(module.outputs.stdout, sep='=')
         self.assertVectorFitsTopoInfo(vector=actual, reference=ref_topo,
                                       msg=msg)
         self.assertVectorFitsRegionInfo(vector=actual, reference=ref_info,
@@ -481,7 +460,6 @@ class TestCase(unittest.TestCase):
         `assertRasterFitsUnivar()` or `assertRasterFitsInfo()`
         """
         stdout = call_module('r.info', map=map, flags='r')
-        stdout = decode(stdout)
         actual = text_to_keyvalue(stdout, sep='=')
         if refmin > actual['min']:
             stdmsg = ('The actual minimum ({a}) is smaller than the reference'
@@ -512,7 +490,6 @@ class TestCase(unittest.TestCase):
         `assertRaster3DFitsUnivar()` or `assertRaster3DFitsInfo()`
         """
         stdout = call_module('r3.info', map=map, flags='r')
-        stdout = decode(stdout)
         actual = text_to_keyvalue(stdout, sep='=')
         if refmin > actual['min']:
             stdmsg = ('The actual minimum ({a}) is smaller than the reference'
@@ -898,13 +875,13 @@ class TestCase(unittest.TestCase):
             # be more appropriate
             module = SimpleModule('v.info', flags='t', map=reference)
             self.runModule(module)
-            ref_topo = text_to_keyvalue(decode(module.outputs.stdout), sep='=')
+            ref_topo = text_to_keyvalue(module.outputs.stdout, sep='=')
             self.assertVectorFitsTopoInfo(vector=intersection,
                                           reference=ref_topo,
                                           msg=msg)
             module = SimpleModule('v.info', flags='g', map=reference)
             self.runModule(module)
-            ref_info = text_to_keyvalue(decode(module.outputs.stdout), sep='=')
+            ref_info = text_to_keyvalue(module.outputs.stdout, sep='=')
             self.assertVectorFitsRegionInfo(vector=intersection,
                                             reference=ref_info,
                                             msg=msg, precision=precision)
@@ -934,7 +911,7 @@ class TestCase(unittest.TestCase):
             # 43=98606087.5818323
             # 44=727592.902311112
             # total area=2219442027.22035
-            total_area = decode(module.outputs.stdout).splitlines()[-1].split('=')[-1]
+            total_area = module.outputs.stdout.splitlines()[-1].split('=')[-1]
             if total_area > precision:
                 stdmsg = ("Area of difference of vectors <{va}> and <{vr}>"
                           " should be 0"
@@ -1105,7 +1082,7 @@ class TestCase(unittest.TestCase):
             # here exception raised by run() with finish_=True would be
             # almost enough but we want some additional info to be included
             # in the test report
-            errors = decode(module.outputs.stderr)
+            errors = module.outputs.stderr
             # provide diagnostic at least in English locale
             # TODO: standardized error code would be handy here
             import re
@@ -1120,7 +1097,7 @@ class TestCase(unittest.TestCase):
                                     module.get_python(),
                                     errors=errors)
         # TODO: use this also in assert and apply when appropriate
-        if expecting_stdout and not decode(module.outputs.stdout).strip():
+        if expecting_stdout and not module.outputs.stdout.strip():
 
             if module.outputs.stderr:
                 errors = " The errors are:\n" + module.outputs.stderr
@@ -1172,8 +1149,8 @@ class TestCase(unittest.TestCase):
             module.run()
             self.grass_modules.append(module.name)
         except CalledModuleError:
-            print(decode(module.outputs.stdout))
-            print(decode(module.outputs.stderr))
+            print(module.outputs.stdout)
+            print(module.outputs.stderr)
             # TODO: message format
             # TODO: stderr?
             stdmsg = ('Running <{m.name}> module ended'
@@ -1182,11 +1159,11 @@ class TestCase(unittest.TestCase):
                       'See the following errors:\n'
                       '{errors}'.format(
                           m=module, code=module.get_python(),
-                          errors=decode(module.outputs.stderr)
+                          errors=module.outputs.stderr
                       ))
             self.fail(self._formatMessage(msg, stdmsg))
-        print(decode(module.outputs.stdout))
-        print(decode(module.outputs.stderr))
+        print(module.outputs.stdout)
+        print(module.outputs.stderr)
         # log these to final report
         # TODO: always or only if the calling test method failed?
         # in any case, this must be done before self.fail()
@@ -1206,11 +1183,11 @@ class TestCase(unittest.TestCase):
             module.run()
             self.grass_modules.append(module.name)
         except CalledModuleError:
-            print(decode(module.outputs.stdout))
-            print(decode(module.outputs.stderr))
+            print(module.outputs.stdout)
+            print(module.outputs.stderr)
         else:
-            print(decode(module.outputs.stdout))
-            print(decode(module.outputs.stderr))
+            print(module.outputs.stdout)
+            print(module.outputs.stderr)
             stdmsg = ('Running <%s> ended with zero (successful) return code'
                       ' when expecting module to fail' % module.get_python())
             self.fail(self._formatMessage(msg, stdmsg))
