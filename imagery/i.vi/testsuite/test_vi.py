@@ -12,15 +12,15 @@ from grass.gunittest.case import TestCase
 
 
 class TestReport(TestCase):
-    blue = 'lsat5_1987_10'
-    green = 'lsat5_1987_20'
-    red = 'lsat5_1987_30'
-    nir = 'lsat5_1987_40'
+    blue = 'lsat5_1987_10@landsat'
+    green = 'lsat5_1987_20@landsat'
+    red = 'lsat5_1987_30@landsat'
+    nir = 'lsat5_1987_40@landsat'
 
     @classmethod
     def setUpClass(cls):
         """Use temporary region settings"""
-        cls.runModule("g.region", raster='lsat5_1987_30')
+        cls.runModule("g.region", raster='lsat5_1987_30@landsat')
         cls.use_temp_region()
 
     @classmethod
