@@ -127,7 +127,7 @@ class Info(object):
 
     def _get_organization(self):
         """Private method to obtain the Vector organization"""
-        return libvect.Vect_get_organization(self.c_mapinfo)
+        return utils.decode(libvect.Vect_get_organization(self.c_mapinfo))
 
     def _set_organization(self, org):
         """Private method to change the Vector organization"""
@@ -138,7 +138,7 @@ class Info(object):
 
     def _get_date(self):
         """Private method to obtain the Vector date"""
-        return libvect.Vect_get_date(self.c_mapinfo)
+        return utils.decode(libvect.Vect_get_date(self.c_mapinfo))
 
     def _set_date(self, date):
         """Private method to change the Vector date"""
@@ -149,7 +149,7 @@ class Info(object):
 
     def _get_person(self):
         """Private method to obtain the Vector person"""
-        return libvect.Vect_get_person(self.c_mapinfo)
+        return utils.decode(libvect.Vect_get_person(self.c_mapinfo))
 
     def _set_person(self, person):
         """Private method to change the Vector person"""
@@ -160,7 +160,7 @@ class Info(object):
 
     def _get_title(self):
         """Private method to obtain the Vector title"""
-        return libvect.Vect_get_map_name(self.c_mapinfo)
+        return utils.decode(libvect.Vect_get_map_name(self.c_mapinfo))
 
     def _set_title(self, title):
         """Private method to change the Vector title"""
@@ -171,7 +171,7 @@ class Info(object):
 
     def _get_map_date(self):
         """Private method to obtain the Vector map date"""
-        date_str = libvect.Vect_get_map_date(self.c_mapinfo)
+        date_str = utils.decode(libvect.Vect_get_map_date(self.c_mapinfo))
         try:
             return datetime.datetime.strptime(date_str, self.date_fmt)
         except:
@@ -198,7 +198,7 @@ class Info(object):
 
     def _get_comment(self):
         """Private method to obtain the Vector comment"""
-        return libvect.Vect_get_comment(self.c_mapinfo)
+        return utils.decode(libvect.Vect_get_comment(self.c_mapinfo))
 
     def _set_comment(self, comm):
         """Private method to set the Vector comment"""

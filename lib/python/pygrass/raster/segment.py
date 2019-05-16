@@ -27,8 +27,8 @@ class Segment(object):
     def nseg(self):
         rows = self.rows()
         cols = self.cols()
-        return ((rows + self.srows - 1) / self.srows) * \
-               ((cols + self.scols - 1) / self.scols)
+        return int(((rows + self.srows - 1) / self.srows) *
+                   ((cols + self.scols - 1) / self.scols))
 
     def segments_in_mem(self):
         if self.maxmem > 0 and self.maxmem < 100:
