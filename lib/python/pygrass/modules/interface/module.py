@@ -782,10 +782,8 @@ class Module(object):
             if self.stdin:
                 self.stdin = encode(self.stdin)
             stdout, stderr = self.popen.communicate(input=self.stdin)
-            stdout = decode(stdout)
-            stderr = decode(stderr)
-            self.outputs['stdout'].value = stdout if stdout else ''
-            self.outputs['stderr'].value = stderr if stderr else ''
+            self.outputs['stdout'].value = decode(stdout) if stdout else ''
+            self.outputs['stderr'].value = decode(stderr) if stderr else ''
             self.time = time.time() - self.start_time
 
             self._finished = True
