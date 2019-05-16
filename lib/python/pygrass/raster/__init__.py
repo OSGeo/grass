@@ -67,7 +67,7 @@ class RasterRow(RasterAbstractBase):
         >>> elev.has_cats()
         True
         >>> elev.mode
-        u'r'
+        'r'
         >>> elev.mtype
         'CELL'
         >>> elev.num_cats()
@@ -85,13 +85,13 @@ class RasterRow(RasterAbstractBase):
         >>> elev.hist.title = "A test map"
         >>> elev.hist.write()
         >>> elev.hist.title
-        u'A test map'
+        'A test map'
         >>> elev.hist.keyword
-        u'This is a test map'
+        'This is a test map'
 
         >>> attrs = list(elev.hist)
         >>> attrs[0]
-        ('name', u'Raster_test_map')
+        ('name', 'Raster_test_map')
         >>> attrs[2]
         ('mtype', '')
 
@@ -99,27 +99,27 @@ class RasterRow(RasterAbstractBase):
         to interact with the raster categories.
 
         >>> elev.cats          # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-        [(u'A', 11, None),
-         (u'B', 12, None),
+        [('A', 11, None),
+         ('B', 12, None),
         ...
-         (u'P', 44, None)]
+         ('P', 44, None)]
 
         >>> elev.cats.labels() # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-        [u'A', u'B', u'C', u'D', u'E',
-         u'F', u'G', u'H', u'I', u'J',
-         u'K', u'L', u'M', u'n', u'O', u'P']
+        ['A', 'B', 'C', 'D', 'E',
+         'F', 'G', 'H', 'I', 'J',
+         'K', 'L', 'M', 'n', 'O', 'P']
         >>> elev.cats[0]
-        (u'A', 11, None)
+        ('A', 11, None)
         >>> elev.cats[2]
-        (u'C', 13, None)
+        ('C', 13, None)
         >>> elev.cats[0] = ('AA', 11)
         >>> elev.cats[1] = ('BB', 12)
         >>> elev.cats.write()
         >>> elev.cats.read()
         >>> elev.cats[0]
-        (u'AA', 11, None)
+        ('AA', 11, None)
         >>> elev.cats[1]
-        (u'BB', 12, None)
+        ('BB', 12, None)
 
         Open a raster map using the *with statement*:
 

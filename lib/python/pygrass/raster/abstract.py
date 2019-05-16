@@ -217,7 +217,7 @@ class RasterAbstractBase(object):
 
         >>> ele = RasterAbstractBase(test_raster_name)
         >>> ele.name
-        u'abstract_test_map'
+        'abstract_test_map'
         >>> ele.exist()
         True
 
@@ -403,7 +403,7 @@ class RasterAbstractBase(object):
         >>> ele = RasterAbstractBase(test_raster_name)
         >>> name = ele.name_mapset().split("@")
         >>> name
-        [u'abstract_test_map']
+        ['abstract_test_map']
 
         """
         if name is None:

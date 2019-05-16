@@ -161,7 +161,7 @@ class Vector(Info):
 
             >>> new.table.conn.commit()
             >>> new.table.execute().fetchall()
-            [(1, u'pub'), (2, u'resturant')]
+            [(1, 'pub'), (2, 'resturant')]
 
         close the vector map ::
 
@@ -177,9 +177,9 @@ class Vector(Info):
             >>> new.read(2)
             Point(1.000000, 1.000000)
             >>> new.read(1).attrs['name']
-            u'pub'
+            'pub'
             >>> new.read(2).attrs['name']
-            u'resturant'
+            'resturant'
             >>> new.close()
             >>> new.remove()
 
@@ -577,7 +577,7 @@ class VectorTopo(Vector):
             >>> test_vect.write(point1, cat=2, attrs=('resturant',))
             >>> test_vect.table.conn.commit()  # save changes in the DB
             >>> test_vect.table_to_dict()
-            {1: [1, u'pub'], 2: [2, u'resturant']}
+            {1: [1, 'pub'], 2: [2, 'resturant']}
             >>> test_vect.close()
 
         Now rewrite one point of the vector map: ::
@@ -662,16 +662,16 @@ class VectorTopo(Vector):
             >>> test_vect.open('r')
 
             >>> test_vect.table_to_dict()
-            {1: [1, u'point', 1.0], 2: [2, u'line', 2.0], 3: [3, u'centroid', 3.0]}
+            {1: [1, 'point', 1.0], 2: [2, 'line', 2.0], 3: [3, 'centroid', 3.0]}
 
             >>> test_vect.table_to_dict(where="value > 2")
-            {3: [3, u'centroid', 3.0]}
+            {3: [3, 'centroid', 3.0]}
 
             >>> test_vect.table_to_dict(where="value > 0")
-            {1: [1, u'point', 1.0], 2: [2, u'line', 2.0], 3: [3, u'centroid', 3.0]}
+            {1: [1, 'point', 1.0], 2: [2, 'line', 2.0], 3: [3, 'centroid', 3.0]}
 
             >>> test_vect.table.filters.get_sql()
-            u'SELECT cat,name,value FROM vector_doctest_map WHERE value > 0 ORDER BY cat;'
+            'SELECT cat,name,value FROM vector_doctest_map WHERE value > 0 ORDER BY cat;'
 
         """
 

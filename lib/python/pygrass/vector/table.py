@@ -80,13 +80,13 @@ class Filters(object):
 
     >>> filter = Filters('table')
     >>> filter.get_sql()
-    u'SELECT * FROM table;'
+    'SELECT * FROM table;'
     >>> filter.where("area<10000").get_sql()
-    u'SELECT * FROM table WHERE area<10000;'
+    'SELECT * FROM table WHERE area<10000;'
     >>> filter.select("cat", "area").get_sql()
-    u'SELECT cat, area FROM table WHERE area<10000;'
+    'SELECT cat, area FROM table WHERE area<10000;'
     >>> filter.order_by("area").limit(10).get_sql()
-    u'SELECT cat, area FROM table WHERE area<10000 ORDER BY area LIMIT 10;'
+    'SELECT cat, area FROM table WHERE area<10000 ORDER BY area LIMIT 10;'
 
     """
     def __init__(self, tname):
@@ -186,7 +186,7 @@ class Columns(object):
     >>> cols_sqlite = Columns(test_vector_name,
     ...                       sqlite3.connect(get_path(path)))
     >>> cols_sqlite.tname
-    u'table_doctest_map'
+    'table_doctest_map'
 
     For a postgreSQL table:
 
@@ -306,12 +306,12 @@ class Columns(object):
         >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.sql_descr()                   # doctest: +ELLIPSIS
-        u'cat INTEGER, name varchar(50), value double precision'
+        'cat INTEGER, name varchar(50), value double precision'
         >>> import psycopg2 as pg                         # doctest: +SKIP
         >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
         >>> cols_pg.sql_descr()                 # doctest: +ELLIPSIS +SKIP
-        u'cat INTEGER, name varchar(50), value double precision'
+        'cat INTEGER, name varchar(50), value double precision'
         """
         if remove:
             return ', '.join(['%s %s' % (key, val) for key, val in self.items()
@@ -328,12 +328,12 @@ class Columns(object):
         >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.types()                       # doctest: +ELLIPSIS
-        [u'INTEGER', u'varchar(50)', u'double precision']
+        ['INTEGER', 'varchar(50)', 'double precision']
         >>> import psycopg2 as pg                         # doctest: +SKIP
         >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
         >>> cols_pg.types()                     # doctest: +ELLIPSIS +SKIP
-        [u'INTEGER', u'varchar(50)', u'double precision']
+        ['INTEGER', 'varchar(50)', 'double precision']
 
         """
         return self.odict.values()
@@ -347,12 +347,12 @@ class Columns(object):
         >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.names()                      # doctest: +ELLIPSIS
-        [u'cat', u'name', u'value']
+        ['cat', 'name', 'value']
         >>> import psycopg2 as pg                         # doctest: +SKIP
         >>> cols_pg = Columns(test_vector_name,       # doctest: +SKIP
         ...                   pg.connect('host=localhost dbname=grassdb'))
         >>> cols_pg.names()                     # doctest: +ELLIPSIS +SKIP
-        [u'cat', u'name', u'value']
+        ['cat', 'name', 'value']
 
         """
         if remove:
@@ -373,12 +373,12 @@ class Columns(object):
         >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.items()                       # doctest: +ELLIPSIS
-        [(u'cat', u'INTEGER'), (u'name', u'varchar(50)'), (u'value', u'double precision')]
+        [('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')]
         >>> import psycopg2 as pg                         # doctest: +SKIP
         >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
         >>> cols_pg.items()                     # doctest: +ELLIPSIS +SKIP
-        [(u'cat', u'INTEGER'), (u'name', u'varchar(50)'), (u'value', u'double precision')]
+        [('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')]
 
         """
         return self.odict.items()
@@ -588,15 +588,15 @@ class Link(object):
     >>> link.layer
     1
     >>> link.name
-    u'link0'
+    'link0'
     >>> link.table_name
-    u'table_doctest_map'
+    'table_doctest_map'
     >>> link.key
-    u'cat'
+    'cat'
     >>> link.database
-    u'$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+    '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
     >>> link.driver
-    u'sqlite'
+    'sqlite'
     >>> link
     Link(1, link0, sqlite)
 
@@ -737,12 +737,12 @@ class Link(object):
         >>> conn = link.connection()
         >>> cur = conn.cursor()
         >>> link.table_name
-        u'table_doctest_map'
+        'table_doctest_map'
         >>> cur.execute("SELECT cat, name, value from %s" %
         ...             link.table_name)              # doctest: +ELLIPSIS
         <sqlite3.Cursor object at ...>
         >>> cur.fetchone()     #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-        (1, u'point', 1.0)
+        (1, 'point', 1.0)
         >>> cur.close()
         >>> conn.close()
 
@@ -782,10 +782,10 @@ class Link(object):
         ...             'sqlite')
         >>> table = link.table()
         >>> table.filters.select('cat', 'name', 'value')
-        Filters(u'SELECT cat, name, value FROM table_doctest_map;')
+        Filters('SELECT cat, name, value FROM table_doctest_map;')
         >>> cur = table.execute()
         >>> cur.fetchone()
-        (1, u'point', 1.0)
+        (1, 'point', 1.0)
         >>> cur.close()
 
         """
@@ -958,7 +958,7 @@ class Table(object):
     >>> tab_sqlite = Table(name=test_vector_name,
     ...                    connection=sqlite3.connect(get_path(path)))
     >>> tab_sqlite.name
-    u'table_doctest_map'
+    'table_doctest_map'
     >>> import psycopg2                                   # doctest: +SKIP
     >>> tab_pg = Table(test_vector_name,
     ...                psycopg2.connect('host=localhost dbname=grassdb',
@@ -1004,7 +1004,7 @@ class Table(object):
         >>> tab_sqlite = Table(name=test_vector_name,
         ...                    connection=sqlite3.connect(get_path(path)))
         >>> tab_sqlite
-        Table(u'table_doctest_map')
+        Table('table_doctest_map')
 
         """
         return "Table(%r)" % (self.name)
@@ -1077,10 +1077,10 @@ class Table(object):
         >>> tab_sqlite = Table(name=test_vector_name,
         ...                    connection=sqlite3.connect(get_path(path)))
         >>> tab_sqlite.filters.select('cat', 'name').order_by('value')
-        Filters(u'SELECT cat, name FROM table_doctest_map ORDER BY value;')
+        Filters('SELECT cat, name FROM table_doctest_map ORDER BY value;')
         >>> cur = tab_sqlite.execute()
         >>> cur.fetchone()     #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-         (1, u'point')
+         (1, 'point')
 
         """
         try:

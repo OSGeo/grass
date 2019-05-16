@@ -163,9 +163,9 @@ class Attrs(object):
         >>> test_vect.open('r')
         >>> v1 = test_vect[1]
         >>> v1.attrs['name']
-        u'point'
+        'point'
         >>> v1.attrs['name', 'value']
-        (u'point', 1.0)
+        ('point', 1.0)
         >>> test_vect.close()
 
         """
@@ -186,15 +186,15 @@ class Attrs(object):
         >>> test_vect.open('r')
         >>> v1 = test_vect[1]
         >>> v1.attrs['name']
-        u'point'
+        'point'
 
         >>> v1.attrs['name'] = "new_point_1"
         >>> v1.attrs['name']
-        u'new_point_1'
+        'new_point_1'
 
         >>> v1.attrs['name', 'value'] = "new_point_2", 100.
         >>> v1.attrs['name', 'value']
-        (u'new_point_2', 100.0)
+        ('new_point_2', 100.0)
         >>> v1.attrs['name', 'value'] = "point", 1.
         >>> v1.attrs.table.conn.commit()
         >>> test_vect.close()
@@ -234,7 +234,7 @@ class Attrs(object):
            >>> test_vect.open('r')
            >>> v1 = test_vect[1]
            >>> v1.attrs.values()
-           (1, u'point', 1.0)
+           (1, 'point', 1.0)
             >>> test_vect.close()
 
         """
@@ -252,7 +252,7 @@ class Attrs(object):
            >>> test_vect.open('r')
            >>> v1 = test_vect[1]
            >>> v1.attrs.keys()
-           [u'cat', u'name', u'value']
+           ['cat', 'name', 'value']
             >>> test_vect.close()
 
         """
@@ -374,7 +374,7 @@ class Geo(object):
 
             >>> pnt = Point(10, 100)
             >>> pnt.to_wkt()
-            u'POINT (10.0000000000000000 100.0000000000000000)'
+            'POINT (10.0000000000000000 100.0000000000000000)'
         """
         return decode(libvect.Vect_line_to_wkt(self.c_points, self.gtype, not self.is2D))
 
@@ -1303,7 +1303,6 @@ class Boundary(Line):
 
     def __init__(self, **kargs):
         super(Boundary, self).__init__(**kargs)
-
         v_id = kargs.get('v_id', 0)
         self.dir = libvect.GV_FORWARD if v_id > 0 else libvect.GV_BACKWARD
         self.c_left = ctypes.pointer(ctypes.c_int())
