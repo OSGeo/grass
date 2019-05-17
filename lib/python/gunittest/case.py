@@ -19,7 +19,7 @@ import unittest
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
-from grass.script import shutil_which, text_to_string
+from grass.script import shutil_which, text_to_string, encode
 
 from .gmodules import call_module, SimpleModule
 from .checkers import (check_text_ellipsis,
@@ -729,7 +729,7 @@ class TestCase(unittest.TestCase):
         # hash is the easiest way how to get a valid vector name
         # TODO: introduce some function which will make file valid
         hasher = hashlib.md5()
-        hasher.update(filename)
+        hasher.update(encode(filename))
         namehash = hasher.hexdigest()
         vector = self._get_unique_name('import_ascii_vector_' + name_part
                                        + '_' + namehash)

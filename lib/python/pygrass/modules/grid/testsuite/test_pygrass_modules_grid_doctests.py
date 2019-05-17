@@ -31,7 +31,7 @@ def load_tests(loader, tests, ignore):
     # for now it is the only place where it works
     grass.gunittest.utils.do_doctest_gettext_workaround()
 
-    tests.addTests(doctest.DocTestSuite(gmodules.shortcuts))
+    #tests.addTests(doctest.DocTestSuite(gmodules.shortcuts))
     return tests
 
 

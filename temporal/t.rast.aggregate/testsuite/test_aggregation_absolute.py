@@ -116,8 +116,7 @@ class TestAggregationAbsolute(TestCase):
                           basename="b", granularity="1 months",
                           method="maximum", sampling=["contains"],
                           file_limit=0, nprocs=3, suffix='time')
-        #self.assertRasterExists('b_2001_01_01T00_00_00')
-        self.assertRasterExists('b_2001_01_01_00')
+        self.assertRasterExists('b_2001_01_01T00_00_00')
 
     def test_aggregation_2months(self):
         """Aggregation two month"""

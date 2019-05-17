@@ -145,7 +145,7 @@ class VectorMaskTest(TestCase):
     def test_inverted_mask(self):
         """Test to see if the standard outputs are created"""
         self.assertModule('v.in.lidar', input=self.las_file,
-            output=self.imported_points, flags='bti',
+            output=self.imported_points, flags='btu',
             mask=self.areas)
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
