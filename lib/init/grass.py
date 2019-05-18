@@ -344,6 +344,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
   --exec EXECUTABLE              {exec_}
                                    {exec_detail}
   --tmp-location                 {tmp_location}
+  --no-banner                    {no_banner}
 
 {params}:
   GISDBASE                       {gisdbase}
@@ -401,6 +402,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
     executable_params=_("parameters of the executable"),
     standard_flags=_("standard flags"),
     tmp_location=_("create temporary location (use with the --exec flag)"),
+    no_banner=_("Start GRASS without displaying banner"),
     )
 
 
@@ -1954,6 +1956,7 @@ class Parameters(object):
         self.mapset = None
         self.geofile = None
         self.tmp_location = False
+        self.no_banner = True
 
 
 def parse_cmdline(argv, default_gui):
@@ -1982,6 +1985,9 @@ def parse_cmdline(argv, default_gui):
         # Check if the -wxpython flag was given
         elif i in ["-wxpython", "-wx", "--wxpython", "--wx"]:
             params.grass_gui = 'wxpython'
+        # Check if the -no-banner flag was given
+        elif i == "--no-banner":
+            params.no_banner = False
         # Check if the user wants to create a new mapset
         elif i == "-c":
             params.create_new = True
@@ -2224,8 +2230,9 @@ def main():
         clean_all()
         sys.exit(0)
     else:
-        clear_screen()
-        show_banner()
+        if params.no_banner:
+            clear_screen()
+            show_banner()
         say_hello()
         show_info(shellname=shellname,
                   grass_gui=grass_gui, default_gui=default_gui)
@@ -2258,7 +2265,8 @@ def main():
         close_gui()
 
         # here we are at the end of grass session
-        clear_screen()
+        if params.no_banner:
+            clear_screen()
         clean_all()
         if not params.tmp_location:
             writefile(gisrcrc, readfile(gisrc))
