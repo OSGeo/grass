@@ -48,6 +48,7 @@ import string
 import subprocess
 import types
 import re
+import six
 import platform
 import tempfile
 import locale
@@ -64,13 +65,6 @@ ENCODING = locale.getdefaultlocale()[1]
 if ENCODING is None:
     ENCODING = 'UTF-8'
     print("Default locale not found, using UTF-8")  # intentionally not translatable
-
-# Python 3 compatibility start
-PY2 = sys.version[0] == '2'
-if PY2:
-    string_types = basestring,
-else:
-    string_types = str,
 
 # Variables substituted during build process
 if 'GISBASE' in os.environ and len(os.getenv('GISBASE')) > 0:
@@ -161,7 +155,7 @@ def encode(string, encoding=ENCODING):
 # see https://trac.osgeo.org/grass/ticket/3508
 def to_text_string(obj, encoding=ENCODING):
     """Convert `obj` to (unicode) text string"""
-    if PY2:
+    if six.PY2:
         # Python 2
         return encode(obj, encoding=encoding)
     else:
@@ -1544,11 +1538,11 @@ def run_batch_job(batch_job):
     :param batch_job: executable and parameters in a list or a string
     """
     batch_job_string = batch_job
-    if not isinstance(batch_job, string_types):
+    if not isinstance(batch_job, six.string_types):
         # for messages only
         batch_job_string = ' '.join(batch_job)
     message(_("Executing <%s> ...") % batch_job_string)
-    if isinstance(batch_job, string_types):
+    if isinstance(batch_job, six.string_types):
         # shell=True is keeping the original GRASS_BATCH_JOB behavior
         def quote(string):
             if '"' in string:
