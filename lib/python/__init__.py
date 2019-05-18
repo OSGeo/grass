@@ -1,6 +1,8 @@
 import gettext
 import os
 
+import six
+
 # Setup i18N
 #
 # Calling `gettext.install()` injects `_()` in the builtins namespace and
@@ -17,9 +19,14 @@ import os
 # - https://www.wefearchange.org/2012/06/the-right-way-to-internationalize-your.html
 #
 _LOCALE_DIR = os.path.join(os.getenv("GISBASE"), 'locale')
-gettext.install('grasslibs', _LOCALE_DIR)
-gettext.install('grassmods', _LOCALE_DIR)
-gettext.install('grasswxpy', _LOCALE_DIR)
+if six.PY2:
+    gettext.install('grasslibs', _LOCALE_DIR, unicode=True)
+    gettext.install('grassmods', _LOCALE_DIR, unicode=True)
+    gettext.install('grasswxpy', _LOCALE_DIR, unicode=True)
+else:
+    gettext.install('grasslibs', _LOCALE_DIR)
+    gettext.install('grassmods', _LOCALE_DIR)
+    gettext.install('grasswxpy', _LOCALE_DIR)
 
 
 __all__ = ["script", "temporal"]
