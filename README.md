@@ -1,24 +1,12 @@
 [![Build Status](https://travis-ci.com/OSGeo/grass.svg?branch=master)](https://travis-ci.com/OSGeo/grass)
 
-GRASS GIS Development Subversion repository
-===========================================
+GRASS GIS Repository
+====================
 
 How to get write access here?
 -----------------------------
 
-Write access is only granted to developers who agree to abide by
-RFC2 - [Legal aspects of code contributions](http://trac.osgeo.org/grass/wiki/RFC/2_LegalAspectsOfCodeContributions)
-and the [code submission guidelines](http://trac.osgeo.org/grass/wiki/Submitting)
-
-This needs to be communicated to a GRASS developer. S/he will
-then possibly propose you to the GRASS Project Steering committee
-after a period of evaluation. For details, see [here](http://trac.osgeo.org/grass/wiki/RFC)
-
-Once write access is granted, you, the new developer need to
-obtain an `osgeo_id` at http://www.osgeo.org/osgeo_userid
-If you already have an `osgeo_id` but forgot it, search for it at
-Search at http://www.osgeo.org/cgi-bin/ldap_web_search.py
-
+See [Procedure for gaining Git write access](https://trac.osgeo.org/grass/wiki/HowToContribute#WriteaccesstotheGRASScorerepository)
 
 How to compile GRASS?
 ---------------------
