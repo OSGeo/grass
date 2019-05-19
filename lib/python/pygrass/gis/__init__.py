@@ -14,6 +14,7 @@ import grass.lib.gis as libgis
 from grass.pygrass.errors import GrassError
 from grass.script.utils import encode, decode
 from grass.pygrass.utils import getenv
+from grass.pygrass.gis.region import Region
 
 test_vector_name = "Gis_test_vector"
 test_raster_name = "Gis_test_raster"
