@@ -45,7 +45,7 @@ class ParseSingleColorRuleColorsTestCase(TestCase):
         colors = ("{string} -> "
                   "{v.value}: {r.value}, {g.value}, {b.value}".format(**locals()))
         error_text = Rast_parse_color_rule_error(ret)
-        self.assertEqual(error_text, "",
+        self.assertEqual(error_text, b"",
                          msg=("Conversion not successful (%s): %s (%s)"
                               % (colors, error_text, ret)))
         self.assertEqual(v.value, value,

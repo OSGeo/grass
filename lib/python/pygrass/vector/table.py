@@ -336,7 +336,7 @@ class Columns(object):
         ['INTEGER', 'varchar(50)', 'double precision']
 
         """
-        return self.odict.values()
+        return list(self.odict.values())
 
     def names(self, remove=None, unicod=True):
         """Return a list with the column names.
@@ -356,10 +356,10 @@ class Columns(object):
 
         """
         if remove:
-            nams = self.odict.keys()
+            nams = list(self.odict.keys())
             nams.remove(remove)
         else:
-            nams = self.odict.keys()
+            nams = list(self.odict.keys())
         if unicod:
             return nams
         else:
@@ -381,7 +381,7 @@ class Columns(object):
         [('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')]
 
         """
-        return self.odict.items()
+        return list(self.odict.items())
 
     def add(self, col_name, col_type):
         """Add a new column to the table.
@@ -509,7 +509,7 @@ class Columns(object):
         >>> cols_sqlite.cast('n_pizzas', 'float8')  # doctest: +ELLIPSIS
         Traceback (most recent call last):
           ...
-        DBError: SQLite does not support to cast columns.
+        grass.exceptions.DBError: SQLite does not support to cast columns.
         >>> import psycopg2 as pg                         # doctest: +SKIP
         >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP

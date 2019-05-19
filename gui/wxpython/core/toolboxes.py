@@ -461,7 +461,7 @@ def _expandUserToolboxesItem(node, toolboxes):
     >>> toolboxes = etree.fromstring('<toolboxes><toolbox name="UserToolbox"><items><module-item name="g.region"/></items></toolbox></toolboxes>')
     >>> _expandUserToolboxesItem(tree, toolboxes)
     >>> etree.tostring(tree)
-    '<toolbox><items><toolbox name="GeneratedUserToolboxesList"><label>Custom toolboxes</label><items><toolbox name="UserToolbox"><items><module-item name="g.region" /></items></toolbox></items></toolbox></items></toolbox>'
+    b'<toolbox><items><toolbox name="GeneratedUserToolboxesList"><label>Custom toolboxes</label><items><toolbox name="UserToolbox"><items><module-item name="g.region" /></items></toolbox></items></toolbox></items></toolbox>'
     """
     tboxes = toolboxes.findall('.//toolbox')
 
@@ -486,7 +486,7 @@ def _removeUserToolboxesItem(root):
     >>> tree = etree.fromstring('<toolbox><items><user-toolboxes-list/></items></toolbox>')
     >>> _removeUserToolboxesItem(tree)
     >>> etree.tostring(tree)
-    '<toolbox><items /></toolbox>'
+    b'<toolbox><items /></toolbox>'
     """
     for n in root.findall('./items/user-toolboxes-list'):
         items = root.find('./items')
@@ -571,7 +571,7 @@ def _expandItems(node, items, itemTag):
     >>> items = etree.fromstring('<module-items><module-item name="g.region"><module>g.region</module><description>GRASS region management</description></module-item></module-items>')
     >>> _expandItems(tree, items, 'module-item')
     >>> etree.tostring(tree)
-    '<items><module-item name="g.region"><module>g.region</module><description>GRASS region management</description></module-item></items>'
+    b'<items><module-item name="g.region"><module>g.region</module><description>GRASS region management</description></module-item></items>'
     """
     for moduleItem in node.findall('.//' + itemTag):
         itemName = moduleItem.get('name')
@@ -605,13 +605,13 @@ def _expandRuntimeModules(node, loadMetadata=True):
     ...                         '</items>')
     >>> _expandRuntimeModules(tree)
     >>> etree.tostring(tree)
-    '<items><module-item name="g.region"><module>g.region</module><description>Manages the boundary definitions for the geographic region.</description><keywords>general,settings,computational region,extent,resolution,level1</keywords></module-item></items>'
+    b'<items><module-item name="g.region"><module>g.region</module><description>Manages the boundary definitions for the geographic region.</description><keywords>general,settings,computational region,extent,resolution,level1</keywords></module-item></items>'
     >>> tree = etree.fromstring('<items>'
     ...                         '<module-item name="m.proj"></module-item>'
     ...                         '</items>')
     >>> _expandRuntimeModules(tree)
     >>> etree.tostring(tree)
-    '<items><module-item name="m.proj"><module>m.proj</module><description>Converts coordinates from one projection to another (cs2cs frontend).</description><keywords>miscellaneous,projection,transformation</keywords></module-item></items>'
+    b'<items><module-item name="m.proj"><module>m.proj</module><description>Converts coordinates from one projection to another (cs2cs frontend).</description><keywords>miscellaneous,projection,transformation</keywords></module-item></items>'
     """
     hasErrors = False
     modules = node.findall('.//module-item')
@@ -690,7 +690,7 @@ def _convertTag(node, old, new):
     >>> _convertTag(tree, 'toolbox', 'menu')
     >>> _convertTag(tree, 'module-item', 'menuitem')
     >>> etree.tostring(tree)
-    '<toolboxes><menu><items><menuitem /></items></menu></toolboxes>'
+    b'<toolboxes><menu><items><menuitem /></items></menu></toolboxes>'
     """
     for n in node.findall('.//%s' % old):
         n.tag = new
@@ -703,7 +703,7 @@ def _convertTagAndRemoveAttrib(node, old, new):
     >>> _convertTagAndRemoveAttrib(tree, 'toolbox', 'menu')
     >>> _convertTagAndRemoveAttrib(tree, 'module-item', 'menuitem')
     >>> etree.tostring(tree)
-    '<toolboxes><menu><items><menuitem /></items></menu></toolboxes>'
+    b'<toolboxes><menu><items><menuitem /></items></menu></toolboxes>'
     """
     for n in node.findall('.//%s' % old):
         n.tag = new
@@ -716,7 +716,7 @@ def _convertTree(root):
     >>> tree = etree.fromstring('<toolbox name="MainMenu"><label>Main menu</label><items><toolbox><label>Raster</label><items><module-item name="g.region"><module>g.region</module></module-item></items></toolbox></items></toolbox>')
     >>> _convertTree(tree)
     >>> etree.tostring(tree)
-    '<menudata><menubar><menu><label>Raster</label><items><menuitem><command>g.region</command></menuitem></items></menu></menubar></menudata>'
+    b'<menudata><menubar><menu><label>Raster</label><items><menuitem><command>g.region</command></menuitem></items></menu></menubar></menudata>'
     """
     root.attrib = {}
     label = root.find('label')

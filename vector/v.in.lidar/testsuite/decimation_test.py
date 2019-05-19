@@ -134,7 +134,7 @@ class TestCountBasedDecimation(TestCase):
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
             vector=self.imported_points,
-            reference=dict(points=(self.npoints - 105) / 10))
+            reference=dict(points=int((self.npoints - 105) / 10)))
 
     def test_limit_skip(self):
         """Test to see if the outputs are created"""

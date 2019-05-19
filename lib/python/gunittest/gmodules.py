@@ -40,7 +40,7 @@ class SimpleModule(Module):
     >>> str(colors.outputs.stdout)
     ''
     >>> colors.outputs.stderr.strip()
-    u"Color table for raster map <test_a> set to 'rules'"
+    "Color table for raster map <test_a> set to 'rules'"
     """
     def __init__(self, cmd, *args, **kargs):
         for banned in ['stdout_', 'stderr_', 'finish_', 'run_']:
@@ -60,7 +60,7 @@ def call_module(module, stdin=None,
                 **kwargs):
     r"""Run module with parameters given in `kwargs` and return its output.
 
-    >>> print call_module('g.region', flags='pg')  # doctest: +ELLIPSIS
+    >>> print (call_module('g.region', flags='pg'))  # doctest: +ELLIPSIS
     projection=...
     zone=...
     n=...

@@ -92,7 +92,7 @@ class Info(object):
         return self._mode
 
     def _set_mode(self, mode):
-        if mode.upper() not in ('R', 'W'):
+        if mode.upper() not in 'RW':
             str_err = _("Mode type: {0} not supported ('r', 'w')")
             raise ValueError(str_err.format(mode))
         self._mode = mode

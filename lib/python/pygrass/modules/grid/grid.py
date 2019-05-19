@@ -83,9 +83,9 @@ def copy_mapset(mapset, path):
     >>> sorted(os.listdir(path))                          # doctest: +ELLIPSIS
     [...'PERMANENT'...]
     >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
-    [u'DEFAULT_WIND', u'PROJ_INFO', u'PROJ_UNITS', u'VAR', u'WIND']
+    ['DEFAULT_WIND', 'PROJ_INFO', 'PROJ_UNITS', 'VAR', 'WIND']
     >>> sorted(os.listdir(os.path.join(path, mname)))   # doctest: +ELLIPSIS
-    [...u'SEARCH_PATH',...u'WIND']
+    [...'SEARCH_PATH',...'WIND']
     >>> import shutil
     >>> shutil.rmtree(path)
 
@@ -311,7 +311,7 @@ def get_cmd(cmdd):
     ...              elevation='ele', slope='slp', aspect='asp',
     ...              overwrite=True, run_=False)
     >>> get_cmd(slp.get_dict())  # doctest: +ELLIPSIS
-    ['r.slope.aspect', u'elevation=ele', u'format=degrees', ..., u'--o']
+    ['r.slope.aspect', 'elevation=ele', 'format=degrees', ..., '--o']
     """
     cmd = [cmdd['name'], ]
     cmd.extend(("%s=%s" % (k, v) for k, v in cmdd['inputs']

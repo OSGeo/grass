@@ -777,7 +777,7 @@ class VectorTopo(Vector):
             ...                                         feature_type="blub")
             Traceback (most recent call last):
             ...
-            GrassError: Unsupported feature type <blub>, supported are <point,line,boundary,centroid>
+            grass.exceptions.GrassError: Unsupported feature type <blub>, supported are <point,line,boundary,centroid>
 
             >>> test_vect.close()
 
