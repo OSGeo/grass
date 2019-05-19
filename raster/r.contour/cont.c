@@ -94,27 +94,29 @@ void contour(double levels[],
 	}
 
 	/* check each cell of top and bottom borders  */
-	for (startrow = 0; startrow < nrow; startrow += (nrow - 2)) {
+	for (startrow = 0; startrow <= nrow - 2; startrow += (nrow - 2)) {
 	    for (startcol = 0; startcol <= ncol - 2; startcol++) {
 
 		/* look for starting point of new line */
 		if (!hit[startrow][startcol]) {
 		    current.r = startrow;
 		    current.c = startcol;
-		    outside = getnewcell(&current, nrow, ncol, z);
 
 		    /* is this top or bottom? */
-		    if (startrow == 0)	/* top */
+		    if (startrow < nrow - 2)	/* top */
 			current.edge = 0;
 		    else	/* bottom edge */
 			current.edge = 2;
+
+		    outside = getnewcell(&current, nrow, ncol, z);
+
 		    p1 = current.edge;
 		    p2 = current.edge + 1;
 
 		    if (checkedge(current.z[p1], current.z[p2], level)) {
 			getpoint(&current, level, Cell, Points);
 			/* while not off an edge, follow line */
-			while (!outside && !hit[current.r][current.c]) {
+			while (!outside) {
 			    hit[current.r][current.c] |=
 				findcrossing(&current, level, Cell, Points,
 					     &ncrossing);
@@ -133,25 +135,27 @@ void contour(double levels[],
 	}			/* for rows */
 
 	/* check right and left borders (each row of first and last column) */
-	for (startcol = 0; startcol < ncol; startcol += (ncol - 2)) {
+	for (startcol = 0; startcol <= ncol - 2 ; startcol += (ncol - 2)) {
 	    for (startrow = 0; startrow <= nrow - 2; startrow++) {
 		/* look for starting point of new line */
 		if (!hit[startrow][startcol]) {
 		    current.r = startrow;
 		    current.c = startcol;
-		    outside = getnewcell(&current, nrow, ncol, z);
 
 		    /* is this left or right edge? */
-		    if (startcol == 0)	/* left */
+		    if (startcol < ncol - 2)	/* left */
 			current.edge = 3;
 		    else	/* right edge */
 			current.edge = 1;
+
+		    outside = getnewcell(&current, nrow, ncol, z);
+
 		    p1 = current.edge;
 		    p2 = (current.edge + 1) % 4;
 		    if (checkedge(current.z[p1], current.z[p2], level)) {
 			getpoint(&current, level, Cell, Points);
 			/* while not off an edge, follow line */
-			while (!outside && !hit[current.r][current.c]) {
+			while (!outside) {
 			    hit[current.r][current.c] |=
 				findcrossing(&current, level, Cell, Points,
 					     &ncrossing);
@@ -177,9 +181,12 @@ void contour(double levels[],
 		    current.r = startrow;
 		    current.c = startcol;
 		    current.edge = 0;
+		    p1 = current.edge;
+		    p2 = current.edge + 1;
+
 		    outside = getnewcell(&current, nrow, ncol, z);
 		    if (!outside &&
-			checkedge(current.z[0], current.z[1], level)) {
+			checkedge(current.z[p1], current.z[p2], level)) {
 			getpoint(&current, level, Cell, Points);
 			hit[current.r][current.c] |=
 			    findcrossing(&current, level, Cell, Points,
@@ -188,7 +195,7 @@ void contour(double levels[],
 			outside = getnewcell(&current, nrow, ncol, z);
 
 			/* while not back to starting point, follow line */
-			while (!outside && !hit[current.r][current.c] &&
+			while (!outside &&
 			       ((current.edge != 0) ||
 				((current.r != startrow) ||
 				 (current.c != startcol)))) {
@@ -235,6 +242,8 @@ static int getnewcell(struct cell *current, int nrow, int ncol, DCELL ** z)
 	current->z[1] = z[current->r][current->c + 1];
 	current->z[2] = z[current->r + 1][current->c + 1];
 	current->z[3] = z[current->r + 1][current->c];
+
+	/* testing for NULL values here does not work */
 
 	return 0;
     }
@@ -328,6 +337,7 @@ static int findcrossing(struct cell *current, double level,
 
 	cellhit = 1;
     }
+
     return cellhit;
 }
 
