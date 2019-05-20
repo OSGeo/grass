@@ -1,0 +1,19 @@
+MODULE_TOPDIR = ../..
+
+PGM=r.in.pdal
+
+LIBES = $(RASTERLIB) $(SEGMENTLIB) $(GPROJLIB) $(VECTORLIB) $(DBMILIB) $(GISLIB) $(MATHLIB) $(PDALLIBS)
+DEPENDENCIES = $(GPROJDEP) $(VECTORDEP) $(DBMIDEP) $(RASTERDEP) $(GISDEP) $(SEGMENTDEP)
+
+EXTRA_INC = $(VECT_INC) $(PROJINC) $(PDALINC)
+EXTRA_CFLAGS = $(VECT_CFLAGS) $(PDALCPPFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+LINK = $(CXX)
+
+ifneq ($(strip $(CXX)),)
+ifneq ($(USE_PDAL),)
+default: cmd
+endif
+endif
