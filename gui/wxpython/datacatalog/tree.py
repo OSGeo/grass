@@ -616,17 +616,17 @@ class DataCatalogTree(LocationMapTree):
 
     def OnRenameMap(self, event):
         """Rename layer with dialog"""
-        old_name = self.selected_layer.label
+        old_name = self.selected_layer[0].label
         gisrc, env = gscript.create_environment(
             gisenv()['GISDBASE'],
-            self.selected_location.label, mapset=self.selected_mapset.label)
+            self.selected_location[0].label, mapset=self.selected_mapset[0].label)
         new_name = self._getNewMapName(
             _('New name'),
             _('Rename map'),
             old_name,
             env=env,
-            mapset=self.selected_mapset.label,
-            element=self.selected_type.label)
+            mapset=self.selected_mapset[0].label,
+            element=self.selected_type[0].label)
         if new_name:
             self.Rename(old_name, new_name)
 
@@ -652,20 +652,20 @@ class DataCatalogTree(LocationMapTree):
         string = old + ',' + new
         gisrc, env = gscript.create_environment(
             gisenv()['GISDBASE'],
-            self.selected_location.label, self.selected_mapset.label)
+            self.selected_location[0].label, self.selected_mapset[0].label)
         label = _("Renaming map <{name}>...").format(name=string)
         self.showNotification.emit(message=label)
-        if self.selected_type.label == 'vector':
+        if self.selected_type[0].label == 'vector':
             renamed, cmd = self._runCommand('g.rename', vector=string, env=env)
-        elif self.selected_type.label == 'raster':
+        elif self.selected_type[0].label == 'raster':
             renamed, cmd = self._runCommand('g.rename', raster=string, env=env)
         else:
             renamed, cmd = self._runCommand(
                 'g.rename', raster3d=string, env=env)
         if renamed == 0:
-            self.selected_layer.label = new
-            self.selected_layer.data['name'] = new
-            self.RefreshNode(self.selected_layer)
+            self.selected_layer[0].label = new
+            self.selected_layer[0].data['name'] = new
+            self.RefreshNode(self.selected_layer[0])
             self.showNotification.emit(
                 message=_("{cmd} -- completed").format(cmd=cmd))
             Debug.msg(1, "LAYER RENAMED TO: " + new)
@@ -679,6 +679,7 @@ class DataCatalogTree(LocationMapTree):
             else:
                 GMessage(_("No map selected for moving."), parent=self)
             return
+
         for i in range(len(self.copy_layer)):
             gisrc, env = gscript.create_environment(
                             gisenv()['GISDBASE'], self.selected_location[0].label, mapset=self.selected_mapset[0].label)
@@ -737,51 +738,52 @@ class DataCatalogTree(LocationMapTree):
     
                     # remove old
                     if not self.copy_mode:
-                        self._removeMapAfterCopy(env2)
+                        self._removeMapAfterCopy(self.copy_layer[i], self.copy_type[i], env2)
     
                 gscript.try_remove(gisrc)
                 gscript.try_remove(gisrc2)
                 # expand selected mapset
             else:
-                if self.copy_type.label == 'raster_3d':
+                if self.copy_type[i].label == 'raster_3d':
                     GError(_("Reprojection is not implemented for 3D rasters"), parent=self)
                     return
-                if map_exists(new_name, element=self.copy_type.label, env=env,
-                              mapset=self.selected_mapset.label):
+                if map_exists(new_name, element=self.copy_type[i].label, env=env,
+                              mapset=self.selected_mapset[0].label):
                     new_name = self._getNewMapName(_('New name'), _('Select new name'),
-                                                   self.copy_layer.label, env=env,
-                                                   mapset=self.selected_mapset.label,
-                                                   element=self.copy_type.label)
+                                                   self.copy_layer[i].label, env=env,
+                                                   mapset=self.selected_mapset[0].label,
+                                                   element=self.copy_type[i].label)
                     if not new_name:
-                        return
+                        continue
                 gisdbase = gisenv()['GISDBASE']
-                callback = lambda: self._onDoneReprojection(iEnv=env2, iGisrc=gisrc2, oGisrc=gisrc)
-                dlg = CatalogReprojectionDialog(self, self._giface, gisdbase, self.copy_location.label,
-                                                self.copy_mapset.label, self.copy_layer.label, env2,
-                                                gisdbase, self.selected_location.label, self.selected_mapset.label,
-                                                new_name, self.copy_type.label, env, callback)
+                callback = lambda gisrc2=gisrc2, gisrc=gisrc, cLayer=self.copy_layer[i], \
+                                  cType=self.copy_type[i], cMode=self.copy_mode, name=new_name: \
+                                  self._onDoneReprojection(env2, gisrc2, gisrc, cLayer, cType, cMode, name)
+                dlg = CatalogReprojectionDialog(self, self._giface, gisdbase, self.copy_location[i].label,
+                                                self.copy_mapset[i].label, self.copy_layer[i].label, env2,
+                                                gisdbase, self.selected_location[0].label, self.selected_mapset[0].label,
+                                                new_name, self.copy_type[i].label, env, callback)
                 dlg.ShowModal()
         self.ExpandNode(self.selected_mapset[0], recursive=True)
         self._initVariablesCatalog()
 
-    def _onDoneReprojection(self, iEnv, iGisrc, oGisrc):
-        self.InsertLayer(name=self.copy_layer.label, mapset_node=self.selected_mapset,
-                         element_name=self.copy_type.label)
-        if not self.copy_mode:
-            self._removeMapAfterCopy(iEnv)
+    def _onDoneReprojection(self, iEnv, iGisrc, oGisrc, cLayer, cType, cMode, name):
+        self.InsertLayer(name=name, mapset_node=self.selected_mapset[0],
+                         element_name=cType.label)
+        if not cMode:
+            self._removeMapAfterCopy(cLayer, cType, iEnv)
         gscript.try_remove(iGisrc)
         gscript.try_remove(oGisrc)
-        self.ExpandNode(self.selected_mapset, recursive=True)
-        self._initVariablesCatalog()
+        self.ExpandNode(self.selected_mapset[0], recursive=True)
 
-    def _removeMapAfterCopy(self, env):
-        removed, cmd = self._runCommand('g.remove', type=self.copy_type.label,
-                                        name=self.copy_layer.label, flags='f', env=env)
+    def _removeMapAfterCopy(self, cLayer, cType, env):
+        removed, cmd = self._runCommand('g.remove', type=cType.label,
+                                        name=cLayer.label, flags='f', env=env)
         if removed == 0:
-            self._model.RemoveNode(self.copy_layer)
-            self.RefreshNode(self.copy_type, recursive=True)
-            Debug.msg(1, "LAYER " + self.copy_layer.label + " DELETED")
-            self.showNotification.emit(message=_("g.remove completed").format(cmd=cmd))
+            self._model.RemoveNode(cLayer)
+            self.RefreshNode(cType, recursive=True)
+            Debug.msg(1, "LAYER " + cLayer.label + " DELETED")
+            self.showNotification.emit(message=_("g.remove completed"))
 
     def InsertLayer(self, name, mapset_node, element_name):
         """Insert layer into model and refresh tree"""
@@ -864,7 +866,7 @@ class DataCatalogTree(LocationMapTree):
 
     def OnBeginDrag(self, node, event):
         """Just copy necessary data"""
-        self.DefineItems([node])
+        self.DefineItems(self.GetSelected())
         if self.selected_layer and not (self._restricted and gisenv()[
                                         'LOCATION_NAME'] != self.selected_location[0].label):
             event.Allow()
@@ -877,8 +879,8 @@ class DataCatalogTree(LocationMapTree):
         """Copy layer into target"""
         self.copy_mode = wx.GetMouseState().ControlDown()
         if node:
-            self.DefineItems([node])
-            if self._restricted and gisenv()['MAPSET'] != self.selected_mapset[9].label:
+            self.DefineItems(self.GetSelected())
+            if self._restricted and gisenv()['MAPSET'] != self.selected_mapset[0].label:
                 GMessage(_("To move or copy maps to other mapsets, unlock editing of other mapsets"),
                          parent=self)
                 event.Veto()
@@ -1054,8 +1056,8 @@ class DataCatalogTree(LocationMapTree):
         item = wx.MenuItem(menu, wx.NewId(), _("&Switch mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnSwitchLocationMapset, item)
-        if (self.selected_location.label == genv['LOCATION_NAME']
-                and self.selected_mapset.label == genv['MAPSET']):
+        if (self.selected_location[0].label == genv['LOCATION_NAME']
+                and self.selected_mapset[0].label == genv['MAPSET']):
             item.Enable(False)
         self.PopupMenu(menu)
         menu.Destroy()
