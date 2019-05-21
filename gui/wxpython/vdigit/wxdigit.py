@@ -1767,7 +1767,7 @@ class IVDigit:
                 Vect_cidx_get_cat_by_index(self.poMapInfo, i, j,
                                            byref(cat), byref(type), byref(id))
                 if field in self.cats:
-                    if cat > self.cats[field]:
+                    if self.cats[field] is None or cat.value > self.cats[field]:
                         self.cats[field] = cat.value
                 else:
                     self.cats[field] = cat.value
