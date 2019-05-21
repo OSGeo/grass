@@ -7,6 +7,7 @@ sudo apt-get install --no-install-recommends \
     autoconf2.13 \
     autotools-dev \
     debhelper \
+    ccache \
     fakeroot \
     flex \
     bison \
