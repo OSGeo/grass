@@ -110,8 +110,7 @@ svn ci -m"GRASS GIS $VERSION" include/VERSION
 svn up
 
 # Create Changelog file on release branch:
-# https://arthurdejong.org/svn2cl/
-svn2cl
+python tools/gitlog2changelog.py
 mv ChangeLog ChangeLog_$VERSION
 head ChangeLog_$VERSION
 gzip ChangeLog_$VERSION
