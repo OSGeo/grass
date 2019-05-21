@@ -16,7 +16,7 @@ class TestProfiling(TestCase):
 
     def test_flagg(self):
         """Testing flag g with map lakes"""
-        output_str = """n=15279
+        output_str = u"""n=15279
 nmissing=0
 nnull=0
 min=1
@@ -34,12 +34,12 @@ kurtosis=-1.20024
 skewness=-2.41826e-14"""
         v_univar = SimpleModule("v.univar", flags="g", map='lakes', column='cat')
         v_univar.run()
-        self.assertLooksLike(actual=v_univar.outputs.stdout.encode('utf8'),
+        self.assertLooksLike(actual=v_univar.outputs.stdout,
                              reference=output_str)
 
     def test_flage(self):
         """Testing flag e with map geology"""
-        output_str = """number of features with non NULL attribute: 1832
+        output_str = u"""number of features with non NULL attribute: 1832
 number of missing attributes: 0
 number of NULL attributes: 0
 minimum: 166.947
@@ -61,12 +61,12 @@ median (even number of cells): 10308.4
 90th percentile: 86449.7"""
         v_univar = SimpleModule('v.univar', map='geology', column='PERIMETER', flags='e')
         v_univar.run()
-        self.assertLooksLike(actual=v_univar.outputs.stdout.encode('utf8'),
+        self.assertLooksLike(actual=v_univar.outputs.stdout,
                              reference=output_str)
  
     def test_flagw(self):
         """Testing flag w with map lakes"""
-        output_str = """number of features with non NULL attribute: 15279
+        output_str = u"""number of features with non NULL attribute: 15279
 number of missing attributes: 0
 number of NULL attributes: 0
 minimum: 2
@@ -77,12 +77,12 @@ mean: 6190.76
 mean of absolute values: 6190.76"""
         v_univar = SimpleModule('v.univar', map='lakes', column='FULL_HYDRO', flags='w')
         v_univar.run()
-        self.assertLooksLike(actual=v_univar.outputs.stdout.encode('utf8'),
+        self.assertLooksLike(actual=v_univar.outputs.stdout,
                              reference=output_str)
 
     def test_flagd(self):
         """Testing flag d with map hospitals"""
-        univar_string = """number of primitives: 160
+        univar_string = u"""number of primitives: 160
 number of non zero distances: 12561
 number of zero distances: 0
 minimum: 9.16773
@@ -100,7 +100,7 @@ kurtosis: 0.277564
 skewness: 0.801646"""
         v_univar = SimpleModule('v.univar', map='hospitals', column='CITY', flags='d')
         v_univar.run()
-        self.assertLooksLike(actual=v_univar.outputs.stdout.encode('utf8'),
+        self.assertLooksLike(actual=v_univar.outputs.stdout,
                              reference=univar_string)
 		
     def test_output(self):

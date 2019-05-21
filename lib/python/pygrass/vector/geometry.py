@@ -1304,6 +1304,8 @@ class Boundary(Line):
     def __init__(self, **kargs):
         super(Boundary, self).__init__(**kargs)
         v_id = kargs.get('v_id', 0)
+        # not sure what it means that v_id is None
+        v_id = 0 if v_id is None else v_id
         self.dir = libvect.GV_FORWARD if v_id > 0 else libvect.GV_BACKWARD
         self.c_left = ctypes.pointer(ctypes.c_int())
         self.c_right = ctypes.pointer(ctypes.c_int())

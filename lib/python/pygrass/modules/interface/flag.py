@@ -13,14 +13,14 @@ class Flag(object):
     >>> flag = Flag(diz=dict(name='a', description='Flag description',
     ...                      default=True))
     >>> flag.name
-    u'a'
+    'a'
     >>> flag.special
     False
     >>> flag.description
-    u'Flag description'
+    'Flag description'
     >>> flag = Flag(diz=dict(name='overwrite'))
     >>> flag.name
-    u'overwrite'
+    'overwrite'
     >>> flag.special
     True
     """
@@ -41,16 +41,16 @@ class Flag(object):
         >>> flag = Flag(diz=dict(name='a', description='Flag description',
         ...                      default=True))
         >>> flag.get_bash()
-        u''
+        ''
         >>> flag.value = True
         >>> flag.get_bash()
-        u'-a'
+        '-a'
         >>> flag = Flag(diz=dict(name='overwrite'))
         >>> flag.get_bash()
-        u''
+        ''
         >>> flag.value = True
         >>> flag.get_bash()
-        u'--o'
+        '--o'
         """
         if self.value:
             if self.special:
@@ -66,16 +66,16 @@ class Flag(object):
         >>> flag = Flag(diz=dict(name='a', description='Flag description',
         ...                      default=True))
         >>> flag.get_python()
-        u''
+        ''
         >>> flag.value = True
         >>> flag.get_python()
-        u'a'
+        'a'
         >>> flag = Flag(diz=dict(name='overwrite'))
         >>> flag.get_python()
-        u''
+        ''
         >>> flag.value = True
         >>> flag.get_python()
-        u'overwrite=True'
+        'overwrite=True'
         """
         if self.value:
             return '%s=True' % self.name if self.special else self.name

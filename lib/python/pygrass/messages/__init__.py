@@ -148,7 +148,7 @@ class Messenger(object):
        Traceback (most recent call last):
          File "__init__.py", line 241, in fatal
            raise FatalError(message)
-       FatalError: Ohh no no no!
+       grass.exceptions.FatalError: Ohh no no no!
 
        >>> msgr = Messenger(raise_on_error=True)
        >>> msgr.set_raise_on_error(False)
@@ -164,7 +164,7 @@ class Messenger(object):
        Traceback (most recent call last):
          File "__init__.py", line 241, in fatal
            raise FatalError(message)
-       FatalError: Ohh no no no!
+       grass.exceptions.FatalError: Ohh no no no!
 
     """
     def __init__(self, raise_on_error=False):

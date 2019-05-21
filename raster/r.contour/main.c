@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
     struct FPRange range;
     int fd;
     double *lev;
+    double snap;
     int nlevels;
     int n_cut;
 
@@ -221,6 +222,23 @@ int main(int argc, char *argv[])
         db_close_database_shutdown_driver(Driver);
     }
     Vect_build(&Map);
+
+    /* if a contour line hits a border of NULL cells, it traces 
+     * itself back until it hits a border of NULL cells again,
+     * then goes back to the starting point
+     * -> cleaning is needed */
+    snap = (Wind.ns_res + Wind.ew_res) / 2000.0;
+    G_message(_("Snap lines"));
+    Vect_snap_lines(&Map, GV_LINE, snap, NULL);
+    G_message(_("Break lines at intersections"));
+    Vect_break_lines(&Map, GV_LINE, NULL);
+    G_message(_("Remove duplicates"));
+    Vect_remove_duplicates(&Map, GV_LINE, NULL);
+    G_message(_("Merge lines"));
+    Vect_merge_lines(&Map, GV_LINE, NULL, NULL);
+    Vect_build_partial(&Map, GV_BUILD_NONE);
+    Vect_build(&Map);
+    
     Vect_close(&Map);
 
     exit(EXIT_SUCCESS);

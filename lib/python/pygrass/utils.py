@@ -260,7 +260,7 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     >>> get_raster_for_points(vect, ele, column=test_raster_name, region=region)
     True
     >>> vect.table.filters.select('value', test_raster_name)
-    Filters(u'SELECT value, Utils_test_raster FROM test_vect_2;')
+    Filters('SELECT value, Utils_test_raster FROM test_vect_2;')
     >>> cur = vect.table.execute()
     >>> r = cur.fetchall()
     >>> r[0]                                        # doctest: +ELLIPSIS
@@ -348,11 +348,11 @@ def set_path(modulename, dirname=None, path='.'):
 def split_in_chunk(iterable, length=10):
     """Split a list in chunk.
 
-    >>> for chunk in split_in_chunk(range(25)): print chunk
+    >>> for chunk in split_in_chunk(range(25)): print (chunk)
     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
     (10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
     (20, 21, 22, 23, 24)
-    >>> for chunk in split_in_chunk(range(25), 3): print chunk
+    >>> for chunk in split_in_chunk(range(25), 3): print (chunk)
     (0, 1, 2)
     (3, 4, 5)
     (6, 7, 8)

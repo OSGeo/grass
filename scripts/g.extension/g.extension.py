@@ -324,7 +324,9 @@ def list_available_extensions(url):
     if flags['t']:
         grass.message(_("List of available extensions (toolboxes):"))
         tlist = get_available_toolboxes(url)
-        for toolbox_code, toolbox_data in tlist.items():
+        tkeys = sorted(tlist.keys())
+        for toolbox_code in tkeys:
+            toolbox_data = tlist[toolbox_code]
             if flags['g']:
                 print('toolbox_name=' + toolbox_data['name'])
                 print('toolbox_code=' + toolbox_code)

@@ -12,7 +12,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
-out_where = """cat|level
+out_where = u"""cat|level
 1|56
 2|58
 3|60
@@ -86,7 +86,7 @@ class Testrr(TestCase):
 
     def test_flag_t(self):
         """Testing flag t"""
-        string="""min=1
+        string=u"""min=1
         max=6"""
         self.assertModule('r.contour', input=self.input, output=self.output, levels=1, step=1, flags='t')
         self.assertRasterFitsUnivar(self.output,
@@ -104,7 +104,7 @@ class Testrr(TestCase):
         self.assertModule('r.contour', input=self.input, output=self.output, step=2)
         v_db_select = SimpleModule('v.db.select', map=self.output)
         v_db_select.run()
-        self.assertLooksLike(reference=out_where, actual=v_db_select.outputs.stdout.encode('utf8'))
+        self.assertLooksLike(reference=out_where, actual=v_db_select.outputs.stdout)
 
 if __name__ == '__main__':
     from grass.gunittest.main import test
