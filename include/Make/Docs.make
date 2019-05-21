@@ -91,13 +91,9 @@ html2pdfdoccomplete:
 	$(call html_pdf vector,v.*.html)
 
 changelog:
-	@ echo "creating ChangeLog file (following 'trunk' only)..."
-	@ # svn2cl creates a GNU style ChangeLog file:
-	@ # http://ch.tudelft.nl/~arthur/svn2cl/
-	@if [ ! -x "`which svn2cl`" ] ; then \
-		echo "\"svn2cl\" is required, please install first from http://ch.tudelft.nl/~arthur/svn2cl/" ;	exit 1 ; \
-	fi
-	sh svn2cl ./ChangeLog
+	@ echo "creating ChangeLog file (following 'master' only)..."
+	@ # tools/gitlog2changelog.py creates a GNU style ChangeLog file:
+	python tools/gitlog2changelog.py
 
 .PHONY: htmldocs-single htmldocs packagehtmldocs pdfdocs cleandocs html2pdfdoc
 .PHONY: html2pdfdoccomplete changelog
