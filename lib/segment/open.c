@@ -60,7 +60,7 @@ Segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols,
 	SEG->ncols = ncols;
 	SEG->len = len;
 	SEG->nseg = nseg;
-	SEG->cache = G_malloc(sizeof(char) * SEG->nrows * SEG->ncols * SEG->len);
+	SEG->cache = G_calloc(sizeof(char) * SEG->nrows * SEG->ncols, SEG->len);
 	SEG->scb = NULL;
 	SEG->open = 1;
 	
