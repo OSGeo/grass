@@ -503,7 +503,8 @@ int main(int argc, char *argv[])
 	    ptr2 = cell;
 	    for (col = 0; col < ncols; col++) {
 		solvedir[0] = *(DCELL *)ptr2;
-		Segment_put(&solve_seg, solvedir, row, col);
+		if (Segment_put(&solve_seg, solvedir, row, col) < 0)
+		    G_fatal_error(_("Can not write to temporary file"));
 		ptr2 = G_incr_void_ptr(ptr2, dsize);
 	    }
 	}
@@ -563,7 +564,8 @@ int main(int argc, char *argv[])
 		    p = null_cost;
 		}
 		costs.cost_in = p;
-		Segment_put(&cost_seg, &costs, row, col);
+		if (Segment_put(&cost_seg, &costs, row, col) < 0)
+		    G_fatal_error(_("Can not write to temporary file"));
 		ptr2 = G_incr_void_ptr(ptr2, dsize);
 	    }
 	}
@@ -579,7 +581,8 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    for (col = 0; col < ncols; col++) {
-		Segment_put(&dir_seg, &fnullval, row, col);
+		if (Segment_put(&dir_seg, &fnullval, row, col) < 0)
+		    G_fatal_error(_("Can not write to temporary file"));
 	    }
 	}
 	G_percent(1, 1, 1);
@@ -729,21 +732,24 @@ int main(int argc, char *argv[])
 		if (!Rast_is_null_value(ptr2, data_type2)) {
 		    double cellval;
 
-		    Segment_get(&cost_seg, &costs, row, col);
+		    if (Segment_get(&cost_seg, &costs, row, col) < 0)
+			G_fatal_error(_("Can not read from temporary file"));
 
 		    cellval = Rast_get_d_value(ptr2, data_type2);
 		    if (start_with_raster_vals == 1) {
                         insert(cellval, row, col);
 			costs.cost_out = cellval;
 			costs.nearest = cellval;
-			Segment_put(&cost_seg, &costs, row, col);
+			if (Segment_put(&cost_seg, &costs, row, col) < 0)
+			    G_fatal_error(_("Can not write to temporary file"));
 		    }
 		    else {
 			value = &zero;
 			insert(zero, row, col);
 			costs.cost_out = *value;
 			costs.nearest = cellval;
-			Segment_put(&cost_seg, &costs, row, col);
+			if (Segment_put(&cost_seg, &costs, row, col) < 0)
+			    G_fatal_error(_("Can not write to temporary file"));
 		    }
 		    got_one = 1;
 		}
@@ -769,13 +775,15 @@ int main(int argc, char *argv[])
 		|| next_start_pt->col < 0 || next_start_pt->col >= ncols)
 		G_fatal_error(_("Specified starting location outside database window"));
 	    insert(zero, next_start_pt->row, next_start_pt->col);
-	    Segment_get(&cost_seg, &costs, next_start_pt->row,
-			next_start_pt->col);
+	    if (Segment_get(&cost_seg, &costs, next_start_pt->row,
+			next_start_pt->col) < 0)
+		G_fatal_error(_("Can not read from temporary file"));
 	    costs.cost_out = *value;
 	    costs.nearest = next_start_pt->value;
 
-	    Segment_put(&cost_seg, &costs, next_start_pt->row,
-			next_start_pt->col);
+	    if (Segment_put(&cost_seg, &costs, next_start_pt->row,
+			next_start_pt->col) < 0)
+		G_fatal_error(_("Can not write to temporary file"));
 	    next_start_pt = next_start_pt->next;
 	}
     }
@@ -826,7 +834,8 @@ int main(int argc, char *argv[])
 	    break;
 
 	/* If I've already been updated, delete me */
-	Segment_get(&cost_seg, &costs, pres_cell->row, pres_cell->col);
+	if (Segment_get(&cost_seg, &costs, pres_cell->row, pres_cell->col) < 0)
+	    G_fatal_error(_("Can not read from temporary file"));
 	old_min_cost = costs.cost_out;
 	if (!Rast_is_d_null_value(&old_min_cost)) {
 	    if (pres_cell->min_cost > old_min_cost) {
@@ -842,8 +851,10 @@ int main(int argc, char *argv[])
 	}
 	FLAG_SET(visited, pres_cell->row, pres_cell->col);
 
-	if (have_solver)
-	    Segment_get(&solve_seg, mysolvedir, pres_cell->row, pres_cell->col);
+	if (have_solver) {
+	    if (Segment_get(&solve_seg, mysolvedir, pres_cell->row, pres_cell->col) < 0)
+		G_fatal_error(_("Can not read from temporary file"));
+	}
 
 	my_cost = costs.cost_in;
 	nearest = costs.nearest;
@@ -1020,7 +1031,8 @@ int main(int argc, char *argv[])
 	    /* skip already processed neighbors here ? */
 
 	    min_cost = dnullval;
-	    Segment_get(&cost_seg, &costs, row, col);
+	    if (Segment_get(&cost_seg, &costs, row, col) < 0)
+		G_fatal_error(_("Can not read from temporary file"));
 
 	    switch (neighbor) {
 	    case 1:
@@ -1109,41 +1121,50 @@ int main(int argc, char *argv[])
 	    if (Rast_is_d_null_value(&min_cost))
 		continue;
 
-	    Segment_get(&cost_seg, &costs, row, col);
+	    if (Segment_get(&cost_seg, &costs, row, col) < 0)
+		G_fatal_error(_("Can not read from temporary file"));
 	    old_min_cost = costs.cost_out;
 
 	    /* add to list */
 	    if (Rast_is_d_null_value(&old_min_cost)) {
 		costs.cost_out = min_cost;
 		costs.nearest = nearest;
-		Segment_put(&cost_seg, &costs, row, col);
+		if (Segment_put(&cost_seg, &costs, row, col) < 0)
+		    G_fatal_error(_("Can not write to temporary file"));
 		insert(min_cost, row, col);
 		if (dir == 1) {
 		    if (dir_bin)
 			cur_dir = (1 << (int)cur_dir);
-		    Segment_put(&dir_seg, &cur_dir, row, col);
+		    if (Segment_put(&dir_seg, &cur_dir, row, col) < 0)
+			G_fatal_error(_("Can not write to temporary file"));
 		}
 		if (have_solver) {
-		    Segment_get(&solve_seg, solvedir, row, col);
+		    if (Segment_get(&solve_seg, solvedir, row, col) < 0)
+			G_fatal_error(_("Can not read from temporary file"));
 		    solvedir[1] = mysolvedir[0];
-		    Segment_put(&solve_seg, solvedir, row, col);
+		    if (Segment_put(&solve_seg, solvedir, row, col) < 0)
+			G_fatal_error(_("Can not write to temporary file"));
 		}
 	    }
 	    /* update with lower costs */
 	    else if (old_min_cost > min_cost) {
 		costs.cost_out = min_cost;
 		costs.nearest = nearest;
-		Segment_put(&cost_seg, &costs, row, col);
+		if (Segment_put(&cost_seg, &costs, row, col) < 0)
+		    G_fatal_error(_("Can not write to temporary file"));
 		insert(min_cost, row, col);
 		if (dir == 1) {
 		    if (dir_bin)
 			cur_dir = (1 << (int)cur_dir);
-		    Segment_put(&dir_seg, &cur_dir, row, col);
+		    if (Segment_put(&dir_seg, &cur_dir, row, col) < 0)
+			G_fatal_error(_("Can not write to temporary file"));
 		}
 		if (have_solver) {
-		    Segment_get(&solve_seg, solvedir, row, col);
+		    if (Segment_get(&solve_seg, solvedir, row, col) < 0)
+			G_fatal_error(_("Can not read from temporary file"));
 		    solvedir[1] = mysolvedir[0];
-		    Segment_put(&solve_seg, solvedir, row, col);
+		    if (Segment_put(&solve_seg, solvedir, row, col) < 0)
+			G_fatal_error(_("Can not write to temporary file"));
 		}
 	    }
 	    else if (old_min_cost == min_cost &&
@@ -1159,19 +1180,23 @@ int main(int argc, char *argv[])
 		 * otherwise we might get circular paths */
 
 		if (have_solver) {
-		    Segment_get(&solve_seg, solvedir, row, col);
+		    if (Segment_get(&solve_seg, solvedir, row, col) < 0)
+			G_fatal_error(_("Can not read from temporary file"));
 		    equal = (solvedir[1] == mysolvedir[0]);
 		    if (solvedir[1] > mysolvedir[0]) {
 			solvedir[1] = mysolvedir[0];
-			Segment_put(&solve_seg, solvedir, row, col);
+			if (Segment_put(&solve_seg, solvedir, row, col) < 0)
+			    G_fatal_error(_("Can not write to temporary file"));
 
 			costs.nearest = nearest;
-			Segment_put(&cost_seg, &costs, row, col);
+			if (Segment_put(&cost_seg, &costs, row, col) < 0)
+			    G_fatal_error(_("Can not write to temporary file"));
 
 			if (dir == 1) {
 			    if (dir_bin)
 				cur_dir = (1 << (int)cur_dir);
-			    Segment_put(&dir_seg, &cur_dir, row, col);
+			    if (Segment_put(&dir_seg, &cur_dir, row, col) < 0)
+				G_fatal_error(_("Can not write to temporary file"));
 			}
 		    }
 		}
@@ -1180,12 +1205,15 @@ int main(int argc, char *argv[])
 		    /* this can create circular paths:
 		     * set only if current cell does not point to neighbor
 		     * does not avoid longer circular paths */
-		    Segment_get(&dir_seg, &old_dir, pres_cell->row, pres_cell->col);
+		    if (Segment_get(&dir_seg, &old_dir, pres_cell->row, pres_cell->col) < 0)
+			G_fatal_error(_("Can not read from temporary file"));
 		    dir_fwd = (1 << dir_inv[(int)cur_dir]);
 		    if (!((int)old_dir & dir_fwd)) {
-			Segment_get(&dir_seg, &old_dir, row, col);
+			if (Segment_get(&dir_seg, &old_dir, row, col) < 0)
+			    G_fatal_error(_("Can not read from temporary file"));
 			cur_dir = ((1 << (int)cur_dir) | (int)old_dir);
-			Segment_put(&dir_seg, &cur_dir, row, col);
+			if (Segment_put(&dir_seg, &cur_dir, row, col) < 0)
+			    G_fatal_error(_("Can not write to temporary file"));
 		    }
 		}
 	    }
@@ -1263,7 +1291,8 @@ int main(int argc, char *argv[])
 			continue;
 		    }
 		}
-		Segment_get(&cost_seg, &costs, row, col);
+		if (Segment_get(&cost_seg, &costs, row, col) < 0)
+		    G_fatal_error(_("Can not read from temporary file"));
 		min_cost = costs.cost_out;
 		nearest = costs.nearest;
 		if (Rast_is_d_null_value(&min_cost)) {
@@ -1328,7 +1357,8 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 	    p = dir_cell;
 	    for (col = 0; col < ncols; col++) {
-		Segment_get(&dir_seg, &cur_dir, row, col);
+		if (Segment_get(&dir_seg, &cur_dir, row, col) < 0)
+		    G_fatal_error(_("Can not read from temporary file"));
 		*((FCELL *) p) = cur_dir;
 		p = G_incr_void_ptr(p, dir_size);
 	    }
