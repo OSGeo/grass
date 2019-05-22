@@ -130,8 +130,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
 		G_warning(_("proj_create_crs_to_crs() failed for '%s' and '%s'"),
 		          insrid, outsrid);
 	    }
-	    G_free(insrid);
-	    G_free(outsrid);
 #if PROJ_VERSION_MAJOR >= 6
 	    else {
 		const char *str = proj_as_proj_string(NULL, info_trans->pj,
@@ -141,6 +139,8 @@ int GPJ_init_transform(const struct pj_info *info_in,
 		    info_trans->def = G_store(str);
 	    }
 #endif
+	    G_free(insrid);
+	    G_free(outsrid);
 	}
 	if (info_trans->pj == NULL) {
 	    /* PROJ6+: enforce axis order easting, northing
