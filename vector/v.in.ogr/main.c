@@ -2083,6 +2083,26 @@ int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *poSpatialFilter,
 	    yminl[layer] = oExt.MinY;
 	    ymaxl[layer] = oExt.MaxY;
 
+	    /* OGR extents are unreliable,
+	     * sometimes excluding valid features
+	     * reason: converting double to float or %.6g and back
+	     * -> expand a bit */
+	    G_debug(2, "xmin old: %.15g", xminl[layer]);
+	    xminl[layer] = xminl[layer] - fabs(xminl[layer] * 2.0e-6);
+	    G_debug(2, "xmin new: %.15g", xminl[layer]);
+
+	    G_debug(2, "xmax old: %.15g", xmaxl[layer]);
+	    xmaxl[layer] = xmaxl[layer] + fabs(xmaxl[layer] * 2.0e-6);
+	    G_debug(2, "xmax new: %.15g", xmaxl[layer]);
+
+	    G_debug(2, "ymin old: %.15g", yminl[layer]);
+	    yminl[layer] = yminl[layer] - fabs(yminl[layer] * 2.0e-6);
+	    G_debug(2, "ymin new: %.15g", yminl[layer]);
+
+	    G_debug(2, "ymax old: %.15g", ymaxl[layer]);
+	    ymaxl[layer] = ymaxl[layer] + fabs(ymaxl[layer] * 2.0e-6);
+	    G_debug(2, "ymax new: %.15g", ymaxl[layer]);
+
 	    /* use OGR extents if possible, needed to skip corrupted data
 	     * in OGR dsn/layer */
 	    have_ogr_extent[layer] = 1;
@@ -2142,7 +2162,10 @@ int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *poSpatialFilter,
     for (layer = 0; layer < nlayers; layer++) {
 	int have_filter = 0;
 
-	if (have_ogr_extent[layer]) {
+	/* OGR extents are unreliable, 
+	 * sometimes excluding valid features:
+	 * disabled */
+	if (0 && have_ogr_extent[layer]) {
 	    if (*xmin <= *xmax && *ymin <= *ymax) {
 		/* check for any overlap */
 		if (xminl[layer] > *xmax || xmaxl[layer] < *xmin ||
