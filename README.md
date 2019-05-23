@@ -3,10 +3,19 @@
 GRASS GIS Repository
 ====================
 
+GRASS GIS ([https://grass.osgeo.org/](https://grass.osgeo.org/)) is a Geographic Information System
+used for geospatial data management and analysis, image processing, graphics/map production,
+spatial modeling, and visualization.
+
+
 How to get write access here?
 -----------------------------
 
-See [Procedure for gaining Git write access](https://trac.osgeo.org/grass/wiki/HowToContribute#WriteaccesstotheGRASScorerepository)
+In general: you don't really need write access as you can simply open a
+[pull request](https://github.com/OSGeo/grass/pulls) to contribute to GRASS GIS.
+
+Want to become a core developer? See
+[Procedure for gaining Git write access](https://trac.osgeo.org/grass/wiki/HowToContribute#WriteaccesstotheGRASScorerepository)
 
 How to compile GRASS?
 ---------------------
