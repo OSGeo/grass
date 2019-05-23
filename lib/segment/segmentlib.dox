@@ -225,6 +225,91 @@ Rast_close(output_raster_fd);
 Rast_close(raster_fd);
 \endcode
 
+\section Using_the_library_with_multiple_raster_maps Using the Library with Multiple Raster Maps
+
+In case we want to manipulate multiple raster maps at the same time,
+we can use the fact that the *Segment Library* supports storage of
+arbitrary data in cell. This is particularly advantageous when we are
+always accessing values from all rasters at once since the look up
+and possible reading from disk will need to happen just once for
+each cell we access. We cover the case when the number of input raster
+maps is not known in advance.
+
+In the following examples, we assume we can convert values from all
+raster maps into the same type (we are using double).
+We also assume that we got the raster names in command
+line options as a GRASS GIS module.
+Note that the code is not complete and some definitions or calls are
+not shown.
+
+\dontinclude doc/raster/r.example.segmulti/main.c
+
+First, we count number of inputs to have the value at hand:
+
+\skip count
+\until ninputs
+
+We define segment sizes (and other variables) as in the case of one
+raster:
+
+\skip Rast_window_rows
+\until nsegs
+
+However, we define size of one cell (item) stored in the segment
+structures as multiplication of size of the raster cell and
+number of input rasters:
+
+\skip DCELL_TYPE
+\until segment_cell_size
+
+We proceed with creating and opening the segment structures in the usual
+way:
+
+\skip Segment_open
+\until G_fatal_error
+
+The opening of rasters needs to happen in a loop. We assume that we can
+open that many raster maps at the same time (there is a limit of how
+many open file operating system can handle):
+
+\skip file descriptors
+\until }
+
+We allocate two buffers we will use. One for holding raster map row
+and one for holding a row of cell (items) stored in the segment
+structures. We will access the row of segment cells as a two-dimensional
+field with first dimension being a column and second the ordinal number
+of input raster map.
+
+\skip allocate
+\until seg_buffer
+
+Now, we loop over rows and we load the given row for each of the raster
+maps. Then, for each column, i.e., value in a row of the given raster,
+we copy the value to its place in the segmentation buffer.
+
+\skip for (row
+\until actual processing
+
+Now we can do the actual processing which we will discuss later as this
+would be in a separate function anyway. After the processing, we write
+the resulting rasters. In this example, we do additional processing and
+store a sum of all the rasters, so we are writing only one raster:
+
+\skip Segment_flush
+\until memory cleanup
+
+At the end, we free memory and close rasters:
+
+\skip G_free
+\until Rast_close(output_fd);
+
+The actual processing with random access needs to get the individual
+values stored in each cell in the segment storage.
+
+\skip hold the values
+\until Segment_put
+
 \section Segment_Routines Segment Routines
 
 <P>
