@@ -22,17 +22,22 @@
 #include "local_proto.h"
 
 /**
- * \fn int Segment_get_row (SEGMENT *SEG, void *buf, int row)
- *
  * \brief Read row from segment file.
  *
  * Transfers data from a segment file, row by row, into memory
- * (which can then be written to a regular matrix file). <b>Seg</b> is the
- * segment structure that was configured from a call to
- * <i>Segment_init()</i>.
+ * (which can then be written to a regular matrix file, typically raster
+ * map). *SEG* is the
+ * segment structure that was configured from a call to 
+ * Segment_init() or Segment_open().
  *
- * <b>Buf</b> will be filled with <em>ncols*len</em> bytes of data
- * corresponding to the <b>row</b> in the data matrix.
+ * *buf* will be filled with <em>ncols*len</em> bytes of data
+ * corresponding to the *row* in the data matrix.
+ *
+ * \pre Segment_flush() needs to be called beforehand in order to make
+ * all recently written values available.
+ *
+ * \pre *buf* points to an allocated array of length <em>ncols*len</em>
+ * where *len* is size of one stored value (cell).
  *
  * \param[in] seg segment
  * \param[in,out] buf
