@@ -1758,7 +1758,7 @@ def bash_startup(location, location_name, grass_env_file):
         grass_name = "ISIS-GRASS"
     else:
         grass_name = "GRASS"
-    f.write("PS1='{name} {version} ({location}):\\w > '\n".format(
+    f.write("PS1='{name} {version} ({location}):\\W > '\n".format(
         name=grass_name, version=grass_version, location=location_name))
 
     # TODO: have a function and/or module to test this
@@ -1813,7 +1813,7 @@ def default_startup(location, location_name):
         # "$ETC/run" doesn't work at all???
         process = subprocess.Popen([os.getenv('SHELL')])
     else:
-        os.environ['PS1'] = "GRASS %s (%s):\\w > " % (grass_version, location_name)
+        os.environ['PS1'] = "GRASS %s (%s):\\W > " % (grass_version, location_name)
         process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
 
     return process
