@@ -38,11 +38,16 @@ class WMSGdalDrv(WMSBase):
     def __init__(self):
         super().__init__()
         self.proxy = None
-        self.proxy_auth = None
+        self.proxy_user_pw = None
 
-    def setProxy(self, proxy, user_pw=None):
+    def setProxy(self, proxy, proxy_user_pw=None):
+        """ Set the HTTP proxy and its user and password
+
+        @input proxy HTTP proxy with [IP address]:[port]
+        @input proxy_user_pw with [user name]:[password]
+        """
         self.proxy = proxy
-        self.proxy_auth = user_pw
+        self.proxy_user_pw = proxy_user_pw
 
     def _createXML(self):
         """!Create XML for GDAL WMS driver
@@ -139,8 +144,8 @@ class WMSGdalDrv(WMSBase):
 
         if self.proxy:
             gdal.SetConfigOption('GDAL_HTTP_PROXY', self.proxy)
-        if self.proxy_auth:
-            gdal.SetConfigOption('GDAL_HTTP_PROXYUSERPWD', self.proxy_auth)
+        if self.proxy_user_pw:
+            gdal.SetConfigOption('GDAL_HTTP_PROXYUSERPWD', self.proxy_user_pw)
         wms_dataset = gdal.Open(xml_file, gdal.GA_ReadOnly)
         grass.try_remove(xml_file)
         if wms_dataset is None:
