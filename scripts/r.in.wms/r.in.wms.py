@@ -246,6 +246,8 @@ def main():
             wms.setProxy(options['proxy'], options['proxy_user_pw'])
         if options['proxy']:
             wms.setProxy(options['proxy'])
+            if 'GRASS' in options['driver']:
+                grass.warning(_("The proxy will be ignored by the choosen GRASS driver. It is only used with the GDAL driver."))
 
         options['region'] = GetRegionParams(options['region'])
         fetched_map = wms.GetMap(options, flags)
