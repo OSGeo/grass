@@ -1,0 +1,47 @@
+<h2>DESCRIPTION</h2>
+
+Prints band references information.
+
+<h2>EXAMPLES</h2>
+
+<h3>Print all band references</h3>
+
+<div class="code"><pre>
+g.bands
+</pre></div>
+
+<h3>Filter band references by a shortcut</h3>
+
+Only band identifiers related to Sentinel-2A satellite will be
+printed.
+
+<div class="code"><pre>
+g.bands bands=S2A
+</pre></div>
+
+<h3>Filter references by a band identifier</h3>
+
+Only first band related to Sentinel-2A satellite will be printed.
+
+<div class="code"><pre>
+g.bands bands=S2A_1
+</pre></div>
+
+<h2>KNOWN ISSUES</h2>
+
+<em>g.bands</em> has very limited functionality. Currenlly only
+system-defined band references can be printed out. The module will be
+designed in order to manage (add, modify, delete) user-defined band
+references.
+
+<h2>SEE ALSO</h2>
+
+<em><a href="r.info.html">r.info</a></em>
+
+<h2>AUTHORS</h2>
+
+Martin Landa<br>
+Development sponsored by <a href="https://www.mundialis.de/en/">mundialis GmbH & Co.KG</a>
+
+<p>
+<i>Last changed: $Date$</i>
