@@ -1,0 +1,120 @@
+{
+    "Sentinel2A": {
+        "description": "The Sentinel-2 A bands",
+        "shortcut": "S2A",
+        "instruments": "optical and infrared",
+        "bands": {
+            "1": {
+                "central wavelength (nm)": 442.7,
+                "bandwidth (nm)": 21
+            },
+            "2": {
+                "central wavelength (nm)": 492.4,
+                "bandwidth (nm)": 66
+            },
+            "3": {
+                "central wavelength (nm)": 559.8,
+                "bandwidth (nm)": 36
+                },
+            "4": {
+                "central wavelength (nm)": 664.6,
+                "bandwidth (nm)": 31
+            },
+            "5": {
+                "central wavelength (nm)": 704.1,
+                "bandwidth (nm)": 15
+            },
+            "6": {
+                "central wavelength (nm)": 740.5,
+                "bandwidth (nm)": 15
+                },
+            "7": {
+                "central wavelength (nm)": 782.8,
+                "bandwidth (nm)": 20
+            },
+            "8": {
+                "central wavelength (nm)": 832.8,
+                "bandwidth (nm)": 106
+            },
+            "8a": {
+                "central wavelength (nm)": 864.7,
+                "bandwidth (nm)": 21
+            },
+            "9": {
+                "central wavelength (nm)": 945.1,
+                "bandwidth (nm)": 20
+            },
+            "10": {
+                "central wavelength (nm)": 1373.5,
+                "bandwidth (nm)": 31
+            },
+            "11": {
+                "central wavelength (nm)": 1613.7,
+                "bandwidth (nm)": 91
+            },
+            "12": {
+                "central wavelength (nm)": 2202.4,
+                "bandwidth (nm)": 175
+            }
+        }
+    },
+    "Sentinel2B": {
+        "description": "The Sentinel-2B bands",
+        "shortcut": "S2B",
+        "instruments": "optical and infrared",
+        "bands": {
+            "1": {
+                "central wavelength (nm)": 442.2,
+                "bandwidth (nm)": 21
+            },
+            "2": {
+                "central wavelength (nm)": 492.1,
+                "bandwidth (nm)": 66
+            },
+            "3": {
+                "central wavelength (nm)": 559.0,
+                "bandwidth (nm)": 36
+            },
+            "4": {
+                "central wavelength (nm)": 664.9,
+                "bandwidth (nm)": 31
+            },
+            "5": {
+                "central wavelength (nm)": 703.8,
+                "bandwidth (nm)": 16
+            },
+            "6": {
+                "central wavelength (nm)": 739.1,
+                "bandwidth (nm)": 15
+            },
+            "7": {
+                "central wavelength (nm)": 779.7,
+                "bandwidth (nm)": 20
+            },
+            "8": {
+                "central wavelength (nm)": 832.9,
+                "bandwidth (nm)": 106
+            },
+            "8a": {
+                "central wavelength (nm)": 864.0,
+                "bandwidth (nm)": 22
+            },
+            "9": {
+                "central wavelength (nm)": 943.2,
+                "bandwidth (nm)": 21
+            },
+            "10": {
+                "central wavelength (nm)": 1376.9,
+                "bandwidth (nm)": 30
+            },
+            "11": {
+                "central wavelength (nm)": 1610.4,
+                "bandwidth (nm)": 94
+            },
+            "12": {
+                "central wavelength (nm)": 2185.7,
+                "bandwidth (nm)": 185
+            }
+        }
+    }
+}
