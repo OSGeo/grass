@@ -18,6 +18,7 @@ SUBDIRS = \
 	db.out.ogr \
 	db.test \
 	db.univar \
+	g.bands \
 	g.extension \
 	g.extension.all \
 	g.manual \
