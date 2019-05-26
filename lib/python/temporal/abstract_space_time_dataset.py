@@ -1485,6 +1485,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 sql = "SELECT * FROM %s  WHERE %s.id IN (SELECT id FROM %s)" % \
                       (map_view, map_view, self.get_map_register())
 
+            # filter by band reference identifier
+            if self.band_reference:
+                if where:
+                    where += " AND "
+                else:
+                    where = ""
+                where += "band_reference = '%s'" % self.band_reference
+
             if where is not None and where != "":
                 sql += " AND (%s)" % (where.split(";")[0])
             if order is not None and order != "":

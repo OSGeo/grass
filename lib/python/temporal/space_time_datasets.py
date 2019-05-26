@@ -344,6 +344,7 @@ class RasterDataset(AbstractMapDataset):
             self.metadata.set_datatype(kvp["datatype"])
             self.metadata.set_min(kvp["min"])
             self.metadata.set_max(kvp["max"])
+            self.metadata.set_band_reference(kvp["band_reference"])
 
             rows = int(kvp["rows"])
             cols = int(kvp["cols"])
@@ -1047,6 +1048,15 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
     """
     def __init__(self, ident):
         AbstractSpaceTimeDataset.__init__(self, ident)
+
+        self.band_reference = None
+
+    def set_band_reference(self, band_reference):
+        """Set band reference indentifier
+
+        :param str band_reference: band reference identifier (eg. S2A_1)
+        """
+        self.band_reference = band_reference
 
     def is_stds(self):
         """Return True if this class is a space time dataset
