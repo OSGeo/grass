@@ -37,7 +37,7 @@ void Rast_unsuppress_masking(void);
 
 /* bands.c */
 struct Key_Value *Rast_read_band_reference(const char *, const char *);
-int Rast_write_band_reference(const char *, const char *);
+int Rast_write_band_reference(const char *, const char *, const char *);
 
 /* cats.c */
 int Rast_read_cats(const char *, const char *, struct Categories *);
