@@ -2,6 +2,8 @@ MODULE_TOPDIR = ../..
 
 PGM = g.bands
 
+ETCFILES = reader
+
 # TODO: unfortunately Script.make assumes that ETCFILES are Python
 # modules only, this should be improved (by introducing a new variable
 # in Script.make), there are more affected modules, see eg. d.polar or
@@ -10,6 +12,7 @@ JSON_FLS = $(wildcard *.json)
 JSON_ETC = $(patsubst %,$(ETC)/$(PGM)/%,$(JSON_FLS))
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
+include $(MODULE_TOPDIR)/include/Make/Python.make
 
 default: script $(JSON_ETC)
 
