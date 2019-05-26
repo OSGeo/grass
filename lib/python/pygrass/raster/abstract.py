@@ -156,6 +156,42 @@ class Info(object):
     def mtype(self):
         return RTYPE_STR[libraster.Rast_map_type(self.name, self.mapset)]
 
+    def _get_band_reference(self):
+        """Get band reference identifier if exits.
+
+        :return str: band identifier (eg. S2A_1) or None
+        """
+        key_val = libraster.Rast_read_band_reference(self.name, self.mapset)
+        if key_val:
+            return libgis.G_find_key_value("identifier", key_val)
+        return None
+
+    def _set_band_reference(self, band_reference):
+        """Set/Unset band reference identifier.
+
+        :param str band_reference: band reference to assign or None to remove (unset)
+        """
+        if band_reference:
+            # assign
+            #
+            # for prototype purposes only (!)
+            from grass.script.utils import set_path
+            set_path('g.bands')
+            from reader import BandReader
+
+            reader = BandReader()
+            # determine filename (assuming that band_reference is unique!)
+            filename = reader.find_filename(band_reference)
+        else:
+            # remove
+            filename = None
+
+        libraster.Rast_write_band_reference(self.name,
+                                            filename,
+                                            band_reference)
+
+    band_reference = property(fget=_get_band_reference, fset=_set_band_reference)
+
     def _get_units(self):
         return libraster.Rast_read_units(self.name, self.mapset)
 
