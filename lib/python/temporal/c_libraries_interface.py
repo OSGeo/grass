@@ -630,6 +630,13 @@ def _read_raster_info(name, mapset):
             kvp["min"] = min.value
             kvp["max"] = max.value
 
+    # Read band reference identifier
+    key_val = libraster.Rast_read_band_reference(name, mapset)
+    if key_val:
+        kvp["band_reference"] = libgis.G_find_key_value("identifier", key_val)
+    else:
+        kvp["band_reference"] = None
+
     return kvp
 
 ###############################################################################

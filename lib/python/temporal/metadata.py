@@ -317,11 +317,27 @@ class RasterMetadata(RasterMetadataBase):
     """
     def __init__(self, ident=None, datatype=None,
                  cols=None, rows=None, number_of_cells=None, nsres=None,
-                 ewres=None, min=None, max=None):
+                 ewres=None, min=None, max=None, band_reference=None):
 
         RasterMetadataBase.__init__(self, "raster_metadata", ident, datatype,
                                     cols, rows, number_of_cells, nsres,
                                     ewres, min, max)
+
+        self.set_band_reference(band_reference)
+
+    def set_band_reference(self, band_reference):
+        """Set the band reference identifier"""
+        self.D["band_reference"] = band_reference
+
+    def get_band_reference(self):
+        """Get the band reference identifier
+           :return: None if not found"""
+        if "band_reference" in self.D:
+            return self.D["band_reference"]
+        else:
+            return None
+
+    band_reference = property(fget=get_band_reference, fset=set_band_reference)
 
     def print_info(self):
         """Print information about this class in human readable style"""
