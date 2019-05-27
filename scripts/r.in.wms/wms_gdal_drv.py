@@ -143,9 +143,9 @@ class WMSGdalDrv(WMSBase):
         xml_file = self._createXML()
 
         if self.proxy:
-            gdal.SetConfigOption('GDAL_HTTP_PROXY', self.proxy)
+            gdal.SetConfigOption('GDAL_HTTP_PROXY', str(self.proxy))
         if self.proxy_user_pw:
-            gdal.SetConfigOption('GDAL_HTTP_PROXYUSERPWD', self.proxy_user_pw)
+            gdal.SetConfigOption('GDAL_HTTP_PROXYUSERPWD', str(self.proxy_user_pw))
         wms_dataset = gdal.Open(xml_file, gdal.GA_ReadOnly)
         grass.try_remove(xml_file)
         if wms_dataset is None:
