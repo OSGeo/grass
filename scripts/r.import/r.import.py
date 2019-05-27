@@ -127,6 +127,7 @@ import math
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
+from grass.pygrass.vector import VectorTopo
 
 
 # initialize global vars
@@ -319,6 +320,13 @@ def main():
         try:
             grass.run_command('v.proj', input=vreg, output=vreg,
                               location=tgtloc, mapset=tgtmapset, quiet=True)
+            # test if v.proj created a valid area
+            v = VectorTopo(vreg)
+            v.open('r')
+            if v.num_primitive_of('area') != 1:
+                v.close()
+                grass.fatal(_("Please check the 'extent' parameter"))
+            v.close()
         except CalledModuleError:
             grass.fatal(_("Unable to reproject to source location"))
 
