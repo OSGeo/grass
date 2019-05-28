@@ -169,16 +169,16 @@ int main(int argc, char *argv[])
     /***********************/
 
     /* input maps exist ? */
-    if (!G_find_raster(input.ele->answer, ""))
+    if (!G_find_raster2(input.ele->answer, ""))
 	G_fatal_error(_("Raster map <%s> not found"), input.ele->answer);
 
     if (input.acc->answer) {
-	if (!G_find_raster(input.acc->answer, ""))
+	if (!G_find_raster2(input.acc->answer, ""))
 	    G_fatal_error(_("Raster map <%s> not found"), input.acc->answer);
     }
 
     if (input.depression->answer) {
-	if (!G_find_raster(input.depression->answer, ""))
+	if (!G_find_raster2(input.depression->answer, ""))
 	    G_fatal_error(_("Raster map <%s> not found"), input.depression->answer);
 	have_depressions = 1;
     }
