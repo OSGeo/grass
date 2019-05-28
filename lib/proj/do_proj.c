@@ -83,8 +83,41 @@ int GPJ_init_transform(const struct pj_info *info_in,
                        const struct pj_info *info_out,
 		       struct pj_info *info_trans)
 {
+    char *insrid = NULL, *outsrid = NULL;
+
     if (info_in->pj == NULL)
 	G_fatal_error(_("Input coordinate system is NULL"));
+
+#ifdef HAVE_PROJ_H
+#if PROJ_VERSION_MAJOR >= 6
+    info_trans->pj = NULL;
+    if (info_trans->def) {
+	/* create a pj from user-defined transformation pipeline */
+	info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
+	if (info_trans->pj == NULL) {
+	    G_warning(_("proj_create() failed for '%s'"), info_trans->def);
+	    return -1;
+	}
+	return 1;
+    }
+    info_trans->meters = 1.;
+    info_trans->zone = 0;
+    sprintf(info_trans->proj, "pipeline");
+    
+    /* if no output CRS is defined, 
+     * assume info_out to be ll equivalent of info_in */
+    /* do not use +init=epsg:XXXX, use EPSG:XXXX */
+
+    /* if no output CRS is defined, get the ll equivalent */
+    
+
+
+#else /* PROJ 5 */
+
+#endif
+#else /* PROJ 4 */
+
+#endif
 
 #ifdef HAVE_PROJ_H
     info_trans->pj = NULL;
