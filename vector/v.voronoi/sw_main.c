@@ -272,7 +272,7 @@ int readbounds(void)
 	    continue;
 
 	area_id = 0;
-	if (n_areas(line, &area_id) != 1)
+	if (n_areas(line, &area_id) < 1)
 	    continue;
 
 	Vect_read_line(&In, Points, Cats, line);
@@ -299,8 +299,14 @@ int readbounds(void)
 	    continue;
 
 	area_id = 0;
-	if (n_areas(line, &area_id) != 1)
-	    continue;
+	if (skeleton) {
+	    if (n_areas(line, &area_id) < 1)
+		continue;
+	}
+	else {
+	    if (n_areas(line, &area_id) != 1)
+		continue;
+	}
 
 	Vect_read_line(&In, Points, Cats, line);
 	Vect_line_prune(Points);

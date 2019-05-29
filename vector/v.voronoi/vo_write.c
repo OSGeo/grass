@@ -12,6 +12,7 @@ static int write_skeleton(struct line_pnts *Points)
     int i, area1, area2;
     static struct line_pnts *APoints = NULL;
     static struct line_cats *Cats = NULL;
+    int ret;
 
     if (!APoints) {
 	APoints = Vect_new_line_struct();
@@ -22,20 +23,50 @@ static int write_skeleton(struct line_pnts *Points)
 	return 0;
     if ((area2 = Vect_find_area(&In, Points->x[1], Points->y[1])) == 0)
 	return 0;
-    if (area1 != area2)
-	return 0;
 
+    ret = 1;
     if (!Vect_get_area_centroid(&In, area1))
-	return 0;
-    Vect_get_area_points(&In, area1, APoints);
-    if (Vect_line_check_intersection(Points, APoints, 0))
-	return 0;
+	ret = 0;
 
-    for (i = 0; i < Vect_get_area_num_isles(&In, area1); i++) {
-	Vect_get_isle_points(&In, Vect_get_area_isle(&In, area1, i), APoints);
+    if (ret) {
+	Vect_get_area_points(&In, area1, APoints);
 	if (Vect_line_check_intersection(Points, APoints, 0))
-	    return 0;
+	    ret = 0;
     }
+
+    if (ret) {
+	for (i = 0; i < Vect_get_area_num_isles(&In, area1); i++) {
+	    Vect_get_isle_points(&In, Vect_get_area_isle(&In, area1, i), APoints);
+	    if (Vect_line_check_intersection(Points, APoints, 0)) {
+		ret = 0;
+		break;
+	    }
+	}
+    }
+
+
+    if (!ret && area1 != area2) {
+	ret = 1;
+	if (!Vect_get_area_centroid(&In, area2))
+	    ret = 0;
+	if (ret) {
+	    Vect_get_area_points(&In, area2, APoints);
+	    if (Vect_line_check_intersection(Points, APoints, 0))
+		ret = 0;
+	}
+
+	if (ret) {
+	    for (i = 0; i < Vect_get_area_num_isles(&In, area2); i++) {
+		Vect_get_isle_points(&In, Vect_get_area_isle(&In, area2, i), APoints);
+		if (Vect_line_check_intersection(Points, APoints, 0)) {
+		    ret = 0;
+		    break;
+		}
+	    }
+	}
+    }
+    if (!ret)
+	return 0;
 
     Vect_get_area_cats(&In, area1, Cats);
     Vect_write_line(&Out, GV_LINE, Points, Cats);
