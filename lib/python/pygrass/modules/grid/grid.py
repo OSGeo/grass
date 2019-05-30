@@ -600,6 +600,7 @@ class GridModule(object):
         loc = Location()
         mset = loc[self.mset.name]
         mset.visible.extend(loc.mapsets())
+        noutputs = 0
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]
             if otm.typedesc == 'raster' and otm.value:
@@ -607,6 +608,12 @@ class GridModule(object):
                            self.mset.name, self.msetstr, bboxes,
                            self.module.flags.overwrite,
                            self.start_row, self.start_col, self.out_prefix)
+                noutputs += 1
+        if noutputs < 1:
+            msg = 'No raster output option defined for <{}>'.format(self.module.name)
+            if self.module.name == 'r.mapcalc':
+                msg += '. Use <{}.simple> instead'.format(self.module.name)
+            raise RuntimeError(msg)
 
     def rm_tiles(self):
         """Remove all the tiles."""
