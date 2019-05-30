@@ -19,6 +19,7 @@ struct Site *bottomsite;
 int nedges;
 struct Freelist efl;
 double xmin, xmax, ymin, ymax, deltax, deltay;
+double xcenter, ycenter;
 struct Freelist hfl;
 struct Halfedge *ELleftend, *ELrightend;
 int ELhashsize;
@@ -137,6 +138,9 @@ int addsite(double x, double y, double z, int id)
 	xmin = xmax = sites[nsites].coord.x;
 	ymin = ymax = sites[nsites].coord.y;
     }
+
+    sites[nsites].coord.x -= xcenter;
+    sites[nsites].coord.y -= ycenter;
 
     nsites++;
 
@@ -259,7 +263,7 @@ int readbounds(void)
 
     Vect_set_constraint_type(&In, GV_BOUNDARY);
     Vect_set_constraint_field(&In, Field);
-    
+
     l = 0;
     maxdist = 0;
     for (line = 1; line <= nlines; line++) {

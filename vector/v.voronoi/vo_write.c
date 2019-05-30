@@ -103,10 +103,10 @@ int write_ep(struct Edge *e)
 	return 0;
 
     if (e->ep[le] != NULL && e->ep[re] != NULL) {	/* both end defined */
-	x1 = e->ep[le]->coord.x;
-	y1 = e->ep[le]->coord.y;
-	x2 = e->ep[re]->coord.x;
-	y2 = e->ep[re]->coord.y;
+	x1 = e->ep[le]->coord.x + xcenter;
+	y1 = e->ep[le]->coord.y + ycenter;
+	x2 = e->ep[re]->coord.x + xcenter;
+	y2 = e->ep[re]->coord.y + ycenter;
 
 	if (!Vect_point_in_box(x1, y1, 0.0, &Box) ||
 	    !Vect_point_in_box(x2, y2, 0.0, &Box)) {
@@ -129,19 +129,19 @@ int write_ep(struct Edge *e)
 	int knownPointAtLeft = -1;
 
 	if (e->ep[le] != NULL) {
-	    x1 = e->ep[le]->coord.x;
-	    y1 = e->ep[le]->coord.y;
+	    x1 = e->ep[le]->coord.x + xcenter;
+	    y1 = e->ep[le]->coord.y + ycenter;
 	    knownPointAtLeft = 1;
 	}
 	else if (e->ep[re] != NULL) {
-	    x1 = e->ep[re]->coord.x;
-	    y1 = e->ep[re]->coord.y;
+	    x1 = e->ep[re]->coord.x + xcenter;
+	    y1 = e->ep[re]->coord.y + ycenter;
 	    knownPointAtLeft = 0;
 	}
 
 	if (knownPointAtLeft == -1) {
-	    x2 = (e->reg[le]->coord.x + e->reg[re]->coord.x) / 2.0;
-	    y2 = (e->reg[le]->coord.y + e->reg[re]->coord.y) / 2.0;
+	    x2 = (e->reg[le]->coord.x + e->reg[re]->coord.x) / 2.0 + xcenter;
+	    y2 = (e->reg[le]->coord.y + e->reg[re]->coord.y) / 2.0 + ycenter;
 	    knownPointAtLeft = 0;
 	    if (!extend_line(Box.S, Box.N, Box.W, Box.E,
 			     e->a, e->b, e->c, x2, y2, &x1, &y1,

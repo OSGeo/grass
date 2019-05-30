@@ -202,6 +202,8 @@ int main(int argc, char **argv)
     Vect_region_box(&Window, &Box);
     Box.T = 0.5;
     Box.B = -0.5;
+    xcenter = (Box.W + Box.E) / 2.0;
+    ycenter = (Box.S + Box.N) / 2.0;
 
     freeinit(&sfl, sizeof(struct Site));
 

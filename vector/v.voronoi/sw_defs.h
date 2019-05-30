@@ -57,6 +57,7 @@ extern struct Site *bottomsite;
 extern int nedges;
 extern struct Freelist efl;
 extern double xmin, xmax, ymin, ymax, deltax, deltay;
+extern double xcenter, ycenter;
 extern struct Freelist hfl;
 extern struct Halfedge *ELleftend, *ELrightend;
 extern int ELhashsize;
