@@ -109,6 +109,8 @@ class BandReader:
     def find_filename(self, band_reference):
         """Find filename by band reference.
 
+        Match is case-insensitive.
+
         :param str band_reference: band reference identifier to search for (eg. S2A_1)
 
         :return str: file basename if found or None
@@ -122,8 +124,8 @@ class BandReader:
 
         for filename, config in self.config.items():
             for root in config.keys():
-                if config[root]['shortcut'] == shortcut and \
-                   band in config[root]['bands'].keys():
+                if config[root]['shortcut'].upper() == shortcut.upper() and \
+                   band.upper() in map(lambda x: x.upper(), config[root]['bands'].keys()):
                     return filename
 
         return None
