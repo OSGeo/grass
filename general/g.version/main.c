@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 
     shell = G_define_flag();
     shell->key = 'g';
-    shell->description = _("Print info in shell script style (including SVN revision number)");
+    shell->description = _("Print info in shell script style (including Git reference commit)");
     shell->guisection = _("Shell");
 
     if (G_parser(argc, argv))
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     if (shell->answer) {
 	fprintf(stdout, "version=%s\n", GRASS_VERSION_NUMBER);
 	fprintf(stdout, "date=%s\n", GRASS_VERSION_DATE);
-	fprintf(stdout, "revision=%s\n", GRASS_VERSION_SVN);
+	fprintf(stdout, "revision=%s\n", GRASS_VERSION_GIT);
 	fprintf(stdout, "build_date=%d-%02d-%02d\n", YEAR, MONTH, DAY);
 	fprintf(stdout, "build_platform=%s\n", ARCH);
         fprintf(stdout, "build_off_t_size=%lu\n", sizeof(off_t));
