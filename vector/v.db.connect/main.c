@@ -208,6 +208,7 @@ int main(int argc, char **argv)
 		}
 	    }			/* end print */
 	    else {		/* columns */
+		char *database_novar;
 
 		if ((fi = Vect_get_field2(&Map, field_opt->answer)) == NULL)
 		    G_fatal_error(_("Database connection not defined for layer <%s>"),
@@ -217,8 +218,10 @@ int main(int argc, char **argv)
 		    G_fatal_error(_("Unable to start driver <%s>"),
 				  fi->driver);
 
+		database_novar = Vect_subst_var(fi->database, &Map);
+
 		db_init_handle(&handle);
-		db_set_handle(&handle, fi->database, NULL);
+		db_set_handle(&handle, database_novar, NULL);
 		if (db_open_database(driver, &handle) != DB_OK)
 		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 				  fi->database, fi->driver);
@@ -251,12 +254,16 @@ int main(int argc, char **argv)
 	else {
 	    if (field_opt->answer && dbtable->answer && dbkey->answer
 		&& dbdatabase->answer && dbdriver->answer) {
+		char *database_novar;
+
 		fi = (struct field_info *)G_malloc(sizeof(struct field_info));
 		fi->name = fieldname;
 		fi->table = dbtable->answer;
 		fi->key = dbkey->answer;
 		fi->database = dbdatabase->answer;
 		fi->driver = dbdriver->answer;
+
+		database_novar = Vect_subst_var(fi->database, &Map);
 
 		ret = Vect_map_check_dblink(&Map, field, fieldname);
 		G_debug(3, "Vect_map_check_dblink = %d", ret);
@@ -269,16 +276,13 @@ int main(int argc, char **argv)
 			dbColumn *column;
 
 			if (db_table_exists
-			    (dbdriver->answer, dbdatabase->answer,
+			    (dbdriver->answer, database_novar,
 			     dbtable->answer) < 1)
 			    G_fatal_error(_("Table <%s> does not exist in database <%s>"),
-					  dbtable->answer,
-					  dbdatabase->answer);
+					  dbtable->answer, database_novar);
 
 			driver = db_start_driver_open_database(fi->driver,
-							       Vect_subst_var
-							       (fi->database,
-								&Map));
+							       database_novar);
 			if (!driver)
 			    G_fatal_error(_("Unable to start driver <%s>"),
 					  dbdriver->answer);
@@ -309,7 +313,7 @@ int main(int argc, char **argv)
 		}
 		else {		/* field not yet defined, add new field */
 		    if (db_table_exists
-			(dbdriver->answer, dbdatabase->answer,
+			(dbdriver->answer, database_novar,
 			 dbtable->answer) < 1)
 			G_warning(_("Table <%s> does not exist in database <%s>"),
 				  dbtable->answer, dbdatabase->answer);
@@ -323,9 +327,7 @@ int main(int argc, char **argv)
 					    dbtable->answer, input);
 
 			driver = db_start_driver_open_database(fi->driver,
-							       Vect_subst_var
-							       (fi->database,
-								&Map));
+							       database_novar);
 
 			if (!driver)
 			    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
