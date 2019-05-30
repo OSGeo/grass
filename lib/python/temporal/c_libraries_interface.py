@@ -633,7 +633,7 @@ def _read_raster_info(name, mapset):
     # Read band reference identifier
     key_val = libraster.Rast_read_band_reference(name, mapset)
     if key_val:
-        kvp["band_reference"] = libgis.G_find_key_value("identifier", key_val)
+        kvp["band_reference"] = decode(libgis.G_find_key_value("identifier", key_val))
     else:
         kvp["band_reference"] = None
 
