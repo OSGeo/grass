@@ -163,7 +163,7 @@ class Info(object):
         """
         key_val = libraster.Rast_read_band_reference(self.name, self.mapset)
         if key_val:
-            return libgis.G_find_key_value("identifier", key_val)
+            return utils.decode(libgis.G_find_key_value("identifier", key_val))
         return None
 
     def _set_band_reference(self, band_reference):
@@ -175,8 +175,7 @@ class Info(object):
             # assign
             #
             # for prototype purposes only (!)
-            from grass.script.utils import set_path
-            set_path('g.bands')
+            utils.set_path('g.bands')
             from reader import BandReader
 
             reader = BandReader()
