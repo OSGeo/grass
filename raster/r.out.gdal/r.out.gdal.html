@@ -136,6 +136,11 @@ efficient, but not supported by some applications.
 <!-- GDAL switched default from BAND to PIXEL interleave on 08/01/07 (r11823) -->
 This issue only arises when writing out multi-band imagery groups.
 
+<p>Classic TIFF format supports only files with up to 4GB. For export of 
+files that exceed this limit (in compressed or uncompressed form) 
+need to be exported with <em>createopt="BIGTIFF=YES"</em>. BIGTIFF is 
+available if GDAL is built with libtiff >= 4.0.
+
 <h3>Improving GeoTIFF compatibility</h3>
 
 To create a GeoTIFF that is highly compatible with various other GIS
