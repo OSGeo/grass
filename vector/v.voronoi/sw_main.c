@@ -31,7 +31,7 @@ int PQmin;
 
 struct Cell_head Window;
 struct bound_box Box;
-struct Map_info In, Out;
+struct Map_info In, Out, Out2;
 int Type;
 int Field;
 int in_area;
@@ -493,4 +493,45 @@ int readbounds(void)
     Vect_destroy_list(arealist);
 
     return 0;
+}
+
+int copybounds(void)
+{
+    int line, nlines, ltype;
+    int area_id;
+    int ncopied;
+    struct line_pnts *Points;
+    struct line_cats *Cats;
+
+    Points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
+    
+    nlines = Vect_get_num_lines(&In);
+    ncopied = 0;
+
+    for (line = 1; line <= nlines; line++) {
+
+	if (!Vect_line_alive(&In, line))
+	    continue;
+	ltype = Vect_get_line_type(&In, line);
+
+	if (!(ltype & GV_BOUNDARY))
+	    continue;
+
+	if (n_areas(line, &area_id) != 2)
+	    continue;
+
+	Vect_read_line(&In, Points, Cats, line);
+	Vect_line_prune(Points);
+
+	Vect_reset_cats(Cats);
+	Vect_cat_set(Cats, 1, 2);
+	Vect_write_line(&Out, GV_BOUNDARY, Points, Cats);
+	ncopied++;
+    }
+
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
+
+    return ncopied;
 }

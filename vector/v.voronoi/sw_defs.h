@@ -112,6 +112,7 @@ int scomp(const void *, const void *);
 struct Site *nextone(void);
 int readsites(void);
 int readbounds(void);
+int copybounds(void);
 
 /* sw_memory.c */
 int freeinit(struct Freelist *, int);

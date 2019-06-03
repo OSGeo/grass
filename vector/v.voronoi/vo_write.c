@@ -97,6 +97,8 @@ int write_ep(struct Edge *e)
     if (!Points) {
 	Points = Vect_new_line_struct();
 	Cats = Vect_new_cats_struct();
+	if (in_area)
+	    Vect_cat_set(Cats, 1, 1);
     }
 
     if (in_area && e->reg[le]->sitenbr == e->reg[re]->sitenbr)
