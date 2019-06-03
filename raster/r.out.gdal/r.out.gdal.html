@@ -207,7 +207,7 @@ r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE"
 
 <div class="code"><pre>
 g.region raster=elevation -p
-# Using PREDICTOR 2 or 3 (the latter mainly for floating point data can further reduce file size
+# Using PREDICTOR 2 or 3 (the latter mainly for floating point data) can further reduce file size
 r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=LZW,PREDICTOR=3,BIGTIFF=YES"
 </pre></div>
 
