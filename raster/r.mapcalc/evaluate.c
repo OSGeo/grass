@@ -34,8 +34,6 @@ int append_map(expression *e)
 {
     /* \brief Append a map to the global map list and reallocate if necessary
      */
-    const char *mapset;
-
     if (num_maps >= max_maps) {
         max_maps += 10;
         map_list = G_realloc(map_list, max_maps * sizeof(struct expression*));
@@ -370,19 +368,19 @@ void execute(expr_list * ee)
     for (current_depth = 0; current_depth < depths; current_depth++) {
         for (current_row = 0; current_row < rows; current_row++) {
             if (verbose)
-            G_percent(n, count, 2);
+		G_percent(n, count, 2);
 
             for (l = ee; l; l = l->next) {
-            expression *e = l->exp;
-            int fd;
+		expression *e = l->exp;
+		int fd;
 
-            evaluate(e);
+		evaluate(e);
 
-            if (e->type != expr_type_binding)
-                continue;
+		if (e->type != expr_type_binding)
+		    continue;
 
-            fd = e->data.bind.fd;
-            put_map_row(fd, e->buf, e->res_type);
+		fd = e->data.bind.fd;
+		put_map_row(fd, e->buf, e->res_type);
             }
 
             n++;
@@ -392,7 +390,9 @@ void execute(expr_list * ee)
     G_finish_workers();
 
     if (verbose)
-    G_percent(n, count, 2);
+	G_percent(n, count, 2);
+
+    close_maps();
 
     for (l = ee; l; l = l->next) {
         expression *e = l->exp;
@@ -412,14 +412,14 @@ void execute(expr_list * ee)
 
         if (val->type == expr_type_map) {
             if (val->data.map.mod == 'M') {
-            copy_cats(var, val->data.map.idx);
-            copy_colors(var, val->data.map.idx);
+		copy_cats(var, val->data.map.idx);
+		copy_colors(var, val->data.map.idx);
             }
 
             copy_history(var, val->data.map.idx);
         }
         else
-        create_history(var, val);
+	    create_history(var, val);
     }
 
     G_unset_error_routine();
