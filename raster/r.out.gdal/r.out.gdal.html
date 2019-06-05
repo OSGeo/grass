@@ -136,6 +136,11 @@ efficient, but not supported by some applications.
 <!-- GDAL switched default from BAND to PIXEL interleave on 08/01/07 (r11823) -->
 This issue only arises when writing out multi-band imagery groups.
 
+<p>Classic TIFF format supports only files with up to 4GB. Files that 
+exceed this limit (in compressed or uncompressed form) need to be 
+exported with <em>createopt="BIGTIFF=YES"</em>. BIGTIFF is available if 
+GDAL is built with libtiff >= 4.0.
+
 <h3>Improving GeoTIFF compatibility</h3>
 
 To create a GeoTIFF that is highly compatible with various other GIS
@@ -196,6 +201,14 @@ r.out.gdal in=elevation output=elevation.tif createopt="PROFILE=GeoTIFF,TFW=YES"
 <div class="code"><pre>
 g.region raster=elevation -p
 r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE"
+</pre></div>
+
+<h3>Export a large raster map in LZW compressed (Big) GeoTIFF format</h3>
+
+<div class="code"><pre>
+g.region raster=elevation -p
+# Using PREDICTOR 2 or 3 (the latter mainly for floating point data) can further reduce file size
+r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=LZW,PREDICTOR=3,BIGTIFF=YES"
 </pre></div>
 
 <h3>Export a raster map with internal overview in "Deflate" compressed GeoTIFF format</h3>
