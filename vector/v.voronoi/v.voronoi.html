@@ -16,6 +16,12 @@ will extract only the center line.
 
 <h2>NOTES</h2>
 
+<em>v.voronoi</em> suffers from numerical instability, results can 
+sometimes contain many artefacts. When creating Voronoi diagrams for areas 
+or skeletons for areas, it is highly recommended to simplify the areas first 
+with <em><a href="v.generalize.html">v.generalize</a></em>.
+
+<p>
 Voronoi diagrams may be used for nearest-neighbor flood filling.
 Give the centroids attributes (start with
 <em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>),

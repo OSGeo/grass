@@ -202,6 +202,8 @@ int main(int argc, char **argv)
     Vect_region_box(&Window, &Box);
     Box.T = 0.5;
     Box.B = -0.5;
+    xcenter = (Box.W + Box.E) / 2.0;
+    ycenter = (Box.S + Box.N) / 2.0;
 
     freeinit(&sfl, sizeof(struct Site));
 
@@ -211,8 +213,17 @@ int main(int argc, char **argv)
     else
 	readsites();
 
-    if (Vect_open_new(&Out, opt.out->answer, 0) < 0)
-	G_fatal_error(_("Unable to create vector map <%s>"), opt.out->answer);
+    if (in_area) {
+	if (Vect_open_tmp_new(&Out, NULL, 0) < 0)
+	    G_fatal_error(_("Unable to create temporary vector map"));
+
+	if (Vect_open_new(&Out2, opt.out->answer, 0) < 0)
+	    G_fatal_error(_("Unable to create vector map <%s>"), opt.out->answer);
+    }
+    else {
+	if (Vect_open_new(&Out, opt.out->answer, 0) < 0)
+	    G_fatal_error(_("Unable to create vector map <%s>"), opt.out->answer);
+    }
 
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
@@ -297,6 +308,103 @@ int main(int argc, char **argv)
 	}
 
 	G_free(coor);
+    }
+
+    if (in_area) {
+	int ltype;
+
+	/* Voronoi diagrams for areas */
+	/* write input boundaries with an area on both sides to output */
+	if (copybounds() > 0) {
+	    int cat;
+	    double x, y;
+	    double snap_thresh;
+	    int nmod;
+
+	    /* snap Voronoi edges to boundaries */
+	    snap_thresh = fabs(Box.W);
+	    if (snap_thresh < fabs(Box.E))
+		snap_thresh = fabs(Box.E);
+	    if (snap_thresh < fabs(Box.N))
+		snap_thresh = fabs(Box.N);
+	    if (snap_thresh < fabs(Box.S))
+		snap_thresh = fabs(Box.S);
+	    snap_thresh = 2 * d_ulp(snap_thresh);
+
+	    /* TODO: snap only Voronoi edges */
+	    Vect_snap_lines(&Out, GV_BOUNDARY, snap_thresh, NULL);
+	    do {
+		Vect_break_lines(&Out, GV_BOUNDARY, NULL);
+		Vect_remove_duplicates(&Out, GV_BOUNDARY, NULL);
+		nmod =
+		    Vect_clean_small_angles_at_nodes(&Out, GV_BOUNDARY, NULL);
+	    } while (nmod > 0);
+
+	    /* break lines */
+	    Vect_break_lines(&Out, GV_BOUNDARY, NULL);
+
+	    /* remove edge parts that are within an input area */
+	    nlines = Vect_get_num_lines(&Out);
+	    for (line = 1; line <= nlines; line++) {
+		if (!Vect_line_alive(&Out, line))
+		    continue;
+
+		ltype = Vect_get_line_type(&Out, line);
+		if (!(ltype & GV_BOUNDARY))
+		    continue;
+
+		Vect_read_line(&Out, Points, Cats, line);
+		cat = 0;
+		Vect_cat_get(Cats, 1, &cat);
+		if (cat != 1)
+		    continue;
+
+		Vect_line_prune(Points);
+		if (Points->n_points == 2) {
+		    x = (Points->x[0] + Points->x[1]) / 2.0;
+		    y = (Points->y[0] + Points->y[1]) / 2.0;
+		}
+		else {
+		    i = 1;
+		    while (Points->x[0] == Points->x[i] &&
+		           Points->y[0] == Points->y[i] &&
+			   i < Points->n_points - 1) {
+			i++;
+		    }
+		    i = Points->n_points / 2.;
+		    x = Points->x[i];
+		    y = Points->y[i];
+		}
+		if (Vect_find_area(&In, x, y) > 0)
+		    Vect_delete_line(&Out, line);
+	    }
+	}
+
+	/* copy result to final output */
+	Vect_reset_cats(Cats);
+
+	nlines = Vect_get_num_lines(&Out);
+
+	for (line = 1; line <= nlines; line++) {
+
+	    if (!Vect_line_alive(&Out, line))
+		continue;
+
+	    ltype = Vect_get_line_type(&Out, line);
+	    if (!(ltype & GV_BOUNDARY))
+		continue;
+
+	    Vect_read_line(&Out, Points, NULL, line);
+	    Vect_line_prune(Points);
+
+	    Vect_write_line(&Out2, GV_BOUNDARY, Points, Cats);
+	}
+
+	/* close temporary vector */
+	Vect_close(&Out);
+	/* is this a dirty hack ? */
+	Out = Out2;
+	Vect_build_partial(&Out, GV_BUILD_BASE);
     }
 
     nfields = Vect_cidx_get_num_fields(&In);
