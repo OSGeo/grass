@@ -806,11 +806,11 @@ class DataCatalogTree(LocationMapTree):
         """Delete layer or mapset"""
         names = [self.selected_layer[i].label + '@' + self.selected_mapset[i].label
                  for i in range(len(self.selected_layer))]
-        if self._confirmDialog(
-                question=_(
-                    "Do you really want to delete map(s) <{m}>?").format(
-                    m=', '.join(names)),
-                title=_('Delete map')) == wx.ID_YES:
+        if len(names) < 10:
+            question = _("Do you really want to delete map(s) <{m}>?").format(m=', '.join(names))
+        else:
+            question = _("Do you really want to delete {n} maps?").format(n=len(names))
+        if self._confirmDialog(question, title=_('Delete map')) == wx.ID_YES:
             label = _("Deleting {name}...").format(name=names)
             self.showNotification.emit(message=label)
             for i in range(len(self.selected_layer)):
