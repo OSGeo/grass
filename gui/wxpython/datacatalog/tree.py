@@ -421,7 +421,6 @@ class LocationMapTree(TreeView):
 
     def _initVariables(self):
         """Init variables."""
-        print('init')
         self.selected_layer = []
         self.selected_type = []
         self.selected_mapset = []
@@ -591,10 +590,10 @@ class DataCatalogTree(LocationMapTree):
     def OnMoveMap(self, event):
         """Move layer or mapset (just save it temporarily, copying is done by paste)"""
         self.copy_mode = False
-        self.copy_layer = self.selected_layer
-        self.copy_type = self.selected_type
-        self.copy_mapset = self.selected_mapset
-        self.copy_location = self.selected_location
+        self.copy_layer = self.selected_layer[:]
+        self.copy_type = self.selected_type[:]
+        self.copy_mapset = self.selected_mapset[:]
+        self.copy_location = self.selected_location[:]
         if len(self.copy_layer) > 1:
             label = _("{c} maps marked for moving.").format(c=len(self.selected_layer))
         else:
@@ -604,10 +603,10 @@ class DataCatalogTree(LocationMapTree):
     def OnCopyMap(self, event):
         """Copy layer or mapset (just save it temporarily, copying is done by paste)"""
         self.copy_mode = True
-        self.copy_layer = self.selected_layer
-        self.copy_type = self.selected_type
-        self.copy_mapset = self.selected_mapset
-        self.copy_location = self.selected_location
+        self.copy_layer = self.selected_layer[:]
+        self.copy_type = self.selected_type[:]
+        self.copy_mapset = self.selected_mapset[:]
+        self.copy_location = self.selected_location[:]
         if len(self.copy_layer) > 1:
             label = _("{c} maps marked for copying.").format(c=len(self.selected_layer))
         else:
@@ -879,7 +878,7 @@ class DataCatalogTree(LocationMapTree):
         """Copy layer into target"""
         self.copy_mode = wx.GetMouseState().ControlDown()
         if node:
-            self.DefineItems(self.GetSelected())
+            self.DefineItems([node])
             if self._restricted and gisenv()['MAPSET'] != self.selected_mapset[0].label:
                 GMessage(_("To move or copy maps to other mapsets, unlock editing of other mapsets"),
                          parent=self)
