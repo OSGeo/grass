@@ -373,12 +373,17 @@ int main(int argc, char *argv[])
 		      parm.dxx->key, parm.dyy->key, parm.dxy->key);
     }
 
+    G_get_window(&window);
+
     /* set the window from the header for the elevation file */
     if (!flag.a->answer) {
-	G_get_window(&window);
 	Rast_get_cellhd(elev_name, "", &cellhd);
 	Rast_align_window(&window, &cellhd);
 	Rast_set_window(&window);
+	/* probably not needed, just to make sure
+	 * G_get_window() and Rast_get_window()
+	 * return the same */
+	G_set_window(&window);
     }
 
     if (strcmp(parm.out_precision->answer, "DCELL") == 0)
@@ -394,8 +399,6 @@ int main(int argc, char *argv[])
     /* data type is the type of data being processed,
        out_type is type of map being created */
     /* ? why not use Rast_map_type() then ? */
-
-    G_get_set_window(&window);
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
