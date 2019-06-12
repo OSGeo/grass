@@ -123,7 +123,7 @@ scan3line(FUN &funobj,
 	a[2]=*tmp;
       } else {
 	a[2] = nodata;
-	assert(ae == AMI_ERROR_END_OF_STREAM);
+	assert((off_t)ae == AMI_ERROR_END_OF_STREAM);
       }
     } else {
       a[2] = nodata;
@@ -137,7 +137,7 @@ scan3line(FUN &funobj,
 	c[2] = *tmp;
       } else {
 	c[2] = nodata;
-	assert(ae == AMI_ERROR_END_OF_STREAM);
+	assert((off_t)ae == AMI_ERROR_END_OF_STREAM);
       }
     } else {
       c[2] = nodata;

@@ -26,8 +26,8 @@
 /* input parameters type */
 /* ------------------------------------------------------------ */
 
-typedef short dimension_type; /* represent dimension of the grid */
-static const dimension_type dimension_type_max=SHRT_MAX;
+typedef long dimension_type; /* represent dimension of the grid */
+static const dimension_type dimension_type_max=LONG_MAX;
 
 typedef short direction_type;  /* represent the direction of a cell */
 static const direction_type DIRECTION_UNDEF=-1;
