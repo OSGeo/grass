@@ -49,6 +49,8 @@ class RPCDefs(object):
     G_LOCATION = 12
     G_GISDBASE = 13
     READ_MAP_FULL_INFO = 14
+    WRITE_BAND_REFERENCE = 15
+    READ_BAND_REFERENCE = 16
     G_FATAL_ERROR = 49
 
     TYPE_RASTER = 0
@@ -494,6 +496,84 @@ def _remove_timestamp(lock, conn, data):
 ###############################################################################
 
 
+def _read_band_reference(lock, conn, data):
+    """Read the file based GRASS band identifier
+       the result using the provided pipe.
+
+       The tuple to be send via pipe: (return value of
+       Rast_read_band_reference).
+
+       Please have a look at the documentation of
+       Rast_read_band_reference, for the return values description.
+
+       :param lock: A multiprocessing.Lock instance
+       :param conn: A multiprocessing.Pipe instance used to send True or False
+       :param data: The list of data entries [function_id, maptype, name,
+                    mapset, layer, timestring]
+
+    """
+    check = 0
+    band_ref = None
+    try:
+        maptype = data[1]
+        name = data[2]
+        mapset = data[3]
+        layer = data[4]
+
+        if maptype == RPCDefs.TYPE_RASTER:
+            key_val = libraster.Rast_read_band_reference(name, mapset)
+            if key_val:
+                band_ref = decode(libgis.G_find_key_value("identifier", key_val))
+                check = 1
+        else:
+            logging.error("Unable to read band reference. "
+                          "Unsupported map type %s" % maptype)
+            return -1
+    except:
+        raise
+    finally:
+        conn.send((check, band_ref))
+
+###############################################################################
+
+
+def _write_band_reference(lock, conn, data):
+    """Write the file based GRASS band identifier
+       the return values of the called C-functions using the provided pipe.
+
+       The value to be send via pipe is the return value of Rast_write_band_reference.
+
+       Please have a look at the documentation of
+       Rast_write_band_reference, for the return values description.
+
+       :param lock: A multiprocessing.Lock instance
+       :param conn: A multiprocessing.Pipe instance used to send True or False
+       :param data: The list of data entries [function_id, maptype, name,
+                    mapset, layer, timestring]
+
+    """
+    check = -3
+    try:
+        maptype = data[1]
+        name = data[2]
+        mapset = data[3]
+        layer = data[4]
+        band_reference = data[5]
+
+        if maptype == RPCDefs.TYPE_RASTER:
+            check = libraster.Rast_write_band_reference(name, mapset, band_reference);
+        else:
+            logging.error("Unable to write band reference. "
+                          "Unsupported map type %s" % maptype)
+            return -2
+    except:
+        raise
+    finally:
+        conn.send(check)
+
+###############################################################################
+
+
 def _map_exists(lock, conn, data):
     """Check if a map exists in the spatial database
 
@@ -629,13 +709,6 @@ def _read_raster_info(name, mapset):
                 byref(range), byref(min), byref(max))
             kvp["min"] = min.value
             kvp["max"] = max.value
-
-    # Read band reference identifier
-    key_val = libraster.Rast_read_band_reference(name, mapset)
-    if key_val:
-        kvp["band_reference"] = decode(libgis.G_find_key_value("identifier", key_val))
-    else:
-        kvp["band_reference"] = None
 
     return kvp
 
@@ -957,6 +1030,8 @@ def c_library_server(lock, conn):
     functions[RPCDefs.G_LOCATION] = _get_location
     functions[RPCDefs.G_GISDBASE] = _get_gisdbase
     functions[RPCDefs.READ_MAP_FULL_INFO] = _read_map_full_info
+    functions[RPCDefs.WRITE_BAND_REFERENCE] = _write_band_reference
+    functions[RPCDefs.READ_BAND_REFERENCE] = _read_band_reference
     functions[RPCDefs.G_FATAL_ERROR] = _fatal_error
 
     libgis.G_gisinit("c_library_server")
@@ -1269,6 +1344,40 @@ class CLibrariesInterface(RPCServerBase):
         self.client_conn.send([RPCDefs.WRITE_TIMESTAMP, RPCDefs.TYPE_RASTER,
                                name, mapset, None, timestring])
         return self.safe_receive("write_raster_timestamp")
+
+    def read_raster_band_reference(self, name, mapset):
+        """Read a file based raster band reference
+
+           Please have a look at the documentation Rast_read_band_reference
+           for the return values description.
+
+           :param name: The name of the map
+           :param mapset: The mapset of the map
+           :returns: The return value of Rast_read_band_reference
+        """
+        self.check_server()
+        self.client_conn.send([RPCDefs.READ_BAND_REFERENCE, RPCDefs.TYPE_RASTER,
+                               name, mapset, None])
+        return self.safe_receive("read_raster_band_reference")
+
+    def write_raster_band_reference(self, name, mapset, band_reference):
+        """Write a file based raster band reference
+
+           Please have a look at the documentation Rast_write_band_reference
+           for the return values description.
+
+           Note:
+               Only band references of maps from the current mapset can written.
+
+           :param name: The name of the map
+           :param mapset: The mapset of the map
+           :param band_reference: band reference identifier
+           :returns: The return value of Rast_write_band_reference
+        """
+        self.check_server()
+        self.client_conn.send([RPCDefs.WRITE_BAND_REFERENCE, RPCDefs.TYPE_RASTER,
+                               name, mapset, None, band_reference])
+        return self.safe_receive("write_raster_band_reference")
 
     def raster3d_map_exists(self, name, mapset):
         """Check if a 3D raster map exists in the spatial database

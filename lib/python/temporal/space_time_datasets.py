@@ -303,6 +303,45 @@ class RasterDataset(AbstractMapDataset):
 
         return True
 
+    def read_band_reference_from_grass(self):
+        """Read the band identifier of this map from the map metadata
+           in the grass file system based spatial database and
+           set the internal band identifier that should be insert/updated
+           in the temporal database.
+
+           :return: True if success, False on error
+        """
+
+        check, band_ref = self.ciface.read_raster_band_reference(self.get_name(),
+                                                                 self.get_mapset())
+
+        if check < 1:
+            self.msgr.error(_("Unable to read band reference file "
+                              "for raster map <%s>" % (self.get_map_id())))
+            return False
+
+        self.metadata.set_band_reference(band_ref)
+
+        return True
+
+    def write_band_reference_to_grass(self):
+        """Write the band identifier of this map into the map metadata in
+           the grass file system based spatial database.
+
+           Internally the libgis API functions are used for writing
+
+           :return: True if success, False on error
+        """
+        check = self.ciface.write_raster_band_reference(self.get_name(),
+                                                        self.get_mapset(),
+                                                        self.metadata.get_band_reference())
+        if check == -1:
+            self.msgr.error(_("Unable to write band identifier for raster map <%s>"
+                            % (self.get_name())))
+            return False
+
+        return True
+
     def map_exists(self):
         """Return True in case the map exists in the grass spatial database
 
@@ -344,7 +383,6 @@ class RasterDataset(AbstractMapDataset):
             self.metadata.set_datatype(kvp["datatype"])
             self.metadata.set_min(kvp["min"])
             self.metadata.set_max(kvp["max"])
-            self.metadata.set_band_reference(kvp["band_reference"])
 
             rows = int(kvp["rows"])
             cols = int(kvp["cols"])
@@ -355,9 +393,28 @@ class RasterDataset(AbstractMapDataset):
             self.metadata.set_rows(rows)
             self.metadata.set_number_of_cells(ncells)
 
+            # Fill band reference if defined
+            check, band_ref = self.ciface.read_raster_band_reference(self.get_name(),
+                                                                     self.get_mapset())
+            if check > 0:
+                self.metadata.set_band_reference(band_ref)
+
             return True
 
         return False
+
+    def set_band_reference(self, band_reference):
+        """Set band reference identifier
+
+        Metadata is updated in order to propagate band identifier into
+        temporal DB.
+
+        File-based band identifier stored in GRASS data base.
+
+        :param str band_reference: band reference identifier (eg. S2A_1)
+        """
+        self.metadata.set_band_reference(band_reference)
+        self.write_band_reference_to_grass()
 
 ###############################################################################
 
@@ -1052,7 +1109,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
         self.band_reference = None
 
     def set_band_reference(self, band_reference):
-        """Set band reference indentifier
+        """Set band reference identifier
 
         :param str band_reference: band reference identifier (eg. S2A_1)
         """
