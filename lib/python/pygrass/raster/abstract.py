@@ -157,14 +157,22 @@ class Info(object):
         return RTYPE_STR[libraster.Rast_map_type(self.name, self.mapset)]
 
     def _get_band_reference(self):
-        """Get band reference identifier if exits.
+        """Get band reference identifier.
 
         :return str: band identifier (eg. S2A_1) or None
         """
-        key_val = libraster.Rast_read_band_reference(self.name, self.mapset)
-        if key_val:
-            return utils.decode(libgis.G_find_key_value("identifier", key_val))
-        return None
+        band_ref = None
+        p_filename = ctypes.c_char_p()
+        p_band_ref = ctypes.c_char_p()
+        ret = libraster.Rast_read_band_reference(self.name, self.mapset,
+                                                 ctypes.byref(p_filename),
+                                                 ctypes.byref(p_band_ref))
+        if ret:
+            band_ref = utils.decode(p_band_ref.value)
+            libgis.G_free(p_filename)
+            libgis.G_free(p_band_ref)
+
+        return band_ref
 
     def _set_band_reference(self, band_reference):
         """Set/Unset band reference identifier.
@@ -173,21 +181,20 @@ class Info(object):
         """
         if band_reference:
             # assign
-            #
             # for prototype purposes only (!)
             utils.set_path('g.bands')
             from reader import BandReader
 
             reader = BandReader()
             # determine filename (assuming that band_reference is unique!)
-            filename = reader.find_filename(band_reference)
-        else:
-            # remove
-            filename = None
+            filename = reader.find_file(band_reference)
 
-        libraster.Rast_write_band_reference(self.name,
-                                            filename,
-                                            band_reference)
+            # write band reference
+            libraster.Rast_write_band_reference(self.name,
+                                                filename,
+                                                band_reference)
+        else:
+            libraster.Rast_remove_band_reference(self.name)
 
     band_reference = property(fget=_get_band_reference, fset=_set_band_reference)
 

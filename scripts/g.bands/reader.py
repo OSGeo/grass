@@ -106,8 +106,8 @@ class BandReader:
                 "<{}> not found".format(shortcut)
             )
 
-    def find_filename(self, band_reference):
-        """Find filename by band reference.
+    def find_file(self, band_reference):
+        """Find file by band reference.
 
         Match is case-insensitive.
 

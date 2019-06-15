@@ -1,7 +1,7 @@
 /*!
  * \file lib/raster/bands.c
  *
- * \brief Raster Library - Band reference support
+ * \brief Raster Library - Band reference managenent
  *
  * (C) 2019 by the GRASS Development Team
  *
@@ -21,95 +21,106 @@
 static const char *_band_file = "band";
 
 /*!
-   \brief Get raster map band reference identifier.
+  \brief Check if band reference for raster map exists
 
-   Note that G_free_key_value() must called by a caller.
+  \param name map name
+  \param mapset mapset name
 
-   \param name map name
-   \param mapset mapset name
-
-   \return band identifier key value pairs
-   \return NULL if missing
- */
-struct Key_Value *Rast_read_band_reference(const char *name, const char *mapset)
+  \return 1 on success
+  \return 0 no band reference present
+*/
+int Rast_has_band_reference(const char *name, const char *mapset)
 {
-    FILE *fp;
-    struct Key_Value *key_val;
-    const char *filename, *band_ref;
+    if (!G_find_file2_misc("cell_misc", _band_file, name, mapset))
+	return 0;
 
-    if (!G_find_file2_misc("cell_misc", _band_file, name, mapset)) {
-        G_debug(1, "Band identifier not found for <%s@%s>", name, mapset);
-        return NULL;
-    }
-
-    fp = G_fopen_old_misc("cell_misc", _band_file, name, mapset);
-    if (!fp) {
-        G_debug(1, "Unable to read band indentier file for <%s@%s>",
-                name, mapset);
-        return NULL;
-    }
-
-    key_val = G_fread_key_value(fp);
-    fclose(fp);
-    if (!key_val) {
-        G_debug(1, "Unable to parse band indentier key value pairs for <%s@%s>",
-                name, mapset);
-	return NULL;
-    }
-
-    filename = G_find_key_value("file", key_val);
-    band_ref = G_find_key_value("identifier", key_val);
-    if (!filename || !band_ref) {
-        G_debug(1, "Invalid band identifier: unable to parse values for <%s@%s>",
-                name, mapset);
-        G_free_key_value(key_val);
-
-	return NULL;
-    }
-
-    G_debug(1, "Band idenfifier <%s> (%s) detected for <%s@%s>",
-            band_ref, filename, name, mapset);
-
-    return key_val;
+    return 1;
 }
 
 /*!
-   \brief Set raster map band reference identifier.
+   \brief Read raster map band reference identifier.
+
+   Note that output arguments should be freed by the caller using G_free().
 
    \param name map name
-   \param filename filename JSON reference (NULL to unset)
-   \param band_reference band reference identifier (NULL to unset)
+   \param mapset mapset name
+   \param[out] filename filename JSON reference
+   \param[out] band_reference band reference identifier
 
-   \return 0 success
+  \return 1 on success
+  \return 0 band reference not found
+  \return negative on error
+ */
+int Rast_read_band_reference(const char *name, const char *mapset,
+                             char **filename, char **band_reference)
+{
+    int ret;
+    FILE *fd;
+    struct Key_Value *key_val;
+
+    G_debug(1, "Reading band reference file for raster map <%s@%s>",
+            name, mapset);
+
+    if (!Rast_has_band_reference(name, mapset))
+        return 0;
+
+    fd = G_fopen_old_misc("cell_misc", _band_file, name, mapset);
+    if (!fd) {
+        G_debug(1, "Unable to read band indentier file for <%s@%s>",
+                name, mapset);
+        return -1;
+    }
+
+    ret = G__read_band_reference(fd, &key_val);
+    *filename = G_store(G_find_key_value("file", key_val));
+    *band_reference = G_store(G_find_key_value("identifier", key_val));
+
+    fclose(fd);
+    G_free_key_value(key_val);
+
+    return ret;
+}
+
+/*!
+   \brief Write raster map band reference identifier.
+
+   \param name map name
+   \param filename filename JSON reference
+   \param band_reference band reference identifier
+
+   \return 1 on success
+   \return negative on error
  */
 int Rast_write_band_reference(const char *name,
                               const char *filename, const char *band_reference)
 {
-    FILE *fp;
-    struct Key_Value *key_val;
+    int ret;
+    FILE *fd;
 
-    if (filename && band_reference) {
-        /* set */
-        key_val = G_create_key_value();
-        G_set_key_value("file", filename, key_val);
-        G_set_key_value("identifier", band_reference, key_val);
-
-        fp = G_fopen_new_misc("cell_misc", _band_file, name);
-        if (!fp)
-            G_fatal_error(_("Unable to create band file for <%s>"), name);
-
-        if (G_fwrite_key_value(fp, key_val) < 0)
-            G_fatal_error(_("Error writing band file for <%s>"), name);
-
-        G_free_key_value(key_val);
-
-        fclose(fp);
-    }
-    else {
-        /* unset */
-        if (G_find_file2_misc("cell_misc", _band_file, name, G_mapset()))
-            G_remove_misc("cell_misc", _band_file, name);
+    fd = G_fopen_new_misc("cell_misc", _band_file, name);
+    if (!fd) {
+        G_fatal_error(_("Unable to create band file for <%s>"), name);
+        return -1;
     }
 
-    return 0;
+    ret = G__write_band_reference(fd, filename, band_reference);
+    fclose(fd);
+
+    return ret;
+}
+
+/*!
+  \brief Remove band reference from raster map
+
+  Only band reference files in current mapset can be removed.
+
+  \param name map name
+
+  \return 0 if no file
+  \return 1 on success
+  \return -1 on error
+*/
+int Rast_remove_band_reference(const char *name)
+{
+    return G_remove_misc("cell_misc", _band_file, name);
 }
