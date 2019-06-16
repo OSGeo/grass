@@ -1447,6 +1447,70 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return obj_list
 
+    def _update_where_statement_by_band_reference(self, where):
+        """Update given SQL WHERE statement by band reference.
+
+        Call this method only when self.band_reference is defined.
+
+        :param str where: SQL WHERE statement to be updated
+
+        :return: updated SQL WHERE statement
+        """
+        def leading_zero(value):
+            try:
+                if value.startswith('0'):
+                    return value.lstrip('0')
+                else:
+                    return '{0:02d}'.format(int(value))
+            except ValueError:
+                return value
+
+            return None
+
+        # initialized WHERE statement
+        if where:
+            where += " AND "
+        else:
+            where = ""
+
+        # be case-insensitive
+        if '_' in self.band_reference:
+            # fully-qualified band reference
+            where += "band_reference IN ('{orig}', '{lower}', '{upper}'".format(
+                orig=self.band_reference,
+                lower=self.band_reference.lower(),
+                upper=self.band_reference.upper(),
+            )
+
+            # be zero-padding less sensitive
+            filename, identifier = self.band_reference.split('_', -1)
+            identifier_zp = leading_zero(identifier)
+            if identifier_zp:
+                where += ", '{fl}_{zp}'".format(
+                    fl=filename,
+                    zp=identifier_zp
+                )
+
+            # close WHERE statement
+            where += ')'
+        else:
+            # shortcut or band identifier given
+            shortcut_identifier = leading_zero(self.band_reference)
+            if shortcut_identifier:
+                where += "{br} LIKE '{si}\_%' {esc} OR {br} LIKE '%\_{si}' {esc} OR " \
+                    "{br} LIKE '{orig}\_%' {esc} OR {br} LIKE '%\_{orig}' {esc}".format(
+                        br="band_reference",
+                        si=shortcut_identifier,
+                        orig=self.band_reference,
+                        esc="ESCAPE '\\'"
+                )
+            else:
+                where += "band_reference = '{}'".format(
+                    self.band_reference
+                )
+
+        return where
+
     def get_registered_maps(self, columns=None, where=None, order=None,
                             dbif=None):
         """Return SQL rows of all registered maps.
@@ -1487,11 +1551,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
             # filter by band reference identifier
             if self.band_reference:
-                if where:
-                    where += " AND "
-                else:
-                    where = ""
-                where += "band_reference = '%s'" % self.band_reference
+                where = self._update_where_statement_by_band_reference(where)
 
             if where is not None and where != "":
                 sql += " AND (%s)" % (where.split(";")[0])
