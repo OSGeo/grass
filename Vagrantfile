@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-### Inspired by https://svn.osgeo.org/gdal/trunk/gdal/Vagrantfile
+### Inspired by https://github.com/OSGeo/gdal/blob/master/Vagrantfile
 
 require 'socket'
 
