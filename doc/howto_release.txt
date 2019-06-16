@@ -24,7 +24,7 @@ Contents
 tools/fix_typos.sh
 
 # i18N: sync from Transifex (https://www.transifex.com/grass-gis/grass7/dashboard/)
-#  - except for Latvian; Latvian is directly edited in SVN and then sync'ed from trunk .po files
+#  - except for Latvian; Latvian is directly edited in git and then sync'ed from master .po files
 cd locale
 sh ~/software/grass-addons/tools/transifex_merge.sh
 make
@@ -49,14 +49,16 @@ make verify
 rm -f config.guess config.sub
 wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
 wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
-svn diff config.guess config.sub
+git diff config.guess config.sub
 autoconf-2.13
-# check and submit to SVN:
-svn ci -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/" config.guess config.sub configure
+# check and submit to git:
+git add config.guess config.sub configure
+git commit -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/" config.guess config.sub configure
 # test by running ./configure 
 
-# update from SVN
-svn up
+# update from git
+git fetch --all --prune
+git push origin master
 
 # cleanup rubbish:
 rm -f locale/templates/*.pot
@@ -74,8 +76,7 @@ rm -f gui/wxpython/menustrings.py gui/wxpython/build_ext.pyc gui/wxpython/xml/me
 chmod -R a+r *
 
 # double check
-svn status --no-ignore
-svn status
+git status
 
 # Create release branch (only if not yet existing)
 # ... see below
@@ -106,8 +107,10 @@ RELEASE=`cat include/VERSION | head -3 | tail -1`
 VERSION=${MAJOR}.${MINOR}.${RELEASE}
 echo $VERSION
 
-svn ci -m"GRASS GIS $VERSION" include/VERSION
-svn up
+TODO: add feature_branch...
+
+git add include/VERSION
+git commit -m"GRASS GIS $VERSION" include/VERSION
 
 # Create Changelog file on release branch:
 python tools/gitlog2changelog.py
@@ -115,43 +118,40 @@ mv ChangeLog ChangeLog_$VERSION
 head ChangeLog_$VERSION
 gzip ChangeLog_$VERSION
 
-# Tag release (http://trac.osgeo.org/grass/browser/grass/tags):
-# see http://svnbook.red-bean.com/en/1.4/svn.branchmerge.tags.html
+# TODO:
+# Tag release ...
 
 TODAY=`date +"%Y%m%d"`
 RELEASETAG=release_${TODAY}_grass_${MAJOR}_${MINOR}_${RELEASE}
 echo $RELEASETAG
 
-URL=https://svn.osgeo.org/grass
-svn copy $URL/grass/branches/releasebranch_7_4 \
-	$URL/grass/tags/$RELEASETAG \
-	-m "Tagging release grass_${MAJOR}_${MINOR}_${RELEASE}"
-      
-      
+TODO...
+
 # create source package (in the source directory):
 echo grass-${VERSION}
 
 mkdir grass-${VERSION}
 mv * grass-${VERSION}/
 # create the package:
-tar cvfzh grass-${VERSION}.tar.gz --exclude=.svn grass-${VERSION}/*
+tar cvfzh grass-${VERSION}.tar.gz --exclude-vcs grass-${VERSION}/*
 # restore src code location:
 mv ./grass-${VERSION}/* .
 rmdir ./grass-${VERSION}
 # Calculating MD5 sum:
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 
-# reset include/VERSION file to SVN version:
+# reset include/VERSION file to git version:
 vim include/VERSION
 
 #example
 7
 4
-1svn
+1dev
 2018
 
 rm -f include/VERSION~
-svn ci -m"back to SVN" include/VERSION
+git add include/VERSION
+git commit -m"back to git" include/VERSION
 
 
 # Store the source tarball (twice) in (use scp -p FILES grass:):
@@ -192,6 +192,7 @@ vim grass-addons/tools/addons/grass-addons.sh
   - https://grass.osgeo.org/download/software/sources/
   - https://grass.osgeo.org/download/software/linux/
   - https://grass.osgeo.org/home/history/releases/
+# TODO: git tags
   - https://grass.osgeo.org/development/svn/svn-tags/ (add tag): echo $RELEASETAG
 
 # write announcement
@@ -302,31 +303,3 @@ vim grass-addons/tools/addons/grass-addons.sh
 
    See also: https://grass.osgeo.org/wiki/Contact_Databases
    ... anywhere else? Please add here.
-
-###########################################
-(B) HOWTO create a branch
-
-1. see SVN book:
-   http://svnbook.red-bean.com/en/1.1/ch04s07.html
-
-   GRASS 7.6 release branch:
-
-# see below for real example
-#          BRANCH=releasebranch_7_6
-#          URL=https://svn.osgeo.org/grass
-#          svn copy $URL/grass/trunk \
-#                   $URL/grass/branches/$BRANCH \
-#                   -m "Release branch for GRASS 7.6.x"
-
-Branch creation example: GRASS GIS 7.6 release branch creation
-
-svn copy https://svn.osgeo.org/grass/grass/trunk/ \
-    https://svn.osgeo.org/grass/grass/branches/releasebranch_7_6 \
-    -m "Release branch for GRASS GIS 7.6.x"
-
-----------
-Switching current local copy to above development branch:
-   (http://svnbook.red-bean.com/en/1.1/ch04s05.html)
-
-           cd /path/to/your/local/copy/trunk
-           svn switch https://svn.osgeo.org/grass/grass/branches/releasebranch_7_6 .
