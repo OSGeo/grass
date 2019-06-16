@@ -11,13 +11,13 @@ PREREQUISITES
 (D) INSTALLATION (first time)
 (E) INSTALLATION ON MACOSX
 (F) RUNNING GRASS
-(G) UPDATE OF SOURCE CODE (SVN or SVN snapshot only)
+(G) UPDATE OF SOURCE CODE
 (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
 (I) CODE OPTIMIZATION
 (J) DEBUGGING OPTIONS
 (K) LARGE FILE SUPPORT (for raster maps)
 (L) SUPPORT
-(M) GRASS PROGRAMMER'S MANUAL
+(M) GRASS GIS PROGRAMMER'S MANUAL
 (N) CONTRIBUTING CODE AND PATCHES
 (O) DRAFT TUTORIAL
 
@@ -40,20 +40,20 @@ Installation order:
 
 GRASS source code is currently distributed in 2 forms:
 
-1) Officially released source code (e.g. grass-7.2.0.tar.gz or later)
+1) Officially released source code (e.g. grass-7.4.0.tar.gz or later)
 
   The Full source code version contains all the GRASS source code
   required for compilation. It is distributed as one file (*.tar.gz
   package) and the version is composed of 3 numbers, e.g. 7.2.0, 7.2.1
   etc.
 
-2) SVN or SVN Snapshots of source code (SVN or SVN snapshot)
+2) Snapshots of source code (generated from GitHub)
 
-  This version of the source code can be acquired either from the SVN
-  repository (https://svn.osgeo.org/grass/) or as a snapshot
-  (*.tar.gz package) of that SVN repository. The SVN snapshot name
+  This version of the source code can be acquired either from the GitHub
+  repository (https://github.com/OSGeo/grass/) or as a auto-generated snapshot
+  (*.tar.gz package) of the GitHub repository. The snapshot name
   contains the date when the snapshot was created (checked out from
-  the SVN repository), e.g. grass-7.2.svn_src_snapshot_2016_06_11.tar.gz
+  the GitHub repository), e.g. grass-7.4.git_src_snapshot_2019_06_11.tar.gz
   from https://grass.osgeo.org/grass74/source/snapshot/
   Further instructions at https://trac.osgeo.org/grass/wiki/DownloadSource
 
@@ -179,22 +179,24 @@ GRASS GIS startup menu to the extracted directory.
 Enjoy.
 
 
-(G) UPDATE OF SOURCE CODE (SVN or SVN snapshot only)
+(G) UPDATE OF SOURCE CODE
 
 Assuming that you want to update your current installation from
-SVN, you have to perform a few steps. In general:
+GitHub, you have to perform a few steps. In general:
 
-- update from SVN
+- update from GitHub
 - configure, compile
 
 In detail:
 
     cd /where/your/grass7sourcecode/lives/
-    svn update
+    git fetch --all
+    git merge upstream/master
     ./configure ...
     make
     make install
 
+For details, see https://trac.osgeo.org/grass/wiki/HowToGit
 
 (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
 
