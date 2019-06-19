@@ -118,8 +118,8 @@ class BandReader:
         try:
             shortcut, band = band_reference.split('_')
         except ValueError:
-            raise BandReaderError("Invalid band identifier <{}>".fomat(
-                band_identifier
+            raise BandReaderError("Invalid band identifier <{}>".format(
+                band_reference
             ))
 
         for filename, config in self.config.items():

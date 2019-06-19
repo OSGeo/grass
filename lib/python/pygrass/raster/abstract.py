@@ -183,16 +183,23 @@ class Info(object):
             # assign
             # for prototype purposes only (!)
             utils.set_path('g.bands')
-            from reader import BandReader
+            from reader import BandReader, BandReaderError
 
             reader = BandReader()
             # determine filename (assuming that band_reference is unique!)
-            filename = reader.find_file(band_reference)
+            try:
+                filename = reader.find_file(band_reference)
+            except BandReaderError as e:
+                fatal("{}".format(e))
+                raise
+            if not filename:
+                fatal("Band reference <{}> not found".format(band_reference))
+                raise
 
             # write band reference
             libraster.Rast_write_band_reference(self.name,
                                                 filename,
-                                                band_reference)
+                                                band_reference.upper())
         else:
             libraster.Rast_remove_band_reference(self.name)
 
