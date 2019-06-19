@@ -1476,19 +1476,17 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # be case-insensitive
         if '_' in self.band_reference:
             # fully-qualified band reference
-            where += "band_reference IN ('{orig}', '{lower}', '{upper}'".format(
-                orig=self.band_reference,
-                lower=self.band_reference.lower(),
-                upper=self.band_reference.upper(),
+            where += "band_reference IN ('{}'".format(
+                self.band_reference.upper()
             )
 
             # be zero-padding less sensitive
-            filename, identifier = self.band_reference.split('_', -1)
+            shortcut, identifier = self.band_reference.split('_', -1)
             identifier_zp = leading_zero(identifier)
             if identifier_zp:
                 where += ", '{fl}_{zp}'".format(
-                    fl=filename,
-                    zp=identifier_zp
+                    fl=shortcut.upper(),
+                    zp=identifier_zp.upper()
                 )
 
             # close WHERE statement
@@ -1501,7 +1499,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     "{br} LIKE '{orig}\_%' {esc} OR {br} LIKE '%\_{orig}' {esc}".format(
                         br="band_reference",
                         si=shortcut_identifier,
-                        orig=self.band_reference,
+                        orig=self.band_reference.upper(),
                         esc="ESCAPE '\\'"
                 )
             else:
