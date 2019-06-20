@@ -352,6 +352,9 @@ class RasterMetadata(RasterMetadataBase):
         """Print information about this class in shell style"""
         RasterMetadataBase.print_shell_info(self)
 
+        # band reference section (raster specific only)
+        print("band_reference=" + str(self.get_band_reference()))
+
 ###############################################################################
 
 
