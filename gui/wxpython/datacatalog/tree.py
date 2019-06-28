@@ -848,13 +848,13 @@ class DataCatalogTree(LocationMapTree):
             label = _("Displaying {name}...").format(name=string)
             self.showNotification.emit(message=label)
             self._giface.lmgr.AddMaps(
-                layerName, self.selected_type.label, True)
+                layerName, self.selected_type[0].label, True)
 
             if len(self._giface.GetLayerList()) == 1:
                 # zoom to map if there is only one map layer
                 self._giface.GetMapWindow().ZoomToMap()
 
-            label = "d." + self.selected_type.label[:4] + " --q map=" + string + \
+            label = "d." + self.selected_type[0].label[:4] + " --q map=" + string + \
                     _(" -- completed. Go to Layers tab for further operations.")
             self.showNotification.emit(message=label)
             Debug.msg(1, "LAYER " + self.selected_layer[0].label + " DISPLAYED")
