@@ -891,10 +891,10 @@ class DataCatalogTree(LocationMapTree):
 
     def OnSwitchLocationMapset(self, event):
         genv = gisenv()
-        if self.selected_location.label == genv['LOCATION_NAME']:
-            self.changeMapset.emit(mapset=self.selected_mapset.label)
+        if self.selected_location[0].label == genv['LOCATION_NAME']:
+            self.changeMapset.emit(mapset=self.selected_mapset[0].label)
         else:
-            self.changeLocation.emit(mapset=self.selected_mapset.label, location=self.selected_location.label)
+            self.changeLocation.emit(mapset=self.selected_mapset[0].label, location=self.selected_location[0].label)
         self.ExpandCurrentMapset()
 
     def OnMetadata(self, event):
@@ -1028,7 +1028,7 @@ class DataCatalogTree(LocationMapTree):
         menu.AppendSeparator()
 
         if not isinstance(self._giface, StandaloneGrassInterface) and \
-           self.selected_location.label == genv['LOCATION_NAME']:
+           self.selected_location[0].label == genv['LOCATION_NAME']:
             item = wx.MenuItem(menu, wx.NewId(), _("&Display layer"))
             menu.AppendItem(item)
             self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
