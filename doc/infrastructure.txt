@@ -248,6 +248,16 @@ Maintainer: Markus Neteler
 
 * https://scan.coverity.com/projects/grass?tab=overview
 
+
+== Transifex translation management ==
+
+i18N gettext messages:
+
+* Dashboard: https://www.transifex.com/grass-gis/
+* URL to fetch files:
+** https://www.transifex.com/grass-gis/grass7/content/
+** Use: "Auto update resources" button
+
 == OLD: GRASS Quality Control ==
 
 Maintainer: Prof. Giulio Antoniol
