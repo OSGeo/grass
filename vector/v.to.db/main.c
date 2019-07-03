@@ -39,11 +39,17 @@ int main(int argc, char *argv[])
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("database"));
     G_add_keyword(_("area"));
-    G_add_keyword(_("length"));
-    G_add_keyword(_("perimeter"));
-    G_add_keyword(_("coordinates"));
+    G_add_keyword(_("azimuth"));
     G_add_keyword(_("bounding box"));
     G_add_keyword(_("category"));
+    G_add_keyword(_("compactness"));
+    G_add_keyword(_("coordinates"));
+    G_add_keyword(_("fractal"));
+    G_add_keyword(_("length"));
+    G_add_keyword(_("perimeter"));
+    G_add_keyword(_("sides"));
+    G_add_keyword(_("sinuous"));
+    G_add_keyword(_("slope"));
     module->description = _("Populates attribute values from vector features.");
 
     parse_command_line(argc, argv);
