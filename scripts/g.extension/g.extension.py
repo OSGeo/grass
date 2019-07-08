@@ -1103,7 +1103,7 @@ def download_source_code_official_github(url, name, outdev, directory=None):
 
 
 def move_extracted_files(extract_dir, target_dir, files):
-    """Fix state of extracted file by moving them to different diretcory
+    """Fix state of extracted files by moving them to different directory
 
     When extracting, it is not clear what will be the root directory
     or if there will be one at all. So this function moves the files to
@@ -1794,6 +1794,7 @@ def resolve_source_code(url=None, name=None):
     """
     if not url and name:
         module_class = get_module_class_name(name)
+        # note: 'trunk' is required to make URL usable for 'svn export' call
         git_url = 'https://github.com/OSGeo/grass-addons/trunk/' \
                    'grass{version}/{module_class}/{module_name}' \
                    .format(version=version[0],
