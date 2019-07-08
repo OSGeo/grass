@@ -991,6 +991,33 @@ def download_source_code_svn(url, name, outdev, directory=None):
     return directory
 
 
+def download_source_code_official_github(url, name, outdev, directory=None):
+    """Download source code from a official GitHub reporsitory
+
+    .. note:
+        Stdout is passed to to *outdev* while stderr is will be just printed.
+
+    :param url: URL of the repository
+        (module class/family and name are attached)
+    :param name: module name
+    :param outdev: output divide for the standard output of the svn command
+    :param directory: directory where the source code will be downloaded
+        (default is the current directory with name attached)
+
+    :returns: full path to the directory with the source code
+        (useful when you not specify directory, if *directory* is specified
+        the return value is equal to it)
+    """
+    if not directory:
+        directory = os.path.join(os.getcwd, name)
+    classchar = name.split('.', 1)[0]
+    moduleclass = expand_module_class_name(classchar)
+    if grass.call(['svn', 'export',
+                   url, directory], stdout=outdev) != 0:
+        grass.fatal(_("GRASS Addons <%s> not found") % name)
+    return directory
+
+
 def move_extracted_files(extract_dir, target_dir, files):
     """Fix state of extracted file by moving them to different diretcory
 
@@ -1090,9 +1117,11 @@ def download_source_code(source, url, name, outdev,
     gscript.verbose("Downloading source code for <{name}> from <{url}>"
                     " which is identified as '{source}' type of source..."
                     .format(source=source, url=url, name=name))
-    if source == 'svn':
+    if source == 'official':
+        download_source_code_official_github(url, name, outdev, directory)
+    elif source == 'svn':
         download_source_code_svn(url, name, outdev, directory)
-    elif source in ['remote_zip', 'official']:
+    elif source in ['remote_zip']: # , 'official'
         # we expect that the module.zip file is not by chance in the archive
         zip_name = os.path.join(tmpdir, 'extension.zip')
         f, h = urlretrieve(url, zip_name)
@@ -1650,11 +1679,17 @@ def resolve_source_code(url=None, name=None):
     """
     if not url and name:
         module_class = get_module_class_name(name)
-        trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
-                   'grass{version}/{module_class}/{module_name}?format=zip' \
+        git_url = 'https://github.com/OSGeo/grass-addons/trunk/' \
+                   'grass{version}/{module_class}/{module_name}' \
                    .format(version=version[0],
                            module_class=module_class, module_name=name)
-        return 'official', trac_url
+        # trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
+        #            'grass{version}/{module_class}/{module_name}?format=zip' \
+        #            .format(version=version[0],
+        #                    module_class=module_class, module_name=name)
+        # return 'official', trac_url
+        return 'official', git_url
+
     if os.path.isdir(url):
         return 'dir', os.path.abspath(url)
     elif os.path.exists(url):
