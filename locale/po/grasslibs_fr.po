@@ -3412,7 +3412,7 @@ msgid "Unable to write into category raster conditions file <%s>"
 msgstr "impossible d'écrire dans le fichier <%s> de catégories du raster"
 
 #: ../lib/imagery/iscatt_core.c:526
-msgid "Unable to read from category raster condtition file."
+msgid "Unable to read from category raster condition file."
 msgstr "Impossible de lire le fichier de catégories du raster."
 
 #: ../lib/imagery/iscatt_core.c:533
@@ -3445,7 +3445,7 @@ msgstr "Impossible de lire la plage de valeurs du raster <%s>"
 
 #: ../lib/imagery/iscatt_core.c:803
 #, c-format
-msgid "Unable to open category raster condtition file <%s>"
+msgid "Unable to open category raster condition file <%s>"
 msgstr "Impossible d'ouvrir le fichier <%s> de catégories du raster"
 
 #: ../lib/imagery/iscatt_core.c:817
