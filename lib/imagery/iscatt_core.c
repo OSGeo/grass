@@ -438,7 +438,7 @@ static void update_cat_scatt_plts(struct rast_row *bands_rows,
    \brief Computes scatter plots data from bands_rows.
 
    \param scatt_conds pointer to scScatts struct of type SC_SCATT_CONDITIONS, 
-   			       where are selected areas (condtitions) stored
+   			       where are selected areas (conditions) stored
    \param f_cats_rasts_conds file which stores selected areas (conditions) from
                             mapwindow see I_create_cat_rast and I_insert_patch_to_cat_rast
    \param bands_rows data arrays of raster rows from analyzed raster bands 
@@ -511,7 +511,7 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 	else {
 	    scatts_bands = scatts_conds->scatts_bands;
 
-        /* check conditions from category raster condtitions file
+        /* check conditions from category raster conditions file
            (see I_create_cat_rast) */
 	    if (f_cats_rasts_conds[i_cat]) {
 		n_pixs =
@@ -523,7 +523,7 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 		    G_free(rast_pixs);
 		    G_free(belongs_pix);
 		    G_warning(_
-			      ("Unable to read from category raster condtition file."));
+			      ("Unable to read from category raster condition file."));
 		    return -1;
 		}
 		if (n_pixs != n_pixs) {
@@ -800,7 +800,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 					 f_cats_rasts_conds,
 					 scatt_conds->n_a_cats);
 		G_warning(_
-			  ("Unable to open category raster condtition file <%s>"),
+			  ("Unable to open category raster condition file <%s>"),
 			  bands[band_id]);
 		return -1;
 	    }

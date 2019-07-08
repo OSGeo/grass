@@ -3604,7 +3604,7 @@ msgstr "ne morem zapisati \"history\" podatkov za [%s]"
 
 #: ../lib/imagery/iscatt_core.c:526
 #, fuzzy
-msgid "Unable to read from category raster condtition file."
+msgid "Unable to read from category raster condition file."
 msgstr "Nezmožen ustvariti datoteko z vzglavjem za [%s v %s]"
 
 #: ../lib/imagery/iscatt_core.c:533
@@ -3639,7 +3639,7 @@ msgstr "ne morem spremeniti direktorija v %s"
 
 #: ../lib/imagery/iscatt_core.c:803
 #, fuzzy, c-format
-msgid "Unable to open category raster condtition file <%s>"
+msgid "Unable to open category raster condition file <%s>"
 msgstr "Nezmožen odpreti datoteko s tabelo fundamentalne točke: %s"
 
 #: ../lib/imagery/iscatt_core.c:817

@@ -3583,7 +3583,7 @@ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
 #: ../lib/imagery/iscatt_core.c:526
 #, fuzzy
-msgid "Unable to read from category raster condtition file."
+msgid "Unable to read from category raster condition file."
 msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
 
 #: ../lib/imagery/iscatt_core.c:533
@@ -3618,7 +3618,7 @@ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
 #: ../lib/imagery/iscatt_core.c:803
 #, fuzzy, c-format
-msgid "Unable to open category raster condtition file <%s>"
+msgid "Unable to open category raster condition file <%s>"
 msgstr "datum لم يمكن فتح ملف جدول : %s"
 
 #: ../lib/imagery/iscatt_core.c:817
