@@ -481,7 +481,7 @@ def get_interface_description(cmd):
                 cmd = os.path.splitext(cmd)[0]
 
             if cmd == 'd.rast3d':
-                sys.path.insert(0, os.path.join(os.getenv('GISBASE'), 'etc',
+                sys.path.insert(0, os.path.join(os.getenv('GISBASE'),
                                                 'gui', 'scripts'))
 
             p = Popen([sys.executable, get_real_command(cmd),
