@@ -4,7 +4,7 @@
 
     /* Normalized Difference Water Index
      * after McFeeters (1996), https://doi.org/10.3390/rs5073544 */
-double nd_wi(double greenchan, double nirchan) 
+double nd_wi(double greenchan, double nirchan)
 {
     double result;
 

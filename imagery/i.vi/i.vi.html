@@ -399,6 +399,7 @@ The calculation of NDWI from the reflectance values is done as follows:
 <div class="code"><pre>
 g.region raster=band.2 -p
 i.vi green=band.2 nir=band.4 viname=ndwi output=ndwi
+r.colors ndwi color=byg -n
 r.univar -e ndwi
 </pre></div>
 
