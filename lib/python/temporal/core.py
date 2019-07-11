@@ -113,7 +113,7 @@ tgis_version = 2
 # can differ this value must be an integer larger than 0
 # Increase this value in case of backward incompatible changes
 # temporal database SQL layout
-tgis_db_version = 2
+tgis_db_version = 3
 
 # We need to know the parameter style of the database backend
 tgis_dbmi_paramstyle = None
