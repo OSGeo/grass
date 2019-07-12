@@ -3,10 +3,10 @@
 usage()
 {
     cat <<EOF
-Usage: geos-config [OPTIONS]
+Usage: nc-config [OPTIONS]
 Options:
      [--prefix]
-     [--clibs]
+     [--libs]
      [--cflags]
      [--ldflags]
      [--includes]
@@ -28,8 +28,8 @@ case $1 in
     --cflags)
       echo -I$OSGEO4W_ROOT_MSYS/include
       ;;
-    --clibs)
-      echo $OSGEO4W_ROOT_MSYS/lib/geos_c.lib
+    --libs)
+      echo $OSGEO4W_ROOT_MSYS/lib/netcdf.lib
       ;;
     --ldflags)
       echo 
