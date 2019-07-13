@@ -68,7 +68,7 @@ class LayerManagerModuleTree(MenuTreeModelBuilder):
                 self, filename, expandAddons=expandAddons,
                 message_handler=message_handler)
         except (ValueError, AttributeError, TypeError):
-            error_handler(_("Unable to parse user toolboxes XML files. "
-                            "Default module tree will be loaded."))
+            message_handler(_("Unable to parse user toolboxes XML files. "
+                              "Default module tree will be loaded."))
             MenuTreeModelBuilder.__init__(
                 self, fallback, message_handler=message_handler)
