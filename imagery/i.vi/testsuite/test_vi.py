@@ -26,6 +26,7 @@ class TestReport(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.runModule("g.remove", flags='f', type="raster", name="ipvi")
+        cls.runModule("g.remove", flags='f', type="raster", name="ndwi")
         cls.runModule("g.remove", flags='f', type="raster", name="dvi")
         cls.runModule("g.remove", flags='f', type="raster", name="sr")
         cls.runModule("g.remove", flags='f', type="raster", name="evi")
@@ -42,6 +43,14 @@ class TestReport(TestCase):
         self.assertRasterMinMax(map=map_output, refmin=0.0454545454545,
                                 refmax=0.906666666667,
                                 msg="ipvi in degrees must be between 0.0454545454545  and 0.906666666667")
+
+    def test_vinamendwi(self):
+        """Testing viname ndwi"""
+        map_output = 'ndwi'
+        self.assertModule('i.vi', red=self.red, green=self.green, nir=self.nir, viname='ndwi',
+                          output=map_output)
+        self.assertRasterMinMax(map=map_output, refmin=-0.71, refmax=0.93,
+                                msg="ndwi in percent must be between -0.71 and 0.93")
 
     def test_vinamedvi(self):
         """Testing viname dvi"""

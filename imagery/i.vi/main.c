@@ -1,29 +1,30 @@
 
 /****************************************************************************
  *
- * MODULE:       i.vi
- * AUTHOR(S):    Baburao Kamble baburaokamble@gmail.com
- *		 Yann Chemin - yann.chemin@gmail.com
- *		 Nikos Alexandris - nik@nikosalexandris.net
- * PURPOSE:      Calculates 15 vegetation indices
- * 		 based on biophysical parameters.
+ * MODULE:      i.vi
+ * AUTHOR(S):   Baburao Kamble baburaokamble@gmail.com
+ *              Yann Chemin - yann.chemin@gmail.com
+ *              Nikos Alexandris - nik@nikosalexandris.net
+ * PURPOSE:     Calculates 16 vegetation and related indices
+ *              based on biophysical parameters.
  *
- * COPYRIGHT:    (C) 2002-2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2019 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
  *   	    	 for details.
  *
- * Remark:
- *		 These are generic indices that use red and nir for most of them.
- *               Those can be any use by standard satellite having V and IR.
- *		 However arvi uses red, nir and blue;
- *		 GVI uses B,G,R,NIR, chan5 and chan 7 of landsat;
- *		 and GARI uses B,G,R and NIR.
+ * Remarks:
+ *           These are generic indices that use red and nir for most of them.
+ *           Those can be any use by standard satellite having V and IR.
+ *           However, arvi uses red, nir and blue;
+ *           GVI uses B,G,R,NIR, chan5 and chan 7 of landsat;
+ *           and GARI uses B,G,R and NIR.
  *
- * Changelog:	 Added EVI on 20080718 (Yann)
- * 		 Added VARI on 20081014 (Yann)
- * 		 Added EVI2 on 20130208 (NikosA)
+ * Changelog:   Added EVI on 20080718 (Yann)
+ *              Added VARI on 20081014 (Yann)
+ *              Added EVI2 on 20130208 (NikosA)
+ *              Added NDWI on 20190711 (neteler)
  *
  *****************************************************************************/
 
@@ -37,6 +38,7 @@
 
 double s_r(double redchan, double nirchan);
 double nd_vi(double redchan, double nirchan);
+double nd_wi(double greenchan, double nirchan);
 double ip_vi(double redchan, double nirchan);
 double d_vi(double redchan, double nirchan);
 double e_vi(double bluechan, double redchan, double nirchan);
@@ -112,7 +114,7 @@ int main(int argc, char *argv[])
     desc = NULL;
     G_asprintf(&desc,
 	       "arvi;%s;dvi;%s;evi;%s;evi2;%s;gvi;%s;gari;%s;gemi;%s;ipvi;%s;msavi;%s;"
-	       "msavi2;%s;ndvi;%s;pvi;%s;savi;%s;sr;%s;vari;%s;wdvi;%s",
+	       "msavi2;%s;ndvi;%s;ndwi;%s;pvi;%s;savi;%s;sr;%s;vari;%s;wdvi;%s",
 	       _("Atmospherically Resistant Vegetation Index"),
 	       _("Difference Vegetation Index"),
 	       _("Enhanced Vegetation Index"),
@@ -124,13 +126,14 @@ int main(int argc, char *argv[])
 	       _("Modified Soil Adjusted Vegetation Index"),
 	       _("second Modified Soil Adjusted Vegetation Index"),
 	       _("Normalized Difference Vegetation Index"),
+	       _("Normalized Difference Water Index"),
 	       _("Perpendicular Vegetation Index"),
 	       _("Soil Adjusted Vegetation Index"),
 	       _("Simple Ratio"),
 	       _("Visible Atmospherically Resistant Index"),
 	       _("Weighted Difference Vegetation Index"));
     opt.viname->descriptions = desc;
-    opt.viname->options = "arvi,dvi,evi,evi2,gvi,gari,gemi,ipvi,msavi,msavi2,ndvi,pvi,savi,sr,vari,wdvi";
+    opt.viname->options = "arvi,dvi,evi,evi2,gvi,gari,gemi,ipvi,msavi,msavi2,ndvi,ndwi,pvi,savi,sr,vari,wdvi";
     opt.viname->answer = "ndvi";
     opt.viname->key_desc = _("type");
 
@@ -230,6 +233,9 @@ int main(int argc, char *argv[])
 
     if (!strcasecmp(viflag, "ndvi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("ndvi index requires red and nir maps"));
+
+    if (!strcasecmp(viflag, "ndwi") && (!(opt.green->answer) || !(opt.nir->answer)) )
+	G_fatal_error(_("ndwi index requires green and nir maps"));
 
     if (!strcasecmp(viflag, "ipvi") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("ipvi index requires red and nir maps"));
@@ -458,11 +464,14 @@ int main(int argc, char *argv[])
 
 		/* calculate ndvi                    */
 		if (!strcasecmp(viflag, "ndvi")) {
-		    if (d_redchan + d_nirchan < 0.001)
+		    if (d_redchan + d_nirchan < 0.001)  /* TODO: why this? */
 			Rast_set_d_null_value(&outrast[col], 1);
 		    else
 			outrast[col] = nd_vi(d_redchan, d_nirchan);
 		}
+
+		if (!strcasecmp(viflag, "ndwi"))
+		    outrast[col] = nd_wi(d_greenchan, d_nirchan);
 
 		if (!strcasecmp(viflag, "ipvi"))
 		    outrast[col] = ip_vi(d_redchan, d_nirchan);
