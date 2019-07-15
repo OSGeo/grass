@@ -494,11 +494,11 @@ def get_interface_description(cmd):
 
         if p.returncode != 0:
             raise ScriptError(_("Unable to fetch interface description for command '<{cmd}>'."
-                                "\n\nDetails: <{det}>".format(cmd=cmd, det=decode(cmderr))))
+                                "\n\nDetails: <{det}>").format(cmd=cmd, det=decode(cmderr)))
 
     except OSError as e:
         raise ScriptError(_("Unable to fetch interface description for command '<{cmd}>'."
-                            "\n\nDetails: <{det}>".format(cmd=cmd, det=e)))
+                            "\n\nDetails: <{det}>").format(cmd=cmd, det=e))
 
     desc = convert_xml_to_utf8(decode(cmdout))
     desc = desc.replace(b'grass-interface.dtd',
