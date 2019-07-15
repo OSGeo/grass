@@ -5,7 +5,7 @@
 # MODULE:       g.bands
 # AUTHOR(S):    Martin Landa <landa.martin gmail com>
 #
-# PURPOSE:      Print bands references.
+# PURPOSE:      Prints band reference information.
 #
 # COPYRIGHT:    (C) 2019 by mundialis GmbH & Co.KG, and the GRASS Development Team
 #
@@ -16,17 +16,17 @@
 #############################################################################
 
 #%module
-#% description: Prints bands references.
+#% description: Prints band reference information.
 #% keyword: general
 #% keyword: imagery
 #% keyword: image collections
 #% keyword: bands
 #%end
 #%option
-#% key: bands
+#% key: band
 #% type: string
 #% key_desc: name
-#% description: Name of band identifier (example: S2A or S2A_1)
+#% description: Name of band reference identifier (example: S2A or S2A_1)
 #% required: no
 #% multiple: no
 #%end
