@@ -51,14 +51,17 @@ import grass.script as gs
 from grass.pygrass.raster import RasterRow
 from grass.exceptions import GrassError, OpenError
 
-def print_map_band_reference(name):
+def print_map_band_reference(name, band_reader):
     """Print band reference information assigned to a single raster map
 
     :param str name: raster map name
     """
     try:
         with RasterRow(name) as rast:
-            print (rast.info.band_reference)
+            band_ref = rast.info.band_reference
+            if band_ref:
+                shortcut, band = band_ref.split('_')
+                band_reader.print_info(shortcut, band)
     except OpenError as e:
         gs.error(_("Map <{}> not found").format(name))
 
@@ -95,11 +98,17 @@ def main():
     else:
         bands = [None]
 
+    if flags['p']:
+        gs.utils.set_path('g.bands')
+        from reader import BandReader
+        band_reader = BandReader()
+    else:
+        band_reader = None
     multi_bands = len(bands) > 1
     for i in range(len(maps)):
         band_ref = bands[i] if multi_bands else bands[0]
         if flags['p']:
-            print_map_band_reference(maps[i])
+            print_map_band_reference(maps[i], band_reader)
         else:
             manage_map_band_reference(maps[i], band_ref)
 
