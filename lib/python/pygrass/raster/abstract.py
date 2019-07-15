@@ -20,7 +20,7 @@ import grass.lib.raster as libraster
 #
 from grass.pygrass import utils
 from grass.pygrass.gis.region import Region
-from grass.pygrass.errors import must_be_open
+from grass.pygrass.errors import must_be_open, must_be_in_current_mapset
 from grass.pygrass.shell.conversion import dict2html
 from grass.pygrass.shell.show import raw_figure
 
@@ -174,6 +174,7 @@ class Info(object):
 
         return band_ref
 
+    @must_be_in_current_mapset
     def _set_band_reference(self, band_reference):
         """Set/Unset band reference identifier.
 
@@ -272,7 +273,12 @@ class RasterAbstractBase(object):
 
         ..
         """
-        self.mapset = mapset
+        if mapset:
+            self.mapset = mapset
+        else:
+            # note that @must_be_in_current_mapset requires mapset to be set
+            self.mapset = utils.decode(libgis.G_find_raster(name, mapset))
+
         self._name = name
         # Private attribute `_fd` that return the file descriptor of the map
         self._fd = None
