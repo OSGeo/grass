@@ -62,6 +62,8 @@ def print_map_band_reference(name, band_reader):
             if band_ref:
                 shortcut, band = band_ref.split('_')
                 band_reader.print_info(shortcut, band)
+            else:
+                gs.info(_("No band reference assigned to <{}>").format(name))
     except OpenError as e:
         gs.error(_("Map <{}> not found").format(name))
 
