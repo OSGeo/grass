@@ -1,0 +1,67 @@
+<h2>DESCRIPTION</h2>
+
+Manages band reference information to a single raster map or a list of
+raster maps. Band reference can be assigned by <b>bands</b>
+option. Already assign band reference can be removed by <b>-r</b>
+flag. This module also allows printing detailed band reference
+information already assigned to a raster map.
+
+<p>
+Either a single raster map or a list of raster maps can be given
+by <b>map</b> option.
+
+<h2>EXAMPLES</h2>
+
+<h3>Assign band reference to single raster map</h3>
+
+<div class="code"><pre>
+i.band map=T33UVR_20180506T100031_B01 bands=S2A_1
+</pre></div>
+
+Note that band references overview can be easily printed
+by <em><a href="g.bands.html">g.bands</a></em> module.
+
+<h3>Assign band reference to list of raster maps</h3>
+
+<div class="code"><pre>
+i.band map=T33UVR_20180506T100031_B01,xxx bands=S2A_1
+</pre></div>
+
+<h3>Assign band references to list of raster maps</h3>
+
+<div class="code"><pre>
+i.band map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02 bands=S2A_1,S2A_2
+</pre></div>
+
+<h3>Remove band reference</h3>
+
+<div class="code"><pre>
+i.band -r map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02
+</pre></div>
+
+<h3>Print band reference information about single raster map</h3>
+
+<div class="code"><pre>
+i.band -p map=T33UVR_20180506T100031_B01
+</pre></div>
+
+<h3>Print band reference information about list of raster map</h3>
+
+<div class="code"><pre>
+i.band -r map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="g.bands.html">g.bands</a>,
+  <a href="r.info.html">r.info</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Martin Landa<br>
+Development sponsored by <a href="https://www.mundialis.de/en/">mundialis GmbH & Co.KG</a>
+
+<p>
+<i>Last changed: $Date$</i>
