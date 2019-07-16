@@ -264,6 +264,8 @@ if [ -n "$PACKAGE_PATCH" ]; then
 	/mingw${MINGW_POSTFIX}/bin/libpng16-16.dll \
 	/mingw${MINGW_POSTFIX}/bin/libsystre-0.dll \
 	/mingw${MINGW_POSTFIX}/bin/libtre-5.dll \
+	/mingw${MINGW_POSTFIX}/bin/libgraphite2.dll \
+	/mingw${MINGW_POSTFIX}/bin/libpcre-1.dll \
         /mingw${MINGW_POSTFIX}/bin/zlib1.dll \
         /mingw${MINGW_POSTFIX}/bin/libstdc++-6.dll \
 	apps/grass/grass$POSTFIX/bin
