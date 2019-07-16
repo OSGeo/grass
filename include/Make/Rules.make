@@ -22,7 +22,12 @@ $(ARCH_INCDIR)/%.h: %.h
 	$(INSTALL_DATA) $< $@
 
 ifneq ($(MINGW),)
+ifeq ($(wildcard $(TOOLSDIR)/g.echo$(EXE)),)
+# dummy path until g.echo.exe gets compiled and is needed
+mkpath = $(1);$(2)
+else
 mkpath = $(shell $(TOOLSDIR)/g.echo$(EXE) $(1));$(2)
+endif
 else
 mkpath = $(1):$(2)
 endif
