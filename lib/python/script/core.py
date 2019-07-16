@@ -258,6 +258,12 @@ def get_real_command(cmd):
         # so, lets remove extension
         if os.path.splitext(cmd)[1] == '.py':
             cmd = cmd[:-3]
+        # PATHEXT is necessary to check on Windows (force lowercase)
+        pathext = list(map(lambda x: x.lower(),
+                           os.environ['PATHEXT'].split(os.pathsep)))
+        if '.py' not in pathext:
+            # we assume that PATHEXT contains always '.py'
+            os.environ['PATHEXT'] = '.py;' + os.environ['PATHEXT']
         full_path = shutil_which(cmd + '.py')
         if full_path:
             return full_path
