@@ -47,7 +47,7 @@ def main():
     if ',' in options['band']:
         gs.fatal("Multiple values not supported")
     if '_' in options['band']:
-        kwargs['shortcut'], kwargs['band'] = options['bands'].split('_')
+        kwargs['shortcut'], kwargs['band'] = options['band'].split('_')
     else:
         kwargs['shortcut'] = options['band']
     kwargs['extended'] = flags['e']
