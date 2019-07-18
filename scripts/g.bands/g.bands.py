@@ -30,6 +30,10 @@
 #% required: no
 #% multiple: no
 #%end
+#%flag
+#% key: e
+#% description: Print extended metadata information
+#%end
 
 import sys
 
@@ -46,6 +50,7 @@ def main():
         kwargs['shortcut'], kwargs['band'] = options['bands'].split('_')
     else:
         kwargs['shortcut'] = options['band']
+    kwargs['extended'] = flags['e']
 
     reader = BandReader()
     reader.print_info(**kwargs)

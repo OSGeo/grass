@@ -55,7 +55,12 @@ class BandReader:
                 )
 
     @staticmethod
-    def _print_band(band, item):
+    def _print_band_extended(band, item):
+        """Print band-specific metadata
+
+        :param str band: band identifier
+        :param str item: items to be printed out
+        """
         indent = 4
         print ('{}band: {}'.format(
             ' ' * indent, band
@@ -63,13 +68,20 @@ class BandReader:
         for k, v in item[band].items():
             print ('{}{}: {}'.format(' ' * indent * 2, k, v))
 
-    def print_info(self, shortcut=None, band=None):
+    @staticmethod
+    def _print_band(shortcut, band):
+        print ('{}_{}'.format(
+            shortcut, band
+        ))
+
+    def print_info(self, shortcut=None, band=None, extended=False):
         """Prints band reference information to stdout.
 
         Can be filtered by shortcut or band identifier.
 
         :param str shortcut: shortcut to filter (eg. S2A) or None
         :param str band: band (eg. 1) or None
+        :param bool extended: print also extended metadata
         """
         found = False
         for root in self.config.values():
@@ -85,20 +97,27 @@ class BandReader:
                         ))
 
                 # print generic information
-                for subitem in item.keys():
-                    if subitem == 'bands':
-                        # bands item is processed bellow
-                        continue
-                    print ('{}: {}'.format(
-                        subitem, item[subitem]
-                    ))
+                if extended:
+                    for subitem in item.keys():
+                        if subitem == 'bands':
+                            # bands item is processed bellow
+                            continue
+                        print ('{}: {}'.format(
+                            subitem, item[subitem]
+                        ))
 
-                # print detailed band information
-                if band:
-                    self._print_band(band, item['bands'])
+                    # print detailed band information
+                    if band:
+                        self._print_band_exteded(band, item['bands'])
+                    else:
+                        for iband in item['bands']:
+                            self._print_band_extended(iband, item['bands'])
                 else:
-                    for iband in item['bands']:
-                        self._print_band(iband, item['bands'])
+                    if band:
+                        self._print_band(item['shortcut'], band)
+                    else:
+                        for iband in item['bands']:
+                            self._print_band(item['shortcut'], iband)
 
         # raise error when defined shortcut not found
         if shortcut and not found:
