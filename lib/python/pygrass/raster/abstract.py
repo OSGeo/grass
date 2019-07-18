@@ -182,10 +182,7 @@ class Info(object):
         """
         if band_reference:
             # assign
-            # for prototype purposes only (!)
-            utils.set_path('g.bands')
-            from reader import BandReader, BandReaderError
-
+            from grass.bands import BandReader, BandReaderError
             reader = BandReader()
             # determine filename (assuming that band_reference is unique!)
             try:

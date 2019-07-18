@@ -36,17 +36,16 @@ import sys
 import grass.script as gs
 
 def main():
-    gs.utils.set_path('g.bands')
-    from reader import BandReader
+    from grass.bands import BandReader
 
     band = None
     kwargs = {}
-    if ',' in options['bands']:
+    if ',' in options['band']:
         gs.fatal("Multiple values not supported")
-    if '_' in options['bands']:
+    if '_' in options['band']:
         kwargs['shortcut'], kwargs['band'] = options['bands'].split('_')
     else:
-        kwargs['shortcut'] = options['bands']
+        kwargs['shortcut'] = options['band']
 
     reader = BandReader()
     reader.print_info(**kwargs)

@@ -2,8 +2,6 @@ MODULE_TOPDIR = ../..
 
 PGM = g.bands
 
-ETCFILES = reader
-
 # TODO: unfortunately Script.make assumes that ETCFILES are Python
 # modules only, this should be improved (by introducing a new variable
 # in Script.make), there are more affected modules, see eg. d.polar or
