@@ -208,7 +208,7 @@ static int snap_cross(int asegment, double *adistance, int bsegment,
 {
     int seg;
     double x, y;
-    double dist, curdist;
+    double dist, curdist, dthresh;
 
     /* 1. of A seg */
     seg = asegment;
@@ -251,7 +251,8 @@ static int snap_cross(int asegment, double *adistance, int bsegment,
      * the smallest difference representable with 
      * single precision floating point works well with pathological input
      * regular input is not affected */
-    if (curdist < d_ulp(x, y)) {	/* was rethresh * rethresh */
+    dthresh = d_ulp(x, y);
+    if (curdist < dthresh * dthresh) {	/* was rethresh * rethresh */
 	*xc = x;
 	*yc = y;
 
