@@ -68,11 +68,8 @@ class BandReader:
         for k, v in item[band].items():
             print ('{}{}: {}'.format(' ' * indent * 2, k, v))
 
-    @staticmethod
-    def _print_band(shortcut, band):
-        print ('{}_{}'.format(
-            shortcut, band
-        ))
+    def _print_band(self, shortcut, band):
+        print (self._band_identifier(shortcut, band))
 
     def print_info(self, shortcut=None, band=None, extended=False):
         """Prints band reference information to stdout.
@@ -86,7 +83,8 @@ class BandReader:
         found = False
         for root in self.config.values():
             for item in root.values():
-                if shortcut and item['shortcut'][0:len(shortcut)] != shortcut:
+                if shortcut and \
+                   item['shortcut'][0:len(shortcut)].upper() != shortcut.upper():
                     continue
 
                 found = True
@@ -148,3 +146,21 @@ class BandReader:
                     return filename
 
         return None
+
+    def get_bands(self):
+        """Get list of band identifiers.
+
+        :return list: list of valid band identifiers
+        """
+        bands = []
+        for root in self.config.values():
+            for item in root.values():
+                for band in item['bands']:
+                    bands.append(
+                        self._band_identifier(item['shortcut'], band)
+                    )
+        return bands
+
+    @staticmethod
+    def _band_identifier(shortcut, band):
+        return '{}_{}'.format(shortcut, band)
