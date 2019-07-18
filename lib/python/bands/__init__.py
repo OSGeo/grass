@@ -86,7 +86,7 @@ class BandReader:
         found = False
         for root in self.config.values():
             for item in root.values():
-                if shortcut and item['shortcut'] != shortcut:
+                if shortcut and item['shortcut'][0:len(shortcut)] != shortcut:
                     continue
 
                 found = True
@@ -122,7 +122,7 @@ class BandReader:
         # raise error when defined shortcut not found
         if shortcut and not found:
             raise BandReaderError(
-                "<{}> not found".format(shortcut)
+                "Band reference <{}> not found".format(shortcut)
             )
 
     def find_file(self, band_reference):
