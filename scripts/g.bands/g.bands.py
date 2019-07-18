@@ -26,7 +26,7 @@
 #% key: band
 #% type: string
 #% key_desc: name
-#% description: Name of band reference identifier (example: S2A or S2A_1)
+#% description: Name of band reference identifier (example: S2, S2A or S2A_1)
 #% required: no
 #% multiple: no
 #%end
