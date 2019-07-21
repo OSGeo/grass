@@ -1,0 +1,41 @@
+{
+    "Landsat7": {
+        "description": "The Landsat 7 bands",
+        "shortcut": "Ls7",
+        "instruments": "optical and infrared",
+        "bands": {
+            "1": {
+                "bandwidth (µm)": "0.45-0.52",
+                "resolution (meters)": 30
+            },
+            "2": {
+                "bandwidth (µm)": "0.52-0.60",
+                "resolution (meters)": 30
+            },
+            "3": {
+                "bandwidth (µm)": "0.63-0.69",
+                "resolution (meters)": 30
+            },
+            "4": {
+                "bandwidth (µm)": "0.77-0.90",
+                "resolution (meters)": 30
+            },
+            "5": {
+                "bandwidth (µm)": "1.55-1.75",
+                "resolution (meters)": 30
+            },
+            "6": {
+                "bandwidth (µm)": "10.40-12.50",
+                "resolution (meters)": 60
+            },
+            "7": {
+                "bandwidth (µm)": "2.09-2.35",
+                "resolution (meters)": 30
+            },
+            "8": {
+                "bandwidth (µm)": "52-90",
+                "resolution (meters)": 15
+            }
+        }
+    }
+}
