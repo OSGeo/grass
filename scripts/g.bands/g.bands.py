@@ -58,6 +58,8 @@ def main():
     except BandReaderError as e:
         gs.fatal(e)
 
+    return 0
+
 if __name__ == "__main__":
     options, flags = gs.parser()
 
