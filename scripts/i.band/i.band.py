@@ -72,6 +72,8 @@ def manage_map_band_reference(name, band_ref):
 
     :param str name: raster map name
     :param str band_ref: band reference (None for dissociating band reference)
+
+    :return int: return code
     """
     try:
         with RasterRow(name) as rast:
@@ -85,12 +87,15 @@ def manage_map_band_reference(name, band_ref):
                 rast.info.band_reference = band_ref
             except GrassError as e:
                 gs.error(_("Unable to assign/dissociate band reference. {}").format(e))
+                return 1
     except OpenError as e:
         gs.error(_("Map <{}> not found in current mapset").format(name))
+        return 1
+
+    return 0
 
 def main():
-    gs.utils.set_path('g.bands')
-    from reader import BandReader
+    from grass.bands import BandReader
 
     maps = options['map'].split(',')
     if not flags['r']:
@@ -107,12 +112,16 @@ def main():
     else:
         band_reader = None
     multi_bands = len(bands) > 1
+    ret = 0
     for i in range(len(maps)):
         band_ref = bands[i] if multi_bands else bands[0]
         if flags['p']:
             print_map_band_reference(maps[i], band_reader)
         else:
-            manage_map_band_reference(maps[i], band_ref)
+            if manage_map_band_reference(maps[i], band_ref) != 0:
+                ret = 1
+
+    return ret
 
 if __name__ == "__main__":
     options, flags = gs.parser()
