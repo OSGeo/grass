@@ -40,7 +40,7 @@ import sys
 import grass.script as gs
 
 def main():
-    from grass.bands import BandReader
+    from grass.bands import BandReader, BandReaderError
 
     band = None
     kwargs = {}
@@ -52,8 +52,11 @@ def main():
         kwargs['shortcut'] = options['band']
     kwargs['extended'] = flags['e']
 
-    reader = BandReader()
-    reader.print_info(**kwargs)
+    try:
+        reader = BandReader()
+        reader.print_info(**kwargs)
+    except BandReaderError as e:
+        gs.fatal(e)
 
 if __name__ == "__main__":
     options, flags = gs.parser()
