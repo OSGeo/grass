@@ -7,8 +7,7 @@ from collections import OrderedDict
 import grass.script as gs
 
 class BandReaderError(Exception):
-    def __init__(self, msg):
-        gs.fatal(msg)
+    pass
 
 class BandReader:
     """Band references reader"""
@@ -25,11 +24,18 @@ class BandReader:
         """Read configuration"""
         self.config = dict()
         for json_file in self._json_files:
-            with open(json_file) as fd:
-                config = json.load(
-                    fd,
-                    object_pairs_hook=OrderedDict
-                )
+            try:
+                with open(json_file) as fd:
+                    config = json.load(
+                        fd,
+                        object_pairs_hook=OrderedDict
+                    )
+            except json.decoder.JSONDecodeError as e:
+                raise BandReaderError(
+                    "Unable to parse '{}': {}".format(
+                        json_file, e
+                ))
+
             # check if configuration is valid
             self._check_config(config)
 
@@ -106,7 +112,7 @@ class BandReader:
 
                     # print detailed band information
                     if band:
-                        self._print_band_exteded(band, item['bands'])
+                        self._print_band_extended(band, item['bands'])
                     else:
                         for iband in item['bands']:
                             self._print_band_extended(iband, item['bands'])
