@@ -16,7 +16,6 @@ class TestBandsSystemDefined(TestCase):
         return band_ref
 
     def test_band_ref_assign_not_current_mapset(self):
-        # TODO: discard stderr
         # it is assumed that we are not in PERMANENT mapset
         module = SimpleModule('i.band', map=self.raster_map + '@PERMANENT',
                               band=self.band_ref)
@@ -32,15 +31,13 @@ class TestBandsSystemDefined(TestCase):
         self.assertModule(module)
 
         # check also using pygrass
-        # TODO: it should be lowercase
-        self.assertEqual(self.read_band_ref(), self.band_ref.upper())
+        self.assertEqual(self.read_band_ref(), self.band_ref)
 
     def test_band_ref_dissociate(self):
         module = SimpleModule('i.band', flags='r', map=self.raster_map)
         self.assertModule(module)
 
         # check also using pygrass
-        # TODO: it should be lowercase
         self.assertEqual(self.read_band_ref(), None)
 
 if __name__ == '__main__':
