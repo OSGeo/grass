@@ -197,7 +197,7 @@ class Info(object):
             # write band reference
             libraster.Rast_write_band_reference(self.name,
                                                 filename,
-                                                band_reference.upper())
+                                                band_reference)
         else:
             libraster.Rast_remove_band_reference(self.name)
 
