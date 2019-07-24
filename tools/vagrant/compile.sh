@@ -1,6 +1,6 @@
 #!/bin/sh
 
-### inspired by https://svn.osgeo.org/gdal/trunk/gdal/scripts/vagrant/gdal.sh
+### inspired by https://github.com/OSGeo/gdal/blob/master/gdal/scripts/vagrant/gdal.sh
 
 # abort install if any errors occur and enable tracing
 set -o errexit

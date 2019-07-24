@@ -1581,17 +1581,6 @@ def close_gui():
             message(_("Unable to close GUI. {0}").format(e))
 
 
-def clear_screen():
-    """Clear terminal"""
-    if WINDOWS:
-        pass
-    # TODO: uncomment when PDCurses works.
-    #   cls
-    else:
-        if not is_debug():
-            call(["tput", "clear"])
-
-
 def show_banner():
     """Write GRASS GIS ASCII name to stderr"""
     sys.stderr.write(r"""
@@ -2166,7 +2155,6 @@ def main():
         clean_all()
         sys.exit(0)
     else:
-        clear_screen()
         show_banner()
         say_hello()
         show_info(shellname=shellname,
@@ -2200,7 +2188,6 @@ def main():
         close_gui()
 
         # here we are at the end of grass session
-        clear_screen()
         clean_all()
         if not params.tmp_location:
             writefile(gisrcrc, readfile(gisrc))

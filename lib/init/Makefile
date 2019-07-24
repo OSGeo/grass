@@ -95,8 +95,8 @@ $(ETC)/winlocale$(EXE): $(OBJDIR)/winlocale.o
 
 $(ETC)/VERSIONNUMBER:
 	rm -f $@
-	@if [ -n "$(GRASS_VERSION_SVN)" ] ; then \
-		echo "$(GRASS_VERSION_NUMBER) $(GRASS_VERSION_SVN)" > $@ ; \
+	@if [ -n "$(GRASS_VERSION_GIT)" ] ; then \
+		echo "$(GRASS_VERSION_NUMBER) $(GRASS_VERSION_GIT)" > $@ ; \
 	else \
 		echo "$(GRASS_VERSION_NUMBER)" > $@ ; \
 	fi

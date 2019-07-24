@@ -325,11 +325,11 @@ class Module(object):
     >>> region.flags.u = True
     >>> region.flags["3"].value = True  # set numeric flags
     >>> region.get_bash()
-    u'g.region -p -3 -u'
+    'g.region -p -3 -u'
     >>> new_region = copy.deepcopy(region)
     >>> new_region.inputs.res = "10"
     >>> new_region.get_bash()
-    u'g.region res=10 -p -3 -u'
+    'g.region res=10 -p -3 -u'
 
     >>> neighbors = Module("r.neighbors")
     >>> neighbors.inputs.input = "mapA"
@@ -337,30 +337,30 @@ class Module(object):
     >>> neighbors.inputs.size = 5
     >>> neighbors.inputs.quantile = 0.5
     >>> neighbors.get_bash()
-    u'r.neighbors input=mapA method=average size=5 quantile=0.5 output=mapB'
+    'r.neighbors input=mapA method=average size=5 quantile=0.5 output=mapB'
 
     >>> new_neighbors1 = copy.deepcopy(neighbors)
     >>> new_neighbors1.inputs.input = "mapD"
     >>> new_neighbors1.inputs.size = 3
     >>> new_neighbors1.inputs.quantile = 0.5
     >>> new_neighbors1.get_bash()
-    u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+    'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
 
     >>> new_neighbors2 = copy.deepcopy(neighbors)
     >>> new_neighbors2(input="mapD", size=3, run_=False)
     Module('r.neighbors')
     >>> new_neighbors2.get_bash()
-    u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+    'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
 
     >>> neighbors = Module("r.neighbors")
     >>> neighbors.get_bash()
-    u'r.neighbors method=average size=3'
+    'r.neighbors method=average size=3'
 
     >>> new_neighbors3 = copy.deepcopy(neighbors)
     >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
     Module('r.neighbors')
     >>> new_neighbors3.get_bash()
-    u'r.neighbors input=mapA method=average size=3 output=mapB'
+    'r.neighbors input=mapA method=average size=3 output=mapB'
 
     >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
     ...                  overwrite=True, run_=False)
@@ -391,17 +391,17 @@ class Module(object):
     >>> p.popen.returncode
     0
     >>> colors.inputs["stdin"].value
-    u'1 red'
+    '1 red'
     >>> colors.outputs["stdout"].value
-    u''
+    ''
     >>> colors.outputs["stderr"].value.strip()
-    u"Color table for raster map <test_a> set to 'rules'"
+    "Color table for raster map <test_a> set to 'rules'"
 
     >>> colors = Module("r.colors", map="test_a", rules="-",
     ...                 run_=False, finish_=False, stdin_=PIPE)
     >>> colors.run()
     Module('r.colors')
-    >>> stdout, stderr = colors.popen.communicate(input="1 red")
+    >>> stdout, stderr = colors.popen.communicate(input=b"1 red")
     >>> colors.popen.returncode
     0
     >>> stdout
@@ -412,30 +412,30 @@ class Module(object):
     ...                 stdin_=PIPE, stderr_=PIPE)
     >>> colors.run()
     Module('r.colors')
-    >>> stdout, stderr = colors.popen.communicate(input="1 red")
+    >>> stdout, stderr = colors.popen.communicate(input=b"1 red")
     >>> colors.popen.returncode
     0
     >>> stdout
     >>> stderr.strip()
-    "Color table for raster map <test_a> set to 'rules'"
+    b"Color table for raster map <test_a> set to 'rules'"
 
     Run a second time
 
     >>> colors.run()
     Module('r.colors')
-    >>> stdout, stderr = colors.popen.communicate(input="1 blue")
+    >>> stdout, stderr = colors.popen.communicate(input=b"1 blue")
     >>> colors.popen.returncode
     0
     >>> stdout
     >>> stderr.strip()
-    "Color table for raster map <test_a> set to 'rules'"
+    b"Color table for raster map <test_a> set to 'rules'"
 
     Multiple run test
 
     >>> colors = Module("r.colors", map="test_a",
     ...                                            color="ryb", run_=False)
     >>> colors.get_bash()
-    u'r.colors map=test_a color=ryb'
+    'r.colors map=test_a color=ryb'
     >>> colors.run()
     Module('r.colors')
     >>> colors(color="gyr")
@@ -843,31 +843,31 @@ class MultiModule(object):
 
     Asynchronous module run, setting finish = False
 
-    >>> region_1 = Module("g.region", run_=False)
-    >>> region_1.flags.p = True
-    >>> region_2 = copy.deepcopy(region_1)
-    >>> region_2.flags.p = True
-    >>> region_3 = copy.deepcopy(region_1)
-    >>> region_3.flags.p = True
-    >>> region_4 = copy.deepcopy(region_1)
-    >>> region_4.flags.p = True
-    >>> region_5 = copy.deepcopy(region_1)
-    >>> region_5.flags.p = True
+    >>> region_1 = Module("g.region", run_=False)  # doctest: +SKIP
+    >>> region_1.flags.p = True  # doctest: +SKIP
+    >>> region_2 = copy.deepcopy(region_1)  # doctest: +SKIP
+    >>> region_2.flags.p = True  # doctest: +SKIP
+    >>> region_3 = copy.deepcopy(region_1)  # doctest: +SKIP
+    >>> region_3.flags.p = True  # doctest: +SKIP
+    >>> region_4 = copy.deepcopy(region_1)  # doctest: +SKIP
+    >>> region_4.flags.p = True  # doctest: +SKIP
+    >>> region_5 = copy.deepcopy(region_1)  # doctest: +SKIP
+    >>> region_5.flags.p = True  # doctest: +SKIP
     >>> mm = MultiModule(module_list=[region_1, region_2, region_3, region_4, region_5],
-    ...                  sync=False)
-    >>> t = mm.run()
-    >>> isinstance(t, Process)
+    ...                  sync=False)  # doctest: +SKIP
+    >>> t = mm.run()  # doctest: +SKIP
+    >>> isinstance(t, Process)  # doctest: +SKIP
     True
-    >>> m_list = mm.wait()
-    >>> m_list[0].popen.returncode
+    >>> m_list = mm.wait()  # doctest: +SKIP
+    >>> m_list[0].popen.returncode  # doctest: +SKIP
     0
-    >>> m_list[1].popen.returncode
+    >>> m_list[1].popen.returncode  # doctest: +SKIP
     0
-    >>> m_list[2].popen.returncode
+    >>> m_list[2].popen.returncode  # doctest: +SKIP
     0
-    >>> m_list[3].popen.returncode
+    >>> m_list[3].popen.returncode  # doctest: +SKIP
     0
-    >>> m_list[4].popen.returncode
+    >>> m_list[4].popen.returncode  # doctest: +SKIP
     0
 
     Asynchronous module run, setting finish = False and using temporary region

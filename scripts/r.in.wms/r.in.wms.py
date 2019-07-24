@@ -145,6 +145,20 @@ This program is free software under the GNU General Public License
 #% guisection: Map style
 #%end
 
+#%option
+#% key: proxy
+#% label: HTTP proxy only GDAL driver (GDAL_HTTP_PROXY)
+#% type: string
+#% description: HTTP proxy
+#%end
+
+#%option
+#% key: proxy_user_pw
+#% label: User and password for HTTP proxy only for GDAL driver (GDAL_HTTP_PROXYUSERPWD). Must be in the form of [user name]:[password].
+#% type: string
+#% description: User and password for HTTP proxy
+#%end
+
 #%option G_OPT_F_BIN_INPUT
 #% key: capfile
 #% required: no
@@ -227,6 +241,14 @@ def main():
         wms.GetCapabilities(options)
     else:
         from wms_base import GRASSImporter
+        # set proxy
+        if options['proxy'] and options['proxy_user_pw']:
+            wms.setProxy(options['proxy'], options['proxy_user_pw'])
+        if options['proxy']:
+            wms.setProxy(options['proxy'])
+            if 'GRASS' in options['driver']:
+                grass.warning(_("The proxy will be ignored by the choosen GRASS driver. It is only used with the GDAL driver."))
+
         options['region'] = GetRegionParams(options['region'])
         fetched_map = wms.GetMap(options, flags)
 

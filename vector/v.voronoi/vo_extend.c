@@ -48,7 +48,7 @@ int extend_line(double s, double n, double w, double e,
 	}
 
 	/* south */
-	nx = (c - b * s) / a;
+	nx = (c - b * (s - ycenter)) / a + xcenter;
 	if (Vect_point_in_box(nx, s, 0.0, &Box) &&
 	    ((nx > x && knownPointAtLeft) || (nx <= x && !knownPointAtLeft)))
 	{
@@ -58,7 +58,7 @@ int extend_line(double s, double n, double w, double e,
 	}
 
 	/* north */
-	nx = (c - b * n) / a;
+	nx = (c - b * (n - ycenter)) / a + xcenter;
 	if (Vect_point_in_box(nx, n, 0.0, &Box) &&
 	    ((nx > x && knownPointAtLeft) || (nx <= x && !knownPointAtLeft)))
 	{
@@ -69,7 +69,7 @@ int extend_line(double s, double n, double w, double e,
 
 	if (knownPointAtLeft) {
 	    /* east */
-	    ny = (c - a * e) / b;
+	    ny = (c - a * (e - xcenter)) / b + ycenter;
 	    if (Vect_point_in_box(e, ny, 0.0, &Box)) {
 		*c_x = e;
 		*c_y = ny;
@@ -78,7 +78,7 @@ int extend_line(double s, double n, double w, double e,
 	}
 	else {
 	    /* west */
-	    ny = (c - a * w) / b;
+	    ny = (c - a * (w - xcenter)) / b + ycenter;
 	    if (Vect_point_in_box(w, ny, 0.0, &Box)) {
 		*c_x = w;
 		*c_y = ny;

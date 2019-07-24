@@ -32,7 +32,7 @@ import grass.script as grass
 from grass.exceptions import CalledModuleError
 
 
-class WMSBase:
+class WMSBase(object):
 
     def __init__(self):
         # these variables are information for destructor
@@ -127,7 +127,7 @@ class WMSBase:
         if 'epsg' in target_crs.keys():
             self.target_epsg = target_crs['epsg']
             if self.source_epsg != self.target_epsg:
-                grass.warning(_("SRS differences: WMS source EPSG %s != location EPSG %s (use srs=%s to adjust)") % 
+                grass.warning(_("SRS differences: WMS source EPSG %s != location EPSG %s (use srs=%s to adjust)") %
                               (self.source_epsg, self.target_epsg, self.target_epsg))
 
         self.proj_srs = grass.read_command('g.proj',
@@ -382,7 +382,7 @@ class WMSBase:
         if self.source_epsg is not None and self.target_epsg is not None \
             and self.source_epsg == self.target_epsg:
             do_reproject = False
-        # TODO: correctly compare source and target crs 
+        # TODO: correctly compare source and target crs
         if do_reproject == True and self.proj_srs == self.proj_location:
             do_reproject = False
         if do_reproject:

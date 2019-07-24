@@ -439,7 +439,7 @@ class DisplayAttributesDialog(wx.Dialog):
         if fid > 0:
             self.fid = fid
         elif len(self.cats.keys()) > 0:
-            self.fid = self.cats.keys()[0]
+            self.fid = list(self.cats.keys())[0]
         else:
             self.fid = -1
 
@@ -530,7 +530,7 @@ class DisplayAttributesDialog(wx.Dialog):
                     ctype = columns[name]['ctype']
 
                     if columns[name]['values'][idx] is not None:
-                        if columns[name]['ctype'] != types.StringType:
+                        if not isinstance(columns[name]['ctype'], six.string_types):
                             value = str(columns[name]['values'][idx])
                         else:
                             value = columns[name]['values'][idx]

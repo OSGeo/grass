@@ -35,7 +35,7 @@ def load_tests(loader, tests, ignore):
     tests.addTests(doctest.DocTestSuite(grid.grid))
     tests.addTests(doctest.DocTestSuite(grid.patch))
     tests.addTests(doctest.DocTestSuite(grid.split))
-    tests.addTests(doctest.DocTestSuite(shortcuts))
+#    tests.addTests(doctest.DocTestSuite(shortcuts))
     return tests
 
 

@@ -3,6 +3,7 @@
 
 set -e
 
+export CC="ccache $CC"
 ./configure --host=x86_64-linux-gnu \
             --build=x86_64-linux-gnu \
             --prefix=/usr/lib \

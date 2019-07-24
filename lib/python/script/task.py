@@ -448,14 +448,12 @@ def convert_xml_to_utf8(xml_text):
     pattern = re.compile(b'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
     m = re.match(pattern, xml_text)
     if m is None:
-        return xml_text
+        return xml_text.encode("utf-8") if xml_text else None
     #
     enc = m.groups()[0]
-    # for Python 3
-    enc_decoded = enc.decode('ascii')
 
     # modify: change the encoding to "utf-8", for correct parsing
-    xml_text_utf8 = xml_text.decode(enc_decoded).encode("utf-8")
+    xml_text_utf8 = xml_text.decode(enc.decode('ascii')).encode("utf-8")
     p = re.compile(b'encoding="' + enc + b'"', re.IGNORECASE)
     xml_text_utf8 = p.sub(b'encoding="utf-8"', xml_text_utf8)
 
@@ -472,7 +470,7 @@ def get_interface_description(cmd):
     :param cmd: command (name of GRASS module)
     """
     try:
-        p = Popen([encode(cmd), b'--interface-description'], stdout=PIPE,
+        p = Popen([cmd, '--interface-description'], stdout=PIPE,
                   stderr=PIPE)
         cmdout, cmderr = p.communicate()
 
@@ -484,7 +482,7 @@ def get_interface_description(cmd):
                 cmd = os.path.splitext(cmd)[0]
 
             if cmd == 'd.rast3d':
-                sys.path.insert(0, os.path.join(os.getenv('GISBASE'), 'etc',
+                sys.path.insert(0, os.path.join(os.getenv('GISBASE'),
                                                 'gui', 'scripts'))
 
             p = Popen([sys.executable, get_real_command(cmd),
@@ -497,11 +495,11 @@ def get_interface_description(cmd):
 
         if p.returncode != 0:
             raise ScriptError(_("Unable to fetch interface description for command '<{cmd}>'."
-                                "\n\nDetails: <{det}>".format(cmd=cmd, det=decode(cmderr))))
+                                "\n\nDetails: <{det}>").format(cmd=cmd, det=decode(cmderr)))
 
     except OSError as e:
         raise ScriptError(_("Unable to fetch interface description for command '<{cmd}>'."
-                            "\n\nDetails: <{det}>".format(cmd=cmd, det=e)))
+                            "\n\nDetails: <{det}>").format(cmd=cmd, det=e))
 
     desc = convert_xml_to_utf8(cmdout)
     desc = desc.replace(b'grass-interface.dtd',

@@ -38,7 +38,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 <i>Note: Missing entries below still need to be documented in Doxygen format.</i>
 
 <!-- original:
-  http://trac.osgeo.org/grass/browser/grass-web/trunk/images/grass7_arch.odp
+  https://github.com/OSGeo/grass/blob/master/doc/grass7_arch.odg
 -->
 \image html "grass7_arch.png" "GRASS 7 Architecture"
 
@@ -185,7 +185,7 @@ as follows:
 </dl>
 
 <!-- original: 
-  http://trac.osgeo.org/grass/browser/grass-web/trunk/images/loc_struct.odg
+  https://raw.githubusercontent.com/OSGeo/grass/master/doc/help_loc_structure.odg
 -->
 \image html "loc_struct.png" "Diagram of GRASS file structure"
 

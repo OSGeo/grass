@@ -12,6 +12,7 @@ static int write_skeleton(struct line_pnts *Points)
     int i, area1, area2;
     static struct line_pnts *APoints = NULL;
     static struct line_cats *Cats = NULL;
+    int ret;
 
     if (!APoints) {
 	APoints = Vect_new_line_struct();
@@ -22,20 +23,50 @@ static int write_skeleton(struct line_pnts *Points)
 	return 0;
     if ((area2 = Vect_find_area(&In, Points->x[1], Points->y[1])) == 0)
 	return 0;
-    if (area1 != area2)
-	return 0;
 
+    ret = 1;
     if (!Vect_get_area_centroid(&In, area1))
-	return 0;
-    Vect_get_area_points(&In, area1, APoints);
-    if (Vect_line_check_intersection(Points, APoints, 0))
-	return 0;
+	ret = 0;
 
-    for (i = 0; i < Vect_get_area_num_isles(&In, area1); i++) {
-	Vect_get_isle_points(&In, Vect_get_area_isle(&In, area1, i), APoints);
+    if (ret) {
+	Vect_get_area_points(&In, area1, APoints);
 	if (Vect_line_check_intersection(Points, APoints, 0))
-	    return 0;
+	    ret = 0;
     }
+
+    if (ret) {
+	for (i = 0; i < Vect_get_area_num_isles(&In, area1); i++) {
+	    Vect_get_isle_points(&In, Vect_get_area_isle(&In, area1, i), APoints);
+	    if (Vect_line_check_intersection(Points, APoints, 0)) {
+		ret = 0;
+		break;
+	    }
+	}
+    }
+
+
+    if (!ret && area1 != area2) {
+	ret = 1;
+	if (!Vect_get_area_centroid(&In, area2))
+	    ret = 0;
+	if (ret) {
+	    Vect_get_area_points(&In, area2, APoints);
+	    if (Vect_line_check_intersection(Points, APoints, 0))
+		ret = 0;
+	}
+
+	if (ret) {
+	    for (i = 0; i < Vect_get_area_num_isles(&In, area2); i++) {
+		Vect_get_isle_points(&In, Vect_get_area_isle(&In, area2, i), APoints);
+		if (Vect_line_check_intersection(Points, APoints, 0)) {
+		    ret = 0;
+		    break;
+		}
+	    }
+	}
+    }
+    if (!ret)
+	return 0;
 
     Vect_get_area_cats(&In, area1, Cats);
     Vect_write_line(&Out, GV_LINE, Points, Cats);
@@ -66,16 +97,18 @@ int write_ep(struct Edge *e)
     if (!Points) {
 	Points = Vect_new_line_struct();
 	Cats = Vect_new_cats_struct();
+	if (in_area)
+	    Vect_cat_set(Cats, 1, 1);
     }
 
     if (in_area && e->reg[le]->sitenbr == e->reg[re]->sitenbr)
 	return 0;
 
     if (e->ep[le] != NULL && e->ep[re] != NULL) {	/* both end defined */
-	x1 = e->ep[le]->coord.x;
-	y1 = e->ep[le]->coord.y;
-	x2 = e->ep[re]->coord.x;
-	y2 = e->ep[re]->coord.y;
+	x1 = e->ep[le]->coord.x + xcenter;
+	y1 = e->ep[le]->coord.y + ycenter;
+	x2 = e->ep[re]->coord.x + xcenter;
+	y2 = e->ep[re]->coord.y + ycenter;
 
 	if (!Vect_point_in_box(x1, y1, 0.0, &Box) ||
 	    !Vect_point_in_box(x2, y2, 0.0, &Box)) {
@@ -98,19 +131,19 @@ int write_ep(struct Edge *e)
 	int knownPointAtLeft = -1;
 
 	if (e->ep[le] != NULL) {
-	    x1 = e->ep[le]->coord.x;
-	    y1 = e->ep[le]->coord.y;
+	    x1 = e->ep[le]->coord.x + xcenter;
+	    y1 = e->ep[le]->coord.y + ycenter;
 	    knownPointAtLeft = 1;
 	}
 	else if (e->ep[re] != NULL) {
-	    x1 = e->ep[re]->coord.x;
-	    y1 = e->ep[re]->coord.y;
+	    x1 = e->ep[re]->coord.x + xcenter;
+	    y1 = e->ep[re]->coord.y + ycenter;
 	    knownPointAtLeft = 0;
 	}
 
 	if (knownPointAtLeft == -1) {
-	    x2 = (e->reg[le]->coord.x + e->reg[re]->coord.x) / 2.0;
-	    y2 = (e->reg[le]->coord.y + e->reg[re]->coord.y) / 2.0;
+	    x2 = (e->reg[le]->coord.x + e->reg[re]->coord.x) / 2.0 + xcenter;
+	    y2 = (e->reg[le]->coord.y + e->reg[re]->coord.y) / 2.0 + ycenter;
 	    knownPointAtLeft = 0;
 	    if (!extend_line(Box.S, Box.N, Box.W, Box.E,
 			     e->a, e->b, e->c, x2, y2, &x1, &y1,

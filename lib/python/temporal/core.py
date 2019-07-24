@@ -1233,7 +1233,7 @@ class DBConnection(object):
                         # objects too
                         statement = "%s\'%s\'%s" % (statement[0:pos],
                                                     str(args[count]),
-                                                    str(statement[pos + 1:]))
+                                                    statement[pos + 1:])
                     count += 1
 
                 return statement
@@ -1319,6 +1319,7 @@ class DBConnection(object):
 
            :param statement: The executable SQL statement or SQL script
         """
+        print (statement)
         connected = False
         if not self.connected:
             self.connect()

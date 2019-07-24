@@ -1245,7 +1245,7 @@ class GMFrame(wx.Frame):
                                 "Python: %s\n"
                                 "wxPython: %s\n"
                                 "%s: %s%s\n" % (_("GRASS version"), vInfo.get('version', _('unknown version')),
-                                                _("GRASS SVN revision"), vInfo.get(
+                                                _("Code revision"), vInfo.get(
                                                     'revision', '?'),
                                                 _("Build date"), vInfo.get(
                                                     'build_date', '?'),

@@ -35,6 +35,20 @@ class NullDevice():
 
 class WMSGdalDrv(WMSBase):
 
+    def __init__(self):
+        super(WMSGdalDrv, self).__init__()
+        self.proxy = None
+        self.proxy_user_pw = None
+
+    def setProxy(self, proxy, proxy_user_pw=None):
+        """ Set the HTTP proxy and its user and password
+
+        @input proxy HTTP proxy with [IP address]:[port]
+        @input proxy_user_pw with [user name]:[password]
+        """
+        self.proxy = proxy
+        self.proxy_user_pw = proxy_user_pw
+
     def _createXML(self):
         """!Create XML for GDAL WMS driver
 
@@ -127,6 +141,11 @@ class WMSGdalDrv(WMSBase):
         temp_map = self._tempfile()
 
         xml_file = self._createXML()
+
+        if self.proxy:
+            gdal.SetConfigOption('GDAL_HTTP_PROXY', str(self.proxy))
+        if self.proxy_user_pw:
+            gdal.SetConfigOption('GDAL_HTTP_PROXYUSERPWD', str(self.proxy_user_pw))
         wms_dataset = gdal.Open(xml_file, gdal.GA_ReadOnly)
         grass.try_remove(xml_file)
         if wms_dataset is None:

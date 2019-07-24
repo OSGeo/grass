@@ -15,11 +15,10 @@ COPYRIGHT: (C) 2015 Vaclav Petras, and by the GRASS Development Team
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-from grass.script.utils import decode
 
 import os
 
-FULL_TOOLBOXES_OUTPUT = """\
+FULL_TOOLBOXES_OUTPUT = u"""\
 Hydrology (HY)
 * r.stream.basins
 * r.stream.channel
@@ -45,7 +44,7 @@ class TestToolboxesMetadata(TestCase):
         """List toolboxes and their content"""
         module = SimpleModule('g.extension', flags='lt', url=self.url)
         self.assertModule(module)
-        stdout = decode(module.outputs.stdout)
+        stdout = module.outputs.stdout
         self.assertMultiLineEqual(stdout, FULL_TOOLBOXES_OUTPUT)
 
 

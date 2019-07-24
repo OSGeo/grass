@@ -67,7 +67,7 @@ def unify_units(dic):
 
     Example of British English spelling replaced by US English spelling::
 
-        >>> unify_units({'units': ['metres'], 'unit': ['metre']})
+        >>> unify_units({'units': ['metres'], 'unit': ['metre']})  # doctest: +SKIP
         {'units': ['meters'], 'unit': ['meter']}
 
     :param dic: The dictionary containing information about units

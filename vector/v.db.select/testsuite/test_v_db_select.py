@@ -14,7 +14,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
-out_group = """CZab
+out_group = u"""CZab
 CZam
 CZba
 CZbb
@@ -153,12 +153,12 @@ Zwe
 bz
 """
 
-out_where = """1076|366545504|324050.96875|1077|1076|Zwe|366545512.376|324050.97237
+out_where = u"""1076|366545504|324050.96875|1077|1076|Zwe|366545512.376|324050.97237
 1123|1288.555298|254.393951|1124|1123|Zwe|1288.546525|254.393964
 1290|63600420|109186.835938|1291|1290|Zwe|63600422.4739|109186.832069
 """
 
-out_sep = """1076,366545504,324050.96875,1077,1076,Zwe,366545512.376,324050.97237
+out_sep = u"""1076,366545504,324050.96875,1077,1076,Zwe,366545512.376,324050.97237
 1123,1288.555298,254.393951,1124,1123,Zwe,1288.546525,254.393964
 1290,63600420,109186.835938,1291,1290,Zwe,63600422.4739,109186.832069
 """
@@ -188,7 +188,7 @@ class SelectTest(TestCase):
         sel = SimpleModule('v.db.select', flags='c', map=self.invect,
                            columns=self.col, group=self.col)
         sel.run()
-        self.assertLooksLike(reference=out_group, actual=sel.outputs.stdout.encode('utf8'))
+        self.assertLooksLike(reference=out_group, actual=sel.outputs.stdout)
 
     def testWhere(self):
         """Testing v.db.select with where option"""
@@ -196,7 +196,7 @@ class SelectTest(TestCase):
                            where="{col}='{val}'".format(col=self.col,
                                                         val=self.val))
         sel.run()
-        self.assertLooksLike(reference=out_where, actual=sel.outputs.stdout.encode('utf8'))
+        self.assertLooksLike(reference=out_where, actual=sel.outputs.stdout)
 
     def testSeparator(self):
         sel = SimpleModule('v.db.select', flags='c', map=self.invect,
@@ -204,7 +204,7 @@ class SelectTest(TestCase):
                                                         val=self.val),
                            separator='comma')
         sel.run()
-        self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout.encode('utf8'))
+        self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout)
 
     def testComma(self):
         sel = SimpleModule('v.db.select', flags='c', map=self.invect,
@@ -212,7 +212,7 @@ class SelectTest(TestCase):
                                                         val=self.val),
                            separator=',')
         sel.run()
-        self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout.encode('utf8'))
+        self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout)
 
 if __name__ == '__main__':
     test()

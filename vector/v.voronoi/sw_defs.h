@@ -57,6 +57,7 @@ extern struct Site *bottomsite;
 extern int nedges;
 extern struct Freelist efl;
 extern double xmin, xmax, ymin, ymax, deltax, deltay;
+extern double xcenter, ycenter;
 extern struct Freelist hfl;
 extern struct Halfedge *ELleftend, *ELrightend;
 extern int ELhashsize;
@@ -111,6 +112,7 @@ int scomp(const void *, const void *);
 struct Site *nextone(void);
 int readsites(void);
 int readbounds(void);
+int copybounds(void);
 
 /* sw_memory.c */
 int freeinit(struct Freelist *, int);

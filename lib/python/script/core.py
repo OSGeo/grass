@@ -261,6 +261,12 @@ def get_real_command(cmd):
         # so, lets remove extension
         if os.path.splitext(cmd)[1] == '.py':
             cmd = cmd[:-3]
+        # PATHEXT is necessary to check on Windows (force lowercase)
+        pathext = list(map(lambda x: x.lower(),
+                           os.environ['PATHEXT'].split(os.pathsep)))
+        if '.py' not in pathext:
+            # we assume that PATHEXT contains always '.py'
+            os.environ['PATHEXT'] = '.py;' + os.environ['PATHEXT']
         full_path = shutil_which(cmd + '.py')
         if full_path:
             return full_path
@@ -1463,8 +1469,7 @@ def find_program(pgm, *args):
     nuldev = open(os.devnull, 'w+')
     try:
         # TODO: the doc or impl is not correct, any return code is accepted
-        cmd = list(map(lambda x: encode(x), [pgm] + list(args)))
-        call(cmd, stdin = nuldev, stdout = nuldev, stderr = nuldev)
+        call([pgm] + list(args), stdin = nuldev, stdout = nuldev, stderr = nuldev)
         found = True
     except:
         found = False

@@ -14,8 +14,6 @@ class TestTextAssertions(TestCase):
     def test_str(self):
         error = ScriptError('error')
         self.assertEqual('error', str(error))
-        error = ScriptError(12)
-        self.assertEqual('12', str(error))
 
 
 if __name__ == '__main__':

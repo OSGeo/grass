@@ -323,7 +323,7 @@ class Region(object):
 
             >>> reg = Region()
             >>> reg.keys()                               # doctest: +ELLIPSIS
-            [u'proj', u'zone', ..., u'cols', u'cells']
+            ['proj', 'zone', ..., 'cols', 'cells']
 
         ..
         """

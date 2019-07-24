@@ -132,7 +132,7 @@ int export_lines_single(struct Map_info *In, int field, int otype, int donocat, 
             mk_att(cat, Fi, driver, ncol, colctype, colname, doatt, nocat,
                    Ogr_feature, n_noatt);
             if (OGR_L_CreateFeature(Ogr_layer, Ogr_feature) != OGRERR_NONE ) {
-		G_warning(_("Failed to create OGR feature"));
+		G_fatal_error(_("Failed to create OGR feature"));
 	    }
 	    else
 		n_exported++;
@@ -228,7 +228,7 @@ int export_lines_multi(struct Map_info *In, int field, int otype, int donocat, i
             mk_att(cat, Fi, driver, ncol, colctype, colname, doatt, nocat,
                    Ogr_feature, n_noatt);
             if (OGR_L_CreateFeature(Ogr_layer, Ogr_feature) != OGRERR_NONE ) {
-		G_warning(_("Failed to create OGR feature"));
+		G_fatal_error(_("Failed to create OGR feature"));
 	    }
 	    else
 		n_exported++;
@@ -277,7 +277,7 @@ int export_lines_multi(struct Map_info *In, int field, int otype, int donocat, i
         mk_att(cat, Fi, driver, ncol, colctype, colname, doatt, nocat,
                Ogr_feature, n_noatt);
 	if (OGR_L_CreateFeature(Ogr_layer, Ogr_feature) != OGRERR_NONE ) {
-	    G_warning(_("Failed to create OGR feature"));
+	    G_fatal_error(_("Failed to create OGR feature"));
 	}
 	else
 	    n_exported++;

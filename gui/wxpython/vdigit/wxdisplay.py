@@ -22,10 +22,13 @@ from __future__ import print_function
 import locale
 import six
 
+import os
+import sys
 import wx
 
 from core.debug import Debug
 from core.settings import UserSettings
+from core.gcmd import DecodeString
 from gui_core.wrap import Rect
 
 try:
@@ -48,6 +51,8 @@ def print_error(msg, type):
     """Redirect stderr"""
     global log
     if log:
+        if sys.version_info.major >= 3:
+            msg = DecodeString(msg.data)
         log.write(msg + os.linesep)
     else:
         print(msg)
@@ -346,7 +351,9 @@ class DisplayDriver:
                             point_beg.y,
                             0,
                             0))
-                    pdc.SetIdBounds(dcId, wx.RectPP(point_beg, point_end))
+                    pdc.SetIdBounds(dcId, Rect(point_beg.x, point_beg.y,
+                                               point_end.x - point_beg.x,
+                                               point_end.y - point_beg.y))
                     pdc.DrawLine(point_beg.x, point_beg.y,
                                  point_end.x, point_end.y)
                     i += 1

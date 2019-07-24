@@ -2,6 +2,7 @@
 #         Rainer M. Krug, Rainer@krugs.de (osx)
 
 language: c
+cache: ccache
 
 matrix:
    include:
@@ -9,10 +10,15 @@ matrix:
         dist: xenial
         compiler: gcc
         sudo: required
+        env:
+            CC=gcc
+
       - os: linux
         dist: xenial
         compiler: clang
         sudo: required
+        env:
+            CC=clang
 
 env:
   global:
