@@ -832,6 +832,7 @@ class DataCatalogTree(LocationMapTree):
                             self._giface.GetLayerList().DeleteLayer(layer)
 
                 gscript.try_remove(gisrc)
+            self.UnselectAll()
             self.showNotification.emit(message=_("g.remove completed"))
 
     def OnDisplayLayer(self, event):
@@ -840,28 +841,23 @@ class DataCatalogTree(LocationMapTree):
 
     def DisplayLayer(self):
         """Display selected layer in current graphics view"""
-        layerName = []
-        if self.selected_location[0].label == gisenv(
-        )['LOCATION_NAME'] and self.selected_mapset[0]:
-            string = self.selected_layer[0].label + '@' + self.selected_mapset[0].label
-            layerName.append(string)
-            label = _("Displaying {name}...").format(name=string)
-            self.showNotification.emit(message=label)
-            self._giface.lmgr.AddMaps(
-                layerName, self.selected_type[0].label, True)
+        all_names = []
+        names = {'raster': [], 'vector': [], 'raster3d': []}
+        for i in range(len(self.selected_layer)):
+            name = self.selected_layer[i].label + '@' + self.selected_mapset[i].label
+            names[self.selected_type[i].label].append(name)
+            all_names.append(name)
+        #if self.selected_location[0].label == gisenv()['LOCATION_NAME'] and self.selected_mapset[0]:
+        for ltype in names:
+            if names[ltype]:
+                self._giface.lmgr.AddMaps(list(reversed(names[ltype])), ltype, True)
 
-            if len(self._giface.GetLayerList()) == 1:
-                # zoom to map if there is only one map layer
-                self._giface.GetMapWindow().ZoomToMap()
+        if len(self._giface.GetLayerList()) == 1:
+            # zoom to map if there is only one map layer
+            self._giface.GetMapWindow().ZoomToMap()
 
-            label = "d." + self.selected_type[0].label[:4] + " --q map=" + string + \
-                    _(" -- completed. Go to Layers tab for further operations.")
-            self.showNotification.emit(message=label)
-            Debug.msg(1, "LAYER " + self.selected_layer[0].label + " DISPLAYED")
-        else:
-            GError(
-                _("Failed to display layer: not in current mapset or invalid layer"),
-                parent=self)
+        Debug.msg(1, "Displayed layer(s): " + str(all_names))
+
 
     def OnBeginDrag(self, node, event):
         """Just copy necessary data"""
@@ -1027,11 +1023,14 @@ class DataCatalogTree(LocationMapTree):
 
         menu.AppendSeparator()
 
-        if not isinstance(self._giface, StandaloneGrassInterface) and \
-           self.selected_location[0].label == genv['LOCATION_NAME']:
-            item = wx.MenuItem(menu, wx.NewId(), _("&Display layer"))
-            menu.AppendItem(item)
-            self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
+        if not isinstance(self._giface, StandaloneGrassInterface):
+            if all([each.label == genv['LOCATION_NAME'] for each in self.selected_location]):
+                if len(self.selected_layer) > 1:
+                    item = wx.MenuItem(menu, wx.NewId(), _("&Display layers"))
+                else:
+                    item = wx.MenuItem(menu, wx.NewId(), _("&Display layer"))
+                menu.AppendItem(item)
+                self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
 
         item = wx.MenuItem(menu, wx.NewId(), _("Show &metadata"))
         menu.AppendItem(item)
