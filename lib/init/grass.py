@@ -1810,16 +1810,20 @@ def grep(pattern, lines):
 
 def print_params():
     """Write compile flags and other configuration to stderr"""
-    plat = gpath('include', 'Make', 'Platform.make')
-    if not os.path.exists(plat):
-        fatal(_("Please install the GRASS GIS development package"))
-    fileplat = open(plat)
-    linesplat = fileplat.readlines()
-    fileplat.close()
-
     params = sys.argv[2:]
     if not params:
         params = ['arch', 'build', 'compiler', 'path', 'revision', 'version']
+
+    # check if we are dealing with parameters which require dev files
+    dev_params = ["arch", "compiler", "build", "revision"]
+    if any([param in dev_params for param in params]):
+        plat = gpath('include', 'Make', 'Platform.make')
+        if not os.path.exists(plat):
+            fatal(_("Please install the GRASS GIS development package"))
+        fileplat = open(plat)
+        # this is in fact require only for some, but prepare it anyway
+        linesplat = fileplat.readlines()
+        fileplat.close()
 
     for arg in params:
         if arg == 'path':
