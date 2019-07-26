@@ -5,7 +5,7 @@
 # MODULE:       i.band
 # AUTHOR(S):    Martin Landa <landa.martin gmail com>
 #
-# PURPOSE:      Manages band reference information to a single raster map or
+# PURPOSE:      Assigns band reference information to a single raster map or
 #               a list of raster maps
 #
 # COPYRIGHT:    (C) 2019 by mundialis GmbH & Co.KG, and the GRASS Development Team
@@ -17,7 +17,7 @@
 #############################################################################
 
 #%module
-#% description: Manages band reference information to a single raster map or a list of raster maps.
+#% description: Assigns band reference information to a single raster map or to a list of raster maps.
 #% keyword: general
 #% keyword: imagery
 #% keyword: image collections
@@ -29,7 +29,7 @@
 #% key: band
 #% type: string
 #% key_desc: name
-#% description: Name of band reference identifier (example: S2A_1)
+#% description: Name of band reference identifier (example: S2A_1,S2A_2,...)
 #% required: no
 #% multiple: yes
 #%end
@@ -39,7 +39,7 @@
 #%end
 #%flag
 #% key: p
-#% description: Print detailed band reference information assigned to a raster map(s)
+#% description: Print detailed band reference information assigned to a raster map(s) and exit
 #%end
 #%rules
 #% required:-p,-r,band
