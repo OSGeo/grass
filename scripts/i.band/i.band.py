@@ -95,8 +95,6 @@ def manage_map_band_reference(name, band_ref):
     return 0
 
 def main():
-    from grass.bands import BandReader
-
     maps = options['map'].split(',')
     if not flags['r']:
         bands = options['band'].split(',')
@@ -106,8 +104,7 @@ def main():
         bands = [None]
 
     if flags['p']:
-        gs.utils.set_path('g.bands')
-        from reader import BandReader
+        from grass.bands import BandReader
         band_reader = BandReader()
     else:
         band_reader = None
