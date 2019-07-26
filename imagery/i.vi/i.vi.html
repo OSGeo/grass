@@ -217,15 +217,28 @@ NDVI = (NIR - Red) / (NIR + Red)
 </pre></div>
 
 <p>
-<b>NDWI: Normalized Difference Water Index</b>
+<b>NDWI: Normalized Difference Water Index</b> (after McFeeters, 1996)
 
-(after McFeeters, 1996)
+<p>
+This index is suitable to detect water bodies.
 
 <div class="code"><pre>
 ndwi( greenchan, nirchan )
 
 NDWI = (green - NIR) / (green + NIR)
 </pre></div>
+
+<p>
+The water content of leaves can be estimated with another NDWI (after 
+Gao, 1996):
+
+<div class="code"><pre>
+ndwi( greenchan, nirchan )
+
+NDWI = (NIR - SWIR) / (NIR + SWIR)
+</pre></div>
+
+This index is important for monitoring vegetation health (not implemented).
 
 <p>
 <b>PVI: Perpendicular Vegetation Index</b>

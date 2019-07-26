@@ -71,6 +71,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "python-numpy",
       "python-ply",
       "python-pil",
+      "python-six",
       "libnetcdf-dev",
       "netcdf-bin",
       "libblas-dev",
