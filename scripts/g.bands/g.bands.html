@@ -1,17 +1,48 @@
 <h2>DESCRIPTION</h2>
 
-Prints band references information.
+Prints band references information related to image collections.
 
 <p>
+Band reference (a shortcut or fully defined band reference identifier)
+is specified by <b>band</b> option. Extended metadata is printed only
+when <b>-e</b> flag is given.
+
+<h3>Image collections</h3>
+
+Image collections are the common data type to reference time series of
+multi band data. It is used in many frameworks to address multi
+spectral satellite images series. GRASS supports a multi-band raster
+layer approach rudimentarily with the group concept
+(<em><a href="i.group.html">i.group</a></em>). A new band reference
+concept is designed in order to support image collections in GRASS GIS.
+
+<h2>NOTES</h2>
+
 Band reference can be assigned to a raster map
 by <em><a href="i.band.html">i.band</a></em>.
 
+<p>
+Band reference concept is supported by temporal GRASS modules,
+see <em><a href="t.register.html#support-for-band-references">t.register</a></em>,
+<em><a href="t.rast.list.html#filtering-the-result-by-band-references">t.rast.list</a></em> and
+<em><a href="t.info.html#space-time-dataset-with-band-references-assigned">t.info</a></em> modules for examples.
+
 <h2>EXAMPLES</h2>
 
-<h3>Print all band references</h3>
+<h3>Print all available band references</h3>
 
 <div class="code"><pre>
 g.bands
+
+S2A_1
+S2A_2
+...
+S2B_1
+S2B_2
+...
+Ls7_1
+Ls7_2
+...
 </pre></div>
 
 <h3>Filter band references by a shortcut</h3>
@@ -21,22 +52,58 @@ printed.
 
 <div class="code"><pre>
 g.bands band=S2A
+
+S2A_1
+...
+S2A_12
 </pre></div>
 
-<h3>Filter references by a band identifier</h3>
-
-Only first band related to Sentinel-2A satellite will be printed.
+Similarly for both Sentinel-2 satellites.
 
 <div class="code"><pre>
-g.bands band=S2A_1
+g.bands band=S2
+
+S2A_1
+...
+S2A_12
+S2B_1
+...
+S2B_12
+</pre></div>
+
+<h3>Print extended metadata for specified band identifier</h3>
+
+Extended metadata related to the first band of Sentinel-2A satellite
+will be printed.
+
+<div class="code"><pre>
+g.bands -e band=S2A_1
+
+description: The Sentinel-2 A bands
+shortcut: S2A
+instruments: optical and infrared
+    band: 1
+        central wavelength (nm): 442.7
+        bandwidth (nm): 21
 </pre></div>
 
 <h2>KNOWN ISSUES</h2>
 
-<em>g.bands</em> has very limited functionality. Currenlly only
-system-defined band references can be printed out. The module will be
-designed in order to manage (add, modify, delete) user-defined band
+<em>g.bands</em> has currently <b>very limited functionality</b>. Only
+system-defined band references are supported. The final implementation
+will support managing (add, modify, delete) user-defined band
 references.
+
+<p>
+Only very limited number of band references is currently
+implemented. Namely Sentine2-A, Sentinel2-B and Landsat7
+sattelites. This will be improved in the near future.
+
+<h2>REFERENCES</h2>
+
+<ul>
+  <li><a href="https://developers.google.com/earth-engine/tutorial_api_04">Google Earth Engine API</a></li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
