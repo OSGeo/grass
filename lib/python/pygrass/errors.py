@@ -5,7 +5,6 @@ from grass.exceptions import (FlagError, ParameterError, DBError,
                               GrassError, OpenError)
 
 from grass.pygrass.messages import get_msgr
-from grass.pygrass.utils import decode
 import grass.lib.gis as libgis
 
 
@@ -36,7 +35,7 @@ def must_be_in_current_mapset(method):
 
     @wraps(method)
     def wrapper(self, *args, **kargs):
-        if self.mapset == decode(libgis.G_mapset()):
+        if self.mapset == libgis.G_mapset().decode():
             return method(self, *args, **kargs)
         else:
             raise GrassError(_("Map <{}> not found in current mapset").format(
