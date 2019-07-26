@@ -270,11 +270,12 @@ class RasterAbstractBase(object):
 
         ..
         """
-        if mapset:
-            self.mapset = mapset
-        else:
+        self.mapset = mapset
+        if not mapset:
             # note that @must_be_in_current_mapset requires mapset to be set
-            self.mapset = utils.decode(libgis.G_find_raster(name, mapset))
+            mapset = libgis.G_find_raster(name, mapset)
+            if mapset is not None:
+                self.mapset = utils.decode(mapset)
 
         self._name = name
         # Private attribute `_fd` that return the file descriptor of the map
