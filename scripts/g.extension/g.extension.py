@@ -939,7 +939,7 @@ def install_extension_win(name):
                "grass-%(major)s.%(minor)s.%(patch)s" % \
                {'platform': platform,
                 'major': version[0], 'minor': version[1],
-                'patch': version[2]}
+                'patch': 'svn'}
 
     # resolve ZIP URL
     source, url = resolve_source_code(url='{0}/{1}.zip'.format(base_url, name))
