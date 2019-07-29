@@ -76,7 +76,6 @@ ENV PACKAGES="\
       py3-pillow \
       py3-six \
       postgresql \
-      proj4 \
       sqlite \
       sqlite-libs \
       tiff \
@@ -102,7 +101,6 @@ ENV PACKAGES="\
       openjpeg-dev \
       openblas-dev \
       postgresql-dev \
-      proj4-dev \
       sqlite-dev \
       tar \
       tiff-dev \
@@ -146,7 +144,7 @@ RUN echo "Install main packages";\
     #
     # install the latest projection library for GRASS GIS
     #
-    echo "Install PROJ4";\
+    echo "Install PROJ-$PROJ_VERSION";\
     echo "  => Dowload proj-$PROJ_VERSION";\
     wget http://download.osgeo.org/proj/proj-$PROJ_VERSION.tar.gz && \
     tar xzvf proj-$PROJ_VERSION.tar.gz && \
@@ -168,11 +166,11 @@ RUN echo "Install main packages";\
     #
     echo "Install GRASS GIS";\
     echo "  => Dowload grass-$GRASS_VERSION";\
-    wget https://grass.osgeo.org/grass`echo $GRASS_VERSION | tr -d .`/source/snapshot/grass-$GRASS_VERSION.svn_src_snapshot_latest.tar.gz && \
+    wget https://grass.osgeo.org/grass`echo $GRASS_VERSION | tr -d .`/source/snapshot/grass-$GRASS_VERSION.git_src_snapshot_latest.tar.gz && \
     # unpack source code package and remove tarball archive:
     mkdir /src/grass_build && \
-    tar xfz grass-$GRASS_VERSION.svn_src_snapshot_latest.tar.gz --strip=1 -C /src/grass_build && \
-    rm -f grass-$GRASS_VERSION.svn_src_snapshot_latest.tar.gz; \
+    tar xfz grass-$GRASS_VERSION.git_src_snapshot_latest.tar.gz --strip=1 -C /src/grass_build && \
+    rm -f grass-$GRASS_VERSION.git_src_snapshot_latest.tar.gz; \
     #
     # Configure compile and install GRASS GIS
     #
