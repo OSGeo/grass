@@ -8,7 +8,7 @@ $(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC) $(IMGDST) | $(HTMLDIR)
         $(PYTHON) $(GISBASE)/tools/mkhtml.py $* > $@
 
 $(MANDIR)/%.$(MANSECT): $(HTMLDIR)/%.html
-	$(HTML2MAN) $< $@
+	$(HTML2MAN) "$<" "$@"
 
 %.tmp.html: $(HTMLSRC)
 	if [ "$(HTMLSRC)" != "" ] ; then $(call htmldesc,$<,$@) ; fi
