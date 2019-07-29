@@ -242,6 +242,6 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     LC_ALL="en_US.UTF-8"
 
 # debug
-RUN $GRASSBIN --config revision version
+RUN $GRASSBIN --config svn_revision version
 
 CMD [$GRASSBIN, "--version"]
