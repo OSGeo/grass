@@ -343,7 +343,7 @@ if sys.platform == 'win32':
 
 if index_name:
     sys.stdout.write(sourcecode.substitute(URL_SOURCE=url_source, PGM=pgm,
-                                           URL_LOG=url_source.replace('browser',  'log')))
+                                           URL_LOG=url_source.replace('grass/tree',  'grass/commits')))
     sys.stdout.write(footer_index.substitute(INDEXNAME=index_name,
                                              INDEXNAMECAP=index_name_cap,
                                              YEAR=year, GRASS_VERSION=grass_version))
