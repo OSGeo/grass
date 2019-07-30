@@ -1319,7 +1319,6 @@ class DBConnection(object):
 
            :param statement: The executable SQL statement or SQL script
         """
-        print (statement)
         connected = False
         if not self.connected:
             self.connect()
