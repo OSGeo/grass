@@ -65,6 +65,7 @@ ENV PACKAGES="\
       gettext \
       geos \
       gnutls \
+      gtk+3.0 \
       libbz2 \
       libjpeg-turbo \
       libpng \
@@ -97,6 +98,7 @@ ENV PACKAGES="\
       gdal-dev \
       geos-dev \
       gnutls-dev \
+      gtk+3.0-dev \
       libc6-compat \
       libjpeg-turbo-dev \
       libpng-dev \
