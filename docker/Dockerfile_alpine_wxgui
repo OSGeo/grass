@@ -150,7 +150,7 @@ RUN echo "Install main packages";\
     # echo LANG="en_US.UTF-8" > /etc/default/locale;
     #
     # compile wxPython, unfortunately there is no Alpine package (yet) - compilation is slow, though!
-    $PYTHONBIN -m pip install -U wxPython ;\
+    $PYTHONBIN -m pip install -U pathlib2 wxPython && \
     #
     # install the latest projection library for GRASS GIS
     #
