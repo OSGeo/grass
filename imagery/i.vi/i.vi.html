@@ -353,10 +353,12 @@ r.univar -e gemi
 
 <h3>Calculation of GVI</h3>
 
-The calculation of GVI from the reflectance values is done as follows:
+The calculation of GVI (Green Vegetation Index - Tasseled Cap) from the
+reflectance values is done as follows:
 
 <div class="code"><pre>
 g.region raster=band.3 -p
+# assuming Landsat-7
 i.vi blue=band.1 green=band.2 red=band.3 nir=band.4 band5=band.5 band7=band.7 viname=gvi output=gvi
 r.univar -e gvi
 </pre></div>
