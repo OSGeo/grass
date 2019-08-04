@@ -99,7 +99,7 @@ def main():
     # TODO: create directory according to date and revision and create reports there
 
     # some predefined variables, name of the GRASS launch script + location/mapset
-    #grass7bin = 'C:\Program Files (x86)\GRASS GIS 7.2.svn\grass78svn.bat'
+    #grass7bin = 'C:\Program Files (x86)\GRASS GIS 7.8.git\grass78dev.bat'
     grass7bin = args.grassbin  # TODO: can be used if pressent
 
     ########### SOFTWARE
