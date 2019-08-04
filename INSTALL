@@ -40,11 +40,11 @@ Installation order:
 
 GRASS source code is currently distributed in 2 forms:
 
-1) Officially released source code (e.g. grass-7.7.0.tar.gz or later)
+1) Officially released source code (e.g. grass-7.8.0.tar.gz or later)
 
   The Full source code version contains all the GRASS source code
   required for compilation. It is distributed as one file (*.tar.gz
-  package) and the version is composed of 3 numbers, e.g. 7.2.0, 7.2.1
+  package) and the version is composed of 3 numbers, e.g. 7.8.0, 7.8.1
   etc.
 
 2) Snapshots of source code (generated from GitHub)
@@ -53,8 +53,8 @@ GRASS source code is currently distributed in 2 forms:
   repository (https://github.com/OSGeo/grass/) or as a auto-generated snapshot
   (*.tar.gz package) of the GitHub repository. The snapshot name
   contains the date when the snapshot was created (checked out from
-  the GitHub repository), e.g. grass-7.7.git_src_snapshot_2019_06_11.tar.gz
-  from https://grass.osgeo.org/grass77/source/snapshot/
+  the GitHub repository), e.g. grass-7.8.git_src_snapshot_2019_07_11.tar.gz
+  from https://grass.osgeo.org/grass78/source/snapshot/
   Further instructions at https://trac.osgeo.org/grass/wiki/DownloadSource
 
 
@@ -151,16 +151,16 @@ See also CODE OPTIMIZATION below.
 
 After compilation, the resulting code is stored in the directory
     ./dist.$ARCH
-and the scripts (grass77, ...) in
+and the scripts (grass78, ...) in
     ./bin.$ARCH
 
 To run GRASS, simply start
-    ./bin.$ARCH/grass77
+    ./bin.$ARCH/grass78
 
 or run
 
     make install
-    grass77
+    grass78
 
 
 (E) INSTALLATION ON MACOSX

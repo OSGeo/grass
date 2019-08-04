@@ -28,4 +28,4 @@ if [ -z "$GRASS_PYTHON" ] ; then
 fi
 export GRASS_PYTHON
 
-exec "$GRASS_PYTHON" "@BINDIR@/grass77.py" "$@" &
+exec "$GRASS_PYTHON" "@BINDIR@/grass78.py" "$@" &
