@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 '''Preprocess a C source file using gcc and convert the result into
    a token stream
