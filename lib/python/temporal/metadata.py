@@ -1155,7 +1155,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
             return None
 
     def get_number_of_bands(self):
-        """Get the number of registred bands
+        """Get the number of registered bands
            :return: None if not found
         """
         if "number_of_bands" in self.D:
