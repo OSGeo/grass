@@ -1,7 +1,7 @@
 {
     "Landsat7": {
         "description": "The Landsat 7 bands",
-        "shortcut": "Ls7",
+        "shortcut": "L7",
         "instruments": "optical and infrared",
         "bands": {
             "1": {
