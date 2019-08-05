@@ -305,7 +305,7 @@ class RasterDataset(AbstractMapDataset):
 
     def read_band_reference_from_grass(self):
         """Read the band identifier of this map from the map metadata
-           in the grass file system based spatial database and
+           in the GRASS file system based spatial database and
            set the internal band identifier that should be insert/updated
            in the temporal database.
 
