@@ -326,7 +326,7 @@ class RasterDataset(AbstractMapDataset):
 
     def write_band_reference_to_grass(self):
         """Write the band identifier of this map into the map metadata in
-           the grass file system based spatial database.
+           the GRASS file system based spatial database.
 
            Internally the libgis API functions are used for writing
 
