@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # This is an example script how groundwater flow and solute transport are
 # computed within grass
 import sys

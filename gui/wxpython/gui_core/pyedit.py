@@ -48,7 +48,7 @@ from core.debug import Debug
 
 def script_template():
     """The most simple script which runs and gives something"""
-    return r"""#!/usr/bin/env python
+    return r"""#!/usr/bin/env python3
 
 import grass.script as gscript
 
@@ -75,7 +75,7 @@ def module_template():
     output = StringIO()
     # header
     output.write(
-        r"""#!/usr/bin/env python
+        r"""#!/usr/bin/env python3
 #
 #%s
 #
@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
 def script_example():
     """Example of a simple script"""
-    return r"""#!/usr/bin/env python
+    return r"""#!/usr/bin/env python3
 
 import grass.script as gscript
 
@@ -165,7 +165,7 @@ if __name__ == "__main__":
 
 def module_example():
     """Example of a GRASS module"""
-    return r"""#!/usr/bin/env python
+    return r"""#!/usr/bin/env python3
 
 #%module
 #% description: Adds the values of two rasters (A + B)
@@ -208,7 +208,7 @@ if __name__ == "__main__":
 
 def module_error_handling_example():
     """Example of a GRASS module"""
-    return r"""#!/usr/bin/env python
+    return r"""#!/usr/bin/env python3
 
 #%module
 #% description: Selects values from raster above value of mean plus standard deviation
