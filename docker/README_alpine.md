@@ -7,7 +7,7 @@ Download size of this image is only approximately 80 MB.
 Build the docker with:
 
 ```bash
-$ sudo docker build --build-arg GRASS_VERSION=7.7 \
+$ sudo docker build --build-arg GRASS_VERSION=7.9 \
                     --build-arg PYTHON_VERSION=3  \
                     --build-arg PROJ_VERSION=5.2.0 \
                     --build-arg PROJ_DATUMGRID_VERSION=1.8 \
