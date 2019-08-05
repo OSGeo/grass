@@ -16,7 +16,7 @@
 #############################################################################
 
 #%module
-#% description: Prints band reference information.
+#% description: Prints band reference information of multispectral data.
 #% keyword: general
 #% keyword: imagery
 #% keyword: image collections
