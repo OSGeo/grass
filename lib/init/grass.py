@@ -1594,7 +1594,7 @@ def show_banner():
 
 
 def say_hello():
-    """Write welcome to stderr including Subversion revision if in svn copy"""
+    """Write welcome to stderr including code revision if in git copy"""
     sys.stderr.write(_("Welcome to GRASS GIS %s") % GRASS_VERSION)
     if GRASS_VERSION.endswith('dev'):
         try:
