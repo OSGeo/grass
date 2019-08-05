@@ -10,22 +10,74 @@ when <b>-e</b> flag is given.
 <h3>Image collections</h3>
 
 Image collections are the common data type to reference time series of
-multi band data. It is used in many frameworks to address multi
-spectral satellite images series. GRASS supports a multi-band raster
-layer approach rudimentarily with the group concept
+multi band data. It is used in many frameworks
+(see <a href="https://developers.google.com/earth-engine/tutorial_api_04">Google
+Earth Engine API</a> for example) to address multi spectral
+satellite images series. GRASS supports a multi-band raster layer
+approach rudimentarily with the imagery group concept
 (<em><a href="i.group.html">i.group</a></em>). A new band reference
-concept is designed in order to support image collections in GRASS GIS.
+concept is designed in order to support image collections in GRASS
+GIS.
 
 <h2>NOTES</h2>
 
-Band reference can be assigned to a raster map
-by <em><a href="i.band.html">i.band</a></em>.
+Specific band reference can be assigned to a raster map
+by <em><a href="i.band.html">i.band</a></em> module.
 
 <p>
 Band reference concept is supported by temporal GRASS modules,
 see <em><a href="t.register.html#support-for-band-references">t.register</a></em>,
 <em><a href="t.rast.list.html#filtering-the-result-by-band-references">t.rast.list</a></em> and
-<em><a href="t.info.html#space-time-dataset-with-band-references-assigned">t.info</a></em> modules for examples.
+<em><a href="t.info.html#space-time-dataset-with-band-references-assigned">t.info</a></em> modules for real examples.
+
+<h3>Band reference registry files</h3>
+
+Band reference information is stored in JSON files with a pre-defined
+internal data structure. A minimalistic example is shown below.
+
+<div class="code"><pre>
+{
+    "Sentinel2A": {
+        "description": "The Sentinel-2 A bands",
+        "shortcut": "S2A",
+        "instruments": "optical and infrared",
+        "bands": {
+            "1": {
+                "central wavelength (nm)": 442.7,
+                "bandwidth (nm)": 21
+            },
+            "2": {
+                "central wavelength (nm)": 492.4,
+                "bandwidth (nm)": 66
+            }
+}
+</pre></div>
+
+Each series starts with an unique identifier (&quot;Sentinel2A&quot;
+in example above). Required attributes are only two:
+a <tt>shortcut</tt> and <tt>bands</tt>. Note that a <i>shortcut</i>
+must be unique in all band reference registry files. Number of other
+attributes is not defined or even limited (in example above
+only <tt>description</tt> and <tt>instruments</tt> attributes are
+defined). List of bands is defined by a <tt>bands</tt> attribute. Each
+band is defined by an identifier ("1", "2" in example above). List of
+attributes describing each band is not pre-defined or limited. In
+example above each band is described by a <tt>central widthlength
+(nm)</tt> and <tt>bandwidth (nm)</tt>.
+
+<p>
+Band reference identifier defined by <b>band</b> option is given by
+a <i>shortcut</i> in order to print band reference information for
+whole series or by specific <i>shortcut</i>_<i>band</i>
+identifier.
+
+<p>
+System-defined registry files are located in GRASS GIS installation
+directory (<tt>$GISBASE/etc/g.bands</tt>). Note that
+currently <i>g.bands</i> allows to manage only system-defined registry
+files. Support for user-defined registry files is planned to be
+implemented, see <a href="#known-issues">KNOWN ISSUES</a> section for
+details.
 
 <h2>EXAMPLES</h2>
 
