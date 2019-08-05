@@ -66,7 +66,7 @@ int Rast_read_band_reference(const char *name, const char *mapset,
 
     fd = G_fopen_old_misc("cell_misc", _band_file, name, mapset);
     if (!fd) {
-        G_debug(1, "Unable to read band indentier file for <%s@%s>",
+        G_debug(1, "Unable to read band identifier file for <%s@%s>",
                 name, mapset);
         return -1;
     }
