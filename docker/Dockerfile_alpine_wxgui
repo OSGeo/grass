@@ -2,8 +2,8 @@ FROM alpine:edge
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
-LABEL authors="Pietro Zambelli"
-LABEL maintainer="peter.zamb@gmail.com"
+LABEL authors="Markus Neteler"
+LABEL maintainer="neteler@osgeo.org"
 
 # PACKAGES VERSIONS
 ARG GRASS_VERSION=7.7
@@ -15,7 +15,7 @@ ARG PROJ_DATUMGRID_VERSION=1.8
 # CONFIG VARIABLES
 # ================
 
-# set configuration options
+# set configuration options, with wxGUI
 ENV GRASS_CONFIG="\
       --enable-largefile \
       --with-cxx \
@@ -28,6 +28,7 @@ ENV GRASS_CONFIG="\
       --with-zstd \
       --with-cairo --with-cairo-ldflags=-lfontconfig \
       --with-fftw \
+      --with-wxwidgets \
       --with-postgres --with-postgres-includes='/usr/include/postgresql' \
       --without-freetype \
       --without-openmp \
@@ -64,6 +65,7 @@ ENV PACKAGES="\
       gettext \
       geos \
       gnutls \
+      gtk+3.0 \
       libbz2 \
       libjpeg-turbo \
       libpng \
@@ -79,6 +81,8 @@ ENV PACKAGES="\
       sqlite \
       sqlite-libs \
       tiff \
+      wxgtk-base \
+      wxgtk \
       zstd \
       zstd-libs \
     " \
@@ -94,6 +98,7 @@ ENV PACKAGES="\
       gdal-dev \
       geos-dev \
       gnutls-dev \
+      gtk+3.0-dev \
       libc6-compat \
       libjpeg-turbo-dev \
       libpng-dev \
@@ -101,12 +106,16 @@ ENV PACKAGES="\
       openjpeg-dev \
       openblas-dev \
       postgresql-dev \
+      python3-dev \
+      py-numpy-dev \
       sqlite-dev \
       tar \
       tiff-dev \
       unzip \
       vim \
       wget \
+      wxgtk-base-dev \
+      wxgtk-dev \
       zip \
       zstd-dev \
     "
@@ -141,6 +150,9 @@ RUN echo "Install main packages";\
             --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
             --virtual .build-deps $GRASS_BUILD_PACKAGES; \
     # echo LANG="en_US.UTF-8" > /etc/default/locale;
+    #
+    # compile wxPython, unfortunately there is no Alpine package (yet) - compilation is slow, though!
+    $PYTHONBIN -m pip install -U pathlib2 wxPython && \
     #
     # install the latest projection library for GRASS GIS
     #
