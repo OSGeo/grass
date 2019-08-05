@@ -9,7 +9,7 @@
  * License (>=v2). Read the file COPYING that comes with GRASS
  * for details.
  *
- * \author Martin Landa
+ * \author Martin Landa (with financial support by mundialis, Bonn, for openEO EU H2020 grant 776242, https://openeo.org)
  */
 
 #include <string.h>
