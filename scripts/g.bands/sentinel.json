@@ -2,7 +2,9 @@
     "Sentinel2A": {
         "description": "The Sentinel-2 A bands",
         "shortcut": "S2A",
-        "instruments": "optical and infrared",
+        "instruments": "MultiSpectral Instrument (MSI) optical and infrared",
+        "launched": "23 June 2015",
+        "source": "https://sentinel.esa.int/web/sentinel/missions/sentinel-2",
         "bands": {
             "1": {
                 "central wavelength (nm)": 442.7,
@@ -61,7 +63,9 @@
     "Sentinel2B": {
         "description": "The Sentinel-2B bands",
         "shortcut": "S2B",
-        "instruments": "optical and infrared",
+        "instruments": "MultiSpectral Instrument (MSI) optical and infrared",
+        "launched": "07 March 2017",
+        "source": "https://sentinel.esa.int/web/sentinel/missions/sentinel-2",
         "bands": {
             "1": {
                 "central wavelength (nm)": 442.2,

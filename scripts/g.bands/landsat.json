@@ -2,7 +2,9 @@
     "Landsat7": {
         "description": "The Landsat 7 bands",
         "shortcut": "L7",
-        "instruments": "optical and infrared",
+        "instruments": "Enhanced Thematic Mapper (ETM+) optical and infrared",
+        "launched": "April 15, 1999",
+        "source": "https://www.usgs.gov/land-resources/nli/landsat/landsat-7",
         "bands": {
             "1": {
                 "bandwidth (µm)": "0.45-0.52",
