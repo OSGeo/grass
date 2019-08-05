@@ -8,35 +8,107 @@
         "bands": {
             "1": {
                 "bandwidth (µm)": "0.45-0.52",
-                "resolution (meters)": 30
+                "resolution (meters)": 30,
+                "tag": "Visible (Blue)"
             },
             "2": {
                 "bandwidth (µm)": "0.52-0.60",
-                "resolution (meters)": 30
+                "resolution (meters)": 30,
+                "tag": "Visible (Green)"
             },
             "3": {
                 "bandwidth (µm)": "0.63-0.69",
-                "resolution (meters)": 30
+                "resolution (meters)": 30,
+                "tag": "Visible (Red)"
             },
             "4": {
                 "bandwidth (µm)": "0.77-0.90",
-                "resolution (meters)": 30
+                "resolution (meters)": 30,
+                "tag": "Near-Infrared"
             },
             "5": {
                 "bandwidth (µm)": "1.55-1.75",
-                "resolution (meters)": 30
+                "resolution (meters)": 30,
+                "tag": "Near-Infrared"
             },
             "6": {
                 "bandwidth (µm)": "10.40-12.50",
-                "resolution (meters)": 60
+                "resolution (meters)": 60,
+                "tag": "Thermal"
             },
             "7": {
                 "bandwidth (µm)": "2.09-2.35",
-                "resolution (meters)": 30
+                "resolution (meters)": 30,
+                "tag": "Mid-Infrared"
             },
             "8": {
                 "bandwidth (µm)": "52-90",
-                "resolution (meters)": 15
+                "resolution (meters)": 15,
+                "tag": "Panchromatic"
+            }
+        }
+    },
+    "Landsat8": {
+        "description": "The Landsat 8 bands",
+        "shortcut": "L8",
+        "instruments": "Operational Land Imager (OLI) and the Thermal Infrared Sensor (TIRS)",
+        "launched": "February 11, 2013",
+        "source": "https://www.usgs.gov/land-resources/nli/landsat/landsat-8",
+        "bands": {
+            "1": {
+                "bandwidth (µm)": "0.43-0.45",
+                "resolution (meters)": 30,
+                "tag": "Visible"
+            },
+            "2": {
+                "bandwidth (µm)": "0.45-0.51",
+                "resolution (meters)": 30,
+                "tag": "Visible (Blue)"
+            },
+            "3": {
+                "bandwidth (µm)": "0.53-0.59",
+                "resolution (meters)": 30,
+                "tag": "Visible (Green)"
+            },
+            "4": {
+                "bandwidth (µm)": "0.64-0.67",
+                "resolution (meters)": 30,
+                "tag": "Visible (Red)"
+            },
+            "5": {
+                "bandwidth (µm)": "0.85-0.88",
+                "resolution (meters)": 30,
+                "tag": "Near-Infrared"
+            },
+            "6": {
+                "bandwidth (µm)": "1.57-1.65",
+                "resolution (meters)": 30,
+                "tag": "SWIR 1"
+            },
+            "7": {
+                "bandwidth (µm)": "2.11-2.29",
+                "resolution (meters)": 30,
+                "tag": "SWIR 2"
+            },
+            "8": {
+                "bandwidth (µm)": "0.50-0.68",
+                "resolution (meters)": 15,
+                "tag": "Panchromatic"
+            },
+            "9": {
+                "bandwidth (µm)": "1.36-1.38",
+                "resolution (meters)": 30,
+                "tag": "Cirrus"
+             },
+            "10": {
+                "bandwidth (µm)": "10.6-11.19",
+                "resolution (meters)": 100,
+                "tag": "TIRS 1"
+            },
+            "11": {
+                "bandwidth (µm)": "11.5-12.51",
+                "resolution (meters)": 100,
+                "tag": "TIRS 1"
             }
         }
     }
