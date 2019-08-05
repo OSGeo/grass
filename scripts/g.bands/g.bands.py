@@ -5,7 +5,7 @@
 # MODULE:       g.bands
 # AUTHOR(S):    Martin Landa <landa.martin gmail com>
 #
-# PURPOSE:      Prints band reference information.
+# PURPOSE:      Prints band reference information of multispectral data.
 #
 # COPYRIGHT:    (C) 2019 by mundialis GmbH & Co.KG, and the GRASS Development Team
 #
