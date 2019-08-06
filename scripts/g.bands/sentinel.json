@@ -7,56 +7,69 @@
         "source": "https://sentinel.esa.int/web/sentinel/missions/sentinel-2",
         "bands": {
             "1": {
-                "central wavelength (nm)": 442.7,
-                "bandwidth (nm)": 21
+                "central wavelength (nm)": 443.9,
+                "bandwidth (nm)": 27,
+                "spatial resolution (meters)": 60
             },
             "2": {
-                "central wavelength (nm)": 492.4,
-                "bandwidth (nm)": 66
+                "central wavelength (nm)": 496.6,
+                "bandwidth (nm)": 98,
+                "spatial resolution (meters)": 10
             },
             "3": {
-                "central wavelength (nm)": 559.8,
-                "bandwidth (nm)": 36
+                "central wavelength (nm)": 560.0,
+                "bandwidth (nm)": 45,
+                "spatial resolution (meters)": 10
                 },
             "4": {
-                "central wavelength (nm)": 664.6,
-                "bandwidth (nm)": 31
+                "central wavelength (nm)": 664.5,
+                "bandwidth (nm)": 38,
+                "spatial resolution (meters)": 10
             },
             "5": {
-                "central wavelength (nm)": 704.1,
-                "bandwidth (nm)": 15
+                "central wavelength (nm)": 703.9,
+                "bandwidth (nm)": 19,
+                "spatial resolution (meters)": 20
             },
             "6": {
-                "central wavelength (nm)": 740.5,
-                "bandwidth (nm)": 15
+                "central wavelength (nm)": 740.2,
+                "bandwidth (nm)": 18,
+                "spatial resolution (meters)": 20
                 },
             "7": {
-                "central wavelength (nm)": 782.8,
-                "bandwidth (nm)": 20
+                "central wavelength (nm)": 782.5,
+                "bandwidth (nm)": 28,
+                "spatial resolution (meters)": 20
             },
             "8": {
-                "central wavelength (nm)": 832.8,
-                "bandwidth (nm)": 106
+                "central wavelength (nm)": 835.1,
+                "bandwidth (nm)": 145,
+                "spatial resolution (meters)": 10
             },
             "8A": {
-                "central wavelength (nm)": 864.7,
-                "bandwidth (nm)": 21
+                "central wavelength (nm)": 864.8,
+                "bandwidth (nm)": 33,
+                "spatial resolution (meters)": 20
             },
             "9": {
-                "central wavelength (nm)": 945.1,
-                "bandwidth (nm)": 20
+                "central wavelength (nm)": 945.0,
+                "bandwidth (nm)": 26,
+                "spatial resolution (meters)": 60
             },
             "10": {
                 "central wavelength (nm)": 1373.5,
-                "bandwidth (nm)": 31
+                "bandwidth (nm)": 75,
+                "spatial resolution (meters)": 60
             },
             "11": {
                 "central wavelength (nm)": 1613.7,
-                "bandwidth (nm)": 91
+                "bandwidth (nm)": 143,
+                "spatial resolution (meters)": 20
             },
             "12": {
                 "central wavelength (nm)": 2202.4,
-                "bandwidth (nm)": 175
+                "bandwidth (nm)": 242,
+                "spatial resolution (meters)": 20
             }
         }
     },
@@ -68,56 +81,69 @@
         "source": "https://sentinel.esa.int/web/sentinel/missions/sentinel-2",
         "bands": {
             "1": {
-                "central wavelength (nm)": 442.2,
-                "bandwidth (nm)": 21
+                "central wavelength (nm)": 442.3,
+                "bandwidth (nm)": 45,
+                "spatial resolution (meters)": 60
             },
             "2": {
                 "central wavelength (nm)": 492.1,
-                "bandwidth (nm)": 66
+                "bandwidth (nm)": 98,
+                "spatial resolution (meters)": 10
             },
             "3": {
                 "central wavelength (nm)": 559.0,
-                "bandwidth (nm)": 36
+                "bandwidth (nm)": 46,
+                "spatial resolution (meters)": 10
             },
             "4": {
-                "central wavelength (nm)": 664.9,
-                "bandwidth (nm)": 31
+                "central wavelength (nm)": 665.0,
+                "bandwidth (nm)": 39,
+                "spatial resolution (meters)": 10
             },
             "5": {
                 "central wavelength (nm)": 703.8,
-                "bandwidth (nm)": 16
+                "bandwidth (nm)": 20,
+                "spatial resolution (meters)": 20
             },
             "6": {
                 "central wavelength (nm)": 739.1,
-                "bandwidth (nm)": 15
+                "bandwidth (nm)": 18,
+                "spatial resolution (meters)": 20
             },
             "7": {
                 "central wavelength (nm)": 779.7,
-                "bandwidth (nm)": 20
+                "bandwidth (nm)": 28,
+                "spatial resolution (meters)": 20
             },
             "8": {
-                "central wavelength (nm)": 832.9,
-                "bandwidth (nm)": 106
+                "central wavelength (nm)": 833.0,
+                "bandwidth (nm)": 133,
+                "spatial resolution (meters)": 10
             },
             "8A": {
                 "central wavelength (nm)": 864.0,
-                "bandwidth (nm)": 22
+                "bandwidth (nm)": 32,
+                "spatial resolution (meters)": 20
             },
             "9": {
                 "central wavelength (nm)": 943.2,
-                "bandwidth (nm)": 21
+                "bandwidth (nm)": 27,
+                "spatial resolution (meters)": 60
             },
             "10": {
                 "central wavelength (nm)": 1376.9,
-                "bandwidth (nm)": 30
+                "bandwidth (nm)": 76,
+                "spatial resolution (meters)": 60
             },
             "11": {
                 "central wavelength (nm)": 1610.4,
-                "bandwidth (nm)": 94
+                "bandwidth (nm)": 141,
+                "spatial resolution (meters)": 20
             },
             "12": {
                 "central wavelength (nm)": 2185.7,
-                "bandwidth (nm)": 185
+                "bandwidth (nm)": 238,
+                "spatial resolution (meters)": 20
             }
         }
     }
