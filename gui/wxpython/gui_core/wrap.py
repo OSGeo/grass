@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 import wx
 import wx.lib.buttons as buttons
+import wx.lib.colourselect as csel
 try:
     import wx.lib.agw.customtreectrl as CT
 except ImportError:
@@ -439,3 +440,16 @@ class TextEntryDialog(wx.TextEntryDialog):
         else:
             super(TextEntryDialog, self).__init__(parent=parent, message=message, caption=caption,
                                                   defaultValue=value, style=style, pos=pos)
+
+
+class ColourSelect(csel.ColourSelect):
+    """Wrapper around wx.lib.colourselect.ColourSelect to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        csel.ColourSelect.__init__(self, *args, **kwargs)
+
+    def SetToolTip(self, tip):
+        if wxPythonPhoenix:
+            csel.ColourSelect.SetToolTip(self, tipString=tip)
+        else:
+            csel.ColourSelect.SetToolTipString(self, tip)
