@@ -1605,9 +1605,9 @@ def show_banner():
 
 
 def say_hello():
-    """Write welcome to stderr including Subversion revision if in svn copy"""
+    """Write welcome to stderr including code revision if in git copy"""
     sys.stderr.write(_("Welcome to GRASS GIS %s") % grass_version)
-    if grass_version.endswith('svn'):
+    if grass_version.endswith('dev'):
         try:
             filerev = open(gpath('etc', 'VERSIONNUMBER'))
             linerev = filerev.readline().rstrip('\n')
