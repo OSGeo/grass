@@ -686,18 +686,32 @@ def install_extension(source, url, xmlurl):
             # install extension
             ret1, installed_modules, tmp_dir = install_extension_std_platforms(module,
                                                    source=source, url=url)
+
+            # change python to python3 in shebang
             proc = subprocess.Popen(
                 "which " + module, shell=True,
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = proc.communicate()
-            filename = out.decode('utf-8').rstrip()
-            if 'scripts' in filename:
-                with fileinput.FileInput(filename, inplace=True) as file:
-                    for line in file:
-                        print(line.replace(
-                            "#!/usr/bin/env python\n",
-                            "#!/usr/bin/env python3\n"
-                        ), end='')
+            # test if installed module is meta module
+            if not out:
+                metamodules = get_modules_of_metamodules(module)
+                filenames = []
+                for mm in metamodules:
+                    proc = subprocess.Popen(
+                        "which " + mm, shell=True,
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    out, err = proc.communicate()
+                    filenames.append(out.decode('utf-8').rstrip())
+            else:
+                filenames = [out.decode('utf-8').rstrip()]
+            for filename in filenames:
+                if 'scripts' in filename:
+                    with fileinput.FileInput(filename, inplace=True) as file:
+                        for line in file:
+                            print(line.replace(
+                                "#!/usr/bin/env python\n",
+                                "#!/usr/bin/env python3\n"
+                            ), end='')
             # remove python alternative
             ps = grass.Popen((
                 "update-alternatives", "--remove",
@@ -1272,6 +1286,23 @@ def download_source_code(source, url, name, outdev,
                       " Please report this to the grass-user mailing list.")
                     .format(source))
     assert os.path.isdir(directory)
+
+
+def get_modules_of_metamodules(name):
+    with open(os.path.join(TMPDIR, name, 'Makefile')) as f:
+        datafile = f.readlines()
+
+    makefile_part = ""
+    next_line = False
+    for line in datafile:
+        if 'SUBDIRS' in line or next_line:
+            makefile_part += line
+            if (line.strip()).endswith('\\'):
+                next_line = True
+            else:
+                next_line = False
+    modules = makefile_part.replace('SUBDIRS', '').replace('=', '').replace('\\', '').strip().split('\n')
+    return [x.strip() for x in modules]
 
 
 def install_extension_std_platforms(name, source, url):
