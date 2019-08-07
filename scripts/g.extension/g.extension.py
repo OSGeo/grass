@@ -129,15 +129,19 @@
 
 
 from __future__ import print_function
+import fileinput
 import os
 import sys
 import re
 import atexit
 import shutil
 import zipfile
+import subprocess
 import tempfile
 import xml.etree.ElementTree as etree
 from distutils.dir_util import copy_tree
+
+
 
 from six.moves.urllib.request import urlopen, urlretrieve, ProxyHandler, build_opener, install_opener
 from six.moves.urllib.error import HTTPError, URLError
@@ -675,8 +679,29 @@ def install_extension(source, url, xmlurl):
         if sys.platform == "win32":
             ret += install_extension_win(module)
         else:
+            # set /usr/bin/python to python3 cause of python shebangs
+            ps = gscript.Popen((
+                "update-alternatives", "--install", "/usr/bin/python",
+                "python", "/usr/bin/python3", "1"))
+            # install extension
             ret1, installed_modules, tmp_dir = install_extension_std_platforms(module,
                                                    source=source, url=url)
+            proc = subprocess.Popen(
+                "which " + module, shell=True,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out, err = proc.communicate()
+            filename = out.decode('utf-8').rstrip()
+            if 'scripts' in filename:
+                with fileinput.FileInput(filename, inplace=True) as file:
+                    for line in file:
+                        print(line.replace(
+                            "#!/usr/bin/env python\n",
+                            "#!/usr/bin/env python3\n"
+                        ), end='')
+            # remove python alternative
+            ps = grass.Popen((
+                "update-alternatives", "--remove",
+                "python", "/usr/bin/python3"))
             ret += ret1
         if len(mlist) > 1:
             print('-' * 60)
