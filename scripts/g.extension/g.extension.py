@@ -1252,23 +1252,6 @@ def download_source_code(source, url, name, outdev,
     assert os.path.isdir(directory)
 
 
-def get_modules_of_metamodules(name):
-    with open(os.path.join(TMPDIR, name, 'Makefile')) as f:
-        datafile = f.readlines()
-
-    makefile_part = ""
-    next_line = False
-    for line in datafile:
-        if 'SUBDIRS' in line or next_line:
-            makefile_part += line
-            if (line.strip()).endswith('\\'):
-                next_line = True
-            else:
-                next_line = False
-    modules = makefile_part.replace('SUBDIRS', '').replace('=', '').replace('\\', '').strip().split('\n')
-    return [x.strip() for x in modules]
-
-
 def install_extension_std_platforms(name, source, url):
     """Install extension on standard platforms"""
     gisbase = os.getenv('GISBASE')
