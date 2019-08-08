@@ -136,7 +136,6 @@ import re
 import atexit
 import shutil
 import zipfile
-import subprocess
 import tempfile
 import xml.etree.ElementTree as etree
 from distutils.dir_util import copy_tree
@@ -679,43 +678,8 @@ def install_extension(source, url, xmlurl):
         if sys.platform == "win32":
             ret += install_extension_win(module)
         else:
-            # set /usr/bin/python to python3 cause of python shebangs
-            ps = gscript.Popen((
-                "update-alternatives", "--install", "/usr/bin/python",
-                "python", "/usr/bin/python3", "1"))
-            # install extension
             ret1, installed_modules, tmp_dir = install_extension_std_platforms(module,
                                                    source=source, url=url)
-
-            # change python to python3 in shebang
-            proc = subprocess.Popen(
-                "which " + module, shell=True,
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            out, err = proc.communicate()
-            # test if installed module is meta module
-            if not out:
-                metamodules = get_modules_of_metamodules(module)
-                filenames = []
-                for mm in metamodules:
-                    proc = subprocess.Popen(
-                        "which " + mm, shell=True,
-                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    out, err = proc.communicate()
-                    filenames.append(out.decode('utf-8').rstrip())
-            else:
-                filenames = [out.decode('utf-8').rstrip()]
-            for filename in filenames:
-                if 'scripts' in filename:
-                    with fileinput.FileInput(filename, inplace=True) as file:
-                        for line in file:
-                            print(line.replace(
-                                "#!/usr/bin/env python\n",
-                                "#!/usr/bin/env python3\n"
-                            ), end='')
-            # remove python alternative
-            ps = grass.Popen((
-                "update-alternatives", "--remove",
-                "python", "/usr/bin/python3"))
             ret += ret1
         if len(mlist) > 1:
             print('-' * 60)
@@ -1328,6 +1292,22 @@ def install_extension_std_platforms(name, source, url):
     download_source_code(source=source, url=url, name=name,
                          outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
     os.chdir(srcdir)
+
+    # change shebang from python to python3
+    pyfiles = []
+    # r=root, d=directories, f = files
+    for r, d, f in os.walk(srcdir):
+        for file in f:
+            if file.endswith('.py'):
+                pyfiles.append(os.path.join(r, file))
+
+    for filename in pyfiles:
+        with fileinput.FileInput(filename, inplace=True) as file:
+            for line in file:
+                print(line.replace(
+                    "#!/usr/bin/env python\n",
+                    "#!/usr/bin/env python3\n"
+                ), end='')
 
     dirs = {
         'bin': os.path.join(TMPDIR, name, 'bin'),
