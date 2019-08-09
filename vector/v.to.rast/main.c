@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->options = "point,line,boundary,centroid,area";
-    type_opt->answer = "point,line,area";
+    type_opt->answer = "point,line,centroid,area";
     type_opt->guisection = _("Selection");
     
     cats_opt = G_define_standard_option(G_OPT_V_CATS);
