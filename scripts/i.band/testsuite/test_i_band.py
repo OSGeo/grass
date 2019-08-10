@@ -7,7 +7,7 @@ from grass.pygrass.raster import RasterRow
 class TestBandsSystemDefined(TestCase):
     # note that full NC dataset is needed
     raster_map = "lsat7_2002_10"
-    band_ref = "Ls7_1"
+    band_ref = "L7_1"
 
     def read_band_ref(self):
         with RasterRow(self.raster_map) as rast:
