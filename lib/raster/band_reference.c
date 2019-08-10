@@ -1,5 +1,5 @@
 /*!
- * \file lib/raster/bands.c
+ * \file lib/raster/band_reference.c
  *
  * \brief Raster Library - Band reference managenent
  *
@@ -18,7 +18,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-static const char *_band_file = "band";
+static const char *_band_file = "band_reference";
 
 /*!
   \brief Check if band reference for raster map exists

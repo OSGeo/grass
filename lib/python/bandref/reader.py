@@ -6,17 +6,17 @@ from collections import OrderedDict
 
 import grass.script as gs
 
-class BandReaderError(Exception):
+class BandReferenceReaderError(Exception):
     pass
 
-class BandReader:
+class BandReferenceReader:
     """Band references reader"""
     def __init__(self):
         self._json_files = glob.glob(
             os.path.join(os.environ['GISBASE'], 'etc', 'g.bands', '*.json')
         )
         if not self._json_files:
-            raise BandReaderError("No band definitions found")
+            raise BandReferenceReaderError("No band definitions found")
 
         self._read_config()
 
@@ -31,7 +31,7 @@ class BandReader:
                         object_pairs_hook=OrderedDict
                     )
             except json.decoder.JSONDecodeError as e:
-                raise BandReaderError(
+                raise BandReferenceReaderError(
                     "Unable to parse '{}': {}".format(
                         json_file, e
                 ))
@@ -52,11 +52,11 @@ class BandReader:
         for items in config.values():
             for item in ('shortcut', 'bands'):
                 if item not in items.keys():
-                    raise BandReaderError(
+                    raise BandReferenceReaderError(
                         "Invalid band definition: <{}> is missing".format(item
                 ))
             if len(items['bands']) < 1:
-                raise BandReaderError(
+                raise BandReferenceReaderError(
                     "Invalid band definition: no bands defined"
                 )
 
@@ -95,7 +95,7 @@ class BandReader:
 
                 found = True
                 if band and band not in item['bands']:
-                    raise BandReaderError(
+                    raise BandReferenceReaderError(
                         "Band <{}> not found in <{}>".format(
                             band, shortcut
                         ))
@@ -125,7 +125,7 @@ class BandReader:
 
         # raise error when defined shortcut not found
         if shortcut and not found:
-            raise BandReaderError(
+            raise BandReferenceReaderError(
                 "Band reference <{}> not found".format(shortcut)
             )
 
@@ -141,7 +141,7 @@ class BandReader:
         try:
             shortcut, band = band_reference.split('_')
         except ValueError:
-            raise BandReaderError("Invalid band identifier <{}>".format(
+            raise BandReferenceReaderError("Invalid band identifier <{}>".format(
                 band_reference
             ))
 

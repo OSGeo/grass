@@ -104,8 +104,8 @@ def main():
         bands = [None]
 
     if flags['p']:
-        from grass.bands import BandReader
-        band_reader = BandReader()
+        from grass.bandref import BandReferenceReader
+        band_reader = BandReferenceReader()
     else:
         band_reader = None
     multi_bands = len(bands) > 1

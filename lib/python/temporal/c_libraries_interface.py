@@ -567,9 +567,9 @@ def _write_band_reference(lock, conn, data):
         band_reference = data[5]
 
         if maptype == RPCDefs.TYPE_RASTER:
-            from grass.bands import BandReader
+            from grass.bandref import BandReferenceReader
 
-            reader = BandReader()
+            reader = BandReferenceReader()
             # determine filename (assuming that band_reference is unique!)
             filename = reader.find_file(band_reference)
 

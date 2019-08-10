@@ -40,7 +40,7 @@ import sys
 import grass.script as gs
 
 def main():
-    from grass.bands import BandReader, BandReaderError
+    from grass.bandref import BandReferenceReader, BandReferenceReaderError
 
     band = None
     kwargs = {}
@@ -53,9 +53,9 @@ def main():
     kwargs['extended'] = flags['e']
 
     try:
-        reader = BandReader()
+        reader = BandReferenceReader()
         reader.print_info(**kwargs)
-    except BandReaderError as e:
+    except BandReferenceReaderError as e:
         gs.fatal(e)
 
     return 0

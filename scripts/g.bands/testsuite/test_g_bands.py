@@ -17,8 +17,8 @@ class TestBandsSystemDefined(TestCase):
         nbands = self._number_of_bands()
 
         # get number of valid band identifiers by Bands lib
-        from grass.bands import BandReader
-        nbands_ref = len(BandReader().get_bands())
+        from grass.bandref import BandReferenceReader
+        nbands_ref = len(BandReferenceReader().get_bands())
 
         self.assertEqual(nbands, nbands_ref)
 

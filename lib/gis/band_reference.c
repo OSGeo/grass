@@ -1,5 +1,5 @@
 /*!
- * \file lib/gis/bands.c
+ * \file lib/gis/band_reference.c
  *
  * \brief GIS Library - Band reference management (internal use only)
  *
@@ -9,7 +9,7 @@
  * License (>=v2). Read the file COPYING that comes with GRASS
  * for details.
  *
- * \author Martin Landa
+ * \author Martin Landa (with financial support by mundialis, Bonn, for openEO EU H2020 grant 776242, https://openeo.org)
  */
 
 #include <grass/gis.h>
@@ -42,7 +42,7 @@ int G__read_band_reference(FILE *fd, struct Key_Value **key_val)
         return -2;
     }
 
-    G_debug(1, "Band idenfifier <%s> (%s)", band_ref, filename);
+    G_debug(1, "Band reference <%s> (%s)", band_ref, filename);
 
     return 1;
 }

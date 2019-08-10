@@ -182,12 +182,12 @@ class Info(object):
         """
         if band_reference:
             # assign
-            from grass.bands import BandReader, BandReaderError
-            reader = BandReader()
+            from grass.bandref import BandReferenceReader, BandReferenceReaderError
+            reader = BandReferenceReader()
             # determine filename (assuming that band_reference is unique!)
             try:
                 filename = reader.find_file(band_reference)
-            except BandReaderError as e:
+            except BandReferenceReaderError as e:
                 fatal("{}".format(e))
                 raise
             if not filename:
