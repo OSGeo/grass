@@ -129,6 +129,7 @@
 
 
 from __future__ import print_function
+import fileinput
 import os
 import sys
 import re
@@ -1040,6 +1041,21 @@ def install_extension_win(name):
     download_source_code(source=source, url=url, name=name,
                          outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
 
+    # change shebang from python to python3
+    pyfiles = []
+    for r, d, f in os.walk(srcdir):
+        for file in f:
+            if file.endswith('.py'):
+                pyfiles.append(os.path.join(r, file))
+
+    for filename in pyfiles:
+        with fileinput.FileInput(filename, inplace=True) as file:
+            for line in file:
+                print(line.replace(
+                    "#!/usr/bin/env python\n",
+                    "#!/usr/bin/env python3\n"
+                ), end='')
+
     # copy Addons copy tree to destination directory
     move_extracted_files(extract_dir=srcdir, target_dir=options['prefix'],
                          files=os.listdir(srcdir))
@@ -1272,6 +1288,22 @@ def install_extension_std_platforms(name, source, url):
     download_source_code(source=source, url=url, name=name,
                          outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
     os.chdir(srcdir)
+
+    # change shebang from python to python3
+    pyfiles = []
+    # r=root, d=directories, f = files
+    for r, d, f in os.walk(srcdir):
+        for file in f:
+            if file.endswith('.py'):
+                pyfiles.append(os.path.join(r, file))
+
+    for filename in pyfiles:
+        with fileinput.FileInput(filename, inplace=True) as file:
+            for line in file:
+                print(line.replace(
+                    "#!/usr/bin/env python\n",
+                    "#!/usr/bin/env python3\n"
+                ), end='')
 
     dirs = {
         'bin': os.path.join(TMPDIR, name, 'bin'),
