@@ -5249,9 +5249,8 @@ msgstr "无法获得当前区域的投影参数"
 #: ../display/d.grid/plot.c:605 ../display/d.where/main.c:151
 #: ../general/g.region/printwindow.c:265 ../general/g.region/printwindow.c:501
 #: ../general/g.region/printwindow.c:593 ../vector/v.proj/main.c:292
-#, fuzzy
 msgid "Unable to initialize coordinate transformation"
-msgstr "无法关闭地图"
+msgstr ""
 
 #: ../ps/ps.map/ps_clrtbl.c:35 ../ps/ps.map/ps_fclrtbl.c:46
 #, c-format
@@ -5846,28 +5845,24 @@ msgid "Traces paths from starting points following input directions."
 msgstr ""
 
 #: ../raster/r.path/main.c:157
-#, fuzzy
 msgid "Name of input direction"
-msgstr "输入的 2D 矢量地图的名称"
+msgstr ""
 
 #: ../raster/r.path/main.c:159
-#, fuzzy
 msgid "Direction in degrees CCW from east, or bitmask encoded"
-msgstr "角度以正东为零始逆时针方向增加"
+msgstr ""
 
 #: ../raster/r.path/main.c:164
-#, fuzzy
 msgid "Format of the input direction map"
-msgstr "输入的 2D 矢量地图的名称"
+msgstr ""
 
 #: ../raster/r.path/main.c:170
 msgid "auto-detect direction format"
 msgstr ""
 
 #: ../raster/r.path/main.c:171
-#, fuzzy
 msgid "degrees CCW from East"
-msgstr "角度以正东为零始逆时针方向增加"
+msgstr ""
 
 #: ../raster/r.path/main.c:172
 msgid "degrees CCW from East divided by 45 (e.g. r.watershed directions)"
@@ -5878,27 +5873,16 @@ msgid "bitmask encoded directions (e.g. r.cost -b)"
 msgstr ""
 
 #: ../raster/r.path/main.c:179
-#, fuzzy
 msgid "Name of input raster values to be used for output"
-msgstr "栅格地图的名称 <%s>"
+msgstr ""
 
 #: ../raster/r.path/main.c:185
-#, fuzzy
 msgid "Name for output raster path map"
 msgstr ""
-"#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
-"输出栅格图的名称\n"
-"#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
-"输出栅格文件的名称"
 
 #: ../raster/r.path/main.c:190
-#, fuzzy
 msgid "Name for output vector path map"
 msgstr ""
-"#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
-"输出栅格图的名称\n"
-"#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
-"输出栅格文件的名称"
 
 #: ../raster/r.path/main.c:272 ../raster/r.drain/main.c:244
 #, c-format
@@ -5934,20 +5918,18 @@ msgid "Starting vector map <%s> contains no points in the current region"
 msgstr ""
 
 #: ../raster/r.path/main.c:359
-#, fuzzy
 msgid "No start point(s) specified"
-msgstr "没有指定起点/终点"
+msgstr ""
 
 #: ../raster/r.path/main.c:369
-#, fuzzy, c-format
+#, c-format
 msgid "Reading raster values map <%s> ..."
-msgstr "读取标签文件 <%s在%s中> ..."
+msgstr ""
 
 #: ../raster/r.path/main.c:382 ../raster/r.path/main.c:445
 #: ../raster/r.path/main.c:462
-#, fuzzy
 msgid "Unable to write to tempfile"
-msgstr "不能创建输出地图 <%s>"
+msgstr ""
 
 #: ../raster/r.path/main.c:390 ../raster/r.info/main.c:134
 msgid "Unable to read range file"
@@ -5980,18 +5962,17 @@ msgid "Input direction format assumed to be bitmask encoded without Knight's mov
 msgstr ""
 
 #: ../raster/r.path/main.c:422
-#, fuzzy
 msgid "Input direction format assumed to be degrees CCW from East"
-msgstr "角度以正东为零始逆时针方向增加"
+msgstr ""
 
 #: ../raster/r.path/main.c:426
 msgid "Input direction format assumed to be bitmask encoded with Knight's move"
 msgstr ""
 
 #: ../raster/r.path/main.c:429
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to detect format of input direction map <%s>"
-msgstr "无法打开输入文件<%s>"
+msgstr ""
 
 #: ../raster/r.path/main.c:432
 #, c-format
@@ -5999,14 +5980,13 @@ msgid "Invalid directions format '%s'"
 msgstr ""
 
 #: ../raster/r.path/main.c:434
-#, fuzzy, c-format
+#, c-format
 msgid "Reading direction map <%s> ..."
-msgstr "读取 %s ..."
+msgstr ""
 
 #: ../raster/r.path/main.c:481
-#, fuzzy
 msgid "Processing start points..."
-msgstr "没有起始点"
+msgstr ""
 
 #: ../raster/r.path/main.c:491 ../vector/v.buffer/main.c:414
 #: ../vector/v.in.ogr/main.c:912 ../vector/v.overlay/main.c:227
@@ -6029,9 +6009,8 @@ msgid "Writing output raster map..."
 msgstr ""
 
 #: ../raster/r.path/main.c:640
-#, fuzzy
 msgid "Unable to increase point list"
-msgstr "无法创建表 <%s>"
+msgstr ""
 
 #: ../raster/r.path/main.c:740 ../raster/r.path/main.c:771
 #: ../raster/r.path/main.c:897 ../raster/r.path/main.c:1005
@@ -6050,14 +6029,13 @@ msgid "No path from row %d, col %d"
 msgstr ""
 
 #: ../raster/r.path/main.c:845
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid direction %d"
-msgstr "地图北向格网坐标"
+msgstr ""
 
 #: ../raster/r.path/main.c:934
-#, fuzzy
 msgid "Path is leaving the current region"
-msgstr "打印当前区域"
+msgstr ""
 
 #: ../raster/r.profile/main.c:54 ../raster/r.transect/main.c:104
 #: ../display/d.profile/main.c:192 ../raster3d/r3.cross.rast/main.c:229
@@ -6518,9 +6496,9 @@ msgstr ""
 #: ../vector/v.proj/main.c:343 ../vector/v.proj/main.c:355
 #: ../vector/v.proj/main.c:370 ../vector/v.proj/main.c:385
 #: ../vector/v.proj/main.c:466 ../vector/v.proj/main.c:471
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s (projection of input coordinate pair)"
-msgstr "pj_do_proj (输入坐标对的投影) 有错误"
+msgstr ""
 
 #: ../raster/r.regression.multi/main.c:61
 msgid "Matrix is unsolvable"
@@ -6866,9 +6844,8 @@ msgid "Name for output raster map to contain walking costs"
 msgstr ""
 
 #: ../raster/r.walk/main.c:227 ../raster/r.cost/main.c:183
-#, fuzzy
 msgid "Name of input raster map solving equal costs"
-msgstr "输入栅格图的名称"
+msgstr ""
 
 #: ../raster/r.walk/main.c:229 ../raster/r.cost/main.c:185
 msgid "Helper variable to pick a direction if two directions have equal cumulative costs (smaller is better)"
@@ -7022,9 +6999,8 @@ msgid "No start points"
 msgstr "没有起始点"
 
 #: ../raster/r.walk/main.c:408 ../raster/r.cost/main.c:348
-#, fuzzy
 msgid "No stop points"
-msgstr "没有起始点"
+msgstr ""
 
 #: ../raster/r.walk/main.c:412 ../raster/r.cost/main.c:352
 #, c-format
@@ -7142,9 +7118,9 @@ msgid "Specified starting location outside database window"
 msgstr ""
 
 #: ../raster/r.walk/main.c:932 ../raster/r.cost/main.c:797
-#, fuzzy, c-format
+#, c-format
 msgid "Number of duplicate stop points: %d"
-msgstr "输入点的数目：%d"
+msgstr ""
 
 #: ../raster/r.walk/main.c:946 ../raster/r.cost/main.c:811
 msgid "Finding cost path..."
@@ -9571,9 +9547,9 @@ msgstr ""
 #: ../raster/r.horizon/main.c:849 ../raster/r.horizon/main.c:867
 #: ../raster/r.horizon/main.c:1203 ../raster/r.horizon/main.c:1223
 #: ../raster/r.proj/main.c:450 ../raster/r.proj/main.c:541
-#, fuzzy, c-format
+#, c-format
 msgid "Error in %s"
-msgstr "错误：%s"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:1176
 #, c-format
@@ -10959,9 +10935,8 @@ msgid "Create aspect as degrees clockwise from North (azimuth), with flat = -999
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:293
-#, fuzzy
 msgid "Default: degrees counter-clockwise from East, with flat = 0"
-msgstr "各向异性角度 (度，从东开始逆时针方向计算)"
+msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:348 ../raster/r.relief/main.c:199
 #, c-format
@@ -11612,9 +11587,8 @@ msgid "Distance filter remains flat before beginning exponent"
 msgstr ""
 
 #: ../raster/r.random.surface/main.c:102 ../raster/r.random.cells/main.c:77
-#, fuzzy
 msgid "Random seed, default [random]"
-msgstr "选择波段(默认选择所有波段)"
+msgstr ""
 
 #: ../raster/r.random.surface/main.c:108
 msgid "Maximum cell value of distribution"
@@ -12011,9 +11985,8 @@ msgid "Names of 2-%d input raster maps"
 msgstr "2-%d 输入栅格地图的名称"
 
 #: ../raster/r.cross/main.c:89
-#, fuzzy
 msgid "Non-NULL data only"
-msgstr "只保留非零数据"
+msgstr ""
 
 #: ../raster/r.cross/main.c:102
 #, c-format
@@ -12070,9 +12043,9 @@ msgid "Reading raster map <%s> using weight %f..."
 msgstr ""
 
 #: ../raster/r.series/main.c:274 ../raster/r.series/main.c:334
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open input raster <%s>"
-msgstr "无法打开输入文件<%s>"
+msgstr ""
 
 #: ../raster/r.series/main.c:311
 msgid "input= and weights= must have the same number of values"
@@ -13916,18 +13889,17 @@ msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:84
-#, fuzzy
 msgid "Name of input raster files"
-msgstr "输入栅格图的名称"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:90 ../imagery/i.group/main.c:74
 msgid "Input file with one raster map name per line"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:147 ../raster/r.buildvrt/main.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Input raster map <%s> not found"
-msgstr "未找到3D栅格图<%s>"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:150 ../raster/r.buildvrt/main.c:203
 msgid "Input and output raster map can not be identical"
@@ -13943,9 +13915,8 @@ msgid "Only one raster map name found in input file"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:188
-#, fuzzy
 msgid "Only one raster map name found"
-msgstr "未找到3D栅格图<%s>"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:260
 msgid "Input maptypes are different"
@@ -13966,9 +13937,9 @@ msgid "Unable to create fcell/%s file"
 msgstr ""
 
 #: ../raster/r.buildvrt/link.c:35
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create cell_misc/%s/vrt file"
-msgstr "无法创建表 <%s>"
+msgstr ""
 
 #: ../raster/r.buildvrt/link.c:66 ../raster/r.external/link.c:160
 #, c-format
@@ -15949,9 +15920,8 @@ msgid "Resolution of output raster map"
 msgstr ""
 
 #: ../raster/r.proj/main.c:209 ../vector/v.proj/main.c:119
-#, fuzzy
 msgid "PROJ pipeline for coordinate transformation"
-msgstr "无法关闭地图"
+msgstr ""
 
 #: ../raster/r.proj/main.c:214
 msgid "List raster maps in input mapset and exit"
@@ -18184,9 +18154,8 @@ msgid "For USLE. All non-NULL and non-zero cells are considered as blocking terr
 msgstr ""
 
 #: ../raster/r.watershed/front/main.c:123
-#, fuzzy
 msgid "Name of input raster map with percentages for flow accumulation."
-msgstr "栅格地图的名称 <%s>"
+msgstr ""
 
 #: ../raster/r.watershed/front/main.c:129
 msgid "Minimum size of exterior watershed basin"
@@ -22979,9 +22948,8 @@ msgid "Number of cells to add to each side of the current region extent"
 msgstr ""
 
 #: ../general/g.region/main.c:348
-#, fuzzy
 msgid "A negative number shrinks the current region extent"
-msgstr "答应当前区域的范围"
+msgstr ""
 
 #: ../general/g.region/main.c:358
 msgid "Save current region settings in named region file"
@@ -23438,9 +23406,8 @@ msgid "No output format specified, define one of flags -%c, -%c, or -%c"
 msgstr ""
 
 #: ../general/g.proj/output.c:134
-#, fuzzy
 msgid "Unable to convert projection information to PROJ format"
-msgstr "不能将输入地图的投影信息转换为 GRASS 格式来检查"
+msgstr ""
 
 #: ../general/g.proj/output.c:180
 msgid "Unable to convert to WKT"
@@ -24443,9 +24410,8 @@ msgid "Found %d clumps"
 msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:26
-#, fuzzy
 msgid "Name of input imagery group or raster maps"
-msgstr "输入栅格图的名称"
+msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:33
 msgid "Suffix for output bands with modified band values"
@@ -25305,9 +25271,9 @@ msgid "Name for output raster map holding reject threshold results"
 msgstr ""
 
 #: ../imagery/i.maxlik/main.c:106
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not match the current mapset"
-msgstr "不更新当前区域"
+msgstr ""
 
 #: ../imagery/i.maxlik/invert.c:28
 #, c-format
@@ -28311,9 +28277,8 @@ msgid "Viewpoint height not given, using calculated value %.0f"
 msgstr ""
 
 #: ../misc/m.nviz.image/main.c:244
-#, fuzzy
 msgid "Failed to write image"
-msgstr "无法创建文件 [%s]"
+msgstr ""
 
 #: ../misc/m.nviz.image/main.c:246
 msgid "Unsupported output format"
@@ -30932,9 +30897,9 @@ msgstr ""
 
 #: ../vector/v.out.ogr/main.c:682 ../vector/v.out.ogr/main.c:757
 #: ../vector/v.to.db/main.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create column <%s>"
-msgstr "无法创建表 <%s>"
+msgstr ""
 
 #: ../vector/v.out.ogr/main.c:763
 #, c-format
@@ -31983,9 +31948,9 @@ msgid "Generating points..."
 msgstr ""
 
 #: ../vector/v.random/main.c:530 ../vector/v.random/main.c:677
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to insert new row: %s"
-msgstr "无法插入新记录：'%s'"
+msgstr ""
 
 #: ../vector/v.random/main.c:702 ../vector/v.db.select/main.c:208
 msgid "Unable to open select cursor"
@@ -31998,9 +31963,9 @@ msgid "Unable to fetch data from table <%s>"
 msgstr ""
 
 #: ../vector/v.random/main.c:742
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to update row: %s"
-msgstr "无法创建表 <%s>"
+msgstr ""
 
 #: ../vector/v.support/main.c:41
 msgid "Updates vector map metadata."
@@ -35118,14 +35083,13 @@ msgid "Projection of layer <%s> is different from projection of layer <%s>"
 msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:19
-#, fuzzy
 msgid "Converting OSM lines..."
-msgstr "绘制 ... "
+msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:118
-#, fuzzy, c-format
+#, c-format
 msgid "Number of OSM line splits: %d"
-msgstr "输入点的数目：%d"
+msgstr ""
 
 #: ../vector/v.in.ogr/clean.c:119 ../vector/v.overlay/area_area.c:154
 msgid "Merging lines..."
@@ -39870,14 +39834,12 @@ msgid "If new >= 0, attributes is not copied"
 msgstr ""
 
 #: ../vector/v.extract/main.c:151
-#, fuzzy
 msgid "Name of attribute column for dissolving areas"
-msgstr "用于平滑参数的属性字段的名称"
+msgstr ""
 
 #: ../vector/v.extract/main.c:152
-#, fuzzy
 msgid "Preserves category values"
-msgstr "打印类别标签"
+msgstr ""
 
 #: ../vector/v.extract/main.c:169
 #, c-format
@@ -39890,9 +39852,9 @@ msgid "Searching for column <%s> in table <%s>..."
 msgstr ""
 
 #: ../vector/v.extract/main.c:253
-#, fuzzy, c-format
+#, c-format
 msgid "Column <%s> does not exist for layer %d"
-msgstr "字段 <%s> 未找到"
+msgstr ""
 
 #: ../vector/v.extract/main.c:268
 #, c-format
@@ -44599,11 +44561,11 @@ msgstr "必须指定'from_table'或'select'选项。"
 msgid "One of -%c or options <%s>, <%s> or <%s> must be specified"
 msgstr "必须指定'from_table'或'select'选项。"
 
-#~ msgid "column '%s', type 'string': unknown width -> stored as varchar(250) some data may be lost"
-#~ msgstr "列'%s'，类型'string'：未知的宽度->存储为varchar(250)可能会丢失一部分数据"
+msgid "column '%s', type 'string': unknown width -> stored as varchar(250) some data may be lost"
+msgstr "列'%s'，类型'string'：未知的宽度->存储为varchar(250)可能会丢失一部分数据"
 
-#~ msgid "Non-zero data only"
-#~ msgstr "只保留非零数据"
+msgid "Non-zero data only"
+msgstr "只保留非零数据"
 
-#~ msgid "Error in pj_do_proj (projection of input coordinate pair)"
-#~ msgstr "pj_do_proj (输入坐标对的投影) 有错误"
+msgid "Error in pj_do_proj (projection of input coordinate pair)"
+msgstr "pj_do_proj (输入坐标对的投影) 有错误"
