@@ -1,7 +1,5 @@
 How to release GRASS GIS binaries and source code
 
-$Date$
-
 Note: This text contains *some* rules only applicable to the
       development coordinator (currently Markus Neteler, PSC Chair).
 
@@ -58,7 +56,7 @@ git commit -m"config.guess + config.sub: updated from http://git.savannah.gnu.or
 # test by running ./configure 
 
 git push origin config_sub_update_r78
-# open PR
+# open PR and merge
 
 ######
 # cleanup rubbish:
@@ -105,7 +103,7 @@ rm -f include/VERSION~
 MAJOR=`cat include/VERSION | head -1 | tail -1`
 MINOR=`cat include/VERSION | head -2 | tail -1`
 RELEASE=`cat include/VERSION | head -3 | tail -1`
-VERSION=${MAJOR}.${MINOR}.${RELEASE}
+VERSION=${MAJOR}_${MINOR}_${RELEASE}
 echo $VERSION
 
 git checkout -b release_GRASS_GIS_$VERSION
@@ -119,15 +117,15 @@ mv ChangeLog ChangeLog_$VERSION
 head ChangeLog_$VERSION
 gzip ChangeLog_$VERSION
 
-# TODO:
-# Tag release ...
-
 TODAY=`date +"%Y%m%d"`
 RELEASETAG=release_${TODAY}_grass_${MAJOR}_${MINOR}_${RELEASE}
 echo $RELEASETAG
 
-TODO...
+# Tag release (on GitHub)
+echo "grass_$VERSION"
+https://github.com/OSGeo/grass/releases/new
 
+#### Packaging
 # create source package (in the source directory):
 echo grass-${VERSION}
 
@@ -146,15 +144,18 @@ vim include/VERSION
 
 #example
 7
-4
-1dev
-2018
+8
+0dev
+2019
 
 rm -f include/VERSION~
+git checkout -b back_to_git_dev
 git add include/VERSION
 git commit -m"back to git" include/VERSION
+git push origin back_to_git_dev
+# open PR and merge
 
-
+#### Upload source code package
 # Store the source tarball (twice) in (use scp -p FILES grass:):
 SERVER1=grass.osgeo.org
 SERVER1DIR=/var/www/grass/grass-cms/grass$MAJOR$MINOR/source/
@@ -187,7 +188,7 @@ vim grass-addons/tools/addons/grass-addons-build.sh
 vim grass-addons/tools/addons/grass-addons.sh
 
 ###################
-# update web site to new version: CMS
+# update web site to show new version: CMS
   - News section
   - https://grass.osgeo.org/download/software/
   - https://grass.osgeo.org/download/software/sources/
@@ -198,8 +199,8 @@ vim grass-addons/tools/addons/grass-addons.sh
 
 # write announcement
   - store in trac:
-    https://trac.osgeo.org/grass/wiki/Release/7.6.x-News
-    https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures76  <- add content of major changes only
+    https://trac.osgeo.org/grass/wiki/Release/7.8.x-News
+    https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures78  <- add content of major changes only
   - update version in https://grasswiki.osgeo.org/wiki/GRASS-Wiki
   - store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html <- how? with protected PHP upload page? (dropped since CMS)
 
@@ -211,11 +212,10 @@ vim grass-addons/tools/addons/grass-addons.sh
   - update last version on main page
 
 # trac updates, only when new major release:
-  - Add new release to https://trac.osgeo.org/grass/admin/ticket/versions
-  - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.6.x --> Edit Milestone
-    - also: Retarget associated open tickets to milestone 7.6.x
+  - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.8.x --> Edit Milestone
+    - also: Retarget associated open tickets to milestone 7.8.x
   - Batch modify tickets, set to next milestone (update this query accordingly: two entries to change)
-     https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.6.0&milestone=7.6.1&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority
+     https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.8.0&milestone=7.8.1&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority
      - Set max items to 1000, then select all shown tickets via Status: assigned/new/reopened sections
      - Scroll down to "Batch modify": under the "Comment" section, add Field "Milestone" and set to next version
      - then use "Change ticket" button, done.
@@ -229,16 +229,16 @@ vim grass-addons/tools/addons/grass-addons.sh
   - Update grass_packager_release.bat, eg.
 
      set MAJOR=7
-     set MINOR=4
-     set PATCH=1RC1
+     set MINOR=8
+     set PATCH=0RC1
 
   - Update addons (grass_addons.sh) rules, eg.
 
-     compile $SVN_PATH/grass7 $GISBASE_PATH/grass760RC1   $ADDON_PATH/grass760RC1/addons
+     compile $GIT_PATH/grass7 $GISBASE_PATH/grass780RC1   $ADDON_PATH/grass780RC1/addons
 
   - Modify grass_copy_wwwroot.sh accordingly, eg.
 
-     copy_addon 761RC1 7.6.1RC1
+     copy_addon 781RC1 7.8.1RC1
 
 # Launchpad notes:
 
