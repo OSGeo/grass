@@ -78,7 +78,7 @@ update-po:
 		    echo "Merging failed"; \
 		fi \
 		done
-	@echo "Be careful with SVN commits as .po file updates must be synchronized with the individual translators."
+	@echo "Be careful with git commits as .po file updates must be synchronized with the individual translators."
 
 verify:
 	@cd ./po/ ; for po in `ls *_*.po 2>/dev/null` ; do \
@@ -86,7 +86,7 @@ verify:
 		msgfmt -c $$po; \
 	done
 	@rm -f po/messages.mo
-	@echo "Note: In case of translations errors to be fixed, edit the respective translation on transifex (and not in SVN)"
+	@echo "Note: In case of translations errors to be fixed, edit the respective translation on transifex (and not in git)"
 
 statistics:
 	$(call po_stats)

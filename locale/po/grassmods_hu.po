@@ -5919,9 +5919,9 @@ msgid "No start point(s) specified"
 msgstr ""
 
 #: ../raster/r.path/main.c:369
-#, fuzzy, c-format
+#, c-format
 msgid "Reading raster values map <%s> ..."
-msgstr "Raszter térkép olvasás <%s>..."
+msgstr ""
 
 #: ../raster/r.path/main.c:382 ../raster/r.path/main.c:445
 #: ../raster/r.path/main.c:462
@@ -5977,9 +5977,9 @@ msgid "Invalid directions format '%s'"
 msgstr ""
 
 #: ../raster/r.path/main.c:434
-#, fuzzy, c-format
+#, c-format
 msgid "Reading direction map <%s> ..."
-msgstr "Raszter térkép olvasás <%s>..."
+msgstr ""
 
 #: ../raster/r.path/main.c:481
 msgid "Processing start points..."
@@ -13889,18 +13889,16 @@ msgid "mosaic"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:79
-#, fuzzy
 msgid "virtual raster"
-msgstr "raszter"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:81
 msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:84
-#, fuzzy
 msgid "Name of input raster files"
-msgstr "Input szín trékép neve"
+msgstr ""
 
 #: ../raster/r.buildvrt/main.c:90 ../imagery/i.group/main.c:74
 msgid "Input file with one raster map name per line"
@@ -30932,9 +30930,9 @@ msgstr ""
 
 #: ../vector/v.out.ogr/main.c:682 ../vector/v.out.ogr/main.c:757
 #: ../vector/v.to.db/main.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create column <%s>"
-msgstr "Nem tudok memóriát foglalni"
+msgstr ""
 
 #: ../vector/v.out.ogr/main.c:763
 #, c-format
@@ -32008,9 +32006,9 @@ msgid "Unable to fetch data from table <%s>"
 msgstr ""
 
 #: ../vector/v.random/main.c:742
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to update row: %s"
-msgstr "Nem tudok memóriát foglalni"
+msgstr ""
 
 #: ../vector/v.support/main.c:41
 msgid "Updates vector map metadata."

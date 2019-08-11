@@ -272,9 +272,9 @@ msgid "Unable to read range file for <%s>"
 msgstr ""
 
 #: ../lib/raster/range.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read stats file for <%s>"
-msgstr "无法读取输入文件<%s>"
+msgstr ""
 
 #: ../lib/raster/range.c:368 ../lib/raster/range.c:374
 #: ../lib/raster/range.c:406 ../lib/raster/range.c:420
@@ -284,9 +284,9 @@ msgstr ""
 
 #: ../lib/raster/range.c:450 ../lib/raster/range.c:464
 #: ../lib/raster/range.c:482 ../lib/raster/range.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write stats file for <%s>"
-msgstr "无法读取输入文件<%s>"
+msgstr ""
 
 #: ../lib/raster/raster_metadata.c:109
 #, c-format
@@ -652,9 +652,9 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr ""
 
 #: ../lib/raster/vrt.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Tile raster map <%s> not found"
-msgstr "3D栅格地图<%s>未找到"
+msgstr ""
 
 #: ../lib/raster/vrt.c:86
 msgid "A virtual raster can not contain itself"
@@ -1125,9 +1125,8 @@ msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
 msgstr "表面之间切面点不匹配。"
 
 #: ../lib/ogsf/gsd_img_ppm.c:96
-#, fuzzy
 msgid "Unable to write view"
-msgstr "无法移除%s"
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, c-format
@@ -6354,9 +6353,8 @@ msgid "no description"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:292
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "无法为读取打开%s"
+msgstr ""
 
 #: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
 #: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
@@ -6369,9 +6367,8 @@ msgid "range: %g to %g"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:368
-#, fuzzy
 msgid "Unable to open color descriptions"
-msgstr "无法为写入打开%s"
+msgstr ""
 
 #: ../lib/gis/mapset_msc.c:90
 #, c-format
@@ -9584,23 +9581,21 @@ msgid "Invalid zone %s specified"
 msgstr ""
 
 #: ../lib/proj/get_proj.c:243
-#, fuzzy
 msgid "Unable to initialise PROJ with the following parameter list:"
-msgstr "无法使用以下的参数表对PROJ.4进行初始化："
+msgstr ""
 
 #: ../lib/proj/get_proj.c:252
-#, fuzzy, c-format
+#, c-format
 msgid "The PROJ error message: %s"
-msgstr "错误信息： %s"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:360
 msgid "Option input overflowed option table"
 msgstr "选项输出溢出选项表"
 
 #: ../lib/proj/get_proj.c:388
-#, fuzzy
 msgid "Unable to initialize pj"
-msgstr "无法打开输入文件<%s>"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:396
 #, c-format
@@ -9705,33 +9700,31 @@ msgid "Input coordinate system is NULL"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:104
-#, fuzzy, c-format
+#, c-format
 msgid "proj_create() failed for '%s'"
-msgstr "pj转换（）失败: %s"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create latlong equivalent for '%s'"
-msgstr "无法打开数据库元素列表 <%s>"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:164
-#, fuzzy
 msgid "No input projection"
-msgstr "未知的投影"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:167 ../lib/proj/do_proj.c:336
 msgid "No transformation object"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:221 ../lib/proj/do_proj.c:446
-#, fuzzy, c-format
+#, c-format
 msgid "proj_trans() failed: %s"
-msgstr "pj转换（）失败: %s"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:247
-#, fuzzy
 msgid "No output projection"
-msgstr "未知的投影"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:276 ../lib/proj/do_proj.c:499
 #: ../lib/proj/do_proj.c:626 ../lib/proj/do_proj.c:790
@@ -9740,9 +9733,9 @@ msgid "pj_transform() failed: %s"
 msgstr "pj转换（）失败: %s"
 
 #: ../lib/proj/do_proj.c:584 ../lib/proj/do_proj.c:747
-#, fuzzy, c-format
+#, c-format
 msgid "proj_trans() failed: %d"
-msgstr "pj转换（）失败: %s"
+msgstr ""
 
 #: ../lib/lidar/zones.c:476 ../lib/lidar/zones.c:513
 #, c-format
@@ -9847,8 +9840,8 @@ msgstr "R/G/B不在0-255之间"
 msgid "Example: income < 1000 and inhab >= 10000"
 msgstr "例如：income < 1000 and inhab >= 10000"
 
-#~ msgid "Unable to initialise PROJ.4 with the following parameter list:"
-#~ msgstr "无法使用以下的参数表对PROJ.4进行初始化："
+msgid "Unable to initialise PROJ.4 with the following parameter list:"
+msgstr "无法使用以下的参数表对PROJ.4进行初始化："
 
-#~ msgid "The error message: %s"
-#~ msgstr "错误信息： %s"
+msgid "The error message: %s"
+msgstr "错误信息： %s"

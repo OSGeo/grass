@@ -11631,9 +11631,8 @@ msgid "Not enough points for line"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Tên cho bản đồ véc tơ mới"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -16241,9 +16240,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:323
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "Bạn có muốn tạo vị trí GRASS <%s>?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -20554,9 +20552,8 @@ msgstr "Vec-tơ thành thể tích"
 msgid "Sites to vector"
 msgstr "Đia điểm thành vec-tơ"
 
-#, fuzzy
 msgid "Raster map calculator."
-msgstr "Trình tính toán cho bản đồ raster 3 chiều"
+msgstr ""
 
 #, fuzzy
 msgid "V&olumes"

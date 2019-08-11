@@ -270,9 +270,9 @@ msgid "Unable to read range file for <%s>"
 msgstr ""
 
 #: ../lib/raster/range.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read stats file for <%s>"
-msgstr "Tidak dapat membuka raster <%s>"
+msgstr ""
 
 #: ../lib/raster/range.c:368 ../lib/raster/range.c:374
 #: ../lib/raster/range.c:406 ../lib/raster/range.c:420
@@ -282,9 +282,9 @@ msgstr ""
 
 #: ../lib/raster/range.c:450 ../lib/raster/range.c:464
 #: ../lib/raster/range.c:482 ../lib/raster/range.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write stats file for <%s>"
-msgstr "Tidak dapat membuka raster <%s>"
+msgstr ""
 
 #: ../lib/raster/raster_metadata.c:109
 #, c-format
@@ -650,9 +650,9 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr ""
 
 #: ../lib/raster/vrt.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Tile raster map <%s> not found"
-msgstr "Peta raster 3D <%s> tidak ada"
+msgstr ""
 
 #: ../lib/raster/vrt.c:86
 msgid "A virtual raster can not contain itself"
@@ -1123,9 +1123,8 @@ msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
 msgstr ""
 
 #: ../lib/ogsf/gsd_img_ppm.c:96
-#, fuzzy
 msgid "Unable to write view"
-msgstr "Tidak dapat menghapus %s"
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, c-format
@@ -6346,9 +6345,8 @@ msgid "no description"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:292
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "Tidak dapat membuka tampilan"
+msgstr ""
 
 #: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
 #: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
@@ -6361,9 +6359,8 @@ msgid "range: %g to %g"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:368
-#, fuzzy
 msgid "Unable to open color descriptions"
-msgstr "Tidak dapat membuka tampilan"
+msgstr ""
 
 #: ../lib/gis/mapset_msc.c:90
 #, c-format
@@ -9589,9 +9586,8 @@ msgid "Option input overflowed option table"
 msgstr ""
 
 #: ../lib/proj/get_proj.c:388
-#, fuzzy
 msgid "Unable to initialize pj"
-msgstr "Tidak dapat mengubah nama %s"
+msgstr ""
 
 #: ../lib/proj/get_proj.c:396
 #, c-format
@@ -9701,9 +9697,9 @@ msgid "proj_create() failed for '%s'"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create latlong equivalent for '%s'"
-msgstr "Tidak dapat membuka daftar elemen basis data '%s'"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:164
 msgid "No input projection"
