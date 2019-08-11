@@ -172,11 +172,6 @@ RUN echo "Install main packages";\
     tar xfz grass-$GRASS_VERSION.git_src_snapshot_latest.tar.gz --strip=1 -C /src/grass_build && \
     rm -f grass-$GRASS_VERSION.git_src_snapshot_latest.tar.gz; \
     #
-    # Fixup python shebangs - TODO: remove once https://github.com/OSGeo/grass/pull/75 is merged
-    cd /src/grass_build && \
-    find -name '*.py' | xargs sed -i 's,#!/usr/bin/env python,#!/usr/bin/env python3,' && \
-    sed -i 's,python,python3,' include/Make/Platform.make.in && \
-    #
     # Configure compile and install GRASS GIS
     #
     echo "  => Configure and compile grass";\
