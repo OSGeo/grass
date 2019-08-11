@@ -87,9 +87,9 @@ vim include/VERSION
 
 #example:
 7
-4
-1RC1
-2018
+8
+0RC1
+2019
 
 # cleanup
 rm -f include/VERSION~
@@ -108,10 +108,10 @@ RELEASE=`cat include/VERSION | head -3 | tail -1`
 VERSION=${MAJOR}.${MINOR}.${RELEASE}
 echo $VERSION
 
-TODO: add feature_branch...
-
+git checkout -b release_GRASS_GIS_$VERSION
 git add include/VERSION
 git commit -m"GRASS GIS $VERSION" include/VERSION
+git push origin release_GRASS_GIS_$VERSION
 
 # Create Changelog file on release branch:
 python tools/gitlog2changelog.py
@@ -304,3 +304,4 @@ vim grass-addons/tools/addons/grass-addons.sh
 
    See also: https://grass.osgeo.org/wiki/Contact_Databases
    ... anywhere else? Please add here.
+   
