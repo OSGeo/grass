@@ -53,13 +53,14 @@ git diff config.guess config.sub
 autoconf-2.13
 # check and submit to git:
 git add config.guess config.sub configure
+git checkout -b config_sub_update_master
 git commit -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/" config.guess config.sub configure
 # test by running ./configure 
 
-# update from git
-git fetch --all --prune
-git push origin master
+git push origin config_sub_update_r78
+# open PR
 
+######
 # cleanup rubbish:
 rm -f locale/templates/*.pot
 rm -f locale/po/messages.mo
