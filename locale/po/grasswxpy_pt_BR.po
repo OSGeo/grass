@@ -11676,9 +11676,8 @@ msgid "Not enough points for line"
 msgstr "Pontos insuficientes para linha"
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Insira nome para novo mapset:"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -16276,9 +16275,8 @@ msgid "Set label for Y axis"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:304
-#, fuzzy
 msgid "Labels"
-msgstr "Adicionar etiquetas"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
@@ -16289,9 +16287,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:323
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "Pretende criar uma GRASS location <%s>?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16361,9 +16358,9 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "Arquivo de área de trabalho <%s> já existe. ¿Quer sobreescrever este arquivo?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
 msgid "File exists"
@@ -20671,9 +20668,8 @@ msgstr "Vectorial para volume"
 msgid "Sites to vector"
 msgstr "Pontos ('sites' ) para vectorial"
 
-#, fuzzy
 msgid "Raster map calculator."
-msgstr "Calculador de mapa raster 3D"
+msgstr ""
 
 #, fuzzy
 msgid "V&olumes"

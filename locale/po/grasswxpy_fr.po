@@ -3479,11 +3479,11 @@ msgstr "Merci de fournir un nom de caméra (généré par i.ortho.camera)"
 
 #: ../gui/wxpython/photo2image/g.gui.photo2image.py:111
 msgid "Please provive an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
-msgstr "Merci de fournir une valeur d'ordre (1 si 4 points fiduciaux, 2 si 8 points fiduciaux)"
+msgstr ""
 
 #: ../gui/wxpython/photo2image/g.gui.photo2image.py:116
 msgid "Please provive an output files extension (used by i.rectify)"
-msgstr "Merci de fournir une extention des fichiers de sortie (utilisé par i.rectify)"
+msgstr ""
 
 #: ../gui/wxpython/photo2image/ip2i_statusbar.py:38
 #: ../gui/wxpython/image2target/ii2t_statusbar.py:38
@@ -4091,9 +4091,9 @@ msgid "Delete selected mapset"
 msgstr "Effacer le jeu de cartes sélectionné"
 
 #: ../gui/wxpython/gis_set.py:258
-#, fuzzy, python-format
+#, python-format
 msgid "GRASS GIS %s Startup%s"
-msgstr "SIG GRASS %s démarrage %s"
+msgstr ""
 
 #: ../gui/wxpython/gis_set.py:263
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:257
@@ -11790,9 +11790,8 @@ msgid "Not enough points for line"
 msgstr "Pas assez de points pour créer une ligne"
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "Entrer le nom du nouveau jeu de cartes :"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format
@@ -16446,24 +16445,20 @@ msgid "STVDS"
 msgstr "STVDS"
 
 #: ../gui/wxpython/tplot/frame.py:282
-#, fuzzy
 msgid "Set title for the plot"
-msgstr "Entrer les paramètres pour le script"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:287
-#, fuzzy
 msgid "Set label for X axis"
-msgstr "Définir l'étiquette"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:292
-#, fuzzy
 msgid "Set label for Y axis"
-msgstr "Définir l'étiquette"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:304
-#, fuzzy
 msgid "Labels"
-msgstr "Étiquette"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:311
 msgid "Path for output CSV file with plotted data"
@@ -16474,9 +16469,8 @@ msgid "CVS path"
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:323
-#, fuzzy
 msgid "Do you want the CSV header?"
-msgstr "Voulez-vous enregistrer les modifications ?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:364 ../gui/wxpython/tplot/frame.py:842
 #: ../gui/wxpython/tplot/frame.py:846 ../gui/wxpython/tplot/frame.py:867
@@ -16546,14 +16540,13 @@ msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr "Problème à la récupération des données du jeu de données vecteur temporel. Liste de valeurs vides."
 
 #: ../gui/wxpython/tplot/frame.py:802
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
-msgstr "Le carte vectorielle <%s> existe déjà. Voulez-vous l'écraser ?"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:804
-#, fuzzy
 msgid "File exists"
-msgstr "Le fichier existe déjà"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:809
 msgid "Please change name of output CSV file or "
@@ -21108,23 +21101,23 @@ msgstr "Algèbre temporelle vecteur"
 msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
 msgstr "Applique des opérations spatiales et temporelles sur des jeux de données vecteur temporel à l'aide de l'algèbre temporelle vecteur."
 
-#~ msgid "Repository (leave empty to use the official one)"
-#~ msgstr "Dépôt (laisser vide pour utiliser l'officiel)"
+msgid "Repository (leave empty to use the official one)"
+msgstr "Dépôt (laisser vide pour utiliser l'officiel)"
 
-#~ msgid "&Fetch"
-#~ msgstr "Récupérer"
+msgid "&Fetch"
+msgstr "Récupérer"
 
-#~ msgid "Fetch list of available modules from GRASS Addons SVN repository"
-#~ msgstr "Récupérer la liste des modules disponibles depuis le dépôt svn des GRASS AddOns"
+msgid "Fetch list of available modules from GRASS Addons SVN repository"
+msgstr "Récupérer la liste des modules disponibles depuis le dépôt svn des GRASS AddOns"
+
+msgid "Please provide an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
+msgstr "Merci de fournir une valeur d'ordre (1 si 4 fiduciaux, 2 si 8 fiduciaux)"
+
+msgid "Please provide an output files extension (used by i.rectify)"
+msgstr "Merci de fournir une extention de fichier (utilisé par i.rectify)"
 
 #~ msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
 #~ msgstr "Créer une carte raster à partir de statistiques univariées sur des points LIDAR LAS."
 
 #~ msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
 #~ msgstr "Convertir des nuages de points LIDAR LAS vers une carte vecteur GRASS avec libLAS"
-
-#~ msgid "Please provide an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
-#~ msgstr "Merci de fournir une valeur d'ordre (1 si 4 fiduciaux, 2 si 8 fiduciaux)"
-
-#~ msgid "Please provide an output files extension (used by i.rectify)"
-#~ msgstr "Merci de fournir une extention de fichier (utilisé par i.rectify)"

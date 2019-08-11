@@ -281,9 +281,9 @@ msgid "Unable to read range file for <%s>"
 msgstr "No ha sido posible leer archivo de rango para <%s>"
 
 #: ../lib/raster/range.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read stats file for <%s>"
-msgstr "No ha sido posible leer archivo de rango para <%s>"
+msgstr ""
 
 #: ../lib/raster/range.c:368 ../lib/raster/range.c:374
 #: ../lib/raster/range.c:406 ../lib/raster/range.c:420
@@ -293,9 +293,9 @@ msgstr "No ha sido posible escribir archivo de rango para <%s>"
 
 #: ../lib/raster/range.c:450 ../lib/raster/range.c:464
 #: ../lib/raster/range.c:482 ../lib/raster/range.c:487
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write stats file for <%s>"
-msgstr "No ha sido posible escribir archivo de rango para <%s>"
+msgstr ""
 
 #: ../lib/raster/raster_metadata.c:109
 #, c-format
@@ -661,9 +661,9 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr "No ha sido posible crear archivo de dependencias en <%s@%s>"
 
 #: ../lib/raster/vrt.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Tile raster map <%s> not found"
-msgstr "El mapa ráster 3D <%s> no se ha encontrado"
+msgstr ""
 
 #: ../lib/raster/vrt.c:86
 msgid "A virtual raster can not contain itself"
@@ -939,9 +939,9 @@ msgid "Raster library not initialized. Programmer forgot to call Rast_init()."
 msgstr "Librería raster no inicializada. El programador olvidó llamar a Rast_init()."
 
 #: ../lib/raster/init.c:109
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown compression method <%s>, using default %s"
-msgstr "Método de compresión desconocido <%s>, usando ZLIB por defecto"
+msgstr ""
 
 #: ../lib/raster/init.c:113
 #, c-format
@@ -949,9 +949,9 @@ msgid "No compression is not supported for GRASS raster maps, using default %s"
 msgstr ""
 
 #: ../lib/raster/init.c:120
-#, fuzzy, c-format
+#, c-format
 msgid "This GRASS version does not support %s compression, using default %s"
-msgstr "Esta versión de GRASS no soporta la compresión %s, utilizando ZLIB por defecto"
+msgstr ""
 
 #: ../lib/raster/null_val.c:64
 msgid "EmbedGivenNulls: wrong data type"
@@ -984,9 +984,8 @@ msgid "Output window changed while maps are open for write. Map name <%s>"
 msgstr "La ventana de salida cambió mientras los mapas están abiertos para lectura. Nombre de mapa <%s>"
 
 #: ../lib/ogsf/gsd_img_tif.c:63 ../lib/ogsf/gsd_img_ppm.c:50
-#, fuzzy
 msgid "Unable to get image of current GL screen"
-msgstr "No ha sido posible leer rango de ráster <%s>"
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_tif.c:69 ../lib/ogsf/gk2.c:216
 #: ../lib/ogsf/gsd_img_ppm.c:55 ../lib/ogsf/gsd_img_ppm.c:101
@@ -1135,9 +1134,8 @@ msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
 msgstr "Error de concordancia de los puntos de corte del plano entre superficies. Revise la(s) resolucion(es)."
 
 #: ../lib/ogsf/gsd_img_ppm.c:96
-#, fuzzy
 msgid "Unable to write view"
-msgstr "No ha sido posible escribir líneas"
+msgstr ""
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, c-format
@@ -2825,9 +2823,8 @@ msgid "color"
 msgstr "color"
 
 #: ../lib/python/script/setup.py:229
-#, fuzzy
 msgid "Cleaning up default sqlite database ..."
-msgstr "Limpiando archivos temporales..."
+msgstr ""
 
 #: ../lib/python/script/setup.py:247 ../lib/init/grass.py:1844
 msgid "Cleaning up temporary files..."
@@ -3418,7 +3415,7 @@ msgstr "No ha sido posible escribir en archivo de condiciones de categorías rá
 
 #: ../lib/imagery/iscatt_core.c:526
 msgid "Unable to read from category raster condition file."
-msgstr "No ha sido posible leer desde archivo de condiciones de categorías ráster."
+msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:533
 msgid "Invalid size of category raster conditions file."
@@ -3451,7 +3448,7 @@ msgstr "No ha sido posible leer rango de ráster <%s>"
 #: ../lib/imagery/iscatt_core.c:803
 #, c-format
 msgid "Unable to open category raster condition file <%s>"
-msgstr "No ha sido posible abrir archivo <%s> de condiciones de categorías"
+msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:817
 msgid "Corrupted category raster conditions file (fseek failed)"
@@ -3711,9 +3708,9 @@ msgid "The APPDATA variable points to directory which does not exist, ask your o
 msgstr ""
 
 #: ../lib/init/grass.py:444
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to create configuration directory '%s' with error: %s"
-msgstr "No se puede cambiar el nombre del directorio de '%s' a '%s'."
+msgstr ""
 
 #: ../lib/init/grass.py:487
 #, python-format
@@ -3818,43 +3815,41 @@ msgid "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reas
 msgstr ""
 
 #: ../lib/init/grass.py:963
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unable to create new location because the location <{location}> already exists."
-msgstr "Ha fallado la creación de una nueva Localización. La localización <%s> ya existe."
+msgstr ""
 
 #: ../lib/init/grass.py:967
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unable to create new location <{location}> because <{path}> is a file."
-msgstr "Ha fallado la creación de una nueva Localización. La localización <%s> ya existe."
+msgstr ""
 
 #: ../lib/init/grass.py:970
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unable to create new location <{location}> because the directory <{path}> already exists."
-msgstr "Ha fallado la creación de una nueva Localización. La localización <%s> ya existe."
+msgstr ""
 
 #: ../lib/init/grass.py:974
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unable to create new location in the directory <{path}> for an unknown reason."
-msgstr "Ha fallado la creación de una nueva Localización. La localización <%s> ya existe."
+msgstr ""
 
 #: ../lib/init/grass.py:1021
 msgid "Mapset <{}> already exists. Ignoring the request to create it. Note that this warning may become an error in future versions."
 msgstr ""
 
 #: ../lib/init/grass.py:1049
-#, fuzzy
 msgid "Creating new GRASS GIS location <{}>..."
-msgstr "Creando nueva Localización/Directorio de mapas..."
+msgstr ""
 
 #: ../lib/init/grass.py:1055
-#, fuzzy
 msgid "Creating new GRASS GIS mapset <{}>..."
-msgstr "Creando nueva Localización/Directorio de mapas..."
+msgstr ""
 
 #: ../lib/init/grass.py:1060
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
-msgstr "No ha sido posible crear una nueva tabla de elementos PostGIS"
+msgstr ""
 
 #: ../lib/init/grass.py:1066
 msgid "The mapset <{}> is missing the WIND file (computational region). It will be fixed now. Note that this warning may become an error in future versions."
@@ -4931,19 +4926,19 @@ msgid "Bug in UI description. Missing option key"
 msgstr ""
 
 #: ../lib/gis/parser.c:359
-#, fuzzy, c-format
+#, c-format
 msgid "Bug in UI description. Option key <%s> is not valid"
-msgstr "Error en las descripciónes, no existe la opción '%s' en <%s>."
+msgstr ""
 
 #: ../lib/gis/parser.c:361
-#, fuzzy, c-format
+#, c-format
 msgid "Bug in UI description. Description for option <%s> missing"
-msgstr "Error en las descripciónes, no existe la opción '%s' en <%s>."
+msgstr ""
 
 #: ../lib/gis/parser.c:413
-#, fuzzy, c-format
+#, c-format
 msgid "Bug in UI description. Option '%s' in <%s> does not exist"
-msgstr "Error en las descripciónes, no existe la opción '%s' en <%s>."
+msgstr ""
 
 #: ../lib/gis/parser.c:537
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
@@ -5613,15 +5608,15 @@ msgstr "Coordenadas no válidas."
 
 #: ../lib/gis/adj_cellhd.c:109 ../lib/gis/adj_cellhd.c:249
 msgid "NS resolution has been changed"
-msgstr ""
+msgstr "La resolución N-S, ha sido cambiada."
 
 #: ../lib/gis/adj_cellhd.c:114 ../lib/gis/adj_cellhd.c:254
 msgid "EW resolution has been changed"
-msgstr ""
+msgstr "La resolución E-O, ha sido cambiada."
 
 #: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:257
 msgid "NS and EW resolutions are different"
-msgstr ""
+msgstr "Las resoluciones N-S y E-O, son diferentes."
 
 #: ../lib/gis/adj_cellhd.c:157
 msgid "Illegal n-s resolution value"
@@ -5653,53 +5648,53 @@ msgstr "Valor de profundidad no admitido"
 
 #: ../lib/gis/adj_cellhd.c:202
 msgid "Top must be larger than Bottom"
-msgstr ""
+msgstr "El valor del límite superior, debe ser mayor que el del límite inferior."
 
 #: ../lib/gis/adj_cellhd.c:276
 #, c-format
 msgid "East (%.15g) is not larger than West (%.15g)"
-msgstr ""
+msgstr "El valor de la frontera Este (%.15g) no es mayor que la Oeste (%.15g). "
 
 #: ../lib/gis/adj_cellhd.c:311
 #, c-format
 msgid "Illegal latitude for North: %g"
-msgstr ""
+msgstr "Latitud ilegal para el Norte: %g"
 
 #: ../lib/gis/adj_cellhd.c:313
 #, c-format
 msgid "Illegal latitude for South: %g"
-msgstr ""
+msgstr "Latitud ilegal para el Sur: %g "
 
 #: ../lib/gis/adj_cellhd.c:319
 #, c-format
 msgid "Illegal longitude for West: %g"
-msgstr ""
+msgstr "Valor ilegal de Longitud para el Oeste: %g "
 
 #: ../lib/gis/adj_cellhd.c:323
 #, c-format
 msgid "Illegal longitude for East: %g"
-msgstr ""
+msgstr "Valor ilegal de Longitud para el Este: %g "
 
 #: ../lib/gis/adj_cellhd.c:351
 #, c-format
 msgid "NS extent does not match NS resolution: %g cells difference"
-msgstr ""
+msgstr "La extensión N-S no coincide con la resolución N-S: Existe una diferencia de %g células."
 
 #: ../lib/gis/adj_cellhd.c:360
 #, c-format
 msgid "%g cells missing to reach 90 degree north"
-msgstr ""
+msgstr " Faltan %g celdas para alcanzar los 90 grados Norte."
 
 #: ../lib/gis/adj_cellhd.c:363 ../lib/gis/adj_cellhd.c:377
 #: ../lib/gis/adj_cellhd.c:391
 #, c-format
 msgid "Subtle input data rounding error of north boundary (%g)"
-msgstr ""
+msgstr "Existe un error sutil de redondeo en los datos de entrada de la frontera Norte (%g)."
 
 #: ../lib/gis/adj_cellhd.c:373
 #, c-format
 msgid "90 degree north is exceeded by %g cells"
-msgstr ""
+msgstr " Los 90 grados Norte, han sido excedidos por %g céldas."
 
 #: ../lib/gis/adj_cellhd.c:402
 msgid "Illegal latitude for North"
@@ -5708,13 +5703,13 @@ msgstr "Latitud no admitida para Norte"
 #: ../lib/gis/adj_cellhd.c:410
 #, c-format
 msgid "%g cells missing to reach 90 degree south"
-msgstr ""
+msgstr " Faltan %g celdas para alcanzar los 90 grados Sur."
 
 #: ../lib/gis/adj_cellhd.c:413 ../lib/gis/adj_cellhd.c:427
 #: ../lib/gis/adj_cellhd.c:441
 #, c-format
 msgid "Subtle input data rounding error of south boundary (%g)"
-msgstr ""
+msgstr "Existe un error sutil de redondeo en los datos de entrada de la frontera Sur (%g)."
 
 #: ../lib/gis/adj_cellhd.c:423
 #, c-format
@@ -6397,9 +6392,8 @@ msgid "Seek offset out of range"
 msgstr "Compensación o desplazamiento de búsqueda fuera de rango."
 
 #: ../lib/gis/cmprzstd.c:80 ../lib/gis/cmprzstd.c:95 ../lib/gis/cmprzstd.c:169
-#, fuzzy
 msgid "GRASS needs to be compiled with ZSTD for ZSTD compression"
-msgstr "GRASS necesita ser compilado con BZIP2 para la compresión BZIP2"
+msgstr ""
 
 #: ../lib/gis/cmprzstd.c:134 ../lib/gis/cmprzstd.c:196
 #, c-format
@@ -6425,9 +6419,8 @@ msgid "no description"
 msgstr "no hay descripción"
 
 #: ../lib/gis/color_rules.c:292
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "No se pueden cargar las reglas de color <%s>."
+msgstr ""
 
 #: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
 #: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
@@ -6440,9 +6433,8 @@ msgid "range: %g to %g"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:368
-#, fuzzy
 msgid "Unable to open color descriptions"
-msgstr "No se puede abrir %s para escritura."
+msgstr ""
 
 #: ../lib/gis/mapset_msc.c:90
 #, c-format
@@ -6518,14 +6510,14 @@ msgid "Option <%s> requires <%s>"
 msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:305
-#, fuzzy, c-format
+#, c-format
 msgid "Option <%s> requires all of %s"
-msgstr "La opción %s necesita todas las %s"
+msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Option <%s> is mutually exclusive with all of %s"
-msgstr "La opción %s es mutuamente excluyente con todas las %s"
+msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:358
 #, c-format
@@ -6968,9 +6960,9 @@ msgid "Spatial index format version %d.%d is not supported by this release. Plea
 msgstr "Formato de índice espacial versión %d.%d no está soportado para esta versión. Por favor reconstruya la topología."
 
 #: ../lib/vector/diglib/plus_line.c:262 ../lib/vector/diglib/plus_line.c:302
-#, fuzzy, c-format
+#, c-format
 msgid "Attempt to delete not registered line %d from node %d"
-msgstr "Intento de eliminar una isla no registrada %d del área %d"
+msgstr ""
 
 #: ../lib/vector/diglib/cindex_rw.c:156
 #, c-format
@@ -8736,8 +8728,8 @@ msgstr[1] "%d primitivas registradas"
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] "Un vértice registrado"
-msgstr[1] "%d vértices registrados"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
@@ -9692,23 +9684,21 @@ msgid "Invalid zone %s specified"
 msgstr "Se ha especificado una zona inválida %s."
 
 #: ../lib/proj/get_proj.c:243
-#, fuzzy
 msgid "Unable to initialise PROJ with the following parameter list:"
-msgstr "No es posible inicializar PROJ 4 con la lista de parámetros siguientes."
+msgstr ""
 
 #: ../lib/proj/get_proj.c:252
-#, fuzzy, c-format
+#, c-format
 msgid "The PROJ error message: %s"
-msgstr "El mensaje de error: %s."
+msgstr ""
 
 #: ../lib/proj/get_proj.c:360
 msgid "Option input overflowed option table"
 msgstr "La opción de entrada, desbordó la tabla de opciones."
 
 #: ../lib/proj/get_proj.c:388
-#, fuzzy
 msgid "Unable to initialize pj"
-msgstr "No se puede inicializar pj, por la causa: %s."
+msgstr ""
 
 #: ../lib/proj/get_proj.c:396
 #, c-format
@@ -9813,33 +9803,31 @@ msgid "Input coordinate system is NULL"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:104
-#, fuzzy, c-format
+#, c-format
 msgid "proj_create() failed for '%s'"
-msgstr "Ha fallado pj_transform(): %s"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:114
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create latlong equivalent for '%s'"
-msgstr "No ha sido posible crear archivo de histograma para <%s>"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:164
-#, fuzzy
 msgid "No input projection"
-msgstr "Proyección desconocida."
+msgstr ""
 
 #: ../lib/proj/do_proj.c:167 ../lib/proj/do_proj.c:336
 msgid "No transformation object"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:221 ../lib/proj/do_proj.c:446
-#, fuzzy, c-format
+#, c-format
 msgid "proj_trans() failed: %s"
-msgstr "Ha fallado pj_transform(): %s"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:247
-#, fuzzy
 msgid "No output projection"
-msgstr "No ha sido posible establecer proyección"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:276 ../lib/proj/do_proj.c:499
 #: ../lib/proj/do_proj.c:626 ../lib/proj/do_proj.c:790
@@ -9848,9 +9836,9 @@ msgid "pj_transform() failed: %s"
 msgstr "Ha fallado pj_transform(): %s"
 
 #: ../lib/proj/do_proj.c:584 ../lib/proj/do_proj.c:747
-#, fuzzy, c-format
+#, c-format
 msgid "proj_trans() failed: %d"
-msgstr "Ha fallado pj_transform(): %s"
+msgstr ""
 
 #: ../lib/lidar/zones.c:476 ../lib/lidar/zones.c:513
 #, c-format
@@ -10174,39 +10162,51 @@ msgstr "No ha sido posible abrir ráster <%s>"
 msgid "Absurd polygon."
 msgstr "Polígono absurdo."
 
-#~ msgid ""
-#~ "GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
-#~ "Interactive startup needed."
-#~ msgstr ""
-#~ "Variables GISDBASE, LOCATION_NAME y MAPSET no están definidas adecuadamente.\n"
-#~ "Se necesita arranque interactivo."
+msgid ""
+"GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
+"Interactive startup needed."
+msgstr ""
+"Variables GISDBASE, LOCATION_NAME y MAPSET no están definidas adecuadamente.\n"
+"Se necesita arranque interactivo."
 
-#~ msgid "BUG in option name, '%s' is not valid"
-#~ msgstr "BUG in opción nombre, '%s' no es válido"
+msgid "BUG in option name, '%s' is not valid"
+msgstr "BUG in opción nombre, '%s' no es válido"
 
-#~ msgid "Default locale settings are missing. GRASS running with C locale."
-#~ msgstr "Faltan configuraciones locales predeterminadas. GRASS está corriendo con C local."
+msgid "Default locale settings are missing. GRASS running with C locale."
+msgstr "Faltan configuraciones locales predeterminadas. GRASS está corriendo con C local."
 
-#~ msgid "Unable to initialise PROJ.4 with the following parameter list:"
-#~ msgstr "No es posible inicializar PROJ 4 con la lista de parámetros siguientes."
+msgid "Unable to initialise PROJ.4 with the following parameter list:"
+msgstr "No es posible inicializar PROJ 4 con la lista de parámetros siguientes."
 
-#~ msgid "The error message: %s"
-#~ msgstr "El mensaje de error: %s."
+msgid "The error message: %s"
+msgstr "El mensaje de error: %s."
 
-#~ msgid "Unknown compression method <%s>, using default ZLIB"
-#~ msgstr "Método de compresión desconocido <%s>, usando ZLIB por defecto"
+msgid "Unknown compression method <%s>, using default ZLIB"
+msgstr "Método de compresión desconocido <%s>, usando ZLIB por defecto"
 
-#~ msgid "This GRASS version does not support %s compression, using default ZLIB"
-#~ msgstr "Esta versión de GRASS no soporta la compresión %s, utilizando ZLIB por defecto"
+msgid "This GRASS version does not support %s compression, using default ZLIB"
+msgstr "Esta versión de GRASS no soporta la compresión %s, utilizando ZLIB por defecto"
 
-#~ msgid "BUG in descriptions, option '%s' in <%s> does not exist"
-#~ msgstr "Error en las descripciónes, no existe la opción '%s' en <%s>."
+msgid "BUG in descriptions, option '%s' in <%s> does not exist"
+msgstr "Error en las descripciónes, no existe la opción '%s' en <%s>."
 
-#~ msgid "Unable allocate PNG structure"
-#~ msgstr "No ha sido posible asignar estructura PNG"
+msgid "Unable allocate PNG structure"
+msgstr "No ha sido posible asignar estructura PNG"
 
-#~ msgid "Unable to read find raster <%s>"
-#~ msgstr "No se puede leer \"Encontrar ráster <% s>\"."
+msgid "Unable to read find raster <%s>"
+msgstr "No se puede leer \"Encontrar ráster <% s>\"."
+
+msgid "Failed to create new location. The location <%s> already exists."
+msgstr "Ha fallado la creación de una nueva Localización. La localización <%s> ya existe."
+
+msgid "Creating new GRASS GIS location/mapset..."
+msgstr "Creando nueva Localización/Directorio de mapas..."
+
+msgid "Option %s requires all of %s"
+msgstr "La opción %s necesita todas las %s"
+
+msgid "Option %s is mutually exclusive with all of %s"
+msgstr "La opción %s es mutuamente excluyente con todas las %s"
 
 #~ msgid ""
 #~ "Unable to fetch interface description for command '%(cmd)s'.\n"
@@ -10215,18 +10215,6 @@ msgstr "Polígono absurdo."
 #~ msgstr ""
 #~ "No se puede recuperar la descripción para el comando '%(cmd)s':\n"
 #~ "Detalles:%(det)s"
-
-#~ msgid "Failed to create new location. The location <%s> already exists."
-#~ msgstr "Ha fallado la creación de una nueva Localización. La localización <%s> ya existe."
-
-#~ msgid "Creating new GRASS GIS location/mapset..."
-#~ msgstr "Creando nueva Localización/Directorio de mapas..."
-
-#~ msgid "Option %s requires all of %s"
-#~ msgstr "La opción %s necesita todas las %s"
-
-#~ msgid "Option %s is mutually exclusive with all of %s"
-#~ msgstr "La opción %s es mutuamente excluyente con todas las %s"
 
 #~ msgid "Unable to seek"
 #~ msgstr "No ha sido posible buscar"

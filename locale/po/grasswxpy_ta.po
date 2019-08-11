@@ -11631,9 +11631,8 @@ msgid "Not enough points for line"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:51
-#, fuzzy
 msgid "Name for the new mapset:"
-msgstr "புதிய வரைபடத்தொகுப்பு"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:150
 #, python-brace-format

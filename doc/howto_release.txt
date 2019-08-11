@@ -26,7 +26,7 @@ tools/fix_typos.sh
 # i18N: sync from Transifex (https://www.transifex.com/grass-gis/grass7/dashboard/)
 #  - except for Latvian; Latvian is directly edited in git and then sync'ed from master .po files
 cd locale
-sh ~/software/grass-addons/tools/transifex_merge.sh
+sh ~/software/grass_addons_git/tools/transifex_merge.sh
 make
 make verify
 # ... then fix .po files as needed.
