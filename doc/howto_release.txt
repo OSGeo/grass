@@ -57,7 +57,7 @@ git checkout -b config_sub_update_master
 git commit -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/" config.guess config.sub configure
 # test by running ./configure 
 
-git push origin config_sub_update_r78
+git push origin config_sub_update_master
 # open PR
 
 ######
