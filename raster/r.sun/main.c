@@ -915,7 +915,7 @@ int INPUT_part(int offset, double *zmax)
 
     if (longin != NULL) {
 	cell7 = Rast_allocate_f_buf();
-	if (latitudeArray == NULL) {
+	if (longitudeArray == NULL) {
             if (!(longitudeArray = G_alloc_fmatrix(numRows, n))) 
             {
                 G_fatal_error(_("Out of memory"));
