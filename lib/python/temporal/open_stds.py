@@ -51,7 +51,10 @@ def open_old_stds(name, type, dbif=None):
         name, mapset = name.split('@')
     band_ref = None
     if name.find(":") > -1:
-        name, band_ref = name.split(':')
+        try:
+            name, band_ref = name.split(':')
+        except ValueError:
+            msgr.fatal("Invalid name of the space time dataset")
     id = name + "@" + mapset
 
     if type == "strds" or type == "rast" or type == "raster":

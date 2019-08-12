@@ -52,6 +52,29 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.reset(ident)
         self.map_counter = 0
 
+        # SpaceTimeRasterDataset related only
+        self.band_reference = None
+
+    def get_name(self, band_reference=True):
+        """Get dataset name including band reference filter if enabled.
+
+        :param bool band_reference: True to return dataset name
+        including band reference filter if defined
+        (eg. "sentinel:S2A_1") otherwise dataset name is returned only
+        (eg. "sentinel").
+
+        :return str: dataset name
+
+        """
+        dataset_name = super(AbstractSpaceTimeDataset, self).get_name()
+
+        if band_reference and self.band_reference:
+            return '{}:{}'.format(
+                dataset_name, self.band_reference
+            )
+
+        return dataset_name
+
     def create_map_register_name(self):
         """Create the name of the map register table of this space time
             dataset

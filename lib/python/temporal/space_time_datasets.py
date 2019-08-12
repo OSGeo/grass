@@ -1106,8 +1106,6 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
     def __init__(self, ident):
         AbstractSpaceTimeDataset.__init__(self, ident)
 
-        self.band_reference = None
-
     def set_band_reference(self, band_reference):
         """Set band reference identifier
 
