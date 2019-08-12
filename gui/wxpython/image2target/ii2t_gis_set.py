@@ -108,7 +108,7 @@ class GRASSStartup(wx.Frame):
         versionFile.close()
         try:
             grassVersion, grassRevision = versionLine.split(' ', 1)
-            if grassVersion.endswith('svn'):
+            if grassVersion.endswith('dev'):
                 grassRevisionStr = ' (%s)' % grassRevision
             else:
                 grassRevisionStr = ''

@@ -250,7 +250,7 @@ menustrings_menudata.LayerManagerMenuData = [
     _('Converts coordinates from one projection to another (cs2cs frontend).'),
     _('Addons extensions'),
     _('Install extension from addons'),
-    _('Installs new extension from GRASS AddOns SVN repository.'),
+    _('Installs new extension from GRASS AddOns repository.'),
     _('Manage installed extension'),
     _('Updates or removes installed GRASS AddOns extension(s).'),
     _('Preferences'),
