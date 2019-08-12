@@ -50,9 +50,9 @@ def open_old_stds(name, type, dbif=None):
     else:
         name, mapset = name.split('@')
     band_ref = None
-    if name.find(":") > -1:
+    if name.find("::") > -1:
         try:
-            name, band_ref = name.split(':')
+            name, band_ref = name.split('::')
         except ValueError:
             msgr.fatal("Invalid name of the space time dataset")
     id = name + "@" + mapset

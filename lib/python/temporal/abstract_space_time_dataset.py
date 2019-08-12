@@ -60,7 +60,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         :param bool band_reference: True to return dataset name
         including band reference filter if defined
-        (eg. "sentinel:S2A_1") otherwise dataset name is returned only
+        (eg. "sentinel::S2A_1") otherwise dataset name is returned only
         (eg. "sentinel").
 
         :return str: dataset name
@@ -69,7 +69,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         dataset_name = super(AbstractSpaceTimeDataset, self).get_name()
 
         if band_reference and self.band_reference:
-            return '{}:{}'.format(
+            return '{}::{}'.format(
                 dataset_name, self.band_reference
             )
 
