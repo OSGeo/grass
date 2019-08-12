@@ -1797,7 +1797,7 @@ class GMFrame(wx.Frame):
         dlg.Show()
 
     def OnInstallExtension(self, event):
-        """Install extension from GRASS Addons SVN repository"""
+        """Install extension from GRASS Addons repository"""
         from modules.extensions import InstallExtensionWindow
         win = InstallExtensionWindow(
             self, giface=self._giface, size=(650, 550))

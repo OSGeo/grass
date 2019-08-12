@@ -327,7 +327,7 @@
     <label>Install extension from addons</label>
     <handler>OnInstallExtension</handler>
     <related-module>g.extension</related-module>
-    <description>Installs new extension from GRASS AddOns SVN repository.</description>
+    <description>Installs new extension from GRASS AddOns repository.</description>
     <keywords>general,installation,extensions</keywords>
   </wxgui-item>
   <wxgui-item name="ManageExtension">
