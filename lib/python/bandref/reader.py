@@ -67,12 +67,20 @@ class BandReferenceReader:
         :param str band: band identifier
         :param str item: items to be printed out
         """
+        def print_kv(k, v, indent):
+            if isinstance(v, OrderedDict):
+                print ('{}{}:'.format(' ' * indent * 2, k))
+                for ki, vi in v.items():
+                    print_kv(ki, vi, indent * 2)
+            else:
+                print ('{}{}: {}'.format(' ' * indent * 2, k, v))
+
         indent = 4
         print ('{}band: {}'.format(
             ' ' * indent, band
         ))
         for k, v in item[band].items():
-            print ('{}{}: {}'.format(' ' * indent * 2, k, v))
+            print_kv(k, v, indent)
 
     def _print_band(self, shortcut, band):
         print (self._band_identifier(shortcut, band))

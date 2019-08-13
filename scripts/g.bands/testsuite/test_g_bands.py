@@ -22,18 +22,18 @@ class TestBandsSystemDefined(TestCase):
 
         self.assertEqual(nbands, nbands_ref)
 
-    def test_number_s2a(self):
-        # test number of S2A band identifiers (hardcoded, no changes expected)
+    def test_number_s2(self):
+        # test number of S2 band identifiers (hardcoded, no changes expected)
         #
-        nbands = self._number_of_bands(band='S2A')
+        nbands = self._number_of_bands(band='S2')
 
         self.assertEqual(nbands, 13)
 
 
-    def test_number_s2a_1(self):
-        # test if S2A_1 is defined (lower + upper case)
+    def test_number_s2_1(self):
+        # test if S2_1 is defined (lower + upper case)
         #
-        band = 'S2A_1'
+        band = 'S2_1'
         for iband in [band, band.lower()]:
             nbands = self._number_of_bands(band=iband)
             self.assertEqual(nbands, 1)

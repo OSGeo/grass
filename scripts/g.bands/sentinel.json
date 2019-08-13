@@ -1,148 +1,152 @@
 {
-    "Sentinel2A": {
-        "description": "The Sentinel-2 A bands",
-        "shortcut": "S2A",
+    "Sentinel2": {
+        "description": "The Sentinel-2 A/B bands",
+        "shortcut": "S2",
         "instruments": "MultiSpectral Instrument (MSI) optical and infrared",
-        "launched": "23 June 2015",
+        "launched": "23 June 2015 (A); 07 March 2017 (B)",
         "source": "https://sentinel.esa.int/web/sentinel/missions/sentinel-2",
         "bands": {
             "1": {
-                "central wavelength (nm)": 443.9,
-                "bandwidth (nm)": 27,
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 443.9,
+                    "bandwidth (nm)": 27
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 442.3,
+                    "bandwidth (nm)": 45
+                },
                 "spatial resolution (meters)": 60
             },
             "2": {
-                "central wavelength (nm)": 496.6,
-                "bandwidth (nm)": 98,
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 496.6,
+                    "bandwidth (nm)": 98
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 492.1,
+                    "bandwidth (nm)": 98
+                },
                 "spatial resolution (meters)": 10
             },
             "3": {
-                "central wavelength (nm)": 560.0,
-                "bandwidth (nm)": 45,
-                "spatial resolution (meters)": 10
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 560.0,
+                    "bandwidth (nm)": 45
                 },
-            "4": {
-                "central wavelength (nm)": 664.5,
-                "bandwidth (nm)": 38,
-                "spatial resolution (meters)": 10
-            },
-            "5": {
-                "central wavelength (nm)": 703.9,
-                "bandwidth (nm)": 19,
-                "spatial resolution (meters)": 20
-            },
-            "6": {
-                "central wavelength (nm)": 740.2,
-                "bandwidth (nm)": 18,
-                "spatial resolution (meters)": 20
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 559.0,
+                    "bandwidth (nm)": 46
                 },
-            "7": {
-                "central wavelength (nm)": 782.5,
-                "bandwidth (nm)": 28,
-                "spatial resolution (meters)": 20
-            },
-            "8": {
-                "central wavelength (nm)": 835.1,
-                "bandwidth (nm)": 145,
-                "spatial resolution (meters)": 10
-            },
-            "8A": {
-                "central wavelength (nm)": 864.8,
-                "bandwidth (nm)": 33,
-                "spatial resolution (meters)": 20
-            },
-            "9": {
-                "central wavelength (nm)": 945.0,
-                "bandwidth (nm)": 26,
-                "spatial resolution (meters)": 60
-            },
-            "10": {
-                "central wavelength (nm)": 1373.5,
-                "bandwidth (nm)": 75,
-                "spatial resolution (meters)": 60
-            },
-            "11": {
-                "central wavelength (nm)": 1613.7,
-                "bandwidth (nm)": 143,
-                "spatial resolution (meters)": 20
-            },
-            "12": {
-                "central wavelength (nm)": 2202.4,
-                "bandwidth (nm)": 242,
-                "spatial resolution (meters)": 20
-            }
-        }
-    },
-    "Sentinel2B": {
-        "description": "The Sentinel-2B bands",
-        "shortcut": "S2B",
-        "instruments": "MultiSpectral Instrument (MSI) optical and infrared",
-        "launched": "07 March 2017",
-        "source": "https://sentinel.esa.int/web/sentinel/missions/sentinel-2",
-        "bands": {
-            "1": {
-                "central wavelength (nm)": 442.3,
-                "bandwidth (nm)": 45,
-                "spatial resolution (meters)": 60
-            },
-            "2": {
-                "central wavelength (nm)": 492.1,
-                "bandwidth (nm)": 98,
-                "spatial resolution (meters)": 10
-            },
-            "3": {
-                "central wavelength (nm)": 559.0,
-                "bandwidth (nm)": 46,
                 "spatial resolution (meters)": 10
             },
             "4": {
-                "central wavelength (nm)": 665.0,
-                "bandwidth (nm)": 39,
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 664.5,
+                    "bandwidth (nm)": 38
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 665.0,
+                    "bandwidth (nm)": 39
+                },
                 "spatial resolution (meters)": 10
             },
             "5": {
-                "central wavelength (nm)": 703.8,
-                "bandwidth (nm)": 20,
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 703.9,
+                    "bandwidth (nm)": 19
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 703.8,
+                    "bandwidth (nm)": 20
+                },
                 "spatial resolution (meters)": 20
             },
             "6": {
-                "central wavelength (nm)": 739.1,
-                "bandwidth (nm)": 18,
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 740.2,
+                    "bandwidth (nm)": 18
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 739.1,
+                    "bandwidth (nm)": 18
+                },
                 "spatial resolution (meters)": 20
             },
             "7": {
-                "central wavelength (nm)": 779.7,
-                "bandwidth (nm)": 28,
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 782.5,
+                    "bandwidth (nm)": 28
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 779.7,
+                    "bandwidth (nm)": 28
+                },
                 "spatial resolution (meters)": 20
             },
             "8": {
-                "central wavelength (nm)": 833.0,
-                "bandwidth (nm)": 133,
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 835.1,
+                    "bandwidth (nm)": 145
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 833.0,
+                    "bandwidth (nm)": 133
+                },
                 "spatial resolution (meters)": 10
             },
             "8A": {
-                "central wavelength (nm)": 864.0,
-                "bandwidth (nm)": 32,
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 864.8,
+                    "bandwidth (nm)": 33
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 864.0,
+                    "bandwidth (nm)": 32
+                },
                 "spatial resolution (meters)": 20
             },
             "9": {
-                "central wavelength (nm)": 943.2,
-                "bandwidth (nm)": 27,
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 945.0,
+                    "bandwidth (nm)": 26
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 943.2,
+                    "bandwidth (nm)": 27
+                },
                 "spatial resolution (meters)": 60
             },
             "10": {
-                "central wavelength (nm)": 1376.9,
-                "bandwidth (nm)": 76,
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 1373.5,
+                    "bandwidth (nm)": 75
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 1376.9,
+                    "bandwidth (nm)": 76
+                },
                 "spatial resolution (meters)": 60
             },
             "11": {
-                "central wavelength (nm)": 1610.4,
-                "bandwidth (nm)": 141,
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 1613.7,
+                    "bandwidth (nm)": 143
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 1610.4,
+                    "bandwidth (nm)": 141
+                },
                 "spatial resolution (meters)": 20
             },
             "12": {
-                "central wavelength (nm)": 2185.7,
-                "bandwidth (nm)": 238,
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 2202.4,
+                    "bandwidth (nm)": 242
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 2185.7,
+                    "bandwidth (nm)": 238
+                },
                 "spatial resolution (meters)": 20
             }
         }

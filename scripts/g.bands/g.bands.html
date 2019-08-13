@@ -37,19 +37,37 @@ internal data structure. A minimalistic example is shown below.
 
 <div class="code"><pre>
 {
-    "Sentinel2A": {
-        "description": "The Sentinel-2 A bands",
-        "shortcut": "S2A",
-        "instruments": "optical and infrared",
+    "Sentinel2": {
+        "description": "The Sentinel-2 A/B bands",
+        "shortcut": "S2",
+        "instruments": "MultiSpectral Instrument (MSI) optical and infrared",
+        "launched": "23 June 2015 (A); 07 March 2017 (B)",
+        "source": "https://sentinel.esa.int/web/sentinel/missions/sentinel-2",
         "bands": {
             "1": {
-                "central wavelength (nm)": 442.7,
-                "bandwidth (nm)": 21
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 443.9,
+                    "bandwidth (nm)": 27
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 442.3,
+                    "bandwidth (nm)": 45
+                },
+                "spatial resolution (meters)": 60
             },
             "2": {
-                "central wavelength (nm)": 492.4,
-                "bandwidth (nm)": 66
+                "Sentinel 2A" : {
+                    "central wavelength (nm)": 496.6,
+                    "bandwidth (nm)": 98
+                },
+                "Sentinel 2B" : {
+                    "central wavelength (nm)": 492.1,
+                    "bandwidth (nm)": 98
+                },
+                "spatial resolution (meters)": 10
             }
+        }
+    }
 }
 </pre></div>
 
@@ -86,57 +104,51 @@ details.
 <div class="code"><pre>
 g.bands
 
-S2A_1
-S2A_2
+S2_1
+S2_2
 ...
-S2B_1
-S2B_2
+L7_1
+L7_2
 ...
-Ls7_1
-Ls7_2
+L8_1
+L8_2
 ...
 </pre></div>
 
 <h3>Filter band references by a shortcut</h3>
 
-Only band identifiers related to Sentinel-2A satellite will be
+Only band identifiers related to Sentinel-2 satellite will be
 printed.
-
-<div class="code"><pre>
-g.bands band=S2A
-
-S2A_1
-...
-S2A_12
-</pre></div>
-
-Similarly for both Sentinel-2 satellites.
 
 <div class="code"><pre>
 g.bands band=S2
 
-S2A_1
+S2_1
 ...
-S2A_12
-S2B_1
-...
-S2B_12
+S2_12
 </pre></div>
 
 <h3>Print extended metadata for specified band identifier</h3>
 
-Extended metadata related to the first band of Sentinel-2A satellite
+Extended metadata related to the first band of Sentinel-2 satellite
 will be printed.
 
 <div class="code"><pre>
-g.bands -e band=S2A_1
+g.bands -e band=S2_1
 
-description: The Sentinel-2 A bands
-shortcut: S2A
-instruments: optical and infrared
+description: The Sentinel-2 A/B bands
+shortcut: S2
+instruments: MultiSpectral Instrument (MSI) optical and infrared
+launched: 23 June 2015 (A); 07 March 2017 (B)
+source: https://sentinel.esa.int/web/sentinel/missions/sentinel-2
     band: 1
-        central wavelength (nm): 442.7
-        bandwidth (nm): 21
+        Sentinel 2A:
+                central wavelength (nm): 443.9
+                bandwidth (nm): 27
+        Sentinel 2B:
+                central wavelength (nm): 442.3
+                bandwidth (nm): 45
+        spatial resolution (meters): 60
 </pre></div>
 
 <h2>KNOWN ISSUES</h2>
