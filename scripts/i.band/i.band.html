@@ -16,15 +16,15 @@ by <b>map</b> option.
 Note that <i>only raster maps from the current mapsets</i> can be modified.
 
 <p>
-For more information about band references and image collections
+For more information about band reference concept
 see <em><a href="g.bands.html">g.bands</a></em> module.
 
 <p>Band references are supported by temporal GRASS modules. Name of
 STRDS can be extended by band identifier in order to filter the result
 by a band reference. See
 <em><a href="t.register.html#support-for-band-references">t.register</a></em>,
-<em><a href="t.rast.list.html#filtering-the-result-by-band-references">t.rast.list</a></em>
-and <em><a href="t.info.html#space-time-dataset-with-band-references-assigned">t.info</a></em>
+<em><a href="t.rast.list.html#filtering-the-result-by-band-references">t.rast.list</a></em>, <em><a href="t.info.html#space-time-dataset-with-band-references-assigned">t.info</a></em>
+and <em><a href="t.rast.mapcalc.html#band-reference-filtering">t.rast.mapcalc</a></em>
 modules for examples.
 
 <h2>EXAMPLES</h2>
@@ -32,19 +32,19 @@ modules for examples.
 <h3>Assign band reference to a single raster map</h3>
 
 <div class="code"><pre>
-i.band map=T33UVR_20180506T100031_B01 band=S2A_1
+i.band map=T33UVR_20180506T100031_B01 band=S2_1
 </pre></div>
 
 <h3>Assign band reference to a list of raster maps</h3>
 
 <div class="code"><pre>
-i.band map=T33UVR_20180506T100031_B01,T33UVR_20180521T100029_B01 band=S2A_1,S2B_1
+i.band map=T33UVR_20180506T100031_B01,T33UVR_20180521T100029_B01 band=S2_1,S2_1
 </pre></div>
 
 <h3>Assign different band references to a list of raster maps</h3>
 
 <div class="code"><pre>
-i.band map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02 band=S2A_1,S2A_2
+i.band map=T33UVR_20180506T100031_B01,T33UVR_20180506T100031_B02 band=S2_1,S2_2
 </pre></div>
 
 <h3>Remove band reference from a list of raster maps</h3>

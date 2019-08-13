@@ -29,7 +29,7 @@
 #% key: band
 #% type: string
 #% key_desc: name
-#% description: Name of band reference identifier (example: S2A_1,S2A_2,...)
+#% description: Name of band reference identifier (example: S2_1,S2_2,...)
 #% required: no
 #% multiple: yes
 #%end

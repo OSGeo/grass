@@ -159,7 +159,7 @@ class Info(object):
     def _get_band_reference(self):
         """Get band reference identifier.
 
-        :return str: band identifier (eg. S2A_1) or None
+        :return str: band identifier (eg. S2_1) or None
         """
         band_ref = None
         p_filename = ctypes.c_char_p()

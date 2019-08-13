@@ -411,7 +411,7 @@ class RasterDataset(AbstractMapDataset):
 
         File-based band identifier stored in GRASS data base.
 
-        :param str band_reference: band reference identifier (eg. S2A_1)
+        :param str band_reference: band reference identifier (eg. S2_1)
         """
         self.metadata.set_band_reference(band_reference)
         self.write_band_reference_to_grass()
@@ -1109,7 +1109,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
     def set_band_reference(self, band_reference):
         """Set band reference identifier
 
-        :param str band_reference: band reference identifier (eg. S2A_1)
+        :param str band_reference: band reference identifier (eg. S2_1)
         """
         self.band_reference = band_reference
 

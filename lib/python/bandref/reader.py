@@ -90,7 +90,7 @@ class BandReferenceReader:
 
         Can be filtered by shortcut or band identifier.
 
-        :param str shortcut: shortcut to filter (eg. S2A) or None
+        :param str shortcut: shortcut to filter (eg. S2) or None
         :param str band: band (eg. 1) or None
         :param bool extended: print also extended metadata
         """
@@ -142,7 +142,7 @@ class BandReferenceReader:
 
         Match is case-insensitive.
 
-        :param str band_reference: band reference identifier to search for (eg. S2A_1)
+        :param str band_reference: band reference identifier to search for (eg. S2_1)
 
         :return str: file basename if found or None
         """
