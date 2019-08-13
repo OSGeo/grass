@@ -24,6 +24,7 @@ lib/db/sqlp/sqlp.output
 lib/db/sqlp/sqlp.tab.c
 lib/db/sqlp/sqlp.tab.h
 lib/db/sqlp/sqlp.yy.c
+lib/python/ctypes/ctypesgencore/parser/lextab.py
 lib/python/script/setup.py.tmp
 raster/r.mapcalc/mapcalc.output
 raster/r.mapcalc/mapcalc.tab.c
