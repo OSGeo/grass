@@ -70,6 +70,7 @@ rm -f locale/po/messages.mo
 rm -f demolocation/PERMANENT/.bash*
 find . -name '*~'     | xargs rm
 find . -name '*.bak'  | xargs rm
+find . -name '*.swp'  | xargs rm
 find . -name '.#*'    | xargs rm
 find . -name '*.orig' | xargs rm
 find . -name '*.rej'  | xargs rm
