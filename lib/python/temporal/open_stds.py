@@ -115,6 +115,10 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
         id = name
 
     if type == "strds" or type == "rast" or type == "raster":
+        if name.find('.') > -1:
+            # a dot is used as a separator for band reference filtering
+            msgr.fatal(_("Illegal dataset name <{}>. "
+                         "Character '.' not allowed.").format(name))
         sp = dataset_factory("strds", id)
     elif type == "str3ds" or type == "raster3d" or type == "rast3d "or type == "raster_3d":
         sp = dataset_factory("str3ds", id)
