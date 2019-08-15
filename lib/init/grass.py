@@ -654,9 +654,9 @@ def set_defaults():
     # GRASS_PYTHON
     if not os.getenv('GRASS_PYTHON'):
         if WINDOWS:
-            os.environ['GRASS_PYTHON'] = "python.exe"
+            os.environ['GRASS_PYTHON'] = "python3.exe"
         else:
-            os.environ['GRASS_PYTHON'] = "python"
+            os.environ['GRASS_PYTHON'] = "python3"
 
     # GRASS_GNUPLOT
     if not os.getenv('GRASS_GNUPLOT'):
