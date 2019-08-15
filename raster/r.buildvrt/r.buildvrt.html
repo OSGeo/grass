@@ -29,18 +29,22 @@ raster routines.
 
 <h3>VRT from a DEM in the North Carolina sample dataset</h3>
 
+In this exercise a low resolution DEM is resampled to a high
+resolution DEM. This is subsequently cut into small tiles and
+from that a virtual tile mosaik is created:
+
 <div class="code"><pre>
-# set the region
+# set the computational region to elevation map
 g.region raster=elev_state_500m -p
-# higher resolution
+# enforce higher resolution
 g.region res=50 -p
-# resample the DEM to 50 meter
+# resample the 500 meter DEM to 50 meter resolution
 r.resamp.interp input=elev_state_500m output=elev_state_50m method=bilinear
-# create tiles
+# create tiles from resulting large 50 m elevation map
 r.tile input=elev_state_50m output=elev_state_50m_tile_ width=1000 height=1000 overlap=0
-# dump list of tiles to a file
+# for convenience, dump list of tile names to a file
 g.list type=raster pattern=elev_state_50m_tile_* output=tilelist
-# build a vrt
+# build a mosaik as VRT from tile list
 r.buildvrt file=tilelist output=elev_state_50m_vrt
 </pre></div>
 
