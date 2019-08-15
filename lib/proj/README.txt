@@ -1,10 +1,8 @@
 Projection string management: GRASS GIS relies on GDAL/PROJ.
 
-The EPGS DB is transformed into suitable CSV data for GDAL/PROJ
-according to this procedure:
-http://svn.osgeo.org/metacrs/geotiff/trunk/libgeotiff/csv/README
+EPGS DB management: see https://github.com/OSGeo/libgeotiff/tree/master/libgeotiff
 
-The EPSG CSV files are used via GDAL/OGR API from
+The EPSG data are used via GDAL/OGR API from
 gdal-config --datadir
 
 The datum shift grids are also used from GDAL/PROJ (proj-nad package).

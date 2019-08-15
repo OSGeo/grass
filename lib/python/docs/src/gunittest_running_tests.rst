@@ -117,7 +117,7 @@ Example Bash script to run be used as a cron job
     # compile current source code from scratch
     cd $GRASSSRC
     make distclean -j4
-    svn up
+    git pull
     ./configure ...  # or a script containing all the flags
     make -j4
 
