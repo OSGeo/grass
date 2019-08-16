@@ -201,7 +201,7 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
             # we assume that PATHEXT contains always '.py'
             pathext.insert(0, '.py')
         # See if the given file matches any of the expected path extensions.
-        # This will allow us to short circuit when given "python.exe".
+        # This will allow us to short circuit when given "python3.exe".
         # If it does match, only test that one, otherwise we have to try
         # others.
         if any(cmd.lower().endswith(ext) for ext in pathext):
