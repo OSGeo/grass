@@ -187,7 +187,7 @@ char *G__json(void)
     /*FILE *fp = NULL;*/
     char *type;
     char *file_name = NULL;
-    char c;
+    int c;
     int random_int = rand();
     int num_flags = 0;
     int num_inputs = 0;
@@ -436,7 +436,7 @@ char *check_mapset_in_layer_name(char *layer_name, int always_remove)
 {
     int i = 0;
     char **tokens;
-    char *mapset;
+    const char *mapset;
 
     mapset = G_mapset();
 
