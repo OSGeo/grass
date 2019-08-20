@@ -96,7 +96,7 @@ static void usage(FILE *fp, int markers)
                 fprintf(fp, "%s\n", st->module_info.description);
         }
     }
-    if (extensive &&& st->module_info.keywords) {
+    if (extensive && st->module_info.keywords) {
 	fprintf(fp, "\n");
 	if (markers)
 	    fprintf(fp, "{{{KEYWORDS}}}\n");
