@@ -261,6 +261,7 @@ int main(int argc, char *argv[])
 
     if (format == GV_ASCII_FORMAT_POINT) {
 	int i, rowlen, ncols, minncols, *coltype, *coltype2, *collen, nrows;
+	char **colsample;
 	int n_int = 0, n_double = 0, n_string = 0;
 	char buf[1000];
 	struct field_info *Fi;
@@ -277,7 +278,7 @@ int main(int argc, char *argv[])
 	unlink(tmp);
 
 	points_analyse(ascii, tmpascii, fs, td, &rowlen, &ncols, &minncols,
-		       &nrows, &coltype, &collen, skip_lines, xcol, ycol,
+		       &nrows, &coltype, &colsample, &collen, skip_lines, xcol, ycol,
 		       zcol, catcol, region_flag->answer, ignore_flag->answer);
 
 	G_verbose_message(_("Maximum input row length: %d"), rowlen);
@@ -312,16 +313,20 @@ int main(int argc, char *argv[])
 	}
 
 	if (coltype[xcol] == DB_C_TYPE_STRING) {
-	    G_fatal_error(_("'%s' column is not of number type"), "x");
+	    G_fatal_error(_("'%s' column is not of number type, "
+	                    "encountered: %s"), "x", colsample[xcol]);
 	}
 	if (coltype[ycol] == DB_C_TYPE_STRING) {
-	    G_fatal_error(_("'%s' column is not of number type"), "y");
+	    G_fatal_error(_("'%s' column is not of number type, "
+	                    "encountered: %s"), "y", colsample[ycol]);
 	}
 	if (zcol >= 0 && coltype[zcol] == DB_C_TYPE_STRING) {
-	    G_fatal_error(_("'%s' column is not of number type"), "z");
+	    G_fatal_error(_("'%s' column is not of number type, "
+	                    "encountered: %s"), "z", colsample[zcol]);
 	}
 	if (catcol >= 0 && coltype[catcol] == DB_C_TYPE_STRING) {
-	    G_fatal_error(_("'%s' column is not of number type"), "cat");
+	    G_fatal_error(_("'%s' column is not of number type, "
+	                    "encountered: %s"), "cat", colsample[catcol]);
 	}
 
 	/* Create table */

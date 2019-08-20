@@ -48,12 +48,14 @@ static int is_double(char *str)
  * minncolumns: minimum number of columns
  * nrows: number of rows
  * column_type: column types
+ * column_sample: value which was used to decide the type
  * column_length: column lengths (string only)
  */
 
 int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 		   int *rowlength, int *ncolumns, int *minncolumns,
-		   int *nrows, int **column_type, int **column_length,
+		   int *nrows, int **column_type, char ***column_sample,
+		   int **column_length,
 		   int skip_lines, int xcol, int ycol, int zcol, int catcol, 
 		   int region_flag, int ignore_flag)
 {
@@ -64,6 +66,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
     int ncols = 0;		/* number of columns */
     int minncols = -1;
     int *coltype = NULL;	/* column types */
+    char **colsample = NULL;	/* column samples */
     int *collen = NULL;		/* column lengths */
     char **tokens;
     int ntokens;		/* number of tokens */
@@ -153,9 +156,11 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 
 	if (ntokens > ncols) {
 	    coltype = (int *)G_realloc(coltype, ntokens * sizeof(int));
+	    colsample = (char **)G_realloc(colsample, ntokens * sizeof(char *));
 	    collen = (int *)G_realloc(collen, ntokens * sizeof(int));
 	    for (i = ncols; i < ntokens; i++) {
 		coltype[i] = DB_C_TYPE_INT;	/* default type */
+		colsample[i] = G_store("Not read");  /* default type */
 		collen[i] = 0;
 	    }
 	    ncols = ntokens;
@@ -259,11 +264,14 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 	    if (is_double(tokens[i])) {	/* double */
 		if (coltype[i] == DB_C_TYPE_INT) {
 		    coltype[i] = DB_C_TYPE_DOUBLE;
+		    G_free(colsample[i]);
+		    colsample[i] = G_store(tokens[i]);
 		}
 		continue;
 	    }
 	    /* string */
 	    coltype[i] = DB_C_TYPE_STRING;
+	    colsample[i] = G_store(tokens[i]);
 	    if (len > collen[i])
 		collen[i] = len;
 	}
@@ -289,6 +297,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
     *ncolumns = ncols;
     *minncolumns = minncols;
     *column_type = coltype;
+    *column_sample = colsample;
     *column_length = collen;
     *nrows = row - 1;		/* including skipped lines */
 
