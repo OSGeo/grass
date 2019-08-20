@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
 	   G_message(_("Number of columns: %d"), ncols);
         }
 
-        G_message(_("Number of rows: %d"), nrows);
+        G_message(_("Number of data rows: %d"), nrows - skip_lines);
         
 	/* check column numbers */
 	if (xcol >= minncols) {
