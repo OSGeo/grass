@@ -46,6 +46,17 @@ def main():
     table = options['table']
     layer = options['layer']
 
+    # We check for existence of the map in the current mapset before
+    # doing any other operation.
+    info = gscript.find_file(map, element='vector', mapset=".")
+    if not info['file']:
+        mapset = gscript.gisenv()["MAPSET"]
+        # Message is formulated in the way that it does not mislead
+        # in case where a map of the same name is in another mapset.
+        gscript.fatal(_("Vector map <{name}> not found"
+                        " in the current mapset ({mapset})").format(
+                            name=map, mapset=mapset))
+
     # do some paranoia tests as well:
     f = gscript.vector_layer_db(map, layer)
 
