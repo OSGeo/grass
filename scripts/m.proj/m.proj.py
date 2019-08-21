@@ -10,7 +10,7 @@ AUTHOR(S): M. Hamish Bowman, Dept. Marine Science, Otago University,
 PURPOSE:   cs2cs reprojection frontend for a list of coordinates.
            Replacement for m.proj2 from GRASS 5
 
-COPYRIGHT: (c) 2006-2014 Hamish Bowman, and the GRASS Development Team
+COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
            This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
@@ -90,7 +90,13 @@ COPYRIGHT: (c) 2006-2014 Hamish Bowman, and the GRASS Development Team
 #% description: Include column names in output file
 #% guisection: Output
 #%end
-
+#%rules
+#% required: coordinates, input
+#% exclusive: coordinates, input
+#% exclusive: proj_in, -i
+#% exclusive: proj_out, -o
+#% exclusive: -i, -o
+#%end
 
 import sys
 import os
@@ -138,25 +144,6 @@ def main():
         gcore.fatal(_(
             "cs2cs program not found, install PROJ.4 first: \
             http://proj.maptools.org"))
-
-    # check for overenthusiasm
-    if proj_in and ll_in:
-        gcore.fatal(_("Choose only one input parameter method"))
-
-    if proj_out and ll_out:
-        gcore.fatal(_("Choose only one output parameter method"))
-
-    if ll_in and ll_out:
-        gcore.fatal(_("Choose only one auto-projection parameter method"))
-
-    if output and not gcore.overwrite() and os.path.exists(output):
-        gcore.fatal(_("Output file already exists"))
-
-    if not coords and not input:
-        gcore.fatal(_("One of <coordinates> and <input> must be given"))
-    if coords and input:
-        gcore.fatal(_(
-            "Options <coordinates> and <input> are mutually exclusive"))
 
     # parse field separator
     # FIXME: input_x,y needs to split on multiple whitespace between them
