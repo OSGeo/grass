@@ -48,7 +48,7 @@ int max_cat(struct Map_info *Map, int layer);
 int main(int argc, char *argv[])
 {
     int i, ret;
-    char *in_name, *out_name, *bbox_name;
+    char *in_name, *out_name, *meta_name, *bbox_name;
     struct GModule *module;
     struct Option *old, *new, *bbox;
     struct Flag *append, *table_flag, *no_topo;
@@ -174,6 +174,12 @@ int main(int argc, char *argv[])
 	    Vect_close(&OutMap);
 	}
 
+	/* Get map name the table columns are derived from */
+	if (append->answer)
+	    meta_name = out_name;
+	else
+	    meta_name = old->answers[0];
+
 	i = 0;
 	while (old->answers[i]) {
 	    in_name = old->answers[i];
@@ -239,17 +245,25 @@ int main(int argc, char *argv[])
 
 		if (!table_in ||
 		    (table_out && !table_in) || (!table_out && table_in)) {
-		    G_fatal_error(_("Missing table"));
+		    G_fatal_error(_("Missing table for <%s>"), in_name);
 		}
 
 		if (G_strcasecmp(fi_in->key, key) != 0) {
-		    G_fatal_error(_("Key columns differ"));
+		    G_fatal_error(
+			_("Key (category) column names differ:"
+			  " <%s> from <%s> and <%s> from <%s>"),
+			fi_in->key, in_name,
+			key, meta_name);
 		}
 
 		ncols = db_get_table_number_of_columns(table_out);
 
 		if (ncols != db_get_table_number_of_columns(table_in)) {
-		    G_fatal_error(_("Number of columns differ"));
+		    G_fatal_error(
+			_("Number of columns differ:"
+			  " %d in <%s> and %d in <%s>"),
+			db_get_table_number_of_columns(table_in),
+			in_name, ncols, meta_name);
 		}
 
 		for (col = 0; col < ncols; col++) {
@@ -283,7 +297,16 @@ int main(int argc, char *argv[])
 			db_sqltype_to_Ctype(db_get_column_sqltype
 					    (column_out));
 		    if (ctype_in != ctype_out) {
-			G_fatal_error(_("Column types differ"));
+			G_fatal_error(
+			    _("Column types differ: "
+			      " <%s> from <%s> is <%s> and"
+			      " <%s> from <%s> is <%s>"),
+			    db_get_column_name(column_in),
+			    meta_name,
+			    db_sqltype_name(db_get_column_sqltype(column_in)),
+			    db_get_column_name(column_out),
+			    in_name,
+			    db_sqltype_name(db_get_column_sqltype(column_out)));
 		    }
 		    if (ctype_in == DB_C_TYPE_STRING &&
 			db_get_column_length(column_in) !=
