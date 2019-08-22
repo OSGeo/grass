@@ -48,8 +48,11 @@ static int is_double(char *str)
  * minncolumns: minimum number of columns
  * nrows: number of rows
  * column_type: column types
- * column_sample: value which was used to decide the type
+ * column_sample: values which was used to decide the type or NULLs
  * column_length: column lengths (string only)
+ *
+ * If the who whole column is empty, column_sample will contain NULL
+ * for that given column.
  */
 
 int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
@@ -160,7 +163,8 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 	    collen = (int *)G_realloc(collen, ntokens * sizeof(int));
 	    for (i = ncols; i < ntokens; i++) {
 		coltype[i] = DB_C_TYPE_INT;	/* default type */
-		colsample[i] = G_store("Not read");  /* default type */
+		/* We store a value later if column is not empty. */
+		colsample[i] = NULL;
 		collen[i] = 0;
 	    }
 	    ncols = ntokens;
@@ -251,6 +255,9 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 
 	    len = strlen(tokens[i]); 
 	    /* do not guess column type for missing values */ 
+	    /* continue here ensures that we preserve NULLs in
+	     * colsample for (completely) empty columns (which, however,
+	     * should probably default to string rather than int). */
 	    if (len == 0) 
 		continue;
 
@@ -259,6 +266,12 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 		    is_double(tokens[i]));
 
 	    if (is_int(tokens[i])) {
+		/* We store the first encountered value for integers.
+		 * Rest is for consistency. */
+		if (!colsample[i] || coltype[i] != DB_C_TYPE_INT) {
+		    G_free(colsample[i]);
+		    colsample[i] = G_store(tokens[i]);
+		}
 		continue;	/* integer */
 	    }
 	    if (is_double(tokens[i])) {	/* double */
@@ -270,8 +283,13 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 		continue;
 	    }
 	    /* string */
-	    coltype[i] = DB_C_TYPE_STRING;
-	    colsample[i] = G_store(tokens[i]);
+	    if (coltype[i] != DB_C_TYPE_STRING) {
+		/* Only set type if not already set to store the field
+		 * only once and to show the first encountered item. */
+		coltype[i] = DB_C_TYPE_STRING;
+		G_free(colsample[i]);
+		colsample[i] = G_store(tokens[i]);
+	    }
 	    if (len > collen[i])
 		collen[i] = len;
 	}
