@@ -314,19 +314,19 @@ int main(int argc, char *argv[])
 
 	if (coltype[xcol] == DB_C_TYPE_STRING) {
 	    G_fatal_error(_("'%s' column is not of number type, "
-	                    "encountered: %s"), "x", colsample[xcol]);
+	                    "encountered: '%s'"), "x", colsample[xcol]);
 	}
 	if (coltype[ycol] == DB_C_TYPE_STRING) {
 	    G_fatal_error(_("'%s' column is not of number type, "
-	                    "encountered: %s"), "y", colsample[ycol]);
+	                    "encountered: '%s'"), "y", colsample[ycol]);
 	}
 	if (zcol >= 0 && coltype[zcol] == DB_C_TYPE_STRING) {
 	    G_fatal_error(_("'%s' column is not of number type, "
-	                    "encountered: %s"), "z", colsample[zcol]);
+	                    "encountered: '%s'"), "z", colsample[zcol]);
 	}
 	if (catcol >= 0 && coltype[catcol] == DB_C_TYPE_STRING) {
 	    G_fatal_error(_("'%s' column is not of number type, "
-	                    "encountered: %s"), "cat", colsample[catcol]);
+	                    "encountered: '%s'"), "cat", colsample[catcol]);
 	}
 
 	/* Create table */
@@ -488,7 +488,7 @@ int main(int argc, char *argv[])
 		    case DB_C_TYPE_DOUBLE:
 			if (ctype == DB_C_TYPE_INT) {
 			    G_fatal_error(_("Column number %d <%s> defined as integer "
-					    "has double values, encountered: %s"),
+					    "has double values, encountered: '%s'"),
 					  i + 1,
 					  db_get_column_name(column),
 					  colsample[i]);
@@ -502,15 +502,14 @@ int main(int argc, char *argv[])
 		    case DB_C_TYPE_STRING:
 			if (ctype == DB_C_TYPE_INT) {
 			    G_fatal_error(_("Column number %d <%s> defined as integer "
-					    "has string values, encountered: %s"),
-					  i + 1,
-					  db_get_column_name(column),
+					    "has string values, encountered: '%s'"),
+					  i + 1, db_get_column_name(column),
 					  colsample[i]);
 			}
 			else if (ctype == DB_C_TYPE_DOUBLE) {
 			    G_fatal_error(_("Column number %d <%s> defined as double "
-					    "has string values, encountered: %s"), i + 1,
-					  db_get_column_name(column),
+					    "has string values, encountered: '%s'"),
+					  i + 1, db_get_column_name(column),
 					  colsample[i]);
 			}
 			if (length < collen[i]) {
