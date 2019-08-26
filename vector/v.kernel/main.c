@@ -91,6 +91,7 @@ int main(int argc, char **argv)
     DCELL *output_cell = NULL;
     double sigma, dmax, segmax, netmax, multip;
     char *tmpstr1, *tmpstr2;
+    struct History history;
 
     double **coordinate;
     double sigmaOptimal;
@@ -606,6 +607,10 @@ int main(int argc, char **argv)
         G_percent(1, 1, 1);
         
 	Rast_close(fdout);
+
+    Rast_short_history(out_opt->answer, "raster", &history);
+    Rast_command_history(&history);
+    Rast_write_history(out_opt->answer, &history);
     }
 
     G_done_msg(_("Maximum value in output: %e."), multip * gausmax);
