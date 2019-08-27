@@ -101,6 +101,8 @@ ENV PACKAGES="\
       openjpeg-dev \
       openblas-dev \
       postgresql-dev \
+      python3-dev \
+      py3-numpy-dev \
       sqlite-dev \
       tar \
       tiff-dev \
