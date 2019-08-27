@@ -107,7 +107,7 @@ ENV PACKAGES="\
       openblas-dev \
       postgresql-dev \
       python3-dev \
-      py-numpy-dev \
+      py3-numpy-dev \
       sqlite-dev \
       tar \
       tiff-dev \
