@@ -302,10 +302,10 @@ int main(int argc, char *argv[])
 			      " <%s> from <%s> is <%s> and"
 			      " <%s> from <%s> is <%s>"),
 			    db_get_column_name(column_in),
-			    meta_name,
+			    in_name,
 			    db_sqltype_name(db_get_column_sqltype(column_in)),
 			    db_get_column_name(column_out),
-			    in_name,
+			    meta_name,
 			    db_sqltype_name(db_get_column_sqltype(column_out)));
 		    }
 		    if (ctype_in == DB_C_TYPE_STRING &&
