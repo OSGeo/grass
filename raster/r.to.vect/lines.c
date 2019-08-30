@@ -280,7 +280,6 @@ static int update_list(int count)
 				}
 			}
 		}
-
 	    v_list[col - 1].right = v_list[col].right;
 	    v_list[col].right = NULL;
 	}
