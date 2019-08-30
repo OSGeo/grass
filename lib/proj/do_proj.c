@@ -90,7 +90,16 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
 #ifdef HAVE_PROJ_H
 #if PROJ_VERSION_MAJOR >= 6
+
+    /* PROJ6+: enforce axis order easting, northing
+     * +axis=enu (works with proj-4.8+) */
+
     info_trans->pj = NULL;
+    info_trans->meters = 1.;
+    info_trans->zone = 0;
+    sprintf(info_trans->proj, "pipeline");
+
+    /* user-provided pipeline */
     if (info_trans->def) {
 	/* create a pj from user-defined transformation pipeline */
 	info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
@@ -100,107 +109,147 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	}
 	return 1;
     }
-    info_trans->meters = 1.;
-    info_trans->zone = 0;
-    sprintf(info_trans->proj, "pipeline");
-    
+
     /* if no output CRS is defined, 
      * assume info_out to be ll equivalent of info_in */
-    /* do not use +init=epsg:XXXX, use EPSG:XXXX */
-
-    /* if no output CRS is defined, get the ll equivalent */
-    
-
-
-#else /* PROJ 5 */
-
-#endif
-#else /* PROJ 4 */
-
-#endif
-
-#ifdef HAVE_PROJ_H
-    info_trans->pj = NULL;
-    if (!info_trans->def) {
-	if (info_in->srid && info_out->pj && info_out->srid) {
-	    char *insrid, *outsrid;
-
-#if PROJ_VERSION_MAJOR >= 6
-	    /* PROJ6+: EPSG must uppercase EPSG */
-	    if (strncmp(info_in->srid, "epsg", 4) == 0)
-		insrid = G_store_upper(info_in->srid);
-	    else
-		insrid = G_store(info_in->srid);
-
-	    if (strncmp(info_out->srid, "epsg", 4) == 0)
-		outsrid = G_store_upper(info_out->srid);
-	    else
-		outsrid = G_store(info_out->srid);
-
-	    /* PROJ6+: enforce axis order easting, northing
-	     * +axis=enu (works with proj-4.8+) */
-
-#else
-	    /* PROJ5: EPSG must lowercase epsg */
-	    if (strncmp(info_in->srid, "EPSG", 4) == 0)
-		insrid = G_store_lower(info_in->srid);
-	    else
-		insrid = G_store(info_in->srid);
-
-	    if (strncmp(info_out->srid, "EPSG", 4) == 0)
-		outsrid = G_store_lower(info_out->srid);
-	    else
-		outsrid = G_store(info_out->srid);
-
-#endif
-	    /* ask PROJ for the best pipeline */
-	    info_trans->pj = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
-	                                            insrid,
-						    outsrid,
-						    NULL);
-
-	    if (info_trans->pj == NULL) {
-		G_warning(_("proj_create_crs_to_crs() failed for '%s' and '%s'"),
-		          insrid, outsrid);
-	    }
-#if PROJ_VERSION_MAJOR >= 6
-	    else {
-		const char *str = proj_as_proj_string(NULL, info_trans->pj,
-		                                PJ_PROJ_5, NULL);
-
-		if (str)
-		    info_trans->def = G_store(str);
-	    }
-#endif
-	    G_free(insrid);
-	    G_free(outsrid);
-	}
-	if (info_trans->pj == NULL) {
-	    /* PROJ6+: enforce axis order easting, northing
-	     * +axis=enu (works with proj-4.8+) */
-	    /* PROJ6+: what should we do with +towgs ? 
-	     * +towgs works only if WGS84 is used as pivot datum on both sides */
-  	    if (info_out->pj != NULL && info_out->def != NULL)
-		G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s +step %s",
-			   info_in->def, info_out->def);
-	    else
-		/* assume info_out to be ll equivalent of info_in */
-		G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s",
-			   info_in->def);
-	}
-    }
-
-    if (info_trans->pj == NULL)
+    if (info_out->pj == NULL && info_out->def == NULL) {
+	G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s +axis=enu",
+		   info_in->def);
 	info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
-    if (info_trans->pj == NULL) {
-	G_warning(_("proj_create() failed for '%s'"), info_trans->def);
-	return -1;
+	if (info_trans->pj == NULL) {
+	    G_warning(_("proj_create() failed for '%s'"), info_trans->def);
+	    return -1;
+	}
+	return 1;
     }
+    
+    /* PROJ6+: EPSG must uppercase EPSG */
+    if (info_in->srid && strncmp(info_in->srid, "epsg", 4) == 0)
+	insrid = G_store_upper(info_in->srid);
+    else
+	insrid = G_store(info_in->srid);
 
+    if (info_out->srid && strncmp(info_out->srid, "epsg", 4) == 0)
+	outsrid = G_store_upper(info_out->srid);
+    else
+	outsrid = G_store(info_out->srid);
+
+
+    if (info_in->def && info_out->def) {
+	char *indef = NULL, *outdef = NULL;
+
+	if (insrid) {
+	    G_asprintf(&indef, "%s +axis=enu", insrid);
+	}
+	else {
+	    G_asprintf(&indef, "%s +axis=enu", info_in->def);
+	}
+
+	if (outsrid) {
+	    G_asprintf(&outdef, "%s +axis=enu", outsrid);
+	}
+	else {
+	    G_asprintf(&outdef, "%s +axis=enu", info_out->def);
+	}
+
+	/* try proj_create_crs_to_crs() */
+	info_trans->pj = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
+						indef,
+						outdef,
+						NULL);
+
+	if (info_trans->pj) {
+	    const char *str = proj_as_proj_string(NULL, info_trans->pj,
+					    PJ_PROJ_5, NULL);
+
+	    if (str)
+		info_trans->def = G_store(str);
+	}
+	else {
+	    /* try proj_create() with +proj=pipeline +step +inv %s +step %s" */
+	    G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s +axis=enu +step %s +axis=enu",
+		       indef, outdef);
+
+	    info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
+	    if (info_trans->pj == NULL) {
+		G_warning(_("proj_create() failed for '%s'"), info_trans->def);
+		return -1;
+	    }
+	}
+    }
+#else /* PROJ 5 */
+    info_trans->pj = NULL;
     info_trans->meters = 1.;
     info_trans->zone = 0;
     sprintf(info_trans->proj, "pipeline");
-#else
+
+    /* user-provided pipeline */
+    if (info_trans->def) {
+	/* create a pj from user-defined transformation pipeline */
+	info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
+	if (info_trans->pj == NULL) {
+	    G_warning(_("proj_create() failed for '%s'"), info_trans->def);
+	    return -1;
+	}
+	return 1;
+    }
+
+    /* if no output CRS is defined, 
+     * assume info_out to be ll equivalent of info_in */
+    if (info_out->pj == NULL && info_out->def == NULL) {
+	G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s +axis=enu",
+		   info_in->def);
+	info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
+	if (info_trans->pj == NULL) {
+	    G_warning(_("proj_create() failed for '%s'"), info_trans->def);
+	    return -1;
+	}
+	return 1;
+    }
+
+    insrid = G_store(info_in->srid);
+    outsrid = G_store(info_out->srid);
+
+    if (info_in->def && info_out->def) {
+	char *indef = NULL, *outdef = NULL;
+
+	if (insrid) {
+	    G_asprintf(&indef, "%s +axis=enu", insrid);
+	}
+	else {
+	    G_asprintf(&indef, "%s +axis=enu", info_in->def);
+	}
+
+	if (outsrid) {
+	    G_asprintf(&outdef, "%s +axis=enu", outsrid);
+	}
+	else {
+	    G_asprintf(&outdef, "%s +axis=enu", info_out->def);
+	}
+
+	/* try proj_create_crs_to_crs() */
+	info_trans->pj = proj_create_crs_to_crs(PJ_DEFAULT_CTX,
+						indef,
+						outdef,
+						NULL);
+
+	if (info_trans->pj) {
+	    G_debug(1, "proj_create_crs_to_crs() succeeded with PROJ5");
+	}
+	else {
+	    /* try proj_create() with +proj=pipeline +step +inv %s +step %s" */
+	    G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s +axis=enu +step %s +axis=enu",
+		       indef, outdef);
+
+	    info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
+	    if (info_trans->pj == NULL) {
+		G_warning(_("proj_create() failed for '%s'"), info_trans->def);
+		return -1;
+	    }
+	}
+    }
+#endif
+#else /* PROJ 4 */
     if (info_out->pj == NULL) {
 	if (GPJ_get_equivalent_latlong(info_out, info_in) < 0) {
 	    G_warning(_("Unable to create latlong equivalent for '%s'"),
@@ -288,11 +337,22 @@ int GPJ_transform(const struct pj_info *info_in,
     /* prepare */
     if (in_is_ll) {
 	/* convert to radians */
+#if PROJ_VERSION_MAJOR >= 6
 	/* PROJ 6: conversion to radians is not always needed:
 	 * if proj_angular_input(info_trans->pj, dir) == 1 
 	 * -> convert from degrees to radians */
+	if (proj_angular_input(info_trans->pj, dir) == 1) {
+	    c.lpzt.lam = (*x) / RAD_TO_DEG;
+	    c.lpzt.phi = (*y) / RAD_TO_DEG;
+	}
+	else {
+	    c.lpzt.lam = (*x);
+	    c.lpzt.phi = (*y);
+	}
+#else
 	c.lpzt.lam = (*x) / RAD_TO_DEG;
 	c.lpzt.phi = (*y) / RAD_TO_DEG;
+#endif
 	c.lpzt.z = 0;
 	if (z)
 	    c.lpzt.z = *z;
@@ -320,11 +380,22 @@ int GPJ_transform(const struct pj_info *info_in,
     /* output */
     if (out_is_ll) {
 	/* convert to degrees */
-	/* PROJ 6: conversion to radians is not always needed:
+#if PROJ_VERSION_MAJOR >= 6
+	/* PROJ 6: conversion from radians is not always needed:
 	 * if proj_angular_output(info_trans->pj, dir) == 1 
 	 * -> convert from radians to degrees */
+	if (proj_angular_output(info_trans->pj, dir) == 1) {
+	    *x = c.lpzt.lam * RAD_TO_DEG;
+	    *y = c.lpzt.phi * RAD_TO_DEG;
+	}
+	else {
+	    *x = c.lpzt.lam;
+	    *y = c.lpzt.phi;
+	}
+#else
 	*x = c.lpzt.lam * RAD_TO_DEG;
 	*y = c.lpzt.phi * RAD_TO_DEG;
+#endif
 	if (z)
 	    *z = c.lpzt.z;
     }
@@ -480,22 +551,64 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	     */
 	    for (i = 0; i < n; i++) {
 		/* convert to radians */
+#if PROJ_VERSION_MAJOR >= 6
+		/* PROJ 6: conversion to radians is not always needed:
+		 * if proj_angular_input(info_trans->pj, dir) == 1 
+		 * -> convert from degrees to radians */
+		if (proj_angular_input(info_trans->pj, dir) == 1) {
+		    c.lpzt.lam = (*x) / RAD_TO_DEG;
+		    c.lpzt.phi = (*y) / RAD_TO_DEG;
+		}
+		else {
+		    c.lpzt.lam = (*x);
+		    c.lpzt.phi = (*y);
+		}
+#else
 		c.lpzt.lam = x[i] / RAD_TO_DEG;
 		c.lpzt.phi = y[i] / RAD_TO_DEG;
+#endif
 		c.lpzt.z = z[i];
 		c = proj_trans(info_trans->pj, dir, c);
 		if ((ok = proj_errno(info_trans->pj)) < 0)
 		    break;
 		/* convert to degrees */
+#if PROJ_VERSION_MAJOR >= 6
+		/* PROJ 6: conversion from radians is not always needed:
+		 * if proj_angular_output(info_trans->pj, dir) == 1 
+		 * -> convert from degrees to radians */
+		if (proj_angular_output(info_trans->pj, dir) == 1) {
+		    x[i] = c.lp.lam * RAD_TO_DEG;
+		    y[i] = c.lp.phi * RAD_TO_DEG;
+		}
+		else {
+		    x[i] = c.lp.lam;
+		    y[i] = c.lp.phi;
+		}
+#else
 		x[i] = c.lp.lam * RAD_TO_DEG;
 		y[i] = c.lp.phi * RAD_TO_DEG;
+#endif
 	    }
 	}
 	else {
 	    for (i = 0; i < n; i++) {
 		/* convert to radians */
+#if PROJ_VERSION_MAJOR >= 6
+		/* PROJ 6: conversion to radians is not always needed:
+		 * if proj_angular_input(info_trans->pj, dir) == 1 
+		 * -> convert from degrees to radians */
+		if (proj_angular_input(info_trans->pj, dir) == 1) {
+		    c.lpzt.lam = (*x) / RAD_TO_DEG;
+		    c.lpzt.phi = (*y) / RAD_TO_DEG;
+		}
+		else {
+		    c.lpzt.lam = (*x);
+		    c.lpzt.phi = (*y);
+		}
+#else
 		c.lpzt.lam = x[i] / RAD_TO_DEG;
 		c.lpzt.phi = y[i] / RAD_TO_DEG;
+#endif
 		c.lpzt.z = z[i];
 		c = proj_trans(info_trans->pj, dir, c);
 		if ((ok = proj_errno(info_trans->pj)) < 0)
@@ -518,8 +631,22 @@ int GPJ_transform_array(const struct pj_info *info_in,
 		if ((ok = proj_errno(info_trans->pj)) < 0)
 		    break;
 		/* convert to degrees */
+#if PROJ_VERSION_MAJOR >= 6
+		/* PROJ 6: conversion from radians is not always needed:
+		 * if proj_angular_output(info_trans->pj, dir) == 1 
+		 * -> convert from degrees to radians */
+		if (proj_angular_output(info_trans->pj, dir) == 1) {
+		    x[i] = c.lp.lam * RAD_TO_DEG;
+		    y[i] = c.lp.phi * RAD_TO_DEG;
+		}
+		else {
+		    x[i] = c.lp.lam;
+		    y[i] = c.lp.phi;
+		}
+#else
 		x[i] = c.lp.lam * RAD_TO_DEG;
 		y[i] = c.lp.phi * RAD_TO_DEG;
+#endif
 	    }
 	}
 	else {
