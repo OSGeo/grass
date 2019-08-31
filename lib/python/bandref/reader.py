@@ -82,8 +82,11 @@ class BandReferenceReader:
         for k, v in item[band].items():
             print_kv(k, v, indent)
 
-    def _print_band(self, shortcut, band):
-        print (self._band_identifier(shortcut, band))
+    def _print_band(self, shortcut, band, tag=None):
+        sys.stdout.write(self._band_identifier(shortcut, band))
+        if tag:
+            sys.stdout.write(' {}'.format(tag))
+        sys.stdout.write(os.linesep)
 
     def print_info(self, shortcut=None, band=None, extended=False):
         """Prints band reference information to stdout.
@@ -125,11 +128,18 @@ class BandReferenceReader:
                         for iband in item['bands']:
                             self._print_band_extended(iband, item['bands'])
                 else:
+                    # basic information only
                     if band:
-                        self._print_band(item['shortcut'], band)
+                        self._print_band(
+                            item['shortcut'], band,
+                            item['bands'][band].get('tag')
+                        )
                     else:
                         for iband in item['bands']:
-                            self._print_band(item['shortcut'], iband)
+                            self._print_band(
+                                item['shortcut'], iband,
+                                item['bands'][iband].get('tag')
+                            )
 
         # raise error when defined shortcut not found
         if shortcut and not found:

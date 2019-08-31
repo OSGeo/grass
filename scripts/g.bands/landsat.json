@@ -58,7 +58,7 @@
             "1": {
                 "wavelength (µm)": "0.43-0.45",
                 "spatial resolution (meters)": 30,
-                "tag": "Visible"
+                "tag": "Visible (Coastal/Aerosol)"
             },
             "2": {
                 "wavelength (µm)": "0.45-0.51",

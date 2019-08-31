@@ -55,7 +55,8 @@ internal data structure. A minimalistic example is shown below.
                     "central wavelength (nm)": 442.3,
                     "bandwidth (nm)": 45
                 },
-                "spatial resolution (meters)": 60
+                "spatial resolution (meters)": 60,
+                "tag": "Visible (Coastal/Aerosol)"
             },
             "2": {
                 "Sentinel 2A" : {
@@ -66,14 +67,15 @@ internal data structure. A minimalistic example is shown below.
                     "central wavelength (nm)": 492.1,
                     "bandwidth (nm)": 98
                 },
-                "spatial resolution (meters)": 10
+                "spatial resolution (meters)": 10,
+                "tag": "Visible (Blue)"
             }
         }
     }
 }
 </pre></div>
 
-Each series starts with an unique identifier (&quot;Sentinel2A&quot;
+Each series starts with an unique identifier (&quot;Sentinel2&quot;
 in example above). Required attributes are only two:
 a <tt>shortcut</tt> and <tt>bands</tt>. Note that a <i>shortcut</i>
 must be unique in all band reference registry files. Number of other
@@ -106,16 +108,18 @@ details.
 <div class="code"><pre>
 g.bands
 
-S2_1
-S2_2
+S2_1 Visible (Coastal/Aerosol)
+S2_2 Visible (Blue)
 ...
-L7_1
-L7_2
+L7_1 Visible (Blue)
+L7_2 Visible (Green)
 ...
-L8_1
-L8_2
+L8_1 Visible (Coastal/Aerosol)
+L8_2 Visible (Blue)
 ...
 </pre></div>
+
+The module prints band reference and related tag if defined.
 
 <h3>Filter band references by a shortcut</h3>
 
@@ -125,9 +129,9 @@ printed.
 <div class="code"><pre>
 g.bands band=S2
 
-S2_1
+S2_1 Visible (Coastal/Aerosol)
 ...
-S2_12
+S2_12 SWIR 2
 </pre></div>
 
 <h3>Print extended metadata for specified band identifier</h3>
@@ -162,8 +166,8 @@ references.
 
 <p>
 Only very limited number of band references is currently
-implemented. Namely Sentine2-A, Sentinel2-B and Landsat7
-sattelites. This will be improved in the near future.
+defined. Namely Sentinel-2, Landsat7, and Landsat8 sattelites. This
+will be improved in the near future.
 
 <h2>REFERENCES</h2>
 
