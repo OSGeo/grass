@@ -32,7 +32,7 @@ from core.debug import Debug
 from core.utils import autoCropImageFromFile
 
 from animation.utils import HashCmd, HashCmds, GetFileFromCmd, GetFileFromCmds
-from gui_core.wrap import EmptyBitmap
+from gui_core.wrap import EmptyBitmap, BitmapFromImage
 
 import grass.script.core as gcore
 from grass.script.task import cmdlist_to_tuple
@@ -308,7 +308,7 @@ class BitmapProvider:
             cmdTuple[0], **cmdTuple[1])
 
         if returncode == 0:
-            return wx.BitmapFromImage(autoCropImageFromFile(filename))
+            return BitmapFromImage(autoCropImageFromFile(filename))
         else:
             os.remove(filename)
             raise GException(messages)
@@ -519,7 +519,7 @@ class BitmapComposer:
                         self._bitmapPool[
                             HashCmds(
                                 cmd_lists[i][0],
-                                cmd_lists[i][1])] = wx.BitmapFromImage(
+                                cmd_lists[i][1])] = BitmapFromImage(
                             wx.Image(filename))
                         os.remove(filename)
                 proc_count = 0
