@@ -1465,7 +1465,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 if line[0] == '#' or line == '':
                     continue
                 line = line.replace('\n', '').strip()
-                coords = map(float, line.split())
+                coords = list(map(float, line.split()))
                 if coords[4] == 1:
                     check = True
                     self.GCPcount += 1

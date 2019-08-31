@@ -117,7 +117,7 @@ class ProcessWorkspaceFile:
         if node_lm is not None:
             posAttr = node_lm.get('dim', '')
             if posAttr:
-                posVal = map(int, posAttr.split(','))
+                posVal = list(map(int, posAttr.split(',')))
                 try:
                     self.layerManager['pos'] = (posVal[0], posVal[1])
                     self.layerManager['size'] = (posVal[2], posVal[3])
@@ -137,7 +137,7 @@ class ProcessWorkspaceFile:
             # window position and size
             posAttr = display.get('dim', '')
             if posAttr:
-                posVal = map(int, posAttr.split(','))
+                posVal = list(map(int, posAttr.split(',')))
                 try:
                     pos = (posVal[0], posVal[1])
                     size = (posVal[2], posVal[3])
