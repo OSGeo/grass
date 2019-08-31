@@ -1368,7 +1368,7 @@ class ExportDialog(wx.Dialog):
 
     def ChangeFormat(self, index):
         for i, panel in enumerate(self.formatPanels):
-            self.formatPanelSizer.Show(item=panel, show=(i == index))
+            self.formatPanelSizer.Show(window=panel, show=(i == index))
         self.formatPanelSizer.Layout()
 
     def OnFont(self, event):
