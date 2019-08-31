@@ -32,7 +32,7 @@
 #%option
 #% key: operation
 #% type: string
-#% required: yes
+#% required: no
 #% multiple: no
 #% options: print
 #% description: Operation to be performed

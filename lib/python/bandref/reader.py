@@ -106,7 +106,7 @@ class BandReferenceReader:
                         continue
                 except re.error as e:
                     raise BandReferenceReaderError(
-                        "Invalid shortcut: {}".format(e)
+                        "Invalid pattern: {}".format(e)
                     )
 
                 found = True
